@@ -963,8 +963,8 @@ bool wxToolBar::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD id)
         LRESULT state = ::SendMessage(GetHwnd(), TB_GETSTATE, id, 0);
         toggled = (state & TBSTATE_CHECKED) != 0;
 
-        // ignore the event when a radio button is released, as this doesn't seem to
-        // happen at all, and is handled otherwise
+        // ignore the event when a radio button is released, as this doesn't
+        // seem to happen at all, and is handled otherwise
         if ( tool->GetKind() == wxITEM_RADIO && !toggled )
             return true;
 
@@ -979,7 +979,7 @@ bool wxToolBar::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD id)
         // revert back
         tool->Toggle(!toggled);
 
-        ::SendMessage(GetHwnd(), TB_CHECKBUTTON, id, MAKELONG(toggled, 0));
+        ::SendMessage(GetHwnd(), TB_CHECKBUTTON, id, MAKELONG(!toggled, 0));
     }
 
     return true;
