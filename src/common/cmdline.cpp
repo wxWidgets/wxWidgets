@@ -842,7 +842,7 @@ int wxCmdLineParser::Parse(bool showUsage)
         }
     }
 
-    if ( !ok && errorMsg.length() != 0 )
+    if ( !ok && (errorMsg.length() != 0 || helpRequested) )
     {
         wxString usage;
         wxMessageOutput* msgOut = wxMessageOutput::Get();
