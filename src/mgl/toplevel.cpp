@@ -142,18 +142,19 @@ void wxTopLevelWindowMGL::Maximize(bool maximize)
     {
         int x, y, w, h;
         
+        m_isMaximized = TRUE;
+
         GetPosition(&m_savedFrame.x, &m_savedFrame.y);
         GetSize(&m_savedFrame.width, &m_savedFrame.height);
 
         wxClientDisplayRect(&x, &y, &w, &h);
         SetSize(x, y, w, h);
-        m_isMaximized = TRUE;
     }
     else if ( !maximize && m_isMaximized )
     {
+        m_isMaximized = FALSE;
         SetSize(m_savedFrame.x, m_savedFrame.y, 
                 m_savedFrame.width, m_savedFrame.height);
-        m_isMaximized = FALSE;
     }
 }
 

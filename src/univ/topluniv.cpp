@@ -148,7 +148,12 @@ long wxTopLevelWindow::GetDecorationsStyle() const
         if ( m_windowStyle & wxMINIMIZE_BOX )
             style |= wxTOPLEVEL_BUTTON_ICONIZE;
         if ( m_windowStyle & wxMAXIMIZE_BOX )
-            style |= wxTOPLEVEL_BUTTON_MAXIMIZE;
+        {
+            if ( IsMaximized() )
+                style |= wxTOPLEVEL_BUTTON_RESTORE;
+            else
+                style |= wxTOPLEVEL_BUTTON_MAXIMIZE;
+        }
 #if wxUSE_HELP
         if ( m_exStyle & (wxFRAME_EX_CONTEXTHELP | wxDIALOG_EX_CONTEXTHELP))
             style |= wxTOPLEVEL_BUTTON_HELP;
@@ -268,25 +273,27 @@ long wxTopLevelWindow::HitTest(const wxPoint& pt) const
 void wxTopLevelWindow::SetIcon(const wxIcon& icon)
 {
     wxTopLevelWindowNative::SetIcon(icon);
-    if ( !m_renderer ) return;
 
-    wxSize size = m_renderer->GetFrameIconSize();
-
-    if ( !icon.Ok() || size.x == -1  )
-        m_titlebarIcon = icon;
-    else
+    if ( ms_drawDecorations && m_renderer )
     {
-        wxBitmap bmp1;
-        bmp1.CopyFromIcon(icon);
-        if ( !bmp1.Ok() )
-            m_titlebarIcon = wxNullIcon;
-        else if ( bmp1.GetWidth() == size.x && bmp1.GetHeight() == size.y )
+        wxSize size = m_renderer->GetFrameIconSize();
+
+        if ( !icon.Ok() || size.x == -1  )
             m_titlebarIcon = icon;
         else
         {
-            wxImage img = bmp1.ConvertToImage();
-            img.Rescale(size.x, size.y);
-            m_titlebarIcon.CopyFromBitmap(wxBitmap(img));
+            wxBitmap bmp1;
+            bmp1.CopyFromIcon(icon);
+            if ( !bmp1.Ok() )
+                m_titlebarIcon = wxNullIcon;
+            else if ( bmp1.GetWidth() == size.x && bmp1.GetHeight() == size.y )
+                m_titlebarIcon = icon;
+            else
+            {
+                wxImage img = bmp1.ConvertToImage();
+                img.Rescale(size.x, size.y);
+                m_titlebarIcon.CopyFromBitmap(wxBitmap(img));
+            }
         }
     }
 }
