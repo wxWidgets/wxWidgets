@@ -66,7 +66,7 @@ wxObject *wxDialogXmlHandler::DoCreateResource()
                 GetName());
 
     if (HasParam(wxT("size")))
-        dlg->SetClientSize(GetSize());
+        dlg->SetClientSize(GetSize(wxT("size"), dlg));
     if (HasParam(wxT("pos")))
         dlg->Move(GetPosition());
     if (HasParam(wxT("icon")))

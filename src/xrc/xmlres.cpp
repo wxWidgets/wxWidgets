@@ -1092,7 +1092,8 @@ wxString wxXmlResourceHandler::GetParamValue(const wxString& param)
 
 
 
-wxSize wxXmlResourceHandler::GetSize(const wxString& param)
+wxSize wxXmlResourceHandler::GetSize(const wxString& param,
+                                     wxWindow *windowToUse)
 {
     wxString s = GetParamValue(param);
     if (s.empty()) s = wxT("-1,-1");
@@ -1111,8 +1112,14 @@ wxSize wxXmlResourceHandler::GetSize(const wxString& param)
 
     if (is_dlg)
     {
-        if (m_parentAsWindow)
+        if (windowToUse)
+        {
+            return wxDLG_UNIT(windowToUse, wxSize(sx, sy));
+        }
+        else if (m_parentAsWindow)
+        {
             return wxDLG_UNIT(m_parentAsWindow, wxSize(sx, sy));
+        }
         else
         {
             wxLogError(_("Cannot convert dialog units: dialog unknown."));
@@ -1133,7 +1140,9 @@ wxPoint wxXmlResourceHandler::GetPosition(const wxString& param)
 
 
 
-wxCoord wxXmlResourceHandler::GetDimension(const wxString& param, wxCoord defaultv)
+wxCoord wxXmlResourceHandler::GetDimension(const wxString& param,
+                                           wxCoord defaultv,
+                                           wxWindow *windowToUse)
 {
     wxString s = GetParamValue(param);
     if (s.empty()) return defaultv;
@@ -1151,8 +1160,14 @@ wxCoord wxXmlResourceHandler::GetDimension(const wxString& param, wxCoord defaul
 
     if (is_dlg)
     {
-        if (m_parentAsWindow)
+        if (windowToUse)
+        {
+            return wxDLG_UNIT(windowToUse, wxSize(sx, 0)).x;
+        }
+        else if (m_parentAsWindow)
+        {
             return wxDLG_UNIT(m_parentAsWindow, wxSize(sx, 0)).x;
+        }
         else
         {
             wxLogError(_("Cannot convert dialog units: dialog unknown."));

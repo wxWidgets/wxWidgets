@@ -69,7 +69,7 @@ wxObject *wxFrameXmlHandler::DoCreateResource()
                   GetName());
 
     if (HasParam(wxT("size")))
-        frame->SetClientSize(GetSize());
+        frame->SetClientSize(GetSize(wxT("size"), frame));
     if (HasParam(wxT("pos")))
         frame->Move(GetPosition());
     if (HasParam(wxT("icon")))

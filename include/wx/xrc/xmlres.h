@@ -389,7 +389,7 @@ protected:
 
     // Gets an integer value from the parameter.
     long GetLong(const wxString& param, long defaultv = 0);
-    
+
     // Gets a float value from the parameter.
     float GetFloat(const wxString& param, float defaultv = 0);
 
@@ -397,13 +397,15 @@ protected:
     wxColour GetColour(const wxString& param);
 
     // Gets the size (may be in dialog units).
-    wxSize GetSize(const wxString& param = wxT("size"));
+    wxSize GetSize(const wxString& param = wxT("size"),
+                   wxWindow *windowToUse = NULL);
 
     // Gets the position (may be in dialog units).
     wxPoint GetPosition(const wxString& param = wxT("pos"));
 
     // Gets a dimension (may be in dialog units).
-    wxCoord GetDimension(const wxString& param, wxCoord defaultv = 0);
+    wxCoord GetDimension(const wxString& param, wxCoord defaultv = 0,
+                         wxWindow *windowToUse = NULL);
 
     // Gets a bitmap.
     wxBitmap GetBitmap(const wxString& param = wxT("bitmap"),
