@@ -676,12 +676,12 @@ bool wxSplitterWindow::OnSashPositionChange(int newSashPosition)
 
   if ( m_splitMode == wxSPLIT_VERTICAL )
   {
-    if ( h - newSashPosition < m_minimumPaneSize )
+    if ( w - newSashPosition < m_minimumPaneSize )
       return FALSE;
   }
   else // m_splitMode = wxSPLIT_HORIZONTAL
   {
-    if ( w - newSashPosition < m_minimumPaneSize )
+    if ( h - newSashPosition < m_minimumPaneSize )
       return FALSE;
   }
 
