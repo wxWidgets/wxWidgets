@@ -264,6 +264,7 @@
         <include>$(TOP_SRCDIR)include</include>
         <lib-path>$(LIBDIRNAME)</lib-path>        
         <include cond="FORMAT!='autoconf'">$(SETUPHDIR)</include>
+        <warnings>max</warnings>
     </template>
 
     <!-- for both GUI and wxBase libs/samples: -->
