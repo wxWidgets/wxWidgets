@@ -146,7 +146,7 @@ gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *WX
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    if (!win->m_hasVMT)
+    if (!win->m_hasVMT || !win->IsShown())
         return FALSE;
 
     int x = 0;
