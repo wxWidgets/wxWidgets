@@ -225,7 +225,7 @@ void wxComboBox::SetFocus()
 
 int wxComboBox::AppendCommon( const wxString &item )
 {
-    wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
+    wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid combobox") );
 
     DisableEvents();
 
