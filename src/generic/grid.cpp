@@ -2528,7 +2528,8 @@ bool wxGridStringTable::InsertRows( size_t pos, size_t numRows )
     size_t row, col;
 
     size_t curNumRows = m_data.GetCount();
-    size_t curNumCols = ( curNumRows > 0 ? m_data[0].GetCount() : 0 );
+    size_t curNumCols = ( curNumRows > 0 ? m_data[0].GetCount() :
+                          ( GetView() ? GetView()->GetNumberCols() : 0 ) );
 
     if ( pos >= curNumRows )
     {
@@ -2565,7 +2566,8 @@ bool wxGridStringTable::AppendRows( size_t numRows )
     size_t row, col;
 
     size_t curNumRows = m_data.GetCount();
-    size_t curNumCols = ( curNumRows > 0 ? m_data[0].GetCount() : 0 );
+    size_t curNumCols = ( curNumRows > 0 ? m_data[0].GetCount() : 
+                          ( GetView() ? GetView()->GetNumberCols() : 0 ) );
 
     wxArrayString sa;
     if ( curNumCols > 0 )
@@ -2644,7 +2646,8 @@ bool wxGridStringTable::InsertCols( size_t pos, size_t numCols )
     size_t row, col;
 
     size_t curNumRows = m_data.GetCount();
-    size_t curNumCols = ( curNumRows > 0 ? m_data[0].GetCount() : 0 );
+    size_t curNumCols = ( curNumRows > 0 ? m_data[0].GetCount() :
+                          ( GetView() ? GetView()->GetNumberCols() : 0 ) );
 
     if ( pos >= curNumCols )
     {
@@ -2677,6 +2680,7 @@ bool wxGridStringTable::AppendCols( size_t numCols )
     size_t row, n;
 
     size_t curNumRows = m_data.GetCount();
+#if 0
     if ( !curNumRows )
     {
         // TODO: something better than this ?
@@ -2684,6 +2688,7 @@ bool wxGridStringTable::AppendCols( size_t numCols )
         wxFAIL_MSG( wxT("Unable to append cols to a grid table with no rows.\nCall AppendRows() first") );
         return FALSE;
     }
+#endif
 
     for ( row = 0;  row < curNumRows;  row++ )
     {
@@ -2710,7 +2715,8 @@ bool wxGridStringTable::DeleteCols( size_t pos, size_t numCols )
     size_t row, n;
 
     size_t curNumRows = m_data.GetCount();
-    size_t curNumCols = ( curNumRows > 0 ? m_data[0].GetCount() : 0 );
+    size_t curNumCols = ( curNumRows > 0 ? m_data[0].GetCount() :
+                          ( GetView() ? GetView()->GetNumberCols() : 0 ) );
 
     if ( pos >= curNumCols )
     {
@@ -3223,12 +3229,6 @@ bool wxGrid::SetTable( wxGridTableBase *table, bool takeOwnership,
 
 void wxGrid::Init()
 {
-    if ( m_numRows <= 0 )
-        m_numRows = WXGRID_DEFAULT_NUMBER_ROWS;
-
-    if ( m_numCols <= 0 )
-        m_numCols = WXGRID_DEFAULT_NUMBER_COLS;
-
     m_rowLabelWidth  = WXGRID_DEFAULT_ROW_LABEL_WIDTH;
     m_colLabelHeight = WXGRID_DEFAULT_COL_LABEL_HEIGHT;
 
@@ -3426,6 +3426,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
 {
     int i;
 
+#if 0
     // if we were using the default widths/heights so far, we must change them
     // now
     if ( m_colWidths.IsEmpty() )
@@ -3437,6 +3438,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
     {
         InitRowHeights();
     }
+#endif
 
     switch ( msg.GetId() )
     {
@@ -3444,20 +3446,25 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
         {
             size_t pos = msg.GetCommandInt();
             int numRows = msg.GetCommandInt2();
-            for ( i = 0;  i < numRows;  i++ )
-            {
-                m_rowHeights.Insert( m_defaultRowHeight, pos );
-                m_rowBottoms.Insert( 0, pos );
-            }
+
             m_numRows += numRows;
 
-            int bottom = 0;
-            if ( pos > 0 ) bottom = m_rowBottoms[pos-1];
-
-            for ( i = pos;  i < m_numRows;  i++ )
+            if ( !m_rowHeights.IsEmpty() )
             {
-                bottom += m_rowHeights[i];
-                m_rowBottoms[i] = bottom;
+                for ( i = 0;  i < numRows;  i++ )
+                {
+                    m_rowHeights.Insert( m_defaultRowHeight, pos );
+                    m_rowBottoms.Insert( 0, pos );
+                }
+
+                int bottom = 0;
+                if ( pos > 0 ) bottom = m_rowBottoms[pos-1];
+
+                for ( i = pos;  i < m_numRows;  i++ )
+                {
+                    bottom += m_rowHeights[i];
+                    m_rowBottoms[i] = bottom;
+                }
             }
             CalcDimensions();
         }
@@ -3466,22 +3473,25 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
         case wxGRIDTABLE_NOTIFY_ROWS_APPENDED:
         {
             int numRows = msg.GetCommandInt();
-            for ( i = 0;  i < numRows;  i++ )
-            {
-                m_rowHeights.Add( m_defaultRowHeight );
-                m_rowBottoms.Add( 0 );
-            }
-
             int oldNumRows = m_numRows;
             m_numRows += numRows;
 
-            int bottom = 0;
-            if ( oldNumRows > 0 ) bottom = m_rowBottoms[oldNumRows-1];
-
-            for ( i = oldNumRows;  i < m_numRows;  i++ )
+            if ( !m_rowHeights.IsEmpty() )
             {
-                bottom += m_rowHeights[i];
-                m_rowBottoms[i] = bottom;
+                for ( i = 0;  i < numRows;  i++ )
+                {
+                    m_rowHeights.Add( m_defaultRowHeight );
+                    m_rowBottoms.Add( 0 );
+                }
+
+                int bottom = 0;
+                if ( oldNumRows > 0 ) bottom = m_rowBottoms[oldNumRows-1];
+
+                for ( i = oldNumRows;  i < m_numRows;  i++ )
+                {
+                    bottom += m_rowHeights[i];
+                    m_rowBottoms[i] = bottom;
+                }
             }
             CalcDimensions();
         }
@@ -3491,33 +3501,38 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
         {
             size_t pos = msg.GetCommandInt();
             int numRows = msg.GetCommandInt2();
-            for ( i = 0;  i < numRows;  i++ )
-            {
-                m_rowHeights.Remove( pos );
-                m_rowBottoms.Remove( pos );
-            }
             m_numRows -= numRows;
 
-            if ( !m_numRows )
+            if ( !m_rowHeights.IsEmpty() )
             {
-                m_numCols = 0;
-                m_colWidths.Clear();
-                m_colRights.Clear();
-                m_currentCellCoords = wxGridNoCellCoords;
-            }
-            else
-            {
-                if ( m_currentCellCoords.GetRow() >= m_numRows )
-                    m_currentCellCoords.Set( 0, 0 );
-
-                int h = 0;
-                for ( i = 0;  i < m_numRows;  i++ )
+                for ( i = 0;  i < numRows;  i++ )
                 {
-                    h += m_rowHeights[i];
-                    m_rowBottoms[i] = h;
+                    m_rowHeights.Remove( pos );
+                    m_rowBottoms.Remove( pos );
+                }
+
+                if ( !m_numRows )
+                {
+#if 0
+                    m_numCols = 0;
+                    m_colWidths.Clear();
+                    m_colRights.Clear();
+#endif
+                    m_currentCellCoords = wxGridNoCellCoords;
+                }
+                else
+                {
+                    if ( m_currentCellCoords.GetRow() >= m_numRows )
+                        m_currentCellCoords.Set( 0, 0 );
+
+                    int h = 0;
+                    for ( i = 0;  i < m_numRows;  i++ )
+                    {
+                        h += m_rowHeights[i];
+                        m_rowBottoms[i] = h;
+                    }
                 }
             }
-
             CalcDimensions();
         }
         return TRUE;
@@ -3526,20 +3541,24 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
         {
             size_t pos = msg.GetCommandInt();
             int numCols = msg.GetCommandInt2();
-            for ( i = 0;  i < numCols;  i++ )
-            {
-                m_colWidths.Insert( m_defaultColWidth, pos );
-                m_colRights.Insert( 0, pos );
-            }
             m_numCols += numCols;
 
-            int right = 0;
-            if ( pos > 0 ) right = m_colRights[pos-1];
-
-            for ( i = pos;  i < m_numCols;  i++ )
+            if ( !m_colWidths.IsEmpty() )
             {
-                right += m_colWidths[i];
-                m_colRights[i] = right;
+                for ( i = 0;  i < numCols;  i++ )
+                {
+                    m_colWidths.Insert( m_defaultColWidth, pos );
+                    m_colRights.Insert( 0, pos );
+                }
+
+                int right = 0;
+                if ( pos > 0 ) right = m_colRights[pos-1];
+
+                for ( i = pos;  i < m_numCols;  i++ )
+                {
+                    right += m_colWidths[i];
+                    m_colRights[i] = right;
+                }
             }
             CalcDimensions();
         }
@@ -3548,22 +3567,24 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
         case wxGRIDTABLE_NOTIFY_COLS_APPENDED:
         {
             int numCols = msg.GetCommandInt();
-            for ( i = 0;  i < numCols;  i++ )
-            {
-                m_colWidths.Add( m_defaultColWidth );
-                m_colRights.Add( 0 );
-            }
-
             int oldNumCols = m_numCols;
             m_numCols += numCols;
-
-            int right = 0;
-            if ( oldNumCols > 0 ) right = m_colRights[oldNumCols-1];
-
-            for ( i = oldNumCols;  i < m_numCols;  i++ )
+            if ( !m_colWidths.IsEmpty() )
             {
-                right += m_colWidths[i];
-                m_colRights[i] = right;
+                for ( i = 0;  i < numCols;  i++ )
+                {
+                    m_colWidths.Add( m_defaultColWidth );
+                    m_colRights.Add( 0 );
+                }
+
+                int right = 0;
+                if ( oldNumCols > 0 ) right = m_colRights[oldNumCols-1];
+
+                for ( i = oldNumCols;  i < m_numCols;  i++ )
+                {
+                    right += m_colWidths[i];
+                    m_colRights[i] = right;
+                }
             }
             CalcDimensions();
         }
@@ -3573,32 +3594,36 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
         {
             size_t pos = msg.GetCommandInt();
             int numCols = msg.GetCommandInt2();
-            for ( i = 0;  i < numCols;  i++ )
-            {
-                m_colWidths.Remove( pos );
-                m_colRights.Remove( pos );
-            }
             m_numCols -= numCols;
 
-            if ( !m_numCols )
+            if ( !m_colWidths.IsEmpty() )
             {
-#if 0  // leave the row alone here so that AppendCols will work subsequently
-                m_numRows = 0;
-                m_rowHeights.Clear();
-                m_rowBottoms.Clear();
-#endif
-                m_currentCellCoords = wxGridNoCellCoords;
-            }
-            else
-            {
-                if ( m_currentCellCoords.GetCol() >= m_numCols )
-                    m_currentCellCoords.Set( 0, 0 );
-
-                int w = 0;
-                for ( i = 0;  i < m_numCols;  i++ )
+                for ( i = 0;  i < numCols;  i++ )
                 {
-                    w += m_colWidths[i];
-                    m_colRights[i] = w;
+                    m_colWidths.Remove( pos );
+                    m_colRights.Remove( pos );
+                }
+
+                if ( !m_numCols )
+                {
+#if 0  // leave the row alone here so that AppendCols will work subsequently
+                    m_numRows = 0;
+                    m_rowHeights.Clear();
+                    m_rowBottoms.Clear();
+#endif
+                    m_currentCellCoords = wxGridNoCellCoords;
+                }
+                else
+                {
+                    if ( m_currentCellCoords.GetCol() >= m_numCols )
+                        m_currentCellCoords.Set( 0, 0 );
+
+                    int w = 0;
+                    for ( i = 0;  i < m_numCols;  i++ )
+                    {
+                        w += m_colWidths[i];
+                        m_colRights[i] = w;
+                    }
                 }
             }
             CalcDimensions();
@@ -4431,7 +4456,12 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                         m_selectingKeyboard = coords;
                     }
                     else
+                    {
                         SetCurrentCell( coords );
+                        if ( m_selection->GetSelectionMode()
+                             != wxGrid::wxGridSelectCells)
+                            SelectBlock( coords, coords );
+                    }
                     m_waitForSlowClick = TRUE;
                 }
             }
@@ -4762,9 +4792,14 @@ bool wxGrid::InsertRows( int pos, int numRows, bool WXUNUSED(updateLabels) )
             }
 
             m_selection->UpdateRows( pos, numRows );
-            if ( !GetBatchCount() ) Refresh();
+            if ( !GetBatchCount() )
+            {
+                CalcDimensions();
+                m_rowLabelWin->Refresh();
+                m_gridWin->Refresh();
+            }
         }
-
+        
         return ok;
     }
     else
@@ -4786,6 +4821,15 @@ bool wxGrid::AppendRows( int numRows, bool WXUNUSED(updateLabels) )
 
     if ( m_table && m_table->AppendRows( numRows ) )
     {
+        if ( m_numCols == 0 )
+        {
+            m_table->AppendCols( WXGRID_DEFAULT_NUMBER_COLS );
+            //
+            // TODO: perhaps instead of appending the default number of cols
+            // we should remember what the last non-zero number of cols was ?
+            //
+        }
+
         if ( m_currentCellCoords == wxGridNoCellCoords )
         {
             // if we have just inserted cols into an empty grid the current
@@ -4797,7 +4841,12 @@ bool wxGrid::AppendRows( int numRows, bool WXUNUSED(updateLabels) )
         // the table will have sent the results of the append row
         // operation to this view object as a grid table message
         //
-        if ( !GetBatchCount() ) Refresh();
+        if ( !GetBatchCount() )
+        {
+            CalcDimensions();
+            m_rowLabelWin->Refresh();
+            m_gridWin->Refresh();
+        }
         return TRUE;
     }
     else
@@ -4829,7 +4878,12 @@ bool wxGrid::DeleteRows( int pos, int numRows, bool WXUNUSED(updateLabels) )
             // operation to this view object as a grid table message
             //
             m_selection->UpdateRows( pos, -((int)numRows) );
-            if ( !GetBatchCount() ) Refresh();
+            if ( !GetBatchCount() )
+            {
+                CalcDimensions();
+                m_rowLabelWin->Refresh();
+                m_gridWin->Refresh();
+            }
             return TRUE;
         }
     }
@@ -4868,7 +4922,12 @@ bool wxGrid::InsertCols( int pos, int numCols, bool WXUNUSED(updateLabels) )
             }
 
             m_selection->UpdateCols( pos, numCols );
-            if ( !GetBatchCount() ) Refresh();
+            if ( !GetBatchCount() )
+            {
+                CalcDimensions();
+                m_colLabelWin->Refresh();
+                m_gridWin->Refresh();
+            }
         }
 
         return ok;
@@ -4903,7 +4962,12 @@ bool wxGrid::AppendCols( int numCols, bool WXUNUSED(updateLabels) )
             SetCurrentCell( 0, 0 );
         }
 
-        if ( !GetBatchCount() ) Refresh();
+        if ( !GetBatchCount() )
+        {
+            CalcDimensions();
+            m_colLabelWin->Refresh();
+            m_gridWin->Refresh();
+        }
         return TRUE;
     }
     else
@@ -4934,7 +4998,12 @@ bool wxGrid::DeleteCols( int pos, int numCols, bool WXUNUSED(updateLabels) )
             // operation to this view object as a grid table message
             //
             m_selection->UpdateCols( pos, -((int)numCols) );
-            if ( !GetBatchCount() ) Refresh();
+            if ( !GetBatchCount() )
+            {
+                CalcDimensions();
+                m_colLabelWin->Refresh();
+                m_gridWin->Refresh();
+            }
             return TRUE;
         }
     }
@@ -5600,7 +5669,7 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED_GTK(reg) )
 
 void wxGrid::DrawRowLabels( wxDC& dc )
 {
-    if ( !m_numRows || !m_numCols ) return;
+    if ( !m_numRows ) return;
 
     size_t i;
     size_t numLabels = m_rowLabelsExposed.GetCount();
@@ -5648,7 +5717,7 @@ void wxGrid::DrawRowLabel( wxDC& dc, int row )
 
 void wxGrid::DrawColLabels( wxDC& dc )
 {
-    if ( !m_numRows || !m_numCols ) return;
+    if ( !m_numCols ) return;
 
     size_t i;
     size_t numLabels = m_colLabelsExposed.GetCount();
@@ -7635,7 +7704,7 @@ void wxGrid::SelectRow( int row, bool addToSelected )
     if ( IsSelection() && !addToSelected )
         ClearSelection();
 
-    m_selection->SelectRow( row );
+    m_selection->SelectRow( row, FALSE, addToSelected );
 }
 
 
@@ -7644,7 +7713,7 @@ void wxGrid::SelectCol( int col, bool addToSelected )
     if ( IsSelection() && !addToSelected )
         ClearSelection();
 
-    m_selection->SelectCol( col );
+    m_selection->SelectCol( col, FALSE, addToSelected );
 }
 
 

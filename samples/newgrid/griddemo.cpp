@@ -497,9 +497,11 @@ void GridFrame::DeleteSelectedRows( wxCommandEvent& WXUNUSED(ev) )
 {
     if ( grid->IsSelection() )
     {
-        for ( int n = 0; n < grid->GetNumberRows(); n++ )
+        for ( int n = 0; n < grid->GetNumberRows(); )
             if ( grid->IsInSelection( n , 0 ) )
                 grid->DeleteRows( n, 1 );
+	    else
+	        n++;
     }
 }
 
@@ -508,9 +510,11 @@ void GridFrame::DeleteSelectedCols( wxCommandEvent& WXUNUSED(ev) )
 {
     if ( grid->IsSelection() )
     {
-        for ( int n = 0; n < grid->GetNumberCols(); n++ )
+        for ( int n = 0; n < grid->GetNumberCols(); )
             if ( grid->IsInSelection( 0 , n ) )
                 grid->DeleteCols( n, 1 );
+	    else
+	        n++;
     }
 }
 
