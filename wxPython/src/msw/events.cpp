@@ -108,6 +108,23 @@ static char* wxStringErrorMsg = "string type is required for parameter";
 #ifdef __cplusplus
 extern "C" {
 #endif
+static PyObject *_wrap_wxNewEventType(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxNewEventType",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxNewEventType();
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define new_wxEvent(_swigarg0) (new wxEvent(_swigarg0))
 static PyObject *_wrap_new_wxEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -6282,6 +6299,7 @@ static PyMethodDef eventscMethods[] = {
 	 { "wxEvent_GetEventObject", (PyCFunction) _wrap_wxEvent_GetEventObject, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxEvent", (PyCFunction) _wrap_delete_wxEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxEvent", (PyCFunction) _wrap_new_wxEvent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxNewEventType", (PyCFunction) _wrap_wxNewEventType, METH_VARARGS | METH_KEYWORDS },
 	 { NULL, NULL }
 };
 #ifdef __cplusplus

@@ -158,7 +158,7 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
     if (!PyArg_ParseTuple(args, "O", &onInitFunc))
         return NULL;
 
-#if 0  // Try it out without this check, soo how it does...
+#if 0  // Try it out without this check, see how it does...
     if (wxTopLevelWindows.Number() > 0) {
         PyErr_SetString(PyExc_TypeError, "Only 1 wxApp per process!");
         return NULL;

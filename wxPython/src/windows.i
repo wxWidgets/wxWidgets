@@ -348,6 +348,7 @@ public:
     //void SetPalette(wxPalette* palette);
     void SetCursor(const wxCursor&cursor);
     void SetEventHandler(wxEvtHandler* handler);
+    void SetExtraStyle(long exStyle);
     void SetTitle(const wxString& title);
     bool Show(bool show);
     bool TransferDataFromWindow();

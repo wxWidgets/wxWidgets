@@ -2667,6 +2667,35 @@ static PyObject *_wrap_wxToolBarBase_GetToolMargins(PyObject *self, PyObject *ar
     return _resultobj;
 }
 
+#define wxToolBarBase_GetMargins(_swigobj)  (_swigobj->GetMargins())
+static PyObject *_wrap_wxToolBarBase_GetMargins(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSize * _result;
+    wxToolBarBase * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxToolBarBase_GetMargins",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_GetMargins. Expected _wxToolBarBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxSize (wxToolBarBase_GetMargins(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
 #define wxToolBarBase_GetToolPacking(_swigobj)  (_swigobj->GetToolPacking())
 static PyObject *_wrap_wxToolBarBase_GetToolPacking(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -3185,6 +3214,7 @@ static PyMethodDef stattoolcMethods[] = {
 	 { "wxToolBarBase_SetRows", (PyCFunction) _wrap_wxToolBarBase_SetRows, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolBarBase_GetToolSeparation", (PyCFunction) _wrap_wxToolBarBase_GetToolSeparation, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolBarBase_GetToolPacking", (PyCFunction) _wrap_wxToolBarBase_GetToolPacking, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_GetMargins", (PyCFunction) _wrap_wxToolBarBase_GetMargins, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolBarBase_GetToolMargins", (PyCFunction) _wrap_wxToolBarBase_GetToolMargins, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolBarBase_SetToolSeparation", (PyCFunction) _wrap_wxToolBarBase_SetToolSeparation, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolBarBase_SetToolPacking", (PyCFunction) _wrap_wxToolBarBase_SetToolPacking, METH_VARARGS | METH_KEYWORDS },

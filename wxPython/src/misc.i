@@ -312,6 +312,7 @@ long wxNewId();
 void wxRegisterId(long id);
 %name(NewId) long wxNewId();
 %name(RegisterId) void wxRegisterId(long id);
+long wxGetCurrentId();
 
 void wxBell();
 void wxDisplaySize(int *OUTPUT, int *OUTPUT);
@@ -332,6 +333,7 @@ wxString wxGetOsDescription();
 void wxSleep(int secs);
 void wxUsleep(unsigned long milliseconds);
 bool wxYield();
+bool wxYieldIfNeeded();
 void wxEnableTopLevelWindows(bool enable);
 
 %inline %{

@@ -267,7 +267,7 @@ def runTest(frame, nb, log):
 
     ed.SetText(demoText + open('Main.py').read())
     ed.EmptyUndoBuffer()
-
+    ed.Colourise(0, -1)
 
     # line numbers in the margin
     ed.SetMarginType(1, wxSTC_MARGIN_NUMBER)

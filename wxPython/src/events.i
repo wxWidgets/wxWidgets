@@ -30,6 +30,9 @@
 
 //---------------------------------------------------------------------------
 
+
+int wxNewEventType();
+
 class wxEvent {
 public:
     wxEvent(int id = 0);

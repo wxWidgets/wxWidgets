@@ -252,6 +252,23 @@ static PyObject *_wrap_RegisterId(PyObject *self, PyObject *args, PyObject *kwar
     return _resultobj;
 }
 
+static PyObject *_wrap_wxGetCurrentId(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxGetCurrentId",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (long )wxGetCurrentId();
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
 static PyObject *_wrap_wxBell(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     char *_kwnames[] = {  NULL };
@@ -601,6 +618,23 @@ static PyObject *_wrap_wxYield(PyObject *self, PyObject *args, PyObject *kwargs)
 {
     wxPy_BEGIN_ALLOW_THREADS;
         _result = (bool )wxYield();
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxYieldIfNeeded(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxYieldIfNeeded",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxYieldIfNeeded();
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
@@ -4972,6 +5006,7 @@ static PyMethodDef misccMethods[] = {
 	 { "wxStripMenuCodes", (PyCFunction) _wrap_wxStripMenuCodes, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetResource", (PyCFunction) _wrap_wxGetResource, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEnableTopLevelWindows", (PyCFunction) _wrap_wxEnableTopLevelWindows, METH_VARARGS | METH_KEYWORDS },
+	 { "wxYieldIfNeeded", (PyCFunction) _wrap_wxYieldIfNeeded, METH_VARARGS | METH_KEYWORDS },
 	 { "wxYield", (PyCFunction) _wrap_wxYield, METH_VARARGS | METH_KEYWORDS },
 	 { "wxUsleep", (PyCFunction) _wrap_wxUsleep, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSleep", (PyCFunction) _wrap_wxSleep, METH_VARARGS | METH_KEYWORDS },
@@ -4987,6 +5022,7 @@ static PyMethodDef misccMethods[] = {
 	 { "wxEndBusyCursor", (PyCFunction) _wrap_wxEndBusyCursor, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDisplaySize", (PyCFunction) _wrap_wxDisplaySize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBell", (PyCFunction) _wrap_wxBell, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGetCurrentId", (PyCFunction) _wrap_wxGetCurrentId, METH_VARARGS | METH_KEYWORDS },
 	 { "RegisterId", (PyCFunction) _wrap_RegisterId, METH_VARARGS | METH_KEYWORDS },
 	 { "NewId", (PyCFunction) _wrap_NewId, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRegisterId", (PyCFunction) _wrap_wxRegisterId, METH_VARARGS | METH_KEYWORDS },

@@ -654,6 +654,8 @@ NewId = miscc.NewId
 
 RegisterId = miscc.RegisterId
 
+wxGetCurrentId = miscc.wxGetCurrentId
+
 wxBell = miscc.wxBell
 
 wxDisplaySize = miscc.wxDisplaySize
@@ -683,6 +685,8 @@ wxSleep = miscc.wxSleep
 wxUsleep = miscc.wxUsleep
 
 wxYield = miscc.wxYield
+
+wxYieldIfNeeded = miscc.wxYieldIfNeeded
 
 wxEnableTopLevelWindows = miscc.wxEnableTopLevelWindows
 

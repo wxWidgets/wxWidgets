@@ -924,6 +924,8 @@ enum wxEventType {
 
  wxEVT_TIMER,
 
+ wxWS_EX_VALIDATE_RECURSIVELY,
+
 };
 
 

@@ -4393,6 +4393,34 @@ static PyObject *_wrap_wxWindow_SetEventHandler(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
+#define wxWindow_SetExtraStyle(_swigobj,_swigarg0)  (_swigobj->SetExtraStyle(_swigarg0))
+static PyObject *_wrap_wxWindow_SetExtraStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _arg0;
+    long  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","exStyle", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxWindow_SetExtraStyle",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_SetExtraStyle. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxWindow_SetExtraStyle(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxWindow_SetTitle(_swigobj,_swigarg0)  (_swigobj->SetTitle(_swigarg0))
 static PyObject *_wrap_wxWindow_SetTitle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -9646,6 +9674,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_TransferDataFromWindow", (PyCFunction) _wrap_wxWindow_TransferDataFromWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_Show", (PyCFunction) _wrap_wxWindow_Show, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetTitle", (PyCFunction) _wrap_wxWindow_SetTitle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_SetExtraStyle", (PyCFunction) _wrap_wxWindow_SetExtraStyle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetEventHandler", (PyCFunction) _wrap_wxWindow_SetEventHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetCursor", (PyCFunction) _wrap_wxWindow_SetCursor, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetClientSize", (PyCFunction) _wrap_wxWindow_SetClientSize, METH_VARARGS | METH_KEYWORDS },
