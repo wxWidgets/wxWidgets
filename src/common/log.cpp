@@ -555,7 +555,7 @@ void wxLogStderr::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
         if ( traits && !traits->HasStderr() )
         {
             wxMessageOutputDebug dbgout;
-            dbgout.Printf(_T("%s"), str.c_str());
+            dbgout.Printf(_T("%s\n"), str.c_str());
         }
     }
 }
