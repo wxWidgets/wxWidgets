@@ -85,7 +85,6 @@ build-gtk-shared-stamp:
 				--with-gtk \
 				--with-opengl \
 				--enable-burnt_name \
-				--disable-newgrid \
 				--with-zlib=sys \
 				--with-libjpeg=sys \
 				--with-libpng=sys \
@@ -101,7 +100,6 @@ build-gtk-static-stamp:
 				--with-gtk \
 				--with-opengl \
 				--disable-shared \
-				--disable-newgrid \
 				--with-zlib=sys \
 				--with-libjpeg=sys \
 				--with-libpng=sys \
