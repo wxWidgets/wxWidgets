@@ -1498,6 +1498,11 @@ dist-only:
 
 dist: @GUIDIST@
 	@echo "*** Creating wxWindows distribution in $(DISTDIR)..."
+	@# now prune away a lot of the crap included by using cp -R
+	@# in other dist targets.
+	find $(DISTDIR) \( -name "CVS" -o -name ".cvsignore" -o -name "*.dsp" -o -name "*.dsw" -o -name "*.hh*" -o \
+			\( -name "makefile.*" -a ! -name "makefile.unx" \) \) \
+			-print0 | xargs -0 rm -rf
 	@cd _dist_dir && tar ch $(DISTDIRNAME) | gzip -f9 > ../$(WXARCHIVE);
 	@if test "$(USE_GUI)" = 1; then \
 	cd $(DISTDIR); \
