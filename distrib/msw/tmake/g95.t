@@ -416,7 +416,7 @@ $(TIFFLIB): $(TIFFOBJS)
 	$(RANLIB) $@
 
 $(REGEXLIB):
-	$(MAKE) -C $(REGEXDIR) -f makefile.g95 WXDIR=$(WXDIR)
+	$(MAKE) -C $(REGEXDIR) -f makefile.g95 WXDIR=$(WXDIR) WXWIN=$(WXDIR)
 
 $(OBJECTS):	$(WXINC)/wx/defs.h $(WXINC)/wx/object.h $(ARCHINCDIR)/wx/setup.h
 
