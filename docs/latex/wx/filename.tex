@@ -87,10 +87,10 @@ File names can be case-sensitive or not, the function\rtfsp
 The rules for determining if the file name is absolute or relative also depends
 on the file name format and the only portable way to answer to this question is
 to use \helpref{IsAbsolute}{wxfilenameisabsolute} method. To ensure that the
-filename is absolute you may use \helpref{Normalize}{wxfilenamenormalize}. There
-is also an inverse function \helpref{MakeRelativeTo}{wxfilenamemakerelativeto} 
-which undoes what \helpref{Normalize(wxPATH\_NORM\_DOTS)}{wxfilenamenormalize} 
-does.
+filename is absolute you may use
+\helpref{MakeAbsolute}{wxfilenamemakeabsolute}.  There is also an inverse
+function \helpref{MakeRelativeTo}{wxfilenamemakerelativeto} which undoes what
+\helpref{Normalize(wxPATH\_NORM\_DOTS)}{wxfilenamenormalize} does.
 
 Other functions returning information about the file format provided by this
 class are \helpref{GetVolumeSeparator}{wxfilenamegetvolumeseparator},\rtfsp
@@ -524,6 +524,23 @@ Returns {\tt TRUE} if this object represents a directory, {\tt FALSE} otherwise
 directory or file really exists, you should use 
 \helpref{DirExists}{wxfilenamedirexists} or 
 \helpref{FileExists}{wxfilenamefileexists} for this.
+
+\membersection{wxFileName::MakeAbsolute}\label{wxfilenamemakeabsolute}
+
+\func{bool}{MakeAbsolute}{\param{const wxString\& }{cwd = wxEmptyString}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
+
+Make the file name absolute. This is a shortcut for
+{\tt \helpref{Normalize}{wxfilenamenormalize}(wxPATH\_NORM\_DOTS | wxPATH\_NORM\_ABSOLUTE | wxPATH\_NORM\_TILDE, cwd, format)}.
+
+\wxheading{See also}
+
+\helpref{MakeRelativeTo}{wxfilenamemakerelativeto},
+\helpref{Normalize}{wxfilenamenormalize},
+\helpref{IsAbsolute}{wxfilenameisabsolute}
+
+\wxheading{Note}
+
+This method was added in wxWindows 2.4.1.
 
 \membersection{wxFileName::MakeRelativeTo}\label{wxfilenamemakerelativeto}
 

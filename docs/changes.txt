@@ -185,6 +185,7 @@ All:
 - fixed duplicate wxFontEncoding values
 - wxFileConfig now always uses UTF-8 to store settings in Unicode build;
   it will be possible to set different charset in wxWindows >= 2.5.0
+- added wxFileName::MakeAbsolute
 
 Unix (GUI):
 
