@@ -1334,7 +1334,7 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 
     wxCHECK_RET( font, wxT("invalid font") );
 
-#ifdef __WXGTK20__
+#if defined(__WXGTK20__)
     wxCHECK_RET( m_context, wxT("no Pango context") );
 #endif
 
@@ -1378,7 +1378,7 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
         gdk_draw_line( m_window, m_textGC, x, ul_y, x + width, ul_y);
     }
 
-#ifdef __WXGTK20__
+#if defined(__WXGTK20__) && wxUSE_WCHAR_T
     g_object_unref( G_OBJECT( layout ) );
 #endif
 
