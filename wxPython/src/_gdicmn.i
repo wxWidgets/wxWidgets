@@ -192,9 +192,8 @@ public:
         elif index == 1: self.height = val
         else: raise IndexError
     def __nonzero__(self):               return self.Get() != (0,0)
-    def __getinitargs__(self):           return ()
-    def __getstate__(self):              return self.Get()
-    def __setstate__(self, state):       self.Set(*state)
+    __safe_for_unpickling__ = True
+    def __reduce__(self):                return (wx.Size, self.Get())
     }
 
 };
@@ -267,9 +266,8 @@ public:
         elif index == 1: self.y = val
         else: raise IndexError
     def __nonzero__(self):               return self.Get() != (0.0, 0.0)
-    def __getinitargs__(self):           return ()
-    def __getstate__(self):              return self.Get()
-    def __setstate__(self, state):       self.Set(*state)
+    __safe_for_unpickling__ = True
+    def __reduce__(self):                return (wx.RealPoint, self.Get())
     }
 };
 
@@ -353,9 +351,8 @@ public:
         elif index == 1: self.y = val
         else: raise IndexError
     def __nonzero__(self):               return self.Get() != (0,0)
-    def __getinitargs__(self):           return ()
-    def __getstate__(self):              return self.Get()
-    def __setstate__(self, state):       self.Set(*state)
+    __safe_for_unpickling__ = True
+    def __reduce__(self):                return (wx.Point, self.Get())
     }
 };
 
@@ -526,9 +523,8 @@ public:
         elif index == 3: self.height = val
         else: raise IndexError
     def __nonzero__(self):               return self.Get() != (0,0,0,0)
-    def __getinitargs__(self):           return ()
-    def __getstate__(self):              return self.Get()
-    def __setstate__(self, state):       self.Set(*state)
+    __safe_for_unpickling__ = True
+    def __reduce__(self):                return (wx.Rect, self.Get())
     }
 };
 
@@ -654,10 +650,8 @@ public:
         elif index == 1: self.y = val
         else: raise IndexError
     def __nonzero__(self):               return self.Get() != (0.0, 0.0)
-    def __getinitargs__(self):           return ()
-    def __getstate__(self):              return self.Get()
-    def __setstate__(self, state):       self.Set(*state)
-
+    __safe_for_unpickling__ = True
+    def __reduce__(self):                return (wx.Point2D, self.Get())
     }
 };
 
