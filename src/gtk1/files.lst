@@ -72,6 +72,7 @@ ALL_SOURCES = \
 		common/file.cpp \
 		common/fileconf.cpp \
 		common/filefn.cpp \
+		common/filename.cpp \
 		common/filesys.cpp \
 		common/fontcmn.cpp \
 		common/fontmap.cpp \
@@ -296,6 +297,7 @@ ALL_HEADERS = \
 		fileconf.h \
 		filedlg.h \
 		filefn.h \
+		filename.h \
 		filesys.h \
 		font.h \
 		fontdlg.h \
@@ -592,6 +594,7 @@ COMMONOBJS = \
 		file.o \
 		fileconf.o \
 		filefn.o \
+		filename.o \
 		filesys.o \
 		fontcmn.o \
 		fontmap.o \
@@ -698,6 +701,7 @@ COMMONDEPS = \
 		file.d \
 		fileconf.d \
 		filefn.d \
+		filename.d \
 		filesys.d \
 		fontcmn.d \
 		fontmap.d \

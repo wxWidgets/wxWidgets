@@ -135,6 +135,7 @@ ffile.cpp	C	B
 file.cpp	C	B
 fileconf.cpp	C	B
 filefn.cpp	C	B
+filename.cpp	C	B
 filesys.cpp	C	B
 fontcmn.cpp	C
 fontmap.cpp	C	B
@@ -603,6 +604,7 @@ file.h	W	B
 fileconf.h	W	B
 filedlg.h	W
 filefn.h	W	B
+filename.h	W	B
 filesys.h	W	B
 font.h	W
 fontdlg.h	W

@@ -40,78 +40,85 @@ class wxStaticBoxSizer;
 
 class WXDLLEXPORT wxSizerItem: public wxObject
 {
-    DECLARE_CLASS(wxSizerItem);
 public:
-  // spacer
-  wxSizerItem( int width, int height, int option, int flag, int border, wxObject* userData);
+    // spacer
+    wxSizerItem( int width, int height, int option, int flag, int border, wxObject* userData);
 
-  // window
-  wxSizerItem( wxWindow *window, int option, int flag, int border, wxObject* userData );
+    // window
+    wxSizerItem( wxWindow *window, int option, int flag, int border, wxObject* userData );
 
-  // subsizer
-  wxSizerItem( wxSizer *sizer, int option, int flag, int border, wxObject* userData );
+    // subsizer
+    wxSizerItem( wxSizer *sizer, int option, int flag, int border, wxObject* userData );
 
-  ~wxSizerItem();
+    ~wxSizerItem();
 
-  virtual wxSize GetSize();
-  virtual wxSize CalcMin();
-  virtual void SetDimension( wxPoint pos, wxSize size );
+    virtual wxSize GetSize();
+    virtual wxSize CalcMin();
+    virtual void SetDimension( wxPoint pos, wxSize size );
 
-  void SetRatio( int width, int height )
-    // if either of dimensions is zero, ratio is assumed to be 1
-    // to avoid "divide by zero" errors
-    { m_ratio = (width && height) ? ((float) width / (float) height) : 1; }
-  void SetRatio( wxSize size )
-    { m_ratio = (size.x && size.y) ? ((float) size.x / (float) size.y) : 1; }
-  void SetRatio( float ratio ) { m_ratio = ratio; }
-  float GetRatio() const { return m_ratio; }
+    wxSize GetMinSize()
+        { return m_minSize; }
 
-  bool IsWindow();
-  bool IsSizer();
-  bool IsSpacer();
+    void SetRatio( int width, int height )
+        // if either of dimensions is zero, ratio is assumed to be 1
+        // to avoid "divide by zero" errors
+        { m_ratio = (width && height) ? ((float) width / (float) height) : 1; }
+    void SetRatio( wxSize size )
+        { m_ratio = (size.x && size.y) ? ((float) size.x / (float) size.y) : 1; }
+    void SetRatio( float ratio ) 
+        { m_ratio = ratio; }
+    float GetRatio() const 
+        { return m_ratio; }
+
+    bool IsWindow();
+    bool IsSizer();
+    bool IsSpacer();
   
-  void SetInitSize( int x, int y )
-    { m_minSize.x = x; m_minSize.y = y; }
-  void SetOption( int option )
-    { m_option = option; }
-  void SetFlag( int flag )
-    { m_flag = flag; }
-  void SetBorder( int border )
-    { m_border = border; }
+    void SetInitSize( int x, int y )
+        { m_minSize.x = x; m_minSize.y = y; }
+    void SetOption( int option )
+        { m_option = option; }
+    void SetFlag( int flag )
+        { m_flag = flag; }
+    void SetBorder( int border )
+        { m_border = border; }
 
-  wxWindow *GetWindow() const
-    { return m_window; }
-  void SetWindow( wxWindow *window )
-    { m_window = window; }
-  wxSizer *GetSizer() const
-    { return m_sizer; }
-  void SetSizer( wxSizer *sizer )
-    { m_sizer = sizer; }
-  int GetOption() const
-    { return m_option; }
-  int GetFlag() const
-    { return m_flag; }
-  int GetBorder() const
-    { return m_border; }
-  wxObject* GetUserData()
-    { return m_userData; }
-  wxPoint GetPosition()
-    { return m_pos; }
+    wxWindow *GetWindow() const
+        { return m_window; }
+    void SetWindow( wxWindow *window )
+        { m_window = window; }
+    wxSizer *GetSizer() const
+        { return m_sizer; }
+    void SetSizer( wxSizer *sizer )
+        { m_sizer = sizer; }
+    int GetOption() const
+        { return m_option; }
+    int GetFlag() const
+        { return m_flag; }
+    int GetBorder() const
+        { return m_border; }
+    wxObject* GetUserData()
+        { return m_userData; }
+    wxPoint GetPosition()
+        { return m_pos; }
 
 protected:
-  wxWindow    *m_window;
-  wxSizer     *m_sizer;
-  wxSize       m_size;
-  wxPoint      m_pos;
-  wxSize       m_minSize;
-  int          m_option;
-  int          m_border;
-  int          m_flag;
-  // als: aspect ratio can always be calculated from m_size,
-  //      but this would cause precision loss when the window
-  //      is shrinked.  it is safer to preserve initial value.
-  float        m_ratio;
-  wxObject    *m_userData;
+    wxWindow    *m_window;
+    wxSizer     *m_sizer;
+    wxSize       m_size;
+    wxPoint      m_pos;
+    wxSize       m_minSize;
+    int          m_option;
+    int          m_border;
+    int          m_flag;
+    // als: aspect ratio can always be calculated from m_size,
+    //      but this would cause precision loss when the window
+    //      is shrinked.  it is safer to preserve initial value.
+    float        m_ratio;
+    wxObject    *m_userData;
+  
+private:
+    DECLARE_CLASS(wxSizerItem);
 };
 
 //---------------------------------------------------------------------------
