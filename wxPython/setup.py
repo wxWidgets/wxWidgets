@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #----------------------------------------------------------------------
 
-import sys, os, glob, fnmatch
+import sys, os, glob, fnmatch, commands
 from distutils.core      import setup, Extension
 from distutils.file_util import copy_file
 from distutils.dir_util  import mkpath
@@ -480,6 +480,13 @@ elif os.name == 'posix':
 
     libdirs = []
     libs = []
+
+    # If you get unresolved symbol errors on Solaris and are usign gcc, then
+    # uncomment this block to add the right flags to the link step and build
+    # again.
+    ## if os.uname()[0] == 'SunOS':
+    ##     libs.append('gcc')
+    ##     libdirs.append(commands.getoutput("gcc -print-search-dirs | grep '^install' | awk '{print $2}'")[:-1])
 
     Verify_WX_CONFIG()
 
