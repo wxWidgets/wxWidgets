@@ -126,7 +126,7 @@ static pascal OSStatus TextInputEventHandler( EventHandlerCallRef handler , Even
     {
         case kEventTextInputUnicodeForKeyEvent :
             // this is only called when no default handler has jumped in, eg a wxControl on a floater window does not
-            // get its own kEventTextInputUnicodeForKeyEvent, so we route back the 
+            // get its own kEventTextInputUnicodeForKeyEvent, so we route back the
             wxControl* control = wxDynamicCast( focus , wxControl ) ;
             if ( control )
             {
@@ -341,13 +341,13 @@ static pascal OSStatus WindowEventHandler( EventHandlerCallRef handler , EventRe
 
                 GetEventParameter( event, kEventParamCurrentBounds, typeQDRectangle, NULL,
                     sizeof( newContentRect ), NULL, &newContentRect );
-                    
+
                 wxRect contentRect(newContentRect.left , newContentRect.top ,
                     newContentRect.right - newContentRect.left ,
                     newContentRect.bottom - newContentRect.top) ;
-                    
+
                 bool handled = false ;
-                if ((attributes & kWindowBoundsChangeSizeChanged) != 0) 
+                if ((attributes & kWindowBoundsChangeSizeChanged) != 0)
                 {
                     wxSizeEvent event(contentRect , toplevelWindow->GetId());
                     event.SetEventObject(toplevelWindow);
@@ -713,9 +713,9 @@ void wxTopLevelWindowMac::MacGetPortParams(WXPOINTPTR localOrigin, WXRECTPTR cli
     *rootwin = this ;
 }
 
-void wxTopLevelWindowMac::Clear()
+void wxTopLevelWindowMac::ClearBackground()
 {
-    wxWindow::Clear() ;
+    wxWindow::ClearBackground() ;
 }
 
 WXWidget wxTopLevelWindowMac::MacGetContainerForEmbedding()
@@ -766,7 +766,7 @@ void wxTopLevelWindowMac::MacUpdate( long timestamp)
         DisposeRgn( diffRgn );
     if ( visRgn )
         DisposeRgn( visRgn ) ;
-        
+
     EndUpdate( (WindowRef)m_macWindow ) ;
     SetEmptyRgn( (RgnHandle) m_macNoEraseUpdateRgn ) ;
     m_macNeedsErasing = false ;

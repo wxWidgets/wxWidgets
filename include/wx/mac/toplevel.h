@@ -75,7 +75,7 @@ public:
                                       const wxString& name ) ;
     static WXWindow MacGetWindowInUpdate() { return s_macWindowInUpdate ; }
     virtual void MacGetPortParams(WXPOINTPTR localOrigin, WXRECTPTR clipRect, WXWindow *window , wxWindowMac** rootwin ) ;
-    virtual void Clear() ;
+    virtual void ClearBackground() ;
     virtual WXWidget MacGetContainerForEmbedding() ;
     WXWindow MacGetWindowRef() { return m_macWindow ; }
     virtual void MacActivate( long timestamp , bool inIsActivating ) ;
