@@ -16,9 +16,6 @@
 //---------------------------------------------------------------------------
 
 %{
-#include <wx/spinbutt.h>
-#include <wx/spinctrl.h>
-
     DECLARE_DEF_STRING(SPIN_BUTTON_NAME);
     wxChar* wxSpinCtrlNameStr = _T("wxSpinCtrl");
     DECLARE_DEF_STRING(SpinCtrlNameStr);

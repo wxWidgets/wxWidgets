@@ -16,8 +16,6 @@
 //---------------------------------------------------------------------------
 
 %{
-#include <wx/dirctrl.h>
-
     DECLARE_DEF_STRING(DirDialogDefaultFolderStr);
 %}
 

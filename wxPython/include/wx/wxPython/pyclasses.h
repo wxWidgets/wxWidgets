@@ -132,6 +132,10 @@ class wxPyPreviewFrame;
 class wxPyWindow;
 class wxPyPreviewControlBar;
 class wxPyPrintPreview;
+class wxPyListCtrl;
+class wxPyControl;
+class wxPyPrintout;
+
 
 #ifdef __WXMAC__
 class wxPopupWindow;

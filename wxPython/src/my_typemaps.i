@@ -194,6 +194,14 @@
 %#endif
 }
 
+%typemap(python, varout) wxString {
+%#if wxUSE_UNICODE
+    $result = PyUnicode_FromWideChar($1.c_str(), $1.Len());
+%#else
+    $result = PyString_FromStringAndSize($1.c_str(), $1.Len());
+%#endif
+}
+
 
 
 // //---------------------------------------------------------------------------

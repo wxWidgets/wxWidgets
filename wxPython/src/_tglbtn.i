@@ -16,11 +16,8 @@
 //---------------------------------------------------------------------------
 
 %{
-#include <wx/tglbtn.h>
-
     wxChar* wxToggleButtonNameStr = _T("wxToggleButton");
     DECLARE_DEF_STRING(ToggleButtonNameStr);
-
 %}
 
 //---------------------------------------------------------------------------

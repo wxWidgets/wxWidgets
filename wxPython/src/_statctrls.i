@@ -17,8 +17,6 @@
 //---------------------------------------------------------------------------
 
 %{
-#include <wx/statline.h>
-
     DECLARE_DEF_STRING(StaticBitmapNameStr);
     DECLARE_DEF_STRING(StaticBoxNameStr);
     DECLARE_DEF_STRING(StaticTextNameStr);
