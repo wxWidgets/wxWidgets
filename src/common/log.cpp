@@ -180,9 +180,9 @@ void wxLogVerbose(const wxChar *szFormat, ...)
 
       wxChar *p = s_szBuf;
       size_t len = WXSIZEOF(s_szBuf);
-      strncpy(s_szBuf, _T("Trace ("), len);
-      len -= 7; // strlen("Trace (")
-      p += 7;
+      strncpy(s_szBuf, _T("("), len);
+      len -= 2; // strlen("(")
+      p += 2;
       strncat(p, mask, len);
       size_t lenMask = wxStrlen(mask);
       len -= lenMask;
@@ -369,8 +369,13 @@ void wxLog::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
         case wxLOG_Trace:
         case wxLOG_Debug:
 #ifdef __WXDEBUG__
-            DoLogString(szString, t);
-#endif
+            {
+                wxString msg = level == wxLOG_Trace ? wxT("Trace: ")
+                                                    : wxT("Debug: "),
+                msg << szString;
+                DoLogString(msg, t);
+            }
+#endif // Debug
             break;
     }
 }
