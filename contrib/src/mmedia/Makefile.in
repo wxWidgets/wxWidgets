@@ -14,11 +14,16 @@ AR = @AR@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
+DLLPREFIX = @DLLPREFIX@
 EXTRALIBS = @EXTRALIBS@
 EXTRALIBS_ESD = @EXTRALIBS_ESD@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
 HOST_SUFFIX = @HOST_SUFFIX@
+INSTALL_DATA = @INSTALL_DATA@
+INSTALL_DIR = @INSTALL_DIR@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
 LDFLAGS = @LDFLAGS@
+LIBPREFIX = @LIBPREFIX@
 LN_S = @LN_S@
 PIC_FLAG = @PIC_FLAG@
 RANLIB = @RANLIB@
@@ -87,6 +92,10 @@ WX_VERSION = 2.5.0
 
 ### Conditionally set variables: ###
 
+@COND_DEPS_TRACKING_0@CXXC = $(CXX)
+@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
+@COND_PLATFORM_WIN32_0@DLLIMPEXT = .$(SO_SUFFIX)
+@COND_PLATFORM_WIN32_1@DLLIMPEXT = .a
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_OFFICIAL_BUILD_0_PLATFORM_WIN32_1@VENDORTAG = _$(VENDOR)
@@ -150,42 +159,42 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 @COND_GCC_PCH_1@__mmediadll_PCH_DEP = .pch/wxprec_mmediadll/wx/wxprec.h.gch
 @COND_GCC_PCH_1@__mmediadll_PCH_INC = -I.pch/wxprec_mmediadll
 COND_SHARED_1___mmediadll___depname = \
-	$(LIBDIRNAME)/lib$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf3)
+	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf3)
 @COND_SHARED_1@__mmediadll___depname = $(COND_SHARED_1___mmediadll___depname)
 COND_PLATFORM_WIN32_1___mmediadll___importlib = \
-	-Wl,--out-implib,$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX).$(SO_SUFFIX)
+	-Wl,--out-implib,$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 @COND_PLATFORM_WIN32_1@__mmediadll___importlib = $(COND_PLATFORM_WIN32_1___mmediadll___importlib)
 COND_PLATFORM_MACOSX_1___mmediadll___macinstnamecmd = -install_name \
-	$(libdir)/lib$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf2)
+	$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf2)
 @COND_PLATFORM_MACOSX_1@__mmediadll___macinstnamecmd = $(COND_PLATFORM_MACOSX_1___mmediadll___macinstnamecmd)
 @COND_PLATFORM_MACOSX_1@__mmediadll___macver = \
 @COND_PLATFORM_MACOSX_1@	-compatibility_version $(WX_VERSION) \
 @COND_PLATFORM_MACOSX_1@	-current_version $(WX_VERSION)
 COND_USE_SOSYMLINKS_1___mmediadll___so_symlinks_cmd = (cd $(LIBDIRNAME)/; rm -f \
-	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX).$(SO_SUFFIX) \
-	lib$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf2); \
+	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX)$(DLLIMPEXT) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf2); \
 	$(LN_S) \
-	lib$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf3) \
-	lib$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf2); \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf3) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf2); \
 	$(LN_S) \
-	lib$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf2) \
-	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX).$(SO_SUFFIX))
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf2) \
+	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX)$(DLLIMPEXT))
 @COND_USE_SOSYMLINKS_1@__mmediadll___so_symlinks_cmd = $(COND_USE_SOSYMLINKS_1___mmediadll___so_symlinks_cmd)
 COND_USE_SOSYMLINKS_1___mmediadll___so_symlinks_inst_cmd = rm -f \
-	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX).$(SO_SUFFIX) \
-	lib$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf2); \
+	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX)$(DLLIMPEXT) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf2); \
 	$(LN_S) \
-	lib$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf3) \
-	lib$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf2); \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf3) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf2); \
 	$(LN_S) \
-	lib$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf2) \
-	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX).$(SO_SUFFIX)
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf2) \
+	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 @COND_USE_SOSYMLINKS_1@__mmediadll___so_symlinks_inst_cmd = $(COND_USE_SOSYMLINKS_1___mmediadll___so_symlinks_inst_cmd)
 COND_USE_SOVERLINUX_1___mmediadll___soname_flags = \
-	$(SONAME_FLAG)lib$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf2)
+	$(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf2)
 @COND_USE_SOVERLINUX_1@__mmediadll___soname_flags = $(COND_USE_SOVERLINUX_1___mmediadll___soname_flags)
 COND_USE_SOVERSOLARIS_1___mmediadll___soname_flags = \
-	$(SONAME_FLAG)lib$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf3)
+	$(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf3)
 @COND_USE_SOVERSOLARIS_1@__mmediadll___soname_flags = $(COND_USE_SOVERSOLARIS_1___mmediadll___soname_flags)
 @COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@__mmediadll___targetsuf2 \
 @COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@	= .$(SO_SUFFIX).0
@@ -200,7 +209,7 @@ COND_USE_SOVERSOLARIS_1___mmediadll___soname_flags = \
 @COND_GCC_PCH_1@__mmedialib_PCH_DEP = .pch/wxprec_mmedialib/wx/wxprec.h.gch
 @COND_GCC_PCH_1@__mmedialib_PCH_INC = -I.pch/wxprec_mmedialib
 COND_SHARED_0___mmedialib___depname = \
-	$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX).a
+	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX).a
 @COND_SHARED_0@__mmedialib___depname = $(COND_SHARED_0___mmedialib___depname)
 
 ### Targets: ###
@@ -216,188 +225,188 @@ all: $(__mmediadll___depname) $(__mmedialib___depname)
 clean: 
 	rm -rf ./.deps ./.pch
 	rm -f ./*.o
-	rm -f $(LIBDIRNAME)/lib$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf3)
-	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX).$(SO_SUFFIX)
-	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX).$(SO_SUFFIX) $(LIBDIRNAME)/lib$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf2)
-	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX).a
+	rm -f $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf3)
+	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
+	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf2)
+	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX).a
 
 distclean: clean
 	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 install: all $(__install_mmediadll___depname) $(__install_mmedialib___depname)
-	$(INSTALL) -d $(includedir)
+	$(INSTALL_DIR) $(includedir)
 	for f in wx/mmedia/cdbase.h wx/mmedia/cdunix.h wx/mmedia/cdwin.h wx/mmedia/sndaiff.h wx/mmedia/sndbase.h wx/mmedia/sndcodec.h wx/mmedia/sndcpcm.h wx/mmedia/sndesd.h wx/mmedia/sndfile.h wx/mmedia/sndg72x.h wx/mmedia/sndmsad.h wx/mmedia/sndoss.h wx/mmedia/sndpcm.h wx/mmedia/sndulaw.h wx/mmedia/sndwav.h wx/mmedia/sndwin.h wx/mmedia/vidbase.h wx/mmedia/vidwin.h wx/mmedia/vidxanm.h; do \
 	if test ! -d $(includedir)/`dirname $$f` ; then \
-	$(INSTALL) -d $(includedir)/`dirname $$f`; \
+	$(INSTALL_DIR) $(includedir)/`dirname $$f`; \
 	fi; \
-	$(INSTALL) -m 644 $(srcdir)/../../include//$$f $(includedir)/$$f; \
+	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(includedir)/$$f; \
 	done
 
 install-strip: install
-	$(STRIP) $(libdir)/lib$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf3)
+	$(STRIP) $(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf3)
 
 @COND_SHARED_1@install_mmediadll: 
-@COND_SHARED_1@	$(INSTALL) -d $(libdir)
-@COND_SHARED_1@	$(INSTALL) -m 644 $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX).$(SO_SUFFIX) $(libdir)
-@COND_SHARED_1@	install -c $(LIBDIRNAME)/lib$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf3) $(libdir)
+@COND_SHARED_1@	$(INSTALL_DIR) $(libdir)
+@COND_SHARED_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(libdir)
+@COND_SHARED_1@	$(INSTALL_PROGRAM) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf3) $(libdir)
 @COND_SHARED_1@	(cd $(libdir) ; $(__mmediadll___so_symlinks_inst_cmd))
 
 @COND_SHARED_0@install_mmedialib: 
-@COND_SHARED_0@	$(INSTALL) -d $(libdir)
-@COND_SHARED_0@	$(INSTALL) -m 644 $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX).a $(libdir)
+@COND_SHARED_0@	$(INSTALL_DIR) $(libdir)
+@COND_SHARED_0@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX).a $(libdir)
 
-@COND_SHARED_1@$(LIBDIRNAME)/lib$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf3): $(__mmediadll_PCH_DEP)  $(MMEDIADLL_OBJECTS)
+@COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__mmediadll___targetsuf3): $(__mmediadll_PCH_DEP)  $(MMEDIADLL_OBJECTS)
 @COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(MMEDIADLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__mmediadll___macinstnamecmd) $(__mmediadll___importlib) $(__mmediadll___soname_flags) $(__mmediadll___macver) $(EXTRALIBS_ESD)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p)
 @COND_SHARED_1@	$(__mmediadll___so_symlinks_cmd)
 
 mmediadll_cdbase.o: $(srcdir)/cdbase.cpp
-	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
 mmediadll_cdunix.o: $(srcdir)/cdunix.cpp
-	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
 mmediadll_cdwin.o: $(srcdir)/cdwin.cpp
-	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
 mmediadll_g711.o: $(srcdir)/g711.cpp
-	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
 mmediadll_g721.o: $(srcdir)/g721.cpp
-	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
 mmediadll_g723_24.o: $(srcdir)/g723_24.cpp
-	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
 mmediadll_g723_40.o: $(srcdir)/g723_40.cpp
-	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
 mmediadll_g72x.o: $(srcdir)/g72x.cpp
-	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
 mmediadll_sndaiff.o: $(srcdir)/sndaiff.cpp
-	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
 mmediadll_sndbase.o: $(srcdir)/sndbase.cpp
-	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
 mmediadll_sndcodec.o: $(srcdir)/sndcodec.cpp
-	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
 mmediadll_sndcpcm.o: $(srcdir)/sndcpcm.cpp
-	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
 mmediadll_sndesd.o: $(srcdir)/sndesd.cpp
-	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
 mmediadll_sndfile.o: $(srcdir)/sndfile.cpp
-	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
 mmediadll_sndg72x.o: $(srcdir)/sndg72x.cpp
-	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
 mmediadll_sndmsad.o: $(srcdir)/sndmsad.cpp
-	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
 mmediadll_sndoss.o: $(srcdir)/sndoss.cpp
-	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
 mmediadll_sndpcm.o: $(srcdir)/sndpcm.cpp
-	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
 mmediadll_sndulaw.o: $(srcdir)/sndulaw.cpp
-	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
 mmediadll_sndwav.o: $(srcdir)/sndwav.cpp
-	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
 mmediadll_sndwin.o: $(srcdir)/sndwin.cpp
-	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
 mmediadll_vidbase.o: $(srcdir)/vidbase.cpp
-	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
 mmediadll_vidwin.o: $(srcdir)/vidwin.cpp
-	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
 mmediadll_vidxanm.o: $(srcdir)/vidxanm.cpp
-	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-@COND_SHARED_0@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX).a: $(__mmedialib_PCH_DEP)  $(MMEDIALIB_OBJECTS)
+@COND_SHARED_0@$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX).a: $(__mmedialib_PCH_DEP)  $(MMEDIALIB_OBJECTS)
 @COND_SHARED_0@	rm -f $@
 @COND_SHARED_0@	$(AR) rcu $@ $(MMEDIALIB_OBJECTS)
 @COND_SHARED_0@	$(RANLIB) $@
 
 mmedialib_cdbase.o: $(srcdir)/cdbase.cpp
-	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
 mmedialib_cdunix.o: $(srcdir)/cdunix.cpp
-	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
 mmedialib_cdwin.o: $(srcdir)/cdwin.cpp
-	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
 mmedialib_g711.o: $(srcdir)/g711.cpp
-	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
 mmedialib_g721.o: $(srcdir)/g721.cpp
-	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
 mmedialib_g723_24.o: $(srcdir)/g723_24.cpp
-	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
 mmedialib_g723_40.o: $(srcdir)/g723_40.cpp
-	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
 mmedialib_g72x.o: $(srcdir)/g72x.cpp
-	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
 mmedialib_sndaiff.o: $(srcdir)/sndaiff.cpp
-	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
 mmedialib_sndbase.o: $(srcdir)/sndbase.cpp
-	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
 mmedialib_sndcodec.o: $(srcdir)/sndcodec.cpp
-	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
 mmedialib_sndcpcm.o: $(srcdir)/sndcpcm.cpp
-	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
 mmedialib_sndesd.o: $(srcdir)/sndesd.cpp
-	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
 mmedialib_sndfile.o: $(srcdir)/sndfile.cpp
-	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
 mmedialib_sndg72x.o: $(srcdir)/sndg72x.cpp
-	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
 mmedialib_sndmsad.o: $(srcdir)/sndmsad.cpp
-	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
 mmedialib_sndoss.o: $(srcdir)/sndoss.cpp
-	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
 mmedialib_sndpcm.o: $(srcdir)/sndpcm.cpp
-	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
 mmedialib_sndulaw.o: $(srcdir)/sndulaw.cpp
-	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
 mmedialib_sndwav.o: $(srcdir)/sndwav.cpp
-	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
 mmedialib_sndwin.o: $(srcdir)/sndwin.cpp
-	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
 mmedialib_vidbase.o: $(srcdir)/vidbase.cpp
-	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
 mmedialib_vidwin.o: $(srcdir)/vidwin.cpp
-	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
 mmedialib_vidxanm.o: $(srcdir)/vidxanm.cpp
-	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
 uninstall: 
 

@@ -13,6 +13,7 @@ INSTALL = @INSTALL@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
+EXEEXT = @EXEEXT@
 EXTRALIBS = @EXTRALIBS@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
 HOST_SUFFIX = @HOST_SUFFIX@
@@ -43,6 +44,8 @@ WX_VERSION = 2.5.0
 
 ### Conditionally set variables: ###
 
+@COND_DEPS_TRACKING_0@CXXC = $(CXX)
+@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_TOOLKIT_MAC@WXBASEPORT = _carbon
@@ -72,7 +75,7 @@ WX_VERSION = 2.5.0
 @COND_WXUSE_ZLIB_BUILTIN@	-lwxzlib$(WXDEBUGFLAG)$(HOST_SUFFIX)
 COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -i $(top_srcdir)/include -i $(srcdir) \
-	$(__DLLFLAG_p_1) -i $(srcdir)/../../samples -o accesstest Carbon.r \
+	$(__DLLFLAG_p_1) -i $(srcdir)/../../samples -o accesstest$(EXEEXT) Carbon.r \
 	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.r sample.r
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_1 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = \
@@ -88,21 +91,21 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_2 = --define __WXUNIVERSAL__
 @COND_PLATFORM_MAC_1@__accesstest___mac_rezcmd = $(__MACOSX_RESOURCES_p_1)
 @COND_PLATFORM_MAC_1@__accesstest___mac_setfilecmd = \
-@COND_PLATFORM_MAC_1@	$(SETFILE) -a C accesstest
+@COND_PLATFORM_MAC_1@	$(SETFILE) -a C accesstest$(EXEEXT)
 @COND_PLATFORM_WIN32_1@__accesstest___win32rc = accesstest_accesstest_rc.o
 @COND_PLATFORM_MACOSX_1@__accesstest_bundle___depname = accesstest_bundle
 
 ### Targets: ###
 
-all: accesstest $(__accesstest_bundle___depname)
+all: accesstest$(EXEEXT) $(__accesstest_bundle___depname)
 
-accesstest: $(ACCESSTEST_OBJECTS) $(__accesstest___win32rc)
+accesstest$(EXEEXT): $(ACCESSTEST_OBJECTS) $(__accesstest___win32rc)
 	$(CXX) -o $@ $(ACCESSTEST_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
 	$(__accesstest___mac_rezcmd)
 	$(__accesstest___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-accesstest.app/Contents: accesstest $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+accesstest.app/Contents: accesstest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p accesstest.app/Contents
 	mkdir -p accesstest.app/Contents/MacOS
 	mkdir -p accesstest.app/Contents/Resources
@@ -117,14 +120,14 @@ accesstest.app/Contents: accesstest $(top_srcdir)/src/mac/Info.plist.in $(LIBDIR
 	echo -n "APPL????" >accesstest.app/Contents/PkgInfo
 	
 	
-	ln -f accesstest accesstest.app/Contents/MacOS/accesstest
+	ln -f accesstest$(EXEEXT) accesstest.app/Contents/MacOS/accesstest
 	
 	
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc accesstest.app/Contents/Resources/accesstest.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns accesstest.app/Contents/Resources/wxmac.icns
 
 accesstest_accesstest.o: $(srcdir)/accesstest.cpp
-	$(CXX) -c -o $@ $(ACCESSTEST_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(ACCESSTEST_CXXFLAGS) $<
 
 accesstest_accesstest_rc.o: $(srcdir)/accesstest.rc
 	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples
@@ -134,7 +137,7 @@ accesstest_accesstest_rc.o: $(srcdir)/accesstest.rc
 clean: 
 	rm -rf ./.deps ./.pch
 	rm -f ./*.o
-	rm -f accesstest
+	rm -f accesstest$(EXEEXT)
 	rm -rf accesstest.app
 
 distclean: clean

@@ -13,6 +13,7 @@ INSTALL = @INSTALL@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
+EXEEXT = @EXEEXT@
 EXTRALIBS = @EXTRALIBS@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
 HOST_SUFFIX = @HOST_SUFFIX@
@@ -43,6 +44,8 @@ WX_VERSION = 2.5.0
 
 ### Conditionally set variables: ###
 
+@COND_DEPS_TRACKING_0@CXXC = $(CXX)
+@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_TOOLKIT_MAC@WXBASEPORT = _carbon
@@ -72,7 +75,7 @@ WX_VERSION = 2.5.0
 @COND_WXUSE_ZLIB_BUILTIN@	-lwxzlib$(WXDEBUGFLAG)$(HOST_SUFFIX)
 COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -i $(top_srcdir)/include -i $(srcdir) \
-	$(__DLLFLAG_p_1) -i $(srcdir)/../../samples -o nettest Carbon.r \
+	$(__DLLFLAG_p_1) -i $(srcdir)/../../samples -o nettest$(EXEEXT) Carbon.r \
 	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.r sample.r
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_1 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = \
@@ -87,18 +90,19 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_1 = -d __WXUNIVERSAL__
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_2 = --define __WXUNIVERSAL__
 @COND_PLATFORM_MAC_1@__nettest___mac_rezcmd = $(__MACOSX_RESOURCES_p_1)
-@COND_PLATFORM_MAC_1@__nettest___mac_setfilecmd = $(SETFILE) -a C nettest
+@COND_PLATFORM_MAC_1@__nettest___mac_setfilecmd = \
+@COND_PLATFORM_MAC_1@	$(SETFILE) -a C nettest$(EXEEXT)
 @COND_PLATFORM_WIN32_1@__nettest___win32rc = nettest_nettest_rc.o
 @COND_PLATFORM_MACOSX_1@__nettest_bundle___depname = nettest_bundle
 
 ### Targets: ###
 
-all: nettest $(__nettest_bundle___depname)
+all: nettest$(EXEEXT) $(__nettest_bundle___depname)
 
 clean: 
 	rm -rf ./.deps ./.pch
 	rm -f ./*.o
-	rm -f nettest
+	rm -f nettest$(EXEEXT)
 	rm -rf nettest.app
 
 distclean: clean
@@ -108,13 +112,13 @@ install: all
 
 install-strip: install
 
-nettest: $(NETTEST_OBJECTS) $(__nettest___win32rc)
+nettest$(EXEEXT): $(NETTEST_OBJECTS) $(__nettest___win32rc)
 	$(CXX) -o $@ $(NETTEST_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
 	$(__nettest___mac_rezcmd)
 	$(__nettest___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-nettest.app/Contents: nettest $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+nettest.app/Contents: nettest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p nettest.app/Contents
 	mkdir -p nettest.app/Contents/MacOS
 	mkdir -p nettest.app/Contents/Resources
@@ -129,7 +133,7 @@ nettest.app/Contents: nettest $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/
 	echo -n "APPL????" >nettest.app/Contents/PkgInfo
 	
 	
-	ln -f nettest nettest.app/Contents/MacOS/nettest
+	ln -f nettest$(EXEEXT) nettest.app/Contents/MacOS/nettest
 	
 	
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc nettest.app/Contents/Resources/nettest.rsrc
@@ -138,7 +142,7 @@ nettest.app/Contents: nettest $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/
 @COND_PLATFORM_MACOSX_1@nettest_bundle: nettest.app/Contents
 
 nettest_nettest.o: $(srcdir)/nettest.cpp
-	$(CXX) -c -o $@ $(NETTEST_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(NETTEST_CXXFLAGS) $<
 
 nettest_nettest_rc.o: $(srcdir)/nettest.rc
 	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples

@@ -13,6 +13,7 @@ INSTALL = @INSTALL@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
+EXEEXT = @EXEEXT@
 EXTRALIBS = @EXTRALIBS@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
 HOST_SUFFIX = @HOST_SUFFIX@
@@ -43,6 +44,8 @@ WX_VERSION = 2.5.0
 
 ### Conditionally set variables: ###
 
+@COND_DEPS_TRACKING_0@CXXC = $(CXX)
+@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_TOOLKIT_MAC@WXBASEPORT = _carbon
@@ -72,7 +75,7 @@ WX_VERSION = 2.5.0
 @COND_WXUSE_ZLIB_BUILTIN@	-lwxzlib$(WXDEBUGFLAG)$(HOST_SUFFIX)
 COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -i $(top_srcdir)/include -i $(srcdir) \
-	$(__DLLFLAG_p_1) -i $(srcdir)/../../samples -o controls Carbon.r \
+	$(__DLLFLAG_p_1) -i $(srcdir)/../../samples -o controls$(EXEEXT) Carbon.r \
 	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.r sample.r
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_1 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = \
@@ -87,27 +90,28 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_1 = -d __WXUNIVERSAL__
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_2 = --define __WXUNIVERSAL__
 @COND_PLATFORM_MAC_1@__controls___mac_rezcmd = $(__MACOSX_RESOURCES_p_1)
-@COND_PLATFORM_MAC_1@__controls___mac_setfilecmd = $(SETFILE) -a C controls
+@COND_PLATFORM_MAC_1@__controls___mac_setfilecmd = \
+@COND_PLATFORM_MAC_1@	$(SETFILE) -a C controls$(EXEEXT)
 @COND_PLATFORM_WIN32_1@__controls___win32rc = controls_controls_rc.o
 @COND_PLATFORM_MACOSX_1@__controls_bundle___depname = controls_bundle
 
 ### Targets: ###
 
-all: controls $(__controls_bundle___depname)
+all: controls$(EXEEXT) $(__controls_bundle___depname)
 
 clean: 
 	rm -rf ./.deps ./.pch
 	rm -f ./*.o
-	rm -f controls
+	rm -f controls$(EXEEXT)
 	rm -rf controls.app
 
-controls: $(CONTROLS_OBJECTS) $(__controls___win32rc)
+controls$(EXEEXT): $(CONTROLS_OBJECTS) $(__controls___win32rc)
 	$(CXX) -o $@ $(CONTROLS_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
 	$(__controls___mac_rezcmd)
 	$(__controls___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-controls.app/Contents: controls $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+controls.app/Contents: controls$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p controls.app/Contents
 	mkdir -p controls.app/Contents/MacOS
 	mkdir -p controls.app/Contents/Resources
@@ -122,7 +126,7 @@ controls.app/Contents: controls $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME
 	echo -n "APPL????" >controls.app/Contents/PkgInfo
 	
 	
-	ln -f controls controls.app/Contents/MacOS/controls
+	ln -f controls$(EXEEXT) controls.app/Contents/MacOS/controls
 	
 	
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc controls.app/Contents/Resources/controls.rsrc
@@ -131,7 +135,7 @@ controls.app/Contents: controls $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME
 @COND_PLATFORM_MACOSX_1@controls_bundle: controls.app/Contents
 
 controls_controls.o: $(srcdir)/controls.cpp
-	$(CXX) -c -o $@ $(CONTROLS_CXXFLAGS) $<
+	$(CXXC) -c -o $@ $(CONTROLS_CXXFLAGS) $<
 
 controls_controls_rc.o: $(srcdir)/controls.rc
 	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples
