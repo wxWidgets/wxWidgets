@@ -242,7 +242,7 @@
                                     // complains about deallocating
                                     // arrays of wxPoints if wxPoint is a class.
 
-#if (!defined(WIN32) && !defined(__WIN32__)) || defined(__GNUWIN32__) || defined(__BORLANDC__)
+#if (!defined(WIN32) && !defined(__WIN32__)) || defined(__GNUWIN32__)
 // Can't use OLE drag and drop in Windows 3.1 because we don't know how
 // to implement UUIDs
 // GnuWin32 doesn't have appropriate headers for e.g. IUnknown.
