@@ -16,6 +16,7 @@
 
 #import <Foundation/NSString.h>
 #import <AppKit/NSTextField.h>
+#include <math.h>
 
 IMPLEMENT_DYNAMIC_CLASS(wxStaticText, wxControl)
 BEGIN_EVENT_TABLE(wxStaticText, wxControl)
@@ -40,7 +41,13 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID winid,
     [GetNSTextField() setBezeled: NO];
     [GetNSTextField() setEditable: NO];
     [GetNSTextField() setDrawsBackground: NO];
+
     [GetNSControl() sizeToFit];
+    // Round-up to next integer size
+    NSRect nsrect = [m_cocoaNSView frame];
+    nsrect.size.width = ceil(nsrect.size.width);
+    [m_cocoaNSView setFrameSize: nsrect.size];
+
     if(m_parent)
         m_parent->CocoaAddChild(this);
     return true;
