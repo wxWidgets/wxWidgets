@@ -149,6 +149,7 @@ wxYearSpinCtrl::wxYearSpinCtrl(wxCalendarCtrl *cal)
                            wxDefaultSize,
                            wxSP_ARROW_KEYS | wxCLIP_SIBLINGS,
                            -4300, 10000, cal->GetDate().GetYear())
+
 {
     m_cal = cal;
 }
@@ -757,18 +758,22 @@ void wxCalendarCtrl::DoMoveWindow(int x, int y, int width, int height)
     {
         wxSize sizeCombo = m_comboMonth->GetSize();
         wxSize sizeStatic = m_staticMonth->GetSize();
+        wxSize sizeSpin = m_spinYear->GetSize();
 
         int dy = (sizeCombo.y - sizeStatic.y) / 2;
 
-        m_comboMonth->Move(x, y);
-        m_staticMonth->SetSize(x, y + dy, sizeCombo.x, sizeStatic.y);
+        if (sizeCombo.x + HORZ_MARGIN - sizeSpin.x > width)
+        {
+            m_comboMonth->SetSize(x, y, width - HORZ_MARGIN - sizeSpin.x, sizeCombo.y);
+        }
+        else
+        {
+            m_comboMonth->Move(x, y);
+        }
+        m_staticMonth->Move(x, y + dy);
+        m_spinYear->Move(x + width - sizeSpin.x, y);
+        m_staticYear->Move(x + width - sizeSpin.x, y + dy);
 
-        int xDiff = sizeCombo.x + HORZ_MARGIN;
-
-        m_spinYear->SetSize(x + xDiff, y, width - xDiff, sizeCombo.y);
-        m_staticYear->SetSize(x + xDiff, y + dy, width - xDiff, sizeStatic.y);
-
-        wxSize sizeSpin = m_spinYear->GetSize();
         yDiff = wxMax(sizeSpin.y, sizeCombo.y) + VERT_MARGIN;
     }
     else // no controls on the top
