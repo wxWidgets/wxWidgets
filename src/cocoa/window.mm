@@ -80,13 +80,6 @@ wxWindow::~wxWindow()
 
 void wxWindowCocoa::CocoaAddChild(wxWindowCocoa *child)
 {
-    [child->m_cocoaNSView retain];
-    // NOTE: addSubView takes ownership of, but does not retain the subview
-    // Upon a removeFromView or closing the super view, the child WILL be
-    // released!!!  I think the idea here is that normally you would alloc
-    // the subview and add it to the superview and this way you don't have
-    // to release what you just alloced.  Unfortunately, that doesn't
-    // make sense for wxCocoa, so we do this instead.
     [m_cocoaNSView addSubview: child->m_cocoaNSView];
     wxASSERT(!child->m_dummyNSView);
     child->m_isShown = true;
@@ -97,9 +90,9 @@ void wxWindowCocoa::CocoaRemoveFromParent(void)
     if(m_dummyNSView)
     {
         wxASSERT(m_cocoaNSView);
-        // balances the alloc
+        // balances the replaceSubView:with:
         [m_dummyNSView removeFromSuperview];
-        // But since we also retained it ourselves
+        // But since we were the ones to alloc it
         [m_dummyNSView release];
         m_dummyNSView = nil;
         // m_cocoaNSView has of course already been removed by virtue of
@@ -262,11 +255,11 @@ bool wxWindow::Show(bool show)
         // If state isn't changing, return false
         if(!m_dummyNSView)
             return false;
-        // replaceSubView releases m_dummyNSView, balancing the alloc
-        [m_cocoaNSView retain];
+        // replaceSubView:with: releases m_dummyNSView, balancing the
+        // previous replaceSubView:with
         [[m_dummyNSView superview] replaceSubview:m_dummyNSView with:m_cocoaNSView];
-        // But since we also retained it ourselves
         wxASSERT(![m_dummyNSView superview]);
+        // But since we were the ones to alloc it
         [m_dummyNSView release];
         m_dummyNSView = nil;
         wxASSERT([m_cocoaNSView superview]);
@@ -277,8 +270,8 @@ bool wxWindow::Show(bool show)
         if(m_dummyNSView)
             return false;
         m_dummyNSView = [[NSView alloc] initWithFrame: [m_cocoaNSView frame]];
-        [m_dummyNSView retain];
-        // NOTE: replaceSubView will cause m_cocaNSView to be released
+        // NOTE: replaceSubView will cause m_cocaNSView to be (auto)released
+        // which balances out addSubView
         [[m_cocoaNSView superview] replaceSubview:m_cocoaNSView with:m_dummyNSView];
         // m_coocaNSView is now only retained by us
         wxASSERT([m_dummyNSView superview]);
@@ -500,7 +493,6 @@ void wxWindow::Raise()
     wxAutoNSAutoreleasePool pool;
     NSView *nsview = m_dummyNSView?m_dummyNSView:m_cocoaNSView;
     NSView *superview = [nsview superview];
-    [nsview retain];
     [nsview removeFromSuperview];
     [superview addSubview:nsview];
 }
