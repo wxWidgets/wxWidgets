@@ -28,6 +28,12 @@
     #pragma option -O1
 #endif
 
+#ifdef __EMX__
+// The following define is needed by Innotek's libc to
+// make the definition of struct localeconv available.
+#define __INTERNAL_DEFS
+#endif
+
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
