@@ -392,7 +392,45 @@ void MyFrame::OnPaint(wxPaintEvent &WXUNUSED(event) )
 #endif // __WXGTK__
 
     dc.DrawRectangle( 10, 10, 90, 90 );
-    dc.DrawRoundedRectangle( 10, 110, 90, 90, 5 );
+    dc.DrawRoundedRectangle( 110, 10, 90, 90, 5 );
+    
+    dc.SetPen( *wxWHITE_PEN );
+    dc.DrawLine( 10, 110, 100, 110 );
+    dc.SetPen( *wxBLACK_PEN );
+    dc.DrawLine( 100, 110, 100, 200 );
+    dc.SetPen( *wxWHITE_PEN );
+    dc.DrawLine( 100, 200, 10, 200 );
+    dc.SetPen( *wxBLACK_PEN );
+    dc.DrawLine( 10, 200, 10, 110 );
+    
+    wxPen white_butt( "white", 1, wxSOLID );
+    white_butt.SetCap( wxCAP_BUTT );
+    wxPen black_butt( "black", 1, wxSOLID );
+    black_butt.SetCap( wxCAP_BUTT );
+    
+    dc.SetPen( white_butt );
+    dc.DrawLine( 110, 110, 200, 110 );
+    dc.SetPen( black_butt );
+    dc.DrawLine( 200, 110, 200, 200 );
+    dc.SetPen( white_butt );
+    dc.DrawLine( 200, 200, 110, 200 );
+    dc.SetPen( black_butt );
+    dc.DrawLine( 110, 200, 110, 110 );
+    
+    wxPen white_miter( "white", 1, wxSOLID );
+    white_miter.SetJoin( wxJOIN_MITER );
+    wxPen black_miter( "black", 1, wxSOLID );
+    black_miter.SetJoin( wxJOIN_MITER );
+    
+    dc.SetPen( white_miter );
+    dc.DrawLine( 210, 110, 300, 110 );
+    dc.SetPen( black_miter );
+    dc.DrawLine( 300, 110, 300, 200 );
+    dc.SetPen( white_miter );
+    dc.DrawLine( 300, 200, 210, 200 );
+    dc.SetPen( black_miter );
+    dc.DrawLine( 210, 200, 210, 110 );
+    
 
     dc.DrawText( "This is text\n(on multiple lines)", 110, 10 );
 
