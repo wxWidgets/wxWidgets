@@ -6,6 +6,9 @@ Portable programs should try to use \helpref{wxSpinCtrl}{wxspinctrl} instead
 as wxSpinButton is not implemented for all platforms (Win32 and GTK only
 currently).
 
+{\bf NB:} the range supported by this control (and wxSpinCtrl) depends on the
+platform but is at least {\tt SHRT\_MIN} to {\tt SHRT\_MAX}.
+
 \wxheading{Derived from}
 
 \helpref{wxControl}{wxcontrol}\\
