@@ -148,7 +148,8 @@ bool wxDirData::Read(wxString *filename)
 
     // speed up string concatenation in the loop a bit
     wxString path = m_dirname;
-    path += _T('/');
+    if (!wxIsPathSeparator(path.Last()))
+        path += _T('/');
     path.reserve(path.length() + 255);
     
     wxString de_d_name;
