@@ -81,8 +81,17 @@ public:
             else
                 return new wxSound(fileName);
         }
-        %name(SoundFromData) wxSound(const wxMemoryBuffer& data) {
-            return new wxSound((int)data.GetDataLen(), (wxByte*)data.GetData());
+        %name(SoundFromData) wxSound(PyObject* data) {
+            unsigned char* buffer; int size;
+            wxSound *sound = NULL;
+
+            bool blocked = wxPyBeginBlockThreads();
+            if (!PyArg_Parse(data, "t#", &buffer, &size))
+                goto done;
+            sound = new wxSound(size, buffer);
+        done:
+            wxPyEndBlockThreads(blocked);
+            return sound;
         }
     }
     
@@ -95,16 +104,26 @@ public:
     bool Create(const wxString& fileName/*, bool isResource = false*/);
 
     %extend {
-        bool CreateFromData(const wxMemoryBuffer& data) {
-            %#ifndef __WXMAC__
-                 return self->Create((int)data.GetDataLen(), (wxByte*)data.GetData());
-            %#else
+        bool CreateFromData(PyObject* data) {
+        %#ifndef __WXMAC__
+            unsigned char* buffer;
+            int size;
+            bool rv = False;
+
+            bool blocked = wxPyBeginBlockThreads();
+            if (!PyArg_Parse(data, "t#", &buffer, &size))
+                goto done;
+            rv = self->Create(size, buffer);
+        done:
+            wxPyEndBlockThreads(blocked);
+            return rv;
+        %#else
                  bool blocked = wxPyBeginBlockThreads();
                  PyErr_SetString(PyExc_NotImplementedError,
                                  "Create from data is not available on this platform.");
                  wxPyEndBlockThreads(blocked);
                  return False;
-            %#endif
+        %#endif
         }
     }
     
