@@ -1640,7 +1640,7 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
     g_focusWindowLast =
     g_focusWindow = win;
 
-#if 0
+#if 1
     wxPrintf( "OnSetFocus from " );
     if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
         wxPrintf( win->GetClassInfo()->GetClassName() );

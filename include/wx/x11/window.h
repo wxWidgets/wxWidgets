@@ -145,6 +145,10 @@ public:
     // For compatibility across platforms (not in event table)
     void OnIdle(wxIdleEvent& WXUNUSED(event)) {}
     
+    // Go up to a toplevel window and query which window has the focus.
+    // May return NULL.
+    wxWindow *GetFocusWidget();
+    
 protected:
     // Makes an adjustment to the window position (for example, a frame that has
     // a toolbar that it manages itself).

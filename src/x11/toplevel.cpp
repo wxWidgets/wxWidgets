@@ -61,6 +61,8 @@ void wxTopLevelWindowX11::Init()
     m_fsStyle = 0;
     m_fsIsMaximized = FALSE;
     m_fsIsShowing = FALSE;
+    
+    m_focusWidget = NULL;
 }
 
 bool wxTopLevelWindowX11::Create(wxWindow *parent,
@@ -111,6 +113,7 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
 
     // TODO: if we want no border, caption etc.,
     // I think we set this to True to remove decorations
+    // No. RR.
     xattributes.override_redirect = False;
     
     wxSize size2(size);
@@ -144,10 +147,18 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     // background completely.
     XSetWindowBackgroundPixmap( xdisplay, xwindow, None );
 
-    // Messes up window management
-    //    XSetTransientForHint( xdisplay, xwindow, xparent );
+    if (GetExtraStyle() & wxTOPLEVEL_EX_DIALOG)
+    {
+        if (GetParent() && GetParent()->GetMainWindow())
+        {
+             Window xparentwindow = (Window) GetParent()->GetMainWindow();
+             XSetTransientForHint( xdisplay, xwindow, xparentwindow );
+        }
+    }
 
-    size_hints.flags = PSize;
+    size_hints.flags = PSize | PPosition;
+    size_hints.x = pos2.x;
+    size_hints.y = pos2.y;
     size_hints.width = size2.x;
     size_hints.height = size2.y;
     XSetWMNormalHints( xdisplay, xwindow, &size_hints);
@@ -157,10 +168,12 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     wm_hints.initial_state = NormalState;
     XSetWMHints( xdisplay, xwindow, &wm_hints);
     
-    Atom wm_delete_window = XInternAtom( xdisplay, "WM_DELETE_WINDOW", False);
-    XSetWMProtocols( xdisplay, xwindow, &wm_delete_window, 1);
+    Atom wm_protocols[2];
+    wm_protocols[0] = XInternAtom( xdisplay, "WM_DELETE_WINDOW", False );
+    wm_protocols[1] = XInternAtom( xdisplay, "WM_TAKE_FOCUS", False );
+    XSetWMProtocols( xdisplay, xwindow, wm_protocols, 2);
     
-    wxSetWMDecorations((Window) GetMainWindow(), style);
+    wxSetWMDecorations( xwindow, style);
 
     SetTitle(title);
     

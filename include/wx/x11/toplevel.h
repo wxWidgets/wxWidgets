@@ -67,6 +67,9 @@ public:
     
     // implementation from now on
     // --------------------------
+    
+    void SetFocusWidget( wxWindow *focus )   { m_focusWidget = focus; }
+    wxWindow *GetFocusWidget() const         { return m_focusWidget; }
 
 protected:
     // common part of all ctors
@@ -83,19 +86,22 @@ protected:
         int sizeFlags = wxSIZE_AUTO);
     virtual void DoGetPosition( int *x, int *y ) const;
     
-    // is the frame currently iconized?
+    // Is the frame currently iconized?
     bool m_iconized;
 
-    // should the frame be maximized when it will be shown? set by Maximize()
+    // Should the frame be maximized when it will be shown? set by Maximize()
     // when it is called while the frame is hidden
     bool m_maximizeOnShow;
 
     // Data to save/restore when calling ShowFullScreen
-    long                  m_fsStyle; // Passed to ShowFullScreen
+    long                  m_fsStyle;   // Passed to ShowFullScreen
     wxRect                m_fsOldSize;
     bool                  m_fsIsMaximized;
     bool                  m_fsIsShowing;
     wxString              m_title;
+    
+    // This widget gets the key input
+    wxWindow*             m_focusWidget;
 };
 
 // list of all frames and modeless dialogs

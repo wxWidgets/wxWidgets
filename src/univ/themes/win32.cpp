@@ -3935,6 +3935,7 @@ bool wxWin32InputHandler::HandleMouse(wxInputConsumer *control,
     if ( event.ButtonDown() )
     {
         wxWindow *win = control->GetInputWindow();
+        
         if ( wxWindow::FindFocus() != control->GetInputWindow() )
         {
             win->SetFocus();

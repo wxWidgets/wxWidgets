@@ -251,7 +251,7 @@ int wxEntryStart( int& argc, char *argv[] )
     
     XSelectInput( xdisplay, XDefaultRootWindow(xdisplay), PropertyChangeMask);
         
-//    wxSetDetectableAutoRepeat( TRUE );
+    wxSetDetectableAutoRepeat( TRUE );
 
     if (!wxApp::Initialize())
         return -1;
@@ -484,8 +484,8 @@ void wxApp::ProcessXEvent(WXEvent* _event)
             if (win && !win->IsEnabled())
                 return;
 
-            Atom wm_delete_window = XInternAtom(wxGlobalDisplay(), "WM_DELETE_WINDOW", True);;
-            Atom wm_protocols = XInternAtom(wxGlobalDisplay(), "WM_PROTOCOLS", True);;
+            Atom wm_delete_window = XInternAtom(wxGlobalDisplay(), "WM_DELETE_WINDOW", True);
+            Atom wm_protocols = XInternAtom(wxGlobalDisplay(), "WM_PROTOCOLS", True);
 
             if (event->xclient.message_type == wm_protocols)
             {
@@ -555,9 +555,9 @@ void wxApp::ProcessXEvent(WXEvent* _event)
         {
             if (win)
             {
-                wxLogDebug( "GraphicsExpose from %s", win->GetName().c_str(),
-                                              event->xgraphicsexpose.x, event->xgraphicsexpose.y,
-                                              event->xgraphicsexpose.width, event->xgraphicsexpose.height);
+                // wxLogDebug( "GraphicsExpose from %s", win->GetName().c_str(),
+                //                              event->xgraphicsexpose.x, event->xgraphicsexpose.y,
+                //                              event->xgraphicsexpose.width, event->xgraphicsexpose.height);
                     
                 win->GetUpdateRegion().Union( event->xgraphicsexpose.x, event->xgraphicsexpose.y,
                                               event->xgraphicsexpose.width, event->xgraphicsexpose.height);
@@ -577,15 +577,23 @@ void wxApp::ProcessXEvent(WXEvent* _event)
         case ButtonRelease:
         case MotionNotify:
         {
-            if (win && !win->IsEnabled())
+            if (!win)
                 return;
-
-            if (win)
+                
+            if (!win->IsEnabled())
+                return;
+            
+#if 1
+            if (event->type == ButtonPress)
             {
-                wxMouseEvent wxevent;
-                wxTranslateMouseEvent(wxevent, win, window, event);
-                win->GetEventHandler()->ProcessEvent( wxevent );
+                if ((win != wxWindow::FindFocus()) && win->AcceptsFocus())
+                   win->SetFocus();
             }
+#endif
+
+            wxMouseEvent wxevent;
+            wxTranslateMouseEvent(wxevent, win, window, event);
+            win->GetEventHandler()->ProcessEvent( wxevent );
             return;
         }
         case FocusIn:

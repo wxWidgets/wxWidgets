@@ -125,6 +125,7 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
 
     Display *xdisplay = (Display*) wxGlobalDisplay();
     int xscreen = DefaultScreen( xdisplay );
+    Visual *xvisual = DefaultVisual( xdisplay, xscreen );
     Colormap cm = DefaultColormap( xdisplay, xscreen );
 
     m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
@@ -133,34 +134,39 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
     m_foregroundColour = *wxBLACK;
     m_foregroundColour.CalcPixel( (WXColormap) cm ); 
 
-    Window parentWindow = (Window) parent->GetMainWindow();
+    Window xparent = (Window) parent->GetMainWindow();
 
-    wxSize size2(size);
-    if (size2.x == -1)
-	size2.x = 100;
-    if (size2.y == -1)
-	size2.y = 100;
-
-    wxPoint pos2(pos);
-    if (pos2.x == -1)
-	pos2.x = 100;
-    if (pos2.y == -1)
-	pos2.y = 100;
+    XSetWindowAttributes xattributes;
     
-    Window xwindow = XCreateSimpleWindow( 
-        xdisplay, parentWindow,
-        pos2.x, pos2.y, size2.x, size2.y, 0, 
-        m_backgroundColour.GetPixel(),
-        m_backgroundColour.GetPixel() );
+    long xattributes_mask =
+        CWEventMask |
+        CWBorderPixel | CWBackPixel;
         
-    m_mainWidget = (WXWindow) xwindow;
-
-    // Select event types wanted
-    XSelectInput( xdisplay, xwindow,
+    xattributes.background_pixel = m_backgroundColour.GetPixel();
+    xattributes.border_pixel = BlackPixel( xdisplay, xscreen );
+    
+    xattributes.event_mask = 
         ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
         ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask |
         KeymapStateMask | FocusChangeMask | ColormapChangeMask | StructureNotifyMask |
-        PropertyChangeMask);
+        PropertyChangeMask;
+    
+    wxSize size2(size);
+    if (size2.x == -1)
+	size2.x = 20;
+    if (size2.y == -1)
+	size2.y = 20;
+
+    wxPoint pos2(pos);
+    if (pos2.x == -1)
+	pos2.x = 0;
+    if (pos2.y == -1)
+	pos2.y = 0;
+    
+    Window xwindow = XCreateWindow( xdisplay, xparent, pos2.x, pos2.y, size2.x, size2.y, 
+       0, DefaultDepth(xdisplay,xscreen), InputOutput, xvisual, xattributes_mask, &xattributes );
+        
+    m_mainWidget = (WXWindow) xwindow;
 
     wxAddWindowToTable( xwindow, (wxWindow*) this );
 
@@ -193,12 +199,7 @@ wxWindowX11::~wxWindowX11()
     m_isBeingDeleted = TRUE;
     
     // X11-specific actions first
-    Window main = (Window) m_mainWidget;
-    if ( main )
-    {
-        // Removes event handlers
-        //DetachWidget(main);
-    }
+    Window xwindow = (Window) m_mainWidget;
 
     if (m_parent)
         m_parent->RemoveChild( this );
@@ -206,11 +207,11 @@ wxWindowX11::~wxWindowX11()
     DestroyChildren();
 
     // Destroy the window
-    if (main)
+    if (xwindow)
     {
-        XSelectInput( wxGlobalDisplay(), main, NoEventMask);
-        wxDeleteWindowFromTable( main );
-        XDestroyWindow( wxGlobalDisplay(), main );
+        XSelectInput( wxGlobalDisplay(), xwindow, NoEventMask);
+        wxDeleteWindowFromTable( xwindow );
+        XDestroyWindow( wxGlobalDisplay(), xwindow );
         m_mainWidget = NULL;
     }
 }
@@ -253,7 +254,6 @@ wxWindow *wxWindowBase::FindFocus()
     return NULL;
 }
 
-#if 0
 wxWindow *wxWindowX11::GetFocusWidget()
 {
    wxWindow *win = (wxWindow*) this;
@@ -266,7 +266,6 @@ wxWindow *wxWindowX11::GetFocusWidget()
    
    return win;
 }
-#endif
 
 // Enabling/disabling handled by event loop, and not sending events
 // if disabled.
@@ -286,17 +285,13 @@ bool wxWindowX11::Show(bool show)
     Display *xdisp = (Display*) GetXDisplay();
     if (show)
     {
-        wxString msg;
-        msg.Printf("Mapping window of type %s", GetClassInfo()->GetClassName());
-        wxLogDebug(msg);
+        // wxLogDebug( "Mapping window of type %s", GetName().c_str() );
         XMapWindow(xdisp, xwin);
         XSync(xdisp, False);
     }
     else
     {
-        wxString msg;
-        msg.Printf("Unmapping window of type %s", GetClassInfo()->GetClassName());
-        wxLogDebug(msg);
+        // wxLogDebug( "Unmapping window of type %s", GetName().c_str() );
         XUnmapWindow(xdisp, xwin);
     }
 
