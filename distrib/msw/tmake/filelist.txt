@@ -534,7 +534,6 @@ notebmac.cpp	Mac
 palette.cpp	Mac
 pen.cpp	Mac
 pnghand.cpp	Mac
-print.cpp	Mac
 printdlg.cpp	Mac
 printmac.cpp	Mac
 radiobox.cpp	Mac
