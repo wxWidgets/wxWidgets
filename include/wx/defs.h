@@ -450,9 +450,7 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 #define wxTE_PASSWORD       wxPASSWORD
 #define wxTE_READONLY       0x0010
 #define wxTE_MULTILINE      0x0020
-
-// MSW-only
-#define wxTE_RICHTEXT       0x0020
+#define wxTE_PROCESS_TAB    0x0040
 
 /*
  * wxComboBox style flags

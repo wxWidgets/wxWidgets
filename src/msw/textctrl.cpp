@@ -983,10 +983,13 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 long wxTextCtrl::MSWGetDlgCode()
 {
   long lRc = DLGC_WANTCHARS | DLGC_WANTARROWS;
-  if ( m_windowStyle & wxPROCESS_ENTER )
+  if ( m_windowStyle & wxTE_PROCESS_ENTER )
     lRc |= DLGC_WANTMESSAGE;
   else if ( m_windowStyle & wxTE_MULTILINE )
     lRc |= DLGC_WANTMESSAGE;
+  // ??
+  if ( m_windowStyle & wxTE_PROCESS_TAB )
+    lRc |= DLGC_WANTTAB;
 
   return lRc;
 }
