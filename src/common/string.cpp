@@ -837,7 +837,7 @@ int wxString::Find(const char *pszSub) const
 }
 
 // ---------------------------------------------------------------------------
-// formatted input/output
+// formatted output
 // ---------------------------------------------------------------------------
 int wxString::Printf(const char *pszFormat, ...)
 {
@@ -853,30 +853,13 @@ int wxString::Printf(const char *pszFormat, ...)
 
 int wxString::PrintfV(const char* pszFormat, va_list argptr)
 {
-  static char s_szScratch[1024]; // @@@@ shouldn't use fixed-size buffer!
+  static char s_szScratch[1024];
 
   int iLen = vsprintf(s_szScratch, pszFormat, argptr);
   AllocBeforeWrite(iLen);
   strcpy(m_pchData, s_szScratch);
 
   return iLen;
-}
-
-int wxString::Scanf(const char *pszFormat, ...) const
-{
-  va_list argptr;
-  va_start(argptr, pszFormat);
-
-  int iLen = ScanfV(pszFormat, argptr);
-
-  va_end(argptr);
-
-  return iLen;
-}
-
-int wxString::ScanfV(const char *pszFormat, va_list argptr) const
-{
-  return vsscanf(c_str(), pszFormat, argptr);
 }
 
 // ---------------------------------------------------------------------------
@@ -1149,7 +1132,7 @@ void wxArrayString::Alloc(size_t nSize)
 
 // searches the array for an item (forward or backwards)
 
-// Robert Roebling (changed to bool from Bool)
+// Robert Roebling (changed to bool from bool)
 
 int wxArrayString::Index(const char *sz, bool bCase, bool bFromEnd) const
 {
@@ -1186,7 +1169,7 @@ void wxArrayString::Add(const wxString& src)
 // add item at the given position
 void wxArrayString::Insert(const wxString& src, size_t nIndex)
 {
-  wxCHECK( nIndex <= m_nCount );
+  wxCHECK_RET( nIndex <= m_nCount, "bad index in wxArrayString::Insert" );
 
   Grow();
 
@@ -1202,7 +1185,7 @@ void wxArrayString::Insert(const wxString& src, size_t nIndex)
 // removes item from array (by index)
 void wxArrayString::Remove(size_t nIndex)
 {
-  wxCHECK( nIndex <= m_nCount );
+  wxCHECK_RET( nIndex <= m_nCount, "bad index in wxArrayString::Remove" );
 
   // release our lock
   Item(nIndex).GetStringData()->Unlock();
@@ -1217,14 +1200,13 @@ void wxArrayString::Remove(const char *sz)
 {
   int iIndex = Index(sz);
 
-  wxCHECK( iIndex != NOT_FOUND );
+  wxCHECK_RET( iIndex != NOT_FOUND,
+               "removing inexistent element in wxArrayString::Remove" );
 
   Remove((size_t)iIndex);
 }
 
 // sort array elements using passed comparaison function
-
-// Robert Roebling (changed to bool from Bool)
 
 void wxArrayString::Sort(bool bCase, bool bReverse)
 {
