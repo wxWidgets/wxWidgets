@@ -18535,7 +18535,14 @@ _ACEOF
 echo "${ECHO_T}$wx_largefile" >&6
 fi
 
-echo "$as_me:$LINENO: checking for _LARGEFILE_SOURCE value needed for large files" >&5
+
+if test "x$wx_largefile" = "xyes"; then
+    if test "x$ac_cv_sys_file_offset_bits" = "x64"; then
+        WX_LARGEFILE_FLAGS="-D_FILE_OFFSET_BITS=64 -D_LARGE_FILES"
+    else
+        WX_LARGEFILE_FLAGS="-D_LARGE_FILES"
+    fi
+        echo "$as_me:$LINENO: checking for _LARGEFILE_SOURCE value needed for large files" >&5
 echo $ECHO_N "checking for _LARGEFILE_SOURCE value needed for large files... $ECHO_C" >&6
 if test "${ac_cv_sys_largefile_source+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -18707,12 +18714,8 @@ _ACEOF
 
 fi
 
-
-if test "x$wx_largefile" = "xyes"; then
-    if test "x$ac_cv_sys_file_offset_bits" = "x64"; then
-        WX_LARGEFILE_FLAGS="-D_FILE_OFFSET_BITS=64 -D_LARGE_FILES"
-    else
-        WX_LARGEFILE_FLAGS="-D_LARGE_FILES"
+    if test "$ac_cv_sys_largefile_source" != no; then
+        WX_LARGEFILE_FLAGS="$WX_LARGEFILE_FLAGS -D_LARGEFILE_SOURCE=$ac_cv_sys_largefile_source"
     fi
     CPPFLAGS="$CPPFLAGS $WX_LARGEFILE_FLAGS"
 fi
@@ -36052,6 +36055,187 @@ echo "$as_me: WARNING: Couldn't find socklen_t synonym for this system" >&2;}
 _ACEOF
 
         fi
+                echo "$as_me:$LINENO: checking what is the type of the fifth argument of getsockopt" >&5
+echo $ECHO_N "checking what is the type of the fifth argument of getsockopt... $ECHO_C" >&6
+if test "${wx_cv_type_getsockopt5+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+                cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+                        #include <sys/types.h>
+                        #include <sys/socket.h>
+
+int
+main ()
+{
+
+                        socklen_t len;
+                        getsockopt(0, 0, 0, 0, &len);
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  wx_cv_type_getsockopt5=socklen_t
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+
+                                                                                                                                                                        CFLAGS_OLD="$CFLAGS"
+                        if test "$GCC" = yes ; then
+                            CFLAGS="$CFLAGS -Werror"
+                        fi
+
+                        cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+                                #include <sys/types.h>
+                                #include <sys/socket.h>
+
+int
+main ()
+{
+
+                                size_t len;
+                                getsockopt(0, 0, 0, 0, &len);
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  wx_cv_type_getsockopt5=size_t
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+                                    #include <sys/types.h>
+                                    #include <sys/socket.h>
+
+int
+main ()
+{
+
+                                    int len;
+                                    getsockopt(0, 0, 0, 0, &len);
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  wx_cv_type_getsockopt5=int
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+wx_cv_type_getsockopt5=unknown
+
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+
+                        CFLAGS="$CFLAGS_OLD"
+
+
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+
+fi
+echo "$as_me:$LINENO: result: $wx_cv_type_getsockopt5" >&5
+echo "${ECHO_T}$wx_cv_type_getsockopt5" >&6
+
+        if test "$wx_cv_type_getsockopt5" = "unknown"; then
+            wxUSE_SOCKETS=no
+            { echo "$as_me:$LINENO: WARNING: Couldn't find socklen_t synonym for this system" >&5
+echo "$as_me: WARNING: Couldn't find socklen_t synonym for this system" >&2;}
+        else
+            cat >>confdefs.h <<_ACEOF
+#define SOCKOPTLEN_T $wx_cv_type_getsockopt5
+_ACEOF
+
+        fi
         ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -41528,6 +41712,14 @@ if test "$wxUSE_SHARED" = "yes"; then
                             sanitised_bakefile_mess=`echo "$SHARED_LD_CXX" | tr -d '()'`
     EXE_LINKER=`eval echo "$sanitised_bakefile_mess"`
 
+                case "${host}" in
+      *-pc-os2_emx | *-pc-os2-emx )
+        SHARED_LD_CC="`pwd`/dllar.sh -name-mangler-script ./dllnames.sh -libf INITINSTANCE -libf TERMINSTANCE -o"
+        SHARED_LD_CXX="`pwd`/dllar.sh -name-mangler-script ./dllnames.sh -libf INITINSTANCE -libf TERMINSTANCE -o"
+	cp -p ${srcdir}/src/os2/dllnames.sh .
+	cp -p ${srcdir}/src/os2/dllar.sh .
+      ;;
+    esac
 else
 
         EXE_LINKER="$CXX -o"
