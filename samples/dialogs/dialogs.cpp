@@ -33,14 +33,16 @@
 #include "wx/tipdlg.h"
 #include "wx/progdlg.h"
 
-// New wxGenericDirCtrl
-#include "wx/dirctrl.h"
-
 #define wxTEST_GENERIC_DIALOGS_IN_MSW 0
 
 #if defined(__WXMSW__) && wxTEST_GENERIC_DIALOGS_IN_MSW
 #include <wx/generic/colrdlgg.h>
 #include <wx/generic/fontdlgg.h>
+#endif
+
+#if !defined(__WXMSW__) || defined(wxUSE_DIRDLGG) && wxUSE_DIRDLGG
+// New wxGenericDirCtrl
+#include "wx/dirctrl.h"
 #endif
 
 #include "dialogs.h"
@@ -480,6 +482,7 @@ void MyFrame::DirChoose(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::GenericDirChoose(wxCommandEvent& WXUNUSED(event) )
 {
+#if !defined(__WXMSW__) || defined(wxUSE_DIRDLGG) && wxUSE_DIRDLGG
     // pass some initial dir to wxDirDialog
     wxString dirHome;
     wxGetHomeDir(&dirHome);
@@ -491,6 +494,10 @@ void MyFrame::GenericDirChoose(wxCommandEvent& WXUNUSED(event) )
         wxMessageDialog dialog2(this, dialog.GetPath(), "Selected path");
         dialog2.ShowModal();
     }
+#else
+    wxLogError("Sorry, generic dir dialog not available:\n"
+               "set wxUSE_DIRDLGG to 1 and recompile");
+#endif
 }
 
 void MyFrame::ModalDlg(wxCommandEvent& WXUNUSED(event))
