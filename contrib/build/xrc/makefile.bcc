@@ -59,6 +59,7 @@ XRCDLL_OBJECTS =  \
 	$(OBJS)\xrcdll_xh_slidr.obj \
 	$(OBJS)\xrcdll_xh_spin.obj \
 	$(OBJS)\xrcdll_xh_split.obj \
+	$(OBJS)\xrcdll_xh_statbar.obj \
 	$(OBJS)\xrcdll_xh_stbmp.obj \
 	$(OBJS)\xrcdll_xh_stbox.obj \
 	$(OBJS)\xrcdll_xh_stlin.obj \
@@ -104,6 +105,7 @@ XRCLIB_OBJECTS =  \
 	$(OBJS)\xrclib_xh_slidr.obj \
 	$(OBJS)\xrclib_xh_spin.obj \
 	$(OBJS)\xrclib_xh_split.obj \
+	$(OBJS)\xrclib_xh_statbar.obj \
 	$(OBJS)\xrclib_xh_stbmp.obj \
 	$(OBJS)\xrclib_xh_stbox.obj \
 	$(OBJS)\xrclib_xh_stlin.obj \
@@ -259,7 +261,7 @@ clean:
 !if "$(SHARED)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)251$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc_bcc$(VENDORTAG).dll: $(OBJS)\xrcdll_dummy.obj  $(XRCDLL_OBJECTS)
 	ilink32 -Tpd -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
-	c0d32.obj $(XRCDLL_OBJECTS),$@,, $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib  $(__WXLIB_HTML_p)  $(__WXLIB_ADV_p)  $(__WXLIB_CORE_p)  $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,,
+	c0d32.obj $(XRCDLL_OBJECTS),$@,, $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib  $(__WXLIB_HTML_p)  $(__WXLIB_ADV_p)  $(__WXLIB_CORE_p)  $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,,
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc $@
 !endif
@@ -354,6 +356,9 @@ $(OBJS)\xrcdll_xh_spin.obj: ../../src/xrc\xh_spin.cpp
 	$(CXX) -q -c -P -o$@ $(XRCDLL_CXXFLAGS) $**
 
 $(OBJS)\xrcdll_xh_split.obj: ../../src/xrc\xh_split.cpp
+	$(CXX) -q -c -P -o$@ $(XRCDLL_CXXFLAGS) $**
+
+$(OBJS)\xrcdll_xh_statbar.obj: ../../src/xrc\xh_statbar.cpp
 	$(CXX) -q -c -P -o$@ $(XRCDLL_CXXFLAGS) $**
 
 $(OBJS)\xrcdll_xh_stbmp.obj: ../../src/xrc\xh_stbmp.cpp
@@ -468,6 +473,9 @@ $(OBJS)\xrclib_xh_spin.obj: ../../src/xrc\xh_spin.cpp
 	$(CXX) -q -c -P -o$@ $(XRCLIB_CXXFLAGS) $**
 
 $(OBJS)\xrclib_xh_split.obj: ../../src/xrc\xh_split.cpp
+	$(CXX) -q -c -P -o$@ $(XRCLIB_CXXFLAGS) $**
+
+$(OBJS)\xrclib_xh_statbar.obj: ../../src/xrc\xh_statbar.cpp
 	$(CXX) -q -c -P -o$@ $(XRCLIB_CXXFLAGS) $**
 
 $(OBJS)\xrclib_xh_stbmp.obj: ../../src/xrc\xh_stbmp.cpp
