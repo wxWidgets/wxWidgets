@@ -155,6 +155,9 @@ public:
     void OnTogBorder(wxCommandEvent& event)    { TogStyle(wxTR_ROW_LINES); }
     void OnTogFullHighlight(wxCommandEvent& event)    { TogStyle(wxTR_FULL_ROW_HIGHLIGHT); }
 
+    void OnSetFgColour(wxCommandEvent& event);
+    void OnSetBgColour(wxCommandEvent& event);
+
     void OnDump(wxCommandEvent& event);
 #ifndef NO_MULTIPLE_SELECTION
     void OnDumpSelected(wxCommandEvent& event);
@@ -225,6 +228,8 @@ enum
     TreeTest_TogRootLines,
     TreeTest_TogBorder,
     TreeTest_TogFullHighlight,
+    TreeTest_SetFgColour,
+    TreeTest_SetBgColour,
     TreeTest_Dump,
     TreeTest_DumpSelected,
     TreeTest_Count,

@@ -26,6 +26,7 @@
 
 #ifndef WX_PRECOMP
   #include "wx/wx.h"
+  #include "wx/colordlg.h"
 #endif
 
 #include "wx/log.h"
@@ -62,10 +63,11 @@
                              return;                                             \
                            }
 
+#define MENU_LINK(name) EVT_MENU(TreeTest_##name, MyFrame::On##name)
+
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_SIZE(MyFrame::OnSize)
 
-#define MENU_LINK(name) EVT_MENU(TreeTest_##name, MyFrame::On##name)
     MENU_LINK(Quit)
     MENU_LINK(About)
     MENU_LINK(TogButtons)
@@ -76,6 +78,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     MENU_LINK(TogRootLines)
     MENU_LINK(TogBorder)
     MENU_LINK(TogFullHighlight)
+    MENU_LINK(SetFgColour)
+    MENU_LINK(SetBgColour)
     MENU_LINK(Dump)
 #ifndef NO_MULTIPLE_SELECTION
     MENU_LINK(DumpSelected)
@@ -193,6 +197,9 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
 #endif // NO_MULTIPLE_SELECTION
     style_menu->Append(TreeTest_ToggleImages, wxT("Toggle show ima&ges"));
     style_menu->Append(TreeTest_SetImageSize, wxT("Set image si&ze..."));
+    style_menu->AppendSeparator();
+    style_menu->Append(TreeTest_SetFgColour, wxT("Set &foreground colour..."));
+    style_menu->Append(TreeTest_SetBgColour, wxT("Set &background colour..."));
 
     tree_menu->Append(TreeTest_Recreate, "&Recreate the tree");
     tree_menu->Append(TreeTest_CollapseAndReset, "C&ollapse and reset");
@@ -250,8 +257,6 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
                                 wxTR_HAS_VARIABLE_ROW_HEIGHT |
 #endif
                                 wxSUNKEN_BORDER);
-
-//    m_treeCtrl->SetBackgroundColour( *wxLIGHT_GREY );
 
     m_textCtrl = new wxTextCtrl(this, -1, "",
                                 wxDefaultPosition, wxDefaultSize,
@@ -562,6 +567,20 @@ void MyFrame::OnToggleIcon(wxCommandEvent& WXUNUSED(event))
     CHECK_ITEM( item );
 
     m_treeCtrl->DoToggleIcon(item);
+}
+
+void MyFrame::OnSetFgColour(wxCommandEvent& WXUNUSED(event))
+{
+    wxColour col = wxGetColourFromUser(this, m_treeCtrl->GetForegroundColour());
+    if ( col.Ok() )
+        m_treeCtrl->SetForegroundColour(col);
+}
+
+void MyFrame::OnSetBgColour(wxCommandEvent& WXUNUSED(event))
+{
+    wxColour col = wxGetColourFromUser(this, m_treeCtrl->GetBackgroundColour());
+    if ( col.Ok() )
+        m_treeCtrl->SetBackgroundColour(col);
 }
 
 // MyTreeCtrl implementation
