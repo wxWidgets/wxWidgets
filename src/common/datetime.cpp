@@ -190,7 +190,7 @@ wxDateTime::Country wxDateTime::ms_country = wxDateTime::Country_Unknown;
 #ifdef __WXDEBUG__
 extern const wxChar *wxDumpDate(const wxDateTime* dt)
 {
-    static wxChar buf[20];
+    static wxChar buf[128];
 
     wxStrcpy(buf, dt->Format(_T("%Y-%m-%d (%a) %H:%M:%S")));
 

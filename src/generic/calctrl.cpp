@@ -81,9 +81,6 @@ BEGIN_EVENT_TABLE(wxCalendarCtrl, wxControl)
 
     EVT_LEFT_DOWN(wxCalendarCtrl::OnClick)
     EVT_LEFT_DCLICK(wxCalendarCtrl::OnDClick)
-
-    EVT_CALENDAR_MONTH(-1, wxCalendarCtrl::OnCalMonthChange)
-    EVT_CALENDAR_YEAR(-1, wxCalendarCtrl::OnCalMonthChange)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxMonthComboBox, wxComboBox)
@@ -358,6 +355,9 @@ void wxCalendarCtrl::SetDate(const wxDateTime& date)
         {
             m_spinYear->SetValue(m_date.Format(_T("%Y")));
         }
+
+        // as the month changed, holidays did too
+        SetHolidayAttrs();
 
         // update the calendar
         Refresh();
@@ -861,9 +861,7 @@ void wxCalendarCtrl::OnMonthChange(wxCommandEvent& event)
         tm.mday = wxDateTime::GetNumberOfDays(mon, tm.year);
     }
 
-    SetDate(wxDateTime(tm.mday, mon, tm.year));
-
-    GenerateEvents(wxEVT_CALENDAR_MONTH_CHANGED, wxEVT_CALENDAR_SEL_CHANGED);
+    SetDateAndNotify(wxDateTime(tm.mday, mon, tm.year));
 }
 
 void wxCalendarCtrl::OnYearChange(wxSpinEvent& event)
@@ -876,9 +874,7 @@ void wxCalendarCtrl::OnYearChange(wxSpinEvent& event)
         tm.mday = wxDateTime::GetNumberOfDays(tm.mon, year);
     }
 
-    SetDate(wxDateTime(tm.mday, tm.mon, year));
-
-    GenerateEvents(wxEVT_CALENDAR_YEAR_CHANGED, wxEVT_CALENDAR_SEL_CHANGED);
+    SetDateAndNotify(wxDateTime(tm.mday, tm.mon, year));
 }
 
 // ----------------------------------------------------------------------------
@@ -956,13 +952,6 @@ void wxCalendarCtrl::OnChar(wxKeyEvent& event)
 // ----------------------------------------------------------------------------
 // holidays handling
 // ----------------------------------------------------------------------------
-
-void wxCalendarCtrl::OnCalMonthChange(wxCalendarEvent& event)
-{
-    SetHolidayAttrs();
-
-    event.Skip();
-}
 
 void wxCalendarCtrl::EnableHolidayDisplay(bool display)
 {

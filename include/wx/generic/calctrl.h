@@ -168,7 +168,6 @@ private:
     void OnChar(wxKeyEvent& event);
     void OnMonthChange(wxCommandEvent& event);
     void OnYearChange(wxSpinEvent& event);
-    void OnCalMonthChange(wxCalendarEvent& event);
 
     // override some base class virtuals
     virtual wxSize DoGetBestSize() const;

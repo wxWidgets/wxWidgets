@@ -67,6 +67,8 @@ public:
     void OnCalendar(wxCalendarEvent& event);
     void OnCalendarWeekDayClick(wxCalendarEvent& event);
     void OnCalendarChange(wxCalendarEvent& event);
+    void OnCalMonthChange(wxCalendarEvent& event);
+    void OnCalYearChange(wxCalendarEvent& event);
 
     wxCalendarCtrl *GetCal() const { return m_calendar; }
 
@@ -148,6 +150,8 @@ END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyPanel, wxPanel)
     EVT_CALENDAR            (Calendar_CalCtrl,   MyPanel::OnCalendar)
+    EVT_CALENDAR_MONTH      (Calendar_CalCtrl,   MyPanel::OnCalMonthChange)
+    EVT_CALENDAR_YEAR       (Calendar_CalCtrl,   MyPanel::OnCalYearChange)
     EVT_CALENDAR_SEL_CHANGED(Calendar_CalCtrl,   MyPanel::OnCalendarChange)
     EVT_CALENDAR_WEEKDAY_CLICKED(Calendar_CalCtrl, MyPanel::OnCalendarWeekDayClick)
 END_EVENT_TABLE()
@@ -338,6 +342,16 @@ void MyPanel::OnCalendarChange(wxCalendarEvent& event)
     s.Printf("Selected date: %s", event.GetDate().FormatISODate().c_str());
 
     m_date->SetLabel(s);
+}
+
+void MyPanel::OnCalMonthChange(wxCalendarEvent& WXUNUSED(event))
+{
+    wxLogStatus("Calendar month changed");
+}
+
+void MyPanel::OnCalYearChange(wxCalendarEvent& WXUNUSED(event))
+{
+    wxLogStatus("Calendar year changed");
 }
 
 void MyPanel::OnCalendarWeekDayClick(wxCalendarEvent& event)

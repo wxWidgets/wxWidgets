@@ -1349,6 +1349,31 @@ static void TestTimeArithmetics()
     }
 }
 
+static void TestTimeHolidays()
+{
+    puts("\n*** testing wxDateTimeHolidayAuthority ***\n");
+
+    wxDateTime::Tm tm = wxDateTime(29, wxDateTime::May, 2000).GetTm();
+    wxDateTime dtStart(1, tm.mon, tm.year),
+               dtEnd = dtStart.GetLastMonthDay();
+
+    wxDateTimeArray hol;
+    wxDateTimeHolidayAuthority::GetHolidaysInRange(dtStart, dtEnd, hol);
+
+    const wxChar *format = "%d-%b-%Y (%a)";
+
+    printf("All holidays between %s and %s:\n",
+           dtStart.Format(format).c_str(), dtEnd.Format(format).c_str());
+
+    size_t count = hol.GetCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        printf("\t%s\n", hol[n].Format(format).c_str());
+    }
+
+    puts("");
+}
+
 #if 0
 
 // test compatibility with the old wxDate/wxTime classes
@@ -1737,6 +1762,11 @@ int main(int argc, char **argv)
         fprintf(stderr, "Failed to initialize the wxWindows library, aborting.");
     }
 
+#ifdef TEST_USLEEP
+    puts("Sleeping for 3 seconds... z-z-z-z-z...");
+    wxUsleep(3000);
+#endif // TEST_USLEEP
+
 #ifdef TEST_CMDLINE
     static const wxCmdLineEntryDesc cmdLineDesc[] =
     {
@@ -1883,7 +1913,7 @@ int main(int argc, char **argv)
 #endif // TEST_MIME
 
 #ifdef TEST_TIME
-    if ( 1 )
+    if ( 0 )
     {
         TestTimeSet();
         TestTimeStatic();
@@ -1898,6 +1928,7 @@ int main(int argc, char **argv)
         TestTimeFormat();
         TestTimeArithmetics();
     }
+    TestTimeHolidays();
     if ( 0 )
         TestInteractive();
 #endif // TEST_TIME
