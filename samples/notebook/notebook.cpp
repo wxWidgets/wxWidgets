@@ -380,7 +380,7 @@ void MyFrame::ReInitNotebook()
         {
             wxString str = notebook->GetPageText(n);
 
-            wxNotebookPage *page = m_notebook->CreatePage(str);
+            wxWindow *page = m_notebook->CreatePage(str);
             m_notebook->AddPage(page, str, FALSE, m_notebook->GetIconIndex() );
         }
 
@@ -400,7 +400,7 @@ void MyFrame::ReInitNotebook()
     }
 
 
-    m_sizerNotebook = new wxNotebookSizer(m_notebook);
+    m_sizerNotebook = new wxBookCtrlSizer(m_notebook);
     m_sizerTop->Add(m_sizerNotebook, 1, wxEXPAND | wxALL, 4);
     m_sizerTop->Layout();
 }

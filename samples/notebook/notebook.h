@@ -9,7 +9,31 @@
 // License:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/notebook.h"
+// this sample can be used to test both wxNotebook and wxListbook
+//#define TEST_LISTBOOK
+
+#ifdef TEST_LISTBOOK
+    #include "wx/listbook.h"
+
+    #define wxNotebook wxListbook
+    #define wxNotebookEvent wxListbookEvent
+
+    #define wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED
+    #define wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING
+    #define EVT_NOTEBOOK_PAGE_CHANGED EVT_LISTBOOK_PAGE_CHANGED
+    #define EVT_NOTEBOOK_PAGE_CHANGING EVT_LISTBOOK_PAGE_CHANGING
+
+    #undef wxNB_TOP
+    #define wxNB_TOP wxLB_TOP
+    #undef wxNB_BOTTOM
+    #define wxNB_BOTTOM wxLB_BOTTOM
+    #undef wxNB_LEFT
+    #define wxNB_LEFT wxLB_LEFT
+    #undef wxNB_RIGHT
+    #define wxNB_RIGHT wxLB_RIGHT
+#else
+    #include "wx/notebook.h"
+#endif
 
 // Define a new application
 class MyApp : public wxApp
@@ -106,7 +130,7 @@ private:
     wxBoxSizer *m_sizerTop;
 
     // Sizer for m_notebook
-    wxNotebookSizer *m_sizerNotebook;
+    wxBookCtrlSizer *m_sizerNotebook;
 
     wxImageList *m_imageList;
 
