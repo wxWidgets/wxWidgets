@@ -40,6 +40,7 @@ ABOUT_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 ABOUT_OBJECTS =  \
 	about_about.o \
 	$(__about___win32rc)
+DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
 WX_VERSION = 2.5.1
 

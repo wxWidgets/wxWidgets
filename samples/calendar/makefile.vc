@@ -16,7 +16,8 @@ CALENDAR_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS_7)$(__DEBUGRUNTIME_3) \
 	/DWIN32 $(__DEBUGINFO_0) /Fd$(OBJS)\calendar.pdb $(____DEBUGRUNTIME_2_p) \
 	$(__OPTIMIZEFLAG_4) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\..\include /I$(SETUPHDIR) \
-	/W4 /I. $(__DLLFLAG_p) /D_WINDOWS /I.\..\..\samples $(CXXFLAGS) /GR /GX
+	/W4 /I. $(__DLLFLAG_p) /D_WINDOWS /I.\..\..\samples $(CXXFLAGS) \
+	$(__EXCEPTIONSFLAG_8) $(__EXCEPTIONSFLAG_9)
 CALENDAR_OBJECTS =  \
 	$(OBJS)\calendar_calendar.obj \
 	$(OBJS)\calendar_calendar.res
@@ -116,6 +117,18 @@ __DLLFLAG_p = /DWXUSINGDLL
 !endif
 !if "$(SHARED)" == "1"
 __DLLFLAG_p_1 = /d WXUSINGDLL
+!endif
+!if "$(USE_EXCEPTIONS)" == "0"
+__EXCEPTIONSFLAG_8 = 
+!endif
+!if "$(USE_EXCEPTIONS)" == "1"
+__EXCEPTIONSFLAG_8 = /GR
+!endif
+!if "$(USE_EXCEPTIONS)" == "0"
+__EXCEPTIONSFLAG_9 = 
+!endif
+!if "$(USE_EXCEPTIONS)" == "1"
+__EXCEPTIONSFLAG_9 = /GX
 !endif
 !if "$(USE_GUI)" == "1"
 __LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib

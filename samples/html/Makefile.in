@@ -13,6 +13,7 @@ INSTALL = @INSTALL@
 
 ### Variables: ###
 
+DESTDIR = 
 
 ### Conditionally set variables: ###
 

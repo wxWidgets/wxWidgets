@@ -54,8 +54,8 @@ RSC=rc.exe
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswd\wxregex"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MDd /W1 /Od /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD CPP /nologo /FD /GR /GX /MDd /W1 /Od /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD BASE CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -77,8 +77,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_msw\wxregex"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MD /W1 /O1 /Fd..\..\lib\vc_lib\wxregex.pdb /D "WIN32" /D "_LIB" /c
-# ADD CPP /nologo /FD /GR /GX /MD /W1 /O1 /Fd..\..\lib\vc_lib\wxregex.pdb /D "WIN32" /D "_LIB" /c
+# ADD BASE CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxregex.pdb /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxregex.pdb /D "WIN32" /D "_LIB" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -100,8 +100,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswud\wxregex"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MDd /W1 /Od /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD CPP /nologo /FD /GR /GX /MDd /W1 /Od /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD BASE CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -123,8 +123,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswu\wxregex"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MD /W1 /O1 /Fd..\..\lib\vc_lib\wxregex.pdb /D "WIN32" /D "_LIB" /c
-# ADD CPP /nologo /FD /GR /GX /MD /W1 /O1 /Fd..\..\lib\vc_lib\wxregex.pdb /D "WIN32" /D "_LIB" /c
+# ADD BASE CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxregex.pdb /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxregex.pdb /D "WIN32" /D "_LIB" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -146,8 +146,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivd\wxregex"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MDd /W1 /Od /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD CPP /nologo /FD /GR /GX /MDd /W1 /Od /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD BASE CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -169,8 +169,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswuniv\wxregex"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MD /W1 /O1 /Fd..\..\lib\vc_lib\wxregex.pdb /D "WIN32" /D "_LIB" /c
-# ADD CPP /nologo /FD /GR /GX /MD /W1 /O1 /Fd..\..\lib\vc_lib\wxregex.pdb /D "WIN32" /D "_LIB" /c
+# ADD BASE CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxregex.pdb /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxregex.pdb /D "WIN32" /D "_LIB" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -192,8 +192,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivud\wxregex"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MDd /W1 /Od /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD CPP /nologo /FD /GR /GX /MDd /W1 /Od /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD BASE CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -215,8 +215,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivu\wxregex"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MD /W1 /O1 /Fd..\..\lib\vc_lib\wxregex.pdb /D "WIN32" /D "_LIB" /c
-# ADD CPP /nologo /FD /GR /GX /MD /W1 /O1 /Fd..\..\lib\vc_lib\wxregex.pdb /D "WIN32" /D "_LIB" /c
+# ADD BASE CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxregex.pdb /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_lib\wxregex.pdb /D "WIN32" /D "_LIB" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -238,8 +238,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswddll\wxregex"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MDd /W1 /Od /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD CPP /nologo /FD /GR /GX /MDd /W1 /Od /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD BASE CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -261,8 +261,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswdll\wxregex"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MD /W1 /O1 /Fd..\..\lib\vc_dll\wxregex.pdb /D "WIN32" /D "_LIB" /c
-# ADD CPP /nologo /FD /GR /GX /MD /W1 /O1 /Fd..\..\lib\vc_dll\wxregex.pdb /D "WIN32" /D "_LIB" /c
+# ADD BASE CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxregex.pdb /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxregex.pdb /D "WIN32" /D "_LIB" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -284,8 +284,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswuddll\wxregex"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MDd /W1 /Od /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD CPP /nologo /FD /GR /GX /MDd /W1 /Od /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD BASE CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -307,8 +307,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswudll\wxregex"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MD /W1 /O1 /Fd..\..\lib\vc_dll\wxregex.pdb /D "WIN32" /D "_LIB" /c
-# ADD CPP /nologo /FD /GR /GX /MD /W1 /O1 /Fd..\..\lib\vc_dll\wxregex.pdb /D "WIN32" /D "_LIB" /c
+# ADD BASE CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxregex.pdb /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxregex.pdb /D "WIN32" /D "_LIB" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -330,8 +330,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivddll\wxregex"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MDd /W1 /Od /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD CPP /nologo /FD /GR /GX /MDd /W1 /Od /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD BASE CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -353,8 +353,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivdll\wxregex"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MD /W1 /O1 /Fd..\..\lib\vc_dll\wxregex.pdb /D "WIN32" /D "_LIB" /c
-# ADD CPP /nologo /FD /GR /GX /MD /W1 /O1 /Fd..\..\lib\vc_dll\wxregex.pdb /D "WIN32" /D "_LIB" /c
+# ADD BASE CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxregex.pdb /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxregex.pdb /D "WIN32" /D "_LIB" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -376,8 +376,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivuddll\wxregex"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MDd /W1 /Od /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
-# ADD CPP /nologo /FD /GR /GX /MDd /W1 /Od /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD BASE CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
+# ADD CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -399,8 +399,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivudll\wxregex"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MD /W1 /O1 /Fd..\..\lib\vc_dll\wxregex.pdb /D "WIN32" /D "_LIB" /c
-# ADD CPP /nologo /FD /GR /GX /MD /W1 /O1 /Fd..\..\lib\vc_dll\wxregex.pdb /D "WIN32" /D "_LIB" /c
+# ADD BASE CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxregex.pdb /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /Fd..\..\lib\vc_dll\wxregex.pdb /D "WIN32" /D "_LIB" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe

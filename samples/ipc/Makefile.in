@@ -40,6 +40,7 @@ CLIENT_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 CLIENT_OBJECTS =  \
 	$(__client___win32rc) \
 	client_client.o
+DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
 SERVER_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \

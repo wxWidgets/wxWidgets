@@ -30,18 +30,19 @@ WATCOM_CWD = $+ $(%cdrive):$(%cwd) $-
 
 ### Variables: ###
 
-MAKEARGS = CPPFLAGS="$(CPPFLAGS)" OFFICIAL_BUILD="$(OFFICIAL_BUILD)" &
-	WXUNIV="$(WXUNIV)" DEBUG_FLAG="$(DEBUG_FLAG)" CFLAGS="$(CFLAGS)" &
-	RUNTIME_LIBS="$(RUNTIME_LIBS)" CXX="$(CXX)" CFG="$(CFG)" &
-	USE_GUI="$(USE_GUI)" MONOLITHIC="$(MONOLITHIC)" CXXFLAGS="$(CXXFLAGS)" &
-	CC="$(CC)" USE_HTML="$(USE_HTML)" BUILD="$(BUILD)" LDFLAGS="$(LDFLAGS)" &
-	DEBUG_INFO="$(DEBUG_INFO)" SHARED="$(SHARED)" VENDOR="$(VENDOR)" &
-	USE_OPENGL="$(USE_OPENGL)" USE_ODBC="$(USE_ODBC)" UNICODE="$(UNICODE)"
+MAKEARGS = CPPFLAGS="$(CPPFLAGS)" DEBUG_FLAG="$(DEBUG_FLAG)" &
+	LDFLAGS="$(LDFLAGS)" CC="$(CC)" USE_GUI="$(USE_GUI)" &
+	MONOLITHIC="$(MONOLITHIC)" CXXFLAGS="$(CXXFLAGS)" USE_HTML="$(USE_HTML)" &
+	BUILD="$(BUILD)" DEBUG_INFO="$(DEBUG_INFO)" &
+	USE_EXCEPTIONS="$(USE_EXCEPTIONS)" VENDOR="$(VENDOR)" UNICODE="$(UNICODE)" &
+	OFFICIAL_BUILD="$(OFFICIAL_BUILD)" WXUNIV="$(WXUNIV)" &
+	RUNTIME_LIBS="$(RUNTIME_LIBS)" CXX="$(CXX)" CFG="$(CFG)" CFLAGS="$(CFLAGS)" &
+	SHARED="$(SHARED)" USE_ODBC="$(USE_ODBC)" USE_OPENGL="$(USE_OPENGL)"
 
 
 ### Targets: ###
 
-all : .SYMBOLIC access artprov calendar caret checklst config console controls db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi memcheck menu mfc minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png printing propsize regtest render richedit rotate sashtest scroll scrollsub shaped sockets splitter statbar tab taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wxtest
+all : .SYMBOLIC access artprov calendar caret checklst config console controls db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi memcheck menu mfc minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png printing propsize regtest render richedit rotate sashtest scroll scrollsub shaped sockets splitter statbar tab taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wxtest
 
 access : .SYMBOLIC 
 	cd access
@@ -146,6 +147,11 @@ erase : .SYMBOLIC
 
 event : .SYMBOLIC 
 	cd event
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
+	cd $(WATCOM_CWD)
+
+except : .SYMBOLIC 
+	cd except
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
 	cd $(WATCOM_CWD)
 

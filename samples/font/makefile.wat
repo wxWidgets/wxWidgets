@@ -109,6 +109,13 @@ __DLLFLAG_p =
 !ifeq SHARED 1
 __DLLFLAG_p = -dWXUSINGDLL
 !endif
+__EXCEPTIONSFLAG_7 =
+!ifeq USE_EXCEPTIONS 0
+__EXCEPTIONSFLAG_7 = 
+!endif
+!ifeq USE_EXCEPTIONS 1
+__EXCEPTIONSFLAG_7 = -xs
+!endif
 __LIB_JPEG_p =
 !ifeq USE_GUI 1
 __LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib
@@ -163,7 +170,7 @@ __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
 FONT_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
 	$(__RUNTIME_LIBS_5) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) &
-	-i=.\..\..\samples $(CXXFLAGS)
+	-i=.\..\..\samples $(CXXFLAGS) $(__EXCEPTIONSFLAG_7)
 FONT_OBJECTS =  &
 	$(OBJS)\font_font.obj
 OBJS = &

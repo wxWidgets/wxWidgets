@@ -34,6 +34,7 @@ top_srcdir = @top_srcdir@
 
 ### Variables: ###
 
+DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
 WX_VERSION = 2.5.1
 ZIP_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \

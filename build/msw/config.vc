@@ -68,6 +68,9 @@ SHARED = 0
 # Compile Unicode build of wxWindows? [0,1]
 UNICODE = 0
 
+# Enable exceptions in compiled code. [0,1]
+USE_EXCEPTIONS = 1
+
 # Build GUI libraries? [0,1]
 USE_GUI = 1
 

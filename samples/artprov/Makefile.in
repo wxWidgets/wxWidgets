@@ -41,6 +41,7 @@ ARTTEST_OBJECTS =  \
 	arttest_arttest.o \
 	arttest_artbrows.o \
 	$(__arttest___win32rc)
+DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
 WX_VERSION = 2.5.1
 

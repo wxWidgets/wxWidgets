@@ -38,6 +38,7 @@ top_srcdir = @top_srcdir@
 
 ### Variables: ###
 
+DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
 RENDDLL_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -DWXUSINGDLL $(CXXFLAGS) $(PIC_FLAG)

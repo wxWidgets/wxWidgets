@@ -79,22 +79,22 @@ __DEBUGINFO = -d0
 !ifeq DEBUG_INFO 1
 __DEBUGINFO = -d2
 !endif
-__DEBUGINFO_2 =
+__DEBUGINFO_1 =
 !ifeq BUILD debug
 !ifeq DEBUG_INFO default
-__DEBUGINFO_2 = debug all
+__DEBUGINFO_1 = debug all
 !endif
 !endif
 !ifeq BUILD release
 !ifeq DEBUG_INFO default
-__DEBUGINFO_2 = 
+__DEBUGINFO_1 = 
 !endif
 !endif
 !ifeq DEBUG_INFO 0
-__DEBUGINFO_2 = 
+__DEBUGINFO_1 = 
 !endif
 !ifeq DEBUG_INFO 1
-__DEBUGINFO_2 = debug all
+__DEBUGINFO_1 = debug all
 !endif
 __DEBUG_DEFINE_p =
 !ifeq BUILD debug
@@ -108,6 +108,13 @@ __DEBUG_DEFINE_p = -d__WXDEBUG__
 __DLLFLAG_p =
 !ifeq SHARED 1
 __DLLFLAG_p = -dWXUSINGDLL
+!endif
+__EXCEPTIONSFLAG =
+!ifeq USE_EXCEPTIONS 0
+__EXCEPTIONSFLAG = 
+!endif
+!ifeq USE_EXCEPTIONS 1
+__EXCEPTIONSFLAG = -xs
 !endif
 __LIB_JPEG_p =
 !ifeq USE_GUI 1
@@ -167,7 +174,7 @@ __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
 CLIENT_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) &
-	-i=.\..\..\samples $(CXXFLAGS)
+	-i=.\..\..\samples $(CXXFLAGS) $(__EXCEPTIONSFLAG)
 CLIENT_OBJECTS =  &
 	$(OBJS)\client_client.obj
 OBJS = &
@@ -175,7 +182,7 @@ OBJS = &
 SERVER_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) &
-	-i=.\..\..\samples $(CXXFLAGS)
+	-i=.\..\..\samples $(CXXFLAGS) $(__EXCEPTIONSFLAG)
 SERVER_OBJECTS =  &
 	$(OBJS)\server_server.obj
 SETUPHDIR = &
@@ -215,7 +222,7 @@ $(OBJS)\client.exe :  $(CLIENT_OBJECTS) $(OBJS)\client_sample.res
 	@%append $(OBJS)\client.lbc option quiet
 	@%append $(OBJS)\client.lbc name $^@
 	@%append $(OBJS)\client.lbc option caseexact
-	@%append $(OBJS)\client.lbc $(LDFLAGS) $(__DEBUGINFO_2)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
+	@%append $(OBJS)\client.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(CLIENT_OBJECTS)) do @%append $(OBJS)\client.lbc file %i
 	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\client.lbc library %i
 	@%append $(OBJS)\client.lbc option resource=$(OBJS)\client_sample.res
@@ -226,7 +233,7 @@ $(OBJS)\server.exe :  $(SERVER_OBJECTS) $(OBJS)\server_sample.res
 	@%append $(OBJS)\server.lbc option quiet
 	@%append $(OBJS)\server.lbc name $^@
 	@%append $(OBJS)\server.lbc option caseexact
-	@%append $(OBJS)\server.lbc $(LDFLAGS) $(__DEBUGINFO_2)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
+	@%append $(OBJS)\server.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(SERVER_OBJECTS)) do @%append $(OBJS)\server.lbc file %i
 	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\server.lbc library %i
 	@%append $(OBJS)\server.lbc option resource=$(OBJS)\server_sample.res

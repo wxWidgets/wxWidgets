@@ -40,6 +40,7 @@ CARET_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 CARET_OBJECTS =  \
 	caret_caret.o \
 	$(__caret___win32rc)
+DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
 WX_VERSION = 2.5.1
 

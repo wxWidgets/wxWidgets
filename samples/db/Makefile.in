@@ -42,6 +42,7 @@ DBTEST_OBJECTS =  \
 	dbtest_dbtest.o \
 	dbtest_listdb.o \
 	$(__dbtest___win32rc)
+DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
 WX_VERSION = 2.5.1
 

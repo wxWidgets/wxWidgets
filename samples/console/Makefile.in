@@ -34,6 +34,7 @@ CONSOLE_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(CXXFLAGS)
 CONSOLE_OBJECTS =  \
 	console_console.o
+DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
 
 ### Conditionally set variables: ###

@@ -15,7 +15,8 @@ include ../../build/msw/config.gcc
 MDI_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I.\..\..\include -I$(SETUPHDIR) -Wall -I. \
-	$(__DLLFLAG_p) -I.\..\..\samples $(CXXFLAGS)
+	$(__DLLFLAG_p) -I.\..\..\samples $(CXXFLAGS) $(__EXCEPTIONSFLAG_4) \
+	$(__EXCEPTIONSFLAG_5)
 MDI_OBJECTS =  \
 	$(OBJS)\mdi_mdi.o \
 	$(OBJS)\mdi_mdi_rc.o
@@ -95,6 +96,18 @@ __DLLFLAG_p = -DWXUSINGDLL
 endif
 ifeq ($(SHARED),1)
 __DLLFLAG_p_1 = --define WXUSINGDLL
+endif
+ifeq ($(USE_EXCEPTIONS),0)
+__EXCEPTIONSFLAG_4 = -fno-rtti
+endif
+ifeq ($(USE_EXCEPTIONS),1)
+__EXCEPTIONSFLAG_4 = 
+endif
+ifeq ($(USE_EXCEPTIONS),0)
+__EXCEPTIONSFLAG_5 = -fno-exceptions
+endif
+ifeq ($(USE_EXCEPTIONS),1)
+__EXCEPTIONSFLAG_5 = 
 endif
 ifeq ($(USE_GUI),1)
 __LIB_JPEG_p = -lwxjpeg$(WXDEBUGFLAG)

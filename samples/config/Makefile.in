@@ -40,6 +40,7 @@ CONFTEST_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 CONFTEST_OBJECTS =  \
 	conftest_conftest.o \
 	$(__conftest___win32rc)
+DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
 WX_VERSION = 2.5.1
 

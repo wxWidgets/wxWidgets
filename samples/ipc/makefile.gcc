@@ -15,7 +15,8 @@ include ../../build/msw/config.gcc
 CLIENT_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I.\..\..\include -I$(SETUPHDIR) -Wall -I. \
-	$(__DLLFLAG_p) -I.\..\..\samples $(CXXFLAGS)
+	$(__DLLFLAG_p) -I.\..\..\samples $(CXXFLAGS) $(__EXCEPTIONSFLAG_0) \
+	$(__EXCEPTIONSFLAG)
 CLIENT_OBJECTS =  \
 	$(OBJS)\client_sample_rc.o \
 	$(OBJS)\client_client.o
@@ -24,7 +25,8 @@ OBJS = \
 SERVER_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I.\..\..\include -I$(SETUPHDIR) -Wall -I. \
-	$(__DLLFLAG_p) -I.\..\..\samples $(CXXFLAGS)
+	$(__DLLFLAG_p) -I.\..\..\samples $(CXXFLAGS) $(__EXCEPTIONSFLAG_0) \
+	$(__EXCEPTIONSFLAG)
 SERVER_OBJECTS =  \
 	$(OBJS)\server_sample_rc.o \
 	$(OBJS)\server_server.o
@@ -102,6 +104,18 @@ __DLLFLAG_p = -DWXUSINGDLL
 endif
 ifeq ($(SHARED),1)
 __DLLFLAG_p_0 = --define WXUSINGDLL
+endif
+ifeq ($(USE_EXCEPTIONS),0)
+__EXCEPTIONSFLAG = -fno-exceptions
+endif
+ifeq ($(USE_EXCEPTIONS),1)
+__EXCEPTIONSFLAG = 
+endif
+ifeq ($(USE_EXCEPTIONS),0)
+__EXCEPTIONSFLAG_0 = -fno-rtti
+endif
+ifeq ($(USE_EXCEPTIONS),1)
+__EXCEPTIONSFLAG_0 = 
 endif
 ifeq ($(USE_GUI),1)
 __LIB_JPEG_p = -lwxjpeg$(WXDEBUGFLAG)

@@ -96,6 +96,11 @@ SHARED = 0
 UNICODE = 0
 !endif
 
+# Enable exceptions in compiled code. [0,1]
+!ifndef USE_EXCEPTIONS
+USE_EXCEPTIONS = 1
+!endif
+
 # Build GUI libraries? [0,1]
 !ifndef USE_GUI
 USE_GUI = 1

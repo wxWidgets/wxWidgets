@@ -2,7 +2,7 @@
 <makefile>
 
     <include file="../build/bakefiles/config.bkl"/>
-    
+
     <template id="sub">
         <dir>$(id)</dir>
         <dependency-of>all</dependency-of>
@@ -30,6 +30,7 @@
     <subproject id="erase" template="sub"/>
     <subproject id="event" template="sub"/>
     <subproject id="exec" template="sub"/>
+    <subproject id="except" template="sub"/>
     <subproject id="font" template="sub"/>
     <subproject id="grid" template="sub"/>
     <subproject id="help" template="sub"/>

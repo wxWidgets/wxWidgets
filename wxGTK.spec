@@ -196,6 +196,7 @@ wx/fontenc.h
 wx/fontmap.h
 wx/fs_mem.h
 wx/fs_zip.h
+wx/gzstream.h
 wx/hash.h
 wx/hashmap.h
 wx/hashset.h
@@ -228,6 +229,7 @@ wx/ptr_scpd.h
 wx/regex.h
 wx/scopeguard.h
 wx/snglinst.h
+wx/stack.h
 wx/stopwatch.h
 wx/strconv.h
 wx/stream.h

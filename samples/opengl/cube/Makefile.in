@@ -41,6 +41,7 @@ CUBE_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 CUBE_OBJECTS =  \
 	cube_cube.o \
 	$(__cube___win32rc)
+DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
 WX_VERSION = 2.5.1
 
