@@ -73,6 +73,7 @@ void wxGauge::SetValue(int pos)
     if ( m_peer && m_peer->Ok() )
     {
         m_peer->SetValue( GetValue() ) ;
+        // we turn off animation in the unnecessary situations as this is eating a lot of CPU otherwise
         Boolean shouldAnimate = ( GetValue() > 0 && GetValue() < GetRange() ) ;
         if ( m_peer->GetData<Boolean>( kControlEntireControl , kControlProgressBarAnimatingTag ) != shouldAnimate )
         {
