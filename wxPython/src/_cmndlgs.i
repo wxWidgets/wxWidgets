@@ -345,7 +345,7 @@ class wxFindDialogEvent : public wxCommandEvent
 public:
     wxFindDialogEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
     int GetFlags();
-    wxString GetFindString();
+    const wxString& GetFindString();
     const wxString& GetReplaceString();
     wxFindReplaceDialog *GetDialog();
     void SetFlags(int flags);
