@@ -474,8 +474,6 @@ void wxWindowMSW::SetFocus()
 
 void wxWindowMSW::SetFocusFromKbd()
 {
-    wxWindowBase::SetFocusFromKbd();
-
     // when the focus is given to the control with DLGC_HASSETSEL style from
     // keyboard its contents should be entirely selected: this is what
     // ::IsDialogMessage() does and so we should do it as well to provide the
@@ -484,6 +482,11 @@ void wxWindowMSW::SetFocusFromKbd()
     {
         ::SendMessage(GetHwnd(), EM_SETSEL, 0, -1);
     }
+
+    // do this after (maybe) setting the selection as like this when
+    // wxEVT_SET_FOCUS handler is called, the selection would have been already
+    // set correctly -- this may be important
+    wxWindowBase::SetFocusFromKbd();
 }
 
 // Get the window with the focus
