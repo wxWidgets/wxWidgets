@@ -1807,6 +1807,10 @@ public:
     const wxArrayInt GetSelectedRows() const;
     const wxArrayInt GetSelectedCols() const;
 
+    void DeselectRow( int row );
+    void DeselectCol( int col );
+    void DeselectCell( int row, int col );
+
 
     // This function returns the rectangle that encloses the block of cells
     // limited by TopLeft and BottomRight cell in device coords and clipped
