@@ -2091,13 +2091,23 @@ long wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                     }
                     else // normal click
                     {
-                        // clear the selection and then let the default handler
-                        // do the job
+                        // avoid doing anything if we click on the only
+                        // currently selected item
+                        wxArrayTreeItemIds selections;
+                        size_t count = GetSelections(selections);
+                        if ( count == 0 ||
+                                count > 1 ||
+                                    HITEM(selections[0]) != htItem )
+                        {
+                            // clear the previously selected items
                         UnselectAll();
 
                         // prevent the click from starting in-place editing
-                        // when there was no selection in the control
+                            // which should only happen if we click on the
+                            // already selected item (and nothing else is
+                            // selected)
                         TreeView_SelectItem(GetHwnd(), 0);
+                        }
 
                         // reset on any click without Shift
                         m_htSelStart = 0;

@@ -204,6 +204,7 @@ wxMSW:
 - fix for explicit keyword detection (VC++)
 - fix for sending event from wxCheckListBox::Check()
 - wxCaret::SetSize correction for showing caret
+- fix for wxTreeCtrl label editing in wxTR_MULTIPLE mode
 
 wxMotif:
 
