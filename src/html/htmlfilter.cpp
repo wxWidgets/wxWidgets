@@ -1,20 +1,18 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        htmlfilt.cpp
+// Name:        filter.cpp
 // Purpose:     wxHtmlFilter - input filter for translating into HTML format
 // Author:      Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
 
 #ifdef __GNUG__
-#pragma implementation
+#pragma implementation "htmlfilter.h"
 #endif
 
 #include "wx/wxprec.h"
 
-#include "wx/defs.h"
 #if wxUSE_HTML
 
 #ifdef __BORDLANDC__
@@ -25,7 +23,7 @@
 #include "wx/wx.h"
 #endif
 
-#include "wx/html/htmlfilt.h"
+#include "wx/html/htmlfilter.h"
 #include "wx/html/htmlwin.h"
 
 
@@ -64,9 +62,9 @@ wxString wxHtmlFilterPlainText::ReadFile(const wxFSFile& file) const
     doc = src;
     delete [] src;
 
-    doc.Replace(wxT("<"), wxT("&lt;"), TRUE);
-    doc.Replace(wxT(">"), wxT("&gt;"), TRUE);
-    doc2 = "<HTML><BODY><PRE>\n" + doc + "\n</PRE></BODY></HTML>";
+    doc.Replace(_T("<"), _T("&lt;"), TRUE);
+    doc.Replace(_T(">"), _T("&gt;"), TRUE);
+    doc2 = _T("<HTML><BODY><PRE>\n") + doc + _T("\n</PRE></BODY></HTML>");
     return doc2;
 }
 
@@ -94,7 +92,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxHtmlFilterImage, wxHtmlFilter)
 
 bool wxHtmlFilterImage::CanRead(const wxFSFile& file) const
 {
-    return (file.GetMimeType().Left(6) == wxT("image/"));
+    return (file.GetMimeType().Left(6) == "image/");
 }
 
 
@@ -130,7 +128,7 @@ bool wxHtmlFilterHTML::CanRead(const wxFSFile& file) const
 // This is true in most case but some page can return:
 // "text/html; char-encoding=...."
 // So we use Find instead
-  return (file.GetMimeType().Find(wxT("text/html")) == 0);
+  return (file.GetMimeType().Find(_T("text/html")) == 0);
 }
 
 

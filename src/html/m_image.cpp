@@ -346,27 +346,27 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
 
     TAG_HANDLER_PROC(tag)
     {
-        if (tag.GetName() == "IMG") {
-            if (tag.HasParam("SRC")) {
+        if (tag.GetName() == wxT("IMG")) {
+            if (tag.HasParam(wxT("SRC"))) {
                 int w = -1, h = -1;
                 int al;
                 wxFSFile *str;
-                wxString tmp = tag.GetParam("SRC");
+                wxString tmp = tag.GetParam(wxT("SRC"));
                 wxString mn = wxEmptyString;
 
                 str = m_WParser -> GetFS() -> OpenFile(tmp);
                 if (tag.HasParam(wxT("WIDTH"))) tag.ScanParam(wxT("WIDTH"), wxT("%i"), &w);
                 if (tag.HasParam(wxT("HEIGHT"))) tag.ScanParam(wxT("HEIGHT"), wxT("%i"), &h);
                 al = wxHTML_ALIGN_BOTTOM;
-                if (tag.HasParam("ALIGN")) {
-                    wxString alstr = tag.GetParam("ALIGN");
+                if (tag.HasParam(wxT("ALIGN"))) {
+                    wxString alstr = tag.GetParam(wxT("ALIGN"));
                     alstr.MakeUpper();  // for the case alignment was in ".."
-                    if (alstr == "TEXTTOP") al = wxHTML_ALIGN_TOP;
-                    else if ((alstr == "CENTER") || (alstr == "ABSCENTER")) al = wxHTML_ALIGN_CENTER;
+                    if (alstr == wxT("TEXTTOP")) al = wxHTML_ALIGN_TOP;
+                    else if ((alstr == wxT("CENTER")) || (alstr == wxT("ABSCENTER"))) al = wxHTML_ALIGN_CENTER;
                 }
-                if (tag.HasParam("USEMAP")) {
-                    mn = tag.GetParam( "USEMAP" );
-                    if (mn[ (unsigned int) 0 ] == '#') {
+                if (tag.HasParam(wxT("USEMAP"))) {
+                    mn = tag.GetParam( wxT("USEMAP") );
+                    if (mn[ (unsigned int) 0 ] == wxT('#')) {
                         mn = mn.Mid( 1 );
                     }
                 }
@@ -382,11 +382,11 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                 }
             }
         }
-        if (tag.GetName() == "MAP") {
+        if (tag.GetName() == wxT("MAP")) {
             m_WParser->CloseContainer();
             m_WParser->OpenContainer();
-            if (tag.HasParam("NAME")) {
-                wxString tmp = tag.GetParam("NAME");
+            if (tag.HasParam(wxT("NAME"))) {
+                wxString tmp = tag.GetParam(wxT("NAME"));
                 wxHtmlImageMapCell *cel = new wxHtmlImageMapCell( tmp );
                 m_WParser->GetContainer()->InsertCell( cel );
             }
@@ -394,26 +394,26 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
             m_WParser->CloseContainer();
             m_WParser->OpenContainer();
         }
-        if (tag.GetName() == "AREA") {
-            if (tag.HasParam("SHAPE")) {
-                wxString tmp = tag.GetParam("SHAPE");
+        if (tag.GetName() == wxT("AREA")) {
+            if (tag.HasParam(wxT("SHAPE"))) {
+                wxString tmp = tag.GetParam(wxT("SHAPE"));
                 wxString coords = wxEmptyString;
                 tmp.MakeUpper();
                 wxHtmlImageMapAreaCell *cel = NULL;
-                if (tag.HasParam("COORDS")) {
-                    coords = tag.GetParam("COORDS");
+                if (tag.HasParam(wxT("COORDS"))) {
+                    coords = tag.GetParam(wxT("COORDS"));
                 }
-                if (tmp == "POLY") {
+                if (tmp == wxT("POLY")) {
                     cel = new wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::POLY, coords, m_WParser -> GetPixelScale() );
-                } else if (tmp == "CIRCLE") {
+                } else if (tmp == wxT("CIRCLE")) {
                     cel = new wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::CIRCLE, coords, m_WParser -> GetPixelScale() );
-                } else if (tmp == "RECT") {
+                } else if (tmp == wxT("RECT")) {
                     cel = new wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::RECT, coords, m_WParser -> GetPixelScale() );
                 }
-                if (cel != NULL && tag.HasParam("HREF")) {
-                    wxString tmp = tag.GetParam("HREF");
+                if (cel != NULL && tag.HasParam(wxT("HREF"))) {
+                    wxString tmp = tag.GetParam(wxT("HREF"));
                     wxString target = wxEmptyString;
-                    if (tag.HasParam("TARGET")) target = tag.GetParam("TARGET");
+                    if (tag.HasParam(wxT("TARGET"))) target = tag.GetParam(wxT("TARGET"));
                     cel->SetLink( wxHtmlLinkInfo(tmp, target));
                 }
                 if (cel != NULL) m_WParser->GetContainer()->InsertCell( cel );

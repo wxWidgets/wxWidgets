@@ -112,7 +112,7 @@ class HP_TagHandler : public wxHtmlTagHandler
 
 bool HP_TagHandler::HandleTag(const wxHtmlTag& tag)
 {
-    if (tag.GetName() == "UL") {
+    if (tag.GetName() == wxT("UL")) {
         m_Level++;
         ParseInner(tag);
         m_Level--;

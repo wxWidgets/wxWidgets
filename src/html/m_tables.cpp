@@ -117,7 +117,7 @@ wxHtmlTableCell::wxHtmlTableCell(wxHtmlContainerCell *parent, const wxHtmlTag& t
  : wxHtmlContainerCell(parent)
 {
     m_PixelScale = pixel_scale;
-    m_HasBorders = (tag.HasParam("BORDER") && tag.GetParam("BORDER") != "0");
+    m_HasBorders = (tag.HasParam(wxT("BORDER")) && tag.GetParam(wxT("BORDER")) != wxT("0"));
     m_ColsInfo = NULL;
     m_NumCols = m_NumRows = 0;
     m_CellInfo = NULL;
@@ -272,10 +272,10 @@ void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
     // vertical alignment:
     {
         wxString valign;
-        if (tag.HasParam("VALIGN")) valign = tag.GetParam("VALIGN"); else valign = m_tValign;
+        if (tag.HasParam(wxT("VALIGN"))) valign = tag.GetParam(wxT("VALIGN")); else valign = m_tValign;
         valign.MakeUpper();
-        if (valign == "TOP") m_CellInfo[r][c].valign = wxHTML_ALIGN_TOP;
-        else if (valign == "BOTTOM") m_CellInfo[r][c].valign = wxHTML_ALIGN_BOTTOM;
+        if (valign == wxT("TOP")) m_CellInfo[r][c].valign = wxHTML_ALIGN_TOP;
+        else if (valign == wxT("BOTTOM")) m_CellInfo[r][c].valign = wxHTML_ALIGN_BOTTOM;
         else m_CellInfo[r][c].valign = wxHTML_ALIGN_CENTER;
     }
 
@@ -431,7 +431,7 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
         wxHtmlContainerCell *c;
 
         // new table started, backup upper-level table (if any) and create new:
-        if (tag.GetName() == "TABLE") {
+        if (tag.GetName() == wxT("TABLE")) {
             wxHtmlTableCell *oldt = m_Table;
             wxHtmlContainerCell *oldcont;
             int m_OldAlign;
@@ -442,7 +442,7 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
             m_Table = new wxHtmlTableCell(c, tag, m_WParser -> GetPixelScale());
             m_OldAlign = m_WParser -> GetAlign();
             m_tAlign = wxEmptyString;
-            if (tag.HasParam("ALIGN")) m_tAlign = tag.GetParam("ALIGN");
+            if (tag.HasParam(wxT("ALIGN"))) m_tAlign = tag.GetParam(wxT("ALIGN"));
 
             ParseInner(tag);
 
@@ -456,10 +456,10 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
 
         else if (m_Table && !tag.IsEnding()) {
             // new row in table
-            if (tag.GetName() == "TR") {
+            if (tag.GetName() == wxT("TR")) {
                 m_Table -> AddRow(tag);
                 m_rAlign = m_tAlign;
-                if (tag.HasParam("ALIGN")) m_rAlign = tag.GetParam("ALIGN");
+                if (tag.HasParam(wxT("ALIGN"))) m_rAlign = tag.GetParam(wxT("ALIGN"));
             }
 
             // new cell
@@ -470,7 +470,7 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
 
                 m_WParser -> OpenContainer();
 
-                if (tag.GetName() == "TH") /*header style*/ {
+                if (tag.GetName() == wxT("TH")) /*header style*/ {
                     m_WParser -> SetAlign(wxHTML_ALIGN_CENTER);
                 }
 
@@ -478,10 +478,10 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
                     wxString als;
 
                     als = m_rAlign;
-                    if (tag.HasParam("ALIGN")) als = tag.GetParam("ALIGN");
+                    if (tag.HasParam(wxT("ALIGN"))) als = tag.GetParam(wxT("ALIGN"));
                     als.MakeUpper();
-                    if (als == "RIGHT") m_WParser -> SetAlign(wxHTML_ALIGN_RIGHT);
-                    else if (als == "CENTER") m_WParser -> SetAlign(wxHTML_ALIGN_CENTER);
+                    if (als == wxT("RIGHT")) m_WParser -> SetAlign(wxHTML_ALIGN_RIGHT);
+                    else if (als == wxT("CENTER")) m_WParser -> SetAlign(wxHTML_ALIGN_CENTER);
                 }
                 m_WParser -> OpenContainer();
             }

@@ -86,7 +86,7 @@ TAG_HANDLER_BEGIN(OLULLI, "OL,UL,LI")
         wxHtmlContainerCell *c;
 
         // List Item:
-        if (tag.GetName() == "LI") {
+        if (tag.GetName() == wxT("LI")) {
             if (!tag.IsEnding()) {
                 m_WParser -> CloseContainer();
                 m_WParser -> CloseContainer();
@@ -118,7 +118,7 @@ TAG_HANDLER_BEGIN(OLULLI, "OL,UL,LI")
         else {
             int oldnum = m_Numbering;
 
-            if (tag.GetName() == "UL") m_Numbering = 0;
+            if (tag.GetName() == wxT("UL")) m_Numbering = 0;
             else m_Numbering = 1;
 
             c = m_WParser -> GetContainer();

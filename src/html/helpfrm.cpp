@@ -624,11 +624,11 @@ void wxHtmlHelpFrame::ReadCustomization(wxConfigBase *cfg, const wxString& path)
             }
                     
             for (i = 0; i < cnt; i++) {
-                val.Printf("hcBookmark_%i", i);
+                val.Printf(wxT("hcBookmark_%i"), i);
                 s = cfg -> Read(val);
                 m_BookmarksNames.Add(s);
                 if (m_Bookmarks) m_Bookmarks -> Append(s);
-                val.Printf("hcBookmark_%i_url", i);
+                val.Printf(wxT("hcBookmark_%i_url"), i);
                 s = cfg -> Read(val);
                 m_BookmarksPages.Add(s);
             }
@@ -669,9 +669,9 @@ void wxHtmlHelpFrame::WriteCustomization(wxConfigBase *cfg, const wxString& path
         
         cfg -> Write("hcBookmarksCnt", (long)cnt);
         for (i = 0; i < cnt; i++) {
-            val.Printf("hcBookmark_%i", i);
+            val.Printf(wxT("hcBookmark_%i"), i);
             cfg -> Write(val, m_BookmarksNames[i]);
-            val.Printf("hcBookmark_%i_url", i);
+            val.Printf(wxT("hcBookmark_%i_url"), i);
             cfg -> Write(val, m_BookmarksPages[i]);
         }
     }

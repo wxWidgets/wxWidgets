@@ -397,14 +397,14 @@ void wxHtmlContainerCell::InsertCell(wxHtmlCell *f)
 
 void wxHtmlContainerCell::SetAlign(const wxHtmlTag& tag)
 {
-    if (tag.HasParam("ALIGN")) {
-        wxString alg = tag.GetParam("ALIGN");
+    if (tag.HasParam(wxT("ALIGN"))) {
+        wxString alg = tag.GetParam(wxT("ALIGN"));
         alg.MakeUpper();
-        if (alg == "CENTER")
+        if (alg == wxT("CENTER"))
             SetAlignHor(wxHTML_ALIGN_CENTER);
-        else if (alg == "LEFT")
+        else if (alg == wxT("LEFT"))
             SetAlignHor(wxHTML_ALIGN_LEFT);
-        else if (alg == "RIGHT")
+        else if (alg == wxT("RIGHT"))
             SetAlignHor(wxHTML_ALIGN_RIGHT);
     }
 }
@@ -413,11 +413,11 @@ void wxHtmlContainerCell::SetAlign(const wxHtmlTag& tag)
 
 void wxHtmlContainerCell::SetWidthFloat(const wxHtmlTag& tag, double pixel_scale)
 {
-    if (tag.HasParam("WIDTH")) {
+    if (tag.HasParam(wxT("WIDTH"))) {
         int wdi;
-        wxString wd = tag.GetParam("WIDTH");
+        wxString wd = tag.GetParam(wxT("WIDTH"));
 
-        if (wd[wd.Length()-1] == '%') {
+        if (wd[wd.Length()-1] == wxT('%')) {
             wxSscanf(wd.c_str(), wxT("%i%%"), &wdi);
             SetWidthFloat(wdi, wxHTML_UNITS_PERCENT);
         }
