@@ -159,8 +159,8 @@ Description: wxWindows Cross-platform C++ GUI toolkit (development contrib libs)
 Package: wxwin=V-headers
 Architecture: any
 Section: devel
-Conflicts: wxwin-headers, libwxgtk2.3
-Replaces: wxwin-headers, wxgtk2.1-dev
+Conflicts: wxwin-headers
+Replaces: wxwin-headers, wxgtk2.1-dev, libwxgtk2.3
 Provides: wxwin-headers
 Description: wxWindows Cross-platform C++ GUI toolkit (header files)
  wxWindows is a class library for C++ providing GUI (Graphical User

@@ -1,3 +1,12 @@
+wxwindows2.4 (2.4.0.3) unstable; urgency=low
+
+  * Changed Conflict to Replaces so people can use 2.4 -dev before all
+    their 2.3 deps are gone.  Closes: #178305
+  * Added wxPy supplied 2.3 distutils to the source package, apparently the
+    standard 2.2 one is now insufficient.  This hopefully Closes: #178457
+
+ -- Ron Lee <ron@debian.org>  Mon, 27 Jan 2003 17:36:59 -0800
+
 wxwindows2.4 (2.4.0.2) unstable; urgency=low
 
   * Added missing quantize.h to install.  Closes: #178135
