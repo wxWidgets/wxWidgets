@@ -169,8 +169,10 @@ void MyFrame::OnExecOpenConnection(wxCommandEvent& WXUNUSED(evt))
                                   "Connect ...", "localhost");
   addr.Hostname(hname);
   addr.Service(3000);
-  sock->SetNotify(0);
-  sock->Connect(addr, TRUE);
+  sock->SetNotify(wxSOCKET_CONNECTION_FLAG | wxSOCKET_LOST_FLAG);
+  sock->SetNotify(TRUE);
+  sock->Connect(addr, FALSE);
+  sock->WaitOnConnect(10);
   sock->SetFlags(wxSocketBase::NONE);
   if (!sock->IsConnected())
     wxMessageBox("Can't connect to the specified host", "Alert !");
@@ -238,7 +240,7 @@ void MyFrame::OnExecTest1(wxCommandEvent& WXUNUSED(evt))
   if (!sock->IsConnected())
     return;
 
-  wxDialog *dlgbox = new wxDialog(this, -1, "Test 1", wxDefaultPosition, wxSize(414, 250));
+  wxDialog *dlgbox = new wxDialog(this, -1, "Test 1", wxDefaultPosition, wxSize(414, 280));
   wxTextCtrl *text_win = new wxTextCtrl(dlgbox, -1, "",
                                         wxPoint(0, 0), wxSize(400, 200),
 					wxTE_MULTILINE);
