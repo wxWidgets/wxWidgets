@@ -254,8 +254,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size,
 
     m_chkShowImages = new wxCheckBox( m_panel, ID_CHK_SHOWIMAGES,
         wxT("&Show images") );
+#ifndef TEST_LISTBOOK
     m_chkMultiLine = new wxCheckBox( m_panel, ID_CHK_MULTILINE,
         wxT("&Multiple lines") );
+#endif // !TEST_LISTBOOK
 
     m_btnAddPage = new wxButton( m_panel, ID_BTN_ADD_PAGE, wxT("&Add page") );
 
@@ -287,7 +289,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size,
     wxBoxSizer *sizerLeft = new wxBoxSizer(wxVERTICAL);
     sizerLeft->Add(m_radioOrient, 0, wxEXPAND);
     sizerLeft->Add(m_chkShowImages, 0, wxEXPAND | wxTOP, 4);
+#ifndef TEST_LISTBOOK
     sizerLeft->Add(m_chkMultiLine, 0, wxEXPAND | wxTOP, 4);
+#endif // !TEST_LISTBOOK
 
     sizerLeft->Add(0, 0, 1); // Spacer
 
@@ -359,8 +363,10 @@ void MyFrame::ReInitNotebook()
             break;
     }
 
+#ifndef TEST_LISTBOOK
     if ( m_chkMultiLine->IsChecked() )
         flags |= wxNB_MULTILINE;
+#endif // !TEST_LISTBOOK
 
     MyNotebook *notebook = m_notebook;
 
@@ -410,7 +416,9 @@ void MyFrame::ReInitNotebook()
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_RADIOBOX(ID_RADIO_ORIENT, MyFrame::OnCheckOrRadioBox)
     EVT_CHECKBOX(ID_CHK_SHOWIMAGES, MyFrame::OnCheckOrRadioBox)
+#ifndef TEST_LISTBOOK
     EVT_CHECKBOX(ID_CHK_MULTILINE, MyFrame::OnCheckOrRadioBox)
+#endif // !TEST_LISTBOOK
 
     EVT_BUTTON(ID_BTN_ADD_PAGE, MyFrame::OnButtonAddPage)
     EVT_BUTTON(ID_BTN_INSERT_PAGE, MyFrame::OnButtonInsertPage)
