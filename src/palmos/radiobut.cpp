@@ -2,10 +2,10 @@
 // Name:        src/palmos/radiobut.cpp
 // Purpose:     wxRadioButton
 // Author:      William Osborne - minimal working wxPalmOS port
-// Modified by:
+// Modified by: Wlodzimierz ABX Skiba - native wxRadioButton implementation
 // Created:     10/13/04
 // RCS-ID:      $Id$
-// Copyright:   (c) William Osborne
+// Copyright:   (c) William Osborne, Wlodzimierz Skiba
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -35,8 +35,6 @@
     #include "wx/settings.h"
     #include "wx/dcscreen.h"
 #endif
-
-#include "wx/palmos/private.h"
 
 // ============================================================================
 // wxRadioButton implementation
@@ -115,7 +113,8 @@ bool wxRadioButton::Create(wxWindow *parent,
                            const wxValidator& validator,
                            const wxString& name)
 {
-    return false;
+    wxControl::PalmCreateControl(pushButtonCtl, parent, id, label, pos, size);
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -124,11 +123,12 @@ bool wxRadioButton::Create(wxWindow *parent,
 
 void wxRadioButton::SetValue(bool value)
 {
+    SetBoolValue(value);
 }
 
 bool wxRadioButton::GetValue() const
 {
-    return false;
+    return GetBoolValue();
 }
 
 // ----------------------------------------------------------------------------
@@ -137,11 +137,6 @@ bool wxRadioButton::GetValue() const
 
 void wxRadioButton::Command (wxCommandEvent& event)
 {
-}
-
-bool wxRadioButton::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
-{
-    return false;
 }
 
 // ----------------------------------------------------------------------------

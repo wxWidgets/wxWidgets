@@ -82,11 +82,14 @@ public:
     wxWindow *GetLastFocus() const { return m_winLastFocused; }
 
     // interface to native frame structure
-    FormType *GetForm();
+    FormType *GetForm() const;
 
 protected:
     // common part of all ctors
     void Init();
+
+    // getting and setting sizes
+    virtual void DoGetSize( int *width, int *height ) const;
 
     // common part of Iconize(), Maximize() and Restore()
     void DoShowWindow(int nShowCmd);

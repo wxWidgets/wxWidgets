@@ -89,6 +89,10 @@ protected:
     // return default best size (doesn't really make any sense, override this)
     virtual wxSize DoGetBestSize() const;
 
+    // getting and setting sizes
+    virtual void DoGetPosition( int *x, int *y ) const;
+    virtual void DoGetSize( int *width, int *height ) const;
+
     // create the control of the given ControlStyleType: this is typically called
     // from Create() method of the derived class passing its label, pos and
     // size parameter (style parameter is not needed because m_windowStyle is
@@ -117,7 +121,9 @@ protected:
 
 private:
 
-    // Label stores label in case of wxButton, wxCheckBox, wxToggleButton etc.
+    virtual void DoGetBounds( RectangleType &rect ) const;
+
+    // m_label stores label in case of wxButton, wxCheckBox, wxToggleButton etc.
     // We must ensure that it persists for as long as it is being displayed
     // (that is, for as long as the control is displayed or until we call
     // CtlSetLabel() with a new string), and we must free the string after

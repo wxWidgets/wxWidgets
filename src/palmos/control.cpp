@@ -43,6 +43,7 @@
 #include "wx/button.h"
 #include "wx/checkbox.h"
 #include "wx/tglbtn.h"
+#include "wx/radiobut.h"
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -113,7 +114,7 @@ bool wxControl::PalmCreateControl(ControlStyleType style,
                     ( pos.y == wxDefaultCoord ) ? winUndefConstraint : pos.y,
                     ( size.x == wxDefaultCoord ) ? winUndefConstraint : size.x,
                     ( size.y == wxDefaultCoord ) ? winUndefConstraint : size.y,
-                    boldFont,
+                    stdFont,
                     0,
                     false
                 );
@@ -182,6 +183,37 @@ wxSize wxControl::DoGetBestSize() const
     return wxSize(16, 16);
 }
 
+void wxControl::DoGetBounds( RectangleType &rect ) const
+{
+    FormType* form = GetParentForm();
+    if(form==NULL)
+        return;
+    uint16_t index = FrmGetObjectIndex(form,GetId());
+    if(index==frmInvalidObjectId)
+        return;
+    FrmGetObjectBounds(form,index,&rect);
+}
+
+void wxControl::DoGetPosition( int *x, int *y ) const
+{
+    RectangleType rect;
+    DoGetBounds(rect);
+    if(x)
+        *x = rect.topLeft.x;
+    if(y)
+        *y = rect.topLeft.y;
+}
+
+void wxControl::DoGetSize( int *width, int *height ) const
+{
+    RectangleType rect;
+    DoGetBounds(rect);
+    if(width)
+        *width = rect.extent.x;
+    if(height)
+        *height = rect.extent.y;
+}
+
 bool wxControl::Enable(bool enable)
 {
     if( m_control == NULL )
@@ -224,6 +256,7 @@ void wxControl::SetLabel(const wxString& label)
     // setting in wrong control causes crash
     if ( ( wxDynamicCast(this,wxButton) != NULL ) ||
          ( wxDynamicCast(this,wxCheckBox) != NULL ) ||
+         ( wxDynamicCast(this,wxRadioButton) != NULL ) ||
          ( wxDynamicCast(this,wxToggleButton) != NULL ) )
     {
         m_label = label;
@@ -238,6 +271,7 @@ wxString wxControl::GetLabel()
     // setting in wrong control causes crash
     if ( wxDynamicCast(this,wxButton) ||
          wxDynamicCast(this,wxCheckBox) ||
+         wxDynamicCast(this,wxRadioButton) ||
          wxDynamicCast(this,wxToggleButton) )
     {
         return m_label;
@@ -290,15 +324,9 @@ void wxControl::OnEraseBackground(wxEraseEvent& event)
 }
 
 WXHBRUSH wxControl::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED(nCtlColor),
-#if wxUSE_CTL3D
-                               WXUINT message,
-                               WXWPARAM wParam,
-                               WXLPARAM lParam
-#else
                                WXUINT WXUNUSED(message),
                                WXWPARAM WXUNUSED(wParam),
                                WXLPARAM WXUNUSED(lParam)
-#endif
     )
 {
     return (WXHBRUSH)0;

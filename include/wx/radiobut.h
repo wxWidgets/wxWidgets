@@ -47,6 +47,8 @@ extern WXDLLEXPORT_DATA(const wxChar*) wxRadioButtonNameStr;
     #include "wx/cocoa/radiobut.h"
 #elif defined(__WXPM__)
     #include "wx/os2/radiobut.h"
+#elif defined(__WXPALMOS__)
+    #include "wx/palmos/radiobut.h"
 #endif
 
 #endif // wxUSE_RADIOBTN

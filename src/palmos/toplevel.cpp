@@ -186,6 +186,16 @@ void wxTopLevelWindowPalm::Restore()
 {
 }
 
+void wxTopLevelWindowPalm::DoGetSize( int *width, int *height ) const
+{
+    RectangleType rect;
+    FrmGetFormBounds( GetForm() , &rect );
+    if(width)
+        *width = rect.extent.x;
+    if(height)
+        *height = rect.extent.y;
+}
+
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowPalm fullscreen
 // ----------------------------------------------------------------------------
@@ -212,9 +222,9 @@ bool wxTopLevelWindowPalm::EnableCloseButton(bool enable)
     return false;
 }
 
-FormType *wxTopLevelWindowPalm::GetForm()
+FormType *wxTopLevelWindowPalm::GetForm() const
 {
-    return FrmGetActiveForm ();
+    return FrmGetActiveForm();
 }
 
 #ifndef __WXWINCE__

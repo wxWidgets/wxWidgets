@@ -30,7 +30,7 @@
 
 #include "wx/stockitem.h"
 #include "wx/intl.h"
-
+#include "wx/utils.h" // for wxStripMenuCodes()
 
 bool wxIsStockID(wxWindowID id)
 {
@@ -95,7 +95,7 @@ bool wxIsStockID(wxWindowID id)
 
 wxString wxGetStockLabel(wxWindowID id)
 {
-#ifdef __SMARTPHONE__
+#if defined(__SMARTPHONE__) || defined(__WXPALMOS__)
     #define STOCKITEM(stockid, label) \
         case stockid:                 \
             return wxStripMenuCodes(label);

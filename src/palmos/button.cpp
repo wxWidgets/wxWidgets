@@ -38,6 +38,9 @@
     #include "wx/bmpbuttn.h"
     #include "wx/settings.h"
     #include "wx/dcscreen.h"
+    #include "wx/frame.h"
+    #include "wx/dialog.h"
+    #include "wx/stockitem.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -126,7 +129,48 @@ bool wxButton::Create(wxWindow *parent,
                       const wxValidator& validator,
                       const wxString& name)
 {
-    wxControl::PalmCreateControl(buttonCtl, parent, id, label, pos, size);
+    // Default coordinates based on the knowledgebase recipe "Buttons"
+    wxSize palmSize(size.x==wxDefaultCoord?36:size.x,
+                    size.y==wxDefaultCoord?12:size.y);
+
+    // Default placement depends on dialog vs. frame type of parent
+    wxPoint palmPos(pos);
+    if((palmPos.x==wxDefaultCoord)||(palmPos.y==wxDefaultCoord))
+    {
+        wxSize parentSize(parent->GetSize());
+        wxWindow* parentTLW = parent;
+        while ( parentTLW && !parentTLW->IsTopLevel() )
+        {
+            parentTLW = parentTLW->GetParent();
+        }
+
+        if(wxDynamicCast(parentTLW, wxFrame)!=NULL)
+        {
+            if(palmPos.x==wxDefaultCoord)
+                palmPos.x = 1;
+            if(palmPos.y==wxDefaultCoord)
+                palmPos.y = parentSize.y-palmSize.y;
+        }
+        else if(wxDynamicCast(parentTLW, wxDialog)!=NULL)
+        {
+            if(palmPos.x==wxDefaultCoord)
+                palmPos.x = 5;
+            if(palmPos.y==wxDefaultCoord)
+                palmPos.y = parentSize.y-palmSize.y-5;
+        }
+        else
+        {
+            // something seriously broken
+            return false;
+        }
+    }
+
+    // take the stock label
+    wxString palmLabel = label;
+    if( palmLabel.empty() && wxIsStockID(id) )
+        palmLabel = wxGetStockLabel(id);
+
+    wxControl::PalmCreateControl(buttonCtl, parent, id, palmLabel, palmPos, palmSize);
     return true;
 }
 
@@ -140,13 +184,13 @@ wxButton::~wxButton()
 
 wxSize wxButton::DoGetBestSize() const
 {
-    return wxSize(0,0);
+    return wxSize(36,12);
 }
 
 /* static */
 wxSize wxButtonBase::GetDefaultSize()
 {
-    return wxSize(0,0);
+    return wxSize(36,12);
 }
 
 void wxButton::SetDefault()
@@ -180,7 +224,7 @@ bool wxButton::SendClickEvent()
     return false;
 }
 
-void wxButton::Command(wxCommandEvent & event)
+void wxButton::Command(wxCommandEvent &event)
 {
 }
 

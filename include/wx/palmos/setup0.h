@@ -521,7 +521,7 @@
 #define wxUSE_LISTBOX      0    // wxListBox
 #define wxUSE_LISTCTRL     0    // wxListCtrl
 #define wxUSE_RADIOBOX     0    // wxRadioBox
-#define wxUSE_RADIOBTN     0    // wxRadioButton
+#define wxUSE_RADIOBTN     1    // wxRadioButton
 #define wxUSE_SCROLLBAR    0    // wxScrollBar
 #define wxUSE_SLIDER       1    // wxSlider
 #define wxUSE_SPINBTN      0    // wxSpinButton

@@ -304,15 +304,9 @@ WXLRESULT wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
 }
 
 WXHBRUSH wxRadioBox::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED(nCtlColor),
-#if wxUSE_CTL3D
-                               WXUINT message,
-                               WXWPARAM wParam,
-                               WXLPARAM lParam
-#else
                                WXUINT WXUNUSED(message),
                                WXWPARAM WXUNUSED(wParam),
                                WXLPARAM WXUNUSED(lParam)
-#endif
     )
 {
     return (WXHBRUSH)0;

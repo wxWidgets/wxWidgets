@@ -118,6 +118,7 @@ wxPalmOS:
 - native wxCheckBox implementation
 - native wxSlider implementation
 - native wxToggleButton implementation
+- native wxRadioButton implementation
 
 
 2.5.3

@@ -151,6 +151,7 @@ SOURCES =  ../../samples/minimal/minimal.cpp \
 ../../src/common/sizer.cpp \
 ../../src/common/socket.cpp \
 ../../src/common/statbar.cpp \
+../../src/common/stockitem.cpp \
 ../../src/common/strconv.cpp \
 ../../src/common/stream.cpp \
 ../../src/common/string.cpp \

@@ -2,10 +2,10 @@
 // Name:        wx/palmos/radiobut.h
 // Purpose:     wxRadioButton class
 // Author:      William Osborne - minimal working wxPalmOS port
-// Modified by:
+// Modified by: Wlodzimierz ABX Skiba - native wxRadioButton implementation
 // Created:     10/13/04
 // RCS-ID:      $Id$
-// Copyright:   (c) William Osborne
+// Copyright:   (c) William Osborne, Wlodzimierz Skiba
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -50,7 +50,6 @@ public:
     virtual bool GetValue() const;
 
     // implementation only from now on
-    virtual bool MSWCommand(WXUINT param, WXWORD id);
     virtual void Command(wxCommandEvent& event);
     virtual void ApplyParentThemeBackground(const wxColour& bg)
         { SetBackgroundColour(bg); }
@@ -62,10 +61,6 @@ protected:
 private:
     // common part of all ctors
     void Init();
-
-    // we need to store the state internally as the result of GetValue()
-    // sometimes gets out of sync in WM_COMMAND handler
-    bool m_isChecked;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxRadioButton)
 };
