@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\Dev\Wx2\WxWindows\Lib\wx.lib
+;From library:  H:\Dev\Wx2\WxWindows\lib\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -132,12 +132,12 @@ EXPORTS
       __dt__14wxArrayOptionsFv
       ;wxCmdLineParser::Usage()
       Usage__15wxCmdLineParserFv
-      ;wxCmdLineParser::Parse()
-      Parse__15wxCmdLineParserFv
       ;wxCmdLineParserData::SetArguments(int,char**)
       SetArguments__19wxCmdLineParserDataFiPPc
       ;wxCmdLineParser::Found(const wxString&) const
       Found__15wxCmdLineParserCFRC8wxString
+      ;wxCmdLineParser::Parse(unsigned long)
+      Parse__15wxCmdLineParserFUl
       ;wxCmdLineParser::AddParam(const wxString&,wxCmdLineParamType,int)
       AddParam__15wxCmdLineParserFRC8wxString18wxCmdLineParamTypei
       ;wxCmdLineParser::GetParam(unsigned int) const
@@ -2028,14 +2028,12 @@ EXPORTS
       AssignHomeDir__10wxFileNameFv
       ;wxFileName::PrependDir(const wxString&)
       PrependDir__10wxFileNameFRC8wxString
-      ;wxFileName::IsAbsolute(wxPathFormat)
-      IsAbsolute__10wxFileNameF12wxPathFormat
+      ;wxFileName::GetPathSeparators(wxPathFormat)
+      GetPathSeparators__10wxFileNameF12wxPathFormat
       ;wxFileName::Mkdir(const wxString&,int,unsigned long)
       Mkdir__10wxFileNameFRC8wxStringiUl
       ;wxFileName::IsPathSeparator(char,wxPathFormat)
       IsPathSeparator__10wxFileNameFc12wxPathFormat
-      ;wxFileName::GetPathSeparators(wxPathFormat)
-      GetPathSeparators__10wxFileNameF12wxPathFormat
       ;wxFileName::GetFullPath(wxPathFormat) const
       GetFullPath__10wxFileNameCF12wxPathFormat
       ;wxFileName::Touch()
@@ -12251,6 +12249,7 @@ EXPORTS
       sm_classwxGauge__7wxGauge
       ;wxGauge::SetForegroundColour(const wxColour&)
       SetForegroundColour__7wxGaugeFRC8wxColour
+      wxGaugeWndProc
       ;wxConstructorForwxGauge()
       wxConstructorForwxGauge__Fv
       ;wxGauge::SetBackgroundColour(const wxColour&)
@@ -12259,16 +12258,16 @@ EXPORTS
       GetRange__7wxGaugeCFv
       ;wxGauge::Create(wxWindow*,int,int,const wxPoint&,const wxSize&,long,const wxValidator&,const wxString&)
       Create__7wxGaugeFP8wxWindowiT2RC7wxPointRC6wxSizelRC11wxValidatorRC8wxString
+      ;wxGauge::SetBezelFace(int)
+      SetBezelFace__7wxGaugeFi
       ;wxGauge::SetShadowWidth(int)
       SetShadowWidth__7wxGaugeFi
       ;wxGauge::SetRange(int)
       SetRange__7wxGaugeFi
-      ;wxGauge::SetBezelFace(int)
-      SetBezelFace__7wxGaugeFi
-      ;wxGauge::GetShadowWidth() const
-      GetShadowWidth__7wxGaugeCFv
       ;wxGauge::GetValue() const
       GetValue__7wxGaugeCFv
+      ;wxGauge::GetShadowWidth() const
+      GetShadowWidth__7wxGaugeCFv
       ;wxGauge::GetBezelFace() const
       GetBezelFace__7wxGaugeCFv
   ;From object file:  ..\os2\gdiimage.cpp
@@ -13221,38 +13220,42 @@ EXPORTS
       sm_classwxPrinter__9wxPrinter
   ;From object file:  ..\os2\radiobox.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxRadioBox::Show(unsigned long)
-      Show__10wxRadioBoxFUl
       ;wxRadioBox::ContainsHWND(unsigned long) const
       ContainsHWND__10wxRadioBoxCFUl
+      ;wxRadioBox::Show(unsigned long)
+      Show__10wxRadioBoxFUl
       ;wxRadioBox::GetString(int) const
       GetString__10wxRadioBoxCFi
       ;wxRadioBox::OnCtlColor(unsigned long,unsigned long,unsigned int,unsigned int,void*,void*)
       OnCtlColor__10wxRadioBoxFUlT1UiT3PvT5
-      ;wxRadioBox::GetSelection() const
-      GetSelection__10wxRadioBoxCFv
+      ;wxRadioBox::GetMaxButtonSize() const
+      GetMaxButtonSize__10wxRadioBoxCFv
       ;wxRadioBox::GetStringSelection() const
       GetStringSelection__10wxRadioBoxCFv
+      ;wxRadioBox::GetSelection() const
+      GetSelection__10wxRadioBoxCFv
+      ;wxRadioBox::DoGetBestSize() const
+      DoGetBestSize__10wxRadioBoxCFv
       ;wxRadioBox::SetStringSelection(const wxString&)
       SetStringSelection__10wxRadioBoxFRC8wxString
       ;wxRadioBox::Enable(int,unsigned long)
       Enable__10wxRadioBoxFiUl
       ;wxRadioBox::Enable(unsigned long)
       Enable__10wxRadioBoxFUl
-      ;wxRadioBox::GetLabel(int) const
-      GetLabel__10wxRadioBoxCFi
-      ;wxRadioBox::GetSize(int*,int*) const
-      GetSize__10wxRadioBoxCFPiT1
       ;wxRadioBox::GetPosition(int*,int*) const
       GetPosition__10wxRadioBoxCFPiT1
+      ;wxRadioBox::GetSize(int*,int*) const
+      GetSize__10wxRadioBoxCFPiT1
+      ;wxRadioBox::GetLabel(int) const
+      GetLabel__10wxRadioBoxCFi
       ;wxRadioBox::GetColumnCount() const
       GetColumnCount__10wxRadioBoxCFv
       ;wxRadioBox::SetFocus()
       SetFocus__10wxRadioBoxFv
       ;wxRadioBox::OS2Command(unsigned int,unsigned short)
       OS2Command__10wxRadioBoxFUiUs
-      ;wxRadioBox::SetLabel(int,wxBitmap*)
-      SetLabel__10wxRadioBoxFiP8wxBitmap
+      ;wxRadioBox::AdjustButtons(int,int,int,int,long)
+      AdjustButtons__10wxRadioBoxFiN31l
       ;wxRadioBox::SubclassRadioButton(unsigned long)
       SubclassRadioButton__10wxRadioBoxFUl
       __vft10wxRadioBox14wxRadioBoxBase
@@ -13268,31 +13271,34 @@ EXPORTS
       Create__10wxRadioBoxFP8wxWindowiRC8wxStringRC7wxPointRC6wxSizeT2PC8wxStringT2lRC11wxValidatorT3
       ;wxRadioBox::FindString(const wxString&) const
       FindString__10wxRadioBoxCFRC8wxString
+      __vft10wxRadioBox8wxObject
       ;wxRadioBox::sm_classwxRadioBox
       sm_classwxRadioBox__10wxRadioBox
-      __vft10wxRadioBox8wxObject
       ;wxRadioBox::SetSelection(int)
       SetSelection__10wxRadioBoxFi
-      ;wxRadioBox::GetCount() const
-      GetCount__10wxRadioBoxCFv
       ;wxRadioBox::~wxRadioBox()
       __dt__10wxRadioBoxFv
       ;wxRadioBox::GetNumVer() const
       GetNumVer__10wxRadioBoxCFv
-      ;wxRadioBtnWndProc(unsigned long,unsigned int,void*,void*)
-      wxRadioBtnWndProc__FUlUiPvT3
-      ;wxRadioBox::Show(int,unsigned long)
-      Show__10wxRadioBoxFiUl
+      ;wxRadioBox::GetCount() const
+      GetCount__10wxRadioBoxCFv
       ;wxRadioBox::Command(wxCommandEvent&)
       Command__10wxRadioBoxFR14wxCommandEvent
+      ;wxRadioBox::Show(int,unsigned long)
+      Show__10wxRadioBoxFiUl
+      ;wxRadioBox::SetFont(const wxFont&)
+      SetFont__10wxRadioBoxFRC6wxFont
+      ;wxRadioBox::GetTotalButtonSize(const wxSize&) const
+      GetTotalButtonSize__10wxRadioBoxCFRC6wxSize
       ;wxRadioBox::DoSetSize(int,int,int,int,int)
       DoSetSize__10wxRadioBoxFiN41
       ;wxRadioBox::GetNumHor() const
       GetNumHor__10wxRadioBoxCFv
+      ;wxRadioBox::WindowProc(unsigned int,void*,void*)
+      WindowProc__10wxRadioBoxFUiPvT2
       ;wxRadioBox::SetString(int,const wxString&)
       SetString__10wxRadioBoxFiRC8wxString
-      ;wxRadioBox::SetLabel(int,const wxString&)
-      SetLabel__10wxRadioBoxFiRC8wxString
+      wxRadioBtnWndProc
   ;From object file:  ..\os2\radiobut.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxRadioButton::sm_classwxRadioButton
@@ -13436,6 +13442,8 @@ EXPORTS
       GetSystemFont__16wxSystemSettingsFi
   ;From object file:  ..\os2\slider.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxSlider::DoSetSize(int,int,int,int,int)
+      DoSetSize__8wxSliderFiN41
       ;wxSlider::SetValue(int)
       SetValue__8wxSliderFi
       ;wxSlider::SetTick(int)
@@ -13446,8 +13454,6 @@ EXPORTS
       SetPageSize__8wxSliderFi
       ;wxSlider::SetLineSize(int)
       SetLineSize__8wxSliderFi
-      ;wxSlider::DoSetSize(int,int,int,int,int)
-      DoSetSize__8wxSliderFiN41
       ;wxSlider::GetValue() const
       GetValue__8wxSliderCFv
       ;wxSlider::ContainsHWND(unsigned long) const
@@ -13487,10 +13493,10 @@ EXPORTS
       ClearSel__8wxSliderFv
       ;wxSlider::GetLineSize() const
       GetLineSize__8wxSliderCFv
-      ;wxSlider::OS2OnScroll(int,unsigned short,unsigned short,unsigned long)
-      OS2OnScroll__8wxSliderFiUsT2Ul
       ;wxSlider::Command(wxCommandEvent&)
       Command__8wxSliderFR14wxCommandEvent
+      ;wxSlider::OS2OnScroll(int,unsigned short,unsigned short,unsigned long)
+      OS2OnScroll__8wxSliderFiUsT2Ul
       ;wxSlider::SetSelection(int,int)
       SetSelection__8wxSliderFiT1
       ;wxSlider::sm_classwxSlider
@@ -13505,13 +13511,11 @@ EXPORTS
       sm_classwxSpinButton__12wxSpinButton
       ;wxSpinButton::Create(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
       Create__12wxSpinButtonFP8wxWindowiRC7wxPointRC6wxSizelRC8wxString
-      ;wxSpinButton::OS2OnNotify(int,void*,void**)
-      OS2OnNotify__12wxSpinButtonFiPvPPv
       __vft12wxSpinButton8wxObject
-      ;wxSpinButton::SetValue(int)
-      SetValue__12wxSpinButtonFi
       ;wxSpinButton::SetRange(int,int)
       SetRange__12wxSpinButtonFiT1
+      ;wxSpinButton::SetValue(int)
+      SetValue__12wxSpinButtonFi
       ;wxConstructorForwxSpinEvent()
       wxConstructorForwxSpinEvent__Fv
       ;wxConstructorForwxSpinButton()
@@ -13526,27 +13530,42 @@ EXPORTS
       OS2Command__12wxSpinButtonFUiUs
   ;From object file:  ..\os2\spinctrl.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxSpinCtrl::GetSpinForTextCtrl(unsigned long)
+      GetSpinForTextCtrl__10wxSpinCtrlFUl
+      __vft10wxSpinCtrl8wxObject
       ;wxSpinCtrl::SetFont(const wxFont&)
       SetFont__10wxSpinCtrlFRC6wxFont
-      __vft10wxSpinCtrl8wxObject
+      ;wxSpinCtrl::SetFocus()
+      SetFocus__10wxSpinCtrlFv
       ;wxSpinCtrl::SetValue(const wxString&)
       SetValue__10wxSpinCtrlFRC8wxString
       ;wxSpinCtrl::sm_classwxSpinCtrl
       sm_classwxSpinCtrl__10wxSpinCtrl
+      ;wxSpinCtrl::DoGetPosition(int*,int*) const
+      DoGetPosition__10wxSpinCtrlCFPiT1
       ;wxSpinCtrl::DoMoveWindow(int,int,int,int)
       DoMoveWindow__10wxSpinCtrlFiN31
-      ;wxSpinCtrl::Show(unsigned long)
-      Show__10wxSpinCtrlFUl
+      wxSpinCtrlWndProc
+      ;wxSpinCtrl::OnChar(wxKeyEvent&)
+      OnChar__10wxSpinCtrlFR10wxKeyEvent
       ;wxSpinCtrl::sm_eventTable
       sm_eventTable__10wxSpinCtrl
       ;wxSpinCtrl::sm_eventTableEntries
       sm_eventTableEntries__10wxSpinCtrl
+      ;wxSpinCtrl::Show(unsigned long)
+      Show__10wxSpinCtrlFUl
       ;wxSpinCtrl::OnSpinChange(wxSpinEvent&)
       OnSpinChange__10wxSpinCtrlFR11wxSpinEvent
+      ;wxSpinCtrl::DoGetSize(int*,int*) const
+      DoGetSize__10wxSpinCtrlCFPiT1
+      ;wxSpinCtrl::~wxSpinCtrl()
+      __dt__10wxSpinCtrlFv
       ;wxSpinCtrl::DoGetBestSize() const
       DoGetBestSize__10wxSpinCtrlCFv
       ;wxSpinCtrl::Enable(unsigned long)
       Enable__10wxSpinCtrlFUl
+      ;wxSpinCtrl::ProcessTextCommand(unsigned short,unsigned short)
+      ProcessTextCommand__10wxSpinCtrlFUsT1
       ;wxSpinCtrl::GetEventTable() const
       GetEventTable__10wxSpinCtrlCFv
       ;wxSpinCtrl::Create(wxWindow*,int,const wxString&,const wxPoint&,const wxSize&,long,int,int,int,const wxString&)
@@ -13557,7 +13576,6 @@ EXPORTS
       GetValue__10wxSpinCtrlCFv
   ;From object file:  ..\os2\statbmp.cpp
     ;PUBDEFs (Symbols available from object file):
-      __vft14wxStaticBitmap8wxObject
       ;wxStaticBitmap::Free()
       Free__14wxStaticBitmapFv
       ;wxStaticBitmap::Create(wxWindow*,int,const wxGDIImage&,const wxPoint&,const wxSize&,long,const wxString&)
@@ -13574,27 +13592,17 @@ EXPORTS
       DoGetBestSize__14wxStaticBitmapCFv
   ;From object file:  ..\os2\statbox.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxStaticBox::OnEraseBackground(wxEraseEvent&)
-      OnEraseBackground__11wxStaticBoxFR12wxEraseEvent
       ;wxConstructorForwxStaticBox()
       wxConstructorForwxStaticBox__Fv
-      ;wxStaticBox::OnCtlColor(unsigned long,unsigned long,unsigned int,unsigned int,void*,void*)
-      OnCtlColor__11wxStaticBoxFUlT1UiT3PvT5
-      ;wxStaticBox::GetEventTable() const
-      GetEventTable__11wxStaticBoxCFv
-      ;wxStaticBox::OS2WindowProc(unsigned int,void*,void*)
-      OS2WindowProc__11wxStaticBoxFUiPvT2
       ;wxStaticBox::DoGetBestSize() const
       DoGetBestSize__11wxStaticBoxCFv
+      ;wxStaticBox::OS2WindowProc(unsigned int,void*,void*)
+      OS2WindowProc__11wxStaticBoxFUiPvT2
       ;wxStaticBox::Create(wxWindow*,int,const wxString&,const wxPoint&,const wxSize&,long,const wxString&)
       Create__11wxStaticBoxFP8wxWindowiRC8wxStringRC7wxPointRC6wxSizelT3
       ;wxStaticBox::sm_classwxStaticBox
       sm_classwxStaticBox__11wxStaticBox
-      ;wxStaticBox::sm_eventTable
-      sm_eventTable__11wxStaticBox
       __vft11wxStaticBox8wxObject
-      ;wxStaticBox::sm_eventTableEntries
-      sm_eventTableEntries__11wxStaticBox
   ;From object file:  ..\os2\stattext.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxStaticText::OS2WindowProc(unsigned int,void*,void*)
@@ -14152,6 +14160,8 @@ EXPORTS
       wxUsleep__FUl
       ;wxPMErrorToStr(unsigned long)
       wxPMErrorToStr__FUl
+      ;wxOS2SetFont(unsigned long,const wxFont&)
+      wxOS2SetFont__FUlRC6wxFont
       ;wxGetHostName(char*,int)
       wxGetHostName__FPci
       ;wxGetResource(const wxString&,const wxString&,int*,const wxString&)
