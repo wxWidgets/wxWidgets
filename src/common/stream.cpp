@@ -480,7 +480,9 @@ wxInputStream::~wxInputStream()
 char *wxInputStream::AllocSpaceWBack(size_t needed_size)
 {
   char *temp_b;
+  size_t old_size;
 
+  old_size = m_wbacksize;
   m_wbacksize += needed_size;
 
   if (!m_wback)
@@ -491,13 +493,16 @@ char *wxInputStream::AllocSpaceWBack(size_t needed_size)
   if (!temp_b)
     return NULL;
   m_wback = temp_b;
+  m_wbackcur += needed_size;
+
+  memmove(m_wback+needed_size, m_wback, old_size);
   
-  return (char *)(m_wback+(m_wbacksize-needed_size));
+  return (char *)(m_wback);
 }
 
 size_t wxInputStream::GetWBack(char *buf, size_t bsize)
 {
-  size_t s_toget = m_wbacksize-m_wbackcur;
+  size_t s_toget = m_wbackcur;
 
   if (!m_wback)
     return 0;
@@ -505,10 +510,10 @@ size_t wxInputStream::GetWBack(char *buf, size_t bsize)
   if (bsize < s_toget)
     s_toget = bsize;
 
-  memcpy(buf, (m_wback+m_wbackcur), s_toget);
+  memcpy(buf, (m_wback+m_wbackcur-bsize), s_toget);
 
-  m_wbackcur += s_toget;
-  if (m_wbackcur == m_wbacksize) {
+  m_wbackcur -= s_toget;
+  if (m_wbackcur == 0) {
     free(m_wback);
     m_wback = (char *)NULL;
     m_wbacksize = 0;
