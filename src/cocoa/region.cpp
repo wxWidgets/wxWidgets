@@ -113,12 +113,61 @@ wxRegion::wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight)
 {
 }
 
+// ----------------------------------------------------------------------------
+// wxRegionIterator
+// ----------------------------------------------------------------------------
+
 wxRegionIterator::wxRegionIterator()
 {
+    m_current =
+    m_numRects = 0;
+    m_rects = NULL;
+}
+
+wxRegionIterator::wxRegionIterator(const wxRegion& region)
+{
+    m_current =
+    m_numRects = 0;
+
+    m_rects = NULL;
+}
+
+wxRegionIterator::wxRegionIterator(const wxRegionIterator& iterator)
+{
+    m_current = iterator.m_current;
+    m_numRects = iterator.m_numRects;
+
+    // TODO: copy m_rects
+    m_rects = NULL;
+}
+
+wxRegionIterator wxRegionIterator::operator++(int)
+{
+    return wxRegionIterator(*this);
+}
+
+long wxRegionIterator::GetX() const
+{
+    return 0;
+}
+
+long wxRegionIterator::GetY() const
+{
+    return 0;
+}
+
+long wxRegionIterator::GetW() const
+{
+    return 0;
+}
+
+long wxRegionIterator::GetH() const
+{
+    return 0;
 }
 
 wxRegionIterator::~wxRegionIterator()
 {
+    // delete [] m_rects;
 }
 
-// vi:sts=4:sw=4:et
