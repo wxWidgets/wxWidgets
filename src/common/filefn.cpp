@@ -1336,7 +1336,10 @@ wxString wxFindFirstFile(const wxChar *spec, int flags)
     wxString result;
     gs_dir->GetFirst(&result, wxFileNameFromPath(spec), dirFlags);
     if ( result.IsEmpty() )
+    {
         wxDELETE(gs_dir);
+        return result;
+    }
 
     return gs_dirPath + result;
 }
@@ -1349,7 +1352,10 @@ wxString wxFindNextFile()
     gs_dir->GetNext(&result);
     
     if ( result.IsEmpty() )
+    {
         wxDELETE(gs_dir);
+        return result;
+    }
     
     return gs_dirPath + result;
 }
