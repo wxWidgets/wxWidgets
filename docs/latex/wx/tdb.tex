@@ -918,6 +918,11 @@ As of v2.6 of wxWidgets, the wxODBC classes now fully support the compilation
 and use of the classes in a Unicode build of wxWidgets, assuming the compiler 
 and OS on which the program will be compiled/run is Unicode capable.
 
+The one major difference in writing code that can be compiled in either 
+unicode or non-unicode builds that is specific to the wxODBC classes is to 
+use the SQL_C_WXCHAR datatype for string columns rather than SQL_C_CHAR or 
+SQL_C_WCHAR.
+
 \subsection{wxODBC - Sample Code}\label{wxodbcsamplecode1}
 
 Simplest example of establishing/opening a connection to an ODBC datasource, 
