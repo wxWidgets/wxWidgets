@@ -64,27 +64,27 @@ size_t wxMBConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 
 const wxWCharBuffer wxMBConv::cMB2WC(const char *psz) const
 {
-    if (psz) 
+    if (psz)
     {
         size_t nLen = MB2WC((wchar_t *) NULL, psz, 0);
         wxWCharBuffer buf(nLen);
         MB2WC((wchar_t *)(const wchar_t *) buf, psz, nLen);
         return buf;
-    } 
-    else 
+    }
+    else
         return wxWCharBuffer((wchar_t *) NULL);
 }
 
 const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *psz) const
 {
-    if (psz) 
+    if (psz)
     {
         size_t nLen = WC2MB((char *) NULL, psz, 0);
         wxCharBuffer buf(nLen);
         WC2MB((char *)(const char *) buf, psz, nLen);
         return buf;
-    } 
-    else 
+    }
+    else
         return wxCharBuffer((char *) NULL);
 }
 
@@ -321,7 +321,11 @@ size_t wxCSConv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
   ((wxCSConv *)this)->LoadNow(); // discard constness
   if (buf) {
     if (m_cset) {
+#if defined(__VISAGECPP__)
+      m_cset->m2w.Convert(psz, (wxChar*)buf);
+#else
       m_cset->m2w.Convert(psz, buf);
+#endif
     } else {
       // latin-1 (direct)
       for (size_t c=0; c<n; c++)
@@ -337,7 +341,11 @@ size_t wxCSConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
   ((wxCSConv *)this)->LoadNow(); // discard constness
   if (buf) {
     if (m_cset) {
+#if defined(__VISAGECPP__)
+      m_cset->w2m.Convert((wxChar*)psz, buf);
+#else
       m_cset->w2m.Convert(psz, buf);
+#endif
     } else {
       // latin-1 (direct)
       for (size_t c=0; c<n; c++)
