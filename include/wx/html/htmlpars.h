@@ -20,6 +20,8 @@
 
 #include "wx/html/htmltag.h"
 #include "wx/filesys.h"
+#include "wx/hash.h"
+#include "wx/fontenc.h"
 
 class WXDLLEXPORT wxMBConv;
 class WXDLLEXPORT wxHtmlParser;
