@@ -117,10 +117,6 @@ WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
     VOID    WINAPI ibAdjustWindowRect( HWND hWnd, LPRECT lprc ) ;
 #endif // wxUSE_ITSY_BITSY
 
-#if wxUSE_CTL3D
-    #include "wx/msw/ctl3d/ctl3d.h"
-#endif // wxUSE_CTL3D
-
 /*
  * Decide what window classes we're going to use
  * for this combination of CTl3D/FAFA settings

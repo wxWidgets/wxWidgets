@@ -429,12 +429,8 @@ void wxDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 
 void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
 {
-#if wxUSE_CTL3D
-    Ctl3dColorChange();
-#else
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
     Refresh();
-#endif
 }
 
 // ---------------------------------------------------------------------------

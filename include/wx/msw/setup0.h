@@ -1044,18 +1044,6 @@
 // Recommended setting: 1
 #define wxUSE_OLE           1
 
-// Set this to 1 to use Microsoft CTL3D library for "3D-look" under Win16 or NT
-// 3.x. This setting is ignored under Win9x and NT 4.0+.
-//
-// Default is 0 for (most) Win32 (systems), 1 for Win16
-//
-// Recommended setting: same as default
-#if defined(__WIN95__)
-#define wxUSE_CTL3D                      0
-#else
-#define wxUSE_CTL3D                      1
-#endif
-
 // Define as 1 to use Microsoft's ItsyBitsy small title bar library, for
 // wxMiniFrame. This setting is only used for Win3.1; Win9x and NT use native
 // miniframes support instead.
@@ -1116,5 +1104,5 @@
 // NOW MANDATORY: don't change.
 #define wxUSE_DYNAMIC_CLASSES     1
 
-#endif
-    // _WX_SETUP_H_
+#endif // _WX_SETUP_H_
+
