@@ -121,7 +121,7 @@ morbidly curious, here are a few more details:
       runtime instead of my slightly hacked up version of it exported
       via the wxPython C API.
 
-    * The %name directive is now deprecated so replaced most uses of
+    * The %name directive is now deprecated so I replaced most uses of
       it with a custom %Rename macro that uses %rename internally.
       These will evetually need to be replaced with a DocDecl macro
       when docstrings are added.
