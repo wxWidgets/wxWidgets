@@ -1457,5 +1457,73 @@ OSStatus wxMacControl::SetTabEnabled( SInt16 tabNo , bool enable )
     return ::SetTabEnabled( m_controlRef , tabNo , enable ) ;
 }
 
+//
+// Quartz Support
+//
+
+#ifdef __WXMAC_OSX__
+// snippets from Sketch Sample from Apple :
+
+#define	kGenericRGBProfilePathStr       "/System/Library/ColorSync/Profiles/Generic RGB Profile.icc"
+/*
+    This function locates, opens, and returns the profile reference for the calibrated 
+    Generic RGB color space. It is up to the caller to call CMCloseProfile when done
+    with the profile reference this function returns.
+*/
+CMProfileRef wxMacOpenGenericProfile(void)
+{
+    static CMProfileRef cachedRGBProfileRef = NULL;
+    
+    // we only create the profile reference once
+    if (cachedRGBProfileRef == NULL)
+    {
+		CMProfileLocation 	loc;
+	
+		loc.locType = cmPathBasedProfile;
+		strcpy(loc.u.pathLoc.path, kGenericRGBProfilePathStr);
+	
+		verify_noerr( CMOpenProfile(&cachedRGBProfileRef, &loc) );
+    }
+
+    if (cachedRGBProfileRef)
+    {
+		// clone the profile reference so that the caller has their own reference, not our cached one
+		CMCloneProfileRef(cachedRGBProfileRef);   
+    }
+
+    return cachedRGBProfileRef;
+}
+
+/*
+    Return the generic RGB color space. This is a 'get' function and the caller should
+    not release the returned value unless the caller retains it first. Usually callers
+    of this routine will immediately use the returned colorspace with CoreGraphics
+    so they typically do not need to retain it themselves.
+    
+    This function creates the generic RGB color space once and hangs onto it so it can
+    return it whenever this function is called.
+*/
+
+CGColorSpaceRef wxMacGetGenericRGBColorSpace()
+{
+    static CGColorSpaceRef genericRGBColorSpace = NULL;
+
+	if (genericRGBColorSpace == NULL)
+	{
+		CMProfileRef genericRGBProfile = wxMacOpenGenericProfile();
+	
+		if (genericRGBProfile)
+		{
+			genericRGBColorSpace = CGColorSpaceCreateWithPlatformColorSpace(genericRGBProfile);
+			wxASSERT_MSG( genericRGBColorSpace != NULL, wxT("couldn't create the generic RGB color space") ) ;
+			
+			// we opened the profile so it is up to us to close it
+			CMCloseProfile(genericRGBProfile); 
+		}
+	}
+    return genericRGBColorSpace;
+}
+#endif
+
 #endif // wxUSE_GUI
 

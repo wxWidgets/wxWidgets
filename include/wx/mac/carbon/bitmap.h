@@ -196,7 +196,7 @@ public:
     // returns the 'native' implementation, a GWorldPtr for the content and one for the mask 
     WXHBITMAP GetHBITMAP( WXHBITMAP * mask = NULL ) const;
 
-#if wxMAC_USE_CORE_GRAPHICS
+#ifdef __WXMAC_OSX__
     // returns a CGImageRef which must released after usage with CGImageRelease
     WXCGIMAGEREF CGImageCreate() const ;
 #endif

@@ -454,7 +454,7 @@ PicHandle wxBitmapRefData::GetPictHandle()
     return m_pictHandle ;
 }
 
-#if wxMAC_USE_CORE_GRAPHICS
+#ifdef __WXMAC_OSX__
 void wxMacMemoryBufferReleaseProc(void *info, const void *data, size_t size)
 {
     wxMemoryBuffer* membuf = (wxMemoryBuffer*) info ;
@@ -817,7 +817,7 @@ bool wxBitmap::CreateFromXpm(const char **bits)
     return TRUE;
 }
 
-#if wxMAC_USE_CORE_GRAPHICS
+#ifdef __WXMAC_OSX__
 WXCGIMAGEREF wxBitmap::CGImageCreate() const
 {
     wxCHECK_MSG( Ok(), NULL , wxT("invalid bitmap") ) ;

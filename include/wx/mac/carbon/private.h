@@ -637,10 +637,14 @@ private:
     wxBrush m_brush ;
 } ;
 
+#endif // wxMAC_USE_CORE_GRAPHICS
+
+#ifdef __WXMAC_OSX__
+
 CGColorSpaceRef wxMacGetGenericRGBColorSpace(void) ;
 void wxMacMemoryBufferReleaseProc(void *info, const void *data, size_t size) ;
 
-#endif // wxMAC_USE_CORE_GRAPHICS
+#endif
 
 class WXDLLEXPORT wxBitmapRefData: public wxGDIRefData
 {
@@ -678,7 +682,7 @@ public:
 #endif // wxUSE_PALETTE
     
     wxMask *      m_bitmapMask; // Optional mask
-#if wxMAC_USE_CORE_GRAPHICS
+#ifdef __WXMAC_OSX__
     CGImageRef    CGImageCreate() const ;
 #endif
      
@@ -710,7 +714,7 @@ private :
     wxMemoryBuffer m_memBuf ;
     int           m_rawAccessCount ;
     bool          m_ok;
-#if wxMAC_USE_CORE_GRAPHICS
+#ifdef __WXMAC_OSX__
     mutable CGImageRef    m_cgImageRef ;
 #endif
     IconRef       m_iconRef ;
