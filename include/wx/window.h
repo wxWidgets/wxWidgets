@@ -556,10 +556,12 @@ public:
 
     void UpdateWindowUI();
 
+#if wxUSE_MENUS
     bool PopupMenu( wxMenu *menu, const wxPoint& pos )
         { return DoPopupMenu(menu, pos.x, pos.y); }
     bool PopupMenu( wxMenu *menu, int x, int y )
         { return DoPopupMenu(menu, x, y); }
+#endif // wxUSE_MENUS
 
     // scrollbars
     // ----------
@@ -831,7 +833,9 @@ protected:
     virtual void DoSetToolTip( wxToolTip *tip );
 #endif // wxUSE_TOOLTIPS
 
+#if wxUSE_MENUS
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y ) = 0;
+#endif // wxUSE_MENUS
 
     // client data accessors
     virtual void DoSetClientObject( wxClientData *data );

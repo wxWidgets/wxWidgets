@@ -28,6 +28,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_CMDLINE_PARSER
+
 #ifndef WX_PRECOMP
     #include "wx/string.h"
     #include "wx/log.h"
@@ -912,3 +914,5 @@ static wxString GetTypeName(wxCmdLineParamType type)
 
     return s;
 }
+
+#endif // wxUSE_CMDLINE_PARSER

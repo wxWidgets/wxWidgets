@@ -27,12 +27,16 @@ public:
     void SetReturnCode(int returnCode) { m_returnCode = returnCode; }
     int GetReturnCode() const { return m_returnCode; }
 
+#if wxUSE_STATTEXT && wxUSE_TEXTCTRL
     // splits text up at newlines and places the
     // lines into a vertical wxBoxSizer
     wxSizer *CreateTextSizer( const wxString &message );
+#endif // wxUSE_STATTEXT && wxUSE_TEXTCTRL
     
+#if wxUSE_BUTTON
     // places buttons into a horizontal wxBoxSizer
     wxSizer *CreateButtonSizer( long flags );
+#endif // wxUSE_BUTTON
 
 protected:
     // the return code from modal dialog

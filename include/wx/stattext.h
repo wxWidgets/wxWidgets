@@ -1,6 +1,8 @@
 #ifndef _WX_STATTEXT_H_BASE_
 #define _WX_STATTEXT_H_BASE_
 
+#if wxUSE_STATTEXT
+
 #if defined(__WXMSW__)
 #include "wx/msw/stattext.h"
 #elif defined(__WXMOTIF__)
@@ -16,6 +18,8 @@
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/stattext.h"
 #endif
+
+#endif // wxUSE_STATTEXT
 
 #endif
     // _WX_STATTEXT_H_BASE_

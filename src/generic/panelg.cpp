@@ -65,7 +65,9 @@ END_EVENT_TABLE()
 void wxPanel::Init()
 {
     m_winLastFocused = (wxWindow *)NULL;
+#if wxUSE_BUTTON
     m_btnDefault = (wxButton *)NULL;
+#endif // wxUSE_BUTTON
 }
 
 bool wxPanel::Create(wxWindow *parent, wxWindowID id,

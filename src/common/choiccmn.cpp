@@ -28,6 +28,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_CHOICE
+
 #ifndef WX_PRECOMP
     #include "wx/choice.h"
 #endif
@@ -60,3 +62,6 @@ void wxChoiceBase::Command(wxCommandEvent& event)
     SetSelection(event.m_commandInt);
     (void)ProcessEvent(event);
 }
+
+#endif // wxUSE_CHOICE
+

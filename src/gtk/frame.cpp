@@ -146,6 +146,7 @@ static gint gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WX
     return TRUE;
 }
 
+#if wxUSE_MENUS
 //-----------------------------------------------------------------------------
 // "child_attached" of menu bar
 //-----------------------------------------------------------------------------
@@ -169,6 +170,7 @@ static void gtk_menu_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *
     win->m_menuBarDetached = TRUE;
     win->GtkUpdateSize();
 }
+#endif // wxUSE_MENUS
 
 #if wxUSE_TOOLBAR
 //-----------------------------------------------------------------------------
@@ -612,6 +614,7 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
     wxWindow::DoGetClientSize( width, height );
     if (height)
     {
+#if wxUSE_MENUS
         /* menu bar */
         if (m_frameMenuBar)
         {
@@ -620,6 +623,7 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
             else
                 (*height) -= wxPLACE_HOLDER;
         }
+#endif // wxUSE_MENUS
 
 #if wxUSE_STATUSBAR
         /* status bar */
@@ -663,6 +667,7 @@ void wxFrame::DoSetClientSize( int width, int height )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
+#if wxUSE_MENUS
         /* menu bar */
         if (m_frameMenuBar)
         {
@@ -671,6 +676,7 @@ void wxFrame::DoSetClientSize( int width, int height )
             else
                 height += wxPLACE_HOLDER;
         }
+#endif // wxUSE_MENUS
 
 #if wxUSE_STATUSBAR
         /* status bar */
@@ -759,6 +765,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
          * this hurts in the eye, but I don't want to call SetSize()
          * because I don't want to call any non-native functions here. */
 
+#if wxUSE_MENUS
         if (m_frameMenuBar)
         {
             int xx = m_miniEdge;
@@ -775,6 +782,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
                                   xx, yy, ww, hh );
             client_area_y_offset += hh;
         }
+#endif // wxUSE_MENUS
 
 #if wxUSE_TOOLBAR
         if ((m_frameToolBar) &&
@@ -782,6 +790,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
         {
             int xx = m_miniEdge;
             int yy = m_miniEdge + m_miniTitle;
+#if wxUSE_MENUS
             if (m_frameMenuBar)
             {
                 if (!m_menuBarDetached)
@@ -789,6 +798,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
                 else
                     yy += wxPLACE_HOLDER;
             }
+#endif // wxUSE_MENUS
 
             m_frameToolBar->m_x = xx;
             m_frameToolBar->m_y = yy;
@@ -848,7 +858,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
                             xx, yy, ww, hh );
         gtk_widget_draw( m_frameStatusBar->m_widget, (GdkRectangle*) NULL );
     }
-#endif
+#endif // wxUSE_STATUSBAR
 
     m_sizeSet = TRUE;
 
@@ -857,6 +867,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
     event.SetEventObject( this );
     GetEventHandler()->ProcessEvent( event );
 
+#if wxUSE_STATUSBAR
     // send size event to status bar
     if (m_frameStatusBar)
     {
@@ -864,6 +875,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
         event2.SetEventObject( m_frameStatusBar );
         m_frameStatusBar->GetEventHandler()->ProcessEvent( event2 );
     }
+#endif // wxUSE_STATUSBAR
 
     m_resizing = FALSE;
 }
@@ -888,7 +900,9 @@ void wxFrame::OnInternalIdle()
         return;
     }
 
+#if wxUSE_MENUS
     if (m_frameMenuBar) m_frameMenuBar->OnInternalIdle();
+#endif // wxUSE_MENUS
 #if wxUSE_TOOLBAR
     if (m_frameToolBar) m_frameToolBar->OnInternalIdle();
 #endif
@@ -902,6 +916,8 @@ void wxFrame::OnInternalIdle()
 // ----------------------------------------------------------------------------
 // menu/tool/status bar stuff
 // ----------------------------------------------------------------------------
+
+#if wxUSE_MENUS
 
 void wxFrame::SetMenuBar( wxMenuBar *menuBar )
 {
@@ -959,7 +975,10 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
     m_sizeSet = FALSE;
 }
 
+#endif // wxUSE_MENUS
+
 #if wxUSE_TOOLBAR
+
 wxToolBar* wxFrame::CreateToolBar( long style, wxWindowID id, const wxString& name )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );

@@ -20,6 +20,8 @@
     #pragma interface "choicebase.h"
 #endif
 
+#if wxUSE_CHOICE
+
 #include "wx/ctrlsub.h"     // the base class
 
 // ----------------------------------------------------------------------------
@@ -73,6 +75,8 @@ public:
 #elif defined(__WXSTUBS__)
     #include "wx/stubs/choice.h"
 #endif
+
+#endif // wxUSE_CHOICE
 
 #endif
     // _WX_CHOICE_H_BASE_

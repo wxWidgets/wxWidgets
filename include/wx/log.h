@@ -266,6 +266,8 @@ protected:
 
 #if wxUSE_GUI
 
+#if wxUSE_TEXTCTRL
+
 // log everything to a text window (GUI only of course)
 class WXDLLEXPORT wxLogTextCtrl : public wxLog
 {
@@ -280,9 +282,14 @@ private:
     wxTextCtrl *m_pTextCtrl;
 };
 
+#endif // wxUSE_TEXTCTRL
+
 // ----------------------------------------------------------------------------
 // GUI log target, the default one for wxWindows programs
 // ----------------------------------------------------------------------------
+
+#if wxUSE_LOGGUI
+
 class WXDLLEXPORT wxLogGui : public wxLog
 {
 public:
@@ -305,12 +312,17 @@ protected:
                   m_bWarnings;      // any warnings?
 };
 
+#endif // wxUSE_LOGGUI
+
 // ----------------------------------------------------------------------------
 // (background) log window: this class forwards all log messages to the log
 // target which was active when it was instantiated, but also collects them
 // to the log window. This window has it's own menu which allows the user to
 // close it, clear the log contents or save it to the file.
 // ----------------------------------------------------------------------------
+
+#if wxUSE_LOGWINDOW
+
 class WXDLLEXPORT wxLogWindow : public wxLog
 {
 public:
@@ -363,6 +375,8 @@ private:
     wxLog      *m_pOldLog;        // previous log target
     wxLogFrame *m_pLogFrame;      // the log frame
 };
+
+#endif // wxUSE_LOGWINDOW
 
 #endif // wxUSE_GUI
 

@@ -16,6 +16,8 @@
     #pragma interface "controlwithitems.h"
 #endif
 
+#if wxUSE_CONTROLS
+
 #include "wx/control.h"      // base class
 
 // ----------------------------------------------------------------------------
@@ -93,6 +95,7 @@ protected:
     wxClientDataType m_clientDataItemsType;
 };
 
-#endif // _WX_CTRLSUB_H_BASE_
+#endif // wxUSE_CONTROLS
 
+#endif // _WX_CTRLSUB_H_BASE_
 

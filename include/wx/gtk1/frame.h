@@ -69,7 +69,9 @@ public:
     virtual void MakeModal(bool modal = TRUE);
     virtual void Restore();
 
+#if wxUSE_MENUS
     virtual void SetMenuBar( wxMenuBar *menuBar );
+#endif // wxUSE_MENUS
 
 #if wxUSE_STATUSBAR
     virtual void PositionStatusBar();

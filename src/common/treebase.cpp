@@ -25,8 +25,10 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
+
+#if wxUSE_TREECTRL
 
 #include "wx/treebase.h"
 #include "wx/settings.h"
@@ -50,4 +52,5 @@ wxTreeEvent::wxTreeEvent(wxEventType commandType, int id)
     m_itemOld = 0;
 }
 
+#endif // wxUSE_TREECTRL
 

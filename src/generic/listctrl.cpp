@@ -19,6 +19,8 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_LISTCTRL
+
 #include "wx/dcscreen.h"
 #include "wx/app.h"
 #include "wx/listctrl.h"
@@ -3728,3 +3730,5 @@ void wxListCtrl::SetFocus()
     if ( FindFocus() != this )
         m_mainWin->SetFocus();
 }
+
+#endif // wxUSE_LISTCTRL

@@ -12,16 +12,19 @@
 // ============================================================================
 // declarations
 // ============================================================================
+
 #ifdef __GNUG__
     #pragma implementation "textctrlbase.h"
 #endif
-        
+
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
+
+#if wxUSE_TEXTCTRL
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
@@ -206,4 +209,6 @@ int wxTextCtrlBase::underflow()
 }
 
 #endif // NO_TEXT_WINDOW_STREAM
+
+#endif // wxUSE_TEXTCTRL
 

@@ -28,6 +28,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_CONTROLS
+
 #ifndef WX_PRECOMP
     #include "wx/control.h"
     #include "wx/log.h"
@@ -92,4 +94,6 @@ void wxControlBase::InitCommandEvent(wxCommandEvent& event) const
             ;
     }
 }
+
+#endif // wxUSE_CONTROLS
 

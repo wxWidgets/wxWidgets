@@ -28,6 +28,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_FONTMAP
+
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/log.h"
@@ -54,12 +56,14 @@
 // ----------------------------------------------------------------------------
 
 // the config paths we use
+#if wxUSE_CONFIG
 static const wxChar* FONTMAPPER_ROOT_PATH = wxT("/wxWindows/FontMapper");
 static const wxChar* FONTMAPPER_CHARSET_PATH = wxT("Charsets");
 static const wxChar* FONTMAPPER_CHARSET_ALIAS_PATH = wxT("Aliases");
 #if wxUSE_GUI
     static const wxChar* FONTMAPPER_FONT_FROM_ENCODING_PATH = wxT("Encodings");
 #endif // wxUSE_GUI
+#endif // wxUSE_CONFIG
 
 // encodings supported by GetEncodingDescription
 static wxFontEncoding gs_encodings[] =
@@ -746,3 +750,5 @@ bool wxFontMapper::IsEncodingAvailable(wxFontEncoding encoding,
 }
 
 #endif // wxUSE_GUI
+
+#endif // wxUSE_FONTMAP

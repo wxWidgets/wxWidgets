@@ -409,7 +409,11 @@ wxSize wxWindowBase::DoGetBestSize() const
               node = node->GetNext() )
         {
             wxWindow *win = node->GetData();
-            if ( win->IsTopLevel() || wxDynamicCast(win, wxStatusBar) )
+            if ( win->IsTopLevel()
+#if wxUSE_STATUSBAR
+                    || wxDynamicCast(win, wxStatusBar)
+#endif // wxUSE_STATUSBAR
+               )
             {
                 // dialogs and frames lie in different top level windows -
                 // don't deal with them here; as for the status bars, they
@@ -1256,6 +1260,7 @@ void wxWindowBase::GetPositionConstraint(int *x, int *y) const
 // of control classes.
 void wxWindowBase::UpdateWindowUI()
 {
+#if wxUSE_CONTROLS
     wxUpdateUIEvent event(GetId());
     event.m_eventObject = this;
 
@@ -1269,10 +1274,12 @@ void wxWindowBase::UpdateWindowUI()
             wxControl *control = wxDynamicCast(this, wxControl);
             if ( control )
             {
+#if wxUSE_TEXTCTRL
                 wxTextCtrl *text = wxDynamicCast(control, wxTextCtrl);
                 if ( text )
                     text->SetValue(event.GetText());
                 else
+#endif // wxUSE_TEXTCTRL
                     control->SetLabel(event.GetText());
             }
         }
@@ -1295,6 +1302,7 @@ void wxWindowBase::UpdateWindowUI()
         }
 #endif // wxUSE_RADIOBTN
     }
+#endif // wxUSE_CONTROLS
 }
 
 // ----------------------------------------------------------------------------
@@ -1404,6 +1412,7 @@ void wxWindowBase::OnInitDialog( wxInitDialogEvent &WXUNUSED(event) )
 // process Ctrl-Alt-mclick
 void wxWindowBase::OnMiddleClick( wxMouseEvent& event )
 {
+#if wxUSE_MSGDLG
     if ( event.ControlDown() && event.AltDown() )
     {
         // don't translate these strings
@@ -1448,6 +1457,7 @@ void wxWindowBase::OnMiddleClick( wxMouseEvent& event )
                      (wxWindow *)this);
     }
     else
+#endif // wxUSE_MSGDLG
     {
         event.Skip();
     }

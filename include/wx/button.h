@@ -1,6 +1,8 @@
 #ifndef _WX_BUTTON_H_BASE_
 #define _WX_BUTTON_H_BASE_
 
+#if wxUSE_BUTTON
+
 #if defined(__WXMSW__)
 #include "wx/msw/button.h"
 #elif defined(__WXMOTIF__)
@@ -16,6 +18,8 @@
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/button.h"
 #endif
+
+#endif // wxUSE_BUTTON
 
 #endif
     // _WX_BUTTON_H_BASE_

@@ -1530,7 +1530,7 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget, GdkEvent *WXUNUSED(
         gdk_im_begin(win->m_ic, win->m_wxwindow->window);
 #endif
 
-#ifdef wxUSE_CARET
+#if wxUSE_CARET
     // caret needs to be informed about focus change
     wxCaret *caret = win->GetCaret();
     if ( caret )
@@ -1588,7 +1588,7 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED
         gdk_im_end();
 #endif
 
-#ifdef wxUSE_CARET
+#if wxUSE_CARET
     // caret needs to be informed about focus change
     wxCaret *caret = win->GetCaret();
     if ( caret )
@@ -3351,6 +3351,8 @@ void wxWindow::ApplyWidgetStyle()
 // Pop-up menu stuff
 //-----------------------------------------------------------------------------
 
+#if wxUSE_MENUS
+
 static void gtk_pop_hide_callback( GtkWidget *WXUNUSED(widget), bool* is_waiting  )
 {
     *is_waiting = FALSE;
@@ -3420,6 +3422,8 @@ bool wxWindow::DoPopupMenu( wxMenu *menu, int x, int y )
 
     return TRUE;
 }
+
+#endif // wxUSE_MENUS
 
 #if wxUSE_DRAG_AND_DROP
 

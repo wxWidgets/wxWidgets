@@ -29,6 +29,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_NUMBERDLG
+
 #ifndef WX_PRECOMP
     #include <stdio.h>
 
@@ -206,3 +208,5 @@ long wxGetNumberFromUser(const wxString& msg,
 
     return dialog.GetValue();
 }
+
+#endif // wxUSE_NUMBERDLG

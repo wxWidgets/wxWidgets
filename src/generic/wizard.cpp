@@ -28,6 +28,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_WIZARDDLG
+
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
     #include "wx/intl.h"
@@ -389,3 +391,4 @@ wxWizardEvent::wxWizardEvent(wxEventType type, int id, bool direction)
     m_direction = direction;
 }
 
+#endif // wxUSE_WIZARDDLG

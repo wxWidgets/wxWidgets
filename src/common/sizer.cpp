@@ -32,7 +32,9 @@ IMPLEMENT_ABSTRACT_CLASS(wxSizer, wxObject);
 IMPLEMENT_ABSTRACT_CLASS(wxGridSizer, wxSizer);
 IMPLEMENT_ABSTRACT_CLASS(wxFlexGridSizer, wxGridSizer);
 IMPLEMENT_ABSTRACT_CLASS(wxBoxSizer, wxSizer);
+#if wxUSE_STATBOX
 IMPLEMENT_ABSTRACT_CLASS(wxStaticBoxSizer, wxBoxSizer);
+#endif
 #if wxUSE_NOTEBOOK
 IMPLEMENT_ABSTRACT_CLASS(wxNotebookSizer, wxSizer);
 #endif
@@ -942,6 +944,8 @@ wxSize wxBoxSizer::CalcMin()
 // wxStaticBoxSizer
 //---------------------------------------------------------------------------
 
+#if wxUSE_STATBOX
+
 wxStaticBoxSizer::wxStaticBoxSizer( wxStaticBox *box, int orient )
   : wxBoxSizer( orient )
 {
@@ -990,6 +994,8 @@ wxSize wxStaticBoxSizer::CalcMin()
 
     return ret;
 }
+
+#endif // wxUSE_STATBOX
 
 //---------------------------------------------------------------------------
 // wxNotebookSizer

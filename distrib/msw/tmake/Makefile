@@ -1,7 +1,8 @@
 # FIXME we'll generate this makefile with configure later, but for now please
 #       change it manually
-TMAKEDIR=/home/zeitlin/build/tmake
-TMAKE=$(TMAKEDIR)/bin/tmake
+#TMAKEDIR=/home/zeitlin/build/tmake
+#TMAKE=$(TMAKEDIR)/bin/tmake
+TMAKE=tmake
 
 WXDIR=../../..
 MSW_MAKEFILES_DIR=$(WXDIR)/src/msw

@@ -14,6 +14,8 @@
 #ifndef _WX_WIZARD_H_
 #define _WX_WIZARD_H_
 
+#if wxUSE_WIZARDDLG
+
 // ----------------------------------------------------------------------------
 // headers and other simple declarations
 // ----------------------------------------------------------------------------
@@ -187,5 +189,7 @@ typedef void (wxEvtHandler::*wxWizardEventFunction)(wxWizardEvent&);
 // the user pressed "Cancel" button and the wizard is going to be dismissed -
 // unless the event handler vetoes the event
 #define EVT_WIZARD_CANCEL(id, fn) { wxEVT_WIZARD_CANCEL, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxWizardEventFunction) & fn, (wxObject *)NULL },
+
+#endif // wxUSE_WIZARDDLG
 
 #endif // _WX_WIZARD_H_

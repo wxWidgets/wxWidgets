@@ -20,6 +20,8 @@
     #pragma interface "controlbase.h"
 #endif
 
+#if wxUSE_CONTROLS
+
 #include "wx/window.h"      // base class
 
 // ----------------------------------------------------------------------------
@@ -70,6 +72,8 @@ protected:
 #elif defined(__WXSTUBS__)
     #include "wx/stubs/control.h"
 #endif
+
+#endif // wxUSE_CONTROLS
 
 #endif
     // _WX_CONTROL_H_BASE_

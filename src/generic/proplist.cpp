@@ -28,6 +28,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_PROPSHEET
+
 #ifndef WX_PRECOMP
     #include "wx/window.h"
     #include "wx/font.h"
@@ -1880,3 +1882,4 @@ static wxBitmap *GetCrossBitmap()
     return s_crossBitmap;
 }
 
+#endif // wxUSE_PROPSHEET

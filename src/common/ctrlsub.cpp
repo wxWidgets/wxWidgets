@@ -28,6 +28,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_CONTROLS
+
 #ifndef WX_PRECOMP
     #include "wx/ctrlsub.h"
 #endif
@@ -92,3 +94,4 @@ void *wxControlWithItems::GetClientData(int n) const
     return DoGetItemClientData(n);
 }
 
+#endif // wxUSE_CONTROLS

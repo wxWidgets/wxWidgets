@@ -28,6 +28,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_LISTBOX
+
 #ifndef WX_PRECOMP
     #include "wx/listbox.h"
 #endif
@@ -96,3 +98,5 @@ void wxListBoxBase::SetFirstItem(const wxString& s)
 
     DoSetFirstItem(n);
 }
+
+#endif // wxUSE_LISTBOX

@@ -28,6 +28,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_CARET
+
 #ifndef WX_PRECOMP
     #include "wx/window.h"
     #include "wx/dcclient.h"
@@ -205,3 +207,5 @@ void wxCaret::DoDraw(wxDC *dc)
     dc->DrawRectangle( m_x, m_y, m_width, m_height );
 #endif // 0/1
 }
+
+#endif // wxUSE_CARET

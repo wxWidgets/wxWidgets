@@ -25,8 +25,10 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
+
+#if wxUSE_TREECTRL
 
 #include "wx/generic/treectlg.h"
 #include "wx/imaglist.h"
@@ -2530,3 +2532,4 @@ void wxGenericTreeCtrl::RefreshLine( wxGenericTreeItem *item )
     Refresh( TRUE, &rect );
 }
 
+#endif // wxUSE_TREECTRL

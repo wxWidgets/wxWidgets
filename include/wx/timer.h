@@ -22,7 +22,7 @@
 #include "wx/longlong.h"
 #include "wx/event.h"
 
-#if wxUSE_GUI
+#if wxUSE_GUI && wxUSE_TIMER
 
 // ----------------------------------------------------------------------------
 // wxTimer
@@ -181,11 +181,13 @@ typedef void (wxEvtHandler::*wxTimerEventFunction)(wxTimerEvent&);
 
 #define EVT_TIMER(id, func) { wxEVT_TIMER, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTimerEventFunction) & func, NULL},
 
-#endif // wxUSE_GUI
+#endif // wxUSE_GUI && wxUSE_TIMER
 
 // ----------------------------------------------------------------------------
 // wxStopWatch: measure time intervals with up to 1ms resolution
 // ----------------------------------------------------------------------------
+
+#if wxUSE_STOPWATCH
 
 class WXDLLEXPORT wxStopWatch
 {
@@ -208,6 +210,9 @@ private:
     long m_pause;         // the time of the last Pause() or 0
 };
 
+#endif // wxUSE_STOPWATCH
+
+#if wxUSE_LONGLONG
 
 // Starts a global timer
 // -- DEPRECATED: use wxStopWatch instead
@@ -216,6 +221,8 @@ void WXDLLEXPORT wxStartTimer();
 // Gets elapsed milliseconds since last wxStartTimer or wxGetElapsedTime
 // -- DEPRECATED: use wxStopWatch instead
 long WXDLLEXPORT wxGetElapsedTime(bool resetTimer = TRUE);
+
+#endif // wxUSE_LONGLONG
 
 // ----------------------------------------------------------------------------
 // global time functions
@@ -227,8 +234,10 @@ extern long WXDLLEXPORT wxGetLocalTime();
 // Get number of seconds since GMT 00:00:00, Jan 1st 1970.
 extern long WXDLLEXPORT wxGetUTCTime();
 
+#if wxUSE_LONGLONG
 // Get number of milliseconds since local time 00:00:00 Jan 1st 1970
 extern wxLongLong WXDLLEXPORT wxGetLocalTimeMillis();
+#endif // wxUSE_LONGLONG
 
 #define wxGetCurrentTime() wxGetLocalTime()
 
