@@ -1,33 +1,4 @@
 
-  !!! When sending bug reports tell us what version of wxWindows you are 
-      using (including the beta) and what compiler on what system. One 
-      example: wxWINE 2.1 snapshot 6, egcs 1.1.1, Redhat 5.0 !!!
-
-* Preparing WINE
-----------------
-
-Most C++ compilers cannot compile the WINE sources yet (this includes
-all versions of g++ and egcs) so you have to make a minimal change
-and recompile all of WINE in order to get anywhere.
-
-(Note: this information may be out of date now. See notes at
-the bottom of this file.)
-
-This change has do be applied to the /include/windef.h file, line 59
-in the section "Calling convention definitions", where the sources
-reads:
-
-#if __i386__
-
-which has to be changed into
-
-#if 0
-
-After this change, you'll have to recompile all of WINE without
-forgetting to install it. The direct consequence of this change
-is that the Win32 binary emulator won't work anymore, as the
-change disables the Windows native calling convention.
-
 * The most simple case
 -----------------------
 

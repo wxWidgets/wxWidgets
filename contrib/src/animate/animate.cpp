@@ -22,11 +22,11 @@
 #include "wx/wfstream.h"
 #include "wx/image.h"
 #include "wx/gifdecod.h"
-#include "wx/animate/animate.h"
 #include "wx/log.h"
+#include "wx/dcmemory.h"
+#include "wx/animate/animate.h"
 #include "wx/dc.h"
 #include "wx/dcclient.h"
-#include "wx/dcmemory.h"
 
 /*
  * wxAnimationPlayer

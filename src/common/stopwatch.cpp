@@ -250,7 +250,7 @@ wxLongLong wxGetLocalTimeMillis()
     // If possible, use a function which avoids conversions from
     // broken-up time structures to milliseconds
 
-#if defined(__WXMSW__) && defined(__MWERKS__)
+#if defined(__WXMSW__) && (defined(__WINE__) || defined(__MWERKS__))
     // This should probably be the way all WXMSW compilers should do it
     // Go direct to the OS for time
 

@@ -40,6 +40,9 @@
 
 extern "C"
 {
+    #if defined(__WXMSW__)
+        #define XMD_H
+    #endif
     #include "jpeglib.h"
 }
 

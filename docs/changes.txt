@@ -122,6 +122,7 @@ wxGTK:
 - fixed wxChoice::Delete() in presence of client data
 - allow calling wxWindow::SetFont if window not yet created
 - use same average character width as other ports when calculating dialog units
+- fixed mouse wheel handling under GTK2 (Hugh Fisher)
 
 wxMac:
 
