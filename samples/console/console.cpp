@@ -54,7 +54,7 @@
 //#define TEST_FILENAME
 //#define TEST_FTP
 //#define TEST_HASH
-#define TEST_INFO_FUNCTIONS
+//#define TEST_INFO_FUNCTIONS
 //#define TEST_LIST
 //#define TEST_LOCALE
 //#define TEST_LOG
@@ -64,7 +64,7 @@
 //#define TEST_REGCONF
 //#define TEST_REGEX
 //#define TEST_REGISTRY
-//#define TEST_SNGLINST
+#define TEST_SNGLINST
 //#define TEST_SOCKETS
 //#define TEST_STREAMS
 //#define TEST_STRINGS
