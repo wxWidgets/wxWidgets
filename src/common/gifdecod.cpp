@@ -456,6 +456,15 @@ int wxGIFDecoder::dgif(GIFImage *img, int interl, int bits)
                 return wxGIF_INVFORMAT;
             }
         }
+
+        if (pos >= allocSize)
+        {
+            delete[] ab_prefix;
+            delete[] ab_tail;
+            delete[] stack;
+            return wxGIF_INVFORMAT;
+        }
+
         stack[pos] = code;              /* push last code into the stack */
         abcabca    = code;              /* save for special case */
 
@@ -473,18 +482,11 @@ int wxGIFDecoder::dgif(GIFImage *img, int interl, int bits)
             }
         }
 
-        /* dump stack data to the buffer */
+        /* dump stack data to the image buffer */
         while (pos >= 0)
         {
-            if (pos >= allocSize)
-            {
-                delete[] ab_prefix;
-                delete[] ab_tail;
-                delete[] stack;
-                return wxGIF_INVFORMAT;
-            }
-
-            (img->p)[x + (y * (img->w))] = (char)stack[pos--];
+            (img->p)[x + (y * (img->w))] = (char) stack[pos];
+            pos--;
 
             if (++x >= (img->w))
             {
@@ -500,13 +502,50 @@ int wxGIFDecoder::dgif(GIFImage *img, int interl, int bits)
                         case 3: y += 4; break;
                         case 4: y += 2; break;
                     }
-                    if (y >= (img->h))
+
+                    /* loop until a valid y coordinate has been
+                    found, Or if the maximum number of passes has
+                    been reached, exit the loop, and stop image
+                    decoding (At this point the image is succesfully
+                    decoded).
+                    If we don't loop, but merely set y to some other
+                    value, that new value might still be invalid depending
+                    on the height of the image. This would cause out of
+                    bounds writing.
+                    */
+                    while (y >= (img->h))
                     {
                         switch (++pass)
                         {
                             case 2: y = 4; break;
                             case 3: y = 2; break;
                             case 4: y = 1; break;
+
+                            default:
+                                /*
+                                It's possible we arrive here. For example this
+                                happens when the image is interlaced, and the
+                                height is 1. Looking at the above cases, the
+                                lowest possible y is 1. While the only valid
+                                one would be 0 for an image of height 1. So
+                                'eventually' the loop will arrive here.
+                                This case makes sure this while loop is
+                                exited, as well as the 2 other ones.
+                                */
+
+                                // Set y to a valid coordinate so the local
+                                // while loop will be exited. (y = 0 always
+                                // is >= img->h since if img->h == 0 the
+                                // image is never decoded)
+                                y = 0;
+
+                                // This will exit the other outer while loop
+                                pos = -1;
+
+                                // This will halt image decoding.
+                                code = ab_fin;
+
+                                break;
                         }
                     }
                 }
