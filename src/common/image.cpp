@@ -525,7 +525,10 @@ unsigned char wxImage::GetBlue( int x, int y ) const
 
 bool wxImage::Ok() const
 {
-    return (M_IMGDATA && M_IMGDATA->m_ok);
+    // image of 0 width or height can't be considered ok - at least because it
+    // causes crashes in ConvertToBitmap() if we don't catch it in time
+    wxImageRefData *data = M_IMGDATA;
+    return data && data->m_ok && data->m_width && data->m_height;
 }
 
 char unsigned *wxImage::GetData() const
