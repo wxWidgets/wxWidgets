@@ -116,11 +116,11 @@ extern wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
 
 static char* wxStringErrorMsg = "string type is required for parameter";
 
-//#ifdef SEPARATE
-//    static wxString wxPyEmptyStr("");
-//    static wxPoint  wxPyDefaultPosition(-1, -1);
-//    static wxSize   wxPyDefaultSize(-1, -1);
-//#endif
+#if defined(SEPARATE) && defined(__WXMSW__)
+    static wxString wxPyEmptyStr("");
+    static wxPoint  wxPyDefaultPosition(-1, -1);
+    static wxSize   wxPyDefaultSize(-1, -1);
+#endif
 static PyObject *_wrap_glArrayElementEXT(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     GLint  _arg0;

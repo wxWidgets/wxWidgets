@@ -2959,6 +2959,160 @@ static PyObject *_wrap_wxGridEvent_m_cell_get(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define wxGridEvent_GetRow(_swigobj)  (_swigobj->GetRow())
+static PyObject *_wrap_wxGridEvent_GetRow(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGridEvent * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxGridEvent_GetRow",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_GetRow. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGridEvent_GetRow(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_GetCol(_swigobj)  (_swigobj->GetCol())
+static PyObject *_wrap_wxGridEvent_GetCol(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGridEvent * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxGridEvent_GetCol",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_GetCol. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGridEvent_GetCol(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_GetPosition(_swigobj)  (_swigobj->GetPosition())
+static PyObject *_wrap_wxGridEvent_GetPosition(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxPoint * _result;
+    wxGridEvent * _arg0;
+    char * _argc0 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxGridEvent_GetPosition",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_GetPosition. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxPoint (wxGridEvent_GetPosition(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxPoint_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxGridEvent_ControlDown(_swigobj)  (_swigobj->ControlDown())
+static PyObject *_wrap_wxGridEvent_ControlDown(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGridEvent * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxGridEvent_ControlDown",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_ControlDown. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxGridEvent_ControlDown(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_ShiftDown(_swigobj)  (_swigobj->ShiftDown())
+static PyObject *_wrap_wxGridEvent_ShiftDown(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGridEvent * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxGridEvent_ShiftDown",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_ShiftDown. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxGridEvent_ShiftDown(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_GetCell(_swigobj)  (_swigobj->GetCell())
+static PyObject *_wrap_wxGridEvent_GetCell(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxGridCell * _result;
+    wxGridEvent * _arg0;
+    char * _argc0 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxGridEvent_GetCell",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_GetCell. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxGridCell *)wxGridEvent_GetCell(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCell_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
 static void *SwigwxNotebookEventTowxNotifyEvent(void *ptr) {
     wxNotebookEvent *src;
     wxNotifyEvent *dest;
@@ -4385,6 +4539,12 @@ static PyMethodDef windows2cMethods[] = {
 	 { "wxNotebookEvent_SetOldSelection", _wrap_wxNotebookEvent_SetOldSelection, 1 },
 	 { "wxNotebookEvent_GetOldSelection", _wrap_wxNotebookEvent_GetOldSelection, 1 },
 	 { "wxNotebookEvent_GetSelection", _wrap_wxNotebookEvent_GetSelection, 1 },
+	 { "wxGridEvent_GetCell", _wrap_wxGridEvent_GetCell, 1 },
+	 { "wxGridEvent_ShiftDown", _wrap_wxGridEvent_ShiftDown, 1 },
+	 { "wxGridEvent_ControlDown", _wrap_wxGridEvent_ControlDown, 1 },
+	 { "wxGridEvent_GetPosition", _wrap_wxGridEvent_GetPosition, 1 },
+	 { "wxGridEvent_GetCol", _wrap_wxGridEvent_GetCol, 1 },
+	 { "wxGridEvent_GetRow", _wrap_wxGridEvent_GetRow, 1 },
 	 { "wxGridEvent_m_cell_get", _wrap_wxGridEvent_m_cell_get, 1 },
 	 { "wxGridEvent_m_cell_set", _wrap_wxGridEvent_m_cell_set, 1 },
 	 { "wxGridEvent_m_shift_get", _wrap_wxGridEvent_m_shift_get, 1 },

@@ -322,6 +322,27 @@ class wxGridEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def GetRow(self):
+        val = windows2c.wxGridEvent_GetRow(self.this)
+        return val
+    def GetCol(self):
+        val = windows2c.wxGridEvent_GetCol(self.this)
+        return val
+    def GetPosition(self):
+        val = windows2c.wxGridEvent_GetPosition(self.this)
+        val = wxPointPtr(val)
+        val.thisown = 1
+        return val
+    def ControlDown(self):
+        val = windows2c.wxGridEvent_ControlDown(self.this)
+        return val
+    def ShiftDown(self):
+        val = windows2c.wxGridEvent_ShiftDown(self.this)
+        return val
+    def GetCell(self):
+        val = windows2c.wxGridEvent_GetCell(self.this)
+        val = wxGridCellPtr(val)
+        return val
     def __setattr__(self,name,value):
         if name == "m_row" :
             windows2c.wxGridEvent_m_row_set(self.this,value)

@@ -1359,7 +1359,7 @@ class wxAcceleratorTable(wxAcceleratorTablePtr):
 #----------------------------------------------------------------------
 # This helper function will take a wxPython object and convert it to
 # another wxPython object type.  This will not be able to create objects
-# user that are derived from wxPython classes, only those that are
+# that are derived from wxPython classes by the user, only those that are
 # actually part of wxPython and directly corespond to C++ objects.
 #
 # This is useful in situations where some method returns a generic
@@ -1446,8 +1446,8 @@ class wxApp(wxPyApp):
         if filename:
             sys.stdout = sys.stderr = open(filename, 'a')
         else:
-            #raise self.error, 'wxPyStdOutWindow not yet implemented.'
-            self.stdioWin = sys.stdout = sys.stderr = wxPyStdOutWindow()
+            raise self.error, 'wxPyStdOutWindow not yet implemented.'
+            #self.stdioWin = sys.stdout = sys.stderr = wxPyStdOutWindow()
 
     def RestoreStdio(self):
         sys.stdout, sys.stderr = self.saveStdio

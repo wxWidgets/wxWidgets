@@ -1208,13 +1208,16 @@ static PyObject *_wrap_wxImage_GetHeight(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-#define wxImage_GetData(_swigobj)  (_swigobj->GetData())
+static PyObject * wxImage_GetData(wxImage *self) {
+            unsigned char* data = self->GetData();
+            int len = self->GetWidth() * self->GetHeight() * 3;
+            return PyString_FromStringAndSize((char*)data, len);
+        }
 static PyObject *_wrap_wxImage_GetData(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
-    unsigned char * _result;
+    PyObject * _result;
     wxImage * _arg0;
     char * _argc0 = 0;
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTuple(args,"s:wxImage_GetData",&_argc0)) 
@@ -1227,24 +1230,34 @@ static PyObject *_wrap_wxImage_GetData(PyObject *self, PyObject *args) {
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (unsigned char *)wxImage_GetData(_arg0);
+        _result = (PyObject *)wxImage_GetData(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (char *) _result,"_unsigned_char_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
+}{
+  _resultobj = _result;
+}
     return _resultobj;
 }
 
-#define wxImage_SetData(_swigobj,_swigarg0)  (_swigobj->SetData(_swigarg0))
+static void  wxImage_SetData(wxImage *self,PyObject * data) {
+            unsigned char* dataPtr;
+
+            if (! PyString_Check(data)) {
+                PyErr_SetString(PyExc_TypeError, "Expected string object");
+                return /* NULL */ ;
+            }
+            dataPtr = (unsigned char*)PyString_AsString(data);
+            self->SetData(dataPtr);
+        }
 static PyObject *_wrap_wxImage_SetData(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     wxImage * _arg0;
-    unsigned char * _arg1;
+    PyObject * _arg1;
     char * _argc0 = 0;
-    char * _argc1 = 0;
+    PyObject * _obj1 = 0;
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ss:wxImage_SetData",&_argc0,&_argc1)) 
+    if(!PyArg_ParseTuple(args,"sO:wxImage_SetData",&_argc0,&_obj1)) 
         return NULL;
     if (_argc0) {
         if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxImage_p")) {
@@ -1252,12 +1265,9 @@ static PyObject *_wrap_wxImage_SetData(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    if (_argc1) {
-        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_unsigned_char_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxImage_SetData. Expected _unsigned_char_p.");
-        return NULL;
-        }
-    }
+{
+  _arg1 = _obj1;
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxImage_SetData(_arg0,_arg1);
