@@ -1132,7 +1132,16 @@ extern unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs)
         wxGlobalSEInformation = pExcPtrs;
 
         // give the user a chance to do something special about this
-        wxTheApp->OnFatalException();
+        __try
+        {
+            wxTheApp->OnFatalException();
+        }
+        __except ( EXCEPTION_EXECUTE_HANDLER )
+        {
+            // nothing to do here, just ignore the exception inside the
+            // exception handler
+            ;
+        }
 
         wxGlobalSEInformation = NULL;
 
