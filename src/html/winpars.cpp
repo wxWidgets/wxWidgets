@@ -32,7 +32,7 @@
 #include "wx/fontmap.h"
 #include "wx/log.h"
 #include "wx/settings.h"
-#include "wx/url.h"
+#include "wx/uri.h"
 
 
 //-----------------------------------------------------------------------------
