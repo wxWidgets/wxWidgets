@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
 // Name:        common/fontcmn.cpp
 // Purpose:     implementation of wxFontBase methods
 // Author:      Vadim Zeitlin
@@ -57,8 +57,8 @@
 static void AdjustFontSize(wxFont font, wxDC& dc, const wxSize& pixelSize)
 {
     int currentSize = font.GetPointSize();
-    int largestGood;
-    int smallestBad;
+    int largestGood wxDUMMY_INITIALIZE(0);
+    int smallestBad wxDUMMY_INITIALIZE(0);
 
     bool initialGoodFound = false;
     bool initialBadFound = false;
