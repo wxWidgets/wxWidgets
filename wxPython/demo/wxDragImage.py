@@ -138,12 +138,12 @@ class DragCanvas(wxScrolledWindow):
         dc.DestroyClippingRegion()
 
 
-
-
     def OnEraseBackground(self, evt):
         dc = evt.GetDC()
         if not dc:
             dc = wxClientDC(self)
+            rect = self.GetUpdateRegion().GetBox()
+            dc.SetClippingRegion(rect.x, rect.y, rect.width, rect.height)
         self.TileBackground(dc)
 
 

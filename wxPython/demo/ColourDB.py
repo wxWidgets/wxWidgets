@@ -60,6 +60,8 @@ class TestWindow(wxScrolledWindow):
         dc = evt.GetDC()
         if not dc:
             dc = wxClientDC(self)
+            rect = self.GetUpdateRegion().GetBox()
+            dc.SetClippingRegion(rect.x, rect.y, rect.width, rect.height)
         self.TileBackground(dc)
 
 
@@ -86,7 +88,7 @@ class TestWindow(wxScrolledWindow):
             stop = pixStop / self.lineHeight
         else:
             start = 0
-            stop = len(numColours)
+            stop = numColours
 
         for line in range(max(0,start), min(stop,numColours)):
             clr = colours[line]
@@ -100,12 +102,24 @@ class TestWindow(wxScrolledWindow):
         dc.EndDrawing()
 
 
+# On wxGTK there needs to be a panel under wxScrolledWindows if they are
+# going to be in a wxNotebook...
+class TestPanel(wxPanel):
+    def __init__(self, parent):
+        wxPanel.__init__(self, parent, -1)
+        self.win = TestWindow(self)
+        EVT_SIZE(self, self.OnSize)
+
+    def OnSize(self, evt):
+        self.win.SetSize(evt.GetSize())
+
+
 
 #----------------------------------------------------------------------
 
 
 def runTest(frame, nb, log):
-    win = TestWindow(nb)
+    win = TestPanel(nb)
     return win
 
 #----------------------------------------------------------------------

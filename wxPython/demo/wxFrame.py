@@ -25,7 +25,7 @@ class MyFrame(wxFrame):
 
 def runTest(frame, nb, log):
     win = MyFrame(frame, -1, "This is a wxFrame", size=(350, 200),
-                  style = wxDEFAULT_FRAME_STYLE |  wxFRAME_TOOL_WINDOW )
+                  style = wxDEFAULT_FRAME_STYLE)# |  wxFRAME_TOOL_WINDOW )
     frame.otherWin = win
     win.Show(true)
 

@@ -16,7 +16,7 @@ from my_distutils import run_swig, contrib_copy_tree
 VERSION          = "2.3.1"
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
-AUTHOR_EMAIL     = "robin@alldunn.com"
+AUTHOR_EMAIL     = "Robin Dunn <robin@alldunn.com>"
 URL              = "http://wxPython.org/"
 LICENCE          = "wxWindows (LGPL derivative)"
 LONG_DESCRIPTION = """\
@@ -91,8 +91,9 @@ if bcpp_compiling:
 # Check for build flags on the command line
 #----------------------------------------------------------------------
 
-for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 'CORE_ONLY',
-             'USE_SWIG', 'IN_CVS_TREE', 'FINAL', 'HYBRID', ]:
+for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 'BUILD_XRC',
+             'CORE_ONLY', 'USE_SWIG', 'IN_CVS_TREE',
+             'FINAL', 'HYBRID', ]:
     for x in range(len(sys.argv)):
         if string.find(sys.argv[x], flag) == 0:
             pos = string.find(sys.argv[x], '=') + 1
@@ -115,6 +116,7 @@ if CORE_ONLY:
     BUILD_GLCANVAS = 0
     BUILD_OGL = 0
     BUILD_STC = 0
+    BUILD_XRC = 0
 
 #----------------------------------------------------------------------
 # Setup some platform specific stuff
