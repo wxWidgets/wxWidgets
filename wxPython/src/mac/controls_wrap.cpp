@@ -961,6 +961,8 @@ public:
     DEC_PYCALLBACK_VOID_WXWINBASE(AddChild);
     DEC_PYCALLBACK_VOID_WXWINBASE(RemoveChild);
 
+    DEC_PYCALLBACK_BOOL_(ShouldInheritColours);
+    
     PYPRIVATE;
 };
 
@@ -990,6 +992,7 @@ IMP_PYCALLBACK_SIZE_const(wxPyControl, wxControl, GetMaxSize);
 IMP_PYCALLBACK_VOID_WXWINBASE(wxPyControl, wxControl, AddChild);
 IMP_PYCALLBACK_VOID_WXWINBASE(wxPyControl, wxControl, RemoveChild);
 
+IMP_PYCALLBACK_BOOL_(wxPyControl, wxControl, ShouldInheritColours);
 
 
 
@@ -7118,7 +7121,10 @@ static PyObject *_wrap_TextAttr_GetFont(PyObject *, PyObject *args, PyObject *kw
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxFont, 0);
+    {
+        wxFont* resultptr = new wxFont(*result);
+        resultobj = SWIG_NewPointerObj((void*)(resultptr), SWIGTYPE_p_wxFont, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -14915,7 +14921,10 @@ static PyObject *_wrap_ToolBarToolBase_GetNormalBitmap(PyObject *, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxBitmap, 0);
+    {
+        wxBitmap* resultptr = new wxBitmap(*result);
+        resultobj = SWIG_NewPointerObj((void*)(resultptr), SWIGTYPE_p_wxBitmap, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -14944,7 +14953,10 @@ static PyObject *_wrap_ToolBarToolBase_GetDisabledBitmap(PyObject *, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxBitmap, 0);
+    {
+        wxBitmap* resultptr = new wxBitmap(*result);
+        resultobj = SWIG_NewPointerObj((void*)(resultptr), SWIGTYPE_p_wxBitmap, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -21087,6 +21099,32 @@ static PyObject *_wrap_ListCtrl_AssignImageList(PyObject *, PyObject *args, PyOb
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ListCtrl_InReportView(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyListCtrl *arg1 = (wxPyListCtrl *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:ListCtrl_InReportView",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPyListCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxPyListCtrl const *)arg1)->InReportView();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     return resultobj;
     fail:
     return NULL;
@@ -30021,6 +30059,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ListCtrl_GetImageList", (PyCFunction) _wrap_ListCtrl_GetImageList, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"ListCtrl_SetImageList", (PyCFunction) _wrap_ListCtrl_SetImageList, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"ListCtrl_AssignImageList", (PyCFunction) _wrap_ListCtrl_AssignImageList, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"ListCtrl_InReportView", (PyCFunction) _wrap_ListCtrl_InReportView, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"ListCtrl_IsVirtual", (PyCFunction) _wrap_ListCtrl_IsVirtual, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"ListCtrl_RefreshItem", (PyCFunction) _wrap_ListCtrl_RefreshItem, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"ListCtrl_RefreshItems", (PyCFunction) _wrap_ListCtrl_RefreshItems, METH_VARARGS | METH_KEYWORDS, NULL },

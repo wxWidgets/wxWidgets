@@ -618,6 +618,8 @@ void wxBitmap_SetMaskColour(wxBitmap *self,wxColour const &colour){
             wxMask *mask = new wxMask(*self, colour);
             self->SetMask(mask);
         }
+bool wxBitmap___eq__(wxBitmap *self,wxBitmap const *other){ return other ? (*self == *other) : False; }
+bool wxBitmap___ne__(wxBitmap *self,wxBitmap const *other){ return other ? (*self != *other) : True;  }
 wxMask *new_wxMask(wxBitmap const &bitmap,wxColour const &colour){
             if ( !colour.Ok() )
                 return new wxMask(bitmap, *wxBLACK);
@@ -936,18 +938,7 @@ public:
 #include <wx/dcps.h>
 
 
-class wxMetaFile : public wxObject {
-public:
-    wxMetaFile(const wxString&)
-        { wxPyRaiseNotImplemented(); }
-};
-
-class wxMetaFileDC : public wxClientDC {
-public:
-    wxMetaFileDC(const wxString&, int, int, const wxString&)
-        { wxPyRaiseNotImplemented(); }
-};
-
+#include <wx/metafile.h>
 
 
 
@@ -3429,6 +3420,66 @@ static PyObject *_wrap_Bitmap_SetDepth(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
+static PyObject *_wrap_Bitmap___eq__(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxBitmap *arg1 = (wxBitmap *) 0 ;
+    wxBitmap *arg2 = (wxBitmap *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "other", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Bitmap___eq__",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxBitmap,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxBitmap,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)wxBitmap___eq__(arg1,(wxBitmap const *)arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Bitmap___ne__(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxBitmap *arg1 = (wxBitmap *) 0 ;
+    wxBitmap *arg2 = (wxBitmap *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "other", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Bitmap___ne__",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxBitmap,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxBitmap,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)wxBitmap___ne__(arg1,(wxBitmap const *)arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * Bitmap_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -4367,7 +4418,10 @@ static PyObject *_wrap_IconBundle_GetIcon(PyObject *, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxIcon, 0);
+    {
+        wxIcon* resultptr = new wxIcon(*result);
+        resultobj = SWIG_NewPointerObj((void*)(resultptr), SWIGTYPE_p_wxIcon, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -13456,7 +13510,10 @@ static PyObject *_wrap_DC_GetBackground(PyObject *, PyObject *args, PyObject *kw
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxBrush, 0);
+    {
+        wxBrush* resultptr = new wxBrush(*result);
+        resultobj = SWIG_NewPointerObj((void*)(resultptr), SWIGTYPE_p_wxBrush, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -13485,7 +13542,10 @@ static PyObject *_wrap_DC_GetBrush(PyObject *, PyObject *args, PyObject *kwargs)
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxBrush, 0);
+    {
+        wxBrush* resultptr = new wxBrush(*result);
+        resultobj = SWIG_NewPointerObj((void*)(resultptr), SWIGTYPE_p_wxBrush, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -13514,7 +13574,10 @@ static PyObject *_wrap_DC_GetFont(PyObject *, PyObject *args, PyObject *kwargs) 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxFont, 0);
+    {
+        wxFont* resultptr = new wxFont(*result);
+        resultobj = SWIG_NewPointerObj((void*)(resultptr), SWIGTYPE_p_wxFont, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -13543,7 +13606,10 @@ static PyObject *_wrap_DC_GetPen(PyObject *, PyObject *args, PyObject *kwargs) {
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPen, 0);
+    {
+        wxPen* resultptr = new wxPen(*result);
+        resultobj = SWIG_NewPointerObj((void*)(resultptr), SWIGTYPE_p_wxPen, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -15444,6 +15510,177 @@ static PyObject *_wrap_new_MetaFile(PyObject *, PyObject *args, PyObject *kwargs
 }
 
 
+static PyObject *_wrap_delete_MetaFile(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMetaFile *arg1 = (wxMetaFile *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:delete_MetaFile",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxMetaFile,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        delete arg1;
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_MetaFile_Ok(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMetaFile *arg1 = (wxMetaFile *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MetaFile_Ok",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxMetaFile,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->Ok();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_MetaFile_SetClipboard(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMetaFile *arg1 = (wxMetaFile *) 0 ;
+    int arg2 = (int) 0 ;
+    int arg3 = (int) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "width",(char *) "height", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OO:MetaFile_SetClipboard",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxMetaFile,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if (obj1) {
+        arg2 = (int) SWIG_AsInt(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj2) {
+        arg3 = (int) SWIG_AsInt(obj2); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->SetClipboard(arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_MetaFile_GetSize(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMetaFile *arg1 = (wxMetaFile *) 0 ;
+    wxSize result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MetaFile_GetSize",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxMetaFile,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (arg1)->GetSize();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxSize * resultptr;
+        resultptr = new wxSize((wxSize &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxSize, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_MetaFile_GetWidth(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMetaFile *arg1 = (wxMetaFile *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MetaFile_GetWidth",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxMetaFile,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)(arg1)->GetWidth();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_FromInt((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_MetaFile_GetHeight(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMetaFile *arg1 = (wxMetaFile *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MetaFile_GetHeight",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxMetaFile,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)(arg1)->GetHeight();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_FromInt((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * MetaFile_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -15519,6 +15756,32 @@ static PyObject *_wrap_new_MetaFileDC(PyObject *, PyObject *args, PyObject *kwar
         if (temp4)
         delete arg4;
     }
+    return NULL;
+}
+
+
+static PyObject *_wrap_MetaFileDC_Close(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxMetaFileDC *arg1 = (wxMetaFileDC *) 0 ;
+    wxMetaFile *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MetaFileDC_Close",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxMetaFileDC,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxMetaFile *)(arg1)->Close();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxMetaFile, 0);
+    return resultobj;
+    fail:
     return NULL;
 }
 
@@ -17882,6 +18145,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Bitmap_SetHeight", (PyCFunction) _wrap_Bitmap_SetHeight, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Bitmap_SetWidth", (PyCFunction) _wrap_Bitmap_SetWidth, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Bitmap_SetDepth", (PyCFunction) _wrap_Bitmap_SetDepth, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Bitmap___eq__", (PyCFunction) _wrap_Bitmap___eq__, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Bitmap___ne__", (PyCFunction) _wrap_Bitmap___ne__, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Bitmap_swigregister", Bitmap_swigregister, METH_VARARGS, NULL },
 	 { (char *)"new_Mask", (PyCFunction) _wrap_new_Mask, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Mask_swigregister", Mask_swigregister, METH_VARARGS, NULL },
@@ -18255,8 +18520,15 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PostScriptDC_GetResolution", (PyCFunction) _wrap_PostScriptDC_GetResolution, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PostScriptDC_swigregister", PostScriptDC_swigregister, METH_VARARGS, NULL },
 	 { (char *)"new_MetaFile", (PyCFunction) _wrap_new_MetaFile, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"delete_MetaFile", (PyCFunction) _wrap_delete_MetaFile, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"MetaFile_Ok", (PyCFunction) _wrap_MetaFile_Ok, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"MetaFile_SetClipboard", (PyCFunction) _wrap_MetaFile_SetClipboard, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"MetaFile_GetSize", (PyCFunction) _wrap_MetaFile_GetSize, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"MetaFile_GetWidth", (PyCFunction) _wrap_MetaFile_GetWidth, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"MetaFile_GetHeight", (PyCFunction) _wrap_MetaFile_GetHeight, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"MetaFile_swigregister", MetaFile_swigregister, METH_VARARGS, NULL },
 	 { (char *)"new_MetaFileDC", (PyCFunction) _wrap_new_MetaFileDC, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"MetaFileDC_Close", (PyCFunction) _wrap_MetaFileDC_Close, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"MetaFileDC_swigregister", MetaFileDC_swigregister, METH_VARARGS, NULL },
 	 { (char *)"new_PrinterDC", (PyCFunction) _wrap_new_PrinterDC, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PrinterDC_swigregister", PrinterDC_swigregister, METH_VARARGS, NULL },

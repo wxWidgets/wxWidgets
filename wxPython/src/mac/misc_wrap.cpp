@@ -215,83 +215,85 @@ SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 #define  SWIGTYPE_p_wxMenu swig_types[6] 
 #define  SWIGTYPE_p_wxEvent swig_types[7] 
 #define  SWIGTYPE_p_wxConfigBase swig_types[8] 
-#define  SWIGTYPE_p_wxFileType swig_types[9] 
-#define  SWIGTYPE_p_wxLogGui swig_types[10] 
-#define  SWIGTYPE_p_wxFont swig_types[11] 
-#define  SWIGTYPE_p_wxDataFormat swig_types[12] 
-#define  SWIGTYPE_p_wxTimerEvent swig_types[13] 
-#define  SWIGTYPE_p_wxCaret swig_types[14] 
-#define  SWIGTYPE_p_int swig_types[15] 
-#define  SWIGTYPE_p_wxSize swig_types[16] 
-#define  SWIGTYPE_p_wxClipboard swig_types[17] 
-#define  SWIGTYPE_p_wxStopWatch swig_types[18] 
-#define  SWIGTYPE_p_wxDC swig_types[19] 
-#define  SWIGTYPE_p_wxClipboardLocker swig_types[20] 
-#define  SWIGTYPE_p_wxIcon swig_types[21] 
-#define  SWIGTYPE_p_wxLogStderr swig_types[22] 
-#define  SWIGTYPE_p_wxLogTextCtrl swig_types[23] 
-#define  SWIGTYPE_p_wxTextCtrl swig_types[24] 
-#define  SWIGTYPE_p_wxBusyCursor swig_types[25] 
-#define  SWIGTYPE_p_wxPyTextDataObject swig_types[26] 
-#define  SWIGTYPE_p_wxBitmapDataObject swig_types[27] 
-#define  SWIGTYPE_p_wxTextDataObject swig_types[28] 
-#define  SWIGTYPE_p_wxDataObject swig_types[29] 
-#define  SWIGTYPE_p_wxPyBitmapDataObject swig_types[30] 
-#define  SWIGTYPE_p_wxFileDataObject swig_types[31] 
-#define  SWIGTYPE_p_wxCustomDataObject swig_types[32] 
-#define  SWIGTYPE_p_wxURLDataObject swig_types[33] 
-#define  SWIGTYPE_p_wxMetafileDataObject swig_types[34] 
-#define  SWIGTYPE_p_wxSound swig_types[35] 
-#define  SWIGTYPE_p_wxTimerRunner swig_types[36] 
-#define  SWIGTYPE_p_wxLogWindow swig_types[37] 
-#define  SWIGTYPE_p_wxTimeSpan swig_types[38] 
-#define  SWIGTYPE_p_wxArrayString swig_types[39] 
-#define  SWIGTYPE_p_wxWindowDisabler swig_types[40] 
-#define  SWIGTYPE_p_wxToolTip swig_types[41] 
-#define  SWIGTYPE_p_wxDataObjectComposite swig_types[42] 
-#define  SWIGTYPE_p_wxFileConfig swig_types[43] 
-#define  SWIGTYPE_p_wxSystemSettings swig_types[44] 
-#define  SWIGTYPE_p_wxPyDataObjectSimple swig_types[45] 
-#define  SWIGTYPE_p_wxDataObjectSimple swig_types[46] 
-#define  SWIGTYPE_p_wxEvtHandler swig_types[47] 
-#define  SWIGTYPE_p_wxRect swig_types[48] 
-#define  SWIGTYPE_p_char swig_types[49] 
-#define  SWIGTYPE_p_wxSingleInstanceChecker swig_types[50] 
-#define  SWIGTYPE_p_wxFileTypeInfo swig_types[51] 
-#define  SWIGTYPE_p_wxFrame swig_types[52] 
-#define  SWIGTYPE_p_wxTimer swig_types[53] 
-#define  SWIGTYPE_p_wxMimeTypesManager swig_types[54] 
-#define  SWIGTYPE_p_wxPyArtProvider swig_types[55] 
-#define  SWIGTYPE_p_wxPyTipProvider swig_types[56] 
-#define  SWIGTYPE_p_wxTipProvider swig_types[57] 
-#define  SWIGTYPE_p_wxJoystick swig_types[58] 
-#define  SWIGTYPE_p_wxSystemOptions swig_types[59] 
-#define  SWIGTYPE_p_wxPoint swig_types[60] 
-#define  SWIGTYPE_p_wxJoystickEvent swig_types[61] 
-#define  SWIGTYPE_p_wxCursor swig_types[62] 
-#define  SWIGTYPE_p_wxObject swig_types[63] 
-#define  SWIGTYPE_p_wxOutputStream swig_types[64] 
-#define  SWIGTYPE_p_wxDateTime swig_types[65] 
-#define  SWIGTYPE_p_wxPyDropSource swig_types[66] 
-#define  SWIGTYPE_p_wxWindow swig_types[67] 
-#define  SWIGTYPE_p_wxString swig_types[68] 
-#define  SWIGTYPE_p_wxPyProcess swig_types[69] 
-#define  SWIGTYPE_p_wxBitmap swig_types[70] 
-#define  SWIGTYPE_p_wxConfig swig_types[71] 
-#define  SWIGTYPE_p_wxChar swig_types[72] 
-#define  SWIGTYPE_p_wxBusyInfo swig_types[73] 
-#define  SWIGTYPE_p_wxPyDropTarget swig_types[74] 
-#define  SWIGTYPE_p_wxPyTextDropTarget swig_types[75] 
-#define  SWIGTYPE_p_wxPyFileDropTarget swig_types[76] 
-#define  SWIGTYPE_p_wxProcessEvent swig_types[77] 
-#define  SWIGTYPE_p_wxPyLog swig_types[78] 
-#define  SWIGTYPE_p_wxLogNull swig_types[79] 
-#define  SWIGTYPE_p_wxColour swig_types[80] 
-#define  SWIGTYPE_p_wxByte swig_types[81] 
-#define  SWIGTYPE_p_wxConfigPathChanger swig_types[82] 
-#define  SWIGTYPE_p_wxPyTimer swig_types[83] 
-#define  SWIGTYPE_p_wxDateSpan swig_types[84] 
-static swig_type_info *swig_types[86];
+#define  SWIGTYPE_p_wxDisplay swig_types[9] 
+#define  SWIGTYPE_p_wxFileType swig_types[10] 
+#define  SWIGTYPE_p_wxLogGui swig_types[11] 
+#define  SWIGTYPE_p_wxFont swig_types[12] 
+#define  SWIGTYPE_p_wxDataFormat swig_types[13] 
+#define  SWIGTYPE_p_wxTimerEvent swig_types[14] 
+#define  SWIGTYPE_p_wxCaret swig_types[15] 
+#define  SWIGTYPE_p_int swig_types[16] 
+#define  SWIGTYPE_p_wxSize swig_types[17] 
+#define  SWIGTYPE_p_wxClipboard swig_types[18] 
+#define  SWIGTYPE_p_wxStopWatch swig_types[19] 
+#define  SWIGTYPE_p_wxDC swig_types[20] 
+#define  SWIGTYPE_p_wxClipboardLocker swig_types[21] 
+#define  SWIGTYPE_p_wxIcon swig_types[22] 
+#define  SWIGTYPE_p_wxLogStderr swig_types[23] 
+#define  SWIGTYPE_p_wxLogTextCtrl swig_types[24] 
+#define  SWIGTYPE_p_wxTextCtrl swig_types[25] 
+#define  SWIGTYPE_p_wxBusyCursor swig_types[26] 
+#define  SWIGTYPE_p_wxPyTextDataObject swig_types[27] 
+#define  SWIGTYPE_p_wxBitmapDataObject swig_types[28] 
+#define  SWIGTYPE_p_wxTextDataObject swig_types[29] 
+#define  SWIGTYPE_p_wxDataObject swig_types[30] 
+#define  SWIGTYPE_p_wxPyBitmapDataObject swig_types[31] 
+#define  SWIGTYPE_p_wxFileDataObject swig_types[32] 
+#define  SWIGTYPE_p_wxCustomDataObject swig_types[33] 
+#define  SWIGTYPE_p_wxURLDataObject swig_types[34] 
+#define  SWIGTYPE_p_wxMetafileDataObject swig_types[35] 
+#define  SWIGTYPE_p_wxSound swig_types[36] 
+#define  SWIGTYPE_p_wxTimerRunner swig_types[37] 
+#define  SWIGTYPE_p_wxLogWindow swig_types[38] 
+#define  SWIGTYPE_p_wxTimeSpan swig_types[39] 
+#define  SWIGTYPE_p_wxArrayString swig_types[40] 
+#define  SWIGTYPE_p_wxWindowDisabler swig_types[41] 
+#define  SWIGTYPE_p_wxToolTip swig_types[42] 
+#define  SWIGTYPE_p_wxDataObjectComposite swig_types[43] 
+#define  SWIGTYPE_p_wxFileConfig swig_types[44] 
+#define  SWIGTYPE_p_wxSystemSettings swig_types[45] 
+#define  SWIGTYPE_p_wxVideoMode swig_types[46] 
+#define  SWIGTYPE_p_wxPyDataObjectSimple swig_types[47] 
+#define  SWIGTYPE_p_wxDataObjectSimple swig_types[48] 
+#define  SWIGTYPE_p_wxEvtHandler swig_types[49] 
+#define  SWIGTYPE_p_wxRect swig_types[50] 
+#define  SWIGTYPE_p_char swig_types[51] 
+#define  SWIGTYPE_p_wxSingleInstanceChecker swig_types[52] 
+#define  SWIGTYPE_p_wxFileTypeInfo swig_types[53] 
+#define  SWIGTYPE_p_wxFrame swig_types[54] 
+#define  SWIGTYPE_p_wxTimer swig_types[55] 
+#define  SWIGTYPE_p_wxMimeTypesManager swig_types[56] 
+#define  SWIGTYPE_p_wxPyArtProvider swig_types[57] 
+#define  SWIGTYPE_p_wxPyTipProvider swig_types[58] 
+#define  SWIGTYPE_p_wxTipProvider swig_types[59] 
+#define  SWIGTYPE_p_wxJoystick swig_types[60] 
+#define  SWIGTYPE_p_wxSystemOptions swig_types[61] 
+#define  SWIGTYPE_p_wxPoint swig_types[62] 
+#define  SWIGTYPE_p_wxJoystickEvent swig_types[63] 
+#define  SWIGTYPE_p_wxCursor swig_types[64] 
+#define  SWIGTYPE_p_wxObject swig_types[65] 
+#define  SWIGTYPE_p_wxOutputStream swig_types[66] 
+#define  SWIGTYPE_p_wxDateTime swig_types[67] 
+#define  SWIGTYPE_p_wxPyDropSource swig_types[68] 
+#define  SWIGTYPE_p_wxWindow swig_types[69] 
+#define  SWIGTYPE_p_wxString swig_types[70] 
+#define  SWIGTYPE_p_wxPyProcess swig_types[71] 
+#define  SWIGTYPE_p_wxBitmap swig_types[72] 
+#define  SWIGTYPE_p_wxConfig swig_types[73] 
+#define  SWIGTYPE_p_wxChar swig_types[74] 
+#define  SWIGTYPE_p_wxBusyInfo swig_types[75] 
+#define  SWIGTYPE_p_wxPyDropTarget swig_types[76] 
+#define  SWIGTYPE_p_wxPyTextDropTarget swig_types[77] 
+#define  SWIGTYPE_p_wxPyFileDropTarget swig_types[78] 
+#define  SWIGTYPE_p_wxProcessEvent swig_types[79] 
+#define  SWIGTYPE_p_wxPyLog swig_types[80] 
+#define  SWIGTYPE_p_wxLogNull swig_types[81] 
+#define  SWIGTYPE_p_wxColour swig_types[82] 
+#define  SWIGTYPE_p_wxByte swig_types[83] 
+#define  SWIGTYPE_p_wxConfigPathChanger swig_types[84] 
+#define  SWIGTYPE_p_wxPyTimer swig_types[85] 
+#define  SWIGTYPE_p_wxDateSpan swig_types[86] 
+static swig_type_info *swig_types[88];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -635,7 +637,21 @@ IMP_PYCALLBACK_STRING__pure( wxPyTipProvider, wxTipProvider, GetTip);
 IMP_PYCALLBACK_STRING_STRING(wxPyTipProvider, wxTipProvider, PreprocessTip);
 
 
-IMP_PYCALLBACK__(wxPyTimer, wxTimer, Notify);
+//IMP_PYCALLBACK__(wxPyTimer, wxTimer, Notify);
+
+void wxPyTimer::Notify() {
+    bool found;
+    wxPyBeginBlockThreads();
+    if ((found = wxPyCBH_findCallback(m_myInst, "Notify")))
+        wxPyCBH_callCallback(m_myInst, Py_BuildValue("()"));
+    wxPyEndBlockThreads();
+    if (! found)
+        wxTimer::Notify();
+}   
+void wxPyTimer::base_Notify() {
+    wxTimer::Notify();
+}
+
 
 
 SWIGSTATICINLINE(PyObject *)
@@ -853,7 +869,7 @@ bool wxSound_Create__SWIG_1(wxSound *self,int size,wxByte const *data){
             wxPyEndBlockThreads();
             return False;
         }
-void Sound_Stop(){}
+void Sound_Stop(){ wxPyRaiseNotImplemented(); }
 
 #include <wx/mimetype.h>
 
@@ -1401,6 +1417,25 @@ IMP_PYCALLBACK_BOOL_INTINT(wxPyFileDropTarget, wxFileDropTarget, OnDrop);
 
 
 bool wxClipboardLocker___nonzero__(wxClipboardLocker *self){ return !!(*self); }
+
+#include "wx/display.h"
+
+bool wxVideoMode___eq__(wxVideoMode *self,wxVideoMode const *other){ return other ? (*self == *other) : False; }
+bool wxVideoMode___ne__(wxVideoMode *self,wxVideoMode const *other){ return other ? (*self != *other) : True;  }
+int Display_GetFromWindow(wxWindow *window){ wxPyRaiseNotImplemented(); return wxNOT_FOUND; }
+PyObject *wxDisplay_GetModes(wxDisplay *self,wxVideoMode const &mode){
+            PyObject* pyList = NULL;
+            wxArrayVideoModes arr = self->GetModes(mode);
+            wxPyBeginBlockThreads();
+            pyList = PyList_New(0);
+            for (int i=0; i < arr.GetCount(); i++) {
+                wxVideoMode* m = new wxVideoMode(arr.Item(i));
+                PyObject* pyObj = wxPyConstructObject(m, wxT("wxVideoMode"), true);
+                PyList_Append(pyList, pyObj);
+            }
+            wxPyEndBlockThreads();
+            return pyList;
+        }
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -6261,21 +6296,27 @@ static PyObject *_wrap_Timer__setCallbackInfo(PyObject *, PyObject *args, PyObje
     wxPyTimer *arg1 = (wxPyTimer *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
     PyObject *arg3 = (PyObject *) 0 ;
+    int arg4 = (int) 1 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "self",(char *) "_class", NULL 
+        (char *) "self",(char *) "self",(char *) "_class",(char *) "incref", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:Timer__setCallbackInfo",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|O:Timer__setCallbackInfo",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPyTimer,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     arg2 = obj1;
     arg3 = obj2;
+    if (obj3) {
+        arg4 = (int) SWIG_AsInt(obj3); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->_setCallbackInfo(arg2,arg3);
+        (arg1)->_setCallbackInfo(arg2,arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -16151,7 +16192,7 @@ static PyObject *_wrap_new_FileConfig(PyObject *, PyObject *args, PyObject *kwar
     wxString *arg3 = (wxString *) &arg3_defvalue ;
     wxString const &arg4_defvalue = wxPyEmptyString ;
     wxString *arg4 = (wxString *) &arg4_defvalue ;
-    long arg5 = (long) 0 ;
+    long arg5 = (long) wxCONFIG_USE_LOCAL_FILE|wxCONFIG_USE_GLOBAL_FILE ;
     wxFileConfig *result;
     bool temp1 = False ;
     bool temp2 = False ;
@@ -26894,6 +26935,859 @@ static PyObject * ClipboardLocker_swigregister(PyObject *, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static PyObject *_wrap_new_VideoMode(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 = (int) 0 ;
+    int arg2 = (int) 0 ;
+    int arg3 = (int) 0 ;
+    int arg4 = (int) 0 ;
+    wxVideoMode *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    char *kwnames[] = {
+        (char *) "width",(char *) "height",(char *) "depth",(char *) "freq", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOOO:new_VideoMode",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    if (obj0) {
+        arg1 = (int) SWIG_AsInt(obj0); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj1) {
+        arg2 = (int) SWIG_AsInt(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj2) {
+        arg3 = (int) SWIG_AsInt(obj2); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj3) {
+        arg4 = (int) SWIG_AsInt(obj3); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxVideoMode *)new wxVideoMode(arg1,arg2,arg3,arg4);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxVideoMode, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_delete_VideoMode(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxVideoMode *arg1 = (wxVideoMode *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:delete_VideoMode",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxVideoMode,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        delete arg1;
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_VideoMode_Matches(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxVideoMode *arg1 = (wxVideoMode *) 0 ;
+    wxVideoMode *arg2 = 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "other", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VideoMode_Matches",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxVideoMode,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxVideoMode,
+    SWIG_POINTER_EXCEPTION | 0)) == -1)
+    SWIG_fail;
+    if (arg2 == NULL) {
+        PyErr_SetString(PyExc_TypeError,"null reference");
+        SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxVideoMode const *)arg1)->Matches((wxVideoMode const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_VideoMode_GetWidth(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxVideoMode *arg1 = (wxVideoMode *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:VideoMode_GetWidth",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxVideoMode,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)((wxVideoMode const *)arg1)->GetWidth();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_FromInt((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_VideoMode_GetHeight(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxVideoMode *arg1 = (wxVideoMode *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:VideoMode_GetHeight",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxVideoMode,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)((wxVideoMode const *)arg1)->GetHeight();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_FromInt((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_VideoMode_GetDepth(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxVideoMode *arg1 = (wxVideoMode *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:VideoMode_GetDepth",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxVideoMode,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)((wxVideoMode const *)arg1)->GetDepth();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_FromInt((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_VideoMode_IsOk(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxVideoMode *arg1 = (wxVideoMode *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:VideoMode_IsOk",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxVideoMode,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxVideoMode const *)arg1)->IsOk();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_VideoMode___eq__(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxVideoMode *arg1 = (wxVideoMode *) 0 ;
+    wxVideoMode *arg2 = (wxVideoMode *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "other", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VideoMode___eq__",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxVideoMode,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxVideoMode,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)wxVideoMode___eq__(arg1,(wxVideoMode const *)arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_VideoMode___ne__(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxVideoMode *arg1 = (wxVideoMode *) 0 ;
+    wxVideoMode *arg2 = (wxVideoMode *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "other", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VideoMode___ne__",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxVideoMode,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxVideoMode,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)wxVideoMode___ne__(arg1,(wxVideoMode const *)arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_VideoMode_w_set(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxVideoMode *arg1 = (wxVideoMode *) 0 ;
+    int arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "w", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VideoMode_w_set",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxVideoMode,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (int) SWIG_AsInt(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
+    if (arg1) (arg1)->w = arg2;
+    
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_VideoMode_w_get(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxVideoMode *arg1 = (wxVideoMode *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:VideoMode_w_get",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxVideoMode,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    result = (int) ((arg1)->w);
+    
+    resultobj = SWIG_FromInt((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_VideoMode_h_set(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxVideoMode *arg1 = (wxVideoMode *) 0 ;
+    int arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "h", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VideoMode_h_set",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxVideoMode,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (int) SWIG_AsInt(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
+    if (arg1) (arg1)->h = arg2;
+    
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_VideoMode_h_get(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxVideoMode *arg1 = (wxVideoMode *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:VideoMode_h_get",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxVideoMode,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    result = (int) ((arg1)->h);
+    
+    resultobj = SWIG_FromInt((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_VideoMode_bpp_set(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxVideoMode *arg1 = (wxVideoMode *) 0 ;
+    int arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "bpp", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VideoMode_bpp_set",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxVideoMode,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (int) SWIG_AsInt(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
+    if (arg1) (arg1)->bpp = arg2;
+    
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_VideoMode_bpp_get(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxVideoMode *arg1 = (wxVideoMode *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:VideoMode_bpp_get",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxVideoMode,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    result = (int) ((arg1)->bpp);
+    
+    resultobj = SWIG_FromInt((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_VideoMode_refresh_set(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxVideoMode *arg1 = (wxVideoMode *) 0 ;
+    int arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "refresh", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VideoMode_refresh_set",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxVideoMode,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (int) SWIG_AsInt(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
+    if (arg1) (arg1)->refresh = arg2;
+    
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_VideoMode_refresh_get(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxVideoMode *arg1 = (wxVideoMode *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:VideoMode_refresh_get",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxVideoMode,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    result = (int) ((arg1)->refresh);
+    
+    resultobj = SWIG_FromInt((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject * VideoMode_swigregister(PyObject *, PyObject *args) {
+    PyObject *obj;
+    if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
+    SWIG_TypeClientData(SWIGTYPE_p_wxVideoMode, obj);
+    Py_INCREF(obj);
+    return Py_BuildValue((char *)"");
+}
+static int _wrap_DefaultVideoMode_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable DefaultVideoMode is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_DefaultVideoMode_get() {
+    PyObject *pyobj;
+    
+    pyobj = SWIG_NewPointerObj((void *)(&wxDefaultVideoMode), SWIGTYPE_p_wxVideoMode, 0);
+    return pyobj;
+}
+
+
+static PyObject *_wrap_new_Display(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    size_t arg1 = (size_t) 0 ;
+    wxDisplay *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "index", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:new_Display",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        arg1 = (size_t) SWIG_AsUnsignedLong(obj0); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxDisplay *)new wxDisplay(arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxDisplay, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_delete_Display(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxDisplay *arg1 = (wxDisplay *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:delete_Display",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxDisplay,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        delete arg1;
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Display_GetCount(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    size_t result;
+    char *kwnames[] = {
+        NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":Display_GetCount",kwnames)) goto fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (size_t)wxDisplay::GetCount();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_FromUnsignedLong((unsigned long)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Display_GetFromPoint(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPoint *arg1 = 0 ;
+    int result;
+    wxPoint temp1 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "pt", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Display_GetFromPoint",kwnames,&obj0)) goto fail;
+    {
+        arg1 = &temp1;
+        if ( ! wxPoint_helper(obj0, &arg1)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)wxDisplay::GetFromPoint((wxPoint const &)*arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_FromInt((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Display_GetFromWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "window", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Display_GetFromWindow",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)Display_GetFromWindow(arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_FromInt((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Display_IsOk(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxDisplay *arg1 = (wxDisplay *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Display_IsOk",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxDisplay,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxDisplay const *)arg1)->IsOk();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Display_GetGeometry(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxDisplay *arg1 = (wxDisplay *) 0 ;
+    wxRect result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Display_GetGeometry",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxDisplay,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxDisplay const *)arg1)->GetGeometry();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxRect * resultptr;
+        resultptr = new wxRect((wxRect &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxRect, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Display_GetName(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxDisplay *arg1 = (wxDisplay *) 0 ;
+    wxString result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Display_GetName",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxDisplay,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxDisplay const *)arg1)->GetName();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+        resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Display_IsPrimary(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxDisplay *arg1 = (wxDisplay *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Display_IsPrimary",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxDisplay,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxDisplay const *)arg1)->IsPrimary();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Display_GetModes(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxDisplay *arg1 = (wxDisplay *) 0 ;
+    wxVideoMode const &arg2_defvalue = wxDefaultVideoMode ;
+    wxVideoMode *arg2 = (wxVideoMode *) &arg2_defvalue ;
+    PyObject *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "mode", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:Display_GetModes",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxDisplay,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if (obj1) {
+        if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxVideoMode,
+        SWIG_POINTER_EXCEPTION | 0)) == -1)
+        SWIG_fail;
+        if (arg2 == NULL) {
+            PyErr_SetString(PyExc_TypeError,"null reference");
+            SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (PyObject *)wxDisplay_GetModes(arg1,(wxVideoMode const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = result;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Display_GetCurrentMode(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxDisplay *arg1 = (wxDisplay *) 0 ;
+    wxVideoMode result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Display_GetCurrentMode",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxDisplay,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxDisplay const *)arg1)->GetCurrentMode();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxVideoMode * resultptr;
+        resultptr = new wxVideoMode((wxVideoMode &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVideoMode, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Display_ChangeMode(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxDisplay *arg1 = (wxDisplay *) 0 ;
+    wxVideoMode const &arg2_defvalue = wxDefaultVideoMode ;
+    wxVideoMode *arg2 = (wxVideoMode *) &arg2_defvalue ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "mode", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:Display_ChangeMode",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxDisplay,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if (obj1) {
+        if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxVideoMode,
+        SWIG_POINTER_EXCEPTION | 0)) == -1)
+        SWIG_fail;
+        if (arg2 == NULL) {
+            PyErr_SetString(PyExc_TypeError,"null reference");
+            SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->ChangeMode((wxVideoMode const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Display_ResetMode(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxDisplay *arg1 = (wxDisplay *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Display_ResetMode",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxDisplay,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->ResetMode();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject * Display_swigregister(PyObject *, PyObject *args) {
+    PyObject *obj;
+    if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
+    SWIG_TypeClientData(SWIGTYPE_p_wxDisplay, obj);
+    Py_INCREF(obj);
+    return Py_BuildValue((char *)"");
+}
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"SystemSettings_GetColour", (PyCFunction) _wrap_SystemSettings_GetColour, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"SystemSettings_GetFont", (PyCFunction) _wrap_SystemSettings_GetFont, METH_VARARGS | METH_KEYWORDS, NULL },
@@ -27652,6 +28546,38 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_ClipboardLocker", (PyCFunction) _wrap_delete_ClipboardLocker, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"ClipboardLocker___nonzero__", (PyCFunction) _wrap_ClipboardLocker___nonzero__, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"ClipboardLocker_swigregister", ClipboardLocker_swigregister, METH_VARARGS, NULL },
+	 { (char *)"new_VideoMode", (PyCFunction) _wrap_new_VideoMode, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"delete_VideoMode", (PyCFunction) _wrap_delete_VideoMode, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"VideoMode_Matches", (PyCFunction) _wrap_VideoMode_Matches, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"VideoMode_GetWidth", (PyCFunction) _wrap_VideoMode_GetWidth, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"VideoMode_GetHeight", (PyCFunction) _wrap_VideoMode_GetHeight, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"VideoMode_GetDepth", (PyCFunction) _wrap_VideoMode_GetDepth, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"VideoMode_IsOk", (PyCFunction) _wrap_VideoMode_IsOk, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"VideoMode___eq__", (PyCFunction) _wrap_VideoMode___eq__, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"VideoMode___ne__", (PyCFunction) _wrap_VideoMode___ne__, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"VideoMode_w_set", (PyCFunction) _wrap_VideoMode_w_set, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"VideoMode_w_get", (PyCFunction) _wrap_VideoMode_w_get, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"VideoMode_h_set", (PyCFunction) _wrap_VideoMode_h_set, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"VideoMode_h_get", (PyCFunction) _wrap_VideoMode_h_get, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"VideoMode_bpp_set", (PyCFunction) _wrap_VideoMode_bpp_set, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"VideoMode_bpp_get", (PyCFunction) _wrap_VideoMode_bpp_get, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"VideoMode_refresh_set", (PyCFunction) _wrap_VideoMode_refresh_set, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"VideoMode_refresh_get", (PyCFunction) _wrap_VideoMode_refresh_get, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"VideoMode_swigregister", VideoMode_swigregister, METH_VARARGS, NULL },
+	 { (char *)"new_Display", (PyCFunction) _wrap_new_Display, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"delete_Display", (PyCFunction) _wrap_delete_Display, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Display_GetCount", (PyCFunction) _wrap_Display_GetCount, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Display_GetFromPoint", (PyCFunction) _wrap_Display_GetFromPoint, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Display_GetFromWindow", (PyCFunction) _wrap_Display_GetFromWindow, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Display_IsOk", (PyCFunction) _wrap_Display_IsOk, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Display_GetGeometry", (PyCFunction) _wrap_Display_GetGeometry, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Display_GetName", (PyCFunction) _wrap_Display_GetName, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Display_IsPrimary", (PyCFunction) _wrap_Display_IsPrimary, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Display_GetModes", (PyCFunction) _wrap_Display_GetModes, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Display_GetCurrentMode", (PyCFunction) _wrap_Display_GetCurrentMode, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Display_ChangeMode", (PyCFunction) _wrap_Display_ChangeMode, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Display_ResetMode", (PyCFunction) _wrap_Display_ResetMode, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Display_swigregister", Display_swigregister, METH_VARARGS, NULL },
 	 { NULL, NULL, 0, NULL }
 };
 
@@ -28168,6 +29094,7 @@ static swig_type_info _swigt__p_wxDateTime__TimeZone[] = {{"_p_wxDateTime__TimeZ
 static swig_type_info _swigt__p_wxMenu[] = {{"_p_wxMenu", 0, "wxMenu *", 0, 0, 0, 0},{"_p_wxMenu", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxEvent[] = {{"_p_wxEvent", 0, "wxEvent *", 0, 0, 0, 0},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMenuEvent", _p_wxMenuEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxCloseEvent", _p_wxCloseEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMouseEvent", _p_wxMouseEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxEraseEvent", _p_wxEraseEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxSetCursorEvent", _p_wxSetCursorEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxTimerEvent", _p_wxTimerEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxInitDialogEvent", _p_wxInitDialogEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxPyEvent", _p_wxPyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxJoystickEvent", _p_wxJoystickEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxEvent", 0, 0, 0, 0, 0, 0},{"_p_wxIdleEvent", _p_wxIdleEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxQueryNewPaletteEvent", _p_wxQueryNewPaletteEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMaximizeEvent", _p_wxMaximizeEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxIconizeEvent", _p_wxIconizeEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxActivateEvent", _p_wxActivateEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxSizeEvent", _p_wxSizeEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMoveEvent", _p_wxMoveEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxPaintEvent", _p_wxPaintEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxNcPaintEvent", _p_wxNcPaintEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxPaletteChangedEvent", _p_wxPaletteChangedEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxDisplayChangedEvent", _p_wxDisplayChangedEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMouseCaptureChangedEvent", _p_wxMouseCaptureChangedEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxSysColourChangedEvent", _p_wxSysColourChangedEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxDropFilesEvent", _p_wxDropFilesEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxFocusEvent", _p_wxFocusEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxProcessEvent", _p_wxProcessEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxShowEvent", _p_wxShowEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxCommandEvent", _p_wxCommandEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxNavigationKeyEvent", _p_wxNavigationKeyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxKeyEvent", _p_wxKeyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxScrollWinEvent", _p_wxScrollWinEventTo_p_wxEvent, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxConfigBase[] = {{"_p_wxConfigBase", 0, "wxConfigBase *", 0, 0, 0, 0},{"_p_wxFileConfig", _p_wxFileConfigTo_p_wxConfigBase, 0, 0, 0, 0, 0},{"_p_wxConfigBase", 0, 0, 0, 0, 0, 0},{"_p_wxConfig", _p_wxConfigTo_p_wxConfigBase, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxDisplay[] = {{"_p_wxDisplay", 0, "wxDisplay *", 0, 0, 0, 0},{"_p_wxDisplay", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxFileType[] = {{"_p_wxFileType", 0, "wxFileType *", 0, 0, 0, 0},{"_p_wxFileType", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxLogGui[] = {{"_p_wxLogGui", 0, "wxLogGui *", 0, 0, 0, 0},{"_p_wxLogGui", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxFont[] = {{"_p_wxFont", 0, "wxFont *", 0, 0, 0, 0},{"_p_wxFont", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -28204,6 +29131,7 @@ static swig_type_info _swigt__p_wxToolTip[] = {{"_p_wxToolTip", 0, "wxToolTip *"
 static swig_type_info _swigt__p_wxDataObjectComposite[] = {{"_p_wxDataObjectComposite", 0, "wxDataObjectComposite *", 0, 0, 0, 0},{"_p_wxDataObjectComposite", 0, 0, 0, 0, 0, 0},{"_p_wxURLDataObject", _p_wxURLDataObjectTo_p_wxDataObjectComposite, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxFileConfig[] = {{"_p_wxFileConfig", 0, "wxFileConfig *", 0, 0, 0, 0},{"_p_wxFileConfig", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxSystemSettings[] = {{"_p_wxSystemSettings", 0, "wxSystemSettings *", 0, 0, 0, 0},{"_p_wxSystemSettings", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxVideoMode[] = {{"_p_wxVideoMode", 0, "wxVideoMode *", 0, 0, 0, 0},{"_p_wxVideoMode", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPyDataObjectSimple[] = {{"_p_wxPyDataObjectSimple", 0, "wxPyDataObjectSimple *", 0, 0, 0, 0},{"_p_wxPyDataObjectSimple", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxDataObjectSimple[] = {{"_p_wxDataObjectSimple", 0, "wxDataObjectSimple *", 0, 0, 0, 0},{"_p_wxDataObjectSimple", 0, 0, 0, 0, 0, 0},{"_p_wxPyDataObjectSimple", _p_wxPyDataObjectSimpleTo_p_wxDataObjectSimple, 0, 0, 0, 0, 0},{"_p_wxTextDataObject", _p_wxTextDataObjectTo_p_wxDataObjectSimple, 0, 0, 0, 0, 0},{"_p_wxPyTextDataObject", _p_wxPyTextDataObjectTo_p_wxDataObjectSimple, 0, 0, 0, 0, 0},{"_p_wxBitmapDataObject", _p_wxBitmapDataObjectTo_p_wxDataObjectSimple, 0, 0, 0, 0, 0},{"_p_wxPyBitmapDataObject", _p_wxPyBitmapDataObjectTo_p_wxDataObjectSimple, 0, 0, 0, 0, 0},{"_p_wxFileDataObject", _p_wxFileDataObjectTo_p_wxDataObjectSimple, 0, 0, 0, 0, 0},{"_p_wxCustomDataObject", _p_wxCustomDataObjectTo_p_wxDataObjectSimple, 0, 0, 0, 0, 0},{"_p_wxMetafileDataObject", _p_wxMetafileDataObjectTo_p_wxDataObjectSimple, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxEvtHandler[] = {{"_p_wxEvtHandler", 0, "wxEvtHandler *", 0, 0, 0, 0},{"_p_wxControl", _p_wxControlTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxWindow", _p_wxWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxEvtHandler", 0, 0, 0, 0, 0, 0},{"_p_wxPyApp", _p_wxPyAppTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyTimer", _p_wxPyTimerTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxValidator", _p_wxValidatorTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyValidator", _p_wxPyValidatorTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxMenu", _p_wxMenuTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyProcess", _p_wxPyProcessTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -28255,6 +29183,7 @@ _swigt__p_wxDateTime__TimeZone,
 _swigt__p_wxMenu, 
 _swigt__p_wxEvent, 
 _swigt__p_wxConfigBase, 
+_swigt__p_wxDisplay, 
 _swigt__p_wxFileType, 
 _swigt__p_wxLogGui, 
 _swigt__p_wxFont, 
@@ -28291,6 +29220,7 @@ _swigt__p_wxToolTip,
 _swigt__p_wxDataObjectComposite, 
 _swigt__p_wxFileConfig, 
 _swigt__p_wxSystemSettings, 
+_swigt__p_wxVideoMode, 
 _swigt__p_wxPyDataObjectSimple, 
 _swigt__p_wxDataObjectSimple, 
 _swigt__p_wxEvtHandler, 
@@ -28790,5 +29720,6 @@ SWIGEXPORT(void) SWIG_init(void) {
     wxPyPtrTypeMap_Add("wxFileDropTarget", "wxPyFileDropTarget");
     
     SWIG_addvarlink(SWIG_globals,(char*)"TheClipboard",_wrap_TheClipboard_get, _wrap_TheClipboard_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"DefaultVideoMode",_wrap_DefaultVideoMode_get, _wrap_DefaultVideoMode_set);
 }
 

@@ -575,6 +575,14 @@ class Bitmap(GDIObject):
         return _gdi.Bitmap_SetDepth(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
+    def __eq__(*args, **kwargs):
+        """__eq__(Bitmap other) -> bool"""
+        return _gdi.Bitmap___eq__(*args, **kwargs)
+
+    def __ne__(*args, **kwargs):
+        """__ne__(Bitmap other) -> bool"""
+        return _gdi.Bitmap___ne__(*args, **kwargs)
+
 
 class BitmapPtr(Bitmap):
     def __init__(self, this):
@@ -3151,6 +3159,33 @@ class MetaFile(core.Object):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
+    def __del__(self, destroy=_gdi.delete_MetaFile):
+        """__del__()"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
+    def Ok(*args, **kwargs):
+        """Ok() -> bool"""
+        return _gdi.MetaFile_Ok(*args, **kwargs)
+
+    def SetClipboard(*args, **kwargs):
+        """SetClipboard(int width=0, int height=0) -> bool"""
+        return _gdi.MetaFile_SetClipboard(*args, **kwargs)
+
+    def GetSize(*args, **kwargs):
+        """GetSize() -> Size"""
+        return _gdi.MetaFile_GetSize(*args, **kwargs)
+
+    def GetWidth(*args, **kwargs):
+        """GetWidth() -> int"""
+        return _gdi.MetaFile_GetWidth(*args, **kwargs)
+
+    def GetHeight(*args, **kwargs):
+        """GetHeight() -> int"""
+        return _gdi.MetaFile_GetHeight(*args, **kwargs)
+
+    def __nonzero__(self): return self.Ok() 
 
 class MetaFilePtr(MetaFile):
     def __init__(self, this):
@@ -3171,6 +3206,10 @@ class MetaFileDC(DC):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
+    def Close(*args, **kwargs):
+        """Close() -> MetaFile"""
+        return _gdi.MetaFileDC_Close(*args, **kwargs)
+
 
 class MetaFileDCPtr(MetaFileDC):
     def __init__(self, this):

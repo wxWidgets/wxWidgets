@@ -8820,43 +8820,6 @@ static PyObject *_wrap_Grid_ForceRefresh(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_Grid_Refresh(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxGrid *arg1 = (wxGrid *) 0 ;
-    bool arg2 = (bool) True ;
-    wxRect *arg3 = (wxRect *) NULL ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    PyObject * obj2 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "eraseb",(char *) "rect", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OO:Grid_Refresh",kwnames,&obj0,&obj1,&obj2)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxGrid,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    if (obj1) {
-        arg2 = (bool) SWIG_AsBool(obj1); 
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    if (obj2) {
-        if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_wxRect,
-        SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->Refresh(arg2,(wxRect const *)arg3);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject *_wrap_Grid_IsEditable(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
@@ -15539,7 +15502,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Grid_EndBatch", (PyCFunction) _wrap_Grid_EndBatch, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Grid_GetBatchCount", (PyCFunction) _wrap_Grid_GetBatchCount, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Grid_ForceRefresh", (PyCFunction) _wrap_Grid_ForceRefresh, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"Grid_Refresh", (PyCFunction) _wrap_Grid_Refresh, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Grid_IsEditable", (PyCFunction) _wrap_Grid_IsEditable, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Grid_EnableEditing", (PyCFunction) _wrap_Grid_EnableEditing, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Grid_EnableCellEditControl", (PyCFunction) _wrap_Grid_EnableCellEditControl, METH_VARARGS | METH_KEYWORDS, NULL },
