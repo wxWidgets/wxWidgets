@@ -222,24 +222,10 @@ files from an existing wxWindows sample and adapt them.
 Visual C++ 1.5 compilation (16-bit)
 -----------------------------------
 
-NOTE: this has not been tested recently and probably doesn't
-work.
-
-1. Make sure your WXWIN variable is set, and uses the FAT (short
-   name) form.
-2. Change directory to wx\src\msw. Type 'nmake -f makefile.dos' to
-   make the wxWindows core library.
-3. Change directory to a sample, such as wx\samples\minimal, and
-   type 'nmake -f makefile.dos'.
-
-Add FINAL=1 to your makefile invocation to build the release
-versions of the library and samples.
-
-Use the 'clean' target to clean all objects, libraries and
-executables.
+No longer supported
 
 
-Borland C++ 4.5/5.0/5.5 compilation
+Borland C++ 5.0/5.5 compilation
 -------------------------------
 
 Compiling using the makefiles (updated 24 Sept 02):
@@ -303,46 +289,26 @@ Note (0): This provides the ability to produce separate wxwindows libraries
    for different purposes, and only have to rebuild the applications
 
 
-Note (1): In Borland 4.5 and earleir, using bcc.exe you also need to define BCCDIR
-in the autoexec.bat file; like this:
-   set BCCDIR=c:\progra~1\borland\bcc
-   so that it points to the root directory of
-   your Borland C++ installation, and it uses the FAT (short
-   name) form with no spaces.
-
-
-Note (2): the wxWindows library and (some) samples compile in 16-bit mode
-using makefile.bcc, but at present the wxWindows resource system is switched
-off in this mode. See issues.txt for details.
-
-Note (3): unfortunately most samples won't link in 16-bit mode,
-because the automatic data segment exceeds 64K. The minimal
-sample links and runs, however.
-
-Note (4): the wxWindows makefiles assume byte structure alignment. Please
+Note (1): the wxWindows makefiles assume byte structure alignment. Please
 make sure that your own project or makefile settings use the
 same alignment, or you could experience mysterious crashes. To
 change the alignment, add a suitable option to the $(CFG) target code
 in src/msw/makefile.b32.
 
-Note (5): if you get undefined _SQL... symbols at link time,
+Note (2): if you get undefined _SQL... symbols at link time,
 either install odbc32.lib from the BC++ CD-ROM into your BC++ lib
 directory, or set wxUSE_ODBC to 0 in include\wx\msw\setup.h and
 recompile wxWindows. The same applies if compiling using the IDE.
 
-Note (6): BC++ 4.5 (not 5.0) trips up over jdmerge.c in the JPEG folder;
-you will therefore need to set wxUSE_LIBJPEG to 0 in setup.h and remove
-the jpeg target from src\msw\makefile.b32, and remove jpeg from
-src\makeprog.b32.
 
-
-Note (7): If you wish debug messages to be sent to the console in
+Note (3): If you wish debug messages to be sent to the console in
 debug mode, edit src\makeb32.env and change /aa to /Tpe in
 LINK_FLAGS.
 
 Compiling using the IDE files: [Borland C++ 5.0, not Cbuilder]
 
-1. Load src\bc32.ide (Release settings)
+1. Load src\bc32.ide from the file bc32.zip at 
+   http://biolpc22.york.ac.uk/pub/ports/bcc32/wxwin21/ and select Release settings
 2. Go to Options|Project... and specify the correct BC++ include and lib path for
    your file structure.
 3. Press F9 to compile the wxWindows library.
@@ -386,18 +352,22 @@ Borland C++Builder IDE compilation
 ----------------------------------
 
 1. Build the wxWindows libraries using the Borland make utility as
-   specified in the section called "Borland C++ 4.5/5.0 compilation"
+   specified in the section called "Borland C++ 5.0 compilation"
    above. (C++ Builder includes a stand-alone C++ compiler.  For example,
    C++ Builder 4.0 comes with C++ 5.4.)
 
-2. You can build samples using the makefiles as per the
-   instructions for BC++ above, or you can follow the instructions
-   in docs/tech/tn0004.htm or http://biolpc22.york.ac.uk/wx/bc/ide.html.
-   You can use the process_sample_bcb.bat command which is in
+2. You can use the process_sample_bcb.bat command which is in
    wxwindows\distrib\msw to generate a .mak or .bpr file for most of the
    samples [mak for Cbuilder 1-3; bpr for v4]. Execute this in the sample
-   directory, passing the name of the cpp files on the command line.
+   directory, passing the name of the cpp files on the command line. For more
+   details, see the instructions in docs/tech/tn0004.htm or 
+   http://biolpc22.york.ac.uk/wx/bc/ide.html.
 
+Borland 16 Bit compilation for Windows 3.1
+------------------------------------------
+
+The last version of wxWindows to support 16-bit compilation with Borland was
+2.2.7 - Please download and read the instructions in that release
 
 Watcom C++ 10.6/11 and OpenWatcom compilation
 ---------------------------------------------
