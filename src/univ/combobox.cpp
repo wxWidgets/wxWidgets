@@ -105,14 +105,45 @@ protected:
 };
 
 // ----------------------------------------------------------------------------
-// wxComboPopupEventHandler implements hides the popup if the mouse is clicked
-// outside it
+// wxComboPopupEventHandler hides the popup if the mouse is clicked outside it
 // ----------------------------------------------------------------------------
 
 class wxComboPopupEventHandler : public wxEvtHandler
 {
 public:
     wxComboPopupEventHandler(wxComboControl *combo) { m_combo = combo; }
+
+    virtual bool ProcessEvent(wxEvent& event);
+
+private:
+    wxComboControl *m_combo;
+};
+
+// ----------------------------------------------------------------------------
+// wxComboTextEventHandler forwards wxEVT_COMMAND_TEXT_UPDATED events to the
+// combobox from its text control
+// ----------------------------------------------------------------------------
+
+class wxComboTextEventHandler : public wxEvtHandler
+{
+public:
+    wxComboTextEventHandler(wxComboControl *combo) { m_combo = combo; }
+
+    virtual bool ProcessEvent(wxEvent& event);
+
+private:
+    wxComboControl *m_combo;
+};
+
+// ----------------------------------------------------------------------------
+// wxComboLboxEventHandler forwards wxEVT_COMMAND_LISTBOX_SELECTED from the
+// listbox to the combo
+// ----------------------------------------------------------------------------
+
+class wxComboLboxEventHandler : public wxEvtHandler
+{
+public:
+    wxComboLboxEventHandler(wxComboControl *combo) { m_combo = combo; }
 
     virtual bool ProcessEvent(wxEvent& event);
 
@@ -175,6 +206,8 @@ bool wxComboControl::Create(wxWindow *parent,
                             (style & wxCB_READONLY ? wxTE_READONLY : 0),
                             validator);
 
+    m_text->PushEventHandler(new wxComboTextEventHandler(this));
+
     // for compatibility with the otherp orts, the height specified is the
     // combined height of the combobox itself and the popup
     if ( size.y == -1 )
@@ -200,6 +233,7 @@ bool wxComboControl::Create(wxWindow *parent,
 
 wxComboControl::~wxComboControl()
 {
+    m_text->PopEventHandler(TRUE /* delete it */);
     RemoveEventHandler();
 }
 
@@ -379,6 +413,45 @@ bool wxComboPopupEventHandler::ProcessEvent(wxEvent& event)
 }
 
 // ----------------------------------------------------------------------------
+// wxComboTextEventHandler
+// ----------------------------------------------------------------------------
+
+bool wxComboTextEventHandler::ProcessEvent(wxEvent& event)
+{
+    bool res = wxEvtHandler::ProcessEvent(event);
+
+    if ( event.GetEventType() == wxEVT_COMMAND_TEXT_UPDATED )
+    {
+        // let the combo have it: we do it after processing the event normally
+        // for compatibility with wxMSW port, if it ever changes to use
+        // CBN_EDITUPDATE instead of CBN_EDITCHANGE it currently uses, we
+        // could change it here as well
+        (void)m_combo->ProcessEvent(event);
+    }
+
+    return res;
+}
+
+// ----------------------------------------------------------------------------
+// wxComboLboxEventHandler
+// ----------------------------------------------------------------------------
+
+bool wxComboLboxEventHandler::ProcessEvent(wxEvent& event)
+{
+    if ( event.GetEventType() == wxEVT_COMMAND_LISTBOX_SELECTED )
+    {
+        // all fields are already filled by the listbox, just change the event
+        // type and send it to the combo
+        wxCommandEvent event2 = (wxCommandEvent &)event;
+        event2.SetEventType(wxEVT_COMMAND_COMBOBOX_SELECTED);
+
+        return m_combo->ProcessEvent(event2);
+    }
+
+    return wxEvtHandler::ProcessEvent(event);
+}
+
+// ----------------------------------------------------------------------------
 // wxComboListBox
 // ----------------------------------------------------------------------------
 
@@ -441,10 +514,16 @@ bool wxComboBox::Create(wxWindow *parent,
     wxComboListBox *combolbox = new wxComboListBox(this);
     m_lbox = combolbox;
     m_lbox->Set(n, choices);
+    m_lbox->PushEventHandler(new wxComboLboxEventHandler(this));
 
     SetPopupControl(combolbox);
 
     return TRUE;
+}
+
+wxComboBox::~wxComboBox()
+{
+    m_lbox->PopEventHandler(TRUE /* delete it */);
 }
 
 // ----------------------------------------------------------------------------

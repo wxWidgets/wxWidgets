@@ -218,6 +218,9 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxComboBoxNameStr);
 
+
+    virtual ~wxComboBox();
+
     // the wxUniversal-specific methods
     // --------------------------------
 
