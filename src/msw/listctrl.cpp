@@ -124,6 +124,58 @@ private:
     LV_ITEM *m_item;
 };
 
+///////////////////////////////////////////////////////
+// Problem:
+// The MSW version had problems with SetTextColour() et 
+// al as the wxListItemAttr's were stored keyed on the 
+// item index. If a item was inserted anywhere but the end 
+// of the list the the text attributes (colour etc) for 
+// the following items were out of sync.
+// 
+// Solution:
+// Under MSW the only way to associate data with a List 
+// item independant of its position in the list is to 
+// store a pointer to it in its lParam attribute. However 
+// user programs are already using this (via the 
+// SetItemData() GetItemData() calls).
+// 
+// However what we can do is store a pointer to a 
+// structure which contains the attributes we want *and* 
+// a lParam for the users data, e.g.
+// 
+// class wxListItemInternalData
+// {
+// public:
+//   wxListItemAttr *attr; 
+//   long lParam; // user data
+// };
+// 
+// To conserve memory, a wxListItemInternalData is 
+// only allocated for a LV_ITEM if text attributes or 
+// user data(lparam) are being set.
+
+
+// class wxListItemInternalData
+class wxListItemInternalData
+{
+public:
+   wxListItemAttr *attr; 
+   LPARAM lParam; // user data
+
+   wxListItemInternalData() : attr(NULL), lParam(0) {}
+   ~wxListItemInternalData()
+   {
+       if (attr)
+           delete attr;
+   };
+};
+
+// Get the internal data structure
+static wxListItemInternalData *GetInternalData(HWND hwnd, long itemId);
+static wxListItemInternalData *GetInternalData(wxListCtrl *ctl, long itemId);
+static wxListItemAttr *GetInternalDataAttr(wxListCtrl *ctl, long itemId);
+
+
 // ----------------------------------------------------------------------------
 // events
 // ----------------------------------------------------------------------------
@@ -178,6 +230,7 @@ void wxListCtrl::Init()
     m_baseStyle = 0;
     m_colCount = 0;
     m_textCtrl = NULL;
+    m_AnyInternalData = FALSE;
     m_hasAnyAttr = FALSE;
 }
 
@@ -303,28 +356,25 @@ void wxListCtrl::UpdateStyle()
     }
 }
 
-void wxListCtrl::FreeAllAttrs(bool dontRecreate)
+void wxListCtrl::FreeAllInternalData()
 {
-    if ( m_hasAnyAttr )
-    {
-        for ( wxNode *node = m_attrs.Next(); node; node = m_attrs.Next() )
+    if (m_AnyInternalData)
         {
-            delete (wxListItemAttr *)node->Data();
-        }
+        int n = GetItemCount();
+        int i = 0;
 
-        m_attrs.Destroy();
-        if ( !dontRecreate )
+        for (i = 0; i < n; i++)
         {
-            m_attrs.Create(wxKEY_INTEGER, 1000);        // just as def ctor
-        }
-
-        m_hasAnyAttr = FALSE;
-    }
+            wxListItemInternalData *data = GetInternalData(this, i);
+            if (data)
+                delete data;
+        };
+    };
 }
 
 wxListCtrl::~wxListCtrl()
 {
-    FreeAllAttrs(TRUE /* no need to recreate hash any more */);
+    FreeAllInternalData();
 
     if ( m_textCtrl )
     {
@@ -664,6 +714,42 @@ bool wxListCtrl::SetItem(wxListItem& info)
     LV_ITEM item;
     wxConvertToMSWListItem(this, info, item);
 
+    // we never update the lParam if it contains our pointer
+    // to the wxListItemInternalData structure
+    item.mask &= ~LVIF_PARAM;
+
+    // check if setting attributes or lParam
+    if (info.HasAttributes() || (info.m_mask  & wxLIST_MASK_DATA))
+    {
+        // get internal item data
+        // perhaps a cache here ?
+        wxListItemInternalData *data = GetInternalData(this, info.m_itemId);
+        
+        if (! data)
+        {
+            // need to set it
+            m_AnyInternalData = TRUE;
+            data = new wxListItemInternalData();
+            item.lParam = (LPARAM) data;
+            item.mask |= LVIF_PARAM;
+        };
+
+
+        // user data
+        if (info.m_mask  & wxLIST_MASK_DATA)
+            data->lParam = info.m_data;
+
+        // attributes
+        if (info.HasAttributes())
+        {
+            if (data->attr)
+                *data->attr = *info.GetAttributes();
+            else
+                data->attr = new wxListItemAttr(*info.GetAttributes());
+        };
+    };
+
+
     // we could be changing only the attribute in which case we don't need to
     // call ListView_SetItem() at all
     if ( item.mask )
@@ -683,13 +769,6 @@ bool wxListCtrl::SetItem(wxListItem& info)
     // check whether it has any custom attributes
     if ( info.HasAttributes() )
     {
-        wxListItemAttr *attr = (wxListItemAttr *)m_attrs.Get(item.iItem);
-
-        if ( attr == NULL )
-            m_attrs.Put(item.iItem, (wxObject *)new wxListItemAttr(*info.GetAttributes()));
-        else
-            *attr = *info.GetAttributes();
-
         m_hasAnyAttr = TRUE;
 
         // if the colour has changed, we must redraw the item
@@ -1288,22 +1367,30 @@ long wxListCtrl::InsertItem(wxListItem& info)
 
     LV_ITEM item;
     wxConvertToMSWListItem(this, info, item);
+    item.mask &= ~LVIF_PARAM;
+
+    // check wether we need to allocate our internal data
+    bool needInternalData = ((info.m_mask & wxLIST_MASK_DATA) || info.HasAttributes());
+    if (needInternalData)
+    {
+        m_AnyInternalData = TRUE;
+        item.mask |= LVIF_PARAM;
+
+        // internal stucture that manages data
+        wxListItemInternalData *data = new wxListItemInternalData();
+        item.lParam = (LPARAM) data;
+
+        if (info.m_mask & wxLIST_MASK_DATA)
+            data->lParam = info.m_data;
 
     // check whether it has any custom attributes
     if ( info.HasAttributes() )
     {
-
-        wxListItemAttr *attr;
-        attr = (wxListItemAttr*) m_attrs.Get(item.iItem);
-
-        if (attr == NULL)
-
-            m_attrs.Put(item.iItem, (wxObject *)new wxListItemAttr(*info.GetAttributes()));
-
-        else *attr = *info.GetAttributes();
-
-        m_hasAnyAttr = TRUE;
+            // take copy of attributes
+            data->attr = new wxListItemAttr(*info.GetAttributes());
     }
+    };
+
 
     return (long) ListView_InsertItem(GetHwnd(), & item);
 }
@@ -1422,62 +1509,37 @@ bool wxListCtrl::ScrollList(int dx, int dy)
 
 // data is arbitrary data to be passed to the sort function.
 
-// FIXME: this is horrible and MT-unsafe and everything else but I don't have
-//        time for anything better right now (VZ)
-static long gs_sortData = 0;
-static wxListCtrl *gs_sortCtrl = NULL;
-static wxListCtrlCompare gs_sortFunction = NULL;
+// Internal structures for proxying the user compare function
+// so that we can pass it the *real* user data
 
-int wxCMPFUNC_CONV wxListCtrlCompareFn(const void *arg1, const void *arg2)
+// translate lParam data and call user func
+struct wxInternalDataSort
 {
-    int n1 = *(const int *)arg1,
-        n2 = *(const int *)arg2;
+    wxListCtrlCompare user_fn;
+    long data;
+};
 
-    return gs_sortFunction(gs_sortCtrl->GetItemData(n1),
-                           gs_sortCtrl->GetItemData(n2),
-                           gs_sortData);
-}
+int CALLBACK wxInternalDataCompareFunc(LPARAM lParam1, LPARAM lParam2,  LPARAM lParamSort)
+{
+    struct wxInternalDataSort *internalData = (struct wxInternalDataSort *) lParamSort;
+
+    wxListItemInternalData *data1 = (wxListItemInternalData *) lParam1;
+    wxListItemInternalData *data2 = (wxListItemInternalData *) lParam2;
+
+    long d1 = (data1 == NULL ? 0 : data1->lParam);
+    long d2 = (data2 == NULL ? 0 : data2->lParam);
+
+    return internalData->user_fn(d1, d2, internalData->data);
+
+};
 
 bool wxListCtrl::SortItems(wxListCtrlCompare fn, long data)
 {
-    // sort the attributes too
-    if ( m_hasAnyAttr )
-    {
-        int n,
-            count = GetItemCount();
-        int *aItems = new int[count];
-        for ( n = 0; n < count; n++ )
-        {
-            aItems[n] = n;
-        }
+    struct wxInternalDataSort internalData;
+    internalData.user_fn = fn;
+    internalData.data = data;
 
-        gs_sortData = data;
-        gs_sortCtrl = this;
-        gs_sortFunction = fn;
-
-        qsort(aItems, count, sizeof(int), wxListCtrlCompareFn);
-
-        gs_sortData = 0;
-        gs_sortCtrl = NULL;
-        gs_sortFunction = NULL;
-
-        wxHashTable attrsNew(wxKEY_INTEGER, 1000);
-        for ( n = 0; n < count; n++ )
-        {
-            wxObject *attr = m_attrs.Delete(aItems[n]);
-            if ( attr )
-            {
-                attrsNew.Put(n, attr);
-            }
-        }
-
-        m_attrs.Destroy();
-        m_attrs = attrsNew;
-
-        delete [] aItems;
-    }
-
-    if ( !ListView_SortItems(GetHwnd(), (PFNLVCOMPARE)fn, data) )
+    if ( !ListView_SortItems(GetHwnd(), wxInternalDataCompareFunc, &internalData) )
     {
         wxLogDebug(_T("ListView_SortItems() failed"));
 
@@ -1692,19 +1754,19 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             case LVN_DELETEALLITEMS:
                 eventType = wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS;
                 event.m_itemIndex = -1;
-
-                FreeAllAttrs();
-
                 break;
 
             case LVN_DELETEITEM:
                 eventType = wxEVT_COMMAND_LIST_DELETE_ITEM;
                 event.m_itemIndex = nmLV->iItem;
 
-                if ( m_hasAnyAttr )
+                // delete the assoicated internal data
                 {
-                    delete (wxListItemAttr *)m_attrs.Delete(nmLV->iItem);
-                }
+                    wxListItemInternalData *data = 
+                        GetInternalData(this, nmLV->iItem);
+                    if (data)
+                        delete data;
+                };
                 break;
 
             case LVN_SETDISPINFO:
@@ -1995,7 +2057,7 @@ WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
 
                 wxListItemAttr *attr =
                     IsVirtual() ? OnGetItemAttr(item)
-                                : (wxListItemAttr *)m_attrs.Get(item);
+                                : GetInternalDataAttr(this, item);
 
                 if ( !attr )
                 {
@@ -2192,11 +2254,44 @@ void wxListCtrl::RefreshItems(long itemFrom, long itemTo)
     RefreshRect(rect);
 }
 
+static wxListItemInternalData *GetInternalData(HWND hwnd, long itemId)
+{
+    LV_ITEM it;
+    it.mask = LVIF_PARAM;
+    it.iItem = itemId;
+
+    bool success = ListView_GetItem(hwnd, &it) != 0;
+    if (success)
+        return (wxListItemInternalData *) it.lParam;
+    else
+        return NULL;
+};
+
+static wxListItemInternalData *GetInternalData(wxListCtrl *ctl, long itemId)
+{
+    return GetInternalData((HWND) ctl->GetHWND(), itemId);
+};
+
+static wxListItemAttr *GetInternalDataAttr(wxListCtrl *ctl, long itemId)
+{
+    wxListItemInternalData *data = GetInternalData(ctl, itemId);
+    if (data)
+        return data->attr;
+    else
+        return NULL;
+};
+
+
 static void wxConvertFromMSWListItem(HWND hwndListCtrl,
                                      wxListItem& info,
                                      LV_ITEM& lvItem)
 {
-    info.m_data = lvItem.lParam;
+    wxListItemInternalData *internaldata = 
+        (wxListItemInternalData *) lvItem.lParam;
+
+    if (internaldata)
+        info.m_data = internaldata->lParam;
+
     info.m_mask = 0;
     info.m_state = 0;
     info.m_stateMask = 0;
@@ -2310,7 +2405,6 @@ static void wxConvertToMSWListItem(const wxListCtrl *ctrl,
     lvItem.iItem = (int) info.m_itemId;
 
     lvItem.iImage = info.m_image;
-    lvItem.lParam = info.m_data;
     lvItem.stateMask = 0;
     lvItem.state = 0;
     lvItem.mask = 0;
@@ -2342,8 +2436,6 @@ static void wxConvertToMSWListItem(const wxListCtrl *ctrl,
     }
     if (info.m_mask & wxLIST_MASK_IMAGE)
         lvItem.mask |= LVIF_IMAGE;
-    if (info.m_mask & wxLIST_MASK_DATA)
-        lvItem.mask |= LVIF_PARAM;
 }
 
 static void wxConvertToMSWListCol(int WXUNUSED(col), const wxListItem& item,
@@ -2395,5 +2487,3 @@ static void wxConvertToMSWListCol(int WXUNUSED(col), const wxListItem& item,
 }
 
 #endif // wxUSE_LISTCTRL
-
-// vi:sts=4:sw=4:et

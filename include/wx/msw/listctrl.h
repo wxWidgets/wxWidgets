@@ -356,8 +356,8 @@ protected:
     // common part of all ctors
     void Init();
 
-    // free memory taken by all attributes and recreate the hash table
-    void FreeAllAttrs(bool dontRecreate = FALSE);
+    // free memory taken by all internal data
+    void FreeAllInternalData();
 
     wxTextCtrl*       m_textCtrl;        // The control used for editing a label
     wxImageList *     m_imageListNormal; // The image list for normal icons
@@ -371,8 +371,8 @@ protected:
     int               m_colCount;   // Windows doesn't have GetColumnCount so must
                                     // keep track of inserted/deleted columns
 
-    // the hash table we use for storing pointers to the items attributes
-    wxHashTable m_attrs;
+    // TRUE if we have any internal data (user data & attributes)
+    bool m_AnyInternalData;
 
     // TRUE if we have any items with custom attributes
     bool m_hasAnyAttr;
