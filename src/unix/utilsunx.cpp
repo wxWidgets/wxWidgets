@@ -47,6 +47,7 @@
 #if defined( __MWERKS__ ) && defined(__MACH__)
 #define WXWIN_OS_DESCRIPTION "MacOS X"
 #define HAVE_NANOSLEEP
+#define HAVE_UNAME
 #endif
 
 // not only the statfs syscall is called differently depending on platform, but
