@@ -215,10 +215,13 @@ bool wxMenu::DoInsertOrAppend(
 {
     ERRORID                         vError;
     wxString                        sError;
+    MENUITEM                        vItem;
 
 #if wxUSE_ACCEL
     UpdateAccel(pItem);
 #endif // wxUSE_ACCEL
+
+    memset(&vItem, '\0', sizeof(vItem));
 
     //
     // If "Break" has just been called, insert a menu break before this item
@@ -226,18 +229,24 @@ bool wxMenu::DoInsertOrAppend(
     //
     if (m_bDoBreak)
     {
-        m_vMenuData.afStyle |= MIS_BREAK;
+        vItem.afStyle |= MIS_BREAK;
         m_bDoBreak = FALSE;
     }
 
+    //
+    // Menu items that are being inserted into a submenu MUST have a
+    // MENUITEM structure separate from the parent menu so we must use
+    // a local vItem not the object's m_vMenuItem as that is the MENUITEM
+    // associated with the parent submenu.
+    //
     if (pItem->IsSeparator())
     {
-        m_vMenuData.afStyle |= MIS_SEPARATOR;
+        vItem.afStyle |= MIS_SEPARATOR;
     }
 
     //
     // Id is the numeric id for normal menu items and HMENU for submenus as
-    // required by ::WinInsertMenu() API
+    // required by ::MM_INSERTITEM message API
     //
 
     wxMenu*                         pSubmenu = pItem->GetSubMenu();
@@ -247,13 +256,13 @@ bool wxMenu::DoInsertOrAppend(
         wxASSERT_MSG(pSubmenu->GetHMenu(), wxT("invalid submenu"));
         pSubmenu->SetParent(this);
 
-        m_vMenuData.iPosition = 0; // submenus have a 0 position
-        m_vMenuData.id = (USHORT)pSubmenu->GetHMenu();
-        m_vMenuData.afStyle |= MIS_SUBMENU | MIS_TEXT;
+        vItem.iPosition = 0; // submenus have a 0 position
+        vItem.id = (USHORT)pSubmenu->GetHMenu();
+        vItem.afStyle |= MIS_SUBMENU | MIS_TEXT;
     }
     else
     {
-        m_vMenuData.id = pItem->GetId();
+        vItem.id = pItem->GetId();
     }
 
     BYTE*                           pData;
@@ -264,10 +273,11 @@ bool wxMenu::DoInsertOrAppend(
         //
         // Want to get {Measure|Draw}Item messages?
         // item draws itself, pass pointer to it in data parameter
-        // Will eventually need to set the image handle somewhere into m_vMenuData.hItem
+        // Will eventually need to set the image handle somewhere into vItem.hItem
         //
-        m_vMenuData.afStyle |= MIS_OWNERDRAW;
+        vItem.afStyle |= MIS_OWNERDRAW;
         pData = (BYTE*)pItem;
+        // vItem.hItem = ????
     }
     else
 #endif
@@ -275,28 +285,28 @@ bool wxMenu::DoInsertOrAppend(
         //
         // Menu is just a normal string (passed in data parameter)
         //
-        m_vMenuData.afStyle |= MIS_TEXT;
+        vItem.afStyle |= MIS_TEXT;
         pData = (char*)pItem->GetText().c_str();
     }
 
     APIRET                          rc;
 
-    m_vMenuData.hwndSubMenu = NULLHANDLE;
-    m_vMenuData.hItem       = NULLHANDLE;
-
-    //
-    // -1 means append at end
-    //
-    if (nPos == (size_t)-1)
+    if (pSubmenu == NULL)
     {
-        m_vMenuData.iPosition = MIT_END;
-    }
-    else
-    {
-        m_vMenuData.iPosition   = nPos;
+        //
+        // -1 means append at end
+        //
+        if (nPos == (size_t)-1)
+        {
+            vItem.iPosition = MIT_END;
+        }
+        else
+        {
+            vItem.iPosition = nPos;
+        }
     }
 
-    rc = (APIRET)::WinSendMsg(GetHmenu(), MM_INSERTITEM, (MPARAM)&m_vMenuData, (MPARAM)pData);
+    rc = (APIRET)::WinSendMsg(GetHmenu(), MM_INSERTITEM, (MPARAM)&vItem, (MPARAM)pData);
     if (rc == MIT_MEMERROR || rc == MIT_ERROR)
     {
         vError = ::WinGetLastError(vHabmain);
@@ -660,6 +670,26 @@ WXHMENU wxMenuBar::Create()
             APIRET                  rc;
             ERRORID                 vError;
             wxString                sError;
+            MENUITEM                vItem;
+
+            //
+            // Set the parent and owner of the submenues to be the menubar, not the desktop
+            //
+            if (!::WinSetParent(m_menus[i]->m_vMenuData.hwndSubMenu, hMenuBar, FALSE))
+            {
+                vError = ::WinGetLastError(vHabmain);
+                sError = wxPMErrorToStr(vError);
+                wxLogError("Error setting parent for submenu. Error: %s\n", sError);
+                return NULLHANDLE;
+            }
+
+            if (!::WinSetOwner(m_menus[i]->m_vMenuData.hwndSubMenu, hMenuBar))
+            {
+                vError = ::WinGetLastError(vHabmain);
+                sError = wxPMErrorToStr(vError);
+                wxLogError("Error setting parent for submenu. Error: %s\n", sError);
+                return NULLHANDLE;
+            }
 
             rc = (APIRET)::WinSendMsg(hMenuBar, MM_INSERTITEM, (MPARAM)&m_menus[i]->m_vMenuData, (MPARAM)m_titles[i].c_str());
             if (rc == MIT_MEMERROR || rc == MIT_ERROR)

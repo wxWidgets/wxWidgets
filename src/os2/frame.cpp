@@ -552,6 +552,9 @@ void wxFrame::SetMenuBar(
   wxMenuBar*                        pMenuBar
 )
 {
+    ERRORID                         vError;
+    wxString                        sError;
+
     if (!pMenuBar)
     {
         DetachMenuBar();
@@ -578,6 +581,22 @@ void wxFrame::SetMenuBar(
             return;
     }
 
+    //
+    // Set the parent and owner of the menubar to be the frame
+    //
+    if (!::WinSetParent(m_hMenu, GetHwnd(), FALSE))
+    {
+        vError = ::WinGetLastError(vHabmain);
+        sError = wxPMErrorToStr(vError);
+        wxLogError("Error setting parent for submenu. Error: %s\n", sError);
+    }
+
+    if (!::WinSetOwner(m_hMenu, GetHwnd()))
+    {
+        vError = ::WinGetLastError(vHabmain);
+        sError = wxPMErrorToStr(vError);
+        wxLogError("Error setting parent for submenu. Error: %s\n", sError);
+    }
     InternalSetMenuBar();
 
     m_frameMenuBar = pMenuBar;
