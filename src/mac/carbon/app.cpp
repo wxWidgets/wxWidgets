@@ -723,7 +723,9 @@ void wxApp::CleanUp()
     ProfilerDump( (StringPtr)"\papp.prof" ) ;
     ProfilerTerm() ;
 #  endif
+#endif
 
+#ifdef __DARWIN__
     // clean up HID Keyboard
     if (s_macHIDKeyboard)
         delete s_macHIDKeyboard;
