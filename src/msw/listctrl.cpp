@@ -1772,20 +1772,15 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 break;
 
             case HDN_GETDISPINFOW:
-                {
-                    LPNMHDDISPINFOW info = (LPNMHDDISPINFOW) lParam;
-                    // This is a fix for a strange bug under XP.
-                    // Normally, info->iItem is a valid index, but
-                    // sometimes this is a silly (large) number
-                    // and when we return false via wxControl::MSWOnNotify
-                    // to indicate that it hasn't yet been processed,
-                    // there's a GPF in Windows.
-                    // By returning true here, we avoid further processing
-                    // of this strange message.
-                    if ( (unsigned)info->iItem >= (unsigned)GetColumnCount() )
-                        return true;
-                }
-                // fall through
+                // letting Windows XP handle this message results in mysterious
+                // crashes in comctl32.dll seemingly because of bad message
+                // parameters
+                //
+                // I have no idea what is the real cause of the bug (which is,
+                // just to make things interesting, is impossible to reproduce
+                // reliably) but ignoring all these messages does fix it and
+                // doesn't seem to have any negative consequences
+                return true;
 
             default:
                 return wxControl::MSWOnNotify(idCtrl, lParam, result);
