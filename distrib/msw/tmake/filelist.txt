@@ -409,6 +409,7 @@ gauge.cpp	X
 gdiobj.cpp	X
 glcanvas.cpp	X
 icon.cpp	X
+joystick.cpp	X
 listbox.cpp	X
 main.cpp	X
 mdi.cpp	X
