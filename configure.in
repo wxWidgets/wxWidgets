@@ -1854,7 +1854,7 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         AFMINSTALL=afminstall
         COMPILED_X_PROGRAM=0
 
-        if test "$wxUSE_NANOX" = 1; then
+        if test "$wxUSE_NANOX" = "yes"; then
             AC_MSG_CHECKING(for MicroWindows/NanoX distribution)
             if test "x$MICROWIN" = x ; then
                 AC_MSG_RESULT(not found)
@@ -1895,7 +1895,7 @@ equivalent variable and GTK+ is version 1.2.3 or above.
             )
         fi
 
-        if test "$wxUSE_NANOX" = 1; then
+        if test "$wxUSE_NANOX" = "yes"; then
             TOOLKIT_INCLUDE="-I\$(top_srcdir)/include/wx/x11/nanox -I\$(MICROWIN)/src/include $TOOLKIT_INCLUDE"
             TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__NANOX__"
             GUI_TK_LIBRARY="$GUI_TK_LIBRARY \$MICROWIN/src/lib/libnano-X.a \$MICROWIN/src/lib/libmwengine.a \$MICROWIN/src/lib/libmwfonts.a \$MICROWIN/src/lib/libmwdrivers.a \$MICROWIN/src/lib/libmwobjects.a"
@@ -4043,8 +4043,12 @@ if test "$wxUSE_PROLOGIO" = "yes" ; then
 fi
 
 if test "$wxUSE_RESOURCES" = "yes" ; then
-    AC_DEFINE(wxUSE_RESOURCES)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS resource"
+    if test "$wxUSE_NANOX" = "yes"; then
+        AC_MSG_WARN([Cannot use resource database functions in NanoX])
+	else
+		AC_DEFINE(wxUSE_RESOURCES)
+		SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS resource"
+    fi
 fi
 
 if test "$wxUSE_X_RESOURCES" = "yes"; then

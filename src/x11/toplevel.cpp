@@ -130,6 +130,9 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     m_mainWidget = (WXWindow) xwindow;
 
     XSelectInput( xdisplay, xwindow,
+#if wxUSE_NANOX
+        GR_EVENT_MASK_CLOSE_REQ |
+#endif
         ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
         ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask |
         KeymapStateMask | FocusChangeMask | ColormapChangeMask | StructureNotifyMask |

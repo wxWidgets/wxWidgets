@@ -45,17 +45,10 @@
 #pragma message disable nosimpint
 #endif
 
-#ifdef __WXMOTIF__
-#include <Xm/Xm.h>
-#endif
-
-#ifdef __VMS__
-#pragma message enable nosimpint
-#endif
-
 #include "wx/unix/execute.h"
 
 #ifdef __WXMOTIF__
+#include <Xm/Xm.h>
 #include "wx/motif/private.h"
 #endif
 
@@ -63,8 +56,15 @@
 #include "wx/x11/private.h"
 #endif
 
+#if wxUSE_RESOURCES
 #include "X11/Xresource.h"
+#endif
+
 #include "X11/Xutil.h"
+
+#ifdef __VMS__
+#pragma message enable nosimpint
+#endif
 
 // ----------------------------------------------------------------------------
 // private functions

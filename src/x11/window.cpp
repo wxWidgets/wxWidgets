@@ -272,16 +272,16 @@ bool wxWindowX11::Show(bool show)
     if (show)
     {
         wxString msg;
-	msg.Printf("Mapping window of type %s", GetClassInfo()->GetClassName());
-	wxLogDebug(msg);
+        msg.Printf("Mapping window of type %s", GetClassInfo()->GetClassName());
+        wxLogDebug(msg);
         XMapWindow(xdisp, xwin);
-	XSync(xdisp, False);
+        XSync(xdisp, False);
     }
     else
     {
         wxString msg;
-	msg.Printf("Unmapping window of type %s", GetClassInfo()->GetClassName());
-	wxLogDebug(msg);
+        msg.Printf("Unmapping window of type %s", GetClassInfo()->GetClassName());
+        wxLogDebug(msg);
         XUnmapWindow(xdisp, xwin);
     }
 

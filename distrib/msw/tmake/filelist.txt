@@ -602,6 +602,7 @@ utils.cpp	Motif
 window.cpp	Motif
 
 gsockx11.c	X11	Socket
+nanox.c	    X11
 app.cpp	X11
 bitmap.cpp	X11
 brush.cpp	X11

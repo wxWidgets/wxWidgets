@@ -17,19 +17,14 @@
 #include "wx/app.h"
 #include "wx/utils.h"
 #include "wx/gdicmn.h"
-#include "wx/pen.h"
-#include "wx/brush.h"
-#include "wx/cursor.h"
 #include "wx/icon.h"
 #include "wx/dialog.h"
-#include "wx/msgdlg.h"
 #include "wx/log.h"
 #include "wx/module.h"
 #include "wx/memory.h"
 #include "wx/log.h"
 #include "wx/intl.h"
 #include "wx/evtloop.h"
-#include "wx/cmdline.h"
 
 #if wxUSE_THREADS
     #include "wx/thread.h"
@@ -44,8 +39,8 @@
 #endif
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#include <X11/Xresource.h>
 #include <X11/Xatom.h>
+
 #ifdef __VMS__
 #pragma message enable nosimpint
 #endif
@@ -81,6 +76,13 @@ static int wxXErrorHandler(Display *dpy, XErrorEvent *xevent)
 long wxApp::sm_lastMessageTime = 0;
 WXDisplay *wxApp::ms_display = NULL;
 
+// This is set within wxEntryStart -- too early on
+// to put these in wxTheApp
+static int g_newArgc = 0;
+static wxChar** g_newArgv = NULL;
+static bool g_showIconic = FALSE;
+static wxSize g_initialSize = wxDefaultSize;
+
 bool wxApp::Initialize()
 {
     wxClassInfo::InitializeClasses();
@@ -111,6 +113,10 @@ bool wxApp::Initialize()
 
 void wxApp::CleanUp()
 {
+    if (g_newArgv)
+        delete[] g_newArgv;
+    g_newArgv = NULL;
+
     delete wxWidgetHashTable;
     wxWidgetHashTable = NULL;
 
@@ -156,11 +162,6 @@ void wxApp::CleanUp()
     delete wxLog::SetActiveTarget(NULL);
 }
 
-// This is set within wxEntryStart -- too early on
-// to put these in wxTheApp
-static int g_newArgc = 0;
-static wxChar** g_newArgv = NULL;
-
 // NB: argc and argv may be changed here, pass by reference!
 int wxEntryStart( int& argc, char *argv[] )
 {
@@ -169,17 +170,78 @@ int wxEntryStart( int& argc, char *argv[] )
     gs_pfnXErrorHandler = XSetErrorHandler( wxXErrorHandler );
 #endif // __WXDEBUG__
 
-    /// TODO
-#if 0
-    // Parse the arguments.
-#endif
+    wxString displayName;
+    bool syncDisplay = FALSE;
 
-    Display* xdisplay = XOpenDisplay(NULL);
+    // Parse the arguments.
+    // We can't use wxCmdLineParser or OnInitCmdLine and friends because
+    // we have to create the Display earlier. If we can find a way to
+    // use the wxAppBase API then I'll be quite happy to change it.
+    g_newArgv = new wxChar*[argc];
+    g_newArgc = 0;
+    int i;
+    for (i = 0; i < argc; i++)
+    {
+        wxString arg(argv[i]);
+        if (arg == wxT("-display"))
+        {
+            if (i < (argc - 1))
+            {
+                i ++;
+                displayName = argv[i];
+                continue;
+            }
+        }
+        else if (arg == wxT("-geometry"))
+        {
+            if (i < (argc - 1))
+            {
+                i ++;
+                windowGeometry = argv[i];
+                int w, h;
+                if (wxSscanf(windowGeometry.c_str(), _T("%dx%d"), &w, &h) != 2)
+                {
+                    wxLogError(_("Invalid geometry specification '%s'", windowGeometry.c_str());
+                }
+                else
+                {
+                    g_initialSize = wxSize(w, h);
+                }
+                continue;
+            }
+        }
+        else if (arg == wxT("-sync"))
+        {
+            syncDisplay = TRUE;
+            continue;
+        }
+        else if (arg == wxT("-iconic"))
+        {
+            g_showIconic = TRUE;
+
+            continue;
+        }
+
+        // Not eaten by wxWindows, so pass through
+        g_newArgv[g_newArgc] = argv[i];
+        g_newArgc ++;
+    }
+
+    Display* xdisplay;
+    if (displayName.IsEmpty())
+        xdisplay = XOpenDisplay(NULL);
+    else
+        xdisplay = XOpenDisplay(displayName);
 
     if (!xdisplay)
     {
         wxLogError( _("wxWindows could not open display. Exiting.") );
         return -1;
+    }
+
+    if (syncDisplay)
+    {
+        XSynchronize(xdisplay, True);
     }
     
     wxApp::ms_display = (WXDisplay*) xdisplay;
@@ -193,7 +255,6 @@ int wxEntryStart( int& argc, char *argv[] )
 
     return 0;
 }
-
 
 int wxEntryInitGui()
 {
@@ -253,6 +314,8 @@ int wxEntry( int argc, char *argv[] )
         wxTheApp->argc = argc;
         wxTheApp->argv = argv;
     }
+    wxTheApp->m_showIconic = g_showIconic;
+    wxTheApp->m_initialSize = g_initialSize;
 
     int retValue;
     retValue = wxEntryInitGui();
@@ -310,6 +373,8 @@ wxApp::wxApp()
     m_topLevelWidget = (WXWindow) NULL;
     m_maxRequestSize = 0;
     m_mainLoop = NULL;
+    m_showIconic = FALSE;
+    m_initialSize = wxDefaultSize;
 }
 
 bool wxApp::Initialized()
@@ -342,11 +407,6 @@ void wxApp::ProcessXEvent(WXEvent* _event)
     Window actualWindow = window;
 
     // Find the first wxWindow that corresponds to this event window
-    // TODO: may need to translate coordinates from actualWindow
-    // to window, if the receiving window != wxWindow window
-    //    while (window && !(win = wxGetWindowFromTable(window)))
-    //        window = wxGetWindowParent(window);
-
     // Because we're receiving events after a window
     // has been destroyed, assume a 1:1 match between
     // Window and wxWindow, so if it's not in the table,
@@ -399,6 +459,18 @@ void wxApp::ProcessXEvent(WXEvent* _event)
             }
             return;
         }
+        case ConfigureNotify:
+        {
+            // Not clear if this is the same in NanoX
+            if (win)
+            {
+                wxSizeEvent sizeEvent( wxSize(event->xconfigure.width,event->xconfigure.height), win->GetId() );
+                sizeEvent.SetEventObject( win );
+                
+                win->GetEventHandler()->ProcessEvent( sizeEvent );
+            }
+        }
+#if !wxUSE_NANOX
         case PropertyNotify:
         {
             HandlePropertyChange(_event);
@@ -424,19 +496,9 @@ void wxApp::ProcessXEvent(WXEvent* _event)
             }
             return;
         }
-        case ConfigureNotify:
-        {
-            if (win)
-            {
-                wxSizeEvent sizeEvent( wxSize(event->xconfigure.width,event->xconfigure.height), win->GetId() );
-                sizeEvent.SetEventObject( win );
-                
-                win->GetEventHandler()->ProcessEvent( sizeEvent );
-            }
-        }
         case ResizeRequest:
         {
-            /* Terry Gitnick <terryg@scientech.com> - 1/21/98
+            /*
             * If resize event, don't resize until the last resize event for this
             * window is recieved. Prevents flicker as windows are resized.
             */
@@ -448,9 +510,6 @@ void wxApp::ProcessXEvent(WXEvent* _event)
             report = * event;
             while( XCheckTypedWindowEvent (disp, actualWindow, ResizeRequest, &report));
             
-            // TODO: when implementing refresh optimization, we can use
-            // XtAddExposureToRegion to expand the window's paint region.
-
             if (win)
             {
                 wxSize sz = win->GetSize();
@@ -462,6 +521,17 @@ void wxApp::ProcessXEvent(WXEvent* _event)
 
             return;
         }
+#endif
+#if wxUSE_NANOX
+        case GR_EVENT_TYPE_CLOSE_REQ:
+        {
+            if (win)
+            {
+                win->Close(FALSE);
+            }
+            break;
+        }
+#endif
         case Expose:
         {
             if (win)
@@ -497,7 +567,9 @@ void wxApp::ProcessXEvent(WXEvent* _event)
         }
         case FocusIn:
             {
+#if !wxUSE_NANOX
                 if (win && event->xfocus.detail != NotifyPointer)
+#endif
                 {
                     wxLogDebug( "FocusIn from %s", win->GetName().c_str() );
                     
@@ -509,7 +581,9 @@ void wxApp::ProcessXEvent(WXEvent* _event)
             }
         case FocusOut:
             {
+#if !wxUSE_NANOX
                 if (win && event->xfocus.detail != NotifyPointer)
+#endif
                 {
                     wxLogDebug( "FocusOut from %s\n", win->GetName().c_str() );
                     
@@ -572,7 +646,7 @@ void wxApp::HandlePropertyChange(WXEvent *event)
 {
     // by default do nothing special
     // TODO: what to do for X11
-    // XtDispatchEvent((XEvent*) event); /* let Motif do the work */
+    // XtDispatchEvent((XEvent*) event);
 }
 
 void wxApp::OnIdle(wxIdleEvent& event)
@@ -671,7 +745,7 @@ void wxApp::DeletePendingObjects()
     }
 }
 
-// Create an application context
+// Create display, and other initialization
 bool wxApp::OnInitGui()
 {
     // Eventually this line will be removed, but for
@@ -682,8 +756,8 @@ bool wxApp::OnInitGui()
     if (!wxAppBase::OnInitGui())
 	return FALSE;
     
-
     GetMainColormap( wxApp::GetDisplay() );
+
     m_maxRequestSize = XMaxRequestSize( (Display*) wxApp::GetDisplay() );
 
     return TRUE;
@@ -763,8 +837,6 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
     return TRUE;
 }
-
-// TODO use XmGetPixmap (?) to get the really standard icons!
 
 // XPM hack: make the arrays const
 #define static static const

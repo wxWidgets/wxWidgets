@@ -35,7 +35,7 @@ class WXDLLEXPORT wxLog;
 class WXDLLEXPORT wxEventLoop;
 
 // ----------------------------------------------------------------------------
-// the wxApp class for Motif - see wxAppBase for more details
+// the wxApp class for wxX11 - see wxAppBase for more details
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxApp : public wxAppBase
@@ -99,11 +99,16 @@ public:
     // We need this before create the app
     static   WXDisplay* GetDisplay() { return ms_display; }
     static   WXDisplay* ms_display;
+
+    // Values that can be passed on the command line.
+    // Returns -1, -1 if none specified.
+    const wxSize& GetInitialSize() const { return m_initialSize; }
+    bool GetShowIconic() const { return m_showIconic; }
     
 public:
-    static long    sm_lastMessageTime;
-    int            m_nCmdShow;
-    
+    static long           sm_lastMessageTime;
+    bool                  m_showIconic;    
+    wxSize                m_initialSize;
 protected:
     bool                  m_keepGoing;
     
