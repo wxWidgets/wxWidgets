@@ -66,7 +66,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
 
 int wxFontDialog::ShowModal()
 {
-    DWORD flags = CF_SCREENFONTS | CF_NOSIMULATIONS;
+    // It should be OK to always use GDI simulations
+    DWORD flags = CF_SCREENFONTS /* | CF_NOSIMULATIONS */ ;
 
     LOGFONT logFont;
 
