@@ -449,16 +449,8 @@ bool wxSound::Create(int size, const wxByte* data)
     {
         // FIXME -- make this fully dynamic when plugins architecture is in
         // place
-#ifdef HAVE_SYS_SOUNDCARD_H
-        ms_backend = new wxSoundBackendOSS();
-        if (!ms_backend->IsAvailable())
-        {
-            wxDELETE(ms_backend);
-        }
-#endif
-
 #if wxUSE_LIBSDL
-        if (!ms_backend)
+        //if (!ms_backend)
         {
 #if !wxUSE_PLUGINS
             ms_backend = wxCreateSoundBackendSDL();
@@ -489,6 +481,17 @@ bool wxSound::Create(int size, const wxByte* data)
             }
 #endif
             if (ms_backend && !ms_backend->IsAvailable())
+            {
+                wxDELETE(ms_backend);
+            }
+        }
+#endif
+
+#ifdef HAVE_SYS_SOUNDCARD_H
+        if (!ms_backend)
+        {
+            ms_backend = new wxSoundBackendOSS();
+            if (!ms_backend->IsAvailable())
             {
                 wxDELETE(ms_backend);
             }
