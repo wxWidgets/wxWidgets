@@ -4,14 +4,15 @@ CHANGES.txt for wxPython
 
 2.3.3
 -----
-
 Added wxSplashScreen.
+
+Added wxGenericDirCtrl.
+
 
 
 
 2.3.2.1
 -------
-
 Changed (again) how the Python global interpreter lock is handled as
 well as the Python thread state.  This time it works on SMP machines
 without barfing and is also still compatible with Python debuggers.

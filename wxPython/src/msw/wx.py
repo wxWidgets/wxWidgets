@@ -249,6 +249,7 @@ wxTE_READONLY = wxc.wxTE_READONLY
 wxTE_MULTILINE = wxc.wxTE_MULTILINE
 wxTE_PROCESS_TAB = wxc.wxTE_PROCESS_TAB
 wxTE_RICH = wxc.wxTE_RICH
+wxTE_RICH2 = wxc.wxTE_RICH2
 wxTE_NO_VSCROLL = wxc.wxTE_NO_VSCROLL
 wxTE_AUTO_SCROLL = wxc.wxTE_AUTO_SCROLL
 wxTE_PROCESS_ENTER = wxc.wxTE_PROCESS_ENTER
@@ -641,6 +642,7 @@ wxBITMAP_TYPE_PICT = wxc.wxBITMAP_TYPE_PICT
 wxBITMAP_TYPE_PICT_RESOURCE = wxc.wxBITMAP_TYPE_PICT_RESOURCE
 wxBITMAP_TYPE_ICON = wxc.wxBITMAP_TYPE_ICON
 wxBITMAP_TYPE_ICON_RESOURCE = wxc.wxBITMAP_TYPE_ICON_RESOURCE
+wxBITMAP_TYPE_ANI = wxc.wxBITMAP_TYPE_ANI
 wxBITMAP_TYPE_MACCURSOR = wxc.wxBITMAP_TYPE_MACCURSOR
 wxBITMAP_TYPE_MACCURSOR_RESOURCE = wxc.wxBITMAP_TYPE_MACCURSOR_RESOURCE
 wxBITMAP_TYPE_ANY = wxc.wxBITMAP_TYPE_ANY
@@ -1446,12 +1448,6 @@ class wxTimer(wxPyTimer):
             self.SetOwner(evtHandler, id)
 
 #----------------------------------------------------------------------
-
-NULL = None  # For backwards compatibility only.  You should really be
-             # using None now.
-
-
-#----------------------------------------------------------------------
 # aliases
 
 wxColor      = wxColour
@@ -1462,7 +1458,10 @@ wxPen        = wxPyPen
 wxNoRefBitmap       = wxBitmap
 wxPyDefaultPosition = wxDefaultPosition
 wxPyDefaultSize     = wxDefaultSize
-
+NULL                = None
+wxSystemSettings_GetSystemColour = wxSystemSettings_GetColour
+wxSystemSettings_GetSystemFont   = wxSystemSettings_GetFont
+wxSystemSettings_GetSystemMetric = wxSystemSettings_GetMetric
 
 #----------------------------------------------------------------------
 # wxGTK sets the locale when initialized.  Doing this at the Python

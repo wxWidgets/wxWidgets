@@ -65,7 +65,7 @@ class TestPanel(wxPanel):
         wxPanel.__init__(self, parent, -1)
         self.log = log
 
-        scroller = wxSplitterScrolledWindow(self, -1, (50,50), (350, 250),
+        scroller = wxSplitterScrolledWindow(self, -1, #(50,50), (350, 250),
                                       style=wxNO_BORDER | wxCLIP_CHILDREN | wxVSCROLL)
         splitter = wxThinSplitterWindow(scroller, -1, style=wxSP_3DBORDER | wxCLIP_CHILDREN)
         splitter.SetSashSize(2)
@@ -83,6 +83,10 @@ class TestPanel(wxPanel):
         valueWindow.SetTreeCtrl(tree)
         tree.SetCompanionWindow(valueWindow)
 
+        sizer = wxBoxSizer(wxVERTICAL)
+        sizer.Add(scroller, 1, wxEXPAND|wxALL, 25)
+        self.SetAutoLayout(true)
+        self.SetSizer(sizer)
 
 
 #----------------------------------------------------------------------

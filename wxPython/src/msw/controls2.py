@@ -1119,6 +1119,151 @@ def wxPreTreeCtrl(*_args,**_kwargs):
     return val
 
 
+class wxDirItemDataPtr(wxObjectPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def SetNewDirName(self, *_args, **_kwargs):
+        val = apply(controls2c.wxDirItemData_SetNewDirName,(self,) + _args, _kwargs)
+        return val
+    def __setattr__(self,name,value):
+        if name == "m_path" :
+            controls2c.wxDirItemData_m_path_set(self,value)
+            return
+        if name == "m_name" :
+            controls2c.wxDirItemData_m_name_set(self,value)
+            return
+        if name == "m_isHidden" :
+            controls2c.wxDirItemData_m_isHidden_set(self,value)
+            return
+        if name == "m_isExpanded" :
+            controls2c.wxDirItemData_m_isExpanded_set(self,value)
+            return
+        if name == "m_isDir" :
+            controls2c.wxDirItemData_m_isDir_set(self,value)
+            return
+        self.__dict__[name] = value
+    def __getattr__(self,name):
+        if name == "m_path" : 
+            return controls2c.wxDirItemData_m_path_get(self)
+        if name == "m_name" : 
+            return controls2c.wxDirItemData_m_name_get(self)
+        if name == "m_isHidden" : 
+            return controls2c.wxDirItemData_m_isHidden_get(self)
+        if name == "m_isExpanded" : 
+            return controls2c.wxDirItemData_m_isExpanded_get(self)
+        if name == "m_isDir" : 
+            return controls2c.wxDirItemData_m_isDir_get(self)
+        raise AttributeError,name
+    def __repr__(self):
+        return "<C wxDirItemData instance at %s>" % (self.this,)
+class wxDirItemData(wxDirItemDataPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(controls2c.new_wxDirItemData,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxGenericDirCtrlPtr(wxControlPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(controls2c.wxGenericDirCtrl_Create,(self,) + _args, _kwargs)
+        return val
+    def ExpandPath(self, *_args, **_kwargs):
+        val = apply(controls2c.wxGenericDirCtrl_ExpandPath,(self,) + _args, _kwargs)
+        return val
+    def GetDefaultPath(self, *_args, **_kwargs):
+        val = apply(controls2c.wxGenericDirCtrl_GetDefaultPath,(self,) + _args, _kwargs)
+        return val
+    def SetDefaultPath(self, *_args, **_kwargs):
+        val = apply(controls2c.wxGenericDirCtrl_SetDefaultPath,(self,) + _args, _kwargs)
+        return val
+    def GetPath(self, *_args, **_kwargs):
+        val = apply(controls2c.wxGenericDirCtrl_GetPath,(self,) + _args, _kwargs)
+        return val
+    def GetFilePath(self, *_args, **_kwargs):
+        val = apply(controls2c.wxGenericDirCtrl_GetFilePath,(self,) + _args, _kwargs)
+        return val
+    def SetPath(self, *_args, **_kwargs):
+        val = apply(controls2c.wxGenericDirCtrl_SetPath,(self,) + _args, _kwargs)
+        return val
+    def ShowHidden(self, *_args, **_kwargs):
+        val = apply(controls2c.wxGenericDirCtrl_ShowHidden,(self,) + _args, _kwargs)
+        return val
+    def GetShowHidden(self, *_args, **_kwargs):
+        val = apply(controls2c.wxGenericDirCtrl_GetShowHidden,(self,) + _args, _kwargs)
+        return val
+    def GetFilter(self, *_args, **_kwargs):
+        val = apply(controls2c.wxGenericDirCtrl_GetFilter,(self,) + _args, _kwargs)
+        return val
+    def SetFilter(self, *_args, **_kwargs):
+        val = apply(controls2c.wxGenericDirCtrl_SetFilter,(self,) + _args, _kwargs)
+        return val
+    def GetFilterIndex(self, *_args, **_kwargs):
+        val = apply(controls2c.wxGenericDirCtrl_GetFilterIndex,(self,) + _args, _kwargs)
+        return val
+    def SetFilterIndex(self, *_args, **_kwargs):
+        val = apply(controls2c.wxGenericDirCtrl_SetFilterIndex,(self,) + _args, _kwargs)
+        return val
+    def GetRootId(self, *_args, **_kwargs):
+        val = apply(controls2c.wxGenericDirCtrl_GetRootId,(self,) + _args, _kwargs)
+        if val: val = wxTreeItemIdPtr(val) ; val.thisown = 1
+        return val
+    def GetTreeCtrl(self, *_args, **_kwargs):
+        val = apply(controls2c.wxGenericDirCtrl_GetTreeCtrl,(self,) + _args, _kwargs)
+        if val: val = wxTreeCtrlPtr(val) 
+        return val
+    def GetFilterListCtrl(self, *_args, **_kwargs):
+        val = apply(controls2c.wxGenericDirCtrl_GetFilterListCtrl,(self,) + _args, _kwargs)
+        if val: val = wxDirFilterListCtrlPtr(val) 
+        return val
+    def __repr__(self):
+        return "<C wxGenericDirCtrl instance at %s>" % (self.this,)
+class wxGenericDirCtrl(wxGenericDirCtrlPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(controls2c.new_wxGenericDirCtrl,_args,_kwargs)
+        self.thisown = 1
+        self._setOORInfo(self)
+
+
+
+def wxPreGenericDirCtrl(*_args,**_kwargs):
+    val = wxGenericDirCtrlPtr(apply(controls2c.new_wxPreGenericDirCtrl,_args,_kwargs))
+    val.thisown = 1
+    val._setOORInfo(val)
+    return val
+
+
+class wxDirFilterListCtrlPtr(wxChoicePtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(controls2c.wxDirFilterListCtrl_Create,(self,) + _args, _kwargs)
+        return val
+    def FillFilterList(self, *_args, **_kwargs):
+        val = apply(controls2c.wxDirFilterListCtrl_FillFilterList,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxDirFilterListCtrl instance at %s>" % (self.this,)
+class wxDirFilterListCtrl(wxDirFilterListCtrlPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(controls2c.new_wxDirFilterListCtrl,_args,_kwargs)
+        self.thisown = 1
+        self._setOORInfo(self)
+
+
+
+def wxPreDirFilterListCtrl(*_args,**_kwargs):
+    val = wxDirFilterListCtrlPtr(apply(controls2c.new_wxPreDirFilterListCtrl,_args,_kwargs))
+    val.thisown = 1
+    val._setOORInfo(val)
+    return val
+
+
 
 
 #-------------- FUNCTION WRAPPERS ------------------
@@ -1266,3 +1411,7 @@ wxEVT_COMMAND_TREE_ITEM_ACTIVATED = controls2c.wxEVT_COMMAND_TREE_ITEM_ACTIVATED
 wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK = controls2c.wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK
 wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK = controls2c.wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK
 wxEVT_COMMAND_TREE_END_DRAG = controls2c.wxEVT_COMMAND_TREE_END_DRAG
+wxDIRCTRL_DIR_ONLY = controls2c.wxDIRCTRL_DIR_ONLY
+wxDIRCTRL_SELECT_FIRST = controls2c.wxDIRCTRL_SELECT_FIRST
+wxDIRCTRL_SHOW_FILTERS = controls2c.wxDIRCTRL_SHOW_FILTERS
+wxDIRCTRL_3D_INTERNAL = controls2c.wxDIRCTRL_3D_INTERNAL

@@ -916,6 +916,130 @@ static PyObject *_wrap_new_wxICOHandler(PyObject *self, PyObject *args, PyObject
     return _resultobj;
 }
 
+static void *SwigwxCURHandlerTowxICOHandler(void *ptr) {
+    wxCURHandler *src;
+    wxICOHandler *dest;
+    src = (wxCURHandler *) ptr;
+    dest = (wxICOHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxCURHandlerTowxBMPHandler(void *ptr) {
+    wxCURHandler *src;
+    wxBMPHandler *dest;
+    src = (wxCURHandler *) ptr;
+    dest = (wxBMPHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxCURHandlerTowxImageHandler(void *ptr) {
+    wxCURHandler *src;
+    wxImageHandler *dest;
+    src = (wxCURHandler *) ptr;
+    dest = (wxImageHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxCURHandlerTowxObject(void *ptr) {
+    wxCURHandler *src;
+    wxObject *dest;
+    src = (wxCURHandler *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxCURHandler() (new wxCURHandler())
+static PyObject *_wrap_new_wxCURHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxCURHandler * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxCURHandler",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (wxCURHandler *)new_wxCURHandler();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxCURHandler_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+static void *SwigwxANIHandlerTowxCURHandler(void *ptr) {
+    wxANIHandler *src;
+    wxCURHandler *dest;
+    src = (wxANIHandler *) ptr;
+    dest = (wxCURHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxANIHandlerTowxICOHandler(void *ptr) {
+    wxANIHandler *src;
+    wxICOHandler *dest;
+    src = (wxANIHandler *) ptr;
+    dest = (wxICOHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxANIHandlerTowxBMPHandler(void *ptr) {
+    wxANIHandler *src;
+    wxBMPHandler *dest;
+    src = (wxANIHandler *) ptr;
+    dest = (wxBMPHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxANIHandlerTowxImageHandler(void *ptr) {
+    wxANIHandler *src;
+    wxImageHandler *dest;
+    src = (wxANIHandler *) ptr;
+    dest = (wxImageHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxANIHandlerTowxObject(void *ptr) {
+    wxANIHandler *src;
+    wxObject *dest;
+    src = (wxANIHandler *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxANIHandler() (new wxANIHandler())
+static PyObject *_wrap_new_wxANIHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxANIHandler * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxANIHandler",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (wxANIHandler *)new_wxANIHandler();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxANIHandler_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
 static void *SwigwxGIFHandlerTowxImageHandler(void *ptr) {
     wxGIFHandler *src;
     wxImageHandler *dest;
@@ -2891,6 +3015,8 @@ static PyMethodDef imagecMethods[] = {
 	 { "new_wxPCXHandler", (PyCFunction) _wrap_new_wxPCXHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPNMHandler", (PyCFunction) _wrap_new_wxPNMHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxGIFHandler", (PyCFunction) _wrap_new_wxGIFHandler, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxANIHandler", (PyCFunction) _wrap_new_wxANIHandler, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxCURHandler", (PyCFunction) _wrap_new_wxCURHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxICOHandler", (PyCFunction) _wrap_new_wxICOHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxBMPHandler", (PyCFunction) _wrap_new_wxBMPHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxJPEGHandler", (PyCFunction) _wrap_new_wxJPEGHandler, METH_VARARGS | METH_KEYWORDS },
@@ -2920,7 +3046,11 @@ static PyMethodDef imagecMethods[] = {
  */
 static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_signed_long","_long",0},
+    { "_wxBMPHandler","_wxANIHandler",SwigwxANIHandlerTowxBMPHandler},
+    { "_wxBMPHandler","_wxCURHandler",SwigwxCURHandlerTowxBMPHandler},
     { "_wxBMPHandler","_wxICOHandler",SwigwxICOHandlerTowxBMPHandler},
+    { "_wxICOHandler","_wxANIHandler",SwigwxANIHandlerTowxICOHandler},
+    { "_wxICOHandler","_wxCURHandler",SwigwxCURHandlerTowxICOHandler},
     { "_wxPrintQuality","_wxCoord",0},
     { "_wxPrintQuality","_int",0},
     { "_wxPrintQuality","_signed_int",0},
@@ -2934,6 +3064,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxImageHandler","_wxPCXHandler",SwigwxPCXHandlerTowxImageHandler},
     { "_wxImageHandler","_wxPNMHandler",SwigwxPNMHandlerTowxImageHandler},
     { "_wxImageHandler","_wxGIFHandler",SwigwxGIFHandlerTowxImageHandler},
+    { "_wxImageHandler","_wxANIHandler",SwigwxANIHandlerTowxImageHandler},
+    { "_wxImageHandler","_wxCURHandler",SwigwxCURHandlerTowxImageHandler},
     { "_wxImageHandler","_wxICOHandler",SwigwxICOHandlerTowxImageHandler},
     { "_wxImageHandler","_wxBMPHandler",SwigwxBMPHandlerTowxImageHandler},
     { "_wxImageHandler","_wxJPEGHandler",SwigwxJPEGHandlerTowxImageHandler},
@@ -2980,6 +3112,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxObject","_wxPCXHandler",SwigwxPCXHandlerTowxObject},
     { "_wxObject","_wxPNMHandler",SwigwxPNMHandlerTowxObject},
     { "_wxObject","_wxGIFHandler",SwigwxGIFHandlerTowxObject},
+    { "_wxObject","_wxANIHandler",SwigwxANIHandlerTowxObject},
+    { "_wxObject","_wxCURHandler",SwigwxCURHandlerTowxObject},
     { "_wxObject","_wxICOHandler",SwigwxICOHandlerTowxObject},
     { "_wxObject","_wxBMPHandler",SwigwxBMPHandlerTowxObject},
     { "_wxObject","_wxJPEGHandler",SwigwxJPEGHandlerTowxObject},
@@ -2987,6 +3121,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxObject","_wxImageHandler",SwigwxImageHandlerTowxObject},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
+    { "_wxCURHandler","_wxANIHandler",SwigwxANIHandlerTowxCURHandler},
     { "_unsigned_char","_byte",0},
     { "_unsigned_int","_wxCoord",0},
     { "_unsigned_int","_wxPrintQuality",0},

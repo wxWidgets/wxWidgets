@@ -571,12 +571,6 @@ class wxTimer(wxPyTimer):
             self.SetOwner(evtHandler, id)
 
 #----------------------------------------------------------------------
-
-NULL = None  # For backwards compatibility only.  You should really be
-             # using None now.
-
-
-#----------------------------------------------------------------------
 # aliases
 
 wxColor      = wxColour
@@ -587,7 +581,10 @@ wxPen        = wxPyPen
 wxNoRefBitmap       = wxBitmap
 wxPyDefaultPosition = wxDefaultPosition
 wxPyDefaultSize     = wxDefaultSize
-
+NULL                = None
+wxSystemSettings_GetSystemColour = wxSystemSettings_GetColour
+wxSystemSettings_GetSystemFont   = wxSystemSettings_GetFont
+wxSystemSettings_GetSystemMetric = wxSystemSettings_GetMetric
 
 #----------------------------------------------------------------------
 # wxGTK sets the locale when initialized.  Doing this at the Python

@@ -30,7 +30,6 @@
 #ifdef __WXGTK__
 #include <wx/checklst.h>
 #endif
-
 %}
 
 //----------------------------------------------------------------------
@@ -740,6 +739,8 @@ public:
     wxString GetValue() const;
     void SetValue(const wxString& value);
 
+    wxString GetRange(long from, long to);
+
     int GetLineLength(long lineNo) const;
     wxString GetLineText(long lineNo) const;
     int GetNumberOfLines() const;
@@ -782,7 +783,10 @@ public:
     // considering all its contents as a single strings) and (x, y) coordinates
     // which represent column and line.
     long XYToPosition(long x, long y) const;
-    bool PositionToXY(long pos, long *OUTPUT, long *OUTPUT) const;
+    void PositionToXY(long pos, long *OUTPUT, long *OUTPUT) const;
+
+    //bool PositionToXY(long pos, long *OUTPUT, long *OUTPUT) const;
+    // TODO: check return value, raise exception.
 
     void ShowPosition(long pos);
 
@@ -1119,6 +1123,7 @@ public:
 };
 
 #endif
+
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------

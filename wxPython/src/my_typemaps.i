@@ -312,6 +312,23 @@
     $target = t_output_helper($target, o);
 }
 
+
+%typemap(python,ignore) bool *T_OUTPUT(int temp)
+{
+  $target = (bool*)&temp;
+}
+
+%typemap(python,argout) bool *T_OUTPUT
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*$source));
+    $target = t_output_helper($target, o);
+}
+
+
+%typemap(python,ignore) bool  *OUTPUT = bool *T_OUTPUT;
+%typemap(python,argout) bool  *OUTPUT = bool *T_OUTPUT;
+
 //---------------------------------------------------------------------------
 // Typemaps to convert return values that are base class pointers
 // to the real derived type, if possible.  See wxPyMake_wxObject in

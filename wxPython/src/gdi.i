@@ -554,6 +554,9 @@ public:
     bool GetUnderlined() const;
     wxString GetFaceName() const;
     wxFontEncoding GetEncoding() const;
+
+    bool IsFixedWidth();
+
     wxNativeFontInfo* GetNativeFontInfo() const;
     wxString GetNativeFontInfoDesc() const;
     wxString GetNativeFontInfoUserDesc() const;

@@ -75,6 +75,16 @@ public:
     wxICOHandler();
 };
 
+class wxCURHandler : public wxICOHandler {
+public:
+    wxCURHandler();
+};
+
+class wxANIHandler : public wxCURHandler {
+public:
+    wxANIHandler();
+};
+
 class wxGIFHandler : public wxImageHandler {
 public:
     wxGIFHandler();
@@ -94,6 +104,7 @@ class wxTIFFHandler : public wxImageHandler {
 public:
     wxTIFFHandler();
 };
+
 
 
 //---------------------------------------------------------------------------

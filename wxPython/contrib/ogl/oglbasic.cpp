@@ -3801,33 +3801,25 @@ static PyObject *_wrap_wxPyShape_GetFixedSize(PyObject *self, PyObject *args, Py
     PyObject * _resultobj;
     wxPyShape * _arg0;
     bool * _arg1;
+    int  temp;
     bool * _arg2;
+    int  temp0;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    PyObject * _argo2 = 0;
-    char *_kwnames[] = { "self","OUTPUT","OUTPUT", NULL };
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyShape_GetFixedSize",_kwnames,&_argo0,&_argo1,&_argo2)) 
+{
+  _arg1 = (bool*)&temp;
+}
+{
+  _arg2 = (bool*)&temp0;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyShape_GetFixedSize",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyShape_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyShape_GetFixedSize. Expected _wxPyShape_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_bool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyShape_GetFixedSize. Expected _bool_p.");
-        return NULL;
-        }
-    }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_bool_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxPyShape_GetFixedSize. Expected _bool_p.");
         return NULL;
         }
     }
@@ -3839,6 +3831,16 @@ static PyObject *_wrap_wxPyShape_GetFixedSize(PyObject *self, PyObject *args, Py
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg1));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
+}
     return _resultobj;
 }
 

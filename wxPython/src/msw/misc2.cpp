@@ -2362,67 +2362,6 @@ static PyObject *_wrap_wxSystemSettings_HasFeature(PyObject *self, PyObject *arg
     return _resultobj;
 }
 
-static PyObject *_wrap_wxSystemSettings_GetSystemColour(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxColour * _result;
-    int  _arg0;
-    char *_kwnames[] = { "index", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxSystemSettings_GetSystemColour",_kwnames,&_arg0)) 
-        return NULL;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = new wxColour (wxSystemSettings::GetColour(_arg0));
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-static PyObject *_wrap_wxSystemSettings_GetSystemFont(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxFont * _result;
-    int  _arg0;
-    char *_kwnames[] = { "index", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxSystemSettings_GetSystemFont",_kwnames,&_arg0)) 
-        return NULL;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = new wxFont (wxSystemSettings::GetFont(_arg0));
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxFont_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-static PyObject *_wrap_wxSystemSettings_GetSystemMetric(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    int  _arg0;
-    char *_kwnames[] = { "index", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxSystemSettings_GetSystemMetric",_kwnames,&_arg0)) 
-        return NULL;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (int )wxSystemSettings::GetMetric(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
 static void *SwigwxToolTipTowxObject(void *ptr) {
     wxToolTip *src;
     wxObject *dest;
@@ -4549,6 +4488,34 @@ static PyObject *_wrap_new_wxStopWatch(PyObject *self, PyObject *args, PyObject 
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+    return _resultobj;
+}
+
+#define delete_wxStopWatch(_swigobj) (delete _swigobj)
+static PyObject *_wrap_delete_wxStopWatch(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStopWatch * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxStopWatch",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStopWatch_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxStopWatch. Expected _wxStopWatch_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        delete_wxStopWatch(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -10386,6 +10353,7 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxStopWatch_Resume", (PyCFunction) _wrap_wxStopWatch_Resume, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStopWatch_Pause", (PyCFunction) _wrap_wxStopWatch_Pause, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStopWatch_Start", (PyCFunction) _wrap_wxStopWatch_Start, METH_VARARGS | METH_KEYWORDS },
+	 { "delete_wxStopWatch", (PyCFunction) _wrap_delete_wxStopWatch, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxStopWatch", (PyCFunction) _wrap_new_wxStopWatch, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyTimer_Stop", (PyCFunction) _wrap_wxPyTimer_Stop, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyTimer_Start", (PyCFunction) _wrap_wxPyTimer_Start, METH_VARARGS | METH_KEYWORDS },
@@ -10448,9 +10416,6 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxToolTip_GetTip", (PyCFunction) _wrap_wxToolTip_GetTip, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolTip_SetTip", (PyCFunction) _wrap_wxToolTip_SetTip, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxToolTip", (PyCFunction) _wrap_new_wxToolTip, METH_VARARGS | METH_KEYWORDS },
-	 { "wxSystemSettings_GetSystemMetric", (PyCFunction) _wrap_wxSystemSettings_GetSystemMetric, METH_VARARGS | METH_KEYWORDS },
-	 { "wxSystemSettings_GetSystemFont", (PyCFunction) _wrap_wxSystemSettings_GetSystemFont, METH_VARARGS | METH_KEYWORDS },
-	 { "wxSystemSettings_GetSystemColour", (PyCFunction) _wrap_wxSystemSettings_GetSystemColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSystemSettings_HasFeature", (PyCFunction) _wrap_wxSystemSettings_HasFeature, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSystemSettings_GetMetric", (PyCFunction) _wrap_wxSystemSettings_GetMetric, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSystemSettings_GetFont", (PyCFunction) _wrap_wxSystemSettings_GetFont, METH_VARARGS | METH_KEYWORDS },

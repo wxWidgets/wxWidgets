@@ -20,6 +20,7 @@
 #include <wx/listctrl.h>
 #include <wx/treectrl.h>
 #include <wx/imaglist.h>
+#include <wx/dirctrl.h>
 %}
 
 //----------------------------------------------------------------------
@@ -1279,6 +1280,121 @@ public:
 };
 
 
+//----------------------------------------------------------------------
+
+
+enum {
+    wxDIRCTRL_DIR_ONLY,
+    wxDIRCTRL_SELECT_FIRST,
+    wxDIRCTRL_SHOW_FILTERS,
+    wxDIRCTRL_3D_INTERNAL,
+};
+
+
+class wxDirItemData : public wxObject // wxTreeItemData
+{
+public:
+  wxDirItemData(const wxString& path, const wxString& name, bool isDir);
+//  ~wxDirItemDataEx();
+  void SetNewDirName( wxString path );
+  wxString m_path, m_name;
+  bool m_isHidden;
+  bool m_isExpanded;
+  bool m_isDir;
+};
+
+
+class wxGenericDirCtrl: public wxControl
+{
+public:
+    wxGenericDirCtrl(wxWindow *parent, const wxWindowID id = -1,
+                     const wxString &dir = wxDirDialogDefaultFolderStr,
+                     const wxPoint& pos = wxDefaultPosition,
+                     const wxSize& size = wxDefaultSize,
+                     long style = wxDIRCTRL_3D_INTERNAL|wxSUNKEN_BORDER,
+                     const wxString& filter = wxEmptyString,
+                     int defaultFilter = 0,
+                     const wxString& name = "dirCtrl" );
+    %name(wxPreGenericDirCtrl)wxGenericDirCtrl();
+
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreGenericDirCtrl:val._setOORInfo(val)"
+
+    bool Create(wxWindow *parent, const wxWindowID id = -1,
+                const wxString &dir = wxDirDialogDefaultFolderStr,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxDIRCTRL_3D_INTERNAL|wxSUNKEN_BORDER,
+                const wxString& filter = wxEmptyString,
+                int defaultFilter = 0,
+                const wxString& name = "treeCtrl" );
+
+
+    // Try to expand as much of the given path as possible.
+    bool ExpandPath(const wxString& path);
+
+    // Accessors
+
+    inline wxString GetDefaultPath() const;
+    void SetDefaultPath(const wxString& path);
+
+    // Get dir or filename
+    wxString GetPath() const ;
+
+    // Get selected filename path only (else empty string).
+    // I.e. don't count a directory as a selection
+    wxString GetFilePath() const ;
+    void SetPath(const wxString& path) ;
+
+    void ShowHidden( bool show );
+    bool GetShowHidden();
+
+    wxString GetFilter() const;
+    void SetFilter(const wxString& filter);
+
+    int GetFilterIndex() const;
+    void SetFilterIndex(int n) ;
+
+    wxTreeItemId GetRootId();
+
+    wxTreeCtrl* GetTreeCtrl() const;
+    wxDirFilterListCtrl* GetFilterListCtrl() const;
+
+//  //// Helpers
+//      void SetupSections();
+//      // Parse the filter into an array of filters and an array of descriptions
+//      int ParseFilter(const wxString& filterStr, wxArrayString& filters, wxArrayString& descriptions);
+//      // Find the child that matches the first part of 'path'.
+//      // E.g. if a child path is "/usr" and 'path' is "/usr/include"
+//      // then the child for /usr is returned.
+//      // If the path string has been used (we're at the leaf), done is set to TRUE
+//      wxTreeItemId FindChild(wxTreeItemId parentId, const wxString& path, bool& done);
+};
+
+
+class wxDirFilterListCtrl: public wxChoice
+{
+public:
+    wxDirFilterListCtrl(wxGenericDirCtrl* parent, const wxWindowID id = -1,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        long style = 0);
+    %name(wxPreDirFilterListCtrl)wxDirFilterListCtrl();
+
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreDirFilterListCtrl:val._setOORInfo(val)"
+
+    bool Create(wxGenericDirCtrl* parent, const wxWindowID id = -1,
+              const wxPoint& pos = wxDefaultPosition,
+              const wxSize& size = wxDefaultSize,
+              long style = 0);
+
+//// Operations
+    void FillFilterList(const wxString& filter, int defaultFilter);
+};
+
+
+//----------------------------------------------------------------------
 //----------------------------------------------------------------------
 
 %init %{

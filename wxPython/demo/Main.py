@@ -22,25 +22,7 @@ import images
 
 
 _treeList = [
-    ('New since last release', ['ContextHelp',
-                                'PyCrust',
-                                'PyCrustWithFilling',
-                                'VirtualListCtrl',
-                                'wxListCtrl',
-                                'TablePrint',
-                                'OOR',
-                                'wxFindReplaceDialog',
-                                'DrawXXXList',
-                                'ErrorDialogs',
-                                'wxRightTextCtrl',
-                                'URLDragAndDrop',
-                                'wxMimeTypesManager',
-                                'wxPopupWindow',
-                                'wxDynamicSashWindow',
-                                'wxEditableListBox',
-                                'SplitTree',
-                                'wxLEDNumberCtrl',
-                                'wxEditor',
+    ('New since last release', ['wxGenericDirCtrl',
                                 ]),
 
     ('Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame',
@@ -60,7 +42,8 @@ _treeList = [
                         ]),
 
     ('Controls', ['wxButton', 'wxCheckBox', 'wxCheckListBox', 'wxChoice',
-                  'wxComboBox', 'wxGauge', 'wxListBox', 'wxListCtrl', 'wxTextCtrl',
+                  'wxComboBox', 'wxGauge', 'wxListBox', 'wxListCtrl', 'VirtualListCtrl',
+                  'wxTextCtrl',
                   'wxTreeCtrl', 'wxSpinButton', 'wxSpinCtrl', 'wxStaticText',
                   'wxStaticBitmap', 'wxRadioBox', 'wxSlider', 'wxToolBar',
                   'wxCalendarCtrl', 'wxToggleButton',
@@ -77,7 +60,7 @@ _treeList = [
                         'ActiveXWrapper_Acrobat', 'ActiveXWrapper_IE',
                         'wxDragImage', "wxProcess", "FancyText", "OOR", "wxWave",
                         'wxJoystick', 'DrawXXXList', 'ErrorDialogs', 'wxMimeTypesManager',
-                        'SplitTree',
+                        'ContextHelp', 'SplitTree',
                         ]),
 
     ('wxPython Library', ['Layoutf', 'wxScrolledMessageDialog',
@@ -85,7 +68,8 @@ _treeList = [
                           'wxCalendar', 'wxMVCTree', 'wxVTKRenderWindow',
                           'FileBrowseButton', 'GenericButtons', 'wxEditor',
                           'ColourSelect', 'ImageBrowser',
-                          'infoframe', 'ColourDB', 'PyCrust', 'TablePrint',
+                          'infoframe', 'ColourDB', 'PyCrust', 'PyCrustWithFilling',
+                          'TablePrint',
                           'wxRightTextCtrl',
                           ]),
 
@@ -511,7 +495,7 @@ class MySplashScreen(wxSplashScreen):
 class MyApp(wxApp):
     def OnInit(self):
         """
-        Create and show the splash screen.  It will then create and show 
+        Create and show the splash screen.  It will then create and show
         the main frame when it is time to do so.
         """
         wxInitAllImageHandlers()

@@ -285,13 +285,6 @@ public:
     // return true if the port has certain feature
     static bool HasFeature(wxSystemFeature index);
 
-
-    // the backwards compatible versions, don't use these methods in the new
-    // code!
-    static wxColour GetSystemColour(int index);
-    static wxFont GetSystemFont(int index);
-    static int GetSystemMetric(int index);
-
 };
 
 
@@ -541,6 +534,7 @@ class wxStopWatch
 public:
     // ctor starts the stop watch
     wxStopWatch();
+    ~wxStopWatch();
     void Start(long t = 0);
     void Pause();
     void Resume();

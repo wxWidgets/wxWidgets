@@ -387,6 +387,9 @@ class wxFontPtr(wxGDIObjectPtr):
     def GetEncoding(self, *_args, **_kwargs):
         val = apply(gdic.wxFont_GetEncoding,(self,) + _args, _kwargs)
         return val
+    def IsFixedWidth(self, *_args, **_kwargs):
+        val = apply(gdic.wxFont_IsFixedWidth,(self,) + _args, _kwargs)
+        return val
     def GetNativeFontInfo(self, *_args, **_kwargs):
         val = apply(gdic.wxFont_GetNativeFontInfo,(self,) + _args, _kwargs)
         if val: val = wxNativeFontInfoPtr(val) 

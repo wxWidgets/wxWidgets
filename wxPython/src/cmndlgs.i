@@ -83,6 +83,7 @@ public:
     int ShowModal();
 };
 
+
 //----------------------------------------------------------------------
 
 class wxFileDialog : public wxDialog {
