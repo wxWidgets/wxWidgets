@@ -252,8 +252,13 @@ int wxFileDialog::ShowModal()
         programmer needs the PLACES BAR (left side of dlg) they
         just shouldn't move or center the dlg.
     */
-    if (m_bMovedWindow) // we need the these flags.
-        msw_flags |= OFN_EXPLORER|OFN_ENABLEHOOK|OFN_ENABLESIZING;
+    if (m_bMovedWindow) // we need these flags.
+    {
+        msw_flags |= OFN_EXPLORER|OFN_ENABLEHOOK;
+#ifndef __WXWINCE__
+        msw_flags |= OFN_ENABLESIZING;
+#endif
+    }
 
     if (m_dialogStyle & wxMULTIPLE )
     {
