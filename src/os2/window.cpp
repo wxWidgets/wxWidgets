@@ -2154,7 +2154,7 @@ MRESULT wxWindow::OS2WindowProc(
 
         // wxFrame specific message
         case WM_MINMAXFRAME:
-            bProcessed = HandleGetMinMaxInfo((PSWP)lParam);
+            bProcessed = HandleGetMinMaxInfo((PSWP)wParam);
             break;
 
         case WM_SYSVALUECHANGED:
