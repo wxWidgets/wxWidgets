@@ -122,10 +122,10 @@ public:
 
 private:
     int OpenDSP(const wxSoundData *data);
-    bool InitDSP(int dev, int iDataBits, int iChannel,
-                 unsigned long ulSamplingRate);
+    bool InitDSP(int dev, const wxSoundData *data);
     
     int m_DSPblkSize;        // Size of the DSP buffer
+    bool m_needConversion;
 };
 
 bool wxSoundBackendOSS::IsAvailable() const
@@ -147,7 +147,7 @@ bool wxSoundBackendOSS::Play(wxSoundData *data, unsigned flags,
         return false;
 
     ioctl(dev, SNDCTL_DSP_SYNC, 0);
- 
+
     do
     {
         bool play = true;
@@ -165,7 +165,7 @@ bool wxSoundBackendOSS::Play(wxSoundData *data, unsigned flags,
             }
 
             i= (int)((l + m_DSPblkSize) < datasize ?
-                    m_DSPblkSize : (datasize - l));
+                     m_DSPblkSize : (datasize - l));
             if (write(dev, &data->m_data[l], i) != i)
             {
                 play = false;
@@ -173,9 +173,8 @@ bool wxSoundBackendOSS::Play(wxSoundData *data, unsigned flags,
             l += i;
         } while (play && l < datasize);
     } while (flags & wxSOUND_LOOP);
-
-    close(dev);
     
+    close(dev);
     return true;
 }
 
@@ -186,10 +185,7 @@ int wxSoundBackendOSS::OpenDSP(const wxSoundData *data)
     if ((dev = open(AUDIODEV, O_WRONLY, 0)) <0)
         return -1;
   
-    if (!InitDSP(dev,
-                 (int)data->m_bitsPerSample,
-                 data->m_channels == 1 ? 0 : 1,
-                 data->m_samplingRate))
+    if (!InitDSP(dev, data) || m_needConversion)
     {
         close(dev);
         return -1;
@@ -198,23 +194,80 @@ int wxSoundBackendOSS::OpenDSP(const wxSoundData *data)
     return dev;
 }
 
-bool wxSoundBackendOSS::InitDSP(int dev, int iDataBits, int iChannel,
-                               unsigned long ulSamplingRate)
+
+bool wxSoundBackendOSS::InitDSP(int dev, const wxSoundData *data)
 {
+    unsigned tmp;
+
+    // Reset the dsp
+    if (ioctl(dev, SNDCTL_DSP_RESET, 0) < 0)
+    {
+        wxLogTrace(_T("sound"), _T("unable to reset dsp"));
+        return false;
+    }
+
+    m_needConversion = false;
+                
+    tmp = data->m_bitsPerSample;
+    if (ioctl(dev, SNDCTL_DSP_SAMPLESIZE, &tmp) < 0)
+    {
+        wxLogTrace(_T("sound"), _T("IOCTL failure (SNDCTL_DSP_SAMPLESIZE)"));
+        return false;
+    }
+    if (tmp != data->m_bitsPerSample)
+    {
+        wxLogTrace(_T("sound"),
+                   _T("Unable to set DSP sample size to %d (wants %d)"),
+                   data->m_bitsPerSample, tmp);
+        m_needConversion = true;
+    }        
+        
+    unsigned stereo = data->m_channels == 1 ? 0 : 1;
+    tmp = stereo;
+    if (ioctl(dev, SNDCTL_DSP_STEREO, &tmp) < 0)
+    {
+        wxLogTrace(_T("sound"), _T("IOCTL failure (SNDCTL_DSP_STEREO)"));
+        return false;
+    }
+    if (tmp != stereo)
+    {
+	wxLogTrace(_T("sound"), _T("Unable to set DSP to %s."), stereo?  _T("stereo"):_T("mono"));
+        m_needConversion = true;
+    }
+
+    tmp = data->m_samplingRate;
+    if (ioctl(dev, SNDCTL_DSP_SPEED, &tmp) < 0)
+    {
+        wxLogTrace(_T("sound"), _T("IOCTL failure (SNDCTL_DSP_SPEED)"));
+       return false;
+    }
+    if (tmp != data->m_samplingRate)
+    {
+        // If the rate the sound card is using is not within 1% of what the
+        // data specified then override the data setting.  The only reason not
+        // to always override this is because of clock-rounding
+        // problems. Sound cards will sometimes use things like 44101 when you
+        // ask for 44100.  No need overriding this and having strange output
+        // file rates for something that we can't hear anyways.
+	if (data->m_samplingRate - tmp > (tmp * .01) || 
+	    tmp - data->m_samplingRate > (tmp * .01)) {
+	    wxLogTrace(_T("sound"),
+                       _T("Unable to set DSP sampling rate to %d (wants %d)"),
+                       data->m_samplingRate, tmp);
+            m_needConversion = true;
+	}
+    }
+
+    // Do this last because some drivers can adjust the buffer sized based on
+    // the sampling rate, etc.
     if (ioctl(dev, SNDCTL_DSP_GETBLKSIZE, &m_DSPblkSize) < 0)
+    {
+        wxLogTrace(_T("sound"), _T("IOCTL failure (SNDCTL_DSP_GETBLKSIZE)"));
         return false;
-    wxLogTrace(_T("sound"), _T("OSS block size: %i"), m_DSPblkSize);
-    if (m_DSPblkSize < 4096 || m_DSPblkSize > 65536)
-        return false;
-    if (ioctl(dev, SNDCTL_DSP_SAMPLESIZE, &iDataBits) < 0)
-        return false;
-    if (ioctl(dev, SNDCTL_DSP_STEREO, &iChannel) < 0)
-        return false;
-    if (ioctl(dev, SNDCTL_DSP_SPEED, &ulSamplingRate) < 0)
-        return false;
+    }
     return true;
 }
-
+   
 #endif // HAVE_SYS_SOUNDCARD_H
 
 // ----------------------------------------------------------------------------
