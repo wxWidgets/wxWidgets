@@ -325,13 +325,13 @@ static void DoCommonPreCleanup()
     // this will flush the old messages if any
     delete wxLog::SetActiveTarget(new wxLogStderr);
 #endif // wxUSE_LOG
-
-    wxModule::CleanUpModules();
 }
 
 // cleanup done after destroying wxTheApp
 static void DoCommonPostCleanup()
 {
+    wxModule::CleanUpModules();
+
     wxClassInfo::CleanUp();
 
     // we can't do this in wxApp itself because it doesn't know if argv had
