@@ -35,7 +35,7 @@ class TestComboBox(wx.Panel):
         cb.Bind(wx.EVT_SET_FOCUS, self.OnSetFocus)
         cb.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
 
-        # Once the combobox is set up, we append some more data to it.
+        # Once the combobox is set up, we can append some more data to it.
         cb.Append("foo", "This is some client data for this item")
 
         # This combobox is created with no values initially.
@@ -49,7 +49,7 @@ class TestComboBox(wx.Panel):
         self.Bind(wx.EVT_COMBOBOX, self.EvtComboBox, cb)
         self.Bind(wx.EVT_COMBOBOX, self.EvtText, cb)
 
-    # The user selects something, we go here.
+    # When the user selects something, we go here.
     def EvtComboBox(self, evt):
         cb = evt.GetEventObject()
         data = cb.GetClientData(cb.GetSelection())
