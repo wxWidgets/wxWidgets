@@ -165,7 +165,7 @@
                                   // Set this to 0 if your compiler can't cope
                                   // with omission of prototype parameters.
 
-#define wxUSE_ODBC                   1
+#define wxUSE_ODBC                   0
                                     // Define 1 to use ODBC classes
 
 
