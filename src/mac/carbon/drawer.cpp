@@ -52,7 +52,7 @@ bool wxDrawerWindow::Create(wxWindow *parent,
  wxWindowID id, const wxString& title,
  wxSize size, wxDirection edge, const wxString& name)
 {
-    wxASSERT_MSG(NULL != parent, "wxDrawerWindows must be attached to a parent window.");
+    wxASSERT_MSG(NULL != parent, wxT("wxDrawerWindows must be attached to a parent window."));
        
     // Constrain the drawer size to the parent window.
     const wxSize parentSize(parent->GetClientSize());

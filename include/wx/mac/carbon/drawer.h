@@ -36,7 +36,7 @@ public:
      const wxString& title,
      wxSize size = wxDefaultSize,
      wxDirection edge = wxLEFT,
-     const wxString& name = "drawerwindow")
+     const wxString& name = wxT("drawerwindow"))
     {
         this->Create(parent, id, title, size, edge, name);
     }
