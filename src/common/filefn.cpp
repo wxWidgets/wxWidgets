@@ -1028,12 +1028,21 @@ wxCopyFile (const wxString& file1, const wxString& file2)
       return FALSE;
     }
 
+  // VZ: should use a buffer here! (FIXME)
+  bool ok = TRUE;
   while ((ch = getc (fd1)) != EOF)
+  {
     (void) putc (ch, fd2);
+    if ( ferror(fd2) )
+    {
+        ok = FALSE;
+        break;
+    }
+  }
 
   fclose (fd1);
   fclose (fd2);
-  return TRUE;
+  return ok;
 }
 
 bool
