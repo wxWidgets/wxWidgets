@@ -524,14 +524,16 @@ void wxQueryNewPaletteEvent::CopyObject(wxObject& obj_d) const
 }
 
 wxWindowCreateEvent::wxWindowCreateEvent(wxWindow *win)
-                   : wxEvent(wxEVT_CREATE)
+                   : wxEvent()
 {
+    SetEventType(wxEVT_CREATE);
     SetEventObject(win);
 }
 
 wxWindowDestroyEvent::wxWindowDestroyEvent(wxWindow *win)
-                    : wxEvent(wxEVT_DESTROY)
+                    : wxEvent()
 {
+    SetEventType(wxEVT_DESTROY);
     SetEventObject(win);
 }
 
@@ -635,7 +637,7 @@ void wxEvtHandler::AddPendingEvent(wxEvent& event)
 
     // 2) Add this event handler to list of event handlers that
     //    have pending events.
-    
+
     wxENTER_CRIT_SECT(*wxPendingEventsLocker);
 
     if ( !wxPendingEvents )
@@ -644,7 +646,7 @@ void wxEvtHandler::AddPendingEvent(wxEvent& event)
 
     // 3) Inform the system that new pending events are somwehere,
     //    and that these should be processed in idle time.
-    
+
     wxWakeUpIdle();
 
     wxLEAVE_CRIT_SECT(*wxPendingEventsLocker);
@@ -663,7 +665,7 @@ void wxEvtHandler::ProcessPendingEvents()
     {
         wxEvent *event = (wxEvent *)node->Data();
         delete node;
-	
+
         // In ProcessEvent, new events might get added and
 	// we can safely leave the crtical section here.
 #if defined(__VISAGECPP__)
@@ -678,10 +680,10 @@ void wxEvtHandler::ProcessPendingEvents()
 #else
         wxENTER_CRIT_SECT( *m_eventsLocker);
 #endif
-	
+
         node = m_pendingEvents->First();
     }
-    
+
 #if defined(__VISAGECPP__)
     wxLEAVE_CRIT_SECT( m_eventsLocker);
 #else
@@ -852,7 +854,7 @@ bool wxEvtHandler::Disconnect( int id, int lastId, wxEventType eventType,
 {
     if (!m_dynamicEvents)
         return FALSE;
-	
+
     wxNode *node = m_dynamicEvents->First();
     while (node)
     {
