@@ -65,8 +65,8 @@ Currently wxWindows does not define Dump for derived classes, but
 programmers may wish to use it for their own applications. Be sure to
 call the Dump member of the class's base class to allow all information to be dumped.
 
-The implementation of this function just writes the class name of the object.
-If DEBUG is undefined or zero, the implementation is empty.
+The implementation of this function just writes the class name of the object
+in debug build (\_\_WXDEBUG\_\_ defined), otherwise it does nothing.
 
 \membersection{wxObject::GetClassInfo}\label{wxobjectgetclassinfo}
 
@@ -164,7 +164,7 @@ The {\bf m\_refData} member is set to NULL.
 \func{void *}{new}{\param{size\_t }{size}, \param{const wxString\& }{filename = NULL}, \param{int}{ lineNum = 0}}
 
 The {\it new} operator is defined for debugging versions of the library only, when
-the identifier DEBUG is defined and is more than zero. It takes over memory allocation, allowing
+the identifier \_\_WXDEBUG\_\_ is defined. It takes over memory allocation, allowing
 wxDebugContext operations.
 
 \membersection{wxObject::operator delete}\label{wxobjectdelete}
@@ -172,7 +172,7 @@ wxDebugContext operations.
 \func{void}{delete}{\param{void }{buf}}
 
 The {\it delete} operator is defined for debugging versions of the library only, when
-the identifier DEBUG is defined and is more than zero. It takes over memory deallocation, allowing
+the identifier \_\_WXDEBUG\_\_ is defined. It takes over memory deallocation, allowing
 wxDebugContext operations.
 
 \section{\class{wxObjectRefData}}\label{wxobjectrefdata}

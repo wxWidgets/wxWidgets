@@ -3,7 +3,7 @@
 A class for performing various debugging and memory tracing
 operations. Full functionality (such as printing out objects
 currently allocated) is only present in a debugging build of wxWindows,
-i.e. if the DEBUG symbol is defined and non-zero. wxDebugContext
+i.e. if the \_\_WXDEBUG\_\_ symbol is defined. wxDebugContext
 and related functions and macros can be compiled out by setting
 wxUSE\_DEBUG\_CONTEXT to 0 is setup.h
 
@@ -180,7 +180,7 @@ Sets the debug mode on or off. If debug mode is on, the wxObject new and delete
 operators store or use information about memory allocation. Otherwise,
 a straight malloc and free will be performed by these operators.
 
-By default, debug mode is on if DEBUG is non-zero. If the application
+By default, debug mode is on if \_\_WXDEBUG\_\_ is defined. If the application
 uses this function, it should make sure that all object memory allocated
 is deallocated with the same value of debug mode. Otherwise, the
 delete operator might try to look for memory information that does not
