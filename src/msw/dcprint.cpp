@@ -32,6 +32,7 @@
     #include "wx/string.h"
     #include "wx/log.h"
     #include "wx/window.h"
+    #include "wx/dcmemory.h"
 #endif
 
 #include "wx/msw/private.h"
