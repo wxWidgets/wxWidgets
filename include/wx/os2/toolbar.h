@@ -48,6 +48,11 @@ class WXDLLEXPORT wxToolBar: public wxToolBarBase
   wxToolBarTool *AddTool(int toolIndex, const wxBitmap& bitmap, const wxBitmap& pushedBitmap = wxNullBitmap,
                bool toggle = FALSE, long xPos = -1, long yPos = -1, wxObject *clientData = NULL,
                const wxString& helpString1 = "", const wxString& helpString2 = "");
+  //Virtual function hiding suppression
+  inline wxToolBarTool *AddTool(int toolIndex, const wxBitmap& bitmap, const wxBitmap& pushedBitmap = wxNullBitmap,
+                                bool toggle = FALSE, wxCoord xPos = -1, wxCoord yPos = -1, wxObject *clientData = NULL,
+                                const wxString& helpString1 = "", const wxString& helpString2 = "")
+  { return(AddTool(toolIndex, bitmap, pushedBitmap, toggle, (long)xPos, (long)yPos, clientData, helpString1, helpString2)); }
 
   // Set default bitmap size
   void SetToolBitmapSize(const wxSize& size);
@@ -81,12 +86,6 @@ protected:
   WXHBITMAP         m_hBitmap;
 
 DECLARE_EVENT_TABLE()
-private:
-  //Virtual function hiding suppression
-  inline wxToolBarTool *AddTool(int toolIndex, const wxBitmap& bitmap, const wxBitmap& pushedBitmap = wxNullBitmap,
-                                bool toggle = FALSE, wxCoord xPos = -1, wxCoord yPos = -1, wxObject *clientData = NULL,
-                                const wxString& helpString1 = "", const wxString& helpString2 = "")
-  { return(AddTool(toolIndex, bitmap, pushedBitmap, toggle, (long)xPos, (long)yPos, clientData, helpString1, helpString2)); }
 };
 
 #endif // wxUSE_TOOLBAR

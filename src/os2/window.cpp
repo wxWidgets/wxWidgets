@@ -124,71 +124,81 @@ END_EVENT_TABLE()
 // implementation
 // ===========================================================================
 
-// Find an item given the MS Windows id
-wxWindow *wxWindow::FindItem(long id) const
+// Find an item given the PM Window id
+wxWindow* wxWindow::FindItem(
+  long                              ulId
+) const
 {
-    wxWindowList::Node *current = GetChildren().GetFirst();
-    while (current)
+    wxWindowList::Node*             pCurrent = GetChildren().GetFirst();
+
+    while (pCurrent)
     {
-        wxWindow *childWin = current->GetData();
+        wxWindow*                   pChildWin = pCurrent->GetData();
+        wxWindow*                   pWnd = pChildWin->FindItem(ulId);
 
-        wxWindow *wnd = childWin->FindItem(id);
-        if ( wnd )
-            return wnd;
+        if (pWnd)
+            return pWnd;
 
-        if ( childWin->IsKindOf(CLASSINFO(wxControl)) )
+        if (pChildWin->IsKindOf(CLASSINFO(wxControl)))
         {
-            wxControl *item = (wxControl *)childWin;
-            if ( item->GetId() == id )
-                return item;
+            wxControl*              pItem = (wxControl *)pChildWin;
+
+            if (pItem->GetId() == ulId)
+                return(pItem);
             else
             {
                 // In case it's a 'virtual' control (e.g. radiobox)
-                if ( item->GetSubcontrols().Member((wxObject *)id) )
-                    return item;
+                if (pItem->GetSubcontrols().Member((wxObject *)ulId))
+                    return(pItem);
             }
         }
-
-        current = current->GetNext();
+        pCurrent = pCurrent->GetNext();
     }
-
-    return NULL;
+    return(NULL);
 }
 
-// Find an item given the MS Windows handle
-wxWindow *wxWindow::FindItemByHWND(WXHWND hWnd, bool controlOnly) const
+// Find an item given the PM Window handle
+wxWindow* wxWindow::FindItemByHWND(
+  WXHWND                            hWnd
+, bool                              bControlOnly
+) const
 {
-    wxWindowList::Node *current = GetChildren().GetFirst();
-    while (current)
+    wxWindowList::Node*             pCurrent = GetChildren().GetFirst();
+
+    while (pCurrent)
     {
-        wxWindow *parent = current->GetData();
+        wxWindow*                   pParent = pCurrent->GetData();
 
         // Do a recursive search.
-        wxWindow *wnd = parent->FindItemByHWND(hWnd);
-        if ( wnd )
-            return wnd;
+        wxWindow*                   pWnd = pParent->FindItemByHWND(hWnd);
 
-        if ( !controlOnly || parent->IsKindOf(CLASSINFO(wxControl)) )
+        if (pWnd)
+            return(pWnd);
+
+        if (!bControlOnly || pParent->IsKindOf(CLASSINFO(wxControl)))
         {
-            wxWindow *item = current->GetData();
-            if ( item->GetHWND() == hWnd )
-                return item;
+            wxWindow*               pItem = pCurrent->GetData();
+
+            if (pItem->GetHWND() == hWnd)
+                return(pItem);
             else
             {
-                if ( item->ContainsHWND(hWnd) )
-                    return item;
+                if (pItem->ContainsHWND(hWnd))
+                    return(pItem);
             }
         }
-
-        current = current->GetNext();
+        pCurrent = pCurrent->GetNext();
     }
-    return NULL;
+    return(NULL);
 }
 
 // Default command handler
-bool wxWindow::OS2Command(WXUINT WXUNUSED(param), WXWORD WXUNUSED(id))
+bool wxWindow::OS2Command(
+  WXUINT                            WXUNUSED(uParam)
+, WXWORD                            WXUNUSED(uId)
+)
 {
-    return FALSE;
+    return(FALSE);
 }
 
 // ----------------------------------------------------------------------------
@@ -201,13 +211,13 @@ void wxWindow::Init()
     InitBase();
 
     // PM specific
-    m_doubleClickAllowed = 0;
-    m_winCaptured = FALSE;
+    m_bDoubleClickAllowed = 0;
+    m_bWinCaptured = FALSE;
 
     m_isBeingDeleted = FALSE;
-    m_oldWndProc = 0;
-    m_useCtl3D = FALSE;
-    m_mouseInWindow = FALSE;
+    m_fnOldWndProc = 0;
+    m_bUseCtl3D = FALSE;
+    m_bMouseInWindow = FALSE;
 
     // wxWnd
     m_hMenu = 0;
@@ -217,17 +227,17 @@ void wxWindow::Init()
     // pass WM_GETDLGCODE to DefWindowProc()
     m_lDlgCode = 0;
 
-    m_xThumbSize = 0;
-    m_yThumbSize = 0;
-    m_backgroundTransparent = FALSE;
+    m_nXThumbSize = 0;
+    m_nYThumbSize = 0;
+    m_bBackgroundTransparent = FALSE;
 
     // as all windows are created with WS_VISIBLE style...
     m_isShown = TRUE;
 
 #if wxUSE_MOUSEEVENT_HACK
-    m_lastMouseX =
-    m_lastMouseY = -1;
-    m_lastMouseEvent = -1;
+    m_lLastMouseX =
+    m_lLastMouseY = -1;
+    m_nLastMouseEvent = -1;
 #endif // wxUSE_MOUSEEVENT_HACK
 }
 
@@ -250,30 +260,47 @@ wxWindow::~wxWindow()
     }
 }
 
-bool wxWindow::Create(wxWindow *parent, wxWindowID id,
-                      const wxPoint& pos,
-                      const wxSize& size,
-                      long style,
-                      const wxString& name)
+bool wxWindow::Create(
+  wxWindow*                         pParent
+, wxWindowID                        vId
+, const wxPoint&                    rPos
+, const wxSize&                     rSize
+, long                              lStyle
+, const wxString&                   rName
+)
 {
-    wxCHECK_MSG( parent, FALSE, wxT("can't create wxWindow without parent") );
+    wxCHECK_MSG(pParent, FALSE, wxT("can't create wxWindow without parent"));
 
-    if ( !CreateBase(parent, id, pos, size, style, wxDefaultValidator, name) )
-        return FALSE;
+    if ( !CreateBase( pParent
+                     ,vId
+                     ,rPos
+                     ,rSize
+                     ,lStyle
+                     ,wxDefaultValidator
+                     ,rName
+                    ))
+        return(FALSE);
 
-    parent->AddChild(this);
+    pParent->AddChild(this);
 
-    bool want3D;
-    WXDWORD exStyle = 0; // TODO: Determine3DEffects(WS_EX_CLIENTEDGE, &want3D);
-    DWORD   msflags = 0;
+    bool                            bWant3D;
+    WXDWORD                         dwExStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &bWant3D);
+    DWORD                           ulFlags = 0L;
 
-
-    // TODO: PM Specific initialization
-    OS2Create(m_windowId, parent, wxCanvasClassName, this, NULL,
-              pos.x, pos.y,
-              WidthDefault(size.x), HeightDefault(size.y),
-              msflags, NULL, exStyle);
-    return TRUE;
+    OS2Create( m_windowId
+              ,pParent
+              ,wxCanvasClassName
+              ,this
+              ,NULL
+              ,rPos.x
+              ,rPos.y
+              ,WidthDefault(rSize.x)
+              ,HeightDefault(rSize.y)
+              ,ulFlags
+              ,NULL
+              ,dwExStyle
+             );
+    return(TRUE);
 }
 
 // ---------------------------------------------------------------------------
@@ -435,7 +462,7 @@ void wxWindow::ScrollWindow( int           dx
 
 void wxWindow::SubclassWin(WXHWND hWnd)
 {
-    wxASSERT_MSG( !m_oldWndProc, wxT("subclassing window twice?") );
+    wxASSERT_MSG( !m_fnOldWndProc, wxT("subclassing window twice?") );
 
     HWND hwnd = (HWND)hWnd;
 /*
@@ -2071,10 +2098,10 @@ bool wxWindow::HandleMouseEvent(WXUINT msg, int x, int y, WXUINT flags)
 
 bool wxWindow::HandleMouseMove(int x, int y, WXUINT flags)
 {
-    if ( !m_mouseInWindow )
+    if ( !m_bMouseInWindow )
     {
         // Generate an ENTER event
-        m_mouseInWindow = TRUE;
+        m_bMouseInWindow = TRUE;
 
         wxMouseEvent event(wxEVT_ENTER_WINDOW);
         InitMouseEvent(event, x, y, flags);
