@@ -66,7 +66,7 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
 
 	MacCreateRealWindow( title , pos , size , MacRemoveBordersFromStyle(style)  , name ) ;
 
-	m_macWindowData->m_macWindowBackgroundTheme = kThemeBrushDialogBackgroundActive ;
+	m_macWindowBackgroundTheme = kThemeBrushDialogBackgroundActive ;
   return TRUE;
 }
 

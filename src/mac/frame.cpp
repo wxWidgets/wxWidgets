@@ -108,7 +108,7 @@ bool wxFrame::Create(wxWindow *parent,
 
   MacCreateRealWindow( title, pos , size , MacRemoveBordersFromStyle(style) , name ) ;
   
-	m_macWindowData->m_macWindowBackgroundTheme = kThemeBrushDocumentWindowBackground ;
+	m_macWindowBackgroundTheme = kThemeBrushDocumentWindowBackground ;
 
   wxModelessWindows.Append(this);
 
