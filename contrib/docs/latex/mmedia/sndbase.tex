@@ -205,10 +205,9 @@ It specifies the sound format the user needs. SetSoundFormat tries to
 apply the format to the current sound stream (it can be a sound file or a
 sound driver). Then, either it manages to apply it and it returns {\bf TRUE},
 or it could not and it returns {\bf FALSE}. In this case, you must check
-the error with
-\helpref{wxSoundStream::GetError}{wxsoundstreamgeterror}. See
-\helpref{wxSoundStream errors section}{wxsoundstreamerrors} for more details.
-
+the error with 
+\helpref{wxSoundStream::GetError}{wxsoundstreamgeterror}. See 
+\helpref{wxSoundStream errors section}{wxsoundstream} for more details.
 
 \wxheading{Note}
 
@@ -248,7 +247,7 @@ Each callback has its callback data.
 
 \func{bool}{StartProduction}{\param{int }{evt}}
 
-StartProduction starts the sound streaming. {\it evt} may be one of
+StartProduction starts the sound streaming. {\it evt} may be one of 
 {\bf wxSOUND\_INPUT}, {\bf wxSOUND\_OUTPUT} or {\bf wxSOUND\_DUPLEX}.
 You cannot specify several flags at the same time. Starting the production
 may automaticaly in position of buffer underrun (only in the case you activated
@@ -257,32 +256,39 @@ It is also advised that you fill quickly enough the sound IO queue when the
 driver requests it (through a wxSoundEvent).
 
 \membersection{wxSoundStream::StopProduction}\label{wxsoundstreamstopproduction}
+
 \func{bool}{StopProduction}{\void}
 
 I stops the async notifier and the sound streaming straightly.
 
 \membersection{wxSoundStream::SetEventHandler}\label{wxsoundstreamseteventhandler}
+
 \func{void}{SetEventHandler}{\param{wxSoundStream* }{handler}}
 
 Sets the event handler: if it is non-null, all events are routed to it.
 
 \membersection{wxSoundStream::GetError}\label{wxsoundstreamgeterror}
+
 \constfunc{wxSoundError}{GetError}{\void}
 
 It returns the last error which occured.
 
 \membersection{wxSoundStream::GetLastAccess}\label{wxsoundstreamgetlastaccess}
+
 \constfunc{wxUint32}{GetLastAccess}{\void}
 
 It returns the number of bytes which were effectively written to/read from the sound stream.
 
 \membersection{wxSoundStream::QueueFilled}\label{wxsoundstreamqueuefilled}
+
 \constfunc{bool}{QueueFilled}{\void}
 
 It returns whether the sound IO queue is full. When it is full, the next IO call will block
 until the IO queue has at least one empty entry.
 
 \membersection{wxSoundStream::OnSoundEvent}\label{wxsoundstreamonsoundevent}
+
 \func{void}{OnSoundEvent}{\param{int }{evt}}
 
 It is called by the wxSoundStream when a new sound event occured.
+

@@ -61,6 +61,9 @@ zip32 -@ %dest\wx%version%_cw.zip < %src\distrib\msw\cw.rsp
 rem OGL 3
 zip32 -@ %dest\ogl3.zip < %src\distrib\msw\ogl.rsp
 
+rem MMedia
+zip32 -@ %dest\mmedia.zip < %src\distrib\msw\mmedia.rsp
+
 rem GLCanvas: obsolete, now in main library
 rem zip32 -@ %dest\glcanvas.zip < %src\distrib\msw\glcanvas.rsp
 

@@ -30,8 +30,6 @@ program contains the following:
   VC++ IDE files;
 - JPEG library source;
 - Object Graphics Library;
-- wxGLCanvas library;
-- wxTreeLayout library;
 - Tex2RTF source;
 - Dialog Editor binary.
 
@@ -55,7 +53,7 @@ files into a suitable directory such as c:\wx.
 
 Other add-on packages are available from the wxWindows Web site, such as:
 
-- glcanvas.zip. Use OpenGL in a wxWindows window.
+- mmedia.zip. Audio, CD, video access for Windows and Linux.
 - ogl3.zip. Object Graphics Library: build network diagrams, CASE tools etc.
 - tex2rtf3.zip. Tex2RTF: create Windows Help, HTML, and Word RTF files from
   the same document source.

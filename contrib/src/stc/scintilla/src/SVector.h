@@ -95,9 +95,9 @@ public:
 		len = 0;
 	}
 	void SetLength(int newLen) {
-		if (newLength > len) {
-			if (newLength >= size) {
-				SizeTo(newLength);
+		if (newLen > len) {
+			if (newLen >= size) {
+				SizeTo(newLen);
 			}
 		}
 		len = newLen;

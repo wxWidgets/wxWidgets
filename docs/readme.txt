@@ -70,7 +70,7 @@ wx2_x_y_cw.zip             Metrowerks CodeWarrior 4.1 project files
 jpeg.zip                   Optional JPEG library
 tiff.zip                   Optional TIFF library
 ogl3.zip                   Optional Object Graphics Library
-glcanvas.zip               Optional wxGLCanvas class (Motif, GTK, MSW)
+mmedia.zip                 Optional MMedia class library (Motif, GTK, MSW)
 tex2rtf2.zip               Tex2RTF documentation tool
 
 wxWindows for GTK distribution

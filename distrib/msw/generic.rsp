@@ -193,22 +193,6 @@ contrib/configure
 contrib/configure.in
 contrib/lib/dummy
 
-contrib/include/wx/mmedia/*.h
-contrib/include/wx/mmedia/internal/*.h
-contrib/src/mmedia/makefile*
-contrib/src/mmedia/README
-contrib/src/mmedia/*.h
-contrib/src/mmedia/*.cpp
-contrib/samples/mmedia/*.h
-contrib/samples/mmedia/*.cpp
-contrib/samples/mmedia/makefile*
-contrib/samples/mmedia/*.xbm
-contrib/samples/mmedia/*.xpm
-contrib/samples/mmedia/*.ico
-contrib/samples/mmedia/*.txt
-contrib/samples/mmedia/*.rc
-contrib/samples/mmedia/*.def
-
 samples/*.txt
 samples/makefile*
 samples/configure

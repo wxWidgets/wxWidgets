@@ -1,3 +1,22 @@
+contrib/docs/html/stc/*.htm
+contrib/docs/html/stc/*.gif
+contrib/docs/html/stc/*.png
+contrib/docs/winhelp/stc.hlp
+contrib/docs/winhelp/stc.cnt
+contrib/docs/pdf/stc.pdf
+
+contrib/docs/latex/stc/*.tex
+contrib/docs/latex/stc/*.sty
+contrib/docs/latex/stc/*.bib
+contrib/docs/latex/stc/*.hpj
+contrib/docs/latex/stc/*.ini
+contrib/docs/latex/stc/*.txt
+contrib/docs/latex/stc/*.cnt
+contrib/docs/latex/stc/*.eps
+contrib/docs/latex/stc/*.bmp
+contrib/docs/latex/stc/*.gif
+contrib/docs/latex/stc/*.wmf
+
 contrib/src/stc/*.cpp
 contrib/src/stc/*.h
 contrib/src/stc/*.rc
@@ -8,7 +27,15 @@ contrib/src/stc/make*.*
 contrib/src/stc/*.txt
 contrib/src/stc/*.ico
 contrib/src/stc/*.bmp
+contrib/src/stc/StcVC.dsp
+contrib/src/stc/StcVC.dsw
+contrib/src/stc/README.txt
 
+contrib/src/stc/scintilla/README.txt
+contrib/src/stc/scintilla/include/*.h
+contrib/src/stc/scintilla/src/*.cpp
+contrib/src/stc/scintilla/src/*.cxx
+contrib/src/stc/scintilla/src/*.h
 contrib/include/wx/stc/*.h
 
 contrib/samples/stc/*.cpp
@@ -23,8 +50,6 @@ contrib/samples/stc/*.ico
 contrib/samples/stc/*.bmp
 contrib/samples/stc/*.xpm
 contrib/samples/stc/*.wxr
-contrib/samples/stc/bitmaps/*.bmp
-contrib/samples/stc/bitmaps/*.gif
-contrib/samples/stc/bitmaps/*.xbm
-contrib/samples/stc/bitmaps/*.xpm
+contrib/samples/stc/StcTestVC.dsp
+contrib/samples/stc/StcTestVC.dsw
 
