@@ -478,28 +478,26 @@ int wxEntry(
     {
         if (wxTheApp->OnInit())
         {
-            nRetValue = -1;
+            nRetValue = wxTheApp->OnRun();
+//          nRetValue = -1;
         }
     }
 
-    if (nRetValue == 0)
-    {
-        wxWindow*                   pTopWindow = wxTheApp->GetTopWindow();
+    wxWindow*                       pTopWindow = wxTheApp->GetTopWindow();
 
-        if (pTopWindow)
+    if (pTopWindow)
+    {
+        // Forcibly delete the window.
+        if (pTopWindow->IsKindOf(CLASSINFO(wxFrame)) ||
+            pTopWindow->IsKindOf(CLASSINFO(wxDialog)) )
         {
-            // Forcibly delete the window.
-            if (pTopWindow->IsKindOf(CLASSINFO(wxFrame)) ||
-                pTopWindow->IsKindOf(CLASSINFO(wxDialog)) )
-            {
-                pTopWindow->Close(TRUE);
-                wxTheApp->DeletePendingObjects();
-            }
-            else
-            {
-                delete pTopWindow;
-                wxTheApp->SetTopWindow(NULL);
-            }
+            pTopWindow->Close(TRUE);
+            wxTheApp->DeletePendingObjects();
+        }
+        else
+        {
+            delete pTopWindow;
+            wxTheApp->SetTopWindow(NULL);
         }
     }
     wxTheApp->OnExit();

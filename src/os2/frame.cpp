@@ -344,6 +344,14 @@ void wxFrame::DoShowWindow(
 {
     HWND                            hClient;
 
+    //
+    // Send anything to initialize the frame
+    //
+    ::WinSendMsg( GetHwnd()
+                 ,WM_UPDATEFRAME
+                 ,(MPARAM)FCF_MENU
+                 ,(MPARAM)0
+                );
     hClient = ::WinWindowFromID(GetHwnd(), FID_CLIENT);
     ::WinShowWindow(GetHwnd(), (BOOL)bShowCmd);
     ::WinShowWindow(hClient, (BOOL)bShowCmd);
@@ -898,6 +906,7 @@ bool wxFrame::OS2Create(
                            ,SWP_SIZE | SWP_MOVE
                           ))
         return FALSE;
+    WinQueryWindowPos(hClient, &vSwp);
     return TRUE;
 } // end of wxFrame::OS2Create
 
