@@ -141,45 +141,47 @@ bool wxNotebook::Create(wxWindow *parent,
                         long style,
                         const wxString& name)
 {
-  // base init
-  if ( !CreateBase(parent, id, pos, size, style, wxDefaultValidator, name) )
-      return FALSE;
+    // base init
+    if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
+        return FALSE;
 
-  parent->AddChild(this);
+    // notebook, so explicitly specify 0 as last parameter
+    if ( !MSWCreateControl(WC_TABCONTROL, _T(""), pos, size,
+                style | wxTAB_TRAVERSAL) )
+        return FALSE;
 
-  // style
-  m_windowStyle = style | wxTAB_TRAVERSAL;
+    SetBackgroundColour(wxColour(::GetSysColor(COLOR_BTNFACE)));
 
-  long tabStyle = WS_TABSTOP | TCS_TABS;
+    return TRUE;
+}
 
-  if ( m_windowStyle & wxBORDER )
-    tabStyle |= WS_BORDER;
-  if ( m_windowStyle & wxCLIP_SIBLINGS )
-    tabStyle |= WS_CLIPSIBLINGS;
-  if (m_windowStyle & wxCLIP_CHILDREN)
-    tabStyle |= WS_CLIPCHILDREN;
+WXDWORD wxNotebook::MSWGetStyle(long style, WXDWORD *exstyle) const
+{
+    WXDWORD tabStyle = wxControl::MSWGetStyle(style, exstyle);
 
-  if ( m_windowStyle & wxTC_MULTILINE )
-    tabStyle |= TCS_MULTILINE;
-  if (m_windowStyle & wxNB_FIXEDWIDTH)
-    tabStyle |= TCS_FIXEDWIDTH ;
-  if (m_windowStyle & wxNB_BOTTOM)
-    tabStyle |= TCS_RIGHT;
-  if (m_windowStyle & wxNB_LEFT)
-    tabStyle |= TCS_VERTICAL;
-  if (m_windowStyle & wxNB_RIGHT)
-    tabStyle |= TCS_VERTICAL|TCS_RIGHT;
+    tabStyle |= WS_TABSTOP | TCS_TABS;
 
-  // note that we don't want to have the default WS_EX_CLIENTEDGE style for the
-  // notebook, so explicitly specify 0 as last parameter
-  if ( !MSWCreateControl(WC_TABCONTROL, tabStyle, pos, size, _T(""), 0) )
-  {
-    return FALSE;
-  }
+    if ( style & wxTC_MULTILINE )
+        tabStyle |= TCS_MULTILINE;
+    if ( style & wxNB_FIXEDWIDTH )
+        tabStyle |= TCS_FIXEDWIDTH;
 
-  SetBackgroundColour(wxColour(::GetSysColor(COLOR_BTNFACE)));
+    if ( style & wxNB_BOTTOM )
+        tabStyle |= TCS_RIGHT;
+    else if ( style & wxNB_LEFT )
+        tabStyle |= TCS_VERTICAL;
+    else if ( style & wxNB_RIGHT )
+        tabStyle |= TCS_VERTICAL | TCS_RIGHT;
 
-  return TRUE;
+    // ex style
+    if ( exstyle )
+    {
+        // note that we never want to have the default WS_EX_CLIENTEDGE style
+        // as it looks too ugly for the notebooks
+        *exstyle = 0;
+    }
+
+    return tabStyle;
 }
 
 // ----------------------------------------------------------------------------
@@ -577,6 +579,21 @@ void wxNotebook::SetConstraintSizes(bool WXUNUSED(recurse))
 bool wxNotebook::DoPhase(int WXUNUSED(nPhase))
 {
   return TRUE;
+}
+
+// ----------------------------------------------------------------------------
+// wxNotebook Windows message handlers
+// ----------------------------------------------------------------------------
+
+bool wxNotebook::MSWOnScroll(int orientation, WXWORD nSBCode,
+                             WXWORD pos, WXHWND control)
+{
+    // don't generate EVT_SCROLLWIN events for the WM_SCROLLs coming from the
+    // up-down control
+    if ( control )
+        return FALSE;
+
+    return wxNotebookBase::MSWOnScroll(orientation, nSBCode, pos, control);
 }
 
 bool wxNotebook::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result)

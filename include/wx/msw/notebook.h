@@ -120,12 +120,17 @@ public:
   // base class virtuals
   // -------------------
   virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
+  virtual bool MSWOnScroll(int orientation, WXWORD nSBCode,
+                           WXWORD pos, WXHWND control);
   virtual void SetConstraintSizes(bool recurse = TRUE);
   virtual bool DoPhase(int nPhase);
 
 protected:
   // common part of all ctors
   void Init();
+
+  // translate wxWin styles to the Windows ones
+  virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const;
 
   // remove one page from the notebook, without deleting
   virtual wxNotebookPage *DoRemovePage(int nPage);
