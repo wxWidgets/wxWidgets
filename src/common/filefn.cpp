@@ -354,7 +354,7 @@ wxString wxPathList::FindValidPath (const wxString& file)
 wxString wxPathList::FindAbsoluteValidPath (const wxString& file)
 {
     wxString f = FindValidPath(file);
-    if ( wxIsAbsolutePath(f) )
+    if ( f.empty() || wxIsAbsolutePath(f) )
         return f;
 
     wxString buf;
