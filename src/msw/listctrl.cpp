@@ -1822,6 +1822,11 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                     // where did the click occur?
                     POINT ptClick;
+#ifdef __WXWINCE__
+                  if(nmhdr->code == GN_CONTEXTMENU) {
+                      ptClick = ((NMRGINFO*)nmhdr)->ptAction;
+                  } else 
+#endif __WXWINCE__
                     if ( !::GetCursorPos(&ptClick) )
                     {
                         wxLogLastError(_T("GetCursorPos"));
@@ -2152,6 +2157,11 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 LV_HITTESTINFO lvhti;
                 wxZeroMemory(lvhti);
 
+#ifdef __WXWINCE__
+              if(nmhdr->code == GN_CONTEXTMENU) {
+                  lvhti.pt = ((NMRGINFO*)nmhdr)->ptAction;
+              } else 
+#endif __WXWINCE__
                 ::GetCursorPos(&(lvhti.pt));
                 ::ScreenToClient(GetHwnd(),&(lvhti.pt));
                 if ( ListView_HitTest(GetHwnd(),&lvhti) != -1 )

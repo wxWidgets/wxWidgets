@@ -192,7 +192,9 @@ wxSize wxStaticText::DoGetBestSize() const
             curLine += *pc;
         }
     }
-
+#ifdef __WXWINCE__
+    if(widthTextMax) widthTextMax += 2;
+#endif
     return wxSize(widthTextMax, heightTextTotal);
 }
 
