@@ -41,7 +41,7 @@ public:
 
     BombsFrame(BombsGame *bombsGame);
 
-    void NewGame(int level);
+    void NewGame(int level, bool query);
 
 private:
 

@@ -340,6 +340,10 @@ void BombsCanvas::OnChar(wxKeyEvent& event)
     if ((prevGridFocusX != m_game->m_gridFocusX)
         || (prevGridFocusY != m_game->m_gridFocusY))
     {
+        // cause focused field to be visible after first key hit after launching new game
+        if( m_game->m_gridFocusX < 0 ) m_game->m_gridFocusX = 0;
+        if( m_game->m_gridFocusY < 0 ) m_game->m_gridFocusY = 0;
+
         // refresh previous field and focused field
         RefreshField(prevGridFocusX, prevGridFocusY,
             prevGridFocusX, prevGridFocusY);

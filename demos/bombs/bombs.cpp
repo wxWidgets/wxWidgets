@@ -53,7 +53,7 @@ bool BombsApp::OnInit()
 
     m_frame = new BombsFrame(&m_game);
 
-    m_frame->NewGame(bombsID_EASY);
+    m_frame->NewGame(bombsID_EASY, false);
 
     return true;
 }
@@ -121,8 +121,18 @@ void BombsFrame::OnExit(wxCommandEvent& WXUNUSED(event))
     Close();
 }
 
-void BombsFrame::NewGame(int level)
+void BombsFrame::NewGame(int level, bool query)
 {
+    if(query)
+    {
+       int ok = wxMessageBox(
+                  wxT("Start new game regardless previous board?"),
+                  wxT("Confirm"),
+                  wxYES_NO | wxICON_QUESTION,
+                  this
+                );
+       if(ok!=wxYES)return;
+    }
 
     int numHorzCells = 20, numVertCells = 20;
 
@@ -162,17 +172,17 @@ void BombsFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 
 void BombsFrame::OnNewEasyGame(wxCommandEvent& WXUNUSED(event))
 {
-    NewGame(bombsID_EASY);
+    NewGame(bombsID_EASY, true);
 }
 
 void BombsFrame::OnNewMediumGame(wxCommandEvent& WXUNUSED(event))
 {
-    NewGame(bombsID_MEDIUM);
+    NewGame(bombsID_MEDIUM, true);
 }
 
 void BombsFrame::OnNewHardGame(wxCommandEvent& WXUNUSED(event))
 {
-    NewGame(bombsID_HARD);
+    NewGame(bombsID_HARD, true);
 }
 
 BEGIN_EVENT_TABLE(BombsCanvas, wxPanel)
