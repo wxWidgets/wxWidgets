@@ -769,7 +769,7 @@ static void
 dumpchr(chr c,
 		FILE *f)
 {
-#ifdef wxUSE_UNICODE
+#if wxUSE_UNICODE
     fprintf(f, "Debugging not implemented in unicode mode");
 #else
 	if (c == '\\')
