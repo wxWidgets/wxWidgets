@@ -710,7 +710,7 @@
 // Default is 1
 //
 // Recommended setting: 1
-#define wxUSE_COLOURDLG     0
+#define wxUSE_COLOURDLG     1
 
 // wxDirDlg class for getting a directory name from user
 #define wxUSE_DIRDLG 0

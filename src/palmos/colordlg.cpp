@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -29,28 +29,14 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include <stdio.h>
     #include "wx/defs.h"
-    #include "wx/bitmap.h"
-    #include "wx/pen.h"
-    #include "wx/brush.h"
-    #include "wx/colour.h"
-    #include "wx/gdicmn.h"
-    #include "wx/utils.h"
-    #include "wx/frame.h"
-    #include "wx/dialog.h"
-    #include "wx/msgdlg.h"
-    #include "wx/math.h"
+    #include "wx/intl.h"
 #endif
 
-#if wxUSE_COLOURDLG && !defined(__SMARTPHONE__)
+#if wxUSE_COLOURDLG
 
-#include "wx/palmos/private.h"
-#include "wx/colordlg.h"
 #include "wx/cmndata.h"
-
-#include <stdlib.h>
-#include <string.h>
+#include "wx/colordlg.h"
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -72,76 +58,40 @@ wxColourDialog::wxColourDialog()
 
 wxColourDialog::wxColourDialog(wxWindow *parent, wxColourData *data)
 {
+    Create(parent, data);
 }
 
 bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
 {
-    return false;
+    m_parent = parent;
+
+    if (data)
+        m_colourData = *data;
+
+    return true;
 }
 
 int wxColourDialog::ShowModal()
 {
-    return wxID_CANCEL;
-}
+    wxString title = _("Choose colour");
 
-// ----------------------------------------------------------------------------
-// title
-// ----------------------------------------------------------------------------
+    wxColour colour = m_colourData.GetColour();
+    RGBColorType rgb;
+    rgb.r = colour.Red();
+    rgb.g = colour.Green();
+    rgb.b = colour.Blue();
+    IndexedColorType i = WinRGBToIndex ( &rgb );
 
-void wxColourDialog::SetTitle(const wxString& title)
-{
-    m_title = title;
-}
+    if (UIPickColor (&i,
+                     &rgb,
+                     (m_colourData.GetChooseFull()?UIPickColorStartRGB:UIPickColorStartPalette),
+                     title.ToAscii(),
+                     NULL) == false)
+        return wxID_CANCEL;
 
-wxString wxColourDialog::GetTitle() const
-{
-    return m_title;
-}
-
-// ----------------------------------------------------------------------------
-// position/size
-// ----------------------------------------------------------------------------
-
-void wxColourDialog::DoGetPosition(int *x, int *y) const
-{
-    if ( x )
-        *x = m_pos.x;
-    if ( y )
-        *y = m_pos.y;
-}
-
-void wxColourDialog::DoSetSize(int x, int y,
-                               int WXUNUSED(width), int WXUNUSED(height),
-                               int WXUNUSED(sizeFlags))
-{
-    if ( x != -1 )
-        m_pos.x = x;
-
-    if ( y != -1 )
-        m_pos.y = y;
-
-    // ignore the size params - we can't change the size of a standard dialog
-    return;
-}
-
-// NB: of course, both of these functions are completely bogus, but it's better
-//     than nothing
-void wxColourDialog::DoGetSize(int *width, int *height) const
-{
-    // the standard dialog size
-    if ( width )
-        *width = 225;
-    if ( height )
-        *height = 324;
-}
-
-void wxColourDialog::DoGetClientSize(int *width, int *height) const
-{
-    // the standard dialog size
-    if ( width )
-        *width = 219;
-    if ( height )
-        *height = 299;
+    colour.Set(rgb.r, rgb.g, rgb.b);
+    m_colourData.SetColour(colour);
+    return wxID_OK;
 }
 
 #endif

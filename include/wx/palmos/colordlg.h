@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -34,25 +34,10 @@ public:
 
     wxColourData& GetColourData() { return m_colourData; }
 
-    // override some base class virtuals
-    virtual void SetTitle(const wxString& title);
-    virtual wxString GetTitle() const;
-
     virtual int ShowModal();
 
-    virtual void DoGetPosition( int *x, int *y ) const;
-
 protected:
-    virtual void DoGetSize(int *width, int *height) const;
-    virtual void DoGetClientSize(int *width, int *height) const;
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
-
     wxColourData        m_colourData;
-    wxString            m_title;
-
-    wxPoint             m_pos;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxColourDialog)
 };

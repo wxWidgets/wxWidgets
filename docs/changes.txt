@@ -105,6 +105,7 @@ wxPalmOS:
 - enumeration of available volumes
 - native wxPrefConfig around Preferences database
 - native wxProgressDialog implementation
+- native wxColourDialog implementation
 - native wxSystemSettings colours
 
 
