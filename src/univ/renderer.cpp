@@ -70,6 +70,60 @@ void wxRenderer::StandardDrawFrame(wxDC& dc,
                        rectLabel.GetRight(), rectFrame.GetRight() - 2);
 }
 
+/* static */
+void wxRenderer::StandardDrawTextLine(wxDC& dc,
+                                      const wxString& text,
+                                      const wxRect& rect,
+                                      int selStart, int selEnd)
+{
+    if ( selStart == -1 )
+    {
+        // just draw it as is
+        dc.DrawText(text, rect.x, rect.y);
+    }
+    else // we have selection
+    {
+        wxCoord width,
+                x = rect.x;
+
+        // draw the part before selection
+        wxString s(text, (size_t)selStart);
+        if ( !s.empty() )
+        {
+            dc.DrawText(s, x, rect.y);
+
+            dc.GetTextExtent(s, &width, NULL);
+            x += width;
+        }
+
+        // draw the selection itself
+        s = wxString(text.c_str() + selStart, text.c_str() + selEnd);
+        if ( !s.empty() )
+        {
+            wxColour colFg = dc.GetTextForeground(),
+                     colBg = dc.GetTextBackground();
+            dc.SetTextForeground(wxTHEME_COLOUR(HIGHLIGHT_TEXT));
+            dc.SetTextBackground(wxTHEME_COLOUR(HIGHLIGHT));
+            dc.SetBackgroundMode(wxSOLID);
+
+            dc.DrawText(s, x, rect.y);
+            dc.GetTextExtent(s, &width, NULL);
+            x += width;
+
+            dc.SetBackgroundMode(wxTRANSPARENT);
+            dc.SetTextBackground(colBg);
+            dc.SetTextForeground(colFg);
+        }
+
+        // draw the final part
+        s = text.c_str() + selEnd;
+        if ( !s.empty() )
+        {
+            dc.DrawText(s, x, rect.y);
+        }
+    }
+}
+
 // ----------------------------------------------------------------------------
 // wxRenderer: scrollbar geometry
 // ----------------------------------------------------------------------------

@@ -166,6 +166,16 @@ public:
                                  wxAlignment align = wxALIGN_LEFT,
                                  int indexAccel = -1) = 0;
 
+    // draw a (part of) line in the text control
+    virtual void DrawTextLine(wxDC& dc,
+                              const wxString& text,
+                              const wxRect& rect,
+                              int selStart = -1,
+                              int selEnd = -1) = 0;
+
+    // draw a line wrap indicator
+    virtual void DrawLineWrapMark(wxDC& dc, const wxRect& rect) = 0;
+
     // geometry functions
     // ------------------
 
@@ -212,12 +222,14 @@ public:
     virtual wxCoord GetCheckItemMargin() const = 0;
 
     // convert between text rectangle and client rectangle for text controls:
-    // by default, the former is equal to the latter, but it can be made
-    // smaller to leave margins around text
+    // the former is typicall smaller to leave margins around text
     virtual wxRect GetTextTotalArea(const wxTextCtrl *text,
-                                    const wxRect& rect) = 0;
+                                    const wxRect& rectText) = 0;
+
+    // extra space is for line indicators
     virtual wxRect GetTextClientArea(const wxTextCtrl *text,
-                                     const wxRect& rect) = 0;
+                                     const wxRect& rectTotal,
+                                     wxCoord *extraSpaceBeyond) = 0;
 
     // virtual dtor for any base class
     virtual ~wxRenderer();
@@ -228,6 +240,13 @@ protected:
     void StandardDrawFrame(wxDC& dc,
                            const wxRect& rectFrame,
                            const wxRect& rectLabel);
+
+    // standard text line drawing: just use DrawText() and highlight the
+    // selected part
+    static void StandardDrawTextLine(wxDC& dc,
+                                     const wxString& text,
+                                     const wxRect& rect,
+                                     int selStart, int selEnd);
 
     // standard scrollbar hit testing: this assumes that it only has 2 arrows
     // and a thumb, so the themes which have more complicated scrollbars (e.g.
@@ -368,6 +387,12 @@ public:
                                  int indexAccel = -1)
         { m_renderer->DrawRadioButton(dc, label, bitmap, rect,
                                       flags, align, indexAccel); }
+    virtual void DrawTextLine(wxDC& dc,
+                              const wxString& text,
+                              const wxRect& rect,
+                              int selStart = -1,
+                              int selEnd = -1)
+        { m_renderer->DrawTextLine(dc, text, rect, selStart, selEnd); }
 
     virtual void AdjustSize(wxSize *size, const wxWindow *window)
         { m_renderer->AdjustSize(size, window); }
@@ -402,8 +427,10 @@ public:
 
     virtual wxRect GetTextTotalArea(const wxTextCtrl *text, const wxRect& rect)
         { return m_renderer->GetTextTotalArea(text, rect); }
-    virtual wxRect GetTextClientArea(const wxTextCtrl *text, const wxRect& rect)
-        { return m_renderer->GetTextClientArea(text, rect); }
+    virtual wxRect GetTextClientArea(const wxTextCtrl *text,
+                                     const wxRect& rect,
+                                     wxCoord *extraSpaceBeyond)
+        { return m_renderer->GetTextClientArea(text, rect, extraSpaceBeyond); }
 
 protected:
     wxRenderer *m_renderer;

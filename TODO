@@ -26,7 +26,7 @@ wxTextCtrl
 *   remember selection when losing/gaining activation
 *   too much is refreshed when double clicking (word select)
 
-*   scrolling by dragging mouse outside the window
+*!  scrolling by dragging mouse outside the window
 
 All
 

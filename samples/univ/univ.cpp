@@ -200,7 +200,7 @@ bool MyUnivApp::OnInitGui()
             else if ( themeName == _T("win32") )
                 m_colourBg = *wxLIGHT_GREY;
 
-            wxTheme::Set(theme);
+            delete wxTheme::Set(theme);
         }
     }
 
@@ -241,8 +241,8 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 {
     SetBackgroundColour(wxGetApp().GetBgColour());
 
-    new wxStaticText(this, _T("Test static text"), wxPoint(10, 10));
 #ifndef TEST_TEXT_ONLY
+    new wxStaticText(this, _T("Test static text"), wxPoint(10, 10));
     new wxStaticText(this, _T("Test static text"), wxPoint(10, 10));
     new wxStaticText(this,
                      _T("&Multi line\n(and very very very very long)\nstatic text"),
@@ -393,7 +393,7 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     wxTextCtrl *text = new wxTextCtrl(this, -1, _T("Hello,\nMultiverse!"),
                                       wxPoint(10, 30),
                                       wxSize(200, 150),
-                                      wxTE_MULTILINE | wxHSCROLL);
+                                      wxTE_MULTILINE);// | wxHSCROLL);
 
 #if 0
     // test wxTextCtrl::Replace()

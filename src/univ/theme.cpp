@@ -87,11 +87,24 @@ wxThemeInfo::wxThemeInfo(Constructor c,
         return TRUE;
     }
 
-#if defined(__WXMSW__)
-    ms_theme = Create(_T("win32"));
-#elif defined(__WXGTK__)
-    ms_theme = Create(_T("gtk"));
-#endif
+    wxString nameDefTheme;
+
+    // use the environment variable first
+    const wxChar *p = wxGetenv(_T("WXTHEME"));
+    if ( p )
+    {
+        nameDefTheme = p;
+    }
+    else // use native theme by default
+    {
+        #if defined(__WXMSW__)
+            nameDefTheme = _T("win32");
+        #elif defined(__WXGTK__)
+            nameDefTheme = _T("gtk");
+        #endif
+    }
+
+    ms_theme = Create(nameDefTheme);
 
     // fallback to the first one in the list
     if ( !ms_theme && ms_allThemes )

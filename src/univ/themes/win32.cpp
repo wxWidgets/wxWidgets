@@ -181,6 +181,12 @@ public:
                                  int flags = 0,
                                  wxAlignment align = wxALIGN_LEFT,
                                  int indexAccel = -1);
+    virtual void DrawTextLine(wxDC& dc,
+                              const wxString& text,
+                              const wxRect& rect,
+                              int selStart = -1,
+                              int selEnd = -1);
+    virtual void DrawLineWrapMark(wxDC& dc, const wxRect& rect);
 
     virtual void AdjustSize(wxSize *size, const wxWindow *window);
     virtual wxRect GetBorderDimensions(wxBorder border) const;
@@ -207,7 +213,8 @@ public:
     virtual wxRect GetTextTotalArea(const wxTextCtrl *text,
                                     const wxRect& rect);
     virtual wxRect GetTextClientArea(const wxTextCtrl *text,
-                                     const wxRect& rect);
+                                     const wxRect& rect,
+                                     wxCoord *extraSpaceBeyond);
 
 protected:
     // common part of DrawLabel() and DrawItem()
@@ -748,7 +755,14 @@ wxWin32Theme::wxWin32Theme()
 
 wxWin32Theme::~wxWin32Theme()
 {
-    WX_CLEAR_ARRAY(m_handlers);
+    size_t count = m_handlers.GetCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        if ( m_handlers[n] != m_handlerDefault )
+            delete m_handlers[n];
+    }
+
+    delete m_handlerDefault;
 
     delete m_renderer;
     delete m_scheme;
@@ -1694,6 +1708,25 @@ void wxWin32Renderer::DrawCheckButton(wxDC& dc,
 }
 
 // ----------------------------------------------------------------------------
+// text control
+// ----------------------------------------------------------------------------
+
+void wxWin32Renderer::DrawTextLine(wxDC& dc,
+                                   const wxString& text,
+                                   const wxRect& rect,
+                                   int selStart,
+                                   int selEnd)
+{
+    // nothing special to do here
+    StandardDrawTextLine(dc, text, rect, selStart, selEnd);
+}
+
+void wxWin32Renderer::DrawLineWrapMark(wxDC& dc, const wxRect& rect)
+{
+    // we don't draw them
+}
+
+// ----------------------------------------------------------------------------
 // background
 // ----------------------------------------------------------------------------
 
@@ -1859,12 +1892,16 @@ wxRect wxWin32Renderer::GetTextTotalArea(const wxTextCtrl *text,
 }
 
 wxRect wxWin32Renderer::GetTextClientArea(const wxTextCtrl *text,
-                                          const wxRect& rect)
+                                          const wxRect& rect,
+                                          wxCoord *extraSpaceBeyond)
 {
     // undo GetTextTotalArea()
     wxRect rectText = rect;
     rectText.height--;
     rectText.Inflate(-1);
+
+    if ( extraSpaceBeyond )
+        *extraSpaceBeyond = NULL;
 
     return rectText;
 }

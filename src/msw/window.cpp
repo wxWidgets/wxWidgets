@@ -1910,7 +1910,31 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
             break;
 
         case WM_SIZE:
-            processed = HandleSize(LOWORD(lParam), HIWORD(lParam), wParam);
+            switch ( wParam )
+            {
+                case SIZE_MAXHIDE:
+                case SIZE_MAXSHOW:
+                    // we're not interested in these messages at all
+                    break;
+
+                case SIZE_MINIMIZED:
+                    // we shouldn't send sizev events for these messages as the
+                    // client size may be negative which breaks existing code
+                    //
+                    // OTOH we might send another (wxMinimizedEvent?) one or
+                    // add an additional parameter to wxSizeEvent if this is
+                    // useful to anybody
+                    break;
+
+                default:
+                    wxFAIL_MSG( _T("unexpected WM_SIZE parameter") );
+                    // fall through nevertheless
+
+                case SIZE_MAXIMIZED:
+                case SIZE_RESTORED:
+                    processed = HandleSize(LOWORD(lParam), HIWORD(lParam),
+                                           wParam);
+            }
             break;
 
 #ifdef __WXUNIVERSAL__

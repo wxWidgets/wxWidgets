@@ -341,6 +341,51 @@ public:
         return m_rowsStart[row];
     }
 
+    // this code is unused any longer
+#if 0
+    // return TRUE if the column is in the start of the last row (hence the row
+    // it is in is not wrapped)
+    bool IsLastRow(wxTextCoord colRowStart) const
+    {
+        return colRowStart == GetRowStart(m_rowsStart.GetCount());
+    }
+
+    // return TRUE if the column is the last column of the row starting in
+    // colRowStart
+    bool IsLastColInRow(wxTextCoord colRowStart,
+                        wxTextCoord colRowEnd,
+                        wxTextCoord lenLine) const
+    {
+        // find the row which starts with colRowStart
+        size_t nRows = GetRowCount();
+        for ( size_t n = 0; n < nRows; n++ )
+        {
+            if ( GetRowStart(n) == colRowStart )
+            {
+                wxTextCoord colNextRowStart = n == nRows - 1
+                                                ? lenLine
+                                                : GetRowStart(n + 1);
+
+                wxASSERT_MSG( colRowEnd < colNextRowStart,
+                              _T("this column is not in this row at all!") );
+
+                return colRowEnd == colNextRowStart - 1;
+            }
+        }
+
+        // caller got it wrong
+        wxFAIL_MSG( _T("this column is not in the start of the row!") );
+
+        return FALSE;
+    }
+#endif // 0
+
+    // is this row the last one in its line?
+    bool IsLastRow(wxTextCoord row) const
+    {
+        return (size_t)row == GetExtraRowCount();
+    }
+
     // the line is valid if it had been laid out correctly: note that just
     // shiwting the line (because one of previous lines changed) doesn't make
     // it invalid
@@ -373,6 +418,10 @@ WX_DEFINE_OBJARRAY(wxArrayWrappedLinesData);
 
 struct WXDLLEXPORT wxTextWrappedData : public wxTextMultiLineData
 {
+    // the width of the column to the right of the text rect used for the
+    // indicator mark display for the wrapped lines
+    wxCoord m_widthMark;
+
     // the data for each line
     wxArrayWrappedLinesData m_linesData;
 
@@ -403,6 +452,7 @@ struct WXDLLEXPORT wxTextWrappedData : public wxTextMultiLineData
     // def ctor
     wxTextWrappedData()
     {
+        m_widthMark = 0;
         m_rowFirstInvalid = -1;
         m_timestamp = 0;
     }
@@ -730,16 +780,32 @@ void wxTextCtrl::Clear()
     SetValue(_T(""));
 }
 
-void wxTextCtrl::ReplaceLine(wxTextCoord line, const wxString& text)
+bool wxTextCtrl::ReplaceLine(wxTextCoord line,
+                             const wxString& text)
 {
-    MData().m_lines[line] = text;
     if ( WrapLines() )
     {
         // first, we have to relayout the line entirely
         //
         // OPT: we might try not to recalc the unchanged part of line
+
         wxWrappedLineData& lineData = WData().m_linesData[line];
-        size_t rowsOld = lineData.GetExtraRowCount();
+
+        // if we had some number of rows before, use this number, otherwise
+        // just make sure that the test below (rowsNew != rowsOld) will be true
+        int rowsOld;
+        if ( lineData.IsValid() )
+        {
+            rowsOld = lineData.GetExtraRowCount();
+        }
+        else // line wasn't laid out yet
+        {
+            // assume it changed entirely as we can't do anything better
+            rowsOld = -1;
+        }
+
+        // now change the line
+        MData().m_lines[line] = text;
 
         // OPT: we choose to lay it our immediately instead of delaying it
         //      until it is needed because it allows us to avoid invalidating
@@ -747,15 +813,36 @@ void wxTextCtrl::ReplaceLine(wxTextCoord line, const wxString& text)
         //      maybe we can imporve this even further?
         LayoutLine(line, lineData);
 
-        // next, if this is not the last line and if the number of rows in it
-        // changed, we need to shift all the lines below it
-        if ( ((size_t)line < WData().m_linesData.GetCount()) &&
-                (lineData.GetExtraRowCount() != rowsOld) )
+        int rowsNew = lineData.GetExtraRowCount();
+
+        if ( rowsNew != rowsOld )
         {
-            // number of rows changed shifting all lines below
-            WData().InvalidateLinesBelow(line + 1);
+            // we have to update the line wrap marks as this is normally done
+            // by LayoutLines() which we bypassed by calling LayoutLine()
+            // directly
+            wxTextCoord rowFirst = lineData.GetFirstRow(),
+                        rowCount = wxMax(rowsOld, rowsNew);
+            RefreshLineWrapMarks(rowFirst, rowFirst + rowCount);
+
+            // next, if this is not the last line, as the number of rows in it
+            // changed, we need to shift all the lines below it
+            if ( (size_t)line < WData().m_linesData.GetCount() )
+            {
+                // number of rows changed shifting all lines below
+                WData().InvalidateLinesBelow(line + 1);
+            }
+
+            // the number of rows changed
+            return TRUE;
         }
     }
+    else // no line wrap
+    {
+        MData().m_lines[line] = text;
+    }
+
+    // the number of rows didn't change
+    return FALSE;
 }
 
 void wxTextCtrl::RemoveLine(wxTextCoord line)
@@ -858,8 +945,11 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
            replace a part of it with the new text and break it into lines again.
         */
 
-        // (0) remember the number of rows before we started
-        wxTextCoord rowsOld = GetRowCount();
+        // (0) we want to know if this replacement changes the number of rows
+        //     as if it does we need to refresh everything below the changed
+        //     text (it will be shifted...) and we can avoid it if there is no
+        //     row relayout
+        bool rowsNumberChanged = FALSE;
 
         // (1) join lines
         const wxArrayString& linesOld = GetLines();
@@ -965,7 +1055,10 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
             if ( nReplaceLine < nReplaceCount )
             {
                 // we have the replacement line for this one
-                ReplaceLine(line, lines[nReplaceLine]);
+                if ( ReplaceLine(line, lines[nReplaceLine]) )
+                {
+                    rowsNumberChanged = TRUE;
+                }
 
                 UpdateMaxWidth(line);
             }
@@ -990,17 +1083,27 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
                     RecalcMaxWidth();
                 }
 
+                // even the line number changed
+                rowsNumberChanged = TRUE;
+
                 // update line to exit the loop
                 line = lineEnd + 1;
             }
         }
 
         // (4c) insert the new lines
-        while ( nReplaceLine < nReplaceCount )
+        if ( nReplaceLine < nReplaceCount )
         {
-            InsertLine(++lineEnd, lines[nReplaceLine++]);
+            // even the line number changed
+            rowsNumberChanged = TRUE;
 
-            UpdateMaxWidth(lineEnd);
+            do
+            {
+                InsertLine(++lineEnd, lines[nReplaceLine++]);
+
+                UpdateMaxWidth(lineEnd);
+            }
+            while ( nReplaceLine < nReplaceCount );
         }
 
         // (5) now refresh the changed area
@@ -1011,18 +1114,27 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
         // we may optimize refresh if the number of rows didn't change - but if
         // it did we have to refresh everything below the part we chanegd as
         // well as it might have moved
-        wxTextCoord rowsNew = GetRowCount();
-        if ( rowsNew == rowsOld )
+        if ( !rowsNumberChanged )
         {
             // refresh the line we changed
-            RefreshPixelRange(lineStart, startNewText, widthNewText);
+            if ( !WrapLines() )
+            {
+                RefreshPixelRange(lineStart++, startNewText, widthNewText);
+            }
+            else
+            {
+                //OPT: we shouldn't refresh the unchanged part of the line in
+                //     this case, but instead just refresh the tail of it - the
+                //     trouble is that we don't know here where does this tail
+                //     start
+            }
 
             // number of rows didn't change, refresh the updated rows and the
             // last one
-            if ( lineStart < lineEnd )
-                RefreshLineRange(lineStart + 1, lineEnd);
+            if ( lineStart <= lineEnd )
+                RefreshLineRange(lineStart, lineEnd);
         }
-        else
+        else // rows number did change
         {
             if ( !WrapLines() )
             {
@@ -1038,16 +1150,7 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
                 RefreshLineRange(lineStart, lineEnd);
 
             // refresh text rect left below
-            if ( rowsNew < rowsOld )
-            {
-                wxCoord h = GetLineHeight();
-                wxRect rect;
-                rect.x = 0;
-                rect.width = m_rectText.width;
-                rect.y = rowsNew*h;
-                rect.height = (rowsOld - rowsNew)*h;
-                RefreshTextRect(rect);
-            }
+            RefreshLineRange(lineEnd + 1, 0);
 
             // the vert scrollbar might [dis]appear
             MData().m_updateScrollbarY = TRUE;
@@ -1586,6 +1689,19 @@ wxTextCoord wxTextCtrl::GetRowCount() const
     }
 
     return count;
+}
+
+wxTextCoord wxTextCtrl::GetRowAfterLine(wxTextCoord line) const
+{
+    if ( !WrapLines() )
+        return line + 1;
+
+    if ( !WData().IsValidLine(line) )
+    {
+        LayoutLines(line);
+    }
+
+    return WData().m_linesData[line].GetNextRow();
 }
 
 wxTextCoord wxTextCtrl::GetFirstRowOfLine(wxTextCoord line) const
@@ -2133,17 +2249,24 @@ wxSize wxTextCtrl::DoGetBestClientSize() const
 
 void wxTextCtrl::UpdateTextRect()
 {
-    m_rectText = GetRenderer()->
-                    GetTextClientArea(this,
-                                      wxRect(wxPoint(0, 0), GetClientSize()));
+    wxRect rectTotal(wxPoint(0, 0), GetClientSize());
+    wxCoord *extraSpace = WrapLines() ? &WData().m_widthMark : NULL;
+    m_rectText = GetRenderer()->GetTextClientArea(this, rectTotal, extraSpace);
 
     if ( !IsSingleLine() )
     {
         // invalidate it so that GetRealTextArea() will recalc it
         MData().m_rectTextReal.width = 0;
 
-        // only scroll this rect when the window is scrolled
-        SetTargetRect(GetRealTextArea());
+        // only scroll this rect when the window is scrolled: note that we have
+        // to scroll not only the text but the line wrap marks too if we show
+        // them
+        wxRect rectText = GetRealTextArea();
+        if ( extraSpace && *extraSpace )
+        {
+            rectText.width += *extraSpace;
+        }
+        SetTargetRect(rectText);
 
         // relayout all lines
         if ( WrapLines() )
@@ -2370,18 +2493,19 @@ void wxTextCtrl::LayoutLines(wxTextCoord lineLast) const
     wxTextCoord lineFirst = WData().m_rowFirstInvalid;
     wxASSERT_MSG( lineFirst != -1, _T("nothing to layout?") );
 
-    wxTextCoord rowCur;
+    wxTextCoord rowFirst, rowCur;
     if ( lineFirst )
     {
         // start after the last known valid line
         const wxWrappedLineData& lineData = WData().m_linesData[lineFirst - 1];
-        rowCur = lineData.GetFirstRow() + lineData.GetRowCount();
+        rowFirst = lineData.GetFirstRow() + lineData.GetRowCount();
     }
     else // no valid lines, start at row 0
     {
-        rowCur = 0;
+        rowFirst = 0;
     }
 
+    rowCur = rowFirst;
     for ( wxTextCoord line = lineFirst; line <= lineLast; line++ )
     {
         // set the starting row for this line
@@ -2409,7 +2533,11 @@ void wxTextCtrl::LayoutLines(wxTextCoord lineLast) const
         lineLast = -1;
     }
 
-    wxConstCast(this, wxTextCtrl)->WData().m_rowFirstInvalid = lineLast;
+    wxTextCtrl *self = wxConstCast(this, wxTextCtrl);
+    self->WData().m_rowFirstInvalid = lineLast;
+
+    // also refresh the line end indicators (FIXME shouldn't do it always!)
+    self->RefreshLineWrapMarks(rowFirst, rowCur);
 }
 
 size_t wxTextCtrl::GetPartOfWrappedLine(const wxChar* text,
@@ -2914,6 +3042,56 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTest2(wxCoord y0,
     return res;
 }
 
+bool wxTextCtrl::GetLineAndRow(wxTextCoord row,
+                               wxTextCoord *lineOut,
+                               wxTextCoord *rowInLineOut) const
+{
+    wxTextCoord line,
+                rowInLine = 0;
+
+    if ( row < 0 )
+        return FALSE;
+
+    int nLines = GetNumberOfLines();
+    if ( WrapLines() )
+    {
+        const wxArrayWrappedLinesData& linesData = WData().m_linesData;
+        for ( line = 0; line < nLines; line++ )
+        {
+            if ( !WData().IsValidLine(line) )
+                LayoutLines(line);
+
+            if ( row < linesData[line].GetNextRow() )
+            {
+                // we found the right line
+                rowInLine = row - linesData[line].GetFirstRow();
+
+                break;
+            }
+        }
+
+        if ( line == nLines )
+        {
+            // the row is out of range
+            return FALSE;
+        }
+    }
+    else // no line wrapping, everything is easy
+    {
+        if ( row >= nLines )
+            return FALSE;
+
+        line = row;
+    }
+
+    if ( lineOut )
+        *lineOut = line;
+    if ( rowInLineOut )
+        *rowInLineOut = rowInLine;
+
+    return TRUE;
+}
+
 // ----------------------------------------------------------------------------
 // scrolling
 // ----------------------------------------------------------------------------
@@ -3276,27 +3454,43 @@ void wxTextCtrl::OnIdle(wxIdleEvent& event)
 
 void wxTextCtrl::RefreshLineRange(wxTextCoord lineFirst, wxTextCoord lineLast)
 {
-    wxASSERT_MSG( lineFirst <= lineLast, _T("no lines to refresh") );
+    wxASSERT_MSG( lineFirst <= lineLast || !lineLast,
+                  _T("no lines to refresh") );
 
     wxRect rect;
     // rect.x is already 0
     rect.width = m_rectText.width;
     wxCoord h = GetLineHeight();
-    rect.y = GetFirstRowOfLine(lineFirst)*h;
 
-    wxTextCoord rowLast;
-    if ( WrapLines() )
+    wxTextCoord rowFirst;
+    if ( lineFirst < GetNumberOfLines() )
     {
-        const wxWrappedLineData& lineData = WData().m_linesData[lineLast];
-        rowLast = lineData.GetFirstRow() + lineData.GetRowCount();
+        rowFirst = GetFirstRowOfLine(lineFirst);
     }
-    else // !wrap lines
+    else // lineFirst == GetNumberOfLines()
     {
-        rowLast = lineLast + 1;
+        // lineFirst may be beyond the last line only if we refresh till
+        // the end, otherwise it's illegal
+        wxASSERT_MSG( lineFirst == GetNumberOfLines() && !lineLast,
+                      _T("invalid line range") );
+
+        rowFirst = GetRowAfterLine(lineFirst - 1);
     }
 
-    // -1 compensates for +1 inside SetBottom
-    rect.SetBottom(rowLast*h - 1);
+    rect.y = rowFirst*h;
+
+    if ( lineLast )
+    {
+        // refresh till this line (inclusive)
+        wxTextCoord rowLast = GetRowAfterLine(lineLast);
+
+        rect.height = (rowLast - rowFirst + 1)*h;
+    }
+    else // lineLast == 0 means to refresh till the end
+    {
+        // FIXME: calc it exactly
+        rect.height = 32000;
+    }
 
     RefreshTextRect(rect);
 }
@@ -3447,7 +3641,7 @@ void wxTextCtrl::RefreshPixelRange(wxTextCoord line,
     RefreshTextRect(rect);
 }
 
-void wxTextCtrl::RefreshTextRect(const wxRect& rectClient)
+void wxTextCtrl::RefreshTextRect(const wxRect& rectClient, bool textOnly)
 {
     wxRect rect;
     CalcScrolledPosition(rectClient.x, rectClient.y, &rect.x, &rect.y);
@@ -3458,8 +3652,16 @@ void wxTextCtrl::RefreshTextRect(const wxRect& rectClient)
     rect.Offset(m_rectText.GetPosition());
 
     // don't refresh outside the text area
-    if ( rect.GetRight() > m_rectText.GetRight() )
-        rect.SetRight(m_rectText.GetRight());
+    if ( textOnly )
+    {
+        if ( rect.GetRight() > m_rectText.GetRight() )
+            rect.SetRight(m_rectText.GetRight());
+    }
+
+    // never refresh beyond the visible rect
+    if ( rect.y < m_rectText.y )
+        rect.y = m_rectText.y;
+
     if ( rect.GetBottom() > m_rectText.GetBottom() )
         rect.SetBottom(m_rectText.GetBottom());
 
@@ -3467,6 +3669,21 @@ void wxTextCtrl::RefreshTextRect(const wxRect& rectClient)
                rect.x, rect.y, rect.x + rect.width, rect.y + rect.height);
 
     Refresh(TRUE, &rect);
+}
+
+void wxTextCtrl::RefreshLineWrapMarks(wxTextCoord rowFirst,
+                                      wxTextCoord rowLast)
+{
+    if ( WData().m_widthMark )
+    {
+        wxRect rectMarks;
+        rectMarks.x = m_rectText.width;
+        rectMarks.width = WData().m_widthMark;
+        rectMarks.y = rowFirst*GetLineHeight();
+        rectMarks.height = (rowLast - rowFirst)*GetLineHeight();
+
+        RefreshTextRect(rectMarks, FALSE /* don't limit to text area */);
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -3503,56 +3720,6 @@ wxString wxTextCtrl::GetTextToShow(const wxString& text) const
         textShown = text;
 
     return textShown;
-}
-
-void wxTextCtrl::DrawTextLine(wxDC& dc, const wxRect& rect,
-                              const wxString& text,
-                              wxTextPos selStart, wxTextPos selEnd)
-{
-    if ( selStart == -1 )
-    {
-        // just draw it as is
-        dc.DrawText(text, rect.x, rect.y);
-    }
-    else // we have selection
-    {
-        wxCoord width,
-                x = rect.x;
-
-        // draw the part before selection
-        wxString s(text, (size_t)selStart);
-        if ( !s.empty() )
-        {
-            dc.DrawText(s, x, rect.y);
-
-            dc.GetTextExtent(s, &width, NULL);
-            x += width;
-        }
-
-        // draw the selection itself
-        s = wxString(text.c_str() + selStart, text.c_str() + selEnd);
-        if ( !s.empty() )
-        {
-            wxColour colFg = dc.GetTextForeground();
-            dc.SetTextForeground(wxTHEME_COLOUR(HIGHLIGHT_TEXT));
-            dc.SetTextBackground(wxTHEME_COLOUR(HIGHLIGHT));
-            dc.SetBackgroundMode(wxSOLID);
-
-            dc.DrawText(s, x, rect.y);
-            dc.GetTextExtent(s, &width, NULL);
-            x += width;
-
-            dc.SetBackgroundMode(wxTRANSPARENT);
-            dc.SetTextForeground(colFg);
-        }
-
-        // draw the final part
-        s = text.c_str() + selEnd;
-        if ( !s.empty() )
-        {
-            dc.DrawText(s, x, rect.y);
-        }
-    }
 }
 
 void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
@@ -3596,6 +3763,11 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
     wxRect rectText;
     rectText.height = hLine;
     wxCoord yClient = y - GetClientAreaOrigin().y;
+
+    // we want to always start at the top of the line, otherwise if we redraw a
+    // rect whose top is in the middle of a line, we'd draw this line shifted
+    yClient -= yClient % hLine;
+
     if ( IsSingleLine() )
     {
         rectText.y = yClient;
@@ -3604,6 +3776,8 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
     {
         CalcUnscrolledPosition(0, yClient, NULL, &rectText.y);
     }
+
+    wxRenderer *renderer = GetRenderer();
 
     // do draw the invalidated parts of each line: note that we iterate here
     // over ROWs, not over LINEs
@@ -3709,9 +3883,44 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
         rectText.width = GetTextWidth(text);
 
         // do draw the text
-        DrawTextLine(dc, rectText, text, selStart, selEnd);
+        renderer->DrawTextLine(dc, text, rectText, selStart, selEnd);
         wxLogTrace(_T("text"), _T("Line %ld: positions %ld-%ld redrawn."),
                    line, colStart, colEnd);
+    }
+}
+
+void wxTextCtrl::DoDrawLineWrapMarks(wxDC& dc, const wxRect& rectUpdate)
+{
+    wxASSERT_MSG( WrapLines() && WData().m_widthMark,
+                  _T("shouldn't be called at all") );
+
+    wxRenderer *renderer = GetRenderer();
+
+    wxRect rectMark;
+    rectMark.x = rectUpdate.x;
+    rectMark.width = rectUpdate.width;
+    wxCoord yTop = GetClientAreaOrigin().y;
+    CalcUnscrolledPosition(0, rectUpdate.y - yTop, NULL, &rectMark.y);
+    wxCoord hLine = GetLineHeight();
+    rectMark.height = hLine;
+
+    wxTextCoord line, rowInLine;
+
+    wxCoord yBottom;
+    CalcUnscrolledPosition(0, rectUpdate.GetBottom() - yTop, NULL, &yBottom);
+    for ( ; rectMark.y < yBottom; rectMark.y += hLine )
+    {
+        if ( !GetLineAndRow(rectMark.y / hLine, &line, &rowInLine) )
+        {
+            // we went beyond the end of text
+            break;
+        }
+
+        // is this row continued on the next one?
+        if ( !WData().m_linesData[line].IsLastRow(rowInLine) )
+        {
+            renderer->DrawLineWrapMark(dc, rectMark);
+        }
     }
 }
 
@@ -3763,6 +3972,29 @@ void wxTextCtrl::DoDraw(wxControlRenderer *renderer)
 #endif // __WXGTK__
 
         DoDrawTextInRect(dc, r);
+    }
+
+    // now redraw the line wrap marks (if we draw them)
+    if ( WrapLines() && WData().m_widthMark )
+    {
+        // this is the rect inside which line wrap marks are drawn
+        wxRect rectMarks;
+        rectMarks.x = rectTextAreaAdjusted.GetRight() + 1;
+        rectMarks.y = rectTextAreaAdjusted.y;
+        rectMarks.width = WData().m_widthMark;
+        rectMarks.height = rectTextAreaAdjusted.height;
+
+        rgnUpdate = GetUpdateRegion();
+        rgnUpdate.Intersect(rectMarks);
+
+        wxRect rectUpdate = rgnUpdate.GetBox();
+        if ( rectUpdate.width && rectUpdate.height )
+        {
+            // the marks are outside previously set clipping region
+            dc.DestroyClippingRegion();
+
+            DoDrawLineWrapMarks(dc, rectUpdate);
+        }
     }
 
     // show caret first time only: we must show it after drawing the text or
@@ -4335,9 +4567,14 @@ bool wxStdTextCtrlInputHandler::HandleMouseMove(wxControl *control,
 bool wxStdTextCtrlInputHandler::HandleFocus(wxControl *control,
                                             const wxFocusEvent& event)
 {
+    // if we don't have selection, our appearance doesn't change
+    wxTextCtrl *text = wxStaticCast(control, wxTextCtrl);
+    if ( !text->HasSelection() )
+        return FALSE;
+
     if ( event.GetEventType() == wxEVT_KILL_FOCUS )
     {
-        wxStaticCast(control, wxTextCtrl)->ClearSelection();
+        text->ClearSelection();
     }
 
     // refresh

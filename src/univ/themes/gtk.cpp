@@ -141,6 +141,13 @@ public:
                                  wxAlignment align = wxALIGN_LEFT,
                                  int indexAccel = -1);
 
+    virtual void DrawTextLine(wxDC& dc,
+                              const wxString& text,
+                              const wxRect& rect,
+                              int selStart = -1,
+                              int selEnd = -1);
+    virtual void DrawLineWrapMark(wxDC& dc, const wxRect& rect);
+
     virtual void AdjustSize(wxSize *size, const wxWindow *window);
     virtual wxRect GetBorderDimensions(wxBorder border) const;
     virtual bool AreScrollbarsInsideBorder() const;
@@ -165,11 +172,10 @@ public:
         { return 2; }
 
     virtual wxRect GetTextTotalArea(const wxTextCtrl *text,
-                                    const wxRect& rect)
-        { wxRect rectTotal = rect; rectTotal.Inflate(2); return rectTotal; }
+                                    const wxRect& rect);
     virtual wxRect GetTextClientArea(const wxTextCtrl *text,
-                                     const wxRect& rect)
-        { wxRect rectText = rect; rectText.Inflate(-2); return rectText; }
+                                     const wxRect& rect,
+                                     wxCoord *extraSpaceBeyond);
 
     // helpers for "wxBitmap wxColourScheme::Get()"
     void DrawCheckBitmap(wxDC& dc, const wxRect& rect);
@@ -252,6 +258,9 @@ protected:
         return size;
     }
 
+    // get the line wrap indicator bitmap
+    wxBitmap GetLineWrapBitmap();
+
     // DrawCheckBitmap and DrawRadioBitmap helpers
 
     // draw the check bitmaps once and cache them for later use
@@ -295,6 +304,9 @@ private:
     // pressed state and the columns are for checked and unchecked status
     // respectively
     wxBitmap m_bitmapsCheckbox[2][2];
+
+    // the line wrap bitmap (drawn at the end of wrapped lines)
+    wxBitmap m_bmpLineWrap;
 };
 
 // ----------------------------------------------------------------------------
@@ -427,7 +439,16 @@ wxGTKTheme::wxGTKTheme()
 
 wxGTKTheme::~wxGTKTheme()
 {
-    WX_CLEAR_ARRAY(m_handlers);
+    size_t count = m_handlers.GetCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        if ( m_handlers[n] != m_handlerDefault )
+            delete m_handlers[n];
+    }
+
+    delete m_handlerDefault;
+    delete m_renderer;
+    delete m_scheme;
 }
 
 wxInputHandler *wxGTKTheme::GetDefaultInputHandler()
@@ -1182,6 +1203,32 @@ wxBitmap wxGTKRenderer::GetCheckBitmap(int flags)
     return m_bitmapsCheckbox[row][col];
 }
 
+wxBitmap wxGTKRenderer::GetLineWrapBitmap()
+{
+    if ( !m_bmpLineWrap.Ok() )
+    {
+        // the line wrap bitmap as used by GTK+
+        #define line_wrap_width 6
+        #define line_wrap_height 9
+        static const char line_wrap_bits[] =
+        {
+          0x1e, 0x3e, 0x30, 0x30, 0x39, 0x1f, 0x0f, 0x0f, 0x1f,
+        };
+
+        wxBitmap bmpLineWrap(line_wrap_bits, line_wrap_width, line_wrap_height);
+        if ( !bmpLineWrap.Ok() )
+        {
+            wxFAIL_MSG( _T("Failed to create line wrap XBM") );
+        }
+        else
+        {
+            m_bmpLineWrap = bmpLineWrap;
+        }
+    }
+
+    return m_bmpLineWrap;
+}
+
 void wxGTKRenderer::DrawCheckButton(wxDC& dc,
                                     const wxString& label,
                                     const wxBitmap& bitmapOrig,
@@ -1282,6 +1329,73 @@ void wxGTKRenderer::DrawRadioButton(wxDC& dc,
 
     DoDrawCheckOrRadioBitmap(dc, label, bitmap, rectTotal,
                              flags, align, indexAccel);
+}
+
+// ----------------------------------------------------------------------------
+// text control
+// ----------------------------------------------------------------------------
+
+wxRect wxGTKRenderer::GetTextTotalArea(const wxTextCtrl *text,
+                                       const wxRect& rect)
+{
+    wxRect rectTotal = rect;
+    rectTotal.Inflate(2);
+    return rectTotal;
+}
+
+wxRect wxGTKRenderer::GetTextClientArea(const wxTextCtrl *text,
+                                        const wxRect& rect,
+                                        wxCoord *extraSpaceBeyond)
+{
+    wxRect rectText = rect;
+    rectText.Inflate(-2);
+
+    if ( text->WrapLines() )
+    {
+        // leave enough for the line wrap bitmap indicator
+        wxCoord widthMark = GetLineWrapBitmap().GetWidth() + 2;
+
+        rectText.width -= widthMark;
+
+        if ( extraSpaceBeyond )
+            *extraSpaceBeyond = widthMark;
+    }
+
+    return rectText;
+}
+
+void wxGTKRenderer::DrawTextLine(wxDC& dc,
+                                 const wxString& text,
+                                 const wxRect& rect,
+                                 int selStart,
+                                 int selEnd)
+{
+    StandardDrawTextLine(dc, text, rect, selStart, selEnd);
+}
+
+void wxGTKRenderer::DrawLineWrapMark(wxDC& dc, const wxRect& rect)
+{
+    wxBitmap bmpLineWrap = GetLineWrapBitmap();
+
+    // for a mono bitmap he colours it appears in depends on the current text
+    // colours, so set them correctly
+    wxColour colFgOld;
+    if ( bmpLineWrap.GetDepth() == 1 )
+    {
+        colFgOld = dc.GetTextForeground();
+
+        // FIXME: I wonder what should we do if the background is black too?
+        dc.SetTextForeground(*wxBLACK);
+    }
+
+    dc.DrawBitmap(bmpLineWrap,
+                  rect.x, rect.y + (rect.height - bmpLineWrap.GetHeight())/2);
+
+    if ( colFgOld.Ok() )
+    {
+        // restore old colour
+        dc.SetTextForeground(colFgOld);
+    }
 }
 
 // ----------------------------------------------------------------------------

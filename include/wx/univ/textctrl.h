@@ -264,14 +264,13 @@ public:
     virtual bool SetFont(const wxFont &font);
     virtual bool Enable(bool enable = TRUE);
 
+    // more readable flag testing methods
+    bool IsSingleLine() const { return !(GetWindowStyle() & wxTE_MULTILINE); }
+    bool IsPassword() const { return (GetWindowStyle() & wxTE_PASSWORD) != 0; }
+    bool WrapLines() const
+        { return !IsSingleLine() && !(GetWindowStyle() & wxHSCROLL); }
+
 protected:
-    // draw the text
-    void DrawTextLine(wxDC& dc, const wxRect& rect,
-                      const wxString& text,
-                      wxTextPos selStart, wxTextPos selEnd);
-
-    void DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate);
-
     // override base class methods
     virtual void DoDrawBorder(wxDC& dc, const wxRect& rect);
     virtual void DoDraw(wxControlRenderer *renderer);
@@ -285,11 +284,11 @@ protected:
     // common part of all ctors
     void Init();
 
-    // more readable flag testing methods
-    bool IsSingleLine() const { return !(GetWindowStyle() & wxTE_MULTILINE); }
-    bool IsPassword() const { return (GetWindowStyle() & wxTE_PASSWORD) != 0; }
-    bool WrapLines() const
-        { return !IsSingleLine() && !(GetWindowStyle() & wxHSCROLL); }
+    // draw the text in the given rectangle
+    void DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate);
+
+    // draw the line wrap marks in this rect
+    void DoDrawLineWrapMarks(wxDC& dc, const wxRect& rectUpdate);
 
     // get the extent (width) of the text
     wxCoord GetTextWidth(const wxString& text) const;
@@ -307,6 +306,9 @@ protected:
     // get the starting row of the given line
     wxTextCoord GetFirstRowOfLine(wxTextCoord line) const;
 
+    // get the row following this line
+    wxTextCoord GetRowAfterLine(wxTextCoord line) const;
+
     // the text area is the part of the window in which the text can be
     // displayed, i.e. part of it inside the margins and the real text area is
     // the area in which the text *is* currently displayed: for example, in the
@@ -316,7 +318,10 @@ protected:
     wxRect GetRealTextArea() const;
 
     // refresh the text in the given (in logical coords) rect
-    void RefreshTextRect(const wxRect& rect);
+    void RefreshTextRect(const wxRect& rect, bool textOnly = TRUE);
+
+    // refresh the line wrap marks for the given range of lines (inclusive)
+    void RefreshLineWrapMarks(wxTextCoord rowFirst, wxTextCoord rowLast);
 
     // refresh the text in the given range (in logical coords) of this line, if
     // width is 0, refresh to the end of line
@@ -396,6 +401,14 @@ protected:
                                            wxTextCoord *col,
                                            wxTextCoord *row) const;
 
+    // get the line and the row in this line corresponding to the given row,
+    // return TRUE if ok and FALSE if row is out of range
+    //
+    // NB: this function can only be called for controls which wrap lines
+    bool GetLineAndRow(wxTextCoord row,
+                       wxTextCoord *line,
+                       wxTextCoord *rowInLine) const;
+
     // get the height of one line (the same for all lines)
     wxCoord GetLineHeight() const
     {
@@ -439,8 +452,8 @@ private:
     inline const wxArrayString& GetLines() const;
     inline size_t GetLineCount() const;
 
-    // replace a line
-    void ReplaceLine(wxTextCoord line, const wxString& text);
+    // replace a line (returns TRUE if the number of rows in thel ine changed)
+    bool ReplaceLine(wxTextCoord line, const wxString& text);
 
     // remove a line
     void RemoveLine(wxTextCoord line);
