@@ -13,6 +13,9 @@
 #pragma implementation "joystick.h"
 #endif
 
+// Not implemented in wxMotif
+#if 0
+
 #include "wx/joystick.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxJoystick, wxObject)
@@ -277,3 +280,5 @@ bool wxJoystick::ReleaseCapture()
     return FALSE;
 }
 
+#endif
+  // 0
