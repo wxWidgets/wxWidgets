@@ -48,6 +48,7 @@
 #include "wx/dateevt.h"
 #include "wx/generic/datectrl.h"
 
+#include "wx/arrstr.h" 
 #include "wx/calctrl.h"
 #include "wx/popupwin.h"
 #include "wx/renderer.h"
@@ -392,7 +393,7 @@ bool wxDatePickerCtrlGeneric::SetFormat(const wxChar *fmt)
 
     if (m_txt)
     {
-        wxStringList valList;
+        wxArrayString valList;
         wxChar c;
         for (c='0'; c <= '9'; c++)
             valList.Add(wxString(c, 1));
@@ -405,7 +406,7 @@ bool wxDatePickerCtrlGeneric::SetFormat(const wxChar *fmt)
                 valList.Add(wxString(*p++, 1));
         }
         wxTextValidator tv(wxFILTER_INCLUDE_CHAR_LIST);
-        tv.SetIncludeList(valList);
+        tv.SetIncludes(valList);
 
         m_txt->SetValidator(tv);
 
