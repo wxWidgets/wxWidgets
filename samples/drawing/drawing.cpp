@@ -802,6 +802,19 @@ void MyCanvas::DrawWithLogicalOps(wxDC& dc)
         dc.DrawLine(x, y, x + w, y + h);
         dc.DrawLine(x + w, y, x, y + h);
     }
+
+    // now some filled rectangles
+    dc.SetBrush(wxBrush(m_owner->m_colourForeground, wxSOLID));
+
+    for ( size_t n = 0; n < WXSIZEOF(rasterOperations); n++ )
+    {
+        wxCoord x = 20 + 150*(n%4),
+                y = 500 + 100*(n/4);
+
+        dc.DrawText(rasterOperations[n].name, x, y - 20);
+        dc.SetLogicalFunction(rasterOperations[n].rop);
+        dc.DrawRectangle(x, y, w, h);
+    }
 }
 
 void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
