@@ -253,6 +253,7 @@ wxMSW:
 - fixed redraw problems in dynamically resized wxStaticText
 - improvements to wxWindows applications behaviour when the system colours
   are changed
+- choose implicit parent for the dialog boxes better
 - fixed wxProgressDialog for ranges > 65535
 - wxSpinButton and wxSpinCtrl now support full 32 bit range (if the version
   of comctl32.dll installed on the system supports it)

@@ -46,8 +46,7 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
 
 int wxMessageDialog::ShowModal()
 {
-    wxWindow *winTop = wxTheApp->GetTopWindow();
-    if ( !winTop )
+    if ( !wxTheApp->GetTopWindow() )
     {
         // when the message box is shown from wxApp::OnInit() (i.e. before the
         // message loop is entered), this must be done or the next message box
@@ -58,11 +57,9 @@ int wxMessageDialog::ShowModal()
     }
 
     // use the top level window as parent if none specified
-    HWND hWnd = 0;
-    if ( m_parent )
-        hWnd = GetHwndOf(m_parent);
-    else if ( winTop )
-        hWnd = GetHwndOf(winTop);
+    if ( !m_parent )
+        m_parent = FindSuitableParent();
+    HWND hWnd = m_parent ? GetHwndOf(m_parent) : NULL;
 
     // translate wx style in MSW
     unsigned int msStyle = MB_OK;

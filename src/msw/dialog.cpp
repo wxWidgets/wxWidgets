@@ -194,6 +194,28 @@ bool wxDialog::IsModalShowing() const
     return wxModalDialogs.Find((wxDialog *)this) != NULL; // const_cast
 }
 
+wxWindow *wxDialog::FindSuitableParent() const
+{
+    // first try to use the currently active window
+    HWND hwndFg = ::GetForegroundWindow();
+    wxWindow *parent = hwndFg ? wxFindWinFromHandle((WXHWND)hwndFg)
+                              : NULL;
+    if ( !parent )
+    {
+        // next try the main app window
+        parent = wxTheApp->GetTopWindow();
+    }
+
+    // finally, check if the parent we found is really suitable
+    if ( !parent || parent == (wxWindow *)this || !parent->IsShown() )
+    {
+        // don't use this one
+        parent = NULL;
+    }
+
+    return parent;
+}
+
 void wxDialog::DoShowModal()
 {
     wxCHECK_RET( !IsModalShowing(), _T("DoShowModal() called twice") );
@@ -285,12 +307,7 @@ bool wxDialog::Show(bool show)
             // modal dialog needs a parent window, so try to find one
             if ( !GetParent() )
             {
-                wxWindow *parent = wxTheApp->GetTopWindow();
-                if ( parent && parent != this && parent->IsShown() )
-                {
-                    // use it
-                    m_parent = parent;
-                }
+                m_parent = FindSuitableParent();
             }
 
             DoShowModal();

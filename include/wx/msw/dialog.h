@@ -98,6 +98,12 @@ public:
 #endif // wxUSE_CTL3D
 
 protected:
+    // find the window to use as parent for this dialog if none has been
+    // specified explicitly by the user
+    //
+    // may return NULL
+    wxWindow *FindSuitableParent() const;
+
     // show modal dialog and enter modal loop
     void DoShowModal();
 
