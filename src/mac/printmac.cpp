@@ -144,6 +144,7 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
     wxEndBusyCursor();
     wxMessageBox("Sorry, could not create an abort dialog.", "Print Error", wxOK, parent);
     delete dc;
+    return FALSE;
   }
   sm_abortWindow = win;
   sm_abortWindow->Show(TRUE);
