@@ -494,23 +494,30 @@ wxInputStream::~wxInputStream()
 char *wxInputStream::AllocSpaceWBack(size_t needed_size)
 {
   char *temp_b;
-  size_t old_size;
+  size_t toget;
 
-  old_size = m_wbacksize;
-  m_wbacksize += needed_size;
+  /* get number of bytes left from previous wback buffer */
+  toget = m_wbacksize - m_wbackcur;
 
-  if (!m_wback)
-    temp_b = (char *)malloc(m_wbacksize);
-  else
-    temp_b = (char *)realloc(m_wback, m_wbacksize);
+  /* allocate a buffer large enough to hold prev + new data */
+  temp_b = (char *) malloc(needed_size + toget);
 
   if (!temp_b)
-    return (char*)NULL;
-  m_wback = temp_b;
+    return NULL;
 
-  memmove(m_wback+needed_size, m_wback, old_size);
-  
-  return (char *)(m_wback);
+  /* copy previous data (and free old buffer) if needed */
+  if (m_wback)
+  {
+    memmove(temp_b + needed_size, m_wback + m_wbackcur, toget);
+    free(m_wback);
+  }
+
+  /* done */
+  m_wback = temp_b;
+  m_wbackcur = 0;
+  m_wbacksize = needed_size + toget;
+
+  return (char *) m_wback;
 }
 
 size_t wxInputStream::GetWBack(char *buf, size_t bsize)
@@ -581,6 +588,7 @@ wxInputStream& wxInputStream::Read(void *buffer, size_t size)
   size     -= retsize;
   buf      += retsize;
 
+  // GRG: shouldn't we also add retsize to m_lastcount here?
   m_lastcount = OnSysRead(buf, size);
   return *this;
 }
