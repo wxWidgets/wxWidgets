@@ -38,6 +38,7 @@
 				F5F5A69902CDB04601000133,
 			);
 			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 //040
 //041
@@ -102,6 +103,7 @@
 				05952DFCFFF02D1B11CA0E50,
 				05952DFDFFF02D1B11CA0E50,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			mainGroup = 20286C29FDCF999611CA2CEA;
 			projectDirPath = "";
@@ -193,8 +195,8 @@
 			productName = "¬´PROJECTNAME¬ª";
 			productReference = 0249A665FF388DC511CA2CEA;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">
-<plist version=\"0.9\">
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
@@ -229,13 +231,13 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 1;
 		};
 		20286C35FDCF999611CA2CEA = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		20286C36FDCF999611CA2CEA = {
 			buildActionMask = 2147483647;
@@ -243,6 +245,7 @@
 				F5F5A69B02CDB0E101000133,
 			);
 			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		20286C38FDCF999611CA2CEA = {
 			buildActionMask = 2147483647;
@@ -250,6 +253,7 @@
 				F591E05801FCC5DE01000133,
 			);
 			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		20286C3BFDCF999611CA2CEA = {
 			buildActionMask = 2147483647;
@@ -259,6 +263,7 @@
 				F5F5A69702CDB02701000133,
 			);
 			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		20286C3CFDCF999611CA2CEA = {
 			fileRef = 20286C33FDCF999611CA2CEA;
@@ -277,6 +282,7 @@
 //F53
 //F54
 		F591E05701FCC5DE01000133 = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = minimal.cpp;
 			refType = 2;
@@ -296,6 +302,7 @@
 				F5A0C6B102CF7C5801000133,
 			);
 			buildSettings = {
+				DEBUGGING_SYMBOLS = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
 				HEADER_SEARCH_PATHS = "../../src/build/include ../../include . - /usr/include";
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -320,8 +327,8 @@
 			productName = "¬´PROJECTNAME¬ª";
 			productReference = F5A0C6B302CF7C5801000133;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">
-<plist version=\"0.9\">
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
@@ -356,13 +363,13 @@
 </dict>
 </plist>
 ";
-			shouldUseHeadermap = 1;
 		};
 		F5A0C6A802CF7C5801000133 = {
 			buildActionMask = 2147483647;
 			files = (
 			);
 			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5A0C6A902CF7C5801000133 = {
 			buildActionMask = 2147483647;
@@ -370,6 +377,7 @@
 				F5A0C6AA02CF7C5801000133,
 			);
 			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5A0C6AA02CF7C5801000133 = {
 			fileRef = F5F5A69A02CDB0E101000133;
@@ -383,6 +391,7 @@
 				F5A0C6AC02CF7C5801000133,
 			);
 			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5A0C6AC02CF7C5801000133 = {
 			fileRef = F591E05701FCC5DE01000133;
@@ -398,6 +407,7 @@
 				F5A0C6BA02CF7C9901000133,
 			);
 			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5A0C6AE02CF7C5801000133 = {
 			fileRef = 20286C33FDCF999611CA2CEA;
@@ -417,6 +427,7 @@
 				F5A0C6BD02CF7CE301000133,
 			);
 			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F5A0C6B302CF7C5801000133 = {
 			isa = PBXApplicationReference;
