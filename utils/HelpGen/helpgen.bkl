@@ -5,7 +5,8 @@
 
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
-    <exe id="HelpGen" template="wx_util_console" template_append="wx_append">
+    <exe id="HelpGen" template="wx_util_console"
+                      template_append="wx_append_base">
         <sources>
             src/HelpGen.cpp
             src/cjparser.cpp

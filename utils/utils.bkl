@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <include file="../build/bakefiles/config.bkl"/>
+    
+    <template id="sub">
+        <dependency-of>all</dependency-of>
+    </template>
+
+    <subproject id="tex2rtf" template="sub">
+        <dir>tex2rtf/src</dir>
+        <installable>yes</installable>
+    </subproject>
+    
+    <subproject id="helpgen" template="sub">
+        <dir>HelpGen</dir>
+        <installable>yes</installable>
+    </subproject>
+
+</makefile>
