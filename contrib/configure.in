@@ -43,12 +43,16 @@ AC_OUTPUT([
             src/mmedia/Makefile
             src/stc/Makefile
             src/xml/Makefile
+	    src/gizmos/Makefile
             samples/Makefile
             samples/mmedia/Makefile
             samples/ogl/Makefile
             samples/ogl/ogledit/Makefile
             samples/ogl/studio/Makefile
             samples/stc/Makefile
+	    samples/gizmos/Makefile
+	    samples/gizmos/multicell/Makefile
+	    samples/gizmos/splittree/Makefile
             utils/Makefile
             utils/wxrc/Makefile
             utils/wxrcedit/Makefile
