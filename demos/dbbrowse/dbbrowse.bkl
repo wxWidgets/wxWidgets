@@ -3,7 +3,7 @@
 
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
-    <exe id="dbbrowse" template="wx_sample" template_append="wx_append">
+    <exe id="dbbrowse" template="wx_sample" template_append="wx_append" cond="USE_ODBC=='1'">
         <sources>
             dbbrowse.cpp
             doc.cpp
