@@ -1615,6 +1615,7 @@ private:
     void OnMouseLeftDown(wxMouseEvent& evt);
     void OnMouseMove(wxMouseEvent& evt);
     void OnMouseLeftUp(wxMouseEvent& evt);
+    void OnMouseRightUp(wxMouseEvent& evt);
     void OnContextMenu(wxContextMenuEvent& evt);
     void OnMouseWheel(wxMouseEvent& evt);
     void OnChar(wxKeyEvent& evt);

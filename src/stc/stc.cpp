@@ -112,7 +112,11 @@ BEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
 #endif
     EVT_MOTION                  (wxStyledTextCtrl::OnMouseMove)
     EVT_LEFT_UP                 (wxStyledTextCtrl::OnMouseLeftUp)
+#ifdef __WXGTK__
+    EVT_RIGHT_UP                (wxStyledTextCtrl::OnMouseRightUp)
+#else
     EVT_CONTEXT_MENU            (wxStyledTextCtrl::OnContextMenu)
+#endif
     EVT_MOUSEWHEEL              (wxStyledTextCtrl::OnMouseWheel)
     EVT_CHAR                    (wxStyledTextCtrl::OnChar)
     EVT_KEY_DOWN                (wxStyledTextCtrl::OnKeyDown)
@@ -1837,6 +1841,12 @@ void wxStyledTextCtrl::OnMouseLeftUp(wxMouseEvent& evt) {
 }
 
 
+void wxStyledTextCtrl::OnMouseRightUp(wxMouseEvent& evt) {
+    wxPoint pt = evt.GetPosition();
+    m_swx->DoContextMenu(Point(pt.x, pt.y));
+}
+
+
 void wxStyledTextCtrl::OnContextMenu(wxContextMenuEvent& evt) {
     wxPoint pt = evt.GetPosition();
     ScreenToClient(&pt.x, &pt.y);
@@ -1869,7 +1879,7 @@ void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
     bool alt  = evt.AltDown();
     bool skip = ((ctrl || alt) && ! (ctrl && alt));
 
-    if (key <= 0xff && !iscntrl(key) && !m_lastKeyDownConsumed && !skip) {
+    if (key <= 0xff && key >= 32 && !m_lastKeyDownConsumed && !skip) {
         m_swx->DoAddChar(key);
         return;
     }
