@@ -191,7 +191,7 @@ methodOverrideMap = {
         size_t len = strm.GetSize();
         char* buff = new char[len+1];
         strm.CopyTo(buff, len);
-        buff[len+1] = 0;
+        buff[len] = 0;
         SendMsg(%s, markerNumber, (long)buff);
         delete [] buff;
         ''',
@@ -285,7 +285,7 @@ methodOverrideMap = {
         size_t len = strm.GetSize();
         char* buff = new char[len+1];
         strm.CopyTo(buff, len);
-        buff[len+1] = 0;
+        buff[len] = 0;
         SendMsg(%s, type, (long)buff);
         delete [] buff;
      ''',
