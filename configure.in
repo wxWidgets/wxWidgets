@@ -4618,16 +4618,8 @@ if test "$wxUSE_GUI" = "yes"; then
         AC_MSG_WARN([Joystick not yet supported under Mac OS X... disabled])
         wxUSE_JOYSTICK=no
      fi
-    if test "$TOOLKIT" = "MOTIF"; then
-        AC_MSG_WARN([Joystick not yet supported under Motif... disabled])
-        wxUSE_JOYSTICK=no
-     fi
-    if test "$TOOLKIT" = "X11"; then
-        AC_MSG_WARN([Joystick not yet supported under X11... disabled])
-        wxUSE_JOYSTICK=no
-     fi
-
-    dnl under MSW we always have joystick support
+    
+     dnl under MSW we always have joystick support
     if test "$TOOLKIT" != "MSW"; then
         if test "$wxUSE_JOYSTICK" = "yes"; then
             dnl joystick support is only for Linux 2.1.x or greater
@@ -5232,7 +5224,8 @@ fi
 
 if test "$wxUSE_SYSTEM_OPTIONS" = "yes"; then
     AC_DEFINE(wxUSE_SYSTEM_OPTIONS)
-if test "$TOOLKIT" = "MSW"; then
+if test "$TOOLKIT" = "MSW" -o "$TOOLKIT" = "GTK" -o "$TOOLKIT" = "X11" -o \
+        "$TOOLKIT" = "MOTIF"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS taskbar"
 fi
 

@@ -478,3 +478,15 @@ dnl ### begin block COND_SHARED_0 ###
         COND_SHARED_0=""
     fi
     AC_SUBST(COND_SHARED_0)
+dnl ### begin block COND_TOOLKIT_MAC_USE_GUI_1 ###
+    COND_TOOLKIT_MAC_USE_GUI_1="#"
+    if test "x$TOOLKIT" = "xMAC" -a "x$USE_GUI" = "x1" ; then
+        COND_TOOLKIT_MAC_USE_GUI_1=""
+    fi
+    AC_SUBST(COND_TOOLKIT_MAC_USE_GUI_1)
+dnl ### begin block COND_TOOLKIT_OS2_USE_GUI_1 ###
+    COND_TOOLKIT_OS2_USE_GUI_1="#"
+    if test "x$TOOLKIT" = "xOS2" -a "x$USE_GUI" = "x1" ; then
+        COND_TOOLKIT_OS2_USE_GUI_1=""
+    fi
+    AC_SUBST(COND_TOOLKIT_OS2_USE_GUI_1)

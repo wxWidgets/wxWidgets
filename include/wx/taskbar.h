@@ -11,7 +11,7 @@
 // wxTaskBarIconBase: define wxTaskBarIcon interface
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTaskBarIconBase : public wxEvtHandler
+class WXDLLIMPEXP_ADV wxTaskBarIconBase : public wxEvtHandler
 {
 public:
     wxTaskBarIconBase() { }
@@ -35,7 +35,7 @@ private:
 // wxTaskBarIcon events
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTaskBarIconEvent : public wxEvent
+class WXDLLIMPEXP_ADV wxTaskBarIconEvent : public wxEvent
 {
 public:
     wxTaskBarIconEvent(wxEventType evtType, wxTaskBarIcon *tbIcon)
@@ -51,13 +51,13 @@ private:
 };
 
 BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EVENT_TYPE( wxEVT_TASKBAR_MOVE, 1550 )
-    DECLARE_EVENT_TYPE( wxEVT_TASKBAR_LEFT_DOWN, 1551 )
-    DECLARE_EVENT_TYPE( wxEVT_TASKBAR_LEFT_UP, 1552 )
-    DECLARE_EVENT_TYPE( wxEVT_TASKBAR_RIGHT_DOWN, 1553 )
-    DECLARE_EVENT_TYPE( wxEVT_TASKBAR_RIGHT_UP, 1554 )
-    DECLARE_EVENT_TYPE( wxEVT_TASKBAR_LEFT_DCLICK, 1555 )
-    DECLARE_EVENT_TYPE( wxEVT_TASKBAR_RIGHT_DCLICK, 1556 )
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV,wxEVT_TASKBAR_MOVE,1550)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV,wxEVT_TASKBAR_LEFT_DOWN,1551)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV,wxEVT_TASKBAR_LEFT_UP,1552)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV,wxEVT_TASKBAR_RIGHT_DOWN,1553)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV,wxEVT_TASKBAR_RIGHT_UP,1554)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV,wxEVT_TASKBAR_LEFT_DCLICK,1555)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV,wxEVT_TASKBAR_RIGHT_DCLICK,1556)
 END_DECLARE_EVENT_TYPES()
 
 #define EVT_TASKBAR_MOVE(fn)         DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_MOVE, -1, -1, (wxObjectEventFunction) (wxEventFunction) &fn, NULL),

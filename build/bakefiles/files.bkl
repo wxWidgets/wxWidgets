@@ -561,7 +561,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/imagpnm.h
     wx/imagtiff.h
     wx/imagxpm.h
-    wx/joystick.h
     wx/listbase.h
     wx/listctrl.h
     wx/matrix.h
@@ -588,7 +587,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/statline.h
     wx/tab.h
     wx/tabctrl.h
-    wx/taskbar.h
     wx/tbarbase.h
     wx/tbarsmpl.h
     wx/tglbtn.h
@@ -601,7 +599,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/vlbox.h
     wx/vms_x_fix.h
     wx/vscroll.h
-    wx/wave.h
     wx/xpmdecod.h
     wx/xpmhand.h
 </set>
@@ -612,20 +609,17 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- ====================================================================== -->
 
 <set var="XWIN_LOWLEVEL_SRC" hints="files">
-    src/common/taskbarcmn.cpp
     src/generic/caret.cpp
     src/generic/printps.cpp
     src/unix/dialup.cpp
     src/unix/fontenum.cpp
     src/unix/fontutil.cpp
-    src/unix/taskbarx11.cpp
     src/unix/utilsx11.cpp
 </set>
 <set var="XWIN_LOWLEVEL_HDR" hints="files">
     wx/generic/caret.h
     wx/generic/printps.h
     wx/unix/fontutil.h
-    wx/unix/taskbarx11.h
     wx/unix/utilsx11.h
 </set>
 
@@ -697,7 +691,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/fontdlg.cpp
     src/gtk/frame.cpp
     src/gtk/gauge.cpp
-    src/gtk/joystick.cpp
     src/gtk/listbox.cpp
     src/gtk/mdi.cpp
     src/gtk/menu.cpp
@@ -719,7 +712,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/textctrl.cpp
     src/gtk/tglbtn.cpp
     src/gtk/utilsres.cpp
-    src/gtk/wave.cpp
 </set>
 <set var="GTK_HDR" hints="files">
     wx/generic/dirdlgg.h
@@ -757,7 +749,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/gauge.h
     wx/gtk/gdiobj.h
     wx/gtk/icon.h
-    wx/gtk/joystick.h
     wx/gtk/listbox.h
     wx/gtk/mdi.h
     wx/gtk/menu.h
@@ -786,7 +777,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/tooltip.h
     wx/gtk/toplevel.h
     wx/gtk/treectrl.h
-    wx/gtk/wave.h
     wx/gtk/win_gtk.h
     wx/gtk/window.h
 </set>
@@ -966,7 +956,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/x11/gdiobj.cpp
     <!-- src/x11/gsockx11.c FIXME -->
     src/x11/icon.cpp
-    src/x11/joystick.cpp
     src/x11/main.cpp
     src/x11/minifram.cpp
     src/x11/nanox.c
@@ -1002,7 +991,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/x11/font.h
     wx/x11/gdiobj.h
     wx/x11/icon.h
-    wx/x11/joystick.h
     wx/x11/minifram.h
     wx/x11/palette.h
     wx/x11/pen.h
@@ -1023,7 +1011,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- ====================================================================== -->
 
 <set var="MSW_LOWLEVEL_SRC" hints="files">
-    src/common/taskbarcmn.cpp
     src/msw/app.cpp
     src/msw/bitmap.cpp
     src/msw/brush.cpp
@@ -1051,7 +1038,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/helpchm.cpp
     src/msw/helpwin.cpp
     src/msw/icon.cpp
-    src/msw/joystick.cpp
     src/msw/minifram.cpp
     src/msw/ole/automtn.cpp
     src/msw/ole/dataobj.cpp
@@ -1065,13 +1051,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/region.cpp
     src/msw/renderer.cpp
     src/msw/settings.cpp
-    src/msw/taskbar.cpp
     src/msw/timer.cpp
     src/msw/tooltip.cpp
     src/msw/toplevel.cpp
     src/msw/utilsgui.cpp
     src/msw/uxtheme.cpp
-    src/msw/wave.cpp
     src/msw/window.cpp
 </set>
 <set var="MSW_LOWLEVEL_HDR" hints="files">
@@ -1168,7 +1152,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/icon.h
     wx/msw/imaglist.h
     wx/msw/iniconf.h
-    wx/msw/joystick.h
     wx/msw/listbox.h
     wx/msw/listctrl.h
     wx/msw/mdi.h
@@ -1212,7 +1195,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/statline.h
     wx/msw/stattext.h
     wx/msw/tabctrl.h
-    wx/msw/taskbar.h
     wx/msw/tbar95.h
     wx/msw/tbarmsw.h
     wx/msw/textctrl.h
@@ -1221,7 +1203,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/tooltip.h
     wx/msw/toplevel.h
     wx/msw/treectrl.h
-    wx/msw/wave.h
     wx/msw/window.h
 
     <!-- Resources must be installed together with headers: -->
@@ -1375,7 +1356,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/os2/helpwin.cpp
     src/os2/icon.cpp
     src/os2/iniconf.cpp
-    src/os2/joystick.cpp
     src/os2/listbox.cpp
     src/os2/main.cpp
     src/os2/menu.cpp
@@ -1408,7 +1388,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/os2/toolbar.cpp
     src/os2/tooltip.cpp
     src/os2/toplevel.cpp
-    src/os2/wave.cpp
     src/os2/window.cpp
 </set>
 <set var="OS2_HDR" hints="files">
@@ -1448,7 +1427,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/os2/helpwin.h
     wx/os2/icon.h
     wx/os2/iniconf.h
-    wx/os2/joystick.h
     wx/os2/listbox.h
     wx/os2/menu.h
     wx/os2/menuitem.h
@@ -1481,7 +1459,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/os2/toolbar.h
     wx/os2/tooltip.h
     wx/os2/toplevel.h
-    wx/os2/wave.h
     wx/os2/window.h
 </set>
 
@@ -1531,7 +1508,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/gauge.cpp
     src/mac/gdiobj.cpp
     src/mac/icon.cpp
-    src/mac/joystick.cpp
     src/mac/listbox.cpp
     src/mac/macnotfy.cpp
     src/mac/mdi.cpp
@@ -1568,7 +1544,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/tooltip.cpp
     src/mac/toplevel.cpp
     src/mac/uma.cpp
-    src/mac/wave.cpp
     src/mac/window.cpp
     <!-- Generic implementations used by wxMac: -->
     src/generic/caret.cpp
@@ -1620,7 +1595,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/helpxxxx.h
     wx/mac/icon.h
     wx/mac/imaglist.h
-    wx/mac/joystick.h
     wx/mac/listbox.h
     wx/mac/listctrl.h
     wx/mac/macnotfy.h
@@ -1660,7 +1634,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/toplevel.h
     wx/mac/treectrl.h
     wx/mac/uma.h
-    wx/mac/wave.h
     wx/mac/window.h
     <!-- Generic implementations used by wxMac: -->
     wx/generic/caret.h
@@ -1941,12 +1914,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!--                               wxAdvanced                               -->
 <!-- ====================================================================== -->
 
-<set var="ADVANCED_MSW_SRC" hints="files">
-</set>
-
-<set var="ADVANCED_MSW_HDR" hints="files">
-</set>
-
 <set var="ADVANCED_CMN_SRC" hints="files">
     src/common/dbgrid.cpp
     src/generic/calctrl.cpp
@@ -1976,11 +1943,56 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/splash.h
     wx/generic/wizard.h
     wx/grid.h
+    wx/joystick.h
     wx/laywin.h
     wx/sashwin.h
     wx/splash.h
+    wx/taskbar.h
     wx/tipdlg.h
+    wx/wave.h
     wx/wizard.h
+</set>
+
+<set var="ADVANCED_MSW_SRC" hints="files">
+    src/common/taskbarcmn.cpp
+    src/msw/joystick.cpp
+    src/msw/taskbar.cpp
+    src/msw/wave.cpp
+</set>
+<set var="ADVANCED_MSW_HDR" hints="files">
+    wx/msw/joystick.h
+    wx/msw/taskbar.h
+    wx/msw/wave.h
+</set>
+
+<set var="ADVANCED_MAC_SRC" hints="files">
+    src/mac/joystick.cpp
+    src/mac/wave.cpp
+</set>
+<set var="ADVANCED_MAC_HDR" hints="files">
+    wx/mac/joystick.h
+    wx/mac/wave.h
+</set>
+
+<set var="ADVANCED_OS2_SRC" hints="files">
+    src/os2/joystick.cpp
+    src/os2/wave.cpp
+</set>
+<set var="ADVANCED_OS2_HDR" hints="files">
+    wx/os2/joystick.h
+    wx/os2/wave.h
+</set>
+
+<set var="ADVANCED_UNIX_SRC" hints="files">
+    src/common/taskbarcmn.cpp
+    src/unix/joystick.cpp
+    src/unix/taskbarx11.cpp
+    src/unix/wave.cpp
+</set>
+<set var="ADVANCED_UNIX_HDR" hints="files">
+    wx/unix/joystick.h
+    wx/unix/taskbarx11.h
+    wx/unix/wave.h
 </set>
 
 
@@ -2135,17 +2147,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         $(NET_CMN_SRC) $(NET_PLATFORM_SRC)
     </set>
 
-    
-    <!-- wxAdvanced files: -->
-    <set var="ADVANCED_PLATFORM_SRC" hints="files">
-        <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_SRC)</if>
-    </set>
-    <set var="ADVANCED_PLATFORM_HDR" hints="files">
-        <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_HDR)</if>
-    </set>
-    <set var="ADVANCED_SRC">$(ADVANCED_CMN_SRC) $(ADVANCED_PLATFORM_SRC)</set>
-    <set var="ADVANCED_HDR">$(ADVANCED_CMN_HDR) $(ADVANCED_PLATFORM_HDR)</set>
-
 
     <!-- GUI sources: -->
     
@@ -2195,6 +2196,27 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
             $(LOWLEVEL_SRC) $(UNIV_SRC) $(UNIV_THEMES_SRC) $(GUI_CMN_SRC)
         </if>
     </set>
+    
+    <!-- wxAdvanced files: -->
+    <set var="ADVANCED_PLATFORM_SRC" hints="files">
+        <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_SRC)</if>
+        <if cond="TOOLKIT=='MAC'">$(ADVANCED_MAC_SRC)</if>
+        <if cond="TOOLKIT=='MOTIF'">$(ADVANCED_UNIX_SRC)</if>
+        <if cond="TOOLKIT=='GTK'">$(ADVANCED_UNIX_SRC)</if>
+        <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_SRC)</if>
+        <if cond="TOOLKIT=='OS2'">$(ADVANCED_OS2_SRC)</if>
+    </set>
+    <set var="ADVANCED_PLATFORM_HDR" hints="files">
+        <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_HDR)</if>
+        <if cond="TOOLKIT=='MAC'">$(ADVANCED_MAC_HDR)</if>
+        <if cond="TOOLKIT=='MOTIF'">$(ADVANCED_UNIX_HDR)</if>
+        <if cond="TOOLKIT=='GTK'">$(ADVANCED_UNIX_HDR)</if>
+        <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_HDR)</if>
+        <if cond="TOOLKIT=='OS2'">$(ADVANCED_OS2_HDR)</if>
+    </set>
+    <set var="ADVANCED_SRC">$(ADVANCED_CMN_SRC) $(ADVANCED_PLATFORM_SRC)</set>
+    <set var="ADVANCED_HDR">$(ADVANCED_CMN_HDR) $(ADVANCED_PLATFORM_HDR)</set>
+
 
 
     <set var="ALL_GUI_HEADERS" hints="files">

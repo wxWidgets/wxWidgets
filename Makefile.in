@@ -66,7 +66,8 @@ ADVDLL_OBJECTS =  \
 	advdll_sashwin.o \
 	advdll_splash.o \
 	advdll_tipdlg.o \
-	advdll_wizard.o
+	advdll_wizard.o \
+	$(__ADVANCED_PLATFORM_SRC_OBJECTS_2)
 ADVLIB_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
 	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
@@ -83,7 +84,8 @@ ADVLIB_OBJECTS =  \
 	advlib_sashwin.o \
 	advlib_splash.o \
 	advlib_tipdlg.o \
-	advlib_wizard.o
+	advlib_wizard.o \
+	$(__ADVANCED_PLATFORM_SRC_OBJECTS_3)
 ALL_HEADERS =  \
 	wx/app.h \
 	wx/apptrait.h \
@@ -203,11 +205,15 @@ ALL_HEADERS =  \
 	wx/generic/splash.h \
 	wx/generic/wizard.h \
 	wx/grid.h \
+	wx/joystick.h \
 	wx/laywin.h \
 	wx/sashwin.h \
 	wx/splash.h \
+	wx/taskbar.h \
 	wx/tipdlg.h \
+	wx/wave.h \
 	wx/wizard.h \
+	$(ADVANCED_PLATFORM_HDR) \
 	wx/html/forcelnk.h \
 	wx/html/helpctrl.h \
 	wx/html/helpdata.h \
@@ -818,6 +824,18 @@ XMLLIB_OBJECTS =  \
 
 ### Conditionally set variables: ###
 
+@COND_TOOLKIT_GTK@ADVANCED_PLATFORM_HDR = \
+@COND_TOOLKIT_GTK@	wx/unix/joystick.h wx/unix/taskbarx11.h wx/unix/wave.h
+@COND_TOOLKIT_MAC@ADVANCED_PLATFORM_HDR = \
+@COND_TOOLKIT_MAC@	wx/mac/joystick.h wx/mac/wave.h
+@COND_TOOLKIT_MOTIF@ADVANCED_PLATFORM_HDR = \
+@COND_TOOLKIT_MOTIF@	wx/unix/joystick.h wx/unix/taskbarx11.h wx/unix/wave.h
+@COND_TOOLKIT_MSW@ADVANCED_PLATFORM_HDR = \
+@COND_TOOLKIT_MSW@	wx/msw/joystick.h wx/msw/taskbar.h wx/msw/wave.h
+@COND_TOOLKIT_OS2@ADVANCED_PLATFORM_HDR = \
+@COND_TOOLKIT_OS2@	wx/os2/joystick.h wx/os2/wave.h
+@COND_TOOLKIT_X11@ADVANCED_PLATFORM_HDR = \
+@COND_TOOLKIT_X11@	wx/unix/joystick.h wx/unix/taskbarx11.h wx/unix/wave.h
 COND_USE_GUI_1_WXUNIV_0_ALL_GUI_HEADERS =  \
 	wx/bmpbuttn.h \
 	wx/brush.h \
@@ -943,7 +961,6 @@ COND_USE_GUI_1_WXUNIV_0_ALL_GUI_HEADERS =  \
 	wx/imagpnm.h \
 	wx/imagtiff.h \
 	wx/imagxpm.h \
-	wx/joystick.h \
 	wx/listbase.h \
 	wx/listctrl.h \
 	wx/matrix.h \
@@ -970,7 +987,6 @@ COND_USE_GUI_1_WXUNIV_0_ALL_GUI_HEADERS =  \
 	wx/statline.h \
 	wx/tab.h \
 	wx/tabctrl.h \
-	wx/taskbar.h \
 	wx/tbarbase.h \
 	wx/tbarsmpl.h \
 	wx/tglbtn.h \
@@ -983,7 +999,6 @@ COND_USE_GUI_1_WXUNIV_0_ALL_GUI_HEADERS =  \
 	wx/vlbox.h \
 	wx/vms_x_fix.h \
 	wx/vscroll.h \
-	wx/wave.h \
 	wx/xpmdecod.h \
 	wx/xpmhand.h \
 	$(LOWLEVEL_HDR) \
@@ -1114,7 +1129,6 @@ COND_USE_GUI_1_WXUNIV_1_ALL_GUI_HEADERS =  \
 	wx/imagpnm.h \
 	wx/imagtiff.h \
 	wx/imagxpm.h \
-	wx/joystick.h \
 	wx/listbase.h \
 	wx/listctrl.h \
 	wx/matrix.h \
@@ -1141,7 +1155,6 @@ COND_USE_GUI_1_WXUNIV_1_ALL_GUI_HEADERS =  \
 	wx/statline.h \
 	wx/tab.h \
 	wx/tabctrl.h \
-	wx/taskbar.h \
 	wx/tbarbase.h \
 	wx/tbarsmpl.h \
 	wx/tglbtn.h \
@@ -1154,7 +1167,6 @@ COND_USE_GUI_1_WXUNIV_1_ALL_GUI_HEADERS =  \
 	wx/vlbox.h \
 	wx/vms_x_fix.h \
 	wx/vscroll.h \
-	wx/wave.h \
 	wx/xpmdecod.h \
 	wx/xpmhand.h \
 	$(LOWLEVEL_HDR) \
@@ -1320,7 +1332,6 @@ COND_TOOLKIT_GTK_GUI_HDR =  \
 	wx/gtk/gauge.h \
 	wx/gtk/gdiobj.h \
 	wx/gtk/icon.h \
-	wx/gtk/joystick.h \
 	wx/gtk/listbox.h \
 	wx/gtk/mdi.h \
 	wx/gtk/menu.h \
@@ -1349,7 +1360,6 @@ COND_TOOLKIT_GTK_GUI_HDR =  \
 	wx/gtk/tooltip.h \
 	wx/gtk/toplevel.h \
 	wx/gtk/treectrl.h \
-	wx/gtk/wave.h \
 	wx/gtk/win_gtk.h \
 	wx/gtk/window.h
 @COND_TOOLKIT_GTK@GUI_HDR = $(COND_TOOLKIT_GTK_GUI_HDR)
@@ -1392,7 +1402,6 @@ COND_TOOLKIT_MAC_GUI_HDR =  \
 	wx/mac/helpxxxx.h \
 	wx/mac/icon.h \
 	wx/mac/imaglist.h \
-	wx/mac/joystick.h \
 	wx/mac/listbox.h \
 	wx/mac/listctrl.h \
 	wx/mac/macnotfy.h \
@@ -1432,7 +1441,6 @@ COND_TOOLKIT_MAC_GUI_HDR =  \
 	wx/mac/toplevel.h \
 	wx/mac/treectrl.h \
 	wx/mac/uma.h \
-	wx/mac/wave.h \
 	wx/mac/window.h \
 	wx/generic/caret.h \
 	wx/generic/fdrepdlg.h \
@@ -1549,7 +1557,6 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/icon.h \
 	wx/msw/imaglist.h \
 	wx/msw/iniconf.h \
-	wx/msw/joystick.h \
 	wx/msw/listbox.h \
 	wx/msw/listctrl.h \
 	wx/msw/mdi.h \
@@ -1593,7 +1600,6 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/statline.h \
 	wx/msw/stattext.h \
 	wx/msw/tabctrl.h \
-	wx/msw/taskbar.h \
 	wx/msw/tbar95.h \
 	wx/msw/tbarmsw.h \
 	wx/msw/textctrl.h \
@@ -1602,7 +1608,6 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/tooltip.h \
 	wx/msw/toplevel.h \
 	wx/msw/treectrl.h \
-	wx/msw/wave.h \
 	wx/msw/window.h \
 	wx/msw/gnuwin32/winresrc.h \
 	wx/msw/wx.manifest \
@@ -1679,7 +1684,6 @@ COND_TOOLKIT_OS2_GUI_HDR =  \
 	wx/os2/helpwin.h \
 	wx/os2/icon.h \
 	wx/os2/iniconf.h \
-	wx/os2/joystick.h \
 	wx/os2/listbox.h \
 	wx/os2/menu.h \
 	wx/os2/menuitem.h \
@@ -1712,7 +1716,6 @@ COND_TOOLKIT_OS2_GUI_HDR =  \
 	wx/os2/toolbar.h \
 	wx/os2/tooltip.h \
 	wx/os2/toplevel.h \
-	wx/os2/wave.h \
 	wx/os2/window.h
 @COND_TOOLKIT_OS2@GUI_HDR = $(COND_TOOLKIT_OS2_GUI_HDR)
 @COND_TOOLKIT_COCOA@LOWLEVEL_HDR = 
@@ -1720,7 +1723,6 @@ COND_TOOLKIT_GTK_LOWLEVEL_HDR =  \
 	wx/generic/caret.h \
 	wx/generic/printps.h \
 	wx/unix/fontutil.h \
-	wx/unix/taskbarx11.h \
 	wx/unix/utilsx11.h \
 	wx/generic/paletteg.h
 @COND_TOOLKIT_GTK@LOWLEVEL_HDR = $(COND_TOOLKIT_GTK_LOWLEVEL_HDR)
@@ -1754,7 +1756,6 @@ COND_TOOLKIT_MOTIF_LOWLEVEL_HDR =  \
 	wx/generic/caret.h \
 	wx/generic/printps.h \
 	wx/unix/fontutil.h \
-	wx/unix/taskbarx11.h \
 	wx/unix/utilsx11.h
 @COND_TOOLKIT_MOTIF@LOWLEVEL_HDR = $(COND_TOOLKIT_MOTIF_LOWLEVEL_HDR)
 @COND_TOOLKIT_MSW@LOWLEVEL_HDR = 
@@ -1763,7 +1764,6 @@ COND_TOOLKIT_X11_LOWLEVEL_HDR =  \
 	wx/generic/caret.h \
 	wx/generic/printps.h \
 	wx/unix/fontutil.h \
-	wx/unix/taskbarx11.h \
 	wx/unix/utilsx11.h \
 	src/generic/timer.h \
 	wx/x11/app.h \
@@ -1784,7 +1784,6 @@ COND_TOOLKIT_X11_LOWLEVEL_HDR =  \
 	wx/x11/font.h \
 	wx/x11/gdiobj.h \
 	wx/x11/icon.h \
-	wx/x11/joystick.h \
 	wx/x11/minifram.h \
 	wx/x11/palette.h \
 	wx/x11/pen.h \
@@ -1822,6 +1821,88 @@ COND_TOOLKIT_X11_LOWLEVEL_HDR =  \
 @COND_PLATFORM_WIN32_1@WXDLLVERSIONTAG = 
 @COND_UNICODE_1@WXUNICODEFLAG = u
 @COND_WXUNIV_1@WXUNIVNAME = univ
+COND_TOOLKIT_GTK___ADVANCED_PLATFORM_SRC_OBJECTS =  \
+	monodll_taskbarcmn.o \
+	monodll_joystick.o \
+	monodll_taskbarx11.o \
+	monodll_wave.o
+@COND_TOOLKIT_GTK@__ADVANCED_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_GTK___ADVANCED_PLATFORM_SRC_OBJECTS)
+@COND_TOOLKIT_MAC@__ADVANCED_PLATFORM_SRC_OBJECTS = \
+@COND_TOOLKIT_MAC@	monodll_joystick.o monodll_wave.o
+COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS =  \
+	monodll_taskbarcmn.o \
+	monodll_joystick.o \
+	monodll_taskbarx11.o \
+	monodll_wave.o
+@COND_TOOLKIT_MOTIF@__ADVANCED_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS)
+@COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_SRC_OBJECTS = \
+@COND_TOOLKIT_MSW@	monodll_taskbarcmn.o monodll_joystick.o \
+@COND_TOOLKIT_MSW@	monodll_taskbar.o monodll_wave.o
+@COND_TOOLKIT_OS2@__ADVANCED_PLATFORM_SRC_OBJECTS = \
+@COND_TOOLKIT_OS2@	monodll_joystick.o monodll_wave.o
+COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS =  \
+	monodll_taskbarcmn.o \
+	monodll_joystick.o \
+	monodll_taskbarx11.o \
+	monodll_wave.o
+@COND_TOOLKIT_X11@__ADVANCED_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS)
+COND_TOOLKIT_GTK___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
+	monolib_taskbarcmn.o \
+	monolib_joystick.o \
+	monolib_taskbarx11.o \
+	monolib_wave.o
+@COND_TOOLKIT_GTK@__ADVANCED_PLATFORM_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK___ADVANCED_PLATFORM_SRC_OBJECTS_1)
+@COND_TOOLKIT_MAC@__ADVANCED_PLATFORM_SRC_OBJECTS_1 = \
+@COND_TOOLKIT_MAC@	monolib_joystick.o monolib_wave.o
+COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
+	monolib_taskbarcmn.o \
+	monolib_joystick.o \
+	monolib_taskbarx11.o \
+	monolib_wave.o
+@COND_TOOLKIT_MOTIF@__ADVANCED_PLATFORM_SRC_OBJECTS_1 = $(COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS_1)
+@COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_SRC_OBJECTS_1 = \
+@COND_TOOLKIT_MSW@	monolib_taskbarcmn.o monolib_joystick.o \
+@COND_TOOLKIT_MSW@	monolib_taskbar.o monolib_wave.o
+@COND_TOOLKIT_OS2@__ADVANCED_PLATFORM_SRC_OBJECTS_1 = \
+@COND_TOOLKIT_OS2@	monolib_joystick.o monolib_wave.o
+COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
+	monolib_taskbarcmn.o \
+	monolib_joystick.o \
+	monolib_taskbarx11.o \
+	monolib_wave.o
+@COND_TOOLKIT_X11@__ADVANCED_PLATFORM_SRC_OBJECTS_1 = $(COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_1)
+@COND_TOOLKIT_GTK@__ADVANCED_PLATFORM_SRC_OBJECTS_2 = \
+@COND_TOOLKIT_GTK@	advdll_taskbarcmn.o advdll_joystick.o \
+@COND_TOOLKIT_GTK@	advdll_taskbarx11.o advdll_wave.o
+@COND_TOOLKIT_MAC@__ADVANCED_PLATFORM_SRC_OBJECTS_2 = \
+@COND_TOOLKIT_MAC@	advdll_joystick.o advdll_wave.o
+@COND_TOOLKIT_MOTIF@__ADVANCED_PLATFORM_SRC_OBJECTS_2 = \
+@COND_TOOLKIT_MOTIF@	advdll_taskbarcmn.o advdll_joystick.o \
+@COND_TOOLKIT_MOTIF@	advdll_taskbarx11.o advdll_wave.o
+@COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_SRC_OBJECTS_2 = \
+@COND_TOOLKIT_MSW@	advdll_taskbarcmn.o advdll_joystick.o advdll_taskbar.o \
+@COND_TOOLKIT_MSW@	advdll_wave.o
+@COND_TOOLKIT_OS2@__ADVANCED_PLATFORM_SRC_OBJECTS_2 = \
+@COND_TOOLKIT_OS2@	advdll_joystick.o advdll_wave.o
+@COND_TOOLKIT_X11@__ADVANCED_PLATFORM_SRC_OBJECTS_2 = \
+@COND_TOOLKIT_X11@	advdll_taskbarcmn.o advdll_joystick.o \
+@COND_TOOLKIT_X11@	advdll_taskbarx11.o advdll_wave.o
+@COND_TOOLKIT_GTK@__ADVANCED_PLATFORM_SRC_OBJECTS_3 = \
+@COND_TOOLKIT_GTK@	advlib_taskbarcmn.o advlib_joystick.o \
+@COND_TOOLKIT_GTK@	advlib_taskbarx11.o advlib_wave.o
+@COND_TOOLKIT_MAC@__ADVANCED_PLATFORM_SRC_OBJECTS_3 = \
+@COND_TOOLKIT_MAC@	advlib_joystick.o advlib_wave.o
+@COND_TOOLKIT_MOTIF@__ADVANCED_PLATFORM_SRC_OBJECTS_3 = \
+@COND_TOOLKIT_MOTIF@	advlib_taskbarcmn.o advlib_joystick.o \
+@COND_TOOLKIT_MOTIF@	advlib_taskbarx11.o advlib_wave.o
+@COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_SRC_OBJECTS_3 = \
+@COND_TOOLKIT_MSW@	advlib_taskbarcmn.o advlib_joystick.o advlib_taskbar.o \
+@COND_TOOLKIT_MSW@	advlib_wave.o
+@COND_TOOLKIT_OS2@__ADVANCED_PLATFORM_SRC_OBJECTS_3 = \
+@COND_TOOLKIT_OS2@	advlib_joystick.o advlib_wave.o
+@COND_TOOLKIT_X11@__ADVANCED_PLATFORM_SRC_OBJECTS_3 = \
+@COND_TOOLKIT_X11@	advlib_taskbarcmn.o advlib_joystick.o \
+@COND_TOOLKIT_X11@	advlib_taskbarx11.o advlib_wave.o
 @COND_PLATFORM_MACOSX_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS \
 @COND_PLATFORM_MACOSX_1@	= monodll_utilsunx.o
 @COND_PLATFORM_UNIX_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS \
@@ -3078,7 +3159,6 @@ COND_TOOLKIT_GTK___GUI_SRC_OBJECTS =  \
 	monodll_fontdlg.o \
 	monodll_frame.o \
 	monodll_gauge.o \
-	monodll_joystick.o \
 	monodll_listbox.o \
 	monodll_mdi.o \
 	monodll_menu.o \
@@ -3099,8 +3179,7 @@ COND_TOOLKIT_GTK___GUI_SRC_OBJECTS =  \
 	monodll_tbargtk.o \
 	monodll_textctrl.o \
 	monodll_tglbtn.o \
-	monodll_utilsres.o \
-	monodll_wave.o
+	monodll_utilsres.o
 @COND_TOOLKIT_GTK@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_GTK___GUI_SRC_OBJECTS)
 COND_TOOLKIT_MAC___GUI_SRC_OBJECTS =  \
 	monodll_accel.o \
@@ -3138,7 +3217,6 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS =  \
 	monodll_gauge.o \
 	monodll_gdiobj.o \
 	monodll_icon.o \
-	monodll_joystick.o \
 	monodll_listbox.o \
 	monodll_macnotfy.o \
 	monodll_mdi.o \
@@ -3175,7 +3253,6 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS =  \
 	monodll_tooltip.o \
 	monodll_toplevel.o \
 	monodll_uma.o \
-	monodll_wave.o \
 	monodll_window.o \
 	monodll_caret.o \
 	monodll_fdrepdlg.o \
@@ -3339,7 +3416,6 @@ COND_TOOLKIT_OS2___GUI_SRC_OBJECTS =  \
 	monodll_helpwin.o \
 	monodll_icon.o \
 	monodll_iniconf.o \
-	monodll_joystick.o \
 	monodll_listbox.o \
 	monodll_main.o \
 	monodll_menu.o \
@@ -3372,7 +3448,6 @@ COND_TOOLKIT_OS2___GUI_SRC_OBJECTS =  \
 	monodll_toolbar.o \
 	monodll_tooltip.o \
 	monodll_toplevel.o \
-	monodll_wave.o \
 	monodll_window.o
 @COND_TOOLKIT_OS2@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_OS2___GUI_SRC_OBJECTS)
 COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1 =  \
@@ -3471,7 +3546,6 @@ COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_1 =  \
 	monolib_fontdlg.o \
 	monolib_frame.o \
 	monolib_gauge.o \
-	monolib_joystick.o \
 	monolib_listbox.o \
 	monolib_mdi.o \
 	monolib_menu.o \
@@ -3492,8 +3566,7 @@ COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_1 =  \
 	monolib_tbargtk.o \
 	monolib_textctrl.o \
 	monolib_tglbtn.o \
-	monolib_utilsres.o \
-	monolib_wave.o
+	monolib_utilsres.o
 @COND_TOOLKIT_GTK@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1 =  \
 	monolib_accel.o \
@@ -3531,7 +3604,6 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1 =  \
 	monolib_gauge.o \
 	monolib_gdiobj.o \
 	monolib_icon.o \
-	monolib_joystick.o \
 	monolib_listbox.o \
 	monolib_macnotfy.o \
 	monolib_mdi.o \
@@ -3568,7 +3640,6 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1 =  \
 	monolib_tooltip.o \
 	monolib_toplevel.o \
 	monolib_uma.o \
-	monolib_wave.o \
 	monolib_window.o \
 	monolib_caret.o \
 	monolib_fdrepdlg.o \
@@ -3732,7 +3803,6 @@ COND_TOOLKIT_OS2___GUI_SRC_OBJECTS_1 =  \
 	monolib_helpwin.o \
 	monolib_icon.o \
 	monolib_iniconf.o \
-	monolib_joystick.o \
 	monolib_listbox.o \
 	monolib_main.o \
 	monolib_menu.o \
@@ -3765,7 +3835,6 @@ COND_TOOLKIT_OS2___GUI_SRC_OBJECTS_1 =  \
 	monolib_toolbar.o \
 	monolib_tooltip.o \
 	monolib_toplevel.o \
-	monolib_wave.o \
 	monolib_window.o
 @COND_TOOLKIT_OS2@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_OS2___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2 =  \
@@ -3864,7 +3933,6 @@ COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_2 =  \
 	coredll_fontdlg.o \
 	coredll_frame.o \
 	coredll_gauge.o \
-	coredll_joystick.o \
 	coredll_listbox.o \
 	coredll_mdi.o \
 	coredll_menu.o \
@@ -3885,8 +3953,7 @@ COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_2 =  \
 	coredll_tbargtk.o \
 	coredll_textctrl.o \
 	coredll_tglbtn.o \
-	coredll_utilsres.o \
-	coredll_wave.o
+	coredll_utilsres.o
 @COND_TOOLKIT_GTK@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2 =  \
 	coredll_accel.o \
@@ -3924,7 +3991,6 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2 =  \
 	coredll_gauge.o \
 	coredll_gdiobj.o \
 	coredll_icon.o \
-	coredll_joystick.o \
 	coredll_listbox.o \
 	coredll_macnotfy.o \
 	coredll_mdi.o \
@@ -3961,7 +4027,6 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2 =  \
 	coredll_tooltip.o \
 	coredll_toplevel.o \
 	coredll_uma.o \
-	coredll_wave.o \
 	coredll_window.o \
 	coredll_caret.o \
 	coredll_fdrepdlg.o \
@@ -4125,7 +4190,6 @@ COND_TOOLKIT_OS2___GUI_SRC_OBJECTS_2 =  \
 	coredll_helpwin.o \
 	coredll_icon.o \
 	coredll_iniconf.o \
-	coredll_joystick.o \
 	coredll_listbox.o \
 	coredll_main.o \
 	coredll_menu.o \
@@ -4158,7 +4222,6 @@ COND_TOOLKIT_OS2___GUI_SRC_OBJECTS_2 =  \
 	coredll_toolbar.o \
 	coredll_tooltip.o \
 	coredll_toplevel.o \
-	coredll_wave.o \
 	coredll_window.o
 @COND_TOOLKIT_OS2@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_OS2___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3 =  \
@@ -4257,7 +4320,6 @@ COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_3 =  \
 	corelib_fontdlg.o \
 	corelib_frame.o \
 	corelib_gauge.o \
-	corelib_joystick.o \
 	corelib_listbox.o \
 	corelib_mdi.o \
 	corelib_menu.o \
@@ -4278,8 +4340,7 @@ COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_3 =  \
 	corelib_tbargtk.o \
 	corelib_textctrl.o \
 	corelib_tglbtn.o \
-	corelib_utilsres.o \
-	corelib_wave.o
+	corelib_utilsres.o
 @COND_TOOLKIT_GTK@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3 =  \
 	corelib_accel.o \
@@ -4317,7 +4378,6 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3 =  \
 	corelib_gauge.o \
 	corelib_gdiobj.o \
 	corelib_icon.o \
-	corelib_joystick.o \
 	corelib_listbox.o \
 	corelib_macnotfy.o \
 	corelib_mdi.o \
@@ -4354,7 +4414,6 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3 =  \
 	corelib_tooltip.o \
 	corelib_toplevel.o \
 	corelib_uma.o \
-	corelib_wave.o \
 	corelib_window.o \
 	corelib_caret.o \
 	corelib_fdrepdlg.o \
@@ -4518,7 +4577,6 @@ COND_TOOLKIT_OS2___GUI_SRC_OBJECTS_3 =  \
 	corelib_helpwin.o \
 	corelib_icon.o \
 	corelib_iniconf.o \
-	corelib_joystick.o \
 	corelib_listbox.o \
 	corelib_main.o \
 	corelib_menu.o \
@@ -4551,7 +4609,6 @@ COND_TOOLKIT_OS2___GUI_SRC_OBJECTS_3 =  \
 	corelib_toolbar.o \
 	corelib_tooltip.o \
 	corelib_toplevel.o \
-	corelib_wave.o \
 	corelib_window.o
 @COND_TOOLKIT_OS2@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_OS2___GUI_SRC_OBJECTS_3)
 @COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS = monodll_helpbest.o
@@ -4584,13 +4641,11 @@ COND_TOOLKIT_OS2___GUI_SRC_OBJECTS_3 =  \
 @COND_WXUSE_ZLIB_BUILTIN@	-lwxzlib$(WXDEBUGFLAG)$(HOST_SUFFIX)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS = 
 COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS =  \
-	monodll_taskbarcmn.o \
 	monodll_caret.o \
 	monodll_printps.o \
 	monodll_dialup.o \
 	monodll_fontenum.o \
 	monodll_fontutil.o \
-	monodll_taskbarx11.o \
 	monodll_utilsx11.o \
 	monodll_paletteg.o \
 	monodll_app.o \
@@ -4654,13 +4709,11 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_window.o
 @COND_TOOLKIT_MGL@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS)
 COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS =  \
-	monodll_taskbarcmn.o \
 	monodll_caret.o \
 	monodll_printps.o \
 	monodll_dialup.o \
 	monodll_fontenum.o \
 	monodll_fontutil.o \
-	monodll_taskbarx11.o \
 	monodll_utilsx11.o \
 	monodll_bitmap.o \
 	monodll_brush.o \
@@ -4669,7 +4722,6 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_utilsx.o
 @COND_TOOLKIT_MOTIF@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS)
 COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
-	monodll_taskbarcmn.o \
 	monodll_app.o \
 	monodll_bitmap.o \
 	monodll_brush.o \
@@ -4697,7 +4749,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_helpchm.o \
 	monodll_helpwin.o \
 	monodll_icon.o \
-	monodll_joystick.o \
 	monodll_minifram.o \
 	monodll_automtn.o \
 	monodll_dataobj.o \
@@ -4711,24 +4762,20 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_region.o \
 	monodll_renderer.o \
 	monodll_settings.o \
-	monodll_taskbar.o \
 	monodll_timer.o \
 	monodll_tooltip.o \
 	monodll_toplevel.o \
 	monodll_utilsgui.o \
 	monodll_uxtheme.o \
-	monodll_wave.o \
 	monodll_window.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS)
 @COND_TOOLKIT_OS2@__LOWLEVEL_SRC_OBJECTS = 
 COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS =  \
-	monodll_taskbarcmn.o \
 	monodll_caret.o \
 	monodll_printps.o \
 	monodll_dialup.o \
 	monodll_fontenum.o \
 	monodll_fontutil.o \
-	monodll_taskbarx11.o \
 	monodll_utilsx11.o \
 	monodll_timer.o \
 	monodll_app.o \
@@ -4747,7 +4794,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_font.o \
 	monodll_gdiobj.o \
 	monodll_icon.o \
-	monodll_joystick.o \
 	monodll_main.o \
 	monodll_minifram.o \
 	monodll_nanox.o \
@@ -4764,13 +4810,11 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS =  \
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_0 = 
 COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_0 =  \
-	coredll_taskbarcmn.o \
 	coredll_caret.o \
 	coredll_printps.o \
 	coredll_dialup.o \
 	coredll_fontenum.o \
 	coredll_fontutil.o \
-	coredll_taskbarx11.o \
 	coredll_utilsx11.o \
 	coredll_paletteg.o \
 	coredll_app.o \
@@ -4834,13 +4878,11 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_0 =  \
 	coredll_window.o
 @COND_TOOLKIT_MGL@__LOWLEVEL_SRC_OBJECTS_0 = $(COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_0)
 COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_0 =  \
-	coredll_taskbarcmn.o \
 	coredll_caret.o \
 	coredll_printps.o \
 	coredll_dialup.o \
 	coredll_fontenum.o \
 	coredll_fontutil.o \
-	coredll_taskbarx11.o \
 	coredll_utilsx11.o \
 	coredll_bitmap.o \
 	coredll_brush.o \
@@ -4849,7 +4891,6 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_0 =  \
 	coredll_utilsx.o
 @COND_TOOLKIT_MOTIF@__LOWLEVEL_SRC_OBJECTS_0 = $(COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_0)
 COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_0 =  \
-	coredll_taskbarcmn.o \
 	coredll_app.o \
 	coredll_bitmap.o \
 	coredll_brush.o \
@@ -4877,7 +4918,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_0 =  \
 	coredll_helpchm.o \
 	coredll_helpwin.o \
 	coredll_icon.o \
-	coredll_joystick.o \
 	coredll_minifram.o \
 	coredll_automtn.o \
 	coredll_dataobj.o \
@@ -4891,24 +4931,20 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_0 =  \
 	coredll_region.o \
 	coredll_renderer.o \
 	coredll_settings.o \
-	coredll_taskbar.o \
 	coredll_timer.o \
 	coredll_tooltip.o \
 	coredll_toplevel.o \
 	coredll_utilsgui.o \
 	coredll_uxtheme.o \
-	coredll_wave.o \
 	coredll_window.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_0 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_0)
 @COND_TOOLKIT_OS2@__LOWLEVEL_SRC_OBJECTS_0 = 
 COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_0 =  \
-	coredll_taskbarcmn.o \
 	coredll_caret.o \
 	coredll_printps.o \
 	coredll_dialup.o \
 	coredll_fontenum.o \
 	coredll_fontutil.o \
-	coredll_taskbarx11.o \
 	coredll_utilsx11.o \
 	coredll_timer.o \
 	coredll_app.o \
@@ -4927,7 +4963,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_0 =  \
 	coredll_font.o \
 	coredll_gdiobj.o \
 	coredll_icon.o \
-	coredll_joystick.o \
 	coredll_main.o \
 	coredll_minifram.o \
 	coredll_nanox.o \
@@ -4944,13 +4979,11 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_0 =  \
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_0 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_0)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_8 = 
 COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_8 =  \
-	corelib_taskbarcmn.o \
 	corelib_caret.o \
 	corelib_printps.o \
 	corelib_dialup.o \
 	corelib_fontenum.o \
 	corelib_fontutil.o \
-	corelib_taskbarx11.o \
 	corelib_utilsx11.o \
 	corelib_paletteg.o \
 	corelib_app.o \
@@ -5014,13 +5047,11 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_8 =  \
 	corelib_window.o
 @COND_TOOLKIT_MGL@__LOWLEVEL_SRC_OBJECTS_8 = $(COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_8)
 COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_8 =  \
-	corelib_taskbarcmn.o \
 	corelib_caret.o \
 	corelib_printps.o \
 	corelib_dialup.o \
 	corelib_fontenum.o \
 	corelib_fontutil.o \
-	corelib_taskbarx11.o \
 	corelib_utilsx11.o \
 	corelib_bitmap.o \
 	corelib_brush.o \
@@ -5029,7 +5060,6 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_8 =  \
 	corelib_utilsx.o
 @COND_TOOLKIT_MOTIF@__LOWLEVEL_SRC_OBJECTS_8 = $(COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_8)
 COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_8 =  \
-	corelib_taskbarcmn.o \
 	corelib_app.o \
 	corelib_bitmap.o \
 	corelib_brush.o \
@@ -5057,7 +5087,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_8 =  \
 	corelib_helpchm.o \
 	corelib_helpwin.o \
 	corelib_icon.o \
-	corelib_joystick.o \
 	corelib_minifram.o \
 	corelib_automtn.o \
 	corelib_dataobj.o \
@@ -5071,24 +5100,20 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_8 =  \
 	corelib_region.o \
 	corelib_renderer.o \
 	corelib_settings.o \
-	corelib_taskbar.o \
 	corelib_timer.o \
 	corelib_tooltip.o \
 	corelib_toplevel.o \
 	corelib_utilsgui.o \
 	corelib_uxtheme.o \
-	corelib_wave.o \
 	corelib_window.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_8 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_8)
 @COND_TOOLKIT_OS2@__LOWLEVEL_SRC_OBJECTS_8 = 
 COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_8 =  \
-	corelib_taskbarcmn.o \
 	corelib_caret.o \
 	corelib_printps.o \
 	corelib_dialup.o \
 	corelib_fontenum.o \
 	corelib_fontutil.o \
-	corelib_taskbarx11.o \
 	corelib_utilsx11.o \
 	corelib_timer.o \
 	corelib_app.o \
@@ -5107,7 +5132,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_8 =  \
 	corelib_font.o \
 	corelib_gdiobj.o \
 	corelib_icon.o \
-	corelib_joystick.o \
 	corelib_main.o \
 	corelib_minifram.o \
 	corelib_nanox.o \
@@ -5124,13 +5148,11 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_8 =  \
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_8 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_8)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_9 = 
 COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_9 =  \
-	monolib_taskbarcmn.o \
 	monolib_caret.o \
 	monolib_printps.o \
 	monolib_dialup.o \
 	monolib_fontenum.o \
 	monolib_fontutil.o \
-	monolib_taskbarx11.o \
 	monolib_utilsx11.o \
 	monolib_paletteg.o \
 	monolib_app.o \
@@ -5194,13 +5216,11 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_9 =  \
 	monolib_window.o
 @COND_TOOLKIT_MGL@__LOWLEVEL_SRC_OBJECTS_9 = $(COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_9)
 COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_9 =  \
-	monolib_taskbarcmn.o \
 	monolib_caret.o \
 	monolib_printps.o \
 	monolib_dialup.o \
 	monolib_fontenum.o \
 	monolib_fontutil.o \
-	monolib_taskbarx11.o \
 	monolib_utilsx11.o \
 	monolib_bitmap.o \
 	monolib_brush.o \
@@ -5209,7 +5229,6 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_9 =  \
 	monolib_utilsx.o
 @COND_TOOLKIT_MOTIF@__LOWLEVEL_SRC_OBJECTS_9 = $(COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_9)
 COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_9 =  \
-	monolib_taskbarcmn.o \
 	monolib_app.o \
 	monolib_bitmap.o \
 	monolib_brush.o \
@@ -5237,7 +5256,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_9 =  \
 	monolib_helpchm.o \
 	monolib_helpwin.o \
 	monolib_icon.o \
-	monolib_joystick.o \
 	monolib_minifram.o \
 	monolib_automtn.o \
 	monolib_dataobj.o \
@@ -5251,24 +5269,20 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_9 =  \
 	monolib_region.o \
 	monolib_renderer.o \
 	monolib_settings.o \
-	monolib_taskbar.o \
 	monolib_timer.o \
 	monolib_tooltip.o \
 	monolib_toplevel.o \
 	monolib_utilsgui.o \
 	monolib_uxtheme.o \
-	monolib_wave.o \
 	monolib_window.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_9 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_9)
 @COND_TOOLKIT_OS2@__LOWLEVEL_SRC_OBJECTS_9 = 
 COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_9 =  \
-	monolib_taskbarcmn.o \
 	monolib_caret.o \
 	monolib_printps.o \
 	monolib_dialup.o \
 	monolib_fontenum.o \
 	monolib_fontutil.o \
-	monolib_taskbarx11.o \
 	monolib_utilsx11.o \
 	monolib_timer.o \
 	monolib_app.o \
@@ -5287,7 +5301,6 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_9 =  \
 	monolib_font.o \
 	monolib_gdiobj.o \
 	monolib_icon.o \
-	monolib_joystick.o \
 	monolib_main.o \
 	monolib_minifram.o \
 	monolib_nanox.o \
@@ -5316,6 +5329,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_splash.o \
 	monodll_tipdlg.o \
 	monodll_wizard.o \
+	$(__ADVANCED_PLATFORM_SRC_OBJECTS) \
 	$(__HTML_SRC_PLATFORM_OBJECTS) \
 	monodll_helpctrl.o \
 	monodll_helpdata.o \
@@ -5353,6 +5367,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_splash.o \
 	monolib_tipdlg.o \
 	monolib_wizard.o \
+	$(__ADVANCED_PLATFORM_SRC_OBJECTS_1) \
 	$(__HTML_SRC_PLATFORM_OBJECTS_1) \
 	monolib_helpctrl.o \
 	monolib_helpdata.o \
@@ -5845,6 +5860,24 @@ advdll_gridsel.o: $(srcdir)/src/generic/gridsel.cpp
 advdll_helpext.o: $(srcdir)/src/generic/helpext.cpp
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
 
+@COND_TOOLKIT_MSW@advdll_joystick.o: $(srcdir)/src/msw/joystick.cpp
+@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_MAC@advdll_joystick.o: $(srcdir)/src/mac/joystick.cpp
+@COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_MOTIF@advdll_joystick.o: $(srcdir)/src/unix/joystick.cpp
+@COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_GTK@advdll_joystick.o: $(srcdir)/src/unix/joystick.cpp
+@COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_X11@advdll_joystick.o: $(srcdir)/src/unix/joystick.cpp
+@COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_OS2@advdll_joystick.o: $(srcdir)/src/os2/joystick.cpp
+@COND_TOOLKIT_OS2@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
 advdll_laywin.o: $(srcdir)/src/generic/laywin.cpp
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
 
@@ -5854,8 +5887,50 @@ advdll_sashwin.o: $(srcdir)/src/generic/sashwin.cpp
 advdll_splash.o: $(srcdir)/src/generic/splash.cpp
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
 
+advdll_taskbar.o: $(srcdir)/src/msw/taskbar.cpp
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_MSW@advdll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp
+@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_MOTIF@advdll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp
+@COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_GTK@advdll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp
+@COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_X11@advdll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp
+@COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_MOTIF@advdll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp
+@COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_GTK@advdll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp
+@COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_X11@advdll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp
+@COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
 advdll_tipdlg.o: $(srcdir)/src/generic/tipdlg.cpp
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_OS2@advdll_wave.o: $(srcdir)/src/os2/wave.cpp
+@COND_TOOLKIT_OS2@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_MSW@advdll_wave.o: $(srcdir)/src/msw/wave.cpp
+@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_MOTIF@advdll_wave.o: $(srcdir)/src/unix/wave.cpp
+@COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_GTK@advdll_wave.o: $(srcdir)/src/unix/wave.cpp
+@COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_X11@advdll_wave.o: $(srcdir)/src/unix/wave.cpp
+@COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_MAC@advdll_wave.o: $(srcdir)/src/mac/wave.cpp
+@COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
 
 advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
@@ -5886,6 +5961,24 @@ advlib_gridsel.o: $(srcdir)/src/generic/gridsel.cpp
 advlib_helpext.o: $(srcdir)/src/generic/helpext.cpp
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
 
+@COND_TOOLKIT_MSW@advlib_joystick.o: $(srcdir)/src/msw/joystick.cpp
+@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_MAC@advlib_joystick.o: $(srcdir)/src/mac/joystick.cpp
+@COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_MOTIF@advlib_joystick.o: $(srcdir)/src/unix/joystick.cpp
+@COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_GTK@advlib_joystick.o: $(srcdir)/src/unix/joystick.cpp
+@COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_X11@advlib_joystick.o: $(srcdir)/src/unix/joystick.cpp
+@COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_OS2@advlib_joystick.o: $(srcdir)/src/os2/joystick.cpp
+@COND_TOOLKIT_OS2@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
 advlib_laywin.o: $(srcdir)/src/generic/laywin.cpp
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
 
@@ -5895,8 +5988,50 @@ advlib_sashwin.o: $(srcdir)/src/generic/sashwin.cpp
 advlib_splash.o: $(srcdir)/src/generic/splash.cpp
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
 
+advlib_taskbar.o: $(srcdir)/src/msw/taskbar.cpp
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_MSW@advlib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp
+@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_MOTIF@advlib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp
+@COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_GTK@advlib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp
+@COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_X11@advlib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp
+@COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_MOTIF@advlib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp
+@COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_GTK@advlib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp
+@COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_X11@advlib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp
+@COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
 advlib_tipdlg.o: $(srcdir)/src/generic/tipdlg.cpp
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_OS2@advlib_wave.o: $(srcdir)/src/os2/wave.cpp
+@COND_TOOLKIT_OS2@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_MSW@advlib_wave.o: $(srcdir)/src/msw/wave.cpp
+@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_MOTIF@advlib_wave.o: $(srcdir)/src/unix/wave.cpp
+@COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_GTK@advlib_wave.o: $(srcdir)/src/unix/wave.cpp
+@COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_X11@advlib_wave.o: $(srcdir)/src/unix/wave.cpp
+@COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_MAC@advlib_wave.o: $(srcdir)/src/mac/wave.cpp
+@COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
 
 advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
@@ -7593,21 +7728,6 @@ coredll_inpcons.o: $(srcdir)/src/univ/inpcons.cpp
 coredll_inphand.o: $(srcdir)/src/univ/inphand.cpp
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_MSW_USE_GUI_1@coredll_joystick.o: $(srcdir)/src/msw/joystick.cpp
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@coredll_joystick.o: $(srcdir)/src/gtk/joystick.cpp
-@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_joystick.o: $(srcdir)/src/mac/joystick.cpp
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_X11_USE_GUI_1@coredll_joystick.o: $(srcdir)/src/x11/joystick.cpp
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0@coredll_joystick.o: $(srcdir)/src/os2/joystick.cpp
-@COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
 @COND_USE_GUI_1@coredll_layout.o: $(srcdir)/src/common/layout.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -8304,30 +8424,6 @@ coredll_statlmac.o: $(srcdir)/src/mac/statlmac.cpp
 @COND_USE_GUI_1_WXUNIV_1@coredll_tabg.o: $(srcdir)/src/generic/tabg.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_MSW_USE_GUI_1@coredll_taskbar.o: $(srcdir)/src/msw/taskbar.cpp
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_GTK_USE_GUI_1@coredll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp
-@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1@coredll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp
-@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_MSW_USE_GUI_1@coredll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_X11_USE_GUI_1@coredll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_GTK_USE_GUI_1@coredll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp
-@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1@coredll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp
-@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_X11_USE_GUI_1@coredll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
 coredll_tbar95.o: $(srcdir)/src/msw/tbar95.cpp
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -8558,18 +8654,6 @@ coredll_volume.o: $(srcdir)/src/msw/volume.cpp
 
 @COND_USE_GUI_1@coredll_vscroll.o: $(srcdir)/src/generic/vscroll.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0@coredll_wave.o: $(srcdir)/src/os2/wave.cpp
-@COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_MSW_USE_GUI_1@coredll_wave.o: $(srcdir)/src/msw/wave.cpp
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@coredll_wave.o: $(srcdir)/src/gtk/wave.cpp
-@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_wave.o: $(srcdir)/src/mac/wave.cpp
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
@@ -9698,21 +9782,6 @@ corelib_inpcons.o: $(srcdir)/src/univ/inpcons.cpp
 corelib_inphand.o: $(srcdir)/src/univ/inphand.cpp
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_MSW_USE_GUI_1@corelib_joystick.o: $(srcdir)/src/msw/joystick.cpp
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@corelib_joystick.o: $(srcdir)/src/gtk/joystick.cpp
-@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_joystick.o: $(srcdir)/src/mac/joystick.cpp
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_X11_USE_GUI_1@corelib_joystick.o: $(srcdir)/src/x11/joystick.cpp
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0@corelib_joystick.o: $(srcdir)/src/os2/joystick.cpp
-@COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
 @COND_USE_GUI_1@corelib_layout.o: $(srcdir)/src/common/layout.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
@@ -10409,30 +10478,6 @@ corelib_statlmac.o: $(srcdir)/src/mac/statlmac.cpp
 @COND_USE_GUI_1_WXUNIV_1@corelib_tabg.o: $(srcdir)/src/generic/tabg.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_MSW_USE_GUI_1@corelib_taskbar.o: $(srcdir)/src/msw/taskbar.cpp
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_GTK_USE_GUI_1@corelib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp
-@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1@corelib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp
-@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_MSW_USE_GUI_1@corelib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_X11_USE_GUI_1@corelib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_GTK_USE_GUI_1@corelib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp
-@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1@corelib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp
-@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_X11_USE_GUI_1@corelib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
 corelib_tbar95.o: $(srcdir)/src/msw/tbar95.cpp
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
@@ -10663,18 +10708,6 @@ corelib_volume.o: $(srcdir)/src/msw/volume.cpp
 
 @COND_USE_GUI_1@corelib_vscroll.o: $(srcdir)/src/generic/vscroll.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0@corelib_wave.o: $(srcdir)/src/os2/wave.cpp
-@COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_MSW_USE_GUI_1@corelib_wave.o: $(srcdir)/src/msw/wave.cpp
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@corelib_wave.o: $(srcdir)/src/gtk/wave.cpp
-@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_wave.o: $(srcdir)/src/mac/wave.cpp
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
@@ -12339,17 +12372,20 @@ monodll_ipcbase.o: $(srcdir)/src/common/ipcbase.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_joystick.o: $(srcdir)/src/msw/joystick.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@monodll_joystick.o: $(srcdir)/src/gtk/joystick.cpp
-@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+@COND_TOOLKIT_MAC_USE_GUI_1@monodll_joystick.o: $(srcdir)/src/mac/joystick.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_joystick.o: $(srcdir)/src/mac/joystick.cpp
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+@COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_joystick.o: $(srcdir)/src/unix/joystick.cpp
+@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_X11_USE_GUI_1@monodll_joystick.o: $(srcdir)/src/x11/joystick.cpp
+@COND_TOOLKIT_GTK_USE_GUI_1@monodll_joystick.o: $(srcdir)/src/unix/joystick.cpp
+@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_X11_USE_GUI_1@monodll_joystick.o: $(srcdir)/src/unix/joystick.cpp
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0@monodll_joystick.o: $(srcdir)/src/os2/joystick.cpp
-@COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+@COND_TOOLKIT_OS2_USE_GUI_1@monodll_joystick.o: $(srcdir)/src/os2/joystick.cpp
+@COND_TOOLKIT_OS2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_USE_GUI_1@monodll_layout.o: $(srcdir)/src/common/layout.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -13182,26 +13218,26 @@ monodll_sysopt.o: $(srcdir)/src/common/sysopt.cpp
 @COND_USE_GUI_1_WXUNIV_1@monodll_tabg.o: $(srcdir)/src/generic/tabg.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_MSW_USE_GUI_1@monodll_taskbar.o: $(srcdir)/src/msw/taskbar.cpp
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_GTK_USE_GUI_1@monodll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp
-@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp
-@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+monodll_taskbar.o: $(srcdir)/src/msw/taskbar.cpp
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
+@COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp
+@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_GTK_USE_GUI_1@monodll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp
+@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_GTK_USE_GUI_1@monodll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp
-@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_GTK_USE_GUI_1@monodll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp
+@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -13485,17 +13521,23 @@ monodll_volume.o: $(srcdir)/src/msw/volume.cpp
 @COND_USE_GUI_1@monodll_vscroll.o: $(srcdir)/src/generic/vscroll.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0@monodll_wave.o: $(srcdir)/src/os2/wave.cpp
-@COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+@COND_TOOLKIT_OS2_USE_GUI_1@monodll_wave.o: $(srcdir)/src/os2/wave.cpp
+@COND_TOOLKIT_OS2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_wave.o: $(srcdir)/src/msw/wave.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@monodll_wave.o: $(srcdir)/src/gtk/wave.cpp
-@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+@COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_wave.o: $(srcdir)/src/unix/wave.cpp
+@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_wave.o: $(srcdir)/src/mac/wave.cpp
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+@COND_TOOLKIT_GTK_USE_GUI_1@monodll_wave.o: $(srcdir)/src/unix/wave.cpp
+@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_X11_USE_GUI_1@monodll_wave.o: $(srcdir)/src/unix/wave.cpp
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_MAC_USE_GUI_1@monodll_wave.o: $(srcdir)/src/mac/wave.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 monodll_wfstream.o: $(srcdir)/src/common/wfstream.cpp
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -14846,17 +14888,20 @@ monolib_ipcbase.o: $(srcdir)/src/common/ipcbase.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_joystick.o: $(srcdir)/src/msw/joystick.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@monolib_joystick.o: $(srcdir)/src/gtk/joystick.cpp
-@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+@COND_TOOLKIT_MAC_USE_GUI_1@monolib_joystick.o: $(srcdir)/src/mac/joystick.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_joystick.o: $(srcdir)/src/mac/joystick.cpp
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+@COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_joystick.o: $(srcdir)/src/unix/joystick.cpp
+@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_X11_USE_GUI_1@monolib_joystick.o: $(srcdir)/src/x11/joystick.cpp
+@COND_TOOLKIT_GTK_USE_GUI_1@monolib_joystick.o: $(srcdir)/src/unix/joystick.cpp
+@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_X11_USE_GUI_1@monolib_joystick.o: $(srcdir)/src/unix/joystick.cpp
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0@monolib_joystick.o: $(srcdir)/src/os2/joystick.cpp
-@COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+@COND_TOOLKIT_OS2_USE_GUI_1@monolib_joystick.o: $(srcdir)/src/os2/joystick.cpp
+@COND_TOOLKIT_OS2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_USE_GUI_1@monolib_layout.o: $(srcdir)/src/common/layout.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -15689,26 +15734,26 @@ monolib_sysopt.o: $(srcdir)/src/common/sysopt.cpp
 @COND_USE_GUI_1_WXUNIV_1@monolib_tabg.o: $(srcdir)/src/generic/tabg.cpp
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_MSW_USE_GUI_1@monolib_taskbar.o: $(srcdir)/src/msw/taskbar.cpp
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_GTK_USE_GUI_1@monolib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp
-@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp
-@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+monolib_taskbar.o: $(srcdir)/src/msw/taskbar.cpp
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
+@COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp
+@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_GTK_USE_GUI_1@monolib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp
+@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_GTK_USE_GUI_1@monolib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp
-@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_GTK_USE_GUI_1@monolib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp
+@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -15992,17 +16037,23 @@ monolib_volume.o: $(srcdir)/src/msw/volume.cpp
 @COND_USE_GUI_1@monolib_vscroll.o: $(srcdir)/src/generic/vscroll.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0@monolib_wave.o: $(srcdir)/src/os2/wave.cpp
-@COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+@COND_TOOLKIT_OS2_USE_GUI_1@monolib_wave.o: $(srcdir)/src/os2/wave.cpp
+@COND_TOOLKIT_OS2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_wave.o: $(srcdir)/src/msw/wave.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@monolib_wave.o: $(srcdir)/src/gtk/wave.cpp
-@COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+@COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_wave.o: $(srcdir)/src/unix/wave.cpp
+@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_wave.o: $(srcdir)/src/mac/wave.cpp
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+@COND_TOOLKIT_GTK_USE_GUI_1@monolib_wave.o: $(srcdir)/src/unix/wave.cpp
+@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_X11_USE_GUI_1@monolib_wave.o: $(srcdir)/src/unix/wave.cpp
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_MAC_USE_GUI_1@monolib_wave.o: $(srcdir)/src/mac/wave.cpp
+@COND_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_wfstream.o: $(srcdir)/src/common/wfstream.cpp
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<

@@ -20,7 +20,7 @@
 
 #include "wx/object.h"
 
-class WXDLLEXPORT wxWave : public wxObject
+class WXDLLIMPEXP_ADV wxWave : public wxObject
 {
 public:
   wxWave();

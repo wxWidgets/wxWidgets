@@ -22,9 +22,10 @@
 
 class wxTaskBarIcon;
 
-WX_DECLARE_EXPORTED_LIST(wxTaskBarIcon, wxTaskBarIconList);
+WX_DECLARE_LIST_WITH_DECL(wxTaskBarIcon, wxTaskBarIconList,
+                          class WXDLLIMPEXP_ADV);
 
-class WXDLLEXPORT wxTaskBarIcon: public wxTaskBarIconBase
+class WXDLLIMPEXP_ADV wxTaskBarIcon: public wxTaskBarIconBase
 {
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxTaskBarIcon)
 public:

@@ -1147,12 +1147,15 @@ dnl ---------------------------------------------------------------------------
 AC_DEFUN(AC_BAKEFILE_SUFFIXES,
 [
     SO_SUFFIX="so"
+    SO_SUFFIX_MODULE="so"
     EXEEXT=""
     DLLPREFIX=lib
+    DLLPREFIX_MODULE=
     
     case "${host}" in
         *-hp-hpux* )
             SO_SUFFIX="sl"
+            SO_SUFFIX_MODULE="sl"
         ;;
         *-*-aix* )
             dnl quoting from
@@ -1161,9 +1164,11 @@ AC_DEFUN(AC_BAKEFILE_SUFFIXES,
             dnl     .a extension. This will explain why you can't link with an
             dnl     .so and why it works with the name changed to .a.
             SO_SUFFIX="a"
+            SO_SUFFIX_MODULE="a"
         ;;
         *-*-cygwin* | *-*-mingw32* )
             SO_SUFFIX="dll"
+            SO_SUFFIX_MODULE="dll"
             EXEEXT=".exe"
             DLLPREFIX=""
         ;;
@@ -1173,12 +1178,15 @@ AC_DEFUN(AC_BAKEFILE_SUFFIXES,
         ;;
         powerpc-*-darwin* )
             SO_SUFFIX="dylib"
+            SO_SUFFIX_MODULE="bundle"
         ;;
     esac
 
     AC_SUBST(SO_SUFFIX)
+    AC_SUBST(SO_SUFFIX_MODULE)
     AC_SUBST(EXEEXT)
     AC_SUBST(DLLPREFIX)
+    AC_SUBST(DLLPREFIX_MODULE)
 ])
 
 
@@ -1271,6 +1279,7 @@ AC_DEFUN(AC_BAKEFILE_SHARED_LD,
 verbose=0
 args=""
 objects=""
+linking_flag="-dynamiclib"
 
 while test \${#} -gt 0; do
     case \${1} in
@@ -1290,8 +1299,8 @@ while test \${#} -gt 0; do
         args="\${args} \${1}"
         ;;
 
-       -dynamiclib)
-        # skip these options
+       -dynamiclib|-bundle)
+        linking_flag="\${1}"
         ;;
 
        -*)
@@ -1329,9 +1338,9 @@ fi
 # Link the shared library from the single module created
 #
 if test \${verbose} = 1; then
-    echo "cc -dynamiclib master.\$\$.o \${args}"
+    echo "cc \${linking_flag} master.\$\$.o \${args}"
 fi
-c++ -dynamiclib master.\$\$.o \${args}
+c++ \${linking_flag} master.\$\$.o \${args}
 status=\$?
 if test \${status} != 0; then
     exit \${status}
@@ -1346,8 +1355,10 @@ exit 0
 EOF
         chmod +x shared-ld-sh
 
-        SHARED_LD_CC="`pwd`/shared-ld-sh -undefined suppress -flat_namespace -o"
+        SHARED_LD_CC="`pwd`/shared-ld-sh -dynamiclib -undefined suppress -flat_namespace -o"
+        SHARED_LD_MODULE_CC="`pwd`/shared-ld-sh -bundle -undefined suppress -flat_namespace -o"
         SHARED_LD_CXX="$SHARED_LD_CC"
+        SHARED_LD_MODULE_CXX="$SHARED_LD_MODULE_CC"
         PIC_FLAG="-dynamic -fPIC"
         dnl FIXME - what about C libs? Gilles says to use c++ because it doesn't
         dnl         matter for C projects and matters for C++ ones
@@ -1398,8 +1409,17 @@ EOF
         AC_MSG_ERROR(unknown system type $host.)
     esac
 
+    if test "x$SHARED_LD_MODULE_CC" = "x" ; then
+        SHARED_LD_MODULE_CC="$SHARED_LD_CC"
+    fi
+    if test "x$SHARED_LD_MODULE_CXX" = "x" ; then
+        SHARED_LD_MODULE_CC="$SHARED_LD_CXX"
+    fi
+
     AC_SUBST(SHARED_LD_CC)
     AC_SUBST(SHARED_LD_CXX)
+    AC_SUBST(SHARED_LD_MODULE_CC)
+    AC_SUBST(SHARED_LD_MODULE_CXX)
     AC_SUBST(PIC_FLAG)
 ])
 
