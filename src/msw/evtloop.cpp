@@ -252,7 +252,7 @@ int wxEventLoop::Run()
     private:
         wxEventLoop *m_evtLoop;
         FuncType m_fn;
-    } callOnExit(this, wxEventLoop::OnExit);
+    } callOnExit(this, &wxEventLoop::OnExit);
 
     for ( ;; )
     {
