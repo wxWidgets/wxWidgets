@@ -1427,8 +1427,8 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     PangoLayout *layout = pango_layout_new(m_context);
     pango_layout_set_font_description(layout, m_fontdesc);
     {
-        const wxWX2MBbuf data = text.mb_str(wxConvUTF8);
-        pango_layout_set_text(layout, data, strlen(data));
+        const wxCharBuffer data = wxConvUTF8.cWC2MB( text );
+        pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
     }
     PangoLayoutLine *line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
     PangoRectangle rect;
@@ -1447,7 +1447,6 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
         gdk_gc_set_foreground( m_textGC, m_textForegroundColour.GetColor() );
     }
     gdk_draw_string( m_window, font, m_textGC, x, y + font->ascent, text.mbc_str() );
-#endif // GTK+ 2.0/1.x
 
     /* CMB 17/7/98: simple underline: ignores scaling and underlying
        X font's XA_UNDERLINE_POSITION and XA_UNDERLINE_THICKNESS
@@ -1458,6 +1457,7 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
         if (font->descent > 0) ul_y++;
         gdk_draw_line( m_window, m_textGC, x, ul_y, x + width, ul_y);
     }
+#endif // GTK+ 2.0/1.x
 
 #if defined(__WXGTK20__) && wxUSE_WCHAR_T
     g_object_unref( G_OBJECT( layout ) );
@@ -1588,12 +1588,44 @@ void wxWindowDC::DoGetTextExtent(const wxString &string,
 {
     wxFont fontToUse = m_font;
     if (theFont) fontToUse = *theFont;
-
+    if (string.IsEmpty())
+    {
+        if (width) (*width) = 0;
+        if (height) (*height) = 0;
+        return;
+    }
+    
+#ifdef __WXGTK20__
+    PangoFontDescription *desc = fontToUse.GetNativeFontInfo()->description;
+    PangoLayout *layout = pango_layout_new(m_context);
+    pango_layout_set_font_description(layout, desc);
+    {
+        const wxCharBuffer data = wxConvUTF8.cWC2MB( string );
+        pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
+    }
+    PangoLayoutLine *line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
+ 
+    PangoRectangle rect;
+    pango_layout_line_get_extents(line, NULL, &rect);
+       
+    
+    if (width) (*width) = (wxCoord) rect.width;
+    if (height) (*height) = (wxCoord) rect.height;
+    if (descent)
+    {
+        // Do something about metrics here
+        (*descent) = 0;
+    }
+    if (externalLeading) (*externalLeading) = 0;  // ??
+    
+    g_object_unref( G_OBJECT( layout ) );
+#else
     GdkFont *font = fontToUse.GetInternalFont( m_scaleY );
     if (width) (*width) = wxCoord(gdk_string_width( font, string.mbc_str() ) / m_scaleX);
     if (height) (*height) = wxCoord((font->ascent + font->descent) / m_scaleY);
     if (descent) (*descent) = wxCoord(font->descent / m_scaleY);
     if (externalLeading) (*externalLeading) = 0;  // ??
+#endif
 }
 
 wxCoord wxWindowDC::GetCharWidth() const

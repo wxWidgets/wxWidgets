@@ -48,6 +48,7 @@
 #include "wx/intl.h"
 #include "wx/settings.h"
 #include "wx/log.h"
+#include "wx/fontutil.h"
 
 #ifdef __WXDEBUG__
     #include "wx/thread.h"
@@ -3138,12 +3139,55 @@ void wxWindowGTK::GetTextExtent( const wxString& string,
     if (theFont) fontToUse = *theFont;
 
     wxCHECK_RET( fontToUse.Ok(), wxT("invalid font") );
+    
+    if (string.IsEmpty())
+    {
+        if (x) (*y) = 0;
+        if (x) (*y) = 0;
+        return;
+    }
+#ifdef __WXGTK20__
 
+    PangoContext *context = NULL;
+    if (m_widget)
+        gtk_widget_get_pango_context( m_widget );
+        
+    if (!context)
+    {
+        if (x) (*y) = 0;
+        if (x) (*y) = 0;
+        return;
+    }
+    
+    PangoFontDescription *desc = fontToUse.GetNativeFontInfo()->description;
+    PangoLayout *layout = pango_layout_new(context);
+    pango_layout_set_font_description(layout, desc);
+    {
+        const wxCharBuffer data = wxConvUTF8.cWC2MB( string );
+        pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
+    }
+    PangoLayoutLine *line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
+ 
+    PangoRectangle rect;
+    pango_layout_line_get_extents(line, NULL, &rect);
+       
+    if (x) (*x) = (wxCoord) rect.width;
+    if (y) (*y) = (wxCoord) rect.height;
+    if (descent)
+    {
+        // Do something about metrics here
+        (*descent) = 0;
+    }
+    if (externalLeading) (*externalLeading) = 0;  // ??
+    
+    g_object_unref( G_OBJECT( layout ) );
+#else
     GdkFont *font = fontToUse.GetInternalFont( 1.0 );
     if (x) (*x) = gdk_string_width( font, wxGTK_CONV( string ) );
     if (y) (*y) = font->ascent + font->descent;
     if (descent) (*descent) = font->descent;
     if (externalLeading) (*externalLeading) = 0;  // ??
+#endif
 }
 
 void wxWindowGTK::SetFocus()
