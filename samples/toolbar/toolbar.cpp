@@ -98,6 +98,10 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
+    void OnSize(wxSizeEvent& event);
+
+    void OnToggleAnotherToolbar(wxCommandEvent& event);
+
     void OnToggleToolbarSize(wxCommandEvent& event);
     void OnToggleToolbarOrient(wxCommandEvent& event);
     void OnToggleToolbarRows(wxCommandEvent& event);
@@ -127,11 +131,15 @@ private:
     void DoDeletePrint();
     void DoToggleHelp();
 
+    void LayoutChildren();
+
     bool                m_smallToolbar,
                         m_horzToolbar;
     size_t              m_rows;             // 1 or 2 only
 
-    wxTextCtrl*         m_textWindow;
+    wxTextCtrl         *m_textWindow;
+
+    wxToolBar          *m_tbar;
 
     DECLARE_EVENT_TABLE()
 };
@@ -152,6 +160,7 @@ enum
     IDM_TOOLBAR_INSERTPRINT,
     IDM_TOOLBAR_TOGGLEHELP,
     IDM_TOOLBAR_TOGGLEFULLSCREEN,
+    IDM_TOOLBAR_TOGGLE_ANOTHER_TOOLBAR,
 
     ID_COMBO = 1000
 };
@@ -164,8 +173,12 @@ enum
 // help button.
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    EVT_SIZE(MyFrame::OnSize)
+
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
     EVT_MENU(wxID_HELP, MyFrame::OnAbout)
+
+    EVT_MENU(IDM_TOOLBAR_TOGGLE_ANOTHER_TOOLBAR, MyFrame::OnToggleAnotherToolbar)
 
     EVT_MENU(IDM_TOOLBAR_TOGGLETOOLBARSIZE, MyFrame::OnToggleToolbarSize)
     EVT_MENU(IDM_TOOLBAR_TOGGLETOOLBARORIENT, MyFrame::OnToggleToolbarOrient)
@@ -326,6 +339,7 @@ MyFrame::MyFrame(wxFrame* parent,
                  long style)
        : wxFrame(parent, id, title, pos, size, style)
 {
+    m_tbar = NULL;
     m_textWindow = new wxTextCtrl(this, -1, "", wxPoint(0, 0), wxSize(-1, -1), wxTE_MULTILINE);
 
     m_smallToolbar = TRUE;
@@ -340,6 +354,11 @@ MyFrame::MyFrame(wxFrame* parent,
 
     // Make a menubar
     wxMenu *tbarMenu = new wxMenu;
+    tbarMenu->Append(IDM_TOOLBAR_TOGGLE_ANOTHER_TOOLBAR,
+                     "Toggle &another toolbar\tCtrl-A",
+                     "Show/hide another test toolbar",
+                     TRUE);
+
     tbarMenu->Append(IDM_TOOLBAR_TOGGLETOOLBARSIZE,
                      "&Toggle toolbar size\tCtrl-S",
                      "Toggle between big/small toolbar",
@@ -396,6 +415,61 @@ wxToolBar* MyFrame::OnCreateToolBar(long style,
 }
 
 #endif // USE_GENERIC_TBAR
+
+void MyFrame::LayoutChildren()
+{
+    wxSize size = GetClientSize();
+
+    int offset;
+    if ( m_tbar )
+    {
+        m_tbar->SetSize(-1, size.y);
+        m_tbar->Move(0, 0);
+
+        offset = m_tbar->GetSize().x;
+    }
+    else
+    {
+        offset = 0;
+    }
+
+    m_textWindow->SetSize(offset, 0, size.x - offset, size.y);
+}
+
+void MyFrame::OnSize(wxSizeEvent& event)
+{
+    if ( m_tbar )
+    {
+        LayoutChildren();
+    }
+    else
+    {
+        event.Skip();
+    }
+}
+
+void MyFrame::OnToggleAnotherToolbar(wxCommandEvent& WXUNUSED(event))
+{
+    if ( m_tbar )
+    {
+        delete m_tbar;
+        m_tbar = NULL;
+    }
+    else
+    {
+        m_tbar = new wxToolBar(this, -1,
+                               wxDefaultPosition, wxDefaultSize,
+                               wxTB_VERTICAL);
+        m_tbar->AddTool(wxID_HELP, wxBITMAP(help),
+                        wxNullBitmap, FALSE,
+                        NULL,
+                        "This is the help button",
+                        "This is the long help for the help button");
+        m_tbar->Realize();
+    }
+
+    LayoutChildren();
+}
 
 void MyFrame::OnToggleToolbarSize(wxCommandEvent& WXUNUSED(event))
 {
