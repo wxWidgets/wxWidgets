@@ -48,9 +48,6 @@ public:
     virtual bool Pending();
     virtual void Dispatch();
 
-    // implementation only from now on
-    void OnIdle(wxIdleEvent &event);
-
     virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
 

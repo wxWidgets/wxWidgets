@@ -66,8 +66,6 @@ public:
     // implementation from now on
     // --------------------------
     
-    void OnIdle(wxIdleEvent& event);
-    
     // Processes an X event.
     virtual bool ProcessXEvent(WXEvent* event);
     

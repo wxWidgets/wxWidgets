@@ -52,9 +52,6 @@ public:
     virtual bool Yield(bool onlyIfNeeded = FALSE);
     virtual void WakeUpIdle();
 
-    // implementation only from now on
-    void OnIdle( wxIdleEvent &event );
-
     virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
 

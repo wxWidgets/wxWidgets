@@ -777,25 +777,8 @@ void wxApp::OnIdle(
         return;
 
     gbInOnIdle = TRUE;
-
-    //
-    // If there are pending events, we must process them: pending events
-    // are either events to the threads other than main or events posted
-    // with wxPostEvent() functions
-    //
-    ProcessPendingEvents();
-
-    //
-    // 'Garbage' collection of windows deleted with Close().
-    //
-    DeletePendingObjects();
-
-#if wxUSE_LOG
-    //
-    // Flush the logged messages if any
-    //
-    wxLog::FlushActive();
-#endif // wxUSE_LOG
+    
+    wxAppBase::OnIdle(event);
 
 #if wxUSE_DC_CACHEING
     // automated DC cache management: clear the cached DCs and bitmap
@@ -806,21 +789,6 @@ void wxApp::OnIdle(
         !::WinGetKeyState(HWND_DESKTOP, VK_BUTTON2))
         wxDC::ClearCache();
 #endif // wxUSE_DC_CACHEING
-
-    // Now done in ProcessIdle()
-#if 0
-    //
-    // Send OnIdle events to all windows
-    //
-    if (SendIdleEvents())
-    {
-        //
-        // SendIdleEvents() returns TRUE if at least one window requested more
-        // idle events
-        //
-        rEvent.RequestMore(TRUE);
-    }
-#endif
 
     gbInOnIdle = FALSE;
 } // end of wxApp::OnIdle

@@ -71,7 +71,7 @@ wxHashTable *wxWidgetHashTable = NULL;
 IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
 
 BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
-    EVT_IDLE(wxApp::OnIdle)
+    EVT_IDLE(wxAppBase::OnIdle)
 END_EVENT_TABLE()
 
 #ifdef __WXDEBUG__
@@ -201,48 +201,6 @@ void wxApp::HandlePropertyChange(WXEvent *event)
 {
     // by default do nothing special
     XtDispatchEvent((XEvent*) event); /* let Motif do the work */
-}
-
-void wxApp::OnIdle(wxIdleEvent& event)
-{
-    static bool inOnIdle = FALSE;
-
-    // Avoid recursion (via ProcessEvent default case)
-    if (inOnIdle)
-        return;
-
-    inOnIdle = TRUE;
-
-    // If there are pending events, we must process them: pending events
-    // are either events to the threads other than main or events posted
-    // with wxPostEvent() functions
-    // GRG: I have moved this here so that all pending events are processed
-    //   before starting to delete any objects. This behaves better (in
-    //   particular, wrt wxPostEvent) and is coherent with wxGTK's current
-    //   behaviour. Also removed the '#if wxUSE_THREADS' around it.
-    //  Changed Mar/2000 before 2.1.14
-
-    // Flush pending events.
-    ProcessPendingEvents();
-
-    // 'Garbage' collection of windows deleted with Close().
-    DeletePendingObjects();
-
-    // flush the logged messages if any
-    wxLog *pLog = wxLog::GetActiveTarget();
-    if ( pLog != NULL && pLog->HasPendingMessages() )
-        pLog->Flush();
-
-    // Now done in ProcessIdle()
-#if 0
-    // Send OnIdle events to all windows
-    bool needMore = SendIdleEvents();
-
-    if (needMore)
-        event.RequestMore(TRUE);
-#endif
-
-    inOnIdle = FALSE;
 }
 
 static char *fallbackResources[] = {

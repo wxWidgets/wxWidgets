@@ -66,8 +66,6 @@ public:
     // implementation from now on
     // --------------------------
     
-    void OnIdle(wxIdleEvent& event);
-    
 protected:
     bool                  m_showOnInit;
     

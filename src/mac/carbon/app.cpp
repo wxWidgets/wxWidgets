@@ -1025,35 +1025,13 @@ void wxApp::Dispatch()
 
 void wxApp::OnIdle(wxIdleEvent& event)
 {
-    // Avoid recursion (via ProcessEvent default case)
-    if ( s_inOnIdle )
-        return;
-
-  s_inOnIdle = TRUE;
-
-  // 'Garbage' collection of windows deleted with Close().
-  DeletePendingObjects();
-
-  // flush the logged messages if any
-  wxLog *pLog = wxLog::GetActiveTarget();
-  if ( pLog != NULL && pLog->HasPendingMessages() )
-    pLog->Flush();
-
-    // Now done in ProcessIdle()
-#if 0
-  // Send OnIdle events to all windows
-  bool needMore = SendIdleEvents();
-
-  if (needMore)
-    event.RequestMore(TRUE);
-#endif
-
+    wxAppBase::OnIdle(event);
+    
     // If they are pending events, we must process them: pending events are
     // either events to the threads other than main or events posted with
     // wxPostEvent() functions
     wxMacProcessNotifierAndPendingEvents();
 
-  s_inOnIdle = FALSE;
   if(!wxMenuBar::MacGetInstalledMenuBar() && wxMenuBar::MacGetCommonMenuBar())
     wxMenuBar::MacGetCommonMenuBar()->MacInstallMenuBar();
 }

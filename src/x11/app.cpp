@@ -88,7 +88,7 @@ WXDisplay *wxApp::ms_display = NULL;
 IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
 
 BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
-    EVT_IDLE(wxApp::OnIdle)
+    EVT_IDLE(wxAppBase::OnIdle)
 END_EVENT_TABLE()
 
 bool wxApp::Initialize(int& argc, wxChar **argv)
@@ -698,35 +698,6 @@ bool wxApp::HandlePropertyChange(WXEvent *event)
     // TODO: what to do for X11
     // XtDispatchEvent((XEvent*) event);
     return FALSE;
-}
-
-void wxApp::OnIdle(wxIdleEvent& event)
-{
-    static bool s_inOnIdle = FALSE;
-
-    // Avoid recursion (via ProcessEvent default case)
-    if (s_inOnIdle)
-        return;
-
-    s_inOnIdle = TRUE;
-
-    // Resend in the main thread events which have been prepared in other
-    // threads
-    ProcessPendingEvents();
-
-    // 'Garbage' collection of windows deleted with Close()
-    DeletePendingObjects();
-
-    // Now done in ProcessIdle()
-#if 0
-    // Send OnIdle events to all windows
-    bool needMore = SendIdleEvents();
-
-    if (needMore)
-        event.RequestMore(TRUE);
-#endif
-
-    s_inOnIdle = FALSE;
 }
 
 void wxApp::WakeUpIdle()

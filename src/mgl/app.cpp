@@ -204,7 +204,7 @@ static void wxDestroyMGL_WM()
 IMPLEMENT_DYNAMIC_CLASS(wxApp,wxEvtHandler)
 
 BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
-    EVT_IDLE(wxApp::OnIdle)
+    EVT_IDLE(wxAppBase::OnIdle)
 END_EVENT_TABLE()
 
 
@@ -270,38 +270,6 @@ bool wxApp::OnInitGui()
     if ( oldLog ) delete oldLog;
 
     return TRUE;
-}
-
-void wxApp::OnIdle(wxIdleEvent &event)
-{
-    static bool s_inOnIdle = FALSE;
-
-    /* Avoid recursion (via ProcessEvent default case) */
-    if (s_inOnIdle)
-        return;
-
-    s_inOnIdle = TRUE;
-
-    /* Resend in the main thread events which have been prepared in other
-       threads */
-    ProcessPendingEvents();
-
-    // 'Garbage' collection of windows deleted with Close().
-    DeletePendingObjects();
-
-#if wxUSE_LOG
-    // flush the logged messages if any
-    wxLog::FlushActive();
-#endif // wxUSE_LOG
-
-    // Now done in ProcessIdle()
-#if 0
-    // Send OnIdle events to all windows
-    if ( SendIdleEvents() )
-        event.RequestMore(TRUE);
-#endif
-
-    s_inOnIdle = FALSE;
 }
 
 int wxApp::MainLoop()
