@@ -487,6 +487,15 @@ typedef int wxWindowID;
 // size of statically declared array
 #define WXSIZEOF(array)   (sizeof(array)/sizeof(array[0]))
 
+// helper macros to be able to define unique/anonymous objects: this works by
+// appending the current line number to the given identifier to reduce the
+// probability of the conflict (it may still happen if this is used in the
+// headers, hence you should avoid doing it or provide unique prefixes then)
+#define wxCONCAT(text, line)        text ## line
+#define wxCONCAT_LINE2(text, line)  wxCONCAT(text, line)
+#define wxCONCAT_LINE(text)         wxCONCAT_LINE2(text, __LINE__)
+#define wxMAKE_UNIQUE_NAME(text)    wxCONCAT_LINE(text)
+
 // symbolic constant used by all Find()-like functions returning positive
 // integer on success as failure indicator
 #define wxNOT_FOUND       (-1)

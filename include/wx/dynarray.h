@@ -593,7 +593,8 @@ WX_DECLARE_USER_EXPORTED_BASEARRAY(double,       wxBaseArrayDouble,
 // Some commonly used predefined arrays
 // ----------------------------------------------------------------------------
 
-WX_DEFINE_USER_EXPORTED_ARRAY_SHORT (short,  wxArrayShort,   WXDLLIMPEXP_BASE);
+WX_DEFINE_USER_EXPORTED_ARRAY_SHORT (short,  wxArrayShort,   
+                                     WXDLLIMPEXP_BASE);
 WX_DEFINE_USER_EXPORTED_ARRAY_INT   (int,    wxArrayInt,     WXDLLIMPEXP_BASE);
 WX_DEFINE_USER_EXPORTED_ARRAY_LONG  (long,   wxArrayLong,    WXDLLIMPEXP_BASE);
 WX_DEFINE_USER_EXPORTED_ARRAY       (void *, wxArrayPtrVoid, WXDLLIMPEXP_BASE);
