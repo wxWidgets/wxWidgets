@@ -3702,6 +3702,7 @@ if test "$TOOLKIT" != "MSW"; then
                 if test "x$GCC" != "xyes"; then
                     THREAD_OPTS=""
                 fi
+                ;;
 
           *-*-irix* )
                 dnl gcc under IRIX doesn't seem to like -pthread, but it
