@@ -48,7 +48,8 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_filestream.obj \
 	$(OBJS)\test_memstream.obj \
 	$(OBJS)\test_zlibstream.obj \
-	$(OBJS)\test_fontmap.obj
+	$(OBJS)\test_fontmap.obj \
+	$(OBJS)\test_datetime.obj
 
 ### Conditionally set variables: ###
 
@@ -227,4 +228,7 @@ $(OBJS)\test_zlibstream.obj: .\streams\zlibstream.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_fontmap.obj: .\fontmap\fontmap.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_datetime.obj: .\datetime\datetime.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**

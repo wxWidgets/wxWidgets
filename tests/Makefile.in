@@ -54,7 +54,8 @@ TEST_OBJECTS =  \
 	test_filestream.o \
 	test_memstream.o \
 	test_zlibstream.o \
-	test_fontmap.o
+	test_fontmap.o \
+	test_datetime.o
 
 ### Conditionally set variables: ###
 
@@ -120,13 +121,9 @@ test$(EXEEXT): $(TEST_OBJECTS)
 data: 
 	@mkdir -p .
 	@for f in testdata.fc; do \
-	if test ! -e ./$$f ; \
-	then x=yep ; \
-	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \
+	if test \( ! -s ./$$f \) -o \( $(srcdir)/$$f -nt ./$$f  \) ; then \
+	cp -pRf $(srcdir)/$$f . ; \
 	fi; \
-	case "$$x" in ?*) \
-	cp -pRf $(srcdir)/$$f . ;; \
-	esac; \
 	done
 
 test_test.o: $(srcdir)/test.cpp
@@ -184,6 +181,9 @@ test_zlibstream.o: $(srcdir)/streams/zlibstream.cpp
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
 test_fontmap.o: $(srcdir)/fontmap/fontmap.cpp
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
+
+test_datetime.o: $(srcdir)/datetime/datetime.cpp
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
 

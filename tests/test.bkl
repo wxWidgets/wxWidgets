@@ -27,6 +27,7 @@
             streams/memstream.cpp
             streams/zlibstream.cpp
             fontmap/fontmap.cpp
+            datetime/datetime.cpp
         </sources>
         <wx-lib>base</wx-lib>
     </exe>

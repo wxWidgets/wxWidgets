@@ -103,13 +103,6 @@ __RUNTIME_LIBS_5 = -br
 !ifeq RUNTIME_LIBS static
 __RUNTIME_LIBS_5 = 
 !endif
-__EXCEPTIONSFLAG_6 =
-!ifeq USE_EXCEPTIONS 0
-__EXCEPTIONSFLAG_6 = 
-!endif
-!ifeq USE_EXCEPTIONS 1
-__EXCEPTIONSFLAG_6 = -xr
-!endif
 __EXCEPTIONSFLAG_7 =
 !ifeq USE_EXCEPTIONS 0
 __EXCEPTIONSFLAG_7 = 
@@ -176,7 +169,7 @@ SETUPHDIR = &
 TEST_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm $(__RUNTIME_LIBS_5) &
 	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
 	-i=.\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) $(CPPUNIT_CFLAGS) &
-	$(__EXCEPTIONSFLAG_6) $(__EXCEPTIONSFLAG_7) $(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONSFLAG_7) $(CPPFLAGS) $(CXXFLAGS)
 TEST_OBJECTS =  &
 	$(OBJS)\test_test.obj &
 	$(OBJS)\test_main.obj &
@@ -196,7 +189,8 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_filestream.obj &
 	$(OBJS)\test_memstream.obj &
 	$(OBJS)\test_zlibstream.obj &
-	$(OBJS)\test_fontmap.obj
+	$(OBJS)\test_fontmap.obj &
+	$(OBJS)\test_datetime.obj
 
 
 all : $(OBJS)
@@ -284,4 +278,7 @@ $(OBJS)\test_zlibstream.obj :  .AUTODEPEND .\streams\zlibstream.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_fontmap.obj :  .AUTODEPEND .\fontmap\fontmap.cpp
+	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_datetime.obj :  .AUTODEPEND .\datetime\datetime.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
