@@ -48,12 +48,13 @@ class Panel(_core.Window):
         Get the default attributes for this class.  This is useful if you want
         to use the same font or colour in your own control as in a standard
         control -- which is a much better idea than hard coding specific
-        colours or fonts which might look completely out of place on the users
-        system, especially if it uses themes.
+        colours or fonts which might look completely out of place on the
+        user's system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
         ignore under other platforms. Under Mac, it will change the size of
-        the returned font. See SetWindowVariant for more about this.
+        the returned font. See `wx.Window.SetWindowVariant` for more about
+        this.
         """
         return _windows_.Panel_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -79,12 +80,13 @@ def Panel_GetClassDefaultAttributes(*args, **kwargs):
     Get the default attributes for this class.  This is useful if you want
     to use the same font or colour in your own control as in a standard
     control -- which is a much better idea than hard coding specific
-    colours or fonts which might look completely out of place on the users
-    system, especially if it uses themes.
+    colours or fonts which might look completely out of place on the
+    user's system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
     ignore under other platforms. Under Mac, it will change the size of
-    the returned font. See SetWindowVariant for more about this.
+    the returned font. See `wx.Window.SetWindowVariant` for more about
+    this.
     """
     return _windows_.Panel_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -211,12 +213,13 @@ class ScrolledWindow(Panel):
         Get the default attributes for this class.  This is useful if you want
         to use the same font or colour in your own control as in a standard
         control -- which is a much better idea than hard coding specific
-        colours or fonts which might look completely out of place on the users
-        system, especially if it uses themes.
+        colours or fonts which might look completely out of place on the
+        user's system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
         ignore under other platforms. Under Mac, it will change the size of
-        the returned font. See SetWindowVariant for more about this.
+        the returned font. See `wx.Window.SetWindowVariant` for more about
+        this.
         """
         return _windows_.ScrolledWindow_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -242,12 +245,13 @@ def ScrolledWindow_GetClassDefaultAttributes(*args, **kwargs):
     Get the default attributes for this class.  This is useful if you want
     to use the same font or colour in your own control as in a standard
     control -- which is a much better idea than hard coding specific
-    colours or fonts which might look completely out of place on the users
-    system, especially if it uses themes.
+    colours or fonts which might look completely out of place on the
+    user's system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
     ignore under other platforms. Under Mac, it will change the size of
-    the returned font. See SetWindowVariant for more about this.
+    the returned font. See `wx.Window.SetWindowVariant` for more about
+    this.
     """
     return _windows_.ScrolledWindow_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -488,12 +492,13 @@ class Frame(TopLevelWindow):
         Get the default attributes for this class.  This is useful if you want
         to use the same font or colour in your own control as in a standard
         control -- which is a much better idea than hard coding specific
-        colours or fonts which might look completely out of place on the users
-        system, especially if it uses themes.
+        colours or fonts which might look completely out of place on the
+        user's system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
         ignore under other platforms. Under Mac, it will change the size of
-        the returned font. See SetWindowVariant for more about this.
+        the returned font. See `wx.Window.SetWindowVariant` for more about
+        this.
         """
         return _windows_.Frame_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -519,12 +524,13 @@ def Frame_GetClassDefaultAttributes(*args, **kwargs):
     Get the default attributes for this class.  This is useful if you want
     to use the same font or colour in your own control as in a standard
     control -- which is a much better idea than hard coding specific
-    colours or fonts which might look completely out of place on the users
-    system, especially if it uses themes.
+    colours or fonts which might look completely out of place on the
+    user's system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
     ignore under other platforms. Under Mac, it will change the size of
-    the returned font. See SetWindowVariant for more about this.
+    the returned font. See `wx.Window.SetWindowVariant` for more about
+    this.
     """
     return _windows_.Frame_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -588,12 +594,13 @@ class Dialog(TopLevelWindow):
         Get the default attributes for this class.  This is useful if you want
         to use the same font or colour in your own control as in a standard
         control -- which is a much better idea than hard coding specific
-        colours or fonts which might look completely out of place on the users
-        system, especially if it uses themes.
+        colours or fonts which might look completely out of place on the
+        user's system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
         ignore under other platforms. Under Mac, it will change the size of
-        the returned font. See SetWindowVariant for more about this.
+        the returned font. See `wx.Window.SetWindowVariant` for more about
+        this.
         """
         return _windows_.Dialog_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -619,12 +626,13 @@ def Dialog_GetClassDefaultAttributes(*args, **kwargs):
     Get the default attributes for this class.  This is useful if you want
     to use the same font or colour in your own control as in a standard
     control -- which is a much better idea than hard coding specific
-    colours or fonts which might look completely out of place on the users
-    system, especially if it uses themes.
+    colours or fonts which might look completely out of place on the
+    user's system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
     ignore under other platforms. Under Mac, it will change the size of
-    the returned font. See SetWindowVariant for more about this.
+    the returned font. See `wx.Window.SetWindowVariant` for more about
+    this.
     """
     return _windows_.Dialog_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -807,12 +815,13 @@ class StatusBar(_core.Window):
         Get the default attributes for this class.  This is useful if you want
         to use the same font or colour in your own control as in a standard
         control -- which is a much better idea than hard coding specific
-        colours or fonts which might look completely out of place on the users
-        system, especially if it uses themes.
+        colours or fonts which might look completely out of place on the
+        user's system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
         ignore under other platforms. Under Mac, it will change the size of
-        the returned font. See SetWindowVariant for more about this.
+        the returned font. See `wx.Window.SetWindowVariant` for more about
+        this.
         """
         return _windows_.StatusBar_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -838,12 +847,13 @@ def StatusBar_GetClassDefaultAttributes(*args, **kwargs):
     Get the default attributes for this class.  This is useful if you want
     to use the same font or colour in your own control as in a standard
     control -- which is a much better idea than hard coding specific
-    colours or fonts which might look completely out of place on the users
-    system, especially if it uses themes.
+    colours or fonts which might look completely out of place on the
+    user's system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
     ignore under other platforms. Under Mac, it will change the size of
-    the returned font. See SetWindowVariant for more about this.
+    the returned font. See `wx.Window.SetWindowVariant` for more about
+    this.
     """
     return _windows_.StatusBar_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -1114,12 +1124,13 @@ class SplitterWindow(_core.Window):
         Get the default attributes for this class.  This is useful if you want
         to use the same font or colour in your own control as in a standard
         control -- which is a much better idea than hard coding specific
-        colours or fonts which might look completely out of place on the users
-        system, especially if it uses themes.
+        colours or fonts which might look completely out of place on the
+        user's system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
         ignore under other platforms. Under Mac, it will change the size of
-        the returned font. See SetWindowVariant for more about this.
+        the returned font. See `wx.Window.SetWindowVariant` for more about
+        this.
         """
         return _windows_.SplitterWindow_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -1150,12 +1161,13 @@ def SplitterWindow_GetClassDefaultAttributes(*args, **kwargs):
     Get the default attributes for this class.  This is useful if you want
     to use the same font or colour in your own control as in a standard
     control -- which is a much better idea than hard coding specific
-    colours or fonts which might look completely out of place on the users
-    system, especially if it uses themes.
+    colours or fonts which might look completely out of place on the
+    user's system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
     ignore under other platforms. Under Mac, it will change the size of
-    the returned font. See SetWindowVariant for more about this.
+    the returned font. See `wx.Window.SetWindowVariant` for more about
+    this.
     """
     return _windows_.SplitterWindow_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -3244,6 +3256,10 @@ class PyWindow(_core.Window):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _windows_.PyWindow__setCallbackInfo(*args, **kwargs)
 
+    def SetBestSize(*args, **kwargs):
+        """SetBestSize(self, Size size)"""
+        return _windows_.PyWindow_SetBestSize(*args, **kwargs)
+
     def base_DoMoveWindow(*args, **kwargs):
         """base_DoMoveWindow(self, int x, int y, int width, int height)"""
         return _windows_.PyWindow_base_DoMoveWindow(*args, **kwargs)
@@ -3324,6 +3340,10 @@ class PyWindow(_core.Window):
         """base_ApplyParentThemeBackground(self, Colour c)"""
         return _windows_.PyWindow_base_ApplyParentThemeBackground(*args, **kwargs)
 
+    def base_GetDefaultAttributes(*args, **kwargs):
+        """base_GetDefaultAttributes(self) -> VisualAttributes"""
+        return _windows_.PyWindow_base_GetDefaultAttributes(*args, **kwargs)
+
 
 class PyWindowPtr(PyWindow):
     def __init__(self, this):
@@ -3355,6 +3375,10 @@ class PyPanel(Panel):
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _windows_.PyPanel__setCallbackInfo(*args, **kwargs)
+
+    def SetBestSize(*args, **kwargs):
+        """SetBestSize(self, Size size)"""
+        return _windows_.PyPanel_SetBestSize(*args, **kwargs)
 
     def base_DoMoveWindow(*args, **kwargs):
         """base_DoMoveWindow(self, int x, int y, int width, int height)"""
@@ -3436,6 +3460,10 @@ class PyPanel(Panel):
         """base_ApplyParentThemeBackground(self, Colour c)"""
         return _windows_.PyPanel_base_ApplyParentThemeBackground(*args, **kwargs)
 
+    def base_GetDefaultAttributes(*args, **kwargs):
+        """base_GetDefaultAttributes(self) -> VisualAttributes"""
+        return _windows_.PyPanel_base_GetDefaultAttributes(*args, **kwargs)
+
 
 class PyPanelPtr(PyPanel):
     def __init__(self, this):
@@ -3467,6 +3495,10 @@ class PyScrolledWindow(ScrolledWindow):
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _windows_.PyScrolledWindow__setCallbackInfo(*args, **kwargs)
+
+    def SetBestSize(*args, **kwargs):
+        """SetBestSize(self, Size size)"""
+        return _windows_.PyScrolledWindow_SetBestSize(*args, **kwargs)
 
     def base_DoMoveWindow(*args, **kwargs):
         """base_DoMoveWindow(self, int x, int y, int width, int height)"""
@@ -3547,6 +3579,10 @@ class PyScrolledWindow(ScrolledWindow):
     def base_ApplyParentThemeBackground(*args, **kwargs):
         """base_ApplyParentThemeBackground(self, Colour c)"""
         return _windows_.PyScrolledWindow_base_ApplyParentThemeBackground(*args, **kwargs)
+
+    def base_GetDefaultAttributes(*args, **kwargs):
+        """base_GetDefaultAttributes(self) -> VisualAttributes"""
+        return _windows_.PyScrolledWindow_base_GetDefaultAttributes(*args, **kwargs)
 
 
 class PyScrolledWindowPtr(PyScrolledWindow):

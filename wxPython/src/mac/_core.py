@@ -2593,22 +2593,27 @@ class EvtHandler(Object):
         """
         Bind an event to an event handler.
 
-          event     One of the EVT_* objects that specifies the
-                    type of event to bind,
+        :param event: One of the EVT_* objects that specifies the
+                      type of event to bind,
 
-          handler   A callable object to be invoked when the event
-                    is delivered to self.  Pass None to disconnect an
-                    event handler.
+        :param handler: A callable object to be invoked when the
+                      event is delivered to self.  Pass None to
+                      disconnect an event handler.
 
-          source    Sometimes the event originates from a different window
-                    than self, but you still want to catch it in self.  (For
-                    example, a button event delivered to a frame.)  By
-                    passing the source of the event, the event handling
-                    system is able to differentiate between the same event
-                    type from different controls.
+        :param source: Sometimes the event originates from a
+                      different window than self, but you still
+                      want to catch it in self.  (For example, a
+                      button event delivered to a frame.)  By
+                      passing the source of the event, the event
+                      handling system is able to differentiate
+                      between the same event type from different
+                      controls.
 
-          id,id2    Used for menu IDs or for event types that require a
-                    range of IDs
+        :param id: Used to spcify the event source by ID instead
+                   of instance.
+
+        :param id2: Used when it is desirable to bind a handler
+                      to a range of IDs, such as with EVT_MENU_RANGE.
         """
         if source is not None:
             id  = source.GetId()
@@ -6680,7 +6685,7 @@ class Window(EvtHandler):
         useful if you want to use the same font or colour in your own control
         as in a standard control -- which is a much better idea than hard
         coding specific colours or fonts which might look completely out of
-        place on the users system, especially if it uses themes.
+        place on the user's system, especially if it uses themes.
         """
         return _core_.Window_GetDefaultAttributes(*args, **kwargs)
 
@@ -6691,12 +6696,13 @@ class Window(EvtHandler):
         Get the default attributes for this class.  This is useful if you want
         to use the same font or colour in your own control as in a standard
         control -- which is a much better idea than hard coding specific
-        colours or fonts which might look completely out of place on the users
-        system, especially if it uses themes.
+        colours or fonts which might look completely out of place on the
+        user's system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
         ignore under other platforms. Under Mac, it will change the size of
-        the returned font. See SetWindowVariant for more about this.
+        the returned font. See `wx.Window.SetWindowVariant` for more about
+        this.
         """
         return _core_.Window_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -6710,7 +6716,7 @@ class Window(EvtHandler):
         EVT_ERASE_BACKGROUND event handler function under Windows and
         automatically under GTK.
 
-        Note that setting the background colour does not cause an immediate
+        Note that setting the background colour may not cause an immediate
         refresh, so you may wish to call ClearBackground or Refresh after
         calling this function.
 
@@ -7364,12 +7370,13 @@ def Window_GetClassDefaultAttributes(*args, **kwargs):
     Get the default attributes for this class.  This is useful if you want
     to use the same font or colour in your own control as in a standard
     control -- which is a much better idea than hard coding specific
-    colours or fonts which might look completely out of place on the users
-    system, especially if it uses themes.
+    colours or fonts which might look completely out of place on the
+    user's system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
     ignore under other platforms. Under Mac, it will change the size of
-    the returned font. See SetWindowVariant for more about this.
+    the returned font. See `wx.Window.SetWindowVariant` for more about
+    this.
     """
     return _core_.Window_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -8107,12 +8114,13 @@ class Control(Window):
         Get the default attributes for this class.  This is useful if you want
         to use the same font or colour in your own control as in a standard
         control -- which is a much better idea than hard coding specific
-        colours or fonts which might look completely out of place on the users
-        system, especially if it uses themes.
+        colours or fonts which might look completely out of place on the
+        user's system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
         ignore under other platforms. Under Mac, it will change the size of
-        the returned font. See SetWindowVariant for more about this.
+        the returned font. See `wx.Window.SetWindowVariant` for more about
+        this.
         """
         return _core_.Control_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -8143,12 +8151,13 @@ def Control_GetClassDefaultAttributes(*args, **kwargs):
     Get the default attributes for this class.  This is useful if you want
     to use the same font or colour in your own control as in a standard
     control -- which is a much better idea than hard coding specific
-    colours or fonts which might look completely out of place on the users
-    system, especially if it uses themes.
+    colours or fonts which might look completely out of place on the
+    user's system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
     ignore under other platforms. Under Mac, it will change the size of
-    the returned font. See SetWindowVariant for more about this.
+    the returned font. See `wx.Window.SetWindowVariant` for more about
+    this.
     """
     return _core_.Control_GetClassDefaultAttributes(*args, **kwargs)
 

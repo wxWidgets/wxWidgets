@@ -1,6 +1,10 @@
 # This file was created automatically by SWIG.
 # Don't modify this file, modify the SWIG interface instead.
 
+"""
+Classes for an interactive Calendar control.
+"""
+
 import _calendar
 
 import _misc
@@ -451,12 +455,13 @@ class CalendarCtrl(_core.Control):
         Get the default attributes for this class.  This is useful if you want
         to use the same font or colour in your own control as in a standard
         control -- which is a much better idea than hard coding specific
-        colours or fonts which might look completely out of place on the users
-        system, especially if it uses themes.
+        colours or fonts which might look completely out of place on the
+        user's system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
         ignore under other platforms. Under Mac, it will change the size of
-        the returned font. See SetWindowVariant for more about this.
+        the returned font. See `wx.Window.SetWindowVariant` for more about
+        this.
         """
         return _calendar.CalendarCtrl_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -488,12 +493,13 @@ def CalendarCtrl_GetClassDefaultAttributes(*args, **kwargs):
     Get the default attributes for this class.  This is useful if you want
     to use the same font or colour in your own control as in a standard
     control -- which is a much better idea than hard coding specific
-    colours or fonts which might look completely out of place on the users
-    system, especially if it uses themes.
+    colours or fonts which might look completely out of place on the
+    user's system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
     ignore under other platforms. Under Mac, it will change the size of
-    the returned font. See SetWindowVariant for more about this.
+    the returned font. See `wx.Window.SetWindowVariant` for more about
+    this.
     """
     return _calendar.CalendarCtrl_GetClassDefaultAttributes(*args, **kwargs)
 

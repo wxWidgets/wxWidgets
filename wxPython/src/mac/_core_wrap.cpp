@@ -1342,9 +1342,7 @@ int PyApp_GetComCtl32Version(){ wxPyRaiseNotImplemented(); return 0; }
     }
 
 
-    wxPyApp* wxGetApp() {
-        return (wxPyApp*)wxTheApp;
-    }
+    wxPyApp* wxPyGetApp() { return (wxPyApp*)wxTheApp; }
 
 
 
@@ -20777,7 +20775,7 @@ static PyObject *_wrap_GetApp(PyObject *self, PyObject *args, PyObject *kwargs) 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":GetApp",kwnames)) goto fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxPyApp *)wxGetApp();
+        result = (wxPyApp *)wxPyGetApp();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
