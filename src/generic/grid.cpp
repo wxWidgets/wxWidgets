@@ -5832,7 +5832,14 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                          || editor->IsAcceptedKey(event) )
                     {
                         EnableCellEditControl();
-                        editor->StartingKey(event);
+
+                        // the editor could be not shown for a variety of
+                        // reasons (i.e. blocked by the app or whatever), so
+                        // check if it really was created
+                        if ( m_cellEditCtrlEnabled )
+                        {
+                            editor->StartingKey(event);
+                        }
                     }
                     else
                     {
