@@ -425,6 +425,7 @@ enum {
     wxSTATIC_BORDER,
     wxTRANSPARENT_WINDOW,
     wxNO_BORDER,
+    wxDEFAULT_CONTROL_BORDER,
 
     wxTAB_TRAVERSAL,
     wxWANTS_CHARS,
@@ -688,13 +689,6 @@ enum {
 //     wxTC_OWNERDRAW,
 
 };
-
-
-#ifdef __WXGTK__
-#define wxDEFAULT_STATUSBAR_STYLE wxST_SIZEGRIP|wxFULL_REPAINT_ON_RESIZE
-#else
-#define wxDEFAULT_STATUSBAR_STYLE wxST_SIZEGRIP
-#endif
 
 
 
