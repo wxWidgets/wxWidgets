@@ -598,8 +598,8 @@ void wxMacConvertToPC( const char *from , char *to , int len )
 
 TECObjectRef s_TECNativeCToUnicode = NULL ;
 TECObjectRef s_TECUnicodeToNativeC = NULL ;
-TECObjectRef s_TECPCToNativeC = NULL ;
-TECObjectRef s_TECNativeCToPC = NULL ;
+TECObjectRef s_TECPlatformToNativeC = NULL ;
+TECObjectRef s_TECNativeCToPlatform = NULL ;
 void wxMacSetupConverters() 
 {
     // if we assume errors are happening here we need low level debugging since the high level assert will use the encoders that 
@@ -613,14 +613,14 @@ void wxMacSetupConverters()
     status = TECCreateConverter(&s_TECUnicodeToNativeC, 
     	kTextEncodingUnicodeDefault, wxApp::s_macDefaultEncodingIsPC ? kTextEncodingWindowsLatin1 : kTextEncodingMacRoman);
 
-    if ( !wxApp::s_macDefaultEncodingIsPC )
+    if ( wxApp::s_macDefaultEncodingIsPC )
     {
-        status = TECCreateConverter(&s_TECPCToNativeC, 
-        	kTextEncodingWindowsLatin1, wxApp::s_macDefaultEncodingIsPC ? kTextEncodingWindowsLatin1 : kTextEncodingMacRoman);
+        status = TECCreateConverter(&s_TECPlatformToNativeC, 
+        	kTextEncodingMacRoman, wxApp::s_macDefaultEncodingIsPC ? kTextEncodingWindowsLatin1 : kTextEncodingMacRoman);
 
         	
-        status = TECCreateConverter(&s_TECNativeCToPC, 
-        	wxApp::s_macDefaultEncodingIsPC ? kTextEncodingWindowsLatin1 : kTextEncodingMacRoman , kTextEncodingWindowsLatin1 );
+        status = TECCreateConverter(&s_TECNativeCToPlatform, 
+        	wxApp::s_macDefaultEncodingIsPC ? kTextEncodingWindowsLatin1 : kTextEncodingMacRoman , kTextEncodingMacRoman );
     }
 }
 
@@ -631,9 +631,9 @@ void wxMacCleanupConverters()
 
     status = TECDisposeConverter(s_TECUnicodeToNativeC);
 
-    status = TECDisposeConverter(s_TECPCToNativeC);
+    status = TECDisposeConverter(s_TECPlatformToNativeC);
 
-    status = TECDisposeConverter(s_TECNativeCToPC);
+    status = TECDisposeConverter(s_TECNativeCToPlatform);
 }
 
 wxWCharBuffer wxMacStringToWString( const wxString &from ) 
@@ -666,7 +666,7 @@ wxString wxMacMakeStringFromCString( const char * from , int len )
     status = TECConvertText(s_TECNativeCToUnicode, (ConstTextPtr)from , byteInLen, &byteInLen,
         (TextPtr)buf, byteBufferLen, &byteOutLen);
 #else
-    if ( wxApp::s_macDefaultEncodingIsPC )
+    if ( !wxApp::s_macDefaultEncodingIsPC )
         memcpy( buf , from , len ) ;
     else
     {
@@ -675,7 +675,7 @@ wxString wxMacMakeStringFromCString( const char * from , int len )
         ByteCount byteInLen = len ;
         ByteCount byteBufferLen = byteInLen ;
 
-        status = TECConvertText(s_TECNativeCToPC, (ConstTextPtr)from , byteInLen, &byteInLen,
+        status = TECConvertText(s_TECPlatformToNativeC, (ConstTextPtr)from , byteInLen, &byteInLen,
             (TextPtr)buf, byteBufferLen, &byteOutLen);
     }
 #endif
@@ -701,7 +701,7 @@ wxCharBuffer wxMacStringToCString( const wxString &from )
         (TextPtr)result.data(), byteBufferLen, &byteOutLen);
     return result ;
 #else
-    if ( wxApp::s_macDefaultEncodingIsPC )
+    if ( !wxApp::s_macDefaultEncodingIsPC )
         return wxCharBuffer( from.c_str() ) ;
     else
     {
@@ -711,7 +711,7 @@ wxCharBuffer wxMacStringToCString( const wxString &from )
         ByteCount byteInLen = from.Length() ;
         ByteCount byteBufferLen = byteInLen ;
 
-        status = TECConvertText(s_TECPCToNativeC, (ConstTextPtr)from.c_str() , byteInLen, &byteInLen,
+        status = TECConvertText(s_TECNativeCToPlatform, (ConstTextPtr)from.c_str() , byteInLen, &byteInLen,
             (TextPtr)result.data(), byteBufferLen, &byteOutLen);
         return result ;
     }
