@@ -1780,6 +1780,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/gsockosx.c
 </set>
 <set var="COCOA_HDR" hints="files">
+    wx/cocoa/NSApplication.h
     wx/cocoa/NSBox.h
     wx/cocoa/NSButton.h
     wx/cocoa/NSControl.h
@@ -1826,6 +1827,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/cocoa/radiobox.h
     wx/cocoa/radiobut.h
     wx/cocoa/region.h
+    wx/cocoa/slider.h
     wx/cocoa/spinbutt.h
     wx/cocoa/statbmp.h
     wx/cocoa/statbox.h
@@ -1837,6 +1839,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/cocoa/window.h
     <!-- Generic implementations used by wxCocoa: -->
     wx/generic/caret.h
+    wx/generic/dirdlgg.h
     wx/generic/fdrepdlg.h
     wx/generic/fontdlgg.h
     wx/generic/imaglist.h
