@@ -14,45 +14,63 @@ EXTRACPPFLAGS=-i=..\zlib
 
 !include $(WXDIR)\src\makewat.env
 
+# set RENAME to 1 to rename the files to the short names -- this is needed
+# with older Watcom versions
+# RENAME=1
+
+!ifeq RENAME 1
+TIFF=
+EXTRACPPFLAGS+=-dwxUSE_SHORTNAMES
+!else
+TIFF=tif_
+!endif
+
 WXLIB = $(WXDIR)\lib
 
-LIBTARGET   = $(WXLIB)\tiff.lib
+LIBTARGET = $(WXLIB)\tiff$(WATCOM_SUFFIX).lib
 
 OBJECTS= &
-		_aux.obj &
-		close.obj &
-		codec.obj &
-		compress.obj &
-		dir.obj &
-		dirinfo.obj &
-		dirread.obj &
-		dirwrite.obj &
-		dumpmode.obj &
-		error.obj &
-		fax3.obj &
-		fax3sm.obj &
-		flush.obj &
-		getimage.obj &
-		jpeg.obj &
-		luv.obj &
-		lzw.obj &
-		next.obj &
-		open.obj &
-		packbits.obj &
-		pixarlog.obj &
-		predict.obj &
-		print.obj &
-		read.obj &
-		strip.obj &
-		swab.obj &
-		thunder.obj &
-		tile.obj &
-		version.obj &
-		warning.obj &
-		win32.obj &
-		write.obj &
-		zip.obj
+!ifeq RENAME 1
+		$(OUTPUTDIR)_aux.obj &
+!else
+		$(OUTPUTDIR)tif_aux.obj &
+!endif
+		$(OUTPUTDIR)$(TIFF)close.obj &
+		$(OUTPUTDIR)$(TIFF)codec.obj &
+		$(OUTPUTDIR)$(TIFF)compress.obj &
+		$(OUTPUTDIR)$(TIFF)dir.obj &
+		$(OUTPUTDIR)$(TIFF)dirinfo.obj &
+		$(OUTPUTDIR)$(TIFF)dirread.obj &
+		$(OUTPUTDIR)$(TIFF)dirwrite.obj &
+		$(OUTPUTDIR)$(TIFF)dumpmode.obj &
+		$(OUTPUTDIR)$(TIFF)error.obj &
+		$(OUTPUTDIR)$(TIFF)fax3.obj &
+		$(OUTPUTDIR)$(TIFF)fax3sm.obj &
+		$(OUTPUTDIR)$(TIFF)flush.obj &
+		$(OUTPUTDIR)$(TIFF)getimage.obj &
+		$(OUTPUTDIR)$(TIFF)jpeg.obj &
+		$(OUTPUTDIR)$(TIFF)luv.obj &
+		$(OUTPUTDIR)$(TIFF)lzw.obj &
+		$(OUTPUTDIR)$(TIFF)next.obj &
+		$(OUTPUTDIR)$(TIFF)open.obj &
+		$(OUTPUTDIR)$(TIFF)packbits.obj &
+		$(OUTPUTDIR)$(TIFF)pixarlog.obj &
+		$(OUTPUTDIR)$(TIFF)predict.obj &
+		$(OUTPUTDIR)$(TIFF)print.obj &
+		$(OUTPUTDIR)$(TIFF)read.obj &
+		$(OUTPUTDIR)$(TIFF)strip.obj &
+		$(OUTPUTDIR)$(TIFF)swab.obj &
+		$(OUTPUTDIR)$(TIFF)thunder.obj &
+		$(OUTPUTDIR)$(TIFF)tile.obj &
+		$(OUTPUTDIR)$(TIFF)version.obj &
+		$(OUTPUTDIR)$(TIFF)warning.obj &
+		$(OUTPUTDIR)$(TIFF)win32.obj &
+		$(OUTPUTDIR)$(TIFF)write.obj &
+		$(OUTPUTDIR)$(TIFF)zip.obj
 
+all: $(OUTPUTDIR) $(RENAME) $(LIBTARGET) .SYMBOLIC
+
+!ifeq RENAME 1
 rename: .SYMBOLIC
 		copy tif_predict.h tif_pred.h
 		copy tif_aux.c _aux.c 
@@ -88,13 +106,16 @@ rename: .SYMBOLIC
 		copy tif_win32.c win32.c 
 		copy tif_write.c write.c 
 		copy tif_zip.c zip.c
+!endif
 
-all:        rename $(OBJECTS) $(LIBTARGET)
+$(OUTPUTDIR):
+	@if not exist $^@ mkdir $^@
 
+LBCFILE=$(OUTPUTDIR)tiff.lbc
 $(LIBTARGET) : $(OBJECTS)
-    %create tmp.lbc
-    @for %i in ( $(OBJECTS) ) do @%append tmp.lbc +%i
-    wlib /b /c /n /p=512 $^@ @tmp.lbc
+    %create $(LBCFILE)
+    @for %i in ( $(OBJECTS) ) do @%append $(LBCFILE) +%i
+    wlib /q /b /c /n /p=512 $^@ @$(LBCFILE)
 
 clean:   .SYMBOLIC
     -erase *.obj
@@ -102,6 +123,7 @@ clean:   .SYMBOLIC
     -erase *.pch
     -erase *.err
     -erase *.lbc
+!ifeq RENAME 1
 	-erase tif_pred.h
 	-erase _aux.c 
 	-erase close.c 
@@ -136,6 +158,7 @@ clean:   .SYMBOLIC
 	-erase win32.c 
 	-erase write.c 
 	-erase zip.c
+!endif
 
 cleanall:   clean
 
