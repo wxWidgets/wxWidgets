@@ -1124,6 +1124,9 @@ void wxApp::MacHandleOneEvent( WXEVENTREF evr )
         MacHandleUnhandledEvent(evr);
     }
     wxMacProcessNotifierAndPendingEvents() ;
+#if wxUSE_THREADS
+    wxMutexGuiLeaveOrEnter();
+#endif // wxUSE_THREADS
 }
 
 long wxMacTranslateKey(unsigned char key, unsigned char code) ;
