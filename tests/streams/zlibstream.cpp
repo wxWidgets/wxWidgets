@@ -330,9 +330,9 @@ const unsigned char *zlibStream::GetCompressedData()
 
 void zlibStream::doTestStreamData(int input_flag, int output_flag, int compress_level)
 {
-    size_t fail_pos = 0;
+    size_t fail_pos;
     char last_value = 0;
-    bool bWasEOF = true;
+    bool bWasEOF;
 
     {   // Part one: Create a compressed file.
         wxFileOutputStream fstream_out(FILENAME_GZ);
@@ -503,8 +503,8 @@ void zlibStream::DoDeleteOutStream()
 
 void zlibStream::genExtTestData(wxTextOutputStream &out, const char *buf, int flag)
 {
-    unsigned char *data = NULL;
-    size_t size = 0;
+    unsigned char *data;
+    size_t size;
     
     {   // Gen data
         wxMemoryOutputStream memstream_out;
