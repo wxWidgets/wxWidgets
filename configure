@@ -17364,12 +17364,10 @@ if test "$wxUSE_CLIPBOARD" = "yes"; then
 EOF
 
 
-    if test "$wxUSE_GTK" = 1; then
-                cat >> confdefs.h <<\EOF
+        cat >> confdefs.h <<\EOF
 #define wxUSE_DATAOBJ 1
 EOF
 
-    fi
 fi
 
 if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
@@ -18168,7 +18166,7 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:18172: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:18170: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
