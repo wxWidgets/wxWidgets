@@ -12,31 +12,16 @@
 top_srcdir = @top_srcdir@/..
 top_builddir = ../..
 program_dir = samples/sockets
-# the comment at the end of the next line is needed because otherwise autoconf
-# would remove this line completely - it contains a built-in hack to remove
-# any VPATH assignment not containing ':'
-VPATH = @PATH_IFS@$(top_srcdir)/samples/sockets # ':' for autoconf
 
-# Clears all default suffixes
-.SUFFIXES:	.o .cpp .c .cxx
+# PROGRAM=minimal
 
-.cpp.o :
-	$(CXX) -c $(CXXFLAGS) -o $@ $<
+OBJECTS =$(PROGRAM).o
+DEPFILES=$(PROGRAM).d
 
-# Set defaults from configure
-include ../../src/make.env
+# this can't be called all
+dummy:
+	$(MAKE) PROGRAM=client all
+	$(MAKE) PROGRAM=server all
 
-all:	client@PROGRAM_EXT@ server@PROGRAM_EXT@
-
-sockets_resources.o:  sockets.rc
-	$(RESCOMP) -i $< -o $@ $(RESFLAGS)
-
-client@PROGRAM_EXT@:	client.o ../../lib/@WX_TARGET_LIBRARY@ sockets_resources.o
-	$(CXX) $(LDFLAGS) -o client@PROGRAM_EXT@ sockets_resources.o client.o $(LDLIBS)
-
-server@PROGRAM_EXT@:	server.o ../../lib/@WX_TARGET_LIBRARY@
-	$(CXX) $(LDFLAGS) -o server@PROGRAM_EXT@ sockets_resources.o server.o $(LDLIBS)
-
-clean:
-	rm -f client@PROGRAM_EXT@ server@PROGRAM_EXT@ sockets_resources.o client.o server.o core
+include ../../src/makeprog.env
 
