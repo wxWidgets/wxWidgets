@@ -6,7 +6,7 @@
 // Created:     22/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Aleskandars Gluchovas
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -161,12 +161,12 @@ static inline bool skip_to_next_comment_in_the_line( char*& cur )
                *cur != '/'
              ) ++cur;
 
-        if ( cur == _gSrcEnd ) return FALSE;
+        if ( cur == _gSrcEnd ) return false;
 
         if ( *cur == '/' )
         {
             if ( (*(cur+1) == '*') ||
-                 (*(cur+1) == '/') ) return TRUE;
+                 (*(cur+1) == '/') ) return true;
             else
             {
                 ++cur;
@@ -174,7 +174,7 @@ static inline bool skip_to_next_comment_in_the_line( char*& cur )
             }
         }
 
-        return FALSE;
+        return false;
 
     } while(1);
 }
@@ -381,10 +381,9 @@ static inline bool get_next_token( char*& cur )
     }
 
     if ( cur >= _gSrcEnd )
-
-        return FALSE;
+        return false;
     else
-        return TRUE;
+        return true;
 }
 
 static inline void skip_preprocessor_dir( char*& cur )
@@ -497,13 +496,13 @@ static inline bool cmp_tokens( char* tok1, char* tok2 )
     do
     {
         if ( *(tok1++) != *(tok2++) )
-            return FALSE;
+            return false;
 
         --len;
 
     } while ( --len );
 
-    return TRUE;
+    return true;
 }
 
 static inline bool cmp_tokens_fast( char* tok1, char* tok2, size_t len )
@@ -511,11 +510,11 @@ static inline bool cmp_tokens_fast( char* tok1, char* tok2, size_t len )
     do
     {
         if ( *(tok1++) != *(tok2++) )
-            return FALSE;
+            return false;
 
     } while ( --len );
 
-    return TRUE;
+    return true;
 }
 
 static inline void skip_tempalate_statement( char*& cur )
@@ -741,18 +740,18 @@ static inline bool skip_imp_block( char*& cur )
     while( *cur != '{' && cur < _gSrcEnd )
     {
         skip_token( cur );
-        if ( !get_next_token( cur ) ) return FALSE;
+        if ( !get_next_token( cur ) ) return false;
     }
 
     while( *cur != '}' && cur < _gSrcEnd )
     {
         skip_token( cur );
-        if ( !get_next_token( cur ) ) return FALSE;
+        if ( !get_next_token( cur ) ) return false;
     }
 
     ++cur;
 
-    return TRUE;
+    return true;
 }
 
 static bool is_class_token( char*& cur )
@@ -779,7 +778,7 @@ static bool is_class_token( char*& cur )
 
             return cmp_tokens_fast( cur, "union", 5 );
 
-    return FALSE;
+    return false;
 }
 
 inline static bool is_forward_decl( char* cur )
@@ -788,11 +787,11 @@ inline static bool is_forward_decl( char* cur )
     {
         switch( *cur )
         {
-            case ':' : return FALSE;
-            case '{' : return FALSE;
-            case '(' : return FALSE;
+            case ':' : return false;
+            case '{' : return false;
+            case '(' : return false;
 
-            case ';' : return TRUE;
+            case ';' : return true;
 
             default : break;
         };
@@ -801,12 +800,12 @@ inline static bool is_forward_decl( char* cur )
 
     } while (cur < _gSrcEnd); // prevent running out of bounds
 
-    return FALSE;
+    return false;
 }
 
 inline static bool is_function( char* cur, bool& isAMacro )
 {
-    isAMacro = FALSE;
+    isAMacro = false;
 
     int tmpLnNo;
     store_line_no( tmpLnNo );
@@ -825,10 +824,10 @@ inline static bool is_function( char* cur, bool& isAMacro )
 
     if ( cur > eol )
     {
-        isAMacro = TRUE;
+        isAMacro = true;
         restore_line_no( tmpLnNo );
 
-        return TRUE;
+        return true;
     }
 
     // it's not a macro, go to the begining of arg. list
@@ -840,7 +839,7 @@ inline static bool is_function( char* cur, bool& isAMacro )
         if ( *cur == '(' )
         {
             restore_line_no( tmpLnNo );
-            return TRUE;
+            return true;
         }
 
         // end of statement found without any brackets in it
@@ -849,7 +848,7 @@ inline static bool is_function( char* cur, bool& isAMacro )
         if ( *cur == ';' )
         {
             restore_line_no( tmpLnNo );
-            return FALSE;
+            return false;
         }
 
         ++cur;
@@ -859,7 +858,7 @@ inline static bool is_function( char* cur, bool& isAMacro )
     isAMacro = 1;
     restore_line_no( tmpLnNo );
 
-    return FALSE;
+    return false;
 }
 
 // upon return the cursor is positioned after the
@@ -1018,8 +1017,8 @@ spFile* CJSourceParser::Parse( char* start, char* end )
                    ) == 0
             )
         {
-            int o = 0;
-            ++o;
+            // int o = 0;
+            // ++o;
         }
 
         switch (*cur)
@@ -1118,7 +1117,7 @@ spFile* CJSourceParser::Parse( char* start, char* end )
             continue;
         }
 
-        bool isAMacro = 0;
+        bool isAMacro = false;
 
         if ( is_function( cur, isAMacro ) )
         {
@@ -1132,8 +1131,9 @@ spFile* CJSourceParser::Parse( char* start, char* end )
 
             int tmpLnNo;
             store_line_no( tmpLnNo );
+            wxUnusedVar( tmpLnNo );
 
-            isAMacro = FALSE;
+            isAMacro = false;
 
             if ( !ParseNameAndRetVal( cur, isAMacro ) )
             {
@@ -1219,11 +1219,11 @@ void CJSourceParser::AttachComments( spContext& ctx, char* cur )
 
         if ( i == 0 )
 
-            pComment->mStartsPar = TRUE;
+            pComment->mStartsPar = true;
         else
         if ( pComment->mIsMultiline )
 
-            pComment->mStartsPar = TRUE;
+            pComment->mStartsPar = true;
         else
         {
             // find out wheather there is a new-line
@@ -1235,9 +1235,9 @@ void CJSourceParser::AttachComments( spContext& ctx, char* cur )
 
             if ( prevLine >= prevComEnd )
 
-                pComment->mStartsPar = TRUE;
+                pComment->mStartsPar = true;
             else
-                pComment->mStartsPar = FALSE;
+                pComment->mStartsPar = false;
         }
 
         prevComEnd = set_comment_text( pComment->mText, start );
@@ -1521,7 +1521,7 @@ void CJSourceParser::ParseKeyword( char*& cur )
 
 bool CJSourceParser::ParseNameAndRetVal( char*& cur, bool& isAMacro )
 {
-    isAMacro = FALSE;
+    isAMacro = false;
 
     // FOR NOW:: all functions in the global
     //           scope are ignored
@@ -1537,7 +1537,7 @@ bool CJSourceParser::ParseNameAndRetVal( char*& cur, bool& isAMacro )
             isVirtual = true;
 
         skip_token( cur );
-        if ( !get_next_token( cur ) ) return FALSE;
+        if ( !get_next_token( cur ) ) return false;
     }
 
     char* bracketPos = cur;
@@ -1564,9 +1564,9 @@ bool CJSourceParser::ParseNameAndRetVal( char*& cur, bool& isAMacro )
 
             mpPlugin->ParseContext( _gSrcStart, cur, _gSrcEnd, mpCurCtx );
 
-            isAMacro = TRUE;
+            isAMacro = true;
 
-            return FALSE;
+            return false;
         }
     }
 
@@ -1633,7 +1633,7 @@ bool CJSourceParser::ParseNameAndRetVal( char*& cur, bool& isAMacro )
     // now, enter operation context
     mpCurCtx = pOp;
 
-    return TRUE;
+    return true;
 }
 
 bool CJSourceParser::ParseArguments( char*& cur )
@@ -1655,7 +1655,7 @@ bool CJSourceParser::ParseArguments( char*& cur )
 
         get_next_token( cur );
 
-        bool first_blk = 1;
+        bool first_blk = true;
 
         while( *cur != ')' && *cur != ',' )
         {
@@ -1693,7 +1693,7 @@ bool CJSourceParser::ParseArguments( char*& cur )
             // if only one block enclosed, than it's probably
             // some macro, there should be at least two blocks,
             // one for argument type and another for it's identifier
-            return FALSE;
+            return false;
         }
 
         if ( blocksSkipped == 0 )
@@ -1777,29 +1777,31 @@ bool CJSourceParser::ParseArguments( char*& cur )
     int tmpLnNo;
     store_line_no( tmpLnNo );
 
+    bool result = true;
+
     do
     {
         if ( *tok == '{' || *tok == ';' )
         {
             restore_line_no(tmpLnNo);
-            return TRUE;
+            break;
         }
 
         // check for unexpected tokens
         if ( *tok == '=' || *tok == '0' )
         {
             skip_token(tok);
-            if ( !get_next_token(tok) ) return FALSE;
+            if ( !get_next_token(tok) ) return false;
             continue;
         }
 
-        if ( *tok == '}' ) return FALSE;
+        if ( *tok == '}' ) return false;
 
         // if initialization list found
         if ( *tok == ':' )
         {
             restore_line_no(tmpLnNo);
-            return TRUE;
+            break;
         }
 
         if ( cmp_tokens_fast( tok, "const", 5 ) )
@@ -1807,30 +1809,28 @@ bool CJSourceParser::ParseArguments( char*& cur )
             ((spOperation*)mpCurCtx)->mIsConstant = true;
 
             skip_token(tok);
-            if ( !get_next_token(tok) ) return FALSE;
+            if ( !get_next_token(tok) ) return false;
             continue;
         }
 
-        if ( CheckVisibilty( tok ) ) return FALSE;
+        if ( CheckVisibilty( tok ) ) return false;
 
         // if next context found
-        if ( is_keyword( tok ) ) return FALSE;
+        if ( is_keyword( tok ) ) return false;
 
         skip_token(tok);
-        if ( !get_next_token(tok) ) return FALSE;
+        if ( !get_next_token(tok) ) return false;
 
     } while(1);
 
-    return TRUE;
+    return result;
 }
 
 void CJSourceParser::ParseMemberVar( char*& cur )
 {
     MMemberListT& members = mpCurCtx->GetMembers();
 
-    bool firstMember = 1;
-
-    size_t first = 0;
+    bool firstMember = true;
 
     string type;
 
@@ -1860,7 +1860,6 @@ void CJSourceParser::ParseMemberVar( char*& cur )
         if ( firstMember )
         {
             firstMember = 0;
-            first = members.size() - 1;;
         }
 
         skip_token_back( cur );
@@ -1904,7 +1903,7 @@ void CJSourceParser::ParseMemberVar( char*& cur )
 
     } while(1);
 
-    first = 0;
+    size_t first = 0;
 
     // set up types for all collected (same-type) attributes;
     while ( first != members.size() - 1 )
@@ -1950,7 +1949,7 @@ void CJSourceParser::SkipFunctionBody( char*& cur )
 {
     // FIXME:: check for comments and quoted stirngs here
 
-    bool hasDefinition = FALSE;
+    bool hasDefinition = false;
 
     while( *cur != '{' && *cur != ';' )
     {
@@ -1964,7 +1963,7 @@ void CJSourceParser::SkipFunctionBody( char*& cur )
     }
     else
     {
-        hasDefinition = TRUE;
+        hasDefinition = true;
 
         skip_scope_block( cur ); // skip the whole imp.
     }
@@ -2004,22 +2003,22 @@ bool CJSourceParser::CheckVisibilty( char*& cur )
     if ( cmp_tokens_fast( cur, "public:", len ) )
     {
         mCurVis = SP_VIS_PUBLIC;
-        return TRUE;
+        return true;
     }
 
     if ( cmp_tokens_fast( cur, "protected:", len ) )
     {
         mCurVis = SP_VIS_PROTECTED;
-        return TRUE;
+        return true;
     }
 
     if ( cmp_tokens_fast( cur, "private:", len ) )
     {
         mCurVis = SP_VIS_PRIVATE;
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 void CJSourceParser::AddClassNode( char*& cur )
