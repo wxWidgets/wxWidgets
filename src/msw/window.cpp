@@ -4056,7 +4056,7 @@ WXHBRUSH wxWindowMSW::MSWGetBgBrushForSelf(wxWindow *parent, WXHDC hDC)
 
 WXHBRUSH wxWindowMSW::MSWGetBgBrush(WXHDC hDC)
 {
-    for ( wxWindow *win = this; win; win = win->GetParent() )
+    for ( wxWindow *win = (wxWindow *)this; win; win = win->GetParent() )
     {
         // background is not inherited beyond the containing TLW
         if ( win->IsTopLevel() )
@@ -5089,7 +5089,7 @@ bool wxGetKeyState(wxKeyCode key)
     bool bVirtual;
 
 //High order with GetAsyncKeyState only available on WIN32
-#ifdef __WIN32__    
+#ifdef __WIN32__
     //If the requested key is a LED key, return
     //true if the led is pressed
     if (key == WXK_NUMLOCK ||
@@ -5097,12 +5097,12 @@ bool wxGetKeyState(wxKeyCode key)
         key == WXK_SCROLL)
     {
 #endif
-        //low order bit means LED is highlighted, 
+        //low order bit means LED is highlighted,
         //high order means key is down
         //Here, for compat with other ports we want both
         return GetKeyState( wxCharCodeWXToMSW(key, &bVirtual) ) != 0;
 
-#ifdef __WIN32__    
+#ifdef __WIN32__
     }
     else
     {
