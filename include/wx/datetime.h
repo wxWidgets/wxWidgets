@@ -42,12 +42,12 @@ class WXDLLEXPORT wxDateSpan;
 
 #ifdef __WXMAC__
 #if __MSL__ < 0x6000
-	#define WX_TIME_BASE_OFFSET ( 2082844800L + 126144000L )
+    #define WX_TIME_BASE_OFFSET ( 2082844800L + 126144000L )
 #else
-	#define WX_TIME_BASE_OFFSET 0
+    #define WX_TIME_BASE_OFFSET 0
 #endif
 #else
-	#define WX_TIME_BASE_OFFSET 0
+    #define WX_TIME_BASE_OFFSET 0
 #endif
 /*
  * TODO

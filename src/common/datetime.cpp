@@ -3170,7 +3170,7 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
                     // but we already have a month - maybe we guessed wrong?
                     if ( !haveDay )
                     {
-                    	// no need to check in month range as always < 12, but
+                        // no need to check in month range as always < 12, but
                         // the days are counted from 1 unlike the months
                         day = (wxDateTime_t)mon + 1;
                         haveDay = TRUE;
@@ -3180,7 +3180,7 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
                         // could possible be the year (doesn't the year come
                         // before the month in the japanese format?) (FIXME)
                         break;
-                	}
+                    }
                 }
 
                 mon = mon2;
@@ -3292,7 +3292,8 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
                 mon = (wxDateTime::Month)(day - 1);
 
                 // we're in the current year then
-                if ( year <= GetNumOfDaysInMonth(Inv_Year, mon) )
+                if ( (year > 0) &&
+                        (unsigned)year <= GetNumOfDaysInMonth(Inv_Year, mon) )
                 {
                     day = year;
 
