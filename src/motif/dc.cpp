@@ -46,11 +46,6 @@ wxDC::wxDC()
     m_backgroundMode = wxTRANSPARENT;
 
     m_isInteractive = FALSE;
-
-    m_internalDeviceOriginX = 0;
-    m_internalDeviceOriginY = 0;
-    m_externalDeviceOriginX = 0;
-    m_externalDeviceOriginY = 0;
 }
 
 void wxDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y)
@@ -178,22 +173,10 @@ void wxDC::SetLogicalOrigin( wxCoord x, wxCoord y )
 
 void wxDC::SetDeviceOrigin( wxCoord x, wxCoord y )
 {
-    m_externalDeviceOriginX = x;
-    m_externalDeviceOriginY = y;
+    // only wxPostScripDC has m_signX = -1, we override SetDeviceOrigin there
+    m_deviceOriginX = x;
+    m_deviceOriginY = y;
     ComputeScaleAndOrigin();
-}
-
-void wxDC::SetInternalDeviceOrigin( wxCoord x, wxCoord y )
-{
-    m_internalDeviceOriginX = x;
-    m_internalDeviceOriginY = y;
-    ComputeScaleAndOrigin();
-}
-
-void wxDC::GetInternalDeviceOrigin( wxCoord *x, wxCoord *y )
-{
-    if (x) *x = m_internalDeviceOriginX;
-    if (y) *y = m_internalDeviceOriginY;
 }
 
 void wxDC::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
@@ -245,25 +228,7 @@ wxCoord wxDCBase::LogicalToDeviceYRel(wxCoord y) const
 
 void wxDC::ComputeScaleAndOrigin()
 {
-    // CMB: copy scale to see if it changes
-    double origScaleX = m_scaleX;
-    double origScaleY = m_scaleY;
-
     m_scaleX = m_logicalScaleX * m_userScaleX;
     m_scaleY = m_logicalScaleY * m_userScaleY;
-
-    m_deviceOriginX = m_internalDeviceOriginX + m_externalDeviceOriginX;
-    m_deviceOriginY = m_internalDeviceOriginY + m_externalDeviceOriginY;
-
-    // CMB: if scale has changed call SetPen to recalulate the line width
-    if (m_scaleX != origScaleX || m_scaleY != origScaleY)
-    {
-        // this is a bit artificial, but we need to force wxDC to think
-        // the pen has changed
-        wxPen* pen = & GetPen();
-        wxPen tempPen;
-        m_pen = tempPen;
-        SetPen(* pen);
-    }
 }
 

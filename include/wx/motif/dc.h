@@ -155,20 +155,9 @@ public:
             return (wxCoord)((double)(y) * m_scaleY - 0.5);
     }
 
-    void SetInternalDeviceOrigin( wxCoord x, wxCoord y );
-    void GetInternalDeviceOrigin( wxCoord *x, wxCoord *y );
-
 public:
     // not sure what for, but what is a mm on a screen you don't know the size of?
     double       m_mm_to_pix_x,m_mm_to_pix_y;
-
-    // If un-scrolled is non-zero or d.o. changes with scrolling. Set using
-    // SetInternalDeviceOrigin().
-    wxCoord         m_internalDeviceOriginX,m_internalDeviceOriginY;
-
-    // To be set by external classes such as wxScrolledWindow using
-    // SetDeviceOrigin()
-    wxCoord         m_externalDeviceOriginX,m_externalDeviceOriginY;
 
     // recompute scale?
     bool         m_needComputeScaleX, m_needComputeScaleY;

@@ -245,13 +245,33 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
     XtAppAddActions ((XtAppContext) wxTheApp->GetAppContext(), actions, 1);
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
-    if (style & wxBORDER)
+    
+    if (style & wxSIMPLE_BORDER)
     {
         m_borderWidget = (WXWidget)XtVaCreateManagedWidget
                                    (
                                     "canvasBorder",
                                     xmFrameWidgetClass, parentWidget,
                                     XmNshadowType, XmSHADOW_IN,
+                                    XmNshadowThickness, 1,
+                                    NULL
+                                   );
+    } else if (style & wxSUNKEN_BORDER)
+    {
+        m_borderWidget = (WXWidget)XtVaCreateManagedWidget
+                                   (
+                                    "canvasBorder",
+                                    xmFrameWidgetClass, parentWidget,
+                                    XmNshadowType, XmSHADOW_IN,
+                                    NULL
+                                   );
+    } else if (style & wxRAISED_BORDER)
+    {
+        m_borderWidget = (WXWidget)XtVaCreateManagedWidget
+                                   (
+                                    "canvasBorder",
+                                    xmFrameWidgetClass, parentWidget,
+                                    XmNshadowType, XmSHADOW_OUT,
                                     NULL
                                    );
     }
@@ -878,6 +898,18 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
         // Use whole client area
         x = 0; y = 0;
         GetClientSize(& w, & h);
+    }
+
+    wxNode *cnode = m_children.First();
+    while (cnode)
+    {
+        wxWindow *child = (wxWindow*) cnode->Data();
+	int sx = 0;
+	int sy = 0;
+	child->GetSize( &sx, &sy );
+        wxPoint pos( child->GetPosition() );
+	child->SetSize( pos.x + dx, pos.y + dy, sx, sy, wxSIZE_ALLOW_MINUS_ONE );
+	cnode = cnode->Next();
     }
 
     int x1 = (dx >= 0) ? x : x - dx;

@@ -171,8 +171,10 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     wxPaintDC dc( this );
     m_owner->PrepareDC( dc );
 
+    dc.SetPen( *wxBLACK_PEN );
+    
     dc.DrawText( "Some text", 140, 140 );
-  
+
     dc.DrawRectangle( 100, 160, 200, 200 );
     
     dc.SetBrush( *wxTRANSPARENT_BRUSH );

@@ -1,11 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        motif/dataform.h
 // Purpose:     declaration of the wxDataFormat class
-// Author:      Vadim Zeitlin
+// Author:      Robert Roebling
 // Modified by:
 // Created:     19.10.99 (extracted from motif/dataobj.h)
 // RCS-ID:      $Id$
-// Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+// Copyright:   (c) 1999 Robert Roebling
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -15,42 +15,52 @@
 class wxDataFormat
 {
 public:
-    typedef unsigned long /* Atom */ NativeFormat;
+    // the clipboard formats under Xt are Atoms
+    typedef Atom NativeFormat;
 
     wxDataFormat();
     wxDataFormat( wxDataFormatId type );
     wxDataFormat( const wxString &id );
     wxDataFormat( const wxChar *id );
-    wxDataFormat( const wxDataFormat &format );
-    wxDataFormat( const Atom atom );
+    wxDataFormat( NativeFormat format );
 
-    void SetType( wxDataFormatId type );
-    NativeFormat GetType() const { return m_type; }
+    wxDataFormat& operator=(NativeFormat format)
+        { SetId(format); return *this; }
 
-    /* the string Id identifies the format of clipboard or DnD data. a word
-     * processor would e.g. add a wxTextDataObject and a wxPrivateDataObject
-     * to the clipboard - the latter with the Id "application/wxword", an
-     * image manipulation program would put a wxBitmapDataObject and a
-     * wxPrivateDataObject to the clipboard - the latter with "image/png". */
+    // comparison (must have both versions)
+    bool operator==(NativeFormat format) const
+        { return m_format == (NativeFormat)format; }
+    bool operator!=(NativeFormat format) const
+        { return m_format != (NativeFormat)format; }
+    bool operator==(wxDataFormatId format) const
+        { return m_type == (wxDataFormatId)format; }
+    bool operator!=(wxDataFormatId format) const
+        { return m_type != (wxDataFormatId)format; }
 
-    wxString GetId() const { return m_id; }
+    // explicit and implicit conversions to NativeFormat which is one of
+    // standard data types (implicit conversion is useful for preserving the
+    // compatibility with old code)
+    NativeFormat GetFormatId() const { return m_format; }
+    operator NativeFormat() const { return m_format; }
+
+    void SetId( NativeFormat format );
+
+    // string ids are used for custom types - this SetId() must be used for
+    // application-specific formats
+    wxString GetId() const;
     void SetId( const wxChar *id );
 
-    Atom GetAtom();
-    void SetAtom(Atom atom) { m_hasAtom = TRUE; m_atom = atom; }
-
-    // implicit conversion to wxDataFormatId
-    operator NativeFormat() const { return m_type; }
-
-    bool operator==(NativeFormat type) const { return m_type == type; }
-    bool operator!=(NativeFormat type) const { return m_type != type; }
+    // implementation
+    wxDataFormatId GetType() const;
 
 private:
-    NativeFormat  m_type;
-    wxString    m_id;
-    bool        m_hasAtom;
-    Atom        m_atom;
+    wxDataFormatId   m_type;
+    NativeFormat     m_format;
+
+    void PrepareFormats();
+    void SetType( wxDataFormatId type );
 };
+
 
 #endif // _WX_MOTIF_DATAFORM_H
 

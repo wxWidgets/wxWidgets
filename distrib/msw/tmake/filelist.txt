@@ -149,7 +149,7 @@ module.cpp	C	B
 mstream.cpp	C
 object.cpp	C	B
 objstrm.cpp	C
-odbc.cpp	C	R
+odbc.cpp	C	R,X
 paper.cpp	C
 prntbase.cpp	C
 process.cpp	C	32,B
