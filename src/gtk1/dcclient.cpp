@@ -1589,6 +1589,11 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     CalcBoundingBox (x, y);
 }
 
+
+// TODO: There is an example of rotating text with GTK2 that would probably be
+// a better approach here:
+//           http://www.daa.com.au/pipermail/pygtk/2003-April/005052.html
+
 void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, double angle )
 {
     if (angle == 0.0)
@@ -1601,18 +1606,22 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
 
     if (!m_window) return;
 
-#ifdef __WXGTK20__
+    wxCoord w;
+    wxCoord h;
+
+#ifdef  __WXGTK20__
     // implement later without GdkFont for GTK 2.0
-    return;
+    GetTextExtent(text, &w, &h, NULL,NULL, &m_font);
+    
 #else
     GdkFont *font = m_font.GetInternalFont( m_scaleY );
 
     wxCHECK_RET( font, wxT("invalid font") );
 
     // the size of the text
-    wxCoord w = gdk_string_width( font, text.mbc_str() );
-    wxCoord h = font->ascent + font->descent;
-
+    w = gdk_string_width( font, text.mbc_str() );
+    h = font->ascent + font->descent;
+#endif
     // draw the string normally
     wxBitmap src(w, h);
     wxMemoryDC dc;
@@ -1665,8 +1674,8 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
             wxCoord dstX = (wxCoord)(r*cos(angleOrig) + 0.5),
                     dstY = (wxCoord)(r*sin(angleOrig) + 0.5);
 
-            // black pixel?
-            bool textPixel = data[(srcY*w + srcX)*3] == 0;
+            // non-white pixel?
+            bool textPixel = data[(srcY*w + srcX)*3] != 0xff;
             if ( textPixel || (m_backgroundMode == wxSOLID) )
             {
                 // change colour if needed
@@ -1703,7 +1712,6 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
     // update the bounding box
     CalcBoundingBox(x + minX, y + minY);
     CalcBoundingBox(x + maxX, y + maxY);
-#endif
 }
 
 void wxWindowDC::DoGetTextExtent(const wxString &string,
