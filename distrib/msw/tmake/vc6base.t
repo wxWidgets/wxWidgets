@@ -52,7 +52,7 @@
     my %versions = GetVersion();
     my ($verMaj, $verMin) = ( $versions{'MAJOR'}, $versions{'MINOR'} );
     $project{"LINK_VERSION"} = "$verMaj.$verMin";
-    $project{"DLL_VERSION"} = "$verMaj$verMin";
+    $project{"DLL_VERSION"} = "$verMaj$verMin" . $versions{'MICRO_IF_UNSTABLE'};
 #$}
 # Microsoft Developer Studio Project File - Name="wxBase" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
