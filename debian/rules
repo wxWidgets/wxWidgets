@@ -577,6 +577,7 @@ install-gtk-univ: build-gtk-univ-stamp
 	dh_installdirs
 	cp -a $(objdir_gtk_univ)/lib/* debian/$(package_gtk_univ)/usr/lib
 	cp $(objdir_gtk_univ)/wxgtkuniv-$(release)-config debian/$(package_gtk_univ)/usr/bin/
+	cp debian/lintian-override debian/$(package_gtk_univ)/usr/share/lintian/overrides/$(package_gtk_univ)
 
 install-gtk-contrib: DH_OPTIONS=-p$(package_gtk_contrib)
 install-gtk-contrib: build-contrib-shared-stamp

@@ -1,8 +1,10 @@
 wxwindows2.3 (2.3.2) unstable; urgency=low
 
   * Major Overhaul.  First serious release contender.
-  * Added .dll's to msw-cross packages.
-  * Added -dbg versions of the cross packages.
+
+      Added .dll's to msw-cross packages.
+      Added -dbg versions of the cross packages.
+      Added experimental -univ(gtk) package.
 
  -- Ron Lee <ron@debian.org>  Thu, 27 Sep 2001 05:55:07 -0700
 
