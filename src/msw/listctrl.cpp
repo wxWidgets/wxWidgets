@@ -2145,6 +2145,10 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 }
                 break;
 
+                // when using MSLU we get ANSI messages sometimes, apparently
+#if wxUSE_UNICODE_MSLU
+            case LVN_GETDISPINFOA:
+#endif // wxUSE_UNICODE_MSLU
             case LVN_GETDISPINFO:
                 if ( IsVirtual() )
                 {
@@ -2156,7 +2160,29 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     if ( lvi.mask & LVIF_TEXT )
                     {
                         wxString text = OnGetItemText(item, lvi.iSubItem);
-                        wxStrncpy(lvi.pszText, text, lvi.cchTextMax);
+#if wxUSE_UNICODE_MSLU
+                        if ( nmhdr->code == LVN_GETDISPINFOA )
+                        {
+                            if ( !::WideCharToMultiByte
+                                    (
+                                        CP_ACP,
+                                        0,          // no flags
+                                        text,
+                                        text.length() + 1,
+                                        (char *)lvi.pszText,
+                                        lvi.cchTextMax,
+                                        NULL,       // default character
+                                        NULL        // [out] def char used flag
+                                    ) )
+                            {
+                                wxLogLastError(_T("WideCharToMultiByte()"));
+                            }
+                        }
+                        else 
+#endif // wxUSE_UNICODE_MSLU
+                        {
+                            wxStrncpy(lvi.pszText, text, lvi.cchTextMax);
+                        }
                     }
 
                     // see comment at the end of wxListCtrl::GetColumn()
