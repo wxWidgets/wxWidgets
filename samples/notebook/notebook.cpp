@@ -245,6 +245,9 @@ void MyFrame::OnDeletePage(wxCommandEvent& WXUNUSED(event))
 {
     if (m_notebook->GetPageCount() > 0)
         m_notebook->DeletePage( m_notebook->GetPageCount()-1 );
+
+    // VZ: this crashes wxGTK
+    //m_notebook->RemovePage( m_notebook->GetPageCount()-1 );
 }
 
 void MyFrame::OnNextPage(wxCommandEvent& WXUNUSED(event))

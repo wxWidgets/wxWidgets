@@ -588,6 +588,8 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
 void MyListCtrl::OnChar(wxKeyEvent& event)
 {
     wxLogMessage(_T("Got char event."));
+
+    event.Skip();
 }
 
 void MyListCtrl::LogEvent(const wxListEvent& event, const wxChar *eventName)

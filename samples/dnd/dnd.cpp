@@ -1071,6 +1071,8 @@ void DnDFrame::OnLeftDown(wxMouseEvent &WXUNUSED(event) )
                             ,wxCURSOR_PENCIL,           // for copy
                             wxCURSOR_SPRAYCAN,          // for move
                             wxCURSOR_QUESTION_ARROW     // for nothing
+#elif defined(__WXGTK__)
+                            ,wxICON(mondrian)
 #endif
                             );
 
@@ -1511,19 +1513,19 @@ DnDShapeFrame::DnDShapeFrame(wxFrame *parent)
     SetDropTarget(new DnDShapeDropTarget(this));
 
     m_shape = NULL;
-    
+
     SetBackgroundColour(*wxWHITE);
 }
 
 DnDShapeFrame::~DnDShapeFrame()
 {
-    if (m_shape) 
+    if (m_shape)
         delete m_shape;
 }
 
 void DnDShapeFrame::SetShape(DnDShape *shape)
 {
-    if (m_shape) 
+    if (m_shape)
         delete m_shape;
     m_shape = shape;
     Refresh();

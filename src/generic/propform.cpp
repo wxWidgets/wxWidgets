@@ -284,7 +284,7 @@ void wxPropertyFormView::OnDoubleClick(wxControl *item)
  * Property form dialog box
  */
  
-IMPLEMENT_CLASS(wxPropertyFormDialog, wxDialog)
+IMPLEMENT_DYNAMIC_CLASS(wxPropertyFormDialog, wxDialog)
 
 BEGIN_EVENT_TABLE(wxPropertyFormDialog, wxDialog)
     EVT_CLOSE(wxPropertyFormDialog::OnCloseWindow)
@@ -337,7 +337,7 @@ bool wxPropertyFormDialog::ProcessEvent(wxEvent& event)
  * Property form panel
  */
  
-IMPLEMENT_CLASS(wxPropertyFormPanel, wxPanel)
+IMPLEMENT_DYNAMIC_CLASS(wxPropertyFormPanel, wxPanel)
 
 void wxPropertyFormPanel::OnDefaultAction(wxControl *item)
 {
@@ -362,7 +362,7 @@ bool wxPropertyFormPanel::ProcessEvent(wxEvent& event)
  * Property frame
  */
  
-IMPLEMENT_CLASS(wxPropertyFormFrame, wxFrame)
+IMPLEMENT_DYNAMIC_CLASS(wxPropertyFormFrame, wxFrame)
 
 BEGIN_EVENT_TABLE(wxPropertyFormFrame, wxFrame)
     EVT_CLOSE(wxPropertyFormFrame::OnCloseWindow)

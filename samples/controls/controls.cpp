@@ -810,7 +810,7 @@ void MyPanel::OnPageChanging( wxNotebookEvent &event )
                           "page change from taking place - if you select\n"
                           "[No] the current page will stay the third one\n",
                           "Control sample",
-                          wxICON_QUESTION | wxYES_NO) != wxYES )
+                          wxICON_QUESTION | wxYES_NO, this) != wxYES )
         {
             event.Veto();
 
