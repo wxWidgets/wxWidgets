@@ -3,11 +3,15 @@
 A mutex object is a synchronization object whose state is set to signaled when
 it is not owned by any thread, and nonsignaled when it is owned. Its name comes
 from its usefulness in coordinating mutually-exclusive access to a shared
-resource. Only one thread at a time can own a mutex object but the mutexes are
-recursive in the sense that a thread can lock a mutex which it had already
-locked before (instead of dead locking the entire process in this situation by
-starting to wait on a mutex which will never be released while the thread is
-waiting).
+resource as only one thread at a time can own a mutex object.
+
+Mutexes may be recursive in the sense that a thread can lock a mutex which it
+had already locked before (instead of dead locking the entire process in this
+situation by starting to wait on a mutex which will never be released while the
+thread is waiting) but using them is not recommended and they are {\bf not}
+recursive by default. The reason for this is that recursive mutexes are not
+supported by all Unix flavours and, worse, they cannot be used with 
+\helpref{wxCondition}{wxcondition}.
 
 For example, when several thread use the data stored in the linked list,
 modifications to the list should be only allowed to one thread at a time
@@ -61,6 +65,19 @@ mutex is unlocked in any case: whether the function returns true or false
 this class instead of directly using wxMutex is, in general safer and is even
 more so if your program uses C++ exceptions.
 
+\wxheading{Constants}
+
+\begin{verbatim}
+enum wxMutexType
+{
+    // normal mutex: try to always use this one
+    wxMUTEX_DEFAULT,
+
+    // recursive mutex: don't use these ones with wxCondition
+    wxMUTEX_RECURSIVE
+};
+\end{verbatim}
+
 \wxheading{Derived from}
 
 None.
@@ -78,7 +95,7 @@ None.
 
 \membersection{wxMutex::wxMutex}\label{wxmutexconstr}
 
-\func{}{wxMutex}{\void}
+\func{}{wxMutex}{\param{wxMutexType }{type = {\tt wxMUTEX\_DEFAULT}}}
 
 Default constructor.
 
