@@ -1,0 +1,143 @@
+% ----------------------------------------------------------------------------
+% wxTextInputStream
+% ----------------------------------------------------------------------------
+\section{\class{wxTextInputStream}}\label{wxtextinputstream}
+
+This class provides functions that read text datas using an input stream.
+So, you can read \it{text} floats, integers.
+
+Operator >> is overloaded and you can use this class a C++ std-iostream.
+
+For example:
+\begin{verbatim}
+  wxTextInputStream text( input );
+  wxUint8 i1;
+  float f2;
+  wxString line;
+
+  text >> i1;       // read a 8 bit integer.
+  text >> i1 >> f2; // read a 8 bit integer followed by float. 
+  text >> line;     // read a text line
+\end{verbatim}
+
+\wxheading{Include files}
+
+<wx/txtstrm.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxTextInputStream::wxTextInputStream}\label{wxtextinputstreamconstr}
+
+\func{}{wxTextInputStream}{\param{wxInputStream\&}{ stream}}
+
+Constructs a text stream object from an input stream. Only read methods will
+be available.
+
+\wxheading{Parameters}
+
+\docparam{stream}{The input stream.}
+
+\membersection{wxTextInputStream::\destruct{wxTextInputStream}}
+
+\func{}{\destruct{wxTextInputStream}}{\void}
+
+Destroys the wxTextInputStream object.
+
+\membersection{wxTextInputStream::Read8}
+
+\func{unsigned char}{Read8}{\void}
+
+Reads a single byte from the stream.
+
+\membersection{wxTextInputStream::Read16}
+
+\func{unsigned short}{Read16}{\void}
+
+Reads a 16 bit integer from the stream.
+
+\membersection{wxTextInputStream::Read32}
+
+\func{unsigned long}{Read32}{\void}
+
+Reads a 32 bit integer from the stream.
+
+\membersection{wxTextInputStream::ReadDouble}
+
+\func{double}{ReadDouble}{\void}
+
+Reads a double (IEEE encoded) from the stream.
+
+\membersection{wxTextInputStream::ReadString}
+
+\func{wxString}{wxTextInputStream::ReadString}{\void}
+
+Reads a line from the stream. A line is a string which ends with
+$\backslack$n or $\backslash$r$\backslash$n or $\backslash$r.
+
+% ----------------------------------------------------------------------------
+% wxTextOutputStream
+% ----------------------------------------------------------------------------
+
+\section{\class{wxTextOutputStream}}\label{wxtextoutputstream}
+
+This class provides functions that write text datas using an output stream.
+So, you can write \it{text} floats, integers.
+
+For example:
+\begin{verbatim}
+  wxTextOutputStream text( output );
+
+  output << "This is a text line\n";
+  output << 1234;
+  output << 1.23456;
+\end{verbatim}
+ 
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxTextOutputStream::wxTextOutputStream}\label{wxdataoutputstreamconstr}
+
+\func{}{wxTextOutputStream}{\param{wxOutputStream\&}{ stream}}
+
+Constructs a text stream object from an output stream. Only write methods will
+be available.
+
+\wxheading{Parameters}
+
+\docparam{stream}{The output stream.}
+
+\membersection{wxTextOutputStream::\destruct{wxTextOutputStream}}
+
+\func{}{\destruct{wxTextOutputStream}}{\void}
+
+Destroys the wxTextOutputStream object.
+
+\membersection{wxTextOutputStream::Write8}
+
+\func{void}{wxTextOutputStream::Write8}{{\param unsigned char }{i8}}
+
+Writes the single byte {\it i8} to the stream.
+
+\membersection{wxTextOutputStream::Write16}
+
+\func{void}{wxTextOutputStream::Write16}{{\param unsigned short }{i16}}
+
+Writes the 16 bit integer {\it i16} to the stream.
+
+\membersection{wxTextOutputStream::Write32}
+
+\func{void}{wxTextOutputStream::Write32}{{\param unsigned long }{i32}}
+
+Writes the 32 bit integer {\it i32} to the stream.
+
+\membersection{wxTextOutputStream::WriteDouble}
+
+\func{void}{wxTextOutputStream::WriteDouble}{{\param double }{f}}
+
+Writes the double {\it f} to the stream using the IEEE format.
+
+\membersection{wxTextOutputStream::WriteString}
+
+\func{void}{wxTextOutputStream::WriteString}{{\param const wxString\& }{string}}
+
+Writes {\it string} as a line. Depending on the operating system, it adds
+$\backslash$n or $\backslash$r$\backslash$n.
