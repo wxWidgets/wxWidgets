@@ -128,11 +128,13 @@ wxAppConsole::~wxAppConsole()
 
 bool wxAppConsole::Initialize(int& argc, wxChar **argv)
 {
+#if wxUSE_LOG 
     // If some code logged something before wxApp instance was created,
     // wxLogStderr was set as the target. Undo it here by destroying the
     // current target. It will be re-created next time logging is needed, but
     // this time wxAppTraits will be used:
     delete wxLog::SetActiveTarget(NULL);
+#endif // wxUSE_LOG
     
     // remember the command line arguments
     this->argc = argc;
