@@ -47,8 +47,7 @@ import images
 _treeList = [
     # new stuff
     ('Recent Additions/Updates', [
-        'OGL',
-        'FloatCanvas',
+        'Ticker',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -162,6 +161,7 @@ _treeList = [
         'StyledTextCtrl_2',
         'TablePrint',
         'Throbber',
+        'Ticker',
         'TimeCtrl',
         'VListBox',
         ]),
