@@ -89,7 +89,7 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
 #ifndef __DOS__
     wxBitmapButton* homeButton =
         new wxBitmapButton(this, ID_GO_HOME,
-                           wxArtProvider::GetBitmap(wxART_GO_HOME, wxART_CMN_DIALOG));
+                           wxArtProvider::GetBitmap(wxART_GO_HOME, wxART_BUTTON));
     buttonsizer->Add( homeButton, 0, wxLEFT|wxRIGHT, 10 );
 #endif
 
@@ -99,7 +99,7 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
     {
         wxBitmapButton* newButton =
             new wxBitmapButton(this, ID_NEW,
-                            wxArtProvider::GetBitmap(wxART_NEW_DIR, wxART_CMN_DIALOG));
+                            wxArtProvider::GetBitmap(wxART_NEW_DIR, wxART_BUTTON));
         buttonsizer->Add( newButton, 0, wxRIGHT, 10 );
 #if wxUSE_TOOLTIPS
         newButton->SetToolTip(_("Create new directory"));

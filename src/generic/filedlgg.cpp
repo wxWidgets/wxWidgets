@@ -917,14 +917,14 @@ wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
     wxBitmapButton *but;
 
     but = new wxBitmapButton(this, ID_LIST_MODE,
-                             wxArtProvider::GetBitmap(wxART_LIST_VIEW, wxART_CMN_DIALOG));
+                             wxArtProvider::GetBitmap(wxART_LIST_VIEW, wxART_BUTTON));
 #if wxUSE_TOOLTIPS
     but->SetToolTip( _("View files as a list view") );
 #endif
     buttonsizer->Add( but, 0, wxALL, 5 );
 
     but = new wxBitmapButton(this, ID_REPORT_MODE,
-                             wxArtProvider::GetBitmap(wxART_REPORT_VIEW, wxART_CMN_DIALOG));
+                             wxArtProvider::GetBitmap(wxART_REPORT_VIEW, wxART_BUTTON));
 #if wxUSE_TOOLTIPS
     but->SetToolTip( _("View files as a detailed view") );
 #endif
@@ -933,7 +933,7 @@ wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
     buttonsizer->Add( 30, 5, 1 );
 
     m_upDirButton = new wxBitmapButton(this, ID_UP_DIR,
-                           wxArtProvider::GetBitmap(wxART_GO_DIR_UP, wxART_CMN_DIALOG));
+                           wxArtProvider::GetBitmap(wxART_GO_DIR_UP, wxART_BUTTON));
 #if wxUSE_TOOLTIPS
     m_upDirButton->SetToolTip( _("Go to parent directory") );
 #endif
@@ -941,7 +941,7 @@ wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
 
 #ifndef __DOS__ // VS: Home directory is meaningless in MS-DOS...
     but = new wxBitmapButton(this, ID_PARENT_DIR,
-                             wxArtProvider::GetBitmap(wxART_GO_HOME, wxART_CMN_DIALOG));
+                             wxArtProvider::GetBitmap(wxART_GO_HOME, wxART_BUTTON));
 #if wxUSE_TOOLTIPS
     but->SetToolTip( _("Go to home directory") );
 #endif
@@ -951,7 +951,7 @@ wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
 #endif //!__DOS__
 
     m_newDirButton = new wxBitmapButton(this, ID_NEW_DIR,
-                           wxArtProvider::GetBitmap(wxART_NEW_DIR, wxART_CMN_DIALOG));
+                           wxArtProvider::GetBitmap(wxART_NEW_DIR, wxART_BUTTON));
 #if wxUSE_TOOLTIPS
     m_newDirButton->SetToolTip( _("Create new directory") );
 #endif
