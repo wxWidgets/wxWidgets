@@ -3246,6 +3246,34 @@ static PyObject *_wrap_TopLevelWindow_RequestUserAttention(PyObject *, PyObject 
 }
 
 
+static PyObject *_wrap_TopLevelWindow_IsActive(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxTopLevelWindow *arg1 = (wxTopLevelWindow *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:TopLevelWindow_IsActive",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxTopLevelWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->IsActive();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * TopLevelWindow_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -25221,6 +25249,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TopLevelWindow_GetTitle", (PyCFunction) _wrap_TopLevelWindow_GetTitle, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"TopLevelWindow_SetShape", (PyCFunction) _wrap_TopLevelWindow_SetShape, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"TopLevelWindow_RequestUserAttention", (PyCFunction) _wrap_TopLevelWindow_RequestUserAttention, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"TopLevelWindow_IsActive", (PyCFunction) _wrap_TopLevelWindow_IsActive, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"TopLevelWindow_swigregister", TopLevelWindow_swigregister, METH_VARARGS, NULL },
 	 { (char *)"new_Frame", (PyCFunction) _wrap_new_Frame, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"new_PreFrame", (PyCFunction) _wrap_new_PreFrame, METH_VARARGS | METH_KEYWORDS, NULL },

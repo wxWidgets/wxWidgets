@@ -211,6 +211,7 @@ wxFontPtr = wx._gdi.FontPtr
 wxFontFromNativeInfo = wx._gdi.FontFromNativeInfo
 wxFontFromNativeInfoString = wx._gdi.FontFromNativeInfoString
 wxFont2 = wx._gdi.Font2
+wxFontFromPixelSize = wx._gdi.FontFromPixelSize
 wxFont_GetDefaultEncoding = wx._gdi.Font_GetDefaultEncoding
 wxFont_SetDefaultEncoding = wx._gdi.Font_SetDefaultEncoding
 wxFontEnumerator = wx._gdi.FontEnumerator

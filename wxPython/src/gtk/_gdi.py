@@ -1632,6 +1632,14 @@ class Font(GDIObject):
         """GetPointSize(self) -> int"""
         return _gdi_.Font_GetPointSize(*args, **kwargs)
 
+    def GetPixelSize(*args, **kwargs):
+        """GetPixelSize(self) -> Size"""
+        return _gdi_.Font_GetPixelSize(*args, **kwargs)
+
+    def IsUsingSizeInPixels(*args, **kwargs):
+        """IsUsingSizeInPixels(self) -> bool"""
+        return _gdi_.Font_IsUsingSizeInPixels(*args, **kwargs)
+
     def GetFamily(*args, **kwargs):
         """GetFamily(self) -> int"""
         return _gdi_.Font_GetFamily(*args, **kwargs)
@@ -1675,6 +1683,10 @@ class Font(GDIObject):
     def SetPointSize(*args, **kwargs):
         """SetPointSize(self, int pointSize)"""
         return _gdi_.Font_SetPointSize(*args, **kwargs)
+
+    def SetPixelSize(*args, **kwargs):
+        """SetPixelSize(self, Size pixelSize)"""
+        return _gdi_.Font_SetPixelSize(*args, **kwargs)
 
     def SetFamily(*args, **kwargs):
         """SetFamily(self, int family)"""
@@ -1771,6 +1783,17 @@ def Font2(*args, **kwargs):
     """
     if kwargs.has_key('faceName'): kwargs['face'] = kwargs['faceName'];del kwargs['faceName']
     val = _gdi_.new_Font2(*args, **kwargs)
+    val.thisown = 1
+    return val
+
+def FontFromPixelSize(*args, **kwargs):
+    """
+    FontFromPixelSize(Size pixelSize, int family, int style, int weight, 
+        bool underlined=False, String face=wxEmptyString, 
+        int encoding=FONTENCODING_DEFAULT) -> Font
+    """
+    if kwargs.has_key('faceName'): kwargs['face'] = kwargs['faceName'];del kwargs['faceName']
+    val = _gdi_.new_FontFromPixelSize(*args, **kwargs)
     val.thisown = 1
     return val
 

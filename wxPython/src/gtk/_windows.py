@@ -368,6 +368,10 @@ class TopLevelWindow(_core.Window):
         """RequestUserAttention(self, int flags=USER_ATTENTION_INFO)"""
         return _windows_.TopLevelWindow_RequestUserAttention(*args, **kwargs)
 
+    def IsActive(*args, **kwargs):
+        """IsActive(self) -> bool"""
+        return _windows_.TopLevelWindow_IsActive(*args, **kwargs)
+
 
 class TopLevelWindowPtr(TopLevelWindow):
     def __init__(self, this):
