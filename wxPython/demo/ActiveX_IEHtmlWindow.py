@@ -10,9 +10,9 @@ if wx.Platform == '__WXMSW__':
 
 #----------------------------------------------------------------------
 
-class TestPanel(wx.Window):
+class TestPanel(wx.Panel):
     def __init__(self, parent, log, frame=None):
-        wx.Window.__init__(
+        wx.Panel.__init__(
             self, parent, -1,
             style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN|wx.NO_FULL_REPAINT_ON_RESIZE
             )
