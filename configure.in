@@ -2629,20 +2629,28 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXMSW__ -D__WIN95__ -D__WIN32__ -DMWIN -DMICROWIN_NOCONTROLS -DMICROWIN_TODO=1"
     fi
 
-    if test "$wxUSE_X11" = 1; then
-        dnl use standard macros to check for X headers/libs, this brings support
-        dnl for the standard configure options --x-includes and --x-libraries
+    dnl common part of X11 and Motif port checks
+    if test "$wxUSE_X11" = 1 -o "$wxUSE_MOTIF" = 1; then
+        dnl use standard macros to check for X headers/libs, this brings
+        dnl support for the standard configure options --x-includes,
+        dnl --x-libraries and --no-x
         AC_PATH_XTRA
 
         if test "$no_x" = "yes"; then
           AC_MSG_ERROR(X11 not found, please use --x-includes and/or --x-libraries options)
         fi
 
-        GUI_TK_LIBRARY="$X_LIBS"
-        TOOLKIT_INCLUDE="$X_CFLAGS"
+        dnl for some reason AC_PATH_XTRA seems to add -INONE and -LNONE (and
+        dnl also sometimes -RNONE) to X_CFLAGS and X_LIBS respectively, filter
+        dnl this junk out
+        GUI_TK_LIBRARY=`echo $X_LIBS | sed 's/ -LNONE//' | sed 's/ -RNONE//'`
+        TOOLKIT_INCLUDE=`echo $X_CFLAGS | sed 's/ -INONE//'`
         AFMINSTALL=afminstall
         COMPILED_X_PROGRAM=0
 
+    fi
+
+    if test "$wxUSE_X11" = 1; then
         if test "$wxUSE_NANOX" = "yes"; then
             AC_MSG_CHECKING(for MicroWindows/NanoX distribution)
             if test "x$MICROWIN" = x ; then
@@ -2708,21 +2716,6 @@ equivalent variable and GTK+ is version 1.2.3 or above.
     fi
 
     if test "$wxUSE_MOTIF" = 1; then
-        dnl use standard macros to check for X headers/libs, this brings support
-        dnl for the standard configure options --x-includes and --x-libraries
-        AC_PATH_XTRA
-
-        if test "$no_x" = "yes"; then
-          AC_MSG_ERROR(X11 not found, please use --x-includes and/or --x-libraries options)
-        fi
-
-        dnl for some reason AC_PATH_XTRA seems to add -INONE and -LNONE to
-        dnl X_LIBS and X_CFLAGS respectively -- what for??
-        GUI_TK_LIBRARY=`echo $X_LIBS | sed 's/ -LNONE//'`
-        TOOLKIT_INCLUDE=`echo $X_CFLAGS | sed 's/ -INONE//'`
-        AFMINSTALL=afminstall
-        COMPILED_X_PROGRAM=0
-
         AC_MSG_CHECKING(for Motif/Lesstif headers)
         WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, Xm/Xm.h)
         if test "$ac_find_includes" != "" ; then
@@ -2858,6 +2851,7 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         GUIDIST=MOTIF_DIST
     fi
 
+    dnl more tests common to X11 and Motif:
     if test "$wxUSE_X11" = 1 -o "$wxUSE_MOTIF" = 1; then
         dnl test for external libxpm if we're configured to use it
         if test "$wxUSE_LIBXPM" = "sys"; then
