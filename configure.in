@@ -2876,7 +2876,6 @@ if test "$wxUSE_MAC" = 1; then
     AC_CHECK_PROG(RESCOMP, Rez, Rez, /Developer/Tools/Rez)
     AC_CHECK_PROG(DEREZ, DeRez, DeRez, /Developer/Tools/DeRez)
     MACOSX_BUNDLE="bundle"
-    if test "$wxUSE_SHARED" = "yes"; then
     dnl resources are bundled both with shared library and applications
     dnl since the carb resource *must* be included in the application
     LIBWXMACRESCOMP="\$(RESCOMP) -t APPL Carbon.r ${LIBWXMACRES} -o \$(BIN_PROGRAM)"
