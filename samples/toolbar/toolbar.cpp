@@ -119,6 +119,7 @@ public:
     void OnToolbarStyle(wxCommandEvent& event);
 
     void OnToolLeftClick(wxCommandEvent& event);
+    void OnToolRightClick(wxCommandEvent& event);
     void OnToolEnter(wxCommandEvent& event);
 
     void OnCombo(wxCommandEvent& event);
@@ -228,6 +229,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_COMBOBOX(ID_COMBO, MyFrame::OnCombo)
 
     EVT_TOOL_ENTER(ID_TOOLBAR, MyFrame::OnToolEnter)
+    EVT_TOOL_RCLICKED(wxID_ANY, MyFrame::OnToolRightClick)
 
     EVT_UPDATE_UI(wxID_COPY, MyFrame::OnUpdateCopyAndCut)
     EVT_UPDATE_UI(wxID_CUT, MyFrame::OnUpdateCopyAndCut)
@@ -621,6 +623,12 @@ void MyFrame::OnToolLeftClick(wxCommandEvent& event)
     {
         DoDeletePrint();
     }
+}
+
+void MyFrame::OnToolRightClick(wxCommandEvent& event)
+{
+    m_textWindow->AppendText(
+            wxString::Format(_T("Tool %d right clicked.\n"), event.GetInt()));
 }
 
 void MyFrame::OnCombo(wxCommandEvent& event)
