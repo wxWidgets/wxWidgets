@@ -566,7 +566,6 @@ wxSocketBase& wxSocketBase::WriteMsg(const void *buffer, wxUint32 nbytes)
 {
   wxUint32 total;
   bool error;
-  int old_flags;
   struct
   {
     unsigned char sig[4];
@@ -578,7 +577,6 @@ wxSocketBase& wxSocketBase::WriteMsg(const void *buffer, wxUint32 nbytes)
 
   error = TRUE;
   total = 0;
-  old_flags = m_flags;
   SetFlags((m_flags & wxSOCKET_BLOCK) | wxSOCKET_WAITALL);
 
   msg.sig[0] = (unsigned char) 0xad;
@@ -632,7 +630,6 @@ wxSocketBase& wxSocketBase::Unread(const void *buffer, wxUint32 nbytes)
 
 wxSocketBase& wxSocketBase::Discard()
 {
-  int old_flags;
   char *buffer = new char[MAX_DISCARD_SIZE];
   wxUint32 ret;
   wxUint32 total = 0;
@@ -640,7 +637,6 @@ wxSocketBase& wxSocketBase::Discard()
   // Mask read events
   m_reading = TRUE;
 
-  old_flags = m_flags;
   SetFlags(wxSOCKET_NOWAIT);
 
   do
