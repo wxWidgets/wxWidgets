@@ -68,7 +68,7 @@ public:
     virtual void SetString(int item, const wxString& label) ;
 
     virtual bool Enable(int item, bool enable = true);
-    virtual void Show(int item, bool show) ;
+    virtual bool Show(int item, bool show = true);
 
     virtual int GetColumnCount() const ;
     virtual int GetRowCount() const ;
