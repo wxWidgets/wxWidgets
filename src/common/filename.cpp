@@ -37,7 +37,10 @@
 #include "wx/tokenzr.h"
 #include "wx/config.h"          // for wxExpandEnvVars
 #include "wx/utils.h"
+
+#if wxUSE_DYNLIB_CLASS
 #include "wx/dynlib.h"
+#endif
 
 // For GetShort/LongPathName
 #ifdef __WIN32__
@@ -524,6 +527,7 @@ wxString wxFileName::GetLongPath() const
     wxString pathOut;
     bool success = FALSE;
 
+#if wxUSE_DYNLIB_CLASS
     typedef DWORD (*GET_LONG_PATH_NAME)(const wxChar *, wxChar *, DWORD);
 
     static bool s_triedToLoad = FALSE;
@@ -534,10 +538,14 @@ wxString wxFileName::GetLongPath() const
         s_triedToLoad = TRUE;
 
         wxDllType dllKernel = wxDllLoader::LoadLibrary(_T("kernel32"));
-        if ( dllKernel )
+        if ( 0 ) // dllKernel )
         {
             // may succeed or fail depending on the Windows version
-            s_pfnGetLongPathName = (GET_LONG_PATH_NAME) wxDllLoader::GetSymbol(dllKernel, _T("GetLongPathName"));
+#ifdef _UNICODE
+            s_pfnGetLongPathName = (GET_LONG_PATH_NAME) wxDllLoader::GetSymbol(dllKernel, _T("GetLongPathNameW"));
+#else
+            s_pfnGetLongPathName = (GET_LONG_PATH_NAME) wxDllLoader::GetSymbol(dllKernel, _T("GetLongPathNameA"));
+#endif
 
             wxDllLoader::UnloadLibrary(dllKernel);
 
@@ -568,6 +576,8 @@ wxString wxFileName::GetLongPath() const
     }
     if (success)
         return pathOut;
+#endif
+    // wxUSE_DYNLIB_CLASS
 
     if (!success)
     {
@@ -581,6 +591,7 @@ wxString wxFileName::GetLongPath() const
         size_t count = m_dirs.GetCount();
         size_t i;
         wxString tmpPath;
+
         for ( i = 0; i < count; i++ )
         {
             // We're using pathOut to collect the long-name path,
@@ -588,7 +599,13 @@ wxString wxFileName::GetLongPath() const
             tmpPath = pathOut + m_dirs[i];
 
             if (tmpPath.Last() == wxT(':'))
+            {
+                // Can't pass a drive and root dir to FindFirstFile,
+                // so continue to next dir
                 tmpPath += wxFILE_SEP_PATH;
+                pathOut = tmpPath;
+                continue;
+            }
 
             hFind = ::FindFirstFile(tmpPath, &findFileData);
             if (hFind == INVALID_HANDLE_VALUE)
@@ -599,7 +616,7 @@ wxString wxFileName::GetLongPath() const
             else
             {
                 pathOut += findFileData.cFileName;
-                if ( (i < count) )
+                if ( (i < (count-1)) )
                     pathOut += wxFILE_SEP_PATH;
 
                 ::FindClose(hFind);
