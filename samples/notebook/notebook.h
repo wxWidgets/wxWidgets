@@ -16,7 +16,7 @@ class MyApp: public wxApp
 {
 public:
     bool OnInit();
-    void InitTabView(wxNotebook* notebook, wxTopLevelWindow* window);
+    void InitTabView(wxNotebook* notebook, wxWindow* window);
 
     wxButton*   m_okButton;
     wxButton*   m_cancelButton;

@@ -59,7 +59,7 @@ bool MyApp::OnInit()
 #endif
 }
 
-void MyApp::InitTabView(wxNotebook* notebook, wxTopLevelWindow* window)
+void MyApp::InitTabView(wxNotebook* notebook, wxWindow* window)
 {
   m_okButton = new wxButton(window, wxID_OK, "Close", wxPoint(-1, -1), wxSize(80, 25));
   m_cancelButton = new wxButton(window, ID_DELETE_PAGE, "&Delete page", wxPoint(-1, -1), wxSize(80, 25));
