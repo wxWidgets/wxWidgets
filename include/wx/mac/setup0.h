@@ -125,7 +125,7 @@
 #define wxUSE_ON_FATAL_EXCEPTION 1
 
 // Set this to 1 to be able to generate a human-readable (unlike
-// machine-readable minidumop created by wxCrashReport::Generate()) stack back
+// machine-readable minidump created by wxCrashReport::Generate()) stack back
 // trace when your program crashes using wxStackWalker
 //
 // Default is 1 if supported by the compiler.
@@ -139,9 +139,8 @@
 //
 // Default is 1 if supported by the compiler.
 //
-// Recommended setting: 1 under Win32, it is not especially useful elsewhere
-//                      currently
-#define wxUSE_DEBUGREPORT 1
+// Recommended setting: 0, it is still experimental and API may change
+#define wxUSE_DEBUGREPORT 0
 
 // ----------------------------------------------------------------------------
 // Unicode support
@@ -257,9 +256,6 @@
 //
 // Notice that if wxNO_THREADS is defined, wxUSE_THREADS is automatically reset
 // to 0 in wx/chkconf.h, so, for example, if you set USE_THREADS to 0 in
-// build/msw/config.* file this value will have no effectNotice that if
-// wxNO_THREADS is defined, wxUSE_THREADS is automatically reset to 0 in
-// wx/chkconf.h, so, for example, if you set USE_THREADS to 0 in
 // build/msw/config.* file this value will have no effect.
 //
 // Default is 1
