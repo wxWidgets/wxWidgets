@@ -103,7 +103,7 @@ MoveBeforeInTabOrder methods of wx.Window.
 Applied (and heavily modified) a patch from Eugene
 <svip123@fastmail.fm> that allows the sample modules in the demo to be
 edited and reloaded, all from within the demo.  You can switch back
-and forth beteen the default and your edited version, and any errors
+and forth between the default and your edited version, and any errors
 ocurring upon the reload are reported on the Demo tab.
 
 
