@@ -379,7 +379,7 @@ void wxRadioBox::SetFocus()
 //-------------------------------------------------------------------------------------
 // Simulates the effect of the user issuing a command to the item
 
-#define RADIO_SIZE 40
+#define RADIO_SIZE 20
 
 void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
@@ -423,7 +423,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         if (maxHeight<eachHeight[i]) maxHeight = eachHeight[i];
           }
     
-    totHeight = GetRowCount() * (maxHeight + charHeight/2) + charHeight*3/2;
+    totHeight = GetRowCount() * (maxHeight + charHeight/2) + charHeight ;
     totWidth  = GetColumnCount() * (maxWidth + charWidth) + charWidth;
     
     // only change our width/height if asked for
@@ -506,7 +506,7 @@ wxSize wxRadioBox::DoGetBestSize() const
         if (maxHeight < eachHeight)   maxHeight = eachHeight;
     }
     
-    totHeight = GetRowCount() * (maxHeight + charHeight/2) + charHeight * 3/2;
+    totHeight = GetRowCount() * (maxHeight + charHeight/2) + charHeight ;
     totWidth  = GetColumnCount() * (maxWidth + charWidth) + charWidth;
     
     // handle radio box title as well
