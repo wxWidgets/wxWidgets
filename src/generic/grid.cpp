@@ -203,6 +203,8 @@ public:
 
     void ScrollWindow( int dx, int dy, const wxRect *rect );
 
+    wxGrid* GetOwner() { return m_owner; }
+
 private:
     wxGrid                   *m_owner;
     wxGridRowLabelWindow     *m_rowLabelWin;
@@ -446,6 +448,10 @@ void wxGridCellEditor::PaintBackground(const wxRect& rectCell,
 {
     // erase the background because we might not fill the cell
     wxClientDC dc(m_control->GetParent());
+    wxGridWindow* gridWindow = wxDynamicCast(m_control->GetParent(), wxGridWindow);
+    if (gridWindow)
+        gridWindow->GetOwner()->PrepareDC(dc);
+    
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.SetBrush(wxBrush(attr->GetBackgroundColour(), wxSOLID));
     dc.DrawRectangle(rectCell);
