@@ -532,8 +532,13 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
     Close(TRUE);
 }
 
-void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnAbout(wxCommandEvent& event)
 {
+    if ( event.IsChecked() )
+        m_textWindow->WriteText( _T("Help button down now.\n") );
+    else
+        m_textWindow->WriteText( _T("Help button up now.\n") );
+
     (void)wxMessageBox(_T("wxWindows toolbar sample"), _T("About wxToolBar"));
 }
 
@@ -542,14 +547,6 @@ void MyFrame::OnToolLeftClick(wxCommandEvent& event)
     wxString str;
     str.Printf( _T("Clicked on tool %d\n"), event.GetId());
     m_textWindow->WriteText( str );
-
-    if (event.GetId() == wxID_HELP)
-    {
-        if ( event.GetExtraLong() != 0 )
-            m_textWindow->WriteText( _T("Help button down now.\n") );
-        else
-            m_textWindow->WriteText( _T("Help button up now.\n") );
-    }
 
     if (event.GetId() == wxID_COPY)
     {
