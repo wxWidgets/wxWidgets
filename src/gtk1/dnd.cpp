@@ -55,47 +55,6 @@ extern bool g_blockEventsOnDrag;
 //----------------------------------------------------------------------------
 
 /* XPM */
-static char * gv_xpm[] = {
-"40 34 3 1",
-"         s None c None",
-".        c black",
-"X        c white",
-"                                        ",
-"                                        ",
-"                  ......                ",
-"                ..XXXXXX..              ",
-"               .XXXXXXXXXX.             ",
-"              .XXXXXXXXXXXX.            ",
-"              .XXXXXXXXXXXX.            ",
-"             .XXXXXXXXXXXXXX.           ",
-"             .XXX..XXXX..XXX.           ",
-"          ....XX....XX....XX.           ",
-"         .XXX.XXX..XXXX..XXX....        ",
-"        .XXXXXXXXXXXXXXXXXXX.XXX.       ",
-"        .XXXXXXXXXXXXXXXXXXXXXXXX.      ",
-"        .XXXXXXXXXXXXXXXXXXXXXXXX.      ",
-"         ..XXXXXXXXXXXXXXXXXXXXXX.      ",
-"           .XXXXXXXXXXXXXXXXXX...       ",
-"           ..XXXXXXXXXXXXXXXX.          ",
-"            .XXXXXXXXXXXXXXXX.          ",
-"            .XXXXXXXXXXXXXXXX.          ",
-"            .XXXXXXXXXXXXXXXXX.         ",
-"            .XXXXXXXXXXXXXXXXX.         ",
-"            .XXXXXXXXXXXXXXXXXX.        ",
-"            .XXXXXXXXXXXXXXXXXXX.       ",
-"           .XXXXXXXXXXXXXXXXXXXXX.      ",
-"           .XXXXXXXXXXXXXX.XXXXXXX.     ",
-"          .XXXXXXX.XXXXXXX.XXXXXXX.     ",
-"         .XXXXXXXX.XXXXXXX.XXXXXXX.     ",
-"         .XXXXXXX...XXXXX...XXXXX.      ",
-"         .XXXXXXX.  .....   .....       ",
-"         ..XXXX..                       ",
-"           ....                         ",
-"                                        ",
-"                                        ",
-"                                        "};
-
-/* XPM */
 static char * page_xpm[] = {
 /* width height ncolors chars_per_pixel */
 "32 32 5 1",
@@ -206,8 +165,8 @@ static gboolean target_drag_motion( GtkWidget *WXUNUSED(widget),
     if (ret)
     {
         GdkDragAction action = GDK_ACTION_MOVE;
-	if (result == wxDragCopy) action == GDK_ACTION_COPY;
-        gdk_drag_status( context, context->suggested_action, time );
+	if (result == wxDragCopy) action = GDK_ACTION_COPY;
+        gdk_drag_status( context, action, time );
     }
 
     /* after this, invalidate the drop_target's GdkDragContext */
@@ -678,54 +637,101 @@ static void source_drag_end( GtkWidget          *WXUNUSED(widget),
     drop_source->m_waiting = FALSE;
 }
 
+//-----------------------------------------------------------------------------
+// "configure_event" from m_iconWindow
+//-----------------------------------------------------------------------------
+
+static gint 
+gtk_dnd_window_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *WXUNUSED(event), wxDropSource *source )
+{
+    if (g_isIdle) 
+        wxapp_install_idle_handler();
+
+    wxDragResult action = wxDragNone;
+    if (source->m_dragContext->action == GDK_ACTION_COPY) action = wxDragCopy;
+    if (source->m_dragContext->action == GDK_ACTION_MOVE) action = wxDragMove;
+
+    source->GiveFeedback( action, FALSE );
+    
+    return 0;
+}
+
 //---------------------------------------------------------------------------
 // wxDropSource
 //---------------------------------------------------------------------------
 
-wxDropSource::wxDropSource( wxWindow *win, const wxIcon &go, const wxIcon &stop )
+wxDropSource::wxDropSource( wxWindow *win, const wxIcon &icon )
 {
     g_blockEventsOnDrag = TRUE;
     m_waiting = TRUE;
 
+    m_iconWindow = (GtkWidget*) NULL;
+    
     m_window = win;
     m_widget = win->m_widget;
     if (win->m_wxwindow) m_widget = win->m_wxwindow;
 
     m_retValue = wxDragCancel;
 
-    m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
-    m_goaheadCursor = wxCursor( wxCURSOR_HAND );
-
-    m_goIcon = go;
-    if (wxNullIcon == go) m_goIcon = wxIcon( page_xpm );
-    m_stopIcon = stop;
-    if (wxNullIcon == stop) m_stopIcon = wxIcon( gv_xpm );
+    m_icon = icon;
+    if (wxNullIcon == icon) m_icon = wxIcon( page_xpm );
 }
 
-wxDropSource::wxDropSource( wxDataObject& data, wxWindow *win,
-                            const wxIcon &go, const wxIcon &stop )
+wxDropSource::wxDropSource( wxDataObject& data, wxWindow *win, const wxIcon &icon )
 {
     m_waiting = TRUE;
     
     SetData( data );
 
+    m_iconWindow = (GtkWidget*) NULL;
+    
     m_window = win;
     m_widget = win->m_widget;
     if (win->m_wxwindow) m_widget = win->m_wxwindow;
+    
     m_retValue = wxDragCancel;
 
-    m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
-    m_goaheadCursor = wxCursor( wxCURSOR_HAND );
-
-    m_goIcon = go;
-    if (wxNullIcon == go) m_goIcon = wxIcon( page_xpm );
-    m_stopIcon = stop;
-    if (wxNullIcon == stop) m_stopIcon = wxIcon( gv_xpm );
+    m_icon = icon;
+    if (wxNullIcon == icon) m_icon = wxIcon( page_xpm );
 }
 
 wxDropSource::~wxDropSource()
 {
     g_blockEventsOnDrag = FALSE;
+}
+
+void wxDropSource::PrepareIcon( int hot_x, int hot_y, GdkDragContext *context )
+{
+    GdkBitmap *mask = (GdkBitmap *) NULL;
+    if (m_icon.GetMask()) mask = m_icon.GetMask()->GetBitmap();
+    GdkPixmap *pixmap = m_icon.GetPixmap();
+
+    gint width,height;
+    gdk_window_get_size (pixmap, &width, &height);
+
+    GdkColormap *colormap = gtk_widget_get_colormap( m_widget );
+    gtk_widget_push_visual (gdk_colormap_get_visual (colormap));
+    gtk_widget_push_colormap (colormap);
+
+    m_iconWindow = gtk_window_new (GTK_WINDOW_POPUP);
+    gtk_widget_set_events (m_iconWindow, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
+    gtk_widget_set_app_paintable (GTK_WIDGET (m_iconWindow), TRUE);
+
+    gtk_widget_pop_visual ();
+    gtk_widget_pop_colormap ();
+
+    gtk_widget_set_usize (m_iconWindow, width, height);
+    gtk_widget_realize (m_iconWindow);
+
+    gtk_signal_connect( GTK_OBJECT(m_iconWindow), "configure_event",
+        GTK_SIGNAL_FUNC(gtk_dnd_window_configure_callback), (gpointer)this );
+	
+    gdk_window_set_back_pixmap (m_iconWindow->window, pixmap, FALSE);
+  
+    if (mask)
+        gtk_widget_shape_combine_mask (m_iconWindow, mask, 0, 0);
+
+    gtk_drag_set_icon_widget( context, m_iconWindow, hot_x, hot_y );
 }
 
 wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
@@ -783,21 +789,13 @@ wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
     {
         GdkDragContext *context = gtk_drag_begin( m_widget,
                                               target_list,
-                                              GDK_ACTION_COPY,
+                                              (GdkDragAction)(GDK_ACTION_COPY|GDK_ACTION_MOVE),
                                               button_number,  /* number of mouse button which started drag */
                                               (GdkEvent*) &event );
-
-        wxMask *mask = m_goIcon.GetMask();
-        GdkBitmap *bm = (GdkBitmap *) NULL;
-        if (mask) bm = mask->GetBitmap();
-        GdkPixmap *pm = m_goIcon.GetPixmap();
-
-        gtk_drag_set_icon_pixmap( context,
-                                  gtk_widget_get_colormap( m_widget ),
-                                  pm,
-                                  bm,
-                                  0,
-                                  0 );
+					      
+	m_dragContext = context;
+	
+        PrepareIcon( 0, 0, context );
 
         while (m_waiting) gtk_main_iteration();;
     }

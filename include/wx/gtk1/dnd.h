@@ -109,14 +109,12 @@ class wxDropSource: public wxDropSourceBase
 public:
     /* constructor. set data later with SetData() */
     wxDropSource( wxWindow *win,
-                  const wxIcon &go = wxNullIcon,
-                  const wxIcon &stop = wxNullIcon );
+                  const wxIcon &go = wxNullIcon );
 
     /* constructor for setting one data object */
     wxDropSource( wxDataObject& data,
                   wxWindow *win,
-                  const wxIcon &go = wxNullIcon,
-                  const wxIcon &stop = wxNullIcon );
+                  const wxIcon &go = wxNullIcon );
 
     ~wxDropSource();
 
@@ -127,17 +125,17 @@ public:
     void RegisterWindow();
     void UnregisterWindow();
 
-    GtkWidget     *m_widget;
-    wxWindow      *m_window;
-    wxDragResult   m_retValue;
-
-    wxCursor      m_defaultCursor;
-    wxCursor      m_goaheadCursor;
-
-    wxIcon        m_goIcon;
-    wxIcon        m_stopIcon;
-
-    bool          m_waiting;
+    void PrepareIcon( int hot_x, int hot_y, GdkDragContext *context );
+    
+    GtkWidget       *m_widget;
+    GtkWidget       *m_iconWindow;
+    GdkDragContext  *m_dragContext;
+    wxWindow        *m_window;
+    
+    wxDragResult     m_retValue;
+    wxIcon           m_icon;
+    
+    bool             m_waiting;
 };
 
 #endif
