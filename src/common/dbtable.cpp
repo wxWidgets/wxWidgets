@@ -1070,7 +1070,7 @@ void wxDbTable::BuildSelectStmt(wxString &pSqlStmt, int typeOfSelect, bool disti
     {
         tStr = colDefs[i].ColName;
         // If joining tables, the base table column names must be qualified to avoid ambiguity
-        if ((appendFromClause || pDb->Dbms() == dbmsACCESS) && !tStr.Find(wxT('.')))
+        if ((appendFromClause || pDb->Dbms() == dbmsACCESS) && tStr.Find(wxT('.')) == wxNOT_FOUND)
         {
             pSqlStmt += pDb->SQLTableName(queryTableName.c_str());
             pSqlStmt += wxT(".");
@@ -1283,7 +1283,7 @@ void wxDbTable::BuildWhereClause(wxString &pWhereClause, int typeOfWhere,
             // Concatenate where phrase for the column
             wxString tStr = colDefs[colNo].ColName;
 
-            if (qualTableName.Length() && !tStr.Find(wxT('.')))
+            if (qualTableName.Length() && tStr.Find(wxT('.')) == wxNOT_FOUND)
             {
                 pWhereClause += pDb->SQLTableName(qualTableName);
                 pWhereClause += wxT(".");
