@@ -281,7 +281,11 @@ public:
     }
 
 private:
+#ifdef __MWERKS__
+    friend class wxSplitterWindow;
+#else
     friend wxSplitterWindow;
+#endif
 
     // data for the different types of event
     union

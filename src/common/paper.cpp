@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        paper.cpp
 // Purpose:     Paper size classes
-// Author:      Julian Smart
+// Author:      Julian Smart 
 // Modified by:
 // Created:     04/01/98
 // RCS-ID:      $Id$

@@ -239,7 +239,7 @@
 // (under Unix, configure tests for this)
 #ifndef HAVE_BOOL
     #if defined( __MWERKS__ )
-        #if (__MWERKS__ >= 0x1000) && !__option(bool)
+        #if (__MWERKS__ >= 0x1000) && __option(bool)
             #define HAVE_BOOL
         #endif
     #elif defined(__VISUALC__) && (__VISUALC__ == 1020)

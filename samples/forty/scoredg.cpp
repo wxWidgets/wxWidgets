@@ -28,7 +28,7 @@
 #endif
 
 #if wxUSE_IOSTREAMH
-#if defined(__WXMSW__) && !defined(__GNUWIN32__)
+#if defined(__WXMSW__) && !defined(__GNUWIN32__) && !defined(__MWERKS__)
 #include <strstrea.h>
 #else
 #include <strstream.h>

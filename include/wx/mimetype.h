@@ -32,7 +32,11 @@ class wxMimeTypesManagerImpl;
 // the accessors *must* be checked!
 class WXDLLEXPORT wxFileType
 {
+#ifdef __MWERKS__
+friend class wxMimeTypesManagerImpl;  // it has access to m_impl
+#else
 friend wxMimeTypesManagerImpl;  // it has access to m_impl
+#endif
 
 public:
     // An object of this class must be passed to Get{Open|Print}Command. The

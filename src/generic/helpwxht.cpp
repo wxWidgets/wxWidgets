@@ -36,7 +36,9 @@
 
 #include <stdio.h>
 #include <ctype.h>
+#ifndef __MWERKS__
 #include <sys/stat.h>
+#endif
 
 #ifndef __WINDOWS__
 #   include   <unistd.h>

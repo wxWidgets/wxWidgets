@@ -26,6 +26,12 @@
 
 #ifdef __WXMSW__
     #include <ansi_prefix.win32.h>
+    #include <ansi_parms.h>
+    #if defined( __MSL__ ) && __MSL__ >= 0x5012
+			#define	fileno	_fileno
+			#define	fdopen	_fdopen
+			#define	tell	_tell
+    #endif
 #elif defined( __WXMAC__)
     #include <ansi_prefix.mac.h>
 #endif

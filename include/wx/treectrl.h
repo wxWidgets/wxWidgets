@@ -41,7 +41,12 @@
 
 class WXDLLEXPORT wxTreeEvent : public wxNotifyEvent
 {
-friend wxTreeCtrl;
+#ifdef __MWERKS__
+    friend class wxTreeCtrl;
+#else
+    friend wxTreeCtrl;
+#endif
+
 public:
     wxTreeEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
 
