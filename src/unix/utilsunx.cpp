@@ -844,6 +844,8 @@ long wxExecute(wxChar **argv,
         return exitcode;
 #endif // wxUSE_GUI
     }
+
+    return ERROR_RETURN_CODE;
 }
 
 #undef ERROR_RETURN_CODE
