@@ -181,7 +181,7 @@ void wxMenu::SetTitle(const wxString& label)
     // TODO
 }
 
-const wxString& wxMenu::GetTitle() const
+const wxString wxMenu::GetTitle() const
 {
     return m_title;
 }

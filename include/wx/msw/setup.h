@@ -162,49 +162,6 @@
 				// float on the disk
 
 /*
- * Motif and XView
- *
- */
-
-#define WX_STANDARD_GRAPHICS 0
-                                  // If 1, normalizes X drawing code to behave exactly as
-                                  // as MSW. If 0, is compatible with existing applications.
-                                  // Some Xlib drawing primitives have non-intuitive behaviour!
-
-#define USE_GADGETS                0
-                                    // More efficient to use gadgets for some
-                                    // widgets in Motif. 0 for no gadgets.
-                                    // Please note: there is no reason to not
-                                    // use it except if you intend to modify
-                                    // color of individuals items OR
-                                    // you need to move panel items interactively
-#define USE_BUTTON_GADGET          0
-                                    // On JACS's system, gadget buttons
-                                    // interfere with default button setting.
-#define PIXEL0_DISABLE             0
-                                    // Define as 1 to disallow allocation
-                                    // of pixel #0 (wxXOR problem).
-                                    // JACS - I found this caused problems.
-
-#define MOTIF_MENUBAR_DELETE_FIX   0
-                                    // On some systems (Ultrix, OSF), deleting a frame
-                                    // from within a menu callback causes a crash.
-                                    // Set to 1 to avoid deleting the menubar handle directly,
-                                    // which seems to cure it.
-#define	DEFAULT_FILE_SELECTOR_SIZE 0
-				    // Let Motif defines the size of File
-				    // Selector Box (if 1), or fix it to
-				    // wxFSB_WIDTH x wxFSB_HEIGHT (if 0)
-#define	wxFSB_WIDTH                600
-#define wxFSB_HEIGHT               500
-
-#define	MOTIF_MANAGE               1
-				    // Control default style of Dialogs
-				    // 1: use wxMOTIF_RESIZE as default
-				    // 0: do not use wxMOTIF_RESIZE as default
-
-
-/*
  * MS Windows/Windows NT
  *
  */
@@ -224,14 +181,9 @@
                                     // Switching this off also switches off
                                     // the printing architecture and interactive
                                     // wxPrinterDC.
-#define USE_GREY_BACKGROUND        1
-                                    // If 1, uses grey (gray!) panels
-                                    // in FAFA and non-FAFA, non-CTL3D modes.
-                                    // I (JACS) think the controls look better
-                                    // this way. CTL3D always uses grey panels.
 #define USE_ITSY_BITSY             1
                                     // Define 1 to use Microsoft's ItsyBitsy
-                                    // small title bar library
+                                    // small title bar library, for wxMiniFrame
 #define USE_BITMAP_MESSAGE         1
                                     // Define 1 to use bitmap messages.
 #define USE_PORTABLE_FONTS_IN_MSW  0

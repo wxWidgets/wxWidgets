@@ -1,7 +1,7 @@
-lib/dummy
-src/win/*.cpp
-src/win/*.h
-src/win/make*.*
+docs/*.*
+win/*.cpp
+win/*.h
+win/make*.*
 samples/cube/*.cpp
 samples/cube/*.h
 samples/cube/*.rc
@@ -14,8 +14,6 @@ samples/isosurf/*.rc
 samples/isosurf/*.ico
 samples/isosurf/*.xbm
 samples/isosurf/*.dat
+samples/isosurf/*.dat.gz
 samples/isosurf/make*.*
-wx/*.h
-wx/*.cpp
-distrib/*.*
 

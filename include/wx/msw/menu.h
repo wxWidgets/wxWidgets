@@ -65,7 +65,7 @@ public:
   // item properties
     // title
   void SetTitle(const wxString& label);
-  const wxString& GetTitle() const;
+  const wxString GetTitle() const;
     // label
   void SetLabel(int id, const wxString& label);
   wxString GetLabel(int id) const;

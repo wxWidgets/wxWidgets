@@ -312,7 +312,7 @@ void wxMenu::SetTitle(const wxString& label)
              (UINT)-2, (const char *)m_title);
 }
 
-const wxString& wxMenu::GetTitle() const
+const wxString wxMenu::GetTitle() const
 {
    return m_title;
 }
