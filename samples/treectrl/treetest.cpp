@@ -42,7 +42,9 @@
 
 // under Windows the icons are in the .rc file
 #ifndef __WXMSW__
+#ifdef NO_VARIABLE_HEIGHT
   #include "icon1.xpm"
+#endif
   #include "icon2.xpm"
   #include "mondrian.xpm"
 #endif
@@ -414,11 +416,13 @@ MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
                        long style)
           : wxTreeCtrl(parent, id, pos, size, style)
 {
-#if (USE_TR_HAS_VARIABLE_ROW_HIGHT && wxUSE_LIBJPEG)
+#ifndef NO_VARIABLE_HEIGHT
+#if wxUSE_LIBJPEG
     wxImage::AddHandler(new wxJPEGHandler);
     wxImage image;
 
     image.LoadFile(wxString("horse.jpg"), wxBITMAP_TYPE_JPEG );
+#endif
 #endif
 
     m_reverseSort = FALSE;
@@ -430,14 +434,14 @@ MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
 #if defined(__WXMSW__) && defined(__WIN16__)
     // This is required in 16-bit Windows mode only because we can't load a specific (16x16)
     // icon image, so it comes out stretched
-#  if USE_TR_HAS_VARIABLE_ROW_HIGHT
+#  ifndef NO_VARIABLE_HEIGHT
     m_imageListNormal->Add(image.ConvertToBitmap());
 #  else
     m_imageListNormal->Add(wxBitmap("bitmap1", wxBITMAP_TYPE_BMP_RESOURCE));
 #  endif
     m_imageListNormal->Add(wxBitmap("bitmap2", wxBITMAP_TYPE_BMP_RESOURCE));
 #else
-#  if USE_TR_HAS_VARIABLE_ROW_HIGHT
+#  ifndef NO_VARIABLE_HEIGHT
     m_imageListNormal->Add(image.ConvertToBitmap());
 #  else
     m_imageListNormal->Add(wxICON(icon1));
