@@ -43,6 +43,7 @@
 #endif
 
 #include "wx/wfstream.h"
+#include "wx/datstrm.h"
 
 
 // Create a new application object
@@ -189,6 +190,57 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
     textCtrl.WriteText( tmp );
     
     file_input >> str;
+    tmp.Printf( "String: %s\n", str.c_str() );
+    textCtrl.WriteText( tmp );
+    
+
+    textCtrl << "\nTest for wxDataStream:\n\n";
+
+    textCtrl.WriteText( "Writing to wxDataOutputStream:\n" );
+    
+    file_output.SeekO( 0 );
+    wxDataOutputStream data_output( file_output );
+
+    wxInt32 i32 = 0xFFFFFFFF;
+    tmp.Printf( "Signed int32: %d\n", i32 );
+    textCtrl.WriteText( tmp );
+    data_output.Write32( i32 );
+    
+    wxUint32 ui32 = 0xFFFFFFFF;
+    tmp.Printf( "Unsigned int32: %u\n", ui32 );
+    textCtrl.WriteText( tmp );
+    data_output.Write32( ui32 );
+    
+    d = 2.01234567890123456789;
+    tmp.Printf( "Double: %f\n", d );
+    textCtrl.WriteText( tmp );
+    data_output.WriteDouble( d );
+    
+    str = "Hello!";
+    tmp.Printf( "String: %s\n", str.c_str() );
+    textCtrl.WriteText( tmp );
+    data_output.WriteString( str );
+    
+    file_output.OutputStreamBuffer()->FlushBuffer();
+    
+    textCtrl.WriteText( "\nReading from wxDataInputStream:\n" );
+    
+    file_input.SeekI( 0 );
+    wxDataInputStream data_input( file_input );
+
+    i32 = data_input.Read32();
+    tmp.Printf( "Signed int32: %d\n", i32 );
+    textCtrl.WriteText( tmp );
+    
+    ui32 = data_input.Read32();
+    tmp.Printf( "Unsigned int32: %d\n", ui32 );
+    textCtrl.WriteText( tmp );
+
+    d = data_input.ReadDouble();
+    tmp.Printf( "Double: %f\n", d );
+    textCtrl.WriteText( tmp );
+    
+    str = data_input.ReadString();
     tmp.Printf( "String: %s\n", str.c_str() );
     textCtrl.WriteText( tmp );
 }

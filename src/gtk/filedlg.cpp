@@ -165,7 +165,11 @@ void wxFileDialog::SetPath(const wxString& path)
     {
         wxString ext;
         wxSplitPath(path, &m_dir, &m_fileName, &ext);
-        m_fileName += ext;
+	if (!ext.IsEmpty())
+	{
+	    m_fileName += _T(".");
+            m_fileName += ext;
+	}
     }
 }
 
