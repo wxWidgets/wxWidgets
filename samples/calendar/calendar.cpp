@@ -132,7 +132,7 @@ enum
     Calendar_Cal_Year,
     Calendar_Cal_SeqMonth,
     Calendar_Cal_SurroundWeeks,
-    Calendar_CalCtrl = 1000,
+    Calendar_CalCtrl = 1000
 };
 
 // ----------------------------------------------------------------------------
