@@ -82,6 +82,7 @@ protected:
     wxTextCtrl*       m_input;
 
     DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxGenericDirDialog)
 };
 
 #endif // _WX_DIRDLGG_H_

@@ -45,6 +45,8 @@
 // wxGenericDirDialog
 //-----------------------------------------------------------------------------
 
+IMPLEMENT_DYNAMIC_CLASS(wxGenericDirDialog, wxDialog)
+
 static const int ID_DIRCTRL = 1000;
 static const int ID_TEXTCTRL = 1001;
 static const int ID_OK = 1002;
