@@ -1300,30 +1300,36 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
 
     if (m_isDragging)
     {
-        // erase the line
-        DrawCurrent();
+        // we don't draw the line beyond our window, but we allow dragging it
+        // there
+        int w = 0;
+        GetClientSize( &w, NULL );
+#if wxUSE_GENERIC_LIST_EXTENSIONS
+        m_owner->CalcUnscrolledPosition(w, 0, &w, NULL);
+#endif // wxUSE_GENERIC_LIST_EXTENSIONS
+        w -= 6;
+
+        // erase the line if it was drawn
+        if ( m_currentX < w )
+            DrawCurrent();
 
         if (event.ButtonUp())
         {
             ReleaseMouse();
             m_isDragging = FALSE;
             m_dirty = TRUE;
-            m_owner->SetColumnWidth( m_column, m_currentX-m_minX );
+            m_owner->SetColumnWidth( m_column, m_currentX - m_minX );
         }
         else
         {
-            int w = 0;
-            GetClientSize( &w, NULL );
             if (x > m_minX + 7)
                 m_currentX = x;
             else
                 m_currentX = m_minX + 7;
 
-            if ( m_currentX > w - 7 )
-                m_currentX = w - 7;
-
             // draw in the new location
-            DrawCurrent();
+            if ( m_currentX < w )
+                DrawCurrent();
         }
     }
     else // not dragging
