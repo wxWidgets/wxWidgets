@@ -729,10 +729,12 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         m_macControl = NewControl(MAC_WXHWND(parent->MacGetRootWindow()), &bounds, "\p", true, featurSet, 0, featurSet, kControlUserPaneProc, 0);
             /* set up the mUP specific features and data */
         mUPOpenControl((ControlHandle) m_macControl, m_windowStyle );
+        /*
         if ( parent )
         {
             parent->MacGetTopLevelWindow()->MacInstallEventHandler() ;
         }
+        */
     }
     MacPostControlCreate() ;
 
