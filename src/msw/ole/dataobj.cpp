@@ -1133,6 +1133,9 @@ protected:
 
         return TRUE;
     }
+    virtual bool GetDataHere(const wxDataFormat& WXUNUSED(format),
+                             void *buf) const
+        { return GetDataHere(buf); }
 #endif
 
     DECLARE_NO_COPY_CLASS(CFSTR_SHELLURLDataObject)
