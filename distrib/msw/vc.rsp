@@ -3,268 +3,270 @@ wxBaseVC.dsw
 wxBaseDll.dsp
 wxBaseDll.dsw
 
-src/wxvc.dsp
-src/wxvc.dsw
-src/wxvc_dll.dsp
-src/wxvc_dll.dsw
+src/wxWindows.dsp
+src/wxWindows.dsw
+src/wxUniv.dsp
+src/wxUniv.dsw
+src/wxBase.dsp
+src/wxBase.dsw
 
-src/jpeg/JpegVC.dsp
-src/jpeg/JpegVC.dsw
+src/jpeg/jpeg.dsp
+src/jpeg/jpeg.dsw
 
-src/tiff/TiffVC.dsp
-src/tiff/TiffVC.dsw
+src/tiff/tiff.dsp
+src/tiff/tiff.dsw
 
-src/zlib/ZlibVC.dsp
-src/zlib/ZlibVC.dsw
+src/zlib/zlib.dsp
+src/zlib/zlib.dsw
 
-src/png/PngVC.dsp
-src/png/PngVC.dsw
+src/png/png.dsp
+src/png/png.dsw
 
-samples/SamplesVC.dsw
+samples/samples.dsw
 
-samples/calendar/CalendarVC.dsp
-samples/calendar/CalendarVC.dsw
+samples/calendar/Calendar.dsp
+samples/calendar/Calendar.dsw
 
-samples/caret/CaretVC.dsp
-samples/caret/CaretVC.dsw
+samples/caret/Caret.dsp
+samples/caret/Caret.dsw
 
-samples/checklst/ChecklstVC.dsp
-samples/checklst/ChecklstVC.dsw
+samples/checklst/Checklst.dsp
+samples/checklst/Checklst.dsw
 
-samples/config/ConfigVC.dsp
-samples/config/ConfigVC.dsw
+samples/config/Config.dsp
+samples/config/Config.dsw
 
-samples/controls/ControlsVC.dsp
-samples/controls/ControlsVC.dsw
+samples/controls/Controls.dsp
+samples/controls/Controls.dsw
 
-samples/db/DbVC.dsp
-samples/db/DbVC.dsw
+samples/db/Db.dsp
+samples/db/Db.dsw
 
-samples/dialogs/DialogsVC.dsp
-samples/dialogs/DialogsVC.dsw
+samples/dialogs/Dialogs.dsp
+samples/dialogs/Dialogs.dsw
 
-samples/dialup/DialupVC.dsp
-samples/dialup/DialupVC.dsw
+samples/dialup/Dialup.dsp
+samples/dialup/Dialup.dsw
 
-samples/dnd/DndVC.dsp
-samples/dnd/DndVC.dsw
+samples/dnd/Dnd.dsp
+samples/dnd/Dnd.dsw
 
-samples/dragimag/DragimagVC.dsp
-samples/dragimag/DragimagVC.dsw
+samples/dragimag/Dragimag.dsp
+samples/dragimag/Dragimag.dsw
 
-samples/docview/DocviewVC.dsp
-samples/docview/DocviewVC.dsw
+samples/docview/Docview.dsp
+samples/docview/Docview.dsw
 
-samples/docvwmdi/DocVwMdiVC.dsp
-samples/docvwmdi/DocVwMdiVC.dsw
+samples/docvwmdi/DocVwMdi.dsp
+samples/docvwmdi/DocVwMdi.dsw
 
-samples/drawing/DrawingVC.dsp
-samples/drawing/DrawingVC.dsw
+samples/drawing/Drawing.dsp
+samples/drawing/Drawing.dsw
 
-samples/dynamic/DynamicVC.dsp
-samples/dynamic/DynamicVC.dsw
+samples/dynamic/Dynamic.dsp
+samples/dynamic/Dynamic.dsw
 
-samples/dynamic/EraseVC.dsp
-samples/dynamic/EraseVC.dsw
+samples/dynamic/Erase.dsp
+samples/dynamic/Erase.dsw
 
-samples/event/EventVC.dsp
-samples/event/EventVC.dsw
+samples/event/Event.dsp
+samples/event/Event.dsw
 
-samples/exec/ExecVC.dsp
-samples/exec/ExecVC.dsw
+samples/exec/Exec.dsp
+samples/exec/Exec.dsw
 
-samples/font/FontVC.dsp
-samples/font/FontVC.dsw
+samples/font/Font.dsp
+samples/font/Font.dsw
 
-samples/grid/GridVC.dsp
-samples/grid/GridVC.dsw
+samples/grid/Grid.dsp
+samples/grid/Grid.dsw
 
-samples/help/HelpVC.dsp
-samples/help/HelpVC.dsw
+samples/help/Help.dsp
+samples/help/Help.dsw
 
-samples/html/about/AboutVC.dsp
-samples/html/about/AboutVC.dsw
-samples/html/help/HelpVC.dsp
-samples/html/help/HelpVC.dsw
-samples/html/helpview/HelpViewVC.dsp
-samples/html/helpview/HelpViewVC.dsw
-samples/html/printing/PrintingVC.dsp
-samples/html/printing/PrintingVC.dsw
-samples/html/test/TestVC.dsp
-samples/html/test/TestVC.dsw
-samples/html/virtual/VirtualVC.dsp
-samples/html/virtual/VirtualVC.dsw
-samples/html/widget/WidgetVC.dsp
-samples/html/widget/WidgetVC.dsw
-samples/html/zip/ZipVC.dsp
-samples/html/zip/ZipVC.dsw
+samples/html/about/About.dsp
+samples/html/about/About.dsw
+samples/html/help/Help.dsp
+samples/html/help/Help.dsw
+samples/html/helpview/HelpView.dsp
+samples/html/helpview/HelpView.dsw
+samples/html/printing/Printing.dsp
+samples/html/printing/Printing.dsw
+samples/html/test/Test.dsp
+samples/html/test/Test.dsw
+samples/html/virtual/Virtual.dsp
+samples/html/virtual/Virtual.dsw
+samples/html/widget/Widget.dsp
+samples/html/widget/Widget.dsw
+samples/html/zip/Zip.dsp
+samples/html/zip/Zip.dsw
 
-samples/image/ImageVC.dsp
-samples/image/ImageVC.dsw
+samples/image/Image.dsp
+samples/image/Image.dsw
 
-samples/internat/InternatVC.dsp
-samples/internat/InternatVC.dsw
+samples/internat/Internat.dsp
+samples/internat/Internat.dsw
 
-samples/ipc/ClientVC.dsp
-samples/ipc/ClientVC.dsw
-samples/ipc/ServerVC.dsp
-samples/ipc/ServerVC.dsw
+samples/ipc/Client.dsp
+samples/ipc/Client.dsw
+samples/ipc/Server.dsp
+samples/ipc/Server.dsw
 
-samples/joytest/JoytestVC.dsp
-samples/joytest/JoytestVC.dsw
+samples/joytest/Joytest.dsp
+samples/joytest/Joytest.dsw
 
-samples/layout/LayoutVC.dsp
-samples/layout/LayoutVC.dsw
+samples/layout/Layout.dsp
+samples/layout/Layout.dsw
 
-samples/listctrl/ListCtrlVC.dsp
-samples/listctrl/ListCtrlVC.dsw
+samples/listctrl/ListCtrl.dsp
+samples/listctrl/ListCtrl.dsw
 
-samples/mdi/MdiVC.dsp
-samples/mdi/MdiVC.dsw
+samples/mdi/Mdi.dsp
+samples/mdi/Mdi.dsw
 
-samples/memcheck/MemcheckVC.dsp
-samples/memcheck/MemcheckVC.dsw
+samples/memcheck/Memcheck.dsp
+samples/memcheck/Memcheck.dsw
 
-samples/menu/MenuVC.dsp
-samples/menu/MenuVC.dsw
+samples/menu/Menu.dsp
+samples/menu/Menu.dsw
 
-samples/mfc/MfcVC.dsp
-samples/mfc/MfcVC.dsw
+samples/mfc/Mfc.dsp
+samples/mfc/Mfc.dsw
 
-samples/minimal/MinimalVC.dsp
-samples/minimal/MinimalVC.dsw
+samples/minimal/Minimal.dsp
+samples/minimal/Minimal.dsw
 
-samples/minifram/MiniframVC.dsp
-samples/minifram/MiniframVC.dsw
+samples/minifram/Minifram.dsp
+samples/minifram/Minifram.dsw
 
-samples/nativdlg/NativdlgVC.dsp
-samples/nativdlg/NativdlgVC.dsw
+samples/nativdlg/Nativdlg.dsp
+samples/nativdlg/Nativdlg.dsw
 
-samples/newgrid/NewgridVC.dsp
-samples/newgrid/NewgridVC.dsw
+samples/newgrid/Newgrid.dsp
+samples/newgrid/Newgrid.dsw
 
-samples/notebook/NotebookVC.dsp
-samples/notebook/NotebookVC.dsw
+samples/notebook/Notebook.dsp
+samples/notebook/Notebook.dsw
 
-samples/oleauto/OleautoVC.dsp
-samples/oleauto/OleautoVC.dsw
+samples/oleauto/Oleauto.dsp
+samples/oleauto/Oleauto.dsw
 
-samples/ownerdrw/OwnerDrwVC.dsp
-samples/ownerdrw/OwnerDrwVC.dsw
+samples/ownerdrw/OwnerDrw.dsp
+samples/ownerdrw/OwnerDrw.dsw
 
-samples/plot/PlotVC.dsp
-samples/plot/PlotVC.dsw
+samples/plot/Plot.dsp
+samples/plot/Plot.dsw
 
-samples/png/PngVC.dsp
-samples/png/PngVC.dsw
+samples/png/Png.dsp
+samples/png/Png.dsw
 
-samples/printing/PrintingVC.dsp
-samples/printing/PrintingVC.dsw
+samples/printing/Printing.dsp
+samples/printing/Printing.dsw
 
-samples/proplist/ProplistVC.dsp
-samples/proplist/ProplistVC.dsw
+samples/proplist/Proplist.dsp
+samples/proplist/Proplist.dsw
 
-samples/propsize/PropsizeVC.dsp
-samples/propsize/PropsizeVC.dsw
+samples/propsize/Propsize.dsp
+samples/propsize/Propsize.dsw
 
-samples/Regtest/RegtestVC.dsp
-samples/Regtest/RegtestVC.dsw
+samples/Regtest/Regtest.dsp
+samples/Regtest/Regtest.dsw
 
-samples/resource/ResourceVC.dsp
-samples/resource/ResourceVC.dsw
+samples/resource/Resource.dsp
+samples/resource/Resource.dsw
 
-samples/richedit/RichEditVC.dsp
-samples/richedit/RichEditVC.dsw
+samples/richedit/RichEdit.dsp
+samples/richedit/RichEdit.dsw
 
-samples/rotate/RotateVC.dsp
-samples/rotate/RotateVC.dsw
+samples/rotate/Rotate.dsp
+samples/rotate/Rotate.dsw
 
-samples/sashtest/SashtestVC.dsp
-samples/sashtest/SashtestVC.dsw
+samples/sashtest/Sashtest.dsp
+samples/sashtest/Sashtest.dsw
 
-samples/scroll/ScrollVC.dsp
-samples/scroll/ScrollVC.dsw
+samples/scroll/Scroll.dsp
+samples/scroll/Scroll.dsw
 
-samples/scrollsub/ScrollsubVC.dsp
-samples/scrollsub/ScrollsubVC.dsw
+samples/scrollsub/Scrollsub.dsp
+samples/scrollsub/Scrollsub.dsw
 
-samples/sockets/ClientVC.dsp
-samples/sockets/ServerVC.dsp
-samples/sockets/ClientVC.dsw
-samples/sockets/ServerVC.dsw
+samples/sockets/Client.dsp
+samples/sockets/Server.dsp
+samples/sockets/Client.dsw
+samples/sockets/Server.dsw
 
-samples/splitter/SplitterVC.dsp
-samples/splitter/SplitterVC.dsw
+samples/splitter/Splitter.dsp
+samples/splitter/Splitter.dsw
 
-samples/statbar/StatbarVC.dsp
-samples/statbar/StatbarVC.dsw
+samples/statbar/Statbar.dsp
+samples/statbar/Statbar.dsw
 
-samples/tab/TabVC.dsp
-samples/tab/TabVC.dsw
+samples/tab/Tab.dsp
+samples/tab/Tab.dsw
 
-samples/taskbar/TaskbarVC.dsp
-samples/taskbar/TaskbarVC.dsw
+samples/taskbar/Taskbar.dsp
+samples/taskbar/Taskbar.dsw
 
-samples/text/TextVC.dsp
-samples/text/TextVC.dsw
+samples/text/Text.dsp
+samples/text/Text.dsw
 
-samples/thread/ThreadVC.dsp
-samples/thread/ThreadVC.dsw
+samples/thread/Thread.dsp
+samples/thread/Thread.dsw
 
-samples/toolbar/ToolbarVC.dsp
-samples/toolbar/ToolbarVC.dsw
+samples/toolbar/Toolbar.dsp
+samples/toolbar/Toolbar.dsw
 
-samples/treectrl/TreectrlVC.dsp
-samples/treectrl/TreeCtrlVC.dsw
+samples/treectrl/Treectrl.dsp
+samples/treectrl/TreeCtrl.dsw
 
-samples/treelay/TreelayVC.dsp
-samples/treelay/TreelayVC.dsw
+samples/treelay/Treelay.dsp
+samples/treelay/Treelay.dsw
 
-samples/typetest/TypetestVC.dsp
-samples/typetest/TypetestVC.dsw
+samples/typetest/Typetest.dsp
+samples/typetest/Typetest.dsw
 
-samples/validate/ValidateVC.dsp
-samples/validate/ValidateVC.dsw
+samples/validate/Validate.dsp
+samples/validate/Validate.dsw
 
-samples/wizard/WizardVC.dsp
-samples/wizard/WizardVC.dsw
+samples/wizard/Wizard.dsp
+samples/wizard/Wizard.dsw
 
-samples/opengl/cube/CubeVC.dsp
-samples/opengl/cube/CubeVC.dsw
-samples/opengl/isosurf/IsosurfVC.dsp
-samples/opengl/isosurf/IsosurfVC.dsw
-samples/opengl/penguin/PenguinVC.dsp
-samples/opengl/penguin/PenguinVC.dsw
+samples/opengl/cube/Cube.dsp
+samples/opengl/cube/Cube.dsw
+samples/opengl/isosurf/Isosurf.dsp
+samples/opengl/isosurf/Isosurf.dsw
+samples/opengl/penguin/Penguin.dsp
+samples/opengl/penguin/Penguin.dsw
 
-demos/bombs/BombsVC.dsp
-demos/bombs/BombsVC.dsw
+demos/bombs/Bombs.dsp
+demos/bombs/Bombs.dsw
 
-demos/dbbrowse/DbbrowseVC.dsp
-demos/dbbrowse/DbbrowseVC.dsw
+demos/dbbrowse/Dbbrowse.dsp
+demos/dbbrowse/Dbbrowse.dsw
 
-demos/forty/FortyVC.dsp
-demos/forty/FortyVC.dsw
+demos/forty/Forty.dsp
+demos/forty/Forty.dsw
 
-demos/fractal/FractalVC.dsp
-demos/fractal/FractalVC.dsw
+demos/fractal/Fractal.dsp
+demos/fractal/Fractal.dsw
 
-demos/life/LifeVC.dsp
-demos/life/LifeVC.dsw
+demos/life/Life.dsp
+demos/life/Life.dsw
 
-demos/poem/PoemVC.dsp
-demos/poem/PoemVC.dsw
+demos/poem/Poem.dsp
+demos/poem/Poem.dsw
 
-utils/dialoged/src/DialogEdVC.dsp
-utils/dialoged/src/DialogEdVC.dsw
+utils/dialoged/src/DialogEd.dsp
+utils/dialoged/src/DialogEd.dsw
 
-utils/tex2rtf/src/Tex2RTFVC.dsp
-utils/tex2rtf/src/Tex2RTFVC.dsw
+utils/tex2rtf/src/Tex2RTF.dsp
+utils/tex2rtf/src/Tex2RTF.dsw
 
-utils/hhp2cached/hhp2cachedVC.dsp
-utils/hhp2cached/hhp2cachedVC.dsw
+utils/hhp2cached/hhp2cached.dsp
+utils/hhp2cached/hhp2cached.dsw
 
-utils/helpgen/src/HelpGenVC.dsp
-utils/helpgen/src/HelpGenVC.dsw
+utils/helpgen/src/HelpGen.dsp
+utils/helpgen/src/HelpGen.dsw
 
 contrib/src/ogl/OglVC.dsp
 contrib/src/ogl/OglVC.dsw
