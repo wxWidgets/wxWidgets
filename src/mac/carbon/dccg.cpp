@@ -164,6 +164,8 @@ CGPathRef wxMacCGPath::GetPath() const
     return m_path ;
 }
 
+// we always stock two context states, one at entry, the other one after 
+// changing to HI Graphics orientation (this one is used for getting back clippings etc)
 
 wxMacCGContext::wxMacCGContext( CGrafPtr port ) 
 {
@@ -175,6 +177,8 @@ wxMacCGContext::wxMacCGContext( CGContextRef cgcontext )
 {
     m_qdPort = NULL ;
     m_cgContext = cgcontext ;
+    CGContextSaveGState( m_cgContext ) ;
+    CGContextSaveGState( m_cgContext ) ;
 }
 
 wxMacCGContext::wxMacCGContext()
@@ -185,6 +189,11 @@ wxMacCGContext::wxMacCGContext()
 
 wxMacCGContext::~wxMacCGContext() 
 {
+    if ( m_cgContext )
+    {
+        CGContextRestoreGState( m_cgContext ) ;
+        CGContextRestoreGState( m_cgContext ) ;
+    }
     if ( m_qdPort )
         QDEndCGContext( m_qdPort , &m_cgContext ) ;
 }
@@ -258,11 +267,13 @@ CGContextRef wxMacCGContext::GetNativeContext()
         Rect bounds ;
         GetPortBounds( (CGrafPtr) m_qdPort , &bounds ) ;
         OSStatus status = QDBeginCGContext( (CGrafPtr) m_qdPort , &m_cgContext ) ;
+        CGContextSaveGState( m_cgContext ) ;
 
         wxASSERT_MSG( status == noErr , wxT("Cannot nest wxDCs on the same window") ) ;
         CGContextTranslateCTM( m_cgContext , 0 , bounds.bottom - bounds.top ) ;
         CGContextScaleCTM( m_cgContext , 1 , -1 ) ;
         
+        CGContextSaveGState( m_cgContext ) ;
         SetPen( m_pen ) ;
         SetBrush( m_brush ) ;
     }
@@ -271,7 +282,9 @@ CGContextRef wxMacCGContext::GetNativeContext()
 
 void wxMacCGContext::SetNativeContext( CGContextRef cg ) 
 { 
+    wxASSERT( m_cgContext == NULL ) ;
     m_cgContext = cg ; 
+    CGContextSaveGState( m_cgContext ) ;
 }
 
 void wxMacCGContext::SetPen( const wxPen &pen )
@@ -621,6 +634,11 @@ void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord hei
     yy = YLOG2DEVMAC(y);
     ww = XLOG2DEVREL(width);
     hh = YLOG2DEVREL(height);
+
+    CGContextRef cgContext = dynamic_cast<wxMacCGContext*>(m_graphicContext)->GetNativeContext() ;
+    CGRect clipRect = CGRectMake( xx ,yy , ww, hh ) ;
+    CGContextClipToRect( cgContext , clipRect ) ;
+
 //    SetRectRgn( (RgnHandle) m_macCurrentClipRgn , xx , yy , xx + ww , yy + hh ) ;
 //    SectRgn( (RgnHandle) m_macCurrentClipRgn , (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn ) ;
     if( m_clipping )
@@ -694,6 +712,11 @@ void wxDC::DoSetClippingRegionAsRegion( const wxRegion &region  )
 void wxDC::DestroyClippingRegion()
 {
 //    CopyRgn( (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn ) ;
+    CGContextRef cgContext = dynamic_cast<wxMacCGContext*>(m_graphicContext)->GetNativeContext() ;
+    CGContextRestoreGState( cgContext );    
+    CGContextSaveGState( cgContext );    
+    SetPen( m_pen ) ;
+    SetBrush( m_brush ) ;
     m_clipping = FALSE;
 }
 
@@ -1097,7 +1120,6 @@ void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
     }
     wxGraphicPath* path = m_graphicContext->CreatePath() ;
     path->AddRectangle(xx ,yy , ww , hh ) ;
-    path->CloseSubpath() ;
     m_graphicContext->DrawPath( path ) ;
     delete path ;
 }
@@ -1498,7 +1520,7 @@ void  wxDC::Clear(void)
 
     if ( m_backgroundBrush.Ok() && m_backgroundBrush.GetStyle() != wxTRANSPARENT)
     {      
-                HIRect rect = CGRectMake( -10000 , -10000 , 20000 , 20000 ) ;
+        HIRect rect = CGRectMake( -10000 , -10000 , 20000 , 20000 ) ;
         switch( m_backgroundBrush.MacGetBrushKind() )
         {
             case kwxMacBrushTheme :
@@ -1507,13 +1529,20 @@ void  wxDC::Clear(void)
             break ;
             case kwxMacBrushThemeBackground :
                 {
-                    HIThemeBackgroundDrawInfo drawInfo ;
-                    drawInfo.version = 0 ;
-                    drawInfo.state = kThemeStateActive ;
-                    drawInfo.kind = m_backgroundBrush.MacGetThemeBackground(NULL) ;
-                    HIThemeDrawBackground( &rect , &drawInfo, dynamic_cast<wxMacCGContext*>(m_graphicContext)->GetNativeContext() ,
-                        kHIThemeOrientationNormal) ;
-
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
+                    if ( HIThemeDrawBackground )
+                    {
+                        HIThemeBackgroundDrawInfo drawInfo ;
+                        drawInfo.version = 0 ;
+                        drawInfo.state = kThemeStateActive ;
+                        drawInfo.kind = m_backgroundBrush.MacGetThemeBackground(NULL) ;
+                        if ( drawInfo.kind == kThemeBackgroundMetal )
+                            HIThemeDrawBackground( &rect , &drawInfo, dynamic_cast<wxMacCGContext*>(m_graphicContext)->GetNativeContext() ,
+                                kHIThemeOrientationNormal) ;
+                            HIThemeApplyBackground( &rect , &drawInfo, dynamic_cast<wxMacCGContext*>(m_graphicContext)->GetNativeContext() ,
+                                kHIThemeOrientationNormal) ;
+                    }
+#endif
                 }
             break ;
             case kwxMacBrushColour :
