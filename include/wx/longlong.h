@@ -54,6 +54,8 @@
         #error "The 64 bit integer support in CodeWarrior has been disabled."
         #error "See the documentation on the 'longlong' pragma."
     #endif
+#elif defined(__VISAGECPP__) && __IBMCPP__ >= 400
+        #define wxLongLong_t long long
 #else // no native long long type
     // both warning and pragma warning are not portable, but at least an
     // unknown pragma should never be an error.
