@@ -43,6 +43,7 @@ private:
 #define SWIG_TypeCast        SWIG_Python_TypeCast
 #define SWIG_TypeDynamicCast SWIG_Python_TypeDynamicCast
 #define SWIG_TypeName        SWIG_Python_TypeName
+#define SWIG_TypePrettyName  SWIG_Python_TypePrettyName
 #define SWIG_TypeQuery       SWIG_Python_TypeQuery
 #define SWIG_TypeClientData  SWIG_Python_TypeClientData
 #define SWIG_PackData        SWIG_Python_PackData 
@@ -113,6 +114,7 @@ SWIGIMPORT(swig_type_info *) SWIG_TypeCheck(char *c, swig_type_info *);
 SWIGIMPORT(void *)           SWIG_TypeCast(swig_type_info *, void *);
 SWIGIMPORT(swig_type_info *) SWIG_TypeDynamicCast(swig_type_info *, void **);
 SWIGIMPORT(const char *)     SWIG_TypeName(const swig_type_info *);
+SWIGIMPORT(const char *)     SWIG_TypePrettyName(const swig_type_info *);
 SWIGIMPORT(swig_type_info *) SWIG_TypeQuery(const char *);
 SWIGIMPORT(void)             SWIG_TypeClientData(swig_type_info *, void *);
 SWIGIMPORT(char *)           SWIG_PackData(char *, void *, int);
@@ -123,6 +125,7 @@ SWIGIMPORT(char *)           SWIG_UnpackData(char *, void *, int);
 }
 #endif
 
+
 /***********************************************************************
  * pyrun.swg for wxPython
  *
@@ -132,8 +135,6 @@ SWIGIMPORT(char *)           SWIG_UnpackData(char *, void *, int);
  * anyway.
  *
  ************************************************************************/
-
-#include "Python.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -204,6 +205,7 @@ SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 #endif
 
 
+
 /* -------- TYPES TABLE (BEGIN) -------- */
 
 #define  SWIGTYPE_p_wxRect swig_types[0] 
@@ -237,47 +239,64 @@ static swig_type_info *swig_types[20];
 
 #define SWIG_name    "_stc"
 
-/* Auxiliar swig  macros */
+/* Auxiliar swig  macros that appear in the header */
+
+#define SWIG_OLDOBJ  1
+#define SWIG_NEWOBJ  SWIG_OLDOBJ + 1
+#define SWIG_PYSTR   SWIG_NEWOBJ + 1
 
 #ifdef __cplusplus
 #define SWIGSTATICINLINE(a) static inline a
 #define SWIGSTATIC(a) static a
-#define swig_new_array(type, size) (new type[(size)])
+#define swig_new_array(size,Type) (new Type[(size)])
+#define swig_delete(cptr) delete cptr
 #define swig_delete_array(cptr) delete[] cptr
-#define swig_const_cast(type,a) const_cast<type>(a)
-#define swig_static_cast(type,a) static_cast<type>(a)
-#define swig_reinterpret_cast(type,a) reinterpret_cast<type>(a)
-
-#ifdef HAVE_NUMERIC_CAST
-#define swig_numeric_cast(type,a) numeric_cast<type>(a)
-#else
-#define swig_numeric_cast(type,a) static_cast<type>(a)
-#endif
+#define swig_const_cast(a,Type) const_cast<Type >(a)
+#define swig_static_cast(a,Type) static_cast<Type >(a)
+#define swig_reinterpret_cast(a,Type) reinterpret_cast<Type >(a)
+#define swig_new_copy(ptr,Type) (new Type(*ptr))
+#define swig_numeric_cast(a,Type) static_cast<Type >(a)
 
 #else /* C case */
 
 #define SWIGSTATICINLINE(a) static a
 #define SWIGSTATIC(a) static a
-#define swig_new_array(type, size) ((type*) malloc((size)*sizeof(type)))
+#define swig_new_array(size,Type) ((Type*) malloc((size)*sizeof(Type)))
+#define swig_delete(cptr) free((char*)cptr)
 #define swig_delete_array(cptr) free((char*)cptr)
-#define swig_const_cast(type,a) (type)(a)
-#define swig_static_cast(type,a) (type)(a)
-#define swig_reinterpret_cast(type,a) (type)(a)
-#define swig_numeric_cast(type,a) (type)(a)
+#define swig_const_cast(a,Type) (Type)(a)
+#define swig_static_cast(a,Type) (Type)(a)
+#define swig_reinterpret_cast(a,Type) (Type)(a)
+#define swig_numeric_cast(a,Type) (Type)(a)
+#define swig_new_copy(ptr,Type)  ((Type*)memcpy(malloc(sizeof(Type)),ptr,sizeof(Type)))
 
 #endif /* __cplusplus */
 
 
-#define SWIG_FromSignedChar     PyInt_FromLong
-#define SWIG_FromUnsignedChar   PyInt_FromLong
-#define SWIG_FromShort         PyInt_FromLong
-#define SWIG_FromUnsignedShort  PyInt_FromLong
-#define SWIG_FromInt           PyInt_FromLong
-#define SWIG_FromLong          PyInt_FromLong
-#define SWIG_FromFloat         PyFloat_FromDouble
-#define SWIG_FromDouble        PyFloat_FromDouble
-#define SWIG_FromFloat         PyFloat_FromDouble
-#define SWIG_FromDouble        PyFloat_FromDouble
+/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_signed_SS_char PyInt_FromLong
+/*@@*/
+/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_unsigned_SS_char PyInt_FromLong
+/*@@*/
+/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_short PyInt_FromLong
+/*@@*/
+/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_unsigned_SS_short PyInt_FromLong
+/*@@*/
+/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_int PyInt_FromLong
+/*@@*/
+/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_long PyInt_FromLong
+/*@@*/
+/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_float PyFloat_FromDouble
+/*@@*/
+/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_double PyFloat_FromDouble
+/*@@*/
 
 
 #include "wx/wxPython/wxPython.h"
@@ -290,119 +309,184 @@ static swig_type_info *swig_types[20];
 #include <limits.h>
 
 
-SWIGSTATICINLINE(long)
-SWIG_CheckLongInRange(long value, const char* type,
-		      long min_value, long max_value)
+SWIGSTATICINLINE(int)
+  SWIG_CheckLongInRange(long value, long min_value, long max_value,
+			const char *errmsg)
 {
-  if (!PyErr_Occurred()) {
-    if (value < min_value) {
-      PyObject *err = 
-	PyString_FromFormat("value %ld is less than '%s' minimum %ld", 
-			    value, type, min_value);
-      
-      PyErr_SetObject(PyExc_OverflowError, err);
-      Py_DECREF(err);
-    } else if (value > max_value) {
-      PyObject *err = 
-	PyString_FromFormat("value %ld is greater than '%s' maximum %ld", 
-			    value, type, max_value);
-      PyErr_SetObject(PyExc_OverflowError, err);
-      Py_DECREF(err);
+  if (value < min_value) {
+    if (errmsg) {
+      PyErr_Format(PyExc_OverflowError, 
+		   "value %ld is less than '%s' minimum %ld", 
+		   value, errmsg, min_value);
     }
+    return 0;    
+  } else if (value > max_value) {
+    if (errmsg) {
+      PyErr_Format(PyExc_OverflowError,
+		   "value %ld is greater than '%s' maximum %ld", 
+		   value, errmsg, max_value);
+    }
+    return 0;
   }
-  return value;
+  return 1;
 }
 
 
-SWIGSTATICINLINE(long)
-SWIG_AsLong(PyObject * obj)
+// See my_fragments.i
+SWIGSTATICINLINE(int)
+SWIG_AsVal_long(PyObject* obj, long* val)
 {
-    if (PyNumber_Check(obj))
-        return PyInt_AsLong(obj);
+    if (PyNumber_Check(obj)) {
+        if (val) *val = PyInt_AsLong(obj);
+        return 1;
+    }
     else {
         PyObject* errmsg = PyString_FromFormat("Expected number, got %s",
                                                obj->ob_type->tp_name);
         PyErr_SetObject(PyExc_TypeError, errmsg);
         Py_DECREF(errmsg);
-        return 0;
     }
+    return 0;
 }
 
 
 #if INT_MAX != LONG_MAX
 SWIGSTATICINLINE(int)
-SWIG_AsInt(PyObject *obj)
+  SWIG_AsVal_int(PyObject *obj, int *val)
 { 
-  return swig_numeric_cast(int,
-    SWIG_CheckLongInRange(SWIG_AsLong(obj),
-			  "int", INT_MIN, INT_MAX));
+  const char* errmsg = val ? "int" : 0;
+  long v;
+  if (SWIG_AsVal_long(obj, &v)) {
+    if (SWIG_CheckLongInRange(v, INT_MIN,INT_MAX, errmsg)) {
+      if (val) *val = swig_numeric_cast(v, int);
+      return 1;
+    } else {
+      return 0;
+    }
+  } else {
+    PyErr_Clear();
+  }
+  if (val) {
+    PyErr_SetString(PyExc_TypeError, "an int is expected");
+  }
+  return 0;    
 }
 #else
-#define SWIG_AsInt SWIG_AsLong
+SWIGSTATICINLINE(int)
+  SWIG_AsVal_int(PyObject *obj, int *val)
+{
+  return SWIG_AsVal_long(obj,(long*)val);
+}
 #endif
 
 
 SWIGSTATICINLINE(int)
-SWIG_CheckInt(PyObject* obj)
+SWIG_As_int(PyObject* obj)
 {
-  SWIG_AsInt(obj);
-  if (PyErr_Occurred()) {
-    PyErr_Clear();
-    return 0;
-  } else {
-    return 1;
+  int v;
+  if (!SWIG_AsVal_int(obj, &v)) {
+    /*
+      this is needed to make valgrind/purify happier.  the other
+      solution is throw an exception, but since this code should work
+      with plain C ....
+     */
+    memset((void*)&v, 0, sizeof(int));
   }
+  return v;
+}
+
+
+SWIGSTATICINLINE(long)
+SWIG_As_long(PyObject* obj)
+{
+  long v;
+  if (!SWIG_AsVal_long(obj, &v)) {
+    /*
+      this is needed to make valgrind/purify happier.  the other
+      solution is throw an exception, but since this code should work
+      with plain C ....
+     */
+    memset((void*)&v, 0, sizeof(long));
+  }
+  return v;
+}
+
+  
+SWIGSTATICINLINE(int)
+SWIG_Check_int(PyObject* obj)
+{
+  return SWIG_AsVal_int(obj, (int*)0);
+}
+
+  
+SWIGSTATICINLINE(int)
+SWIG_Check_long(PyObject* obj)
+{
+  return SWIG_AsVal_long(obj, (long*)0);
 }
 
 
 SWIGSTATICINLINE(int)
-SWIG_CheckLong(PyObject* obj)
+  SWIG_AsVal_bool(PyObject *obj, bool *val)
 {
-  SWIG_AsLong(obj);
-  if (PyErr_Occurred()) {
-    PyErr_Clear();
-    return 0;
-  } else {
+  /*  if (val) *val = PyObject_IsTrue(obj); return 1; */
+  if (obj == Py_True) {
+    if (val) *val = true;
     return 1;
   }
+  if (obj == Py_False) {
+    if (val) *val = false;
+    return 1;
+  }
+  int res = 0;
+  if (SWIG_AsVal_int(obj, &res)) {    
+    if (val) *val = (bool)res;
+    return 1;
+  }
+  if (val) {
+    PyErr_SetString(PyExc_TypeError, "a bool is expected");
+  }
+  return 0;
 }
 
 
 SWIGSTATICINLINE(bool)
-SWIG_AsBool(PyObject *obj)
+SWIG_As_bool(PyObject* obj)
 {
-  return PyObject_IsTrue(obj) ? true : false;
-}
-
-
-SWIGSTATICINLINE(int)
-SWIG_CheckBool(PyObject* obj)
-{
-  SWIG_AsBool(obj);
-  if (PyErr_Occurred()) {
-    PyErr_Clear();
-    return 0;
-  } else {
-    return 1;
+  bool v;
+  if (!SWIG_AsVal_bool(obj, &v)) {
+    /*
+      this is needed to make valgrind/purify happier.  the other
+      solution is throw an exception, but since this code should work
+      with plain C ....
+     */
+    memset((void*)&v, 0, sizeof(bool));
   }
+  return v;
+}
+
+  
+SWIGSTATICINLINE(int)
+SWIG_Check_bool(PyObject* obj)
+{
+  return SWIG_AsVal_bool(obj, (bool*)0);
 }
 
 
-static PyObject* t_output_helper(PyObject* target, PyObject* o) {
+  static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     PyObject*   o3;
-
+    
     if (!target) {                   
         target = o;
     } else if (target == Py_None) {  
         Py_DECREF(Py_None);
         target = o;
     } else {                         
-        if (!PyTuple_Check(target)) {
-            o2 = target;
-            target = PyTuple_New(1);
-            PyTuple_SetItem(target, 0, o2);
-        }
+        o2 = target;
+        target = PyTuple_New(1);
+        PyTuple_SetItem(target, 0, o2);
+
         o3 = PyTuple_New(1);            
         PyTuple_SetItem(o3, 0, o);      
 
@@ -415,46 +499,54 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 }
 
 
-/* returns '1' if the input is a raw char*, '0' if is a PyString */
+
+/* returns SWIG_OLDOBJ if the input is a raw char*, SWIG_PYSTR if is a PyString */
 SWIGSTATIC(int)
-SWIG_AsCharPtrAndSize(PyObject *obj, char** cptr, size_t* size)
+SWIG_AsCharPtrAndSize(PyObject *obj, char** cptr, size_t* psize)
 {
   static swig_type_info* pchar_info = 0;
-  int psize = 0;
+  char* vptr = 0;
   if (!pchar_info) pchar_info = SWIG_TypeQuery("char *");
-
-  if (SWIG_ConvertPtr(obj, swig_reinterpret_cast(void **,cptr), pchar_info, 0) == -1) {
-    PyErr_Clear();
-    PyString_AsStringAndSize(obj, cptr, &psize);
-    if (PyErr_Occurred()) {
-      PyErr_Clear();
-      PyErr_SetString(PyExc_TypeError,"a string is expected");
-    }
-    if (size) *size = psize;
-    return 0;
+  if (SWIG_ConvertPtr(obj, (void**)&vptr, pchar_info, 0) != -1) {
+    if (cptr) *cptr = vptr;
+    if (psize) *psize = vptr ? (strlen(vptr) + 1) : 0;
+    return SWIG_OLDOBJ;
   } else {
-    if (size) *size = (*cptr) ? (strlen(*cptr) + 1) : 0;
-    return 1;
+    if (PyString_Check(obj)) {
+      if (cptr) {
+	*cptr = PyString_AS_STRING(obj);
+	if (psize) {
+	  *psize = PyString_GET_SIZE(obj) + 1;
+	}
+      }
+      return SWIG_PYSTR;
+    }
   }
+  if (cptr) {
+    PyErr_SetString(PyExc_TypeError, "a string is expected");
+  }
+  return 0;
 }
 
 
-SWIGSTATICINLINE(char* )
-SWIG_AsCharPtr(PyObject *obj)
+SWIGSTATICINLINE(int)
+SWIG_AsCharPtr(PyObject *obj, char **val)
 {
-  char* cptr;
-  SWIG_AsCharPtrAndSize(obj, &cptr, 0);
-  if (PyErr_Occurred()) {
-    PyErr_Clear();
+  char* cptr = 0;
+  if (SWIG_AsCharPtrAndSize(obj, &cptr, (size_t*)(0))) {
+    if (val) *val = cptr;
+    return 1;
+  }
+  if (val) {
     PyErr_SetString(PyExc_TypeError, "a char* is expected");
-  }  
-  return cptr;
+  }
+  return 0;
 }
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-static int _wrap_STCNameStr_set(PyObject *_val) {
+static int _wrap_STCNameStr_set(PyObject *) {
     PyErr_SetString(PyExc_TypeError,"Variable STCNameStr is read-only.");
     return 1;
 }
@@ -474,7 +566,7 @@ static PyObject *_wrap_STCNameStr_get() {
 }
 
 
-static PyObject *_wrap_new_StyledTextCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_StyledTextCtrl(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 = (int) wxID_ANY ;
@@ -503,7 +595,7 @@ static PyObject *_wrap_new_StyledTextCtrl(PyObject *self, PyObject *args, PyObje
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if (obj1) {
-        arg2 = (int) SWIG_AsInt(obj1); 
+        arg2 = (int)SWIG_As_int(obj1); 
         if (PyErr_Occurred()) SWIG_fail;
     }
     if (obj2) {
@@ -519,7 +611,7 @@ static PyObject *_wrap_new_StyledTextCtrl(PyObject *self, PyObject *args, PyObje
         }
     }
     if (obj4) {
-        arg5 = (long) SWIG_AsLong(obj4); 
+        arg5 = (long)SWIG_As_long(obj4); 
         if (PyErr_Occurred()) SWIG_fail;
     }
     if (obj5) {
@@ -552,7 +644,7 @@ static PyObject *_wrap_new_StyledTextCtrl(PyObject *self, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_new_PreStyledTextCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_PreStyledTextCtrl(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *result;
     char *kwnames[] = {
@@ -575,7 +667,7 @@ static PyObject *_wrap_new_PreStyledTextCtrl(PyObject *self, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_Create(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_Create(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -607,7 +699,7 @@ static PyObject *_wrap_StyledTextCtrl_Create(PyObject *self, PyObject *args, PyO
     if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if (obj2) {
-        arg3 = (int) SWIG_AsInt(obj2); 
+        arg3 = (int)SWIG_As_int(obj2); 
         if (PyErr_Occurred()) SWIG_fail;
     }
     if (obj3) {
@@ -623,7 +715,7 @@ static PyObject *_wrap_StyledTextCtrl_Create(PyObject *self, PyObject *args, PyO
         }
     }
     if (obj5) {
-        arg6 = (long) SWIG_AsLong(obj5); 
+        arg6 = (long)SWIG_As_long(obj5); 
         if (PyErr_Occurred()) SWIG_fail;
     }
     if (obj6) {
@@ -655,7 +747,7 @@ static PyObject *_wrap_StyledTextCtrl_Create(PyObject *self, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_AddText(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_AddText(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
@@ -696,7 +788,7 @@ static PyObject *_wrap_StyledTextCtrl_AddText(PyObject *self, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_AddStyledText(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_AddStyledText(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxMemoryBuffer *arg2 = 0 ;
@@ -742,7 +834,7 @@ static PyObject *_wrap_StyledTextCtrl_AddStyledText(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_InsertText(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_InsertText(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -758,7 +850,7 @@ static PyObject *_wrap_StyledTextCtrl_InsertText(PyObject *self, PyObject *args,
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_InsertText",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         arg3 = wxString_in_helper(obj2);
@@ -787,7 +879,7 @@ static PyObject *_wrap_StyledTextCtrl_InsertText(PyObject *self, PyObject *args,
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_ClearAll(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_ClearAll(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -812,7 +904,7 @@ static PyObject *_wrap_StyledTextCtrl_ClearAll(PyObject *self, PyObject *args, P
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_ClearDocumentStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_ClearDocumentStyle(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -837,7 +929,7 @@ static PyObject *_wrap_StyledTextCtrl_ClearDocumentStyle(PyObject *self, PyObjec
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetLength(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetLength(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -856,14 +948,14 @@ static PyObject *_wrap_StyledTextCtrl_GetLength(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetCharAt(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetCharAt(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -877,7 +969,7 @@ static PyObject *_wrap_StyledTextCtrl_GetCharAt(PyObject *self, PyObject *args, 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_GetCharAt",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -886,14 +978,14 @@ static PyObject *_wrap_StyledTextCtrl_GetCharAt(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetCurrentPos(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetCurrentPos(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -912,14 +1004,14 @@ static PyObject *_wrap_StyledTextCtrl_GetCurrentPos(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetAnchor(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetAnchor(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -938,14 +1030,14 @@ static PyObject *_wrap_StyledTextCtrl_GetAnchor(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetStyleAt(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetStyleAt(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -959,7 +1051,7 @@ static PyObject *_wrap_StyledTextCtrl_GetStyleAt(PyObject *self, PyObject *args,
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_GetStyleAt",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -968,14 +1060,14 @@ static PyObject *_wrap_StyledTextCtrl_GetStyleAt(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_Redo(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_Redo(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -1000,7 +1092,7 @@ static PyObject *_wrap_StyledTextCtrl_Redo(PyObject *self, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetUndoCollection(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetUndoCollection(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -1013,7 +1105,7 @@ static PyObject *_wrap_StyledTextCtrl_SetUndoCollection(PyObject *self, PyObject
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetUndoCollection",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1029,7 +1121,7 @@ static PyObject *_wrap_StyledTextCtrl_SetUndoCollection(PyObject *self, PyObject
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SelectAll(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SelectAll(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -1054,7 +1146,7 @@ static PyObject *_wrap_StyledTextCtrl_SelectAll(PyObject *self, PyObject *args, 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetSavePoint(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetSavePoint(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -1079,7 +1171,7 @@ static PyObject *_wrap_StyledTextCtrl_SetSavePoint(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetStyledText(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetStyledText(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -1095,9 +1187,9 @@ static PyObject *_wrap_StyledTextCtrl_GetStyledText(PyObject *self, PyObject *ar
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_GetStyledText",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1115,7 +1207,7 @@ static PyObject *_wrap_StyledTextCtrl_GetStyledText(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_CanRedo(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_CanRedo(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool result;
@@ -1143,7 +1235,7 @@ static PyObject *_wrap_StyledTextCtrl_CanRedo(PyObject *self, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_MarkerLineFromHandle(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_MarkerLineFromHandle(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -1157,7 +1249,7 @@ static PyObject *_wrap_StyledTextCtrl_MarkerLineFromHandle(PyObject *self, PyObj
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_MarkerLineFromHandle",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1166,14 +1258,14 @@ static PyObject *_wrap_StyledTextCtrl_MarkerLineFromHandle(PyObject *self, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_MarkerDeleteHandle(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_MarkerDeleteHandle(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -1186,7 +1278,7 @@ static PyObject *_wrap_StyledTextCtrl_MarkerDeleteHandle(PyObject *self, PyObjec
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_MarkerDeleteHandle",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1202,7 +1294,7 @@ static PyObject *_wrap_StyledTextCtrl_MarkerDeleteHandle(PyObject *self, PyObjec
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetUndoCollection(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetUndoCollection(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool result;
@@ -1230,7 +1322,7 @@ static PyObject *_wrap_StyledTextCtrl_GetUndoCollection(PyObject *self, PyObject
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetViewWhiteSpace(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetViewWhiteSpace(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -1249,14 +1341,14 @@ static PyObject *_wrap_StyledTextCtrl_GetViewWhiteSpace(PyObject *self, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetViewWhiteSpace(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetViewWhiteSpace(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -1269,7 +1361,7 @@ static PyObject *_wrap_StyledTextCtrl_SetViewWhiteSpace(PyObject *self, PyObject
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetViewWhiteSpace",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1285,7 +1377,7 @@ static PyObject *_wrap_StyledTextCtrl_SetViewWhiteSpace(PyObject *self, PyObject
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_PositionFromPoint(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_PositionFromPoint(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxPoint arg2 ;
@@ -1310,14 +1402,14 @@ static PyObject *_wrap_StyledTextCtrl_PositionFromPoint(PyObject *self, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_PositionFromPointClose(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_PositionFromPointClose(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -1333,9 +1425,9 @@ static PyObject *_wrap_StyledTextCtrl_PositionFromPointClose(PyObject *self, PyO
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_PositionFromPointClose",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1344,14 +1436,14 @@ static PyObject *_wrap_StyledTextCtrl_PositionFromPointClose(PyObject *self, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GotoLine(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GotoLine(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -1364,7 +1456,7 @@ static PyObject *_wrap_StyledTextCtrl_GotoLine(PyObject *self, PyObject *args, P
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_GotoLine",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1380,7 +1472,7 @@ static PyObject *_wrap_StyledTextCtrl_GotoLine(PyObject *self, PyObject *args, P
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GotoPos(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GotoPos(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -1393,7 +1485,7 @@ static PyObject *_wrap_StyledTextCtrl_GotoPos(PyObject *self, PyObject *args, Py
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_GotoPos",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1409,7 +1501,7 @@ static PyObject *_wrap_StyledTextCtrl_GotoPos(PyObject *self, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetAnchor(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetAnchor(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -1422,7 +1514,7 @@ static PyObject *_wrap_StyledTextCtrl_SetAnchor(PyObject *self, PyObject *args, 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetAnchor",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1438,18 +1530,19 @@ static PyObject *_wrap_StyledTextCtrl_SetAnchor(PyObject *self, PyObject *args, 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetCurLine(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetCurLine(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int *arg2 = (int *) 0 ;
     wxString result;
     int temp2 ;
+    int res2 = 0 ;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "self", NULL 
     };
     
-    arg2 = &temp2;
+    arg2 = &temp2; res2 = SWIG_NEWOBJ;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:StyledTextCtrl_GetCurLine",kwnames,&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
@@ -1467,17 +1560,15 @@ static PyObject *_wrap_StyledTextCtrl_GetCurLine(PyObject *self, PyObject *args,
         resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
 #endif
     }
-    {
-        PyObject *o = PyInt_FromLong((long) (*arg2));
-        resultobj = t_output_helper(resultobj,o);
-    }
+    resultobj = t_output_helper(resultobj, ((res2 == SWIG_NEWOBJ) ?
+    SWIG_From_int((*arg2)) : SWIG_NewPointerObj((void*)(arg2), SWIGTYPE_p_int, 0)));
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetEndStyled(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetEndStyled(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -1496,14 +1587,14 @@ static PyObject *_wrap_StyledTextCtrl_GetEndStyled(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_ConvertEOLs(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_ConvertEOLs(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -1516,7 +1607,7 @@ static PyObject *_wrap_StyledTextCtrl_ConvertEOLs(PyObject *self, PyObject *args
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_ConvertEOLs",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1532,7 +1623,7 @@ static PyObject *_wrap_StyledTextCtrl_ConvertEOLs(PyObject *self, PyObject *args
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetEOLMode(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetEOLMode(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -1551,14 +1642,14 @@ static PyObject *_wrap_StyledTextCtrl_GetEOLMode(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetEOLMode(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetEOLMode(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -1571,7 +1662,7 @@ static PyObject *_wrap_StyledTextCtrl_SetEOLMode(PyObject *self, PyObject *args,
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetEOLMode",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1587,7 +1678,7 @@ static PyObject *_wrap_StyledTextCtrl_SetEOLMode(PyObject *self, PyObject *args,
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_StartStyling(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_StartStyling(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -1602,9 +1693,9 @@ static PyObject *_wrap_StyledTextCtrl_StartStyling(PyObject *self, PyObject *arg
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_StartStyling",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1620,7 +1711,7 @@ static PyObject *_wrap_StyledTextCtrl_StartStyling(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetStyling(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetStyling(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -1635,9 +1726,9 @@ static PyObject *_wrap_StyledTextCtrl_SetStyling(PyObject *self, PyObject *args,
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_SetStyling",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1653,7 +1744,7 @@ static PyObject *_wrap_StyledTextCtrl_SetStyling(PyObject *self, PyObject *args,
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetBufferedDraw(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetBufferedDraw(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool result;
@@ -1681,7 +1772,7 @@ static PyObject *_wrap_StyledTextCtrl_GetBufferedDraw(PyObject *self, PyObject *
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetBufferedDraw(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetBufferedDraw(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -1694,7 +1785,7 @@ static PyObject *_wrap_StyledTextCtrl_SetBufferedDraw(PyObject *self, PyObject *
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetBufferedDraw",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1710,7 +1801,7 @@ static PyObject *_wrap_StyledTextCtrl_SetBufferedDraw(PyObject *self, PyObject *
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetTabWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetTabWidth(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -1723,7 +1814,7 @@ static PyObject *_wrap_StyledTextCtrl_SetTabWidth(PyObject *self, PyObject *args
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetTabWidth",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1739,7 +1830,7 @@ static PyObject *_wrap_StyledTextCtrl_SetTabWidth(PyObject *self, PyObject *args
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetTabWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetTabWidth(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -1758,14 +1849,14 @@ static PyObject *_wrap_StyledTextCtrl_GetTabWidth(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetCodePage(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetCodePage(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -1778,7 +1869,7 @@ static PyObject *_wrap_StyledTextCtrl_SetCodePage(PyObject *self, PyObject *args
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetCodePage",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1794,7 +1885,7 @@ static PyObject *_wrap_StyledTextCtrl_SetCodePage(PyObject *self, PyObject *args
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_MarkerDefine(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_MarkerDefine(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -1817,9 +1908,9 @@ static PyObject *_wrap_StyledTextCtrl_MarkerDefine(PyObject *self, PyObject *arg
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OO:StyledTextCtrl_MarkerDefine",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     if (obj3) {
         {
@@ -1847,7 +1938,7 @@ static PyObject *_wrap_StyledTextCtrl_MarkerDefine(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_MarkerSetForeground(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_MarkerSetForeground(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -1863,7 +1954,7 @@ static PyObject *_wrap_StyledTextCtrl_MarkerSetForeground(PyObject *self, PyObje
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_MarkerSetForeground",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         arg3 = &temp3;
@@ -1883,7 +1974,7 @@ static PyObject *_wrap_StyledTextCtrl_MarkerSetForeground(PyObject *self, PyObje
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_MarkerSetBackground(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_MarkerSetBackground(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -1899,7 +1990,7 @@ static PyObject *_wrap_StyledTextCtrl_MarkerSetBackground(PyObject *self, PyObje
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_MarkerSetBackground",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         arg3 = &temp3;
@@ -1919,7 +2010,7 @@ static PyObject *_wrap_StyledTextCtrl_MarkerSetBackground(PyObject *self, PyObje
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_MarkerAdd(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_MarkerAdd(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -1935,9 +2026,9 @@ static PyObject *_wrap_StyledTextCtrl_MarkerAdd(PyObject *self, PyObject *args, 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_MarkerAdd",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1946,14 +2037,14 @@ static PyObject *_wrap_StyledTextCtrl_MarkerAdd(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_MarkerDelete(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_MarkerDelete(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -1968,9 +2059,9 @@ static PyObject *_wrap_StyledTextCtrl_MarkerDelete(PyObject *self, PyObject *arg
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_MarkerDelete",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1986,7 +2077,7 @@ static PyObject *_wrap_StyledTextCtrl_MarkerDelete(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_MarkerDeleteAll(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_MarkerDeleteAll(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -1999,7 +2090,7 @@ static PyObject *_wrap_StyledTextCtrl_MarkerDeleteAll(PyObject *self, PyObject *
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_MarkerDeleteAll",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2015,7 +2106,7 @@ static PyObject *_wrap_StyledTextCtrl_MarkerDeleteAll(PyObject *self, PyObject *
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_MarkerGet(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_MarkerGet(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -2029,7 +2120,7 @@ static PyObject *_wrap_StyledTextCtrl_MarkerGet(PyObject *self, PyObject *args, 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_MarkerGet",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2038,14 +2129,14 @@ static PyObject *_wrap_StyledTextCtrl_MarkerGet(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_MarkerNext(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_MarkerNext(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -2061,9 +2152,9 @@ static PyObject *_wrap_StyledTextCtrl_MarkerNext(PyObject *self, PyObject *args,
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_MarkerNext",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2072,14 +2163,14 @@ static PyObject *_wrap_StyledTextCtrl_MarkerNext(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_MarkerPrevious(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_MarkerPrevious(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -2095,9 +2186,9 @@ static PyObject *_wrap_StyledTextCtrl_MarkerPrevious(PyObject *self, PyObject *a
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_MarkerPrevious",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2106,14 +2197,14 @@ static PyObject *_wrap_StyledTextCtrl_MarkerPrevious(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_MarkerDefineBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_MarkerDefineBitmap(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -2128,7 +2219,7 @@ static PyObject *_wrap_StyledTextCtrl_MarkerDefineBitmap(PyObject *self, PyObjec
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_MarkerDefineBitmap",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_wxBitmap,
     SWIG_POINTER_EXCEPTION | 0)) == -1)
@@ -2151,7 +2242,7 @@ static PyObject *_wrap_StyledTextCtrl_MarkerDefineBitmap(PyObject *self, PyObjec
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetMarginType(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetMarginType(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -2166,9 +2257,9 @@ static PyObject *_wrap_StyledTextCtrl_SetMarginType(PyObject *self, PyObject *ar
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_SetMarginType",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2184,7 +2275,7 @@ static PyObject *_wrap_StyledTextCtrl_SetMarginType(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetMarginType(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetMarginType(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -2198,7 +2289,7 @@ static PyObject *_wrap_StyledTextCtrl_GetMarginType(PyObject *self, PyObject *ar
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_GetMarginType",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2207,14 +2298,14 @@ static PyObject *_wrap_StyledTextCtrl_GetMarginType(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetMarginWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetMarginWidth(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -2229,9 +2320,9 @@ static PyObject *_wrap_StyledTextCtrl_SetMarginWidth(PyObject *self, PyObject *a
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_SetMarginWidth",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2247,7 +2338,7 @@ static PyObject *_wrap_StyledTextCtrl_SetMarginWidth(PyObject *self, PyObject *a
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetMarginWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetMarginWidth(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -2261,7 +2352,7 @@ static PyObject *_wrap_StyledTextCtrl_GetMarginWidth(PyObject *self, PyObject *a
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_GetMarginWidth",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2270,14 +2361,14 @@ static PyObject *_wrap_StyledTextCtrl_GetMarginWidth(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetMarginMask(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetMarginMask(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -2292,9 +2383,9 @@ static PyObject *_wrap_StyledTextCtrl_SetMarginMask(PyObject *self, PyObject *ar
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_SetMarginMask",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2310,7 +2401,7 @@ static PyObject *_wrap_StyledTextCtrl_SetMarginMask(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetMarginMask(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetMarginMask(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -2324,7 +2415,7 @@ static PyObject *_wrap_StyledTextCtrl_GetMarginMask(PyObject *self, PyObject *ar
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_GetMarginMask",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2333,14 +2424,14 @@ static PyObject *_wrap_StyledTextCtrl_GetMarginMask(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetMarginSensitive(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetMarginSensitive(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -2355,9 +2446,9 @@ static PyObject *_wrap_StyledTextCtrl_SetMarginSensitive(PyObject *self, PyObjec
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_SetMarginSensitive",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (bool) SWIG_AsBool(obj2); 
+    arg3 = (bool)SWIG_As_bool(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2373,7 +2464,7 @@ static PyObject *_wrap_StyledTextCtrl_SetMarginSensitive(PyObject *self, PyObjec
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetMarginSensitive(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetMarginSensitive(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -2387,7 +2478,7 @@ static PyObject *_wrap_StyledTextCtrl_GetMarginSensitive(PyObject *self, PyObjec
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_GetMarginSensitive",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2405,7 +2496,7 @@ static PyObject *_wrap_StyledTextCtrl_GetMarginSensitive(PyObject *self, PyObjec
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_StyleClearAll(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_StyleClearAll(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -2430,7 +2521,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleClearAll(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_StyleSetForeground(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_StyleSetForeground(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -2446,7 +2537,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetForeground(PyObject *self, PyObjec
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_StyleSetForeground",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         arg3 = &temp3;
@@ -2466,7 +2557,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetForeground(PyObject *self, PyObjec
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_StyleSetBackground(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_StyleSetBackground(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -2482,7 +2573,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetBackground(PyObject *self, PyObjec
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_StyleSetBackground",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         arg3 = &temp3;
@@ -2502,7 +2593,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetBackground(PyObject *self, PyObjec
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_StyleSetBold(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_StyleSetBold(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -2517,9 +2608,9 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetBold(PyObject *self, PyObject *arg
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_StyleSetBold",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (bool) SWIG_AsBool(obj2); 
+    arg3 = (bool)SWIG_As_bool(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2535,7 +2626,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetBold(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_StyleSetItalic(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_StyleSetItalic(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -2550,9 +2641,9 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetItalic(PyObject *self, PyObject *a
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_StyleSetItalic",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (bool) SWIG_AsBool(obj2); 
+    arg3 = (bool)SWIG_As_bool(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2568,7 +2659,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetItalic(PyObject *self, PyObject *a
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_StyleSetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_StyleSetSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -2583,9 +2674,9 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetSize(PyObject *self, PyObject *arg
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_StyleSetSize",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2601,7 +2692,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetSize(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_StyleSetFaceName(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_StyleSetFaceName(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -2617,7 +2708,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetFaceName(PyObject *self, PyObject 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_StyleSetFaceName",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         arg3 = wxString_in_helper(obj2);
@@ -2646,7 +2737,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetFaceName(PyObject *self, PyObject 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_StyleSetEOLFilled(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_StyleSetEOLFilled(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -2661,9 +2752,9 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetEOLFilled(PyObject *self, PyObject
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_StyleSetEOLFilled",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (bool) SWIG_AsBool(obj2); 
+    arg3 = (bool)SWIG_As_bool(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2679,7 +2770,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetEOLFilled(PyObject *self, PyObject
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_StyleResetDefault(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_StyleResetDefault(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -2704,7 +2795,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleResetDefault(PyObject *self, PyObject
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_StyleSetUnderline(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_StyleSetUnderline(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -2719,9 +2810,9 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetUnderline(PyObject *self, PyObject
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_StyleSetUnderline",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (bool) SWIG_AsBool(obj2); 
+    arg3 = (bool)SWIG_As_bool(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2737,7 +2828,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetUnderline(PyObject *self, PyObject
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_StyleSetCase(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_StyleSetCase(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -2752,9 +2843,9 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetCase(PyObject *self, PyObject *arg
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_StyleSetCase",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2770,7 +2861,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetCase(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_StyleSetCharacterSet(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_StyleSetCharacterSet(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -2785,9 +2876,9 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetCharacterSet(PyObject *self, PyObj
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_StyleSetCharacterSet",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2803,7 +2894,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetCharacterSet(PyObject *self, PyObj
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_StyleSetHotSpot(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_StyleSetHotSpot(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -2818,9 +2909,9 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetHotSpot(PyObject *self, PyObject *
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_StyleSetHotSpot",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (bool) SWIG_AsBool(obj2); 
+    arg3 = (bool)SWIG_As_bool(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2836,7 +2927,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetHotSpot(PyObject *self, PyObject *
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetSelForeground(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetSelForeground(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -2852,7 +2943,7 @@ static PyObject *_wrap_StyledTextCtrl_SetSelForeground(PyObject *self, PyObject 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_SetSelForeground",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         arg3 = &temp3;
@@ -2872,7 +2963,7 @@ static PyObject *_wrap_StyledTextCtrl_SetSelForeground(PyObject *self, PyObject 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetSelBackground(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetSelBackground(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -2888,7 +2979,7 @@ static PyObject *_wrap_StyledTextCtrl_SetSelBackground(PyObject *self, PyObject 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_SetSelBackground",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         arg3 = &temp3;
@@ -2908,7 +2999,7 @@ static PyObject *_wrap_StyledTextCtrl_SetSelBackground(PyObject *self, PyObject 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetCaretForeground(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetCaretForeground(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxColour *arg2 = 0 ;
@@ -2940,7 +3031,7 @@ static PyObject *_wrap_StyledTextCtrl_SetCaretForeground(PyObject *self, PyObjec
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_CmdKeyAssign(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_CmdKeyAssign(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -2957,11 +3048,11 @@ static PyObject *_wrap_StyledTextCtrl_CmdKeyAssign(PyObject *self, PyObject *arg
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:StyledTextCtrl_CmdKeyAssign",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg4 = (int) SWIG_AsInt(obj3); 
+    arg4 = (int)SWIG_As_int(obj3); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2977,7 +3068,7 @@ static PyObject *_wrap_StyledTextCtrl_CmdKeyAssign(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_CmdKeyClear(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_CmdKeyClear(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -2992,9 +3083,9 @@ static PyObject *_wrap_StyledTextCtrl_CmdKeyClear(PyObject *self, PyObject *args
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_CmdKeyClear",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -3010,7 +3101,7 @@ static PyObject *_wrap_StyledTextCtrl_CmdKeyClear(PyObject *self, PyObject *args
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_CmdKeyClearAll(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_CmdKeyClearAll(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -3035,7 +3126,7 @@ static PyObject *_wrap_StyledTextCtrl_CmdKeyClearAll(PyObject *self, PyObject *a
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetStyleBytes(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetStyleBytes(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -3050,10 +3141,9 @@ static PyObject *_wrap_StyledTextCtrl_SetStyleBytes(PyObject *self, PyObject *ar
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_SetStyleBytes",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = SWIG_AsCharPtr(obj2);
-    if (PyErr_Occurred()) SWIG_fail;
+    if (!SWIG_AsCharPtr(obj2, (char**)&arg3)) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetStyleBytes(arg2,arg3);
@@ -3068,7 +3158,7 @@ static PyObject *_wrap_StyledTextCtrl_SetStyleBytes(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_StyleSetVisible(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_StyleSetVisible(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -3083,9 +3173,9 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetVisible(PyObject *self, PyObject *
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_StyleSetVisible",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (bool) SWIG_AsBool(obj2); 
+    arg3 = (bool)SWIG_As_bool(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -3101,7 +3191,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetVisible(PyObject *self, PyObject *
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetCaretPeriod(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetCaretPeriod(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -3120,14 +3210,14 @@ static PyObject *_wrap_StyledTextCtrl_GetCaretPeriod(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetCaretPeriod(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetCaretPeriod(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -3140,7 +3230,7 @@ static PyObject *_wrap_StyledTextCtrl_SetCaretPeriod(PyObject *self, PyObject *a
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetCaretPeriod",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -3156,7 +3246,7 @@ static PyObject *_wrap_StyledTextCtrl_SetCaretPeriod(PyObject *self, PyObject *a
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetWordChars(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetWordChars(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
@@ -3197,7 +3287,7 @@ static PyObject *_wrap_StyledTextCtrl_SetWordChars(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_BeginUndoAction(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_BeginUndoAction(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -3222,7 +3312,7 @@ static PyObject *_wrap_StyledTextCtrl_BeginUndoAction(PyObject *self, PyObject *
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_EndUndoAction(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_EndUndoAction(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -3247,7 +3337,7 @@ static PyObject *_wrap_StyledTextCtrl_EndUndoAction(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_IndicatorSetStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_IndicatorSetStyle(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -3262,9 +3352,9 @@ static PyObject *_wrap_StyledTextCtrl_IndicatorSetStyle(PyObject *self, PyObject
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_IndicatorSetStyle",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -3280,7 +3370,7 @@ static PyObject *_wrap_StyledTextCtrl_IndicatorSetStyle(PyObject *self, PyObject
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_IndicatorGetStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_IndicatorGetStyle(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -3294,7 +3384,7 @@ static PyObject *_wrap_StyledTextCtrl_IndicatorGetStyle(PyObject *self, PyObject
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_IndicatorGetStyle",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -3303,14 +3393,14 @@ static PyObject *_wrap_StyledTextCtrl_IndicatorGetStyle(PyObject *self, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_IndicatorSetForeground(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_IndicatorSetForeground(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -3326,7 +3416,7 @@ static PyObject *_wrap_StyledTextCtrl_IndicatorSetForeground(PyObject *self, PyO
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_IndicatorSetForeground",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         arg3 = &temp3;
@@ -3346,7 +3436,7 @@ static PyObject *_wrap_StyledTextCtrl_IndicatorSetForeground(PyObject *self, PyO
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_IndicatorGetForeground(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_IndicatorGetForeground(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -3360,7 +3450,7 @@ static PyObject *_wrap_StyledTextCtrl_IndicatorGetForeground(PyObject *self, PyO
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_IndicatorGetForeground",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -3380,7 +3470,7 @@ static PyObject *_wrap_StyledTextCtrl_IndicatorGetForeground(PyObject *self, PyO
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetWhitespaceForeground(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetWhitespaceForeground(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -3396,7 +3486,7 @@ static PyObject *_wrap_StyledTextCtrl_SetWhitespaceForeground(PyObject *self, Py
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_SetWhitespaceForeground",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         arg3 = &temp3;
@@ -3416,7 +3506,7 @@ static PyObject *_wrap_StyledTextCtrl_SetWhitespaceForeground(PyObject *self, Py
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetWhitespaceBackground(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetWhitespaceBackground(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -3432,7 +3522,7 @@ static PyObject *_wrap_StyledTextCtrl_SetWhitespaceBackground(PyObject *self, Py
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_SetWhitespaceBackground",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         arg3 = &temp3;
@@ -3452,7 +3542,7 @@ static PyObject *_wrap_StyledTextCtrl_SetWhitespaceBackground(PyObject *self, Py
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetStyleBits(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetStyleBits(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -3465,7 +3555,7 @@ static PyObject *_wrap_StyledTextCtrl_SetStyleBits(PyObject *self, PyObject *arg
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetStyleBits",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -3481,7 +3571,7 @@ static PyObject *_wrap_StyledTextCtrl_SetStyleBits(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetStyleBits(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetStyleBits(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -3500,14 +3590,14 @@ static PyObject *_wrap_StyledTextCtrl_GetStyleBits(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetLineState(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetLineState(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -3522,9 +3612,9 @@ static PyObject *_wrap_StyledTextCtrl_SetLineState(PyObject *self, PyObject *arg
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_SetLineState",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -3540,7 +3630,7 @@ static PyObject *_wrap_StyledTextCtrl_SetLineState(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetLineState(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetLineState(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -3554,7 +3644,7 @@ static PyObject *_wrap_StyledTextCtrl_GetLineState(PyObject *self, PyObject *arg
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_GetLineState",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -3563,14 +3653,14 @@ static PyObject *_wrap_StyledTextCtrl_GetLineState(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetMaxLineState(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetMaxLineState(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -3589,14 +3679,14 @@ static PyObject *_wrap_StyledTextCtrl_GetMaxLineState(PyObject *self, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetCaretLineVisible(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetCaretLineVisible(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool result;
@@ -3624,7 +3714,7 @@ static PyObject *_wrap_StyledTextCtrl_GetCaretLineVisible(PyObject *self, PyObje
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetCaretLineVisible(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetCaretLineVisible(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -3637,7 +3727,7 @@ static PyObject *_wrap_StyledTextCtrl_SetCaretLineVisible(PyObject *self, PyObje
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetCaretLineVisible",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -3653,7 +3743,7 @@ static PyObject *_wrap_StyledTextCtrl_SetCaretLineVisible(PyObject *self, PyObje
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetCaretLineBack(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetCaretLineBack(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxColour result;
@@ -3683,7 +3773,7 @@ static PyObject *_wrap_StyledTextCtrl_GetCaretLineBack(PyObject *self, PyObject 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetCaretLineBack(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetCaretLineBack(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxColour *arg2 = 0 ;
@@ -3715,7 +3805,7 @@ static PyObject *_wrap_StyledTextCtrl_SetCaretLineBack(PyObject *self, PyObject 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_StyleSetChangeable(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_StyleSetChangeable(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -3730,9 +3820,9 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetChangeable(PyObject *self, PyObjec
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_StyleSetChangeable",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (bool) SWIG_AsBool(obj2); 
+    arg3 = (bool)SWIG_As_bool(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -3748,7 +3838,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetChangeable(PyObject *self, PyObjec
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_AutoCompShow(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_AutoCompShow(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -3764,7 +3854,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompShow(PyObject *self, PyObject *arg
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_AutoCompShow",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         arg3 = wxString_in_helper(obj2);
@@ -3793,7 +3883,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompShow(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_AutoCompCancel(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_AutoCompCancel(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -3818,7 +3908,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompCancel(PyObject *self, PyObject *a
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_AutoCompActive(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_AutoCompActive(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool result;
@@ -3846,7 +3936,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompActive(PyObject *self, PyObject *a
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_AutoCompPosStart(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_AutoCompPosStart(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -3865,14 +3955,14 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompPosStart(PyObject *self, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_AutoCompComplete(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_AutoCompComplete(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -3897,7 +3987,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompComplete(PyObject *self, PyObject 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_AutoCompStops(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_AutoCompStops(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
@@ -3938,7 +4028,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompStops(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_AutoCompSetSeparator(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_AutoCompSetSeparator(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -3951,7 +4041,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompSetSeparator(PyObject *self, PyObj
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_AutoCompSetSeparator",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -3967,7 +4057,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompSetSeparator(PyObject *self, PyObj
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_AutoCompGetSeparator(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_AutoCompGetSeparator(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -3986,14 +4076,14 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompGetSeparator(PyObject *self, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_AutoCompSelect(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_AutoCompSelect(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
@@ -4034,7 +4124,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompSelect(PyObject *self, PyObject *a
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_AutoCompSetCancelAtStart(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_AutoCompSetCancelAtStart(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -4047,7 +4137,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompSetCancelAtStart(PyObject *self, P
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_AutoCompSetCancelAtStart",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -4063,7 +4153,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompSetCancelAtStart(PyObject *self, P
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_AutoCompGetCancelAtStart(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_AutoCompGetCancelAtStart(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool result;
@@ -4091,7 +4181,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompGetCancelAtStart(PyObject *self, P
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_AutoCompSetFillUps(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_AutoCompSetFillUps(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
@@ -4132,7 +4222,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompSetFillUps(PyObject *self, PyObjec
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_AutoCompSetChooseSingle(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_AutoCompSetChooseSingle(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -4145,7 +4235,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompSetChooseSingle(PyObject *self, Py
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_AutoCompSetChooseSingle",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -4161,7 +4251,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompSetChooseSingle(PyObject *self, Py
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_AutoCompGetChooseSingle(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_AutoCompGetChooseSingle(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool result;
@@ -4189,7 +4279,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompGetChooseSingle(PyObject *self, Py
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_AutoCompSetIgnoreCase(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_AutoCompSetIgnoreCase(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -4202,7 +4292,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompSetIgnoreCase(PyObject *self, PyOb
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_AutoCompSetIgnoreCase",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -4218,7 +4308,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompSetIgnoreCase(PyObject *self, PyOb
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_AutoCompGetIgnoreCase(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_AutoCompGetIgnoreCase(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool result;
@@ -4246,7 +4336,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompGetIgnoreCase(PyObject *self, PyOb
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_UserListShow(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_UserListShow(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -4262,7 +4352,7 @@ static PyObject *_wrap_StyledTextCtrl_UserListShow(PyObject *self, PyObject *arg
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_UserListShow",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         arg3 = wxString_in_helper(obj2);
@@ -4291,7 +4381,7 @@ static PyObject *_wrap_StyledTextCtrl_UserListShow(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_AutoCompSetAutoHide(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_AutoCompSetAutoHide(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -4304,7 +4394,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompSetAutoHide(PyObject *self, PyObje
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_AutoCompSetAutoHide",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -4320,7 +4410,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompSetAutoHide(PyObject *self, PyObje
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_AutoCompGetAutoHide(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_AutoCompGetAutoHide(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool result;
@@ -4348,7 +4438,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompGetAutoHide(PyObject *self, PyObje
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_AutoCompSetDropRestOfWord(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_AutoCompSetDropRestOfWord(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -4361,7 +4451,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompSetDropRestOfWord(PyObject *self, 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_AutoCompSetDropRestOfWord",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -4377,7 +4467,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompSetDropRestOfWord(PyObject *self, 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_AutoCompGetDropRestOfWord(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_AutoCompGetDropRestOfWord(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool result;
@@ -4405,7 +4495,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompGetDropRestOfWord(PyObject *self, 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_RegisterImage(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_RegisterImage(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -4420,7 +4510,7 @@ static PyObject *_wrap_StyledTextCtrl_RegisterImage(PyObject *self, PyObject *ar
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_RegisterImage",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_wxBitmap,
     SWIG_POINTER_EXCEPTION | 0)) == -1)
@@ -4443,7 +4533,7 @@ static PyObject *_wrap_StyledTextCtrl_RegisterImage(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_ClearRegisteredImages(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_ClearRegisteredImages(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -4468,7 +4558,7 @@ static PyObject *_wrap_StyledTextCtrl_ClearRegisteredImages(PyObject *self, PyOb
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_AutoCompGetTypeSeparator(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_AutoCompGetTypeSeparator(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -4487,14 +4577,14 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompGetTypeSeparator(PyObject *self, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_AutoCompSetTypeSeparator(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_AutoCompSetTypeSeparator(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -4507,7 +4597,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompSetTypeSeparator(PyObject *self, P
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_AutoCompSetTypeSeparator",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -4523,7 +4613,7 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompSetTypeSeparator(PyObject *self, P
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetIndent(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetIndent(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -4536,7 +4626,7 @@ static PyObject *_wrap_StyledTextCtrl_SetIndent(PyObject *self, PyObject *args, 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetIndent",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -4552,7 +4642,7 @@ static PyObject *_wrap_StyledTextCtrl_SetIndent(PyObject *self, PyObject *args, 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetIndent(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetIndent(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -4571,14 +4661,14 @@ static PyObject *_wrap_StyledTextCtrl_GetIndent(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetUseTabs(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetUseTabs(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -4591,7 +4681,7 @@ static PyObject *_wrap_StyledTextCtrl_SetUseTabs(PyObject *self, PyObject *args,
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetUseTabs",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -4607,7 +4697,7 @@ static PyObject *_wrap_StyledTextCtrl_SetUseTabs(PyObject *self, PyObject *args,
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetUseTabs(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetUseTabs(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool result;
@@ -4635,7 +4725,7 @@ static PyObject *_wrap_StyledTextCtrl_GetUseTabs(PyObject *self, PyObject *args,
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetLineIndentation(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetLineIndentation(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -4650,9 +4740,9 @@ static PyObject *_wrap_StyledTextCtrl_SetLineIndentation(PyObject *self, PyObjec
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_SetLineIndentation",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -4668,7 +4758,7 @@ static PyObject *_wrap_StyledTextCtrl_SetLineIndentation(PyObject *self, PyObjec
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetLineIndentation(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetLineIndentation(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -4682,7 +4772,7 @@ static PyObject *_wrap_StyledTextCtrl_GetLineIndentation(PyObject *self, PyObjec
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_GetLineIndentation",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -4691,14 +4781,14 @@ static PyObject *_wrap_StyledTextCtrl_GetLineIndentation(PyObject *self, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetLineIndentPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetLineIndentPosition(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -4712,7 +4802,7 @@ static PyObject *_wrap_StyledTextCtrl_GetLineIndentPosition(PyObject *self, PyOb
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_GetLineIndentPosition",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -4721,14 +4811,14 @@ static PyObject *_wrap_StyledTextCtrl_GetLineIndentPosition(PyObject *self, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetColumn(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetColumn(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -4742,7 +4832,7 @@ static PyObject *_wrap_StyledTextCtrl_GetColumn(PyObject *self, PyObject *args, 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_GetColumn",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -4751,14 +4841,14 @@ static PyObject *_wrap_StyledTextCtrl_GetColumn(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetUseHorizontalScrollBar(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetUseHorizontalScrollBar(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -4771,7 +4861,7 @@ static PyObject *_wrap_StyledTextCtrl_SetUseHorizontalScrollBar(PyObject *self, 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetUseHorizontalScrollBar",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -4787,7 +4877,7 @@ static PyObject *_wrap_StyledTextCtrl_SetUseHorizontalScrollBar(PyObject *self, 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetUseHorizontalScrollBar(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetUseHorizontalScrollBar(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool result;
@@ -4815,7 +4905,7 @@ static PyObject *_wrap_StyledTextCtrl_GetUseHorizontalScrollBar(PyObject *self, 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetIndentationGuides(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetIndentationGuides(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -4828,7 +4918,7 @@ static PyObject *_wrap_StyledTextCtrl_SetIndentationGuides(PyObject *self, PyObj
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetIndentationGuides",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -4844,7 +4934,7 @@ static PyObject *_wrap_StyledTextCtrl_SetIndentationGuides(PyObject *self, PyObj
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetIndentationGuides(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetIndentationGuides(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool result;
@@ -4872,7 +4962,7 @@ static PyObject *_wrap_StyledTextCtrl_GetIndentationGuides(PyObject *self, PyObj
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetHighlightGuide(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetHighlightGuide(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -4885,7 +4975,7 @@ static PyObject *_wrap_StyledTextCtrl_SetHighlightGuide(PyObject *self, PyObject
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetHighlightGuide",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -4901,7 +4991,7 @@ static PyObject *_wrap_StyledTextCtrl_SetHighlightGuide(PyObject *self, PyObject
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetHighlightGuide(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetHighlightGuide(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -4920,14 +5010,14 @@ static PyObject *_wrap_StyledTextCtrl_GetHighlightGuide(PyObject *self, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetLineEndPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetLineEndPosition(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -4941,7 +5031,7 @@ static PyObject *_wrap_StyledTextCtrl_GetLineEndPosition(PyObject *self, PyObjec
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_GetLineEndPosition",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -4950,14 +5040,14 @@ static PyObject *_wrap_StyledTextCtrl_GetLineEndPosition(PyObject *self, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetCodePage(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetCodePage(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -4976,14 +5066,14 @@ static PyObject *_wrap_StyledTextCtrl_GetCodePage(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetCaretForeground(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetCaretForeground(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxColour result;
@@ -5013,7 +5103,7 @@ static PyObject *_wrap_StyledTextCtrl_GetCaretForeground(PyObject *self, PyObjec
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetReadOnly(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetReadOnly(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool result;
@@ -5041,7 +5131,7 @@ static PyObject *_wrap_StyledTextCtrl_GetReadOnly(PyObject *self, PyObject *args
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetCurrentPos(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetCurrentPos(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -5054,7 +5144,7 @@ static PyObject *_wrap_StyledTextCtrl_SetCurrentPos(PyObject *self, PyObject *ar
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetCurrentPos",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5070,7 +5160,7 @@ static PyObject *_wrap_StyledTextCtrl_SetCurrentPos(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetSelectionStart(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetSelectionStart(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -5083,7 +5173,7 @@ static PyObject *_wrap_StyledTextCtrl_SetSelectionStart(PyObject *self, PyObject
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetSelectionStart",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5099,7 +5189,7 @@ static PyObject *_wrap_StyledTextCtrl_SetSelectionStart(PyObject *self, PyObject
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetSelectionStart(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetSelectionStart(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -5118,14 +5208,14 @@ static PyObject *_wrap_StyledTextCtrl_GetSelectionStart(PyObject *self, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetSelectionEnd(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetSelectionEnd(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -5138,7 +5228,7 @@ static PyObject *_wrap_StyledTextCtrl_SetSelectionEnd(PyObject *self, PyObject *
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetSelectionEnd",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5154,7 +5244,7 @@ static PyObject *_wrap_StyledTextCtrl_SetSelectionEnd(PyObject *self, PyObject *
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetSelectionEnd(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetSelectionEnd(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -5173,14 +5263,14 @@ static PyObject *_wrap_StyledTextCtrl_GetSelectionEnd(PyObject *self, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetPrintMagnification(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetPrintMagnification(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -5193,7 +5283,7 @@ static PyObject *_wrap_StyledTextCtrl_SetPrintMagnification(PyObject *self, PyOb
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetPrintMagnification",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5209,7 +5299,7 @@ static PyObject *_wrap_StyledTextCtrl_SetPrintMagnification(PyObject *self, PyOb
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetPrintMagnification(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetPrintMagnification(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -5228,14 +5318,14 @@ static PyObject *_wrap_StyledTextCtrl_GetPrintMagnification(PyObject *self, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetPrintColourMode(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetPrintColourMode(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -5248,7 +5338,7 @@ static PyObject *_wrap_StyledTextCtrl_SetPrintColourMode(PyObject *self, PyObjec
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetPrintColourMode",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5264,7 +5354,7 @@ static PyObject *_wrap_StyledTextCtrl_SetPrintColourMode(PyObject *self, PyObjec
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetPrintColourMode(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetPrintColourMode(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -5283,14 +5373,14 @@ static PyObject *_wrap_StyledTextCtrl_GetPrintColourMode(PyObject *self, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_FindText(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_FindText(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -5311,9 +5401,9 @@ static PyObject *_wrap_StyledTextCtrl_FindText(PyObject *self, PyObject *args, P
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO|O:StyledTextCtrl_FindText",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         arg4 = wxString_in_helper(obj3);
@@ -5321,7 +5411,7 @@ static PyObject *_wrap_StyledTextCtrl_FindText(PyObject *self, PyObject *args, P
         temp4 = True;
     }
     if (obj4) {
-        arg5 = (int) SWIG_AsInt(obj4); 
+        arg5 = (int)SWIG_As_int(obj4); 
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
@@ -5331,7 +5421,7 @@ static PyObject *_wrap_StyledTextCtrl_FindText(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     {
         if (temp4)
         delete arg4;
@@ -5346,7 +5436,7 @@ static PyObject *_wrap_StyledTextCtrl_FindText(PyObject *self, PyObject *args, P
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_FormatRange(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_FormatRange(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -5374,11 +5464,11 @@ static PyObject *_wrap_StyledTextCtrl_FormatRange(PyObject *self, PyObject *args
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOOOO:StyledTextCtrl_FormatRange",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg4 = (int) SWIG_AsInt(obj3); 
+    arg4 = (int)SWIG_As_int(obj3); 
     if (PyErr_Occurred()) SWIG_fail;
     if ((SWIG_ConvertPtr(obj4,(void **)(&arg5),SWIGTYPE_p_wxDC,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
@@ -5397,14 +5487,14 @@ static PyObject *_wrap_StyledTextCtrl_FormatRange(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetFirstVisibleLine(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetFirstVisibleLine(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -5423,14 +5513,14 @@ static PyObject *_wrap_StyledTextCtrl_GetFirstVisibleLine(PyObject *self, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetLine(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetLine(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -5444,7 +5534,7 @@ static PyObject *_wrap_StyledTextCtrl_GetLine(PyObject *self, PyObject *args, Py
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_GetLine",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5466,7 +5556,7 @@ static PyObject *_wrap_StyledTextCtrl_GetLine(PyObject *self, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetLineCount(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetLineCount(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -5485,14 +5575,14 @@ static PyObject *_wrap_StyledTextCtrl_GetLineCount(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetMarginLeft(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetMarginLeft(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -5505,7 +5595,7 @@ static PyObject *_wrap_StyledTextCtrl_SetMarginLeft(PyObject *self, PyObject *ar
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetMarginLeft",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5521,7 +5611,7 @@ static PyObject *_wrap_StyledTextCtrl_SetMarginLeft(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetMarginLeft(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetMarginLeft(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -5540,14 +5630,14 @@ static PyObject *_wrap_StyledTextCtrl_GetMarginLeft(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetMarginRight(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetMarginRight(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -5560,7 +5650,7 @@ static PyObject *_wrap_StyledTextCtrl_SetMarginRight(PyObject *self, PyObject *a
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetMarginRight",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5576,7 +5666,7 @@ static PyObject *_wrap_StyledTextCtrl_SetMarginRight(PyObject *self, PyObject *a
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetMarginRight(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetMarginRight(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -5595,14 +5685,14 @@ static PyObject *_wrap_StyledTextCtrl_GetMarginRight(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetModify(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetModify(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool result;
@@ -5630,7 +5720,7 @@ static PyObject *_wrap_StyledTextCtrl_GetModify(PyObject *self, PyObject *args, 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetSelection(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -5645,9 +5735,9 @@ static PyObject *_wrap_StyledTextCtrl_SetSelection(PyObject *self, PyObject *arg
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_SetSelection",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5663,7 +5753,7 @@ static PyObject *_wrap_StyledTextCtrl_SetSelection(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetSelectedText(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetSelectedText(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString result;
@@ -5695,7 +5785,7 @@ static PyObject *_wrap_StyledTextCtrl_GetSelectedText(PyObject *self, PyObject *
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetTextRange(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetTextRange(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -5711,9 +5801,9 @@ static PyObject *_wrap_StyledTextCtrl_GetTextRange(PyObject *self, PyObject *arg
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_GetTextRange",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5735,7 +5825,7 @@ static PyObject *_wrap_StyledTextCtrl_GetTextRange(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_HideSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_HideSelection(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -5748,7 +5838,7 @@ static PyObject *_wrap_StyledTextCtrl_HideSelection(PyObject *self, PyObject *ar
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_HideSelection",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5764,7 +5854,7 @@ static PyObject *_wrap_StyledTextCtrl_HideSelection(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_LineFromPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_LineFromPosition(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -5778,7 +5868,7 @@ static PyObject *_wrap_StyledTextCtrl_LineFromPosition(PyObject *self, PyObject 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_LineFromPosition",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5787,14 +5877,14 @@ static PyObject *_wrap_StyledTextCtrl_LineFromPosition(PyObject *self, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_PositionFromLine(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_PositionFromLine(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -5808,7 +5898,7 @@ static PyObject *_wrap_StyledTextCtrl_PositionFromLine(PyObject *self, PyObject 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_PositionFromLine",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5817,14 +5907,14 @@ static PyObject *_wrap_StyledTextCtrl_PositionFromLine(PyObject *self, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_LineScroll(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_LineScroll(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -5839,9 +5929,9 @@ static PyObject *_wrap_StyledTextCtrl_LineScroll(PyObject *self, PyObject *args,
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_LineScroll",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5857,7 +5947,7 @@ static PyObject *_wrap_StyledTextCtrl_LineScroll(PyObject *self, PyObject *args,
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_EnsureCaretVisible(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_EnsureCaretVisible(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -5882,7 +5972,7 @@ static PyObject *_wrap_StyledTextCtrl_EnsureCaretVisible(PyObject *self, PyObjec
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_ReplaceSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_ReplaceSelection(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
@@ -5923,7 +6013,7 @@ static PyObject *_wrap_StyledTextCtrl_ReplaceSelection(PyObject *self, PyObject 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetReadOnly(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetReadOnly(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -5936,7 +6026,7 @@ static PyObject *_wrap_StyledTextCtrl_SetReadOnly(PyObject *self, PyObject *args
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetReadOnly",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5952,7 +6042,7 @@ static PyObject *_wrap_StyledTextCtrl_SetReadOnly(PyObject *self, PyObject *args
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_CanPaste(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_CanPaste(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool result;
@@ -5980,7 +6070,7 @@ static PyObject *_wrap_StyledTextCtrl_CanPaste(PyObject *self, PyObject *args, P
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_CanUndo(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_CanUndo(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool result;
@@ -6008,7 +6098,7 @@ static PyObject *_wrap_StyledTextCtrl_CanUndo(PyObject *self, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_EmptyUndoBuffer(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_EmptyUndoBuffer(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -6033,7 +6123,7 @@ static PyObject *_wrap_StyledTextCtrl_EmptyUndoBuffer(PyObject *self, PyObject *
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_Undo(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_Undo(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -6058,7 +6148,7 @@ static PyObject *_wrap_StyledTextCtrl_Undo(PyObject *self, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_Cut(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_Cut(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -6083,7 +6173,7 @@ static PyObject *_wrap_StyledTextCtrl_Cut(PyObject *self, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_Copy(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_Copy(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -6108,7 +6198,7 @@ static PyObject *_wrap_StyledTextCtrl_Copy(PyObject *self, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_Paste(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_Paste(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -6133,7 +6223,7 @@ static PyObject *_wrap_StyledTextCtrl_Paste(PyObject *self, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_Clear(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_Clear(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -6158,7 +6248,7 @@ static PyObject *_wrap_StyledTextCtrl_Clear(PyObject *self, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetText(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetText(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
@@ -6199,7 +6289,7 @@ static PyObject *_wrap_StyledTextCtrl_SetText(PyObject *self, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetText(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetText(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString result;
@@ -6231,7 +6321,7 @@ static PyObject *_wrap_StyledTextCtrl_GetText(PyObject *self, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetTextLength(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetTextLength(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -6250,14 +6340,14 @@ static PyObject *_wrap_StyledTextCtrl_GetTextLength(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetOvertype(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetOvertype(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -6270,7 +6360,7 @@ static PyObject *_wrap_StyledTextCtrl_SetOvertype(PyObject *self, PyObject *args
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetOvertype",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -6286,7 +6376,7 @@ static PyObject *_wrap_StyledTextCtrl_SetOvertype(PyObject *self, PyObject *args
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetOvertype(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetOvertype(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool result;
@@ -6314,7 +6404,7 @@ static PyObject *_wrap_StyledTextCtrl_GetOvertype(PyObject *self, PyObject *args
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetCaretWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetCaretWidth(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -6327,7 +6417,7 @@ static PyObject *_wrap_StyledTextCtrl_SetCaretWidth(PyObject *self, PyObject *ar
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetCaretWidth",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -6343,7 +6433,7 @@ static PyObject *_wrap_StyledTextCtrl_SetCaretWidth(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetCaretWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetCaretWidth(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -6362,14 +6452,14 @@ static PyObject *_wrap_StyledTextCtrl_GetCaretWidth(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetTargetStart(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetTargetStart(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -6382,7 +6472,7 @@ static PyObject *_wrap_StyledTextCtrl_SetTargetStart(PyObject *self, PyObject *a
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetTargetStart",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -6398,7 +6488,7 @@ static PyObject *_wrap_StyledTextCtrl_SetTargetStart(PyObject *self, PyObject *a
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetTargetStart(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetTargetStart(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -6417,14 +6507,14 @@ static PyObject *_wrap_StyledTextCtrl_GetTargetStart(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetTargetEnd(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetTargetEnd(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -6437,7 +6527,7 @@ static PyObject *_wrap_StyledTextCtrl_SetTargetEnd(PyObject *self, PyObject *arg
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetTargetEnd",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -6453,7 +6543,7 @@ static PyObject *_wrap_StyledTextCtrl_SetTargetEnd(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetTargetEnd(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetTargetEnd(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -6472,14 +6562,14 @@ static PyObject *_wrap_StyledTextCtrl_GetTargetEnd(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_ReplaceTarget(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_ReplaceTarget(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
@@ -6506,7 +6596,7 @@ static PyObject *_wrap_StyledTextCtrl_ReplaceTarget(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     {
         if (temp2)
         delete arg2;
@@ -6521,7 +6611,7 @@ static PyObject *_wrap_StyledTextCtrl_ReplaceTarget(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_ReplaceTargetRE(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_ReplaceTargetRE(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
@@ -6548,7 +6638,7 @@ static PyObject *_wrap_StyledTextCtrl_ReplaceTargetRE(PyObject *self, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     {
         if (temp2)
         delete arg2;
@@ -6563,7 +6653,7 @@ static PyObject *_wrap_StyledTextCtrl_ReplaceTargetRE(PyObject *self, PyObject *
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SearchInTarget(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SearchInTarget(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
@@ -6590,7 +6680,7 @@ static PyObject *_wrap_StyledTextCtrl_SearchInTarget(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     {
         if (temp2)
         delete arg2;
@@ -6605,7 +6695,7 @@ static PyObject *_wrap_StyledTextCtrl_SearchInTarget(PyObject *self, PyObject *a
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetSearchFlags(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetSearchFlags(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -6618,7 +6708,7 @@ static PyObject *_wrap_StyledTextCtrl_SetSearchFlags(PyObject *self, PyObject *a
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetSearchFlags",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -6634,7 +6724,7 @@ static PyObject *_wrap_StyledTextCtrl_SetSearchFlags(PyObject *self, PyObject *a
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetSearchFlags(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetSearchFlags(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -6653,14 +6743,14 @@ static PyObject *_wrap_StyledTextCtrl_GetSearchFlags(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_CallTipShow(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_CallTipShow(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -6676,7 +6766,7 @@ static PyObject *_wrap_StyledTextCtrl_CallTipShow(PyObject *self, PyObject *args
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_CallTipShow",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         arg3 = wxString_in_helper(obj2);
@@ -6705,7 +6795,7 @@ static PyObject *_wrap_StyledTextCtrl_CallTipShow(PyObject *self, PyObject *args
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_CallTipCancel(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_CallTipCancel(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -6730,7 +6820,7 @@ static PyObject *_wrap_StyledTextCtrl_CallTipCancel(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_CallTipActive(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_CallTipActive(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool result;
@@ -6758,7 +6848,7 @@ static PyObject *_wrap_StyledTextCtrl_CallTipActive(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_CallTipPosAtStart(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_CallTipPosAtStart(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -6777,14 +6867,14 @@ static PyObject *_wrap_StyledTextCtrl_CallTipPosAtStart(PyObject *self, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_CallTipSetHighlight(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_CallTipSetHighlight(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -6799,9 +6889,9 @@ static PyObject *_wrap_StyledTextCtrl_CallTipSetHighlight(PyObject *self, PyObje
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_CallTipSetHighlight",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -6817,7 +6907,7 @@ static PyObject *_wrap_StyledTextCtrl_CallTipSetHighlight(PyObject *self, PyObje
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_CallTipSetBackground(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_CallTipSetBackground(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxColour *arg2 = 0 ;
@@ -6849,7 +6939,7 @@ static PyObject *_wrap_StyledTextCtrl_CallTipSetBackground(PyObject *self, PyObj
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_CallTipSetForeground(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_CallTipSetForeground(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxColour *arg2 = 0 ;
@@ -6881,7 +6971,7 @@ static PyObject *_wrap_StyledTextCtrl_CallTipSetForeground(PyObject *self, PyObj
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_CallTipSetForegroundHighlight(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_CallTipSetForegroundHighlight(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxColour *arg2 = 0 ;
@@ -6913,7 +7003,7 @@ static PyObject *_wrap_StyledTextCtrl_CallTipSetForegroundHighlight(PyObject *se
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_VisibleFromDocLine(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_VisibleFromDocLine(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -6927,7 +7017,7 @@ static PyObject *_wrap_StyledTextCtrl_VisibleFromDocLine(PyObject *self, PyObjec
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_VisibleFromDocLine",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -6936,14 +7026,14 @@ static PyObject *_wrap_StyledTextCtrl_VisibleFromDocLine(PyObject *self, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_DocLineFromVisible(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_DocLineFromVisible(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -6957,7 +7047,7 @@ static PyObject *_wrap_StyledTextCtrl_DocLineFromVisible(PyObject *self, PyObjec
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_DocLineFromVisible",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -6966,14 +7056,14 @@ static PyObject *_wrap_StyledTextCtrl_DocLineFromVisible(PyObject *self, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetFoldLevel(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetFoldLevel(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -6988,9 +7078,9 @@ static PyObject *_wrap_StyledTextCtrl_SetFoldLevel(PyObject *self, PyObject *arg
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_SetFoldLevel",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7006,7 +7096,7 @@ static PyObject *_wrap_StyledTextCtrl_SetFoldLevel(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetFoldLevel(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetFoldLevel(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -7020,7 +7110,7 @@ static PyObject *_wrap_StyledTextCtrl_GetFoldLevel(PyObject *self, PyObject *arg
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_GetFoldLevel",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7029,14 +7119,14 @@ static PyObject *_wrap_StyledTextCtrl_GetFoldLevel(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetLastChild(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetLastChild(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -7052,9 +7142,9 @@ static PyObject *_wrap_StyledTextCtrl_GetLastChild(PyObject *self, PyObject *arg
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_GetLastChild",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7063,14 +7153,14 @@ static PyObject *_wrap_StyledTextCtrl_GetLastChild(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetFoldParent(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetFoldParent(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -7084,7 +7174,7 @@ static PyObject *_wrap_StyledTextCtrl_GetFoldParent(PyObject *self, PyObject *ar
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_GetFoldParent",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7093,14 +7183,14 @@ static PyObject *_wrap_StyledTextCtrl_GetFoldParent(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_ShowLines(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_ShowLines(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -7115,9 +7205,9 @@ static PyObject *_wrap_StyledTextCtrl_ShowLines(PyObject *self, PyObject *args, 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_ShowLines",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7133,7 +7223,7 @@ static PyObject *_wrap_StyledTextCtrl_ShowLines(PyObject *self, PyObject *args, 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_HideLines(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_HideLines(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -7148,9 +7238,9 @@ static PyObject *_wrap_StyledTextCtrl_HideLines(PyObject *self, PyObject *args, 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_HideLines",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7166,7 +7256,7 @@ static PyObject *_wrap_StyledTextCtrl_HideLines(PyObject *self, PyObject *args, 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetLineVisible(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetLineVisible(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -7180,7 +7270,7 @@ static PyObject *_wrap_StyledTextCtrl_GetLineVisible(PyObject *self, PyObject *a
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_GetLineVisible",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7198,7 +7288,7 @@ static PyObject *_wrap_StyledTextCtrl_GetLineVisible(PyObject *self, PyObject *a
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetFoldExpanded(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetFoldExpanded(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -7213,9 +7303,9 @@ static PyObject *_wrap_StyledTextCtrl_SetFoldExpanded(PyObject *self, PyObject *
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_SetFoldExpanded",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (bool) SWIG_AsBool(obj2); 
+    arg3 = (bool)SWIG_As_bool(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7231,7 +7321,7 @@ static PyObject *_wrap_StyledTextCtrl_SetFoldExpanded(PyObject *self, PyObject *
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetFoldExpanded(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetFoldExpanded(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -7245,7 +7335,7 @@ static PyObject *_wrap_StyledTextCtrl_GetFoldExpanded(PyObject *self, PyObject *
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_GetFoldExpanded",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7263,7 +7353,7 @@ static PyObject *_wrap_StyledTextCtrl_GetFoldExpanded(PyObject *self, PyObject *
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_ToggleFold(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_ToggleFold(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -7276,7 +7366,7 @@ static PyObject *_wrap_StyledTextCtrl_ToggleFold(PyObject *self, PyObject *args,
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_ToggleFold",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7292,7 +7382,7 @@ static PyObject *_wrap_StyledTextCtrl_ToggleFold(PyObject *self, PyObject *args,
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_EnsureVisible(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_EnsureVisible(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -7305,7 +7395,7 @@ static PyObject *_wrap_StyledTextCtrl_EnsureVisible(PyObject *self, PyObject *ar
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_EnsureVisible",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7321,7 +7411,7 @@ static PyObject *_wrap_StyledTextCtrl_EnsureVisible(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetFoldFlags(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetFoldFlags(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -7334,7 +7424,7 @@ static PyObject *_wrap_StyledTextCtrl_SetFoldFlags(PyObject *self, PyObject *arg
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetFoldFlags",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7350,7 +7440,7 @@ static PyObject *_wrap_StyledTextCtrl_SetFoldFlags(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_EnsureVisibleEnforcePolicy(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_EnsureVisibleEnforcePolicy(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -7363,7 +7453,7 @@ static PyObject *_wrap_StyledTextCtrl_EnsureVisibleEnforcePolicy(PyObject *self,
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_EnsureVisibleEnforcePolicy",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7379,7 +7469,7 @@ static PyObject *_wrap_StyledTextCtrl_EnsureVisibleEnforcePolicy(PyObject *self,
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetTabIndents(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetTabIndents(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -7392,7 +7482,7 @@ static PyObject *_wrap_StyledTextCtrl_SetTabIndents(PyObject *self, PyObject *ar
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetTabIndents",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7408,7 +7498,7 @@ static PyObject *_wrap_StyledTextCtrl_SetTabIndents(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetTabIndents(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetTabIndents(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool result;
@@ -7436,7 +7526,7 @@ static PyObject *_wrap_StyledTextCtrl_GetTabIndents(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetBackSpaceUnIndents(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetBackSpaceUnIndents(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -7449,7 +7539,7 @@ static PyObject *_wrap_StyledTextCtrl_SetBackSpaceUnIndents(PyObject *self, PyOb
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetBackSpaceUnIndents",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7465,7 +7555,7 @@ static PyObject *_wrap_StyledTextCtrl_SetBackSpaceUnIndents(PyObject *self, PyOb
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetBackSpaceUnIndents(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetBackSpaceUnIndents(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool result;
@@ -7493,7 +7583,7 @@ static PyObject *_wrap_StyledTextCtrl_GetBackSpaceUnIndents(PyObject *self, PyOb
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetMouseDwellTime(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetMouseDwellTime(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -7506,7 +7596,7 @@ static PyObject *_wrap_StyledTextCtrl_SetMouseDwellTime(PyObject *self, PyObject
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetMouseDwellTime",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7522,7 +7612,7 @@ static PyObject *_wrap_StyledTextCtrl_SetMouseDwellTime(PyObject *self, PyObject
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetMouseDwellTime(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetMouseDwellTime(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -7541,14 +7631,14 @@ static PyObject *_wrap_StyledTextCtrl_GetMouseDwellTime(PyObject *self, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_WordStartPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_WordStartPosition(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -7564,9 +7654,9 @@ static PyObject *_wrap_StyledTextCtrl_WordStartPosition(PyObject *self, PyObject
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_WordStartPosition",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (bool) SWIG_AsBool(obj2); 
+    arg3 = (bool)SWIG_As_bool(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7575,14 +7665,14 @@ static PyObject *_wrap_StyledTextCtrl_WordStartPosition(PyObject *self, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_WordEndPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_WordEndPosition(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -7598,9 +7688,9 @@ static PyObject *_wrap_StyledTextCtrl_WordEndPosition(PyObject *self, PyObject *
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_WordEndPosition",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (bool) SWIG_AsBool(obj2); 
+    arg3 = (bool)SWIG_As_bool(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7609,14 +7699,14 @@ static PyObject *_wrap_StyledTextCtrl_WordEndPosition(PyObject *self, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetWrapMode(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetWrapMode(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -7629,7 +7719,7 @@ static PyObject *_wrap_StyledTextCtrl_SetWrapMode(PyObject *self, PyObject *args
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetWrapMode",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7645,7 +7735,7 @@ static PyObject *_wrap_StyledTextCtrl_SetWrapMode(PyObject *self, PyObject *args
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetWrapMode(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetWrapMode(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -7664,14 +7754,14 @@ static PyObject *_wrap_StyledTextCtrl_GetWrapMode(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetLayoutCache(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetLayoutCache(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -7684,7 +7774,7 @@ static PyObject *_wrap_StyledTextCtrl_SetLayoutCache(PyObject *self, PyObject *a
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetLayoutCache",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7700,7 +7790,7 @@ static PyObject *_wrap_StyledTextCtrl_SetLayoutCache(PyObject *self, PyObject *a
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetLayoutCache(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetLayoutCache(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -7719,14 +7809,14 @@ static PyObject *_wrap_StyledTextCtrl_GetLayoutCache(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetScrollWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetScrollWidth(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -7739,7 +7829,7 @@ static PyObject *_wrap_StyledTextCtrl_SetScrollWidth(PyObject *self, PyObject *a
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetScrollWidth",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7755,7 +7845,7 @@ static PyObject *_wrap_StyledTextCtrl_SetScrollWidth(PyObject *self, PyObject *a
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetScrollWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetScrollWidth(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -7774,14 +7864,14 @@ static PyObject *_wrap_StyledTextCtrl_GetScrollWidth(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_TextWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_TextWidth(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -7798,7 +7888,7 @@ static PyObject *_wrap_StyledTextCtrl_TextWidth(PyObject *self, PyObject *args, 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_TextWidth",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         arg3 = wxString_in_helper(obj2);
@@ -7812,7 +7902,7 @@ static PyObject *_wrap_StyledTextCtrl_TextWidth(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     {
         if (temp3)
         delete arg3;
@@ -7827,7 +7917,7 @@ static PyObject *_wrap_StyledTextCtrl_TextWidth(PyObject *self, PyObject *args, 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetEndAtLastLine(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetEndAtLastLine(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -7840,7 +7930,7 @@ static PyObject *_wrap_StyledTextCtrl_SetEndAtLastLine(PyObject *self, PyObject 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetEndAtLastLine",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7856,7 +7946,7 @@ static PyObject *_wrap_StyledTextCtrl_SetEndAtLastLine(PyObject *self, PyObject 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetEndAtLastLine(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetEndAtLastLine(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -7875,14 +7965,14 @@ static PyObject *_wrap_StyledTextCtrl_GetEndAtLastLine(PyObject *self, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_TextHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_TextHeight(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -7896,7 +7986,7 @@ static PyObject *_wrap_StyledTextCtrl_TextHeight(PyObject *self, PyObject *args,
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_TextHeight",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7905,14 +7995,14 @@ static PyObject *_wrap_StyledTextCtrl_TextHeight(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetUseVerticalScrollBar(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetUseVerticalScrollBar(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -7925,7 +8015,7 @@ static PyObject *_wrap_StyledTextCtrl_SetUseVerticalScrollBar(PyObject *self, Py
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetUseVerticalScrollBar",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7941,7 +8031,7 @@ static PyObject *_wrap_StyledTextCtrl_SetUseVerticalScrollBar(PyObject *self, Py
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetUseVerticalScrollBar(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetUseVerticalScrollBar(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool result;
@@ -7969,7 +8059,7 @@ static PyObject *_wrap_StyledTextCtrl_GetUseVerticalScrollBar(PyObject *self, Py
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_AppendText(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_AppendText(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -7985,7 +8075,7 @@ static PyObject *_wrap_StyledTextCtrl_AppendText(PyObject *self, PyObject *args,
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_AppendText",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         arg3 = wxString_in_helper(obj2);
@@ -8014,7 +8104,7 @@ static PyObject *_wrap_StyledTextCtrl_AppendText(PyObject *self, PyObject *args,
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetTwoPhaseDraw(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetTwoPhaseDraw(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool result;
@@ -8042,7 +8132,7 @@ static PyObject *_wrap_StyledTextCtrl_GetTwoPhaseDraw(PyObject *self, PyObject *
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetTwoPhaseDraw(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetTwoPhaseDraw(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -8055,7 +8145,7 @@ static PyObject *_wrap_StyledTextCtrl_SetTwoPhaseDraw(PyObject *self, PyObject *
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetTwoPhaseDraw",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -8071,7 +8161,7 @@ static PyObject *_wrap_StyledTextCtrl_SetTwoPhaseDraw(PyObject *self, PyObject *
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_TargetFromSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_TargetFromSelection(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8096,7 +8186,7 @@ static PyObject *_wrap_StyledTextCtrl_TargetFromSelection(PyObject *self, PyObje
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_LinesJoin(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_LinesJoin(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8121,7 +8211,7 @@ static PyObject *_wrap_StyledTextCtrl_LinesJoin(PyObject *self, PyObject *args, 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_LinesSplit(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_LinesSplit(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -8134,7 +8224,7 @@ static PyObject *_wrap_StyledTextCtrl_LinesSplit(PyObject *self, PyObject *args,
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_LinesSplit",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -8150,7 +8240,7 @@ static PyObject *_wrap_StyledTextCtrl_LinesSplit(PyObject *self, PyObject *args,
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetFoldMarginColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetFoldMarginColour(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -8166,7 +8256,7 @@ static PyObject *_wrap_StyledTextCtrl_SetFoldMarginColour(PyObject *self, PyObje
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_SetFoldMarginColour",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         arg3 = &temp3;
@@ -8186,7 +8276,7 @@ static PyObject *_wrap_StyledTextCtrl_SetFoldMarginColour(PyObject *self, PyObje
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetFoldMarginHiColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetFoldMarginHiColour(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -8202,7 +8292,7 @@ static PyObject *_wrap_StyledTextCtrl_SetFoldMarginHiColour(PyObject *self, PyOb
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_SetFoldMarginHiColour",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         arg3 = &temp3;
@@ -8222,7 +8312,7 @@ static PyObject *_wrap_StyledTextCtrl_SetFoldMarginHiColour(PyObject *self, PyOb
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_LineDown(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_LineDown(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8247,7 +8337,7 @@ static PyObject *_wrap_StyledTextCtrl_LineDown(PyObject *self, PyObject *args, P
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_LineDownExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_LineDownExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8272,7 +8362,7 @@ static PyObject *_wrap_StyledTextCtrl_LineDownExtend(PyObject *self, PyObject *a
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_LineUp(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_LineUp(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8297,7 +8387,7 @@ static PyObject *_wrap_StyledTextCtrl_LineUp(PyObject *self, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_LineUpExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_LineUpExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8322,7 +8412,7 @@ static PyObject *_wrap_StyledTextCtrl_LineUpExtend(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_CharLeft(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_CharLeft(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8347,7 +8437,7 @@ static PyObject *_wrap_StyledTextCtrl_CharLeft(PyObject *self, PyObject *args, P
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_CharLeftExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_CharLeftExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8372,7 +8462,7 @@ static PyObject *_wrap_StyledTextCtrl_CharLeftExtend(PyObject *self, PyObject *a
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_CharRight(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_CharRight(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8397,7 +8487,7 @@ static PyObject *_wrap_StyledTextCtrl_CharRight(PyObject *self, PyObject *args, 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_CharRightExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_CharRightExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8422,7 +8512,7 @@ static PyObject *_wrap_StyledTextCtrl_CharRightExtend(PyObject *self, PyObject *
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_WordLeft(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_WordLeft(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8447,7 +8537,7 @@ static PyObject *_wrap_StyledTextCtrl_WordLeft(PyObject *self, PyObject *args, P
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_WordLeftExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_WordLeftExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8472,7 +8562,7 @@ static PyObject *_wrap_StyledTextCtrl_WordLeftExtend(PyObject *self, PyObject *a
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_WordRight(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_WordRight(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8497,7 +8587,7 @@ static PyObject *_wrap_StyledTextCtrl_WordRight(PyObject *self, PyObject *args, 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_WordRightExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_WordRightExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8522,7 +8612,7 @@ static PyObject *_wrap_StyledTextCtrl_WordRightExtend(PyObject *self, PyObject *
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_Home(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_Home(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8547,7 +8637,7 @@ static PyObject *_wrap_StyledTextCtrl_Home(PyObject *self, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_HomeExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_HomeExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8572,7 +8662,7 @@ static PyObject *_wrap_StyledTextCtrl_HomeExtend(PyObject *self, PyObject *args,
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_LineEnd(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_LineEnd(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8597,7 +8687,7 @@ static PyObject *_wrap_StyledTextCtrl_LineEnd(PyObject *self, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_LineEndExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_LineEndExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8622,7 +8712,7 @@ static PyObject *_wrap_StyledTextCtrl_LineEndExtend(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_DocumentStart(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_DocumentStart(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8647,7 +8737,7 @@ static PyObject *_wrap_StyledTextCtrl_DocumentStart(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_DocumentStartExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_DocumentStartExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8672,7 +8762,7 @@ static PyObject *_wrap_StyledTextCtrl_DocumentStartExtend(PyObject *self, PyObje
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_DocumentEnd(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_DocumentEnd(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8697,7 +8787,7 @@ static PyObject *_wrap_StyledTextCtrl_DocumentEnd(PyObject *self, PyObject *args
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_DocumentEndExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_DocumentEndExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8722,7 +8812,7 @@ static PyObject *_wrap_StyledTextCtrl_DocumentEndExtend(PyObject *self, PyObject
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_PageUp(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_PageUp(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8747,7 +8837,7 @@ static PyObject *_wrap_StyledTextCtrl_PageUp(PyObject *self, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_PageUpExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_PageUpExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8772,7 +8862,7 @@ static PyObject *_wrap_StyledTextCtrl_PageUpExtend(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_PageDown(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_PageDown(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8797,7 +8887,7 @@ static PyObject *_wrap_StyledTextCtrl_PageDown(PyObject *self, PyObject *args, P
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_PageDownExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_PageDownExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8822,7 +8912,7 @@ static PyObject *_wrap_StyledTextCtrl_PageDownExtend(PyObject *self, PyObject *a
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_EditToggleOvertype(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_EditToggleOvertype(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8847,7 +8937,7 @@ static PyObject *_wrap_StyledTextCtrl_EditToggleOvertype(PyObject *self, PyObjec
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_Cancel(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_Cancel(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8872,7 +8962,7 @@ static PyObject *_wrap_StyledTextCtrl_Cancel(PyObject *self, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_DeleteBack(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_DeleteBack(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8897,7 +8987,7 @@ static PyObject *_wrap_StyledTextCtrl_DeleteBack(PyObject *self, PyObject *args,
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_Tab(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_Tab(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8922,7 +9012,7 @@ static PyObject *_wrap_StyledTextCtrl_Tab(PyObject *self, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_BackTab(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_BackTab(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8947,7 +9037,7 @@ static PyObject *_wrap_StyledTextCtrl_BackTab(PyObject *self, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_NewLine(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_NewLine(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8972,7 +9062,7 @@ static PyObject *_wrap_StyledTextCtrl_NewLine(PyObject *self, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_FormFeed(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_FormFeed(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -8997,7 +9087,7 @@ static PyObject *_wrap_StyledTextCtrl_FormFeed(PyObject *self, PyObject *args, P
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_VCHome(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_VCHome(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9022,7 +9112,7 @@ static PyObject *_wrap_StyledTextCtrl_VCHome(PyObject *self, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_VCHomeExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_VCHomeExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9047,7 +9137,7 @@ static PyObject *_wrap_StyledTextCtrl_VCHomeExtend(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_ZoomIn(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_ZoomIn(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9072,7 +9162,7 @@ static PyObject *_wrap_StyledTextCtrl_ZoomIn(PyObject *self, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_ZoomOut(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_ZoomOut(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9097,7 +9187,7 @@ static PyObject *_wrap_StyledTextCtrl_ZoomOut(PyObject *self, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_DelWordLeft(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_DelWordLeft(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9122,7 +9212,7 @@ static PyObject *_wrap_StyledTextCtrl_DelWordLeft(PyObject *self, PyObject *args
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_DelWordRight(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_DelWordRight(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9147,7 +9237,7 @@ static PyObject *_wrap_StyledTextCtrl_DelWordRight(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_LineCut(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_LineCut(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9172,7 +9262,7 @@ static PyObject *_wrap_StyledTextCtrl_LineCut(PyObject *self, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_LineDelete(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_LineDelete(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9197,7 +9287,7 @@ static PyObject *_wrap_StyledTextCtrl_LineDelete(PyObject *self, PyObject *args,
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_LineTranspose(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_LineTranspose(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9222,7 +9312,7 @@ static PyObject *_wrap_StyledTextCtrl_LineTranspose(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_LineDuplicate(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_LineDuplicate(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9247,7 +9337,7 @@ static PyObject *_wrap_StyledTextCtrl_LineDuplicate(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_LowerCase(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_LowerCase(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9272,7 +9362,7 @@ static PyObject *_wrap_StyledTextCtrl_LowerCase(PyObject *self, PyObject *args, 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_UpperCase(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_UpperCase(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9297,7 +9387,7 @@ static PyObject *_wrap_StyledTextCtrl_UpperCase(PyObject *self, PyObject *args, 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_LineScrollDown(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_LineScrollDown(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9322,7 +9412,7 @@ static PyObject *_wrap_StyledTextCtrl_LineScrollDown(PyObject *self, PyObject *a
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_LineScrollUp(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_LineScrollUp(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9347,7 +9437,7 @@ static PyObject *_wrap_StyledTextCtrl_LineScrollUp(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_DeleteBackNotLine(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_DeleteBackNotLine(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9372,7 +9462,7 @@ static PyObject *_wrap_StyledTextCtrl_DeleteBackNotLine(PyObject *self, PyObject
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_HomeDisplay(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_HomeDisplay(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9397,7 +9487,7 @@ static PyObject *_wrap_StyledTextCtrl_HomeDisplay(PyObject *self, PyObject *args
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_HomeDisplayExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_HomeDisplayExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9422,7 +9512,7 @@ static PyObject *_wrap_StyledTextCtrl_HomeDisplayExtend(PyObject *self, PyObject
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_LineEndDisplay(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_LineEndDisplay(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9447,7 +9537,7 @@ static PyObject *_wrap_StyledTextCtrl_LineEndDisplay(PyObject *self, PyObject *a
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_LineEndDisplayExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_LineEndDisplayExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9472,7 +9562,7 @@ static PyObject *_wrap_StyledTextCtrl_LineEndDisplayExtend(PyObject *self, PyObj
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_HomeWrap(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_HomeWrap(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9497,7 +9587,7 @@ static PyObject *_wrap_StyledTextCtrl_HomeWrap(PyObject *self, PyObject *args, P
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_HomeWrapExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_HomeWrapExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9522,7 +9612,7 @@ static PyObject *_wrap_StyledTextCtrl_HomeWrapExtend(PyObject *self, PyObject *a
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_LineEndWrap(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_LineEndWrap(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9547,7 +9637,7 @@ static PyObject *_wrap_StyledTextCtrl_LineEndWrap(PyObject *self, PyObject *args
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_LineEndWrapExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_LineEndWrapExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9572,7 +9662,7 @@ static PyObject *_wrap_StyledTextCtrl_LineEndWrapExtend(PyObject *self, PyObject
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_VCHomeWrap(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_VCHomeWrap(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9597,7 +9687,7 @@ static PyObject *_wrap_StyledTextCtrl_VCHomeWrap(PyObject *self, PyObject *args,
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_VCHomeWrapExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_VCHomeWrapExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9622,7 +9712,7 @@ static PyObject *_wrap_StyledTextCtrl_VCHomeWrapExtend(PyObject *self, PyObject 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_LineCopy(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_LineCopy(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9647,7 +9737,7 @@ static PyObject *_wrap_StyledTextCtrl_LineCopy(PyObject *self, PyObject *args, P
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_MoveCaretInsideView(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_MoveCaretInsideView(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -9672,7 +9762,7 @@ static PyObject *_wrap_StyledTextCtrl_MoveCaretInsideView(PyObject *self, PyObje
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_LineLength(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_LineLength(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -9686,7 +9776,7 @@ static PyObject *_wrap_StyledTextCtrl_LineLength(PyObject *self, PyObject *args,
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_LineLength",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -9695,14 +9785,14 @@ static PyObject *_wrap_StyledTextCtrl_LineLength(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_BraceHighlight(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_BraceHighlight(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -9717,9 +9807,9 @@ static PyObject *_wrap_StyledTextCtrl_BraceHighlight(PyObject *self, PyObject *a
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_BraceHighlight",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -9735,7 +9825,7 @@ static PyObject *_wrap_StyledTextCtrl_BraceHighlight(PyObject *self, PyObject *a
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_BraceBadLight(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_BraceBadLight(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -9748,7 +9838,7 @@ static PyObject *_wrap_StyledTextCtrl_BraceBadLight(PyObject *self, PyObject *ar
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_BraceBadLight",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -9764,7 +9854,7 @@ static PyObject *_wrap_StyledTextCtrl_BraceBadLight(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_BraceMatch(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_BraceMatch(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -9778,7 +9868,7 @@ static PyObject *_wrap_StyledTextCtrl_BraceMatch(PyObject *self, PyObject *args,
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_BraceMatch",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -9787,14 +9877,14 @@ static PyObject *_wrap_StyledTextCtrl_BraceMatch(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetViewEOL(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetViewEOL(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool result;
@@ -9822,7 +9912,7 @@ static PyObject *_wrap_StyledTextCtrl_GetViewEOL(PyObject *self, PyObject *args,
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetViewEOL(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetViewEOL(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -9835,7 +9925,7 @@ static PyObject *_wrap_StyledTextCtrl_SetViewEOL(PyObject *self, PyObject *args,
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetViewEOL",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -9851,7 +9941,7 @@ static PyObject *_wrap_StyledTextCtrl_SetViewEOL(PyObject *self, PyObject *args,
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetDocPointer(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetDocPointer(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     void *result;
@@ -9877,7 +9967,7 @@ static PyObject *_wrap_StyledTextCtrl_GetDocPointer(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetDocPointer(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetDocPointer(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     void *arg2 = (void *) 0 ;
@@ -9905,7 +9995,7 @@ static PyObject *_wrap_StyledTextCtrl_SetDocPointer(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetModEventMask(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetModEventMask(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -9918,7 +10008,7 @@ static PyObject *_wrap_StyledTextCtrl_SetModEventMask(PyObject *self, PyObject *
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetModEventMask",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -9934,7 +10024,7 @@ static PyObject *_wrap_StyledTextCtrl_SetModEventMask(PyObject *self, PyObject *
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetEdgeColumn(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetEdgeColumn(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -9953,14 +10043,14 @@ static PyObject *_wrap_StyledTextCtrl_GetEdgeColumn(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetEdgeColumn(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetEdgeColumn(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -9973,7 +10063,7 @@ static PyObject *_wrap_StyledTextCtrl_SetEdgeColumn(PyObject *self, PyObject *ar
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetEdgeColumn",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -9989,7 +10079,7 @@ static PyObject *_wrap_StyledTextCtrl_SetEdgeColumn(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetEdgeMode(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetEdgeMode(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -10008,14 +10098,14 @@ static PyObject *_wrap_StyledTextCtrl_GetEdgeMode(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetEdgeMode(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetEdgeMode(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -10028,7 +10118,7 @@ static PyObject *_wrap_StyledTextCtrl_SetEdgeMode(PyObject *self, PyObject *args
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetEdgeMode",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -10044,7 +10134,7 @@ static PyObject *_wrap_StyledTextCtrl_SetEdgeMode(PyObject *self, PyObject *args
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetEdgeColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetEdgeColour(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxColour result;
@@ -10074,7 +10164,7 @@ static PyObject *_wrap_StyledTextCtrl_GetEdgeColour(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetEdgeColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetEdgeColour(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxColour *arg2 = 0 ;
@@ -10106,7 +10196,7 @@ static PyObject *_wrap_StyledTextCtrl_SetEdgeColour(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SearchAnchor(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SearchAnchor(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -10131,7 +10221,7 @@ static PyObject *_wrap_StyledTextCtrl_SearchAnchor(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SearchNext(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SearchNext(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -10148,7 +10238,7 @@ static PyObject *_wrap_StyledTextCtrl_SearchNext(PyObject *self, PyObject *args,
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_SearchNext",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         arg3 = wxString_in_helper(obj2);
@@ -10162,7 +10252,7 @@ static PyObject *_wrap_StyledTextCtrl_SearchNext(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     {
         if (temp3)
         delete arg3;
@@ -10177,7 +10267,7 @@ static PyObject *_wrap_StyledTextCtrl_SearchNext(PyObject *self, PyObject *args,
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SearchPrev(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SearchPrev(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -10194,7 +10284,7 @@ static PyObject *_wrap_StyledTextCtrl_SearchPrev(PyObject *self, PyObject *args,
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_SearchPrev",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         arg3 = wxString_in_helper(obj2);
@@ -10208,7 +10298,7 @@ static PyObject *_wrap_StyledTextCtrl_SearchPrev(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     {
         if (temp3)
         delete arg3;
@@ -10223,7 +10313,7 @@ static PyObject *_wrap_StyledTextCtrl_SearchPrev(PyObject *self, PyObject *args,
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_LinesOnScreen(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_LinesOnScreen(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -10242,14 +10332,14 @@ static PyObject *_wrap_StyledTextCtrl_LinesOnScreen(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_UsePopUp(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_UsePopUp(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -10262,7 +10352,7 @@ static PyObject *_wrap_StyledTextCtrl_UsePopUp(PyObject *self, PyObject *args, P
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_UsePopUp",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -10278,7 +10368,7 @@ static PyObject *_wrap_StyledTextCtrl_UsePopUp(PyObject *self, PyObject *args, P
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SelectionIsRectangle(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SelectionIsRectangle(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool result;
@@ -10306,7 +10396,7 @@ static PyObject *_wrap_StyledTextCtrl_SelectionIsRectangle(PyObject *self, PyObj
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetZoom(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetZoom(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -10319,7 +10409,7 @@ static PyObject *_wrap_StyledTextCtrl_SetZoom(PyObject *self, PyObject *args, Py
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetZoom",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -10335,7 +10425,7 @@ static PyObject *_wrap_StyledTextCtrl_SetZoom(PyObject *self, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetZoom(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetZoom(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -10354,14 +10444,14 @@ static PyObject *_wrap_StyledTextCtrl_GetZoom(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_CreateDocument(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_CreateDocument(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     void *result;
@@ -10387,7 +10477,7 @@ static PyObject *_wrap_StyledTextCtrl_CreateDocument(PyObject *self, PyObject *a
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_AddRefDocument(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_AddRefDocument(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     void *arg2 = (void *) 0 ;
@@ -10415,7 +10505,7 @@ static PyObject *_wrap_StyledTextCtrl_AddRefDocument(PyObject *self, PyObject *a
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_ReleaseDocument(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_ReleaseDocument(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     void *arg2 = (void *) 0 ;
@@ -10443,7 +10533,7 @@ static PyObject *_wrap_StyledTextCtrl_ReleaseDocument(PyObject *self, PyObject *
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetModEventMask(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetModEventMask(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -10462,14 +10552,14 @@ static PyObject *_wrap_StyledTextCtrl_GetModEventMask(PyObject *self, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetSTCFocus(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetSTCFocus(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -10482,7 +10572,7 @@ static PyObject *_wrap_StyledTextCtrl_SetSTCFocus(PyObject *self, PyObject *args
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetSTCFocus",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -10498,7 +10588,7 @@ static PyObject *_wrap_StyledTextCtrl_SetSTCFocus(PyObject *self, PyObject *args
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetSTCFocus(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetSTCFocus(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool result;
@@ -10526,7 +10616,7 @@ static PyObject *_wrap_StyledTextCtrl_GetSTCFocus(PyObject *self, PyObject *args
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetStatus(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetStatus(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -10539,7 +10629,7 @@ static PyObject *_wrap_StyledTextCtrl_SetStatus(PyObject *self, PyObject *args, 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetStatus",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -10555,7 +10645,7 @@ static PyObject *_wrap_StyledTextCtrl_SetStatus(PyObject *self, PyObject *args, 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetStatus(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetStatus(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -10574,14 +10664,14 @@ static PyObject *_wrap_StyledTextCtrl_GetStatus(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetMouseDownCaptures(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetMouseDownCaptures(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -10594,7 +10684,7 @@ static PyObject *_wrap_StyledTextCtrl_SetMouseDownCaptures(PyObject *self, PyObj
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetMouseDownCaptures",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -10610,7 +10700,7 @@ static PyObject *_wrap_StyledTextCtrl_SetMouseDownCaptures(PyObject *self, PyObj
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetMouseDownCaptures(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetMouseDownCaptures(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool result;
@@ -10638,7 +10728,7 @@ static PyObject *_wrap_StyledTextCtrl_GetMouseDownCaptures(PyObject *self, PyObj
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetSTCCursor(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetSTCCursor(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -10651,7 +10741,7 @@ static PyObject *_wrap_StyledTextCtrl_SetSTCCursor(PyObject *self, PyObject *arg
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetSTCCursor",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -10667,7 +10757,7 @@ static PyObject *_wrap_StyledTextCtrl_SetSTCCursor(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetSTCCursor(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetSTCCursor(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -10686,14 +10776,14 @@ static PyObject *_wrap_StyledTextCtrl_GetSTCCursor(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetControlCharSymbol(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetControlCharSymbol(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -10706,7 +10796,7 @@ static PyObject *_wrap_StyledTextCtrl_SetControlCharSymbol(PyObject *self, PyObj
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetControlCharSymbol",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -10722,7 +10812,7 @@ static PyObject *_wrap_StyledTextCtrl_SetControlCharSymbol(PyObject *self, PyObj
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetControlCharSymbol(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetControlCharSymbol(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -10741,14 +10831,14 @@ static PyObject *_wrap_StyledTextCtrl_GetControlCharSymbol(PyObject *self, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_WordPartLeft(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_WordPartLeft(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -10773,7 +10863,7 @@ static PyObject *_wrap_StyledTextCtrl_WordPartLeft(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_WordPartLeftExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_WordPartLeftExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -10798,7 +10888,7 @@ static PyObject *_wrap_StyledTextCtrl_WordPartLeftExtend(PyObject *self, PyObjec
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_WordPartRight(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_WordPartRight(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -10823,7 +10913,7 @@ static PyObject *_wrap_StyledTextCtrl_WordPartRight(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_WordPartRightExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_WordPartRightExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -10848,7 +10938,7 @@ static PyObject *_wrap_StyledTextCtrl_WordPartRightExtend(PyObject *self, PyObje
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetVisiblePolicy(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetVisiblePolicy(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -10863,9 +10953,9 @@ static PyObject *_wrap_StyledTextCtrl_SetVisiblePolicy(PyObject *self, PyObject 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_SetVisiblePolicy",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -10881,7 +10971,7 @@ static PyObject *_wrap_StyledTextCtrl_SetVisiblePolicy(PyObject *self, PyObject 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_DelLineLeft(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_DelLineLeft(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -10906,7 +10996,7 @@ static PyObject *_wrap_StyledTextCtrl_DelLineLeft(PyObject *self, PyObject *args
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_DelLineRight(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_DelLineRight(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -10931,7 +11021,7 @@ static PyObject *_wrap_StyledTextCtrl_DelLineRight(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetXOffset(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetXOffset(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -10944,7 +11034,7 @@ static PyObject *_wrap_StyledTextCtrl_SetXOffset(PyObject *self, PyObject *args,
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetXOffset",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -10960,7 +11050,7 @@ static PyObject *_wrap_StyledTextCtrl_SetXOffset(PyObject *self, PyObject *args,
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetXOffset(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetXOffset(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -10979,14 +11069,14 @@ static PyObject *_wrap_StyledTextCtrl_GetXOffset(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_ChooseCaretX(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_ChooseCaretX(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -11011,7 +11101,7 @@ static PyObject *_wrap_StyledTextCtrl_ChooseCaretX(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetXCaretPolicy(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetXCaretPolicy(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -11026,9 +11116,9 @@ static PyObject *_wrap_StyledTextCtrl_SetXCaretPolicy(PyObject *self, PyObject *
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_SetXCaretPolicy",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -11044,7 +11134,7 @@ static PyObject *_wrap_StyledTextCtrl_SetXCaretPolicy(PyObject *self, PyObject *
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetYCaretPolicy(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetYCaretPolicy(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -11059,9 +11149,9 @@ static PyObject *_wrap_StyledTextCtrl_SetYCaretPolicy(PyObject *self, PyObject *
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_SetYCaretPolicy",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -11077,7 +11167,7 @@ static PyObject *_wrap_StyledTextCtrl_SetYCaretPolicy(PyObject *self, PyObject *
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetPrintWrapMode(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetPrintWrapMode(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -11090,7 +11180,7 @@ static PyObject *_wrap_StyledTextCtrl_SetPrintWrapMode(PyObject *self, PyObject 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetPrintWrapMode",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -11106,7 +11196,7 @@ static PyObject *_wrap_StyledTextCtrl_SetPrintWrapMode(PyObject *self, PyObject 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetPrintWrapMode(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetPrintWrapMode(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -11125,14 +11215,14 @@ static PyObject *_wrap_StyledTextCtrl_GetPrintWrapMode(PyObject *self, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetHotspotActiveForeground(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetHotspotActiveForeground(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -11148,7 +11238,7 @@ static PyObject *_wrap_StyledTextCtrl_SetHotspotActiveForeground(PyObject *self,
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_SetHotspotActiveForeground",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         arg3 = &temp3;
@@ -11168,7 +11258,7 @@ static PyObject *_wrap_StyledTextCtrl_SetHotspotActiveForeground(PyObject *self,
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetHotspotActiveBackground(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetHotspotActiveBackground(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -11184,7 +11274,7 @@ static PyObject *_wrap_StyledTextCtrl_SetHotspotActiveBackground(PyObject *self,
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_SetHotspotActiveBackground",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         arg3 = &temp3;
@@ -11204,7 +11294,7 @@ static PyObject *_wrap_StyledTextCtrl_SetHotspotActiveBackground(PyObject *self,
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetHotspotActiveUnderline(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetHotspotActiveUnderline(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -11217,7 +11307,7 @@ static PyObject *_wrap_StyledTextCtrl_SetHotspotActiveUnderline(PyObject *self, 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetHotspotActiveUnderline",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -11233,7 +11323,7 @@ static PyObject *_wrap_StyledTextCtrl_SetHotspotActiveUnderline(PyObject *self, 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetHotspotSingleLine(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetHotspotSingleLine(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -11246,7 +11336,7 @@ static PyObject *_wrap_StyledTextCtrl_SetHotspotSingleLine(PyObject *self, PyObj
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetHotspotSingleLine",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -11262,7 +11352,7 @@ static PyObject *_wrap_StyledTextCtrl_SetHotspotSingleLine(PyObject *self, PyObj
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_ParaDown(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_ParaDown(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -11287,7 +11377,7 @@ static PyObject *_wrap_StyledTextCtrl_ParaDown(PyObject *self, PyObject *args, P
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_ParaDownExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_ParaDownExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -11312,7 +11402,7 @@ static PyObject *_wrap_StyledTextCtrl_ParaDownExtend(PyObject *self, PyObject *a
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_ParaUp(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_ParaUp(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -11337,7 +11427,7 @@ static PyObject *_wrap_StyledTextCtrl_ParaUp(PyObject *self, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_ParaUpExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_ParaUpExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -11362,7 +11452,7 @@ static PyObject *_wrap_StyledTextCtrl_ParaUpExtend(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_PositionBefore(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_PositionBefore(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -11376,7 +11466,7 @@ static PyObject *_wrap_StyledTextCtrl_PositionBefore(PyObject *self, PyObject *a
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_PositionBefore",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -11385,14 +11475,14 @@ static PyObject *_wrap_StyledTextCtrl_PositionBefore(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_PositionAfter(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_PositionAfter(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -11406,7 +11496,7 @@ static PyObject *_wrap_StyledTextCtrl_PositionAfter(PyObject *self, PyObject *ar
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_PositionAfter",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -11415,14 +11505,14 @@ static PyObject *_wrap_StyledTextCtrl_PositionAfter(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_CopyRange(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_CopyRange(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -11437,9 +11527,9 @@ static PyObject *_wrap_StyledTextCtrl_CopyRange(PyObject *self, PyObject *args, 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_CopyRange",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -11455,7 +11545,7 @@ static PyObject *_wrap_StyledTextCtrl_CopyRange(PyObject *self, PyObject *args, 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_CopyText(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_CopyText(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -11471,7 +11561,7 @@ static PyObject *_wrap_StyledTextCtrl_CopyText(PyObject *self, PyObject *args, P
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_CopyText",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         arg3 = wxString_in_helper(obj2);
@@ -11500,7 +11590,7 @@ static PyObject *_wrap_StyledTextCtrl_CopyText(PyObject *self, PyObject *args, P
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetSelectionMode(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetSelectionMode(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -11513,7 +11603,7 @@ static PyObject *_wrap_StyledTextCtrl_SetSelectionMode(PyObject *self, PyObject 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetSelectionMode",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -11529,7 +11619,7 @@ static PyObject *_wrap_StyledTextCtrl_SetSelectionMode(PyObject *self, PyObject 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetSelectionMode(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetSelectionMode(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -11548,14 +11638,14 @@ static PyObject *_wrap_StyledTextCtrl_GetSelectionMode(PyObject *self, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetLineSelStartPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetLineSelStartPosition(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -11569,7 +11659,7 @@ static PyObject *_wrap_StyledTextCtrl_GetLineSelStartPosition(PyObject *self, Py
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_GetLineSelStartPosition",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -11578,14 +11668,14 @@ static PyObject *_wrap_StyledTextCtrl_GetLineSelStartPosition(PyObject *self, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetLineSelEndPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetLineSelEndPosition(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -11599,7 +11689,7 @@ static PyObject *_wrap_StyledTextCtrl_GetLineSelEndPosition(PyObject *self, PyOb
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_GetLineSelEndPosition",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -11608,14 +11698,14 @@ static PyObject *_wrap_StyledTextCtrl_GetLineSelEndPosition(PyObject *self, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_LineDownRectExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_LineDownRectExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -11640,7 +11730,7 @@ static PyObject *_wrap_StyledTextCtrl_LineDownRectExtend(PyObject *self, PyObjec
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_LineUpRectExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_LineUpRectExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -11665,7 +11755,7 @@ static PyObject *_wrap_StyledTextCtrl_LineUpRectExtend(PyObject *self, PyObject 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_CharLeftRectExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_CharLeftRectExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -11690,7 +11780,7 @@ static PyObject *_wrap_StyledTextCtrl_CharLeftRectExtend(PyObject *self, PyObjec
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_CharRightRectExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_CharRightRectExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -11715,7 +11805,7 @@ static PyObject *_wrap_StyledTextCtrl_CharRightRectExtend(PyObject *self, PyObje
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_HomeRectExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_HomeRectExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -11740,7 +11830,7 @@ static PyObject *_wrap_StyledTextCtrl_HomeRectExtend(PyObject *self, PyObject *a
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_VCHomeRectExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_VCHomeRectExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -11765,7 +11855,7 @@ static PyObject *_wrap_StyledTextCtrl_VCHomeRectExtend(PyObject *self, PyObject 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_LineEndRectExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_LineEndRectExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -11790,7 +11880,7 @@ static PyObject *_wrap_StyledTextCtrl_LineEndRectExtend(PyObject *self, PyObject
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_PageUpRectExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_PageUpRectExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -11815,7 +11905,7 @@ static PyObject *_wrap_StyledTextCtrl_PageUpRectExtend(PyObject *self, PyObject 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_PageDownRectExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_PageDownRectExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -11840,7 +11930,7 @@ static PyObject *_wrap_StyledTextCtrl_PageDownRectExtend(PyObject *self, PyObjec
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_StutteredPageUp(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_StutteredPageUp(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -11865,7 +11955,7 @@ static PyObject *_wrap_StyledTextCtrl_StutteredPageUp(PyObject *self, PyObject *
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_StutteredPageUpExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_StutteredPageUpExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -11890,7 +11980,7 @@ static PyObject *_wrap_StyledTextCtrl_StutteredPageUpExtend(PyObject *self, PyOb
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_StutteredPageDown(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_StutteredPageDown(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -11915,7 +12005,7 @@ static PyObject *_wrap_StyledTextCtrl_StutteredPageDown(PyObject *self, PyObject
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_StutteredPageDownExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_StutteredPageDownExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -11940,7 +12030,7 @@ static PyObject *_wrap_StyledTextCtrl_StutteredPageDownExtend(PyObject *self, Py
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_WordLeftEnd(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_WordLeftEnd(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -11965,7 +12055,7 @@ static PyObject *_wrap_StyledTextCtrl_WordLeftEnd(PyObject *self, PyObject *args
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_WordLeftEndExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_WordLeftEndExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -11990,7 +12080,7 @@ static PyObject *_wrap_StyledTextCtrl_WordLeftEndExtend(PyObject *self, PyObject
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_WordRightEnd(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_WordRightEnd(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -12015,7 +12105,7 @@ static PyObject *_wrap_StyledTextCtrl_WordRightEnd(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_WordRightEndExtend(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_WordRightEndExtend(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -12040,7 +12130,7 @@ static PyObject *_wrap_StyledTextCtrl_WordRightEndExtend(PyObject *self, PyObjec
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetWhitespaceChars(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetWhitespaceChars(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
@@ -12081,7 +12171,7 @@ static PyObject *_wrap_StyledTextCtrl_SetWhitespaceChars(PyObject *self, PyObjec
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetCharsDefault(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetCharsDefault(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -12106,7 +12196,7 @@ static PyObject *_wrap_StyledTextCtrl_SetCharsDefault(PyObject *self, PyObject *
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_AutoCompGetCurrent(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_AutoCompGetCurrent(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -12125,14 +12215,14 @@ static PyObject *_wrap_StyledTextCtrl_AutoCompGetCurrent(PyObject *self, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_StartRecord(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_StartRecord(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -12157,7 +12247,7 @@ static PyObject *_wrap_StyledTextCtrl_StartRecord(PyObject *self, PyObject *args
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_StopRecord(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_StopRecord(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     PyObject * obj0 = 0 ;
@@ -12182,7 +12272,7 @@ static PyObject *_wrap_StyledTextCtrl_StopRecord(PyObject *self, PyObject *args,
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetLexer(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetLexer(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -12195,7 +12285,7 @@ static PyObject *_wrap_StyledTextCtrl_SetLexer(PyObject *self, PyObject *args, P
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetLexer",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -12211,7 +12301,7 @@ static PyObject *_wrap_StyledTextCtrl_SetLexer(PyObject *self, PyObject *args, P
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetLexer(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetLexer(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -12230,14 +12320,14 @@ static PyObject *_wrap_StyledTextCtrl_GetLexer(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_Colourise(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_Colourise(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -12252,9 +12342,9 @@ static PyObject *_wrap_StyledTextCtrl_Colourise(PyObject *self, PyObject *args, 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_Colourise",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -12270,7 +12360,7 @@ static PyObject *_wrap_StyledTextCtrl_Colourise(PyObject *self, PyObject *args, 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetProperty(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetProperty(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
@@ -12327,7 +12417,7 @@ static PyObject *_wrap_StyledTextCtrl_SetProperty(PyObject *self, PyObject *args
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetKeyWords(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetKeyWords(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -12343,7 +12433,7 @@ static PyObject *_wrap_StyledTextCtrl_SetKeyWords(PyObject *self, PyObject *args
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_SetKeyWords",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         arg3 = wxString_in_helper(obj2);
@@ -12372,7 +12462,7 @@ static PyObject *_wrap_StyledTextCtrl_SetKeyWords(PyObject *self, PyObject *args
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetLexerLanguage(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetLexerLanguage(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
@@ -12413,7 +12503,7 @@ static PyObject *_wrap_StyledTextCtrl_SetLexerLanguage(PyObject *self, PyObject 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetCurrentLine(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetCurrentLine(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int result;
@@ -12432,14 +12522,14 @@ static PyObject *_wrap_StyledTextCtrl_GetCurrentLine(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_StyleSetSpec(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_StyleSetSpec(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -12455,7 +12545,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetSpec(PyObject *self, PyObject *arg
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_StyleSetSpec",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         arg3 = wxString_in_helper(obj2);
@@ -12484,7 +12574,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetSpec(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_StyleSetFont(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_StyleSetFont(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -12499,7 +12589,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetFont(PyObject *self, PyObject *arg
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_StyleSetFont",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_wxFont,
     SWIG_POINTER_EXCEPTION | 0)) == -1)
@@ -12522,7 +12612,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetFont(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_StyleSetFontAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_StyleSetFontAttr(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -12546,20 +12636,20 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetFontAttr(PyObject *self, PyObject 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOOOO:StyledTextCtrl_StyleSetFontAttr",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         arg4 = wxString_in_helper(obj3);
         if (arg4 == NULL) SWIG_fail;
         temp4 = True;
     }
-    arg5 = (bool) SWIG_AsBool(obj4); 
+    arg5 = (bool)SWIG_As_bool(obj4); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg6 = (bool) SWIG_AsBool(obj5); 
+    arg6 = (bool)SWIG_As_bool(obj5); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg7 = (bool) SWIG_AsBool(obj6); 
+    arg7 = (bool)SWIG_As_bool(obj6); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -12583,7 +12673,7 @@ static PyObject *_wrap_StyledTextCtrl_StyleSetFontAttr(PyObject *self, PyObject 
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_CmdKeyExecute(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_CmdKeyExecute(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -12596,7 +12686,7 @@ static PyObject *_wrap_StyledTextCtrl_CmdKeyExecute(PyObject *self, PyObject *ar
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_CmdKeyExecute",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -12612,7 +12702,7 @@ static PyObject *_wrap_StyledTextCtrl_CmdKeyExecute(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetMargins(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetMargins(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -12627,9 +12717,9 @@ static PyObject *_wrap_StyledTextCtrl_SetMargins(PyObject *self, PyObject *args,
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:StyledTextCtrl_SetMargins",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -12645,20 +12735,22 @@ static PyObject *_wrap_StyledTextCtrl_SetMargins(PyObject *self, PyObject *args,
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetSelection(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int *arg2 = (int *) 0 ;
     int *arg3 = (int *) 0 ;
     int temp2 ;
+    int res2 = 0 ;
     int temp3 ;
+    int res3 = 0 ;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "self", NULL 
     };
     
-    arg2 = &temp2;
-    arg3 = &temp3;
+    arg2 = &temp2; res2 = SWIG_NEWOBJ;
+    arg3 = &temp3; res3 = SWIG_NEWOBJ;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:StyledTextCtrl_GetSelection",kwnames,&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
@@ -12670,21 +12762,17 @@ static PyObject *_wrap_StyledTextCtrl_GetSelection(PyObject *self, PyObject *arg
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
-    {
-        PyObject *o = PyInt_FromLong((long) (*arg2));
-        resultobj = t_output_helper(resultobj,o);
-    }
-    {
-        PyObject *o = PyInt_FromLong((long) (*arg3));
-        resultobj = t_output_helper(resultobj,o);
-    }
+    resultobj = t_output_helper(resultobj, ((res2 == SWIG_NEWOBJ) ?
+    SWIG_From_int((*arg2)) : SWIG_NewPointerObj((void*)(arg2), SWIGTYPE_p_int, 0)));
+    resultobj = t_output_helper(resultobj, ((res3 == SWIG_NEWOBJ) ?
+    SWIG_From_int((*arg3)) : SWIG_NewPointerObj((void*)(arg3), SWIGTYPE_p_int, 0)));
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_PointFromPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_PointFromPosition(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -12698,7 +12786,7 @@ static PyObject *_wrap_StyledTextCtrl_PointFromPosition(PyObject *self, PyObject
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_PointFromPosition",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -12718,7 +12806,7 @@ static PyObject *_wrap_StyledTextCtrl_PointFromPosition(PyObject *self, PyObject
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_ScrollToLine(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_ScrollToLine(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -12731,7 +12819,7 @@ static PyObject *_wrap_StyledTextCtrl_ScrollToLine(PyObject *self, PyObject *arg
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_ScrollToLine",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -12747,7 +12835,7 @@ static PyObject *_wrap_StyledTextCtrl_ScrollToLine(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_ScrollToColumn(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_ScrollToColumn(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -12760,7 +12848,7 @@ static PyObject *_wrap_StyledTextCtrl_ScrollToColumn(PyObject *self, PyObject *a
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_ScrollToColumn",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -12776,7 +12864,7 @@ static PyObject *_wrap_StyledTextCtrl_ScrollToColumn(PyObject *self, PyObject *a
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SendMsg(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SendMsg(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -12794,14 +12882,14 @@ static PyObject *_wrap_StyledTextCtrl_SendMsg(PyObject *self, PyObject *args, Py
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OO:StyledTextCtrl_SendMsg",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     if (obj2) {
-        arg3 = (long) SWIG_AsLong(obj2); 
+        arg3 = (long)SWIG_As_long(obj2); 
         if (PyErr_Occurred()) SWIG_fail;
     }
     if (obj3) {
-        arg4 = (long) SWIG_AsLong(obj3); 
+        arg4 = (long)SWIG_As_long(obj3); 
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
@@ -12811,14 +12899,14 @@ static PyObject *_wrap_StyledTextCtrl_SendMsg(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromLong((long)result);
+    resultobj = SWIG_From_long((long)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetVScrollBar(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetVScrollBar(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxScrollBar *arg2 = (wxScrollBar *) 0 ;
@@ -12847,7 +12935,7 @@ static PyObject *_wrap_StyledTextCtrl_SetVScrollBar(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetHScrollBar(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetHScrollBar(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxScrollBar *arg2 = (wxScrollBar *) 0 ;
@@ -12876,7 +12964,7 @@ static PyObject *_wrap_StyledTextCtrl_SetHScrollBar(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetLastKeydownProcessed(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetLastKeydownProcessed(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool result;
@@ -12904,7 +12992,7 @@ static PyObject *_wrap_StyledTextCtrl_GetLastKeydownProcessed(PyObject *self, Py
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetLastKeydownProcessed(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetLastKeydownProcessed(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -12917,7 +13005,7 @@ static PyObject *_wrap_StyledTextCtrl_SetLastKeydownProcessed(PyObject *self, Py
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetLastKeydownProcessed",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -12933,7 +13021,7 @@ static PyObject *_wrap_StyledTextCtrl_SetLastKeydownProcessed(PyObject *self, Py
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SaveFile(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SaveFile(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
@@ -12977,7 +13065,7 @@ static PyObject *_wrap_StyledTextCtrl_SaveFile(PyObject *self, PyObject *args, P
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_LoadFile(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_LoadFile(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxString *arg2 = 0 ;
@@ -13021,7 +13109,7 @@ static PyObject *_wrap_StyledTextCtrl_LoadFile(PyObject *self, PyObject *args, P
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_DoDragOver(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_DoDragOver(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
@@ -13039,11 +13127,11 @@ static PyObject *_wrap_StyledTextCtrl_DoDragOver(PyObject *self, PyObject *args,
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:StyledTextCtrl_DoDragOver",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (int) SWIG_AsInt(obj2); 
+    arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg4 = (wxDragResult) SWIG_AsInt(obj3); 
+    arg4 = (int)SWIG_As_int(obj3); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13052,14 +13140,14 @@ static PyObject *_wrap_StyledTextCtrl_DoDragOver(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_DoDropText(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_DoDropText(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     long arg2 ;
@@ -13078,9 +13166,9 @@ static PyObject *_wrap_StyledTextCtrl_DoDropText(PyObject *self, PyObject *args,
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:StyledTextCtrl_DoDropText",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (long) SWIG_AsLong(obj1); 
+    arg2 = (long)SWIG_As_long(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (long) SWIG_AsLong(obj2); 
+    arg3 = (long)SWIG_As_long(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         arg4 = wxString_in_helper(obj3);
@@ -13111,7 +13199,7 @@ static PyObject *_wrap_StyledTextCtrl_DoDropText(PyObject *self, PyObject *args,
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_SetUseAntiAliasing(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_SetUseAntiAliasing(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool arg2 ;
@@ -13124,7 +13212,7 @@ static PyObject *_wrap_StyledTextCtrl_SetUseAntiAliasing(PyObject *self, PyObjec
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetUseAntiAliasing",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13140,7 +13228,7 @@ static PyObject *_wrap_StyledTextCtrl_SetUseAntiAliasing(PyObject *self, PyObjec
 }
 
 
-static PyObject *_wrap_StyledTextCtrl_GetUseAntiAliasing(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextCtrl_GetUseAntiAliasing(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     bool result;
@@ -13168,14 +13256,14 @@ static PyObject *_wrap_StyledTextCtrl_GetUseAntiAliasing(PyObject *self, PyObjec
 }
 
 
-static PyObject * StyledTextCtrl_swigregister(PyObject *self, PyObject *args) {
+static PyObject * StyledTextCtrl_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxStyledTextCtrl, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_StyledTextEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_StyledTextEvent(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEventType arg1 = (wxEventType) 0 ;
     int arg2 = (int) 0 ;
@@ -13188,11 +13276,11 @@ static PyObject *_wrap_new_StyledTextEvent(PyObject *self, PyObject *args, PyObj
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OO:new_StyledTextEvent",kwnames,&obj0,&obj1)) goto fail;
     if (obj0) {
-        arg1 = (wxEventType) SWIG_AsInt(obj0); 
+        arg1 = (wxEventType)SWIG_As_int(obj0); 
         if (PyErr_Occurred()) SWIG_fail;
     }
     if (obj1) {
-        arg2 = (int) SWIG_AsInt(obj1); 
+        arg2 = (int)SWIG_As_int(obj1); 
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
@@ -13209,7 +13297,7 @@ static PyObject *_wrap_new_StyledTextEvent(PyObject *self, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_delete_StyledTextEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_StyledTextEvent(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     PyObject * obj0 = 0 ;
@@ -13234,7 +13322,7 @@ static PyObject *_wrap_delete_StyledTextEvent(PyObject *self, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_StyledTextEvent_SetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_SetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int arg2 ;
@@ -13247,7 +13335,7 @@ static PyObject *_wrap_StyledTextEvent_SetPosition(PyObject *self, PyObject *arg
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextEvent_SetPosition",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextEvent,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13263,7 +13351,7 @@ static PyObject *_wrap_StyledTextEvent_SetPosition(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextEvent_SetKey(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_SetKey(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int arg2 ;
@@ -13276,7 +13364,7 @@ static PyObject *_wrap_StyledTextEvent_SetKey(PyObject *self, PyObject *args, Py
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextEvent_SetKey",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextEvent,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13292,7 +13380,7 @@ static PyObject *_wrap_StyledTextEvent_SetKey(PyObject *self, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_StyledTextEvent_SetModifiers(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_SetModifiers(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int arg2 ;
@@ -13305,7 +13393,7 @@ static PyObject *_wrap_StyledTextEvent_SetModifiers(PyObject *self, PyObject *ar
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextEvent_SetModifiers",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextEvent,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13321,7 +13409,7 @@ static PyObject *_wrap_StyledTextEvent_SetModifiers(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_StyledTextEvent_SetModificationType(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_SetModificationType(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int arg2 ;
@@ -13334,7 +13422,7 @@ static PyObject *_wrap_StyledTextEvent_SetModificationType(PyObject *self, PyObj
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextEvent_SetModificationType",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextEvent,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13350,7 +13438,7 @@ static PyObject *_wrap_StyledTextEvent_SetModificationType(PyObject *self, PyObj
 }
 
 
-static PyObject *_wrap_StyledTextEvent_SetText(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_SetText(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     wxString *arg2 = 0 ;
@@ -13391,7 +13479,7 @@ static PyObject *_wrap_StyledTextEvent_SetText(PyObject *self, PyObject *args, P
 }
 
 
-static PyObject *_wrap_StyledTextEvent_SetLength(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_SetLength(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int arg2 ;
@@ -13404,7 +13492,7 @@ static PyObject *_wrap_StyledTextEvent_SetLength(PyObject *self, PyObject *args,
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextEvent_SetLength",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextEvent,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13420,7 +13508,7 @@ static PyObject *_wrap_StyledTextEvent_SetLength(PyObject *self, PyObject *args,
 }
 
 
-static PyObject *_wrap_StyledTextEvent_SetLinesAdded(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_SetLinesAdded(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int arg2 ;
@@ -13433,7 +13521,7 @@ static PyObject *_wrap_StyledTextEvent_SetLinesAdded(PyObject *self, PyObject *a
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextEvent_SetLinesAdded",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextEvent,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13449,7 +13537,7 @@ static PyObject *_wrap_StyledTextEvent_SetLinesAdded(PyObject *self, PyObject *a
 }
 
 
-static PyObject *_wrap_StyledTextEvent_SetLine(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_SetLine(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int arg2 ;
@@ -13462,7 +13550,7 @@ static PyObject *_wrap_StyledTextEvent_SetLine(PyObject *self, PyObject *args, P
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextEvent_SetLine",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextEvent,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13478,7 +13566,7 @@ static PyObject *_wrap_StyledTextEvent_SetLine(PyObject *self, PyObject *args, P
 }
 
 
-static PyObject *_wrap_StyledTextEvent_SetFoldLevelNow(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_SetFoldLevelNow(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int arg2 ;
@@ -13491,7 +13579,7 @@ static PyObject *_wrap_StyledTextEvent_SetFoldLevelNow(PyObject *self, PyObject 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextEvent_SetFoldLevelNow",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextEvent,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13507,7 +13595,7 @@ static PyObject *_wrap_StyledTextEvent_SetFoldLevelNow(PyObject *self, PyObject 
 }
 
 
-static PyObject *_wrap_StyledTextEvent_SetFoldLevelPrev(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_SetFoldLevelPrev(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int arg2 ;
@@ -13520,7 +13608,7 @@ static PyObject *_wrap_StyledTextEvent_SetFoldLevelPrev(PyObject *self, PyObject
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextEvent_SetFoldLevelPrev",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextEvent,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13536,7 +13624,7 @@ static PyObject *_wrap_StyledTextEvent_SetFoldLevelPrev(PyObject *self, PyObject
 }
 
 
-static PyObject *_wrap_StyledTextEvent_SetMargin(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_SetMargin(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int arg2 ;
@@ -13549,7 +13637,7 @@ static PyObject *_wrap_StyledTextEvent_SetMargin(PyObject *self, PyObject *args,
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextEvent_SetMargin",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextEvent,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13565,7 +13653,7 @@ static PyObject *_wrap_StyledTextEvent_SetMargin(PyObject *self, PyObject *args,
 }
 
 
-static PyObject *_wrap_StyledTextEvent_SetMessage(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_SetMessage(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int arg2 ;
@@ -13578,7 +13666,7 @@ static PyObject *_wrap_StyledTextEvent_SetMessage(PyObject *self, PyObject *args
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextEvent_SetMessage",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextEvent,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13594,7 +13682,7 @@ static PyObject *_wrap_StyledTextEvent_SetMessage(PyObject *self, PyObject *args
 }
 
 
-static PyObject *_wrap_StyledTextEvent_SetWParam(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_SetWParam(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int arg2 ;
@@ -13607,7 +13695,7 @@ static PyObject *_wrap_StyledTextEvent_SetWParam(PyObject *self, PyObject *args,
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextEvent_SetWParam",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextEvent,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13623,7 +13711,7 @@ static PyObject *_wrap_StyledTextEvent_SetWParam(PyObject *self, PyObject *args,
 }
 
 
-static PyObject *_wrap_StyledTextEvent_SetLParam(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_SetLParam(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int arg2 ;
@@ -13636,7 +13724,7 @@ static PyObject *_wrap_StyledTextEvent_SetLParam(PyObject *self, PyObject *args,
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextEvent_SetLParam",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextEvent,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13652,7 +13740,7 @@ static PyObject *_wrap_StyledTextEvent_SetLParam(PyObject *self, PyObject *args,
 }
 
 
-static PyObject *_wrap_StyledTextEvent_SetListType(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_SetListType(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int arg2 ;
@@ -13665,7 +13753,7 @@ static PyObject *_wrap_StyledTextEvent_SetListType(PyObject *self, PyObject *arg
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextEvent_SetListType",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextEvent,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13681,7 +13769,7 @@ static PyObject *_wrap_StyledTextEvent_SetListType(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextEvent_SetX(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_SetX(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int arg2 ;
@@ -13694,7 +13782,7 @@ static PyObject *_wrap_StyledTextEvent_SetX(PyObject *self, PyObject *args, PyOb
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextEvent_SetX",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextEvent,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13710,7 +13798,7 @@ static PyObject *_wrap_StyledTextEvent_SetX(PyObject *self, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_StyledTextEvent_SetY(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_SetY(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int arg2 ;
@@ -13723,7 +13811,7 @@ static PyObject *_wrap_StyledTextEvent_SetY(PyObject *self, PyObject *args, PyOb
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextEvent_SetY",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextEvent,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13739,7 +13827,7 @@ static PyObject *_wrap_StyledTextEvent_SetY(PyObject *self, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_StyledTextEvent_SetDragText(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_SetDragText(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     wxString *arg2 = 0 ;
@@ -13780,7 +13868,7 @@ static PyObject *_wrap_StyledTextEvent_SetDragText(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextEvent_SetDragAllowMove(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_SetDragAllowMove(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     bool arg2 ;
@@ -13793,7 +13881,7 @@ static PyObject *_wrap_StyledTextEvent_SetDragAllowMove(PyObject *self, PyObject
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextEvent_SetDragAllowMove",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextEvent,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13809,7 +13897,7 @@ static PyObject *_wrap_StyledTextEvent_SetDragAllowMove(PyObject *self, PyObject
 }
 
 
-static PyObject *_wrap_StyledTextEvent_SetDragResult(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_SetDragResult(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int arg2 ;
@@ -13822,7 +13910,7 @@ static PyObject *_wrap_StyledTextEvent_SetDragResult(PyObject *self, PyObject *a
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextEvent_SetDragResult",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStyledTextEvent,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (wxDragResult) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13838,7 +13926,7 @@ static PyObject *_wrap_StyledTextEvent_SetDragResult(PyObject *self, PyObject *a
 }
 
 
-static PyObject *_wrap_StyledTextEvent_GetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_GetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int result;
@@ -13857,14 +13945,14 @@ static PyObject *_wrap_StyledTextEvent_GetPosition(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextEvent_GetKey(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_GetKey(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int result;
@@ -13883,14 +13971,14 @@ static PyObject *_wrap_StyledTextEvent_GetKey(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextEvent_GetModifiers(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_GetModifiers(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int result;
@@ -13909,14 +13997,14 @@ static PyObject *_wrap_StyledTextEvent_GetModifiers(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextEvent_GetModificationType(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_GetModificationType(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int result;
@@ -13935,14 +14023,14 @@ static PyObject *_wrap_StyledTextEvent_GetModificationType(PyObject *self, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextEvent_GetText(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_GetText(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     wxString result;
@@ -13974,7 +14062,7 @@ static PyObject *_wrap_StyledTextEvent_GetText(PyObject *self, PyObject *args, P
 }
 
 
-static PyObject *_wrap_StyledTextEvent_GetLength(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_GetLength(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int result;
@@ -13993,14 +14081,14 @@ static PyObject *_wrap_StyledTextEvent_GetLength(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextEvent_GetLinesAdded(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_GetLinesAdded(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int result;
@@ -14019,14 +14107,14 @@ static PyObject *_wrap_StyledTextEvent_GetLinesAdded(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextEvent_GetLine(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_GetLine(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int result;
@@ -14045,14 +14133,14 @@ static PyObject *_wrap_StyledTextEvent_GetLine(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextEvent_GetFoldLevelNow(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_GetFoldLevelNow(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int result;
@@ -14071,14 +14159,14 @@ static PyObject *_wrap_StyledTextEvent_GetFoldLevelNow(PyObject *self, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextEvent_GetFoldLevelPrev(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_GetFoldLevelPrev(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int result;
@@ -14097,14 +14185,14 @@ static PyObject *_wrap_StyledTextEvent_GetFoldLevelPrev(PyObject *self, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextEvent_GetMargin(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_GetMargin(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int result;
@@ -14123,14 +14211,14 @@ static PyObject *_wrap_StyledTextEvent_GetMargin(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextEvent_GetMessage(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_GetMessage(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int result;
@@ -14149,14 +14237,14 @@ static PyObject *_wrap_StyledTextEvent_GetMessage(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextEvent_GetWParam(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_GetWParam(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int result;
@@ -14175,14 +14263,14 @@ static PyObject *_wrap_StyledTextEvent_GetWParam(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextEvent_GetLParam(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_GetLParam(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int result;
@@ -14201,14 +14289,14 @@ static PyObject *_wrap_StyledTextEvent_GetLParam(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextEvent_GetListType(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_GetListType(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int result;
@@ -14227,14 +14315,14 @@ static PyObject *_wrap_StyledTextEvent_GetListType(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextEvent_GetX(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_GetX(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int result;
@@ -14253,14 +14341,14 @@ static PyObject *_wrap_StyledTextEvent_GetX(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextEvent_GetY(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_GetY(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int result;
@@ -14279,14 +14367,14 @@ static PyObject *_wrap_StyledTextEvent_GetY(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextEvent_GetDragText(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_GetDragText(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     wxString result;
@@ -14318,7 +14406,7 @@ static PyObject *_wrap_StyledTextEvent_GetDragText(PyObject *self, PyObject *arg
 }
 
 
-static PyObject *_wrap_StyledTextEvent_GetDragAllowMove(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_GetDragAllowMove(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     bool result;
@@ -14346,7 +14434,7 @@ static PyObject *_wrap_StyledTextEvent_GetDragAllowMove(PyObject *self, PyObject
 }
 
 
-static PyObject *_wrap_StyledTextEvent_GetDragResult(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_GetDragResult(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     int result;
@@ -14365,14 +14453,14 @@ static PyObject *_wrap_StyledTextEvent_GetDragResult(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromInt((int)result);
+    resultobj = SWIG_From_int((int)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_StyledTextEvent_GetShift(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_GetShift(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     bool result;
@@ -14400,7 +14488,7 @@ static PyObject *_wrap_StyledTextEvent_GetShift(PyObject *self, PyObject *args, 
 }
 
 
-static PyObject *_wrap_StyledTextEvent_GetControl(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_GetControl(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     bool result;
@@ -14428,7 +14516,7 @@ static PyObject *_wrap_StyledTextEvent_GetControl(PyObject *self, PyObject *args
 }
 
 
-static PyObject *_wrap_StyledTextEvent_GetAlt(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_GetAlt(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     bool result;
@@ -14456,7 +14544,7 @@ static PyObject *_wrap_StyledTextEvent_GetAlt(PyObject *self, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_StyledTextEvent_Clone(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_StyledTextEvent_Clone(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
     wxEvent *result;
@@ -14482,7 +14570,7 @@ static PyObject *_wrap_StyledTextEvent_Clone(PyObject *self, PyObject *args, PyO
 }
 
 
-static PyObject * StyledTextEvent_swigregister(PyObject *self, PyObject *args) {
+static PyObject * StyledTextEvent_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxStyledTextEvent, obj);
@@ -14490,477 +14578,477 @@ static PyObject * StyledTextEvent_swigregister(PyObject *self, PyObject *args) {
     return Py_BuildValue((char *)"");
 }
 static PyMethodDef SwigMethods[] = {
-	 { (char *)"new_StyledTextCtrl", (PyCFunction) _wrap_new_StyledTextCtrl, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"new_PreStyledTextCtrl", (PyCFunction) _wrap_new_PreStyledTextCtrl, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_Create", (PyCFunction) _wrap_StyledTextCtrl_Create, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_AddText", (PyCFunction) _wrap_StyledTextCtrl_AddText, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_AddStyledText", (PyCFunction) _wrap_StyledTextCtrl_AddStyledText, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_InsertText", (PyCFunction) _wrap_StyledTextCtrl_InsertText, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_ClearAll", (PyCFunction) _wrap_StyledTextCtrl_ClearAll, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_ClearDocumentStyle", (PyCFunction) _wrap_StyledTextCtrl_ClearDocumentStyle, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetLength", (PyCFunction) _wrap_StyledTextCtrl_GetLength, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetCharAt", (PyCFunction) _wrap_StyledTextCtrl_GetCharAt, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetCurrentPos", (PyCFunction) _wrap_StyledTextCtrl_GetCurrentPos, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetAnchor", (PyCFunction) _wrap_StyledTextCtrl_GetAnchor, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetStyleAt", (PyCFunction) _wrap_StyledTextCtrl_GetStyleAt, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_Redo", (PyCFunction) _wrap_StyledTextCtrl_Redo, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetUndoCollection", (PyCFunction) _wrap_StyledTextCtrl_SetUndoCollection, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SelectAll", (PyCFunction) _wrap_StyledTextCtrl_SelectAll, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetSavePoint", (PyCFunction) _wrap_StyledTextCtrl_SetSavePoint, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetStyledText", (PyCFunction) _wrap_StyledTextCtrl_GetStyledText, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_CanRedo", (PyCFunction) _wrap_StyledTextCtrl_CanRedo, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_MarkerLineFromHandle", (PyCFunction) _wrap_StyledTextCtrl_MarkerLineFromHandle, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_MarkerDeleteHandle", (PyCFunction) _wrap_StyledTextCtrl_MarkerDeleteHandle, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetUndoCollection", (PyCFunction) _wrap_StyledTextCtrl_GetUndoCollection, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetViewWhiteSpace", (PyCFunction) _wrap_StyledTextCtrl_GetViewWhiteSpace, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetViewWhiteSpace", (PyCFunction) _wrap_StyledTextCtrl_SetViewWhiteSpace, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_PositionFromPoint", (PyCFunction) _wrap_StyledTextCtrl_PositionFromPoint, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_PositionFromPointClose", (PyCFunction) _wrap_StyledTextCtrl_PositionFromPointClose, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GotoLine", (PyCFunction) _wrap_StyledTextCtrl_GotoLine, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GotoPos", (PyCFunction) _wrap_StyledTextCtrl_GotoPos, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetAnchor", (PyCFunction) _wrap_StyledTextCtrl_SetAnchor, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetCurLine", (PyCFunction) _wrap_StyledTextCtrl_GetCurLine, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetEndStyled", (PyCFunction) _wrap_StyledTextCtrl_GetEndStyled, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_ConvertEOLs", (PyCFunction) _wrap_StyledTextCtrl_ConvertEOLs, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetEOLMode", (PyCFunction) _wrap_StyledTextCtrl_GetEOLMode, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetEOLMode", (PyCFunction) _wrap_StyledTextCtrl_SetEOLMode, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_StartStyling", (PyCFunction) _wrap_StyledTextCtrl_StartStyling, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetStyling", (PyCFunction) _wrap_StyledTextCtrl_SetStyling, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetBufferedDraw", (PyCFunction) _wrap_StyledTextCtrl_GetBufferedDraw, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetBufferedDraw", (PyCFunction) _wrap_StyledTextCtrl_SetBufferedDraw, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetTabWidth", (PyCFunction) _wrap_StyledTextCtrl_SetTabWidth, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetTabWidth", (PyCFunction) _wrap_StyledTextCtrl_GetTabWidth, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetCodePage", (PyCFunction) _wrap_StyledTextCtrl_SetCodePage, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_MarkerDefine", (PyCFunction) _wrap_StyledTextCtrl_MarkerDefine, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_MarkerSetForeground", (PyCFunction) _wrap_StyledTextCtrl_MarkerSetForeground, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_MarkerSetBackground", (PyCFunction) _wrap_StyledTextCtrl_MarkerSetBackground, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_MarkerAdd", (PyCFunction) _wrap_StyledTextCtrl_MarkerAdd, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_MarkerDelete", (PyCFunction) _wrap_StyledTextCtrl_MarkerDelete, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_MarkerDeleteAll", (PyCFunction) _wrap_StyledTextCtrl_MarkerDeleteAll, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_MarkerGet", (PyCFunction) _wrap_StyledTextCtrl_MarkerGet, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_MarkerNext", (PyCFunction) _wrap_StyledTextCtrl_MarkerNext, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_MarkerPrevious", (PyCFunction) _wrap_StyledTextCtrl_MarkerPrevious, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_MarkerDefineBitmap", (PyCFunction) _wrap_StyledTextCtrl_MarkerDefineBitmap, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetMarginType", (PyCFunction) _wrap_StyledTextCtrl_SetMarginType, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetMarginType", (PyCFunction) _wrap_StyledTextCtrl_GetMarginType, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetMarginWidth", (PyCFunction) _wrap_StyledTextCtrl_SetMarginWidth, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetMarginWidth", (PyCFunction) _wrap_StyledTextCtrl_GetMarginWidth, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetMarginMask", (PyCFunction) _wrap_StyledTextCtrl_SetMarginMask, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetMarginMask", (PyCFunction) _wrap_StyledTextCtrl_GetMarginMask, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetMarginSensitive", (PyCFunction) _wrap_StyledTextCtrl_SetMarginSensitive, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetMarginSensitive", (PyCFunction) _wrap_StyledTextCtrl_GetMarginSensitive, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_StyleClearAll", (PyCFunction) _wrap_StyledTextCtrl_StyleClearAll, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_StyleSetForeground", (PyCFunction) _wrap_StyledTextCtrl_StyleSetForeground, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_StyleSetBackground", (PyCFunction) _wrap_StyledTextCtrl_StyleSetBackground, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_StyleSetBold", (PyCFunction) _wrap_StyledTextCtrl_StyleSetBold, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_StyleSetItalic", (PyCFunction) _wrap_StyledTextCtrl_StyleSetItalic, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_StyleSetSize", (PyCFunction) _wrap_StyledTextCtrl_StyleSetSize, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_StyleSetFaceName", (PyCFunction) _wrap_StyledTextCtrl_StyleSetFaceName, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_StyleSetEOLFilled", (PyCFunction) _wrap_StyledTextCtrl_StyleSetEOLFilled, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_StyleResetDefault", (PyCFunction) _wrap_StyledTextCtrl_StyleResetDefault, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_StyleSetUnderline", (PyCFunction) _wrap_StyledTextCtrl_StyleSetUnderline, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_StyleSetCase", (PyCFunction) _wrap_StyledTextCtrl_StyleSetCase, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_StyleSetCharacterSet", (PyCFunction) _wrap_StyledTextCtrl_StyleSetCharacterSet, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_StyleSetHotSpot", (PyCFunction) _wrap_StyledTextCtrl_StyleSetHotSpot, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetSelForeground", (PyCFunction) _wrap_StyledTextCtrl_SetSelForeground, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetSelBackground", (PyCFunction) _wrap_StyledTextCtrl_SetSelBackground, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetCaretForeground", (PyCFunction) _wrap_StyledTextCtrl_SetCaretForeground, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_CmdKeyAssign", (PyCFunction) _wrap_StyledTextCtrl_CmdKeyAssign, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_CmdKeyClear", (PyCFunction) _wrap_StyledTextCtrl_CmdKeyClear, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_CmdKeyClearAll", (PyCFunction) _wrap_StyledTextCtrl_CmdKeyClearAll, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetStyleBytes", (PyCFunction) _wrap_StyledTextCtrl_SetStyleBytes, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_StyleSetVisible", (PyCFunction) _wrap_StyledTextCtrl_StyleSetVisible, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetCaretPeriod", (PyCFunction) _wrap_StyledTextCtrl_GetCaretPeriod, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetCaretPeriod", (PyCFunction) _wrap_StyledTextCtrl_SetCaretPeriod, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetWordChars", (PyCFunction) _wrap_StyledTextCtrl_SetWordChars, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_BeginUndoAction", (PyCFunction) _wrap_StyledTextCtrl_BeginUndoAction, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_EndUndoAction", (PyCFunction) _wrap_StyledTextCtrl_EndUndoAction, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_IndicatorSetStyle", (PyCFunction) _wrap_StyledTextCtrl_IndicatorSetStyle, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_IndicatorGetStyle", (PyCFunction) _wrap_StyledTextCtrl_IndicatorGetStyle, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_IndicatorSetForeground", (PyCFunction) _wrap_StyledTextCtrl_IndicatorSetForeground, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_IndicatorGetForeground", (PyCFunction) _wrap_StyledTextCtrl_IndicatorGetForeground, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetWhitespaceForeground", (PyCFunction) _wrap_StyledTextCtrl_SetWhitespaceForeground, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetWhitespaceBackground", (PyCFunction) _wrap_StyledTextCtrl_SetWhitespaceBackground, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetStyleBits", (PyCFunction) _wrap_StyledTextCtrl_SetStyleBits, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetStyleBits", (PyCFunction) _wrap_StyledTextCtrl_GetStyleBits, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetLineState", (PyCFunction) _wrap_StyledTextCtrl_SetLineState, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetLineState", (PyCFunction) _wrap_StyledTextCtrl_GetLineState, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetMaxLineState", (PyCFunction) _wrap_StyledTextCtrl_GetMaxLineState, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetCaretLineVisible", (PyCFunction) _wrap_StyledTextCtrl_GetCaretLineVisible, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetCaretLineVisible", (PyCFunction) _wrap_StyledTextCtrl_SetCaretLineVisible, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetCaretLineBack", (PyCFunction) _wrap_StyledTextCtrl_GetCaretLineBack, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetCaretLineBack", (PyCFunction) _wrap_StyledTextCtrl_SetCaretLineBack, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_StyleSetChangeable", (PyCFunction) _wrap_StyledTextCtrl_StyleSetChangeable, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_AutoCompShow", (PyCFunction) _wrap_StyledTextCtrl_AutoCompShow, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_AutoCompCancel", (PyCFunction) _wrap_StyledTextCtrl_AutoCompCancel, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_AutoCompActive", (PyCFunction) _wrap_StyledTextCtrl_AutoCompActive, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_AutoCompPosStart", (PyCFunction) _wrap_StyledTextCtrl_AutoCompPosStart, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_AutoCompComplete", (PyCFunction) _wrap_StyledTextCtrl_AutoCompComplete, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_AutoCompStops", (PyCFunction) _wrap_StyledTextCtrl_AutoCompStops, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_AutoCompSetSeparator", (PyCFunction) _wrap_StyledTextCtrl_AutoCompSetSeparator, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_AutoCompGetSeparator", (PyCFunction) _wrap_StyledTextCtrl_AutoCompGetSeparator, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_AutoCompSelect", (PyCFunction) _wrap_StyledTextCtrl_AutoCompSelect, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_AutoCompSetCancelAtStart", (PyCFunction) _wrap_StyledTextCtrl_AutoCompSetCancelAtStart, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_AutoCompGetCancelAtStart", (PyCFunction) _wrap_StyledTextCtrl_AutoCompGetCancelAtStart, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_AutoCompSetFillUps", (PyCFunction) _wrap_StyledTextCtrl_AutoCompSetFillUps, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_AutoCompSetChooseSingle", (PyCFunction) _wrap_StyledTextCtrl_AutoCompSetChooseSingle, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_AutoCompGetChooseSingle", (PyCFunction) _wrap_StyledTextCtrl_AutoCompGetChooseSingle, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_AutoCompSetIgnoreCase", (PyCFunction) _wrap_StyledTextCtrl_AutoCompSetIgnoreCase, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_AutoCompGetIgnoreCase", (PyCFunction) _wrap_StyledTextCtrl_AutoCompGetIgnoreCase, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_UserListShow", (PyCFunction) _wrap_StyledTextCtrl_UserListShow, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_AutoCompSetAutoHide", (PyCFunction) _wrap_StyledTextCtrl_AutoCompSetAutoHide, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_AutoCompGetAutoHide", (PyCFunction) _wrap_StyledTextCtrl_AutoCompGetAutoHide, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_AutoCompSetDropRestOfWord", (PyCFunction) _wrap_StyledTextCtrl_AutoCompSetDropRestOfWord, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_AutoCompGetDropRestOfWord", (PyCFunction) _wrap_StyledTextCtrl_AutoCompGetDropRestOfWord, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_RegisterImage", (PyCFunction) _wrap_StyledTextCtrl_RegisterImage, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_ClearRegisteredImages", (PyCFunction) _wrap_StyledTextCtrl_ClearRegisteredImages, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_AutoCompGetTypeSeparator", (PyCFunction) _wrap_StyledTextCtrl_AutoCompGetTypeSeparator, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_AutoCompSetTypeSeparator", (PyCFunction) _wrap_StyledTextCtrl_AutoCompSetTypeSeparator, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetIndent", (PyCFunction) _wrap_StyledTextCtrl_SetIndent, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetIndent", (PyCFunction) _wrap_StyledTextCtrl_GetIndent, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetUseTabs", (PyCFunction) _wrap_StyledTextCtrl_SetUseTabs, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetUseTabs", (PyCFunction) _wrap_StyledTextCtrl_GetUseTabs, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetLineIndentation", (PyCFunction) _wrap_StyledTextCtrl_SetLineIndentation, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetLineIndentation", (PyCFunction) _wrap_StyledTextCtrl_GetLineIndentation, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetLineIndentPosition", (PyCFunction) _wrap_StyledTextCtrl_GetLineIndentPosition, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetColumn", (PyCFunction) _wrap_StyledTextCtrl_GetColumn, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetUseHorizontalScrollBar", (PyCFunction) _wrap_StyledTextCtrl_SetUseHorizontalScrollBar, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetUseHorizontalScrollBar", (PyCFunction) _wrap_StyledTextCtrl_GetUseHorizontalScrollBar, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetIndentationGuides", (PyCFunction) _wrap_StyledTextCtrl_SetIndentationGuides, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetIndentationGuides", (PyCFunction) _wrap_StyledTextCtrl_GetIndentationGuides, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetHighlightGuide", (PyCFunction) _wrap_StyledTextCtrl_SetHighlightGuide, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetHighlightGuide", (PyCFunction) _wrap_StyledTextCtrl_GetHighlightGuide, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetLineEndPosition", (PyCFunction) _wrap_StyledTextCtrl_GetLineEndPosition, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetCodePage", (PyCFunction) _wrap_StyledTextCtrl_GetCodePage, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetCaretForeground", (PyCFunction) _wrap_StyledTextCtrl_GetCaretForeground, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetReadOnly", (PyCFunction) _wrap_StyledTextCtrl_GetReadOnly, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetCurrentPos", (PyCFunction) _wrap_StyledTextCtrl_SetCurrentPos, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetSelectionStart", (PyCFunction) _wrap_StyledTextCtrl_SetSelectionStart, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetSelectionStart", (PyCFunction) _wrap_StyledTextCtrl_GetSelectionStart, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetSelectionEnd", (PyCFunction) _wrap_StyledTextCtrl_SetSelectionEnd, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetSelectionEnd", (PyCFunction) _wrap_StyledTextCtrl_GetSelectionEnd, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetPrintMagnification", (PyCFunction) _wrap_StyledTextCtrl_SetPrintMagnification, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetPrintMagnification", (PyCFunction) _wrap_StyledTextCtrl_GetPrintMagnification, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetPrintColourMode", (PyCFunction) _wrap_StyledTextCtrl_SetPrintColourMode, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetPrintColourMode", (PyCFunction) _wrap_StyledTextCtrl_GetPrintColourMode, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_FindText", (PyCFunction) _wrap_StyledTextCtrl_FindText, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_FormatRange", (PyCFunction) _wrap_StyledTextCtrl_FormatRange, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetFirstVisibleLine", (PyCFunction) _wrap_StyledTextCtrl_GetFirstVisibleLine, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetLine", (PyCFunction) _wrap_StyledTextCtrl_GetLine, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetLineCount", (PyCFunction) _wrap_StyledTextCtrl_GetLineCount, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetMarginLeft", (PyCFunction) _wrap_StyledTextCtrl_SetMarginLeft, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetMarginLeft", (PyCFunction) _wrap_StyledTextCtrl_GetMarginLeft, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetMarginRight", (PyCFunction) _wrap_StyledTextCtrl_SetMarginRight, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetMarginRight", (PyCFunction) _wrap_StyledTextCtrl_GetMarginRight, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetModify", (PyCFunction) _wrap_StyledTextCtrl_GetModify, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetSelection", (PyCFunction) _wrap_StyledTextCtrl_SetSelection, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetSelectedText", (PyCFunction) _wrap_StyledTextCtrl_GetSelectedText, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetTextRange", (PyCFunction) _wrap_StyledTextCtrl_GetTextRange, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_HideSelection", (PyCFunction) _wrap_StyledTextCtrl_HideSelection, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_LineFromPosition", (PyCFunction) _wrap_StyledTextCtrl_LineFromPosition, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_PositionFromLine", (PyCFunction) _wrap_StyledTextCtrl_PositionFromLine, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_LineScroll", (PyCFunction) _wrap_StyledTextCtrl_LineScroll, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_EnsureCaretVisible", (PyCFunction) _wrap_StyledTextCtrl_EnsureCaretVisible, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_ReplaceSelection", (PyCFunction) _wrap_StyledTextCtrl_ReplaceSelection, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetReadOnly", (PyCFunction) _wrap_StyledTextCtrl_SetReadOnly, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_CanPaste", (PyCFunction) _wrap_StyledTextCtrl_CanPaste, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_CanUndo", (PyCFunction) _wrap_StyledTextCtrl_CanUndo, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_EmptyUndoBuffer", (PyCFunction) _wrap_StyledTextCtrl_EmptyUndoBuffer, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_Undo", (PyCFunction) _wrap_StyledTextCtrl_Undo, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_Cut", (PyCFunction) _wrap_StyledTextCtrl_Cut, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_Copy", (PyCFunction) _wrap_StyledTextCtrl_Copy, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_Paste", (PyCFunction) _wrap_StyledTextCtrl_Paste, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_Clear", (PyCFunction) _wrap_StyledTextCtrl_Clear, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetText", (PyCFunction) _wrap_StyledTextCtrl_SetText, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetText", (PyCFunction) _wrap_StyledTextCtrl_GetText, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetTextLength", (PyCFunction) _wrap_StyledTextCtrl_GetTextLength, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetOvertype", (PyCFunction) _wrap_StyledTextCtrl_SetOvertype, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetOvertype", (PyCFunction) _wrap_StyledTextCtrl_GetOvertype, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetCaretWidth", (PyCFunction) _wrap_StyledTextCtrl_SetCaretWidth, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetCaretWidth", (PyCFunction) _wrap_StyledTextCtrl_GetCaretWidth, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetTargetStart", (PyCFunction) _wrap_StyledTextCtrl_SetTargetStart, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetTargetStart", (PyCFunction) _wrap_StyledTextCtrl_GetTargetStart, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetTargetEnd", (PyCFunction) _wrap_StyledTextCtrl_SetTargetEnd, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetTargetEnd", (PyCFunction) _wrap_StyledTextCtrl_GetTargetEnd, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_ReplaceTarget", (PyCFunction) _wrap_StyledTextCtrl_ReplaceTarget, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_ReplaceTargetRE", (PyCFunction) _wrap_StyledTextCtrl_ReplaceTargetRE, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SearchInTarget", (PyCFunction) _wrap_StyledTextCtrl_SearchInTarget, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetSearchFlags", (PyCFunction) _wrap_StyledTextCtrl_SetSearchFlags, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetSearchFlags", (PyCFunction) _wrap_StyledTextCtrl_GetSearchFlags, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_CallTipShow", (PyCFunction) _wrap_StyledTextCtrl_CallTipShow, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_CallTipCancel", (PyCFunction) _wrap_StyledTextCtrl_CallTipCancel, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_CallTipActive", (PyCFunction) _wrap_StyledTextCtrl_CallTipActive, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_CallTipPosAtStart", (PyCFunction) _wrap_StyledTextCtrl_CallTipPosAtStart, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_CallTipSetHighlight", (PyCFunction) _wrap_StyledTextCtrl_CallTipSetHighlight, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_CallTipSetBackground", (PyCFunction) _wrap_StyledTextCtrl_CallTipSetBackground, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_CallTipSetForeground", (PyCFunction) _wrap_StyledTextCtrl_CallTipSetForeground, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_CallTipSetForegroundHighlight", (PyCFunction) _wrap_StyledTextCtrl_CallTipSetForegroundHighlight, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_VisibleFromDocLine", (PyCFunction) _wrap_StyledTextCtrl_VisibleFromDocLine, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_DocLineFromVisible", (PyCFunction) _wrap_StyledTextCtrl_DocLineFromVisible, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetFoldLevel", (PyCFunction) _wrap_StyledTextCtrl_SetFoldLevel, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetFoldLevel", (PyCFunction) _wrap_StyledTextCtrl_GetFoldLevel, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetLastChild", (PyCFunction) _wrap_StyledTextCtrl_GetLastChild, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetFoldParent", (PyCFunction) _wrap_StyledTextCtrl_GetFoldParent, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_ShowLines", (PyCFunction) _wrap_StyledTextCtrl_ShowLines, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_HideLines", (PyCFunction) _wrap_StyledTextCtrl_HideLines, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetLineVisible", (PyCFunction) _wrap_StyledTextCtrl_GetLineVisible, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetFoldExpanded", (PyCFunction) _wrap_StyledTextCtrl_SetFoldExpanded, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetFoldExpanded", (PyCFunction) _wrap_StyledTextCtrl_GetFoldExpanded, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_ToggleFold", (PyCFunction) _wrap_StyledTextCtrl_ToggleFold, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_EnsureVisible", (PyCFunction) _wrap_StyledTextCtrl_EnsureVisible, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetFoldFlags", (PyCFunction) _wrap_StyledTextCtrl_SetFoldFlags, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_EnsureVisibleEnforcePolicy", (PyCFunction) _wrap_StyledTextCtrl_EnsureVisibleEnforcePolicy, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetTabIndents", (PyCFunction) _wrap_StyledTextCtrl_SetTabIndents, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetTabIndents", (PyCFunction) _wrap_StyledTextCtrl_GetTabIndents, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetBackSpaceUnIndents", (PyCFunction) _wrap_StyledTextCtrl_SetBackSpaceUnIndents, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetBackSpaceUnIndents", (PyCFunction) _wrap_StyledTextCtrl_GetBackSpaceUnIndents, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetMouseDwellTime", (PyCFunction) _wrap_StyledTextCtrl_SetMouseDwellTime, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetMouseDwellTime", (PyCFunction) _wrap_StyledTextCtrl_GetMouseDwellTime, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_WordStartPosition", (PyCFunction) _wrap_StyledTextCtrl_WordStartPosition, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_WordEndPosition", (PyCFunction) _wrap_StyledTextCtrl_WordEndPosition, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetWrapMode", (PyCFunction) _wrap_StyledTextCtrl_SetWrapMode, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetWrapMode", (PyCFunction) _wrap_StyledTextCtrl_GetWrapMode, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetLayoutCache", (PyCFunction) _wrap_StyledTextCtrl_SetLayoutCache, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetLayoutCache", (PyCFunction) _wrap_StyledTextCtrl_GetLayoutCache, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetScrollWidth", (PyCFunction) _wrap_StyledTextCtrl_SetScrollWidth, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetScrollWidth", (PyCFunction) _wrap_StyledTextCtrl_GetScrollWidth, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_TextWidth", (PyCFunction) _wrap_StyledTextCtrl_TextWidth, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetEndAtLastLine", (PyCFunction) _wrap_StyledTextCtrl_SetEndAtLastLine, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetEndAtLastLine", (PyCFunction) _wrap_StyledTextCtrl_GetEndAtLastLine, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_TextHeight", (PyCFunction) _wrap_StyledTextCtrl_TextHeight, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetUseVerticalScrollBar", (PyCFunction) _wrap_StyledTextCtrl_SetUseVerticalScrollBar, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetUseVerticalScrollBar", (PyCFunction) _wrap_StyledTextCtrl_GetUseVerticalScrollBar, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_AppendText", (PyCFunction) _wrap_StyledTextCtrl_AppendText, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetTwoPhaseDraw", (PyCFunction) _wrap_StyledTextCtrl_GetTwoPhaseDraw, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetTwoPhaseDraw", (PyCFunction) _wrap_StyledTextCtrl_SetTwoPhaseDraw, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_TargetFromSelection", (PyCFunction) _wrap_StyledTextCtrl_TargetFromSelection, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_LinesJoin", (PyCFunction) _wrap_StyledTextCtrl_LinesJoin, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_LinesSplit", (PyCFunction) _wrap_StyledTextCtrl_LinesSplit, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetFoldMarginColour", (PyCFunction) _wrap_StyledTextCtrl_SetFoldMarginColour, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetFoldMarginHiColour", (PyCFunction) _wrap_StyledTextCtrl_SetFoldMarginHiColour, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_LineDown", (PyCFunction) _wrap_StyledTextCtrl_LineDown, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_LineDownExtend", (PyCFunction) _wrap_StyledTextCtrl_LineDownExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_LineUp", (PyCFunction) _wrap_StyledTextCtrl_LineUp, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_LineUpExtend", (PyCFunction) _wrap_StyledTextCtrl_LineUpExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_CharLeft", (PyCFunction) _wrap_StyledTextCtrl_CharLeft, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_CharLeftExtend", (PyCFunction) _wrap_StyledTextCtrl_CharLeftExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_CharRight", (PyCFunction) _wrap_StyledTextCtrl_CharRight, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_CharRightExtend", (PyCFunction) _wrap_StyledTextCtrl_CharRightExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_WordLeft", (PyCFunction) _wrap_StyledTextCtrl_WordLeft, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_WordLeftExtend", (PyCFunction) _wrap_StyledTextCtrl_WordLeftExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_WordRight", (PyCFunction) _wrap_StyledTextCtrl_WordRight, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_WordRightExtend", (PyCFunction) _wrap_StyledTextCtrl_WordRightExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_Home", (PyCFunction) _wrap_StyledTextCtrl_Home, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_HomeExtend", (PyCFunction) _wrap_StyledTextCtrl_HomeExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_LineEnd", (PyCFunction) _wrap_StyledTextCtrl_LineEnd, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_LineEndExtend", (PyCFunction) _wrap_StyledTextCtrl_LineEndExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_DocumentStart", (PyCFunction) _wrap_StyledTextCtrl_DocumentStart, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_DocumentStartExtend", (PyCFunction) _wrap_StyledTextCtrl_DocumentStartExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_DocumentEnd", (PyCFunction) _wrap_StyledTextCtrl_DocumentEnd, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_DocumentEndExtend", (PyCFunction) _wrap_StyledTextCtrl_DocumentEndExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_PageUp", (PyCFunction) _wrap_StyledTextCtrl_PageUp, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_PageUpExtend", (PyCFunction) _wrap_StyledTextCtrl_PageUpExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_PageDown", (PyCFunction) _wrap_StyledTextCtrl_PageDown, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_PageDownExtend", (PyCFunction) _wrap_StyledTextCtrl_PageDownExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_EditToggleOvertype", (PyCFunction) _wrap_StyledTextCtrl_EditToggleOvertype, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_Cancel", (PyCFunction) _wrap_StyledTextCtrl_Cancel, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_DeleteBack", (PyCFunction) _wrap_StyledTextCtrl_DeleteBack, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_Tab", (PyCFunction) _wrap_StyledTextCtrl_Tab, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_BackTab", (PyCFunction) _wrap_StyledTextCtrl_BackTab, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_NewLine", (PyCFunction) _wrap_StyledTextCtrl_NewLine, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_FormFeed", (PyCFunction) _wrap_StyledTextCtrl_FormFeed, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_VCHome", (PyCFunction) _wrap_StyledTextCtrl_VCHome, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_VCHomeExtend", (PyCFunction) _wrap_StyledTextCtrl_VCHomeExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_ZoomIn", (PyCFunction) _wrap_StyledTextCtrl_ZoomIn, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_ZoomOut", (PyCFunction) _wrap_StyledTextCtrl_ZoomOut, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_DelWordLeft", (PyCFunction) _wrap_StyledTextCtrl_DelWordLeft, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_DelWordRight", (PyCFunction) _wrap_StyledTextCtrl_DelWordRight, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_LineCut", (PyCFunction) _wrap_StyledTextCtrl_LineCut, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_LineDelete", (PyCFunction) _wrap_StyledTextCtrl_LineDelete, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_LineTranspose", (PyCFunction) _wrap_StyledTextCtrl_LineTranspose, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_LineDuplicate", (PyCFunction) _wrap_StyledTextCtrl_LineDuplicate, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_LowerCase", (PyCFunction) _wrap_StyledTextCtrl_LowerCase, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_UpperCase", (PyCFunction) _wrap_StyledTextCtrl_UpperCase, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_LineScrollDown", (PyCFunction) _wrap_StyledTextCtrl_LineScrollDown, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_LineScrollUp", (PyCFunction) _wrap_StyledTextCtrl_LineScrollUp, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_DeleteBackNotLine", (PyCFunction) _wrap_StyledTextCtrl_DeleteBackNotLine, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_HomeDisplay", (PyCFunction) _wrap_StyledTextCtrl_HomeDisplay, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_HomeDisplayExtend", (PyCFunction) _wrap_StyledTextCtrl_HomeDisplayExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_LineEndDisplay", (PyCFunction) _wrap_StyledTextCtrl_LineEndDisplay, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_LineEndDisplayExtend", (PyCFunction) _wrap_StyledTextCtrl_LineEndDisplayExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_HomeWrap", (PyCFunction) _wrap_StyledTextCtrl_HomeWrap, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_HomeWrapExtend", (PyCFunction) _wrap_StyledTextCtrl_HomeWrapExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_LineEndWrap", (PyCFunction) _wrap_StyledTextCtrl_LineEndWrap, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_LineEndWrapExtend", (PyCFunction) _wrap_StyledTextCtrl_LineEndWrapExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_VCHomeWrap", (PyCFunction) _wrap_StyledTextCtrl_VCHomeWrap, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_VCHomeWrapExtend", (PyCFunction) _wrap_StyledTextCtrl_VCHomeWrapExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_LineCopy", (PyCFunction) _wrap_StyledTextCtrl_LineCopy, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_MoveCaretInsideView", (PyCFunction) _wrap_StyledTextCtrl_MoveCaretInsideView, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_LineLength", (PyCFunction) _wrap_StyledTextCtrl_LineLength, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_BraceHighlight", (PyCFunction) _wrap_StyledTextCtrl_BraceHighlight, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_BraceBadLight", (PyCFunction) _wrap_StyledTextCtrl_BraceBadLight, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_BraceMatch", (PyCFunction) _wrap_StyledTextCtrl_BraceMatch, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetViewEOL", (PyCFunction) _wrap_StyledTextCtrl_GetViewEOL, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetViewEOL", (PyCFunction) _wrap_StyledTextCtrl_SetViewEOL, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetDocPointer", (PyCFunction) _wrap_StyledTextCtrl_GetDocPointer, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetDocPointer", (PyCFunction) _wrap_StyledTextCtrl_SetDocPointer, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetModEventMask", (PyCFunction) _wrap_StyledTextCtrl_SetModEventMask, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetEdgeColumn", (PyCFunction) _wrap_StyledTextCtrl_GetEdgeColumn, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetEdgeColumn", (PyCFunction) _wrap_StyledTextCtrl_SetEdgeColumn, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetEdgeMode", (PyCFunction) _wrap_StyledTextCtrl_GetEdgeMode, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetEdgeMode", (PyCFunction) _wrap_StyledTextCtrl_SetEdgeMode, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetEdgeColour", (PyCFunction) _wrap_StyledTextCtrl_GetEdgeColour, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetEdgeColour", (PyCFunction) _wrap_StyledTextCtrl_SetEdgeColour, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SearchAnchor", (PyCFunction) _wrap_StyledTextCtrl_SearchAnchor, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SearchNext", (PyCFunction) _wrap_StyledTextCtrl_SearchNext, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SearchPrev", (PyCFunction) _wrap_StyledTextCtrl_SearchPrev, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_LinesOnScreen", (PyCFunction) _wrap_StyledTextCtrl_LinesOnScreen, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_UsePopUp", (PyCFunction) _wrap_StyledTextCtrl_UsePopUp, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SelectionIsRectangle", (PyCFunction) _wrap_StyledTextCtrl_SelectionIsRectangle, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetZoom", (PyCFunction) _wrap_StyledTextCtrl_SetZoom, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetZoom", (PyCFunction) _wrap_StyledTextCtrl_GetZoom, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_CreateDocument", (PyCFunction) _wrap_StyledTextCtrl_CreateDocument, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_AddRefDocument", (PyCFunction) _wrap_StyledTextCtrl_AddRefDocument, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_ReleaseDocument", (PyCFunction) _wrap_StyledTextCtrl_ReleaseDocument, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetModEventMask", (PyCFunction) _wrap_StyledTextCtrl_GetModEventMask, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetSTCFocus", (PyCFunction) _wrap_StyledTextCtrl_SetSTCFocus, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetSTCFocus", (PyCFunction) _wrap_StyledTextCtrl_GetSTCFocus, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetStatus", (PyCFunction) _wrap_StyledTextCtrl_SetStatus, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetStatus", (PyCFunction) _wrap_StyledTextCtrl_GetStatus, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetMouseDownCaptures", (PyCFunction) _wrap_StyledTextCtrl_SetMouseDownCaptures, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetMouseDownCaptures", (PyCFunction) _wrap_StyledTextCtrl_GetMouseDownCaptures, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetSTCCursor", (PyCFunction) _wrap_StyledTextCtrl_SetSTCCursor, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetSTCCursor", (PyCFunction) _wrap_StyledTextCtrl_GetSTCCursor, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetControlCharSymbol", (PyCFunction) _wrap_StyledTextCtrl_SetControlCharSymbol, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetControlCharSymbol", (PyCFunction) _wrap_StyledTextCtrl_GetControlCharSymbol, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_WordPartLeft", (PyCFunction) _wrap_StyledTextCtrl_WordPartLeft, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_WordPartLeftExtend", (PyCFunction) _wrap_StyledTextCtrl_WordPartLeftExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_WordPartRight", (PyCFunction) _wrap_StyledTextCtrl_WordPartRight, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_WordPartRightExtend", (PyCFunction) _wrap_StyledTextCtrl_WordPartRightExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetVisiblePolicy", (PyCFunction) _wrap_StyledTextCtrl_SetVisiblePolicy, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_DelLineLeft", (PyCFunction) _wrap_StyledTextCtrl_DelLineLeft, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_DelLineRight", (PyCFunction) _wrap_StyledTextCtrl_DelLineRight, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetXOffset", (PyCFunction) _wrap_StyledTextCtrl_SetXOffset, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetXOffset", (PyCFunction) _wrap_StyledTextCtrl_GetXOffset, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_ChooseCaretX", (PyCFunction) _wrap_StyledTextCtrl_ChooseCaretX, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetXCaretPolicy", (PyCFunction) _wrap_StyledTextCtrl_SetXCaretPolicy, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetYCaretPolicy", (PyCFunction) _wrap_StyledTextCtrl_SetYCaretPolicy, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetPrintWrapMode", (PyCFunction) _wrap_StyledTextCtrl_SetPrintWrapMode, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetPrintWrapMode", (PyCFunction) _wrap_StyledTextCtrl_GetPrintWrapMode, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetHotspotActiveForeground", (PyCFunction) _wrap_StyledTextCtrl_SetHotspotActiveForeground, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetHotspotActiveBackground", (PyCFunction) _wrap_StyledTextCtrl_SetHotspotActiveBackground, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetHotspotActiveUnderline", (PyCFunction) _wrap_StyledTextCtrl_SetHotspotActiveUnderline, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetHotspotSingleLine", (PyCFunction) _wrap_StyledTextCtrl_SetHotspotSingleLine, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_ParaDown", (PyCFunction) _wrap_StyledTextCtrl_ParaDown, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_ParaDownExtend", (PyCFunction) _wrap_StyledTextCtrl_ParaDownExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_ParaUp", (PyCFunction) _wrap_StyledTextCtrl_ParaUp, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_ParaUpExtend", (PyCFunction) _wrap_StyledTextCtrl_ParaUpExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_PositionBefore", (PyCFunction) _wrap_StyledTextCtrl_PositionBefore, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_PositionAfter", (PyCFunction) _wrap_StyledTextCtrl_PositionAfter, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_CopyRange", (PyCFunction) _wrap_StyledTextCtrl_CopyRange, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_CopyText", (PyCFunction) _wrap_StyledTextCtrl_CopyText, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetSelectionMode", (PyCFunction) _wrap_StyledTextCtrl_SetSelectionMode, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetSelectionMode", (PyCFunction) _wrap_StyledTextCtrl_GetSelectionMode, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetLineSelStartPosition", (PyCFunction) _wrap_StyledTextCtrl_GetLineSelStartPosition, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetLineSelEndPosition", (PyCFunction) _wrap_StyledTextCtrl_GetLineSelEndPosition, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_LineDownRectExtend", (PyCFunction) _wrap_StyledTextCtrl_LineDownRectExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_LineUpRectExtend", (PyCFunction) _wrap_StyledTextCtrl_LineUpRectExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_CharLeftRectExtend", (PyCFunction) _wrap_StyledTextCtrl_CharLeftRectExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_CharRightRectExtend", (PyCFunction) _wrap_StyledTextCtrl_CharRightRectExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_HomeRectExtend", (PyCFunction) _wrap_StyledTextCtrl_HomeRectExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_VCHomeRectExtend", (PyCFunction) _wrap_StyledTextCtrl_VCHomeRectExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_LineEndRectExtend", (PyCFunction) _wrap_StyledTextCtrl_LineEndRectExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_PageUpRectExtend", (PyCFunction) _wrap_StyledTextCtrl_PageUpRectExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_PageDownRectExtend", (PyCFunction) _wrap_StyledTextCtrl_PageDownRectExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_StutteredPageUp", (PyCFunction) _wrap_StyledTextCtrl_StutteredPageUp, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_StutteredPageUpExtend", (PyCFunction) _wrap_StyledTextCtrl_StutteredPageUpExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_StutteredPageDown", (PyCFunction) _wrap_StyledTextCtrl_StutteredPageDown, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_StutteredPageDownExtend", (PyCFunction) _wrap_StyledTextCtrl_StutteredPageDownExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_WordLeftEnd", (PyCFunction) _wrap_StyledTextCtrl_WordLeftEnd, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_WordLeftEndExtend", (PyCFunction) _wrap_StyledTextCtrl_WordLeftEndExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_WordRightEnd", (PyCFunction) _wrap_StyledTextCtrl_WordRightEnd, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_WordRightEndExtend", (PyCFunction) _wrap_StyledTextCtrl_WordRightEndExtend, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetWhitespaceChars", (PyCFunction) _wrap_StyledTextCtrl_SetWhitespaceChars, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetCharsDefault", (PyCFunction) _wrap_StyledTextCtrl_SetCharsDefault, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_AutoCompGetCurrent", (PyCFunction) _wrap_StyledTextCtrl_AutoCompGetCurrent, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_StartRecord", (PyCFunction) _wrap_StyledTextCtrl_StartRecord, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_StopRecord", (PyCFunction) _wrap_StyledTextCtrl_StopRecord, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetLexer", (PyCFunction) _wrap_StyledTextCtrl_SetLexer, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetLexer", (PyCFunction) _wrap_StyledTextCtrl_GetLexer, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_Colourise", (PyCFunction) _wrap_StyledTextCtrl_Colourise, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetProperty", (PyCFunction) _wrap_StyledTextCtrl_SetProperty, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetKeyWords", (PyCFunction) _wrap_StyledTextCtrl_SetKeyWords, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetLexerLanguage", (PyCFunction) _wrap_StyledTextCtrl_SetLexerLanguage, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetCurrentLine", (PyCFunction) _wrap_StyledTextCtrl_GetCurrentLine, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_StyleSetSpec", (PyCFunction) _wrap_StyledTextCtrl_StyleSetSpec, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_StyleSetFont", (PyCFunction) _wrap_StyledTextCtrl_StyleSetFont, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_StyleSetFontAttr", (PyCFunction) _wrap_StyledTextCtrl_StyleSetFontAttr, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_CmdKeyExecute", (PyCFunction) _wrap_StyledTextCtrl_CmdKeyExecute, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetMargins", (PyCFunction) _wrap_StyledTextCtrl_SetMargins, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetSelection", (PyCFunction) _wrap_StyledTextCtrl_GetSelection, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_PointFromPosition", (PyCFunction) _wrap_StyledTextCtrl_PointFromPosition, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_ScrollToLine", (PyCFunction) _wrap_StyledTextCtrl_ScrollToLine, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_ScrollToColumn", (PyCFunction) _wrap_StyledTextCtrl_ScrollToColumn, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SendMsg", (PyCFunction) _wrap_StyledTextCtrl_SendMsg, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetVScrollBar", (PyCFunction) _wrap_StyledTextCtrl_SetVScrollBar, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetHScrollBar", (PyCFunction) _wrap_StyledTextCtrl_SetHScrollBar, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetLastKeydownProcessed", (PyCFunction) _wrap_StyledTextCtrl_GetLastKeydownProcessed, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetLastKeydownProcessed", (PyCFunction) _wrap_StyledTextCtrl_SetLastKeydownProcessed, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SaveFile", (PyCFunction) _wrap_StyledTextCtrl_SaveFile, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_LoadFile", (PyCFunction) _wrap_StyledTextCtrl_LoadFile, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_DoDragOver", (PyCFunction) _wrap_StyledTextCtrl_DoDragOver, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_DoDropText", (PyCFunction) _wrap_StyledTextCtrl_DoDropText, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_SetUseAntiAliasing", (PyCFunction) _wrap_StyledTextCtrl_SetUseAntiAliasing, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_GetUseAntiAliasing", (PyCFunction) _wrap_StyledTextCtrl_GetUseAntiAliasing, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextCtrl_swigregister", StyledTextCtrl_swigregister, METH_VARARGS },
-	 { (char *)"new_StyledTextEvent", (PyCFunction) _wrap_new_StyledTextEvent, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"delete_StyledTextEvent", (PyCFunction) _wrap_delete_StyledTextEvent, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_SetPosition", (PyCFunction) _wrap_StyledTextEvent_SetPosition, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_SetKey", (PyCFunction) _wrap_StyledTextEvent_SetKey, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_SetModifiers", (PyCFunction) _wrap_StyledTextEvent_SetModifiers, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_SetModificationType", (PyCFunction) _wrap_StyledTextEvent_SetModificationType, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_SetText", (PyCFunction) _wrap_StyledTextEvent_SetText, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_SetLength", (PyCFunction) _wrap_StyledTextEvent_SetLength, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_SetLinesAdded", (PyCFunction) _wrap_StyledTextEvent_SetLinesAdded, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_SetLine", (PyCFunction) _wrap_StyledTextEvent_SetLine, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_SetFoldLevelNow", (PyCFunction) _wrap_StyledTextEvent_SetFoldLevelNow, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_SetFoldLevelPrev", (PyCFunction) _wrap_StyledTextEvent_SetFoldLevelPrev, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_SetMargin", (PyCFunction) _wrap_StyledTextEvent_SetMargin, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_SetMessage", (PyCFunction) _wrap_StyledTextEvent_SetMessage, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_SetWParam", (PyCFunction) _wrap_StyledTextEvent_SetWParam, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_SetLParam", (PyCFunction) _wrap_StyledTextEvent_SetLParam, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_SetListType", (PyCFunction) _wrap_StyledTextEvent_SetListType, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_SetX", (PyCFunction) _wrap_StyledTextEvent_SetX, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_SetY", (PyCFunction) _wrap_StyledTextEvent_SetY, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_SetDragText", (PyCFunction) _wrap_StyledTextEvent_SetDragText, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_SetDragAllowMove", (PyCFunction) _wrap_StyledTextEvent_SetDragAllowMove, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_SetDragResult", (PyCFunction) _wrap_StyledTextEvent_SetDragResult, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_GetPosition", (PyCFunction) _wrap_StyledTextEvent_GetPosition, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_GetKey", (PyCFunction) _wrap_StyledTextEvent_GetKey, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_GetModifiers", (PyCFunction) _wrap_StyledTextEvent_GetModifiers, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_GetModificationType", (PyCFunction) _wrap_StyledTextEvent_GetModificationType, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_GetText", (PyCFunction) _wrap_StyledTextEvent_GetText, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_GetLength", (PyCFunction) _wrap_StyledTextEvent_GetLength, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_GetLinesAdded", (PyCFunction) _wrap_StyledTextEvent_GetLinesAdded, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_GetLine", (PyCFunction) _wrap_StyledTextEvent_GetLine, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_GetFoldLevelNow", (PyCFunction) _wrap_StyledTextEvent_GetFoldLevelNow, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_GetFoldLevelPrev", (PyCFunction) _wrap_StyledTextEvent_GetFoldLevelPrev, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_GetMargin", (PyCFunction) _wrap_StyledTextEvent_GetMargin, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_GetMessage", (PyCFunction) _wrap_StyledTextEvent_GetMessage, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_GetWParam", (PyCFunction) _wrap_StyledTextEvent_GetWParam, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_GetLParam", (PyCFunction) _wrap_StyledTextEvent_GetLParam, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_GetListType", (PyCFunction) _wrap_StyledTextEvent_GetListType, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_GetX", (PyCFunction) _wrap_StyledTextEvent_GetX, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_GetY", (PyCFunction) _wrap_StyledTextEvent_GetY, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_GetDragText", (PyCFunction) _wrap_StyledTextEvent_GetDragText, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_GetDragAllowMove", (PyCFunction) _wrap_StyledTextEvent_GetDragAllowMove, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_GetDragResult", (PyCFunction) _wrap_StyledTextEvent_GetDragResult, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_GetShift", (PyCFunction) _wrap_StyledTextEvent_GetShift, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_GetControl", (PyCFunction) _wrap_StyledTextEvent_GetControl, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_GetAlt", (PyCFunction) _wrap_StyledTextEvent_GetAlt, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_Clone", (PyCFunction) _wrap_StyledTextEvent_Clone, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"StyledTextEvent_swigregister", StyledTextEvent_swigregister, METH_VARARGS },
-	 { NULL, NULL }
+	 { (char *)"new_StyledTextCtrl", (PyCFunction) _wrap_new_StyledTextCtrl, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"new_PreStyledTextCtrl", (PyCFunction) _wrap_new_PreStyledTextCtrl, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_Create", (PyCFunction) _wrap_StyledTextCtrl_Create, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_AddText", (PyCFunction) _wrap_StyledTextCtrl_AddText, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_AddStyledText", (PyCFunction) _wrap_StyledTextCtrl_AddStyledText, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_InsertText", (PyCFunction) _wrap_StyledTextCtrl_InsertText, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_ClearAll", (PyCFunction) _wrap_StyledTextCtrl_ClearAll, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_ClearDocumentStyle", (PyCFunction) _wrap_StyledTextCtrl_ClearDocumentStyle, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetLength", (PyCFunction) _wrap_StyledTextCtrl_GetLength, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetCharAt", (PyCFunction) _wrap_StyledTextCtrl_GetCharAt, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetCurrentPos", (PyCFunction) _wrap_StyledTextCtrl_GetCurrentPos, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetAnchor", (PyCFunction) _wrap_StyledTextCtrl_GetAnchor, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetStyleAt", (PyCFunction) _wrap_StyledTextCtrl_GetStyleAt, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_Redo", (PyCFunction) _wrap_StyledTextCtrl_Redo, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetUndoCollection", (PyCFunction) _wrap_StyledTextCtrl_SetUndoCollection, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SelectAll", (PyCFunction) _wrap_StyledTextCtrl_SelectAll, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetSavePoint", (PyCFunction) _wrap_StyledTextCtrl_SetSavePoint, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetStyledText", (PyCFunction) _wrap_StyledTextCtrl_GetStyledText, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_CanRedo", (PyCFunction) _wrap_StyledTextCtrl_CanRedo, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_MarkerLineFromHandle", (PyCFunction) _wrap_StyledTextCtrl_MarkerLineFromHandle, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_MarkerDeleteHandle", (PyCFunction) _wrap_StyledTextCtrl_MarkerDeleteHandle, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetUndoCollection", (PyCFunction) _wrap_StyledTextCtrl_GetUndoCollection, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetViewWhiteSpace", (PyCFunction) _wrap_StyledTextCtrl_GetViewWhiteSpace, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetViewWhiteSpace", (PyCFunction) _wrap_StyledTextCtrl_SetViewWhiteSpace, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_PositionFromPoint", (PyCFunction) _wrap_StyledTextCtrl_PositionFromPoint, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_PositionFromPointClose", (PyCFunction) _wrap_StyledTextCtrl_PositionFromPointClose, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GotoLine", (PyCFunction) _wrap_StyledTextCtrl_GotoLine, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GotoPos", (PyCFunction) _wrap_StyledTextCtrl_GotoPos, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetAnchor", (PyCFunction) _wrap_StyledTextCtrl_SetAnchor, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetCurLine", (PyCFunction) _wrap_StyledTextCtrl_GetCurLine, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetEndStyled", (PyCFunction) _wrap_StyledTextCtrl_GetEndStyled, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_ConvertEOLs", (PyCFunction) _wrap_StyledTextCtrl_ConvertEOLs, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetEOLMode", (PyCFunction) _wrap_StyledTextCtrl_GetEOLMode, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetEOLMode", (PyCFunction) _wrap_StyledTextCtrl_SetEOLMode, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_StartStyling", (PyCFunction) _wrap_StyledTextCtrl_StartStyling, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetStyling", (PyCFunction) _wrap_StyledTextCtrl_SetStyling, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetBufferedDraw", (PyCFunction) _wrap_StyledTextCtrl_GetBufferedDraw, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetBufferedDraw", (PyCFunction) _wrap_StyledTextCtrl_SetBufferedDraw, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetTabWidth", (PyCFunction) _wrap_StyledTextCtrl_SetTabWidth, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetTabWidth", (PyCFunction) _wrap_StyledTextCtrl_GetTabWidth, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetCodePage", (PyCFunction) _wrap_StyledTextCtrl_SetCodePage, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_MarkerDefine", (PyCFunction) _wrap_StyledTextCtrl_MarkerDefine, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_MarkerSetForeground", (PyCFunction) _wrap_StyledTextCtrl_MarkerSetForeground, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_MarkerSetBackground", (PyCFunction) _wrap_StyledTextCtrl_MarkerSetBackground, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_MarkerAdd", (PyCFunction) _wrap_StyledTextCtrl_MarkerAdd, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_MarkerDelete", (PyCFunction) _wrap_StyledTextCtrl_MarkerDelete, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_MarkerDeleteAll", (PyCFunction) _wrap_StyledTextCtrl_MarkerDeleteAll, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_MarkerGet", (PyCFunction) _wrap_StyledTextCtrl_MarkerGet, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_MarkerNext", (PyCFunction) _wrap_StyledTextCtrl_MarkerNext, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_MarkerPrevious", (PyCFunction) _wrap_StyledTextCtrl_MarkerPrevious, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_MarkerDefineBitmap", (PyCFunction) _wrap_StyledTextCtrl_MarkerDefineBitmap, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetMarginType", (PyCFunction) _wrap_StyledTextCtrl_SetMarginType, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetMarginType", (PyCFunction) _wrap_StyledTextCtrl_GetMarginType, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetMarginWidth", (PyCFunction) _wrap_StyledTextCtrl_SetMarginWidth, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetMarginWidth", (PyCFunction) _wrap_StyledTextCtrl_GetMarginWidth, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetMarginMask", (PyCFunction) _wrap_StyledTextCtrl_SetMarginMask, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetMarginMask", (PyCFunction) _wrap_StyledTextCtrl_GetMarginMask, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetMarginSensitive", (PyCFunction) _wrap_StyledTextCtrl_SetMarginSensitive, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetMarginSensitive", (PyCFunction) _wrap_StyledTextCtrl_GetMarginSensitive, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_StyleClearAll", (PyCFunction) _wrap_StyledTextCtrl_StyleClearAll, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_StyleSetForeground", (PyCFunction) _wrap_StyledTextCtrl_StyleSetForeground, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_StyleSetBackground", (PyCFunction) _wrap_StyledTextCtrl_StyleSetBackground, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_StyleSetBold", (PyCFunction) _wrap_StyledTextCtrl_StyleSetBold, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_StyleSetItalic", (PyCFunction) _wrap_StyledTextCtrl_StyleSetItalic, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_StyleSetSize", (PyCFunction) _wrap_StyledTextCtrl_StyleSetSize, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_StyleSetFaceName", (PyCFunction) _wrap_StyledTextCtrl_StyleSetFaceName, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_StyleSetEOLFilled", (PyCFunction) _wrap_StyledTextCtrl_StyleSetEOLFilled, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_StyleResetDefault", (PyCFunction) _wrap_StyledTextCtrl_StyleResetDefault, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_StyleSetUnderline", (PyCFunction) _wrap_StyledTextCtrl_StyleSetUnderline, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_StyleSetCase", (PyCFunction) _wrap_StyledTextCtrl_StyleSetCase, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_StyleSetCharacterSet", (PyCFunction) _wrap_StyledTextCtrl_StyleSetCharacterSet, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_StyleSetHotSpot", (PyCFunction) _wrap_StyledTextCtrl_StyleSetHotSpot, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetSelForeground", (PyCFunction) _wrap_StyledTextCtrl_SetSelForeground, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetSelBackground", (PyCFunction) _wrap_StyledTextCtrl_SetSelBackground, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetCaretForeground", (PyCFunction) _wrap_StyledTextCtrl_SetCaretForeground, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_CmdKeyAssign", (PyCFunction) _wrap_StyledTextCtrl_CmdKeyAssign, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_CmdKeyClear", (PyCFunction) _wrap_StyledTextCtrl_CmdKeyClear, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_CmdKeyClearAll", (PyCFunction) _wrap_StyledTextCtrl_CmdKeyClearAll, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetStyleBytes", (PyCFunction) _wrap_StyledTextCtrl_SetStyleBytes, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_StyleSetVisible", (PyCFunction) _wrap_StyledTextCtrl_StyleSetVisible, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetCaretPeriod", (PyCFunction) _wrap_StyledTextCtrl_GetCaretPeriod, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetCaretPeriod", (PyCFunction) _wrap_StyledTextCtrl_SetCaretPeriod, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetWordChars", (PyCFunction) _wrap_StyledTextCtrl_SetWordChars, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_BeginUndoAction", (PyCFunction) _wrap_StyledTextCtrl_BeginUndoAction, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_EndUndoAction", (PyCFunction) _wrap_StyledTextCtrl_EndUndoAction, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_IndicatorSetStyle", (PyCFunction) _wrap_StyledTextCtrl_IndicatorSetStyle, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_IndicatorGetStyle", (PyCFunction) _wrap_StyledTextCtrl_IndicatorGetStyle, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_IndicatorSetForeground", (PyCFunction) _wrap_StyledTextCtrl_IndicatorSetForeground, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_IndicatorGetForeground", (PyCFunction) _wrap_StyledTextCtrl_IndicatorGetForeground, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetWhitespaceForeground", (PyCFunction) _wrap_StyledTextCtrl_SetWhitespaceForeground, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetWhitespaceBackground", (PyCFunction) _wrap_StyledTextCtrl_SetWhitespaceBackground, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetStyleBits", (PyCFunction) _wrap_StyledTextCtrl_SetStyleBits, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetStyleBits", (PyCFunction) _wrap_StyledTextCtrl_GetStyleBits, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetLineState", (PyCFunction) _wrap_StyledTextCtrl_SetLineState, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetLineState", (PyCFunction) _wrap_StyledTextCtrl_GetLineState, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetMaxLineState", (PyCFunction) _wrap_StyledTextCtrl_GetMaxLineState, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetCaretLineVisible", (PyCFunction) _wrap_StyledTextCtrl_GetCaretLineVisible, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetCaretLineVisible", (PyCFunction) _wrap_StyledTextCtrl_SetCaretLineVisible, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetCaretLineBack", (PyCFunction) _wrap_StyledTextCtrl_GetCaretLineBack, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetCaretLineBack", (PyCFunction) _wrap_StyledTextCtrl_SetCaretLineBack, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_StyleSetChangeable", (PyCFunction) _wrap_StyledTextCtrl_StyleSetChangeable, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_AutoCompShow", (PyCFunction) _wrap_StyledTextCtrl_AutoCompShow, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_AutoCompCancel", (PyCFunction) _wrap_StyledTextCtrl_AutoCompCancel, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_AutoCompActive", (PyCFunction) _wrap_StyledTextCtrl_AutoCompActive, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_AutoCompPosStart", (PyCFunction) _wrap_StyledTextCtrl_AutoCompPosStart, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_AutoCompComplete", (PyCFunction) _wrap_StyledTextCtrl_AutoCompComplete, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_AutoCompStops", (PyCFunction) _wrap_StyledTextCtrl_AutoCompStops, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_AutoCompSetSeparator", (PyCFunction) _wrap_StyledTextCtrl_AutoCompSetSeparator, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_AutoCompGetSeparator", (PyCFunction) _wrap_StyledTextCtrl_AutoCompGetSeparator, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_AutoCompSelect", (PyCFunction) _wrap_StyledTextCtrl_AutoCompSelect, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_AutoCompSetCancelAtStart", (PyCFunction) _wrap_StyledTextCtrl_AutoCompSetCancelAtStart, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_AutoCompGetCancelAtStart", (PyCFunction) _wrap_StyledTextCtrl_AutoCompGetCancelAtStart, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_AutoCompSetFillUps", (PyCFunction) _wrap_StyledTextCtrl_AutoCompSetFillUps, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_AutoCompSetChooseSingle", (PyCFunction) _wrap_StyledTextCtrl_AutoCompSetChooseSingle, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_AutoCompGetChooseSingle", (PyCFunction) _wrap_StyledTextCtrl_AutoCompGetChooseSingle, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_AutoCompSetIgnoreCase", (PyCFunction) _wrap_StyledTextCtrl_AutoCompSetIgnoreCase, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_AutoCompGetIgnoreCase", (PyCFunction) _wrap_StyledTextCtrl_AutoCompGetIgnoreCase, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_UserListShow", (PyCFunction) _wrap_StyledTextCtrl_UserListShow, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_AutoCompSetAutoHide", (PyCFunction) _wrap_StyledTextCtrl_AutoCompSetAutoHide, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_AutoCompGetAutoHide", (PyCFunction) _wrap_StyledTextCtrl_AutoCompGetAutoHide, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_AutoCompSetDropRestOfWord", (PyCFunction) _wrap_StyledTextCtrl_AutoCompSetDropRestOfWord, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_AutoCompGetDropRestOfWord", (PyCFunction) _wrap_StyledTextCtrl_AutoCompGetDropRestOfWord, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_RegisterImage", (PyCFunction) _wrap_StyledTextCtrl_RegisterImage, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_ClearRegisteredImages", (PyCFunction) _wrap_StyledTextCtrl_ClearRegisteredImages, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_AutoCompGetTypeSeparator", (PyCFunction) _wrap_StyledTextCtrl_AutoCompGetTypeSeparator, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_AutoCompSetTypeSeparator", (PyCFunction) _wrap_StyledTextCtrl_AutoCompSetTypeSeparator, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetIndent", (PyCFunction) _wrap_StyledTextCtrl_SetIndent, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetIndent", (PyCFunction) _wrap_StyledTextCtrl_GetIndent, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetUseTabs", (PyCFunction) _wrap_StyledTextCtrl_SetUseTabs, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetUseTabs", (PyCFunction) _wrap_StyledTextCtrl_GetUseTabs, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetLineIndentation", (PyCFunction) _wrap_StyledTextCtrl_SetLineIndentation, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetLineIndentation", (PyCFunction) _wrap_StyledTextCtrl_GetLineIndentation, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetLineIndentPosition", (PyCFunction) _wrap_StyledTextCtrl_GetLineIndentPosition, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetColumn", (PyCFunction) _wrap_StyledTextCtrl_GetColumn, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetUseHorizontalScrollBar", (PyCFunction) _wrap_StyledTextCtrl_SetUseHorizontalScrollBar, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetUseHorizontalScrollBar", (PyCFunction) _wrap_StyledTextCtrl_GetUseHorizontalScrollBar, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetIndentationGuides", (PyCFunction) _wrap_StyledTextCtrl_SetIndentationGuides, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetIndentationGuides", (PyCFunction) _wrap_StyledTextCtrl_GetIndentationGuides, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetHighlightGuide", (PyCFunction) _wrap_StyledTextCtrl_SetHighlightGuide, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetHighlightGuide", (PyCFunction) _wrap_StyledTextCtrl_GetHighlightGuide, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetLineEndPosition", (PyCFunction) _wrap_StyledTextCtrl_GetLineEndPosition, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetCodePage", (PyCFunction) _wrap_StyledTextCtrl_GetCodePage, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetCaretForeground", (PyCFunction) _wrap_StyledTextCtrl_GetCaretForeground, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetReadOnly", (PyCFunction) _wrap_StyledTextCtrl_GetReadOnly, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetCurrentPos", (PyCFunction) _wrap_StyledTextCtrl_SetCurrentPos, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetSelectionStart", (PyCFunction) _wrap_StyledTextCtrl_SetSelectionStart, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetSelectionStart", (PyCFunction) _wrap_StyledTextCtrl_GetSelectionStart, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetSelectionEnd", (PyCFunction) _wrap_StyledTextCtrl_SetSelectionEnd, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetSelectionEnd", (PyCFunction) _wrap_StyledTextCtrl_GetSelectionEnd, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetPrintMagnification", (PyCFunction) _wrap_StyledTextCtrl_SetPrintMagnification, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetPrintMagnification", (PyCFunction) _wrap_StyledTextCtrl_GetPrintMagnification, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetPrintColourMode", (PyCFunction) _wrap_StyledTextCtrl_SetPrintColourMode, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetPrintColourMode", (PyCFunction) _wrap_StyledTextCtrl_GetPrintColourMode, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_FindText", (PyCFunction) _wrap_StyledTextCtrl_FindText, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_FormatRange", (PyCFunction) _wrap_StyledTextCtrl_FormatRange, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetFirstVisibleLine", (PyCFunction) _wrap_StyledTextCtrl_GetFirstVisibleLine, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetLine", (PyCFunction) _wrap_StyledTextCtrl_GetLine, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetLineCount", (PyCFunction) _wrap_StyledTextCtrl_GetLineCount, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetMarginLeft", (PyCFunction) _wrap_StyledTextCtrl_SetMarginLeft, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetMarginLeft", (PyCFunction) _wrap_StyledTextCtrl_GetMarginLeft, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetMarginRight", (PyCFunction) _wrap_StyledTextCtrl_SetMarginRight, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetMarginRight", (PyCFunction) _wrap_StyledTextCtrl_GetMarginRight, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetModify", (PyCFunction) _wrap_StyledTextCtrl_GetModify, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetSelection", (PyCFunction) _wrap_StyledTextCtrl_SetSelection, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetSelectedText", (PyCFunction) _wrap_StyledTextCtrl_GetSelectedText, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetTextRange", (PyCFunction) _wrap_StyledTextCtrl_GetTextRange, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_HideSelection", (PyCFunction) _wrap_StyledTextCtrl_HideSelection, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_LineFromPosition", (PyCFunction) _wrap_StyledTextCtrl_LineFromPosition, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_PositionFromLine", (PyCFunction) _wrap_StyledTextCtrl_PositionFromLine, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_LineScroll", (PyCFunction) _wrap_StyledTextCtrl_LineScroll, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_EnsureCaretVisible", (PyCFunction) _wrap_StyledTextCtrl_EnsureCaretVisible, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_ReplaceSelection", (PyCFunction) _wrap_StyledTextCtrl_ReplaceSelection, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetReadOnly", (PyCFunction) _wrap_StyledTextCtrl_SetReadOnly, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_CanPaste", (PyCFunction) _wrap_StyledTextCtrl_CanPaste, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_CanUndo", (PyCFunction) _wrap_StyledTextCtrl_CanUndo, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_EmptyUndoBuffer", (PyCFunction) _wrap_StyledTextCtrl_EmptyUndoBuffer, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_Undo", (PyCFunction) _wrap_StyledTextCtrl_Undo, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_Cut", (PyCFunction) _wrap_StyledTextCtrl_Cut, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_Copy", (PyCFunction) _wrap_StyledTextCtrl_Copy, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_Paste", (PyCFunction) _wrap_StyledTextCtrl_Paste, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_Clear", (PyCFunction) _wrap_StyledTextCtrl_Clear, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetText", (PyCFunction) _wrap_StyledTextCtrl_SetText, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetText", (PyCFunction) _wrap_StyledTextCtrl_GetText, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetTextLength", (PyCFunction) _wrap_StyledTextCtrl_GetTextLength, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetOvertype", (PyCFunction) _wrap_StyledTextCtrl_SetOvertype, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetOvertype", (PyCFunction) _wrap_StyledTextCtrl_GetOvertype, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetCaretWidth", (PyCFunction) _wrap_StyledTextCtrl_SetCaretWidth, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetCaretWidth", (PyCFunction) _wrap_StyledTextCtrl_GetCaretWidth, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetTargetStart", (PyCFunction) _wrap_StyledTextCtrl_SetTargetStart, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetTargetStart", (PyCFunction) _wrap_StyledTextCtrl_GetTargetStart, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetTargetEnd", (PyCFunction) _wrap_StyledTextCtrl_SetTargetEnd, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetTargetEnd", (PyCFunction) _wrap_StyledTextCtrl_GetTargetEnd, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_ReplaceTarget", (PyCFunction) _wrap_StyledTextCtrl_ReplaceTarget, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_ReplaceTargetRE", (PyCFunction) _wrap_StyledTextCtrl_ReplaceTargetRE, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SearchInTarget", (PyCFunction) _wrap_StyledTextCtrl_SearchInTarget, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetSearchFlags", (PyCFunction) _wrap_StyledTextCtrl_SetSearchFlags, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetSearchFlags", (PyCFunction) _wrap_StyledTextCtrl_GetSearchFlags, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_CallTipShow", (PyCFunction) _wrap_StyledTextCtrl_CallTipShow, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_CallTipCancel", (PyCFunction) _wrap_StyledTextCtrl_CallTipCancel, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_CallTipActive", (PyCFunction) _wrap_StyledTextCtrl_CallTipActive, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_CallTipPosAtStart", (PyCFunction) _wrap_StyledTextCtrl_CallTipPosAtStart, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_CallTipSetHighlight", (PyCFunction) _wrap_StyledTextCtrl_CallTipSetHighlight, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_CallTipSetBackground", (PyCFunction) _wrap_StyledTextCtrl_CallTipSetBackground, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_CallTipSetForeground", (PyCFunction) _wrap_StyledTextCtrl_CallTipSetForeground, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_CallTipSetForegroundHighlight", (PyCFunction) _wrap_StyledTextCtrl_CallTipSetForegroundHighlight, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_VisibleFromDocLine", (PyCFunction) _wrap_StyledTextCtrl_VisibleFromDocLine, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_DocLineFromVisible", (PyCFunction) _wrap_StyledTextCtrl_DocLineFromVisible, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetFoldLevel", (PyCFunction) _wrap_StyledTextCtrl_SetFoldLevel, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetFoldLevel", (PyCFunction) _wrap_StyledTextCtrl_GetFoldLevel, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetLastChild", (PyCFunction) _wrap_StyledTextCtrl_GetLastChild, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetFoldParent", (PyCFunction) _wrap_StyledTextCtrl_GetFoldParent, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_ShowLines", (PyCFunction) _wrap_StyledTextCtrl_ShowLines, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_HideLines", (PyCFunction) _wrap_StyledTextCtrl_HideLines, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetLineVisible", (PyCFunction) _wrap_StyledTextCtrl_GetLineVisible, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetFoldExpanded", (PyCFunction) _wrap_StyledTextCtrl_SetFoldExpanded, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetFoldExpanded", (PyCFunction) _wrap_StyledTextCtrl_GetFoldExpanded, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_ToggleFold", (PyCFunction) _wrap_StyledTextCtrl_ToggleFold, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_EnsureVisible", (PyCFunction) _wrap_StyledTextCtrl_EnsureVisible, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetFoldFlags", (PyCFunction) _wrap_StyledTextCtrl_SetFoldFlags, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_EnsureVisibleEnforcePolicy", (PyCFunction) _wrap_StyledTextCtrl_EnsureVisibleEnforcePolicy, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetTabIndents", (PyCFunction) _wrap_StyledTextCtrl_SetTabIndents, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetTabIndents", (PyCFunction) _wrap_StyledTextCtrl_GetTabIndents, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetBackSpaceUnIndents", (PyCFunction) _wrap_StyledTextCtrl_SetBackSpaceUnIndents, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetBackSpaceUnIndents", (PyCFunction) _wrap_StyledTextCtrl_GetBackSpaceUnIndents, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetMouseDwellTime", (PyCFunction) _wrap_StyledTextCtrl_SetMouseDwellTime, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetMouseDwellTime", (PyCFunction) _wrap_StyledTextCtrl_GetMouseDwellTime, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_WordStartPosition", (PyCFunction) _wrap_StyledTextCtrl_WordStartPosition, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_WordEndPosition", (PyCFunction) _wrap_StyledTextCtrl_WordEndPosition, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetWrapMode", (PyCFunction) _wrap_StyledTextCtrl_SetWrapMode, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetWrapMode", (PyCFunction) _wrap_StyledTextCtrl_GetWrapMode, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetLayoutCache", (PyCFunction) _wrap_StyledTextCtrl_SetLayoutCache, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetLayoutCache", (PyCFunction) _wrap_StyledTextCtrl_GetLayoutCache, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetScrollWidth", (PyCFunction) _wrap_StyledTextCtrl_SetScrollWidth, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetScrollWidth", (PyCFunction) _wrap_StyledTextCtrl_GetScrollWidth, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_TextWidth", (PyCFunction) _wrap_StyledTextCtrl_TextWidth, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetEndAtLastLine", (PyCFunction) _wrap_StyledTextCtrl_SetEndAtLastLine, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetEndAtLastLine", (PyCFunction) _wrap_StyledTextCtrl_GetEndAtLastLine, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_TextHeight", (PyCFunction) _wrap_StyledTextCtrl_TextHeight, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetUseVerticalScrollBar", (PyCFunction) _wrap_StyledTextCtrl_SetUseVerticalScrollBar, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetUseVerticalScrollBar", (PyCFunction) _wrap_StyledTextCtrl_GetUseVerticalScrollBar, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_AppendText", (PyCFunction) _wrap_StyledTextCtrl_AppendText, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetTwoPhaseDraw", (PyCFunction) _wrap_StyledTextCtrl_GetTwoPhaseDraw, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetTwoPhaseDraw", (PyCFunction) _wrap_StyledTextCtrl_SetTwoPhaseDraw, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_TargetFromSelection", (PyCFunction) _wrap_StyledTextCtrl_TargetFromSelection, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_LinesJoin", (PyCFunction) _wrap_StyledTextCtrl_LinesJoin, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_LinesSplit", (PyCFunction) _wrap_StyledTextCtrl_LinesSplit, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetFoldMarginColour", (PyCFunction) _wrap_StyledTextCtrl_SetFoldMarginColour, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetFoldMarginHiColour", (PyCFunction) _wrap_StyledTextCtrl_SetFoldMarginHiColour, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_LineDown", (PyCFunction) _wrap_StyledTextCtrl_LineDown, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_LineDownExtend", (PyCFunction) _wrap_StyledTextCtrl_LineDownExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_LineUp", (PyCFunction) _wrap_StyledTextCtrl_LineUp, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_LineUpExtend", (PyCFunction) _wrap_StyledTextCtrl_LineUpExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_CharLeft", (PyCFunction) _wrap_StyledTextCtrl_CharLeft, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_CharLeftExtend", (PyCFunction) _wrap_StyledTextCtrl_CharLeftExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_CharRight", (PyCFunction) _wrap_StyledTextCtrl_CharRight, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_CharRightExtend", (PyCFunction) _wrap_StyledTextCtrl_CharRightExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_WordLeft", (PyCFunction) _wrap_StyledTextCtrl_WordLeft, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_WordLeftExtend", (PyCFunction) _wrap_StyledTextCtrl_WordLeftExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_WordRight", (PyCFunction) _wrap_StyledTextCtrl_WordRight, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_WordRightExtend", (PyCFunction) _wrap_StyledTextCtrl_WordRightExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_Home", (PyCFunction) _wrap_StyledTextCtrl_Home, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_HomeExtend", (PyCFunction) _wrap_StyledTextCtrl_HomeExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_LineEnd", (PyCFunction) _wrap_StyledTextCtrl_LineEnd, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_LineEndExtend", (PyCFunction) _wrap_StyledTextCtrl_LineEndExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_DocumentStart", (PyCFunction) _wrap_StyledTextCtrl_DocumentStart, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_DocumentStartExtend", (PyCFunction) _wrap_StyledTextCtrl_DocumentStartExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_DocumentEnd", (PyCFunction) _wrap_StyledTextCtrl_DocumentEnd, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_DocumentEndExtend", (PyCFunction) _wrap_StyledTextCtrl_DocumentEndExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_PageUp", (PyCFunction) _wrap_StyledTextCtrl_PageUp, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_PageUpExtend", (PyCFunction) _wrap_StyledTextCtrl_PageUpExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_PageDown", (PyCFunction) _wrap_StyledTextCtrl_PageDown, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_PageDownExtend", (PyCFunction) _wrap_StyledTextCtrl_PageDownExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_EditToggleOvertype", (PyCFunction) _wrap_StyledTextCtrl_EditToggleOvertype, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_Cancel", (PyCFunction) _wrap_StyledTextCtrl_Cancel, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_DeleteBack", (PyCFunction) _wrap_StyledTextCtrl_DeleteBack, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_Tab", (PyCFunction) _wrap_StyledTextCtrl_Tab, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_BackTab", (PyCFunction) _wrap_StyledTextCtrl_BackTab, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_NewLine", (PyCFunction) _wrap_StyledTextCtrl_NewLine, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_FormFeed", (PyCFunction) _wrap_StyledTextCtrl_FormFeed, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_VCHome", (PyCFunction) _wrap_StyledTextCtrl_VCHome, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_VCHomeExtend", (PyCFunction) _wrap_StyledTextCtrl_VCHomeExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_ZoomIn", (PyCFunction) _wrap_StyledTextCtrl_ZoomIn, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_ZoomOut", (PyCFunction) _wrap_StyledTextCtrl_ZoomOut, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_DelWordLeft", (PyCFunction) _wrap_StyledTextCtrl_DelWordLeft, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_DelWordRight", (PyCFunction) _wrap_StyledTextCtrl_DelWordRight, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_LineCut", (PyCFunction) _wrap_StyledTextCtrl_LineCut, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_LineDelete", (PyCFunction) _wrap_StyledTextCtrl_LineDelete, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_LineTranspose", (PyCFunction) _wrap_StyledTextCtrl_LineTranspose, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_LineDuplicate", (PyCFunction) _wrap_StyledTextCtrl_LineDuplicate, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_LowerCase", (PyCFunction) _wrap_StyledTextCtrl_LowerCase, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_UpperCase", (PyCFunction) _wrap_StyledTextCtrl_UpperCase, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_LineScrollDown", (PyCFunction) _wrap_StyledTextCtrl_LineScrollDown, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_LineScrollUp", (PyCFunction) _wrap_StyledTextCtrl_LineScrollUp, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_DeleteBackNotLine", (PyCFunction) _wrap_StyledTextCtrl_DeleteBackNotLine, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_HomeDisplay", (PyCFunction) _wrap_StyledTextCtrl_HomeDisplay, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_HomeDisplayExtend", (PyCFunction) _wrap_StyledTextCtrl_HomeDisplayExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_LineEndDisplay", (PyCFunction) _wrap_StyledTextCtrl_LineEndDisplay, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_LineEndDisplayExtend", (PyCFunction) _wrap_StyledTextCtrl_LineEndDisplayExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_HomeWrap", (PyCFunction) _wrap_StyledTextCtrl_HomeWrap, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_HomeWrapExtend", (PyCFunction) _wrap_StyledTextCtrl_HomeWrapExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_LineEndWrap", (PyCFunction) _wrap_StyledTextCtrl_LineEndWrap, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_LineEndWrapExtend", (PyCFunction) _wrap_StyledTextCtrl_LineEndWrapExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_VCHomeWrap", (PyCFunction) _wrap_StyledTextCtrl_VCHomeWrap, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_VCHomeWrapExtend", (PyCFunction) _wrap_StyledTextCtrl_VCHomeWrapExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_LineCopy", (PyCFunction) _wrap_StyledTextCtrl_LineCopy, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_MoveCaretInsideView", (PyCFunction) _wrap_StyledTextCtrl_MoveCaretInsideView, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_LineLength", (PyCFunction) _wrap_StyledTextCtrl_LineLength, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_BraceHighlight", (PyCFunction) _wrap_StyledTextCtrl_BraceHighlight, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_BraceBadLight", (PyCFunction) _wrap_StyledTextCtrl_BraceBadLight, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_BraceMatch", (PyCFunction) _wrap_StyledTextCtrl_BraceMatch, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetViewEOL", (PyCFunction) _wrap_StyledTextCtrl_GetViewEOL, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetViewEOL", (PyCFunction) _wrap_StyledTextCtrl_SetViewEOL, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetDocPointer", (PyCFunction) _wrap_StyledTextCtrl_GetDocPointer, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetDocPointer", (PyCFunction) _wrap_StyledTextCtrl_SetDocPointer, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetModEventMask", (PyCFunction) _wrap_StyledTextCtrl_SetModEventMask, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetEdgeColumn", (PyCFunction) _wrap_StyledTextCtrl_GetEdgeColumn, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetEdgeColumn", (PyCFunction) _wrap_StyledTextCtrl_SetEdgeColumn, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetEdgeMode", (PyCFunction) _wrap_StyledTextCtrl_GetEdgeMode, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetEdgeMode", (PyCFunction) _wrap_StyledTextCtrl_SetEdgeMode, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetEdgeColour", (PyCFunction) _wrap_StyledTextCtrl_GetEdgeColour, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetEdgeColour", (PyCFunction) _wrap_StyledTextCtrl_SetEdgeColour, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SearchAnchor", (PyCFunction) _wrap_StyledTextCtrl_SearchAnchor, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SearchNext", (PyCFunction) _wrap_StyledTextCtrl_SearchNext, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SearchPrev", (PyCFunction) _wrap_StyledTextCtrl_SearchPrev, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_LinesOnScreen", (PyCFunction) _wrap_StyledTextCtrl_LinesOnScreen, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_UsePopUp", (PyCFunction) _wrap_StyledTextCtrl_UsePopUp, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SelectionIsRectangle", (PyCFunction) _wrap_StyledTextCtrl_SelectionIsRectangle, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetZoom", (PyCFunction) _wrap_StyledTextCtrl_SetZoom, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetZoom", (PyCFunction) _wrap_StyledTextCtrl_GetZoom, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_CreateDocument", (PyCFunction) _wrap_StyledTextCtrl_CreateDocument, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_AddRefDocument", (PyCFunction) _wrap_StyledTextCtrl_AddRefDocument, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_ReleaseDocument", (PyCFunction) _wrap_StyledTextCtrl_ReleaseDocument, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetModEventMask", (PyCFunction) _wrap_StyledTextCtrl_GetModEventMask, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetSTCFocus", (PyCFunction) _wrap_StyledTextCtrl_SetSTCFocus, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetSTCFocus", (PyCFunction) _wrap_StyledTextCtrl_GetSTCFocus, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetStatus", (PyCFunction) _wrap_StyledTextCtrl_SetStatus, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetStatus", (PyCFunction) _wrap_StyledTextCtrl_GetStatus, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetMouseDownCaptures", (PyCFunction) _wrap_StyledTextCtrl_SetMouseDownCaptures, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetMouseDownCaptures", (PyCFunction) _wrap_StyledTextCtrl_GetMouseDownCaptures, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetSTCCursor", (PyCFunction) _wrap_StyledTextCtrl_SetSTCCursor, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetSTCCursor", (PyCFunction) _wrap_StyledTextCtrl_GetSTCCursor, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetControlCharSymbol", (PyCFunction) _wrap_StyledTextCtrl_SetControlCharSymbol, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetControlCharSymbol", (PyCFunction) _wrap_StyledTextCtrl_GetControlCharSymbol, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_WordPartLeft", (PyCFunction) _wrap_StyledTextCtrl_WordPartLeft, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_WordPartLeftExtend", (PyCFunction) _wrap_StyledTextCtrl_WordPartLeftExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_WordPartRight", (PyCFunction) _wrap_StyledTextCtrl_WordPartRight, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_WordPartRightExtend", (PyCFunction) _wrap_StyledTextCtrl_WordPartRightExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetVisiblePolicy", (PyCFunction) _wrap_StyledTextCtrl_SetVisiblePolicy, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_DelLineLeft", (PyCFunction) _wrap_StyledTextCtrl_DelLineLeft, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_DelLineRight", (PyCFunction) _wrap_StyledTextCtrl_DelLineRight, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetXOffset", (PyCFunction) _wrap_StyledTextCtrl_SetXOffset, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetXOffset", (PyCFunction) _wrap_StyledTextCtrl_GetXOffset, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_ChooseCaretX", (PyCFunction) _wrap_StyledTextCtrl_ChooseCaretX, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetXCaretPolicy", (PyCFunction) _wrap_StyledTextCtrl_SetXCaretPolicy, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetYCaretPolicy", (PyCFunction) _wrap_StyledTextCtrl_SetYCaretPolicy, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetPrintWrapMode", (PyCFunction) _wrap_StyledTextCtrl_SetPrintWrapMode, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetPrintWrapMode", (PyCFunction) _wrap_StyledTextCtrl_GetPrintWrapMode, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetHotspotActiveForeground", (PyCFunction) _wrap_StyledTextCtrl_SetHotspotActiveForeground, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetHotspotActiveBackground", (PyCFunction) _wrap_StyledTextCtrl_SetHotspotActiveBackground, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetHotspotActiveUnderline", (PyCFunction) _wrap_StyledTextCtrl_SetHotspotActiveUnderline, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetHotspotSingleLine", (PyCFunction) _wrap_StyledTextCtrl_SetHotspotSingleLine, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_ParaDown", (PyCFunction) _wrap_StyledTextCtrl_ParaDown, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_ParaDownExtend", (PyCFunction) _wrap_StyledTextCtrl_ParaDownExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_ParaUp", (PyCFunction) _wrap_StyledTextCtrl_ParaUp, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_ParaUpExtend", (PyCFunction) _wrap_StyledTextCtrl_ParaUpExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_PositionBefore", (PyCFunction) _wrap_StyledTextCtrl_PositionBefore, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_PositionAfter", (PyCFunction) _wrap_StyledTextCtrl_PositionAfter, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_CopyRange", (PyCFunction) _wrap_StyledTextCtrl_CopyRange, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_CopyText", (PyCFunction) _wrap_StyledTextCtrl_CopyText, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetSelectionMode", (PyCFunction) _wrap_StyledTextCtrl_SetSelectionMode, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetSelectionMode", (PyCFunction) _wrap_StyledTextCtrl_GetSelectionMode, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetLineSelStartPosition", (PyCFunction) _wrap_StyledTextCtrl_GetLineSelStartPosition, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetLineSelEndPosition", (PyCFunction) _wrap_StyledTextCtrl_GetLineSelEndPosition, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_LineDownRectExtend", (PyCFunction) _wrap_StyledTextCtrl_LineDownRectExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_LineUpRectExtend", (PyCFunction) _wrap_StyledTextCtrl_LineUpRectExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_CharLeftRectExtend", (PyCFunction) _wrap_StyledTextCtrl_CharLeftRectExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_CharRightRectExtend", (PyCFunction) _wrap_StyledTextCtrl_CharRightRectExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_HomeRectExtend", (PyCFunction) _wrap_StyledTextCtrl_HomeRectExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_VCHomeRectExtend", (PyCFunction) _wrap_StyledTextCtrl_VCHomeRectExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_LineEndRectExtend", (PyCFunction) _wrap_StyledTextCtrl_LineEndRectExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_PageUpRectExtend", (PyCFunction) _wrap_StyledTextCtrl_PageUpRectExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_PageDownRectExtend", (PyCFunction) _wrap_StyledTextCtrl_PageDownRectExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_StutteredPageUp", (PyCFunction) _wrap_StyledTextCtrl_StutteredPageUp, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_StutteredPageUpExtend", (PyCFunction) _wrap_StyledTextCtrl_StutteredPageUpExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_StutteredPageDown", (PyCFunction) _wrap_StyledTextCtrl_StutteredPageDown, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_StutteredPageDownExtend", (PyCFunction) _wrap_StyledTextCtrl_StutteredPageDownExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_WordLeftEnd", (PyCFunction) _wrap_StyledTextCtrl_WordLeftEnd, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_WordLeftEndExtend", (PyCFunction) _wrap_StyledTextCtrl_WordLeftEndExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_WordRightEnd", (PyCFunction) _wrap_StyledTextCtrl_WordRightEnd, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_WordRightEndExtend", (PyCFunction) _wrap_StyledTextCtrl_WordRightEndExtend, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetWhitespaceChars", (PyCFunction) _wrap_StyledTextCtrl_SetWhitespaceChars, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetCharsDefault", (PyCFunction) _wrap_StyledTextCtrl_SetCharsDefault, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_AutoCompGetCurrent", (PyCFunction) _wrap_StyledTextCtrl_AutoCompGetCurrent, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_StartRecord", (PyCFunction) _wrap_StyledTextCtrl_StartRecord, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_StopRecord", (PyCFunction) _wrap_StyledTextCtrl_StopRecord, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetLexer", (PyCFunction) _wrap_StyledTextCtrl_SetLexer, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetLexer", (PyCFunction) _wrap_StyledTextCtrl_GetLexer, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_Colourise", (PyCFunction) _wrap_StyledTextCtrl_Colourise, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetProperty", (PyCFunction) _wrap_StyledTextCtrl_SetProperty, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetKeyWords", (PyCFunction) _wrap_StyledTextCtrl_SetKeyWords, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetLexerLanguage", (PyCFunction) _wrap_StyledTextCtrl_SetLexerLanguage, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetCurrentLine", (PyCFunction) _wrap_StyledTextCtrl_GetCurrentLine, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_StyleSetSpec", (PyCFunction) _wrap_StyledTextCtrl_StyleSetSpec, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_StyleSetFont", (PyCFunction) _wrap_StyledTextCtrl_StyleSetFont, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_StyleSetFontAttr", (PyCFunction) _wrap_StyledTextCtrl_StyleSetFontAttr, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_CmdKeyExecute", (PyCFunction) _wrap_StyledTextCtrl_CmdKeyExecute, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetMargins", (PyCFunction) _wrap_StyledTextCtrl_SetMargins, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetSelection", (PyCFunction) _wrap_StyledTextCtrl_GetSelection, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_PointFromPosition", (PyCFunction) _wrap_StyledTextCtrl_PointFromPosition, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_ScrollToLine", (PyCFunction) _wrap_StyledTextCtrl_ScrollToLine, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_ScrollToColumn", (PyCFunction) _wrap_StyledTextCtrl_ScrollToColumn, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SendMsg", (PyCFunction) _wrap_StyledTextCtrl_SendMsg, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetVScrollBar", (PyCFunction) _wrap_StyledTextCtrl_SetVScrollBar, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetHScrollBar", (PyCFunction) _wrap_StyledTextCtrl_SetHScrollBar, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetLastKeydownProcessed", (PyCFunction) _wrap_StyledTextCtrl_GetLastKeydownProcessed, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetLastKeydownProcessed", (PyCFunction) _wrap_StyledTextCtrl_SetLastKeydownProcessed, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SaveFile", (PyCFunction) _wrap_StyledTextCtrl_SaveFile, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_LoadFile", (PyCFunction) _wrap_StyledTextCtrl_LoadFile, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_DoDragOver", (PyCFunction) _wrap_StyledTextCtrl_DoDragOver, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_DoDropText", (PyCFunction) _wrap_StyledTextCtrl_DoDropText, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_SetUseAntiAliasing", (PyCFunction) _wrap_StyledTextCtrl_SetUseAntiAliasing, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_GetUseAntiAliasing", (PyCFunction) _wrap_StyledTextCtrl_GetUseAntiAliasing, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextCtrl_swigregister", StyledTextCtrl_swigregister, METH_VARARGS, NULL },
+	 { (char *)"new_StyledTextEvent", (PyCFunction) _wrap_new_StyledTextEvent, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"delete_StyledTextEvent", (PyCFunction) _wrap_delete_StyledTextEvent, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_SetPosition", (PyCFunction) _wrap_StyledTextEvent_SetPosition, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_SetKey", (PyCFunction) _wrap_StyledTextEvent_SetKey, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_SetModifiers", (PyCFunction) _wrap_StyledTextEvent_SetModifiers, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_SetModificationType", (PyCFunction) _wrap_StyledTextEvent_SetModificationType, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_SetText", (PyCFunction) _wrap_StyledTextEvent_SetText, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_SetLength", (PyCFunction) _wrap_StyledTextEvent_SetLength, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_SetLinesAdded", (PyCFunction) _wrap_StyledTextEvent_SetLinesAdded, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_SetLine", (PyCFunction) _wrap_StyledTextEvent_SetLine, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_SetFoldLevelNow", (PyCFunction) _wrap_StyledTextEvent_SetFoldLevelNow, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_SetFoldLevelPrev", (PyCFunction) _wrap_StyledTextEvent_SetFoldLevelPrev, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_SetMargin", (PyCFunction) _wrap_StyledTextEvent_SetMargin, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_SetMessage", (PyCFunction) _wrap_StyledTextEvent_SetMessage, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_SetWParam", (PyCFunction) _wrap_StyledTextEvent_SetWParam, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_SetLParam", (PyCFunction) _wrap_StyledTextEvent_SetLParam, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_SetListType", (PyCFunction) _wrap_StyledTextEvent_SetListType, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_SetX", (PyCFunction) _wrap_StyledTextEvent_SetX, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_SetY", (PyCFunction) _wrap_StyledTextEvent_SetY, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_SetDragText", (PyCFunction) _wrap_StyledTextEvent_SetDragText, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_SetDragAllowMove", (PyCFunction) _wrap_StyledTextEvent_SetDragAllowMove, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_SetDragResult", (PyCFunction) _wrap_StyledTextEvent_SetDragResult, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_GetPosition", (PyCFunction) _wrap_StyledTextEvent_GetPosition, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_GetKey", (PyCFunction) _wrap_StyledTextEvent_GetKey, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_GetModifiers", (PyCFunction) _wrap_StyledTextEvent_GetModifiers, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_GetModificationType", (PyCFunction) _wrap_StyledTextEvent_GetModificationType, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_GetText", (PyCFunction) _wrap_StyledTextEvent_GetText, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_GetLength", (PyCFunction) _wrap_StyledTextEvent_GetLength, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_GetLinesAdded", (PyCFunction) _wrap_StyledTextEvent_GetLinesAdded, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_GetLine", (PyCFunction) _wrap_StyledTextEvent_GetLine, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_GetFoldLevelNow", (PyCFunction) _wrap_StyledTextEvent_GetFoldLevelNow, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_GetFoldLevelPrev", (PyCFunction) _wrap_StyledTextEvent_GetFoldLevelPrev, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_GetMargin", (PyCFunction) _wrap_StyledTextEvent_GetMargin, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_GetMessage", (PyCFunction) _wrap_StyledTextEvent_GetMessage, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_GetWParam", (PyCFunction) _wrap_StyledTextEvent_GetWParam, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_GetLParam", (PyCFunction) _wrap_StyledTextEvent_GetLParam, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_GetListType", (PyCFunction) _wrap_StyledTextEvent_GetListType, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_GetX", (PyCFunction) _wrap_StyledTextEvent_GetX, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_GetY", (PyCFunction) _wrap_StyledTextEvent_GetY, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_GetDragText", (PyCFunction) _wrap_StyledTextEvent_GetDragText, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_GetDragAllowMove", (PyCFunction) _wrap_StyledTextEvent_GetDragAllowMove, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_GetDragResult", (PyCFunction) _wrap_StyledTextEvent_GetDragResult, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_GetShift", (PyCFunction) _wrap_StyledTextEvent_GetShift, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_GetControl", (PyCFunction) _wrap_StyledTextEvent_GetControl, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_GetAlt", (PyCFunction) _wrap_StyledTextEvent_GetAlt, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_Clone", (PyCFunction) _wrap_StyledTextEvent_Clone, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StyledTextEvent_swigregister", StyledTextEvent_swigregister, METH_VARARGS, NULL },
+	 { NULL, NULL, 0, NULL }
 };
 
 
@@ -15463,7 +15551,7 @@ _swigt__p_wxMemoryBuffer,
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (END) -------- */
 
 static swig_const_info swig_const_table[] = {
-{0}};
+{0, 0, 0, 0.0, 0, 0}};
 
 #ifdef __cplusplus
 }
@@ -15491,913 +15579,913 @@ SWIGEXPORT(void) SWIG_init(void) {
     
     PyDict_SetItemString(d,(char*)"cvar", SWIG_globals);
     SWIG_addvarlink(SWIG_globals,(char*)"STCNameStr",_wrap_STCNameStr_get, _wrap_STCNameStr_set);
-    PyDict_SetItemString(d,"STC_USE_DND", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_USE_POPUP", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_INVALID_POSITION", SWIG_FromInt((int)-1));
-    PyDict_SetItemString(d,"STC_START", SWIG_FromInt((int)2000));
-    PyDict_SetItemString(d,"STC_OPTIONAL_START", SWIG_FromInt((int)3000));
-    PyDict_SetItemString(d,"STC_LEXER_START", SWIG_FromInt((int)4000));
-    PyDict_SetItemString(d,"STC_WS_INVISIBLE", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_WS_VISIBLEALWAYS", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_WS_VISIBLEAFTERINDENT", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_EOL_CRLF", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_EOL_CR", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_EOL_LF", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_CP_UTF8", SWIG_FromInt((int)65001));
-    PyDict_SetItemString(d,"STC_CP_DBCS", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_MARKER_MAX", SWIG_FromInt((int)31));
-    PyDict_SetItemString(d,"STC_MARK_CIRCLE", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_MARK_ROUNDRECT", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_MARK_ARROW", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_MARK_SMALLRECT", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_MARK_SHORTARROW", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_MARK_EMPTY", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_MARK_ARROWDOWN", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_MARK_MINUS", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_MARK_PLUS", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_MARK_VLINE", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_MARK_LCORNER", SWIG_FromInt((int)10));
-    PyDict_SetItemString(d,"STC_MARK_TCORNER", SWIG_FromInt((int)11));
-    PyDict_SetItemString(d,"STC_MARK_BOXPLUS", SWIG_FromInt((int)12));
-    PyDict_SetItemString(d,"STC_MARK_BOXPLUSCONNECTED", SWIG_FromInt((int)13));
-    PyDict_SetItemString(d,"STC_MARK_BOXMINUS", SWIG_FromInt((int)14));
-    PyDict_SetItemString(d,"STC_MARK_BOXMINUSCONNECTED", SWIG_FromInt((int)15));
-    PyDict_SetItemString(d,"STC_MARK_LCORNERCURVE", SWIG_FromInt((int)16));
-    PyDict_SetItemString(d,"STC_MARK_TCORNERCURVE", SWIG_FromInt((int)17));
-    PyDict_SetItemString(d,"STC_MARK_CIRCLEPLUS", SWIG_FromInt((int)18));
-    PyDict_SetItemString(d,"STC_MARK_CIRCLEPLUSCONNECTED", SWIG_FromInt((int)19));
-    PyDict_SetItemString(d,"STC_MARK_CIRCLEMINUS", SWIG_FromInt((int)20));
-    PyDict_SetItemString(d,"STC_MARK_CIRCLEMINUSCONNECTED", SWIG_FromInt((int)21));
-    PyDict_SetItemString(d,"STC_MARK_BACKGROUND", SWIG_FromInt((int)22));
-    PyDict_SetItemString(d,"STC_MARK_DOTDOTDOT", SWIG_FromInt((int)23));
-    PyDict_SetItemString(d,"STC_MARK_ARROWS", SWIG_FromInt((int)24));
-    PyDict_SetItemString(d,"STC_MARK_PIXMAP", SWIG_FromInt((int)25));
-    PyDict_SetItemString(d,"STC_MARK_CHARACTER", SWIG_FromInt((int)10000));
-    PyDict_SetItemString(d,"STC_MARKNUM_FOLDEREND", SWIG_FromInt((int)25));
-    PyDict_SetItemString(d,"STC_MARKNUM_FOLDEROPENMID", SWIG_FromInt((int)26));
-    PyDict_SetItemString(d,"STC_MARKNUM_FOLDERMIDTAIL", SWIG_FromInt((int)27));
-    PyDict_SetItemString(d,"STC_MARKNUM_FOLDERTAIL", SWIG_FromInt((int)28));
-    PyDict_SetItemString(d,"STC_MARKNUM_FOLDERSUB", SWIG_FromInt((int)29));
-    PyDict_SetItemString(d,"STC_MARKNUM_FOLDER", SWIG_FromInt((int)30));
-    PyDict_SetItemString(d,"STC_MARKNUM_FOLDEROPEN", SWIG_FromInt((int)31));
-    PyDict_SetItemString(d,"STC_MASK_FOLDERS", SWIG_FromInt((int)0xFE000000));
-    PyDict_SetItemString(d,"STC_MARGIN_SYMBOL", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_MARGIN_NUMBER", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_STYLE_DEFAULT", SWIG_FromInt((int)32));
-    PyDict_SetItemString(d,"STC_STYLE_LINENUMBER", SWIG_FromInt((int)33));
-    PyDict_SetItemString(d,"STC_STYLE_BRACELIGHT", SWIG_FromInt((int)34));
-    PyDict_SetItemString(d,"STC_STYLE_BRACEBAD", SWIG_FromInt((int)35));
-    PyDict_SetItemString(d,"STC_STYLE_CONTROLCHAR", SWIG_FromInt((int)36));
-    PyDict_SetItemString(d,"STC_STYLE_INDENTGUIDE", SWIG_FromInt((int)37));
-    PyDict_SetItemString(d,"STC_STYLE_LASTPREDEFINED", SWIG_FromInt((int)39));
-    PyDict_SetItemString(d,"STC_STYLE_MAX", SWIG_FromInt((int)127));
-    PyDict_SetItemString(d,"STC_CHARSET_ANSI", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_CHARSET_DEFAULT", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_CHARSET_BALTIC", SWIG_FromInt((int)186));
-    PyDict_SetItemString(d,"STC_CHARSET_CHINESEBIG5", SWIG_FromInt((int)136));
-    PyDict_SetItemString(d,"STC_CHARSET_EASTEUROPE", SWIG_FromInt((int)238));
-    PyDict_SetItemString(d,"STC_CHARSET_GB2312", SWIG_FromInt((int)134));
-    PyDict_SetItemString(d,"STC_CHARSET_GREEK", SWIG_FromInt((int)161));
-    PyDict_SetItemString(d,"STC_CHARSET_HANGUL", SWIG_FromInt((int)129));
-    PyDict_SetItemString(d,"STC_CHARSET_MAC", SWIG_FromInt((int)77));
-    PyDict_SetItemString(d,"STC_CHARSET_OEM", SWIG_FromInt((int)255));
-    PyDict_SetItemString(d,"STC_CHARSET_RUSSIAN", SWIG_FromInt((int)204));
-    PyDict_SetItemString(d,"STC_CHARSET_SHIFTJIS", SWIG_FromInt((int)128));
-    PyDict_SetItemString(d,"STC_CHARSET_SYMBOL", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_CHARSET_TURKISH", SWIG_FromInt((int)162));
-    PyDict_SetItemString(d,"STC_CHARSET_JOHAB", SWIG_FromInt((int)130));
-    PyDict_SetItemString(d,"STC_CHARSET_HEBREW", SWIG_FromInt((int)177));
-    PyDict_SetItemString(d,"STC_CHARSET_ARABIC", SWIG_FromInt((int)178));
-    PyDict_SetItemString(d,"STC_CHARSET_VIETNAMESE", SWIG_FromInt((int)163));
-    PyDict_SetItemString(d,"STC_CHARSET_THAI", SWIG_FromInt((int)222));
-    PyDict_SetItemString(d,"STC_CASE_MIXED", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_CASE_UPPER", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_CASE_LOWER", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_INDIC_MAX", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_INDIC_PLAIN", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_INDIC_SQUIGGLE", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_INDIC_TT", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_INDIC_DIAGONAL", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_INDIC_STRIKE", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_INDIC_HIDDEN", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_INDIC_BOX", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_INDIC0_MASK", SWIG_FromInt((int)0x20));
-    PyDict_SetItemString(d,"STC_INDIC1_MASK", SWIG_FromInt((int)0x40));
-    PyDict_SetItemString(d,"STC_INDIC2_MASK", SWIG_FromInt((int)0x80));
-    PyDict_SetItemString(d,"STC_INDICS_MASK", SWIG_FromInt((int)0xE0));
-    PyDict_SetItemString(d,"STC_PRINT_NORMAL", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_PRINT_INVERTLIGHT", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_PRINT_BLACKONWHITE", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_PRINT_COLOURONWHITE", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_PRINT_COLOURONWHITEDEFAULTBG", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_FIND_WHOLEWORD", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_FIND_MATCHCASE", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_FIND_WORDSTART", SWIG_FromInt((int)0x00100000));
-    PyDict_SetItemString(d,"STC_FIND_REGEXP", SWIG_FromInt((int)0x00200000));
-    PyDict_SetItemString(d,"STC_FIND_POSIX", SWIG_FromInt((int)0x00400000));
-    PyDict_SetItemString(d,"STC_FOLDLEVELBASE", SWIG_FromInt((int)0x400));
-    PyDict_SetItemString(d,"STC_FOLDLEVELWHITEFLAG", SWIG_FromInt((int)0x1000));
-    PyDict_SetItemString(d,"STC_FOLDLEVELHEADERFLAG", SWIG_FromInt((int)0x2000));
-    PyDict_SetItemString(d,"STC_FOLDLEVELBOXHEADERFLAG", SWIG_FromInt((int)0x4000));
-    PyDict_SetItemString(d,"STC_FOLDLEVELBOXFOOTERFLAG", SWIG_FromInt((int)0x8000));
-    PyDict_SetItemString(d,"STC_FOLDLEVELCONTRACTED", SWIG_FromInt((int)0x10000));
-    PyDict_SetItemString(d,"STC_FOLDLEVELUNINDENT", SWIG_FromInt((int)0x20000));
-    PyDict_SetItemString(d,"STC_FOLDLEVELNUMBERMASK", SWIG_FromInt((int)0x0FFF));
-    PyDict_SetItemString(d,"STC_FOLDFLAG_LINEBEFORE_EXPANDED", SWIG_FromInt((int)0x0002));
-    PyDict_SetItemString(d,"STC_FOLDFLAG_LINEBEFORE_CONTRACTED", SWIG_FromInt((int)0x0004));
-    PyDict_SetItemString(d,"STC_FOLDFLAG_LINEAFTER_EXPANDED", SWIG_FromInt((int)0x0008));
-    PyDict_SetItemString(d,"STC_FOLDFLAG_LINEAFTER_CONTRACTED", SWIG_FromInt((int)0x0010));
-    PyDict_SetItemString(d,"STC_FOLDFLAG_LEVELNUMBERS", SWIG_FromInt((int)0x0040));
-    PyDict_SetItemString(d,"STC_FOLDFLAG_BOX", SWIG_FromInt((int)0x0001));
-    PyDict_SetItemString(d,"STC_TIME_FOREVER", SWIG_FromInt((int)10000000));
-    PyDict_SetItemString(d,"STC_WRAP_NONE", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_WRAP_WORD", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_CACHE_NONE", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_CACHE_CARET", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_CACHE_PAGE", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_CACHE_DOCUMENT", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_EDGE_NONE", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_EDGE_LINE", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_EDGE_BACKGROUND", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_CURSORNORMAL", SWIG_FromInt((int)-1));
-    PyDict_SetItemString(d,"STC_CURSORWAIT", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_VISIBLE_SLOP", SWIG_FromInt((int)0x01));
-    PyDict_SetItemString(d,"STC_VISIBLE_STRICT", SWIG_FromInt((int)0x04));
-    PyDict_SetItemString(d,"STC_CARET_SLOP", SWIG_FromInt((int)0x01));
-    PyDict_SetItemString(d,"STC_CARET_STRICT", SWIG_FromInt((int)0x04));
-    PyDict_SetItemString(d,"STC_CARET_JUMPS", SWIG_FromInt((int)0x10));
-    PyDict_SetItemString(d,"STC_CARET_EVEN", SWIG_FromInt((int)0x08));
-    PyDict_SetItemString(d,"STC_SEL_STREAM", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_SEL_RECTANGLE", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_SEL_LINES", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_KEYWORDSET_MAX", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_MOD_INSERTTEXT", SWIG_FromInt((int)0x1));
-    PyDict_SetItemString(d,"STC_MOD_DELETETEXT", SWIG_FromInt((int)0x2));
-    PyDict_SetItemString(d,"STC_MOD_CHANGESTYLE", SWIG_FromInt((int)0x4));
-    PyDict_SetItemString(d,"STC_MOD_CHANGEFOLD", SWIG_FromInt((int)0x8));
-    PyDict_SetItemString(d,"STC_PERFORMED_USER", SWIG_FromInt((int)0x10));
-    PyDict_SetItemString(d,"STC_PERFORMED_UNDO", SWIG_FromInt((int)0x20));
-    PyDict_SetItemString(d,"STC_PERFORMED_REDO", SWIG_FromInt((int)0x40));
-    PyDict_SetItemString(d,"STC_LASTSTEPINUNDOREDO", SWIG_FromInt((int)0x100));
-    PyDict_SetItemString(d,"STC_MOD_CHANGEMARKER", SWIG_FromInt((int)0x200));
-    PyDict_SetItemString(d,"STC_MOD_BEFOREINSERT", SWIG_FromInt((int)0x400));
-    PyDict_SetItemString(d,"STC_MOD_BEFOREDELETE", SWIG_FromInt((int)0x800));
-    PyDict_SetItemString(d,"STC_MODEVENTMASKALL", SWIG_FromInt((int)0xF77));
-    PyDict_SetItemString(d,"STC_KEY_DOWN", SWIG_FromInt((int)300));
-    PyDict_SetItemString(d,"STC_KEY_UP", SWIG_FromInt((int)301));
-    PyDict_SetItemString(d,"STC_KEY_LEFT", SWIG_FromInt((int)302));
-    PyDict_SetItemString(d,"STC_KEY_RIGHT", SWIG_FromInt((int)303));
-    PyDict_SetItemString(d,"STC_KEY_HOME", SWIG_FromInt((int)304));
-    PyDict_SetItemString(d,"STC_KEY_END", SWIG_FromInt((int)305));
-    PyDict_SetItemString(d,"STC_KEY_PRIOR", SWIG_FromInt((int)306));
-    PyDict_SetItemString(d,"STC_KEY_NEXT", SWIG_FromInt((int)307));
-    PyDict_SetItemString(d,"STC_KEY_DELETE", SWIG_FromInt((int)308));
-    PyDict_SetItemString(d,"STC_KEY_INSERT", SWIG_FromInt((int)309));
-    PyDict_SetItemString(d,"STC_KEY_ESCAPE", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_KEY_BACK", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_KEY_TAB", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_KEY_RETURN", SWIG_FromInt((int)13));
-    PyDict_SetItemString(d,"STC_KEY_ADD", SWIG_FromInt((int)310));
-    PyDict_SetItemString(d,"STC_KEY_SUBTRACT", SWIG_FromInt((int)311));
-    PyDict_SetItemString(d,"STC_KEY_DIVIDE", SWIG_FromInt((int)312));
-    PyDict_SetItemString(d,"STC_SCMOD_SHIFT", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_SCMOD_CTRL", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_SCMOD_ALT", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_LEX_CONTAINER", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_LEX_NULL", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_LEX_PYTHON", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_LEX_CPP", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_LEX_HTML", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_LEX_XML", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_LEX_PERL", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_LEX_SQL", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_LEX_VB", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_LEX_PROPERTIES", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_LEX_ERRORLIST", SWIG_FromInt((int)10));
-    PyDict_SetItemString(d,"STC_LEX_MAKEFILE", SWIG_FromInt((int)11));
-    PyDict_SetItemString(d,"STC_LEX_BATCH", SWIG_FromInt((int)12));
-    PyDict_SetItemString(d,"STC_LEX_XCODE", SWIG_FromInt((int)13));
-    PyDict_SetItemString(d,"STC_LEX_LATEX", SWIG_FromInt((int)14));
-    PyDict_SetItemString(d,"STC_LEX_LUA", SWIG_FromInt((int)15));
-    PyDict_SetItemString(d,"STC_LEX_DIFF", SWIG_FromInt((int)16));
-    PyDict_SetItemString(d,"STC_LEX_CONF", SWIG_FromInt((int)17));
-    PyDict_SetItemString(d,"STC_LEX_PASCAL", SWIG_FromInt((int)18));
-    PyDict_SetItemString(d,"STC_LEX_AVE", SWIG_FromInt((int)19));
-    PyDict_SetItemString(d,"STC_LEX_ADA", SWIG_FromInt((int)20));
-    PyDict_SetItemString(d,"STC_LEX_LISP", SWIG_FromInt((int)21));
-    PyDict_SetItemString(d,"STC_LEX_RUBY", SWIG_FromInt((int)22));
-    PyDict_SetItemString(d,"STC_LEX_EIFFEL", SWIG_FromInt((int)23));
-    PyDict_SetItemString(d,"STC_LEX_EIFFELKW", SWIG_FromInt((int)24));
-    PyDict_SetItemString(d,"STC_LEX_TCL", SWIG_FromInt((int)25));
-    PyDict_SetItemString(d,"STC_LEX_NNCRONTAB", SWIG_FromInt((int)26));
-    PyDict_SetItemString(d,"STC_LEX_BULLANT", SWIG_FromInt((int)27));
-    PyDict_SetItemString(d,"STC_LEX_VBSCRIPT", SWIG_FromInt((int)28));
-    PyDict_SetItemString(d,"STC_LEX_ASP", SWIG_FromInt((int)29));
-    PyDict_SetItemString(d,"STC_LEX_PHP", SWIG_FromInt((int)30));
-    PyDict_SetItemString(d,"STC_LEX_BAAN", SWIG_FromInt((int)31));
-    PyDict_SetItemString(d,"STC_LEX_MATLAB", SWIG_FromInt((int)32));
-    PyDict_SetItemString(d,"STC_LEX_SCRIPTOL", SWIG_FromInt((int)33));
-    PyDict_SetItemString(d,"STC_LEX_ASM", SWIG_FromInt((int)34));
-    PyDict_SetItemString(d,"STC_LEX_CPPNOCASE", SWIG_FromInt((int)35));
-    PyDict_SetItemString(d,"STC_LEX_FORTRAN", SWIG_FromInt((int)36));
-    PyDict_SetItemString(d,"STC_LEX_F77", SWIG_FromInt((int)37));
-    PyDict_SetItemString(d,"STC_LEX_CSS", SWIG_FromInt((int)38));
-    PyDict_SetItemString(d,"STC_LEX_POV", SWIG_FromInt((int)39));
-    PyDict_SetItemString(d,"STC_LEX_LOUT", SWIG_FromInt((int)40));
-    PyDict_SetItemString(d,"STC_LEX_ESCRIPT", SWIG_FromInt((int)41));
-    PyDict_SetItemString(d,"STC_LEX_PS", SWIG_FromInt((int)42));
-    PyDict_SetItemString(d,"STC_LEX_NSIS", SWIG_FromInt((int)43));
-    PyDict_SetItemString(d,"STC_LEX_MMIXAL", SWIG_FromInt((int)44));
-    PyDict_SetItemString(d,"STC_LEX_CLW", SWIG_FromInt((int)45));
-    PyDict_SetItemString(d,"STC_LEX_CLWNOCASE", SWIG_FromInt((int)46));
-    PyDict_SetItemString(d,"STC_LEX_LOT", SWIG_FromInt((int)47));
-    PyDict_SetItemString(d,"STC_LEX_YAML", SWIG_FromInt((int)48));
-    PyDict_SetItemString(d,"STC_LEX_TEX", SWIG_FromInt((int)49));
-    PyDict_SetItemString(d,"STC_LEX_METAPOST", SWIG_FromInt((int)50));
-    PyDict_SetItemString(d,"STC_LEX_POWERBASIC", SWIG_FromInt((int)51));
-    PyDict_SetItemString(d,"STC_LEX_FORTH", SWIG_FromInt((int)52));
-    PyDict_SetItemString(d,"STC_LEX_ERLANG", SWIG_FromInt((int)53));
-    PyDict_SetItemString(d,"STC_LEX_OCTAVE", SWIG_FromInt((int)54));
-    PyDict_SetItemString(d,"STC_LEX_AUTOMATIC", SWIG_FromInt((int)1000));
-    PyDict_SetItemString(d,"STC_P_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_P_COMMENTLINE", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_P_NUMBER", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_P_STRING", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_P_CHARACTER", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_P_WORD", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_P_TRIPLE", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_P_TRIPLEDOUBLE", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_P_CLASSNAME", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_P_DEFNAME", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_P_OPERATOR", SWIG_FromInt((int)10));
-    PyDict_SetItemString(d,"STC_P_IDENTIFIER", SWIG_FromInt((int)11));
-    PyDict_SetItemString(d,"STC_P_COMMENTBLOCK", SWIG_FromInt((int)12));
-    PyDict_SetItemString(d,"STC_P_STRINGEOL", SWIG_FromInt((int)13));
-    PyDict_SetItemString(d,"STC_C_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_C_COMMENT", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_C_COMMENTLINE", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_C_COMMENTDOC", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_C_NUMBER", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_C_WORD", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_C_STRING", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_C_CHARACTER", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_C_UUID", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_C_PREPROCESSOR", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_C_OPERATOR", SWIG_FromInt((int)10));
-    PyDict_SetItemString(d,"STC_C_IDENTIFIER", SWIG_FromInt((int)11));
-    PyDict_SetItemString(d,"STC_C_STRINGEOL", SWIG_FromInt((int)12));
-    PyDict_SetItemString(d,"STC_C_VERBATIM", SWIG_FromInt((int)13));
-    PyDict_SetItemString(d,"STC_C_REGEX", SWIG_FromInt((int)14));
-    PyDict_SetItemString(d,"STC_C_COMMENTLINEDOC", SWIG_FromInt((int)15));
-    PyDict_SetItemString(d,"STC_C_WORD2", SWIG_FromInt((int)16));
-    PyDict_SetItemString(d,"STC_C_COMMENTDOCKEYWORD", SWIG_FromInt((int)17));
-    PyDict_SetItemString(d,"STC_C_COMMENTDOCKEYWORDERROR", SWIG_FromInt((int)18));
-    PyDict_SetItemString(d,"STC_C_GLOBALCLASS", SWIG_FromInt((int)19));
-    PyDict_SetItemString(d,"STC_H_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_H_TAG", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_H_TAGUNKNOWN", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_H_ATTRIBUTE", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_H_ATTRIBUTEUNKNOWN", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_H_NUMBER", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_H_DOUBLESTRING", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_H_SINGLESTRING", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_H_OTHER", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_H_COMMENT", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_H_ENTITY", SWIG_FromInt((int)10));
-    PyDict_SetItemString(d,"STC_H_TAGEND", SWIG_FromInt((int)11));
-    PyDict_SetItemString(d,"STC_H_XMLSTART", SWIG_FromInt((int)12));
-    PyDict_SetItemString(d,"STC_H_XMLEND", SWIG_FromInt((int)13));
-    PyDict_SetItemString(d,"STC_H_SCRIPT", SWIG_FromInt((int)14));
-    PyDict_SetItemString(d,"STC_H_ASP", SWIG_FromInt((int)15));
-    PyDict_SetItemString(d,"STC_H_ASPAT", SWIG_FromInt((int)16));
-    PyDict_SetItemString(d,"STC_H_CDATA", SWIG_FromInt((int)17));
-    PyDict_SetItemString(d,"STC_H_QUESTION", SWIG_FromInt((int)18));
-    PyDict_SetItemString(d,"STC_H_VALUE", SWIG_FromInt((int)19));
-    PyDict_SetItemString(d,"STC_H_XCCOMMENT", SWIG_FromInt((int)20));
-    PyDict_SetItemString(d,"STC_H_SGML_DEFAULT", SWIG_FromInt((int)21));
-    PyDict_SetItemString(d,"STC_H_SGML_COMMAND", SWIG_FromInt((int)22));
-    PyDict_SetItemString(d,"STC_H_SGML_1ST_PARAM", SWIG_FromInt((int)23));
-    PyDict_SetItemString(d,"STC_H_SGML_DOUBLESTRING", SWIG_FromInt((int)24));
-    PyDict_SetItemString(d,"STC_H_SGML_SIMPLESTRING", SWIG_FromInt((int)25));
-    PyDict_SetItemString(d,"STC_H_SGML_ERROR", SWIG_FromInt((int)26));
-    PyDict_SetItemString(d,"STC_H_SGML_SPECIAL", SWIG_FromInt((int)27));
-    PyDict_SetItemString(d,"STC_H_SGML_ENTITY", SWIG_FromInt((int)28));
-    PyDict_SetItemString(d,"STC_H_SGML_COMMENT", SWIG_FromInt((int)29));
-    PyDict_SetItemString(d,"STC_H_SGML_1ST_PARAM_COMMENT", SWIG_FromInt((int)30));
-    PyDict_SetItemString(d,"STC_H_SGML_BLOCK_DEFAULT", SWIG_FromInt((int)31));
-    PyDict_SetItemString(d,"STC_HJ_START", SWIG_FromInt((int)40));
-    PyDict_SetItemString(d,"STC_HJ_DEFAULT", SWIG_FromInt((int)41));
-    PyDict_SetItemString(d,"STC_HJ_COMMENT", SWIG_FromInt((int)42));
-    PyDict_SetItemString(d,"STC_HJ_COMMENTLINE", SWIG_FromInt((int)43));
-    PyDict_SetItemString(d,"STC_HJ_COMMENTDOC", SWIG_FromInt((int)44));
-    PyDict_SetItemString(d,"STC_HJ_NUMBER", SWIG_FromInt((int)45));
-    PyDict_SetItemString(d,"STC_HJ_WORD", SWIG_FromInt((int)46));
-    PyDict_SetItemString(d,"STC_HJ_KEYWORD", SWIG_FromInt((int)47));
-    PyDict_SetItemString(d,"STC_HJ_DOUBLESTRING", SWIG_FromInt((int)48));
-    PyDict_SetItemString(d,"STC_HJ_SINGLESTRING", SWIG_FromInt((int)49));
-    PyDict_SetItemString(d,"STC_HJ_SYMBOLS", SWIG_FromInt((int)50));
-    PyDict_SetItemString(d,"STC_HJ_STRINGEOL", SWIG_FromInt((int)51));
-    PyDict_SetItemString(d,"STC_HJ_REGEX", SWIG_FromInt((int)52));
-    PyDict_SetItemString(d,"STC_HJA_START", SWIG_FromInt((int)55));
-    PyDict_SetItemString(d,"STC_HJA_DEFAULT", SWIG_FromInt((int)56));
-    PyDict_SetItemString(d,"STC_HJA_COMMENT", SWIG_FromInt((int)57));
-    PyDict_SetItemString(d,"STC_HJA_COMMENTLINE", SWIG_FromInt((int)58));
-    PyDict_SetItemString(d,"STC_HJA_COMMENTDOC", SWIG_FromInt((int)59));
-    PyDict_SetItemString(d,"STC_HJA_NUMBER", SWIG_FromInt((int)60));
-    PyDict_SetItemString(d,"STC_HJA_WORD", SWIG_FromInt((int)61));
-    PyDict_SetItemString(d,"STC_HJA_KEYWORD", SWIG_FromInt((int)62));
-    PyDict_SetItemString(d,"STC_HJA_DOUBLESTRING", SWIG_FromInt((int)63));
-    PyDict_SetItemString(d,"STC_HJA_SINGLESTRING", SWIG_FromInt((int)64));
-    PyDict_SetItemString(d,"STC_HJA_SYMBOLS", SWIG_FromInt((int)65));
-    PyDict_SetItemString(d,"STC_HJA_STRINGEOL", SWIG_FromInt((int)66));
-    PyDict_SetItemString(d,"STC_HJA_REGEX", SWIG_FromInt((int)67));
-    PyDict_SetItemString(d,"STC_HB_START", SWIG_FromInt((int)70));
-    PyDict_SetItemString(d,"STC_HB_DEFAULT", SWIG_FromInt((int)71));
-    PyDict_SetItemString(d,"STC_HB_COMMENTLINE", SWIG_FromInt((int)72));
-    PyDict_SetItemString(d,"STC_HB_NUMBER", SWIG_FromInt((int)73));
-    PyDict_SetItemString(d,"STC_HB_WORD", SWIG_FromInt((int)74));
-    PyDict_SetItemString(d,"STC_HB_STRING", SWIG_FromInt((int)75));
-    PyDict_SetItemString(d,"STC_HB_IDENTIFIER", SWIG_FromInt((int)76));
-    PyDict_SetItemString(d,"STC_HB_STRINGEOL", SWIG_FromInt((int)77));
-    PyDict_SetItemString(d,"STC_HBA_START", SWIG_FromInt((int)80));
-    PyDict_SetItemString(d,"STC_HBA_DEFAULT", SWIG_FromInt((int)81));
-    PyDict_SetItemString(d,"STC_HBA_COMMENTLINE", SWIG_FromInt((int)82));
-    PyDict_SetItemString(d,"STC_HBA_NUMBER", SWIG_FromInt((int)83));
-    PyDict_SetItemString(d,"STC_HBA_WORD", SWIG_FromInt((int)84));
-    PyDict_SetItemString(d,"STC_HBA_STRING", SWIG_FromInt((int)85));
-    PyDict_SetItemString(d,"STC_HBA_IDENTIFIER", SWIG_FromInt((int)86));
-    PyDict_SetItemString(d,"STC_HBA_STRINGEOL", SWIG_FromInt((int)87));
-    PyDict_SetItemString(d,"STC_HP_START", SWIG_FromInt((int)90));
-    PyDict_SetItemString(d,"STC_HP_DEFAULT", SWIG_FromInt((int)91));
-    PyDict_SetItemString(d,"STC_HP_COMMENTLINE", SWIG_FromInt((int)92));
-    PyDict_SetItemString(d,"STC_HP_NUMBER", SWIG_FromInt((int)93));
-    PyDict_SetItemString(d,"STC_HP_STRING", SWIG_FromInt((int)94));
-    PyDict_SetItemString(d,"STC_HP_CHARACTER", SWIG_FromInt((int)95));
-    PyDict_SetItemString(d,"STC_HP_WORD", SWIG_FromInt((int)96));
-    PyDict_SetItemString(d,"STC_HP_TRIPLE", SWIG_FromInt((int)97));
-    PyDict_SetItemString(d,"STC_HP_TRIPLEDOUBLE", SWIG_FromInt((int)98));
-    PyDict_SetItemString(d,"STC_HP_CLASSNAME", SWIG_FromInt((int)99));
-    PyDict_SetItemString(d,"STC_HP_DEFNAME", SWIG_FromInt((int)100));
-    PyDict_SetItemString(d,"STC_HP_OPERATOR", SWIG_FromInt((int)101));
-    PyDict_SetItemString(d,"STC_HP_IDENTIFIER", SWIG_FromInt((int)102));
-    PyDict_SetItemString(d,"STC_HPA_START", SWIG_FromInt((int)105));
-    PyDict_SetItemString(d,"STC_HPA_DEFAULT", SWIG_FromInt((int)106));
-    PyDict_SetItemString(d,"STC_HPA_COMMENTLINE", SWIG_FromInt((int)107));
-    PyDict_SetItemString(d,"STC_HPA_NUMBER", SWIG_FromInt((int)108));
-    PyDict_SetItemString(d,"STC_HPA_STRING", SWIG_FromInt((int)109));
-    PyDict_SetItemString(d,"STC_HPA_CHARACTER", SWIG_FromInt((int)110));
-    PyDict_SetItemString(d,"STC_HPA_WORD", SWIG_FromInt((int)111));
-    PyDict_SetItemString(d,"STC_HPA_TRIPLE", SWIG_FromInt((int)112));
-    PyDict_SetItemString(d,"STC_HPA_TRIPLEDOUBLE", SWIG_FromInt((int)113));
-    PyDict_SetItemString(d,"STC_HPA_CLASSNAME", SWIG_FromInt((int)114));
-    PyDict_SetItemString(d,"STC_HPA_DEFNAME", SWIG_FromInt((int)115));
-    PyDict_SetItemString(d,"STC_HPA_OPERATOR", SWIG_FromInt((int)116));
-    PyDict_SetItemString(d,"STC_HPA_IDENTIFIER", SWIG_FromInt((int)117));
-    PyDict_SetItemString(d,"STC_HPHP_DEFAULT", SWIG_FromInt((int)118));
-    PyDict_SetItemString(d,"STC_HPHP_HSTRING", SWIG_FromInt((int)119));
-    PyDict_SetItemString(d,"STC_HPHP_SIMPLESTRING", SWIG_FromInt((int)120));
-    PyDict_SetItemString(d,"STC_HPHP_WORD", SWIG_FromInt((int)121));
-    PyDict_SetItemString(d,"STC_HPHP_NUMBER", SWIG_FromInt((int)122));
-    PyDict_SetItemString(d,"STC_HPHP_VARIABLE", SWIG_FromInt((int)123));
-    PyDict_SetItemString(d,"STC_HPHP_COMMENT", SWIG_FromInt((int)124));
-    PyDict_SetItemString(d,"STC_HPHP_COMMENTLINE", SWIG_FromInt((int)125));
-    PyDict_SetItemString(d,"STC_HPHP_HSTRING_VARIABLE", SWIG_FromInt((int)126));
-    PyDict_SetItemString(d,"STC_HPHP_OPERATOR", SWIG_FromInt((int)127));
-    PyDict_SetItemString(d,"STC_PL_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_PL_ERROR", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_PL_COMMENTLINE", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_PL_POD", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_PL_NUMBER", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_PL_WORD", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_PL_STRING", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_PL_CHARACTER", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_PL_PUNCTUATION", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_PL_PREPROCESSOR", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_PL_OPERATOR", SWIG_FromInt((int)10));
-    PyDict_SetItemString(d,"STC_PL_IDENTIFIER", SWIG_FromInt((int)11));
-    PyDict_SetItemString(d,"STC_PL_SCALAR", SWIG_FromInt((int)12));
-    PyDict_SetItemString(d,"STC_PL_ARRAY", SWIG_FromInt((int)13));
-    PyDict_SetItemString(d,"STC_PL_HASH", SWIG_FromInt((int)14));
-    PyDict_SetItemString(d,"STC_PL_SYMBOLTABLE", SWIG_FromInt((int)15));
-    PyDict_SetItemString(d,"STC_PL_REGEX", SWIG_FromInt((int)17));
-    PyDict_SetItemString(d,"STC_PL_REGSUBST", SWIG_FromInt((int)18));
-    PyDict_SetItemString(d,"STC_PL_LONGQUOTE", SWIG_FromInt((int)19));
-    PyDict_SetItemString(d,"STC_PL_BACKTICKS", SWIG_FromInt((int)20));
-    PyDict_SetItemString(d,"STC_PL_DATASECTION", SWIG_FromInt((int)21));
-    PyDict_SetItemString(d,"STC_PL_HERE_DELIM", SWIG_FromInt((int)22));
-    PyDict_SetItemString(d,"STC_PL_HERE_Q", SWIG_FromInt((int)23));
-    PyDict_SetItemString(d,"STC_PL_HERE_QQ", SWIG_FromInt((int)24));
-    PyDict_SetItemString(d,"STC_PL_HERE_QX", SWIG_FromInt((int)25));
-    PyDict_SetItemString(d,"STC_PL_STRING_Q", SWIG_FromInt((int)26));
-    PyDict_SetItemString(d,"STC_PL_STRING_QQ", SWIG_FromInt((int)27));
-    PyDict_SetItemString(d,"STC_PL_STRING_QX", SWIG_FromInt((int)28));
-    PyDict_SetItemString(d,"STC_PL_STRING_QR", SWIG_FromInt((int)29));
-    PyDict_SetItemString(d,"STC_PL_STRING_QW", SWIG_FromInt((int)30));
-    PyDict_SetItemString(d,"STC_B_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_B_COMMENT", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_B_NUMBER", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_B_KEYWORD", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_B_STRING", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_B_PREPROCESSOR", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_B_OPERATOR", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_B_IDENTIFIER", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_B_DATE", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_B_STRINGEOL", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_B_KEYWORD2", SWIG_FromInt((int)10));
-    PyDict_SetItemString(d,"STC_B_KEYWORD3", SWIG_FromInt((int)11));
-    PyDict_SetItemString(d,"STC_B_KEYWORD4", SWIG_FromInt((int)12));
-    PyDict_SetItemString(d,"STC_PROPS_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_PROPS_COMMENT", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_PROPS_SECTION", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_PROPS_ASSIGNMENT", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_PROPS_DEFVAL", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_L_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_L_COMMAND", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_L_TAG", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_L_MATH", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_L_COMMENT", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_LUA_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_LUA_COMMENT", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_LUA_COMMENTLINE", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_LUA_COMMENTDOC", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_LUA_NUMBER", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_LUA_WORD", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_LUA_STRING", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_LUA_CHARACTER", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_LUA_LITERALSTRING", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_LUA_PREPROCESSOR", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_LUA_OPERATOR", SWIG_FromInt((int)10));
-    PyDict_SetItemString(d,"STC_LUA_IDENTIFIER", SWIG_FromInt((int)11));
-    PyDict_SetItemString(d,"STC_LUA_STRINGEOL", SWIG_FromInt((int)12));
-    PyDict_SetItemString(d,"STC_LUA_WORD2", SWIG_FromInt((int)13));
-    PyDict_SetItemString(d,"STC_LUA_WORD3", SWIG_FromInt((int)14));
-    PyDict_SetItemString(d,"STC_LUA_WORD4", SWIG_FromInt((int)15));
-    PyDict_SetItemString(d,"STC_LUA_WORD5", SWIG_FromInt((int)16));
-    PyDict_SetItemString(d,"STC_LUA_WORD6", SWIG_FromInt((int)17));
-    PyDict_SetItemString(d,"STC_LUA_WORD7", SWIG_FromInt((int)18));
-    PyDict_SetItemString(d,"STC_LUA_WORD8", SWIG_FromInt((int)19));
-    PyDict_SetItemString(d,"STC_ERR_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_ERR_PYTHON", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_ERR_GCC", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_ERR_MS", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_ERR_CMD", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_ERR_BORLAND", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_ERR_PERL", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_ERR_NET", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_ERR_LUA", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_ERR_CTAG", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_ERR_DIFF_CHANGED", SWIG_FromInt((int)10));
-    PyDict_SetItemString(d,"STC_ERR_DIFF_ADDITION", SWIG_FromInt((int)11));
-    PyDict_SetItemString(d,"STC_ERR_DIFF_DELETION", SWIG_FromInt((int)12));
-    PyDict_SetItemString(d,"STC_ERR_DIFF_MESSAGE", SWIG_FromInt((int)13));
-    PyDict_SetItemString(d,"STC_ERR_PHP", SWIG_FromInt((int)14));
-    PyDict_SetItemString(d,"STC_ERR_ELF", SWIG_FromInt((int)15));
-    PyDict_SetItemString(d,"STC_ERR_IFC", SWIG_FromInt((int)16));
-    PyDict_SetItemString(d,"STC_ERR_IFORT", SWIG_FromInt((int)17));
-    PyDict_SetItemString(d,"STC_ERR_ABSF", SWIG_FromInt((int)18));
-    PyDict_SetItemString(d,"STC_BAT_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_BAT_COMMENT", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_BAT_WORD", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_BAT_LABEL", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_BAT_HIDE", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_BAT_COMMAND", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_BAT_IDENTIFIER", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_BAT_OPERATOR", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_MAKE_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_MAKE_COMMENT", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_MAKE_PREPROCESSOR", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_MAKE_IDENTIFIER", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_MAKE_OPERATOR", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_MAKE_TARGET", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_MAKE_IDEOL", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_DIFF_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_DIFF_COMMENT", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_DIFF_COMMAND", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_DIFF_HEADER", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_DIFF_POSITION", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_DIFF_DELETED", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_DIFF_ADDED", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_CONF_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_CONF_COMMENT", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_CONF_NUMBER", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_CONF_IDENTIFIER", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_CONF_EXTENSION", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_CONF_PARAMETER", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_CONF_STRING", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_CONF_OPERATOR", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_CONF_IP", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_CONF_DIRECTIVE", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_AVE_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_AVE_COMMENT", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_AVE_NUMBER", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_AVE_WORD", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_AVE_STRING", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_AVE_ENUM", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_AVE_STRINGEOL", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_AVE_IDENTIFIER", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_AVE_OPERATOR", SWIG_FromInt((int)10));
-    PyDict_SetItemString(d,"STC_AVE_WORD1", SWIG_FromInt((int)11));
-    PyDict_SetItemString(d,"STC_AVE_WORD2", SWIG_FromInt((int)12));
-    PyDict_SetItemString(d,"STC_AVE_WORD3", SWIG_FromInt((int)13));
-    PyDict_SetItemString(d,"STC_AVE_WORD4", SWIG_FromInt((int)14));
-    PyDict_SetItemString(d,"STC_AVE_WORD5", SWIG_FromInt((int)15));
-    PyDict_SetItemString(d,"STC_AVE_WORD6", SWIG_FromInt((int)16));
-    PyDict_SetItemString(d,"STC_ADA_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_ADA_WORD", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_ADA_IDENTIFIER", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_ADA_NUMBER", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_ADA_DELIMITER", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_ADA_CHARACTER", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_ADA_CHARACTEREOL", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_ADA_STRING", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_ADA_STRINGEOL", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_ADA_LABEL", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_ADA_COMMENTLINE", SWIG_FromInt((int)10));
-    PyDict_SetItemString(d,"STC_ADA_ILLEGAL", SWIG_FromInt((int)11));
-    PyDict_SetItemString(d,"STC_BAAN_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_BAAN_COMMENT", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_BAAN_COMMENTDOC", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_BAAN_NUMBER", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_BAAN_WORD", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_BAAN_STRING", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_BAAN_PREPROCESSOR", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_BAAN_OPERATOR", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_BAAN_IDENTIFIER", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_BAAN_STRINGEOL", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_BAAN_WORD2", SWIG_FromInt((int)10));
-    PyDict_SetItemString(d,"STC_LISP_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_LISP_COMMENT", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_LISP_NUMBER", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_LISP_KEYWORD", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_LISP_STRING", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_LISP_STRINGEOL", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_LISP_IDENTIFIER", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_LISP_OPERATOR", SWIG_FromInt((int)10));
-    PyDict_SetItemString(d,"STC_EIFFEL_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_EIFFEL_COMMENTLINE", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_EIFFEL_NUMBER", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_EIFFEL_WORD", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_EIFFEL_STRING", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_EIFFEL_CHARACTER", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_EIFFEL_OPERATOR", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_EIFFEL_IDENTIFIER", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_EIFFEL_STRINGEOL", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_NNCRONTAB_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_NNCRONTAB_COMMENT", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_NNCRONTAB_TASK", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_NNCRONTAB_SECTION", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_NNCRONTAB_KEYWORD", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_NNCRONTAB_MODIFIER", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_NNCRONTAB_ASTERISK", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_NNCRONTAB_NUMBER", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_NNCRONTAB_STRING", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_NNCRONTAB_ENVIRONMENT", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_NNCRONTAB_IDENTIFIER", SWIG_FromInt((int)10));
-    PyDict_SetItemString(d,"STC_FORTH_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_FORTH_COMMENT", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_FORTH_COMMENT_ML", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_FORTH_IDENTIFIER", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_FORTH_CONTROL", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_FORTH_KEYWORD", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_FORTH_DEFWORD", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_FORTH_PREWORD1", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_FORTH_PREWORD2", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_FORTH_NUMBER", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_FORTH_STRING", SWIG_FromInt((int)10));
-    PyDict_SetItemString(d,"STC_FORTH_LOCALE", SWIG_FromInt((int)11));
-    PyDict_SetItemString(d,"STC_MATLAB_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_MATLAB_COMMENT", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_MATLAB_COMMAND", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_MATLAB_NUMBER", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_MATLAB_KEYWORD", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_MATLAB_STRING", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_MATLAB_OPERATOR", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_MATLAB_IDENTIFIER", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_MATLAB_DOUBLEQUOTESTRING", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_WHITE", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_COMMENTLINE", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_PERSISTENT", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_CSTYLE", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_COMMENTBLOCK", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_NUMBER", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_STRING", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_CHARACTER", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_STRINGEOL", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_KEYWORD", SWIG_FromInt((int)10));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_OPERATOR", SWIG_FromInt((int)11));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_IDENTIFIER", SWIG_FromInt((int)12));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_TRIPLE", SWIG_FromInt((int)13));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_CLASSNAME", SWIG_FromInt((int)14));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_PREPROCESSOR", SWIG_FromInt((int)15));
-    PyDict_SetItemString(d,"STC_ASM_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_ASM_COMMENT", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_ASM_NUMBER", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_ASM_STRING", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_ASM_OPERATOR", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_ASM_IDENTIFIER", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_ASM_CPUINSTRUCTION", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_ASM_MATHINSTRUCTION", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_ASM_REGISTER", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_ASM_DIRECTIVE", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_ASM_DIRECTIVEOPERAND", SWIG_FromInt((int)10));
-    PyDict_SetItemString(d,"STC_ASM_COMMENTBLOCK", SWIG_FromInt((int)11));
-    PyDict_SetItemString(d,"STC_ASM_CHARACTER", SWIG_FromInt((int)12));
-    PyDict_SetItemString(d,"STC_ASM_STRINGEOL", SWIG_FromInt((int)13));
-    PyDict_SetItemString(d,"STC_ASM_EXTINSTRUCTION", SWIG_FromInt((int)14));
-    PyDict_SetItemString(d,"STC_F_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_F_COMMENT", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_F_NUMBER", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_F_STRING1", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_F_STRING2", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_F_STRINGEOL", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_F_OPERATOR", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_F_IDENTIFIER", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_F_WORD", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_F_WORD2", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_F_WORD3", SWIG_FromInt((int)10));
-    PyDict_SetItemString(d,"STC_F_PREPROCESSOR", SWIG_FromInt((int)11));
-    PyDict_SetItemString(d,"STC_F_OPERATOR2", SWIG_FromInt((int)12));
-    PyDict_SetItemString(d,"STC_F_LABEL", SWIG_FromInt((int)13));
-    PyDict_SetItemString(d,"STC_F_CONTINUATION", SWIG_FromInt((int)14));
-    PyDict_SetItemString(d,"STC_CSS_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_CSS_TAG", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_CSS_CLASS", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_CSS_PSEUDOCLASS", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_CSS_UNKNOWN_PSEUDOCLASS", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_CSS_OPERATOR", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_CSS_IDENTIFIER", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_CSS_UNKNOWN_IDENTIFIER", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_CSS_VALUE", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_CSS_COMMENT", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_CSS_ID", SWIG_FromInt((int)10));
-    PyDict_SetItemString(d,"STC_CSS_IMPORTANT", SWIG_FromInt((int)11));
-    PyDict_SetItemString(d,"STC_CSS_DIRECTIVE", SWIG_FromInt((int)12));
-    PyDict_SetItemString(d,"STC_CSS_DOUBLESTRING", SWIG_FromInt((int)13));
-    PyDict_SetItemString(d,"STC_CSS_SINGLESTRING", SWIG_FromInt((int)14));
-    PyDict_SetItemString(d,"STC_POV_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_POV_COMMENT", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_POV_COMMENTLINE", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_POV_NUMBER", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_POV_OPERATOR", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_POV_IDENTIFIER", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_POV_STRING", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_POV_STRINGEOL", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_POV_DIRECTIVE", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_POV_BADDIRECTIVE", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_POV_WORD2", SWIG_FromInt((int)10));
-    PyDict_SetItemString(d,"STC_POV_WORD3", SWIG_FromInt((int)11));
-    PyDict_SetItemString(d,"STC_POV_WORD4", SWIG_FromInt((int)12));
-    PyDict_SetItemString(d,"STC_POV_WORD5", SWIG_FromInt((int)13));
-    PyDict_SetItemString(d,"STC_POV_WORD6", SWIG_FromInt((int)14));
-    PyDict_SetItemString(d,"STC_POV_WORD7", SWIG_FromInt((int)15));
-    PyDict_SetItemString(d,"STC_POV_WORD8", SWIG_FromInt((int)16));
-    PyDict_SetItemString(d,"STC_LOUT_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_LOUT_COMMENT", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_LOUT_NUMBER", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_LOUT_WORD", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_LOUT_WORD2", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_LOUT_WORD3", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_LOUT_WORD4", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_LOUT_STRING", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_LOUT_OPERATOR", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_LOUT_IDENTIFIER", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_LOUT_STRINGEOL", SWIG_FromInt((int)10));
-    PyDict_SetItemString(d,"STC_ESCRIPT_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_ESCRIPT_COMMENT", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_ESCRIPT_COMMENTLINE", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_ESCRIPT_COMMENTDOC", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_ESCRIPT_NUMBER", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_ESCRIPT_WORD", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_ESCRIPT_STRING", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_ESCRIPT_OPERATOR", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_ESCRIPT_IDENTIFIER", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_ESCRIPT_BRACE", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_ESCRIPT_WORD2", SWIG_FromInt((int)10));
-    PyDict_SetItemString(d,"STC_ESCRIPT_WORD3", SWIG_FromInt((int)11));
-    PyDict_SetItemString(d,"STC_PS_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_PS_COMMENT", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_PS_DSC_COMMENT", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_PS_DSC_VALUE", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_PS_NUMBER", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_PS_NAME", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_PS_KEYWORD", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_PS_LITERAL", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_PS_IMMEVAL", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_PS_PAREN_ARRAY", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_PS_PAREN_DICT", SWIG_FromInt((int)10));
-    PyDict_SetItemString(d,"STC_PS_PAREN_PROC", SWIG_FromInt((int)11));
-    PyDict_SetItemString(d,"STC_PS_TEXT", SWIG_FromInt((int)12));
-    PyDict_SetItemString(d,"STC_PS_HEXSTRING", SWIG_FromInt((int)13));
-    PyDict_SetItemString(d,"STC_PS_BASE85STRING", SWIG_FromInt((int)14));
-    PyDict_SetItemString(d,"STC_PS_BADSTRINGCHAR", SWIG_FromInt((int)15));
-    PyDict_SetItemString(d,"STC_NSIS_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_NSIS_COMMENT", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_NSIS_STRINGDQ", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_NSIS_STRINGLQ", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_NSIS_STRINGRQ", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_NSIS_FUNCTION", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_NSIS_VARIABLE", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_NSIS_LABEL", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_NSIS_USERDEFINED", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_NSIS_SECTIONDEF", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_NSIS_SUBSECTIONDEF", SWIG_FromInt((int)10));
-    PyDict_SetItemString(d,"STC_NSIS_IFDEFINEDEF", SWIG_FromInt((int)11));
-    PyDict_SetItemString(d,"STC_NSIS_MACRODEF", SWIG_FromInt((int)12));
-    PyDict_SetItemString(d,"STC_NSIS_STRINGVAR", SWIG_FromInt((int)13));
-    PyDict_SetItemString(d,"STC_MMIXAL_LEADWS", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_MMIXAL_COMMENT", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_MMIXAL_LABEL", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_MMIXAL_OPCODE", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_MMIXAL_OPCODE_PRE", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_MMIXAL_OPCODE_VALID", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_MMIXAL_OPCODE_UNKNOWN", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_MMIXAL_OPCODE_POST", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_MMIXAL_OPERANDS", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_MMIXAL_NUMBER", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_MMIXAL_REF", SWIG_FromInt((int)10));
-    PyDict_SetItemString(d,"STC_MMIXAL_CHAR", SWIG_FromInt((int)11));
-    PyDict_SetItemString(d,"STC_MMIXAL_STRING", SWIG_FromInt((int)12));
-    PyDict_SetItemString(d,"STC_MMIXAL_REGISTER", SWIG_FromInt((int)13));
-    PyDict_SetItemString(d,"STC_MMIXAL_HEX", SWIG_FromInt((int)14));
-    PyDict_SetItemString(d,"STC_MMIXAL_OPERATOR", SWIG_FromInt((int)15));
-    PyDict_SetItemString(d,"STC_MMIXAL_SYMBOL", SWIG_FromInt((int)16));
-    PyDict_SetItemString(d,"STC_MMIXAL_INCLUDE", SWIG_FromInt((int)17));
-    PyDict_SetItemString(d,"STC_CLW_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_CLW_LABEL", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_CLW_COMMENT", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_CLW_STRING", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_CLW_USER_IDENTIFIER", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_CLW_INTEGER_CONSTANT", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_CLW_REAL_CONSTANT", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_CLW_PICTURE_STRING", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_CLW_KEYWORD", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_CLW_COMPILER_DIRECTIVE", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_CLW_BUILTIN_PROCEDURES_FUNCTION", SWIG_FromInt((int)10));
-    PyDict_SetItemString(d,"STC_CLW_STRUCTURE_DATA_TYPE", SWIG_FromInt((int)11));
-    PyDict_SetItemString(d,"STC_CLW_ATTRIBUTE", SWIG_FromInt((int)12));
-    PyDict_SetItemString(d,"STC_CLW_STANDARD_EQUATE", SWIG_FromInt((int)13));
-    PyDict_SetItemString(d,"STC_CLW_ERROR", SWIG_FromInt((int)14));
-    PyDict_SetItemString(d,"STC_LOT_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_LOT_HEADER", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_LOT_BREAK", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_LOT_SET", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_LOT_PASS", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_LOT_FAIL", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_LOT_ABORT", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_YAML_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_YAML_COMMENT", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_YAML_IDENTIFIER", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_YAML_KEYWORD", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_YAML_NUMBER", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_YAML_REFERENCE", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_YAML_DOCUMENT", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_YAML_TEXT", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_YAML_ERROR", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_TEX_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_TEX_SPECIAL", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_TEX_GROUP", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_TEX_SYMBOL", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_TEX_COMMAND", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_TEX_TEXT", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_METAPOST_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_METAPOST_SPECIAL", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_METAPOST_GROUP", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_METAPOST_SYMBOL", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_METAPOST_COMMAND", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_METAPOST_TEXT", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_METAPOST_EXTRA", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_ERLANG_DEFAULT", SWIG_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_ERLANG_COMMENT", SWIG_FromInt((int)1));
-    PyDict_SetItemString(d,"STC_ERLANG_VARIABLE", SWIG_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_ERLANG_NUMBER", SWIG_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_ERLANG_KEYWORD", SWIG_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_ERLANG_STRING", SWIG_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_ERLANG_OPERATOR", SWIG_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_ERLANG_ATOM", SWIG_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_ERLANG_FUNCTION_NAME", SWIG_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_ERLANG_CHARACTER", SWIG_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_ERLANG_MACRO", SWIG_FromInt((int)10));
-    PyDict_SetItemString(d,"STC_ERLANG_RECORD", SWIG_FromInt((int)11));
-    PyDict_SetItemString(d,"STC_ERLANG_SEPARATOR", SWIG_FromInt((int)12));
-    PyDict_SetItemString(d,"STC_ERLANG_NODE_NAME", SWIG_FromInt((int)13));
-    PyDict_SetItemString(d,"STC_ERLANG_UNKNOWN", SWIG_FromInt((int)31));
-    PyDict_SetItemString(d,"STC_CMD_REDO", SWIG_FromInt((int)2011));
-    PyDict_SetItemString(d,"STC_CMD_SELECTALL", SWIG_FromInt((int)2013));
-    PyDict_SetItemString(d,"STC_CMD_UNDO", SWIG_FromInt((int)2176));
-    PyDict_SetItemString(d,"STC_CMD_CUT", SWIG_FromInt((int)2177));
-    PyDict_SetItemString(d,"STC_CMD_COPY", SWIG_FromInt((int)2178));
-    PyDict_SetItemString(d,"STC_CMD_PASTE", SWIG_FromInt((int)2179));
-    PyDict_SetItemString(d,"STC_CMD_CLEAR", SWIG_FromInt((int)2180));
-    PyDict_SetItemString(d,"STC_CMD_LINEDOWN", SWIG_FromInt((int)2300));
-    PyDict_SetItemString(d,"STC_CMD_LINEDOWNEXTEND", SWIG_FromInt((int)2301));
-    PyDict_SetItemString(d,"STC_CMD_LINEUP", SWIG_FromInt((int)2302));
-    PyDict_SetItemString(d,"STC_CMD_LINEUPEXTEND", SWIG_FromInt((int)2303));
-    PyDict_SetItemString(d,"STC_CMD_CHARLEFT", SWIG_FromInt((int)2304));
-    PyDict_SetItemString(d,"STC_CMD_CHARLEFTEXTEND", SWIG_FromInt((int)2305));
-    PyDict_SetItemString(d,"STC_CMD_CHARRIGHT", SWIG_FromInt((int)2306));
-    PyDict_SetItemString(d,"STC_CMD_CHARRIGHTEXTEND", SWIG_FromInt((int)2307));
-    PyDict_SetItemString(d,"STC_CMD_WORDLEFT", SWIG_FromInt((int)2308));
-    PyDict_SetItemString(d,"STC_CMD_WORDLEFTEXTEND", SWIG_FromInt((int)2309));
-    PyDict_SetItemString(d,"STC_CMD_WORDRIGHT", SWIG_FromInt((int)2310));
-    PyDict_SetItemString(d,"STC_CMD_WORDRIGHTEXTEND", SWIG_FromInt((int)2311));
-    PyDict_SetItemString(d,"STC_CMD_HOME", SWIG_FromInt((int)2312));
-    PyDict_SetItemString(d,"STC_CMD_HOMEEXTEND", SWIG_FromInt((int)2313));
-    PyDict_SetItemString(d,"STC_CMD_LINEEND", SWIG_FromInt((int)2314));
-    PyDict_SetItemString(d,"STC_CMD_LINEENDEXTEND", SWIG_FromInt((int)2315));
-    PyDict_SetItemString(d,"STC_CMD_DOCUMENTSTART", SWIG_FromInt((int)2316));
-    PyDict_SetItemString(d,"STC_CMD_DOCUMENTSTARTEXTEND", SWIG_FromInt((int)2317));
-    PyDict_SetItemString(d,"STC_CMD_DOCUMENTEND", SWIG_FromInt((int)2318));
-    PyDict_SetItemString(d,"STC_CMD_DOCUMENTENDEXTEND", SWIG_FromInt((int)2319));
-    PyDict_SetItemString(d,"STC_CMD_PAGEUP", SWIG_FromInt((int)2320));
-    PyDict_SetItemString(d,"STC_CMD_PAGEUPEXTEND", SWIG_FromInt((int)2321));
-    PyDict_SetItemString(d,"STC_CMD_PAGEDOWN", SWIG_FromInt((int)2322));
-    PyDict_SetItemString(d,"STC_CMD_PAGEDOWNEXTEND", SWIG_FromInt((int)2323));
-    PyDict_SetItemString(d,"STC_CMD_EDITTOGGLEOVERTYPE", SWIG_FromInt((int)2324));
-    PyDict_SetItemString(d,"STC_CMD_CANCEL", SWIG_FromInt((int)2325));
-    PyDict_SetItemString(d,"STC_CMD_DELETEBACK", SWIG_FromInt((int)2326));
-    PyDict_SetItemString(d,"STC_CMD_TAB", SWIG_FromInt((int)2327));
-    PyDict_SetItemString(d,"STC_CMD_BACKTAB", SWIG_FromInt((int)2328));
-    PyDict_SetItemString(d,"STC_CMD_NEWLINE", SWIG_FromInt((int)2329));
-    PyDict_SetItemString(d,"STC_CMD_FORMFEED", SWIG_FromInt((int)2330));
-    PyDict_SetItemString(d,"STC_CMD_VCHOME", SWIG_FromInt((int)2331));
-    PyDict_SetItemString(d,"STC_CMD_VCHOMEEXTEND", SWIG_FromInt((int)2332));
-    PyDict_SetItemString(d,"STC_CMD_ZOOMIN", SWIG_FromInt((int)2333));
-    PyDict_SetItemString(d,"STC_CMD_ZOOMOUT", SWIG_FromInt((int)2334));
-    PyDict_SetItemString(d,"STC_CMD_DELWORDLEFT", SWIG_FromInt((int)2335));
-    PyDict_SetItemString(d,"STC_CMD_DELWORDRIGHT", SWIG_FromInt((int)2336));
-    PyDict_SetItemString(d,"STC_CMD_LINECUT", SWIG_FromInt((int)2337));
-    PyDict_SetItemString(d,"STC_CMD_LINEDELETE", SWIG_FromInt((int)2338));
-    PyDict_SetItemString(d,"STC_CMD_LINETRANSPOSE", SWIG_FromInt((int)2339));
-    PyDict_SetItemString(d,"STC_CMD_LINEDUPLICATE", SWIG_FromInt((int)2404));
-    PyDict_SetItemString(d,"STC_CMD_LOWERCASE", SWIG_FromInt((int)2340));
-    PyDict_SetItemString(d,"STC_CMD_UPPERCASE", SWIG_FromInt((int)2341));
-    PyDict_SetItemString(d,"STC_CMD_LINESCROLLDOWN", SWIG_FromInt((int)2342));
-    PyDict_SetItemString(d,"STC_CMD_LINESCROLLUP", SWIG_FromInt((int)2343));
-    PyDict_SetItemString(d,"STC_CMD_DELETEBACKNOTLINE", SWIG_FromInt((int)2344));
-    PyDict_SetItemString(d,"STC_CMD_HOMEDISPLAY", SWIG_FromInt((int)2345));
-    PyDict_SetItemString(d,"STC_CMD_HOMEDISPLAYEXTEND", SWIG_FromInt((int)2346));
-    PyDict_SetItemString(d,"STC_CMD_LINEENDDISPLAY", SWIG_FromInt((int)2347));
-    PyDict_SetItemString(d,"STC_CMD_LINEENDDISPLAYEXTEND", SWIG_FromInt((int)2348));
-    PyDict_SetItemString(d,"STC_CMD_HOMEWRAP", SWIG_FromInt((int)2349));
-    PyDict_SetItemString(d,"STC_CMD_HOMEWRAPEXTEND", SWIG_FromInt((int)2450));
-    PyDict_SetItemString(d,"STC_CMD_LINEENDWRAP", SWIG_FromInt((int)2451));
-    PyDict_SetItemString(d,"STC_CMD_LINEENDWRAPEXTEND", SWIG_FromInt((int)2452));
-    PyDict_SetItemString(d,"STC_CMD_VCHOMEWRAP", SWIG_FromInt((int)2453));
-    PyDict_SetItemString(d,"STC_CMD_VCHOMEWRAPEXTEND", SWIG_FromInt((int)2454));
-    PyDict_SetItemString(d,"STC_CMD_LINECOPY", SWIG_FromInt((int)2455));
-    PyDict_SetItemString(d,"STC_CMD_WORDPARTLEFT", SWIG_FromInt((int)2390));
-    PyDict_SetItemString(d,"STC_CMD_WORDPARTLEFTEXTEND", SWIG_FromInt((int)2391));
-    PyDict_SetItemString(d,"STC_CMD_WORDPARTRIGHT", SWIG_FromInt((int)2392));
-    PyDict_SetItemString(d,"STC_CMD_WORDPARTRIGHTEXTEND", SWIG_FromInt((int)2393));
-    PyDict_SetItemString(d,"STC_CMD_DELLINELEFT", SWIG_FromInt((int)2395));
-    PyDict_SetItemString(d,"STC_CMD_DELLINERIGHT", SWIG_FromInt((int)2396));
-    PyDict_SetItemString(d,"STC_CMD_PARADOWN", SWIG_FromInt((int)2413));
-    PyDict_SetItemString(d,"STC_CMD_PARADOWNEXTEND", SWIG_FromInt((int)2414));
-    PyDict_SetItemString(d,"STC_CMD_PARAUP", SWIG_FromInt((int)2415));
-    PyDict_SetItemString(d,"STC_CMD_PARAUPEXTEND", SWIG_FromInt((int)2416));
-    PyDict_SetItemString(d,"STC_CMD_LINEDOWNRECTEXTEND", SWIG_FromInt((int)2426));
-    PyDict_SetItemString(d,"STC_CMD_LINEUPRECTEXTEND", SWIG_FromInt((int)2427));
-    PyDict_SetItemString(d,"STC_CMD_CHARLEFTRECTEXTEND", SWIG_FromInt((int)2428));
-    PyDict_SetItemString(d,"STC_CMD_CHARRIGHTRECTEXTEND", SWIG_FromInt((int)2429));
-    PyDict_SetItemString(d,"STC_CMD_HOMERECTEXTEND", SWIG_FromInt((int)2430));
-    PyDict_SetItemString(d,"STC_CMD_VCHOMERECTEXTEND", SWIG_FromInt((int)2431));
-    PyDict_SetItemString(d,"STC_CMD_LINEENDRECTEXTEND", SWIG_FromInt((int)2432));
-    PyDict_SetItemString(d,"STC_CMD_PAGEUPRECTEXTEND", SWIG_FromInt((int)2433));
-    PyDict_SetItemString(d,"STC_CMD_PAGEDOWNRECTEXTEND", SWIG_FromInt((int)2434));
-    PyDict_SetItemString(d,"STC_CMD_STUTTEREDPAGEUP", SWIG_FromInt((int)2435));
-    PyDict_SetItemString(d,"STC_CMD_STUTTEREDPAGEUPEXTEND", SWIG_FromInt((int)2436));
-    PyDict_SetItemString(d,"STC_CMD_STUTTEREDPAGEDOWN", SWIG_FromInt((int)2437));
-    PyDict_SetItemString(d,"STC_CMD_STUTTEREDPAGEDOWNEXTEND", SWIG_FromInt((int)2438));
-    PyDict_SetItemString(d,"STC_CMD_WORDLEFTEND", SWIG_FromInt((int)2439));
-    PyDict_SetItemString(d,"STC_CMD_WORDLEFTENDEXTEND", SWIG_FromInt((int)2440));
-    PyDict_SetItemString(d,"STC_CMD_WORDRIGHTEND", SWIG_FromInt((int)2441));
-    PyDict_SetItemString(d,"STC_CMD_WORDRIGHTENDEXTEND", SWIG_FromInt((int)2442));
-    PyDict_SetItemString(d,"wxEVT_STC_CHANGE", SWIG_FromInt((int)wxEVT_STC_CHANGE));
-    PyDict_SetItemString(d,"wxEVT_STC_STYLENEEDED", SWIG_FromInt((int)wxEVT_STC_STYLENEEDED));
-    PyDict_SetItemString(d,"wxEVT_STC_CHARADDED", SWIG_FromInt((int)wxEVT_STC_CHARADDED));
-    PyDict_SetItemString(d,"wxEVT_STC_SAVEPOINTREACHED", SWIG_FromInt((int)wxEVT_STC_SAVEPOINTREACHED));
-    PyDict_SetItemString(d,"wxEVT_STC_SAVEPOINTLEFT", SWIG_FromInt((int)wxEVT_STC_SAVEPOINTLEFT));
-    PyDict_SetItemString(d,"wxEVT_STC_ROMODIFYATTEMPT", SWIG_FromInt((int)wxEVT_STC_ROMODIFYATTEMPT));
-    PyDict_SetItemString(d,"wxEVT_STC_KEY", SWIG_FromInt((int)wxEVT_STC_KEY));
-    PyDict_SetItemString(d,"wxEVT_STC_DOUBLECLICK", SWIG_FromInt((int)wxEVT_STC_DOUBLECLICK));
-    PyDict_SetItemString(d,"wxEVT_STC_UPDATEUI", SWIG_FromInt((int)wxEVT_STC_UPDATEUI));
-    PyDict_SetItemString(d,"wxEVT_STC_MODIFIED", SWIG_FromInt((int)wxEVT_STC_MODIFIED));
-    PyDict_SetItemString(d,"wxEVT_STC_MACRORECORD", SWIG_FromInt((int)wxEVT_STC_MACRORECORD));
-    PyDict_SetItemString(d,"wxEVT_STC_MARGINCLICK", SWIG_FromInt((int)wxEVT_STC_MARGINCLICK));
-    PyDict_SetItemString(d,"wxEVT_STC_NEEDSHOWN", SWIG_FromInt((int)wxEVT_STC_NEEDSHOWN));
-    PyDict_SetItemString(d,"wxEVT_STC_PAINTED", SWIG_FromInt((int)wxEVT_STC_PAINTED));
-    PyDict_SetItemString(d,"wxEVT_STC_USERLISTSELECTION", SWIG_FromInt((int)wxEVT_STC_USERLISTSELECTION));
-    PyDict_SetItemString(d,"wxEVT_STC_URIDROPPED", SWIG_FromInt((int)wxEVT_STC_URIDROPPED));
-    PyDict_SetItemString(d,"wxEVT_STC_DWELLSTART", SWIG_FromInt((int)wxEVT_STC_DWELLSTART));
-    PyDict_SetItemString(d,"wxEVT_STC_DWELLEND", SWIG_FromInt((int)wxEVT_STC_DWELLEND));
-    PyDict_SetItemString(d,"wxEVT_STC_START_DRAG", SWIG_FromInt((int)wxEVT_STC_START_DRAG));
-    PyDict_SetItemString(d,"wxEVT_STC_DRAG_OVER", SWIG_FromInt((int)wxEVT_STC_DRAG_OVER));
-    PyDict_SetItemString(d,"wxEVT_STC_DO_DROP", SWIG_FromInt((int)wxEVT_STC_DO_DROP));
-    PyDict_SetItemString(d,"wxEVT_STC_ZOOM", SWIG_FromInt((int)wxEVT_STC_ZOOM));
-    PyDict_SetItemString(d,"wxEVT_STC_HOTSPOT_CLICK", SWIG_FromInt((int)wxEVT_STC_HOTSPOT_CLICK));
-    PyDict_SetItemString(d,"wxEVT_STC_HOTSPOT_DCLICK", SWIG_FromInt((int)wxEVT_STC_HOTSPOT_DCLICK));
-    PyDict_SetItemString(d,"wxEVT_STC_CALLTIP_CLICK", SWIG_FromInt((int)wxEVT_STC_CALLTIP_CLICK));
+    PyDict_SetItemString(d,"STC_USE_DND", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_USE_POPUP", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_INVALID_POSITION", SWIG_From_int((int)-1));
+    PyDict_SetItemString(d,"STC_START", SWIG_From_int((int)2000));
+    PyDict_SetItemString(d,"STC_OPTIONAL_START", SWIG_From_int((int)3000));
+    PyDict_SetItemString(d,"STC_LEXER_START", SWIG_From_int((int)4000));
+    PyDict_SetItemString(d,"STC_WS_INVISIBLE", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_WS_VISIBLEALWAYS", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_WS_VISIBLEAFTERINDENT", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_EOL_CRLF", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_EOL_CR", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_EOL_LF", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_CP_UTF8", SWIG_From_int((int)65001));
+    PyDict_SetItemString(d,"STC_CP_DBCS", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_MARKER_MAX", SWIG_From_int((int)31));
+    PyDict_SetItemString(d,"STC_MARK_CIRCLE", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_MARK_ROUNDRECT", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_MARK_ARROW", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_MARK_SMALLRECT", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_MARK_SHORTARROW", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_MARK_EMPTY", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_MARK_ARROWDOWN", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_MARK_MINUS", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_MARK_PLUS", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_MARK_VLINE", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_MARK_LCORNER", SWIG_From_int((int)10));
+    PyDict_SetItemString(d,"STC_MARK_TCORNER", SWIG_From_int((int)11));
+    PyDict_SetItemString(d,"STC_MARK_BOXPLUS", SWIG_From_int((int)12));
+    PyDict_SetItemString(d,"STC_MARK_BOXPLUSCONNECTED", SWIG_From_int((int)13));
+    PyDict_SetItemString(d,"STC_MARK_BOXMINUS", SWIG_From_int((int)14));
+    PyDict_SetItemString(d,"STC_MARK_BOXMINUSCONNECTED", SWIG_From_int((int)15));
+    PyDict_SetItemString(d,"STC_MARK_LCORNERCURVE", SWIG_From_int((int)16));
+    PyDict_SetItemString(d,"STC_MARK_TCORNERCURVE", SWIG_From_int((int)17));
+    PyDict_SetItemString(d,"STC_MARK_CIRCLEPLUS", SWIG_From_int((int)18));
+    PyDict_SetItemString(d,"STC_MARK_CIRCLEPLUSCONNECTED", SWIG_From_int((int)19));
+    PyDict_SetItemString(d,"STC_MARK_CIRCLEMINUS", SWIG_From_int((int)20));
+    PyDict_SetItemString(d,"STC_MARK_CIRCLEMINUSCONNECTED", SWIG_From_int((int)21));
+    PyDict_SetItemString(d,"STC_MARK_BACKGROUND", SWIG_From_int((int)22));
+    PyDict_SetItemString(d,"STC_MARK_DOTDOTDOT", SWIG_From_int((int)23));
+    PyDict_SetItemString(d,"STC_MARK_ARROWS", SWIG_From_int((int)24));
+    PyDict_SetItemString(d,"STC_MARK_PIXMAP", SWIG_From_int((int)25));
+    PyDict_SetItemString(d,"STC_MARK_CHARACTER", SWIG_From_int((int)10000));
+    PyDict_SetItemString(d,"STC_MARKNUM_FOLDEREND", SWIG_From_int((int)25));
+    PyDict_SetItemString(d,"STC_MARKNUM_FOLDEROPENMID", SWIG_From_int((int)26));
+    PyDict_SetItemString(d,"STC_MARKNUM_FOLDERMIDTAIL", SWIG_From_int((int)27));
+    PyDict_SetItemString(d,"STC_MARKNUM_FOLDERTAIL", SWIG_From_int((int)28));
+    PyDict_SetItemString(d,"STC_MARKNUM_FOLDERSUB", SWIG_From_int((int)29));
+    PyDict_SetItemString(d,"STC_MARKNUM_FOLDER", SWIG_From_int((int)30));
+    PyDict_SetItemString(d,"STC_MARKNUM_FOLDEROPEN", SWIG_From_int((int)31));
+    PyDict_SetItemString(d,"STC_MASK_FOLDERS", SWIG_From_int((int)0xFE000000));
+    PyDict_SetItemString(d,"STC_MARGIN_SYMBOL", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_MARGIN_NUMBER", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_STYLE_DEFAULT", SWIG_From_int((int)32));
+    PyDict_SetItemString(d,"STC_STYLE_LINENUMBER", SWIG_From_int((int)33));
+    PyDict_SetItemString(d,"STC_STYLE_BRACELIGHT", SWIG_From_int((int)34));
+    PyDict_SetItemString(d,"STC_STYLE_BRACEBAD", SWIG_From_int((int)35));
+    PyDict_SetItemString(d,"STC_STYLE_CONTROLCHAR", SWIG_From_int((int)36));
+    PyDict_SetItemString(d,"STC_STYLE_INDENTGUIDE", SWIG_From_int((int)37));
+    PyDict_SetItemString(d,"STC_STYLE_LASTPREDEFINED", SWIG_From_int((int)39));
+    PyDict_SetItemString(d,"STC_STYLE_MAX", SWIG_From_int((int)127));
+    PyDict_SetItemString(d,"STC_CHARSET_ANSI", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_CHARSET_DEFAULT", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_CHARSET_BALTIC", SWIG_From_int((int)186));
+    PyDict_SetItemString(d,"STC_CHARSET_CHINESEBIG5", SWIG_From_int((int)136));
+    PyDict_SetItemString(d,"STC_CHARSET_EASTEUROPE", SWIG_From_int((int)238));
+    PyDict_SetItemString(d,"STC_CHARSET_GB2312", SWIG_From_int((int)134));
+    PyDict_SetItemString(d,"STC_CHARSET_GREEK", SWIG_From_int((int)161));
+    PyDict_SetItemString(d,"STC_CHARSET_HANGUL", SWIG_From_int((int)129));
+    PyDict_SetItemString(d,"STC_CHARSET_MAC", SWIG_From_int((int)77));
+    PyDict_SetItemString(d,"STC_CHARSET_OEM", SWIG_From_int((int)255));
+    PyDict_SetItemString(d,"STC_CHARSET_RUSSIAN", SWIG_From_int((int)204));
+    PyDict_SetItemString(d,"STC_CHARSET_SHIFTJIS", SWIG_From_int((int)128));
+    PyDict_SetItemString(d,"STC_CHARSET_SYMBOL", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_CHARSET_TURKISH", SWIG_From_int((int)162));
+    PyDict_SetItemString(d,"STC_CHARSET_JOHAB", SWIG_From_int((int)130));
+    PyDict_SetItemString(d,"STC_CHARSET_HEBREW", SWIG_From_int((int)177));
+    PyDict_SetItemString(d,"STC_CHARSET_ARABIC", SWIG_From_int((int)178));
+    PyDict_SetItemString(d,"STC_CHARSET_VIETNAMESE", SWIG_From_int((int)163));
+    PyDict_SetItemString(d,"STC_CHARSET_THAI", SWIG_From_int((int)222));
+    PyDict_SetItemString(d,"STC_CASE_MIXED", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_CASE_UPPER", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_CASE_LOWER", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_INDIC_MAX", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_INDIC_PLAIN", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_INDIC_SQUIGGLE", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_INDIC_TT", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_INDIC_DIAGONAL", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_INDIC_STRIKE", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_INDIC_HIDDEN", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_INDIC_BOX", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_INDIC0_MASK", SWIG_From_int((int)0x20));
+    PyDict_SetItemString(d,"STC_INDIC1_MASK", SWIG_From_int((int)0x40));
+    PyDict_SetItemString(d,"STC_INDIC2_MASK", SWIG_From_int((int)0x80));
+    PyDict_SetItemString(d,"STC_INDICS_MASK", SWIG_From_int((int)0xE0));
+    PyDict_SetItemString(d,"STC_PRINT_NORMAL", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_PRINT_INVERTLIGHT", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_PRINT_BLACKONWHITE", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_PRINT_COLOURONWHITE", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_PRINT_COLOURONWHITEDEFAULTBG", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_FIND_WHOLEWORD", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_FIND_MATCHCASE", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_FIND_WORDSTART", SWIG_From_int((int)0x00100000));
+    PyDict_SetItemString(d,"STC_FIND_REGEXP", SWIG_From_int((int)0x00200000));
+    PyDict_SetItemString(d,"STC_FIND_POSIX", SWIG_From_int((int)0x00400000));
+    PyDict_SetItemString(d,"STC_FOLDLEVELBASE", SWIG_From_int((int)0x400));
+    PyDict_SetItemString(d,"STC_FOLDLEVELWHITEFLAG", SWIG_From_int((int)0x1000));
+    PyDict_SetItemString(d,"STC_FOLDLEVELHEADERFLAG", SWIG_From_int((int)0x2000));
+    PyDict_SetItemString(d,"STC_FOLDLEVELBOXHEADERFLAG", SWIG_From_int((int)0x4000));
+    PyDict_SetItemString(d,"STC_FOLDLEVELBOXFOOTERFLAG", SWIG_From_int((int)0x8000));
+    PyDict_SetItemString(d,"STC_FOLDLEVELCONTRACTED", SWIG_From_int((int)0x10000));
+    PyDict_SetItemString(d,"STC_FOLDLEVELUNINDENT", SWIG_From_int((int)0x20000));
+    PyDict_SetItemString(d,"STC_FOLDLEVELNUMBERMASK", SWIG_From_int((int)0x0FFF));
+    PyDict_SetItemString(d,"STC_FOLDFLAG_LINEBEFORE_EXPANDED", SWIG_From_int((int)0x0002));
+    PyDict_SetItemString(d,"STC_FOLDFLAG_LINEBEFORE_CONTRACTED", SWIG_From_int((int)0x0004));
+    PyDict_SetItemString(d,"STC_FOLDFLAG_LINEAFTER_EXPANDED", SWIG_From_int((int)0x0008));
+    PyDict_SetItemString(d,"STC_FOLDFLAG_LINEAFTER_CONTRACTED", SWIG_From_int((int)0x0010));
+    PyDict_SetItemString(d,"STC_FOLDFLAG_LEVELNUMBERS", SWIG_From_int((int)0x0040));
+    PyDict_SetItemString(d,"STC_FOLDFLAG_BOX", SWIG_From_int((int)0x0001));
+    PyDict_SetItemString(d,"STC_TIME_FOREVER", SWIG_From_int((int)10000000));
+    PyDict_SetItemString(d,"STC_WRAP_NONE", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_WRAP_WORD", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_CACHE_NONE", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_CACHE_CARET", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_CACHE_PAGE", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_CACHE_DOCUMENT", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_EDGE_NONE", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_EDGE_LINE", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_EDGE_BACKGROUND", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_CURSORNORMAL", SWIG_From_int((int)-1));
+    PyDict_SetItemString(d,"STC_CURSORWAIT", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_VISIBLE_SLOP", SWIG_From_int((int)0x01));
+    PyDict_SetItemString(d,"STC_VISIBLE_STRICT", SWIG_From_int((int)0x04));
+    PyDict_SetItemString(d,"STC_CARET_SLOP", SWIG_From_int((int)0x01));
+    PyDict_SetItemString(d,"STC_CARET_STRICT", SWIG_From_int((int)0x04));
+    PyDict_SetItemString(d,"STC_CARET_JUMPS", SWIG_From_int((int)0x10));
+    PyDict_SetItemString(d,"STC_CARET_EVEN", SWIG_From_int((int)0x08));
+    PyDict_SetItemString(d,"STC_SEL_STREAM", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_SEL_RECTANGLE", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_SEL_LINES", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_KEYWORDSET_MAX", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_MOD_INSERTTEXT", SWIG_From_int((int)0x1));
+    PyDict_SetItemString(d,"STC_MOD_DELETETEXT", SWIG_From_int((int)0x2));
+    PyDict_SetItemString(d,"STC_MOD_CHANGESTYLE", SWIG_From_int((int)0x4));
+    PyDict_SetItemString(d,"STC_MOD_CHANGEFOLD", SWIG_From_int((int)0x8));
+    PyDict_SetItemString(d,"STC_PERFORMED_USER", SWIG_From_int((int)0x10));
+    PyDict_SetItemString(d,"STC_PERFORMED_UNDO", SWIG_From_int((int)0x20));
+    PyDict_SetItemString(d,"STC_PERFORMED_REDO", SWIG_From_int((int)0x40));
+    PyDict_SetItemString(d,"STC_LASTSTEPINUNDOREDO", SWIG_From_int((int)0x100));
+    PyDict_SetItemString(d,"STC_MOD_CHANGEMARKER", SWIG_From_int((int)0x200));
+    PyDict_SetItemString(d,"STC_MOD_BEFOREINSERT", SWIG_From_int((int)0x400));
+    PyDict_SetItemString(d,"STC_MOD_BEFOREDELETE", SWIG_From_int((int)0x800));
+    PyDict_SetItemString(d,"STC_MODEVENTMASKALL", SWIG_From_int((int)0xF77));
+    PyDict_SetItemString(d,"STC_KEY_DOWN", SWIG_From_int((int)300));
+    PyDict_SetItemString(d,"STC_KEY_UP", SWIG_From_int((int)301));
+    PyDict_SetItemString(d,"STC_KEY_LEFT", SWIG_From_int((int)302));
+    PyDict_SetItemString(d,"STC_KEY_RIGHT", SWIG_From_int((int)303));
+    PyDict_SetItemString(d,"STC_KEY_HOME", SWIG_From_int((int)304));
+    PyDict_SetItemString(d,"STC_KEY_END", SWIG_From_int((int)305));
+    PyDict_SetItemString(d,"STC_KEY_PRIOR", SWIG_From_int((int)306));
+    PyDict_SetItemString(d,"STC_KEY_NEXT", SWIG_From_int((int)307));
+    PyDict_SetItemString(d,"STC_KEY_DELETE", SWIG_From_int((int)308));
+    PyDict_SetItemString(d,"STC_KEY_INSERT", SWIG_From_int((int)309));
+    PyDict_SetItemString(d,"STC_KEY_ESCAPE", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_KEY_BACK", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_KEY_TAB", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_KEY_RETURN", SWIG_From_int((int)13));
+    PyDict_SetItemString(d,"STC_KEY_ADD", SWIG_From_int((int)310));
+    PyDict_SetItemString(d,"STC_KEY_SUBTRACT", SWIG_From_int((int)311));
+    PyDict_SetItemString(d,"STC_KEY_DIVIDE", SWIG_From_int((int)312));
+    PyDict_SetItemString(d,"STC_SCMOD_SHIFT", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_SCMOD_CTRL", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_SCMOD_ALT", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_LEX_CONTAINER", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_LEX_NULL", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_LEX_PYTHON", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_LEX_CPP", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_LEX_HTML", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_LEX_XML", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_LEX_PERL", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_LEX_SQL", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_LEX_VB", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_LEX_PROPERTIES", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_LEX_ERRORLIST", SWIG_From_int((int)10));
+    PyDict_SetItemString(d,"STC_LEX_MAKEFILE", SWIG_From_int((int)11));
+    PyDict_SetItemString(d,"STC_LEX_BATCH", SWIG_From_int((int)12));
+    PyDict_SetItemString(d,"STC_LEX_XCODE", SWIG_From_int((int)13));
+    PyDict_SetItemString(d,"STC_LEX_LATEX", SWIG_From_int((int)14));
+    PyDict_SetItemString(d,"STC_LEX_LUA", SWIG_From_int((int)15));
+    PyDict_SetItemString(d,"STC_LEX_DIFF", SWIG_From_int((int)16));
+    PyDict_SetItemString(d,"STC_LEX_CONF", SWIG_From_int((int)17));
+    PyDict_SetItemString(d,"STC_LEX_PASCAL", SWIG_From_int((int)18));
+    PyDict_SetItemString(d,"STC_LEX_AVE", SWIG_From_int((int)19));
+    PyDict_SetItemString(d,"STC_LEX_ADA", SWIG_From_int((int)20));
+    PyDict_SetItemString(d,"STC_LEX_LISP", SWIG_From_int((int)21));
+    PyDict_SetItemString(d,"STC_LEX_RUBY", SWIG_From_int((int)22));
+    PyDict_SetItemString(d,"STC_LEX_EIFFEL", SWIG_From_int((int)23));
+    PyDict_SetItemString(d,"STC_LEX_EIFFELKW", SWIG_From_int((int)24));
+    PyDict_SetItemString(d,"STC_LEX_TCL", SWIG_From_int((int)25));
+    PyDict_SetItemString(d,"STC_LEX_NNCRONTAB", SWIG_From_int((int)26));
+    PyDict_SetItemString(d,"STC_LEX_BULLANT", SWIG_From_int((int)27));
+    PyDict_SetItemString(d,"STC_LEX_VBSCRIPT", SWIG_From_int((int)28));
+    PyDict_SetItemString(d,"STC_LEX_ASP", SWIG_From_int((int)29));
+    PyDict_SetItemString(d,"STC_LEX_PHP", SWIG_From_int((int)30));
+    PyDict_SetItemString(d,"STC_LEX_BAAN", SWIG_From_int((int)31));
+    PyDict_SetItemString(d,"STC_LEX_MATLAB", SWIG_From_int((int)32));
+    PyDict_SetItemString(d,"STC_LEX_SCRIPTOL", SWIG_From_int((int)33));
+    PyDict_SetItemString(d,"STC_LEX_ASM", SWIG_From_int((int)34));
+    PyDict_SetItemString(d,"STC_LEX_CPPNOCASE", SWIG_From_int((int)35));
+    PyDict_SetItemString(d,"STC_LEX_FORTRAN", SWIG_From_int((int)36));
+    PyDict_SetItemString(d,"STC_LEX_F77", SWIG_From_int((int)37));
+    PyDict_SetItemString(d,"STC_LEX_CSS", SWIG_From_int((int)38));
+    PyDict_SetItemString(d,"STC_LEX_POV", SWIG_From_int((int)39));
+    PyDict_SetItemString(d,"STC_LEX_LOUT", SWIG_From_int((int)40));
+    PyDict_SetItemString(d,"STC_LEX_ESCRIPT", SWIG_From_int((int)41));
+    PyDict_SetItemString(d,"STC_LEX_PS", SWIG_From_int((int)42));
+    PyDict_SetItemString(d,"STC_LEX_NSIS", SWIG_From_int((int)43));
+    PyDict_SetItemString(d,"STC_LEX_MMIXAL", SWIG_From_int((int)44));
+    PyDict_SetItemString(d,"STC_LEX_CLW", SWIG_From_int((int)45));
+    PyDict_SetItemString(d,"STC_LEX_CLWNOCASE", SWIG_From_int((int)46));
+    PyDict_SetItemString(d,"STC_LEX_LOT", SWIG_From_int((int)47));
+    PyDict_SetItemString(d,"STC_LEX_YAML", SWIG_From_int((int)48));
+    PyDict_SetItemString(d,"STC_LEX_TEX", SWIG_From_int((int)49));
+    PyDict_SetItemString(d,"STC_LEX_METAPOST", SWIG_From_int((int)50));
+    PyDict_SetItemString(d,"STC_LEX_POWERBASIC", SWIG_From_int((int)51));
+    PyDict_SetItemString(d,"STC_LEX_FORTH", SWIG_From_int((int)52));
+    PyDict_SetItemString(d,"STC_LEX_ERLANG", SWIG_From_int((int)53));
+    PyDict_SetItemString(d,"STC_LEX_OCTAVE", SWIG_From_int((int)54));
+    PyDict_SetItemString(d,"STC_LEX_AUTOMATIC", SWIG_From_int((int)1000));
+    PyDict_SetItemString(d,"STC_P_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_P_COMMENTLINE", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_P_NUMBER", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_P_STRING", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_P_CHARACTER", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_P_WORD", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_P_TRIPLE", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_P_TRIPLEDOUBLE", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_P_CLASSNAME", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_P_DEFNAME", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_P_OPERATOR", SWIG_From_int((int)10));
+    PyDict_SetItemString(d,"STC_P_IDENTIFIER", SWIG_From_int((int)11));
+    PyDict_SetItemString(d,"STC_P_COMMENTBLOCK", SWIG_From_int((int)12));
+    PyDict_SetItemString(d,"STC_P_STRINGEOL", SWIG_From_int((int)13));
+    PyDict_SetItemString(d,"STC_C_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_C_COMMENT", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_C_COMMENTLINE", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_C_COMMENTDOC", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_C_NUMBER", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_C_WORD", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_C_STRING", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_C_CHARACTER", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_C_UUID", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_C_PREPROCESSOR", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_C_OPERATOR", SWIG_From_int((int)10));
+    PyDict_SetItemString(d,"STC_C_IDENTIFIER", SWIG_From_int((int)11));
+    PyDict_SetItemString(d,"STC_C_STRINGEOL", SWIG_From_int((int)12));
+    PyDict_SetItemString(d,"STC_C_VERBATIM", SWIG_From_int((int)13));
+    PyDict_SetItemString(d,"STC_C_REGEX", SWIG_From_int((int)14));
+    PyDict_SetItemString(d,"STC_C_COMMENTLINEDOC", SWIG_From_int((int)15));
+    PyDict_SetItemString(d,"STC_C_WORD2", SWIG_From_int((int)16));
+    PyDict_SetItemString(d,"STC_C_COMMENTDOCKEYWORD", SWIG_From_int((int)17));
+    PyDict_SetItemString(d,"STC_C_COMMENTDOCKEYWORDERROR", SWIG_From_int((int)18));
+    PyDict_SetItemString(d,"STC_C_GLOBALCLASS", SWIG_From_int((int)19));
+    PyDict_SetItemString(d,"STC_H_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_H_TAG", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_H_TAGUNKNOWN", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_H_ATTRIBUTE", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_H_ATTRIBUTEUNKNOWN", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_H_NUMBER", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_H_DOUBLESTRING", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_H_SINGLESTRING", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_H_OTHER", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_H_COMMENT", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_H_ENTITY", SWIG_From_int((int)10));
+    PyDict_SetItemString(d,"STC_H_TAGEND", SWIG_From_int((int)11));
+    PyDict_SetItemString(d,"STC_H_XMLSTART", SWIG_From_int((int)12));
+    PyDict_SetItemString(d,"STC_H_XMLEND", SWIG_From_int((int)13));
+    PyDict_SetItemString(d,"STC_H_SCRIPT", SWIG_From_int((int)14));
+    PyDict_SetItemString(d,"STC_H_ASP", SWIG_From_int((int)15));
+    PyDict_SetItemString(d,"STC_H_ASPAT", SWIG_From_int((int)16));
+    PyDict_SetItemString(d,"STC_H_CDATA", SWIG_From_int((int)17));
+    PyDict_SetItemString(d,"STC_H_QUESTION", SWIG_From_int((int)18));
+    PyDict_SetItemString(d,"STC_H_VALUE", SWIG_From_int((int)19));
+    PyDict_SetItemString(d,"STC_H_XCCOMMENT", SWIG_From_int((int)20));
+    PyDict_SetItemString(d,"STC_H_SGML_DEFAULT", SWIG_From_int((int)21));
+    PyDict_SetItemString(d,"STC_H_SGML_COMMAND", SWIG_From_int((int)22));
+    PyDict_SetItemString(d,"STC_H_SGML_1ST_PARAM", SWIG_From_int((int)23));
+    PyDict_SetItemString(d,"STC_H_SGML_DOUBLESTRING", SWIG_From_int((int)24));
+    PyDict_SetItemString(d,"STC_H_SGML_SIMPLESTRING", SWIG_From_int((int)25));
+    PyDict_SetItemString(d,"STC_H_SGML_ERROR", SWIG_From_int((int)26));
+    PyDict_SetItemString(d,"STC_H_SGML_SPECIAL", SWIG_From_int((int)27));
+    PyDict_SetItemString(d,"STC_H_SGML_ENTITY", SWIG_From_int((int)28));
+    PyDict_SetItemString(d,"STC_H_SGML_COMMENT", SWIG_From_int((int)29));
+    PyDict_SetItemString(d,"STC_H_SGML_1ST_PARAM_COMMENT", SWIG_From_int((int)30));
+    PyDict_SetItemString(d,"STC_H_SGML_BLOCK_DEFAULT", SWIG_From_int((int)31));
+    PyDict_SetItemString(d,"STC_HJ_START", SWIG_From_int((int)40));
+    PyDict_SetItemString(d,"STC_HJ_DEFAULT", SWIG_From_int((int)41));
+    PyDict_SetItemString(d,"STC_HJ_COMMENT", SWIG_From_int((int)42));
+    PyDict_SetItemString(d,"STC_HJ_COMMENTLINE", SWIG_From_int((int)43));
+    PyDict_SetItemString(d,"STC_HJ_COMMENTDOC", SWIG_From_int((int)44));
+    PyDict_SetItemString(d,"STC_HJ_NUMBER", SWIG_From_int((int)45));
+    PyDict_SetItemString(d,"STC_HJ_WORD", SWIG_From_int((int)46));
+    PyDict_SetItemString(d,"STC_HJ_KEYWORD", SWIG_From_int((int)47));
+    PyDict_SetItemString(d,"STC_HJ_DOUBLESTRING", SWIG_From_int((int)48));
+    PyDict_SetItemString(d,"STC_HJ_SINGLESTRING", SWIG_From_int((int)49));
+    PyDict_SetItemString(d,"STC_HJ_SYMBOLS", SWIG_From_int((int)50));
+    PyDict_SetItemString(d,"STC_HJ_STRINGEOL", SWIG_From_int((int)51));
+    PyDict_SetItemString(d,"STC_HJ_REGEX", SWIG_From_int((int)52));
+    PyDict_SetItemString(d,"STC_HJA_START", SWIG_From_int((int)55));
+    PyDict_SetItemString(d,"STC_HJA_DEFAULT", SWIG_From_int((int)56));
+    PyDict_SetItemString(d,"STC_HJA_COMMENT", SWIG_From_int((int)57));
+    PyDict_SetItemString(d,"STC_HJA_COMMENTLINE", SWIG_From_int((int)58));
+    PyDict_SetItemString(d,"STC_HJA_COMMENTDOC", SWIG_From_int((int)59));
+    PyDict_SetItemString(d,"STC_HJA_NUMBER", SWIG_From_int((int)60));
+    PyDict_SetItemString(d,"STC_HJA_WORD", SWIG_From_int((int)61));
+    PyDict_SetItemString(d,"STC_HJA_KEYWORD", SWIG_From_int((int)62));
+    PyDict_SetItemString(d,"STC_HJA_DOUBLESTRING", SWIG_From_int((int)63));
+    PyDict_SetItemString(d,"STC_HJA_SINGLESTRING", SWIG_From_int((int)64));
+    PyDict_SetItemString(d,"STC_HJA_SYMBOLS", SWIG_From_int((int)65));
+    PyDict_SetItemString(d,"STC_HJA_STRINGEOL", SWIG_From_int((int)66));
+    PyDict_SetItemString(d,"STC_HJA_REGEX", SWIG_From_int((int)67));
+    PyDict_SetItemString(d,"STC_HB_START", SWIG_From_int((int)70));
+    PyDict_SetItemString(d,"STC_HB_DEFAULT", SWIG_From_int((int)71));
+    PyDict_SetItemString(d,"STC_HB_COMMENTLINE", SWIG_From_int((int)72));
+    PyDict_SetItemString(d,"STC_HB_NUMBER", SWIG_From_int((int)73));
+    PyDict_SetItemString(d,"STC_HB_WORD", SWIG_From_int((int)74));
+    PyDict_SetItemString(d,"STC_HB_STRING", SWIG_From_int((int)75));
+    PyDict_SetItemString(d,"STC_HB_IDENTIFIER", SWIG_From_int((int)76));
+    PyDict_SetItemString(d,"STC_HB_STRINGEOL", SWIG_From_int((int)77));
+    PyDict_SetItemString(d,"STC_HBA_START", SWIG_From_int((int)80));
+    PyDict_SetItemString(d,"STC_HBA_DEFAULT", SWIG_From_int((int)81));
+    PyDict_SetItemString(d,"STC_HBA_COMMENTLINE", SWIG_From_int((int)82));
+    PyDict_SetItemString(d,"STC_HBA_NUMBER", SWIG_From_int((int)83));
+    PyDict_SetItemString(d,"STC_HBA_WORD", SWIG_From_int((int)84));
+    PyDict_SetItemString(d,"STC_HBA_STRING", SWIG_From_int((int)85));
+    PyDict_SetItemString(d,"STC_HBA_IDENTIFIER", SWIG_From_int((int)86));
+    PyDict_SetItemString(d,"STC_HBA_STRINGEOL", SWIG_From_int((int)87));
+    PyDict_SetItemString(d,"STC_HP_START", SWIG_From_int((int)90));
+    PyDict_SetItemString(d,"STC_HP_DEFAULT", SWIG_From_int((int)91));
+    PyDict_SetItemString(d,"STC_HP_COMMENTLINE", SWIG_From_int((int)92));
+    PyDict_SetItemString(d,"STC_HP_NUMBER", SWIG_From_int((int)93));
+    PyDict_SetItemString(d,"STC_HP_STRING", SWIG_From_int((int)94));
+    PyDict_SetItemString(d,"STC_HP_CHARACTER", SWIG_From_int((int)95));
+    PyDict_SetItemString(d,"STC_HP_WORD", SWIG_From_int((int)96));
+    PyDict_SetItemString(d,"STC_HP_TRIPLE", SWIG_From_int((int)97));
+    PyDict_SetItemString(d,"STC_HP_TRIPLEDOUBLE", SWIG_From_int((int)98));
+    PyDict_SetItemString(d,"STC_HP_CLASSNAME", SWIG_From_int((int)99));
+    PyDict_SetItemString(d,"STC_HP_DEFNAME", SWIG_From_int((int)100));
+    PyDict_SetItemString(d,"STC_HP_OPERATOR", SWIG_From_int((int)101));
+    PyDict_SetItemString(d,"STC_HP_IDENTIFIER", SWIG_From_int((int)102));
+    PyDict_SetItemString(d,"STC_HPA_START", SWIG_From_int((int)105));
+    PyDict_SetItemString(d,"STC_HPA_DEFAULT", SWIG_From_int((int)106));
+    PyDict_SetItemString(d,"STC_HPA_COMMENTLINE", SWIG_From_int((int)107));
+    PyDict_SetItemString(d,"STC_HPA_NUMBER", SWIG_From_int((int)108));
+    PyDict_SetItemString(d,"STC_HPA_STRING", SWIG_From_int((int)109));
+    PyDict_SetItemString(d,"STC_HPA_CHARACTER", SWIG_From_int((int)110));
+    PyDict_SetItemString(d,"STC_HPA_WORD", SWIG_From_int((int)111));
+    PyDict_SetItemString(d,"STC_HPA_TRIPLE", SWIG_From_int((int)112));
+    PyDict_SetItemString(d,"STC_HPA_TRIPLEDOUBLE", SWIG_From_int((int)113));
+    PyDict_SetItemString(d,"STC_HPA_CLASSNAME", SWIG_From_int((int)114));
+    PyDict_SetItemString(d,"STC_HPA_DEFNAME", SWIG_From_int((int)115));
+    PyDict_SetItemString(d,"STC_HPA_OPERATOR", SWIG_From_int((int)116));
+    PyDict_SetItemString(d,"STC_HPA_IDENTIFIER", SWIG_From_int((int)117));
+    PyDict_SetItemString(d,"STC_HPHP_DEFAULT", SWIG_From_int((int)118));
+    PyDict_SetItemString(d,"STC_HPHP_HSTRING", SWIG_From_int((int)119));
+    PyDict_SetItemString(d,"STC_HPHP_SIMPLESTRING", SWIG_From_int((int)120));
+    PyDict_SetItemString(d,"STC_HPHP_WORD", SWIG_From_int((int)121));
+    PyDict_SetItemString(d,"STC_HPHP_NUMBER", SWIG_From_int((int)122));
+    PyDict_SetItemString(d,"STC_HPHP_VARIABLE", SWIG_From_int((int)123));
+    PyDict_SetItemString(d,"STC_HPHP_COMMENT", SWIG_From_int((int)124));
+    PyDict_SetItemString(d,"STC_HPHP_COMMENTLINE", SWIG_From_int((int)125));
+    PyDict_SetItemString(d,"STC_HPHP_HSTRING_VARIABLE", SWIG_From_int((int)126));
+    PyDict_SetItemString(d,"STC_HPHP_OPERATOR", SWIG_From_int((int)127));
+    PyDict_SetItemString(d,"STC_PL_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_PL_ERROR", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_PL_COMMENTLINE", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_PL_POD", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_PL_NUMBER", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_PL_WORD", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_PL_STRING", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_PL_CHARACTER", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_PL_PUNCTUATION", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_PL_PREPROCESSOR", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_PL_OPERATOR", SWIG_From_int((int)10));
+    PyDict_SetItemString(d,"STC_PL_IDENTIFIER", SWIG_From_int((int)11));
+    PyDict_SetItemString(d,"STC_PL_SCALAR", SWIG_From_int((int)12));
+    PyDict_SetItemString(d,"STC_PL_ARRAY", SWIG_From_int((int)13));
+    PyDict_SetItemString(d,"STC_PL_HASH", SWIG_From_int((int)14));
+    PyDict_SetItemString(d,"STC_PL_SYMBOLTABLE", SWIG_From_int((int)15));
+    PyDict_SetItemString(d,"STC_PL_REGEX", SWIG_From_int((int)17));
+    PyDict_SetItemString(d,"STC_PL_REGSUBST", SWIG_From_int((int)18));
+    PyDict_SetItemString(d,"STC_PL_LONGQUOTE", SWIG_From_int((int)19));
+    PyDict_SetItemString(d,"STC_PL_BACKTICKS", SWIG_From_int((int)20));
+    PyDict_SetItemString(d,"STC_PL_DATASECTION", SWIG_From_int((int)21));
+    PyDict_SetItemString(d,"STC_PL_HERE_DELIM", SWIG_From_int((int)22));
+    PyDict_SetItemString(d,"STC_PL_HERE_Q", SWIG_From_int((int)23));
+    PyDict_SetItemString(d,"STC_PL_HERE_QQ", SWIG_From_int((int)24));
+    PyDict_SetItemString(d,"STC_PL_HERE_QX", SWIG_From_int((int)25));
+    PyDict_SetItemString(d,"STC_PL_STRING_Q", SWIG_From_int((int)26));
+    PyDict_SetItemString(d,"STC_PL_STRING_QQ", SWIG_From_int((int)27));
+    PyDict_SetItemString(d,"STC_PL_STRING_QX", SWIG_From_int((int)28));
+    PyDict_SetItemString(d,"STC_PL_STRING_QR", SWIG_From_int((int)29));
+    PyDict_SetItemString(d,"STC_PL_STRING_QW", SWIG_From_int((int)30));
+    PyDict_SetItemString(d,"STC_B_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_B_COMMENT", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_B_NUMBER", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_B_KEYWORD", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_B_STRING", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_B_PREPROCESSOR", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_B_OPERATOR", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_B_IDENTIFIER", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_B_DATE", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_B_STRINGEOL", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_B_KEYWORD2", SWIG_From_int((int)10));
+    PyDict_SetItemString(d,"STC_B_KEYWORD3", SWIG_From_int((int)11));
+    PyDict_SetItemString(d,"STC_B_KEYWORD4", SWIG_From_int((int)12));
+    PyDict_SetItemString(d,"STC_PROPS_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_PROPS_COMMENT", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_PROPS_SECTION", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_PROPS_ASSIGNMENT", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_PROPS_DEFVAL", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_L_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_L_COMMAND", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_L_TAG", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_L_MATH", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_L_COMMENT", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_LUA_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_LUA_COMMENT", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_LUA_COMMENTLINE", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_LUA_COMMENTDOC", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_LUA_NUMBER", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_LUA_WORD", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_LUA_STRING", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_LUA_CHARACTER", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_LUA_LITERALSTRING", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_LUA_PREPROCESSOR", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_LUA_OPERATOR", SWIG_From_int((int)10));
+    PyDict_SetItemString(d,"STC_LUA_IDENTIFIER", SWIG_From_int((int)11));
+    PyDict_SetItemString(d,"STC_LUA_STRINGEOL", SWIG_From_int((int)12));
+    PyDict_SetItemString(d,"STC_LUA_WORD2", SWIG_From_int((int)13));
+    PyDict_SetItemString(d,"STC_LUA_WORD3", SWIG_From_int((int)14));
+    PyDict_SetItemString(d,"STC_LUA_WORD4", SWIG_From_int((int)15));
+    PyDict_SetItemString(d,"STC_LUA_WORD5", SWIG_From_int((int)16));
+    PyDict_SetItemString(d,"STC_LUA_WORD6", SWIG_From_int((int)17));
+    PyDict_SetItemString(d,"STC_LUA_WORD7", SWIG_From_int((int)18));
+    PyDict_SetItemString(d,"STC_LUA_WORD8", SWIG_From_int((int)19));
+    PyDict_SetItemString(d,"STC_ERR_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_ERR_PYTHON", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_ERR_GCC", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_ERR_MS", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_ERR_CMD", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_ERR_BORLAND", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_ERR_PERL", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_ERR_NET", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_ERR_LUA", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_ERR_CTAG", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_ERR_DIFF_CHANGED", SWIG_From_int((int)10));
+    PyDict_SetItemString(d,"STC_ERR_DIFF_ADDITION", SWIG_From_int((int)11));
+    PyDict_SetItemString(d,"STC_ERR_DIFF_DELETION", SWIG_From_int((int)12));
+    PyDict_SetItemString(d,"STC_ERR_DIFF_MESSAGE", SWIG_From_int((int)13));
+    PyDict_SetItemString(d,"STC_ERR_PHP", SWIG_From_int((int)14));
+    PyDict_SetItemString(d,"STC_ERR_ELF", SWIG_From_int((int)15));
+    PyDict_SetItemString(d,"STC_ERR_IFC", SWIG_From_int((int)16));
+    PyDict_SetItemString(d,"STC_ERR_IFORT", SWIG_From_int((int)17));
+    PyDict_SetItemString(d,"STC_ERR_ABSF", SWIG_From_int((int)18));
+    PyDict_SetItemString(d,"STC_BAT_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_BAT_COMMENT", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_BAT_WORD", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_BAT_LABEL", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_BAT_HIDE", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_BAT_COMMAND", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_BAT_IDENTIFIER", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_BAT_OPERATOR", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_MAKE_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_MAKE_COMMENT", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_MAKE_PREPROCESSOR", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_MAKE_IDENTIFIER", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_MAKE_OPERATOR", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_MAKE_TARGET", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_MAKE_IDEOL", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_DIFF_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_DIFF_COMMENT", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_DIFF_COMMAND", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_DIFF_HEADER", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_DIFF_POSITION", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_DIFF_DELETED", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_DIFF_ADDED", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_CONF_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_CONF_COMMENT", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_CONF_NUMBER", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_CONF_IDENTIFIER", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_CONF_EXTENSION", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_CONF_PARAMETER", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_CONF_STRING", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_CONF_OPERATOR", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_CONF_IP", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_CONF_DIRECTIVE", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_AVE_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_AVE_COMMENT", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_AVE_NUMBER", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_AVE_WORD", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_AVE_STRING", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_AVE_ENUM", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_AVE_STRINGEOL", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_AVE_IDENTIFIER", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_AVE_OPERATOR", SWIG_From_int((int)10));
+    PyDict_SetItemString(d,"STC_AVE_WORD1", SWIG_From_int((int)11));
+    PyDict_SetItemString(d,"STC_AVE_WORD2", SWIG_From_int((int)12));
+    PyDict_SetItemString(d,"STC_AVE_WORD3", SWIG_From_int((int)13));
+    PyDict_SetItemString(d,"STC_AVE_WORD4", SWIG_From_int((int)14));
+    PyDict_SetItemString(d,"STC_AVE_WORD5", SWIG_From_int((int)15));
+    PyDict_SetItemString(d,"STC_AVE_WORD6", SWIG_From_int((int)16));
+    PyDict_SetItemString(d,"STC_ADA_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_ADA_WORD", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_ADA_IDENTIFIER", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_ADA_NUMBER", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_ADA_DELIMITER", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_ADA_CHARACTER", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_ADA_CHARACTEREOL", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_ADA_STRING", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_ADA_STRINGEOL", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_ADA_LABEL", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_ADA_COMMENTLINE", SWIG_From_int((int)10));
+    PyDict_SetItemString(d,"STC_ADA_ILLEGAL", SWIG_From_int((int)11));
+    PyDict_SetItemString(d,"STC_BAAN_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_BAAN_COMMENT", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_BAAN_COMMENTDOC", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_BAAN_NUMBER", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_BAAN_WORD", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_BAAN_STRING", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_BAAN_PREPROCESSOR", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_BAAN_OPERATOR", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_BAAN_IDENTIFIER", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_BAAN_STRINGEOL", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_BAAN_WORD2", SWIG_From_int((int)10));
+    PyDict_SetItemString(d,"STC_LISP_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_LISP_COMMENT", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_LISP_NUMBER", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_LISP_KEYWORD", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_LISP_STRING", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_LISP_STRINGEOL", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_LISP_IDENTIFIER", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_LISP_OPERATOR", SWIG_From_int((int)10));
+    PyDict_SetItemString(d,"STC_EIFFEL_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_EIFFEL_COMMENTLINE", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_EIFFEL_NUMBER", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_EIFFEL_WORD", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_EIFFEL_STRING", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_EIFFEL_CHARACTER", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_EIFFEL_OPERATOR", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_EIFFEL_IDENTIFIER", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_EIFFEL_STRINGEOL", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_NNCRONTAB_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_NNCRONTAB_COMMENT", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_NNCRONTAB_TASK", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_NNCRONTAB_SECTION", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_NNCRONTAB_KEYWORD", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_NNCRONTAB_MODIFIER", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_NNCRONTAB_ASTERISK", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_NNCRONTAB_NUMBER", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_NNCRONTAB_STRING", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_NNCRONTAB_ENVIRONMENT", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_NNCRONTAB_IDENTIFIER", SWIG_From_int((int)10));
+    PyDict_SetItemString(d,"STC_FORTH_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_FORTH_COMMENT", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_FORTH_COMMENT_ML", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_FORTH_IDENTIFIER", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_FORTH_CONTROL", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_FORTH_KEYWORD", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_FORTH_DEFWORD", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_FORTH_PREWORD1", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_FORTH_PREWORD2", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_FORTH_NUMBER", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_FORTH_STRING", SWIG_From_int((int)10));
+    PyDict_SetItemString(d,"STC_FORTH_LOCALE", SWIG_From_int((int)11));
+    PyDict_SetItemString(d,"STC_MATLAB_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_MATLAB_COMMENT", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_MATLAB_COMMAND", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_MATLAB_NUMBER", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_MATLAB_KEYWORD", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_MATLAB_STRING", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_MATLAB_OPERATOR", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_MATLAB_IDENTIFIER", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_MATLAB_DOUBLEQUOTESTRING", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_WHITE", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_COMMENTLINE", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_PERSISTENT", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_CSTYLE", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_COMMENTBLOCK", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_NUMBER", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_STRING", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_CHARACTER", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_STRINGEOL", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_KEYWORD", SWIG_From_int((int)10));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_OPERATOR", SWIG_From_int((int)11));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_IDENTIFIER", SWIG_From_int((int)12));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_TRIPLE", SWIG_From_int((int)13));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_CLASSNAME", SWIG_From_int((int)14));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_PREPROCESSOR", SWIG_From_int((int)15));
+    PyDict_SetItemString(d,"STC_ASM_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_ASM_COMMENT", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_ASM_NUMBER", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_ASM_STRING", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_ASM_OPERATOR", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_ASM_IDENTIFIER", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_ASM_CPUINSTRUCTION", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_ASM_MATHINSTRUCTION", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_ASM_REGISTER", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_ASM_DIRECTIVE", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_ASM_DIRECTIVEOPERAND", SWIG_From_int((int)10));
+    PyDict_SetItemString(d,"STC_ASM_COMMENTBLOCK", SWIG_From_int((int)11));
+    PyDict_SetItemString(d,"STC_ASM_CHARACTER", SWIG_From_int((int)12));
+    PyDict_SetItemString(d,"STC_ASM_STRINGEOL", SWIG_From_int((int)13));
+    PyDict_SetItemString(d,"STC_ASM_EXTINSTRUCTION", SWIG_From_int((int)14));
+    PyDict_SetItemString(d,"STC_F_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_F_COMMENT", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_F_NUMBER", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_F_STRING1", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_F_STRING2", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_F_STRINGEOL", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_F_OPERATOR", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_F_IDENTIFIER", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_F_WORD", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_F_WORD2", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_F_WORD3", SWIG_From_int((int)10));
+    PyDict_SetItemString(d,"STC_F_PREPROCESSOR", SWIG_From_int((int)11));
+    PyDict_SetItemString(d,"STC_F_OPERATOR2", SWIG_From_int((int)12));
+    PyDict_SetItemString(d,"STC_F_LABEL", SWIG_From_int((int)13));
+    PyDict_SetItemString(d,"STC_F_CONTINUATION", SWIG_From_int((int)14));
+    PyDict_SetItemString(d,"STC_CSS_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_CSS_TAG", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_CSS_CLASS", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_CSS_PSEUDOCLASS", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_CSS_UNKNOWN_PSEUDOCLASS", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_CSS_OPERATOR", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_CSS_IDENTIFIER", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_CSS_UNKNOWN_IDENTIFIER", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_CSS_VALUE", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_CSS_COMMENT", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_CSS_ID", SWIG_From_int((int)10));
+    PyDict_SetItemString(d,"STC_CSS_IMPORTANT", SWIG_From_int((int)11));
+    PyDict_SetItemString(d,"STC_CSS_DIRECTIVE", SWIG_From_int((int)12));
+    PyDict_SetItemString(d,"STC_CSS_DOUBLESTRING", SWIG_From_int((int)13));
+    PyDict_SetItemString(d,"STC_CSS_SINGLESTRING", SWIG_From_int((int)14));
+    PyDict_SetItemString(d,"STC_POV_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_POV_COMMENT", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_POV_COMMENTLINE", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_POV_NUMBER", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_POV_OPERATOR", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_POV_IDENTIFIER", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_POV_STRING", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_POV_STRINGEOL", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_POV_DIRECTIVE", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_POV_BADDIRECTIVE", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_POV_WORD2", SWIG_From_int((int)10));
+    PyDict_SetItemString(d,"STC_POV_WORD3", SWIG_From_int((int)11));
+    PyDict_SetItemString(d,"STC_POV_WORD4", SWIG_From_int((int)12));
+    PyDict_SetItemString(d,"STC_POV_WORD5", SWIG_From_int((int)13));
+    PyDict_SetItemString(d,"STC_POV_WORD6", SWIG_From_int((int)14));
+    PyDict_SetItemString(d,"STC_POV_WORD7", SWIG_From_int((int)15));
+    PyDict_SetItemString(d,"STC_POV_WORD8", SWIG_From_int((int)16));
+    PyDict_SetItemString(d,"STC_LOUT_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_LOUT_COMMENT", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_LOUT_NUMBER", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_LOUT_WORD", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_LOUT_WORD2", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_LOUT_WORD3", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_LOUT_WORD4", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_LOUT_STRING", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_LOUT_OPERATOR", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_LOUT_IDENTIFIER", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_LOUT_STRINGEOL", SWIG_From_int((int)10));
+    PyDict_SetItemString(d,"STC_ESCRIPT_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_ESCRIPT_COMMENT", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_ESCRIPT_COMMENTLINE", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_ESCRIPT_COMMENTDOC", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_ESCRIPT_NUMBER", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_ESCRIPT_WORD", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_ESCRIPT_STRING", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_ESCRIPT_OPERATOR", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_ESCRIPT_IDENTIFIER", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_ESCRIPT_BRACE", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_ESCRIPT_WORD2", SWIG_From_int((int)10));
+    PyDict_SetItemString(d,"STC_ESCRIPT_WORD3", SWIG_From_int((int)11));
+    PyDict_SetItemString(d,"STC_PS_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_PS_COMMENT", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_PS_DSC_COMMENT", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_PS_DSC_VALUE", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_PS_NUMBER", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_PS_NAME", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_PS_KEYWORD", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_PS_LITERAL", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_PS_IMMEVAL", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_PS_PAREN_ARRAY", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_PS_PAREN_DICT", SWIG_From_int((int)10));
+    PyDict_SetItemString(d,"STC_PS_PAREN_PROC", SWIG_From_int((int)11));
+    PyDict_SetItemString(d,"STC_PS_TEXT", SWIG_From_int((int)12));
+    PyDict_SetItemString(d,"STC_PS_HEXSTRING", SWIG_From_int((int)13));
+    PyDict_SetItemString(d,"STC_PS_BASE85STRING", SWIG_From_int((int)14));
+    PyDict_SetItemString(d,"STC_PS_BADSTRINGCHAR", SWIG_From_int((int)15));
+    PyDict_SetItemString(d,"STC_NSIS_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_NSIS_COMMENT", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_NSIS_STRINGDQ", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_NSIS_STRINGLQ", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_NSIS_STRINGRQ", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_NSIS_FUNCTION", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_NSIS_VARIABLE", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_NSIS_LABEL", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_NSIS_USERDEFINED", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_NSIS_SECTIONDEF", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_NSIS_SUBSECTIONDEF", SWIG_From_int((int)10));
+    PyDict_SetItemString(d,"STC_NSIS_IFDEFINEDEF", SWIG_From_int((int)11));
+    PyDict_SetItemString(d,"STC_NSIS_MACRODEF", SWIG_From_int((int)12));
+    PyDict_SetItemString(d,"STC_NSIS_STRINGVAR", SWIG_From_int((int)13));
+    PyDict_SetItemString(d,"STC_MMIXAL_LEADWS", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_MMIXAL_COMMENT", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_MMIXAL_LABEL", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_MMIXAL_OPCODE", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_MMIXAL_OPCODE_PRE", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_MMIXAL_OPCODE_VALID", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_MMIXAL_OPCODE_UNKNOWN", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_MMIXAL_OPCODE_POST", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_MMIXAL_OPERANDS", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_MMIXAL_NUMBER", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_MMIXAL_REF", SWIG_From_int((int)10));
+    PyDict_SetItemString(d,"STC_MMIXAL_CHAR", SWIG_From_int((int)11));
+    PyDict_SetItemString(d,"STC_MMIXAL_STRING", SWIG_From_int((int)12));
+    PyDict_SetItemString(d,"STC_MMIXAL_REGISTER", SWIG_From_int((int)13));
+    PyDict_SetItemString(d,"STC_MMIXAL_HEX", SWIG_From_int((int)14));
+    PyDict_SetItemString(d,"STC_MMIXAL_OPERATOR", SWIG_From_int((int)15));
+    PyDict_SetItemString(d,"STC_MMIXAL_SYMBOL", SWIG_From_int((int)16));
+    PyDict_SetItemString(d,"STC_MMIXAL_INCLUDE", SWIG_From_int((int)17));
+    PyDict_SetItemString(d,"STC_CLW_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_CLW_LABEL", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_CLW_COMMENT", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_CLW_STRING", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_CLW_USER_IDENTIFIER", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_CLW_INTEGER_CONSTANT", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_CLW_REAL_CONSTANT", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_CLW_PICTURE_STRING", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_CLW_KEYWORD", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_CLW_COMPILER_DIRECTIVE", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_CLW_BUILTIN_PROCEDURES_FUNCTION", SWIG_From_int((int)10));
+    PyDict_SetItemString(d,"STC_CLW_STRUCTURE_DATA_TYPE", SWIG_From_int((int)11));
+    PyDict_SetItemString(d,"STC_CLW_ATTRIBUTE", SWIG_From_int((int)12));
+    PyDict_SetItemString(d,"STC_CLW_STANDARD_EQUATE", SWIG_From_int((int)13));
+    PyDict_SetItemString(d,"STC_CLW_ERROR", SWIG_From_int((int)14));
+    PyDict_SetItemString(d,"STC_LOT_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_LOT_HEADER", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_LOT_BREAK", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_LOT_SET", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_LOT_PASS", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_LOT_FAIL", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_LOT_ABORT", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_YAML_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_YAML_COMMENT", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_YAML_IDENTIFIER", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_YAML_KEYWORD", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_YAML_NUMBER", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_YAML_REFERENCE", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_YAML_DOCUMENT", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_YAML_TEXT", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_YAML_ERROR", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_TEX_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_TEX_SPECIAL", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_TEX_GROUP", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_TEX_SYMBOL", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_TEX_COMMAND", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_TEX_TEXT", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_METAPOST_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_METAPOST_SPECIAL", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_METAPOST_GROUP", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_METAPOST_SYMBOL", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_METAPOST_COMMAND", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_METAPOST_TEXT", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_METAPOST_EXTRA", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_ERLANG_DEFAULT", SWIG_From_int((int)0));
+    PyDict_SetItemString(d,"STC_ERLANG_COMMENT", SWIG_From_int((int)1));
+    PyDict_SetItemString(d,"STC_ERLANG_VARIABLE", SWIG_From_int((int)2));
+    PyDict_SetItemString(d,"STC_ERLANG_NUMBER", SWIG_From_int((int)3));
+    PyDict_SetItemString(d,"STC_ERLANG_KEYWORD", SWIG_From_int((int)4));
+    PyDict_SetItemString(d,"STC_ERLANG_STRING", SWIG_From_int((int)5));
+    PyDict_SetItemString(d,"STC_ERLANG_OPERATOR", SWIG_From_int((int)6));
+    PyDict_SetItemString(d,"STC_ERLANG_ATOM", SWIG_From_int((int)7));
+    PyDict_SetItemString(d,"STC_ERLANG_FUNCTION_NAME", SWIG_From_int((int)8));
+    PyDict_SetItemString(d,"STC_ERLANG_CHARACTER", SWIG_From_int((int)9));
+    PyDict_SetItemString(d,"STC_ERLANG_MACRO", SWIG_From_int((int)10));
+    PyDict_SetItemString(d,"STC_ERLANG_RECORD", SWIG_From_int((int)11));
+    PyDict_SetItemString(d,"STC_ERLANG_SEPARATOR", SWIG_From_int((int)12));
+    PyDict_SetItemString(d,"STC_ERLANG_NODE_NAME", SWIG_From_int((int)13));
+    PyDict_SetItemString(d,"STC_ERLANG_UNKNOWN", SWIG_From_int((int)31));
+    PyDict_SetItemString(d,"STC_CMD_REDO", SWIG_From_int((int)2011));
+    PyDict_SetItemString(d,"STC_CMD_SELECTALL", SWIG_From_int((int)2013));
+    PyDict_SetItemString(d,"STC_CMD_UNDO", SWIG_From_int((int)2176));
+    PyDict_SetItemString(d,"STC_CMD_CUT", SWIG_From_int((int)2177));
+    PyDict_SetItemString(d,"STC_CMD_COPY", SWIG_From_int((int)2178));
+    PyDict_SetItemString(d,"STC_CMD_PASTE", SWIG_From_int((int)2179));
+    PyDict_SetItemString(d,"STC_CMD_CLEAR", SWIG_From_int((int)2180));
+    PyDict_SetItemString(d,"STC_CMD_LINEDOWN", SWIG_From_int((int)2300));
+    PyDict_SetItemString(d,"STC_CMD_LINEDOWNEXTEND", SWIG_From_int((int)2301));
+    PyDict_SetItemString(d,"STC_CMD_LINEUP", SWIG_From_int((int)2302));
+    PyDict_SetItemString(d,"STC_CMD_LINEUPEXTEND", SWIG_From_int((int)2303));
+    PyDict_SetItemString(d,"STC_CMD_CHARLEFT", SWIG_From_int((int)2304));
+    PyDict_SetItemString(d,"STC_CMD_CHARLEFTEXTEND", SWIG_From_int((int)2305));
+    PyDict_SetItemString(d,"STC_CMD_CHARRIGHT", SWIG_From_int((int)2306));
+    PyDict_SetItemString(d,"STC_CMD_CHARRIGHTEXTEND", SWIG_From_int((int)2307));
+    PyDict_SetItemString(d,"STC_CMD_WORDLEFT", SWIG_From_int((int)2308));
+    PyDict_SetItemString(d,"STC_CMD_WORDLEFTEXTEND", SWIG_From_int((int)2309));
+    PyDict_SetItemString(d,"STC_CMD_WORDRIGHT", SWIG_From_int((int)2310));
+    PyDict_SetItemString(d,"STC_CMD_WORDRIGHTEXTEND", SWIG_From_int((int)2311));
+    PyDict_SetItemString(d,"STC_CMD_HOME", SWIG_From_int((int)2312));
+    PyDict_SetItemString(d,"STC_CMD_HOMEEXTEND", SWIG_From_int((int)2313));
+    PyDict_SetItemString(d,"STC_CMD_LINEEND", SWIG_From_int((int)2314));
+    PyDict_SetItemString(d,"STC_CMD_LINEENDEXTEND", SWIG_From_int((int)2315));
+    PyDict_SetItemString(d,"STC_CMD_DOCUMENTSTART", SWIG_From_int((int)2316));
+    PyDict_SetItemString(d,"STC_CMD_DOCUMENTSTARTEXTEND", SWIG_From_int((int)2317));
+    PyDict_SetItemString(d,"STC_CMD_DOCUMENTEND", SWIG_From_int((int)2318));
+    PyDict_SetItemString(d,"STC_CMD_DOCUMENTENDEXTEND", SWIG_From_int((int)2319));
+    PyDict_SetItemString(d,"STC_CMD_PAGEUP", SWIG_From_int((int)2320));
+    PyDict_SetItemString(d,"STC_CMD_PAGEUPEXTEND", SWIG_From_int((int)2321));
+    PyDict_SetItemString(d,"STC_CMD_PAGEDOWN", SWIG_From_int((int)2322));
+    PyDict_SetItemString(d,"STC_CMD_PAGEDOWNEXTEND", SWIG_From_int((int)2323));
+    PyDict_SetItemString(d,"STC_CMD_EDITTOGGLEOVERTYPE", SWIG_From_int((int)2324));
+    PyDict_SetItemString(d,"STC_CMD_CANCEL", SWIG_From_int((int)2325));
+    PyDict_SetItemString(d,"STC_CMD_DELETEBACK", SWIG_From_int((int)2326));
+    PyDict_SetItemString(d,"STC_CMD_TAB", SWIG_From_int((int)2327));
+    PyDict_SetItemString(d,"STC_CMD_BACKTAB", SWIG_From_int((int)2328));
+    PyDict_SetItemString(d,"STC_CMD_NEWLINE", SWIG_From_int((int)2329));
+    PyDict_SetItemString(d,"STC_CMD_FORMFEED", SWIG_From_int((int)2330));
+    PyDict_SetItemString(d,"STC_CMD_VCHOME", SWIG_From_int((int)2331));
+    PyDict_SetItemString(d,"STC_CMD_VCHOMEEXTEND", SWIG_From_int((int)2332));
+    PyDict_SetItemString(d,"STC_CMD_ZOOMIN", SWIG_From_int((int)2333));
+    PyDict_SetItemString(d,"STC_CMD_ZOOMOUT", SWIG_From_int((int)2334));
+    PyDict_SetItemString(d,"STC_CMD_DELWORDLEFT", SWIG_From_int((int)2335));
+    PyDict_SetItemString(d,"STC_CMD_DELWORDRIGHT", SWIG_From_int((int)2336));
+    PyDict_SetItemString(d,"STC_CMD_LINECUT", SWIG_From_int((int)2337));
+    PyDict_SetItemString(d,"STC_CMD_LINEDELETE", SWIG_From_int((int)2338));
+    PyDict_SetItemString(d,"STC_CMD_LINETRANSPOSE", SWIG_From_int((int)2339));
+    PyDict_SetItemString(d,"STC_CMD_LINEDUPLICATE", SWIG_From_int((int)2404));
+    PyDict_SetItemString(d,"STC_CMD_LOWERCASE", SWIG_From_int((int)2340));
+    PyDict_SetItemString(d,"STC_CMD_UPPERCASE", SWIG_From_int((int)2341));
+    PyDict_SetItemString(d,"STC_CMD_LINESCROLLDOWN", SWIG_From_int((int)2342));
+    PyDict_SetItemString(d,"STC_CMD_LINESCROLLUP", SWIG_From_int((int)2343));
+    PyDict_SetItemString(d,"STC_CMD_DELETEBACKNOTLINE", SWIG_From_int((int)2344));
+    PyDict_SetItemString(d,"STC_CMD_HOMEDISPLAY", SWIG_From_int((int)2345));
+    PyDict_SetItemString(d,"STC_CMD_HOMEDISPLAYEXTEND", SWIG_From_int((int)2346));
+    PyDict_SetItemString(d,"STC_CMD_LINEENDDISPLAY", SWIG_From_int((int)2347));
+    PyDict_SetItemString(d,"STC_CMD_LINEENDDISPLAYEXTEND", SWIG_From_int((int)2348));
+    PyDict_SetItemString(d,"STC_CMD_HOMEWRAP", SWIG_From_int((int)2349));
+    PyDict_SetItemString(d,"STC_CMD_HOMEWRAPEXTEND", SWIG_From_int((int)2450));
+    PyDict_SetItemString(d,"STC_CMD_LINEENDWRAP", SWIG_From_int((int)2451));
+    PyDict_SetItemString(d,"STC_CMD_LINEENDWRAPEXTEND", SWIG_From_int((int)2452));
+    PyDict_SetItemString(d,"STC_CMD_VCHOMEWRAP", SWIG_From_int((int)2453));
+    PyDict_SetItemString(d,"STC_CMD_VCHOMEWRAPEXTEND", SWIG_From_int((int)2454));
+    PyDict_SetItemString(d,"STC_CMD_LINECOPY", SWIG_From_int((int)2455));
+    PyDict_SetItemString(d,"STC_CMD_WORDPARTLEFT", SWIG_From_int((int)2390));
+    PyDict_SetItemString(d,"STC_CMD_WORDPARTLEFTEXTEND", SWIG_From_int((int)2391));
+    PyDict_SetItemString(d,"STC_CMD_WORDPARTRIGHT", SWIG_From_int((int)2392));
+    PyDict_SetItemString(d,"STC_CMD_WORDPARTRIGHTEXTEND", SWIG_From_int((int)2393));
+    PyDict_SetItemString(d,"STC_CMD_DELLINELEFT", SWIG_From_int((int)2395));
+    PyDict_SetItemString(d,"STC_CMD_DELLINERIGHT", SWIG_From_int((int)2396));
+    PyDict_SetItemString(d,"STC_CMD_PARADOWN", SWIG_From_int((int)2413));
+    PyDict_SetItemString(d,"STC_CMD_PARADOWNEXTEND", SWIG_From_int((int)2414));
+    PyDict_SetItemString(d,"STC_CMD_PARAUP", SWIG_From_int((int)2415));
+    PyDict_SetItemString(d,"STC_CMD_PARAUPEXTEND", SWIG_From_int((int)2416));
+    PyDict_SetItemString(d,"STC_CMD_LINEDOWNRECTEXTEND", SWIG_From_int((int)2426));
+    PyDict_SetItemString(d,"STC_CMD_LINEUPRECTEXTEND", SWIG_From_int((int)2427));
+    PyDict_SetItemString(d,"STC_CMD_CHARLEFTRECTEXTEND", SWIG_From_int((int)2428));
+    PyDict_SetItemString(d,"STC_CMD_CHARRIGHTRECTEXTEND", SWIG_From_int((int)2429));
+    PyDict_SetItemString(d,"STC_CMD_HOMERECTEXTEND", SWIG_From_int((int)2430));
+    PyDict_SetItemString(d,"STC_CMD_VCHOMERECTEXTEND", SWIG_From_int((int)2431));
+    PyDict_SetItemString(d,"STC_CMD_LINEENDRECTEXTEND", SWIG_From_int((int)2432));
+    PyDict_SetItemString(d,"STC_CMD_PAGEUPRECTEXTEND", SWIG_From_int((int)2433));
+    PyDict_SetItemString(d,"STC_CMD_PAGEDOWNRECTEXTEND", SWIG_From_int((int)2434));
+    PyDict_SetItemString(d,"STC_CMD_STUTTEREDPAGEUP", SWIG_From_int((int)2435));
+    PyDict_SetItemString(d,"STC_CMD_STUTTEREDPAGEUPEXTEND", SWIG_From_int((int)2436));
+    PyDict_SetItemString(d,"STC_CMD_STUTTEREDPAGEDOWN", SWIG_From_int((int)2437));
+    PyDict_SetItemString(d,"STC_CMD_STUTTEREDPAGEDOWNEXTEND", SWIG_From_int((int)2438));
+    PyDict_SetItemString(d,"STC_CMD_WORDLEFTEND", SWIG_From_int((int)2439));
+    PyDict_SetItemString(d,"STC_CMD_WORDLEFTENDEXTEND", SWIG_From_int((int)2440));
+    PyDict_SetItemString(d,"STC_CMD_WORDRIGHTEND", SWIG_From_int((int)2441));
+    PyDict_SetItemString(d,"STC_CMD_WORDRIGHTENDEXTEND", SWIG_From_int((int)2442));
+    PyDict_SetItemString(d,"wxEVT_STC_CHANGE", SWIG_From_int((int)wxEVT_STC_CHANGE));
+    PyDict_SetItemString(d,"wxEVT_STC_STYLENEEDED", SWIG_From_int((int)wxEVT_STC_STYLENEEDED));
+    PyDict_SetItemString(d,"wxEVT_STC_CHARADDED", SWIG_From_int((int)wxEVT_STC_CHARADDED));
+    PyDict_SetItemString(d,"wxEVT_STC_SAVEPOINTREACHED", SWIG_From_int((int)wxEVT_STC_SAVEPOINTREACHED));
+    PyDict_SetItemString(d,"wxEVT_STC_SAVEPOINTLEFT", SWIG_From_int((int)wxEVT_STC_SAVEPOINTLEFT));
+    PyDict_SetItemString(d,"wxEVT_STC_ROMODIFYATTEMPT", SWIG_From_int((int)wxEVT_STC_ROMODIFYATTEMPT));
+    PyDict_SetItemString(d,"wxEVT_STC_KEY", SWIG_From_int((int)wxEVT_STC_KEY));
+    PyDict_SetItemString(d,"wxEVT_STC_DOUBLECLICK", SWIG_From_int((int)wxEVT_STC_DOUBLECLICK));
+    PyDict_SetItemString(d,"wxEVT_STC_UPDATEUI", SWIG_From_int((int)wxEVT_STC_UPDATEUI));
+    PyDict_SetItemString(d,"wxEVT_STC_MODIFIED", SWIG_From_int((int)wxEVT_STC_MODIFIED));
+    PyDict_SetItemString(d,"wxEVT_STC_MACRORECORD", SWIG_From_int((int)wxEVT_STC_MACRORECORD));
+    PyDict_SetItemString(d,"wxEVT_STC_MARGINCLICK", SWIG_From_int((int)wxEVT_STC_MARGINCLICK));
+    PyDict_SetItemString(d,"wxEVT_STC_NEEDSHOWN", SWIG_From_int((int)wxEVT_STC_NEEDSHOWN));
+    PyDict_SetItemString(d,"wxEVT_STC_PAINTED", SWIG_From_int((int)wxEVT_STC_PAINTED));
+    PyDict_SetItemString(d,"wxEVT_STC_USERLISTSELECTION", SWIG_From_int((int)wxEVT_STC_USERLISTSELECTION));
+    PyDict_SetItemString(d,"wxEVT_STC_URIDROPPED", SWIG_From_int((int)wxEVT_STC_URIDROPPED));
+    PyDict_SetItemString(d,"wxEVT_STC_DWELLSTART", SWIG_From_int((int)wxEVT_STC_DWELLSTART));
+    PyDict_SetItemString(d,"wxEVT_STC_DWELLEND", SWIG_From_int((int)wxEVT_STC_DWELLEND));
+    PyDict_SetItemString(d,"wxEVT_STC_START_DRAG", SWIG_From_int((int)wxEVT_STC_START_DRAG));
+    PyDict_SetItemString(d,"wxEVT_STC_DRAG_OVER", SWIG_From_int((int)wxEVT_STC_DRAG_OVER));
+    PyDict_SetItemString(d,"wxEVT_STC_DO_DROP", SWIG_From_int((int)wxEVT_STC_DO_DROP));
+    PyDict_SetItemString(d,"wxEVT_STC_ZOOM", SWIG_From_int((int)wxEVT_STC_ZOOM));
+    PyDict_SetItemString(d,"wxEVT_STC_HOTSPOT_CLICK", SWIG_From_int((int)wxEVT_STC_HOTSPOT_CLICK));
+    PyDict_SetItemString(d,"wxEVT_STC_HOTSPOT_DCLICK", SWIG_From_int((int)wxEVT_STC_HOTSPOT_DCLICK));
+    PyDict_SetItemString(d,"wxEVT_STC_CALLTIP_CLICK", SWIG_From_int((int)wxEVT_STC_CALLTIP_CLICK));
     
     
 }
