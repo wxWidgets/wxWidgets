@@ -125,8 +125,6 @@ include/wx/html/msw/*.ico
 include/wx/html/msw/*.rc
 lib/dummy
 
-bin/*.*
-
 tools/gettext/*.*
 
 bitmaps/xpm/16x16/*.*

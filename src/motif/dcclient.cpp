@@ -2284,6 +2284,9 @@ wxPaintDC::wxPaintDC(wxWindow* win) : wxWindowDC(win)
 
     win->SetUpdateRegion(*region);
 
+    wxRegion& theRegion(win->GetUpdateRegion());
+    theRegion.SetRects(updateRects); // We also store in terms of rects, for iteration to work.
+
     // Set the clipping region. Any user-defined region will be combined with this
     // one in SetDCClipping.
     XSetRegion ((Display*) m_display, (GC) m_gc, (Region) region->GetXRegion());

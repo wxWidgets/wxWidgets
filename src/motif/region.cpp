@@ -23,6 +23,14 @@
     IMPLEMENT_DYNAMIC_CLASS(wxRegionIterator, wxObject)
 #endif
 
+// ----------------------------------------------------------------------------
+// list types
+// ----------------------------------------------------------------------------
+
+#include "wx/listimpl.cpp"
+
+WX_DEFINE_LIST(wxRectList);
+
 //-----------------------------------------------------------------------------
 // wxRegionRefData implementation
 //-----------------------------------------------------------------------------
@@ -32,20 +40,85 @@ public:
     wxRegionRefData()
     {
         m_region = XCreateRegion();
+        m_usingRects = FALSE;
+        m_rects = (wxRect*) NULL;
+        m_rectCount = 0;
     }
 
     wxRegionRefData(const wxRegionRefData& data)
     {
         m_region = XCreateRegion();
+        m_rects = (wxRect*) NULL;
+        m_rectCount = 0;
         XUnionRegion(m_region, data.m_region, m_region);
+
+        SetRects(data.m_rectCount, data.m_rects);
     }
 
     ~wxRegionRefData()
     {
         XDestroyRegion(m_region);
+        DeleteRects();
     }
-    Region  m_region;
+
+    wxRect* GetRects() { return m_rects; };
+    void SetRects(const wxRectList& rectList);
+    void SetRects(int count, const wxRect* rects);
+    bool UsingRects() const { return m_usingRects; }
+    int GetRectCount() const { return m_rectCount; }
+
+    void DeleteRects();
+
+    Region      m_region;
+    wxRect*     m_rects;
+    int         m_rectCount;
+    bool        m_usingRects;  // TRUE if we're using the above.
 };
+
+void wxRegionRefData::SetRects(const wxRectList& rectList)
+{
+    DeleteRects();
+    m_usingRects = (rectList.Number() > 0);
+    if (m_usingRects)
+    {
+      m_rectCount = rectList.Number();
+      m_rects = new wxRect[m_rectCount];
+    }
+
+    wxRectList::Node* node = rectList.GetFirst();
+    int i = 0;
+    while (node) {
+        wxRect* rect = node->GetData();
+        m_rects[i] = * rect;
+        node = node->GetNext();
+        i ++;
+    }
+}
+
+void wxRegionRefData::SetRects(int count, const wxRect* rects)
+{
+    DeleteRects();
+    m_usingRects = (count > 0);
+    if (m_usingRects)
+    {
+      m_rectCount = count;
+      m_rects = new wxRect[m_rectCount];
+      int i;
+      for (i = 0; i < m_rectCount; i++)
+        m_rects[i] = rects[i];
+    }
+}
+
+void wxRegionRefData::DeleteRects()
+{
+   if (m_rects)
+   {
+      delete[] m_rects;
+      m_rects = (wxRect*) NULL;
+   }
+   m_rectCount = 0;
+   m_usingRects = FALSE;
+ }
 
 #define M_REGION (((wxRegionRefData*)m_refData)->m_region)
 
@@ -296,6 +369,38 @@ wxRegionContain wxRegion::Contains(const wxRect& rect) const
     return Contains(x, y, w, h);
 }
 
+bool wxRegion::UsingRects() const
+{
+    return ((wxRegionRefData*)m_refData)->UsingRects();
+}
+
+/*
+wxRectList& wxRegion::GetRectList()
+{
+    return ((wxRegionRefData*)m_refData)->GetRectList();
+}
+*/
+
+wxRect* wxRegion::GetRects()
+{
+    return ((wxRegionRefData*)m_refData)->GetRects();
+}
+
+int wxRegion::GetRectCount() const
+{
+    return ((wxRegionRefData*)m_refData)->GetRectCount();
+}
+
+void wxRegion::SetRects(const wxRectList& rectList)
+{
+    ((wxRegionRefData*)m_refData)->SetRects(rectList);
+}
+
+void wxRegion::SetRects(int count, const wxRect* rects)
+{
+    ((wxRegionRefData*)m_refData)->SetRects(count, rects);
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                             //
 //                               wxRegionIterator                                 //
@@ -342,12 +447,39 @@ void wxRegionIterator::Reset(const wxRegion& region)
         m_numRects = 0;
     else
     {
-        // TODO create m_rects and fill with rectangles for this region
+        // Create m_rects and fill with rectangles for this region.
+        // Since we can't find the rectangles in a region, we cheat
+        // by retrieving the rectangles explicitly set in wxPaintDC::wxPaintDC
+        // (dcclient.cpp).
+        if (m_region.UsingRects())
+        {
+            wxRect* rects = m_region.GetRects();
+            int count = m_region.GetRectCount();
+            m_numRects = count;
+            m_rects = new wxRect[m_numRects];
 
-        // For now, fudge by getting the whole bounding box.
-        m_rects = new wxRect[1];
-        m_numRects = 1;
-        m_rects[0] = m_region.GetBox();
+            int i = 0;
+            for (i = 0; i < m_numRects; i++)
+               m_rects[i] = rects[i];
+
+	    /*
+            int i = 0;
+            wxRectList::Node* node = rectList.GetFirst();
+            while (node) {
+                wxRect* rect = node->GetData();
+                m_rects[i] = * rect;
+                node = node->GetNext();
+                i ++;
+            }
+	    */
+        }
+        else
+        {
+            // For now, fudge by getting the whole bounding box.
+            m_rects = new wxRect[1];
+            m_numRects = 1;
+            m_rects[0] = m_region.GetBox();
+        }
     }
 }
 

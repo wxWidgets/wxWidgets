@@ -20,8 +20,12 @@
 #include "wx/gdiobj.h"
 #include "wx/gdicmn.h"
 
-class WXDLLEXPORT wxRect;
-class WXDLLEXPORT wxPoint;
+// ----------------------------------------------------------------------------
+// A list of rectangles type used by wxRegion and wxWindow
+// ----------------------------------------------------------------------------
+
+WX_DECLARE_LIST(wxRect, wxRectList);
+
 
 enum wxRegionContain {
 	wxOutRegion = 0, wxPartRegion = 1, wxInRegion = 2
@@ -104,6 +108,16 @@ public:
 
     // Get the internal Region handle
     WXRegion GetXRegion() const;
+
+// 'Naughty' functions that allow wxWindows to use a list of rects
+// instead of the region, in certain circumstances (e.g. when
+// making a region out of the update rectangles).
+// These are used by wxPaintDC::wxPaintDC and wxRegionIterator::Reset.
+    bool UsingRects() const;
+    wxRect* GetRects();
+    int GetRectCount() const;
+    void SetRects(const wxRectList& rectList);
+    void SetRects(int count, const wxRect* rects);
 };
 
 class WXDLLEXPORT wxRegionIterator : public wxObject {
@@ -128,13 +142,13 @@ public:
 	long GetWidth() const { return GetW(); }
 	long GetH() const;
 	long GetHeight() const { return GetH(); }
-    wxRect GetRect() const { return wxRect(GetX(), GetY(), GetWidth(), GetHeight()); }
+        wxRect GetRect() const { return wxRect(GetX(), GetY(), GetWidth(), GetHeight()); }
 
 private:
 	long	 m_current;
 	long	 m_numRects;
 	wxRegion m_region;
-    wxRect*  m_rects;
+        wxRect*  m_rects;
 };
 
 #endif

@@ -16,11 +16,7 @@
     #pragma interface "window.h"
 #endif
 
-// ----------------------------------------------------------------------------
-// A list of rectangles type used by wxWindow
-// ----------------------------------------------------------------------------
-
-WX_DECLARE_LIST(wxRect, wxRectList);
+#include "wx/region.h"
 
 // ----------------------------------------------------------------------------
 // wxWindow class for Motif - see also wxWindowBase
