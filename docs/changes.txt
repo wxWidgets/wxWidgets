@@ -25,6 +25,7 @@ wxHTML:
 
 - fixed wxHtmlHelpController's cache files handling on big endian machines
 - fixed alignment handling in tables
+- fixed memory corruption when shutting down application using wxHTML
 
 2.2.9
 -----
