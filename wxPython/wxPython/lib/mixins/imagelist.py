@@ -58,7 +58,6 @@ class MagicImageList:
                 else:
                     index = self.__magicImageList.Add( icon, mask )
             else:
-                print icon.__class__.__name__
                 raise ValueError("Unexpected icon object %s, "
                                  "expected wxIcon or wxBitmap" % (icon))
             self.__magicImageListMapping [id (icon)] = index
