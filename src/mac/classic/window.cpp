@@ -1332,7 +1332,7 @@ void wxWindowMac::MacOnScroll(wxScrollEvent &event )
 }
 
 // Get the window with the focus
-wxWindowMac *wxWindowBase::FindFocus()
+wxWindowMac *wxWindowBase::DoFindFocus()
 {
     return gFocusWindow ;
 }

@@ -2359,7 +2359,7 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *widget,
 // because it is static and so couldn't be made virtual
 // ----------------------------------------------------------------------------
 
-wxWindow *wxWindowBase::FindFocus()
+wxWindow *wxWindowBase::DoFindFocus()
 {
     // the cast is necessary when we compile in wxUniversal mode
     return (wxWindow *)g_focusWindow;

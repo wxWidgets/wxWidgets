@@ -493,7 +493,9 @@ public:
     virtual void SetFocusFromKbd() { SetFocus(); }
 
         // return the window which currently has the focus or NULL
-    static wxWindow *FindFocus() /* = 0: implement in derived classes */;
+    static wxWindow *FindFocus();
+    
+    static wxWindow *DoFindFocus() /* = 0: implement in derived classes */;
 
         // can this window have focus?
     virtual bool AcceptsFocus() const { return IsShown() && IsEnabled(); }
@@ -1071,6 +1073,12 @@ protected:
 
     // Send the wxWindowDestroyEvent
     void SendDestroyEvent();
+
+    // returns the main window of composite control; this is the window
+    // that FindFocus returns if the focus is in one of composite control's
+    // windows
+    virtual wxWindow *GetMainWindowOfCompositeControl() 
+        { return (wxWindow*)this; }
 
     // the window id - a number which uniquely identifies a window among
     // its siblings unless it is wxID_ANY

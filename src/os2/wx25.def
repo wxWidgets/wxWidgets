@@ -14262,7 +14262,7 @@ EXPORTS
       DoMoveWindow__8wxWindowFiN31
       ;wxWindow::DoClientToScreen(int*,int*) const
       DoClientToScreen__8wxWindowCFPiT1
-      ;wxWindowBase::FindFocus()
+      ;wxWindowBase::DoFindFocus()
       FindFocus__12wxWindowBaseFv
       ;wxWindow::OS2OnDrawItem(int,void**)
       OS2OnDrawItem__8wxWindowFiPPv

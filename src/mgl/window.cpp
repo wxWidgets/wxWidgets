@@ -742,7 +742,7 @@ void wxWindowMGL::KillFocus()
 // this wxWindowBase function is implemented here (in platform-specific file)
 // because it is static and so couldn't be made virtual
 // ----------------------------------------------------------------------------
-wxWindow *wxWindowBase::FindFocus()
+wxWindow *wxWindowBase::DoFindFocus()
 {
     return (wxWindow*)gs_focusedWindow;
 }

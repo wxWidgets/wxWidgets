@@ -475,7 +475,7 @@ void wxWindowOS2::SetFocusFromKbd()
     wxWindowBase::SetFocusFromKbd();
 } // end of wxWindowOS2::SetFocus
 
-wxWindow* wxWindowBase::FindFocus()
+wxWindow* wxWindowBase::DoFindFocus()
 {
     HWND                            hWnd = ::WinQueryFocus(HWND_DESKTOP);
 
@@ -484,7 +484,7 @@ wxWindow* wxWindowBase::FindFocus()
         return wxFindWinFromHandle((WXHWND)hWnd);
     }
     return NULL;
-} // wxWindowBase::FindFocus
+} // wxWindowBase::DoFindFocus
 
 bool wxWindowOS2::Enable(
   bool                              bEnable

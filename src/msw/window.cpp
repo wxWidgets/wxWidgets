@@ -581,7 +581,7 @@ void wxWindowMSW::SetFocusFromKbd()
 }
 
 // Get the window with the focus
-wxWindow *wxWindowBase::FindFocus()
+wxWindow *wxWindowBase::DoFindFocus()
 {
     HWND hWnd = ::GetFocus();
     if ( hWnd )

@@ -394,7 +394,7 @@ void wxWindowX11::SetFocus()
 }
 
 // Get the window with the focus
-wxWindow *wxWindowBase::FindFocus()
+wxWindow *wxWindowBase::DoFindFocus()
 {
     Window xfocus = (Window) 0;
     int revert = 0;

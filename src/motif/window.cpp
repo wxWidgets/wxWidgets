@@ -564,7 +564,7 @@ void wxWindow::SetFocus()
 }
 
 // Get the window with the focus
-wxWindow *wxWindowBase::FindFocus()
+wxWindow *wxWindowBase::DoFindFocus()
 {
     // TODO Problems:
     // (1) Can there be multiple focussed widgets in an application?

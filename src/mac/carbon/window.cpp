@@ -2486,7 +2486,7 @@ void wxWindowMac::MacOnScroll(wxScrollEvent &event )
 }
 
 // Get the window with the focus
-wxWindowMac *wxWindowBase::FindFocus()
+wxWindowMac *wxWindowBase::DoFindFocus()
 {
     ControlRef control ;
     GetKeyboardFocus( GetUserFocusWindow() , &control ) ;
