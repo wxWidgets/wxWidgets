@@ -39,7 +39,7 @@ class WXDLLEXPORT wxDrawObject
 public:
 
     wxDrawObject()
-        : m_isBBoxValid(FALSE)
+        : m_isBBoxValid(false)
         , m_minX(0), m_minY(0), m_maxX(0), m_maxY(0)
     { }
 
@@ -58,7 +58,7 @@ public:
       }
       else
       {
-         m_isBBoxValid = TRUE;
+         m_isBBoxValid = true;
 
          m_minX = x;
          m_minY = y;
@@ -69,7 +69,7 @@ public:
 
     void ResetBoundingBox()
     {
-        m_isBBoxValid = FALSE;
+        m_isBBoxValid = false;
 
         m_minX = m_maxX = m_minY = m_maxY = 0;
     }
@@ -106,10 +106,10 @@ class WXDLLEXPORT wxDCBase : public wxObject
 public:
     wxDCBase()
         : m_colour(wxColourDisplay())
-        , m_ok(TRUE)
-        , m_clipping(FALSE)
+        , m_ok(true)
+        , m_clipping(false)
         , m_isInteractive(0)
-        , m_isBBoxValid(FALSE)
+        , m_isBBoxValid(false)
         , m_logicalOriginX(0), m_logicalOriginY(0)
         , m_deviceOriginX(0), m_deviceOriginY(0)
         , m_logicalScaleX(1.0), m_logicalScaleY(1.0)
@@ -129,7 +129,7 @@ public:
         , m_font()
 #if wxUSE_PALETTE
         , m_palette()
-        , m_hasCustomPalette(FALSE)
+        , m_hasCustomPalette(false)
 #endif // wxUSE_PALETTE
     {
         ResetBoundingBox();
@@ -251,10 +251,10 @@ public:
         { DoDrawIcon(icon, pt.x, pt.y); }
 
     void DrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
-                    bool useMask = FALSE)
+                    bool useMask = false)
         { DoDrawBitmap(bmp, x, y, useMask); }
     void DrawBitmap(const wxBitmap &bmp, const wxPoint& pt,
-                    bool useMask = FALSE)
+                    bool useMask = false)
         { DoDrawBitmap(bmp, pt.x, pt.y, useMask); }
 
     void DrawText(const wxString& text, wxCoord x, wxCoord y)
@@ -285,14 +285,14 @@ public:
 
     bool Blit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
               wxDC *source, wxCoord xsrc, wxCoord ysrc,
-              int rop = wxCOPY, bool useMask = FALSE, wxCoord xsrcMask = -1, wxCoord ysrcMask = -1)
+              int rop = wxCOPY, bool useMask = false, wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord)
     {
         return DoBlit(xdest, ydest, width, height,
                       source, xsrc, ysrc, rop, useMask, xsrcMask, ysrcMask);
     }
     bool Blit(const wxPoint& destPt, const wxSize& sz,
               wxDC *source, const wxPoint& srcPt,
-              int rop = wxCOPY, bool useMask = FALSE, const wxPoint& srcPtMask = wxPoint(-1, -1))
+              int rop = wxCOPY, bool useMask = false, const wxPoint& srcPtMask = wxDefaultPosition)
     {
         return DoBlit(destPt.x, destPt.y, sz.x, sz.y,
                       source, srcPt.x, srcPt.y, rop, useMask, srcPtMask.x, srcPtMask.y);
@@ -361,7 +361,7 @@ public:
 
     virtual void Clear() = 0;
 
-    virtual bool StartDoc(const wxString& WXUNUSED(message)) { return TRUE; }
+    virtual bool StartDoc(const wxString& WXUNUSED(message)) { return true; }
     virtual void EndDoc() { }
 
     virtual void StartPage() { }
@@ -538,7 +538,7 @@ public:
     //
     // FIXME: is this (still) used?
     virtual void SetOptimization(bool WXUNUSED(opt)) { }
-    virtual bool GetOptimization() { return FALSE; }
+    virtual bool GetOptimization() { return false; }
 
     // bounding box
     // ------------
@@ -554,7 +554,7 @@ public:
       }
       else
       {
-         m_isBBoxValid = TRUE;
+         m_isBBoxValid = true;
 
          m_minX = x;
          m_minY = y;
@@ -565,7 +565,7 @@ public:
 
     void ResetBoundingBox()
     {
-        m_isBBoxValid = FALSE;
+        m_isBBoxValid = false;
 
         m_minX = m_maxX = m_minY = m_maxY = 0;
     }
@@ -658,7 +658,7 @@ protected:
 
     virtual void DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y) = 0;
     virtual void DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
-                              bool useMask = FALSE) = 0;
+                              bool useMask = false) = 0;
 
     virtual void DoDrawText(const wxString& text, wxCoord x, wxCoord y) = 0;
     virtual void DoDrawRotatedText(const wxString& text,
@@ -667,7 +667,7 @@ protected:
     virtual bool DoBlit(wxCoord xdest, wxCoord ydest,
                         wxCoord width, wxCoord height,
                         wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                        int rop = wxCOPY, bool useMask = FALSE, wxCoord xsrcMask = -1, wxCoord ysrcMask = -1) = 0;
+                        int rop = wxCOPY, bool useMask = false, wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord) = 0;
 
     virtual void DoGetSize(int *width, int *height) const = 0;
     virtual void DoGetSizeMM(int* width, int* height) const = 0;

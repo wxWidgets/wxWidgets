@@ -124,7 +124,7 @@ public:
         : m_paintdc(window)
     {
         window->PrepareDC( m_paintdc );
-        
+
         if( buffer != wxNullBitmap )
             Init(&m_paintdc, buffer);
         else

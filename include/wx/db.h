@@ -26,7 +26,7 @@
 #define _WX_DB_H_
 
 
-// BJO 20000503: introduce new GetColumns members which are more database independant and 
+// BJO 20000503: introduce new GetColumns members which are more database independant and
 //               return columns in the order they were created
 #define OLD_GETCOLUMNS 1
 #define EXPERIMENTAL_WXDB_FUNCTIONS 1
@@ -42,7 +42,7 @@
 #include "wx/defs.h"
 #include "wx/string.h"
 
-#if defined(__VISUALC__) 
+#if defined(__VISUALC__)
     // we need to include standard Windows headers but we can't include
     // <windows.h> directly when using MFC because it includes it itself in a
     // different manner
@@ -293,8 +293,8 @@ class WXDLLIMPEXP_ODBC wxDbConnectInf
     public:
 
         wxDbConnectInf();
-        wxDbConnectInf(HENV henv, const wxString &dsn, const wxString &userID=wxEmptyString, 
-                       const wxString &password=wxEmptyString, const wxString &defaultDir=wxEmptyString, 
+        wxDbConnectInf(HENV henv, const wxString &dsn, const wxString &userID=wxEmptyString,
+                       const wxString &password=wxEmptyString, const wxString &defaultDir=wxEmptyString,
                        const wxString &description=wxEmptyString, const wxString &fileType=wxEmptyString);
 
         ~wxDbConnectInf();
@@ -488,13 +488,13 @@ private:
     wxDBMS           dbmsType;        // Type of datasource - i.e. Oracle, dBase, SQLServer, etc
 
     // Private member functions
-    bool             getDbInfo(bool failOnDataTypeUnsupported=TRUE);
+    bool             getDbInfo(bool failOnDataTypeUnsupported=true);
     bool             getDataTypeInfo(SWORD fSqlType, wxDbSqlTypeInfo &structSQLTypeInfo);
     bool             setConnectionOptions(void);
     void             logError(const wxString &errMsg, const wxString &SQLState);
     const wxChar    *convertUserID(const wxChar *userID, wxString &UserID);
     void             initialize();
-    bool             open(bool failOnDataTypeUnsupported=TRUE);
+    bool             open(bool failOnDataTypeUnsupported=true);
 
 #if !wxODBC_BACKWARD_COMPATABILITY
     // ODBC handles
@@ -606,9 +606,9 @@ public:
     ~wxDb();
 
     // Data Source Name, User ID, Password and whether open should fail on data type not supported
-    bool         Open(const wxString& inConnectStr, bool failOnDataTypeUnsupported=TRUE);
-    bool         Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthStr, bool failOnDataTypeUnsupported=TRUE);
-    bool         Open(wxDbConnectInf *dbConnectInf, bool failOnDataTypeUnsupported=TRUE);
+    bool         Open(const wxString& inConnectStr, bool failOnDataTypeUnsupported=true);
+    bool         Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthStr, bool failOnDataTypeUnsupported=true);
+    bool         Open(wxDbConnectInf *dbConnectInf, bool failOnDataTypeUnsupported=true);
     bool         Open(wxDb *copyDb);  // pointer to a wxDb whose connection info should be copied rather than re-queried
     void         Close(void);
     bool         CommitTrans(void);
@@ -616,7 +616,7 @@ public:
     bool         DispAllErrors(HENV aHenv, HDBC aHdbc = SQL_NULL_HDBC, HSTMT aHstmt = SQL_NULL_HSTMT);
     bool         GetNextError(HENV aHenv, HDBC aHdbc = SQL_NULL_HDBC, HSTMT aHstmt = SQL_NULL_HSTMT);
     void         DispNextError(void);
-    bool         CreateView(const wxString &viewName, const wxString &colList, const wxString &pSqlStmt, bool attemptDrop=TRUE);
+    bool         CreateView(const wxString &viewName, const wxString &colList, const wxString &pSqlStmt, bool attemptDrop=true);
     bool         DropView(const wxString &viewName);
     bool         ExecSql(const wxString &pSqlStmt);
     bool         GetNext(void);
@@ -628,7 +628,7 @@ public:
     int          GetKeyFields(const wxString &tableName, wxDbColInf* colInf, UWORD noCols);
 
     wxDbColInf  *GetColumns(wxChar *tableName[], const wxChar *userID=NULL);
-    wxDbColInf  *GetColumns(const wxString &tableName, UWORD *numCols, const wxChar *userID=NULL); 
+    wxDbColInf  *GetColumns(const wxString &tableName, UWORD *numCols, const wxChar *userID=NULL);
 
     int             GetColumnCount(const wxString &tableName, const wxChar *userID=NULL);
     const wxChar   *GetDatabaseName(void)  {return dbInf.dbmsName;}
@@ -651,25 +651,25 @@ public:
     wxDbSqlTypeInfo GetTypeInfBlob()       {return typeInfBlob;}
 
     // tableName can refer to a table, view, alias or synonym
-    bool         TableExists(const wxString &tableName, const wxChar *userID=NULL, 
+    bool         TableExists(const wxString &tableName, const wxChar *userID=NULL,
                              const wxString &tablePath=wxEmptyString);
-    bool         TablePrivileges(const wxString &tableName, const wxString &priv, 
-                                 const wxChar *userID=NULL, const wxChar *schema=NULL, 
+    bool         TablePrivileges(const wxString &tableName, const wxString &priv,
+                                 const wxChar *userID=NULL, const wxChar *schema=NULL,
                                  const wxString &path=wxEmptyString);
 
     // These two functions return the table name or column name in a form ready
     // for use in SQL statements.  For example, if the datasource allows spaces
     // in the table name or column name, the returned string will have the
-    // correct enclosing marks around the name to allow it to be properly 
+    // correct enclosing marks around the name to allow it to be properly
     // included in a SQL statement
     const wxString  SQLTableName(const wxChar *tableName);
     const wxString  SQLColumnName(const wxChar *colName);
 
-    void         LogError(const wxString &errMsg, const wxString &SQLState = wxEmptyString) 
+    void         LogError(const wxString &errMsg, const wxString &SQLState = wxEmptyString)
                         { logError(errMsg, SQLState); }
     void         SetDebugErrorMessages(bool state) { silent = !state; }
-    bool         SetSqlLogging(wxDbSqlLogState state, const wxString &filename = SQL_LOG_FILENAME, 
-                               bool append = FALSE);
+    bool         SetSqlLogging(wxDbSqlLogState state, const wxString &filename = SQL_LOG_FILENAME,
+                               bool append = false);
     bool         WriteSqlLog(const wxString &logMsg);
 
     wxDBMS       Dbms(void);
@@ -742,7 +742,7 @@ wxDbSqlLog(wxDbSqlLogState state, const wxString &filename = SQL_LOG_FILENAME);
 #if 0
 // MSW/VC6 ONLY!!!  Experimental
 int WXDLLEXPORT wxDbCreateDataSource(const wxString &driverName, const wxString &dsn, const wxString &description=wxEmptyString,
-                                     bool sysDSN=FALSE, const wxString &defDir=wxEmptyString, wxWindow *parent=NULL);
+                                     bool sysDSN=false, const wxString &defDir=wxEmptyString, wxWindow *parent=NULL);
 #endif
 
 // This routine allows you to query a driver manager

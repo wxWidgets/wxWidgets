@@ -60,7 +60,7 @@ public:
     {
         wxPluginLibrary::ms_classes = new wxDLImports;
         wxPluginManager::CreateManifest();
-        return TRUE;
+        return true;
     }
 
     virtual void OnExit()
@@ -123,10 +123,10 @@ bool wxPluginLibrary::UnrefLib()
     if ( m_linkcount == 0 || --m_linkcount == 0 )
     {
         delete this;
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 // ------------------------
@@ -316,7 +316,7 @@ bool wxPluginManager::UnloadLibrary(const wxString& libname)
         wxLogDebug(_T("Attempt to unload library '%s' which is not loaded."),
                    libname.c_str());
 
-        return FALSE;
+        return false;
     }
 
     wxLogTrace(_T("dll"), _T("UnloadLibrary(%s)"), realname.c_str());
@@ -324,12 +324,12 @@ bool wxPluginManager::UnloadLibrary(const wxString& libname)
     if ( !entry->UnrefLib() )
     {
         // not really unloaded yet
-        return FALSE;
+        return false;
     }
 
     ms_manifest->erase(ms_manifest->find(realname));
 
-    return TRUE;
+    return true;
 }
 
 // ------------------------
@@ -420,7 +420,7 @@ wxDllLoader::GetSymbol(wxDllType dllHandle, const wxString &name, bool *success)
         wxFAIL_MSG( _T("Using a library not loaded with wxDllLoader?") );
 
         if ( success )
-            *success = FALSE;
+            *success = false;
 
         return NULL;
     }
@@ -551,7 +551,7 @@ wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
 
     wxString libname = ConstructLibraryName(name);
 
-    bool success = FALSE;
+    bool success = false;
     wxDllType handle = wxDllLoader::LoadLibrary(libname, &success);
     if(success)
     {

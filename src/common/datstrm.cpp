@@ -6,7 +6,7 @@
 // Created:     28/06/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Guilhem Lavaux
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -30,10 +30,10 @@
 
 #if wxUSE_UNICODE
 wxDataInputStream::wxDataInputStream(wxInputStream& s, wxMBConv& conv)
-  : m_input(&s), m_be_order(FALSE), m_conv(conv)
+  : m_input(&s), m_be_order(false), m_conv(conv)
 #else
 wxDataInputStream::wxDataInputStream(wxInputStream& s)
-  : m_input(&s), m_be_order(FALSE)
+  : m_input(&s), m_be_order(false)
 #endif
 {
 }
@@ -269,10 +269,10 @@ wxDataInputStream& wxDataInputStream::operator>>(float& f)
 
 #if wxUSE_UNICODE
 wxDataOutputStream::wxDataOutputStream(wxOutputStream& s, wxMBConv& conv)
-  : m_output(&s), m_be_order(FALSE), m_conv(conv)
+  : m_output(&s), m_be_order(false), m_conv(conv)
 #else
 wxDataOutputStream::wxDataOutputStream(wxOutputStream& s)
-  : m_output(&s), m_be_order(FALSE)
+  : m_output(&s), m_be_order(false)
 #endif
 {
 }

@@ -65,7 +65,7 @@ public:
     void HandleOnFocus(wxFocusEvent& event);
     void HandleOnWindowDestroy(wxWindowBase *child);
 
-    // should be called from SetFocus(), returns FALSE if we did nothing with
+    // should be called from SetFocus(), returns false if we did nothing with
     // the focus and the default processing should take place
     bool DoSetFocus();
 

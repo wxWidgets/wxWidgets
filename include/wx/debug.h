@@ -1,12 +1,12 @@
 /**
-*  Name:        wx/debug.h 
-*  Purpose:     Misc debug functions and macros 
-*  Author:      Vadim Zeitlin 
+*  Name:        wx/debug.h
+*  Purpose:     Misc debug functions and macros
+*  Author:      Vadim Zeitlin
 *  Modified by: Ryan Norton (Converted to C)
-*  Created:     29/01/98 
-*  RCS-ID:      $Id$ 
-*  Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr> 
-*  Licence:     wxWindows licence 
+*  Created:     29/01/98
+*  RCS-ID:      $Id$
+*  Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+*  Licence:     wxWindows licence
 */
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
@@ -52,7 +52,7 @@
 /*  */
 /*  All debugging macros rely on ASSERT() which in turn calls user-defined */
 /*  OnAssert() function. To keep things simple, it's called even when the */
-/*  expression is TRUE (i.e. everything is ok) and by default does nothing: just */
+/*  expression is true (i.e. everything is ok) and by default does nothing: just */
 /*  returns the same value back. But if you redefine it to do something more sexy */
 /*  (popping up a message box in your favourite GUI, sending you e-mail or */
 /*  whatever) it will affect all ASSERTs, FAILs and CHECKs in your code. */
@@ -125,7 +125,7 @@
 #endif  /* __WXDEBUG__ */
 
 #ifdef __cplusplus
-    /*  Use of wxFalse instead of FALSE suppresses compiler warnings about testing */
+    /*  Use of wxFalse instead of false suppresses compiler warnings about testing */
     /*  constant expression */
     WXDLLIMPEXP_DATA_BASE(extern const bool) wxFalse;
 #endif

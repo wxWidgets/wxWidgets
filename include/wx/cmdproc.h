@@ -29,7 +29,7 @@ class WXDLLEXPORT wxMenu;
 class WXDLLEXPORT wxCommand : public wxObject
 {
 public:
-    wxCommand(bool canUndoIt = FALSE, const wxString& name = wxEmptyString);
+    wxCommand(bool canUndoIt = false, const wxString& name = wxEmptyString);
     ~wxCommand();
 
     // Override this to perform a command
@@ -61,8 +61,8 @@ public:
     virtual ~wxCommandProcessor();
 
     // Pass a command to the processor. The processor calls Do(); if
-    // successful, is appended to the command history unless storeIt is FALSE.
-    virtual bool Submit(wxCommand *command, bool storeIt = TRUE);
+    // successful, is appended to the command history unless storeIt is false.
+    virtual bool Submit(wxCommand *command, bool storeIt = true);
 
     // just store the command without executing it
     virtual void Store(wxCommand *command);

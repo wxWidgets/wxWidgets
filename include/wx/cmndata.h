@@ -49,7 +49,7 @@ public:
     wxColour        m_dataColour;
     wxColour        m_custColours[16];
     bool            m_chooseFull;
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxColourData)
 };
@@ -90,7 +90,7 @@ public:
         m_encodingInfo = data.m_encodingInfo;
         return *this;
     }
-                          
+
     void SetAllowSymbols(bool flag) { m_allowSymbols = flag; }
     bool GetAllowSymbols() const { return m_allowSymbols; }
 
@@ -132,7 +132,7 @@ public:
 private:
     wxFontEncoding       m_encoding;
     wxNativeEncodingInfo m_encodingInfo;
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxFontData)
 };
@@ -356,7 +356,7 @@ private:
     bool            m_printSetupDialog;
     wxPrintData     m_printData;
 
-private:    
+private:
     DECLARE_DYNAMIC_CLASS(wxPrintDialogData)
 };
 
@@ -457,7 +457,7 @@ private:
     bool            m_getDefaultInfo; // Equiv. to PSD_RETURNDEFAULT
     bool            m_enableHelp;
     wxPrintData     m_printData;
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxPageSetupDialogData)
 };

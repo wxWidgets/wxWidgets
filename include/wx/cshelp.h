@@ -6,7 +6,7 @@
 // Created:     08/09/2000
 // RCS-ID:      $Id$
 // Copyright:   (c) 2000 Julian Smart, Vadim Zeitlin
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_CSHELPH__
@@ -41,7 +41,7 @@
 class WXDLLEXPORT wxContextHelp : public wxObject
 {
 public:
-    wxContextHelp(wxWindow* win = NULL, bool beginHelp = TRUE);
+    wxContextHelp(wxWindow* win = NULL, bool beginHelp = true);
     virtual ~wxContextHelp();
 
     bool BeginContextHelp(wxWindow* win);
@@ -54,7 +54,7 @@ public:
 
 protected:
     bool    m_inHelp;
-    bool    m_status; // TRUE if the user left-clicked
+    bool    m_status; // true if the user left-clicked
 
 private:
     DECLARE_DYNAMIC_CLASS(wxContextHelp)
@@ -117,7 +117,7 @@ public:
     virtual wxString GetHelp(const wxWindowBase *window) = 0;
 
     // do show help for the given window (uses GetHelp() internally if
-    // applicable), return TRUE if it was done or FALSE if no help available
+    // applicable), return true if it was done or false if no help available
     // for this window
     virtual bool ShowHelp(wxWindowBase *window) = 0;
 

@@ -49,7 +49,7 @@ class WXDLLIMPEXP_BASE wxArrayString;
 
 /// should we use registry instead of configuration files under Windows?
 // (i.e. whether wxConfigBase::Create() will create a wxFileConfig (if it's
-//  FALSE) or wxRegConfig (if it's true and we're under Win32))
+//  false) or wxRegConfig (if it's true and we're under Win32))
 #ifndef   wxUSE_CONFIG_NATIVE
   #define wxUSE_CONFIG_NATIVE 1
 #endif
@@ -94,7 +94,7 @@ public:
   static wxConfigBase *Set(wxConfigBase *pConfig);
     // get the config object, creates it on demand unless DontCreateOnDemand
     // was called
-  static wxConfigBase *Get(bool createOnDemand = TRUE) 
+  static wxConfigBase *Get(bool createOnDemand = true)
        { if ( createOnDemand && (!ms_pConfig) ) Create(); return ms_pConfig; }
     // create a new config object: this function will create the "best"
     // implementation of wxConfig available for the current platform, see
@@ -102,7 +102,7 @@ public:
     // the created object and also sets it as ms_pConfig.
   static wxConfigBase *Create();
     // should Get() try to create a new log object if the current one is NULL?
-  static void DontCreateOnDemand() { ms_bAutoCreate = FALSE; }
+  static void DontCreateOnDemand() { ms_bAutoCreate = false; }
 
   // ctor & virtual dtor
       // ctor (can be used as default ctor too)
@@ -137,15 +137,15 @@ public:
   virtual bool GetNextEntry (wxString& str, long& lIndex) const = 0;
     // get number of entries/subgroups in the current group, with or without
     // it's subgroups
-  virtual size_t GetNumberOfEntries(bool bRecursive = FALSE) const = 0;
-  virtual size_t GetNumberOfGroups(bool bRecursive = FALSE) const = 0;
+  virtual size_t GetNumberOfEntries(bool bRecursive = false) const = 0;
+  virtual size_t GetNumberOfGroups(bool bRecursive = false) const = 0;
 
   // tests of existence
-    // returns TRUE if the group by this name exists
+    // returns true if the group by this name exists
   virtual bool HasGroup(const wxString& strName) const = 0;
     // same as above, but for an entry
   virtual bool HasEntry(const wxString& strName) const = 0;
-    // returns TRUE if either a group or an entry with a given name exist
+    // returns true if either a group or an entry with a given name exist
   bool Exists(const wxString& strName) const
     { return HasGroup(strName) || HasEntry(strName); }
 
@@ -156,7 +156,7 @@ public:
     return HasEntry(name) ? Type_String : Type_Unknown;
   }
 
-  // key access: returns TRUE if value was really read, FALSE if default used
+  // key access: returns true if value was really read, false if default used
   // (and if the key is not found the default value is returned.)
 
     // read a string from the key
@@ -210,9 +210,9 @@ public:
     { return Write(key, wxString(value)); }
 
   // permanently writes all changes
-  virtual bool Flush(bool bCurrentOnly = FALSE) = 0;
+  virtual bool Flush(bool bCurrentOnly = false) = 0;
 
-  // renaming, all functions return FALSE on failure (probably because the new
+  // renaming, all functions return false on failure (probably because the new
   // name is already taken by an existing entry)
     // rename an entry
   virtual bool RenameEntry(const wxString& oldName,
@@ -225,7 +225,7 @@ public:
     // deletes the specified entry and the group it belongs to if
     // it was the last key in it and the second parameter is true
   virtual bool DeleteEntry(const wxString& key,
-                           bool bDeleteGroupIfEmpty = TRUE) = 0;
+                           bool bDeleteGroupIfEmpty = true) = 0;
     // delete the group (with all subgroups)
   virtual bool DeleteGroup(const wxString& key) = 0;
     // delete the whole underlying object (disk file, registry key, ...)
@@ -236,9 +236,9 @@ public:
     // we can automatically expand environment variables in the config entries
     // (this option is on by default, you can turn it on/off at any time)
   bool IsExpandingEnvVars() const { return m_bExpandEnvVars; }
-  void SetExpandEnvVars(bool bDoIt = TRUE) { m_bExpandEnvVars = bDoIt; }
+  void SetExpandEnvVars(bool bDoIt = true) { m_bExpandEnvVars = bDoIt; }
     // recording of default values
-  void SetRecordDefaults(bool bDoIt = TRUE) { m_bRecordDefaults = bDoIt; }
+  void SetRecordDefaults(bool bDoIt = true) { m_bRecordDefaults = bDoIt; }
   bool IsRecordingDefaults() const { return m_bRecordDefaults; }
   // does expansion only if needed
   wxString ExpandEnvVars(const wxString& str) const;

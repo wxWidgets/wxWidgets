@@ -24,7 +24,7 @@
 class WXDLLEXPORT wxWindow;
 class WXDLLEXPORT wxPoint;
 class WXDLLEXPORT wxRect;
-class WXDLLEXPORT wxString; 
+class WXDLLEXPORT wxString;
 
 WX_DECLARE_EXPORTED_OBJARRAY(wxVideoMode, wxArrayVideoModes);
 

@@ -129,8 +129,8 @@ public:
     void SetSwitchChars(const wxString& switchChars);
 
     // long options are not POSIX-compliant, this option allows to disable them
-    void EnableLongOptions(bool enable = TRUE);
-    void DisableLongOptions() { EnableLongOptions(FALSE); }
+    void EnableLongOptions(bool enable = true);
+    void DisableLongOptions() { EnableLongOptions(false); }
 
     bool AreLongOptionsEnabled();
 
@@ -168,7 +168,7 @@ public:
     //
     // if showUsage is true, Usage() is called in case of syntax error or if
     // help was requested
-    int Parse(bool showUsage = TRUE);
+    int Parse(bool showUsage = true);
 
     // give the usage message describing all program options
     void Usage();
@@ -176,19 +176,19 @@ public:
     // get the command line arguments
     // ------------------------------
 
-    // returns TRUE if the given switch was found
+    // returns true if the given switch was found
     bool Found(const wxString& name) const;
 
-    // returns TRUE if an option taking a string value was found and stores the
+    // returns true if an option taking a string value was found and stores the
     // value in the provided pointer
     bool Found(const wxString& name, wxString *value) const;
 
-    // returns TRUE if an option taking an integer value was found and stores
+    // returns true if an option taking an integer value was found and stores
     // the value in the provided pointer
     bool Found(const wxString& name, long *value) const;
 
 #if wxUSE_DATETIME
-    // returns TRUE if an option taking a date value was found and stores the
+    // returns true if an option taking a date value was found and stores the
     // value in the provided pointer
     bool Found(const wxString& name, wxDateTime *value) const;
 #endif // wxUSE_DATETIME

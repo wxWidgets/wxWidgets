@@ -6,7 +6,7 @@
 // Created:     28/06/1998
 // RCS-ID:      $Id$
 // Copyright:   (c) Guilhem Lavaux
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_DATSTREAM_H_
@@ -31,7 +31,7 @@ public:
     wxDataInputStream(wxInputStream& s);
 #endif
     ~wxDataInputStream();
-    
+
     bool IsOk() { return m_input->IsOk(); }
 
     wxUint64 Read64();

@@ -118,7 +118,7 @@ class WXDLLIMPEXP_DBGRID wxDbGridTableBase : public wxGridTableBase
 {
 public:
     wxDbGridTableBase(wxDbTable *tab, wxDbGridColInfo *ColInfo,
-              int count = wxUSE_QUERY, bool takeOwnership = TRUE);
+              int count = wxUSE_QUERY, bool takeOwnership = true);
     ~wxDbGridTableBase();
 
     virtual int GetNumberRows()
@@ -150,12 +150,12 @@ public:
 
     virtual wxString GetColLabelValue(int col);
 
-    virtual bool     AssignDbTable(wxDbTable *tab, int count = wxUSE_QUERY, bool takeOwnership=TRUE);
+    virtual bool     AssignDbTable(wxDbTable *tab, int count = wxUSE_QUERY, bool takeOwnership=true);
     virtual void     ValidateRow(int row);
     virtual bool     UpdateRow(int row) const
     {
         if (m_row != row)
-            return TRUE;
+            return true;
         else
             return Writeback();
     }

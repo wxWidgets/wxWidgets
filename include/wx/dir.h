@@ -104,7 +104,7 @@ public:
     // open the directory for enumerating
     bool Open(const wxString& dir);
 
-    // returns TRUE if the directory was successfully opened
+    // returns true if the directory was successfully opened
     bool IsOpened() const;
 
     // get the full name of the directory (without '/' at the end)
@@ -114,7 +114,7 @@ public:
     // -------------------------
 
     // start enumerating all files matching filespec (or all files if it is
-    // empty) and flags, return TRUE on success
+    // empty) and flags, return true on success
     bool GetFirst(wxString *filename,
                   const wxString& filespec = wxEmptyString,
                   int flags = wxDIR_DEFAULT) const;

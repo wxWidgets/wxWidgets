@@ -56,7 +56,7 @@ public:
     static wxDialUpManager *Create();
 
     // could the dialup manager be initialized correctly? If this function
-    // returns FALSE, no other functions will work neither, so it's a good idea
+    // returns false, no other functions will work neither, so it's a good idea
     // to call this function and check its result before calling any other
     // wxDialUpManager methods
     virtual bool IsOk() const = 0;
@@ -78,20 +78,20 @@ public:
     // if no username/password are given, the function will try to do without
     // them, but will ask the user if really needed
     //
-    // if async parameter is FALSE, the function waits until the end of dialing
-    // and returns TRUE upon successful completion.
-    // if async is TRUE, the function only initiates the connection and returns
+    // if async parameter is false, the function waits until the end of dialing
+    // and returns true upon successful completion.
+    // if async is true, the function only initiates the connection and returns
     // immediately - the result is reported via events (an event is sent
     // anyhow, but if dialing failed it will be a DISCONNECTED one)
     virtual bool Dial(const wxString& nameOfISP = wxEmptyString,
                       const wxString& username = wxEmptyString,
                       const wxString& password = wxEmptyString,
-                      bool async = TRUE) = 0;
+                      bool async = true) = 0;
 
-    // returns TRUE if (async) dialing is in progress
+    // returns true if (async) dialing is in progress
     virtual bool IsDialing() const = 0;
 
-    // cancel dialing the number initiated with Dial(async = TRUE)
+    // cancel dialing the number initiated with Dial(async = true)
     // NB: this won't result in DISCONNECTED event being sent
     virtual bool CancelDialing() = 0;
 
@@ -101,7 +101,7 @@ public:
     // online status
     // -------------
 
-    // returns TRUE if the computer has a permanent network connection (i.e. is
+    // returns true if the computer has a permanent network connection (i.e. is
     // on a LAN) and so there is no need to use Dial() function to go online
     //
     // NB: this functions tries to guess the result and it is not always
@@ -109,7 +109,7 @@ public:
     //     confirmation or give him a possibility to override it
     virtual bool IsAlwaysOnline() const = 0;
 
-    // returns TRUE if the computer is connected to the network: under Windows,
+    // returns true if the computer is connected to the network: under Windows,
     // this just means that a RAS connection exists, under Unix we check that
     // the "well-known host" (as specified by SetWellKnownHost) is reachable
     virtual bool IsOnline() const = 0;
@@ -118,7 +118,7 @@ public:
     // so, in general, the user should be allowed to override it. This function
     // allows to forcefully set the online status - whatever our internal
     // algorithm may think about it.
-    virtual void SetOnlineStatus(bool isOnline = TRUE) = 0;
+    virtual void SetOnlineStatus(bool isOnline = true) = 0;
 
     // set misc wxDialUpManager options
     // --------------------------------
@@ -129,7 +129,7 @@ public:
     // Windows, the notification about the change of connection status is
     // instantenous.
     //
-    // Returns FALSE if couldn't set up automatic check for online status.
+    // Returns false if couldn't set up automatic check for online status.
     virtual bool EnableAutoCheckOnlineStatus(size_t nSeconds = 60) = 0;
 
     // disable automatic check for connection status change - notice that the
@@ -192,9 +192,9 @@ typedef void (wxEvtHandler::*wxDialUpEventFunction)(wxDialUpEvent&);
 
 // macros to catch dialup events
 #define EVT_DIALUP_CONNECTED(func) \
-   DECLARE_EVENT_TABLE_ENTRY( wxEVT_DIALUP_CONNECTED, -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxDialUpEventFunction, & func ), NULL),
+   DECLARE_EVENT_TABLE_ENTRY( wxEVT_DIALUP_CONNECTED, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxDialUpEventFunction, & func ), NULL),
 #define EVT_DIALUP_DISCONNECTED(func) \
-   DECLARE_EVENT_TABLE_ENTRY( wxEVT_DIALUP_DISCONNECTED, -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxDialUpEventFunction, & func ), NULL),
+   DECLARE_EVENT_TABLE_ENTRY( wxEVT_DIALUP_DISCONNECTED, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxDialUpEventFunction, & func ), NULL),
 
 
 #endif // wxUSE_DIALUP_MANAGER

@@ -155,6 +155,6 @@ WXDLLEXPORT_DATA(const wxChar *) wxUserResourceStr = wxT("TEXT");
 #endif
 
 
-const wxSize wxDefaultSize(-1, -1);
-const wxPoint wxDefaultPosition(-1, -1);
+const wxSize wxDefaultSize(wxDefaultCoord, wxDefaultCoord);
+const wxPoint wxDefaultPosition(wxDefaultCoord, wxDefaultCoord);
 

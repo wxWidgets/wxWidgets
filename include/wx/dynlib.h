@@ -131,7 +131,7 @@ public:
     //       to use it polymorphically.
     ~wxDynamicLibrary() { Unload(); }
 
-    // return TRUE if the library was loaded successfully
+    // return true if the library was loaded successfully
     bool IsLoaded() const { return m_handle != 0; }
 
     // load the library with the given name (full or not), return true if ok
@@ -220,11 +220,11 @@ public:
       which case the library is searched for in all standard locations
       (use GetDllExt() to construct the filename)
 
-      if success pointer is not NULL, it will be filled with TRUE if everything
-      went ok and FALSE otherwise
+      if success pointer is not NULL, it will be filled with true if everything
+      went ok and false otherwise
      */
     static wxDllType LoadLibrary(const wxString& name, bool *success = NULL);
-    
+
     /*
       This function unloads the shared library previously loaded with
       LoadLibrary

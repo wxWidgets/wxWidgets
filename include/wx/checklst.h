@@ -27,7 +27,7 @@ public:
 
     // check list box specific methods
     virtual bool IsChecked(size_t item) const = 0;
-    virtual void Check(size_t item, bool check = TRUE) = 0;
+    virtual void Check(size_t item, bool check = true) = 0;
 
     DECLARE_NO_COPY_CLASS(wxCheckListBoxBase)
 };

@@ -143,18 +143,18 @@ public:
     virtual size_t GetDataSize(const wxDataFormat& format) const = 0;
 
     // copy raw data (in the specified format) to the provided buffer, return
-    // TRUE if data copied successfully, FALSE otherwise
+    // true if data copied successfully, false otherwise
     virtual bool GetDataHere(const wxDataFormat& format, void *buf) const = 0;
 
     // get data from the buffer of specified length (in the given format),
-    // return TRUE if the data was read successfully, FALSE otherwise
+    // return true if the data was read successfully, false otherwise
     virtual bool SetData(const wxDataFormat& WXUNUSED(format),
                          size_t WXUNUSED(len), const void * WXUNUSED(buf))
     {
-        return FALSE;
+        return false;
     }
 
-    // returns TRUE if this format is supported
+    // returns true if this format is supported
     bool IsSupported(const wxDataFormat& format, Direction dir = Get) const;
 };
 
@@ -180,7 +180,7 @@ public:
 
 // ----------------------------------------------------------------------------
 // wxDataObjectSimple is a wxDataObject which only supports one format (in
-// both Get and Set directions, but you may return FALSE from GetDataHere() or
+// both Get and Set directions, but you may return false from GetDataHere() or
 // SetData() if one of them is not supported). This is the simplest possible
 // wxDataObject implementation.
 //
@@ -218,11 +218,11 @@ public:
 
     // copy our data to the buffer
     virtual bool GetDataHere(void *WXUNUSED(buf)) const
-        { return FALSE; }
+        { return false; }
 
     // copy data from buffer to our data
     virtual bool SetData(size_t WXUNUSED(len), const void *WXUNUSED(buf))
-        { return FALSE; }
+        { return false; }
 
     // implement base class pure virtuals
     // ----------------------------------
@@ -270,8 +270,8 @@ public:
 
     // add data object (it will be deleted by wxDataObjectComposite, hence it
     // must be allocated on the heap) whose format will become the preferred
-    // one if preferred == TRUE
-    void Add(wxDataObjectSimple *dataObject, bool preferred = FALSE);
+    // one if preferred == true
+    void Add(wxDataObjectSimple *dataObject, bool preferred = false);
 
     // implement base class pure virtuals
     // ----------------------------------
@@ -340,7 +340,7 @@ public:
     virtual size_t GetFormatCount(Direction WXUNUSED(dir) = Get) const { return 2; }
     virtual void GetAllFormats(wxDataFormat *formats,
                                wxDataObjectBase::Direction WXUNUSED(dir) = Get) const;
-                               
+
     virtual size_t GetDataSize() const { return GetDataSize(GetPreferredFormat()); }
     virtual bool GetDataHere(void *buf) const { return GetDataHere(GetPreferredFormat(), buf); }
     virtual bool SetData(size_t len, const void *buf) { return SetData(GetPreferredFormat(), len, buf); }
@@ -375,7 +375,7 @@ public:
 
 private:
     wxString m_text;
-    
+
     DECLARE_NO_COPY_CLASS(wxTextDataObject)
 };
 
@@ -422,7 +422,7 @@ public:
 
     // the Get() functions do nothing for us
     virtual size_t GetDataSize() const { return 0; }
-    virtual bool GetDataHere(void *WXUNUSED(buf)) const { return FALSE; }
+    virtual bool GetDataHere(void *WXUNUSED(buf)) const { return false; }
 
 protected:
     wxArrayString m_filenames;

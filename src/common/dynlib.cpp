@@ -326,7 +326,7 @@ void *wxDynamicLibrary::GetSymbol(const wxString &name, bool *success) const
     wxCHECK_MSG( IsLoaded(), NULL,
                  _T("Can't load symbol from unloaded library") );
 
-    bool     failed = FALSE;
+    bool     failed = false;
     void    *symbol = 0;
 
     wxUnusedVar(symbol);
@@ -383,7 +383,7 @@ void *wxDynamicLibrary::GetSymbol(const wxString &name, bool *success) const
             wxLogError(wxT("%s"), err);
         }
 #else
-        failed = TRUE;
+        failed = true;
         wxLogSysError(_("Couldn't find symbol '%s' in a dynamic library"),
                       name.c_str());
 #endif

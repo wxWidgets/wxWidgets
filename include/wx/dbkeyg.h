@@ -3,7 +3,7 @@
 // Purpose:     Generic key support for wxDbTable
 // Author:      Roger Gammans
 // Modified by:
-// Created:     
+// Created:
 // RCS-ID:      $Id$
 // Copyright:   (c) 1999 The Computer Surgery (roger@computer-surgery.co.uk)
 // Licence:     wxWindows licence

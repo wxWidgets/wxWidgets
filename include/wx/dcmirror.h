@@ -137,7 +137,7 @@ protected:
         wxFAIL_MSG( _T("this is probably wrong") );
 
         m_dc.DoDrawArc(GetX(x1, y1), GetY(x1, y1),
-                       GetX(x2, y2), GetY(x2, y2), 
+                       GetX(x2, y2), GetY(x2, y2),
                        xc, yc);
     }
 
@@ -154,7 +154,7 @@ protected:
         wxFAIL_MSG( _T("this is probably wrong") );
 
         m_dc.DoDrawEllipticArc(GetX(x, y), GetY(x, y),
-                               GetX(w, h), GetY(w, h), 
+                               GetX(w, h), GetY(w, h),
                                sa, ea);
     }
 
@@ -188,7 +188,7 @@ protected:
     }
 
     virtual void DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
-                              bool useMask = FALSE)
+                              bool useMask = false)
     {
         m_dc.DoDrawBitmap(bmp, GetX(x, y), GetY(x, y), useMask);
     }
@@ -209,8 +209,8 @@ protected:
     virtual bool DoBlit(wxCoord xdest, wxCoord ydest,
                         wxCoord w, wxCoord h,
                         wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                        int rop = wxCOPY, bool useMask = FALSE,
-                        wxCoord xsrcMask = -1, wxCoord ysrcMask = -1)
+                        int rop = wxCOPY, bool useMask = false,
+                        wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord)
     {
         return m_dc.DoBlit(GetX(xdest, ydest), GetY(xdest, ydest),
                            GetX(w, h), GetY(w, h),

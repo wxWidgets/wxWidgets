@@ -47,7 +47,7 @@
 
 // Base macro for wrapping CPPUNIT_TEST macros and so making them conditional
 // tests, meaning that the test only get registered and thus run when a given
-// runtime condition is true. 
+// runtime condition is true.
 // In case the condition is evaluated as false a skip message is logged
 // (the message will only be shown in verbose mode).
 #define WXTEST_ANY_WITH_CONDITION(suiteName, Condition, testMethod, anyTest) \

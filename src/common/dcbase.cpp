@@ -32,7 +32,7 @@
 
 #include <math.h>
 
-// bool wxDCBase::sm_cacheing = FALSE;
+// bool wxDCBase::sm_cacheing = false;
 
 // ============================================================================
 // implementation
@@ -291,7 +291,7 @@ static bool wx_spline_add_point(double x, double y)
   point->x = (int) x;
   point->y = (int) y;
   wx_spline_point_list.Append((wxObject*)point);
-  return TRUE;
+  return true;
 }
 
 static void wx_spline_draw_point_array(wxDCBase *dc)
@@ -571,7 +571,7 @@ void wxDCBase::DrawLabel(const wxString& text,
             width0 = width;
     if ( bitmap.Ok() )
     {
-        DrawBitmap(bitmap, x, y, TRUE /* use mask */);
+        DrawBitmap(bitmap, x, y, true /* use mask */);
 
         wxCoord offset = bitmap.GetWidth() + 4;
         x += offset;

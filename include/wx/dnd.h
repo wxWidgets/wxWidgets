@@ -97,9 +97,9 @@ public:
     virtual wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly) = 0;
 
     // override to give feedback depending on the current operation result
-    // "effect" and return TRUE if you did something, FALSE to let the library
+    // "effect" and return true if you did something, false to let the library
     // give the default feedback
-    virtual bool GiveFeedback(wxDragResult WXUNUSED(effect)) { return FALSE; }
+    virtual bool GiveFeedback(wxDragResult WXUNUSED(effect)) { return false; }
 
 protected:
     const wxCursor& GetCursor(wxDragResult res) const
@@ -177,7 +177,7 @@ public:
     virtual void OnLeave() { }
 
     // this function is called when data is dropped at position (x, y) - if it
-    // returns TRUE, OnData() will be called immediately afterwards which will
+    // returns true, OnData() will be called immediately afterwards which will
     // allow to retrieve the data dropped.
     virtual bool OnDrop(wxCoord x, wxCoord y) = 0;
 
@@ -189,7 +189,7 @@ public:
     virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def) = 0;
 
     // may be called *only* from inside OnData() and will fill m_dataObject
-    // with the data from the drop source if it returns TRUE
+    // with the data from the drop source if it returns true
     virtual bool GetData() = 0;
 
 protected:
