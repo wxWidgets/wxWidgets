@@ -247,7 +247,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
   
     dc.DrawText( "TIFF handler", 30, 1515 );
     if (my_horse_tiff && my_horse_tiff->Ok()) 
-        dc.DrawBitmap( *my_horse_pnm, 30, 1530 );
+        dc.DrawBitmap( *my_horse_tiff, 30, 1530 );
 
     if (my_smile_xbm && my_smile_xbm->Ok()) 
     {
