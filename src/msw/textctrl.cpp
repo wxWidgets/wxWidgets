@@ -144,6 +144,8 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
 #ifdef __WIN16__
     EVT_ERASE_BACKGROUND(wxTextCtrl::OnEraseBackground)
 #endif
+
+    EVT_SET_FOCUS(wxTextCtrl::OnSetFocus)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -162,6 +164,7 @@ void wxTextCtrl::Init()
 
     m_privateContextMenu = NULL;
     m_suppressNextUpdate = FALSE;
+    m_isNativeCaretShown = true;
 }
 
 wxTextCtrl::~wxTextCtrl()
@@ -1241,6 +1244,27 @@ bool wxTextCtrl::CanRedo() const
 }
 
 // ----------------------------------------------------------------------------
+// caret handling (Windows only)
+// ----------------------------------------------------------------------------
+
+bool wxTextCtrl::ShowNativeCaret(bool show)
+{
+    if ( show != m_isNativeCaretShown )
+    {
+        if ( !(show ? ::ShowCaret(GetHwnd()) : ::HideCaret(GetHwnd())) )
+        {
+            // not an error, may simply indicate that it's not shown/hidden
+            // yet (i.e. it had been hidden/showh 2 times before)
+            return false;
+        }
+
+        m_isNativeCaretShown = show;
+    }
+
+    return true;
+}
+
+// ----------------------------------------------------------------------------
 // implemenation details
 // ----------------------------------------------------------------------------
 
@@ -1709,6 +1733,15 @@ void wxTextCtrl::OnRightClick(wxMouseEvent& event)
     else
 #endif
     event.Skip();
+}
+
+void wxTextCtrl::OnSetFocus(wxFocusEvent& event)
+{
+    // be sure the caret remains invisible if the user had hidden it
+    if ( !m_isNativeCaretShown )
+    {
+        ::HideCaret(GetHwnd());
+    }
 }
 
 // the rest of the file only deals with the rich edit controls

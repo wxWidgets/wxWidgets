@@ -128,6 +128,11 @@ public:
     virtual void SetSelection(long from, long to);
     virtual void SetEditable(bool editable);
 
+    // Caret handling (Windows only)
+
+    bool ShowNativeCaret(bool show = true);
+    bool HideNativeCaret() { return ShowNativeCaret(false); }
+
     // Implementation from now on
     // --------------------------
 
@@ -183,6 +188,10 @@ public:
     // Show a context menu for Rich Edit controls (the standard
     // EDIT control has one already)
     void OnRightClick(wxMouseEvent& event);
+
+    // be sure the caret remains invisible if the user
+    // called HideNativeCaret() before
+    void OnSetFocus(wxFocusEvent& event);
 
 protected:
     // common part of all ctors
@@ -245,6 +254,8 @@ private:
     DECLARE_DYNAMIC_CLASS(wxTextCtrl)
 
     wxMenu* m_privateContextMenu;
+
+    bool m_isNativeCaretShown;
 };
 
 #endif
