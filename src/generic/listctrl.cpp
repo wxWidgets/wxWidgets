@@ -3203,6 +3203,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
 
         wxListEvent le( command, GetParent()->GetId() );
         le.SetEventObject( GetParent() );
+        le.m_itemIndex = current;
         le.m_pointDrag = m_dragStart;
         GetParent()->GetEventHandler()->ProcessEvent( le );
 
