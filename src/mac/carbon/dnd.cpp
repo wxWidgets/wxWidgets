@@ -173,6 +173,7 @@ bool wxDropTarget::GetData()
     {
       UInt16 items ;
       OSErr result;
+      bool firstFileAdded = false ;
       CountDragItems((DragReference)m_currentDrag, &items);
       for (UInt16 index = 1; index <= items; ++index) 
       {
@@ -215,7 +216,13 @@ bool wxDropTarget::GetData()
                   {
                     HFSFlavor* theFile = (HFSFlavor*) theData ;
                     wxString name = wxMacFSSpec2MacFilename( &theFile->fileSpec ) ;
-                    ((wxFileDataObject*)m_dataObject)->AddFile( name ) ;
+                    if (  firstFileAdded )
+                    	((wxFileDataObject*)m_dataObject)->AddFile( name ) ;
+                    else
+                    {
+                    	((wxFileDataObject*)m_dataObject)->SetData( 0 , name.c_str() ) ;
+                    	firstFileAdded = true ;	
+                    }
                   }
                   else
                   {
