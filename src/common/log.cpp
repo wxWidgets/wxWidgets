@@ -481,8 +481,8 @@ void wxLogGui::DoLog(wxLogLevel level, const char *szString)
 {
   switch ( level ) {
     case wxLOG_Info:
-    case wxLOG_Message:
       if ( GetVerbose() )
+    case wxLOG_Message:
         if ( !m_bErrors ) {
           m_aMessages.Add(szString);
           m_bHasMessages = TRUE;
