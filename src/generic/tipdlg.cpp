@@ -241,9 +241,6 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
 
     wxStaticText *text = new wxStaticText(this, wxID_ANY, _("Did you know..."));
 
-    // Currently this causes the bottom half to be chopped off,
-    // so disable the large font
-#ifndef __WXMSW__
     if (!isPda)
     {
         wxFont font = text->GetFont();
@@ -251,7 +248,6 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
         font.SetWeight(wxFONTWEIGHT_BOLD);
         text->SetFont(font);
     }
-#endif
 
     m_text = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
                             wxDefaultPosition, wxSize(200, 160),
