@@ -7,10 +7,12 @@ intelligent Frame.  This one has a menu and a statusbar, is able to
 save and reload doodles, clear the workspace, and has a simple control
 panel for setting color and line thickness in addition to the popup
 menu that DoodleWindow provides.  There is also a nice About dialog
-implmented using an wxHtmlWindow.
+implmented using an wx.html.HtmlWindow.
 """
 
-from wxPython.wx import *
+import wx
+import wx.html
+from wx.lib import buttons        # for generic button classes
 from doodle import DoodleWindow
 
 import os, cPickle
@@ -18,25 +20,28 @@ import os, cPickle
 
 #----------------------------------------------------------------------
 
-idNEW    = 11001
-idOPEN   = 11002
-idSAVE   = 11003
-idSAVEAS = 11004
-idCLEAR  = 11005
-idEXIT   = 11006
-idABOUT  = 11007
+wx.RegisterId(5000)  # Give a high starting value for the IDs, just for kicks
+
+idNEW    = wx.NewId()
+idOPEN   = wx.NewId()
+idSAVE   = wx.NewId()
+idSAVEAS = wx.NewId()
+idCLEAR  = wx.NewId()
+idEXIT   = wx.NewId()
+idABOUT  = wx.NewId()
 
 
-class DoodleFrame(wxFrame):
+
+class DoodleFrame(wx.Frame):
     """
     A DoodleFrame contains a DoodleWindow and a ControlPanel and manages
-    their layout with a wxBoxSizer.  A menu and associated event handlers
+    their layout with a wx.BoxSizer.  A menu and associated event handlers
     provides for saving a doodle to a file, etc.
     """
     title = "Do a doodle"
     def __init__(self, parent):
-        wxFrame.__init__(self, parent, -1, self.title, size=(800,600),
-                         style=wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE)
+        wx.Frame.__init__(self, parent, -1, self.title, size=(800,600),
+                         style=wx.DEFAULT_FRAME_STYLE | wx.NO_FULL_REPAINT_ON_RESIZE)
         self.CreateStatusBar()
         self.MakeMenu()
         self.filename = None
@@ -47,9 +52,9 @@ class DoodleFrame(wxFrame):
         # Create a sizer to layout the two windows side-by-side.
         # Both will grow vertically, the doodle window will grow
         # horizontally as well.
-        box = wxBoxSizer(wxHORIZONTAL)
-        box.Add(cPanel, 0, wxEXPAND)
-        box.Add(self.doodle, 1, wxEXPAND)
+        box = wx.BoxSizer(wx.HORIZONTAL)
+        box.Add(cPanel, 0, wx.EXPAND)
+        box.Add(self.doodle, 1, wx.EXPAND)
 
         # Tell the frame that it should layout itself in response to
         # size events.
@@ -73,15 +78,19 @@ class DoodleFrame(wxFrame):
                 f.close()
                 self.doodle.SetLinesData(data)
             except cPickle.UnpicklingError:
-                wxMessageBox("%s is not a doodle file." % self.filename,
-                             "oops!", style=wxOK|wxICON_EXCLAMATION)
+                wx.MessageBox("%s is not a doodle file." % self.filename,
+                             "oops!", style=wx.OK|wx.ICON_EXCLAMATION)
 
 
     def MakeMenu(self):
         # create the file menu
-        menu1 = wxMenu()
-        menu1.Append(idOPEN, "&Open", "Open a doodle file")
-        menu1.Append(idSAVE, "&Save", "Save the doodle")
+        menu1 = wx.Menu()
+
+        # Using the "\tKeyName" syntax automatically creates a
+        # wx.AcceleratorTable for this frame and binds the keys to
+        # the menu items.
+        menu1.Append(idOPEN, "&Open\tCtrl-O", "Open a doodle file")
+        menu1.Append(idSAVE, "&Save\tCtrl-S", "Save the doodle")
         menu1.Append(idSAVEAS, "Save &As", "Save the doodle in a new file")
         menu1.AppendSeparator()
         menu1.Append(idCLEAR, "&Clear", "Clear the current doodle")
@@ -89,30 +98,30 @@ class DoodleFrame(wxFrame):
         menu1.Append(idEXIT, "E&xit", "Terminate the application")
 
         # and the help menu
-        menu2 = wxMenu()
-        menu2.Append(idABOUT, "&About", "Display the gratuitous 'about this app' thingamajig")
+        menu2 = wx.Menu()
+        menu2.Append(idABOUT, "&About\tCtrl-H", "Display the gratuitous 'about this app' thingamajig")
 
         # and add them to a menubar
-        menuBar = wxMenuBar()
+        menuBar = wx.MenuBar()
         menuBar.Append(menu1, "&File")
         menuBar.Append(menu2, "&Help")
         self.SetMenuBar(menuBar)
 
-        EVT_MENU(self, idOPEN,   self.OnMenuOpen)
-        EVT_MENU(self, idSAVE,   self.OnMenuSave)
-        EVT_MENU(self, idSAVEAS, self.OnMenuSaveAs)
-        EVT_MENU(self, idCLEAR,  self.OnMenuClear)
-        EVT_MENU(self, idEXIT,   self.OnMenuExit)
-        EVT_MENU(self, idABOUT,  self.OnMenuAbout)
+        wx.EVT_MENU(self, idOPEN,   self.OnMenuOpen)
+        wx.EVT_MENU(self, idSAVE,   self.OnMenuSave)
+        wx.EVT_MENU(self, idSAVEAS, self.OnMenuSaveAs)
+        wx.EVT_MENU(self, idCLEAR,  self.OnMenuClear)
+        wx.EVT_MENU(self, idEXIT,   self.OnMenuExit)
+        wx.EVT_MENU(self, idABOUT,  self.OnMenuAbout)
 
 
 
     wildcard = "Doodle files (*.ddl)|*.ddl|All files (*.*)|*.*"
 
     def OnMenuOpen(self, event):
-        dlg = wxFileDialog(self, "Open doodle file...", os.getcwd(),
-                           style=wxOPEN, wildcard = self.wildcard)
-        if dlg.ShowModal() == wxID_OK:
+        dlg = wx.FileDialog(self, "Open doodle file...", os.getcwd(),
+                           style=wx.OPEN, wildcard = self.wildcard)
+        if dlg.ShowModal() == wx.ID_OK:
             self.filename = dlg.GetPath()
             self.ReadFile()
             self.SetTitle(self.title + ' -- ' + self.filename)
@@ -127,10 +136,10 @@ class DoodleFrame(wxFrame):
 
 
     def OnMenuSaveAs(self, event):
-        dlg = wxFileDialog(self, "Save doodle as...", os.getcwd(),
-                           style=wxSAVE | wxOVERWRITE_PROMPT,
+        dlg = wx.FileDialog(self, "Save doodle as...", os.getcwd(),
+                           style=wx.SAVE | wx.OVERWRITE_PROMPT,
                            wildcard = self.wildcard)
-        if dlg.ShowModal() == wxID_OK:
+        if dlg.ShowModal() == wx.ID_OK:
             filename = dlg.GetPath()
             if not os.path.splitext(filename)[1]:
                 filename = filename + '.ddl'
@@ -159,7 +168,7 @@ class DoodleFrame(wxFrame):
 #----------------------------------------------------------------------
 
 
-class ControlPanel(wxPanel):
+class ControlPanel(wx.Panel):
     """
     This class implements a very simple control panel for the DoodleWindow.
     It creates buttons for each of the colours and thickneses supported by
@@ -167,36 +176,51 @@ class ControlPanel(wxPanel):
     also a little window that shows an example doodleLine in the selected
     values.  Nested sizers are used for layout.
     """
+
+    BMP_SIZE = 16
+    BMP_BORDER = 3
+
     def __init__(self, parent, ID, doodle):
-        wxPanel.__init__(self, parent, ID, style=wxRAISED_BORDER)
+        wx.Panel.__init__(self, parent, ID, style=wx.RAISED_BORDER)
 
         numCols = 4
         spacing = 4
 
+        btnSize = wx.Size(self.BMP_SIZE + 2*self.BMP_BORDER,
+                          self.BMP_SIZE + 2*self.BMP_BORDER)
+
         # Make a grid of buttons for each colour.  Attach each button
         # event to self.OnSetColour.  The button ID is the same as the
         # key in the colour dictionary.
+        self.clrBtns = {}
         colours = doodle.menuColours
         keys = colours.keys()
         keys.sort()
-        cGrid = wxGridSizer(cols=numCols, hgap=2, vgap=2)
+        cGrid = wx.GridSizer(cols=numCols, hgap=2, vgap=2)
         for k in keys:
-            bmp = self.MakeBitmap(wxNamedColour(colours[k]))
-            b = wxBitmapButton(self, k, bmp)
-            EVT_BUTTON(self, k, self.OnSetColour)
+            bmp = self.MakeBitmap(colours[k])
+            b = buttons.GenBitmapToggleButton(self, k, bmp, size=btnSize )
+            b.SetBezelWidth(1)
+            b.SetUseFocusIndicator(False)
+            wx.EVT_BUTTON(self, k, self.OnSetColour)
             cGrid.Add(b, 0)
+            self.clrBtns[colours[k]] = b
+        self.clrBtns[colours[keys[0]]].SetToggle(True)
 
-        # Save the button size so we can use it for the number buttons
-        btnSize = b.GetSize()
 
         # Make a grid of buttons for the thicknesses.  Attach each button
         # event to self.OnSetThickness.  The button ID is the same as the
         # thickness value.
-        tGrid = wxGridSizer(cols=numCols, hgap=2, vgap=2)
+        self.thknsBtns = {}
+        tGrid = wx.GridSizer(cols=numCols, hgap=2, vgap=2)
         for x in range(1, doodle.maxThickness+1):
-            b = wxButton(self, x, str(x), size=btnSize)
-            EVT_BUTTON(self, x, self.OnSetThickness)
+            b = buttons.GenToggleButton(self, x, str(x), size=btnSize)
+            b.SetBezelWidth(1)
+            b.SetUseFocusIndicator(False)
+            wx.EVT_BUTTON(self, x, self.OnSetThickness)
             tGrid.Add(b, 0)
+            self.thknsBtns[x] = b
+        self.thknsBtns[1].SetToggle(True)
 
         # Make a colour indicator window, it is registerd as a listener
         # with the doodle window so it will be notified when the settings
@@ -208,10 +232,10 @@ class ControlPanel(wxPanel):
 
         # Make a box sizer and put the two grids and the indicator
         # window in it.
-        box = wxBoxSizer(wxVERTICAL)
-        box.Add(cGrid, 0, wxALL, spacing)
-        box.Add(tGrid, 0, wxALL, spacing)
-        box.Add(ci, 0, wxEXPAND|wxALL, spacing)
+        box = wx.BoxSizer(wx.VERTICAL)
+        box.Add(cGrid, 0, wx.ALL, spacing)
+        box.Add(tGrid, 0, wx.ALL, spacing)
+        box.Add(ci, 0, wx.EXPAND|wx.ALL, spacing)
         self.SetSizer(box)
         self.SetAutoLayout(True)
 
@@ -224,15 +248,15 @@ class ControlPanel(wxPanel):
     def MakeBitmap(self, colour):
         """
         We can create a bitmap of whatever we want by simply selecting
-        it into a wxMemoryDC and drawing on it.  In this case we just set
+        it into a wx.MemoryDC and drawing on it.  In this case we just set
         a background brush and clear the dc.
         """
-        bmp = wxEmptyBitmap(16,16)
-        dc = wxMemoryDC()
+        bmp = wx.EmptyBitmap(self.BMP_SIZE, self.BMP_SIZE)
+        dc = wx.MemoryDC()
         dc.SelectObject(bmp)
-        dc.SetBackground(wxBrush(colour))
+        dc.SetBackground(wx.Brush(colour))
         dc.Clear()
-        dc.SelectObject(wxNullBitmap)
+        dc.SelectObject(wx.NullBitmap)
         return bmp
 
 
@@ -241,6 +265,10 @@ class ControlPanel(wxPanel):
         Use the event ID to get the colour, set that colour in the doodle.
         """
         colour = self.doodle.menuColours[event.GetId()]
+        if colour != self.doodle.colour:
+            # untoggle the old colour button
+            self.clrBtns[self.doodle.colour].SetToggle(False)
+        # set the new colour
         self.doodle.SetColour(colour)
 
 
@@ -248,22 +276,28 @@ class ControlPanel(wxPanel):
         """
         Use the event ID to set the thickness in the doodle.
         """
-        self.doodle.SetThickness(event.GetId())
+        thickness = event.GetId()
+        if thickness != self.doodle.thickness:
+            # untoggle the old thickness button
+            self.thknsBtns[self.doodle.thickness].SetToggle(False)
+        # set the new colour
+        self.doodle.SetThickness(thickness)
+
 
 
 #----------------------------------------------------------------------
 
-class ColourIndicator(wxWindow):
+class ColourIndicator(wx.Window):
     """
     An instance of this class is used on the ControlPanel to show
     a sample of what the current doodle line will look like.
     """
     def __init__(self, parent):
-        wxWindow.__init__(self, parent, -1, style=wxSUNKEN_BORDER)
-        self.SetBackgroundColour(wxWHITE)
-        self.SetSize(wxSize(-1, 45))
+        wx.Window.__init__(self, parent, -1, style=wx.SUNKEN_BORDER)
+        self.SetBackgroundColour(wx.WHITE)
+        self.SetSize( (-1, 45) )
         self.colour = self.thickness = None
-        EVT_PAINT(self, self.OnPaint)
+        wx.EVT_PAINT(self, self.OnPaint)
 
 
     def Update(self, colour, thickness):
@@ -281,10 +315,10 @@ class ColourIndicator(wxWindow):
         This method is called when all or part of the window needs to be
         redrawn.
         """
-        dc = wxPaintDC(self)
+        dc = wx.PaintDC(self)
         if self.colour:
             sz = self.GetClientSize()
-            pen = wxPen(wxNamedColour(self.colour), self.thickness)
+            pen = wx.Pen(self.colour, self.thickness)
             dc.BeginDrawing()
             dc.SetPen(pen)
             dc.DrawLine(10, sz.height/2, sz.width-10, sz.height/2)
@@ -293,7 +327,7 @@ class ColourIndicator(wxWindow):
 
 #----------------------------------------------------------------------
 
-class DoodleAbout(wxDialog):
+class DoodleAbout(wx.Dialog):
     """ An about box that uses an HTML window """
 
     text = '''
@@ -318,44 +352,43 @@ instructions: </p>
 
 <p><b>SuperDoodle</b> and <b>wxPython</b> are brought to you by
 <b>Robin Dunn</b> and <b>Total Control Software</b>, Copyright
-&copy; 1997-2001.</p>
+&copy; 1997-2003.</p>
 </body>
 </html>
 '''
 
     def __init__(self, parent):
-        wxDialog.__init__(self, parent, -1, 'About SuperDoodle',
-                          size=wxSize(420, 380))
-        from wxPython.html import wxHtmlWindow
+        wx.Dialog.__init__(self, parent, -1, 'About SuperDoodle',
+                          size=(420, 380) )
 
-        html = wxHtmlWindow(self, -1)
+        html = wx.html.HtmlWindow(self, -1)
         html.SetPage(self.text)
-        button = wxButton(self, wxID_OK, "Okay")
+        button = wx.Button(self, wx.ID_OK, "Okay")
 
         # constraints for the html window
-        lc = wxLayoutConstraints()
-        lc.top.SameAs(self, wxTop, 5)
-        lc.left.SameAs(self, wxLeft, 5)
-        lc.bottom.SameAs(button, wxTop, 5)
-        lc.right.SameAs(self, wxRight, 5)
+        lc = wx.LayoutConstraints()
+        lc.top.SameAs(self, wx.Top, 5)
+        lc.left.SameAs(self, wx.Left, 5)
+        lc.bottom.SameAs(button, wx.Top, 5)
+        lc.right.SameAs(self, wx.Right, 5)
         html.SetConstraints(lc)
 
         # constraints for the button
-        lc = wxLayoutConstraints()
-        lc.bottom.SameAs(self, wxBottom, 5)
-        lc.centreX.SameAs(self, wxCentreX)
+        lc = wx.LayoutConstraints()
+        lc.bottom.SameAs(self, wx.Bottom, 5)
+        lc.centreX.SameAs(self, wx.CentreX)
         lc.width.AsIs()
         lc.height.AsIs()
         button.SetConstraints(lc)
 
         self.SetAutoLayout(True)
         self.Layout()
-        self.CentreOnParent(wxBOTH)
+        self.CentreOnParent(wx.BOTH)
 
 
 #----------------------------------------------------------------------
 
-class DoodleApp(wxApp):
+class DoodleApp(wx.App):
     def OnInit(self):
         frame = DoodleFrame(None)
         frame.Show(True)
