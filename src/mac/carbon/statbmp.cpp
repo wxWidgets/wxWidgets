@@ -19,7 +19,7 @@
 #include "wx/dcclient.h"
 
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap, wxStaticBitmapBase)
+IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap, wxControl)
 #endif
 
 /*

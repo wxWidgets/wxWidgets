@@ -26,6 +26,8 @@
 #if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxGDIObject)
 IMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject)
+IMPLEMENT_ABSTRACT_CLASS(wxBitmapBase , wxGDIObject )
+IMPLEMENT_ABSTRACT_CLASS(wxBitmapHandlerBase, wxObject ) 
 #endif
 
 #ifdef __UNIX__
@@ -240,6 +242,12 @@ wxBitmapRefData::~wxBitmapRefData()
 }
 
 wxList wxBitmap::sm_handlers;
+
+
+bool wxBitmap::CopyFromIcon(const wxIcon& icon)
+{
+    Ref(icon) ;
+}
 
 wxBitmap::wxBitmap()
 {

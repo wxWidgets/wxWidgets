@@ -107,7 +107,16 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
 	MacPreControlCreate( parent , id ,  "" , pos , mySize ,style, validator , name , &bounds , title ) ;
 
-	m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , "\p" , false , 0 , 0 , 1, 
+    if ( m_windowStyle & wxTE_MULTILINE )
+    {
+        wxASSERT_MSG( !(m_windowStyle & wxTE_PROCESS_ENTER),
+                      wxT("wxTE_PROCESS_ENTER style is ignored for multiline text controls (they always process it)") );
+
+        m_windowStyle |= wxTE_PROCESS_ENTER;
+    }
+
+
+	m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , "\p" , true , 0 , 0 , 1, 
 	  	( style & wxTE_PASSWORD ) ? kControlEditTextPasswordProc : kControlEditTextProc , (long) this ) ;
 	MacPostControlCreate() ;
 
@@ -653,7 +662,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 	keychar = short(ev->message & charCodeMask);
 	keycode = short(ev->message & keyCodeMask) >> 8 ;
 	UMAHandleControlKey( m_macControl , keycode , keychar , ev->modifiers ) ;
-	if ( keychar >= 0x20 || event.KeyCode() == WXK_RETURN)
+	if ( keychar >= 0x20 || event.KeyCode() == WXK_RETURN || event.KeyCode() == WXK_DELETE || event.KeyCode() == WXK_BACK)
 	{
         wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
         event.SetString( GetValue() ) ;

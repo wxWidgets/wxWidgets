@@ -181,28 +181,6 @@ void wxRadioBox::Enable(int item, bool enable)
     	}
 }
 
-
-//-------------------------------------------------------------------------------------
-// 		¥ FindString
-//-------------------------------------------------------------------------------------
-// Finds a button matching the given string, returning the position if found 
-// or -1 if not found
-
-int wxRadioBox::FindString(const wxString& s) const
-{
-    int i;
-    wxRadioButton *current;
-    
-    current=m_radioButtonCycle;
-    for (i = 0; i < m_noItems; i++)
-    {
-        if (s == current->GetLabel())
-            return i;
-    	current=current->NextInCycle();
-    }
-    return -1;
-}
-
 //-------------------------------------------------------------------------------------
 // 		¥ GetLabel()
 //-------------------------------------------------------------------------------------
@@ -218,7 +196,7 @@ wxString wxRadioBox::GetLabel() const
 //-------------------------------------------------------------------------------------
 // Returns the label for the given button
 
-wxString wxRadioBox::GetLabel(int item) const
+wxString wxRadioBox::GetString(int item) const
 {
    	int i;
     wxRadioButton *current;
@@ -255,31 +233,6 @@ int wxRadioBox::GetSelection() const
 }
 
 //-------------------------------------------------------------------------------------
-// 		¥ GetString
-//-------------------------------------------------------------------------------------
-// Find string for position
-
-wxString wxRadioBox::GetString(int item) const
-{
-
-    return GetLabel(item);
-}
-
-//-------------------------------------------------------------------------------------
-// 		¥ GetStringSelection
-//-------------------------------------------------------------------------------------
-// Returns the selected string
-
-wxString wxRadioBox::GetStringSelection () const
-{
-    int sel = GetSelection ();
-    if (sel > -1)
-        return this->GetString (sel);
-    else
-        return wxString("");
-}
-
-//-------------------------------------------------------------------------------------
 // 		¥ Number
 //-------------------------------------------------------------------------------------
 // Returns the number of buttons in the radiobox
@@ -302,7 +255,7 @@ void wxRadioBox::SetLabel(const wxString& label)
 //-------------------------------------------------------------------------------------
 // Sets the label of a given button
 
-void wxRadioBox::SetLabel(int item,const wxString& label)
+void wxRadioBox::SetString(int item,const wxString& label)
 {
    	int i;
     wxRadioButton *current;
@@ -339,24 +292,6 @@ void wxRadioBox::SetSelection(int item)
     	}
     current->SetValue(true);
     
-}
-
-//-------------------------------------------------------------------------------------
-// 		¥ SetStringSelection
-//-------------------------------------------------------------------------------------
-// Sets a button by passing the desired string. This does not cause 
-// wxEVT_COMMAND_RADIOBOX_SELECTED event to get emitted
-
-bool wxRadioBox::SetStringSelection (const wxString& s)
-{
-    int sel = FindString (s);
-    if (sel > -1)
-    {
-        SetSelection (sel);
-        return TRUE;
-    }
-    else
-        return FALSE;
 }
 
 //-------------------------------------------------------------------------------------
@@ -479,15 +414,15 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 	maxHeight=-1;
 	for (i = 0 ; i < m_noItems; i++)
 		{
-		GetTextExtent(GetLabel(i), &eachWidth[i], &eachHeight[i]);
+		GetTextExtent(GetString(i), &eachWidth[i], &eachHeight[i]);
 		eachWidth[i] = (int)(eachWidth[i] + RADIO_SIZE);
 		eachHeight[i] = (int)((3*eachHeight[i])/2);
 		if (maxWidth<eachWidth[i]) maxWidth = eachWidth[i];
 		if (maxHeight<eachHeight[i]) maxHeight = eachHeight[i];
   		}
 
-	totHeight = GetNumVer() * (maxHeight + charHeight/2) + charHeight*3/2;
-	totWidth  = GetNumHor() * (maxWidth + charWidth) + charWidth;
+	totHeight = GetRowCount() * (maxHeight + charHeight/2) + charHeight*3/2;
+	totWidth  = GetColumnCount() * (maxWidth + charWidth) + charWidth;
 
     // only change our width/height if asked for
     if ( width == -1 )
@@ -550,7 +485,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 //-------------------------------------------------------------------------------------
 // return the number of buttons in the vertical direction
 
-int wxRadioBox::GetNumVer() const
+int wxRadioBox::GetRowCount() const
 {
     if ( m_windowStyle & wxRA_SPECIFY_ROWS )
     {
@@ -567,7 +502,7 @@ int wxRadioBox::GetNumVer() const
 //-------------------------------------------------------------------------------------
 // return the number of buttons in the horizontal direction
 
-int wxRadioBox::GetNumHor() const
+int wxRadioBox::GetColumnCount() const
 {
     if ( m_windowStyle & wxRA_SPECIFY_ROWS )
     {

@@ -296,6 +296,11 @@ void wxWindow::CaptureMouse()
     wxTheApp->s_captureWindow = this ;
 }
 
+wxWindow* wxWindowBase::GetCapture()
+{
+    return wxTheApp->s_captureWindow ;
+}
+
 void wxWindow::ReleaseMouse()
 {
     wxTheApp->s_captureWindow = NULL ;

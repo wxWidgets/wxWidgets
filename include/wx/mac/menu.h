@@ -74,9 +74,6 @@ public:
         // get the menu handle
     WXHMENU GetHMenu() const { return m_hMenu; }
 
-    // attach/detach menu to/from wxMenuBar
-    void Attach(wxMenuBar *menubar);
-    void Detach();
 	short MacGetMenuId() { return m_macMenuId ; }
 #if wxUSE_ACCEL
     // called by wxMenuBar to build its accel table from the accels of all menus
@@ -191,8 +188,6 @@ protected:
 #endif // WXWIN_COMPATIBILITY
 
     wxArrayString m_titles;
-
-    wxFrame      *m_menuBarFrame;
 
 #if wxUSE_ACCEL
     // the accelerator table for all accelerators in all our menus

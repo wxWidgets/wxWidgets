@@ -23,7 +23,7 @@
 // wxSpinCtrl
 //-----------------------------------------------------------------------------
 
-#if wxUSE_SPINBTN
+#if wxUSE_SPINBTN && !defined(__WXMAC__)
 
 #if !USE_SHARED_LIBRARY
      IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrl,wxControl)

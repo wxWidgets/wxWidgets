@@ -43,21 +43,25 @@ public:
              const wxValidator& val = wxDefaultValidator, const wxString& name = wxRadioBoxNameStr);
 
 // Specific functions (in wxWindows2 reference)
-	bool Enable(bool enable);
-	void Enable(int item, bool enable);
-	int FindString(const wxString& s) const;
-	wxString GetLabel() const;
-	wxString GetLabel(int item) const;
-	int GetSelection() const;
-	wxString GetString(int item) const;
-	virtual wxString GetStringSelection() const;
+	virtual void SetSelection(int item);
+	virtual int GetSelection() const;
+	
 	inline virtual int GetCount() const { return m_noItems; } ;
+
+	virtual wxString GetString(int item) const;
+	virtual void SetString(int item, const wxString& label) ;
+	
+	virtual void Enable(int item, bool enable);
+	virtual void Show(int item, bool show) ;
+
+    virtual int GetColumnCount() const ;
+    virtual int GetRowCount() const ;
+
+
+	bool Enable(bool enable);
+	wxString GetLabel() const;
 	void SetLabel(const wxString& label) ;
-	void SetLabel(int item, const wxString& label) ;
-	void SetSelection(int item);
-	virtual bool SetStringSelection(const wxString& s);
 	bool Show(bool show);
-	void Show(int item, bool show) ;
 
 // Other external functions 
 	void Command(wxCommandEvent& event);
@@ -79,8 +83,6 @@ protected:
 	virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
-	int GetNumHor() const;
-	int GetNumVer() const;
 
     DECLARE_EVENT_TABLE()
 };
