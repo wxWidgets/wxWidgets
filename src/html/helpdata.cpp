@@ -63,7 +63,7 @@ static char* ReadLine(char *line, char *buf)
 
 static int LINKAGEMODE IndexCompareFunc(const void *a, const void *b)
 {
-    return wxStrcmp(((wxHtmlContentsItem*)a)->m_Name, ((wxHtmlContentsItem*)b)->m_Name);
+    return wxStricmp(((wxHtmlContentsItem*)a)->m_Name, ((wxHtmlContentsItem*)b)->m_Name);
 }
 
 
