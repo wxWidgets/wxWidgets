@@ -457,6 +457,24 @@ bool wxDirExists(const wxString& dir)
 #endif // Win32/16
 }
 
+bool wxSetEnv(const wxString& var, const wxChar *value)
+{
+    // some compilers have putenv() or _putenv() or _wputenv() but it's better
+    // to always use Win32 function directly instead of dealing with them
+#if defined(__WIN32__)
+    if ( !::SetEnvironmentVariable(var, value) )
+    {
+        wxLogLastError(_T("SetEnvironmentVariable"));
+
+        return FALSE;
+    }
+
+    return TRUE;
+#else // no way to set env vars
+    return FALSE;
+#endif
+}
+
 // ----------------------------------------------------------------------------
 // process management
 // ----------------------------------------------------------------------------

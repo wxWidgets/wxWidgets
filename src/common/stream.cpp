@@ -1024,7 +1024,8 @@ wxBufferedInputStream::wxBufferedInputStream(wxInputStream& s,
 
 wxBufferedInputStream::~wxBufferedInputStream()
 {
-    m_parent_i_stream->SeekI(-m_i_streambuf->GetBytesLeft(), wxFromCurrent);
+    m_parent_i_stream->SeekI(-(off_t)m_i_streambuf->GetBytesLeft(),
+                             wxFromCurrent);
 
     delete m_i_streambuf;
 }

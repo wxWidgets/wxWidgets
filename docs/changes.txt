@@ -1,6 +1,13 @@
 wxWindows 2 Change Log
 ----------------------
 
+2.3.0
+-----
+
+wxMSW:
+
+- threads: bug in wxCondition::Broadcast fixed (Pieter van der Meulen)
+
 2.2.0
 -----
 
