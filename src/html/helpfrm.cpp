@@ -1069,7 +1069,7 @@ void wxHtmlHelpFrame::OptionsDialog()
     if (!m_NormalFace.empty())
         dlg.NormalFont->SetStringSelection(m_NormalFace);
     else
-        dlg.FixedFont->SetSelection(0);
+        dlg.NormalFont->SetSelection(0);
     if (!m_FixedFace.empty())
         dlg.FixedFont->SetStringSelection(m_FixedFace);
     else
