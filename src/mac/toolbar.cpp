@@ -253,26 +253,27 @@ bool wxToolBar::Realize()
             wxASSERT_MSG( container != NULL , "No valid mac container control" ) ;
             ::EmbedControl( m_macToolHandle , container ) ;
             
-            if ( GetWindowStyleFlag() & wxTB_HORIZONTAL )
+            if ( GetWindowStyleFlag() & wxTB_VERTICAL )
             {
-                x += (int)toolSize.x;
+                y += (int)toolSize.y;
             }
             else
             {
-                y += (int)toolSize.y;
+                x += (int)toolSize.x;
             }
             noButtons ++;
         }
         else
         {
             m_macToolHandles.Add( NULL ) ;
-            if ( GetWindowStyleFlag() & wxTB_HORIZONTAL )
+            
+            if ( GetWindowStyleFlag() & wxTB_VERTICAL )
             {
-                x += (int)toolSize.x / 4;
+                y += (int)toolSize.y / 4;
             }
             else
             {
-                y += (int)toolSize.y / 4;
+                x += (int)toolSize.x / 4;
             }
         }
         if ( toolbarrect.left + x + m_xMargin + kwxMacToolBarLeftMargin - m_x - localOrigin.h > maxWidth) {
@@ -390,46 +391,46 @@ void wxToolBar::MacSuperChangedPosition()
     int toolcount = 0 ;
     {
       WindowRef rootwindow = (WindowRef) MacGetRootWindow() ;
-    	while (node)
-    	{
-    		wxToolBarTool *tool = (wxToolBarTool *)node->Data();
-    		wxBitmapRefData * bmap = (wxBitmapRefData*) ( tool->GetNormalBitmap().GetRefData()) ;
-    		
-    		if(  !tool->IsSeparator()  )
-    		{
-    			Rect toolrect = { toolbarrect.top + m_yMargin + kwxMacToolBarTopMargin, toolbarrect.left + x + m_xMargin + kwxMacToolBarLeftMargin , 0 , 0 } ;
-    			toolrect.right = toolrect.left + toolSize.x ;
-    			toolrect.bottom = toolrect.top + toolSize.y ;
-    						
-    			ControlHandle m_macToolHandle = (ControlHandle) m_macToolHandles[toolcount++] ;
-    			
-            	{
-            		Rect contrlRect ;		
-            		GetControlBounds( m_macToolHandle , &contrlRect ) ; 
-            		int former_mac_x = contrlRect.left ;
-            		int former_mac_y = contrlRect.top ;
-            		int mac_x = toolrect.left ;
-            		int mac_y = toolrect.top ;
-             		        	
-            		if ( mac_x != former_mac_x || mac_y != former_mac_y )
-            		{
-            			{
-            				Rect inval = { former_mac_y , former_mac_x , former_mac_y + toolSize.y , former_mac_x + toolSize.y } ;
-            				InvalWindowRect( rootwindow , &inval ) ;
-            			}
-            	  		UMAMoveControl( m_macToolHandle , mac_x , mac_y ) ;
-            			{
-            				Rect inval = { mac_y , mac_x , mac_y + toolSize.y , mac_x + toolSize.y } ;
-            				InvalWindowRect( rootwindow , &inval ) ;
-            			}
-            		}
-            	}
-    			
-    			x += (int)toolSize.x;
-    			noButtons ++;
-    		}
-    		else
-    		{
+        while (node)
+        {
+            wxToolBarTool *tool = (wxToolBarTool *)node->Data();
+            wxBitmapRefData * bmap = (wxBitmapRefData*) ( tool->GetNormalBitmap().GetRefData()) ;
+            
+            if(  !tool->IsSeparator()  )
+            {
+                Rect toolrect = { toolbarrect.top + m_yMargin + kwxMacToolBarTopMargin, toolbarrect.left + x + m_xMargin + kwxMacToolBarLeftMargin , 0 , 0 } ;
+                toolrect.right = toolrect.left + toolSize.x ;
+                toolrect.bottom = toolrect.top + toolSize.y ;
+                            
+                ControlHandle m_macToolHandle = (ControlHandle) m_macToolHandles[toolcount++] ;
+                
+                {
+                    Rect contrlRect ;       
+                    GetControlBounds( m_macToolHandle , &contrlRect ) ; 
+                    int former_mac_x = contrlRect.left ;
+                    int former_mac_y = contrlRect.top ;
+                    int mac_x = toolrect.left ;
+                    int mac_y = toolrect.top ;
+                                
+                    if ( mac_x != former_mac_x || mac_y != former_mac_y )
+                    {
+                        {
+                            Rect inval = { former_mac_y , former_mac_x , former_mac_y + toolSize.y , former_mac_x + toolSize.y } ;
+                            InvalWindowRect( rootwindow , &inval ) ;
+                        }
+                        UMAMoveControl( m_macToolHandle , mac_x , mac_y ) ;
+                        {
+                            Rect inval = { mac_y , mac_x , mac_y + toolSize.y , mac_x + toolSize.y } ;
+                            InvalWindowRect( rootwindow , &inval ) ;
+                        }
+                    }
+                }
+                
+                x += (int)toolSize.x;
+                noButtons ++;
+            }
+            else
+            {
                 toolcount++ ;
                 x += (int)toolSize.x / 4;
             }
@@ -561,75 +562,75 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
   wxPaintDC dc(this) ;
   wxMacPortSetter helper(&dc) ;
   
-	Rect toolbarrect = { dc.YLOG2DEVMAC(0) , dc.XLOG2DEVMAC(0) , 
-		dc.YLOG2DEVMAC(m_height) , dc.XLOG2DEVMAC(m_width) } ;
-	UMADrawThemePlacard( &toolbarrect , IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
-	{
-		int index = 0 ;
-		for ( index = 0 ; index < m_macToolHandles.Count() ; ++index )
-		{
-			if ( m_macToolHandles[index] )
-			{
-				UMADrawControl( (ControlHandle) m_macToolHandles[index] ) ;
-			}
-		}
-	}
+    Rect toolbarrect = { dc.YLOG2DEVMAC(0) , dc.XLOG2DEVMAC(0) , 
+        dc.YLOG2DEVMAC(m_height) , dc.XLOG2DEVMAC(m_width) } ;
+    UMADrawThemePlacard( &toolbarrect , IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
+    {
+        int index = 0 ;
+        for ( index = 0 ; index < m_macToolHandles.Count() ; ++index )
+        {
+            if ( m_macToolHandles[index] )
+            {
+                UMADrawControl( (ControlHandle) m_macToolHandles[index] ) ;
+            }
+        }
+    }
 }
 
 void  wxToolBar::OnMouse( wxMouseEvent &event ) 
 {
-	if (event.GetEventType() == wxEVT_LEFT_DOWN || event.GetEventType() == wxEVT_LEFT_DCLICK )
-	{
-			
-		int x = event.m_x ;
-		int y = event.m_y ;
-		
-		MacClientToRootWindow( &x , &y ) ;
-			
-		ControlHandle	control ;
-		Point		localwhere ;
-		SInt16		controlpart ;
-		WindowRef	window = (WindowRef) MacGetRootWindow() ;
-		
-		localwhere.h = x ;
-		localwhere.v = y ;
-	
-		short modifiers = 0;
-		
-		if ( !event.m_leftDown && !event.m_rightDown )
-			modifiers  |= btnState ;
-	
-		if ( event.m_shiftDown )
-			modifiers |= shiftKey ;
-			
-		if ( event.m_controlDown )
-			modifiers |= controlKey ;
-	
-		if ( event.m_altDown )
-			modifiers |= optionKey ;
-	
-		if ( event.m_metaDown )
-			modifiers |= cmdKey ;
-	
-		controlpart = ::FindControl( localwhere , window , &control ) ;
-		{
-			if ( control && ::IsControlActive( control ) )
-			{
-				{
-					if ( controlpart == kControlIndicatorPart && !UMAHasAppearance() )
-						controlpart = ::HandleControlClick( control , localwhere , modifiers , (ControlActionUPP) NULL ) ;
-					else
-						controlpart = ::HandleControlClick( control , localwhere , modifiers , (ControlActionUPP) -1 ) ;
-					wxTheApp->s_lastMouseDown = 0 ;
-					if ( controlpart && ! ( ( UMAHasAppearance() || (controlpart != kControlIndicatorPart) ) 
-						&& (IsKindOf( CLASSINFO( wxScrollBar ) ) ) ) ) // otherwise we will get the event twice
-					{
-						MacHandleControlClick( control , controlpart ) ;
-					}
-				}
-			}
-		}
-	}
+    if (event.GetEventType() == wxEVT_LEFT_DOWN || event.GetEventType() == wxEVT_LEFT_DCLICK )
+    {
+            
+        int x = event.m_x ;
+        int y = event.m_y ;
+        
+        MacClientToRootWindow( &x , &y ) ;
+            
+        ControlHandle   control ;
+        Point       localwhere ;
+        SInt16      controlpart ;
+        WindowRef   window = (WindowRef) MacGetRootWindow() ;
+        
+        localwhere.h = x ;
+        localwhere.v = y ;
+    
+        short modifiers = 0;
+        
+        if ( !event.m_leftDown && !event.m_rightDown )
+            modifiers  |= btnState ;
+    
+        if ( event.m_shiftDown )
+            modifiers |= shiftKey ;
+            
+        if ( event.m_controlDown )
+            modifiers |= controlKey ;
+    
+        if ( event.m_altDown )
+            modifiers |= optionKey ;
+    
+        if ( event.m_metaDown )
+            modifiers |= cmdKey ;
+    
+        controlpart = ::FindControl( localwhere , window , &control ) ;
+        {
+            if ( control && ::IsControlActive( control ) )
+            {
+                {
+                    if ( controlpart == kControlIndicatorPart && !UMAHasAppearance() )
+                        controlpart = ::HandleControlClick( control , localwhere , modifiers , (ControlActionUPP) NULL ) ;
+                    else
+                        controlpart = ::HandleControlClick( control , localwhere , modifiers , (ControlActionUPP) -1 ) ;
+                    wxTheApp->s_lastMouseDown = 0 ;
+                    if ( controlpart && ! ( ( UMAHasAppearance() || (controlpart != kControlIndicatorPart) ) 
+                        && (IsKindOf( CLASSINFO( wxScrollBar ) ) ) ) ) // otherwise we will get the event twice
+                    {
+                        MacHandleControlClick( control , controlpart ) ;
+                    }
+                }
+            }
+        }
+    }
 }
 
 #endif // wxUSE_TOOLBAR
