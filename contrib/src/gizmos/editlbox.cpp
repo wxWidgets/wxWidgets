@@ -158,11 +158,11 @@ wxEditableListBox::wxEditableListBox(wxWindow *parent, wxWindowID id,
     subsizer->Add(m_bDown, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
 
 #if wxUSE_TOOLTIPS
-    if ( m_bEdit ) m_bEdit->SetToolTip(wxT("Edit item"));
-    if ( m_bNew ) m_bNew->SetToolTip(wxT("New item"));
-    if ( m_bDel ) m_bDel->SetToolTip(wxT("Delete item"));
-    m_bUp->SetToolTip(wxT("Move up"));
-    m_bDown->SetToolTip(wxT("Move down"));
+    if ( m_bEdit ) m_bEdit->SetToolTip(_("Edit item"));
+    if ( m_bNew ) m_bNew->SetToolTip(_("New item"));
+    if ( m_bDel ) m_bDel->SetToolTip(_("Delete item"));
+    m_bUp->SetToolTip(_("Move up"));
+    m_bDown->SetToolTip(_("Move down"));
 #endif
 
     subp->SetAutoLayout(TRUE);
