@@ -1522,10 +1522,12 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
                                        bool highlighted )
 {
     wxRect rect = r;
-    //m_owner->CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
+#if 0
+    m_owner->CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
 
     if ( !m_owner->IsExposed( rect ) )
         return;
+#endif
 
     // use our own flag if we maintain it
     if ( !IsVirtual() )
@@ -1596,14 +1598,12 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
 
         int width = m_owner->GetColumnWidth(col++);
 
-        dc->SetClippingRegion(x, rect.y, width, rect.height);
+        wxDCClipper clipper(*dc, x, rect.y, width, rect.height);
 
         if ( item->HasText() )
         {
             dc->DrawText( item->GetText(), x, rect.y );
         }
-
-        dc->DestroyClippingRegion();
 
         x = xOld + width;
 
