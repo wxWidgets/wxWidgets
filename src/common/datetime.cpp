@@ -1833,40 +1833,81 @@ bool wxDateTime::SetToWeekDay(WeekDay weekday,
     }
 }
 
-wxDateTime::wxDateTime_t wxDateTime::GetDayOfYear(const TimeZone& tz) const
+static inline
+wxDateTime::wxDateTime_t GetDayOfYearFromTm(const wxDateTime::Tm& tm)
 {
-    Tm tm(GetTm(tz));
-
-    return gs_cumulatedDays[IsLeapYear(tm.year)][tm.mon] + tm.mday;
+    return gs_cumulatedDays[wxDateTime::IsLeapYear(tm.year)][tm.mon] + tm.mday;
 }
 
-wxDateTime::wxDateTime_t wxDateTime::GetWeekOfYear(wxDateTime::WeekFlags flags,
-                                                   const TimeZone& tz) const
+wxDateTime::wxDateTime_t wxDateTime::GetDayOfYear(const TimeZone& tz) const
+{
+    return GetDayOfYearFromTm(GetTm(tz));
+}
+
+// convert Sun, Mon, ..., Sat into 6, 0, ..., 5
+static inline int ConvertWeekDayToMondayBase(int wd)
+{
+    return wd == wxDateTime::Sun ? 6 : wd - 1;
+}
+
+wxDateTime::wxDateTime_t
+wxDateTime::GetWeekOfYear(wxDateTime::WeekFlags flags, const TimeZone& tz) const
 {
     if ( flags == Default_First )
     {
         flags = GetCountry() == USA ? Sunday_First : Monday_First;
     }
 
-    wxDateTime_t nDayInYear = GetDayOfYear(tz);
-    wxDateTime_t week;
+    Tm tm(GetTm(tz));
+    wxDateTime_t nDayInYear = GetDayOfYearFromTm(tm);
 
-    WeekDay wd = GetWeekDay(tz);
+    int wdTarget = GetWeekDay(tz);
+    int wdYearStart = wxDateTime(1, Jan, GetYear()).GetWeekDay();
+    int week;
     if ( flags == Sunday_First )
     {
-        week = (nDayInYear - wd + 7) / 7;
+        // FIXME: First week is not calculated correctly.
+        week = (nDayInYear - wdTarget + 7) / 7;
+        if ( wdYearStart == Wed || wdYearStart == Thu )
+            week++;
     }
-    else
+    else // week starts with monday
     {
-        // have to shift the week days values
-        week = (nDayInYear - (wd - 1 + 7) % 7 + 7) / 7;
-    }
+        // adjust the weekdays to non-US style.
+        wdYearStart = ConvertWeekDayToMondayBase(wdYearStart);
+        wdTarget = ConvertWeekDayToMondayBase(wdTarget);
 
-    // FIXME some more elegant way??
-    WeekDay wdYearStart = wxDateTime(1, Jan, GetYear()).GetWeekDay();
-    if ( wdYearStart == Wed || wdYearStart == Thu )
-    {
-        week++;
+        // quoting from http://www.cl.cam.ac.uk/~mgk25/iso-time.html:
+        //
+        //      Week 01 of a year is per definition the first week that has the
+        //      Thursday in this year, which is equivalent to the week that
+        //      contains the fourth day of January. In other words, the first
+        //      week of a new year is the week that has the majority of its
+        //      days in the new year. Week 01 might also contain days from the
+        //      previous year and the week before week 01 of a year is the last
+        //      week (52 or 53) of the previous year even if it contains days
+        //      from the new year. A week starts with Monday (day 1) and ends
+        //      with Sunday (day 7).
+        //
+
+        // if Jan 1 is Thursday or less, it is in the first week of this year
+        if ( wdYearStart < 4 )
+        {
+            // count the number of entire weeks between Jan 1 and this date
+            week = (nDayInYear + wdYearStart + 6 - wdTarget)/7;
+
+            // be careful to check for overflow in the next year
+            if ( week == 53 && tm.mday - wdTarget > 28 )
+                    week = 1;
+        }
+        else // Jan 1 is in the last week of the previous year
+        {
+            // check if we happen to be at the last week of previous year:
+            if ( tm.mon == Jan && tm.mday < 8 - wdYearStart )
+                week = wxDateTime(31, Dec, GetYear()-1).GetWeekOfYear();
+            else
+                week = (nDayInYear + wdYearStart - 1 - wdTarget)/7;
+        }
     }
 
     return week;

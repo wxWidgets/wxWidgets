@@ -323,6 +323,7 @@ for n in range(20):
         { {  3, wxDateTime::Apr, 1925 },  1, wxDateTime::Fri, wxDateTime::Apr, 1925 },
         { { 21, wxDateTime::Mar, 2093 },  3, wxDateTime::Sat, wxDateTime::Mar, 2093 },
         { {  3, wxDateTime::Dec, 2074 }, -5, wxDateTime::Mon, wxDateTime::Dec, 2074 },
+
     };
 
     wxDateTime dt;
@@ -425,6 +426,8 @@ for n in range(20):
         { { 11, wxDateTime::Aug, 2079 }, 32, 2, 2, 223 },
         { {  2, wxDateTime::Feb, 2063 },  5, 1, 1,  33 },
         { { 16, wxDateTime::Oct, 1942 }, 42, 3, 3, 289 },
+        { { 30, wxDateTime::Dec, 2003 },  1, 5, 5, 364 },
+        { {  2, wxDateTime::Jan, 2004 },  1, 1, 1,   2 },
     };
 
     for ( size_t n = 0; n < WXSIZEOF(weekNumberTestDates); n++ )
