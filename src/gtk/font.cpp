@@ -147,37 +147,6 @@ wxFontRefData::~wxFontRefData()
 }
 
 // ----------------------------------------------------------------------------
-// wxNativeFontInfo
-// ----------------------------------------------------------------------------
-
-bool wxNativeFontInfo::FromString(const wxString& s)
-{
-    wxStringTokenizer tokenizer(s, _T(";"));
-
-    wxString token = tokenizer.GetNextToken();
-    //
-    //  Ignore the version for now
-    //
-
-    xFontName = tokenizer.GetNextToken();
-    if(!xFontName)
-        return FALSE;
-
-    return TRUE;
-}
-
-wxString wxNativeFontInfo::ToString() const
-{
-    wxString s;
-
-    s.Printf(_T("%d;%s"),
-             0,                         // version
-             xFontName.c_str());
-
-    return s;
-}
-
-// ----------------------------------------------------------------------------
 // wxFont
 // ----------------------------------------------------------------------------
 

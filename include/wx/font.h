@@ -114,7 +114,9 @@ public:
     virtual wxString GetFaceName() const = 0;
     virtual wxFontEncoding GetEncoding() const = 0;
     virtual wxNativeFontInfo *GetNativeFontInfo() const;
+
     wxString GetNativeFontInfoDesc() const;
+    wxString GetNativeFontInfoUserDesc() const;
 
     // change the font characteristics
     virtual void SetPointSize( int pointSize ) = 0;
@@ -125,7 +127,9 @@ public:
     virtual void SetUnderlined( bool underlined ) = 0;
     virtual void SetEncoding(wxFontEncoding encoding) = 0;
     virtual void SetNativeFontInfo(const wxNativeFontInfo& info);
+
     void SetNativeFontInfo(const wxString& info);
+    void SetNativeFontInfoUserDesc(const wxString& info);
 
     // translate the fonts into human-readable string (i.e. GetStyleString()
     // will return "wxITALIC" for an italic font, ...)

@@ -34,6 +34,7 @@
 
 #include "wx/gdicmn.h"
 #include "wx/fontutil.h" // for wxNativeFontInfo
+#include "wx/fontmap.h"
 
 #include "wx/tokenzr.h"
 
@@ -77,16 +78,16 @@ wxFont *wxFontBase::New(const wxString& strNativeFontDesc)
 
 wxNativeFontInfo *wxFontBase::GetNativeFontInfo() const
 {
-#if !defined(__WXGTK__) && !defined(__WXMSW__)
-    wxNativeFontInfo *fontInfo = new wxNativeFontInfo;
+#ifdef wxNO_NATIVE_FONTINFO
+    wxNativeFontInfo *fontInfo = new wxNativeFontInfo();
 
-    fontInfo->pointSize = GetPointSize();
-    fontInfo->family = GetFamily();
-    fontInfo->style = GetStyle();
-    fontInfo->weight = GetWeight();
-    fontInfo->underlined = GetUnderlined();
-    fontInfo->faceName = GetFaceName();
-    fontInfo->encoding = GetEncoding();
+    fontInfo->SetPointSize(GetPointSize());
+    fontInfo->SetFamily(GetFamily());
+    fontInfo->SetStyle((wxFontStyle)GetStyle());
+    fontInfo->SetWeight((wxFontWeight)GetWeight());
+    fontInfo->SetUnderlined(GetUnderlined());
+    fontInfo->SetFaceName(GetFaceName());
+    fontInfo->SetEncoding(GetEncoding());
 
     return fontInfo;
 #else
@@ -96,7 +97,7 @@ wxNativeFontInfo *wxFontBase::GetNativeFontInfo() const
 
 void wxFontBase::SetNativeFontInfo(const wxNativeFontInfo& info)
 {
-#if !defined(__WXGTK__) && !defined(__WXMSW__)
+#ifdef wxNO_NATIVE_FONTINFO
     SetPointSize(info.pointSize);
     SetFamily(info.family);
     SetStyle(info.style);
@@ -122,10 +123,32 @@ wxString wxFontBase::GetNativeFontInfoDesc() const
     return fontDesc;
 }
 
+wxString wxFontBase::GetNativeFontInfoUserDesc() const
+{
+    wxString fontDesc;
+    wxNativeFontInfo *fontInfo = GetNativeFontInfo();
+    if ( fontInfo )
+    {
+        fontDesc = fontInfo->ToUserString();
+        delete fontInfo;
+    }
+
+    return fontDesc;
+}
+
 void wxFontBase::SetNativeFontInfo(const wxString& info)
 {
     wxNativeFontInfo fontInfo;
     if ( !info.empty() && fontInfo.FromString(info) )
+    {
+        SetNativeFontInfo(fontInfo);
+    }
+}
+
+void wxFontBase::SetNativeFontInfoUserDesc(const wxString& info)
+{
+    wxNativeFontInfo fontInfo;
+    if ( !info.empty() && fontInfo.FromUserString(info) )
     {
         SetNativeFontInfo(fontInfo);
     }
@@ -203,11 +226,11 @@ wxString wxFontBase::GetWeightString() const
     }
 }
 
-#if !defined(__WXGTK__) && !defined(__WXMSW__)
-
 // ----------------------------------------------------------------------------
 // wxNativeFontInfo
 // ----------------------------------------------------------------------------
+
+#ifdef wxNO_NATIVE_FONTINFO
 
 // These are the generic forms of FromString()/ToString.
 //
@@ -238,12 +261,12 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
         return FALSE;
-    style = (int)l;
+    style = (wxFontStyle)l;
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
         return FALSE;
-    weight = (int)l;
+    weight = (wxFontWeight)l;
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
@@ -270,8 +293,8 @@ wxString wxNativeFontInfo::ToString() const
              0,                                 // version
              pointSize,
              family,
-             style,
-             weight,
+             (int)style,
+             (int)weight,
              underlined,
              faceName.GetData(),
              (int)encoding);
@@ -279,5 +302,220 @@ wxString wxNativeFontInfo::ToString() const
     return s;
 }
 
+void wxNativeFontInfo::Init()
+{
+    pointSize = wxNORMAL_FONT->GetPointSize();
+    family = wxFONTFAMILY_DEFAULT;
+    style = wxFONTSTYLE_NORMAL;
+    weight = wxFONTWEIGHT_NORMAL;
+    underlined = FALSE;
+    faceName.clear();
+    encoding = wxFONTENCODING_DEFAULT;
+}
+
+int wxNativeFontInfo::GetPointSize() const
+{
+    return pointSize;
+}
+
+wxFontStyle wxNativeFontInfo::GetStyle() const
+{
+    return style;
+}
+
+wxFontWeight wxNativeFontInfo::GetWeight() const
+{
+    return weight;
+}
+
+bool wxNativeFontInfo::GetUnderlined() const
+{
+    return underlined;
+}
+
+wxString wxNativeFontInfo::GetFaceName() const
+{
+    return faceName;
+}
+
+wxFontEncoding wxNativeFontInfo::GetEncoding() const
+{
+    return encoding;
+}
+
+void wxNativeFontInfo::SetPointSize(int pointsize)
+{
+    pointSize = pointsize;
+}
+
+void wxNativeFontInfo::SetStyle(wxFontStyle style_)
+{
+    style = style_;
+}
+
+void wxNativeFontInfo::SetWeight(wxFontWeight weight_)
+{
+    weight = weight_;
+}
+
+void wxNativeFontInfo::SetUnderlined(bool underlined_)
+{
+    underlined = underlined_;
+}
+
+void wxNativeFontInfo::SetFaceName(wxString facename_)
+{
+    facename = facename_;
+}
+
+void wxNativeFontInfo::SetEncoding(wxFontEncoding encoding_)
+{
+    encoding = encoding_;
+}
+
 #endif // generic wxNativeFontInfo implementation
+
+// conversion to/from user-readable string: this is used in the generic
+// versions and under MSW as well because there is no standard font description
+// format there anyhow (but there is a well-defined standard for X11 fonts used
+// by wxGTK and wxMotif)
+
+#if defined(wxNO_NATIVE_FONTINFO) || defined(__WXMSW__)
+
+wxString wxNativeFontInfo::ToUserString() const
+{
+    wxString desc;
+
+    // first put the adjectives, if any - this is English-centric, of course,
+    // but what else can we do?
+    if ( GetUnderlined() )
+    {
+        desc << _("underlined ");
+    }
+
+    switch ( GetWeight() )
+    {
+        default:
+            wxFAIL_MSG( _T("unknown font weight") );
+            // fall through
+
+        case wxFONTWEIGHT_NORMAL:
+            break;
+
+        case wxFONTWEIGHT_LIGHT:
+            desc << _("light ");
+            break;
+
+        case wxFONTWEIGHT_BOLD:
+            desc << _("bold ");
+            break;
+    }
+
+    switch ( GetStyle() )
+    {
+        default:
+            wxFAIL_MSG( _T("unknown font style") );
+            // fall through
+
+        case wxFONTSTYLE_NORMAL:
+            break;
+
+            // we don't distinguish between the two for now anyhow...
+        case wxFONTSTYLE_ITALIC:
+        case wxFONTSTYLE_SLANT:
+            desc << _("italic ");
+            break;
+    }
+
+    if ( !facename.empty() )
+    {
+        desc << facename << _T(' ');
+    }
+
+    if ( pointsize != wxNORMAL_FONT->GetPointSize() )
+    {
+        desc << pointsize;
+    }
+}
+
+bool wxNativeFontInfo::FromUserString(const wxString& s)
+{
+    // reset to the default state
+    Init();
+
+    // parse a more or less free form string
+    //
+    // TODO: we should handle at least the quoted facenames
+    wxStringTokenizer tokenizer(s, _T(";, "), wxTOKEN_STRTOK);
+
+    wxString face;
+    unsigned long size;
+    wxFontEncoding encoding;
+
+    while ( tokenizer.HasMoreTokens() )
+    {
+        wxString token = tokenizer.GetNextToken();
+
+        // normalize it
+        token.Trim(TRUE).Trim(FALSE).MakeLower();
+
+        // look for the known tokens
+        if ( token == _T("underlined") || token == _("underlined") )
+        {
+            SetUnderlined(TRUE);
+        }
+        else if ( token == _T("light") || token == _("light") )
+        {
+            SetWeight(wxFONTWEIGHT_LIGHT);
+        }
+        else if ( token == _T("bold") || token == _("bold") )
+        {
+            SetWeight(wxFONTWEIGHT_BOLD);
+        }
+        else if ( token == _T("italic") || token == _("italic") )
+        {
+            SetStyle(wxFONTSTYLE_ITALIC);
+        }
+        else if ( token.ToULong(&size) )
+        {
+            pointsize = (int)size;
+        }
+        else if ( (encoding = wxTheFontMapper->CharsetToEncoding(token, FALSE))
+                    != wxFONTENCODING_DEFAULT )
+        {
+            SetEncoding(encoding);
+        }
+        else // assume it is the face name
+        {
+            if ( !face.empty() )
+            {
+                face += _T(' ');
+            }
+
+            face += token;
+
+            // skip the code which resets face below
+            continue;
+        }
+
+        // if we had had the facename, we shouldn't continue appending tokens
+        // to it (i.e. "foo bold bar" shouldn't result in the facename "foo
+        // bar")
+        if ( !face.empty() )
+        {
+            SetFaceName(face);
+            face.clear();
+        }
+    }
+
+    // we might not have flushed it inside the loop
+    if ( !face.empty() )
+    {
+        SetFaceName(face);
+    }
+
+    return TRUE;
+}
+
+#endif // generic or wxMSW
 

@@ -426,26 +426,18 @@ void MyFrame::OnCheckNativeToFromString(wxCommandEvent& WXUNUSED(event))
         if ( fontInfo != font->GetNativeFontInfoDesc() )
             wxLogError(wxT("wxNativeFontInfo ToString()/FromString() broken!"));
         else
-            wxLogError(wxT("wxNativeFontInfo works: %s"), fontInfo.c_str());
+            wxLogMessage(wxT("wxNativeFontInfo works: %s"), fontInfo.c_str());
+
         delete font;
      }
 }
 
 void MyFrame::DoResizeFont(int diff)
 {
-    wxFont fontOld = m_canvas->GetTextFont();
+    wxFont font = m_canvas->GetTextFont();
 
-    DoChangeFont(
-        wxFont(
-               fontOld.GetPointSize() + diff,
-               fontOld.GetFamily(),
-               fontOld.GetStyle(),
-               fontOld.GetWeight(),
-               fontOld.GetUnderlined(),
-               fontOld.GetFaceName(),
-               fontOld.GetEncoding()
-              )
-    );
+    font.SetPointSize(font.GetPointSize() + diff);
+    DoChangeFont(font);
 }
 
 void MyFrame::DoChangeFont(const wxFont& font, const wxColour& col)
@@ -647,7 +639,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     if ( m_font.Ok() )
     {
-        wxString fontDesc = m_font.GetNativeFontInfoDesc();
+        wxString fontDesc = m_font.GetNativeFontInfoUserDesc();
         fontInfo.Printf(wxT("Native font info: %s"), fontDesc.c_str());
         dc.DrawText(fontInfo, 5, 5 + dc.GetCharHeight());
     }

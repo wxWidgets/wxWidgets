@@ -154,6 +154,91 @@ wxString wxNativeEncodingInfo::ToString() const
 }
 
 // ----------------------------------------------------------------------------
+// wxNativeFontInfo
+// ----------------------------------------------------------------------------
+
+void wxNativeFontInfo::Init()
+{
+    xFontName.clear();
+}
+
+bool wxNativeFontInfo::FromString(const wxString& s)
+{
+    wxStringTokenizer tokenizer(s, _T(";"));
+
+    // check the version
+    wxString token = tokenizer.GetNextToken();
+    if ( token != _T('0') )
+        return FALSE;
+
+    xFontName = tokenizer.GetNextToken();
+
+    // this should be the end
+    if ( tokenizer.HasMoreTokens() )
+        return FALSE;
+
+    return FromXFontName(xFontName);
+}
+
+wxString wxNativeFontInfo::ToString() const
+{
+    // 0 is the version
+    return wxString::Format(_T("%d;%s"), 0, GetXFontName().c_str());
+}
+
+bool wxNativeFontInfo::FromUserString(const wxString& s)
+{
+    return FromXFontName(s);
+}
+
+wxString wxNativeFontInfo::ToUserString() const
+{
+    return GetXFontName();
+}
+
+bool wxNativeFontInfo::FromXFontName(const wxString& xFontName)
+{
+    // TODO: we should be able to handle the font aliases here, but how?
+    wxStringTokenizer tokenizer(xFontName, _T("-"), wxTOKEN_STRTOK);
+
+    for ( size_t n = 0; n < WXSIZEOF(fontElements); n++ )
+    {
+        if ( !tokenizer.HasMoreTokens() )
+        {
+            // not enough elements in the XLFD - or maybe an alias
+            return FALSE;
+        }
+
+        fontElements[n] = tokenizer.GetNextToken();
+    }
+
+    // this should be all
+    return !tokenizer.HasMoreTokens();
+}
+
+wxString wxNativeFontInfo::GetXFontName() const
+{
+    if ( xFontName.empty() )
+    {
+        for ( size_t n = 0; n < WXSIZEOF(fontElements); n++ )
+        {
+            // replace the non specified elements with '*' except for the
+            // additional style which is usually just omitted
+            wxString elt = fontElements[n];
+            if ( elt.empty() && n != 5 )
+            {
+                elt = _T('*');
+            }
+
+            // const_cast
+            ((wxNativeFontInfo *)this)->xFontName << _T('-') << elt;
+        }
+    }
+
+    return xFontName;
+}
+
+// ----------------------------------------------------------------------------
 // common functions
 // ----------------------------------------------------------------------------
 
@@ -228,7 +313,7 @@ bool wxGetNativeFontEncoding(wxFontEncoding encoding,
             return FALSE;
     }
 
-   info->encoding = encoding;
+    info->encoding = encoding;
 
     return TRUE;
 }
