@@ -1,0 +1,15 @@
+Title wxMacPython
+Version 2.3.3
+Description wxMac and wxPython
+DefaultLocation /
+DeleteWarning 
+
+### Package Flags
+
+NeedsAuthorization YES
+Required NO
+Relocatable NO
+RequiresReboot NO
+UseUserMask NO
+OverwritePermissions NO
+InstallFat NO
