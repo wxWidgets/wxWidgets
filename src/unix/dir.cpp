@@ -117,8 +117,13 @@ wxDirData::~wxDirData()
 
 bool wxDirData::Read(wxString *filename)
 {
-    dirent *de = (dirent *)NULL;    // just to silent compiler warnings
+    dirent *de = (dirent *)NULL;    // just to silence compiler warnings
     bool matches = FALSE;
+
+    // speed up string concatenation in the loop a bit
+    wxString path = m_dirname;
+    path += _T('/');
+    path.reserve(path.length() + 255);
 
     while ( !matches )
     {
@@ -133,24 +138,25 @@ bool wxDirData::Read(wxString *filename)
         {
             if ( !(m_flags & wxDIR_DOTDOT) )
                 continue;
+
+            // we found a valid match
+            break;
         }
 
         // check the type now
-        if ( !(m_flags & wxDIR_FILES) &&
-             !wxDir::Exists(m_dirname + _T('/') + de->d_name) )
+        if ( !(m_flags & wxDIR_FILES) && !wxDir::Exists(path + de->d_name) )
         {
             // it's a file, but we don't want them
             continue;
         }
-        else if ( !(m_flags & wxDIR_DIRS) &&
-                  wxDir::Exists(m_dirname + _T('/') + de->d_name) )
+        else if ( !(m_flags & wxDIR_DIRS) && wxDir::Exists(path + de->d_name) )
         {
             // it's a dir, and we don't want it
             continue;
         }
 
         // finally, check the name
-        if ( !m_filespec )
+        if ( m_filespec.empty() )
         {
             matches = m_flags & wxDIR_HIDDEN ? TRUE : de->d_name[0] != '.';
         }
