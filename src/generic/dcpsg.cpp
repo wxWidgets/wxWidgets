@@ -744,7 +744,7 @@ void wxPostScriptDC::DoDrawRoundedRectangle (wxCoord x, wxCoord y, wxCoord width
         /* Draw rectangle anticlockwise */
         PsPrintf( wxT("newpath\n")
                   wxT("%d %d %d 90 180 arc\n")
-                  wxT("%d %d moveto\n")
+                  wxT("%d %d lineto\n")
                   wxT("%d %d %d 180 270 arc\n")
                   wxT("%d %d lineto\n")
                   wxT("%d %d %d 270 0 arc\n")
@@ -754,7 +754,7 @@ void wxPostScriptDC::DoDrawRoundedRectangle (wxCoord x, wxCoord y, wxCoord width
                   wxT("closepath\n")
                   wxT("fill\n"),
                 LogicalToDeviceX(x + rad), LogicalToDeviceY(y + rad), LogicalToDeviceXRel(rad),
-                LogicalToDeviceX(x), LogicalToDeviceY(y + rad),
+                LogicalToDeviceX(x), LogicalToDeviceY(y + height - rad),
                 LogicalToDeviceX(x + rad), LogicalToDeviceY(y + height - rad), LogicalToDeviceXRel(rad),
                 LogicalToDeviceX(x + width - rad), LogicalToDeviceY(y + height),
                 LogicalToDeviceX(x + width - rad), LogicalToDeviceY(y + height - rad), LogicalToDeviceXRel(rad),
@@ -773,7 +773,7 @@ void wxPostScriptDC::DoDrawRoundedRectangle (wxCoord x, wxCoord y, wxCoord width
         /* Draw rectangle anticlockwise */
         PsPrintf( wxT("newpath\n")
                   wxT("%d %d %d 90 180 arc\n")
-                  wxT("%d %d moveto\n")
+                  wxT("%d %d lineto\n")
                   wxT("%d %d %d 180 270 arc\n")
                   wxT("%d %d lineto\n")
                   wxT("%d %d %d 270 0 arc\n")
@@ -783,7 +783,7 @@ void wxPostScriptDC::DoDrawRoundedRectangle (wxCoord x, wxCoord y, wxCoord width
                   wxT("closepath\n")
                   wxT("stroke\n"),
                 LogicalToDeviceX(x + rad), LogicalToDeviceY(y + rad), LogicalToDeviceXRel(rad),
-                LogicalToDeviceX(x), LogicalToDeviceY(y + rad),
+                LogicalToDeviceX(x), LogicalToDeviceY(y + height - rad),
                 LogicalToDeviceX(x + rad), LogicalToDeviceY(y + height - rad), LogicalToDeviceXRel(rad),
                 LogicalToDeviceX(x + width - rad), LogicalToDeviceY(y + height),
                 LogicalToDeviceX(x + width - rad), LogicalToDeviceY(y + height - rad), LogicalToDeviceXRel(rad),
