@@ -59,12 +59,14 @@ public:
         (void)Create(parent, id, title, pos, size, style, name);
     }
 
-    ~wxMDIParentFrame(void);
+    ~wxMDIParentFrame();
     bool Create( wxWindow *parent,
-       wxWindowID id, const wxString& title,
-       const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-       long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
-       const wxString& name = wxFrameNameStr );
+                 wxWindowID id,
+                 const wxString& title,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
+                 const wxString& name = wxFrameNameStr );
 
     wxMDIChildFrame *GetActiveChild() const;
 
