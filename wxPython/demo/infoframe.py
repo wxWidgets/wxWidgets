@@ -82,14 +82,14 @@ if __name__ == "__main__":
         outputWindowClass = wxPyInformationalMessagesFrame
         def OnInit(self):
             frame = MyFrame(self.stdioWin)
-            frame.Show(TRUE)
+            frame.Show(True)
             self.SetTopWindow(frame)
             if isinstance(sys.stdout,wxPyInformationalMessagesFrame):
                 sys.stdout.SetParent(frame)
                 #self.redirectStdio(None)# this is done automatically
                 # by the MyApp(1) call below
             print "Starting.\n",
-            return true
+            return True
 
     app = MyApp(1)
     app.MainLoop()

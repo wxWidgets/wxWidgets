@@ -2,8 +2,239 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
-2.3.3
------
+?????
+-------
+
+Added wxScrolledPanel from Wil Sadkin
+
+
+
+2.4.0.7
+-------
+Gave up on generating a warning upon the use of the old true/false or
+TRUE/FALSE values.
+
+Fixed wxGenericTreeCtrl (used on wxGTK and wxMac for wxTreeCtrl) so
+that it can successfully handle lots of nodes instead of overflowing
+when the virtual height of the widget overflowed a 16-bit value.
+
+Fixed the typemap that converts strings to wxColours to also accept
+unicode.
+
+Fixed problem where the wrong class name could sometimes be used for
+OOR.
+
+Fixed an interpreter lock problem in the __eq__ and __ne__ methods in
+wxSize and etc.
+
+Updated PyCrust to version 0.9
+
+Instead of always logging C++ assertions, added wxPYAPP_ASSERT_LOG
+flag to turn it on.  In most cases turning it into an exception (the
+default behavior) is enough.  See below in the 2.3.4.1 notes for more
+details.
+
+
+
+
+2.4.0.6 (a.k.a. the I'm so stupid release)
+-------
+The new deprecation class for the old true/false symbols can now be
+returned from OnInit.  And I promise to be sure I am testing what I
+think I am testing in the future...
+
+
+
+2.4.0.5 (a.k.a. the blame it on Kevin release)
+-------
+A few little but annoying bug fixes.
+
+Updated pycolourchooser.
+
+Updated to 0.9b of PyCrust.
+
+
+
+2.4.0.4
+-------
+Added missing wxRect methods
+
+Add OOR support for wxApp objects too.
+
+Added wxCursorFromImage, which works on wxMSW and wxGTK so far.
+
+All platforms now send EVT_DESTROY_WINDOW.  Be warned that at the time
+the event is sent the window is in the process of being deconstructed,
+and so calling some (most?) methods of the window itself may cause
+problems.
+
+Fixed SF Bug #689481, a method in the OGL wrappers was using the wrong
+return type.
+
+Fixed SF Bug #689958, an endless loop in printout.py.
+
+Added EVT_WINDOW_CREATE_ID and EVT_WINDOW_DESTROY_ID so these events
+can be associated with a specific window ID and more easily caught by
+the parent window.
+
+Fixed copy-paste error in wxListCtrl.GetFirstSelected.
+
+Added missing Init method (and an overloading wrapper) to wxLocale
+wrapper.
+
+Added a wxBitmap.SetMaskColour convenience method.
+
+Changed how the dynamic event tables (used for all Python wx classes,
+C++ wx classes typically use static event tables) are searched such
+that they behave from a Python perspective more like the static tables
+in C++.  Namely that if there are identical event bindings in a base
+Python class and a derived Python class that the one in the derived
+class will be found first and that if Skip is called that the one in
+the base class will still be found instead of skipping directly to the
+static stable in the C++ class.
+
+Switched to using True/False in the wxPython lib and demo instead of
+true/false or TRUE/FALSE to prepare for the new boolean type and
+constants being added to Python.  Added code to wx.py to test for the
+existence of the new constants and to create suitable values if not
+present.
+
+Added some static wxApp functions that help with integration with the
+Mac UI.  They are no-ops on other platforms so it doesn't hurt to
+always call them.  The functions are:
+
+       wxApp_GetMacDefaultEncodingIsPC
+       wxApp_GetMacSupportPCMenuShortcuts
+       wxApp_GetMacAboutMenuItemId
+       wxApp_GetMacPreferencesMenuItemId
+       wxApp_GetMacExitMenuItemId
+       wxApp_GetMacHelpMenuTitleName
+       wxApp_SetMacDefaultEncodingIsPC
+       wxApp_SetMacSupportPCMenuShortcuts
+       wxApp_SetMacAboutMenuItemId
+       wxApp_SetMacPreferencesMenuItemId
+       wxApp_SetMacExitMenuItemId
+       wxApp_SetMacHelpMenuTitleName
+
+Refactored, enhanced and added capabilities for the DrawXXXList
+functions, inspired by code from Chris Barker.
+
+The wxWindows .mo language catalog files are now installed in a
+subdirectory of the wxPython package dir on MSW since that platform
+doesn't have a standard place for them.
+
+Added missing deselect methods for wxGrid.
+
+Fixed typemaps for wxGridCellCoordsArray.
+
+Updated to the 0.9a version of PyCrust
+
+
+
+2.4.0.2
+-------
+Several bug fixes.
+
+Added wxIntCtrl from Will Sadkin.
+
+Added wxPyColourChooser by Michael Gilfix.
+
+
+
+
+2.4.0.1
+-------
+No major new features since 2.3.4.2, mostly bug fixes and minor
+enhancements.
+
+Added function wrappers for the common dialogs from Kevin Altis.  See
+wxPython/lib/dialogs.py for more details.
+
+
+
+2.3.4.2
+-------
+Various bug fixes.
+
+
+
+2.3.4.1
+-------
+Updated XRCed and wxTimeCtrl contribs.
+
+Show a couple new wxGrid features in the demo.
+
+Several bug fixes in wxWindows.
+
+Added wxHtmlFilter.
+
+wxASSERT and related C++ runtime diagnostics are now converted to
+Python exceptions.  When an assert happens a wxPyAssertionError
+(which derives from AssertionError) exception is created and when
+control returns back to the Python code that invoked the C++ API it
+will be raised.  The same exception restrictions are in place as
+before, namely that exceptions can't cross from one Python layer
+through C++ to another Python layer.  That simply means that if you
+want to catch wxPyAssertionError or any other exception that you need
+to do it before control returns to C++ at the end of your event
+handler or callback code.  There is some test code in demo/wxButton.py
+you can use to play with this new feature.
+
+Added some methods to wxApp (SetAssertMode and GetAssertMode) that let
+you control how C++ assertions are processed.  Valid modes are:
+wxPYAPP_ASSERT_SUPPRESS, wxPYAPP_ASSERT_EXCEPTION, and
+wxPYAPP_ASSERT_DIALOG.  Using _SUPPRESS will give you behavior like
+the old "final" builds and the assert will be ignored, _EXCEPTION is
+the new default described above, and _DIALOG is like the default in
+2.3.3.1 and prior "hybrid" builds.  You can also combine _EXCEPTION
+and _DIALOG if you wish, although I don't know why you would.
+
+You can now overload OnInitGui, OnExit and OnAssert in your classes
+derived from wxApp.
+
+Added GetSelectedCells, GetSelectionBlockTopLeft,
+GetSelectionBlockBottomRight, GetSelectedRows, GetSelectedCols nethods
+to wxGrid.
+
+Added Python == and != operators for some basic classes
+
+Fixed the Python wrappers for wxInputStream so they no longer block
+when reading from a wxProcess on wxGTK.  They now work more or less as
+they did before 2.3.3.1 but the dual meaning of eof() has been
+removed.  There is now a CanRead() method that lets you know if there
+is data waiting to be read from the pipe.
+
+Fixed method name clash in wxIEHtmlWin, renamed Refresh to RefreshPage.
+
+Added Throbber from Cliff Wells to the library and the demo.
+
+Windows installer prompts to uninstall old version first.
+
+Added wxPython.lib.evtmgr by Robb Shecter, which is an easier, more
+"Pythonic" and more OO method of registering handlers for wxWindows
+events using the Publish/Subscribe pattern.
+
+Added wxPython.lib.popupctl by Gerrit van Dyk which is a combobox-like
+gizmo for poping up arbitrary controls.  It is currently using
+wxDialog because of some issues with wxPopupWindow...
+
+Added wxPython.lib.gridmovers by Gerrit van Dyk which facilitates the
+dragging of columns and/or rows in a wxGrid.
+
+Added wxPython.lib.multisash by Gerrit van Dyk which is a nice
+implementation of allowing the user to split a window any number of
+times either horizontally or vertically, and to close the split off
+windows when desired.
+
+Added helpviewer tool that displays HTML books similarly to how MS
+HTMLHelp viewer does.  Changed how the wxPythonDocs tarball is built
+and added a script to launch the doc viewer.
+
+
+
+
+2.3.3.1
+-------
 Added wxSplashScreen.
 
 Added wxGenericDirCtrl.
@@ -174,6 +405,9 @@ Added wxXmlResourceHandler which allows you to create custom handlers
 for nonstandard class types in XRC resources.  See the demo for an
 example.
 
+Added wxPython.lib.mixins.rubberband module from Robb Shecter.
+
+Added wxTimeCtrl from Will Sadkin.
 
 
 
@@ -205,8 +439,8 @@ Added XRCed to the wxPython Tools directory, contributed by Roman
 Rolinsky.
 
 Added a new "constructor" to most of the window classes that calls the
-default C++ contructor, (the one with no parameters) and also added the
-coresponding Create(...) method.  This allows you to do a 2-step
+default C++ constructor, (the one with no parameters) and also added the
+corresponding  Create(...) method.  This allows you to do a 2-step
 creation of windows which is sometimes required for doing things such
 as setting extended style flags before the window is created, or for
 passing the object to the XRC resource system to be created from the
@@ -742,7 +976,7 @@ methods look like this:
                           toggle=FALSE)
 
 
-There are also coresponding InsertTool and InsertSimpleTool methods
+There are also corresponding InsertTool and InsertSimpleTool methods
 that additionally take an integer position as the first parameter.
 
 Added a wrapper for the new PCX and TIFF ImageHandlers.

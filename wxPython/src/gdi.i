@@ -34,6 +34,7 @@
 %import misc.i
 %import fonts.i
 
+%pragma(python) code = "import wx"
 
 //---------------------------------------------------------------------------
 %{
@@ -67,6 +68,11 @@ public:
     bool LoadFile(const wxString& name, wxBitmapType type=wxBITMAP_TYPE_ANY);
     bool SaveFile(const wxString& name, wxBitmapType type, wxPalette* palette = NULL);
     void SetMask(wxMask* mask);
+    %pragma(python) addtoclass = "
+    def SetMaskColour(self, colour):
+        mask = wxMaskColour(self, colour)
+        self.SetMask(mask)
+    "
 #ifdef __WXMSW__
     void SetPalette(wxPalette& palette);
 #endif
@@ -95,14 +101,6 @@ public:
     void SetQuality(int q);
 #endif
 
-    %pragma(python) addtoclass = "
-    def __del__(self,gdic=gdic):
-        try:
-            if self.thisown == 1 :
-                gdic.delete_wxBitmap(self)
-        except:
-            pass
-"
 };
 
 
@@ -231,14 +229,6 @@ public:
 #endif
     void CopyFromBitmap(const wxBitmap& bmp);
 
-    %pragma(python) addtoclass = "
-    def __del__(self,gdic=gdic):
-        try:
-            if self.thisown == 1 :
-                gdic.delete_wxIcon(self)
-        except:
-            pass
-"
 };
 
 
@@ -337,6 +327,17 @@ public:
     }
 %}
 
+%new wxCursor* wxCursorFromImage(const wxImage& image);
+%{
+    wxCursor* wxCursorFromImage(const wxImage& image) {
+    #ifndef __WXMAC__
+        return new wxCursor(image);
+    #else
+        return NULL;
+    #endif
+    }
+%}
+
 //----------------------------------------------------------------------
 
 class wxColour : public wxObject {
@@ -351,15 +352,45 @@ public:
     %addmethods {
         PyObject* Get() {
             PyObject* rv = PyTuple_New(3);
-            PyTuple_SetItem(rv, 0, PyInt_FromLong(self->Red()));
-            PyTuple_SetItem(rv, 1, PyInt_FromLong(self->Green()));
-            PyTuple_SetItem(rv, 2, PyInt_FromLong(self->Blue()));
+            int red = -1;
+            int green = -1;
+            int blue = -1;
+            if (self->Ok()) {
+                red =   self->Red();
+                green = self->Green();
+                blue =  self->Blue();
+            }
+            PyTuple_SetItem(rv, 0, PyInt_FromLong(red));
+            PyTuple_SetItem(rv, 1, PyInt_FromLong(green));
+            PyTuple_SetItem(rv, 2, PyInt_FromLong(blue));
             return rv;
         }
+        bool __eq__(PyObject* obj) {
+            wxColour  tmp;
+            wxColour* ptr = &tmp;
+            if (obj == Py_None)    return FALSE;
+            wxPyBLOCK_THREADS(bool success = wxColour_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return FALSE;
+            return *self == *ptr;
+        }
+        bool __ne__(PyObject* obj) {
+            wxColour  tmp;
+            wxColour* ptr = &tmp;
+            if (obj == Py_None)    return TRUE;
+            wxPyBLOCK_THREADS(bool success = wxColour_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return TRUE;
+            return *self != *ptr;
+        }
     }
-    %pragma(python) addtoclass = "asTuple = Get"
-    %pragma(python) addtoclass = "def __str__(self): return str(self.asTuple())"
-    %pragma(python) addtoclass = "def __repr__(self): return str(self.asTuple())"
+
+    %pragma(python) addtoclass = "asTuple = Get
+    def __str__(self):                  return str(self.asTuple())
+    def __repr__(self):                 return 'wxColour:' + str(self.asTuple())
+    def __nonzero__(self):              return self.Ok()
+    def __getinitargs__(self):          return ()
+    def __getstate__(self):             return self.asTuple()
+    def __setstate__(self, state):      self.Set(*state)
+"
 
 };
 
@@ -388,15 +419,15 @@ public:
             if ( !cName2.Replace(wxT("GRAY"), wxT("GREY")) )
                 cName2.clear();
 
-            wxNode *node = self->First();
+            wxNode *node = self->GetFirst();
             while ( node ) {
                 const wxChar *key = node->GetKeyString();
                 if ( cName == key || cName2 == key ) {
-                    wxColour* c = (wxColour *)node->Data();
+                    wxColour* c = (wxColour *)node->GetData();
                     c->Set(red, green, blue);
                     return;
                 }
-                node = node->Next();
+                node = node->GetNext();
             }
 
             // otherwise append the new colour
@@ -535,34 +566,34 @@ public:
 //----------------------------------------------------------------------
 
 
-
 class wxDC : public wxObject {
 public:
 //    wxDC(); **** abstract base class, can't instantiate.
     ~wxDC();
 
     void BeginDrawing();
+
 //  %name(BlitXY)
-    bool Blit(long xdest, long ydest,
-              long width, long height,
-              wxDC *source, long xsrc, long ysrc,
+    bool Blit(wxCoord xdest, wxCoord ydest,
+              wxCoord width, wxCoord height,
+              wxDC *source, wxCoord xsrc, wxCoord ysrc,
               int logicalFunc = wxCOPY, int useMask = FALSE);
 //      bool Blit(const wxPoint& destPt, const wxSize& sz,
 //                wxDC *source, const wxPoint& srcPt,
 //                int logicalFunc = wxCOPY, int useMask = FALSE);
 
     void Clear();
-    void CrossHair(long x, long y);
+    void CrossHair(wxCoord x, wxCoord y);
     void DestroyClippingRegion();
-    long DeviceToLogicalX(long x);
-    long DeviceToLogicalXRel(long x);
-    long DeviceToLogicalY(long y);
-    long DeviceToLogicalYRel(long y);
-    void DrawArc(long x1, long y1, long x2, long y2, long xc, long yc);
-    void DrawCircle(long x, long y, long radius);
-    void DrawEllipse(long x, long y, long width, long height);
-    void DrawEllipticArc(long x, long y, long width, long height, long start, long end);
-    void DrawIcon(const wxIcon& icon, long x, long y);
+    wxCoord DeviceToLogicalX(wxCoord x);
+    wxCoord DeviceToLogicalXRel(wxCoord x);
+    wxCoord DeviceToLogicalY(wxCoord y);
+    wxCoord DeviceToLogicalYRel(wxCoord y);
+    void DrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoord xc, wxCoord yc);
+    void DrawCircle(wxCoord x, wxCoord y, wxCoord radius);
+    void DrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
+    void DrawEllipticArc(wxCoord x, wxCoord y, wxCoord width, wxCoord height, wxCoord start, wxCoord end);
+    void DrawIcon(const wxIcon& icon, wxCoord x, wxCoord y);
 
     void DrawLabel(const wxString& text, const wxRect& rect,
                    int alignment = wxALIGN_LEFT | wxALIGN_TOP,
@@ -580,27 +611,27 @@ public:
         }
     }
 
-    void DrawLine(long x1, long y1, long x2, long y2);
-    void DrawLines(int PCOUNT, wxPoint* points, long xoffset=0, long yoffset=0);
-    void DrawPolygon(int PCOUNT, wxPoint* points, long xoffset=0, long yoffset=0,
+    void DrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2);
+    void DrawLines(int PCOUNT, wxPoint* points, wxCoord xoffset=0, wxCoord yoffset=0);
+    void DrawPolygon(int PCOUNT, wxPoint* points, wxCoord xoffset=0, wxCoord yoffset=0,
                      int fill_style=wxODDEVEN_RULE);
-    void DrawPoint(long x, long y);
-    void DrawRectangle(long x, long y, long width, long height);
+    void DrawPoint(wxCoord x, wxCoord y);
+    void DrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     %name(DrawRectangleRect)void DrawRectangle(const wxRect& rect);
     void DrawRotatedText(const wxString& text, wxCoord x, wxCoord y, double angle);
-    void DrawRoundedRectangle(long x, long y, long width, long height, long radius=20);
+    void DrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, wxCoord radius=20);
     void DrawSpline(int PCOUNT, wxPoint* points);
-    void DrawText(const wxString& text, long x, long y);
+    void DrawText(const wxString& text, wxCoord x, wxCoord y);
     void EndDoc();
     void EndDrawing();
     void EndPage();
-    bool FloodFill(long x, long y, const wxColour& colour, int style=wxFLOOD_SURFACE);
+    bool FloodFill(wxCoord x, wxCoord y, const wxColour& colour, int style=wxFLOOD_SURFACE);
     wxBrush  GetBackground();
     wxBrush  GetBrush();
-    long GetCharHeight();
-    long GetCharWidth();
-    void GetClippingBox(long *OUTPUT, long *OUTPUT,
-                        long *OUTPUT, long *OUTPUT);
+    wxCoord GetCharHeight();
+    wxCoord GetCharWidth();
+    void GetClippingBox(wxCoord *OUTPUT, wxCoord *OUTPUT,
+                        wxCoord *OUTPUT, wxCoord *OUTPUT);
     wxFont GetFont();
     int GetLogicalFunction();
     void GetLogicalScale(double *OUTPUT, double *OUTPUT);
@@ -608,7 +639,7 @@ public:
     bool GetOptimization();
     wxPen GetPen();
     %addmethods {
-        %new wxColour* GetPixel(long x, long y) {
+        %new wxColour* GetPixel(wxCoord x, wxCoord y) {
             wxColour* wc = new wxColour();
             self->GetPixel(x, y, wc);
             return wc;
@@ -618,25 +649,27 @@ public:
     wxSize GetSize();
     wxSize GetSizeMM();
     wxColour GetTextBackground();
-    void GetTextExtent(const wxString& string, long *OUTPUT, long *OUTPUT);
+    void GetTextExtent(const wxString& string, wxCoord *OUTPUT, wxCoord *OUTPUT);
     %name(GetFullTextExtent)void GetTextExtent(const wxString& string,
-                       long *OUTPUT, long *OUTPUT, long *OUTPUT, long* OUTPUT,
+                       wxCoord *OUTPUT, wxCoord *OUTPUT, wxCoord *OUTPUT, wxCoord* OUTPUT,
                        const wxFont* font = NULL);
+    void GetMultiLineTextExtent(const wxString& text, wxCoord *OUTPUT, wxCoord *OUTPUT, wxCoord *OUTPUT,
+                                wxFont *font = NULL);
     wxColour GetTextForeground();
     void GetUserScale(double *OUTPUT, double *OUTPUT);
-    long LogicalToDeviceX(long x);
-    long LogicalToDeviceXRel(long x);
-    long LogicalToDeviceY(long y);
-    long LogicalToDeviceYRel(long y);
-    long MaxX();
-    long MaxY();
-    long MinX();
-    long MinY();
+    wxCoord LogicalToDeviceX(wxCoord x);
+    wxCoord LogicalToDeviceXRel(wxCoord x);
+    wxCoord LogicalToDeviceY(wxCoord y);
+    wxCoord LogicalToDeviceYRel(wxCoord y);
+    wxCoord MaxX();
+    wxCoord MaxY();
+    wxCoord MinX();
+    wxCoord MinY();
     bool Ok();
-    void SetDeviceOrigin(long x, long y);
+    void SetDeviceOrigin(wxCoord x, wxCoord y);
     void SetBackground(const wxBrush& brush);
     void SetBackgroundMode(int mode);
-    void SetClippingRegion(long x, long y, long width, long height);
+    void SetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     %name(SetClippingRegionAsRegion) void SetClippingRegion(const wxRegion& region);
     %name(SetClippingRect) void SetClippingRegion(const wxRect& rect);
     void SetPalette(const wxPalette& colourMap);
@@ -655,7 +688,7 @@ public:
 
 
 
-    void DrawBitmap(const wxBitmap& bitmap, long x, long y,
+    void DrawBitmap(const wxBitmap& bitmap, wxCoord x, wxCoord y,
                     int useMask = FALSE);
 
     bool CanDrawBitmap();
@@ -681,191 +714,38 @@ public:
 #endif
 
 
-    %addmethods {
-        // NOTE: These methods are VERY SIMILAR in implentation.  It would be
-        // nice to factor out common code and or turn them into a set of
-        // template-like macros.
+    %addmethods {  // See drawlist.cpp for impplementaion of these...
 
-        // Draw a point for every set of coordinants in pyPoints, optionally
-        // setting a new pen for each
-        PyObject* _DrawPointList(PyObject* pyPoints, PyObject* pyPens) {
-            wxPyBeginBlockThreads();
-
-            bool      isFastSeq  = PyList_Check(pyPoints) || PyTuple_Check(pyPoints);
-            bool      isFastPens = PyList_Check(pyPens) || PyTuple_Check(pyPens);
-            int       numObjs = 0;
-            int       numPens = 0;
-            wxPen*    pen;
-            PyObject* obj;
-            int       x1, y1;
-            int       i = 0;
-            PyObject* retval;
-
-            if (!PySequence_Check(pyPoints)) {
-                goto err0;
-            }
-            if (!PySequence_Check(pyPens)) {
-                goto err1;
-            }
-            numObjs = PySequence_Length(pyPoints);
-            numPens = PySequence_Length(pyPens);
-
-            for (i = 0; i < numObjs; i++) {
-                // Use a new pen?
-                if (i < numPens) {
-                    if (isFastPens) {
-                        obj = PySequence_Fast_GET_ITEM(pyPens, i);
-                    }
-                    else {
-                        obj = PySequence_GetItem(pyPens, i);
-                    }
-                    if (SWIG_GetPtrObj(obj, (void **) &pen, "_wxPen_p")) {
-                        if (!isFastPens)
-                            Py_DECREF(obj);
-                        goto err1;
-                    }
-
-                    self->SetPen(*pen);
-                    if (!isFastPens)
-                        Py_DECREF(obj);
-                }
-
-                // Get the point coordinants
-                if (isFastSeq) {
-                    obj = PySequence_Fast_GET_ITEM(pyPoints, i);
-                }
-                else {
-                    obj = PySequence_GetItem(pyPoints, i);
-                }
-                if (! _2int_seq_helper(obj, &x1, &y1)) {
-                    if (!isFastPens)
-                        Py_DECREF(obj);
-                    goto err0;
-                }
-                if (PyErr_Occurred()) {
-                    retval = NULL;
-                    if (!isFastPens)
-                        Py_DECREF(obj);
-                    goto exit;
-                }
-
-
-                // Now draw the point
-                self->DrawPoint(x1, y1);
-
-                if (!isFastSeq)
-                    Py_DECREF(obj);
-            }
-
-            Py_INCREF(Py_None);
-            retval = Py_None;
-            goto exit;
-
-        err1:
-            PyErr_SetString(PyExc_TypeError, "Expected a sequence of wxPens");
-            retval = NULL;
-            goto exit;
-        err0:
-            PyErr_SetString(PyExc_TypeError, "Expected a sequence of (x,y) sequences.");
-            retval = NULL;
-            goto exit;
-
-        exit:
-            wxPyEndBlockThreads();
-            return retval;
+        PyObject* _DrawPointList(PyObject* pyCoords, PyObject* pyPens, PyObject* pyBrushes)
+        {
+            return wxPyDrawXXXList(*self, wxPyDrawXXXPoint, pyCoords, pyPens, pyBrushes);
         }
 
+        PyObject* _DrawLineList(PyObject* pyCoords, PyObject* pyPens, PyObject* pyBrushes)
+        {
+            return wxPyDrawXXXList(*self, wxPyDrawXXXLine, pyCoords, pyPens, pyBrushes);
+        }
 
-        // Draw a line for every set of coordinants in pyLines, optionally
-        // setting a new pen for each
-        PyObject* _DrawLineList(PyObject* pyLines, PyObject* pyPens) {
-            wxPyBeginBlockThreads();
+        PyObject* _DrawRectangleList(PyObject* pyCoords, PyObject* pyPens, PyObject* pyBrushes)
+        {
+            return wxPyDrawXXXList(*self, wxPyDrawXXXRectangle, pyCoords, pyPens, pyBrushes);
+        }
 
-            bool      isFastSeq  = PyList_Check(pyLines) || PyTuple_Check(pyLines);
-            bool      isFastPens = PyList_Check(pyPens) || PyTuple_Check(pyPens);
-            int       numObjs = 0;
-            int       numPens = 0;
-            wxPen*    pen;
-            PyObject* obj;
-            int       x1, y1, x2, y2;
-            int       i = 0;
-            PyObject* retval;
+        PyObject* _DrawEllipseList(PyObject* pyCoords, PyObject* pyPens, PyObject* pyBrushes)
+        {
+            return wxPyDrawXXXList(*self, wxPyDrawXXXEllipse, pyCoords, pyPens, pyBrushes);
+        }
 
-            if (!PySequence_Check(pyLines)) {
-                goto err0;
-            }
-            if (!PySequence_Check(pyPens)) {
-                goto err1;
-            }
-            numObjs = PySequence_Length(pyLines);
-            numPens = PySequence_Length(pyPens);
+        PyObject* _DrawPolygonList(PyObject* pyCoords, PyObject* pyPens, PyObject* pyBrushes)
+        {
+            return wxPyDrawXXXList(*self, wxPyDrawXXXPolygon, pyCoords, pyPens, pyBrushes);
+        }
 
-            for (i = 0; i < numObjs; i++) {
-                // Use a new pen?
-                if (i < numPens) {
-                    if (isFastPens) {
-                        obj = PySequence_Fast_GET_ITEM(pyPens, i);
-                    }
-                    else {
-                        obj = PySequence_GetItem(pyPens, i);
-                    }
-                    if (SWIG_GetPtrObj(obj, (void **) &pen, "_wxPen_p")) {
-                        if (!isFastPens)
-                            Py_DECREF(obj);
-                        goto err1;
-                    }
-
-                    self->SetPen(*pen);
-                    if (!isFastPens)
-                        Py_DECREF(obj);
-                }
-
-                // Get the line coordinants
-                if (isFastSeq) {
-                    obj = PySequence_Fast_GET_ITEM(pyLines, i);
-                }
-                else {
-                    obj = PySequence_GetItem(pyLines, i);
-                }
-                if (! _4int_seq_helper(obj, &x1, &y1, &x2, &y2)) {
-                    if (!isFastPens)
-                        Py_DECREF(obj);
-                    goto err0;
-                }
-                if (PyErr_Occurred()) {
-                    retval = NULL;
-                    if (!isFastPens)
-                        Py_DECREF(obj);
-                    goto exit;
-                }
-
-                // Now draw the line
-                self->DrawLine(x1, y1, x2, y2);
-
-                if (!isFastSeq)
-                    Py_DECREF(obj);
-            }
-
-            Py_INCREF(Py_None);
-            retval = Py_None;
-            goto exit;
-
-        err1:
-            PyErr_SetString(PyExc_TypeError, "Expected a sequence of wxPens");
-            retval = NULL;
-            goto exit;
-
-        err0:
-            PyErr_SetString(PyExc_TypeError, "Expected a sequence of (x1,y1, x2,y2) sequences.");
-            retval = NULL;
-            goto exit;
-
-        exit:
-            wxPyEndBlockThreads();
-            return retval;
+        PyObject* _DrawTextList(PyObject* textList, PyObject* pyPoints,
+                                PyObject* foregroundList, PyObject* backgroundList) {
+            return wxPyDrawTextList(*self, textList, pyPoints, foregroundList, backgroundList);
         }
     }
-
 
     %pragma(python) addtoclass = "
     def DrawPointList(self, points, pens=None):
@@ -875,7 +755,8 @@ public:
            pens = [pens]
         elif len(pens) != len(points):
            raise ValueError('points and pens must have same length')
-        return self._DrawPointList(points, pens)
+        return self._DrawPointList(points, pens, [])
+
 
     def DrawLineList(self, lines, pens=None):
         if pens is None:
@@ -884,7 +765,83 @@ public:
            pens = [pens]
         elif len(pens) != len(lines):
            raise ValueError('lines and pens must have same length')
-        return self._DrawLineList(lines, pens)
+        return self._DrawLineList(lines, pens, [])
+
+
+    def DrawRectangleList(self, rectangles, pens=None, brushes=None):
+        if pens is None:
+           pens = []
+        elif isinstance(pens, wxPenPtr):
+           pens = [pens]
+        elif len(pens) != len(rectangles):
+           raise ValueError('rectangles and pens must have same length')
+        if brushes is None:
+           brushes = []
+        elif isinstance(brushes, wxBrushPtr):
+           brushes = [brushes]
+        elif len(brushes) != len(rectangles):
+           raise ValueError('rectangles and brushes must have same length')
+        return self._DrawRectangleList(rectangles, pens, brushes)
+
+
+    def DrawEllipseList(self, ellipses, pens=None, brushes=None):
+        if pens is None:
+           pens = []
+        elif isinstance(pens, wxPenPtr):
+           pens = [pens]
+        elif len(pens) != len(ellipses):
+           raise ValueError('ellipses and pens must have same length')
+        if brushes is None:
+           brushes = []
+        elif isinstance(brushes, wxBrushPtr):
+           brushes = [brushes]
+        elif len(brushes) != len(ellipses):
+           raise ValueError('ellipses and brushes must have same length')
+        return self._DrawEllipseList(ellipses, pens, brushes)
+
+
+    def DrawPolygonList(self, polygons, pens=None, brushes=None):
+        ## Note: This does not currently support fill style or offset
+        ## you can always use the non-List version if need be.
+        ## I really would like to support fill-style, however,
+        ## but wxODDEVEN_RULE does not appear to be defined at the Python level
+        ## [It's in wx.py... --Robin]
+        if pens is None:
+           pens = []
+        elif isinstance(pens, wxPenPtr):
+           pens = [pens]
+        elif len(pens) != len(polygons):
+           raise ValueError('polygons and pens must have same length')
+        if brushes is None:
+           brushes = []
+        elif isinstance(brushes, wxBrushPtr):
+           brushes = [brushes]
+        elif len(brushes) != len(polygons):
+           raise ValueError('polygons and brushes must have same length')
+        return self._DrawPolygonList(polygons, pens, brushes)
+
+
+    def DrawTextList(self, textList, coords, foregrounds = None, backgrounds = None, fonts = None):
+        ## NOTE: this does not currently support changing the font
+        ##       Make sure you set Background mode to wxSolid (DC.SetBackgroundMode)
+        ##       If you want backgounds to do anything.
+        if type(textList) == type(''):
+           textList = [textList]
+        elif len(textList) != len(coords):
+           raise ValueError('textlist and coords must have same length')
+        if foregrounds is None:
+           foregrounds = []
+        elif isinstance(foregrounds, wxColourPtr):
+           foregrounds = [foregrounds]
+        elif len(foregrounds) != len(coords):
+           raise ValueError('foregrounds and coords must have same length')
+        if backgrounds is None:
+           backgrounds = []
+        elif isinstance(backgrounds, wxColourPtr):
+           backgrounds = [backgrounds]
+        elif len(backgrounds) != len(coords):
+           raise ValueError('backgrounds and coords must have same length')
+        return  self._DrawTextList(textList, coords, foregrounds, backgrounds)
 "
 
 
@@ -1082,7 +1039,7 @@ enum wxRegionContain {
 
 class wxRegion : public wxGDIObject {
 public:
-    wxRegion(long x=0, long y=0, long width=0, long height=0);
+    wxRegion(wxCoord x=0, wxCoord y=0, wxCoord width=0, wxCoord height=0);
 #ifndef __WXMAC__
     %name(wxRegionFromPoints)wxRegion(int PCOUNT, wxPoint* points, int fillStyle = wxWINDING_RULE);
 #endif
@@ -1093,28 +1050,28 @@ public:
     bool Offset(wxCoord x, wxCoord y);
 #endif
 
-    wxRegionContain Contains(long x, long y);
+    wxRegionContain Contains(wxCoord x, wxCoord y);
     %name(ContainsPoint)wxRegionContain Contains(const wxPoint& pt);
     %name(ContainsRect)wxRegionContain Contains(const wxRect& rect);
-    %name(ContainsRectDim)wxRegionContain Contains(long x, long y, long w, long h);
+    %name(ContainsRectDim)wxRegionContain Contains(wxCoord x, wxCoord y, wxCoord w, wxCoord h);
 
     wxRect GetBox();
 
-    bool Intersect(long x, long y, long width, long height);
+    bool Intersect(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     %name(IntersectRect)bool Intersect(const wxRect& rect);
     %name(IntersectRegion)bool Intersect(const wxRegion& region);
 
     bool IsEmpty();
 
-    bool Union(long x, long y, long width, long height);
+    bool Union(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     %name(UnionRect)bool Union(const wxRect& rect);
     %name(UnionRegion)bool Union(const wxRegion& region);
 
-    bool Subtract(long x, long y, long width, long height);
+    bool Subtract(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     %name(SubtractRect)bool Subtract(const wxRect& rect);
     %name(SubtractRegion)bool Subtract(const wxRegion& region);
 
-    bool Xor(long x, long y, long width, long height);
+    bool Xor(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     %name(XorRect)bool Xor(const wxRect& rect);
     %name(XorRegion)bool Xor(const wxRegion& region);
 };
@@ -1126,12 +1083,12 @@ public:
     wxRegionIterator(const wxRegion& region);
     ~wxRegionIterator();
 
-    long GetX();
-    long GetY();
-    long GetW();
-    long GetWidth();
-    long GetH();
-    long GetHeight();
+    wxCoord GetX();
+    wxCoord GetY();
+    wxCoord GetW();
+    wxCoord GetWidth();
+    wxCoord GetH();
+    wxCoord GetHeight();
     wxRect GetRect();
     bool HaveRects();
     void Reset();

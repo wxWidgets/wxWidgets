@@ -71,6 +71,7 @@ static void wxPyCoreAPI_IMPORT() {
 #define wxRealPoint_helper(a,b)             (wxPyCoreAPIPtr->p_wxRealPoint_helper(a,b))
 #define wxRect_helper(a,b)                  (wxPyCoreAPIPtr->p_wxRect_helper(a,b))
 #define wxColour_helper(a,b)                (wxPyCoreAPIPtr->p_wxColour_helper(a,b))
+#define wxPoint2DDouble_helper(a,b)         (wxPyCoreAPIPtr->p_wxPoint2DDouble_helper(a,b))
 
 #define wxPyCBH_setCallbackInfo(a, b, c, d) (wxPyCoreAPIPtr->p_wxPyCBH_setCallbackInfo(a,b,c,d))
 #define wxPyCBH_findCallback(a, b)          (wxPyCoreAPIPtr->p_wxPyCBH_findCallback(a, b))

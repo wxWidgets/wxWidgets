@@ -1,6 +1,5 @@
 
 from wxPython.wx import *
-import string
 
 #---------------------------------------------------------------------------
 
@@ -11,8 +10,10 @@ wildcard = "Python source (*.py)|*.py|" \
 def runTest(frame, nb, log):
     dlg = wxFileDialog(frame, "Choose a file", "", "", wildcard, wxOPEN|wxMULTIPLE)
     if dlg.ShowModal() == wxID_OK:
-        for path in dlg.GetPaths():
-            log.WriteText('You selected: %s\n' % path)
+        paths = dlg.GetPaths()
+        log.WriteText('You selected %d files:' % len(paths))
+        for path in paths:
+            log.WriteText('           %s\n' % path)
     dlg.Destroy()
 
 #---------------------------------------------------------------------------

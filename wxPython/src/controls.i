@@ -338,6 +338,7 @@ public:
     %pragma(python) addtomethod = "wxPreCheckBox:val._setOORInfo(val)"
 
     bool GetValue();
+    bool IsChecked();
     void SetValue(const bool state);
 };
 
@@ -1003,18 +1004,15 @@ public:
     int FindString(const wxString& string);
 
     wxString GetString(int n);
-
-#ifdef __WXGTK__
-    %name(GetItemLabel)wxString GetLabel( int item );
-    %name(SetItemLabel)void SetLabel( int item, const wxString& label );
-#else
     void SetString(int n, const wxString& label);
     %pragma(python) addtoclass = "
     GetItemLabel = GetString
     SetItemLabel = SetString
     "
+#ifndef __WXGTK__
     int GetColumnCount();
     int GetRowCount();
+    int GetNextItem(int item, wxDirection dir, long style);
 #endif
 
     int GetSelection();

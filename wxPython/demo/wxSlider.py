@@ -1,8 +1,6 @@
 
 from wxPython.wx import *
 
-import string
-
 #----------------------------------------------------------------------
 
 class TestPanel(wxPanel):
@@ -31,11 +29,13 @@ def runTest(frame, nb, log):
 
 
 
-
-
-
-
-
-
 overview = """\
 """
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

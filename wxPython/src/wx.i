@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wxp.i
+// Name:        wx.i
 // Purpose:     SWIG interface file for a python wxWindows module
 //
 // Author:      Robin Dunn
@@ -65,6 +65,14 @@ wxSize      wxDefaultSize;
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 
+enum {
+    wxPYAPP_ASSERT_SUPPRESS  = 1,
+    wxPYAPP_ASSERT_EXCEPTION = 2,
+    wxPYAPP_ASSERT_DIALOG    = 4,
+    wxPYAPP_ASSERT_LOG       = 8
+};
+
+
 class wxPyApp : public wxEvtHandler {
 public:
     %addmethods {
@@ -75,6 +83,11 @@ public:
     }
 
     ~wxPyApp();
+
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyApp)"
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+
 
     wxString GetAppName();
 #ifdef __WXMSW__
@@ -105,6 +118,24 @@ public:
     void SetTopWindow(wxWindow* window);
     void SetVendorName(const wxString& name);
     void SetUseBestVisual(bool flag);
+
+    int  GetAssertMode();
+    void SetAssertMode(int mode);
+
+
+    static bool GetMacDefaultEncodingIsPC();
+    static bool GetMacSupportPCMenuShortcuts();
+    static long GetMacAboutMenuItemId();
+    static long GetMacPreferencesMenuItemId();
+    static long GetMacExitMenuItemId();
+    static wxString GetMacHelpMenuTitleName();
+
+    static void SetMacDefaultEncodingIsPC(bool val);
+    static void SetMacSupportPCMenuShortcuts(bool val);
+    static void SetMacAboutMenuItemId(long val);
+    static void SetMacPreferencesMenuItemId(long val);
+    static void SetMacExitMenuItemId(long val);
+    static void SetMacHelpMenuTitleName(const wxString& val);
 };
 
 %inline %{
@@ -192,6 +223,7 @@ static wxPyCoreAPI API = {
     wxRealPoint_helper,
     wxRect_helper,
     wxColour_helper,
+    wxPoint2DDouble_helper,
 
     wxPyCBH_setCallbackInfo,
     wxPyCBH_findCallback,
@@ -226,7 +258,7 @@ static wxPyCoreAPI API = {
     Py_XDECREF(v);
 
 
-    __wxPreStart();     // initialize the GUI toolkit, if needed.
+    __wxPreStart(d);     // initialize the GUI toolkit, if needed.
 
 
         // Since these modules are all linked together, initialize them now
@@ -261,7 +293,7 @@ static wxPyCoreAPI API = {
     PyDict_SetItemString(d,"wxVERSION_NUMBER", PyInt_FromLong((long)wxVERSION_NUMBER ));
 #if wxUSE_UNICODE
     wxString tempStr(wxVERSION_STRING);
-    PyDict_SetItemString(d,"wxVERSION_STRING", PyUnicode_FromUnicode(tempStr.c_str(), tempStr.Len()));
+    PyDict_SetItemString(d,"wxVERSION_STRING", PyUnicode_FromWideChar(tempStr.c_str(), tempStr.Len()));
 #else
     PyDict_SetItemString(d,"wxVERSION_STRING", PyString_FromString(wxVERSION_STRING));
 #endif
@@ -274,4 +306,5 @@ static wxPyCoreAPI API = {
 //----------------------------------------------------------------------
 
 %pragma(python) include="_extras.py";
+
 

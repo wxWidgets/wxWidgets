@@ -30,7 +30,7 @@ class TestPanel(wxPanel):
         sizer.Add(btns, 0, wxEXPAND|wxALL, 15)
 
         self.SetSizer(sizer)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
 
         self.sizer = sizer  # save it for testing later
 

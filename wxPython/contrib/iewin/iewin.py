@@ -125,8 +125,8 @@ class wxIEHtmlWinPtr(wxWindowPtr):
     def GoSearch(self, *_args, **_kwargs):
         val = apply(iewinc.wxIEHtmlWin_GoSearch,(self,) + _args, _kwargs)
         return val
-    def Refresh(self, *_args, **_kwargs):
-        val = apply(iewinc.wxIEHtmlWin_Refresh,(self,) + _args, _kwargs)
+    def RefreshPage(self, *_args, **_kwargs):
+        val = apply(iewinc.wxIEHtmlWin_RefreshPage,(self,) + _args, _kwargs)
         return val
     def Stop(self, *_args, **_kwargs):
         val = apply(iewinc.wxIEHtmlWin_Stop,(self,) + _args, _kwargs)

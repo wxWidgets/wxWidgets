@@ -1,8 +1,6 @@
 
 from wxPython.wx import *
 
-import string
-
 #----------------------------------------------------------------------
 
 class TestPanel(wxPanel):

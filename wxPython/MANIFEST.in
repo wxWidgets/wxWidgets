@@ -44,11 +44,6 @@ include samples/doodle/*.txt
 include samples/doodle/*.py
 include samples/doodle/*.iss
 include samples/doodle/sample.ddl
-include samples/stxview/*.txt
-include samples/stxview/*.py
-include samples/stxview/*.stx
-include samples/stxview/StructuredText/*.py
-include samples/stxview/StructuredText/*.txt
 include samples/wxProject/*.txt
 include samples/wxProject/*.py
 include samples/StyleEditor/*.py

@@ -1,57 +1,32 @@
 Building wxPython on Mac OS X
 -----------------------------
 
-NOTE:  OS X support is HIGHLY EXPERIMENTAL at this time.  Most things
-       are working now, but a few still don't.  I know about most of
-       them and am addressing them as I have time.  If you have any
-       ideas about a fix for the stuff that's still broken then
-       please persue them and send the fixes to me.
 
-
-These are the steps I have used for building wxPython on Mac OS X 10.1
+These are the steps I have used for building wxPython on Mac OS X 10.x
 with the Apple Developer Tools, a.k.a the Darwin version.  I assume
 that you know your way around a command line and that you know how to
 get things from various CVS repositories as needed.
 
 
-1. Python 2.2 is required.  There is a disk image with an installer
-   package in the wxPython Sourceforge download area, in this group:
+1. "MacPython-OSX" 2.3 is required.  There is a disk image with an
+   installer package in the wxPython Sourceforge download area, in
+   this group:
 
    http://sourceforge.net/project/showfiles.php?group_id=10718&release_id=84730
 
    If, for some reason you need to build your own Python, get the
-   source from www.python.org and follow theinstructions in the
-   Mac/OSX/README file to build and install Python.app and the
-   Python.framework.
-
-   If you build your own Python then you may want to make a symlink or
-   two in /usr/local/bin so that this version of Python can be found
-   from the command line.  For example:
-
-        cd /usr/local/bin
-	sudo ln -s /Library/Frameworks/Python.framework/Versions/2.2/bin/python2.2 python2.2
-        sudo ln -s python2.2 python
-
-   Also, if you create a /usr/local/bin/pythonw script like the
-   following then you can run Python GUI apps (like wxPython) directly
-   from the command line:
-
-       #!/bin/sh
-       exec /Applications/Python.app/Contents/MacOS/python $@
-
-   Be sure to give this script execute permissions:
-
-       sudo chmod +x /usr/local/bin/pythonw
-
-   If you would like to make a MachoPython installer from what you
-   built then you may want to look at the scripts I use to do it
-   located in wxPython/distrib/mac/buildPython.
+   source from www.python.org and follow the instructions in the
+   Mac/OSX/README file to build and install the Python.framework and
+   Python tools.
 
    One last thing, make sure that /usr/local/bin is in your PATH
-   environment variable.
+   environment variable since that is where the new python and pythonw
+   commands will be located.
 
 
-2. In a wxWindows CVS tree make a build directory.
+2. In a wxWindows CVS tree make a build directory.  (You can also use
+   a CVS snapshot located in http://wxwindows.org/snapshots/ or the
+   released wxPythonSrc-*.tr.gz archive.)
 
 	cd ~/proj/wxWindows	# or wherever you put it
 	mkdir build
@@ -69,7 +44,14 @@ get things from various CVS repositories as needed.
 5. Build and install wxPython.
 
 	cd ../wxPython
-	python setup.py IN_CVS_TREE=1 build install
+	python setup.py build install
+
+   If you would like to install to someplace besides the Python
+   site-packages directory (such as to your home directory) then you
+   can add "--root=<path>" after the "install" command.  To use
+   wxPython like this you'll need to ensure that the directory
+   containing wxPyrthon is contained in in the PYTHONPATH environment
+   variable.
 
 6. Test.  Just navigate in the Finder to the demo directory and double
    click demo.py, or simple.py, or whatever you want to run.  Or from

@@ -70,7 +70,7 @@ class TestFloatBar(wxFrame):
 def runTest(frame, nb, log):
     win = TestFloatBar(frame, log)
     frame.otherWin = win
-    win.Show(true)
+    win.Show(True)
 
 #---------------------------------------------------------------------------
 

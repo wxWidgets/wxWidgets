@@ -33,9 +33,9 @@ class MyPrintout(wxPrintout):
     def HasPage(self, page):
         self.log.WriteText("wxPrintout.HasPage: %d\n" % page)
         if page <= 2:
-            return true
+            return True
         else:
-            return false
+            return False
 
     def GetPageInfo(self):
         self.log.WriteText("wxPrintout.GetPageInfo\n")
@@ -82,7 +82,7 @@ class MyPrintout(wxPrintout):
         self.canvas.DoDrawing(dc)
         dc.DrawText("Page: %d" % page, marginX/2, maxY-marginY)
 
-        return true
+        return True
 
 
 #----------------------------------------------------------------------
@@ -117,14 +117,14 @@ class TestPrintPanel(wxPanel):
 
         self.box.Add(subbox, 0, wxGROW)
 
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(self.box)
 
 
     def OnPrintSetup(self, event):
         printerDialog = wxPrintDialog(self)
         printerDialog.GetPrintDialogData().SetPrintData(self.printData)
-        printerDialog.GetPrintDialogData().SetSetupDialog(true)
+        printerDialog.GetPrintDialogData().SetSetupDialog(True)
         printerDialog.ShowModal();
         self.printData = printerDialog.GetPrintDialogData().GetPrintData()
         printerDialog.Destroy()
@@ -144,7 +144,7 @@ class TestPrintPanel(wxPanel):
         frame.Initialize()
         frame.SetPosition(self.frame.GetPosition())
         frame.SetSize(self.frame.GetSize())
-        frame.Show(true)
+        frame.Show(True)
 
 
 

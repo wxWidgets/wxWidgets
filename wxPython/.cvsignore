@@ -2,8 +2,12 @@
 .emacs.desktop
 .gdb_history
 MANIFEST
+_build_dmg
 _build_rpm
 build
+build-gtk
+build-gtk2
+build-gtk2.unicode
 build-pkg
 build-pkg-debug
 build.local

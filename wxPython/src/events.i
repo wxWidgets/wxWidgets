@@ -225,9 +225,9 @@ public:
     bool MetaDown();
     bool AltDown();
     bool ShiftDown();
-    long KeyCode();
 
     long GetKeyCode();
+    %pragma(python) addtoclass = "KeyCode = GetKeyCode"
     bool HasModifiers();
 
     // get the raw key code (platform-dependent)
@@ -407,7 +407,7 @@ public:
 
             for (int i=0; i<count; i++) {
 #if wxUSE_UNICODE
-                PyList_SetItem(list, i, PyUnicode_FromUnicode(files[i], files[i].Len()));
+                PyList_SetItem(list, i, PyUnicode_FromWideChar(files[i], files[i].Len()));
 #else
                 PyList_SetItem(list, i, PyString_FromString((const char*)files[i]));
 #endif

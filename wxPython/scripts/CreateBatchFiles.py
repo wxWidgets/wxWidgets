@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------
 # Name:         CreateBatchFiles.py
-# Purpose:	Run by the InnoSetup installer to create a DOS batch
+# Purpose:      Run by the InnoSetup installer to create a DOS batch
 #               file for each of the wxPython tool scripts.
 #
 # Author:       Robin Dunn
@@ -22,6 +22,8 @@ scripts = [ ("img2png", 0),
             ("xrced",   1),
             ("pyshell", 1),
             ("pycrust", 1),
+            ("pycwrap", 1),
+            ("helpviewer", 1),
             ]
 
 template = """\

@@ -209,7 +209,7 @@ public:
     void GetEnds(double *OUTPUT, double *OUTPUT, double *OUTPUT, double *OUTPUT);
     wxPyShape * GetFrom();
     void GetLabelPosition(int position, double *OUTPUT, double *OUTPUT);
-    wxPoint * GetNextControlPoint(wxPyShape *shape);
+    wxRealPoint * GetNextControlPoint(wxPyShape *shape);
     wxPyShape * GetTo();
     void Initialise();
     void InsertLineControlPoint(wxDC* dc);

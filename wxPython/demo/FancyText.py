@@ -36,6 +36,5 @@ def runTest(frame, nb, log):
 
 
 
-import string
-overview = string.replace(fancytext.__doc__, "<", "&lt;")
+overview = fancytext.__doc__.replace("<", "&lt;")
 

@@ -1,8 +1,6 @@
 from wxPython.wx import *
 from wxPython.grid import *
 
-import string
-
 #---------------------------------------------------------------------------
 
 class CustomDataTable(wxPyGridTableBase):
@@ -45,7 +43,10 @@ class CustomDataTable(wxPyGridTableBase):
         return len(self.data[0])
 
     def IsEmptyCell(self, row, col):
-        return not self.data[row][col]
+        try:
+            return not self.data[row][col]
+        except IndexError:
+            return true
 
     # Get/Set values in the table.  The Python version of these
     # methods can handle any data-type, (as long as the Editor and
@@ -90,11 +91,11 @@ class CustomDataTable(wxPyGridTableBase):
     # editor and renderer.  This allows you to enforce some type-safety
     # in the grid.
     def CanGetValueAs(self, row, col, typeName):
-        colType = string.split(self.dataTypes[col], ':')[0]
+        colType = self.dataTypes[col].split(':')[0]
         if typeName == colType:
             return true
         else:
-            return false
+            return False
 
     def CanSetValueAs(self, row, col, typeName):
         return self.CanGetValueAs(row, col, typeName)
@@ -120,7 +121,7 @@ class CustTableGrid(wxGrid):
 
         self.SetRowLabelSize(0)
         self.SetMargins(0,0)
-        self.AutoSizeColumns(false)
+        self.AutoSizeColumns(False)
 
         EVT_GRID_CELL_LEFT_DCLICK(self, self.OnLeftDClick)
 
@@ -138,8 +139,22 @@ class CustTableGrid(wxGrid):
 class TestFrame(wxFrame):
     def __init__(self, parent, log):
         wxFrame.__init__(self, parent, -1, "Custom Table, data driven Grid  Demo", size=(640,480))
-        grid = CustTableGrid(self, log)
+        p = wxPanel(self, -1, style=0)
+        grid = CustTableGrid(p, log)
+        b = wxButton(p, -1, "Another Control...")
+        b.SetDefault()
+        EVT_BUTTON(self, b.GetId(), self.OnButton)
+        EVT_SET_FOCUS(b, self.OnButtonFocus)
+        bs = wxBoxSizer(wxVERTICAL)
+        bs.Add(grid, 1, wxGROW|wxALL, 5)
+        bs.Add(b)
+        p.SetSizer(bs)
 
+    def OnButton(self, evt):
+        print "button selected"
+
+    def OnButtonFocus(self, evt):
+        print "button focus"
 
 
 #---------------------------------------------------------------------------

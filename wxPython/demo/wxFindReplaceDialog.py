@@ -25,21 +25,21 @@ class TestPanel(wxPanel):
         data = wxFindReplaceData()
         dlg = wxFindReplaceDialog(self, data, "Find")
         dlg.data = data  # save a reference to it...
-        dlg.Show(true)
+        dlg.Show(True)
 
 
     def OnShowFindReplace(self, evt):
         data = wxFindReplaceData()
         dlg = wxFindReplaceDialog(self, data, "Find & Replace", wxFR_REPLACEDIALOG)
         dlg.data = data  # save a reference to it...
-        dlg.Show(true)
+        dlg.Show(True)
 
 
     def OnFind(self, evt):
         map = {
             wxEVT_COMMAND_FIND : "FIND",
             wxEVT_COMMAND_FIND_NEXT : "FIND_NEXT",
-            wxEVT_COMMAND_FIND_REPLACE : "REPALCE",
+            wxEVT_COMMAND_FIND_REPLACE : "REPLACE",
             wxEVT_COMMAND_FIND_REPLACE_ALL : "REPLACE_ALL",
             }
         et = evt.GetEventType()

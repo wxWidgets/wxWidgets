@@ -8,10 +8,9 @@ your sources from and what your desired end result is, there are
 several permutations of those steps.  At a high level the basic steps
 are:
 
-     1. Get the wxWindows sources
+     1. Get the sources
      2. Build the wxWindows DLL
-     3. Get the wxPython sources
-     4. Build and Install wxPython
+     3. Build and Install wxPython
 
 We'll go into more detail of each of these steps below, but first a
 few bits of background information on tools.
@@ -20,7 +19,11 @@ I use a tool called SWIG (http://www.swig.org) to help generate the
 C++ sources used in the wxPython extension module.  However you don't
 need to have SWIG unless you want to modify the *.i files.  I've made
 several modifications to SWIG specific to wxPython's needs and so the
-modified sources are included in the wx CVS at .../wxPython/wxSWIG.
+modified sources are included in the wx CVS at.../wxPython/wxSWIG.
+But because of the size and since most people won't need it my SWIG is
+not included in the wxPythonSrc tarball.  You'll need to get it from
+CVS or a CVS snapshot.
+
 If you need to modify the *.i files for wxPython then change to this
 directory and run:
 
@@ -40,6 +43,7 @@ it should be easier now to build with other win32 compilers such as
 the free mingw32 or Borland compilers, but I havn't tried them yet.
 If anybody wants to try it I'll take any required patches for the
 setup script and for these instructions.
+
 
 
 UNICODE
@@ -69,44 +73,44 @@ And now on to the fun stuff...
 
 
 
-1. Get the wxWindows sources
-----------------------------
+1. Get the sources
+------------------
 
-A. There are a few possible ways to get sources for wxWindows.  You
-   can download a released version from http://wxwindows.org/ or you
-   can get current development sources from the CVS server.  (Some
-   information about annonymous CVS access is at the
-   http://wxwindows.org/cvs.htm site.)  The advantage of using CVS is
-   that you can easily update as soon as the developers check in new
-   sources or fixes.  The advantage of using a released version is
-   that it usually has had more thorough testing done.  You can decide
-   which method is best for you.
+A. You can either use a tarball with the released version of the
+   source code for wxWindows/wxPython, or you can get current
+   development sources from the CVS repository.  (Some information
+   about annonymous CVS access is at the http://wxwindows.org/cvs.htm
+   site.)  The advantage of using CVS is that you can easily update as
+   soon as the developers check in new sources or fixes.  The
+   advantage of using a released version is that it usually has had
+   more thorough testing done.  You can decide which method is best
+   for you.  The released version file is named
+   wxPythonSrc-[version].tar.gz and is available from the wxPython
+   website at http://wxpython.org/download.php.  You can use WinZip to
+   unpack it if you don't have tar and gzip.
 
-B. You'll usually want to use wxWindows sources that have the same
-   version number as the wxPython sources you are using.  (Another
-   advantage of using CVS is that you'll get both at the same time.)
 
-C. Once you get the sources be sure to put them in a path without a
+B. Once you get the sources be sure to put them in a path without a
    space in it (i.e., NOT c:\Program Files\wx) and set an environment
-   variable named WXWIN to this directory.  For example:
+   variable named WXWIN to the top level directory.  For example:
 
-         mkdir \wx2
-         cd \wx2
-         unzip wxMSW-2.2.2.zip
-         set WXWIN=c:\wx2
+         set WXWIN=c:\wx\wxPythonSrc-2.4.0.4
 
-   You'll probably want to add that last line to your autoexec.bat or
+   You'll probably want to add that line to your autoexec.bat or
    System Properties depending on the type of system you are on.
 
-D. Change to the wx2\include\wx\msw directory and copy setup0.h to
+
+C. Change to the %WXWIN%\include\wx\msw directory and copy setup0.h to
    setup.h and then edit setup.h.  This is how you control which parts
    of wxWindows are compiled into or left out of the build, simply by
    turning options on or off.  I have the following differences from
    the default setup0.h in my setup.h, but you can experiment with
    other settings if you like:
 
+
 	 WXWIN_COMPATIBILITY_2_2	0
          wxDIALOG_UNIT_COMPATIBILITY	0
+	 wxUSE_DEBUG_CONTEXT		1
 	 wxUSE_MEMORY_TRACING		1
          wxUSE_CMDLINE_PARSER		0
 	 wxUSE_FSVOLUME			0
@@ -134,6 +138,7 @@ A. Although MSVC project files are provided I always use the makefiles
    Python, (and I make sure they stay that way.)  You would have to
    edit the project files a bit to make it work otherwise.
 
+
 B. There are three different types of wxWindows DLLs that can be
    produced by the VC makefile simply by providing a flag on the nmake
    command-line, I call the three types DEBUG, FINAL, and HYBRID.
@@ -157,43 +162,41 @@ B. There are three different types of wxWindows DLLs that can be
             wxmsw[version].dll.  This DLL is compiled with optimizations
             turned on and without debugging information and without
             __WXDEBUG__.  The /MD flag is used which means that you
-            can use this version with the standard python.exe.  This
-            is the version that I use when making the binary installer
-            for win32.
+            can use this version with the standard python.exe.
 
      HYBRID Specified with "FINAL=hybrid" and produces a DLL named
             wxmsw[version]h.dll.  This DLL is almost the same as the
-            DEBUG version except the /MD flag is used which means that
-            you can use the standard python.exe but you still get the
-            debugging info and the __WXDEBUG__ code enabled.  With the
-            debugger you can trace through the the code for the
-            wxPython extension and the wxWindows DLL, but not the
-            Python interpreter.  You might use this version when you
-            want to deploy a wxPython app with the __WXDEBUG__ code
-            enabled.  I use this mode most of the time during
-            development simply because it's easier than having to
-            remember to type python_d all the time.
+            FINAL version except the __WXDEBUG__ is used which means
+            that you will get extra runtime assertions and validations
+            from wxWindows.  If any of these fail then they are turned
+            into a Python exception that you can catch and deal with
+            in your code.  This is the version that I use when making
+            the binary installer for win32.
+
 
    Since different DLL names and object file directories are used you
    can build all three types if you like.
 
-C. Change to the wx2\src\msw directory and type the following command,
+
+C. Change to the %WXWIN%\src\msw directory and type the following command,
    using the value for FINAL that you want:
 
-         nmake -f makefile.vc dll pch FINAL=hybrid
+         nmake -f makefile.vc dll FINAL=hybrid
 
    Your machine will then crunch away for possibly a long time,
    depending on your hardware, and when it's done you should have a
-   DLL and some library files in \wx2\lib.
+   DLL and some library files in %WXWIN%\lib.
 
-D. You'll either need to add \wx2\lib to the PATH or copy the DLL file
-   to a directory already on the PATH so the DLL can be found at
+
+D. You'll either need to add %WXWIN%\lib to the PATH or copy the DLL
+   file to a directory already on the PATH so the DLL can be found at
    runtime.  Another option is to copy the DLL to the directory that
    the wxPython pacakge is installed to, for example,
    c:\Python22\lib\site-packages\wxPython.
 
+
 E. You can test your build by changing to one of the directories under
-   \wx2\samples or \wx2\demos and typing (using the right FINAL flag):
+   %WXWIN%\samples or %WXWIN\demos and typing (using the right FINAL flag):
 
         nmake -f makefile.vc FINAL=hybrid WXUSINGDLL=1
 
@@ -201,26 +204,15 @@ E. You can test your build by changing to one of the directories under
 
 
 
-3. Get the wxPython sources
----------------------------
 
-A. You have the same options (and same advantages/disadvantages) for
-   getting the wxPython source, either a released snapshot or from
-   CVS.  The released version file is named wxPython-[version].tar.gz
-   and is available at http://wxpython.org/download.php.  You can use
-   WinZip to unpack it if you don't have tar and gzip.  If you want to
-   use CVS you'll find wxPython in the wxWindows CVS tree (see above)
-   in the wxWindows/wxPython directory.
-
-
-
-4. Build and Install wxPython
+3. Build and Install wxPython
 -----------------------------
 
 A. As mentioned previouslly, wxPython is built with the standard
    Python Distutils tool.  If you are using Python 2.0 or later you
    are all set, otherwise you need to download and install Distutils
    1.0 from http://www.python.org/sigs/distutils-sig/.
+
 
 B. Change to the root wxPython directory and look at the setup.py
    file.  This is the script that configures and defines all the
@@ -246,18 +238,7 @@ B. Change to the root wxPython directory and look at the setup.py
                        will be executed to regenerate the wrapper C++
                        and shadow python files.
 
-           IN_CVS_TREE If you are using the CVS version of the
-                       wxWindows and wxPython sources then you will
-                       need to set this flag to non-zero.  This is
-                       needed because some source files from the
-                       wxWindows tree are copied to be under the
-                       wxPython tree in order to keep Distutils happy.
-                       With this flag set then setup.py will
-                       automatically keep these copied sources up to
-                       date if the original version is ever updated.
-                       If you are using the tar.gz version of the
-                       Python sources then these copied sources are
-                       already present in your source tree.
+	          etc.
 
 
 C. To build and install wxPython you simply need to execute the
@@ -280,11 +261,19 @@ C. To build and install wxPython you simply need to execute the
    commented out.  Just search for "GX-" and uncomment it so it is put
    into the cflags list.
 
+   If you would like to install to someplace besides the Python
+   site-packages directory (such as to your home directory) then you
+   can add "--root=<path>" after the "install" command.  To use
+   wxPython like this you'll need to ensure that the directory
+   containing wxPyrthon is contained in in the PYTHONPATH environment
+   variable.
+
 
 D. At this point you should be able to change into the wxPython\demo
    directory and run the demo:
 
          python demo.py
+
 
 E. If you would like to make a test build that doesn't overwrite the
    installed version of wxPython you can do so with one of these
@@ -301,8 +290,8 @@ E. If you would like to make a test build that doesn't overwrite the
    To run using this test version just add the base wxPython source
    directory to the PYTHONPATH:
 
-         set PYTHONPATH=c:\wx2\wxPython
-         cd c:\wx2\wxPython\demo
+         set PYTHONPATH=%WXDIR%\wxPython
+         cd %WXDIR%\wxPython\demo
          python demo.py
 
 

@@ -30,7 +30,6 @@
 %import controls.i
 
 %pragma(python) code = "import wx"
-%pragma(python) code = "import string"
 
 //---------------------------------------------------------------------------
 
@@ -39,16 +38,20 @@ class wxSizerItem : public wxObject {
 public:
     // No need to ever create one directly in Python...
 
-    //wxSizerItem( int width, int height, int option, int flag, int border, wxObject* userData);
-    //wxSizerItem( wxWindow *window, int option, int flag, int border, wxObject* userData );
-    //wxSizerItem( wxSizer *sizer, int option, int flag, int border, wxObject* userData );
+    //wxSizerItem( int width, int height, int proportion, int flag, int border, wxObject* userData);
+    //wxSizerItem( wxWindow *window, int proportion, int flag, int border, wxObject* userData );
+    //wxSizerItem( wxSizer *sizer, int proportion, int flag, int border, wxObject* userData );
 
     void DeleteWindows();
+    void DetachSizer();
 
-    wxPoint GetPosition();
     wxSize GetSize();
     wxSize CalcMin();
     void SetDimension( wxPoint pos, wxSize size );
+
+    wxSize GetMinSize();
+    void SetInitSize( int x, int y );
+
     %name(SetRatioWH) void SetRatio( int width, int height );
     %name(SetRatioSize) void SetRatio( wxSize size );
     void SetRatio( float ratio );
@@ -58,18 +61,26 @@ public:
     bool IsSizer();
     bool IsSpacer();
 
+    void SetProportion( int proportion );
+    int GetProportion();
+    %pragma(python) addtoclass = "SetOption = SetProportion"
+    %pragma(python) addtoclass = "GetOption = GetProportion"
+    void SetFlag( int flag );
+    int GetFlag();
+    void SetBorder( int border );
+    int GetBorder();
+
     wxWindow *GetWindow();
     void SetWindow( wxWindow *window );
     wxSizer *GetSizer();
     void SetSizer( wxSizer *sizer );
-    int GetOption();
-    int GetFlag();
-    int GetBorder();
+    const wxSize& GetSpacer();
+    void SetSpacer( const wxSize &size );
 
-    void SetInitSize( int x, int y );
-    void SetOption( int option );
-    void SetFlag( int flag );
-    void SetBorder( int border );
+    void Show( bool show );
+    bool IsShown();
+
+    wxPoint GetPosition();
 
     // wxObject* GetUserData();
     %addmethods {
@@ -104,103 +115,127 @@ public:
     %addmethods {
         void Destroy() { delete self; }
 
-        void AddWindow(wxWindow *window, int option=0, int flag=0, int border=0,
+        void AddWindow(wxWindow *window, int proportion=0, int flag=0, int border=0,
                        PyObject* userData=NULL) {
             wxPyUserData* data = NULL;
             if (userData) data = new wxPyUserData(userData);
-            self->Add(window, option, flag, border, data);
+            self->Add(window, proportion, flag, border, data);
         }
-        void AddSizer(wxSizer *sizer, int option=0, int flag=0, int border=0,
+        void AddSizer(wxSizer *sizer, int proportion=0, int flag=0, int border=0,
                       PyObject* userData=NULL) {
             wxPyUserData* data = NULL;
             if (userData) data = new wxPyUserData(userData);
-            self->Add(sizer, option, flag, border, data);
+            self->Add(sizer, proportion, flag, border, data);
         }
-        void AddSpacer(int width, int height, int option=0, int flag=0,
+        void AddSpacer(int width, int height, int proportion=0, int flag=0,
                        int border=0, PyObject* userData=NULL) {
             wxPyUserData* data = NULL;
             if (userData) data = new wxPyUserData(userData);
-            self->Add(width, height, option, flag, border, data);
+            self->Add(width, height, proportion, flag, border, data);
         }
 
-
-        void InsertWindow(int before, wxWindow *window, int option=0, int flag=0,
+        void InsertWindow(int before, wxWindow *window, int proportion=0, int flag=0,
                           int border=0, PyObject* userData=NULL) {
             wxPyUserData* data = NULL;
             if (userData) data = new wxPyUserData(userData);
-            self->Insert(before, window, option, flag, border, data);
+            self->Insert(before, window, proportion, flag, border, data);
         }
-        void InsertSizer(int before, wxSizer *sizer, int option=0, int flag=0,
+        void InsertSizer(int before, wxSizer *sizer, int proportion=0, int flag=0,
                          int border=0, PyObject* userData=NULL) {
             wxPyUserData* data = NULL;
             if (userData) data = new wxPyUserData(userData);
-            self->Insert(before, sizer, option, flag, border, data);
+            self->Insert(before, sizer, proportion, flag, border, data);
         }
-        void InsertSpacer(int before, int width, int height, int option=0, int flag=0,
+        void InsertSpacer(int before, int width, int height, int proportion=0, int flag=0,
                           int border=0, PyObject* userData=NULL) {
             wxPyUserData* data = NULL;
             if (userData) data = new wxPyUserData(userData);
-            self->Insert(before, width, height, option, flag, border, data);
+            self->Insert(before, width, height, proportion, flag, border, data);
         }
 
 
-        void PrependWindow(wxWindow *window, int option=0, int flag=0, int border=0,
+        void PrependWindow(wxWindow *window, int proportion=0, int flag=0, int border=0,
                            PyObject* userData=NULL) {
             wxPyUserData* data = NULL;
             if (userData) data = new wxPyUserData(userData);
-            self->Prepend(window, option, flag, border, data);
+            self->Prepend(window, proportion, flag, border, data);
         }
-        void PrependSizer(wxSizer *sizer, int option=0, int flag=0, int border=0,
+        void PrependSizer(wxSizer *sizer, int proportion=0, int flag=0, int border=0,
                           PyObject* userData=NULL) {
             wxPyUserData* data = NULL;
             if (userData) data = new wxPyUserData(userData);
-            self->Prepend(sizer, option, flag, border, data);
+            self->Prepend(sizer, proportion, flag, border, data);
         }
-        void PrependSpacer(int width, int height, int option=0, int flag=0,
+        void PrependSpacer(int width, int height, int proportion=0, int flag=0,
                            int border=0, PyObject* userData=NULL) {
             wxPyUserData* data = NULL;
             if (userData) data = new wxPyUserData(userData);
-            self->Prepend(width, height, option, flag, border, data);
+            self->Prepend(width, height, proportion, flag, border, data);
         }
+
+        // TODO:  AddItem, InsertItem, PrependItem
+
     }
 
-    %name(RemoveWindow)bool Remove( wxWindow *window );
+    %name(RemoveWindow)bool Remove( wxWindow *window );  // TODO: This is DEPRECATED.  Should all be removed?
     %name(RemoveSizer)bool Remove( wxSizer *sizer );
     %name(RemovePos)bool Remove( int pos );
+
+    %name(DetachWindow)bool Detach( wxWindow *window );
+    %name(DetachSizer)bool Detach( wxSizer *sizer );
+    %name(DetachPos)bool Detach( int pos );
 
 
     %pragma(python) addtoclass = "
     def Add(self, *args, **kw):
         if type(args[0]) == type(1):
             apply(self.AddSpacer, args, kw)
-        elif string.find(args[0].this, 'Sizer') != -1:
+        elif isinstance(args[0], wxSizerPtr):
             apply(self.AddSizer, args, kw)
-        else:
+        elif isinstance(args[0], wxWindowPtr):
             apply(self.AddWindow, args, kw)
+        else:
+            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
 
     def Insert(self, *args, **kw):
         if type(args[1]) == type(1):
             apply(self.InsertSpacer, args, kw)
-        elif string.find(args[1].this, 'Sizer') != -1:
+        elif isinstance(args[1], wxSizerPtr):
             apply(self.InsertSizer, args, kw)
-        else:
+        elif isinstance(args[1], wxWindowPtr):
             apply(self.InsertWindow, args, kw)
+        else:
+            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
 
     def Prepend(self, *args, **kw):
         if type(args[0]) == type(1):
             apply(self.PrependSpacer, args, kw)
-        elif string.find(args[0].this, 'Sizer') != -1:
+        elif isinstance(args[0], wxSizerPtr):
             apply(self.PrependSizer, args, kw)
-        else:
+        elif isinstance(args[0], wxWindowPtr):
             apply(self.PrependWindow, args, kw)
+        else:
+            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
 
     def Remove(self, *args, **kw):
         if type(args[0]) == type(1):
-            apply(self.RemovePos, args, kw)
-        elif string.find(args[0].this, 'Sizer') != -1:
-            apply(self.RemoveSizer, args, kw)
+            return apply(self.RemovePos, args, kw)
+        elif isinstance(args[0], wxSizerPtr):
+            return apply(self.RemoveSizer, args, kw)
+        elif isinstance(args[0], wxWindowPtr):
+            return apply(self.RemoveWindow, args, kw)
         else:
-            apply(self.RemoveWindow, args, kw)
+            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
+
+    def Detach(self, *args, **kw):
+        if type(args[0]) == type(1):
+            return apply(self.DetachPos, args, kw)
+        elif isinstance(args[0], wxSizerPtr):
+            return apply(self.DetachSizer, args, kw)
+        elif isinstance(args[0], wxWindowPtr):
+            return apply(self.DetachWindow, args, kw)
+        else:
+            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
 
     def AddMany(self, widgets):
         for childinfo in widgets:
@@ -209,22 +244,38 @@ public:
             apply(self.Add, childinfo)
 "
 
+    void Clear( bool delete_windows = false );
+    void DeleteWindows();
 
-    void SetDimension( int x, int y, int width, int height );
     void SetMinSize(wxSize size);
 
-    %name(SetItemMinSizeWindow) void SetItemMinSize(wxWindow* window, int width, int height);
-    %name(SetItemMinSizeSizer) void SetItemMinSize(wxSizer* sizer, int width, int height);
-    %name(SetItemMinSizePos) void SetItemMinSize(int pos, int width, int height);
+    %name(SetItemMinSizeWindow) void SetItemMinSize(wxWindow* window, wxSize size);
+    %name(SetItemMinSizeSizer) void SetItemMinSize(wxSizer* sizer, wxSize size);
+    %name(SetItemMinSizePos) void SetItemMinSize(int pos, wxSize size);
+    %name(SetItemMinSizeWindowWH) void SetItemMinSize(wxWindow* window, int width, int height);
+    %name(SetItemMinSizeSizerWH) void SetItemMinSize(wxSizer* sizer, int width, int height);
+    %name(SetItemMinSizePosWH) void SetItemMinSize(int pos, int width, int height);
 
     %pragma(python) addtoclass = "
     def SetItemMinSize(self, *args):
         if type(args[0]) == type(1):
             apply(self.SetItemMinSizePos, args)
-        elif string.find(args[0].this, 'Sizer') != -1:
+        elif isinstance(args[0], wxSizerPtr):
             apply(self.SetItemMinSizeSizer, args)
-        else:
+        elif isinstance(args[0], wxWindowPtr):
             apply(self.SetItemMinSizeWindow, args)
+        else:
+            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
+
+    def SetItemMinSizeWH(self, *args):
+        if type(args[0]) == type(1):
+            apply(self.SetItemMinSizePosWH, args)
+        elif isinstance(args[0], wxSizerPtr):
+            apply(self.SetItemMinSizeSizerWH, args)
+        elif isinstance(args[0], wxWindowPtr):
+            apply(self.SetItemMinSizeWindowWH, args)
+        else:
+            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
      "
 
     wxSize GetSize();
@@ -251,17 +302,64 @@ public:
     void SetSizeHints( wxWindow *window );
     void SetVirtualSizeHints( wxWindow *window );
 
-    void Clear( bool delete_windows=FALSE );
-    void DeleteWindows();
-
 
     // wxList& GetChildren();
     %addmethods {
         PyObject* GetChildren() {
-            wxList& list = self->GetChildren();
+            wxSizerItemList& list = self->GetChildren();
             return wxPy_ConvertList(&list, "wxSizerItem");
         }
     }
+
+    void SetDimension( int x, int y, int width, int height );
+
+    // Manage whether individual windows or sub-sizers are considered
+    // in the layout calculations or not.
+    %name(ShowWindow)void Show( wxWindow *window, bool show = TRUE );
+    %name(ShowSizer)void Show( wxSizer *sizer, bool show = TRUE );
+    %name(ShowPos)void Show( size_t index, bool show = TRUE );
+    %name(HideWindow)void Hide( wxWindow *window );
+    %name(HideSizer)void Hide( wxSizer *sizer );
+    %name(HidePos)void Hide( size_t index );
+    %name(IsShownWindow)bool IsShown( wxWindow *window );
+    %name(IsShownSizer)bool IsShown( wxSizer *sizer );
+    %name(IsShownPos)bool IsShown( size_t index );
+
+    %pragma(python) addtoclass = "
+    def Show(self, *args):
+        if type(args[0]) == type(1):
+            apply(self.ShowPos, args)
+        elif isinstance(args[0], wxSizerPtr):
+            apply(self.ShowSizer, args)
+        elif isinstance(args[0], wxWindowPtr):
+            apply(self.ShowWindow, args)
+        else:
+            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
+
+    def Hide(self, *args):
+        if type(args[0]) == type(1):
+            apply(self.HidePos, args)
+        elif isinstance(args[0], wxSizerPtr):
+            apply(self.HideSizer, args)
+        elif isinstance(args[0], wxWindowPtr):
+            apply(self.HideWindow, args)
+        else:
+            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
+
+    def IsShown(self, *args):
+        if type(args[0]) == type(1):
+            return apply(self.IsShownPos, args)
+        elif isinstance(args[0], wxSizerPtr):
+            return apply(self.IsShownSizer, args)
+        elif isinstance(args[0], wxWindowPtr):
+            return apply(self.IsShownWindow, args)
+        else:
+            raise TypeError, 'Expected int, wxSizer or wxWindow parameter'
+"
+
+    // Recursively call wxWindow::Show () on all sizer items.
+    void ShowItems (bool show);
+
 };
 
 
@@ -303,6 +401,7 @@ public:
     wxBoxSizer(int orient = wxHORIZONTAL);
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     int GetOrientation();
+    void SetOrientation(int orient);
     void RecalcSizes();
     wxSize CalcMin();
 };
@@ -352,6 +451,19 @@ public:
 
 //---------------------------------------------------------------------------
 
+enum wxFlexSizerGrowMode
+{
+    // don't resize the cells in non-flexible direction at all
+    wxFLEX_GROWMODE_NONE,
+
+    // uniformly resize only the specified ones (default)
+    wxFLEX_GROWMODE_SPECIFIED,
+
+    // uniformly resize all cells
+    wxFLEX_GROWMODE_ALL
+};
+
+
 class wxFlexGridSizer: public wxGridSizer
 {
 public:
@@ -361,11 +473,22 @@ public:
     void RecalcSizes();
     wxSize CalcMin();
 
-    void AddGrowableRow( size_t idx );
+    void AddGrowableRow( size_t idx, int proportion = 0  );
     void RemoveGrowableRow( size_t idx );
-    void AddGrowableCol( size_t idx );
+    void AddGrowableCol( size_t idx, int proportion = 0  );
     void RemoveGrowableCol( size_t idx );
 
+    // the sizer cells may grow in both directions, not grow at all or only
+    // grow in one direction but not the other
+
+    // the direction may be wxVERTICAL, wxHORIZONTAL or wxBOTH (default)
+    void SetFlexibleDirection(int direction);
+    int GetFlexibleDirection();
+
+    // note that the grow mode only applies to the direction which is not
+    // flexible
+    void SetNonFlexibleGrowMode(wxFlexSizerGrowMode mode);
+    wxFlexSizerGrowMode GetNonFlexibleGrowMode();
 };
 
 //---------------------------------------------------------------------------

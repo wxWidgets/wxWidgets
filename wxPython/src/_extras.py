@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Name:         _extra.py
-# Purpose:	This file is appended to the shadow class file generated
+# Purpose:      This file is appended to the shadow class file generated
 #               by SWIG.  We add some unSWIGable things here.
 #
 # Author:       Robin Dunn
@@ -130,6 +130,12 @@ def EVT_WINDOW_CREATE(win, func):
 
 def EVT_WINDOW_DESTROY(win, func):
     win.Connect(-1, -1, wxEVT_DESTROY, func)
+
+def EVT_WINDOW_CREATE_ID(win, id, func):
+    win.Connect(id, -1, wxEVT_CREATE, func)
+
+def EVT_WINDOW_DESTROY_ID(win, id, func):
+    win.Connect(id, -1, wxEVT_DESTROY, func)
 
 def EVT_SET_CURSOR(win, func):
     win.Connect(-1, -1, wxEVT_SET_CURSOR, func)
@@ -263,7 +269,7 @@ def EVT_COMMAND_SCROLL(win, id, func):
     win.Connect(id, -1, wxEVT_SCROLL_PAGEDOWN,  func)
     win.Connect(id, -1, wxEVT_SCROLL_THUMBTRACK,func)
     win.Connect(id, -1, wxEVT_SCROLL_THUMBRELEASE,func)
-    win.Connect(-1, -1, wxEVT_SCROLL_ENDSCROLL,   func)
+    win.Connect(id, -1, wxEVT_SCROLL_ENDSCROLL,   func)
 
 def EVT_COMMAND_SCROLL_TOP(win, id, func):
     win.Connect(id, -1, wxEVT_SCROLL_TOP, func)
@@ -587,16 +593,49 @@ wxColor      = wxColour
 wxNamedColor = wxNamedColour
 wxPen        = wxPyPen
 wxScrollbar  = wxScrollBar
+wxPoint2D    = wxPoint2DDouble
+
+wxPyAssertionError = wxc.wxPyAssertionError
 
 
 # backwards compatibility
-wxNoRefBitmap       = wxBitmap
-wxPyDefaultPosition = wxDefaultPosition
-wxPyDefaultSize     = wxDefaultSize
-NULL                = None
+wxNoRefBitmap           = wxBitmap
+wxPyDefaultPosition     = wxDefaultPosition
+wxPyDefaultSize         = wxDefaultSize
+NULL                    = None
 wxSystemSettings_GetSystemColour = wxSystemSettings_GetColour
 wxSystemSettings_GetSystemFont   = wxSystemSettings_GetFont
 wxSystemSettings_GetSystemMetric = wxSystemSettings_GetMetric
+
+
+# workarounds for bad wxRTTI names
+__wxPyPtrTypeMap['wxGauge95']    = 'wxGauge'
+
+
+
+def NewId():
+    import warnings
+    warnings.warn("Use wxNewId instead", DeprecationWarning, 2)
+    return wxNewId()
+
+def RegisterId(ID):
+    import warnings
+    warnings.warn("Use wxRegisterId instead", DeprecationWarning, 2)
+    return wxRegisterId(ID)
+
+
+
+# Use Python's bool constants if available, make aliases if not
+try:
+    True
+except NameError:
+    True = 1==1
+    False = 1==0
+
+# Backwards compaatible
+TRUE  = true  = True
+FALSE = false = False
+
 
 #----------------------------------------------------------------------
 # wxGTK sets the locale when initialized.  Doing this at the Python
@@ -608,7 +647,11 @@ if wxPlatform == "__WXGTK__":
     except:
         pass
 
-
+if wxPlatform == "__WXMSW__":
+    import os
+    localedir = os.path.join(os.path.split(__file__)[0], "locale")
+    wxLocale_AddCatalogLookupPathPrefix(localedir)
+    del os
 
 #----------------------------------------------------------------------
 # wxWindows version numbers.  wxPython version is in __version__.
@@ -660,6 +703,18 @@ def wxPyTypeCast(obj, typeStr):
         theObj.thisown = obj.thisown
     return theObj
 
+#----------------------------------------------------------------------------
+# An isinstance for Pythons < 2.2 that can check a sequence of class objects
+# like the one in 2.2 can.
+
+def wxPy_isinstance(obj, klasses):
+    import types
+    if sys.version[:3] < "2.2" and type(klasses) in [types.TupleType, types.ListType]:
+        for klass in klasses:
+            if isinstance(obj, klass): return True
+        return False
+    else:
+        return isinstance(obj, klasses)
 
 #----------------------------------------------------------------------------
 _wxCallAfterId = None
@@ -684,6 +739,9 @@ def wxCallAfter(callable, *args, **kw):
     evt.args = args
     evt.kw = kw
     wxPostEvent(app, evt)
+
+# an alias
+wxRunLater = wxCallAfter
 
 #----------------------------------------------------------------------
 
@@ -744,7 +802,7 @@ class wxPyOnDemandOutputWindow:
             self.text  = wxTextCtrl(self.frame, -1, "",
                                     style = wxTE_MULTILINE|wxTE_READONLY)
             self.frame.SetSize(wxSize(450, 300))
-            self.frame.Show(true)
+            self.frame.Show(True)
             EVT_CLOSE(self.frame, self.OnCloseWindow)
         self.text.AppendText(str)
 
@@ -765,12 +823,17 @@ class wxApp(wxPyApp):
     error = 'wxApp.error'
     outputWindowClass = wxPyOnDemandOutputWindow
 
-    def __init__(self, redirect=_defRedirect, filename=None):
+    def __init__(self, redirect=_defRedirect, filename=None, useBestVisual=False):
         wxPyApp.__init__(self)
         self.stdioWin = None
         self.saveStdio = (sys.stdout, sys.stderr)
+
+        # This has to be done before OnInit
+        self.SetUseBestVisual(useBestVisual)
+
         if redirect:
             self.RedirectStdio(filename)
+
         # this initializes wxWindows and then calls our OnInit
         _wxStart(self.OnInit)
 
@@ -797,12 +860,27 @@ class wxApp(wxPyApp):
         if filename:
             sys.stdout = sys.stderr = open(filename, 'a')
         else:
-            self.stdioWin = self.outputWindowClass() # wxPyOnDemandOutputWindow
+            self.stdioWin = self.outputWindowClass()
             sys.stdout = sys.stderr = self.stdioWin
 
 
     def RestoreStdio(self):
         sys.stdout, sys.stderr = self.saveStdio
+
+
+# change from wxPyApp_ to wxApp_
+wxApp_GetMacDefaultEncodingIsPC = wxc.wxPyApp_GetMacDefaultEncodingIsPC
+wxApp_GetMacSupportPCMenuShortcuts = wxc.wxPyApp_GetMacSupportPCMenuShortcuts
+wxApp_GetMacAboutMenuItemId = wxc.wxPyApp_GetMacAboutMenuItemId
+wxApp_GetMacPreferencesMenuItemId = wxc.wxPyApp_GetMacPreferencesMenuItemId
+wxApp_GetMacExitMenuItemId = wxc.wxPyApp_GetMacExitMenuItemId
+wxApp_GetMacHelpMenuTitleName = wxc.wxPyApp_GetMacHelpMenuTitleName
+wxApp_SetMacDefaultEncodingIsPC = wxc.wxPyApp_SetMacDefaultEncodingIsPC
+wxApp_SetMacSupportPCMenuShortcuts = wxc.wxPyApp_SetMacSupportPCMenuShortcuts
+wxApp_SetMacAboutMenuItemId = wxc.wxPyApp_SetMacAboutMenuItemId
+wxApp_SetMacPreferencesMenuItemId = wxc.wxPyApp_SetMacPreferencesMenuItemId
+wxApp_SetMacExitMenuItemId = wxc.wxPyApp_SetMacExitMenuItemId
+wxApp_SetMacHelpMenuTitleName = wxc.wxPyApp_SetMacHelpMenuTitleName
 
 
 #----------------------------------------------------------------------------
@@ -812,7 +890,7 @@ class wxPySimpleApp(wxApp):
         wxApp.__init__(self, flag)
     def OnInit(self):
         wxInitAllImageHandlers()
-        return true
+        return True
 
 
 class wxPyWidgetTester(wxApp):
@@ -823,11 +901,11 @@ class wxPyWidgetTester(wxApp):
     def OnInit(self):
         self.frame = wxFrame(None, -1, "Widget Tester", pos=(0,0), size=self.size)
         self.SetTopWindow(self.frame)
-        return true
+        return True
 
     def SetWidget(self, widgetClass, *args):
         w = apply(widgetClass, (self.frame,) + args)
-        self.frame.Show(true)
+        self.frame.Show(True)
 
 #----------------------------------------------------------------------------
 # DO NOT hold any other references to this object.  This is how we

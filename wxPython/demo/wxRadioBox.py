@@ -3,10 +3,13 @@ from wxPython.wx import *
 
 #---------------------------------------------------------------------------
 
-RBOX1 = wxNewId()
-RBOX2 = wxNewId()
 RBUT1 = wxNewId()
 RBUT2 = wxNewId()
+RBUT3 = wxNewId()
+RBUT4 = wxNewId()
+
+RBOX1 = wxNewId()
+RBOX2 = wxNewId()
 
 class TestRadioButtons(wxPanel):
     def __init__(self, parent, log):
@@ -33,15 +36,6 @@ class TestRadioButtons(wxPanel):
         rb.SetToolTip(wxToolTip("This box has no label"))
         sizer.Add(rb, 0, wxLEFT|wxRIGHT|wxBOTTOM, 20)
 
-        sizer.Add(wxStaticText(self, -1, "These are plain wxRadioButtons"),
-                  0, wxLEFT|wxRIGHT, 20)
-        sizer.Add(wxRadioButton(self, RBUT1, "wxRadioButton 1"),
-                  0, wxLEFT|wxRIGHT, 20)
-        sizer.Add(wxRadioButton(self, RBUT2, "wxRadioButton 2"),
-                  0, wxLEFT|wxRIGHT, 20)
-        EVT_RADIOBUTTON(self, RBUT1, self.EvtRadioButton)
-        EVT_RADIOBUTTON(self, RBUT2, self.EvtRadioButton)
-
         self.SetSizer(sizer)
 
 
@@ -49,7 +43,7 @@ class TestRadioButtons(wxPanel):
         self.log.WriteText('EvtRadioBox: %d\n' % event.GetInt())
 
     def EvtRadioButton(self, event):
-        self.log.write('EvtRadioButton:%d\n' % event.GetInt())
+        self.log.write('EvtRadioButton:%d\n' % event.GetId())
 
 #---------------------------------------------------------------------------
 
@@ -57,21 +51,19 @@ def runTest(frame, nb, log):
     win = TestRadioButtons(nb, log)
     return win
 
-#---------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
 
 
 overview = """\
-A radio box item is used to select one of number of mutually exclusive choices.  It is displayed as a vertical column or horizontal row of labelled buttons.
+A radio box item is used to select one of number of mutually exclusive
+choices.  It is displayed as a vertical column or horizontal row of
+labelled buttons.
 
 """
 
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
 

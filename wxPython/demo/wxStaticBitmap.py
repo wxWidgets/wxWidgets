@@ -1,8 +1,6 @@
 
 from wxPython.wx import *
-from Main import opj
 
-import string
 import images
 
 #----------------------------------------------------------------------

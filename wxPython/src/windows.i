@@ -216,12 +216,17 @@ public:
     void DragAcceptFiles(bool accept);
 #endif
     void Enable(bool enable);
+    void Disable();
 
     // Find child window by ID or name
     %name(FindWindowById) wxWindow* FindWindow(long id);
     %name(FindWindowByName) wxWindow* FindWindow(const wxString& name);
 
     void Fit();
+
+    // set virtual size to satisfy children
+    void FitInside();
+
     wxColour GetBackgroundColour();
     wxBorder GetBorder() const;
 
@@ -291,7 +296,9 @@ public:
     bool IsShown();
     bool IsTopLevel();
     void Layout();
+#ifdef wxUSE_WX_RESOURCES
     bool LoadFromResource(wxWindow* parent, const wxString& resourceName, const wxResourceTable* resourceTable = NULL);
+#endif
     void Lower();
     void MakeModal(bool flag=TRUE);
     %name(MoveXY)void Move(int x, int y, int flags = wxSIZE_USE_EXISTING);
@@ -365,6 +372,8 @@ public:
     wxSize GetVirtualSize() const;
     %name(GetVirtualSizeTuple)void GetVirtualSize( int *OUTPUT, int *OUTPUT ) const;
 
+    wxSize GetBestVirtualSize();
+
     %name(SetClientSizeWH)void SetClientSize(int width, int height);
     void SetClientSize(const wxSize& size);
     //void SetPalette(wxPalette* palette);
@@ -409,6 +418,13 @@ public:
 
     wxSize GetBestSize();
     wxSize GetMaxSize();
+
+    // There are times (and windows) where 'Best' size and 'Min' size
+    // are vastly out of sync.  This should be remedied somehow, but in
+    // the meantime, this method will return the larger of BestSize
+    // (the window's smallest legible size), and any user specified
+    // MinSize hint.
+    wxSize GetAdjustedBestSize();
 
     void SetCaret(wxCaret *caret);
     wxCaret *GetCaret();
@@ -761,6 +777,7 @@ public:
     wxMenu *Replace(size_t pos, wxMenu *menu, const wxString& title);
     wxMenu *Remove(size_t pos);
     void EnableTop(size_t pos, bool enable);
+    bool IsEnabledTop(size_t pos);
     void SetLabelTop(size_t pos, const wxString& label);
     wxString GetLabelTop(size_t pos);
     int FindMenu(const wxString& title);
