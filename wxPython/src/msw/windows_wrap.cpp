@@ -1378,7 +1378,7 @@ static PyObject *_wrap_Panel_Create(PyObject *self, PyObject *args, PyObject *kw
     PyObject *resultobj;
     wxPanel *arg1 = (wxPanel *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    int arg3 ;
+    int arg3 = (int) (int)-1 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
     wxSize const &arg5_defvalue = wxDefaultSize ;
@@ -1401,13 +1401,15 @@ static PyObject *_wrap_Panel_Create(PyObject *self, PyObject *args, PyObject *kw
         (char *) "self",(char *) "parent",(char *) "id",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OOOO:Panel_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOO:Panel_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPanel,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg3 = (int const) SWIG_AsInt(obj2); 
-    if (PyErr_Occurred()) SWIG_fail;
+    if (obj2) {
+        arg3 = (int const) SWIG_AsInt(obj2); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (obj3) {
         {
             arg4 = &temp4;
@@ -26349,6 +26351,27 @@ SWIGEXPORT(void) SWIG_init(void) {
     SWIG_addvarlink(SWIG_globals,(char*)"DialogNameStr",_wrap_DialogNameStr_get, _wrap_DialogNameStr_set);
     SWIG_addvarlink(SWIG_globals,(char*)"StatusLineNameStr",_wrap_StatusLineNameStr_get, _wrap_StatusLineNameStr_set);
     SWIG_addvarlink(SWIG_globals,(char*)"ToolBarNameStr",_wrap_ToolBarNameStr_get, _wrap_ToolBarNameStr_set);
+    PyDict_SetItemString(d,"STAY_ON_TOP", SWIG_FromInt((int)wxSTAY_ON_TOP));
+    PyDict_SetItemString(d,"ICONIZE", SWIG_FromInt((int)wxICONIZE));
+    PyDict_SetItemString(d,"MINIMIZE", SWIG_FromInt((int)wxMINIMIZE));
+    PyDict_SetItemString(d,"MAXIMIZE", SWIG_FromInt((int)wxMAXIMIZE));
+    PyDict_SetItemString(d,"CLOSE_BOX", SWIG_FromInt((int)wxCLOSE_BOX));
+    PyDict_SetItemString(d,"THICK_FRAME", SWIG_FromInt((int)wxTHICK_FRAME));
+    PyDict_SetItemString(d,"SYSTEM_MENU", SWIG_FromInt((int)wxSYSTEM_MENU));
+    PyDict_SetItemString(d,"MINIMIZE_BOX", SWIG_FromInt((int)wxMINIMIZE_BOX));
+    PyDict_SetItemString(d,"MAXIMIZE_BOX", SWIG_FromInt((int)wxMAXIMIZE_BOX));
+    PyDict_SetItemString(d,"TINY_CAPTION_HORIZ", SWIG_FromInt((int)wxTINY_CAPTION_HORIZ));
+    PyDict_SetItemString(d,"TINY_CAPTION_VERT", SWIG_FromInt((int)wxTINY_CAPTION_VERT));
+    PyDict_SetItemString(d,"RESIZE_BOX", SWIG_FromInt((int)wxRESIZE_BOX));
+    PyDict_SetItemString(d,"RESIZE_BORDER", SWIG_FromInt((int)wxRESIZE_BORDER));
+    PyDict_SetItemString(d,"DIALOG_NO_PARENT", SWIG_FromInt((int)wxDIALOG_NO_PARENT));
+    PyDict_SetItemString(d,"DEFAULT_FRAME_STYLE", SWIG_FromInt((int)wxDEFAULT_FRAME_STYLE));
+    PyDict_SetItemString(d,"DEFAULT_DIALOG_STYLE", SWIG_FromInt((int)wxDEFAULT_DIALOG_STYLE));
+    PyDict_SetItemString(d,"FRAME_TOOL_WINDOW", SWIG_FromInt((int)wxFRAME_TOOL_WINDOW));
+    PyDict_SetItemString(d,"FRAME_FLOAT_ON_PARENT", SWIG_FromInt((int)wxFRAME_FLOAT_ON_PARENT));
+    PyDict_SetItemString(d,"FRAME_NO_WINDOW_MENU", SWIG_FromInt((int)wxFRAME_NO_WINDOW_MENU));
+    PyDict_SetItemString(d,"FRAME_NO_TASKBAR", SWIG_FromInt((int)wxFRAME_NO_TASKBAR));
+    PyDict_SetItemString(d,"FRAME_SHAPED", SWIG_FromInt((int)wxFRAME_SHAPED));
     PyDict_SetItemString(d,"FULLSCREEN_NOMENUBAR", SWIG_FromInt((int)wxFULLSCREEN_NOMENUBAR));
     PyDict_SetItemString(d,"FULLSCREEN_NOTOOLBAR", SWIG_FromInt((int)wxFULLSCREEN_NOTOOLBAR));
     PyDict_SetItemString(d,"FULLSCREEN_NOSTATUSBAR", SWIG_FromInt((int)wxFULLSCREEN_NOSTATUSBAR));

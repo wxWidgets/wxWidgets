@@ -24,8 +24,8 @@ class Panel(core.Window):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=wxTAB_TRAVERSAL|wxNO_BORDER, 
+        Create(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=wxTAB_TRAVERSAL|wxNO_BORDER, 
             String name=PanelNameStr) -> bool
 
         Create the GUI part of the Window for 2-phase creation mode.

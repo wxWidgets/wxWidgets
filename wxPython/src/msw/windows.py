@@ -24,8 +24,8 @@ class Panel(core.Window):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=wxTAB_TRAVERSAL|wxNO_BORDER, 
+        Create(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=wxTAB_TRAVERSAL|wxNO_BORDER, 
             String name=PanelNameStr) -> bool
 
         Create the GUI part of the Window for 2-phase creation mode.
@@ -195,6 +195,27 @@ def PreScrolledWindow(*args, **kwargs):
 
 #---------------------------------------------------------------------------
 
+STAY_ON_TOP = _windows.STAY_ON_TOP
+ICONIZE = _windows.ICONIZE
+MINIMIZE = _windows.MINIMIZE
+MAXIMIZE = _windows.MAXIMIZE
+CLOSE_BOX = _windows.CLOSE_BOX
+THICK_FRAME = _windows.THICK_FRAME
+SYSTEM_MENU = _windows.SYSTEM_MENU
+MINIMIZE_BOX = _windows.MINIMIZE_BOX
+MAXIMIZE_BOX = _windows.MAXIMIZE_BOX
+TINY_CAPTION_HORIZ = _windows.TINY_CAPTION_HORIZ
+TINY_CAPTION_VERT = _windows.TINY_CAPTION_VERT
+RESIZE_BOX = _windows.RESIZE_BOX
+RESIZE_BORDER = _windows.RESIZE_BORDER
+DIALOG_NO_PARENT = _windows.DIALOG_NO_PARENT
+DEFAULT_FRAME_STYLE = _windows.DEFAULT_FRAME_STYLE
+DEFAULT_DIALOG_STYLE = _windows.DEFAULT_DIALOG_STYLE
+FRAME_TOOL_WINDOW = _windows.FRAME_TOOL_WINDOW
+FRAME_FLOAT_ON_PARENT = _windows.FRAME_FLOAT_ON_PARENT
+FRAME_NO_WINDOW_MENU = _windows.FRAME_NO_WINDOW_MENU
+FRAME_NO_TASKBAR = _windows.FRAME_NO_TASKBAR
+FRAME_SHAPED = _windows.FRAME_SHAPED
 FULLSCREEN_NOMENUBAR = _windows.FULLSCREEN_NOMENUBAR
 FULLSCREEN_NOTOOLBAR = _windows.FULLSCREEN_NOTOOLBAR
 FULLSCREEN_NOSTATUSBAR = _windows.FULLSCREEN_NOSTATUSBAR
