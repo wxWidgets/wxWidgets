@@ -1152,8 +1152,10 @@ AC_ARG_ENABLE(sdltest, [  --disable-sdltest       Do not try to compile and run 
            sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
     if test "x$enable_sdltest" = "xyes" ; then
       ac_save_CFLAGS="$CFLAGS"
+      ac_save_CXXFLAGS="$CXXFLAGS"
       ac_save_LIBS="$LIBS"
       CFLAGS="$CFLAGS $SDL_CFLAGS"
+      CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
       LIBS="$LIBS $SDL_LIBS"
 dnl
 dnl Now check if the installed SDL is sufficiently new. (Also sanity
@@ -1219,6 +1221,7 @@ int main (int argc, char *argv[])
 
 ],, no_sdl=yes,[echo $ac_n "cross compiling; assumed OK... $ac_c"])
        CFLAGS="$ac_save_CFLAGS"
+       CXXFLAGS="$ac_save_CXXFLAGS"
        LIBS="$ac_save_LIBS"
      fi
   fi
@@ -1238,6 +1241,7 @@ int main (int argc, char *argv[])
        else
           echo "*** Could not run SDL test program, checking why..."
           CFLAGS="$CFLAGS $SDL_CFLAGS"
+          CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
           LIBS="$LIBS $SDL_LIBS"
           AC_TRY_LINK([
 #include <stdio.h>
@@ -1262,6 +1266,7 @@ int main(int argc, char *argv[])
           echo "*** or that you have moved SDL since it was installed. In the latter case, you"
           echo "*** may want to edit the sdl-config script: $SDL_CONFIG" ])
           CFLAGS="$ac_save_CFLAGS"
+          CXXFLAGS="$ac_save_CXXFLAGS"
           LIBS="$ac_save_LIBS"
        fi
      fi
@@ -1322,8 +1327,10 @@ AC_DEFUN([AC_BAKEFILE_PLATFORM],
     PLATFORM_WIN32=0
     PLATFORM_MSDOS=0
     PLATFORM_MAC=0
+    PLATFORM_MACOS=0
     PLATFORM_MACOSX=0
     PLATFORM_OS2=0
+    PLATFORM_BEOS=0
 
     if test "x$BAKEFILE_FORCE_PLATFORM" = "x"; then 
         case "${BAKEFILE_HOST}" in
@@ -1339,6 +1346,13 @@ AC_DEFUN([AC_BAKEFILE_PLATFORM],
             powerpc-*-darwin* )
                 PLATFORM_MAC=1
                 PLATFORM_MACOSX=1
+            ;; 
+            *-*-beos* )
+                PLATFORM_BEOS=1
+            ;;
+            powerpc-apple-macos* )
+                PLATFORM_MAC=1
+                PLATFORM_MACOS=1
             ;;
             * )
                 PLATFORM_UNIX=1
@@ -1362,6 +1376,9 @@ AC_DEFUN([AC_BAKEFILE_PLATFORM],
             unix )
                 PLATFORM_UNIX=1
             ;;
+            beos )
+                PLATFORM_BEOS=1
+            ;;
             * )
                 AC_MSG_ERROR([Unknown platform: $BAKEFILE_FORCE_PLATFORM])
             ;;
@@ -1372,8 +1389,10 @@ AC_DEFUN([AC_BAKEFILE_PLATFORM],
     AC_SUBST(PLATFORM_WIN32)
     AC_SUBST(PLATFORM_MSDOS)
     AC_SUBST(PLATFORM_MAC)
+    AC_SUBST(PLATFORM_MACOS)
     AC_SUBST(PLATFORM_MACOSX)
     AC_SUBST(PLATFORM_OS2)
+    AC_SUBST(PLATFORM_BEOS)
 ])
 
 
@@ -1408,6 +1427,10 @@ AC_DEFUN([AC_BAKEFILE_PLATFORM_SPECIFICS],
         else
             OS2_LIBEXT="a"
         fi
+        ;;
+      
+      i*86-*-beos* )
+        LDFLAGS="-L/boot/develop/lib/x86 $LDFLAGS"
         ;;
     esac
 ])
@@ -1494,24 +1517,21 @@ dnl ---------------------------------------------------------------------------
 
 AC_DEFUN([AC_BAKEFILE_SHARED_LD],
 [
-    dnl Defaults for GCC and ELF .so shared libs:
-    SHARED_LD_CC="\$(CC) -shared -o"
-    SHARED_LD_CXX="\$(CXX) -shared -o"
-
     dnl the extra compiler flags needed for compilation of shared library
+    PIC_FLAG=""
     if test "x$GCC" = "xyes"; then
         dnl the switch for gcc is the same under all platforms
         PIC_FLAG="-fPIC"
     fi
+    
+    dnl Defaults for GCC and ELF .so shared libs:
+    SHARED_LD_CC="\$(CC) -shared ${PIC_FLAG} -o"
+    SHARED_LD_CXX="\$(CXX) -shared ${PIC_FLAG} -o"
 
     case "${BAKEFILE_HOST}" in
       *-hp-hpux* )
         dnl default settings are good for gcc but not for the native HP-UX
-        if test "x$GCC" = "xyes"; then
-            dnl -o flag must be after PIC flag
-            SHARED_LD_CC="${CC} -shared ${PIC_FLAG} -o"
-            SHARED_LD_CXX="${CXX} -shared ${PIC_FLAG} -o"
-        else
+        if test "x$GCC" != "xyes"; then
             dnl no idea why it wants it, but it does
             LDFLAGS="$LDFLAGS -L/usr/lib"
 
@@ -1611,8 +1631,8 @@ AC_DEFUN([AC_BAKEFILE_SHARED_LD],
       *-*-beos* )
         dnl can't use gcc under BeOS for shared library creation because it
         dnl complains about missing 'main'
-        SHARED_LD_CC="${LD} -shared -o"
-        SHARED_LD_CXX="${LD} -shared -o"
+        SHARED_LD_CC="${LD} -nostart -o"
+        SHARED_LD_CXX="${LD} -nostart -o"
       ;;
 
       *-*-irix* )
@@ -1624,6 +1644,8 @@ AC_DEFUN([AC_BAKEFILE_SHARED_LD],
       
       *-*-cygwin* | *-*-mingw32* )
         PIC_FLAG=""
+        SHARED_LD_CC="\$(CC) -shared -o"
+        SHARED_LD_CXX="\$(CXX) -shared -o"
       ;;
 
       *-pc-os2_emx | *-pc-os2-emx )
@@ -1634,6 +1656,7 @@ AC_DEFUN([AC_BAKEFILE_SHARED_LD],
         chmod +x dllar.sh
       ;;
       
+      powerpc-apple-macos* | \
       *-*-freebsd* | *-*-openbsd* | *-*-netbsd* | \
       *-*-sunos4* | \
       *-*-osf* | \
@@ -1770,6 +1793,8 @@ AC_DEFUN([AC_BAKEFILE_CHECK_BASIC_STUFF],
 
     case ${BAKEFILE_HOST} in
         *-hp-hpux* )
+            dnl HP-UX install doesn't handle the "-d" switch so don't
+            dnl use it there
             INSTALL_DIR="mkdir -p"
             ;;
         *)  INSTALL_DIR="$INSTALL -d"
@@ -1807,7 +1832,7 @@ AC_DEFUN([AC_BAKEFILE_RES_COMPILERS],
             fi
          ;;
  
-      *-*-darwin* )
+      *-*-darwin* | powerpc-apple-macos* )
             AC_CHECK_PROG(RESCOMP, Rez, Rez, /Developer/Tools/Rez)
             AC_CHECK_PROG(SETFILE, SetFile, SetFile, /Developer/Tools/SetFile)
         ;;
@@ -1859,49 +1884,7 @@ AC_DEFUN([AC_BAKEFILE_PRECOMP_HEADERS],
                     AC_MSG_RESULT([no])
                 ])
             if test $GCC_PCH = 1 ; then
-                cat <<EOF >bk-make-pch
-#!/bin/sh
-
-# This script is part of Bakefile (http://bakefile.sourceforge.net) autoconf
-# script. It is used to generated precompiled headers.
-#
-# Permission is given to use this file in any way.
-
-outfile="\${1}"
-header="\${2}"
-shift
-shift
-
-compiler=
-headerfile=
-while test \${#} -gt 0; do
-    case "\${1}" in
-        -I* )
-            incdir=\`echo \${1} | sed -e 's/-I\(.*\)/\1/g'\`
-            if test "x\${headerfile}" = "x" -a -f "\${incdir}/\${header}" ; then
-                headerfile="\${incdir}/\${header}"
-            fi
-        ;;
-    esac
-    compiler="\${compiler} \${1}"
-    shift
-done
-
-if test "x\${headerfile}" = "x" ; then
-    echo "error: can't find header \${header} in include paths" >2
-else
-    if test -f \${outfile} ; then
-        rm -f \${outfile}
-    else
-        mkdir -p \`dirname \${outfile}\`
-    fi
-    depsfile=".deps/\`basename \${outfile}\`.d"
-    mkdir -p .deps
-    # can do this because gcc is >= 3.4:
-    \${compiler} -o \${outfile} -MMD -MF "\${depsfile}" "\${headerfile}"
-    exit \${?}
-fi
-EOF
+                AC_BAKEFILE_CREATE_FILE_BK_MAKE_PCH
                 chmod +x bk-make-pch
             fi
         fi
@@ -1927,6 +1910,8 @@ dnl ---------------------------------------------------------------------------
 
 AC_DEFUN([AC_BAKEFILE],
 [
+    AC_PREREQ(2.58)
+
     if test "x$BAKEFILE_HOST" = "x"; then
         BAKEFILE_HOST="${host}"
     fi
@@ -2022,7 +2007,7 @@ flag_USE_LXLITE=1;
 basnam(){
     case ${D}# in
     1)
-        echo ${D}1 | sed 's/.*\///' | sed 's/.*\\//'
+        echo ${D}1 | sed 's/.*\\///' | sed 's/.*\\\\//'
         ;;
     2)
         echo ${D}1 | sed 's/'${D}2'${D}//'
@@ -2049,18 +2034,18 @@ CleanUp() {
 
     # Kill result in case of failure as there is just to many stupid make/nmake
     # things out there which doesn't do this.
-    if [[] ${D}# -eq 0 []]; then
+    if @<:@ ${D}# -eq 0 @:>@; then
         rm -f ${D}arcFile ${D}arcFile2 ${D}defFile ${D}dllFile
     fi
 }
 
 # Print usage and exit script with rc=1.
 PrintHelp() {
- echo 'Usage: dllar [[]-o[[]utput[]] output_file[]] [[]-i[[]mport[]] importlib_name[]]'
- echo '       [[]-d[[]escription[]] "dll descrption"[]] [[]-cc "CC"[]] [[]-f[[]lags[]] "CFLAGS"[]]'
- echo '       [[]-ord[[]inals[]][]] -ex[[]clude[]] "symbol(s)"'
- echo '       [[]-libf[[]lags[]] "{INIT|TERM}{GLOBAL|INSTANCE}"[]] [[]-nocrt[[]dll[]][]] [[]-nolxl[[]ite[]][]]'
- echo '       [[]*.o[]] [[]*.a[]]'
+ echo 'Usage: dllar @<:@-o@<:${utput}:>@ output_file@:>@ @<:@-i@<:${mport}:>@ importlib_name@:>@'
+ echo '       @<:@-d@<:${escription}:>@ "dll descrption"@:>@ @<:@-cc "CC"@:>@ @<:@-f@<:${lags}:>@ "CFLAGS"@:>@'
+ echo '       @<:@-ord@<:${inals}:>@@:>@ -ex@<:${clude}:>@ "symbol(s)"'
+ echo '       @<:@-libf@<:${lags}:>@ "{INIT|TERM}{GLOBAL|INSTANCE}"@:>@ @<:@-nocrt@<:${dll}:>@@:>@ @<:@-nolxl@<:${ite}:>@@:>@'
+ echo '       @<:@*.o@:>@ @<:@*.a@:>@'
  echo '*> "output_file" should have no extension.'
  echo '   If it has the .o, .a or .dll extension, it is automatically removed.'
  echo '   The import library name is derived from this and is set to "name".a,'
@@ -2073,16 +2058,16 @@ PrintHelp() {
  echo '*> "cc" is used to use another GCC executable.   (default: gcc.exe)'
  echo '*> "flags" should be any set of valid GCC flags. (default: -s -Zcrtdll)'
  echo '   These flags will be put at the start of GCC command line.'
- echo '*> -ord[[]inals[]] tells dllar to export entries by ordinals. Be careful.'
- echo '*> -ex[[]clude[]] defines symbols which will not be exported. You can define'
+ echo '*> -ord@<:${inals}:>@ tells dllar to export entries by ordinals. Be careful.'
+ echo '*> -ex@<:${clude}:>@ defines symbols which will not be exported. You can define'
  echo '   multiple symbols, for example -ex "myfunc yourfunc _GLOBAL*".'
  echo '   If the last character of a symbol is "*", all symbols beginning'
  echo '   with the prefix before "*" will be exclude, (see _GLOBAL* above).'
- echo '*> -libf[[]lags[]] can be used to add INITGLOBAL/INITINSTANCE and/or'
+ echo '*> -libf@<:${lags}:>@ can be used to add INITGLOBAL/INITINSTANCE and/or'
  echo '   TERMGLOBAL/TERMINSTANCE flags to the dynamically-linked library.'
- echo '*> -nocrt[[]dll[]] switch will disable linking the library against emx''s'
+ echo '*> -nocrt@<:${dll}:>@ switch will disable linking the library against emx''s'
  echo '   C runtime DLLs.'
- echo '*> -nolxl[[]ite[]] switch will disable running lxlite on the resulting DLL.'
+ echo '*> -nolxl@<:${ite}:>@ switch will disable running lxlite on the resulting DLL.'
  echo '*> All other switches (for example -L./ or -lmylib) will be passed'
  echo '   unchanged to GCC at the end of command line.'
  echo '*> If you create a DLL from a library and you do not specify -o,'
@@ -2106,7 +2091,7 @@ doCommand() {
     eval ${D}*
     rcCmd=${D}?
 
-    if [[] ${D}rcCmd -ne 0 []]; then
+    if @<:@ ${D}rcCmd -ne 0 @:>@; then
         echo "command failed, exit code="${D}rcCmd
         CleanUp
         exit ${D}rcCmd
@@ -2137,7 +2122,7 @@ case ${D}curDirS in
 esac
 # Parse commandline
 libsToLink=0
-while [[] ${D}1 []]; do
+while @<:@ ${D}1 @:>@; do
     case ${D}1 in
     -ord*)
         EXPORT_BY_ORDINALS=1;
@@ -2191,16 +2176,16 @@ while [[] ${D}1 []]; do
         ;;
     *)
         found=0;
-        if [[] ${D}libsToLink -ne 0 []]; then
+        if @<:@ ${D}libsToLink -ne 0 @:>@; then
             EXTRA_CFLAGS=${D}{EXTRA_CFLAGS}" "${D}1
         else
             for file in ${D}1 ; do
-                if [[] -f ${D}file []]; then
+                if @<:@ -f ${D}file @:>@; then
                     inputFiles="${D}{inputFiles} ${D}file"
                     found=1
                 fi
             done
-            if [[] ${D}found -eq 0 []]; then
+            if @<:@ ${D}found -eq 0 @:>@; then
                 echo "ERROR: No file(s) found: "${D}1
                 exit 8
             fi
@@ -2211,7 +2196,7 @@ while [[] ${D}1 []]; do
 done # iterate cmdline words
 
 #
-if [[] -z "${D}inputFiles" []]; then
+if @<:@ -z "${D}inputFiles" @:>@; then
     echo "dllar: no input files"
     PrintHelp
 fi
@@ -2236,7 +2221,7 @@ for file in ${D}inputFiles ; do
         esac
         dirname=\`basnam ${D}file ${D}suffix\`"_%"
         mkdir ${D}dirname
-        if [[] ${D}? -ne 0 []]; then
+        if @<:@ ${D}? -ne 0 @:>@; then
             echo "Failed to create subdirectory ./${D}dirname"
             CleanUp
             exit 8;
@@ -2247,16 +2232,16 @@ for file in ${D}inputFiles ; do
         cd ${D}curDir
         found=0;
         for subfile in ${D}dirname/*.o* ; do
-            if [[] -f ${D}subfile []]; then
+            if @<:@ -f ${D}subfile @:>@; then
                 found=1
-                if [[] -s ${D}subfile []]; then
+                if @<:@ -s ${D}subfile @:>@; then
 	            # FIXME: This should be: is file size > 32 byte, _not_ > 0!
                     newInputFiles="${D}newInputFiles ${D}subfile"
                 fi
             fi
         done
-        if [[] ${D}found -eq 0 []]; then
-            echo "WARNING: there are no files in archive \'${D}file\'"
+        if @<:@ ${D}found -eq 0 @:>@; then
+            echo "WARNING: there are no files in archive \\'${D}file\\'"
         fi
         ;;
     *)
@@ -2268,7 +2253,7 @@ inputFiles="${D}newInputFiles"
 
 # Output filename(s).
 do_backup=0;
-if [[] -z ${D}outFile []]; then
+if @<:@ -z ${D}outFile @:>@; then
     do_backup=1;
     set outFile ${D}inputFiles; outFile=${D}2
 fi
@@ -2313,7 +2298,7 @@ case ${D}outimpFile in
 *)
     ;;
 esac
-if [[] -z ${D}outimpFile []]; then
+if @<:@ -z ${D}outimpFile @:>@; then
     outimpFile=${D}outFile
 fi
 defFile="${D}{outFile}.def"
@@ -2323,11 +2308,11 @@ dllFile="${D}outFile"
 # Add suffix to dllFile later, first we need a version to use as
 # name in .def file.
 
-if [[] ${D}do_backup -ne 0 []] ; then
-    if [[] -f ${D}arcFile []] ; then
+if @<:@ ${D}do_backup -ne 0 @:>@ ; then
+    if @<:@ -f ${D}arcFile @:>@ ; then
         doCommand "mv ${D}arcFile ${D}{outFile}_s.a"
     fi
-    if [[] -f ${D}arcFile2 []] ; then
+    if @<:@ -f ${D}arcFile2 @:>@ ; then
         doCommand "mv ${D}arcFile2 ${D}{outFile}_s.lib"
     fi
 fi
@@ -2349,8 +2334,8 @@ done
 rm -f ${D}defFile
 echo "LIBRARY \`basnam ${D}dllFile\` ${D}library_flags" >> ${D}defFile
 dllFile="${D}dllFile.dll"
-if [[] -n ${D}description []]; then
-    echo "DESCRIPTION  \"${D}{description}\"" >> ${D}defFile
+if @<:@ -n ${D}description @:>@; then
+    echo "DESCRIPTION  \\"${D}{description}\\"" >> ${D}defFile
 fi
 echo "EXPORTS" >> ${D}defFile
 
@@ -2364,12 +2349,12 @@ for word in ${D}exclude_symbols; do
 done
 
 
-if [[] ${D}EXPORT_BY_ORDINALS -ne 0 []]; then
-    sed "=" < ${D}tmpdefFile | \
+if @<:@ ${D}EXPORT_BY_ORDINALS -ne 0 @:>@; then
+    sed "=" < ${D}tmpdefFile | \\
     sed '
       N
       : loop
-      s/^\([[]0-9[]]\+\)\([[]^;[]]*\)\(;.*\)\?/\2 @\1 NONAME/
+      s/^\\(@<:@0-9@:>@\\+\\)\\(@<:@^;@:>@*\\)\\(;.*\\)\\?/\\2 @\\1 NONAME/
       t loop
     ' > ${D}{tmpdefFile}%
     grep -v "^ *${D}" < ${D}{tmpdefFile}% > ${D}tmpdefFile
@@ -2394,9 +2379,9 @@ doCommand "${D}CC ${D}CFLAGS -Zdll -o ${D}dllFile ${D}defFile ${D}gccCmdl ${D}EX
 touch "${D}{outFile}.dll"
 
 doCommand "emximp -o ${D}arcFile ${D}defFile"
-if [[] ${D}flag_USE_LXLITE -ne 0 []]; then
+if @<:@ ${D}flag_USE_LXLITE -ne 0 @:>@; then
     add_flags="";
-    if [[] ${D}EXPORT_BY_ORDINALS -ne 0 []]; then
+    if @<:@ ${D}EXPORT_BY_ORDINALS -ne 0 @:>@; then
         add_flags="-ynd"
     fi
     doCommand "lxlite -cs -t: -mrn -mln ${D}add_flags ${D}dllFile"
@@ -2449,13 +2434,13 @@ if test ${D}DEPSMODE = gcc ; then
         esac
         shift
     done
-    depfile=\`basename ${D}srcfile | sed -e 's/\..*${D}/.d/g'\`
-    depobjname=\`echo ${D}depfile |sed -e 's/\.d/.o/g'\`
+    depfile=\`basename ${D}srcfile | sed -e 's/\\..*${D}/.d/g'\`
+    depobjname=\`echo ${D}depfile |sed -e 's/\\.d/.o/g'\`
     if test -f ${D}depfile ; then
         sed -e "s,${D}depobjname:,${D}objfile:,g" ${D}depfile >${D}{DEPSDIR}/${D}{objfile}.d
         rm -f ${D}depfile
     else
-        depfile=\`basename ${D}objfile | sed -e 's/\..*${D}/.d/g'\`
+        depfile=\`basename ${D}objfile | sed -e 's/\\..*${D}/.d/g'\`
         if test -f ${D}depfile ; then
             sed -e "/^${D}objfile/!s,${D}depobjname:,${D}objfile:,g" ${D}depfile >${D}{DEPSDIR}/${D}{objfile}.d
             rm -f ${D}depfile
@@ -2562,6 +2547,56 @@ rm -f master.${D}${D}.o
 exit 0
 EOF
 dnl ===================== shared-ld-sh ends here =====================
+])
+
+AC_DEFUN([AC_BAKEFILE_CREATE_FILE_BK_MAKE_PCH],
+[
+dnl ===================== bk-make-pch begins here =====================
+D='$'
+cat <<EOF >bk-make-pch
+#!/bin/sh
+
+# This script is part of Bakefile (http://bakefile.sourceforge.net) autoconf
+# script. It is used to generated precompiled headers.
+#
+# Permission is given to use this file in any way.
+
+outfile="${D}{1}"
+header="${D}{2}"
+shift
+shift
+
+compiler=
+headerfile=
+while test ${D}{#} -gt 0; do
+    case "${D}{1}" in
+        -I* )
+            incdir=\`echo ${D}{1} | sed -e 's/-I\\(.*\\)/\\1/g'\`
+            if test "x${D}{headerfile}" = "x" -a -f "${D}{incdir}/${D}{header}" ; then
+                headerfile="${D}{incdir}/${D}{header}"
+            fi
+        ;;
+    esac
+    compiler="${D}{compiler} ${D}{1}"
+    shift
+done
+
+if test "x${D}{headerfile}" = "x" ; then
+    echo "error: can't find header ${D}{header} in include paths" >2
+else
+    if test -f ${D}{outfile} ; then
+        rm -f ${D}{outfile}
+    else
+        mkdir -p \`dirname ${D}{outfile}\`
+    fi
+    depsfile=".deps/\`echo ${D}{outfile} | tr '/.' '__'\`.d"
+    mkdir -p .deps
+    # can do this because gcc is >= 3.4:
+    ${D}{compiler} -o ${D}{outfile} -MMD -MF "${D}{depsfile}" "${D}{headerfile}"
+    exit ${D}{?}
+fi
+EOF
+dnl ===================== bk-make-pch ends here =====================
 ])
 
 dnl
