@@ -98,21 +98,16 @@ void wxNotebookBase::AssignImageList(wxImageList* imageList)
 
 wxSize wxNotebookBase::CalcSizeFromPage(const wxSize& sizePage) const
 {
-    // this was just taken from wxNotebookSizer::CalcMin() and is, of
-    // course, totally bogus - just like the original code was
+    // this is, of course, totally bogus -- but we must do something by
+    // default because not all ports implement this
     wxSize sizeTotal = sizePage;
-    
-	// changed hajokirchhoff -- May, 31st, 2003
-	// moved the __WXMSW__ portion to wxNotebook::CalcSizeFromPage in src/msw/notebook.cpp
-	// where it really belongs.
-	// Question: Shouldn't we make wxNotebookBase::CalcSizeFromPage a pure virtual class.
-	//			 I'd like this better than this "totally bogus" code here.
+
     if ( HasFlag(wxNB_LEFT) || HasFlag(wxNB_RIGHT) )
     {
         sizeTotal.x += 90;
         sizeTotal.y += 10;
     }
-    else
+    else // tabs on top/bottom side
     {
         sizeTotal.x += 10;
         sizeTotal.y += 40;
@@ -149,17 +144,24 @@ wxNotebookPage *wxNotebookBase::DoRemovePage(int nPage)
 
 wxSize wxNotebookBase::DoGetBestSize() const
 {
-  wxSize bestSize(0,0);
-  size_t nCount = m_pages.Count();
-	// iterate over all pages, get the largest width and height
-  for ( size_t nPage = 0; nPage < nCount; nPage++ ) {
-    wxNotebookPage *pPage = m_pages[nPage];
-    wxSize childBestSize(pPage->GetBestSize());
-	bestSize.SetWidth(max(childBestSize.GetWidth(), bestSize.GetWidth()));
-	bestSize.SetHeight(max(childBestSize.GetHeight(), bestSize.GetHeight()));
-  }
-  // convert display area to window area, adding the size neccessary for the tab control itself
-  return CalcSizeFromPage(bestSize);
+    wxSize bestSize(0,0);
+    size_t nCount = m_pages.Count();
+
+    // iterate over all pages, get the largest width and height
+    for ( size_t nPage = 0; nPage < nCount; nPage++ )
+    {
+        wxNotebookPage *pPage = m_pages[nPage];
+        wxSize childBestSize(pPage->GetBestSize());
+
+        if ( childBestSize.x > bestSize.x )
+            bestSize.x = childBestSize.x;
+
+        if ( childBestSize.y > bestSize.y )
+            bestSize.y = childBestSize.y;
+    }
+
+    // convert display area to window area, adding the size neccessary for the tab control itself
+    return CalcSizeFromPage(bestSize);
 }
 
 int wxNotebookBase::GetNextPage(bool forward) const
