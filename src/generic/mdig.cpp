@@ -31,6 +31,7 @@
 #ifndef WX_PRECOMP
     #include "wx/panel.h"
     #include "wx/menu.h"
+    #include "wx/intl.h"
 #endif //WX_PRECOMP
 
 #include "wx/generic/mdig.h"
