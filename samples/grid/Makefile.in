@@ -7,7 +7,10 @@ program_dir = samples/grid
 
 PROGRAM=grid
 
-OBJECTS=$(PROGRAM).o
+OBJECTS =$(PROGRAM).o
+DEPFILES=$(PROGRAM).d
 
 include ../../src/makeprog.env
+
+-include $(DEPFILES)
 

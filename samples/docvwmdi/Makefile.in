@@ -15,6 +15,9 @@ program_dir = samples/docvwmdi
 
 PROGRAM=docview
 
-OBJECTS=$(PROGRAM).o doc.o view.o
+OBJECTS =$(PROGRAM).o doc.o view.o
+DEPFILES=$(PROGRAM).d doc.d view.d
 
 include ../../src/makeprog.env
+
+-include $(DEPFILES)

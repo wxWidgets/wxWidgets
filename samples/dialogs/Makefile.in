@@ -17,7 +17,9 @@ DATAFILES=tips.txt
 
 PROGRAM=dialogs
 
-OBJECTS=$(PROGRAM).o
+OBJECTS =$(PROGRAM).o
+DEPFILES=$(PROGRAM).d
 
 include ../../src/makeprog.env
 
+-include $(DEPFILES)

@@ -17,7 +17,9 @@ DATAFILES = horse.png horse.jpg horse.bmp horse.gif horse.pcx horse.pnm horse.ti
 
 PROGRAM=image
 
-OBJECTS=$(PROGRAM).o
+OBJECTS =$(PROGRAM).o
+DEPFILES=$(PROGRAM).d
 
 include ../../src/makeprog.env
 
+-include $(DEPFILES)

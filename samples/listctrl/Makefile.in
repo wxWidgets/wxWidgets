@@ -15,7 +15,9 @@ program_dir = samples/listctrl
 
 PROGRAM=listtest
 
-OBJECTS=$(PROGRAM).o
+OBJECTS =$(PROGRAM).o
+DEPFILES=$(PROGRAM).d
 
 include ../../src/makeprog.env
 
+-include $(DEPFILES)

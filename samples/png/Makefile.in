@@ -17,7 +17,9 @@ DATAFILES = julian.png paint16.png paint.png
 
 PROGRAM=pngdemo
 
-OBJECTS=$(PROGRAM).o
+OBJECTS =$(PROGRAM).o
+DEPFILES=$(PROGRAM).d
 
 include ../../src/makeprog.env
 
+-include $(DEPFILES)

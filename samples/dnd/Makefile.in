@@ -17,7 +17,9 @@ DATAFILES=julian.png dnd.wxr
 
 PROGRAM=dnd
 
-OBJECTS=$(PROGRAM).o
+OBJECTS =$(PROGRAM).o
+DEPFILES=$(PROGRAM).d
 
 include ../../src/makeprog.env
 
+-include $(DEPFILES)

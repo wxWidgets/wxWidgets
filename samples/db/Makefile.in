@@ -15,7 +15,9 @@ program_dir = samples/db
 
 PROGRAM=dbtest
 
-OBJECTS=$(PROGRAM).o listdb.o
+OBJECTS =$(PROGRAM).o listdb.o
+DEPFILES=$(PROGRAM).d listdb.d
 
 include ../../src/makeprog.env
 
+-include $(DEPFILES)

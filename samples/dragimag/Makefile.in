@@ -8,7 +8,9 @@ program_dir = samples/dragimag
 PROGRAM=dragimag
 DATAFILES=backgrnd.png shape01.png shape02.png shape03.png
 
-OBJECTS=$(PROGRAM).o
+OBJECTS =$(PROGRAM).o
+DEPFILES=$(PROGRAM).d
 
 include ../../src/makeprog.env
 
+-include $(DEPFILES)

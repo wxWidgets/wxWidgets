@@ -7,7 +7,9 @@ program_dir = samples/statbar
 
 PROGRAM=statbar
 
-OBJECTS=$(PROGRAM).o
+OBJECTS =$(PROGRAM).o
+DEPFILES=$(PROGRAM).d
 
 include ../../src/makeprog.env
 
+-include $(DEPFILES)

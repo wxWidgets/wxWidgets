@@ -15,8 +15,11 @@ program_dir = samples/console
 
 PROGRAM=console
 
-OBJECTS=$(PROGRAM).o
+OBJECTS =$(PROGRAM).o
+DEPFILES=$(PROGRAM).d
+
 DATAFILES=testdata.fc
 
 include ../../src/makeprog.env
 
+-include $(DEPFILES)

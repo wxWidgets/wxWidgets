@@ -15,7 +15,9 @@ program_dir = samples/menu
 
 PROGRAM=menu
 
-OBJECTS=$(PROGRAM).o
+OBJECTS =$(PROGRAM).o
+DEPFILES=$(PROGRAM).d
 
 include ../../src/makeprog.env
 
+-include $(DEPFILES)

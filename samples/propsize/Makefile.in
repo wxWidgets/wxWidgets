@@ -7,7 +7,9 @@ program_dir = samples/propsize
 
 PROGRAM=propsize
 
-OBJECTS=$(PROGRAM).o
+OBJECTS =$(PROGRAM).o
+DEPFILES=$(PROGRAM).d
 
 include ../../src/makeprog.env
 
+-include $(DEPFILES)

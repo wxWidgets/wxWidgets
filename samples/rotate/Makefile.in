@@ -15,9 +15,11 @@ program_dir = samples/rotate
 
 PROGRAM=rotate
 
-OBJECTS=$(PROGRAM).o
+OBJECTS =$(PROGRAM).o
+DEPFILES=$(PROGRAM).d
 
 DATAFILES=kclub.bmp
 
 include ../../src/makeprog.env
 
+-include $(DEPFILES)

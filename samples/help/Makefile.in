@@ -15,7 +15,8 @@ program_dir = samples/help
 
 PROGRAM=help
 
-OBJECTS=demo.o
+OBJECTS =demo.o
+DEPFILES=demo.d
 
 DATADIRS=doc
 DATAFILES=doc.cnt doc.hlp doc.hpj doc.tex doc.zip back.gif forward.gif \
@@ -42,4 +43,4 @@ DATAFILES=doc.cnt doc.hlp doc.hpj doc.tex doc.zip back.gif forward.gif \
 
 include ../../src/makeprog.env
 
-
+-include $(DEPFILES)

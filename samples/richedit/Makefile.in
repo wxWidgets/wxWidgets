@@ -15,7 +15,9 @@ program_dir = samples/richedit
 
 PROGRAM=wxLayout
 
-OBJECTS=$(PROGRAM).o kbList.o wxllist.o wxlparser.o wxlwindow.o
+OBJECTS =$(PROGRAM).o kbList.o wxllist.o wxlparser.o wxlwindow.o
+DEPFILES=$(PROGRAM).d kbList.d wxllist.d wxlparser.d wxlwindow.d
 
 include ../../src/makeprog.env
 
+-include $(DEPFILES)
