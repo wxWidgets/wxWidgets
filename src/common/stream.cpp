@@ -52,6 +52,8 @@ void wxStreamBuffer::WriteBack(char c)
 
   // Assume that if we write "back" we have read a few bytes: so we have some
   // space.
+  if (m_buffer_pos == m_buffer_start)
+    return;
 
   m_buffer_pos--;
   *m_buffer_pos = c;
@@ -212,6 +214,7 @@ wxInputStream::wxInputStream()
   m_i_destroybuf = TRUE;
   m_i_streambuf = new wxStreamBuffer(*this);
   m_eof = FALSE;
+  m_lastread = 0;
 }
 
 wxInputStream::wxInputStream(wxStreamBuffer *buffer)
@@ -219,6 +222,7 @@ wxInputStream::wxInputStream(wxStreamBuffer *buffer)
   m_i_destroybuf = FALSE;
   m_i_streambuf = buffer;
   m_eof = FALSE;
+  m_lastread = 0;
 }
 
 wxInputStream::~wxInputStream()
@@ -416,12 +420,16 @@ wxOutputStream::wxOutputStream()
 {
   m_o_destroybuf = TRUE;
   m_o_streambuf = new wxStreamBuffer(*this);
+  m_bad = FALSE;
+  m_lastwrite = 0;
 }
 
 wxOutputStream::wxOutputStream(wxStreamBuffer *buffer)
 {
   m_o_destroybuf = FALSE;
   m_o_streambuf = buffer;
+  m_bad = FALSE;
+  m_lastwrite = 0;
 }
 
 wxOutputStream::~wxOutputStream()

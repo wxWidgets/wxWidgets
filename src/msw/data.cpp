@@ -167,6 +167,7 @@ wxPrintPaperDatabase* wxThePrintPaperDatabase = NULL;
 // Hand-coded IMPLEMENT... macro for wxObject (define static data)
 wxClassInfo wxObject::classwxObject("wxObject", NULL, NULL, sizeof(wxObject), NULL);
 wxClassInfo *wxClassInfo::first = NULL;
+wxClassInfo wxClassInfo::classTable(wxKEY_STRING);
 
 #include "wx/button.h"
 #include "wx/bmpbuttn.h"

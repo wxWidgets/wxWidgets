@@ -21,6 +21,7 @@
 #endif
 
 #include "wx/module.h"
+#include "wx/hash.h"
 
 IMPLEMENT_CLASS(wxModule, wxObject)
 
@@ -35,16 +36,21 @@ void wxModule::RegisterModule(wxModule* module)
 // and register them.
 bool wxModule::RegisterModules(void)
 {
-    wxClassInfo* classInfo = wxClassInfo::first;
-    while (classInfo)
+    wxNode *node;
+    wxClassInfo* classInfo;
+
+    wxClassInfo::classTable.BeginFind();
+    node = wxClassInfo::classTable.Next();
+    while (node)
     {
+        classInfo = (wxClassInfo *)node->Data();
         if ((classInfo != (& (wxModule::classwxModule))) &&
             classInfo->IsKindOf(CLASSINFO(wxModule)))
         {
             wxModule* module = (wxModule*) classInfo->CreateObject();
             RegisterModule(module);
         }
-        classInfo = classInfo->next;
+        node = wxClassInfo::classTable.Next();
     }
     return TRUE;
 }

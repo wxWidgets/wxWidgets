@@ -49,13 +49,16 @@ void wxObjectOutputStream::WriteObjectDef(wxObjectStreamInfo& info)
   if (info.duplicate) {
     data_s.WriteString(TAG_DUPLICATE_OBJECT);
     data_s.WriteString(GetObjectName(info.object));
+    printf("info.object (dup %s)\n", info.object->GetClassInfo()->GetClassName());
     return;
   }
 
   if (info.object) {
     data_s.WriteString(info.object->GetClassInfo()->GetClassName());
+    printf("info.object (%s)\n", info.object->GetClassInfo()->GetClassName());
   } else {
     data_s.WriteString(TAG_EMPTY_OBJECT);
+    printf("info.object (NULL)\n");
     return;
   }
 
@@ -230,13 +233,13 @@ bool wxObjectInputStream::ReadObjectDef(wxObjectStreamInfo *info)
 
   class_name = data_s.ReadString();
   info->children_removed = 0;
+  info->n_children = 0;
 
   if (class_name == TAG_EMPTY_OBJECT)
     info->object = (wxObject *) NULL;
   else if (class_name == TAG_DUPLICATE_OBJECT) {
     info->object_name = data_s.ReadString();
     info->object = SolveName(info->object_name);
-    info->n_children = 0;
   } else {
     info->object_name = data_s.ReadString();
     info->object = wxCreateDynamicObject( WXSTRINGCAST class_name);

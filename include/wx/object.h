@@ -29,10 +29,12 @@ class WXDLLEXPORT wxObject;
 #endif
 
 class WXDLLEXPORT wxClassInfo;
-class WXDLLEXPORT ostream;
+class WXDLLIMPORT ostream;
 class WXDLLEXPORT wxInputStream;
-class WXDLLIMPORT wxObjectInputStream;
-class WXDLLIMPORT wxObjectOutputStream;
+class WXDLLEXPORT wxObjectInputStream;
+class WXDLLEXPORT wxObjectOutputStream;
+class WXDLLEXPORT wxHashTable;
+class WXDLLEXPORT wxObject_Serialize;
 
 /*
  * Dynamic object system declarations
@@ -56,6 +58,8 @@ class WXDLLEXPORT wxClassInfo
 
    static wxClassInfo *first;
    wxClassInfo *next;
+
+   static wxHashTable classTable;
 
    wxClassInfo(char *cName, char *baseName1, char *baseName2, int sz, wxObjectConstructorFn fn);
 
@@ -195,6 +199,9 @@ class WXDLLEXPORT wxObject
 
 protected:
   wxObjectRefData *m_refData;
+#ifdef USE_STORABLE_CLASSES
+  wxObject_Serialize *m_serialObj;
+#endif
 };
 
 /*

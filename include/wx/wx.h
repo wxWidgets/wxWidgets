@@ -65,6 +65,10 @@
 #include "wx/dirdlg.h"
 #include "wx/cmndata.h"
 #include "wx/intl.h"
+#ifdef USE_STORABLE_CLASSES
+#include "wx/objstrm.h"
+#include "wx/serbase.h"
+#endif
 
 #endif
     // _WX_WXH__

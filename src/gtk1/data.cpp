@@ -172,6 +172,7 @@ const char *wxUserResourceStr = "TEXT";
 // Hand-coded IMPLEMENT... macro for wxObject (define static data)
 wxClassInfo wxObject::classwxObject((char *) "wxObject", (char *) NULL, (char *) NULL, (int ) sizeof(wxObject), (wxObjectConstructorFn) NULL);
 wxClassInfo *wxClassInfo::first = (wxClassInfo *) NULL;
+wxHashTable wxClassInfo::classTable(wxKEY_STRING);
 
 #include "wx/button.h"
 #include "wx/bmpbuttn.h"

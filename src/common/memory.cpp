@@ -785,9 +785,14 @@ bool wxDebugContext::PrintClasses(void)
   }
 
   int n = 0;
-  wxClassInfo *info = wxClassInfo::first;
-  while (info)
+  wxNode *node;
+  wxClassInfo *info;
+
+  wxClassInfo::classTable.BeginFind();
+  node = wxClassInfo::classTable.Next();
+  while (node)
   {
+    info = (wxClassInfo *)node->Data();
     if (info->GetClassName())
     {
       wxTrace("%s ", info->GetClassName());
@@ -801,7 +806,7 @@ bool wxDebugContext::PrintClasses(void)
       else
         wxTrace("\n");
     }
-    info = info->next;
+    node = node->Next();
     n ++;
   }
   wxTrace("\nThere are %d classes derived from wxObject.\n", n);

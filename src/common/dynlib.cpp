@@ -42,27 +42,22 @@ wxLibraries wxTheLibraries;
 
 wxLibrary::wxLibrary(void *handle)
 {
-  typedef wxClassLibrary *(*t_get_list)(void);
-  t_get_list get_list;
+  typedef wxClassInfo **(*t_get_first)(void);
+  t_get_first get_first;
 
   m_handle = handle;
+  m_destroy = TRUE;
 
-  get_list = (t_get_list)GetSymbol("GetClassList");
-  m_liblist = (*get_list)();
+  // Some system may use a local heap for library.
+  get_first = (t_get_first)GetSymbol("wxGetClassFirst");
+  // It is a wxWindows DLL.
+  if (get_first)
+    PrepareClasses(get_first());
 }
 
 wxLibrary::~wxLibrary()
 {
-  if (m_handle) {
-    typedef void (*t_free_list)(wxClassLibrary *);
-    t_free_list free_list;
-
-    free_list = (t_free_list) GetSymbol("FreeClassList");
-    if (free_list != NULL)
-      free_list(m_liblist);
-    else
-      delete m_liblist;
-
+  if (m_handle && m_destroy) {
 #ifdef __UNIX__
     dlclose(m_handle);
 #endif
@@ -74,7 +69,36 @@ wxLibrary::~wxLibrary()
 
 wxObject *wxLibrary::CreateObject(const wxString& name)
 {
-  return m_liblist->CreateObject(name);
+  wxClassInfo *info = (wxClassInfo *)classTable.Get(name);
+
+  if (!info)
+    return NULL;
+
+  return info->CreateObject();
+}
+
+void wxLibrary::PrepareClasses(wxClassInfo **first)
+{
+  // Index all class infos by their class name
+  wxClassInfo *info = *first;
+  while (info)
+  {
+    if (info->className)
+      classTable.Put(info->className, (wxObject *)info);
+    info = info->next;
+  }
+
+  // Set base pointers for each wxClassInfo
+  info = *first;
+  while (info)
+  {
+    if (info->GetBaseClassName1())
+      info->baseInfo1 = (wxClassInfo *)classTable.Get(info->GetBaseClassName1());
+    if (info->GetBaseClassName2())
+      info->baseInfo2 = (wxClassInfo *)classTable.Get(info->GetBaseClassName2());
+    info = info->next;
+  }
+  *first = NULL;
 }
 
 void *wxLibrary::GetSymbol(const wxString& symbname)
@@ -117,7 +141,7 @@ wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
   if ( (node = m_loaded.Find(name.GetData())) )
     return ((wxLibrary *)node->Data());
 
-#ifdef __UNIX__
+#if defined(__UNIX__)
   lib_name.Prepend("./lib");
   lib_name += ".so";
 
@@ -127,14 +151,16 @@ wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
 
   if (!handle)
     return NULL;
-#endif
-#ifdef __WINDOWS__
+#elif defined(__WINDOWS__)
   lib_name += ".dll";
 
   HMODULE handle = LoadLibrary(lib_name);
   if (!handle)
     return NULL;
+#else
+  return NULL;
 #endif
+
   lib = new wxLibrary((void *)handle);
 
   m_loaded.Append(name.GetData(), lib);
@@ -152,93 +178,6 @@ wxObject *wxLibraries::CreateObject(const wxString& path)
       return obj;
 
     node = node->Next();
-  }
-  return NULL;
-}
-
-// ---------------------------------------------------------------------------
-// wxClassLibrary (this class is used to access the internal class)
-// ---------------------------------------------------------------------------
-
-wxClassLibrary::wxClassLibrary(void)
-{
-}
-
-wxClassLibrary::~wxClassLibrary(void)
-{
-  size_t i;
-
-  for (i=0;i<m_list.Count();i++)
-    delete (m_list[i]);
-}
-
-void wxClassLibrary::RegisterClass(wxClassInfo *class_info,
-                                   const wxString& path)
-{
-  wxClassLibInfo *info = new wxClassLibInfo;
-
-  info->class_info = class_info;
-  info->path = path;
-  m_list.Add(info);
-}
-
-void wxClassLibrary::UnregisterClass(wxClassInfo *class_info)
-{
-  size_t i = 0;
-
-  while (i < m_list.Count()) {
-    if (m_list[i]->class_info == class_info) {
-      delete (m_list[i]);
-      m_list.Remove(i);
-      return;
-    }
-    i++;
-  }
-}
-
-bool wxClassLibrary::CreateObjects(const wxString& path,
-                                   wxArrayClassInfo& objs)
-{
-  wxClassLibInfo *info;
-  size_t i = 0;
-
-  while (i < m_list.Count()) {
-    info = m_list[i];
-    if (wxMatchWild(path, info->path))
-      objs.Add(info->class_info);
-    i++;
-  }
-  return (i > 0);
-}
-
-bool wxClassLibrary::FetchInfos(const wxString& path,
-                                wxArrayClassLibInfo& infos)
-{
-  wxClassLibInfo *info;
-  size_t i = 0;
-
-  while (i < m_list.Count()) {
-    info = m_list[i];
-    if (wxMatchWild(path, info->path)) {
-      wxClassLibInfo *inf = new wxClassLibInfo;
-      *inf = *info;
-      infos.Add(inf);
-    }
-    i++;
-  }
-  return (i > 0);
-}
-
-wxObject *wxClassLibrary::CreateObject(const wxString& path)
-{
-  wxClassLibInfo *info;
-  size_t i = 0;
-
-  while (i < m_list.Count()) {
-    info = m_list[i];
-    if (wxMatchWild(path, info->path))
-      return info->class_info->CreateObject();
-    i++;
   }
   return NULL;
 }

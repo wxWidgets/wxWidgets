@@ -22,7 +22,10 @@
 
 #ifndef WX_PRECOMP
 #include "wx/hash.h"
+#ifdef USE_STORABLE_CLASSES
 #include "wx/objstrm.h"
+#include "wx/serbase.h"
+#endif
 #endif
 
 #include <string.h>
@@ -40,6 +43,7 @@
 #if !USE_SHARED_LIBRARY
 wxClassInfo wxObject::classwxObject((char *) "wxObject", (char *) NULL, (char *) NULL, (int ) sizeof(wxObject), (wxObjectConstructorFn) NULL);
 wxClassInfo *wxClassInfo::first = (wxClassInfo *) NULL;
+wxHashTable wxClassInfo::classTable(wxKEY_STRING);
 #endif
 
 /*
@@ -49,11 +53,18 @@ wxClassInfo *wxClassInfo::first = (wxClassInfo *) NULL;
 wxObject::wxObject(void)
 {
   m_refData = (wxObjectRefData *) NULL;
+#ifdef USE_STORABLE_CLASSES
+  m_serialObj = (wxObject_Serialize *)NULL;
+#endif
 }
 
 wxObject::~wxObject(void)
 {
 	UnRef();
+#ifdef USE_STORABLE_CLASSES
+	if (m_serialObj)
+	  delete m_serialObj;
+#endif
 }
 
 /*
@@ -184,14 +195,12 @@ bool wxClassInfo::IsKindOf(wxClassInfo *info)
 // Set pointers to base class(es) to speed up IsKindOf
 void wxClassInfo::InitializeClasses(void)
 {
-  wxHashTable table(wxKEY_STRING);
-
   // Index all class infos by their class name
   wxClassInfo *info = first;
   while (info)
   {
     if (info->className)
-      table.Put(info->className, (wxObject *)info);
+      classTable.Put(info->className, (wxObject *)info);
     info = info->next;
   }
 
@@ -200,23 +209,23 @@ void wxClassInfo::InitializeClasses(void)
   while (info)
   {
     if (info->GetBaseClassName1())
-      info->baseInfo1 = (wxClassInfo *)table.Get(info->GetBaseClassName1());
+      info->baseInfo1 = (wxClassInfo *)classTable.Get(info->GetBaseClassName1());
     if (info->GetBaseClassName2())
-      info->baseInfo2 = (wxClassInfo *)table.Get(info->GetBaseClassName2());
+      info->baseInfo2 = (wxClassInfo *)classTable.Get(info->GetBaseClassName2());
     info = info->next;
   }
+  first = NULL;
 }
 
 wxObject *wxCreateDynamicObject(char *name)
 {
-  wxClassInfo *info = wxClassInfo::first;
-  while (info)
-  {
-    if (info->className && strcmp(info->className, name) == 0)
-      return info->CreateObject();
-    info = info->next;
-  }
-  return (wxObject *) NULL;
+  wxClassInfo *info;
+
+  info = (wxClassInfo *)wxClassInfo::classTable.Get(name);
+  if (!info)
+    return (wxObject *)NULL;
+
+  return info->CreateObject();
 }
 
 #ifdef USE_STORABLE_CLASSES
@@ -235,50 +244,50 @@ void wxObject::StoreObject( wxObjectOutputStream& stream )
 {
   wxString obj_name = wxString(GetClassInfo()->GetClassName()) + "_Serialize";
   wxLibrary *lib = wxTheLibraries.LoadLibrary("wxserial");
-  WXSERIAL(wxObject) *serial;
 
   if (!lib) {
     wxMessageBox("Can't load wxSerial dynamic library.", "Alert !");
     return;
   }
-  serial = (WXSERIAL(wxObject) *)lib->CreateObject( obj_name );
+  if (!m_serialObj) {
+    m_serialObj = (WXSERIAL(wxObject) *)lib->CreateObject( obj_name );
 
-  if (!serial) {
-    wxString message;
+    if (!m_serialObj) {
+      wxString message;
 
-    message.Printf("Can't find the serialization object (%s) for the object %s",
-                   WXSTRINGCAST obj_name,                                                          WXSTRINGCAST GetClassInfo()->GetClassName());
-    wxMessageBox(message, "Alert !");
-    return;
+      message.Printf("Can't find the serialization object (%s) for the object %s",
+                     WXSTRINGCAST obj_name,
+                     WXSTRINGCAST GetClassInfo()->GetClassName());
+      wxMessageBox(message, "Alert !");
+      return;
+    }
+    m_serialObj->SetObject(this);
   }
 
-  serial->SetObject(this);
-  serial->StoreObject(stream);
-
-  delete serial;
+  m_serialObj->StoreObject(stream);
 }
 
 void wxObject::LoadObject( wxObjectInputStream& stream )
 {
   wxString obj_name = wxString(GetClassInfo()->GetClassName()) + "_Serialize";
   wxLibrary *lib = wxTheLibraries.LoadLibrary("wxserial");
-  WXSERIAL(wxObject) *serial =
-                           (WXSERIAL(wxObject) *)lib->CreateObject( obj_name );
 
-  if (!serial) {
-    wxString message;
+  if (!m_serialObj) {
+    m_serialObj = (WXSERIAL(wxObject) *)lib->CreateObject( obj_name );
 
-    message.Printf("Can't find the serialization object (%s) for the object %s",
-                   WXSTRINGCAST obj_name,
-                   WXSTRINGCAST GetClassInfo()->GetClassName());
-    wxMessageBox(message, "Alert !");
-    return;
+    if (!m_serialObj) {
+      wxString message;
+
+      message.Printf("Can't find the serialization object (%s) for the object %s",
+                     WXSTRINGCAST obj_name,
+                     WXSTRINGCAST GetClassInfo()->GetClassName());
+      wxMessageBox(message, "Alert !");
+      return;
+    }
+    m_serialObj->SetObject(this);
   }
 
-  serial->SetObject(this);
-  serial->LoadObject(stream);
-
-  delete serial;
+  m_serialObj->LoadObject(stream);
 }
 
 #endif
