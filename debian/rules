@@ -55,6 +55,7 @@ objdir_examples=docs/examples
 objdir_i18n=locale
 
 objdir_gtk_univ=objs_gtk_univ
+objdir_univ_install=objs_univ_install
 
 objdir_wxbase_msw_shared=objs_wxbase_msw_sh
 objdir_wxbase_msw_static=objs_wxbase_msw_st
@@ -65,7 +66,7 @@ objdir_msw_dbg=objs_msw_d
 
 objdirs=$(objdir_wxbase_shared) $(objdir_wxbase_static) $(objdir_wxbase_debug) \
 	$(objdir_gtk_shared) $(objdir_gtk_static) $(objdir_gtk_debug) $(objdir_gtk_univ) \
-	$(objdir_doc_cruft) $(objdir_doc) $(objdir_examples) \
+	$(objdir_univ_install) $(objdir_doc_cruft) $(objdir_doc) $(objdir_examples) \
 	$(objdir_wxbase_msw_shared) $(objdir_wxbase_msw_static) $(objdir_wxbase_msw_dbg) \
 	$(objdir_msw_shared) $(objdir_msw_static) $(objdir_msw_dbg)
 
@@ -622,7 +623,17 @@ install-headers: install-gtk-lib
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
+
+# The only way to be really sure we get the univ headers correct is to install
+# them.  Do that in a scratch dirs, and move the gtk ones last, so at least
+# they win in the result of any uncaught conflict.
+
+	cd $(objdir_gtk_univ) \
+		&& $(MAKE) install prefix=`pwd`/../$(objdir_univ_install)/usr
+
+	dh_movefiles --sourcedir=$(objdir_univ_install)
 	dh_movefiles --sourcedir=debian/$(package_gtk_lib)
+
 	dh_installmanpages \
 		ansi2knr.1 \
 		jpegtran.1 \
@@ -722,6 +733,7 @@ binary-common:
 	dh_installdocs
 	dh_installchangelogs
 	dh_installexamples
+	dh_installmenu
 	dh_link
 
 	@# Don't strip debug libs at all, and strip cross libs elsewhere

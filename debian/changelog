@@ -1,7 +1,28 @@
-wxwindows2.3 (2.3.4) unstable; urgency=low
+wxwindows2.5 (2.5.0) unstable; urgency=low
+
+  * New beginnings.  Back to development flavored chaos again.
+
+ -- Ron Lee <ron@debian.org>  Thu, 19 Dec 2002 01:08:50 -0800
+
+wxwindows2.4 (2.4.0) unstable; urgency=low
+
+  * The fingers crossed release.
+
+ -- Ron Lee <ron@debian.org>  Thu, 19 Dec 2002 00:50:48 -0800
+
+wxwindows2.3 (2.3.4.1) unstable; urgency=low
 
   * 2.4.0pre1 I guess.
   * Added -ffunction-sections for broken hppa linker. Closes: #162948
+  * Conflict/Replace wxPython2.2.  Since its nmu these two packages
+    can no longer currently coexist.  Closes: #171258
+  * xrced.py path search fixed.  Closes: #168148, #170748
+  * Actually install all wxUniv headers to the header package.
+    Closes: #168250, #164557
+  * Robin tells me this one should be fixed in 2.3 too, I can't confirm
+    so please reopen if it's not.  Closes: #172390
+  * Added menu items for pycrust/pyshell, thanks Martin.  Closes: #172447
+  * Broken header fixed.  Closes: #168887
 
  -- Ron Lee <ron@debian.org>  Mon, 18 Nov 2002 18:54:21 -0800
 
