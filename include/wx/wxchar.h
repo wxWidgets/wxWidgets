@@ -768,7 +768,11 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
    headers, so we need to declare it ourselves to be able to use it.
  */
 #if defined(HAVE_VSNPRINTF) && !defined(HAVE_VSNPRINTF_DECL)
+#ifdef __cplusplus
     extern "C"
+#else
+    extern
+#endif
     int vsnprintf(char *str, size_t size, const char *format, va_list ap);
 #endif /* !HAVE_VSNPRINTF_DECL */
 
