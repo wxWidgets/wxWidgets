@@ -713,9 +713,11 @@ void wxListBox::MacScrollTo( int n )
     verify_noerr( ::RevealDataBrowserItem((ControlRef) m_macControl , id , kTextColumnId , kDataBrowserRevealWithoutSelecting ) ) ;
 }
 
+#if !TARGET_API_MAC_OSX
 void wxListBox::OnSize( wxSizeEvent &event)
 {
 }
+#endif
 
 void wxListBox::MacSetRedraw( bool doDraw )
 {
@@ -778,6 +780,8 @@ void wxListBox::MacDoDoubleClick()
     GetEventHandler()->ProcessEvent(event) ;
 */
 }
+
+#if !TARGET_API_MAC_OSX
 
 void wxListBox::OnChar(wxKeyEvent& event)
 {
@@ -886,4 +890,6 @@ void wxListBox::OnChar(wxKeyEvent& event)
         }
     }
 }
+
+#endif
 
