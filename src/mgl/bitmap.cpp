@@ -281,7 +281,7 @@ bool wxBitmap::CreateFromXpm(const char **bits)
     return TRUE;
 }
 
-wxBitmap::wxBitmap(const wxImage& image, int depth = -1)
+wxBitmap::wxBitmap(const wxImage& image, int depth)
 {
     long width, height;
 
