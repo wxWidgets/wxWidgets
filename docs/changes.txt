@@ -17,6 +17,7 @@ OTHER CHANGES
 -----
 
 - chinese translations added
+- wxTreeEvent::GetPoint() returns correct position for ITEM_XXX_CLICK events
 
 2.2.3
 -----
