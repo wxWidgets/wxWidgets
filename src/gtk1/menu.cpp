@@ -1375,7 +1375,7 @@ static wxString GetHotKey( const wxMenuItem& item )
             case WXK_F10:
             case WXK_F11:
             case WXK_F12:
-                hotkey << wxT('F') << code - WXK_F1 + 1;
+                hotkey += wxString::Format(wxT("F%d"), code - WXK_F1 + 1);
                 break;
 
                 // TODO: we should use gdk_keyval_name() (a.k.a.
