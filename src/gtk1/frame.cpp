@@ -462,7 +462,7 @@ void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
         for(wxNode *node = GetChildren().First(); node; node = node->Next())
         {
             wxWindow *win = (wxWindow *)node->Data();
-            if (!IS_KIND_OF(win,wxFrame) && !IS_KIND_OF(win,wxDialog)
+            if (!wxIS_KIND_OF(win,wxFrame) && !wxIS_KIND_OF(win,wxDialog)
 #if 0  // not in m_children anyway ?
               && (win != m_frameMenuBar) &&
               (win != m_frameToolBar) &&

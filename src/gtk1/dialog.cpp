@@ -261,7 +261,7 @@ void wxDialog::OnSize( wxSizeEvent &WXUNUSED(event) )
         for(wxNode *node = GetChildren().First(); node; node = node->Next())
         {
             wxWindow *win = (wxWindow *)node->Data();
-            if (!IS_KIND_OF(win,wxFrame) && !IS_KIND_OF(win,wxDialog))
+            if (!wxIS_KIND_OF(win,wxFrame) && !wxIS_KIND_OF(win,wxDialog))
             {
 	        // it's the second one: do nothing
                 if (child) return;
