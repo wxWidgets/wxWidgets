@@ -108,10 +108,6 @@ SOURCE=.\common\ctrlcmn.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\dcbase.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\date.cpp
 # End Source File
 # Begin Source File
@@ -125,6 +121,10 @@ SOURCE=.\common\db.cpp
 # Begin Source File
 
 SOURCE=.\common\dbtable.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\dcbase.cpp
 # End Source File
 # Begin Source File
 
@@ -163,11 +163,11 @@ SOURCE=.\common\extended.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\file.cpp
+SOURCE=.\common\ffile.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\ffile.cpp
+SOURCE=.\common\file.cpp
 # End Source File
 # Begin Source File
 
@@ -180,6 +180,10 @@ SOURCE=.\common\filefn.cpp
 # Begin Source File
 
 SOURCE=.\common\filesys.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\fontcmn.cpp
 # End Source File
 # Begin Source File
 
@@ -219,11 +223,11 @@ SOURCE=.\common\http.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\image.cpp
+SOURCE=.\common\imagbmp.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\imagbmp.cpp
+SOURCE=.\common\image.cpp
 # End Source File
 # Begin Source File
 
@@ -344,15 +348,15 @@ SOURCE=.\common\socket.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\strconv.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\stream.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\common\string.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\strconv.cpp
 # End Source File
 # Begin Source File
 
@@ -385,6 +389,12 @@ SOURCE=.\common\tokenzr.cpp
 # Begin Source File
 
 SOURCE=.\common\txtstrm.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\unzip.c
+# ADD CPP /I "zlib"
+# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -429,6 +439,7 @@ SOURCE=.\common\wxexpr.cpp
 # Begin Source File
 
 SOURCE=.\common\zipstrm.cpp
+# ADD CPP /I "zlib"
 # End Source File
 # Begin Source File
 
@@ -440,15 +451,23 @@ SOURCE=.\common\zstream.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\generic\choicdgg.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\generic\busyinfo.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\generic\choicdgg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\generic\gridg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic\helpext.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic\helphtml.cpp
 # End Source File
 # Begin Source File
 
@@ -457,6 +476,10 @@ SOURCE=.\generic\helpwxht.cpp
 # Begin Source File
 
 SOURCE=.\generic\laywin.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic\logg.cpp
 # End Source File
 # Begin Source File
 
@@ -511,7 +534,6 @@ SOURCE=.\generic\textdlgg.cpp
 SOURCE=.\generic\tipdlg.cpp
 # End Source File
 # End Group
-
 # Begin Group "wxHTML Files"
 
 # PROP Default_Filter ""
@@ -588,7 +610,6 @@ SOURCE=.\html\mod_tables.cpp
 SOURCE=.\html\search.cpp
 # End Source File
 # End Group
-
 # Begin Group "MSW Files"
 
 # PROP Default_Filter ""
@@ -615,6 +636,10 @@ SOURCE=.\msw\brush.cpp
 # Begin Source File
 
 SOURCE=.\msw\button.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\caret.cpp
 # End Source File
 # Begin Source File
 
@@ -736,6 +761,11 @@ SOURCE=.\msw\gaugemsw.cpp
 # Begin Source File
 
 SOURCE=.\msw\gdiobj.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\gsocket.c
+# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -881,6 +911,10 @@ SOURCE=.\msw\statbox.cpp
 # Begin Source File
 
 SOURCE=.\msw\statbr95.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\statline.cpp
 # End Source File
 # Begin Source File
 

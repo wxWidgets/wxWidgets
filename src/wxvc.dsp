@@ -1,7 +1,6 @@
 # Microsoft Developer Studio Project File - Name="wxvc" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 5.00
 # ** DO NOT EDIT **
-# RCS-ID:      $Id$
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
@@ -171,6 +170,10 @@ SOURCE=.\common\filesys.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\fontcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\framecmn.cpp
 # End Source File
 # Begin Source File
@@ -333,15 +336,15 @@ SOURCE=.\common\socket.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\strconv.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\stream.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\common\string.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\strconv.cpp
 # End Source File
 # Begin Source File
 
@@ -448,11 +451,23 @@ SOURCE=.\generic\gridg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\generic\helpext.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic\helphtml.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\generic\helpwxht.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\generic\laywin.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic\logg.cpp
 # End Source File
 # Begin Source File
 
@@ -616,6 +631,10 @@ SOURCE=.\msw\button.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\caret.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\checkbox.cpp
 # End Source File
 # Begin Source File
@@ -734,6 +753,11 @@ SOURCE=.\msw\gaugemsw.cpp
 # Begin Source File
 
 SOURCE=.\msw\gdiobj.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\gsocket.c
+# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -892,11 +916,11 @@ SOURCE=.\msw\statbr95.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\msw\stattext.cpp
+SOURCE=.\msw\statline.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\msw\statline.cpp
+SOURCE=.\msw\stattext.cpp
 # End Source File
 # Begin Source File
 
@@ -990,19 +1014,8 @@ SOURCE=.\msw\ole\uuid.cpp
 # Begin Source File
 
 SOURCE=.\png\png.c
-
-!IF  "$(CFG)" == "wxvc - Win32 Release"
-
-# ADD CPP /I "../include zlib"
-# SUBTRACT CPP /I "../include" /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "wxvc - Win32 Debug"
-
 # ADD CPP /I "zlib"
 # SUBTRACT CPP /YX /Yc /Yu
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
@@ -1015,240 +1028,86 @@ SOURCE=.\png\pngconf.h
 # Begin Source File
 
 SOURCE=.\png\pngerror.c
-
-!IF  "$(CFG)" == "wxvc - Win32 Release"
-
-# ADD CPP /I "../include zlib"
-# SUBTRACT CPP /I "../include" /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "wxvc - Win32 Debug"
-
 # ADD CPP /I "zlib"
 # SUBTRACT CPP /YX /Yc /Yu
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\png\pngget.c
-
-!IF  "$(CFG)" == "wxvc - Win32 Release"
-
-# ADD CPP /I "../include zlib"
-# SUBTRACT CPP /I "../include" /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "wxvc - Win32 Debug"
-
 # ADD CPP /I "zlib"
 # SUBTRACT CPP /YX /Yc /Yu
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\png\pngmem.c
-
-!IF  "$(CFG)" == "wxvc - Win32 Release"
-
-# ADD CPP /I "../include zlib"
-# SUBTRACT CPP /I "../include" /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "wxvc - Win32 Debug"
-
 # ADD CPP /I "zlib"
 # SUBTRACT CPP /YX /Yc /Yu
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\png\pngpread.c
-
-!IF  "$(CFG)" == "wxvc - Win32 Release"
-
-# ADD CPP /I "../include zlib"
-# SUBTRACT CPP /I "../include" /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "wxvc - Win32 Debug"
-
 # ADD CPP /I "zlib"
 # SUBTRACT CPP /YX /Yc /Yu
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\png\pngread.c
-
-!IF  "$(CFG)" == "wxvc - Win32 Release"
-
-# ADD CPP /I "../include zlib"
-# SUBTRACT CPP /I "../include" /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "wxvc - Win32 Debug"
-
 # ADD CPP /I "zlib"
 # SUBTRACT CPP /YX /Yc /Yu
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\png\pngrio.c
-
-!IF  "$(CFG)" == "wxvc - Win32 Release"
-
-# ADD CPP /I "../include zlib"
-# SUBTRACT CPP /I "../include" /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "wxvc - Win32 Debug"
-
 # ADD CPP /I "zlib"
 # SUBTRACT CPP /YX /Yc /Yu
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\png\pngrtran.c
-
-!IF  "$(CFG)" == "wxvc - Win32 Release"
-
-# ADD CPP /I "../include zlib"
-# SUBTRACT CPP /I "../include" /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "wxvc - Win32 Debug"
-
 # ADD CPP /I "zlib"
 # SUBTRACT CPP /YX /Yc /Yu
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\png\pngrutil.c
-
-!IF  "$(CFG)" == "wxvc - Win32 Release"
-
-# ADD CPP /I "../include zlib"
-# SUBTRACT CPP /I "../include" /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "wxvc - Win32 Debug"
-
 # ADD CPP /I "zlib"
 # SUBTRACT CPP /YX /Yc /Yu
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\png\pngset.c
-
-!IF  "$(CFG)" == "wxvc - Win32 Release"
-
-# ADD CPP /I "../include zlib"
-# SUBTRACT CPP /I "../include" /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "wxvc - Win32 Debug"
-
 # ADD CPP /I "zlib"
 # SUBTRACT CPP /YX /Yc /Yu
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\png\pngtrans.c
-
-!IF  "$(CFG)" == "wxvc - Win32 Release"
-
-# ADD CPP /I "../include zlib"
-# SUBTRACT CPP /I "../include" /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "wxvc - Win32 Debug"
-
 # ADD CPP /I "zlib"
 # SUBTRACT CPP /YX /Yc /Yu
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\png\pngwio.c
-
-!IF  "$(CFG)" == "wxvc - Win32 Release"
-
-# ADD CPP /I "../include zlib"
-# SUBTRACT CPP /I "../include" /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "wxvc - Win32 Debug"
-
 # ADD CPP /I "zlib"
 # SUBTRACT CPP /YX /Yc /Yu
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\png\pngwrite.c
-
-!IF  "$(CFG)" == "wxvc - Win32 Release"
-
-# ADD CPP /I "../include zlib"
-# SUBTRACT CPP /I "../include" /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "wxvc - Win32 Debug"
-
 # ADD CPP /I "zlib"
 # SUBTRACT CPP /YX /Yc /Yu
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\png\pngwtran.c
-
-!IF  "$(CFG)" == "wxvc - Win32 Release"
-
-# ADD CPP /I "../include zlib"
-# SUBTRACT CPP /I "../include" /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "wxvc - Win32 Debug"
-
 # ADD CPP /I "zlib"
 # SUBTRACT CPP /YX /Yc /Yu
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\png\pngwutil.c
-
-!IF  "$(CFG)" == "wxvc - Win32 Release"
-
-# ADD CPP /I "../include zlib"
-# SUBTRACT CPP /I "../include" /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "wxvc - Win32 Debug"
-
 # ADD CPP /I "zlib"
 # SUBTRACT CPP /YX /Yc /Yu
-
-!ENDIF 
-
 # End Source File
 # End Group
 # Begin Group "XPM files"
