@@ -198,6 +198,9 @@ wxString wxBitmapButton::GetLabel() const
 
 void wxBitmapButton::ApplyWidgetStyle()
 {
+    if (GTK_BUTTON(m_widget)->child == NULL) return;
+    
+    wxButton::ApplyWidgetStyle();
 }
 
 void wxBitmapButton::SetBitmap()
@@ -217,17 +220,18 @@ void wxBitmapButton::SetBitmap()
     if (!the_one.Ok()) the_one = m_bitmap;
     if (!the_one.Ok()) return;
 
-    GtkButton *bin = GTK_BUTTON(m_widget);
-
     GdkBitmap *mask = (GdkBitmap *) NULL;
     if (the_one.GetMask()) mask = the_one.GetMask()->GetBitmap();
 
+    GtkButton *bin = GTK_BUTTON(m_widget);
     if (bin->child == NULL)
     {          // initial bitmap
         GtkWidget *pixmap = gtk_pixmap_new(the_one.GetPixmap(), mask);
         gtk_widget_show(pixmap);
         gtk_container_add(GTK_CONTAINER(m_widget), pixmap);
-    } else {   // subsequent bitmaps
+    }
+    else
+    {   // subsequent bitmaps
         GtkPixmap *g_pixmap = GTK_PIXMAP(bin->child);
         gtk_pixmap_set(g_pixmap, the_one.GetPixmap(), mask);
     }

@@ -108,6 +108,7 @@ public:
 
 #if wxUSE_SPINCTRL
     void OnSpinCtrl(wxSpinEvent& event);
+    void OnSpinCtrlSetValue(wxCommandEvent& event);
 #endif // wxUSE_SPINCTRL
 
     void OnEnableAll(wxCommandEvent& event);
@@ -426,6 +427,7 @@ const int  ID_SPIN              = 182;
 const int  ID_BTNPROGRESS       = 183;
 const int  ID_BUTTON_LABEL      = 184;
 const int  ID_SPINCTRL          = 185;
+const int  ID_SPINCTRL_VALUE    = 186;
 
 const int  ID_BUTTON_TEST1      = 190;
 const int  ID_BUTTON_TEST2      = 191;
@@ -484,6 +486,7 @@ EVT_BUTTON    (ID_BTNPROGRESS,          MyPanel::OnShowProgress)
 #endif // wxUSE_SPINBTN
 #if wxUSE_SPINCTRL
 EVT_SPINCTRL  (ID_SPINCTRL,             MyPanel::OnSpinCtrl)
+EVT_BUTTON    (ID_SPINCTRL_VALUE,       MyPanel::OnSpinCtrlSetValue)
 #endif // wxUSE_SPINCTRL
 EVT_BUTTON    (ID_BUTTON_LABEL,         MyPanel::OnUpdateLabel)
 EVT_CHECKBOX  (ID_CHANGE_COLOUR,        MyPanel::OnChangeColour)
@@ -747,11 +750,13 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_spinbutton->SetValue(initialSpinValue);
 
     m_btnProgress = new wxButton( panel, ID_BTNPROGRESS, "&Show progress dialog",
-                                  wxPoint(300, 160) );
+                                  wxPoint(330, 160) );
 #endif // wxUSE_SPINBTN
 
 #if wxUSE_SPINCTRL
-    m_spinctrl = new wxSpinCtrl( panel, ID_SPINCTRL, "", wxPoint(200, 160), wxSize(80, -1) );
+    (void)new wxButton ( panel, ID_SPINCTRL_VALUE, "SetValue", wxPoint(140,160) );
+
+    m_spinctrl = new wxSpinCtrl( panel, ID_SPINCTRL, "", wxPoint(240, 160), wxSize(80, -1) );
     m_spinctrl->SetRange(10,30);
     m_spinctrl->SetValue(15);
 #endif // wxUSE_SPINCTRL
@@ -1256,6 +1261,11 @@ void MyPanel::OnSpinCtrl(wxSpinEvent& event)
     s.Printf(_T("Spin ctrl changed: now %d (from event: %d)\n"),
              m_spinctrl->GetValue(), event.GetInt());
     m_text->AppendText(s);
+}
+
+void MyPanel::OnSpinCtrlSetValue(wxCommandEvent& event)
+{
+    m_spinctrl->SetValue( 12 );
 }
 
 #endif // wxUSE_SPINCTRL
