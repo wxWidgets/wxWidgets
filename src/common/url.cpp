@@ -20,6 +20,8 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_SOCKETS
+
 #ifndef WX_PRECOMP
 #endif
 
@@ -313,3 +315,6 @@ void wxURL::SetProxy(const wxString& url_proxy)
   m_protoname = "proxy";
   m_path = url_proxy;
 }
+
+#endif
+  // wxUSE_SOCKETS

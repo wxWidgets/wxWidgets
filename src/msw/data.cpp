@@ -412,6 +412,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxToolBar95, wxToolBarBase)
 
 #endif
 
+#if wxUSE_SOCKETS
+
 #include "wx/sckaddr.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxIPV4address, wxSockAddress)
@@ -455,6 +457,8 @@ IMPLEMENT_PROTOCOL(wxFileProto, "file", NULL, FALSE)
 IMPLEMENT_DYNAMIC_CLASS(wxTCPServer, wxServerBase)
 IMPLEMENT_DYNAMIC_CLASS(wxTCPClient, wxClientBase)
 IMPLEMENT_DYNAMIC_CLASS(wxTCPConnection, wxConnectionBase)
+
+#endif
 
 #include "wx/statusbr.h"
 

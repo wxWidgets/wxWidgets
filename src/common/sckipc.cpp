@@ -20,6 +20,8 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_SOCKETS
+
 #ifndef WX_PRECOMP
 #endif
 
@@ -516,3 +518,6 @@ void Server_OnRequest(wxSocketServer& server,
     }
   }
 }
+
+#endif
+  // wxUSE_SOCKETS

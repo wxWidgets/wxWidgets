@@ -20,6 +20,8 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_SOCKETS
+
 #ifndef __MWERKS__
 #include <memory.h>
 #endif
@@ -407,3 +409,5 @@ wxList *wxFTP::GetList(const wxString& wildcard)
 
   return file_list;
 }
+#endif
+  // wxUSE_SOCKETS

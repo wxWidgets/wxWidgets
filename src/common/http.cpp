@@ -20,6 +20,8 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_SOCKETS
+
 #ifndef WX_PRECOMP
 #endif
 
@@ -276,3 +278,6 @@ wxInputStream *wxHTTP::GetInputStream(const wxString& path)
 
   return inp_stream;
 }
+
+#endif
+   // wxUSE_SOCKETS

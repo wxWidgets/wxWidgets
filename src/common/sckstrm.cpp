@@ -19,6 +19,8 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_SOCKETS
+
 #ifndef WX_PRECOMP
 #endif
 
@@ -86,3 +88,5 @@ wxSocketStream::wxSocketStream(wxSocketBase& s)
 wxSocketStream::~wxSocketStream()
 {
 }
+
+#endif

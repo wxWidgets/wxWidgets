@@ -760,6 +760,7 @@ DEFAULT_wxUSE_TIMEDATE=1
 DEFAULT_wxUSE_INTL=1
 DEFAULT_wxUSE_CONFIG=1
 DEFAULT_wxUSE_STREAMS=1
+DEFAULT_wxUSE_SOCKETS=0
 DEFAULT_wxUSE_SERIAL=1
 DEFAULT_wxUSE_DYNLIB_CLASS=1
 
@@ -892,6 +893,10 @@ wxUSE_STREAMS)
 AC_OVERRIDES(serial,serial,
 **--with-serial           use class serialization,
 wxUSE_SERIAL)
+
+AC_OVERRIDES(sockets,sockets,
+**--with-sockets	  use wxSocket etc classes,
+wxUSE_SOCKETS)
 
 dnl ----------------------------------------------------------------
 dnl user options for PostScript

@@ -20,6 +20,8 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_SOCKETS
+
 #ifndef WX_PRECOMP
 #include <wx/wx.h>
 #endif
@@ -137,3 +139,6 @@ void wxProtocolModule::OnExit()
   delete wxURL::g_proxy;
   wxURL::g_proxy = NULL;
 }
+
+#endif
+  // wxUSE_SOCKETS

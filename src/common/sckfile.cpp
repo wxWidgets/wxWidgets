@@ -19,6 +19,8 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_SOCKETS
+
 #ifndef WX_PRECOMP
 #endif
 
@@ -44,3 +46,6 @@ wxInputStream *wxFileProto::GetInputStream(const wxString& path)
 {
   return new wxFileInputStream(path);
 }
+
+#endif
+  // wxUSE_SOCKETS

@@ -20,6 +20,8 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_SOCKETS
+
 #ifndef WX_PRECOMP
 #endif
 
@@ -417,3 +419,6 @@ void wxUNIXaddress::Disassemble(struct sockaddr *addr, size_t len)
   *m_addr = *(struct sockaddr_un *)addr;
 }
 #endif
+
+#endif 
+  // wxUSE_SOCKETS
