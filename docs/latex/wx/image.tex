@@ -351,6 +351,9 @@ Returns the image data as an array. This is most often used when doing
 direct image manipulation. The return value points to an array of
 characters in RGBRGBRGB$\ldots$ format.
 
+You should not delete the returned pointer nor pass it to
+\helpref{wxImage::SetData}{wximagesetdata}.
+
 \membersection{wxImage::GetGreen}\label{wximagegetgreen}
 
 \constfunc{unsigned char}{GetGreen}{\param{int}{ x}, \param{int}{ y}}
@@ -809,6 +812,13 @@ Example:
 Sets the image data without performing checks. The data given must have
 the size (width*height*3) or results will be unexpected. Don't use this
 method if you aren't sure you know what you are doing.
+
+The data must have been allocated with malloc(), NOT with operator new.
+
+After this call the pointer to the data is owned by the wxImage object,
+that will be responsible for deleting it.
+Do not pass to this function a pointer obtained through
+\helpref{wxImage::GetData}{wximagegetdata}.
 
 \membersection{wxImage::SetMask}\label{wximagesetmask}
 
