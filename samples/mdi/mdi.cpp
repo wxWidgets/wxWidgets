@@ -172,7 +172,7 @@ void MyFrame::OnClose(wxCloseEvent& event)
     if ( event.CanVeto() && (gs_nFrames > 0) )
     {
         wxString msg;
-        msg.Printf("%d windows still open, close anyhow?", gs_nFrames);
+        msg.Printf(_T("%d windows still open, close anyhow?"), gs_nFrames);
         if ( wxMessageBox(msg, "Please confirm",
                           wxICON_QUESTION | wxYES_NO) != wxYES )
         {
@@ -205,7 +205,7 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
                                     wxDEFAULT_FRAME_STYLE);
 
     wxString title;
-    title.Printf("Canvas Frame %d", ++gs_nFrames);
+    title.Printf(_T("Canvas Frame %d"), ++gs_nFrames);
 
     subframe->SetTitle(title);
 

@@ -1625,7 +1625,7 @@ void wxWindow::Init()
     m_scrollGC = (GdkGC*) NULL;
     m_widgetStyle = (GtkStyle*) NULL;
 
-    m_insertCallback = wxInsertChildInWindow;
+    m_insertCallback = (wxInsertChildFunction) NULL;
 
     m_isStaticBox = FALSE;
     m_acceptsFocus = FALSE;
@@ -1650,6 +1650,8 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
                        long style, const wxString &name  )
 {
     PreCreation( parent, id, pos, size, style, name );
+
+    m_insertCallback = wxInsertChildInWindow;
 
     m_widget = gtk_scrolled_window_new( (GtkAdjustment *) NULL, (GtkAdjustment *) NULL );
     GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
@@ -2364,6 +2366,21 @@ bool wxWindow::Reparent( wxWindow *newParent )
         return FALSE;
 
     return TRUE;
+}
+
+void wxWindow::DoAddChild(wxWindow *child) 
+{
+    wxASSERT_MSG( (m_widget != NULL), _T("invalid window") );
+
+    wxASSERT_MSG( (child != NULL), _T("invalid child window") );
+
+    wxASSERT_MSG( (m_insertCallback != NULL), _T("invalid child insertion function") );
+    
+    /* add to list */
+    AddChild( child );
+    
+    /* insert GTK representation */
+    (*m_insertCallback)(this, child);
 }
 
 void wxWindow::Raise()

@@ -123,7 +123,7 @@ class wxMDIChildFrame: public wxFrame
   virtual wxStatusBar* CreateStatusBar( int WXUNUSED(number)=1, long WXUNUSED(style)=1, 
     wxWindowID WXUNUSED(id)=1, const wxString& WXUNUSED(name)=WXSTRINGCAST NULL ) {return (wxStatusBar*)NULL; }
   virtual wxStatusBar *GetStatusBar() const { return (wxStatusBar*)NULL; }
-  virtual void SetStatusText( const wxString &WXUNUSED(text), int WXUNUSED(number) ) {}
+  virtual void SetStatusText( const wxString &WXUNUSED(text), int WXUNUSED(number)=0 ) {}
   virtual void SetStatusWidths( int WXUNUSED(n), const int WXUNUSED(widths_field)[] ) {}
 
     // no size hints

@@ -304,7 +304,7 @@ END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxFrame,wxWindow)
 
-wxFrame::wxFrame()
+void wxFrame::Init()
 {
     m_frameMenuBar = (wxMenuBar *) NULL;
     m_frameStatusBar = (wxStatusBar *) NULL;
@@ -315,7 +315,6 @@ wxFrame::wxFrame()
     m_mainWidget = (GtkWidget*) NULL;
     m_menuBarDetached = FALSE;
     m_toolBarDetached = FALSE;
-    m_insertCallback = (wxInsertChildFunction) NULL;
     m_insertInClientArea = TRUE;
 }
 
@@ -323,17 +322,8 @@ wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString &title,
       const wxPoint &pos, const wxSize &size,
       long style, const wxString &name )
 {
-    m_frameMenuBar = (wxMenuBar *) NULL;
-    m_frameStatusBar = (wxStatusBar *) NULL;
-    m_frameToolBar = (wxToolBar *) NULL;
-    m_sizeSet = FALSE;
-    m_miniEdge = 0;
-    m_miniTitle = 0;
-    m_mainWidget = (GtkWidget*) NULL;
-    m_menuBarDetached = FALSE;
-    m_toolBarDetached = FALSE;
-    m_insertCallback = (wxInsertChildFunction) NULL;
-    m_insertInClientArea = TRUE;
+    Init();
+    
     Create( parent, id, title, pos, size, style, name );
 }
 

@@ -170,6 +170,32 @@ gtk_dialog_map_callback( GtkWidget *widget, wxDialog *win )
 }
     
 //-----------------------------------------------------------------------------
+// InsertChild for wxDialog
+//-----------------------------------------------------------------------------
+
+/* Callback for wxFrame. This very strange beast has to be used because
+ * C++ has no virtual methods in a constructor. We have to emulate a
+ * virtual function here as wxWindows requires different ways to insert
+ * a child in container classes. */
+
+static void wxInsertChildInDialog( wxDialog* parent, wxWindow* child )
+{
+    gtk_myfixed_put( GTK_MYFIXED(parent->m_wxwindow),
+                     GTK_WIDGET(child->m_widget),
+                     child->m_x,
+                     child->m_y,
+                     child->m_width,
+                     child->m_height );
+
+    if (parent->HasFlag(wxTAB_TRAVERSAL))
+    {
+        /* we now allow a window to get the focus as long as it
+           doesn't have any children. */
+        GTK_WIDGET_UNSET_FLAGS( parent->m_wxwindow, GTK_CAN_FOCUS );
+    }
+}
+
+//-----------------------------------------------------------------------------
 // wxDialog
 //-----------------------------------------------------------------------------
 
@@ -211,6 +237,8 @@ bool wxDialog::Create( wxWindow *parent,
 
     PreCreation( parent, id, pos, size, style, name );
 
+    m_insertCallback = (wxInsertChildFunction) wxInsertChildInDialog;
+    
     m_widget = gtk_window_new( GTK_WINDOW_TOPLEVEL );
     
     if (!name.IsEmpty())

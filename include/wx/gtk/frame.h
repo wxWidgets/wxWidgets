@@ -49,7 +49,7 @@ class wxFrame: public wxWindow
 DECLARE_DYNAMIC_CLASS(wxFrame)
 
 public:
-    wxFrame();
+    wxFrame() { Init(); }
     wxFrame( wxWindow *parent, wxWindowID id, const wxString &title,
             const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
             long style = wxDEFAULT_FRAME_STYLE, const wxString &name = wxFrameNameStr );
@@ -120,6 +120,9 @@ public:
     bool          m_insertInClientArea;  /* not from within OnCreateXXX */
 
 protected:
+    // common part of all ctors
+    void Init();
+    
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);

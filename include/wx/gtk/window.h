@@ -125,8 +125,10 @@ public:
             const wxSize &size, long style, const wxString &name );
     void PostCreation();
 
-    void InsertChild(wxWindow *child) { (*m_insertCallback)(this, child); }
-    void DoAddChild(wxWindow *child) { AddChild(child); InsertChild(child); }
+    /* internal addition of child windows. differs from class
+       to class not by using virtual functions but by using
+       the m_insertCallback */
+    void DoAddChild(wxWindow *child);
 
     /* the methods below are required because many native widgets
        are composed of several subwidgets and setting a style for
@@ -139,14 +141,14 @@ public:
     virtual bool IsOwnGtkWindow( GdkWindow *window );
     void ConnectWidget( GtkWidget *widget );
 
-    // creates a new widget style if none is there
-    // and sets m_widgetStyle to this value.
+    /* creates a new widget style if none is there
+       and sets m_widgetStyle to this value. */
     GtkStyle *GetWidgetStyle();
 
-    // called by SetFont() and SetXXXColour etc
+    /* called by SetFont() and SetXXXColour etc */
     void SetWidgetStyle();
 
-    // overridden in many GTK widgets
+    /* overridden in many GTK widgets */
     virtual void ApplyWidgetStyle();
 
 #if wxUSE_TOOLTIPS
@@ -162,11 +164,11 @@ public:
     int                  m_x, m_y;
     int                  m_width, m_height;
 
-    // see the docs in src/gtk/window.cpp
+    /* see the docs in src/gtk/window.cpp */
     GtkWidget           *m_widget;
     GtkWidget           *m_wxwindow;
 
-    // scrolling stuff
+    /* scrolling stuff */
     GtkAdjustment       *m_hAdjust,*m_vAdjust;
     float                m_oldHorizontalPos;
     float                m_oldVerticalPos;
