@@ -899,7 +899,7 @@ bool wxMetaTagHandler::HandleTag(const wxHtmlTag& tag)
         tag.GetParam(_T("HTTP-EQUIV")).IsSameAs(_T("Content-Type"), false) &&
         tag.HasParam(_T("CONTENT")))
     {
-        wxString content = tag.GetParam(_T("CONTENT"));
+        wxString content = tag.GetParam(_T("CONTENT")).Lower();
         if (content.Left(19) == _T("text/html; charset="))
         {
             *m_retval = content.Mid(19);
