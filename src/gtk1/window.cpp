@@ -1600,14 +1600,29 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget, GdkEvent *WXUNUSED(
     }
 #endif // wxUSE_CARET
 
-    wxFocusEvent event( wxEVT_SET_FOCUS, win->GetId() );
-    event.SetEventObject( win );
-
-    if (win->GetEventHandler()->ProcessEvent( event ))
+    if (win->IsTopLevel())
     {
-        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus_in_event" );
-        return TRUE;
+        wxActivateEvent event( wxEVT_ACTIVATE, TRUE, win->GetId() );
+        event.SetEventObject( win );
+
+        if (win->GetEventHandler()->ProcessEvent( event ))
+        {
+            gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus_in_event" );
+            return TRUE;
+        }
     }
+    else
+    {
+        wxFocusEvent event( wxEVT_SET_FOCUS, win->GetId() );
+        event.SetEventObject( win );
+
+        if (win->GetEventHandler()->ProcessEvent( event ))
+        {
+            gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus_in_event" );
+            return TRUE;
+        }
+    }
+
 
     return FALSE;
 }
@@ -1658,13 +1673,27 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED
     }
 #endif // wxUSE_CARET
 
-    wxFocusEvent event( wxEVT_KILL_FOCUS, win->GetId() );
-    event.SetEventObject( win );
-
-    if (win->GetEventHandler()->ProcessEvent( event ))
+    if (win->IsTopLevel())
     {
-        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus_out_event" );
-        return TRUE;
+        wxActivateEvent event( wxEVT_ACTIVATE, FALSE, win->GetId() );
+        event.SetEventObject( win );
+
+        if (win->GetEventHandler()->ProcessEvent( event ))
+        {
+            gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus_out_event" );
+            return TRUE;
+        }
+    }
+    else
+    {
+        wxFocusEvent event( wxEVT_KILL_FOCUS, win->GetId() );
+        event.SetEventObject( win );
+
+        if (win->GetEventHandler()->ProcessEvent( event ))
+        {
+            gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus_out_event" );
+            return TRUE;
+        }
     }
 
     return FALSE;
@@ -2647,7 +2676,7 @@ void wxWindow::OnInternalIdle()
         // do it only once
         g_sendActivateEvent = -1;
 
-        wxActivateEvent event(wxEVT_ACTIVATE, activate, GetId());
+        wxActivateEvent event(wxEVT_ACTIVATE_APP, activate, GetId());
         event.SetEventObject(this);
 
         (void)GetEventHandler()->ProcessEvent(event);

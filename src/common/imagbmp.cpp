@@ -383,7 +383,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
                 if (bpp == 1)
                 {
                     int bit = 0;
-                    for (bit = 0; bit < 8; bit++)
+                    for (bit = 0; bit < 8 && column < width; bit++)
                     {
                         index = ((aByte & (0x80 >> bit)) ? 1 : 0);
                         ptr[poffset] = cmap[index].r;
@@ -405,7 +405,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
                     else
                     {
                         int nibble = 0;
-                        for (nibble = 0; nibble < 2; nibble++)
+                        for (nibble = 0; nibble < 2 && column < width; nibble++)
                         {
                             index = ((aByte & (0xF0 >> nibble * 4)) >> (!nibble * 4));
                             if (index >= 16)
@@ -461,7 +461,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
                         }
                         else
                         {
-                            for (int l = 0; l < first; l++)
+                            for (int l = 0; l < first && column < width; l++)
                             {
                                 ptr[poffset    ] = cmap[aByte].r;
                                 ptr[poffset + 1] = cmap[aByte].g;
