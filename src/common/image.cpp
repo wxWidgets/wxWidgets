@@ -177,7 +177,7 @@ bool wxImage::Create( const char** xpmData )
 {
 #if wxUSE_XPM
     UnRef();
-    
+
     wxXPMDecoder decoder;
     (*this) = decoder.ReadData(xpmData);
     return Ok();
@@ -425,7 +425,7 @@ wxImage wxImage::Scale( int width, int height ) const
     unsigned char *target_data = data;
     unsigned char *source_alpha = 0 ;
     unsigned char *target_alpha = 0 ;
-    
+
     if (M_IMGDATA->m_hasMask)
     {
         image.SetMaskColour( M_IMGDATA->m_maskRed,
@@ -452,7 +452,7 @@ wxImage wxImage::Scale( int width, int height ) const
         {
         unsigned char* src_line = &source_data[(y>>16)*old_width*3];
         unsigned char* src_alpha_line = source_alpha ? &source_alpha[(y>>16)*old_width] : 0 ;
-        
+
         long x = 0;
         for ( long i = 0; i < width; i++ )
         {
@@ -603,7 +603,7 @@ wxImage wxImage::GetSubImage( const wxRect &rect ) const
     return image;
 }
 
-wxImage wxImage::Size( const wxSize& size, const wxPoint& pos, 
+wxImage wxImage::Size( const wxSize& size, const wxPoint& pos,
                        int r_, int g_, int b_ ) const
 {
     wxImage image;
@@ -810,8 +810,8 @@ void wxImage::SetRGB( const wxRect& rect_, unsigned char r, unsigned char g, uns
     }
     else
     {
-        wxCHECK_RET( imageRect.Inside(rect.GetTopLeft()) && 
-                     imageRect.Inside(rect.GetBottomRight()), 
+        wxCHECK_RET( imageRect.Inside(rect.GetTopLeft()) &&
+                     imageRect.Inside(rect.GetBottomRight()),
                      wxT("invalid bounding rectangle") );
     }
 
@@ -820,7 +820,7 @@ void wxImage::SetRGB( const wxRect& rect_, unsigned char r, unsigned char g, uns
         x2 = rect.GetRight() + 1,
         y2 = rect.GetBottom() + 1;
 
-    unsigned char *data = NULL;
+    unsigned char *data wxDUMMY_INITIALIZE(NULL);
     int x, y, width = GetWidth();
     for (y = y1; y < y2; y++)
     {
