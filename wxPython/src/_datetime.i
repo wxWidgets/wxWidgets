@@ -713,12 +713,39 @@ public:
         wxDateTime __sub__(const wxTimeSpan& other) { return *self - other; }
         wxDateTime __sub__(const wxDateSpan& other) { return *self - other; }
 
-        bool __lt__(const wxDateTime* other) { return other ? (*self <  *other) : False; }
-        bool __le__(const wxDateTime* other) { return other ? (*self <= *other) : False; }
-        bool __gt__(const wxDateTime* other) { return other ? (*self >  *other) : True;  }
-        bool __ge__(const wxDateTime* other) { return other ? (*self >= *other) : True;  }
-        bool __eq__(const wxDateTime* other) { return other ? (*self == *other) : False; }
-        bool __ne__(const wxDateTime* other) { return other ? (*self != *other) : True;  }
+//         bool __lt__(const wxDateTime* other) { return other ? (*self <  *other) : False; }
+//         bool __le__(const wxDateTime* other) { return other ? (*self <= *other) : False; }
+//         bool __gt__(const wxDateTime* other) { return other ? (*self >  *other) : True;  }
+//         bool __ge__(const wxDateTime* other) { return other ? (*self >= *other) : True;  }
+
+
+        // These fall back to just comparing pointers if other is NULL, or if
+        // either operand is invalid.
+        bool __lt__(const wxDateTime* other) { 
+            if (!other || !self->IsValid() || !other->IsValid()) return self <  other; 
+            return (*self <  *other);
+        }
+        bool __le__(const wxDateTime* other) { 
+            if (!other || !self->IsValid() || !other->IsValid()) return self <= other; 
+            return (*self <= *other);
+        }
+        bool __gt__(const wxDateTime* other) { 
+            if (!other || !self->IsValid() || !other->IsValid()) return self >  other; 
+            return (*self >  *other);
+        }
+        bool __ge__(const wxDateTime* other) { 
+            if (!other || !self->IsValid() || !other->IsValid()) return self >= other; 
+            return (*self >= *other);
+        }
+
+        bool __eq__(const wxDateTime* other) {
+            if (!other || !self->IsValid() || !other->IsValid()) return self == other; 
+            return (*self == *other);
+        }
+        bool __ne__(const wxDateTime* other) {
+            if (!other || !self->IsValid() || !other->IsValid()) return self != other; 
+            return (*self != *other);
+        }            
     }
 
         
