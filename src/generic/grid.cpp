@@ -474,7 +474,7 @@ void wxGridCellEditor::HandleReturn(wxKeyEvent& event)
 bool wxGridCellEditor::IsAcceptedKey(wxKeyEvent& event)
 {
     // accept the simple key presses, not anything with Ctrl/Alt/Meta
-    return !event.HasModifiers();
+    return !(event.ControlDown() || event.AltDown());
 }
 
 void wxGridCellEditor::StartingKey(wxKeyEvent& event)
@@ -1393,6 +1393,7 @@ void wxGridCellEditorEvtHandler::OnKeyDown(wxKeyEvent& event)
             event.Skip( m_grid->ProcessEvent( event ) );
             break;
 
+        case WXK_NUMPAD_ENTER:
         case WXK_RETURN:
             if (!m_grid->ProcessEvent(event))
                 m_editor->HandleReturn(event);
@@ -1411,6 +1412,7 @@ void wxGridCellEditorEvtHandler::OnChar(wxKeyEvent& event)
         case WXK_ESCAPE:
         case WXK_TAB:
         case WXK_RETURN:
+        case WXK_NUMPAD_ENTER:
             break;
 
         default:
@@ -5422,6 +5424,7 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 break;
 
             case WXK_RETURN:
+            case WXK_NUMPAD_ENTER:
                 if ( event.ControlDown() )
                 {
                     event.Skip();  // to let the edit control have the return
