@@ -220,6 +220,7 @@ wxToolBarTool *wxToolBarBase::AddTool(int index, const wxBitmap& bitmap, const w
 void wxToolBarBase::AddSeparator ()
 {
   wxToolBarTool *tool = new wxToolBarTool;
+  tool->m_index = -1;
   tool->m_toolStyle = wxTOOL_STYLE_SEPARATOR;
   m_tools.Append(-1, tool);
 }
