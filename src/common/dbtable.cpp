@@ -12,7 +12,7 @@
 // RCS-ID:      $Id$
 // Copyright:   (c) 1996 Remstar International, Inc.
 // Licence:     wxWindows licence, plus:
-// Notice:       This class library and its intellectual design are free of charge for use,
+// Notice:      This class library and its intellectual design are free of charge for use,
 //              modification, enhancement, debugging under the following conditions:
 //              1) These classes may only be used as part of the implementation of a
 //                 wxWindows-based application
@@ -41,20 +41,20 @@
 #endif
 
 #ifdef DBDEBUG_CONSOLE
-        #include <iostream.h>
+    #include <iostream.h>
 #endif
 
 #ifdef    __BORLANDC__
-        #pragma hdrstop
+    #pragma hdrstop
 #endif  //__BORLANDC__
 
 #if wxMAJOR_VERSION == 2
-        #ifndef WX_PRECOMP
-                #include "wx/string.h"
-                #include "wx/object.h"
-                #include "wx/list.h"
-                #include "wx/utils.h"
-                #include "wx/msgdlg.h"
+    #ifndef WX_PRECOMP
+        #include "wx/string.h"
+        #include "wx/object.h"
+        #include "wx/list.h"
+        #include "wx/utils.h"
+        #include "wx/msgdlg.h"
     #endif
     #include "wx/filefn.h"
 #endif
@@ -141,20 +141,20 @@ wxTable::wxTable(wxDB *pwxDB, const char *tblName, const int nCols,
 
     pDb->nTables++;
 
-    char s[200];
+    wxString s;
     tableID = ++lastTableID;
-    sprintf(s, "wxTable constructor (%-20s) tableID:[%6lu] pDb:[%p]", tblName,tableID,pDb);
+    s.sprintf("wxTable constructor (%-20s) tableID:[%6lu] pDb:[%p]", tblName,tableID,pDb);
 
 #ifdef __WXDEBUG__
     CstructTablesInUse *tableInUse;
-    tableInUse = new CstructTablesInUse();
+    tableInUse            = new CstructTablesInUse();
     tableInUse->tableName = tblName;
-    tableInUse->tableID = tableID;
-    tableInUse->pDb = pDb;
+    tableInUse->tableID   = tableID;
+    tableInUse->pDb       = pDb;
     TablesInUse.Append(tableInUse);
 #endif
 
-    pDb->WriteSqlLog(s);
+    pDb->WriteSqlLog(s.GetData());
 
     // Grab the HENV and HDBC from the wxDB object
     henv = pDb->henv;
@@ -201,7 +201,7 @@ wxTable::wxTable(wxDB *pwxDB, const char *tblName, const int nCols,
             case SQL_CURSOR_FORWARD_ONLY:
                 cout << "Forward Only";     break;
             case SQL_CURSOR_STATIC:
-                cout << "Static";               break;
+                cout << "Static";           break;
             case SQL_CURSOR_KEYSET_DRIVEN:
                 cout << "Keyset Driven";    break;
             case SQL_CURSOR_DYNAMIC:
@@ -245,17 +245,18 @@ wxTable::wxTable(wxDB *pwxDB, const char *tblName, const int nCols,
 /********** wxTable::~wxTable() **********/
 wxTable::~wxTable()
 {
-    char s[80];
+    wxString s;
     if (pDb)
     {
-        sprintf(s, "wxTable destructor (%-20s) tableID:[%6lu] pDb:[%p]", tableName,tableID,pDb);
-        pDb->WriteSqlLog(s);
+        s.sprintf("wxTable destructor (%-20s) tableID:[%6lu] pDb:[%p]", tableName,tableID,pDb);
+        pDb->WriteSqlLog(s.GetData());
     }
 
 #ifdef __WXDEBUG__
     if (tableID)
     {
         bool found = FALSE;
+
         wxNode *pNode;
         pNode = TablesInUse.First();
         while (pNode && !found)
@@ -264,16 +265,16 @@ wxTable::~wxTable()
             {
                 found = TRUE;
                 if (!TablesInUse.DeleteNode(pNode))
-                    wxMessageBox (s,"Unable to delete node!");
+                    wxMessageBox (s.GetData(),"Unable to delete node!");
             }
             else
                 pNode = pNode->Next();
         }
         if (!found)
         {
-            char msg[250];
-            sprintf(msg,"Unable to find the tableID in the linked\nlist of tables in use.\n\n%s",s);
-            wxMessageBox (msg,"NOTICE...");
+            wxString msg;
+            msg.sprintf("Unable to find the tableID in the linked\nlist of tables in use.\n\n%s",s.GetData());
+            wxMessageBox (msg.GetData(),"NOTICE...");
         }
     }
 #endif
@@ -434,8 +435,8 @@ bool wxTable::bindUpdateParams(void)
             break;
         }
         if (SQLBindParameter(hstmtUpdate, colNo++, SQL_PARAM_INPUT, colDefs[i].SqlCtype,
-                                    fSqlType, precision, scale, (UCHAR*) colDefs[i].PtrDataObj, 
-                                    precision+1, &colDefs[i].CbValue) != SQL_SUCCESS)
+                             fSqlType, precision, scale, (UCHAR*) colDefs[i].PtrDataObj, 
+                             precision+1, &colDefs[i].CbValue) != SQL_SUCCESS)
             return(pDb->DispAllErrors(henv, hdbc, hstmtUpdate));
     }
 
@@ -455,7 +456,7 @@ bool wxTable::bindCols(HSTMT cursor)
     for (i = 0; i < noCols; i++)
     {
         if (SQLBindCol(cursor, i+1, colDefs[i].SqlCtype, (UCHAR*) colDefs[i].PtrDataObj,
-                            colDefs[i].SzDataObj, &cb) != SQL_SUCCESS)
+                       colDefs[i].SzDataObj, &cb) != SQL_SUCCESS)
             return(pDb->DispAllErrors(henv, hdbc, cursor));
     }
 
@@ -574,21 +575,22 @@ bool wxTable::Open(void)
         return FALSE;
 
     int i;
-    char sqlStmt[DB_MAX_STATEMENT_LEN];
+//    char sqlStmt[DB_MAX_STATEMENT_LEN];
+    wxString sqlStmt;
 
     // Verify that the table exists in the database
     if (!pDb->TableExists(tableName,pDb->GetUsername(),tablePath))
     {
-        char s[250];
+        wxString s;
         if (wxStrcmp(tablePath,""))
-            sprintf(s, "Error opening '%s/%s'.\n",tablePath,tableName);
+            s.sprintf("Error opening '%s/%s'.\n",tablePath,tableName);
         else
-            sprintf(s, "Error opening '%s'.\n", tableName);
+            s.sprintf("Error opening '%s'.\n", tableName);
         if (!pDb->TableExists(tableName,NULL,tablePath))
-            wxStrcat(s,"Table/view does not exist in the database.\n");
+            s += "Table/view does not exist in the database.\n";
         else
-            wxStrcat(s,"Current logged in user does not have sufficient privileges to access this table.\n");
-        pDb->LogError(s);
+            s += "Current logged in user does not have sufficient privileges to access this table.\n";
+        pDb->LogError(s.GetData());
         return(FALSE);
     }
 
@@ -613,33 +615,33 @@ bool wxTable::Open(void)
     if (!queryOnly && noCols > 0)
     {
         bool needComma = FALSE;
-        sprintf(sqlStmt, "INSERT INTO %s (", tableName);
+        sqlStmt.sprintf("INSERT INTO %s (", tableName);
         for (i = 0; i < noCols; i++)
         {
             if (! colDefs[i].InsertAllowed)
                 continue;
             if (needComma)
-                wxStrcat(sqlStmt, ",");
-            wxStrcat(sqlStmt, colDefs[i].ColName);
+                sqlStmt += ",";
+            sqlStmt += colDefs[i].ColName;
             needComma = TRUE;
         }
         needComma = FALSE;
-        wxStrcat(sqlStmt, ") VALUES (");
+        sqlStmt += ") VALUES (";
         for (i = 0; i < noCols; i++)
         {
             if (! colDefs[i].InsertAllowed)
                 continue;
             if (needComma)
-                wxStrcat(sqlStmt, ",");
-            wxStrcat(sqlStmt, "?");
+                sqlStmt += ",";
+            sqlStmt += "?";
             needComma = TRUE;
         }
-        wxStrcat(sqlStmt, ")");
+        sqlStmt += ")";
 
 //      pDb->WriteSqlLog(sqlStmt);
 
         // Prepare the insert statement for execution
-        if (SQLPrepare(hstmtInsert, (UCHAR FAR *) sqlStmt, SQL_NTS) != SQL_SUCCESS)
+        if (SQLPrepare(hstmtInsert, (UCHAR FAR *) sqlStmt.GetData(), SQL_NTS) != SQL_SUCCESS)
             return(pDb->DispAllErrors(henv, hdbc, hstmtInsert));
     }
     
@@ -884,7 +886,8 @@ bool wxTable::CreateTable(bool attemptDrop)
         return FALSE;
 
     int i, j;
-    char sqlStmt[DB_MAX_STATEMENT_LEN];
+//    char sqlStmt[DB_MAX_STATEMENT_LEN];
+    wxString sqlStmt;
 
 #ifdef DBDEBUG_CONSOLE
     cout << "Creating Table " << tableName << "..." << endl;
@@ -923,7 +926,8 @@ bool wxTable::CreateTable(bool attemptDrop)
 
     // Build a CREATE TABLE string from the colDefs structure.
     bool needComma = FALSE;
-    sprintf(sqlStmt, "CREATE TABLE %s (", tableName);
+    sqlStmt.sprintf("CREATE TABLE %s (", tableName);
+
     for (i = 0; i < noCols; i++)
     {
         // Exclude derived columns since they are NOT part of the base table
@@ -931,38 +935,38 @@ bool wxTable::CreateTable(bool attemptDrop)
             continue;
         // Comma Delimiter
         if (needComma)
-           wxStrcat(sqlStmt, ",");
+           sqlStmt += ",";
         // Column Name
-        wxStrcat(sqlStmt, colDefs[i].ColName);
-        wxStrcat(sqlStmt, " ");
+        sqlStmt += colDefs[i].ColName;
+        sqlStmt += " ";
         // Column Type
         switch(colDefs[i].DbDataType)
         {
             case DB_DATA_TYPE_VARCHAR:
-                wxStrcat(sqlStmt, pDb->typeInfVarchar.TypeName); break;
+                sqlStmt += pDb->typeInfVarchar.TypeName; break;
             case DB_DATA_TYPE_INTEGER:
-                wxStrcat(sqlStmt, pDb->typeInfInteger.TypeName); break;
+                sqlStmt += pDb->typeInfInteger.TypeName; break;
             case DB_DATA_TYPE_FLOAT:
-                wxStrcat(sqlStmt, pDb->typeInfFloat.TypeName); break;
+                sqlStmt += pDb->typeInfFloat.TypeName; break;
             case DB_DATA_TYPE_DATE:
-                wxStrcat(sqlStmt, pDb->typeInfDate.TypeName); break;
+                sqlStmt += pDb->typeInfDate.TypeName; break;
         }
         // For varchars, append the size of the string
         if (colDefs[i].DbDataType == DB_DATA_TYPE_VARCHAR)
         {
-            char s[10];
+            wxString s;
             // wxStrcat(sqlStmt, "(");
             // wxStrcat(sqlStmt, itoa(colDefs[i].SzDataObj, s, 10));
             // wxStrcat(sqlStmt, ")");
-            sprintf(s, "(%d)", colDefs[i].SzDataObj);
-            wxStrcat(sqlStmt, s);
+            s.sprintf("(%d)", colDefs[i].SzDataObj);
+            sqlStmt += s.GetData();
         }
 
         if (pDb->Dbms() == dbmsSYBASE_ASE || pDb->Dbms() == dbmsMY_SQL)
         {
             if (colDefs[i].KeyField)
             {
-                wxStrcat(sqlStmt, " NOT NULL");
+                sqlStmt += " NOT NULL";
             }
         }
         
@@ -981,14 +985,14 @@ bool wxTable::CreateTable(bool attemptDrop)
     {
         if (pDb->Dbms() != dbmsMY_SQL)
         {
-            wxStrcat(sqlStmt, ",CONSTRAINT ");
-            wxStrcat(sqlStmt, tableName);
-            wxStrcat(sqlStmt, "_PIDX PRIMARY KEY (");
+            sqlStmt += ",CONSTRAINT ";
+            sqlStmt += tableName;
+            sqlStmt += "_PIDX PRIMARY KEY (";
         }
         else
         {
             /* MySQL goes out on this one. We also declare the relevant key NON NULL above */
-            wxStrcat(sqlStmt, ", PRIMARY KEY (");
+            sqlStmt += ", PRIMARY KEY (";
         }
 
         // List column name(s) of column(s) comprising the primary key
@@ -997,23 +1001,23 @@ bool wxTable::CreateTable(bool attemptDrop)
             if (colDefs[i].KeyField)
             {
                 if (j++) // Multi part key, comma separate names
-                    wxStrcat(sqlStmt, ",");
-                wxStrcat(sqlStmt, colDefs[i].ColName);
+                    sqlStmt += ",";
+                sqlStmt += colDefs[i].ColName;
             }
         }
-       wxStrcat(sqlStmt, ")");
+       sqlStmt += ")";
     }
     // Append the closing parentheses for the create table statement
-   wxStrcat(sqlStmt, ")");
+    sqlStmt += ")";
 
-    pDb->WriteSqlLog(sqlStmt);
+    pDb->WriteSqlLog(sqlStmt.GetData());
 
 #ifdef DBDEBUG_CONSOLE
-    cout << endl << sqlStmt << endl;
+    cout << endl << sqlStmt.GetData() << endl;
 #endif
 
     // Execute the CREATE TABLE statement
-   RETCODE retcode = SQLExecDirect(hstmt, (UCHAR FAR *) sqlStmt, SQL_NTS);
+    RETCODE retcode = SQLExecDirect(hstmt, (UCHAR FAR *) sqlStmt.GetData(), SQL_NTS);
     if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
     {
         pDb->DispAllErrors(henv, hdbc, hstmt);
@@ -1042,26 +1046,27 @@ bool wxTable::DropTable()
     //          below for any other databases when those databases are defined
     //       to handle this situation consistently
 
-    char sqlStmt[DB_MAX_STATEMENT_LEN];
+//    char sqlStmt[DB_MAX_STATEMENT_LEN];
+    wxString sqlStmt;
 
-    sprintf(sqlStmt, "DROP TABLE %s", tableName);
+    sqlStmt.sprintf("DROP TABLE %s", tableName);
 
-    pDb->WriteSqlLog(sqlStmt);
+    pDb->WriteSqlLog(sqlStmt.GetData());
 
 #ifdef DBDEBUG_CONSOLE
-    cout << endl << sqlStmt << endl;
+    cout << endl << sqlStmt.GetData() << endl;
 #endif
 
-    if (SQLExecDirect(hstmt, (UCHAR FAR *) sqlStmt, SQL_NTS) != SQL_SUCCESS)
+    if (SQLExecDirect(hstmt, (UCHAR FAR *) sqlStmt.GetData(), SQL_NTS) != SQL_SUCCESS)
     {
         // Check for "Base table not found" error and ignore
         pDb->GetNextError(henv, hdbc, hstmt);
         if (wxStrcmp(pDb->sqlState,"S0002"))  // "Base table not found"
         {
             // Check for product specific error codes
-            if (!((pDb->Dbms() == dbmsSYBASE_ASA    && !wxStrcmp(pDb->sqlState,"42000"))     ||  // 5.x (and lower?)
-                   (pDb->Dbms() == dbmsMY_SQL           && !wxStrcmp(pDb->sqlState,"S1000"))     ||  // untested
-                   (pDb->Dbms() == dbmsPOSTGRES     && !wxStrcmp(pDb->sqlState,"08S01"))))    // untested
+            if (!((pDb->Dbms() == dbmsSYBASE_ASA && !wxStrcmp(pDb->sqlState,"42000"))   ||  // 5.x (and lower?)
+                  (pDb->Dbms() == dbmsMY_SQL     && !wxStrcmp(pDb->sqlState,"S1000"))   ||  // untested
+                  (pDb->Dbms() == dbmsPOSTGRES   && !wxStrcmp(pDb->sqlState,"08S01"))))     // untested
             {
                 pDb->DispNextError();
                 pDb->DispAllErrors(henv, hdbc, hstmt);
@@ -1085,52 +1090,53 @@ bool wxTable::DropTable()
 /********** wxTable::CreateIndex() **********/
 bool wxTable::CreateIndex(const char * idxName, bool unique, int noIdxCols, CidxDef *pIdxDefs, bool attemptDrop)
 {
-    char sqlStmt[DB_MAX_STATEMENT_LEN];
+//    char sqlStmt[DB_MAX_STATEMENT_LEN];
+    wxString sqlStmt;
 
     // Drop the index first
     if (attemptDrop && !DropIndex(idxName))
         return (FALSE);
 
     // Build a CREATE INDEX statement
-    wxStrcpy(sqlStmt, "CREATE ");
+    sqlStmt = "CREATE ";
     if (unique)
-        wxStrcat(sqlStmt, "UNIQUE ");
+        sqlStmt += "UNIQUE ";
 
-    wxStrcat(sqlStmt, "INDEX ");
-    wxStrcat(sqlStmt, idxName);
-    wxStrcat(sqlStmt, " ON ");
-    wxStrcat(sqlStmt, tableName);
-    wxStrcat(sqlStmt, " (");
+    sqlStmt += "INDEX ";
+    sqlStmt += idxName;
+    sqlStmt += " ON ";
+    sqlStmt += tableName;
+    sqlStmt += " (";
 
     // Append list of columns making up index
     int i;
     for (i = 0; i < noIdxCols; i++)
     {
-        wxStrcat(sqlStmt, pIdxDefs[i].ColName);
-      /* Postgres doesn't cope with ASC */
+        sqlStmt += pIdxDefs[i].ColName;
+        /* Postgres doesn't cope with ASC */
         if (pDb->Dbms() != dbmsPOSTGRES)
         {
             if (pIdxDefs[i].Ascending)
-                wxStrcat(sqlStmt, " ASC");
+                sqlStmt += " ASC";
             else
-                wxStrcat(sqlStmt, " DESC");
+                sqlStmt += " DESC";
         }
 
         if ((i + 1) < noIdxCols)
-            wxStrcat(sqlStmt, ",");
+            sqlStmt += ",";
     }
     
     // Append closing parentheses
-    wxStrcat(sqlStmt, ")");
+    sqlStmt += ")";
 
-    pDb->WriteSqlLog(sqlStmt);
+    pDb->WriteSqlLog(sqlStmt.GetData());
 
 #ifdef DBDEBUG_CONSOLE
-    cout << endl << sqlStmt << endl << endl;
+    cout << endl << sqlStmt.GetData() << endl << endl;
 #endif
 
     // Execute the CREATE INDEX statement
-    if (SQLExecDirect(hstmt, (UCHAR FAR *) sqlStmt, SQL_NTS) != SQL_SUCCESS)
+    if (SQLExecDirect(hstmt, (UCHAR FAR *) sqlStmt.GetData(), SQL_NTS) != SQL_SUCCESS)
     {
         pDb->DispAllErrors(henv, hdbc, hstmt);
         pDb->RollbackTrans();
@@ -1158,31 +1164,32 @@ bool wxTable::DropIndex(const char * idxName)
     //          below for any other databases when those databases are defined
     //       to handle this situation consistently
 
-    char sqlStmt[DB_MAX_STATEMENT_LEN];
+//    char sqlStmt[DB_MAX_STATEMENT_LEN];
+    wxString sqlStmt;
 
     if (pDb->Dbms() == dbmsACCESS)
-        sprintf(sqlStmt, "DROP INDEX %s ON %s",idxName,tableName);
+        sqlStmt.sprintf("DROP INDEX %s ON %s",idxName,tableName);
     else if (pDb->Dbms() == dbmsSYBASE_ASE)
-        sprintf(sqlStmt, "DROP INDEX %s.%s",tableName,idxName);
+        sqlStmt.sprintf("DROP INDEX %s.%s",tableName,idxName);
     else
-        sprintf(sqlStmt, "DROP INDEX %s",idxName);
+        sqlStmt.sprintf("DROP INDEX %s",idxName);
 
-    pDb->WriteSqlLog(sqlStmt);
+    pDb->WriteSqlLog(sqlStmt.GetData());
 
 #ifdef DBDEBUG_CONSOLE
-    cout << endl << sqlStmt << endl;
+    cout << endl << sqlStmt.GetData() << endl;
 #endif
 
-    if (SQLExecDirect(hstmt, (UCHAR FAR *) sqlStmt, SQL_NTS) != SQL_SUCCESS)
+    if (SQLExecDirect(hstmt, (UCHAR FAR *) sqlStmt.GetData(), SQL_NTS) != SQL_SUCCESS)
     {
         // Check for "Index not found" error and ignore
         pDb->GetNextError(henv, hdbc, hstmt);
         if (wxStrcmp(pDb->sqlState,"S0012"))  // "Index not found"
         {
             // Check for product specific error codes
-            if (!((pDb->Dbms() == dbmsSYBASE_ASA    && !wxStrcmp(pDb->sqlState,"42000"))   ||  // v5.x (and lower?)
-                   (pDb->Dbms() == dbmsSYBASE_ASE   && !wxStrcmp(pDb->sqlState,"S0002"))   ||  // Base table not found
-                   (pDb->Dbms() == dbmsMY_SQL           && !wxStrcmp(pDb->sqlState,"42S02"))       // untested
+            if (!((pDb->Dbms() == dbmsSYBASE_ASA  && !wxStrcmp(pDb->sqlState,"42000")) ||  // v5.x (and lower?)
+                   (pDb->Dbms() == dbmsSYBASE_ASE && !wxStrcmp(pDb->sqlState,"S0002")) ||  // Base table not found
+                   (pDb->Dbms() == dbmsMY_SQL     && !wxStrcmp(pDb->sqlState,"42S02"))     // untested
                     ))
             {
                 pDb->DispNextError();
@@ -1251,7 +1258,7 @@ bool wxTable::Update(void)
     pDb->WriteSqlLog(sqlStmt);
 
 #ifdef DBDEBUG_CONSOLE
-    cout << endl << sqlStmt << endl << endl;
+    cout << endl << sqlStmt.GetData() << endl << endl;
 #endif
 
     // Execute the SQL UPDATE statement
@@ -1289,7 +1296,7 @@ bool wxTable::UpdateWhere(const char *pWhereClause)
     pDb->WriteSqlLog(sqlStmt);
 
 #ifdef DBDEBUG_CONSOLE
-    cout << endl << sqlStmt << endl << endl;
+    cout << endl << sqlStmt.GetData() << endl << endl;
 #endif
 
     // Execute the SQL UPDATE statement
@@ -1837,26 +1844,27 @@ void wxTable::SetCursor(HSTMT *hstmtActivate)
 ULONG wxTable::Count(const char *args)
 {
     ULONG l;
-    char sqlStmt[DB_MAX_STATEMENT_LEN];
+//    char sqlStmt[DB_MAX_STATEMENT_LEN];
+    wxString sqlStmt;
     SDWORD cb;
 
     // Build a "SELECT COUNT(*) FROM queryTableName [WHERE whereClause]" SQL Statement
-    wxStrcpy(sqlStmt, "SELECT COUNT(");
-    wxStrcat(sqlStmt, args);
-    wxStrcat(sqlStmt, ") FROM ");
-    wxStrcat(sqlStmt, queryTableName);
+    sqlStmt  = "SELECT COUNT(";
+    sqlStmt += args;
+    sqlStmt += ") FROM ";
+    sqlStmt += queryTableName;
 
     if (from && wxStrlen(from))
-        wxStrcat(sqlStmt, from);
+        sqlStmt += from;
 
     // Add the where clause if one is provided
     if (where && wxStrlen(where))
     {
-        wxStrcat(sqlStmt, " WHERE ");
-        wxStrcat(sqlStmt, where);
+        sqlStmt += " WHERE ";
+        sqlStmt += where;
     }
 
-    pDb->WriteSqlLog(sqlStmt);
+    pDb->WriteSqlLog(sqlStmt.GetData());
 
     // Initialize the Count cursor if it's not already initialized
     if (!hstmtCount)
@@ -1868,7 +1876,7 @@ ULONG wxTable::Count(const char *args)
     }
 
     // Execute the SQL statement
-    if (SQLExecDirect(*hstmtCount, (UCHAR FAR *) sqlStmt, SQL_NTS) != SQL_SUCCESS)
+    if (SQLExecDirect(*hstmtCount, (UCHAR FAR *) sqlStmt.GetData(), SQL_NTS) != SQL_SUCCESS)
     {
         pDb->DispAllErrors(henv, hdbc, *hstmtCount);
         return(0);
@@ -1953,7 +1961,7 @@ bool wxTable::Refresh(void)
         pDb->DispAllErrors(henv, hdbc, hstmtInternal);
 
     // Restore the original where and order by clauses
-    where     = saveWhere;
+    where   = saveWhere;
     orderBy = saveOrderBy;
 
     return(result);
