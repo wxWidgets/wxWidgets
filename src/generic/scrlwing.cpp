@@ -358,7 +358,7 @@ void wxScrollHelper::SetScrollbars(int pixelsPerUnitX,
     m_targetWindow->SetVirtualSize( w, h );
 
     if (do_refresh && !noRefresh)
-        m_targetWindow->Refresh(TRUE, GetRect());
+        m_targetWindow->Refresh(TRUE, GetScrollRect());
 
     // TODO: check if we can use AdjustScrollbars always.
 #ifdef __WXUNIVERSAL__
@@ -488,11 +488,11 @@ void wxScrollHelper::HandleOnScroll(wxScrollWinEvent& event)
 
     if ( needsRefresh )
     {
-        m_targetWindow->Refresh(TRUE, GetRect());
+        m_targetWindow->Refresh(TRUE, GetScrollRect());
     }
     else
     {
-        m_targetWindow->ScrollWindow(dx, dy, GetRect());
+        m_targetWindow->ScrollWindow(dx, dy, GetScrollRect());
     }
 
 #ifdef __WXMAC__
@@ -569,7 +569,7 @@ int wxScrollHelper::CalcScrollInc(wxScrollWinEvent& event)
                 nScrollInc = noPositions - m_xScrollPosition; // As +ve as we can go
         }
         else
-            m_targetWindow->Refresh(TRUE, GetRect());
+            m_targetWindow->Refresh(TRUE, GetScrollRect());
     }
     else
     {
@@ -593,7 +593,7 @@ int wxScrollHelper::CalcScrollInc(wxScrollWinEvent& event)
         else
         {
             // VZ: why do we do this? (FIXME)
-            m_targetWindow->Refresh(TRUE, GetRect());
+            m_targetWindow->Refresh(TRUE, GetScrollRect());
         }
     }
 
@@ -743,18 +743,18 @@ void wxScrollHelper::AdjustScrollbars()
     {
        if (m_xScrollingEnabled)
             m_targetWindow->ScrollWindow( m_xScrollPixelsPerLine * (oldXScroll - m_xScrollPosition), 0,
-                                          GetRect() );
+                                          GetScrollRect() );
        else
-            m_targetWindow->Refresh(TRUE, GetRect());
+            m_targetWindow->Refresh(TRUE, GetScrollRect());
     }
 
     if (oldYScroll != m_yScrollPosition)
     {
         if (m_yScrollingEnabled)
             m_targetWindow->ScrollWindow( 0, m_yScrollPixelsPerLine * (oldYScroll-m_yScrollPosition),
-                                          GetRect() );
+                                          GetScrollRect() );
         else
-            m_targetWindow->Refresh(TRUE, GetRect());
+            m_targetWindow->Refresh(TRUE, GetScrollRect());
     }
 
 #ifdef __WXMAC__
@@ -848,7 +848,7 @@ void wxScrollHelper::Scroll( int x_pos, int y_pos )
         if (old_x != m_xScrollPosition) {
             m_win->SetScrollPos( wxHORIZONTAL, m_xScrollPosition );
             m_targetWindow->ScrollWindow( (old_x-m_xScrollPosition)*m_xScrollPixelsPerLine, 0,
-                                          GetRect() );
+                                          GetScrollRect() );
         }
     }
     if ((y_pos != -1) && (m_yScrollPixelsPerLine))
@@ -869,7 +869,7 @@ void wxScrollHelper::Scroll( int x_pos, int y_pos )
         if (old_y != m_yScrollPosition) {
             m_win->SetScrollPos( wxVERTICAL, m_yScrollPosition );
             m_targetWindow->ScrollWindow( 0, (old_y-m_yScrollPosition)*m_yScrollPixelsPerLine,
-                                          GetRect() );
+                                          GetScrollRect() );
         }
     }
 

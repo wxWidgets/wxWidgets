@@ -146,7 +146,7 @@ public:
 
 protected:
     // get pointer to our scroll rect if we use it or NULL
-    const wxRect *GetRect() const
+    const wxRect *GetScrollRect() const
     {
         return m_rectToScroll.width != 0 ? &m_rectToScroll : NULL;
     }
