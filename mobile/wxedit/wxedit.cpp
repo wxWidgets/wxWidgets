@@ -17,9 +17,16 @@
 #endif
 
 #include "wx/filename.h"
+#include "wx/config.h"
 
 // Include private headers
 #include "wxedit.h"
+
+//------------------------------------------------------------------------------
+// constants
+//------------------------------------------------------------------------------
+
+#define HISTORY_ENTRIES 3
 
 //------------------------------------------------------------------------------
 // MyFrame
@@ -39,23 +46,78 @@ BEGIN_EVENT_TABLE(MyFrame,wxFrame)
     EVT_MENU(ID_PASTE, MyFrame::OnPaste)
     EVT_MENU(ID_DELETE, MyFrame::OnDelete)
     
-    EVT_MENU(ID_LAST_1, MyFrame::OnLast1)
-    EVT_MENU(ID_LAST_2, MyFrame::OnLast2)
-    EVT_MENU(ID_LAST_3, MyFrame::OnLast3)
+    EVT_MENU_RANGE(ID_LAST_1, ID_LAST_3, MyFrame::OnLastFiles)
     
     EVT_CLOSE(MyFrame::OnCloseWindow)
+    EVT_UPDATE_UI(-1,MyFrame::OnUpdateUI)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame( wxWindow *parent, wxWindowID id, const wxString &title,
     const wxPoint &position, const wxSize& size, long style ) :
     wxFrame( parent, id, title, position, size, style )
 {
+    // Create menu and status bar.
     CreateMyMenuBar();
-    
     CreateStatusBar(1);
-    SetStatusText( "Welcome!" );
+    SetStatusText( "Welcome to wxEdit!" );
     
+    // Create edit control. Since it is the only
+    // control in the frame, it will be resized
+    // to file it out.
     m_text = new wxTextCtrl( this, -1, "", wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
+    
+    // Read .ini file for file history etc.
+    wxConfig *conf = (wxConfig*) wxConfig::Get();
+
+    int entries = 0;    
+    conf->Read( "/History/Count", &entries );
+    
+    for (int i = 0; i < entries; i++)
+    {
+        wxString tmp;
+        tmp.Printf( "/History/File%d", (int)i );
+        
+        wxString res;
+        conf->Read( tmp, &res );
+        
+        if (!res.empty())
+            AddToHistory( res );
+    }
+}
+
+void MyFrame::MakeHistory()
+{
+    wxMenuBar *mb = GetMenuBar();
+    
+    wxASSERT( mb );
+
+    int max = m_history.GetCount();
+    if (max > HISTORY_ENTRIES)
+        max = HISTORY_ENTRIES;
+        
+    for (int i = 0; i < max; i++)
+    {
+        wxMenu *menu = NULL;
+        mb->FindItem( ID_LAST_1 + i, &menu );
+        wxASSERT( menu );
+        
+        wxFileName fname( m_history[(size_t)i] );
+        menu->SetLabel( ID_LAST_1 + i, fname.GetFullName() );
+    }
+}
+
+void MyFrame::AddToHistory( const wxString &fname )
+{
+    // Fill menu with history index
+    int index = m_history.Index( fname );
+    
+    if (index != wxNOT_FOUND)
+        m_history.Remove( (size_t) index );
+    
+    m_history.Insert( fname, 0 );
+    
+    // Update menu
+    MakeHistory();
 }
 
 void MyFrame::CreateMyMenuBar()
@@ -69,9 +131,23 @@ void MyFrame::CreateMyMenuBar()
     file_menu->Append( ID_SAVEAS, "Save as...", "Save text as..." );
     file_menu->AppendSeparator();
     file_menu->Append( ID_QUIT, "Quit...", "Quit program" );
+
+    wxMenu *edit_menu = new wxMenu;
+    edit_menu->Append( ID_COPY, "Copy" );
+    edit_menu->Append( ID_CUT, "Cut" );
+    edit_menu->Append( ID_PASTE, "Paste" );
+    edit_menu->AppendSeparator();
+    edit_menu->Append( ID_DELETE, "Delete" );
+    
+    wxMenu *history_menu = new wxMenu;
+    history_menu->Append( ID_LAST_1, "No file." );
+    history_menu->Append( ID_LAST_2, "No file." );
+    history_menu->Append( ID_LAST_3, "No file." );
     
     wxMenuBar *menu_bar = new wxMenuBar();
-    menu_bar->Append( file_menu, "File" );
+    menu_bar->Append( file_menu, "&File" );
+    menu_bar->Append( edit_menu, "&Edit" );
+    menu_bar->Append( history_menu, "&History" );
     
     SetMenuBar( menu_bar );
 }
@@ -92,16 +168,23 @@ void MyFrame::OnDelete( wxCommandEvent &event )
 {
 }
 
-void MyFrame::OnLast1( wxCommandEvent &event )
+void MyFrame::OnLastFiles( wxCommandEvent &event )
 {
-}
+    if (!Discard()) return;
 
-void MyFrame::OnLast2( wxCommandEvent &event )
-{
-}
-
-void MyFrame::OnLast3( wxCommandEvent &event )
-{
+    if (!m_filename.empty())
+        AddToHistory( m_filename );
+        
+    size_t index = event.GetId() - ID_LAST_1;
+    
+    wxASSERT( index < m_history.GetCount() );
+    
+    m_filename = m_history[index];
+    
+    m_text->Clear();
+    m_text->LoadFile( m_filename );
+    
+    SetStatusText( m_filename );
 }
 
 void MyFrame::OnNew( wxCommandEvent &event )
@@ -109,10 +192,19 @@ void MyFrame::OnNew( wxCommandEvent &event )
     if (!Discard()) return;
 
     m_text->Clear();
+    
+    if (!m_filename.empty())
+        AddToHistory( m_filename );
+        
+    m_filename = wxEmptyString;
+    
+    SetStatusText( "" );
 }
 
 void MyFrame::OnOpen( wxCommandEvent &event )
 {
+    if (!Discard()) return;
+
     wxFileDialog dialog( this, "Open text", "", "",
         "Text file (*.txt)|*.txt|"
         "Any file (*)|*",
@@ -148,16 +240,34 @@ void MyFrame::OnOpen( wxCommandEvent &event )
         }
 #endif
 
-        m_text->LoadFile( dialog.GetPath() );
+        m_filename = dialog.GetPath();
+        m_text->LoadFile( m_filename );
+    
+        SetStatusText( m_filename );
     }
 }
 
 void MyFrame::OnSave( wxCommandEvent &event )
 {
+    if (m_filename.empty())
+        OnSaveAs( event );
+    else
+        m_text->SaveFile( m_filename );
 }
 
 void MyFrame::OnSaveAs( wxCommandEvent &event )
 {
+    wxFileDialog dialog( this, "Open text", "", "",
+        "Text file (*.txt)|*.txt|"
+        "Any file (*)|*",
+        wxSAVE|wxOVERWRITE_PROMPT );
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        m_filename = dialog.GetPath();
+        m_text->SaveFile( m_filename );
+    
+        SetStatusText( m_filename );
+    }
 }
 
 void MyFrame::OnAbout( wxCommandEvent &event )
@@ -183,7 +293,7 @@ bool MyFrame::Discard()
 {
     if (m_text->IsModified())
     {
-        wxMessageDialog dialog( this, "Text has been modified! Save?",
+        wxMessageDialog dialog( this, "Text has been\nmodified! Save?",
             "wxEdit", wxYES_NO|wxCANCEL|wxICON_EXCLAMATION );
             
         int ret = dialog.ShowModal();
@@ -201,10 +311,57 @@ bool MyFrame::Discard()
     return TRUE;
 }
 
+void MyFrame::OnUpdateUI( wxUpdateUIEvent &event )
+{
+    switch (event.GetId())
+    {
+        case ID_COPY:
+            event.Enable( FALSE );
+            break;
+        case ID_CUT:
+            event.Enable( FALSE );
+            break;
+        case ID_PASTE:
+            event.Enable( FALSE );
+            break;
+        case ID_DELETE:
+            event.Enable( m_text->HasSelection() );
+            break;
+        default:
+            break;
+    }
+}
+
 void MyFrame::OnCloseWindow( wxCloseEvent &event )
 {
+    // Save changes?
     if (!Discard()) return;    
+    
+    // Add current to history
+    if (!m_filename.empty())
+        AddToHistory( m_filename );
 
+    // Write .ini file    
+    wxConfig *conf = (wxConfig*) wxConfig::Get();
+    
+    int max = HISTORY_ENTRIES;
+    if (m_history.GetCount() < (size_t)max)
+        max = m_history.GetCount();
+        
+    conf->Write( "/History/Count", max );
+    
+    for (int i = 0; i < max; i++)
+    {
+        wxString tmp;
+        tmp.Printf( "/History/File%d", (int)i );
+        
+        conf->Write( tmp, m_history[(size_t)i] );
+    }
+    
+    // Flush and delete config
+    delete wxConfig::Set( NULL );
+
+    // Finally destroy window and quit
     Destroy();
 }
 
@@ -220,6 +377,9 @@ MyApp::MyApp()
 
 bool MyApp::OnInit()
 {
+    SetVendorName("Free world");
+    SetAppName("wxEdit");
+    
     MyFrame *frame = new MyFrame( NULL, -1, "wxEdit", wxPoint(20,20), wxSize(500,340) );
     frame->Show( TRUE );
     

@@ -55,7 +55,9 @@ private:
     void CreateMyMenuBar();
     
 private:
-    wxTextCtrl  *m_text;
+    wxTextCtrl     *m_text;
+    wxString        m_filename;
+    wxArrayString   m_history;
     
 private:
     void OnAbout( wxCommandEvent &event );
@@ -70,13 +72,15 @@ private:
     void OnPaste( wxCommandEvent &event );
     void OnDelete( wxCommandEvent &event );
     
-    void OnLast1( wxCommandEvent &event );
-    void OnLast2( wxCommandEvent &event );
-    void OnLast3( wxCommandEvent &event );
+    void OnLastFiles( wxCommandEvent &event );
+    
+    void MakeHistory();
+    void AddToHistory( const wxString &fname );
     
     bool Save();
     bool Discard();
     
+    void OnUpdateUI( wxUpdateUIEvent &event );
     void OnCloseWindow( wxCloseEvent &event );
     
 private:
