@@ -157,4 +157,4 @@ plot_zin_bmp            BITMAP  "wx/msw/plot_zin.bmp"
 plot_zot_bmp            BITMAP  "wx/msw/plot_zot.bmp"
 
 // For wxContextHelpButton
-csquery_bmp             BITMAP "wx/msw/csquery.bmp"
+csquery                 BITMAP "wx/msw/csquery.bmp"
