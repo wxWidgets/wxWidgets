@@ -184,7 +184,7 @@ public:
 };
 
 
-class wxListEvent: public wxCommandEvent {
+class wxListEvent: public wxNotifyEvent {
 public:
     int           m_code;
     long          m_itemIndex;
