@@ -311,7 +311,7 @@ void wxPrintData::ConvertToNative()
             pd->hDevNames = NULL;
 
             hDevMode = pd->hDevMode;
-            m_devMode = (void*) hDevMode;
+            m_devMode = (void*)(long) hDevMode;
             pd->hDevMode = NULL;
         }
 
@@ -819,7 +819,7 @@ void wxPrintDialogData::ConvertFromNative()
             // Make sure we don't leak memory
             GlobalFree((HGLOBAL)(DWORD) m_printData.GetNativeData());
         }
-        m_printData.SetNativeData((void*) pd->hDevMode);
+        m_printData.SetNativeData((void*)(long) pd->hDevMode);
         pd->hDevMode = NULL;
     }
 
