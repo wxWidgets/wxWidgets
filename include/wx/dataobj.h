@@ -109,7 +109,7 @@ public:
     wxString GetId() const { return m_format.GetId(); }
 
     // implement the base class pure virtuals
-    virtual wxDataFormatId GetPreferredFormat() const
+    virtual wxDataFormat GetPreferredFormat() const
         { return m_format; }
     virtual bool IsSupportedFormat(wxDataFormat format) const
         { return m_format == format; }
