@@ -1513,7 +1513,9 @@ void wxFileIconsTable::Create()
     m_smallImageList = new wxImageList(16, 16);
 
     // folder:
-    m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_FOLDER, wxART_CMN_DIALOG));
+    m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_FOLDER,
+                                                   wxART_CMN_DIALOG,
+                                                   wxSize(16, 16)));
     // folder_open
     m_smallImageList->Add(wxIcon(file_icons_tbl_folder_open_xpm));
     // computer
@@ -1527,11 +1529,15 @@ void wxFileIconsTable::Create()
     // removeable
     m_smallImageList->Add(wxIcon(file_icons_tbl_removeable_xpm));
     // file
-    m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_CMN_DIALOG));
+    m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_NORMAL_FILE,
+                                                   wxART_CMN_DIALOG,
+                                                   wxSize(16, 16)));
     // executable
     if (GetIconID(wxEmptyString, _T("application/x-executable")) == file)
     {
-        m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_EXECUTABLE_FILE, wxART_CMN_DIALOG));
+        m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_EXECUTABLE_FILE,
+                                                       wxART_CMN_DIALOG,
+                                                       wxSize(16, 16)));
         delete m_HashTable->Get(_T("exe"));
         m_HashTable->Delete(_T("exe"));
         m_HashTable->Put(_T("exe"), new wxFileIconEntry(executable));
