@@ -1699,6 +1699,7 @@ void wxStdDialogButtonSizer::AddButton(wxButton *mybutton)
             m_buttonCancel = mybutton;
             break;
         case wxID_HELP:
+		case wxID_CONTEXT_HELP:
             m_buttonHelp = mybutton;
             break;
         default:
