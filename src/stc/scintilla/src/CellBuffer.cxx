@@ -344,21 +344,21 @@ void Action::Grab(Action *source) {
 	source->lenData = 0;
 }
 
-// The undo history stores a sequence of user operations that represent the user's view of the 
-// commands executed on the text. 
+// The undo history stores a sequence of user operations that represent the user's view of the
+// commands executed on the text.
 // Each user operation contains a sequence of text insertion and text deletion actions.
 // All the user operations are stored in a list of individual actions with 'start' actions used
 // as delimiters between user operations.
-// Initially there is one start action in the history. 
-// As each action is performed, it is recorded in the history. The action may either become 
+// Initially there is one start action in the history.
+// As each action is performed, it is recorded in the history. The action may either become
 // part of the current user operation or may start a new user operation. If it is to be part of the
-// current operation, then it overwrites the current last action. If it is to be part of a new 
+// current operation, then it overwrites the current last action. If it is to be part of a new
 // operation, it is appended after the current last action.
 // After writing the new action, a new start action is appended at the end of the history.
-// The decision of whether to start a new user operation is based upon two factors. If a 
+// The decision of whether to start a new user operation is based upon two factors. If a
 // compound operation has been explicitly started by calling BeginUndoAction and no matching
-// EndUndoAction (these calls nest) has been called, then the action is coalesced into the current 
-// operation. If there is no outstanding BeginUndoAction call then a new operation is started 
+// EndUndoAction (these calls nest) has been called, then the action is coalesced into the current
+// operation. If there is no outstanding BeginUndoAction call then a new operation is started
 // unless it looks as if the new action is caused by the user typing or deleting a stream of text.
 // Sequences that look like typing or deletion are coalesced into a single user operation.
 
@@ -402,7 +402,7 @@ void UndoHistory::EnsureUndoRoom() {
 void UndoHistory::AppendAction(actionType at, int position, char *data, int lengthData) {
 	EnsureUndoRoom();
 	//Platform::DebugPrintf("%% %d action %d %d %d\n", at, position, lengthData, currentAction);
-	//Platform::DebugPrintf("^ %d action %d %d\n", actions[currentAction - 1].at, 
+	//Platform::DebugPrintf("^ %d action %d %d\n", actions[currentAction - 1].at,
 	//	actions[currentAction - 1].position, actions[currentAction - 1].lenData);
 	if (currentAction >= 1) {
 		if (0 == undoSequenceDepth) {
@@ -414,11 +414,11 @@ void UndoHistory::AppendAction(actionType at, int position, char *data, int leng
 				currentAction++;
 			} else if (currentAction == savePoint) {
 				currentAction++;
-			} else if ((at == removeAction) && 
+			} else if ((at == removeAction) &&
 				((position + lengthData * 2) != actPrevious.position)) {
 				// Removals must be at same position to coalesce
 				currentAction++;
-			} else if ((at == insertAction) && 
+			} else if ((at == insertAction) &&
 				(position != (actPrevious.position + actPrevious.lenData*2))) {
 				// Insertions must be immediately after to coalesce
 				currentAction++;
@@ -427,7 +427,7 @@ void UndoHistory::AppendAction(actionType at, int position, char *data, int leng
 			}
 		} else {
 			currentAction++;
-		} 
+		}
 	} else {
 		currentAction++;
 	}
@@ -460,7 +460,7 @@ void UndoHistory::EndUndoAction() {
 		}
 	}
 }
-	
+
 void UndoHistory::DropUndoSequence() {
 	undoSequenceDepth = 0;
 }
@@ -490,9 +490,9 @@ int UndoHistory::StartUndo() {
 	// Drop any trailing startAction
 	if (actions[currentAction].at == startAction && currentAction > 0)
 		currentAction--;
-	
+
 	// Count the steps in this action
-	int act = currentAction; 
+	int act = currentAction;
 	while (actions[act].at != startAction && act > 0) {
 		act--;
 	}
@@ -511,9 +511,9 @@ int UndoHistory::StartRedo() {
 	// Drop any leading startAction
 	if (actions[currentAction].at == startAction && currentAction < maxAction)
 		currentAction++;
-	
+
 	// Count the steps in this action
-	int act = currentAction; 
+	int act = currentAction;
 	while (actions[act].at != startAction && act < maxAction) {
 		act++;
 	}
@@ -1000,7 +1000,7 @@ int CellBuffer::GetLineState(int line) {
 int CellBuffer::GetMaxLineState() {
 	return lineStates.Length();
 }
-		
+
 int CellBuffer::SetLevel(int line, int level) {
 	int prev = 0;
 	if ((line >= 0) && (line < lv.lines)) {

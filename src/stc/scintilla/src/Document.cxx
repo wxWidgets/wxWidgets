@@ -65,27 +65,27 @@ void Document::SetSavePoint() {
 	NotifySavePoint(true);
 }
 
-int Document::AddMark(int line, int markerNum) { 
-	int prev = cb.AddMark(line, markerNum); 
+int Document::AddMark(int line, int markerNum) {
+	int prev = cb.AddMark(line, markerNum);
 	DocModification mh(SC_MOD_CHANGEMARKER, LineStart(line), 0, 0, 0);
 	NotifyModified(mh);
 	return prev;
 }
 
-void Document::DeleteMark(int line, int markerNum) { 
-	cb.DeleteMark(line, markerNum); 
+void Document::DeleteMark(int line, int markerNum) {
+	cb.DeleteMark(line, markerNum);
 	DocModification mh(SC_MOD_CHANGEMARKER, LineStart(line), 0, 0, 0);
 	NotifyModified(mh);
 }
 
-void Document::DeleteMarkFromHandle(int markerHandle) { 
-	cb.DeleteMarkFromHandle(markerHandle); 
+void Document::DeleteMarkFromHandle(int markerHandle) {
+	cb.DeleteMarkFromHandle(markerHandle);
 	DocModification mh(SC_MOD_CHANGEMARKER, 0, 0, 0, 0);
 	NotifyModified(mh);
 }
 
-void Document::DeleteAllMarks(int markerNum) { 
-	cb.DeleteAllMarks(markerNum); 
+void Document::DeleteAllMarks(int markerNum) {
+	cb.DeleteAllMarks(markerNum);
 	DocModification mh(SC_MOD_CHANGEMARKER, 0, 0, 0, 0);
 	NotifyModified(mh);
 }
@@ -128,8 +128,8 @@ int Document::VCHomePosition(int position) {
 		return startText;
 }
 
-int Document::SetLevel(int line, int level) { 
-	int prev = cb.SetLevel(line, level); 
+int Document::SetLevel(int line, int level) {
+	int prev = cb.SetLevel(line, level);
 	if (prev != level) {
 		DocModification mh(SC_MOD_CHANGEFOLD, LineStart(line), 0, 0, 0);
 		mh.line = line;
@@ -143,7 +143,7 @@ int Document::SetLevel(int line, int level) {
 static bool IsSubordinate(int levelStart, int levelTry) {
 	if (levelTry & SC_FOLDLEVELWHITEFLAG)
 		return true;
-	else 
+	else
 		return (levelStart & SC_FOLDLEVELNUMBERMASK) < (levelTry & SC_FOLDLEVELNUMBERMASK);
 }
 
@@ -160,7 +160,7 @@ int Document::GetLastChild(int lineParent, int level) {
 	}
 	if (lineMaxSubord > lineParent) {
 		if (level > (GetLevel(lineMaxSubord+1) & SC_FOLDLEVELNUMBERMASK)) {
-			// Have chewed up some whitespace that belongs to a parent so seek back 
+			// Have chewed up some whitespace that belongs to a parent so seek back
 			if ((lineMaxSubord > lineParent) && (GetLevel(lineMaxSubord) & SC_FOLDLEVELWHITEFLAG)) {
 				lineMaxSubord--;
 			}
@@ -173,7 +173,7 @@ int Document::GetFoldParent(int line) {
 	int level = GetLevel(line);
 	int lineLook = line-1;
 	while ((lineLook > 0) && (
-		(!(GetLevel(lineLook) & SC_FOLDLEVELHEADERFLAG)) || 
+		(!(GetLevel(lineLook) & SC_FOLDLEVELHEADERFLAG)) ||
 		((GetLevel(lineLook) & SC_FOLDLEVELNUMBERMASK) >= level))
 	) {
 		lineLook--;
@@ -323,7 +323,7 @@ void Document::InsertStyledString(int position, char *s, int insertLength) {
 			if (startSavePoint && cb.IsCollectingUndo())
 				NotifySavePoint(!startSavePoint);
 			ModifiedAt(position / 2);
-	
+
 			int modFlags = SC_MOD_INSERTTEXT | SC_PERFORMED_USER;
 			DocModification mh(modFlags, position / 2, insertLength / 2, LinesTotal() - prevLinesTotal, text);
 			NotifyModified(mh);
@@ -345,7 +345,7 @@ int Document::Undo() {
 			int cellPosition = action.position / 2;
 			ModifiedAt(cellPosition);
 			newPos = cellPosition;
-			
+
 			int modFlags = SC_PERFORMED_UNDO;
 			// With undo, an insertion action becomes a deletion notification
 			if (action.at == removeAction) {
@@ -356,10 +356,10 @@ int Document::Undo() {
 			}
 			if (step == steps-1)
 				modFlags |= SC_LASTSTEPINUNDOREDO;
-			NotifyModified(DocModification(modFlags, cellPosition, action.lenData, 
+			NotifyModified(DocModification(modFlags, cellPosition, action.lenData,
 				LinesTotal() - prevLinesTotal, action.data));
 		}
-	
+
 		bool endSavePoint = cb.IsSavePoint();
 		if (startSavePoint != endSavePoint)
 			NotifySavePoint(endSavePoint);
@@ -380,7 +380,7 @@ int Document::Redo() {
 			int cellPosition = action.position / 2;
 			ModifiedAt(cellPosition);
 			newPos = cellPosition;
-			
+
 			int modFlags = SC_PERFORMED_REDO;
 			if (action.at == insertAction) {
 				newPos += action.lenData;
@@ -390,10 +390,10 @@ int Document::Redo() {
 			}
 			if (step == steps-1)
 				modFlags |= SC_LASTSTEPINUNDOREDO;
-			NotifyModified(DocModification(modFlags, cellPosition, action.lenData, 
+			NotifyModified(DocModification(modFlags, cellPosition, action.lenData,
 				LinesTotal() - prevLinesTotal, action.data));
 		}
-	
+
 		bool endSavePoint = cb.IsSavePoint();
 		if (startSavePoint != endSavePoint)
 			NotifySavePoint(endSavePoint);
@@ -585,7 +585,7 @@ long Document::FindText(int minPos, int maxPos, const char *s, bool caseSensitiv
 	// Range endpoints should not be inside DBCS characters, but just in case, move them.
 	int startPos = MovePositionOutsideChar(minPos, increment, false);
 	int endPos = MovePositionOutsideChar(maxPos, increment, false);
- 	
+
 	// Compute actual search ranges needed
 	int lengthFind = strlen(s);
  	int endSearch = 0;
@@ -697,7 +697,7 @@ void Document::SetStyleFor(int length, char style) {
 		enteredCount++;
 		int prevEndStyled = endStyled;
 		if (cb.SetStyleFor(stylingPos, length, style, stylingMask)) {
-			DocModification mh(SC_MOD_CHANGESTYLE | SC_PERFORMED_USER, 
+			DocModification mh(SC_MOD_CHANGESTYLE | SC_PERFORMED_USER,
 				prevEndStyled, length);
 			NotifyModified(mh);
 		}
@@ -719,7 +719,7 @@ void Document::SetStyles(int length, char *styles) {
 		}
 		endStyled = stylingPos;
 		if (didChange) {
-			DocModification mh(SC_MOD_CHANGESTYLE | SC_PERFORMED_USER, 
+			DocModification mh(SC_MOD_CHANGESTYLE | SC_PERFORMED_USER,
 				prevEndStyled, endStyled - prevEndStyled);
 			NotifyModified(mh);
 		}
@@ -795,3 +795,5 @@ void Document::NotifyModified(DocModification mh) {
 		watchers[i].watcher->NotifyModified(this, mh, watchers[i].userData);
 	}
 }
+
+

@@ -13,7 +13,7 @@
 #include "Style.h"
 #include "ViewStyle.h"
 
-MarginStyle::MarginStyle() : 
+MarginStyle::MarginStyle() :
 	symbol(false), width(16), mask(0xffffffff), sensitive(false) {
 }
 
@@ -64,7 +64,7 @@ ViewStyle::ViewStyle(const ViewStyle &source) {
 	for (int ind=0;ind<=INDIC_MAX;ind++) {
 		indicators[ind] = source.indicators[ind];
 	}
-	
+
 	selforeset = source.selforeset;
 	selforeground.desired = source.selforeground.desired;
 	selbackset = source.selbackset;
@@ -84,7 +84,7 @@ ViewStyle::ViewStyle(const ViewStyle &source) {
 	zoomLevel = source.zoomLevel;
 	viewWhitespace = source.viewWhitespace;
 	viewEOL = source.viewEOL;
-	showMarkedLines = source.showMarkedLines;		
+	showMarkedLines = source.showMarkedLines;
 }
 
 ViewStyle::~ViewStyle() {
@@ -93,7 +93,7 @@ ViewStyle::~ViewStyle() {
 void ViewStyle::Init() {
 	fontNames.Clear();
 	ResetDefaultStyle();
-	
+
 	indicators[0].style = INDIC_SQUIGGLE;
 	indicators[0].fore = Colour(0, 0x7f, 0);
 	indicators[1].style = INDIC_TT;
@@ -118,7 +118,7 @@ void ViewStyle::Init() {
 	//caretcolour.desired = Colour(0xff, 0, 0);
 	caretcolour.desired = Colour(0, 0, 0);
 	edgecolour.desired = Colour(0xc0, 0xc0, 0xc0);
-	
+
 	leftMarginWidth = 1;
 	rightMarginWidth = 1;
 	ms[0].symbol = false;
@@ -183,7 +183,7 @@ void ViewStyle::Refresh(Surface &surface) {
 				maxDescent = styles[i].descent;
 		}
 	}
-	
+
 	lineHeight = maxAscent + maxDescent;
 	aveCharWidth = styles[STYLE_DEFAULT].aveCharWidth;
 	spaceWidth = styles[STYLE_DEFAULT].spaceWidth;
@@ -210,11 +210,11 @@ void ViewStyle::ClearStyles() {
 	for (unsigned int i=0;i<(sizeof(styles)/sizeof(styles[0]));i++) {
 		if (i != STYLE_DEFAULT) {
 			styles[i].Clear(
-				styles[STYLE_DEFAULT].fore.desired, 
-				styles[STYLE_DEFAULT].back.desired, 
-				styles[STYLE_DEFAULT].size, 
-				styles[STYLE_DEFAULT].fontName, 
-				styles[STYLE_DEFAULT].bold, 
+				styles[STYLE_DEFAULT].fore.desired,
+				styles[STYLE_DEFAULT].back.desired,
+				styles[STYLE_DEFAULT].size,
+				styles[STYLE_DEFAULT].fontName,
+				styles[STYLE_DEFAULT].bold,
 				styles[STYLE_DEFAULT].italic,
 				styles[STYLE_DEFAULT].eolFilled);
 		}
@@ -225,3 +225,5 @@ void ViewStyle::ClearStyles() {
 void ViewStyle::SetStyleFontName(int styleIndex, const char *name) {
 	styles[styleIndex].fontName = fontNames.Save(name);
 }
+
+
