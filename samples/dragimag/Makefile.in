@@ -15,6 +15,8 @@ program_dir = samples/dragimag
 
 PROGRAM=test
 
+DATAFILES = backgrnd.png shape1.png shape2.png shape3.png
+
 OBJECTS=$(PROGRAM).o
 
 include ../../src/makeprog.env

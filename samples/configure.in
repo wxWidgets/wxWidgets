@@ -66,4 +66,8 @@ AC_OUTPUT([
             html/zip/Makefile
             html/virtual/Makefile
             html/widget/Makefile
+            opengl/Makefile
+            opengl/cube/Makefile
+            opengl/penguin/Makefile
+            opengl/isosurf/Makefile
         ])

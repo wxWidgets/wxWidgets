@@ -698,6 +698,10 @@ trap 'rm -fr `echo "
             html/zip/Makefile
             html/virtual/Makefile
             html/widget/Makefile
+            opengl/Makefile
+            opengl/cube/Makefile
+            opengl/penguin/Makefile
+            opengl/isosurf/Makefile
         " | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -785,6 +789,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             docview/Makefile
             docvwmdi/Makefile
             dnd/Makefile
+            dragimag/Makefile
             drawing/Makefile
             exec/Makefile
             font/Makefile
@@ -830,6 +835,10 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             html/zip/Makefile
             html/virtual/Makefile
             html/widget/Makefile
+            opengl/Makefile
+            opengl/cube/Makefile
+            opengl/penguin/Makefile
+            opengl/isosurf/Makefile
         "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
