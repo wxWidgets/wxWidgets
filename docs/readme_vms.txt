@@ -2,9 +2,11 @@ This distribution contains makefiles for VMS. It is a very preliminary release
 and many tests have still to be done.
 
 The compilation was tested with
-    -OpenVMS Alpha 7.2
-    -DECC 6.0
+    -OpenVMS Alpha 7.2-1
+    -DECC 6.2
     -Compac C++ 6.2
+    -DECWindows 1.2-5
+    -Mozilla M14 (for the GTK-stuff)
     
 To get everything compiled you'll need to have installed:
     -Bison
@@ -19,9 +21,15 @@ To get everything compiled you'll need to have installed:
           http://www.cdrom.com/pub/png/pngcode.html )
     -sys$library:libtiff.olb (from: ftp://ftp.sgi.com/graphics/tiff/ )
 
-Currently only the MOTIF GUI vcan be build by typing
-  MMS/MACRO=(__WXMOTIF__=1)
+Currently only the MOTIF GUI can be build by typing
+  MMS motif
  in the main directory of the distribution.
+
+The GTK GUI is now in Alpha testing. Type
+  MMS gtk
+ in the main directory of the distribution to get a test. I builds the
+MINIMAL_GTK.exe sample only. It does something but I also got it crashing.
+ 
  
 It automatically makes the library in [.lib] and links some of the samples
 and utils.
