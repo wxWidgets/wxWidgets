@@ -12,89 +12,101 @@
 
 /* cfront 1.2 defines "c_plusplus" instead of "__cplusplus" */
 #ifdef c_plusplus
-#ifndef __cplusplus
-#define __cplusplus
-#endif
+  #ifndef __cplusplus
+    #define __cplusplus
+  #endif
 #endif
 
 
 #ifdef __cplusplus
 
-#include <stdlib.h>
+  #include <stdlib.h>
 
-#ifdef __SALFORDC__
-#include <io.h>
-#include <clib.h>
-#else
-#include <osfcn.h>
-#endif
+  #ifdef __SALFORDC__
+    #include <io.h>
+    #include <clib.h>
+  #else
+    #include <osfcn.h>
+  #endif
 
-#ifdef __VISAGECPP__
-#include <io.h>
-#endif
+  #ifdef __VISAGECPP__
+    #include <io.h>
+  #endif
 
-#ifdef __cplusplus
-static int yyinput()
-#else
-static int input()
-#endif
+  #ifdef __cplusplus
+    static int yyinput()
+  #else
+    static int input()
+  #endif
 
-/* use prototypes in function declarations */
-#define YY_USE_PROTOS
+  /* use prototypes in function declarations */
+  #define YY_USE_PROTOS
 
-/* the "const" storage-class-modifier is valid */
-#define YY_USE_CONST
+  /* the "const" storage-class-modifier is valid */
+  #define YY_USE_CONST
 
 #else	/* ! __cplusplus */
 
-#ifdef __STDC__
+  #ifdef __STDC__
 
-#ifdef __GNUC__
-#include <stddef.h>
-#else
-#include <stdlib.h>
-#endif	/* __GNUC__ */
+    #ifdef __GNUC__
+      #include <stddef.h>
+    #else
+      #include <stdlib.h>
+    #endif  /* __GNUC__ */
 
-#define YY_USE_PROTOS
-#define YY_USE_CONST
+    #define YY_USE_PROTOS
+    #define YY_USE_CONST
 
-#endif	/* __STDC__ */
+  #endif  /* __STDC__ */
+
+  #ifdef __BORLANDC__
+    #include <io.h>
+    #define YY_USE_PROTOS
+    #define YY_USE_CONST
+  #endif
+
+  #ifdef __MINGW32__
+    #include <io.h>
+  #endif
+
 #endif	/* ! __cplusplus */
 
 
 #ifdef __TURBOC__
-#define YY_USE_CONST
+  #define YY_USE_CONST
 #endif
 
 
 #ifndef YY_USE_CONST
-#define const
+  #define const
 #endif
 
 
 #ifdef YY_USE_PROTOS
-#define YY_PROTO(proto) proto
+  #define YY_PROTO(proto) proto
 #else
-#define YY_PROTO(proto) ()
-/* we can't get here if it's an ANSI C compiler, or a C++ compiler,
+  #define YY_PROTO(proto) ()
+  /* we can't get here if it's an ANSI C compiler, or a C++ compiler,
  * so it's got to be a K&R compiler, and therefore there's no standard
  * place from which to include these definitions
  */
-/*
-char *malloc();
-int free();
-*/
-
+  /*
+   char *malloc();
+   int free();
+  */
 #endif
 
 
 /* amount of stuff to slurp up with each read */
 #ifndef YY_READ_BUF_SIZE
-#define YY_READ_BUF_SIZE 8192
+  #define YY_READ_BUF_SIZE 8192
 #endif
+
 
 /* returned upon end-of-file */
 #define YY_END_TOK 0
+
 
 /* copy whatever the last rule matched to the standard output */
 
@@ -104,6 +116,7 @@ int free();
  */
 #define ECHO (void) fwrite( (char *) yytext, yyleng, 1, yyout )
 
+
 /* gets input and stuffs it into "buf".  number of characters read, or YY_NULL,
  * is returned in "result".
  */
@@ -112,11 +125,13 @@ int free();
 	    YY_FATAL_ERROR( "read() in flex scanner failed" );
 #define YY_NULL 0
 
+
 /* no semi-colon after return; correct usage is to write "yyterminate();" -
  * we don't want an extra ';' after the "return" because that will cause
  * some compilers to complain about unreachable statements.
  */
 #define yyterminate() return ( YY_NULL )
+
 
 /* report a fatal error */
 
@@ -135,7 +150,7 @@ int free();
  */
 
 #if !defined(__VISAGECPP__)
-#define YY_FATAL_ERROR(msg) \
+  #define YY_FATAL_ERROR(msg) \
 	do \
 		{ \
 		(void) fputs( msg, stderr ); \
@@ -144,9 +159,9 @@ int free();
 		} \
 	while ( 0 )
 #else
-/* suppress expression always false warning */
-int os2var = 0;
-#define YY_FATAL_ERROR(msg) \
+  /* suppress expression always false warning */
+  int os2var = 0;
+  #define YY_FATAL_ERROR(msg) \
 	do \
 		{ \
 		(void) fputs( msg, stderr ); \
@@ -155,6 +170,7 @@ int os2var = 0;
 		} \
 	while ( os2var == 0 )
 #endif
+
 
 /* default yywrap function - always treat EOF as an EOF */
 int yywrap(void) { return 1; }
@@ -171,7 +187,7 @@ int yywrap(void) { return 1; }
 
 /* special action meaning "start processing a new file" */
 #if !defined(__VISAGECPP__)
-#define YY_NEW_FILE \
+  #define YY_NEW_FILE \
 	do \
 		{ \
 		yy_init_buffer( yy_current_buffer, yyin ); \
@@ -179,7 +195,7 @@ int yywrap(void) { return 1; }
 		} \
 	while ( 0 )
 #else
-#define YY_NEW_FILE \
+  #define YY_NEW_FILE \
 	do \
 		{ \
 		yy_init_buffer( yy_current_buffer, yyin ); \
@@ -188,26 +204,25 @@ int yywrap(void) { return 1; }
 	while ( os2var == 0 )
 #endif
 
+
 /* default declaration of generated scanner - a define so the user can
  * easily add parameters
  */
 #define YY_DECL int yylex YY_PROTO(( void ))
 
-/* code executed at the end of each rule */
-#define YY_BREAK break;
 
 #define YY_END_OF_BUFFER_CHAR 0
 
 #ifndef YY_BUF_SIZE
-#define YY_BUF_SIZE (YY_READ_BUF_SIZE * 2) /* size of default input buffer */
+  #define YY_BUF_SIZE (YY_READ_BUF_SIZE * 2) /* size of default input buffer */
 #endif
 
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 
 #define YY_CHAR unsigned char
-# line 1 "lexer.l"
+// # line 1 "lexer.l"
 #define INITIAL 0
-# line 9 "lexer.l"
+// # line 9 "lexer.l"
 /*
  * File:         lexer.l
  * Description:  Lexical analyser for PROLOGIO; can be used with
@@ -220,18 +235,17 @@ typedef struct yy_buffer_state *YY_BUFFER_STATE;
  */
 
 #if defined(FLEX_SCANNER) && defined(_LINUX)
-#define PROIO_input my_input
+  #define PROIO_input my_input
 #endif
 /* ---steve162e */
 
 #include "wx/deprecated/expr.h"
 #ifdef wx_x
-extern char *malloc();
+  extern char *malloc();
 #endif
-#define Return(x) return x;
 
 #if defined(VMS) && ( __VMS_VER < 70000000 )
-#define strdup(s) (strcpy((char *)malloc(strlen(s)+1), s));
+  #define strdup(s) (strcpy((char *)malloc(strlen(s)+1), s));
 #endif
 
 static size_t lex_buffer_length = 0;
@@ -240,28 +254,34 @@ static size_t lex_string_ptr = 0;
 static int lex_read_from_string = 0;
 
 static int my_input(void);
-static int my_unput(char);
+#ifndef FLEX_SCANNER
+  static int my_unput(char);
+#endif
 
 #ifdef FLEX_SCANNER
-#undef YY_INPUT
-# define YY_INPUT(buf,result,max_size) \
+    #undef YY_INPUT
+    #define YY_INPUT(buf,result,max_size) \
    if (lex_read_from_string) \
-   {  int c = my_input(); result = (c == 0) ? YY_NULL : ((buf)[0]=(c), 1); } \
+        { \
+            int c = my_input(); \
+            result = (c == 0) ? YY_NULL : ((buf)[0]=(c), 1); \
+        } \
    else \
 	if ( (result = read( fileno(yyin), (char *) buf, max_size )) < 0 ) \
 	    YY_FATAL_ERROR( "read() in flex scanner failed" );
 #else
-# ifndef unput
-#  undef unput
-# endif
-# define unput(_c) my_unput(_c)
+    #ifndef unput
+        #undef unput
+    #endif
+    #define unput(_c) my_unput(_c)
 #endif
 
-# line 58 "lexer.l"
+// # line 58 "lexer.l"
 
 /* done after the current pattern has been matched and before the
  * corresponding action - sets up yytext
  */
+
 #define YY_DO_BEFORE_ACTION \
 	yytext = yy_bp; \
 	yyleng = yy_cp - yy_bp; \
@@ -275,7 +295,7 @@ static int my_unput(char);
 
 /* return all but the first 'n' matched characters back to the input stream */
 #if !defined(__VISAGECPP__)
-#define yyless(n) \
+    #define yyless(n) \
 	do \
 		{ \
 		/* undo effects of setting up yytext */ \
@@ -285,7 +305,7 @@ static int my_unput(char);
 		} \
 	while ( 0 )
 #else
-#define yyless(n) \
+    #define yyless(n) \
 	do \
 		{ \
 		/* undo effects of setting up yytext */ \
@@ -299,9 +319,8 @@ static int my_unput(char);
 #undef unput
 #define unput(c) yyunput( c, yytext )
 
-
 struct yy_buffer_state
-    {
+{
     FILE *yy_input_file;
 
     YY_CHAR *yy_ch_buf;		/* input buffer */
@@ -314,13 +333,16 @@ struct yy_buffer_state
     int yy_n_chars;
 
     int yy_eof_status;		/* whether we've seen an EOF on this buffer */
+
 #define EOF_NOT_SEEN 0
+
     /* "pending" happens when the EOF has been seen but there's still
      * some text process
      */
+
 #define EOF_PENDING 1
 #define EOF_DONE 2
-    };
+};
 
 static YY_BUFFER_STATE yy_current_buffer;
 
@@ -339,11 +361,11 @@ static int yy_n_chars;		/* number of characters read into yy_ch_buf */
 
 
 #ifndef YY_USER_ACTION
-#define YY_USER_ACTION
+    #define YY_USER_ACTION
 #endif
 
 #ifndef YY_USER_INIT
-#define YY_USER_INIT
+    #define YY_USER_INIT
 #endif
 
 extern YY_CHAR *yytext;
@@ -480,9 +502,9 @@ void yy_init_buffer YY_PROTO(( YY_BUFFER_STATE b, FILE *file ));
 #define yy_new_buffer yy_create_buffer
 
 #ifdef __cplusplus
-static int yyinput YY_PROTO(( void ));
+  static int yyinput YY_PROTO(( void ));
 #else
-static int input YY_PROTO(( void ));
+  static int input YY_PROTO(( void ));
 #endif
 
 YY_DECL
@@ -570,98 +592,126 @@ do_action:	/* this label is used only to access EOF actions */
 	switch ( yy_act )
 	    {
 	    case 0: /* must backtrack */
+        {
 	    /* undo the effects of YY_DO_BEFORE_ACTION */
 	    *yy_cp = yy_hold_char;
 	    yy_cp = yy_last_accepting_cpos;
 	    yy_current_state = yy_last_accepting_state;
 	    goto yy_find_action;
+        }
 
-case 1:
-# line 60 "lexer.l"
-{yylval.s = strdup((const char*) yytext); Return(INTEGER);}
-	YY_BREAK
-case 2:
-# line 62 "lexer.l"
-Return(EXP);
-	YY_BREAK
-case 3:
-# line 64 "lexer.l"
-{yylval.s = strdup((const char*) yytext); Return(WORD);}
-	YY_BREAK
-case 4:
-# line 66 "lexer.l"
-{int len = strlen((const char*) yytext);
+        case 1:
+        {
+            yylval.s = strdup((const char*) yytext);
+            return INTEGER;
+        }
+
+        case 2:
+        {
+            return EXP;
+        }
+
+        case 3:
+        {
+            yylval.s = strdup((const char*) yytext);
+            return WORD;
+        }
+
+        case 4:
+        {
+            int len = strlen((const char*) yytext);
                                    yytext[len-1] = 0;
                                    yylval.s = strdup((const char*) (yytext+1));
-                                   Return(WORD);}
-	YY_BREAK
-case 5:
-# line 71 "lexer.l"
-{yylval.s = strdup((const char*) yytext); Return(STRING);}
-	YY_BREAK
-case 6:
-# line 73 "lexer.l"
-Return(OPEN);
-	YY_BREAK
-case 7:
-# line 75 "lexer.l"
-Return(CLOSE);
-	YY_BREAK
-case 8:
-# line 77 "lexer.l"
-Return(COMMA);
-	YY_BREAK
-case 9:
-# line 79 "lexer.l"
-Return(OPEN_SQUARE);
-	YY_BREAK
-case 10:
-# line 81 "lexer.l"
-Return(CLOSE_SQUARE);
-	YY_BREAK
-case 11:
-# line 83 "lexer.l"
-Return(EQUALS);
-	YY_BREAK
-case 12:
-# line 85 "lexer.l"
-Return(PERIOD);
-	YY_BREAK
-case 13:
-# line 87 "lexer.l"
-;
-	YY_BREAK
-case 14:
-# line 89 "lexer.l"
-;
-	YY_BREAK
-case 15:
-# line 91 "lexer.l"
-{       loop:
-#ifdef __cplusplus
+            return WORD;
+        }
+
+        case 5:
+        {
+            yylval.s = strdup((const char*) yytext);
+            return STRING;
+        }
+
+        case 6:
+        {
+            return OPEN;
+        }
+
+        case 7:
+        {
+            return CLOSE;
+        }
+
+        case 8:
+        {
+            return COMMA;
+        }
+
+        case 9:
+        {
+            return OPEN_SQUARE;
+        }
+
+        case 10:
+        {
+            return CLOSE_SQUARE;
+        }
+
+        case 11:
+        {
+            return EQUALS;
+        }
+
+        case 12:
+        {
+            return PERIOD;
+        }
+
+        case 13:
+        {
+            break;
+        }
+
+        case 14:
+        {
+            break;
+        }
+
+        case 15:
+        {
+          loop:
+            #ifdef __cplusplus
                           while (yyinput() != '*');
                           switch (yyinput())
-#else
+            #else
                           while (input() != '*');
                           switch (input())
-#endif
+            #endif
+              {
+                  case '/':
+                      break;
+                  case '*':
+                      unput('*');
+                  default:
+                      goto loop;
+              }
+            break;
+        }
+
+        case 16:
                                   {
-                                  case '/': break;
-                                  case '*': unput('*');
-                                  default: goto loop;
+            return ERROR;
                                   }
+
+        case 17:
+        {
+            ECHO;
+            break;
                           }
-	YY_BREAK
-case 16:
-# line 106 "lexer.l"
-Return(ERROR);
-	YY_BREAK
-case 17:
-# line 108 "lexer.l"
-ECHO;
-	YY_BREAK
-case YY_STATE_EOF(INITIAL):
+
+        case YY_STATE_EOF(INITIAL):
+        {
     yyterminate();
+        }
 
 	    case YY_END_OF_BUFFER:
 		{
@@ -706,7 +756,6 @@ case YY_STATE_EOF(INITIAL):
 			yy_current_state = yy_next_state;
 			goto yy_match;
 			}
-
 		    else
 			{
 			    yy_cp = yy_last_accepting_cpos;
@@ -714,7 +763,6 @@ case YY_STATE_EOF(INITIAL):
 			goto yy_find_action;
 			}
 		    }
-
 		else switch ( yy_get_next_buffer() )
 		    {
 		    case EOB_ACT_END_OF_FILE:
@@ -736,7 +784,6 @@ case YY_STATE_EOF(INITIAL):
 			    yy_act = YY_STATE_EOF((yy_start - 1) / 2);
 			    goto do_action;
 			    }
-
 			else
 			    {
 			    if ( ! yy_did_buffer_switch_on_eof )
@@ -755,8 +802,7 @@ case YY_STATE_EOF(INITIAL):
 			goto yy_match;
 
 		    case EOB_ACT_LAST_MATCH:
-			yy_c_buf_p =
-			    &yy_current_buffer->yy_ch_buf[yy_n_chars];
+                    yy_c_buf_p = &yy_current_buffer->yy_ch_buf[yy_n_chars];
 
 			yy_current_state = yy_get_previous_state();
 
@@ -771,10 +817,10 @@ case YY_STATE_EOF(INITIAL):
 #ifdef FLEX_DEBUG
 		printf( "action # %d\n", yy_act );
 #endif
-		YY_FATAL_ERROR(
-			"fatal flex scanner internal error--no action found" );
+            YY_FATAL_ERROR("fatal flex scanner internal error--no action found" );
 	    }
 	}
+
 #if defined(__VISAGECPP__)
 /* VA complains about proc maybe not returning a value so return one */
 return 0;
@@ -794,8 +840,7 @@ return 0;
  */
 
 static int yy_get_next_buffer()
-
-    {
+{
     register YY_CHAR *dest = yy_current_buffer->yy_ch_buf;
     register YY_CHAR *source = yytext - 1; /* copy prev. char, too */
     register int number_to_move, i;
@@ -865,7 +910,7 @@ static int yy_get_next_buffer()
     yytext = &yy_current_buffer->yy_ch_buf[1];
 
     return ( ret_val );
-    }
+}
 
 
 /* yy_get_previous_state - get the state just before the EOB char was reached
@@ -875,8 +920,7 @@ static int yy_get_next_buffer()
  */
 
 static yy_state_type yy_get_previous_state()
-
-    {
+{
     register yy_state_type yy_current_state;
     register YY_CHAR *yy_cp;
 
@@ -900,7 +944,7 @@ static yy_state_type yy_get_previous_state()
 	}
 
     return ( yy_current_state );
-    }
+}
 
 
 /* yy_try_NUL_trans - try to make a transition on the NUL character
@@ -915,8 +959,7 @@ static yy_state_type yy_try_NUL_trans( register yy_state_type yy_current_state )
 static yy_state_type yy_try_NUL_trans( yy_current_state )
 register yy_state_type yy_current_state;
 #endif
-
-    {
+{
     register int yy_is_jam;
     register YY_CHAR *yy_cp = yy_c_buf_p;
 
@@ -936,7 +979,7 @@ register yy_state_type yy_current_state;
     yy_is_jam = (yy_current_state == 33);
 
     return ( yy_is_jam ? 0 : yy_current_state );
-    }
+}
 
 
 #ifdef YY_USE_PROTOS
@@ -946,8 +989,7 @@ static void yyunput( c, yy_bp )
 YY_CHAR c;
 register YY_CHAR *yy_bp;
 #endif
-
-    {
+{
     register YY_CHAR *yy_cp = yy_c_buf_p;
 
     /* undo effects of setting up yytext */
@@ -981,7 +1023,7 @@ register YY_CHAR *yy_bp;
      *       macro to now work correctly
      */
     YY_DO_BEFORE_ACTION; /* set up yytext again */
-    }
+}
 
 
 #ifdef __cplusplus
@@ -989,8 +1031,7 @@ static int yyinput()
 #else
 static int input()
 #endif
-
-    {
+{
     int c;
     YY_CHAR *yy_cp = yy_c_buf_p;
 
@@ -1003,9 +1044,9 @@ static int input()
 	 * valid NUL; if not, then we've hit the end of the buffer.
 	 */
 	if ( yy_c_buf_p < &yy_current_buffer->yy_ch_buf[yy_n_chars] )
-	    /* this was really a NUL */
+        { /* this was really a NUL */
 	    *yy_c_buf_p = '\0';
-
+        }
 	else
 	    { /* need more input */
 	    yytext = yy_c_buf_p;
@@ -1020,27 +1061,25 @@ static int input()
 			yy_c_buf_p = yytext + YY_MORE_ADJ;
 			return ( EOF );
 			}
-
 		    YY_NEW_FILE;
 
-#ifdef __cplusplus
+                    #ifdef __cplusplus
 		    return ( yyinput() );
-#else
+                    #else
 		    return ( input() );
-#endif
+                    #endif
 		    }
-		    break;
 
 		case EOB_ACT_CONTINUE_SCAN:
 		    yy_c_buf_p = yytext + YY_MORE_ADJ;
 		    break;
 
 		case EOB_ACT_LAST_MATCH:
-#ifdef __cplusplus
+                    #ifdef __cplusplus
 		    YY_FATAL_ERROR( "unexpected last match in yyinput()" );
-#else
+                    #else
 		    YY_FATAL_ERROR( "unexpected last match in input()" );
-#endif
+                    #endif
 		}
 	    }
 	}
@@ -1049,7 +1088,7 @@ static int input()
     yy_hold_char = *++yy_c_buf_p;
 
     return ( c );
-    }
+}
 
 
 #ifdef YY_USE_PROTOS
@@ -1058,11 +1097,10 @@ void yyrestart( FILE *input_file )
 void yyrestart( input_file )
 FILE *input_file;
 #endif
-
-    {
+{
     yy_init_buffer( yy_current_buffer, input_file );
     yy_load_buffer_state();
-    }
+}
 
 
 #ifdef YY_USE_PROTOS
@@ -1071,8 +1109,7 @@ void yy_switch_to_buffer( YY_BUFFER_STATE new_buffer )
 void yy_switch_to_buffer( new_buffer )
 YY_BUFFER_STATE new_buffer;
 #endif
-
-    {
+{
     if ( yy_current_buffer == new_buffer )
 	return;
 
@@ -1093,7 +1130,7 @@ YY_BUFFER_STATE new_buffer;
      * to go ahead and always set it.
      */
     yy_did_buffer_switch_on_eof = 1;
-    }
+}
 
 
 #ifdef YY_USE_PROTOS
@@ -1101,13 +1138,12 @@ void yy_load_buffer_state( void )
 #else
 void yy_load_buffer_state()
 #endif
-
-    {
+{
     yy_n_chars = yy_current_buffer->yy_n_chars;
     yytext = yy_c_buf_p = yy_current_buffer->yy_buf_pos;
     yyin = yy_current_buffer->yy_input_file;
     yy_hold_char = *yy_c_buf_p;
-    }
+}
 
 
 #ifdef YY_USE_PROTOS
@@ -1117,8 +1153,7 @@ YY_BUFFER_STATE yy_create_buffer( file, size )
 FILE *file;
 int size;
 #endif
-
-    {
+{
     YY_BUFFER_STATE b;
 
     b = (YY_BUFFER_STATE) malloc( sizeof( struct yy_buffer_state ) );
@@ -1139,7 +1174,7 @@ int size;
     yy_init_buffer( b, file );
 
     return ( b );
-    }
+}
 
 
 #ifdef YY_USE_PROTOS
@@ -1148,14 +1183,13 @@ void yy_delete_buffer( YY_BUFFER_STATE b )
 void yy_delete_buffer( b )
 YY_BUFFER_STATE b;
 #endif
-
-    {
+{
     if ( b == yy_current_buffer )
 	yy_current_buffer = (YY_BUFFER_STATE) 0;
 
     free( (char *) b->yy_ch_buf );
     free( (char *) b );
-    }
+}
 
 
 #ifdef YY_USE_PROTOS
@@ -1165,8 +1199,7 @@ void yy_init_buffer( b, file )
 YY_BUFFER_STATE b;
 FILE *file;
 #endif
-
-    {
+{
     b->yy_input_file = file;
 
     /* we put in the '\n' and start reading from [1] so that an
@@ -1186,43 +1219,49 @@ FILE *file;
     b->yy_buf_pos = &b->yy_ch_buf[1];
 
     b->yy_eof_status = EOF_NOT_SEEN;
-    }
-# line 108 "lexer.l"
+}
+// # line 108 "lexer.l"
 
 
 
 #ifdef FLEX_SCANNER
-static int lex_input() {
+    static int lex_input()
+    {
   return input();
-}
+    }
 #else	/* BSD/AT&T lex */
-#ifndef input
-# error "Sorry, but need either flex or AT&T lex"
-#endif
-static int lex_input() {
+    #ifndef input
+        #error "Sorry, but need either flex or AT&T lex"
+    #endif
+    static int lex_input() {
   return input();
-}
-/* # undef unput
-# define unput(_c) my_unput(_c)
-*/
+    }
 
-# undef input
-# define input() my_input()
-static int my_unput(char c)
-{
-  if (lex_read_from_string) {
+    /*
+    # undef unput
+    # define unput(_c) my_unput(_c)
+    */
+
+    # undef input
+    # define input() my_input()
+    static int my_unput(char c)
+    {
+        if (lex_read_from_string)
+        {
     /* Make sure we have something */
-    if (lex_string_ptr) {
+            if (lex_string_ptr)
+            {
       if (c == '\n') yylineno--;
       lex_string_ptr--;
     }
-  } else {
+        }
+        else
+        {
     yytchar= (c);if(yytchar=='\n')yylineno--;*yysptr++=yytchar;
-/*    unput(c); Causes infinite recursion! */
+            /* unput(c); Causes infinite recursion! */
   }
   return c;
-}
-
+    }
 #endif
 
 /* Public */
@@ -1254,17 +1293,23 @@ void LexFromString(char *buffer)
 
 static int my_input( void )
 {
-  if (lex_read_from_string) {
+    if (lex_read_from_string)
+    {
     if (lex_string_ptr == lex_buffer_length)
+        {
       return 0;
-    else {
+        }
+        else
+        {
       char c = lex_buffer[lex_string_ptr++];
 #ifndef FLEX_SCANNER
       if (c == '\n') yylineno++;
 #endif
       return c;
     }
-  } else {
+    }
+    else
+    {
     return lex_input();
   }
 }
@@ -1274,3 +1319,4 @@ void wxExprCleanUp()
 	if (yy_current_buffer)
 		yy_delete_buffer(yy_current_buffer);
 }
+

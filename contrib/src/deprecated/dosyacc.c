@@ -5,11 +5,11 @@
 
 #if !defined(wxUSE_PROLOGIO) || wxUSE_PROLOGIO
 
-#ifndef lint
+#if !defined(lint) && 0
 static char yysccsid[] = "@(#)yaccpar     1.7 (Berkeley) 09/09/90";
 #endif
 #define YYBYACC 1
-#line 2 "parser.y"
+// #line 2 "parser.y"
 #include "string.h"
 #if defined(_MSC_VER) || defined(__VISAGECPP__)
 #include <io.h>
@@ -45,12 +45,12 @@ void yyoutput(int);
 }
 #endif
 #endif
-#line 36 "parser.y"
+// #line 36 "parser.y"
 typedef union {
     char *s;
 /*    struct pexpr *expr; */
 } YYSTYPE;
-#line 44 "y_tab.c"
+// #line 44 "y_tab.c"
 #define INTEGER 1
 #define WORD 2
 #define STRING 3
@@ -213,7 +213,7 @@ YYSTYPE yylval;
 short yyss[YYSTACKSIZE];
 YYSTYPE yyvs[YYSTACKSIZE];
 #define yystacksize YYSTACKSIZE
-#line 118 "parser.y"
+// #line 118 "parser.y"
 
 #include "doslex.c"
 
@@ -259,7 +259,7 @@ void yyerror(char *s)
 #endif
 #endif
    
-#line 247 "y_tab.c"
+// #line 247 "y_tab.c"
 #define YYABORT goto yyabort
 #define YYACCEPT goto yyaccept
 #define YYERROR goto yyerrlab
@@ -305,7 +305,8 @@ yyloop:
         }
 #endif
     }
-    if ((yyn = yysindex[yystate]) && (yyn += yychar) >= 0 &&
+    yyn = yysindex[yystate];
+    if ((yyn) && (yyn += yychar) >= 0 &&
             yyn <= YYTABLESIZE && yycheck[yyn] == yychar)
     {
 #if YYDEBUG
@@ -323,7 +324,8 @@ yyloop:
         if (yyerrflag > 0)  --yyerrflag;
         goto yyloop;
     }
-    if ((yyn = yyrindex[yystate]) && (yyn += yychar) >= 0 &&
+    yyn = yyrindex[yystate];
+    if ((yyn) && (yyn += yychar) >= 0 &&
             yyn <= YYTABLESIZE && yycheck[yyn] == yychar)
     {
         yyn = yytable[yyn];
@@ -332,13 +334,13 @@ yyloop:
     if (yyerrflag) goto yyinrecovery;
 #ifdef lint
     goto yynewerror;
-#endif
 yynewerror:
+#endif
     yyerror("syntax error");
 #ifdef lint
     goto yyerrlab;
-#endif
 yyerrlab:
+#endif
     ++yynerrs;
 yyinrecovery:
     if (yyerrflag < 3)
@@ -346,7 +348,8 @@ yyinrecovery:
         yyerrflag = 3;
         for (;;)
         {
-            if ((yyn = yysindex[*yyssp]) && (yyn += YYERRCODE) >= 0 &&
+            yyn = yysindex[*yyssp];
+            if ((yyn) && (yyn += YYERRCODE) >= 0 &&
                     yyn <= YYTABLESIZE && yycheck[yyn] == YYERRCODE)
             {
 #if YYDEBUG
@@ -402,80 +405,80 @@ yyreduce:
     switch (yyn)
     {
 case 3:
-#line 68 "parser.y"
+// #line 68 "parser.y"
 {process_command(proio_cons(wxmake_word(yyvsp[-1].s), NULL)); free(yyvsp[-1].s);}
 break;
 case 4:
-#line 70 "parser.y"
+// #line 70 "parser.y"
 {process_command(yyvsp[-1].s);}
 break;
 case 5:
-#line 72 "parser.y"
+// #line 72 "parser.y"
 {syntax_error("Unrecognized command.");}
 break;
 case 6:
-#line 76 "parser.y"
+// #line 76 "parser.y"
 {yyval.s = proio_cons(wxmake_word(yyvsp[-3].s), yyvsp[-1].s); free(yyvsp[-3].s);}
 break;
 case 7:
-#line 78 "parser.y"
+// #line 78 "parser.y"
 {yyval.s = proio_cons(NULL, NULL);}
 break;
 case 8:
-#line 80 "parser.y"
+// #line 80 "parser.y"
 {yyval.s = yyvsp[-1].s; }
 break;
 case 9:
-#line 84 "parser.y"
+// #line 84 "parser.y"
 {yyval.s = NULL;}
 break;
 case 10:
-#line 86 "parser.y"
+// #line 86 "parser.y"
 {yyval.s = proio_cons(yyvsp[0].s, NULL);}
 break;
 case 11:
-#line 89 "parser.y"
+// #line 89 "parser.y"
 {yyval.s = proio_cons(yyvsp[-2].s, yyvsp[0].s);}
 break;
 case 12:
-#line 93 "parser.y"
+// #line 93 "parser.y"
 {yyval.s = proio_cons(wxmake_word("="), proio_cons(wxmake_word(yyvsp[-2].s), proio_cons(yyvsp[0].s, NULL)));
                          free(yyvsp[-2].s); }
 break;
 case 13:
-#line 96 "parser.y"
+// #line 96 "parser.y"
 {yyval.s = yyvsp[0].s; }
 break;
 case 14:
-#line 99 "parser.y"
+// #line 99 "parser.y"
 {yyval.s = wxmake_word(yyvsp[0].s); free(yyvsp[0].s);}
 break;
 case 15:
-#line 101 "parser.y"
+// #line 101 "parser.y"
 {yyval.s = wxmake_string(yyvsp[0].s); free(yyvsp[0].s);}
 break;
 case 16:
-#line 103 "parser.y"
+// #line 103 "parser.y"
 {yyval.s = wxmake_integer(yyvsp[0].s); free(yyvsp[0].s);}
 break;
 case 17:
-#line 105 "parser.y"
+// #line 105 "parser.y"
 {yyval.s = wxmake_real(yyvsp[-2].s, yyvsp[0].s); free(yyvsp[-2].s); free(yyvsp[0].s); }
 break;
 case 18:
-#line 107 "parser.y"
+// #line 107 "parser.y"
 {yyval.s = wxmake_exp(yyvsp[-2].s, yyvsp[0].s); free(yyvsp[-2].s); free(yyvsp[0].s); }
 break;
 case 19:
-#line 110 "parser.y"
+// #line 110 "parser.y"
 {yyval.s = wxmake_exp2(yyvsp[-4].s, yyvsp[-2].s, yyvsp[0].s); free(yyvsp[-4].s); free(yyvsp[-2].s);
                                                                   free(yyvsp[0].s); }
 break;
 case 20:
-#line 114 "parser.y"
+// #line 114 "parser.y"
 {yyval.s = yyvsp[0].s;}
 break;
-#line 461 "y_tab.c"
+// #line 461 "y_tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;
@@ -508,7 +511,8 @@ break;
         if (yychar == 0) goto yyaccept;
         goto yyloop;
     }
-    if ((yyn = yygindex[yym]) && (yyn += yystate) >= 0 &&
+    yyn = yygindex[yym];
+    if ((yyn) && (yyn += yystate) >= 0 &&
             yyn <= YYTABLESIZE && yycheck[yyn] == yystate)
         yystate = yytable[yyn];
     else
