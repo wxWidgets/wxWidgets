@@ -143,7 +143,7 @@ wxBitmap::wxBitmap(void *data, long type, int width, int height, int depth)
     (void) Create(data, type, width, height, depth);
 }
 
-wxBitmap::wxBitmap(const wxString& filename, long type)
+wxBitmap::wxBitmap(const wxString& filename, int type)
 {
     LoadFile(filename, (int)type);
 }

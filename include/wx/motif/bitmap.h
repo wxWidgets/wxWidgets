@@ -149,7 +149,7 @@ public:
     wxBitmap(char **data, wxControl* control);
     
     // Load a file or resource
-    wxBitmap(const wxString& name, long type = wxBITMAP_TYPE_XPM);
+    wxBitmap(const wxString& name, int type = wxBITMAP_TYPE_XPM);
     
     // Constructor for generalised creation from data
     wxBitmap(void *data, long type, int width, int height, int depth = 1);
