@@ -186,7 +186,7 @@ protected:
     virtual int OnGetItemImage(long item) const;
 
     // it calls our OnGetXXX() functions
-    friend wxListMainWindow;
+    friend class WXDLLEXPORT wxListMainWindow;
 
 private:
     // Virtual function hiding supression
