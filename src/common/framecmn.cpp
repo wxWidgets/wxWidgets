@@ -41,10 +41,10 @@ void wxFrame::DoMenuUpdates()
 void wxFrame::DoMenuUpdates(wxMenu* menu, wxWindow* WXUNUSED(focusWin))
 {
   wxEvtHandler* evtHandler = GetEventHandler();
-  wxNode* node = menu->GetItems().First();
+  wxMenuItemList::Node* node = menu->GetMenuItems().GetFirst();
   while (node)
   {
-    wxMenuItem* item = (wxMenuItem*) node->Data();
+    wxMenuItem* item = node->GetData();
     if ( !item->IsSeparator() )
     {
       wxWindowID id = item->GetId();
@@ -64,6 +64,6 @@ void wxFrame::DoMenuUpdates(wxMenu* menu, wxWindow* WXUNUSED(focusWin))
       if (item->GetSubMenu())
         DoMenuUpdates(item->GetSubMenu(), (wxWindow*) NULL);
     }
-    node = node->Next();
+    node = node->GetNext();
   }
 }

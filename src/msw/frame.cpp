@@ -670,7 +670,7 @@ bool wxFrame::ProcessCommand(int id)
     if ( !bar )
         return FALSE;
 
-    wxMenuItem *item = bar->FindItemForId(id);
+    wxMenuItem *item = bar->FindItem(id);
     if ( item && item->IsCheckable() )
     {
         item->Toggle();

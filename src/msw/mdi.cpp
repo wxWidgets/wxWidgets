@@ -889,7 +889,7 @@ bool wxMDIChildFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND hwnd)
             return TRUE;
     }
 
-    if (GetMenuBar() && GetMenuBar()->FindItemForId(id))
+    if (GetMenuBar() && GetMenuBar()->FindItem(id))
     {
         ProcessCommand(id);
         return TRUE;
