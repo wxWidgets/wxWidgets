@@ -1315,6 +1315,7 @@ enum wxStretch
 #define wxID_NOTOALL            5114
 #define wxID_ABORT              5115
 #define wxID_RETRY              5116
+#define wxID_IGNORE             5117
 
 // IDs used by generic file dialog (11 consecutive starting from this value)
 #define wxID_FILEDLGG           5900
