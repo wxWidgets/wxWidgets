@@ -88,20 +88,9 @@ typedef unsigned char size_t8;
         typedef unsigned long size_t32;
     #else
         // assume sizeof(int) == 4 - what else can we do
-        typedef unsigned int size_t32;
+        wxCOMPILE_TIME_ASSERT( sizeof(int) == 4, IntMustBeExactly4Bytes);
 
-        // ... but at least check it during run time
-        static class IntSizeChecker
-        {
-        public:
-            IntSizeChecker()
-            {
-                // Asserting a sizeof directly causes some compilers to
-                // issue a "using constant in a conditional expression" warning
-                wxASSERT_MSG( wxAssertIsEqual(sizeof(int), 4),
-                              "size_t32 is incorrectly defined!" );
-            }
-        } intsizechecker;
+        typedef unsigned int size_t32;
     #endif
 #endif // Win/!Win
 
@@ -1487,6 +1476,58 @@ bool wxLocale::AddCatalog(const wxChar *szDomain)
     return FALSE;
   }
 }
+
+// ----------------------------------------------------------------------------
+// accessors for locale-dependent data
+// ----------------------------------------------------------------------------
+
+#ifdef __WXMSW__
+
+/* static */
+wxString wxLocale::GetInfo(wxLocaleInfo index)
+{
+    wxString str;
+    wxChar buffer[256];
+    size_t count;
+    buffer[0] = wxT('\0');
+    switch (index)
+    {
+        case wxSYS_DECIMAL_SEPARATOR:
+            count = ::GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SDECIMAL, buffer, 256);
+            if (!count)
+                str << ".";
+            else
+                str << buffer;
+            break;
+        case wxSYS_LIST_SEPARATOR:
+            count = ::GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SLIST, buffer, 256);
+            if (!count)
+                str << ",";
+            else
+                str << buffer;
+            break;
+        case wxSYS_LEADING_ZERO: // 0 means no leading zero, 1 means leading zero
+            count = ::GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_ILZERO, buffer, 256);
+            if (!count)
+                str << "0";
+            else
+                str << buffer;
+            break;
+        default:
+            wxFAIL_MSG("Unknown System String !");
+    }
+    return str;
+}
+
+#else // !__WXMSW__
+
+/* static */
+wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory)
+{
+    return wxEmptyString;
+}
+
+#endif // __WXMSW__/!__WXMSW__
 
 // ----------------------------------------------------------------------------
 // global functions and variables
