@@ -90,15 +90,13 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
 {
 #if ( defined(__WXOS2__) || defined(__WXMSW__) ) && !defined(__WXUNIVERSAL__)
-      MyDialog *dialog = new MyDialog;
-      if (dialog->LoadNativeDialog(this, _T("dialog1")))
-      {
-    dialog->SetModal(true);
-        dialog->ShowModal();
-      }
-  dialog->Close(true);
+    MyDialog dialog;
+    if (dialog.LoadNativeDialog(this, _T("dialog1")))
+    {
+        dialog.ShowModal();
+    }
 #else
-  wxMessageBox(_T("No native dialog support"),_T("Platform limitation"));
+    wxMessageBox(_T("No native dialog support"),_T("Platform limitation"));
 #endif
 }
 
