@@ -91,16 +91,16 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
 void wxToolBar::DoEnableTool(wxToolBarToolBase *tool, bool enable)
 {
     // Created disabled-state bitmap on demand
-    if (!enable && !m_bitmap2.Ok())
+    if (!enable && !tool->GetBitmap2().Ok())
     {
-        wxImage in(m_bitmap1);
-        wxImage out(m_bitmap1);
+        wxImage in(tool->GetBitmap1());
+        wxImage out(tool->GetBitmap1());
 
         wxCreateGreyedImage(in, out);
 
-        m_bitmap2 = out.ConvertToBitmap();
+        tool->SetBitmap2(out.ConvertToBitmap());
     }
-    RefreshTool(tool);    
+    RefreshTool((wxToolBarTool*) tool);    
 }
 
 void wxToolBar::DoToggleTool(wxToolBarToolBase *tool, bool toggle)
@@ -146,7 +146,7 @@ void wxToolBar::RefreshTool( wxToolBarTool *tool )
 
 void wxToolBar::DrawToolBarTool( wxToolBarTool *tool, wxDC &dc, bool down )
 {
-    wxBitmap& bitmap = (tool->IsEnabled() || !tool->GetBitmap1().Ok()) ? tool->GetBitmap1() : tool->GetBitmap2() ;
+    const wxBitmap& bitmap = (tool->IsEnabled() || !tool->GetBitmap1().Ok()) ? tool->GetBitmap1() : tool->GetBitmap2() ;
     if (down)
     {
         dc.DrawBitmap( bitmap, tool->m_x+4, tool->m_y+4, TRUE );
@@ -304,7 +304,7 @@ void wxToolBar::OnMouse(wxMouseEvent &event)
         }
     }
     
-    if (event.LeftDown() && (hit) && hit->Enabled())
+    if (event.LeftDown() && (hit) && hit->IsEnabled())
     {
         CaptureMouse();
         m_captured = hit;
