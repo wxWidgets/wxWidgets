@@ -14,8 +14,6 @@
 
 #include "wx/combobox.h"
 
-#if wxUSE_COMBOBOX
-
 #include <wx/intl.h>
 
 #include "gdk/gdk.h"
@@ -543,6 +541,3 @@ bool wxComboBox::IsOwnGtkWindow( GdkWindow *window )
              (window == GTK_COMBO(m_widget)->button->window ) );
 }
 
-#endif
-
-  // wxUSE_COMBOBOX

@@ -36,7 +36,9 @@ typedef unsigned long size_t32;
 // ----------------------------------------------------------------------------
 
 // gettext() style macro
+#ifndef WXINTL_NO_GETTEXT_MACRO
 #define   _(str)  wxGetTranslation(str)
+#endif
 
 // ----------------------------------------------------------------------------
 // forward decls
