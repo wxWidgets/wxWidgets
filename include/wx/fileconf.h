@@ -17,6 +17,15 @@
 #define   _FILECONF_H
 
 // ----------------------------------------------------------------------------
+// compile options
+// ----------------------------------------------------------------------------
+
+// it won't compile without it anyhow
+#ifndef USE_WXCONFIG
+  #error "Please define USE_WXCONFIG or remove fileconf.cpp from your makefile"
+#endif // USE_WXCONFIG
+
+// ----------------------------------------------------------------------------
 // wxFileConfig
 // ----------------------------------------------------------------------------
 

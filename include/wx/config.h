@@ -1,6 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        
-// Purpose:     
+// Name:        config.h
+// Purpose:     declaration of the base class of all config implementations
+//              (see also: fileconf.h and msw/regconf.h)
 // Author:      Karsten Ballüder & Vadim Zeitlin
 // Modified by: 
 // Created:     07.04.98 (adapted from appconf.h)
@@ -12,6 +13,15 @@
 
 #ifndef   _APPCONF_H
 #define   _APPCONF_H
+
+// ----------------------------------------------------------------------------
+// compile options
+// ----------------------------------------------------------------------------
+
+// it won't compile without it anyhow
+#ifndef USE_WXCONFIG
+  #error "Please define USE_WXCONFIG or remove config.cpp from your makefile"
+#endif // USE_WXCONFIG
 
 // ----------------------------------------------------------------------------
 // constants
