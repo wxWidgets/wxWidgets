@@ -10,10 +10,10 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef TREELISRCTRL_H
+#ifndef TREELISTCTRL_H
 #define TREELISTCTRL_H
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "treelistctrl.h"
 #endif
 
@@ -59,6 +59,8 @@ public:
         m_width = width;
         m_alignment = alignment;
     }
+
+    ~wxTreeListColumnInfo() {}
 
     // getters
     wxTreeListColumnAlign GetAlignment() const { return m_alignment; }

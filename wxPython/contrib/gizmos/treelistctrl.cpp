@@ -18,7 +18,7 @@
 // headers
 // ---------------------------------------------------------------------------
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
   #pragma implementation "treelistctrl.h"
 #endif
 
@@ -30,9 +30,6 @@
 #endif
 
 
-//#include "wx/gizmos/treelistctrl.h"
-#include "treelistctrl.h"
-
 #include <wx/treebase.h>
 #include <wx/timer.h>
 #include <wx/textctrl.h>
@@ -41,6 +38,10 @@
 #include <wx/dcclient.h>
 #include <wx/dcscreen.h>
 #include <wx/scrolwin.h>
+
+//#include "wx/gizmos/treelistctrl.h"
+#include "treelistctrl.h"
+
 
 #ifdef __WXGTK__
     #include <gtk/gtk.h>
@@ -537,7 +538,7 @@ protected:
     size_t m_main_column; // ALB
 
     friend class wxTreeListItem;
-    friend class wxTreeRenameTimer;
+    friend class wxTreeListRenameTimer;
     friend class wxTreeListTextCtrl;
 
     wxFont               m_normalFont;
@@ -628,10 +629,10 @@ private:
 
 
 // timer used for enabling in-place edit
-class  wxTreeRenameTimer: public wxTimer
+class  wxTreeListRenameTimer: public wxTimer
 {
 public:
-    wxTreeRenameTimer( wxTreeListMainWindow *owner );
+    wxTreeListRenameTimer( wxTreeListMainWindow *owner );
 
     void Notify();
 
@@ -881,15 +882,15 @@ static void EventFlagsToSelType(long style,
 }
 
 // ---------------------------------------------------------------------------
-// wxTreeRenameTimer (internal)
+// wxTreeListRenameTimer (internal)
 // ---------------------------------------------------------------------------
 
-wxTreeRenameTimer::wxTreeRenameTimer( wxTreeListMainWindow *owner )
+wxTreeListRenameTimer::wxTreeListRenameTimer( wxTreeListMainWindow *owner )
 {
     m_owner = owner;
 }
 
-void wxTreeRenameTimer::Notify()
+void wxTreeListRenameTimer::Notify()
 {
     m_owner->OnRenameTimer();
 }
@@ -1764,7 +1765,7 @@ void wxTreeListMainWindow::Init()
     m_isDragging = FALSE;
     m_dropTarget = m_oldSelection = (wxTreeListItem *)NULL;
 
-    m_renameTimer = new wxTreeRenameTimer( this );
+    m_renameTimer = new wxTreeListRenameTimer( this );
     m_lastOnSame = FALSE;
 
     m_normalFont = wxSystemSettings::GetSystemFont( wxSYS_DEFAULT_GUI_FONT );
