@@ -901,7 +901,7 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
         {
             HDC cdc = GetHdc();
             HDC hdcMem = ::CreateCompatibleDC(GetHdc());
-            HBITMAP hOldBitmap = ::SelectObject(hdcMem, GetHbitmapOf(bmp));
+            HGDIOBJ hOldBitmap = ::SelectObject(hdcMem, GetHbitmapOf(bmp));
 #if wxUSE_PALETTE
             wxPalette *pal = bmp.GetPalette();
             if ( pal && ::GetDeviceCaps(cdc,BITSPIXEL) <= 8 )
@@ -921,7 +921,7 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
                 ::SelectPalette(hdcMem, oldPal, FALSE);
 #endif // wxUSE_PALETTE
 
-	    ::SelectObject(hdcMem, hOldBitmap);
+            ::SelectObject(hdcMem, hOldBitmap);
             ::DeleteDC(hdcMem);
         }
 
@@ -966,7 +966,7 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
         }
 #endif // wxUSE_PALETTE
 
-        HBITMAP hOldBitmap = ::SelectObject( memdc, hbitmap );
+        HGDIOBJ hOldBitmap = ::SelectObject( memdc, hbitmap );
         ::BitBlt( cdc, x, y, width, height, memdc, 0, 0, SRCCOPY);
 
 #if wxUSE_PALETTE
@@ -1249,12 +1249,12 @@ void wxDC::SetBrush(const wxBrush& brush)
         if ( stipple && stipple->Ok() )
         {
 #ifdef __WIN32__
-	        ::SetBrushOrgEx(GetHdc(),
+            ::SetBrushOrgEx(GetHdc(),
                             m_deviceOriginX % stipple->GetWidth(),
                             m_deviceOriginY % stipple->GetHeight(),
                             NULL);  // don't need previous brush origin
 #else
-	        ::SetBrushOrg(GetHdc(),
+            ::SetBrushOrg(GetHdc(),
                             m_deviceOriginX % stipple->GetWidth(),
                             m_deviceOriginY % stipple->GetHeight());
 #endif
@@ -1325,14 +1325,6 @@ void wxDC::SetBackgroundMode(int mode)
 
     // SetBackgroundColour now only refers to text background
     // and m_backgroundMode is used there
-
-/*
-    if (m_backgroundMode == wxTRANSPARENT)
-        ::SetBkMode(GetHdc(), TRANSPARENT);
-    else
-        ::SetBkMode(GetHdc(), OPAQUE);
-	Last change:  AC   29 Jan 101    8:54 pm
-*/
 }
 
 void wxDC::SetLogicalFunction(int function)
@@ -1435,13 +1427,13 @@ void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
 #ifdef __WXMICROWIN__
     if (!GetHDC())
     {
-	if (x) *x = 0;
-	if (y) *y = 0;
-	if (descent) *descent = 0;
-	if (externalLeading) *externalLeading = 0;
-	return;
+        if (x) *x = 0;
+        if (y) *y = 0;
+        if (descent) *descent = 0;
+        if (externalLeading) *externalLeading = 0;
+        return;
     }
-#endif
+#endif // __WXMICROWIN__
 
     HFONT hfontOld;
     if ( font )
@@ -1769,8 +1761,8 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
             dc_buffer = ::CreateCompatibleDC(GetHdc());
             buffer_bmap = ::CreateCompatibleBitmap(GetHdc(), width, height);
 #endif // wxUSE_DC_CACHEING/!wxUSE_DC_CACHEING
-            HBITMAP hOldMaskBitmap = ::SelectObject(dc_mask, (HBITMAP) mask->GetMaskBitmap());
-            HBITMAP hOldBufferBitmap = ::SelectObject(dc_buffer, buffer_bmap);
+            HGDIOBJ hOldMaskBitmap = ::SelectObject(dc_mask, (HBITMAP) mask->GetMaskBitmap());
+            HGDIOBJ hOldBufferBitmap = ::SelectObject(dc_buffer, buffer_bmap);
 
             // copy dest to buffer
             if ( !::BitBlt(dc_buffer, 0, 0, (int)width, (int)height,
