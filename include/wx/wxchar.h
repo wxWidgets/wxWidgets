@@ -1099,11 +1099,11 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
     #define wxWX2WC wxMB2WC
 #endif
 
-//
-// RN:  The following are not normal versions of memcpy et al., rather
-// these are either char or widechar versions depending on
-// if unicode is used or not.
-//
+/*
+    RN:  The following are not normal versions of memcpy et al., rather
+    these are either char or widechar versions depending on
+    if unicode is used or not.
+*/
 
 #ifdef __cplusplus
 
