@@ -31,6 +31,7 @@
 #include "wx/html/htmlwin.h"
 #include "wx/settings.h"
 #include "wx/module.h"
+#include "wx/dynarray.h"
 
 #include <stdlib.h>
 
@@ -373,6 +374,7 @@ void wxHtmlWordCell::Draw(wxDC& dc, int x, int y,
                           wxHtmlRenderingInfo& info)
 {
 #if 0 // useful for debugging
+    dc.SetPen(*wxBLACK_PEN);
     dc.DrawRectangle(x+m_PosX,y+m_PosY,m_Width,m_Height);
 #endif
 
@@ -811,6 +813,10 @@ void wxHtmlContainerCell::UpdateRenderingStatePost(wxHtmlRenderingInfo& info,
 void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
                                wxHtmlRenderingInfo& info)
 {
+#if 0 // useful for debugging
+    dc.SetPen(*wxRED_PEN);
+    dc.DrawRectangle(x+m_PosX,y+m_PosY,m_Width,m_Height);
+#endif
     // container visible, draw it:
     if ((y + m_PosY <= view_y2) && (y + m_PosY + m_Height > view_y1))
     {
@@ -1060,13 +1066,96 @@ wxHtmlCell *wxHtmlContainerCell::GetLastTerminal() const
         if ( c )
             return c;
 
+        wxHtmlCell *ctmp;
         wxHtmlCell *c2 = NULL;
         for (c = m_Cells; c; c = c->GetNext())
-            c2 = c->GetLastTerminal();
+        {
+            ctmp = c->GetLastTerminal();
+            if ( ctmp )
+                c2 = ctmp;
+        }
         return c2;
     }
     else
         return NULL;
+}
+
+
+static bool IsEmptyContainer(wxHtmlContainerCell *cell)
+{
+    for ( wxHtmlCell *c = cell->GetFirstChild(); c; c = c->GetNext() )
+    {
+        if ( !c->IsTerminalCell() || !c->IsFormattingCell() )
+            return false;
+    }
+    return true;
+}
+
+void wxHtmlContainerCell::RemoveExtraSpacing(bool top, bool bottom)
+{   
+    if ( top )
+        SetIndent(0, wxHTML_INDENT_TOP);
+    if ( bottom )
+        SetIndent(0, wxHTML_INDENT_BOTTOM);
+
+    if ( m_Cells )
+    {
+        wxHtmlCell *c;
+        wxHtmlContainerCell *cont;
+        if ( top )
+        {
+            for ( c = m_Cells; c; c = c->GetNext() )
+            {
+                if ( c->IsTerminalCell() )
+                {
+                    if ( !c->IsFormattingCell() )
+                        break;
+                }
+                else
+                {
+                    cont = (wxHtmlContainerCell*)c;
+                    if ( IsEmptyContainer(cont) )
+                    {
+                        cont->SetIndent(0, wxHTML_INDENT_VERTICAL);
+                    }
+                    else
+                    {
+                        cont->RemoveExtraSpacing(true, false);
+                        break;
+                    }
+                }
+            }
+        }
+        
+        if ( bottom )
+        {
+            wxArrayPtrVoid arr;
+            for ( c = m_Cells; c; c = c->GetNext() )
+                arr.Add((void*)c);
+           
+            for ( int i = arr.GetCount() - 1; i >= 0; i--)
+            {
+                c = (wxHtmlCell*)arr[i];
+                if ( c->IsTerminalCell() )
+                {
+                    if ( !c->IsFormattingCell() )
+                        break;
+                }
+                else
+                {
+                    cont = (wxHtmlContainerCell*)c;
+                    if ( IsEmptyContainer(cont) )
+                    {
+                        cont->SetIndent(0, wxHTML_INDENT_VERTICAL);                                 }
+                    else
+                    {
+                        cont->RemoveExtraSpacing(false, true);
+                        break;
+                    }
+                }
+            }
+        }
+    }
 }
 
 

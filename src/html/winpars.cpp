@@ -208,6 +208,8 @@ wxObject* wxHtmlWinParser::GetProduct()
 
     top = m_Container;
     while (top->GetParent()) top = top->GetParent();
+    top->RemoveExtraSpacing(true, true);
+
     return top;
 }
 

@@ -145,7 +145,7 @@ private:
             // This list is used to initialize m_Handlers member.
 
     wxHtmlContainerCell *m_Container;
-            // actual container. See Open/CloseContainer for details.
+            // current container. See Open/CloseContainer for details.
 
     int m_FontBold, m_FontItalic, m_FontUnderlined, m_FontFixed; // this is not TRUE,FALSE but 1,0, we need it for indexing
     int m_FontSize; /* -2 to +4,  0 is default */

@@ -418,6 +418,11 @@ public:
     
     virtual wxHtmlCell *GetFirstTerminal() const;
     virtual wxHtmlCell *GetLastTerminal() const;
+    
+    
+    // Removes indentation on top or bottom of the container (i.e. above or
+    // below first/last terminal cell). For internal use only.
+    void RemoveExtraSpacing(bool top, bool bottom);
 
 protected:
     void UpdateRenderingStatePre(wxHtmlRenderingInfo& info,
