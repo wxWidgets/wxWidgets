@@ -32,6 +32,9 @@
     #include "wx/valtext.h"
 #endif
 
+#define _WX_DEFINE_DATE_EVENTS_
+#include "wx/dateevt.h"
+
 #include "wx/datectrl.h"
 #include "wx/calctrl.h"
 
