@@ -53,7 +53,7 @@ enum wxLayoutAlignment {
  * orientation and size.
  */
 
-class wxQueryLayoutInfoEvent: public wxEvent
+class WXDLLEXPORT wxQueryLayoutInfoEvent: public wxEvent
 {
 DECLARE_DYNAMIC_CLASS(wxQueryLayoutInfoEvent)
 public:
@@ -100,7 +100,7 @@ typedef void (wxEvtHandler::*wxQueryLayoutInfoEventFunction)(wxQueryLayoutInfoEv
  * This event is used to take a bite out of the available client area.
  */
 
-class wxCalculateLayoutEvent: public wxEvent
+class WXDLLEXPORT wxCalculateLayoutEvent: public wxEvent
 {
 DECLARE_DYNAMIC_CLASS(wxCalculateLayoutEvent)
 public:
@@ -129,7 +129,7 @@ typedef void (wxEvtHandler::*wxCalculateLayoutEventFunction)(wxCalculateLayoutEv
 // This is window that can remember alignment/orientation, does its own layout,
 // and can provide sashes too. Useful for implementing docked windows with sashes in
 // an IDE-style interface.
-class wxSashLayoutWindow: public wxSashWindow
+class WXDLLEXPORT wxSashLayoutWindow: public wxSashWindow
 {
     DECLARE_CLASS(wxSashLayoutWindow)
 public:
@@ -165,7 +165,7 @@ class WXDLLEXPORT wxMDIParentFrame;
 class WXDLLEXPORT wxFrame;
 
 // This class implements the layout algorithm
-class wxLayoutAlgorithm: public wxObject
+class WXDLLEXPORT wxLayoutAlgorithm: public wxObject
 {
 public:
     wxLayoutAlgorithm() {}

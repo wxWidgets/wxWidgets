@@ -21,7 +21,7 @@
 #include <wx/list.h>
 #include <wx/icon.h>
 
-class wxTaskBarIcon: public wxEvtHandler {
+class WXDLLEXPORT wxTaskBarIcon: public wxEvtHandler {
     DECLARE_DYNAMIC_CLASS(wxTaskBarIcon)
 public:
     wxTaskBarIcon(void);
