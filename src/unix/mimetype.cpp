@@ -77,6 +77,7 @@
 #include "wx/dir.h"
 #include "wx/utils.h"
 #include "wx/tokenzr.h"
+#include "wx/iconloc.h"
 
 #include "wx/unix/mimetype.h"
 
