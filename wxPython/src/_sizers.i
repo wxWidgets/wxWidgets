@@ -820,21 +820,22 @@ as well.", "");
 
     %extend {
         DocAStr(Show,
-                "Show(self, item, bool show=True)",
+                "Show(self, item, bool show=True, bool recursive=False) -> bool",
                 "Shows or hides an item managed by the sizer.  To make a sizer item
 disappear or reappear, use Show followed by `Layout`.  The *item*
 parameter can be either a window, a sizer, or the zero-based index of
-the item.", "");
-        void Show(PyObject* item, bool show = True) {
+the item.  Use the recursive parameter to show or hide an item in a
+subsizer.  Returns True if the item was found.", "");
+        bool Show(PyObject* item, bool show = True, bool recursive=False) {
             bool blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, False, True);
             wxPyEndBlockThreads(blocked);
             if ( info.window )
-                self->Show(info.window, show);
+                return self->Show(info.window, show, recursive);
             else if ( info.sizer )
-                self->Show(info.sizer, show);
+                return self->Show(info.sizer, show, recursive);
             else if ( info.gotPos )
-                self->Show(info.pos, show);
+                return self->Show(info.pos, show);
         }
        
         DocAStr(IsShown,
@@ -859,11 +860,11 @@ the item.", "");
     }
 
     %pythoncode {
-    def Hide(self, item):
+    def Hide(self, item, recursive=False):
         """
-        A convenience method for Show(item, False).
+        A convenience method for Show(item, False, recursive).
         """
-        self.Show(item, False)
+        return self.Show(item, False, recursive)
     }
 
     
