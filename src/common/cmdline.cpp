@@ -478,12 +478,11 @@ wxString wxCmdLineParser::GetParam(size_t n) const
 // Resets switches and options
 void wxCmdLineParser::Reset()
 {
-	unsigned int i;
-	for (i = 0; i < m_data->m_options.Count(); i++)
-	{
-		wxCmdLineOption& opt = m_data->m_options[(size_t)i];
-		opt.SetHasValue(FALSE);
-	}
+    for ( size_t i = 0; i < m_data->m_options.Count(); i++ )
+    {
+        wxCmdLineOption& opt = m_data->m_options[i];
+        opt.SetHasValue(FALSE);
+    }
 }
 
 
@@ -502,7 +501,7 @@ int wxCmdLineParser::Parse()
 
     size_t countParam = m_data->m_paramDesc.GetCount();
 
-	Reset();
+    Reset();
 
     // parse everything
     wxString arg;

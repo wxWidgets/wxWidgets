@@ -78,15 +78,15 @@ public:
     bool Rename(const wxString& src, const wxString& dst);
     bool RmFile(const wxString& path);
 
-	// Get the size of a file in the current dir.
-	// this function tries its best to deliver the size in bytes using BINARY
-	// (the SIZE command reports different sizes depending on whether 
-	// type is set to ASCII or BINARY)
-	// returns -1 if file is non-existant or size could not be found
-	int GetFileSize(const wxString& fileName);
+    // Get the size of a file in the current dir.
+    // this function tries its best to deliver the size in bytes using BINARY
+    // (the SIZE command reports different sizes depending on whether 
+    // type is set to ASCII or BINARY)
+    // returns -1 if file is non-existant or size could not be found
+    int GetFileSize(const wxString& fileName);
 
        // Check to see if a file exists in the current dir
-	bool FileExists(const wxString& fileName);
+    bool FileExists(const wxString& fileName);
 
     // Download methods
     bool Abort();
