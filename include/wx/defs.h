@@ -311,7 +311,7 @@ typedef int wxWindowID;
 #if defined(__WXMSW__)
     // __declspec works in BC++ 5 and later, Watcom C++ 11.0 and later as well
     // as VC++ and gcc
-    #if defined(__VISUALC__) || defined(__BORLANDC__) || defined(__GNUC__) || defined(__WATCOMC__)
+    #if defined(__VISUALC__) || defined(__BORLANDC__) || defined(__GNUC__) || defined(__WATCOMC__) || defined(__DIGITALMARS__)
         #define WXEXPORT __declspec(dllexport)
         #define WXIMPORT __declspec(dllimport)
     #else // compiler doesn't support __declspec()
