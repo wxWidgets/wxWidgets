@@ -147,8 +147,8 @@ wxTable::wxTable(wxDB *pwxDB, const char *tblName, const int nCols,
     s.sprintf("wxTable constructor (%-20s) tableID:[%6lu] pDb:[%p]", tblName,tableID,pDb);
 
 #ifdef __WXDEBUG__
-    CstructTablesInUse *tableInUse;
-    tableInUse            = new CstructTablesInUse();
+    wxTablesInUse *tableInUse;
+    tableInUse            = new wxTablesInUse();
     tableInUse->tableName = tblName;
     tableInUse->tableID   = tableID;
     tableInUse->pDb       = pDb;
@@ -263,11 +263,11 @@ wxTable::~wxTable()
         pNode = TablesInUse.First();
         while (pNode && !found)
         {
-            if (((CstructTablesInUse *)pNode->Data())->tableID == tableID)
+            if (((wxTablesInUse *)pNode->Data())->tableID == tableID)
             {
                 found = TRUE;
                 if (!TablesInUse.DeleteNode(pNode))
-                    wxLogDebug (s.c_str(),"Unable to delete node!");
+                    wxLogDebug (s.GetData(),"Unable to delete node!");
             }
             else
                 pNode = pNode->Next();
@@ -1094,7 +1094,7 @@ bool wxTable::DropTable()
 
 
 /********** wxTable::CreateIndex() **********/
-bool wxTable::CreateIndex(const char * idxName, bool unique, int noIdxCols, CidxDef *pIdxDefs, bool attemptDrop)
+bool wxTable::CreateIndex(const char * idxName, bool unique, int noIdxCols, wxIdxDef *pIdxDefs, bool attemptDrop)
 {
 //    char sqlStmt[DB_MAX_STATEMENT_LEN];
     wxString sqlStmt;
@@ -1497,7 +1497,8 @@ void wxTable::GetDeleteStmt(char *pSqlStmt, int typeOfDel, const char *pWhereCla
 
 
 /********** wxTable::GetWhereClause() **********/
-void wxTable::GetWhereClause(char *pWhereClause, int typeOfWhere, const char *qualTableName)
+void wxTable::GetWhereClause(char *pWhereClause, int typeOfWhere,
+                             const char *qualTableName, bool useLikeComparison)
 /*
  * Note: GetWhereClause() currently ignores timestamp columns.
  *       They are not included as part of the where clause.
@@ -1529,7 +1530,10 @@ void wxTable::GetWhereClause(char *pWhereClause, int typeOfWhere, const char *qu
                 wxStrcat(pWhereClause, ".");
             }
             wxStrcat(pWhereClause, colDefs[i].ColName);
-            wxStrcat(pWhereClause, " = ");
+            if (useLikeComparison && (colDefs[i].SqlCtype == SQL_C_CHAR))
+                wxStrcat(pWhereClause, " LIKE ");
+            else
+                wxStrcat(pWhereClause, " = ");
             switch(colDefs[i].SqlCtype)
             {
             case SQL_C_CHAR:
