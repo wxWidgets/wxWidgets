@@ -604,6 +604,45 @@ void wxDC::DrawIcon(const wxIcon& icon, long x, long y)
   CalcBoundingBox(x+icon.GetWidth(), y+icon.GetHeight());
 }
 
+void wxDC::DrawBitmap( const wxBitmap &bmp, long x, long y, bool useMask )
+{
+    if (!bmp.Ok())
+        return;
+
+    // If we're not drawing transparently, and not drawing to a printer,
+    // optimize this function to use Windows functions.
+    if (!useMask && !IsKindOf(CLASSINFO(wxPrinterDC)))
+    {
+        HDC cdc = (HDC)m_hDC;
+        HDC memdc = ::CreateCompatibleDC( cdc );
+        HBITMAP hbitmap = (HBITMAP) bmp.GetHBITMAP( );
+        ::SelectObject( memdc, hbitmap );
+        ::BitBlt( cdc, x, y, bmp.GetWidth(), bmp.GetHeight(), memdc, 0, 0, SRCCOPY);
+        ::SelectObject( memdc, 0 );
+        ::DeleteDC( memdc );
+    }
+    else
+    {
+        // Rather than reproduce wxDC::Blit, let's do it at the wxWin API level
+        wxMemoryDC memDC;
+        memDC.SelectObject(bmp);
+
+        /* Not sure if we need this. The mask should leave the
+         * masked areas as per the original background of this DC.
+         */
+/*
+        // There might be transparent areas, so make these
+        // the same colour as this DC
+        memDC.SetBackground(* GetBackground());
+        memDC.Clear();
+*/
+
+        Blit(x, y, bmp.GetWidth(), bmp.GetHeight(), & memDC, 0, 0, wxCOPY, useMask);
+
+        memDC.SelectObject(wxNullBitmap);
+    }
+}
+
 void wxDC::SetFont(const wxFont& the_font)
 {
   // Set the old object temporarily, in case the assignment deletes an object
@@ -1256,7 +1295,7 @@ bool wxDC::Blit(long xdest, long ydest, long width, long height,
   {
     if (IsKindOf(CLASSINFO(wxPrinterDC)))
     {
-      // If we are printing source colours are screen colours
+      // If we are printing, source colours are screen colours
       // not printer colours and so we need copy the bitmap
       // pixel by pixel.
       HDC dc_src = (HDC) source->m_hDC;

@@ -40,10 +40,10 @@ class WXDLLEXPORT wxGenericColourDialog: public wxDialog
   wxRect singleCustomColourRect;
 
   // Size of each colour rectangle
-  wxIntPoint smallRectangleSize;
+  wxPoint smallRectangleSize;
 
   // For single customizable colour
-  wxIntPoint customRectangleSize;
+  wxPoint customRectangleSize;
 
   // Grid spacing (between rectangles)
   int gridSpacing;

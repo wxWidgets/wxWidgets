@@ -2069,7 +2069,7 @@ void wxWindow::MSWOnLButtonDown(int x, int y, WXUINT flags)
     event.SetTimestamp(wxApp::sm_lastMessageTime);
     event.m_eventObject = this;
 
-    m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVENT_TYPE_LEFT_DOWN;
+    m_lastXPos = event.m_x; m_lastYPos = event.m_y; m_lastEvent = wxEVT_LEFT_DOWN;
 
     if (!GetEventHandler()->ProcessEvent(event))
         Default();

@@ -371,7 +371,9 @@ bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)
   int i = 0;
   int commandId = event.GetId();
 
-  while (table.entries[i].m_fn)
+  // BC++ doesn't like while (table.entries[i].m_fn)
+
+  while (table.entries[i].m_fn != 0L)
   {
     if ((event.GetEventType() == table.entries[i].m_eventType) &&
         (table.entries[i].m_id == -1 || // Match, if event spec says any id will do (id == -1)

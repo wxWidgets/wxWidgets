@@ -170,7 +170,7 @@ class WXDLLEXPORT wxPreviewFrame: public wxFrame
 public:
   wxPreviewFrame(wxPrintPreviewBase *preview, wxFrame *parent, const wxString& title = "Print Preview",
     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-    long style = wxDEFAULT_FRAME, const wxString& name = "frame");
+    long style = wxDEFAULT_FRAME_STYLE, const wxString& name = "frame");
   ~wxPreviewFrame();
 
   bool OnClose();

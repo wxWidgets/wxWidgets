@@ -400,7 +400,7 @@ class WXDLLEXPORT wxDocParentFrame: public wxFrame
  public:
   wxDocParentFrame(wxDocManager *manager, wxFrame *frame, wxWindowID id, const wxString& title,
     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-    long type = wxDEFAULT_FRAME, const wxString& name = "frame");
+    long type = wxDEFAULT_FRAME_STYLE, const wxString& name = "frame");
 
   // Extend event processing to search the document manager's event table
   virtual bool ProcessEvent(wxEvent& event);

@@ -115,6 +115,8 @@ public:
     DrawIcon(icon, pt.x, pt.y);
   }
 
+  virtual void DrawBitmap( const wxBitmap &bmp, long x, long y, bool useMask=FALSE );
+
   inline void DrawPoint(wxPoint& point) { DrawPoint(point.x, point.y); }
   virtual void DrawLines(wxList *list, long xoffset = 0, long yoffset = 0);
   virtual void DrawPolygon(wxList *list, long xoffset = 0, long yoffset = 0, int fillStyle=wxODDEVEN_RULE);

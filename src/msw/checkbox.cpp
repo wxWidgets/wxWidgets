@@ -33,7 +33,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmapCheckBox, wxCheckBox)
 
 bool wxCheckBox::MSWCommand(WXUINT WXUNUSED(param), WXWORD WXUNUSED(id))
 {
-  wxCommandEvent event(wxEVENT_TYPE_CHECKBOX_COMMAND, m_windowId);
+  wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, m_windowId);
   event.SetInt(GetValue());
   event.SetEventObject(this);
   ProcessCommand(event);

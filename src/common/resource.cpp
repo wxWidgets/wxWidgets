@@ -379,10 +379,15 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, const wxItemResource* c
       {
         control = new wxScrollBar(parent, id, pos, size,
            childResource->GetStyle(), wxDefaultValidator, childResource->GetName());
+/*
         ((wxScrollBar *)control)->SetValue((int)childResource->GetValue1());
         ((wxScrollBar *)control)->SetPageSize((int)childResource->GetValue2());
         ((wxScrollBar *)control)->SetObjectLength((int)childResource->GetValue3());
         ((wxScrollBar *)control)->SetViewLength((int)(long)childResource->GetValue5());
+*/
+ 		((wxScrollBar *)control)->SetScrollbar((int)childResource->GetValue1(),(int)childResource->GetValue2(),
+ 			(int)childResource->GetValue3(),(int)(long)childResource->GetValue5(),FALSE);
+
       }
 #endif
    else if (itemType == wxString("wxSlider"))
@@ -1834,7 +1839,8 @@ static wxResourceBitListStruct wxResourceBitListTable[] =
   { "wxMINIMIZE_BOX", wxMINIMIZE_BOX},
   { "wxMAXIMIZE_BOX", wxMAXIMIZE_BOX},
   { "wxRESIZE_BOX", wxRESIZE_BOX},
-  { "wxDEFAULT_FRAME", wxDEFAULT_FRAME},
+  { "wxDEFAULT_FRAME_STYLE", wxDEFAULT_FRAME_STYLE},
+  { "wxDEFAULT_FRAME", wxDEFAULT_FRAME_STYLE},
   { "wxDEFAULT_DIALOG_STYLE", wxDEFAULT_DIALOG_STYLE},
   { "wxBORDER", wxBORDER},
   { "wxRETAINED", wxRETAINED},

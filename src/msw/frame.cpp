@@ -920,7 +920,7 @@ void wxFrame::Command(int id)
 
 void wxFrame::ProcessCommand(int id)
 {
-  wxCommandEvent commandEvent(wxEVENT_TYPE_MENU_COMMAND, id);
+  wxCommandEvent commandEvent(wxEVT_COMMAND_MENU_SELECTED, id);
   commandEvent.SetInt( id );
   commandEvent.SetEventObject( this );
 

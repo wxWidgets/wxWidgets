@@ -413,7 +413,7 @@ wxString wxMenu::GetLabel(int id) const
 
 bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id)
 {
-  wxCommandEvent event(wxEVENT_TYPE_MENU_COMMAND);
+  wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED);
   event.SetEventObject( this );
   event.SetId( id );
   event.SetInt( id );
