@@ -116,6 +116,7 @@ COMMONOBJS = \
   $(COMMDIR)/hash.$(OBJSUFF) \
   $(COMMDIR)/list.$(OBJSUFF) \
   $(COMMDIR)/variant.$(OBJSUFF) \
+  $(COMMDIR)/paper.$(OBJSUFF) \
   $(COMMDIR)/string.$(OBJSUFF) \
   $(COMMDIR)/time.$(OBJSUFF) \
   $(COMMDIR)/tokenzr.$(OBJSUFF) \

@@ -88,6 +88,7 @@ COMMONOBJS = \
   $(COMMDIR)\date.obj \
   $(COMMDIR)\hash.obj \
   $(COMMDIR)\list.obj \
+  $(COMMDIR)\paper.obj \
   $(COMMDIR)\string.obj \
   $(COMMDIR)\time.obj \
   $(COMMDIR)\tokenzr.obj \

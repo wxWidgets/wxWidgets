@@ -225,9 +225,16 @@ public:
   virtual long MinY() const { return m_minY; }
   virtual long MaxY() const { return m_maxY; }
 
+  // Size in device units
   virtual void GetSize( int* width, int* height ) const;
   inline wxSize GetSize(void) const { int w, h; GetSize(&w, &h); return wxSize(w, h); }
-  virtual void GetSizeMM( long* width, long* height ) const;
+
+  // Size in millimetres
+  virtual void GetSizeMM( int* width, int* height ) const;
+  inline wxSize GetSizeMM(void) const { int w, h; GetSizeMM(&w, &h); return wxSize(w, h); }
+
+  // Resolution in pixels per logical inch
+  virtual wxSize GetPPI(void) const;
 
   virtual bool StartDoc( const wxString& WXUNUSED(message) ) { return TRUE; }
   virtual void EndDoc() {}
@@ -339,7 +346,6 @@ public:
     bool         m_autoSetting;   // wxMSW only ?
     bool         m_dontDelete;    // wxMSW only ?
     bool         m_optimize;      // wxMSW only ?
-    wxString     m_filename;      // Not sure where this belongs.
 
     wxPen        m_pen;
     wxBrush      m_brush;

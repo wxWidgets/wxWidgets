@@ -211,10 +211,17 @@ class WXDLLEXPORT wxDC: public wxObject
     virtual inline long MinY(void) const { return m_minY; }
     virtual inline long MaxY(void) const { return m_maxY; }
 
+    // Size in device units
     virtual void GetSize( int* width, int* height ) const;
     inline wxSize GetSize(void) const { int w, h; GetSize(&w, &h); return wxSize(w, h); }
-    virtual void GetSizeMM( long* width, long* height ) const;
-    
+
+    // Size in millimetres
+    virtual void GetSizeMM( int* width, int* height ) const;
+    inline wxSize GetSizeMM(void) const { int w, h; GetSizeMM(&w, &h); return wxSize(w, h); }
+
+    // Resolution in pixels per logical inch
+    wxSize GetPPI(void) const ;
+
     virtual bool StartDoc( const wxString& WXUNUSED(message) ) { return TRUE; };
     virtual void EndDoc(void) {};
     virtual void StartPage(void) {};
@@ -342,8 +349,7 @@ class WXDLLEXPORT wxDC: public wxObject
     bool         m_clipping;      // Is clipping on right now ?
     bool         m_optimize;      // wxMSW only ?
     bool         m_isInteractive; // For wxPostScriptDC
-    wxString     m_filename;      // Ditto
-    
+
     wxPen        m_pen;
     wxBrush      m_brush;
     wxBrush      m_backgroundBrush;

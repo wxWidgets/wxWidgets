@@ -39,6 +39,7 @@ LIB_CPP_SRC=\
  common/dbtable.cpp \
  common/prntbase.cpp \
  common/serbase.cpp \
+ common/paper.cpp \
  common/string.cpp \
  common/textfile.cpp \
  common/time.cpp \

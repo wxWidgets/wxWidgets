@@ -21,6 +21,7 @@
 
 #include "wx/dialog.h"
 #include "wx/module.h"
+#include "wx/cmndata.h"
 #include <fstream.h>
 
 
@@ -41,14 +42,21 @@ class WXDLLEXPORT wxPostScriptDC: public wxDC
 public:
 
   wxPostScriptDC();
+
+  // Deprecated constructor
   wxPostScriptDC(const wxString& output, bool interactive = TRUE, wxWindow *parent = (wxWindow *) NULL);
+
+  // Recommended constructor
+  wxPostScriptDC(const wxPrintData& printData);
 
   ~wxPostScriptDC();
 
+  // Deprecated
   bool Create(const wxString& output, bool interactive = TRUE, wxWindow *parent = (wxWindow *) NULL);
 
   virtual bool Ok() const;
 
+  // Deprecated: use wxGenericPrintDialog instead
   virtual bool PrinterDialog(wxWindow *parent = (wxWindow *) NULL);
 
   virtual void BeginDrawing() {}
@@ -112,7 +120,10 @@ public:
                      wxFont *theFont = (wxFont *) NULL, bool use16 = FALSE);
 
   void GetSize(int* width, int* height) const;
-  void GetSizeMM(long *width, long *height) const;
+  void GetSizeMM(int *width, int *height) const;
+
+  // Resolution in pixels per logical inch
+  wxSize GetPPI(void) const;
 
   void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
   void SetDeviceOrigin( long x, long y );
@@ -121,6 +132,9 @@ public:
   inline void SetPalette(const wxPalette& WXUNUSED(palette)) {}
 
   inline ofstream *GetStream(void) const { return m_pstream; }
+
+  inline wxPrintData& GetPrintData() { return m_printData; }
+  inline void SetPrintData(const wxPrintData& data) { m_printData = data; }
 
 protected:
 
@@ -133,9 +147,10 @@ protected:
   bool              m_clipping;
   double            m_underlinePosition;
   double            m_underlineThickness;
+  wxPrintData       m_printData;
 };
 
-// TODO Needed? Should perhaps use wxGenericPrintDialog instead.
+// Deprecated: should use wxGenericPrintDialog instead.
 #if 1
 #define wxID_PRINTER_COMMAND        1
 #define wxID_PRINTER_OPTIONS        2
@@ -166,89 +181,94 @@ enum {
 
 // Print Actions
 enum {
-  PS_PRINTER,
+  PS_NONE,
+  PS_PREVIEW,
   PS_FILE,
-  PS_PREVIEW
+  PS_PRINTER
 };// ps_action = PS_PREVIEW;
 
 // PostScript printer settings
-WXDLLEXPORT void wxSetPrinterCommand(const char *cmd);
-WXDLLEXPORT void wxSetPrintPreviewCommand(const char *cmd);
-WXDLLEXPORT void wxSetPrinterOptions(const char *flags);
+WXDLLEXPORT void wxSetPrinterCommand(const wxString& cmd);
+WXDLLEXPORT void wxSetPrintPreviewCommand(const wxString& cmd);
+WXDLLEXPORT void wxSetPrinterOptions(const wxString& flags);
 WXDLLEXPORT void wxSetPrinterOrientation(int orientation);
 WXDLLEXPORT void wxSetPrinterScaling(double x, double y);
 WXDLLEXPORT void wxSetPrinterTranslation(long x, long y);
 WXDLLEXPORT void wxSetPrinterMode(int mode);
-WXDLLEXPORT void wxSetPrinterFile(const char *f);
-WXDLLEXPORT void wxSetAFMPath(const char *f);
+WXDLLEXPORT void wxSetPrinterFile(const wxString& f);
+WXDLLEXPORT void wxSetAFMPath(const wxString& f);
 
 // Get current values
-WXDLLEXPORT char* wxGetPrinterCommand();
-WXDLLEXPORT char* wxGetPrintPreviewCommand();
-WXDLLEXPORT char* wxGetPrinterOptions();
+WXDLLEXPORT wxString wxGetPrinterCommand();
+WXDLLEXPORT wxString wxGetPrintPreviewCommand();
+WXDLLEXPORT wxString wxGetPrinterOptions();
 WXDLLEXPORT int wxGetPrinterOrientation();
 WXDLLEXPORT void wxGetPrinterScaling(double* x, double* y);
 WXDLLEXPORT void wxGetPrinterTranslation(long *x, long *y);
 WXDLLEXPORT int wxGetPrinterMode();
-WXDLLEXPORT char* wxGetPrinterFile();
-WXDLLEXPORT char* wxGetAFMPath();
+WXDLLEXPORT wxString wxGetPrinterFile();
+WXDLLEXPORT wxString wxGetAFMPath();
 
 /*
- * PostScript print setup information
+ * PostScript print setup information.
+ * This is now obsolete, but retained for a while for compatibility
  */
 
 class WXDLLEXPORT wxPrintSetupData: public wxObject
 {
 public:
-    char *printerCommand;
-    char *previewCommand;
-    char *printerFlags;
-    char *printerFile;
-    int printerOrient;
-    double printerScaleX;
-    double printerScaleY;
-    long printerTranslateX;
-    long printerTranslateY;
-    // 1 = Preview, 2 = print to file, 3 = send to printer
-    int printerMode;
-    char *afmPath;
-    // A name in the paper database (see wx_print.h: the printing framework)
-    char *paperName;
-    bool printColour;
-
-public:
     wxPrintSetupData();
     ~wxPrintSetupData();
 
-    void SetPrinterCommand(const char *cmd);
-    void SetPaperName(const char *paper);
-    void SetPrintPreviewCommand(const char *cmd);
-    void SetPrinterOptions(const char *flags);
-    void SetPrinterFile(const char *f);
-    void SetPrinterOrientation(int orient);
-    void SetPrinterScaling(double x, double y);
-    void SetPrinterTranslation(long x, long y);
+    void SetPrinterCommand(const wxString& cmd) { m_printerCommand = cmd; };
+    void SetPaperName(const wxString& paper) { m_paperName = paper; };
+    void SetPrintPreviewCommand(const wxString& cmd) { m_previewCommand = cmd; };
+    void SetPrinterOptions(const wxString& flags) { m_printerFlags = flags; };
+    void SetPrinterFile(const wxString& f) { m_printerFile = f; };
+    void SetPrinterOrientation(int orient) { m_printerOrient = orient; };
+    void SetPrinterScaling(double x, double y) { m_printerScaleX = x; m_printerScaleY = y; };
+    void SetPrinterTranslation(long x, long y) { m_printerTranslateX = x; m_printerTranslateY = y; };
     // 1 = Preview, 2 = print to file, 3 = send to printer
-    void SetPrinterMode(int mode);
-    void SetAFMPath(const char *f);
-    void SetColour(bool col);
+    void SetPrinterMode(int mode) { m_printerMode = mode; };
+    void SetAFMPath(const wxString& f) { m_afmPath = f; };
+    void SetColour(bool col) { m_printColour = col; };
 
     // Get current values
-    char *GetPrinterCommand();
-    char *GetPrintPreviewCommand();
-    char *GetPrinterOptions();
-    char *GetPrinterFile();
-    char *GetPaperName();
-    int GetPrinterOrientation();
-    void GetPrinterScaling(double* x, double* y);
-    void GetPrinterTranslation(long *x, long *y);
-    int GetPrinterMode();
-    char *GetAFMPath();
-    bool GetColour();
+    wxString GetPrinterCommand() const { return m_printerCommand; } ;
+    wxString GetPrintPreviewCommand() const { return m_previewCommand; } ;
+    wxString GetPrinterOptions() const { return m_printerFlags; };
+    wxString GetPrinterFile() const { return m_printerFile; };
+    wxString GetPaperName() const { return m_paperName; }
+    int GetPrinterOrientation() const { return m_printerOrient; };
+    void GetPrinterScaling(double* x, double* y) const { *x = m_printerScaleX; *y = m_printerScaleY; };
+    void GetPrinterTranslation(long *x, long *y) const { *x = m_printerTranslateX; *y = m_printerTranslateY; };
+    int GetPrinterMode() const { return m_printerMode; };
+    wxString GetAFMPath() const { return m_afmPath; };
+    bool GetColour() const { return m_printColour; };
 
     void operator=(wxPrintSetupData& data);
 
-private:
+    // Initialize from a wxPrintData object (wxPrintData should now be used instead of wxPrintSetupData).
+    // There is also an operator for initializing a wxPrintData from a wxPrintSetupData.
+    void operator=(const wxPrintData& data);
+
+public:
+    wxString        m_printerCommand;
+    wxString        m_previewCommand;
+    wxString        m_printerFlags;
+    wxString        m_printerFile;
+    int             m_printerOrient;
+    double          m_printerScaleX;
+    double          m_printerScaleY;
+    long            m_printerTranslateX;
+    long            m_printerTranslateY;
+    // 1 = Preview, 2 = print to file, 3 = send to printer
+    int             m_printerMode;
+    wxString        m_afmPath;
+    // A name in the paper database (see paper.h)
+    wxString        m_paperName;
+    bool            m_printColour;
+
   DECLARE_DYNAMIC_CLASS(wxPrintSetupData)
 };
 

@@ -69,6 +69,7 @@ public:
   inline wxSize(long xx, long yy) { x = xx; y = yy; }
   inline wxSize(const wxSize& sz) { x = sz.x; y = sz.y; }
   inline void operator = (const wxSize& sz) { x = sz.x; y = sz.y; }
+  inline bool operator == (const wxSize& sz) const { return (x == sz.x && y == sz.y); }
   inline wxSize operator + (const wxSize& sz) { return wxSize(x + sz.x, y + sz.y); }
   inline wxSize operator - (const wxSize& sz) { return wxSize(x - sz.x, y - sz.y); }
   inline void Set(long xx, long yy) { x = xx; y = yy; }
@@ -88,6 +89,7 @@ class WXDLLEXPORT wxRealPoint
   inline wxRealPoint operator - (const wxRealPoint& pt) { return wxRealPoint(x - pt.x, y - pt.y); }
 
   inline void operator = (const wxRealPoint& pt) { x = pt.x; y = pt.y; }
+  inline bool operator == (const wxRealPoint& pt) const { return (x == pt.x && y == pt.y); }
 };
 
 class WXDLLEXPORT wxPoint
@@ -106,6 +108,7 @@ class WXDLLEXPORT wxPoint
   wxPoint(const wxPoint& pt) { x = pt.x; y = pt.y; };
 
   inline void operator = (const wxPoint& pt) { x = pt.x; y = pt.y; }
+  inline bool operator == (const wxPoint& pt) const { return (x == pt.x && y == pt.y); }
   inline wxPoint operator + (const wxPoint& pt) { return wxPoint(x + pt.x, y + pt.y); }
   inline wxPoint operator - (const wxPoint& pt) { return wxPoint(x - pt.x, y - pt.y); }
 };

@@ -1370,6 +1370,11 @@ void wxWindowDC::DrawSpline( wxList *points )
     wx_spline_draw_point_array( this );
 }
 
+// Resolution in pixels per logical inch
+wxSize wxWindowDC::GetPPI(void) const
+{
+    return wxSize(100, 100);
+}
 
 //-----------------------------------------------------------------------------
 // wxPaintDC

@@ -762,10 +762,10 @@ void wxDocManager::OnPrintSetup(wxCommandEvent& WXUNUSED(event))
   if (view)
     parentWin = view->GetFrame();
 
-  wxPrintData data;
+  wxPrintDialogData data;
 
   wxPrintDialog printerDialog(parentWin, & data);
-  printerDialog.GetPrintData().SetSetupDialog(TRUE);
+  printerDialog.GetPrintDialogData().SetSetupDialog(TRUE);
   printerDialog.ShowModal();
 }
 

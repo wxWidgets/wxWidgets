@@ -44,12 +44,12 @@ class WXDLLEXPORT wxPrinterBase: public wxObject
   DECLARE_CLASS(wxPrinterBase)
 
 public:
-  wxPrinterBase(wxPrintData *data = (wxPrintData *) NULL);
+  wxPrinterBase(wxPrintDialogData *data = (wxPrintDialogData *) NULL);
   ~wxPrinterBase();
 
   virtual wxWindow *CreateAbortWindow(wxWindow *parent, wxPrintout *printout);
   virtual void ReportError(wxWindow *parent, wxPrintout *printout, char *message);
-  inline wxPrintData& GetPrintData() const { return (wxPrintData&) m_printData; };
+  inline wxPrintDialogData& GetPrintDialogData() const { return (wxPrintDialogData&) m_printDialogData; };
   inline bool GetAbort() const { return sm_abortIt; }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -57,10 +57,10 @@ public:
 
   virtual bool Setup(wxWindow *parent) = 0;
   virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = TRUE) = 0;
-  virtual bool PrintDialog(wxWindow *parent) = 0;
+  virtual wxDC* PrintDialog(wxWindow *parent) = 0;
 
 protected:
-  wxPrintData           m_printData;
+  wxPrintDialogData     m_printDialogData;
   wxPrintout*           m_currentPrintout;
 public:
   static wxWindow*      sm_abortWindow;
@@ -251,7 +251,7 @@ class WXDLLEXPORT wxPrintPreviewBase: public wxObject
   DECLARE_CLASS(wxPrintPreviewBase)
 
 public:
-  wxPrintPreviewBase(wxPrintout *printout, wxPrintout *printoutForPrinting = (wxPrintout *) NULL, wxPrintData *data = (wxPrintData *) NULL);
+  wxPrintPreviewBase(wxPrintout *printout, wxPrintout *printoutForPrinting = (wxPrintout *) NULL, wxPrintDialogData *data = (wxPrintDialogData *) NULL);
   ~wxPrintPreviewBase();
 
   virtual bool SetCurrentPage(int pageNum);
@@ -277,7 +277,7 @@ public:
   // a wxMemoryDC.
   virtual bool RenderPage(int pageNum);
 
-  inline wxPrintData& GetPrintData() { return m_printData; }
+  inline wxPrintDialogData& GetPrintDialogData() { return m_printDialogData; }
 
   virtual void SetZoom(int percent);
   inline int GetZoom() const { return m_currentZoom; };
@@ -302,7 +302,7 @@ public:
   virtual void DetermineScaling() = 0;
 
 protected:
-  wxPrintData       m_printData;
+  wxPrintDialogData m_printDialogData;
   wxWindow*         m_previewCanvas;
   wxFrame*          m_previewFrame;
   wxBitmap*         m_previewBitmap;
@@ -339,48 +339,6 @@ public:
 
   DECLARE_EVENT_TABLE()
 };
-
-/*
- * Again, this only really needed for non-Windows platforms
- * or if you want to test the PostScript printing under Windows,
- * or if you're using the generic page setup dialog under e.g. Win16.
- */
-
-class WXDLLEXPORT wxPrintPaperType: public wxObject
-{
-public:
-    wxPrintPaperType(const char *name = (const char *) NULL, int wmm = 0, int hmm = 0, int wp = 0, int hp = 0);
-    ~wxPrintPaperType();
-
-public:
-    int widthMM;
-    int heightMM;
-    int widthPixels;
-    int heightPixels;
-    char *pageName;
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxPrintPaperType)
-};
-
-class WXDLLEXPORT wxPrintPaperDatabase: public wxList
-{
-public:
-    wxPrintPaperDatabase();
-    ~wxPrintPaperDatabase();
-
-    void CreateDatabase();
-    void ClearDatabase();
-
-    void AddPaperType(const char *name, int wmm, int hmm, int wp, int hp);
-    wxPrintPaperType *FindPaperType(const char *name);
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxPrintPaperDatabase)
-};
-
-WXDLLEXPORT_DATA(extern wxPrintPaperDatabase*) wxThePrintPaperDatabase;
-
 
 #endif
     // _WX_PRNTBASEH__

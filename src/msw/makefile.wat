@@ -84,6 +84,7 @@ COMMONOBJS = cmndata.obj &
   date.obj &
   hash.obj &
   list.obj &
+  paper.obj &
   string.obj &
   socket.obj &
   sckaddr.obj &
@@ -627,6 +628,9 @@ hash.obj:     $(COMMDIR)\hash.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 list.obj:     $(COMMDIR)\list.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+paper.obj:     $(COMMDIR)\paper.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 string.obj:     $(COMMDIR)\string.cpp

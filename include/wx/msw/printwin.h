@@ -27,11 +27,11 @@ class WXDLLEXPORT wxWindowsPrinter: public wxPrinterBase
   DECLARE_DYNAMIC_CLASS(wxWindowsPrinter)
 
  public:
-  wxWindowsPrinter(wxPrintData *data = NULL);
+  wxWindowsPrinter(wxPrintDialogData *data = NULL);
   ~wxWindowsPrinter(void);
 
   virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = TRUE);
-  virtual bool PrintDialog(wxWindow *parent);
+  virtual wxDC* PrintDialog(wxWindow *parent);
   virtual bool Setup(wxWindow *parent);
 
  private:
@@ -48,7 +48,7 @@ class WXDLLEXPORT wxWindowsPrintPreview: public wxPrintPreviewBase
   DECLARE_CLASS(wxWindowsPrintPreview)
 
  public:
-  wxWindowsPrintPreview(wxPrintout *printout, wxPrintout *printoutForPrinting = NULL, wxPrintData *data = NULL);
+  wxWindowsPrintPreview(wxPrintout *printout, wxPrintout *printoutForPrinting = NULL, wxPrintDialogData *data = NULL);
   ~wxWindowsPrintPreview(void);
 
   virtual bool Print(bool interactive);

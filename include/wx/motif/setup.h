@@ -68,7 +68,7 @@
 /*
  * Use Threads
  */
-#define wxUSE_THREADS 1
+#define wxUSE_THREADS 0
 /*
  * Have glibc2
  */
@@ -77,6 +77,8 @@
  * Use libXpm
  */
 #define wxHAVE_LIB_XPM 0
+
+#define wxUSE_XPM 1
 
 /* ------------------------------------------------------------------------ */
 /* GUI control options (always enabled in wxGTK)                            */
@@ -199,11 +201,11 @@
 /*
  * Use tooltips
  */
-#define wxUSE_TOOLTIPS 1
+#define wxUSE_TOOLTIPS 0
 /*
  * Use dnd
  */
-#define wxUSE_DRAG_AND_DROP 1
+#define wxUSE_DRAG_AND_DROP 0
 /*
  * Use wxLibrary class
  */
@@ -387,7 +389,7 @@
 /* #undef HAVE_DOPRNT */
 
 /* Define if you have sched.h */
-#define HAVE_SCHED_H 1
+#define HAVE_SCHED_H 0
 
 /* Define if you have strings.h */
 #define HAVE_STRINGS_H 1
@@ -405,10 +407,10 @@
 #define HAVE_VSNPRINTF 1
 
 /* Define if you have usleep() */
-/* #undef HAVE_USLEEP */
+#define HAVE_USLEEP 1
 
 /* Define if you have nanosleep() */
-#define HAVE_NANOSLEEP 1
+#define HAVE_NANOSLEEP 0
 
 /* Define if you have vfork() */
 #define HAVE_VFORK 1

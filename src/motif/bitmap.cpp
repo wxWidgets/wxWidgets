@@ -197,7 +197,7 @@ bool wxBitmap::LoadFile(const wxString& filename, long type)
     wxBitmapHandler *handler = FindHandler(type);
     
     if ( handler == NULL ) {
-        wxLogWarning("no bitmap handler for type %d defined.", type);
+        wxLogWarning("%s: no bitmap handler for type %d defined.", (const char*) filename, type);
         
         return FALSE;
     }
@@ -214,7 +214,7 @@ bool wxBitmap::Create(void *data, long type, int width, int height, int depth)
     wxBitmapHandler *handler = FindHandler(type);
     
     if ( handler == NULL ) {
-        wxLogWarning("no bitmap handler for type %d defined.", type);
+        wxLogWarning("no data bitmap handler for type %d defined.", type);
         
         return FALSE;
     }
@@ -790,7 +790,7 @@ void wxBitmap::InitStandardHandlers()
     AddHandler(new wxXBMFileHandler);
     AddHandler(new wxXBMDataHandler);
     
-    // XPM is considered standard for Moif, although it can be omitted if absolutely
+    // XPM is considered standard for Motif, although it can be omitted if absolutely
     // necessary.
 #if wxUSE_XPM
     AddHandler(new wxXPMFileHandler);

@@ -36,9 +36,9 @@ class WXDLLEXPORT wxRadioBox;
 class WXDLLEXPORT wxPrintSetupData;
 
 /*
- * Simulated Print and Print Setup dialogs
- * for non-Windows platforms (and Windows using PostScript print/preview)
- */
+* Simulated Print and Print Setup dialogs
+* for non-Windows platforms (and Windows using PostScript print/preview)
+*/
 
 #define wxPRINTID_STATIC        10
 #define wxPRINTID_RANGE         11
@@ -50,36 +50,39 @@ class WXDLLEXPORT wxPrintSetupData;
 
 class WXDLLEXPORT wxGenericPrintDialog: public wxDialog
 {
-  DECLARE_DYNAMIC_CLASS(wxGenericPrintDialog)
+    DECLARE_DYNAMIC_CLASS(wxGenericPrintDialog)
+        
+public:
+    wxGenericPrintDialog(wxWindow *parent, wxPrintDialogData* data = (wxPrintDialogData*) NULL);
+    ~wxGenericPrintDialog();
 
- public:
-  wxStaticText  *printerMessage;
-  wxButton   *setupButton;
-  wxButton   *helpButton;
-  wxRadioBox *rangeRadioBox;
-  wxTextCtrl     *fromText;
-  wxTextCtrl     *toText;
-  wxTextCtrl     *noCopiesText;
-  wxCheckBox *printToFileCheckBox;
-  wxCheckBox *collateCopiesCheckBox;
+    void OnSetup(wxCommandEvent& event);
+    void OnRange(wxCommandEvent& event);
+    void OnOK(wxCommandEvent& event);
+    
+    virtual bool TransferDataFromWindow();
+    virtual bool TransferDataToWindow();
 
-  wxPrintData printData;
-  wxGenericPrintDialog(wxWindow *parent, wxPrintData* data);
-  ~wxGenericPrintDialog(void);
+    virtual int ShowModal();
 
-  void OnSetup(wxCommandEvent& event);
-  void OnRange(wxCommandEvent& event);
-  void OnOK(wxCommandEvent& event);
+    inline wxPrintDialogData& GetPrintDialogData() { return m_printDialogData; }
+    wxDC *GetPrintDC();
 
-  virtual bool TransferDataFromWindow(void);
-  virtual bool TransferDataToWindow(void);
-
-  virtual int ShowModal(void);
-
-  inline wxPrintData& GetPrintData(void) { return printData; }
-  wxDC *GetPrintDC(void);
-
-DECLARE_EVENT_TABLE()
+public:
+    wxStaticText*       m_printerMessage;
+    wxButton*           m_setupButton;
+    wxButton*           m_helpButton;
+    wxRadioBox*         m_rangeRadioBox;
+    wxTextCtrl*         m_fromText;
+    wxTextCtrl*         m_toText;
+    wxTextCtrl*         m_noCopiesText;
+    wxCheckBox*         m_printToFileCheckBox;
+    wxCheckBox*         m_collateCopiesCheckBox;
+    
+    wxPrintDialogData   m_printDialogData;
+    
+    
+    DECLARE_EVENT_TABLE()
 };
 
 #define wxPRINTID_PRINTCOLOUR       10
@@ -90,27 +93,34 @@ DECLARE_EVENT_TABLE()
 
 class WXDLLEXPORT wxGenericPrintSetupDialog: public wxDialog
 {
-  DECLARE_CLASS(wxGenericPrintSetupDialog)
+    DECLARE_CLASS(wxGenericPrintSetupDialog)
+        
+public:
+    // There are no configuration options for the dialog, so we
+    // just pass the wxPrintData object (no wxPrintSetupDialogData class needed)
+    wxGenericPrintSetupDialog(wxWindow *parent, wxPrintData* data);
+    wxGenericPrintSetupDialog(wxWindow *parent, wxPrintSetupData* data);
+    ~wxGenericPrintSetupDialog();
 
- public:
-  wxRadioBox *orientationRadioBox;
-  wxTextCtrl     *printerCommandText;
-  wxTextCtrl     *printerOptionsText;
-  wxCheckBox *colourCheckBox;
-  wxChoice   *paperTypeChoice;
+    void Init(wxPrintData* data);
 
+    virtual bool TransferDataFromWindow();
+    virtual bool TransferDataToWindow();
+
+    wxChoice *CreatePaperTypeChoice(int* x, int* y);
+    
+public:
+    wxRadioBox*         m_orientationRadioBox;
+    wxTextCtrl*         m_printerCommandText;
+    wxTextCtrl*         m_printerOptionsText;
+    wxCheckBox*         m_colourCheckBox;
+    wxChoice*           m_paperTypeChoice;
+    
 #if wxUSE_POSTSCRIPT
-  wxPrintSetupData printData;
-  inline wxPrintSetupData& GetPrintData(void) { return printData; }
+    wxPrintData         m_printData;
+    inline wxPrintData& GetPrintData() { return m_printData; }
 #endif
-
-  wxGenericPrintSetupDialog(wxWindow *parent, wxPrintSetupData* data);
-  ~wxGenericPrintSetupDialog(void);
-
-  virtual bool TransferDataFromWindow(void);
-  virtual bool TransferDataToWindow(void);
-
-  wxChoice *CreatePaperTypeChoice(int* x, int* y);
+    
 };
 
 #define wxPRINTID_LEFTMARGIN         30
@@ -120,34 +130,35 @@ class WXDLLEXPORT wxGenericPrintSetupDialog: public wxDialog
 
 class WXDLLEXPORT wxGenericPageSetupDialog: public wxDialog
 {
-  DECLARE_CLASS(wxGenericPageSetupDialog)
+    DECLARE_CLASS(wxGenericPageSetupDialog)
+        
+public:
+    wxGenericPageSetupDialog(wxWindow *parent, wxPageSetupData* data = (wxPageSetupData*) NULL);
+    ~wxGenericPageSetupDialog();
 
- public:
-  wxButton   *printerButton;
-  wxRadioBox *orientationRadioBox;
-  wxTextCtrl     *marginLeftText;
-  wxTextCtrl     *marginTopText;
-  wxTextCtrl     *marginRightText;
-  wxTextCtrl     *marginBottomText;
-  wxChoice   *paperTypeChoice;
+    virtual bool TransferDataFromWindow();
+    virtual bool TransferDataToWindow();
 
-  static bool pageSetupDialogCancelled;
-  
-  wxPageSetupData pageData;
+    void OnPrinter(wxCommandEvent& event);
+    
+    wxChoice *CreatePaperTypeChoice(int* x, int* y);
+    inline wxPageSetupData& GetPageSetupData() { return m_pageData; }
 
-  wxGenericPageSetupDialog(wxWindow *parent, wxPageSetupData* data = (wxPageSetupData*) NULL);
-  ~wxGenericPageSetupDialog(void);
-
-  virtual bool TransferDataFromWindow(void);
-  virtual bool TransferDataToWindow(void);
-
-  void OnPrinter(wxCommandEvent& event);
-
-  wxChoice *CreatePaperTypeChoice(int* x, int* y);
-  inline wxPageSetupData& GetPageSetupData(void) { return pageData; }
-
-DECLARE_EVENT_TABLE()
+public:
+    wxButton*       m_printerButton;
+    wxRadioBox*     m_orientationRadioBox;
+    wxTextCtrl*     m_marginLeftText;
+    wxTextCtrl*     m_marginTopText;
+    wxTextCtrl*     m_marginRightText;
+    wxTextCtrl*     m_marginBottomText;
+    wxChoice*       m_paperTypeChoice;
+    
+    static bool     m_pageSetupDialogCancelled;
+    
+    wxPageSetupData m_pageData;
+    
+    DECLARE_EVENT_TABLE()
 };
 
 #endif
-    // __PRINTDLGH_G__
+// __PRINTDLGH_G__

@@ -172,6 +172,9 @@ class WXDLLEXPORT wxWindowDC: public wxDC
     virtual void DrawSpline( int n, wxPoint points[] )
     { wxDC::DrawSpline(n, points); }
 
+    // Resolution in pixels per logical inch
+    wxSize GetPPI(void) const;
+
     // Motif-specific
     void SetDCClipping (); // Helper function for setting clipping
 

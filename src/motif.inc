@@ -35,6 +35,7 @@ LIB_CPP_SRC=\
  common/mimetype.cpp \
  common/module.cpp \
  common/object.cpp \
+ common/paper.cpp \
  common/prntbase.cpp \
  common/resource.cpp \
  common/serbase.cpp \

@@ -116,6 +116,7 @@ COMMONOBJS = \
   $(COMMDIR)\hash.obj \
   $(COMMDIR)\list.obj \
   $(COMMDIR)\variant.obj \
+  $(COMMDIR)\paper.obj \
   $(COMMDIR)\string.obj \
   $(COMMDIR)\time.obj \
   $(COMMDIR)\y_tab.obj \
@@ -869,6 +870,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(COMMDIR)/variant.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(COMMDIR)/paper.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

@@ -92,6 +92,9 @@ public:
 
   virtual void DrawSpline( wxList *points );
 
+  // Resolution in pixels per logical inch
+  wxSize GetPPI(void) const;
+
   // implementation
 
   GdkWindow    *m_window;

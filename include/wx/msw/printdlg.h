@@ -29,24 +29,23 @@ class WXDLLEXPORT wxPrintDialog: public wxDialog
 {
   DECLARE_DYNAMIC_CLASS(wxPrintDialog)
 
- private:
-  wxPrintData printData;
-  wxDC *printerDC;
-  bool destroyDC;
-  char *deviceName;
-  char *driverName;
-  char *portName;
-  wxWindow *dialogParent;
- public:
+public:
   wxPrintDialog(void);
-  wxPrintDialog(wxWindow *parent, wxPrintData* data = NULL);
+  wxPrintDialog(wxWindow *parent, wxPrintDialogData* data = NULL);
   ~wxPrintDialog(void);
 
-  bool Create(wxWindow *parent, wxPrintData* data = NULL);
+  bool Create(wxWindow *parent, wxPrintDialogData* data = NULL);
   virtual int ShowModal(void);
 
-  inline wxPrintData& GetPrintData(void) { return printData; }
+  inline wxPrintDialogData& GetPrintDialogData(void) { return m_printDialogData; }
+  inline wxPrintData& GetPrintData(void) { return m_printDialogData.GetPrintData(); }
   virtual wxDC *GetPrintDC(void);
+
+private:
+  wxPrintDialogData m_printDialogData;
+  wxDC*             m_printerDC;
+  bool              m_destroyDC;
+  wxWindow*         m_dialogParent;
 };
 
 class WXDLLEXPORT wxPageSetupDialog: public wxDialog

@@ -50,112 +50,101 @@ IMPLEMENT_CLASS(wxPageSetupDialog, wxDialog)
 #endif
 
 wxPrintDialog::wxPrintDialog(void):
- wxDialog()
+wxDialog()
 {
-  dialogParent = NULL;
-  printerDC = NULL;
-  destroyDC = TRUE;
-  deviceName = NULL;
-  driverName = NULL;
-  portName = NULL;
+    m_dialogParent = NULL;
+    m_printerDC = NULL;
+    m_destroyDC = TRUE;
 }
 
-wxPrintDialog::wxPrintDialog(wxWindow *p, wxPrintData* data):
- wxDialog()
+wxPrintDialog::wxPrintDialog(wxWindow *p, wxPrintDialogData* data):
+wxDialog()
 {
-  Create(p, data);
+    Create(p, data);
 }
 
-bool wxPrintDialog::Create(wxWindow *p, wxPrintData* data)
+bool wxPrintDialog::Create(wxWindow *p, wxPrintDialogData* data)
 {
-  dialogParent = p;
-  printerDC = NULL;
-  destroyDC = TRUE;
-  deviceName = NULL;
-  driverName = NULL;
-  portName = NULL;
+    m_dialogParent = p;
+    m_printerDC = NULL;
+    m_destroyDC = TRUE;
 
-  if ( data )
-    printData = *data;
+    if ( data )
+        m_printDialogData = *data;
+    
+    m_printDialogData.SetOwnerWindow(p);
 
-#ifdef __WXMSW__
-  printData.SetOwnerWindow(p);
-#endif
-
-  return TRUE;
+    return TRUE;
 }
 
 wxPrintDialog::~wxPrintDialog(void)
 {
-  if (destroyDC && printerDC)
-    delete printerDC;
-  if (deviceName) delete[] deviceName;
-  if (driverName) delete[] driverName;
-  if (portName) delete[] portName;
+    if (m_destroyDC && m_printerDC)
+        delete m_printerDC;
 }
 
 int wxPrintDialog::ShowModal(void)
 {
-  printData.ConvertToNative();
-
-  bool ret = (PrintDlg( (PRINTDLG *)printData.printData ) != 0);
-  if ( ret != FALSE && ((PRINTDLG *)printData.printData)->hDC)
-  {
-    wxPrinterDC *pdc = new wxPrinterDC((WXHDC) ((PRINTDLG *)printData.printData)->hDC);
-    printerDC = pdc;
-    printData.ConvertFromNative();
-    return wxID_OK;
-  }
-  else
-  {
-/*
-      char buf[256];
-      DWORD exError = CommDlgExtendedError();
-      sprintf(buf, "ret = %d, ex error = %d", (int) ret, (int) exError);
-      wxMessageBox(buf);
-*/
-      return wxID_CANCEL;
-  }
+    m_printDialogData.ConvertToNative();
+    
+    bool ret = (PrintDlg( (PRINTDLG *)m_printDialogData.GetNativeData() ) != 0);
+    if ( ret != FALSE && ((PRINTDLG *)m_printDialogData.GetNativeData())->hDC)
+    {
+        wxPrinterDC *pdc = new wxPrinterDC((WXHDC) ((PRINTDLG *)m_printDialogData.GetNativeData())->hDC);
+        m_printerDC = pdc;
+        m_printDialogData.ConvertFromNative();
+        return wxID_OK;
+    }
+    else
+    {
+    /*
+    char buf[256];
+    DWORD exError = CommDlgExtendedError();
+    sprintf(buf, "ret = %d, ex error = %d", (int) ret, (int) exError);
+    wxMessageBox(buf);
+        */
+        return wxID_CANCEL;
+    }
 }
 
 wxDC *wxPrintDialog::GetPrintDC(void)
 {
-  if (printerDC)
-  {
-    destroyDC = FALSE;
-    return printerDC;
-  }
-  else
-    return NULL;
+    if (m_printerDC)
+    {
+        m_destroyDC = FALSE;
+        return m_printerDC;
+    }
+    else
+        return (wxDC*) NULL;
 }
 
 /*
- * wxPageSetupDialog
- */
+* wxPageSetupDialog
+*/
 
 wxPageSetupDialog::wxPageSetupDialog(void):
- wxDialog()
+wxDialog()
 {
-  m_dialogParent = NULL;
+    m_dialogParent = NULL;
 }
 
 wxPageSetupDialog::wxPageSetupDialog(wxWindow *p, wxPageSetupData *data):
- wxDialog()
+wxDialog()
 {
-  Create(p, data);
+    Create(p, data);
 }
 
 bool wxPageSetupDialog::Create(wxWindow *p, wxPageSetupData *data)
 {
-  m_dialogParent = p;
-
-  if (data)
-    m_pageSetupData = (*data);
-
+    m_dialogParent = p;
+    
+    if (data)
+        m_pageSetupData = (*data);
+    
 #if defined(__WIN95__)
-  m_pageSetupData.SetOwnerWindow(p);
+    m_pageSetupData.SetOwnerWindow(p);
 #endif
-  return TRUE;
+    return TRUE;
 }
 
 wxPageSetupDialog::~wxPageSetupDialog(void)
@@ -168,11 +157,11 @@ int wxPageSetupDialog::ShowModal(void)
     m_pageSetupData.ConvertToNative();
     if (PageSetupDlg( (PAGESETUPDLG *)m_pageSetupData.GetNativeData() ))
     {
-      m_pageSetupData.ConvertFromNative();
-      return wxID_OK;
+        m_pageSetupData.ConvertFromNative();
+        return wxID_OK;
     }
     else
-      return wxID_CANCEL;
+        return wxID_CANCEL;
 #else
     wxGenericPageSetupDialog *genericPageSetupDialog = new wxGenericPageSetupDialog(GetParent(), & m_pageSetupData);
     int ret = genericPageSetupDialog->ShowModal();

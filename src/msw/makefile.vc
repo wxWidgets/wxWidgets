@@ -135,6 +135,7 @@ COMMONOBJS = \
   ..\common\$D\date.obj \
   ..\common\$D\hash.obj \
   ..\common\$D\list.obj \
+  ..\common\$D\paper.obj \
   ..\common\$D\string.obj \
   ..\common\$D\socket.obj \
   ..\common\$D\sckaddr.obj \

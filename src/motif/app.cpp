@@ -29,7 +29,9 @@
 #include "wx/module.h"
 #include "wx/memory.h"
 
+#if wxUSE_THREADS
 #include "wx/thread.h"
+#endif
 
 #if wxUSE_WX_RESOURCES
     #include "wx/resource.h"
@@ -297,11 +299,13 @@ int wxApp::MainLoop()
         {
             if (!ProcessIdle())
             {
+#if wxUSE_THREADS
                 // leave the main loop to give other threads a chance to
                 // perform their GUI work
                 wxMutexGuiLeave();
                 wxUsleep(20);
                 wxMutexGuiEnter();
+#endif
             }
         }
 
@@ -509,8 +513,9 @@ bool wxApp::OnInitGui()
         argv);
 
     if (!dpy) {
+        wxString className(wxTheApp->GetClassName());
         wxLogError(_("wxWindows could not open display for '%s': exiting."),
-                   wxTheApp->GetClassName());
+                   (const char*) className);
         exit(-1);
     }
     m_initialDisplay = (WXDisplay*) dpy;

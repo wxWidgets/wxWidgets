@@ -1,6 +1,10 @@
 \section{\class{wxPrintData}}\label{wxprintdata}
 
-This class holds a variety of information related to print dialogs.
+This class holds a variety of information related to printers and
+printer device contexts. This class is used to create a wxPrinterDC
+and a wxPostScriptDC. It is also used as a data member of wxPrintDialogData
+and wxPageSetupDialogData, as part of the mechanism for transferring data
+between the print dialogs and the application.
 
 \wxheading{Derived from}
 
@@ -12,7 +16,45 @@ This class holds a variety of information related to print dialogs.
 
 \wxheading{See also}
 
-\helpref{wxPrintDialog}{wxprintdialog}, \helpref{wxPrintDialog Overview}{wxprintdialogoverview}
+\helpref{wxPrintDialog}{wxprintdialog}, 
+\helpref{wxPageSetupDialog}{wxpagesetupdialog}, 
+\helpref{wxPrintDialogData}{wxprintdialogdata}, 
+\helpref{wxPageSetupDialogData}{wxpagesetupdialogdata}, 
+\helpref{wxPrintDialog Overview}{wxprintdialogoverview}, 
+\helpref{wxPrinterDC}{wxprinterdc}, 
+\helpref{wxPostScriptDC}{wxpostscriptdc}
+
+\wxheading{Remarks}
+
+The following functions are specific to PostScript printing
+and have not yet been documented:
+
+\begin{verbatim}
+const wxString& GetPrinterCommand() const ;
+const wxString& GetPrinterOptions() const ;
+const wxString& GetPreviewCommand() const ;
+const wxString& GetFilename() const ;
+const wxString& GetFontMetricPath() const ;
+double GetPrinterScaleX() const ;
+double GetPrinterScaleY() const ;
+long GetPrinterTranslateX() const ;
+long GetPrinterTranslateY() const ;
+// wxPRINT_MODE_PREVIEW, wxPRINT_MODE_FILE, wxPRINT_MODE_PRINTER
+wxPrintMode GetPrintMode() const ;
+
+void SetPrinterCommand(const wxString& command) ;
+void SetPrinterOptions(const wxString& options) ;
+void SetPreviewCommand(const wxString& command) ;
+void SetFilename(const wxString& filename) ;
+void SetFontMetricPath(const wxString& path) ;
+void SetPrinterScaleX(double x) ;
+void SetPrinterScaleY(double y) ;
+void SetPrinterScaling(double x, double y) ;
+void SetPrinterTranslateX(long x) ;
+void SetPrinterTranslateY(long y) ;
+void SetPrinterTranslation(long x, long y) ;
+void SetPrintMode(wxPrintMode printMode) ;
+\end{verbatim}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -20,7 +62,11 @@ This class holds a variety of information related to print dialogs.
 
 \func{}{wxPrintData}{\void}
 
-Constructor.
+Default constructor.
+
+\func{}{wxPrintData}{\param{const wxPrintData\&}{ data}}
+
+Copy constructor.
 
 \membersection{wxPrintData::\destruct{wxPrintData}}
 
@@ -28,107 +74,83 @@ Constructor.
 
 Destructor.
 
-\membersection{wxPrintData::EnableHelp}\label{wxprintdataenablehelp}
-
-\func{void}{EnableHelp}{\param{bool }{flag}}
-
-Enables or disables the `Help' button.
-
-\membersection{wxPrintData::EnablePageNumbers}\label{wxprintdataenablepagenumbers}
-
-\func{void}{EnablePageNumbers}{\param{bool }{flag}}
-
-Enables or disables the `Page numbers' controls.
-
-\membersection{wxPrintData::EnablePrintToFile}\label{wxprintdataenableprinttofile}
-
-\func{void}{EnablePrintToFile}{\param{bool }{flag}}
-
-Enables or disables the `Print to file' checkbox.
-
-\membersection{wxPrintData::EnableSelection}\label{wxprintdataenableselection}
-
-\func{void}{EnableSelection}{\param{bool }{flag}}
-
-Enables or disables the `Selection' radio button.
-
-\membersection{wxPrintData::GetAllPages}\label{wxprintdatagetallpages}
-
-\func{bool}{GetAllPages}{\void}
-
-Returns TRUE if the user requested that all pages be printed.
-
 \membersection{wxPrintData::GetCollate}\label{wxprintdatagetcollate}
 
-\func{bool}{GetCollate}{\void}
+\constfunc{bool}{GetCollate}{\void}
 
-Returns TRUE if the user requested that the document(s) be collated.
+Returns TRUE if collation is on.
 
-\membersection{wxPrintData::GetFromPage}\label{wxprintdatagetfrompage}
+\membersection{wxPrintData::GetColour}\label{wxprintdatagetcolour}
 
-\func{int}{GetFromPage}{\void}
+\constfunc{bool}{GetColour}{\void}
 
-Returns the {\it from} page number, as entered by the user.
+Returns TRUE if colour printing is on.
 
-\membersection{wxPrintData::GetMaxPage}\label{wxprintdatagetmaxpage}
+\membersection{wxPrintData::GetDuplex}\label{wxprintdatagetduplex}
 
-\func{int}{GetMaxPage}{\void}
+\constfunc{wxDuplexMode}{GetDuplex}{\void}
 
-Returns the {\it maximum} page number.
-
-\membersection{wxPrintData::GetMinPage}\label{wxprintdatagetminpage}
-
-\func{int}{GetMinPage}{\void}
-
-Returns the {\it minimum} page number.
+Returns the duplex mode. One of wxDUPLEX\_SIMPLEX, wxDUPLEX\_HORIZONTAL, wxDUPLEX\_VERTICAL.
 
 \membersection{wxPrintData::GetNoCopies}\label{wxprintdatagetnocopies}
 
-\func{int}{GetNoCopies}{\void}
+\constfunc{int}{GetNoCopies}{\void}
 
 Returns the number of copies requested by the user.
 
 \membersection{wxPrintData::GetOrientation}\label{wxprintdatagetorientation}
 
-\func{int}{GetOrientation}{\void}
+\constfunc{int}{GetOrientation}{\void}
 
 Gets the orientation. This can be wxLANDSCAPE or wxPORTRAIT.
 
-\membersection{wxPrintData::GetToPage}\label{wxprintdatagettopage}
+\membersection{wxPrintData::GetPaperId}\label{wxprintdatagetpaperid}
 
-\func{int}{GetToPage}{\void}
+\constfunc{wxPaperSize}{GetPaperId}{\void}
 
-Returns the {\it to} page number, as entered by the user.
+Returns the paper size id. For more information, see \helpref{wxPrintData::SetPaperId}{wxprintdatasetpaperid}.
+
+\membersection{wxPrintData::GetPrinterName}\label{wxprintdatagetprintername}
+
+\constfunc{const wxString\&}{GetPrinterName}{\void}
+
+Returns the printer name. If the printer name is the empty string, it indicates that the default
+printer should be used.
+
+\membersection{wxPrintData::GetQuality}\label{wxprintdatagetquality}
+
+\constfunc{wxPaperQuality}{GetQuality}{\void}
+
+Returns the current print quality. This can be a positive integer, denoting the number of dots per inch, or
+one of the following identifiers:
+
+\begin{verbatim}
+wxPRINT\_QUALITY\_HIGH
+wxPRINT\_QUALITY\_MEDIUM
+wxPRINT\_QUALITY\_LOW
+wxPRINT\_QUALITY\_DRAFT
+\end{verbatim}
+
+On input you should pass one of these identifiers, but on return you may get back a positive integer
+indicating the current resolution setting.
 
 \membersection{wxPrintData::SetCollate}\label{wxprintdatasetcollate}
 
 \func{void}{SetCollate}{\param{bool }{flag}}
 
-Sets the 'Collate' checkbox to TRUE or FALSE.
+Sets collation to on or off.
 
-\membersection{wxPrintData::SetFromPage}\label{wxprintdatasetfrompage}
+\membersection{wxPrintData::SetColour}\label{wxprintdatasetcolour}
 
-\func{void}{SetFromPage}{\param{int }{page}}
+\func{void}{SetColour}{\param{bool }{flag}}
 
-Sets the {\it from} page number.
+Sets colour printing on or off.
 
-\membersection{wxPrintData::SetMaxPage}\label{wxprintdatasetmaxpage}
+\membersection{wxPrintData::SetDuplex}\label{wxprintdatasetduplex}
 
-\func{void}{SetMaxPage}{\param{int }{page}}
+\func{void}{SetDuplex}{\param{wxDuplexMode}{ mode}}
 
-Sets the {\it maximum} page number.
-
-\membersection{wxPrintData::SetMinPage}\label{wxprintdatasetminpage}
-
-\func{void}{SetMinPage}{\param{int }{page}}
-
-Sets the {\it minimum} page number.
-
-\membersection{wxPrintData::SetOrientation}\label{wxprintdatasetorientation}
-
-\func{void}{SetOrientation}{\param{int }{orientation}}
-
-Sets the orientation. This can be wxLANDSCAPE or wxPORTRAIT.
+Returns the duplex mode. One of wxDUPLEX\_SIMPLEX, wxDUPLEX\_HORIZONTAL, wxDUPLEX\_VERTICAL.
 
 \membersection{wxPrintData::SetNoCopies}\label{wxprintdatasetnocopies}
 
@@ -136,27 +158,129 @@ Sets the orientation. This can be wxLANDSCAPE or wxPORTRAIT.
 
 Sets the default number of copies to be printed out.
 
-\membersection{wxPrintData::SetPrintToFile}\label{wxprintdatasetprinttofile}
+\membersection{wxPrintData::SetOrientation}\label{wxprintdatasetorientation}
 
-\func{void}{SetPrintToFile}{\param{bool }{flag}}
+\func{void}{SetOrientation}{\param{int }{orientation}}
 
-Sets the 'Print to file' checkbox to TRUE or FALSE.
+Sets the orientation. This can be wxLANDSCAPE or wxPORTRAIT.
 
-\membersection{wxPrintData::SetSetupDialog}\label{wxprintdatasetsetupdialog}
+\membersection{wxPrintData::SetPaperId}\label{wxprintdatasetpaperid}
 
-\func{void}{SetSetupDialog}{\param{bool }{flag}}
+\func{void}{SetPaperId}{\param{wxPaperSize}{ paperId}}
 
-Determines whether the dialog to be shown will be the Print dialog
-(pass FALSE) or Print Setup dialog (pass TRUE).
+\index{wxPaperSize}Sets the paper id. This indicates the type of paper to be used. For a mapping between
+paper id, paper size and string name, see wxPrintPaperDatabase in {\tt paper.h} (not yet documented).
 
-Note that the setup dialog is obsolete from
-Windows 95, though retained for backward compatibility.
+{\it paperId} can be one of:
 
-\membersection{wxPrintData::SetToPage}\label{wxprintdatasettopage}
+{\small
+\begin{verbatim}
+    wxPAPER_NONE,               // Use specific dimensions
+    wxPAPER_LETTER,             // Letter, 8 1/2 by 11 inches
+    wxPAPER_LEGAL,              // Legal, 8 1/2 by 14 inches
+    wxPAPER_A4,                 // A4 Sheet, 210 by 297 millimeters
+    wxPAPER_CSHEET,             // C Sheet, 17 by 22 inches
+    wxPAPER_DSHEET,             // D Sheet, 22 by 34 inches
+    wxPAPER_ESHEET,             // E Sheet, 34 by 44 inches
+    wxPAPER_LETTERSMALL,        // Letter Small, 8 1/2 by 11 inches
+    wxPAPER_TABLOID,            // Tabloid, 11 by 17 inches
+    wxPAPER_LEDGER,             // Ledger, 17 by 11 inches
+    wxPAPER_STATEMENT,          // Statement, 5 1/2 by 8 1/2 inches
+    wxPAPER_EXECUTIVE,          // Executive, 7 1/4 by 10 1/2 inches
+    wxPAPER_A3,                 // A3 sheet, 297 by 420 millimeters
+    wxPAPER_A4SMALL,            // A4 small sheet, 210 by 297 millimeters
+    wxPAPER_A5,                 // A5 sheet, 148 by 210 millimeters
+    wxPAPER_B4,                 // B4 sheet, 250 by 354 millimeters
+    wxPAPER_B5,                 // B5 sheet, 182-by-257-millimeter paper
+    wxPAPER_FOLIO,              // Folio, 8-1/2-by-13-inch paper
+    wxPAPER_QUARTO,             // Quarto, 215-by-275-millimeter paper
+    wxPAPER_10X14,              // 10-by-14-inch sheet
+    wxPAPER_11X17,              // 11-by-17-inch sheet
+    wxPAPER_NOTE,               // Note, 8 1/2 by 11 inches
+    wxPAPER_ENV_9,              // #9 Envelope, 3 7/8 by 8 7/8 inches
+    wxPAPER_ENV_10,             // #10 Envelope, 4 1/8 by 9 1/2 inches
+    wxPAPER_ENV_11,             // #11 Envelope, 4 1/2 by 10 3/8 inches
+    wxPAPER_ENV_12,             // #12 Envelope, 4 3/4 by 11 inches
+    wxPAPER_ENV_14,             // #14 Envelope, 5 by 11 1/2 inches
+    wxPAPER_ENV_DL,             // DL Envelope, 110 by 220 millimeters
+    wxPAPER_ENV_C5,             // C5 Envelope, 162 by 229 millimeters
+    wxPAPER_ENV_C3,             // C3 Envelope, 324 by 458 millimeters
+    wxPAPER_ENV_C4,             // C4 Envelope, 229 by 324 millimeters
+    wxPAPER_ENV_C6,             // C6 Envelope, 114 by 162 millimeters
+    wxPAPER_ENV_C65,            // C65 Envelope, 114 by 229 millimeters
+    wxPAPER_ENV_B4,             // B4 Envelope, 250 by 353 millimeters
+    wxPAPER_ENV_B5,             // B5 Envelope, 176 by 250 millimeters
+    wxPAPER_ENV_B6,             // B6 Envelope, 176 by 125 millimeters
+    wxPAPER_ENV_ITALY,          // Italy Envelope, 110 by 230 millimeters
+    wxPAPER_ENV_MONARCH,        // Monarch Envelope, 3 7/8 by 7 1/2 inches
+    wxPAPER_ENV_PERSONAL,       // 6 3/4 Envelope, 3 5/8 by 6 1/2 inches
+    wxPAPER_FANFOLD_US,         // US Std Fanfold, 14 7/8 by 11 inches
+    wxPAPER_FANFOLD_STD_GERMAN, // German Std Fanfold, 8 1/2 by 12 inches
+    wxPAPER_FANFOLD_LGL_GERMAN, // German Legal Fanfold, 8 1/2 by 13 inches
 
-\func{void}{SetToPage}{\param{int }{page}}
+Windows 95 only:
+    wxPAPER_ISO_B4,             // B4 (ISO) 250 x 353 mm
+    wxPAPER_JAPANESE_POSTCARD,  // Japanese Postcard 100 x 148 mm
+    wxPAPER_9X11,               // 9 x 11 in
+    wxPAPER_10X11,              // 10 x 11 in
+    wxPAPER_15X11,              // 15 x 11 in
+    wxPAPER_ENV_INVITE,         // Envelope Invite 220 x 220 mm
+    wxPAPER_LETTER_EXTRA,       // Letter Extra 9 \275 x 12 in
+    wxPAPER_LEGAL_EXTRA,        // Legal Extra 9 \275 x 15 in
+    wxPAPER_TABLOID_EXTRA,      // Tabloid Extra 11.69 x 18 in
+    wxPAPER_A4_EXTRA,           // A4 Extra 9.27 x 12.69 in
+    wxPAPER_LETTER_TRANSVERSE,  // Letter Transverse 8 \275 x 11 in
+    wxPAPER_A4_TRANSVERSE,      // A4 Transverse 210 x 297 mm
+    wxPAPER_LETTER_EXTRA_TRANSVERSE, // Letter Extra Transverse 9\275 x 12 in
+    wxPAPER_A_PLUS,             // SuperA/SuperA/A4 227 x 356 mm
+    wxPAPER_B_PLUS,             // SuperB/SuperB/A3 305 x 487 mm
+    wxPAPER_LETTER_PLUS,        // Letter Plus 8.5 x 12.69 in
+    wxPAPER_A4_PLUS,            // A4 Plus 210 x 330 mm
+    wxPAPER_A5_TRANSVERSE,      // A5 Transverse 148 x 210 mm
+    wxPAPER_B5_TRANSVERSE,      // B5 (JIS) Transverse 182 x 257 mm
+    wxPAPER_A3_EXTRA,           // A3 Extra 322 x 445 mm
+    wxPAPER_A5_EXTRA,           // A5 Extra 174 x 235 mm
+    wxPAPER_B5_EXTRA,           // B5 (ISO) Extra 201 x 276 mm
+    wxPAPER_A2,                 // A2 420 x 594 mm
+    wxPAPER_A3_TRANSVERSE,      // A3 Transverse 297 x 420 mm
+    wxPAPER_A3_EXTRA_TRANSVERSE // A3 Extra Transverse 322 x 445 mm
+\end{verbatim}
+}
 
-Sets the {\it to} page number.
+\membersection{wxPrintData::SetPrinterName}\label{wxprintdatasetprintername}
+
+\func{void}{SetPrinterName}{\param{const wxString\& }{printerName}}
+
+Sets the printer name. This can be the empty string to indicate that the default
+printer should be used.
+
+\membersection{wxPrintData::SetQuality}\label{wxprintdatasetquality}
+
+\func{void}{SetQuality}{\param{wxPaperQuality}{ quality}}
+
+Sets the desired print quality. This can be a positive integer, denoting the number of dots per inch, or
+one of the following identifiers:
+
+\begin{verbatim}
+wxPRINT\_QUALITY\_HIGH
+wxPRINT\_QUALITY\_MEDIUM
+wxPRINT\_QUALITY\_LOW
+wxPRINT\_QUALITY\_DRAFT
+\end{verbatim}
+
+On input you should pass one of these identifiers, but on return you may get back a positive integer
+indicating the current resolution setting.
+
+\membersection{wxPrintData::operator $=$}\label{wxprintdataassign}
+
+\func{void}{operator $=$}{\param{const wxPrintData\&}{ data}}
+
+Assigns print data to this object.
+
+\func{void}{operator $=$}{\param{const wxPrintSetupData\&}{ data}}
+
+Assigns print setup data to this object. wxPrintSetupData is deprecated,
+but retained for backward compatibility.
 
 \section{\class{wxPrintDialog}}\label{wxprintdialog}
 
@@ -183,14 +307,14 @@ a successfully dismissed print dialog.
 
 \membersection{wxPrintDialog::wxPrintDialog}
 
-\func{}{wxPrintDialog}{\param{wxWindow* }{parent}, \param{wxPrintData* }{data = NULL}}
+\func{}{wxPrintDialog}{\param{wxWindow* }{parent}, \param{wxPrintDialogData* }{data = NULL}}
 
 Constructor. Pass a parent window, and optionally a pointer to a block of print
 data, which will be copied to the print dialog's print data.
 
 \wxheading{See also}
 
-\helpref{wxPrintData}{wxprintdata}
+\helpref{wxPrintDialogData}{wxprintdialogdata}
 
 \membersection{wxPrintDialog::\destruct{wxPrintDialog}}
 
@@ -199,11 +323,11 @@ data, which will be copied to the print dialog's print data.
 Destructor. If wxPrintDialog::GetPrintDC has {\it not} been called,
 the device context obtained by the dialog (if any) will be deleted.
 
-\membersection{wxPrintDialog::GetPrintData}\label{wxprintdialoggetprintdata}
+\membersection{wxPrintDialog::GetPrintDialogData}\label{wxprintdialoggetprintdialogdata}
 
-\func{wxPrintData\&}{GetPrintData}{\void}
+\func{wxPrintDialogData\&}{GetPrintDialogData}{\void}
 
-Returns the \helpref{print data}{wxprintdata} associated with the print dialog.
+Returns the \helpref{print dialog data}{wxprintdialogdata} associated with the print dialog.
 
 \membersection{wxPrintDialog::GetPrintDC}\label{wxprintdialoggetprintdc}
 
@@ -221,6 +345,191 @@ explicitly.
 Shows the dialog, returning wxID\_OK if the user pressed OK, and wxID\_CANCEL
 otherwise. After this function is called, a device context may
 be retrievable using \helpref{wxPrintDialog::GetPrintDC}{wxprintdialoggetprintdc}.
+
+\section{\class{wxPrintDialogData}}\label{wxprintdialogdata}
+
+This class holds information related to the visual characteristics of wxPrintDialog.
+It contains a wxPrintData object with underlying printing settings.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/cmndata.h>
+
+\wxheading{See also}
+
+\helpref{wxPrintDialog}{wxprintdialog}, \helpref{wxPrintDialog Overview}{wxprintdialogoverview}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxPrintDialogData::wxPrintDialogData}
+
+\func{}{wxPrintDialogData}{\void}
+
+Default constructor.
+
+\func{}{wxPrintDialogData}{\param{wxPrintDialogData\&}{ dialogData}}
+
+Copy constructor.
+
+\func{}{wxPrintDialogData}{\param{wxPrintData\&}{ printData}}
+
+Construct an object from a print dialog data object.
+
+\membersection{wxPrintDialogData::\destruct{wxprintdialogdata}}
+
+\func{}{\destruct{wxPrintDialogData}}{\void}
+
+Destructor.
+
+\membersection{wxPrintDialogData::EnableHelp}\label{wxprintdialogdataenablehelp}
+
+\func{void}{EnableHelp}{\param{bool }{flag}}
+
+Enables or disables the `Help' button.
+
+\membersection{wxPrintDialogData::EnablePageNumbers}\label{wxprintdialogdataenablepagenumbers}
+
+\func{void}{EnablePageNumbers}{\param{bool }{flag}}
+
+Enables or disables the `Page numbers' controls.
+
+\membersection{wxPrintDialogData::EnablePrintToFile}\label{wxprintdialogdataenableprinttofile}
+
+\func{void}{EnablePrintToFile}{\param{bool }{flag}}
+
+Enables or disables the `Print to file' checkbox.
+
+\membersection{wxPrintDialogData::EnableSelection}\label{wxprintdialogdataenableselection}
+
+\func{void}{EnableSelection}{\param{bool }{flag}}
+
+Enables or disables the `Selection' radio button.
+
+\membersection{wxPrintDialogData::GetAllPages}\label{wxprintdialogdatagetallpages}
+
+\constfunc{bool}{GetAllPages}{\void}
+
+Returns TRUE if the user requested that all pages be printed.
+
+\membersection{wxPrintDialogData::GetCollate}\label{wxprintdialogdatagetcollate}
+
+\constfunc{bool}{GetCollate}{\void}
+
+Returns TRUE if the user requested that the document(s) be collated.
+
+\membersection{wxPrintDialogData::GetFromPage}\label{wxprintdialogdatagetfrompage}
+
+\constfunc{int}{GetFromPage}{\void}
+
+Returns the {\it from} page number, as entered by the user.
+
+\membersection{wxPrintDialogData::GetMaxPage}\label{wxprintdialogdatagetmaxpage}
+
+\constfunc{int}{GetMaxPage}{\void}
+
+Returns the {\it maximum} page number.
+
+\membersection{wxPrintDialogData::GetMinPage}\label{wxprintdialogdatagetminpage}
+
+\constfunc{int}{GetMinPage}{\void}
+
+Returns the {\it minimum} page number.
+
+\membersection{wxPrintDialogData::GetNoCopies}\label{wxprintdialogdatagetnocopies}
+
+\constfunc{int}{GetNoCopies}{\void}
+
+Returns the number of copies requested by the user.
+
+\membersection{wxPrintDialogData::GetPrintData}\label{wxprintdialogdatagetprintdata}
+
+\func{wxPrintData\&}{GetPrintData}{\void}
+
+Returns a reference to the internal wxPrintData object.
+
+\membersection{wxPrintDialogData::GetPrintToFile}\label{wxprintdialogdatagetprinttofile}
+
+\constfunc{bool}{GetPrintToFile}{\void}
+
+Returns TRUE if the user has selected printing to a file.
+
+\membersection{wxPrintDialogData::GetToPage}\label{wxprintdialogdatagettopage}
+
+\constfunc{int}{GetToPage}{\void}
+
+Returns the {\it to} page number, as entered by the user.
+
+\membersection{wxPrintDialogData::SetCollate}\label{wxprintdialogdatasetcollate}
+
+\func{void}{SetCollate}{\param{bool }{flag}}
+
+Sets the 'Collate' checkbox to TRUE or FALSE.
+
+\membersection{wxPrintDialogData::SetFromPage}\label{wxprintdialogdatasetfrompage}
+
+\func{void}{SetFromPage}{\param{int }{page}}
+
+Sets the {\it from} page number.
+
+\membersection{wxPrintDialogData::SetMaxPage}\label{wxprintdialogdatasetmaxpage}
+
+\func{void}{SetMaxPage}{\param{int }{page}}
+
+Sets the {\it maximum} page number.
+
+\membersection{wxPrintDialogData::SetMinPage}\label{wxprintdialogdatasetminpage}
+
+\func{void}{SetMinPage}{\param{int }{page}}
+
+Sets the {\it minimum} page number.
+
+\membersection{wxPrintDialogData::SetNoCopies}\label{wxprintdialogdatasetnocopies}
+
+\func{void}{SetNoCopies}{\param{int }{n}}
+
+Sets the default number of copies the user has requested to be printed out.
+
+\membersection{wxPrintDialogData::SetPrintData}\label{wxprintdialogdatasetprintdata}
+
+\func{void}{SetPrintData}{\param{const wxPrintData\& }{printData}}
+
+Sets the internal wxPrintData.
+
+\membersection{wxPrintDialogData::SetPrintToFile}\label{wxprintdialogdatasetprinttofile}
+
+\func{void}{SetPrintToFile}{\param{bool }{flag}}
+
+Sets the 'Print to file' checkbox to TRUE or FALSE.
+
+\membersection{wxPrintDialogData::SetSetupDialog}\label{wxprintdialogdatasetsetupdialog}
+
+\func{void}{SetSetupDialog}{\param{bool }{flag}}
+
+Determines whether the dialog to be shown will be the Print dialog
+(pass FALSE) or Print Setup dialog (pass TRUE).
+
+Note that the setup dialog is (according to Microsoft) obsolete from
+Windows 95, though retained for backward compatibility.
+
+\membersection{wxPrintDialogData::SetToPage}\label{wxprintdialogdatasettopage}
+
+\func{void}{SetToPage}{\param{int }{page}}
+
+Sets the {\it to} page number.
+
+\membersection{wxPrintDialogData::operator $=$}\label{wxprintdialogdataassign}
+
+\func{void}{operator $=$}{\param{const wxPrintData\&}{ data}}
+
+Assigns print data to this object.
+
+\func{void}{operator $=$}{\param{const wxPrintDialogData\&}{ data}}
+
+Assigns another print dialog data object to this object.
 
 \section{\class{wxPrinter}}\label{wxprinter}
 
@@ -247,13 +556,14 @@ method of printing.
 
 \membersection{wxPrinter::wxPrinter}
 
-\func{}{wxPrinter}{\param{wxPrintData* }{data = NULL}}
+\func{}{wxPrinter}{\param{wxPrintDialogData* }{data = NULL}}
 
 Constructor. Pass an optional pointer to a block of print
-data, which will be copied to the printer object's print data.
+dialog data, which will be copied to the printer object's local data.
 
 \wxheading{See also}
 
+\helpref{wxPrintDialogData}{wxprintdialogdata}, 
 \helpref{wxPrintData}{wxprintdata}
 
 \membersection{wxPrinter::\destruct{wxPrinter}}
@@ -274,9 +584,9 @@ Returns TRUE if the user has aborted the print job.
 
 Creates the default printing abort window, with a cancel button.
 
-\membersection{wxPrinter::GetPrintData}\label{wxprintergetprintdata}
+\membersection{wxPrinter::GetPrintDialogData}\label{wxprintergetprintdialogdata}
 
-\func{wxPrintData\&}{GetPrintData}{\void}
+\func{wxPrintDialogData\&}{GetPrintDialogData}{\void}
 
 Returns the \helpref{print data}{wxprintdata} associated with the printer object.
 
@@ -292,9 +602,13 @@ Print could return FALSE if there was a problem initializing the printer device 
 
 \membersection{wxPrinter::PrintDialog}\label{wxprinterprintdialog}
 
-\func{bool}{PrintDialog}{\param{wxWindow *}{parent}}
+\func{wxDC*}{PrintDialog}{\param{wxWindow *}{parent}}
 
-Invokes the print dialog.
+Invokes the print dialog. If successful (the user did not press Cancel
+and no error occurred), a suitable device context will be returned
+(otherwise NULL is returned).
+
+The application must delete this device context to avoid a memory leak.
 
 \membersection{wxPrinter::ReportError}\label{wxprinterreporterror}
 
@@ -304,7 +618,7 @@ Default error-reporting function.
 
 \membersection{wxPrinter::Setup}\label{wxprintersetup}
 
-\func{void}{Setup}{\param{wxWindow *}{parent}}
+\func{bool}{Setup}{\param{wxWindow *}{parent}}
 
 Invokes the print setup dialog. Note that the setup dialog is obsolete from
 Windows 95, though retained for backward compatibility.
@@ -333,6 +647,12 @@ achieving the correct scaling for the page.
 
 \membersection{wxPrinterDC::wxPrinterDC}
 
+\func{}{wxPrinterDC}{\param{const wxPrintData\& }{printData}}
+
+Pass a \helpref{wxPrintData}{wxprintdata} object with information
+necessary for setting up a suitable printer device context. This
+is the recommended way to construct a wxPrinterDC.
+
 \func{}{wxPrinterDC}{\param{const wxString\& }{driver}, \param{const wxString\& }{device}, \param{const wxString\& }{output},
  \param{const bool }{interactive = TRUE}, \param{int }{orientation = wxPORTRAIT}}
 
@@ -341,6 +661,8 @@ displayed. {\it device} indicates the type of printer and {\it output}
 is an optional file for printing to. The {\it driver} parameter is
 currently unused.  Use the {\it Ok} member to test whether the
 constructor was successful in creating a useable device context.
+
+This constructor is deprecated and retained only for backward compatibility.
 
 \section{\class{wxPrintout}}\label{wxprintout}
 
@@ -670,5 +992,4 @@ Associates a printout object with the wxPrintPreview object.
 
 Sets the percentage preview zoom, and refreshes the preview canvas
 accordingly.
-
 

@@ -15,6 +15,10 @@ descriptions of the member functions.
 
 \membersection{wxPostScriptDC::wxPostScriptDC}
 
+\func{}{wxPostScriptDC}{\param{const wxPrintData\&}{ printData}}
+
+Constructs a PostScript printer device context from a \helpref{wxPrintData}{wxprintdata} object.
+
 \func{}{wxPostScriptDC}{\param{const wxString\& }{output}, \param{bool }{interactive = TRUE},\\
   \param{wxWindow *}{parent}}
 
@@ -27,6 +31,9 @@ in creating a useable device context.
 
 See \helpref{Printer settings}{printersettings} for functions to set and
 get PostScript printing settings.
+
+This constructor and the global printer settings are now deprecated;
+use the wxPrintData constructor instead.
 
 \membersection{wxPostScriptDC::GetStream}
 

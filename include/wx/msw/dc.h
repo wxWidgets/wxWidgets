@@ -199,10 +199,14 @@ public:
 
   // Size in device units
   virtual void GetSize(int* width, int* height) const;
-  inline wxSize GetSize(void) const { int w, h; GetSize(&w, &h); return wxSize(w, h); }
+  inline wxSize GetSize() const { int w, h; GetSize(&w, &h); return wxSize(w, h); }
 
   // Size in mm
-  virtual void GetSizeMM(long* width, long* height) const ;
+  virtual void GetSizeMM(int* width, int* height) const ;
+  inline wxSize GetSizeMM() const { int w, h; GetSizeMM(&w, &h); return wxSize(w, h); }
+
+  // Resolution in Pixels per inch
+  virtual wxSize GetPPI(void) const ;
 
   // Compatibility
 #if WXWIN_COMPATIBILITY
@@ -351,7 +355,6 @@ protected:
 
   wxWindow *        m_canvas;
   wxBitmap          m_selectedBitmap;
-  wxString          m_filename;
 
   // TRUE => DeleteDC() in dtor, FALSE => only ReleaseDC() it
   bool              m_bOwnsDC;

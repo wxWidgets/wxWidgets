@@ -42,6 +42,7 @@ LIB_CPP_SRC=\
  ../common/prntbase.cpp \
  ../common/resource.cpp \
  ../common/serbase.cpp \
+ ../common/paper.cpp \
  ../common/string.cpp \
  ../common/textfile.cpp \
  ../common/tbarbase.cpp \
@@ -71,6 +72,9 @@ LIB_CPP_SRC=\
  ../common/http.cpp \
  ../common/url.cpp \
  ../common/tokenzr.cpp \
+\
+ ../unix/threadpsx.cpp \
+ ../unix/utilsunx.cpp \
 \
  accel.cpp \
  app.cpp \
@@ -121,11 +125,9 @@ LIB_CPP_SRC=\
  stattext.cpp \
  taskbar.cpp \
  textctrl.cpp \
- thread.cpp \
  timer.cpp \
  toolbar.cpp \
  utils.cpp \
- utilsexc.cpp \
  wave.cpp \
  window.cpp \
 \

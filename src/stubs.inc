@@ -34,6 +34,7 @@ LIB_CPP_SRC=\
  common/module.cpp \
  common/object.cpp \
  common/odbc.cpp \
+ common/paper.cpp \
  common/prntbase.cpp \
  common/resource.cpp \
  common/serbase.cpp \

@@ -41,7 +41,10 @@
 #include <time.h>           // nanosleep() and/or usleep()
 #include <ctype.h>          // isspace()
 
-#ifdef HAVE_UNAME
+// JACS: needed for FD_SETSIZE
+#include <sys/time.h>
+
+#if HAVE_UNAME
     #include <sys/utsname.h> // for uname()
 #endif // HAVE_UNAME
 
@@ -81,14 +84,14 @@ void wxSleep(int nSecs)
 
 void wxUsleep(unsigned long milliseconds)
 {
-#if defined(HAVE_NANOSLEEP)
+#if HAVE_NANOSLEEP
     timespec tmReq;
     tmReq.tv_sec = milliseconds / 1000;
     tmReq.tv_nsec = (milliseconds % 1000) * 1000 * 1000;
 
     // we're not interested in remaining time nor in return value
     (void)nanosleep(&tmReq, (timespec *)NULL);
-#elif defined(HAVE_USLEEP)
+#elif HAVE_USLEEP
     // uncomment this if you feel brave or if you are sure that your version
     // of Solaris has a safe usleep() function but please notice that usleep()
     // is known to lead to crashes in MT programs in Solaris 2.[67] and is not

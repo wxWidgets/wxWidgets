@@ -130,6 +130,7 @@ COMMONOBJS = \
   $(MSWDIR)\date.obj \
   $(MSWDIR)\hash.obj \
   $(MSWDIR)\list.obj \
+  $(MSWDIR)\paper.obj \
   $(MSWDIR)\string.obj \
   $(MSWDIR)\time.obj \
   $(MSWDIR)\wxexpr.obj \
@@ -538,6 +539,8 @@ $(MSWDIR)\wxexpr.obj:     $(COMMDIR)\wxexpr.$(SRCSUFF)
 $(MSWDIR)\hash.obj:     $(COMMDIR)\hash.$(SRCSUFF)
 
 $(MSWDIR)\list.obj:     $(COMMDIR)\list.$(SRCSUFF)
+
+$(MSWDIR)\paper.obj:     $(COMMDIR)\paper.$(SRCSUFF)
 
 $(MSWDIR)\string.obj:     $(COMMDIR)\string.$(SRCSUFF)
 

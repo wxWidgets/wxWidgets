@@ -1,8 +1,14 @@
 \section{Printing overview}\label{printingoverview}
 
-Classes: \helpref{wxPrintout}{wxprintout}, \helpref{wxPrinter}{wxprinter},\rtfsp
-\helpref{wxPrintPreview}{wxprintpreview}, \helpref{wxPrinterDC}{wxprinterdc},\rtfsp
-\helpref{wxPrintDialog}{wxprintdialog}.
+Classes: \helpref{wxPrintout}{wxprintout}, 
+\helpref{wxPrinter}{wxprinter}, 
+\helpref{wxPrintPreview}{wxprintpreview}, 
+\helpref{wxPrinterDC}{wxprinterdc}, 
+\helpref{wxPrintDialog}{wxprintdialog}, 
+\helpref{wxPrintData}{wxprintdata}, 
+\helpref{wxPrintDialogData}{wxprintdialogdata}, 
+\helpref{wxPageSetupDialog}{wxpagesetupdialog}, 
+\helpref{wxPageSetupDialogData}{wxpagesetupdialogdata}
 
 The printing framework relies on the application to provide classes
 whose member functions can respond to particular requests, such
@@ -11,8 +17,6 @@ This method allows wxWindows to take over the housekeeping duties of
 turning preview pages, calling the print dialog box, creating
 the printer device context, and so on: the application can concentrate
 on the rendering of the information onto a device context.
-The printing framework is mainly a Windows feature; PostScript
-support under non-Windows platforms is emerging but has not been rigorously tested.
 
 The \helpref{document/view framework}{docviewoverview} creates a default wxPrintout
 object for every view, calling wxView::OnDraw to achieve a

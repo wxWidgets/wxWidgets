@@ -24,12 +24,13 @@
     #pragma implementation "thread.h"
 #endif
 
+// With simple makefiles, we must ignore the file body if not using
+// threads.
+#include "wx/setup.h"
+
+#if wxUSE_THREADS
+
 #include "wx/thread.h"
-
-#if !wxUSE_THREADS
-    #error This file needs wxUSE_THREADS
-#endif
-
 #include "wx/module.h"
 #include "wx/utils.h"
 #include "wx/log.h"
@@ -42,7 +43,7 @@
 #include <errno.h>
 #include <time.h>
 
-#ifdef HAVE_SCHED_H
+#if HAVE_SCHED_H
     #include <sched.h>
 #endif
 
@@ -793,3 +794,5 @@ void wxMutexGuiLeave()
   gs_mutexGui->Unlock();
 }
 
+#endif
+  // wxUSE_THREADS

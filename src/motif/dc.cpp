@@ -213,14 +213,21 @@ void wxDC::GetSize( int* width, int* height ) const
     *height = m_maxY-m_minY;
 };
 
-void wxDC::GetSizeMM( long* width, long* height ) const
+void wxDC::GetSizeMM( int* width, int* height ) const
 {
     int w = 0;
     int h = 0;
     GetSize( &w, &h );
-    *width = long( double(w) / (m_scaleX*m_mm_to_pix_x) );
-    *height = long( double(h) / (m_scaleY*m_mm_to_pix_y) );
+    *width = int( double(w) / (m_scaleX*m_mm_to_pix_x) );
+    *height = int( double(h) / (m_scaleY*m_mm_to_pix_y) );
 };
+
+// Resolution in pixels per logical inch
+wxSize wxDC::GetPPI(void) const
+{
+    // TODO (should probably be pure virtual)
+    return wxSize(0, 0);
+}
 
 void wxDC::SetTextForeground( const wxColour &col )
 {
