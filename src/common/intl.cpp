@@ -1686,7 +1686,7 @@ bool wxLocale::Init(int language, int flags)
         return false;
     }
 #elif defined(__WXMAC__)
-    if (language == wxLANGUAGE_DEFAULT)
+    if (lang == wxLANGUAGE_DEFAULT)
         locale = wxEmptyString;
     else
         locale = info->CanonicalName;
