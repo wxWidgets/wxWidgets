@@ -122,6 +122,7 @@ wxWindowDC::wxWindowDC(wxWindow *window)
     CopyRgn( (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn ) ;
     m_macPort = UMAGetWindowPort( windowref ) ;
     m_ok = TRUE ;
+    MacSetupGraphicContext() ;
     SetBackground(MacGetBackgroundBrush(window));
 }
 
@@ -168,6 +169,7 @@ wxClientDC::wxClientDC(wxWindow *window)
     m_macPort = UMAGetWindowPort( windowref ) ;
 
     m_ok = TRUE ;
+    MacSetupGraphicContext() ;
     SetBackground(MacGetBackgroundBrush(window));
     SetFont( window->GetFont() ) ;
 }
@@ -215,6 +217,7 @@ wxPaintDC::wxPaintDC(wxWindow *window)
     m_macPort = UMAGetWindowPort( windowref ) ;
 
     m_ok = TRUE ;
+    MacSetupGraphicContext() ;
     SetBackground(MacGetBackgroundBrush(window));
     SetFont( window->GetFont() ) ;
 }

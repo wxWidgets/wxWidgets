@@ -44,6 +44,7 @@
 extern int wxPageNumber;
 
 class wxMacPortStateHelper ;
+class wxMacCGContext ;
 //-----------------------------------------------------------------------------
 // wxDC
 //-----------------------------------------------------------------------------
@@ -282,6 +283,11 @@ protected:
     mutable bool                    m_macAliasWasEnabled ;
     mutable void*                   m_macForegroundPixMap ;
     mutable void*                   m_macBackgroundPixMap ;
+    
+    // CoreGraphics
+    
+    wxMacCGContext      * m_macGraphicContext ;
+    void                MacSetupGraphicContext() ;
 };
 
 #endif
