@@ -177,9 +177,9 @@ bool wxDirData::Read(wxString *filename)
         if ( (((FileInfo*)&catalogInfo.finderInfo)->finderFlags & kIsInvisible ) && !(m_flags & wxDIR_HIDDEN ) )
             continue ;
         
-        // its a dir and we want it
-        if ( (catalogInfo.nodeFlags & kFSNodeIsDirectoryMask)  && (m_flags & wxDIR_DIRS) )
-            break ;
+        // its a dir and we don't want it
+        if ( (catalogInfo.nodeFlags & kFSNodeIsDirectoryMask)  && !(m_flags & wxDIR_DIRS) )
+            continue ;
 
         // its a file but we don't want it
         if ( (catalogInfo.nodeFlags & kFSNodeIsDirectoryMask) == 0  && !(m_flags & wxDIR_FILES ) )
