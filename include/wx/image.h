@@ -98,7 +98,6 @@ public:
     wxImage( const wxImage& image );
     wxImage( const wxImage* image );
 
-    // these functions get implemented in /src/(platform)/bitmap.cpp
     wxImage( const wxBitmap &bitmap );
     operator wxBitmap() const { return ConvertToBitmap(); }
     wxBitmap ConvertToBitmap() const;
@@ -110,8 +109,16 @@ public:
     void Create( int width, int height, unsigned char* data, bool static_data = FALSE );
     void Destroy();
 
+    // creates an identical copy of the image (the = operator
+    // just raises the ref count)
+    wxImage Copy() const;
+    
     // return the new image with size width*height
     wxImage GetSubImage( const wxRect& ) const;
+    
+    // pastes image into this instance and takes care of
+    // the mask colour and out of bounds problems
+    void Paste( const wxImage &image, int x, int y );    
 
     // return the new image with size width*height
     wxImage Scale( int width, int height ) const;
