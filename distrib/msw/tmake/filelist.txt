@@ -283,7 +283,7 @@ dcprint.cpp	MSW	LowLevel
 dcscreen.cpp	MSW	LowLevel
 dde.cpp	MSW	LowLevel,Base
 dialog.cpp	MSW
-dialup.cpp	MSW
+dialup.cpp	MSW	LowLevel
 dib.cpp	MSW	LowLevel
 dibutils.cpp	MSW
 dir.cpp	MSW	Base

@@ -948,6 +948,10 @@ SOURCE=.\msw\dde.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\dialup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\dib.cpp
 # End Source File
 # Begin Source File

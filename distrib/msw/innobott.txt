@@ -16,6 +16,7 @@
 [INI]
 
 [Registry]
+    Root: HKCU; SubKey: Software\Environment\; ValueName: WXWIN; ValueType: string; ValueData: {app}; Flags: createvalueifdoesntexist
 
 [UninstallDelete]
 
