@@ -31,7 +31,7 @@ class Tokenizer:
 	tname = tok_name[type]
    	if iskeyword(string):
     	    tname = "KEY"
-    	self.toks.append(tname, string, b, e)
+    	self.toks.append( (tname, string, b, e) )
 
     def readline(self):
     	t = self.text
