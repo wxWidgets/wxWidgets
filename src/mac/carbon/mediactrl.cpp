@@ -625,8 +625,8 @@ wxSize wxQTMediaBackend::GetVideoSize() const
 //---------------------------------------------------------------------------
 // wxQTMediaBackend::Move
 //
-// If not using a native 10.2 QT control performs some emulated window
-// movement stuff
+// We need to do this even when using native qt control because 
+// CreateMovieControl is broken in this regard...
 //---------------------------------------------------------------------------
 void wxQTMediaBackend::Move(int x, int y, int w, int h)
 {
@@ -642,6 +642,15 @@ void wxQTMediaBackend::Move(int x, int y, int w, int h)
 
         ::SetMovieBox(m_movie, &theRect);
         wxASSERT(::GetMoviesError() == noErr);
+    }
+#else
+    if(m_timer && m_ctrl)
+    {
+        m_ctrl->GetParent()->MacWindowToRootWindow(&x, &y);
+
+        ::MoveControl( (ControlRef) m_ctrl->GetHandle(), x, y );
+        m_ctrl->GetParent()->Refresh();
+        m_ctrl->GetParent()->Update();
     }
 #endif
 }
