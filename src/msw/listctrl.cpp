@@ -213,7 +213,24 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_ACTIVATED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_FOCUSED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_CACHE_HINT)
 
+#if wxUSE_EXTENDED_RTTI
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxListCtrl, wxControl,"wx/listctrl.h")
+
+WX_BEGIN_PROPERTIES_TABLE(wxListCtrl)
+WX_END_PROPERTIES_TABLE()
+
+WX_BEGIN_HANDLERS_TABLE(wxListCtrl)
+WX_END_HANDLERS_TABLE()
+
+WX_CONSTRUCTOR_5( wxListCtrl , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle ) 
+
+/*
+ TODO : Expose more information of a list's layout etc. via appropriate objects (à la NotebookPageInfo)
+*/
+#else
 IMPLEMENT_DYNAMIC_CLASS(wxListCtrl, wxControl)
+#endif
+
 IMPLEMENT_DYNAMIC_CLASS(wxListView, wxListCtrl)
 IMPLEMENT_DYNAMIC_CLASS(wxListItem, wxObject)
 

@@ -470,7 +470,19 @@ private:
 // wxWin macros
 // ----------------------------------------------------------------------------
 
+#if wxUSE_EXTENDED_RTTI
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxTreeCtrl, wxControl,"wx/treectrl.h")
+
+WX_BEGIN_PROPERTIES_TABLE(wxTreeCtrl)
+WX_END_PROPERTIES_TABLE()
+
+WX_BEGIN_HANDLERS_TABLE(wxTreeCtrl)
+WX_END_HANDLERS_TABLE()
+
+WX_CONSTRUCTOR_5( wxTreeCtrl , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle ) 
+#else
 IMPLEMENT_DYNAMIC_CLASS(wxTreeCtrl, wxControl)
+#endif
 
 // ----------------------------------------------------------------------------
 // constants
