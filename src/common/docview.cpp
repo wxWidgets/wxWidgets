@@ -34,6 +34,7 @@
 #include "wx/menu.h"
 #include "wx/list.h"
 #include "wx/filedlg.h"
+#include "wx/mdi.h"
 #endif
 
 #include "wx/msgdlg.h"
@@ -482,27 +483,34 @@ void wxView::OnChangeFilename(void)
     wxString name;
     GetDocument()->GetPrintableName(name);
 
-    // If the frame is an MDI child, just set the title
-    // to the name.
+    // If the frame is an MDI child, just set the title to the name.
     // Otherwise, append the document name to the name of the application
-#ifdef __WXMSW__
+    // I have to do an illegal cast because in wxGTK, wxMDIChildFrame
+    // doesn't inherited from wxFrame, Robert Roebling
+    
+    wxFrame *frame = NULL;
+    wxMDIChildFrame *mdi_frame = NULL;
     if (GetFrame()->IsKindOf(CLASSINFO(wxMDIChildFrame)))
-#else
-    if (FALSE)
-#endif
-    {
-      GetFrame()->SetTitle(name);
-    }
+      mdi_frame = (wxMDIChildFrame*)GetFrame();
     else
+      frame = GetFrame();
+      
+    if (frame)
+    {
+      frame->SetTitle(name);
+      return;
+    }
+    
+    if (mdi_frame)
     {
       if (wxTheApp->GetAppName() != "")
       {
         char buf[400];
         sprintf(buf, "%s - %s", (const char *)wxTheApp->GetAppName(), (const char *)name);
-        GetFrame()->SetTitle(buf);
+        mdi_frame->SetTitle(buf);
       }
       else
-        GetFrame()->SetTitle(name);
+        mdi_frame->SetTitle(name);
     }
   }
 }

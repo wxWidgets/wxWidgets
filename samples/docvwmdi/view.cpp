@@ -113,7 +113,7 @@ bool DrawingView::OnClose(bool deleteWindow)
   if (frame)
     frame->SetTitle(s);
 
-  SetFrame(NULL);
+  SetFrame((wxFrame*)NULL);
 
   Activate(FALSE);
   

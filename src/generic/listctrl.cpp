@@ -1755,6 +1755,7 @@ void wxListMainWindow::DeleteItem( long index )
   if (node)
   {
     wxListLineData *line = (wxListLineData*)node->Data();
+    if (m_current == line) m_current = NULL;
     DeleteLine( line );
     m_lines.DeleteNode( node );
   };

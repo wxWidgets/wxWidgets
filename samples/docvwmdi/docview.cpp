@@ -114,7 +114,7 @@ int MyApp::OnExit(void)
  * Called from view.cpp, when a view is created.
  */
  
-wxFrame *MyApp::CreateChildFrame(wxDocument *doc, wxView *view, bool isCanvas)
+wxMDIChildFrame *MyApp::CreateChildFrame(wxDocument *doc, wxView *view, bool isCanvas)
 {
   //// Make a child frame
   wxDocMDIChildFrame *subframe = new wxDocMDIChildFrame(doc, view, GetMainFrame(), -1, "Child Frame",

@@ -176,6 +176,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame,wxPanel)
 BEGIN_EVENT_TABLE(wxMDIChildFrame, wxPanel)
   EVT_CLOSE(wxMDIChildFrame::OnCloseWindow)
   EVT_SIZE(wxMDIChildFrame::OnSize)
+  EVT_ACTIVATE(wxMDIChildFrame::OnActivate)
 END_EVENT_TABLE()
 
 wxMDIChildFrame::wxMDIChildFrame(void)
@@ -254,6 +255,7 @@ void wxMDIChildFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
     child->SetSize( 1, 1, client_x-2, client_y);
   }
 };
+
 bool wxMDIChildFrame::Destroy(void)
 {
   if (!wxPendingDelete.Member(this))
@@ -303,6 +305,10 @@ void wxMDIChildFrame::SetMenuBar( wxMenuBar *menu_bar )
 };
 
 void wxMDIChildFrame::Activate(void)
+{
+};
+
+void wxMDIChildFrame::OnActivate( wxActivateEvent &WXUNUSED(event) )
 {
 };
 

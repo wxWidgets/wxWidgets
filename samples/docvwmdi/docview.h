@@ -28,7 +28,7 @@ class MyApp: public wxApp
     bool OnInit(void);
     int OnExit(void);
 
-    wxFrame *CreateChildFrame(wxDocument *doc, wxView *view, bool isCanvas);
+    wxMDIChildFrame *CreateChildFrame(wxDocument *doc, wxView *view, bool isCanvas);
 
   protected:
     wxDocManager* m_docManager;
