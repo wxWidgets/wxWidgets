@@ -193,8 +193,8 @@ private:
     DECLARE_DYNAMIC_CLASS(wxFileDialog)
     DECLARE_EVENT_TABLE()
 
-    static long   m_lastViewStyle;  // list or report?
-    static bool   m_lastShowHidden; 
+    static long   s_lastViewStyle;  // list or report?
+    static bool   s_lastShowHidden; 
 };
 
 // File selector - backward compatibility

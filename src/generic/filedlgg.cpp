@@ -35,6 +35,7 @@
 #include "wx/mimetype.h"
 #include "wx/image.h"
 #include "wx/module.h"
+#include "wx/config.h"
 
 
 #if wxUSE_TOOLTIPS
@@ -711,8 +712,8 @@ BEGIN_EVENT_TABLE(wxFileDialog,wxDialog)
         EVT_CHECKBOX(ID_CHECK,wxFileDialog::OnCheck)
 END_EVENT_TABLE()
 
-long wxFileDialog::m_lastViewStyle = wxLC_LIST;
-bool wxFileDialog::m_lastShowHidden = FALSE;
+long wxFileDialog::s_lastViewStyle = wxLC_LIST;
+bool wxFileDialog::s_lastShowHidden = FALSE;
 
 wxFileDialog::wxFileDialog(wxWindow *parent,
                  const wxString& message,
@@ -724,6 +725,12 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
   wxDialog( parent, -1, message, pos, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
 {
     wxBeginBusyCursor();
+
+    if (wxConfig::Get(FALSE))
+    {
+        wxConfig::Get() -> Read(wxT("/wxWindows/wxFileDialog/ViewStyle"), &s_lastViewStyle);
+        wxConfig::Get() -> Read(wxT("/wxWindows/wxFileDialog/ShowHidden"), &s_lastShowHidden);
+    }
 
     m_message = message;
     m_dialogStyle = style;
@@ -821,11 +828,11 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
 
     if (m_dialogStyle & wxMULTIPLE)
         m_list = new wxFileCtrl( this, ID_LIST_CTRL, m_dir, firstWild, wxDefaultPosition,
-	                         wxSize(440,180), m_lastViewStyle | wxSUNKEN_BORDER );
+	                         wxSize(440,180), s_lastViewStyle | wxSUNKEN_BORDER );
     else
         m_list = new wxFileCtrl( this, ID_LIST_CTRL, m_dir, firstWild, wxDefaultPosition,
-	                         wxSize(440,180), m_lastViewStyle | wxSUNKEN_BORDER | wxLC_SINGLE_SEL );
-    m_list -> ShowHidden(m_lastShowHidden);
+	                         wxSize(440,180), s_lastViewStyle | wxSUNKEN_BORDER | wxLC_SINGLE_SEL );
+    m_list -> ShowHidden(s_lastShowHidden);
     mainsizer->Add( m_list, 1, wxEXPAND | wxLEFT|wxRIGHT, 10 );
 
     wxBoxSizer *textsizer = new wxBoxSizer( wxHORIZONTAL );
@@ -838,7 +845,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     m_choice = new wxChoice( this, ID_CHOICE );
     choicesizer->Add( m_choice, 1, wxCENTER|wxALL, 10 );
     m_check = new wxCheckBox( this, ID_CHECK, _("Show hidden files") );
-    m_check->SetValue( m_lastShowHidden );
+    m_check->SetValue( s_lastShowHidden );
     choicesizer->Add( m_check, 0, wxCENTER|wxALL, 10 );
     choicesizer->Add( new wxButton( this, wxID_CANCEL, _("Cancel") ), 0, wxCENTER | wxALL, 10 );
     mainsizer->Add( choicesizer, 0, wxEXPAND );
@@ -857,7 +864,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
 
     mainsizer->Fit( this );
     mainsizer->SetSizeHints( this );
-
+    
     Centre( wxBOTH );
 
     if (m_fileName.IsEmpty())
@@ -870,6 +877,11 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
 
 wxFileDialog::~wxFileDialog()
 {
+    if (wxConfig::Get(FALSE))
+    {
+        wxConfig::Get() -> Write(wxT("/wxWindows/wxFileDialog/ViewStyle"), s_lastViewStyle);
+        wxConfig::Get() -> Write(wxT("/wxWindows/wxFileDialog/ShowHidden"), s_lastShowHidden);
+    }
 }
 
 void wxFileDialog::OnChoice( wxCommandEvent &event )
@@ -889,7 +901,7 @@ void wxFileDialog::OnChoice( wxCommandEvent &event )
 
 void wxFileDialog::OnCheck( wxCommandEvent &event )
 {
-    m_list->ShowHidden( (m_lastShowHidden = event.GetInt() != 0) );
+    m_list->ShowHidden( (s_lastShowHidden = event.GetInt() != 0) );
 }
 
 void wxFileDialog::OnActivated( wxListEvent &event )
@@ -1029,14 +1041,14 @@ void wxFileDialog::OnListOk( wxCommandEvent &WXUNUSED(event) )
 void wxFileDialog::OnList( wxCommandEvent &WXUNUSED(event) )
 {
     m_list->ChangeToListMode();
-    m_lastViewStyle = wxLC_LIST;
+    s_lastViewStyle = wxLC_LIST;
     m_list->SetFocus();
 }
 
 void wxFileDialog::OnReport( wxCommandEvent &WXUNUSED(event) )
 {
     m_list->ChangeToReportMode();
-    m_lastViewStyle = wxLC_REPORT;
+    s_lastViewStyle = wxLC_REPORT;
     m_list->SetFocus();
 }
 
