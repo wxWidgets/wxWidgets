@@ -110,7 +110,9 @@ public:
     void OnThrowUnhandled(wxCommandEvent& event);
 
     void OnCrash(wxCommandEvent& event);
+#if wxUSE_ON_FATAL_EXCEPTION
     void OnHandleCrash(wxCommandEvent& event);
+#endif
 
     // 1st-level exception handling: we overload ProcessEvent() to be able to
     // catch exceptions which occur in MyFrame methods here
@@ -161,12 +163,14 @@ class UnhandledException
 enum
 {
     // control ids and menu items
-    Except_ThrowInt = 100,
+    Except_ThrowInt = wxID_HIGHEST,
     Except_ThrowString,
     Except_ThrowObject,
     Except_ThrowUnhandled,
     Except_Crash,
+#if wxUSE_ON_FATAL_EXCEPTION
     Except_HandleCrash,
+#endif
     Except_Dialog,
 
     Except_Quit = wxID_EXIT,
@@ -189,7 +193,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Except_ThrowObject, MyFrame::OnThrowObject)
     EVT_MENU(Except_ThrowUnhandled, MyFrame::OnThrowUnhandled)
     EVT_MENU(Except_Crash, MyFrame::OnCrash)
+#if wxUSE_ON_FATAL_EXCEPTION
     EVT_MENU(Except_HandleCrash, MyFrame::OnHandleCrash)
+#endif
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyDialog, wxDialog)
@@ -295,8 +301,10 @@ MyFrame::MyFrame()
                         _T("Throw &unhandled exception\tCtrl-U"));
     menuFile->Append(Except_Crash, _T("&Crash\tCtrl-C"));
     menuFile->AppendSeparator();
+#if wxUSE_ON_FATAL_EXCEPTION
     menuFile->AppendCheckItem(Except_HandleCrash, _T("&Handle crashes\tCtrl-H"));
     menuFile->AppendSeparator();
+#endif
     menuFile->Append(Except_Quit, _T("E&xit\tCtrl-Q"), _T("Quit this program"));
 
     wxMenu *helpMenu = new wxMenu;
@@ -380,10 +388,14 @@ void MyFrame::OnCrash(wxCommandEvent& WXUNUSED(event))
     DoCrash();
 }
 
+#if wxUSE_ON_FATAL_EXCEPTION
+
 void MyFrame::OnHandleCrash(wxCommandEvent& event)
 {
     wxHandleFatalExceptions(event.IsChecked());
 }
+
+#endif
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
