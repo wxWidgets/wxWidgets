@@ -265,6 +265,50 @@ MyDialog::MyDialog(wxFrame *parent, wxWindowID id, const wxString &title )
 }
 \end{verbatim}
 
+Note that the new way of specifying flags to wxSizer is via \helpref{wxSizerFlags}{wxsizerflags}.  This class greatly eases the burden of passing flags to a wxSizer.
+
+Here's how you'd do the previous example with wxSizerFlags:
+
+\begin{verbatim}
+// we want to get a dialog that is stretchable because it
+// has a text ctrl at the top and two buttons at the bottom
+
+MyDialog::MyDialog(wxFrame *parent, wxWindowID id, const wxString &title )
+        : wxDialog(parent, id, title, wxDefaultPosition, wxDefaultSize,
+                   wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
+{
+  wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
+
+  // create text ctrl with minimal size 100x60 that is horizontally and 
+  // vertically stretchable with a border width of 10
+  topsizer->Add(
+    new wxTextCtrl( this, -1, "My text.", wxDefaultPosition, wxSize(100,60), wxTE_MULTILINE),
+    wxSizerFlags(1).Align().Expand().Border(wxALL, 10));
+
+  wxBoxSizer *button_sizer = new wxBoxSizer( wxHORIZONTAL );
+
+  //create two buttons that are horizontally unstretchable, 
+  // with an all-around border with a width of 10 and implicit top alignment
+  button_sizer->Add(
+     new wxButton( this, wxID_OK, "OK" ),
+     wxSizerFlags(0).Align().Border(wxALL, 10));       
+
+  button_sizer->Add(
+     new wxButton( this, wxID_CANCEL, "Cancel" ),
+     wxSizerFlags(0).Align().Border(wxALL, 10));    
+
+  //create a sizer with no border and centered horizontally
+  topsizer->Add(
+     button_sizer,
+     wxSizerFlags(0).Center() ); 
+
+  SetSizer( topsizer );      // use the sizer for layout
+
+  topsizer->SetSizeHints( this );   // set size hints to honour minimum size
+}
+\end{verbatim}
+
+
 \subsection{Programming with wxGridSizer}\label{gridsizerprogramming}
 
 \helpref{wxGridSizer}{wxgridsizer} is a sizer which lays out its children in a two-dimensional

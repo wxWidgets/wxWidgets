@@ -62,7 +62,11 @@ The destructor.
 
 \membersection{wxSizer::Add}\label{wxsizeradd}
 
+\func{wxSizerItem*}{Add}{\param{wxWindow* }{window}, \param{const wxSizerFlags\& }{flags}}
+
 \func{wxSizerItem*}{Add}{\param{wxWindow* }{window}, \param{int }{proportion = 0},\param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
+
+\func{wxSizerItem*}{Add}{\param{wxSizer* }{sizer}, \param{const wxSizerFlags\& }{flags}}
 
 \func{wxSizerItem*}{Add}{\param{wxSizer* }{sizer}, \param{int }{proportion = 0}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
 
@@ -142,6 +146,8 @@ the sizer, adjusted for the border if any.}
 item, for use in derived classes when sizing information is more
 complex than the {\it proportion} and {\it flag} will allow for.}
 
+\docparam{flags}{A \helpref{wxSizerFlags}{wxsizerflags} object that 
+enables you to specify most of the above parameters more conveniently.}
 
 \membersection{wxSizer::AddSpacer}\label{wxsizeraddspacer}
 
@@ -254,7 +260,11 @@ size of all the children and their borders or the minimal size set by
 
 \membersection{wxSizer::Insert}\label{wxsizerinsert}
 
+\func{wxSizerItem*}{Insert}{\param{size\_t }{index}, \param{wxWindow* }{window}, \param{const wxSizerFlags\& }{flags}}
+
 \func{wxSizerItem*}{Insert}{\param{size\_t }{index}, \param{wxWindow* }{window}, \param{int }{proportion = 0},\param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
+
+\func{wxSizerItem*}{Insert}{\param{size\_t }{index}, \param{wxSizer* }{sizer}, \param{const wxSizerFlags\& }{flags}}
 
 \func{wxSizerItem*}{Insert}{\param{size\_t }{index}, \param{wxSizer* }{sizer}, \param{int }{proportion = 0}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
 
@@ -294,7 +304,11 @@ the current dimension.
 
 \membersection{wxSizer::Prepend}\label{wxsizerprepend}
 
+\func{wxSizerItem*}{Prepend}{\param{wxWindow* }{window}, \param{const wxSizerFlags\& }{flags}}
+
 \func{wxSizerItem*}{Prepend}{\param{wxWindow* }{window}, \param{int }{proportion = 0}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
+
+\func{wxSizerItem*}{Prepend}{\param{wxSizer* }{sizer}, \param{const wxSizerFlags\& }{flags}}
 
 \func{wxSizerItem*}{Prepend}{\param{wxSizer* }{sizer}, \param{int }{proportion = 0}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
 
@@ -429,6 +443,8 @@ are the only two sizer classes that can size rows/columns independently.
 
 
 \section{\class{wxSizerFlags}}\label{wxsizerflags}
+
+PRELIMINARY.
 
 Normally, when you add something to a sizer via \helpref{wxSizer::Add}{wxsizeradd}, you have to specify a lot of flags and parameters.  This can be unwieldy.
 
