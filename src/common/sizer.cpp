@@ -1446,6 +1446,9 @@ static void GetStaticBoxBorders( wxStaticBox *box,
 {
     // this has to be done platform by platform as there is no way to
     // guess the thickness of a wxStaticBox border
+#ifdef __WXCOCOA__
+    box->GetBordersForSizer(borderTop,borderOther);
+#else // __WXCOCOA__
 #ifdef __WXGTK__
     if ( box->GetLabel().IsEmpty() )
         *borderTop = 5;
@@ -1454,6 +1457,7 @@ static void GetStaticBoxBorders( wxStaticBox *box,
         *borderTop = box->GetCharHeight();
 
     *borderOther = 5;
+#endif // __WXCOCOA__
 }
 
 void wxStaticBoxSizer::RecalcSizes()
