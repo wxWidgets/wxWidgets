@@ -65,9 +65,9 @@ gtk_scrollbar_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-    if (!win->m_hasVMT) return;
-    
     win->CalculateScrollbar();
+    
+    if (!win->m_hasVMT) return;
 }
 
 //-----------------------------------------------------------------------------
@@ -140,7 +140,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
     m_vScrollbarVisible = FALSE;
 
     bool multi_line = (style & wxTE_MULTILINE) != 0;
-    if ( multi_line )
+    if (multi_line)
     {
         /* a multi-line edit control: create a vertical scrollbar by default and
            horizontal if requested */
@@ -171,9 +171,14 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
             gtk_widget_show(hscrollbar);
         }
 
-        /* we create the vertical scrollbar on demand */
-	m_vScrollbar = (GtkWidget*) NULL;
-
+        /* finally, put the vertical scrollbar in the upper right corner */
+        m_vScrollbar = gtk_vscrollbar_new( GTK_TEXT(m_text)->vadj );
+        GTK_WIDGET_UNSET_FLAGS( m_vScrollbar, GTK_CAN_FOCUS );
+	
+        gtk_table_attach(GTK_TABLE(m_widget), m_vScrollbar, 1, 2, 0, 1,
+                     GTK_FILL,
+                     (GtkAttachOptions)(GTK_EXPAND | GTK_FILL | GTK_SHRINK),
+                     0, 0);
     }
     else
     {
@@ -194,15 +199,18 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
     PostCreation();
 
     if (multi_line)
-    {
-//        gtk_widget_realize(m_text);
         gtk_widget_show(m_text);
-    }
 
     /* we want to be notified about text changes */
     gtk_signal_connect( GTK_OBJECT(m_text), "changed",
       GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
 
+    if (multi_line)
+    {
+        gtk_signal_connect(GTK_OBJECT(GTK_TEXT(m_text)->vadj), "changed",
+          (GtkSignalFunc) gtk_scrollbar_changed_callback, (gpointer) this );
+    }
+    
     if (!value.IsEmpty())
     {
         gint tmp = 0;
@@ -243,12 +251,6 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
 
     Show( TRUE );
 
-    if (multi_line)
-    {
-        gtk_signal_connect(GTK_OBJECT(GTK_TEXT(m_text)->vadj), "changed",
-          (GtkSignalFunc) gtk_scrollbar_changed_callback, (gpointer) this );
-    }
-
     return TRUE;
 }
 
@@ -271,18 +273,6 @@ void wxTextCtrl::CalculateScrollbar()
     {
         if (!m_vScrollbarVisible)
         {
-	    if (!m_vScrollbar)
-	    {
-                /* finally, put the vertical scrollbar in the upper right corner */
-                m_vScrollbar = gtk_vscrollbar_new( GTK_TEXT(m_text)->vadj );
-                GTK_WIDGET_UNSET_FLAGS( m_vScrollbar, GTK_CAN_FOCUS );
-	
-                gtk_table_attach(GTK_TABLE(m_widget), m_vScrollbar, 1, 2, 0, 1,
-                     GTK_FILL,
-                     (GtkAttachOptions)(GTK_EXPAND | GTK_FILL | GTK_SHRINK),
-                     0, 0);
-	    }
-	    
             gtk_widget_show( m_vScrollbar );
 
             m_vScrollbarVisible = TRUE;

@@ -769,16 +769,16 @@ void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
     }
     else
     {
-        // do we have exactly one child?
+        /* do we have exactly one child? */
         wxWindow *child = (wxWindow *)NULL;
         for ( wxNode *node = GetChildren().First(); node; node = node->Next() )
         {
             wxWindow *win = (wxWindow *)node->Data();
             if ( !wxIS_KIND_OF(win,wxFrame) && !wxIS_KIND_OF(win,wxDialog) )
             {
-                if ( child )
+                if (child)
                 {
-                    // it's the second one: do nothing
+                    /* it's the second one: do nothing */
                     return;
                 }
 
@@ -786,10 +786,10 @@ void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
             }
         }
 
-        // no children at all?
-        if ( child )
+        /* no children at all? */
+        if (child)
         {
-            // yes: set it's size to fill all the frame
+            /* yes: set it's size to fill all the frame */
             int client_x, client_y;
             GetClientSize( &client_x, &client_y );
             child->SetSize( 1, 1, client_x-2, client_y-2 );
@@ -800,6 +800,12 @@ void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
 static void SetInvokingWindow( wxMenu *menu, wxWindow *win )
 {
     menu->SetInvokingWindow( win );
+    
+#if (GTK_MINOR_VERSION > 0)
+    /* support for native hot keys  */
+    gtk_accel_group_attach( menu->m_accel, GTK_OBJECT(win->m_widget));
+#endif
+
     wxNode *node = menu->GetItems().First();
     while (node)
     {
@@ -819,8 +825,8 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
 
     if (m_frameMenuBar)
     {
-        /* support for native key accelerators indicated by underscroes */
 #if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
+        /* support for native key accelerators indicated by underscroes */
          gtk_accel_group_attach( m_frameMenuBar->m_accel, GTK_OBJECT(m_widget));
 #endif
 

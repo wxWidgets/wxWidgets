@@ -73,6 +73,8 @@ public:
     // implementation
     void SetMenuItem(GtkWidget *menuItem) { m_menuItem = menuItem; }
     GtkWidget *GetMenuItem() const { return m_menuItem; }
+    
+    wxString GetHotKey() const { return m_hotKey; }
 
     void SetCheckedFlag(bool checked) { m_isChecked = checked; }
     bool GetCheckedFlag() const { return m_isChecked; }
@@ -80,6 +82,7 @@ public:
 private:
     int           m_id;
     wxString      m_text;
+    wxString      m_hotKey;
     bool          m_isCheckMenu;
     bool          m_isChecked;
     bool          m_isEnabled;

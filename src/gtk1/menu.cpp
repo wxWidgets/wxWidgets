@@ -474,8 +474,10 @@ wxMenuItem::wxMenuItem()
 // it's valid for this function to be called even if m_menuItem == NULL
 void wxMenuItem::SetName( const wxString& str )
 {
+    /* '\t' is the deliminator indicating a hot key */
     m_text = _T("");
-    for ( const wxChar *pc = str; *pc != _T('\0'); pc++ )
+    const wxChar *pc = str;
+    for (; (*pc != _T('\0')) && (*pc != _T('\t')); pc++ )
     {
         if (*pc == _T('&'))
 	{
@@ -486,6 +488,13 @@ void wxMenuItem::SetName( const wxString& str )
         else
            m_text << *pc;
     }
+    
+    /* only GTK 1.2 know about hot keys */
+    m_hotKey = _T("");
+#if (GTK_MINOR_VERSION > 0)
+    pc++;
+    m_hotKey = pc;
+#endif
 
     if (m_menuItem)
     {
@@ -607,7 +616,6 @@ void wxMenu::Append( int id, const wxString &item, const wxString &helpStr, bool
     
     GtkItemFactoryEntry entry;
     entry.path = buf;
-    entry.accelerator = (gchar*) NULL;
     entry.callback = (GtkItemFactoryCallback) gtk_menu_clicked_callback;
     entry.callback_action = 0;
     if (checkable)
@@ -615,12 +623,48 @@ void wxMenu::Append( int id, const wxString &item, const wxString &helpStr, bool
     else
         entry.item_type = "<Item>";
     
+    entry.accelerator = (gchar*) NULL;
+    char hotbuf[50];
+    wxString hotkey( mitem->GetHotKey() );
+    if (!hotkey.IsEmpty())
+    {
+	switch (hotkey[0])
+	{
+	    case _T('a'):   /* Alt */
+	    case _T('A'):
+	    case _T('m'):   /* Meta */
+	    case _T('M'):
+	    {
+	       strcpy( hotbuf, "<alt>" );
+	       wxString last = hotkey.Right(1);
+	       strcat( hotbuf, last.mb_str() );
+               entry.accelerator = hotbuf;
+	       break;
+	    }
+	    case _T('c'):    /* Ctrl */
+	    case _T('C'):
+	    case _T('s'):    /* Strg, yeah man, I'm German */
+	    case _T('S'):
+	    {
+	       strcpy( hotbuf, "<control>" );
+	       wxString last = hotkey.Right(1);
+	       strcat( hotbuf, last.mb_str() );
+               entry.accelerator = hotbuf;
+	       break;
+	    }
+	    default:
+	    {
+	    }
+	}
+    }
+    
     gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
     
     /* in order to get the pointer to the item we need the item text _without_ underscores */
     wxString s = _T("<main>/");
     for ( const wxChar *pc = text; *pc != _T('\0'); pc++ )
     {
+        if (*pc == _T('\t')) break;
         if (*pc == _T('_')) pc++; /* skip it */
         s << *pc;
     }

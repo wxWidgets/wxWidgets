@@ -506,7 +506,7 @@ m_text(NULL), m_notebook(NULL)
     (*m_multitext) << " Appended.";
     m_multitext->SetInsertionPoint(0);
     m_multitext->WriteText( "Prepended. " );
-    m_multitext->AppendText( "\nPress function keys to test different wxTextCtrl functions." );
+    m_multitext->AppendText( "\nPress function keys for test different tests." );
 
     (*m_multitext) << "\nDoes it have cross cursor?";
     m_multitext->SetCursor(*wxCROSS_CURSOR);
