@@ -167,6 +167,9 @@ public:
     // accessors
     int GetInterval() const { return m_interval; }
 
+    // implement the base class pure virtual
+    virtual wxEvent *Clone() const { return new wxTimerEvent(*this); }
+
 private:
     int m_interval;
 

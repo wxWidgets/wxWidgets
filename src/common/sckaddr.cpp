@@ -72,16 +72,8 @@ const wxSockAddress& wxSockAddress::operator=(const wxSockAddress& addr)
   return *this;
 }
 
-void wxSockAddress::CopyObject(wxObject& dest) const
-{
-  wxSockAddress *addr = (wxSockAddress *)&dest;
-
-  wxObject::CopyObject(dest);
-  addr->SetAddress(GetAddress());
-}
-
 void wxSockAddress::Clear()
-{ 
+{
   GAddress_destroy(m_address);
   m_address = GAddress_new();
 }
@@ -102,7 +94,7 @@ wxIPV4address::~wxIPV4address()
 bool wxIPV4address::Hostname(const wxString& name)
 {
   // Some people are sometimes fool.
-  if (name == wxT("")) 
+  if (name == wxT(""))
   {
     wxLogWarning( _("Trying to solve a NULL hostname: giving up") );
     return FALSE;
@@ -147,7 +139,7 @@ wxString wxIPV4address::Hostname()
 
 unsigned short wxIPV4address::Service()
 {
-  return GAddress_INET_GetPort(m_address); 
+  return GAddress_INET_GetPort(m_address);
 }
 
 #if 0
@@ -196,7 +188,7 @@ const wxString& wxIPV6address::Hostname()
 
 unsigned short wxIPV6address::Service()
 {
-  return GAddress_INET_GetPort(m_address); 
+  return GAddress_INET_GetPort(m_address);
 }
 
 #endif
@@ -231,5 +223,5 @@ wxString wxUNIXaddress::Filename()
 
 #endif
 
-#endif 
+#endif
   // wxUSE_SOCKETS

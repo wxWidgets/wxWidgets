@@ -179,6 +179,9 @@ public:
     // process (i.e. does it result from our own attempt to establish the
     // connection)?
     bool IsOwnEvent() const { return m_id != 0; }
+
+    // implement the base class pure virtual
+    virtual wxEvent *Clone() const { return new wxDialUpEvent(*this); }
 };
 
 // the type of dialup event handler function

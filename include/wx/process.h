@@ -114,8 +114,12 @@ public:
         // the exit code
     int GetExitCode() { return m_exitcode; }
 
+    // implement the base class pure virtual
+    virtual wxEvent *Clone() const { return new wxProcessEvent(*this); }
+
 public:
-    int m_pid, m_exitcode;
+    int m_pid,
+        m_exitcode;
 
     DECLARE_DYNAMIC_CLASS(wxProcessEvent)
 };

@@ -39,7 +39,9 @@ public:
   void SetAddress(GAddress *address);
   const wxSockAddress& operator =(const wxSockAddress& addr);
 
-  void CopyObject(wxObject& dest) const;
+  // we need to be able to create copies of the addresses polymorphically (i.e.
+  // wihtout knowing the exact address class)
+  virtual wxSockAddress *Clone() const = 0;
 
 protected:
   GAddress *m_address;
@@ -61,7 +63,8 @@ public:
   wxString Hostname();
   unsigned short Service();
 
-  inline int Type() { return wxSockAddress::IPV4; }
+  virtual int Type() { return wxSockAddress::IPV4; }
+  virtual wxSockAddress *Clone() const { return new wxIPV4address(*this); }
 };
 
 #ifdef ENABLE_IPV6
@@ -82,7 +85,8 @@ public:
   wxString Hostname() const;
   unsigned short Service() const;
 
-  inline int Type() { return wxSockAddress::IPV6; }
+  virtual int Type() { return wxSockAddress::IPV6; }
+  virtual wxSockAddress *Clone() const { return new wxIPV6address(*this); }
 };
 #endif
 
@@ -103,7 +107,8 @@ public:
   void Filename(const wxString& name);
   wxString Filename();
 
-  inline int Type() { return wxSockAddress::UNIX; }
+  virtual int Type() { return wxSockAddress::UNIX; }
+  virtual wxSockAddress *Clone() const { return new wxUNIXaddress(*this); }
 };
 #endif
   // __UNIX__

@@ -638,7 +638,7 @@ void wxEvtHandler::AddPendingEvent(wxEvent& event)
     if ( !m_pendingEvents )
       m_pendingEvents = new wxList;
 
-    wxEvent *event2 = (wxEvent *)event.Clone();
+    wxEvent *event2 = event.Clone();
 
     m_pendingEvents->Append(event2);
 

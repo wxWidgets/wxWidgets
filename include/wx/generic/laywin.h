@@ -91,6 +91,8 @@ public:
     void SetAlignment(wxLayoutAlignment align) { m_alignment = align; }
     wxLayoutAlignment GetAlignment() const { return m_alignment; }
 
+    virtual wxEvent *Clone() const { return new wxQueryLayoutInfoEvent(*this); }
+
 protected:
     int                     m_flags;
     int                     m_requestedLength;
@@ -119,13 +121,17 @@ public:
         m_flags = 0;
         m_id = id;
     }
-// Read by the app
-    inline void SetFlags(int flags) { m_flags = flags; }
-    inline int GetFlags() const { return m_flags; }
 
-// Set by the app
-    inline void SetRect(const wxRect& rect) { m_rect = rect; }
-    inline wxRect GetRect() const { return m_rect; }
+    // Read by the app
+    void SetFlags(int flags) { m_flags = flags; }
+    int GetFlags() const { return m_flags; }
+
+    // Set by the app
+    void SetRect(const wxRect& rect) { m_rect = rect; }
+    wxRect GetRect() const { return m_rect; }
+
+    virtual wxEvent *Clone() const { return new wxCalculateLayoutEvent(*this); }
+
 protected:
     int                     m_flags;
     wxRect                  m_rect;

@@ -99,22 +99,6 @@ bool wxObject::IsKindOf(wxClassInfo *info) const
         return FALSE;
 }
 
-wxObject *wxObject::Clone() const
-{
-    wxObject *object = GetClassInfo()->CreateObject();
-    CopyObject(*object);
-    return object;
-}
-
-#ifdef __WXDEBUG__
-void wxObject::CopyObject(wxObject& object_dest) const
-#else // !Debug
-void wxObject::CopyObject(wxObject& WXUNUSED(object_dest)) const
-#endif // Debug/!Debug
-{
-    wxASSERT(object_dest.GetClassInfo()->IsKindOf(GetClassInfo()));
-}
-
 #if wxUSE_STD_IOSTREAM && (defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT)
 void wxObject::Dump(wxSTD ostream& str)
 {

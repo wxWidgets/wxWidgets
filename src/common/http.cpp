@@ -185,11 +185,11 @@ bool wxHTTP::Connect(wxSockAddress& addr, bool WXUNUSED(wait))
 {
   if (m_addr) {
     delete m_addr;
-    m_addr = NULL;
     Close();
   }
 
-  m_addr = (wxSockAddress *) addr.Clone();
+  m_addr = addr.Clone();
+
   return TRUE;
 }
 

@@ -359,8 +359,10 @@ public:
     // exists only for optimization purposes.
     bool IsCommandEvent() const { return m_isCommandEvent; }
 
-    // specialized clone function since it is done a lot
-    virtual wxEvent *Clone() const { return new wxEvent(*this); }
+    // this function is used to create a copy of the event polymorphically and
+    // all derived classes must implement it because otherwise wxPostEvent()
+    // for them wouldn't work (it needs to do a copy of the event)
+    virtual wxEvent *Clone() const = 0;
 
 public:
     wxObject*         m_eventObject;
