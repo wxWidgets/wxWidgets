@@ -45,7 +45,13 @@
 #include "wx/textctrl.h"
 
 #include "wx/calctrl.h"
-#include "wx/datectrl.h"
+
+#if wxUSE_DATEPICKCTRL
+    #include "wx/datectrl.h"
+    #if wxUSE_DATEPICKCTRL_GENERIC
+        #include "wx/generic/datectrl.h"
+    #endif // wxUSE_DATEPICKCTRL_GENERIC
+#endif // wxUSE_DATEPICKCTRL
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -143,7 +149,7 @@ private:
     void OnDateChange(wxDateEvent& event);
 
 
-    wxDatePickerCtrl *m_datePicker;
+    wxDatePickerCtrlBase *m_datePicker;
     wxTextCtrl *m_text;
 
 
@@ -175,6 +181,9 @@ enum
     Calendar_DatePicker_AskDate = 300,
     Calendar_DatePicker_ShowCentury,
     Calendar_DatePicker_DropDown,
+#if wxUSE_DATEPICKCTRL_GENERIC
+    Calendar_DatePicker_Generic,
+#endif // wxUSE_DATEPICKCTRL_GENERIC
 #endif // wxUSE_DATEPICKCTRL
     Calendar_CalCtrl = 1000
 };
@@ -307,6 +316,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                               _T("Al&ways show century"));
     menuDate->AppendCheckItem(Calendar_DatePicker_DropDown,
                               _T("Use &drop down control"));
+#if wxUSE_DATEPICKCTRL_GENERIC
+    menuDate->AppendCheckItem(Calendar_DatePicker_Generic,
+                              _T("Use &generic version of the control"));
+#endif // wxUSE_DATEPICKCTRL_GENERIC
     menuDate->AppendSeparator();
     menuDate->Append(Calendar_DatePicker_AskDate, _T("&Choose date...\tCtrl-D"), _T("Show dialog with wxDatePickerCtrl"));
 #endif // wxUSE_DATEPICKCTRL
@@ -577,6 +590,15 @@ MyDialog::MyDialog(wxWindow *parent, const wxDateTime& dt, int dtpStyle)
                       ),
                     wxSizerFlags().Border());
 
+#if wxUSE_DATEPICKCTRL_GENERIC
+    wxFrame *frame = (wxFrame *)wxGetTopLevelParent(parent);
+    if ( frame && frame->GetMenuBar()->IsChecked(Calendar_DatePicker_Generic) )
+        m_datePicker = new wxDatePickerCtrlGeneric(this, -1, dt,
+                                                   wxDefaultPosition,
+                                                   wxDefaultSize,
+                                                   dtpStyle);
+    else
+#endif // wxUSE_DATEPICKCTRL_GENERIC
     m_datePicker = new wxDatePickerCtrl(this, -1, dt,
                                         wxDefaultPosition, wxDefaultSize,
                                         dtpStyle);
