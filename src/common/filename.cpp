@@ -112,6 +112,12 @@
     #include <sys/stat.h>
 #endif
 
+#ifdef __VISAGECPP__
+#ifndef MAX_PATH
+#define MAX_PATH 256
+#endif
+#endif
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -460,9 +466,9 @@ wxString wxFileName::CreateTempFileName(const wxString& prefix)
 
     // Temporarily remove - MN
     #ifndef __WATCOMC__
-        ::DosCreateDir(wxStringBuffer(MAX_PATH), NULL);
+        ::DosCreateDir(wxStringBuffer(path, MAX_PATH), NULL);
     #endif
-    
+
 #else // !Windows, !OS/2, !DOS
     if ( dir.empty() )
     {
@@ -1287,7 +1293,7 @@ void wxFileName::SplitPath(const wxString& fullpathWithVolume,
     if ( format == wxPATH_DOS || format == wxPATH_VMS )
     {
         wxString sepVol = GetVolumeSeparator(format);
-        
+
         size_t posFirstColon = fullpath.find_first_of(sepVol);
         if ( posFirstColon != wxString::npos )
         {

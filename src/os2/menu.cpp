@@ -969,7 +969,6 @@ wxMenu* wxMenuBar::Remove(
     if (IsAttached())
     {
         ::WinSendMsg((HWND)GetHmenu(), MM_REMOVEITEM, MPFROM2SHORT(nId, TRUE), (MPARAM)0);
-        pMenu->Detach();
 
 #if wxUSE_ACCEL
         if (pMenu->HasAccels())

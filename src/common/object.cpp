@@ -32,6 +32,11 @@
     #endif // wxUSE_SERIAL
 #endif // WX_PRECOMP
 
+#ifdef __VISAGECPP__
+        #include "wx/objstrm.h"
+        #include "wx/serbase.h"
+#endif
+
 #include <string.h>
 #include <assert.h>
 
