@@ -71,6 +71,7 @@
     //for <gdk/gdkx.h>/related for GDK_WINDOW_XWINDOW
 #    include "wx/gtk/win_gtk.h"
 #    include <gtk/gtksignal.h>
+//#    include <gst/gconf/gconf.h> //gstreamer gnome interface
 #endif
 
 
@@ -124,8 +125,6 @@ public:
 #endif
 
     GstElement* m_player;       //GStreamer media element
-//    GstElement* m_audiosink;
-    GstElement* m_videosink;
     
     wxSize      m_videoSize;
     wxControl*  m_ctrl;
@@ -203,8 +202,11 @@ gint wxGStreamerMediaBackend::OnGTKRealize(GtkWidget* theWidget,
     GdkWindow *window = GTK_PIZZA(theWidget)->bin_window;
     wxASSERT(window);
     
-    gst_x_overlay_set_xwindow_id( GST_X_OVERLAY(be->m_videosink),
-                        GDK_WINDOW_XWINDOW( window )
+    GstElement* videosink;
+    g_object_get (G_OBJECT (be->m_player), "video-sink", &videosink, NULL);
+    
+    gst_x_overlay_set_xwindow_id( GST_X_OVERLAY(videosink),
+                                  GDK_WINDOW_XWINDOW( window )
                                   );
     
     return 0;
@@ -217,8 +219,6 @@ gint wxGStreamerMediaBackend::OnGTKRealize(GtkWidget* theWidget,
 // wxGStreamerMediaBackend::Cleanup
 //
 // Frees the gstreamer interfaces if there were any created
-//TODO: Do we need to free the video interface?  I'm getting segfaults
-//if I do...
 //---------------------------------------------------------------------------
 void wxGStreamerMediaBackend::Cleanup()
 {
@@ -226,11 +226,6 @@ void wxGStreamerMediaBackend::Cleanup()
     {
         gst_element_set_state (m_player, GST_STATE_NULL);
         gst_object_unref (GST_OBJECT (m_player));
-        
-        //if(GST_IS_OBJECT(m_videosink))
-        //    gst_object_unref (GST_OBJECT (m_videosink));
-        //if(GST_IS_OBJECT(m_audiosink))
-        //    gst_object_unref (GST_OBJECT (m_audiosink));
     }
 }
 
@@ -387,13 +382,12 @@ void wxGStreamerMediaBackend::OnVideoCapsReady(GstPad* pad, GParamSpec* pspec, g
 //
 // 1) Stops/Cleanups the previous instance if there is any
 // 2) Creates the gstreamer interfaces - playbin and xvimagesink for video
-// 3) If there is no playbin or video sink it bails out
-// 4) Sets the playbin to have our video sink so we can set the window later
-// 5) Set up the error and end-of-stream callbacks for our player
-// 6) Make sure our video sink can support the x overlay interface
-// 7) Make sure the passed URI is valid and tell playbin to load it
-// 8) Use the xoverlay extension to tell gstreamer to play in our window
-// 9) Get the video size - pause required to set the stream in action
+// 3) If there is no playbin bail out
+// 4) Set up the error and end-of-stream callbacks for our player
+// 5) Make sure our video sink can support the x overlay interface
+// 6) Make sure the passed URI is valid and tell playbin to load it
+// 7) Use the xoverlay extension to tell gstreamer to play in our window
+// 8) Get the video size - pause required to set the stream in action
 //---------------------------------------------------------------------------
 bool wxGStreamerMediaBackend::Load(const wxURI& location)
 {
@@ -402,46 +396,40 @@ bool wxGStreamerMediaBackend::Load(const wxURI& location)
     
     //2
     m_player    = gst_element_factory_make ("playbin", "play");
-//    m_audiosink = gst_element_factory_make ("alsasink", "audiosink");
-    m_videosink = gst_element_factory_make ("xvimagesink", "videosink");
 
     //3
-    //no playbin -- outta here :)
-    if (!m_player || !GST_IS_OBJECT(m_videosink))
+    if (!m_player)
         return false;
         
-//    //have alsa?
-//    if (GST_IS_OBJECT(m_audiosink) == false)
-//    {
-//        //nope, try OSS
-//        m_audiosink = gst_element_factory_make ("osssink", "audiosink");
-//         wxASSERT_MSG(GST_IS_OBJECT(m_audiosink), wxT("WARNING: Alsa and OSS drivers for gstreamer not found - audio will be unavailable for wxMediaCtrl"));
-//    }
-    
-
-    //4        
-    g_object_set (G_OBJECT (m_player),
-                    "video-sink", m_videosink,
-//                    "audio-sink", m_audiosink,
-                    NULL);
-
-    //5
+    //4
     g_signal_connect (m_player, "eos", G_CALLBACK (OnError), this);
     g_signal_connect (m_player, "error", G_CALLBACK (OnFinish), this);
 
-    //6
-    wxASSERT( GST_IS_X_OVERLAY(m_videosink) );
-    if ( ! GST_IS_X_OVERLAY(m_videosink) )
+    //5
+//#ifdef __WXGTK__
+    //use gnome-specific gstreamer extensions
+//    GstElement* videosink = gst_gconf_get_default_video_sink();
+//#else
+    GstElement* videosink = gst_element_factory_make ("xvimagesink", "videosink");
+    if ( !GST_IS_OBJECT(videosink) )
+        videosink = gst_element_factory_make ("ximagesink", "videosink");
+//#endif
+    wxASSERT( GST_IS_X_OVERLAY(videosink) );
+    if ( ! GST_IS_X_OVERLAY(videosink) )
         return false;
-    
-    //7
+
+    g_object_set (G_OBJECT (m_player),
+                    "video-sink", videosink,
+//                    "audio-sink", m_audiosink,
+                    NULL);    
+    //6
     wxString locstring = location.BuildUnescapedURI();
     wxASSERT(gst_uri_protocol_is_valid("file"));
     wxASSERT(gst_uri_is_valid(locstring.mb_str()));
 
     g_object_set (G_OBJECT (m_player), "uri", (const char*)locstring.mb_str(), NULL);
     
-    //8    
+    //7    
 #ifdef __WXGTK__
     if(!GTK_WIDGET_REALIZED(m_ctrl->m_wxwindow))
     {
@@ -459,7 +447,7 @@ bool wxGStreamerMediaBackend::Load(const wxURI& location)
 #endif
 
  
-    gst_x_overlay_set_xwindow_id( GST_X_OVERLAY(m_videosink),
+    gst_x_overlay_set_xwindow_id( GST_X_OVERLAY(videosink),
 #ifdef __WXGTK__
                         GDK_WINDOW_XWINDOW( window )
 #else
@@ -471,7 +459,7 @@ bool wxGStreamerMediaBackend::Load(const wxURI& location)
     } //end else block
 #endif 
  
-    //9
+    //8
     wxASSERT(gst_element_set_state (m_player,
                     GST_STATE_PAUSED)    == GST_STATE_SUCCESS);            
     
