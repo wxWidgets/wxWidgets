@@ -180,24 +180,25 @@ wxObject* wxHtmlWinParser::GetProduct()
     return top;
 }
 
-wxFSFile *wxHtmlWinParser::OpenURL(wxHtmlURLType type, 
+wxFSFile *wxHtmlWinParser::OpenURL(wxHtmlURLType type,
                                    const wxString& url) const
 {
     // FIXME - normalize the URL to full path before passing to
     //         OnOpeningURL!!
     if ( m_Window )
     {
-        wxString redirect;
         wxString myurl(url);
         wxHtmlOpeningStatus status;
         for (;;)
         {
-            if ( m_Window->OnOpeningURL(type, myurl, &redirect) == wxHTML_REDIRECT )
-                myurl = redirect;
-            else
+            wxString redirect;
+            status = m_Window->OnOpeningURL(type, myurl, &redirect);
+            if ( status != wxHTML_REDIRECT )
                 break;
+
+            myurl = redirect;
         }
-        
+
         if ( status == wxHTML_BLOCK )
             return NULL;
         else
