@@ -416,13 +416,16 @@ wxObject *wxLibraries::CreateObject(const wxString& path)
     return NULL;
 }
 
-#ifdef __DARWIN__
+#endif // wxUSE_DYNLIB_CLASS && !wxUSE_DYNAMIC_LOADER
+
+#if defined(__DARWIN__) && (wxUSE_DYNLIB_CLASS || wxUSE_DYNAMIC_LOADER)
 // ---------------------------------------------------------------------------
 // For Darwin/Mac OS X
 //   supply the sun style dlopen functions in terms of Darwin NS*
 // ---------------------------------------------------------------------------
 
-#import <mach-o/dyld.h>
+#include <stdio.h>
+#include <mach-o/dyld.h>
 
 static char dl_last_error[1024];
 
@@ -494,6 +497,4 @@ void *dlsym(void *handle, const char *symbol)
     return addr;
 }
 
-#endif // __DARWIN__
-
-#endif // wxUSE_DYNLIB_CLASS
+#endif // defined(__DARWIN__) && (wxUSE_DYNLIB_CLASS || wxUSE_DYNAMIC_LOADER)
