@@ -457,6 +457,7 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
    if(keyCode == WXK_F1)
    {
       m_llist->Debug();
+      event.skip();
       return;
    }
 #endif
@@ -563,15 +564,13 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
             // this should work even in read-only mode
             Copy();
             break;
-#ifdef M_BASEDIR
-	 case 's': // search
+         case 's': // search
             Find("");
             break;
          case 't': // search again
             FindAgain();
             break;
-#endif
-	 default:
+         default:
             ;
          }
       else if( IsEditable() )
@@ -611,15 +610,13 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
                   SetDirty();
                }
                break;
-#ifdef M_BASEDIR
             case 's': // search
                Find("");
                break;
             case 't': // search again
                FindAgain();
                break;
-#endif
-	    case 'u':
+            case 'u':
                m_llist->DeleteToBeginOfLine();
                SetDirty();
                break;
@@ -1081,28 +1078,32 @@ wxLayoutWindow::Paste(bool primary)
    // Read some text
    if (wxTheClipboard->Open())
    {
+#if __WXGTK__
       if(primary)
          wxTheClipboard->UsePrimarySelection();
-
+#endif
+#if wxUSE_PRIVATE_CLIPBOARD_FORMAT
       wxLayoutDataObject wxldo;
       if (wxTheClipboard->IsSupported( wxldo.GetFormat() ))
       {
-         wxTheClipboard->GetData(wxldo);
-
-         // now we can access the data we had put into wxLayoutDataObject in
-         // wxLayoutList::GetSelection by calling its GetLayoutData() - the
-         // trouble is that I don't know what to do with it! (VZ)
+         wxTheClipboard->GetData(&wxldo);
+         {
+         }
+         //FIXME: missing functionality  m_llist->Insert(wxldo.GetList());
       }
       else
+#endif
       {
+#if 0 //RE_ENABLE FIXME!!
          wxTextDataObject data;
          if (wxTheClipboard->IsSupported( data.GetFormat() ))
          {
-            wxTheClipboard->GetData(data);
+            wxTheClipboard->GetData(&data);
             wxString text = data.GetText();
             wxLayoutImportText( m_llist, text);
             SetDirty();
          }
+#endif
       }
       wxTheClipboard->Close();
    }
@@ -1119,8 +1120,9 @@ wxLayoutWindow::Copy(bool invalidate)
       m_llist->EndSelection();
    }
 
-   wxLayoutDataObject *wldo = new wxLayoutDataObject;
-   wxLayoutList *llist = m_llist->GetSelection(wldo, invalidate);
+#if 0 //FIXME CLIPBOARD
+   wxLayoutDataObject wldo;
+   wxLayoutList *llist = m_llist->GetSelection(&wldo, invalidate);
    if(! llist)
       return FALSE;
    // Export selection as text:
@@ -1148,16 +1150,16 @@ wxLayoutWindow::Copy(bool invalidate)
 
    if (wxTheClipboard->Open())
    {
-      wxDataObjectComposite *dobj = new wxDataObjectComposite;
-      dobj->Add(new wxTextDataObject(text));
-      dobj->Add(wldo);
-
-      bool rc = wxTheClipboard->SetData(dobj);
-
+      wxTextDataObject *data = new wxTextDataObject( text );
+      bool  rc = wxTheClipboard->SetData( data );
+#if wxUSE_PRIVATE_CLIPBOARD_FORMAT
+      rc |= wxTheClipboard->AddData( &wldo );
+#endif
       wxTheClipboard->Close();
       return rc;
    }
-
+#endif //FIXME CLIPBOARD
+   
    return FALSE;
 }
 
