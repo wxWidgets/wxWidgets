@@ -52,6 +52,8 @@ public:
     // accessors
         // is this a valid tree item?
     bool IsOk() const { return m_pItem != 0; }
+        // return true if this item is not valid
+    bool operator!() const { return !IsOk(); }
 
     // operations
         // invalidate the item
@@ -61,12 +63,11 @@ public:
     // deprecated: only for compatibility, don't work on 64 bit archs
     wxTreeItemId(long item) { m_pItem = (wxTreeItemIdValue)item; }
     operator long() const { return (long)m_pItem; }
-#endif // WXWIN_COMPATIBILITY_2_4
+#else // !WXWIN_COMPATIBILITY_2_4
+    operator bool() const { return IsOk(); }
+#endif // WXWIN_COMPATIBILITY_2_4/!WXWIN_COMPATIBILITY_2_4
 
     wxTreeItemIdValue m_pItem;
-    bool operator!() const { return !IsOk(); }
-    operator bool() const { return IsOk(); }
-
 };
 
 inline bool operator==(const wxTreeItemId& i1, const wxTreeItemId& i2)
