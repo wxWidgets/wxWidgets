@@ -67,9 +67,7 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     xattributes.border_pixel = BlackPixel( xdisplay, xscreen );
     xattributes.override_redirect = False;
 
-    wxSize size(2, 2);
-    
-    Window xwindow = XCreateWindow( xdisplay, xparent, 0, 0, size.x, size.y, 
+    Window xwindow = XCreateWindow( xdisplay, xparent, pos.x, pos.y, size.x, size.y, 
        0, DefaultDepth(xdisplay,xscreen), InputOutput, xvisual, xattributes_mask, &xattributes );
     
     XSelectInput( xdisplay, xwindow,
