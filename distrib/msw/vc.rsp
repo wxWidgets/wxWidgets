@@ -5,6 +5,9 @@ src/wxvc6.dsw
 src/wxvc_dll.dsp
 src/wxvc_dll.dsw
 
+src/jpeg/jpeg.dsp
+src/jpeg/jpeg.dsw
+
 samples/checklst/ChecklstVC.dsp
 samples/checklst/ChecklstVC.dsw
 

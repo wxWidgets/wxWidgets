@@ -117,25 +117,27 @@ instead of showing a dialog. Windows only.
 
 \constfunc{wxPoint}{GetMarginTopLeft}{\void}
 
-Returns the left (x) and top (y) margins.
+Returns the left (x) and top (y) margins in millimetres.
 
 \membersection{wxPageSetupDialogData::GetMarginBottomRight}\label{wxpagesetupdialogdatagetmarginbottomright}
 
 \constfunc{wxPoint}{GetMarginBottomRight}{\void}
 
-Returns the right (x) and bottom (y) margins.
+Returns the right (x) and bottom (y) margins in millimetres.
 
 \membersection{wxPageSetupDialogData::GetMinMarginTopLeft}\label{wxpagesetupdialogdatagetminmargintopleft}
 
 \constfunc{wxPoint}{GetMinMarginTopLeft}{\void}
 
-Returns the left (x) and top (y) minimum margins the user can enter (Windows only).
+Returns the left (x) and top (y) minimum margins the user can enter (Windows only). Units
+are in millimetres
 
 \membersection{wxPageSetupDialogData::GetMinMarginBottomRight}\label{wxpagesetupdialogdatagetminmarginbottomright}
 
 \constfunc{wxPoint}{GetMinMarginBottomRight}{\void}
 
-Returns the right (x) and bottom (y) minimum margins the user can enter (Windows only).
+Returns the right (x) and bottom (y) minimum margins the user can enter (Windows only). Units
+are in millimetres
 
 \membersection{wxPageSetupDialogData::GetPaperId}\label{wxpagesetupdialogdatagetpaperid}
 
@@ -169,31 +171,33 @@ instead of showing a dialog. Windows only.
 \func{void}{SetDefaultMinMargins}{\param{bool}{ flag}}
 
 Pass TRUE if the page setup dialog will take its minimum margin values from the currently
-selected printer properties. Windows only.
+selected printer properties. Windows only. Units are in millimetres
 
 \membersection{wxPageSetupDialogData::SetMarginTopLeft}\label{wxpagesetupdialogdatasetmargintopleft}
 
 \func{void}{GetMarginTopLeft}{\param{const wxPoint\& }{pt}}
 
-Sets the left (x) and top (y) margins.
+Sets the left (x) and top (y) margins in millimetres.
 
 \membersection{wxPageSetupDialogData::SetMarginBottomRight}\label{wxpagesetupdialogdatasetmarginbottomright}
 
 \func{void}{SetMarginBottomRight}{\param{const wxPoint\& }{pt}}
 
-Sets the right (x) and bottom (y) margins.
+Sets the right (x) and bottom (y) margins in millimetres.
 
 \membersection{wxPageSetupDialogData::SetMinMarginTopLeft}\label{wxpagesetupdialogdatasetminmargintopleft}
 
 \func{void}{SetMinMarginTopLeft}{\param{const wxPoint\& }{pt}}
 
-Sets the left (x) and top (y) minimum margins the user can enter (Windows only).
+Sets the left (x) and top (y) minimum margins the user can enter (Windows only). Units are
+in millimetres.
 
 \membersection{wxPageSetupDialogData::SetMinMarginBottomRight}\label{wxpagesetupdialogdatasetminmarginbottomright}
 
 \func{void}{SetMinMarginBottomRight}{\param{const wxPoint\& }{pt}}
 
-Sets the right (x) and bottom (y) minimum margins the user can enter (Windows only).
+Sets the right (x) and bottom (y) minimum margins the user can enter (Windows only). Units are
+in millimetres.
 
 \membersection{wxPageSetupDialogData::SetPaperId}\label{wxpagesetupdialogdatasetpaperid}
 
@@ -284,5 +288,4 @@ Returns the \helpref{page setup data}{wxpagesetupdialogdata} associated with the
 
 Shows the dialog, returning wxID\_OK if the user pressed OK, and wxID\_CANCEL
 otherwise.
-
 

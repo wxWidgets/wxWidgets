@@ -660,7 +660,7 @@ bool wxProject::GenerateVCProject()
     stream << "# PROP Ignore_Export_Lib 0\n";
     stream << "# PROP Target_Dir \"\"\n";
     stream << "# ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /D \"WIN32\" /D \"_DEBUG\" /D \"_WINDOWS\" /YX /FD /c\n";
-    stream << "# ADD CPP /nologo /MD /W3 /Gm /GX /Zi /Od";
+    stream << "# ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od";
 
     n = m_includeDirs.Number();
     for (i = 0; i < n; i++)
@@ -686,7 +686,7 @@ bool wxProject::GenerateVCProject()
         wxString lib = m_extraLibs[i];
         stream << lib << " ";
     }
-    stream << "/nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:\"libcd.lib\" /nodefaultlib:\"libcid.lib\" /out:\"Debug/" << m_targetName << ".exe\" /pdbtype:sept";
+    stream << "/nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:\"libcd.lib,libcid.lib,msvcrt.lib\" /out:\"Debug/" << m_targetName << ".exe\" /pdbtype:sept";
 
     n = m_debugLibDirs.Number();
     for (i = 0; i < n; i++)
@@ -721,7 +721,7 @@ bool wxProject::GenerateVCProject()
     stream << "# PROP Ignore_Export_Lib 0\n";
     stream << "# PROP Target_Dir \"\"\n";
     stream << "# ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /D \"WIN32\" /D \"_DEBUG\" /D \"_WINDOWS\" /YX /FD /c\n";
-    stream << "# ADD CPP /nologo /MD /W3 /Gm /GX /Zi /Od";
+    stream << "# ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od";
 
     n = m_includeDirs.Number();
     for (i = 0; i < n; i++)
