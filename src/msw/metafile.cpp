@@ -379,12 +379,12 @@ bool wxMakeMetafilePlaceable(const wxString& filename, int x1, int y1, int x2, i
             p < (WORD *)&pMFHead ->checksum; ++p)
         pMFHead ->checksum ^= *p;
 
-    FILE *fd = fopen(filename.fn_str(), "rb");
+    FILE *fd = wxFopen(filename.fn_str(), "rb");
     if (!fd) return FALSE;
 
     wxChar tempFileBuf[256];
     wxGetTempFileName(wxT("mf"), tempFileBuf);
-    FILE *fHandle = fopen(wxConvFile.cWX2MB(tempFileBuf), "wb");
+    FILE *fHandle = wxFopen(wxConvFile.cWX2MB(tempFileBuf), "wb");
     if (!fHandle)
         return FALSE;
     fwrite((void *)&header, sizeof(unsigned char), sizeof(mfPLACEABLEHEADER), fHandle);

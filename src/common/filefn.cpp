@@ -1163,7 +1163,7 @@ bool wxPathExists(const wxChar *pszPathName)
   /* Windows API returns -1 from stat for "c:\dir\" if "c:\dir" exists
    * OTOH, we should change "d:" to "d:\" and leave "\" as is. */
   wxString strPath(pszPathName);
-  if ( wxEndsWithPathSeparator(pszPathName) && pszPathName[1] != wxT('\0') )
+  if ( wxEndsWithPathSeparator(pszPathName) && pszPathName[1] != wxT('\0') && pszPathName[1] != wxT(':') )
     strPath.Last() = wxT('\0');
 
   wxStructStat st;

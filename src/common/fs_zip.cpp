@@ -118,7 +118,7 @@ wxString wxZipFSHandler::FindFirst(const wxString& spec, int flags)
     }
 
     m_ZipFile = left;
-    m_Archive = (void*) unzOpen(m_ZipFile.fn_str());
+    m_Archive = (void*) unzOpen(m_ZipFile.mb_str());
     m_Pattern = right.AfterLast(wxT('/'));
     m_BaseDir = right.BeforeLast(wxT('/'));
 

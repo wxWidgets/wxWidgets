@@ -519,7 +519,7 @@ void wxDebugContext::SetStream(ostream *str, streambuf *buf)
 
 bool wxDebugContext::SetFile(const wxString& file)
 {
-  ofstream *str = new ofstream(file.fn_str());
+  ofstream *str = new ofstream(file.mb_str());
 
   if (str->bad())
   {
@@ -1026,7 +1026,7 @@ void operator delete(void* pData, wxChar* /* fileName */, int /* lineNum */)
   wxDebugFree(pData, FALSE);
 }
 // New operator 21/11/1998
-void operator delete[](void* pData, char* /* fileName */, int /* lineNum */)
+void operator delete[](void* pData, wxChar* /* fileName */, int /* lineNum */)
 {
   wxDebugFree(pData, TRUE);
 }
