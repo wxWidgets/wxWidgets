@@ -1282,23 +1282,67 @@ extern WXDLLIMPEXP_BASE long wxEncodingToCharset(wxFontEncoding encoding)
 
 extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding)
 {
-    // translate encoding into the Windows CHARSET
-    long charset = wxEncodingToCharset(encoding);
-    if ( charset == -1 )
-        return -1;
-
-    // translate CHARSET to code page
-    CHARSETINFO csetInfo;
-    if ( !::TranslateCharsetInfo((DWORD *)(DWORD)charset,
-                                 &csetInfo,
-                                 TCI_SRCCHARSET) )
+    // There don't seem to be symbolic names for
+    // these under Windows so I just copied the
+    // values from MSDN.
+    switch (encoding)
     {
-        wxLogLastError(_T("TranslateCharsetInfo(TCI_SRCCHARSET)"));
-
-        return -1;
+        case wxFONTENCODING_ISO8859_1:      return 28591;
+        case wxFONTENCODING_ISO8859_2:      return 28592;
+        case wxFONTENCODING_ISO8859_3:      return 28593;
+        case wxFONTENCODING_ISO8859_4:      return 28594;
+        case wxFONTENCODING_ISO8859_5:      return 28595;
+        case wxFONTENCODING_ISO8859_6:      return 28596;
+        case wxFONTENCODING_ISO8859_7:      return 28597;
+        case wxFONTENCODING_ISO8859_8:      return 28598;
+        case wxFONTENCODING_ISO8859_9:      return 28599;
+        // case wxFONTENCODING_ISO8859_10:
+        case wxFONTENCODING_ISO8859_11:     return 874; // Thai?
+        // case wxFONTENCODING_ISO8859_12,      // doesn't exist currently, but put it
+        // case wxFONTENCODING_ISO8859_13,      // Baltic (Latin7)
+        // case wxFONTENCODING_ISO8859_14,      // Latin8
+        case wxFONTENCODING_ISO8859_15:     return 28605;
+        case wxFONTENCODING_KOI8:           return 20866;
+        case wxFONTENCODING_KOI8_U:         return 21866;
+        case wxFONTENCODING_CP437:          return 437;
+        case wxFONTENCODING_CP850:          return 850;
+        case wxFONTENCODING_CP852:          return 852;
+        case wxFONTENCODING_CP855:          return 855;
+        case wxFONTENCODING_CP866:          return 866;
+        case wxFONTENCODING_CP874:          return 874;
+        case wxFONTENCODING_CP932:          return 932;
+        case wxFONTENCODING_CP936:          return 936;
+        case wxFONTENCODING_CP949:          return 949;
+        case wxFONTENCODING_CP950:          return 950;
+        case wxFONTENCODING_CP1250:         return 1250;
+        case wxFONTENCODING_CP1251:         return 1251;
+        case wxFONTENCODING_CP1252:         return 1252;
+        case wxFONTENCODING_CP1253:         return 1253;
+        case wxFONTENCODING_CP1254:         return 1254;
+        case wxFONTENCODING_CP1255:         return 1255;
+        case wxFONTENCODING_CP1256:         return 1256;
+        case wxFONTENCODING_CP1257:         return 1257;
+        case wxFONTENCODING_EUC_JP:         return 51932;
+        case wxFONTENCODING_MACROMAN:       return 10000;
+        case wxFONTENCODING_MACJAPANESE:    return 10001;
+        case wxFONTENCODING_MACCHINESETRAD: return 10002;
+        case wxFONTENCODING_MACKOREAN:      return 10003;
+        case wxFONTENCODING_MACARABIC:      return 10004;
+        case wxFONTENCODING_MACHEBREW:      return 10005;
+        case wxFONTENCODING_MACGREEK:       return 10006;
+        case wxFONTENCODING_MACCYRILLIC:    return 10007;
+        case wxFONTENCODING_MACTHAI:        return 10021;
+        case wxFONTENCODING_MACCHINESESIMP: return 10008;
+        case wxFONTENCODING_MACCENTRALEUR:  return 10029;
+        case wxFONTENCODING_MACCROATIAN:    return 10082;
+        case wxFONTENCODING_MACICELANDIC:   return 10079;
+        case wxFONTENCODING_MACROMANIAN:    return 10009;
+        case wxFONTENCODING_UTF7:           return 65000;
+        case wxFONTENCODING_UTF8:           return 65001;
+        default: return -1;
     }
 
-    return csetInfo.ciACP;
+    return -1;
 }
 
 extern long wxCharsetToCodepage(const wxChar *name)
