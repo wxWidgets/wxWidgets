@@ -9,8 +9,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "controls.cpp"
-#pragma interface "controls.cpp"
+#pragma interface "controls.h"
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
