@@ -100,7 +100,14 @@ bool wxButton::Create(
     // Subclass again for purposes of dialog editing mode
     //
     SubclassWin(m_hWnd);
-    SetFont(*wxSMALL_FONT);
+    wxFont*                          pButtonFont = new wxFont( 8
+                                                              ,wxSWISS
+                                                              ,wxNORMAL
+                                                              ,wxNORMAL
+                                                             );
+    SetFont(*pButtonFont);
+    SetXComp(0);
+    SetYComp(0);
     SetSize( rPos.x
             ,rPos.y
             ,rSize.x

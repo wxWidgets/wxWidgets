@@ -208,7 +208,12 @@ bool wxTextCtrl::Create(
     //
     // Set font, position, size and initial value
     //
-    SetFont(*wxSMALL_FONT);
+    wxFont*                          pTextFont = new wxFont( 10
+                                                            ,wxMODERN
+                                                            ,wxNORMAL
+                                                            ,wxNORMAL
+                                                           );
+    SetFont(*pTextFont);
     if (!rsValue.IsEmpty())
     {
         SetValue(rsValue);

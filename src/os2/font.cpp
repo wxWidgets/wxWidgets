@@ -108,8 +108,13 @@ public:
     //
     inline int GetPointSize(void) const
     {
-        return m_bNativeFontInfoOk ? m_vNativeFontInfo.GetPointSize()
-                                   : m_nPointSize;
+        //
+        // We don't use the actual native font point size since it is
+        // the chosen physical font, which is usually only and approximation
+        // of the desired outline font.  The actual displayable point size
+        // is the one stored in the refData
+        //
+        return m_nPointSize;
     }
 
     inline int GetFamily(void) const
@@ -402,7 +407,13 @@ bool wxFontRefData::Alloc(
     //
     memcpy(&m_vFattrs, &m_vNativeFontInfo.fa, sizeof(m_vFattrs));
     memcpy(&m_vFname, &m_vNativeFontInfo.fn, sizeof(m_vFname));
-    m_nPointSize  = m_vNativeFontInfo.fm.lEmHeight;
+    //
+    // Going to leave the point size alone.  Mostly we use outline fonts
+    // that can be set to any point size inside of Presentation Parameters,
+    // regardless of whether or not the actual font is registered in the system.
+    // The GpiCreateLogFont will do enough by selecting the right family,
+    // and face name.
+    //
     if (strcmp(m_vNativeFontInfo.fa.szFacename, "Times New Roman") == 0)
         m_nFamily = wxROMAN;
     else if (strcmp(m_vNativeFontInfo.fa.szFacename, "Tms Rmn") == 0)

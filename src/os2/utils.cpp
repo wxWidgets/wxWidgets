@@ -1241,7 +1241,7 @@ void wxOS2SetFont(
             break;
 
         case wxMODERN:
-            strcpy(zFacename, "System Vio");
+            strcpy(zFacename, "System VIO");
             break;
 
         case wxSWISS:
@@ -1250,7 +1250,7 @@ void wxOS2SetFont(
 
         case wxDEFAULT:
         default:
-            strcpy(zFacename, "System Vio");
+            strcpy(zFacename, "System VIO");
             break;
     }
 
