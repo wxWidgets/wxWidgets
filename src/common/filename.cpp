@@ -9,6 +9,44 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+/*
+   Here are brief descriptions of the filename formats supported by this class:
+
+   wxPATH_UNIX: standard Unix format, absolute file names have the form
+                /dir1/dir2/.../dirN/filename, "." and ".." stand for the
+                current and parent directory respectively, "~" is parsed as the
+                user HOME and "~username" as the HOME of that user
+
+   wxPATH_DOS:  DOS/Windows format, absolute file names have the form
+                drive:\dir1\dir2\...\dirN\filename.ext where drive is a single
+                letter. "." and ".." as for Unix but no "~".
+
+                There are also UNC names of the form \\share\fullpath
+
+   wxPATH_MAC:  Mac OS 8/9 format, absolute file names have the form
+                    volume:dir1:...:dirN:filename
+                and the relative file names are either
+                    :dir1:...:dirN:filename
+                or just
+                    filename
+                (although :filename works as well).
+
+   wxPATH_VMS:  VMS native format, absolute file names have the form
+                    <device>:[dir1.dir2.dir3]file.txt
+                or
+                    <device>:[000000.dir1.dir2.dir3]file.txt
+
+                the <device> is the physical device (i.e. disk). 000000 is the
+                root directory on the device which can be omitted.
+
+                Note that VMS uses different separators unlike Unix:
+                 : always after the device. If the path does not contain : than
+                   the default (the device of the current directory) is assumed.
+                 [ start of directory specyfication
+                 . separator between directory and subdirectory
+                 ] between directory and file
+ */
+
 // ============================================================================
 // declarations
 // ============================================================================
@@ -166,32 +204,33 @@ static void ConvertWxToFileTime(FILETIME *ft, const wxDateTime& dt)
 
 void wxFileName::Assign( const wxFileName &filepath )
 {
-    m_ext = filepath.GetExt();
-    m_name = filepath.GetName();
+    m_volume = filepath.GetVolume();
     m_dirs = filepath.GetDirs();
+    m_name = filepath.GetName();
+    m_ext = filepath.GetExt();
 }
 
-void wxFileName::Assign( const wxString& path,
-                         const wxString& name,
-                         const wxString& ext,
-                         wxPathFormat format )
+void wxFileName::Assign(const wxString& volume,
+                        const wxString& path,
+                        const wxString& name,
+                        const wxString& ext,
+                        wxPathFormat format )
 {
-    wxStringTokenizer tn(path, GetPathSeparators(format),
-                         wxTOKEN_RET_EMPTY_ALL);
-    int i = 0;
+    wxStringTokenizer tn(path, GetPathSeparators(format));
+
     m_dirs.Clear();
     while ( tn.HasMoreTokens() )
     {
         wxString token = tn.GetNextToken();
 
-        // If the path starts with a slash (or two for a network path),
-        // we need the first dir entry to be an empty for later reassembly.
-        if ((i < 2) || !token.IsEmpty())
+        // if the path starts with a slash, we do need the first empty dir
+        // entry to be able to tell later that it was an absolute path, but
+        // otherwise ignore the double slashes
+        if ( m_dirs.IsEmpty() || !token.IsEmpty() )
             m_dirs.Add( token );
-
-        i ++;
     }
 
+    m_volume = volume;
     m_ext = ext;
     m_name = name;
 }
@@ -199,10 +238,10 @@ void wxFileName::Assign( const wxString& path,
 void wxFileName::Assign(const wxString& fullpath,
                         wxPathFormat format)
 {
-    wxString path, name, ext;
-    SplitPath(fullpath, &path, &name, &ext, format);
+    wxString volume, path, name, ext;
+    SplitPath(fullpath, &volume, &path, &name, &ext, format);
 
-    Assign(path, name, ext, format);
+    Assign(volume, path, name, ext, format);
 }
 
 void wxFileName::Assign(const wxString& path,
@@ -218,6 +257,8 @@ void wxFileName::Assign(const wxString& path,
 void wxFileName::Clear()
 {
     m_dirs.Clear();
+
+    m_volume =
     m_name =
     m_ext = wxEmptyString;
 }
@@ -503,29 +544,59 @@ bool wxFileName::SameAs( const wxFileName &filepath, wxPathFormat format)
 /* static */
 bool wxFileName::IsCaseSensitive( wxPathFormat format )
 {
-    // only DOS and OpenVMS filenames are case-sensitive
-    return GetFormat(format) != wxPATH_DOS && GetFormat(format) != wxPATH_VMS;
-}
-
-bool wxFileName::IsRelative( wxPathFormat format )
-{
-    return !IsAbsolute(format);
+    // only Unix filenames are truely case-sensitive
+    return GetFormat(format) == wxPATH_UNIX;
 }
 
 bool wxFileName::IsAbsolute( wxPathFormat format )
 {
-    wxChar ch = m_dirs.IsEmpty() ? _T('\0') : m_dirs[0u][0u];
+    // if we have no path, we can't be an abs filename
+    if ( m_dirs.IsEmpty() )
+    {
+        return FALSE;
+    }
 
-    // Hack to cope with e.g. c:\thing - need something better
-    wxChar driveSep = _T('\0');
-    if (!m_dirs.IsEmpty() && m_dirs[0].Length() > 1)
-        driveSep = m_dirs[0u][1u];
+    switch ( GetFormat(format) )
+    {
+        case wxPATH_DOS:
+        case wxPATH_VMS:
+        case wxPATH_MAC:
+            // must have the drive
+            return !m_volume.empty();
 
-    // the path is absolute if it starts with a path separator or, only for
-    // Unix filenames, with "~" or "~user"
-    return IsPathSeparator(ch, format) ||
-           driveSep == _T(':') ||
-           (GetFormat(format) == wxPATH_UNIX && ch == _T('~') );
+        default:
+            wxFAIL_MSG( _T("unknown wxPATH_XXX style") );
+            // fall through
+
+        case wxPATH_UNIX:
+            const wxString& str = m_dirs[0u];
+            if ( str.empty() )
+            {
+                // the path started with '/', it's an absolute one
+                return TRUE;
+            }
+
+            // the path is absolute if it starts with a path separator or
+            // with "~" or "~user"
+            wxChar ch = str[0u];
+
+            return IsPathSeparator(ch, format) || ch == _T('~');
+    }
+}
+
+/* static */
+wxString wxFileName::GetVolumeSeparator(wxPathFormat format)
+{
+    wxString sepVol;
+
+    if ( GetFormat(format) != wxPATH_UNIX )
+    {
+        // so far it is the same for all systems which have it
+        sepVol = wxFILE_SEP_DSK;
+    }
+    //else: leave empty, no volume separators under Unix
+
+    return sepVol;
 }
 
 /* static */
@@ -535,8 +606,9 @@ wxString wxFileName::GetPathSeparators(wxPathFormat format)
     switch ( GetFormat(format) )
     {
         case wxPATH_DOS:
-            // accept both as native APIs do
-            seps << wxFILE_SEP_PATH_UNIX << wxFILE_SEP_PATH_DOS;
+            // accept both as native APIs do but put the native one first as
+            // this is the one we use in GetFullPath()
+            seps << wxFILE_SEP_PATH_DOS << wxFILE_SEP_PATH_UNIX;
             break;
 
         default:
@@ -550,7 +622,7 @@ wxString wxFileName::GetPathSeparators(wxPathFormat format)
         case wxPATH_MAC:
             seps = wxFILE_SEP_PATH_MAC;
             break;
-       
+
         case wxPATH_VMS:
             seps = wxFILE_SEP_PATH_VMS;
             break;
@@ -562,6 +634,10 @@ wxString wxFileName::GetPathSeparators(wxPathFormat format)
 /* static */
 bool wxFileName::IsPathSeparator(wxChar ch, wxPathFormat format)
 {
+    // wxString::Find() doesn't work as expected with NUL - it will always find
+    // it, so it is almost surely a bug if this function is called with NUL arg
+    wxASSERT_MSG( ch != _T('\0'), _T("shouldn't be called with NUL") );
+
     return GetPathSeparators(format).Find(ch) != wxNOT_FOUND;
 }
 
@@ -569,7 +645,7 @@ bool wxFileName::IsWild( wxPathFormat format )
 {
     // FIXME: this is probably false for Mac and this is surely wrong for most
     //        of Unix shells (think about "[...]")
-	(void)format;
+    (void)format;
     return m_name.find_first_of(_T("*?")) != wxString::npos;
 }
 
@@ -635,55 +711,71 @@ wxString wxFileName::GetPath( bool add_separator, wxPathFormat format ) const
 
 wxString wxFileName::GetFullPath( wxPathFormat format ) const
 {
-    format = GetFormat( format );
-    
-    wxString ret;
-    if (format == wxPATH_DOS)
+    format = GetFormat(format);
+
+    wxString fullpath;
+
+    // first put the volume
+    if ( !m_volume.empty() )
     {
-        for (size_t i = 0; i < m_dirs.GetCount(); i++)
+        // special Windows UNC paths hack, part 2: undo what we did in
+        // SplitPath() and make an UNC path if we have a drive which is not a
+        // single letter (hopefully the network shares can't be one letter only
+        // although I didn't find any authoritative docs on this)
+        if ( format == wxPATH_DOS && m_volume.length() > 1 )
         {
-            ret += m_dirs[i];
-            ret += '\\';
+            fullpath << wxFILE_SEP_PATH_DOS << wxFILE_SEP_PATH_DOS << m_volume;
+        }
+        else // !UNC
+        {
+            fullpath << m_volume << GetVolumeSeparator(format);
         }
     }
-    else
-    if (format == wxPATH_UNIX)
+
+    // then concatenate all the path components using the path separator
+    size_t dirCount = m_dirs.GetCount();
+    if ( dirCount )
     {
-        for (size_t i = 0; i < m_dirs.GetCount(); i++)
+        // under Mac, we must have a path separator in the beginning of the
+        // relative path - otherwise it would be parsed as an absolute one
+        if ( format == wxPATH_MAC && m_volume.empty() && !m_dirs[0].empty() )
         {
-            ret += m_dirs[i];
-            ret += '/';
+            fullpath += wxFILE_SEP_PATH_MAC;
+        }
+
+        wxChar chPathSep = GetPathSeparators(format)[0u];
+        if ( format == wxPATH_VMS )
+        {
+            fullpath += _T('[');
+        }
+
+        for ( size_t i = 0; i < dirCount; i++ )
+        {
+            // under VMS, we shouldn't have a leading dot
+            if ( i && (format != wxPATH_VMS || !m_dirs[i - 1].empty()) )
+                fullpath += chPathSep;
+
+            fullpath += m_dirs[i];
+        }
+
+        if ( format == wxPATH_VMS )
+        {
+            fullpath += _T(']');
+        }
+        else // !VMS
+        {
+            // separate the file name from the last directory, notice that we
+            // intentionally do it even if the name and extension are empty as
+            // this allows us to distinguish the directories from the file
+            // names (the directories have the trailing slash)
+            fullpath += chPathSep;
         }
     }
-    else
-    if (format == wxPATH_VMS)
-    {
-       ret += '[';
-        for (size_t i = 0; i < m_dirs.GetCount(); i++)
-        {
-            ret += '.';
-            ret += m_dirs[i];
-        }
-       ret += ']';
-    }
-    else
-    {
-        for (size_t i = 0; i < m_dirs.GetCount(); i++)
-        {
-            ret += m_dirs[i];
-            ret += ':';
-        }
-    }
-    
-    ret += m_name;
-    
-    if (!m_ext.IsEmpty())
-    {
-        ret += '.';
-        ret += m_ext;
-    }
-    
-    return ret;
+
+    // finally add the file name and extension
+    fullpath += GetFullName();
+
+    return fullpath;
 }
 
 // Return the short form of the path (returns identity on non-Windows platforms)
@@ -734,7 +826,7 @@ wxString wxFileName::GetLongPath() const
         if ( dllKernel )
         {
             // may succeed or fail depending on the Windows version
-			static GET_LONG_PATH_NAME s_pfnGetLongPathName = NULL;
+            static GET_LONG_PATH_NAME s_pfnGetLongPathName = NULL;
 #ifdef _UNICODE
             s_pfnGetLongPathName = (GET_LONG_PATH_NAME) wxDllLoader::GetSymbol(dllKernel, _T("GetLongPathNameW"));
 #else
@@ -833,9 +925,9 @@ wxPathFormat wxFileName::GetFormat( wxPathFormat format )
 #if defined(__WXMSW__) || defined(__WXPM__)
         format = wxPATH_DOS;
 #elif defined(__WXMAC__) && !defined(__DARWIN__)
-        format = wxPATH_MAC; 
+        format = wxPATH_MAC;
 #elif defined(__VMS)
-        format = wxPATH_VMS; 
+        format = wxPATH_VMS;
 #else
         format = wxPATH_UNIX;
 #endif
@@ -847,7 +939,8 @@ wxPathFormat wxFileName::GetFormat( wxPathFormat format )
 // path splitting function
 // ----------------------------------------------------------------------------
 
-void wxFileName::SplitPath(const wxString& fullpath,
+void wxFileName::SplitPath(const wxString& fullpathWithVolume,
+                           wxString *pstrVolume,
                            wxString *pstrPath,
                            wxString *pstrName,
                            wxString *pstrExt,
@@ -855,30 +948,63 @@ void wxFileName::SplitPath(const wxString& fullpath,
 {
     format = GetFormat(format);
 
-    // find the positions of the last dot and last path separator in the path
-    size_t posLastDot = fullpath.find_last_of(wxFILE_SEP_EXT);
-    size_t posLastSlash = fullpath.find_last_of(GetPathSeparators(format));
+    wxString fullpath = fullpathWithVolume;
 
-    if ( (posLastDot != wxString::npos) && (format == wxPATH_UNIX) )
+    // under VMS the end of the path is ']', not the path separator used to
+    // separate the components
+    wxString sepPath = format == wxPATH_VMS ? _T(']')
+                                            : GetPathSeparators(format);
+
+    // special Windows UNC paths hack: transform \\share\path into share:path
+    if ( format == wxPATH_DOS )
     {
-        if ( (posLastDot == 0) ||
-             (fullpath[posLastDot - 1] == wxFILE_SEP_PATH_UNIX) )
+        if ( fullpath.length() >= 4 &&
+                fullpath[0u] == wxFILE_SEP_PATH_DOS &&
+                    fullpath[1u] == wxFILE_SEP_PATH_DOS )
         {
-            // under Unix, dot may be (and commonly is) the first character of
-            // the filename, don't treat the entire filename as extension in
-            // this case
-            posLastDot = wxString::npos;
+            fullpath.erase(0, 2);
+
+            size_t posFirstSlash = fullpath.find_first_of(sepPath);
+            if ( posFirstSlash != wxString::npos )
+            {
+                fullpath[posFirstSlash] = wxFILE_SEP_DSK;
+
+                // UNC paths are always absolute, right? (FIXME)
+                fullpath.insert(posFirstSlash + 1, wxFILE_SEP_PATH_DOS);
+            }
         }
     }
-    else
-     if ( (posLastDot != wxString::npos) && (format == wxPATH_VMS) )
+
+    // do we have the volume name in the beginning?
+    wxString sepVol = GetVolumeSeparator(format);
+    if ( !sepVol.empty() )
+    {
+        size_t posFirstColon = fullpath.find_first_of(sepVol);
+        if ( posFirstColon != wxString::npos )
+        {
+            if ( pstrVolume )
+            {
+                *pstrVolume = fullpath.Left(posFirstColon);
+            }
+
+            // remove the volume name and the separator from the full path
+            fullpath.erase(0, posFirstColon + sepVol.length());
+        }
+    }
+
+    // find the positions of the last dot and last path separator in the path
+    size_t posLastDot = fullpath.find_last_of(wxFILE_SEP_EXT);
+    size_t posLastSlash = fullpath.find_last_of(sepPath);
+
+    if ( (posLastDot != wxString::npos) &&
+            ((format == wxPATH_UNIX) || (format == wxPATH_VMS)) )
     {
         if ( (posLastDot == 0) ||
-             (fullpath[posLastDot - 1] == ']' ) )
+             (fullpath[posLastDot - 1] == sepPath[0u] ) )
         {
-            // under OpenVMS, dot may be (and commonly is) the first character of
-            // the filename, don't treat the entire filename as extension in
-            // this case
+            // under Unix and VMS, dot may be (and commonly is) the first
+            // character of the filename, don't treat the entire filename as
+            // extension in this case
             posLastDot = wxString::npos;
         }
     }
@@ -902,8 +1028,21 @@ void wxFileName::SplitPath(const wxString& fullpath,
         }
         else
         {
-            // take all until the separator
-            *pstrPath = fullpath.Left(posLastSlash);
+            // take everything up to the path separator but take care to make
+            // tha path equal to something like '/', not empty, for the files
+            // immediately under root directory
+            size_t len = posLastSlash;
+            if ( !len )
+                len++;
+
+            *pstrPath = fullpath.Left(len);
+
+            // special VMS hack: remove the initial bracket
+            if ( format == wxPATH_VMS )
+            {
+                if ( (*pstrPath)[0u] == _T('[') )
+                    pstrPath->erase(0, 1);
+            }
         }
     }
 
@@ -1022,7 +1161,7 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
                           wxDateTime *dtMod,
                           wxDateTime *dtChange) const
 {
-#if defined(__UNIX_LIKE__) 
+#if defined(__UNIX_LIKE__)
     wxStructStat stBuf;
     if ( wxStat(GetFullPath(), &stBuf) == 0 )
     {

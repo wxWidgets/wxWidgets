@@ -105,19 +105,30 @@ public:
 
         // the same for delayed initialization
 
-        // VZ: wouldn't it be better to call this Create() for consistency with
-        //     all GUI classes? Personally, I like Set() more than Assign() too
-
     void Assign(const wxFileName& filepath);
+
     void Assign(const wxString& fullpath,
                 wxPathFormat format = wxPATH_NATIVE);
-    void Assign(const wxString& path,
-                const wxString& name,
-                wxPathFormat format = wxPATH_NATIVE);
-    void Assign(const wxString& path,
+
+    void Assign(const wxString& volume,
+                const wxString& path,
                 const wxString& name,
                 const wxString& ext,
                 wxPathFormat format = wxPATH_NATIVE);
+
+    void Assign(const wxString& path,
+                const wxString& name,
+                wxPathFormat format = wxPATH_NATIVE);
+
+    void Assign(const wxString& path,
+                const wxString& name,
+                const wxString& ext,
+                wxPathFormat format = wxPATH_NATIVE)
+    {
+        // empty volume
+        Assign(_T(""), path, name, ext, format);
+    }
+
     void AssignDir(const wxString& dir, wxPathFormat format = wxPATH_NATIVE)
         { Assign(dir, _T(""), format); }
 
@@ -224,9 +235,21 @@ public:
         { return *this == wxFileName(filename); }
 
     // Tests
+
+        // are the file names of this type cases sensitive?
     static bool IsCaseSensitive( wxPathFormat format = wxPATH_NATIVE );
-    bool IsRelative( wxPathFormat format = wxPATH_NATIVE );
+
+        // is this filename absolute?
     bool IsAbsolute( wxPathFormat format = wxPATH_NATIVE );
+
+        // is this filename relative?
+    bool IsRelative( wxPathFormat format = wxPATH_NATIVE )
+        { return !IsAbsolute(format); }
+
+    // Information about path format
+
+    // get the string separating the volume from the path for this format
+    static wxString GetVolumeSeparator(wxPathFormat format = wxPATH_NATIVE);
 
     // get the string of path separators for this format
     static wxString GetPathSeparators(wxPathFormat format = wxPATH_NATIVE);
@@ -247,17 +270,21 @@ public:
     // Other accessors
     void SetExt( const wxString &ext )          { m_ext = ext; }
     wxString GetExt() const                     { return m_ext; }
-    bool HasExt() const                         { return !m_ext.IsEmpty(); }
+    bool HasExt() const                         { return !m_ext.empty(); }
 
     void SetName( const wxString &name )        { m_name = name; }
     wxString GetName() const                    { return m_name; }
-    bool HasName() const                        { return !m_name.IsEmpty(); }
+    bool HasName() const                        { return !m_name.empty(); }
+
+    void SetVolume( const wxString &volume )    { m_volume = volume; }
+    wxString GetVolume() const                  { return m_volume; }
+    bool HasVolume() const                      { return !m_volume.empty(); }
 
     // full name is the file name + extension (but without the path)
     void SetFullName(const wxString& fullname);
     wxString GetFullName() const;
 
-    const wxArrayString &GetDirs() const        { return m_dirs; }
+    const wxArrayString& GetDirs() const        { return m_dirs; }
 
     // Construct path only - possibly with the trailing separator
     wxString GetPath( bool add_separator = FALSE,
@@ -281,15 +308,29 @@ public:
         // get the canonical path format for this platform
     static wxPathFormat GetFormat( wxPathFormat format = wxPATH_NATIVE );
 
-        // split a fullpath into path, (base) name and ext (all of the pointers
-        // can be NULL)
+        // split a fullpath into the volume, path, (base) name and extension
+        // (all of the pointers can be NULL)
     static void SplitPath(const wxString& fullpath,
+                          wxString *volume,
                           wxString *path,
                           wxString *name,
                           wxString *ext,
                           wxPathFormat format = wxPATH_NATIVE);
 
+        // compatibility version
+    static void SplitPath(const wxString& fullpath,
+                          wxString *path,
+                          wxString *name,
+                          wxString *ext,
+                          wxPathFormat format = wxPATH_NATIVE)
+    {
+        SplitPath(fullpath, NULL, path, name, ext, format);
+    }
+
 private:
+    // the drive/volume/device specification (always empty for Unix)
+    wxString        m_volume;
+
     // the path components of the file
     wxArrayString   m_dirs;
 
