@@ -235,7 +235,7 @@ protected:
     wxString m_shortHelpString;
     wxString m_longHelpString;
 
-    DECLARE_NO_COPY_CLASS(wxToolBarToolBase)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxToolBarToolBase)
 };
 
 // a list of toolbar tools
@@ -427,6 +427,9 @@ public:
     virtual wxToolBarToolBase *FindToolForPosition(wxCoord x,
                                                    wxCoord y) const = 0;
 
+    // find the tool by id
+    wxToolBarToolBase *FindById(int toolid) const;
+
     // return TRUE if this is a vertical toolbar, otherwise FALSE
     bool IsVertical() const { return HasFlag(wxTB_VERTICAL); }
 
@@ -571,9 +574,6 @@ protected:
 
     // helper functions
     // ----------------
-
-    // find the tool by id
-    wxToolBarToolBase *FindById(int toolid) const;
 
     // un-toggle all buttons in the same radio group
     void UnToggleRadioGroup(wxToolBarToolBase *tool);

@@ -59,6 +59,8 @@ WX_DEFINE_LIST(wxToolBarToolsList);
 // wxToolBarToolBase
 // ----------------------------------------------------------------------------
 
+IMPLEMENT_DYNAMIC_CLASS(wxToolBarToolBase, wxObject)   
+
 bool wxToolBarToolBase::Enable(bool enable)
 {
     if ( m_enabled == enable )
