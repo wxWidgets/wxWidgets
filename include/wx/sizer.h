@@ -642,6 +642,8 @@ private:
 
 #endif // wxUSE_STATBOX
 
+#if wxUSE_BUTTON
+
 class WXDLLEXPORT wxStdDialogButtonSizer: public wxBoxSizer
 {
 public:
@@ -667,7 +669,7 @@ public:
     // I wouldn't add any other hacks like that into here,
     // but this one I can see being useful.
     void Finalise();
-    
+
     wxButton *GetAffirmativeButton() const { return m_buttonAffirmative; }
     wxButton *GetApplyButton() const { return m_buttonApply; }
     wxButton *GetNegativeButton() const { return m_buttonNegative; }
@@ -680,11 +682,13 @@ protected:
     wxButton *m_buttonNegative;     // wxID_NO
     wxButton *m_buttonCancel;
     wxButton *m_buttonHelp;
-    
+
 private:
     DECLARE_CLASS(wxStdDialogButtonSizer)
     DECLARE_NO_COPY_CLASS(wxStdDialogButtonSizer)
 };
+
+#endif // wxUSE_STATBOX
 
 #if WXWIN_COMPATIBILITY_2_4
 // NB: wxBookCtrlSizer and wxNotebookSizer are deprecated, they

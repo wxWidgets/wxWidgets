@@ -44,7 +44,9 @@ IMPLEMENT_CLASS(wxBoxSizer, wxSizer)
 #if wxUSE_STATBOX
 IMPLEMENT_CLASS(wxStaticBoxSizer, wxBoxSizer)
 #endif
+#if wxUSE_BUTTON
 IMPLEMENT_CLASS(wxStdDialogButtonSizer, wxBoxSizer)
+#endif
 
 WX_DEFINE_EXPORTED_LIST( wxSizerItemList );
 
@@ -1641,16 +1643,18 @@ void wxStaticBoxSizer::ShowItems( bool show )
 
 #endif // wxUSE_STATBOX
 
+#if wxUSE_BUTTON
+
 wxStdDialogButtonSizer::wxStdDialogButtonSizer()
     : wxBoxSizer(wxHORIZONTAL)
 {
     bool is_pda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
 
-    // If we have a PDA screen, put yes/no button over 
+    // If we have a PDA screen, put yes/no button over
     // all other buttons, otherwise on the left side.
     if (is_pda)
         m_orient = wxVERTICAL;
-    
+
     m_buttonAffirmative = NULL;
     m_buttonApply = NULL;
     m_buttonNegative = NULL;
@@ -1704,61 +1708,61 @@ void wxStdDialogButtonSizer::Finalise()
 #ifdef __WXMAC__
         Add(0, 0, 0, wxLEFT, 6);
         if (m_buttonHelp)
-            Add((wxWindow*)m_buttonHelp, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 6); 
-            
+            Add((wxWindow*)m_buttonHelp, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 6);
+
         if (m_buttonNegative){
             // HIG POLICE BULLETIN - destructive buttons need extra padding
             // 24 pixels on either side
             Add((wxWindow*)m_buttonNegative, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 12);
         }
-        
+
         // extra whitespace between help/negative and cancel/ok buttons
-        Add(0, 0, 1, wxEXPAND, 0); 
-        
+        Add(0, 0, 1, wxEXPAND, 0);
+
         if (m_buttonCancel){
             Add((wxWindow*)m_buttonCancel, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 6);
             // Cancel or help should be default
             // m_buttonCancel->SetDefaultButton();
         }
-        
-        // Ugh, Mac doesn't really have apply dialogs, so I'll just 
+
+        // Ugh, Mac doesn't really have apply dialogs, so I'll just
         // figure the best place is between Cancel and OK
         if (m_buttonApply)
             Add((wxWindow*)m_buttonApply, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 6);
-            
+
         if (m_buttonAffirmative){
             Add((wxWindow*)m_buttonAffirmative, 0, wxALIGN_CENTRE | wxLEFT, 6);
-            
+
             if (m_buttonAffirmative->GetId() == wxID_SAVE){
                 // these buttons have set labels under Mac so we should use them
                 m_buttonAffirmative->SetLabel(_("Save"));
                 m_buttonNegative->SetLabel(_("Don't Save"));
             }
         }
-        
+
         // Extra space around and at the right
         Add(12, 24);
 #elif defined(__WXGTK20__)
         Add(0, 0, 0, wxLEFT, 9);
         if (m_buttonHelp)
-            Add((wxWindow*)m_buttonHelp, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3); 
-        
+            Add((wxWindow*)m_buttonHelp, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
+
         // extra whitespace between help and cancel/ok buttons
-        Add(0, 0, 1, wxEXPAND, 0); 
-        
+        Add(0, 0, 1, wxEXPAND, 0);
+
         if (m_buttonNegative){
             Add((wxWindow*)m_buttonNegative, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
         }
-        
+
         if (m_buttonCancel){
             Add((wxWindow*)m_buttonCancel, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
             // Cancel or help should be default
             // m_buttonCancel->SetDefaultButton();
         }
-        
+
         if (m_buttonApply)
             Add((wxWindow*)m_buttonApply, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
-            
+
         if (m_buttonAffirmative)
             Add((wxWindow*)m_buttonAffirmative, 0, wxALIGN_CENTRE | wxLEFT, 6);
 #else
@@ -1767,30 +1771,32 @@ void wxStdDialogButtonSizer::Finalise()
     // Windows style
         Add(0, 0, 0, wxLEFT, 9);
         if (m_buttonHelp)
-            Add((wxWindow*)m_buttonHelp, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonHelp->ConvertDialogToPixels(wxSize(4, 0)).x); 
-        
+            Add((wxWindow*)m_buttonHelp, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonHelp->ConvertDialogToPixels(wxSize(4, 0)).x);
+
         // extra whitespace between help and cancel/ok buttons
-        Add(0, 0, 1, wxEXPAND, 0); 
+        Add(0, 0, 1, wxEXPAND, 0);
 
         if (m_buttonApply)
             Add((wxWindow*)m_buttonApply, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonApply->ConvertDialogToPixels(wxSize(4, 0)).x);
-            
+
         if (m_buttonAffirmative){
             Add((wxWindow*)m_buttonAffirmative, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonAffirmative->ConvertDialogToPixels(wxSize(4, 0)).x);
         }
-                
+
         if (m_buttonNegative){
             Add((wxWindow*)m_buttonNegative, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonNegative->ConvertDialogToPixels(wxSize(4, 0)).x);
         }
-        
+
         if (m_buttonCancel){
             Add((wxWindow*)m_buttonCancel, 0, wxALIGN_CENTRE | wxLEFT, m_buttonCancel->ConvertDialogToPixels(wxSize(4, 0)).x);
             // Cancel or help should be default
             // m_buttonCancel->SetDefaultButton();
         }
-            
+
 #endif
 }
+
+#endif // wxUSE_BUTTON
 
 #if WXWIN_COMPATIBILITY_2_4
 
