@@ -46,7 +46,7 @@ include/wx/motif/*.h
 include/install-sh
 
 docs/motif/*.txt
-docs/motif/makewx
+docs/motif/makewxmotif
 
 lib/dummy
 

@@ -1099,6 +1099,15 @@ wxString wxString::Upper() const
 // convert to lower case, return the copy of the string
 wxString wxString::Lower() const { wxString s(*this); return s.MakeLower(); }
 
+int wxString::sprintf(const char *pszFormat, ...)
+  {
+    va_list argptr;
+    va_start(argptr, pszFormat);
+    int iLen = PrintfV(pszFormat, argptr);
+    va_end(argptr);
+    return iLen;
+  }
+
 // ---------------------------------------------------------------------------
 // standard C++ library string functions
 // ---------------------------------------------------------------------------

@@ -19,14 +19,39 @@ COMPILING USING CONFIGURE
   you can follow the following steps to use the simpler (but
   less automatic) makefile system. If using configure, the
   following script should make the library and samples, when
-  run from the top-level wxWindows directory (see also 'makewx'
-  in this directory):
+  run from the top-level wxWindows directory (see also 'makewxmotif'
+  in this directory). Make this script executable with the command
+  chmod a+x makewxmotif.
 
-  # Make wxMotif using the configure system
-  chmod a+x configure config.sub setup/general/* config.guess setup/shared/*
-  ./configure --with-shared --with-motif --with-debug_flag \
-   --with-debug_info --without-threads
+  -------:x-----Cut here-----:x-----
+  # makewxmotif
+  # Sets permissions (in case we extracted wxMotif from zip files)
+  # and makes wxMotif.
+  # Call from top-level wxWindows directory.
+  # Note that this uses standard (but commonly-used) configure options;
+  # if you're feeling brave, you may wish to compile with threads.
+  # -- Julian Smart
+  chmod a+x configure config.sub config.guess setup/general/* setup/shared/*
+  ./configure --with-shared --with-motif --without-gtk --with-debug_flag --with-debug_info --without-threads
+  make makefiles
   make
+  -------:x-----Cut here-----:x-----
+
+  This script will build wxMotif using shared libraries.
+
+- Change directory to a sample e.g. samples/minimal, and type make.
+  The binary will end up under the Linux (or other appropriate) subdirectory.
+
+- To build an application outside the wxWindows hierarchy, you can
+  use `wx-config --cflags` when compiling source files and `wx-config --libs`
+  when linking, where wx-config is in the wxWindows root directory.
+  These invocations return the appropriate flags for the compiler.
+
+- When compiling certain utilities such as Dialog Editor, you may find
+  that the makefile refers to wx-config as above. Unless you have used
+  "make install" to install wxWindows, wx-config won't be found, so
+  either edit the makefile to hard-wire the flags, or place wx-config
+  where it will be found by the makefile.
 
 COMPILING USING MAKEFILES
 
@@ -41,8 +66,6 @@ COMPILING USING MAKEFILES
 
     export WXWIN=/home/jacs/wx2
 
-  Later, there will be a better makefile system
-  and/or alternate make.env files as per wxWindows 1.68.
   Please feel free to contribute settings files for your environment.
 
 - Change directory to src/motif and type:
@@ -50,7 +73,10 @@ COMPILING USING MAKEFILES
     make -f makefile.unx motif
 
   This should make the library libwx_motif.a in the lib
-  directory.
+  directory. Note that this makefile system does not build shared
+  libraries, only static ones (that is, the wxWindows library will be
+  linked statically; to see remaining dependencies on shared libraries,
+  type e.g. ldd minimal_motif).
 
 - Make a sample, such as the minimal sample:
 
@@ -63,13 +89,13 @@ Notes:
 ------
 
 - Better installation and makefile systems are
-  required. Although the wxGTK config system can be used to make
-  wxMotif and samples, it can't easily be made to work
-  with applications outside the wxWindows hierarchy. Hence the
-  simple makefile system.
+  required. A revised configure system is in preparation.
 
 - Debugging mode is switched on by default. To compile in non-debug
-  mode, remove the -D__WXDEBUG__ switch in make.env.
+  mode, remove the -D__WXDEBUG__ switch in make.env (or if using the
+  configure system, change --with-debug_flag to --without_debug_flag
+  and --with-debug_info to --without-debug_info in the makewxmotif
+  script).
 
 - Some classes can be switched off in include/wx/motif/setup.h,
   if you are having trouble with a particular file. However,
@@ -106,5 +132,5 @@ Notes:
     wxwin-users@wx.dent.med.uni-muenchen.de
 
 
-Julian Smart, December 1998.
+Julian Smart, January 1999.
 julian.smart@ukonline.co.uk

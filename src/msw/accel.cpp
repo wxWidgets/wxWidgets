@@ -102,10 +102,10 @@ wxAcceleratorTable::wxAcceleratorTable(const wxString& resource)
 extern int wxCharCodeWXToMSW(int id, bool *isVirtual);
 
 // Create from an array
+#if !defined(__WIN16__) && !defined(__TWIN32__)
 wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[])
 {
     // Not available in WIN16
-#if !defined(__WIN16__) && !defined(__TWIN32__)
     m_refData = new wxAcceleratorRefData;
 
     ACCEL* arr = new ACCEL[n];
@@ -135,8 +135,12 @@ wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]
     delete[] arr;
 
     M_ACCELDATA->m_ok = (M_ACCELDATA->m_hAccel != 0);
-#endif
 }
+#else
+wxAcceleratorTable::wxAcceleratorTable(int WXUNUSED(n), const wxAcceleratorEntry WXUNUSED(entries)[])
+{
+}
+#endif
 
 bool wxAcceleratorTable::Ok(void) const
 {

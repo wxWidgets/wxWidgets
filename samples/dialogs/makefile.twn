@@ -1,0 +1,43 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile for dialogs example (UNIX).
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/maketwin.env
+
+OBJECTS = $(OBJDIR)/dialogs.$(OBJSUFF) $(OBJDIR)/dialogs_resources.$(OBJSUFF)
+
+all:    $(OBJDIR) dialogs$(GUISUFFIX)$(EXESUFF)
+
+wx:
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+dialogs$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o dialogs$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+
+$(OBJDIR)/dialogs.$(OBJSUFF):	dialogs.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ dialogs.$(SRCSUFF)
+
+dialogs_resources.c:  dialogs.rc
+	$(RESCOMP) $(RCINPUTSWITCH) dialogs.rc $(RCOUTPUTSWITCH) dialogs_resources.c $(RESFLAGS)
+
+$(OBJDIR)/dialogs_resources.$(OBJSUFF):	dialogs_resources.c
+	$(CC) -c $(CPPFLAGS) -o $@ dialogs_resources.c
+
+#$(OBJDIR)/dialogs_resources.o:  dialogs.rc
+#	$(RESCOMP) $(RCINPUTSWITCH) dialogs.rc $(RCOUTPUTSWITCH) $(OBJDIR)/dialogs_resources.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) dialogs$(GUISUFFIX).exe core *.rsc *.res

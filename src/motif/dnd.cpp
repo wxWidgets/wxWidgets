@@ -217,6 +217,20 @@ void wxDropSource::UnregisterWindow(void)
 }
 #endif
 
+wxPrivateDropTarget::wxPrivateDropTarget()
+{
+    m_id = wxTheApp->GetAppName();
+}
+  
+size_t wxPrivateDropTarget::GetFormatCount() const
+{
+    return 1;
+}
+
+wxDataFormat wxPrivateDropTarget::GetFormat(size_t n) const
+{
+    return wxDF_INVALID;
+}
 
 #endif
       // wxUSE_DRAG_AND_DROP

@@ -2,9 +2,9 @@ utils/glcanvas/docs/*.*
 utils/glcanvas/win/*.cpp
 utils/glcanvas/win/*.h
 utils/glcanvas/win/make*.*
-utils/glcanvas/src/*.cpp
-utils/glcanvas/src/*.h
-utils/glcanvas/src/make*.*
+utils/glcanvas/gtk/*.cpp
+utils/glcanvas/gtk/*.h
+utils/glcanvas/gtk/make*.*
 utils/glcanvas/motif/*.cpp
 utils/glcanvas/motif/*.h
 utils/glcanvas/motif/make*.*

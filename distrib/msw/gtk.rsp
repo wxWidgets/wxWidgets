@@ -11,6 +11,7 @@ wxGTK.spec
 
 docs/gtk/*.html
 docs/gtk/*.txt
+docs/gtk/makewxgtk
 
 include/wx/gtk/*.h
 include/install-sh

@@ -107,7 +107,6 @@ LIB_CPP_SRC=\
  motif/msgdlg.cpp \
  motif/palette.cpp \
  motif/pen.cpp \
- motif/print.cpp \
  motif/radiobox.cpp \
  motif/radiobut.cpp \
  motif/region.cpp \

@@ -507,15 +507,9 @@ public:
   enum caseCompare {exact, ignoreCase};
     // values for first parameter of Strip function
   enum stripType {leading = 0x1, trailing = 0x2, both = 0x3};
+
     // use Printf()
-  inline int sprintf(const char *pszFormat, ...)
-  {
-    va_list argptr;
-    va_start(argptr, pszFormat);
-    int iLen = PrintfV(pszFormat, argptr);
-    va_end(argptr);
-    return iLen;
-  }
+  int sprintf(const char *pszFormat, ...);
 
     // use Cmp()
   inline int CompareTo(const char* psz, caseCompare cmp = exact) const

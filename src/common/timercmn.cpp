@@ -136,7 +136,7 @@ bool wxGetLocalTime(long *timeZone, int *dstObserved)
   struct tm *tp;
   time(&t0);
   tp = localtime(&t0);
-  *timeZone = timezone; // tp->tm_gmtoff; // ???
+  *timeZone = _timezone; // tp->tm_gmtoff; // ???
   *dstObserved = tp->tm_isdst;
 #elif defined(__MINGW32__)
   time_t t0;

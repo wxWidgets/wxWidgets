@@ -1,10 +1,14 @@
-wxWindows 2.0 Change Log
-------------------------
+wxWindows 2 Change Log
+----------------------
 
-Beta 3, January 1999
---------------------
+Beta 3, January 31st 1999
+-------------------------
 
 wxGTK:
+
+- wxClipboard/DnD API changes (still in progress).
+- wxToolTip class added.
+- Miscellaneous fixes.
 
 wxMSW:
 
@@ -13,6 +17,7 @@ wxMSW:
 - TWIN32 support added.
 - Renamed VC++ makefiles from .nt to .vc, and
   factored out program/library settings.
+- Fixed wxIniConfig bug.
 
 wxMotif:
 

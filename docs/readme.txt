@@ -1,7 +1,7 @@
-wxWindows 2.0
--------------
+wxWindows 2 beta 3
+------------------
 
-Welcome to wxWindows 2.0, a sophisticated cross-platform C++
+Welcome to wxWindows 2, a sophisticated cross-platform C++
 framework for writing advanced GUI applications using (where
 possible) the native controls.
 
@@ -21,11 +21,14 @@ important documents and samples.
 Platforms supported
 -------------------
 
-wxWindows 2.0 currently supports the following platforms:
+wxWindows 2 currently supports the following platforms:
 
 - Windows 3.1, Windows 95/98, Windows NT
-- Unix with Motif/Lesstif
-- Unix with GTK+
+- Most Unix variants with Motif/Lesstif
+- Most Unix variants with GTK+
+
+Most popular C++ compilers are supported; see the release notes
+(available via docs/html/index.htm) for details.
 
 Files
 -----
@@ -49,7 +52,7 @@ wx200cw.zip             Metrowerks CodeWarrior project files
 Installation
 ------------
 
-wxWindows 2.0 needs to be compiled before you can test out
+wxWindows 2 needs to be compiled before you can test out
 the samples or write your own applications.
 For installation information, please see the install.txt file
 in the individual directories:
@@ -80,7 +83,7 @@ commercial applications using wxWindows.
 Documentation
 -------------
 
-See docs/changes.txt for a history of changes to wxWindows 2.0.
+See docs/changes.txt for a history of changes to wxWindows 2.
 See docs/html/index.htm for an HTML index of the major documents.
 
 The Windows help files are located in docs/winhelp.
@@ -91,7 +94,7 @@ Further information
 
 The wxWindows Web site is located at:
 
-  http://wxwin.home.ml.org
+  http://www.wxwindows.org
 
 The wxGTK Web site (with further wxGTK-specific fiels and
 information) is located at:
@@ -106,7 +109,7 @@ A wxWindows CD-ROM with the latest distribution plus an HTML
 front-end and hundreds of MB of compilers, utilities and other
 material may be ordered from the CD-ROM page:
 
-  http://wxwin.home.ml.org/cdrom
+  http://www.wxwindows.org/cdrom.htm
 
 or contact Julian Smart <julian.smart@ukonline.co.uk>.
 
