@@ -38,7 +38,9 @@ void wxXmlResource::InitAllHandlers()
     AddHandler(new wxStaticBoxXmlHandler);
     AddHandler(new wxStaticBitmapXmlHandler);
     AddHandler(new wxTreeCtrlXmlHandler);
+#if wxUSE_CALENDARCTRL
     AddHandler(new wxCalendarCtrlXmlHandler);
+#endif
     AddHandler(new wxListCtrlXmlHandler);
 #if wxUSE_CHECKLISTBOX
     AddHandler(new wxCheckListXmlHandler);

@@ -19,6 +19,10 @@
     #pragma hdrstop
 #endif
 
+#include "wx/setup.h"
+
+#if wxUSE_CALENDARCTRL
+
 #include "wx/xrc/xh_cald.h"
 #include "wx/event.h"
 #include "wx/calctrl.h"
@@ -57,3 +61,5 @@ bool wxCalendarCtrlXmlHandler::CanHandle(wxXmlNode *node)
 {
     return IsOfClass(node, wxT("wxCalendarCtrl"));
 }
+
+#endif
