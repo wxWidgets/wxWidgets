@@ -79,6 +79,9 @@ bool wxStaticBox::Create(wxWindow *parent,
                            WS_EX_TRANSPARENT) )
         return FALSE;
 
+    // to be transparent we should have the same colour as the parent as well
+    SetBackgroundColour(GetParent()->GetBackgroundColour());
+
     return TRUE;
 }
 
