@@ -198,7 +198,7 @@ private:
 
 
 // Global instance of resource class. For your convenience.
-extern wxXmlResource *wxTheXmlResource;
+extern WXXMLDLLEXPORT wxXmlResource *wxTheXmlResource;
 
 // This macro translates string identifier (as used in XML resource,
 // e.g. <menuitem id="my_menu">...</menuitem>) to integer id that is needed by
