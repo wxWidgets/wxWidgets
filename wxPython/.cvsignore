@@ -2,6 +2,7 @@
 .emacs.desktop
 .gdb_history
 MANIFEST
+_build_rpm
 build
 build-pkg
 build-pkg-debug
