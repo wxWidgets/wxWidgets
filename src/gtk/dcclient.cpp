@@ -1104,10 +1104,10 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
 
     if (!m_window) return FALSE;
 
-#if 0
+#if 1
     // transform the source DC coords to the device ones
-    xsrc = XLOG2DEV(xsrc);
-    ysrc = YLOG2DEV(ysrc);
+    xsrc = source->XLOG2DEV(xsrc);
+    ysrc = source->YLOG2DEV(ysrc);
 #endif
 
     wxClientDC *srcDC = (wxClientDC*)source;
