@@ -1,4 +1,7 @@
+#ifndef __VISAGECPP__ /* DW: why does anyone need this for this module? */
 #include "wx/defs.h"
+#endif
+
 #include "wx/setup.h"
 
 #include <math.h>
