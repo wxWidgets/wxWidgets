@@ -423,6 +423,19 @@ is required (for example, if there are several subwindows).
 
 See \helpref{wxSizeEvent}{wxsizeevent}.
 
+\membersection{wxFrame::SendSizeEvent}\label{wxframesendsizeevent}
+
+\func{void}{SendSizeEvent}{\void}
+
+This function sends a dummy \helpref{size event}{wxsizeevent} to the frame
+forcing it to reevaluate its children positions. It is sometimes useful to call
+this function after adding or deleting a children after the frame creation or
+if a child size changes.
+
+Note that if the frame is using either sizers or constraints for the children
+layout, it is enough to call \helpref{Layout()}{wxwindowlayout} directly and
+this function should not be used in this case.
+
 \membersection{wxFrame::SetIcon}\label{wxframeseticon}
 
 \func{void}{SetIcon}{\param{const wxIcon\& }{icon}}

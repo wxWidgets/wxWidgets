@@ -100,7 +100,7 @@ public:
 
     // a MSW only function which sends a size event to the window using its
     // current size - this has an effect of refreshing the window layout
-    void SendSizeEvent();
+    virtual void SendSizeEvent();
 
 protected:
     // common part of all ctors
