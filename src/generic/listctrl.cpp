@@ -9,16 +9,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*
-   FIXME for virtual list controls
-
-  +1. clicking on the item with a mouse is awfully slow, what is going on?
-      note that selecting with keyboard seems to be much faster
-   => fixed HighlightAll() - iterating over 1000000 items *is* slow
-
-   2. background colour is wrong?
- */
-
-/*
    TODO for better virtual list control support:
 
    1. less dumb line caching, we should cache at least all those visible
@@ -175,7 +165,14 @@ public:
     bool SelectItem(size_t item, bool select = TRUE);
 
     // select the range of items
-    void SelectRange(size_t itemFrom, size_t itemTo, bool select = TRUE);
+    //
+    // return true and fill the itemsChanged array with the indices of items
+    // which have changed state if "few" of them did, otherwise return false
+    // (meaning that too many items changed state to bother counting them
+    // individually)
+    bool SelectRange(size_t itemFrom, size_t itemTo,
+                     bool select = TRUE,
+                     wxArrayInt *itemsChanged = NULL);
 
     // return true if the given item is selected
     bool IsSelected(size_t item) const;
@@ -895,12 +892,19 @@ bool wxSelectionStore::SelectItem(size_t item, bool select)
     return FALSE;
 }
 
-void wxSelectionStore::SelectRange(size_t itemFrom, size_t itemTo, bool select)
+bool wxSelectionStore::SelectRange(size_t itemFrom, size_t itemTo,
+                                   bool select,
+                                   wxArrayInt *itemsChanged)
 {
+    // 100 is hardcoded but it shouldn't matter much: the important thing is
+    // that we don't refresh everything when really few (e.g. 1 or 2) items
+    // change state
+    static const size_t MANY_ITEMS = 100;
+
     wxASSERT_MSG( itemFrom <= itemTo, _T("should be in order") );
 
     // are we going to have more [un]selected items than the other ones?
-    if ( itemTo - itemFrom > m_count / 2 )
+    if ( itemTo - itemFrom > m_count/2 )
     {
         if ( select != m_defaultState )
         {
@@ -927,6 +931,9 @@ void wxSelectionStore::SelectRange(size_t itemFrom, size_t itemTo, bool select)
                 if ( selOld.Index(item) == wxNOT_FOUND )
                     m_itemsSel.Add(item);
             }
+
+            // many items (> half) changed state
+            itemsChanged = NULL;
         }
         else // select == m_defaultState
         {
@@ -950,6 +957,17 @@ void wxSelectionStore::SelectRange(size_t itemFrom, size_t itemTo, bool select)
                 // delete all of them (from end to avoid changing indices)
                 for ( int i = end; i >= (int)start; i-- )
                 {
+                    if ( itemsChanged )
+                    {
+                        if ( itemsChanged->GetCount() > MANY_ITEMS )
+                        {
+                            // stop counting (see comment below)
+                            itemsChanged = NULL;
+                        }
+
+                        itemsChanged->Add(m_itemsSel[i]);
+                    }
+
                     m_itemsSel.RemoveAt(i);
                 }
             }
@@ -957,12 +975,31 @@ void wxSelectionStore::SelectRange(size_t itemFrom, size_t itemTo, bool select)
     }
     else // "few" items change state
     {
+        if ( itemsChanged )
+        {
+            itemsChanged->Empty();
+        }
+
         // just add the items to the selection
         for ( size_t item = itemFrom; item <= itemTo; item++ )
         {
-            SelectItem(item, select);
+            if ( SelectItem(item, select) && itemsChanged )
+            {
+                itemsChanged->Add(item);
+
+                if ( itemsChanged->GetCount() > MANY_ITEMS )
+                {
+                    // stop counting them, we'll just eat gobs of memory
+                    // for nothing at all - faster to refresh everything in
+                    // this case
+                    itemsChanged = NULL;
+                }
+            }
         }
     }
+
+    // we set it to NULL if there are many items changing state
+    return itemsChanged != NULL;
 }
 
 void wxSelectionStore::OnItemDelete(size_t item)
@@ -2346,25 +2383,37 @@ bool wxListMainWindow::IsHighlighted(size_t line) const
     }
 }
 
-void wxListMainWindow::HighlightLines( size_t lineFrom, size_t lineTo, bool highlight )
+void wxListMainWindow::HighlightLines( size_t lineFrom,
+                                       size_t lineTo,
+                                       bool highlight )
 {
     if ( IsVirtual() )
     {
-        m_selStore.SelectRange(lineFrom, lineTo, highlight);
-        RefreshLines(lineFrom, lineTo);
+        wxArrayInt linesChanged;
+        if ( !m_selStore.SelectRange(lineFrom, lineTo, highlight,
+                                     &linesChanged) )
+        {
+            // meny items changed state, refresh everything
+            RefreshLines(lineFrom, lineTo);
+        }
+        else // only a few items changed state, refresh only them
+        {
+            size_t count = linesChanged.GetCount();
+            for ( size_t n = 0; n < count; n++ )
+            {
+                RefreshLine(linesChanged[n]);
+            }
+        }
     }
-    else
+    else // iterate over all items in non report view
     {
-        // do it the dumb way
-        bool needsRefresh = FALSE;
         for ( size_t line = lineFrom; line <= lineTo; line++ )
         {
             if ( HighlightLine(line, highlight) )
-                needsRefresh = TRUE;
+            {
+                RefreshLine(line);
+            }
         }
-
-        if ( needsRefresh )
-            RefreshLines(lineFrom, lineTo);
     }
 }
 
