@@ -200,10 +200,15 @@ wxDC::~wxDC()
         }
         else // we don't own our HDC
         {
-            // this is not supposed to happen as we can't free the HDC then
-            wxCHECK_RET( m_canvas, _T("no canvas in not owning ~wxDC?") );
-
-            ::ReleaseDC(GetHwndOf(m_canvas), GetHdc());
+            if (m_canvas)
+            {
+                ::ReleaseDC(GetHwndOf(m_canvas), GetHdc());
+            }
+            else
+            {
+                // Must have been a wxScreenDC
+                ::ReleaseDC((HWND) NULL, GetHdc());
+            }
         }
     }
 }
