@@ -89,7 +89,9 @@ public:
 
 #if defined(__WXMSW__)
     #include "wx/msw/apptbase.h"
-#else
+#elif defined(__UNIX__)
+    #include "wx/unix/apptbase.h"
+#else // no platform-specific methods to add to wxAppTraits
     typedef 
     // wxAppTraits must be a class because it was forward declared as class
     class WXDLLEXPORT wxAppTraits : public wxAppTraitsBase

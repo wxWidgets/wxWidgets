@@ -76,9 +76,6 @@
 // global data
 //-----------------------------------------------------------------------------
 
-wxApp *wxTheApp = (wxApp *)  NULL;
-wxAppInitializerFunction wxAppBase::m_appInitFn = (wxAppInitializerFunction) NULL;
-
 bool   g_mainThreadLocked = FALSE;
 gint   g_pendingTag = 0;
 

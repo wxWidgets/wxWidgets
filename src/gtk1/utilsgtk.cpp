@@ -10,6 +10,7 @@
 #include "wx/utils.h"
 #include "wx/string.h"
 
+#include "wx/apptrait.h"
 #include "wx/intl.h"
 #include "wx/log.h"
 
@@ -121,12 +122,14 @@ int wxDisplayDepth()
     return gdk_window_get_visual( wxGetRootWindow()->window )->depth;
 }
 
-int wxGetOsVersion(int *majorVsn, int *minorVsn)
+int wxGUIAppTraits::GetOSVersion(int *majorVsn, int *minorVsn)
 {
-  if (majorVsn) *majorVsn = GTK_MAJOR_VERSION;
-  if (minorVsn) *minorVsn = GTK_MINOR_VERSION;
+    if (majorVsn)
+        *majorVsn = GTK_MAJOR_VERSION;
+    if (minorVsn)
+        *minorVsn = GTK_MINOR_VERSION;
 
-  return wxGTK;
+    return wxGTK;
 }
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)

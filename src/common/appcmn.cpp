@@ -32,6 +32,7 @@
     #include "wx/app.h"
     #include "wx/intl.h"
     #include "wx/list.h"
+    #include "wx/log.h"
     #include "wx/msgdlg.h"
 #endif
 

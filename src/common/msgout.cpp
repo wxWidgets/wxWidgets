@@ -121,7 +121,8 @@ void wxMessageOutputDebug::Printf(const wxChar* format, ...)
         #endif
     }
 #else // !MSW, !Mac
-    wxFputs(out, stderr);
+    // FIXME: why is wxFputs() not defined under Linux?
+    fputs(out.mb_str(), stderr);
     fflush(stderr);
 #endif // platform
 }

@@ -32,6 +32,7 @@
 #if wxUSE_TIMER
 
 #ifndef WX_PRECOMP
+    #include "wx/timer.h"
 #endif
 
 // ----------------------------------------------------------------------------

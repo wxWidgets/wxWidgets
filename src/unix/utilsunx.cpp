@@ -21,6 +21,7 @@
 #include "wx/intl.h"
 #include "wx/log.h"
 #include "wx/app.h"
+#include "wx/apptrait.h"
 
 #include "wx/utils.h"
 #include "wx/process.h"
@@ -1079,7 +1080,7 @@ bool wxGUIAppTraits::CreateEndProcessPipe(wxExecuteData& execData)
 
 bool wxGUIAppTraits::IsWriteFDOfEndProcessPipe(wxExecuteData& execData, int fd)
 {
-    return fd == execData.pipeEndProcDetect[wxPipe::Write]
+    return fd == (execData.pipeEndProcDetect)[wxPipe::Write];
 }
 
 void wxGUIAppTraits::DetachWriteFDOfEndProcessPipe(wxExecuteData& execData)

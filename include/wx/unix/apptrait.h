@@ -19,7 +19,7 @@
 class WXDLLEXPORT wxConsoleAppTraits : public wxConsoleAppTraitsBase
 {
 public:
-    virtual bool CreateEndProcessPipe();
+    virtual bool CreateEndProcessPipe(wxExecuteData& execData);
     virtual bool IsWriteFDOfEndProcessPipe(wxExecuteData& execData, int fd);
     virtual void DetachWriteFDOfEndProcessPipe(wxExecuteData& execData);
     virtual int WaitForChild(wxExecuteData& execData);
