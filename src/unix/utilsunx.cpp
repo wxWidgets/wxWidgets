@@ -301,14 +301,19 @@ void wxHandleProcessTermination(wxEndProcessData *proc_data)
 
     if( rc == -1 || ! (WIFEXITED(status) || WIFSIGNALED(status)) )
     {
-       wxLogSysError(_("Waiting for subprocess termination failed"));
+       // wxLogSysError(_("Waiting for subprocess termination failed"));
        /* AFAIK, this can only happen if something went wrong within
           wxGTK, i.e. due to a race condition or some serious bug.
           After having fixed the order of statements in
           GTK_EndProcessDetector(). (KB)
+
+          JACS adds -- I have other code that kills a process recursively
+          and calls waitpid; so this function then generates an error.
+          I've commented out the wxLogSysError and the 'else' so that
+          termination is always done properly.
        */
     }
-    else
+    // else
     {
         // notify user about termination if required
         if (proc_data->process)
