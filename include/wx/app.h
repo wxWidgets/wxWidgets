@@ -19,7 +19,7 @@ typedef wxApp* (*wxAppInitializerFunction) (void);
 
 #include "wx/object.h"
 
-#ifdef __GTK
+#ifdef __GTK__
 typedef wxObject* (*wxAppInitializerFunction) (void);  // returning wxApp* won't work with gcc
 #endif
 
