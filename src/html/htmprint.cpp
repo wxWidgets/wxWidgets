@@ -405,7 +405,9 @@ wxHtmlEasyPrinting::wxHtmlEasyPrinting(const wxString& name, wxFrame *parent_fra
     m_Frame = parent_frame;
     m_Name = name;
     m_PrintData = new wxPrintData;
+#if (defined __WXGTK__) || (defined __WXMOTIF__)
     (*m_PrintData) = (*wxThePrintSetupData);
+#endif
     m_PageSetupData = new wxPageSetupDialogData;
     m_Headers[0] = m_Headers[1] = m_Footers[0] = m_Footers[1] = wxEmptyString;
     
