@@ -234,6 +234,7 @@ public:
 // Declarations of some alternate "constructors"
 %new wxIcon* wxEmptyIcon();
 %new wxIcon* wxIconFromXPMData(PyObject* listOfStrings);
+%new wxIcon* wxIconFromBitmap(const wxBitmap& bmp);
 
 %{ // Implementations of some alternate "constructors"
     wxIcon* wxEmptyIcon() {
@@ -249,6 +250,12 @@ public:
             return NULL;
         icon = new wxIcon(cArray);
         delete [] cArray;
+        return icon;
+    }
+
+    wxIcon* wxIconFromBitmap(const wxBitmap& bmp) {
+        wxIcon* icon = new wxIcon();
+        icon->CopyFromBitmap(bmp);
         return icon;
     }
 %}
