@@ -327,6 +327,7 @@ ownerdrw.cpp	MSW
 palette.cpp	MSW	LowLevel
 pen.cpp	MSW	LowLevel
 penwin.cpp	MSW
+popupwin.cpp	MSW	LowLevel
 printdlg.cpp	MSW
 printwin.cpp	MSW
 radiobox.cpp	MSW

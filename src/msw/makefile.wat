@@ -303,6 +303,7 @@ MSWOBJS = accel.obj &
 	palette.obj &
 	pen.obj &
 	penwin.obj &
+	popupwin.obj &
 	printdlg.obj &
 	printwin.obj &
 	radiobox.obj &
@@ -623,6 +624,9 @@ pen.obj:     $(MSWDIR)\pen.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 penwin.obj:     $(MSWDIR)\penwin.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+popupwin.obj:     $(MSWDIR)\popupwin.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 printdlg.obj:     $(MSWDIR)\printdlg.cpp

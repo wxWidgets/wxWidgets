@@ -236,6 +236,7 @@ ALL_SOURCES = \
 		msw/palette.cpp \
 		msw/pen.cpp \
 		msw/penwin.cpp \
+		msw/popupwin.cpp \
 		msw/printdlg.cpp \
 		msw/printwin.cpp \
 		msw/radiobox.cpp \
@@ -301,6 +302,7 @@ ALL_HEADERS = \
 		bmpbuttn.h \
 		brush.h \
 		buffer.h \
+		build.h \
 		busyinfo.h \
 		button.h \
 		calctrl.h \
@@ -928,6 +930,7 @@ GUIOBJS = \
 		palette.o \
 		pen.o \
 		penwin.o \
+		popupwin.o \
 		printdlg.o \
 		printwin.o \
 		radiobox.o \
@@ -988,6 +991,7 @@ GUI_LOWLEVEL_OBJS = \
 		main.o \
 		palette.o \
 		pen.o \
+		popupwin.o \
 		regconf.o \
 		region.o \
 		registry.o \

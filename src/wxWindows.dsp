@@ -1273,6 +1273,10 @@ SOURCE=.\msw\penwin.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\popupwin.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\printdlg.cpp
 # End Source File
 # Begin Source File
@@ -1551,6 +1555,10 @@ SOURCE=..\include\wx\brush.h
 # Begin Source File
 
 SOURCE=..\include\wx\buffer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\build.h
 # End Source File
 # Begin Source File
 

@@ -351,6 +351,7 @@ MSWOBJS     = \
 		$(MSWDIR)/palette.$(OBJSUFF) \
 		$(MSWDIR)/pen.$(OBJSUFF) \
 		$(MSWDIR)/penwin.$(OBJSUFF) \
+		$(MSWDIR)/popupwin.$(OBJSUFF) \
 		$(MSWDIR)/printdlg.$(OBJSUFF) \
 		$(MSWDIR)/printwin.$(OBJSUFF) \
 		$(MSWDIR)/radiobox.$(OBJSUFF) \

@@ -279,6 +279,7 @@ ALL_HEADERS = \
 		bmpbuttn.h \
 		brush.h \
 		buffer.h \
+		build.h \
 		busyinfo.h \
 		button.h \
 		calctrl.h \

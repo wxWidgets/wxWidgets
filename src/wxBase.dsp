@@ -665,6 +665,10 @@ SOURCE=..\include\wx\buffer.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\build.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\chkconf.h
 # End Source File
 # Begin Source File

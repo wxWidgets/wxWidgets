@@ -340,6 +340,7 @@ MSWOBJS = $(MSWDIR)\$D\accel.obj \
 		$(MSWDIR)\$D\palette.obj \
 		$(MSWDIR)\$D\pen.obj \
 		$(MSWDIR)\$D\penwin.obj \
+		$(MSWDIR)\$D\popupwin.obj \
 		$(MSWDIR)\$D\printdlg.obj \
 		$(MSWDIR)\$D\printwin.obj \
 		$(MSWDIR)\$D\radiobox.obj \
