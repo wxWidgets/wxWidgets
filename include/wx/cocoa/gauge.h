@@ -49,6 +49,8 @@ public:
 // Cocoa callbacks
 // ------------------------------------------------------------------------
 protected:
+    // NSProgressIndicator cannot be enabled/disabled
+    virtual void CocoaSetEnabled(bool enable) { }
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
