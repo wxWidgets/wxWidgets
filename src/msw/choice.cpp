@@ -335,12 +335,12 @@ int wxChoice::FindString(const wxString& s) const
 #else // !Watcom
    //TODO:  Evidently some MSW versions (all?) don't like empty strings
    //passed to SendMessage, so we have to do it ourselves in that case
-   if ( s.size() == 0 )
+   if ( s.empty() )
    {
      int count = GetCount();
      for ( int i = 0; i < count; i++ )
      {
-       if ( GetString(i).size() == 0 )
+       if ( GetString(i).empty() )
            return i;
      }
 
