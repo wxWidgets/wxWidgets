@@ -57,7 +57,11 @@
 #include <stdlib.h>
 #include <sys/types.h>
 
-#if wxUSE_RICHEDIT && (!defined(__GNUWIN32_OLD__) || defined(__CYGWIN10__))
+#if wxUSE_RICHEDIT
+
+// old mingw32 has richedit stuff directly in windows.h and doesn't have
+// richedit.h at all
+#if !defined(__GNUWIN32_OLD__) || defined(__CYGWIN10__)
     #include <richedit.h>
 #endif
 
@@ -98,8 +102,10 @@
 
 // Watcom C++ doesn't define this
 #ifndef SCF_ALL
-#define SCF_ALL 0x0004
+    #define SCF_ALL 0x0004
 #endif
+
+#endif // wxUSE_RICHEDIT
 
 // ----------------------------------------------------------------------------
 // private functions
