@@ -24,6 +24,7 @@
 #ifndef WX_PRECOMP
     #include "wx/hash.h"
     #include "wx/object.h"
+    #include "wx/xti.h"
 #endif
 
 #include "wx/xml/xml.h"
