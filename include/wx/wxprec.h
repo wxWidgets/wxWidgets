@@ -27,7 +27,9 @@
 
 // Comment this out if you don't mind slower compilation of the wxWindows
 // library
+#ifndef __WXMAC__
 #include <windows.h>
+#endif
 
 #ifdef GetClassInfo
 #undef GetClassInfo
