@@ -39,10 +39,11 @@ protected:
   static wxHTTP *g_proxy;
   wxProtoInfo *m_protoinfo;
   wxProtocol *m_protocol;
-  wxHTTP m_proxy;
+  wxHTTP *m_proxy;
   wxURLError m_error;
   wxString m_protoname, m_hostname, m_servname, m_path, m_url;
   wxString m_user, m_password;
+  bool m_useProxy;
 
   bool PrepProto(wxString& url);
   bool PrepHost(wxString& url);
@@ -60,6 +61,8 @@ public:
 
   inline wxString GetProtocolName() const
         { return m_protoinfo->m_protoname; }
+  inline wxString GetHostName() const { return m_hostname; }
+  inline wxString GetURL() const { return m_url; }
   inline wxProtocol& GetProtocol() { return *m_protocol; }
   inline wxURLError GetError() const { return m_error; }
   inline wxString GetPath() const { return m_path; }

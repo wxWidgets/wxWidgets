@@ -83,7 +83,7 @@ wxFSFile* wxInternetFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxStri
     info = (wxInetCacheNode*) m_Cache.Get(right);
 
     // Add item into cache:
-    if (info != NULL)
+    if (info == NULL)
     {
         wxURL url(right);
         s = url.GetInputStream();
@@ -136,5 +136,20 @@ wxInternetFSHandler::~wxInternetFSHandler()
         delete n2;
     }
 }
+
+class wxFileSystemInternetModule : public wxModule
+{
+    DECLARE_DYNAMIC_CLASS(wxFileSystemInternetModule)
+
+    public:
+        virtual bool OnInit()
+        {
+            wxFileSystem::AddHandler(new wxInternetFSHandler);
+            return TRUE;
+        }
+        virtual void OnExit() {}
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxFileSystemInternetModule, wxModule)
 
 #endif // wxUSE_FS_INET

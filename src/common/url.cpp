@@ -22,19 +22,13 @@
 
 #if wxUSE_SOCKETS
 
-#ifndef WX_PRECOMP
-#endif
-
 #include <string.h>
 #include <ctype.h>
 
-// wxWindows headers
 #include <wx/string.h>
 #include <wx/list.h>
 #include <wx/utils.h>
-
-// wxSocket header
-#include "wx/url.h"
+#include <wx/url.h>
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxProtoInfo, wxObject)
@@ -43,7 +37,7 @@ IMPLEMENT_CLASS(wxURL, wxObject)
 
 // Protocols list
 wxProtoInfo *wxURL::g_protocols = NULL;
-wxHTTP *wxURL::g_proxy;
+wxHTTP *wxURL::g_proxy = NULL;
 
 // --------------------------------------------------------------
 // wxURL
@@ -56,14 +50,10 @@ wxHTTP *wxURL::g_proxy;
 wxURL::wxURL(const wxString& url)
 {
   m_protocol = NULL;
-  if (g_proxy->IsConnected()) {
-    m_protocol = g_proxy;
-    m_protoname = "proxy";
-    m_path = url;
-    return;
-  }
-  m_url = url;
   m_error = wxURL_NOERR;
+  m_url = url;
+  m_useProxy = (g_proxy != NULL);
+  m_proxy = g_proxy;
   ParseURL();
 }
 
@@ -71,34 +61,54 @@ bool wxURL::ParseURL()
 {
   wxString last_url = m_url;
 
-  // Clean up
-  CleanData();
+ // If the URL was already parsed (so m_protocol != NULL), we pass this section.
+  if (!m_protocol) {
 
-  // Extract protocol name
-  if (!PrepProto(last_url)) {
-    m_error = wxURL_SNTXERR;
-    return FALSE;
-  }
+    // Clean up
+    CleanData();
 
-  // Find and create the protocol object
-  if (!FetchProtocol()) {
-    m_error = wxURL_NOPROTO;
-    return FALSE;
-  }
-
-  // Do we need a host name ?
-  if (m_protoinfo->m_needhost) {
-    // Extract it
-    if (!PrepHost(last_url)) {
+    // Extract protocol name
+    if (!PrepProto(last_url)) {
       m_error = wxURL_SNTXERR;
       return FALSE;
     }
-  }
 
-  // Extract full path
-  if (!PrepPath(last_url)) {
-    m_error = wxURL_NOPATH;
-    return FALSE;
+    // Find and create the protocol object
+    if (!FetchProtocol()) {
+      m_error = wxURL_NOPROTO;
+      return FALSE;
+    }
+
+    // Do we need a host name ?
+    if (m_protoinfo->m_needhost) {
+      // Extract it
+      if (!PrepHost(last_url)) {
+        m_error = wxURL_SNTXERR;
+        return FALSE;
+      }
+    }
+
+    // Extract full path
+    if (!PrepPath(last_url)) {
+      m_error = wxURL_NOPATH;
+      return FALSE;
+    }
+  }
+  // URL parse finished.
+
+  if (m_useProxy) {
+    // We destroy the newly created protocol.
+    CleanData();
+
+    // Third, we rebuild the URL.
+    m_url = m_protoname + _T(":");
+    if (m_protoinfo->m_needhost)
+      m_url = m_url + _T("//") + m_hostname;
+
+    m_url += m_path;
+
+    // We initialize specific variables.
+    m_protocol = m_proxy; // FIXME: we should clone the protocol
   }
 
   m_error = wxURL_NOERR;
@@ -107,13 +117,15 @@ bool wxURL::ParseURL()
 
 void wxURL::CleanData()
 {
-  if (m_protoname != _T("proxy"))
+  if (!m_useProxy)
     delete m_protocol;
 }
 
 wxURL::~wxURL()
 {
   CleanData();
+  if (m_proxy && m_proxy != g_proxy)
+    delete m_proxy;
 }
 
 // --------------------------------------------------------------
@@ -125,7 +137,7 @@ bool wxURL::PrepProto(wxString& url)
   int pos;
 
   // Find end
-  pos = url.Find(':');
+  pos = url.Find(_T(':'));
   if (pos == -1)
     return FALSE;
 
@@ -146,7 +158,7 @@ bool wxURL::PrepHost(wxString& url)
 
   url = url(2, url.Length());
 
-  pos = url.Find('/');
+  pos = url.Find(_T('/'));
   if (pos == -1)
     pos = url.Length();
 
@@ -154,10 +166,10 @@ bool wxURL::PrepHost(wxString& url)
     return FALSE;
 
   temp_url = url(0, pos);
-  url = url(url.Find('/'), url.Length());
+  url = url(url.Find(_T('/')), url.Length());
 
   // Retrieve service number
-  pos2 = temp_url.Find(':', TRUE);
+  pos2 = temp_url.Find(_T(':'), TRUE);
   if (pos2 != -1 && pos2 < pos) {
     m_servname = temp_url(pos2+1, pos);
     if (!m_servname.IsNumber())
@@ -166,18 +178,18 @@ bool wxURL::PrepHost(wxString& url)
   }
 
   // Retrieve user and password.
-  pos2 = temp_url.Find('@');
+  pos2 = temp_url.Find(_T('@'));
   // Even if pos2 equals -1, this code is right.
   m_hostname = temp_url(pos2+1, temp_url.Length());
 
-  m_user = "";
-  m_password = "";
+  m_user = _T("");
+  m_password = _T("");
 
   if (pos2 == -1)
     return TRUE;
 
   temp_url = temp_url(0, pos2);
-  pos2 = temp_url.Find(':');
+  pos2 = temp_url.Find(_T(':'));
 
   if (pos2 == -1)
     return FALSE;
@@ -191,9 +203,9 @@ bool wxURL::PrepHost(wxString& url)
 bool wxURL::PrepPath(wxString& url)
 {
   if (url.Length() != 0)
-    m_path = url;
+    m_path = ConvertToValidURI(url);
   else
-    m_path = "/";
+    m_path = _T("/");
   return TRUE;
 }
 
@@ -224,10 +236,6 @@ wxInputStream *wxURL::GetInputStream(void)
   wxIPV4address addr;
   wxInputStream *the_i_stream = NULL;
 
-  if (!m_protocol)
-    if (!ParseURL())
-      return NULL;
-
   if (!m_protocol) {
     m_error = wxURL_NOPROTO;
     return NULL;
@@ -239,7 +247,8 @@ wxInputStream *wxURL::GetInputStream(void)
     m_protocol->SetPassword(m_password);
   }
 
-  if (m_protoinfo->m_needhost) {
+  // m_protoinfo is NULL when we use a proxy
+  if (!m_useProxy && m_protoinfo->m_needhost) {
     if (!addr.Hostname(m_hostname)) {
       m_error = wxURL_NOHOST;
       return NULL;
@@ -254,7 +263,12 @@ wxInputStream *wxURL::GetInputStream(void)
     }
   }
 
-  the_i_stream = m_protocol->GetInputStream(m_path);
+  // When we use a proxy, we have to pass the whole URL to it.
+  if (m_useProxy)
+    the_i_stream = m_protocol->GetInputStream(m_url);
+  else
+    the_i_stream = m_protocol->GetInputStream(m_path);
+
   if (!the_i_stream) {
     m_error = wxURL_PROTOERR;
     return NULL;
@@ -265,31 +279,45 @@ wxInputStream *wxURL::GetInputStream(void)
 
 void wxURL::SetDefaultProxy(const wxString& url_proxy)
 {
-  g_proxy->Close();
-
-  if (url_proxy.IsNull())
+  if (url_proxy.IsNull()) {
+    g_proxy->Close();
+    delete g_proxy;
+    g_proxy = NULL;
     return;
+  }
 
   wxString tmp_str = url_proxy;
-  int pos = tmp_str.Find(':');
+  int pos = tmp_str.Find(_T(':'));
+  if (pos == -1)
+    return;
+
   wxString hostname = tmp_str(0, pos),
-           port = tmp_str(pos, tmp_str.Length()-pos);
+           port = tmp_str(pos+1, tmp_str.Length()-pos);
   wxIPV4address addr;
 
-  addr.Hostname(hostname);
-  addr.Service(port);
-  
+  if (!addr.Hostname(hostname))
+    return;
+  if (!addr.Service(port))
+    return;
+
+  if (g_proxy)
+  // Finally, when all is right, we connect the new proxy.
+    g_proxy->Close();
+  else
+    g_proxy = new wxHTTP();
   g_proxy->Connect(addr, TRUE); // Watcom needs the 2nd arg for some reason
 }
 
 void wxURL::SetProxy(const wxString& url_proxy)
 {
   if (url_proxy.IsNull()) {
-    m_proxy.Close();
+    if (m_proxy) {
+      m_proxy->Close();
+      delete m_proxy;
+    }
+    m_useProxy = FALSE;
     return;
   }
-
-  CleanData();
 
   wxString tmp_str;
   wxString hostname, port;
@@ -297,18 +325,27 @@ void wxURL::SetProxy(const wxString& url_proxy)
   wxIPV4address addr;
 
   tmp_str = url_proxy;
-  pos = tmp_str.Find(':');
+  pos = tmp_str.Find(_T(':'));
+  // This is an invalid proxy name.
+  if (pos == -1)
+    return;
+
   hostname = tmp_str(0, pos);
   port = tmp_str(pos, tmp_str.Length()-pos);
 
   addr.Hostname(hostname);
   addr.Service(port);
 
-  m_proxy.Connect(addr, TRUE); // Watcom needs the 2nd arg for some reason
+  // Finally, create the whole stuff.
+  if (m_proxy && m_proxy != g_proxy)
+    delete m_proxy;
+  m_proxy = new wxHTTP();
+  m_proxy->Connect(addr, TRUE); // Watcom needs the 2nd arg for some reason
 
-  m_protocol = &m_proxy;
-  m_protoname = "proxy";
-  m_path = url_proxy;
+  CleanData();
+  // Reparse url.
+  m_useProxy = TRUE;
+  ParseURL();
 }
 
 wxString wxURL::ConvertToValidURI(const wxString& uri)
@@ -323,8 +360,7 @@ wxString wxURL::ConvertToValidURI(const wxString& uri)
     if (c == _T(' '))
       out_str += _T('+');
     else {
-      if (!isalpha(c) && c != _T('.') && c != _T('+') && c != _T('.') && 
-                         c != _T('/')) {
+      if (!isalpha(c) && c != _T('.') && c != _T('+') && c != _T('/')) { 
         hexa_code.Printf(_T("%%%02X"), c);
         out_str += hexa_code;
       } else

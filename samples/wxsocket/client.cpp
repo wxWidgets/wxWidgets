@@ -274,26 +274,31 @@ void MyFrame::OnExecTest1(wxCommandEvent& WXUNUSED(evt))
 void MyFrame::Download(wxInputStream *input)
 {
   wxProgressDialog progress("Downloading ...", "0% downloaded");
-  wxBufferedInputStream buf_in(*input);
   wxFileOutputStream f_out("test.url");
-
-  size_t file_size = input->StreamSize();
   size_t downloaded;
-  int BUFSIZE = (file_size > 100) ? (file_size / 100) : file_size;
-  int bytes_read = BUFSIZE;
+  int BUFSIZE, bytes_read;
+  size_t file_size;
   wxString message;
   int percents;
 
   char *buf;
 
-// TODO: Support for streams which don't support StreamSize
-
+  if (input->GetSize() == (size_t)-1) {
+    file_size = (size_t)-1;
+    bytes_read = BUFSIZE = 10240;
+  } else {
+    file_size = input->GetSize();
+    if (file_size > 10240)
+      bytes_read = BUFSIZE = file_size / 1024;
+    else
+      bytes_read = BUFSIZE = 1024;
+  }
   buf = new char[BUFSIZE];
 
   downloaded = 0;
   bytes_read = BUFSIZE;
   while (downloaded < file_size && bytes_read != 0) {
-    bytes_read = buf_in.Read(buf, BUFSIZE).LastRead();
+    bytes_read = input->Read(buf, BUFSIZE).LastRead();
     f_out.Write(buf, bytes_read);
     downloaded += bytes_read;
 

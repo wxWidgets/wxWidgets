@@ -846,9 +846,8 @@ bool wxSocketClient::Connect(wxSockAddress& addr_man, bool WXUNUSED(wait) )
   // Update the flags of m_socket.
   SetFlags(m_flags);
   GSocket_SetPeer(m_socket, addr_man.GetAddress());
-  if (GSocket_Connect(m_socket, GSOCK_STREAMED) != GSOCK_NOERROR) {
+  if (GSocket_Connect(m_socket, GSOCK_STREAMED) != GSOCK_NOERROR)
     return FALSE;
-  }
 
   // Enables bg events.
   // ------------------

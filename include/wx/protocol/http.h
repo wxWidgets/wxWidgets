@@ -20,7 +20,7 @@ class WXDLLEXPORT wxHTTP : public wxProtocol {
 protected:
   wxProtocolError m_perr;
   wxList m_headers;
-  bool m_read;
+  bool m_read, m_proxy_mode;
   wxSockAddress *m_addr;
 public:
   wxHTTP();
@@ -35,6 +35,8 @@ public:
 
   void SetHeader(const wxString& header, const wxString& h_data);
   wxString GetHeader(const wxString& header);
+
+  void SetProxyMode(bool on);
 
 protected:
   typedef enum {

@@ -30,11 +30,11 @@
 #include <stdlib.h>
 
 #ifdef sun
-  #include <sys/filio.h>
+#    include <sys/filio.h>
 #endif
 
 #ifdef sgi
-  #include <bstring.h>
+#    include <bstring.h>
 #endif
 
 #include <signal.h>
@@ -238,18 +238,18 @@ GSocketError GSocket_SetServer(GSocket *sck)
     return GSOCK_INVADDR;
   }
 
-  if (sck->m_stream)
-    type = SOCK_STREAM;
-  else
-    type = SOCK_DGRAM;
+  /* We always have a stream here  */
+  sck->m_stream = TRUE;
 
-  sck->m_fd = socket(sck->m_local->m_realfamily, type, 0);
+  /* Create the socket */
+  sck->m_fd = socket(sck->m_local->m_realfamily, SOCK_STREAM, 0);
 
   if (sck->m_fd == -1) {
     sck->m_error = GSOCK_IOERR;
     return GSOCK_IOERR;
   }
 
+  /* Bind the socket to the LOCAL address */
   if (bind(sck->m_fd, sck->m_local->m_addr, sck->m_local->m_len) < 0) {
     close(sck->m_fd);
     sck->m_fd = -1;
@@ -257,6 +257,7 @@ GSocketError GSocket_SetServer(GSocket *sck)
     return GSOCK_IOERR;
   }
 
+  /* Enable listening up to 5 connections */
   if (listen(sck->m_fd, 5) < 0) {
     close(sck->m_fd);
     sck->m_fd = -1;
@@ -264,10 +265,7 @@ GSocketError GSocket_SetServer(GSocket *sck)
     return GSOCK_IOERR;
   }
 
-  sck->m_server = TRUE;
-
   return GSOCK_NOERROR;
-     
 }
 
 /*
@@ -279,15 +277,19 @@ GSocket *GSocket_WaitConnection(GSocket *socket)
 
   assert(socket != NULL);
 
+  /* If the socket has already been created, we exit immediately */
   if (socket->m_fd == -1 || !socket->m_server) {
     socket->m_error = GSOCK_INVSOCK;
     return NULL;
   }
 
+  /* Reenable GSOCK_CONNECTION event */
   _GSocket_Enable(socket, GSOCK_CONNECTION);
 
+  /* Create a GSocket object for the new connection */
   connection = GSocket_new();
 
+  /* Accept the incoming connection */
   connection->m_fd = accept(socket->m_fd, NULL, NULL);
   if (connection->m_fd == -1) {
     GSocket_destroy(connection);
@@ -295,6 +297,7 @@ GSocket *GSocket_WaitConnection(GSocket *socket)
     return NULL;
   }
 
+  /* Initialize all fields */
   connection->m_stream   = TRUE;
   connection->m_server   = FALSE;
   connection->m_oriented = TRUE;
@@ -322,8 +325,10 @@ GSocketError GSocket_SetNonOriented(GSocket *sck)
   sck->m_server   = FALSE;
   sck->m_oriented = FALSE;
 
+  /* Create the socket */
   sck->m_fd = socket(sck->m_local->m_realfamily, SOCK_DGRAM, 0);
 
+  /* Bind it to the LOCAL address */
   if (bind(sck->m_fd, sck->m_local->m_addr, sck->m_local->m_len) < 0) {
     close(sck->m_fd);
     sck->m_fd    = -1;
@@ -357,6 +362,7 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
     return GSOCK_INVADDR;
   }
 
+  /* Test whether we want the socket to be a stream (e.g. TCP) */
   sck->m_stream = (stream == GSOCK_STREAMED);
   sck->m_oriented = TRUE;
 
@@ -365,6 +371,7 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
   else
     type = SOCK_DGRAM;
 
+  /* Create the socket */
   sck->m_fd = socket(sck->m_peer->m_realfamily, type, 0);
 
   if (sck->m_fd == -1) {
@@ -372,6 +379,7 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
     return GSOCK_IOERR;
   }
 
+  /* Connect it to the PEER address */
   if (connect(sck->m_fd, sck->m_peer->m_addr,
               sck->m_peer->m_len) != 0) {
     close(sck->m_fd);
@@ -380,6 +388,7 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
     return GSOCK_IOERR;
   }
   
+  /* It is not a server */
   sck->m_server = FALSE;
 
   return GSOCK_NOERROR;
@@ -397,9 +406,10 @@ int GSocket_Read(GSocket *socket, char *buffer, int size)
     return -1;
   }
 
+  /* Reenable GSOCK_INPUT event */
   _GSocket_Enable(socket, GSOCK_INPUT);
 
-  if (socket->m_oriented)
+  if (socket->m_stream)
     return _GSocket_Recv_Stream(socket, buffer, size);
   else
     return _GSocket_Recv_Dgram(socket, buffer, size);
@@ -417,7 +427,7 @@ int GSocket_Write(GSocket *socket, const char *buffer,
 
   _GSocket_Enable(socket, GSOCK_OUTPUT);
 
-  if (socket->m_oriented)
+  if (socket->m_stream)
     return _GSocket_Send_Stream(socket, buffer, size);
   else
     return _GSocket_Send_Dgram(socket, buffer, size);
@@ -502,6 +512,8 @@ void GSocket_SetFallback(GSocket *socket, GSocketEventFlags event,
   assert (socket != NULL);
 
   for (count=0;count<GSOCK_MAX_EVENT;count++) {
+    /* We test each flag and, if it is enabled, we enable the corresponding
+       event */
     if ((event & (1 << count)) != 0) {
       socket->m_fbacks[count] = fallback;
       socket->m_data[count] = cdata;
@@ -593,6 +605,7 @@ int _GSocket_Recv_Dgram(GSocket *socket, char *buffer, int size)
     return -1;
   }
 
+  /* Translate a system address into a GSocket address */
   if (!socket->m_peer)
     socket->m_peer = GAddress_new();
   _GAddress_translate_from(socket->m_peer, &from, fromlen);
@@ -634,6 +647,7 @@ int _GSocket_Send_Dgram(GSocket *socket, const char *buffer, int size)
     return -1;
   }
 
+  /* Frees memory allocated from _GAddress_translate_to */
   free(addr);
 
   return ret;
@@ -675,6 +689,10 @@ void _GSocket_Detected_Write(GSocket *socket)
  * -------------------------------------------------------------------------
  */
 
+/* CHECK_ADDRESS verifies that the current family is either GSOCK_NOFAMILY or
+ * GSOCK_*family*. In case it is GSOCK_NOFAMILY, it initializes address to be
+ * a GSOCK_*family*. In other cases, it returns GSOCK_INVADDR.
+ */
 #define CHECK_ADDRESS(address, family, retval) \
 { \
   if (address->m_family == GSOCK_NOFAMILY) \
@@ -804,10 +822,11 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
 
   addr = &(((struct sockaddr_in *)address->m_addr)->sin_addr);
 
-  /* only name for the moment */
+  /* If it is a numeric host name, convert it now */
   if (inet_aton(hostname, addr) == 0) {
     struct in_addr *array_addr;
 
+    /* It is a real name, we solve it */
     if ((he = gethostbyname(hostname)) == NULL) {
       address->m_error = GSOCK_NOHOST;
       return GSOCK_NOHOST;
@@ -847,7 +866,6 @@ GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port,
     return GSOCK_INVOP;
   }
  
-  /* TODO: TCP or UDP */
   se = getservbyname(port, protocol);
   if (!se) {
     if (isdigit(port[0])) {

@@ -108,8 +108,8 @@ void MyFrame::OnSockRequest(wxSocketEvent& evt)
 
   wxSocketBase *sock = evt.Socket();
 
-  printf("OnSockRequest OK\n");
-  printf("OnSockRequest (event = %d)\n",evt.SocketEvent());
+  wxPrintf(_T("OnSockRequest OK\n"));
+  wxPrintf(_T("OnSockRequest (event = %d)\n"),evt.SocketEvent());
   switch (evt.SocketEvent()) {
   case GSOCK_INPUT:
     unsigned char c;
@@ -120,13 +120,15 @@ void MyFrame::OnSockRequest(wxSocketEvent& evt)
 
     break;
   case GSOCK_LOST:
-    printf("Destroying socket\n");
+    wxPrintf(_T("Destroying socket\n"));
     wxPendingDelete.Append(sock);
     UpdateStatus(-1);
     return;
     break;
+  default:
+    wxPrintf(_T("Invalid event !\n"));
   }
-  printf("OnSockRequest Exiting\n");
+  wxPrintf(_T("OnSockRequest Exiting\n"));
 }
 
 void MyFrame::OnSockRequestServer(wxSocketEvent& evt)
@@ -142,8 +144,8 @@ void MyFrame::OnSockRequestServer(wxSocketEvent& evt)
   wxSocketBase *sock2;
   wxSocketServer *server = (wxSocketServer *) evt.Socket();
 
-  printf("OnSockRequestServer OK\n");
-  printf("OnSockRequest (Main = %d) (event = %d)\n",wxThread::IsMain(), evt.SocketEvent());
+  wxPrintf(_T("OnSockRequestServer OK\n"));
+  wxPrintf(_T("OnSockRequest (Main = %d) (event = %d)\n"),wxThread::IsMain(), evt.SocketEvent());
 
   sock2 = server->Accept();
   if (sock2 == NULL)
@@ -199,8 +201,8 @@ void MyFrame::ExecTest1(wxSocketBase *sock_o)
 
 void MyFrame::UpdateStatus(int incr)
 {
-  char s[30];
+  wxChar s[30];
   nb_clients += incr;
-  sprintf(s, "%d clients connected", nb_clients);
+  wxSprintf(s, _T("%d clients connected"), nb_clients);
   SetStatusText(s);
 }

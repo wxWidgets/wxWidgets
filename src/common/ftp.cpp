@@ -251,7 +251,7 @@ public:
 
   wxInputFTPStream(wxFTP *ftp_clt, wxSocketBase *sock)
     : wxSocketInputStream(*sock), m_ftp(ftp_clt) {}
-  size_t StreamSize() const { return m_ftpsize; }
+  size_t GetSize() const { return m_ftpsize; }
   virtual ~wxInputFTPStream(void)
   { 
      if (LastError() == wxStream_NOERROR)

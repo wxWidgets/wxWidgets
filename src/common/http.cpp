@@ -45,6 +45,7 @@ wxHTTP::wxHTTP()
 {
   m_addr = NULL;
   m_read = FALSE;
+  m_proxy_mode = FALSE;
 
   SetNotify(GSOCK_LOST_FLAG);
 }
@@ -67,6 +68,11 @@ wxString wxHTTP::GetContentType()
   return GetHeader(_T("Content-Type"));
 }
 
+void wxHTTP::SetProxyMode(bool on)
+{
+  m_proxy_mode = on;
+}
+
 void wxHTTP::SetHeader(const wxString& header, const wxString& h_data)
 {
   if (m_read) {
@@ -86,7 +92,12 @@ void wxHTTP::SetHeader(const wxString& header, const wxString& h_data)
 
 wxString wxHTTP::GetHeader(const wxString& header)
 {
-  wxNode *node = m_headers.Find(header);
+  wxNode *node;
+  wxString upper_header;
+
+  upper_header = header.Upper();
+  
+  node = m_headers.Find(upper_header);
   if (!node)
     return wxEmptyString;
 
@@ -134,6 +145,8 @@ bool wxHTTP::ParseHeaders()
     wxString left_str = tokenzr.GetNextToken();
     wxString *str = new wxString(tokenzr.GetNextToken());
 
+    left_str.MakeUpper();
+
     m_headers.Append(left_str, (wxObject *) str);
   }
   return TRUE;
@@ -143,7 +156,7 @@ bool wxHTTP::Connect(const wxString& host)
 {
   wxIPV4address *addr;
 
-  if (m_connected) {
+  if (m_addr) {
     delete m_addr;
     m_addr = NULL;
     Close();
@@ -180,7 +193,7 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
 {
   wxChar *tmp_buf;
   wxChar buf[200]; // 200 is arbitrary.
-  wxString tmp_str;
+  wxString tmp_str = path;
 
   switch (req) {
   case wxHTTP_GET:
@@ -194,7 +207,6 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
   SetFlags(NONE);
   Notify(FALSE);
 
-  tmp_str = wxURL::ConvertToValidURI(path);
   wxSprintf(buf, _T("%s %s HTTP/1.0\n\r"), tmp_buf, tmp_str.GetData());
   const wxWX2MBbuf pathbuf = wxConvLibc.cWX2MB(buf);
   Write(pathbuf, strlen(MBSTRINGCAST pathbuf));
@@ -243,7 +255,7 @@ public:
   unsigned long m_read_bytes;
 
   wxHTTPStream(wxHTTP *http) : wxSocketInputStream(*http), m_http(http) {}
-  size_t StreamSize() const { return m_httpsize; }
+  size_t GetSize() const { return m_httpsize; }
   virtual ~wxHTTPStream(void) { m_http->Abort(); }
 
 protected:
@@ -265,18 +277,23 @@ size_t wxHTTPStream::OnSysRead(void *buffer, size_t bufsize)
 
 bool wxHTTP::Abort(void)
 {
-  return wxSocketClient::Close();
+  bool ret, connected;
+
+  ret = wxSocketClient::Close();
+
+  return ret;
 }
 
 wxInputStream *wxHTTP::GetInputStream(const wxString& path)
 {
   wxHTTPStream *inp_stream = new wxHTTPStream(this);
+  wxString new_path;
 
-  if (!m_addr || m_connected) {
-    m_perr = wxPROTO_CONNERR;
+  m_perr = wxPROTO_CONNERR;
+  if (!m_addr)
     return NULL;
-  }
 
+  // We set m_connected back to FALSE so wxSocketBase will know what to do.
   if (!wxProtocol::Connect(*m_addr))
     return NULL;
 
@@ -291,6 +308,7 @@ wxInputStream *wxHTTP::GetInputStream(const wxString& path)
   inp_stream->m_read_bytes = 0;
 
   Notify(FALSE);
+  SetFlags(SPEED | WAITALL);
 
   return inp_stream;
 }

@@ -124,7 +124,11 @@ IMPLEMENT_DYNAMIC_CLASS(wxHtmlFilterHTML, wxHtmlFilter)
 
 bool wxHtmlFilterHTML::CanRead(const wxFSFile& file) const
 {
-    return (file.GetMimeType() == "text/html");
+//    return (file.GetMimeType() == "text/html");
+// This is true in most case but some page can return:
+// "text/html; char-encoding=...."
+// So we use Find instead
+  return (file.GetMimeType().Find(_T("text/html")) == 0);
 }
 
 

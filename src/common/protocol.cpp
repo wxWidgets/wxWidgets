@@ -26,6 +26,8 @@
 #include "wx/url.h"
 #include "wx/module.h"
 
+#include <stdlib.h>
+
 /////////////////////////////////////////////////////////////////
 // wxProtoInfo
 /////////////////////////////////////////////////////////////////
@@ -126,13 +128,21 @@ IMPLEMENT_DYNAMIC_CLASS(wxProtocolModule, wxModule)
 
 bool wxProtocolModule::OnInit()
 {
-  wxURL::g_proxy = new wxHTTP();
+  char *env_http_prox;
+
+  wxURL::g_proxy = NULL;
+  // Initialize the proxy when HTTP_PROXY is defined
+  env_http_prox = getenv("HTTP_PROXY");
+  if (env_http_prox)
+    wxURL::SetDefaultProxy(env_http_prox);
+  
   return TRUE;
 }
 
 void wxProtocolModule::OnExit()
 {
-  delete wxURL::g_proxy;
+  if (wxURL::g_proxy)
+    delete wxURL::g_proxy;
   wxURL::g_proxy = NULL;
 }
 

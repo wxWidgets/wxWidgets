@@ -32,6 +32,7 @@
 
 #include <wx/defs.h>
 #include <wx/object.h>
+#include <wx/log.h>
 #include <wx/gsocket.h>
 #include <wx/sckaddr.h>
 
@@ -101,6 +102,12 @@ wxIPV4address::~wxIPV4address()
 
 bool wxIPV4address::Hostname(const wxString& name)
 {
+  // Some people are sometimes fool.
+  if (name == _T("")) {
+    wxLogWarning( _T("Trying to solve a NULL hostname: giving up") );
+    return FALSE;
+  }
+
   return (GAddress_INET_SetHostName(m_address, name.fn_str()) == GSOCK_NOERROR);
 }
 

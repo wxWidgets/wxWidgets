@@ -128,7 +128,10 @@ bool wxHtmlWindow::SetPage(const wxString& source)
     SetBackgroundColour(wxColour(0xFF, 0xFF, 0xFF));
     m_OpenedPage = m_OpenedAnchor = wxEmptyString;
     m_Parser -> SetDC(dc);
-    if (m_Cell) delete m_Cell;
+    if (m_Cell) {
+      delete m_Cell;
+      m_Cell = NULL;
+    }
     m_Cell = (wxHtmlContainerCell*) m_Parser -> Parse(source);
     delete dc;
     m_Cell -> SetIndent(m_Borders, HTML_INDENT_ALL, HTML_UNITS_PIXELS);
