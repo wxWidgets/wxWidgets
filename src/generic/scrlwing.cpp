@@ -353,8 +353,14 @@ void wxScrollHelper::SetScrollbars(int pixelsPerUnitX,
     if (do_refresh && !noRefresh)
         m_targetWindow->Refresh(TRUE, GetRect());
 
+    // TODO: check if we can use AdjustScrollbars always.
+#ifdef __WXUNIVERSAL__
+    AdjustScrollbars();
+#else    
+    // This is also done by AdjustScrollbars, above
 #ifdef __WXMAC__
     m_targetWindow->MacUpdateImmediately() ;
+#endif
 #endif
 }
 
