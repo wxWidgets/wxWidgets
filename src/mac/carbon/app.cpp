@@ -1177,7 +1177,7 @@ int wxMacKeyCodeToModifier(wxKeyCode key)
     }
 }
 
-bool wxGetKeyState(wxKeyCode key) //virtual key code if < 10.2.x, else see below
+bool wxGetKeyState(const wxKeyCode& key) //virtual key code if < 10.2.x, else see below
 {
 #ifdef __DARWIN__
     // Startup HID keyboard for getting key codes on DARWIN
