@@ -15,6 +15,11 @@ class MyVListBox(wx.VListBox):
     # n'th item on the dc within the rect.  How it is drawn, and what
     # is drawn is entirely up to you.
     def OnDrawItem(self, dc, rect, n):
+        if self.GetSelection() == n:
+            c = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHTTEXT)
+        else:
+            c = self.GetForegroundColour()#wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHTTEXT) 
+        dc.SetTextForeground(c)
         dc.DrawLabel(self._getItemText(n), rect,
                      wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
 
