@@ -50,6 +50,14 @@
 #   endif
 #endif /* !defined(wxUSE_DYNLIB_CLASS) */
 
+#ifndef wxUSE_FILESYSTEM
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_FILESYSTEM must be defined."
+#   else
+#       define wxUSE_FILESYSTEM 0
+#   endif
+#endif /* !defined(wxUSE_FILESYSTEM) */
+
 /* don't give an error about this one yet, it's not fully implemented */
 #ifndef wxUSE_FSVOLUME
 #   define wxUSE_FSVOLUME 0
@@ -725,11 +733,33 @@
 #   endif
 #endif /* wxUSE_PROTOCOL */
 
-/* non GUI settings */
-#if wxUSE_STOPWATCH
+/* have to test for wxUSE_HTML before wxUSE_FILESYSTEM */
+#if wxUSE_HTML
+#   if !wxUSE_FILESYSTEM
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxHTML requires wxFileSystem"
+#       else
+#           undef wxUSE_FILESYSTEM
+#           define wxUSE_FILESYSTEM 1
+#       endif
+#   endif
+#endif /* wxUSE_HTML */
+
+#if wxUSE_FILESYSTEM
+#   if !wxUSE_STREAMS
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_FILESYSTEM requires wxUSE_STREAMS"
+#       else
+#           undef wxUSE_STREAMS
+#           define wxUSE_STREAMS 1
+#       endif
+#   endif
+#endif /* wxUSE_FILESYSTEM */
+
+#if wxUSE_STOPWATCH || wxUSE_DATETIME
 #    if !wxUSE_LONGLONG
 #        ifdef wxABORT_ON_CONFIG_ERROR
-#            error "wxUSE_STOPWATCH requires wxUSE_LONGLONG"
+#            error "wxUSE_STOPWATCH and wxUSE_DATETIME require wxUSE_LONGLONG"
 #        else
 #            undef wxUSE_LONGLONG
 #            define wxUSE_LONGLONG 1
