@@ -669,7 +669,7 @@ public:
 
     void base_AddChild(wxWindow* child);
     void base_RemoveChild(wxWindow* child);
-}
+};
 
 
 //---------------------------------------------------------------------------

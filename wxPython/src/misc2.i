@@ -1459,49 +1459,48 @@ extern wxMimeTypesManager* wxTheMimeTypesManager;
 
 %}
 
-// Art clients
-#define wxART_TOOLBAR                  "toolbar_C"
-#define wxART_MENU                     "menu_C"
-#define wxART_FRAME_ICON               "frame_icon_C"
+%pragma(python) code = "
+# Art clients
+wxART_TOOLBAR              = 'wxART_TOOLBAR_C'
+wxART_MENU                 = 'wxART_MENU_C'
+wxART_FRAME_ICON           = 'wxART_FRAME_ICON_C'
+wxART_CMN_DIALOG           = 'wxART_CMN_DIALOG_C'
+wxART_HELP_BROWSER         = 'wxART_HELP_BROWSER_C'
+wxART_MESSAGE_BOX          = 'wxART_MESSAGE_BOX_C'
+wxART_OTHER                = 'wxART_OTHER_C'
 
-#define wxART_CMN_DIALOG               "cmn_dialog_C"
-#define wxART_HELP_BROWSER             "help_browser_C"
-#define wxART_MESSAGE_BOX              "message_box_C"
-
-#define wxART_OTHER                    "other_C"
-
-// Art IDs
-#define wxART_ADD_BOOKMARK             "add_bookmark"
-#define wxART_DEL_BOOKMARK             "del_bookmark"
-#define wxART_HELP_SIDE_PANEL          "help_side_panel"
-#define wxART_HELP_SETTINGS            "help_settings"
-#define wxART_HELP_BOOK                "help_book"
-#define wxART_HELP_FOLDER              "help_folder"
-#define wxART_HELP_PAGE                "help_page"
-#define wxART_GO_BACK                  "go_back"
-#define wxART_GO_FORWARD               "go_forward"
-#define wxART_GO_UP                    "go_up"
-#define wxART_GO_DOWN                  "go_down"
-#define wxART_GO_TO_PARENT             "go_to_parent"
-#define wxART_GO_HOME                  "go_home"
-#define wxART_FILE_OPEN                "file_open"
-#define wxART_PRINT                    "print"
-#define wxART_HELP                     "help"
-#define wxART_TIP                      "tip"
-#define wxART_REPORT_VIEW              "report_view"
-#define wxART_LIST_VIEW                "list_view"
-#define wxART_NEW_DIR                  "new_dir"
-#define wxART_FOLDER                   "folder"
-#define wxART_GO_DIR_UP                "go_dir_up"
-#define wxART_EXECUTABLE_FILE          "executable_file"
-#define wxART_NORMAL_FILE              "normal_file"
-#define wxART_TICK_MARK                "tick"
-#define wxART_CROSS_MARK               "cross"
-#define wxART_ERROR                    "error"
-#define wxART_QUESTION                 "question"
-#define wxART_WARNING                  "warning"
-#define wxART_INFORMATION              "information"
-
+# Art IDs
+wxART_ADD_BOOKMARK         = 'wxART_ADD_BOOKMARK'
+wxART_DEL_BOOKMARK         = 'wxART_DEL_BOOKMARK'
+wxART_HELP_SIDE_PANEL      = 'wxART_HELP_SIDE_PANEL'
+wxART_HELP_SETTINGS        = 'wxART_HELP_SETTINGS'
+wxART_HELP_BOOK            = 'wxART_HELP_BOOK'
+wxART_HELP_FOLDER          = 'wxART_HELP_FOLDER'
+wxART_HELP_PAGE            = 'wxART_HELP_PAGE'
+wxART_GO_BACK              = 'wxART_GO_BACK'
+wxART_GO_FORWARD           = 'wxART_GO_FORWARD'
+wxART_GO_UP                = 'wxART_GO_UP'
+wxART_GO_DOWN              = 'wxART_GO_DOWN'
+wxART_GO_TO_PARENT         = 'wxART_GO_TO_PARENT'
+wxART_GO_HOME              = 'wxART_GO_HOME'
+wxART_FILE_OPEN            = 'wxART_FILE_OPEN'
+wxART_PRINT                = 'wxART_PRINT'
+wxART_HELP                 = 'wxART_HELP'
+wxART_TIP                  = 'wxART_TIP'
+wxART_REPORT_VIEW          = 'wxART_REPORT_VIEW'
+wxART_LIST_VIEW            = 'wxART_LIST_VIEW'
+wxART_NEW_DIR              = 'wxART_NEW_DIR'
+wxART_FOLDER               = 'wxART_FOLDER'
+wxART_GO_DIR_UP            = 'wxART_GO_DIR_UP'
+wxART_EXECUTABLE_FILE      = 'wxART_EXECUTABLE_FILE'
+wxART_NORMAL_FILE          = 'wxART_NORMAL_FILE'
+wxART_TICK_MARK            = 'wxART_TICK_MARK'
+wxART_CROSS_MARK           = 'wxART_CROSS_MARK'
+wxART_ERROR                = 'wxART_ERROR'
+wxART_QUESTION             = 'wxART_QUESTION'
+wxART_WARNING              = 'wxART_WARNING'
+wxART_INFORMATION          = 'wxART_INFORMATION'
+"
 
 %{  // Python aware wxArtProvider
 class wxPyArtProvider : public wxArtProvider  {
