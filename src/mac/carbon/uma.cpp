@@ -106,12 +106,23 @@ void UMAInitToolbox( UInt16 inMoreMastersCalls )
 
   if ( TXNInitTextension != (void*) kUnresolvedCFragSymbolAddress )
   { 
-    TXNMacOSPreferredFontDescription defaults;
-    defaults.fontID = kFontIDGeneva ;
-    defaults.pointSize = (10 << 16) ;
-    defaults.fontStyle = kTXNDefaultFontStyle;
-    defaults.encoding = kTXNSystemDefaultEncoding;
-  	TXNInitTextension(&defaults,  1, (kTXNAlwaysUseQuickDrawTextMask | kTXNWantMoviesMask | kTXNWantSoundMask | kTXNWantGraphicsMask));
+    FontFamilyID fontId ;
+	Str255 fontName ;
+	SInt16 fontSize ;
+	Style fontStyle ;
+	GetThemeFont(kThemeSmallSystemFont , GetApplicationScript() , fontName , &fontSize , &fontStyle ) ;
+    GetFNum( fontName, &fontId );
+
+    TXNMacOSPreferredFontDescription fontDescriptions[] =
+    {
+        { fontId , (fontSize << 16) ,kTXNDefaultFontStyle, kTXNSystemDefaultEncoding } ,
+    } ;
+    int noOfFontDescriptions = sizeof( fontDescriptions ) / sizeof(TXNMacOSPreferredFontDescription) ;
+#if TARGET_CARBON  
+    --noOfFontDescriptions ;
+#endif
+  	// kTXNAlwaysUseQuickDrawTextMask might be desirable because of speed increases but it crashes the app under OS X upon key stroke
+  	TXNInitTextension(fontDescriptions,  noOfFontDescriptions, ( kTXNWantMoviesMask | kTXNWantSoundMask | kTXNWantGraphicsMask));
 	}
 
   long menuMgrAttr ;
