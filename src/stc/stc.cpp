@@ -90,10 +90,8 @@ BEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
     EVT_SCROLL                  (wxStyledTextCtrl::OnScroll)
     EVT_SIZE                    (wxStyledTextCtrl::OnSize)
     EVT_LEFT_DOWN               (wxStyledTextCtrl::OnMouseLeftDown)
-#if defined(__WXMSW__) || defined(__WXMAC__)
     // Let Scintilla see the double click as a second click
     EVT_LEFT_DCLICK             (wxStyledTextCtrl::OnMouseLeftDown)
-#endif
     EVT_MOTION                  (wxStyledTextCtrl::OnMouseMove)
     EVT_LEFT_UP                 (wxStyledTextCtrl::OnMouseLeftUp)
 #if defined(__WXGTK__) || defined(__WXMAC__)
@@ -102,6 +100,7 @@ BEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
     EVT_CONTEXT_MENU            (wxStyledTextCtrl::OnContextMenu)
 #endif
     EVT_MOUSEWHEEL              (wxStyledTextCtrl::OnMouseWheel)
+    EVT_MIDDLE_UP               (wxStyledTextCtrl::OnMouseMiddleUp)
     EVT_CHAR                    (wxStyledTextCtrl::OnChar)
     EVT_KEY_DOWN                (wxStyledTextCtrl::OnKeyDown)
     EVT_KILL_FOCUS              (wxStyledTextCtrl::OnLoseFocus)
@@ -1959,18 +1958,18 @@ void wxStyledTextCtrl::OnSize(wxSizeEvent& evt) {
 void wxStyledTextCtrl::OnMouseLeftDown(wxMouseEvent& evt) {
     SetFocus();
     wxPoint pt = evt.GetPosition();
-    m_swx->DoButtonDown(Point(pt.x, pt.y), m_stopWatch.Time(),
+    m_swx->DoLeftButtonDown(Point(pt.x, pt.y), m_stopWatch.Time(),
                       evt.ShiftDown(), evt.ControlDown(), evt.AltDown());
 }
 
 void wxStyledTextCtrl::OnMouseMove(wxMouseEvent& evt) {
     wxPoint pt = evt.GetPosition();
-    m_swx->DoButtonMove(Point(pt.x, pt.y));
+    m_swx->DoLeftButtonMove(Point(pt.x, pt.y));
 }
 
 void wxStyledTextCtrl::OnMouseLeftUp(wxMouseEvent& evt) {
     wxPoint pt = evt.GetPosition();
-    m_swx->DoButtonUp(Point(pt.x, pt.y), m_stopWatch.Time(),
+    m_swx->DoLeftButtonUp(Point(pt.x, pt.y), m_stopWatch.Time(),
                       evt.ControlDown());
 }
 
@@ -1980,6 +1979,11 @@ void wxStyledTextCtrl::OnMouseRightUp(wxMouseEvent& evt) {
     m_swx->DoContextMenu(Point(pt.x, pt.y));
 }
 
+
+void wxStyledTextCtrl::OnMouseMiddleUp(wxMouseEvent& evt) {
+    wxPoint pt = evt.GetPosition();
+    m_swx->DoMiddleButtonUp(Point(pt.x, pt.y));
+}
 
 void wxStyledTextCtrl::OnContextMenu(wxContextMenuEvent& evt) {
     wxPoint pt = evt.GetPosition();
