@@ -31,9 +31,10 @@
 #if wxUSE_NOTEBOOK
 
 #ifndef WX_PRECOMP
-    #include "wx/notebook.h"
-    #include "wx/imaglist.h"
 #endif //WX_PRECOMP
+
+#include "wx/imaglist.h"
+#include "wx/notebook.h"
 
 // ============================================================================
 // implementation

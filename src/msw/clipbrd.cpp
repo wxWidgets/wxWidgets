@@ -66,12 +66,11 @@
 
 #if wxUSE_DATAOBJ
     #include "wx/dataobj.h"
+#endif
 
-// No: don't necessarily use OLE clipboard with data object
-#if 0
+#if wxUSE_OLE
    // use OLE clipboard
    #define wxUSE_OLE_CLIPBOARD 1
-#endif
 #else // !wxUSE_DATAOBJ
     // use Win clipboard API
     #define wxUSE_OLE_CLIPBOARD 0

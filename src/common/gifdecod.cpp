@@ -588,8 +588,12 @@ int wxGIFDecoder::ReadGIF()
 
 	    /* fill in the data */
 	    m_f->Read(buf, 9);
+	    pimg->left = buf[0] + 256 * buf[1];
+	    pimg->top = buf[2] + 256 * buf[3];
+/*
 	    pimg->left = buf[4] + 256 * buf[5];
 	    pimg->top = buf[4] + 256 * buf[5];
+*/
 	    pimg->w = buf[4] + 256 * buf[5];
 	    pimg->h = buf[6] + 256 * buf[7];
 	    interl = ((buf[8] & 0x40)? 1 : 0);

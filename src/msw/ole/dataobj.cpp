@@ -1203,10 +1203,12 @@ void wxDataObject::SetAutoDelete()
 {
 }
 
+#ifdef __WXDEBUG__
 const wxChar *wxDataObject::GetFormatName(wxDataFormat format)
 {
     return NULL;
 }
+#endif
 
 #endif
 

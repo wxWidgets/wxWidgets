@@ -376,6 +376,10 @@ SOURCE=.\common\mstream.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\nbkbase.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\object.cpp
 # End Source File
 # Begin Source File
@@ -889,7 +893,7 @@ SOURCE=.\msw\dragimag.cpp
 # Begin Source File
 
 SOURCE=.\msw\dummy.cpp
-# ADD CPP /D "__WXUNIVERSAL__" /Yc"wx/wxprec.h"
+# ADD CPP /Yc"wx/wxprec.h"
 # End Source File
 # Begin Source File
 
