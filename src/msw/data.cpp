@@ -160,7 +160,7 @@ const wxChar *wxFloatToStringStr = T("%.2f");
 const wxChar *wxDoubleToStringStr = T("%.2f");
 
 #ifdef __WXMSW__
-const wxChar *wxUserResourceStr = T("TEXT(");
+const wxChar *wxUserResourceStr = T("TEXT");
 #endif
 
 #if wxUSE_SHARED_LIBRARY

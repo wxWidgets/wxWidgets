@@ -67,7 +67,7 @@ static struct
 }
 aStdKeys[] = 
 { 
-  { HKEY_CLASSES_ROOT,      T("HKEY_CLASSES_ROOT("),      T("HKCR") },
+  { HKEY_CLASSES_ROOT,      T("HKEY_CLASSES_ROOT"),      T("HKCR") },
 #ifdef  __WIN32__
   { HKEY_CURRENT_USER,      T("HKEY_CURRENT_USER"),      T("HKCU") },
   { HKEY_LOCAL_MACHINE,     T("HKEY_LOCAL_MACHINE"),     T("HKLM") },

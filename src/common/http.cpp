@@ -201,7 +201,7 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
 
   switch (req) {
   case wxHTTP_GET:
-    tmp_buf = T("GET(");
+    tmp_buf = T("GET");
     break;
   default:
     return FALSE;

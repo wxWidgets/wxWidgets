@@ -1099,7 +1099,7 @@ bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
     m_hWnd = (WXHWND)::CreateWindowEx
                        (
                         exStyle,
-                        T("MDICLIENT("),
+                        T("MDICLIENT"),
                         NULL,
                         msStyle,
                         0, 0, 0, 0,

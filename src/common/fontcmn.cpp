@@ -70,43 +70,43 @@ bool wxFontBase::operator!=(const wxFont& font) const
 
 wxString wxFontBase::GetFamilyString() const
 {
-    wxCHECK_MSG( Ok(), T("wxDEFAULT("), T("invalid font") );
+    wxCHECK_MSG( Ok(), T("wxDEFAULT"), T("invalid font") );
 
     switch ( GetFamily() )
     {
         case wxDECORATIVE:   return T("wxDECORATIVE");
         case wxROMAN:        return T("wxROMAN");
-        case wxSCRIPT:       return T("wxSCRIPT(");
+        case wxSCRIPT:       return T("wxSCRIPT");
         case wxSWISS:        return T("wxSWISS");
         case wxMODERN:       return T("wxMODERN");
         case wxTELETYPE:     return T("wxTELETYPE");
-        default:             return T("wxDEFAULT(");
+        default:             return T("wxDEFAULT");
     }
 }
 
 wxString wxFontBase::GetStyleString() const
 {
-    wxCHECK_MSG( Ok(), T("wxDEFAULT("), T("invalid font") );
+    wxCHECK_MSG( Ok(), T("wxDEFAULT"), T("invalid font") );
 
     switch ( GetStyle() )
     {
         case wxNORMAL:   return T("wxNORMAL");
-        case wxSLANT:    return T("wxSLANT(");
+        case wxSLANT:    return T("wxSLANT");
         case wxITALIC:   return T("wxITALIC");
-        default:         return T("wxDEFAULT(");
+        default:         return T("wxDEFAULT");
     }
 }
 
 wxString wxFontBase::GetWeightString() const
 {
-    wxCHECK_MSG( Ok(), T("wxDEFAULT("), T("invalid font") );
+    wxCHECK_MSG( Ok(), T("wxDEFAULT"), T("invalid font") );
 
     switch ( GetWeight() )
     {
         case wxNORMAL:   return T("wxNORMAL");
         case wxBOLD:     return T("wxBOLD");
-        case wxLIGHT:    return T("wxLIGHT(");
-        default:         return T("wxDEFAULT(");
+        case wxLIGHT:    return T("wxLIGHT");
+        default:         return T("wxDEFAULT");
     }
 }
 

@@ -147,7 +147,7 @@ wxTime::wxTime(const wxDate& date, hourTy h, minuteTy m, secondTy s, bool dst)
 /*
                 if (IsDST()) setError(NIHCL_BADTIME,DEFAULT,
                 date.dayOfMonth(),date.nameOfMonth(),date.year(),
-                h,m,s,(dst?_("DST("):""));
+                h,m,s,(dst?_("DST"):""));
 */
   }
   sec += TIME_ZONE;                               // adjust to GMT

@@ -85,7 +85,7 @@ bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat)
         window = XtWindow( (Widget) wxTheApp->GetTopWindow()->GetTopWidget() );
 
     int success = XmClipboardRetrieve((Display*) wxGetDisplay(),
-      window, "TEXT(", (XtPointer) 0, 0, & numBytes, & privateId) ;
+      window, "TEXT", (XtPointer) 0, 0, & numBytes, & privateId) ;
 
     // Assume only text is supported. If we have anything at all,
     // or the clipboard is locked so we're not sure, we say we support it.
@@ -128,7 +128,7 @@ bool wxSetClipboardData(wxDataFormat dataFormat, wxObject *obj, int width, int h
       XmClipboardCopy((Display*) wxGetDisplay(),
        window, 
        itemId,
-       "TEXT(",
+       "TEXT",
        (XtPointer) data,
        strlen(data) + 1,
        0,
@@ -171,7 +171,7 @@ wxObject *wxGetClipboardData(wxDataFormat dataFormat, long *len)
 	}
         result = XmClipboardRetrieve((Display*) wxGetDisplay(),
           window,
-          "TEXT(",
+          "TEXT",
           (XtPointer) data,
           currentDataSize,
           &numBytes,
@@ -224,7 +224,7 @@ bool wxGetClipboardFormatName(wxDataFormat dataFormat, char *formatName, int max
     // Only wxDF_TEXT supported
     if (dataFormat == wxDF_TEXT)
     {
-       strcpy(formatName, "TEXT(");
+       strcpy(formatName, "TEXT");
        return TRUE;
     }
     else
@@ -413,7 +413,7 @@ wxClipboard::~wxClipboard()
 
 static int FormatStringToID(char *str)
 {
-    if (!strcmp(str, "TEXT("))
+    if (!strcmp(str, "TEXT"))
         return wxDF_TEXT;
     
     return wxRegisterClipboardFormat(str);
@@ -499,7 +499,7 @@ char *wxClipboard::GetClipboardString(long time)
     char *str;
     long length;
     
-    str = GetClipboardData("TEXT(", &length, time);
+    str = GetClipboardData("TEXT", &length, time);
     if (!str) {
         str = new char[1];
         *str = 0;
@@ -516,7 +516,7 @@ char *wxClipboard::GetClipboardData(char *format, long *length, long time)
         else
             return NULL;
     } else if (cbString) {
-        if (!strcmp(format, "TEXT("))
+        if (!strcmp(format, "TEXT"))
             return copystring(cbString);
         else
             return NULL;

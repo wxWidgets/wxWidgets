@@ -194,7 +194,7 @@ static char * GetIniFile (char *dest, const char *filename)
             strcat (dest, "/");
         if (filename == NULL)
         {
-            if ((filename = getenv ("XENVIRONMENT(")) == NULL)
+            if ((filename = getenv ("XENVIRONMENT")) == NULL)
                 filename = ".Xdefaults";
         }
         else if (*filename != '.')
@@ -405,7 +405,7 @@ bool wxGetResource(const wxString& section, const wxString& entry, int *value, c
     {
         // Handle True, False here
         // True, Yes, Enables, Set or  Activated
-        if (*s == 'T(' || *s == 'Y' || *s == 'E' || *s == 'S' || *s == 'A')
+        if (*s == 'T' || *s == 'Y' || *s == 'E' || *s == 'S' || *s == 'A')
             *value = TRUE;
         // False, No, Disabled, Reset, Cleared, Deactivated
         else if (*s == 'F' || *s == 'N' || *s == 'D' || *s == 'R' || *s == 'C')
@@ -457,7 +457,7 @@ void wxXMergeDatabases (wxApp * theApp, Display * display)
     * and merge into existing database
     */
 
-    if ((environment = getenv ("XENVIRONMENT(")) == NULL)
+    if ((environment = getenv ("XENVIRONMENT")) == NULL)
     {
         size_t len;
         environment = GetIniFile (filename, NULL);

@@ -254,7 +254,7 @@ static wxString wxGetPrintDlgError()
         case  PDERR_INITFAILURE: msg = T("PDERR_INITFAILURE"); break;
         case  PDERR_GETDEVMODEFAIL: msg = T("PDERR_GETDEVMODEFAIL"); break;
         case  PDERR_DNDMMISMATCH: msg = T("PDERR_DNDMMISMATCH"); break;
-        case  PDERR_DEFAULTDIFFERENT: msg = T("PDERR_DEFAULTDIFFERENT("); break;
+        case  PDERR_DEFAULTDIFFERENT: msg = T("PDERR_DEFAULTDIFFERENT"); break;
         case  PDERR_CREATEICFAILURE: msg = T("PDERR_CREATEICFAILURE"); break;
         default: break;
     }

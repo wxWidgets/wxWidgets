@@ -225,12 +225,12 @@ wxCursor::wxCursor(int cursor_type)
     }
     case wxCURSOR_POINT_LEFT:
     {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), T("wxCURSOR_PLEFT("));
+      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), T("wxCURSOR_PLEFT"));
       break;
     }
     case wxCURSOR_POINT_RIGHT:
     {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), T("wxCURSOR_PRIGHT("));
+      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), T("wxCURSOR_PRIGHT"));
       break;
     }
     case wxCURSOR_QUESTION_ARROW:

@@ -407,19 +407,19 @@ const char *wxDataObject::GetFormatName(wxDataFormat format)
 
   static char s_szBuf[128];
   switch ( format ) {
-    case CF_TEXT:         return "CF_TEXT(";
+    case CF_TEXT:         return "CF_TEXT";
     case CF_BITMAP:       return "CF_BITMAP";
-    case CF_METAFILEPICT: return "CF_METAFILEPICT(";
+    case CF_METAFILEPICT: return "CF_METAFILEPICT";
     case CF_SYLK:         return "CF_SYLK";
     case CF_DIF:          return "CF_DIF";
     case CF_TIFF:         return "CF_TIFF";
-    case CF_OEMTEXT:      return "CF_OEMTEXT(";
+    case CF_OEMTEXT:      return "CF_OEMTEXT";
     case CF_DIB:          return "CF_DIB";
     case CF_PALETTE:      return "CF_PALETTE";
     case CF_PENDATA:      return "CF_PENDATA";
     case CF_RIFF:         return "CF_RIFF";
     case CF_WAVE:         return "CF_WAVE";
-    case CF_UNICODETEXT:  return "CF_UNICODETEXT(";
+    case CF_UNICODETEXT:  return "CF_UNICODETEXT";
     case CF_ENHMETAFILE:  return "CF_ENHMETAFILE";
     case CF_HDROP:        return "CF_HDROP";
     case CF_LOCALE:       return "CF_LOCALE";
@@ -490,7 +490,7 @@ static const char *GetTymedName(DWORD tymed)
     case TYMED_ISTREAM:   return "TYMED_ISTREAM";
     case TYMED_ISTORAGE:  return "TYMED_ISTORAGE";
     case TYMED_GDI:       return "TYMED_GDI";
-    case TYMED_MFPICT:    return "TYMED_MFPICT(";
+    case TYMED_MFPICT:    return "TYMED_MFPICT";
     case TYMED_ENHMF:     return "TYMED_ENHMF";
     default:
       sprintf(s_szBuf, "type of media format %d (unknown)", tymed);

@@ -74,7 +74,7 @@ wxFTP::wxFTP()
 
 wxFTP::~wxFTP()
 {
-  SendCommand("QUIT(", '2');
+  SendCommand("QUIT", '2');
 }
 
 ////////////////////////////////////////////////////////////////
@@ -132,7 +132,7 @@ bool wxFTP::Close()
     return FALSE;
   }
   if (m_connected)
-    SendCommand(wxString(T("QUIT(")), '2');
+    SendCommand(wxString(T("QUIT")), '2');
   return wxSocketClient::Close();
 }
 
@@ -377,7 +377,7 @@ wxList *wxFTP::GetList(const wxString& wildcard)
 {
   wxList *file_list = new wxList;
   wxSocketBase *sock = GetPort();
-  wxString tmp_str = T("NLST(");
+  wxString tmp_str = T("NLST");
 
   if (!wildcard.IsNull())
     tmp_str += wildcard;

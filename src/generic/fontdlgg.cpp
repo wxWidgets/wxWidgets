@@ -59,7 +59,7 @@ END_EVENT_TABLE()
 #define NUM_COLS 48
 static wxString wxColourDialogNames[NUM_COLS]={T("ORANGE"),
                     T("GOLDENROD"),
-                    T("WHEAT("),
+                    T("WHEAT"),
                     T("SPRING GREEN"),
                     T("SKY BLUE"),
                     T("SLATE BLUE"),

@@ -260,7 +260,7 @@ void wxTextCtrl::AdoptAttributesFromHWND()
 
   GetClassName(hWnd, buf, WXSIZEOF(buf));
 
-  if ( wxStricmp(buf, T("EDIT(")) == 0 )
+  if ( wxStricmp(buf, T("EDIT")) == 0 )
     m_isRich = FALSE;
   else
     m_isRich = TRUE;

@@ -94,7 +94,7 @@ void wxRegisterPenWin(void)
 ///////////////////////////////////////////////////////////////////////
 // If running on a Pen Windows system, register this app so all
 // EDIT controls in dialogs are replaced by HEDIT controls.
-// (Notice the CONTROL statement in the RC file is "EDIT(",
+// (Notice the CONTROL statement in the RC file is "EDIT",
 // RegisterPenApp will automatically change that control to
 // an HEDIT.
   if ((g_hPenWin = (HANDLE)GetSystemMetrics(SM_PENWINDOWS)) != (HANDLE)NULL) {

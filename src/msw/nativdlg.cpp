@@ -227,7 +227,7 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
     // for correct functioning.
     // Could have wxWindow::AdoptAttributesFromHWND(WXHWND)
     // to be overridden by each control class.
-    else if (str == T("EDIT("))
+    else if (str == T("EDIT"))
     {
         win = new wxTextCtrl;
     }

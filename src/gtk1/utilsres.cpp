@@ -99,7 +99,7 @@ static wxChar *GetIniFile(wxChar *dest, const wxChar *filename)
         if (dest[wxStrlen(dest) - 1] != T('/')) wxStrcat(dest, T("/"));
         if (filename == NULL)
         {
-          if ((filename = wxGetenv(T("XENVIRONMENT("))) == NULL) filename = T(".Xdefaults");
+          if ((filename = wxGetenv(T("XENVIRONMENT"))) == NULL) filename = T(".Xdefaults");
         }
         else
           if (*filename != T('.')) wxStrcat(dest, T("."));
@@ -148,7 +148,7 @@ static void wxXMergeDatabases()
     // Open XENVIRONMENT file, or if not defined, the .Xdefaults,
     // and merge into existing database
 
-    if ((environment = wxGetenv(T("XENVIRONMENT("))) == NULL) 
+    if ((environment = wxGetenv(T("XENVIRONMENT"))) == NULL) 
     {
         size_t len;
 #if wxUSE_UNICODE
@@ -352,7 +352,7 @@ bool wxGetResource(const wxString& section, const wxString& entry, int *value, c
     {
         // Handle True, False here
         // True, Yes, Enables, Set or  Activated
-        if (*s == 'T(' || *s == 'Y' || *s == 'E' || *s == 'S' || *s == 'A')
+        if (*s == 'T' || *s == 'Y' || *s == 'E' || *s == 'S' || *s == 'A')
             *value = TRUE;
         // False, No, Disabled, Reset, Cleared, Deactivated
         else if (*s == 'F' || *s == 'N' || *s == 'D' || *s == 'R' || *s == 'C')
