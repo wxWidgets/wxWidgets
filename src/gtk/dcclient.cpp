@@ -974,7 +974,7 @@ void wxWindowDC::SetLogicalFunction( int function )
     switch (function)
     {
         case wxXOR:          mode = GDK_INVERT; break;
-        case wxINVERT:       mode = GDK_INVERT; break;
+        case wxINVERT:       mode = GDK_XOR; break;
 #if (GDK_MINOR_VERSION > 0)
         case wxOR_REVERSE:   mode = GDK_OR_REVERSE; break;
         case wxAND_REVERSE:  mode = GDK_AND_REVERSE; break;

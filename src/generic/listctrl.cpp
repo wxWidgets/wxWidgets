@@ -685,7 +685,7 @@ wxListHeaderWindow::wxListHeaderWindow( void )
     m_owner = (wxListMainWindow *) NULL;
     m_currentCursor = (wxCursor *) NULL;
     m_resizeCursor = (wxCursor *) NULL;
-    m_isDraging = FALSE;
+    m_isDragging = FALSE;
 }
 
 wxListHeaderWindow::wxListHeaderWindow( wxWindow *win, wxWindowID id, wxListMainWindow *owner,
@@ -697,7 +697,8 @@ wxListHeaderWindow::wxListHeaderWindow( wxWindow *win, wxWindowID id, wxListMain
 //  m_currentCursor = wxSTANDARD_CURSOR;
     m_currentCursor = (wxCursor *) NULL;
     m_resizeCursor = new wxCursor( wxCURSOR_SIZEWE );
-    m_isDraging = FALSE;
+    m_isDragging = FALSE;
+    SetBackgroundColour( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE ) );
 }
 
 wxListHeaderWindow::~wxListHeaderWindow( void )
@@ -796,13 +797,13 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
 {
     int x = event.GetX();
     int y = event.GetY();
-    if (m_isDraging)
+    if (m_isDragging)
     {
         DrawCurrent();
         if (event.ButtonUp())
         {
             ReleaseMouse();
-            m_isDraging = FALSE;
+            m_isDragging = FALSE;
             m_owner->SetColumnWidth( m_column, m_currentX-m_minX );
         }
         else
@@ -837,7 +838,7 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
 
     if (event.LeftDown() && hit_border)
     {
-        m_isDraging = TRUE;
+        m_isDragging = TRUE;
         m_currentX = x;
         DrawCurrent();
         CaptureMouse();
@@ -2829,7 +2830,7 @@ bool wxListCtrl::SetBackgroundColour( const wxColour &colour )
     
     if (m_headerWin)
     {
-        m_headerWin->SetBackgroundColour( colour );
+//        m_headerWin->SetBackgroundColour( colour );
     }
 
     return TRUE;

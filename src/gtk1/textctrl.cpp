@@ -311,6 +311,9 @@ void wxTextCtrl::SetValue( const wxString &value )
 {
     wxCHECK_RET( m_text != NULL, _T("invalid text ctrl") );
 
+    gtk_signal_disconnect_by_func( GTK_OBJECT(m_text),
+      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
+      
     wxString tmp = _T("");
     if (!value.IsNull()) tmp = value;
     if (m_windowStyle & wxTE_MULTILINE)
@@ -329,6 +332,9 @@ void wxTextCtrl::SetValue( const wxString &value )
     {
         gtk_entry_set_text( GTK_ENTRY(m_text), tmp.mbc_str() );
     }
+    
+    gtk_signal_connect( GTK_OBJECT(m_text), "changed",
+      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
 }
 
 void wxTextCtrl::WriteText( const wxString &text )

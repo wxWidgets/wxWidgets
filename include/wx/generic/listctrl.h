@@ -365,7 +365,7 @@ class WXDLLEXPORT wxListHeaderWindow : public wxWindow
     wxListMainWindow  *m_owner;
     wxCursor          *m_currentCursor;
     wxCursor          *m_resizeCursor;
-    bool               m_isDraging;
+    bool               m_isDragging;
     int                m_column;
     int                m_minX;
     int                m_currentX;
