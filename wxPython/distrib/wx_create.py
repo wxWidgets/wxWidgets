@@ -21,9 +21,6 @@ import os, sys, glob
 wxmodule_template = """
 \"\"\"Renamer stub: provides a way to drop the wx prefix from wxPython objects.\"\"\"
 
-__cvsid__ = \"\x24Id: \x24\"
-__revision__ = \"\x24Revision: \x24\"[11:-2]
-
 from wx import _rename
 from wxPython%(prefix)s import %(suffix)s
 _rename(globals(), %(suffix)s.__dict__, modulename='%(name)s')
