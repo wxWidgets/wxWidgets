@@ -37,18 +37,13 @@
 
 #include  "wx/msw/private.h"
 
-// Windows standard headers
-#ifndef   __WIN95__
-  #error  "wxNotebook is only supported Windows 95 and above"
-#endif    //Win95
-
-#include  <windowsx.h>  // for SetWindowFont
+#include  <windowsx.h>
 
 #ifdef __GNUWIN32_OLD__
     #include "wx/msw/gnuwin32/extra.h"
 #endif
 
-#if defined(__WIN95__) && !(defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__))
+#if !(defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__))
     #include <commctrl.h>
 #endif
 
