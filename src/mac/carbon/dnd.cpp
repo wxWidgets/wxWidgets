@@ -195,20 +195,34 @@ bool wxDropTarget::GetData()
                         Size dataSize ;
                         Ptr theData ;
                         GetFlavorDataSize((DragReference)m_currentDrag, theItem, theType, &dataSize);
-                        if ( theType == 'TEXT' )
+                        if ( theType == kScrapFlavorTypeText )
                         {
                             // this increment is only valid for allocating, on the next GetFlavorData
                             // call it is reset again to the original value
                             dataSize++ ;
                         }
+                        else if ( theType == kScrapFlavorTypeUnicode )
+                        {
+                            // this increment is only valid for allocating, on the next GetFlavorData
+                            // call it is reset again to the original value
+                            dataSize++ ;
+                            dataSize++ ;
+                        }
                         theData = new char[dataSize];
                         GetFlavorData((DragReference)m_currentDrag, theItem, theType, (void*) theData, &dataSize, 0L); 
-                        if( theType == 'TEXT' )
+                        if( theType == kScrapFlavorTypeText )
                         {
                             theData[dataSize]=0 ; 
-                            wxString convert( theData , wxConvLocal ) ;    
-                            m_dataObject->SetData( format, convert.Length() * sizeof(wxChar), (const wxChar*) convert );
+                            m_dataObject->SetData( wxDataFormat(wxDF_TEXT), dataSize , theData );
                         }
+ #if wxUSE_UNICODE
+                        else if ( theType == kScrapFlavorTypeUnicode )
+                        {
+                            theData[dataSize]=0 ; 
+                            theData[dataSize+1]=0 ; 
+                            m_dataObject->SetData( wxDataFormat(wxDF_UNICODETEXT), dataSize , theData );
+                        }
+ #endif
                         else if ( theType == kDragFlavorTypeHFS )
                         {
                             HFSFlavor* theFile = (HFSFlavor*) theData ;
