@@ -10,13 +10,12 @@ LIBVERSION_CURRENT=@WX_CURRENT@
 LIBVERSION_REVISION=@WX_REVISION@
 LIBVERSION_AGE=@WX_AGE@
 
-
 HEADER_PATH=$(top_srcdir)/contrib/include/wx
 HEADER_SUBDIR=deprecated
 
 HEADERS=prop.h propform.h proplist.h resource.h treelay.h wxexpr.h treelay.h
 
-OBJECTS=prop.o propform.o proplist.o wxexpr.o y_tab.o treelay.cpp
+OBJECTS=prop.o propform.o proplist.o wxexpr.o parser.o treelay.cpp
 DEPFILES=$(OBJECTS:.o=.d)
 
 APPEXTRADEFS=-I$(top_srcdir)/contrib/include
@@ -24,3 +23,31 @@ APPEXTRADEFS=-I$(top_srcdir)/contrib/include
 include $(top_builddir)/src/makelib.env
 
 -include $(DEPFILES)
+
+WXDIR = $(top_srcdir)
+
+SRCDIR   = $(WXDIR)/src
+GENDIR   = $(WXDIR)/src/generic
+COMMDIR  = $(WXDIR)/src/common
+
+parser.o: parser.c lexer.c
+	$(CCLEX) -c $(CFLAGS) -I. $(PICFLAGS) -o $@ parser.c
+
+parser.c: $(COMMDIR)/parser.y lexer.c
+	$(YACC) $(COMMDIR)/parser.y
+	@sed -e "s;$(COMMDIR)/y.tab.c;parser.y;g" < y.tab.c | \
+	sed -e "s/BUFSIZ/5000/g"            | \
+	sed -e "s/YYLMAX 200/YYLMAX 5000/g" | \
+	sed -e "s/yy/PROIO_yy/g"            | \
+	sed -e "s/input/PROIO_input/g"      | \
+	sed -e "s/unput/PROIO_unput/g"      > parser.c
+	@$(RM) y.tab.c
+
+lexer.c: $(COMMDIR)/lexer.l
+	$(LEX) $(COMMDIR)/lexer.l
+	@sed -e "s;$(COMMDIR)/@LEX_STEM@.c;lexer.l;g" < @LEX_STEM@.c | \
+	sed -e "s/yy/PROIO_yy/g"            | \
+	sed -e "s/input/PROIO_input/g"      | \
+	sed -e "s/unput/PROIO_unput/g"      > lexer.c
+	@$(RM) @LEX_STEM@.c
+

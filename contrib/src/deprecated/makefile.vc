@@ -32,19 +32,19 @@ LIBEXT=d
 LIBTARGET=$(WXDIR)\lib\wxdeprecated$(LIBEXT).lib
 EXTRATARGETS=$(D)
 
-OBJECTS=$(D)\prop.obj $(D)\propform.obj $(D)\proplist.obj $(D)\dosyacc.obj $(D)\resource.obj $(D)\treelay.obj
+OBJECTS=$(D)\prop.obj $(D)\propform.obj $(D)\proplist.obj $(D)\y_tab.obj $(D)\resource.obj $(D)\treelay.obj
 
 !include $(WXDIR)\src\makelib.vc
 
-$D\dosyacc.obj:     dosyacc.c doslex.c
+$D\y_tab.obj:     y_tab.c lex_yy.c
         cl @<<
-$(CPPFLAGS2) /c dosyacc.c -DUSE_DEFINE -DYY_USE_PROTOS /Fo$@
+$(CPPFLAGS2) /c y_tab.c -DUSE_DEFINE -DYY_USE_PROTOS /Fo$@
 <<
 
-#$(COMMDIR)\y_tab.c:     $(COMMDIR)\dosyacc.c
-#        copy "$(COMMDIR)"\dosyacc.c "$(COMMDIR)"\y_tab.c
+y_tab.c:     dosyacc.c
+        copy dosyacc.c y_tab.c
 
-#$(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
-#    copy "$(COMMDIR)"\doslex.c "$(COMMDIR)"\lex_yy.c
+lex_yy.c:    doslex.c
+    copy doslex.c lex_yy.c
 
 
