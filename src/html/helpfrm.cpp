@@ -443,10 +443,6 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
         m_Splitter -> SetMinimumPaneSize(20);
         if (m_Cfg.navig_on)
             m_Splitter -> SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
-        else {
-            m_Splitter -> SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
-            m_Splitter -> Unsplit();
-        }
         if (m_Cfg.navig_on) {
             m_NavigPan -> Show(TRUE);
             m_Splitter -> SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
