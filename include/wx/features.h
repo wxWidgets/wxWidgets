@@ -27,6 +27,14 @@
     #undef wxHAS_RAW_KEY_CODES
 #endif
 
+// detect SmartPhone
+#ifdef WIN32_PLATFORM_WFSP
+    #ifdef wxUSE_SMARTPHONE
+    #undef wxUSE_SMARTPHONE
+    #endif
+    #define wxUSE_SMARTPHONE 1
+#endif
+
 // taskbar is only implemented in wxMSW and X11 ports
 #if defined(__WXMSW__) || \
         defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXX11__)
