@@ -1617,24 +1617,32 @@ bool wxFileName::SetTimes(const wxDateTime *dtAccess,
                           const wxDateTime *dtCreate)
 {
 #if defined(__WIN32__)
-    wxFileHandle fh(GetFullPath(), wxFileHandle::Write);
-    if ( fh.IsOk() )
+    if ( IsDir() )
     {
-        FILETIME ftAccess, ftCreate, ftWrite;
-
-        if ( dtCreate )
-            ConvertWxToFileTime(&ftCreate, *dtCreate);
-        if ( dtAccess )
-            ConvertWxToFileTime(&ftAccess, *dtAccess);
-        if ( dtMod )
-            ConvertWxToFileTime(&ftWrite, *dtMod);
-
-        if ( ::SetFileTime(fh,
-                           dtCreate ? &ftCreate : NULL,
-                           dtAccess ? &ftAccess : NULL,
-                           dtMod ? &ftWrite : NULL) )
+        // VZ: please let me know how to do this if you can
+        wxFAIL_MSG( _T("SetTimes() not implemented for the directories") );
+    }
+    else // file
+    {
+        wxFileHandle fh(GetFullPath(), wxFileHandle::Write);
+        if ( fh.IsOk() )
         {
-            return TRUE;
+            FILETIME ftAccess, ftCreate, ftWrite;
+
+            if ( dtCreate )
+                ConvertWxToFileTime(&ftCreate, *dtCreate);
+            if ( dtAccess )
+                ConvertWxToFileTime(&ftAccess, *dtAccess);
+            if ( dtMod )
+                ConvertWxToFileTime(&ftWrite, *dtMod);
+
+            if ( ::SetFileTime(fh,
+                               dtCreate ? &ftCreate : NULL,
+                               dtAccess ? &ftAccess : NULL,
+                               dtMod ? &ftWrite : NULL) )
+            {
+                return TRUE;
+            }
         }
     }
 #elif defined(__UNIX_LIKE__) || (defined(__DOS__) && defined(__WATCOMC__))
@@ -1686,25 +1694,49 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
                           wxDateTime *dtCreate) const
 {
 #if defined(__WIN32__)
-    wxFileHandle fh(GetFullPath(), wxFileHandle::Read);
-    if ( fh.IsOk() )
+    // we must use different methods for the files and directories under
+    // Windows as CreateFile(GENERIC_READ) doesn't work for the directories and
+    // CreateFile(FILE_FLAG_BACKUP_SEMANTICS) works -- but only under NT and
+    // not 9x
+    bool ok;
+    FILETIME ftAccess, ftCreate, ftWrite;
+    if ( IsDir() )
     {
-        FILETIME ftAccess, ftCreate, ftWrite;
+        // implemented in msw/dir.cpp
+        extern bool wxGetDirectoryTimes(const wxString& dirname,
+                                        FILETIME *, FILETIME *, FILETIME *);
 
-        if ( ::GetFileTime(fh,
-                           dtCreate ? &ftCreate : NULL,
-                           dtAccess ? &ftAccess : NULL,
-                           dtMod ? &ftWrite : NULL) )
+        // we should pass the path without the trailing separator to
+        // wxGetDirectoryTimes()
+        ok = wxGetDirectoryTimes(GetPath(wxPATH_GET_VOLUME),
+                                 &ftAccess, &ftCreate, &ftWrite);
+    }
+    else // file
+    {
+        wxFileHandle fh(GetFullPath(), wxFileHandle::Read);
+        if ( fh.IsOk() )
         {
-            if ( dtCreate )
-                ConvertFileTimeToWx(dtCreate, ftCreate);
-            if ( dtAccess )
-                ConvertFileTimeToWx(dtAccess, ftAccess);
-            if ( dtMod )
-                ConvertFileTimeToWx(dtMod, ftWrite);
-
-            return TRUE;
+            ok = ::GetFileTime(fh,
+                               dtCreate ? &ftCreate : NULL,
+                               dtAccess ? &ftAccess : NULL,
+                               dtMod ? &ftWrite : NULL) != 0;
         }
+        else
+        {
+            ok = FALSE;
+        }
+    }
+
+    if ( ok )
+    {
+        if ( dtCreate )
+            ConvertFileTimeToWx(dtCreate, ftCreate);
+        if ( dtAccess )
+            ConvertFileTimeToWx(dtAccess, ftAccess);
+        if ( dtMod )
+            ConvertFileTimeToWx(dtMod, ftWrite);
+
+        return TRUE;
     }
 #elif defined(__UNIX_LIKE__) || defined(__WXMAC__) || (defined(__DOS__) && defined(__WATCOMC__))
     wxStructStat stBuf;
