@@ -1005,13 +1005,11 @@ int wxImage::GetImageCount( const wxString &name, long type )
 {
 #if wxUSE_STREAMS
   wxFileInputStream stream(name);
-  if (!stream.Ok())
-      return 0;
-  else
+  if (stream.Ok())
       return GetImageCount(stream, type);
-#else
-  return 0;
 #endif
+
+  return 0;
 }
 
 #if wxUSE_STREAMS
