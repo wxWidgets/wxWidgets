@@ -240,6 +240,14 @@ Checking in docs/changes.txt;
 new revision: 1.299; previous revision: 1.298
 
 
+26. wxHTML tables can no longer be smaller than sum of their columns
+
+Checking in m_tables.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/html/m_tables.cpp,v  <--  m_tables.cpp
+new revision: 1.30; previous revision: 1.29
+done
+
+
 TODO for 2.4 (items that are not backports)
 ===========================================
 
