@@ -23,6 +23,7 @@ wxMSW:
 
 - wxStaticBitmap doesn't stretch its bitmap any longer (like other ports)
 - support for accelerator keys in the owner drawn menus (Derry Bryson)
+- wxCheckListBox::Check() doesn't send CHECKLISTBOX_TOGGLE event any more
 
 All:
 

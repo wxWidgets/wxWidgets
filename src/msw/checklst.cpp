@@ -81,15 +81,18 @@ public:
   // drawing functions
   virtual bool OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODStatus stat);
 
-  // simple accessors
-  bool IsChecked() const  { return m_bChecked;        }
+  // simple accessors and operations
+  bool IsChecked() const { return m_bChecked; }
+
   void Check(bool bCheck);
   void Toggle() { Check(!IsChecked()); }
+
+  void SendEvent();
 
 private:
   bool            m_bChecked;
   wxCheckListBox *m_pParent;
-  size_t            m_nIndex;
+  size_t          m_nIndex;
 };
 
 wxCheckListBoxItem::wxCheckListBoxItem(wxCheckListBox *pParent, size_t nIndex)
@@ -220,7 +223,7 @@ void wxCheckListBoxItem::Check(bool check)
 {
     m_bChecked = check;
 
-    // index may be chanegd because new items were added/deleted
+    // index may be changed because new items were added/deleted
     if ( m_pParent->GetItemIndex(this) != (int)m_nIndex )
     {
         // update it
@@ -253,7 +256,11 @@ void wxCheckListBoxItem::Check(bool check)
     #endif  // Win32/16
 
     InvalidateRect(hwndListbox, &rcUpdate, FALSE);
+}
 
+// send an "item checked" event
+void wxCheckListBoxItem::SendEvent()
+{
     wxCommandEvent event(wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, m_pParent->GetId());
     event.SetInt(m_nIndex);
     event.SetEventObject(m_pParent);
@@ -298,8 +305,9 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
     return wxListBox::Create(parent, id, pos, size, n, choices,
                              style | wxLB_OWNERDRAW, validator, name);
 }
-                            
 
+// misc overloaded methods
+// -----------------------
 
 void wxCheckListBox::Delete(int N)
 {
@@ -442,6 +450,10 @@ void wxCheckListBox::OnKeyDown(wxKeyEvent& event)
                 default:
                     wxFAIL_MSG( _T("what should this key do?") );
             }
+
+            // we should send an event as this has been done by the user and
+            // not by the program
+            item->SendEvent();
         }
     }
     else // nothing to do
@@ -456,8 +468,11 @@ void wxCheckListBox::OnLeftClick(wxMouseEvent& event)
   if ( event.GetX() <= wxOwnerDrawn::GetDefaultMarginWidth() ) {
     int nItem = HitTest(event.GetX(), event.GetY());
 
-    if ( nItem != wxNOT_FOUND )
-      GetItem(nItem)->Toggle();
+    if ( nItem != wxNOT_FOUND ) {
+      wxCheckListBoxItem *item = GetItem(nItem);
+      item->Toggle();
+      item->SendEvent();
+    }
     //else: it's not an error, just click outside of client zone
   }
   else {
