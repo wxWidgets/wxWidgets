@@ -19,7 +19,7 @@
     #pragma hdrstop
 #endif
 
-#if defined(__WXMGL__) || defined(__WXMAC__) \
+#if defined(__WXMGL__) || defined(__WXMAC__) || defined(__WXGTK__) \
     || defined(__WXMOTIF__) || defined(__WXX11__)
 
 #include "wx/setup.h"
