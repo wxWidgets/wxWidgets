@@ -160,7 +160,16 @@ public:
     wxImage ShrinkBy( int xFactor , int yFactor ) const ;
     wxImage& Rescale(int width, int height);
 
+    // resizes the image in place
+    wxImage& Resize( const wxSize& size, const wxPoint& pos, 
+                     int r = -1, int g = -1, int b = -1 );
+    
     void SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned char b );
+
+    %Rename(SetRGBRect,
+            void, SetRGB( const wxRect& rect,
+                          unsigned char r, unsigned char g, unsigned char b ));
+
     unsigned char GetRed( int x, int y );
     unsigned char GetGreen( int x, int y );
     unsigned char GetBlue( int x, int y );
@@ -246,6 +255,14 @@ The method will then fill up the whole image with the colour given.", "");
     }
 
     wxImage GetSubImage(const wxRect& rect);
+
+    // Paste the image or part of this image into an image of the given size at the pos
+    //  any newly exposed areas will be filled with the rgb colour
+    //  by default if r = g = b = -1 then fill with this image's mask colour or find and 
+    //  set a suitable mask colour
+    wxImage Size( const wxSize& size, const wxPoint& pos, 
+                  int r = -1, int g = -1, int b = -1 ) const;
+    
     wxImage Copy();
     void Paste( const wxImage &image, int x, int y );
 
@@ -358,6 +375,15 @@ The method will then fill up the whole image with the colour given.", "");
     }
 
     void SetMaskColour( unsigned char r, unsigned char g, unsigned char b );
+
+    DocDeclAStr(
+        /*bool*/ void , GetOrFindMaskColour( unsigned char *OUTPUT,
+                                             unsigned char *OUTPUT,
+                                             unsigned char *OUTPUT ) const,
+        "GetOrFindMaskColour() -> (r,g,b)",
+        "Get the current mask colour or find a suitable colour.", "");
+    
+
     unsigned char GetMaskRed();
     unsigned char GetMaskGreen();
     unsigned char GetMaskBlue();
