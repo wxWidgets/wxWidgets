@@ -47,44 +47,105 @@ extern GtkWidget *wxGetRootWindow();
 static int
 cmp_families (const void *a, const void *b)
 {
-  const char *a_name = pango_font_family_get_name (*(PangoFontFamily **)a);
-  const char *b_name = pango_font_family_get_name (*(PangoFontFamily **)b);
+    const char *a_name = pango_font_family_get_name (*(PangoFontFamily **)a);
+    const char *b_name = pango_font_family_get_name (*(PangoFontFamily **)b);
   
-  return g_utf8_collate (a_name, b_name);
+    return g_utf8_collate (a_name, b_name);
 }
 
-// I admit I don't yet understand encodings with Pango
+static PangoLanguage *font_test_language;
+
+static gboolean font_is_latin( PangoContext *context, PangoFontDescription *desc )
+{
+    PangoFont *font = pango_context_load_font( context, desc );
+    if (!font) return FALSE;
+    
+    font_test_language = pango_language_from_string( "eng" );
+    
+    PangoCoverage *coverage =pango_font_get_coverage( font, font_test_language );
+    if (!coverage) return FALSE;
+    
+    if ((pango_coverage_get(coverage, 'i') == PANGO_COVERAGE_EXACT) &&
+        (pango_coverage_get(coverage, 'W') == PANGO_COVERAGE_EXACT))
+    {
+        return TRUE;
+    }
+    
+    return FALSE;
+}
+
 bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
                                           bool fixedWidthOnly)
 {
-    if ( fixedWidthOnly )
-    {
-        OnFacename( wxT("monospace") );
-    }
-    else
-    {
-        PangoFontFamily **families = NULL;
-        gint n_families = 0;
-        pango_context_list_families ( 
+    PangoContext *context =
 #ifdef __WXGTK20__
-            gtk_widget_get_pango_context( wxGetRootWindow() ),
+            gtk_widget_get_pango_context( wxGetRootWindow() );
 #else
-            wxTheApp->GetPangoContext(),
+            wxTheApp->GetPangoContext();
 #endif
-            &families, &n_families );
-        qsort (families, n_families, sizeof (PangoFontFamily *), cmp_families);
+    PangoFontFamily **families = NULL;
+    gint n_families = 0;
+    pango_context_list_families( context,  &families, &n_families );
+    qsort (families, n_families, sizeof (PangoFontFamily *), cmp_families);
 
-        for (int i=0; i<n_families; i++)
-        {
-            const gchar *name = pango_font_family_get_name( families[i] );
+    for (int i=0; i<n_families; i++)
+    {
+        const gchar *name = pango_font_family_get_name( families[i] );
             
-            wxString tmp( name, wxConvUTF8 );
-            OnFacename( tmp );
+        if (fixedWidthOnly)
+        {
+            if (
+                 (strstr( name, "mono") == NULL) &&
+                 (strstr( name, "Mono") == NULL) &&
+                 (strstr( name, "MONO") == NULL) &&
+                 (strstr( name, "fixed") == NULL) &&
+                 (strstr( name, "Fixed") == NULL) &&
+                 (strstr( name, "FIXED") == NULL) &&
+                 (strstr( name, "terminal") == NULL) &&
+                 (strstr( name, "Terminal") == NULL) &&
+                 (strstr( name, "TERMINAL") == NULL) &&
+                 (strstr( name, "cour") == NULL) &&
+                 (strstr( name, "Cour") == NULL) &&
+                 (strstr( name, "COUR") == NULL) 
+               )
+            {
+                continue;
+            }
+        
+            PangoFontDescription *desc = pango_font_description_new();
+            pango_font_description_set_family( desc, name );
+            pango_font_description_set_size( desc, 12 * PANGO_SCALE );
+                
+            if (!font_is_latin( context, desc))
+            {
+                pango_font_description_free( desc );
+                continue;
+            }
+                
+            PangoLayout *layout = pango_layout_new(context);
+            pango_layout_set_font_description(layout, desc);
+                
+            pango_layout_set_text(layout, "i", 1 );
+            int i_width = 0;
+            pango_layout_get_size(layout, &i_width, NULL);
+                
+            pango_layout_set_text(layout, "W", 1 );
+            int W_width = 0;
+            pango_layout_get_size(layout, &W_width, NULL);
+               
+            g_object_unref( G_OBJECT( layout ) );
+            pango_font_description_free( desc );
+               
+            if (W_width != i_width) continue;
+            if (i_width == 0) continue;
         }
+        
+        wxString tmp( name, wxConvUTF8 );
+        OnFacename( tmp );
     }
     
     return TRUE;
-}
+    }
 
 bool wxFontEnumerator::EnumerateEncodings(const wxString& family)
 {
