@@ -41,7 +41,7 @@ enum wxTextFileType
 
 WX_DEFINE_ARRAY(wxTextFileType, ArrayFileType);
 
-class wxTextFile
+class WXDLLEXPORT wxTextFile
 {
 public:
   // default type for current platform (determined at compile time)
@@ -143,6 +143,6 @@ private:
 #endif
   // wxUSE_TEXTFILE && wxUSE_FILE
 
-#endif  
+#endif
   // _TEXTFILE_H
-  
+

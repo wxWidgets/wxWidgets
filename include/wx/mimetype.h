@@ -30,7 +30,7 @@ class wxMimeTypesManagerImpl;
 // file type). This object may be created in many different ways and depending
 // on how it was created some fields may be unknown so the return value of all
 // the accessors *must* be checked!
-class wxFileType
+class WXDLLEXPORT wxFileType
 {
 friend wxMimeTypesManagerImpl;  // it has access to m_impl
 
@@ -111,7 +111,7 @@ private:
 // given type) about them.
 //
 // NB: currently it doesn't support modifying MIME database (read-only access).
-class wxMimeTypesManager
+class WXDLLEXPORT wxMimeTypesManager
 {
 public:
     // static helper functions
@@ -162,7 +162,7 @@ private:
 #endif
   // wxUSE_FILE
 
-#endif  
+#endif
   //_MIMETYPE_H
 
 /* vi: set cin tw=80 ts=4 sw=4: */
