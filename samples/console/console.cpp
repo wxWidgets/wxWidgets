@@ -44,7 +44,7 @@
 //#define TEST_ARRAYS
 //#define TEST_CHARSET
 //#define TEST_CMDLINE
-//#define TEST_DATETIME
+#define TEST_DATETIME
 //#define TEST_DIR
 //#define TEST_DLLLOADER
 //#define TEST_ENVIRON
@@ -62,7 +62,7 @@
 //#define TEST_MIME
 //#define TEST_PATHLIST
 //#define TEST_REGCONF
-#define TEST_REGEX
+//#define TEST_REGEX
 //#define TEST_REGISTRY
 //#define TEST_SNGLINST
 //#define TEST_SOCKETS
@@ -4039,6 +4039,7 @@ static void TestTimeSpanFormat()
         _T("(with ms) %H:%M:%S:%l"),
         _T("100%% of minutes is %M"),       // test "%%"
         _T("%D days and %H hours"),
+        _T("or also %S seconds"),
     };
 
     wxTimeSpan ts1(1, 2, 3, 4),
