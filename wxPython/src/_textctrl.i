@@ -122,7 +122,7 @@ public:
     void SetFont(const wxFont& font, long flags = wxTEXT_ATTR_FONT);
     void SetAlignment(wxTextAttrAlignment alignment);
     void SetTabs(const wxArrayInt& tabs);
-    void SetLeftIndent(int indent);
+    void SetLeftIndent(int indent, int subIndent=0);
     void SetRightIndent(int indent);
     void SetFlags(long flags);
 
@@ -142,6 +142,7 @@ public:
     wxTextAttrAlignment GetAlignment() const;
     const wxArrayInt& GetTabs() const;
     long GetLeftIndent() const;
+    long GetLeftSubIndent() const;
     long GetRightIndent() const;
     long GetFlags() const;
 
