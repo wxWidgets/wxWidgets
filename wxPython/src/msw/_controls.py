@@ -5160,7 +5160,7 @@ EVT_TREE_ITEM_MIDDLE_CLICK = wx.PyEventBinder(wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLI
 EVT_TREE_END_DRAG          = wx.PyEventBinder(wxEVT_COMMAND_TREE_END_DRAG         , 1)
 EVT_TREE_STATE_IMAGE_CLICK = wx.PyEventBinder(wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK, 1)
 EVT_TREE_ITEM_GETTOOLTIP   = wx.PyEventBinder(wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP,   1)
-EVT_COMMAND_TREE_ITEM_MENU = wx.PyEventBinder(wxEVT_COMMAND_TREE_ITEM_MENU,         1)    
+EVT_TREE_ITEM_MENU        = wx.PyEventBinder(wxEVT_COMMAND_TREE_ITEM_MENU,         1)
 
 class TreeEvent(_core.NotifyEvent):
     """Proxy of C++ TreeEvent class"""

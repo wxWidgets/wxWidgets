@@ -8290,6 +8290,18 @@ def FindWindowByLabel(*args, **kwargs):
 def Window_FromHWND(*args, **kwargs):
     """Window_FromHWND(Window parent, unsigned long _hWnd) -> Window"""
     return _core_.Window_FromHWND(*args, **kwargs)
+
+def GetTopLevelWindows(*args, **kwargs):
+    """
+    GetTopLevelWindows() -> PyObject
+
+    Returns a list of the the application's top-level windows, (frames,
+    dialogs, etc.)  NOTE: Currently this is a copy of the list maintained
+    by wxWidgets, and so it is only valid as long as no top-level windows
+    are closed or new top-level windows are created.
+
+    """
+    return _core_.GetTopLevelWindows(*args, **kwargs)
 #---------------------------------------------------------------------------
 
 class Validator(EvtHandler):
