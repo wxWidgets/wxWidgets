@@ -71,6 +71,7 @@ public:
         : wxTextCtrl(parent, id, value, pos, size, style) { }
 
     void OnKeyDown(wxKeyEvent& event);
+    void OnChar(wxKeyEvent& event);
 
 private:
     DECLARE_EVENT_TABLE()
@@ -209,8 +210,29 @@ bool MyApp::OnInit()
 //----------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MyTextCtrl, wxTextCtrl)
-EVT_KEY_DOWN(MyTextCtrl::OnKeyDown)
+    EVT_KEY_DOWN(MyTextCtrl::OnKeyDown)
+    EVT_CHAR(MyTextCtrl::OnChar)
 END_EVENT_TABLE()
+
+void MyTextCtrl::OnChar(wxKeyEvent& event)
+{
+    static int s_keycode = 0;
+    static size_t s_repeatCount = 0;
+
+    int keycode = event.KeyCode();
+    if ( keycode == s_keycode )
+        s_repeatCount++;
+    else
+    {
+        s_keycode = keycode;
+        s_repeatCount = 1;
+    }
+        
+    wxLogStatus("Key event: %d (x%u), at position %ld",
+                s_keycode, s_repeatCount, GetInsertionPoint());
+
+    event.Skip();
+}
 
 void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
 {
