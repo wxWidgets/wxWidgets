@@ -30,19 +30,21 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/intl.h"
     #include "wx/list.h"
 #endif
 
+#include "wx/cmdline.h"
 #include "wx/thread.h"
 #include "wx/confbase.h"
-
-#ifdef __WXUNIVERSAL__
-    #include "wx/univ/theme.h"
-#endif // __WXUNIVERSAL__
 
 // ===========================================================================
 // implementation
 // ===========================================================================
+
+// ----------------------------------------------------------------------------
+// initialization and termination
+// ----------------------------------------------------------------------------
 
 wxAppBase::wxAppBase()
 {
@@ -59,15 +61,11 @@ wxAppBase::wxAppBase()
 #endif // wxUSE_GUI
 }
 
-// ----------------------------------------------------------------------------
-// initialization and termination
-// ----------------------------------------------------------------------------
-
 #if wxUSE_GUI
 bool wxAppBase::OnInitGui()
 {
 #ifdef __WXUNIVERSAL__
-    if ( !wxTheme::CreateDefault() )
+    if ( !wxTheme::Get() && !wxTheme::CreateDefault() )
         return FALSE;
 #endif // __WXUNIVERSAL__
 
@@ -136,3 +134,127 @@ void wxAppBase::SetActive(bool active, wxWindow * WXUNUSED(lastFocus))
 }
 
 #endif // wxUSE_GUI
+
+// ----------------------------------------------------------------------------
+// cmd line parsing
+// ----------------------------------------------------------------------------
+
+bool wxAppBase::OnInit()
+{
+#if wxUSE_CMDLINE_PARSER
+    wxCmdLineParser parser(argc, argv);
+
+    OnInitCmdLine(parser);
+
+    bool cont;
+    switch ( parser.Parse() )
+    {
+        case -1:
+            cont = OnCmdLineHelp(parser);
+            break;
+
+        case 0:
+            cont = OnCmdLineParsed(parser);
+            break;
+
+        default:
+            cont = OnCmdLineError(parser);
+            break;
+    }
+
+    if ( !cont )
+        return FALSE;
+#endif // wxUSE_CMDLINE_PARSER
+
+    return TRUE;
+}
+
+#if wxUSE_CMDLINE_PARSER
+
+#define OPTION_VERBOSE _T("verbose")
+#define OPTION_THEME   _T("theme")
+
+void wxAppBase::OnInitCmdLine(wxCmdLineParser& parser)
+{
+    // the standard command line options
+    static const wxCmdLineEntryDesc cmdLineDesc[] =
+    {
+        {
+            wxCMD_LINE_SWITCH,
+            _T("h"),
+            _T("help"),
+            gettext_noop("show this help message"),
+            wxCMD_LINE_VAL_NONE,
+            wxCMD_LINE_OPTION_HELP
+        },
+
+#if wxUSE_LOG
+        {
+            wxCMD_LINE_SWITCH,
+            _T(""),
+            OPTION_VERBOSE,
+            gettext_noop("generate verbose log messages")
+        },
+#endif wxUSE_LOG
+
+#ifdef __WXUNIVERSAL__
+        {
+            wxCMD_LINE_OPTION,
+            _T(""),
+            OPTION_THEME,
+            gettext_noop("specify the theme to use"),
+            wxCMD_LINE_VAL_STRING
+        },
+#endif // __WXUNIVERSAL__
+
+        // terminator
+        { wxCMD_LINE_NONE }
+    };
+
+    parser.SetDesc(cmdLineDesc);
+}
+
+bool wxAppBase::OnCmdLineParsed(wxCmdLineParser& parser)
+{
+#if wxUSE_LOG
+    if ( parser.Found(OPTION_VERBOSE) )
+    {
+        wxLog::SetVerbose(TRUE);
+    }
+#endif // wxUSE_LOG
+
+#ifdef __WXUNIVERSAL__
+    wxString themeName;
+    if ( parser.Found(OPTION_THEME, &themeName) )
+    {
+        wxTheme *theme = wxTheme::Create(themeName);
+        if ( !theme )
+        {
+            wxLogError(_("Unsupported theme '%s'."), themeName.c_str());
+
+            return FALSE;
+        }
+
+        wxTheme::Set(theme);
+    }
+#endif // __WXUNIVERSAL__
+
+    return TRUE;
+}
+
+bool wxAppBase::OnCmdLineHelp(wxCmdLineParser& parser)
+{
+    parser.Usage();
+
+    return FALSE;
+}
+
+bool wxAppBase::OnCmdLineError(wxCmdLineParser& parser)
+{
+    parser.Usage();
+
+    return FALSE;
+}
+
+#endif // wxUSE_CMDLINE_PARSER
+

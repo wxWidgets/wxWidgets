@@ -31,6 +31,8 @@
     typedef wxObject* (*wxAppInitializerFunction)();
 #endif
 
+class WXDLLEXPORT wxCmdLineParser;
+
 // ----------------------------------------------------------------------------
 // headers we have to include here
 // ----------------------------------------------------------------------------
@@ -38,7 +40,7 @@
 #include "wx/event.h"       // for the base class
 
 #if wxUSE_GUI
-    #include "wx/window.h"      // for wxTopLevelWindows
+    #include "wx/window.h"  // for wxTopLevelWindows
 #endif // wxUSE_GUI
 
 #if wxUSE_LOG
@@ -63,19 +65,13 @@ public:
 
     // the virtual functions which may/must be overridden in the derived class
     // -----------------------------------------------------------------------
-#ifdef __WXMAC_X__
-    virtual ~wxAppBase() {}  // Added min for Mac X
-#endif
+
         // called during the program initialization, returning FALSE from here
         // prevents the program from continuing - it's a good place to create
         // the top level program window and return TRUE.
         //
         // Override: always in GUI application, rarely in console ones.
-#if wxUSE_GUI
-    virtual bool OnInit() { return FALSE; };
-#else // !GUI
-    virtual bool OnInit() { return TRUE; };
-#endif // wxUSE_GUI
+    virtual bool OnInit();
 
 #if wxUSE_GUI
         // a platform-dependent version of OnInit(): the code here is likely to
@@ -196,6 +192,34 @@ public:
 
 #endif // wxUSE_GUI
 
+    // cmd line parsing stuff
+    // ----------------------
+
+    // all of these methods may be overridden in the derived class to
+    // customize the command line parsing (by default only a few standard
+    // options are handled)
+    //
+    // you also need to call wxApp::OnInit() from YourApp::OnInit() for all
+    // this to work
+
+#if wxUSE_CMDLINE_PARSER
+    // this one is called from OnInit() to add all supported options
+    // to the given parser
+    virtual void OnInitCmdLine(wxCmdLineParser& parser);
+
+    // called after successfully parsing the command line, return TRUE
+    // to continue and FALSE to exit
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser);
+
+    // called if "--help" option was specified, return TRUE to continue
+    // and FALSE to exit
+    virtual bool OnCmdLineHelp(wxCmdLineParser& parser);
+
+    // called if incorrect command line options were given, return
+    // FALSE to abort and TRUE to continue
+    virtual bool OnCmdLineError(wxCmdLineParser& parser);
+#endif // wxUSE_CMDLINE_PARSER
+
     // miscellaneous customization functions
     // -------------------------------------
 
@@ -281,6 +305,11 @@ protected:
     // does any of our windows has focus?
     bool m_isActive;
 #endif // wxUSE_GUI
+
+#ifdef __WXMAC_X__
+public:
+    virtual ~wxAppBase() {}  // Added min for Mac X
+#endif
 };
 
 // ----------------------------------------------------------------------------
@@ -412,7 +441,7 @@ public:
         extern int wxEntry( int argc, char *argv[] ); \
         int main(int argc, char *argv[]) { return wxEntry(argc, argv); }
 #elif defined(__WXMAC__) && defined(__UNIX__)
-	// wxMac seems to have a specific wxEntry prototype
+    // wxMac seems to have a specific wxEntry prototype
     #define IMPLEMENT_WXWIN_MAIN \
         extern int wxEntry( int argc, char *argv[], bool enterLoop = 1 ); \
         int main(int argc, char *argv[]) { return wxEntry(argc, argv); }

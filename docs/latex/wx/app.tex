@@ -38,10 +38,6 @@ a reference to your application object) to be visible to other files.
 
 Constructor. Called implicitly with a definition of a wxApp object.
 
-% VZ: there is no such feature so far...
-% The argument is a language identifier; this is an experimental
-% feature and will be expanded and documented in future versions.
-
 \membersection{wxApp::\destruct{wxApp}}
 
 \func{void}{\destruct{wxApp}}{\void}
@@ -234,6 +230,53 @@ If you use this member, you can selectively consume keypress events by calling\r
 \helpref{wxKeyEvent}{wxkeyevent}, \helpref{wxWindow::OnChar}{wxwindowonchar},\rtfsp
 \helpref{wxWindow::OnCharHook}{wxwindowoncharhook}, \helpref{wxDialog::OnCharHook}{wxdialogoncharhook}
 
+\membersection{wxApp::OnCmdLineError}\label{wxapponcmdlineerror}
+
+\func{bool}{OnCmdLineError}{\param{wxCmdLineParser\& }{parser}}
+
+Called when command line parsing fails (i.e. an incorrect command line option
+was specified by the user). The default behaviour is to show the program usage
+text and abort the program.
+
+Return {\tt TRUE} to continue normal execution or {\tt FALSE} to return 
+{\tt FALSE} from \helpref{OnInit}{wxapponinit} thus terminating the program.
+
+\wxheading{See also}
+
+\helpref{OnInitCmdLine}{wxapponinitcmdline}
+
+\membersection{wxApp::OnCmdLineHelp}\label{wxapponcmdlinehelp}
+
+\func{bool}{OnCmdLineHelp}{\param{wxCmdLineParser\& }{parser}}
+
+Called when the help option ({\tt --help}) was specified on the command line.
+The default behaviour is to show the program usage text and abort the program.
+
+Return {\tt TRUE} to continue normal execution or {\tt FALSE} to return 
+{\tt FALSE} from \helpref{OnInit}{wxapponinit} thus terminating the program.
+
+\wxheading{See also}
+
+\helpref{OnInitCmdLine}{wxapponinitcmdline}
+
+\membersection{wxApp::OnCmdLineParsed}\label{wxapponcmdlineparsed}
+
+\func{bool}{OnCmdLineParsed}{\param{wxCmdLineParser\& }{parser}}
+
+Called after the command line had been successfully parsed. You may override
+this method to test for the values of the various parameters which could be
+set from the command line.
+
+Don't forget to call the base class version unless you want to suppress
+processing of the standard command line options.
+
+Return {\tt TRUE} to continue normal execution or {\tt FALSE} to return 
+{\tt FALSE} from \helpref{OnInit}{wxapponinit} thus terminating the program.
+
+\wxheading{See also}
+
+\helpref{OnInitCmdLine}{wxapponinitcmdline}
+
 \membersection{wxApp::OnFatalException}\label{wxapponfatalexception}
 
 \func{void}{OnFatalException}{\void}
@@ -251,63 +294,78 @@ work and, in fact, probably won't.
 
 \helpref{wxHandleFatalExcetions}{wxhandlefatalexceptions}
 
-\membersection{wxApp::OnIdle}\label{wxapponidle}
-
-\func{void}{OnIdle}{\param{wxIdleEvent\& }{event}}
-
-Override this member function for any processing which needs to be done
-when the application is idle. You should call wxApp::OnIdle from your own function,
-since this forwards OnIdle events to windows and also performs garbage collection for
-windows whose destruction has been delayed.
-
-wxWindows' strategy for OnIdle processing is as follows. After pending user interface events for an
-application have all been processed, wxWindows sends an OnIdle event to the application object. wxApp::OnIdle itself
-sends an OnIdle event to each application window, allowing windows to do idle processing such as updating
-their appearance. If either wxApp::OnIdle or a window OnIdle function requested more time, by
-caling \helpref{wxIdleEvent::RequestMore}{wxidleeventrequestmore}, wxWindows will send another OnIdle
-event to the application object. This will occur in a loop until either a user event is found to be
-pending, or OnIdle requests no more time. Then all pending user events are processed until the system
-goes idle again, when OnIdle is called, and so on.
-
-\wxheading{See also}
-
-\helpref{wxWindow::OnIdle}{wxwindowonidle}, \helpref{wxIdleEvent}{wxidleevent},\rtfsp
-\helpref{wxWindow::SendIdleEvents}{wxappsendidleevents}
-
-\membersection{wxApp::OnEndSession}\label{wxapponendsession}
-
-\func{void}{OnEndSession}{\param{wxCloseEvent\& }{event}}
-
-This is an event handler function called when the operating system or GUI session is
-about to close down. The application has a chance to silently save information,
-and can optionally close itself.
-
-Use the EVT\_END\_SESSION event table macro to handle query end session events.
-
-The default handler calls \helpref{wxWindow::Close}{wxwindowclose} with a TRUE argument
-(forcing the application to close itself silently).
-
-\wxheading{Remarks}
-
-Under X, OnEndSession is called in response to the `die' event.
-
-Under Windows, OnEndSession is called in response to the WM\_ENDSESSION message.
-
-\wxheading{See also}
-
-\helpref{wxWindow::Close}{wxwindowclose},\rtfsp
-\helpref{wxWindow::OnCloseWindow}{wxwindowonclosewindow},\rtfsp
-\helpref{wxCloseEvent}{wxcloseevent},\rtfsp
-\helpref{wxApp::OnQueryEndSession}{wxapponqueryendsession}
+%% VZ: the wxApp event handler are private and should not be documented here!
+%%
+%%\membersection{wxApp::OnIdle}\label{wxapponidle}
+%%
+%%\func{void}{OnIdle}{\param{wxIdleEvent\& }{event}}
+%%
+%%Override this member function for any processing which needs to be done
+%%when the application is idle. You should call wxApp::OnIdle from your own function,
+%%since this forwards OnIdle events to windows and also performs garbage collection for
+%%windows whose destruction has been delayed.
+%%
+%%wxWindows' strategy for OnIdle processing is as follows. After pending user interface events for an
+%%application have all been processed, wxWindows sends an OnIdle event to the application object. wxApp::OnIdle itself
+%%sends an OnIdle event to each application window, allowing windows to do idle processing such as updating
+%%their appearance. If either wxApp::OnIdle or a window OnIdle function requested more time, by
+%%caling \helpref{wxIdleEvent::RequestMore}{wxidleeventrequestmore}, wxWindows will send another OnIdle
+%%event to the application object. This will occur in a loop until either a user event is found to be
+%%pending, or OnIdle requests no more time. Then all pending user events are processed until the system
+%%goes idle again, when OnIdle is called, and so on.
+%%
+%%\wxheading{See also}
+%%
+%%\helpref{wxWindow::OnIdle}{wxwindowonidle}, \helpref{wxIdleEvent}{wxidleevent},\rtfsp
+%%\helpref{wxWindow::SendIdleEvents}{wxappsendidleevents}
+%%
+%%\membersection{wxApp::OnEndSession}\label{wxapponendsession}
+%%
+%%\func{void}{OnEndSession}{\param{wxCloseEvent\& }{event}}
+%%
+%%This is an event handler function called when the operating system or GUI session is
+%%about to close down. The application has a chance to silently save information,
+%%and can optionally close itself.
+%%
+%%Use the EVT\_END\_SESSION event table macro to handle query end session events.
+%%
+%%The default handler calls \helpref{wxWindow::Close}{wxwindowclose} with a TRUE argument
+%%(forcing the application to close itself silently).
+%%
+%%\wxheading{Remarks}
+%%
+%%Under X, OnEndSession is called in response to the `die' event.
+%%
+%%Under Windows, OnEndSession is called in response to the WM\_ENDSESSION message.
+%%
+%%\wxheading{See also}
+%%
+%%\helpref{wxWindow::Close}{wxwindowclose},\rtfsp
+%%\helpref{wxWindow::OnCloseWindow}{wxwindowonclosewindow},\rtfsp
+%%\helpref{wxCloseEvent}{wxcloseevent},\rtfsp
+%%\helpref{wxApp::OnQueryEndSession}{wxapponqueryendsession}
 
 \membersection{wxApp::OnInit}\label{wxapponinit}
 
 \func{bool}{OnInit}{\void}
 
 This must be provided by the application, and will usually create the
-application's main window, optionally calling \helpref{wxApp::SetTopWindow}{wxappsettopwindow}.
+application's main window, optionally calling 
+\helpref{wxApp::SetTopWindow}{wxappsettopwindow}.
+
+Notice that if you want to to use the command line processing provided by
+wxWindows you have to call the base class version in the derived class
+OnInit().
 
 Return TRUE to continue processing, FALSE to exit the application.
+
+\membersection{wxApp::OnInitCmdLine}\label{wxapponinitcmdline}
+
+\func{void}{OnInitCmdLine}{\param{wxCmdLineParser\& }{parser}}
+
+Called from \helpref{OnInit}{wxapponinit} and may be used to initialize the
+parser with the command line options for this application. The base class
+versions adds support for a few standard options only.
 
 \membersection{wxApp::OnQueryEndSession}\label{wxapponqueryendsession}
 

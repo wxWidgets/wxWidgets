@@ -192,6 +192,9 @@ END_EVENT_TABLE()
 
 bool WidgetsApp::OnInit()
 {
+    if ( !wxApp::OnInit() )
+        return FALSE;
+
     // the reason for having these ifdef's is that I often run two copies of
     // this sample side by side and it is useful to see which one is which
     wxString title;

@@ -64,6 +64,9 @@ struct wxCmdLineOption
                     wxCmdLineParamType typ,
                     int fl)
     {
+        wxASSERT_MSG( !shrt.empty() || !lng.empty(),
+                      _T("option should have at least one name") );
+
         kind = k;
 
         shortName = shrt;
@@ -240,13 +243,16 @@ void wxCmdLineParserData::SetArguments(const wxString& cmdLine)
 
 int wxCmdLineParserData::FindOption(const wxString& name)
 {
-    size_t count = m_options.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    if ( !name.empty() )
     {
-        if ( m_options[n].shortName == name )
+        size_t count = m_options.GetCount();
+        for ( size_t n = 0; n < count; n++ )
         {
-            // found
-            return n;
+            if ( m_options[n].shortName == name )
+            {
+                // found
+                return n;
+            }
         }
     }
 
@@ -410,6 +416,9 @@ void wxCmdLineParser::AddParam(const wxString& desc,
 bool wxCmdLineParser::Found(const wxString& name) const
 {
     int i = m_data->FindOption(name);
+    if ( i == wxNOT_FOUND )
+        i = m_data->FindOptionByLongName(name);
+
     wxCHECK_MSG( i != wxNOT_FOUND, FALSE, _T("unknown switch") );
 
     wxCmdLineOption& opt = m_data->m_options[(size_t)i];
@@ -422,6 +431,9 @@ bool wxCmdLineParser::Found(const wxString& name) const
 bool wxCmdLineParser::Found(const wxString& name, wxString *value) const
 {
     int i = m_data->FindOption(name);
+    if ( i == wxNOT_FOUND )
+        i = m_data->FindOptionByLongName(name);
+
     wxCHECK_MSG( i != wxNOT_FOUND, FALSE, _T("unknown option") );
 
     wxCmdLineOption& opt = m_data->m_options[(size_t)i];
@@ -438,6 +450,9 @@ bool wxCmdLineParser::Found(const wxString& name, wxString *value) const
 bool wxCmdLineParser::Found(const wxString& name, long *value) const
 {
     int i = m_data->FindOption(name);
+    if ( i == wxNOT_FOUND )
+        i = m_data->FindOptionByLongName(name);
+
     wxCHECK_MSG( i != wxNOT_FOUND, FALSE, _T("unknown option") );
 
     wxCmdLineOption& opt = m_data->m_options[(size_t)i];
@@ -454,6 +469,9 @@ bool wxCmdLineParser::Found(const wxString& name, long *value) const
 bool wxCmdLineParser::Found(const wxString& name, wxDateTime *value) const
 {
     int i = m_data->FindOption(name);
+    if ( i == wxNOT_FOUND )
+        i = m_data->FindOptionByLongName(name);
+
     wxCHECK_MSG( i != wxNOT_FOUND, FALSE, _T("unknown option") );
 
     wxCmdLineOption& opt = m_data->m_options[(size_t)i];
