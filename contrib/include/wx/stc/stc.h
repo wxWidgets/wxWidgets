@@ -1799,6 +1799,11 @@ public:
     // Set the horizontal scrollbar to use instead of the ont that's built-in.
     void SetHScrollBar(wxScrollBar* bar) { m_hScrollBar = bar; }
 
+    // Can be used to prevent the EVT_CHAR handler from adding the char
+    bool GetLastKeydownProcessed() { return m_lastKeyDownConsumed; }
+    void SetLastKeydownProcessed(bool val) { m_lastKeyDownConsumed = val; }
+
+
 //----------------------------------------------------------------------
 
 

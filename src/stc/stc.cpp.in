@@ -370,9 +370,6 @@ void wxStyledTextCtrl::OnMouseWheel(wxMouseEvent& evt) {
 void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
     int key = evt.GetKeyCode();
 
-    // AltGr keys???
-    // \|@#¬[]{}?£$~  ã,õ,Ã,Õ, ñ, Ñ
-
     // On (some?) non-US keyboards the AltGr key is required to enter some
     // common characters.  It comes to us as both Alt and Ctrl down so we need
     // to let the char through in that case, otherwise if only ctrl or only
