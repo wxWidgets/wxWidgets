@@ -21,10 +21,11 @@
     #include <wx/wx.h>
 #endif
 
-#include <wx/image.h>
-#include <wx/html/htmlwin.h>
-#include <wx/html/htmlproc.h>
-#include <wx/fs_inet.h>
+#include "wx/image.h"
+#include "wx/html/htmlwin.h"
+#include "wx/html/htmlproc.h"
+#include "wx/fs_inet.h"
+#include "wx/filedlg.h"
 
 // ----------------------------------------------------------------------------
 // private classes
