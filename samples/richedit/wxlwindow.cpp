@@ -633,10 +633,9 @@ wxLayoutWindow::OnPaint( wxPaintEvent &WXUNUSED(event))
 void
 wxLayoutWindow::DoPaint(const wxRect *updateRect)
 {
-   // Causes bad flicker under wxGTK!!!
 #ifdef __WXGTK__
    InternalPaint(updateRect);
-#else
+#else // Causes bad flicker under wxGTK!!!
    Refresh(FALSE); //, updateRect);
 
    if ( !::UpdateWindow(GetHwnd()) )

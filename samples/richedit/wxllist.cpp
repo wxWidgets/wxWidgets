@@ -1772,22 +1772,38 @@ wxLayoutList::MoveCursorWord(int n)
       wxLayoutObject *obj = *i;
       if( obj->GetType() != WXLO_TYPE_TEXT )
       {
-         // any non text objects count as one word
-         n > 0 ? n-- : n++;
+         // any visible non text objects count as one word
+         if ( obj->IsVisibleObject() )
+         {
+            n > 0 ? n-- : n++;
 
-         moveDistance += obj->GetLength();
+            moveDistance += obj->GetLength();
+         }
       }
-      else
+      else // text object
       {
-         // text object
          wxLayoutObjectText *tobj = (wxLayoutObjectText *)obj;
+
+         bool canAdvance = true;
 
          if ( offset == tobj->GetLength() )
          {
             // at end of object
-            n > 0 ? n-- : n++;
+            if ( n > 0 )
+            {
+               // can't move further in this text object
+               n--;
+
+               canAdvance = false;
+            }
+            else if ( offset > 0 )
+            {
+               // offset is off by 1, make it a valid index
+               offset--;
+            }
          }
-         else
+
+         if ( canAdvance )
          {
             const char *start = tobj->GetText().c_str();
             const char *p = start + offset;

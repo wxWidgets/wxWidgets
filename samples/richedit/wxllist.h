@@ -203,6 +203,10 @@ public:
    */
    static wxLayoutObject *Read(wxString &istr);
    //@}
+
+   /// returns TRUE if the object is shown on the screen (i.e. not cmd object)
+   bool IsVisibleObject() const { return GetType() != WXLO_TYPE_CMD; }
+
 protected:
    /// optional data for application's use
    UserData *m_UserData;
@@ -214,7 +218,7 @@ KBLIST_DEFINE(wxLayoutObjectList, wxLayoutObject);
 /// An illegal iterator to save typing.
 #define NULLIT (wxLayoutObjectList::iterator(NULL))
 /// The iterator type.
-#define wxLOiterator   wxLayoutObjectList::iterator
+typedef wxLayoutObjectList::iterator wxLOiterator;
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -316,23 +320,21 @@ private:
    wxBitmap *m_Icon;
 };
 
-/** This structure holds all formatting information. Members which are
-    undefined (for a CmdObject this means: no change), are set to -1.
+/** This structure holds all formatting information.
 */
 struct wxLayoutStyleInfo
 {
-   wxLayoutStyleInfo(int ifamily = -1,
-                     int isize = -1,
-                     int istyle = -1,
-                     int iweight = -1,
-                     int iul = -1,
+   wxLayoutStyleInfo(int ifamily = wxDEFAULT,
+                     int isize = WXLO_DEFAULTFONTSIZE,
+                     int istyle = wxNORMAL,
+                     int iweight = wxNORMAL,
+                     int iul = FALSE,
                      wxColour *fg = NULL,
                      wxColour *bg = NULL);
-   wxColour & GetBGColour()
-      {
-         return m_bg;
-      }
    wxLayoutStyleInfo & operator=(const wxLayoutStyleInfo &right);
+
+   wxColour & GetBGColour() { return m_bg; }
+
    /// Font change parameters.
    int  size, family, style, weight, underline;
    /// Colours
@@ -340,7 +342,7 @@ struct wxLayoutStyleInfo
    int m_fg_valid, m_bg_valid; // bool, but must be int!
 };
 
-
+/// a cached font
 class wxFontCacheEntry
 {
 public:
@@ -366,6 +368,8 @@ public:
       }
 private:
    wxFont *m_Font;
+
+   // VZ: I wonder why it doesn't use wxLayoutStyleInfo instead of those?
    int  m_Family, m_Size, m_Style, m_Weight;
    bool m_Underline;
 };
