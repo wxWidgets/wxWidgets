@@ -82,11 +82,19 @@
 */
 //@{
   /// check that expression is true, "return" if not (also FAILs in debug mode)
-#define   wxCHECK(x)             if (!(x)) {wxFAIL; return; }
-  /// check that expression is true, "return ret" if not
-#define   wxCHECK_RET(x, ret)    if (!(x)) {wxFAIL; return ret; }
+#define   wxCHECK(x, rc)            if (!(x)) {wxFAIL; return rc; }
+  /// as wxCHECK but with a message explaining why we fail
+#define   wxCHECK_MSG(x, rc, msg)   if (!(x)) {wxFAIL_MSG(msg); return rc; }
   /// check that expression is true, perform op if not
-#define   wxCHECK2(x, op)        if (!(x)) {wxFAIL; op; }
+#define   wxCHECK2(x, op)           if (!(x)) {wxFAIL; op; }
+  /// as wxCHECK2 but with a message explaining why we fail
+#define   wxCHECK2_MSG(x, op, msg)  if (!(x)) {wxFAIL_MSG(msg); op; }
+  /// special form of wxCHECK2: as wxCHECK, but for use in void functions
+  //  NB: there is only one form (with msg parameter) and it's intentional:
+  //      there is no other way to tell the caller what exactly went wrong
+  //      from the void function (of course, the function shouldn't be void
+  //      to begin with...)
+#define   wxCHECK_RET(x, msg)       if (!(x)) {wxFAIL_MSG(msg); return; }
 //@}
 
 //@}
