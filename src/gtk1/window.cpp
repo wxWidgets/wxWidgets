@@ -2845,6 +2845,15 @@ void wxWindow::ApplyWidgetStyle()
 {
 }
 
+//-----------------------------------------------------------------------------
+// Pop-up menu stuff
+//-----------------------------------------------------------------------------
+
+static void gtk_pop_hide_callback( GtkWidget *WXUNUSED(widget), bool* is_waiting  )
+{
+    *is_waiting = FALSE;
+}
+
 static void SetInvokingWindow( wxMenu *menu, wxWindow *win )
 {
     menu->SetInvokingWindow( win );
@@ -2885,6 +2894,11 @@ bool wxWindow::DoPopupMenu( wxMenu *menu, int x, int y )
     gs_pop_x = x;
     gs_pop_y = y;
 
+    bool is_waiting = TRUE;
+    
+    gtk_signal_connect( GTK_OBJECT(menu->m_menu), "hide",
+      GTK_SIGNAL_FUNC(gtk_pop_hide_callback), (gpointer)&is_waiting );
+
     gtk_menu_popup(
                   GTK_MENU(menu->m_menu),
                   (GtkWidget *) NULL,          // parent menu shell
@@ -2894,6 +2908,9 @@ bool wxWindow::DoPopupMenu( wxMenu *menu, int x, int y )
                   0,                           // button used to activate it
                   0 //gs_timeLastClick         // the time of activation
                 );
+		
+    while (is_waiting) wxYield();		
+
     return TRUE;
 }
 

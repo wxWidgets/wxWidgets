@@ -97,9 +97,6 @@ the style is wxDOT, wxLONG\_DASH, wxSHORT\_DASH, wxDOT\_DASH, or wxUSER\_DASH.}
 
 \docparam{pen}{A pointer or reference to a pen to copy.}
 
-\docparam{width}{Pen width. Under Windows, the pen width cannot be greater than 1 if
-the style is wxDOT, wxLONG\_DASH, wxSHORT\_DASH, wxDOT\_DASH, or wxUSER\_DASH.}
-  
 \docparam{style}{The style may be one of the following:
 
 \begin{twocollist}\itemsep=0pt
@@ -121,11 +118,12 @@ the style is wxDOT, wxLONG\_DASH, wxSHORT\_DASH, wxDOT\_DASH, or wxUSER\_DASH.}
 
 \wxheading{Remarks}
 
+Different versions of Windows and different versions of other platforms
+support {\it very} different subsets of the styles above - there is no
+similarity even between Windows95 and Windows98 - so handle with care.
+
 If the named colour form is used, an appropriate {\bf wxColour} structure
 is found in the colour database.
-
-{\it style} may be one of wxSOLID, wxDOT, wxLONG\_DASH, wxSHORT\_DASH and
-wxDOT\_DASH.
 
 \wxheading{See also}
 

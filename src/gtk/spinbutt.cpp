@@ -98,7 +98,7 @@ bool wxSpinButton::Create(wxWindow *parent,
     if (new_size.y == -1)
         new_size.y = 30;
 
-    if (!PreCreation( parent, pos, size ) ||
+    if (!PreCreation( parent, pos, new_size ) ||
         !CreateBase( parent, id, pos, new_size, style, wxDefaultValidator, name ))
     {
         wxFAIL_MSG( _T("wxXX creation failed") );

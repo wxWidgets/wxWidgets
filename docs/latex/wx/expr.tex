@@ -287,17 +287,9 @@ typedef enum {
 
 Returns the word value of the expression.
 
-\membersection{wxExpr::WriteLispExpr}\label{wxexprwritelistexpr}
+\membersection{wxExpr::WriteClause}\label{wxexprwriteprologclause}
 
-\func{void}{WriteLispExpr}{\param{ostream\&}{ stream}}
-
-Writes the expression or clause to the given stream in LISP format.
-Not normally needed, since the whole {\bf wxExprDatabase} will usually
-be written at once. Lists are enclosed in parentheses will no commas.
-
-\membersection{wxExpr::WritePrologClause}\label{wxexprwriteprologclause}
-
-\func{void}{WritePrologClause}{\param{ostream\&}{ stream}}
+\func{void}{WriteClause}{\param{FILE *}{ stream}}
 
 Writes the clause to the given stream in Prolog format. Not normally needed, since
 the whole {\bf wxExprDatabase} will usually be written at once. The format is:
@@ -306,7 +298,7 @@ full stop.
 
 \membersection{wxExpr::WriteExpr}\label{wxexprwriteexpr}
 
-\func{void}{WriteExpr}{\param{ostream\&}{ stream}}
+\func{void}{WriteExpr}{\param{FILE *}{ stream}}
 
 Writes the expression (not clause) to the given stream in Prolog
 format. Not normally needed, since the whole {\bf wxExprDatabase} will
@@ -494,15 +486,9 @@ Reads in the given file, returning TRUE if successful.
 Reads a Prolog database from the given string buffer, returning TRUE if
 successful.
 
-\membersection{wxExprDatabase::WriteLisp}\label{wxexprdatabasewritelisp}
-
-\func{bool}{WriteLisp}{\param{ostream\& }{stream}}
-
-Writes the database as a LISP-format file.
-
 \membersection{wxExprDatabase::Write}\label{wxexprdatabasewrite}
 
-\func{bool}{Write}{\param{ostream\& }{stream}}
+\func{bool}{Write}{\param{FILE *}{stream}}
 
 \func{bool}{Write}{\param{const wxString\&}{ filename}}
 

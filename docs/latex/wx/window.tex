@@ -1520,7 +1520,8 @@ processed as usually.
 \wxheading{Remarks}
 
 Just before the menu is popped up, \helpref{wxMenu::UpdateUI}{wxmenuupdateui} is called
-to ensure that the menu items are in the correct state.
+to ensure that the menu items are in the correct state. The menu does not get deleted
+by the window.
 
 \membersection{wxWindow::PushEventHandler}\label{wxwindowpusheventhandler}
 
@@ -1596,6 +1597,19 @@ functions so should not be required by the application programmer.
 \wxheading{Parameters}
 
 \docparam{child}{Child window to remove.}
+
+\membersection{wxWindow::Reparent}\label{wxwindowreparent}
+
+\func{virtual bool}{Reparent}{\param{wxWindow* }{newParent}}
+
+Reparents the window, i.e the window will be removed from its
+current parent window (e.g. a non-standard toolbar in a wxFrame) 
+and then re-inserted into another (e.g. a wxMiniFrame for a
+floating toolbar). Available on Windows and GTK+.
+
+\wxheading{Parameters}
+
+\docparam{newParent}{New parent.}
 
 \membersection{wxWindow::ScreenToClient}\label{wxwindowscreentoclient}
 
