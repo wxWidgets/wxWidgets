@@ -12,19 +12,30 @@
 #pragma implementation "spinctlg.h"
 #endif
 
-#include "wx/spinctrl.h"
+#include "wx/defs.h"
 
 #if wxUSE_SPINCTRL
+
+#include "wx/spinctrl.h"
 
 
 //-----------------------------------------------------------------------------
 // wxSpinCtrl
 //-----------------------------------------------------------------------------
 
+#if wxUSE_SPINBTN
+
+#if !USE_SHARED_LIBRARY
+     IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrl,wxControl)
+#endif
+
+#else // !wxUSE_SPINBTN
+
 #if !USE_SHARED_LIBRARY
      IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrl,wxTextCtrl)
 #endif
 
+#endif // wxUSE_SPINBTN/!wxUSE_SPINBTN
 
 #endif   // wxUSE_SPINCTRL
 
