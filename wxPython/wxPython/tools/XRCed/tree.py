@@ -458,7 +458,7 @@ class XML_Tree(wxTreeCtrl):
                 elif n.nodeType != minidom.Node.ELEMENT_NODE:
                     treeObj.element.removeChild(n)
                     n.unlink()
-                    
+
     # Insert new item at specific position
     def InsertNode(self, itemParent, parent, elem, nextItem):
         # Insert in XML tree and wxWin
@@ -641,7 +641,7 @@ class XML_Tree(wxTreeCtrl):
         testWin = g.testWin
         # Create a window with this resource
         xxx = self.GetPyData(item).treeObject()
-        
+
         # If frame
 #        if xxx.__class__ == xxxFrame:
             # Frame can't have many children,

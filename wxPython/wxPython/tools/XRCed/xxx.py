@@ -542,7 +542,7 @@ class xxxRadioBox(xxxObject):
     allParams = ['label', 'content', 'selection', 'dimension', 'pos', 'size', 'style']
     paramDict = {'dimension': ParamInt}
     required = ['label', 'content']
-    default = {'content': '[]'}    
+    default = {'content': '[]'}
     winStyles = ['wxRA_SPECIFY_ROWS', 'wxRA_SPECIFY_COLS']
 
 class xxxCheckBox(xxxObject):
