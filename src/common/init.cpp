@@ -26,8 +26,10 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/debug.h"
-    #include "wx/module.h"
 #endif
+
+#include "wx/module.h"
+
 
 // ----------------------------------------------------------------------------
 // global vars

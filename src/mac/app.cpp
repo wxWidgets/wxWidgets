@@ -50,7 +50,7 @@ extern wxList wxPendingDelete;
 extern wxList *wxWinMacWindowList;
 extern wxList *wxWinMacControlList;
 
-wxApp *wxTheApp = NULL;
+extern wxApp *wxTheApp ;
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)

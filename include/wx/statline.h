@@ -66,6 +66,8 @@ protected:
     #include "wx/gtk/statline.h"
 #elif defined(__WXPM__)
     #include "wx/os2/statline.h"
+#elif defined(__WXMAC__)
+    #include "wx/mac/statline.h"
 #else // use generic implementation for all other platforms
     #include "wx/generic/statline.h"
 #endif

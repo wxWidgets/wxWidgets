@@ -156,7 +156,6 @@ void wxListBox::Delete(int N)
   	m_noItems --;
 	
 	MacDelete( N ) ;
-    SetHorizontalExtent("");
 }
 
 int wxListBox::DoAppend(const wxString& item)
@@ -170,8 +169,6 @@ int wxListBox::DoAppend(const wxString& item)
 		m_stringArray.Add( item ) ;
  	m_noItems ++;
 	MacAppend( item ) ;
-
-    SetHorizontalExtent(item);
 
 	return index ;
 }
@@ -260,7 +257,6 @@ void wxListBox::Clear()
   m_stringArray.Empty() ;
   m_dataArray.Empty() ;
   MacClear() ;
-  SetHorizontalExtent();
 }
 
 void wxListBox::SetSelection(int N, bool select)
@@ -284,6 +280,11 @@ void *wxListBox::DoGetItemClientData(int N) const
                  "invalid index in wxListBox::GetClientData" );
 
     return (void *)m_dataArray[N];
+}
+
+wxClientData *wxListBox::DoGetItemClientObject(int N) const
+{
+	return (wxClientData *) DoGetItemClientData( N ) ;
 }
 
 void wxListBox::DoSetItemClientData(int N, void *Client_data)
@@ -375,6 +376,37 @@ wxSize wxListBox::DoGetBestSize()
     return wxSize(100, 100);
 }
 
+int wxListBox::GetCount() const
+{
+    return m_noItems;
+}
+
+void wxListBox::SetupColours()
+{
+    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
+    SetForegroundColour(GetParent()->GetForegroundColour());
+}
+
+#if wxUSE_OWNER_DRAWN
+
+class wxListBoxItem : public wxOwnerDrawn
+{
+public:
+    wxListBoxItem(const wxString& str = "");
+};
+
+wxListBoxItem::wxListBoxItem(const wxString& str) : wxOwnerDrawn(str, FALSE)
+{
+    // no bitmaps/checkmarks
+    SetMarginWidth(0);
+}
+
+wxOwnerDrawn *wxListBox::CreateItem(size_t n)
+{
+    return new wxListBoxItem();
+}
+
+#endif  //USE_OWNER_DRAWN
 
 // ============================================================================
 // list box control implementation

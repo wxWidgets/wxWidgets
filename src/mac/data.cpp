@@ -119,7 +119,7 @@ const char *wxButtonBarNameStr = "buttonbar";
 const char *wxEnhDialogNameStr = "Shell";
 const char *wxToolBarNameStr = "toolbar";
 const char *wxStatusLineNameStr = "status_line";
-const char *wxEmptyString = "";
+
 const char *wxGetTextFromUserPromptStr = "Input Text";
 const char *wxMessageBoxCaptionStr = "Message";
 const char *wxFileSelectorPromptStr = "Select a file";

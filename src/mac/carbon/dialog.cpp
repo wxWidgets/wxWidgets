@@ -44,6 +44,8 @@ END_EVENT_TABLE()
 
 wxDialog::wxDialog()
 {
+  m_isShown = FALSE;
+  m_modalShowing = FALSE;
     SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
 }
 
@@ -55,7 +57,12 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
            const wxString& name)
 {
   m_windowStyle = style;
+  m_isShown = FALSE;
+  m_modalShowing = FALSE;
 
+#if wxUSE_TOOLTIPS
+    m_hwndToolTip = 0;
+#endif
   SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
   SetName(name);
   
@@ -165,14 +172,35 @@ void wxDialog::OnCharHook(wxKeyEvent& event)
 
 void wxDialog::Iconize(bool WXUNUSED(iconize))
 {
-    // TODO
+	// mac dialogs cannot be iconized
 }
 
 bool wxDialog::IsIconized() const
 {
-    // TODO
+	// mac dialogs cannot be iconized
     return FALSE;
 }
+
+void wxDialog::DoSetClientSize(int width, int height)
+{
+	wxWindow::DoSetClientSize( width , height ) ;
+}
+
+void wxDialog::GetPosition(int *x, int *y) const
+{
+	DoGetPosition( x , y ) ;
+}
+
+bool wxDialog::IsShown() const
+{
+  return m_isShown;
+}
+
+bool wxDialog::IsModal() const
+{
+    return wxModalDialogs.Find((wxDialog *)this) != 0; // const_cast
+}
+
 
 extern bool s_macIsInModalLoop ;
 
@@ -255,42 +283,79 @@ bool wxDialog::Show(bool show)
 	return TRUE ;
 }
 
+void wxDialog::SetTitle(const wxString& title)
+{
+	wxWindow::SetTitle( title ) ;
+}
+
+wxString wxDialog::GetTitle() const
+{
+	return wxWindow::GetTitle() ;
+}
+
+void wxDialog::Centre(int direction)
+{
+  int x_offset,y_offset ;
+  int display_width, display_height;
+  int  width, height, x, y;
+  wxWindow *parent = GetParent();
+  if ((direction & wxCENTER_FRAME) && parent)
+  {
+      parent->GetPosition(&x_offset,&y_offset) ;
+      parent->GetSize(&display_width,&display_height) ;
+  }
+  else
+  {
+    wxDisplaySize(&display_width, &display_height);
+    x_offset = 0 ;
+    y_offset = 0 ;
+  }
+
+  GetSize(&width, &height);
+  GetPosition(&x, &y);
+
+  if (direction & wxHORIZONTAL)
+    x = (int)((display_width - width)/2);
+  if (direction & wxVERTICAL)
+    y = (int)((display_height - height)/2);
+
+  SetSize(x+x_offset, y+y_offset, width, height);
+}
 
 // Replacement for Show(TRUE) for modal dialogs - returns return code
 int wxDialog::ShowModal()
 {
   m_windowStyle |= wxDIALOG_MODAL;
-	Show(TRUE);
-	return GetReturnCode();
+  Show(TRUE);
+  return GetReturnCode();
 }
 
 void wxDialog::EndModal(int retCode)
 {
-	SetReturnCode(retCode);
-    // TODO modal un-showing
-	Show(FALSE);
+  SetReturnCode(retCode);
+  Show(FALSE);
 }
 
 // Standard buttons
 void wxDialog::OnOK(wxCommandEvent& event)
 {
-	if ( Validate() && TransferDataFromWindow() )
-	{
+  if ( Validate() && TransferDataFromWindow() )
+  {
         if ( IsModal() )
             EndModal(wxID_OK);
         else
         {
-		    SetReturnCode(wxID_OK);
-		    this->Show(FALSE);
+            SetReturnCode(wxID_OK);
+            this->Show(FALSE);
         }
-	}
+  }
 }
 
 void wxDialog::OnApply(wxCommandEvent& event)
 {
-	if (Validate())
-		TransferDataFromWindow();
-	// TODO probably need to disable the Apply button until things change again
+  if (Validate())
+    TransferDataFromWindow();
+  // TODO probably need to disable the Apply button until things change again
 }
 
 void wxDialog::OnCancel(wxCommandEvent& event)
@@ -300,7 +365,7 @@ void wxDialog::OnCancel(wxCommandEvent& event)
     else
     {
         SetReturnCode(wxID_CANCEL);
-		this->Show(FALSE);
+        this->Show(FALSE);
     }
 }
 
@@ -321,12 +386,12 @@ void wxDialog::OnCloseWindow(wxCloseEvent& event)
     // The default OnCancel (above) simply ends a modal dialog, and hides a modeless dialog.
 
     static wxList closing;
-    
+
     if ( closing.Member(this) )
         return;
-    
+
     closing.Append(this);
-    
+
     wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
     cancelEvent.SetEventObject( this );
     GetEventHandler()->ProcessEvent(cancelEvent); // This may close the dialog
@@ -346,7 +411,8 @@ void wxDialog::OnSize(wxSizeEvent& WXUNUSED(event))
 {
   // if we're using constraints - do use them
   #if wxUSE_CONSTRAINTS
-    if ( GetAutoLayout() ) {
+    if ( GetAutoLayout() )
+    {
       Layout();
     }
   #endif

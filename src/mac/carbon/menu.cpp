@@ -57,7 +57,7 @@ void wxMacCtoPString(const char* theCString, Str255 thePString);
 
 // remove inappropriate characters, if useShortcuts is false, the ampersand will not auto-generate a mac menu-shortcut
 
-static void wxMacBuildMenuString(StringPtr outMacItemText, char *outMacShortcutChar , short *outMacModifiers , const char *inItemName , bool useShortcuts )
+void wxMacBuildMenuString(StringPtr outMacItemText, char *outMacShortcutChar , short *outMacModifiers , const char *inItemName , bool useShortcuts )
 {
 	char *p = (char *) &outMacItemText[1] ;
 	short macModifiers = 0 ;
@@ -117,18 +117,18 @@ static void wxMacBuildMenuString(StringPtr outMacItemText, char *outMacShortcutC
 					++inItemName ;
 					while( *inItemName )
 					{
-						if (strncmp("Ctrl+", inItemName, 5) == 0) 
+						if (strncmp("Ctrl", inItemName, 4) == 0) 
 						{
 							inItemName = inItemName + 5;
 							macShortCut = *inItemName;
 						}
-						else if (strncmp("Alt+", inItemName, 4) == 0) 
+						else if (strncmp("Alt", inItemName, 3) == 0) 
 						{
 							inItemName = inItemName + 4;
 							macModifiers |= kMenuOptionModifier ;
 							macShortCut = *inItemName ;
 						}
-						else if (strncmp("Shift+", inItemName, 6) == 0) 
+						else if (strncmp("Shift", inItemName, 5) == 0) 
 						{
 							inItemName = inItemName + 6;
 							macModifiers |= kMenuShiftModifier ;
@@ -602,21 +602,7 @@ wxWindow *wxMenu::GetWindow() const
 
     return NULL;
 }
-/*
-bool wxWindow::PopupMenu(wxMenu *menu, int x, int y)
-{
-	menu->SetInvokingWindow(this);
-	ClientToScreen( &x , &y ) ;
 
-	::InsertMenu( menu->m_hMenu , -1 ) ;
-  long menuResult = ::PopUpMenuSelect(menu->m_hMenu ,y,x, 0) ;
-  menu->MacMenuSelect( this , TickCount() , HiWord(menuResult) , LoWord(menuResult) ) ;
-	::DeleteMenu( menu->m_macMenuId ) ;
-  menu->SetInvokingWindow(NULL);
-
-  return TRUE;
-}
-*/
 // helper functions returning the mac menu position for a certain item, note that this is 
 // mac-wise 1 - based, i.e. the first item has index 1 whereas on MSWin it has pos 0
 
@@ -682,7 +668,28 @@ bool wxMenu::MacMenuSelect( wxEvtHandler* handler, long when , int macMenuId, in
 			event.m_timeStamp = when;
 			event.SetEventObject(handler);
      		event.SetInt( pItem->GetId() );
-     		ProcessCommand( event ) ;
+			{
+				bool processed = false ;
+
+#if WXWIN_COMPATIBILITY
+			    // Try a callback
+			    if (m_callback)
+			    {
+			            (void) (*(m_callback)) (*this, event);
+			            processed = TRUE;
+			    }
+#endif			
+			    // Try the menu's event handler
+			    if ( !processed && handler)
+			    {
+			            processed = handler->ProcessEvent(event);
+			    }
+			
+			  	// Try the window the menu was popped up from (and up
+			  	// through the hierarchy)
+			  	if ( !processed && GetInvokingWindow())
+			    	processed = GetInvokingWindow()->GetEventHandler()->ProcessEvent(event);
+		  	}
 			return true ;
 		}
 	}
@@ -708,7 +715,27 @@ bool wxMenu::MacMenuSelect( wxEvtHandler* handler, long when , int macMenuId, in
 					event.m_timeStamp = when;
 					event.SetEventObject(handler);
        				event.SetInt( pItem->GetId() );
-    				ProcessCommand( event ) ;
+					{
+						bool processed = false ;
+#if WXWIN_COMPATIBILITY
+					    // Try a callback
+					    if (m_callback)
+					    {
+					            (void) (*(m_callback)) (*this, event);
+					            processed = TRUE;
+					    }
+#endif					
+					    // Try the menu's event handler
+					    if ( !processed && handler)
+					    {
+					            processed = handler->ProcessEvent(event);
+					    }
+					
+					  	// Try the window the menu was popped up from (and up
+					  	// through the hierarchy)
+					  	if ( !processed && GetInvokingWindow())
+					    	processed = GetInvokingWindow()->GetEventHandler()->ProcessEvent(event);
+				  	}
 					return true ;
 				}
 			}
@@ -757,6 +784,16 @@ void wxMenuBar::Init()
     m_menuBarFrame = NULL;
 }
 
+wxMenuBar::wxMenuBar()
+{
+    Init();
+}
+
+wxMenuBar::wxMenuBar( long WXUNUSED(style) )
+{
+    Init();
+}
+
 
 wxMenuBar::wxMenuBar(int count, wxMenu *menus[], const wxString titles[])
 {
@@ -789,6 +826,37 @@ void wxMenuBar::Refresh()
 
     DrawMenuBar();
 }
+
+#if wxUSE_ACCEL
+
+void wxMenuBar::RebuildAccelTable()
+{
+    // merge the accelerators of all menus into one accel table
+    size_t nAccelCount = 0;
+    size_t i, count = GetMenuCount();
+    for ( i = 0; i < count; i++ )
+    {
+        nAccelCount += m_menus[i]->GetAccelCount();
+    }
+
+    if ( nAccelCount )
+    {
+        wxAcceleratorEntry *accelEntries = new wxAcceleratorEntry[nAccelCount];
+
+        nAccelCount = 0;
+        for ( i = 0; i < count; i++ )
+        {
+            nAccelCount += m_menus[i]->CopyAccels(&accelEntries[nAccelCount]);
+        }
+
+        m_accelTable = wxAcceleratorTable(nAccelCount, accelEntries);
+
+        delete [] accelEntries;
+    }
+}
+
+#endif // wxUSE_ACCEL
+
 
 void wxMenuBar::MacInstallMenuBar() 
 {
@@ -1047,7 +1115,107 @@ void wxMenuBar::MacMenuSelect(wxEvtHandler* handler, long when , int macMenuId, 
 	  	{
 	  		break ;
 	  	}
-		}
+	  }
 	}
 }
+
+wxMenu *wxMenuBar::Remove(size_t pos)
+{
+    wxMenu *menu = wxMenuBarBase::Remove(pos);
+    if ( !menu )
+        return NULL;
+
+    if ( IsAttached() )
+    {
+		if (s_macInstalledMenuBar == this)
+		{
+			::DeleteMenu( menu->MacGetMenuId() /* m_menus[pos]->MacGetMenuId() */ ) ;
+		}
+
+        menu->Detach();
+
+#if wxUSE_ACCEL
+        if ( menu->HasAccels() )
+        {
+            // need to rebuild accell table
+            RebuildAccelTable();
+        }
+#endif // wxUSE_ACCEL
+
+        Refresh();
+    }
+
+    m_titles.Remove(pos);
+
+    return menu;
+}
+
+bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
+{
+    WXHMENU submenu = menu ? menu->GetHMenu() : 0;
+    wxCHECK_MSG( submenu, FALSE, wxT("can't append invalid menu to menubar") );
+
+    if ( !wxMenuBarBase::Append(menu, title) )
+        return FALSE;
+
+    menu->Attach(this);
+
+    m_titles.Add(title);
+
+    if ( IsAttached() )
+    {
+		if (s_macInstalledMenuBar == this)
+		{
+			::InsertMenu( menu->GetHMenu() , 0 ) ;
+		}
+
+#if wxUSE_ACCEL
+        if ( menu->HasAccels() )
+        {
+            // need to rebuild accell table
+            RebuildAccelTable();
+        }
+#endif // wxUSE_ACCEL
+
+        Refresh();
+    }
+
+    return TRUE;
+}
+
+// ---------------------------------------------------------------------------
+// wxMenuBar searching for menu items
+// ---------------------------------------------------------------------------
+
+// Find the itemString in menuString, and return the item id or wxNOT_FOUND
+int wxMenuBar::FindMenuItem(const wxString& menuString,
+                            const wxString& itemString) const
+{
+    wxString menuLabel = wxStripMenuCodes(menuString);
+    size_t count = GetMenuCount();
+    for ( size_t i = 0; i < count; i++ )
+    {
+        wxString title = wxStripMenuCodes(m_titles[i]);
+        if ( menuString == title )
+            return m_menus[i]->FindItem(itemString);
+    }
+
+    return wxNOT_FOUND;
+}
+
+wxMenuItem *wxMenuBar::FindItem(int id, wxMenu **itemMenu) const
+{
+    if ( itemMenu )
+        *itemMenu = NULL;
+
+    wxMenuItem *item = NULL;
+    size_t count = GetMenuCount();
+    for ( size_t i = 0; !item && (i < count); i++ )
+    {
+        item = m_menus[i]->FindItem(id, itemMenu);
+    }
+
+    return item;
+}
+
 

@@ -29,6 +29,7 @@
   IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
 #endif  //USE_SHARED_LIBRARY
 
+void wxMacBuildMenuString(StringPtr outMacItemText, char *outMacShortcutChar , short *outMacModifiers , const char *inItemName , bool useShortcuts ) ;
 // ----------------------------------------------------------------------------
 // wxMenuItem
 // ----------------------------------------------------------------------------
@@ -62,6 +63,28 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu, int id,
 wxMenuItem::~wxMenuItem() 
 {
 }
+
+bool wxMenuItem::IsChecked() const
+{
+    return wxMenuItemBase::IsChecked() ;
+}
+
+wxString wxMenuItem::GetLabel() const
+{
+    return wxStripMenuCodes(m_text);
+}
+
+// accelerators
+// ------------
+
+#if wxUSE_ACCEL
+
+wxAcceleratorEntry *wxMenuItem::GetAccel() const
+{
+    return wxGetAccelFromString(GetText());
+}
+
+#endif // wxUSE_ACCEL
 
 // misc
 // ----
@@ -139,4 +162,50 @@ void wxMenuItem::Check(bool bDoCheck)
   	 	}
   	}
   }
+}
+
+void wxMenuItem::SetText(const wxString& text)
+{
+    // don't do anything if label didn't change
+    if ( m_text == text )
+        return;
+
+    wxMenuItemBase::SetText(text);
+//    OWNER_DRAWN_ONLY( wxOwnerDrawn::SetName(text) );
+
+    wxCHECK_RET( m_parentMenu && m_parentMenu->GetHMenu(), wxT("menuitem without menu") );
+   	if ( m_parentMenu->GetHMenu() )
+    {
+   	 	int index = m_parentMenu->MacGetIndexFromItem( this ) ;
+   	 	if ( index >= 1 )
+   	 	{
+ 			Str255 label;
+			wxMacBuildMenuString( label , NULL , NULL , text ,false);
+   	 		::SetMenuItemText( m_parentMenu->GetHMenu() , index , label ) ; // checkmark
+  	 	}
+  	}
+
+#if wxUSE_ACCEL
+    m_parentMenu->UpdateAccel(this);
+#endif // wxUSE_ACCEL
+
+}
+void wxMenuItem::SetCheckable(bool checkable)
+{
+    wxMenuItemBase::SetCheckable(checkable);
+   // OWNER_DRAWN_ONLY( wxOwnerDrawn::SetCheckable(checkable) );
+}
+
+// ----------------------------------------------------------------------------
+// wxMenuItemBase
+// ----------------------------------------------------------------------------
+
+wxMenuItem *wxMenuItemBase::New(wxMenu *parentMenu,
+                                int id,
+                                const wxString& name,
+                                const wxString& help,
+                                bool isCheckable,
+                                wxMenu *subMenu)
+{
+    return new wxMenuItem(parentMenu, id, name, help, isCheckable, subMenu);
 }

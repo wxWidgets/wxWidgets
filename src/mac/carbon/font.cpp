@@ -149,6 +149,15 @@ bool wxFont::RealizeResource()
     return TRUE;
 }
 
+void wxFont::SetEncoding(wxFontEncoding encoding)
+{
+    Unshare();
+
+    M_FONTDATA->m_encoding = encoding;
+
+    RealizeResource();
+}
+
 void wxFont::Unshare()
 {
 	// Don't change shared data
@@ -230,11 +239,6 @@ int wxFont::GetPointSize() const
 int wxFont::GetFamily() const
 {
     return M_FONTDATA->m_family;
-}
-
-int wxFont::GetFontId() const
-{
-    return M_FONTDATA->m_fontId;
 }
 
 int wxFont::GetStyle() const

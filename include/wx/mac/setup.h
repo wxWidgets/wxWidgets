@@ -187,7 +187,7 @@
                                   // if enabled, compiles built-in OS independent wxConfig
                                   // class and it's file (any platform) and registry (Win)
                                   // based implementations
-#define wxUSE_THREADS       1
+#define wxUSE_THREADS       0
                                   // support for multithreaded applications: if
                                   // 1, compile in thread classes (thread.h)
                                   // and make the library thread safe
@@ -205,7 +205,7 @@
 #define wxUSE_TOOLTIPS      1
                                   // Define to use wxToolTip class and
                                   // wxWindow::SetToolTip() method
-#define wxUSE_SOCKETS       1 // 0
+#define wxUSE_SOCKETS       0 // 0
                                   // Set to 1 to use socket classes
 #define wxUSE_HTML          1 // 0
                                   // Set to 1 to use wxHTML sub-library
@@ -306,7 +306,7 @@
 #define wxUSE_PENWINDOWS 0
                                     // Set to 1 to use PenWindows
 
-#define wxUSE_OWNER_DRAWN             1
+#define wxUSE_OWNER_DRAWN             0
                                     // Owner-drawn menus and listboxes
 
 #define wxUSE_NATIVE_STATUSBAR        1

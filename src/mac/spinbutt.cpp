@@ -126,4 +126,23 @@ void wxSpinButton::MacHandleControlClick( ControlHandle control , SInt16 control
   GetEventHandler()->ProcessEvent(event);
 }
 
+// ----------------------------------------------------------------------------
+// size calculation
+// ----------------------------------------------------------------------------
+
+wxSize wxSpinButton::DoGetBestSize()
+{
+    if ( (GetWindowStyle() & wxSP_VERTICAL) != 0 )
+    {
+        // vertical control
+        return wxSize(16,
+                      2*16);
+    }
+    else
+    {
+        // horizontal control
+        return wxSize(2*16,
+                      16);
+    }
+}
 

@@ -57,6 +57,7 @@ wxFrame::wxFrame()
   m_frameMenuBar = NULL;
   m_frameStatusBar = NULL;
   m_iconized = FALSE;
+  m_isShown = FALSE;
 }
 
 bool wxFrame::Create(wxWindow *parent,
@@ -73,6 +74,7 @@ bool wxFrame::Create(wxWindow *parent,
   SetName(name);
   m_windowStyle = style;
   m_frameMenuBar = NULL;
+  m_isShown = FALSE;
 
 #if wxUSE_TOOLBAR
   m_frameToolBar = NULL ;

@@ -587,6 +587,14 @@ void wxControl::OnPaint(wxPaintEvent& event)
 		// wxWindow::OnPaint( event ) ;
 	}
 }
+void wxControl::OnEraseBackground(wxEraseEvent& event)
+{
+    // In general, you don't want to erase the background of a control,
+    // or you'll get a flicker.
+    // TODO: move this 'null' function into each control that
+    // might flicker.
+}
+
 
 void  wxControl::OnKeyDown( wxKeyEvent &event ) 
 {

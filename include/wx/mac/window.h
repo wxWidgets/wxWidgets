@@ -155,8 +155,6 @@ public:
 
     // Native resource loading (implemented in src/msw/nativdlg.cpp)
     // FIXME: should they really be all virtual?
-    virtual bool LoadNativeDialog(wxWindow* parent, wxWindowID& id);
-    virtual bool LoadNativeDialog(wxWindow* parent, const wxString& name);
     wxWindow* GetWindowChild1(wxWindowID id);
     wxWindow* GetWindowChild(wxWindowID id);
 
@@ -208,12 +206,6 @@ public:
     wxObject *GetChild(int number) const;
     virtual void MSWDeviceToLogical(float *x, float *y) const;
 #endif // WXWIN_COMPATIBILITY
-
-    // Create an appropriate wxWindow from a HWND
-    virtual wxWindow* CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd);
-
-    // Make sure the window style reflects the HWND style (roughly)
-    virtual void AdoptAttributesFromHWND();
 
     // Setup background and foreground colours correctly
     virtual void SetupColours();

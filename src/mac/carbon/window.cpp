@@ -295,6 +295,34 @@ void wxWindow::DoGetPosition(int *x, int *y) const
     }
 }
 
+wxSize wxWindow::DoGetBestSize()
+{
+	return wxSize( 0 , 0 ) ;
+}
+
+bool wxWindow::Reparent(wxWindow *parent)
+{
+    if ( !wxWindowBase::Reparent(parent) )
+        return FALSE;
+
+    return TRUE;
+}
+
+bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
+{
+	menu->SetInvokingWindow(this);
+    menu->UpdateUI();
+	ClientToScreen( &x , &y ) ;
+
+	::InsertMenu( menu->GetHMenu() , -1 ) ;
+  	long menuResult = ::PopUpMenuSelect(menu->GetHMenu() ,y,x, 0) ;
+ 	menu->MacMenuSelect( this , TickCount() , HiWord(menuResult) , LoWord(menuResult) ) ;
+	::DeleteMenu( menu->MacGetMenuId() ) ;
+ 	menu->SetInvokingWindow(NULL);
+
+  return TRUE;
+}
+
 void wxWindow::DoScreenToClient(int *x, int *y) const
 {
 	WindowRef window = GetMacRootWindow() ;
@@ -399,6 +427,28 @@ void wxWindow::DoGetClientSize(int *x, int *y) const
   	(*x) -= MAC_SCROLLBAR_SIZE;
   if (m_hScrollBar  && m_hScrollBar->IsShown() )
   	(*y) -= MAC_SCROLLBAR_SIZE;
+}
+
+
+// ----------------------------------------------------------------------------
+// tooltips
+// ----------------------------------------------------------------------------
+
+#if wxUSE_TOOLTIPS
+
+void wxWindow::DoSetToolTip(wxToolTip *tooltip)
+{
+    wxWindowBase::DoSetToolTip(tooltip);
+
+//    if ( m_tooltip )
+//        m_tooltip->SetWindow(this);
+}
+
+#endif // wxUSE_TOOLTIPS
+
+void wxWindow::DoMoveWindow(int x, int y, int width, int height)
+{
+	DoSetSize( x,y, width, height ) ;
 }
 
 void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
@@ -1764,13 +1814,3 @@ wxMacDrawingClientHelper::~wxMacDrawingClientHelper()
 	if ( m_formerPort != m_currentPort )
 		SetPort( m_formerPort ) ;
 }
-
-// ----------------------------------------------------------------------------
-// list classes implementation
-// ----------------------------------------------------------------------------
-
-void wxWindowListNode::DeleteData()
-{
-    delete (wxWindow *)GetData();
-}
-

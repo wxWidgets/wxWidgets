@@ -66,6 +66,14 @@ void wxButton::SetDefault()
   }
 }
 
+wxSize wxButton::DoGetBestSize()
+{
+    int wBtn = m_label.Length() * 8 + 12 + 2 * m_macHorizontalBorder;
+	int hBtn = 13 + 2 * m_macVerticalBorder;
+
+    return wxSize(wBtn, hBtn);
+}
+
 void wxButton::Command (wxCommandEvent & event)
 {
     ProcessCommand (event);

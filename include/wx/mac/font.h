@@ -133,16 +133,7 @@ public:
     // implementation only from now on
     // -------------------------------
 
-    int GetFontId() const;
-    virtual bool IsFree() const;
     virtual bool RealizeResource();
-    virtual WXHANDLE GetResourceHandle();
-    virtual bool FreeResource(bool force = FALSE);
-    void MacInstall() const ;
-    /*
-       virtual bool UseResource();
-       virtual bool ReleaseResource();
-     */
 
 protected:
     // common part of all ctors
