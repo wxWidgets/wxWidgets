@@ -147,7 +147,7 @@ wxControl::~wxControl()
 
 void wxControl::SetLabel(const wxString& title)
 {
-    m_label = title ;
+    m_label = wxStripMenuCodes(title) ;
 
     if ( (ControlHandle) m_macControl )
     {
@@ -155,9 +155,9 @@ void wxControl::SetLabel(const wxString& title)
         wxString label ;
     
         if( wxApp::s_macDefaultEncodingIsPC )
-            label = wxMacMakeMacStringFromPC( title ) ;
+            label = wxMacMakeMacStringFromPC( m_label ) ;
         else
-            label = title ;
+            label = m_label ;
         
 #if TARGET_CARBON
         c2pstrcpy( (StringPtr) maclabel , label ) ;

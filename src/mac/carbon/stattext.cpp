@@ -51,7 +51,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
         m_windowId = id;
 
     m_windowStyle = style;
-    m_label = label ;
+    m_label = wxStripMenuCodes(label) ;
 
     bool ret = wxControl::Create( parent, id, pos, size, style , wxDefaultValidator , name );
     SetBestSize( size ) ;

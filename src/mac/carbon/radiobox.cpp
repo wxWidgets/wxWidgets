@@ -115,14 +115,14 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 	Rect bounds ;
 	Str255 title ;
 	
-	MacPreControlCreate( parent , id ,  label , pos , size ,style, val , name , &bounds , title ) ;
+	MacPreControlCreate( parent , id ,  wxStripMenuCodes(label) , pos , size ,style, val , name , &bounds , title ) ;
 
 	m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1, 
 	  	kControlGroupBoxTextTitleProc , (long) this ) ;
 	
     for (i = 0; i < n; i++)
     {
-        wxRadioButton *radBtn = new wxRadioButton(this, NewControlId(),choices[i],wxPoint(5,20*i+10),
+        wxRadioButton *radBtn = new wxRadioButton(this, NewControlId(), wxStripMenuCodes(choices[i]),wxPoint(5,20*i+10),
           wxDefaultSize , i == 0 ? wxRB_GROUP : 0 ) ;
         if ( i == 0 )
           m_radioButtonCycle = radBtn ;
