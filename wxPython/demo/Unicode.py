@@ -6,28 +6,38 @@ from wxPython.wx import *
 
 # Some unicode strings
 chi_uni = (u'Python \u662f\u6700\u597d\u7684\u7de8\u7a0b\u8a9e\u8a00\uff01',
-            '(Python is the best programming language!)')
+            'Python is the best\nprogramming language!')
 
 lt1_uni = (u'Pythonas yra \u017eaviausia \u0161neka',
-            '(Python is the best)')
+            'Python is the best')
 lt2_uni = (u'A\u0161 m\u0117gstu \u0161okolad\u0105',
-            '(I like chocolate)')
+            'I like chocolate')
 
-kor_uni = (u'\ud30c\uc774\uc36c\uc774 \ucd5c\uc120\uc774\ub2e4!',
-           '(Python is the best!)')
+kor_uni = (u'\ud30c\uc774\uc36c\uc740 \ucd5c\uace0\uc758 \ud504\ub85c\uadf8\ub798\ubc0d \uc5b8\uc5b4\uc774\ub2e4!',
+           'Python is the best\nprogramming language!')
+
+bul_uni = (u'\u041f\u0438\u0442\u043e\u043d \u0435 \u043d\u0430\u0439-\u0434\u043e\u0431\u0440\u0438\u044f \u043f\u0440\u043e\u0433\u0440\u0430\u043c\u0435\u043d \u0435\u0437\u0438\u043a!',
+           'Python is the best\nprogramming language!')
+rus_uni = (u'\u041f\u0438\u0442\u043e\u043d - \u043b\u0443\u0447\u0448\u0438\u0439 \u044f\u0437\u044b\u043a \n\u043f\u0440\u043e\u0433\u0440\u0430\u043c\u043c\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u044f!',
+           'Python is the best\nprogramming language!')
 
 
 # Equivalents in UTF-8.  Should I demo these somehow???
 chi_utf8 = ('Python \xe6\x98\xaf\xe6\x9c\x80\xe5\xa5\xbd\xe7\x9a\x84\xe7\xb7\xa8\xe7\xa8\x8b\xe8\xaa\x9e\xe8\xa8\x80\xef\xbc\x81',
-            '(Python is the best programming language)')
+            'Python is the best programming language')
 
 lt1_utf8 = ('Pythonas yra \xc5\xbeaviausia \xc5\xa1neka',
-            '(Python is the best)')
+            'Python is the best')
 lt2_utf8 = ('A\xc5\xa1 m\xc4\x97gstu \xc5\xa1okolad\xc4\x85',
-            '(I like chocolate)')
+            'I like chocolate')
 
-kor_utf8 = ('\xed\x8c\x8c\xec\x9d\xb4\xec\x8d\xac\xec\x9d\xb4 \xec\xb5\x9c\xec\x84\xa0\xec\x9d\xb4\xeb\x8b\xa4!'
-            '(Python is the best!)')
+kor_utf8 = ('\xed\x8c\x8c\xec\x9d\xb4\xec\x8d\xac\xec\x9d\x80 \xec\xb5\x9c\xea\xb3\xa0\xec\x9d\x98 \xed\x94\x84\xeb\xa1\x9c\xea\xb7\xb8\xeb\x9e\x98\xeb\xb0\x8d \xec\x96\xb8\xec\x96\xb4\xec\x9d\xb4\xeb\x8b\xa4!',
+            'Python is the best programming language!')
+
+bul_utf8 = ('\xd0\x9f\xd0\xb8\xd1\x82\xd0\xbe\xd0\xbd \xd0\xb5 \xd0\xbd\xd0\xb0\xd0\xb9-\xd0\xb4\xd0\xbe\xd0\xb1\xd1\x80\xd0\xb8\xd1\x8f \xd0\xbf\xd1\x80\xd0\xbe\xd0\xb3\xd1\x80\xd0\xb0\xd0\xbc\xd0\xb5\xd0\xbd \xd0\xb5\xd0\xb7\xd0\xb8\xd0\xba!',
+            'Python is the best programming language!')
+rus_utf8 = ('\xd0\x9f\xd0\xb8\xd1\x82\xd0\xbe\xd0\xbd - \xd0\xbb\xd1\x83\xd1\x87\xd1\x88\xd0\xb8\xd0\xb9 \xd1\x8f\xd0\xb7\xd1\x8b\xd0\xba \xd0\xbf\xd1\x80\xd0\xbe\xd0\xb3\xd1\x80\xd0\xb0\xd0\xbc\xd0\xbc\xd0\xb8\xd1\x80\xd0\xbe\xd0\xb2\xd0\xb0\xd0\xbd\xd0\xb8\xd1\x8f!',
+            'Python is the best programming language!')
 
 #----------------------------------------------------------------------
 
@@ -61,6 +71,11 @@ class TestPanel(wxPanel):
             self.AddText(box, kor_uni[0], kor_uni[1], 'Korean:', font)
             self.AddLine(box)
 
+            self.AddText(box, bul_uni[0], bul_uni[1], 'Bulgarian:', font)
+            self.AddLine(box)
+            self.AddText(box, rus_uni[0], rus_uni[1], 'Russian:', font)
+            self.AddLine(box)
+
 
         border = wxBoxSizer(wxVERTICAL)
         border.Add(box, 1, wxEXPAND|wxALL, 10)
@@ -74,15 +89,15 @@ class TestPanel(wxPanel):
     def AddText(self, sizer, text1, text2='', lang='', font=None):
         # create some controls
         lang  = wxStaticText(self, -1, lang)
-        text1 = wxStaticText(self, -1, text1)#, style=wxALIGN_CENTRE)
-        text2 = wxStaticText(self, -1, text2)
+        text1 = wxStaticText(self, -1, text1)
+        text2 = wxStaticText(self, -1, text2, style=wxALIGN_RIGHT)
         if font is not None:
             text1.SetFont(font)
 
         # put them in a sizer
         row = wxBoxSizer(wxHORIZONTAL)
         row.Add(lang)
-        row.Add(25,10)
+        row.Add(15,10)
         row.Add(text1, 1, wxEXPAND)
         row.Add(text2)
 
