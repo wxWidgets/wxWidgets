@@ -17,6 +17,7 @@
             arrays/arrays.cpp
             longlong/longlong.cpp
             strings/strings.cpp
+            strings/stdstrings.cpp
             strings/unicode.cpp
             streams/bstream.cpp
             streams/ffilestream.cpp

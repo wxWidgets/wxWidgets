@@ -30,6 +30,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_arrays.o \
 	$(OBJS)\test_longlong.o \
 	$(OBJS)\test_strings.o \
+	$(OBJS)\test_stdstrings.o \
 	$(OBJS)\test_unicode.o \
 	$(OBJS)\test_bstream.o \
 	$(OBJS)\test_ffilestream.o \
@@ -187,6 +188,9 @@ $(OBJS)\test_longlong.o: ./longlong/longlong.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_strings.o: ./strings/strings.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_stdstrings.o: ./strings/stdstrings.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_unicode.o: ./strings/unicode.cpp

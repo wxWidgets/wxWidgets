@@ -180,6 +180,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_arrays.obj &
 	$(OBJS)\test_longlong.obj &
 	$(OBJS)\test_strings.obj &
+	$(OBJS)\test_stdstrings.obj &
 	$(OBJS)\test_unicode.obj &
 	$(OBJS)\test_bstream.obj &
 	$(OBJS)\test_ffilestream.obj &
@@ -243,6 +244,9 @@ $(OBJS)\test_longlong.obj :  .AUTODEPEND .\longlong\longlong.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_strings.obj :  .AUTODEPEND .\strings\strings.cpp
+	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_stdstrings.obj :  .AUTODEPEND .\strings\stdstrings.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_unicode.obj :  .AUTODEPEND .\strings\unicode.cpp

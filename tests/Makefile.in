@@ -45,6 +45,7 @@ TEST_OBJECTS =  \
 	test_arrays.o \
 	test_longlong.o \
 	test_strings.o \
+	test_stdstrings.o \
 	test_unicode.o \
 	test_bstream.o \
 	test_ffilestream.o \
@@ -146,6 +147,9 @@ test_longlong.o: $(srcdir)/longlong/longlong.cpp
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
 test_strings.o: $(srcdir)/strings/strings.cpp
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
+
+test_stdstrings.o: $(srcdir)/strings/stdstrings.cpp
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
 test_unicode.o: $(srcdir)/strings/unicode.cpp
