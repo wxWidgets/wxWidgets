@@ -21,6 +21,8 @@
 /// Path separator.
 #ifdef __WXMSW__
 #define WXEXTHELP_SEPARATOR _T('\\')
+#elif defined(__WXMAC__)
+#define WXEXTHELP_SEPARATOR _T(':')
 #else
 #define WXEXTHELP_SEPARATOR _T('/')
 #endif
