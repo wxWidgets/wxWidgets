@@ -457,7 +457,7 @@ const char *dlerror()
     return dl_last_error;
 }
 
-void *dlopen(const char *path, int mode /* mode is ignored */)
+void *dlopen(const char *path, int WXUNUSED(mode) /* mode is ignored */)
 {
     int dyld_result;
     NSObjectFileImage ofile;
@@ -484,7 +484,7 @@ int dlclose(void *handle)
     return 0;
 }
 
-void *dlsym(void *handle, const char *symbol)
+void *dlsym(void *WXUNUSED(handle), const char *symbol)
 {
     void *addr;
 

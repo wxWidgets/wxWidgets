@@ -501,7 +501,7 @@ wxSize wxSizer::GetMaxClientSize( wxWindow *window )
         return wxDefaultSize;
 }
 
-wxSize wxSizer::GetMinClientSize( wxWindow *window )
+wxSize wxSizer::GetMinClientSize( wxWindow *WXUNUSED(window) )
 {
     return GetMinSize();  // Already returns client size.
 }

@@ -39,6 +39,7 @@ wxTransformMatrix::wxTransformMatrix(void)
 }
 
 wxTransformMatrix::wxTransformMatrix(const wxTransformMatrix& mat)
+    : wxObject()
 {
     (*this) = mat;
 }
