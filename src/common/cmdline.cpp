@@ -846,6 +846,7 @@ int wxCmdLineParser::Parse(bool showUsage)
     {
         wxString usage;
         wxMessageOutput* msgOut = wxMessageOutput::Get();
+        wxASSERT(msgOut);
         if ( showUsage ) usage = GetUsageString();
         if ( msgOut )
             msgOut->Printf( wxT("%s%s"), usage.c_str(), errorMsg.c_str() );
