@@ -210,6 +210,7 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
         sm_lastError = wxPRINTER_ERROR;
 
         delete dc;
+        return false;
     }
     sm_abortWindow = win;
     sm_abortWindow->Show();
@@ -281,7 +282,7 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
 
     delete dc;
 
-    return (sm_lastError == wxPRINTER_NO_ERROR);
+    return sm_lastError == wxPRINTER_NO_ERROR;
 }
 
 wxDC* wxWindowsPrinter::PrintDialog(wxWindow *parent)
@@ -428,9 +429,9 @@ LONG APIENTRY _EXPORT wxAbortProc(HDC WXUNUSED(hPr), int WXUNUSED(Code))
             DispatchMessage(&msg);
         }
 
-        /* bAbort is TRUE (return is FALSE) if the user has aborted */
+    /* bAbort is TRUE (return is FALSE) if the user has aborted */
 
-        return (!wxPrinterBase::sm_abortIt);
+    return !wxPrinterBase::sm_abortIt;
 }
 
 #endif
