@@ -294,6 +294,28 @@ case "${host}" in
     CXX=gcc
     dnl Explicitly link -lstdcpp, since we are using "gcc" not "g++"/"c++".
     LIBS="$LIBS -lstdcpp"
+    dnl
+    dnl Some special code that's automatically added by autoconf-2.57 for OS/2
+    dnl and hopefully also by autoconf-2.58 and newer on all other platforms.
+    dnl For now however, we still need it to make sure the configure script
+    dnl works on OS/2 no matter what platform it is generated on.
+    ac_executable_extensions=".exe"
+    export ac_executable_extensions
+    dnl This strange code is necessary to deal with handling of
+    dnl backslashes by ksh and pdksh's sh variant.
+    ac_save_IFS="$IFS"
+    IFS="\\"
+    ac_TEMP_PATH=
+    for ac_dir in $PATH; do
+      IFS=$ac_save_IFS
+      if test -z "$ac_TEMP_PATH"; then
+        ac_TEMP_PATH="$ac_dir"
+      else
+        ac_TEMP_PATH="$ac_TEMP_PATH/$ac_dir"
+      fi
+    done
+    export PATH="$ac_TEMP_PATH"
+    unset ac_TEMP_PATH
   ;;
 
   powerpc-*-darwin* )
