@@ -493,7 +493,9 @@ wxDbgHelpDLL::DumpSymbol(PSYMBOL_INFO pSym, void *pVariable)
 // debugging helpers
 // ----------------------------------------------------------------------------
 
-#ifndef NDEBUG
+// this code is very useful when debugging debughlp.dll-related code but
+// probably not worth having compiled in normally, please do not remove it!
+#if 0 // ndef NDEBUG
 
 static wxString TagString(wxDbgHelpDLL::SymbolTag tag)
 {
@@ -708,7 +710,7 @@ extern "C" void DumpTI(ULONG ti)
         OutputDebugString(wxString::Format(_T(", next ti=0x%x"), ti));
     }
 
-    OutputDebugString("\r\n");
+    OutputDebugString(_T("\r\n"));
 }
 
 #endif // NDEBUG
