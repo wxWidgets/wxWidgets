@@ -41,6 +41,11 @@
 
 #include "wx/msw/private.h"
 
+// For MB_TASKMODAL
+#ifdef __WXWINCE__
+#include "wx/msw/wince/missing.h"
+#endif
+
 #if wxUSE_THREADS
     #include "wx/thread.h"
 

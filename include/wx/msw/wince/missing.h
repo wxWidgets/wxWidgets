@@ -31,6 +31,15 @@ inline BOOL IsIconic( HWND hWnd )
 Most of these are in MSVC++6.0   <wx\wince\winuser.h>
 see also                         <wx\msw\gnuwin32\winresrc.h>
 */
+
+// ----------------------------------------------------------------------------
+// Used in msgdlg.cpp, evtloop.cpp
+// ----------------------------------------------------------------------------
+
+#ifndef MB_TASKMODAL
+#define MB_TASKMODAL 0x2000
+#endif
+
 ////////////////////////////////////////////////////////
 
 // JACS: I've commented these out in order to start from
@@ -154,6 +163,7 @@ CallWindowProcW(
 #endif // !UNICODE
 
 #endif
+ // 0
 
 ////////////////////////////////////////////////////////
 

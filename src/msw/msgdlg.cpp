@@ -30,6 +30,11 @@
 
 #include "wx/msw/private.h"
 
+// For MB_TASKMODAL
+#ifdef __WXWINCE__
+#include "wx/msw/wince/missing.h"
+#endif
+
 IMPLEMENT_CLASS(wxMessageDialog, wxDialog)
 
 wxMessageDialog::wxMessageDialog(wxWindow *parent,
@@ -104,10 +109,8 @@ int wxMessageDialog::ShowModal()
 
     if (hWnd)
         msStyle |= MB_APPLMODAL;
-#ifndef __WXWINCE__
     else
         msStyle |= MB_TASKMODAL;
-#endif
 
     // do show the dialog
     int msAns = MessageBox(hWnd, m_message.c_str(), m_caption.c_str(), msStyle);
