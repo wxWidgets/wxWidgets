@@ -237,8 +237,8 @@ void PropEditCtrlFile::OnDetails()
     {
         while (axrc[0] == afile[0])
         {
-            afile.Remove(0u);
-            axrc.Remove(0u);
+            afile.RemoveAt(0u);
+            axrc.RemoveAt(0u);
         }
         size_t i;
         txt.Empty();
