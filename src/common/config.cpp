@@ -110,7 +110,12 @@ wxConfigBase *wxConfigBase::Create()
     {                                                                       \
         wxCHECK_MSG( val, FALSE, _T("wxConfig::Read(): NULL parameter") );  \
                                                                             \
-        return DoRead##name(key, val);                                      \
+        if ( !DoRead##name(key, val) )                                      \
+            return FALSE;                                                   \
+                                                                            \
+        *val = extra(*val);                                                 \
+                                                                            \
+        return TRUE;                                                        \
     }                                                                       \
                                                                             \
     bool wxConfigBase::Read(const wxString& key,                            \
@@ -119,15 +124,18 @@ wxConfigBase *wxConfigBase::Create()
     {                                                                       \
         wxCHECK_MSG( val, FALSE, _T("wxConfig::Read(): NULL parameter") );  \
                                                                             \
-        if ( DoRead##name(key, val) )                                       \
-            return TRUE;                                                    \
-                                                                            \
-        if ( IsRecordingDefaults() )                                        \
+        bool read = DoRead##name(key, val);                                 \
+        if ( !read )                                                        \
         {                                                                   \
-            ((wxConfigBase *)this)->DoWrite##name(key, defVal);             \
+            if ( IsRecordingDefaults() )                                    \
+            {                                                               \
+                ((wxConfigBase *)this)->DoWrite##name(key, defVal);         \
+            }                                                               \
+                                                                            \
+            *val = defVal;                                                  \
         }                                                                   \
                                                                             \
-        *val = extra(defVal);                                               \
+        *val = extra(*val);                                                 \
                                                                             \
         return FALSE;                                                       \
     }
