@@ -53,7 +53,8 @@ public:
                                  &wxPyCallback::EventThunker);
             }
             else {
-                PyErr_SetString(PyExc_TypeError, "Expected callable object or None.");
+                wxPyBLOCK_THREADS(
+                    PyErr_SetString(PyExc_TypeError, "Expected callable object or None."));
             }
         }
 
