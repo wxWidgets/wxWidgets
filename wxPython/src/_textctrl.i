@@ -52,11 +52,17 @@ enum {
     // doesn't have focus - use this style to force it to always show it
     wxTE_NOHIDESEL,
 
-    // use wxHSCROLL to not wrap text at all, wxTE_LINEWRAP to wrap it at any
-    // position and wxTE_WORDWRAP to wrap at words boundary
+    // use wxHSCROLL (wxTE_DONTWRAP) to not wrap text at all, wxTE_CHARWRAP to
+    // wrap it at any position and wxTE_WORDWRAP to wrap at words boundary
+    //
+    // if no wrapping style is given at all, the control wraps at word boundary
     wxTE_DONTWRAP,
-    wxTE_LINEWRAP,
+    wxTE_CHARWRAP,
     wxTE_WORDWRAP,
+    wxTE_BESTWRAP,
+
+    // obsolete synonym
+    wxTE_LINEWRAP,
 
     // force using RichEdit version 2.0 or 3.0 instead of 1.0 (default) for
     // wxTE_RICH controls - can be used together with or instead of wxTE_RICH

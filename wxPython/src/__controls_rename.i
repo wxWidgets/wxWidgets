@@ -47,8 +47,10 @@
 %rename(TE_AUTO_URL)                        wxTE_AUTO_URL;
 %rename(TE_NOHIDESEL)                       wxTE_NOHIDESEL;
 %rename(TE_DONTWRAP)                        wxTE_DONTWRAP;
-%rename(TE_LINEWRAP)                        wxTE_LINEWRAP;
+%rename(TE_CHARWRAP)                        wxTE_CHARWRAP;
 %rename(TE_WORDWRAP)                        wxTE_WORDWRAP;
+%rename(TE_BESTWRAP)                        wxTE_BESTWRAP;
+%rename(TE_LINEWRAP)                        wxTE_LINEWRAP;
 %rename(TE_RICH2)                           wxTE_RICH2;
 %rename(TE_CAPITALIZE)                      wxTE_CAPITALIZE;
 %rename(TEXT_ALIGNMENT_DEFAULT)             wxTEXT_ALIGNMENT_DEFAULT;
