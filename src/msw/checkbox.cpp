@@ -70,7 +70,9 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
   int width = size.x;
   int height = size.y;
 
-  long msStyle = BS_AUTOCHECKBOX|WS_TABSTOP|WS_CHILD;
+  long msStyle = BS_AUTOCHECKBOX | WS_TABSTOP | WS_CHILD | WS_VISIBLE;
+  if ( style & wxALIGN_RIGHT )
+    msStyle |= BS_LEFTTEXT;
 
   // We perhaps have different concepts of 3D here - a 3D border,
   // versus a 3D button.
@@ -85,35 +87,33 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
        (m_windowStyle & wxSUNKEN_BORDER) || (m_windowStyle & wxDOUBLE_BORDER)))
     msStyle |= WS_BORDER;
 
-  HWND wx_button = CreateWindowEx(exStyle, "BUTTON", (const char *)Label,
-                    msStyle,
-                    0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
-                    wxGetInstance(), NULL);
+  m_hWnd = (WXHWND)CreateWindowEx(exStyle, "BUTTON", Label,
+                                  msStyle,
+                                  0, 0, 0, 0,
+                                  (HWND)parent->GetHWND(), (HMENU)m_windowId,
+                                  wxGetInstance(), NULL);
 
 #if CTL3D
   if (want3D)
   {
-    Ctl3dSubclassCtl(wx_button);
+    Ctl3dSubclassCtl((HWND)m_hWnd);
     m_useCtl3D = TRUE;
   }
 #endif
 
-  m_hWnd = (WXHWND) wx_button;
-
   // Subclass again for purposes of dialog editing mode
-  SubclassWin((WXHWND) wx_button);
+  SubclassWin(m_hWnd);
   
-  SetFont(* parent->GetFont());
+  SetFont(*parent->GetFont());
 
   SetSize(x, y, width, height);
 
-  ShowWindow(wx_button, SW_SHOW);
   return TRUE;
 }
 
 void wxCheckBox::SetLabel(const wxString& label)
 {
-  SetWindowText((HWND) GetHWND(), (const char *)label);
+  SetWindowText((HWND)GetHWND(), label);
 }
 
 void wxCheckBox::SetSize(int x, int y, int width, int height, int sizeFlags)
@@ -132,31 +132,33 @@ void wxCheckBox::SetSize(int x, int y, int width, int height, int sizeFlags)
 
   AdjustForParentClientOrigin(x1, y1, sizeFlags);
 
-  char buf[300];
-
   int current_width, cyf;
   HWND button = (HWND) GetHWND();
 
-    GetWindowText(button, buf, 300);
-    if (buf[0])
+  int nLen = GetWindowTextLength(button);
+  wxString str;
+  GetWindowText(button, str.GetWriteBuf(nLen), nLen);
+  str.UngetWriteBuf();
+
+  if ( !str.IsEmpty() )
+  {
+    GetTextExtent(str, &current_width, &cyf, NULL, NULL, GetFont());
+    if (w1 < 0)
+      w1 = (int)(current_width + RADIO_SIZE);
+    if (h1 < 0)
     {
-      GetTextExtent(buf, &current_width, &cyf, NULL, NULL, GetFont());
-      if (w1 < 0)
-        w1 = (int)(current_width + RADIO_SIZE);
-      if (h1 < 0)
-      {
-        h1 = (int)(cyf);
-        if (h1 < RADIO_SIZE)
-          h1 = RADIO_SIZE;
-      }
-    }
-    else
-    {
-      if (w1 < 0)
-        w1 = RADIO_SIZE;
-      if (h1 < 0)
+      h1 = (int)(cyf);
+      if (h1 < RADIO_SIZE)
         h1 = RADIO_SIZE;
     }
+  }
+  else
+  {
+    if (w1 < 0)
+      w1 = RADIO_SIZE;
+    if (h1 < 0)
+      h1 = RADIO_SIZE;
+  }
 
   MoveWindow(button, x1, y1, w1, h1, TRUE);
 }
