@@ -79,7 +79,7 @@ WX_DEFINE_ARRAY( RowInfoPtrT, RowArrayT );
 
 #define wxALL_PANES    0x000F
 
-// enumeration of hittest results, see cbDockPane::HitTestPaneItems(..) 
+// enumeration of hittest results, see cbDockPane::HitTestPaneItems(..)
 
 enum CB_HITTEST_RESULT
 {
@@ -100,7 +100,7 @@ enum CB_HITTEST_RESULT
 // helper class, used for spying for not-handled mouse events on control-bars
 // and forwarding them to the frame layout
 
-class cbBarSpy : public wxEvtHandler 
+class cbBarSpy : public wxEvtHandler
 {
 public:
 	DECLARE_DYNAMIC_CLASS( cbBarSpy )
@@ -120,8 +120,8 @@ public:
 	virtual bool ProcessEvent(wxEvent& event);
 };
 
-/* wxFrameLayout manages containment and docking of control bars. 
- * which can be docked along top, bottom, righ, or left side of the 
+/* wxFrameLayout manages containment and docking of control bars.
+ * which can be docked along top, bottom, righ, or left side of the
  * parent frame
  */
 
@@ -130,8 +130,8 @@ class wxFrameLayout : public wxEvtHandler
 public:
 	wxFrameLayout(void); // used only while serializing
 
-	wxFrameLayout( wxWindow* pParentFrame, 
-				   wxWindow* pFrameClient = NULL, 
+	wxFrameLayout( wxWindow* pParentFrame,
+				   wxWindow* pFrameClient = NULL,
 				   bool      activateNow  = TRUE );
 
 	// (doesn't destroy bar windows)
@@ -143,7 +143,7 @@ public:
 	// Can be called after some other layout has been deactivated,
 	// and this one must "take over" the current contents of frame window.
 	//
-	// Effectively hooks itself to the frame window, re-displays all not-hidden 
+	// Effectively hooks itself to the frame window, re-displays all not-hidden
 	// bar-windows and repaints decorations
 
 	virtual void Activate();
@@ -151,7 +151,7 @@ public:
 	// unhooks itself from frame window, and hides all not-hidden windows
 	//
 	// NOTE:: two frame-layouts should not be active at the same time in the
-	//        same frame window, it would cause messy overlapping of bar windows 
+	//        same frame window, it would cause messy overlapping of bar windows
 	//        from both layouts
 
 	virtual void Deactivate();
@@ -163,8 +163,8 @@ public:
 	virtual void DestroyBarWindows();
 
 	// passes the client window (e.g. MDI-client frame) to be controled by
-	// frame layout, the size and position of which should be adjusted to be 
-	// surrounded by controlbar panes, whenever frame is resized, or dimensions 
+	// frame layout, the size and position of which should be adjusted to be
+	// surrounded by controlbar panes, whenever frame is resized, or dimensions
 	// of control panes change
 
 	void SetFrameClient( wxWindow* pFrameClient );
@@ -176,7 +176,7 @@ public:
 	// used by updates-managers
 	cbDockPane** GetPanesArray() { return mPanes; }
 
-	// see pane alignment types 
+	// see pane alignment types
 	cbDockPane* GetPane( int alignment )
 
 		{ return mPanes[alignment]; }
@@ -187,11 +187,11 @@ public:
 	// NOTES:: argument pBarWnd can by NULL, resulting bar decorations to be drawn
 	//         around the empty rectangle (filled with default background colour).
 	//         Argument dimInfo, can be re-used for adding any number of bars, since
-	//         it is not used directly, instead it's members are copied. If dimensions- 
-	//         handler is present, it's instance shared (reference counted). Dimension 
+	//         it is not used directly, instead it's members are copied. If dimensions-
+	//         handler is present, it's instance shared (reference counted). Dimension
 	//         handler should always be allocated on the heap!)
 
-	virtual void AddBar( wxWindow*        pBarWnd, 
+	virtual void AddBar( wxWindow*        pBarWnd,
                          const cbDimInfo&       dimInfo,
 
 						 // defaults:
@@ -201,13 +201,13 @@ public:
 						 const wxString& name="bar",// name, by which the bar could be referred
 						                            // in layout customization dialogs
 
-						 bool spyEvents    = FALSE,	// if TRUE - input events for the bar should 
-													// be "spyed" in order to forward not-handled 
-													// mouse clicks to frame layout (e.g. to enable 
-													// easy-draggablity of toolbars just by clicking 
-													// on their interior regions). For widgets like 
-													// text/tree control this value should be FALSE 
-													// (since there's _no_ certain way to detect 
+						 bool spyEvents    = FALSE,	// if TRUE - input events for the bar should
+													// be "spyed" in order to forward not-handled
+													// mouse clicks to frame layout (e.g. to enable
+													// easy-draggablity of toolbars just by clicking
+													// on their interior regions). For widgets like
+													// text/tree control this value should be FALSE
+													// (since there's _no_ certain way to detect
 													//  whether the event was actually handled...)
 
 						 int state        = wxCBAR_DOCKED_HORIZONTALLY // e.g. wxCBAR_FLOATING
@@ -217,10 +217,10 @@ public:
 	// can be used for repositioning already existing bars. The given bar is first removed
 	// from the pane it currently belongs to, and inserted into the pane, which "matches"
 	// the given recantular area. If pToPane is not NULL, bar is docked to this given pane
-	
+
 	// to dock the bar which is floated, use wxFrameLayout::DockBar(..) method
 
-	virtual bool RedockBar( cbBarInfo* pBar, const wxRect& shapeInParent, 
+	virtual bool RedockBar( cbBarInfo* pBar, const wxRect& shapeInParent,
 							cbDockPane* pToPane = NULL, bool updateNow = TRUE );
 
 	// methods for access and modification of bars in frame layout
@@ -255,9 +255,9 @@ public:
 	wxRect& GetClientRect()		{ return mClntWndBounds;     }
 
 	// NOTE:: in future ubdates-manager will become a normal plugin
-	
+
 	cbUpdatesManagerBase& GetUpdatesManager();
-	
+
 	// destroys the previous manager if any, set the new one
 
 	void SetUpdatesManager( cbUpdatesManagerBase* pUMgr );
@@ -266,7 +266,7 @@ public:
 
 	virtual void GetPaneProperties( cbCommonPaneProperties& props, int alignment = FL_ALIGN_TOP );
 
-	virtual void SetPaneProperties( const cbCommonPaneProperties& props, 
+	virtual void SetPaneProperties( const cbCommonPaneProperties& props,
 		                            int paneMask = wxALL_PANES );
 
 	// TODO:: margins should go into cbCommonPaneProperties in the future
@@ -295,11 +295,11 @@ public:
 	/*** plugin-related methods ***/
 
 	// should be used, instead of passing the event to ProcessEvent(..) method
-	// of the top-plugin directly. This method checks if events are currently 
+	// of the top-plugin directly. This method checks if events are currently
 	// captured and ensures that plugin-event is routed correctly.
 
 	virtual void FirePluginEvent( cbPluginEvent& event );
-	
+
 	// captures/releases user-input event's for the given plugin
 	// Input events are: mouse movement, mouse clicks, keyboard input
 
@@ -312,7 +312,7 @@ public:
 
 	// returns current top-level plugin (the one which receives events first,
 	// with an exception if input-events are currently captured by some other plugin)
-	
+
 	virtual cbPluginBase& GetTopPlugin();
 
 	// hooking custom plugins to frame layout
@@ -340,7 +340,7 @@ public:
 	// default plugins are : cbPaneDrawPlugin, cbRowLayoutPlugin, cbBarDragPlugin,
 	// 						 cbAntiflickerPlugin, cbSimpleCustomizePlugin
 	//
-	// this method is automatically invoked, if no plugins were found upon 
+	// this method is automatically invoked, if no plugins were found upon
 	// fireing of the first plugin-event, i.e. wxFrameLayout *CONFIGURES* itself
 
 	virtual void PushDefaultPlugins();
@@ -348,7 +348,7 @@ public:
 	/* "Advanced" methods for plugin-configuration	using their */
 	/* dynamic class information (e.g. CLASSINFO(pluginClass) ) */
 
-	// first checks if plugin of the given class is already "hooked up", 
+	// first checks if plugin of the given class is already "hooked up",
 	// if not, adds it to the top of plugins chain
 
 	virtual void AddPlugin( wxClassInfo* pPlInfo, int paneMask = wxALL_PANES );
@@ -363,14 +363,14 @@ public:
 	//        thefore the former should be hooked before the one
 	//        who's functionality is being overriden
 
-	virtual void AddPluginBefore( wxClassInfo* pNextPlInfo, wxClassInfo* pPlInfo, 
+	virtual void AddPluginBefore( wxClassInfo* pNextPlInfo, wxClassInfo* pPlInfo,
 								  int paneMask = wxALL_PANES );
 
 	// checks if plugin of the given class is hooked, removes
 	// it if found
 	//
 	// @param pPlInfo class information structure for the plugin
-	// @note  
+	// @note
 	// @see wxFrameLayout::Method
 
 
@@ -417,7 +417,7 @@ public: /* protected really, acessed only by plugins and serializers */
 
 	// pane, from which mouse pointer had just left
 
-	cbDockPane*  mpLRUPane;	   
+	cbDockPane*  mpLRUPane;
 
 	// bounds of client window in parent frame's coordinates
 
@@ -432,11 +432,11 @@ public: /* protected really, acessed only by plugins and serializers */
 
 	cbPluginBase* mpTopPlugin;
 
-	// plugin, which currently has captured all input events, otherwise NULL 
+	// plugin, which currently has captured all input events, otherwise NULL
 
 	cbPluginBase* mpCaputesInput;
 
-	// list of event handlers which are "pushed" onto each bar, to catch 
+	// list of event handlers which are "pushed" onto each bar, to catch
 	// mouse events which are not handled by bars, and froward them to the ,
 	// frome-layout and further to plugins
 
@@ -457,7 +457,7 @@ public: /* protected really, acessed only by plugins and serializers */
 
 public: /* protected really (accessed only by plugins) */
 
-	// refrence to custom updates manager 
+	// refrence to custom updates manager
 	cbUpdatesManagerBase* mpUpdatesMgr;
 
 	// called to set calculated layout to window objects
@@ -468,7 +468,7 @@ public: /* protected really (accessed only by plugins) */
 	void RepositionFloatedBar( cbBarInfo* pBar );
 	void DoSetBarState( cbBarInfo* pBar );
 
-	bool LocateBar( cbBarInfo* pBarInfo, 
+	bool LocateBar( cbBarInfo* pBarInfo,
 					cbRowInfo**  ppRow,
 					cbDockPane** ppPane );
 
@@ -481,7 +481,7 @@ public: /* protected really (accessed only by plugins) */
 	cbDockPane* GetBarPane( cbBarInfo* pBar );
 
 	// delegated from "bar-spy"
-	void ForwardMouseEvent( wxMouseEvent& event, 
+	void ForwardMouseEvent( wxMouseEvent& event,
 							cbDockPane*   pToPane,
 							int           eventType );
 
@@ -513,8 +513,8 @@ public: /* protected really (accessed only by plugins) */
 
 /* structure, which is present in each item of layout,
  * it used by any specific updates-manager to store
- * auxilary information to be used by it's specific 
- * updating algorithm 
+ * auxilary information to be used by it's specific
+ * updating algorithm
  */
 
 class cbUpdateMgrData : public wxObject
@@ -525,7 +525,7 @@ public:
 
 	bool   mIsDirty;         // overrides result of current-against-previous bounds comparison,
 	                         // i.e. requires item to be updated, regardless of it's current area
-	
+
 	wxObject*  mpCustomData; // any custom data stored by specific updates mgr.
 
 	cbUpdateMgrData();   // is-dirty flag is set TRUE initially
@@ -540,8 +540,8 @@ public:
 };
 
 /* Abstract interface for bar-size handler classes.
- * These objects receive notifications, whenever the docking 
- * state of the bar is changed, thus they have a possibility 
+ * These objects receive notifications, whenever the docking
+ * state of the bar is changed, thus they have a possibility
  * to adjust the values in cbDimInfo::mSizes accordingly.
  * Specific handlers can be hooked to specific types of bars.
  */
@@ -590,7 +590,7 @@ public:
 	// from the bar's actual window, filled
 	// with frame's beckground color, default: 0
 
-	int    mVertGap;	
+	int    mVertGap;
 
 	// left/right gap, separates decorations
 	// from the bar's actual window, filled
@@ -604,7 +604,7 @@ public:
 
 	bool   mIsFixed;
 
-	cbBarDimHandlerBase* mpHandler; // NULL, if no handler present 
+	cbBarDimHandlerBase* mpHandler; // NULL, if no handler present
 
 public:
 
@@ -625,18 +625,18 @@ public:
 			   cbBarDimHandlerBase* pDimHandler = NULL
 			 );
 
-    cbDimInfo( int x, int y,  
-               bool isFixed  = TRUE, 
-               int  gap = 6, 
+    cbDimInfo( int x, int y,
+               bool isFixed  = TRUE,
+               int  gap = 6,
                cbBarDimHandlerBase* pDimHandler = NULL
-             ); 
+             );
 
 	const cbDimInfo& operator=( const cbDimInfo& other );
 
 	// destroys handler automatically, if present
 	~cbDimInfo();
 
-	inline cbBarDimHandlerBase* GetDimHandler() { return mpHandler; } 
+	inline cbBarDimHandlerBase* GetDimHandler() { return mpHandler; }
 };
 
 WX_DEFINE_ARRAY(float, cbArrayFloat);
@@ -679,7 +679,7 @@ public:
 
 	// convenience method
 
-	inline cbBarInfo* GetFirstBar() 
+	inline cbBarInfo* GetFirstBar()
 
 		{ return mBars.GetCount() ? mBars[0] : NULL; }
 };
@@ -692,20 +692,20 @@ public:
 	wxString      mName;
 
 	// stores bar's bounds in pane's coordinates
-	wxRect        mBounds;             
+	wxRect        mBounds;
 
 	// stores precalculated bar's bounds in parent frame's coordinates
-	wxRect        mBoundsInParent;     
+	wxRect        mBoundsInParent;
 
 	// back-ref to the row, which contains this bar
-	cbRowInfo*    mpRow;               
+	cbRowInfo*    mpRow;
 
 	// are set up according to the types of the surrounding bars in the row
 	bool          mHasLeftHandle;
 	bool          mHasRightHandle;
 
 	cbDimInfo     mDimInfo;       // preferred sizes for each, control bar state
-								  
+
 	int           mState;         // (see definition of controlbar states)
 
 	int           mAlignment;     // alignment of the pane to which this
@@ -721,7 +721,7 @@ public:
 
 	wxPoint       mPosIfFloated;  // stored last position when bar was in "floated" state
 								  // poistion is stored in parent-window's coordinates
-	
+
 	cbUpdateMgrData mUMgrData;    // info stored for updates-manager
 
 	cbBarInfo*    mpNext;         // next. bar in the row
@@ -760,14 +760,14 @@ public:
 
 	void Reset();
 	bool Next(); // TRUE, if next bar is available
-	
+
 	cbBarInfo& BarInfo();
 
 	// returns reference to currently traversed row
 	cbRowInfo& RowInfo();
 };
 
-/* structure holds configuration options, 
+/* structure holds configuration options,
  * which are usually the same for all panes in
  * frame layout
  */
@@ -795,16 +795,16 @@ class cbCommonPaneProperties : public wxObject
 
 	// minimal dimensions for not-fixed bars in this pane (16x16 default)
 
-	wxSize mMinCBarDim; 
+	wxSize mMinCBarDim;
 
 	// width/height of resizing sash
-	
+
 	int    mResizeHandleSize;
 
 	cbCommonPaneProperties(void);
 };
 
-/* class manages containment and control of control-bars 
+/* class manages containment and control of control-bars
  * along one of the four edges of the parent frame
  */
 
@@ -822,10 +822,10 @@ public:
 	int             mRightMargin;	 // default: 2 pixels
 	int             mTopMargin;		 // default: 2 pixels
 	int             mBottomMargin;   // default: 2 pixels
-	                           
+
 public:
 	// position of the pane in frame's coordinates
-	wxRect          mBoundsInParent; 
+	wxRect          mBoundsInParent;
 
 	// pane width and height in pane's coordinates
 	int             mPaneWidth;
@@ -843,7 +843,7 @@ public: /* protected really */
 
 	// transient properties
 
-	wxList          mRowShapeData;   // shapes of bars of recently modified row, 
+	wxList          mRowShapeData;   // shapes of bars of recently modified row,
 								     // stored when in "non-destructive-firction" mode
 	cbRowInfo*      mpStoredRow;     // row-info for which the shapes are stored
 
@@ -859,8 +859,8 @@ public: /* protected really (accessed only by plugins) */
 	int     GetRowAt( int paneY );
 	int     GetRowAt( int upperY, int lowerY );
 
-	// re-setups flags in the row-information structure, so that 
-	// the would match the changed state of row-items correctly 
+	// re-setups flags in the row-information structure, so that
+	// the would match the changed state of row-items correctly
 	void SyncRowFlags( cbRowInfo* pRow );
 
 	// layout "AI" helpers:
@@ -886,7 +886,7 @@ public: /* protected really (accessed only by plugins) */
 	void InitLinksForRow( cbRowInfo* pRow );
 	void InitLinksForRows();
 
-	// coordinate translation between parent's frame and this pane 
+	// coordinate translation between parent's frame and this pane
 
 	void FrameToPane( int* x, int* y );
 	void PaneToFrame( int* x, int* y );
@@ -904,7 +904,7 @@ public: /* protected really (accessed only by plugins) */
 
 public: /* protected really (accessed only by plugins) */
 
-	// methods for incramental on-screen refreshing of the pane 
+	// methods for incramental on-screen refreshing of the pane
 	// (simply, they are wrappers around corresponding plugin-events)
 
 	virtual void PaintBarDecorations( cbBarInfo* pBar, wxDC& dc );
@@ -941,7 +941,7 @@ public: /* public members */
 	virtual void RemoveBar( cbBarInfo* pBar );
 
 	// rect given in the parent frame's coordinates
-	
+
 	virtual void InsertBar( cbBarInfo* pBar, const wxRect& atRect );
 
 	// inserts bar into the given row, with dimensions and position
@@ -949,7 +949,7 @@ public: /* public members */
 
 	virtual void InsertBar( cbBarInfo* pBar, cbRowInfo* pIntoRow );
 
-	// inserts bar, sets its position according to the preferred settings 
+	// inserts bar, sets its position according to the preferred settings
 	// given in (*pBarInfo) structure
 
 	virtual void InsertBar( cbBarInfo* pBarInfo );
@@ -957,7 +957,7 @@ public: /* public members */
 	// does not destroy the row object, only removes the corresponding
 	// node from this pane
 	virtual void RemoveRow( cbRowInfo* pRow );
-	
+
 	// does not refresh the inserted row immediately,
 	// if pBeforeRowNode arg. is NULL, row is appended to the end of pane's row list
 	virtual void InsertRow( cbRowInfo* pRow, cbRowInfo* pBeforeRow );
@@ -975,8 +975,8 @@ public: /* public members */
 
 	// convenience method
 
-	inline cbRowInfo* GetFirstRow() 
-	
+	inline cbRowInfo* GetFirstRow()
+
 		{ return mRows.GetCount() ? mRows[0] : NULL; }
 
 	// TRUE, if the given bar node presents in this pane
@@ -1053,7 +1053,7 @@ public:
 		: mpLayout( pPanel ) {}
 
 	virtual ~cbUpdatesManagerBase() {}
-	
+
 	void SetLayout( wxFrameLayout* pLayout ) { mpLayout = pLayout; }
 
 	// notificiactions received from frame-layout (in the order, in which
@@ -1089,7 +1089,7 @@ public:
 	cbDockPane* mpPane; // NULL, if event is not addressed to any specific pane
 
 	/* OLD STUFF::
-	// FOR NOW FOR NOW:: all-in-one plugin event structure 
+	// FOR NOW FOR NOW:: all-in-one plugin event structure
 	wxNode* mpObjNode;
 	wxNode* mpObjNodeAux;
 	wxPoint mPos;
@@ -1098,15 +1098,18 @@ public:
 	bool    mAuxBoolVal;
 	*/
 
+	// Not used, but required
+    virtual wxEvent* Clone() { return NULL; }
+
 #if wxCHECK_VERSION(2,3,0)
 	cbPluginEvent( wxEventType eventType, cbDockPane* pPane )
 		: mpPane( pPane )
-		  
+
 		{ m_eventType = eventType; }
 #else
 	cbPluginEvent( int eventType, cbDockPane* pPane )
 		: mpPane( pPane )
-		  
+
 		{ m_eventType = eventType; }
 #endif
 };
@@ -1160,7 +1163,7 @@ public:
 
 	#define cbEVT_PL_LEFT_DCLICK         5
 
-	#define cbEVT_PL_LAYOUT_ROW          6 
+	#define cbEVT_PL_LAYOUT_ROW          6
 	#define cbEVT_PL_RESIZE_ROW          7
 	#define cbEVT_PL_LAYOUT_ROWS         8
 	#define cbEVT_PL_INSERT_BAR          9
@@ -1224,7 +1227,7 @@ class cbCustomizeBarEvent;
 class cbCustomizeLayoutEvent;
 
 // defs. for handler-methods
- 
+
 typedef void (wxEvtHandler::*cbLeftDownHandler        )(cbLeftDownEvent&);
 typedef void (wxEvtHandler::*cbLeftUpHandler          )(cbLeftUpEvent&);
 typedef void (wxEvtHandler::*cbRightDownHandler       )(cbRightDownEvent&);
@@ -1266,7 +1269,7 @@ typedef void (wxEvtHandler::*cbCustomizeLayoutHandler )(cbCustomizeLayoutEvent&)
 	#define EVT_PL_RIGHT_UP(func)		     wxEventTableEntry( cbEVT_PL_RIGHT_UP,		     -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbRightUpHandler         ) & func, (wxObject *) NULL ),
 	#define EVT_PL_MOTION(func)			     wxEventTableEntry( cbEVT_PL_MOTION,		         -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbMotionHandler          ) & func, (wxObject *) NULL ),
 	#define EVT_PL_LEFT_DCLICK(func)	     wxEventTableEntry( cbEVT_PL_LEFT_DCLICK,		 -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbLeftDClickHandler      ) & func, (wxObject *) NULL ),
-																																						 
+
 	#define EVT_PL_LAYOUT_ROW(func)		     wxEventTableEntry( cbEVT_PL_LAYOUT_ROW,	         -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbLayoutRowHandler       ) & func, (wxObject *) NULL ),
 	#define EVT_PL_RESIZE_ROW(func)		     wxEventTableEntry( cbEVT_PL_RESIZE_ROW,	         -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbResizeRowHandler       ) & func, (wxObject *) NULL ),
 	#define EVT_PL_LAYOUT_ROWS(func)	     wxEventTableEntry( cbEVT_PL_LAYOUT_ROWS,	     -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbLayoutRowsHandler      ) & func, (wxObject *) NULL ),
@@ -1274,7 +1277,7 @@ typedef void (wxEvtHandler::*cbCustomizeLayoutHandler )(cbCustomizeLayoutEvent&)
 	#define EVT_PL_RESIZE_BAR(func)		     wxEventTableEntry( cbEVT_PL_RESIZE_BAR,	         -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbResizeBarHandler       ) & func, (wxObject *) NULL ),
 	#define EVT_PL_REMOVE_BAR(func)		     wxEventTableEntry( cbEVT_PL_REMOVE_BAR,	         -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbRemoveBarHandler       ) & func, (wxObject *) NULL ),
 	#define EVT_PL_SIZE_BAR_WND(func)	     wxEventTableEntry( cbEVT_PL_SIZE_BAR_WND,	     -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbSizeBarWndHandler      ) & func, (wxObject *) NULL ),
-																																						 
+
 	#define EVT_PL_DRAW_BAR_DECOR(func)      wxEventTableEntry( cbEVT_PL_DRAW_BAR_DECOR,      -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbDrawBarDecorHandler    ) & func, (wxObject *) NULL ),
 	#define EVT_PL_DRAW_ROW_DECOR(func)      wxEventTableEntry( cbEVT_PL_DRAW_ROW_DECOR,      -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbDrawRowDecorHandler    ) & func, (wxObject *) NULL ),
 	#define EVT_PL_DRAW_PANE_DECOR(func)     wxEventTableEntry( cbEVT_PL_DRAW_PANE_DECOR,     -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbDrawPaneDecorHandler   ) & func, (wxObject *) NULL ),
@@ -1282,7 +1285,7 @@ typedef void (wxEvtHandler::*cbCustomizeLayoutHandler )(cbCustomizeLayoutEvent&)
 	#define EVT_PL_DRAW_ROW_HANDLES(func)    wxEventTableEntry( cbEVT_PL_DRAW_ROW_HANDLES,    -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbDrawRowHandlesHandler  ) & func, (wxObject *) NULL ),
 	#define EVT_PL_DRAW_ROW_BKGROUND(func)   wxEventTableEntry( cbEVT_PL_DRAW_ROW_BKGROUND,   -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbDrawRowBkGroundHandler ) & func, (wxObject *) NULL ),
 	#define EVT_PL_DRAW_PANE_BKGROUND(func)  wxEventTableEntry( cbEVT_PL_DRAW_PANE_BKGROUND,  -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbDrawPaneBkGroundHandler) & func, (wxObject *) NULL ),
-																																						 
+
 	#define EVT_PL_START_BAR_DRAGGING(func)  wxEventTableEntry( cbEVT_PL_START_BAR_DRAGGING,  -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbStartBarDraggingHandler) & func, (wxObject *) NULL ),
 	#define EVT_PL_DRAW_HINT_RECT(func)      wxEventTableEntry( cbEVT_PL_DRAW_HINT_RECT,      -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbDrawHintRectHandler    ) & func, (wxObject *) NULL ),
 
@@ -1299,7 +1302,7 @@ typedef void (wxEvtHandler::*cbCustomizeLayoutHandler )(cbCustomizeLayoutEvent&)
 	#define EVT_PL_RIGHT_UP(func)		     { cbEVT_PL_RIGHT_UP,		     -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbRightUpHandler         ) & func },
 	#define EVT_PL_MOTION(func)			     { cbEVT_PL_MOTION,		         -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbMotionHandler          ) & func },
 	#define EVT_PL_LEFT_DCLICK(func)	     { cbEVT_PL_LEFT_DCLICK,		 -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbLeftDClickHandler      ) & func },
-																																						 
+
 	#define EVT_PL_LAYOUT_ROW(func)		     { cbEVT_PL_LAYOUT_ROW,	         -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbLayoutRowHandler       ) & func },
 	#define EVT_PL_RESIZE_ROW(func)		     { cbEVT_PL_RESIZE_ROW,	         -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbResizeRowHandler       ) & func },
 	#define EVT_PL_LAYOUT_ROWS(func)	     { cbEVT_PL_LAYOUT_ROWS,	     -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbLayoutRowsHandler      ) & func },
@@ -1307,7 +1310,7 @@ typedef void (wxEvtHandler::*cbCustomizeLayoutHandler )(cbCustomizeLayoutEvent&)
 	#define EVT_PL_RESIZE_BAR(func)		     { cbEVT_PL_RESIZE_BAR,	         -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbResizeBarHandler       ) & func },
 	#define EVT_PL_REMOVE_BAR(func)		     { cbEVT_PL_REMOVE_BAR,	         -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbRemoveBarHandler       ) & func },
 	#define EVT_PL_SIZE_BAR_WND(func)	     { cbEVT_PL_SIZE_BAR_WND,	     -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbSizeBarWndHandler      ) & func },
-																																						 
+
 	#define EVT_PL_DRAW_BAR_DECOR(func)      { cbEVT_PL_DRAW_BAR_DECOR,      -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbDrawBarDecorHandler    ) & func },
 	#define EVT_PL_DRAW_ROW_DECOR(func)      { cbEVT_PL_DRAW_ROW_DECOR,      -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbDrawRowDecorHandler    ) & func },
 	#define EVT_PL_DRAW_PANE_DECOR(func)     { cbEVT_PL_DRAW_PANE_DECOR,     -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbDrawPaneDecorHandler   ) & func },
@@ -1315,7 +1318,7 @@ typedef void (wxEvtHandler::*cbCustomizeLayoutHandler )(cbCustomizeLayoutEvent&)
 	#define EVT_PL_DRAW_ROW_HANDLES(func)    { cbEVT_PL_DRAW_ROW_HANDLES,    -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbDrawRowHandlesHandler  ) & func },
 	#define EVT_PL_DRAW_ROW_BKGROUND(func)   { cbEVT_PL_DRAW_ROW_BKGROUND,   -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbDrawRowBkGroundHandler ) & func },
 	#define EVT_PL_DRAW_PANE_BKGROUND(func)  { cbEVT_PL_DRAW_PANE_BKGROUND,  -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbDrawPaneBkGroundHandler) & func },
-																																						 
+
 	#define EVT_PL_START_BAR_DRAGGING(func)  { cbEVT_PL_START_BAR_DRAGGING,  -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbStartBarDraggingHandler) & func },
 	#define EVT_PL_DRAW_HINT_RECT(func)      { cbEVT_PL_DRAW_HINT_RECT,      -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbDrawHintRectHandler    ) & func },
 
@@ -1325,8 +1328,8 @@ typedef void (wxEvtHandler::*cbCustomizeLayoutHandler )(cbCustomizeLayoutEvent&)
 	#define EVT_PL_CUSTOMIZE_BAR(func)       { cbEVT_PL_CUSTOMIZE_BAR,       -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbCustomizeBarHandler)     & func },
 	#define EVT_PL_CUSTOMIZE_LAYOUT(func)    { cbEVT_PL_CUSTOMIZE_LAYOUT,    -1, -1, (wxObjectEventFunction) (wxEventFunction) (cbCustomizeLayoutHandler)  & func },
 #endif
-/* 
- * abstract base class for all control-bar related plugins 
+/*
+ * abstract base class for all control-bar related plugins
  */
 
 class cbPluginBase : public wxEvtHandler
@@ -1334,23 +1337,23 @@ class cbPluginBase : public wxEvtHandler
 	DECLARE_ABSTRACT_CLASS( cbPluginBase )
 public:
 
-	wxFrameLayout* mpLayout; // back-reference to the frame layout 
+	wxFrameLayout* mpLayout; // back-reference to the frame layout
 
 	// specifies panes, for which this plugin receives events
 	// (see pane masks definitions)
-	int            mPaneMask; 
+	int            mPaneMask;
 
 	bool           mIsReady; // is TRUE, when plugin is ready to handle events
 
 public:
-	cbPluginBase(void) 
+	cbPluginBase(void)
 
 		: mpLayout  ( 0 ),
 		  mPaneMask( wxALL_PANES ),
 		  mIsReady ( FALSE )
 	{}
 
-	cbPluginBase( wxFrameLayout* pPanel, int paneMask = wxALL_PANES ) 
+	cbPluginBase( wxFrameLayout* pPanel, int paneMask = wxALL_PANES )
 
 		: mpLayout  ( pPanel ),
 		  mPaneMask( paneMask ),
