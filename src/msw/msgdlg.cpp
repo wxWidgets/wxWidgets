@@ -79,6 +79,9 @@ int wxMessageDialog::ShowModal()
     unsigned int msStyle = MB_OK;
     if (m_dialogStyle & wxYES_NO)
     {
+        wxASSERT_MSG( (m_dialogStyle & wxYES_NO) == wxYES_NO,
+                      _T("wxYES and wxNO may only be used together under MSW") );
+
 #if !(defined(__SMARTPHONE__) && defined(__WXWINCE__))
         if (m_dialogStyle & wxCANCEL)
             msStyle = MB_YESNOCANCEL;
