@@ -184,10 +184,13 @@ that the viewer is a variant of Netscape Navigator.}
 
 \membersection{wxHelpController::KeywordSearch}\label{wxhelpcontrollerkeywordsearch}
 
-\func{virtual bool}{KeywordSearch}{\param{const wxString\& }{keyWord}}
+\func{virtual bool}{KeywordSearch}{\param{const wxString\& }{keyWord}, \param{wxHelpSearchMode }{mode = wxHELP\_SEARCH\_ALL}}
 
-If the help viewer is not running, runs it, and searches for sections matching the given keyword. If one
-match is found, the file is displayed at this section.
+If the help viewer is not running, runs it, and searches for sections matching
+the given keyword. If one match is found, the file is displayed at this
+section. The optional parameter allows the search the index
+(wxHELP\_SEARCH\_INDEX) but this currently only supported by the
+wxHtmlHelpController.
 
 {\it WinHelp, MS HTML Help:} If more than one match is found, 
 the first topic is displayed.

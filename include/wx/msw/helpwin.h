@@ -39,7 +39,8 @@ public:
     virtual bool DisplaySection(int sectionNo);
     virtual bool DisplayBlock(long blockNo);
     virtual bool DisplayContextPopup(int contextId);
-    virtual bool KeywordSearch(const wxString& k);
+    virtual bool KeywordSearch(const wxString& k,
+                               wxHelpSearchMode mode = wxHELP_SEARCH_ALL);
     virtual bool Quit();
 
     inline wxString GetHelpFile() const { return m_helpFile; }

@@ -20,6 +20,7 @@
 
 #if wxUSE_WXHTML_HELP
 
+#include "wx/helpbase.h"
 #include "wx/html/helpdata.h"
 #include "wx/window.h"
 #include "wx/frame.h"
@@ -120,7 +121,8 @@ public:
     // * word may be pretended by + or -
     //   (+ : page must contain the word ; - : page can't contain the word)
     // * if there is no + or - before the word, + is default
-    bool KeywordSearch(const wxString& keyword);
+    bool KeywordSearch(const wxString& keyword,
+                       wxHelpSearchMode mode = wxHELP_SEARCH_ALL);
 
     void UseConfig(wxConfigBase *config, const wxString& rootpath = wxEmptyString)
         {

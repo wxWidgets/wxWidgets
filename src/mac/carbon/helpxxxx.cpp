@@ -62,7 +62,8 @@ bool wxXXXXHelpController::DisplayBlock(long block)
     return FALSE;
 }
 
-bool wxXXXXHelpController::KeywordSearch(const wxString& k)
+bool wxXXXXHelpController::KeywordSearch(const wxString& k,
+                                         wxHelpSearchMode WXUNUSED(mode))
 {
     if (m_helpFile == "") return FALSE;
 

@@ -163,10 +163,11 @@ Displays help window and focuses index panel.
 
 \membersection{wxHtmlHelpController::KeywordSearch}\label{wxhtmlhelpcontrollerkeywordsearch}
 
-\func{bool}{KeywordSearch}{\param{const wxString\& }{keyword}}
+\func{bool}{KeywordSearch}{\param{const wxString\& }{keyword}, \param{wxHelpSearchMode }{mode = wxHELP\_SEARCH\_ALL}}
 
-Displays help window, focuses search panel and starts searching.
-Returns true if the keyword was found.
+Displays help window, focuses search panel and starts searching.  Returns true
+if the keyword was found. Optionally it searches through the index (mode =
+wxHELP\_SEARCH\_INDEX), default the content (mode = wxHELP\_SEARCH\_ALL).
 
 {\bf Important:} KeywordSearch searches only pages listed in .hhc file(s).
 You should list all pages in the contents file.

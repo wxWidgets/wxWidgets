@@ -319,10 +319,11 @@ bool wxHtmlHelpController::DisplayIndex()
     return success;
 }
 
-bool wxHtmlHelpController::KeywordSearch(const wxString& keyword)
+bool wxHtmlHelpController::KeywordSearch(const wxString& keyword,
+                                         wxHelpSearchMode mode)
 {
     CreateHelpWindow();
-    bool success = m_helpFrame->KeywordSearch(keyword);
+    bool success = m_helpFrame->KeywordSearch(keyword, mode);
     AddGrabIfNeeded();
     return success;
 }

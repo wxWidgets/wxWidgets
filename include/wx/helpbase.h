@@ -28,6 +28,13 @@
 // Flags for SetViewer
 #define wxHELP_NETSCAPE     1
 
+// Search modes:
+enum wxHelpSearchMode
+{
+    wxHELP_SEARCH_INDEX,
+    wxHELP_SEARCH_ALL
+};
+
 // Defines the API for help controllers
 class WXDLLEXPORT wxHelpControllerBase: public wxObject
 {
@@ -63,7 +70,8 @@ public:
     // may override this for more specific behaviour.
     virtual bool DisplaySection(const wxString& section) { return KeywordSearch(section); }
     virtual bool DisplayBlock(long blockNo) = 0;
-    virtual bool KeywordSearch(const wxString& k) = 0;
+    virtual bool KeywordSearch(const wxString& k,
+                               wxHelpSearchMode mode = wxHELP_SEARCH_ALL) = 0;
     /// Allows one to override the default settings for the help frame.
     virtual void SetFrameParameters(const wxString& WXUNUSED(title),
         const wxSize& WXUNUSED(size),

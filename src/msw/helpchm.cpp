@@ -197,7 +197,8 @@ bool wxCHMHelpController::DisplayBlock(long block)
     return DisplaySection(block);
 }
 
-bool wxCHMHelpController::KeywordSearch(const wxString& k)
+bool wxCHMHelpController::KeywordSearch(const wxString& k,
+                                        wxHelpSearchMode WXUNUSED(mode))
 {
     if (m_helpFile.IsEmpty()) return FALSE;
 

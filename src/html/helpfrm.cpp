@@ -657,12 +657,23 @@ bool wxHtmlHelpFrame::DisplayIndex()
 
 
 
-bool wxHtmlHelpFrame::KeywordSearch(const wxString& keyword)
+bool wxHtmlHelpFrame::KeywordSearch(const wxString& keyword,
+                                    wxHelpSearchMode mode)
 {
-    if (! (m_SearchList && m_SearchButton && m_SearchText && m_SearchChoice))
-        return FALSE;
+    if (mode == wxHELP_SEARCH_ALL)
+    {
+        if ( !(m_SearchList &&
+               m_SearchButton && m_SearchText && m_SearchChoice) )
+            return false;
+    }
+    else if (mode == wxHELP_SEARCH_INDEX)
+    {
+        if ( !(m_IndexList &&
+               m_IndexButton && m_IndexButtonAll && m_IndexText) )
+            return false;
+    }
 
-    int foundcnt = 0, curi;
+    int foundcnt = 0;
     wxString foundstr;
     wxString book = wxEmptyString;
 
@@ -672,41 +683,71 @@ bool wxHtmlHelpFrame::KeywordSearch(const wxString& keyword)
         m_HtmlWin->Show(TRUE);
         m_Splitter->SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
     }
-    m_NavigNotebook->SetSelection(m_SearchPage);
-    m_SearchList->Clear();
-    m_SearchText->SetValue(keyword);
-    m_SearchButton->Enable(FALSE);
 
-    if (m_SearchChoice->GetSelection() != 0)
-        book = m_SearchChoice->GetStringSelection();
-
-    wxHtmlSearchStatus status(m_Data, keyword,
-                              m_SearchCaseSensitive->GetValue(), m_SearchWholeWords->GetValue(),
-                              book);
-
-    wxProgressDialog progress(_("Searching..."), _("No matching page found yet"),
-                              status.GetMaxIndex(), this,
-                              wxPD_APP_MODAL | wxPD_CAN_ABORT | wxPD_AUTO_HIDE);
-
-    while (status.IsActive())
+    if (mode == wxHELP_SEARCH_ALL)
     {
-        curi = status.GetCurIndex();
-        if (curi % 32 == 0 && progress.Update(curi) == FALSE)
-            break;
-        if (status.Search())
+        m_NavigNotebook->SetSelection(m_SearchPage);
+        m_SearchList->Clear();
+        m_SearchText->SetValue(keyword);
+        m_SearchButton->Enable(false);
+
+        if (m_SearchChoice->GetSelection() != 0)
+            book = m_SearchChoice->GetStringSelection();
+
+        wxHtmlSearchStatus status(m_Data, keyword,
+                                  m_SearchCaseSensitive->GetValue(),
+                                  m_SearchWholeWords->GetValue(),
+                                  book);
+
+        wxProgressDialog progress(_("Searching..."),
+                                  _("No matching page found yet"),
+                                  status.GetMaxIndex(), this,
+                                  wxPD_APP_MODAL | wxPD_CAN_ABORT | wxPD_AUTO_HIDE);
+
+        int curi;
+        while (status.IsActive())
         {
-            foundstr.Printf(_("Found %i matches"), ++foundcnt);
-            progress.Update(status.GetCurIndex(), foundstr);
-            m_SearchList->Append(status.GetName(), status.GetContentsItem());
+            curi = status.GetCurIndex();
+            if (curi % 32 == 0 && progress.Update(curi) == FALSE)
+                break;
+            if (status.Search())
+            {
+                foundstr.Printf(_("Found %i matches"), ++foundcnt);
+                progress.Update(status.GetCurIndex(), foundstr);
+                m_SearchList->Append(status.GetName(), status.GetContentsItem());
+            }
         }
+
+        m_SearchButton->Enable(TRUE);
+        m_SearchText->SetSelection(0, keyword.Length());
+        m_SearchText->SetFocus();
+    }
+    else if (mode == wxHELP_SEARCH_INDEX)
+    {
+        m_NavigNotebook->SetSelection(m_IndexPage);
+        m_IndexList->Clear();
+        m_IndexButton->Enable(false);
+        m_IndexButtonAll->Enable(false);
+        m_IndexText->SetValue(keyword);
+
+        wxCommandEvent dummy;
+        OnIndexFind(dummy); // what a hack...
+        m_IndexButton->Enable(true);
+        m_IndexButtonAll->Enable(true);
+        foundcnt = m_IndexList->GetCount();
     }
 
-    m_SearchButton->Enable(TRUE);
-    m_SearchText->SetSelection(0, keyword.Length());
-    m_SearchText->SetFocus();
     if (foundcnt)
     {
-        wxHtmlContentsItem *it = (wxHtmlContentsItem*) m_SearchList->GetClientData(0);
+        wxHtmlContentsItem *it;
+        if (mode == wxHELP_SEARCH_ALL)
+        {
+            it = (wxHtmlContentsItem*) m_SearchList->GetClientData(0);
+        }
+        else if (mode == wxHELP_SEARCH_INDEX)
+        {
+            it = (wxHtmlContentsItem*) m_IndexList->GetClientData(0);
+        }
         if (it)
         {
             m_HtmlWin->LoadPage(it->GetFullPath());
@@ -1489,7 +1530,8 @@ void wxHtmlHelpFrame::OnSearch(wxCommandEvent& WXUNUSED(event))
 {
     wxString sr = m_SearchText->GetLineText(0);
 
-    if (sr != wxEmptyString) KeywordSearch(sr);
+    if (!sr.empty())
+        KeywordSearch(sr, wxHELP_SEARCH_ALL);
 }
 
 void wxHtmlHelpFrame::OnBookmarksSel(wxCommandEvent& WXUNUSED(event))

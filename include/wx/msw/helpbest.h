@@ -70,9 +70,10 @@ public:
         return m_helpController->DisplayTextPopup( text, pos );
     }
 
-    virtual bool KeywordSearch(const wxString& k)
+    virtual bool KeywordSearch(const wxString& k,
+                               wxHelpSearchMode mode = wxHELP_SEARCH_ALL);
     {
-        return m_helpController->KeywordSearch( k );
+        return m_helpController->KeywordSearch( k, mode );
     }
 
     virtual bool Quit()

@@ -98,7 +98,8 @@ bool wxWinHelpController::DisplayBlock(long block)
     return TRUE;
 }
 
-bool wxWinHelpController::KeywordSearch(const wxString& k)
+bool wxWinHelpController::KeywordSearch(const wxString& k,
+                                        wxHelpSearchMode WXUNUSED(mode))
 {
     if (m_helpFile.IsEmpty()) return FALSE;
     

@@ -20,8 +20,8 @@
 
 #if wxUSE_WXHTML_HELP
 
-#include "wx/html/helpfrm.h"
 #include "wx/helpbase.h"
+#include "wx/html/helpfrm.h"
 
 #define wxID_HTML_HELPFRAME   (wxID_HIGHEST + 1)
 
@@ -42,7 +42,8 @@ public:
     bool Display(int id);
     bool DisplayContents();
     bool DisplayIndex();
-    bool KeywordSearch(const wxString& keyword);
+    bool KeywordSearch(const wxString& keyword,
+                       wxHelpSearchMode mode = wxHELP_SEARCH_ALL);
 
     wxHtmlHelpFrame* GetFrame() { return m_helpFrame; }
     void UseConfig(wxConfigBase *config, const wxString& rootpath = wxEmptyString);

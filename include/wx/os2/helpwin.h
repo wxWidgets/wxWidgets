@@ -34,7 +34,8 @@ class WXDLLEXPORT wxWinHelpController: public wxHelpControllerBase
   virtual bool DisplayContents();
   virtual bool DisplaySection(int sectionNo);
   virtual bool DisplayBlock(long blockNo);
-  virtual bool KeywordSearch(const wxString& k);
+  virtual bool KeywordSearch(const wxString& k,
+                             wxHelpSearchMode mode = wxHELP_SEARCH_ALL);
 
   virtual bool Quit();
   virtual void OnQuit();

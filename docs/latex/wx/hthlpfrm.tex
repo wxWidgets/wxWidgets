@@ -121,9 +121,10 @@ Return wxHtmlHelpData object.
 
 \membersection{wxHtmlHelpFrame::KeywordSearch}\label{wxhtmlhelpframekeywordsearch}
 
-\func{bool}{KeywordSearch}{\param{const wxString\& }{keyword}}
+\func{bool}{KeywordSearch}{\param{const wxString\& }{keyword}, \param{wxHelpSearchMode }{mode = wxHELP\_SEARCH\_ALL}}
 
-Search for given keyword.
+Search for given keyword. Optionally it searches through the index (mode =
+wxHELP\_SEARCH\_INDEX), default the content (mode = wxHELP\_SEARCH\_ALL).
 
 \membersection{wxHtmlHelpFrame::ReadCustomization}\label{wxhtmlhelpframereadcustomization}
 

@@ -37,7 +37,8 @@ public:
     virtual bool DisplayBlock(long blockNo);
     virtual bool DisplayContextPopup(int contextId);
     virtual bool DisplayTextPopup(const wxString& text, const wxPoint& pos);
-    virtual bool KeywordSearch(const wxString& k);
+    virtual bool KeywordSearch(const wxString& k,
+                               wxHelpSearchMode mode = wxHELP_SEARCH_ALL);
     virtual bool Quit();
 
     wxString GetHelpFile() const { return m_helpFile; }
