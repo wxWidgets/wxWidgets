@@ -1569,6 +1569,7 @@ wxListEvent::wxListEvent(wxEventType commandType, int id)
 {
     m_code = 0;
     m_itemIndex = 0;
+    m_oldItemIndex = 0;
     m_col = 0;
     m_cancelled = FALSE;
 }
