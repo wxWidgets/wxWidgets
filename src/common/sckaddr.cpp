@@ -61,6 +61,7 @@
 extern "C"
 {
    struct hostent *gethostbyname(const char *name); 
+   int gethostname(char *name, int namelen); 
 };
 #endif
 
