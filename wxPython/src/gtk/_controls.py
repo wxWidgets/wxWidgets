@@ -381,7 +381,7 @@ class Choice(_core.ControlWithItems):
 
     def SetStringSelection(*args, **kwargs):
         """
-        SetStringSelection(self, String string)
+        SetStringSelection(self, String string) -> bool
 
         Select the item with the specifed string
         """
@@ -524,13 +524,33 @@ class ComboBox(_core.Control,_core.ItemContainer):
         """
         SetSelection(self, int n)
 
-        Selects the text between the two positions, in the combobox text field.
+        Sets the item at index 'n' to be the selected item.
         """
         return _controls_.ComboBox_SetSelection(*args, **kwargs)
 
     def SetMark(*args, **kwargs):
-        """SetMark(self, long from, long to)"""
+        """
+        SetMark(self, long from, long to)
+
+        Selects the text between the two positions in the combobox text field.
+        """
         return _controls_.ComboBox_SetMark(*args, **kwargs)
+
+    def SetStringSelection(*args, **kwargs):
+        """
+        SetStringSelection(self, String string) -> bool
+
+        Select the item with the specifed string
+        """
+        return _controls_.ComboBox_SetStringSelection(*args, **kwargs)
+
+    def SetString(*args, **kwargs):
+        """
+        SetString(self, int n, String string)
+
+        Set the label for the n'th item (zero based) in the list.
+        """
+        return _controls_.ComboBox_SetString(*args, **kwargs)
 
     def SetEditable(*args, **kwargs):
         """SetEditable(self, bool editable)"""

@@ -381,7 +381,7 @@ class Choice(_core.ControlWithItems):
 
     def SetStringSelection(*args, **kwargs):
         """
-        SetStringSelection(self, String string)
+        SetStringSelection(self, String string) -> bool
 
         Select the item with the specifed string
         """
@@ -524,13 +524,33 @@ class ComboBox(_core.Control,_core.ItemContainer):
         """
         SetSelection(self, int n)
 
-        Selects the text between the two positions, in the combobox text field.
+        Sets the item at index 'n' to be the selected item.
         """
         return _controls_.ComboBox_SetSelection(*args, **kwargs)
 
     def SetMark(*args, **kwargs):
-        """SetMark(self, long from, long to)"""
+        """
+        SetMark(self, long from, long to)
+
+        Selects the text between the two positions in the combobox text field.
+        """
         return _controls_.ComboBox_SetMark(*args, **kwargs)
+
+    def SetStringSelection(*args, **kwargs):
+        """
+        SetStringSelection(self, String string) -> bool
+
+        Select the item with the specifed string
+        """
+        return _controls_.ComboBox_SetStringSelection(*args, **kwargs)
+
+    def SetString(*args, **kwargs):
+        """
+        SetString(self, int n, String string)
+
+        Set the label for the n'th item (zero based) in the list.
+        """
+        return _controls_.ComboBox_SetString(*args, **kwargs)
 
     def SetEditable(*args, **kwargs):
         """SetEditable(self, bool editable)"""
@@ -2085,6 +2105,30 @@ class ToggleButton(_core.Control):
         self.thisown = 1
         del newobj.thisown
         self._setOORInfo(self)
+
+    def Create(*args, **kwargs):
+        """
+        Create(self, Window parent, int id, String label, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, 
+            Validator validator=DefaultValidator, String name=ToggleButtonNameStr) -> bool
+        """
+        return _controls_.ToggleButton_Create(*args, **kwargs)
+
+    def SetValue(*args, **kwargs):
+        """SetValue(self, bool value)"""
+        return _controls_.ToggleButton_SetValue(*args, **kwargs)
+
+    def GetValue(*args, **kwargs):
+        """GetValue(self) -> bool"""
+        return _controls_.ToggleButton_GetValue(*args, **kwargs)
+
+    def SetLabel(*args, **kwargs):
+        """
+        SetLabel(self, String label)
+
+        Sets the item's text.
+        """
+        return _controls_.ToggleButton_SetLabel(*args, **kwargs)
 
 
 class ToggleButtonPtr(ToggleButton):
