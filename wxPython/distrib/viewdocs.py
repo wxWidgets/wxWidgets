@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #---------------------------------------------------------------------------
 
-import sys, os
+import sys, os, glob
 from wxPython.tools import helpviewer
 
 
@@ -19,7 +19,13 @@ args = ['',
         os.path.join(basePath, 'ogl.zip'),
         ]
 
+# add any other .zip files found
+for file in glob.glob(os.path.join(basePath, "*.zip")):
+    if file not in args:
+        args.append(file)
+
 # launch helpviewer
 helpviewer.main(args)
 
 #---------------------------------------------------------------------------
+
