@@ -118,7 +118,7 @@ static void CaptureScreenshot()
 // MGL_WM hooks:
 // ---------------------------------------------------------------------------
 
-static void wxWindowPainter(window_t *wnd, MGLDC *dc)
+static void MGLAPI wxWindowPainter(window_t *wnd, MGLDC *dc)
 {
     wxWindowMGL *w = (wxWindow*) wnd->userData;
     
@@ -129,7 +129,7 @@ static void wxWindowPainter(window_t *wnd, MGLDC *dc)
     }
 }
 
-static ibool wxWindowMouseHandler(window_t *wnd, event_t *e)
+static ibool MGLAPI wxWindowMouseHandler(window_t *wnd, event_t *e)
 {
     wxWindowMGL *win = (wxWindowMGL*)MGL_wmGetWindowUserData(wnd);
     wxPoint orig(win->GetClientAreaOrigin());
@@ -374,7 +374,7 @@ static long wxAsciiToKeyCode(event_t *event)
     return (long)EVT_asciiCode(event->message);
 }
 
-static ibool wxWindowKeybHandler(window_t *wnd, event_t *e)
+static ibool MGLAPI wxWindowKeybHandler(window_t *wnd, event_t *e)
 {
     wxWindowMGL *win = (wxWindowMGL*)MGL_wmGetWindowUserData(wnd);
 
