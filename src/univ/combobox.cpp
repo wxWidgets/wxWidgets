@@ -833,7 +833,7 @@ int wxComboBox::DoInsert(const wxString& item, int pos)
     if (pos == GetCount())
         return DoAppend(item);
 
-    GetLBox()->Insert(1, &item, pos);
+    GetLBox()->Insert(item, pos);
     return pos;
 }
 
