@@ -346,7 +346,7 @@ int wxChoice::GetSelection() const
 #endif
 }
 
-void wxChoice::SetString( int WXUNUSED(n), const wxString& WXUNUSED(string) )
+void wxChoice::SetString( int n, const wxString& str )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid choice") );
 
