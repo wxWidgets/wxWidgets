@@ -163,6 +163,8 @@
     #elif defined(__VISAGECPP__)
         #if __IBMCPP__ < 400
             typedef unsigned long bool;
+            #define true ((bool)1)
+            #define false ((bool)0)
         #endif
         #define HAVE_BOOL
     #endif // compilers
@@ -1853,7 +1855,7 @@ typedef void*       WXPOINTPTR ;
 typedef void*       WXHWND ;
 typedef void*       WXEVENTREF ;
 typedef void*		WXEVENTHANDLERREF ;
-typedef void*       WXEVENTHANDLERCALLREF ; 
+typedef void*       WXEVENTHANDLERCALLREF ;
 typedef void*       WXAPPLEEVENTREF ;
 typedef void*       WXHDC ;
 typedef void*       WXHMENU ;
