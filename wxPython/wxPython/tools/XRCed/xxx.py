@@ -11,6 +11,8 @@ import wxPython.lib.wxpTag
 
 from params import *
 
+currentEncoding = wxLocale_GetSystemEncodingName()
+
 # Base class for interface parameter classes
 class xxxNode:
     def __init__(self, node):
@@ -31,12 +33,13 @@ class xxxParam(xxxNode):
         else:
             text = node.childNodes[0] # first child must be text node
             assert text.nodeType == minidom.Node.TEXT_NODE
+        # Use convertion from unicode to current encoding
         self.textNode = text
     # Value returns string
     def value(self):
-        return self.textNode.data
+        return self.textNode.data.encode(currentEncoding)
     def update(self, value):
-        self.textNode.data = value
+        self.textNode.data = unicode(value, currentEncoding)
 
 # Integer parameter
 class xxxParamInt(xxxParam):
@@ -106,6 +109,7 @@ class xxxParamContentCheckList(xxxNode):
             if n.nodeType == minidom.Node.ELEMENT_NODE:
                 assert n.tagName == 'item', 'bad content content'
                 checked = n.getAttribute('checked')
+                if not checked: checked = 0
                 if not n.hasChildNodes():
                     # If does not have child nodes, create empty text node
                     text = tree.dom.createTextNode('')
@@ -131,7 +135,8 @@ class xxxParamContentCheckList(xxxNode):
             l = []
             for s,ch in value:
                 itemElem = tree.dom.createElement('item')
-                itemElem.setAttribute('checked', str(ch))
+                # Add checked only if true
+                if ch: itemElem.setAttribute('checked', '1')
                 itemText = tree.dom.createTextNode(s)
                 itemElem.appendChild(itemText)
                 self.node.appendChild(itemElem)
@@ -260,9 +265,24 @@ class xxxParamFont(xxxObject, xxxNode):
 class xxxContainer(xxxObject):
     hasChildren = true
 
+# Simulate normal parameter for encoding
+class xxxEncoding:
+    def __init__(self, val):
+        self.encd = val
+    def value(self):
+        return self.encd
+    def update(self, val):
+        self.encd = val
+
 # Special class for root node
 class xxxMainNode(xxxContainer):
+    allParams = ['encoding']
+    required = ['encoding']
     hasStyle = hasName = false
+    def __init__(self, dom):
+        xxxContainer.__init__(self, None, dom.documentElement)
+        self.className = 'XML tree'
+        self.params['encoding'] = xxxEncoding(dom.encoding)
 
 ################################################################################
 # Top-level windwows
@@ -275,7 +295,8 @@ class xxxPanel(xxxContainer):
     exStyles = ['wxWS_EX_VALIDATE_RECURSIVELY']
 
 class xxxDialog(xxxContainer):
-    allParams = ['title', 'pos', 'size', 'style']
+    allParams = ['title', 'centered', 'pos', 'size', 'style']
+    paramDict = {'centered': ParamBool}
     required = ['title']
     winStyles = ['wxDEFAULT_DIALOG_STYLE', 'wxSTAY_ON_TOP',
                  'wxDIALOG_MODAL', 'wxDIALOG_MODELESS',
@@ -365,7 +386,7 @@ class xxxSlider(xxxObject):
 
 class xxxGauge(xxxObject):
     allParams = ['range', 'pos', 'size', 'style', 'value', 'shadow', 'bezel']
-    paramDict = {'range': ParamInt, 'value': ParamInt,
+    paramDict = {'range': ParamInt, 'value': ParamInt, 
                  'shadow': ParamInt, 'bezel': ParamInt}
     winStyles = ['wxGA_HORIZONTAL', 'wxGA_VERTICAL', 'wxGA_PROGRESSBAR', 'wxGA_SMOOTH']
 
@@ -392,13 +413,19 @@ class xxxHtmlWindow(xxxObject):
     paramDict = {'borders': ParamInt}
     winStyles = ['wxHW_SCROLLBAR_NEVER', 'wxHW_SCROLLBAR_AUTO']
 
-class xxxCalendar(xxxObject):
+class xxxCalendarCtrl(xxxObject):
     allParams = ['pos', 'size', 'style']
 
 class xxxNotebook(xxxContainer):
     allParams = ['usenotebooksizer', 'pos', 'size', 'style']
     paramDict = {'usenotebooksizer': ParamBool}
     winStyles = ['wxNB_FIXEDWIDTH', 'wxNB_LEFT', 'wxNB_RIGHT', 'wxNB_BOTTOM']
+
+class xxxGenericDirCtrl(xxxObject):
+    allParams = ['defaultfolder', 'filter', 'defaultfilter', 'pos', 'size', 'style']
+    paramDict = {'defaultfilter': ParamInt}
+    winStyles = ['wxDIRCTRL_DIR_ONLY', 'wxDIRCTRL_3D_INTERNAL', 'wxDIRCTRL_SELECT_FIRST',
+                 'wxDIRCTRL_SHOW_FILTERS', 'wxDIRCTRL_EDIT_LABELS']
 
 ################################################################################
 # Buttons
@@ -423,7 +450,13 @@ class xxxRadioButton(xxxObject):
     winStyles = ['wxRB_GROUP']
 
 class xxxSpinButton(xxxObject):
-    allParams = ['pos', 'size', 'style']
+    allParams = ['value', 'min', 'max', 'pos', 'size', 'style']
+    paramDict = {'value': ParamInt}
+    winStyles = ['wxSP_HORIZONTAL', 'wxSP_VERTICAL', 'wxSP_ARROW_KEYS', 'wxSP_WRAP']
+
+class xxxSpinCtrl(xxxObject):
+    allParams = ['value', 'min', 'max', 'pos', 'size', 'style']
+    paramDict = {'value': ParamInt}
     winStyles = ['wxSP_HORIZONTAL', 'wxSP_VERTICAL', 'wxSP_ARROW_KEYS', 'wxSP_WRAP']
 
 ################################################################################
@@ -440,7 +473,8 @@ class xxxRadioBox(xxxObject):
     winStyles = ['wxRA_SPECIFY_ROWS', 'wxRA_SPECIFY_COLS']
 
 class xxxCheckBox(xxxObject):
-    allParams = ['label', 'pos', 'size', 'style']
+    allParams = ['label', 'checked', 'pos', 'size', 'style']
+    paramDict = {'checked': ParamBool}
     required = ['label']
 
 class xxxComboBox(xxxObject):
@@ -580,20 +614,31 @@ class xxxSpacer(xxxObject):
     default = {'size': '0,0'}
 
 class xxxMenuBar(xxxContainer):
-    allParams = []
+    allParams = ['style']
+    paramDict = {'style': ParamNonGenericStyle}    # no generic styles
+    winStyles = ['wxMB_DOCKABLE']
 
 class xxxMenu(xxxContainer):
-    allParams = ['label']
+    allParams = ['label', 'help', 'style']
     default = {'label': ''}
     paramDict = {'style': ParamNonGenericStyle}    # no generic styles
     winStyles = ['wxMENU_TEAROFF']
 
 class xxxMenuItem(xxxObject):
-    allParams = ['checkable', 'label', 'accel', 'help']
+    allParams = ['label', 'bitmap', 'accel', 'help',
+                 'checkable', 'radio', 'enabled', 'checked']
     default = {'label': ''}
+    hasStyle = false
 
 class xxxSeparator(xxxObject):
     hasName = hasStyle = false
+
+################################################################################
+# Unknown control
+
+class xxxUnknown(xxxObject):
+    allParams = ['pos', 'size', 'style']
+    paramDict = {'style': ParamNonGenericStyle}    # no generic styles
 
 ################################################################################
 
@@ -632,7 +677,9 @@ xxxDict = {
     'wxNotebook': xxxNotebook,
     'notebookpage': xxxNotebookPage,
     'wxHtmlWindow': xxxHtmlWindow,
-    'wxCalendar': xxxCalendar,
+    'wxCalendarCtrl': xxxCalendarCtrl,
+    'wxGenericDirCtrl': xxxGenericDirCtrl,
+    'wxSpinCtrl': xxxSpinCtrl,
     
     'wxBoxSizer': xxxBoxSizer,
     'wxStaticBoxSizer': xxxStaticBoxSizer,
@@ -645,12 +692,14 @@ xxxDict = {
     'wxMenu': xxxMenu,
     'wxMenuItem': xxxMenuItem,
     'separator': xxxSeparator,
+
+    'unknown': xxxUnknown,
     }
 
 # Create IDs for all parameters of all classes
 paramIDs = {'fg': wxNewId(), 'bg': wxNewId(), 'exstyle': wxNewId(), 'font': wxNewId(),
             'enabled': wxNewId(), 'focused': wxNewId(), 'hidden': wxNewId(),
-            'tooltip': wxNewId()
+            'tooltip': wxNewId(), 'encoding': wxNewId()
             }
 for cl in xxxDict.values():
     if cl.allParams:
