@@ -1516,7 +1516,7 @@ void wxApp::MacHandleMouseDownEvent( WXEVENTREF evr )
                             newWidth = oldWidth;
                         if (newHeight == 0)
                             newHeight = oldHeight;
-                        win->SetSize( -1, -1, newWidth, newHeight, wxSIZE_USE_EXISTING);
+                        win->SetSize( -1, -1 , newWidth, newHeight, wxSIZE_USE_EXISTING);
                     }
                 }
                 s_lastMouseDown = 0;
@@ -1531,9 +1531,15 @@ void wxApp::MacHandleMouseDownEvent( WXEVENTREF evr )
                     if (win)
                     {
                         Rect tempRect ;
+                        GrafPtr port ;
+                        GetPort( &port ) ;
+                        Point pt = { 0, 0 } ;
+                        SetPortWindowPort(window) ;
+                        LocalToGlobal( &pt ) ;
+                        SetPort( port ) ;
 
                         GetWindowPortBounds(window, &tempRect ) ;
-                        win->SetSize( -1, -1, tempRect.right-tempRect.left ,
+                        win->SetSize( pt.h , pt.v , tempRect.right-tempRect.left ,
                             tempRect.bottom-tempRect.top, wxSIZE_USE_EXISTING);
                     }
                 }
