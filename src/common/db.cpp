@@ -1959,7 +1959,8 @@ wxDbColInf *wxDb::GetColumns(char *tableName[], const char* WXUNUSED(userID))
   _TableColumns *TableColumns = new _TableColumns[tbl];
   
   // Fill the table
-  for (int i = 0 ; i < tbl ; i++)
+  int i;
+  for (i = 0 ; i < tbl ; i++)
     {
       TableColumns[i].colInf = GetColumns(tableName[i], &TableColumns[i].noCols);    
       if (TableColumns[i].colInf == NULL) return NULL;
@@ -1976,13 +1977,14 @@ wxDbColInf *wxDb::GetColumns(char *tableName[], const char* WXUNUSED(userID))
   
   // Merge ...
   int offset = 0;
-  for (int i = 0 ; i < tbl ; i++)
-    {
-      for (int j = 0 ; j < TableColumns[i].noCols ; j++)
-	{
-	  colInf[offset++] = TableColumns[i].colInf[j];	    
-	}
-    }
+  int j;
+  for (i = 0 ; i < tbl ; i++)
+  {
+    for (j = 0 ; j < TableColumns[i].noCols ; j++)
+	 {
+	   colInf[offset++] = TableColumns[i].colInf[j];	    
+	 }
+  }
   delete [] TableColumns;
   
   return colInf;
