@@ -633,7 +633,7 @@
             defined(__EMX__) || defined(__DJGPP__)
         #define wxStricmp stricmp
         #define wxStrnicmp strnicmp
-    #elif defined(__SC__) || defined(__VISUALC__) || \
+    #elif defined(__SYMANTEC__) || defined(__VISUALC__) || \
             (defined(__MWERKS__) && defined(__INTEL__))
         #define wxStricmp _stricmp
         #define wxStrnicmp _strnicmp
