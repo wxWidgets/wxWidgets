@@ -22,6 +22,7 @@ OPTIONS=
 
 GENDIR=$(WXDIR)\src\generic
 COMMDIR=$(WXDIR)\src\common
+HTMLDIR=$(WXDIR)\src\html
 OLEDIR=ole
 MSWDIR=$(WXDIR)\src\msw
 
@@ -53,9 +54,7 @@ GENERICOBJS= $(GENDIR)\busyinfo.obj \
 		$(GENDIR)\treectlg.obj \
 		$(GENDIR)\wizard.obj
 
-COMMONOBJS = \
-		$(COMMDIR)\y_tab.obj \
-		$(COMMDIR)\accesscmn.obj \
+COMMONOBJS = $(COMMDIR)\accesscmn.obj \
 		$(COMMDIR)\appcmn.obj \
 		$(COMMDIR)\artprov.obj \
 		$(COMMDIR)\artstd.obj \
@@ -188,6 +187,27 @@ COMMONOBJS = \
 		$(COMMDIR)\zipstrm.obj \
 		$(COMMDIR)\zstream.obj
 
+HTMLOBJS = $(HTMLDIR)\helpctrl.obj \
+		$(HTMLDIR)\helpdata.obj \
+		$(HTMLDIR)\helpfrm.obj \
+		$(HTMLDIR)\htmlcell.obj \
+		$(HTMLDIR)\htmlfilt.obj \
+		$(HTMLDIR)\htmlpars.obj \
+		$(HTMLDIR)\htmltag.obj \
+		$(HTMLDIR)\htmlwin.obj \
+		$(HTMLDIR)\htmprint.obj \
+		$(HTMLDIR)\m_dflist.obj \
+		$(HTMLDIR)\m_fonts.obj \
+		$(HTMLDIR)\m_hline.obj \
+		$(HTMLDIR)\m_image.obj \
+		$(HTMLDIR)\m_layout.obj \
+		$(HTMLDIR)\m_links.obj \
+		$(HTMLDIR)\m_list.obj \
+		$(HTMLDIR)\m_pre.obj \
+		$(HTMLDIR)\m_style.obj \
+		$(HTMLDIR)\m_tables.obj \
+		$(HTMLDIR)\winpars.obj
+
 MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\ole\access.obj \
 		$(MSWDIR)\app.obj \
@@ -244,6 +264,7 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\icon.obj \
 		$(MSWDIR)\imaglist.obj \
 		$(MSWDIR)\iniconf.obj \
+		$(MSWDIR)\joystick.obj \
 		$(MSWDIR)\listbox.obj \
 		$(MSWDIR)\listctrl.obj \
 		$(MSWDIR)\main.obj \
@@ -299,9 +320,9 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\window.obj
 
 # Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
-OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS)
+OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS) $(WINSOCKLIB)
 
-all: MAKEARCHDIR $(LIBTARGET)
+all: MAKEARCHDIR MAKEWINSOCKLIB $(LIBTARGET) zlib png jpeg tiff regex
 
 MAKEARCHDIR:
     @if not exist $(MSWINCDIR)\setup.h copy $(MSWINCDIR)\setup0.h $(MSWINCDIR)\setup.h
@@ -309,27 +330,52 @@ MAKEARCHDIR:
     @if not exist $(ARCHINCDIR)\wx\setup.h mkdir $(ARCHINCDIR)\wx
     @if not exist $(ARCHINCDIR)\wx\setup.h copy $(MSWINCDIR)\setup.h $(ARCHINCDIR)\wx\setup.h
 
+MAKEWINSOCKLIB:
+    implib /system /v /suffix /Ic:\wx\dm\include\win32 $(WINSOCKLIB) $(WINDIR)\system32\winsock.dll
+##    implib  /s $(WINSOCKLIB) $(WINDIR)\system32\winsock.dll
+##@if not exist $(WINSOCKLIB)  
+
 $(LIBTARGET): $(OBJECTS)
 	-del $(LIBTARGET)
 	*lib /PAGESIZE:512 $(LIBTARGET) y $(OBJECTS), nul;
 
-clean:
+clean: clean_zlib clean_png clean_jpeg clean_tiff clean_regex
 	-del $(COMMDIR)\*.obj
 	-del $(MSWDIR)\*.obj
 	-del $(GENDIR)\*.obj
+    -del $(HTMLDIR)\*.obj
 	-del *.obj
     -del $(LIBTARGET)
 
-## $(COMMDIR)\y_tab.obj:     $(COMMDIR)\y_tab.c $(COMMDIR)\lex_yy.c
-##
-## $(COMMDIR)\y_tab.c:     $(COMMDIR)\dosyacc.c
-##        copy $(COMMDIR)\dosyacc.c $(COMMDIR)\y_tab.c
-##
-## $(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
-##    copy $(COMMDIR)\doslex.c $(COMMDIR)\lex_yy.c
-##
-### $(COMMDIR)\cmndata.obj:     $(COMMDIR)\cmndata.cpp
-###	*$(CC) -c $(CFLAGS) -I$(INCLUDE) $(OPTIONS) $(COMMDIR)\cmndata.cpp -o$(COMMDIR)\cmndata.obj
+png:   
+        make -f $(WXDIR)\src\png\makefile.sc FINAL=$(FINAL)
+
+clean_png:
+        make -f $(WXDIR)\src\png\makefile.sc clean
+
+zlib:   
+        make -f $(WXDIR)\src\zlib\makefile.sc FINAL=$(FINAL) 
+
+clean_zlib:
+        make -f $(WXDIR)\src\zlib\makefile.sc clean
+
+jpeg:   
+        make -f $(WXDIR)\src\jpeg\makefile.sc FINAL=$(FINAL)
+
+clean_jpeg:
+        make -f $(WXDIR)\src\jpeg\makefile.sc clean
+
+regex:  
+        make -f $(WXDIR)\src\regex\makefile.sc FINAL=$(FINAL) 
+
+clean_regex:
+        make -f $(WXDIR)\src\regex\makefile.sc clean
+
+tiff:  
+        make -f $(WXDIR)\src\tiff\makefile.sc FINAL=$(FINAL) 
+
+clean_tiff:
+        make -f $(WXDIR)\src\tiff\makefile.sc clean
 
 MFTYPE=sc
 makefile.$(MFTYPE) : $(WXWIN)\distrib\msw\tmake\filelist.txt $(WXWIN)\distrib\msw\tmake\$(MFTYPE).t

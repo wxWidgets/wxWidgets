@@ -26,6 +26,13 @@
         $project{$tag} .= '$(GENDIR)\\' . $file . " "
     }
 
+    foreach $file (sort keys %wxHTML) {
+        next if $wxHTML{$file} =~ /\b16\b/;
+
+        $file =~ s/cp?p?$/obj/;
+        $project{"WXHTMLOBJS"} .= '$(HTMLDIR)\\' . $file . " "
+    }
+
     foreach $file (sort keys %wxCommon) {
         next if $wxCommon{$file} =~ /\b(16|U)\b/;
 
@@ -35,7 +42,7 @@
 
     foreach $file (sort keys %wxMSW) {
         #! these files don't compile with SC++ 6
-        next if $file =~ /^(joystick|pnghand)\./;
+        #! next if $file =~ /^(joystick|pnghand)\./;
 
         next if $wxMSW{$file} =~ /\b16\b/;
 
@@ -69,21 +76,22 @@ OPTIONS=
 
 GENDIR=$(WXDIR)\src\generic
 COMMDIR=$(WXDIR)\src\common
+HTMLDIR=$(WXDIR)\src\html
 OLEDIR=ole
 MSWDIR=$(WXDIR)\src\msw
 
 GENERICOBJS= #$ ExpandList("WXGENERICOBJS");
 
-COMMONOBJS = \
-		$(COMMDIR)\y_tab.obj \
-		#$ ExpandList("WXCOMMONOBJS");
+COMMONOBJS = #$ ExpandList("WXCOMMONOBJS");
+
+HTMLOBJS = #$ ExpandList ("WXHTMLOBJS");
 
 MSWOBJS = #$ ExpandList("WXMSWOBJS");
 
 # Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
-OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS)
+OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS) $(WINSOCKLIB)
 
-all: MAKEARCHDIR $(LIBTARGET)
+all: MAKEARCHDIR MAKEWINSOCKLIB $(LIBTARGET) zlib png jpeg tiff regex
 
 MAKEARCHDIR:
     @if not exist $(MSWINCDIR)\setup.h copy $(MSWINCDIR)\setup0.h $(MSWINCDIR)\setup.h
@@ -91,27 +99,53 @@ MAKEARCHDIR:
     @if not exist $(ARCHINCDIR)\wx\setup.h mkdir $(ARCHINCDIR)\wx
     @if not exist $(ARCHINCDIR)\wx\setup.h copy $(MSWINCDIR)\setup.h $(ARCHINCDIR)\wx\setup.h
 
+MAKEWINSOCKLIB:
+      @if not exist $(WINSOCKLIB) implib  /s $(WINSOCKLIB) $(WINDIR)\system32\winsock.dll
+##    implib /system /v /suffix /Ic:\wx\dm\include\win32 $(WINSOCKLIB) $(WINDIR)\system32\winsock.dll
+##    implib  /s $(WINSOCKLIB) $(WINDIR)\system32\winsock.dll
+##@if not exist $(WINSOCKLIB)  
+
 $(LIBTARGET): $(OBJECTS)
 	-del $(LIBTARGET)
 	*lib /PAGESIZE:512 $(LIBTARGET) y $(OBJECTS), nul;
 
-clean:
+clean: clean_zlib clean_png clean_jpeg clean_tiff clean_regex
 	-del $(COMMDIR)\*.obj
 	-del $(MSWDIR)\*.obj
 	-del $(GENDIR)\*.obj
+    -del $(HTMLDIR)\*.obj
 	-del *.obj
     -del $(LIBTARGET)
 
-## $(COMMDIR)\y_tab.obj:     $(COMMDIR)\y_tab.c $(COMMDIR)\lex_yy.c
-##
-## $(COMMDIR)\y_tab.c:     $(COMMDIR)\dosyacc.c
-##        copy $(COMMDIR)\dosyacc.c $(COMMDIR)\y_tab.c
-##
-## $(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
-##    copy $(COMMDIR)\doslex.c $(COMMDIR)\lex_yy.c
-##
-### $(COMMDIR)\cmndata.obj:     $(COMMDIR)\cmndata.cpp
-###	*$(CC) -c $(CFLAGS) -I$(INCLUDE) $(OPTIONS) $(COMMDIR)\cmndata.cpp -o$(COMMDIR)\cmndata.obj
+png:   
+        make -f $(WXDIR)\src\png\makefile.sc FINAL=$(FINAL)
+
+clean_png:
+        make -f $(WXDIR)\src\png\makefile.sc clean
+
+zlib:   
+        make -f $(WXDIR)\src\zlib\makefile.sc FINAL=$(FINAL) 
+
+clean_zlib:
+        make -f $(WXDIR)\src\zlib\makefile.sc clean
+
+jpeg:   
+        make -f $(WXDIR)\src\jpeg\makefile.sc FINAL=$(FINAL)
+
+clean_jpeg:
+        make -f $(WXDIR)\src\jpeg\makefile.sc clean
+
+regex:  
+        make -f $(WXDIR)\src\regex\makefile.sc FINAL=$(FINAL) 
+
+clean_regex:
+        make -f $(WXDIR)\src\regex\makefile.sc clean
+
+tiff:  
+        make -f $(WXDIR)\src\tiff\makefile.sc FINAL=$(FINAL) 
+
+clean_tiff:
+        make -f $(WXDIR)\src\tiff\makefile.sc clean
 
 MFTYPE=sc
 makefile.$(MFTYPE) : $(WXWIN)\distrib\msw\tmake\filelist.txt $(WXWIN)\distrib\msw\tmake\$(MFTYPE).t

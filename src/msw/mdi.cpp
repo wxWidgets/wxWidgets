@@ -68,8 +68,11 @@ extern wxMenu *wxCurrentPopupMenu;
 extern const wxChar *wxMDIFrameClassName;   // from app.cpp
 extern const wxChar *wxMDIChildFrameClassName;
 extern const wxChar *wxMDIChildFrameClassNameNoRedraw;
-
+#ifdef __DIGITALMARS__
+extern "C" void wxAssociateWinWithHandle(HWND hWnd, wxWindow *win);
+#else
 extern void wxAssociateWinWithHandle(HWND hWnd, wxWindow *win);
+#endif
 extern void wxRemoveHandleAssociation(wxWindow *win);
 
 static HWND invalidHandle = 0;
