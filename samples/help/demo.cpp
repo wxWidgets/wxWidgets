@@ -35,7 +35,7 @@
 
 // define this to 1 to use HTML help even under Windows (by default, Windows
 // version will use WinHelp).
-// Please also see samples/html/helpview for a more complex help viewer.
+// Please also see samples/html/helpview.
 
 #define USE_HTML_HELP 1
 
@@ -97,6 +97,8 @@ public:
     void OnHelp(wxCommandEvent& event);
     void OnHtmlHelp(wxCommandEvent& event);
     void OnAdvancedHtmlHelp(wxCommandEvent& event);
+
+    void ShowHelp(int commandId, wxHelpControllerBase& helpController);
 
 private:
    wxHelpController         m_help;
@@ -324,7 +326,26 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnHelp(wxCommandEvent& event)
 {
-   switch(event.GetId())
+    ShowHelp(event.GetId(), m_help);
+}
+
+void MyFrame::OnHtmlHelp(wxCommandEvent& event)
+{
+#if USE_HTML_HELP
+    ShowHelp(event.GetId(), m_htmlHelp);
+#endif
+}
+
+void MyFrame::OnAdvancedHtmlHelp(wxCommandEvent& event)
+{
+#if USE_HTML_HELP
+    ShowHelp(event.GetId(), m_advancedHtmlHelp);
+#endif
+}
+
+void MyFrame::ShowHelp(int commandId, wxHelpControllerBase& helpController)
+{
+   switch(commandId)
    {
 
    // Note: For WinHelp, these ids are specified in the map session, mapping
@@ -332,97 +353,27 @@ void MyFrame::OnHelp(wxCommandEvent& event)
    // For HTML and external help, a wxhelp.map file is used.
 
    case HelpDemo_Help_Classes:
-      m_help.DisplaySection(2);
+   case HelpDemo_Html_Help_Classes:
+   case HelpDemo_Advanced_Html_Help_Classes:
+      helpController.DisplaySection(2);
+
+      // if (helpController.IsKindOf(CLASSINFO(wxHtmlHelpController)))
+      // ((wxHtmlHelpController&)helpController).Display("Classes"); // An alternative form for this controller
+
       break;
    case HelpDemo_Help_Functions:
-      m_help.DisplaySection(1);
+   case HelpDemo_Html_Help_Functions:
+   case HelpDemo_Advanced_Html_Help_Functions:
+      helpController.DisplaySection(1);
       break;
    case HelpDemo_Help_Help:
-      m_help.DisplaySection(3);
-      break;
-
-   // These three calls are only used by wxExtHelpController
-
-   case HelpDemo_Help_KDE:
-      m_help.SetViewer("kdehelp");
-      break;
-   case HelpDemo_Help_GNOME:
-      m_help.SetViewer("gnome-help-browser");
-      break;
-   case HelpDemo_Help_Netscape:
-      m_help.SetViewer("netscape", wxHELP_NETSCAPE);
+   case HelpDemo_Html_Help_Help:
+   case HelpDemo_Advanced_Html_Help_Help:
+      helpController.DisplaySection(3);
       break;
 
    case HelpDemo_Help_Search:
-   {
-      wxString key = wxGetTextFromUser("Search for?",
-                                       "Search help for keyword",
-                                       "",
-                                       this);
-      if(! key.IsEmpty())
-         m_help.KeywordSearch(key);
-   }
-   break;
-   case HelpDemo_Help_Index:
-   default:
-      m_help.DisplayContents();
-      break;
-   }
-}
-
-void MyFrame::OnHtmlHelp(wxCommandEvent& event)
-{
-#if USE_HTML_HELP
-   switch(event.GetId())
-   {
-
-   case HelpDemo_Html_Help_Classes:
-      m_htmlHelp.DisplaySection(2);
-      break;
-   case HelpDemo_Html_Help_Functions:
-      m_htmlHelp.DisplaySection(1);
-      break;
-   case HelpDemo_Html_Help_Help:
-      m_htmlHelp.DisplaySection(3);
-      break;
-
    case HelpDemo_Html_Help_Search:
-   {
-      wxString key = wxGetTextFromUser("Search for?",
-                                       "Search help for keyword",
-                                       "",
-                                       this);
-      if(! key.IsEmpty())
-         m_htmlHelp.KeywordSearch(key);
-   }
-   break;
-   case HelpDemo_Html_Help_Index:
-   default:
-      m_htmlHelp.DisplayContents();
-      break;
-   }
-#endif
-}
-
-void MyFrame::OnAdvancedHtmlHelp(wxCommandEvent& event)
-{
-#if USE_HTML_HELP
-   switch(event.GetId())
-   {
-
-   case HelpDemo_Advanced_Html_Help_Classes:
-      m_advancedHtmlHelp.DisplaySection(2);
-//      m_advancedHtmlHelp.Display("Classes"); // An alternative form
-      break;
-   case HelpDemo_Advanced_Html_Help_Functions:
-      m_advancedHtmlHelp.DisplaySection(1);
-//      m_advancedHtmlHelp.Display("Functions"); // An alternative form
-      break;
-   case HelpDemo_Advanced_Html_Help_Help:
-      m_advancedHtmlHelp.DisplaySection(3);
-//      m_advancedHtmlHelp.Display("About"); // An alternative form
-      break;
-
    case HelpDemo_Advanced_Html_Help_Search:
    {
       wxString key = wxGetTextFromUser("Search for?",
@@ -430,14 +381,30 @@ void MyFrame::OnAdvancedHtmlHelp(wxCommandEvent& event)
                                        "",
                                        this);
       if(! key.IsEmpty())
-         m_advancedHtmlHelp.KeywordSearch(key);
+         helpController.KeywordSearch(key);
    }
    break;
+
+   case HelpDemo_Help_Index:
+   case HelpDemo_Html_Help_Index:
    case HelpDemo_Advanced_Html_Help_Index:
+      helpController.DisplayContents();
+      break;
+
+   // These three calls are only used by wxExtHelpController
+
+   case HelpDemo_Help_KDE:
+      helpController.SetViewer("kdehelp");
+      break;
+   case HelpDemo_Help_GNOME:
+      helpController.SetViewer("gnome-help-browser");
+      break;
+   case HelpDemo_Help_Netscape:
+      helpController.SetViewer("netscape", wxHELP_NETSCAPE);
+      break;
+
    default:
-      m_advancedHtmlHelp.DisplayContents();
       break;
    }
-#endif
 }
 

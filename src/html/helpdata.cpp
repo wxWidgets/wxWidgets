@@ -93,7 +93,7 @@ class HP_TagHandler : public wxHtmlTagHandler
         wxHtmlBookRecord *m_Book;
 
     public:
-        HP_TagHandler(wxHtmlBookRecord *b) : wxHtmlTagHandler() {m_Book = b; m_Items = NULL; m_ItemsCnt = 0; m_Name = m_Page = wxEmptyString; m_Level = 0; }
+        HP_TagHandler(wxHtmlBookRecord *b) : wxHtmlTagHandler() {m_Book = b; m_Items = NULL; m_ItemsCnt = 0; m_Name = m_Page = wxEmptyString; m_Level = 0; m_ID = -1; }
         wxString GetSupportedTags() { return wxT("UL,OBJECT,PARAM"); }
         bool HandleTag(const wxHtmlTag& tag);
         void WriteOut(wxHtmlContentsItem*& array, int& size);
