@@ -720,6 +720,12 @@ void wxWindowMac::MacSuperShown( bool show )
 
 void wxWindowMac::MacSuperEnabled( bool enabled ) 
 {
+    if ( !IsTopLevel() )
+    {
+      // to be absolutely correct we'd have to invalidate (with eraseBkground 
+      // because unter MacOSX the frames are drawn with an addXXX mode)
+      // the borders area
+    }
     wxNode *node = GetChildren().First();
     while ( node )
     {

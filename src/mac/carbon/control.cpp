@@ -438,37 +438,8 @@ void wxControl::MacSuperChangedPosition()
 
 void wxControl::MacSuperEnabled( bool enabled ) 
 {
+    Refresh(FALSE) ;
     wxWindow::MacSuperEnabled( enabled ) ;
-/*
-    if ( m_macControl )
-    {
-        if ( UMAHasAppearance() )
-        {
-            if ( !enabled )
-            {
-                ::DeactivateControl( m_macControl ) ; 
-            }
-            else
-            {
-                if ( m_macEnabled )
-                    ::ActivateControl( m_macControl ) ;
-            }
-        }
-        else
-        {
-            if ( !enabled )
-            {
-                ::HiliteControl( m_macControl , 255 ) ;
-            }
-            else
-            {
-                if ( m_macEnabled )
-                    ::HiliteControl( m_macControl , 0 ) ;
-            }
-        }
-    }
-    wxWindow::MacSuperEnabled( enabled ) ;
-*/
 }
 
 void  wxControl::MacSuperShown( bool show ) 

@@ -38,9 +38,10 @@ class WXDLLEXPORT wxStatusBarMac : public wxStatusBarGeneric
   virtual void DrawFieldText(wxDC& dc, int i);
   virtual void DrawField(wxDC& dc, int i);
   virtual void SetStatusText(const wxString& text, int number = 0) ;
-
   ////////////////////////////////////////////////////////////////////////
   // Implementation
+
+  virtual void MacSuperEnabled( bool enable ) ;
 
   void OnPaint(wxPaintEvent& event);
 protected:

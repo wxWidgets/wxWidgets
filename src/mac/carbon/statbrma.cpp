@@ -55,6 +55,11 @@ void wxStatusBarMac::DrawFieldText(wxDC& dc, int i)
 
   wxRect rect;
   GetFieldRect(i, rect);
+  
+  if ( !IsWindowHilited( MacGetRootWindow() ) )
+  {
+    dc.SetTextForeground( wxColour( 0x80 , 0x80 , 0x80 ) ) ;
+  }
 
   wxString text(GetStatusText(i));
 
@@ -101,7 +106,10 @@ void wxStatusBarMac::SetStatusText(const wxString& text, int number)
 void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event) )
 {
   	wxPaintDC dc(this);
-	wxPen black( wxBLACK , 1 , wxSOLID ) ;
+  	
+  if ( IsWindowHilited( MacGetRootWindow() ) )
+  {
+  	wxPen black( wxBLACK , 1 , wxSOLID ) ;
 	wxPen white( wxWHITE , 1 , wxSOLID ) ;
 	
     dc.SetPen(black);
@@ -110,7 +118,13 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event) )
    	dc.SetPen(white);
     dc.DrawLine(0, 1 ,
            m_width , 1);
-
+  }
+  else
+  {
+    dc.SetPen(wxPen(wxColour(0x80,0x80,0x80),1,wxSOLID));
+    dc.DrawLine(0, 0 ,
+           m_width , 0);
+  }
 
   int i;
   if ( GetFont().Ok() )
@@ -123,4 +137,10 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event) )
 #   ifdef __WXMSW__
         dc.SetFont(wxNullFont);
 #   endif // MSW
+}
+
+void wxStatusBarMac::MacSuperEnabled( bool enabled ) 
+{
+    Refresh(FALSE) ;
+    wxWindow::MacSuperEnabled( enabled ) ;
 }

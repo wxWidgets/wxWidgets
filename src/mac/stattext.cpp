@@ -128,6 +128,10 @@ void wxStaticText::OnDraw( wxDC &dc )
     if (m_width <= 0 || m_height <= 0)
         return;
 
+  if ( !IsWindowHilited( MacGetRootWindow() ) )
+  {
+    dc.SetTextForeground( wxColour( 0x80 , 0x80 , 0x80 ) ) ;
+  }
   wxString paragraph;
   int i = 0 ;
   wxString text = m_label;

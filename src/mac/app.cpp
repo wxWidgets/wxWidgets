@@ -976,19 +976,24 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
 void wxApp::MacSuspend( bool convertClipboard )
 {
-    // we have to deactive the window manually
+    // we have to deactive the top level windows manually
 
-    wxTopLevelWindow* window = (wxTopLevelWindow*) GetTopWindow() ;
-    if ( window )
-        window->MacActivate( MacGetCurrentEvent() , false ) ;
+    wxNode* node = wxTopLevelWindows.First();
+    while (node)
+    {
+        wxTopLevelWindow* win = (wxTopLevelWindow*) node->Data();
+        win->MacActivate( MacGetCurrentEvent() , false ) ;
 
-        s_lastMouseDown = 0 ;
-        if( convertClipboard )
-        {
-            MacConvertPrivateToPublicScrap() ;
-        }
+        node = node->Next();
+    }
 
-        ::HideFloatingWindows() ;
+     s_lastMouseDown = 0 ;
+     if( convertClipboard )
+     {
+         MacConvertPrivateToPublicScrap() ;
+     }
+
+     ::HideFloatingWindows() ;
 }
 
 void wxApp::MacResume( bool convertClipboard )

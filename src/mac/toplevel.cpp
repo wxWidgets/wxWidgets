@@ -500,9 +500,7 @@ void wxTopLevelWindowMac::MacActivate( EventRecord *ev , bool inIsActivating )
     
     UMAHighlightAndActivateWindow( m_macWindow , inIsActivating ) ;
     
-    Refresh( FALSE ) ; 
-//  MacSuperEnabled( inIsActivating ) ;
-//  MacUpdateImmediately() ;
+    MacSuperEnabled( inIsActivating ) ;
 }
 
 void wxTopLevelWindowMac::MacKeyDown( EventRecord *ev ) 
