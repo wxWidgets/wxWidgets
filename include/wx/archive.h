@@ -16,7 +16,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_STREAMS && wxUSE_ARCSTREAM
+#if wxUSE_STREAMS && wxUSE_ARCHIVE_STREAMS
 
 #include "wx/stream.h"
 #include "wx/filename.h"
@@ -355,6 +355,6 @@ private:
     DECLARE_ABSTRACT_CLASS(wxArchiveClassFactory)
 };
 
-#endif // wxUSE_STREAMS && wxUSE_ARCSTREAM
+#endif // wxUSE_STREAMS && wxUSE_ARCHIVE_STREAMS
 
 #endif // _WX_ARCHIVE_H__

@@ -413,7 +413,7 @@
 #define wxUSE_FS_ZIP 1
 
 // wxArchive classes for accessing archives such as zip and tar
-#define wxUSE_ARCSTREAM 1
+#define wxUSE_ARCHIVE_STREAMS 1
 
 // Set to 1 to compile wxZipInput/OutputStream classes.
 #define wxUSE_ZIPSTREAM 1

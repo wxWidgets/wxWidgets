@@ -22,7 +22,7 @@
   #include "wx/defs.h"
 #endif
 
-#if wxUSE_STREAMS && wxUSE_ARCSTREAM
+#if wxUSE_STREAMS && wxUSE_ARCHIVE_STREAMS
 
 #include "wx/archive.h"
 #include "wx/html/forcelnk.h"
@@ -73,4 +73,4 @@ wxArchiveEntry& wxArchiveEntry::operator=(const wxArchiveEntry& WXUNUSED(e))
     return *this;
 }
 
-#endif // wxUSE_STREAMS && wxUSE_ARCSTREAM
+#endif // wxUSE_STREAMS && wxUSE_ARCHIVE_STREAMS

@@ -17,7 +17,7 @@
 #   include "wx/wx.h"
 #endif
 
-#if wxUSE_STREAMS && wxUSE_ARCSTREAM
+#if wxUSE_STREAMS && wxUSE_ARCHIVE_STREAMS
 
 // VC++ 6 warns that the list iterator's '->' operator will not work whenever
 // std::list is used with a non-pointer, so switch it off.
@@ -1284,4 +1284,4 @@ template class ArchiveTestCase<wxArchiveClassFactory>;
 template class ArchiveTestCase<wxZipClassFactory>;
 #endif
 
-#endif // wxUSE_STREAMS && wxUSE_ARCSTREAM
+#endif // wxUSE_STREAMS && wxUSE_ARCHIVE_STREAMS

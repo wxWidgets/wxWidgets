@@ -933,12 +933,12 @@
 #           define wxUSE_ZLIB 1
 #       endif
 #   endif
-#   if !wxUSE_ARCSTREAM
+#   if !wxUSE_ARCHIVE_STREAMS
 #       ifdef wxABORT_ON_CONFIG_ERROR
 #           error "wxZip requires wxArchive"
 #       else
-#           undef wxUSE_ARCSTREAM
-#           define wxUSE_ARCSTREAM 1
+#           undef wxUSE_ARCHIVE_STREAMS
+#           define wxUSE_ARCHIVE_STREAMS 1
 #       endif
 #   endif
 #endif /* wxUSE_ZIPSTREAM */
