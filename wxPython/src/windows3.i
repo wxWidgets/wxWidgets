@@ -236,11 +236,13 @@ public:
 
     DEC_PYCALLBACK_BOOL_ME(ProcessLeftDown);
     DEC_PYCALLBACK__(OnDismiss);
+    DEC_PYCALLBACK_BOOL_(CanDismiss);
     PYPRIVATE;
 };
 
 IMP_PYCALLBACK_BOOL_ME(wxPyPopupTransientWindow, wxPopupTransientWindow, ProcessLeftDown);
 IMP_PYCALLBACK__(wxPyPopupTransientWindow, wxPopupTransientWindow, OnDismiss);
+IMP_PYCALLBACK_BOOL_(wxPyPopupTransientWindow, wxPopupTransientWindow, CanDismiss);
 %}
 
 
