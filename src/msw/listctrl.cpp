@@ -27,6 +27,7 @@
 #if defined(__WIN95__)
 
 #include "wx/listctrl.h"
+#include "wx/log.h"
 
 #include "wx/msw/private.h"
 
@@ -65,10 +66,6 @@ bool wxListCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, con
   m_imageListState = NULL;
   m_textCtrl = NULL;
   m_colCount = 0;
-
-  wxSystemSettings settings;
-  SetBackgroundColour(settings.GetSystemColour(wxSYS_COLOUR_WINDOW));
-  SetForegroundColour(parent->GetDefaultForegroundColour());
 
   SetValidator(validator);
   SetName(name);
@@ -111,7 +108,7 @@ bool wxListCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, con
   wstyle |= ConvertToMSWStyle(oldStyle, m_windowStyle);
 
   // Create the ListView control.
-  HWND hWndListControl = CreateWindowEx(exStyle,
+  m_hWnd = (WXHWND)CreateWindowEx(exStyle,
     WC_LISTVIEW,
     "",
     wstyle,
@@ -119,9 +116,18 @@ bool wxListCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, con
     (HWND) parent->GetHWND(),
     (HMENU)m_windowId,
     wxGetInstance(),
-    NULL );
+    NULL);
 
-  m_hWnd = (WXHWND) hWndListControl;
+  if ( !m_hWnd ) {
+     wxLogError("Can't create list control window.");
+
+     return FALSE;
+  }
+
+  wxSystemSettings settings;
+  SetBackgroundColour(settings.GetSystemColour(wxSYS_COLOUR_WINDOW));
+  SetForegroundColour(parent->GetDefaultForegroundColour());
+
   if (parent) parent->AddChild(this);
   
   SubclassWin((WXHWND) m_hWnd);
