@@ -122,7 +122,9 @@ def main(args):
         # blow away the old one if they are different.
         for dest, temp in [(swigDest, swigDestTemp),
                            (pyDest, pyDestTemp)]:
-            if open(dest).read() != open(temp).read():
+            if not os.path.exists(dest):
+                os.rename(temp, dest)
+            elif open(dest).read() != open(temp).read():
                 os.unlink(dest)
                 os.rename(temp, dest)
             else:
