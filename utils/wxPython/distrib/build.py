@@ -757,7 +757,7 @@ pycfiles : $(PYMODULES)
 
 
 $(TARGETDIR) :
-	mkdir $(TARGETDIR)
+	mkdir -p $(TARGETDIR)
 
 $(GENCODEDIR):
 	mkdir $(GENCODEDIR)
@@ -775,7 +775,8 @@ $(GENCODEDIR):
 #----------------------------------------------------------------------------
 
 if __name__ == '__main__':
-    main(sys.argv)
+    err = main(sys.argv)
+    sys.exit(err)
 
 #----------------------------------------------------------------------------
 

@@ -28,3 +28,4 @@ for module in MODULELIST:
     if err:
         break
 
+sys.exit(err)

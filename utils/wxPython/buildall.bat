@@ -1,9 +1,9 @@
 
 cd %WXWIN%\utils\wxPython\src
-build %1 %2 %3 %4 %5 %6 %7 %8 %9
+python ..\distrib\build.py %1 %2 %3 %4 %5 %6 %7 %8 %9
 
 cd %WXWIN%\utils\wxPython\modules
-buildall %1 %2 %3 %4 %5 %6 %7 %8 %9
+python .\buildall.py %1 %2 %3 %4 %5 %6 %7 %8 %9
 
 
 cd %WXWIN%\utils\wxPython

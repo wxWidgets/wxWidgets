@@ -1,11 +1,11 @@
 #!/bin/bash
 cd src
-build $*
+python ../distrib/build.py $*
 if [ "$?" != "0" ]; then
     exit 1
 fi
 
 cd ../modules
-buildall.py $*
+python buildall.py $*
 cd ..
 
