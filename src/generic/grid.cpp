@@ -6788,7 +6788,6 @@ void wxGrid::DrawTextRectangle( wxDC& dc,
 {
     wxArrayString lines;
 
-    dc.SetClippingRegion( rect );
     StringToLines( value, lines );
 
 
@@ -6810,6 +6809,7 @@ void wxGrid::DrawTextRectangle( wxDC& dc,
     long textWidth, textHeight;
     long lineWidth, lineHeight;
 
+    dc.SetClippingRegion( rect );
     if ( lines.GetCount() )
     {
         GetTextBoxSize( dc, lines, &textWidth, &textHeight );
@@ -8509,11 +8509,17 @@ bool wxGrid::LookupAttr(int row, int col, wxGridCellAttr **attr) const
 
 wxGridCellAttr *wxGrid::GetCellAttr(int row, int col) const
 {
-    wxGridCellAttr *attr;
-    if ( !LookupAttr(row, col, &attr) )
+    wxGridCellAttr *attr = NULL;
+    // Additional test to avoid looking at the cache e.g. for
+    // wxNoCellCoords, as this will confuse memory management.
+    if ( row >= 0 )
     {
-        attr = m_table ? m_table->GetAttr(row, col , wxGridCellAttr::Any) : (wxGridCellAttr *)NULL;
-        CacheAttr(row, col, attr);
+	if ( !LookupAttr(row, col, &attr) )
+	{
+	    attr = m_table ? m_table->GetAttr(row, col , wxGridCellAttr::Any)
+	                   : (wxGridCellAttr *)NULL;
+	    CacheAttr(row, col, attr);
+	}
     }
     if (attr)
     {
