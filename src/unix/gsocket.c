@@ -263,6 +263,7 @@ GSocketError GSocket_SetServer(GSocket *sck)
 
   /* We always have a stream here  */
   sck->m_stream = TRUE;
+  sck->m_server = TRUE;
 
   /* Create the socket */
   sck->m_fd = socket(sck->m_local->m_realfamily, SOCK_STREAM, 0);
@@ -670,11 +671,11 @@ int _GSocket_Recv_Stream(GSocket *socket, char *buffer, int size)
   DISABLE_TIMEOUT(socket);
   UNMASK_SIGNAL();
 
-  if (ret == -1 && errno != EAGAIN) {
+  if (ret == -1 && errno != EWOULDBLOCK) {
     socket->m_error = GSOCK_IOERR;
     return -1;
   }
-  if (errno == EAGAIN) {
+  if (errno == EWOULDBLOCK) {
     socket->m_error = GSOCK_TRYAGAIN;
     return -1;
   }
@@ -694,11 +695,11 @@ int _GSocket_Recv_Dgram(GSocket *socket, char *buffer, int size)
   ret = recvfrom(socket->m_fd, buffer, size, 0, &from, &fromlen);
   DISABLE_TIMEOUT(socket);
   UNMASK_SIGNAL();
-  if (ret == -1 && errno != EAGAIN) {
+  if (ret == -1 && errno != EWOULDBLOCK) {
     socket->m_error = GSOCK_IOERR;
     return -1;
   }
-  if (errno == EAGAIN) {
+  if (errno == EWOULDBLOCK) {
     socket->m_error = GSOCK_TRYAGAIN;
     return -1;
   }
@@ -726,11 +727,11 @@ int _GSocket_Send_Stream(GSocket *socket, const char *buffer, int size)
   ret = send(socket->m_fd, buffer, size, 0);
   DISABLE_TIMEOUT(socket);
   UNMASK_SIGNAL();
-  if (ret == -1 && errno != EAGAIN) {
+  if (ret == -1 && errno != EWOULDBLOCK) {
     socket->m_error = GSOCK_IOERR;
     return -1;
   }
-  if (errno == EAGAIN) {
+  if (errno == EWOULDBLOCK) {
     socket->m_error = GSOCK_TRYAGAIN;
     return -1;
   }
@@ -760,11 +761,11 @@ int _GSocket_Send_Dgram(GSocket *socket, const char *buffer, int size)
   /* Frees memory allocated from _GAddress_translate_to */
   free(addr);
 
-  if (ret == -1 && errno != EAGAIN) {
+  if (ret == -1 && errno != EWOULDBLOCK) {
     socket->m_error = GSOCK_IOERR;
     return -1;
   }
-  if (errno == EAGAIN) {
+  if (errno == EWOULDBLOCK) {
     socket->m_error = GSOCK_TRYAGAIN;
     return -1;
   }

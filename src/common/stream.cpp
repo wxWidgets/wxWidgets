@@ -499,7 +499,7 @@ size_t wxInputStream::GetWBack(char *buf, size_t bsize)
   return s_toget;
 }
 
-size_t wxInputStream::Ungetch(void *buf, size_t bufsize)
+size_t wxInputStream::Ungetch(const void *buf, size_t bufsize)
 {
   char *ptrback;
 

@@ -93,7 +93,7 @@ class WXDLLEXPORT wxInputStream: public wxStreamBase {
   virtual size_t LastRead() { return wxStreamBase::m_lastcount; }
 
   // Ungetch
-  size_t Ungetch(void *buffer, size_t size);
+  size_t Ungetch(const void *buffer, size_t size);
   bool Ungetch(char c);
 
   // Operators
