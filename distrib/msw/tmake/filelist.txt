@@ -353,6 +353,7 @@ treectrl.cpp	MSW	Win32Only
 utils.cpp	MSW	Base,LowLevel
 utilsexc.cpp	MSW	Base,LowLevel
 uuid.cpp	MSW	OLE
+volume.cpp	MSW	Base
 wave.cpp	MSW
 window.cpp	MSW	LowLevel
 
@@ -951,6 +952,7 @@ valtext.h	WXH
 variant.h	WXH	Base
 vector.h	WXH	Base
 version.h	WXH	Base
+volume.h	WXH	Base
 wave.h	WXH
 wfstream.h	WXH	Base
 window.h	WXH
