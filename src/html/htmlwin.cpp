@@ -867,9 +867,16 @@ void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
     if ( !m_backBuffer )
         m_backBuffer = new wxBitmap(sz.x, sz.y);
     dcm.SelectObject(*m_backBuffer);
-    dcm.SetBackground(wxBrush(GetBackgroundColour(), wxSOLID));
-    dcm.Clear();
     PrepareDC(dcm);
+
+    // preserve the existing background, otherwise we'd erase anything the user
+    // code had drawn in its EVT_ERASE_BACKGROUND handler when we do the Blit
+    // back below
+    dcm.Blit(0, rect.GetTop(),
+             sz.x, rect.GetBottom() - rect.GetTop() + 1,
+             &dc,
+             0, rect.GetTop());
+
     dcm.SetMapMode(wxMM_TEXT);
     dcm.SetBackgroundMode(wxTRANSPARENT);
 
