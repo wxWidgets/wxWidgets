@@ -188,7 +188,7 @@ place, then do the same for wxPython.
    GTK2.  If you built wxWidgets to use GTK 1.2.x then you should add
    this flag to the command-line::
 
-	 WXPORT=gtk2 
+	 WXPORT=gtk 
 
    If you would like to do a Unicode enabled build (all strings sent
    to or retruned from wx functions are Unicode objects) and your

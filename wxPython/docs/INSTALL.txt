@@ -66,9 +66,11 @@ Installing on Unix-like Systems (not OS X)
 
 4. In addition to building wxPython as described in BUILD.txt, you can
    install it to Python's site-packages dir, as well as some scripts
-   into the same bin dir used by Python by using this command::
+   into the same bin dir used by Python by using this command, plus
+   whatever WXPORT, UNICODE, etc. settings you used for the initial
+   build step::
 
-	python2.3 setup.py install
+	python2.3 setup.py install 
 
    If you would like to install to some place besides the prefix where
    Python is installed, (such as to your home directory) then you can
