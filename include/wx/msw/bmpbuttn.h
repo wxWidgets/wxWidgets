@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_BMPBUTTN_H_
@@ -17,6 +17,7 @@
 #endif
 
 #include "wx/button.h"
+#include "wx/bitmap.h"
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxButtonNameStr;
 
