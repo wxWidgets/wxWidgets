@@ -69,11 +69,24 @@ WXDLLEXPORT int wxEntry(HINSTANCE hInstance,
 
     // break the command line in words
     wxArrayString args;
+
     const wxChar *cmdLine = ::GetCommandLine();
     if ( cmdLine )
     {
         args = wxCmdLineParser::ConvertStringToArgs(cmdLine);
     }
+
+#ifdef __WXWINCE__
+    // WinCE doesn't insert the program itself, so let's
+    // do it here.
+    wxString programName;
+
+    if ( ::GetModuleFileName( (HMODULE) wxGetInstance(), wxStringBuffer(programName, MAX_PATH), MAX_PATH ) == 0)
+    {
+        wxLogLastError(_T("GetModuleFileName"));
+    }
+    args.Insert(programName, 0);
+#endif
 
     int argc = args.GetCount();
 
