@@ -1121,7 +1121,7 @@ void wxDbTable::BuildUpdateStmt(wxString &pSqlStmt, int typeOfUpd, const wxStrin
     bool firstColumn = TRUE;
 
     pSqlStmt.Printf(wxT("UPDATE %s SET "),
-                    pDb->SQLTableName(tableName.Upper().c_str()).c_str());
+                    pDb->SQLTableName(tableName.c_str()).c_str());
 
     // Append a list of columns to be updated
     int i;
