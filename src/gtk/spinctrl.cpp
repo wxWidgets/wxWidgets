@@ -259,12 +259,20 @@ void wxSpinCtrl::OnChar( wxKeyEvent &event )
         wxWindow *top_frame = m_parent;
         while (top_frame->GetParent() && !(top_frame->GetParent()->IsTopLevel()))
             top_frame = top_frame->GetParent();
-        GtkWindow *window = GTK_WINDOW(top_frame->m_widget);
 
-        if (window->default_widget)
+        if ( GTK_IS_WINDOW(top_frame->m_widget) )
         {
-            gtk_widget_activate (window->default_widget);
-            return;
+            GtkWindow *window = GTK_WINDOW(top_frame->m_widget);
+            if ( window )
+            {
+                GtkWidget *widgetDef = window->default_widget;
+
+                if ( widgetDef && GTK_IS_WINDOW(widgetDef) )
+                {
+                    gtk_widget_activate(widgetDef);
+                    return;
+                }
+            }
         }
     }
 
