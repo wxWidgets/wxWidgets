@@ -409,6 +409,41 @@ void wxDC::DoDrawArc(wxCoord x1,wxCoord y1,wxCoord x2,wxCoord y2, wxCoord xc, wx
     CalcBoundingBox((wxCoord)(xc+radius), (wxCoord)(yc+radius));
 }
 
+void wxDC::DoDrawCheckMark(wxCoord x1, wxCoord y1,
+                           wxCoord width, wxCoord height)
+{
+    wxCoord x2 = x1 + width,
+            y2 = y1 + height;
+
+#if defined(__WIN32__) && !defined(__SC__)
+    RECT rect;
+    rect.left   = x1;
+    rect.top    = y1;
+    rect.right  = x2;
+    rect.bottom = y2;
+
+    DrawFrameControl(GetHdc(), &rect, DFC_MENU, DFCS_MENUCHECK);
+#else // Win16
+    // In WIN16, draw a cross
+    HPEN blackPen = ::CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
+    HPEN whiteBrush = (HPEN)::GetStockObject(WHITE_BRUSH);
+    HPEN hPenOld = (HPEN)::SelectObject(hdcMem, blackPen);
+    HPEN hBrushOld = (HPEN)::SelectObject(hdcMem, whiteBrush);
+    ::SetROP2(GetHdc(), R2_COPYPEN);
+    Rectangle(GetHdc(), x1, y1, x2, y2);
+    MoveTo(GetHdc(), x1, y1);
+    LineTo(GetHdc(), x2, y2);
+    MoveTo(GetHdc(), x2, y1);
+    LineTo(GetHdc(), x1, y2);
+    ::SelectObject(GetHdc(), hPenOld);
+    ::SelectObject(GetHdc(), hBrushOld);
+    ::DeleteObject(blackPen);
+#endif // Win32/16
+
+    CalcBoundingBox(x1, y1);
+    CalcBoundingBox(x2, y2);
+}
+
 void wxDC::DoDrawPoint(wxCoord x, wxCoord y)
 {
     COLORREF color = 0x00ffffff;

@@ -153,6 +153,8 @@ protected:
     virtual void DoDrawArc(wxCoord x1, wxCoord y1,
                            wxCoord x2, wxCoord y2,
                            wxCoord xc, wxCoord yc);
+    virtual void DoDrawCheckMark(wxCoord x, wxCoord y,
+                                 wxCoord width, wxCoord height);
     virtual void DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h,
                                    double sa, double ea);
 

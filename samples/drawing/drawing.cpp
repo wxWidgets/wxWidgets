@@ -574,22 +574,31 @@ void MyCanvas::DrawDefault(wxDC& dc)
 
     dc.DrawIcon( wxICON(mondrian), 40, 40 );
 
+    dc.DrawCheckMark(5, 80, 15, 15);
+    dc.DrawCheckMark(25, 80, 30, 30);
+    dc.DrawCheckMark(60, 80, 60, 60);
+
     // this is the test for "blitting bitmap into DC damages selected brush"
     // bug
+    wxIcon icon = wxTheApp->GetStdIcon(wxICON_INFORMATION);
+    wxCoord rectSize = icon.GetWidth() + 10;
+    wxCoord x = 100;
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.SetBrush( *wxGREEN_BRUSH );
-    dc.DrawRectangle(100, 10, 40, 40);
-    dc.DrawBitmap(wxTheApp->GetStdIcon(wxICON_INFORMATION), 102, 12, TRUE);
-    dc.DrawRectangle(150, 10, 40, 40);
-    dc.DrawIcon(wxTheApp->GetStdIcon(wxICON_INFORMATION), 152, 12);
-    dc.DrawRectangle(200, 10, 40, 40);
+    dc.DrawRectangle(x, 10, rectSize, rectSize);
+    dc.DrawBitmap(icon, x + 5, 15, TRUE);
+    x += rectSize + 10;
+    dc.DrawRectangle(x, 10, rectSize, rectSize);
+    dc.DrawIcon(wxTheApp->GetStdIcon(wxICON_INFORMATION), x + 5, 15);
+    x += rectSize + 10;
+    dc.DrawRectangle(x, 10, rectSize, rectSize);
 
     // test for "transparent" bitmap drawing (it intersects with the last
     // rectangle above)
     //dc.SetBrush( *wxTRANSPARENT_BRUSH );
     #include "../image/smile.xpm"
     wxBitmap bmp(smile_xpm);
-    dc.DrawBitmap(bmp, 210, 30, TRUE);
+    dc.DrawBitmap(bmp, x + rectSize - 20, rectSize - 10, TRUE);
 
     dc.SetBrush( *wxBLACK_BRUSH );
     dc.DrawRectangle( 0, 160, 1000, 300 );
@@ -722,9 +731,9 @@ void MyCanvas::DrawDefault(wxDC& dc)
 
     memdc2.DrawRectangle(0, 0, totalWidth, totalHeight);
 
-    memdc2.SelectObject(wxNullBitmap);
     memdc2.SetPen(wxNullPen);
     memdc2.SetBrush(wxNullBrush);
+    memdc2.SelectObject(wxNullBitmap);
 
     dc.DrawBitmap(bitmap2, 500, 270);
 }

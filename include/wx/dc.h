@@ -43,8 +43,6 @@ WXDLLEXPORT_DATA(extern int) wxPageNumber;
 
 class WXDLLEXPORT wxDCBase : public wxObject
 {
-    DECLARE_ABSTRACT_CLASS(wxDCBase)
-
 public:
     wxDCBase()
     {
@@ -111,6 +109,12 @@ public:
         { DoDrawArc(x1, y1, x2, y2, xc, yc); }
     void DrawArc(const wxPoint& pt1, const wxPoint& pt2, const wxPoint& centre)
         { DoDrawArc(pt1.x, pt1.y, pt2.x, pt2.y, centre.x, centre.y); }
+
+    void DrawCheckMark(wxCoord x, wxCoord y,
+                       wxCoord width, wxCoord height)
+        { DoDrawCheckMark(x, y, width, height); }
+    void DrawCheckMark(const wxRect& rect)
+        { DoDrawCheckMark(rect.x, rect.y, rect.width, rect.height); }
 
     void DrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h,
                          double sa, double ea)
@@ -261,7 +265,7 @@ public:
 
     virtual wxCoord GetCharHeight() const = 0;
     virtual wxCoord GetCharWidth() const = 0;
-    
+
     void GetTextExtent(const wxString& string,
                        wxCoord *x, wxCoord *y,
                        wxCoord *descent = NULL,
@@ -453,13 +457,13 @@ public:
             *y = y2;
     }
     void GetClippingBox(long *x, long *y, long *w, long *h) const
-    { 
-	wxCoord xx,yy,ww,hh;
-	DoGetClippingBox(&xx, &yy, &ww, &hh);
-	if (x) *x = xx;
-	if (y) *y = yy;
-	if (w) *w = ww;
-	if (h) *h = hh;
+    {
+        wxCoord xx,yy,ww,hh;
+        DoGetClippingBox(&xx, &yy, &ww, &hh);
+        if (x) *x = xx;
+        if (y) *y = yy;
+        if (w) *w = ww;
+        if (h) *h = hh;
     }
 #endif // !Win16
 
@@ -485,6 +489,8 @@ protected:
     virtual void DoDrawArc(wxCoord x1, wxCoord y1,
                            wxCoord x2, wxCoord y2,
                            wxCoord xc, wxCoord yc) = 0;
+    virtual void DoDrawCheckMark(wxCoord x, wxCoord y,
+                                 wxCoord width, wxCoord height);
     virtual void DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h,
                                    double sa, double ea) = 0;
 
@@ -605,6 +611,7 @@ protected:
 
 private:
     DECLARE_NO_COPY_CLASS(wxDCBase);
+    DECLARE_ABSTRACT_CLASS(wxDCBase)
 };
 
 // ----------------------------------------------------------------------------

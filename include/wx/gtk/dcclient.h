@@ -40,6 +40,7 @@ public:
     virtual bool CanDrawBitmap() const { return TRUE; }
     virtual bool CanGetTextExtent() const { return TRUE; }
 
+//protected:
     virtual void DoFloodFill( wxCoord x, wxCoord y, const wxColour& col, int style=wxFLOOD_SURFACE );
     virtual bool DoGetPixel( wxCoord x1, wxCoord y1, wxColour *col ) const;
 
@@ -121,7 +122,7 @@ public:
     void ComputeScaleAndOrigin();
 
     GdkWindow *GetWindow() { return m_window; }
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxWindowDC)
 };
@@ -135,7 +136,7 @@ class wxPaintDC : public wxWindowDC
 public:
     wxPaintDC();
     wxPaintDC( wxWindow *win );
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxPaintDC)
 };
@@ -149,7 +150,7 @@ class wxClientDC : public wxWindowDC
 public:
     wxClientDC();
     wxClientDC( wxWindow *win );
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxClientDC)
 };

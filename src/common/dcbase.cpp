@@ -30,6 +30,27 @@
 
 #include "wx/dc.h"
 
+void wxDCBase::DoDrawCheckMark(wxCoord x1, wxCoord y1,
+                               wxCoord width, wxCoord height)
+{
+    wxCHECK_RET( Ok(), wxT("invalid window dc") );
+
+    wxCoord x2 = x1 + width,
+            y2 = y1 + height;
+
+    // this is to yield width of 3 for width == height == 10
+    SetPen(wxPen(GetTextForeground(), (width + height + 1) / 7, wxSOLID));
+
+    // we're drawing a scaled version of wx/generic/tick.xpm here
+    wxCoord x3 = x1 + (4*width) / 10,   // x of the tick bottom
+            y3 = y1 + height / 2;       // y of the left tick branch
+    DoDrawLine(x1, y3, x3, y2);
+    DoDrawLine(x3, y2, x2, y1);
+
+    CalcBoundingBox(x1, y1);
+    CalcBoundingBox(x2, y2);
+}
+
 void wxDCBase::DrawLines(const wxList *list, wxCoord xoffset, wxCoord yoffset)
 {
     int n = list->Number();
