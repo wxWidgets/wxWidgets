@@ -143,6 +143,7 @@ protected:
     // the check/radio boxes for styles
     wxCheckBox *m_chkLabels,
                *m_chkVert,
+               *m_chkInverse,
                *m_chkTicks,
                *m_chkBothSides;
 
@@ -210,6 +211,7 @@ SliderWidgetsPage::SliderWidgetsPage(wxBookCtrl *book,
     m_max = 100;
 
     m_chkVert =
+    m_chkInverse = 
     m_chkTicks =
     m_chkLabels =
     m_chkBothSides = (wxCheckBox *)NULL;
@@ -226,6 +228,7 @@ SliderWidgetsPage::SliderWidgetsPage(wxBookCtrl *book,
     wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
 
     m_chkVert = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Vertical"));
+    m_chkInverse = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Inverse"));
     m_chkTicks = CreateCheckBoxAndAddToSizer(sizerLeft, _T("Show &ticks"));
     m_chkLabels = CreateCheckBoxAndAddToSizer(sizerLeft, _T("Show &labels"));
     static const wxString sides[] =
@@ -324,6 +327,7 @@ SliderWidgetsPage::SliderWidgetsPage(wxBookCtrl *book,
 void SliderWidgetsPage::Reset()
 {
     m_chkVert->SetValue(false);
+    m_chkInverse->SetValue(false);
     m_chkTicks->SetValue(true);
     m_chkLabels->SetValue(true);
     m_chkBothSides->SetValue(false);
@@ -340,6 +344,11 @@ void SliderWidgetsPage::CreateSlider()
         flags |= wxSL_VERTICAL;
     else
         flags |= wxSL_HORIZONTAL;
+
+    if ( m_chkInverse->GetValue() )
+    {
+        flags |= wxSL_INVERSE;
+    }
 
     if ( m_chkLabels->GetValue() )
     {
@@ -530,6 +539,7 @@ void SliderWidgetsPage::OnUpdateUIMinMaxButton(wxUpdateUIEvent& event)
 void SliderWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
 {
     event.Enable( m_chkVert->GetValue() ||
+                  m_chkInverse->GetValue() || 
                   !m_chkTicks->GetValue() ||
                   !m_chkLabels->GetValue() ||
                   m_chkBothSides->GetValue() );
@@ -596,10 +606,11 @@ void SliderWidgetsPage::OnSlider(wxScrollEvent& event)
 
     static int s_numSliderEvents = 0;
 
-    wxLogMessage(wxT("Slider event #%d: %s (pos = %d)"),
+    wxLogMessage(wxT("Slider event #%d: %s (pos = %d, int value = %d)"),
                  s_numSliderEvents++,
                  eventNames[index],
-                 event.GetPosition());
+                 event.GetPosition(),
+                 event.GetInt());
 }
 
 #endif // wxUSE_SLIDER
