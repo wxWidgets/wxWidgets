@@ -403,7 +403,7 @@ bool wxApp::Initialized()
 
 int wxApp::MainLoop()
 {
-     int rt;
+    int rt;
     m_mainLoop = new wxEventLoop;
 
     rt = m_mainLoop->Run();

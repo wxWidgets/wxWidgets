@@ -840,6 +840,126 @@ void wxWindowDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y)
 {
 }
 
+#if wxUSE_NANOX
+void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
+                               wxCoord x, wxCoord y,
+                               bool useMask )
+{
+    wxCHECK_RET( Ok(), wxT("invalid window dc") );
+
+    wxCHECK_RET( bitmap.Ok(), wxT("invalid bitmap") );
+    
+    bool is_mono = (bitmap.GetBitmap() != NULL);
+
+    /* scale/translate size and position */
+    int xx = XLOG2DEV(x);
+    int yy = YLOG2DEV(y);
+
+    int w = bitmap.GetWidth();
+    int h = bitmap.GetHeight();
+
+    CalcBoundingBox( x, y );
+    CalcBoundingBox( x + w, y + h );
+
+    if (!m_window) return;
+
+    int ww = XLOG2DEVREL(w);
+    int hh = YLOG2DEVREL(h);
+
+    /* compare to current clipping region */
+    if (!m_currentClippingRegion.IsNull())
+    {
+        wxRegion tmp( xx,yy,ww,hh );
+        tmp.Intersect( m_currentClippingRegion );
+        if (tmp.IsEmpty())
+            return;
+    }
+
+    /* scale bitmap if required */
+    wxBitmap use_bitmap;
+    if ((w != ww) || (h != hh))
+    {
+        wxImage image( bitmap );
+        image.Rescale( ww, hh );
+#if 0
+        if (is_mono)
+            use_bitmap = image.ConvertToMonoBitmap(255,255,255);
+        else
+#endif
+            use_bitmap = image.ConvertToBitmap();
+    }
+    else
+    {
+        use_bitmap = bitmap;
+    }
+
+    /* apply mask if any */
+    WXPixmap mask = NULL;
+    if (use_bitmap.GetMask())
+        mask = use_bitmap.GetMask()->GetBitmap();
+
+    if (useMask && mask)
+    {
+        Pixmap pixmap = (Pixmap) use_bitmap.GetPixmap() ;
+        Pixmap maskPixmap = (Pixmap) use_bitmap.GetMask()->GetBitmap() ;
+        Pixmap bufPixmap = GrNewPixmap(w, h, 0);
+        GC gc = GrNewGC();
+        GrSetGCUseBackground(gc, FALSE);
+        GrSetGCMode(gc, GR_MODE_COPY);
+
+        // This code assumes that background and foreground
+        // colours are used in ROPs, like in MSW.
+        // Not sure if this is true.
+
+        // Copy destination to buffer.
+        // In DoBlit, we need this step because Blit has
+        // a ROP argument. Here, we don't need it.
+        // In DoBlit, we may be able to eliminate this step
+        // if we check if the rop = copy
+#if 0
+        GrCopyArea(bufPixmap, gc, 0, 0, w, h, (Window) m_window,
+                  0, 0, GR_MODE_COPY);
+#endif
+            
+        // Copy src to buffer using selected raster op (none selected
+        // in DrawBitmap, so just use Gxcopy)
+        GrCopyArea(bufPixmap, gc, 0, 0, w, h, pixmap,
+                   0, 0, GR_MODE_COPY);
+
+        // Set masked area in buffer to BLACK (pixel value 0)
+        GrSetGCBackground(gc, WHITE);
+        GrSetGCForeground(gc, BLACK);
+        GrCopyArea(bufPixmap, gc, 0, 0, w, h, maskPixmap,
+                    0, 0, GR_MODE_AND);
+                       
+        // set unmasked area in dest to BLACK
+        GrSetGCBackground(gc, BLACK);
+        GrSetGCForeground(gc, WHITE);
+        GrCopyArea((Window) m_window, gc, xx, yy, w, h, maskPixmap,
+                   0, 0, GR_MODE_AND);
+
+        // OR buffer to dest
+        GrCopyArea((Window) m_window, gc, xx, yy, w, h, bufPixmap,
+                   0, 0, GR_MODE_OR);
+
+        GrDestroyGC(gc);
+        GrDestroyWindow(bufPixmap);
+    }
+    else
+      XCopyArea( (Display*) m_display, (Pixmap) use_bitmap.GetPixmap(), (Window) m_window,
+            (GC) m_penGC, 0, 0, w, h, xx, yy );
+
+    /* remove mask again if any */
+    if (useMask && mask)
+    {
+        if (!m_currentClippingRegion.IsNull())
+                XSetRegion( (Display*) m_display, (GC) m_penGC, (Region) m_currentClippingRegion.GetX11Region() );
+    }
+}
+
+#else
+
+// Normal X11
 void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
                                wxCoord x, wxCoord y,
                                bool useMask )
@@ -970,6 +1090,8 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
         }
     }
 }
+#endif
+  // wxUSE_NANOX/!wxUSE_NANOX
 
 bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                          wxDC *source, wxCoord xsrc, wxCoord ysrc, int rop, bool useMask,

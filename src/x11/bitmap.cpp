@@ -1410,6 +1410,7 @@ int GrGetPixelColor(GR_SCREEN_INFO* sinfo, GR_PALETTE* palette, GR_PIXELVAL pixe
     return 1;
 }
 #endif
+
 #endif
   // wxUSE_NANOX
 

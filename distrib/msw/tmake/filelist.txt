@@ -631,6 +631,7 @@ palette.cpp	X11
 pen.cpp	X11
 popupwin.cpp	X11
 region.cpp	X11
+reparent.cpp	X11
 settings.cpp	X11
 toplevel.cpp	X11
 utils.cpp	X11
@@ -1206,6 +1207,7 @@ pen.h	X11H
 print.h	X11H
 private.h	X11H
 region.h	X11H
+reparent.h	X11H
 settings.h	X11H
 toolbar.h	X11H
 toplevel.h	X11H

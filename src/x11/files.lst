@@ -27,6 +27,7 @@ ALL_SOURCES = \
 		x11/pen.cpp \
 		x11/popupwin.cpp \
 		x11/region.cpp \
+		x11/reparent.cpp \
 		x11/settings.cpp \
 		x11/toplevel.cpp \
 		x11/utils.cpp \
@@ -492,6 +493,7 @@ ALL_HEADERS = \
 		x11/print.h \
 		x11/private.h \
 		x11/region.h \
+		x11/reparent.h \
 		x11/settings.h \
 		x11/toolbar.h \
 		x11/toplevel.h \
@@ -622,6 +624,7 @@ GUI_LOWLEVEL_OBJS = \
 		pen.o \
 		popupwin.o \
 		region.o \
+		reparent.o \
 		settings.o \
 		toplevel.o \
 		utils.o \
