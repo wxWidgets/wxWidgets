@@ -329,8 +329,8 @@ MustHaveApp(ConvertToBitmap);
 MustHaveApp(ConvertToMonoBitmap);
 
     %extend {
-        wxBitmap ConvertToBitmap() {
-            wxBitmap bitmap(*self);
+        wxBitmap ConvertToBitmap(int depth=-1) {
+            wxBitmap bitmap(*self, depth);
             return bitmap;
         }
 
