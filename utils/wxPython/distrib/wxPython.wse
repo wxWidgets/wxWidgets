@@ -927,6 +927,12 @@ item: Install File
   Description=Demos
   Flags=0000000010000010
 end
+item: Install File
+  Source=C:\PROJECTS\wx\utils\wxPython\demo\data\tips.txt
+  Destination=%MAINDIR%\wxPython\demo\data\tips.txt
+  Description=Demos
+  Flags=0000000010000010
+end
 item: Remark
 end
 item: Install File

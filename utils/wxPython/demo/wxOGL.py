@@ -115,6 +115,10 @@ class TestWindow(wxShapeCanvas):
     def __init__(self, parent, log, frame):
         wxShapeCanvas.__init__(self, parent)
 
+        maxWidth  = 1000
+        maxHeight = 1000
+        self.SetScrollbars(20, 20, maxWidth/20, maxHeight/20)
+
         self.log = log
         self.frame = frame
         self.SetBackgroundColour(wxWHITE)

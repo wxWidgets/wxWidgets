@@ -72,7 +72,7 @@ def main():
         os.chdir(WXDIR + '/src/msw')
         do('make dll pch FINAL=1')
         validateFile(WXDIR + '/lib/wx'+dllVer+'.dll')
-        do("upx -9 " + WXDIR + '/lib/wx'+dllVer+'.dll')
+        ## do("upx -9 " + WXDIR + '/lib/wx'+dllVer+'.dll')
 
         do('makeaddons FINAL=1')
         validateFile(WXDIR + '/contrib/lib/ogl.lib')
@@ -117,8 +117,8 @@ FINAL=1
         validateFile(WXDIR+'\\utils\\wxPython\\oglc.pyd')
         validateFile(WXDIR+'\\utils\\wxPython\\stc_c.pyd')
 
-        os.chdir(WXDIR+'\\utils\\wxPython')
-        do("upx -9 *.pyd")
+        ## os.chdir(WXDIR+'\\utils\\wxPython')
+        ## do("upx -9 *.pyd")
 
         logSeparator("Building installer executable...")
         os.chdir(WXDIR+'\\utils\\wxPython\\distrib')
@@ -162,7 +162,7 @@ FINAL=1
 
 
         # #*#*#*#*#*  Comment this out to allow upload...
-        ##return
+        return
 
         logSeparator("Uploading to website...")
         do('python c:\\utils\\sendwxp.py %s' % destName)

@@ -4,7 +4,7 @@
 //
 // Author:      Robin Dunn
 //
-// Created:     6/2/98
+// Created:     17-March-2000
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 by Total Control Software
 // Licence:     wxWindows license
@@ -783,15 +783,30 @@ public:
     wxGridCellBoolEditor();
 };
 
-
 class wxGridCellChoiceEditor : public wxGridCellEditor
 {
 public:
     wxGridCellChoiceEditor(int LCOUNT = 0,
                            const wxString* choices = NULL,
                            bool allowOthers = FALSE);
-};
+#ifdef PRE2115
+    %addmethods {
+        wxGridCellChoiceEditor(PyObject* choices,
+                                bool allowOthers = FALSE) {
 
+            const char** temp = string_LIST_helper(choices);
+            if (temp) {
+                int count = PyList_Size(choices);
+                wxGridCellChoiceEditor* ret;
+                ret = new wxGridCellChoiceEditor(count, temp, allowOthers);
+                delete [] temp;
+                return ret;
+            }
+            return NULL;
+        }
+    }
+#endif
+};
 
 //---------------------------------------------------------------------------
 
@@ -1345,6 +1360,7 @@ public:
     void DisableCellEditControl();
     bool CanEnableCellControl() const;
     bool IsCellEditControlEnabled() const;
+    bool IsCellEditControlShown() const;
 
     bool IsCurrentCellReadOnly() const;
 
@@ -1419,6 +1435,7 @@ public:
     wxString GetRowLabelValue( int row );
     wxString GetColLabelValue( int col );
     wxColour GetGridLineColour();
+    wxColour GetCellHighlightColour();
 
     void     SetRowLabelSize( int width );
     void     SetColLabelSize( int height );
@@ -1430,6 +1447,7 @@ public:
     void     SetRowLabelValue( int row, const wxString& );
     void     SetColLabelValue( int col, const wxString& );
     void     SetGridLineColour( const wxColour& );
+    void     SetCellHighlightColour( const wxColour& );
 
     void     EnableDragRowSize( bool enable = TRUE );
     void     DisableDragRowSize();

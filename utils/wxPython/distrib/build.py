@@ -92,6 +92,7 @@ Configuration Options
     OTHERTARGETS     Other targets to be placed on the default rule line
     OTHERINSTALLTARGETS
                      Other targets to be placed on the install rule line
+    OTHERDEFS        Text to place near the begining of the Makefile
     OTHERRULES       This text is placed at the end of the makefile and
                      will typically be used for adding rules and such
     DEFAULTRULE      Text to be used for the default rule in the makefile
@@ -245,6 +246,7 @@ class BuildConfig:
         self.WXPSRCDIR = '$(WXDIR)/utils/wxPython/src'
         self.SWIGDEPS = ''
         self.OTHERDEPS = ''
+        self.OTHERDEFS = ''
 
 
         if sys.platform == 'win32':
@@ -504,6 +506,7 @@ WXUSINGDLL = %(WXUSINGDLL)s
 GENCODEDIR = %(GENCODEDIR)s
 RESFILE = %(RESFILE)s
 WXPSRCDIR = %(WXPSRCDIR)s
+%(OTHERDEFS)s
 
 
 TARGETDIR = %(TARGETDIR)s
@@ -682,6 +685,7 @@ HELPERLIB = %(HELPERLIB)s
 HELPERLIBDIR = %(HELPERLIBDIR)s
 WXCONFIG=%(WXCONFIG)s
 TARGETDIR = %(TARGETDIR)s
+%(OTHERDEFS)s
 
 
 CCC = %(CCC)s

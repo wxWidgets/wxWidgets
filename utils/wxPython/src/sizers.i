@@ -54,7 +54,9 @@ public:
     bool IsSpacer();
 
     wxWindow *GetWindow();
+    void SetWindow( wxWindow *window );
     wxSizer *GetSizer();
+    void SetSizer( wxSizer *sizer );
     int GetOption();
     int GetFlag();
     int GetBorder();
@@ -97,19 +99,37 @@ public:
             if (userData) data = new wxPyUserData(userData);
             self->Add(window, option, flag, border, data);
         }
-
         void AddSizer(wxSizer *sizer, int option=0, int flag=0, int border=0,
                       PyObject* userData=NULL) {
             wxPyUserData* data = NULL;
             if (userData) data = new wxPyUserData(userData);
             self->Add(sizer, option, flag, border, data);
         }
-
         void AddSpacer(int width, int height, int option=0, int flag=0,
                        int border=0, PyObject* userData=NULL) {
             wxPyUserData* data = NULL;
             if (userData) data = new wxPyUserData(userData);
             self->Add(width, height, option, flag, border, data);
+        }
+
+
+        void InsertWindow(int before, wxWindow *window, int option=0, int flag=0,
+                          int border=0, PyObject* userData=NULL) {
+            wxPyUserData* data = NULL;
+            if (userData) data = new wxPyUserData(userData);
+            self->Insert(before, window, option, flag, border, data);
+        }
+        void InsertSizer(int before, wxSizer *sizer, int option=0, int flag=0,
+                         int border=0, PyObject* userData=NULL) {
+            wxPyUserData* data = NULL;
+            if (userData) data = new wxPyUserData(userData);
+            self->Insert(before, sizer, option, flag, border, data);
+        }
+        void InsertSpacer(int before, int width, int height, int option=0, int flag=0,
+                          int border=0, PyObject* userData=NULL) {
+            wxPyUserData* data = NULL;
+            if (userData) data = new wxPyUserData(userData);
+            self->Insert(before, width, height, option, flag, border, data);
         }
 
 
@@ -119,14 +139,12 @@ public:
             if (userData) data = new wxPyUserData(userData);
             self->Prepend(window, option, flag, border, data);
         }
-
         void PrependSizer(wxSizer *sizer, int option=0, int flag=0, int border=0,
                           PyObject* userData=NULL) {
             wxPyUserData* data = NULL;
             if (userData) data = new wxPyUserData(userData);
             self->Prepend(sizer, option, flag, border, data);
         }
-
         void PrependSpacer(int width, int height, int option=0, int flag=0,
                            int border=0, PyObject* userData=NULL) {
             wxPyUserData* data = NULL;
@@ -148,6 +166,14 @@ public:
             apply(self.AddSizer, args)
         else:
             apply(self.AddWindow, args)
+
+    def Insert(self, *args):
+        if type(args[0]) == type(1):
+            apply(self.InsertSpacer, args)
+        elif string.find(args[0].this, 'Sizer') != -1:
+            apply(self.InsertSizer, args)
+        else:
+            apply(self.InsertWindow, args)
 
     def Prepend(self, *args):
         if type(args[0]) == type(1):
@@ -174,6 +200,21 @@ public:
 
 
     void SetDimension( int x, int y, int width, int height );
+    void SetMinSize(wxSize size);
+
+    %name(SetItemMinSizeWindow) void SetItemMinSize(wxWindow* window, int width, int height);
+    %name(SetItemMinSizeSizer) void SetItemMinSize(wxSizer* sizer, int width, int height);
+    %name(SetItemMinSizePos) void SetItemMinSize(int pos, int width, int height);
+
+    %pragma(python) addtoclass = "
+    def SetItemMinSize(self, *args):
+        if type(args[0]) == type(1):
+            apply(self.SetItemMinSizePos, args)
+        elif string.find(args[0].this, 'Sizer') != -1:
+            apply(self.SetItemMinSizeSizer, args)
+        else:
+            apply(self.SetItemMinSizeWindow, args)
+     "
 
     wxSize GetSize();
     wxPoint GetPosition();
@@ -259,7 +300,41 @@ public:
     wxNotebook *GetNotebook();
 };
 
+//---------------------------------------------------------------------------
 
+class wxGridSizer: public wxSizer
+{
+public:
+    wxGridSizer( int rows=1, int cols=0, int vgap=0, int hgap=0 );
+
+    void RecalcSizes();
+    wxSize CalcMin();
+
+    void SetCols( int cols );
+    void SetRows( int rows );
+    void SetVGap( int gap );
+    void SetHGap( int gap );
+    int GetCols();
+    int GetRows();
+    int GetVGap();
+    int GetHGap();
+};
 
 //---------------------------------------------------------------------------
 
+class wxFlexGridSizer: public wxGridSizer
+{
+public:
+    wxFlexGridSizer( int rows=1, int cols=0, int vgap=0, int hgap=0 );
+
+    void RecalcSizes();
+    wxSize CalcMin();
+
+    void AddGrowableRow( size_t idx );
+    void RemoveGrowableRow( size_t idx );
+    void AddGrowableCol( size_t idx );
+    void RemoveGrowableCol( size_t idx );
+
+};
+
+//---------------------------------------------------------------------------
