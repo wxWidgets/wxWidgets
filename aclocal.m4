@@ -1613,13 +1613,9 @@ AC_DEFUN(AC_BAKEFILE_CHECK_BASIC_STUFF,
     AC_PROG_MAKE_SET
     AC_SUBST(MAKE_SET)
     
-    if test "$build" != "$host" ; then
-        AR=$host_alias-ar
-        STRIP=$host_alias-strip
-    else
-        AC_CHECK_PROG(AR, ar, ar, ar)
-        AC_CHECK_PROG(STRIP, strip, strip, true)
-    fi
+    AC_CHECK_TOOL(AR, ar, ar)
+    AC_CHECK_TOOL(STRIP, strip, :)
+    AC_CHECK_TOOL(NM, nm, :)
 
     case ${host} in
         *-hp-hpux* )
