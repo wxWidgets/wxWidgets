@@ -216,6 +216,7 @@ public:
     void DragAcceptFiles(bool accept);
 #endif
     void Enable(bool enable);
+    void Disable();
 
     // Find child window by ID or name
     %name(FindWindowById) wxWindow* FindWindow(long id);

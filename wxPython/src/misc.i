@@ -511,8 +511,6 @@ public:
 
 long wxNewId();
 void wxRegisterId(long id);
-%name(NewId) long wxNewId();
-%name(RegisterId) void wxRegisterId(long id);
 long wxGetCurrentId();
 
 void wxBell();
