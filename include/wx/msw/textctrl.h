@@ -147,7 +147,7 @@ public:
   
 protected:
   bool      m_isRich; // Are we using rich text edit to implement this?
-  wxString  fileName;
+  wxString  m_fileName;
   
   DECLARE_EVENT_TABLE()
 };

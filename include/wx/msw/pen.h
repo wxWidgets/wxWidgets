@@ -27,6 +27,7 @@ class WXDLLEXPORT wxPenRefData: public wxGDIRefData
     friend class WXDLLEXPORT wxPen;
 public:
     wxPenRefData(void);
+    wxPenRefData(const wxPenRefData& data);
     ~wxPenRefData(void);
 
 protected:
@@ -53,7 +54,7 @@ public:
   wxPen(const wxString& col, int width, int style);
   wxPen(const wxBitmap& stipple, int width);
   inline wxPen(const wxPen& pen) { Ref(pen); }
-  inline wxPen(const wxPen* pen) { /* UnRef(); */ if (pen) Ref(*pen); }
+  inline wxPen(const wxPen* pen) { if (pen) Ref(*pen); }
   ~wxPen(void);
 
   inline wxPen& operator = (const wxPen& pen) { if (*this == pen) return (*this); Ref(pen); return *this; }
@@ -90,6 +91,7 @@ public:
   bool FreeResource(bool force = FALSE);
   WXHANDLE GetResourceHandle(void) ;
   bool IsFree(void);
+  void Unshare();
 };
 
 int wx2msPenStyle(int wx_style);

@@ -40,7 +40,14 @@ IMPLEMENT_DYNAMIC_CLASS(wxBrush, wxGDIObject)
 wxBrushRefData::wxBrushRefData(void)
 {
   m_style = wxSOLID;
-//  m_stipple = NULL ;
+  m_hBrush = 0;
+}
+
+wxBrushRefData::wxBrushRefData(const wxBrushRefData& data)
+{
+  m_style = data.m_style;
+  m_stipple = data.m_stipple;
+  m_colour = data.m_colour;
   m_hBrush = 0;
 }
 
@@ -186,77 +193,69 @@ bool wxBrush::FreeResource(bool force)
   else return FALSE;
 }
 
-/*
-bool wxBrush::UseResource(void)
-{
-  IncrementResourceUsage();
-  return TRUE;
-}
-
-bool wxBrush::ReleaseResource(void)
-{
-  DecrementResourceUsage();
-  return TRUE;
-}
-*/
-
 bool wxBrush::IsFree(void)
 {
   return (M_BRUSHDATA && (M_BRUSHDATA->m_hBrush == 0));
 }
 
+void wxBrush::Unshare()
+{
+	// Don't change shared data
+	if (!m_refData)
+    {
+		m_refData = new wxBrushRefData();
+	}
+    else
+    {
+		wxBrushRefData* ref = new wxBrushRefData(*(wxBrushRefData*)m_refData);
+		UnRef();
+		m_refData = ref;
+	}
+}
+
+
 void wxBrush::SetColour(const wxColour& col)
 {
-  if ( !M_BRUSHDATA )
-	m_refData = new wxBrushRefData;
+    Unshare();
 
-  M_BRUSHDATA->m_colour = col;
+    M_BRUSHDATA->m_colour = col;
 
-  if (FreeResource())
     RealizeResource();
 }
 
 void wxBrush::SetColour(const wxString& col)
 {
-  if ( !M_BRUSHDATA )
-	m_refData = new wxBrushRefData;
+    Unshare();
 
-  M_BRUSHDATA->m_colour = col;
+    M_BRUSHDATA->m_colour = col;
 
-  if (FreeResource())
     RealizeResource();
 }
 
 void wxBrush::SetColour(const unsigned char r, const unsigned char g, const unsigned char b)
 {
-  if ( !M_BRUSHDATA )
-	m_refData = new wxBrushRefData;
+    Unshare();
 
-  M_BRUSHDATA->m_colour.Set(r, g, b);
+    M_BRUSHDATA->m_colour.Set(r, g, b);
 
-  if (FreeResource())
     RealizeResource();
 }
 
 void wxBrush::SetStyle(int Style)
 {
-  if ( !M_BRUSHDATA )
-	m_refData = new wxBrushRefData;
+    Unshare();
 
-  M_BRUSHDATA->m_style = Style;
+    M_BRUSHDATA->m_style = Style;
 
-  if (FreeResource())
     RealizeResource();
 }
 
 void wxBrush::SetStipple(const wxBitmap& Stipple)
 {
-  if ( !M_BRUSHDATA )
-	m_refData = new wxBrushRefData;
+    Unshare();
 
-  M_BRUSHDATA->m_stipple = Stipple;
+    M_BRUSHDATA->m_stipple = Stipple;
 
-  if (FreeResource())
     RealizeResource();
 }
 

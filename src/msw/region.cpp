@@ -36,6 +36,7 @@ class WXDLLEXPORT wxRegionRefData : public wxGDIRefData {
 public:
 	wxRegionRefData(void)
 	{
+        m_region = 0;
 	}
 
 	wxRegionRefData(const wxRegionRefData& data)

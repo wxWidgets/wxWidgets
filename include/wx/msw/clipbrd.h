@@ -104,7 +104,7 @@ class WXDLLEXPORT wxClipboard : public wxObject
 void WXDLLEXPORT wxInitClipboard(void);
 
 /* The clipboard */
-extern wxClipboard* WXDLLEXPORT wxTheClipboard;
+WXDLLEXPORT_DATA(extern wxClipboard*) wxTheClipboard;
 
 #endif // USE_CLIPBOARD
 #endif

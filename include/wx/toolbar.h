@@ -14,7 +14,7 @@
 #elif defined(__WXGTK__)
 #   include "wx/gtk/tbargtk.h"
 #elif defined(__WXQT__)
-#   include "wx/qt/tbargtk.h"
+#   include "wx/qt/tbarqt.h"
 #endif
 
 #endif

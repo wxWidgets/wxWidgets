@@ -52,7 +52,7 @@ public:
   }
 
   virtual void CrossHair(long x, long y) ;
-  virtual void CrossHair(const wxPoint& pt)
+  inline void CrossHair(const wxPoint& pt)
   {
     CrossHair(pt.x, pt.y);
   }

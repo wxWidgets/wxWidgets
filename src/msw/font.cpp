@@ -55,6 +55,20 @@ wxFontRefData::wxFontRefData(void)
   	m_hFont = 0;
 }
 
+wxFontRefData::wxFontRefData(const wxFontRefData& data)
+{
+	m_style = data.m_style;
+  	m_temporary = FALSE;
+  	m_pointSize = data.m_pointSize;
+  	m_family = data.m_family;
+  	m_fontId = data.m_fontId;
+  	m_style = data.m_style;
+  	m_weight = data.m_weight;
+  	m_underlined = data.m_underlined;
+  	m_faceName = data.m_faceName;
+  	m_hFont = 0;
+}
+
 wxFontRefData::~wxFontRefData(void)
 {
 	if ( m_hFont )
@@ -70,27 +84,25 @@ wxFont::wxFont(void)
 /* Constructor for a font. Note that the real construction is done
  * in wxDC::SetFont, when information is available about scaling etc.
  */
-wxFont::wxFont(int PointSize, int Family, int Style, int Weight, bool Underlined, const wxString& Face)
+wxFont::wxFont(int pointSize, int family, int style, int weight, bool underlined, const wxString& faceName)
 {
-  Create(PointSize, Family, Style, Weight, Underlined, Face);
+    Create(pointSize, family, style, weight, underlined, faceName);
 
     if ( wxTheFontList )
         wxTheFontList->Append(this);
 }
 
-bool wxFont::Create(int PointSize, int Family, int Style, int Weight, bool Underlined, const wxString& Face)
+bool wxFont::Create(int pointSize, int family, int style, int weight, bool underlined, const wxString& faceName)
 {
   UnRef();
   m_refData = new wxFontRefData;
 
-  M_FONTDATA->m_family = Family;
-  M_FONTDATA->m_style = Style;
-  M_FONTDATA->m_weight = Weight;
-  M_FONTDATA->m_pointSize = PointSize;
-  M_FONTDATA->m_underlined = Underlined;
-  M_FONTDATA->m_faceName = Face;
-  M_FONTDATA->m_temporary = FALSE;
-  M_FONTDATA->m_hFont = 0;
+  M_FONTDATA->m_family = family;
+  M_FONTDATA->m_style = style;
+  M_FONTDATA->m_weight = weight;
+  M_FONTDATA->m_pointSize = pointSize;
+  M_FONTDATA->m_underlined = underlined;
+  M_FONTDATA->m_faceName = faceName;
 
   RealizeResource();
 
@@ -216,21 +228,7 @@ bool wxFont::FreeResource(bool force)
   return FALSE;
 }
 
-/*
-bool wxFont::UseResource(void)
-{
-  IncrementResourceUsage();
-  return TRUE;
-}
-
-bool wxFont::ReleaseResource(void)
-{
-  DecrementResourceUsage();
-  return TRUE;
-}
-*/
-  
-WXHANDLE wxFont::GetResourceHandle(void)
+WXHANDLE wxFont::GetResourceHandle()
 {
   if ( !M_FONTDATA )
 	return 0;
@@ -238,51 +236,78 @@ WXHANDLE wxFont::GetResourceHandle(void)
     return (WXHANDLE)M_FONTDATA->m_hFont ;
 }
 
-bool wxFont::IsFree(void)
+bool wxFont::IsFree()
 {
   return (M_FONTDATA && (M_FONTDATA->m_hFont == 0));
 }
 
+void wxFont::Unshare()
+{
+	// Don't change shared data
+	if (!m_refData)
+    {
+		m_refData = new wxFontRefData();
+	}
+    else
+    {
+		wxFontRefData* ref = new wxFontRefData(*(wxFontRefData*)m_refData);
+		UnRef();
+		m_refData = ref;
+	}
+}
+
 void wxFont::SetPointSize(int pointSize)
 {
-    if ( !m_refData )
-        m_refData = new wxFontRefData;
+    Unshare();
+
     M_FONTDATA->m_pointSize = pointSize;
+
+    RealizeResource();
 }
 
 void wxFont::SetFamily(int family)
 {
-    if ( !m_refData )
-        m_refData = new wxFontRefData;
+    Unshare();
+
     M_FONTDATA->m_family = family;
+
+    RealizeResource();
 }
 
 void wxFont::SetStyle(int style)
 {
-    if ( !m_refData )
-        m_refData = new wxFontRefData;
+    Unshare();
+
     M_FONTDATA->m_style = style;
+
+    RealizeResource();
 }
 
 void wxFont::SetWeight(int weight)
 {
-    if ( !m_refData )
-        m_refData = new wxFontRefData;
+    Unshare();
+
     M_FONTDATA->m_weight = weight;
+
+    RealizeResource();
 }
 
 void wxFont::SetFaceName(const wxString& faceName)
 {
-    if ( !m_refData )
-        m_refData = new wxFontRefData;
+    Unshare();
+
     M_FONTDATA->m_faceName = faceName;
+
+    RealizeResource();
 }
 
 void wxFont::SetUnderlined(bool underlined)
 {
-    if ( !m_refData )
-        m_refData = new wxFontRefData;
+    Unshare();
+
     M_FONTDATA->m_underlined = underlined;
+
+    RealizeResource();
 }
 
 wxString wxFont::GetFamilyString(void) const
@@ -315,7 +340,6 @@ wxString wxFont::GetFamilyString(void) const
   return fam;
 }
 
-/* New font system */
 wxString wxFont::GetFaceName(void) const
 {
   wxString str("");

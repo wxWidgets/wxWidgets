@@ -67,7 +67,7 @@ class WXDLLEXPORT wxDC;
 class WXDLLEXPORT wxValidator;
 
 #if USE_DRAG_AND_DROP
-class wxDropTarget;
+class WXDLLEXPORT wxDropTarget;
 #endif
 
 #if USE_WX_RESOURCES

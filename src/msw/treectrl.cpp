@@ -1,13 +1,13 @@
-/*
- * File:  TreeCtrl.cpp
- * Purpose: Tree control
- * Author:  Julian Smart
- * Created: 1997
- * Updated: 
- * Copyright:
- */
-
-/* static const char sccsid[] = "%W% %G%"; */
+/////////////////////////////////////////////////////////////////////////////
+// Name:        treectrl.cpp
+// Purpose:     wxTreeCtrl
+// Author:      Julian Smart
+// Modified by:
+// Created:     1997
+// RCS-ID:      $Id$
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
 #pragma implementation "treectrl.h"

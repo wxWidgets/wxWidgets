@@ -27,6 +27,7 @@ class WXDLLEXPORT wxBrushRefData: public wxGDIRefData
     friend class WXDLLEXPORT wxBrush;
 public:
     wxBrushRefData(void);
+    wxBrushRefData(const wxBrushRefData& data);
     ~wxBrushRefData(void);
 
 protected:
@@ -49,7 +50,7 @@ public:
   wxBrush(const wxString& col, int style);
   wxBrush(const wxBitmap& stipple);
   inline wxBrush(const wxBrush& brush) { Ref(brush); }
-  inline wxBrush(const wxBrush* brush) { /* UnRef(); */ if (brush) Ref(*brush); }
+  inline wxBrush(const wxBrush* brush) { if (brush) Ref(*brush); }
   ~wxBrush(void);
 
   virtual void SetColour(const wxColour& col)  ;
@@ -72,12 +73,8 @@ public:
   bool RealizeResource(void);
   WXHANDLE GetResourceHandle(void) ;
   bool FreeResource(bool force = FALSE);
-/*
-  bool UseResource(void);
-  bool ReleaseResource(void);
-*/
-
   bool IsFree(void);
+  void Unshare();
 };
 
 #endif

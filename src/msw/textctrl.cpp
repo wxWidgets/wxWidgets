@@ -72,7 +72,7 @@ wxTextCtrl::wxTextCtrl(void)
  :streambuf()
 #endif
 {
-  fileName = "";
+  m_fileName = "";
   m_isRich = FALSE;
 }
 
@@ -83,7 +83,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
-  fileName = "";
+  m_fileName = "";
   SetName(name);
   SetValidator(validator);
   if (parent) parent->AddChild(this);
@@ -504,7 +504,7 @@ bool wxTextCtrl::LoadFile(const wxString& file)
   if (!FileExists(WXSTRINGCAST file))
     return FALSE;
 
-  fileName = file;
+  m_fileName = file;
 
   Clear();
 
@@ -553,14 +553,14 @@ bool wxTextCtrl::LoadFile(const wxString& file)
 // Returns TRUE if succeeds.
 bool wxTextCtrl::SaveFile(const wxString& file)
 {
-  wxString theFile;
-  if (file == "")
-    theFile = fileName;
-  if (file == "")
+  wxString theFile(file);
+  if (theFile == "")
+    theFile = m_fileName;
+  if (theFile == "")
     return FALSE;
-  fileName = theFile;
+  m_fileName = theFile;
 
-  ofstream output(WXSTRINGCAST file);
+  ofstream output((char*) (const char*) theFile);
   if (output.bad())
 	return FALSE;
 
@@ -848,46 +848,45 @@ wxTextCtrl& wxTextCtrl::operator<<(const wxString& s)
 
 wxTextCtrl& wxTextCtrl::operator<<(float f)
 {
-  static char buf[100];
-  sprintf(buf, "%.2f", f);
-  WriteText(buf);
-  return *this;
+    wxString str;
+    str.Printf("%.2f", f);
+    WriteText(str);
+    return *this;
 }
 
 wxTextCtrl& wxTextCtrl::operator<<(double d)
 {
-  static char buf[100];
-  sprintf(buf, "%.2f", d);
-  WriteText(buf);
-  return *this;
+    wxString str;
+    str.Printf("%.2f", d);
+    WriteText(str);
+    return *this;
 }
 
 wxTextCtrl& wxTextCtrl::operator<<(int i)
 {
-  static char buf[100];
-  sprintf(buf, "%i", i);
-  WriteText(buf);
-  return *this;
+    wxString str;
+    str.Printf("%d", i);
+    WriteText(str);
+    return *this;
 }
 
 wxTextCtrl& wxTextCtrl::operator<<(long i)
 {
-  static char buf[100];
-  sprintf(buf, "%ld", i);
-  WriteText(buf);
-  return *this;
+    wxString str;
+    str.Printf("%ld", i);
+    WriteText(str);
+    return *this;
 }
 
 wxTextCtrl& wxTextCtrl::operator<<(const char c)
 {
-  char buf[2];
+    char buf[2];
 
-  buf[0] = c;
-  buf[1] = 0;
-  WriteText(buf);
-  return *this;
+    buf[0] = c;
+    buf[1] = 0;
+    WriteText(buf);
+    return *this;
 }
-
 
 WXHBRUSH wxTextCtrl::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 			WXUINT message, WXWPARAM wParam, WXLPARAM lParam)

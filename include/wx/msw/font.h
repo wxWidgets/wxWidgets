@@ -25,6 +25,7 @@ class WXDLLEXPORT wxFontRefData: public wxGDIRefData
     friend class WXDLLEXPORT wxFont;
 public:
     wxFontRefData(void);
+    wxFontRefData(const wxFontRefData& data);
     ~wxFontRefData(void);
 protected:
   bool          m_temporary;   // If TRUE, the pointer to the actual font
@@ -53,7 +54,7 @@ public:
   wxFont(void);
   wxFont(int PointSize, int Family, int Style, int Weight, bool underlined = FALSE, const wxString& Face = wxEmptyString);
   inline wxFont(const wxFont& font) { Ref(font); }
-  inline wxFont(const wxFont* font) { /* UnRef(); */ if (font) Ref(*font); }
+  inline wxFont(const wxFont* font) { if (font) Ref(*font); }
 
   ~wxFont(void);
 
@@ -92,6 +93,9 @@ public:
   inline wxFont& operator = (const wxFont& font) { if (*this == font) return (*this); Ref(font); return *this; }
   inline bool operator == (const wxFont& font) { return m_refData == font.m_refData; }
   inline bool operator != (const wxFont& font) { return m_refData != font.m_refData; }
+
+protected:
+  void Unshare();
 };
 
 #endif

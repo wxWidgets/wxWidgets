@@ -256,7 +256,7 @@ bool wxBitmap::SaveFile(const wxString& filename, int type, const wxPalette *pal
 void wxBitmap::SetWidth(int w)
 {
   if (!M_BITMAPDATA)
-    m_refData = new wxBitmapRefData;
+  m_refData = new wxBitmapRefData;
 
   M_BITMAPDATA->m_width = w;
 }

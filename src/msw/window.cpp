@@ -4362,7 +4362,6 @@ void wxWindow::SetupColours(void)
 
 void wxWindow::OnIdle(wxIdleEvent& event)
 {
-#if 0
     // Check if we need to send a LEAVE event
     if (m_mouseInWindow)
     {
@@ -4376,7 +4375,6 @@ void wxWindow::OnIdle(wxIdleEvent& event)
         }
     }
 	UpdateWindowUI();
-#endif
 }
 
 // Raise the window to the top of the Z order
