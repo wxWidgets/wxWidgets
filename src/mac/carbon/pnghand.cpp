@@ -538,7 +538,7 @@ bool wxPNGReader::ReadFile(char * ImageFileName)
 			{
 				if ( pixel_depth == 8 )
 				{
-					for ( int i = 0 ; i < info_ptr->width ; ++i )
+					for ( size_t i = 0 ; i < info_ptr->width ; ++i )
 					{
 						png_color_struct* color ; 
 						RGBColor col ;
@@ -582,7 +582,7 @@ bool wxPNGReader::ReadFile(char * ImageFileName)
 				}
 				else
 				{
-					for ( int i = 0 ; i < info_ptr->width ; ++i )
+					for ( size_t i = 0 ; i < info_ptr->width ; ++i )
 					{
 						png_color_struct* color ; 
 						RGBColor col ;
@@ -601,7 +601,7 @@ bool wxPNGReader::ReadFile(char * ImageFileName)
 			}
 			else
 			{
-				for ( int i = 0 ; i < info_ptr->width ; ++i )
+				for ( size_t i = 0 ; i < info_ptr->width ; ++i )
 				{
 					png_color_struct* color ; 
 					RGBColor col ;

@@ -15,6 +15,11 @@
 
 #include "wx/defs.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+    #include "wx/log.h"
+#endif // WX_PRECOMP
+
 #include "wx/scrolbar.h"
 #include "wx/mac/uma.h"
 
@@ -134,12 +139,15 @@ void wxScrollBar::MacHandleControlClick( WXWidget control , wxInt16 controlpart 
         nScrollInc = 0 ;
         scrollEvent = wxEVT_SCROLL_THUMBTRACK;
 			break ;
+                default :
+                        wxLogError(_("illegal scrollbar selector %d"), controlpart);
+                        break ;
 	}
 
   int new_pos = position + nScrollInc;
 
-  if (new_pos < 0)
-      new_pos = 0;
+  if (new_pos < minPos)
+      new_pos = minPos;
   if (new_pos > maxPos)
       new_pos = maxPos;
 	if ( nScrollInc )
