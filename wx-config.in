@@ -6,6 +6,7 @@ exec_prefix_set=no
 CC="@CC@"
 CXX="@CXX@"
 LD="@SHARED_LD@"
+cross_compiling=@cross_compiling@
 
 usage()
 {
@@ -26,17 +27,18 @@ EOF
 
 cppflags()
 {
-    if test @includedir@ != /usr/include ; then
-        if test @includedir@ != /usr/include/c++ ; then
-            includes=-I@includedir@
-        fi
+    if test "${cross_compiling}" != "yes" \
+            -a @includedir@ != /usr/include \
+            -a @includedir@ != /usr/include/c++ ;
+    then
+        includes=-I@includedir@
     fi
     includes="-I@libdir@/wx/include/@TOOLCHAIN_NAME@ $includes"
     echo $includes @WXDEBUG_DEFINE@ @TOOLKIT_DEF@ @WXCONFIG_INCLUDE@
 }
 
 if test $# -eq 0; then
-      usage 1 1>&2
+    usage 1 1>&2
 fi
 
 while test $# -gt 0; do

@@ -171,7 +171,8 @@ control-files-stamp: debian/control
 	done;
 	@for f in dirs; do \
 		echo "generating control file $(package_headers_msw).$$f"; \
-		cp debian/wxwin-headers-msw.$$f debian/$(package_headers_msw).$$f; \
+		sed -e 's/=H/$(cross_host)/g' < debian/wxwin-headers-msw.$$f \
+			> debian/$(package_headers_msw).$$f; \
 	done;
 	touch $@
 
@@ -342,7 +343,7 @@ build-wxbase-msw-dev-stamp:
 	dh_testdir
 	mkdir $(objdir_wxbase_msw_static)
 	cd $(objdir_wxbase_msw_static) \
-		&& ../configure --prefix=/usr \
+		&& ../configure --prefix=/usr/$(cross_host) \
 				--cache-file=../config_deb.cache \
 				--host=$(cross_host) \
 				--build=$(cross_build) \
@@ -355,7 +356,7 @@ build-msw-dev-stamp:
 	dh_testdir
 	mkdir $(objdir_msw_static)
 	cd $(objdir_msw_static) \
-		&& ../configure --prefix=/usr \
+		&& ../configure --prefix=/usr/$(cross_host) \
 				--cache-file=../config_deb.cache \
 				--host=$(cross_host) \
 				--build=$(cross_build) \
@@ -523,9 +524,9 @@ install-wxbase-msw-dev: build-wxbase-msw-dev-stamp
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	cp -a $(objdir_wxbase_msw_static)/lib/* debian/$(package_wxbase_msw_dev)/usr/lib
+	cp -a $(objdir_wxbase_msw_static)/lib/* debian/$(package_wxbase_msw_dev)/usr/$(cross_host)/lib
 	cp $(objdir_wxbase_msw_static)/wxbase-$(release)-$(cross_host)-config debian/$(package_wxbase_msw_dev)/usr/bin/
-	$(cross_host)-strip --strip-debug debian/$(package_wxbase_msw_dev)/usr/lib/*.a
+	$(cross_host)-strip --strip-debug debian/$(package_wxbase_msw_dev)/usr/$(cross_host)/lib/*.a
 
 install-msw-dev: DH_OPTIONS=-p$(package_msw_dev)
 install-msw-dev: build-msw-dev-stamp
@@ -533,9 +534,9 @@ install-msw-dev: build-msw-dev-stamp
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	cp -a $(objdir_msw_static)/lib/* debian/$(package_msw_dev)/usr/lib
+	cp -a $(objdir_msw_static)/lib/* debian/$(package_msw_dev)/usr/$(cross_host)/lib
 	cp $(objdir_msw_static)/wxmsw-$(release)-$(cross_host)-config debian/$(package_msw_dev)/usr/bin/
-	$(cross_host)-strip --strip-debug debian/$(package_msw_dev)/usr/lib/*.a
+	$(cross_host)-strip --strip-debug debian/$(package_msw_dev)/usr/$(cross_host)/lib/*.a
 
 install-headers-msw: DH_OPTIONS=-p$(package_headers_msw)
 install-headers-msw:
@@ -543,7 +544,18 @@ install-headers-msw:
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	cp -a include/wx/msw debian/$(package_headers_msw)/usr/include/wx
+	@# Symlink all the headers that will be installed by the main -headers
+	@# package to where the cross compiler will expect them.
+	@for f in `ls -1 include/wx`; do \
+		ln -s /usr/include/wx/$$f debian/$(package_headers_msw)/usr/$(cross_host)/include/wx; \
+		echo "linking header /usr/include/wx/$$f"; \
+	done;
+	@# But install this lot for real.
+	rm -f debian/$(package_headers_msw)/usr/$(cross_host)/include/wx/msw
+	cp -a include/wx/msw debian/$(package_headers_msw)/usr/$(cross_host)/include/wx
+	@# and remove this cruft(?)
+	rm -f debian/$(package_headers_msw)/usr/$(cross_host)/include/wx/treelay.h
+
 
 binary-common:
 	dh_testdir
