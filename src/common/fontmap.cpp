@@ -125,7 +125,7 @@ static const wxChar* gs_encodingDescs[] =
     wxTRANSLATE( "Western European with Euro (ISO-8859-15)" ),
     wxTRANSLATE( "KOI8-R" ),
     wxTRANSLATE( "Windows Japanese (CP 932)" ),
-    wxTRANSLATE( "Windows Chiniese Simplified (CP 936)" ),
+    wxTRANSLATE( "Windows Chinese Simplified (CP 936)" ),
     wxTRANSLATE( "Windows Korean (CP 949)" ),
     wxTRANSLATE( "Windows Chinese Traditional (CP 950)" ),
     wxTRANSLATE( "Windows Central European (CP 1250)" ),
