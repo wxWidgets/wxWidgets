@@ -149,7 +149,9 @@ enum wxStockCursor
 class WXDLLEXPORT wxSize
 {
 public:
-    // members are public for compatibility
+    // members are public for compatibility (don't use them directly,
+    // especially that there names were chosen very unfortunately - they should
+    // have been called width and height)
     long x;
     long y;
 
@@ -158,15 +160,21 @@ public:
     wxSize(long xx, long yy) { Set(xx, yy); }
 
     // no copy ctor or assignment operator - the defaults are ok
-
     bool operator==(const wxSize& sz) const { return x == sz.x && y == sz.y; }
 
     // FIXME are these really useful? If they're, we should have += &c as well
     wxSize operator+(const wxSize& sz) { return wxSize(x + sz.x, y + sz.y); }
     wxSize operator-(const wxSize& sz) { return wxSize(x - sz.x, y - sz.y); }
 
+    // accessors
     void Set(long xx, long yy) { x = xx; y = yy; }
+    void SetWidth(long w) { x = w; }
+    void SetHeight(long h) { y = h; }
 
+    long GetWidth() const { return x; }
+    long GetHeight() const { return y; }
+
+    // compatibility
     long GetX() const { return x; }
     long GetY() const { return y; }
 };
