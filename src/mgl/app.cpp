@@ -35,6 +35,7 @@
 #include "wx/univ/theme.h"
 #include "wx/univ/renderer.h"
 #include "wx/univ/colschem.h"
+#include "wx/sysopt.h"
 #include "wx/mgl/private.h"
 
 //-----------------------------------------------------------------------------
@@ -156,7 +157,7 @@ static bool wxCreateMGL_WM(const wxDisplayModeInfo& displayMode)
     int refresh = MGL_DEFAULT_REFRESH;
     
 #if wxUSE_SYSTEM_OPTIONS
-    if ( wxSystemOptions::HasOption(wxT("mgl.screen-refresh") )
+    if ( wxSystemOptions::HasOption(wxT("mgl.screen-refresh")) )
         refresh = wxSystemOptions::GetOptionInt(wxT("mgl.screen-refresh"));
 #endif
         

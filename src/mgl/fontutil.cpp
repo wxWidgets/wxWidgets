@@ -245,7 +245,7 @@ wxMGLFontInstance *wxMGLFontLibrary::GetFontInstance(wxFont *font,
     {
         gs_antialiasingThreshold = 10;
 #if wxUSE_SYSTEM_OPTIONS
-        if ( wxSystemOptions::HasOption(wxT("mgl.aa-threshold") )
+        if ( wxSystemOptions::HasOption(wxT("mgl.aa-threshold")) )
             gs_antialiasingThreshold = 
                 wxSystemOptions::GetOptionInt(wxT("mgl.aa-threshold"));
         wxLogTrace("mgl_font", "AA threshold set to %i", gs_antialiasingThreshold);
