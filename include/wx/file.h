@@ -17,8 +17,10 @@
 #pragma interface "file.h"
 #endif
 
-#include  "wx/string.h"
-#include  "wx/filefn.h"
+#ifndef WX_PRECOMP
+  #include  "wx/string.h"
+  #include  "wx/filefn.h"
+#endif
 
 // ----------------------------------------------------------------------------
 // constants
@@ -53,7 +55,6 @@ class WXDLLEXPORT wxFile
 public:
   // more file constants
   // -------------------
-
     // opening mode
   enum OpenMode { read, write, read_write, write_append };
     // standard values for file descriptor
@@ -61,7 +62,11 @@ public:
 
   // static functions
   // ----------------
-  static bool Exists(const char *sz);  // also checks it's a regular file
+    // check whether a regular file by this name exists
+  static bool Exists(const char *name);
+    // check whetther we can access the given file in given mode
+    // (only read and write make sense here)
+  static bool Access(const char *name, OpenMode mode);
 
   // ctors
   // -----
