@@ -33,6 +33,7 @@ _treeList = [
         'AnalogClockWindow',
         'MaskedEditControls',
         'wxTreeListCtrl',
+        'wxGrid_MegaExample',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -78,6 +79,7 @@ _treeList = [
         'wxGauge',
         'wxGenericDirCtrl',
         'wxGrid',
+        'wxGrid_MegaExample',
         'wxListBox',
         'wxListCtrl',
         'wxListCtrl_virtual',
