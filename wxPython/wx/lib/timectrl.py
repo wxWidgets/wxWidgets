@@ -967,7 +967,7 @@ class TimeCtrl(MaskedTextCtrl):
         causes control to behave as if up arrow was pressed.
         """
         dbg('TimeCtrl::OnSpinUp', indent=1)
-        self.__OnSpin(WXK_UP)
+        self.__OnSpin(wx.WXK_UP)
         keep_processing = False
         dbg(indent=0)
         return keep_processing
@@ -979,7 +979,7 @@ class TimeCtrl(MaskedTextCtrl):
         causes control to behave as if down arrow was pressed.
         """
         dbg('TimeCtrl::OnSpinDown', indent=1)
-        self.__OnSpin(WXK_DOWN)
+        self.__OnSpin(wx.WXK_DOWN)
         keep_processing = False
         dbg(indent=0)
         return keep_processing
