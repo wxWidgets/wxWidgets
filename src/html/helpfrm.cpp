@@ -255,7 +255,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
 
         wxLayoutConstraints *b4 = new wxLayoutConstraints;
         m_IndexButtonAll = new wxButton(dummy, wxID_HTML_INDEXBUTTONALL, _("Show all"));
-        m_IndexButtonAll -> SetToolTip(_("Show all items in index"));
+
         b4 -> top.Below (m_IndexText, 10);
         b4 -> right.SameAs (dummy, wxRight, 10);
         b4 -> width.AsIs();
@@ -264,7 +264,6 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
 
         wxLayoutConstraints *b2 = new wxLayoutConstraints;
         m_IndexButton = new wxButton(dummy, wxID_HTML_INDEXBUTTON, _("Find"));
-        m_IndexButton -> SetToolTip(_("Display all index items that contain given substring. Note that this is case sensitive, so 'window' and 'Window' is something else!"));
         b2 -> top.Below (m_IndexText, 10);
         b2 -> right.LeftOf (m_IndexButtonAll, 10);
         b2 -> width.AsIs();
@@ -278,6 +277,11 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
         b3 -> right.SameAs (dummy, wxRight, 0);
         b3 -> bottom.SameAs (dummy, wxBottom, 0);
         m_IndexList -> SetConstraints(b3);
+
+#if wxUSE_TOOLTIPS
+        m_IndexButtonAll -> SetToolTip(_("Show all items in index"));
+        m_IndexButton -> SetToolTip(_("Display all index items that contain given substring. Note that this is case sensitive, so 'window' and 'Window' is something else!"));
+#endif //wxUSE_TOOLTIPS
 
         dummy -> SetAutoLayout(TRUE);
         dummy -> Layout();
@@ -300,7 +304,9 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
 
         wxLayoutConstraints *b2 = new wxLayoutConstraints;
         m_SearchButton = new wxButton(dummy, wxID_HTML_SEARCHBUTTON, _("Search"));
+#if wxUSE_TOOLTIPS
         m_SearchButton -> SetToolTip(_("Search contents of help book(s) for all occurences of the text you typed above"));
+#endif //wxUSE_TOOLTIPS
         b2 -> top.Below (m_SearchText, 10);
         b2 -> left.SameAs (dummy, wxLeft, 10);
         b2 -> width.AsIs();
