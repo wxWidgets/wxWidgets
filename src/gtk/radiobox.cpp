@@ -184,8 +184,6 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
     PostCreation();
 
-    ApplyWidgetStyle();
-
     SetLabel( title );
 
     SetFont( parent->GetFont() );

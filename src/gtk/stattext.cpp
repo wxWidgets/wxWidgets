@@ -82,8 +82,6 @@ bool wxStaticText::Create(wxWindow *parent,
 
     PostCreation();
 
-    ApplyWidgetStyle();
-
     wxControl::SetFont( parent->GetFont() );
     
     wxSize size_best( DoGetBestSize() );

@@ -138,8 +138,6 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
     PostCreation();
 
-    ApplyWidgetStyle();
-
     ConnectWidget( GTK_COMBO(m_widget)->button );
 
     if (!value.IsNull()) SetValue( value );

@@ -110,8 +110,6 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
 
     PostCreation();
 
-    ApplyWidgetStyle();
-
     SetFont( parent->GetFont() );
 
     wxSize size_best( DoGetBestSize() );

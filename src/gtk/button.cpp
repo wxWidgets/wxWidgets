@@ -118,8 +118,6 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
   
     PostCreation();
   
-    ApplyWidgetStyle();
-
     SetFont( parent->GetFont() );
 
     wxSize best_size( DoGetBestSize() );

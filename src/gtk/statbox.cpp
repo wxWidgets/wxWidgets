@@ -61,10 +61,7 @@ bool wxStaticBox::Create( wxWindow *parent, wxWindowID id, const wxString &label
 
     SetLabel(label);
   
-    ApplyWidgetStyle();
-
     SetFont( parent->GetFont() );
-    
 
     SetBackgroundColour( parent->GetBackgroundColour() );
     SetForegroundColour( parent->GetForegroundColour() );

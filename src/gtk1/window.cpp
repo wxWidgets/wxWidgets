@@ -2022,8 +2022,6 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
 
     PostCreation();
 
-    ApplyWidgetStyle();
-
     Show( TRUE );
 
     return TRUE;
@@ -2949,6 +2947,8 @@ GtkStyle *wxWindow::GetWidgetStyle()
         def = gtk_widget_get_default_style();
 
     m_widgetStyle = gtk_style_copy( def );
+    m_widgetStyle->engine_data = def->engine_data;
+    m_widgetStyle->klass = def->klass;
 
     return m_widgetStyle;
 }

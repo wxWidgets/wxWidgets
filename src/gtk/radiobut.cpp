@@ -116,8 +116,6 @@ bool wxRadioButton::Create( wxWindow *parent, wxWindowID id, const wxString& lab
   
     PostCreation();
 
-    ApplyWidgetStyle();
-
     SetFont( parent->GetFont() );
 
     wxSize size_best( DoGetBestSize() );

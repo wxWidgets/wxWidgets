@@ -115,8 +115,6 @@ bool wxCheckBox::Create(wxWindow *parent,
 
     PostCreation();
 
-    ApplyWidgetStyle();
-
     SetFont( parent->GetFont() );
 
     wxSize size_best( DoGetBestSize() );
