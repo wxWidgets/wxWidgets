@@ -480,7 +480,7 @@ class with real methods and properties that do the Right Thing to
 reflect those calls to the real ActiveX control.  There is also a
 script/tool module named genaxmodule that given a CLSID or progID and
 a class name, will generate the module for you.  There are a few
-examples of the output of this tool in the wx.lib package.  See
+examples of the output of this tool in the wx.lib package, see
 iewin.py, pdfwin.py and flashwin.py.
 
 Currently the genaxmodule tool will tweak some of the names it
@@ -501,7 +501,7 @@ method as required, but MSDN says it is optional.
 It is intended that this new wx.activex module will replace both the
 older version of Lindsay's code available in iewin.IEHtmlWindow, and
 also the wx.lib.activexwraper module.  Probably the biggest
-differences you'l ecounted in migrating activexwrapper-based code
+differences you'll ecounter in migrating activexwrapper-based code
 (besides events working better without causing deadlocks) is that
 events are no longer caught by overriding methods in your derived
 class.  Instead ActiveXWindow uses the wx event system and you bind
@@ -525,14 +525,20 @@ attributes of the event object passed to the handler.  (Can you say
 'event' any more times in a single sentence? ;-) ) For example the
 StatusTextChange event will also send the text that should be put into
 the status line as an event parameter named "Text" and you can access
-it your handlers as an attribute of the evnt object like this::
+it your handlers as an attribute of the event object like this::
 
     def UpdateStatusText(self, evt):
         self.SetStatusText(evt.Text)
 
-These event object attributes should be considered read-only since
-support for output parameters on the events is not yet implemented.
-But that could/should change in the future.
+Usually these event object attributes should be considered read-only,
+but some will be defined by the TypeInfo as output parameters.  In
+those cases if you modify the event object's attribute then that value
+will be returned to the ActiveX control.  For example, to prevent a
+new window from being opened by the IE web browser control you can do
+this in the handler for the iewin.EVT_NewWindow2 event::
+
+    def OnNewWindow2(self, evt):
+        evt.Cancel = True   
 
 So how do you know what methods, events and properties that am ActiveX
 control supports?  There is a funciton in wx.activex named GetAXInfo
@@ -601,6 +607,12 @@ and wxPyEndAllowThreads has changed slightly.  wxPyBeginAllowThreads
 now returns a boolean value that must be passed to the coresponding
 wxPyEndAllowThreads function call.  This is to help do the RightThing
 when calls to these two functions are nested, or if calls to external
-code that are wrapped in the standard Py_(BEGIN|END)_ALLOW_THERADS may
-result in wx event handlers being called (such as os.startfile.)
+code in other extension modules that are wrapped in the standard
+Py_(BEGIN|END)_ALLOW_THERADS may result in wx event handlers being
+called (such as during the call to os.startfile.)
 
+The bulk of wxPython's setup.py has been moved to another module,
+wx/build/config.py.  This module will be installed as part of wxPython
+so 3rd party modules that wish to use the same setup/configuration
+code can do so simply by importing this module from their own setup.py
+scripts. 
