@@ -16,6 +16,8 @@ BUGS
 TODO
 =====================================================================
 
+Printing produces empty pages only.
+
 Formatting of first text in message in M is broken.
 Large images in last line don't get displayed properly.
 Taking last line's height as default for next is rubbish,
