@@ -125,6 +125,9 @@ wxDbTable::wxDbTable(wxDb *pwxDb, const char *tblName, const int nCols,
     selectForUpdate     = FALSE;                    // SELECT ... FOR UPDATE; Indicates whether to include the FOR UPDATE phrase
     queryOnly           = qryOnly;
     insertable          = TRUE;
+    wxStrcpy(tablePath,"");
+    wxStrcpy(tableName,"");
+    wxStrcpy(queryTableName,"");
 
     assert (tblName);
 
@@ -579,6 +582,10 @@ bool wxDbTable::query(int queryType, bool forUpdate, bool distinct, const char *
         BuildSelectStmt(sqlStmt, queryType, distinct);
         pDb->WriteSqlLog(sqlStmt);
     }
+/*
+   This is the block of code that got added during the 2.2.1 merge with 
+   the 2.2 main branch that somehow got added here when it should not have.  - gt
+
     else 
         wxStrcpy(sqlStmt, pSqlStmt);
 
@@ -590,9 +597,9 @@ bool wxDbTable::query(int queryType, bool forUpdate, bool distinct, const char *
         pDb->DispAllErrors(henv, hdbc, hstmt);
         return(FALSE);
     }
-
+*/
     // Make sure the cursor is closed first
-    if (! CloseCursor(hstmt))
+    if (!CloseCursor(hstmt))
         return(FALSE);
 
     // Execute the SQL SELECT statement
@@ -1034,7 +1041,10 @@ bool wxDbTable::CreateTable(bool attemptDrop)
             sqlStmt += s.c_str();
         }
 
-        if (pDb->Dbms() == dbmsSYBASE_ASE || pDb->Dbms() == dbmsMY_SQL)
+        if (pDb->Dbms() == dbmsDB2 ||
+            pDb->Dbms() == dbmsMY_SQL ||
+            pDb->Dbms() == dbmsSYBASE_ASE  ||
+            pDb->Dbms() == dbmsMS_SQL_SERVER)
         {
             if (colDefs[i].KeyField)
             {
@@ -1319,7 +1329,8 @@ bool wxDbTable::DropIndex(const char * idxName)
 
     if (pDb->Dbms() == dbmsACCESS || pDb->Dbms() == dbmsMY_SQL)
         sqlStmt.sprintf("DROP INDEX %s ON %s",idxName,tableName);
-    else if (pDb->Dbms() == dbmsSYBASE_ASE)
+    else if ((pDb->Dbms() == dbmsMS_SQL_SERVER) ||
+             (pDb->Dbms() == dbmsSYBASE_ASE))
         sqlStmt.sprintf("DROP INDEX %s.%s",tableName,idxName);
     else
         sqlStmt.sprintf("DROP INDEX %s",idxName);
@@ -1750,7 +1761,8 @@ bool wxDbTable::CanSelectForUpdate(void)
     if (pDb->Dbms() == dbmsMY_SQL)
         return FALSE;
 
-    if (pDb->dbInf.posStmts & SQL_PS_SELECT_FOR_UPDATE)
+    if ((pDb->Dbms() == dbmsORACLE) ||
+        (pDb->dbInf.posStmts & SQL_PS_SELECT_FOR_UPDATE))
         return(TRUE);
     else
         return(FALSE);
@@ -1852,9 +1864,9 @@ bool wxDbTable::SetQueryTimeout(UDWORD nSeconds)
 
 
 /********** wxDbTable::SetColDefs() **********/
-void wxDbTable::SetColDefs (int index, const char *fieldName, int dataType, void *pData,
-                            int cType, int size, bool keyField, bool upd,
-                            bool insAllow, bool derivedCol)
+void wxDbTable::SetColDefs(int index, const char *fieldName, int dataType, void *pData,
+                           int cType, int size, bool keyField, bool upd,
+                           bool insAllow, bool derivedCol)
 {
     if (!colDefs)  // May happen if the database connection fails
         return;
@@ -1890,8 +1902,8 @@ void wxDbTable::SetColDefs (int index, const char *fieldName, int dataType, void
 }  // wxDbTable::SetColDefs()
 
 
-/********** wxDbTable::SetColDef() **********/
-wxDbColDataPtr* wxDbTable::SetColDefs (wxDbColInf *pColInfs, ULONG numCols)
+/********** wxDbTable::SetColDefs() **********/
+wxDbColDataPtr* wxDbTable::SetColDefs(wxDbColInf *pColInfs, ULONG numCols)
 {
     assert(pColInfs);
     wxDbColDataPtr *pColDataPtrs = NULL;
@@ -1954,7 +1966,7 @@ wxDbColDataPtr* wxDbTable::SetColDefs (wxDbColInf *pColInfs, ULONG numCols)
 
     return (pColDataPtrs);
 
-} // wxDbTable::SetColDef()
+} // wxDbTable::SetColDefs()
 
 
 /********** wxDbTable::SetCursor() **********/
