@@ -44,11 +44,22 @@
     #define GetMillisecondsTime _EVT_getTicks
 
     typedef ulong wxTimerTick_t;
-#else
+
+    #define wxTimerTickFmtSpec _T("lu")
+    #define wxTimerTickPrintfArg(tt) (tt)
+#else // !__WXMGL__
     #define GetMillisecondsTime wxGetLocalTimeMillis
 
     typedef wxLongLong wxTimerTick_t;
-#endif
+
+    #if wxUSE_LONGLONG_WX
+        #define wxTimerTickFmtSpec wxLongLongFmtSpec _T("d")
+        #define wxTimerTickPrintfArg(tt) (tt.GetValue())
+    #else // using native wxLongLong
+        #define wxTimerTickFmtSpec _T("s")
+        #define wxTimerTickPrintfArg(tt) (tt.ToString().c_str())
+    #endif // wx/native long long
+#endif // __WXMGL__/!__WXMGL__
 
 // ----------------------------------------------------------------------------
 // helper structures and wxTimerScheduler
@@ -91,11 +102,9 @@ void wxTimerScheduler::QueueTimer(wxTimerDesc *desc, wxTimerTick_t when)
     desc->shotTime = when;
     desc->running = TRUE;
 
-#ifndef __WXMGL__
     wxLogTrace( wxT("timer"),
-                wxT("queued timer %p at tick %") wxLongLongFmtSpec _T("d"), 
-               desc->timer,  when.GetValue());
-#endif
+                wxT("queued timer %p at tick %") wxTimerTickFmtSpec, 
+               desc->timer,  wxTimerTickPrintfArg(when));
 
     if ( m_timers )
     {
@@ -147,11 +156,11 @@ void wxTimerScheduler::NotifyTimers()
             
             if ( !timerDeleted )
             {
-#ifndef __WXMGL__
                 wxLogTrace( wxT("timer"),
-                            wxT("notified timer %p sheduled for %") wxLongLongFmtSpec _T("d"), 
-                            desc->timer, desc->shotTime.GetValue() );
-#endif
+                            wxT("notified timer %p sheduled for %")
+                            wxTimerTickFmtSpec, 
+                            desc->timer,
+                            wxTimerTickPrintfArg(desc->shotTime) );
 
                 desc->deleteFlag = NULL;
                 if ( !oneShot )
