@@ -829,7 +829,9 @@ Only implemented in wxMSW/wxGTK starting with wxWindows 2.3.2.
 
 \func{virtual void}{SetSelection}{\param{long}{ from}, \param{long}{ to}}
 
-Selects the text starting at the first position up to (but not including) the character at the last position.
+Selects the text starting at the first position up to (but not including) the
+character at the last position. If both parameters are equal to $-1$ all text
+in the control is selected.
 
 \wxheading{Parameters}
 
