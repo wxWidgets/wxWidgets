@@ -294,9 +294,6 @@ bool wxBitmap::CreateFromXpm(const char **data)
     wxCHECK_MSG( img.Ok(), FALSE, wxT("invalid bitmap data") )
     
     *this = wxBitmap(img);
-    
-    if ( wxTheBitmapList ) wxTheBitmapList->AddBitmap(this);
-
     return TRUE;
 #else
 	return FALSE;
