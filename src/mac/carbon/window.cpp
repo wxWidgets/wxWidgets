@@ -35,6 +35,10 @@
 #include "wx/menuitem.h"
 #include "wx/log.h"
 
+#if wxUSE_CARET
+    #include "wx/caret.h"
+#endif // wxUSE_CARET
+
 #define wxWINDOW_HSCROLL 5998
 #define wxWINDOW_VSCROLL 5997
 #define MAC_SCROLLBAR_SIZE 16
@@ -198,25 +202,45 @@ void wxWindow::SetFocus()
 	{
 		if (gFocusWindow )
 		{
+			#if wxUSE_CARET
+			    // Deal with caret
+			    if ( gFocusWindow->m_caret )
+			    {
+			          gFocusWindow->m_caret->OnKillFocus();
+			    }
+			#endif // wxUSE_CARET
 			wxControl* control = wxDynamicCast( gFocusWindow , wxControl ) ;
 			if ( control && control->GetMacControl() )
 			{
 				UMASetKeyboardFocus( gFocusWindow->GetMacRootWindow() , control->GetMacControl()  , kControlFocusNoPart ) ;
 			}
-	    wxFocusEvent event(wxEVT_KILL_FOCUS, gFocusWindow->m_windowId);
-	    event.SetEventObject(gFocusWindow);
+	    	wxFocusEvent event(wxEVT_KILL_FOCUS, gFocusWindow->m_windowId);
+	    	event.SetEventObject(gFocusWindow);
 			gFocusWindow->GetEventHandler()->ProcessEvent(event) ;
 		}
 		gFocusWindow = this ;
 		{
+			#if wxUSE_CARET
+		    // Deal with caret
+		    if ( m_caret )
+		    {
+		        m_caret->OnSetFocus();
+		    }
+			#endif // wxUSE_CARET
+   			// panel wants to track the window which was the last to have focus in it
+    		wxPanel *panel = wxDynamicCast(GetParent(), wxPanel);
+    		if ( panel )
+    		{
+        		panel->SetLastFocus(this);
+    		}
 			wxControl* control = wxDynamicCast( gFocusWindow , wxControl ) ;
 			if ( control && control->GetMacControl() )
 			{
 				UMASetKeyboardFocus( gFocusWindow->GetMacRootWindow() , control->GetMacControl()  , kControlEditTextPart ) ;
 			}
 
-	    wxFocusEvent event(wxEVT_SET_FOCUS, m_windowId);
-	    event.SetEventObject(this);
+	    	wxFocusEvent event(wxEVT_SET_FOCUS, m_windowId);
+	    	event.SetEventObject(this);
 			GetEventHandler()->ProcessEvent(event) ;
 		}
 	}
@@ -1348,6 +1372,9 @@ void wxWindow::MacRedraw( RgnHandle updatergn , long time)
 		if ( focus.Ok() )
 		{
 			WindowRef window = GetMacRootWindow() ;
+			bool eraseBackground = false ;
+			if ( m_macWindowData )
+				eraseBackground = true ;
 			if ( m_backgroundColour == wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE) )
 			{
 					UMASetThemeWindowBackground( window , kThemeBrushDocumentWindowBackground , false ) ;
@@ -1374,13 +1401,13 @@ void wxWindow::MacRedraw( RgnHandle updatergn , long time)
 							if ( parent->m_backgroundColour != wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE ) )
 							{
 								// if we have any other colours in the hierarchy
-			  				RGBBackColor( &parent->m_backgroundColour.GetPixel()) ;
-			  				break ;
+			  					RGBBackColor( &parent->m_backgroundColour.GetPixel()) ;
+			  					break ;
 							}
 							// if we have the normal colours in the hierarchy but another control etc. -> use it's background
 							if ( parent->IsKindOf( CLASSINFO( wxNotebook ) ) || parent->IsKindOf( CLASSINFO( wxTabCtrl ) ))
 							{
-								ApplyThemeBackground			(kThemeBackgroundTabPane, &(**updatergn).rgnBBox , kThemeStateActive,8,true);
+								ApplyThemeBackground(kThemeBackgroundTabPane, &(**updatergn).rgnBBox , kThemeStateActive,8,true);
 								break ;
 							}
 						}
@@ -1401,8 +1428,13 @@ void wxWindow::MacRedraw( RgnHandle updatergn , long time)
 			{
 		  		RGBBackColor( &m_backgroundColour.GetPixel()) ;
 			}
+	  		if ( GetParent() && m_backgroundColour != GetParent()->GetBackgroundColour() )
+	  			eraseBackground = true ;
 			SetClip( updatergn ) ;
-			EraseRgn( updatergn ) ;	
+			if ( eraseBackground )
+			{
+				EraseRgn( updatergn ) ;	
+			}
 		}
 	}
 
@@ -1553,7 +1585,10 @@ void wxWindow::MacKeyDown( EventRecord *ev )
 }
 
 
-
+bool wxWindow::AcceptsFocus() const
+{
+    return MacCanFocus() && wxWindowBase::AcceptsFocus();
+}
 
 ControlHandle wxWindow::MacGetContainerForEmbedding() 
 {

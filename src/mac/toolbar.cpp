@@ -40,8 +40,7 @@ wxToolBar::wxToolBar()
 bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
             long style, const wxString& name)
 {
-  m_maxWidth = -1;
-  m_maxHeight = -1;
+  m_maxWidth = m_maxHeight = 0;
 
   m_defaultWidth = 24;
   m_defaultHeight = 22;
@@ -152,7 +151,9 @@ bool wxToolBar::CreateTools()
 	wxNode *node = m_tools.First();
 	int noButtons = 0;
 	int x = 0 ;
-	
+	wxSize toolSize = GetToolSize() ;
+    int tw, th;
+    GetSize(& tw, & th);
 	while (node)
 	{
 		wxToolBarTool *tool = (wxToolBarTool *)node->Data();
@@ -161,8 +162,8 @@ bool wxToolBar::CreateTools()
 		if( tool->m_toolStyle != wxTOOL_STYLE_SEPARATOR )
 		{
 			Rect toolrect = { toolbarrect.top + kwxMacToolBarTopMargin , toolbarrect.left + x + kwxMacToolBarLeftMargin , 0 , 0 } ;
-			toolrect.right = toolrect.left + m_defaultWidth ;
-			toolrect.bottom = toolrect.top + m_defaultHeight ;
+			toolrect.right = toolrect.left + toolSize.x ;
+			toolrect.bottom = toolrect.top + toolSize.y ;
 			
 			PicHandle	icon = NULL ;
 			if ( bmap )
@@ -197,16 +198,36 @@ bool wxToolBar::CreateTools()
 			UMASetControlFontStyle( m_macToolHandle , &controlstyle ) ;
 			UMAEmbedControl( m_macToolHandle , m_macControl ) ;
 			
-			x += (int)m_defaultWidth;
+			x += (int)toolSize.x;
 			noButtons ++;
 		}
 		else
 		{
 			m_macToolHandles.Add( NULL ) ;
-			x += (int)m_defaultWidth / 4;
+			x += (int)toolSize.x / 4;
 		}
+	    if ( toolbarrect.left + x + kwxMacToolBarLeftMargin > m_maxWidth)
+    	  	m_maxWidth = toolbarrect.left + x + kwxMacToolBarLeftMargin;
+    	if (toolbarrect.top + kwxMacToolBarTopMargin + toolSize.y > m_maxHeight)
+      		m_maxHeight = toolbarrect.top + kwxMacToolBarTopMargin ;
+
 		node = node->Next();
 	}
+
+  if ( GetWindowStyleFlag() & wxTB_HORIZONTAL )
+  {
+    m_maxWidth = tw ; // +=toolSize.x;
+    m_maxHeight += toolSize.y;
+  	m_maxHeight += m_yMargin;
+  }
+  else
+  {
+    m_maxHeight = th ;// += toolSize.y;
+    m_maxWidth += toolSize.x;
+  	m_maxWidth += m_xMargin;
+  }
+
+  SetSize(m_maxWidth, m_maxHeight);
 
   return TRUE;
 }
@@ -218,8 +239,7 @@ void wxToolBar::SetToolBitmapSize(const wxSize& size)
 
 wxSize wxToolBar::GetMaxSize() const
 {
-    // TODO
-    return wxSize(0, 0);
+    return wxSize(m_maxWidth, m_maxHeight);
 }
 
 // The button size is bigger than the bitmap size
@@ -291,7 +311,13 @@ wxToolBarTool *wxToolBar::AddTool(int index, const wxBitmap& bitmap, const wxBit
   else
     tool->m_y = m_yMargin;
 
-  tool->SetSize(m_defaultWidth, m_defaultHeight);
+  tool->SetSize(GetToolSize().x, GetToolSize().y);
+
+  if ((tool->m_x + bitmap.GetWidth() + m_xMargin) > m_maxWidth)
+    m_maxWidth = (tool->m_x + tool->GetWidth() + m_xMargin);
+
+  if ((tool->m_y + bitmap.GetHeight() + m_yMargin) > m_maxHeight)
+    m_maxHeight = (tool->m_y + tool->GetHeight() + m_yMargin);
 
   m_tools.Append((long)index, tool);
   return tool;

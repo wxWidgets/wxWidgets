@@ -89,9 +89,8 @@ void wxChoice::MacHandleControlClick( ControlHandle control , SInt16 controlpart
     wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, m_windowId );
 	event.SetInt(GetSelection());
     event.SetEventObject(this);
-    event.SetString(copystring(GetStringSelection()));
+    event.SetString(GetStringSelection());
     ProcessCommand(event);
-    delete[] event.GetString();
 }
 
 

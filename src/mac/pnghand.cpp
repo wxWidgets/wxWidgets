@@ -106,14 +106,15 @@ wxPNGReader::Create(int width, int height, int depth, int colortype)
 {
   Width = width; Height = height; Depth = depth;
   ColorType = (colortype>=0) ? colortype: ((Depth>8) ? COLORTYPE_COLOR: 0);
+  delete Palette;
+  delete[] RawImage ;
+  RawImage = 0;
+  Palette = 0;
 
   if (lpbi)  
   {
   	wxMacDestroyGWorld( lpbi ) ;
-//		delete Palette;
   }
-  RawImage = 0;
-  Palette = 0;
   if (lpbi = wxMacCreateGWorld( Width , Height , Depth) )
   {
     EfeWidth = (long)(((long)Width*Depth + 31) / 32) * 4;
@@ -197,10 +198,11 @@ bool wxPNGReader::SetRGB(int x, int y, byte r, byte g, byte b)
 
 bool wxPNGReader::SetPalette(wxPalette* colourmap)
 {
+  delete Palette ;
   if (!colourmap)
    return FALSE;
   ColorType |= (COLORTYPE_PALETTE | COLORTYPE_COLOR);
-  Palette = colourmap;
+  Palette = new wxPalette( *colourmap );
 	return true ;
 //  return (DibSetUsage(lpbi, (HPALETTE) Palette->GetHPALETTE(), WXIMA_COLORS ) != 0);
 }
@@ -208,6 +210,7 @@ bool wxPNGReader::SetPalette(wxPalette* colourmap)
 bool
 wxPNGReader::SetPalette(int n, byte *r, byte *g, byte *b)
 {
+  delete Palette ;
   Palette = new wxPalette();
   if (!Palette)
    return FALSE;
@@ -223,6 +226,7 @@ wxPNGReader::SetPalette(int n, byte *r, byte *g, byte *b)
 bool
 wxPNGReader::SetPalette(int n, rgb_color_struct *rgb_struct)
 {
+  delete Palette ;
   Palette = new wxPalette();
   if (!Palette)
    return FALSE;
@@ -249,6 +253,10 @@ wxPNGReader::SetPalette(int n, rgb_color_struct *rgb_struct)
 
 void wxPNGReader::NullData()
 {
+  if (lpbi)  {
+  	wxMacDestroyGWorld( lpbi ) ;
+  }
+  delete Palette;
   lpbi = NULL;
   Palette = NULL;
 }
@@ -516,30 +524,47 @@ bool wxPNGReader::ReadFile(char * ImageFileName)
 			{
 				if ( pixel_depth == 8 )
 				{
+					for ( int i = 0 ; i < info_ptr->width ; ++i )
+					{
+						png_color_struct* color ; 
+						RGBColor col ;
+
+						int index = row_pointers[i] ;
+						color = &info_ptr->palette[index] ;
+						col.red = (((int)color->red) << 8) | ((int)color->red) ;
+						col.green = (((int)color->green) << 8) | ((int)color->green) ;
+						col.blue = (((int)color->blue) << 8) | ((int)color->blue) ;
+						SetCPixel( i, y, &col);
+					}
+					/*
 					png_color_struct* color ; 
 					RGBColor col ;
 					unsigned char* p = &row_pointers[0] ;
+					PenNormal() ;
 					MoveTo( 0 , y ) ;
-					unsigned char lastcol = *p ;
-					color = &info_ptr->palette[lastcol] ;
+					int index = *p ;
+					color = &info_ptr->palette[index] ;
 					col.red = (color->red << 8) | color->red ;
 					col.green = (color->green << 8) | color->green ;
 					col.blue = (color->blue << 8) | color->blue ;
 					RGBForeColor( &col ) ;
+					col.red = col.green = col.blue = 0xFFFF ;
+					RGBBackColor( &col ) ;
 					for ( int i = 0 ; i < info_ptr->width ; ++i , ++p)
 					{
-						if ( *p != lastcol )
+						if ( *p != index )
 						{
 							LineTo( i , y ) ;
-							lastcol = *p ;
-							color = &info_ptr->palette[lastcol] ;
-							col.red = (color->red << 8) | color->red ;
-							col.green = (color->green << 8) | color->green ;
-							col.blue = (color->blue << 8) | color->blue ;
+							index = *p ;
+							color = &info_ptr->palette[index] ;
+							col.red = (((int)color->red) << 8) | ((int)color->red) ;
+							col.green = (((int)color->green) << 8) | ((int)color->green) ;
+							col.blue = (((int)color->blue) << 8) | ((int)color->blue) ;
 							RGBForeColor( &col ) ;
 						}
 					}
-					LineTo( info_ptr->width - 1 , y ) ;
+					LineTo( info_ptr->width  , y ) ;
+					*/
 				}
 				else
 				{
@@ -553,9 +578,9 @@ bool wxPNGReader::ReadFile(char * ImageFileName)
 							
 						int index = ( row_pointers[byte] >> offset ) & ( 0xFF >> ( 8 - pixel_depth ) );
 						color = &info_ptr->palette[index] ;
-						col.red = (color->red << 8) | color->red ;
-						col.green = (color->green << 8) | color->green ;
-						col.blue = (color->blue << 8) | color->blue ;
+						col.red = (((int)color->red) << 8) | ((int)color->red) ;
+						col.green = (((int)color->green) << 8) | ((int)color->green) ;
+						col.blue = (((int)color->blue) << 8) | ((int)color->blue) ;
 						SetCPixel( i, y, &col);
 					}
 				}
@@ -567,9 +592,9 @@ bool wxPNGReader::ReadFile(char * ImageFileName)
 					png_color_struct* color ; 
 					RGBColor col ;
 					color =(png_color_struct*) (&row_pointers[i*3]) ;
-					col.red = (color->red << 8) | color->red ;
-					col.green = (color->green << 8) | color->green ;
-					col.blue = (color->blue << 8) | color->blue ;
+					col.red = (((int)color->red) << 8) | ((int)color->red) ;
+					col.green = (((int)color->green) << 8) | ((int)color->green) ;
+					col.blue = (((int)color->blue) << 8) | ((int)color->blue) ;
 					SetCPixel( i, y, &col);
 				}
 			}

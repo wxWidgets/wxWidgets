@@ -504,6 +504,17 @@ void wxApp::CleanUp()
 
 int wxEntry( int argc, char *argv[] )
 {
+#ifdef __MWERKS__
+#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
+    // This seems to be necessary since there are 'rogue'
+    // objects present at this point (perhaps global objects?)
+    // Setting a checkpoint will ignore them as far as the
+    // memory checking facility is concerned.
+    // Of course you may argue that memory allocated in globals should be
+    // checked, but this is a reasonable compromise.
+    wxDebugContext::SetCheckpoint();
+#endif
+#endif
   if (!wxApp::Initialize())
     return FALSE;
   if (!wxTheApp)
@@ -1021,109 +1032,112 @@ void wxApp::MacHandleMouseUpEvent( EventRecord *ev )
 	}
 }
 
-long wxMacTranslateKey(char key, char code)
+long wxMacTranslateKey(unsigned char key, unsigned char code)
 {
+	long retval = key ;
     switch (key)
     {
     	case 0x01 :
-		 		key = WXK_HOME;
+		 		retval = WXK_HOME;
 		  break;
     	case 0x03 :
-		 		key = WXK_RETURN;
+		 		retval = WXK_RETURN;
 		  break;
     	case 0x04 :
-		 		key = WXK_END;
+		 		retval = WXK_END;
 		  break;
     	case 0x05 :
-		 		key = WXK_HELP;
+		 		retval = WXK_HELP;
 		  break;
     	case 0x08 :
-		 		key = WXK_BACK;
+		 		retval = WXK_BACK;
 		  break;
     	case 0x09 :
-		 		key = WXK_TAB;
+		 		retval = WXK_TAB;
 		  break;
     	case 0x0b :
-		 		key = WXK_PAGEUP;
+		 		retval = WXK_PAGEUP;
 		  break;
     	case 0x0c :
-		 		key = WXK_PAGEDOWN;
+		 		retval = WXK_PAGEDOWN;
 		  break;
     	case 0x0d :
-		 		key = WXK_RETURN;
+		 		retval = WXK_RETURN;
 		  break;
 			case 0x10 :
 			{
 				switch( code )
 				{
 					case 0x7a :
-						key = WXK_F1 ;
+						retval = WXK_F1 ;
 						break;
 					case 0x78 :
-						key = WXK_F2 ;
+						retval = WXK_F2 ;
 						break;
 					case 0x63 :
-						key = WXK_F3 ;
+						retval = WXK_F3 ;
 						break;
 					case 0x76 :
-						key = WXK_F4 ;
+						retval = WXK_F4 ;
 						break;
 					case 0x60 :
-						key = WXK_F5 ;
+						retval = WXK_F5 ;
 						break;
 					case 0x61 :
-						key = WXK_F6 ;
+						retval = WXK_F6 ;
 						break;
 					case 0x62:
-						key = WXK_F7 ;
+						retval = WXK_F7 ;
 						break;
 					case 0x64 :
-						key = WXK_F8 ;
+						retval = WXK_F8 ;
 						break;
 					case 0x65 :
-						key = WXK_F9 ;
+						retval = WXK_F9 ;
 						break;
 					case 0x6D :
-						key = WXK_F10 ;
+						retval = WXK_F10 ;
 						break;
 					case 0x67 :
-						key = WXK_F11 ;
+						retval = WXK_F11 ;
 						break;
 					case 0x6F :
-						key = WXK_F12 ;
+						retval = WXK_F12 ;
 						break;
 					case 0x69 :
-						key = WXK_F13 ;
+						retval = WXK_F13 ;
 						break;
 					case 0x6B :
-						key = WXK_F14 ;
+						retval = WXK_F14 ;
 						break;
 					case 0x71 :
-						key = WXK_F15 ;
+						retval = WXK_F15 ;
 						break;
 				}
 			}
 			break ;
 			case 0x1b :
-				key = WXK_DELETE ;
+				retval = WXK_ESCAPE ;
 			break ;
 			case 0x1c :
-				key = WXK_LEFT ;
+				retval = WXK_LEFT ;
 			break ;
 			case 0x1d :
-				key = WXK_RIGHT ;
+				retval = WXK_RIGHT ;
 			break ;
 			case 0x1e :
-				key = WXK_UP ;
+				retval = WXK_UP ;
 			break ;
 			case 0x1f :
-				key = WXK_DOWN ;
+				retval = WXK_DOWN ;
 			break ;
+			case 0x7F :
+				retval = WXK_DELETE ;
 	 		default:
 			break ;
  	} // end switch
 
-	return key;
+	return retval;
 }
 
 void wxApp::MacHandleKeyDownEvent( EventRecord *ev )
@@ -1141,17 +1155,79 @@ void wxApp::MacHandleKeyDownEvent( EventRecord *ev )
 		wxWindow* focus = wxWindow::FindFocus() ;
 		if ( focus )
 		{
-			wxKeyEvent event(wxEVT_CHAR);
+			long keyval = wxMacTranslateKey(keychar, keycode) ;
+			
+			wxKeyEvent event(wxEVT_KEY_DOWN);
 			event.m_shiftDown = ev->modifiers & shiftKey;
 			event.m_controlDown = ev->modifiers & controlKey;
 			event.m_altDown = ev->modifiers & optionKey;
 			event.m_metaDown = ev->modifiers & cmdKey;
-			event.m_keyCode = wxMacTranslateKey(keychar, keycode);
+			event.m_keyCode = keyval;
 			event.m_x = ev->where.h;
 			event.m_y = ev->where.v;
 			event.m_timeStamp = ev->when;
 			event.SetEventObject(focus);
-			focus->GetEventHandler()->ProcessEvent( event ) ;
+			bool handled = focus->GetEventHandler()->ProcessEvent( event ) ;
+			if ( !handled )
+			{
+				#if wxUSE_ACCEL
+			    if (!handled)
+			    {
+			        wxWindow *ancestor = focus;
+			        /*
+			        while (ancestor)
+			        {
+			            int command = ancestor->GetAcceleratorTable()->GetCommand( event );
+			            if (command != -1)
+			            {
+			                wxCommandEvent command_event( wxEVT_COMMAND_MENU_SELECTED, command );
+			                handled = ancestor->GetEventHandler()->ProcessEvent( command_event );
+			                break;
+			            }
+			            if (ancestor->m_isFrame)
+			                break;
+			            ancestor = ancestor->GetParent();
+			        }
+			        */
+			    }
+				#endif // wxUSE_ACCEL
+			}
+			if (!handled)
+			{
+				wxKeyEvent event(wxEVT_CHAR);
+				event.m_shiftDown = ev->modifiers & shiftKey;
+				event.m_controlDown = ev->modifiers & controlKey;
+				event.m_altDown = ev->modifiers & optionKey;
+				event.m_metaDown = ev->modifiers & cmdKey;
+				event.m_keyCode = keyval;
+				event.m_x = ev->where.h;
+				event.m_y = ev->where.v;
+				event.m_timeStamp = ev->when;
+				event.SetEventObject(focus);
+				handled = focus->GetEventHandler()->ProcessEvent( event ) ;
+			}
+			if ( !handled &&
+		         (keyval == WXK_TAB) &&
+		         (!focus->HasFlag(wxTE_PROCESS_TAB)) &&
+		         (focus->GetParent()) &&
+		         (focus->GetParent()->HasFlag( wxTAB_TRAVERSAL)) )
+		    {
+		        wxNavigationKeyEvent new_event;
+		        new_event.SetEventObject( focus );
+		        new_event.SetDirection( !event.ShiftDown() );
+		        /* CTRL-TAB changes the (parent) window, i.e. switch notebook page */
+		        new_event.SetWindowChange( event.ControlDown() );
+		        new_event.SetCurrentFocus( focus );
+		        handled = focus->GetEventHandler()->ProcessEvent( new_event );
+		    }
+		    /* generate wxID_CANCEL if command-. or <esc> has been pressed (typically in dialogs) */
+		    if ( (!handled) &&
+		         (keyval == '.' && event.ControlDown() ) )
+		    {
+		        wxCommandEvent new_event(wxEVT_COMMAND_BUTTON_CLICKED,wxID_CANCEL);
+		        new_event.SetEventObject( focus );
+		        handled = focus->GetEventHandler()->ProcessEvent( new_event );
+		    }
 		}
 	}
 }
