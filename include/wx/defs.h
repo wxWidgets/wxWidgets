@@ -371,27 +371,18 @@ typedef int wxWindowID;
 #ifdef WXMAKINGDLL
     #if wxUSE_BASE
         #define WXMAKINGDLL_BASE
-    #else
-        #define WXUSINGDLL_BASE
     #endif
 
     #define WXMAKINGDLL_CORE
     #define WXMAKINGDLL_HTML
 #endif // WXMAKINGDLL
 
-#ifdef WXUSINGDLL
-    #define WXUSINGDLL_BASE
-    #define WXUSINGDLL_CORE
-    #define WXUSINGDLL_HTML
-#endif // WXUSINGDLL
-
-
 // WXDLLEXPORT maps to export declaration when building the DLL, to import
 // declaration if using it or to nothing at all if we don't use wxWin as DLL
 #ifdef WXMAKINGDLL_BASE
     #define WXDLLIMPEXP_BASE WXEXPORT
     #define WXDLLIMPEXP_DATA_BASE(type) WXEXPORT type
-#elif defined(WXUSINGDLL_BASE)
+#elif defined(WXUSINGDLL)
     #define WXDLLIMPEXP_BASE WXIMPORT
     #define WXDLLIMPEXP_DATA_BASE(type) WXIMPORT type
 #else // not making nor using DLL
@@ -402,7 +393,7 @@ typedef int wxWindowID;
 #ifdef WXMAKINGDLL_CORE
     #define WXDLLIMPEXP_CORE WXEXPORT
     #define WXDLLIMPEXP_DATA_CORE(type) WXEXPORT type
-#elif defined(WXUSINGDLL_CORE)
+#elif defined(WXUSINGDLL)
     #define WXDLLIMPEXP_CORE WXIMPORT
     #define WXDLLIMPEXP_DATA_CORE(type) WXIMPORT type
 #else // not making nor using DLL
@@ -413,7 +404,7 @@ typedef int wxWindowID;
 #ifdef WXMAKINGDLL_HTML
     #define WXDLLIMPEXP_HTML WXEXPORT
     #define WXDLLIMPEXP_DATA_HTML(type) WXEXPORT type
-#elif defined(WXUSINGDLL_HTML)
+#elif defined(WXUSINGDLL)
     #define WXDLLIMPEXP_HTML WXIMPORT
     #define WXDLLIMPEXP_DATA_HTML(type) WXIMPORT type
 #else // not making nor using DLL
