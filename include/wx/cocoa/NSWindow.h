@@ -23,14 +23,14 @@ class wxCocoaNSWindow
     WX_DECLARE_OBJC_INTERFACE_HASHMAP(NSWindow)
 public:
     void AssociateNSWindow(WX_NSWindow cocoaNSWindow);
-    inline void DisassociateNSWindow(WX_NSWindow cocoaNSWindow)
-    {
-        if(cocoaNSWindow)
-            sm_cocoaHash.erase(cocoaNSWindow);
-    }
+    void DisassociateNSWindow(WX_NSWindow cocoaNSWindow);
     virtual void Cocoa_close(void) = 0;
     virtual bool Cocoa_windowShouldClose(void) = 0;
     virtual void Cocoa_wxMenuItemAction(wxMenuItem& item) = 0;
+    virtual void CocoaNotification_DidBecomeKey(void) { }
+    virtual void CocoaNotification_DidResignKey(void) { }
+protected:
+    static void *sm_cocoaObserver;
 };
 
 #endif // _WX_COCOA_NSWINDOW_H_

@@ -27,11 +27,45 @@
 #include "wx/cocoa/NSWindow.h"
 
 #import <Appkit/NSWindow.h>
+#import <Foundation/NSNotification.h>
+#import <Foundation/NSString.h>
 
-// ----------------------------------------------------------------------------
-// globals
-// ----------------------------------------------------------------------------
+// ============================================================================
+// @class wxNSWindowNotificationObserver
+// ============================================================================
+@interface wxNSWindowNotificationObserver : NSObject
+{
+}
+
+- (void)notificationDidBecomeKey: (NSNotification *)notification;
+- (void)notificationDidResignKey: (NSNotification *)notification;
+@end //interface wxNSWindowNotificationObserver
+
+@implementation wxNSWindowNotificationObserver : NSObject
+
+- (void)notificationDidBecomeKey: (NSNotification *)notification
+{
+    wxCocoaNSWindow *win = wxCocoaNSWindow::GetFromCocoa([notification object]);
+    wxCHECK_RET(win,"notificationDidBecomeKey received but no wxWindow exists");
+    win->CocoaNotification_DidBecomeKey();
+}
+
+- (void)notificationDidResignKey: (NSNotification *)notification
+{
+    wxCocoaNSWindow *win = wxCocoaNSWindow::GetFromCocoa([notification object]);
+    wxCHECK_RET(win,"notificationDidResignKey received but no wxWindow exists");
+    win->CocoaNotification_DidResignKey();
+}
+
+@end //implementation wxNSWindowNotificationObserver
+
+// ============================================================================
+// class wxCocoaNSWindow
+// ============================================================================
+
 WX_IMPLEMENT_OBJC_INTERFACE_HASHMAP(NSWindow)
+
+void *wxCocoaNSWindow::sm_cocoaObserver = [[wxNSWindowNotificationObserver alloc] init];
 
 void wxCocoaNSWindow::AssociateNSWindow(WX_NSWindow cocoaNSWindow)
 {
@@ -39,6 +73,18 @@ void wxCocoaNSWindow::AssociateNSWindow(WX_NSWindow cocoaNSWindow)
     {
         [cocoaNSWindow setReleasedWhenClosed: NO];
         sm_cocoaHash.insert(wxCocoaNSWindowHash::value_type(cocoaNSWindow,this));
+        [[NSNotificationCenter defaultCenter] addObserver:(id)sm_cocoaObserver selector:@selector(notificationDidBecomeKey:) name:@"NSWindowDidBecomeKeyNotification" object:cocoaNSWindow];
+        [[NSNotificationCenter defaultCenter] addObserver:(id)sm_cocoaObserver selector:@selector(notificationDidResignKey:) name:@"NSWindowDidResignKeyNotification" object:cocoaNSWindow];
+    }
+}
+
+void wxCocoaNSWindow::DisassociateNSWindow(WX_NSWindow cocoaNSWindow)
+{
+    if(cocoaNSWindow)
+    {
+        [[NSNotificationCenter defaultCenter] removeObserver:(id)sm_cocoaObserver name:@"NSWindowDidBecomeKeyNotification" object:cocoaNSWindow];
+        [[NSNotificationCenter defaultCenter] removeObserver:(id)sm_cocoaObserver name:@"NSWindowDidResignKeyNotification" object:cocoaNSWindow];
+        sm_cocoaHash.erase(cocoaNSWindow);
     }
 }
 
