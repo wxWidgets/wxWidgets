@@ -376,6 +376,17 @@ public:
                            bool pressed);
 };
 
+class wxGTKTextCtrlInputHandler : public wxStdTextCtrlInputHandler
+{
+public:
+    wxGTKTextCtrlInputHandler(wxInputHandler *handler)
+        : wxStdTextCtrlInputHandler(handler) { }
+
+    virtual bool HandleKey(wxControl *control,
+                           const wxKeyEvent& event,
+                           bool pressed);
+};
+
 // ----------------------------------------------------------------------------
 // wxGTKColourScheme: uses the standard GTK colours
 // ----------------------------------------------------------------------------
@@ -485,7 +496,7 @@ wxInputHandler *wxGTKTheme::GetInputHandler(const wxString& control)
             handler = new wxStdCheckListboxInputHandler(GetDefaultInputHandler());
 #endif // wxUSE_CHECKLISTBOX
         else if ( control == wxINP_HANDLER_TEXTCTRL )
-            handler = new wxStdTextCtrlInputHandler(GetDefaultInputHandler());
+            handler = new wxGTKTextCtrlInputHandler(GetDefaultInputHandler());
         else
             handler = GetDefaultInputHandler();
 
@@ -1902,4 +1913,98 @@ bool wxGTKCheckboxInputHandler::HandleKey(wxControl *control,
     }
 
     return FALSE;
+}
+
+// ----------------------------------------------------------------------------
+// wxGTKTextCtrlInputHandler
+// ----------------------------------------------------------------------------
+
+bool wxGTKTextCtrlInputHandler::HandleKey(wxControl *control,
+                                          const wxKeyEvent& event,
+                                          bool pressed)
+{
+    // handle only GTK-specific text bindings here, the others are handled in
+    // the base class
+    if ( pressed )
+    {
+        wxControlAction action;
+        int keycode = event.GetKeyCode();
+        if ( event.ControlDown() )
+        {
+            switch ( keycode )
+            {
+                case 'A':
+                    action = wxACTION_TEXT_HOME;
+                    break;
+
+                case 'B':
+                    action = wxACTION_TEXT_LEFT;
+                    break;
+
+                case 'D':
+                    action << wxACTION_TEXT_PREFIX_DEL << wxACTION_TEXT_RIGHT;
+                    break;
+
+                case 'E':
+                    action = wxACTION_TEXT_END;
+                    break;
+
+                case 'F':
+                    action = wxACTION_TEXT_RIGHT;
+                    break;
+
+                case 'H':
+                    action << wxACTION_TEXT_PREFIX_DEL << wxACTION_TEXT_LEFT;
+                    break;
+
+                case 'K':
+                    action << wxACTION_TEXT_PREFIX_DEL << wxACTION_TEXT_END;
+                    break;
+
+                case 'N':
+                    action = wxACTION_TEXT_DOWN;
+                    break;
+
+                case 'P':
+                    action = wxACTION_TEXT_UP;
+                    break;
+
+                case 'U':
+                    //delete the entire line
+                    control->PerformAction(wxACTION_TEXT_HOME);
+                    action << wxACTION_TEXT_PREFIX_DEL << wxACTION_TEXT_END;
+                    break;
+
+                case 'W':
+                    action << wxACTION_TEXT_PREFIX_DEL << wxACTION_TEXT_WORD_LEFT;
+                    break;
+            }
+        }
+        else if ( event.AltDown() )
+        {
+            switch ( keycode )
+            {
+                case 'B':
+                    action = wxACTION_TEXT_WORD_LEFT;
+                    break;
+
+                case 'D':
+                    action << wxACTION_TEXT_PREFIX_DEL << wxACTION_TEXT_WORD_RIGHT;
+                    break;
+
+                case 'F':
+                    action = wxACTION_TEXT_WORD_RIGHT;
+                    break;
+            }
+        }
+
+        if ( action != wxACTION_NONE )
+        {
+            control->PerformAction(action);
+
+            return TRUE;
+        }
+    }
+
+    return wxStdTextCtrlInputHandler::HandleKey(control, event, pressed);
 }
