@@ -841,7 +841,6 @@ IMPLEMENT_DYNAMIC_CLASS( wxGridWindow, wxPanel )
 
 BEGIN_EVENT_TABLE( wxGridWindow, wxPanel )
     EVT_PAINT( wxGridWindow::OnPaint )
-    EVT_SCROLLWIN( wxGridWindow::ScrollWindow )
     EVT_MOUSE_EVENTS( wxGridWindow::OnMouseEvent )
     EVT_KEY_DOWN( wxGridWindow::OnKeyDown )
 END_EVENT_TABLE()
