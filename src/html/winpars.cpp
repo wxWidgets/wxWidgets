@@ -50,7 +50,8 @@ wxHtmlWinParser::wxHtmlWinParser(wxHtmlWindow *wnd) : wxHtmlParser()
     m_CharHeight = m_CharWidth = 0;
     m_UseLink = FALSE;
     m_EncConv = NULL;
-    m_InputEnc = m_OutputEnc = wxFONTENCODING_DEFAULT;
+    m_InputEnc = wxFONTENCODING_ISO8859_1;
+    m_OutputEnc = wxFONTENCODING_DEFAULT;
 
     {
         int i, j, k, l, m;
@@ -164,7 +165,7 @@ void wxHtmlWinParser::InitParser(const wxString& source)
 void wxHtmlWinParser::DoneParser()
 {
     m_Container = NULL;
-    SetInputEncoding(wxFONTENCODING_DEFAULT); // for next call
+    SetInputEncoding(wxFONTENCODING_ISO8859_1); // for next call
     wxHtmlParser::DoneParser();
 }
 
