@@ -38,6 +38,7 @@
     #include "wx/scrolbar.h"
     #include "wx/slider.h"
     #include "wx/textctrl.h"
+    #include "wx/listbox.h"
     #include "wx/toolbar.h"
 
     #ifdef __WXMSW__
@@ -1333,18 +1334,29 @@ wxColour wxWin32ColourScheme::GetBackground(wxWindow *win) const
     if ( !win->ShouldInheritColours() )
     {
         wxTextCtrl *text = wxDynamicCast(win, wxTextCtrl);
-        if ( text )
+#if wxUSE_LISTBOX
+        wxListBox* listBox = wxDynamicCast(win, wxListBox);
+#endif        
+        if ( text
+#if wxUSE_LISTBOX
+         || listBox
+#endif         
+          )
         {
-            if ( !text->IsEnabled() ) // not IsEditable()
+            if ( !win->IsEnabled() ) // not IsEditable()
                 col = Get(CONTROL);
-            //else: execute code below
+            else
+            {
+                if ( !col.Ok() )
+                {
+                    // doesn't depend on the state
+                    col = Get(WINDOW);
+                }
+            }
         }
-
-        if ( !col.Ok() )
-        {
-            // doesn't depend on the state
-            col = Get(WINDOW);
-        }
+        
+        if (!col.Ok())
+            col = Get(CONTROL); // Most controls should be this colour, not WINDOW
     }
     else
     {

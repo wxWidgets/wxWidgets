@@ -72,7 +72,7 @@ bool wxStatusBarUniv::Create(wxWindow *parent,
     }
 
     SetFieldsCount(1);
-
+    
     CreateInputHandler(wxINP_HANDLER_STATUSBAR);
 
     SetSize(DoGetBestSize());
