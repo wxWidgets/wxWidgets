@@ -73,6 +73,10 @@ do
 	unx.t)
 	    echo "Generating $topdir/src/os2/files.lst for OS/2 PM and Configure..."
 	    tmake -t os2 wxwin.pro -o $topdir/src/os2/files.lst;;
+
+	mgl.t)
+	    echo "Generating $topdir/src/mgl/files.lst for MGL and Configure..."
+	    tmake -t mgl wxwin.pro -o $topdir/src/mgl/files.lst;;
     esac
 done
 
