@@ -99,21 +99,27 @@ const char *dlerror()
 
 void *dlopen(const char *path, int WXUNUSED(mode) /* mode is ignored */)
 {
-    int dyld_result;
     NSObjectFileImage ofile;
     NSModule handle = NULL;
 
-    dyld_result = NSCreateObjectFileImageFromFile(path, &ofile);
-    if (dyld_result != NSObjectFileImageSuccess)
+    int dyld_result = NSCreateObjectFileImageFromFile(path, &ofile);
+    if ( dyld_result != NSObjectFileImageSuccess )
     {
-        TranslateError(path, dyld_result);
+        handle = NULL;
     }
     else
     {
-        // NSLinkModule will cause the run to abort on any link error's
-        // not very friendly but the error recovery functionality is limited.
-        handle = NSLinkModule(ofile, path, NSLINKMODULE_OPTION_BINDNOW);
+        handle = NSLinkModule
+                 (
+                    ofile,
+                    path,
+                    NSLINKMODULE_OPTION_BINDNOW |
+                    NSLINKMODULE_OPTION_RETURN_ON_ERROR
+                 );
     }
+
+    if ( !handle )
+        TranslateError(path, dyld_result);
 
     return handle;
 }
