@@ -224,6 +224,7 @@ public:
     ~DnDFrame();
 
     void OnPaint(wxPaintEvent& event);
+    void OnSize(wxSizeEvent& event);
     void OnQuit (wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
     void OnDrag (wxCommandEvent& event);
@@ -816,6 +817,7 @@ BEGIN_EVENT_TABLE(DnDFrame, wxFrame)
     EVT_LEFT_DOWN(            DnDFrame::OnLeftDown)
     EVT_RIGHT_DOWN(           DnDFrame::OnRightDown)
     EVT_PAINT(                DnDFrame::OnPaint)
+    EVT_SIZE(                 DnDFrame::OnSize)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(DnDShapeFrame, wxFrame)
@@ -1009,6 +1011,13 @@ void DnDFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
     Close(TRUE);
 }
 
+void DnDFrame::OnSize(wxSizeEvent& event)
+{
+    Refresh();
+
+    event.Skip();
+}
+
 void DnDFrame::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     int w = 0;
@@ -1016,6 +1025,7 @@ void DnDFrame::OnPaint(wxPaintEvent& WXUNUSED(event))
     GetClientSize( &w, &h );
 
     wxPaintDC dc(this);
+    dc.Clear();
     dc.SetFont( wxFont( 24, wxDECORATIVE, wxNORMAL, wxNORMAL, FALSE, "charter" ) );
     dc.DrawText( "Drag text from here!", 100, h-50 );
 }
