@@ -808,9 +808,17 @@ int wxCmdLineParser::Parse(bool showUsage)
                 }
                 else
                 {
-                    optName.Printf(_("%s (or %s)"),
-                                   opt.shortName.c_str(),
-                                   opt.longName.c_str());
+                    if ( AreLongOptionsEnabled() )
+                    {
+                        optName.Printf( _("%s (or %s)"),
+                                        opt.shortName.c_str(),
+                                        opt.longName.c_str() );
+                    }
+                    else
+                    {
+                        optName.Printf( wxT("%s"),
+                                        opt.shortName.c_str() );
+                    }
                 }
 
                 errorMsg << wxString::Format(_("The value for the option '%s' must be specified."),
