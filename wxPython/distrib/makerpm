@@ -158,6 +158,13 @@ if [ -z "${skipcopy}" ]; then
 	cp -pf --link ${wxdir}/${dir}/* ${tarver}/${dir} > /dev/null 2>&1
     done
 
+    # using DIRLIST as above will normally skip any files starting
+    # with a dot, but there are a few .files that we do want to
+    # copy...
+    for dir in wxPython/distrib/msw; do
+	cp -pf --link ${wxdir}/${dir}/.[a-zA-Z]* ${tarver}/${dir}  > /dev/null 2>&1
+    done
+
     echo "*** Removing uneeded stuff from copy of CVS tree"
     pushd ${tarver} > /dev/null
     cleanup .cvsignore
