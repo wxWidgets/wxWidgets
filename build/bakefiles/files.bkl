@@ -2418,6 +2418,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="MEDIA_UNIX_SRC" hints="files">
+    src/unix/mediactrl.cpp
 </set>
 <set var="MEDIA_UNIX_HDR" hints="files">
 </set>
