@@ -297,10 +297,10 @@ void wxFrame::DoSetSize( int x, int y, int width, int height, int sizeFlags )
     if ((m_x != -1) || (m_y != -1))
     {
         if ((m_x != old_x) || (m_y != old_y))
-	{
+        {
             /* m_sizeSet = FALSE; */
-	    gtk_widget_set_uposition( m_widget, m_x, m_y );
-	}
+            gtk_widget_set_uposition( m_widget, m_x, m_y );
+        }
     }
 
     if ((m_width != old_width) || (m_height != old_height))
@@ -483,32 +483,31 @@ void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
     }
     else
     {
-        /* no child: go out ! */
-        if (!GetChildren().First()) return;
-
-        /* do we have exactly one child? */
-        wxWindow *child = (wxWindow *) NULL;
-        for(wxNode *node = GetChildren().First(); node; node = node->Next())
+        // do we have exactly one child?
+        wxWindow *child = (wxWindow *)NULL;
+        for ( wxNode *node = GetChildren().First(); node; node = node->Next() )
         {
             wxWindow *win = (wxWindow *)node->Data();
-            if (!wxIS_KIND_OF(win,wxFrame) && !wxIS_KIND_OF(win,wxDialog)
-#if 0  // not in m_children anyway ?
-              && (win != m_frameMenuBar) &&
-              (win != m_frameToolBar) &&
-              (win != m_frameStatusBar)
-#endif
-            )
+            if ( !wxIS_KIND_OF(win,wxFrame) && !wxIS_KIND_OF(win,wxDialog) )
             {
-                /* it's the second one: do nothing */
-                if (child) return;
+                if ( child )
+                {
+                    // it's the second one: do nothing
+                    return;
+                }
+
                 child = win;
             }
         }
 
-        /* yes: set it's size to fill all the frame */
-        int client_x, client_y;
-        GetClientSize( &client_x, &client_y );
-        child->SetSize( 1, 1, client_x-2, client_y-2 );
+        // no children at all?
+        if ( child )
+        {
+            // yes: set it's size to fill all the frame
+            int client_x, client_y;
+            GetClientSize( &client_x, &client_y );
+            child->SetSize( 1, 1, client_x-2, client_y-2 );
+        }
     }
 }
 
@@ -548,8 +547,8 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
             gtk_myfixed_put( GTK_MYFIXED(m_wxwindow),
                 m_frameMenuBar->m_widget, m_frameMenuBar->m_x, m_frameMenuBar->m_y );
 
-	    /* an mdi child menu bar might be underneath */
-	    if (m_mdiMenuBar) m_frameMenuBar->Show( FALSE );
+            /* an mdi child menu bar might be underneath */
+            if (m_mdiMenuBar) m_frameMenuBar->Show( FALSE );
         }
     }
 
@@ -565,22 +564,20 @@ void wxFrame::OnMenuHighlight(wxMenuEvent& event)
 {
     if (GetStatusBar())
     {
-        if (event.GetMenuId() == -1)
-	{
-            SetStatusText("");
-	}
-        else
+        // if no help string found, we will clear the status bar text
+        wxString helpString;
+
+        int menuId = event.GetMenuId();
+        if ( menuId != -1 )
         {
             wxMenuBar *menuBar = GetMenuBar();
             if (menuBar)
             {
-                int menuId = event.GetMenuId();
-                wxString helpString;
                 helpString = menuBar->GetHelpString(menuId);
-                if (helpString != "")
-                    SetStatusText(helpString);
             }
         }
+
+        SetStatusText(helpString);
     }
 }
 
