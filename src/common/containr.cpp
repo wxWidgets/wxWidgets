@@ -40,6 +40,10 @@
     #include "wx/scrolbar.h"
 #endif
 
+#ifdef __WXMSW__
+    #include "wx/radiobut.h"
+#endif
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -287,13 +291,46 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
 
         wxWindow *child = node->GetData();
 
-        if ( child->AcceptsFocusFromKeyboard() )
+#ifdef __WXMSW__
+        bool is_not_msw_rb = ! wxIsKindOf(m_winLastFocused,wxRadioButton);
+#else
+        bool is_not_msw_rb = true;
+ 
+#endif
+
+        if ( child->AcceptsFocusFromKeyboard() && is_not_msw_rb)
         {
             // if we're setting the focus to a child panel we should prevent it
             // from giving it to the child which had the focus the last time
             // and instead give it to the first/last child depending from which
             // direction we're coming
             event.SetEventObject(m_winParent);
+            
+#ifdef __WXMSW__
+            // we need to hop to the next activated
+            // radio button, not just the next radio
+            // button under MSW 
+            if (wxIsKindOf(child,wxRadioButton))
+            {
+                wxRadioButton *rb = (wxRadioButton*) child;
+                if (!rb->GetValue())
+                {
+                    for (;;)
+                    {
+                        wxWindowList::compatibility_iterator node = children.Find( child );
+                        if (forward) 
+                            node = node->GetNext();
+                        else
+                            node = node->GetPrevious();
+                        if (!node) return; // this would probably an error
+                        child = node->GetData();
+                        if (!wxIsKindOf(child,wxRadioButton)) continue;
+                        rb = (wxRadioButton*) child;
+                        if (rb->GetValue()) break;
+                    }
+                }
+            }
+#endif            
             // disable propagation for this call as otherwise the event might
             // bounce back to us.
             wxPropagationDisabler disableProp(event);
