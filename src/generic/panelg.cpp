@@ -43,7 +43,20 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
+#if wxUSE_EXTENDED_RTTI
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxPanel, wxWindow,"wx/panel.h")
+
+WX_BEGIN_PROPERTIES_TABLE(wxPanel)
+WX_END_PROPERTIES_TABLE()
+
+WX_BEGIN_HANDLERS_TABLE(wxPanel)
+WX_END_HANDLERS_TABLE()
+
+WX_CONSTRUCTOR_4( wxPanel , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size ) 
+
+#else
 IMPLEMENT_DYNAMIC_CLASS(wxPanel, wxWindow)
+#endif
 
 BEGIN_EVENT_TABLE(wxPanel, wxWindow)
     EVT_SYS_COLOUR_CHANGED(wxPanel::OnSysColourChanged)

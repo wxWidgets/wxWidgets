@@ -112,7 +112,20 @@ BEGIN_EVENT_TABLE(wxNotebook, wxControl)
     EVT_NAVIGATION_KEY(wxNotebook::OnNavigationKey)
 END_EVENT_TABLE()
 
+#if wxUSE_EXTENDED_RTTI
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxNotebook, wxControl,"wx/notebook.h")
+
+WX_BEGIN_PROPERTIES_TABLE(wxNotebook)
+WX_END_PROPERTIES_TABLE()
+
+WX_BEGIN_HANDLERS_TABLE(wxNotebook)
+WX_END_HANDLERS_TABLE()
+
+WX_CONSTRUCTOR_4( wxNotebook , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size ) 
+
+#else
 IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxControl)
+#endif
 IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxNotifyEvent)
 
 // ============================================================================

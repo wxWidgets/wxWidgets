@@ -229,7 +229,25 @@ static inline void wxBringWindowToTop(HWND hwnd)
 #ifdef __WXUNIVERSAL__
     IMPLEMENT_ABSTRACT_CLASS(wxWindowMSW, wxWindowBase)
 #else // __WXMSW__
+#if wxUSE_EXTENDED_RTTI
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxWindow, wxWindowBase,"wx/window.h")
+
+WX_BEGIN_PROPERTIES_TABLE(wxWindow)
+	WX_PROPERTY( Parent,wxWindow*, NULL, GetParent,  )
+	WX_PROPERTY( Id,wxWindowID, SetId, GetId, -1 )
+	WX_PROPERTY( Title,wxString, SetTitle, GetTitle, wxT("") )
+	WX_PROPERTY( Label,wxString, SetLabel, GetLabel, wxT("") )
+	WX_PROPERTY( Position,wxPoint, NULL , GetPosition, wxDefaultPosition )
+	WX_PROPERTY( Size,wxSize, SetSize, GetSize, wxDefaultSize )
+WX_END_PROPERTIES_TABLE()
+
+WX_BEGIN_HANDLERS_TABLE(wxWindow)
+WX_END_HANDLERS_TABLE()
+
+WX_CONSTRUCTOR_DUMMY(wxWindow)
+#else
     IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
+#endif
 #endif // __WXUNIVERSAL__/__WXMSW__
 
 BEGIN_EVENT_TABLE(wxWindowMSW, wxWindowBase)

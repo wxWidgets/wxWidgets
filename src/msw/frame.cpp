@@ -79,7 +79,20 @@ BEGIN_EVENT_TABLE(wxFrame, wxFrameBase)
     EVT_SYS_COLOUR_CHANGED(wxFrame::OnSysColourChanged)
 END_EVENT_TABLE()
 
+#if wxUSE_EXTENDED_RTTI
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxFrame, wxTopLevelWindow,"wx/frame.h")
+
+WX_BEGIN_PROPERTIES_TABLE(wxFrame)
+WX_END_PROPERTIES_TABLE()
+
+WX_BEGIN_HANDLERS_TABLE(wxFrame)
+WX_END_HANDLERS_TABLE()
+
+WX_CONSTRUCTOR_5( wxFrame , wxWindow* , Parent , wxWindowID , Id , wxString , Title , wxPoint , Position , wxSize , Size ) 
+
+#else
 IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxTopLevelWindow)
+#endif
 
 // ============================================================================
 // implementation

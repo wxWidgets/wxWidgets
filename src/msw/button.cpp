@@ -46,7 +46,22 @@
 // macros
 // ----------------------------------------------------------------------------
 
+#if wxUSE_EXTENDED_RTTI
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxButton, wxControl,"wx/button.h")
+
+WX_BEGIN_PROPERTIES_TABLE(wxButton)
+	WX_DELEGATE( OnClick , wxEVT_COMMAND_BUTTON_CLICKED , wxCommandEvent )
+WX_END_PROPERTIES_TABLE()
+
+WX_BEGIN_HANDLERS_TABLE(wxButton)
+WX_END_HANDLERS_TABLE()
+
+WX_CONSTRUCTOR_5( wxButton , wxWindow* , Parent , wxWindowID , Id , wxString , Title , wxPoint , Position , wxSize , Size ) 
+
+
+#else
 IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
+#endif
 
 // this macro tries to adjust the default button height to a reasonable value
 // using the char height as the base
