@@ -3102,22 +3102,49 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
         if ((maxWidth != -1) && (m_width > maxWidth)) m_width = maxWidth;
         if ((maxHeight != -1) && (m_height > maxHeight)) m_height = maxHeight;
 
-        int border = 0;
+        int left_border = 0;
+        int right_border = 0;
+        int top_border = 0;
         int bottom_border = 0;
 
-#ifndef __WXGTK20__
+        /* the default button has a border around it */
         if (GTK_WIDGET_CAN_DEFAULT(m_widget))
         {
-            /* the default button has a border around it */
-            border = 6;
-            bottom_border = 5;
-        }
+#ifdef __WXGTK20__
+#if 0
+            GtkBorder *default_border;
+            gtk_widget_style_get( m_widget, "default_border", &default_border, NULL );
+            if (default_border)
+            {
+                left_border += default_border->left;
+                right_border += default_border->right;
+                top_border += default_border->top;
+                bottom_border += default_border->bottom;
+                g_free( default_border );
+                
+            }
 #endif
+            GtkBorder *default_outside_border;
+            {
+                gtk_widget_style_get( m_widget, "default_outside_border", &default_outside_border, NULL );
+                left_border += default_outside_border->left;
+                right_border += default_outside_border->right;
+                top_border += default_outside_border->top;
+                bottom_border += default_outside_border->bottom;
+                g_free( default_outside_border );
+            }
+#else
+            left_border = 6;
+            right_border = 6;
+            top_border = 6;
+            bottom_border = 5;
+#endif
+        }
 
-        DoMoveWindow( m_x-border,
-                      m_y-border,
-                      m_width+2*border,
-                      m_height+border+bottom_border );
+        DoMoveWindow( m_x-top_border,
+                      m_y-left_border,
+                      m_width+left_border+right_border,
+                      m_height+top_border+bottom_border );
     }
 
     if (m_hasScrolling)
