@@ -45,6 +45,8 @@ Implement Robert's wxClipboard.
 
 Distribution naming?
 
+wxToolTip
+
 LOW PRIORITY (MEDIUM TERM)
 --------------------------
 

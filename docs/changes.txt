@@ -1,8 +1,34 @@
 wxWindows 2.0 Change Log
 ------------------------
 
-Beta 2, ??? 1998
---------------------------
+Beta 3, January 1999
+--------------------
+
+wxGTK:
+
+wxMSW:
+
+- wxRegConfig DeleteAll bug fixed.
+- Makefiles for more compilers.
+- TWIN32 support added.
+- Renamed VC++ makefiles from .nt to .vc, and
+  factored out program/library settings.
+
+wxMotif:
+
+- A few more colour fixes.
+- wxGLCanvas and OpenGL samples working.
+- Some compiler warnings fixed.
+- wxChoice crash fix.
+- Dialog Editor starting to work on Motif.
+
+General:
+
+- wxBusyCursor class added.
+- More doc improvements.
+
+Beta 2, January 1999
+--------------------
 
 wxGTK:
 

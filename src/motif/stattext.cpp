@@ -51,7 +51,10 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
-    XmString text = XmStringCreateSimple (label1);
+    // Use XmStringCreateLtoR(), since XmStringCreateSimple
+    // doesn't obey separators.
+//    XmString text = XmStringCreateSimple (label1);
+    XmString text = XmStringCreateLtoR (label1, XmSTRING_DEFAULT_CHARSET);
 
     XmFontList fontList = (XmFontList) m_windowFont.GetFontList(1.0, XtDisplay(parentWidget));
 

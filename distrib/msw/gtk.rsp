@@ -1,6 +1,7 @@
 install-sh
 Makefile
 template.mak
+configure
 configure.in
 config.guess
 config.sub

@@ -38,9 +38,9 @@ High Priority
 - wxRadioBox doesn't show up in the controls sample, though it's
   OK on other dialogs (e.g. printing sample).
 
-- Word wrapping in wxStaticText: how?
-
 - wxSpinButton
+
+- wxToolTip
 
 - Miscellaneous events.
 

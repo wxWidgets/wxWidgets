@@ -272,43 +272,6 @@ Returns TRUE if the frame is iconized.
 
 Returns TRUE if the frame is maximized.
 
-\membersection{wxFrame::LoadAccelerators}\label{wxframeloadaccelerators}
-
-\func{void}{LoadAccelerators}{\param{const wxString\& }{table}}
-
-Loads a keyboard accelerator table for this frame.
-
-\wxheading{Parameters}
-
-\docparam{table}{Accelerator table to load.}
-
-\wxheading{Return value}
-
-TRUE if the operation was successful, FALSE otherwise.
-
-\wxheading{Remarks}
-
-Accelerator tables map keystrokes onto control and menu identifiers, so the
-programmer does not have to explicitly program this correspondence.
-
-See the hello demo ({\tt hello.cpp} and {\tt hello.rc}) for
-an example of accelerator usage. This is a fragment from {\tt hello.rc}:
-
-\begin{verbatim}
-#define HELLO_LOAD_FILE  111
-
-menus_accel ACCELERATORS
-{
-
-"^L", HELLO_LOAD_FILE
-
-}
-\end{verbatim}
-
-This function only works under Windows.
-
-% huh? If you call LoadAccelerators, you need to override wxFrame::OnActivate to do nothing.
-
 \membersection{wxFrame::Maximize}\label{wxframemaximize}
 
 \func{void}{Maximize}{\param{const bool }{maximize}}
@@ -329,17 +292,10 @@ This function only works under Windows.
 
 \membersection{wxFrame::OnActivate}
 
-\func{void}{OnActivate}{\param{bool}{ active}}
+\func{void}{OnActivate}{\param{wxActivateEvent\&}{ event}}
 
 Called when a window is activated or deactivated (MS Windows
-only). If the window is being activated, {\it active} is TRUE, else it
-is FALSE.
-
-If you call wxFrame::LoadAccelerators, you need to override this function e.g.
-
-\begin{verbatim}
-   void OnActivate(bool) {};
-\end{verbatim}
+only). See also \helpref{wxActivateEvent}{wxactivateevent}.
 
 \membersection{wxFrame::OnCreateStatusBar}\label{wxframeoncreatestatusbar}
 
