@@ -891,7 +891,7 @@ unsigned char *wxImage::GetData() const
     return M_IMGDATA->m_data;
 }
 
-void wxImage::SetData( unsigned char *data )
+void wxImage::SetData( unsigned char *data, bool static_data  )
 {
     wxCHECK_RET( Ok(), wxT("invalid image") );
 
@@ -905,13 +905,14 @@ void wxImage::SetData( unsigned char *data )
     newRefData->m_maskGreen = M_IMGDATA->m_maskGreen;
     newRefData->m_maskBlue = M_IMGDATA->m_maskBlue;
     newRefData->m_hasMask = M_IMGDATA->m_hasMask;
+    newRefData->m_static = static_data;
 
     UnRef();
 
     m_refData = newRefData;
 }
 
-void wxImage::SetData( unsigned char *data, int new_width, int new_height )
+void wxImage::SetData( unsigned char *data, int new_width, int new_height, bool static_data )
 {
     wxImageRefData *newRefData = new wxImageRefData();
 
@@ -933,6 +934,7 @@ void wxImage::SetData( unsigned char *data, int new_width, int new_height )
         newRefData->m_data = data;
         newRefData->m_ok = true;
     }
+    newRefData->m_static = static_data;
 
     UnRef();
 
@@ -994,7 +996,7 @@ bool wxImage::ConvertColourToAlpha( unsigned char r, unsigned char g, unsigned c
     return true;
 }
 
-void wxImage::SetAlpha( unsigned char *alpha )
+void wxImage::SetAlpha( unsigned char *alpha, bool static_data )
 {
     wxCHECK_RET( Ok(), wxT("invalid image") );
 
@@ -1005,6 +1007,8 @@ void wxImage::SetAlpha( unsigned char *alpha )
 
     free(M_IMGDATA->m_alpha);
     M_IMGDATA->m_alpha = alpha;
+    M_IMGDATA->m_static = static_data;
+
 }
 
 unsigned char *wxImage::GetAlpha() const

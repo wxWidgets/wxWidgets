@@ -282,12 +282,12 @@ public:
     // these functions provide fastest access to wxImage data but should be
     // used carefully as no checks are done
     unsigned char *GetData() const;
-    void SetData( unsigned char *data );
-    void SetData( unsigned char *data, int new_width, int new_height );
+    void SetData( unsigned char *data, bool static_data=false );
+    void SetData( unsigned char *data, int new_width, int new_height, bool static_data=false );
 
     unsigned char *GetAlpha() const;    // may return NULL!
     bool HasAlpha() const { return GetAlpha() != NULL; }
-    void SetAlpha(unsigned char *alpha = NULL);
+    void SetAlpha(unsigned char *alpha = NULL, bool static_data=false);
     void InitAlpha();
 
     // Mask functions
