@@ -779,8 +779,6 @@ void wxEvtHandler::ProcessPendingEvents()
 #endif
 }
 
-#endif // wxUSE_BASE
-
 /*
  * Event table stuff
  */
@@ -854,8 +852,6 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
     // application object as necessary
     return TryParent(event);
 }
-
-#if wxUSE_BASE
 
 bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)
 {
