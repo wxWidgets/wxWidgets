@@ -2,6 +2,7 @@ wx_root:[wxwindows.lib]libwx_motif.olb/lib
 sys$library:libjpeg.olb/lib
 sys$library:libpng.olb/lib
 sys$library:libz.olb/lib
+sys$library:libtiff.olb/lib
 X11:libxpm.olb/lib
 sys$library:decw$xlibshr.exe/share
 sys$library:decw$xtlibshrr5.exe/share

@@ -127,6 +127,7 @@ const char *wxInternalErrorStr = "wxWindows Internal Error";
 const char *wxFatalErrorStr = "wxWindows Fatal Error";
 const char *wxDirDialogNameStr = "wxDirCtrl";
 const char *wxDirDialogDefaultFolderStr = "/";
+const wxChar *wxTreeCtrlNameStr = wxT("wxTreeCtrl");
 
 // See wx/utils.h
 const char *wxFloatToStringStr = "%.2f";

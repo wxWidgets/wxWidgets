@@ -58,8 +58,11 @@ public:
 
     inline wxString GetMessage() const { return m_message; }
     inline wxString GetPath() const { return m_path; }
+    inline void GetPaths(wxArrayString& a) { a.Empty(); a.Add(m_path); }
     inline wxString GetDirectory() const { return m_dir; }
     inline wxString GetFilename() const { return m_fileName; }
+    inline void GetFilenames(wxArrayString& a) { a.Empty();
+       a.Add( m_fileName); }
     inline wxString GetWildcard() const { return m_wildCard; }
     inline long GetStyle() const { return m_dialogStyle; }
     inline int GetFilterIndex() const { return m_filterIndex ; }

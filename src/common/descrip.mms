@@ -75,6 +75,7 @@ OBJECTS1=framecmn.obj,\
 		imagpcx.obj,\
 		imagpng.obj,\
 		imagpnm.obj,\
+		imagtiff.obj,\
 		intl.obj,\
 		ipcbase.obj,\
 		layout.obj,\
@@ -171,6 +172,7 @@ SOURCES = \
 		imagpcx.cpp,\
 		imagpng.cpp,\
 		imagpnm.cpp,\
+		imagtiff.cpp,\
 		intl.cpp,\
 		ipcbase.cpp,\
 		layout.cpp,\
@@ -292,6 +294,7 @@ imagjpeg.obj : imagjpeg.cpp
 imagpcx.obj : imagpcx.cpp
 imagpng.obj : imagpng.cpp
 imagpnm.obj : imagpnm.cpp
+imagtiff.obj : imagtiff.cpp
 intl.obj : intl.cpp
 ipcbase.obj : ipcbase.cpp
 layout.obj : layout.cpp

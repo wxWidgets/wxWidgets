@@ -17,17 +17,47 @@ To get everything compiled you'll need to have installed:
     -sys$library:libjpeg.olb  (from ftp://ftp.uu.net/graphics/jpeg/ )
     -sys$library:libpng.olb & sys$library:libz.olb (from
           http://www.cdrom.com/pub/png/pngcode.html )
+    -sys$library:libtiff.olb (from: ftp://ftp.sgi.com/graphics/tiff/ )
 
 Currently only the MOTIF GUI vcan be build by typing
   MMS/MACRO=(__WXMOTIF__=1)
  in the main directory of the distribution.
  
-It automatically makes the library in [.lib] and links the following samples
- [.samples.menu]dialogs.exe
- [.samples.menu]image.exe
- [.samples.menu]menu.exe
- [.samples.menu]minimal.exe
- 
+It automatically makes the library in [.lib] and links some of the samples
+and utils.
+
+N.B.
+ the following patch is needed in the tiff3.4 distribution:
+
+polka-jj) diff TIFFCOMP.H;3 TIFFCOMP.H;1
+************
+File $DISK2:[JOUKJ.PUBLIC.TIFF.TIFF.LIBTIFF]TIFFCOMP.H;3
+   97   #ifndef HAVE_UNISTD_H
+   98   #define HAVE_UNISTD_H   1
+   99   #endif
+  100   #endif
+******
+File $DISK2:[JOUKJ.PUBLIC.TIFF.TIFF.LIBTIFF]TIFFCOMP.H;1
+   97   #define HAVE_UNISTD_H   1
+   98   #endif
+************
+************
+File $DISK2:[JOUKJ.PUBLIC.TIFF.TIFF.LIBTIFF]TIFFCOMP.H;3
+  108   #if !defined(SEEK_SET) && defined( HAVE_UNISTD_H )
+  109   #include <unistd.h>
+******
+File $DISK2:[JOUKJ.PUBLIC.TIFF.TIFF.LIBTIFF]TIFFCOMP.H;1
+  106   #if !defined(SEEK_SET) && HAVE_UNISTD_H
+  107   #include <unistd.h>
+************
+
+Number of difference sections found: 2
+Number of difference records found: 4
+
+DIFFERENCES /IGNORE=()/MERGED=1-
+    $DISK2:[JOUKJ.PUBLIC.TIFF.TIFF.LIBTIFF]TIFFCOMP.H;3-
+    $DISK2:[JOUKJ.PUBLIC.TIFF.TIFF.LIBTIFF]TIFFCOMP.H;1
+
 
 
 Finally :
