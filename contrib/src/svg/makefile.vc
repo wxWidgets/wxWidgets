@@ -1,0 +1,147 @@
+
+# File:		makefile.vc
+# Author:	Julian Smart
+# Created:	2001
+# Updated:
+# Copyright:	(c) 2001, Julian Smart
+#
+# "%W% %G%"
+#
+# This has not been tested Chris Elliott (biol75@york.ac.uk) and 
+# the docs don't yet exist
+#
+# Makefile : Builds dcsvg class library (MS VC++).
+# Use FINAL=1 argument to nmake to build final version with no debugging
+# info
+
+
+# Set WXDIR for your system
+WXDIR = $(WXWIN)
+GIZMOSDIR = $(WXDIR)\contrib\src\dcsvg
+GIZMOSINC = $(WXDIR)\contrib\include\wx\dcsvg
+THISDIR = $(WXDIR)\contrib\src\dcsvg
+DOCDIR=$(WXDIR)\contrib\docs
+LOCALDOCDIR=$(WXDIR)\contrib\docs\latex\dcsvg
+
+!include $(WXDIR)\src\makevc.env
+
+OBJECTS = $(D)\dcsvg.obj
+
+LIBTARGET=$(WXDIR)\lib\dcsvg$(LIBEXT).lib
+
+all:    $(D) $(LIBTARGET)
+
+$(D) :
+	mkdir $(D)
+
+wx:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(THISDIR)
+
+wxclean:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.vc clean
+        cd $(THISDIR)
+
+$(LIBTARGET): $(OBJECTS)
+	-erase $(LIBTARGET)
+	$(implib) @<<
+-out:$(LIBTARGET)
+-machine:$(CPU)
+$(OBJECTS)
+<<
+
+$(D)\dcsvg.obj:      dcsvg.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Fo$@ /Tp $(*B).$(SRCSUFF)
+<<
+
+clean:
+        -erase $(D)\*.obj
+        -erase *.sbr
+        -erase *.exe
+        -erase *.res
+        -erase *.map
+        -erase *.pdb
+        -erase $(LIBTARGET)
+
+DOCSOURCES=$(LOCALDOCDIR)\dcsvg.tex \
+ $(LOCALDOCDIR)\bugs.tex $(LOCALDOCDIR)\changes.tex\
+ $(LOCALDOCDIR)\classes.tex $(LOCALDOCDIR)\intro.tex\
+ $(LOCALDOCDIR)\topics.tex $(LOCALDOCDIR)\sample.tex
+
+html: $(DOCDIR)\html\dcsvg\dcsvg.htm
+htmlhelp: $(DOCDIR)\htmlhelp\dcsvg.chm
+htb:	$(DOCDIR)\htb\dcsvg.htb
+hlp: $(DOCDIR)\winhelp\dcsvg.hlp
+pdfrtf: $(DOCDIR)\pdf\dcsvg.rtf
+ps: $(DOCDIR)\ps\dcsvg.ps
+
+touchmanual:
+	touch $(LOCALDOCDIR)\dcsvg.tex
+
+
+$(DOCDIR)\winhelp\dcsvg.hlp:         $(LOCALDOCDIR)\dcsvg.rtf $(LOCALDOCDIR)\dcsvg.hpj
+        cd $(LOCALDOCDIR)
+        -erase dcsvg.ph
+        hc dcsvg
+        move dcsvg.hlp $(DOCDIR)\winhelp\dcsvg.hlp
+        move dcsvg.cnt $(DOCDIR)\winhelp\dcsvg.cnt
+        cd $(THISDIR)
+
+$(LOCALDOCDIR)\dcsvg.rtf: $(DOCSOURCES)
+        cd $(LOCALDOCDIR)
+        -start $(WAITFLAG) tex2rtf $(LOCALDOCDIR)\dcsvg.tex $(LOCALDOCDIR)\dcsvg.rtf -twice -winhelp
+        cd $(THISDIR)
+
+$(DOCDIR)\pdf\dcsvg.rtf: $(DOCSOURCES)
+        cd $(LOCALDOCDIR)
+        -copy *.bmp $(DOCDIR)\pdf
+        -start $(WAITFLAG) tex2rtf $(LOCALDOCDIR)\dcsvg.tex $(DOCDIR)\pdf\dcsvg.rtf -twice -rtf
+        cd $(THISDIR)
+
+$(DOCDIR)\html\dcsvg\dcsvg.htm:         $(DOCSOURCES)
+        cd $(LOCALDOCDIR)
+        -mkdir $(DOCDIR)\html\dcsvg
+        copy *.gif $(DOCDIR)\html\dcsvg
+        -start $(WAITFLAG) tex2rtf $(LOCALDOCDIR)\dcsvg.tex $(DOCDIR)\html\dcsvg\dcsvg.htm -twice -html
+        -erase $(DOCDIR)\html\dcsvg\*.con
+        -erase *.con
+        -erase $(DOCDIR)\html\dcsvg\*.ref
+        cd $(THISDIR)
+
+$(DOCDIR)\htmlhelp\dcsvg.chm: $(DOCDIR)\html\dcsvg\dcsvg.htm $(DOCDIR)\html\dcsvg\dcsvg.hhp
+	cd $(DOCDIR)\html\dcsvg
+	-hhc dcsvg.hhp
+    move dcsvg.chm $(DOCDIR)\htmlhelp\dcsvg.chm
+	cd $(THISDIR)
+
+# An htb file is a zip file containing the .htm, .gif, .hhp, .hhc and .hhk
+# files, renamed to htb.
+# This can then be used with e.g. helpview.
+# Optionally, a cached version of the .hhp file can be generated with hhp2cached.
+$(DOCDIR)\htb\dcsvg.htb: $(DOCDIR)\html\dcsvg\dcsvg.htm
+	cd $(DOCDIR)\html\dcsvg
+    -erase dcsvg.zip dcsvg.htb
+    zip dcsvg.zip *.htm *.gif *.hhp *.hhc *.hhk
+    -mkdir $(DOCDIR)\htb
+    move dcsvg.zip $(DOCDIR)\htb\dcsvg.htb
+    cd $(THISDIR)
+
+$(LOCALDOCDIR)\dcsvg.dvi:	$(DOCSOURCES)
+	cd $(LOCALDOCDIR)
+        -latex dcsvg
+        -latex dcsvg
+        -makeindx dcsvg
+        -bibtex dcsvg
+        -latex dcsvg
+        -latex dcsvg
+        cd $(THISDIR)
+
+$(WXDIR)\docs\ps\dcsvg.ps:	$(LOCALDOCDIR)\dcsvg.dvi
+	cd $(LOCALDOCDIR)
+        -dvips32 -o dcsvg.ps dcsvg
+        move dcsvg.ps $(WXDIR)\docs\ps\dcsvg.ps
+        cd $(THISDIR)
+

@@ -1,0 +1,19 @@
+#
+# File:		makefile.b32
+# Author:	Julian Smart/Chris Elliott
+# Created:	1999/2002
+# Updated:	
+# Copyright:
+#
+# Makefile : Builds SVG library for 32-bit BC++
+
+WXDIR = $(WXWIN)
+
+EXTRACPPFLAGS=-Icontrib/include
+
+LIBTARGET=$(WXDIR)\lib\dcsvg.lib
+
+OBJECTS = dcsvg.obj
+
+!include $(WXDIR)\src\makelib.b32
+

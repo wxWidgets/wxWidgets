@@ -1,0 +1,16 @@
+# Makefile for plot sample.
+# $Id$
+
+top_srcdir = @top_srcdir@/..
+top_builddir = ../../..
+program_dir = contrib/samples/svg
+
+PROGRAM=svgtest
+
+OBJECTS=svgtest.o
+
+APPEXTRALIBS=$(top_builddir)/lib/libwx_dcsvg.@WX_TARGET_LIBRARY_TYPE@
+APPEXTRADEFS=-I$(top_srcdir)/contrib/include
+
+include $(top_builddir)/src/makeprog.env
+
