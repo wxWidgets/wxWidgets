@@ -613,12 +613,15 @@ void wxMenuBar::RebuildAccelTable()
 }
 
 #endif // wxUSE_ACCEL
-
-
+#ifdef WXMAKINGDLL
+extern short gCurrentResource ;
+#endif
 void wxMenuBar::MacInstallMenuBar() 
 {
 	if ( s_macInstalledMenuBar == this )
 		return ;
+		
+    wxStAppResource resload ;
 		
   	Handle menubar = ::GetNewMBar( kwxMacMenuBarResource ) ;
   	wxString message ;
@@ -632,7 +635,10 @@ void wxMenuBar::MacInstallMenuBar()
 
 		MenuHandle menu = ::GetMenuHandle( kwxMacAppleMenuId ) ;
 #if TARGET_API_MAC_OS8
-		::AppendResMenu(menu, 'DRVR');
+    if ( CountMenuItems( menu ) == 2 )
+    {
+		  ::AppendResMenu(menu, 'DRVR');
+		}
 #endif
  
    	for (int i = 0; i < m_menus.GetCount(); i++)
@@ -733,7 +739,6 @@ void wxMenuBar::MacInstallMenuBar()
 			}
 		}
 		::DrawMenuBar() ;
-
 	s_macInstalledMenuBar = this;
 }
 
