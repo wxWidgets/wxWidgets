@@ -83,7 +83,7 @@ void csEvtHandler::CopyData(wxShapeEvtHandler& copy)
     csEvtHandler& csCopy = (csEvtHandler&) copy;
     csCopy.m_label = m_label;
 }
- 
+
 void csEvtHandler::OnLeftClick(double WXUNUSED(x), double WXUNUSED(y), int keys, int WXUNUSED(attachment))
 {
   wxClientDC dc(GetShape()->GetCanvas());
@@ -226,7 +226,7 @@ void csEvtHandler::OnEndDragRight(double x, double y, int WXUNUSED(keys), int at
   // Check if we're on an object
   int new_attachment;
   wxShape *otherShape = canvas->FindFirstSensitiveShape(x, y, &new_attachment, OP_DRAG_RIGHT);
-  
+
   if (otherShape && !otherShape->IsKindOf(CLASSINFO(wxLineShape)))
   {
         wxLineShape* theShape = new csLineShape;
@@ -707,7 +707,7 @@ bool csEvtHandler::EditProperties()
 /*
  * Diagram
  */
- 
+
 bool csDiagram::OnShapeSave(wxExprDatabase& db, wxShape& shape, wxExpr& expr)
 {
   wxDiagram::OnShapeSave(db, shape, expr);
@@ -723,7 +723,7 @@ bool csDiagram::OnShapeLoad(wxExprDatabase& db, wxShape& shape, wxExpr& expr)
   expr.GetAttributeValue(_T("label"), label);
   csEvtHandler *handler = new csEvtHandler(&shape, &shape, label);
   shape.SetEventHandler(handler);
-  
+
   return true;
 }
 
@@ -1155,7 +1155,7 @@ void studioShapeEditProc(wxMenu& menu, wxCommandEvent& event)
                 break;
 
             double theta = shape->GetRotation();
-            const double myPi = 3.1415926535897932384626433832795 ;
+            const double myPi = M_PI;
             double ninetyDegrees = myPi/2.0;
 
             wxString opStr;

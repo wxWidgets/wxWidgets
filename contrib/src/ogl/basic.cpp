@@ -34,7 +34,6 @@
 
 #include <stdio.h>
 #include <ctype.h>
-#include <math.h>
 
 #include "wx/ogl/ogl.h"
 
@@ -3190,7 +3189,7 @@ bool wxShape::GetAttachmentPositionEdge(int attachment, double *x, double *y,
 // to logical (0 -> 1 if rotated by 90 degrees)
 int wxShape::PhysicalToLogicalAttachment(int physicalAttachment) const
 {
-    const double pi = 3.1415926535897932384626433832795 ;
+    const double pi = M_PI ;
     int i;
     if (oglRoughlyEqual(GetRotation(), 0.0))
     {
@@ -3222,7 +3221,7 @@ int wxShape::PhysicalToLogicalAttachment(int physicalAttachment) const
 // to physical (0 is always North)
 int wxShape::LogicalToPhysicalAttachment(int logicalAttachment) const
 {
-    const double pi = 3.1415926535897932384626433832795 ;
+    const double pi = M_PI ;
     int i;
     if (oglRoughlyEqual(GetRotation(), 0.0))
     {
@@ -3252,7 +3251,7 @@ int wxShape::LogicalToPhysicalAttachment(int logicalAttachment) const
 
 void wxShape::Rotate(double WXUNUSED(x), double WXUNUSED(y), double theta)
 {
-    const double pi = 3.1415926535897932384626433832795 ;
+    const double pi = M_PI ;
     m_rotation = theta;
     if (m_rotation < 0.0)
     {

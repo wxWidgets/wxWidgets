@@ -18,10 +18,9 @@
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
- 
+
 #include "wx/svg/dcsvg.h"
 
-#include <math.h>
 #include "wx/image.h"
 
 #define wxSVG_DEBUG FALSE
@@ -36,7 +35,7 @@
 #pragma warn -ccc
 #endif
 
-static inline double DegToRad(double deg) { return (deg * 3.14) / 180.0; } ;
+static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; } ;
 
 wxString wxColStr ( wxColour c )
 {
@@ -140,7 +139,7 @@ void wxSVGFileDC::Init (wxString f, int Width, int Height, float dpi)
 
 // constructors
 wxSVGFileDC::wxSVGFileDC (wxString f)
-{                                
+{
     // quarter 640x480 screen display at 72 dpi
     Init (f,320,240,72.0);
 };
@@ -252,17 +251,17 @@ void wxSVGFileDC::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoord y,
     }
     //now do the text itself
     s.Printf (wxT(" <text x=\"%d\" y=\"%d\" "),x,y );
-   
+
     sTmp = m_font.GetFaceName () ;
     if (sTmp.Len () > 0)  s = s + wxT("style=\"font-family:") + sTmp + wxT("; ");
     else s = s + wxT("style=\" ") ;
 
     wxString fontweights [3] = { wxT("normal"), wxT("lighter"), wxT("bold") };
     s = s + wxT("font-weight:") + fontweights[m_font.GetWeight() - wxNORMAL] + semicolon + space;
-    
+
     wxString fontstyles [5] = { wxT("normal"), wxT("style error"), wxT("style error"), wxT("italic"), wxT("oblique") };
     s = s + wxT("font-style:") + fontstyles[m_font.GetStyle() - wxNORMAL] + semicolon  + space;
-    
+
     sTmp.Printf (wxT("font-size:%dpt; fill:#"), m_font.GetPointSize () );
     s = s + sTmp ;
     s = s + wxColStr (m_textForegroundColour) + wxT("; stroke:#") + wxColStr (m_textForegroundColour) + wxT("; ") ;
@@ -289,7 +288,7 @@ void wxSVGFileDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wx
     if (m_graphics_changed) NewGraphics ();
     wxString s ;
 
-    s.Printf ( wxT(" <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" rx=\"%.2g\" "), 
+    s.Printf ( wxT(" <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" rx=\"%.2g\" "),
                x, y, width, height, radius );
 
     s = s + wxT(" /> ") + newline ;
@@ -374,13 +373,13 @@ void wxSVGFileDC::DoDrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCo
     }
 
     double theta1 = atan2((double)(yc-y1),(double)(x1-xc));
-    if ( theta1 < 0 ) theta1 = theta1 + 3.14 * 2;
+    if ( theta1 < 0 ) theta1 = theta1 + M_PI * 2;
     double theta2 = atan2((double)(yc-y2), (double)(x2-xc));
-    if ( theta2 < 0 ) theta2 = theta2 + 3.14 * 2;
-    if ( theta2 < theta1 ) theta2 = theta2 + 3.14 *2 ;
+    if ( theta2 < 0 ) theta2 = theta2 + M_PI * 2;
+    if ( theta2 < theta1 ) theta2 = theta2 + M_PI *2 ;
 
     int fArc  ;                  // flag for large or small arc 0 means less than 180 degrees
-    if ( fabs(theta2 - theta1) > 3.14 ) fArc = 1; else fArc = 0 ;
+    if ( fabs(theta2 - theta1) > M_PI ) fArc = 1; else fArc = 0 ;
 
     int fSweep = 0 ;             // flag for sweep always 0
 
@@ -446,7 +445,7 @@ void wxSVGFileDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,doub
     if ( (theta2 - theta1) > 0 ) fArc = 1; else fArc = 0 ;
 
     int fSweep ;
-    if ( fabs(theta2 - theta1) > 3.14) fSweep = 1; else fSweep = 0 ;
+    if ( fabs(theta2 - theta1) > M_PI) fSweep = 1; else fSweep = 0 ;
 
     s.Printf ( wxT("<path d=\"M%d %d A%d %d 0.0 %d %d  %d %d L %d %d z "),
         int(xs), int(ys), int(rx), int(ry),
@@ -530,7 +529,7 @@ void wxSVGFileDC::SetPen(const wxPen& pen)
     // width, color, ends, joins : currently implemented
     // dashes, stipple :  not implemented
     m_pen = pen ;
-  
+
     m_graphics_changed = TRUE ;
     wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::SetPen Call executed")) ;
 }
@@ -542,10 +541,10 @@ void wxSVGFileDC::NewGraphics ()
     wxColour c = m_pen.GetColour () ;
 
     wxString s, sBrush, sPenCap, sPenJoin, sPenStyle, sLast, sWarn;
-	
-    sBrush = wxT("</g>\n<g style=\"") + wxBrushString ( m_brush.GetColour (), m_brush.GetStyle () ) 
-	+ wxT("  stroke:#") + wxColStr (c) + wxT("; ") ;
-	
+
+    sBrush = wxT("</g>\n<g style=\"") + wxBrushString ( m_brush.GetColour (), m_brush.GetStyle () )
+             + wxT("  stroke:#") + wxColStr (c) + wxT("; ") ;
+
     switch ( m_pen.GetCap () )
     {
         case  wxCAP_PROJECTING :
@@ -584,7 +583,7 @@ void wxSVGFileDC::NewGraphics ()
             sWarn = sWarn + wxT("<!--- wxSVGFileDC::SetPen Call called to set a Style which is not available --> \n") ;
     }
 
-    sLast.Printf (   wxT("stroke-width:%d\" \n   transform=\"translate(%.2g %.2g) scale(%.2g %.2g)\">"),  
+    sLast.Printf (   wxT("stroke-width:%d\" \n   transform=\"translate(%.2g %.2g) scale(%.2g %.2g)\">"),
                   w, m_OriginX, m_OriginY, m_scaleX, m_scaleY  );
 
     s = sBrush + sPenCap + sPenJoin + sPenStyle + sLast + newline + sWarn;
@@ -598,7 +597,7 @@ void wxSVGFileDC::SetFont(const wxFont& font)
 
 {
     m_font = font ;
-    
+
     wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::SetFont Call executed")) ;
 }
 
@@ -688,7 +687,7 @@ void wxSVGFileDC::SetLogicalOrigin( wxCoord x, wxCoord y )
 
 void wxSVGFileDC::SetDeviceOrigin( wxCoord x, wxCoord y )
 {
-    // only wxPostScripDC has m_signX = -1, 
+    // only wxPostScripDC has m_signX = -1,
     m_deviceOriginX = x;
     m_deviceOriginY = y;
     ComputeScaleAndOrigin();
@@ -697,7 +696,7 @@ void wxSVGFileDC::SetDeviceOrigin( wxCoord x, wxCoord y )
 
 void wxSVGFileDC::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
 {
-    // only wxPostScripDC has m_signX = -1, 
+    // only wxPostScripDC has m_signX = -1,
     m_signX = (xLeftRight ?  1 : -1);
     m_signY = (yBottomUp  ? -1 :  1);
     ComputeScaleAndOrigin();
@@ -706,11 +705,10 @@ void wxSVGFileDC::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
 
 // export a bitmap as a raster image in png
 bool wxSVGFileDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
-                         wxDC* source, wxCoord xsrc, wxCoord ysrc, 
-			 int logicalFunc /*= wxCOPY*/, bool useMask /*= FALSE*/,
-			 wxCoord /*xsrcMask = -1*/, wxCoord /*ysrcMask = -1*/)
+                         wxDC* source, wxCoord xsrc, wxCoord ysrc,
+                         int logicalFunc /*= wxCOPY*/, bool useMask /*= FALSE*/,
+                         wxCoord /*xsrcMask = -1*/, wxCoord /*ysrcMask = -1*/)
 {
-    
     if (logicalFunc != wxCOPY)
     {
         wxASSERT_MSG(FALSE, wxT("wxSVGFileDC::DoBlit Call requested nonCopy mode; this is not possible")) ;
@@ -745,15 +743,15 @@ void wxSVGFileDC::DoDrawIcon(const class wxIcon & myIcon, wxCoord x, wxCoord y)
 }
 
 
-                                 
+
 void wxSVGFileDC::DoDrawBitmap(const class wxBitmap & bmp, wxCoord x, wxCoord y , bool  WXUNUSED(bTransparent) /*=0*/ )
 {
     if (m_graphics_changed) NewGraphics ();
 
-    wxString sTmp, s, sPNG ; 
+    wxString sTmp, s, sPNG ;
     wxImage::AddHandler(new wxPNGHandler);
 
-// create suitable file name   
+// create suitable file name
     sTmp.Printf ( wxT("_image%d.png"), m_sub_images);
     sPNG = m_filename.BeforeLast(wxT('.')) + sTmp;
     while (wxFile::Exists(sPNG) )
@@ -762,7 +760,7 @@ void wxSVGFileDC::DoDrawBitmap(const class wxBitmap & bmp, wxCoord x, wxCoord y 
         sTmp.Printf ( wxT("_image%d.png"), m_sub_images);
         sPNG = m_filename.BeforeLast(wxT('.')) + sTmp;
     }
-    
+
 //create copy of bitmap (wxGTK doesn't like saving a constant bitmap)
     wxBitmap myBitmap = bmp ;
 //save it
@@ -775,7 +773,7 @@ void wxSVGFileDC::DoDrawBitmap(const class wxBitmap & bmp, wxCoord x, wxCoord y 
     s = s + sTmp ;
     sTmp.Printf ( wxT(" xlink:href=\"%s\"> \n"), sPNG.c_str() );
     s = s + sTmp + wxT("<title>Image from wxSVG</title>  </image>") + newline;
-    
+
     if (m_OK && bPNG_OK)
     {
         write(s);
@@ -840,9 +838,9 @@ wxCoord wxSVGFileDC::LogicalToDeviceYRel(wxCoord y) const
 
 void wxSVGFileDC::write(const wxString &s)
 {
-	const wxWX2MBbuf buf = s.mb_str(wxConvUTF8);
-	m_outfile->Write(buf, strlen((const char *)buf));
-	m_OK = m_outfile->Ok();
+    const wxWX2MBbuf buf = s.mb_str(wxConvUTF8);
+    m_outfile->Write(buf, strlen((const char *)buf));
+    m_OK = m_outfile->Ok();
 }
 
 #ifdef __BORLANDC__

@@ -34,7 +34,6 @@
 #endif
 
 #include <ctype.h>
-#include <math.h>
 
 #include "wx/ogl/ogl.h"
 
@@ -668,7 +667,7 @@ void wxLineShape::DrawArrow(wxDC& dc, wxArrowHead *arrow, double xOffset, bool p
    * Add yOffset to arrow, if any
    */
 
-  const double myPi = (double) 3.14159265;
+  const double myPi = (double) M_PI;
   // The translation that the y offset may give
   double deltaX = 0.0;
   double deltaY = 0.0;

@@ -31,9 +31,6 @@
 
 #include "wx/ogl/ogl.h"
 
-
-#include <math.h>
-
 static void IntToHex(unsigned int dec, wxChar *buf);
 static unsigned long HexToInt(wxChar *buf);
 extern wxChar *oglBuffer;
@@ -165,7 +162,7 @@ void wxDrawnShape::Rotate(double x, double y, double theta)
 int wxDrawnShape::DetermineMetaFile(double rotation)
 {
     double tolerance = 0.0001;
-    const double pi = 3.1415926535897932384626433832795 ;
+    const double pi = M_PI ;
     double angle1 = 0.0;
     double angle2 = pi/2.0;
     double angle3 = pi;
@@ -733,7 +730,7 @@ void wxOpDraw::Do(wxDC& dc, double xoffset, double yoffset)
     }
     case DRAWOP_DRAW_ELLIPTIC_ARC:
     {
-      const double pi = 3.1415926535897932384626433832795 ;
+      const double pi = M_PI ;
 
       // Convert back to degrees
       dc.DrawEllipticArc(
@@ -1276,8 +1273,8 @@ bool wxOpPolyDraw::GetPerimeterPoint(double x1, double y1,
  *
  */
 
-static char hexArray[] = { 
-    _T('0'), _T('1'), _T('2'), _T('3'), _T('4'), _T('5'), _T('6'), _T('7'), 
+static char hexArray[] = {
+    _T('0'), _T('1'), _T('2'), _T('3'), _T('4'), _T('5'), _T('6'), _T('7'),
     _T('8'), _T('9'), _T('A'), _T('B'), _T('C'), _T('D'), _T('E'), _T('F') };
 
 // Convert unsigned 16-bit integer to 4-character hex string
@@ -1332,11 +1329,6 @@ static int HexToInt1(wxChar hex)
       return 14;
     case _T('F'):
       return 15;
-    #if 0
-    // handling this default outside switch removes warning under Borland 
-    default:
-      return 0;
-    #endif
   }
 
   return 0;
@@ -2335,7 +2327,7 @@ void wxPseudoMetaFile::DrawArc(const wxPoint& centrePt, const wxPoint& startPt, 
 
 void wxPseudoMetaFile::DrawEllipticArc(const wxRect& rect, double startAngle, double endAngle)
 {
-    const double pi = 3.1415926535897932384626433832795 ;
+    const double pi = M_PI ;
 
     double startAngleRadians = startAngle* (pi*2.0/360.0);
     double endAngleRadians = endAngle* (pi*2.0/360.0);
