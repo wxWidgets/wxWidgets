@@ -141,6 +141,12 @@ int MyApp::OnExit()
 MyFrame::MyFrame()
        : wxFrame((wxFrame *) NULL, -1, "wxConfig Demo")
 {
+  // submenu
+  wxMenu *sub_menu = new wxMenu( wxMENU_TEAROFF );
+  sub_menu->Append(Minimal_About, "&About", "About this sample");
+  sub_menu->Append(Minimal_About, "&About", "About this sample");
+  sub_menu->Append(Minimal_About, "&About", "About this sample");
+
   // menu
   wxMenu *file_menu = new wxMenu;
 

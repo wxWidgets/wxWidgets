@@ -218,9 +218,13 @@ void wxMenuBar::Append( wxMenu *menu, const wxString &title )
     entry.accelerator = (gchar*) NULL;
     entry.callback = (GtkItemFactoryCallback) NULL;
     entry.callback_action = 0;
-    entry.item_type = (m_style & wxMB_TEAROFF || menu->GetStyle() &
-                       wxMENU_TEAROFF) ?
-       "<Tearoff>" : "<Branch>";
+    
+/*
+    if ((m_style & wxMB_TEAROFF) || (menu->GetStyle() & wxMENU_TEAROFF)) 
+        entry.item_type = "<Tearoff>";
+    else
+*/
+        entry.item_type = "<Branch>";
     
     gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
     
@@ -236,6 +240,16 @@ void wxMenuBar::Append( wxMenu *menu, const wxString &title )
     
     gtk_menu_item_set_submenu( GTK_MENU_ITEM(menu->m_owner), menu->m_menu );
     
+/*
+    if ((m_style & wxMB_TEAROFF) || (menu->GetStyle() & wxMENU_TEAROFF)) 
+    {
+        entry.item_type = "<Tearoff>";
+	tmp.Remove( 0, 6 );
+	tmp.Append( _T("/tearoff") );
+        strcpy( buf, tmp.mb_str() );
+        gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );
+    }
+*/
 #else
 
     menu->m_owner = gtk_menu_item_new_with_label( str.mb_str() );
@@ -845,7 +859,13 @@ void wxMenu::Append( int id, const wxString &item, wxMenu *subMenu, const wxStri
     entry.path = buf;
     entry.callback = (GtkItemFactoryCallback) 0;
     entry.callback_action = 0;
-    entry.item_type = (m_style & wxMENU_TEAROFF) ? "<Tearoff>" : "<Branch>";
+    
+/*
+    if (m_style & wxMENU_TEAROFF)
+        entry.item_type = "<Tearoff>";
+    else
+*/
+        entry.item_type = "<Branch>";
     
     gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
     

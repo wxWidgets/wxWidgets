@@ -230,6 +230,8 @@ if test $DEBUG_CONFIGURE = 1; then
 
   DEFAULT_wxUSE_OPTIMISE=no
   DEFAULT_wxUSE_PROFILE=no
+  DEFAULT_wxUSE_NO_RTTI=no
+  DEFAULT_wxUSE_NO_EXCEPTIONS=no
   DEFAULT_wxUSE_DEBUG_FLAG=yes
   DEFAULT_wxUSE_DEBUG_INFO=yes
   DEFAULT_wxUSE_DEBUG_GDB=yes
@@ -325,6 +327,8 @@ else
 
   DEFAULT_wxUSE_OPTIMISE=yes
   DEFAULT_wxUSE_PROFILE=no
+  DEFAULT_wxUSE_NO_RTTI=no
+  DEFAULT_wxUSE_NO_EXCEPTIONS=no
   DEFAULT_wxUSE_DEBUG_FLAG=no
   DEFAULT_wxUSE_DEBUG_INFO=no
   DEFAULT_wxUSE_DEBUG_GDB=no
@@ -474,12 +478,14 @@ elif test "$wxUSE_DEBUG" = "no"; then
   DEFAULT_wxUSE_DEBUG_INFO=no
 fi
 
-WX_ARG_ENABLE(debug_flag,  [  --enable-debug_flag     set __WXDEBUG__ flag (recommended for developers!)], wxUSE_DEBUG_FLAG)
-WX_ARG_ENABLE(debug_info,  [  --enable-debug_info     create code with debugging information], wxUSE_DEBUG_INFO)
-WX_ARG_ENABLE(debug_gdb,   [  --enable-debug_gdb      create code with extra GDB debugging information], wxUSE_DEBUG_GDB)
-WX_ARG_ENABLE(debug_cntxt, [  --enable-debug_cntxt    use wxDebugContext], wxUSE_DEBUG_CONTEXT)
-WX_ARG_ENABLE(mem_tracing, [  --enable-mem_tracing    create code with memory tracing], wxUSE_MEM_TRACING)
-WX_ARG_ENABLE(profile,     [  --enable-profile        create code with profiling information], wxUSE_PROFILE)
+WX_ARG_ENABLE(debug_flag,    [  --enable-debug_flag     set __WXDEBUG__ flag (recommended for developers!)], wxUSE_DEBUG_FLAG)
+WX_ARG_ENABLE(debug_info,    [  --enable-debug_info     create code with debugging information], wxUSE_DEBUG_INFO)
+WX_ARG_ENABLE(debug_gdb,     [  --enable-debug_gdb      create code with extra GDB debugging information], wxUSE_DEBUG_GDB)
+WX_ARG_ENABLE(debug_cntxt,   [  --enable-debug_cntxt    use wxDebugContext], wxUSE_DEBUG_CONTEXT)
+WX_ARG_ENABLE(mem_tracing,   [  --enable-mem_tracing    create code with memory tracing], wxUSE_MEM_TRACING)
+WX_ARG_ENABLE(profile,       [  --enable-profile        create code with profiling information], wxUSE_PROFILE)
+WX_ARG_ENABLE(no_rtti,       [  --enable-no_rtti        create code without RTTI information], wxUSE_NO_RTTI)
+WX_ARG_ENABLE(no_exceptions, [  --enable-no_exceptions  create code without exceptions information], wxUSE_NO_EXCEPTIONS)
 
 dnl ---------------------------------------------------------------------------
 dnl --disable-gui will build only non-GUI part of wxWindows
@@ -1379,6 +1385,16 @@ if test "$wxUSE_PROFILE" = "yes" ; then
     PROFILE="-pg"
 fi
 
+if test "$GCC" = yes ; then
+    if test "$wxUSE_NO_RTTI" = "yes" ; then
+	WXDEBUG_DEFINE="$WXDEBUG_DEFINE -fno-rtti"
+    fi
+    if test "$wxUSE_NO_EXCEPTIONS" = "yes" ; then
+	WXDEBUG_DEFINE="$WXDEBUG_DEFINE -fno-exceptions"
+    fi
+fi  
+	  
+	  
 CXXFLAGS=`echo "${CXXFLAGS}" | sed "s/\-O.//g" `
 CFLAGS=`echo "${CFLAGS}" | sed "s/\-O.//g" `
 if test "$wxUSE_OPTIMISE" = "no" ; then
@@ -1386,15 +1402,6 @@ if test "$wxUSE_OPTIMISE" = "no" ; then
 else
     if test "$GCC" = yes ; then
         OPTIMISE="-O2"
-	
-        save_CFLAGS="$CFLAGS"
-        CFLAGS="$CFLAGS -fno-rtti -fno-exceptions"
-        AC_TRY_COMPILE( 
-	  [], [int some_variable = 0;],
-	  WXDEBUG_DEFINE="$WXDEBUG_DEFINE -fno-rtti -fno-exceptions",
-	  )
-        CFLAGS="$save_CFLAGS"
-	
         case "${host}" in
             i586-*-*|i686-*-* )
             OPTIMISE="${OPTIMISE} "

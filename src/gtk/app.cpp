@@ -44,8 +44,6 @@
 // global data
 //-----------------------------------------------------------------------------
 
-extern wxCursor g_globalCursor;
-
 wxApp *wxTheApp = (wxApp *)  NULL;
 wxAppInitializerFunction wxApp::m_appInitFn = (wxAppInitializerFunction) NULL;
 
@@ -576,9 +574,6 @@ bool wxApp::Initialize()
 #endif
 
     wxImage::InitStandardHandlers();
-
-    // Not needed, leave it as  default. (KB)
-    // g_globalCursor = wxCursor(wxCURSOR_DEFAULT);
 
     wxModule::RegisterModules();
     if (!wxModule::InitializeModules()) return FALSE;
