@@ -621,7 +621,7 @@ bool wxDebugContext::Dump(void)
       wxLogMessage( wxT("----- Memory dump -----") );
     }
   }
-  
+
   TraverseList ((PmSFV)&wxMemStruct::Dump, (checkPoint ? checkPoint->m_next : (wxMemStruct*)NULL));
 
   wxLogMessage( wxT("") );
@@ -860,13 +860,13 @@ int wxDebugContext::CountObjectsLeft(bool sinceCheckpoint)
 }
 
 #if wxUSE_THREADS
-static bool memSectionOk = false;
+static bool memSectionOk = FALSE;
 
 class MemoryCriticalSection : public wxCriticalSection
 {
 public:
 	MemoryCriticalSection() {
-		memSectionOk = true;
+		memSectionOk = TRUE;
 	}
 };
 
@@ -876,12 +876,12 @@ public:
     inline MemoryCriticalSectionLocker(wxCriticalSection& critsect)
 	: m_critsect(critsect), m_locked(memSectionOk) { if(m_locked) m_critsect.Enter(); }
     inline ~MemoryCriticalSectionLocker() { if(m_locked) m_critsect.Leave(); }
-	
+
 private:
     // no assignment operator nor copy ctor
     MemoryCriticalSectionLocker(const MemoryCriticalSectionLocker&);
     MemoryCriticalSectionLocker& operator=(const MemoryCriticalSectionLocker&);
-	
+
     wxCriticalSection& m_critsect;
 	bool	m_locked;
 };
@@ -895,7 +895,7 @@ void * wxDebugAlloc(size_t size, wxChar * fileName, int lineNum, bool isObject, 
 #if wxUSE_THREADS
   MemoryCriticalSectionLocker lock(memLocker);
 #endif
-    
+
   // If not in debugging allocation mode, do the normal thing
   // so we don't leave any trace of ourselves in the node list.
 
@@ -955,7 +955,7 @@ void wxDebugFree(void * buf, bool WXUNUSED(isVect) )
 #if wxUSE_THREADS
   MemoryCriticalSectionLocker lock(memLocker);
 #endif
-  
+
   if (!buf)
     return;
 
