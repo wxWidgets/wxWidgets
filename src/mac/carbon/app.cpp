@@ -1028,9 +1028,6 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
     s_inYield = TRUE;
 
-#if wxUSE_THREADS
-    YieldToAnyThread() ;
-#endif
     // by definition yield should handle all non-processed events
 
     EventRef theEvent;
@@ -1077,19 +1074,7 @@ void wxApp::MacDoOneEvent()
         if ( wxTheApp->ProcessIdle() )
             sleepTime = kEventDurationNoWait ;
         else
-        {
-#if wxUSE_THREADS
-            if (g_numberOfThreads)
-            {
-                YieldToAnyThread() ;
-                sleepTime = kEventDurationNoWait;
-            }
-            else
-#endif // wxUSE_THREADS
-            {
-                sleepTime = kEventDurationSecond;
-            }
-        }
+            sleepTime = kEventDurationSecond;
     }
     else if ( status == eventLoopQuitErr )
     {
