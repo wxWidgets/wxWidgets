@@ -336,11 +336,11 @@ bool wxTopLevelWindowMotif::IsMaximized() const
     return FALSE;
 }
 
-void wxTopLevelWindowMotif::SetSizeHints( int minW, int minH,
-                                          int maxW, int maxH,
-                                          int incW, int incH )
+void wxTopLevelWindowMotif::DoSetSizeHints( int minW, int minH,
+                                            int maxW, int maxH,
+                                            int incW, int incH )
 {
-    wxTopLevelWindowBase::SetSizeHints( minW, minH, maxW, maxH, incW, incH );
+    wxTopLevelWindowBase::DoSetSizeHints( minW, minH, maxW, maxH, incW, incH );
 
     int count = 0;
     Arg args[6];

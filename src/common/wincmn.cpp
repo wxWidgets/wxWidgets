@@ -674,9 +674,9 @@ wxPoint wxWindowBase::GetClientAreaOrigin() const
 }
 
 // set the min/max size of the window
-void wxWindowBase::SetSizeHints(int minW, int minH,
-                                int maxW, int maxH,
-                                int WXUNUSED(incW), int WXUNUSED(incH))
+void wxWindowBase::DoSetSizeHints(int minW, int minH,
+                                  int maxW, int maxH,
+                                  int WXUNUSED(incW), int WXUNUSED(incH))
 {
     // setting min width greater than max width leads to infinite loops under
     // X11 and generally doesn't make any sense, so don't allow it

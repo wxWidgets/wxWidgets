@@ -272,17 +272,17 @@ void wxSlider::MacHandleControlClick( WXWidget control , wxInt16 controlpart, bo
 
 /* This is overloaded in wxSlider so that the proper width/height will always be used
 * for the slider different values would cause redrawing and mouse detection problems */
-void wxSlider::SetSizeHints( int minW, int minH,
-                            int maxW , int maxH ,
-                            int incW , int incH )
+void wxSlider::DoSetSizeHints( int minW, int minH,
+                               int maxW , int maxH ,
+                               int incW , int incH )
 {
     wxSize size = GetBestSize();
 
     if(GetWindowStyle() & wxSL_VERTICAL) {
-        wxWindow::SetSizeHints(size.x, minH, size.x, maxH, incW, incH);
+        wxWindow::DoSetSizeHints(size.x, minH, size.x, maxH, incW, incH);
     }
     else {
-        wxWindow::SetSizeHints(minW, size.y, maxW, size.y, incW, incH);
+        wxWindow::DoSetSizeHints(minW, size.y, maxW, size.y, incW, incH);
     }
 }
 

@@ -940,7 +940,7 @@ void wxWindowX11::DoMoveWindow(int x, int y, int width, int height)
 #endif
 }
 
-void wxWindowX11::SetSizeHints(int minW, int minH, int maxW, int maxH, int incW, int incH)
+void wxWindowX11::DoSetSizeHints(int minW, int minH, int maxW, int maxH, int incW, int incH)
 {
     m_minWidth = minW;
     m_minHeight = minH;

@@ -618,7 +618,7 @@ void wxMDIChildFrame::Lower(void)
     wxWindow::Raise();
 }
 
-void wxMDIChildFrame::SetSizeHints(int WXUNUSED(minW), int WXUNUSED(minH), int WXUNUSED(maxW), int WXUNUSED(maxH), int WXUNUSED(incW), int WXUNUSED(incH))
+void wxMDIChildFrame::DoSetSizeHints(int WXUNUSED(minW), int WXUNUSED(minH), int WXUNUSED(maxW), int WXUNUSED(maxH), int WXUNUSED(incW), int WXUNUSED(incH))
 {
 }
 
