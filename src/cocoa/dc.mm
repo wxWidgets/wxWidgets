@@ -185,6 +185,23 @@ void wxDC::CocoaApplyTransformations()
     // TODO: Apply device/logical/user position/scaling transformations
 }
 
+void wxDC::CocoaUnapplyTransformations()
+{
+    // NOTE: You *must* call this with focus held.
+    // Undo all transforms so we're back in true Cocoa coords with
+    // no scaling or flipping.
+    NSAffineTransform *invertTransform;
+    invertTransform = [m_cocoaWxToBoundsTransform copy];
+    [invertTransform invert];
+    [invertTransform concat];
+}
+
+bool wxDC::CocoaGetBounds(void *rectData)
+{
+    // We don't know what we are so we can't return anything.
+    return false;
+}
+
 void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
     wxAutoNSAutoreleasePool pool;
@@ -553,6 +570,22 @@ void wxDC::SetTextBackground( const wxColour &col )
 
 void wxDC::Clear()
 {
+    if(!CocoaTakeFocus()) return;
+
+    NSRect boundsRect;
+    if(!CocoaGetBounds(&boundsRect)) return;
+
+    NSGraphicsContext *context = [NSGraphicsContext currentContext];
+    [context saveGraphicsState];
+
+    // Undo all transforms so when we draw our bounds rect we
+    // really overwrite our bounds rect.
+    CocoaUnapplyTransformations();
+
+    [m_backgroundBrush.GetNSColor() set];
+    [NSBezierPath fillRect:boundsRect];
+
+    [context restoreGraphicsState];
 }
 
 void wxDC::SetBackground(const wxBrush& brush)

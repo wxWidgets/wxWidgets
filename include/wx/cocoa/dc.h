@@ -58,7 +58,12 @@ protected:
     void CocoaUnwindStackAndLoseFocus();
 // DC flipping/transformation
     void CocoaApplyTransformations();
+    void CocoaUnapplyTransformations();
     WX_NSAffineTransform m_cocoaWxToBoundsTransform;
+// Get bounds rect (for Clear())
+    // note: we use void * to mean NSRect * so that we can avoid
+    // putting NSRect in the headers.
+    virtual bool CocoaGetBounds(void *rectData);
 // Blitting
     virtual bool CocoaDoBlitOnFocusedDC(wxCoord xdest, wxCoord ydest,
         wxCoord width, wxCoord height, wxCoord xsrc, wxCoord ysrc,

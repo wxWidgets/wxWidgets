@@ -23,14 +23,13 @@ public:
     ~wxMemoryDC(void);
     virtual void SelectObject(const wxBitmap& bitmap);
     virtual void DoGetSize(int *width, int *height) const;
-
-    virtual void Clear();
 protected:
     wxBitmap m_selectedBitmap;
     WX_NSImage m_cocoaNSImage;
 // DC stack
     virtual bool CocoaLockFocus();
     virtual bool CocoaUnlockFocus();
+    virtual bool CocoaGetBounds(void *rectData);
 // Blitting
     virtual bool CocoaDoBlitOnFocusedDC(wxCoord xdest, wxCoord ydest,
         wxCoord width, wxCoord height, wxCoord xsrc, wxCoord ysrc,

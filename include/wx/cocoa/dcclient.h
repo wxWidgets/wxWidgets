@@ -27,8 +27,6 @@ public:
     wxWindowDC(wxWindow *win);
     ~wxWindowDC(void);
 
-    // NSView specific functions
-    virtual void Clear();
 protected:
     wxWindow *m_window;
     WX_NSView m_lockedNSView;
@@ -37,6 +35,7 @@ protected:
     virtual bool CocoaUnlockFocus();
     bool CocoaLockFocusOnNSView(WX_NSView nsview);
     bool CocoaUnlockFocusOnNSView();
+    virtual bool CocoaGetBounds(void *rectData);
 };
 
 class wxClientDC: public wxWindowDC

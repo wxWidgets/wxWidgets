@@ -151,20 +151,16 @@ bool wxMemoryDC::CocoaDoBlitOnFocusedDC(wxCoord xdest, wxCoord ydest,
     return false;
 }
 
-void wxMemoryDC::Clear()
+bool wxMemoryDC::CocoaGetBounds(void *rectData)
 {
-    if(!CocoaTakeFocus()) return;
-
-    NSGraphicsContext *context = [NSGraphicsContext currentContext];
-    [context saveGraphicsState];
-
-    [m_backgroundBrush.GetNSColor() set];
-    NSRect rect;
-    rect.origin.x = 0;
-    rect.origin.y = 0;
-    rect.size = [m_cocoaNSImage size];
-    [NSBezierPath fillRect:rect];
-
-    [context restoreGraphicsState];
+    if(!rectData)
+        return false;
+    if(!m_cocoaNSImage)
+        return false;
+    NSRect *pRect = (NSRect*)rectData;
+    pRect->origin.x = 0.0;
+    pRect->origin.y = 0.0;
+    pRect->size = [m_cocoaNSImage size];
+    return true;
 }
 

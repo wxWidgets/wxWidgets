@@ -80,17 +80,15 @@ bool wxWindowDC::CocoaUnlockFocus()
     return CocoaUnlockFocusOnNSView();
 }
 
-void wxWindowDC::Clear()
+bool wxWindowDC::CocoaGetBounds(void *rectData)
 {
-    if(!CocoaTakeFocus()) return;
-
-    NSGraphicsContext *context = [NSGraphicsContext currentContext];
-    [context saveGraphicsState];
-
-    [m_backgroundBrush.GetNSColor() set];
-    [NSBezierPath fillRect:[m_lockedNSView bounds]];
-
-    [context restoreGraphicsState];
+    if(!rectData)
+        return false;
+    if(!m_lockedNSView)
+        return false;
+    NSRect *pRect = (NSRect*)rectData;
+    *pRect = [m_lockedNSView bounds];
+    return true;
 }
 
 /*
