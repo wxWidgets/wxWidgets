@@ -11,6 +11,7 @@
 #----------------------------------------------------------------------------
 
 from wxPython.wx import *
+import locale
 
 #----------------------------------------------------------------------------
 
@@ -105,7 +106,12 @@ class wxColumnSorterMixin:
         item1 = self.itemDataMap[key1][col]
         item2 = self.itemDataMap[key2][col]
 
-        cmpVal = cmp(item1, item2)
+        #--- Internationalization of string sorting with locale module
+        if type(item1) == type('') or type(item2) == type(''):
+            cmpVal = locale.strcoll(str(item1), str(item2))
+        else:
+            cmpVal = cmp(item1, item2)
+        #---
 
         # If the items are equal then pick something else to make the sort value unique
         if cmpVal == 0:
