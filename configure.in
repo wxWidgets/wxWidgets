@@ -3127,7 +3127,7 @@ if test "$wxUSE_DISPLAY" = "yes"; then
 dnl ---------------------------------------------------------------------------
 dnl Xinerama (for unix ) - Brian Victor
 dnl ---------------------------------------------------------------------------
-    if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_MAC" != 1; then
+    if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_MAC" != 1 -a "$wxUSE_COCOA" != 1; then
         AC_MSG_CHECKING([for Xinerama])
         WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],Xinerama)
         if test "$ac_find_libraries" != "" ; then

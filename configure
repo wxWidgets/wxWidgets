@@ -27800,7 +27800,7 @@ fi
 
 
 if test "$wxUSE_DISPLAY" = "yes"; then
-    if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_MAC" != 1; then
+    if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_MAC" != 1 -a "$wxUSE_COCOA" != 1; then
         echo "$as_me:$LINENO: checking for Xinerama" >&5
 echo $ECHO_N "checking for Xinerama... $ECHO_C" >&6
 
