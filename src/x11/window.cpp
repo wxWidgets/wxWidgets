@@ -227,7 +227,7 @@ void wxWindowX11::SetFocus()
 
     if (wxWindowIsVisible(xwindow))
     {
-        // XSetInputFocus( wxGlobalDisplay(), xwindow, RevertToParent, CurrentTime );
+        XSetInputFocus( wxGlobalDisplay(), xwindow, RevertToParent, CurrentTime );
         m_needsInputFocus = FALSE;
     }
     else
@@ -253,6 +253,7 @@ wxWindow *wxWindowBase::FindFocus()
     return NULL;
 }
 
+#if 0
 wxWindow *wxWindowX11::GetFocusWidget()
 {
    wxWindow *win = (wxWindow*) this;
@@ -265,6 +266,7 @@ wxWindow *wxWindowX11::GetFocusWidget()
    
    return win;
 }
+#endif
 
 // Enabling/disabling handled by event loop, and not sending events
 // if disabled.
