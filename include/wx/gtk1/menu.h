@@ -93,7 +93,7 @@ public:
   bool IsSubMenu() const { return m_subMenu != NULL; }
 
     // state
-  void Enable(bool enable = TRUE) { m_isEnabled = enable; }
+  void Enable( bool enable = TRUE ); 
   bool IsEnabled() const { return m_isEnabled; }
   void Check( bool check = TRUE );
   bool IsChecked() const;

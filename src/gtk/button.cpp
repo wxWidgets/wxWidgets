@@ -93,3 +93,11 @@ void wxButton::SetLabel( const wxString &label )
   gtk_label_set( g_label, GetLabel() );
 }
 
+void wxButton::Enable( bool enable )
+{
+  wxControl::Enable( enable );
+  GtkButton *bin = GTK_BUTTON( m_widget );
+  GtkWidget *label = bin->child;
+  gtk_widget_set_sensitive( label, enable );
+}
+

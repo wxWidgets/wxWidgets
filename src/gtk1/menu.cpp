@@ -208,6 +208,12 @@ void wxMenuItem::Check( bool check )
   gtk_check_menu_item_set_state( (GtkCheckMenuItem*)m_menuItem, (gint)check );
 }
 
+void wxMenuItem::Enable( bool enable ) 
+{ 
+  gtk_widget_set_sensitive( m_menuItem, enable );
+  m_isEnabled = enable; 
+}
+
 bool wxMenuItem::IsChecked() const
 {
   wxCHECK( IsCheckable(), FALSE ); // can't get state of uncheckable item!
@@ -259,6 +265,7 @@ void wxMenu::Append( int id, const wxString &item, const wxString &helpStr, bool
   const char *text = mitem->GetText();
   GtkWidget *menuItem = checkable ? gtk_check_menu_item_new_with_label(text)
                                   : gtk_menu_item_new_with_label(text);
+				  
   mitem->SetMenuItem(menuItem);
 
   gtk_signal_connect( GTK_OBJECT(menuItem), "activate",
