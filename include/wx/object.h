@@ -56,11 +56,11 @@ typedef wxObject *(*wxObjectConstructorFn)(void);
 class WXDLLEXPORT wxClassInfo
 {
 public:
-    wxClassInfo::wxClassInfo(const wxChar *className,
-                             const wxChar *baseName1,
-                             const wxChar *baseName2,
-                             int size,
-                             wxObjectConstructorFn ctor)
+    wxClassInfo( const wxChar *className,
+                 const wxChar *baseName1,
+                 const wxChar *baseName2,
+                 int size,
+                 wxObjectConstructorFn ctor )
         : m_className(className)
         , m_baseClassName1(baseName1)
         , m_baseClassName2(baseName2)
