@@ -348,8 +348,8 @@ void wxSizerXmlHandler::SetSizerItemAttributes(wxSizerItem* sitem)
     if (m_isGBS)
     {
         wxGBSizerItem* gbsitem = (wxGBSizerItem*)sitem;
-        gbsitem->SetPos(GetGBPos(wxT("pos")));
-        gbsitem->SetSpan(GetGBSpan(wxT("span")));
+        gbsitem->SetPos(GetGBPos(wxT("cellpos")));
+        gbsitem->SetSpan(GetGBSpan(wxT("cellspan")));
     }    
 }
 
