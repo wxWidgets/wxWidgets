@@ -2422,6 +2422,9 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
                      (flags & wxTREE_HITTEST_ONITEMLABEL) &&
                      HasFlag(wxTR_EDIT_LABELS) )
                 {
+                    if ( m_renameTimer->IsRunning() )
+                        m_renameTimer->Stop();
+
                     m_renameTimer->Start( 100, TRUE );
                 }
 
