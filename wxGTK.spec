@@ -34,7 +34,7 @@ Header files for the wxGTK, the GTK+ 1.2 port of the wxWindows library.
 
 %prep
 %setup -n wxGTK
-./configure --prefix=%{pref} --enable-threads --disable-std_iostreams --with-odbc
+./configure --prefix=%{pref} --enable-burnt_name --with-odbc
 
 %build
 if [ "$SMP" != "" ]; then

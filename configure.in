@@ -626,6 +626,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_THREADS=yes
 
   DEFAULT_wxUSE_SHARED=yes
+  DEFAULT_wxUSE_BURNT_NAME=no
   DEFAULT_wxUSE_OPTIMISE=yes
   DEFAULT_wxUSE_PROFILE=no
   DEFAULT_wxUSE_NO_DEPS=no
@@ -743,6 +744,7 @@ else
   DEFAULT_wxUSE_THREADS=yes
 
   DEFAULT_wxUSE_SHARED=yes
+  DEFAULT_wxUSE_BURNT_NAME=no
   DEFAULT_wxUSE_OPTIMISE=yes
   DEFAULT_wxUSE_PROFILE=no
   DEFAULT_wxUSE_NO_DEPS=no
@@ -922,6 +924,7 @@ dnl compile options
 dnl ---------------------------------------------------------------------------
 
 WX_ARG_ENABLE(shared,      [  --enable-shared         create shared library code], wxUSE_SHARED)
+WX_ARG_ENABLE(burnt_name,  [  --enable-burnt_name     create set name in shared library ], wxUSE_BURNT_NAME)
 WX_ARG_ENABLE(optimise,    [  --enable-optimise       create optimised code], wxUSE_OPTIMISE)
 WX_ARG_ENABLE(debug,       [  --enable-debug          same as debug_flag and debug_info], wxUSE_DEBUG)
 
@@ -1927,7 +1930,9 @@ if test "$wxUSE_SHARED" = "yes"; then
         PIC_FLAG="-fPIC"
         WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
         WX_ALL="CREATE_LINKS"
-        dnl BURNT_LIBRARY_NAME="-Wl,-soname -Wl,${WX_LIBRARY_NAME_SHARED}"
+        if test "$wxUSE_BURNT_NAME" = "yes" ; then
+            BURNT_LIBRARY_NAME="-Wl,-soname -Wl,${WX_LIBRARY_NAME_SHARED}"
+        fi
       ;;
       *-*-irix5* | *-*-irix6* )
         if test "$GCC" = yes ; then
@@ -3481,6 +3486,17 @@ dnl itself (this is macro is required if SUBDIRS variable is used in Makefile.am
 dnl - and we do use it)
 AC_PROG_MAKE_SET
 
+dnl move setup.h back if available
+if test -d include; then
+    if test -d include/wx; then
+        if test -d include/wx/${TOOLKIT_DIR}; then
+            if test -f include/wx/${TOOLKIT_DIR}/setup.h; then
+                mv -f include/wx/${TOOLKIT_DIR}/setup.h setup.h 
+            fi
+        fi
+    fi
+fi
+            
 AC_CONFIG_HEADER(setup.h:setup.h.in)
 
 dnl some more GUI only things
@@ -3519,6 +3535,31 @@ AC_OUTPUT([
           ],
           [
             chmod +x wx-config
+            
+            dnl the debian installer wants setup.h to be in the lib subdir
+            dnl so we *copy* it there
+            
+            if test ! -d lib; then
+              mkdir lib
+            fi
+            if test ! -d lib/wx; then
+              mkdir lib/wx
+            fi
+            if test ! -d lib/wx/include; then
+              mkdir lib/wx/include
+            fi
+            if test ! -d lib/wx/include/wx; then
+              mkdir lib/wx/include/wx
+            fi
+            if test ! -d lib/wx/include/wx/${TOOLKIT_DIR}; then
+              mkdir lib/wx/include/wx/${TOOLKIT_DIR}
+            fi
+            if test -f setup.h; then
+                cp -f setup.h lib/wx/include/wx/${TOOLKIT_DIR}/setup.h
+            fi
+            
+            dnl *move* setup.h to its final place
+            
             if test ! -d include; then
               mkdir include
             fi
@@ -3531,6 +3572,7 @@ AC_OUTPUT([
             if test -f setup.h; then
                 mv -f setup.h include/wx/${TOOLKIT_DIR}/setup.h
             fi
+            
           ],
           [
             TOOLKIT_DIR="${TOOLKIT_DIR}"

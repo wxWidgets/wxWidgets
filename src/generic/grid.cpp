@@ -4144,20 +4144,19 @@ void wxGrid::DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr )
         // FIXME we should properly set colours for arbitrary bg
         wxCoord x1 = rect.x,
                 y1 = rect.y,
-                x2 = rect.x + rect.width,
-                y2 = rect.y + rect.height;
+                x2 = rect.x + rect.width -1,
+                y2 = rect.y + rect.height -1;
 
         dc.SetPen(*wxWHITE_PEN);
-        dc.DrawLine(x1, y1, x2 - 1, y1);
-        dc.DrawLine(x1, y1, x1, y2 - 1);
+        dc.DrawLine(x1, y1, x2, y1);
+        dc.DrawLine(x1, y1, x1, y2);
 
-        dc.SetPen(*wxLIGHT_GREY_PEN);
         dc.DrawLine(x1 + 1, y2 - 1, x2 - 1, y2 - 1);
-        dc.DrawLine(x2 - 1, y1 + 1, x2 - 1, y2 - 1);
+        dc.DrawLine(x2 - 1, y1 + 1, x2 - 1, y2 );
 
         dc.SetPen(*wxBLACK_PEN);
         dc.DrawLine(x1, y2, x2, y2);
-        dc.DrawLine(x2, y1, x2, y2);
+        dc.DrawLine(x2, y1, x2, y2+1);
 #endif // 0/1
     }
 }
