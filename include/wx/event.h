@@ -206,6 +206,8 @@ const wxEventType wxEVT_COMMAND_TREE_SEL_CHANGED =          wxEVT_FIRST + 611;
 const wxEventType wxEVT_COMMAND_TREE_SEL_CHANGING =         wxEVT_FIRST + 612;
 const wxEventType wxEVT_COMMAND_TREE_KEY_DOWN =             wxEVT_FIRST + 613;
 const wxEventType wxEVT_COMMAND_TREE_ITEM_ACTIVATED =       wxEVT_FIRST + 614;
+const wxEventType wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK =     wxEVT_FIRST + 615;
+const wxEventType wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK =    wxEVT_FIRST + 616;
 
  /* List control event types */
 const wxEventType wxEVT_COMMAND_LIST_BEGIN_DRAG =           wxEVT_FIRST + 700;
