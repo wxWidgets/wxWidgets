@@ -32,6 +32,7 @@ wxListBoxXmlHandler::wxListBoxXmlHandler()
     ADD_STYLE(wxLB_ALWAYS_SB);
     ADD_STYLE(wxLB_NEEDED_SB);
     ADD_STYLE(wxLB_SORT);
+    AddWindowStyles();
 }
 
 wxObject *wxListBoxXmlHandler::DoCreateResource()

@@ -23,6 +23,13 @@
 #include "wx/button.h"
 
 
+wxButtonXmlHandler::wxButtonXmlHandler() 
+: wxXmlResourceHandler() 
+{
+    AddWindowStyles();
+}
+
+
 wxObject *wxButtonXmlHandler::DoCreateResource()
 { 
     wxButton *button = new wxButton(m_ParentAsWindow,

@@ -25,6 +25,7 @@
 wxStaticBitmapXmlHandler::wxStaticBitmapXmlHandler() 
 : wxXmlResourceHandler() 
 {
+    AddWindowStyles();
 }
 
 wxObject *wxStaticBitmapXmlHandler::DoCreateResource()

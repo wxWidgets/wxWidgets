@@ -30,6 +30,7 @@ wxTextCtrlXmlHandler::wxTextCtrlXmlHandler() : wxXmlResourceHandler()
     ADD_STYLE(wxTE_PASSWORD);
     ADD_STYLE(wxTE_READONLY);
     ADD_STYLE(wxHSCROLL);
+    AddWindowStyles();
 }
 
 wxObject *wxTextCtrlXmlHandler::DoCreateResource()

@@ -20,7 +20,7 @@
 class WXDLLEXPORT wxButtonXmlHandler : public wxXmlResourceHandler
 {
     public:
-        wxButtonXmlHandler() : wxXmlResourceHandler() {}
+        wxButtonXmlHandler();
         virtual wxObject *DoCreateResource();
         virtual bool CanHandle(wxXmlNode *node);
 };

@@ -386,6 +386,21 @@ void wxXmlResourceHandler::AddStyle(const wxString& name, int value)
 }
 
 
+
+void wxXmlResourceHandler::AddWindowStyles()
+{
+    ADD_STYLE(wxSIMPLE_BORDER);
+    ADD_STYLE(wxSUNKEN_BORDER);
+    ADD_STYLE(wxDOUBLE_BORDER);
+    ADD_STYLE(wxRAISED_BORDER);
+    ADD_STYLE(wxSTATIC_BORDER);
+    ADD_STYLE(wxTRANSPARENT_WINDOW);
+    ADD_STYLE(wxWANTS_CHARS);
+    ADD_STYLE(wxNO_FULL_REPAINT_ON_RESIZE);
+}
+
+
+
 bool wxXmlResourceHandler::HasParam(const wxString& param)
 {
     return (GetParamNode(param) != NULL);

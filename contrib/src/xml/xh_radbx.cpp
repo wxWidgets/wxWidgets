@@ -31,6 +31,7 @@ wxRadioBoxXmlHandler::wxRadioBoxXmlHandler()
     ADD_STYLE(wxRA_HORIZONTAL);
     ADD_STYLE(wxRA_SPECIFY_ROWS);
     ADD_STYLE(wxRA_VERTICAL);
+    AddWindowStyles();
 }
 
 wxObject *wxRadioBoxXmlHandler::DoCreateResource()

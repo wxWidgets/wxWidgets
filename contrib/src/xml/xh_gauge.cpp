@@ -31,6 +31,7 @@ wxGaugeXmlHandler::wxGaugeXmlHandler()
     ADD_STYLE( wxGA_VERTICAL );
     ADD_STYLE( wxGA_PROGRESSBAR );
     ADD_STYLE( wxGA_SMOOTH );   // windows only
+    AddWindowStyles();
 }
 
 wxObject *wxGaugeXmlHandler::DoCreateResource()

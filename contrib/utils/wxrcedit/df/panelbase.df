@@ -4,6 +4,6 @@ type panel
 icon 1
 childtype panel_item
 abstract
-var style of flags wxNO_3D,wxTAB_TRAVERSAL
+var style of flags wxNO_3D,wxTAB_TRAVERSAL,wxCLIP_CHILDREN
 var exstyle of flags wxWS_EX_VALIDATE_RECURSIVELY
 derived from window

@@ -26,6 +26,7 @@ wxChoiceXmlHandler::wxChoiceXmlHandler()
 : wxXmlResourceHandler() , m_InsideBox(FALSE)
 {
     ADD_STYLE(wxCB_SORT);
+    AddWindowStyles();
 }
 
 wxObject *wxChoiceXmlHandler::DoCreateResource()

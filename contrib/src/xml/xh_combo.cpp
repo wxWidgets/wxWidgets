@@ -31,6 +31,7 @@ wxComboBoxXmlHandler::wxComboBoxXmlHandler()
     ADD_STYLE(wxCB_SORT);
     ADD_STYLE(wxCB_READONLY);
     ADD_STYLE(wxCB_DROPDOWN);
+    AddWindowStyles();
 }
 
 wxObject *wxComboBoxXmlHandler::DoCreateResource()

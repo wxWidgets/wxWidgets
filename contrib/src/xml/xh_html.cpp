@@ -31,6 +31,7 @@ wxHtmlWindowXmlHandler::wxHtmlWindowXmlHandler()
 {
     ADD_STYLE( wxHW_SCROLLBAR_NEVER );
     ADD_STYLE( wxHW_SCROLLBAR_AUTO );
+    AddWindowStyles();
 }
 
 wxObject *wxHtmlWindowXmlHandler::DoCreateResource()

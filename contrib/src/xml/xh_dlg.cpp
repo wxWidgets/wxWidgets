@@ -40,6 +40,8 @@ wxDialogXmlHandler::wxDialogXmlHandler() : wxXmlResourceHandler()
     ADD_STYLE(wxNO_3D);
     ADD_STYLE(wxTAB_TRAVERSAL);
     ADD_STYLE(wxWS_EX_VALIDATE_RECURSIVELY);
+    ADD_STYLE(wxCLIP_CHILDREN);
+    AddWindowStyles();
 }
 
 

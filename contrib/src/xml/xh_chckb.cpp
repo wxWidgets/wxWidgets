@@ -27,6 +27,7 @@
 wxCheckBoxXmlHandler::wxCheckBoxXmlHandler() 
 : wxXmlResourceHandler() 
 {
+    AddWindowStyles();
 }
 
 wxObject *wxCheckBoxXmlHandler::DoCreateResource()

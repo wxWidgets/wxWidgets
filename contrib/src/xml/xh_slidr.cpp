@@ -37,6 +37,7 @@ wxSliderXmlHandler::wxSliderXmlHandler()
     ADD_STYLE( wxSL_BOTTOM );
     ADD_STYLE( wxSL_BOTH );
     ADD_STYLE( wxSL_SELRANGE );
+    AddWindowStyles();
 }
 
 wxObject *wxSliderXmlHandler::DoCreateResource()

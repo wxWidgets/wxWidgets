@@ -225,6 +225,9 @@ class WXDLLEXPORT wxXmlResourceHandler : public wxObject
         // Add style flag (e.g. wxMB_DOCKABLE) to list of flags
         // understood by this handler
         void AddStyle(const wxString& name, int value);
+	
+	// Add styles common to all wxWindow-derived classes
+	void AddWindowStyles();
         
         // Gets style flags from text in form "flag | flag2| flag3 |..."
         // Only understads flags added with AddStyle
