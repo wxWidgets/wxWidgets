@@ -35,6 +35,7 @@
 #endif
 
 #include "wx/fontenc.h"
+#include "wx/colour.h"
 
 class WXDLLEXPORT wxFont;
 class WXDLLEXPORT wxWindow;
@@ -342,5 +343,6 @@ WXDLLEXPORT extern wxBitmap wxDisableBitmap( const wxBitmap& rBmp
                                             ,long            lColor
                                            );
 
+WXDLLEXPORT extern COLORREF wxColourToRGB(const wxColour& rColor);
 #endif // _WX_PRIVATE_H_
 
