@@ -304,6 +304,10 @@ bool wxPopupTransientWindow::ProcessLeftDown(wxMouseEvent& WXUNUSED(event))
 // wxPopupComboWindow
 // ----------------------------------------------------------------------------
 
+BEGIN_EVENT_TABLE(wxPopupComboWindow, wxPopupTransientWindow)
+    EVT_KEY_DOWN(wxPopupComboWindow::OnKeyDown)
+END_EVENT_TABLE()
+
 wxPopupComboWindow::wxPopupComboWindow(wxComboControl *parent)
                   : wxPopupTransientWindow(parent)
 {
@@ -339,6 +343,11 @@ void wxPopupComboWindow::PositionNearCombo()
 void wxPopupComboWindow::OnDismiss()
 {
     m_combo->OnDismiss();
+}
+
+void wxPopupComboWindow::OnKeyDown(wxKeyEvent& event)
+{
+    m_combo->ProcessEvent(event);
 }
 
 #endif // wxUSE_COMBOBOX && defined(__WXUNIVERSAL__)

@@ -151,9 +151,13 @@ protected:
     // notify the combo here
     virtual void OnDismiss();
 
+    // forward the key presses to the combobox
+    void OnKeyDown(wxKeyEvent& event);
+
     // the parent combobox
     wxComboControl *m_combo;
 
+    DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxPopupComboWindow)
 };
 
