@@ -161,8 +161,6 @@ bool wxNotebook::Create(wxWindow *parent,
     return FALSE;
   }
 
-  // @@@ this crashes the application with "Invalid instruction" exception
-  //     deep inside Windows -- why???
   SetWindowFont((HWND)m_hwnd, ::GetStockObject(DEFAULT_GUI_FONT), FALSE);
 
   if ( parent != NULL ) 
@@ -434,8 +432,7 @@ void wxNotebook::Command(wxCommandEvent& event)
 
 bool wxNotebook::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
 {
-  wxNotebookEvent event(wxEVT_NULL, m_windowId, 
-                        TabCtrl_GetCurSel(m_hwnd), m_nSelection);
+  wxNotebookEvent event(wxEVT_NULL, m_windowId);
 
   NMHDR* hdr = (NMHDR *)lParam;
   switch ( hdr->code ) {
@@ -447,16 +444,17 @@ bool wxNotebook::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
       event.SetEventType(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING);
       break;
 
-      // if we don't intercept it here this message is passed to our parent (if
-      // we have one) and then lost in it's DefWindowProc
+      // prevent this msg from being passed to wxControl::MSWNotify which would
+      // retrun FALSE disabling the change of page
     case UDN_DELTAPOS:
-      MSWDefWindowProc(WM_NOTIFY, wParam, lParam);
       return TRUE;
 
     default :
       return wxControl::MSWNotify(wParam, lParam);
   }
 
+  event.SetSelection(TabCtrl_GetCurSel(m_hwnd));
+  event.SetOldSelection(m_nSelection);
   event.SetEventObject(this);
   event.SetInt(LOWORD(wParam));
 
