@@ -77,6 +77,7 @@ public:
     static void CleanUp();
 
     static bool RegisterWindowClasses();
+    static bool UnregisterWindowClasses();
 
     // Convert Windows to argc, argv style
     void ConvertToStandardCommandArgs(char* p);

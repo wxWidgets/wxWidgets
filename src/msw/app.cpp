@@ -456,6 +456,96 @@ bool wxApp::RegisterWindowClasses()
 }
 
 // ---------------------------------------------------------------------------
+// UnregisterWindowClasses
+// ---------------------------------------------------------------------------
+
+bool wxApp::UnregisterWindowClasses()
+{
+    bool retval = TRUE;
+
+    // frame window class.
+    if ( !UnregisterClass(wxFrameClassName, wxhInstance) )
+    {
+        wxLogLastError(wxT("UnregisterClass(frame)"));
+
+        retval = FALSE;
+    }
+
+    // "no redraw" frame
+    if ( !UnregisterClass(wxFrameClassNameNoRedraw, wxhInstance) )
+    {
+        wxLogLastError(wxT("UnregisterClass(no redraw frame)"));
+
+        return FALSE;
+    }
+
+    // MDI frame window class.
+    if ( !UnregisterClass(wxMDIFrameClassName, wxhInstance) )
+    {
+        wxLogLastError(wxT("UnregisterClass(MDI parent)"));
+
+        retval = FALSE;
+    }
+
+    // "no redraw" MDI frame
+    if ( !UnregisterClass(wxMDIFrameClassNameNoRedraw, wxhInstance) )
+    {
+        wxLogLastError(wxT("UnregisterClass(no redraw MDI parent frame)"));
+
+        retval = FALSE;
+    }
+
+    // MDI child frame window class.
+    if ( !UnregisterClass(wxMDIChildFrameClassName, wxhInstance) )
+    {
+        wxLogLastError(wxT("UnregisterClass(MDI child)"));
+
+        retval = FALSE;
+    }
+
+    // "no redraw" MDI child frame
+    if ( !UnregisterClass(wxMDIChildFrameClassNameNoRedraw, wxhInstance) )
+    {
+        wxLogLastError(wxT("UnregisterClass(no redraw MDI child)"));
+
+        retval = FALSE;
+    }
+
+    // panel window class.
+    if ( !UnregisterClass(wxPanelClassName, wxhInstance) )
+    {
+        wxLogLastError(wxT("UnregisterClass(panel)"));
+
+        retval = FALSE;
+    }
+
+    // no redraw panel window class.
+    if ( !UnregisterClass(wxPanelClassNameNR, wxhInstance) )
+    {
+        wxLogLastError(wxT("UnregisterClass(no redraw panel)"));
+
+        retval = FALSE;
+    }
+
+    // canvas and textsubwindow class name
+    if ( !UnregisterClass(wxCanvasClassName, wxhInstance) )
+    {
+        wxLogLastError(wxT("UnregisterClass(canvas)"));
+
+        retval = FALSE;
+    }
+
+    if ( !UnregisterClass(wxCanvasClassNameNR, wxhInstance) )
+    {
+        wxLogLastError(wxT("UnregisterClass(no redraw canvas)"));
+
+        retval = FALSE;
+    }
+
+    return retval;
+}
+
+// ---------------------------------------------------------------------------
 // Convert Windows to argc, argv style
 // ---------------------------------------------------------------------------
 
@@ -599,6 +689,14 @@ void wxApp::CleanUp()
 #if wxUSE_OLE
     ::OleUninitialize();
 #endif
+
+#ifdef WXMAKINGDLL
+    // for an EXE the classes are unregistered when it terminates but DLL may
+    // be loaded several times (load/unload/load) into the same process in
+    // which case the registration will fail after the first time if we don't
+    // unregister the classes now
+    UnregisterWindowClasses();
+#endif // WXMAKINGDLL
 
 #if wxUSE_CTL3D
     Ctl3dUnregister(wxhInstance);
