@@ -109,18 +109,12 @@ extern "C" {
 #endif
 #if wxUSE_UNICODE
 #   define  __REG_WIDE_T        wxChar
-#   define  __REG_WIDE_COMPILE  re_comp
-#   define  __REG_WIDE_EXEC     re_exec
+#   define  __REG_WIDE_COMPILE  wx_re_comp
+#   define  __REG_WIDE_EXEC     wx_re_exec
 #   define  __REG_NOCHAR        /* don't want the char versions */
 #endif
 #define __REG_NOFRONT           /* don't want regcomp() and regexec() */
 #define _ANSI_ARGS_(x)          x
-
-/* under FreeBSD re_comp and re_exec are declared (differently) in unistd.h */
-#ifdef __FreeBSD__
-#define re_comp wx_re_comp
-#define re_exec wx_re_exec
-#endif
 /* --- end --- */
 
 
@@ -307,7 +301,7 @@ typedef struct {
 /* automatically gathered by fwd; do not hand-edit */
 /* === regproto.h === */
 #ifndef __REG_NOCHAR
-int re_comp _ANSI_ARGS_((regex_t *, __REG_CONST char *, size_t, int));
+int wx_re_comp _ANSI_ARGS_((regex_t *, __REG_CONST char *, size_t, int));
 #endif
 #ifndef __REG_NOFRONT
 int regcomp _ANSI_ARGS_((regex_t *, __REG_CONST char *, int));
@@ -316,7 +310,7 @@ int regcomp _ANSI_ARGS_((regex_t *, __REG_CONST char *, int));
 int __REG_WIDE_COMPILE _ANSI_ARGS_((regex_t *, __REG_CONST __REG_WIDE_T *, size_t, int));
 #endif
 #ifndef __REG_NOCHAR
-int re_exec _ANSI_ARGS_((regex_t *, __REG_CONST char *, size_t, rm_detail_t *, size_t, regmatch_t [], int));
+int wx_re_exec _ANSI_ARGS_((regex_t *, __REG_CONST char *, size_t, rm_detail_t *, size_t, regmatch_t [], int));
 #endif
 #ifndef __REG_NOFRONT
 int regexec _ANSI_ARGS_((regex_t *, __REG_CONST char *, size_t, regmatch_t [], int));

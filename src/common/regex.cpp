@@ -199,7 +199,7 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
     // compile it
 #ifdef __REG_NOFRONT
     bool conv = true;
-    int errorcode = re_comp(&m_RegEx, expr, expr.length(), flagsRE);
+    int errorcode = wx_re_comp(&m_RegEx, expr, expr.length(), flagsRE);
 #else
     const wxWX2MBbuf conv = expr.mbc_str();
     int errorcode = conv ? regcomp(&m_RegEx, conv, flagsRE) : REG_BADPAT;
@@ -283,7 +283,7 @@ bool wxRegExImpl::Matches(const wxChar *str, int flags) const
     // do match it
 #ifdef __REG_NOFRONT
     bool conv = true;
-    int rc = re_exec(&self->m_RegEx, str, wxStrlen(str), NULL, m_nMatches, m_Matches, flagsRE);
+    int rc = wx_re_exec(&self->m_RegEx, str, wxStrlen(str), NULL, m_nMatches, m_Matches, flagsRE);
 #else
     const wxWX2MBbuf conv = wxConvertWX2MB(str);
     int rc = conv ? regexec(&self->m_RegEx, conv, m_nMatches, m_Matches, flagsRE) : REG_BADPAT;
