@@ -1214,8 +1214,6 @@ void wxFileDialog::OnTextEnter( wxCommandEvent &WXUNUSED(event) )
 
 void wxFileDialog::OnSelected( wxListEvent &event )
 {
-    if (FindFocus() != m_list) return;
-
     wxString filename( event.m_item.m_text );
     if (filename == wxT("..")) return;
 
