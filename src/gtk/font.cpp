@@ -255,7 +255,7 @@ static GdkFont *wxLoadQueryNearestFont(int point_size, int fontid,
 					   int style, int weight, 
 					   bool underlined);
 
-GdkFont *wxFont::GetInternalFont(float scale)
+GdkFont *wxFont::GetInternalFont(float scale) const
 {
   if (M_FONTDATA->m_byXFontName) return M_FONTDATA->m_font;
    

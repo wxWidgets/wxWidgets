@@ -1393,6 +1393,31 @@ void wxWindow::Enable( bool enable )
   if (m_wxwindow) gtk_widget_set_sensitive( m_wxwindow, enable );
 }
 
+int wxWindow::GetCharHeight(void) const
+{
+  GdkFont *font = m_font.GetInternalFont( 1.0 );
+  return font->ascent + font->descent;
+}
+
+int wxWindow::GetCharWidth(void) const
+{
+  GdkFont *font = m_font.GetInternalFont( 1.0 );
+  return gdk_string_width( font, "H" );
+}
+
+void wxWindow::GetTextExtent( const wxString& string, int *x, int *y,
+  int *descent, int *externalLeading, const wxFont *theFont, bool WXUNUSED(use16) ) const
+{
+  wxFont fontToUse = m_font;
+  if (theFont) fontToUse = *theFont;
+  
+  GdkFont *font = fontToUse.GetInternalFont( 1.0 );
+  if (x) (*y) = gdk_string_width( font, string );
+  if (y) (*y) = font->ascent + font->descent;
+  if (descent) (*descent) = font->descent;
+  if (externalLeading) (*externalLeading) = 0;  // ??
+}
+
 void wxWindow::MakeModal( bool modal )
 {
   return;
@@ -1514,11 +1539,6 @@ void wxWindow::SetReturnCode( int retCode )
 int wxWindow::GetReturnCode(void)
 {
   return m_retCode;
-}
-
-wxWindow *wxWindow::GetParent(void)
-{
-  return m_parent;
 }
 
 void wxWindow::Raise(void)

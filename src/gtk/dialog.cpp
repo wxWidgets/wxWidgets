@@ -36,7 +36,7 @@ bool gtk_dialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED
   win->Close();
 
   return TRUE;
-};
+}
 
 //-----------------------------------------------------------------------------
 // wxDialog
@@ -56,7 +56,7 @@ wxDialog::wxDialog(void)
   m_title = "";
   m_modalShowing = FALSE;
   wxTopLevelWindows.Insert( this );
-};
+}
 
 wxDialog::wxDialog( wxWindow *parent, 
       wxWindowID id, const wxString &title,
@@ -66,7 +66,7 @@ wxDialog::wxDialog( wxWindow *parent,
   m_modalShowing = FALSE;
   wxTopLevelWindows.Insert( this );
   Create( parent, id, title, pos, size, style, name );
-};
+}
 
 bool wxDialog::Create( wxWindow *parent,
       wxWindowID id, const wxString &title,
@@ -101,30 +101,30 @@ bool wxDialog::Create( wxWindow *parent,
   PostCreation();
   
   return TRUE;
-};
+}
 
 wxDialog::~wxDialog(void)
 {
   wxTopLevelWindows.DeleteObject( this );
   if (wxTopLevelWindows.Number() == 0) wxTheApp->ExitMainLoop();
-};
+}
 
 void wxDialog::SetTitle(const wxString& title )
 {
   m_title = title;
   if (m_title.IsNull()) m_title = "";
   gtk_window_set_title( GTK_WINDOW(m_widget), m_title );
-};
+}
 
 wxString wxDialog::GetTitle(void) const
 {
   return (wxString&)m_title;
-};
+}
 
 void wxDialog::OnApply( wxCommandEvent &WXUNUSED(event) )
 {
   if (Validate()) TransferDataFromWindow();
-};
+}
 
 void wxDialog::OnCancel( wxCommandEvent &WXUNUSED(event) )
 {
@@ -136,8 +136,8 @@ void wxDialog::OnCancel( wxCommandEvent &WXUNUSED(event) )
   {
     SetReturnCode(wxID_CANCEL);
     this->Show(FALSE);
-  };
-};
+  }
+}
 
 void wxDialog::OnOK( wxCommandEvent &WXUNUSED(event) )
 {
@@ -151,14 +151,14 @@ void wxDialog::OnOK( wxCommandEvent &WXUNUSED(event) )
     {
       SetReturnCode(wxID_OK);
       this->Show(FALSE);
-    };
-  };
-};
+    }
+  }
+}
 
 void wxDialog::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
   // yes
-};
+}
 
 bool wxDialog::OnClose(void)
 {
@@ -189,8 +189,8 @@ void wxDialog::OnCloseWindow(wxCloseEvent& event)
   if (GetEventHandler()->OnClose() || event.GetForce())
   {
     this->Destroy();
-  };
-};
+  }
+}
 
 void wxDialog::ImplementSetPosition(void)
 {
@@ -210,14 +210,22 @@ bool wxDialog::Show( bool show )
   if (!show && IsModal() && m_modalShowing)
   {
     EndModal( wxID_CANCEL );
-  };
+  }
 
   wxWindow::Show( show );
   
   if (show) InitDialog();
   
   return TRUE;
-};
+}
+
+void wxDialog::SetModal(bool flag)
+{
+  if (flag)
+    m_windowStyle |= wxDIALOG_MODAL;
+  else
+    if (m_windowStyle & wxDIALOG_MODAL) m_windowStyle -= wxDIALOG_MODAL;
+}
 
 int wxDialog::ShowModal(void)
 {
@@ -232,7 +240,7 @@ int wxDialog::ShowModal(void)
   gtk_grab_remove( m_widget );
   
   return GetReturnCode();
-};
+}
 
 void wxDialog::EndModal( int retCode )
 {
@@ -242,15 +250,34 @@ void wxDialog::EndModal( int retCode )
   {
      wxFAIL_MSG( "wxDialog: called EndModal twice" );
      return;
-  };
+  }
   
   m_modalShowing = FALSE;
   
   gtk_main_quit();
-};
+}
 
 void wxDialog::InitDialog(void)
 {
   wxWindow::InitDialog();
-};
+}
+
+void wxDialog::SetSizeHints(int minW, int minH, int maxW, int maxH, int WXUNUSED(incW) )
+{
+  gdk_window_set_hints( m_widget->window, -1, -1, 
+	                minW, minH, maxW, maxH, GDK_HINT_MIN_SIZE | GDK_HINT_MIN_SIZE );
+}
+
+void wxDialog::SetIcon( const wxIcon &icon )
+{
+  m_icon = icon;
+  if (!icon.Ok()) return;
+  
+  wxMask *mask = icon.GetMask();
+  GdkBitmap *bm = NULL;
+  if (mask) bm = mask->GetBitmap();
+  
+  gdk_window_set_icon( m_widget->window, NULL, icon.GetPixmap(), bm );
+}
+
 

@@ -96,6 +96,9 @@ public:
   virtual void GetPosition( int *x, int *y ) const;
   virtual void Centre( int direction = wxHORIZONTAL );
   virtual void Fit();
+    // set minimal/maxmimal size for the frame
+  virtual void SetSizeHints( int WXUNUSED(minW), int WXUNUSED(minH), int WXUNUSED(maxW), 
+    int WXUNUSED(maxH), int WXUNUSED(incW) ) { }
 
   void OnSize( wxSizeEvent &event );
   void OnIdle( wxIdleEvent& event );
@@ -113,7 +116,12 @@ public:
   virtual void RemoveChild( wxWindow *child );
   void SetReturnCode( int retCode );
   int GetReturnCode();
-  wxWindow *GetParent();
+  wxWindow *GetParent() const 
+    { return m_parent; }
+  wxWindow *GetGrandParent(void) const
+    { return (m_parent ? m_parent->m_parent : (wxWindow*)NULL); }
+  void wxWindow::SetParent( wxWindow *p ) 
+    { m_parent = p; }
 
   wxEvtHandler *GetEventHandler();
   void SetEventHandler( wxEvtHandler *handler );
@@ -139,15 +147,22 @@ public:
   virtual void SetBackgroundColour( const wxColour &colour );
   virtual wxColour GetForegroundColour() const;
   virtual void SetForegroundColour( const wxColour &colour );
+  
+  virtual int GetCharHeight(void) const;
+  virtual int GetCharWidth(void) const;
+  virtual void GetTextExtent( const wxString& string, int *x, int *y,
+                             int *descent = NULL,
+                             int *externalLeading = NULL,
+                             const wxFont *theFont = NULL, bool use16 = FALSE) const;
 
   virtual void SetDefaultBackgroundColour( const wxColour& col )
-    { m_defaultBackgroundColour = col; };
+    { m_defaultBackgroundColour = col; }
   virtual wxColour GetDefaultBackgroundColour() const
-    { return m_defaultBackgroundColour; };
+    { return m_defaultBackgroundColour; }
   virtual void SetDefaultForegroundColour( const wxColour& col )
-    { m_defaultForegroundColour = col; };
+    { m_defaultForegroundColour = col; }
   virtual wxColour GetDefaultForegroundColour() const
-    { return m_defaultForegroundColour; };
+    { return m_defaultForegroundColour; }
 
   virtual void SetFont( const wxFont &font );
   virtual wxFont *GetFont();

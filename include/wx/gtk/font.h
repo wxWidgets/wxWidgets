@@ -81,7 +81,7 @@ class wxFont: public wxGDIObject
     friend wxPaintDC;
     friend wxWindow;
     
-    GdkFont* GetInternalFont(float scale = 1.0);
+    GdkFont* GetInternalFont(float scale = 1.0) const;
 
     // no data :-)
 };

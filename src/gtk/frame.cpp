@@ -515,9 +515,8 @@ void wxFrame::SetTitle( const wxString &title )
 
 void wxFrame::SetSizeHints(int minW, int minH, int maxW, int maxH, int WXUNUSED(incW) )
 {
-  if (m_wxwindow)
-    gdk_window_set_hints( m_wxwindow->window, -1, -1, 
-	                  minW, minH, maxW, maxH, GDK_HINT_MIN_SIZE | GDK_HINT_MIN_SIZE );
+  gdk_window_set_hints( m_widget->window, -1, -1, 
+	                minW, minH, maxW, maxH, GDK_HINT_MIN_SIZE | GDK_HINT_MIN_SIZE );
 }
 
 void wxFrame::SetIcon( const wxIcon &icon )

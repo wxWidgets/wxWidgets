@@ -21,6 +21,7 @@
 #include "wx/string.h"
 #include "wx/event.h"
 #include "wx/window.h"
+#include "wx/icon.h"
 
 //-----------------------------------------------------------------------------
 // forward decls
@@ -74,8 +75,18 @@ class wxDialog: public wxWindow
     virtual int ShowModal(void);
     virtual void EndModal(int retCode);
     virtual bool IsModal(void) const { return ((GetWindowStyleFlag() & wxDIALOG_MODAL) == wxDIALOG_MODAL); }
+    void SetModal( bool modal );
     virtual void InitDialog(void);
     virtual void Centre( int direction = wxHORIZONTAL );
+    
+    virtual void SetSizeHints( int minW, int minH, int maxW, int maxH, int incW = -1 );
+    
+    virtual void SetIcon( const wxIcon &icon );
+    virtual void Iconize( bool WXUNUSED(iconize)) { }
+    virtual bool IsIconized(void) const { return FALSE; }
+    bool Iconized(void) const { return IsIconized(); }
+    virtual void Maximize(void) { }
+    virtual void Restore(void) { }
     
   private:
   
@@ -85,6 +96,7 @@ class wxDialog: public wxWindow
     
     bool       m_modalShowing;
     wxString   m_title;
+    wxIcon     m_icon;
     
     virtual void ImplementSetPosition();
   

@@ -152,7 +152,7 @@ class wxMDIChildFrame: public wxFrame
   virtual void Maximize(void) {}
   virtual void Restore(void) {}
     
-    void OnActivate( wxActivateEvent &event );
+  void OnActivate( wxActivateEvent &event );
     
   public:
   

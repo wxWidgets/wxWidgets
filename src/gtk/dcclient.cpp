@@ -552,22 +552,25 @@ void wxPaintDC::DrawText( const wxString &text, long x, long y, bool WXUNUSED(us
   }
 }
 
-
-
 bool wxPaintDC::CanGetTextExtent(void) const
 {
   return TRUE;
 }
 
 void wxPaintDC::GetTextExtent( const wxString &string, long *width, long *height,
-                     long *WXUNUSED(descent), long *WXUNUSED(externalLeading),
-                     wxFont *WXUNUSED(theFont), bool WXUNUSED(use16) )
+                     long *descent, long *externalLeading,
+                     wxFont *theFont, bool WXUNUSED(use16) )
 {
   if (!Ok()) return;
   
-  GdkFont *font = m_font.GetInternalFont( m_scaleY );
+  wxFont fontToUse = m_font;
+  if (theFont) fontToUse = *theFont;
+  
+  GdkFont *font = fontToUse.GetInternalFont( m_scaleY );
   if (width) (*width) = long(gdk_string_width( font, string ) / m_scaleX);
   if (height) (*height) = long((font->ascent + font->descent) / m_scaleY);
+  if (descent) (*descent) = long(font->descent / m_scaleY);
+  if (externalLeading) (*externalLeading) = 0;  // ??
 }
 
 long wxPaintDC::GetCharWidth(void)
@@ -575,7 +578,7 @@ long wxPaintDC::GetCharWidth(void)
   if (!Ok()) return 0;
   
   GdkFont *font = m_font.GetInternalFont( m_scaleY );
-  return gdk_string_width( font, "H" );
+  return long(gdk_string_width( font, "H" ) / m_scaleX);
 }
 
 long wxPaintDC::GetCharHeight(void)
@@ -583,7 +586,7 @@ long wxPaintDC::GetCharHeight(void)
   if (!Ok()) return 0;
   
   GdkFont *font = m_font.GetInternalFont( m_scaleY );
-  return font->ascent + font->descent;
+  return long((font->ascent + font->descent) / m_scaleY);
 }
 
 void wxPaintDC::Clear(void)

@@ -254,7 +254,7 @@ void wxMenu::Append( int id, const wxString &item, const wxString &helpStr, bool
   wxMenuItem *mitem = new wxMenuItem();
   mitem->SetId(id);
   mitem->SetText(item);
-  mitem->SetHelpString(helpStr);
+  mitem->SetHelp(helpStr);
   mitem->SetCheckable(checkable);
   const char *text = mitem->GetText();
   GtkWidget *menuItem = checkable ? gtk_check_menu_item_new_with_label(text)
@@ -277,7 +277,7 @@ void wxMenu::Append( int id, const wxString &text, wxMenu *subMenu, const wxStri
   mitem->SetText(text);
 
   GtkWidget *menuItem = gtk_menu_item_new_with_label(mitem->GetText());
-  mitem->SetHelpString(helpStr);
+  mitem->SetHelp(helpStr);
   mitem->SetMenuItem(menuItem);
   mitem->SetSubMenu(subMenu);
 
@@ -344,8 +344,28 @@ bool wxMenu::IsChecked( int id ) const
 void wxMenu::SetLabel( int id, const wxString &label )
 {
   wxMenuItem *item = FindItem(id);
-  if ( item )
+  if (item)
     item->SetText(label);
+}
+
+wxString wxMenu::GetLabel( int id ) const
+{
+  wxMenuItem *item = FindItem(id);
+  if (item) return item->GetText();
+  return "";
+}
+
+void wxMenu::SetHelpString( int id, const wxString& helpString )
+{
+  wxMenuItem *item = FindItem(id);
+  if (item) item->SetHelp( helpString );
+}
+
+wxString wxMenu::GetHelpString( int id ) const
+{
+  wxMenuItem *item = FindItem(id);
+  if (item) return item->GetHelp();
+  return "";
 }
 
 int wxMenu::FindMenuIdByMenuItem( GtkWidget *menuItem ) const

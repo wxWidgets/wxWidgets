@@ -95,11 +95,12 @@ public:
     // state
   void Enable(bool enable = TRUE) { m_isEnabled = enable; }
   bool IsEnabled() const { return m_isEnabled; }
-  void Check(bool check = TRUE);
+  void Check( bool check = TRUE );
   bool IsChecked() const;
 
     // help string (displayed in the status bar by default)
-  void SetHelpString(const wxString& str) { m_helpStr = str; }
+  void SetHelp(const wxString& str) { m_helpStr = str; }
+  const wxString& GetHelp() const { return m_helpStr; }
 
   // implementation
   void SetMenuItem(GtkWidget *menuItem) { m_menuItem = menuItem; }
@@ -136,7 +137,8 @@ public:
 
     // find item by name/id
   int FindItem( const wxString itemString ) const;
-  wxMenuItem *FindItem(int id) const;
+  wxMenuItem *FindItem( int id ) const;
+  wxMenuItem *FindItemForId( int id ) const { return FindItem( id ); }
 
     // get/set item's state
   void Enable( int id, bool enable );
@@ -145,7 +147,12 @@ public:
   bool IsChecked( int id ) const;
 
   void SetLabel( int id, const wxString &label );
+  wxString GetLabel(int id) const;
 
+  // helpstring
+  virtual void SetHelpString(int id, const wxString& helpString);
+  virtual wxString GetHelpString(int id) const ;
+  
   // accessors
   wxList& GetItems() { return m_items; }
 
