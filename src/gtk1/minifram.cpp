@@ -164,6 +164,13 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
 
     if (win->m_isDragging) return TRUE;
 
+    GtkPizza *pizza = GTK_PIZZA(widget);
+    if (gdk_event->window != pizza->bin_window) return TRUE;
+    
+    GdkFont *font = wxSMALL_FONT->GetInternalFont(1.0);
+    int height = font->ascent + font->descent+1;
+    if (gdk_event->y > height) return TRUE;
+        
     gdk_window_raise( win->m_widget->window );
 
     gdk_pointer_grab( widget->window, FALSE,
@@ -303,7 +310,7 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
       const wxPoint &pos, const wxSize &size,
       long style, const wxString &name )
 {
-    style = style | wxCAPTION | wxFRAME_FLOAT_ON_PARENT;
+    style = style | wxCAPTION;
 
     if ((style & wxCAPTION) || (style & wxTINY_CAPTION_HORIZ) || (style & wxTINY_CAPTION_VERT))
         m_miniTitle = 13;
@@ -317,6 +324,11 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
 
     wxFrame::Create( parent, id, title, pos, size, style, name );
 
+    if (m_parent && (GTK_IS_WINDOW(m_parent->m_widget)))
+    {
+        gtk_window_set_transient_for( GTK_WINDOW(m_widget), GTK_WINDOW(m_parent->m_widget) );
+    }
+    
     if ((style & wxSYSTEM_MENU) &&
         ((style & wxCAPTION) || (style & wxTINY_CAPTION_HORIZ) || (style & wxTINY_CAPTION_VERT)))
     {
