@@ -149,7 +149,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
 
     file_menu->Append(TreeTest_About, "&About...");
     file_menu->AppendSeparator();
-    file_menu->Append(TreeTest_Quit, "E&xit");
+    file_menu->Append(TreeTest_Quit, "E&xit\tAlt-X");
 
     tree_menu->Append(TreeTest_Recreate, "&Recreate the tree");
     tree_menu->Append(TreeTest_CollapseAndReset, "C&ollapse and reset");
@@ -200,9 +200,6 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
                                 wxDefaultPosition, wxDefaultSize,
                                 wxTR_HAS_BUTTONS |
                                 wxTR_EDIT_LABELS |
-#ifndef NO_MULTIPLE_SELECTION
-                                wxTR_MULTIPLE |
-#endif
 #ifndef NO_VARIABLE_HEIGHT
                                 wxTR_HAS_VARIABLE_ROW_HEIGHT |
 #endif
@@ -622,9 +619,10 @@ void MyTreeCtrl::DoToggleIcon(const wxTreeItemId& item)
 
 // avoid repetition
 #define TREE_EVENT_HANDLER(name)                            \
-void MyTreeCtrl::name(wxTreeEvent& WXUNUSED(event))         \
+void MyTreeCtrl::name(wxTreeEvent& event)                   \
 {                                                           \
     wxLogMessage(#name);                                    \
+    event.Skip();                                           \
 }
 
 TREE_EVENT_HANDLER(OnBeginRDrag)
@@ -636,6 +634,7 @@ TREE_EVENT_HANDLER(OnItemExpanding)
 TREE_EVENT_HANDLER(OnItemCollapsed)
 TREE_EVENT_HANDLER(OnSelChanged)
 TREE_EVENT_HANDLER(OnSelChanging)
+TREE_EVENT_HANDLER(OnTreeKeyDown)
 
 #undef TREE_EVENT_HANDLER
 
@@ -688,7 +687,7 @@ void MyTreeCtrl::OnEndDrag(wxTreeEvent& event)
     //
     // Finally, we only copy one item here but we might copy the entire tree if
     // we were dragging a folder.
-    AppendItem(itemDst, text);
+    AppendItem(itemDst, text, TreeCtrlIcon_File);
 }
 
 void MyTreeCtrl::OnBeginLabelEdit(wxTreeEvent& event)
@@ -730,11 +729,6 @@ void MyTreeCtrl::OnItemCollapsing(wxTreeEvent& event)
 
         event.Veto();
     }
-}
-
-void MyTreeCtrl::OnTreeKeyDown(wxTreeEvent&WXUNUSED(event))
-{
-    wxLogMessage("OnTreeKeyDown");
 }
 
 void MyTreeCtrl::OnItemActivated(wxTreeEvent&WXUNUSED(event))

@@ -53,9 +53,53 @@ WX_DEFINE_OBJARRAY(wxArrayTreeItemIds);
 
 static const int NO_IMAGE = -1;
 
+#define PIXELS_PER_UNIT 10
+
 // -----------------------------------------------------------------------------
 // private classes
 // -----------------------------------------------------------------------------
+
+// timer used for enabling in-place edit
+class WXDLLEXPORT wxTreeRenameTimer: public wxTimer
+{
+public:
+    wxTreeRenameTimer( wxTreeCtrl *owner );
+
+    void Notify();
+
+private:
+    wxTreeCtrl   *m_owner;
+};
+
+// control used for in-place edit
+class WXDLLEXPORT wxTreeTextCtrl: public wxTextCtrl
+{
+public:
+    wxTreeTextCtrl() { }
+    wxTreeTextCtrl( wxWindow *parent,
+                    const wxWindowID id,
+                    bool *accept,
+                    wxString *res,
+                    wxTreeCtrl *owner,
+                    const wxString &value = wxEmptyString,
+                    const wxPoint &pos = wxDefaultPosition,
+                    const wxSize &size = wxDefaultSize,
+                    int style = 0,
+                    const wxValidator& validator = wxDefaultValidator,
+                    const wxString &name = wxTextCtrlNameStr );
+
+    void OnChar( wxKeyEvent &event );
+    void OnKillFocus( wxFocusEvent &event );
+
+private:
+    bool               *m_accept;
+    wxString           *m_res;
+    wxTreeCtrl         *m_owner;
+    wxString            m_startValue;
+
+    DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxTreeTextCtrl);
+};
 
 // a tree item
 class WXDLLEXPORT wxGenericTreeItem
@@ -76,7 +120,7 @@ public:
 
     const wxString& GetText() const { return m_text; }
     int GetImage(wxTreeItemIcon which = wxTreeItemIcon_Normal) const
-    { return m_images[which]; }
+        { return m_images[which]; }
     wxTreeItemData *GetData() const { return m_data; }
 
     // returns the current image for the item (depending on its
@@ -242,7 +286,7 @@ wxTreeTextCtrl::wxTreeTextCtrl( wxWindow *parent,
     m_accept = accept;
     m_owner = owner;
     (*m_accept) = FALSE;
-    (*m_res) = "";
+    (*m_res) = wxEmptyString;
     m_startValue = value;
 }
 
@@ -283,7 +327,6 @@ void wxTreeTextCtrl::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
         m_owner->OnRenameAccept();
 }
 
-#define PIXELS_PER_UNIT 10
 // -----------------------------------------------------------------------------
 // wxTreeEvent
 // -----------------------------------------------------------------------------
@@ -430,7 +473,7 @@ wxGenericTreeItem *wxGenericTreeItem::HitTest( const wxPoint& point,
 {
     if ((point.y > m_y) && (point.y < m_y + theTree->GetLineHeight(this)))
     {
-        if (point.y<m_y+theTree->GetLineHeight(this)/2)
+        if (point.y < m_y+theTree->GetLineHeight(this)/2 )
             flags |= wxTREE_HITTEST_ONITEMUPPERPART;
         else
             flags |= wxTREE_HITTEST_ONITEMLOWERPART;
@@ -563,6 +606,8 @@ void wxTreeCtrl::Init()
     m_imageListState = (wxImageList *) NULL;
 
     m_dragCount = 0;
+    m_isDragging = FALSE;
+    m_dropTarget = (wxGenericTreeItem *)NULL;
 
     m_renameTimer = new wxTreeRenameTimer( this );
 
@@ -1663,42 +1708,66 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
     }
 }
 
-void wxTreeCtrl::DrawBorder(wxTreeItemId &item)
+void wxTreeCtrl::DrawDropEffect(wxGenericTreeItem *item)
 {
-  if (!item) return;
+    if ( item )
+    {
+        if ( item->HasPlus() )
+        {
+            // it's a folder, indicate it by a border
+            DrawBorder(item);
+        }
+        else
+        {
+            // draw a line under the drop target because the item will be
+            // dropped there
+            DrawLine(item, TRUE /* below */);
+        }
 
-    wxGenericTreeItem *i=item.m_pItem;
-
-    wxClientDC dc(this);
-    PrepareDC( dc );
-    dc.SetLogicalFunction(wxINVERT);
-
-    int w,h,x;
-    ViewStart(&x,&h);     // we only need x
-    GetClientSize(&w,&h); // we only need w
-
-    h=GetLineHeight(i)+1;
-    // 2 white column at border
-    dc.DrawRectangle( PIXELS_PER_UNIT*x+2, i->GetY()-1, w-6, h);
+        SetCursor(wxCURSOR_BULLSEYE);
+    }
+    else
+    {
+        // can't drop here
+        SetCursor(wxCURSOR_NO_ENTRY);
+    }
 }
 
-void wxTreeCtrl::DrawLine(wxTreeItemId &item, bool below)
+void wxTreeCtrl::DrawBorder(const wxTreeItemId &item)
 {
-  if (!item) return;
+    wxCHECK_RET( item.IsOk(), _T("invalid item in wxTreeCtrl::DrawLine") );
 
-    wxGenericTreeItem *i=item.m_pItem;
+    wxGenericTreeItem *i = item.m_pItem;
+
+    wxClientDC dc(this);
+    PrepareDC( dc );
+    dc.SetLogicalFunction(wxINVERT);
+    dc.SetBrush(*wxTRANSPARENT_BRUSH);
+
+    int w = i->GetWidth() + 2;
+    int h = GetLineHeight(i) + 2;
+
+    dc.DrawRectangle( i->GetX() - 1, i->GetY() - 1, w, h);
+}
+
+void wxTreeCtrl::DrawLine(const wxTreeItemId &item, bool below)
+{
+    wxCHECK_RET( item.IsOk(), _T("invalid item in wxTreeCtrl::DrawLine") );
+
+    wxGenericTreeItem *i = item.m_pItem;
 
     wxClientDC dc(this);
     PrepareDC( dc );
     dc.SetLogicalFunction(wxINVERT);
 
-    int w,h,y;
-    GetSize(&w,&h);
+    int x = i->GetX(),
+        y = i->GetY();
+    if ( below )
+    {
+        y += GetLineHeight(i) - 1;
+    }
 
-    if (below) y=i->GetY()+GetLineHeight(i)-1;
-    else y=i->GetY();
-
-    dc.DrawLine( 0, y, w, y);
+    dc.DrawLine( x, y, x + i->GetWidth(), y);
 }
 
 // -----------------------------------------------------------------------------
@@ -2018,84 +2087,152 @@ void wxTreeCtrl::OnRenameAccept()
 
 void wxTreeCtrl::OnMouse( wxMouseEvent &event )
 {
-    if ( !(event.LeftUp() || event.RightDown() || event.LeftDClick() || event.Dragging()) ) return;
-
     if ( !m_anchor ) return;
+
+    // we process left mouse up event (enables in-place edit), right down
+    // (pass to the user code), left dbl click (activate item) and
+    // dragging/moving events for items drag-and-drop
+    if ( !(event.LeftUp() ||
+           event.RightDown() ||
+           event.LeftDClick() ||
+           event.Dragging() ||
+           ((event.Moving() || event.RightUp()) && m_isDragging)) )
+    {
+        event.Skip();
+
+        return;
+    }
 
     wxClientDC dc(this);
     PrepareDC(dc);
     wxCoord x = dc.DeviceToLogicalX( event.GetX() );
     wxCoord y = dc.DeviceToLogicalY( event.GetY() );
 
-    int flags=0;
+    int flags = 0;
     wxGenericTreeItem *item = m_anchor->HitTest( wxPoint(x,y), this, flags);
+
     bool onButton = flags & wxTREE_HITTEST_ONITEMBUTTON;
 
-    if (event.Dragging())
+    if ( event.Dragging() && !m_isDragging )
     {
         if (m_dragCount == 0)
             m_dragStart = wxPoint(x,y);
 
         m_dragCount++;
 
-        if (m_dragCount != 3) return;
+        if (m_dragCount != 3)
+        {
+            // wait until user drags a bit further...
+            return;
+        }
 
-        int command = wxEVT_COMMAND_TREE_BEGIN_DRAG;
-        if (event.RightIsDown()) command = wxEVT_COMMAND_TREE_BEGIN_RDRAG;
+        wxEventType command = event.RightIsDown()
+                              ? wxEVT_COMMAND_TREE_BEGIN_RDRAG
+                              : wxEVT_COMMAND_TREE_BEGIN_DRAG;
 
         wxTreeEvent nevent( command, GetId() );
         nevent.m_item = m_current;
         nevent.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(nevent);
-        return;
+
+        // by default the dragging is not supported, the user code must
+        // explicitly allow the event for it to take place
+        nevent.Veto();
+
+        if ( GetEventHandler()->ProcessEvent(nevent) && nevent.IsAllowed() )
+        {
+            // we're going to drag this item
+            m_isDragging = TRUE;
+
+            CaptureMouse();
+        }
+    }
+    else if ( event.Moving() )
+    {
+        if ( item != m_dropTarget )
+        {
+            // unhighlight the previous drop target
+            DrawDropEffect(m_dropTarget);
+
+            m_dropTarget = item;
+
+            // highlight the current drop target if any
+            DrawDropEffect(m_dropTarget);
+
+            wxYield();
+        }
+    }
+    else if ( (event.LeftUp() || event.RightUp()) && m_isDragging )
+    {
+        // erase the highlighting
+        DrawDropEffect(m_dropTarget);
+
+        // generate the drag end event
+        wxTreeEvent event(wxEVT_COMMAND_TREE_END_DRAG, GetId());
+
+        event.m_item = item;
+        event.m_pointDrag = wxPoint(x, y);
+        event.SetEventObject(this);
+
+        (void)GetEventHandler()->ProcessEvent(event);
+
+        m_isDragging = FALSE;
+        m_dropTarget = (wxGenericTreeItem *)NULL;
+
+        ReleaseMouse();
+
+        SetCursor(wxCURSOR_DEFAULT);
+
+        wxYield();
     }
     else
     {
+        // here we process only the messages which happen on tree items
+
         m_dragCount = 0;
-    }
 
-    if (item == NULL) return;  /* we hit the blank area */
+        if (item == NULL) return;  /* we hit the blank area */
 
-    if (event.RightDown()) {
-        wxTreeEvent nevent(wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK,GetId());
-        nevent.m_item=item;
-        nevent.m_code=0;
-        nevent.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(nevent);
-        return;
-    }
+        if ( event.RightDown() )
+        {
+            wxTreeEvent nevent(wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, GetId());
+            nevent.m_item = item;
+            nevent.m_code = 0;
+            nevent.SetEventObject(this);
+            GetEventHandler()->ProcessEvent(nevent);
+        }
+        else if ( event.LeftUp() && (item == m_current) &&
+                 (flags & wxTREE_HITTEST_ONITEMLABEL) &&
+                 HasFlag(wxTR_EDIT_LABELS) )
+        {
+            m_renameTimer->Start( 100, TRUE );
+        }
+        else
+        {
+            // how should the selection work for this event?
+            bool is_multiple, extended_select, unselect_others;
+            EventFlagsToSelType(GetWindowStyleFlag(),
+                                event.ShiftDown(),
+                                event.ControlDown(),
+                                &is_multiple, &extended_select, &unselect_others);
 
-    if (event.LeftUp() && (item == m_current) &&
-        (flags & wxTREE_HITTEST_ONITEMLABEL) &&
-        HasFlag(wxTR_EDIT_LABELS) )
-    {
-        m_renameTimer->Start( 100, TRUE );
-        return;
-    }
+            if ( onButton )
+            {
+                Toggle( item );
+                if ( is_multiple )
+                    return;
+            }
 
-    // how should the selection work for this event?
-    bool is_multiple, extended_select, unselect_others;
-    EventFlagsToSelType(GetWindowStyleFlag(),
-                        event.ShiftDown(),
-                        event.ControlDown(),
-                        &is_multiple, &extended_select, &unselect_others);
+            SelectItem(item, unselect_others, extended_select);
 
-    if (onButton)
-    {
-        Toggle( item );
-        if (is_multiple)
-            return;
-    }
-
-    SelectItem(item, unselect_others, extended_select);
-
-    if (event.LeftDClick())
-    {
-        wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_ACTIVATED, GetId() );
-        event.m_item = item;
-        event.m_code = 0;
-        event.SetEventObject( this );
-        GetEventHandler()->ProcessEvent( event );
+            if ( event.LeftDClick() )
+            {
+                wxTreeEvent nevent( wxEVT_COMMAND_TREE_ITEM_ACTIVATED, GetId() );
+                nevent.m_item = item;
+                nevent.m_code = 0;
+                nevent.SetEventObject( this );
+                GetEventHandler()->ProcessEvent( nevent );
+            }
+        }
     }
 }
 

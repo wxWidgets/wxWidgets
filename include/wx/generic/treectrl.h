@@ -96,49 +96,6 @@ protected:
     wxTreeItemId m_pItem;
 };
 
-//-----------------------------------------------------------------------------
-// wxTreeRenameTimer (internal)
-//-----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxTreeRenameTimer: public wxTimer
-{
- private:
-   wxTreeCtrl   *m_owner;
-
- public:
-   wxTreeRenameTimer( wxTreeCtrl *owner );
-   void Notify();
-};
-
-//-----------------------------------------------------------------------------
-//  wxTreeTextCtrl (internal)
-//-----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxTreeTextCtrl: public wxTextCtrl
-{
-  DECLARE_DYNAMIC_CLASS(wxTreeTextCtrl);
-
-  private:
-    bool               *m_accept;
-    wxString           *m_res;
-    wxTreeCtrl         *m_owner;
-    wxString            m_startValue;
-
-  public:
-    wxTreeTextCtrl(void) {};
-    wxTreeTextCtrl( wxWindow *parent, const wxWindowID id,
-                    bool *accept, wxString *res, wxTreeCtrl *owner,
-                    const wxString &value = wxEmptyString,
-                    const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
-                    int style = 0,
-                    const wxValidator& validator = wxDefaultValidator,
-                    const wxString &name = wxTextCtrlNameStr );
-    void OnChar( wxKeyEvent &event );
-    void OnKillFocus( wxFocusEvent &event );
-
-  DECLARE_EVENT_TABLE()
-};
-
 // -----------------------------------------------------------------------------
 // wxTreeCtrl - the tree control
 // -----------------------------------------------------------------------------
@@ -405,7 +362,7 @@ public:
     void SetItemSelectedImage(const wxTreeItemId& item, int image)
         { SetItemImage(item, image, wxTreeItemIcon_Selected); }
 
-    // implementation
+    // implementation only from now on
 
     // callbacks
     void OnPaint( wxPaintEvent &event );
@@ -415,12 +372,11 @@ public:
     void OnMouse( wxMouseEvent &event );
     void OnIdle( wxIdleEvent &event );
 
-    // implementation
+    // implementation helpers
     void SendDeleteEvent(wxGenericTreeItem *itemBeingDeleted);
 
-    // Draw Special Information
-    void DrawBorder(wxTreeItemId& item);
-    void DrawLine(wxTreeItemId& item, bool below);
+    void DrawBorder(const wxTreeItemId& item);
+    void DrawLine(const wxTreeItemId& item, bool below);
 
 protected:
     friend class wxGenericTreeItem;
@@ -442,8 +398,12 @@ protected:
     wxBrush             *m_hilightBrush;
     wxImageList         *m_imageListNormal,
                         *m_imageListState;
+
     int                  m_dragCount;
     wxPoint              m_dragStart;
+    bool                 m_isDragging; // true between BEGIN/END drag events
+    wxGenericTreeItem   *m_dropTarget;
+
     wxTimer             *m_renameTimer;
     bool                 m_renameAccept;
     wxString             m_renameRes;
@@ -478,6 +438,8 @@ protected:
     bool TagAllChildrenUntilLast(wxGenericTreeItem *crt_item, wxGenericTreeItem *last_item, bool select);
     bool TagNextChildren(wxGenericTreeItem *crt_item, wxGenericTreeItem *last_item, bool select);
     void UnselectAllChildren( wxGenericTreeItem *item );
+
+    void DrawDropEffect(wxGenericTreeItem *item);
 
 private:
     DECLARE_EVENT_TABLE()
