@@ -1100,7 +1100,7 @@ bool wxDbTable::CreateTable(bool attemptDrop)
 
     // Commit the transaction and close the cursor
     if (!pDb->CommitTrans())
-        rEturn(FALSE);
+        return(FALSE);
     if (!CloseCursor(hstmt))
         return(FALSE);
 

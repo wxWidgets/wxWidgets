@@ -162,6 +162,80 @@ wxDbColFor::~wxDbColFor()
 }  // wxDbColFor::~wxDbColFor()
 
 
+/********** wxDbColInf Con / Destructor **********/
+wxDbColInf::wxDbColInf()
+{
+    catalog[0]      = 0;
+    schema[0]       = 0;
+    tableName[0]    = 0;
+    colName[0]      = 0;
+    sqlDataType     = 0;
+    typeName[0]     = 0;
+    columnSize      = 0;
+    bufferLength    = 0;
+    decimalDigits   = 0;
+    numPrecRadix    = 0;
+    nullable        = 0;
+    remarks[0]      = 0;
+    dbDataType      = 0;
+    PkCol           = 0;
+    PkTableName[0]  = 0;
+    FkCol           = 0;
+    FkTableName[0]  = 0;
+    pColFor         = NULL;
+}  // wxDbColInf::wxDbColFor()
+
+
+wxDbColInf::~wxDbColInf()
+{
+    if (pColFor)
+        delete pColFor;
+    pColFor = NULL;
+}  // wxDbColInf::~wxDbColInf()
+
+
+/********** wxDbTableInf Constructor ********/
+wxDbTableInf::wxDbTableInf()
+{
+    tableName[0]    = 0;
+    tableType[0]    = 0;
+    tableRemarks[0] = 0;
+    numCols         = 0;
+    pColInf         = NULL;
+}  // wxDbTableInf::wxDbTableFor()
+
+
+/********** wxDbTableInf Constructor ********/
+wxDbTableInf::~wxDbTableInf()
+{
+    if (pColInf)
+        delete [] pColInf;
+    pColInf = NULL;
+}  // wxDbTableInf::~wxDbTableInf()
+
+
+/********** wxDbInf Constructor *************/
+wxDbInf::wxDbInf()
+{
+    catalog[0]      = 0; 
+    schema[0]       = 0;
+    numTables       = 0;
+    pTableInf       = NULL;
+}  // wxDbInf::wxDbFor()
+
+
+/********** wxDbInf Destructor *************/
+wxDbInf::~wxDbInf()
+{
+	if (pTableInf)
+		delete [] pTableInf;
+	pTableInf = NULL;
+}  // wxDbInf::~wxDbInf()
+
+
+/*************************************************/
+
+
 int wxDbColFor::Format(int Nation,int dbDataType,SWORD sqlDataType,short columnSize,short decimalDigits)
 {
     // ----------------------------------------------------------------------------------------
@@ -432,18 +506,20 @@ bool wxDb::Open(char *Dsn, char *Uid, char *AuthStr)
 
     // Integer
     if (!getDataTypeInfo(SQL_INTEGER, typeInfInteger))     
-      // If SQL_INTEGER is not supported, use the floating point
-      // data type to store integers as well as floats
-      if (!getDataTypeInfo(typeInfFloat.FsqlType, typeInfInteger))
+    {
+        // If SQL_INTEGER is not supported, use the floating point
+        // data type to store integers as well as floats
+        if (!getDataTypeInfo(typeInfFloat.FsqlType, typeInfInteger))
             return(FALSE);
         else
             typeInfInteger.FsqlType = typeInfFloat.FsqlType;
+    }
     else
         typeInfInteger.FsqlType = SQL_INTEGER;
 
     // Date/Time
     if (Dbms() != dbmsDBASE)
-   {
+    {
         if (! getDataTypeInfo(SQL_TIMESTAMP,typeInfDate))
             return(FALSE);
         else
@@ -2452,10 +2528,6 @@ wxDbInf *wxDb::GetCatalog(char *userID)
 
     //-------------------------------------------------------------
     pDbInf = new wxDbInf;          // Create the Database Arrray
-    pDbInf->catalog[0]     = 0;
-    pDbInf->schema[0]      = 0;
-    pDbInf->numTables      = 0;    // Counter for Tables
-    pDbInf->pTableInf      = NULL; // Array of Tables
     //-------------------------------------------------------------
     // Table Information
     // Pass 1 - Determine how many Tables there are.
@@ -2511,14 +2583,6 @@ wxDbInf *wxDb::GetCatalog(char *userID)
                 if (pDbInf->pTableInf == NULL)   // Has the Table Array been created
                 {  // no, then create the Array
                     pDbInf->pTableInf = new wxDbTableInf[pDbInf->numTables];
-                    for (noTab=0;noTab<pDbInf->numTables;noTab++)
-                    {
-                        (pDbInf->pTableInf+noTab)->tableName[0]    = 0;
-                        (pDbInf->pTableInf+noTab)->tableType[0]    = 0;
-                        (pDbInf->pTableInf+noTab)->tableRemarks[0] = 0;
-                        (pDbInf->pTableInf+noTab)->numCols         = 0;
-                        (pDbInf->pTableInf+noTab)->pColInf         = NULL;
-                    }
                     noTab = 0;
                 } // if (pDbInf->pTableInf == NULL)   // Has the Table Array been created   
 
