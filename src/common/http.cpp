@@ -212,7 +212,7 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
   }
 
   SaveState();
-  SetFlags(NONE);
+  SetFlags(wxSOCKET_NONE);
   Notify(FALSE);
 
   wxSprintf(buf, wxT("%s %s HTTP/1.0\n\r"), tmp_buf, tmp_str.GetData());
