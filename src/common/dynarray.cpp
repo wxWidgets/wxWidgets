@@ -110,7 +110,7 @@ name& name::operator=(const name& src)                                      \
 void name::Grow(size_t nIncrement)                                          \
 {                                                                           \
   /* only do it if no more place */                                         \
-  if( m_nCount == m_nSize ) {                                               \
+  if( (m_nCount == m_nSize) || ((m_nSize - m_nCount) < nIncrement) ) {      \
     if( m_nSize == 0 ) {                                                    \
       /* was empty, determine initial size */                               \
       size_t size = WX_ARRAY_DEFAULT_INITIAL_SIZE;                          \
