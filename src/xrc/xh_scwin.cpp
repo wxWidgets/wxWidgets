@@ -19,6 +19,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_XRC
+
 #include "wx/xrc/xh_scwin.h"
 #include "wx/scrolwin.h"
 #include "wx/frame.h"  // to get wxNO_3D
@@ -59,3 +61,5 @@ bool wxScrolledWindowXmlHandler::CanHandle(wxXmlNode *node)
 {
     return IsOfClass(node, wxT("wxScrolledWindow"));
 }
+
+#endif // wxUSE_XRC

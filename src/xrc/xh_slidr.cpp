@@ -19,10 +19,10 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_XRC && wxUSE_SLIDER
+
 #include "wx/xrc/xh_slidr.h"
 #include "wx/slider.h"
-
-#if wxUSE_SLIDER
 
 IMPLEMENT_DYNAMIC_CLASS(wxSliderXmlHandler, wxXmlResourceHandler)
 
@@ -91,4 +91,4 @@ bool wxSliderXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("wxSlider"));
 }
 
-#endif
+#endif // wxUSE_XRC && wxUSE_SLIDER

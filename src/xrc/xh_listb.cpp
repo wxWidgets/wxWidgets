@@ -19,6 +19,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_XRC
+
 #include "wx/xrc/xh_listb.h"
 #include "wx/listbox.h"
 #include "wx/intl.h"
@@ -99,3 +101,5 @@ bool wxListBoxXmlHandler::CanHandle(wxXmlNode *node)
     return (IsOfClass(node, wxT("wxListBox")) ||
            (m_insideBox && node->GetName() == wxT("item")));
 }
+
+#endif // wxUSE_XRC

@@ -19,6 +19,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_XRC
+
 #include "wx/xrc/xh_bmp.h"
 #include "wx/bitmap.h"
 
@@ -55,3 +57,5 @@ bool wxIconXmlHandler::CanHandle(wxXmlNode *node)
 {
     return IsOfClass(node, wxT("wxIcon"));
 }
+
+#endif // wxUSE_XRC

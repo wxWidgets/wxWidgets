@@ -20,6 +20,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_XRC
+
 #include "wx/xrc/xmlres.h"
 #include "wx/xrc/xh_all.h"
 
@@ -106,3 +108,5 @@ void wxXmlResource::InitAllHandlers()
     AddHandler(new wxStatusBarXmlHandler);
 #endif
 }
+
+#endif // wxUSE_XRC

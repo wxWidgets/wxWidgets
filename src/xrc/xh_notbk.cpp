@@ -19,9 +19,9 @@
     #pragma hdrstop
 #endif
 
-#include "wx/xrc/xh_notbk.h"
+#if wxUSE_XRC && wxUSE_NOTEBOOK
 
-#if wxUSE_NOTEBOOK
+#include "wx/xrc/xh_notbk.h"
 
 #include "wx/log.h"
 #include "wx/notebook.h"
@@ -98,4 +98,4 @@ bool wxNotebookXmlHandler::CanHandle(wxXmlNode *node)
             (m_isInside && IsOfClass(node, wxT("notebookpage"))));
 }
 
-#endif
+#endif // wxUSE_XRC && wxUSE_NOTEBOOK

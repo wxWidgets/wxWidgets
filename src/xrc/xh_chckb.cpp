@@ -19,10 +19,10 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_XRC && wxUSE_CHECKBOX
+
 #include "wx/xrc/xh_chckb.h"
 #include "wx/checkbox.h"
-
-#if wxUSE_CHECKBOX
 
 IMPLEMENT_DYNAMIC_CLASS(wxCheckBoxXmlHandler, wxXmlResourceHandler)
 
@@ -59,4 +59,4 @@ bool wxCheckBoxXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("wxCheckBox"));
 }
 
-#endif
+#endif // wxUSE_XRC && wxUSE_CHECKBOX

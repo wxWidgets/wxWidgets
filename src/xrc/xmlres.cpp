@@ -19,6 +19,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_XRC
+
 #include "wx/dialog.h"
 #include "wx/panel.h"
 #include "wx/frame.h"
@@ -1427,3 +1429,5 @@ void wxXmlInitResourceModule()
     module->Init();
     wxModule::RegisterModule(module);
 }
+
+#endif // wxUSE_XRC

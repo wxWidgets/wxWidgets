@@ -19,6 +19,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_XRC
+
 #include "wx/xrc/xh_scrol.h"
 #include "wx/scrolbar.h"
 
@@ -58,3 +60,5 @@ bool wxScrollBarXmlHandler::CanHandle(wxXmlNode *node)
 {
     return IsOfClass(node, wxT("wxScrollBar"));
 }
+
+#endif // wxUSE_XRC

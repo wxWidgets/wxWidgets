@@ -19,6 +19,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_XRC
+
 #include "wx/xrc/xh_choic.h"
 #include "wx/choice.h"
 #include "wx/intl.h"
@@ -93,3 +95,5 @@ bool wxChoiceXmlHandler::CanHandle(wxXmlNode *node)
     return (IsOfClass(node, wxT("wxChoice")) ||
            (m_insideBox && node->GetName() == wxT("item")));
 }
+
+#endif // wxUSE_XRC

@@ -19,10 +19,10 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_XRC && wxUSE_STATLINE
+
 #include "wx/xrc/xh_stlin.h"
 #include "wx/statline.h"
-
-#if wxUSE_STATLINE
 
 IMPLEMENT_DYNAMIC_CLASS(wxStaticLineXmlHandler, wxXmlResourceHandler)
 
@@ -54,4 +54,4 @@ bool wxStaticLineXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("wxStaticLine"));
 }
 
-#endif
+#endif // wxUSE_XRC && wxUSE_STATLINE

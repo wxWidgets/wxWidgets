@@ -19,6 +19,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_XRC
+
 #include "wx/xrc/xh_panel.h"
 #include "wx/panel.h"
 #include "wx/frame.h"  // to get wxNO_3D
@@ -54,3 +56,5 @@ bool wxPanelXmlHandler::CanHandle(wxXmlNode *node)
 {
     return IsOfClass(node, wxT("wxPanel"));
 }
+
+#endif // wxUSE_XRC

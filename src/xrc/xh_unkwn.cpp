@@ -19,6 +19,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_XRC
+
 #include "wx/xrc/xh_unkwn.h"
 #include "wx/window.h"
 #include "wx/log.h"
@@ -106,3 +108,4 @@ bool wxUnknownWidgetXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("unknown"));
 }
 
+#endif // wxUSE_XRC

@@ -19,6 +19,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_XRC
+
 #include "wx/xrc/xh_bttn.h"
 #include "wx/button.h"
 
@@ -58,3 +60,5 @@ bool wxButtonXmlHandler::CanHandle(wxXmlNode *node)
 {
     return IsOfClass(node, wxT("wxButton"));
 }
+
+#endif // wxUSE_XRC

@@ -19,6 +19,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_XRC
+
 #include "wx/xrc/xh_split.h"
 #include "wx/splitter.h"
 #include "wx/log.h"
@@ -103,4 +105,4 @@ bool wxSplitterWindowXmlHandler::CanHandle(wxXmlNode *node)
      return IsOfClass(node, wxT("wxSplitterWindow"));
 }
 
-
+#endif // wxUSE_XRC

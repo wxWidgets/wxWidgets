@@ -19,6 +19,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_XRC
+
 #include "wx/xrc/xh_tree.h"
 #include "wx/treectrl.h"
 
@@ -64,3 +66,5 @@ bool wxTreeCtrlXmlHandler::CanHandle(wxXmlNode *node)
 {
     return IsOfClass(node, wxT("wxTreeCtrl"));
 }
+
+#endif // wxUSE_XRC

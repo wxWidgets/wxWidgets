@@ -19,6 +19,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_XRC
+
 #include "wx/xrc/xh_stbox.h"
 #include "wx/statbox.h"
 
@@ -50,3 +52,5 @@ bool wxStaticBoxXmlHandler::CanHandle(wxXmlNode *node)
 {
     return IsOfClass(node, wxT("wxStaticBox"));
 }
+
+#endif // wxUSE_XRC

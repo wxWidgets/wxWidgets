@@ -19,11 +19,11 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_XRC && wxUSE_TOOLBAR
+
 #include "wx/xrc/xh_toolb.h"
 #include "wx/toolbar.h"
 #include "wx/frame.h"
-
-#if wxUSE_TOOLBAR
 
 IMPLEMENT_DYNAMIC_CLASS(wxToolBarXmlHandler, wxXmlResourceHandler)
 
@@ -167,4 +167,4 @@ bool wxToolBarXmlHandler::CanHandle(wxXmlNode *node)
             (m_isInside && IsOfClass(node, wxT("separator"))));
 }
 
-#endif
+#endif // wxUSE_XRC && wxUSE_TOOLBAR

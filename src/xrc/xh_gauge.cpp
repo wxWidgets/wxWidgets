@@ -19,10 +19,10 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_XRC && wxUSE_GAUGE
+
 #include "wx/xrc/xh_gauge.h"
 #include "wx/gauge.h"
-
-#if wxUSE_GAUGE
 
 IMPLEMENT_DYNAMIC_CLASS(wxGaugeXmlHandler, wxXmlResourceHandler)
 
@@ -71,4 +71,4 @@ bool wxGaugeXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("wxGauge"));
 }
 
-#endif // wxUSE_GAUGE
+#endif // wxUSE_XRC && wxUSE_GAUGE

@@ -19,11 +19,11 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_XRC && wxUSE_RADIOBOX
+
 #include "wx/xrc/xh_radbx.h"
 #include "wx/radiobox.h"
 #include "wx/intl.h"
-
-#if wxUSE_RADIOBOX
 
 IMPLEMENT_DYNAMIC_CLASS(wxRadioBoxXmlHandler, wxXmlResourceHandler)
 
@@ -102,4 +102,4 @@ bool wxRadioBoxXmlHandler::CanHandle(wxXmlNode *node)
            (m_insideBox && node->GetName() == wxT("item")));
 }
 
-#endif
+#endif // wxUSE_XRC && wxUSE_RADIOBOX

@@ -19,7 +19,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_WIZARDDLG
+#if wxUSE_XRC && wxUSE_WIZARDDLG
 
 #include "wx/xrc/xh_wizrd.h"
 #include "wx/log.h"
@@ -99,4 +99,4 @@ bool wxWizardXmlHandler::CanHandle(wxXmlNode *node)
            );
 }
 
-#endif // wxUSE_WIZARDDLG
+#endif // wxUSE_XRC && wxUSE_WIZARDDLG
