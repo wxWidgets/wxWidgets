@@ -475,7 +475,7 @@ void wxStyledTextCtrl::MarkerDefineBitmap(int markerNumber, const wxBitmap& bmp)
         buff[len] = 0;
         SendMsg(2049, markerNumber, (long)buff);
         delete [] buff;
-        
+
 }
 
 // Set a margin to be either numeric or symbolic.
@@ -858,7 +858,7 @@ void wxStyledTextCtrl::RegisterImage(int type, const wxBitmap& bmp) {
         buff[len] = 0;
         SendMsg(2405, type, (long)buff);
         delete [] buff;
-     
+
 }
 
 // Clear all the registered images.
@@ -1121,7 +1121,7 @@ wxString wxStyledTextCtrl::GetSelectedText() {
          int   len  = end - start;
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
+         wxMemoryBuffer mbuf(len+2);
          char* buf = (char*)mbuf.GetWriteBuf(len+1);
          SendMsg(2161, 0, (long)buf);
          mbuf.UngetWriteBuf(len);
