@@ -446,7 +446,12 @@ wxWindow::~wxWindow()
         // or dialog is destroyed, but before that you may get some memory
         // leaks and potential layout problems if you delete and then add
         // child windows.
-        XtDestroyWidget((Widget) GetMainWidget());
+
+        // GRG, Feb/2000: commented this out when adding support for
+        //   wxSCROLL[WIN]_THUMBRELEASE events. Also it was reported
+        //   that this call crashed wxMotif under OS/2, so it seems
+        //   that leaving it out is the right thing to do.
+//        XtDestroyWidget((Widget) GetMainWidget());
         SetMainWidget((WXWidget) NULL);
     }
 }
@@ -469,7 +474,7 @@ void wxWindow::CreateScrollbar(wxOrientation orientation)
             xmScrollBarWidgetClass, (Widget) m_scrolledWindow,
             XmNorientation, XmHORIZONTAL,
             NULL);
-        //      XtAddCallback (hScrollBar, XmNvalueChangedCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmHORIZONTAL);
+        XtAddCallback (hScrollBar, XmNvalueChangedCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmHORIZONTAL);
         XtAddCallback (hScrollBar, XmNdragCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmHORIZONTAL);
         XtAddCallback (hScrollBar, XmNincrementCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmHORIZONTAL);
         XtAddCallback (hScrollBar, XmNdecrementCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmHORIZONTAL);
@@ -505,7 +510,7 @@ void wxWindow::CreateScrollbar(wxOrientation orientation)
             xmScrollBarWidgetClass, (Widget) m_scrolledWindow,
             XmNorientation, XmVERTICAL,
             NULL);
-        //      XtAddCallback (vScrollBar, XmNvalueChangedCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmVERTICAL);
+        XtAddCallback (vScrollBar, XmNvalueChangedCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmVERTICAL);
         XtAddCallback (vScrollBar, XmNdragCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmVERTICAL);
         XtAddCallback (vScrollBar, XmNincrementCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmVERTICAL);
         XtAddCallback (vScrollBar, XmNdecrementCallback, (XtCallbackProc) wxScrollBarCallback, (XtPointer) XmVERTICAL);
@@ -2273,9 +2278,7 @@ static void wxScrollBarCallback(Widget scrollbar,
         }
     case XmCR_VALUE_CHANGED:
         {
-            // TODO: Should this be intercepted too, or will it cause
-            // duplicate events?
-            eventType = wxEVT_SCROLLWIN_THUMBTRACK;
+            eventType = wxEVT_SCROLLWIN_THUMBRELEASE;
             break;
         }
     case XmCR_PAGE_INCREMENT:

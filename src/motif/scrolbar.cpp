@@ -85,8 +85,7 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
 
     m_mainWidget = (Widget) scrollBarWidget;
 
-    // This will duplicate other events
-    //    XtAddCallback(scrollBarWidget, XmNvalueChangedCallback, (XtCallbackProc)wxScrollBarCallback, (XtPointer)this);
+    XtAddCallback(scrollBarWidget, XmNvalueChangedCallback, (XtCallbackProc)wxScrollBarCallback, (XtPointer)this);
     XtAddCallback(scrollBarWidget, XmNdragCallback, (XtCallbackProc)wxScrollBarCallback, (XtPointer)this);
     XtAddCallback(scrollBarWidget, XmNdecrementCallback, (XtCallbackProc)wxScrollBarCallback, (XtPointer)this);
     XtAddCallback(scrollBarWidget, XmNincrementCallback, (XtCallbackProc)wxScrollBarCallback, (XtPointer)this);
@@ -180,8 +179,8 @@ static void wxScrollBarCallback(Widget WXUNUSED(widget), XtPointer clientData,
                         XmScaleCallbackStruct *cbs)
 {
     wxScrollBar *scrollBar = (wxScrollBar *)clientData;
-
     wxEventType eventType = wxEVT_NULL;
+
     switch (cbs->reason)
     {
         case XmCR_INCREMENT:
@@ -201,9 +200,7 @@ static void wxScrollBarCallback(Widget WXUNUSED(widget), XtPointer clientData,
         }
         case XmCR_VALUE_CHANGED:
         {
-            // TODO: Should this be intercepted too, or will it cause
-            // duplicate events?
-            eventType = wxEVT_SCROLL_THUMBTRACK;
+            eventType = wxEVT_SCROLL_THUMBRELEASE;
             break;
         }
         case XmCR_PAGE_INCREMENT:
