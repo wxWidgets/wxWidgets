@@ -22,6 +22,7 @@
 #include "wx/app.h"
 #include "wx/msgdlg.h"
 #include "wx/cursor.h"
+#include "wx/window.h" // for wxTopLevelWindows
 
 #include <ctype.h>
 #include <stdarg.h>
@@ -59,8 +60,6 @@
 #endif
 
 static char *GetIniFile (char *dest, const char *filename);
-
-extern wxList wxTopLevelWindows;
 
 // ============================================================================
 // implementation

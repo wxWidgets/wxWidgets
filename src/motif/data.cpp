@@ -6,7 +6,7 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -22,7 +22,7 @@
 char *wxBuffer = NULL;
 
 // Windows List
-wxList wxTopLevelWindows;
+wxWindowList wxTopLevelWindows;
 
 // List of windows pending deletion
 wxList wxPendingDelete;

@@ -757,7 +757,7 @@ inline int wxWindow::GetReturnCode() { return m_returnCode; }
 // Get the active window.
 wxWindow* WXDLLEXPORT wxGetActiveWindow();
 
-WXDLLEXPORT_DATA(extern wxList) wxTopLevelWindows;
+WXDLLEXPORT_DATA(extern wxWindowList) wxTopLevelWindows;
 
 // A little class to switch off size optimization while an instance of the object
 // exists

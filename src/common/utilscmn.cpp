@@ -73,6 +73,13 @@
 
 extern char *wxBuffer;
 
+// ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
+
+static wxWindow *wxFindWindowByLabel1(const wxString& title, wxWindow * parent);
+static wxWindow *wxFindWindowByName1 (const wxString& title, wxWindow * parent);
+
 #ifdef __WXMAC__
 int strcasecmp(const char *str_1, const char *str_2)
 {
@@ -418,53 +425,54 @@ wxString wxStripMenuCodes(const wxString& str)
  *
  */
 
-static wxWindow *wxFindWindowByLabel1 (const wxString& title, wxWindow * parent);
-
 wxWindow *
 wxFindWindowByLabel (const wxString& title, wxWindow * parent)
 {
-  if (parent)
+    if (parent)
     {
-      return wxFindWindowByLabel1 (title, parent);
+        return wxFindWindowByLabel1(title, parent);
     }
-  else
+    else
     {
-      for (wxNode * node = wxTopLevelWindows.First (); node; node = node->Next ())
+        for ( wxWindowList::Node * node = wxTopLevelWindows.GetFirst();
+              node;
+              node = node->GetNext() )
         {
-          wxWindow *win = (wxWindow *) node->Data ();
-          wxWindow *retwin = wxFindWindowByLabel1 (title, win);
-          if (retwin)
-            return retwin;
+            wxWindow *win = node->GetData();
+            wxWindow *retwin = wxFindWindowByLabel1 (title, win);
+            if (retwin)
+                return retwin;
         }                        // for()
 
     }
-  return (wxWindow *) NULL;
+    return (wxWindow *) NULL;
 }
 
 // Recursive
 static wxWindow *
 wxFindWindowByLabel1 (const wxString& title, wxWindow * parent)
 {
-  if (parent)
+    if (parent)
     {
-      if (parent->GetLabel() == title)
-                return parent;
+        if (parent->GetLabel() == title)
+            return parent;
     }
 
-  if (parent)
+    if (parent)
     {
-      for (wxNode * node = parent->GetChildren().First (); node; node = node->Next ())
+        for ( wxNode * node = parent->GetChildren().GetFirst();
+              node;
+              node = node->GetNext() )
         {
-          wxWindow *win = (wxWindow *) node->Data ();
-          wxWindow *retwin = wxFindWindowByLabel1 (title, win);
-          if (retwin)
-            return retwin;
-        }                        // for()
+            wxWindow *win = (wxWindow *)node->GetData();
+            wxWindow *retwin = wxFindWindowByLabel1 (title, win);
+            if (retwin)
+                return retwin;
+        }
 
     }
 
-  return (wxWindow *) NULL;                        // Not found
-
+    return (wxWindow *) NULL;                        // Not found
 }
 
 /*
@@ -473,28 +481,29 @@ wxFindWindowByLabel1 (const wxString& title, wxWindow * parent)
  *
  */
 
-static wxWindow *wxFindWindowByName1 (const wxString& title, wxWindow * parent);
-
 wxWindow *
 wxFindWindowByName (const wxString& title, wxWindow * parent)
 {
-  if (parent)
+    if (parent)
     {
-      return wxFindWindowByName1 (title, parent);
+        return wxFindWindowByName1 (title, parent);
     }
-  else
+    else
     {
-      for (wxNode * node = wxTopLevelWindows.First (); node; node = node->Next ())
+        for ( wxWindowList::Node * node = wxTopLevelWindows.GetFirst();
+              node;
+              node = node->GetNext() )
         {
-          wxWindow *win = (wxWindow *) node->Data ();
-          wxWindow *retwin = wxFindWindowByName1 (title, win);
-          if (retwin)
-            return retwin;
-        }                        // for()
+            wxWindow *win = node->GetData();
+            wxWindow *retwin = wxFindWindowByName1 (title, win);
+            if (retwin)
+                return retwin;
+        }
 
     }
-  // Failed? Try by label instead.
-  return wxFindWindowByLabel(title, parent);
+
+    // Failed? Try by label instead.
+    return wxFindWindowByLabel(title, parent);
 }
 
 // Recursive
@@ -730,21 +739,23 @@ whereami(name)
 // Yield to other apps/messages and disable user input
 bool wxSafeYield(wxWindow *win)
 {
-   wxNode *node;
-   for ( node = wxTopLevelWindows.GetFirst();
-         node;
-         node = node->GetNext() )
-      ((wxWindow*)node->GetData())->Enable(FALSE);
-   
-   // always enable ourselves
-   if(win) win->Enable(true);
-   bool rc = wxYield();
+    wxWindowList::Node *node;
+    for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
+    {
+        node->GetData()->Enable(FALSE);
+    }
 
-   for ( node = wxTopLevelWindows.GetFirst();
-         node;
-         node = node->GetNext() )
-      ((wxWindow*)node->GetData())->Enable(TRUE);
-   return rc;
+    // always enable ourselves
+    if ( win )
+        win->Enable(TRUE);
+    bool rc = wxYield();
+
+    for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
+    {
+        node->GetData()->Enable(TRUE);
+    }
+
+    return rc;
 }
 
 /*

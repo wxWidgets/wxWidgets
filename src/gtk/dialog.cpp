@@ -142,7 +142,7 @@ bool wxDialog::Create( wxWindow *parent,
     if (m_parent) m_parent->AddChild( this );
 
     PostCreation();
-    
+
     gtk_widget_realize( m_widget );
 
     gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
@@ -337,7 +337,7 @@ void wxDialog::DoSetSize( int x, int y, int width, int height, int sizeFlags )
         if ((m_x != old_x) || (m_y != old_y))
 	{
             /* m_sizeSet = FALSE; */
-            gtk_widget_set_uposition( m_widget, m_x, m_y ); 
+            gtk_widget_set_uposition( m_widget, m_x, m_y );
 	}
     }
 
@@ -413,7 +413,7 @@ bool wxDialog::Show( bool show )
     }
 
     wxWindow::Show( show );
-    
+
     if (show) InitDialog();
 
     return TRUE;
@@ -442,7 +442,7 @@ int wxDialog::ShowModal()
        wxFAIL_MSG( "wxDialog:ShowModal called twice" );
        return GetReturnCode();
     }
-    
+
     Show( TRUE );
 
     m_modalShowing = TRUE;

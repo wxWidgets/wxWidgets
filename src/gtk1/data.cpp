@@ -33,7 +33,7 @@ XrmDatabase wxResourceDatabase;
 char *wxBuffer = (char *) NULL;
 
 /* Windows List */
-wxList wxTopLevelWindows;
+wxWindowList wxTopLevelWindows;
 
 /* List of windows pending deletion */
 wxList wxPendingDelete;
@@ -75,7 +75,7 @@ wxPenList        *wxThePenList = (wxPenList *) NULL;
 wxFontList       *wxTheFontList = (wxFontList *) NULL;
 wxColourDatabase *wxTheColourDatabase = (wxColourDatabase *) NULL;
 wxBitmapList     *wxTheBitmapList = (wxBitmapList *) NULL;
-  
+
 /* X only font names */
 /*
 wxFontNameDirectory *wxTheFontNameDirectory;
@@ -111,7 +111,7 @@ wxBrush *wxLIGHT_GREY_BRUSH;
 
 wxColour *wxBLACK;
 wxColour *wxWHITE;
-wxColour *wxGREY; 
+wxColour *wxGREY;
 wxColour *wxRED;
 wxColour *wxBLUE;
 wxColour *wxGREEN;
@@ -125,13 +125,13 @@ wxCursor *wxCROSS_CURSOR = (wxCursor *) NULL;
 /* 'Null' objects */
 wxAcceleratorTable   wxNullAcceleratorTable;
 wxBitmap   wxNullBitmap;
-wxIcon     wxNullIcon;  
+wxIcon     wxNullIcon;
 wxCursor   wxNullCursor;
 wxPen      wxNullPen;
 wxBrush    wxNullBrush;
 wxFont     wxNullFont;
 wxColour   wxNullColour;
-wxPalette  wxNullPalette; 
+wxPalette  wxNullPalette;
 
 /* Default window names */
 const char *wxButtonNameStr = "button";

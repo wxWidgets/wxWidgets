@@ -36,7 +36,6 @@ const int wxSTATUS_HEIGHT  = 25;
 // data
 //-----------------------------------------------------------------------------
 
-extern wxList wxTopLevelWindows;
 extern wxList wxPendingDelete;
 
 //-----------------------------------------------------------------------------

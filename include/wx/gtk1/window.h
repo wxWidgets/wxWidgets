@@ -30,7 +30,7 @@
 //-----------------------------------------------------------------------------
 
 extern const char *wxFrameNameStr;
-extern wxList wxTopLevelWindows;
+extern wxWindowList wxTopLevelWindows;
 
 //-----------------------------------------------------------------------------
 // global function

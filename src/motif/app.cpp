@@ -211,9 +211,8 @@ int wxEntry( int argc, char *argv[] )
     // GUI-specific initialization, such as creating an app context.
     wxTheApp->OnInitGui();
 
-    // Here frames insert themselves automatically
-    // into wxTopLevelWindows by getting created
-    // in OnInit().
+    // Here frames insert themselves automatically into wxTopLevelWindows by
+    // getting created in OnInit().
 
     int retValue = 0;
     if (wxTheApp->OnInit())
@@ -438,15 +437,16 @@ void wxApp::OnIdle(wxIdleEvent& event)
 bool wxApp::SendIdleEvents()
 {
     bool needMore = FALSE;
-    wxNode* node = wxTopLevelWindows.First();
+
+    wxWindowList::Node* node = wxTopLevelWindows.GetFirst();
     while (node)
     {
-        wxWindow* win = (wxWindow*) node->Data();
+        wxWindow* win = node->GetData();
         if (SendIdleEvents(win))
             needMore = TRUE;
-
-        node = node->Next();
+        node = node->GetNext();
     }
+
     return needMore;
 }
 
@@ -519,8 +519,8 @@ wxWindow* wxApp::GetTopWindow() const
 {
     if (m_topWindow)
         return m_topWindow;
-    else if (wxTopLevelWindows.Number() > 0)
-        return (wxWindow*) wxTopLevelWindows.First()->Data();
+    else if (wxTopLevelWindows.GetCount() > 0)
+        return wxTopLevelWindows.GetFirst()->GetData();
     else
         return NULL;
 }

@@ -6,7 +6,7 @@
 // Created:     29/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
-// Licence:       wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -197,17 +197,17 @@ public:
     size_t GetCount() const { return m_count; }
 
     // operations
-    
+
         // delete all nodes
     void Clear();
-    
+
         // instruct it to destroy user data when deleting nodes
     void DeleteContents(bool destroy) { m_destroy = destroy; }
 
        // query if to delete
     bool GetDeleteContents() const
         { return m_destroy; }
-    
+
       // get the keytype
     wxKeyType GetKeyType() const
         { return m_keyType; }
@@ -215,6 +215,13 @@ public:
       // set the keytype (required by the serial code)
     void SetKeyType(wxKeyType keyType)
         { wxASSERT( m_count==0 ); m_keyType = keyType; }
+
+#ifdef wxLIST_COMPATIBILITY
+    int Number() const { return GetCount(); }
+    wxNode *First() const { return (wxNode *)GetFirst(); }
+    wxNode *Last() const { return (wxNode *)GetLast(); }
+    wxNode *Nth(size_t index) const { return (wxNode *)Item(index); }
+#endif // wxLIST_COMPATIBILITY
 
 protected:
 
@@ -294,7 +301,7 @@ protected:
     void *FirstThat(wxListIterateFunction func);
     void ForEach(wxListIterateFunction func);
     void *LastThat(wxListIterateFunction func);
-    
+
 private:
     // helpers
         // common part of all ctors
@@ -343,7 +350,7 @@ private:
                  nodetype *previous = (nodetype *)NULL,                     \
                  nodetype *next = (nodetype *)NULL,                         \
                  T *data = (T *)NULL,                                       \
-                 const wxListKey& key = wxDefaultListKey)                        \
+                 const wxListKey& key = wxDefaultListKey)                   \
             : wxNodeBase(list, previous, next, data, key) { }               \
                                                                             \
         nodetype *GetNext() const                                           \
@@ -359,7 +366,7 @@ private:
         virtual void DeleteData();                                          \
     };                                                                      \
                                                                             \
-    class WXDLLEXPORT name : public wxListBase                                          \
+    class WXDLLEXPORT name : public wxListBase                              \
     {                                                                       \
     public:                                                                 \
         typedef nodetype Node;                                              \
@@ -417,7 +424,7 @@ private:
     protected:                                                              \
         wxNodeBase *CreateNode(wxNodeBase *prev, wxNodeBase *next,          \
                                void *data,                                  \
-                               const wxListKey& key = wxDefaultListKey)          \
+                               const wxListKey& key = wxDefaultListKey)     \
             {                                                               \
                 return new nodetype(this,                                   \
                                     (nodetype *)prev, (nodetype *)next,     \
@@ -433,10 +440,16 @@ private:
 //      #include <wx/listimpl.cpp>
 #define WX_DEFINE_LIST(name)    "don't forget to include listimpl.cpp!"
 
-
 // =============================================================================
 // now we can define classes 100% compatible with the old ones
 // =============================================================================
+
+// ----------------------------------------------------------------------------
+// commonly used string classes
+// ----------------------------------------------------------------------------
+
+class wxWindow;
+WX_DECLARE_LIST(wxWindow, wxWindowList);
 
 #ifdef wxLIST_COMPATIBILITY
 
@@ -454,10 +467,6 @@ public:
     // compatibility methods
     void Sort(wxSortCompareFunction compfunc) { wxListBase::Sort(compfunc); }
 
-    int Number() const { return GetCount(); }
-    wxNode *First() const { return (wxNode *)GetFirst(); }
-    wxNode *Last() const { return (wxNode *)GetLast(); }
-    wxNode *Nth(size_t index) const { return (wxNode *)Item(index); }
     wxNode *Member(wxObject *object) const { return (wxNode *)Find(object); }
 };
 
@@ -493,12 +502,6 @@ public:
 
     // alphabetic sort
     void Sort();
-
-    // compatibility methods
-    int Number() const { return GetCount(); }
-    wxNode *First() const { return (wxNode *)GetFirst(); }
-    wxNode *Last() const { return (wxNode *)GetLast(); }
-    wxNode *Nth(size_t index) const { return (wxNode *)Item(index); }
 
 private:
     void DoCopy(const wxStringList&); // common part of copy ctor and operator=

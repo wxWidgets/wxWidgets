@@ -171,7 +171,6 @@ void debug_focus_in( GtkWidget* widget, const char* name, const char *window )
 //-----------------------------------------------------------------------------
 
 extern wxList     wxPendingDelete;
-extern wxList     wxTopLevelWindows;
 extern bool       g_blockEventsOnDrag;
 extern bool       g_blockEventsOnScroll;
 static bool       g_capturing = FALSE;

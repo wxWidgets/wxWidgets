@@ -874,7 +874,7 @@ inline bool wxWindow::IsBeingDeleted() { return m_isBeingDeleted; }
 // Window specific (so far)
 WXDLLEXPORT wxWindow* wxGetActiveWindow();
 
-WXDLLEXPORT_DATA(extern wxList) wxTopLevelWindows;
+WXDLLEXPORT_DATA(extern wxWindowList) wxTopLevelWindows;
 
 WXDLLEXPORT int wxCharCodeMSWToWX(int keySym);
 WXDLLEXPORT int wxCharCodeWXToMSW(int id, bool *IsVirtual);

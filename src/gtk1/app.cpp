@@ -140,11 +140,11 @@ bool wxYield()
     // it's necessary to call ProcessIdle() to update the frames sizes which
     // might have been changed (it also will update other things set from
     // OnUpdateUI() which is a nice (and desired) side effect)
-    for ( wxNode *node = wxTopLevelWindows.GetFirst();
+    for ( wxWindowList::Node *node = wxTopLevelWindows.GetFirst();
           node;
           node = node->GetNext() )
     {
-        wxWindow *win = ((wxWindow*)node->GetData());
+        wxWindow *win = node->GetData();
         win->OnInternalIdle();
     }
 
@@ -312,14 +312,15 @@ bool wxApp::SendIdleEvents()
 {
     bool needMore = FALSE;
 
-    wxNode* node = wxTopLevelWindows.First();
+    wxWindowList::Node* node = wxTopLevelWindows.GetFirst();
     while (node)
     {
-        wxWindow* win = (wxWindow*) node->Data();
+        wxWindow* win = node->GetData();
         if (SendIdleEvents(win))
             needMore = TRUE;
-        node = node->Next();
+        node = node->GetNext();
     }
+
     return needMore;
 }
 
@@ -385,7 +386,7 @@ void wxApp::ProcessPendingEvents()
         wxEvtHandler *handler = (wxEvtHandler *)node->Data();
 
         handler->ProcessPendingEvents();
-       
+
         delete node;
 
         node = wxPendingEvents.First();
@@ -411,10 +412,12 @@ void wxApp::DeletePendingObjects()
 
 wxWindow *wxApp::GetTopWindow()
 {
-    if (m_topWindow) return m_topWindow;
-    wxNode *node = wxTopLevelWindows.First();
-    if (!node) return (wxWindow *) NULL;
-    return (wxWindow*)node->Data();
+    if (m_topWindow)
+        return m_topWindow;
+    else if (wxTopLevelWindows.GetCount() > 0)
+        return wxTopLevelWindows.GetFirst()->GetData();
+    else
+        return NULL;
 }
 
 void wxApp::SetTopWindow( wxWindow *win )
@@ -565,7 +568,7 @@ int wxEntry( int argc, char *argv[] )
     if (!wxTheApp->OnInit())
         return 0;
 
-    wxTheApp->m_initialized = (wxTopLevelWindows.Number() > 0);
+    wxTheApp->m_initialized = wxTopLevelWindows.GetCount() != 0;
 
     int retValue = 0;
 
