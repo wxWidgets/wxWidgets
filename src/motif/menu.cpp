@@ -59,21 +59,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxEvtHandler)
 // ----------------------------------------------------------------------------
 
 // Construct a menu with optional title (then use append)
-void wxMenu::Init(const wxString& title,
-                  long style
-#ifdef WXWIN_COMPATIBILITY
-                  , const wxFunction func
-#endif
-                 )
+void wxMenu::Init()
 {
-    m_title = title;
-    m_eventHandler = this;
-    m_noItems = 0;
-    m_menuBar = NULL;
-    m_pInvokingWindow = NULL;
-    m_style = style;
-
-    //// Motif-specific members
+    // Motif-specific members
     m_numColumns = 1;
     m_menuWidget = (WXWidget) NULL;
     m_popupShell = (WXWidget) NULL;
@@ -81,21 +69,16 @@ void wxMenu::Init(const wxString& title,
     m_menuId = 0;
     m_topLevelMenu  = (wxMenu*) NULL;
     m_ownedByMenuBar = FALSE;
-    m_menuParent = (wxMenu*) NULL;
-    m_clientData = (void*) NULL;
 
-    if (m_title != "")
+    if ( !!m_title )
     {
-        Append(ID_SEPARATOR, m_title) ;
+        Append(wxID_SEPARATOR, m_title) ;
         AppendSeparator() ;
     }
+
     m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_MENU);
     m_foregroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_MENUTEXT);
     m_font = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
-
-#ifdef WXWIN_COMPATIBILITY
-    Callback(func);
-#endif
 }
 
 // The wxWindow destructor will take care of deleting the submenus.
@@ -115,273 +98,78 @@ wxMenu::~wxMenu()
         m_menuParent = NULL;
         //      m_menuBar = NULL;
     }
-
-    wxNode *node = m_menuItems.First();
-    while (node)
-    {
-        wxMenuItem *item = (wxMenuItem *)node->Data();
-
-        /*
-        if (item->GetSubMenu())
-        item->DeleteSubMenu();
-        */
-
-        wxNode *next = node->Next();
-        delete item;
-        delete node;
-        node = next;
-    }
 }
 
 void wxMenu::Break()
 {
-    m_numColumns ++;
+    m_numColumns++;
 }
 
 // function appends a new item or submenu to the menu
-void wxMenu::Append(wxMenuItem *pItem)
+bool wxMenu::DoAppend(wxMenuItem *pItem)
 {
-    wxCHECK_RET( pItem != NULL, "can't append NULL item to the menu" );
-
-    m_menuItems.Append(pItem);
-
     if (m_menuWidget)
-        pItem->CreateItem (m_menuWidget, m_menuBar, m_topLevelMenu); // this is a dynamic Append
-
-    m_noItems++;
-}
-
-void wxMenu::AppendSeparator()
-{
-    Append(new wxMenuItem(this, ID_SEPARATOR));
-}
-
-// Pullright item
-// N.B.: difference between old and new code.
-// Old code stores subMenu in 'children' for later deletion,
-// as well as in m_menuItems, whereas we only store it in
-// m_menuItems here. What implications does this have?
-
-void wxMenu::Append(int id, const wxString& label, wxMenu *subMenu,
-                    const wxString& helpString)
-{
-    Append(new wxMenuItem(this, id, label, helpString, FALSE, subMenu));
-
-    subMenu->m_topLevelMenu = m_topLevelMenu;
-}
-
-// Ordinary menu item
-void wxMenu::Append(int id, const wxString& label,
-                    const wxString& helpString, bool checkable)
-{
-    // 'checkable' parameter is useless for Windows.
-    Append(new wxMenuItem(this, id, label, helpString, checkable));
-}
-
-void wxMenu::Delete(int id)
-{
-    wxNode *node;
-    wxMenuItem *item;
-    int pos;
-
-    for (pos = 0, node = m_menuItems.First(); node; node = node->Next(), pos++)
     {
-        item = (wxMenuItem *)node->Data();
-        if (item->GetId() == id)
-            break;
+        // this is a dynamic Append
+        pItem->CreateItem(m_menuWidget, m_menuBar, m_topLevelMenu);
     }
 
-    if (!node)
-        return;
+    if ( pItem->IsSubMenu() )
+    {
+        pItem->GetSubMenu()->m_topLevelMenu = m_topLevelMenu;
+    }
 
+    return wxMenuBase::DoAppend(pItem);
+}
+
+wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
+{
     item->DestroyItem(TRUE);
 
-    // See also old code - don't know if this is needed (seems redundant).
-    /*
-    if (item->GetSubMenu()) {
-    item->subMenu->top_level_menu = item->GetSubMenu();
-    item->subMenu->window_parent = NULL;
-    children->DeleteObject(item->GetSubMenu());
-    }
-    */
-
-    m_menuItems.DeleteNode(node);
-    delete item;
+    return wxMenuBase::DoRemove(item);
 }
 
-void wxMenu::Enable(int id, bool flag)
+bool wxMenu::DoInsert(size_t pos, wxMenuItem *item)
 {
-    wxMenuItem *item = FindItemForId(id);
-    wxCHECK_RET( item != NULL, "can't enable non-existing menu item" );
+    if ( !wxMenuBase::DoInsert(pos, item) )
+        return FALSE;
 
-    item->Enable(flag);
-}
+    wxFAIL_MSG(wxT("not implemented"));
 
-bool wxMenu::Enabled(int Id) const
-{
-    wxMenuItem *item = FindItemForId(Id);
-    wxCHECK( item != NULL, FALSE );
-
-    return item->IsEnabled();
-}
-
-void wxMenu::Check(int Id, bool Flag)
-{
-    wxMenuItem *item = FindItemForId(Id);
-    wxCHECK_RET( item != NULL, "can't get status of non-existing menu item" );
-
-    item->Check(Flag);
-}
-
-bool wxMenu::Checked(int id) const
-{
-    wxMenuItem *item = FindItemForId(id);
-    wxCHECK( item != NULL, FALSE );
-
-    return item->IsChecked();
+    return FALSE;
 }
 
 void wxMenu::SetTitle(const wxString& label)
 {
-    m_title = label ;
+    m_title = label;
 
-    wxNode *node = m_menuItems.First ();
-    if (!node)
+    wxMenuItemList::Node *node = GetMenuItems().GetFirst();
+    if ( !node )
         return;
 
-    wxMenuItem *item = (wxMenuItem *) node->Data ();
+    wxMenuItem *item = node->GetData ();
     Widget widget = (Widget) item->GetButtonWidget();
-    if (!widget)
+    if ( !widget )
         return;
 
-    XmString title_str = XmStringCreateSimple ((char*) (const char*) label);
-    XtVaSetValues (widget,
-        XmNlabelString, title_str,
-        NULL);
-    // TODO: should we delete title_str now?
+    wxXmString title_str(label);
+    XtVaSetValues(widget,
+                  XmNlabelString, title_str(),
+                  NULL);
 }
 
-const wxString wxMenu::GetTitle() const
-{
-    return m_title;
-}
-
-void wxMenu::SetLabel(int id, const wxString& label)
-{
-    wxMenuItem *item = FindItemForId(id);
-    if (item == (wxMenuItem*) NULL)
-        return;
-
-    item->SetText(label);
-}
-
-wxString wxMenu::GetLabel(int id) const
-{
-    wxMenuItem *it = NULL;
-    WXWidget w = FindMenuItem (id, &it);
-    if (w)
-    {
-        XmString text;
-        char *s;
-        XtVaGetValues ((Widget) w,
-            XmNlabelString, &text,
-            NULL);
-
-        if (XmStringGetLtoR (text, XmSTRING_DEFAULT_CHARSET, &s))
-        {
-            wxString str(s);
-            XtFree (s);
-            return str;
-        }
-        else
-        {
-            XmStringFree (text);
-            return wxEmptyString;
-        }
-    }
-    else
-        return wxEmptyString;
-}
-
-// Finds the item id matching the given string, -1 if not found.
-int wxMenu::FindItem (const wxString& itemString) const
-{
-    char buf1[200];
-    char buf2[200];
-    wxStripMenuCodes ((char *)(const char *)itemString, buf1);
-
-    for (wxNode * node = m_menuItems.First (); node; node = node->Next ())
-    {
-        wxMenuItem *item = (wxMenuItem *) node->Data ();
-        if (item->GetSubMenu())
-        {
-            int ans = item->GetSubMenu()->FindItem(itemString);
-            if (ans > -1)
-                return ans;
-        }
-        if ( !item->IsSeparator() )
-        {
-            wxStripMenuCodes((char *)item->GetName().c_str(), buf2);
-            if (strcmp(buf1, buf2) == 0)
-                return item->GetId();
-        }
-    }
-
-    return -1;
-}
-
-wxMenuItem *wxMenu::FindItemForId(int itemId, wxMenu ** itemMenu) const
-{
-    if (itemMenu)
-        *itemMenu = NULL;
-    for (wxNode * node = m_menuItems.First (); node; node = node->Next ())
-    {
-        wxMenuItem *item = (wxMenuItem *) node->Data ();
-
-        if (item->GetId() == itemId)
-        {
-            if (itemMenu)
-                *itemMenu = (wxMenu *) this;
-            return item;
-        }
-
-        if (item->GetSubMenu())
-        {
-            wxMenuItem *ans = item->GetSubMenu()->FindItemForId (itemId, itemMenu);
-            if (ans)
-                return ans;
-        }
-    }
-
-    if (itemMenu)
-        *itemMenu = NULL;
-    return NULL;
-}
-
-void wxMenu::SetHelpString(int itemId, const wxString& helpString)
-{
-    wxMenuItem *item = FindItemForId (itemId);
-    if (item)
-        item->SetHelp(helpString);
-}
-
-wxString wxMenu::GetHelpString (int itemId) const
-{
-    wxMenuItem *item = FindItemForId (itemId);
-    wxString str("");
-    return (item == NULL) ? str : item->GetHelp();
-}
-
-void wxMenu::ProcessCommand(wxCommandEvent & event)
+bool wxMenu::ProcessCommand(wxCommandEvent & event)
 {
     bool processed = FALSE;
 
+#if WXWIN_COMPATIBILITY
     // Try a callback
     if (m_callback)
     {
         (void) (*(m_callback)) (*this, event);
         processed = TRUE;
     }
+#endif // WXWIN_COMPATIBILITY
 
     // Try the menu's event handler
     if ( !processed && GetEventHandler())
@@ -391,47 +179,9 @@ void wxMenu::ProcessCommand(wxCommandEvent & event)
     // Try the window the menu was popped up from (and up
     // through the hierarchy)
     if ( !processed && GetInvokingWindow())
-    processed = GetInvokingWindow()->ProcessEvent(event);
-}
+        processed = GetInvokingWindow()->ProcessEvent(event);
 
-// Update a menu and all submenus recursively.
-// source is the object that has the update event handlers
-// defined for it. If NULL, the menu or associated window
-// will be used.
-void wxMenu::UpdateUI(wxEvtHandler* source)
-{
-  if (!source && GetInvokingWindow())
-    source = GetInvokingWindow()->GetEventHandler();
-  if (!source)
-    source = GetEventHandler();
-  if (!source)
-    source = this;
-
-  wxNode* node = GetItems().First();
-  while (node)
-  {
-    wxMenuItem* item = (wxMenuItem*) node->Data();
-    if ( !item->IsSeparator() )
-    {
-      wxWindowID id = item->GetId();
-      wxUpdateUIEvent event(id);
-      event.SetEventObject( source );
-
-      if (source->ProcessEvent(event))
-      {
-        if (event.GetSetText())
-          SetLabel(id, event.GetText());
-        if (event.GetSetChecked())
-          Check(id, event.GetChecked());
-        if (event.GetSetEnabled())
-          Enable(id, event.GetEnabled());
-      }
-
-      if (item->GetSubMenu())
-        item->GetSubMenu()->UpdateUI(source);
-    }
-    node = node->Next();
-  }
+    return processed;
 }
 
 // ----------------------------------------------------------------------------
@@ -596,7 +346,7 @@ wxMenuItem *wxMenuBar::FindItem(int id, wxMenu ** itemMenu) const
     wxMenuItem *item = NULL;
     size_t menuCount = GetMenuCount();
     for (size_t i = 0; i < menuCount; i++)
-        if ((item = m_menus[i]->FindItemForId (id, itemMenu)))
+        if ((item = m_menus[i]->FindItem(id, itemMenu)))
             return item;
         return NULL;
 }
@@ -691,16 +441,31 @@ int PostDeletionOfMenu( XtPointer* clientData )
     XtRemoveWorkProc(WorkProcMenuId);
     wxMenu *menu = (wxMenu *)clientData;
 
-    if (menu->GetMainWidget()) {
-        if (menu->GetParent())
+    if (menu->GetMainWidget())
+    {
+        wxMenu *menuParent = menu->GetParent();
+        if ( menuParent )
         {
-            wxList& list = menu->GetParent()->GetItems();
-            list.DeleteObject(menu);
+            wxMenuItemList::Node *node = menuParent->GetMenuItems().GetFirst();
+            while ( node )
+            {
+                if ( node->GetData()->GetSubMenu() == menu )
+                {
+                    menuParent->GetMenuItems().DeleteNode(node);
+
+                    break;
+                }
+
+                node = node->GetNext();
+            }
         }
+
         menu->DestroyMenu(TRUE);
     }
-    /* Mark as no longer popped up */
+
+    // Mark as no longer popped up
     menu->m_menuId = -1;
+
     return TRUE;
 }
 
@@ -774,10 +539,13 @@ WXWidget wxMenu::CreateMenu (wxMenuBar * menuBar, WXWidget parent, wxMenu * topM
     m_menuBar = menuBar;
     m_topLevelMenu = topMenu;
 
-    for (wxNode * node = m_menuItems.First (); node; node = node->Next ())
+    for ( wxMenuItemList::Node *node = GetMenuItems().GetFirst();
+          node;
+          node = node->GetNext() )
     {
-        wxMenuItem *item = (wxMenuItem *) node->Data ();
-        item->CreateItem (menu, menuBar, topMenu);
+        wxMenuItem *item = node->GetData();
+
+        item->CreateItem(menu, menuBar, topMenu);
     }
 
     SetBackgroundColour(m_backgroundColour);
@@ -792,13 +560,15 @@ WXWidget wxMenu::CreateMenu (wxMenuBar * menuBar, WXWidget parent, wxMenu * topM
 // do a CreateMenu again.
 void wxMenu::DestroyMenu (bool full)
 {
-    for (wxNode * node = m_menuItems.First (); node; node = node->Next ())
+    for ( wxMenuItemList::Node *node = GetMenuItems().GetFirst();
+          node;
+          node = node->GetNext() )
     {
-        wxMenuItem *item = (wxMenuItem *) node->Data ();
+        wxMenuItem *item = node->GetData();
         item->SetMenuBar((wxMenuBar*) NULL);
 
         item->DestroyItem(full);
-    }// for()
+    }
 
     if (m_buttonWidget)
     {
@@ -825,9 +595,11 @@ WXWidget wxMenu::FindMenuItem (int id, wxMenuItem ** it) const
         return m_buttonWidget;
     }
 
-    for (wxNode * node = m_menuItems.First (); node; node = node->Next ())
+    for ( wxMenuItemList::Node *node = GetMenuItems().GetFirst();
+          node;
+          node = node->GetNext() )
     {
-        wxMenuItem *item = (wxMenuItem *) node->Data ();
+        wxMenuItem *item = node->GetData ();
         if (item->GetId() == id)
         {
             if (it)
@@ -843,7 +615,7 @@ WXWidget wxMenu::FindMenuItem (int id, wxMenuItem ** it) const
                 return w;
             }
         }
-    }// for()
+    }
 
     if (it)
         *it = (wxMenuItem*) NULL;
@@ -858,10 +630,11 @@ void wxMenu::SetBackgroundColour(const wxColour& col)
     if (m_buttonWidget)
         wxDoChangeBackgroundColour(m_buttonWidget, (wxColour&) col, TRUE);
 
-    wxNode* node = m_menuItems.First();
-    while (node)
+    for ( wxMenuItemList::Node *node = GetMenuItems().GetFirst();
+          node;
+          node = node->GetNext() )
     {
-        wxMenuItem* item = (wxMenuItem*) node->Data();
+        wxMenuItem* item = node->GetData();
         if (item->GetButtonWidget())
         {
             // This crashes because it uses gadgets
@@ -869,7 +642,6 @@ void wxMenu::SetBackgroundColour(const wxColour& col)
         }
         if (item->GetSubMenu())
             item->GetSubMenu()->SetBackgroundColour((wxColour&) col);
-        node = node->Next();
     }
 }
 
@@ -881,10 +653,11 @@ void wxMenu::SetForegroundColour(const wxColour& col)
     if (m_buttonWidget)
         wxDoChangeForegroundColour(m_buttonWidget, (wxColour&) col);
 
-    wxNode* node = m_menuItems.First();
-    while (node)
+    for ( wxMenuItemList::Node *node = GetMenuItems().GetFirst();
+          node;
+          node = node->GetNext() )
     {
-        wxMenuItem* item = (wxMenuItem*) node->Data();
+        wxMenuItem* item = node->GetData();
         if (item->GetButtonWidget())
         {
             // This crashes because it uses gadgets
@@ -892,7 +665,6 @@ void wxMenu::SetForegroundColour(const wxColour& col)
         }
         if (item->GetSubMenu())
             item->GetSubMenu()->SetForegroundColour((wxColour&) col);
-        node = node->Next();
     }
 }
 
@@ -914,10 +686,12 @@ void wxMenu::ChangeFont(bool keepOriginalSize)
             XmNfontList, fontList,
             NULL);
     }
-    wxNode* node = m_menuItems.First();
-    while (node)
+
+    for ( wxMenuItemList::Node *node = GetMenuItems().GetFirst();
+          node;
+          node = node->GetNext() )
     {
-        wxMenuItem* item = (wxMenuItem*) node->Data();
+        wxMenuItem* item = node->GetData();
         if (m_menuWidget && item->GetButtonWidget() && m_font.Ok())
         {
             XtVaSetValues ((Widget) item->GetButtonWidget(),
@@ -926,7 +700,6 @@ void wxMenu::ChangeFont(bool keepOriginalSize)
         }
         if (item->GetSubMenu())
             item->GetSubMenu()->ChangeFont(keepOriginalSize);
-        node = node->Next();
     }
 #endif
 }

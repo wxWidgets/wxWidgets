@@ -1657,7 +1657,7 @@ bool wxWindow::ProcessAccelerator(wxKeyEvent& event)
                 // Try for a menu command
                 if (frame->GetMenuBar())
                 {
-                    wxMenuItem* item = frame->GetMenuBar()->FindItemForId(entry->GetCommand());
+                    wxMenuItem* item = frame->GetMenuBar()->FindItem(entry->GetCommand());
                     if (item)
                     {
                         wxCommandEvent commandEvent(wxEVT_COMMAND_MENU_SELECTED, entry->GetCommand());

@@ -150,7 +150,29 @@ void wxMenuItem::Check(bool bDoCheck)
     }
 }
 
-//// Motif-specific
+wxString wxMenuItem::GetLabel() const
+{
+    return wxStripMenuCodes(m_text);
+}
+
+
+// ----------------------------------------------------------------------------
+// wxMenuItemBase
+// ----------------------------------------------------------------------------
+
+wxMenuItem *wxMenuItemBase::New(wxMenu *parentMenu,
+                                int id,
+                                const wxString& name,
+                                const wxString& help,
+                                bool isCheckable,
+                                wxMenu *subMenu)
+{
+    return new wxMenuItem(parentMenu, id, name, help, isCheckable, subMenu);
+}
+
+// ----------------------------------------------------------------------------
+// Motif-specific
+// ----------------------------------------------------------------------------
 
 void wxMenuItem::CreateItem (WXWidget menu, wxMenuBar * menuBar, wxMenu * topMenu)
 {

@@ -21,10 +21,38 @@
 class WXDLLEXPORT wxSpinCtrl : public wxTextCtrl
 {
 public:
-    wxSpinCtrlBase() { Init(); }
+    wxSpinCtrl() { Init(); }
+
+    wxSpinCtrl(wxWindow *parent,
+               wxWindowID id = -1,
+               const wxString& value = wxEmptyString,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = wxSP_ARROW_KEYS,
+               int min = 0, int max = 100, int initial = 0,
+               const wxString& name = _T("wxSpinCtrl"))
+    {
+        Create(parent, id, value, pos, size, style, min, max, initial, name);
+    }
+
+    bool Create(wxWindow *parent,
+                wxWindowID id = -1,
+                const wxString& value = wxEmptyString,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxSP_ARROW_KEYS,
+                int min = 0, int max = 100, int initial = 0,
+                const wxString& name = _T("wxSpinCtrl"))
+    {
+        SetValue(initial);
+        SetRange(min, max);
+
+        return wxTextCtrl::Create(parent, id, value, pos, size, style,
+                                  wxDefaultValidator, name);
+    }
 
     // accessors
-    int GetValue() const
+    int GetValue(int WXUNUSED(dummy) = 1) const
     {
         int n;
         if ( (wxSscanf(wxTextCtrl::GetValue(), wxT("%d"), &n) != 1) )

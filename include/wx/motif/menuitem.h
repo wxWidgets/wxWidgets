@@ -16,11 +16,13 @@
     #pragma interface "menuitem.h"
 #endif
 
+class WXDLLEXPORT wxMenuBar;
+
 // ----------------------------------------------------------------------------
 // wxMenuItem: an item in the menu, optionally implements owner-drawn behaviour
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMenuItem: public wxMenuItemBase
+class wxMenuItem : public wxMenuItemBase
 {
 public:
     // ctor & dtor
@@ -34,6 +36,7 @@ public:
 
     // accessors (some more are inherited from wxOwnerDrawn or are below)
     virtual void SetText(const wxString& label);
+    virtual wxString GetLabel() const;
     virtual void Enable(bool enable = TRUE);
     virtual void Check(bool check = TRUE);
 
