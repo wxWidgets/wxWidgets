@@ -9,27 +9,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 //===========================================================================
-//                          REGEX LIBS
-//===========================================================================
-
-//wxWindows regular expression library
-#define wxUSE_WXREGEX  
-
-//RN (Ryan Norton's) regular expression library
-//#define wxUSE_RNWXRE 
-
-//GRETA, Microsoft Research's templated regex library 
-//[http://research.microsoft.com/projects/greta/] 
-//Install - Get it from .net powertools, put the directory in this directory
-//(I.E.  All the files will be in $thisdir$/GRETA) 
-//#define wxUSE_GRETA 
-
-//PCRE (Perl Compatible Regular Expressions) [sourceforge.net/projects/pcre]
-//Install - Get the GnuWin32 version and put the files in this directory
-//MSVC - add libpcre.a from the GnuWin32 to this directory
-//#define wxUSE_PCRE  
-
-//===========================================================================
 //                          HEADERS
 //===========================================================================
 
@@ -48,38 +27,14 @@
 
 #include "wx/file.h"   
 
-#ifdef wxUSE_WXREGEX
+#if !wxUSE_REGEX
+#   error wxUSE_REGEX needs to be enabled in setup.h to use wxRegEx
+#endif
+
 //
 //  This is the required header for wxRegEx
 //
-#   include <wx/regex.h>
-#endif
-
-#ifdef wxUSE_RNWXRE
-#   include "re.h"
-#endif
-
-#ifdef wxUSE_GRETA
-#   ifdef _MSC_VER
-#       pragma warning(disable:4018)
-#       pragma warning(disable:4100)
-#       pragma warning(disable:4146)
-#       pragma warning(disable:4244)
-#       pragma warning(disable:4663)
-        extern "C" {
-            int __cdecl _resetstkoflw(void) {return 0;}
-        }
-#   endif //_MSC_VER
-#   include "greta/regexpr2.h"
-    using namespace regex;
-#endif //wxUSE_GRETA
-
-#ifdef wxUSE_PCRE
-#   include "pcre.h"
-#   ifdef _MSC_VER
-#       pragma comment(lib, "libpcre.a")
-#   endif
-#endif
+#include <wx/regex.h>
 
 //===========================================================================
 //                          IMPLEMENTATION
@@ -120,6 +75,9 @@ public:
     };
 
 
+    //
+    //  Adds an item to a menu (long way, easier to do wxMenu::AppendCheckItem())
+    //
     void AddMenuItem(wxMenu* pMenu, int nID = wxID_SEPARATOR, const wxChar* szTitle = _(""), 
                                     const wxChar* szToolTip = _(""))
     {
@@ -130,7 +88,7 @@ public:
         else
             pItem = new wxMenuItem (NULL, nID, szTitle, szToolTip, wxITEM_CHECK);
 
-#if defined(__WXMSW __)
+#ifdef __WXMSW__
         pItem->SetBackgroundColour(wxColour(115, 113, 115));
         pItem->SetTextColour(*wxBLACK);
 #endif
@@ -139,24 +97,25 @@ public:
 
 #if defined( __WXMSW__ ) || defined( __WXMAC__ )
     void OnContextMenu(wxContextMenuEvent& event)
-        { PopupMenu(OptionsMenu, ScreenToClient(event.GetPosition())); }
+        { PopupMenu(GetMenuBar()->GetMenu(1), ScreenToClient(event.GetPosition())); }
 #else
     void OnRightUp(wxMouseEvent& event)
-        { PopupMenu(OptionsMenu, event.GetPosition()); }
+        { PopupMenu(GetMenuBar()->GetMenu(1), event.GetPosition()); }
 #endif
 
     MyFrame() : wxFrame(  NULL, -1, _("regextest - wxRegEx Testing App"),
-                            wxPoint(20,20), wxSize(300,450), wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL )
+                            wxPoint(20,20), wxSize(300,400), wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL )
     {
         //Set the background to something light gray-ish
         SetBackgroundColour(wxColour(150,150,150));
 
         //
-        //  Create the menus (Exit & About)
+        //  Create the menus 
         //
 #if wxUSE_MENUS
+
         wxMenu *FileMenu = new wxMenu;
-                OptionsMenu = new wxMenu;
+        wxMenu *OptionsMenu = new wxMenu;
         wxMenu *HelpMenu = new wxMenu;
 
         AddMenuItem(FileMenu, wxID_EXIT, _("&Exit"), _("Quit this program"));
@@ -185,35 +144,35 @@ public:
         MenuBar->Append(HelpMenu, _T("&Help"));
 
         SetMenuBar(MenuBar);
-    #endif // wxUSE_MENUS
+#endif // wxUSE_MENUS
 
         // Text controls
         PatternText.Create(this, PatternTextID, _(""), wxPoint(5, 30));
-        SearchText.Create(this, SearchTextID, _(""), wxPoint(5, 75));
-        //reset size of text controls
+        SearchText.Create(this, SearchTextID, _(""), wxPoint(5, 75), PatternText.GetSize(), wxTE_MULTILINE);
+        NumIters.Create(this, -1, _("5000"), wxPoint(100, 190));
+        //reset size of the 2 main text controls
         wxSize TextSize = PatternText.GetSize();
         TextSize.SetWidth(200);
         PatternText.SetSize(TextSize);
+        TextSize.SetHeight(TextSize.GetHeight() * 4);
         SearchText.SetSize(TextSize);
         
         // StaticText
         PatternHeader.Create(this, -1, _("Regular Expression:"), wxPoint(5, 10));
         SearchHeader.Create(this, -1, _("String to Search:"), wxPoint(5, 55));
-        IterHeader.Create(this, -1, _("Iterations (Match Time):"), wxPoint(100, 100));
+        IterHeader.Create(this, -1, _("Iterations (Match Time):"), wxPoint(100, 170));
 
-        ResultText.Create(this, -1, _(""), wxPoint(5, 150), wxSize(100,230), wxST_NO_AUTORESIZE);
-        ResultText2.Create(this, -1, _(""), wxPoint(115, 150), wxSize(100,230), wxST_NO_AUTORESIZE);
+        ResultText.Create(this, -1, _(""), wxPoint(5, 220), wxSize(100,110), wxST_NO_AUTORESIZE);
 
         // Button
-        OkButton.Create(this, OkButtonID, _("OK"), wxPoint(20, 120));
+        OkButton.Create(this, OkButtonID, _("OK"), wxPoint(20, 190));
 
-        NumIters.Create(this, -1, _("5000"), wxPoint(100, 120));
 
-        #if wxUSE_STATUSBAR && !defined(__WXWINCE__)
-            // create a status bar just for fun (by default with 1 pane only)
-            CreateStatusBar(1);
-            SetStatusText(_("Enter Some Values and Press the OK Button or Enter"));
-        #endif // wxUSE_STATUSBAR
+#if wxUSE_STATUSBAR && !defined(__WXWINCE__)
+        // create a status bar just for fun (by default with 1 pane only)
+        CreateStatusBar(1);
+        SetStatusText(_("Enter Some Values and Press the OK Button or Enter"));
+#endif // wxUSE_STATUSBAR
     }
 
     void OnAbout(wxCommandEvent& WXUNUSED(evt))
@@ -242,85 +201,40 @@ public:
     {
         wxString szPattern = PatternText.GetValue();
         wxString szSearch = SearchText.GetValue();
-        wxString szResult, szResult2, szResult3, szResult4; //Will be displayed in ResultText
-        wxString szStatus, szStatus2, szStatus3, szStatus4;
+        wxString szResult; //Will be displayed in ResultText
+        wxString szStatus;
 
-        int nCompileFlags = 0, nCompileFlags2 = 0, nCompileFlags3 = 0, nCompileFlags4 = 0;
-        int nMatchFlags = 0, nMatchFlags2 = 0, nMatchFlags3 = 0, nMatchFlags4 = 0;
+        int nCompileFlags = 0;
+        int nMatchFlags = 0;
+
+        wxMenu* OptionsMenu = GetMenuBar()->GetMenu(1);
 
         if (!(OptionsMenu->IsChecked(ExtendedID)))
         {
-#ifdef wxUSE_WXREGEX
             nCompileFlags |= wxRE_BASIC;
-#endif
-        }
-        else
-        {
-#ifdef wxUSE_RNWXRE
-            nCompileFlags2 |= wxRe::wxRE_EXTENDED;
-#endif
-            //            nCompileFlags3 |= EXTENDED;
         }
 
         if (OptionsMenu->IsChecked(ICaseID))
         {
-#ifdef wxUSE_WXREGEX
             nCompileFlags |= wxRE_ICASE;
-#endif
-#ifdef wxUSE_RNWXRE
-            nCompileFlags2 |= wxRe::wxRE_ICASE;
-#endif
-#ifdef wxUSE_GRETA
-            nCompileFlags3 |= NOCASE;
-#endif
-        }
-
-        if (OptionsMenu->IsChecked(NewLineID))
-        {
-#ifdef wxUSE_WXREGEX
-            nCompileFlags |= wxRE_NEWLINE;
-#endif
-#ifdef wxUSE_RNWXRE
-            nCompileFlags2 |= wxRe::wxRE_NEWLINE;
-#endif
-#ifdef wxUSE_GRETA
-            nCompileFlags3 |= MULTILINE;
-#endif
         }
 
         if (OptionsMenu->IsChecked(NotBolID))
         {
-#ifdef wxUSE_WXREGEX
             nMatchFlags |= wxRE_NOTBOL;
-#endif
-#ifdef wxUSE_RNWXRE
-            nMatchFlags2 |= wxRe::wxRE_NOTBOL;
-#endif
         }
 
         if (OptionsMenu->IsChecked(NotEolID))
         {
-#ifdef wxUSE_WXREGEX
             nMatchFlags |= wxRE_NOTEOL;
-#endif
-#ifdef wxUSE_RNWXRE
-            nMatchFlags2 |= wxRe::wxRE_NOTEOL;
-#endif
         }
 
-        //Our regular expression object
 
         //Success!  Here we'll display some 
         //information to the user
-        size_t dwStartIndex = 0, dwEndIndex = 0,
-               dwStartIndex2= 0, dwEndIndex2= 0,
-               dwStartIndex3= 0, dwEndIndex3= 0,
-               dwStartIndex4= 0, dwEndIndex4= 0;
+        size_t dwStartIndex = 0, dwEndIndex = 0;
 
-        time_t dwStartTime = 0, dwEndTime = 0,
-               dwStartTime2= 0, dwEndTime2= 0,
-               dwStartTime3= 0, dwEndTime3= 0,
-               dwStartTime4= 0, dwEndTime4= 0; 
+        time_t dwStartTime = 0, dwEndTime = 0; 
 
         int i = 0;
         long n;
@@ -328,10 +242,11 @@ public:
             n = 0;
 
 
-#ifdef wxUSE_WXREGEX
         SetStatusText("Testing wxRegEx...");
 
+        //Our regular expression object
         wxRegEx Regex;
+
         //Regular Expressions must be compiled before
         //you can search a string with them, or
         //at least most implementations do.
@@ -340,6 +255,10 @@ public:
         //Basically compilation breaks it down into
         //something that's easier to parse, due
         //to the syntax of regular expressions
+        //
+        //Note that you can use a constructor of wxRegEx
+        //that compiles it automatically, i.e.
+        //wxRegEx Regex(szPattern, nCompileFlags)
         if (!Regex.Compile(szPattern, nCompileFlags))
             szStatus += _("\nCompile Failed!\n"); 
         else
@@ -391,190 +310,9 @@ public:
                             szStatus
                                     );
 
-#endif //wxUSE_WXREGEX
-
-#ifdef wxUSE_RNWXRE
-        SetStatusText("Testing RNWXRE...");
-
-        wxRe Re;
-        wxRe::wxReError e;
-        if ((e = Re.Comp(szPattern, nCompileFlags2)) != wxRe::wxRE_OK)
-            szStatus2 = wxString::Format(_("\nCompile Failed!\n%s\n"), wxRe::ErrorToString(e)); 
-        else
-        {
-            //Here's where we actually search our string
-            if ((e = Re.Exec(szSearch, nMatchFlags2)) != wxRe::wxRE_OK)
-                szStatus2 = wxString::Format(_("\n%s\n"), wxRe::ErrorToString(e));
-            else
-            {
-                dwStartIndex2 = Re.GetMatch(0).first;
-                dwEndIndex2 = Re.GetMatch(0).second;
-
-                szStatus2 = _("Success");
-
-                dwStartTime2 = clock();
-        
-                if (OptionsMenu->IsChecked(CompID))
-                {
-                    for(i = 0; i < n; ++i)
-                    {
-                        SetStatusText(wxString::Format(_("RNWXRE Compile #%i"), i));
-                        Re.Comp(szPattern, nCompileFlags2);
-                    }
-                }
-                if (OptionsMenu->IsChecked(MatchID))
-                {
-                    for(i = 0; i < n; ++i)
-                    {
-                        SetStatusText(wxString::Format(_("RNWXRE Match #%i"), i));
-                        Re.Exec(szSearch, nMatchFlags2);
-                    }
-                }
-
-                dwEndTime2 = clock() - dwStartTime2;
-            }
-        }
-        szResult2 = wxString::Format(
-                            _("--Ryan's wxRe--\nIndex:[%i]-[%i]\nString:%s\nMatch Time:%ums\nStatus:%s"),
-                            dwStartIndex2, dwEndIndex2+dwStartIndex2, 
-                            szSearch.Mid(dwStartIndex2, dwEndIndex2),
-                            dwEndTime2, 
-                            szStatus2
-                                    );
-#endif //wxUSE_RNWXRE
-
-#ifdef wxUSE_GRETA
-        SetStatusText("Testing GRETA...");
-        bool bSuccess = true;
-
-        std::string stdszPattern(szPattern);
-        rpattern Greta;
-        try 
-        {
-            Greta = rpattern(stdszPattern,EXTENDED,MODE_MIXED);
-        }
-        catch (...)
-        {
-            bSuccess = false;
-            szStatus3 += _("\nCompile Failed!\n");
-        }
-        match_results r;
-        std::string stdszSearch(szSearch);
-
-        if(bSuccess)
-        {
-            //Here's where we actually search our string
-            if (!(bSuccess = Greta.match(stdszSearch, r).matched))
-                szStatus3 += _("\nExecution/Matching Failed!\n");
-            else
-            {
-                szStatus3 = _("Success");
-
-                dwStartTime3 = clock();
-    
-                if (OptionsMenu->IsChecked(CompID))
-                {
-                    for(i = 0; i < n; ++i)
-                    {
-                        //Supposively GRETA doesn't compile, but
-                        //it's clear that it slows performance greatly
-                        //when creating a rpattern object,
-                        //so one can only surmize that it performs
-                        //some kind of optimizations in the constructor
-                        Greta = rpattern(stdszPattern,EXTENDED,MODE_MIXED);
-                        SetStatusText(wxString::Format(_("GRETA Compile #%i"), i));
-                    }
-                }
-                if (OptionsMenu->IsChecked(MatchID))
-                {
-                    for(i = 0; i < n; ++i)
-                    {
-                        Greta.match(stdszSearch, r);
-                        SetStatusText(wxString::Format(_("GRETA Match #%i"), i));
-                    }
-                }
-    
-                dwEndTime3 = clock() - dwStartTime3;
-            }
-        }
-
-        if (bSuccess)
-        {
-            dwStartIndex3 = r.rstart();
-            dwEndIndex3 = r.rlength();
-        }
-        
-        szResult3 = wxString::Format(
-            _("--Greta--\nIndex:[%i]-[%i]\nString:%s\nMatch Time:%ums\nStatus:%s"),
-                            dwStartIndex3, dwStartIndex3 + dwEndIndex3, 
-                            szSearch.Mid(dwStartIndex3, dwEndIndex3),
-                            dwEndTime3, 
-                            szStatus3);
-#endif //wxUSE_GRETA
-
-#ifdef wxUSE_PCRE
-        SetStatusText("Testing PCRE...");
-
-        pcre* pPcre;
-        const wxChar* szError;
-        int nErrOff;
-
-        if ((pPcre = pcre_compile(szPattern, nCompileFlags4, &szError, &nErrOff, 0)) == NULL)
-            szStatus4 = wxString::Format(_("\nCompile Failed!\nError:%s\nOffset:%i\n"), szError, nErrOff); 
-        else
-        {
-            size_t msize;
-	        pcre_fullinfo(pPcre, 0, PCRE_INFO_CAPTURECOUNT, &msize);
-	        msize = 3*(msize+1);
-	        int *m = new int[msize];
-
-            //Here's where we actually search our string
-            pcre_exec(pPcre, 0, szSearch, szSearch.Length(), 0, 0, m, msize);
-            if (m[0] == -1)
-                szStatus4 = wxString::Format(_("\nExecution/Matching Failed!\n"));
-            else
-            {
-                dwStartIndex4 = m[0];
-                dwEndIndex4 = m[1] - m[0];
-
-                szStatus4 = _("Success");
-
-                dwStartTime4 = clock();
-        
-                
-                if (OptionsMenu->IsChecked(CompID))
-                {
-                    for(i = 0; i < n; ++i)
-                    {
-                        pPcre = pcre_compile(szPattern, nCompileFlags4, &szError, &nErrOff, 0);
-                        SetStatusText(wxString::Format(_("PCRE Compile #%i"), i));
-                    }
-                }
-                if (OptionsMenu->IsChecked(MatchID))
-                {
-                    for(i = 0; i < n; ++i)
-                    {
-                        pcre_exec(pPcre, 0, szSearch, szSearch.Length(), 0, 0, m, msize);
-                        SetStatusText(wxString::Format(_("PCRE Match #%i"), i));
-                    }
-                }
-
-                dwEndTime4 = clock() - dwStartTime4;
-            }
-        }
-        szResult4 = wxString::Format(
-                            _("--PCRE--\nIndex:[%i]-[%i]\nString:%s\nMatch Time:%ums\nStatus:%s"),
-                            dwStartIndex4, dwEndIndex4+dwStartIndex4, 
-                            szSearch.Mid(dwStartIndex4, dwEndIndex4),
-                            dwEndTime4, 
-                            szStatus4
-                                    );
-#endif //wxUSE_PCRE
-
         SetStatusText("Regex Run Complete");
 
-        ResultText.SetLabel(szResult + _("\n\n") + szResult2);
-        ResultText2.SetLabel(szResult3 + _("\n\n") + szResult4);
+        ResultText.SetLabel(szResult);
     }
 
     void OnQuit(wxCommandEvent& WXUNUSED(evt))
@@ -583,10 +321,8 @@ public:
     }
 
     wxTextCtrl PatternText, SearchText, NumIters;
-    wxStaticText PatternHeader, SearchHeader, IterHeader, ResultText, ResultText2;
+    wxStaticText PatternHeader, SearchHeader, IterHeader, ResultText;
     wxButton OkButton;
-
-    wxMenu *OptionsMenu;
 
     DECLARE_EVENT_TABLE()
 };
