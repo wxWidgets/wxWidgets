@@ -69,6 +69,7 @@ All:
 - added wxTextInputStream::ReadChar() (M.J.Wetherell)
 - added translation to Afrikaans (Petri Jooste)
 - Spanish translations updated (Javier San Jose)
+- added gettext plural forms support to wxLocale (Michael N. Filippov)
 
 All (GUI):
 

@@ -11,6 +11,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=koi8-r\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:128
 msgid "International wxWindows App"
@@ -80,3 +82,57 @@ msgstr "Результат"
 msgid "Bad luck! try again..."
 msgstr "Не везет! Попробуй снова..."
 
+#: i18n.cpp:163
+msgid "file deleted"
+msgid_plural "files deleted"
+msgstr[0] "файл удален"
+msgstr[1] "файла удалено"
+msgstr[2] "файлов удалено"
+
+#: i18n.cpp:174
+msgid "line 1"
+msgstr "строчка 1"
+
+#: i18n.cpp:175
+msgid "line 2"
+msgstr "строчка 2"
+
+#: i18n.cpp:176
+msgid "line 3"
+msgstr "строчка 3"
+
+#: i18n.cpp:178
+msgid "Testing N_() (gettext_noop)"
+msgstr "Проверяется N_() (gettext_noop)"
+
+#: i18n.cpp:139
+msgid "Testing _() (gettext)"
+msgstr "Проверяется _() (gettext)"
+
+#: i18n.cpp:140
+msgid "Please enter text to translate"
+msgstr "Пожалуйста, введите текст для перевода"
+
+#: i18n.cpp:141
+msgid "default value"
+msgstr "значение по умолчанию"
+
+#: i18n.cpp:153
+msgid "Testing _N() (ngettext)"
+msgstr "Проверяется _N() (ngettext)"
+
+#: i18n.cpp:155
+msgid "Please enter range for plural forms of \"n files deleted\" phrase"
+msgstr "Пожалуста, введите диапазон для множественных форм фразы \"n файлов удалено\""
+
+#: i18n.cpp:102
+msgid "&1 _() (gettext)"
+msgstr ""
+
+#: i18n.cpp:103
+msgid "&2 _N() (ngettext)"
+msgstr ""
+
+#: i18n.cpp:104
+msgid "&3 N_() (gettext_noop)"
+msgstr ""

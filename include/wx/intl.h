@@ -2,7 +2,8 @@
 // Name:        wx/intl.h
 // Purpose:     Internationalization and localisation for wxWindows
 // Author:      Vadim Zeitlin
-// Modified by:
+// Modified by: Michael N. Filippov <michael@idisys.iae.nsk.su>
+//              (2003/09/30 - plural forms support)
 // Created:     29/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -31,10 +32,13 @@
 // macros
 // ----------------------------------------------------------------------------
 
-// gettext() style macro (notice that xgettext should be invoked with "-k_"
-// option to extract the strings inside _() from the sources)
+// gettext() style macros (notice that xgettext should be invoked with 
+// --keyword="_" --keyword="_N:1,2" --keyword="N_" options
+// to extract the strings from the sources)
 #ifndef WXINTL_NO_GETTEXT_MACRO
-    #define   _(str)  wxGetTranslation(_T(str))
+    #define _(s)            wxGetTranslation(_T(s))
+    #define _N(s1, s2, n)   wxGetTranslation(_T(s1), _T(s2), n)
+    #define N_(s)           _T(s)
 #endif
 
 // another one which just marks the strings for extraction, but doesn't
@@ -474,6 +478,7 @@ public:
     // retrieve the translation for a string in all loaded domains unless
     // the szDomain parameter is specified (and then only this domain is
     // searched)
+    // n - additional parameter for PluralFormsParser
     //
     // return original string if translation is not available
     // (in this case an error message is generated the first time
@@ -482,6 +487,11 @@ public:
     // domains are searched in the last to first order, i.e. catalogs
     // added later override those added before.
     const wxChar *GetString(const wxChar *szOrigString,
+                            const wxChar *szDomain = (const wxChar *) NULL) const;
+    // plural form version of the same:
+    const wxChar *GetString(const wxChar *szOrigString,
+                            const wxChar *szOrigString2,
+                            size_t n,
                             const wxChar *szDomain = (const wxChar *) NULL) const;
 
     // Returns the current short name for the locale
@@ -533,13 +543,24 @@ inline const wxChar *wxGetTranslation(const wxChar *sz)
     else
         return sz;
 }
+inline const wxChar *wxGetTranslation(const wxChar *sz1, const wxChar *sz2,
+                                      size_t n)
+{
+    wxLocale *pLoc = wxGetLocale();
+    if (pLoc)
+        return pLoc->GetString(sz1, sz2, n);
+    else
+        return n == 1 ? sz1 : sz2;
+}
 
 #else // !wxUSE_INTL
 
 // the macros should still be defined - otherwise compilation would fail
 
 #if !defined(WXINTL_NO_GETTEXT_MACRO) && !defined(_)
-    #define   _(str)  (_T(str))
+    #define _(s)            (_T(s))
+    #define _N(s1, s2, n)   ((n) == 1 ? _T(s1) : _T(s2))
+    #define N_(s)           _T(s)
 #endif
 
 #define wxTRANSLATE(str) _T(str)

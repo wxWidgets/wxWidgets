@@ -61,7 +61,10 @@ public:
     void OnAbout(wxCommandEvent& event);
     void OnPlay(wxCommandEvent& event);
     void OnOpen(wxCommandEvent& event);
-
+    void OnTest1(wxCommandEvent& event);
+    void OnTest2(wxCommandEvent& event);
+    void OnTest3(wxCommandEvent& event);
+    
     DECLARE_EVENT_TABLE()
 
     wxLocale& m_locale;
@@ -77,6 +80,9 @@ enum
     INTERNAT_QUIT = 1,
     INTERNAT_TEXT,
     INTERNAT_TEST,
+    INTERNAT_TEST_1,
+    INTERNAT_TEST_2,
+    INTERNAT_TEST_3,
     INTERNAT_OPEN
 };
 
@@ -89,6 +95,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
     EVT_MENU(INTERNAT_TEST, MyFrame::OnPlay)
     EVT_MENU(INTERNAT_OPEN, MyFrame::OnOpen)
+    EVT_MENU(INTERNAT_TEST_1, MyFrame::OnTest1)
+    EVT_MENU(INTERNAT_TEST_2, MyFrame::OnTest2)
+    EVT_MENU(INTERNAT_TEST_3, MyFrame::OnTest3)
 END_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
@@ -120,6 +129,7 @@ bool MyApp::OnInit()
         wxLANGUAGE_GERMAN,
         wxLANGUAGE_RUSSIAN,
         wxLANGUAGE_BULGARIAN,
+        wxLANGUAGE_CZECH,
 #if wxUSE_UNICODE
         wxLANGUAGE_JAPANESE,
         wxLANGUAGE_GEORGIAN,
@@ -139,6 +149,7 @@ bool MyApp::OnInit()
             _T("German"),
             _T("Russian"),
             _T("Bulgarian"),
+            _T("Czech"),
 #if wxUSE_UNICODE
             _T("Japanese"),
             _T("Georgian"),
@@ -193,6 +204,10 @@ bool MyApp::OnInit()
     wxMenu *test_menu = new wxMenu;
     test_menu->Append(INTERNAT_OPEN, _("&Open bogus file"));
     test_menu->Append(INTERNAT_TEST, _("&Play a game"));
+    test_menu->AppendSeparator();
+    test_menu->Append(INTERNAT_TEST_1, _("&1 _() (gettext)"));
+    test_menu->Append(INTERNAT_TEST_2, _("&2 _N() (ngettext)"));
+    test_menu->Append(INTERNAT_TEST_3, _("&3 N_() (gettext_noop)"));
 
     wxMenuBar *menu_bar = new wxMenuBar;
     menu_bar->Append(file_menu, _("&File"));
@@ -298,8 +313,63 @@ void MyFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnOpen(wxCommandEvent&)
 {
-    // open a bogus file -- the error message should be also translated if you've
-    // got wxstd.mo somewhere in the search path
+    // open a bogus file -- the error message should be also translated if
+    // you've got wxstd.mo somewhere in the search path
     wxFile file(wxT("NOTEXIST.ING"));
 }
+
+void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
+{
+    const wxChar* title = _("Testing _() (gettext)");
+    wxTextEntryDialog d(this, _("Please enter text to translate"),
+		title, N_("default value"));
+    if (d.ShowModal() == wxID_OK)
+    {
+    	wxString v = d.GetValue();
+    	wxString s(title);
+    	s << _T("\n") << v << _T(" -> ")
+    	    << wxGetTranslation(v.c_str()) << _T("\n");
+    	wxMessageBox(s);
+    }
+}
+
+void MyFrame::OnTest2(wxCommandEvent& WXUNUSED(event))
+{
+    const wxChar* title = _("Testing _N() (ngettext)");
+    wxTextEntryDialog d(this,
+	    _("Please enter range for plural forms of \"n files deleted\""
+		"phrase"),
+	    title, _T("0-10"));
+    if (d.ShowModal() == wxID_OK)
+    {
+    	int first, last;
+    	wxSscanf(d.GetValue(), _T("%d-%d"), &first, &last);
+    	wxString s(title);
+    	s << _T("\n");
+    	for (int n = first; n <= last; ++n)
+        {
+        	    s << n << _T(" ") << _N("file deleted", "files deleted", n)
+        		<< _T("\n");
+    	}
+        wxMessageBox(s);
+    }
+}
+
+void MyFrame::OnTest3(wxCommandEvent& WXUNUSED(event))
+{
+    const wxChar* lines[] =
+    {
+    	N_("line 1"),
+    	N_("line 2"),
+    	N_("line 3"),
+    };
+    wxString s(_("Testing N_() (gettext_noop)"));
+    s << _T("\n");
+    for (size_t i = 0; i < WXSIZEOF(lines); ++i)
+    {
+    	s << lines[i] << _T(" -> ") << wxGetTranslation(lines[i]) << _T("\n");
+    }
+    wxMessageBox(s);
+}
+
 
