@@ -1904,7 +1904,7 @@ wxString& wxString::replace(size_t nStart, size_t nLen,
 #define   STRING(p)   ((wxString *)(&(p)))
 
 // ctor
-wxArrayString::wxArrayString(bool autoSort)
+void wxArrayString::Init(bool autoSort)
 {
   m_nSize  =
   m_nCount = 0;
@@ -1915,10 +1915,7 @@ wxArrayString::wxArrayString(bool autoSort)
 // copy ctor
 wxArrayString::wxArrayString(const wxArrayString& src)
 {
-  m_nSize  =
-  m_nCount = 0;
-  m_pItems = (wxChar **) NULL;
-  m_autoSort = src.m_autoSort;
+  Init(src.m_autoSort);
 
   *this = src;
 }

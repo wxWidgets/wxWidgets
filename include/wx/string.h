@@ -989,9 +989,17 @@ public:
                                  const wxString& second);
 
   // constructors and destructor
-    // default ctor: if autoSort is TRUE, the array is always sorted (in
-    // alphabetical order)
-  wxArrayString(bool autoSort = FALSE);
+    // default ctor
+  wxArrayString() { Init(FALSE); }
+    // if autoSort is TRUE, the array is always sorted (in alphabetical order)
+    //
+    // NB: the reason for using int and not bool is that like this we can avoid
+    //     using this ctor for implicit conversions from "const char *" (which
+    //     we'd like to be implicitly converted to wxString instead!)
+    //
+    //     of course, using explicit would be even better - if all compilers
+    //     supported it...
+  wxArrayString(int autoSort) { Init(autoSort != 0); }
     // copy ctor
   wxArrayString(const wxArrayString& array);
     // assignment operator
@@ -1065,6 +1073,7 @@ public:
   bool operator!=(const wxArrayString& a) const { return !(*this == a); }
 
 protected:
+  void Init(bool autoSort);             // common part of all ctors
   void Copy(const wxArrayString& src);  // copies the contents of another array
 
 private:
