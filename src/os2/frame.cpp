@@ -850,6 +850,14 @@ bool wxFrame::OS2Create(
     {
         return FALSE;
     }
+    //
+    // Send anything to initialize the frame
+    //
+    ::WinSendMsg( GetHwnd()
+                 ,WM_UPDATEFRAME
+                 ,(MPARAM)FCF_TASKLIST
+                 ,(MPARAM)0
+                );
 
     //
     // Now size everything.  If adding a menu the client will need to be resized.
