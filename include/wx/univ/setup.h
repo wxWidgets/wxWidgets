@@ -13,8 +13,9 @@
 #define _WX_UNIV_SETUP_H_
 
 // ----------------------------------------------------------------------------
-// undef everything
+// not all ports implement everything...
 // ----------------------------------------------------------------------------
+
 #if defined(__WXMAC__)
 
 #define wxUSE_GUI            1
@@ -329,7 +330,7 @@
 #define wxUSE_REGEX         0
 #define wxUSE_STATUSBAR     1
 
-#else
+#else // !Mac, !OS2
 
 #define wxUSE_GUI            1
 #define WXWIN_COMPATIBILITY  0
@@ -372,6 +373,7 @@
 #define wxUSE_FILE                1
 #define wxUSE_FFILE               1
 #define wxUSE_TEXTFILE            0
+#define wxUSE_TEXTBUFFER          0
 #define wxUSE_INTL                0
 #define wxUSE_MENUS 1
 #define wxUSE_TOOLBAR 0
@@ -437,6 +439,7 @@
 #define wxUSE_SPLITTER     1
 #define wxUSE_TAB_DIALOG   0
 
+#define wxUSE_SPLASH 1
 #define wxUSE_JOYSTICK 0
 #define wxUSE_METAFILE              0
 #define wxUSE_ENH_METAFILE          0

@@ -2618,7 +2618,7 @@ void wxAssociateWinWithHandle(HWND hWnd, wxWindowMSW *win)
 #endif // __WXDEBUG__
     if (!oldWin)
     {
-        wxWinHandleHash->Put((long)hWnd, win);
+        wxWinHandleHash->Put((long)hWnd, (wxWindow *)win);
     }
 }
 
