@@ -392,34 +392,7 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
 
     // move the dialog to its initial position without forcing repainting
     int x, y, w, h;
-    if ( !MSWGetCreateWindowCoords(pos, size, x, y, w, h) )
-    {
-        x =
-        w = (int)CW_USEDEFAULT;
-    }
-
-    // we can't use CW_USEDEFAULT here as we're not calling CreateWindow()
-    // and passing CW_USEDEFAULT to MoveWindow() results in resizing the
-    // window to (0, 0) size which breaks quite a lot of things, e.g. the
-    // sizer calculation in wxSizer::Fit()
-    if ( w == (int)CW_USEDEFAULT )
-    {
-        // the exact number doesn't matter, the dialog will be resized
-        // again soon anyhow but it should be big enough to allow
-        // calculation relying on "totalSize - clientSize > 0" work, i.e.
-        // at least greater than the title bar height
-        w =
-        h = 100;
-    }
-
-    if ( x == (int)CW_USEDEFAULT )
-    {
-        // centre it on the screen - what else can we do?
-        wxSize sizeDpy = wxGetDisplaySize();
-
-        x = (sizeDpy.x - w) / 2;
-        y = (sizeDpy.y - h) / 2;
-    }
+    (void)MSWGetCreateWindowCoords(pos, size, x, y, w, h);
 
     if ( !::MoveWindow(GetHwnd(), x, y, w, h, FALSE) )
     {
