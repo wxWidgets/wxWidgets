@@ -56,4 +56,20 @@ private:
 };
 
 
-#endif // _WX_XH_BOXSIZER_H_
+class WXDLLIMPEXP_XRC wxStdDialogButtonSizerXmlHandler
+    : public wxXmlResourceHandler
+{
+public:
+    wxStdDialogButtonSizerXmlHandler();
+    virtual wxObject *DoCreateResource();
+    virtual bool CanHandle(wxXmlNode *node);
+
+private:
+    bool m_isInside;
+    wxStdDialogButtonSizer *m_parentSizer;
+
+    DECLARE_DYNAMIC_CLASS(wxStdDialogButtonSizerXmlHandler)
+};
+
+
+#endif // _WX_XH_SIZER_H_

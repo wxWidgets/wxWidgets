@@ -31,10 +31,11 @@
 #include "wx/tokenzr.h"
 
 
+//-----------------------------------------------------------------------------
+// wxSizerXmlHandler
+//-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxSizerXmlHandler, wxXmlResourceHandler)
-
-
 
 wxSizerXmlHandler::wxSizerXmlHandler()
     : wxXmlResourceHandler(),
@@ -361,6 +362,73 @@ void wxSizerXmlHandler::AddSizerItem(wxSizerItem* sitem)
         ((wxGridBagSizer*)m_parentSizer)->Add((wxGBSizerItem*)sitem);
     else
         m_parentSizer->Add(sitem);
+}
+
+
+
+//-----------------------------------------------------------------------------
+// wxStdDialogButtonSizerXmlHandler
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxStdDialogButtonSizerXmlHandler, wxXmlResourceHandler)
+
+wxStdDialogButtonSizerXmlHandler::wxStdDialogButtonSizerXmlHandler()
+    : m_isInside(false), m_parentSizer(NULL)
+{
+}
+
+wxObject *wxStdDialogButtonSizerXmlHandler::DoCreateResource()
+{
+    if (m_class == wxT("wxStdDialogButtonSizer"))
+    {
+        wxASSERT( !m_parentSizer );
+
+        wxSizer *s = m_parentSizer = new wxStdDialogButtonSizer;
+        m_isInside = true;
+
+        CreateChildren(m_parent, true/*only this handler*/);
+
+        m_parentSizer->Realize();
+
+        m_isInside = false;
+        m_parentSizer = NULL;
+
+        return s;
+    }
+    else // m_class == "button"
+    {
+        wxASSERT( m_parentSizer );
+
+        // find the item to be managed by this sizeritem
+        wxXmlNode *n = GetParamNode(wxT("object"));
+        if ( !n )
+            n = GetParamNode(wxT("object_ref"));
+
+        // did we find one?
+        if (n)
+        {
+            wxObject *item = CreateResFromNode(n, m_parent, NULL);
+            wxButton *button = wxDynamicCast(item, wxButton);
+
+            if (button)
+                m_parentSizer->AddButton(button);
+            else
+                wxLogError(wxT("Error in resource - expected button."));
+
+            return item;
+        }
+        else /*n == NULL*/
+        {
+            wxLogError(wxT("Error in resource: no button within wxStdDialogButtonSizer."));
+            return NULL;
+        }
+    }
+}
+
+bool wxStdDialogButtonSizerXmlHandler::CanHandle(wxXmlNode *node)
+{
+    return (!m_isInside && IsOfClass(node, wxT("wxStdDialogButtonSizer"))) ||
+           (m_isInside && IsOfClass(node, wxT("button")));
 }
 
 #endif // wxUSE_XRC

@@ -34,6 +34,7 @@ void wxXmlResource::InitAllHandlers()
     AddHandler(new wxDialogXmlHandler);
     AddHandler(new wxPanelXmlHandler);
     AddHandler(new wxSizerXmlHandler);
+    AddHandler(new wxStdDialogButtonSizerXmlHandler);
     AddHandler(new wxButtonXmlHandler);
     AddHandler(new wxBitmapButtonXmlHandler);
     AddHandler(new wxStaticTextXmlHandler);

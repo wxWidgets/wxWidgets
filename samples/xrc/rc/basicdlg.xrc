@@ -5,7 +5,8 @@
 <object class="wxDialog" name="non_derived_dialog">
     <title>Non-Derived Dialog Example</title>
     <centered>1</centered>
-    <object class="wxFlexGridSizer">
+    <object class="wxBoxSizer">
+        <orient>wxVERTICAL</orient>
         <cols>1</cols>
         <rows>0</rows>
         <vgap>0</vgap>
@@ -22,20 +23,15 @@
             </object>
         </object>
         <object class="sizeritem">
-            <flag>wxALIGN_CENTRE|wxALL</flag>
+            <flag>wxEXPAND|wxALL</flag>
             <border>5</border>
-            <object class="wxBoxSizer">
-                <orient>wxHORIZONTAL</orient>
-                <object class="sizeritem">
-                    <flag>wxALIGN_CENTRE|wxALL</flag>
-                    <border>5</border>
+            <object class="wxStdDialogButtonSizer">
+                <object class="button">
                     <object class="wxButton" name="wxID_OK">
                         <label>OK</label>
                     </object>
                 </object>
-                <object class="sizeritem">
-                    <flag>wxALIGN_CENTRE|wxALL</flag>
-                    <border>5</border>
+                <object class="button">
                     <object class="wxButton" name="wxID_CANCEL">
                         <label>Cancel</label>
                     </object>
