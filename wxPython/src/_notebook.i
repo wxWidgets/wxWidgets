@@ -15,7 +15,7 @@
 
 //---------------------------------------------------------------------------
 
-MAKE_CONST_WXSTRING(NOTEBOOK_NAME);
+MAKE_CONST_WXSTRING(NotebookNameStr);
 
 //---------------------------------------------------------------------------
 %newgroup
@@ -178,7 +178,7 @@ public:
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,
-               const wxString& name = wxPyNOTEBOOK_NAME);
+               const wxString& name = wxPyNotebookNameStr);
     %RenameCtor(PreNotebook, wxNotebook());
 
     // Turn it back on again
@@ -189,7 +189,7 @@ public:
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,
-               const wxString& name = wxPyNOTEBOOK_NAME);
+               const wxString& name = wxPyNotebookNameStr);
 
 
     // get the number of rows for a control with wxNB_MULTILINE style (not all
