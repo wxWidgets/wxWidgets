@@ -233,7 +233,7 @@ static char wxPostScriptHeaderReencodeISO2[] =
 // wxPostScriptDC
 //-------------------------------------------------------------------------------
 
-float wxPostScriptDC::ms_PSScaleFactor = 10.0;
+float wxPostScriptDC::ms_PSScaleFactor = 1.0;
 
 void wxPostScriptDC::SetResolution(int ppi)
 {
@@ -942,87 +942,83 @@ void wxPostScriptDC::SetFont( const wxFont& font )
 
     m_font = font;
 
-    const char *name;
-    const char *style = "";
     int Style = m_font.GetStyle();
     int Weight = m_font.GetWeight();
 
+    const char *name;
     switch (m_font.GetFamily())
     {
         case wxTELETYPE:
         case wxMODERN:
-            name = "/Courier";
+        {
+            if (Style == wxITALIC)
+            {
+                if (Weight == wxBOLD)
+                    name = "/Courier-BoldOblique";
+                else
+                    name = "/Courier-Oblique";
+            }
+            else
+            {
+                if (Weight == wxBOLD)
+                    name = "/Courier-Bold";
+                else
+                    name = "/Courier";
+            }
             break;
-        case wxSWISS:
-            name = "/Helvetica";
-            break;
+        }
         case wxROMAN:
-//          name = "/Times-Roman";
-            name = "/Times"; // Altered by EDZ
+        {
+            if (Style == wxITALIC)
+            {
+                if (Weight == wxBOLD)
+                    name = "/Times-BoldItalic";
+                else
+                    name = "/Times-Italic";
+            }
+            else
+            {
+                if (Weight == wxBOLD)
+                    name = "/Times-Bold";
+                else
+                    name = "/Times-Roman";
+            }
             break;
+        }
         case wxSCRIPT:
-            name = "/Zapf-Chancery-MediumItalic";
+        {
+            name = "/ZapfChancery-MediumItalic";
             Style  = wxNORMAL;
             Weight = wxNORMAL;
             break;
+        }
+        case wxSWISS:
         default:
-        case wxDEFAULT: // Sans Serif Font
-            name = "/LucidaSans";
+        {
+            if (Style == wxITALIC)
+            {
+                if (Weight == wxBOLD)
+                    name = "/Helvetica-BoldOblique";
+                else
+                    name = "/Helvetica-Oblique";
+            }
+            else
+            {
+                if (Weight == wxBOLD)
+                    name = "/Helvetica-Bold";
+                else
+                    name = "/Helvetica";
+            }
+            break;
+        }
     }
 
-    if (Style == wxNORMAL && (Weight == wxNORMAL || Weight == wxLIGHT))
-    {
-        if (m_font.GetFamily () == wxROMAN)
-            style = "-Roman";
-        else
-            style = "";
-    }
-    else if (Style == wxNORMAL && Weight == wxBOLD)
-    {
-        style = "-Bold";
-    }
-    else if (Style == wxITALIC && (Weight == wxNORMAL || Weight == wxLIGHT))
-    {
-        if (m_font.GetFamily () == wxROMAN)
-            style = "-Italic";
-        else
-            style = "-Oblique";
-    }
-    else if (Style == wxITALIC && Weight == wxBOLD)
-    {
-        if (m_font.GetFamily () == wxROMAN)
-            style = "-BoldItalic";
-        else
-            style = "-BoldOblique";
-    }
-    else if (Style == wxSLANT && (Weight == wxNORMAL || Weight == wxLIGHT))
-    {
-        if (m_font.GetFamily () == wxROMAN)
-            style = "-Italic";
-        else
-            style = "-Oblique";
-    }
-    else if (Style == wxSLANT && Weight == wxBOLD)
-    {
-        if (m_font.GetFamily () == wxROMAN)
-            style = "-BoldItalic";
-        else
-            style = "-BoldOblique";
-    }
-    else
-    {
-        style = "";
-    }
-
-    char buffer[100];
-    strcpy( buffer, name );
-    strcat( buffer, style );
-
-    fprintf( m_pstream, buffer );
+    fprintf( m_pstream, name );
     fprintf( m_pstream, " reencodeISO def\n" );
-    fprintf( m_pstream, buffer );
+    fprintf( m_pstream, name );
     fprintf( m_pstream, " findfont\n" );
 
+    char buffer[100];
     sprintf( buffer, "%f scalefont setfont\n", YLOG2DEVREL(m_font.GetPointSize() * 1000) / 1000.0F);
                 // this is a hack - we must scale font size (in pts) according to m_scaleY but
                 // YLOG2DEVREL works with wxCoord type (int or longint). Se we first convert font size
@@ -1946,10 +1942,10 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
     double UnderlineThickness = 0.0;
 
     /* get actual parameters */
-    const int Family = fontToUse->GetFamily();
-    const int Size =   fontToUse->GetPointSize();
-    const int Style =  fontToUse->GetStyle();
-    const int Weight = fontToUse->GetWeight();
+    int Family = fontToUse->GetFamily();
+    int Size =   fontToUse->GetPointSize();
+    int Style =  fontToUse->GetStyle();
+    int Weight = fontToUse->GetWeight();
 
     /* if we have another font, read the font-metrics */
     if (Family!=lastFamily || Size!=lastSize || Style!=lastStyle || Weight!=lastWeight)
@@ -1965,29 +1961,37 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         switch (Family)
         {
             case wxMODERN:
-                {
-                    if ((Style == wxITALIC) && (Weight == wxBOLD)) name = "CourBoO";
-                    else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = "CourBo";
-                    else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = "CourO";
-                    else name = "Cour";
-                }
+            case wxTELETYPE:
+            {
+                if ((Style == wxITALIC) && (Weight == wxBOLD)) name = "CourBoO.afm";
+                else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = "CourBo.afm";
+                else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = "CourO.afm";
+                else name = "Cour.afm";
                 break;
+            }
             case wxROMAN:
-                {
-                    if ((Style == wxITALIC) && (Weight == wxBOLD)) name = "TimesBoO";
-                    else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = "TimesBo";
-                    else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = "TimesO";
-                    else name = "TimesRo";
-                }
+            {
+                if ((Style == wxITALIC) && (Weight == wxBOLD)) name = "TimesBoO.afm";
+                else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = "TimesBo.afm";
+                else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = "TimesO.afm";
+                else name = "TimesRo.afm";
                 break;
+            }
+            case wxSCRIPT:
+            {
+                name = "Zapf.afm";
+                Style = wxNORMAL;
+                Weight = wxNORMAL;
+            }
+            case wxSWISS:
             default:
-                {
-                    if ((Style == wxITALIC) && (Weight == wxBOLD)) name = "HelvBoO";
-                    else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = "HelvBo";
-                    else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = "HelvO";
-                    else name = "Helv";
-                }
+            {
+                if ((Style == wxITALIC) && (Weight == wxBOLD)) name = "HelvBoO.afm";
+                else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = "HelvBo.afm";
+                else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = "HelvO.afm";
+                else name = "Helv.afm";
                 break;
+            }
         }
 
         /* get the directory of the AFM files */
@@ -2013,17 +2017,17 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
 
         /* new elements JC Sun Aug 25 23:21:44 MET DST 1996 */
 
-        afmName << name << wxT(".afm");
+        afmName << name;
         FILE *afmFile = wxFopen(afmName,wxT("r"));
+        
         if (afmFile==NULL)
         {
            afmName = wxThePrintSetupData->GetAFMPath();
-           afmName << wxFILE_SEP_PATH << name << wxT(".afm");
+           afmName << wxFILE_SEP_PATH << name;
            afmFile = wxFopen(afmName,wxT("r"));
         }
 
-#ifdef __UNIX__
-#ifndef __VMS__
+#if defined(__UNIX__) && !defined(__VMS__)
        if (afmFile==NULL)
         /* please do NOT change the line above to "else if (afmFile==NULL)" -
            - afmFile = fopen() may fail and in that case the next if branch
@@ -2033,11 +2037,14 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
            afmName <<  wxFILE_SEP_PATH
                    << wxT("share") << wxFILE_SEP_PATH
                    << wxT("wx") << wxFILE_SEP_PATH
+#if defined(__LINUX__) || defined(__FREEBSD__)
+                   << wxT("gs_afm") << wxFILE_SEP_PATH
+#else
                    << wxT("afm") << wxFILE_SEP_PATH
-                   << name << wxT(".afm");
+#endif
+                   << name;
            afmFile = wxFopen(afmName,wxT("r"));
         }
-#endif
 #endif
 
         if (afmFile==NULL)
@@ -2154,7 +2161,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
        /  is done by adding the widths of the characters in the
        /  string. they are given in 1/1000 of the size! */
 
-    double widthSum=0;
+    long sum=0;
     wxCoord height=Size; /* by default */
     unsigned char *p;
     for(p=(unsigned char *)wxMBSTRINGCAST strbuf; *p; p++)
@@ -2162,14 +2169,18 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         if(lastWidths[*p]== INT_MIN)
         {
             wxLogDebug(wxT("GetTextExtent: undefined width for character '%hc' (%d)\n"), *p,*p);
-            widthSum += (lastWidths[' ']/1000.0F * Size); /* assume space */
+            sum += lastWidths[' ']; /* assume space */
         }
         else
         {
-            widthSum += ((lastWidths[*p]/1000.0F)*Size);
+            sum += lastWidths[*p];
         }
     }
-
+    
+    double widthSum = sum;
+    widthSum *= Size;
+    widthSum /= 1000.0F;
+    
     /* add descender to height (it is usually a negative value) */
     //if (lastDescender != INT_MIN)
     //{
