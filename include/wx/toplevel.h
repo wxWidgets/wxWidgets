@@ -71,7 +71,7 @@ class WXDLLEXPORT wxTopLevelWindowBase;
     #elif defined(__WINCE_STANDARDSDK__)
         #define wxDEFAULT_FRAME_STYLE (wxMAXIMIZE|wxCLOSE_BOX)
     #else
-        #define wxDEFAULT_FRAME_STYLE (0)
+        #define wxDEFAULT_FRAME_STYLE (wxNO_BORDER)
     #endif
 #else // !__WXWINCE__
     #define wxDEFAULT_FRAME_STYLE \

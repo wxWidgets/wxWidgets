@@ -13,8 +13,13 @@ extern WXDLLEXPORT_DATA(const wxChar*) wxDirDialogNameStr;
 extern WXDLLEXPORT_DATA(const wxChar*) wxDirDialogDefaultFolderStr;
 extern WXDLLEXPORT_DATA(const wxChar*) wxDirSelectorPromptStr;
 
-#define wxDD_DEFAULT_STYLE \
-    (wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxDD_NEW_DIR_BUTTON)
+#ifdef __WXWINCE__
+    #define wxDD_DEFAULT_STYLE \
+        (wxDEFAULT_DIALOG_STYLE | wxDD_NEW_DIR_BUTTON)
+#else
+    #define wxDD_DEFAULT_STYLE \
+        (wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxDD_NEW_DIR_BUTTON)
+#endif
 
 /*
     The interface (TODO: make the other classes really derive from it!) is
