@@ -139,7 +139,7 @@ char *GetExtendedDBErrorMsg2(char *ErrFile, int ErrLine)
 
 
 // Clookup constructor
-Clookup::Clookup(char *tblName, char *colName) : wxDbTable(READONLY_DB, tblName, 1, NULL, !QUERY_ONLY, DbConnectInf.defaultDir)
+Clookup::Clookup(char *tblName, char *colName) : wxDbTable(READONLY_DB, tblName, 1, NULL, !wxDB_QUERY_ONLY, DbConnectInf.defaultDir)
 {
 
     SetColDefs (0, colName, DB_DATA_TYPE_VARCHAR, lookupCol, SQL_C_CHAR, LOOKUP_COL_LEN+1, FALSE, FALSE);
@@ -149,7 +149,7 @@ Clookup::Clookup(char *tblName, char *colName) : wxDbTable(READONLY_DB, tblName,
 
 // Clookup2 constructor
 Clookup2::Clookup2(char *tblName, char *colName1, char *colName2, wxDb *pDb)
-   : wxDbTable(pDb, tblName, (1 + (strlen(colName2) > 0)), NULL, !QUERY_ONLY, DbConnectInf.defaultDir)
+   : wxDbTable(pDb, tblName, (1 + (strlen(colName2) > 0)), NULL, !wxDB_QUERY_ONLY, DbConnectInf.defaultDir)
 {
     int i = 0;
 

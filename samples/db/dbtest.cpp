@@ -364,7 +364,7 @@ void DatabaseDemoFrame::BuildParameterDialog(wxWindow *parent)
  *     or creating a table objects which use the same pDb, know that all the objects
  *     will be committed or rolled back when any of the objects has this function call made.
  */
-Ccontact::Ccontact (wxDb *pwxDb) : wxDbTable(pwxDb ? pwxDb : wxDbGetConnection(&DbConnectInf),CONTACT_TABLE_NAME,CONTACT_NO_COLS,NULL,!QUERY_ONLY,DbConnectInf.defaultDir)
+Ccontact::Ccontact (wxDb *pwxDb) : wxDbTable(pwxDb ? pwxDb : wxDbGetConnection(&DbConnectInf),CONTACT_TABLE_NAME,CONTACT_NO_COLS,NULL,!wxDB_QUERY_ONLY,DbConnectInf.defaultDir)
 {
     // This is used to represent whether the database connection should be released
     // when this instance of the object is deleted.  If using the same connection
@@ -2025,7 +2025,7 @@ void CqueryDlg::ProcessCountBtn()
 
     if (dbTable == 0)  // wxDbTable object needs to be created and opened
     {
-        if (!(dbTable = new wxDbTable(pDB, masterTableName, 0, NULL, !QUERY_ONLY, DbConnectInf.defaultDir)))
+        if (!(dbTable = new wxDbTable(pDB, masterTableName, 0, NULL, !wxDB_QUERY_ONLY, DbConnectInf.defaultDir)))
         {
             wxMessageBox("Memory allocation failed creating a wxDbTable object.","Error...",wxOK | wxICON_EXCLAMATION);
             return;
