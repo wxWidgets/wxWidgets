@@ -89,6 +89,7 @@ LIB_CPP_SRC=\
  gtk/dcscreen.cpp \
  gtk/dnd.cpp \
  gtk/dialog.cpp \
+ gtk/dirdlg.cpp \
  gtk/filedlg.cpp \
  gtk/font.cpp \
  gtk/frame.cpp \

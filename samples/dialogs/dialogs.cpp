@@ -80,11 +80,7 @@ bool MyApp::OnInit(void)
   file_menu->AppendSeparator();
   file_menu->Append(DIALOGS_FILE_OPEN,  "&Open file");
   file_menu->Append(DIALOGS_FILE_SAVE,  "Sa&ve file");
-#ifndef __WXGTK__
-  // don't add a menu entry for something that isn't in wxGTK. It only
-  // confuses the user
   file_menu->Append(DIALOGS_DIR_CHOOSE,  "&Choose a directory");
-#endif
   file_menu->AppendSeparator();
   file_menu->Append(wxID_EXIT, "E&xit");
   wxMenuBar *menu_bar = new wxMenuBar;
@@ -256,7 +252,6 @@ void MyFrame::FileSave(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::DirChoose(wxCommandEvent& WXUNUSED(event) )
 {
-#ifndef __WXGTK__
 	wxDirDialog dialog(this, "Testing directory picker", "");
 
 	if (dialog.ShowModal() == wxID_OK)
@@ -264,7 +259,6 @@ void MyFrame::DirChoose(wxCommandEvent& WXUNUSED(event) )
 		wxMessageDialog dialog2(this, dialog.GetPath(), "Selected path");
 		dialog2.ShowModal();
 	}
-#endif
 }
 
 void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event) )
