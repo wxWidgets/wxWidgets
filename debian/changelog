@@ -1,3 +1,15 @@
+wxwindows2.3 (2.3.3.1) unstable; urgency=low
+
+  * Ok, Robin says wxPython is good to go.
+  * Since wx2.2 has crashed and burned with the new releases of
+    python and png, Could package maintainers with packages that
+    depend on wx please recompile with this package and let me
+    know if they still need 2.2 in woody?   If not I'll have them
+    removed.  There should be a 2.4 release following very soon.
+    (hah, let's see how the date on that comment testifies!)
+
+ -- Ron Lee <ron@debian.org>  Thu, 19 Sep 2002 16:25:12 -0700
+
 wxwindows2.3 (2.3.3) unstable; urgency=low
 
   * The "If it sucks, You whined for it!" release.
