@@ -35,5 +35,16 @@
     #undef wxHAS_TASK_BAR_ICON
 #endif
 
+// wxIconLocation appeared in the middle of 2.5.0 so it's handy to have a
+// separate define for it
+#define wxHAS_ICON_LOCATION
+
+// same for wxCrashReport
+#ifdef __WXMSW__
+    #define wxHAS_CRASH_REPORT
+#else
+    #undef wxHAS_CRASH_REPORT
+#endif
+
 #endif // _WX_FEATURES_H_
 
