@@ -1046,6 +1046,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_fontmap.obj \
 	$(OBJS)\monolib_framecmn.obj \
 	$(OBJS)\monolib_gaugecmn.obj \
+	$(OBJS)\monolib_gbsizer.obj \
 	$(OBJS)\monolib_gdicmn.obj \
 	$(OBJS)\monolib_geometry.obj \
 	$(OBJS)\monolib_gifdecod.obj \
@@ -1240,6 +1241,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_fontmap.obj \
 	$(OBJS)\monolib_framecmn.obj \
 	$(OBJS)\monolib_gaugecmn.obj \
+	$(OBJS)\monolib_gbsizer.obj \
 	$(OBJS)\monolib_gdicmn.obj \
 	$(OBJS)\monolib_geometry.obj \
 	$(OBJS)\monolib_gifdecod.obj \
@@ -1432,6 +1434,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_fontmap.obj \
 	$(OBJS)\coredll_framecmn.obj \
 	$(OBJS)\coredll_gaugecmn.obj \
+	$(OBJS)\coredll_gbsizer.obj \
 	$(OBJS)\coredll_gdicmn.obj \
 	$(OBJS)\coredll_geometry.obj \
 	$(OBJS)\coredll_gifdecod.obj \
@@ -1626,6 +1629,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_fontmap.obj \
 	$(OBJS)\coredll_framecmn.obj \
 	$(OBJS)\coredll_gaugecmn.obj \
+	$(OBJS)\coredll_gbsizer.obj \
 	$(OBJS)\coredll_gdicmn.obj \
 	$(OBJS)\coredll_geometry.obj \
 	$(OBJS)\coredll_gifdecod.obj \
@@ -1818,6 +1822,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_fontmap.obj \
 	$(OBJS)\corelib_framecmn.obj \
 	$(OBJS)\corelib_gaugecmn.obj \
+	$(OBJS)\corelib_gbsizer.obj \
 	$(OBJS)\corelib_gdicmn.obj \
 	$(OBJS)\corelib_geometry.obj \
 	$(OBJS)\corelib_gifdecod.obj \
@@ -2012,6 +2017,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_fontmap.obj \
 	$(OBJS)\corelib_framecmn.obj \
 	$(OBJS)\corelib_gaugecmn.obj \
+	$(OBJS)\corelib_gbsizer.obj \
 	$(OBJS)\corelib_gdicmn.obj \
 	$(OBJS)\corelib_geometry.obj \
 	$(OBJS)\corelib_gifdecod.obj \
@@ -2204,6 +2210,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_fontmap.obj \
 	$(OBJS)\monodll_framecmn.obj \
 	$(OBJS)\monodll_gaugecmn.obj \
+	$(OBJS)\monodll_gbsizer.obj \
 	$(OBJS)\monodll_gdicmn.obj \
 	$(OBJS)\monodll_geometry.obj \
 	$(OBJS)\monodll_gifdecod.obj \
@@ -2398,6 +2405,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_fontmap.obj \
 	$(OBJS)\monodll_framecmn.obj \
 	$(OBJS)\monodll_gaugecmn.obj \
+	$(OBJS)\monodll_gbsizer.obj \
 	$(OBJS)\monodll_gdicmn.obj \
 	$(OBJS)\monodll_geometry.obj \
 	$(OBJS)\monodll_gifdecod.obj \
@@ -3643,6 +3651,11 @@ $(OBJS)\coredll_gaugecmn.obj: ..\..\src\common\gaugecmn.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_gbsizer.obj: ..\..\src\common\gbsizer.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_gdicmn.obj: ..\..\src\common\gdicmn.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
 !endif
@@ -4760,6 +4773,11 @@ $(OBJS)\corelib_gauge95.obj: ..\..\src\msw\gauge95.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_gaugecmn.obj: ..\..\src\common\gaugecmn.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_gbsizer.obj: ..\..\src\common\gbsizer.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
 !endif
 
@@ -6136,6 +6154,11 @@ $(OBJS)\monodll_gauge95.obj: ..\..\src\msw\gauge95.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_gaugecmn.obj: ..\..\src\common\gaugecmn.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_gbsizer.obj: ..\..\src\common\gbsizer.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 !endif
 
@@ -7608,6 +7631,11 @@ $(OBJS)\monolib_gauge95.obj: ..\..\src\msw\gauge95.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_gaugecmn.obj: ..\..\src\common\gaugecmn.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_gbsizer.obj: ..\..\src\common\gbsizer.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 !endif
 

@@ -400,6 +400,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/fontmap.cpp
     src/common/framecmn.cpp
     src/common/gaugecmn.cpp
+    src/common/gbsizer.cpp
     src/common/gdicmn.cpp
     src/common/geometry.cpp
     src/common/gifdecod.cpp
@@ -489,6 +490,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/filedlg.h
     wx/frame.h
     wx/gauge.h
+    wx/gbsizer.h
     wx/gdicmn.h
     wx/generic/accel.h
     wx/generic/choicdgg.h

@@ -29,6 +29,7 @@
 #endif
 
 #include "wx/sizer.h"
+#include "wx/gbsizer.h"
 #include "wx/statline.h"
 #include "wx/notebook.h"
 
@@ -65,6 +66,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(LAYOUT_TEST_CONSTRAINTS, MyFrame::TestConstraints)
   EVT_MENU(LAYOUT_TEST_SIZER, MyFrame::TestFlexSizers)
   EVT_MENU(LAYOUT_TEST_NB_SIZER, MyFrame::TestNotebookSizers)
+  EVT_MENU(LAYOUT_TEST_GB_SIZER, MyFrame::TestGridBagSizer)    
 END_EVENT_TABLE()
 
 // Define my frame constructor
@@ -79,6 +81,7 @@ MyFrame::MyFrame()
   file_menu->Append(LAYOUT_TEST_CONSTRAINTS, _T("Test &constraints"));
   file_menu->Append(LAYOUT_TEST_SIZER, _T("Test wx&FlexSizer"));
   file_menu->Append(LAYOUT_TEST_NB_SIZER, _T("&Test notebook sizers"));
+  file_menu->Append(LAYOUT_TEST_GB_SIZER, _T("Test &gridbag sizer"));
 
   file_menu->AppendSeparator();
   file_menu->Append(LAYOUT_QUIT, _T("E&xit"), _T("Quit program"));
@@ -214,6 +217,14 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
     (void)wxMessageBox(_T("wxWindows GUI library layout demo\n"),
             _T("About Layout Demo"), wxOK|wxICON_INFORMATION);
 }
+
+void MyFrame::TestGridBagSizer(wxCommandEvent& WXUNUSED(event) )
+{
+    MyGridBagSizerFrame *newFrame = new
+        MyGridBagSizerFrame(_T("wxGridBagSizer Test Frame"), 50, 50);
+    newFrame->Show(TRUE);
+}
+
 
 // ----------------------------------------------------------------------------
 // MyConstraintsFrame
@@ -449,3 +460,130 @@ MySizerDialog::MySizerDialog(wxWindow *parent, const wxChar *title)
     topsizer->SetSizeHints( this );
 }
 
+// ----------------------------------------------------------------------------
+// MyGridBagSizerFrame
+// ----------------------------------------------------------------------------
+
+// some simple macros to help make the sample code below more clear
+#define TEXTCTRL(text)   new wxTextCtrl(p, -1, wxT(text))
+#define MLTEXTCTRL(text) new wxTextCtrl(p, -1, wxT(text), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE)
+#define POS(r, c)        wxGBPosition(r,c)
+#define SPAN(r, c)       wxGBSpan(r,c)
+
+wxChar* gbsDescription =wxT("\
+The wxGridBagSizer is similar to the wxFlexGridSizer except the \
+items are explicitly posisioned in a virtual 'cell' in the \n\
+layout grid, and column or row spanning is allowed.  For example, \
+this static text is positioned at (0,0) and it spans 9 columns.");
+
+
+// Some IDs
+enum {
+    GBS_HIDE_BTN = 1212,
+    GBS_SHOW_BTN,
+    GBS_MOVE_BTN1,
+    GBS_MOVE_BTN2,
+    
+    GBS_MAX,
+};
+
+
+BEGIN_EVENT_TABLE(MyGridBagSizerFrame, wxFrame)
+    EVT_BUTTON( GBS_HIDE_BTN,  MyGridBagSizerFrame::OnHideBtn)
+    EVT_BUTTON( GBS_SHOW_BTN,  MyGridBagSizerFrame::OnShowBtn)
+    EVT_BUTTON( GBS_MOVE_BTN1, MyGridBagSizerFrame::OnMoveBtn)
+    EVT_BUTTON( GBS_MOVE_BTN2, MyGridBagSizerFrame::OnMoveBtn)
+END_EVENT_TABLE()
+
+
+MyGridBagSizerFrame::MyGridBagSizerFrame(const wxChar *title, int x, int y )
+    : wxFrame( NULL, -1, title, wxPoint(x, y) )
+{
+    wxPanel* p = new wxPanel(this, -1);
+    m_panel = p;
+    m_gbs = new wxGridBagSizer();
+
+    
+    m_gbs->Add( new wxStaticText(p, -1, gbsDescription),
+              POS(0,0), SPAN(1, 9),
+              wxALIGN_CENTER | wxALL, 5);
+    
+    m_gbs->Add( TEXTCTRL("pos(1,0)"),   POS(1,0) );
+    m_gbs->Add( TEXTCTRL("pos(1,1)"),   POS(1,1) );
+    m_gbs->Add( TEXTCTRL("pos(2,0)"),   POS(2,0) );
+    m_gbs->Add( TEXTCTRL("pos(2,1)"),   POS(2,1) );
+    m_gbs->Add( MLTEXTCTRL("pos(3,2), span(1,2)\nthis row and col are growable"),
+              POS(3,2), SPAN(1,2), wxEXPAND );
+    m_gbs->Add( MLTEXTCTRL("pos(4,3)\nspan(3,1)"),
+              POS(4,3), SPAN(3,1), wxEXPAND );
+    m_gbs->Add( TEXTCTRL("pos(5,4)"),   POS(5,4), wxDefaultSpan, wxEXPAND );
+    m_gbs->Add( TEXTCTRL("pos(6,5)"),   POS(6,5), wxDefaultSpan, wxEXPAND );
+    m_gbs->Add( TEXTCTRL("pos(7,6)"),   POS(7,6) );
+    m_gbs->Add( TEXTCTRL("pos(8,7)"),   POS(8,7) );
+    m_gbs->Add( TEXTCTRL("pos(9,8)"),   POS(9,8) );
+
+    //m_gbs->Add( TEXTCTRL("bad position"), POS(4,3) );  // Test for assert
+    //m_gbs->Add( TEXTCTRL("bad position"), POS(5,3) );  // Test for assert
+
+
+    m_moveBtn1 = new wxButton(p, GBS_MOVE_BTN1, wxT("Move this to (3,6)"));
+    m_moveBtn2 = new wxButton(p, GBS_MOVE_BTN2, wxT("Move this to (3,6)"));
+    m_gbs->Add( m_moveBtn1, POS(10,2) );
+    m_gbs->Add( m_moveBtn2, POS(10,3) );
+    
+    m_hideBtn = new wxButton(p, GBS_HIDE_BTN, wxT("Hide this item -->"));
+    m_gbs->Add(m_hideBtn, POS(12, 3));
+
+    m_hideTxt = new wxTextCtrl(p, -1, wxT("pos(12,4), size(250, -1)"),
+                                wxDefaultPosition, wxSize(250,-1));
+    m_gbs->Add( m_hideTxt, POS(12,4) );
+    
+    m_showBtn = new wxButton(p, GBS_SHOW_BTN, wxT("<-- Show it again"));
+    m_gbs->Add(m_showBtn, POS(12, 5));
+    m_showBtn->Disable();
+
+    m_gbs->Add(10,10, POS(14,0));
+    
+    m_gbs->AddGrowableRow(3);
+    m_gbs->AddGrowableCol(2);
+    
+    p->SetSizerAndFit(m_gbs);
+    SetClientSize(p->GetSize());
+}
+
+    
+void MyGridBagSizerFrame::OnHideBtn(wxCommandEvent&)
+{
+    m_gbs->Hide(m_hideTxt);
+    m_hideBtn->Disable();
+    m_showBtn->Enable();
+    m_gbs->Layout();
+}
+
+void MyGridBagSizerFrame::OnShowBtn(wxCommandEvent&)
+{
+    m_gbs->Show(m_hideTxt);
+    m_hideBtn->Enable();
+    m_showBtn->Disable();
+    m_gbs->Layout();
+}
+
+
+void MyGridBagSizerFrame::OnMoveBtn(wxCommandEvent& event)
+{
+    wxButton* btn = (wxButton*)event.GetEventObject();
+    wxGBPosition curPos = m_gbs->GetItemPosition(btn);
+
+    // if it's already at the "other" spot then move it back
+    if (curPos == wxGBPosition(3,6))
+    {
+        m_gbs->SetItemPosition(btn, m_lastPos);
+        btn->SetLabel(wxT("Move this to (3,6)"));
+    }
+    else if ( m_gbs->SetItemPosition(btn, wxGBPosition(3,6)) )
+    {
+        m_lastPos = curPos;
+        btn->SetLabel(wxT("Move it back"));
+    }
+    m_gbs->Layout();
+}

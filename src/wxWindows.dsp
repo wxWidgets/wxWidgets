@@ -522,6 +522,10 @@ SOURCE=.\common\gaugecmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\gbsizer.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\gdicmn.cpp
 # End Source File
 # Begin Source File
@@ -1930,6 +1934,10 @@ SOURCE=..\include\wx\display.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\dlimpexp.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\dnd.h
 # End Source File
 # Begin Source File
@@ -2063,6 +2071,10 @@ SOURCE=..\include\wx\fs_zip.h
 # Begin Source File
 
 SOURCE=..\include\wx\gauge.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\gbsizer.h
 # End Source File
 # Begin Source File
 

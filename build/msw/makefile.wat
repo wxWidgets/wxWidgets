@@ -304,6 +304,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_fontmap.obj &
 	$(OBJS)\monolib_framecmn.obj &
 	$(OBJS)\monolib_gaugecmn.obj &
+	$(OBJS)\monolib_gbsizer.obj &
 	$(OBJS)\monolib_gdicmn.obj &
 	$(OBJS)\monolib_geometry.obj &
 	$(OBJS)\monolib_gifdecod.obj &
@@ -500,6 +501,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_fontmap.obj &
 	$(OBJS)\monolib_framecmn.obj &
 	$(OBJS)\monolib_gaugecmn.obj &
+	$(OBJS)\monolib_gbsizer.obj &
 	$(OBJS)\monolib_gdicmn.obj &
 	$(OBJS)\monolib_geometry.obj &
 	$(OBJS)\monolib_gifdecod.obj &
@@ -695,6 +697,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_fontmap.obj &
 	$(OBJS)\coredll_framecmn.obj &
 	$(OBJS)\coredll_gaugecmn.obj &
+	$(OBJS)\coredll_gbsizer.obj &
 	$(OBJS)\coredll_gdicmn.obj &
 	$(OBJS)\coredll_geometry.obj &
 	$(OBJS)\coredll_gifdecod.obj &
@@ -891,6 +894,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_fontmap.obj &
 	$(OBJS)\coredll_framecmn.obj &
 	$(OBJS)\coredll_gaugecmn.obj &
+	$(OBJS)\coredll_gbsizer.obj &
 	$(OBJS)\coredll_gdicmn.obj &
 	$(OBJS)\coredll_geometry.obj &
 	$(OBJS)\coredll_gifdecod.obj &
@@ -1086,6 +1090,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_fontmap.obj &
 	$(OBJS)\corelib_framecmn.obj &
 	$(OBJS)\corelib_gaugecmn.obj &
+	$(OBJS)\corelib_gbsizer.obj &
 	$(OBJS)\corelib_gdicmn.obj &
 	$(OBJS)\corelib_geometry.obj &
 	$(OBJS)\corelib_gifdecod.obj &
@@ -1282,6 +1287,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_fontmap.obj &
 	$(OBJS)\corelib_framecmn.obj &
 	$(OBJS)\corelib_gaugecmn.obj &
+	$(OBJS)\corelib_gbsizer.obj &
 	$(OBJS)\corelib_gdicmn.obj &
 	$(OBJS)\corelib_geometry.obj &
 	$(OBJS)\corelib_gifdecod.obj &
@@ -1477,6 +1483,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_fontmap.obj &
 	$(OBJS)\monodll_framecmn.obj &
 	$(OBJS)\monodll_gaugecmn.obj &
+	$(OBJS)\monodll_gbsizer.obj &
 	$(OBJS)\monodll_gdicmn.obj &
 	$(OBJS)\monodll_geometry.obj &
 	$(OBJS)\monodll_gifdecod.obj &
@@ -1673,6 +1680,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_fontmap.obj &
 	$(OBJS)\monodll_framecmn.obj &
 	$(OBJS)\monodll_gaugecmn.obj &
+	$(OBJS)\monodll_gbsizer.obj &
 	$(OBJS)\monodll_gdicmn.obj &
 	$(OBJS)\monodll_geometry.obj &
 	$(OBJS)\monodll_gifdecod.obj &
@@ -3843,6 +3851,11 @@ $(OBJS)\coredll_gaugecmn.obj :  .AUTODEPEND ..\..\src\common\gaugecmn.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_gbsizer.obj :  .AUTODEPEND ..\..\src\common\gbsizer.cpp
+	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_gdicmn.obj :  .AUTODEPEND ..\..\src\common\gdicmn.cpp
 	$(CXX) -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -5060,6 +5073,11 @@ $(OBJS)\corelib_gauge95.obj :  .AUTODEPEND ..\..\src\msw\gauge95.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gaugecmn.obj :  .AUTODEPEND ..\..\src\common\gaugecmn.cpp
+	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_gbsizer.obj :  .AUTODEPEND ..\..\src\common\gbsizer.cpp
 	$(CXX) -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
@@ -6536,6 +6554,11 @@ $(OBJS)\monodll_gauge95.obj :  .AUTODEPEND ..\..\src\msw\gauge95.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gaugecmn.obj :  .AUTODEPEND ..\..\src\common\gaugecmn.cpp
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_gbsizer.obj :  .AUTODEPEND ..\..\src\common\gbsizer.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
@@ -8108,6 +8131,11 @@ $(OBJS)\monolib_gauge95.obj :  .AUTODEPEND ..\..\src\msw\gauge95.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gaugecmn.obj :  .AUTODEPEND ..\..\src\common\gaugecmn.cpp
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_gbsizer.obj :  .AUTODEPEND ..\..\src\common\gbsizer.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 

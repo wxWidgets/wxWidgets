@@ -59,7 +59,8 @@ public:
                  int border,
                  wxObject* userData );
 
-    ~wxSizerItem();
+    wxSizerItem();
+    virtual ~wxSizerItem();
 
     virtual void DeleteWindows();
 
@@ -418,6 +419,10 @@ public:
     virtual wxSize CalcMin();
 
 protected:
+    void AdjustForFlexDirection();
+    void AdjustForGrowables(const wxSize& sz, const wxSize& minsz,
+                            int nrows, int ncols);
+    
     // the heights/widths of all rows/columns
     wxArrayInt  m_rowHeights,
                 m_colWidths;

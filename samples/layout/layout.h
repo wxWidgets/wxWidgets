@@ -26,7 +26,8 @@ public:
     void TestConstraints(wxCommandEvent& event);
     void TestFlexSizers(wxCommandEvent& event);
     void TestNotebookSizers(wxCommandEvent& event);
-
+    void TestGridBagSizer(wxCommandEvent& event);
+    
     void OnAbout(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
 
@@ -51,6 +52,7 @@ private:
     void InitFlexSizer(wxFlexGridSizer *sizer);
 };
 
+
 // a dialog using notebook sizer for layout
 class MySizerDialog : public wxDialog
 {
@@ -58,13 +60,43 @@ public:
     MySizerDialog(wxWindow *parent, const wxChar *title);
 };
 
-// controls an menu constants
+
+// a frame using wxGridBagSizer for layout
+class MyGridBagSizerFrame : public wxFrame
+{
+public:
+    MyGridBagSizerFrame(const wxChar *title, int x, int y );
+
+    void OnHideBtn(wxCommandEvent&);
+    void OnShowBtn(wxCommandEvent&);
+    void OnMoveBtn(wxCommandEvent&);
+    
+private:
+    wxGridBagSizer*     m_gbs;
+    wxPanel*            m_panel;
+    wxButton*           m_hideBtn;
+    wxButton*           m_showBtn;
+    wxTextCtrl*         m_hideTxt;
+
+    wxButton*           m_moveBtn1;
+    wxButton*           m_moveBtn2;
+    wxGBPosition        m_lastPos;
+    
+    DECLARE_EVENT_TABLE()
+};
+
+
+
+
+
+// controls and menu constants
 enum
 {
     LAYOUT_QUIT = 100,
     LAYOUT_ABOUT,
     LAYOUT_TEST_CONSTRAINTS,
     LAYOUT_TEST_SIZER,
-    LAYOUT_TEST_NB_SIZER
+    LAYOUT_TEST_NB_SIZER,
+    LAYOUT_TEST_GB_SIZER
 };
 

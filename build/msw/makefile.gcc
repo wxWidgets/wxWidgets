@@ -1040,6 +1040,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_fontmap.o \
 	$(OBJS)\monolib_framecmn.o \
 	$(OBJS)\monolib_gaugecmn.o \
+	$(OBJS)\monolib_gbsizer.o \
 	$(OBJS)\monolib_gdicmn.o \
 	$(OBJS)\monolib_geometry.o \
 	$(OBJS)\monolib_gifdecod.o \
@@ -1236,6 +1237,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_fontmap.o \
 	$(OBJS)\monolib_framecmn.o \
 	$(OBJS)\monolib_gaugecmn.o \
+	$(OBJS)\monolib_gbsizer.o \
 	$(OBJS)\monolib_gdicmn.o \
 	$(OBJS)\monolib_geometry.o \
 	$(OBJS)\monolib_gifdecod.o \
@@ -1430,6 +1432,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_fontmap.o \
 	$(OBJS)\coredll_framecmn.o \
 	$(OBJS)\coredll_gaugecmn.o \
+	$(OBJS)\coredll_gbsizer.o \
 	$(OBJS)\coredll_gdicmn.o \
 	$(OBJS)\coredll_geometry.o \
 	$(OBJS)\coredll_gifdecod.o \
@@ -1626,6 +1629,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_fontmap.o \
 	$(OBJS)\coredll_framecmn.o \
 	$(OBJS)\coredll_gaugecmn.o \
+	$(OBJS)\coredll_gbsizer.o \
 	$(OBJS)\coredll_gdicmn.o \
 	$(OBJS)\coredll_geometry.o \
 	$(OBJS)\coredll_gifdecod.o \
@@ -1820,6 +1824,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_fontmap.o \
 	$(OBJS)\corelib_framecmn.o \
 	$(OBJS)\corelib_gaugecmn.o \
+	$(OBJS)\corelib_gbsizer.o \
 	$(OBJS)\corelib_gdicmn.o \
 	$(OBJS)\corelib_geometry.o \
 	$(OBJS)\corelib_gifdecod.o \
@@ -2016,6 +2021,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_fontmap.o \
 	$(OBJS)\corelib_framecmn.o \
 	$(OBJS)\corelib_gaugecmn.o \
+	$(OBJS)\corelib_gbsizer.o \
 	$(OBJS)\corelib_gdicmn.o \
 	$(OBJS)\corelib_geometry.o \
 	$(OBJS)\corelib_gifdecod.o \
@@ -2210,6 +2216,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_fontmap.o \
 	$(OBJS)\monodll_framecmn.o \
 	$(OBJS)\monodll_gaugecmn.o \
+	$(OBJS)\monodll_gbsizer.o \
 	$(OBJS)\monodll_gdicmn.o \
 	$(OBJS)\monodll_geometry.o \
 	$(OBJS)\monodll_gifdecod.o \
@@ -2406,6 +2413,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_fontmap.o \
 	$(OBJS)\monodll_framecmn.o \
 	$(OBJS)\monodll_gaugecmn.o \
+	$(OBJS)\monodll_gbsizer.o \
 	$(OBJS)\monodll_gdicmn.o \
 	$(OBJS)\monodll_geometry.o \
 	$(OBJS)\monodll_gifdecod.o \
@@ -3760,6 +3768,11 @@ $(OBJS)\coredll_gaugecmn.o: ../../src/common/gaugecmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_gbsizer.o: ../../src/common/gbsizer.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_gdicmn.o: ../../src/common/gdicmn.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 endif
@@ -4977,6 +4990,11 @@ $(OBJS)\corelib_gauge95.o: ../../src/msw/gauge95.cpp
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_gaugecmn.o: ../../src/common/gaugecmn.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_gbsizer.o: ../../src/common/gbsizer.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 endif
 
@@ -6453,6 +6471,11 @@ $(OBJS)\monodll_gauge95.o: ../../src/msw/gauge95.cpp
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_gaugecmn.o: ../../src/common/gaugecmn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_gbsizer.o: ../../src/common/gbsizer.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 endif
 
@@ -8025,6 +8048,11 @@ $(OBJS)\monolib_gauge95.o: ../../src/msw/gauge95.cpp
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_gaugecmn.o: ../../src/common/gaugecmn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_gbsizer.o: ../../src/common/gbsizer.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 endif
 

@@ -1007,6 +1007,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/filedlg.h \
 	wx/frame.h \
 	wx/gauge.h \
+	wx/gbsizer.h \
 	wx/gdicmn.h \
 	wx/generic/accel.h \
 	wx/generic/choicdgg.h \
@@ -2235,6 +2236,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_fontmap.o \
 	monodll_framecmn.o \
 	monodll_gaugecmn.o \
+	monodll_gbsizer.o \
 	monodll_gdicmn.o \
 	monodll_geometry.o \
 	monodll_gifdecod.o \
@@ -2380,6 +2382,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_fontmap.o \
 	monodll_framecmn.o \
 	monodll_gaugecmn.o \
+	monodll_gbsizer.o \
 	monodll_gdicmn.o \
 	monodll_geometry.o \
 	monodll_gifdecod.o \
@@ -2477,6 +2480,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_fontmap.o \
 	monolib_framecmn.o \
 	monolib_gaugecmn.o \
+	monolib_gbsizer.o \
 	monolib_gdicmn.o \
 	monolib_geometry.o \
 	monolib_gifdecod.o \
@@ -2622,6 +2626,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_fontmap.o \
 	monolib_framecmn.o \
 	monolib_gaugecmn.o \
+	monolib_gbsizer.o \
 	monolib_gdicmn.o \
 	monolib_geometry.o \
 	monolib_gifdecod.o \
@@ -2719,6 +2724,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_fontmap.o \
 	coredll_framecmn.o \
 	coredll_gaugecmn.o \
+	coredll_gbsizer.o \
 	coredll_gdicmn.o \
 	coredll_geometry.o \
 	coredll_gifdecod.o \
@@ -2864,6 +2870,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_fontmap.o \
 	coredll_framecmn.o \
 	coredll_gaugecmn.o \
+	coredll_gbsizer.o \
 	coredll_gdicmn.o \
 	coredll_geometry.o \
 	coredll_gifdecod.o \
@@ -2961,6 +2968,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_fontmap.o \
 	corelib_framecmn.o \
 	corelib_gaugecmn.o \
+	corelib_gbsizer.o \
 	corelib_gdicmn.o \
 	corelib_geometry.o \
 	corelib_gifdecod.o \
@@ -3106,6 +3114,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_fontmap.o \
 	corelib_framecmn.o \
 	corelib_gaugecmn.o \
+	corelib_gbsizer.o \
 	corelib_gdicmn.o \
 	corelib_geometry.o \
 	corelib_gifdecod.o \
@@ -8037,6 +8046,9 @@ coredll_gauge95.o: $(srcdir)/src/msw/gauge95.cpp
 @COND_USE_GUI_1@coredll_gaugecmn.o: $(srcdir)/src/common/gaugecmn.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
+@COND_USE_GUI_1@coredll_gbsizer.o: $(srcdir)/src/common/gbsizer.cpp
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
 @COND_USE_GUI_1@coredll_gdicmn.o: $(srcdir)/src/common/gdicmn.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -10137,6 +10149,9 @@ corelib_gauge95.o: $(srcdir)/src/msw/gauge95.cpp
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 @COND_USE_GUI_1@corelib_gaugecmn.o: $(srcdir)/src/common/gaugecmn.cpp
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
+@COND_USE_GUI_1@corelib_gbsizer.o: $(srcdir)/src/common/gbsizer.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 @COND_USE_GUI_1@corelib_gdicmn.o: $(srcdir)/src/common/gdicmn.cpp
@@ -12788,6 +12803,9 @@ monodll_gauge95.o: $(srcdir)/src/msw/gauge95.cpp
 @COND_USE_GUI_1@monodll_gaugecmn.o: $(srcdir)/src/common/gaugecmn.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
+@COND_USE_GUI_1@monodll_gbsizer.o: $(srcdir)/src/common/gbsizer.cpp
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 @COND_USE_GUI_1@monodll_gdicmn.o: $(srcdir)/src/common/gdicmn.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -15389,6 +15407,9 @@ monolib_gauge95.o: $(srcdir)/src/msw/gauge95.cpp
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_USE_GUI_1@monolib_gaugecmn.o: $(srcdir)/src/common/gaugecmn.cpp
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_USE_GUI_1@monolib_gbsizer.o: $(srcdir)/src/common/gbsizer.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_USE_GUI_1@monolib_gdicmn.o: $(srcdir)/src/common/gdicmn.cpp
