@@ -166,6 +166,10 @@
  */
 #define wxUSE_REGEX 0
 /*
+ * Use XML support
+ */
+#define wxUSE_XML 0
+/*
  * Use zlib
  */
 #define wxUSE_ZLIB 0

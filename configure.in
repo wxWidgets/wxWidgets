@@ -360,6 +360,8 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_CONTROLS=no
 
   DEFAULT_wxUSE_REGEX=no
+  DEFAULT_wxUSE_XML=no
+  DEFAULT_wxUSE_EXPAT=no
   DEFAULT_wxUSE_ZLIB=no
   DEFAULT_wxUSE_LIBPNG=no
   DEFAULT_wxUSE_LIBJPEG=no
@@ -533,6 +535,8 @@ else
   DEFAULT_wxUSE_GUI=yes
 
   DEFAULT_wxUSE_REGEX=yes
+  DEFAULT_wxUSE_XML=yes
+  DEFAULT_wxUSE_EXPAT=yes
   DEFAULT_wxUSE_ZLIB=yes
   DEFAULT_wxUSE_LIBPNG=yes
   DEFAULT_wxUSE_LIBJPEG=yes
@@ -736,6 +740,7 @@ WX_ARG_WITH(dmalloc,       [  --with-dmalloc          use dmalloc library (http:
 WX_ARG_SYS_WITH(regex,     [  --with-regex            enable support for wxRegEx class], wxUSE_REGEX)
 WX_ARG_SYS_WITH(zlib,      [  --with-zlib             use zlib for LZW compression], wxUSE_ZLIB)
 WX_ARG_SYS_WITH(odbc,      [  --with-odbc             use the IODBC and wxODBC classes], wxUSE_ODBC)
+WX_ARG_SYS_WITH(expat,     [  --with-expat            enable XML support using expat parser], wxUSE_EXPAT)
 
 dnl ---------------------------------------------------------------------------
 dnl compile options
@@ -2038,6 +2043,39 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
         TIFF_INCLUDE="-I\${top_srcdir}/src/tiff"
     fi
 fi
+
+dnl ------------------------------------------------------------------------
+dnl Check for expat libraries
+dnl ------------------------------------------------------------------------
+
+if test "$wxUSE_EXPAT" != "no"; then
+    wxUSE_XML=1
+    AC_DEFINE(wxUSE_EXPAT)
+    AC_DEFINE(wxUSE_XML)
+    
+    if test "$wxUSE_EXPAT" = "sys" -o "$wxUSE_EXPAT" = "yes" ; then           
+        AC_CHECK_HEADER(expat.h)
+        if test "$ac_cv_header_expat_h" = "yes"; then
+            AC_CHECK_LIB(expat, XML_ParserCreate, EXPAT_LINK=" -lexpat")
+        fi
+        if test "x$EXPAT_LINK" = "x" ; then
+            if test "$wxUSE_EXPAT" = "sys" ; then
+                AC_MSG_ERROR([system expat library not found! Use --with-expat=builtin to use built-in version])
+            else
+                AC_MSG_WARN([system expat library not found, will use built-in instead])
+                wxUSE_EXPAT=builtin
+            fi
+        else
+            dnl we are using the system library
+            wxUSE_EXPAT=sys
+        fi
+    fi
+    if test "$wxUSE_EXPAT" = "builtin" ; then
+        dnl Expat needs this:
+        AC_CONFIG_SUBDIRS([src/expat])
+    fi
+fi
+
 
 dnl ----------------------------------------------------------------
 dnl search for toolkit (widget sets)
@@ -5383,6 +5421,7 @@ CXXFLAGS=`echo $CODE_GEN_FLAGS $CODE_GEN_FLAGS_CXX $EXTRA_CFLAGS $CXXFLAGS $CXXW
 
 LIBS=`echo $LIBS | sed 's/ \+/ /g'`
 EXTRALIBS="$LDFLAGS $LDFLAGS_VERSIONING $LIBS $DMALLOC_LIBS"
+EXTRALIBS_XML="$EXPAT_LINK"
 if test "$wxUSE_GUI" = "yes"; then
     EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK | sed 's/ \+/ /g'`
 fi
@@ -5407,6 +5446,7 @@ fi
 
 AC_SUBST(wxUSE_ZLIB)
 AC_SUBST(wxUSE_REGEX)
+AC_SUBST(wxUSE_EXPAT)
 AC_SUBST(wxUSE_ODBC)
 AC_SUBST(wxUSE_LIBJPEG)
 AC_SUBST(wxUSE_LIBPNG)
@@ -5427,6 +5467,7 @@ AC_SUBST(OFFICIAL_BUILD)
 AC_SUBST(WXUNIV)
 AC_SUBST(MONOLITHIC)
 AC_SUBST(EXTRALIBS)
+AC_SUBST(EXTRALIBS_XML)
 AC_SUBST(EXTRALIBS_GUI)
 AC_SUBST(EXTRALIBS_OPENGL)
 AC_SUBST(UNICODE)
@@ -5695,6 +5736,7 @@ echo "                                       regex              ${wxUSE_REGEX}"
 echo "                                       tiff               ${wxUSE_LIBTIFF-none}"
 echo "                                       zlib               ${wxUSE_ZLIB}"
 echo "                                       odbc               ${wxUSE_ODBC}"
+echo "                                       expat              ${wxUSE_EXPAT}"
 
 echo ""
 
