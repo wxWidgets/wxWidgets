@@ -128,7 +128,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     ed = new wxStyledTextCtrl(this, ID_ED);
 
     // Default font
-    wxFont font(8, wxMODERN, wxNORMAL, wxNORMAL);
+    wxFont font(10, wxMODERN, wxNORMAL, wxNORMAL);
     ed->StyleSetFont(wxSTC_STYLE_DEFAULT, font);
     ed->StyleClearAll();
 
@@ -148,9 +148,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     ed->StyleSetBold(10, TRUE);
 
 #ifdef __WXMSW__
-    ed->StyleSetSpec(2, "fore:#007f00,bold,face:Arial,size:7");
+    ed->StyleSetSpec(2, "fore:#007f00,bold,face:Arial,size:9");
 #else
-    ed->StyleSetSpec(2, "fore:#007f00,bold,face:Helvetica,size:7");
+    ed->StyleSetSpec(2, "fore:#007f00,bold,face:Helvetica,size:9");
 #endif
 
     // give it some text to play with

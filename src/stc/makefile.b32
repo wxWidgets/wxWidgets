@@ -14,48 +14,47 @@
 WXDIR = $(WXWIN)
 
 SCINTILLA=.\scintilla
+
 S=$(SCINTILLA)\src
 
 STCEXTRACPPFLAGS=-D__WX__ -DSCI_LEXER -I$(SCINTILLA)/include -I$(S)
 
-LIBTARGET=$(WXDIR)\lib\stc.lib
+LIBTARGET=$(WXDIR)\contrib\lib\stc.lib
 
 OBJECTS = \
-	AutoComplete.obj	\
-	CallTip.obj		\
-	CellBuffer.obj		\
-	ContractionState.obj	\
-	Document.obj		\
-	DocumentAccessor.obj	\
-	Editor.obj		\
-	Indicator.obj		\
-	KeyMap.obj		\
-	KeyWords.obj		\
-	LexCPP.obj		\
-	LexHTML.obj		\
-	LexLua.obj		\
-	LexOthers.obj		\
-	LexPerl.obj		\
-	LexPython.obj		\
-	LexSQL.obj		\
-	LexVB.obj		\
-	LineMarker.obj		\
-	PropSet.obj		\
-	PosRegExp.obj		\
-	ScintillaBase.obj	\
-	Style.obj		\
-	UniConversion.obj	\
-	ViewStyle.obj		\
-	WindowAccessor.obj	\
-				\
-	PlatWX.obj		\
-	ScintillaWX.obj		\
-	stc.obj			\
+    AutoComplete.obj        \
+    CallTip.obj             \
+    CellBuffer.obj          \
+    ContractionState.obj    \
+    Document.obj            \
+    DocumentAccessor.obj    \
+    Editor.obj              \
+    Indicator.obj           \
+    KeyMap.obj              \
+    KeyWords.obj            \
+    LexCPP.obj              \
+    LexHTML.obj             \
+    LexLua.obj              \
+    LexOthers.obj           \
+    LexPerl.obj             \
+    LexPython.obj           \
+    LexSQL.obj              \
+    LexVB.obj               \
+    LineMarker.obj          \
+    PosRegExp.obj           \
+    PropSet.obj             \
+    ScintillaBase.obj       \
+    Style.obj               \
+    UniConversion.obj       \
+    ViewStyle.obj           \
+    WindowAccessor.obj      \
+                            \
+    PlatWX.obj              \
+    ScintillaWX.obj         \
+    stc.obj                 \
 
 
 !include $(WXDIR)\src\makelib.b32
-
-all: stc.cfg $(LIBTARGET)
 
 CFG = stc.cfg
 CPPFLAGS=$(DLL_FLAGS) $(EXTRACPPFLAGS) @$(CFG)
