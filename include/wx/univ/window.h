@@ -200,11 +200,6 @@ public:
     // we refresh the window when it is dis/enabled
     virtual bool Enable(bool enable = TRUE);
 
-    // remember that the font/colour was changed
-    virtual bool SetBackgroundColour(const wxColour& colour);
-    virtual bool SetForegroundColour(const wxColour& colour);
-    virtual bool SetFont(const wxFont& font);
-
     // our Capture/ReleaseMouse() maintains the stack of windows which had
     // captured the mouse and when ReleaseMouse() is called, the mouse freed
     // only if the stack is empty, otherwise it is captured back by the window
@@ -272,11 +267,8 @@ protected:
     int       m_alignBgBitmap;
     wxStretch m_stretchBgBitmap;
 
-    // more flags
-    bool m_isCurrent:1; // is the mouse currently inside the window?
-    bool m_hasBgCol:1;  // was the bg colour explicitly changed by user?
-    bool m_hasFgCol:1;  //         fg
-    bool m_hasFont:1;   //         font
+    // is the mouse currently inside the window?
+    bool m_isCurrent:1;
 
 private:
     // the window scrollbars

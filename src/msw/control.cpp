@@ -46,9 +46,6 @@ END_EVENT_TABLE()
 // Item members
 wxControl::wxControl()
 {
-    m_backgroundColour = *wxWHITE;
-    m_foregroundColour = *wxBLACK;
-
 #if WXWIN_COMPATIBILITY
     m_callback = 0;
 #endif // WXWIN_COMPATIBILITY

@@ -3257,7 +3257,11 @@ bool wxWindowMSW::HandleSysColorChange()
     wxSysColourChangedEvent event;
     event.SetEventObject(this);
 
-    return GetEventHandler()->ProcessEvent(event);
+    (void)GetEventHandler()->ProcessEvent(event);
+
+    // always let the system carry on the default processing to allow the
+    // native controls to react to the colours update
+    return FALSE;
 }
 
 bool wxWindowMSW::HandleCtlColor(WXHBRUSH *brush,
@@ -3324,19 +3328,35 @@ bool wxWindowMSW::HandleQueryNewPalette()
 // Responds to colour changes: passes event on to children.
 void wxWindowMSW::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
-    wxNode *node = GetChildren().First();
+    wxWindowList::Node *node = GetChildren().GetFirst();
     while ( node )
     {
-        // Only propagate to non-top-level windows
-        wxWindow *win = (wxWindow *)node->Data();
-        if ( win->GetParent() )
+        // Only propagate to non-top-level windows because Windows already
+        // sends this event to all top-level ones
+        wxWindow *win = node->GetData();
+        if ( !win->IsTopLevel() )
         {
-            wxSysColourChangedEvent event2;
-            event.m_eventObject = win;
-            win->GetEventHandler()->ProcessEvent(event2);
+            // we need to send the real WM_SYSCOLORCHANGE and not just trigger
+            // EVT_SYS_COLOUR_CHANGED call because the latter wouldn't work for
+            // the standard controls
+            ::SendMessage(GetHwndOf(win), WM_SYSCOLORCHANGE, 0, 0);
         }
 
-        node = node->Next();
+        node = node->GetNext();
+    }
+
+    // update the colours we use if they were not set explicitly by the user:
+    // this must be done or OnCtlColor() would continue to use the old colours
+    if ( !m_hasFgCol )
+    {
+        m_foregroundColour = wxSystemSettings::
+                                GetSystemColour(wxSYS_COLOUR_WINDOWTEXT);
+    }
+
+    if ( !m_hasBgCol )
+    {
+        m_backgroundColour = wxSystemSettings::
+                                GetSystemColour(wxSYS_COLOUR_BTNFACE);
     }
 }
 

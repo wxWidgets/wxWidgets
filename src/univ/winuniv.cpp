@@ -939,40 +939,6 @@ wxRect wxWindow::ScrollNoRefresh(int dx, int dy, const wxRect *rectTotal)
 }
 
 // ----------------------------------------------------------------------------
-// colours/fonts
-// ----------------------------------------------------------------------------
-
-bool wxWindow::SetBackgroundColour(const wxColour& colour)
-{
-    if ( !wxWindowNative::SetBackgroundColour(colour) )
-        return FALSE;
-
-    m_hasBgCol = TRUE;
-
-    return TRUE;
-}
-
-bool wxWindow::SetForegroundColour(const wxColour& colour)
-{
-    if ( !wxWindowNative::SetForegroundColour(colour) )
-        return FALSE;
-
-    m_hasFgCol = TRUE;
-
-    return TRUE;
-}
-
-bool wxWindow::SetFont(const wxFont& font)
-{
-    if ( !wxWindowNative::SetFont(font) )
-        return FALSE;
-
-    m_hasFont = TRUE;
-
-    return TRUE;
-}
-
-// ----------------------------------------------------------------------------
 // mouse capture
 // ----------------------------------------------------------------------------
 

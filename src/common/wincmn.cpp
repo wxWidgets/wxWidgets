@@ -637,6 +637,8 @@ bool wxWindowBase::SetBackgroundColour( const wxColour &colour )
 
     m_backgroundColour = colour;
 
+    m_hasBgCol = TRUE;
+
     return TRUE;
 }
 
@@ -646,6 +648,8 @@ bool wxWindowBase::SetForegroundColour( const wxColour &colour )
         return FALSE;
 
     m_foregroundColour = colour;
+
+    m_hasFgCol = TRUE;
 
     return TRUE;
 }
@@ -677,6 +681,8 @@ bool wxWindowBase::SetFont(const wxFont& font)
     }
 
     m_font = fontOk;
+
+    m_hasFont = TRUE;
 
     return TRUE;
 }

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        window.h
+// Name:        wx/window.h
 // Purpose:     wxWindowBase class - the interface of wxWindow
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -822,6 +822,11 @@ protected:
     bool                 m_isShown:1;
     bool                 m_isEnabled:1;
     bool                 m_isBeingDeleted:1;
+
+    // was the window colours/font explicitly changed by user?
+    bool                 m_hasBgCol:1;
+    bool                 m_hasFgCol:1;
+    bool                 m_hasFont:1;
 
     // window attributes
     long                 m_windowStyle,
