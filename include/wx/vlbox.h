@@ -132,14 +132,14 @@ public:
     // delete all items from the control
     void Clear() { SetItemCount(0); }
 
-    // set the selection to the specified item, if it is -1 the selection is
-    // unset
+    // set the selection to the specified item, if it is wxNOT_FOUND the
+    // selection is unset
     //
     // this function is only valid for the single selection listboxes
     void SetSelection(int selection);
 
     // selects or deselects the specified item which must be valid (i.e. not
-    // equal to -1)
+    // equal to wxNOT_FOUND)
     //
     // return true if the items selection status has changed or false
     // otherwise
@@ -221,21 +221,36 @@ protected:
     bool DoSelectAll(bool select);
 
     // change the current item (in single selection listbox it also implicitly
-    // changes the selection); current may be -1 in which case there will be
-    // no current item any more
+    // changes the selection); current may be wxNOT_FOUND in which case there
+    // will be no current item any more
     //
     // return true if the current item changed, false otherwise
     bool DoSetCurrent(int current);
 
+    // flags for DoHandleItemClick
+    enum
+    {
+        ItemClick_Shift = 1,        // item shift-clicked
+        ItemClick_Ctrl  = 2,        //       ctrl
+        ItemClick_Kbd   = 4         // item selected from keyboard
+    };
+
     // common part of keyboard and mouse handling processing code
-    void DoHandleItemClick(int item, bool shiftDown, bool ctrlDown);
+    void DoHandleItemClick(int item, int flags);
 
 private:
-    // the current item or -1
+    // the current item or wxNOT_FOUND
     //
     // if m_selStore == NULL this is also the selected item, otherwise the
     // selections are managed by m_selStore
     int m_current;
+
+    // the anchor of the selection for the multiselection listboxes:
+    // shift-clicking an item extends the selection from m_anchor to the item
+    // clicked, for example
+    //
+    // always wxNOT_FOUND for single selection listboxes
+    int m_anchor;
 
     // the object managing our selected items if not NULL
     wxSelectionStore *m_selStore;

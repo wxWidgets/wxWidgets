@@ -54,7 +54,8 @@ END_EVENT_TABLE()
 
 void wxVListBox::Init()
 {
-    m_current = wxNOT_FOUND;
+    m_current =
+    m_anchor = wxNOT_FOUND;
     m_selStore = NULL;
 }
 
@@ -376,7 +377,7 @@ void wxVListBox::OnPaint(wxPaintEvent& event)
 // wxVListBox keyboard/mouse handling
 // ============================================================================
 
-void wxVListBox::DoHandleItemClick(int item, bool shiftDown, bool ctrlDown)
+void wxVListBox::DoHandleItemClick(int item, int flags)
 {
     // has anything worth telling the client code about happened?
     bool notify = false;
@@ -389,32 +390,44 @@ void wxVListBox::DoHandleItemClick(int item, bool shiftDown, bool ctrlDown)
         // NB: the keyboard interface we implement here corresponds to
         //     wxLB_EXTENDED rather than wxLB_MULTIPLE but this one makes more
         //     sense IMHO
-        if ( shiftDown )
+        if ( flags & ItemClick_Shift )
         {
             if ( m_current != wxNOT_FOUND )
             {
+                if ( m_anchor == wxNOT_FOUND )
+                    m_anchor = m_current;
+
                 select = false;
 
-                // only the range from old m_current to new m_current must be
-                // selected
+                // only the range from the selection anchor to new m_current
+                // must be selected
                 if ( DeselectAll() )
                     notify = true;
 
-                if ( SelectRange(m_current, item) )
+                if ( SelectRange(m_anchor, item) )
                     notify = true;
             }
             //else: treat it as ordinary click/keypress
         }
-        else if ( ctrlDown )
+        else // Shift not pressed
         {
-            select = false;
+            m_anchor = item;
 
-            Toggle(item);
+            if ( flags & ItemClick_Ctrl )
+            {
+                select = false;
 
-            // the status of the item has definitely changed
-            notify = true;
+                if ( !(flags & ItemClick_Kbd) )
+                {
+                    Toggle(item);
+
+                    // the status of the item has definitely changed
+                    notify = true;
+                }
+                //else: Ctrl-arrow pressed, don't change selection
+            }
+            //else: behave as in single selection case
         }
-        //else: behave as in single selection case
 
         if ( select )
         {
@@ -451,6 +464,9 @@ void wxVListBox::DoHandleItemClick(int item, bool shiftDown, bool ctrlDown)
 
 void wxVListBox::OnKeyDown(wxKeyEvent& event)
 {
+    // flags for DoHandleItemClick()
+    int flags = ItemClick_Kbd;
+
     int current = 0; // just to silent the stupid compiler warnings
     switch ( event.GetKeyCode() )
     {
@@ -494,12 +510,25 @@ void wxVListBox::OnKeyDown(wxKeyEvent& event)
             current = GetFirstVisibleLine();
             break;
 
+        case WXK_SPACE:
+            // hack: pressing space should work like a mouse click rather than
+            // like a keyboard arrow press, so trick DoHandleItemClick() in
+            // thinking we were clicked
+            flags &= ~ItemClick_Kbd;
+            current = m_current;
+            break;
+
         default:
             event.Skip();
             return;
     }
 
-    DoHandleItemClick(current, event.ShiftDown(), event.ControlDown());
+    if ( event.ShiftDown() )
+       flags |= ItemClick_Shift;
+    if ( event.ControlDown() )
+        flags |= ItemClick_Ctrl;
+
+    DoHandleItemClick(current, flags);
 }
 
 // ----------------------------------------------------------------------------
@@ -512,15 +541,20 @@ void wxVListBox::OnLeftDown(wxMouseEvent& event)
 
     if ( item != wxNOT_FOUND )
     {
+        int flags = 0;
+        if ( event.ShiftDown() )
+           flags |= ItemClick_Shift;
+
         // under Mac Apple-click is used in the same way as Ctrl-click
         // elsewhere
-        DoHandleItemClick(item, event.ShiftDown(),
 #ifdef __WXMAC__
-                                event.MetaDown()
+        if ( event.MetaDown() )
 #else
-                                event.ControlDown()
+        if ( event.ControlDown() )
 #endif
-                         );
+            flags |= ItemClick_Ctrl;
+
+        DoHandleItemClick(item, flags);
     }
 }
 
