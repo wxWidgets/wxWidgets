@@ -1204,7 +1204,7 @@ void wxGenericFileDialog::HandleAction( const wxString &fn )
 
     if (filename.BeforeFirst(wxT('/')) == wxT("~"))
     {
-        filename = wxGetUserHome() + filename.Remove(0, 1);
+        filename = wxString(wxGetUserHome()) + filename.Remove(0, 1);
     }
 #endif // __UNIX__
 

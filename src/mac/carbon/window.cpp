@@ -523,6 +523,7 @@ ControlUserPaneBackgroundUPP gControlUserPaneBackgroundUPP = NULL ;
 // implementation
 // ===========================================================================
 
+#if KEY_wxList_DEPRECATED
 wxList wxWinMacControlList(wxKEY_INTEGER);
 
 wxWindow *wxFindControlFromMacControl(ControlRef inControl )
@@ -547,6 +548,42 @@ void wxRemoveMacControlAssociation(wxWindow *control)
 {
     wxWinMacControlList.DeleteObject(control);
 }
+#else
+
+WX_DECLARE_HASH_MAP(ControlRef, wxWindow*, wxPointerHash, wxPointerEqual, MacControlMap);
+
+static MacControlMap wxWinMacControlList;
+
+wxWindow *wxFindControlFromMacControl(ControlRef inControl )
+{
+    MacControlMap::iterator node = wxWinMacControlList.find(inControl);
+
+    return (node == wxWinMacControlList.end()) ? NULL : node->second;
+}
+
+void wxAssociateControlWithMacControl(ControlRef inControl, wxWindow *control)
+{
+    // adding NULL ControlRef is (first) surely a result of an error and
+    // (secondly) breaks native event processing
+    wxCHECK_RET( inControl != (ControlRef) NULL, wxT("attempt to add a NULL WindowRef to window list") );
+
+    wxWinMacControlList[inControl] = control;
+}
+
+void wxRemoveMacControlAssociation(wxWindow *control)
+{
+   // iterate over all the elements in the class
+    MacControlMap::iterator it;
+    for ( it = wxWinMacControlList.begin(); it != wxWinMacControlList.end(); ++it )
+    {
+        if ( it->second == control )
+        {
+            wxWinMacControlList.erase(it);
+            break;
+        }
+    }
+}
+#endif // deprecated wxList
 
 // UPP functions
 ControlActionUPP wxMacLiveScrollbarActionUPP = NULL ;
@@ -1904,7 +1941,7 @@ void wxWindowMac::MacPropagateVisibilityChanged()
 #if !TARGET_API_MAC_OSX
     MacVisibilityChanged() ;
 
-    wxWindowListNode *node = GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
     while ( node )
     {
         wxWindowMac *child = node->GetData();
@@ -1920,7 +1957,7 @@ void wxWindowMac::MacPropagateEnabledStateChanged( )
 #if !TARGET_API_MAC_OSX
     MacEnabledStateChanged() ;
 
-    wxWindowListNode *node = GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
     while ( node )
     {
         wxWindowMac *child = node->GetData();
@@ -1936,7 +1973,7 @@ void wxWindowMac::MacPropagateHiliteChanged( )
 #if !TARGET_API_MAC_OSX
     MacHiliteChanged() ;
 
-    wxWindowListNode *node = GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
     while ( node )
     {
         wxWindowMac *child = node->GetData();
@@ -2435,7 +2472,7 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
 #endif
     }
 
-    for (wxWindowListNode *node = GetChildren().GetFirst(); node; node = node->GetNext())
+    for (wxWindowList::compatibility_iterator node = GetChildren().GetFirst(); node; node = node->GetNext())
     {
         wxWindowMac *child = node->GetData();
         if (child == m_vScrollBar) continue;
@@ -2816,7 +2853,7 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
         // in Composited windowing
         wxPoint clientOrigin = GetClientAreaOrigin() ;
 
-        for (wxWindowListNode *node = GetChildren().GetFirst(); node; node = node->GetNext())
+        for (wxWindowList::compatibility_iterator node = GetChildren().GetFirst(); node; node = node->GetNext())
         {
             wxWindowMac *child = node->GetData();
             if (child == m_vScrollBar) continue;
@@ -3039,7 +3076,7 @@ void wxWindowMac::MacSuperChangedPosition()
 {
     // only window-absolute structures have to be moved i.e. controls
 
-    wxWindowListNode *node = GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
     while ( node )
     {
         wxWindowMac *child = node->GetData();
@@ -3052,7 +3089,7 @@ void wxWindowMac::MacTopLevelWindowChangedPosition()
 {
     // only screen-absolute structures have to be moved i.e. glcanvas
 
-    wxWindowListNode *node = GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
     while ( node )
     {
         wxWindowMac *child = node->GetData();
