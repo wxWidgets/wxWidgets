@@ -397,8 +397,14 @@
  
         int wxFputs(const wxChar *ch, FILE *stream);
         int wxPutc(wxChar ch, FILE *stream);
-            
-        WXDLLIMPEXP_BASE size_t   wxStrlen_(const wxChar *s);
+        
+        #ifdef __cplusplus
+        extern "C" {
+        #endif
+            WXDLLIMPEXP_BASE size_t   wxStrlen_(const wxChar *s);
+        #ifdef __cplusplus
+        }
+        #endif
 
         #define wxPutchar(wch) wxPutc(wch, stdout)
         #define wxPuts(ws) wxFputs(ws, stdout)
@@ -703,18 +709,7 @@
     #ifdef HAVE_WCSLEN
         #define wxWcslen wcslen
     #else
-    #if defined( __WXMAC_XCODE__ ) && !defined( __cplusplus )
-    /* xcode native targets are giving multiply defined symbols on regex */
-        static
-    #endif
-        inline size_t wxWcslen(const wchar_t *s)
-        {
-            size_t n = 0;
-            while ( *s++ )
-                n++;
-
-            return n;
-        }
+        WXDLLIMPEXP_BASE size_t wxWcslen(const wchar_t *s);
     #endif
 #endif /* wxUSE_WCHAR_T */
 
@@ -935,33 +930,49 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
     WXDLLIMPEXP_BASE char *strdup(const char* s);
 #endif
 
-/* RN: Used only under OSX <= 10.2 currently */
+/* RN: Used only under OSX <= 10.2 currently 
+   The __cplusplus ifdefs are messy, but they are required to build
+   the regex library, since c does not support function overloading
+*/
 #ifdef wxNEED_WX_STRING_H
-    WXDLLIMPEXP_BASE wxChar * wxStrcat(wxChar *dest, const wxChar *src);
-    WXDLLIMPEXP_BASE const wxChar * wxStrchr(const wxChar *s, wxChar c);
-    inline wxChar * wxStrchr(wxChar *s, wxChar c)
-        { return (wxChar *)wxStrchr((const wxChar *)s, c); }
-    WXDLLIMPEXP_BASE int      wxStrcmp(const wxChar *s1, const wxChar *s2);
-    WXDLLIMPEXP_BASE int      wxStrcoll(const wxChar *s1, const wxChar *s2);
-    WXDLLIMPEXP_BASE wxChar * wxStrcpy(wxChar *dest, const wxChar *src);
-    WXDLLIMPEXP_BASE size_t   wxStrcspn(const wxChar *s, const wxChar *reject);
-    WXDLLIMPEXP_BASE wxChar * wxStrncat(wxChar *dest, const wxChar *src, size_t n);
-    WXDLLIMPEXP_BASE int      wxStrncmp(const wxChar *s1, const wxChar *s2, size_t n);
-    WXDLLIMPEXP_BASE wxChar * wxStrncpy(wxChar *dest, const wxChar *src, size_t n);
-    WXDLLIMPEXP_BASE const wxChar * wxStrpbrk(const wxChar *s, const wxChar *accept);
-    inline wxChar * wxStrpbrk(wxChar *s, const wxChar *accept)
-        { return (wxChar *)wxStrpbrk((const wxChar *)s, accept); }
-    WXDLLIMPEXP_BASE const wxChar * wxStrrchr(const wxChar *s, wxChar c);
-    inline wxChar * wxStrrchr(wxChar *s, wxChar c)
-        { return (wxChar *)wxStrrchr((const wxChar *)s, c); }
-    WXDLLIMPEXP_BASE size_t   wxStrspn(const wxChar *s, const wxChar *accept);
-    WXDLLIMPEXP_BASE const wxChar * wxStrstr(const wxChar *haystack, const wxChar *needle);
-    inline wxChar *wxStrstr(wxChar *haystack, const wxChar *needle)
-        { return (wxChar *)wxStrstr((const wxChar *)haystack, needle); }
+#	ifdef __cplusplus
+    extern "C" {
+#	endif
+        WXDLLIMPEXP_BASE wxChar * wxStrcat(wxChar *dest, const wxChar *src);
+        WXDLLIMPEXP_BASE const wxChar * wxStrchr(const wxChar *s, wxChar c);
+        WXDLLIMPEXP_BASE int      wxStrcmp(const wxChar *s1, const wxChar *s2);
+        WXDLLIMPEXP_BASE int      wxStrcoll(const wxChar *s1, const wxChar *s2);
+        WXDLLIMPEXP_BASE wxChar * wxStrcpy(wxChar *dest, const wxChar *src);
+        WXDLLIMPEXP_BASE size_t   wxStrcspn(const wxChar *s, const wxChar *reject);
+        WXDLLIMPEXP_BASE wxChar * wxStrncat(wxChar *dest, const wxChar *src, size_t n);
+        WXDLLIMPEXP_BASE int      wxStrncmp(const wxChar *s1, const wxChar *s2, size_t n);
+        WXDLLIMPEXP_BASE wxChar * wxStrncpy(wxChar *dest, const wxChar *src, size_t n);
+        WXDLLIMPEXP_BASE const wxChar * wxStrpbrk(const wxChar *s, const wxChar *accept);
+        WXDLLIMPEXP_BASE const wxChar * wxStrrchr(const wxChar *s, wxChar c);
+        WXDLLIMPEXP_BASE size_t   wxStrspn(const wxChar *s, const wxChar *accept);
+        WXDLLIMPEXP_BASE const wxChar * wxStrstr(const wxChar *haystack, const wxChar *needle);
+#	ifdef __cplusplus	
+    }
+#	endif
+
+    /* These functions use C++, so we can't c extern them */
     WXDLLIMPEXP_BASE double   wxStrtod(const wxChar *nptr, wxChar **endptr);
     WXDLLIMPEXP_BASE long int wxStrtol(const wxChar *nptr, wxChar **endptr, int base);
     WXDLLIMPEXP_BASE unsigned long int wxStrtoul(const wxChar *nptr, wxChar **endptr, int base);
     WXDLLIMPEXP_BASE size_t   wxStrxfrm(wxChar *dest, const wxChar *src, size_t n);
+
+    /* inlined versions */
+    #ifdef __cplusplus
+        inline wxChar * wxStrchr(wxChar *s, wxChar c)
+            { return (wxChar *)wxStrchr((const wxChar *)s, c); }
+        inline wxChar * wxStrpbrk(wxChar *s, const wxChar *accept)
+            { return (wxChar *)wxStrpbrk((const wxChar *)s, accept); }
+        inline wxChar * wxStrrchr(wxChar *s, wxChar c)
+            { return (wxChar *)wxStrrchr((const wxChar *)s, c); }
+        inline wxChar *wxStrstr(wxChar *haystack, const wxChar *needle)
+            { return (wxChar *)wxStrstr((const wxChar *)haystack, needle); }
+    #endif
+
 #endif /* wxNEED_WX_STRING_H */
 
 #ifndef wxStrdupA
@@ -1021,6 +1032,8 @@ WXDLLIMPEXP_BASE int      wxSystem(const wxChar *psz);
 #if defined(__MWERKS__) && defined(macintosh)
     #include <time.h>
 #endif
+    /*silent gabby compilers*/
+    struct tm;
     WXDLLIMPEXP_BASE size_t wxStrftime(wxChar *s, size_t max,
                                   const wxChar *fmt, const struct tm *tm);
 #endif /* wxNEED_WX_TIME_H */

@@ -1178,11 +1178,28 @@ WXDLLEXPORT wxWCharBuffer wxSetlocale(int category, const wxChar *locale)
 }
 #endif
 
+#if wxUSE_WCHAR_T && !defined(HAVE_WCSLEN)
+WXDLLEXPORT size_t wxWcslen(const wchar_t *s)
+{
+    size_t n = 0;
+    while ( *s++ )
+        n++;
+
+    return n;
+}
+#endif
+
 // ----------------------------------------------------------------------------
 // string.h functions
 // ----------------------------------------------------------------------------
 
 #ifdef wxNEED_WX_STRING_H
+
+// RN:  These need to be c externed for the regex lib
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 WXDLLEXPORT wxChar * wxStrcat(wxChar *dest, const wxChar *src)
 {
   wxChar *ret = dest;
@@ -1301,6 +1318,10 @@ WXDLLEXPORT const wxChar *wxStrstr(const wxChar *haystack, const wxChar *needle)
 
     return NULL;
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 WXDLLEXPORT double wxStrtod(const wxChar *nptr, wxChar **endptr)
 {

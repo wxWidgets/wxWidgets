@@ -144,6 +144,17 @@ RegExTestCase::RegExTestCase(
 #endif
 }
 
+int wxWcscmp(const wchar_t* s1, const wchar_t* s2)
+{
+    size_t nLen1 = wxWcslen(s1);
+    size_t nLen2 = wxWcslen(s2);
+    
+    if (nLen1 != nLen2)
+        return nLen1 - nLen2;
+    
+    return wxMemcmp(s1, s2, nLen1);
+}
+
 // convert a string from UTF8 to the internal encoding
 //
 wxString RegExTestCase::Conv(const char *str)
@@ -151,7 +162,7 @@ wxString RegExTestCase::Conv(const char *str)
     const wxWCharBuffer wstr = wxConvUTF8.cMB2WC(str);
     const wxWC2WXbuf buf = wxConvCurrent->cWC2WX(wstr);
 
-    if (!buf || wcscmp(wxConvCurrent->cWX2WC(buf), wstr) != 0)
+    if (!buf || wxWcscmp(wxConvCurrent->cWX2WC(buf), wstr) != 0)
         return convError();
     else
         return buf;
