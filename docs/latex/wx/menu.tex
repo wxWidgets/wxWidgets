@@ -1,3 +1,14 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        menu.tex
+%% Purpose:     wxMenu documentation
+%% Author:      wxWidgets Team
+%% Modified by:
+%% Created:     
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets Team
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{\class{wxMenu}}\label{wxmenu}
 
 A menu is a popup (or pull down) list of items, one of which may be
@@ -13,7 +24,8 @@ associated command but just makes a separator line appear in the menu.
 predefined by wxWidgets and have a special meaning since entries
 using these IDs will be taken out of the normal menus under MacOS X
 and will be inserted into the system menu (following the appropriate
-MacOS X interface guideline).
+MacOS X interface guideline). On PalmOS {\it wxID\_EXIT} is disabled according
+to Palm OS Companion guidelines.
 
 Menu items may be either normal items, check items or radio items. Normal items
 don't have any special properties while the check items have a boolean flag

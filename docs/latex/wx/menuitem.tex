@@ -1,3 +1,14 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        menuitem.tex
+%% Purpose:     wxMenuItem documentation
+%% Author:      wxWidgets Team
+%% Modified by:
+%% Created:     
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets Team
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{\class{wxMenuItem}}\label{wxmenuitem}
 
 A menu item represents an item in a menu. Note that you usually don't have to
@@ -154,6 +165,13 @@ will return just {\tt "Hello"}.
 Gets the width of the menu item checkmark bitmap (Windows only).
 
 
+\membersection{wxMenuItem::GetMenu}\label{wxmenuitemgetmenu}
+
+\constfunc{wxMenu*}{GetMenu}{\void}
+
+Returns the menu this menu item is in, or NULL if this menu item is not attached.
+
+
 \membersection{wxMenuItem::GetName}\label{wxmenuitemgetname}
 
 \constfunc{wxString}{GetName}{\void}
@@ -236,7 +254,7 @@ Sets the background colour associated with the menu item (Windows only).
 
 \membersection{wxMenuItem::SetBitmap}\label{wxmenuitemsetbitmap}
 
-\constfunc{void}{SetBitmap}{\param{const wxBitmap\& }{bmp}}
+\func{void}{SetBitmap}{\param{const wxBitmap\& }{bmp}}
 
 Sets the bitmap for the menu item (Windows and GTK+ only). It is
 equivalent to \helpref{SetBitmaps}{wxmenuitemsetbitmaps}(bmp, wxNullBitmap).
@@ -244,7 +262,7 @@ equivalent to \helpref{SetBitmaps}{wxmenuitemsetbitmaps}(bmp, wxNullBitmap).
 
 \membersection{wxMenuItem::SetBitmaps}\label{wxmenuitemsetbitmaps}
 
-\constfunc{void}{SetBitmaps}{\param{const wxBitmap\& }{checked},
+\func{void}{SetBitmaps}{\param{const wxBitmap\& }{checked},
  \param{const wxBitmap\& }{unchecked = wxNullBitmap}}
 
 Sets the checked/unchecked bitmaps for the menu item (Windows only). The first bitmap
@@ -253,14 +271,14 @@ is also used as the single bitmap for uncheckable menu items.
 
 \membersection{wxMenuItem::SetFont}\label{wxmenuitemsetfont}
 
-\constfunc{void}{SetFont}{\param{const wxFont\& }{font}}
+\func{void}{SetFont}{\param{const wxFont\& }{font}}
 
 Sets the font associated with the menu item (Windows only).
 
 
 \membersection{wxMenuItem::SetHelp}\label{wxmenuitemsethelp}
 
-\constfunc{void}{SetHelp}{\param{const wxString\& }{helpString}}
+\func{void}{SetHelp}{\param{const wxString\& }{helpString}}
 
 Sets the help string.
 
@@ -272,16 +290,30 @@ Sets the help string.
 Sets the width of the menu item checkmark bitmap (Windows only).
 
 
+\membersection{wxMenuItem::SetMenu}\label{wxmenuitemsetmenu}
+
+\func{void}{SetMenu}{\param{const wxMenu*}{menu}}
+
+Sets the parent menu which will contain this menu item.
+
+
+\membersection{wxMenuItem::SetSubMenu}\label{wxmenuitemsetsubmenu}
+
+\func{void}{SetSubMenu}{\param{const wxMenu*}{menu}}
+
+Sets the submenu of this menu item.
+
+
 \membersection{wxMenuItem::SetText}\label{wxmenuitemsettext}
 
-\constfunc{void}{SetText}{\param{const wxString\& }{text}}
+\func{void}{SetText}{\param{const wxString\& }{text}}
 
 Sets the text associated with the menu item.
 
 
 \membersection{wxMenuItem::SetTextColour}\label{wxmenuitemsettextcolour}
 
-\constfunc{void}{SetTextColour}{\param{const wxColour\& }{colour}}
+\func{void}{SetTextColour}{\param{const wxColour\& }{colour}}
 
 Sets the text colour associated with the menu item (Windows only).
 
