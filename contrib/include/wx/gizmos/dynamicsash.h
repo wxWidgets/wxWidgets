@@ -13,6 +13,13 @@
 #ifndef _WX_DYNAMICSASH_H_
 #define _WX_DYNAMICSASH_H_
 
+#ifdef GIZMOISDLL
+#define GIZMODLLEXPORT WXDLLEXPORT
+#else
+#define GIZMODLLEXPORT
+#endif
+
+
 /*
 
     wxDynamicSashWindow
@@ -95,7 +102,7 @@ class wxScrollBar;
     a child of the wxDynamicSashWindow.  wxDynamicSashWindow will
     automatically reparent it to the proper place in its window hierarchy.
 */
-class wxDynamicSashSplitEvent : public wxCommandEvent {
+class GIZMODLLEXPORT wxDynamicSashSplitEvent : public wxCommandEvent {
 public:
     wxDynamicSashSplitEvent();
     wxDynamicSashSplitEvent(const wxDynamicSashSplitEvent& event): wxCommandEvent(event) { }
@@ -117,7 +124,7 @@ private:
     the scrollbars' event handlers connected to your view's event handler
     class.
 */
-class wxDynamicSashUnifyEvent : public wxCommandEvent {
+class GIZMODLLEXPORT wxDynamicSashUnifyEvent : public wxCommandEvent {
 public:
     wxDynamicSashUnifyEvent();
     wxDynamicSashUnifyEvent(const wxDynamicSashUnifyEvent& event): wxCommandEvent(event) {}
@@ -132,7 +139,7 @@ private:
 /*
     wxDynamicSashWindow.  See above.
 */
-class wxDynamicSashWindow : public wxWindow {
+class GIZMODLLEXPORT wxDynamicSashWindow : public wxWindow {
 public:
     wxDynamicSashWindow();
     wxDynamicSashWindow(wxWindow *parent, wxWindowID id,

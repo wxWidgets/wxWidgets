@@ -19,6 +19,14 @@
 	#pragma interface "multicell.h"
 #endif
 
+
+#ifdef GIZMOISDLL
+#define GIZMODLLEXPORT WXDLLEXPORT
+#else
+#define GIZMODLLEXPORT
+#endif
+
+
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
@@ -45,7 +53,7 @@ enum wxResizable
 // wxMultiCellItemHandle
 //---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMultiCellItemHandle: public wxObject
+class GIZMODLLEXPORT wxMultiCellItemHandle: public wxObject
 {
 	DECLARE_CLASS(wxMultiCellItemHandle);
 protected:
@@ -81,7 +89,7 @@ private:
 // wxMultiCellSizer
 //---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMultiCellSizer : virtual public wxSizer
+class GIZMODLLEXPORT wxMultiCellSizer : virtual public wxSizer
 {
 	DECLARE_CLASS(wxMultiCellSizer);
 
@@ -131,7 +139,7 @@ class wxCell;
 // wxMultiCellCanvas
 //---------------------------------------------------------------------------
 
-class wxMultiCellCanvas : public wxFlexGridSizer
+class GIZMODLLEXPORT wxMultiCellCanvas : public wxFlexGridSizer
 {
 public:
 	wxMultiCellCanvas(wxWindow *parent, int numRows = 2, int numCols = 2);

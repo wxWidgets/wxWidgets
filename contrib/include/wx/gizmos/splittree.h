@@ -18,6 +18,12 @@
 	#pragma interface "splittree.h"
 #endif
 
+#ifdef GIZMOISDLL
+#define GIZMODLLEXPORT WXDLLEXPORT
+#else
+#define GIZMODLLEXPORT
+#endif
+
 // Set this to 1 to use generic tree control (doesn't yet work properly)
 #define USE_GENERIC_TREECTRL 0
 
@@ -46,7 +52,7 @@ class wxSplitterScrolledWindow;
  * It also updates the scrolled window vertical scrollbar as appropriate.
  */
 
-class wxRemotelyScrolledTreeCtrl: public wxTreeCtrl
+class GIZMODLLEXPORT wxRemotelyScrolledTreeCtrl: public wxTreeCtrl
 {
 	DECLARE_CLASS(wxRemotelyScrolledTreeCtrl)
 public:
@@ -118,7 +124,7 @@ protected:
  * A window displaying values associated with tree control items.
  */
 
-class wxTreeCompanionWindow: public wxWindow
+class GIZMODLLEXPORT wxTreeCompanionWindow: public wxWindow
 {
 public:
     DECLARE_CLASS(wxTreeCompanionWindow)
@@ -132,7 +138,7 @@ public:
 	virtual void DrawItem(wxDC& dc, wxTreeItemId id, const wxRect& rect);
 
 //// Events
-	void OnPaint(wxPaintEvent& event);    
+	void OnPaint(wxPaintEvent& event);
     void OnScroll(wxScrollWinEvent& event);
 	void OnExpand(wxTreeEvent& event);
 
@@ -157,7 +163,7 @@ protected:
  * than the usual one.
  */
 
-class wxThinSplitterWindow: public wxSplitterWindow
+class GIZMODLLEXPORT wxThinSplitterWindow: public wxSplitterWindow
 {
 public:
     DECLARE_DYNAMIC_CLASS(wxThinSplitterWindow)
@@ -176,7 +182,7 @@ public:
 	void DrawSash(wxDC& dc);
 
 //// Events
-    
+
     void OnSize(wxSizeEvent& event);
 
 //// Operations
@@ -197,7 +203,7 @@ protected:
  * scroll appropriately.
  */
 
-class wxSplitterScrolledWindow: public wxScrolledWindow
+class GIZMODLLEXPORT wxSplitterScrolledWindow: public wxScrolledWindow
 {
 public:
     DECLARE_DYNAMIC_CLASS(wxSplitterScrolledWindow)
@@ -210,7 +216,7 @@ public:
 //// Overrides
 
 //// Events
-    
+
     void OnScroll(wxScrollWinEvent& event);
     void OnSize(wxSizeEvent& event);
 
