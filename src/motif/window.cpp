@@ -2655,22 +2655,12 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Widget widget, 
                 {
                     // I have a dclick
                     win->SetLastClick(0, ts);
-                    switch ( eventType )
-                    {
-                        case wxEVT_LEFT_DOWN:
-                            eventType = wxEVT_LEFT_DCLICK;
-                            break;
-                        case wxEVT_MIDDLE_DOWN:
-                            eventType = wxEVT_MIDDLE_DCLICK;
-                            break;
-                        case wxEVT_RIGHT_DOWN:
-                            eventType = wxEVT_RIGHT_DCLICK;
-                            break;
-
-                        default :
-                            break;
-                    }
-                    
+                    if ( eventType == wxEVT_LEFT_DOWN )
+                        eventType = wxEVT_LEFT_DCLICK;
+                    else if ( eventType == wxEVT_MIDDLE_DOWN )
+                        eventType = wxEVT_MIDDLE_DCLICK;
+                    else if ( eventType == wxEVT_RIGHT_DOWN )
+                        eventType = wxEVT_RIGHT_DCLICK;
                 }
                 else
                 {
