@@ -376,7 +376,8 @@ else:
             wxPython.lib.colourdb.updateColourDB()
             colors = wxPython.lib.colourdb.getColourList()
             
-            frame = DrawFrame(None, -1, "FloatCanvas Demo App", size=(700,700))
+            frame = DrawFrame(None, -1, "FloatCanvas Demo App",
+                              wx.DefaultPosition, (700,700))
     
             self.SetTopWindow(frame)
     
