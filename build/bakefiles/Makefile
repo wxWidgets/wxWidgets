@@ -7,11 +7,11 @@ BAKEFILE = bakefile -v
 CDEPS = config.bkl common.bkl common_contrib.bkl
 SDEPS = config.bkl common.bkl common_samples.bkl
 MDEPS = common.bkl config.bkl files.bkl monolithic.bkl multilib.bkl wxwin.py
-MINGW_ALL = ../makefile.gcc ../../samples/makefile.gcc ../../samples/db/makefile.gcc ../../samples/dnd/makefile.gcc ../../samples/ipc/makefile.gcc ../../samples/mdi/makefile.gcc ../../samples/mfc/makefile.gcc ../../samples/png/makefile.gcc ../../samples/tab/makefile.gcc ../../samples/exec/makefile.gcc ../../samples/font/makefile.gcc ../../samples/help/makefile.gcc ../../samples/grid/makefile.gcc ../../samples/menu/makefile.gcc ../../samples/text/makefile.gcc ../../samples/console/makefile.gcc ../../samples/treectrl/makefile.gcc ../../samples/listctrl/makefile.gcc ../../samples/joytest/makefile.gcc ../../samples/regtest/makefile.gcc ../../samples/dialogs/makefile.gcc ../../samples/nativdlg/makefile.gcc ../../samples/display/makefile.gcc ../../samples/notebook/makefile.gcc ../../samples/caret/makefile.gcc ../../samples/erase/makefile.gcc ../../samples/event/makefile.gcc ../../samples/image/makefile.gcc ../../samples/sashtest/makefile.gcc ../../samples/docview/makefile.gcc ../../samples/typetest/makefile.gcc ../../samples/drawing/makefile.gcc ../../samples/splitter/makefile.gcc ../../samples/listbox/makefile.gcc ../../samples/multimon/makefile.gcc ../../samples/dynamic/makefile.gcc ../../samples/checklst/makefile.gcc ../../samples/taskbar/makefile.gcc ../../samples/dragimag/makefile.gcc ../../samples/sockets/makefile.gcc ../../samples/calendar/makefile.gcc ../../samples/minimal/makefile.gcc ../../samples/access/makefile.gcc ../../samples/statbar/makefile.gcc ../../samples/config/makefile.gcc ../../samples/dialup/makefile.gcc ../../samples/controls/makefile.gcc ../../samples/richedit/makefile.gcc ../../samples/newgrid/makefile.gcc ../../samples/toolbar/makefile.gcc ../../samples/htlbox/makefile.gcc ../../samples/layout/makefile.gcc ../../samples/minifram/makefile.gcc ../../samples/mobile/makefile.gcc ../../samples/opengl/makefile.gcc ../../samples/scroll/makefile.gcc ../../samples/rotate/makefile.gcc ../../samples/shaped/makefile.gcc ../../samples/thread/makefile.gcc ../../samples/wizard/makefile.gcc ../../samples/printing/makefile.gcc ../../samples/oleauto/makefile.gcc ../../samples/wxtest/makefile.gcc ../../samples/artprov/makefile.gcc ../../samples/propsize/makefile.gcc ../../samples/ownerdrw/makefile.gcc ../../samples/vscroll/makefile.gcc ../../samples/validate/makefile.gcc ../../samples/widgets/makefile.gcc ../../samples/keyboard/makefile.gcc ../../samples/docvwmdi/makefile.gcc ../../samples/scrollsub/makefile.gcc ../../samples/memcheck/makefile.gcc ../../samples/internat/makefile.gcc ../../contrib/build/stc/makefile.gcc ../../contrib/build/xrc/makefile.gcc ../../contrib/build/gizmos/makefile.gcc
-MSVC_ALL = ../makefile.vc ../../samples/makefile.vc ../../samples/db/makefile.vc ../../samples/dnd/makefile.vc ../../samples/ipc/makefile.vc ../../samples/mdi/makefile.vc ../../samples/mfc/makefile.vc ../../samples/png/makefile.vc ../../samples/tab/makefile.vc ../../samples/exec/makefile.vc ../../samples/font/makefile.vc ../../samples/help/makefile.vc ../../samples/grid/makefile.vc ../../samples/menu/makefile.vc ../../samples/text/makefile.vc ../../samples/console/makefile.vc ../../samples/treectrl/makefile.vc ../../samples/listctrl/makefile.vc ../../samples/joytest/makefile.vc ../../samples/regtest/makefile.vc ../../samples/dialogs/makefile.vc ../../samples/nativdlg/makefile.vc ../../samples/display/makefile.vc ../../samples/notebook/makefile.vc ../../samples/caret/makefile.vc ../../samples/erase/makefile.vc ../../samples/event/makefile.vc ../../samples/image/makefile.vc ../../samples/sashtest/makefile.vc ../../samples/docview/makefile.vc ../../samples/typetest/makefile.vc ../../samples/drawing/makefile.vc ../../samples/splitter/makefile.vc ../../samples/listbox/makefile.vc ../../samples/multimon/makefile.vc ../../samples/dynamic/makefile.vc ../../samples/checklst/makefile.vc ../../samples/taskbar/makefile.vc ../../samples/dragimag/makefile.vc ../../samples/sockets/makefile.vc ../../samples/calendar/makefile.vc ../../samples/minimal/makefile.vc ../../samples/access/makefile.vc ../../samples/statbar/makefile.vc ../../samples/config/makefile.vc ../../samples/dialup/makefile.vc ../../samples/controls/makefile.vc ../../samples/richedit/makefile.vc ../../samples/newgrid/makefile.vc ../../samples/toolbar/makefile.vc ../../samples/htlbox/makefile.vc ../../samples/layout/makefile.vc ../../samples/minifram/makefile.vc ../../samples/mobile/makefile.vc ../../samples/opengl/makefile.vc ../../samples/scroll/makefile.vc ../../samples/rotate/makefile.vc ../../samples/shaped/makefile.vc ../../samples/thread/makefile.vc ../../samples/wizard/makefile.vc ../../samples/printing/makefile.vc ../../samples/oleauto/makefile.vc ../../samples/wxtest/makefile.vc ../../samples/artprov/makefile.vc ../../samples/propsize/makefile.vc ../../samples/ownerdrw/makefile.vc ../../samples/vscroll/makefile.vc ../../samples/validate/makefile.vc ../../samples/widgets/makefile.vc ../../samples/keyboard/makefile.vc ../../samples/docvwmdi/makefile.vc ../../samples/scrollsub/makefile.vc ../../samples/memcheck/makefile.vc ../../samples/internat/makefile.vc ../../contrib/build/stc/makefile.vc ../../contrib/build/xrc/makefile.vc ../../contrib/build/gizmos/makefile.vc
-AUTOCONF_ALL = ../../configure ../../Makefile.in ../../samples/Makefile.in ../../samples/db/Makefile.in ../../samples/dnd/Makefile.in ../../samples/ipc/Makefile.in ../../samples/mdi/Makefile.in ../../samples/mfc/Makefile.in ../../samples/png/Makefile.in ../../samples/tab/Makefile.in ../../samples/exec/Makefile.in ../../samples/font/Makefile.in ../../samples/help/Makefile.in ../../samples/grid/Makefile.in ../../samples/menu/Makefile.in ../../samples/text/Makefile.in ../../samples/console/Makefile.in ../../samples/treectrl/Makefile.in ../../samples/listctrl/Makefile.in ../../samples/joytest/Makefile.in ../../samples/regtest/Makefile.in ../../samples/dialogs/Makefile.in ../../samples/nativdlg/Makefile.in ../../samples/display/Makefile.in ../../samples/notebook/Makefile.in ../../samples/caret/Makefile.in ../../samples/erase/Makefile.in ../../samples/event/Makefile.in ../../samples/image/Makefile.in ../../samples/sashtest/Makefile.in ../../samples/docview/Makefile.in ../../samples/typetest/Makefile.in ../../samples/drawing/Makefile.in ../../samples/splitter/Makefile.in ../../samples/listbox/Makefile.in ../../samples/multimon/Makefile.in ../../samples/dynamic/Makefile.in ../../samples/checklst/Makefile.in ../../samples/taskbar/Makefile.in ../../samples/dragimag/Makefile.in ../../samples/sockets/Makefile.in ../../samples/calendar/Makefile.in ../../samples/minimal/Makefile.in ../../samples/access/Makefile.in ../../samples/statbar/Makefile.in ../../samples/config/Makefile.in ../../samples/dialup/Makefile.in ../../samples/controls/Makefile.in ../../samples/richedit/Makefile.in ../../samples/newgrid/Makefile.in ../../samples/toolbar/Makefile.in ../../samples/htlbox/Makefile.in ../../samples/layout/Makefile.in ../../samples/minifram/Makefile.in ../../samples/mobile/Makefile.in ../../samples/opengl/Makefile.in ../../samples/scroll/Makefile.in ../../samples/rotate/Makefile.in ../../samples/shaped/Makefile.in ../../samples/thread/Makefile.in ../../samples/wizard/Makefile.in ../../samples/printing/Makefile.in ../../samples/oleauto/Makefile.in ../../samples/wxtest/Makefile.in ../../samples/artprov/Makefile.in ../../samples/propsize/Makefile.in ../../samples/ownerdrw/Makefile.in ../../samples/vscroll/Makefile.in ../../samples/validate/Makefile.in ../../samples/widgets/Makefile.in ../../samples/keyboard/Makefile.in ../../samples/docvwmdi/Makefile.in ../../samples/scrollsub/Makefile.in ../../samples/memcheck/Makefile.in ../../samples/internat/Makefile.in ../../contrib/src/stc/Makefile.in ../../contrib/src/xrc/Makefile.in ../../contrib/src/gizmos/Makefile.in
-BORLAND_ALL = ../makefile.bcc ../../samples/makefile.bcc ../../samples/db/makefile.bcc ../../samples/dnd/makefile.bcc ../../samples/ipc/makefile.bcc ../../samples/mdi/makefile.bcc ../../samples/mfc/makefile.bcc ../../samples/png/makefile.bcc ../../samples/tab/makefile.bcc ../../samples/exec/makefile.bcc ../../samples/font/makefile.bcc ../../samples/help/makefile.bcc ../../samples/grid/makefile.bcc ../../samples/menu/makefile.bcc ../../samples/text/makefile.bcc ../../samples/console/makefile.bcc ../../samples/treectrl/makefile.bcc ../../samples/listctrl/makefile.bcc ../../samples/joytest/makefile.bcc ../../samples/regtest/makefile.bcc ../../samples/dialogs/makefile.bcc ../../samples/nativdlg/makefile.bcc ../../samples/display/makefile.bcc ../../samples/notebook/makefile.bcc ../../samples/caret/makefile.bcc ../../samples/erase/makefile.bcc ../../samples/event/makefile.bcc ../../samples/image/makefile.bcc ../../samples/sashtest/makefile.bcc ../../samples/docview/makefile.bcc ../../samples/typetest/makefile.bcc ../../samples/drawing/makefile.bcc ../../samples/splitter/makefile.bcc ../../samples/listbox/makefile.bcc ../../samples/multimon/makefile.bcc ../../samples/dynamic/makefile.bcc ../../samples/checklst/makefile.bcc ../../samples/taskbar/makefile.bcc ../../samples/dragimag/makefile.bcc ../../samples/sockets/makefile.bcc ../../samples/calendar/makefile.bcc ../../samples/minimal/makefile.bcc ../../samples/access/makefile.bcc ../../samples/statbar/makefile.bcc ../../samples/config/makefile.bcc ../../samples/dialup/makefile.bcc ../../samples/controls/makefile.bcc ../../samples/richedit/makefile.bcc ../../samples/newgrid/makefile.bcc ../../samples/toolbar/makefile.bcc ../../samples/htlbox/makefile.bcc ../../samples/layout/makefile.bcc ../../samples/minifram/makefile.bcc ../../samples/mobile/makefile.bcc ../../samples/opengl/makefile.bcc ../../samples/scroll/makefile.bcc ../../samples/rotate/makefile.bcc ../../samples/shaped/makefile.bcc ../../samples/thread/makefile.bcc ../../samples/wizard/makefile.bcc ../../samples/printing/makefile.bcc ../../samples/oleauto/makefile.bcc ../../samples/wxtest/makefile.bcc ../../samples/artprov/makefile.bcc ../../samples/propsize/makefile.bcc ../../samples/ownerdrw/makefile.bcc ../../samples/vscroll/makefile.bcc ../../samples/validate/makefile.bcc ../../samples/widgets/makefile.bcc ../../samples/keyboard/makefile.bcc ../../samples/docvwmdi/makefile.bcc ../../samples/scrollsub/makefile.bcc ../../samples/memcheck/makefile.bcc ../../samples/internat/makefile.bcc ../../contrib/build/stc/makefile.bcc ../../contrib/build/xrc/makefile.bcc ../../contrib/build/gizmos/makefile.bcc
-WATCOM_ALL = ../makefile.wat ../../samples/makefile.wat ../../samples/db/makefile.wat ../../samples/dnd/makefile.wat ../../samples/ipc/makefile.wat ../../samples/mdi/makefile.wat ../../samples/mfc/makefile.wat ../../samples/png/makefile.wat ../../samples/tab/makefile.wat ../../samples/exec/makefile.wat ../../samples/font/makefile.wat ../../samples/help/makefile.wat ../../samples/grid/makefile.wat ../../samples/menu/makefile.wat ../../samples/text/makefile.wat ../../samples/console/makefile.wat ../../samples/treectrl/makefile.wat ../../samples/listctrl/makefile.wat ../../samples/joytest/makefile.wat ../../samples/regtest/makefile.wat ../../samples/dialogs/makefile.wat ../../samples/nativdlg/makefile.wat ../../samples/display/makefile.wat ../../samples/notebook/makefile.wat ../../samples/caret/makefile.wat ../../samples/erase/makefile.wat ../../samples/event/makefile.wat ../../samples/image/makefile.wat ../../samples/sashtest/makefile.wat ../../samples/docview/makefile.wat ../../samples/typetest/makefile.wat ../../samples/drawing/makefile.wat ../../samples/splitter/makefile.wat ../../samples/listbox/makefile.wat ../../samples/multimon/makefile.wat ../../samples/dynamic/makefile.wat ../../samples/checklst/makefile.wat ../../samples/taskbar/makefile.wat ../../samples/dragimag/makefile.wat ../../samples/sockets/makefile.wat ../../samples/calendar/makefile.wat ../../samples/minimal/makefile.wat ../../samples/access/makefile.wat ../../samples/statbar/makefile.wat ../../samples/config/makefile.wat ../../samples/dialup/makefile.wat ../../samples/controls/makefile.wat ../../samples/richedit/makefile.wat ../../samples/newgrid/makefile.wat ../../samples/toolbar/makefile.wat ../../samples/htlbox/makefile.wat ../../samples/layout/makefile.wat ../../samples/minifram/makefile.wat ../../samples/mobile/makefile.wat ../../samples/opengl/makefile.wat ../../samples/scroll/makefile.wat ../../samples/rotate/makefile.wat ../../samples/shaped/makefile.wat ../../samples/thread/makefile.wat ../../samples/wizard/makefile.wat ../../samples/printing/makefile.wat ../../samples/oleauto/makefile.wat ../../samples/wxtest/makefile.wat ../../samples/artprov/makefile.wat ../../samples/propsize/makefile.wat ../../samples/ownerdrw/makefile.wat ../../samples/vscroll/makefile.wat ../../samples/validate/makefile.wat ../../samples/widgets/makefile.wat ../../samples/keyboard/makefile.wat ../../samples/docvwmdi/makefile.wat ../../samples/scrollsub/makefile.wat ../../samples/memcheck/makefile.wat ../../samples/internat/makefile.wat ../../contrib/build/stc/makefile.wat ../../contrib/build/xrc/makefile.wat ../../contrib/build/gizmos/makefile.wat
+MINGW_ALL = ../makefile.gcc ../../samples/makefile.gcc ../../samples/db/makefile.gcc ../../samples/dnd/makefile.gcc ../../samples/ipc/makefile.gcc ../../samples/mdi/makefile.gcc ../../samples/mfc/makefile.gcc ../../samples/png/makefile.gcc ../../samples/tab/makefile.gcc ../../samples/exec/makefile.gcc ../../samples/font/makefile.gcc ../../samples/help/makefile.gcc ../../samples/grid/makefile.gcc ../../samples/html/makefile.gcc ../../samples/html/zip/makefile.gcc ../../samples/html/help/makefile.gcc ../../samples/html/test/makefile.gcc ../../samples/html/about/makefile.gcc ../../samples/html/widget/makefile.gcc ../../samples/html/printing/makefile.gcc ../../samples/html/virtual/makefile.gcc ../../samples/html/helpview/makefile.gcc ../../samples/menu/makefile.gcc ../../samples/text/makefile.gcc ../../samples/console/makefile.gcc ../../samples/treectrl/makefile.gcc ../../samples/listctrl/makefile.gcc ../../samples/joytest/makefile.gcc ../../samples/regtest/makefile.gcc ../../samples/dialogs/makefile.gcc ../../samples/nativdlg/makefile.gcc ../../samples/display/makefile.gcc ../../samples/notebook/makefile.gcc ../../samples/caret/makefile.gcc ../../samples/erase/makefile.gcc ../../samples/event/makefile.gcc ../../samples/image/makefile.gcc ../../samples/sashtest/makefile.gcc ../../samples/docview/makefile.gcc ../../samples/typetest/makefile.gcc ../../samples/drawing/makefile.gcc ../../samples/splitter/makefile.gcc ../../samples/listbox/makefile.gcc ../../samples/multimon/makefile.gcc ../../samples/dynamic/makefile.gcc ../../samples/checklst/makefile.gcc ../../samples/taskbar/makefile.gcc ../../samples/dragimag/makefile.gcc ../../samples/sockets/makefile.gcc ../../samples/calendar/makefile.gcc ../../samples/minimal/makefile.gcc ../../samples/access/makefile.gcc ../../samples/statbar/makefile.gcc ../../samples/config/makefile.gcc ../../samples/dialup/makefile.gcc ../../samples/controls/makefile.gcc ../../samples/richedit/makefile.gcc ../../samples/newgrid/makefile.gcc ../../samples/toolbar/makefile.gcc ../../samples/htlbox/makefile.gcc ../../samples/layout/makefile.gcc ../../samples/minifram/makefile.gcc ../../samples/mobile/makefile.gcc ../../samples/opengl/makefile.gcc ../../samples/scroll/makefile.gcc ../../samples/rotate/makefile.gcc ../../samples/shaped/makefile.gcc ../../samples/thread/makefile.gcc ../../samples/wizard/makefile.gcc ../../samples/printing/makefile.gcc ../../samples/oleauto/makefile.gcc ../../samples/wxtest/makefile.gcc ../../samples/artprov/makefile.gcc ../../samples/propsize/makefile.gcc ../../samples/ownerdrw/makefile.gcc ../../samples/vscroll/makefile.gcc ../../samples/validate/makefile.gcc ../../samples/widgets/makefile.gcc ../../samples/keyboard/makefile.gcc ../../samples/docvwmdi/makefile.gcc ../../samples/scrollsub/makefile.gcc ../../samples/memcheck/makefile.gcc ../../samples/internat/makefile.gcc ../../contrib/build/stc/makefile.gcc ../../contrib/build/xrc/makefile.gcc ../../contrib/build/gizmos/makefile.gcc
+MSVC_ALL = ../makefile.vc ../../samples/makefile.vc ../../samples/db/makefile.vc ../../samples/dnd/makefile.vc ../../samples/ipc/makefile.vc ../../samples/mdi/makefile.vc ../../samples/mfc/makefile.vc ../../samples/png/makefile.vc ../../samples/tab/makefile.vc ../../samples/exec/makefile.vc ../../samples/font/makefile.vc ../../samples/help/makefile.vc ../../samples/grid/makefile.vc ../../samples/html/makefile.vc ../../samples/html/zip/makefile.vc ../../samples/html/help/makefile.vc ../../samples/html/test/makefile.vc ../../samples/html/about/makefile.vc ../../samples/html/widget/makefile.vc ../../samples/html/printing/makefile.vc ../../samples/html/virtual/makefile.vc ../../samples/html/helpview/makefile.vc ../../samples/menu/makefile.vc ../../samples/text/makefile.vc ../../samples/console/makefile.vc ../../samples/treectrl/makefile.vc ../../samples/listctrl/makefile.vc ../../samples/joytest/makefile.vc ../../samples/regtest/makefile.vc ../../samples/dialogs/makefile.vc ../../samples/nativdlg/makefile.vc ../../samples/display/makefile.vc ../../samples/notebook/makefile.vc ../../samples/caret/makefile.vc ../../samples/erase/makefile.vc ../../samples/event/makefile.vc ../../samples/image/makefile.vc ../../samples/sashtest/makefile.vc ../../samples/docview/makefile.vc ../../samples/typetest/makefile.vc ../../samples/drawing/makefile.vc ../../samples/splitter/makefile.vc ../../samples/listbox/makefile.vc ../../samples/multimon/makefile.vc ../../samples/dynamic/makefile.vc ../../samples/checklst/makefile.vc ../../samples/taskbar/makefile.vc ../../samples/dragimag/makefile.vc ../../samples/sockets/makefile.vc ../../samples/calendar/makefile.vc ../../samples/minimal/makefile.vc ../../samples/access/makefile.vc ../../samples/statbar/makefile.vc ../../samples/config/makefile.vc ../../samples/dialup/makefile.vc ../../samples/controls/makefile.vc ../../samples/richedit/makefile.vc ../../samples/newgrid/makefile.vc ../../samples/toolbar/makefile.vc ../../samples/htlbox/makefile.vc ../../samples/layout/makefile.vc ../../samples/minifram/makefile.vc ../../samples/mobile/makefile.vc ../../samples/opengl/makefile.vc ../../samples/scroll/makefile.vc ../../samples/rotate/makefile.vc ../../samples/shaped/makefile.vc ../../samples/thread/makefile.vc ../../samples/wizard/makefile.vc ../../samples/printing/makefile.vc ../../samples/oleauto/makefile.vc ../../samples/wxtest/makefile.vc ../../samples/artprov/makefile.vc ../../samples/propsize/makefile.vc ../../samples/ownerdrw/makefile.vc ../../samples/vscroll/makefile.vc ../../samples/validate/makefile.vc ../../samples/widgets/makefile.vc ../../samples/keyboard/makefile.vc ../../samples/docvwmdi/makefile.vc ../../samples/scrollsub/makefile.vc ../../samples/memcheck/makefile.vc ../../samples/internat/makefile.vc ../../contrib/build/stc/makefile.vc ../../contrib/build/xrc/makefile.vc ../../contrib/build/gizmos/makefile.vc
+AUTOCONF_ALL = ../../configure ../../Makefile.in ../../samples/Makefile.in ../../samples/db/Makefile.in ../../samples/dnd/Makefile.in ../../samples/ipc/Makefile.in ../../samples/mdi/Makefile.in ../../samples/mfc/Makefile.in ../../samples/png/Makefile.in ../../samples/tab/Makefile.in ../../samples/exec/Makefile.in ../../samples/font/Makefile.in ../../samples/help/Makefile.in ../../samples/grid/Makefile.in ../../samples/html/Makefile.in ../../samples/html/zip/Makefile.in ../../samples/html/help/Makefile.in ../../samples/html/test/Makefile.in ../../samples/html/about/Makefile.in ../../samples/html/widget/Makefile.in ../../samples/html/printing/Makefile.in ../../samples/html/virtual/Makefile.in ../../samples/html/helpview/Makefile.in ../../samples/menu/Makefile.in ../../samples/text/Makefile.in ../../samples/console/Makefile.in ../../samples/treectrl/Makefile.in ../../samples/listctrl/Makefile.in ../../samples/joytest/Makefile.in ../../samples/regtest/Makefile.in ../../samples/dialogs/Makefile.in ../../samples/nativdlg/Makefile.in ../../samples/display/Makefile.in ../../samples/notebook/Makefile.in ../../samples/caret/Makefile.in ../../samples/erase/Makefile.in ../../samples/event/Makefile.in ../../samples/image/Makefile.in ../../samples/sashtest/Makefile.in ../../samples/docview/Makefile.in ../../samples/typetest/Makefile.in ../../samples/drawing/Makefile.in ../../samples/splitter/Makefile.in ../../samples/listbox/Makefile.in ../../samples/multimon/Makefile.in ../../samples/dynamic/Makefile.in ../../samples/checklst/Makefile.in ../../samples/taskbar/Makefile.in ../../samples/dragimag/Makefile.in ../../samples/sockets/Makefile.in ../../samples/calendar/Makefile.in ../../samples/minimal/Makefile.in ../../samples/access/Makefile.in ../../samples/statbar/Makefile.in ../../samples/config/Makefile.in ../../samples/dialup/Makefile.in ../../samples/controls/Makefile.in ../../samples/richedit/Makefile.in ../../samples/newgrid/Makefile.in ../../samples/toolbar/Makefile.in ../../samples/htlbox/Makefile.in ../../samples/layout/Makefile.in ../../samples/minifram/Makefile.in ../../samples/mobile/Makefile.in ../../samples/opengl/Makefile.in ../../samples/scroll/Makefile.in ../../samples/rotate/Makefile.in ../../samples/shaped/Makefile.in ../../samples/thread/Makefile.in ../../samples/wizard/Makefile.in ../../samples/printing/Makefile.in ../../samples/oleauto/Makefile.in ../../samples/wxtest/Makefile.in ../../samples/artprov/Makefile.in ../../samples/propsize/Makefile.in ../../samples/ownerdrw/Makefile.in ../../samples/vscroll/Makefile.in ../../samples/validate/Makefile.in ../../samples/widgets/Makefile.in ../../samples/keyboard/Makefile.in ../../samples/docvwmdi/Makefile.in ../../samples/scrollsub/Makefile.in ../../samples/memcheck/Makefile.in ../../samples/internat/Makefile.in ../../contrib/src/stc/Makefile.in ../../contrib/src/xrc/Makefile.in ../../contrib/src/gizmos/Makefile.in
+BORLAND_ALL = ../makefile.bcc ../../samples/makefile.bcc ../../samples/db/makefile.bcc ../../samples/dnd/makefile.bcc ../../samples/ipc/makefile.bcc ../../samples/mdi/makefile.bcc ../../samples/mfc/makefile.bcc ../../samples/png/makefile.bcc ../../samples/tab/makefile.bcc ../../samples/exec/makefile.bcc ../../samples/font/makefile.bcc ../../samples/help/makefile.bcc ../../samples/grid/makefile.bcc ../../samples/html/makefile.bcc ../../samples/html/zip/makefile.bcc ../../samples/html/help/makefile.bcc ../../samples/html/test/makefile.bcc ../../samples/html/about/makefile.bcc ../../samples/html/widget/makefile.bcc ../../samples/html/printing/makefile.bcc ../../samples/html/virtual/makefile.bcc ../../samples/html/helpview/makefile.bcc ../../samples/menu/makefile.bcc ../../samples/text/makefile.bcc ../../samples/console/makefile.bcc ../../samples/treectrl/makefile.bcc ../../samples/listctrl/makefile.bcc ../../samples/joytest/makefile.bcc ../../samples/regtest/makefile.bcc ../../samples/dialogs/makefile.bcc ../../samples/nativdlg/makefile.bcc ../../samples/display/makefile.bcc ../../samples/notebook/makefile.bcc ../../samples/caret/makefile.bcc ../../samples/erase/makefile.bcc ../../samples/event/makefile.bcc ../../samples/image/makefile.bcc ../../samples/sashtest/makefile.bcc ../../samples/docview/makefile.bcc ../../samples/typetest/makefile.bcc ../../samples/drawing/makefile.bcc ../../samples/splitter/makefile.bcc ../../samples/listbox/makefile.bcc ../../samples/multimon/makefile.bcc ../../samples/dynamic/makefile.bcc ../../samples/checklst/makefile.bcc ../../samples/taskbar/makefile.bcc ../../samples/dragimag/makefile.bcc ../../samples/sockets/makefile.bcc ../../samples/calendar/makefile.bcc ../../samples/minimal/makefile.bcc ../../samples/access/makefile.bcc ../../samples/statbar/makefile.bcc ../../samples/config/makefile.bcc ../../samples/dialup/makefile.bcc ../../samples/controls/makefile.bcc ../../samples/richedit/makefile.bcc ../../samples/newgrid/makefile.bcc ../../samples/toolbar/makefile.bcc ../../samples/htlbox/makefile.bcc ../../samples/layout/makefile.bcc ../../samples/minifram/makefile.bcc ../../samples/mobile/makefile.bcc ../../samples/opengl/makefile.bcc ../../samples/scroll/makefile.bcc ../../samples/rotate/makefile.bcc ../../samples/shaped/makefile.bcc ../../samples/thread/makefile.bcc ../../samples/wizard/makefile.bcc ../../samples/printing/makefile.bcc ../../samples/oleauto/makefile.bcc ../../samples/wxtest/makefile.bcc ../../samples/artprov/makefile.bcc ../../samples/propsize/makefile.bcc ../../samples/ownerdrw/makefile.bcc ../../samples/vscroll/makefile.bcc ../../samples/validate/makefile.bcc ../../samples/widgets/makefile.bcc ../../samples/keyboard/makefile.bcc ../../samples/docvwmdi/makefile.bcc ../../samples/scrollsub/makefile.bcc ../../samples/memcheck/makefile.bcc ../../samples/internat/makefile.bcc ../../contrib/build/stc/makefile.bcc ../../contrib/build/xrc/makefile.bcc ../../contrib/build/gizmos/makefile.bcc
+WATCOM_ALL = ../makefile.wat ../../samples/makefile.wat ../../samples/db/makefile.wat ../../samples/dnd/makefile.wat ../../samples/ipc/makefile.wat ../../samples/mdi/makefile.wat ../../samples/mfc/makefile.wat ../../samples/png/makefile.wat ../../samples/tab/makefile.wat ../../samples/exec/makefile.wat ../../samples/font/makefile.wat ../../samples/help/makefile.wat ../../samples/grid/makefile.wat ../../samples/html/makefile.wat ../../samples/html/zip/makefile.wat ../../samples/html/help/makefile.wat ../../samples/html/test/makefile.wat ../../samples/html/about/makefile.wat ../../samples/html/widget/makefile.wat ../../samples/html/printing/makefile.wat ../../samples/html/virtual/makefile.wat ../../samples/html/helpview/makefile.wat ../../samples/menu/makefile.wat ../../samples/text/makefile.wat ../../samples/console/makefile.wat ../../samples/treectrl/makefile.wat ../../samples/listctrl/makefile.wat ../../samples/joytest/makefile.wat ../../samples/regtest/makefile.wat ../../samples/dialogs/makefile.wat ../../samples/nativdlg/makefile.wat ../../samples/display/makefile.wat ../../samples/notebook/makefile.wat ../../samples/caret/makefile.wat ../../samples/erase/makefile.wat ../../samples/event/makefile.wat ../../samples/image/makefile.wat ../../samples/sashtest/makefile.wat ../../samples/docview/makefile.wat ../../samples/typetest/makefile.wat ../../samples/drawing/makefile.wat ../../samples/splitter/makefile.wat ../../samples/listbox/makefile.wat ../../samples/multimon/makefile.wat ../../samples/dynamic/makefile.wat ../../samples/checklst/makefile.wat ../../samples/taskbar/makefile.wat ../../samples/dragimag/makefile.wat ../../samples/sockets/makefile.wat ../../samples/calendar/makefile.wat ../../samples/minimal/makefile.wat ../../samples/access/makefile.wat ../../samples/statbar/makefile.wat ../../samples/config/makefile.wat ../../samples/dialup/makefile.wat ../../samples/controls/makefile.wat ../../samples/richedit/makefile.wat ../../samples/newgrid/makefile.wat ../../samples/toolbar/makefile.wat ../../samples/htlbox/makefile.wat ../../samples/layout/makefile.wat ../../samples/minifram/makefile.wat ../../samples/mobile/makefile.wat ../../samples/opengl/makefile.wat ../../samples/scroll/makefile.wat ../../samples/rotate/makefile.wat ../../samples/shaped/makefile.wat ../../samples/thread/makefile.wat ../../samples/wizard/makefile.wat ../../samples/printing/makefile.wat ../../samples/oleauto/makefile.wat ../../samples/wxtest/makefile.wat ../../samples/artprov/makefile.wat ../../samples/propsize/makefile.wat ../../samples/ownerdrw/makefile.wat ../../samples/vscroll/makefile.wat ../../samples/validate/makefile.wat ../../samples/widgets/makefile.wat ../../samples/keyboard/makefile.wat ../../samples/docvwmdi/makefile.wat ../../samples/scrollsub/makefile.wat ../../samples/memcheck/makefile.wat ../../samples/internat/makefile.wat ../../contrib/build/stc/makefile.wat ../../contrib/build/xrc/makefile.wat ../../contrib/build/gizmos/makefile.wat
 all: mingw msvc autoconf borland watcom
 
 mingw: $(MINGW_ALL)
@@ -35,6 +35,15 @@ clean:
 	rm -f ../../samples/font/makefile.gcc
 	rm -f ../../samples/help/makefile.gcc
 	rm -f ../../samples/grid/makefile.gcc
+	rm -f ../../samples/html/makefile.gcc
+	rm -f ../../samples/html/zip/makefile.gcc
+	rm -f ../../samples/html/help/makefile.gcc
+	rm -f ../../samples/html/test/makefile.gcc
+	rm -f ../../samples/html/about/makefile.gcc
+	rm -f ../../samples/html/widget/makefile.gcc
+	rm -f ../../samples/html/printing/makefile.gcc
+	rm -f ../../samples/html/virtual/makefile.gcc
+	rm -f ../../samples/html/helpview/makefile.gcc
 	rm -f ../../samples/menu/makefile.gcc
 	rm -f ../../samples/text/makefile.gcc
 	rm -f ../../samples/console/makefile.gcc
@@ -112,6 +121,15 @@ clean:
 	rm -f ../../samples/font/makefile.vc
 	rm -f ../../samples/help/makefile.vc
 	rm -f ../../samples/grid/makefile.vc
+	rm -f ../../samples/html/makefile.vc
+	rm -f ../../samples/html/zip/makefile.vc
+	rm -f ../../samples/html/help/makefile.vc
+	rm -f ../../samples/html/test/makefile.vc
+	rm -f ../../samples/html/about/makefile.vc
+	rm -f ../../samples/html/widget/makefile.vc
+	rm -f ../../samples/html/printing/makefile.vc
+	rm -f ../../samples/html/virtual/makefile.vc
+	rm -f ../../samples/html/helpview/makefile.vc
 	rm -f ../../samples/menu/makefile.vc
 	rm -f ../../samples/text/makefile.vc
 	rm -f ../../samples/console/makefile.vc
@@ -190,6 +208,15 @@ clean:
 	rm -f ../../samples/font/Makefile.in
 	rm -f ../../samples/help/Makefile.in
 	rm -f ../../samples/grid/Makefile.in
+	rm -f ../../samples/html/Makefile.in
+	rm -f ../../samples/html/zip/Makefile.in
+	rm -f ../../samples/html/help/Makefile.in
+	rm -f ../../samples/html/test/Makefile.in
+	rm -f ../../samples/html/about/Makefile.in
+	rm -f ../../samples/html/widget/Makefile.in
+	rm -f ../../samples/html/printing/Makefile.in
+	rm -f ../../samples/html/virtual/Makefile.in
+	rm -f ../../samples/html/helpview/Makefile.in
 	rm -f ../../samples/menu/Makefile.in
 	rm -f ../../samples/text/Makefile.in
 	rm -f ../../samples/console/Makefile.in
@@ -267,6 +294,15 @@ clean:
 	rm -f ../../samples/font/makefile.bcc
 	rm -f ../../samples/help/makefile.bcc
 	rm -f ../../samples/grid/makefile.bcc
+	rm -f ../../samples/html/makefile.bcc
+	rm -f ../../samples/html/zip/makefile.bcc
+	rm -f ../../samples/html/help/makefile.bcc
+	rm -f ../../samples/html/test/makefile.bcc
+	rm -f ../../samples/html/about/makefile.bcc
+	rm -f ../../samples/html/widget/makefile.bcc
+	rm -f ../../samples/html/printing/makefile.bcc
+	rm -f ../../samples/html/virtual/makefile.bcc
+	rm -f ../../samples/html/helpview/makefile.bcc
 	rm -f ../../samples/menu/makefile.bcc
 	rm -f ../../samples/text/makefile.bcc
 	rm -f ../../samples/console/makefile.bcc
@@ -344,6 +380,15 @@ clean:
 	rm -f ../../samples/font/makefile.wat
 	rm -f ../../samples/help/makefile.wat
 	rm -f ../../samples/grid/makefile.wat
+	rm -f ../../samples/html/makefile.wat
+	rm -f ../../samples/html/zip/makefile.wat
+	rm -f ../../samples/html/help/makefile.wat
+	rm -f ../../samples/html/test/makefile.wat
+	rm -f ../../samples/html/about/makefile.wat
+	rm -f ../../samples/html/widget/makefile.wat
+	rm -f ../../samples/html/printing/makefile.wat
+	rm -f ../../samples/html/virtual/makefile.wat
+	rm -f ../../samples/html/helpview/makefile.wat
 	rm -f ../../samples/menu/makefile.wat
 	rm -f ../../samples/text/makefile.wat
 	rm -f ../../samples/console/makefile.wat
@@ -629,6 +674,150 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/grid/makefile.wat: $(SDEPS) ../../samples/grid/grid.bkl
 	$(BAKEFILE) -fwatcom -o$@  -DWXTOPDIR=../../ ../../samples/grid/grid.bkl
+	touch $@
+
+../../samples/html/Makefile.in: $(SDEPS) ../../samples/html/html_samples.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/html/html_samples.bkl
+	touch $@
+../../samples/html/makefile.bcc: $(SDEPS) ../../samples/html/html_samples.bkl
+	$(BAKEFILE) -fborland -o$@  -DWXTOPDIR=../../ ../../samples/html/html_samples.bkl
+	touch $@
+../../samples/html/makefile.vc: $(SDEPS) ../../samples/html/html_samples.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DWXTOPDIR=../../ ../../samples/html/html_samples.bkl
+	touch $@
+../../samples/html/makefile.gcc: $(SDEPS) ../../samples/html/html_samples.bkl
+	$(BAKEFILE) -fmingw -o$@  -DWXTOPDIR=../../ ../../samples/html/html_samples.bkl
+	touch $@
+../../samples/html/makefile.wat: $(SDEPS) ../../samples/html/html_samples.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DWXTOPDIR=../../ ../../samples/html/html_samples.bkl
+	touch $@
+
+../../samples/html/zip/Makefile.in: $(SDEPS) ../../samples/html/zip/zip.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/html/zip/zip.bkl
+	touch $@
+../../samples/html/zip/makefile.bcc: $(SDEPS) ../../samples/html/zip/zip.bkl
+	$(BAKEFILE) -fborland -o$@  -DWXTOPDIR=../../../ ../../samples/html/zip/zip.bkl
+	touch $@
+../../samples/html/zip/makefile.vc: $(SDEPS) ../../samples/html/zip/zip.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DWXTOPDIR=../../../ ../../samples/html/zip/zip.bkl
+	touch $@
+../../samples/html/zip/makefile.gcc: $(SDEPS) ../../samples/html/zip/zip.bkl
+	$(BAKEFILE) -fmingw -o$@  -DWXTOPDIR=../../../ ../../samples/html/zip/zip.bkl
+	touch $@
+../../samples/html/zip/makefile.wat: $(SDEPS) ../../samples/html/zip/zip.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DWXTOPDIR=../../../ ../../samples/html/zip/zip.bkl
+	touch $@
+
+../../samples/html/help/Makefile.in: $(SDEPS) ../../samples/html/help/help.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/html/help/help.bkl
+	touch $@
+../../samples/html/help/makefile.bcc: $(SDEPS) ../../samples/html/help/help.bkl
+	$(BAKEFILE) -fborland -o$@  -DWXTOPDIR=../../../ ../../samples/html/help/help.bkl
+	touch $@
+../../samples/html/help/makefile.vc: $(SDEPS) ../../samples/html/help/help.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DWXTOPDIR=../../../ ../../samples/html/help/help.bkl
+	touch $@
+../../samples/html/help/makefile.gcc: $(SDEPS) ../../samples/html/help/help.bkl
+	$(BAKEFILE) -fmingw -o$@  -DWXTOPDIR=../../../ ../../samples/html/help/help.bkl
+	touch $@
+../../samples/html/help/makefile.wat: $(SDEPS) ../../samples/html/help/help.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DWXTOPDIR=../../../ ../../samples/html/help/help.bkl
+	touch $@
+
+../../samples/html/test/Makefile.in: $(SDEPS) ../../samples/html/test/test.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/html/test/test.bkl
+	touch $@
+../../samples/html/test/makefile.bcc: $(SDEPS) ../../samples/html/test/test.bkl
+	$(BAKEFILE) -fborland -o$@  -DWXTOPDIR=../../../ ../../samples/html/test/test.bkl
+	touch $@
+../../samples/html/test/makefile.vc: $(SDEPS) ../../samples/html/test/test.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DWXTOPDIR=../../../ ../../samples/html/test/test.bkl
+	touch $@
+../../samples/html/test/makefile.gcc: $(SDEPS) ../../samples/html/test/test.bkl
+	$(BAKEFILE) -fmingw -o$@  -DWXTOPDIR=../../../ ../../samples/html/test/test.bkl
+	touch $@
+../../samples/html/test/makefile.wat: $(SDEPS) ../../samples/html/test/test.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DWXTOPDIR=../../../ ../../samples/html/test/test.bkl
+	touch $@
+
+../../samples/html/about/Makefile.in: $(SDEPS) ../../samples/html/about/about.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/html/about/about.bkl
+	touch $@
+../../samples/html/about/makefile.bcc: $(SDEPS) ../../samples/html/about/about.bkl
+	$(BAKEFILE) -fborland -o$@  -DWXTOPDIR=../../../ ../../samples/html/about/about.bkl
+	touch $@
+../../samples/html/about/makefile.vc: $(SDEPS) ../../samples/html/about/about.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DWXTOPDIR=../../../ ../../samples/html/about/about.bkl
+	touch $@
+../../samples/html/about/makefile.gcc: $(SDEPS) ../../samples/html/about/about.bkl
+	$(BAKEFILE) -fmingw -o$@  -DWXTOPDIR=../../../ ../../samples/html/about/about.bkl
+	touch $@
+../../samples/html/about/makefile.wat: $(SDEPS) ../../samples/html/about/about.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DWXTOPDIR=../../../ ../../samples/html/about/about.bkl
+	touch $@
+
+../../samples/html/widget/Makefile.in: $(SDEPS) ../../samples/html/widget/widget.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/html/widget/widget.bkl
+	touch $@
+../../samples/html/widget/makefile.bcc: $(SDEPS) ../../samples/html/widget/widget.bkl
+	$(BAKEFILE) -fborland -o$@  -DWXTOPDIR=../../../ ../../samples/html/widget/widget.bkl
+	touch $@
+../../samples/html/widget/makefile.vc: $(SDEPS) ../../samples/html/widget/widget.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DWXTOPDIR=../../../ ../../samples/html/widget/widget.bkl
+	touch $@
+../../samples/html/widget/makefile.gcc: $(SDEPS) ../../samples/html/widget/widget.bkl
+	$(BAKEFILE) -fmingw -o$@  -DWXTOPDIR=../../../ ../../samples/html/widget/widget.bkl
+	touch $@
+../../samples/html/widget/makefile.wat: $(SDEPS) ../../samples/html/widget/widget.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DWXTOPDIR=../../../ ../../samples/html/widget/widget.bkl
+	touch $@
+
+../../samples/html/printing/Makefile.in: $(SDEPS) ../../samples/html/printing/printing.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/html/printing/printing.bkl
+	touch $@
+../../samples/html/printing/makefile.bcc: $(SDEPS) ../../samples/html/printing/printing.bkl
+	$(BAKEFILE) -fborland -o$@  -DWXTOPDIR=../../../ ../../samples/html/printing/printing.bkl
+	touch $@
+../../samples/html/printing/makefile.vc: $(SDEPS) ../../samples/html/printing/printing.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DWXTOPDIR=../../../ ../../samples/html/printing/printing.bkl
+	touch $@
+../../samples/html/printing/makefile.gcc: $(SDEPS) ../../samples/html/printing/printing.bkl
+	$(BAKEFILE) -fmingw -o$@  -DWXTOPDIR=../../../ ../../samples/html/printing/printing.bkl
+	touch $@
+../../samples/html/printing/makefile.wat: $(SDEPS) ../../samples/html/printing/printing.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DWXTOPDIR=../../../ ../../samples/html/printing/printing.bkl
+	touch $@
+
+../../samples/html/virtual/Makefile.in: $(SDEPS) ../../samples/html/virtual/virtual.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/html/virtual/virtual.bkl
+	touch $@
+../../samples/html/virtual/makefile.bcc: $(SDEPS) ../../samples/html/virtual/virtual.bkl
+	$(BAKEFILE) -fborland -o$@  -DWXTOPDIR=../../../ ../../samples/html/virtual/virtual.bkl
+	touch $@
+../../samples/html/virtual/makefile.vc: $(SDEPS) ../../samples/html/virtual/virtual.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DWXTOPDIR=../../../ ../../samples/html/virtual/virtual.bkl
+	touch $@
+../../samples/html/virtual/makefile.gcc: $(SDEPS) ../../samples/html/virtual/virtual.bkl
+	$(BAKEFILE) -fmingw -o$@  -DWXTOPDIR=../../../ ../../samples/html/virtual/virtual.bkl
+	touch $@
+../../samples/html/virtual/makefile.wat: $(SDEPS) ../../samples/html/virtual/virtual.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DWXTOPDIR=../../../ ../../samples/html/virtual/virtual.bkl
+	touch $@
+
+../../samples/html/helpview/Makefile.in: $(SDEPS) ../../samples/html/helpview/helpview.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/html/helpview/helpview.bkl
+	touch $@
+../../samples/html/helpview/makefile.bcc: $(SDEPS) ../../samples/html/helpview/helpview.bkl
+	$(BAKEFILE) -fborland -o$@  -DWXTOPDIR=../../../ ../../samples/html/helpview/helpview.bkl
+	touch $@
+../../samples/html/helpview/makefile.vc: $(SDEPS) ../../samples/html/helpview/helpview.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DWXTOPDIR=../../../ ../../samples/html/helpview/helpview.bkl
+	touch $@
+../../samples/html/helpview/makefile.gcc: $(SDEPS) ../../samples/html/helpview/helpview.bkl
+	$(BAKEFILE) -fmingw -o$@  -DWXTOPDIR=../../../ ../../samples/html/helpview/helpview.bkl
+	touch $@
+../../samples/html/helpview/makefile.wat: $(SDEPS) ../../samples/html/helpview/helpview.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DWXTOPDIR=../../../ ../../samples/html/helpview/helpview.bkl
 	touch $@
 
 ../../samples/menu/Makefile.in: $(SDEPS) ../../samples/menu/menu.bkl
