@@ -73,13 +73,13 @@ class TestValidatorPanel(wxPanel):
         label = wxStaticText(self, -1, "Alpha Only: ")
         fgs.Add(label, 0, wxALIGN_RIGHT|wxCENTER)
 
-        fgs.Add(wxTextCtrl(self, -1, "", validator = MyValidator(ALPHA_ONLY))
+        fgs.Add(wxTextCtrl(self, -1, "", validator = MyValidator(ALPHA_ONLY)))
 
         fgs.Add(1,VSPACE); fgs.Add(1,VSPACE)
 
         label = wxStaticText(self, -1, "Digits Only: ")
         fgs.Add(label, 0, wxALIGN_RIGHT|wxCENTER)
-        fgs.Add(wxTextCtrl(self, -1, "", validator = MyValidator(DIGITS_ONLY)))
+        fgs.Add(wxTextCtrl(self, -1, "", validator = MyValidator(DIGIT_ONLY)))
 
         border = wxBoxSizer()
         border.Add(fgs, 1, wxGROW|wxALL, 25)
