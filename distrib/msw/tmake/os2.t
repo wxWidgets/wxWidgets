@@ -58,6 +58,8 @@
     }
     #! find all our headers
     foreach $file (sort keys %wxWXINCLUDE) {
+        next if $wxWXINCLUDE{$file} =~ /\bP\b/;
+
         $project{"OS2PM_HEADERS"} .= $file . " "
     }
 

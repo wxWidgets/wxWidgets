@@ -67,6 +67,8 @@
     
     #! find all our headers
     foreach $file (sort keys %wxWXINCLUDE) {
+        next if $wxWXINCLUDE{$file} =~ /\bR\b/;
+
         $project{"GTK_HEADERS"} .= $file . " "
     }
 

@@ -67,6 +67,8 @@
     }
     #! find all our headers
     foreach $file (sort keys %wxWXINCLUDE) {
+        next if $wxWXINCLUDE{$file} =~ /\bX\b/;
+
         $project{"MOTIF_HEADERS"} .= $file . " "
     }
 
