@@ -365,6 +365,7 @@ public:
     long GetIndex();
     int GetColumn();
     wxPoint GetPoint();
+    %pragma(python) addtoclass = "GetPostiion = GetPoint"
     const wxString& GetLabel();
     const wxString& GetText();
     int GetImage();
