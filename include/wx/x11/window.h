@@ -103,12 +103,11 @@ public:
     // accessors
     // ---------
     
-    // Get main widget for this window, e.g. a text widget
+    // Get main X11 window
     virtual WXWindow GetMainWindow() const;
     
-    // Get the underlying X window and display
-    WXWindow GetXWindow() const;
-    WXDisplay *GetXDisplay() const;
+    // Get X11 window representing the client area
+    virtual WXWindow GetClientWindow() const;
     
     void SetLastClick(int button, long timestamp)
         { m_lastButton = button; m_lastTS = timestamp; }
@@ -123,6 +122,9 @@ public:
     // Generates paint events from m_updateRegion
     void SendPaintEvents();
     
+    // Generates paint events from flag
+    void SendNcPaintEvents();
+    
     // Generates erase events from m_clearRegion
     void SendEraseEvents();
     
@@ -131,6 +133,14 @@ public:
     
     // Return clear region
     wxRegion &GetClearRegion() { return m_clearRegion; }
+    
+    void NeedUpdateNcAreaInIdle( bool update = TRUE ) { m_updateNcArea = update; }
+    
+    // Inserting into main window instead of client
+    // window. This is mostly for a wxWindow's own
+    // scrollbars.
+    void SetInsertIntoMain( bool insert = TRUE ) { m_insertIntoMain = insert; }
+    bool GetInsertIntoMain() { return m_insertIntoMain; }
     
     // sets the fore/background colour for the given widget
     static void DoChangeForegroundColour(WXWindow widget, wxColour& foregroundColour);
@@ -148,10 +158,6 @@ public:
     // For compatibility across platforms (not in event table)
     void OnIdle(wxIdleEvent& WXUNUSED(event)) {}
     
-    // Go up to a toplevel window and query which window has the focus.
-    // May return NULL.
-    wxWindow *GetFocusWidget();
-    
 protected:
     // Responds to colour changes: passes event on to children.
     void OnSysColourChanged(wxSysColourChangedEvent& event);
@@ -161,10 +167,14 @@ protected:
     int    m_lastButton;     // last pressed button
     
 protected:
-    WXWindow              m_mainWidget;
+    WXWindow              m_mainWindow;
+    WXWindow              m_clientWindow;
+    bool                  m_insertIntoMain;
+    
+    bool                  m_winCaptured;
     wxRegion              m_clearRegion;
     bool                  m_clipPaintRegion;
-    bool                  m_winCaptured;  // ????
+    bool                  m_updateNcArea;
     bool                  m_needsInputFocus; // Input focus set in OnIdle
 
     // implement the base class pure virtuals

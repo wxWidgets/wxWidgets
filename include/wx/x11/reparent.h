@@ -63,8 +63,8 @@ class wxAdoptedWindow: public wxWindow
     wxAdoptedWindow(WXWindow window);
     ~wxAdoptedWindow();
 
-    void SetHandle(WXWindow window) { m_mainWidget = window; }
-    WXWindow GetHandle() const { return GetXWindow(); }
+    void SetHandle(WXWindow window) { m_mainWindow = window; }
+    WXWindow GetHandle() const { return GetMainWindow(); }
 };
 
 #endif

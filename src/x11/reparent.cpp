@@ -94,7 +94,7 @@ wxAdoptedWindow::wxAdoptedWindow()
 
 wxAdoptedWindow::wxAdoptedWindow(WXWindow window)
 {
-    m_mainWidget = window;
+    m_mainWindow = window;
 }
 
 wxAdoptedWindow::~wxAdoptedWindow()
@@ -131,15 +131,15 @@ bool wxReparenter::Reparent(wxWindow* newParent, wxAdoptedWindow* toReparent)
     int parentOffset = 0;
 
     old = XSetErrorHandler(ErrorHandler);
-    XReparentWindow((Display*) newParent->GetXDisplay(),
-                    (Window) toReparent->GetXWindow(),
-                    (Window) newParent->GetXWindow(),
-                    0, 0);
+    XReparentWindow( wxGlobalDisplay(),
+                     (Window) toReparent->GetMainWindow(),
+                     (Window) newParent->GetMainWindow(),
+                     0, 0);
 
-    if (!XQueryTree((Display*) newParent->GetXDisplay(),
-                    (Window) toReparent->GetXWindow(),
-                    &returnroot, &returnparent,
-                    &children, &numchildren) || Xerror)
+    if (!XQueryTree( wxGlobalDisplay(),
+                     (Window) toReparent->GetMainWindow(),
+                     &returnroot, &returnparent,
+                     &children, &numchildren) || Xerror)
     {
         XSetErrorHandler(old);
         return TRUE;
@@ -160,14 +160,14 @@ bool wxReparenter::Reparent(wxWindow* newParent, wxAdoptedWindow* toReparent)
          */
         for (each=0; each<numchildren; each++)
         {
-            XGetWindowAttributes((Display*) newParent->GetXDisplay(),
-                                 children[each], &xwa);
+            XGetWindowAttributes( wxGlobalDisplay(),
+                                  children[each], &xwa);
             fprintf(stderr,
               "Reparenting child at offset %d and position %d, %d.\n",
                parentOffset, parentOffset+xwa.x, parentOffset+xwa.y);
-            XReparentWindow((Display*) newParent->GetXDisplay(),
-                            children[each], (Window) newParent->GetXWindow(),
-              xwa.x, xwa.y);
+            XReparentWindow( wxGlobalDisplay(),
+                             children[each], (Window) newParent->GetMainWindow(),
+                             xwa.x, xwa.y);
         }
     }
 
@@ -187,7 +187,7 @@ bool wxReparenter::WaitAndReparent(wxWindow* newParent, wxAdoptedWindow* toRepar
     sm_exactMatch = exactMatch;
     sm_name = windowName;
     
-    Display* display = (Display*) newParent->GetXDisplay() ;
+    Display* display = wxGlobalDisplay();
     XSelectInput(display,
         RootWindowOfScreen(DefaultScreenOfDisplay(display)),
         SubstructureNotifyMask);

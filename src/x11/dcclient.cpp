@@ -2030,53 +2030,24 @@ int wxWindowDC::GetDepth() const
     return -1;
 }
 
-// ----------------------------------------------------------------------------
-// wxPaintDC
-// ----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxClientDC)
-
-wxPaintDC::wxPaintDC(wxWindow* win)
-  : wxClientDC(win)
-{
-#if USE_PAINT_REGION
-    if (!win->GetClipPaintRegion())
-        return;
-
-    m_paintClippingRegion = win->GetUpdateRegion();
-    Region region = (Region) m_paintClippingRegion.GetX11Region();
-    if (region)
-    {
-        m_paintClippingRegion = win->GetUpdateRegion();
-        Region region2 = (Region) m_paintClippingRegion.GetX11Region();
-        if (region2)
-        {
-            m_currentClippingRegion.Union( m_paintClippingRegion );
-
-            XSetRegion( (Display*) m_display, (GC) m_penGC, region2 );
-            XSetRegion( (Display*) m_display, (GC) m_brushGC, region2 );
-            XSetRegion( (Display*) m_display, (GC) m_textGC, region2 );
-            XSetRegion( (Display*) m_display, (GC) m_bgGC, region2 );
-        }
-    }
-#endif // USE_PAINT_REGION
-}
-
 //-----------------------------------------------------------------------------
 // wxClientDC
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxWindowDC)
 
-wxClientDC::wxClientDC( wxWindow *win )
-          : wxWindowDC( win )
+wxClientDC::wxClientDC( wxWindow *window )
+          : wxWindowDC( window )
 {
-    wxCHECK_RET( win, _T("NULL window in wxClientDC::wxClientDC") );
+    wxCHECK_RET( window, _T("NULL window in wxClientDC::wxClientDC") );
     
-#ifdef __WXUNIVERSAL__
-    wxPoint ptOrigin = win->GetClientAreaOrigin();
+    m_window = (WXWindow*) window->GetClientWindow();
+    
+#if wxUSE_TWO_WINDOWS
+#else
+    wxPoint ptOrigin = window->GetClientAreaOrigin();
     SetDeviceOrigin(ptOrigin.x, ptOrigin.y);
-    wxSize size = win->GetClientSize();
+    wxSize size = window->GetClientSize();
     SetClippingRegion(wxPoint(0, 0), size);
 #endif // __WXUNIVERSAL__
 }
@@ -2086,6 +2057,33 @@ void wxClientDC::DoGetSize(int *width, int *height) const
     wxCHECK_RET( m_owner, _T("GetSize() doesn't work without window") );
 
     m_owner->GetClientSize( width, height );
+}
+
+// ----------------------------------------------------------------------------
+// wxPaintDC
+// ----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxClientDC)
+
+wxPaintDC::wxPaintDC(wxWindow* window)
+  : wxClientDC(window)
+{
+#if USE_PAINT_REGION
+    if (!window->GetClipPaintRegion())
+        return;
+
+    m_paintClippingRegion = window->GetUpdateRegion();
+    Region region = (Region) m_paintClippingRegion.GetX11Region();
+    if (region)
+    {
+            m_currentClippingRegion.Union( m_paintClippingRegion );
+
+            XSetRegion( (Display*) m_display, (GC) m_penGC, region );
+            XSetRegion( (Display*) m_display, (GC) m_brushGC, region );
+            XSetRegion( (Display*) m_display, (GC) m_textGC, region );
+            XSetRegion( (Display*) m_display, (GC) m_bgGC, region );
+    }
+#endif // USE_PAINT_REGION
 }
 
 // ----------------------------------------------------------------------------

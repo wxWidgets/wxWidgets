@@ -78,7 +78,8 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
         KeymapStateMask | FocusChangeMask | ColormapChangeMask | StructureNotifyMask |
         PropertyChangeMask );
 
-    m_mainWidget = (WXWindow) xwindow;
+    m_mainWindow = (WXWindow) xwindow;
+    m_clientWindow = (WXWindow) xwindow;
     wxAddWindowToTable( xwindow, (wxWindow*) this );
 
     // Set background to None which will prevent X11 from clearing the

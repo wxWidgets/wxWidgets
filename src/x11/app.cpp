@@ -49,6 +49,7 @@
 extern wxList wxPendingDelete;
 
 wxHashTable *wxWidgetHashTable = NULL;
+wxHashTable *wxClientWidgetHashTable = NULL;
 
 wxApp *wxTheApp = NULL;
 
@@ -119,6 +120,7 @@ bool wxApp::Initialize()
 #endif
 
     wxWidgetHashTable = new wxHashTable(wxKEY_INTEGER);
+    wxClientWidgetHashTable = new wxHashTable(wxKEY_INTEGER);
 
     wxModule::RegisterModules();
     if (!wxModule::InitializeModules()) return FALSE;
@@ -134,6 +136,8 @@ void wxApp::CleanUp()
 
     delete wxWidgetHashTable;
     wxWidgetHashTable = NULL;
+    delete wxClientWidgetHashTable;
+    wxClientWidgetHashTable = NULL;
 
     wxModule::CleanUpModules();
 
@@ -466,10 +470,16 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
     // has been destroyed, assume a 1:1 match between
     // Window and wxWindow, so if it's not in the table,
     // it must have been destroyed.
-
+    
     win = wxGetWindowFromTable(window);
     if (!win)
-        return FALSE;
+    {
+#if wxUSE_TWO_WINDOWS
+        win = wxGetClientWindowFromTable(window);
+        if (!win)
+#endif
+            return FALSE;
+    }
 
 #ifdef __WXDEBUG__
     wxString windowClass = win->GetClassInfo()->GetClassName();
@@ -479,30 +489,49 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
     {
         case Expose:
         {
-            //wxLogDebug("Expose: %s", windowClass.c_str());
-            win->GetUpdateRegion().Union( XExposeEventGetX(event), XExposeEventGetY(event),
-                                          XExposeEventGetWidth(event), XExposeEventGetHeight(event));
+#if wxUSE_TWO_WINDOWS
+            if (event->xexpose.window != (Window)win->GetClientWindow())
+            {
+                XEvent tmp_event;
+                wxExposeInfo info;
+                info.window = event->xexpose.window;
+                info.found_non_matching = FALSE;
+                while (XCheckIfEvent( wxGlobalDisplay(), &tmp_event, expose_predicate, (XPointer) &info ))
+                {
+                    // Don't worry about optimizing redrawing the border etc.
+                }
+                win->NeedUpdateNcAreaInIdle();
+            }
+            else
+#endif
+            {
+                win->GetUpdateRegion().Union( XExposeEventGetX(event), XExposeEventGetY(event),
+                                              XExposeEventGetWidth(event), XExposeEventGetHeight(event));
                                               
-            win->GetClearRegion().Union( XExposeEventGetX(event), XExposeEventGetY(event),
+                win->GetClearRegion().Union( XExposeEventGetX(event), XExposeEventGetY(event),
                                          XExposeEventGetWidth(event), XExposeEventGetHeight(event));
 
 #if !wxUSE_NANOX
-            XEvent tmp_event;
-            wxExposeInfo info;
-            info.window = event->xexpose.window;
-            info.found_non_matching = FALSE;
-            while (XCheckIfEvent( wxGlobalDisplay(), &tmp_event, expose_predicate, (XPointer) &info ))
-            {
-                win->GetUpdateRegion().Union( tmp_event.xexpose.x, tmp_event.xexpose.y,
-                                              tmp_event.xexpose.width, tmp_event.xexpose.height );
+                XEvent tmp_event;
+                wxExposeInfo info;
+                info.window = event->xexpose.window;
+                info.found_non_matching = FALSE;
+                while (XCheckIfEvent( wxGlobalDisplay(), &tmp_event, expose_predicate, (XPointer) &info ))
+                {
+                    win->GetUpdateRegion().Union( tmp_event.xexpose.x, tmp_event.xexpose.y,
+                                                  tmp_event.xexpose.width, tmp_event.xexpose.height );
                                               
-                win->GetClearRegion().Union( tmp_event.xexpose.x, tmp_event.xexpose.y,
-                                             tmp_event.xexpose.width, tmp_event.xexpose.height );
-            }
+                    win->GetClearRegion().Union( tmp_event.xexpose.x, tmp_event.xexpose.y,
+                                                 tmp_event.xexpose.width, tmp_event.xexpose.height );
+                }
 #endif
+                if (win->GetMainWindow() == win->GetClientWindow())
+                    win->NeedUpdateNcAreaInIdle();
 
-            // Only erase background, paint in idle time.
-            win->SendEraseEvents();
+                // Only erase background, paint in idle time.
+                win->SendEraseEvents();
+                //win->Update();
+            }
 
             return TRUE;
         }
@@ -580,7 +609,6 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
             if (event->update.utype == GR_UPDATE_SIZE)
 #endif
             {
-                //wxLogDebug("ConfigureNotify: %s", windowClass.c_str());
                 if (win->IsTopLevel() && win->IsShown())
                 {
                     wxTopLevelWindowX11 *tlw = (wxTopLevelWindowX11 *) win;

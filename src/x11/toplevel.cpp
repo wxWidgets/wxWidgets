@@ -123,12 +123,18 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     xattributes.background_pixel = m_backgroundColour.GetPixel();
     xattributes.border_pixel = BlackPixel( xdisplay, xscreen );
 
+    if (HasFlag( wxNO_BORDER ))
+    {
+        xattributes_mask |= CWOverrideRedirect;
+        xattributes.override_redirect = True;
+    }
+    
     if (HasFlag( wxNO_FULL_REPAINT_ON_RESIZE ))
     {
         xattributes_mask |= CWBitGravity;
         xattributes.bit_gravity = StaticGravity;
     }
-
+    
     xattributes_mask |= CWEventMask;
     xattributes.event_mask = 
         ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
@@ -147,7 +153,9 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
                                     0, 0, InputOutput, xvisual, backColor, foreColor);
 #endif
 
-    m_mainWidget = (WXWindow) xwindow;
+    m_mainWindow = (WXWindow) xwindow;
+    m_clientWindow = (WXWindow) xwindow;
+    wxAddWindowToTable( xwindow, (wxWindow*) this );
 
 #if wxUSE_NANOX
     XSelectInput( xdisplay, xwindow,
@@ -168,20 +176,26 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
                   PropertyChangeMask
                   );
 #endif
-    
-    wxAddWindowToTable( xwindow, (wxWindow*) this );
 
     // Set background to None which will prevent X11 from clearing the
     // background completely.
     XSetWindowBackgroundPixmap( xdisplay, xwindow, None );
 
 #if !wxUSE_NANOX
-    if (GetExtraStyle() & wxTOPLEVEL_EX_DIALOG)
+    if (HasFlag( wxSTAY_ON_TOP ))
     {
-        if (GetParent() && GetParent()->GetMainWindow())
-        {
-             Window xparentwindow = (Window) GetParent()->GetMainWindow();
-             XSetTransientForHint( xdisplay, xwindow, xparentwindow );
+        Window xroot = RootWindow( xdisplay, xscreen );
+        XSetTransientForHint( xdisplay, xwindow, xroot );
+    }
+    else
+    {
+       if (GetExtraStyle() & wxTOPLEVEL_EX_DIALOG)
+       {
+            if (GetParent() && GetParent()->GetMainWindow())
+            {
+                Window xparentwindow = (Window) GetParent()->GetMainWindow();
+                XSetTransientForHint( xdisplay, xwindow, xparentwindow );
+            }
         }
     }
 
@@ -193,7 +207,12 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     XSetWMNormalHints( xdisplay, xwindow, &size_hints);
     
     XWMHints wm_hints;
-    wm_hints.flags = InputHint | StateHint /* | WindowGroupHint */;
+    wm_hints.flags = InputHint | StateHint;
+    if (GetParent())
+    {  
+        wm_hints.flags |= WindowGroupHint;
+        wm_hints.window_group = (Window) GetParent()->GetMainWindow();
+    }
     wm_hints.input = True;
     wm_hints.initial_state = NormalState;
     XSetWMHints( xdisplay, xwindow, &wm_hints);
@@ -266,6 +285,8 @@ void wxTopLevelWindowX11::OnInternalIdle()
 
 bool wxTopLevelWindowX11::Show(bool show)
 {
+    XSync( wxGlobalDisplay(), False );
+    
     // Nano-X has to force a size event,
     // else there's no initial size.
 #if wxUSE_NANOX
@@ -619,7 +640,7 @@ void wxTopLevelWindowX11::DoSetClientSize(int width, int height)
     size_hints.flags = PSize;
     size_hints.width = width + (oldSize.x - oldClientSize.x);
     size_hints.height = height + (oldSize.y - oldClientSize.y);
-    XSetWMNormalHints( (Display*) GetXDisplay(), (Window) GetMainWindow(),
+    XSetWMNormalHints( wxGlobalDisplay(), (Window) GetMainWindow(),
                        &size_hints);
 
     // This seems to be necessary or resizes don't get performed
@@ -644,11 +665,11 @@ void wxTopLevelWindowX11::DoSetSize(int x, int y, int width, int height, int siz
     wxWindowX11::DoSetSize(x, y, width, height, sizeFlags);
 #endif
     XSync(wxGlobalDisplay(), False);
-    Window window = (Window) m_mainWidget;
+    Window window = (Window) m_mainWindow;
     if (!window)
         return ;
 
-    Display *display = (Display*) GetXDisplay();
+    Display *display = wxGlobalDisplay();
     Window root = RootWindowOfScreen(DefaultScreenOfDisplay(display));
     Window parent_window = window,
         next_parent   = window;
@@ -708,7 +729,7 @@ void wxTopLevelWindowX11::DoSetSize(int x, int y, int width, int height, int siz
     size_hints.height = height;
     size_hints.x = x;
     size_hints.y = y;
-    XSetWMNormalHints( (Display*) GetXDisplay(), (Window) GetMainWindow(),
+    XSetWMNormalHints( wxGlobalDisplay(), (Window) GetMainWindow(),
                        &size_hints);
 
     // This seems to be necessary or resizes don't get performed.
@@ -727,11 +748,11 @@ void wxTopLevelWindowX11::DoSetSize(int x, int y, int width, int height, int siz
 void wxTopLevelWindowX11::DoGetPosition(int *x, int *y) const
 {
     XSync(wxGlobalDisplay(), False);
-    Window window = (Window) m_mainWidget;
+    Window window = (Window) m_mainWindow;
     if (!window)
         return ;
 
-    Display *display = (Display*) GetXDisplay();
+    Display *display = wxGlobalDisplay();
     Window root = RootWindowOfScreen(DefaultScreenOfDisplay(display));
     Window parent_window = window,
         next_parent   = window;
@@ -758,7 +779,7 @@ void wxTopLevelWindowX11::DoGetPosition(int *x, int *y) const
     if (y) *y = yy;
 #else
     XWindowAttributes attr;
-    Status status = XGetWindowAttributes((Display*) GetXDisplay(), parent_window, & attr);
+    Status status = XGetWindowAttributes( wxGlobalDisplay(), parent_window, & attr);
     if (status)
     {
         if (x) *x = attr.x;

@@ -34,6 +34,10 @@ extern void wxDeleteWindowFromTable(Window w);
 extern wxWindow *wxGetWindowFromTable(Window w);
 extern bool wxAddWindowToTable(Window w, wxWindow *win);
 
+extern void wxDeleteClientWindowFromTable(Window w);
+extern wxWindow *wxGetClientWindowFromTable(Window w);
+extern bool wxAddClientWindowToTable(Window w, wxWindow *win);
+
 // ----------------------------------------------------------------------------
 // TranslateXXXEvent() functions - translate X event to wxWindow one
 // ----------------------------------------------------------------------------

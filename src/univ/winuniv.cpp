@@ -132,9 +132,15 @@ bool wxWindow::Create(wxWindow *parent,
     // if we should always have the scrollbar, do show it
     if ( GetWindowStyle() & wxALWAYS_SHOW_SB )
     {
+#if wxUSE_TWO_WINDOWS
+        SetInsertIntoMain( TRUE );
+#endif
         m_scrollbarVert = new wxScrollBar(this, -1,
                                           wxDefaultPosition, wxDefaultSize,
                                           wxSB_VERTICAL);
+#if wxUSE_TWO_WINDOWS
+        SetInsertIntoMain( FALSE );
+#endif
 
         // and position it
         PositionScrollbars();
@@ -456,7 +462,7 @@ void wxWindow::OnSize(wxSizeEvent& event)
         PositionScrollbars();
     }
     
-#ifndef __WXMSW__
+#if 0   // ndef __WXMSW__
     // Refresh the area (strip) previously occupied by the border
     
     if (HasFlag( wxNO_FULL_REPAINT_ON_RESIZE ) && IsShown())
@@ -581,8 +587,11 @@ wxPoint wxWindow::GetClientAreaOrigin() const
 {
     wxPoint pt = wxWindowBase::GetClientAreaOrigin();
 
+#if wxUSE_TWO_WINDOWS
+#else
     if ( m_renderer )
         pt += m_renderer->GetBorderDimensions(GetBorder()).GetPosition();
+#endif
 
     return pt;
 }
@@ -771,10 +780,16 @@ void wxWindow::SetScrollbar(int orient,
         if ( !scrollbar )
         {
             // create it
+#if wxUSE_TWO_WINDOWS
+            SetInsertIntoMain( TRUE );
+#endif
             scrollbar = new wxScrollBar(this, -1,
                                         wxDefaultPosition, wxDefaultSize,
                                         orient & wxVERTICAL ? wxSB_VERTICAL
                                                             : wxSB_HORIZONTAL);
+#if wxUSE_TWO_WINDOWS
+            SetInsertIntoMain( FALSE );
+#endif
             if ( orient & wxVERTICAL )
                 m_scrollbarVert = scrollbar;
             else
