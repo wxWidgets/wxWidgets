@@ -297,8 +297,8 @@ wxString wxFileConfig::GetLocalDir()
 {
   wxString strDir;
 
-#if defined(__WXMAC__)
-  // no local dir concept on Mac OS 9
+#if defined(__WXMAC__) || defined(__DOS__)
+  // no local dir concept on Mac OS 9 or MS-DOS
   return GetGlobalDir() ;
 #else
   wxGetHomeDir(&strDir);
@@ -349,7 +349,7 @@ wxString wxFileConfig::GetLocalFileName(const wxChar *szFile)
 
   str << szFile;
 
-  #ifdef __WXMSW__
+  #if defined(__WINDOWS__) || defined(__DOS__)
     if ( wxStrchr(szFile, wxT('.')) == NULL )
       str << wxT(".ini");
   #endif
