@@ -46,6 +46,9 @@
 #include <arpa/inet.h>
 #include <errno.h>
 
+DEFINE_EVENT_TYPE(wxEVT_DIALUP_CONNECTED)
+DEFINE_EVENT_TYPE(wxEVT_DIALUP_DISCONNECTED)
+
 // ----------------------------------------------------------------------------
 // A class which groups functions dealing with connecting to the network from a
 // workstation using dial-up access to the net. There is at most one instance

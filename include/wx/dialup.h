@@ -153,7 +153,7 @@ public:
 };
 
 // ----------------------------------------------------------------------------
-// DIALUP events processing
+// wxDialUpManager events
 // ----------------------------------------------------------------------------
 
 // the event class for the dialup events
@@ -179,11 +179,16 @@ public:
 // the type of dialup event handler function
 typedef void (wxEvtHandler::*wxDialUpEventFunction)(wxDialUpEvent&);
 
+BEGIN_DECLARE_EVENT_TYPES()
+    DECLARE_EVENT_TYPE(wxEVT_DIALUP_CONNECTED, 450)
+    DECLARE_EVENT_TYPE(wxEVT_DIALUP_DISCONNECTED, 451)
+END_DECLARE_EVENT_TYPES()
+
 // macros to catch dialup events
 #define EVT_DIALUP_CONNECTED(func) \
-   wxEventTableEntry( wxEVT_DIALUP_CONNECTED, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxDialUpEventFunction) & func, NULL),
+   DECLARE_EVENT_TABLE_ENTRY( wxEVT_DIALUP_CONNECTED, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxDialUpEventFunction) & func, NULL),
 #define EVT_DIALUP_DISCONNECTED(func) \
-   wxEventTableEntry( wxEVT_DIALUP_DISCONNECTED, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxDialUpEventFunction) & func, NULL),
+   DECLARE_EVENT_TABLE_ENTRY( wxEVT_DIALUP_DISCONNECTED, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxDialUpEventFunction) & func, NULL),
 
 
 #endif // wxUSE_DIALUP_MANAGER

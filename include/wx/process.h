@@ -24,7 +24,10 @@
 #include "wx/stream.h"
 #endif
 
-// Process Event handling
+// ----------------------------------------------------------------------------
+// wxProcessEvent: event used with wxProcess
+// ----------------------------------------------------------------------------
+
 class WXDLLEXPORT wxProcessEvent : public wxEvent
 {
 DECLARE_DYNAMIC_CLASS(wxProcessEvent)
@@ -48,8 +51,11 @@ public:
     int m_pid, m_exitcode;
 };
 
+// ----------------------------------------------------------------------------
 // A wxProcess object should be passed to wxExecute - than its OnTerminate()
 // function will be called when the process terminates.
+// ----------------------------------------------------------------------------
+
 class WXDLLEXPORT wxProcess : public wxEvtHandler
 {
 DECLARE_DYNAMIC_CLASS(wxProcess)
@@ -104,10 +110,18 @@ protected:
     bool m_redirect;
 };
 
+// ----------------------------------------------------------------------------
+// wxProcess events
+// ----------------------------------------------------------------------------
+
+BEGIN_DECLARE_EVENT_TYPES()
+    DECLARE_EVENT_TYPE(wxEVT_END_PROCESS, 440)
+END_DECLARE_EVENT_TYPES()
+
 typedef void (wxObject::*wxProcessEventFunction)(wxProcessEvent&);
 
 #define EVT_END_PROCESS(id, func) \
-   wxEventTableEntry( wxEVT_END_PROCESS, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxProcessEventFunction) & func, NULL),
+   DECLARE_EVENT_TABLE_ENTRY( wxEVT_END_PROCESS, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxProcessEventFunction) & func, NULL),
 
 #endif
     // _WX_PROCESSH__

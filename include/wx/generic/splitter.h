@@ -323,7 +323,7 @@ private:
 typedef void (wxEvtHandler::*wxSplitterEventFunction)(wxSplitterEvent&);
 
 #define EVT_SPLITTER_SASH_POS_CHANGED(id, fn)                               \
-  wxEventTableEntry(                                                        \
+  DECLARE_EVENT_TABLE_ENTRY(                                                \
     wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED,                                \
     id,                                                                     \
     -1,                                                                     \
@@ -332,7 +332,7 @@ typedef void (wxEvtHandler::*wxSplitterEventFunction)(wxSplitterEvent&);
   ),
 
 #define EVT_SPLITTER_SASH_POS_CHANGING(id, fn)                              \
-  wxEventTableEntry(                                                        \
+  DECLARE_EVENT_TABLE_ENTRY(                                                \
     wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING,                               \
     id,                                                                     \
     -1,                                                                     \
@@ -341,7 +341,7 @@ typedef void (wxEvtHandler::*wxSplitterEventFunction)(wxSplitterEvent&);
   ),
 
 #define EVT_SPLITTER_DCLICK(id, fn)                                         \
-  wxEventTableEntry(                                                        \
+  DECLARE_EVENT_TABLE_ENTRY(                                                \
     wxEVT_COMMAND_SPLITTER_DOUBLECLICKED,                                   \
     id,                                                                     \
     -1,                                                                     \
@@ -350,7 +350,7 @@ typedef void (wxEvtHandler::*wxSplitterEventFunction)(wxSplitterEvent&);
   ),
 
 #define EVT_SPLITTER_UNSPLIT(id, fn)                                        \
-  wxEventTableEntry(                                                        \
+  DECLARE_EVENT_TABLE_ENTRY(                                                \
     wxEVT_COMMAND_SPLITTER_UNSPLIT,                                         \
     id,                                                                     \
     -1,                                                                     \

@@ -52,6 +52,9 @@
 
 #include "wx/dialup.h"
 
+DEFINE_EVENT_TYPE(wxEVT_DIALUP_CONNECTED)
+DEFINE_EVENT_TYPE(wxEVT_DIALUP_DISCONNECTED)
+
 // Doesn't yet compile under VC++ 4, BC++, mingw, Watcom C++: no wininet.h
 #if !defined(__BORLANDC__) && !defined(__GNUWIN32_OLD__) && !defined(__GNUWIN32__) && !defined(__WATCOMC__) && ! (defined(__VISUALC__) && (__VISUALC__ < 1020))
 

@@ -49,6 +49,10 @@ WX_DEFINE_ARRAY(wxPanel *, wxArrayPages);
 // event tables and such
 // ----------------------------------------------------------------------------
 
+DEFINE_EVENT_TYPE(wxEVT_WIZARD_PAGE_CHANGED)
+DEFINE_EVENT_TYPE(wxEVT_WIZARD_PAGE_CHANGING)
+DEFINE_EVENT_TYPE(wxEVT_WIZARD_CANCEL)
+
 BEGIN_EVENT_TABLE(wxWizard, wxDialog)
     EVT_BUTTON(wxID_CANCEL, wxWizard::OnCancel)
     EVT_BUTTON(-1, wxWizard::OnBackOrNext)

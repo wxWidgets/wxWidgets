@@ -97,6 +97,17 @@ END_EVENT_TABLE()
 IMPLEMENT_DYNAMIC_CLASS(wxCalendarCtrl, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxCalendarEvent, wxCommandEvent)
 
+// ----------------------------------------------------------------------------
+// events
+// ----------------------------------------------------------------------------
+
+DEFINE_EVENT_TYPE(wxEVT_CALENDAR_SEL_CHANGED)
+DEFINE_EVENT_TYPE(wxEVT_CALENDAR_DAY_CHANGED)
+DEFINE_EVENT_TYPE(wxEVT_CALENDAR_MONTH_CHANGED)
+DEFINE_EVENT_TYPE(wxEVT_CALENDAR_YEAR_CHANGED)
+DEFINE_EVENT_TYPE(wxEVT_CALENDAR_DOUBLECLICKED)
+DEFINE_EVENT_TYPE(wxEVT_CALENDAR_WEEKDAY_CLICKED)
+
 // ============================================================================
 // implementation
 // ============================================================================

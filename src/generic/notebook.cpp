@@ -45,6 +45,9 @@
 // event table
 // ----------------------------------------------------------------------------
 
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING)
+
 BEGIN_EVENT_TABLE(wxNotebook, wxControl)
     EVT_NOTEBOOK_PAGE_CHANGED(-1, wxNotebook::OnSelChange)
     EVT_SIZE(wxNotebook::OnSize)
@@ -216,7 +219,7 @@ bool wxNotebook::SetPageImage(int nPage, int nImage)
 }
 
 void wxNotebook::SetImageList(wxImageList* imageList)
-{ 
+{
     m_pImageList = imageList;
     // TODO
 }
@@ -474,7 +477,7 @@ bool wxNotebook::RefreshLayout(bool force)
         rect.y = tabHeight + 4;
         rect.width = cw - 8;
         rect.height = ch - 4 - rect.y ;
-  
+
         m_tabView->SetViewRect(rect);
 
         m_tabView->LayoutTabs();
@@ -487,7 +490,7 @@ bool wxNotebook::RefreshLayout(bool force)
         rect.y = tabHeight + 4;
         rect.width = cw - 8;
         rect.height = ch - 4 - rect.y ;
-  
+
         m_tabView->SetViewRect(rect);
 
         m_tabView->LayoutTabs();
@@ -634,7 +637,7 @@ wxRect wxNotebook::GetAvailableClientSize()
 /*
  * wxNotebookTabView
  */
- 
+
 IMPLEMENT_CLASS(wxNotebookTabView, wxTabView)
 
 wxNotebookTabView::wxNotebookTabView(wxNotebook *notebook, long style): wxTabView(style)
@@ -656,12 +659,7 @@ void wxNotebookTabView::OnTabActivate(int activateId, int deactivateId)
   if (!m_notebook)
     return;
 
-// Because of name truncation!
-#if defined(__BORLANDC__) && defined(__WIN16__)
-  wxNotebookEvent event(wxEVT_COMMAND_NB_PAGE_CHANGED, m_notebook->GetId());
-#else
   wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, m_notebook->GetId());
-#endif
 
 #if defined (__WIN16__)
   int activatePos = activateId;

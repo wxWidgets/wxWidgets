@@ -71,25 +71,32 @@ typedef int wxEventType;
 #define DECLARE_EVENT_TABLE_ENTRY(type, id, idLast, fn, obj) \
     { type, id, idLast, fn, obj }
 
+#define BEGIN_DECLARE_EVENT_TYPES() enum {
+#define END_DECLARE_EVENT_TYPES() };
 #define DECLARE_EVENT_TYPE(name, value) name = wxEVT_FIRST + value,
+#define DEFINE_EVENT_TYPE(name)
 
 #else // !WXWIN_COMPATIBILITY_EVENT_TYPES
 
 #define DECLARE_EVENT_TABLE_ENTRY(type, id, idLast, fn, obj) \
     wxEventTableEntry(type, id, idLast, fn, obj)
 
+#define BEGIN_DECLARE_EVENT_TYPES()
+#define END_DECLARE_EVENT_TYPES()
 #define DECLARE_EVENT_TYPE(name, value) extern wxEventType name;
+#define DEFINE_EVENT_TYPE(name) wxEventType name = wxNewEventType();
 
 // generate a new unique event type
 extern WXDLLEXPORT wxEventType wxNewEventType();
 
 #endif // WXWIN_COMPATIBILITY_EVENT_TYPES/!WXWIN_COMPATIBILITY_EVENT_TYPES
 
+BEGIN_DECLARE_EVENT_TYPES()
+
 #if WXWIN_COMPATIBILITY_EVENT_TYPES
-enum
-{
     wxEVT_NULL = 0,
     wxEVT_FIRST = 10000,
+    wxEVT_USER_FIRST = wxEVT_FIRST + 2000,
 #else // !WXWIN_COMPATIBILITY_EVENT_TYPES
     // it is important to still have these as constants to avoid
     // initialization order related problems
@@ -98,226 +105,148 @@ enum
     const wxEventType wxEVT_USER_FIRST = wxEVT_FIRST + 2000;
 #endif // WXWIN_COMPATIBILITY_EVENT_TYPES/!WXWIN_COMPATIBILITY_EVENT_TYPES
 
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_BUTTON_CLICKED, 1)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_CHECKBOX_CLICKED, 2)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_CHOICE_SELECTED, 3)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_LISTBOX_SELECTED, 4)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, 5)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, 6)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_UPDATED, 7)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_ENTER, 8)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_MENU_SELECTED, 9)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_SLIDER_UPDATED, 10)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_RADIOBOX_SELECTED, 11)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_RADIOBUTTON_SELECTED, 12)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_BUTTON_CLICKED, 1)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_CHECKBOX_CLICKED, 2)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_CHOICE_SELECTED, 3)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_LISTBOX_SELECTED, 4)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, 5)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, 6)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_UPDATED, 7)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_ENTER, 8)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_MENU_SELECTED, 9)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_SLIDER_UPDATED, 10)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_RADIOBOX_SELECTED, 11)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_RADIOBUTTON_SELECTED, 12)
 
-// wxEVT_COMMAND_SCROLLBAR_UPDATED is now obsolete since we use
-// wxEVT_SCROLL... events
+    // wxEVT_COMMAND_SCROLLBAR_UPDATED is now obsolete since we use
+    // wxEVT_SCROLL... events
 
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_SCROLLBAR_UPDATED, 13)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_VLBOX_SELECTED, 14)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_COMBOBOX_SELECTED, 15)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_TOOL_RCLICKED, 16)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_TOOL_ENTER, 17)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_SPINCTRL_UPDATED, 18)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_SCROLLBAR_UPDATED, 13)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_VLBOX_SELECTED, 14)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_COMBOBOX_SELECTED, 15)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_TOOL_RCLICKED, 16)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_TOOL_ENTER, 17)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_SPINCTRL_UPDATED, 18)
 
-    // Sockets and timers send events, too
-DECLARE_EVENT_TYPE(wxEVT_SOCKET, 50)
-DECLARE_EVENT_TYPE(wxEVT_TIMER , 80)
+        // Sockets and timers send events, too
+    DECLARE_EVENT_TYPE(wxEVT_SOCKET, 50)
+    DECLARE_EVENT_TYPE(wxEVT_TIMER , 80)
 
-    // Mouse event types
-DECLARE_EVENT_TYPE(wxEVT_LEFT_DOWN, 100)
-DECLARE_EVENT_TYPE(wxEVT_LEFT_UP, 101)
-DECLARE_EVENT_TYPE(wxEVT_MIDDLE_DOWN, 102)
-DECLARE_EVENT_TYPE(wxEVT_MIDDLE_UP, 103)
-DECLARE_EVENT_TYPE(wxEVT_RIGHT_DOWN, 104)
-DECLARE_EVENT_TYPE(wxEVT_RIGHT_UP, 105)
-DECLARE_EVENT_TYPE(wxEVT_MOTION, 106)
-DECLARE_EVENT_TYPE(wxEVT_ENTER_WINDOW, 107)
-DECLARE_EVENT_TYPE(wxEVT_LEAVE_WINDOW, 108)
-DECLARE_EVENT_TYPE(wxEVT_LEFT_DCLICK, 109)
-DECLARE_EVENT_TYPE(wxEVT_MIDDLE_DCLICK, 110)
-DECLARE_EVENT_TYPE(wxEVT_RIGHT_DCLICK, 111)
-DECLARE_EVENT_TYPE(wxEVT_SET_FOCUS, 112)
-DECLARE_EVENT_TYPE(wxEVT_KILL_FOCUS, 113)
+        // Mouse event types
+    DECLARE_EVENT_TYPE(wxEVT_LEFT_DOWN, 100)
+    DECLARE_EVENT_TYPE(wxEVT_LEFT_UP, 101)
+    DECLARE_EVENT_TYPE(wxEVT_MIDDLE_DOWN, 102)
+    DECLARE_EVENT_TYPE(wxEVT_MIDDLE_UP, 103)
+    DECLARE_EVENT_TYPE(wxEVT_RIGHT_DOWN, 104)
+    DECLARE_EVENT_TYPE(wxEVT_RIGHT_UP, 105)
+    DECLARE_EVENT_TYPE(wxEVT_MOTION, 106)
+    DECLARE_EVENT_TYPE(wxEVT_ENTER_WINDOW, 107)
+    DECLARE_EVENT_TYPE(wxEVT_LEAVE_WINDOW, 108)
+    DECLARE_EVENT_TYPE(wxEVT_LEFT_DCLICK, 109)
+    DECLARE_EVENT_TYPE(wxEVT_MIDDLE_DCLICK, 110)
+    DECLARE_EVENT_TYPE(wxEVT_RIGHT_DCLICK, 111)
+    DECLARE_EVENT_TYPE(wxEVT_SET_FOCUS, 112)
+    DECLARE_EVENT_TYPE(wxEVT_KILL_FOCUS, 113)
 
-    // Non-client mouse events
-DECLARE_EVENT_TYPE(wxEVT_NC_LEFT_DOWN, 200)
-DECLARE_EVENT_TYPE(wxEVT_NC_LEFT_UP, 201)
-DECLARE_EVENT_TYPE(wxEVT_NC_MIDDLE_DOWN, 202)
-DECLARE_EVENT_TYPE(wxEVT_NC_MIDDLE_UP, 203)
-DECLARE_EVENT_TYPE(wxEVT_NC_RIGHT_DOWN, 204)
-DECLARE_EVENT_TYPE(wxEVT_NC_RIGHT_UP, 205)
-DECLARE_EVENT_TYPE(wxEVT_NC_MOTION, 206)
-DECLARE_EVENT_TYPE(wxEVT_NC_ENTER_WINDOW, 207)
-DECLARE_EVENT_TYPE(wxEVT_NC_LEAVE_WINDOW, 208)
-DECLARE_EVENT_TYPE(wxEVT_NC_LEFT_DCLICK, 209)
-DECLARE_EVENT_TYPE(wxEVT_NC_MIDDLE_DCLICK, 210)
-DECLARE_EVENT_TYPE(wxEVT_NC_RIGHT_DCLICK, 211)
+        // Non-client mouse events
+    DECLARE_EVENT_TYPE(wxEVT_NC_LEFT_DOWN, 200)
+    DECLARE_EVENT_TYPE(wxEVT_NC_LEFT_UP, 201)
+    DECLARE_EVENT_TYPE(wxEVT_NC_MIDDLE_DOWN, 202)
+    DECLARE_EVENT_TYPE(wxEVT_NC_MIDDLE_UP, 203)
+    DECLARE_EVENT_TYPE(wxEVT_NC_RIGHT_DOWN, 204)
+    DECLARE_EVENT_TYPE(wxEVT_NC_RIGHT_UP, 205)
+    DECLARE_EVENT_TYPE(wxEVT_NC_MOTION, 206)
+    DECLARE_EVENT_TYPE(wxEVT_NC_ENTER_WINDOW, 207)
+    DECLARE_EVENT_TYPE(wxEVT_NC_LEAVE_WINDOW, 208)
+    DECLARE_EVENT_TYPE(wxEVT_NC_LEFT_DCLICK, 209)
+    DECLARE_EVENT_TYPE(wxEVT_NC_MIDDLE_DCLICK, 210)
+    DECLARE_EVENT_TYPE(wxEVT_NC_RIGHT_DCLICK, 211)
 
-    // Character input event type
-DECLARE_EVENT_TYPE(wxEVT_CHAR, 212)
-DECLARE_EVENT_TYPE(wxEVT_CHAR_HOOK, 213)
-DECLARE_EVENT_TYPE(wxEVT_NAVIGATION_KEY, 214)
-DECLARE_EVENT_TYPE(wxEVT_KEY_DOWN, 215)
-DECLARE_EVENT_TYPE(wxEVT_KEY_UP, 216)
+        // Character input event type
+    DECLARE_EVENT_TYPE(wxEVT_CHAR, 212)
+    DECLARE_EVENT_TYPE(wxEVT_CHAR_HOOK, 213)
+    DECLARE_EVENT_TYPE(wxEVT_NAVIGATION_KEY, 214)
+    DECLARE_EVENT_TYPE(wxEVT_KEY_DOWN, 215)
+    DECLARE_EVENT_TYPE(wxEVT_KEY_UP, 216)
 
-    // Set cursor event
-DECLARE_EVENT_TYPE(wxEVT_SET_CURSOR, 230)
+        // Set cursor event
+    DECLARE_EVENT_TYPE(wxEVT_SET_CURSOR, 230)
 
-    // wxScrollbar and wxSlider event identifiers
-DECLARE_EVENT_TYPE(wxEVT_SCROLL_TOP, 300)
-DECLARE_EVENT_TYPE(wxEVT_SCROLL_BOTTOM, 301)
-DECLARE_EVENT_TYPE(wxEVT_SCROLL_LINEUP, 302)
-DECLARE_EVENT_TYPE(wxEVT_SCROLL_LINEDOWN, 303)
-DECLARE_EVENT_TYPE(wxEVT_SCROLL_PAGEUP, 304)
-DECLARE_EVENT_TYPE(wxEVT_SCROLL_PAGEDOWN, 305)
-DECLARE_EVENT_TYPE(wxEVT_SCROLL_THUMBTRACK, 306)
-DECLARE_EVENT_TYPE(wxEVT_SCROLL_THUMBRELEASE, 307)
+        // wxScrollbar and wxSlider event identifiers
+    DECLARE_EVENT_TYPE(wxEVT_SCROLL_TOP, 300)
+    DECLARE_EVENT_TYPE(wxEVT_SCROLL_BOTTOM, 301)
+    DECLARE_EVENT_TYPE(wxEVT_SCROLL_LINEUP, 302)
+    DECLARE_EVENT_TYPE(wxEVT_SCROLL_LINEDOWN, 303)
+    DECLARE_EVENT_TYPE(wxEVT_SCROLL_PAGEUP, 304)
+    DECLARE_EVENT_TYPE(wxEVT_SCROLL_PAGEDOWN, 305)
+    DECLARE_EVENT_TYPE(wxEVT_SCROLL_THUMBTRACK, 306)
+    DECLARE_EVENT_TYPE(wxEVT_SCROLL_THUMBRELEASE, 307)
 
-    // Scroll events from wxWindow
-DECLARE_EVENT_TYPE(wxEVT_SCROLLWIN_TOP, 320)
-DECLARE_EVENT_TYPE(wxEVT_SCROLLWIN_BOTTOM, 321)
-DECLARE_EVENT_TYPE(wxEVT_SCROLLWIN_LINEUP, 322)
-DECLARE_EVENT_TYPE(wxEVT_SCROLLWIN_LINEDOWN, 323)
-DECLARE_EVENT_TYPE(wxEVT_SCROLLWIN_PAGEUP, 324)
-DECLARE_EVENT_TYPE(wxEVT_SCROLLWIN_PAGEDOWN, 325)
-DECLARE_EVENT_TYPE(wxEVT_SCROLLWIN_THUMBTRACK, 326)
-DECLARE_EVENT_TYPE(wxEVT_SCROLLWIN_THUMBRELEASE, 327)
+        // Scroll events from wxWindow
+    DECLARE_EVENT_TYPE(wxEVT_SCROLLWIN_TOP, 320)
+    DECLARE_EVENT_TYPE(wxEVT_SCROLLWIN_BOTTOM, 321)
+    DECLARE_EVENT_TYPE(wxEVT_SCROLLWIN_LINEUP, 322)
+    DECLARE_EVENT_TYPE(wxEVT_SCROLLWIN_LINEDOWN, 323)
+    DECLARE_EVENT_TYPE(wxEVT_SCROLLWIN_PAGEUP, 324)
+    DECLARE_EVENT_TYPE(wxEVT_SCROLLWIN_PAGEDOWN, 325)
+    DECLARE_EVENT_TYPE(wxEVT_SCROLLWIN_THUMBTRACK, 326)
+    DECLARE_EVENT_TYPE(wxEVT_SCROLLWIN_THUMBRELEASE, 327)
 
-    // System events
-DECLARE_EVENT_TYPE(wxEVT_SIZE, 400)
-DECLARE_EVENT_TYPE(wxEVT_MOVE, 401)
-DECLARE_EVENT_TYPE(wxEVT_CLOSE_WINDOW, 402)
-DECLARE_EVENT_TYPE(wxEVT_END_SESSION, 403)
-DECLARE_EVENT_TYPE(wxEVT_QUERY_END_SESSION, 404)
-DECLARE_EVENT_TYPE(wxEVT_ACTIVATE_APP, 405)
-DECLARE_EVENT_TYPE(wxEVT_POWER, 406)
-DECLARE_EVENT_TYPE(wxEVT_ACTIVATE, 409)
-DECLARE_EVENT_TYPE(wxEVT_CREATE, 410)
-DECLARE_EVENT_TYPE(wxEVT_DESTROY, 411)
-DECLARE_EVENT_TYPE(wxEVT_SHOW, 412)
-DECLARE_EVENT_TYPE(wxEVT_ICONIZE, 413)
-DECLARE_EVENT_TYPE(wxEVT_MAXIMIZE, 414)
-DECLARE_EVENT_TYPE(wxEVT_MOUSE_CAPTURE_CHANGED, 415)
-DECLARE_EVENT_TYPE(wxEVT_PAINT, 416)
-DECLARE_EVENT_TYPE(wxEVT_ERASE_BACKGROUND, 417)
-DECLARE_EVENT_TYPE(wxEVT_NC_PAINT, 418)
-DECLARE_EVENT_TYPE(wxEVT_PAINT_ICON, 419)
-DECLARE_EVENT_TYPE(wxEVT_MENU_CHAR, 420)
-DECLARE_EVENT_TYPE(wxEVT_MENU_INIT, 421)
-DECLARE_EVENT_TYPE(wxEVT_MENU_HIGHLIGHT, 422)
-DECLARE_EVENT_TYPE(wxEVT_POPUP_MENU_INIT, 423)
-DECLARE_EVENT_TYPE(wxEVT_CONTEXT_MENU, 424)
-DECLARE_EVENT_TYPE(wxEVT_SYS_COLOUR_CHANGED, 425)
-DECLARE_EVENT_TYPE(wxEVT_SETTING_CHANGED, 426)
-DECLARE_EVENT_TYPE(wxEVT_QUERY_NEW_PALETTE, 427)
-DECLARE_EVENT_TYPE(wxEVT_PALETTE_CHANGED, 428)
-DECLARE_EVENT_TYPE(wxEVT_JOY_BUTTON_DOWN, 429)
-DECLARE_EVENT_TYPE(wxEVT_JOY_BUTTON_UP, 430)
-DECLARE_EVENT_TYPE(wxEVT_JOY_MOVE, 431)
-DECLARE_EVENT_TYPE(wxEVT_JOY_ZMOVE, 432)
-DECLARE_EVENT_TYPE(wxEVT_DROP_FILES, 433)
-DECLARE_EVENT_TYPE(wxEVT_DRAW_ITEM, 434)
-DECLARE_EVENT_TYPE(wxEVT_MEASURE_ITEM, 435)
-DECLARE_EVENT_TYPE(wxEVT_COMPARE_ITEM, 436)
-DECLARE_EVENT_TYPE(wxEVT_INIT_DIALOG, 437)
-DECLARE_EVENT_TYPE(wxEVT_IDLE, 438)
-DECLARE_EVENT_TYPE(wxEVT_UPDATE_UI, 439)
+        // System events
+    DECLARE_EVENT_TYPE(wxEVT_SIZE, 400)
+    DECLARE_EVENT_TYPE(wxEVT_MOVE, 401)
+    DECLARE_EVENT_TYPE(wxEVT_CLOSE_WINDOW, 402)
+    DECLARE_EVENT_TYPE(wxEVT_END_SESSION, 403)
+    DECLARE_EVENT_TYPE(wxEVT_QUERY_END_SESSION, 404)
+    DECLARE_EVENT_TYPE(wxEVT_ACTIVATE_APP, 405)
+    DECLARE_EVENT_TYPE(wxEVT_POWER, 406)
+    DECLARE_EVENT_TYPE(wxEVT_ACTIVATE, 409)
+    DECLARE_EVENT_TYPE(wxEVT_CREATE, 410)
+    DECLARE_EVENT_TYPE(wxEVT_DESTROY, 411)
+    DECLARE_EVENT_TYPE(wxEVT_SHOW, 412)
+    DECLARE_EVENT_TYPE(wxEVT_ICONIZE, 413)
+    DECLARE_EVENT_TYPE(wxEVT_MAXIMIZE, 414)
+    DECLARE_EVENT_TYPE(wxEVT_MOUSE_CAPTURE_CHANGED, 415)
+    DECLARE_EVENT_TYPE(wxEVT_PAINT, 416)
+    DECLARE_EVENT_TYPE(wxEVT_ERASE_BACKGROUND, 417)
+    DECLARE_EVENT_TYPE(wxEVT_NC_PAINT, 418)
+    DECLARE_EVENT_TYPE(wxEVT_PAINT_ICON, 419)
+    DECLARE_EVENT_TYPE(wxEVT_MENU_CHAR, 420)
+    DECLARE_EVENT_TYPE(wxEVT_MENU_INIT, 421)
+    DECLARE_EVENT_TYPE(wxEVT_MENU_HIGHLIGHT, 422)
+    DECLARE_EVENT_TYPE(wxEVT_POPUP_MENU_INIT, 423)
+    DECLARE_EVENT_TYPE(wxEVT_CONTEXT_MENU, 424)
+    DECLARE_EVENT_TYPE(wxEVT_SYS_COLOUR_CHANGED, 425)
+    DECLARE_EVENT_TYPE(wxEVT_SETTING_CHANGED, 426)
+    DECLARE_EVENT_TYPE(wxEVT_QUERY_NEW_PALETTE, 427)
+    DECLARE_EVENT_TYPE(wxEVT_PALETTE_CHANGED, 428)
+    DECLARE_EVENT_TYPE(wxEVT_JOY_BUTTON_DOWN, 429)
+    DECLARE_EVENT_TYPE(wxEVT_JOY_BUTTON_UP, 430)
+    DECLARE_EVENT_TYPE(wxEVT_JOY_MOVE, 431)
+    DECLARE_EVENT_TYPE(wxEVT_JOY_ZMOVE, 432)
+    DECLARE_EVENT_TYPE(wxEVT_DROP_FILES, 433)
+    DECLARE_EVENT_TYPE(wxEVT_DRAW_ITEM, 434)
+    DECLARE_EVENT_TYPE(wxEVT_MEASURE_ITEM, 435)
+    DECLARE_EVENT_TYPE(wxEVT_COMPARE_ITEM, 436)
+    DECLARE_EVENT_TYPE(wxEVT_INIT_DIALOG, 437)
+    DECLARE_EVENT_TYPE(wxEVT_IDLE, 438)
+    DECLARE_EVENT_TYPE(wxEVT_UPDATE_UI, 439)
 
-    // System misc.
-DECLARE_EVENT_TYPE(wxEVT_END_PROCESS, 440)
+        // Generic command events
+        // Note: a click is a higher-level event than button down/up
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_LEFT_CLICK, 500)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_LEFT_DCLICK, 501)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_RIGHT_CLICK, 502)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_RIGHT_DCLICK, 503)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_SET_FOCUS, 504)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_KILL_FOCUS, 505)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_ENTER, 506)
 
-    // Dial up events
-DECLARE_EVENT_TYPE(wxEVT_DIALUP_CONNECTED, 450)
-DECLARE_EVENT_TYPE(wxEVT_DIALUP_DISCONNECTED, 451)
+        // Help events
+    DECLARE_EVENT_TYPE(wxEVT_HELP, 1050)
+    DECLARE_EVENT_TYPE(wxEVT_DETAILED_HELP, 1051)
 
-    // Generic command events
-    // Note: a click is a higher-level event than button down/up
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_LEFT_CLICK, 500)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_LEFT_DCLICK, 501)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_RIGHT_CLICK, 502)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_RIGHT_DCLICK, 503)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_SET_FOCUS, 504)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_KILL_FOCUS, 505)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_ENTER, 506)
-
-    // Tree control event types
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_BEGIN_DRAG, 600)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_BEGIN_RDRAG, 601)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT, 602)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_END_LABEL_EDIT, 603)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_DELETE_ITEM, 604)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_GET_INFO, 605)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_SET_INFO, 606)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_ITEM_EXPANDED, 607)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_ITEM_EXPANDING, 608)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_ITEM_COLLAPSED, 609)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_ITEM_COLLAPSING, 610)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_SEL_CHANGED, 611)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_SEL_CHANGING, 612)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_KEY_DOWN, 613)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_ITEM_ACTIVATED, 614)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, 615)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK, 616)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_END_DRAG, 617)
-
-    // List control event types
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_LIST_BEGIN_DRAG, 700)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_LIST_BEGIN_RDRAG, 701)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT, 702)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_LIST_END_LABEL_EDIT, 703)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_LIST_DELETE_ITEM, 704)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS, 705)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_LIST_GET_INFO, 706)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_LIST_SET_INFO, 707)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_SELECTED, 708)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_DESELECTED, 709)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_LIST_KEY_DOWN, 710)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_LIST_INSERT_ITEM, 711)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_LIST_COL_CLICK, 712)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, 713)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK, 714)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_ACTIVATED, 715)
-
-    // Tab and notebook control event types
-#if defined(__BORLANDC__) && defined(__WIN16__)
-    // For 16-bit BC++, these 2 would be identical otherwise (truncated)
-    #define wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED wxEVT_COMMAND_NB_PAGE_CHANGED
-    #define wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING wxEVT_COMMAND_NB_PAGE_CHANGING
-#endif
-
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_TAB_SEL_CHANGED, 800)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_TAB_SEL_CHANGING, 801)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, 802)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, 803)
-
-    // Splitter events
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED, 850)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING, 851)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_SPLITTER_DOUBLECLICKED, 852)
-DECLARE_EVENT_TYPE(wxEVT_COMMAND_SPLITTER_UNSPLIT, 853)
-
-    // Wizard events
-DECLARE_EVENT_TYPE(wxEVT_WIZARD_PAGE_CHANGED, 900)
-DECLARE_EVENT_TYPE(wxEVT_WIZARD_PAGE_CHANGING, 901)
-DECLARE_EVENT_TYPE(wxEVT_WIZARD_CANCEL, 902)
-
-    // Calendar events
-DECLARE_EVENT_TYPE(wxEVT_CALENDAR_SEL_CHANGED, 950)
-DECLARE_EVENT_TYPE(wxEVT_CALENDAR_DAY_CHANGED, 951)
-DECLARE_EVENT_TYPE(wxEVT_CALENDAR_MONTH_CHANGED, 952)
-DECLARE_EVENT_TYPE(wxEVT_CALENDAR_YEAR_CHANGED, 953)
-DECLARE_EVENT_TYPE(wxEVT_CALENDAR_DOUBLECLICKED, 954)
-DECLARE_EVENT_TYPE(wxEVT_CALENDAR_WEEKDAY_CLICKED, 955)
-
-    // Help events
-DECLARE_EVENT_TYPE(wxEVT_HELP, 1050)
-DECLARE_EVENT_TYPE(wxEVT_DETAILED_HELP, 1051)
-
-#if WXWIN_COMPATIBILITY_EVENT_TYPES
-};
-#endif // WXWIN_COMPATIBILITY_EVENT_TYPES
+END_DECLARE_EVENT_TYPES()
 
 // these 2 events are the same
 #define wxEVT_COMMAND_TOOL_CLICKED wxEVT_COMMAND_MENU_SELECTED
@@ -1508,14 +1437,29 @@ protected:
 
 typedef void (wxObject::*wxObjectEventFunction)(wxEvent&);
 
+// we can't have ctors nor base struct in backwards compatibility mode or
+// otherwise we won't be able to initialize the objects with an agregate, so
+// we have to keep both versions
+#if WXWIN_COMPATIBILITY_EVENT_TYPES
+
+struct WXDLLEXPORT wxEventTableEntry
+{
+    // For some reason, this can't be wxEventType, or VC++ complains.
+    int m_eventType;            // main event type
+    int m_id;                   // control/menu/toolbar id
+    int m_lastId;               // used for ranges of ids
+    wxObjectEventFunction m_fn; // function to call: not wxEventFunction,
+                                // because of dependency problems
+
+    wxObject* m_callbackUserData;
+};
+
+#else // !WXWIN_COMPATIBILITY_EVENT_TYPES
+
 // struct containing the members common to static and dynamic event tables
 // entries
 struct WXDLLEXPORT wxEventTableEntryBase
 {
-    // provide default ctors for everything in backwards compatibility mode
-#if WXWIN_COMPATIBILITY_EVENT_TYPES
-    wxEventTableEntryBase() { }
-#else // !WXWIN_COMPATIBILITY_EVENT_TYPES
     wxEventTableEntryBase(int id, int idLast,
                           wxObjectEventFunction fn, wxObject *data)
     {
@@ -1524,7 +1468,6 @@ struct WXDLLEXPORT wxEventTableEntryBase
         m_fn = fn;
         m_callbackUserData = data;
     }
-#endif // WXWIN_COMPATIBILITY_EVENT_TYPES/!WXWIN_COMPATIBILITY_EVENT_TYPES
 
     // the range of ids for this entry: if m_lastId == -1, the range consists
     // only of m_id, otherwise it is m_id..m_lastId inclusive
@@ -1540,16 +1483,13 @@ struct WXDLLEXPORT wxEventTableEntryBase
 // an entry from a static event table
 struct WXDLLEXPORT wxEventTableEntry : public wxEventTableEntryBase
 {
-#if WXWIN_COMPATIBILITY_EVENT_TYPES
-    wxEventTableEntry() { }
-#else // !WXWIN_COMPATIBILITY_EVENT_TYPES
+    int m_eventType;
     wxEventTableEntry(const int& evType, int id, int idLast,
                       wxObjectEventFunction fn, wxObject *data)
                  : wxEventTableEntryBase(id, idLast, fn, data),
                    m_eventType(evType)
     {
     }
-#endif // WXWIN_COMPATIBILITY_EVENT_TYPES/!WXWIN_COMPATIBILITY_EVENT_TYPES
 
     // the reference to event type: this allows us to not care about the
     // (undefined) order in which the event table entries and the event types
@@ -1563,16 +1503,12 @@ struct WXDLLEXPORT wxEventTableEntry : public wxEventTableEntryBase
 // an entry used in dynamic event table managed by wxEvtHandler::Connect()
 struct WXDLLEXPORT wxDynamicEventTableEntry : public wxEventTableEntryBase
 {
-#if WXWIN_COMPATIBILITY_EVENT_TYPES
-    wxDynamicEventTableEntry() { }
-#else // !WXWIN_COMPATIBILITY_EVENT_TYPES
     wxDynamicEventTableEntry(int evType, int id, int idLast,
                              wxObjectEventFunction fn, wxObject *data)
         : wxEventTableEntryBase(id, idLast, fn, data)
     {
         m_eventType = evType;
     }
-#endif // WXWIN_COMPATIBILITY_EVENT_TYPES/!WXWIN_COMPATIBILITY_EVENT_TYPES
 
     // not a reference here as we can't keep a reference to a temporary int
     // created to wrap the constant value typically passed to Connect() - nor
@@ -1580,6 +1516,11 @@ struct WXDLLEXPORT wxDynamicEventTableEntry : public wxEventTableEntryBase
     int m_eventType;
 };
 
+#endif // !WXWIN_COMPATIBILITY_EVENT_TYPES
+
+// ----------------------------------------------------------------------------
+// wxEventTable: an array of event entries terminated with {0, 0, 0, 0, 0}
+// ----------------------------------------------------------------------------
 struct WXDLLEXPORT wxEventTable
 {
     const wxEventTable *baseTable;    // base event table (next in chain)
@@ -1742,227 +1683,227 @@ typedef void (wxEvtHandler::*wxHelpEventFunction)(wxHelpEvent&);
 // (use &) or the compiler crashes...
 
 #define DECLARE_EVENT_TABLE() \
-private:\
-        static const wxEventTableEntry         sm_eventTableEntries[];\
-protected:\
-        static const wxEventTable        sm_eventTable;\
+    private: \
+        static const wxEventTableEntry sm_eventTableEntries[]; \
+    protected: \
+        static const wxEventTable        sm_eventTable; \
         virtual const wxEventTable*        GetEventTable() const;
 
 #define BEGIN_EVENT_TABLE(theClass, baseClass) \
-const wxEventTable *theClass::GetEventTable() const { return &theClass::sm_eventTable; }\
-const wxEventTable theClass::sm_eventTable =\
-        { &baseClass::sm_eventTable, &theClass::sm_eventTableEntries[0] };\
-const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
+    const wxEventTable *theClass::GetEventTable() const \
+        { return &theClass::sm_eventTable; } \
+    const wxEventTable theClass::sm_eventTable = \
+        { &baseClass::sm_eventTable, &theClass::sm_eventTableEntries[0] }; \
+    const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
 
-#define END_EVENT_TABLE() \
- wxEventTableEntry( 0, 0, 0, 0, 0 ) };
+#define END_EVENT_TABLE() DECLARE_EVENT_TABLE_ENTRY( 0, 0, 0, 0, 0 ) };
 
 /*
  * Event table macros
  */
 
 // Generic events
-#define EVT_CUSTOM(event, id, func) wxEventTableEntry( event, id, -1, (wxObjectEventFunction) (wxEventFunction) & func, (wxObject *) NULL ),
-#define EVT_CUSTOM_RANGE(event, id1, id2, func) wxEventTableEntry( event, id1, id2, (wxObjectEventFunction) (wxEventFunction) & func, (wxObject *) NULL ),
+#define EVT_CUSTOM(event, id, func) DECLARE_EVENT_TABLE_ENTRY( event, id, -1, (wxObjectEventFunction) (wxEventFunction) & func, (wxObject *) NULL ),
+#define EVT_CUSTOM_RANGE(event, id1, id2, func) DECLARE_EVENT_TABLE_ENTRY( event, id1, id2, (wxObjectEventFunction) (wxEventFunction) & func, (wxObject *) NULL ),
 
 // Miscellaneous
-#define EVT_SIZE(func)  wxEventTableEntry( wxEVT_SIZE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxSizeEventFunction) & func, (wxObject *) NULL ),
-#define EVT_MOVE(func)  wxEventTableEntry( wxEVT_MOVE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMoveEventFunction) & func, (wxObject *) NULL ),
-#define EVT_CLOSE(func)  wxEventTableEntry( wxEVT_CLOSE_WINDOW, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCloseEventFunction) & func, (wxObject *) NULL ),
-#define EVT_END_SESSION(func)  wxEventTableEntry( wxEVT_END_SESSION, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCloseEventFunction) & func, (wxObject *) NULL ),
-#define EVT_QUERY_END_SESSION(func)  wxEventTableEntry( wxEVT_QUERY_END_SESSION, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCloseEventFunction) & func, (wxObject *) NULL ),
-#define EVT_PAINT(func)  wxEventTableEntry( wxEVT_PAINT, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxPaintEventFunction) & func, (wxObject *) NULL ),
-#define EVT_ERASE_BACKGROUND(func)  wxEventTableEntry( wxEVT_ERASE_BACKGROUND, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxEraseEventFunction) & func, (wxObject *) NULL ),
-#define EVT_CHAR(func)  wxEventTableEntry( wxEVT_CHAR, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCharEventFunction) & func, (wxObject *) NULL ),
-#define EVT_KEY_DOWN(func)  wxEventTableEntry( wxEVT_KEY_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCharEventFunction) & func, (wxObject *) NULL ),
-#define EVT_KEY_UP(func)  wxEventTableEntry( wxEVT_KEY_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCharEventFunction) & func, (wxObject *) NULL ),
-#define EVT_CHAR_HOOK(func)  wxEventTableEntry( wxEVT_CHAR_HOOK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCharEventFunction) & func, NULL ),
-#define EVT_MENU_HIGHLIGHT(id, func)  wxEventTableEntry( wxEVT_MENU_HIGHLIGHT, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxMenuEventFunction) & func, (wxObject *) NULL ),
-#define EVT_MENU_HIGHLIGHT_ALL(func)  wxEventTableEntry( wxEVT_MENU_HIGHLIGHT, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMenuEventFunction) & func, (wxObject *) NULL ),
-#define EVT_SET_FOCUS(func)  wxEventTableEntry( wxEVT_SET_FOCUS, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxFocusEventFunction) & func, (wxObject *) NULL ),
-#define EVT_KILL_FOCUS(func)  wxEventTableEntry( wxEVT_KILL_FOCUS, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxFocusEventFunction) & func, (wxObject *) NULL ),
-#define EVT_ACTIVATE(func)  wxEventTableEntry( wxEVT_ACTIVATE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxActivateEventFunction) & func, (wxObject *) NULL ),
-#define EVT_ACTIVATE_APP(func)  wxEventTableEntry( wxEVT_ACTIVATE_APP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxActivateEventFunction) & func, (wxObject *) NULL ),
-#define EVT_END_SESSION(func)  wxEventTableEntry( wxEVT_END_SESSION, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCloseEventFunction) & func, (wxObject *) NULL ),
-#define EVT_QUERY_END_SESSION(func)  wxEventTableEntry( wxEVT_QUERY_END_SESSION, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCloseEventFunction) & func, (wxObject *) NULL ),
-#define EVT_DROP_FILES(func)  wxEventTableEntry( wxEVT_DROP_FILES, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxDropFilesEventFunction) & func, (wxObject *) NULL ),
-#define EVT_INIT_DIALOG(func)  wxEventTableEntry( wxEVT_INIT_DIALOG, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxInitDialogEventFunction) & func, (wxObject *) NULL ),
-#define EVT_SYS_COLOUR_CHANGED(func)  wxEventTableEntry( wxEVT_SYS_COLOUR_CHANGED, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxSysColourChangedFunction) & func, (wxObject *) NULL ),
-#define EVT_SHOW(func) wxEventTableEntry( wxEVT_SHOW, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxShowEventFunction) & func, (wxObject *) NULL ),
-#define EVT_MAXIMIZE(func) wxEventTableEntry( wxEVT_MAXIMIZE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMaximizeEventFunction) & func, (wxObject *) NULL ),
-#define EVT_ICONIZE(func) wxEventTableEntry( wxEVT_ICONIZE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxIconizeEventFunction) & func, (wxObject *) NULL ),
-#define EVT_NAVIGATION_KEY(func) wxEventTableEntry( wxEVT_NAVIGATION_KEY, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxNavigationKeyEventFunction) & func, (wxObject *) NULL ),
-#define EVT_PALETTE_CHANGED(func) wxEventTableEntry( wxEVT_PALETTE_CHANGED, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxPaletteChangedEventFunction) & func, (wxObject *) NULL ),
-#define EVT_QUERY_NEW_PALETTE(func) wxEventTableEntry( wxEVT_QUERY_NEW_PALETTE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxQueryNewPaletteEventFunction) & func, (wxObject *) NULL ),
-#define EVT_WINDOW_CREATE(func) wxEventTableEntry( wxEVT_CREATE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxWindowCreateEventFunction) & func, (wxObject *) NULL ),
-#define EVT_WINDOW_DESTROY(func) wxEventTableEntry( wxEVT_DESTROY, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxWindowDestroyEventFunction) & func, (wxObject *) NULL ),
-#define EVT_SET_CURSOR(func) wxEventTableEntry( wxEVT_SET_CURSOR, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxSetCursorEventFunction) & func, (wxObject *) NULL ),
+#define EVT_SIZE(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SIZE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxSizeEventFunction) & func, (wxObject *) NULL ),
+#define EVT_MOVE(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_MOVE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMoveEventFunction) & func, (wxObject *) NULL ),
+#define EVT_CLOSE(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_CLOSE_WINDOW, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCloseEventFunction) & func, (wxObject *) NULL ),
+#define EVT_END_SESSION(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_END_SESSION, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCloseEventFunction) & func, (wxObject *) NULL ),
+#define EVT_QUERY_END_SESSION(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_QUERY_END_SESSION, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCloseEventFunction) & func, (wxObject *) NULL ),
+#define EVT_PAINT(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_PAINT, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxPaintEventFunction) & func, (wxObject *) NULL ),
+#define EVT_ERASE_BACKGROUND(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_ERASE_BACKGROUND, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxEraseEventFunction) & func, (wxObject *) NULL ),
+#define EVT_CHAR(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_CHAR, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCharEventFunction) & func, (wxObject *) NULL ),
+#define EVT_KEY_DOWN(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_KEY_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCharEventFunction) & func, (wxObject *) NULL ),
+#define EVT_KEY_UP(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_KEY_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCharEventFunction) & func, (wxObject *) NULL ),
+#define EVT_CHAR_HOOK(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_CHAR_HOOK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCharEventFunction) & func, NULL ),
+#define EVT_MENU_HIGHLIGHT(id, func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_MENU_HIGHLIGHT, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxMenuEventFunction) & func, (wxObject *) NULL ),
+#define EVT_MENU_HIGHLIGHT_ALL(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_MENU_HIGHLIGHT, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMenuEventFunction) & func, (wxObject *) NULL ),
+#define EVT_SET_FOCUS(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SET_FOCUS, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxFocusEventFunction) & func, (wxObject *) NULL ),
+#define EVT_KILL_FOCUS(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_KILL_FOCUS, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxFocusEventFunction) & func, (wxObject *) NULL ),
+#define EVT_ACTIVATE(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_ACTIVATE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxActivateEventFunction) & func, (wxObject *) NULL ),
+#define EVT_ACTIVATE_APP(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_ACTIVATE_APP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxActivateEventFunction) & func, (wxObject *) NULL ),
+#define EVT_END_SESSION(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_END_SESSION, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCloseEventFunction) & func, (wxObject *) NULL ),
+#define EVT_QUERY_END_SESSION(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_QUERY_END_SESSION, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCloseEventFunction) & func, (wxObject *) NULL ),
+#define EVT_DROP_FILES(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_DROP_FILES, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxDropFilesEventFunction) & func, (wxObject *) NULL ),
+#define EVT_INIT_DIALOG(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_INIT_DIALOG, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxInitDialogEventFunction) & func, (wxObject *) NULL ),
+#define EVT_SYS_COLOUR_CHANGED(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SYS_COLOUR_CHANGED, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxSysColourChangedFunction) & func, (wxObject *) NULL ),
+#define EVT_SHOW(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_SHOW, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxShowEventFunction) & func, (wxObject *) NULL ),
+#define EVT_MAXIMIZE(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_MAXIMIZE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMaximizeEventFunction) & func, (wxObject *) NULL ),
+#define EVT_ICONIZE(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_ICONIZE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxIconizeEventFunction) & func, (wxObject *) NULL ),
+#define EVT_NAVIGATION_KEY(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_NAVIGATION_KEY, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxNavigationKeyEventFunction) & func, (wxObject *) NULL ),
+#define EVT_PALETTE_CHANGED(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_PALETTE_CHANGED, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxPaletteChangedEventFunction) & func, (wxObject *) NULL ),
+#define EVT_QUERY_NEW_PALETTE(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_QUERY_NEW_PALETTE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxQueryNewPaletteEventFunction) & func, (wxObject *) NULL ),
+#define EVT_WINDOW_CREATE(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_CREATE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxWindowCreateEventFunction) & func, (wxObject *) NULL ),
+#define EVT_WINDOW_DESTROY(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_DESTROY, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxWindowDestroyEventFunction) & func, (wxObject *) NULL ),
+#define EVT_SET_CURSOR(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_SET_CURSOR, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxSetCursorEventFunction) & func, (wxObject *) NULL ),
 
 // Mouse events
-#define EVT_LEFT_DOWN(func) wxEventTableEntry( wxEVT_LEFT_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
-#define EVT_LEFT_UP(func) wxEventTableEntry( wxEVT_LEFT_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
-#define EVT_MIDDLE_DOWN(func) wxEventTableEntry( wxEVT_MIDDLE_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
-#define EVT_MIDDLE_UP(func) wxEventTableEntry( wxEVT_MIDDLE_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
-#define EVT_RIGHT_DOWN(func) wxEventTableEntry( wxEVT_RIGHT_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
-#define EVT_RIGHT_UP(func) wxEventTableEntry( wxEVT_RIGHT_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
-#define EVT_MOTION(func) wxEventTableEntry( wxEVT_MOTION, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
-#define EVT_LEFT_DCLICK(func) wxEventTableEntry( wxEVT_LEFT_DCLICK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
-#define EVT_MIDDLE_DCLICK(func) wxEventTableEntry( wxEVT_MIDDLE_DCLICK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
-#define EVT_RIGHT_DCLICK(func) wxEventTableEntry( wxEVT_RIGHT_DCLICK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
-#define EVT_LEAVE_WINDOW(func) wxEventTableEntry( wxEVT_LEAVE_WINDOW, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
-#define EVT_ENTER_WINDOW(func) wxEventTableEntry( wxEVT_ENTER_WINDOW, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
+#define EVT_LEFT_DOWN(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_LEFT_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
+#define EVT_LEFT_UP(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_LEFT_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
+#define EVT_MIDDLE_DOWN(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_MIDDLE_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
+#define EVT_MIDDLE_UP(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_MIDDLE_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
+#define EVT_RIGHT_DOWN(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_RIGHT_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
+#define EVT_RIGHT_UP(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_RIGHT_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
+#define EVT_MOTION(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_MOTION, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
+#define EVT_LEFT_DCLICK(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_LEFT_DCLICK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
+#define EVT_MIDDLE_DCLICK(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_MIDDLE_DCLICK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
+#define EVT_RIGHT_DCLICK(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_RIGHT_DCLICK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
+#define EVT_LEAVE_WINDOW(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_LEAVE_WINDOW, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
+#define EVT_ENTER_WINDOW(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_ENTER_WINDOW, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
 
 // All mouse events
 #define EVT_MOUSE_EVENTS(func) \
- wxEventTableEntry( wxEVT_LEFT_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),\
- wxEventTableEntry( wxEVT_LEFT_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),\
- wxEventTableEntry( wxEVT_MIDDLE_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),\
- wxEventTableEntry( wxEVT_MIDDLE_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),\
- wxEventTableEntry( wxEVT_RIGHT_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),\
- wxEventTableEntry( wxEVT_RIGHT_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),\
- wxEventTableEntry( wxEVT_MOTION, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),\
- wxEventTableEntry( wxEVT_LEFT_DCLICK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),\
- wxEventTableEntry( wxEVT_MIDDLE_DCLICK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),\
- wxEventTableEntry( wxEVT_RIGHT_DCLICK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),\
- wxEventTableEntry( wxEVT_ENTER_WINDOW, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),\
- wxEventTableEntry( wxEVT_LEAVE_WINDOW, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_LEFT_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),\
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_LEFT_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),\
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_MIDDLE_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),\
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_MIDDLE_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),\
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_RIGHT_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),\
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_RIGHT_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),\
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_MOTION, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),\
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_LEFT_DCLICK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),\
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_MIDDLE_DCLICK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),\
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_RIGHT_DCLICK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),\
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_ENTER_WINDOW, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),\
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_LEAVE_WINDOW, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
 
 // EVT_COMMAND
-#define EVT_COMMAND(id, event, fn)  wxEventTableEntry( event, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_COMMAND_RANGE(id1, id2, event, fn)  wxEventTableEntry( event, id1, id2, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_COMMAND(id, event, fn)  DECLARE_EVENT_TABLE_ENTRY( event, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_COMMAND_RANGE(id1, id2, event, fn)  DECLARE_EVENT_TABLE_ENTRY( event, id1, id2, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
 
 // Scrolling from wxWindow (sent to wxScrolledWindow)
 #define EVT_SCROLLWIN(func) \
-  wxEventTableEntry( wxEVT_SCROLLWIN_TOP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),\
-  wxEventTableEntry( wxEVT_SCROLLWIN_BOTTOM, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),\
-  wxEventTableEntry( wxEVT_SCROLLWIN_LINEUP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),\
-  wxEventTableEntry( wxEVT_SCROLLWIN_LINEDOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),\
-  wxEventTableEntry( wxEVT_SCROLLWIN_PAGEUP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),\
-  wxEventTableEntry( wxEVT_SCROLLWIN_PAGEDOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),\
-  wxEventTableEntry( wxEVT_SCROLLWIN_THUMBTRACK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),\
-  wxEventTableEntry( wxEVT_SCROLLWIN_THUMBRELEASE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),
+  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLLWIN_TOP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),\
+  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLLWIN_BOTTOM, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),\
+  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLLWIN_LINEUP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),\
+  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLLWIN_LINEDOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),\
+  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLLWIN_PAGEUP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),\
+  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLLWIN_PAGEDOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),\
+  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLLWIN_THUMBTRACK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),\
+  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLLWIN_THUMBRELEASE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),
 
-#define EVT_SCROLLWIN_TOP(func) wxEventTableEntry( wxEVT_SCROLLWIN_TOP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),
-#define EVT_SCROLLWIN_BOTTOM(func) wxEventTableEntry( wxEVT_SCROLLWIN_BOTTOM, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),
-#define EVT_SCROLLWIN_LINEUP(func) wxEventTableEntry( wxEVT_SCROLLWIN_LINEUP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),
-#define EVT_SCROLLWIN_LINEDOWN(func) wxEventTableEntry( wxEVT_SCROLLWIN_LINEDOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),
-#define EVT_SCROLLWIN_PAGEUP(func) wxEventTableEntry( wxEVT_SCROLLWIN_PAGEUP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),
-#define EVT_SCROLLWIN_PAGEDOWN(func) wxEventTableEntry( wxEVT_SCROLLWIN_PAGEDOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),
-#define EVT_SCROLLWIN_THUMBTRACK(func) wxEventTableEntry( wxEVT_SCROLLWIN_THUMBTRACK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),
-#define EVT_SCROLLWIN_THUMBRELEASE(func) wxEventTableEntry( wxEVT_SCROLLWIN_THUMBRELEASE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),
+#define EVT_SCROLLWIN_TOP(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLLWIN_TOP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),
+#define EVT_SCROLLWIN_BOTTOM(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLLWIN_BOTTOM, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),
+#define EVT_SCROLLWIN_LINEUP(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLLWIN_LINEUP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),
+#define EVT_SCROLLWIN_LINEDOWN(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLLWIN_LINEDOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),
+#define EVT_SCROLLWIN_PAGEUP(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLLWIN_PAGEUP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),
+#define EVT_SCROLLWIN_PAGEDOWN(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLLWIN_PAGEDOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),
+#define EVT_SCROLLWIN_THUMBTRACK(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLLWIN_THUMBTRACK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),
+#define EVT_SCROLLWIN_THUMBRELEASE(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLLWIN_THUMBRELEASE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollWinEventFunction) & func, (wxObject *) NULL ),
 
 // Scrolling from wxSlider and wxScrollBar
 #define EVT_SCROLL(func) \
-  wxEventTableEntry( wxEVT_SCROLL_TOP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),\
-  wxEventTableEntry( wxEVT_SCROLL_BOTTOM, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),\
-  wxEventTableEntry( wxEVT_SCROLL_LINEUP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),\
-  wxEventTableEntry( wxEVT_SCROLL_LINEDOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),\
-  wxEventTableEntry( wxEVT_SCROLL_PAGEUP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),\
-  wxEventTableEntry( wxEVT_SCROLL_PAGEDOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),\
-  wxEventTableEntry( wxEVT_SCROLL_THUMBTRACK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),\
-  wxEventTableEntry( wxEVT_SCROLL_THUMBRELEASE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
+  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_TOP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),\
+  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_BOTTOM, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),\
+  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_LINEUP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),\
+  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_LINEDOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),\
+  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_PAGEUP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),\
+  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_PAGEDOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),\
+  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_THUMBTRACK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),\
+  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_THUMBRELEASE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
 
-#define EVT_SCROLL_TOP(func) wxEventTableEntry( wxEVT_SCROLL_TOP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
-#define EVT_SCROLL_BOTTOM(func) wxEventTableEntry( wxEVT_SCROLL_BOTTOM, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
-#define EVT_SCROLL_LINEUP(func) wxEventTableEntry( wxEVT_SCROLL_LINEUP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
-#define EVT_SCROLL_LINEDOWN(func) wxEventTableEntry( wxEVT_SCROLL_LINEDOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
-#define EVT_SCROLL_PAGEUP(func) wxEventTableEntry( wxEVT_SCROLL_PAGEUP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
-#define EVT_SCROLL_PAGEDOWN(func) wxEventTableEntry( wxEVT_SCROLL_PAGEDOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
-#define EVT_SCROLL_THUMBTRACK(func) wxEventTableEntry( wxEVT_SCROLL_THUMBTRACK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
-#define EVT_SCROLL_THUMBRELEASE(func) wxEventTableEntry( wxEVT_SCROLL_THUMBRELEASE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
+#define EVT_SCROLL_TOP(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_TOP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
+#define EVT_SCROLL_BOTTOM(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_BOTTOM, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
+#define EVT_SCROLL_LINEUP(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_LINEUP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
+#define EVT_SCROLL_LINEDOWN(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_LINEDOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
+#define EVT_SCROLL_PAGEUP(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_PAGEUP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
+#define EVT_SCROLL_PAGEDOWN(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_PAGEDOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
+#define EVT_SCROLL_THUMBTRACK(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_THUMBTRACK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
+#define EVT_SCROLL_THUMBRELEASE(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_THUMBRELEASE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
 
 // Scrolling from wxSlider and wxScrollBar, with an id
 #define EVT_COMMAND_SCROLL(id, func) \
-  wxEventTableEntry( wxEVT_SCROLL_TOP, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),\
-  wxEventTableEntry( wxEVT_SCROLL_BOTTOM, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),\
-  wxEventTableEntry( wxEVT_SCROLL_LINEUP, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),\
-  wxEventTableEntry( wxEVT_SCROLL_LINEDOWN, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),\
-  wxEventTableEntry( wxEVT_SCROLL_PAGEUP, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),\
-  wxEventTableEntry( wxEVT_SCROLL_PAGEDOWN, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),\
-  wxEventTableEntry( wxEVT_SCROLL_THUMBTRACK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),\
-  wxEventTableEntry( wxEVT_SCROLL_THUMBRELEASE, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
+  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_TOP, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),\
+  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_BOTTOM, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),\
+  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_LINEUP, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),\
+  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_LINEDOWN, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),\
+  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_PAGEUP, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),\
+  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_PAGEDOWN, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),\
+  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_THUMBTRACK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),\
+  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_THUMBRELEASE, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
 
-#define EVT_COMMAND_SCROLL_TOP(id, func) wxEventTableEntry( wxEVT_SCROLL_TOP, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
-#define EVT_COMMAND_SCROLL_BOTTOM(id, func) wxEventTableEntry( wxEVT_SCROLL_BOTTOM, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
-#define EVT_COMMAND_SCROLL_LINEUP(id, func) wxEventTableEntry( wxEVT_SCROLL_LINEUP, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
-#define EVT_COMMAND_SCROLL_LINEDOWN(id, func) wxEventTableEntry( wxEVT_SCROLL_LINEDOWN, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
-#define EVT_COMMAND_SCROLL_PAGEUP(id, func) wxEventTableEntry( wxEVT_SCROLL_PAGEUP, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
-#define EVT_COMMAND_SCROLL_PAGEDOWN(id, func) wxEventTableEntry( wxEVT_SCROLL_PAGEDOWN, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
-#define EVT_COMMAND_SCROLL_THUMBTRACK(id, func) wxEventTableEntry( wxEVT_SCROLL_THUMBTRACK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
-#define EVT_COMMAND_SCROLL_THUMBRELEASE(id, func) wxEventTableEntry( wxEVT_SCROLL_THUMBRELEASE, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
+#define EVT_COMMAND_SCROLL_TOP(id, func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_TOP, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
+#define EVT_COMMAND_SCROLL_BOTTOM(id, func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_BOTTOM, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
+#define EVT_COMMAND_SCROLL_LINEUP(id, func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_LINEUP, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
+#define EVT_COMMAND_SCROLL_LINEDOWN(id, func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_LINEDOWN, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
+#define EVT_COMMAND_SCROLL_PAGEUP(id, func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_PAGEUP, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
+#define EVT_COMMAND_SCROLL_PAGEDOWN(id, func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_PAGEDOWN, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
+#define EVT_COMMAND_SCROLL_THUMBTRACK(id, func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_THUMBTRACK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
+#define EVT_COMMAND_SCROLL_THUMBRELEASE(id, func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_THUMBRELEASE, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxScrollEventFunction) & func, (wxObject *) NULL ),
 
 // Convenience macros for commonly-used commands
-#define EVT_BUTTON(id, fn) wxEventTableEntry( wxEVT_COMMAND_BUTTON_CLICKED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_CHECKBOX(id, fn) wxEventTableEntry( wxEVT_COMMAND_CHECKBOX_CLICKED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_CHOICE(id, fn) wxEventTableEntry( wxEVT_COMMAND_CHOICE_SELECTED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_LISTBOX(id, fn) wxEventTableEntry( wxEVT_COMMAND_LISTBOX_SELECTED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_LISTBOX_DCLICK(id, fn) wxEventTableEntry( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_TEXT(id, fn) wxEventTableEntry( wxEVT_COMMAND_TEXT_UPDATED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_TEXT_ENTER(id, fn) wxEventTableEntry( wxEVT_COMMAND_TEXT_ENTER, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_MENU(id, fn) wxEventTableEntry( wxEVT_COMMAND_MENU_SELECTED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_MENU_RANGE(id1, id2, fn) wxEventTableEntry( wxEVT_COMMAND_MENU_SELECTED, id1, id2, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_SLIDER(id, fn) wxEventTableEntry( wxEVT_COMMAND_SLIDER_UPDATED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_RADIOBOX(id, fn) wxEventTableEntry( wxEVT_COMMAND_RADIOBOX_SELECTED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_RADIOBUTTON(id, fn) wxEventTableEntry( wxEVT_COMMAND_RADIOBUTTON_SELECTED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_BUTTON(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_BUTTON_CLICKED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_CHECKBOX(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_CHECKBOX_CLICKED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_CHOICE(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_CHOICE_SELECTED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_LISTBOX(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_LISTBOX_SELECTED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_LISTBOX_DCLICK(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_TEXT(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TEXT_UPDATED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_TEXT_ENTER(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TEXT_ENTER, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_MENU(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_MENU_SELECTED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_MENU_RANGE(id1, id2, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_MENU_SELECTED, id1, id2, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_SLIDER(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_SLIDER_UPDATED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_RADIOBOX(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RADIOBOX_SELECTED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_RADIOBUTTON(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RADIOBUTTON_SELECTED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
 // EVT_SCROLLBAR is now obsolete since we use EVT_COMMAND_SCROLL... events
-#define EVT_SCROLLBAR(id, fn) wxEventTableEntry( wxEVT_COMMAND_SCROLLBAR_UPDATED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_VLBOX(id, fn) wxEventTableEntry( wxEVT_COMMAND_VLBOX_SELECTED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_COMBOBOX(id, fn) wxEventTableEntry( wxEVT_COMMAND_COMBOBOX_SELECTED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_TOOL(id, fn) wxEventTableEntry( wxEVT_COMMAND_TOOL_CLICKED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_TOOL_RANGE(id1, id2, fn) wxEventTableEntry( wxEVT_COMMAND_TOOL_CLICKED, id1, id2, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_TOOL_RCLICKED(id, fn) wxEventTableEntry( wxEVT_COMMAND_TOOL_RCLICKED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_TOOL_RCLICKED_RANGE(id1, id2, fn) wxEventTableEntry( wxEVT_COMMAND_TOOL_RCLICKED, id1, id2, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_TOOL_ENTER(id, fn) wxEventTableEntry( wxEVT_COMMAND_TOOL_ENTER, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_CHECKLISTBOX(id, fn) wxEventTableEntry( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_SCROLLBAR(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_SCROLLBAR_UPDATED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_VLBOX(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_VLBOX_SELECTED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_COMBOBOX(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_COMBOBOX_SELECTED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_TOOL(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TOOL_CLICKED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_TOOL_RANGE(id1, id2, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TOOL_CLICKED, id1, id2, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_TOOL_RCLICKED(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TOOL_RCLICKED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_TOOL_RCLICKED_RANGE(id1, id2, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TOOL_RCLICKED, id1, id2, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_TOOL_ENTER(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TOOL_ENTER, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_CHECKLISTBOX(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
 
 // Generic command events
-#define EVT_COMMAND_LEFT_CLICK(id, fn) wxEventTableEntry( wxEVT_COMMAND_LEFT_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_COMMAND_LEFT_DCLICK(id, fn) wxEventTableEntry( wxEVT_COMMAND_LEFT_DCLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_COMMAND_RIGHT_CLICK(id, fn) wxEventTableEntry( wxEVT_COMMAND_RIGHT_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_COMMAND_RIGHT_DCLICK(id, fn) wxEventTableEntry( wxEVT_COMMAND_RIGHT_DCLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_COMMAND_SET_FOCUS(id, fn) wxEventTableEntry( wxEVT_COMMAND_SET_FOCUS, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_COMMAND_KILL_FOCUS(id, fn) wxEventTableEntry( wxEVT_COMMAND_KILL_FOCUS, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_COMMAND_ENTER(id, fn) wxEventTableEntry( wxEVT_COMMAND_ENTER, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_COMMAND_LEFT_CLICK(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_LEFT_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_COMMAND_LEFT_DCLICK(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_LEFT_DCLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_COMMAND_RIGHT_CLICK(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RIGHT_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_COMMAND_RIGHT_DCLICK(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RIGHT_DCLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_COMMAND_SET_FOCUS(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_SET_FOCUS, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_COMMAND_KILL_FOCUS(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_KILL_FOCUS, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_COMMAND_ENTER(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_ENTER, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
 
 // Joystick events
 #define EVT_JOY_DOWN(func) \
- wxEventTableEntry( wxEVT_JOY_BUTTON_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL ),
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_JOY_BUTTON_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL ),
 #define EVT_JOY_UP(func) \
- wxEventTableEntry( wxEVT_JOY_BUTTON_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL ),
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_JOY_BUTTON_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL ),
 #define EVT_JOY_MOVE(func) \
- wxEventTableEntry( wxEVT_JOY_MOVE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL ),
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_JOY_MOVE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL ),
 #define EVT_JOY_ZMOVE(func) \
- wxEventTableEntry( wxEVT_JOY_ZMOVE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL ),
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_JOY_ZMOVE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL ),
 
 // All joystick events
 #define EVT_JOYSTICK_EVENTS(func) \
- wxEventTableEntry( wxEVT_JOY_BUTTON_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL ),\
- wxEventTableEntry( wxEVT_JOY_BUTTON_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL ),\
- wxEventTableEntry( wxEVT_JOY_MOVE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL ),\
- wxEventTableEntry( wxEVT_JOY_ZMOVE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL ),
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_JOY_BUTTON_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL ),\
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_JOY_BUTTON_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL ),\
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_JOY_MOVE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL ),\
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_JOY_ZMOVE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxJoystickEventFunction) & func, (wxObject *) NULL ),
 
 // Idle event
 #define EVT_IDLE(func) \
- wxEventTableEntry( wxEVT_IDLE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxIdleEventFunction) & func, (wxObject *) NULL ),
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_IDLE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxIdleEventFunction) & func, (wxObject *) NULL ),
 
 // Update UI event
 #define EVT_UPDATE_UI(id, func) \
- wxEventTableEntry( wxEVT_UPDATE_UI, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxUpdateUIEventFunction) & func, (wxObject *) NULL ),
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_UPDATE_UI, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxUpdateUIEventFunction) & func, (wxObject *) NULL ),
 #define EVT_UPDATE_UI_RANGE(id1, id2, func) \
- wxEventTableEntry( wxEVT_UPDATE_UI, id1, id2, (wxObjectEventFunction)(wxEventFunction)(wxUpdateUIEventFunction)&func, (wxObject *) NULL ),
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_UPDATE_UI, id1, id2, (wxObjectEventFunction)(wxEventFunction)(wxUpdateUIEventFunction)&func, (wxObject *) NULL ),
 
 // Help events
 #define EVT_HELP(id, func) \
- wxEventTableEntry( wxEVT_HELP, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxHelpEventFunction) & func, (wxObject *) NULL ),
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_HELP, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxHelpEventFunction) & func, (wxObject *) NULL ),
 
 #define EVT_HELP_RANGE(id1, id2, func) \
- wxEventTableEntry( wxEVT_HELP, id1, id2, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxHelpEventFunction) & func, (wxObject *) NULL ),
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_HELP, id1, id2, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxHelpEventFunction) & func, (wxObject *) NULL ),
 
 #define EVT_DETAILED_HELP(id, func) \
- wxEventTableEntry( wxEVT_DETAILED_HELP, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxHelpEventFunction) & func, (wxObject *) NULL ),
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_DETAILED_HELP, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxHelpEventFunction) & func, (wxObject *) NULL ),
 
 #define EVT_DETAILED_HELP_RANGE(id1, id2, func) \
- wxEventTableEntry( wxEVT_DETAILED_HELP, id1, id2, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxHelpEventFunction) & func, (wxObject *) NULL ),
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_DETAILED_HELP, id1, id2, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxHelpEventFunction) & func, (wxObject *) NULL ),
 
 // ----------------------------------------------------------------------------
 // Global data
