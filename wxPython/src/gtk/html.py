@@ -90,9 +90,6 @@ class wxHtmlTagPtr(wxObjectPtr):
     def GetAllParams(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlTag_GetAllParams,(self,) + _args, _kwargs)
         return val
-    def IsEnding(self, *_args, **_kwargs):
-        val = apply(htmlc.wxHtmlTag_IsEnding,(self,) + _args, _kwargs)
-        return val
     def HasEnding(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlTag_HasEnding,(self,) + _args, _kwargs)
         return val

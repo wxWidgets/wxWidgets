@@ -467,6 +467,12 @@ class wxListCtrlPtr(wxControlPtr):
         return val
     def __repr__(self):
         return "<C wxListCtrl instance at %s>" % (self.this,)
+    
+    def GetItem(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_GetItem,(self,) + _args, _kwargs)
+        val.thisown = 1
+        return val
+    
 class wxListCtrl(wxListCtrlPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controls2c.new_wxListCtrl,_args,_kwargs)

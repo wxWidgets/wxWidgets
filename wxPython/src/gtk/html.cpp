@@ -741,33 +741,6 @@ static PyObject *_wrap_wxHtmlTag_GetAllParams(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
-#define wxHtmlTag_IsEnding(_swigobj)  (_swigobj->IsEnding())
-static PyObject *_wrap_wxHtmlTag_IsEnding(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxHtmlTag * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlTag_IsEnding",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlTag_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlTag_IsEnding. Expected _wxHtmlTag_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxHtmlTag_IsEnding(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
 #define wxHtmlTag_HasEnding(_swigobj)  (_swigobj->HasEnding())
 static PyObject *_wrap_wxHtmlTag_HasEnding(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -6240,7 +6213,6 @@ static PyMethodDef htmlcMethods[] = {
 	 { "wxHtmlTag_GetEndPos1", (PyCFunction) _wrap_wxHtmlTag_GetEndPos1, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlTag_GetBeginPos", (PyCFunction) _wrap_wxHtmlTag_GetBeginPos, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlTag_HasEnding", (PyCFunction) _wrap_wxHtmlTag_HasEnding, METH_VARARGS | METH_KEYWORDS },
-	 { "wxHtmlTag_IsEnding", (PyCFunction) _wrap_wxHtmlTag_IsEnding, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlTag_GetAllParams", (PyCFunction) _wrap_wxHtmlTag_GetAllParams, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlTag_GetParam", (PyCFunction) _wrap_wxHtmlTag_GetParam, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlTag_HasParam", (PyCFunction) _wrap_wxHtmlTag_HasParam, METH_VARARGS | METH_KEYWORDS },

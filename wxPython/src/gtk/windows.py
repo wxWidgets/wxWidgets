@@ -505,6 +505,12 @@ class wxWindowPtr(wxEvtHandlerPtr):
         val = apply(windowsc.wxWindow_GetCaret,(self,) + _args, _kwargs)
         if val: val = wxCaretPtr(val) 
         return val
+    def Freeze(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_Freeze,(self,) + _args, _kwargs)
+        return val
+    def Thaw(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_Thaw,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxWindow instance at %s>" % (self.this,)
     # replaces broken shadow method
@@ -827,6 +833,9 @@ class wxMenuBarPtr(wxWindowPtr):
         return val
     def GetLabelTop(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuBar_GetLabelTop,(self,) + _args, _kwargs)
+        return val
+    def FindMenu(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuBar_FindMenu,(self,) + _args, _kwargs)
         return val
     def FindMenuItem(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuBar_FindMenuItem,(self,) + _args, _kwargs)
