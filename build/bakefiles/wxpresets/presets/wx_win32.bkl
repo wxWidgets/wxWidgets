@@ -42,9 +42,17 @@ FIXME: this template has (at least) the following bugs:
     <!--    is not constant, i.e. if it cannot be determined        -->
     <!--    by bakefile itself.                                     -->
 
+    <!-- this is a temporary variable until there is non general    -->
+    <!-- function in bakefiles for returning native markup for      -->
+    <!-- reading envrionment variables                              -->
+    <set var="ENV_VAR">
+        <if cond="FORMAT=='watcom'">%</if>
+        <if cond="FORMAT!='watcom'"></if>
+    </set>
+    
     <!-- The directory where wxWidgets is installed: -->
     <option name="WX_DIR" category="path">
-        <default-value>$(DOLLAR)(WXWIN)</default-value>
+        <default-value>$(DOLLAR)($(ENV_VAR)WXWIN)</default-value>
         <description>
             The directory where wxWidgets library is installed
         </description>
