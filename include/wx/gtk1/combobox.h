@@ -122,7 +122,7 @@ public:
     bool CanUndo() const;
     bool CanRedo() const;
     void SelectAll();
-    bool IsEditable() const { return !HasFlag(wxCB_READONLY); }
+    bool IsEditable() const ;
     bool HasSelection() const ;
 
     // implementation
