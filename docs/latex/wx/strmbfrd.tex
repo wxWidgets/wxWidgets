@@ -52,26 +52,26 @@ to (such as a file stream or a memory stream).
 % ----------
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxBufferedOutputStream::wxBufferedOutputStream}
+\membersection{wxBufferedOutputStream::wxBufferedOutputStream}\label{wxbufferedoutputstreamctor}
 
 \func{}{wxBufferedOutputStream}{\param{const wxOutputStream\&}{ parent}}
 
 Creates a buffered stream using a buffer of a default size of 1024 bytes for cashing
 the stream {\it parent}.
 
-\membersection{wxBufferedOutputStream::\destruct{wxBufferedOutputStream}}
+\membersection{wxBufferedOutputStream::\destruct{wxBufferedOutputStream}}\label{wxbufferedoutputstreamdtor}
 
 \func{}{\destruct{wxBufferedOutputStream}}{\void}
 
 Destructor. Calls Sync() and destroys the internal buffer.
 
-\membersection{wxBufferedOutputStream::SeekO}
+\membersection{wxBufferedOutputStream::SeekO}\label{wxbufferedoutputstreamseeko}
 
 \func{off\_t}{SeekO}{\param{off\_t}{ pos}, \param{wxSeekMode}{ mode}}
 
 Calls Sync() and changes the stream position.
 
-\membersection{wxBufferedOutputStream::Sync}
+\membersection{wxBufferedOutputStream::Sync}\label{wxbufferedoutputstreamsync}
 
 \func{void}{Sync}{\void}
 

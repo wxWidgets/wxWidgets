@@ -8,7 +8,7 @@ it can be used for basic image manipulation.
 
 A wxImage cannot (currently) be drawn directly to a \helpref{wxDC}{wxdc}. Instead, 
 a platform-specific \helpref{wxBitmap}{wxbitmap} object must be created from it using
-the \helpref{wxBitmap::wxBitmap(wxImage,int depth)}{wxbitmapconstr} constructor. 
+the \helpref{wxBitmap::wxBitmap(wxImage,int depth)}{wxbitmapctor} constructor. 
 This bitmap can then
 be drawn in a device context, using \helpref{wxDC::DrawBitmap}{wxdcdrawbitmap}.
 
@@ -277,7 +277,7 @@ ConvertAlphaToMask does nothing.
 
 \constfunc{wxBitmap}{ConvertToBitmap}{\void}
 
-Deprecated, use equivalent \helpref{wxBitmap constructor}{wxbitmapconstr}
+Deprecated, use equivalent \helpref{wxBitmap constructor}{wxbitmapctor}
 (which takes wxImage and depth as its arguments) instead.
 
 \membersection{wxImage::ConvertToMono}\label{wxbitmapconverttomono}

@@ -30,7 +30,7 @@ Objects:
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxBitmap::wxBitmap}\label{wxbitmapconstr}
+\membersection{wxBitmap::wxBitmap}\label{wxbitmapctor}
 
 \func{}{wxBitmap}{\void}
 
@@ -195,7 +195,7 @@ wxImage to a wxBitmap.}
 \end{itemize}
 }
 
-\membersection{wxBitmap::\destruct{wxBitmap}}
+\membersection{wxBitmap::\destruct{wxBitmap}}\label{wxbitmapdtor}
 
 \func{}{\destruct{wxBitmap}}{\void}
 
@@ -222,7 +222,7 @@ of a given handler class in an application session.}
 
 \helpref{wxBitmapHandler}{wxbitmaphandler}
 
-\membersection{wxBitmap::CleanUpHandlers}
+\membersection{wxBitmap::CleanUpHandlers}\label{wxbitmapcleanuphandlers}
 
 \func{static void}{CleanUpHandlers}{\void}
 
@@ -265,7 +265,7 @@ Creates a bitmap from the given data, which can be of arbitrary type.
 
 \docparam{data}{Data whose type depends on the value of {\it type}.}
 
-\docparam{type}{A bitmap type identifier - see \helpref{wxBitmap::wxBitmap}{wxbitmapconstr} for a list
+\docparam{type}{A bitmap type identifier - see \helpref{wxBitmap::wxBitmap}{wxbitmapctor} for a list
 of possible values.}
 
 \wxheading{Return value}
@@ -279,9 +279,9 @@ type of data.
 
 \wxheading{See also}
 
-\helpref{wxBitmap::wxBitmap}{wxbitmapconstr}
+\helpref{wxBitmap::wxBitmap}{wxbitmapctor}
 
-\membersection{wxBitmap::FindHandler}
+\membersection{wxBitmap::FindHandler}\label{wxbitmapfindhandler}
 
 \func{static wxBitmapHandler*}{FindHandler}{\param{const wxString\& }{name}}
 
@@ -309,14 +309,14 @@ A pointer to the handler if found, NULL otherwise.
 
 \helpref{wxBitmapHandler}{wxbitmaphandler}
 
-\membersection{wxBitmap::GetDepth}
+\membersection{wxBitmap::GetDepth}\label{wxbitmapgetdepth}
 
 \constfunc{int}{GetDepth}{\void}
 
 Gets the colour depth of the bitmap. A value of 1 indicates a
 monochrome bitmap.
 
-\membersection{wxBitmap::GetHandlers}
+\membersection{wxBitmap::GetHandlers}\label{wxbitmapgethandlers}
 
 \func{static wxList\&}{GetHandlers}{\void}
 
@@ -371,7 +371,7 @@ Gets the width of the bitmap in pixels.
 Returns a sub bitmap of the current one as long as the rect belongs entirely to
 the bitmap. This function preserves bit depth and mask information.
 
-\membersection{wxBitmap::InitStandardHandlers}
+\membersection{wxBitmap::InitStandardHandlers}\label{wxbitmapinitstandardhandlers}
 
 \func{static void}{InitStandardHandlers}{\void}
 
@@ -384,7 +384,7 @@ This function is called by wxWidgets on startup.
 
 \helpref{wxBitmapHandler}{wxbitmaphandler}
 
-\membersection{wxBitmap::InsertHandler}
+\membersection{wxBitmap::InsertHandler}\label{wxbitmapinserthandler}
 
 \func{static void}{InsertHandler}{\param{wxBitmapHandler*}{ handler}}
 
@@ -445,7 +445,7 @@ if one has been created by using the \helpref{GetPalette}{wxbitmapgetpalette} me
 
 Returns true if bitmap data is present.
 
-\membersection{wxBitmap::RemoveHandler}
+\membersection{wxBitmap::RemoveHandler}\label{wxbitmapremovehandler}
 
 \func{static bool}{RemoveHandler}{\param{const wxString\& }{name}}
 
@@ -539,7 +539,7 @@ The bitmap object owns the mask once this has been called.
 \helpref{wxBitmap::GetMask}{wxbitmapgetmask}, \helpref{wxMask}{wxmask}
 
 %% VZ: this function is an implementation detail and shouldn't be documented
-%%\membersection{wxBitmap::SetOk}
+%%\membersection{wxBitmap::SetOk}\label{wxbitmapsetok}
 %%
 %%\func{void}{SetOk}{\param{int }{isOk}}
 %%
@@ -563,7 +563,7 @@ Sets the associated palette.
 
 \helpref{wxPalette}{wxpalette}
 
-\membersection{wxBitmap::SetWidth}
+\membersection{wxBitmap::SetWidth}\label{wxbitmapsetwidth}
 
 \func{void}{SetWidth}{\param{int }{width}}
 
@@ -573,7 +573,7 @@ Sets the width member (does not affect the bitmap data).
 
 \docparam{width}{Bitmap width in pixels.}
 
-\membersection{wxBitmap::operator $=$}
+\membersection{wxBitmap::operator $=$}\label{wxbitmapassign}
 
 \func{wxBitmap\& }{operator $=$}{\param{const wxBitmap\& }{bitmap}}
 
@@ -589,7 +589,7 @@ counter. It is a fast operation.
 
 Returns 'this' object.
 
-\membersection{wxBitmap::operator $==$}
+\membersection{wxBitmap::operator $==$}\label{wxbitmapequal}
 
 \func{bool}{operator $==$}{\param{const wxBitmap\& }{bitmap}}
 
@@ -604,7 +604,7 @@ equal (a fast test).
 
 Returns true if the bitmaps were effectively equal, false otherwise.
 
-\membersection{wxBitmap::operator $!=$}
+\membersection{wxBitmap::operator $!=$}\label{wxbitmapnotequal}
 
 \func{bool}{operator $!=$}{\param{const wxBitmap\& }{bitmap}}
 

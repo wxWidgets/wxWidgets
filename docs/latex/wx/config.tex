@@ -108,13 +108,13 @@ of \helpref{wxFileDialog}{wxfiledialog} have ability to use wxConfig class.
 \helpref{DontCreateOnDemand}{wxconfigbasedontcreateondemand}
 
 
-\membersection{Constructor and destructor}
+\membersection{Constructor and destructor}\label{congigconstructordestructor}
 
 \helpref{wxConfigBase}{wxconfigbasector}\\
 \helpref{\destruct{wxConfigBase}}{wxconfigbasedtor}
 
 
-\membersection{Path management}
+\membersection{Path management}\label{configpathmanagement}
 
 As explained in \helpref{config overview}{wxconfigoverview}, the config classes
 support a file system-like hierarchy of keys (files) and groups (directories).
@@ -184,7 +184,7 @@ regardless of the platform (i.e. it is {\bf not} '$\backslash\backslash$' under 
 \helpref{GetPath}{wxconfigbasegetpath}
 
 
-\membersection{Enumeration}
+\membersection{Enumeration}\label{configenumeration}
 
 The functions in this section allow to enumerate all entries and groups in the
 config file. All functions here return false when there are no more items.
@@ -239,7 +239,7 @@ actually enumerating them, but you will probably never need them.
 \helpref{GetNumberOfGroups}{wxconfigbasegetnumberofgroups}
 
 
-\membersection{Tests of existence}
+\membersection{Tests of existence}\label{configtestsofexistence}
 
 \helpref{HasGroup}{wxconfigbasehasgroup}\\
 \helpref{HasEntry}{wxconfigbasehasentry}\\
@@ -247,14 +247,14 @@ actually enumerating them, but you will probably never need them.
 \helpref{GetEntryType}{wxconfigbasegetentrytype}
 
 
-\membersection{Miscellaneous functions}
+\membersection{Miscellaneous functions}\label{configmiscellaneous}
 
 \helpref{GetAppName}{wxconfigbasegetappname}\\
 \helpref{GetVendorName}{wxconfigbasegetvendorname}\\
 \helpref{SetUmask}{wxfileconfigsetumask}
 
 
-\membersection{Key access}
+\membersection{Key access}\label{configkeyaccess}
 
 These function are the core of wxConfigBase class: they allow you to read and
 write config file data. All {\it Read} function take a default value which
@@ -281,7 +281,7 @@ arbitrary path (either relative or absolute), not just the key name.
 \helpref{Flush}{wxconfigbaseflush}
 
 
-\membersection{Rename entries/groups}
+\membersection{Rename entries/groups}\label{configrenaming}
 
 The functions in this section allow to rename entries or subgroups of the
 current group. They will return false on error. typically because either the
@@ -293,7 +293,7 @@ wxConfig implementation.
 \helpref{RenameGroup}{wxconfigbaserenamegroup}
 
 
-\membersection{Delete entries/groups}
+\membersection{Delete entries/groups}\label{configdeleting}
 
 The functions in this section delete entries and/or groups of entries from the
 config file. {\it DeleteAll()} is especially useful if you want to erase all
@@ -304,7 +304,7 @@ traces of your program presence: for example, when you uninstall it.
 \helpref{DeleteAll}{wxconfigbasedeleteall}
 
 
-\membersection{Options}
+\membersection{Options}\label{configoptions}
 
 Some aspects of wxConfigBase behaviour can be changed during run-time. The
 first of them is the expansion of environment variables in the string values

@@ -18,7 +18,7 @@ if you want different behaviour.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxCommandProcessor::wxCommandProcessor}
+\membersection{wxCommandProcessor::wxCommandProcessor}\label{wxcommandprocessorctor}
 
 \func{}{wxCommandProcessor}{\param{int}{ maxCommands = $-1$}}
 
@@ -28,43 +28,43 @@ Constructor.
 commands stored to it, otherwise (and by default) the list of commands can grow
 arbitrarily.
 
-\membersection{wxCommandProcessor::\destruct{wxCommandProcessor}}
+\membersection{wxCommandProcessor::\destruct{wxCommandProcessor}}\label{wxcommandprocessordtor}
 
 \func{}{\destruct{wxCommandProcessor}}{\void}
 
 Destructor.
 
-\membersection{wxCommandProcessor::CanUndo}
+\membersection{wxCommandProcessor::CanUndo}\label{wxcommandprocessorcanundo}
 
 \func{virtual bool}{CanUndo}{\void}
 
 Returns true if the currently-active command can be undone, false otherwise.
 
-\membersection{wxCommandProcessor::ClearCommands}
+\membersection{wxCommandProcessor::ClearCommands}\label{wxcommandprocessorclearcommands}
 
 \func{virtual void}{ClearCommands}{\void}
 
 Deletes all the commands in the list and sets the current command pointer to NULL.
 
-\membersection{wxCommandProcessor::Redo}
+\membersection{wxCommandProcessor::Redo}\label{wxcommandprocessorredo}
 
 \func{virtual bool}{Redo}{\void}
 
 Executes (redoes) the current command (the command that has just been undone if any).
 
-\membersection{wxCommandProcessor::GetCommands}
+\membersection{wxCommandProcessor::GetCommands}\label{wxcommandprocessorgetcommands}
 
 \constfunc{wxList\&}{GetCommands}{\void}
 
 Returns the list of commands.
 
-\membersection{wxCommandProcessor::GetMaxCommands}
+\membersection{wxCommandProcessor::GetMaxCommands}\label{wxcommandprocessorgetmaxcommands}
 
 \constfunc{int}{GetMaxCommands}{\void}
 
 Returns the maximum number of commands that the command processor stores.
 
-\membersection{wxCommandProcessor::GetEditMenu}
+\membersection{wxCommandProcessor::GetEditMenu}\label{wxcommandprocessorgeteditmenu}
 
 \constfunc{wxMenu*}{GetEditMenu}{\void}
 
@@ -94,7 +94,7 @@ Returns the string that will be appended to the Undo menu item.
 
 Returns the string that will be shown for the undo menu item.
 
-\membersection{wxCommandProcessor::Initialize}
+\membersection{wxCommandProcessor::Initialize}\label{wxcommandprocessorinitialize}
 
 \func{virtual void}{Initialize}{\void}
 
@@ -102,7 +102,7 @@ Initializes the command processor, setting the current command to the
 last in the list (if any), and updating the edit menu (if one has been
 specified).
 
-\membersection{wxCommandProcessor::SetEditMenu}
+\membersection{wxCommandProcessor::SetEditMenu}\label{wxcommandprocessorseteditmenu}
 
 \func{void}{SetEditMenu}{\param{wxMenu* }{menu}}
 
@@ -111,7 +111,7 @@ menu as appropriate. Set this to NULL if the menu is about to be
 destroyed and command operations may still be performed, or the command
 processor may try to access an invalid pointer.
 
-\membersection{wxCommandProcessor::SetMenuStrings}
+\membersection{wxCommandProcessor::SetMenuStrings}\label{wxcommandprocessorsetmenustrings}
 
 \func{void}{SetMenuStrings}{\void}
 
@@ -130,7 +130,7 @@ Sets the string that will be appended to the Redo menu item.
 
 Sets the string that will be appended to the Undo menu item.
 
-\membersection{wxCommandProcessor::Submit}
+\membersection{wxCommandProcessor::Submit}\label{wxcommandprocessorsubmit}
 
 \func{virtual bool}{Submit}{\param{wxCommand *}{command}, \param{bool}{ storeIt = true}}
 
@@ -144,7 +144,7 @@ be deleted directly by the application.
 {\it storeIt} indicates whether the successful command should be stored
 in the history list.
 
-\membersection{wxCommandProcessor::Undo}
+\membersection{wxCommandProcessor::Undo}\label{wxcommandprocessorundo}
 
 \func{virtual bool}{Undo}{\void}
 

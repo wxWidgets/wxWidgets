@@ -35,7 +35,7 @@ platform native icons as provided by
 possible as of wxWidgets 2.3.3, the set of wxArtProvider bitmaps is too
 small). 
 
-\membersection{Identifying art resources}
+\membersection{Identifying art resources}\label{artprovideridentifying}
 
 Every bitmap is known to wxArtProvider under an unique ID that is used by when
 requesting a resource from it. The ID is represented by wxArtID type and can
@@ -89,7 +89,7 @@ by GTK+ follow the
 icons, so wxArtProvider may return {\tt wxNullBitmap} or {\tt wxNullIcon}.
 Default theme is typically installed in {\tt /usr/share/icons/hicolor}.
 
-\membersection{Clients}
+\membersection{Clients}\label{artproviderclients}
 
 Client is the entity that calls wxArtProvider's GetBitmap or GetIcon
 function. It is represented by wxClientID type and can have one of these 
@@ -177,7 +177,7 @@ The bitmap if one of registered providers recognizes the ID or wxNullBitmap othe
 Same as \helpref{wxArtProvider::GetBitmap}{wxartprovidergetbitmap}, but
 return a wxIcon object (or wxNullIcon on failure).
 
-\membersection{wxArtProvider::PopProvider}\label{wxartproviderpopprovider}
+\membersection{wxArtProvider::PopProvider}\label{wxartproviderctor}
 
 \func{static bool}{PopProvider}{\void}
 

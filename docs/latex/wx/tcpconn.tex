@@ -58,7 +58,7 @@ enum wxIPCFormat
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxTCPConnection::wxTCPConnection}
+\membersection{wxTCPConnection::wxTCPConnection}\label{wxtcpconnectionctor}
 
 \func{}{wxTCPConnection}{\void}
 
@@ -76,7 +76,7 @@ associated with the connection. Otherwise, the programmer must provide a
 a buffer and size of the buffer for the connection object to use in
 transactions.
 
-\membersection{wxTCPConnection::Advise}
+\membersection{wxTCPConnection::Advise}\label{wxtcpconnectionadvise}
 
 \func{bool}{Advise}{\param{const wxString\& }{item}, \param{char* }{data}, \param{int}{ size = -1}, \param{wxIPCFormat}{ format = wxCF\_TEXT}}
 
@@ -85,7 +85,7 @@ the data associated with the given item. Causes the client
 connection's \helpref{wxTCPConnection::OnAdvise}{wxtcpconnectiononadvise} 
 member to be called. Returns true if successful.
 
-\membersection{wxTCPConnection::Execute}
+\membersection{wxTCPConnection::Execute}\label{wxtcpconnectionexecute}
 
 \func{bool}{Execute}{\param{char* }{data}, \param{int}{ size = -1}, \param{wxIPCFormat}{ format = wxCF\_TEXT}}
 
@@ -95,7 +95,7 @@ to \helpref{wxTCPConnection::Poke}{wxtcpconnectionpoke} in that respect). Causes
 server connection's \helpref{wxTCPConnection::OnExecute}{wxtcpconnectiononexecute} member to be
 called. Returns true if successful.
 
-\membersection{wxTCPConnection::Disconnect}
+\membersection{wxTCPConnection::Disconnect}\label{wxtcpconnectiondisconnect}
 
 \func{bool}{Disconnect}{\void}
 

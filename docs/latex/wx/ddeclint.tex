@@ -30,7 +30,7 @@ wxClientBase\\
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxDDEClient::wxDDEClient}
+\membersection{wxDDEClient::wxDDEClient}\label{wxddeclientctor}
 
 \func{}{wxDDEClient}{\void}
 
@@ -59,10 +59,10 @@ object is returned.
 
 The advantage of deriving your own connection class is that it will
 enable you to intercept messages initiated by the server, such
-as \helpref{wxDDEConnection::OnAdvise}{wxddeconnectiononadvise}. You may also want to
+as \helpref{wxDDEConnection::OnAdvise}{wxconnectiononadvise}. You may also want to
 store application-specific data in instances of the new class.
 
-\membersection{wxDDEClient::ValidHost}
+\membersection{wxDDEClient::ValidHost}\label{wxddeclientvalidhost}
 
 \func{bool}{ValidHost}{\param{const wxString\& }{host}}
 

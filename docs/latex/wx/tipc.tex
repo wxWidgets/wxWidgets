@@ -1,8 +1,8 @@
 \section{Interprocess communication overview}\label{ipcoverview}
 
-Classes: \helpref{wxServer}{wxddeserver},
+Classes: \helpref{wxServer}{wxserver},
 \helpref{wxConnection}{wxddeconnection},
-\helpref{wxClient}{wxddeclient}
+\helpref{wxClient}{wxclient}
 %\helpref{wxTCPServer}{wxtcpserver}, \helpref{wxTCPConnection}{wxtcpconnection},
 %\helpref{wxTCPClient}{wxtcpclient}
 
@@ -108,7 +108,7 @@ need to be overridden.
 create and return an instance of the derived connection class.
 \item Create an instance of your client object.
 \item When appropriate, create a new connection using
-\helpref{wxClient::MakeConnection}{wxddeclientmakeconnection},
+\helpref{wxClient::MakeConnection}{wxclientmakeconnection},
 with arguments host name (processed in Unix only, use `localhost'
 for local computer), service name, and topic name for this
 connection. The client object will call

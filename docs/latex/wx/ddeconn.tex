@@ -59,7 +59,7 @@ enum wxIPCFormat
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxDDEConnection::wxDDEConnection}
+\membersection{wxDDEConnection::wxDDEConnection}\label{wxddeconnectionctor}
 
 \func{}{wxDDEConnection}{\void}
 
@@ -77,7 +77,7 @@ associated with the connection. Otherwise, the programmer must provide a
 a buffer and size of the buffer for the connection object to use in
 transactions.
 
-\membersection{wxDDEConnection::Advise}
+\membersection{wxDDEConnection::Advise}\label{wxddeconnectionadvise}
 
 \func{bool}{Advise}{\param{const wxString\& }{item}, \param{char* }{data}, \param{int}{ size = -1}, \param{wxIPCFormat}{ format = wxCF\_TEXT}}
 
@@ -86,7 +86,7 @@ the data associated with the given item. Causes the client
 connection's \helpref{wxDDEConnection::OnAdvise}{wxddeconnectiononadvise}
 member to be called. Returns true if successful.
 
-\membersection{wxDDEConnection::Execute}
+\membersection{wxDDEConnection::Execute}\label{wxddeconnectionexecute}
 
 \func{bool}{Execute}{\param{char* }{data}, \param{int}{ size = -1}, \param{wxIPCFormat}{ format = wxCF\_TEXT}}
 
@@ -96,7 +96,7 @@ to \helpref{wxDDEConnection::Poke}{wxddeconnectionpoke} in that respect). Causes
 server connection's \helpref{wxDDEConnection::OnExecute}{wxddeconnectiononexecute} member to be
 called. Returns true if successful.
 
-\membersection{wxDDEConnection::Disconnect}
+\membersection{wxDDEConnection::Disconnect}\label{wxddeconnectiondisconnect}
 
 \func{bool}{Disconnect}{\void}
 

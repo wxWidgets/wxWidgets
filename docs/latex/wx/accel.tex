@@ -16,7 +16,7 @@ None
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxAcceleratorEntry::wxAcceleratorEntry}\label{wxacceleratorentryconstr}
+\membersection{wxAcceleratorEntry::wxAcceleratorEntry}\label{wxacceleratorentryctor}
 
 \func{}{wxAcceleratorEntry}{\void}
 
@@ -111,7 +111,7 @@ accept CTRL-Enter as meaning `OK' (but not in GTK+ at present).
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxAcceleratorTable::wxAcceleratorTable}\label{wxacceleratortableconstr}
+\membersection{wxAcceleratorTable::wxAcceleratorTable}\label{wxacceleratortablector}
 
 \func{}{wxAcceleratorTable}{\void}
 
@@ -145,7 +145,7 @@ and cmd values like you would construct wxAcceleratorEntry objects with.}
   Wx::AcceleratorEntry objects or references to 3-element arrays
   ( flags, keyCode, cmd ), like the parameters of Wx::AcceleratorEntry::new.}
 
-\membersection{wxAcceleratorTable::\destruct{wxAcceleratorTable}}
+\membersection{wxAcceleratorTable::\destruct{wxAcceleratorTable}}\label{wxacceleratortabledtor}
 
 \func{}{\destruct{wxAcceleratorTable}}{\void}
 
@@ -157,7 +157,7 @@ Destroys the wxAcceleratorTable object.
 
 Returns true if the accelerator table is valid.
 
-\membersection{wxAcceleratorTable::operator $=$}
+\membersection{wxAcceleratorTable::operator $=$}\label{wxacceleratortableassign}
 
 \func{wxAcceleratorTable\& }{operator $=$}{\param{const wxAcceleratorTable\& }{accel}}
 
@@ -173,7 +173,7 @@ counter. It is a fast operation.
 
 Returns reference to this object.
 
-\membersection{wxAcceleratorTable::operator $==$}
+\membersection{wxAcceleratorTable::operator $==$}\label{wxacceleratortableequal}
 
 \func{bool}{operator $==$}{\param{const wxAcceleratorTable\& }{accel}}
 
@@ -188,7 +188,7 @@ equal (a fast test).
 
 Returns true if the accelerator tables were effectively equal, false otherwise.
 
-\membersection{wxAcceleratorTable::operator $!=$}
+\membersection{wxAcceleratorTable::operator $!=$}\label{wxacceleratortablenotequal}
 
 \func{bool}{operator $!=$}{\param{const wxAcceleratorTable\& }{accel}}
 

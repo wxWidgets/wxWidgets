@@ -136,7 +136,7 @@ for wxObjArray.
 
 \latexignore{\rtfignore{\wxheading{Function groups}}}
 
-\membersection{Macros for template array definition}
+\membersection{Macros for template array definition}\label{arraymacros}
 
 To use an array you must first define the array class. This is done with the
 help of the macros in this section. The class of array elements must be (at
@@ -167,7 +167,7 @@ pointers to {\tt double} you should use
 WX_DEFINE_ARRAY_PTR(double *, MyArrayOfDoublePointers);
 \end{verbatim}
 
-\membersection{Constructors and destructors}
+\membersection{Constructors and destructors}\label{arrayconstructorsdestructors}
 
 Array classes are 100\% C++ objects and as such they have the appropriate copy
 constructors and assignment operators. Copying wxArray just copies the elements
@@ -200,7 +200,7 @@ memory more times than needed.
 \helpref{Alloc}{wxarrayalloc}\\
 \helpref{Shrink}{wxarrayshrink}
 
-\membersection{Number of elements and simple item access}
+\membersection{Number of elements and simple item access}\label{arrayelementsaccess}
 
 Functions in this section return the total number of array elements and allow to
 retrieve them - possibly using just the C array indexing $[]$ operator which
@@ -212,14 +212,14 @@ does exactly the same as \helpref{Item()}{wxarrayitem} method.
 \helpref{Item}{wxarrayitem}\\
 \helpref{Last}{wxarraylast}
 
-\membersection{Adding items}
+\membersection{Adding items}\label{arrayadding}
 
 \helpref{Add}{wxarrayadd}\\
 \helpref{Insert}{wxarrayinsert}\\
 \helpref{SetCount}{wxarraysetcount}\\
 \helpref{WX\_APPEND\_ARRAY}{wxappendarray}
 
-\membersection{Removing items}
+\membersection{Removing items}\label{arrayremoving}
 
 \helpref{WX\_CLEAR\_ARRAY}{wxcleararray}\\
 \helpref{Empty}{wxarrayempty}\\
@@ -227,7 +227,7 @@ does exactly the same as \helpref{Item()}{wxarrayitem} method.
 \helpref{RemoveAt}{wxarrayremoveat}\\
 \helpref{Remove}{wxarrayremove}
 
-\membersection{Searching and sorting}
+\membersection{Searching and sorting}\label{arraysearchingandsorting}
 
 \helpref{Index}{wxarrayindex}\\
 \helpref{Sort}{wxarraysort}

@@ -19,7 +19,7 @@ None
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxDataOutputStream::wxDataOutputStream}\label{wxdataoutputstreamconstr}
+\membersection{wxDataOutputStream::wxDataOutputStream}\label{wxdataoutputstreamctor}
 
 \func{}{wxDataOutputStream}{\param{wxOutputStream\&}{ stream}}
 
@@ -39,13 +39,13 @@ documentation for detailed description). Note that you must not destroy
 {\it conv} before you destroy this wxDataOutputStream instance! It is
 recommended to use default value (UTF-8).}
 
-\membersection{wxDataOutputStream::\destruct{wxDataOutputStream}}
+\membersection{wxDataOutputStream::\destruct{wxDataOutputStream}}\label{wxdataoutputstreamdtor}
 
 \func{}{\destruct{wxDataOutputStream}}{\void}
 
 Destroys the wxDataOutputStream object.
 
-\membersection{wxDataOutputStream::BigEndianOrdered}
+\membersection{wxDataOutputStream::BigEndianOrdered}\label{wxdataoutputstreambigendianorder}
 
 \func{void}{BigEndianOrdered}{\param{bool}{ be\_order}}
 
@@ -54,7 +54,7 @@ order, e.g. for reading on a Sparc or from Java-Streams (which
 always use big-endian order), otherwise data will be written in
 little-endian order.
  
-\membersection{wxDataOutputStream::Write8}
+\membersection{wxDataOutputStream::Write8}\label{wxdataoutputstreamwrite8}
 
 \func{void}{Write8}{{\param wxUint8 }{i8}}
 
@@ -65,7 +65,7 @@ Writes the single byte {\it i8} to the stream.
 Writes an array of bytes to the stream. The amount of bytes to write is
 specified with the {\it size} variable.
 
-\membersection{wxDataOutputStream::Write16}
+\membersection{wxDataOutputStream::Write16}\label{wxdataoutputstreamwrite16}
 
 \func{void}{Write16}{{\param wxUint16 }{i16}}
 
@@ -76,7 +76,7 @@ Writes the 16 bit unsigned integer {\it i16} to the stream.
 Writes an array of 16 bit unsigned integer to the stream. The amount of
 16 bit unsigned integer to write is specified with the {\it size} variable.
 
-\membersection{wxDataOutputStream::Write32}
+\membersection{wxDataOutputStream::Write32}\label{wxdataoutputstreamwrite32}
 
 \func{void}{Write32}{{\param wxUint32 }{i32}}
 
@@ -87,7 +87,7 @@ Writes the 32 bit unsigned integer {\it i32} to the stream.
 Writes an array of 32 bit unsigned integer to the stream. The amount of
 32 bit unsigned integer to write is specified with the {\it size} variable.
 
-\membersection{wxDataOutputStream::Write64}
+\membersection{wxDataOutputStream::Write64}\label{wxdataoutputstreamwrite64}
 
 \func{void}{Write64}{{\param wxUint64 }{i64}}
 
@@ -98,7 +98,7 @@ Writes the 64 bit unsigned integer {\it i64} to the stream.
 Writes an array of 64 bit unsigned integer to the stream. The amount of
 64 bit unsigned integer to write is specified with the {\it size} variable.
 
-\membersection{wxDataOutputStream::WriteDouble}
+\membersection{wxDataOutputStream::WriteDouble}\label{wxdataoutputstreamwritedouble}
 
 \func{void}{WriteDouble}{{\param double }{f}}
 

@@ -19,7 +19,7 @@ change the data or view.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxCommand::wxCommand}
+\membersection{wxCommand::wxCommand}\label{wxcommandctor}
 
 \func{}{wxCommand}{\param{bool}{ canUndo = false}, \param{const wxString\& }{name = NULL}}
 
@@ -33,19 +33,19 @@ the criteria for undoability is context-dependent).
 {\it name} must be supplied for the command processor to display the command name
 in the application's edit menu.
 
-\membersection{wxCommand::\destruct{wxCommand}}
+\membersection{wxCommand::\destruct{wxCommand}}\label{wxcommanddtor}
 
 \func{}{\destruct{wxCommand}}{\void}
 
 Destructor.
 
-\membersection{wxCommand::CanUndo}
+\membersection{wxCommand::CanUndo}\label{wxcommandcanundo}
 
 \func{bool}{CanUndo}{\void}
 
 Returns true if the command can be undone, false otherwise.
 
-\membersection{wxCommand::Do}
+\membersection{wxCommand::Do}\label{wxcommanddo}
 
 \func{bool}{Do}{\void}
 
@@ -54,13 +54,13 @@ Return true to indicate that the action has taken place, false otherwise.
 Returning false will indicate to the command processor that the action is
 not undoable and should not be added to the command history.
 
-\membersection{wxCommand::GetName}
+\membersection{wxCommand::GetName}\label{wxcommandgetname}
 
 \func{wxString}{GetName}{\void}
 
 Returns the command name.
 
-\membersection{wxCommand::Undo}
+\membersection{wxCommand::Undo}\label{wxcommandundo}
 
 \func{bool}{Undo}{\void}
 

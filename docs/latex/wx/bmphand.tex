@@ -23,20 +23,20 @@ application initialisation.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxBitmapHandler::wxBitmapHandler}\label{wxbitmaphandlerconstr}
+\membersection{wxBitmapHandler::wxBitmapHandler}\label{wxbitmaphandlerctor}
 
 \func{}{wxBitmapHandler}{\void}
 
 Default constructor. In your own default constructor, initialise the members
 m\_name, m\_extension and m\_type.
 
-\membersection{wxBitmapHandler::\destruct{wxBitmapHandler}}
+\membersection{wxBitmapHandler::\destruct{wxBitmapHandler}}\label{wxbitmaphandlerdtor}
 
 \func{}{\destruct{wxBitmapHandler}}{\void}
 
 Destroys the wxBitmapHandler object.
 
-\membersection{wxBitmapHandler::Create}
+\membersection{wxBitmapHandler::Create}\label{wxbitmaphandlercreate}
 
 \func{virtual bool}{Create}{\param{wxBitmap* }{bitmap}, \param{void*}{ data}, \param{int}{ type}, \param{int}{ width}, \param{int}{ height}, \param{int}{ depth = -1}}
 
@@ -55,26 +55,26 @@ manipulated by this function.
 
 \docparam{data}{Data whose type depends on the value of {\it type}.}
 
-\docparam{type}{A bitmap type identifier - see \helpref{wxBitmapHandler::wxBitmapHandler}{wxbitmapconstr} for a list
+\docparam{type}{A bitmap type identifier - see \helpref{wxBitmapHandler::wxBitmapHandler}{wxbitmapctor} for a list
 of possible values.}
 
 \wxheading{Return value}
 
 true if the call succeeded, false otherwise (the default).
 
-\membersection{wxBitmapHandler::GetName}
+\membersection{wxBitmapHandler::GetName}\label{wxbitmaphandlergetname}
 
 \constfunc{wxString}{GetName}{\void}
 
 Gets the name of this handler.
 
-\membersection{wxBitmapHandler::GetExtension}
+\membersection{wxBitmapHandler::GetExtension}\label{wxbitmaphandlergetextension}
 
 \constfunc{wxString}{GetExtension}{\void}
 
 Gets the file extension associated with this handler.
 
-\membersection{wxBitmapHandler::GetType}
+\membersection{wxBitmapHandler::GetType}\label{wxbitmaphandlergettype}
 
 \constfunc{long}{GetType}{\void}
 
@@ -93,7 +93,7 @@ Loads a bitmap from a file or resource, putting the resulting data into {\it bit
 \docparam{name}{Either a filename or a Windows resource name.
 The meaning of {\it name} is determined by the {\it type} parameter.}
 
-\docparam{type}{See \helpref{wxBitmap::wxBitmap}{wxbitmapconstr} for values this can take.}
+\docparam{type}{See \helpref{wxBitmap::wxBitmap}{wxbitmapctor} for values this can take.}
 
 \wxheading{Return value}
 
@@ -117,7 +117,7 @@ Saves a bitmap in the named file.
 
 \docparam{name}{A filename. The meaning of {\it name} is determined by the {\it type} parameter.}
 
-\docparam{type}{See \helpref{wxBitmap::wxBitmap}{wxbitmapconstr} for values this can take.}
+\docparam{type}{See \helpref{wxBitmap::wxBitmap}{wxbitmapctor} for values this can take.}
 
 \docparam{palette}{An optional palette used for saving the bitmap.}
 
@@ -131,7 +131,7 @@ true if the operation succeeded, false otherwise.
 \helpref{wxBitmap::SaveFile}{wxbitmapsavefile}\\
 \helpref{wxBitmapHandler::LoadFile}{wxbitmaphandlerloadfile}
 
-\membersection{wxBitmapHandler::SetName}
+\membersection{wxBitmapHandler::SetName}\label{wxbitmaphandlersetname}
 
 \func{void}{SetName}{\param{const wxString\& }{name}}
 
@@ -141,7 +141,7 @@ Sets the handler name.
 
 \docparam{name}{Handler name.}
 
-\membersection{wxBitmapHandler::SetExtension}
+\membersection{wxBitmapHandler::SetExtension}\label{wxbitmaphandlersetextension}
 
 \func{void}{SetExtension}{\param{const wxString\& }{extension}}
 
@@ -151,7 +151,7 @@ Sets the handler extension.
 
 \docparam{extension}{Handler extension.}
 
-\membersection{wxBitmapHandler::SetType}
+\membersection{wxBitmapHandler::SetType}\label{wxbitmaphandlersettype}
 
 \func{void}{SetType}{\param{long }{type}}
 

@@ -18,7 +18,7 @@ No parent class.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxClassInfo::wxClassInfo}\label{wxclassinfoconstr}
+\membersection{wxClassInfo::wxClassInfo}\label{wxclassinfoctor}
 
 \func{}{wxClassInfo}{\param{wxChar * }{className}, \param{wxChar * }{baseClass1}, \param{wxChar * }{baseClass2},
  \param{int}{ size}, \param{wxObjectConstructorFn }{fn}}
@@ -33,37 +33,37 @@ class, so there is no need to create such objects explicitly in an application.
 Creates an object of the appropriate kind. Returns NULL if the class has not been declared
 dynamically creatable (typically, it is an abstract class).
 
-\membersection{wxClassInfo::FindClass}
+\membersection{wxClassInfo::FindClass}\label{wxclassinfofindclass}
 
 \func{static wxClassInfo *}{FindClass}{\param{wxChar * }{name}}
 
 Finds the wxClassInfo object for a class of the given string name.
 
-\membersection{wxClassInfo::GetBaseClassName1}
+\membersection{wxClassInfo::GetBaseClassName1}\label{wxclassinfogetbaseclassname1}
 
 \constfunc{wxChar *}{GetBaseClassName1}{\void}
 
 Returns the name of the first base class (NULL if none).
 
-\membersection{wxClassInfo::GetBaseClassName2}
+\membersection{wxClassInfo::GetBaseClassName2}\label{wxclassinfogetbaseclassname2}
 
 \constfunc{wxChar *}{GetBaseClassName2}{\void}
 
 Returns the name of the second base class (NULL if none).
 
-\membersection{wxClassInfo::GetClassName}
+\membersection{wxClassInfo::GetClassName}\label{wxclassinfogetclassname}
 
 \constfunc{wxChar *}{GetClassName}{\void}
 
 Returns the string form of the class name.
 
-\membersection{wxClassInfo::GetSize}
+\membersection{wxClassInfo::GetSize}\label{wxclassinfogetsize}
 
 \constfunc{int}{GetSize}{\void}
 
 Returns the size of the class.
 
-\membersection{wxClassInfo::InitializeClasses}
+\membersection{wxClassInfo::InitializeClasses}\label{wxclassinfoinitializeclasses}
 
 \func{static void}{InitializeClasses}{\void}
 

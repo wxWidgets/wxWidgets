@@ -436,14 +436,14 @@ The wxCalendarEvent class is used together with
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxCalendarEvent::GetDate}{wxcalendareventgetdate}
+\membersection{wxCalendarEvent::GetDate}\label{wxcalendareventgetdate}
 
 \constfunc{const wxDateTime\&}{GetDate}{\void}
 
 Returns the date. This function may be called for all event types except 
 {\tt EVT\_CALENDAR\_WEEKDAY\_CLICKED} one for which it doesn't make sense.
 
-\membersection{wxCalendarEvent::GetWeekDay}{wxcalendareventgetweekday}
+\membersection{wxCalendarEvent::GetWeekDay}\label{wxcalendareventgetweekday}
 
 \constfunc{wxDateTime::WeekDay}{GetWeekDay}{\void}
 
@@ -451,13 +451,13 @@ Returns the week day on which the user clicked in
 {\tt EVT\_CALENDAR\_WEEKDAY\_CLICKED} handler. It doesn't make sense to call
 this function in other handlers.
 
-\membersection{wxCalendarEvent::SetDate}{wxcalendareventsetdate}
+\membersection{wxCalendarEvent::SetDate}\label{wxcalendareventsetdate}
 
 \func{void}{SetDate}{\param{const wxDateTime\&}{ date}}
 
 Sets the date.
 
-\membersection{wxCalendarEvent::SetWeekDay}{wxcalendareventsetweekday}
+\membersection{wxCalendarEvent::SetWeekDay}\label{wxcalendareventsetweekday}
 
 \func{void}{SetWeekDay}{\param{wxDateTime::WeekDay}{ day}}
 
