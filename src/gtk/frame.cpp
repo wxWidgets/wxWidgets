@@ -5,7 +5,7 @@
 // Created:     01/02/97
 // Id:
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -72,7 +72,7 @@ END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxFrame,wxWindow)
 
-wxFrame::wxFrame(void)
+wxFrame::wxFrame()
 {
   m_doingOnSize = FALSE;
   m_frameMenuBar = NULL;
@@ -144,7 +144,7 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
   return TRUE;
 };
 
-wxFrame::~wxFrame(void)
+wxFrame::~wxFrame()
 {
   if (m_frameMenuBar) delete m_frameMenuBar;
   if (m_frameStatusBar) delete m_frameStatusBar;
@@ -180,7 +180,7 @@ void wxFrame::OnCloseWindow( wxCloseEvent &event )
     }
 };
 
-bool wxFrame::Destroy(void)
+bool wxFrame::Destroy()
 {
   if (!wxPendingDelete.Member(this))
     wxPendingDelete.Append(this);
@@ -300,7 +300,8 @@ static void SetInvokingWindow( wxMenu *menu, wxWindow *win )
   while (node)
   {
     wxMenuItem *menuitem = (wxMenuItem*)node->Data();
-    if (menuitem->m_isSubMenu) SetInvokingWindow( menuitem->m_subMenu, win );
+    if (menuitem->IsSubMenu())
+      SetInvokingWindow( menuitem->GetSubMenu(), win );
     node = node->Next();
   };
 };
@@ -349,12 +350,12 @@ void wxFrame::SetStatusWidths( int n, int *width )
   if (m_frameStatusBar) m_frameStatusBar->SetStatusWidths( n, width );
 };
 
-wxStatusBar *wxFrame::GetStatusBar(void)
+wxStatusBar *wxFrame::GetStatusBar()
 {
   return m_frameStatusBar;
 };
 
-wxMenuBar *wxFrame::GetMenuBar(void)
+wxMenuBar *wxFrame::GetMenuBar()
 {
   return m_frameMenuBar;
 };
@@ -365,59 +366,11 @@ void wxFrame::SetTitle( const wxString &title )
   gtk_window_set_title( GTK_WINDOW(m_widget), title );
 };
 
-wxString wxFrame::GetTitle(void) const
+void wxFrame::SetSizeHints(int minW, int minH, int maxW, int maxH, int incW)
 {
-  return (wxString&)m_title;
-};
-
-void wxFrame::OnIdle(wxIdleEvent& WXUNUSED(event))
-{
-  DoMenuUpdates();
+  // VZ: I don't know a way to set the max size for the window in GTK and have
+  //     no idea about what incW might be
+  gtk_widget_set_usize(m_widget, minW, minH);
 }
 
-// Query app for menu item updates (called from OnIdle)
-void wxFrame::DoMenuUpdates(void)
-{
-  wxMenuBar* bar = GetMenuBar();
-  if (!bar) return;
-
-  wxNode *node = bar->m_menus.First();
-  while (node)
-  {
-    wxMenu* menu = (wxMenu*)node->Data();
-    DoMenuUpdates(menu);
-    
-    node = node->Next();
-  };
-}
-
-void wxFrame::DoMenuUpdates(wxMenu* menu)
-{
-  wxNode* node = menu->m_items.First();
-  while (node)
-  {
-    wxMenuItem* item = (wxMenuItem*) node->Data();
-    if ( !item->IsSeparator() )
-    {
-        wxWindowID id = item->GetId();
-      wxUpdateUIEvent event(id);
-      event.SetEventObject( this );
-
-      if (GetEventHandler()->ProcessEvent(event))
-      {
-        if (event.GetSetText())
-          menu->SetLabel(id, event.GetText());
-        if (event.GetSetChecked())
-          menu->Check(id, event.GetChecked());
-        if (event.GetSetEnabled())
-          menu->Enable(id, event.GetEnabled());
-      }
-
-      if (item->GetSubMenu())
-        DoMenuUpdates(item->GetSubMenu());
-    }
-    node = node->Next();
-  }
-}
-
-
+#include "../common/framecmn.cpp"
