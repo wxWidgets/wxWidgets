@@ -455,7 +455,7 @@ void wxTextCtrl::Replace(long from, long to, const wxString& value)
     SendMessage(hWnd, WM_CUT, (WPARAM)0, (LPARAM)0);
 
     // Now replace with 'value', by pasting.
-    wxSetClipboardData(wxCF_TEXT, (wxObject *) (const char *)value, 0, 0);
+    wxSetClipboardData(wxDF_TEXT, (wxObject *) (const char *)value, 0, 0);
 
     // Paste into edit control
     SendMessage(hWnd, WM_PASTE, (WPARAM)0, (LPARAM)0L);

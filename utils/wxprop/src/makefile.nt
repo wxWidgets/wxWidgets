@@ -29,6 +29,7 @@ LIBTARGET=$(PROPDIR)\lib\wxprop.lib
 
 all:    $(LIBTARGET)
 
+
 $(PROGRAM):    $(PROGRAM).exe
 
 wx:

@@ -73,7 +73,7 @@ bool wxMetaFile::SetClipboard(int width, int height)
     wxOpenClipboard();
     if (!wxEmptyClipboard()) return FALSE;
   }
-  bool success = wxSetClipboardData(wxCF_METAFILE,this, width,height);
+  bool success = wxSetClipboardData(wxDF_METAFILE,this, width,height);
   if (!alreadyOpen) wxCloseClipboard();
   return (bool) success;
 }

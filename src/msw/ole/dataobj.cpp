@@ -280,14 +280,14 @@ STDMETHODIMP wxIDataObject::QueryGetData(FORMATETC *pformatetc)
   }
 
   // and now check the type of data requested
-  if ( m_pDataObject->IsSupportedFormat(pformatetc->cfFormat) ) {
+  if ( m_pDataObject->IsSupportedFormat((wxDataFormat) pformatetc->cfFormat) ) {
     wxLogTrace("wxIDataObject::QueryGetData: %s ok",
-               wxDataObject::GetFormatName(pformatetc->cfFormat));
+               wxDataObject::GetFormatName((wxDataFormat) pformatetc->cfFormat));
     return S_OK;
   }
   else {
     wxLogTrace("wxIDataObject::QueryGetData: %s unsupported",
-               wxDataObject::GetFormatName(pformatetc->cfFormat));
+               wxDataObject::GetFormatName((wxDataFormat) pformatetc->cfFormat));
     return DV_E_FORMATETC;
   }
 }

@@ -108,7 +108,7 @@ wxIDropTarget::wxIDropTarget(wxDropTarget *pTarget)
 { 
   m_cRef         = 0; 
   m_pTarget      = pTarget;
-  m_cfFormat     = 0;
+  m_cfFormat     = (wxDataFormat) 0;
   m_pIDataObject = NULL; 
 }
 
@@ -330,7 +330,7 @@ bool wxDropTarget::IsAcceptedData(IDataObject *pIDataSource) const
     //   means) for file drag and drop
     if ( pIDataSource->QueryGetData(&s_fmtMemory) == S_OK ) {
       // remember this format: we'll later ask for data in it
-      m_pIDropTarget->SetSupportedFormat(s_fmtMemory.cfFormat);
+      m_pIDropTarget->SetSupportedFormat((wxDataFormat) s_fmtMemory.cfFormat);
       return TRUE;
     }
   }
@@ -354,7 +354,7 @@ size_t wxTextDropTarget::GetFormatCount() const
 
 wxDataFormat wxTextDropTarget::GetFormat(size_t WXUNUSED(n)) const
 {
-  return CF_TEXT;
+  return wxDF_TEXT;
 }
 
 // ============================================================================
@@ -409,10 +409,10 @@ size_t wxFileDropTarget::GetFormatCount() const
 wxDataFormat wxFileDropTarget::GetFormat(size_t WXUNUSED(n)) const
 {
 #ifdef __WIN32__
-  return CF_HDROP;
+  return wxDF_FILENAME;
 #else
   // TODO: how to implement this in WIN16?
-  return CF_TEXT;
+  return wxDF_TEXT;
 #endif
 }
 

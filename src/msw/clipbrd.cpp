@@ -86,7 +86,7 @@ bool wxSetClipboardData(int dataFormat, wxObject *obj, int width, int height)
 {
   switch (dataFormat)
   {
-    case wxCF_BITMAP:
+    case wxDF_BITMAP:
     {
       wxBitmap *wxBM = (wxBitmap *)obj;
 
@@ -119,7 +119,7 @@ bool wxSetClipboardData(int dataFormat, wxObject *obj, int width, int height)
       return success;
       break;
     }
-    case wxCF_DIB:
+    case wxDF_DIB:
     {
 #if USE_IMAGE_LOADING_IN_MSW
       HBITMAP hBitmap=(HBITMAP) ((wxBitmap *)obj)->GetHBITMAP();
@@ -132,7 +132,7 @@ bool wxSetClipboardData(int dataFormat, wxObject *obj, int width, int height)
       break;
     }
 #if USE_METAFILE
-    case wxCF_METAFILE:
+    case wxDF_METAFILE:
     {
       wxMetaFile *wxMF = (wxMetaFile *)obj;
       HANDLE data = GlobalAlloc(GHND, sizeof(METAFILEPICT) + 1);
@@ -161,9 +161,9 @@ bool wxSetClipboardData(int dataFormat, wxObject *obj, int width, int height)
       return FALSE;
       break;
     }
-    case wxCF_OEMTEXT:
-      dataFormat = wxCF_TEXT;
-    case wxCF_TEXT:
+    case wxDF_OEMTEXT:
+      dataFormat = wxDF_TEXT;
+    case wxDF_TEXT:
        width = strlen((char *)obj) + 1;
        height = 1;
     default:
@@ -203,7 +203,7 @@ wxObject *wxGetClipboardData(int dataFormat, long *len)
 {
   switch (dataFormat)
   {
-    case wxCF_BITMAP:
+    case wxDF_BITMAP:
     {
       BITMAP bm;
       HBITMAP hBitmap = (HBITMAP) GetClipboardData(CF_BITMAP);
@@ -248,19 +248,19 @@ wxObject *wxGetClipboardData(int dataFormat, long *len)
       return (wxObject *)wxBM;
       break;
     }
-    case wxCF_METAFILE:
+    case wxDF_METAFILE:
     case CF_SYLK:
     case CF_DIF:
     case CF_TIFF:
     case CF_PALETTE:
-    case wxCF_DIB:
+    case wxDF_DIB:
     {
       return FALSE;
       break;
     }
-    case wxCF_OEMTEXT:
-      dataFormat = wxCF_TEXT;
-         case wxCF_TEXT:
+    case wxDF_OEMTEXT:
+      dataFormat = wxDF_TEXT;
+         case wxDF_TEXT:
     default:
     {
       HANDLE hGlobalMemory = GetClipboardData(dataFormat);
@@ -342,8 +342,8 @@ wxClipboard::~wxClipboard()
 static int FormatStringToID(char *str)
 {
   if (!strcmp(str, "TEXT"))
-    return wxCF_TEXT;
-  
+    return wxDF_TEXT;
+
   return wxRegisterClipboardFormat(str);
 }
 
@@ -407,7 +407,7 @@ void wxClipboard::SetClipboardString(char *str, long time)
   cbString = str;
 
   if (wxOpenClipboard()) {
-    if (!wxSetClipboardData(wxCF_TEXT, (wxObject *)str))
+    if (!wxSetClipboardData(wxDF_TEXT, (wxObject *)str))
       got_selection = FALSE;
     else
                 got_selection = wxCloseClipboard();

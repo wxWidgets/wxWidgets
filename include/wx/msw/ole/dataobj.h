@@ -90,7 +90,7 @@ public:
 
   // implement base class pure virtuals
   virtual wxDataFormat GetPreferredFormat() const
-    { return wxDataObject::Text; }
+    { return (wxDataFormat) wxDataObject::Text; }
   virtual bool IsSupportedFormat(wxDataFormat format) const
     { return format == wxDataObject::Text || format == wxDataObject::Locale; }
   virtual uint GetDataSize() const

@@ -188,13 +188,13 @@ static wxDDEServer *DDEFindServer(const wxString& s)
 
 wxDDEServer::wxDDEServer(void)
 {
-  service_name = "";
+  m_serviceName = "";
   wxDDEServerObjects.Append(this);
 }
 
 bool wxDDEServer::Create(const wxString& server_name)
 {
-  service_name = server_name;
+  m_serviceName = server_name;
   HSZ serviceName = DdeCreateStringHandle(DDEIdInst, (char*) (const char *)server_name, CP_WINANSI);
 
   if (DdeNameService(DDEIdInst, serviceName, NULL, DNS_REGISTER) == 0)
@@ -207,9 +207,9 @@ bool wxDDEServer::Create(const wxString& server_name)
 
 wxDDEServer::~wxDDEServer(void)
 {
-  if (service_name != "")
+  if (m_serviceName != "")
   {
-    HSZ serviceName = DdeCreateStringHandle(DDEIdInst, (char*) (const char *)service_name, CP_WINANSI);
+    HSZ serviceName = DdeCreateStringHandle(DDEIdInst, (char*) (const char *)m_serviceName, CP_WINANSI);
     if (DdeNameService(DDEIdInst, serviceName, NULL, DNS_UNREGISTER) == 0)
     {
       DDEPrintError();
@@ -217,7 +217,7 @@ wxDDEServer::~wxDDEServer(void)
   }
   wxDDEServerObjects.DeleteObject(this);
 
-  wxNode *node = connections.First();
+  wxNode *node = m_connections.First();
   while (node)
   {
     wxDDEConnection *connection = (wxDDEConnection *)node->Data();
@@ -227,7 +227,7 @@ wxDDEServer::~wxDDEServer(void)
   }
 
   // If any left after this, delete them
-  node = connections.First();
+  node = m_connections.First();
   while (node)
   {
     wxDDEConnection *connection = (wxDDEConnection *)node->Data();
@@ -244,12 +244,12 @@ wxConnectionBase *wxDDEServer::OnAcceptConnection(const wxString& /* topic */)
 
 wxDDEConnection *wxDDEServer::FindConnection(WXHCONV conv)
 {
-  wxNode *node = connections.First();
+  wxNode *node = m_connections.First();
   wxDDEConnection *found = NULL;
   while (node && !found)
   {
     wxDDEConnection *connection = (wxDDEConnection *)node->Data();
-    if (connection->hConv == conv)
+    if (connection->m_hConv == conv)
       found = connection;
     else node = node->Next();
   }
@@ -259,12 +259,12 @@ wxDDEConnection *wxDDEServer::FindConnection(WXHCONV conv)
 // Only delete the entry in the map, not the actual connection
 bool wxDDEServer::DeleteConnection(WXHCONV conv)
 {
-  wxNode *node = connections.First();
+  wxNode *node = m_connections.First();
   bool found = FALSE;
   while (node && !found)
   {
     wxDDEConnection *connection = (wxDDEConnection *)node->Data();
-    if (connection->hConv == conv)
+    if (connection->m_hConv == conv)
     {
       found = TRUE;
       delete node;
@@ -289,12 +289,12 @@ wxDDEClient::wxDDEClient(void)
 wxDDEClient::~wxDDEClient(void)
 {
   wxDDEClientObjects.DeleteObject(this);
-  wxNode *node = connections.First();
+  wxNode *node = m_connections.First();
   while (node)
   {
     wxDDEConnection *connection = (wxDDEConnection *)node->Data();
     delete connection;  // Deletes the node implicitly (see ~wxDDEConnection)
-    node = connections.First();
+    node = m_connections.First();
   }
 }
 
@@ -316,10 +316,10 @@ wxConnectionBase *wxDDEClient::MakeConnection(const wxString& /* host */, const 
     wxDDEConnection *connection = (wxDDEConnection*) OnMakeConnection();
     if (connection)
     {
-      connection->hConv = (WXHCONV) hConv;
-      connection->topic_name = topic;
-	  connection->client = this;
-      connections.Append(connection);
+      connection->m_hConv = (WXHCONV) hConv;
+      connection->m_topicName = topic;
+	  connection->m_client = this;
+      m_connections.Append(connection);
       return connection;
     }
     else return NULL;
@@ -333,12 +333,12 @@ wxConnectionBase *wxDDEClient::OnMakeConnection(void)
 
 wxDDEConnection *wxDDEClient::FindConnection(WXHCONV conv)
 {
-  wxNode *node = connections.First();
+  wxNode *node = m_connections.First();
   wxDDEConnection *found = NULL;
   while (node && !found)
   {
     wxDDEConnection *connection = (wxDDEConnection *)node->Data();
-    if (connection->hConv == conv)
+    if (connection->m_hConv == conv)
       found = connection;
     else node = node->Next();
   }
@@ -348,12 +348,12 @@ wxDDEConnection *wxDDEClient::FindConnection(WXHCONV conv)
 // Only delete the entry in the map, not the actual connection
 bool wxDDEClient::DeleteConnection(WXHCONV conv)
 {
-  wxNode *node = connections.First();
+  wxNode *node = m_connections.First();
   bool found = FALSE;
   while (node && !found)
   {
     wxDDEConnection *connection = (wxDDEConnection *)node->Data();
-    if (connection->hConv == conv)
+    if (connection->m_hConv == conv)
     {
       found = TRUE;
       delete node;
@@ -373,54 +373,54 @@ wxDDEConnection::wxDDEConnection(char *buffer, int size)
   {
     if (DDEDefaultIPCBuffer == NULL)
       DDEDefaultIPCBuffer = new char[DDEDefaultIPCBufferSize];
-    buf_ptr = DDEDefaultIPCBuffer;
-    buf_size = DDEDefaultIPCBufferSize;
+    m_bufPtr = DDEDefaultIPCBuffer;
+    m_bufSize = DDEDefaultIPCBufferSize;
   }
   else
   {
-    buf_ptr = buffer;
-    buf_size = size;
+    m_bufPtr = buffer;
+    m_bufSize = size;
   }
 
-  topic_name = "";
+  m_topicName = "";
 
-  client = NULL;
-  server = NULL;
+  m_client = NULL;
+  m_server = NULL;
 
-  hConv = 0;
-  sending_data = NULL;
+  m_hConv = 0;
+  m_sendingData = NULL;
 }
 
 wxDDEConnection::wxDDEConnection(void)
 {
-  hConv = 0;
-  sending_data = NULL;
-  server = NULL;
-  client = NULL;
+  m_hConv = 0;
+  m_sendingData = NULL;
+  m_server = NULL;
+  m_client = NULL;
   if (DDEDefaultIPCBuffer == NULL)
     DDEDefaultIPCBuffer = new char[DDEDefaultIPCBufferSize];
 
-  buf_ptr = DDEDefaultIPCBuffer;
-  buf_size = DDEDefaultIPCBufferSize;
-  topic_name = "";
+  m_bufPtr = DDEDefaultIPCBuffer;
+  m_bufSize = DDEDefaultIPCBufferSize;
+  m_topicName = "";
 }
 
 wxDDEConnection::~wxDDEConnection(void)
 {
-	if (server)
-		server->GetConnections().DeleteObject(this);
+	if (m_server)
+		m_server->GetConnections().DeleteObject(this);
 	else
-	    client->GetConnections().DeleteObject(this);
+	    m_client->GetConnections().DeleteObject(this);
 }
 
 // Calls that CLIENT can make
 bool wxDDEConnection::Disconnect(void)
 {
-  DDEDeleteConnection((HCONV) hConv);
-  return (DdeDisconnect((HCONV) hConv) != 0);
+  DDEDeleteConnection((HCONV) m_hConv);
+  return (DdeDisconnect((HCONV) m_hConv) != 0);
 }
 
-bool wxDDEConnection::Execute(char *data, int size, int format)
+bool wxDDEConnection::Execute(char *data, int size, wxDataFormat format)
 {
   DWORD result;
   if (size < 0)
@@ -428,31 +428,31 @@ bool wxDDEConnection::Execute(char *data, int size, int format)
 
   size ++;
 
-  return (DdeClientTransaction((LPBYTE)data, size, (HCONV) hConv,
+  return (DdeClientTransaction((LPBYTE)data, size, (HCONV) m_hConv,
     NULL, format, XTYP_EXECUTE, 5000, &result) ? TRUE : FALSE);
 }
 
-char *wxDDEConnection::Request(const wxString& item, int *size, int format)
+char *wxDDEConnection::Request(const wxString& item, int *size, wxDataFormat format)
 {
   DWORD result;
   HSZ atom = DDEGetAtom(item);
 
-  HDDEDATA returned_data = DdeClientTransaction(NULL, 0, (HCONV) hConv,
+  HDDEDATA returned_data = DdeClientTransaction(NULL, 0, (HCONV) m_hConv,
     atom, format, XTYP_REQUEST, 5000, &result);
 
-  DWORD len = DdeGetData(returned_data, (LPBYTE)(buf_ptr), buf_size, 0);
+  DWORD len = DdeGetData(returned_data, (LPBYTE)(m_bufPtr), m_bufSize, 0);
 
   DdeFreeDataHandle(returned_data);
 
   if (size) *size = (int)len;
   if (len > 0)
   {
-    return buf_ptr;
+    return m_bufPtr;
   }
   else return NULL;
 }
 
-bool wxDDEConnection::Poke(const wxString& item, char *data, int size, int format)
+bool wxDDEConnection::Poke(const wxString& item, char *data, int size, wxDataFormat format)
 {
   DWORD result;
   if (size < 0)
@@ -461,7 +461,7 @@ bool wxDDEConnection::Poke(const wxString& item, char *data, int size, int forma
   size ++;
 
   HSZ item_atom = DDEGetAtom(item);
-  return (DdeClientTransaction((LPBYTE)data, size, (HCONV) hConv,
+  return (DdeClientTransaction((LPBYTE)data, size, (HCONV) m_hConv,
     item_atom, format, XTYP_POKE, 5000, &result) ? TRUE : FALSE);
 }
 
@@ -470,7 +470,7 @@ bool wxDDEConnection::StartAdvise(const wxString& item)
   DWORD result;
   HSZ atom = DDEGetAtom(item);
 
-  return (DdeClientTransaction(NULL, 0, (HCONV) hConv,
+  return (DdeClientTransaction(NULL, 0, (HCONV) m_hConv,
     atom, CF_TEXT, XTYP_ADVSTART, 5000, &result) ? TRUE : FALSE);
 }
 
@@ -479,12 +479,12 @@ bool wxDDEConnection::StopAdvise(const wxString& item)
   DWORD result;
   HSZ atom = DDEGetAtom(item);
 
-  return (DdeClientTransaction(NULL, 0, (HCONV) hConv,
+  return (DdeClientTransaction(NULL, 0, (HCONV) m_hConv,
     atom, CF_TEXT, XTYP_ADVSTOP, 5000, &result) ? TRUE : FALSE);
 }
 
 // Calls that SERVER can make
-bool wxDDEConnection::Advise(const wxString& item, char *data, int size, int format)
+bool wxDDEConnection::Advise(const wxString& item, char *data, int size, wxDataFormat format)
 {
   if (size < 0)
     size = strlen(data);
@@ -492,10 +492,10 @@ bool wxDDEConnection::Advise(const wxString& item, char *data, int size, int for
   size ++;
 
   HSZ item_atom = DDEGetAtom(item);
-  HSZ topic_atom = DDEGetAtom(topic_name);
-  sending_data = data;
-  data_size = size;
-  data_type = format;
+  HSZ topic_atom = DDEGetAtom(m_topicName);
+  m_sendingData = data;
+  m_dataSize = size;
+  m_dataType = format;
   return (DdePostAdvise(DDEIdInst, topic_atom, item_atom) != 0);
 }
 
@@ -535,10 +535,10 @@ DWORD /* lData2 */)
           (wxDDEConnection*) server->OnAcceptConnection(wxString(topic_buf));
         if (connection)
         {
-          connection->server = server;
+          connection->m_server = server;
           server->GetConnections().Append(connection);
-          connection->hConv = 0;
-          connection->topic_name = topic_buf;
+          connection->m_hConv = 0;
+          connection->m_topicName = topic_buf;
           DDECurrentlyConnecting = connection;
           return (DDERETURN)TRUE;
         }
@@ -551,7 +551,7 @@ DWORD /* lData2 */)
     {
       if (DDECurrentlyConnecting)
       {
-        DDECurrentlyConnecting->hConv = (WXHCONV) hConv;
+        DDECurrentlyConnecting->m_hConv = (WXHCONV) hConv;
         DDECurrentlyConnecting = NULL;
         return (DDERETURN)TRUE;
       }
@@ -577,9 +577,9 @@ DWORD /* lData2 */)
 
       if (connection)
       {
-        DWORD len = DdeGetData(hData, (LPBYTE)(connection->buf_ptr), connection->buf_size, 0);
+        DWORD len = DdeGetData(hData, (LPBYTE)(connection->m_bufPtr), connection->m_bufSize, 0);
         DdeFreeDataHandle(hData);
-        if (connection->OnExecute(connection->topic_name, connection->buf_ptr, (int)len, wFmt))
+        if (connection->OnExecute(connection->m_topicName, connection->m_bufPtr, (int)len, (wxDataFormat) wFmt))
           return (DDERETURN)DDE_FACK;
         else
           return (DDERETURN)DDE_FNOTPROCESSED;
@@ -598,7 +598,7 @@ DWORD /* lData2 */)
                      CP_WINANSI);
 
         int user_size = -1;
-        char *data = connection->OnRequest(connection->topic_name, wxString(item_name), &user_size, wFmt);
+        char *data = connection->OnRequest(connection->m_topicName, wxString(item_name), &user_size, (wxDataFormat) wFmt);
         if (data)
         {
           if (user_size < 0) user_size = strlen(data);
@@ -620,9 +620,9 @@ DWORD /* lData2 */)
         char item_name[200];
         DdeQueryString(DDEIdInst, hsz2, (LPSTR)item_name, sizeof(item_name),
                      CP_WINANSI);
-        DWORD len = DdeGetData(hData, (LPBYTE)(connection->buf_ptr), connection->buf_size, 0);
+        DWORD len = DdeGetData(hData, (LPBYTE)(connection->m_bufPtr), connection->m_bufSize, 0);
         DdeFreeDataHandle(hData);
-        connection->OnPoke(connection->topic_name, wxString(item_name), connection->buf_ptr, (int)len, wFmt);
+        connection->OnPoke(connection->m_topicName, wxString(item_name), connection->m_bufPtr, (int)len, (wxDataFormat) wFmt);
         return (DDERETURN)DDE_FACK;
       } else return (DDERETURN)DDE_FNOTPROCESSED;
       break;
@@ -638,7 +638,7 @@ DWORD /* lData2 */)
         DdeQueryString(DDEIdInst, hsz2, (LPSTR)item_name, sizeof(item_name),
                      CP_WINANSI);
 
-        return (DDERETURN)connection->OnStartAdvise(connection->topic_name, wxString(item_name));
+        return (DDERETURN)connection->OnStartAdvise(connection->m_topicName, wxString(item_name));
       } else return (DDERETURN)0;
       break;
     }
@@ -652,7 +652,7 @@ DWORD /* lData2 */)
         char item_name[200];
         DdeQueryString(DDEIdInst, hsz2, (LPSTR)item_name, sizeof(item_name),
                      CP_WINANSI);
-        return (DDERETURN)connection->OnStopAdvise(connection->topic_name, wxString(item_name));
+        return (DDERETURN)connection->OnStopAdvise(connection->m_topicName, wxString(item_name));
       } else return (DDERETURN)0;
       break;
     }
@@ -661,12 +661,12 @@ DWORD /* lData2 */)
     {
       wxDDEConnection *connection = DDEFindConnection(hConv);
 
-      if (connection && connection->sending_data)
+      if (connection && connection->m_sendingData)
       {
         HDDEDATA data = DdeCreateDataHandle(DDEIdInst,
-                          (LPBYTE)connection->sending_data,
-                          connection->data_size, 0, hsz2, connection->data_type, 0);
-        connection->sending_data = NULL;
+                          (LPBYTE)connection->m_sendingData,
+                          connection->m_dataSize, 0, hsz2, connection->m_dataType, 0);
+        connection->m_sendingData = NULL;
         return (DDERETURN)data;
       } else return (DDERETURN)NULL;
       break;
@@ -682,9 +682,9 @@ DWORD /* lData2 */)
         DdeQueryString(DDEIdInst, hsz2, (LPSTR)item_name, sizeof(item_name),
                      CP_WINANSI);
 
-        DWORD len = DdeGetData(hData, (LPBYTE)(connection->buf_ptr), connection->buf_size, 0);
+        DWORD len = DdeGetData(hData, (LPBYTE)(connection->m_bufPtr), connection->m_bufSize, 0);
         DdeFreeDataHandle(hData);
-        if (connection->OnAdvise(connection->topic_name, wxString(item_name), connection->buf_ptr, (int)len, wFmt))
+        if (connection->OnAdvise(connection->m_topicName, wxString(item_name), connection->m_bufPtr, (int)len, (wxDataFormat) wFmt))
           return (DDERETURN)DDE_FACK;
         else
           return (DDERETURN)DDE_FNOTPROCESSED;

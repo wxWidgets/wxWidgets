@@ -48,50 +48,51 @@ class WXDLLEXPORT wxDDEClient;
 class WXDLLEXPORT wxDDEConnection: public wxConnectionBase
 {
   DECLARE_DYNAMIC_CLASS(wxDDEConnection)
- public:
-  char *buf_ptr;
-  wxString topic_name;
-  int buf_size;
-  wxDDEServer *server;
-  wxDDEClient *client;
-
-  WXHCONV hConv;
-  char *sending_data;
-  int data_size;
-  int data_type;
-
+public:
   wxDDEConnection(char *buffer, int size);
   wxDDEConnection(void);
   ~wxDDEConnection(void);
 
   // Calls that CLIENT can make
-  virtual bool Execute(char *data, int size = -1, int format = wxCF_TEXT);
-  virtual bool Execute(const wxString& str) { return Execute((char *)(const char *)str, -1, wxCF_TEXT); }
-  virtual char *Request(const wxString& item, int *size = NULL, int format = wxCF_TEXT);
-  virtual bool Poke(const wxString& item, char *data, int size = -1, int format = wxCF_TEXT);
+  virtual bool Execute(char *data, int size = -1, wxDataFormat format = wxDF_TEXT);
+  virtual bool Execute(const wxString& str) { return Execute((char *)(const char *)str, -1, wxDF_TEXT); }
+  virtual char *Request(const wxString& item, int *size = NULL, wxDataFormat format = wxDF_TEXT);
+  virtual bool Poke(const wxString& item, char *data, int size = -1, wxDataFormat format = wxDF_TEXT);
   virtual bool StartAdvise(const wxString& item);
   virtual bool StopAdvise(const wxString& item);
 
   // Calls that SERVER can make
-  virtual bool Advise(const wxString& item, char *data, int size = -1, int format = wxCF_TEXT);
+  virtual bool Advise(const wxString& item, char *data, int size = -1, wxDataFormat format = wxDF_TEXT);
 
   // Calls that both can make
   virtual bool Disconnect(void);
 
   // Callbacks to SERVER - override at will
-  virtual bool OnExecute(const wxString& topic, char *data, int size, int format) { return FALSE; };
-  virtual char *OnRequest(const wxString& topic, const wxString& item, int *size, int format) { return NULL; };
-  virtual bool OnPoke(const wxString& topic, const wxString& item, char *data, int size, int format) { return FALSE; };
+  virtual bool OnExecute(const wxString& topic, char *data, int size, wxDataFormat format) { return FALSE; };
+  virtual char *OnRequest(const wxString& topic, const wxString& item, int *size, wxDataFormat format) { return NULL; };
+  virtual bool OnPoke(const wxString& topic, const wxString& item, char *data, int size, wxDataFormat format) { return FALSE; };
   virtual bool OnStartAdvise(const wxString& topic, const wxString& item) { return FALSE; };
   virtual bool OnStopAdvise(const wxString& topic, const wxString& item) { return FALSE; };
 
   // Callbacks to CLIENT - override at will
-  virtual bool OnAdvise(const wxString& topic, const wxString& item, char *data, int size, int format) { return FALSE; };
+  virtual bool OnAdvise(const wxString& topic, const wxString& item, char *data, int size, wxDataFormat format) { return FALSE; };
 
   // Callbacks to BOTH
 
   // Default behaviour is to delete connection and return TRUE
   virtual bool OnDisconnect(void);
+
+ public:
+  char*         m_bufPtr;
+  wxString      m_topicName;
+  int           m_bufSize;
+  wxDDEServer*  m_server;
+  wxDDEClient*  m_client;
+
+  WXHCONV       m_hConv;
+  char*         m_sendingData;
+  int           m_dataSize;
+  wxDataFormat  m_dataType;
 };
 
 class WXDLLEXPORT wxDDEServer: public wxServerBase
@@ -111,13 +112,13 @@ class WXDLLEXPORT wxDDEServer: public wxServerBase
   // Find/delete wxDDEConnection corresponding to the HCONV
   wxDDEConnection *FindConnection(WXHCONV conv);
   bool DeleteConnection(WXHCONV conv);
-  inline wxString& GetServiceName(void) const { return (wxString&) service_name; }
-  inline wxList& GetConnections(void) const { return (wxList&) connections; }
+  inline wxString& GetServiceName(void) const { return (wxString&) m_serviceName; }
+  inline wxList& GetConnections(void) const { return (wxList&) m_connections; }
 
  protected:
-  int lastError;
-  wxString service_name;
-  wxList connections;
+  int       m_lastError;
+  wxString  m_serviceName;
+  wxList    m_connections;
 };
 
 class WXDLLEXPORT wxDDEClient: public wxClientBase
@@ -138,11 +139,11 @@ class WXDLLEXPORT wxDDEClient: public wxClientBase
   // Find/delete wxDDEConnection corresponding to the HCONV
   wxDDEConnection *FindConnection(WXHCONV conv);
   bool DeleteConnection(WXHCONV conv);
-  inline wxList& GetConnections(void) const { return (wxList&) connections; }
+  inline wxList& GetConnections(void) const { return (wxList&) m_connections; }
 
  protected:
-  int lastError;
-  wxList connections;
+  int       m_lastError;
+  wxList    m_connections;
 };
 
 void WXDLLEXPORT wxDDEInitialize();
