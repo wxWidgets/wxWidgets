@@ -2102,12 +2102,21 @@ IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxWindowDC)
 wxClientDC::wxClientDC( wxWindow *win )
           : wxWindowDC( win )
 {
+    wxCHECK_RET( win, _T("NULL window in wxClientDC::wxClientDC") );
+
 #ifdef __WXUNIVERSAL__
     wxPoint ptOrigin = win->GetClientAreaOrigin();
     SetDeviceOrigin(ptOrigin.x, ptOrigin.y);
     wxSize size = win->GetClientSize();
     SetClippingRegion(wxPoint(0, 0), size);
 #endif // __WXUNIVERSAL__
+}
+
+void wxClientDC::DoGetSize(int *width, int *height) const
+{
+    wxCHECK_RET( m_owner, _T("GetSize() doesn't work without window") );
+
+    m_owner->GetClientSize( width, height );
 }
 
 // ----------------------------------------------------------------------------
