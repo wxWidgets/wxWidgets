@@ -21,7 +21,7 @@
     #define wxUSE_FS_INET 0
 #endif
 
-#if (wxUSE_FS_INET || wxUSE_FS_ZIP) && wxUSE_STREAMS
+#if (wxUSE_HTML || wxUSE_FS_INET || wxUSE_FS_ZIP) && wxUSE_STREAMS
 
 #include "wx/wfstream.h"
 #include "wx/module.h"

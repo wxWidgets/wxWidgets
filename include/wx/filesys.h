@@ -16,7 +16,7 @@
 
 #include "wx/setup.h"
 
-#if (wxUSE_FS_INET || wxUSE_FS_ZIP) && wxUSE_STREAMS
+#if (wxUSE_HTML || wxUSE_FS_INET || wxUSE_FS_ZIP) && wxUSE_STREAMS
 
 #include "wx/stream.h"
 #include "wx/mimetype.h"
@@ -125,9 +125,9 @@ class WXDLLEXPORT wxFileSystemHandler : public wxObject
 
     public:
         static void CleanUpStatics();
-	        // deletes static members (m_MimeMng). It can be called
-		// as many times as you wish because m_MimeMng is created
-		// on demand
+            // deletes static members (m_MimeMng). It can be called
+        // as many times as you wish because m_MimeMng is created
+        // on demand
 
     private:
         static wxMimeTypesManager *m_MimeMng;
@@ -159,7 +159,7 @@ class WXDLLEXPORT wxFileSystem : public wxObject
                 // file contained in this directory
                 // (so ChangePathTo("dir/subdir/xh.htm") sets m_Path to "dir/subdir/")
 
-	    wxString GetPath() const {return m_Path;}
+        wxString GetPath() const {return m_Path;}
 
         wxFSFile* OpenFile(const wxString& location);
                 // opens given file and returns pointer to input stream.
