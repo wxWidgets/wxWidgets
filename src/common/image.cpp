@@ -493,6 +493,7 @@ bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream )
     //     method is to use goto (setjmp is not really C++ dtors friendly...)
     
     unsigned char **lines = (unsigned char **) NULL;
+    unsigned int i;
     png_infop info_ptr = (png_infop) NULL;
     
     image->Destroy();
@@ -540,7 +541,7 @@ bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream )
     if (lines == NULL)
         goto error;
 
-    for (unsigned int i = 0; i < height; i++)
+    for (i = 0; i < height; i++)
     {
         if ((lines[i] = (unsigned char *)malloc(width * (sizeof(unsigned char) * 4))) == NULL)
         {
