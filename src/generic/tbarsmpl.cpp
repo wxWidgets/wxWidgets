@@ -83,7 +83,7 @@ public:
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxToolBarSimple, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxToolBarSimple, wxToolBarBase)
 
 BEGIN_EVENT_TABLE(wxToolBarSimple, wxToolBarBase)
     EVT_SIZE(wxToolBarSimple::OnSize)

@@ -53,6 +53,8 @@
     END_EVENT_TABLE()
 #endif
 
+IMPLEMENT_CLASS(wxToolBarBase, wxControl)
+
 #include "wx/listimpl.cpp"
 
 WX_DEFINE_LIST(wxToolBarToolsList);

@@ -467,6 +467,7 @@ protected:
 
 private:
     DECLARE_EVENT_TABLE()
+    DECLARE_CLASS(wxToolBarBase)
 };
 
 #endif
