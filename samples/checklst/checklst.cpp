@@ -10,23 +10,26 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-//#pragma implementation
+    //#pragma implementation
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-  #include "wx/wx.h"
+#include "wx/wx.h"
 #endif
 
 #ifdef __WXMSW__
-#include  "wx/ownerdrw.h"
+    #include  "wx/ownerdrw.h"
 #endif
+
+#include  "wx/log.h"
+
 #include  "wx/menuitem.h"
 #include  "wx/checklst.h"
 
@@ -34,43 +37,53 @@
 class CheckListBoxApp: public wxApp
 {
 public:
-  bool OnInit();
+    bool OnInit();
 };
 
 // Define a new frame type
 class CheckListBoxFrame : public wxFrame
 {
 public:
-  // ctor & dtor
-  CheckListBoxFrame(wxFrame *frame, char *title, int x, int y, int w, int h);
-  ~CheckListBoxFrame();
+    // ctor & dtor
+    CheckListBoxFrame(wxFrame *frame, const char *title,
+            int x, int y, int w, int h);
+    ~CheckListBoxFrame();
 
-  // notifications
-  void OnQuit             (wxCommandEvent& event);
-  void OnAbout            (wxCommandEvent& event);
-  void OnListboxSelect    (wxCommandEvent& event);
-  void OnCheckboxToggle   (wxCommandEvent& event);
-  void OnListboxDblClick  (wxCommandEvent& event);
-  bool OnClose            ()                        { return TRUE; }
-
-  DECLARE_EVENT_TABLE()
+    // notifications
+    void OnQuit           (wxCommandEvent& event);
+    void OnAbout          (wxCommandEvent& event);
+    void OnListboxSelect  (wxCommandEvent& event);
+    void OnCheckboxToggle (wxCommandEvent& event);
+    void OnListboxDblClick(wxCommandEvent& event);
+    void OnButtonUp       (wxCommandEvent& event);
+    void OnButtonDown     (wxCommandEvent& event);
 
 private:
-  wxCheckListBox *m_pListBox;
+    void OnButtonMove(bool up);
+
+    wxCheckListBox *m_pListBox;
+
+    DECLARE_EVENT_TABLE()
 };
 
 enum
 {
-  Menu_Quit = 1,
-  Control_First = 1000,
-  Control_Listbox, Control_Listbox2,
+    Menu_Quit = 1,
+    Control_First = 1000,
+    Control_Listbox,
+    Btn_Up,
+    Btn_Down
 };
 
 BEGIN_EVENT_TABLE(CheckListBoxFrame, wxFrame)
-  EVT_MENU(Menu_Quit, CheckListBoxFrame::OnQuit)
-  EVT_LISTBOX(Control_Listbox, CheckListBoxFrame::OnListboxSelect)
-  EVT_CHECKLISTBOX(Control_Listbox, CheckListBoxFrame::OnCheckboxToggle)
-  EVT_LISTBOX_DCLICK(Control_Listbox, CheckListBoxFrame::OnListboxDblClick)
+    EVT_MENU(Menu_Quit, CheckListBoxFrame::OnQuit)
+
+    EVT_LISTBOX(Control_Listbox, CheckListBoxFrame::OnListboxSelect)
+    EVT_CHECKLISTBOX(Control_Listbox, CheckListBoxFrame::OnCheckboxToggle)
+    EVT_LISTBOX_DCLICK(Control_Listbox, CheckListBoxFrame::OnListboxDblClick)
+
+    EVT_BUTTON(Btn_Up, CheckListBoxFrame::OnButtonUp)
+    EVT_BUTTON(Btn_Down, CheckListBoxFrame::OnButtonDown)
 END_EVENT_TABLE()
 
 IMPLEMENT_APP(CheckListBoxApp);
@@ -78,69 +91,86 @@ IMPLEMENT_APP(CheckListBoxApp);
 // init our app: create windows
 bool CheckListBoxApp::OnInit(void)
 {
-  CheckListBoxFrame *pFrame = new CheckListBoxFrame(NULL, "wxWindows Ownerdraw Sample",
-                                                50, 50, 450, 320);
-  SetTopWindow(pFrame);
+    CheckListBoxFrame *pFrame = new CheckListBoxFrame
+                                    (
+                                     NULL,
+                                     "wxWindows Checklistbox Sample",
+                                     50, 50, 480, 320
+                                    );
+    SetTopWindow(pFrame);
 
-  return TRUE;
+    return TRUE;
 }
 
 // main frame constructor
-CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
-         : wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
+CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame,
+        const char *title,
+        int x, int y, int w, int h)
+: wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
 {
-  // create the status line
-  const int widths[] = { -1, 60 };
-  CreateStatusBar(2);
-  SetStatusWidths(2, widths);
-  SetStatusText("no selection", 0);
+    // create the status line
+    const int widths[] = { -1, 60 };
+    CreateStatusBar(2);
+    SetStatusWidths(2, widths);
+    wxLogStatus(this, "no selection");
 
-  // Make a menubar
-  wxMenu *file_menu = new wxMenu;
+    // Make a menubar
+    wxMenu *file_menu = new wxMenu;
 
-  // construct submenu
-  file_menu->Append(Menu_Quit, "E&xit");
+    // construct submenu
+    file_menu->Append(Menu_Quit, "E&xit");
 
-  wxMenuBar *menu_bar = new wxMenuBar;
-  menu_bar->Append(file_menu, "&File");
-  SetMenuBar(menu_bar);
+    wxMenuBar *menu_bar = new wxMenuBar;
+    menu_bar->Append(file_menu, "&File");
+    SetMenuBar(menu_bar);
 
-  // make a panel with some controls
-  wxPanel *pPanel = new wxPanel(this, -1, wxPoint(0, 0),
-                                wxSize(400, 200), wxTAB_TRAVERSAL);
+    // make a panel with some controls
+    wxPanel *panel = new wxPanel(this, -1, wxPoint(0, 0),
+                                 wxSize(400, 200), wxTAB_TRAVERSAL);
 
-  // check list box
-  static const char* aszChoices[] = { "Hello", "world", "and",
-                                      "goodbye", "cruel", "world",
-                                      "-------", "owner-drawn", "listbox" };
+    // check list box
+    static const char* aszChoices[] =
+    {
+        "Zeroth",
+        "First", "Second", "Third",
+        "Fourth", "Fifth", "Sixth",
+        "Seventh", "Eighth", "Nineth"
+    };
 
-  wxString *astrChoices = new wxString[WXSIZEOF(aszChoices)];
-  unsigned int ui;
-  for ( ui = 0; ui < WXSIZEOF(aszChoices); ui++ )
-    astrChoices[ui] = aszChoices[ui];
+    wxString *astrChoices = new wxString[WXSIZEOF(aszChoices)];
+    unsigned int ui;
+    for ( ui = 0; ui < WXSIZEOF(aszChoices); ui++ )
+        astrChoices[ui] = aszChoices[ui];
 
-  m_pListBox = new wxCheckListBox
-                   (
-                     pPanel,             // parent
-                     Control_Listbox,    // control id
-                     wxPoint(10, 10),    // listbox poistion
-                     wxSize(400, 200),   // listbox size
-                     WXSIZEOF(aszChoices), // number of strings
-                     astrChoices         // array of strings
-                   );
+    m_pListBox = new wxCheckListBox
+        (
+         panel,                 // parent
+         Control_Listbox,       // control id
+         wxPoint(10, 10),       // listbox poistion
+         wxSize(400, 200),      // listbox size
+         WXSIZEOF(aszChoices),  // number of strings
+         astrChoices            // array of strings
+        );
 
-  delete [] astrChoices;
+    //m_pListBox->SetBackgroundColour(*wxGREEN);
 
-  // not implemented in wxGTK yet
+    delete [] astrChoices;
+
+    // not implemented in wxGTK yet
 #ifndef __WXGTK__
-  for ( ui = 0; ui < WXSIZEOF(aszChoices); ui += 2 ) {
-    m_pListBox->GetItem(ui)->SetBackgroundColour(wxColor(200, 200, 200));
-  }
+    // set grey background for every second entry
+    for ( ui = 0; ui < WXSIZEOF(aszChoices); ui += 2 ) {
+        m_pListBox->GetItem(ui)->SetBackgroundColour(wxColor(200, 200, 200));
+    }
 #endif // wxGTK
 
-  m_pListBox->Check(2);
+    m_pListBox->Check(2);
 
-  Show(TRUE);
+    // create buttons for moving the items around
+    (void)new wxButton(panel, Btn_Up, "   &Up  ", wxPoint(420, 90));
+    (void)new wxButton(panel, Btn_Down, "&Down", wxPoint(420, 120));
+
+    Show(TRUE);
 }
 
 CheckListBoxFrame::~CheckListBoxFrame()
@@ -149,39 +179,83 @@ CheckListBoxFrame::~CheckListBoxFrame()
 
 void CheckListBoxFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-  Close(TRUE);
+    Close(TRUE);
 }
 
 void CheckListBoxFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-  wxMessageDialog dialog(this, "Demo of wxCheckListBox control\n",
-                         "About wxCheckListBox", wxYES_NO | wxCANCEL);
-  dialog.ShowModal();
+    wxMessageBox("Demo of wxCheckListBox control\n"
+                 "© Vadim Zeitlin 1998-1999",
+                 "About wxCheckListBox",
+                 wxICON_INFORMATION, this);
 }
 
 void CheckListBoxFrame::OnListboxSelect(wxCommandEvent& event)
 {
-  wxString strSelection;
-  unsigned int nSel = event.GetSelection();
-  strSelection.sprintf("item %d selected (%schecked)", nSel,
-                       m_pListBox->IsChecked((int)nSel) ? "" : "not ");
-  SetStatusText(strSelection);
+    int nSel = event.GetSelection();
+    wxLogStatus(this, "item %d selected (%schecked)", nSel,
+                      m_pListBox->IsChecked(nSel) ? "" : "not ");
 }
 
 void CheckListBoxFrame::OnListboxDblClick(wxCommandEvent& WXUNUSED(event))
 {
-  wxString strSelection;
-  strSelection.sprintf("item %d double clicked", m_pListBox->GetSelection());
-  wxMessageDialog dialog(this, strSelection);
-  dialog.ShowModal();
+    wxString strSelection;
+    strSelection.sprintf("item %d double clicked", m_pListBox->GetSelection());
+    wxMessageDialog dialog(this, strSelection);
+    dialog.ShowModal();
 }
 
 void CheckListBoxFrame::OnCheckboxToggle(wxCommandEvent& event)
 {
-  wxString strSelection;
-  unsigned int nItem = event.GetInt();
+    unsigned int nItem = event.GetInt();
 
-  strSelection.sprintf("item %d was %schecked", nItem,
-                       m_pListBox->IsChecked(nItem) ? "" : "un");
-  SetStatusText(strSelection);
+    wxLogStatus(this, "item %d was %schecked", nItem,
+                      m_pListBox->IsChecked(nItem) ? "" : "un");
+}
+
+void CheckListBoxFrame::OnButtonUp(wxCommandEvent& WXUNUSED(event))
+{
+    OnButtonMove(TRUE);
+}
+
+void CheckListBoxFrame::OnButtonDown(wxCommandEvent& WXUNUSED(event))
+{
+    OnButtonMove(FALSE);
+}
+
+void CheckListBoxFrame::OnButtonMove(bool up)
+{
+    int selection = m_pListBox->GetSelection();
+    if ( selection != -1 )
+    {
+        wxString label = m_pListBox->GetString(selection);
+
+        int positionNew = up ? selection - 1 : selection + 2;
+        if ( positionNew < 0 || positionNew > m_pListBox->Number() )
+        {
+            wxLogStatus(this, "Can't move this item %s", up ? "up" : "down");
+        }
+        else
+        {
+            bool wasChecked = m_pListBox->IsChecked(selection);
+
+            int positionOld = up ? selection + 1 : selection;
+
+            // insert the item
+            m_pListBox->InsertItems(1, &label, positionNew);
+
+            // and delete the old one
+            m_pListBox->Delete(positionOld);
+
+            int selectionNew = up ? positionNew : positionNew - 1;
+            m_pListBox->Check(selectionNew, wasChecked);
+            m_pListBox->SetSelection(selectionNew);
+
+            wxLogStatus(this, "Item moved %s", up ? "up" : "down");
+        }
+    }
+    else
+    {
+        wxLogStatus(this, "Please select an item");
+    }
 }
