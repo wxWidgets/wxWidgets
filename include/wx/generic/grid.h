@@ -547,6 +547,7 @@ public:
 
     virtual void Reset();
     virtual void StartingClick();
+    virtual void StartingKey(wxKeyEvent& event);
 
     virtual wxGridCellEditor *Clone() const
         { return new wxGridCellBoolEditor; }
@@ -1929,6 +1930,7 @@ protected:
     void OnSize( wxSizeEvent& );
     void OnKeyDown( wxKeyEvent& );
     void OnKeyUp( wxKeyEvent& );
+    void OnChar( wxKeyEvent& );
     void OnEraseBackground( wxEraseEvent& );
 
 
