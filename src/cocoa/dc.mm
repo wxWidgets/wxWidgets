@@ -107,7 +107,11 @@ void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 
     NSRange glyphRange = [sm_cocoaNSLayoutManager glyphRangeForTextContainer:sm_cocoaNSTextContainer];
     NSRect usedRect = [sm_cocoaNSLayoutManager usedRectForTextContainer:sm_cocoaNSTextContainer];
-
+    // NOTE: We'll crash trying to get the location of glyphAtIndex:0 if
+    // there is no length or we don't start at zero
+    if(!glyphRange.length)
+        return;
+    wxASSERT_MSG(glyphRange.location==0,"glyphRange must begin at zero");
 
     NSAffineTransform *transform = [NSAffineTransform transform];
     [transform translateXBy:x yBy:y];
