@@ -63,11 +63,21 @@ class WXDLLEXPORT wxBitmapButton: public wxButton
   inline int GetMarginX() { return m_marginX; }
   inline int GetMarginY() { return m_marginY; }
 
+// Implementation
+  void DoSetBitmap();
+  virtual void ChangeBackgroundColour();
+
  protected:
-  wxBitmap m_buttonBitmap;
-  wxBitmap m_buttonBitmapSelected;
   wxBitmap m_buttonBitmapFocus;
+  wxBitmap m_buttonBitmap;
+  wxBitmap m_buttonBitmapOriginal; // May be different from m_buttonBitmap
+                                   // if m_buttonBitmap has been changed
+                                   // to reflect button background colour
+  wxBitmap m_buttonBitmapSelected;
+  wxBitmap m_buttonBitmapSelectedOriginal;
+
   wxBitmap m_buttonBitmapDisabled;
+  wxBitmap m_buttonBitmapDisabledOriginal;
 
   int      m_marginX;
   int      m_marginY;

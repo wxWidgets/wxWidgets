@@ -164,6 +164,8 @@ void wxChoice::Append(const wxString& item)
 #endif
 				      NULL);
 
+  DoChangeBackgroundColour((WXWidget) w, m_backgroundColour);
+
   if (m_windowFont.Ok())
     XtVaSetValues (w,
 		   XmNfontList, (XmFontList) m_windowFont.GetFontList(1.0, XtDisplay((Widget) m_formWidget)),
@@ -420,16 +422,45 @@ void wxChoiceCallback (Widget w, XtPointer clientData,
 
 void wxChoice::ChangeFont()
 {
-    // TODO
+    // Note that this causes the widget to be resized back
+    // to its original size! We therefore have to set the size
+    // back again. TODO: a better way in Motif?
+    if (m_windowFont.Ok())
+    {
+        int width, height, width1, height1;
+        GetSize(& width, & height);
+
+        XmFontList fontList = (XmFontList) m_windowFont.GetFontList(1.0, XtDisplay((Widget) m_mainWidget));
+        XtVaSetValues ((Widget) m_mainWidget, XmNfontList, fontList, NULL);
+        XtVaSetValues ((Widget) m_buttonWidget, XmNfontList, fontList, NULL);
+
+        int i;
+        for (i = 0; i < m_noStrings; i++)
+            XtVaSetValues ((Widget) m_widgetList[i], XmNfontList, fontList, NULL);
+        GetSize(& width1, & height1);
+        if (width != width1 || height != height1)
+        {
+            SetSize(-1, -1, width, height);
+        }
+    }
 }
 
 void wxChoice::ChangeBackgroundColour()
 {
-    // TODO
+    DoChangeBackgroundColour(m_formWidget, m_backgroundColour);
+    DoChangeBackgroundColour(m_buttonWidget, m_backgroundColour);
+    DoChangeBackgroundColour(m_menuWidget, m_backgroundColour);
+    int i;
+    for (i = 0; i < m_noStrings; i++)
+        DoChangeBackgroundColour(m_widgetList[i], m_backgroundColour);
 }
 
 void wxChoice::ChangeForegroundColour()
 {
-    // TODO
+    DoChangeForegroundColour(m_formWidget, m_foregroundColour);
+    DoChangeForegroundColour(m_buttonWidget, m_foregroundColour);
+    DoChangeForegroundColour(m_menuWidget, m_foregroundColour);
+    int i;
+    for (i = 0; i < m_noStrings; i++)
+        DoChangeForegroundColour(m_widgetList[i], m_foregroundColour);
 }
-

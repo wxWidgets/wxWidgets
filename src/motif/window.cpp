@@ -3024,8 +3024,6 @@ void wxWindow::ChangeForegroundColour()
 
 // Change a widget's foreground and background colours.
 
-// TODO: make this 2 functions, ChangeForegroundColour and ChangeBackgroundColour.
-
 void wxWindow::DoChangeForegroundColour(WXWidget widget, wxColour& foregroundColour)
 {
   // When should we specify the foreground, if it's calculated
@@ -3077,7 +3075,6 @@ void wxWindow::ChangeFont()
     // Note that this causes the widget to be resized back
     // to its original size! We therefore have to set the size
     // back again. TODO: a better way in Motif?
-    /*
     Widget w = (Widget) GetLabelWidget(); // Usually the main widget
     if (w && m_windowFont.Ok())
     {
@@ -3094,7 +3091,6 @@ void wxWindow::ChangeFont()
             SetSize(-1, -1, width, height);
         }
     }
-    */
 }
 
 void wxWindow::SetFont(const wxFont& font)

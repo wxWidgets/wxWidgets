@@ -52,12 +52,6 @@ public:
     virtual void ChangeFont();
     virtual void ChangeBackgroundColour();
     virtual void ChangeForegroundColour();
-    WXWidget GetTopWidget() const { return m_formWidget; }
-    WXWidget GetLabelWidget() const { return m_labelWidget; }
-
-private:
-    WXWidget    m_formWidget;
-    WXWidget    m_labelWidget;
 };
 
 // Not implemented

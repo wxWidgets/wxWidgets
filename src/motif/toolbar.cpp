@@ -40,8 +40,6 @@ static void wxToolButtonCallback (Widget w, XtPointer clientData,
 static void wxToolButtonPopupCallback (Widget w, XtPointer client_data,
                      XEvent *event, Boolean *continue_to_dispatch);
 
-wxBitmap wxCreateMaskedBitmap(wxBitmap& bitmap, wxColour& colour);
-
 class wxToolBarTimer: public wxTimer
 {
 public:
@@ -444,27 +442,6 @@ void wxToolButtonCallback (Widget w, XtPointer clientData,
         (void) toolBar->OnLeftClick(index, tool->m_toggleState);
     }
 
-}
-
-// Creates a bitmap with transparent areas drawn in
-// the given colour.
-wxBitmap wxCreateMaskedBitmap(wxBitmap& bitmap, wxColour& colour)
-{
-    wxBitmap newBitmap(bitmap.GetWidth(),
-                       bitmap.GetHeight(),
-                       bitmap.GetDepth());
-    wxMemoryDC destDC;
-    wxMemoryDC srcDC;
-    srcDC.SelectObject(bitmap);
-    destDC.SelectObject(newBitmap);
-
-    wxBrush brush(colour, wxSOLID);
-    destDC.SetOptimization(FALSE);
-    destDC.SetBackground(brush);
-    destDC.Clear();
-    destDC.Blit(0, 0, bitmap.GetWidth(), bitmap.GetHeight(), & srcDC, 0, 0, wxCOPY, TRUE);
-
-    return newBitmap;
 }
 
 

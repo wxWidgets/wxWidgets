@@ -153,16 +153,27 @@ void wxCheckBoxCallback (Widget w, XtPointer clientData,
 
 void wxCheckBox::ChangeFont()
 {
-    // TODO
+    wxWindow::ChangeFont();
 }
 
 void wxCheckBox::ChangeBackgroundColour()
 {
-    // TODO
+  wxComputeColours (XtDisplay((Widget) m_mainWidget), & m_backgroundColour,
+			    (wxColour*) NULL);
+
+  XtVaSetValues ((Widget) m_mainWidget,
+		   XmNbackground, g_itemColors[wxBACK_INDEX].pixel,
+		   XmNtopShadowColor, g_itemColors[wxTOPS_INDEX].pixel,
+		   XmNbottomShadowColor, g_itemColors[wxBOTS_INDEX].pixel,
+		   XmNforeground, g_itemColors[wxFORE_INDEX].pixel,
+		   NULL);
+
+  XtVaSetValues ((Widget) m_mainWidget,
+    		   XmNselectColor, g_itemColors[wxSELE_INDEX].pixel,
+               NULL);
 }
 
 void wxCheckBox::ChangeForegroundColour()
 {
-    // TODO
+    wxWindow::ChangeForegroundColour();
 }
-

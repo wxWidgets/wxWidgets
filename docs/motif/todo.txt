@@ -21,8 +21,16 @@ High Priority
   up a dialog, e.g. an About box. Widgets are arranged
   incorrectly. Seems to be OK for non-dialog panels, once the
   size has been restored after the font setting.
+  In fact it seems OK for dialogs now!!! Weird.
 
-- Colour setting in widgets.
+- ChangeFont should have an extra arg, to allow for not resizing
+  the window back to the original size after setting the font.
+  Also don't call SetFont from constructor, assign the font and
+  call ChangeFont so we can pass FALSE if the size has been passed
+  as the default (which means: wxWin should choose an appropriate
+  size, so Motif should expand/contract the widget as appropriate).
+
+- Colour setting in widgets (almost done).
 
 - Implementation of OnEraseBackground. How? Call OnEraseBackground
   just before OnPaint? Will duplicate Xlib's own erase of the background.
@@ -32,8 +40,6 @@ High Priority
   background, no flicker will be seen. If it does something else, such as
   painting a tiled bitmap, then a slight flicker might be seen unless
   X can be persuaded not to repaint the window background by default.
-
-- wxBitmapCheckBox, wxBitmapRadioButton
 
 - wxSpinButton
 
@@ -101,6 +107,8 @@ Low Priority
 
 - wxCheckBoxList
 
+- wxBitmapCheckBox, wxBitmapRadioButton
+
 - Reimplement combobox using Lesstif's widget (avoiding GPL'ed
   widget currently used).
 
@@ -115,3 +123,6 @@ Low Priority
 
 - Could eventually alter the MDI widgets to be more Windows-like
   -- currently it's half-hearted.
+
+- Accelerators
+

@@ -34,8 +34,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
 
 wxRadioButton::wxRadioButton()
 {
-    m_labelWidget = (WXWidget) 0;
-    m_formWidget = (WXWidget) 0;
 }
 
 bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
@@ -65,71 +63,28 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
 
     XmString text = XmStringCreateSimple ((char*) (const char*) label1);
 
-    Widget formWidget = XtVaCreateManagedWidget ((char*) (const char*) name,
-					xmFormWidgetClass, parentWidget,
-					XmNmarginHeight, 0,
-					XmNmarginWidth, 0,
-					NULL);
-
-    m_formWidget = (WXWidget) formWidget;
-
-    Widget labelWidget = XtVaCreateManagedWidget ((char*) (const char*) label1,
-#if wxUSE_GADGETS
-				        xmLabelGadgetClass,
-					    formWidget,
-#else
-					    xmLabelWidgetClass, formWidget,
-#endif
-					    XmNlabelString, text,
-					    NULL);
-    m_labelWidget = (WXWidget) labelWidget;
-/* TODO
-      if (labelFont)
-	XtVaSetValues (labelWidget,
-		       XmNfontList, labelFont->GetInternalFont (XtDisplay(formWidget)),
-		       NULL);
-*/
-
-    XmStringFree (text);
 
     Widget radioButtonWidget = XtVaCreateManagedWidget ("toggle",
 #if wxUSE_GADGETS
-                    xmToggleButtonGadgetClass, formWidget,
+                    xmToggleButtonGadgetClass, parentWidget,
 #else
-                    xmToggleButtonWidgetClass, formWidget,
+                    xmToggleButtonWidgetClass, parentWidget,
 #endif
+                    XmNlabelString, text,
+                    XmNfillOnSelect, True,
+                    XmNindicatorType, XmONE_OF_MANY, // diamond-shape
 						 NULL);
+    XmStringFree (text);
+
     XtAddCallback (radioButtonWidget, XmNvalueChangedCallback, (XtCallbackProc) wxRadioButtonCallback,
 		     (XtCallbackProc) this);
 
     m_mainWidget = (WXWidget) radioButtonWidget;
 
-/* TODO
-  if (labelFont)
-   XtVaSetValues (radioButtonWidget,
-                  XmNfontList, labelFont->GetInternalFont (XtDisplay(formWidget)),
-                  NULL);
-*/
-
-    if (labelWidget)
-	    XtVaSetValues (labelWidget,
-		       XmNtopAttachment, XmATTACH_FORM,
-		       XmNleftAttachment, XmATTACH_FORM,
-		       XmNbottomAttachment, XmATTACH_FORM,
-		       XmNalignment, XmALIGNMENT_BEGINNING,
-		       NULL);
-    XtVaSetValues (radioButtonWidget,
-		     XmNleftOffset, 4,
-		     XmNtopAttachment, XmATTACH_FORM,
-		     XmNbottomAttachment, XmATTACH_FORM,
-	   XmNleftAttachment, (Widget) m_labelWidget ? XmATTACH_WIDGET : XmATTACH_FORM,
-		     XmNleftWidget, (Widget) m_labelWidget ? (Widget) m_labelWidget : formWidget,
-		     NULL);
-
     XtManageChild (radioButtonWidget);
 
     SetCanAddEventHandler(TRUE);
-    AttachWidget (parent, m_mainWidget, m_formWidget, pos.x, pos.y, size.x, size.y);
+    AttachWidget (parent, m_mainWidget, NULL, pos.x, pos.y, size.x, size.y);
 
     SetFont(* parent->GetFont());
     ChangeBackgroundColour();
@@ -158,17 +113,17 @@ void wxRadioButton::Command (wxCommandEvent & event)
 
 void wxRadioButton::ChangeFont()
 {
-    // TODO
+    wxWindow::ChangeFont();
 }
 
 void wxRadioButton::ChangeBackgroundColour()
 {
-    // TODO
+    wxWindow::ChangeBackgroundColour();
 }
 
 void wxRadioButton::ChangeForegroundColour()
 {
-    // TODO
+    wxWindow::ChangeForegroundColour();
 }
 
 void wxRadioButtonCallback (Widget w, XtPointer clientData,

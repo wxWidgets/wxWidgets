@@ -183,16 +183,16 @@ void wxStaticBox::SetSize(int x, int y, int width, int height, int sizeFlags)
 
 void wxStaticBox::ChangeFont()
 {
-    // TODO
+    wxWindow::ChangeFont();
 }
 
 void wxStaticBox::ChangeBackgroundColour()
 {
-    // TODO
+    wxWindow::ChangeBackgroundColour();
 }
 
 void wxStaticBox::ChangeForegroundColour()
 {
-    // TODO
+    wxWindow::ChangeForegroundColour();
 }
 

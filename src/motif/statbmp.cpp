@@ -121,16 +121,16 @@ void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
 
 void wxStaticBitmap::ChangeFont()
 {
-    // TODO
+    wxWindow::ChangeFont();
 }
 
 void wxStaticBitmap::ChangeBackgroundColour()
 {
-    // TODO
+    wxWindow::ChangeBackgroundColour();
 }
 
 void wxStaticBitmap::ChangeForegroundColour()
 {
-    // TODO
+    wxWindow::ChangeForegroundColour();
 }
 

@@ -743,16 +743,16 @@ WXWidget wxListBox::GetTopWidget() const
 
 void wxListBox::ChangeFont()
 {
-    // TODO
+    wxWindow::ChangeFont();
 }
 
 void wxListBox::ChangeBackgroundColour()
 {
-    // TODO
+    wxWindow::ChangeBackgroundColour();
 }
 
 void wxListBox::ChangeForegroundColour()
 {
-    // TODO
+    wxWindow::ChangeForegroundColour();
 }
 

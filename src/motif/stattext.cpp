@@ -76,16 +76,16 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
 void wxStaticText::ChangeFont()
 {
-    // TODO
+    wxWindow::ChangeFont();
 }
 
 void wxStaticText::ChangeBackgroundColour()
 {
-    // TODO
+    wxWindow::ChangeBackgroundColour();
 }
 
 void wxStaticText::ChangeForegroundColour()
 {
-    // TODO
+    wxWindow::ChangeForegroundColour();
 }
 

@@ -137,16 +137,16 @@ void wxButtonCallback (Widget w, XtPointer clientData, XtPointer ptr)
 
 void wxButton::ChangeFont()
 {
-    // TODO
+    wxWindow::ChangeFont();
 }
 
 void wxButton::ChangeBackgroundColour()
 {
-    // TODO
+    DoChangeBackgroundColour(m_mainWidget, m_backgroundColour, TRUE);
 }
 
 void wxButton::ChangeForegroundColour()
 {
-    // TODO
+    wxWindow::ChangeForegroundColour();
 }
 

@@ -50,6 +50,11 @@ wxWave::wxWave(const wxString& sFileName, bool isResource)
   Create(sFileName, isResource);
 }
 
+wxWave::wxWave(int size, const byte* data)
+  : m_waveLength(0), m_isResource(FALSE), m_waveData(NULL)
+{
+  Create(size, data);
+}
 
 wxWave::~wxWave()
 {
@@ -101,6 +106,19 @@ bool wxWave::Create(const wxString& fileName, bool isResource)
 
     return TRUE;
   }
+}
+
+bool wxWave::Create(int size, const byte* data)
+{
+  Free();
+  m_isResource = FALSE;
+  m_waveLength=size;
+  m_waveData = (byte*)::GlobalLock(::GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, m_waveLength));
+  if (!m_waveData)
+     return FALSE;
+
+  for (int i=0; i<size; i++) m_waveData[i] = data[i];
+  return TRUE;
 }
 
 bool wxWave::Play(bool async, bool looped) const

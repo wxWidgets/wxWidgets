@@ -20,6 +20,7 @@
 #include "wx/icon.h"
 #include "wx/log.h"
 #include "wx/control.h"
+#include "wx/dcmemory.h"
 
 #include <Xm/Xm.h>
 
@@ -1003,3 +1004,23 @@ static
     return ipixmap;
 }
 
+// Creates a bitmap with transparent areas drawn in
+// the given colour.
+wxBitmap wxCreateMaskedBitmap(wxBitmap& bitmap, wxColour& colour)
+{
+    wxBitmap newBitmap(bitmap.GetWidth(),
+                       bitmap.GetHeight(),
+                       bitmap.GetDepth());
+    wxMemoryDC destDC;
+    wxMemoryDC srcDC;
+    srcDC.SelectObject(bitmap);
+    destDC.SelectObject(newBitmap);
+
+    wxBrush brush(colour, wxSOLID);
+    destDC.SetOptimization(FALSE);
+    destDC.SetBackground(brush);
+    destDC.Clear();
+    destDC.Blit(0, 0, bitmap.GetWidth(), bitmap.GetHeight(), & srcDC, 0, 0, wxCOPY, TRUE);
+
+    return newBitmap;
+}

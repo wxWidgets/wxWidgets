@@ -209,17 +209,18 @@ void  wxComboBoxCallback (Widget w, XtPointer clientData,
 
 void wxComboBox::ChangeFont()
 {
-    // TODO
+    // Don't use the base class wxChoice's ChangeFont
+    wxWindow::ChangeFont();
 }
 
 void wxComboBox::ChangeBackgroundColour()
 {
-    // TODO
+    wxWindow::ChangeBackgroundColour();
 }
 
 void wxComboBox::ChangeForegroundColour()
 {
-    // TODO
+    wxWindow::ChangeBackgroundColour();
 }
 
 #endif

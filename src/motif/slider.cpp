@@ -249,17 +249,17 @@ void wxSlider::Command (wxCommandEvent & event)
 
 void wxSlider::ChangeFont()
 {
-    // TODO
+    wxWindow::ChangeFont();
 }
 
 void wxSlider::ChangeBackgroundColour()
 {
-    // TODO
+    wxWindow::ChangeBackgroundColour();
 }
 
 void wxSlider::ChangeForegroundColour()
 {
-    // TODO
+    wxWindow::ChangeForegroundColour();
 }
 
 void wxSliderCallback (Widget widget, XtPointer clientData, XmScaleCallbackStruct * cbs)

@@ -190,17 +190,17 @@ int wxGauge::GetValue() const
 
 void wxGauge::ChangeFont()
 {
-    // TODO
+    wxWindow::ChangeFont();
 }
 
 void wxGauge::ChangeBackgroundColour()
 {
-    // TODO
+    wxWindow::ChangeBackgroundColour();
 }
 
 void wxGauge::ChangeForegroundColour()
 {
-    // TODO
+    wxWindow::ChangeForegroundColour();
 }
 
 //// PRIVATE DECLARATIONS FOR XMGAUGE

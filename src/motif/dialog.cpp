@@ -236,6 +236,7 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
        (XtPointer)this);
 
     ChangeBackgroundColour();
+    SetFont(* parent->GetFont());
 
     return TRUE;
 }

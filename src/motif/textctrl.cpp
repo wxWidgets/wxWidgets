@@ -638,17 +638,17 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 
 void wxTextCtrl::ChangeFont()
 {
-    // TODO
+    wxWindow::ChangeFont();
 }
 
 void wxTextCtrl::ChangeBackgroundColour()
 {
-    // TODO
+    wxWindow::ChangeBackgroundColour();
 }
 
 void wxTextCtrl::ChangeForegroundColour()
 {
-    // TODO
+    wxWindow::ChangeForegroundColour();
 }
 
 static void wxTextWindowChangedProc (Widget w, XtPointer clientData, XtPointer ptr)

@@ -203,5 +203,10 @@ public:
 protected:
   static wxList sm_handlers;
 };
+
+// Creates a bitmap with transparent areas drawn in
+// the given colour.
+wxBitmap wxCreateMaskedBitmap(wxBitmap& bitmap, wxColour& colour);
+
 #endif
   // _WX_BITMAP_H_
