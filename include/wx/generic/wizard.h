@@ -65,6 +65,7 @@ private:
     // event handlers
     void OnCancel(wxCommandEvent& event);
     void OnBackOrNext(wxCommandEvent& event);
+    void OnHelp(wxCommandEvent& event);
 
     // the page size requested by user
     wxSize m_sizePage;

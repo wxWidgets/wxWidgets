@@ -39,6 +39,7 @@ changed (this event can not be vetoed).}
 changed (this event can be vetoed).}
 \twocolitem{{\bf EVT\_WIZARD\_CANCEL(id, func)}}{The user attempted to cancel
 the wizard (this event may also be vetoed).}
+\twocolitem{{\bf EVT\_WIZARD\_HELP(id, func)}}{The wizard help button was pressed.}
 \end{twocollist}%
 
 \wxheading{See also}
@@ -63,4 +64,11 @@ EVT\_WIZARD\_PAGE\_CHANGING}, return {\tt TRUE} if we're going forward or
 FALSE otherwise and for {\tt EVT\_WIZARD\_PAGE\_CHANGED} return {\tt TRUE} if
 we came from the previous page and {\tt FALSE} if we returned from the next
 one.
+
+\membersection{wxWizardEvent::GetPage}\label{wxwizardeventgetpage}
+
+\constfunc{wxWizardPage}{GetPage}{\void}
+
+Returns the \helpref{wxWizardPage}{wxwizardpage} which was active when this
+event was generated.
 

@@ -169,7 +169,8 @@ class WXDLLEXPORT wxWizardEvent : public wxNotifyEvent
 public:
     wxWizardEvent(wxEventType type = wxEVT_NULL,
                   int id = -1,
-                  bool direction = TRUE);
+                  bool direction = TRUE,
+                  wxWizardPage* page = NULL);
 
     // for EVT_WIZARD_PAGE_CHANGING, return TRUE if we're going forward or
     // FALSE otherwise and for EVT_WIZARD_PAGE_CHANGED return TRUE if we came
@@ -177,8 +178,11 @@ public:
     // (this function doesn't make sense for CANCEL events)
     bool GetDirection() const { return m_direction; }
 
+    wxWizardPage*   GetPage() const { return m_page; }
+
 private:
     bool m_direction;
+    wxWizardPage*    m_page;
 
     DECLARE_DYNAMIC_CLASS(wxWizardEvent)
 };
@@ -191,6 +195,7 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_WIZARD_PAGE_CHANGED, 900)
     DECLARE_EVENT_TYPE(wxEVT_WIZARD_PAGE_CHANGING, 901)
     DECLARE_EVENT_TYPE(wxEVT_WIZARD_CANCEL, 902)
+    DECLARE_EVENT_TYPE(wxEVT_WIZARD_HELP, 903)
 END_DECLARE_EVENT_TYPES()
 
 typedef void (wxEvtHandler::*wxWizardEventFunction)(wxWizardEvent&);
@@ -205,6 +210,9 @@ typedef void (wxEvtHandler::*wxWizardEventFunction)(wxWizardEvent&);
 // the user pressed "Cancel" button and the wizard is going to be dismissed -
 // unless the event handler vetoes the event
 #define EVT_WIZARD_CANCEL(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_CANCEL, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxWizardEventFunction) & fn, (wxObject *)NULL),
+
+// the user pressed "Help" button 
+#define EVT_WIZARD_HELP(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_HELP, id, -1, (wxObjectEventFunction) (wxEventFunction) wxWizardEventFunction) & fn, (wxObject *)NULL),
 
 #endif // wxUSE_WIZARDDLG
 

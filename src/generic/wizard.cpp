@@ -57,10 +57,13 @@ WX_DEFINE_ARRAY(wxPanel *, wxArrayPages);
 DEFINE_EVENT_TYPE(wxEVT_WIZARD_PAGE_CHANGED)
 DEFINE_EVENT_TYPE(wxEVT_WIZARD_PAGE_CHANGING)
 DEFINE_EVENT_TYPE(wxEVT_WIZARD_CANCEL)
+DEFINE_EVENT_TYPE(wxEVT_WIZARD_HELP)
 
 BEGIN_EVENT_TABLE(wxWizard, wxDialog)
     EVT_BUTTON(wxID_CANCEL, wxWizard::OnCancel)
-    EVT_BUTTON(-1, wxWizard::OnBackOrNext)
+    EVT_BUTTON(wxID_BACKWARD, wxWizard::OnBackOrNext)
+    EVT_BUTTON(wxID_FORWARD, wxWizard::OnBackOrNext)
+    EVT_BUTTON(wxID_HELP, wxWizard::OnHelp)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxWizard, wxDialog)
@@ -410,6 +413,21 @@ void wxWizard::OnBackOrNext(wxCommandEvent& event)
     (void)ShowPage(page, forward);
 }
 
+void wxWizard::OnHelp(wxCommandEvent& WXUNUSED(event))
+{
+    // this function probably can never be called when we don't have an active
+    // page, but a small extra check won't hurt
+    if(m_page != NULL)
+    {
+        // Create and send the help event to the specific page handler
+        // event data contains the active page so that context-sensitive
+        // help is possible
+        wxWizardEvent eventHelp(wxEVT_WIZARD_HELP, GetId(), TRUE, m_page);
+        (void)m_page->GetEventHandler()->ProcessEvent(eventHelp);
+    }
+}
+
+
 // ----------------------------------------------------------------------------
 // our public interface
 // ----------------------------------------------------------------------------
@@ -429,10 +447,13 @@ wxWizard *wxWizardBase::Create(wxWindow *parent,
 // wxWizardEvent
 // ----------------------------------------------------------------------------
 
-wxWizardEvent::wxWizardEvent(wxEventType type, int id, bool direction)
+wxWizardEvent::wxWizardEvent(wxEventType type, int id, bool direction, wxWizardPage* page)
              : wxNotifyEvent(type, id)
 {
+    // Modified 10-20-2001 Robert Cavanaugh
+    // add the active page to the event data
     m_direction = direction;
+    m_page = page;
 }
 
 #endif // wxUSE_WIZARDDLG
