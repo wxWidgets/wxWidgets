@@ -1,4 +1,5 @@
-Mingw32-gcc295.patches
+build/msw/config.*
+build/msw/makefile.*
 
 lib/dummy
 lib/wx*.def
@@ -82,6 +83,11 @@ include/wx/msw/ole/*.h
 include/wx/msw/*.cur
 include/wx/msw/*.ico
 include/wx/msw/*.bmp
+
+samples/*.rc
+samples/*.xpm
+samples/*.ico
+samples/makefile*
 
 samples/ownerdrw/*.cpp
 samples/ownerdrw/*.h

@@ -23,8 +23,6 @@ contrib/src/mmedia/makefile*
 contrib/src/mmedia/README
 contrib/src/mmedia/*.h
 contrib/src/mmedia/*.cpp
-contrib/src/mmedia/MMediaVC.dsp
-contrib/src/mmedia/MMediaVC.dsw
 contrib/samples/mmedia/*.h
 contrib/samples/mmedia/*.cpp
 contrib/samples/mmedia/makefile*
@@ -34,6 +32,7 @@ contrib/samples/mmedia/*.ico
 contrib/samples/mmedia/*.txt
 contrib/samples/mmedia/*.rc
 contrib/samples/mmedia/*.def
-contrib/samples/mmedia/MMBoardVC.dsp
-contrib/samples/mmedia/MMBoardVC.dsw
+contrib/samples/mmedia/mmboard.dsp
+contrib/samples/mmedia/mmboard.dsw
+contrib/samples/mmedia/*.bkl
 

@@ -1,3 +1,6 @@
+build/msw/*.dsp
+build/msw/*.dsw
+
 src/wxWindows.dsp
 src/wxWindows.dsw
 src/wxUniv.dsp
@@ -19,6 +22,8 @@ src/png/png.dsw
 
 src/regex/regex.dsp
 src/regex/regex.dsw
+
+src/expat/expat.dsp
 
 samples/samples.dsw
 
@@ -194,6 +199,9 @@ samples/propsize/propsize.dsw
 samples/regtest/regtest.dsp
 samples/regtest/regtest.dsw
 
+samples/render/*.dsp
+samples/render/*.dsw
+
 samples/rotate/rotate.dsp
 samples/rotate/rotate.dsw
 
@@ -361,18 +369,8 @@ contrib/src/animate/AnimateVC.dsw
 contrib/samples/animate/AniTestVC.dsp
 contrib/samples/animate/AniTestVC.dsw
 
-contrib/src/fl/flVC.dsp
-contrib/src/fl/flVC.dsw
-contrib/samples/fl/fl_demo1/fl_demo.dsp
-contrib/samples/fl/fl_demo1/fl_demo.dsw
-contrib/samples/fl/fl_demo2/fl_demo.dsp
-contrib/samples/fl/fl_demo2/fl_demo.dsw
-contrib/samples/fl/fl_sample1/fl_demo.dsp
-contrib/samples/fl/fl_sample1/fl_demo.dsw
-contrib/samples/fl/fl_sample2/fl_demo.dsp
-contrib/samples/fl/fl_sample2/fl_demo.dsw
-contrib/samples/fl/fl_sample3/fl_demo.dsp
-contrib/samples/fl/fl_sample3/fl_demo.dsw
+contrib/samples/fl/*.dsp
+contrib/samples/fl/*.dsw
 
 contrib/src/net/NetVC.dsp
 contrib/src/net/NetVC.dsw

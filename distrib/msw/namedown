@@ -33,7 +33,7 @@ case $# in
       elif [ -d "${oldname}" ]; then
         mv "${oldname}" "${oldname}.bak" 
         mv "${oldname}.bak" "${newname:-${oldname}}"
-        echo "Directory ${oldname} converted to directory ${newname:-${oldname}}"
+#        echo "Directory ${oldname} converted to directory ${newname:-${oldname}}"
 #        echo /dev/null
 #Don't convert if the file does not exist
       elif [ ! -f "${oldname}" ]; then
@@ -43,12 +43,12 @@ case $# in
 #        echo "${oldname} not converted, file ${newname} already exists" 2>&1
 #Don't move to subdirectories if they happen to exist
       elif [ -d "${newname}" ]; then
-        echo "${oldname} not converted, directory ${newname} already exists" 2>&1
+#        echo "${oldname} not converted, directory ${newname} already exists" 2>&1
 #Do it
       else
         mv "${oldname}" "${oldname}.bak" 
         mv "${oldname}.bak" "${newname:-${oldname}}"
-        echo "File ${oldname} converted to file ${newname:-${oldname}}"
+#        echo "File ${oldname} converted to file ${newname:-${oldname}}"
       fi
    done
     ;;

@@ -53,6 +53,7 @@ samples/multimon/Makefile.in
 samples/notebook/Makefile.in
 samples/printing/Makefile.in
 samples/propsize/Makefile.in
+samples/render/Makefile.in
 samples/rotate/Makefile.in
 samples/sashtest/Makefile.in
 samples/scroll/Makefile.in
@@ -84,8 +85,6 @@ demos/fractal/Makefile.in
 demos/poem/Makefile.in
 demos/life/Makefile.in
 demos/dbbrowse/Makefile.in
-utils/dialoged/Makefile.in
-utils/dialoged/src/Makefile.in
 utils/tex2rtf/Makefile.in
 utils/tex2rtf/src/Makefile.in
 utils/makegen/Makefile.in
@@ -97,6 +96,8 @@ utils/emulator/Makefile.in
 utils/emulator/src/Makefile.in
 utils/helpview/Makefile.in
 utils/helpview/src/Makefile.in
+utils/configtool/Makefile.in
+utils/configtool/src/Makefile.in
 
 contrib/Makefile.in
 contrib/src/Makefile.in
@@ -131,15 +132,11 @@ contrib/samples/stc/Makefile.in
 contrib/samples/applet/Makefile.in
 contrib/samples/animate/Makefile.in
 contrib/samples/fl/Makefile.in
-contrib/samples/fl/fl_demo1/Makefile.in
-contrib/samples/fl/fl_demo2/Makefile.in
-contrib/samples/fl/fl_sample1/Makefile.in
-contrib/samples/fl/fl_sample2/Makefile.in
-contrib/samples/fl/fl_sample3/Makefile.in
 contrib/samples/svg/Makefile.in
 contrib/src/svg/Makefile.in
 
 contrib/src/deprecated/Makefile.in
+contrib/samples/deprecated/Makefile.in
 contrib/samples/deprecated/proplist/Makefile.in
 contrib/samples/deprecated/treelay/Makefile.in
 contrib/samples/deprecated/resource/Makefile.in

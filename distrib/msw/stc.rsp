@@ -26,8 +26,6 @@ contrib/src/stc/*.xpm
 contrib/src/stc/make*.*
 contrib/src/stc/*.ico
 contrib/src/stc/*.bmp
-contrib/src/stc/StcVC.dsp
-contrib/src/stc/StcVC.dsw
 contrib/src/stc/README.txt
 
 contrib/src/stc/scintilla/README.txt
@@ -49,6 +47,7 @@ contrib/samples/stc/*.ico
 contrib/samples/stc/*.bmp
 contrib/samples/stc/*.xpm
 contrib/samples/stc/*.wxr
-contrib/samples/stc/StcTestVC.dsp
-contrib/samples/stc/StcTestVC.dsw
+contrib/samples/stc/stctest.dsp
+contrib/samples/stc/stctest.dsw
+contrib/samples/stc/*.bkl
 
