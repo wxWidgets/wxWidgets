@@ -150,12 +150,12 @@ bool wxVariantDataList::Eq(wxVariantData& data) const
         wxVariant* var1 = (wxVariant*) node1->GetData();
         wxVariant* var2 = (wxVariant*) node2->GetData();
         if ((*var1) != (*var2))
-            return false;
+            return FALSE;
         node1 = node1->GetNext();
         node2 = node2->GetNext();
     }
-    if (node1 || node2) return false;
-    return true;
+    if (node1 || node2) return FALSE;
+    return TRUE;
 }
 
 #if wxUSE_STD_IOSTREAM
@@ -164,7 +164,7 @@ bool wxVariantDataList::Write(wxSTD ostream& str) const
     wxString s;
     Write(s);
     str << (const char*) s.mb_str();
-    return true;
+    return TRUE;
 }
 #endif
 
@@ -182,7 +182,7 @@ bool wxVariantDataList::Write(wxString& str) const
         node = node->GetNext();
     }
 
-    return true;
+    return TRUE;
 }
 
 #if wxUSE_STD_IOSTREAM
@@ -190,7 +190,7 @@ bool wxVariantDataList::Read(wxSTD istream& WXUNUSED(str))
 {
     wxFAIL_MSG(wxT("Unimplemented"));
     // TODO
-    return false;
+    return FALSE;
 }
 #endif
 
@@ -198,7 +198,7 @@ bool wxVariantDataList::Read(wxString& WXUNUSED(str))
 {
     wxFAIL_MSG(wxT("Unimplemented"));
     // TODO
-    return false;
+    return FALSE;
 }
 
 /*
@@ -259,12 +259,12 @@ bool wxVariantDataStringList::Eq(wxVariantData& data) const
         wxString str1 ( node1->GetData() );
         wxString str2 ( node2->GetData() );
         if (str1 != str2)
-            return false;
+            return FALSE;
         node1 = node1->GetNext();
         node2 = node2->GetNext();
     }
-    if (node1 || node2) return false;
-    return true;
+    if (node1 || node2) return FALSE;
+    return TRUE;
 }
 
 #if wxUSE_STD_IOSTREAM
@@ -273,7 +273,7 @@ bool wxVariantDataStringList::Write(wxSTD ostream& str) const
     wxString s;
     Write(s);
     str << (const char*) s.mb_str();
-    return true;
+    return TRUE;
 }
 #endif
 
@@ -290,7 +290,7 @@ bool wxVariantDataStringList::Write(wxString& str) const
         node = node->GetNext();
     }
 
-    return true;
+    return TRUE;
 }
 
 #if wxUSE_STD_IOSTREAM
@@ -298,7 +298,7 @@ bool wxVariantDataStringList::Read(wxSTD istream& WXUNUSED(str))
 {
     wxFAIL_MSG(wxT("Unimplemented"));
     // TODO
-    return false;
+    return FALSE;
 }
 #endif
 
@@ -306,7 +306,7 @@ bool wxVariantDataStringList::Read(wxString& WXUNUSED(str))
 {
     wxFAIL_MSG(wxT("Unimplemented"));
     // TODO
-    return false;
+    return FALSE;
 }
 
 /*
@@ -369,21 +369,21 @@ bool wxVariantDataLong::Write(wxSTD ostream& str) const
     wxString s;
     Write(s);
     str << (const char*) s.mb_str();
-    return true;
+    return TRUE;
 }
 #endif
 
 bool wxVariantDataLong::Write(wxString& str) const
 {
     str.Printf(wxT("%ld"), m_value);
-    return true;
+    return TRUE;
 }
 
 #if wxUSE_STD_IOSTREAM
 bool wxVariantDataLong::Read(wxSTD istream& str)
 {
     str >> m_value;
-    return true;
+    return TRUE;
 }
 #endif
 
@@ -393,21 +393,21 @@ bool wxVariantDataLong::Write(wxOutputStream& str) const
     wxTextOutputStream s(str);
 
     s.Write32((size_t)m_value);
-    return true;
+    return TRUE;
 }
 
 bool wxVariantDataLong::Read(wxInputStream& str)
 {
    wxTextInputStream s(str);
    m_value = s.Read32();
-   return true;
+   return TRUE;
 }
 #endif // wxUSE_STREAMS
 
 bool wxVariantDataLong::Read(wxString& str)
 {
     m_value = wxAtol((const wxChar*) str);
-    return true;
+    return TRUE;
 }
 
 /*
@@ -470,21 +470,21 @@ bool wxVariantDataReal::Write(wxSTD ostream& str) const
     wxString s;
     Write(s);
     str << (const char*) s.mb_str();
-    return true;
+    return TRUE;
 }
 #endif
 
 bool wxVariantDataReal::Write(wxString& str) const
 {
     str.Printf(wxT("%.4f"), m_value);
-    return true;
+    return TRUE;
 }
 
 #if wxUSE_STD_IOSTREAM
 bool wxVariantDataReal::Read(wxSTD istream& str)
 {
     str >> m_value;
-    return true;
+    return TRUE;
 }
 #endif
 
@@ -493,21 +493,21 @@ bool wxVariantDataReal::Write(wxOutputStream& str) const
 {
     wxTextOutputStream s(str);
     s.WriteDouble((double)m_value);
-    return true;
+    return TRUE;
 }
 
 bool wxVariantDataReal::Read(wxInputStream& str)
 {
     wxTextInputStream s(str);
     m_value = (float)s.ReadDouble();
-    return true;
+    return TRUE;
 }
 #endif // wxUSE_STREAMS
 
 bool wxVariantDataReal::Read(wxString& str)
 {
     m_value = wxAtof((const wxChar*) str);
-    return true;
+    return TRUE;
 }
 
 #ifdef HAVE_BOOL
@@ -571,14 +571,14 @@ bool wxVariantDataBool::Write(wxSTD ostream& str) const
     wxString s;
     Write(s);
     str << (const char*) s.mb_str();
-    return true;
+    return TRUE;
 }
 #endif
 
 bool wxVariantDataBool::Write(wxString& str) const
 {
     str.Printf(wxT("%d"), (int) m_value);
-    return true;
+    return TRUE;
 }
 
 #if wxUSE_STD_IOSTREAM
@@ -586,7 +586,7 @@ bool wxVariantDataBool::Read(wxSTD istream& WXUNUSED(str))
 {
     wxFAIL_MSG(wxT("Unimplemented"));
 //    str >> (long) m_value;
-    return false;
+    return FALSE;
 }
 #endif
 
@@ -596,7 +596,7 @@ bool wxVariantDataBool::Write(wxOutputStream& str) const
     wxTextOutputStream s(str);
 
     s.Write8(m_value);
-    return true;
+    return TRUE;
 }
 
 bool wxVariantDataBool::Read(wxInputStream& str)
@@ -604,14 +604,14 @@ bool wxVariantDataBool::Read(wxInputStream& str)
     wxTextInputStream s(str);
 
     m_value = s.Read8() != 0;
-    return true;
+    return TRUE;
 }
 #endif // wxUSE_STREAMS
 
 bool wxVariantDataBool::Read(wxString& str)
 {
     m_value = (wxAtol((const wxChar*) str) != 0);
-    return true;
+    return TRUE;
 }
 #endif // HAVE_BOOL
 
@@ -673,14 +673,14 @@ bool wxVariantDataChar::Write(wxSTD ostream& str) const
     wxString s;
     Write(s);
     str << (const char*) s.mb_str();
-    return true;
+    return TRUE;
 }
 #endif
 
 bool wxVariantDataChar::Write(wxString& str) const
 {
     str.Printf(wxT("%c"), m_value);
-    return true;
+    return TRUE;
 }
 
 #if wxUSE_STD_IOSTREAM
@@ -688,7 +688,7 @@ bool wxVariantDataChar::Read(wxSTD istream& WXUNUSED(str))
 {
     wxFAIL_MSG(wxT("Unimplemented"));
 //    str >> m_value;
-    return false;
+    return FALSE;
 }
 #endif
 
@@ -698,7 +698,7 @@ bool wxVariantDataChar::Write(wxOutputStream& str) const
     wxTextOutputStream s(str);
 
     s.Write8(m_value);
-    return true;
+    return TRUE;
 }
 
 bool wxVariantDataChar::Read(wxInputStream& str)
@@ -706,14 +706,14 @@ bool wxVariantDataChar::Read(wxInputStream& str)
     wxTextInputStream s(str);
 
     m_value = s.Read8();
-    return true;
+    return TRUE;
 }
 #endif // wxUSE_STREAMS
 
 bool wxVariantDataChar::Read(wxString& str)
 {
     m_value = str[(size_t)0];
-    return true;
+    return TRUE;
 }
 
 /*
@@ -781,21 +781,21 @@ bool wxVariantDataString::Eq(wxVariantData& data) const
 bool wxVariantDataString::Write(wxSTD ostream& str) const
 {
     str << (const char*) m_value.mb_str();
-    return true;
+    return TRUE;
 }
 #endif
 
 bool wxVariantDataString::Write(wxString& str) const
 {
     str = m_value;
-    return true;
+    return TRUE;
 }
 
 #if wxUSE_STD_IOSTREAM
 bool wxVariantDataString::Read(wxSTD istream& str)
 {
     str >> m_value;
-    return true;
+    return TRUE;
 }
 #endif
 
@@ -805,7 +805,7 @@ bool wxVariantDataString::Write(wxOutputStream& str) const
   // why doesn't wxOutputStream::operator<< take "const wxString&"
     wxTextOutputStream s(str);
     s.WriteString(m_value);
-    return true;
+    return TRUE;
 }
 
 bool wxVariantDataString::Read(wxInputStream& str)
@@ -813,14 +813,14 @@ bool wxVariantDataString::Read(wxInputStream& str)
     wxTextInputStream s(str);
 
     m_value = s.ReadString();
-    return true;
+    return TRUE;
 }
 #endif // wxUSE_STREAMS
 
 bool wxVariantDataString::Read(wxString& str)
 {
     m_value = str;
-    return true;
+    return TRUE;
 }
 
 #if defined(__BORLANDC__) && defined(__WIN16__)
@@ -889,7 +889,7 @@ bool wxVariantDataTime::Write(wxSTD ostream& str) const
     wxString s;
     Write(s);
     str << (const char*) s.mb_str();
-    return true;
+    return TRUE;
 }
 #endif
 
@@ -897,21 +897,21 @@ bool wxVariantDataTime::Write(wxString& str) const
 {
     wxChar*s = m_value.FormatTime();
     str = s;
-    return true;
+    return TRUE;
 }
 
 #if wxUSE_STD_IOSTREAM
 bool wxVariantDataTime::Read(wxSTD istream& WXUNUSED(str))
 {
     // Not implemented
-    return false;
+    return FALSE;
 }
 #endif
 
 bool wxVariantDataTime::Read(wxString& WXUNUSED(str))
 {
     // Not implemented
-    return false;
+    return FALSE;
 }
 
 /*
@@ -971,28 +971,28 @@ bool wxVariantDataDate::Write(wxSTD ostream& str) const
     wxString s;
     Write(s);
     str << (const char*) s.mb_str();
-    return true;
+    return TRUE;
 }
 #endif
 
 bool wxVariantDataDate::Write(wxString& str) const
 {
     str = m_value.FormatDate();
-    return true;
+    return TRUE;
 }
 
 #if wxUSE_STD_IOSTREAM
 bool wxVariantDataDate::Read(wxSTD istream& WXUNUSED(str))
 {
     // Not implemented
-    return false;
+    return FALSE;
 }
 #endif
 
 bool wxVariantDataDate::Read(wxString& WXUNUSED(str))
 {
     // Not implemented
-    return false;
+    return FALSE;
 }
 #endif
   // wxUSE_TIMEDATE
@@ -1056,28 +1056,28 @@ bool wxVariantDataVoidPtr::Write(wxSTD ostream& str) const
     wxString s;
     Write(s);
     str << (const char*) s.mb_str();
-    return true;
+    return TRUE;
 }
 #endif
 
 bool wxVariantDataVoidPtr::Write(wxString& str) const
 {
     str.Printf(wxT("%ld"), (long) m_value);
-    return true;
+    return TRUE;
 }
 
 #if wxUSE_STD_IOSTREAM
 bool wxVariantDataVoidPtr::Read(wxSTD istream& WXUNUSED(str))
 {
     // Not implemented
-    return false;
+    return FALSE;
 }
 #endif
 
 bool wxVariantDataVoidPtr::Read(wxString& WXUNUSED(str))
 {
     // Not implemented
-    return false;
+    return FALSE;
 }
 
 /*
@@ -1148,7 +1148,7 @@ bool wxVariantDataDateTime::Eq(wxVariantData& data) const
 bool wxVariantDataDateTime::Write(wxSTD ostream& str) const
 {
     // Not implemented
-    return false;
+    return FALSE;
 }
 #endif
 
@@ -1156,7 +1156,7 @@ bool wxVariantDataDateTime::Write(wxSTD ostream& str) const
 bool wxVariantDataDateTime::Write(wxString& str) const
 {
     str = m_value.Format();
-    return true;
+    return TRUE;
 }
 
 
@@ -1164,7 +1164,7 @@ bool wxVariantDataDateTime::Write(wxString& str) const
 bool wxVariantDataDateTime::Read(wxSTD istream& WXUNUSED(str))
 {
     // Not implemented
-    return false;
+    return FALSE;
 }
 #endif
 
@@ -1172,8 +1172,8 @@ bool wxVariantDataDateTime::Read(wxSTD istream& WXUNUSED(str))
 bool wxVariantDataDateTime::Read(wxString& str)
 {
     if(! m_value.ParseDateTime(str))
-        return false;
-    return true;
+        return FALSE;
+    return TRUE;
 }
 
 // ----------------------------------------------------------------------------
@@ -1234,7 +1234,7 @@ bool wxVariantDataArrayString::Eq(wxVariantData& data) const
 bool wxVariantDataArrayString::Write(wxSTD ostream& str) const
 {
     // Not implemented
-    return false;
+    return FALSE;
 }
 #endif
 
@@ -1250,7 +1250,7 @@ bool wxVariantDataArrayString::Write(wxString& str) const
         str += m_value[n];
     }
 
-    return true;
+    return TRUE;
 }
 
 
@@ -1258,7 +1258,7 @@ bool wxVariantDataArrayString::Write(wxString& str) const
 bool wxVariantDataArrayString::Read(wxSTD istream& WXUNUSED(str))
 {
     // Not implemented
-    return false;
+    return FALSE;
 }
 #endif
 
@@ -1271,7 +1271,7 @@ bool wxVariantDataArrayString::Read(wxString& str)
         m_value.Add(tk.GetNextToken());
     }
 
-    return true;
+    return TRUE;
 }
 
 
@@ -1472,7 +1472,7 @@ bool wxVariant::operator== (double value) const
 {
     double thisValue;
     if (!Convert(&thisValue))
-        return false;
+        return FALSE;
     else
         return (value == thisValue);
 }
@@ -1500,7 +1500,7 @@ bool wxVariant::operator== (long value) const
 {
     long thisValue;
     if (!Convert(&thisValue))
-        return false;
+        return FALSE;
     else
         return (value == thisValue);
 }
@@ -1528,7 +1528,7 @@ bool wxVariant::operator== (char value) const
 {
     char thisValue;
     if (!Convert(&thisValue))
-        return false;
+        return FALSE;
     else
         return (value == thisValue);
 }
@@ -1557,7 +1557,7 @@ bool wxVariant::operator== (bool value) const
 {
     bool thisValue;
     if (!Convert(&thisValue))
-        return false;
+        return FALSE;
     else
         return (value == thisValue);
 }
@@ -1586,7 +1586,7 @@ bool wxVariant::operator== (const wxString& value) const
 {
     wxString thisValue;
     if (!Convert(&thisValue))
-        return false;
+        return FALSE;
 
     return value == thisValue;
 }
@@ -1684,7 +1684,7 @@ bool wxVariant::operator== (const wxTime& value) const
 {
     wxTime thisValue;
     if (!Convert(&thisValue))
-        return false;
+        return FALSE;
 
     return value == thisValue;
 }
@@ -1712,7 +1712,7 @@ bool wxVariant::operator== (const wxDate& value) const
 {
     wxDate thisValue;
     if (!Convert(&thisValue))
-        return false;
+        return FALSE;
 
     return (value == thisValue);
 }
@@ -1765,7 +1765,7 @@ bool wxVariant::operator== (const wxDateTime& value) const
 {
     wxDateTime thisValue;
     if (!Convert(&thisValue))
-        return false;
+        return FALSE;
 
     return value.IsEqualTo(thisValue);
 }
@@ -1819,7 +1819,7 @@ bool wxVariant::operator==(const wxArrayString& WXUNUSED(value)) const
 {
     wxFAIL_MSG( _T("TODO") );
 
-    return false;
+    return FALSE;
 }
 
 bool wxVariant::operator!=(const wxArrayString& value) const
@@ -2078,7 +2078,7 @@ void wxVariant::Insert(const wxVariant& value)
     list.Insert(new wxVariant(value));
 }
 
-// Returns true if the variant is a member of the list
+// Returns TRUE if the variant is a member of the list
 bool wxVariant::Member(const wxVariant& value) const
 {
     wxList& list = GetList();
@@ -2088,10 +2088,10 @@ bool wxVariant::Member(const wxVariant& value) const
     {
         wxVariant* other = (wxVariant*) node->GetData();
         if (value == *other)
-            return true;
+            return TRUE;
         node = node->GetNext();
     }
-    return false;
+    return FALSE;
 }
 
 // Deletes the nth element of the list
@@ -2104,7 +2104,7 @@ bool wxVariant::Delete(int item)
     wxVariant* variant = (wxVariant*) node->GetData();
     delete variant;
     delete node;
-    return true;
+    return TRUE;
 }
 
 // Clear list
@@ -2140,9 +2140,9 @@ bool wxVariant::Convert(long* value) const
     else if (type == wxT("string"))
         *value = wxAtol((const wxChar*) ((wxVariantDataString*)GetData())->GetValue());
     else
-        return false;
+        return FALSE;
 
-    return true;
+    return TRUE;
 }
 
 bool wxVariant::Convert(bool* value) const
@@ -2160,17 +2160,17 @@ bool wxVariant::Convert(bool* value) const
     {
         wxString val(((wxVariantDataString*)GetData())->GetValue());
         val.MakeLower();
-        if (val == wxT("true") || val == wxT("yes"))
-            *value = true;
-        else if (val == wxT("false") || val == wxT("no"))
-            *value = false;
+        if (val == wxT("TRUE") || val == wxT("yes"))
+            *value = TRUE;
+        else if (val == wxT("FALSE") || val == wxT("no"))
+            *value = FALSE;
         else
-            return false;
+            return FALSE;
     }
     else
-        return false;
+        return FALSE;
 
-    return true;
+    return TRUE;
 }
 
 bool wxVariant::Convert(double* value) const
@@ -2187,9 +2187,9 @@ bool wxVariant::Convert(double* value) const
     else if (type == wxT("string"))
         *value = (double) wxAtof((const wxChar*) ((wxVariantDataString*)GetData())->GetValue());
     else
-        return false;
+        return FALSE;
 
-    return true;
+    return TRUE;
 }
 
 bool wxVariant::Convert(char* value) const
@@ -2204,15 +2204,15 @@ bool wxVariant::Convert(char* value) const
         *value = (char) (((wxVariantDataBool*)GetData())->GetValue());
 #endif
     else
-        return false;
+        return FALSE;
 
-    return true;
+    return TRUE;
 }
 
 bool wxVariant::Convert(wxString* value) const
 {
     *value = MakeString();
-    return true;
+    return TRUE;
 }
 
 // For some reason, Watcom C++ can't link variant.cpp with time/date classes compiled
@@ -2225,9 +2225,9 @@ bool wxVariant::Convert(wxTime* value) const
     else if (type == wxT("date"))
         *value = wxTime(((wxVariantDataDate*)GetData())->GetValue());
     else
-        return false;
+        return FALSE;
 
-    return true;
+    return TRUE;
 }
 
 bool wxVariant::Convert(wxDate* value) const
@@ -2236,9 +2236,9 @@ bool wxVariant::Convert(wxDate* value) const
     if (type == wxT("date"))
         *value = ((wxVariantDataDate*)GetData())->GetValue();
     else
-        return false;
+        return FALSE;
 
-    return true;
+    return TRUE;
 }
 #endif // wxUSE_TIMEDATE
 
@@ -2248,8 +2248,8 @@ bool wxVariant::Convert(wxDateTime* value) const
     if (type == wxT("datetime"))
     {
         *value = ((wxVariantDataDateTime*)GetData())->GetValue();
-        return true;
-    } 
+        return TRUE;
+    }
     // Fallback to string conversion
     wxString val;
     return Convert(&val) && (value->ParseDate(val));

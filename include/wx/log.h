@@ -223,7 +223,7 @@ public:
 
 
     // this method exists for backwards compatibility only, don't use
-    bool HasPendingMessages() const { return true; }
+    bool HasPendingMessages() const { return TRUE; }
 
 protected:
     // the logging functions that can be overriden

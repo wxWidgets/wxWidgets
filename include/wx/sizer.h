@@ -61,7 +61,7 @@ public:
                  wxObject* userData );
 
     ~wxSizerItem();
-    
+
     virtual void DeleteWindows();
 
     // Enable deleting the SizerItem without destroying the contained sizer.
@@ -141,8 +141,8 @@ protected:
     int          m_border;
     int          m_flag;
 
-    // If true, then this item is considered in the layout
-    // calculation.  Otherwise, it is skipped over. 
+    // If TRUE, then this item is considered in the layout
+    // calculation.  Otherwise, it is skipped over.
     bool         m_show;
 
     // Aspect ratio can always be calculated from m_size,
@@ -239,7 +239,7 @@ public:
     virtual bool Detach( wxSizer *sizer );
     virtual bool Detach( size_t index );
 
-    virtual void Clear( bool delete_windows=false );
+    virtual void Clear( bool delete_windows=FALSE );
     virtual void DeleteWindows();
 
     void SetMinSize( int width, int height )
@@ -289,21 +289,21 @@ public:
 
     // Manage whether individual scene items are considered
     // in the layout calculations or not.
-    void Show( wxWindow *window, bool show = true );
-    void Show( wxSizer *sizer, bool show = true );
-    void Show( size_t index, bool show = true );
+    void Show( wxWindow *window, bool show = TRUE );
+    void Show( wxSizer *sizer, bool show = TRUE );
+    void Show( size_t index, bool show = TRUE );
 
     void Hide( wxSizer *sizer )
-        { Show( sizer, false ); }
+        { Show( sizer, FALSE ); }
     void Hide( wxWindow *window )
-        { Show( window, false ); }
+        { Show( window, FALSE ); }
     void Hide( size_t index )
-        { Show( index, false ); }
+        { Show( index, FALSE ); }
 
     bool IsShown( wxWindow *window ) const;
     bool IsShown( wxSizer *sizer ) const;
     bool IsShown( size_t index ) const;
-    
+
     // Recursively call wxWindow::Show () on all sizer items.
     void ShowItems (bool show);
 
