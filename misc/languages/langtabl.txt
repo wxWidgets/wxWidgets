@@ -39,7 +39,7 @@ wxLANGUAGE_BULGARIAN                   bg_BG  LANG_BULGARIAN   SUBLANG_DEFAULT  
 wxLANGUAGE_BURMESE                     my     -                -                                   "Burmese"
 wxLANGUAGE_CAMBODIAN                   km     -                -                                   "Cambodian"
 wxLANGUAGE_CATALAN                     ca_ES  LANG_CATALAN     SUBLANG_DEFAULT                     "Catalan"
-wxLANGUAGE_CHINESE                     zh_CN  LANG_CHINESE     SUBLANG_DEFAULT                     "Chinese"
+wxLANGUAGE_CHINESE                     zh_TW  LANG_CHINESE     SUBLANG_DEFAULT                     "Chinese"
 wxLANGUAGE_CHINESE_SIMPLIFIED          zh_CN  LANG_CHINESE     SUBLANG_CHINESE_SIMPLIFIED          "Chinese (Simplified)"
 wxLANGUAGE_CHINESE_TRADITIONAL         zh_TW  LANG_CHINESE     SUBLANG_CHINESE_TRADITIONAL         "Chinese (Traditional)"
 wxLANGUAGE_CHINESE_HONGKONG            zh_HK  LANG_CHINESE     SUBLANG_CHINESE_HONGKONG            "Chinese (Hongkong)"
