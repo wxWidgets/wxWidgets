@@ -330,7 +330,7 @@ bool wxMenuBar::Append( wxMenu *menu, const wxString &title )
     return GtkAppend(menu, title);
 }
 
-bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title)
+bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title, int pos)
 {
     wxString str( wxReplaceUnderscore( title ) );
 
@@ -362,7 +362,10 @@ bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title)
     
     gtk_menu_item_set_submenu( GTK_MENU_ITEM(menu->m_owner), menu->m_menu );
     
-    gtk_menu_shell_append( GTK_MENU_SHELL(m_menubar), menu->m_owner );
+    if (pos == -1)
+        gtk_menu_shell_append( GTK_MENU_SHELL(m_menubar), menu->m_owner );
+    else
+        gtk_menu_shell_insert( GTK_MENU_SHELL(m_menubar), menu->m_owner, pos );
     
     gtk_signal_connect( GTK_OBJECT(menu->m_owner), "activate",
                         GTK_SIGNAL_FUNC(gtk_menu_open_callback),
@@ -396,7 +399,7 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 
     // TODO
     
-    if ( !GtkAppend(menu, title) )
+    if ( !GtkAppend(menu, title, (int)pos) )
         return FALSE;
 
     return TRUE;
@@ -1005,7 +1008,7 @@ wxMenu::~wxMenu()
        gtk_widget_destroy( m_menu );
 }
 
-bool wxMenu::GtkAppend(wxMenuItem *mitem)
+bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
 {
     GtkWidget *menuItem;
 
@@ -1017,8 +1020,10 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         // TODO
         menuItem = gtk_menu_item_new();
 #endif
-        gtk_menu_shell_append(GTK_MENU_SHELL(m_menu), menuItem);
-
+        if (pos == -1)
+            gtk_menu_shell_append(GTK_MENU_SHELL(m_menu), menuItem);
+        else
+            gtk_menu_shell_insert(GTK_MENU_SHELL(m_menu), menuItem, pos);
     }
     else if ( mitem->IsSubMenu() )
     {
@@ -1046,7 +1051,10 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
 #endif
 
         gtk_menu_item_set_submenu( GTK_MENU_ITEM(menuItem), mitem->GetSubMenu()->m_menu );
-        gtk_menu_shell_append(GTK_MENU_SHELL(m_menu), menuItem);
+        if (pos == -1)
+            gtk_menu_shell_append(GTK_MENU_SHELL(m_menu), menuItem);
+        else
+            gtk_menu_shell_insert(GTK_MENU_SHELL(m_menu), menuItem, pos);
  
         gtk_widget_show( mitem->GetSubMenu()->m_menu );
 
@@ -1077,7 +1085,10 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
                             GTK_SIGNAL_FUNC(gtk_menu_clicked_callback),
                             (gpointer)this );
 
-        gtk_menu_shell_append(GTK_MENU_SHELL(m_menu), menuItem);
+        if (pos == -1)
+            gtk_menu_shell_append(GTK_MENU_SHELL(m_menu), menuItem);
+        else
+            gtk_menu_shell_insert(GTK_MENU_SHELL(m_menu), menuItem, pos);
 #else
 
         menuItem = gtk_pixmap_menu_item_new ();
@@ -1126,7 +1137,10 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
                             GTK_SIGNAL_FUNC(gtk_menu_clicked_callback),
                             (gpointer)this );
 
-        gtk_menu_append( GTK_MENU(m_menu), menuItem );
+        if (pos == -1)
+            gtk_menu_append( GTK_MENU(m_menu), menuItem );
+        else
+            gtk_menu_insert( GTK_MENU(m_menu), menuItem, pos );
         gtk_widget_show( menuItem );
 #endif
 
@@ -1251,7 +1265,10 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
                             GTK_SIGNAL_FUNC(gtk_menu_clicked_callback),
                             (gpointer)this );
 
-        gtk_menu_shell_append(GTK_MENU_SHELL(m_menu), menuItem);
+        if (pos == -1)
+            gtk_menu_shell_append(GTK_MENU_SHELL(m_menu), menuItem);
+        else
+            gtk_menu_shell_insert(GTK_MENU_SHELL(m_menu), menuItem, pos);
     }
     
     guint accel_key;
@@ -1311,7 +1328,7 @@ wxMenuItem* wxMenu::DoInsert(size_t pos, wxMenuItem *item)
         return NULL;
 
     // TODO
-    if ( !GtkAppend(item) )
+    if ( !GtkAppend(item, (int)pos) )
         return NULL;
 
     return item;

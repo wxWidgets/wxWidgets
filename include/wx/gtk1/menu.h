@@ -46,7 +46,7 @@ public:
     void UnsetInvokingWindow( wxWindow *win );
 
     // common part of Append and Insert
-    bool GtkAppend(wxMenu *menu, const wxString& title);
+    bool GtkAppend(wxMenu *menu, const wxString& title, int pos=-1);
 
 #ifndef __WXGTK20__
     GtkAccelGroup   *m_accel;
@@ -93,8 +93,8 @@ private:
     // common code for all constructors:
     void Init();
 
-    // common part of Append and Insert
-    bool GtkAppend(wxMenuItem *item);
+    // common part of Append (if pos == -1)  and Insert
+    bool GtkAppend(wxMenuItem *item, int pos=-1);
 
 	GtkWidget *m_prevRadio;
 
