@@ -27,19 +27,6 @@
   #pragma hdrstop
 #endif  //__BORLANDC__
 
-// TODO should be done by configure
-#if defined(__UNIX__) && !(defined(HAVE_DLOPEN) || defined(HAVE_SHLLOAD))
-    #if defined(__LINUX__) || defined(__SOLARIS__) || defined(__SUNOS__) || defined(__FREEBSD__)
-        #ifndef HAVE_DLOPEN
-            #define HAVE_DLOPEN
-        #endif
-    #elif defined(__HPUX__)
-        #ifndef HAVE_SHLLOAD
-            #define HAVE_SHLLOAD
-        #endif
-    #endif // Unix flavour
-#endif // !Unix or already have some HAVE_xxx defined
-
 #include "wx/dynlib.h"
 #include "wx/filefn.h"
 #include "wx/intl.h"

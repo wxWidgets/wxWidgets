@@ -20,6 +20,15 @@
 #include <wx/list.h>
 #include <wx/hash.h>
 
+// TODO should be done by configure
+#if defined(__UNIX__) && !(defined(HAVE_DLOPEN) || defined(HAVE_SHLLOAD))
+    #if defined(__LINUX__) || defined(__SOLARIS__) || defined(__SUNOS__) || defined(__FREEBSD__)
+        #define HAVE_DLOPEN
+    #elif defined(__HPUX__)
+        #define HAVE_SHLLOAD
+    #endif // Unix flavour
+#endif // !Unix or already have some HAVE_xxx defined
+
 #if defined(HAVE_DLOPEN)
     #include <dlfcn.h>
 
