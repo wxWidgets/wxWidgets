@@ -102,6 +102,7 @@ db.cpp	C
 dbtable.cpp	C
 dcbase.cpp	C
 dlgcmn.cpp	C
+dobjcmn.cpp	C
 docmdi.cpp	C
 docview.cpp	C
 dynarray.cpp	C	B
@@ -613,7 +614,9 @@ colour.h	K
 combobox.h	K
 control.h	K
 cursor.h	K
+dataform.h	K
 dataobj.h	K
+dataobj2.h	K
 dc.h	K
 dcclient.h	K
 dcmemory.h	K
@@ -672,7 +675,9 @@ colour.h	F
 combobox.h	F
 control.h	F
 cursor.h	F
+dataform.h	F
 dataobj.h	F
+dataobj2.h	F
 dc.h	F
 dcclient.h	F
 dcmemory.h	F
