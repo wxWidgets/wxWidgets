@@ -32,6 +32,7 @@
 #include "wx/process.h"
 #include "wx/intl.h"
 #include "wx/app.h"
+#include "wx/wxchar.h"
 
 #include <stdlib.h>
 
@@ -245,6 +246,12 @@ wxDialUpManagerImpl::wxDialUpManagerImpl()
    m_CanUseIfconfig = -1; // unknown
    m_BeaconHost = WXDIALUP_MANAGER_DEFAULT_BEACONHOST;
    m_BeaconPort = 80;
+   SetConnectCommand("pon", "poff"); // default values for Debian/GNU linux
+   wxChar * dial = wxGetenv(_T("WXDIALUP_DIALCMD"));
+   wxChar * hup = wxGetenv(_T("WXDIALUP_HUPCMD"));
+   if(dial || hup)
+      SetConnectCommand(dial ? wxString(dial) : m_ConnectCommand,
+                        hup ? wxString(hup) : m_HangUpCommand); 
 }
 
 wxDialUpManagerImpl::~wxDialUpManagerImpl()

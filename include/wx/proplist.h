@@ -478,7 +478,7 @@ class WXDLLEXPORT wxFilenameListValidator: public wxPropertyListValidator
 {
   DECLARE_DYNAMIC_CLASS(wxFilenameListValidator)
  public:
-   wxFilenameListValidator(wxString message = "Select a file", wxString wildcard = "*.*", long flags = 0);
+   wxFilenameListValidator(wxString message = "Select a file", wxString wildcard = wxALL_FILES_PATTERN, long flags = 0);
 
    ~wxFilenameListValidator(void);
 

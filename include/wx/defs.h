@@ -16,6 +16,12 @@
     #pragma interface "defs.h"
 #endif
 
+
+// needed to handle strings with xgettext:
+#ifndef gettext_noop
+#  define gettext_noop(x) x
+#endif
+
 // ----------------------------------------------------------------------------
 // compiler and OS identification
 // ----------------------------------------------------------------------------
@@ -1505,6 +1511,16 @@ typedef enum {
     wxPRINT_MODE_PRINTER = 3    // Send to printer
 } wxPrintMode;
 
+// ---------------------------------------------------------------------------
+// Macro to specify "All Files" on different platforms
+// ---------------------------------------------------------------------------
+#if defined(__WXMSW__)
+#   define wxALL_FILES_PATTERN   "*.*"
+#   define wxALL_FILES           gettext_noop("All files (*.*)|*.*")
+#else
+#   define wxALL_FILES_PATTERN   "*"
+#   define wxALL_FILES           gettext_noop("All files (*)|*")
+#endif
 // ---------------------------------------------------------------------------
 // macros that enable wxWindows apps to be compiled in absence of the
 // sytem headers, although some platform specific types are used in the
