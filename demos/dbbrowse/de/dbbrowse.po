@@ -130,10 +130,11 @@ msgid   "\n"
         "-I-> BrowserDB::OnCloseDB() : Begin "
 msgstr  ""
 
-#: ../BrowserDB.cpp:161
+#: ../BrowserDB.cpp:148
 msgid   "\n"
-        "-I-> BrowserDB::OnCloseDB() : Ende "
-msgstr  ""
+        "-I-> BrowserDB::OnCloseDB() : End"
+msgstr  "\n"
+        "-I-> BrowserDB::OnCloseDB() : Ende"
 
 #: ../BrowserDB.cpp:139
 #, c-format
@@ -178,9 +179,9 @@ msgstr  "\n"
 #: ../Doc.cpp:268 ../Doc.cpp:281
 #, c-format
 msgid   "\n"
-        "mjDoc::OnLeer(%s) : even this function will one day be available !"
+        "MainDoc::OnLeer(%s) : even this function will one day be available !"
 msgstr  "\n"
-        "mjDoc::OnLeer(%s) : eines Tages steht auch diese Funktion zur Verfügung !"
+        "MainDoc::OnLeer(%s) : eines Tages steht auch diese Funktion zur Verfügung !"
 
 #: ../BrowserDB.cpp:47
 msgid   "   Line: "
@@ -191,8 +192,8 @@ msgid   "Time"
 msgstr  "Zeit"
 
 #: ../BrowserDB.cpp:47
-msgid   "-I-> mjDoc::OnNewDocument() - End - Time needed : %ld ms"
-msgstr  "-I-> mjDoc::OnNewDocument() - Ende - Dauer : %ld ms"
+msgid   "-I-> MainDoc::OnNewDocument() - End - Time needed : %ld ms"
+msgstr  "-I-> MainDoc::OnNewDocument() - Ende - Dauer : %ld ms"
 
 #: ../BrowserDB.cpp:47
 msgid   "OK"
@@ -361,6 +362,10 @@ msgstr  "-I-> DBGrid::OnTableView(%s) - Satz %6d wurde gelesen."
 msgid   "-I-> DBTree::OnPopulate(%s) - %6d Tables have been read. - Time needed : %ld ms"
 msgstr  "-I-> DBTree::OnPopulate(%s) - %6d Tabellen wurde gelesen. - Dauer : %ld ms"
 
+#, c-format
+msgid   "-I-> DBTree::OnPopulate() - %6d Tables have been read. - Time needed : %ld ms"
+msgstr  "-I-> DBTree::OnPopulate() - %6d Tabellen wurde gelesen. - Dauer : %ld ms"
+
 #: ../DBTree.cpp:110
 #, c-format
 msgid   "-I-> DBTree::OnPopulate(%s) - Table %6d has been read."
@@ -378,8 +383,8 @@ msgstr  "-I-> PgmCtrl::OnSelChanged - %s"
 
 #: ../Doc.cpp:126
 #, c-format
-msgid   "-I-> mjDoc::OnInitView() - End - %d DSN's found"
-msgstr  "-I-> mjDoc::OnInitView() - Ende - %d DSN's gefunden"
+msgid   "-I-> MainDoc::OnInitView() - End - %d DSN's found"
+msgstr  "-I-> MainDoc::OnInitView() - Ende - %d DSN's gefunden"
 
 #: ../PgmCtrl.cpp:160 ../PgmCtrl.cpp:163
 msgid   "-I-> wxConfigBase.p_ProgramCfg->DeleteAll() was succesfull."

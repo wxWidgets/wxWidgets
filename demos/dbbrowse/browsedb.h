@@ -15,7 +15,7 @@
 // Global structure for holding ODBC connection information
 //----------------------------------------------------------------------------------------
 extern struct DbStuff DbConnectInf;
-class mjDoc;
+class MainDoc;
 //----------------------------------------------------------------------------------------
 class BrowserDB
 {
@@ -45,7 +45,7 @@ class BrowserDB
   wxDbInf*       ct_BrowserDB;
   wxColInf*      cl_BrowserDB;
   wxString       ODBCSource, UserName, Password;
-  mjDoc *pDoc;
+  MainDoc *pDoc;
  //---------------------------------------------------------------------------------------
   wxString       Temp0, Temp1, Temp2, Temp3, Temp4, Temp5;
   wxString       ODBCText;

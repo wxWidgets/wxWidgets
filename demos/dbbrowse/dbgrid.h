@@ -12,7 +12,7 @@
  #error "DBGrid requires the new wxGrid class"
 #endif
 //----------------------------------------------------------------------------------------
-class mjDoc;
+class MainDoc;
 //----------------------------------------------------------------------------------------
 class DBGrid: public wxGrid
 {
@@ -24,7 +24,7 @@ class DBGrid: public wxGrid
   int        i_ViewNr;   // View Nummer in Tab / Page
   int        i_Which;    // Which View, Database is this/using
  //---------------------------------------------------------------------------------------
-  mjDoc*     pDoc;
+  MainDoc*   pDoc;
   wxDbInf*   ct_BrowserDB;
   BrowserDB* db_Br;
   wxMenu   *popupMenu1; // OnDBClass

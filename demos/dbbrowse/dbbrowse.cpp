@@ -222,7 +222,7 @@ bool MainApp::OnInit(void)  // Does everything needed for a program start
  //---------------------------------------------------------------------------------------
  frame->p_Splitter = new DocSplitterWindow(frame,-1);
  // p_Splitter->SetCursor(wxCursor(wxCURSOR_PENCIL));
- frame->pDoc                       = new mjDoc();
+ frame->pDoc                       = new MainDoc();
  frame->pDoc->p_MainFrame          = frame;
  frame->pDoc->p_Splitter           = frame->p_Splitter;
  frame->pDoc->p_Splitter->pDoc     = frame->pDoc;       // ControlBase: saving the Sash
@@ -285,7 +285,7 @@ MainFrame::~MainFrame(void)
  // delete wxConfigBase::Set((wxConfigBase *) NULL);
  p_ProgramCfg->Flush(TRUE);        // saves   Objekt
  if (!frame->pDoc)                 // If we have a Valid Document
-  delete frame->pDoc;              // Cleanup (mjDoc::~mjDoc)
+  delete frame->pDoc;              // Cleanup (MainDoc::~MainDoc)
 } // MainFrame::~MainFrame(void)
 //----------------------------------------------------------------------------------------
 void MainFrame::OnQuit(wxCommandEvent& WXUNUSED(event))

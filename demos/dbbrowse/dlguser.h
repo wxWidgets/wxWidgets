@@ -16,7 +16,7 @@
 #define ID_PASSWORD     103
 #define ID_TEXT         104
 //----------------------------------------------------------------------------------------
-class mjDoc;
+class MainDoc;
 //----------------------------------------------------------------------------------------
 class DlgUser: public wxDialog
 {
@@ -25,9 +25,9 @@ class DlgUser: public wxDialog
  wxStaticText *m_Label1, *m_Label2;
  wxTextCtrl *m_UserName, *m_Password;
  wxButton *m_OK, *m_Cancel;
- mjDoc *pDoc;
+ MainDoc *pDoc;
  //---------------------------------------------------------------------------------------
- DlgUser(wxWindow *parent,mjDoc *pDoc, const wxString& title);
+ DlgUser(wxWindow *parent,MainDoc *pDoc, const wxString& title);
  void OnInit();
  void OnOk(wxCommandEvent& event);
  //---------------------------------------------------------------------------------------

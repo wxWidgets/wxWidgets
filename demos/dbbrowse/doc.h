@@ -29,12 +29,12 @@ extern wxString        LogBuf;             // String for all Logs
 class PgmCtrl;             // Declared in PgmCtrl.h file
 class DocSplitterWindow;   // Declared at the end of the file
 //----------------------------------------------------------------------------------------
-class mjDoc
+class MainDoc
 {
  public:
  //---------------------------------------------------------------------------------------
-  mjDoc();
-  virtual ~mjDoc();
+  MainDoc();
+  virtual ~MainDoc();
   int Sash;
  //---------------------------------------------------------------------------------------
  //-- declare document Vars here ---------------------------------------------------------
@@ -72,7 +72,7 @@ class mjDoc
 class DocSplitterWindow: public wxSplitterWindow
 {
  public:
- mjDoc *pDoc;
+ MainDoc *pDoc;
  DocSplitterWindow(wxWindow *parent, wxWindowID id);
  virtual bool OnSashPositionChange(int newSashPosition)
  {

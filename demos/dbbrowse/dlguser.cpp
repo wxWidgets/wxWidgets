@@ -30,7 +30,7 @@
 //----------------------------------------------------------------------------------------
 #include "std.h"
 //----------------------------------------------------------------------------------------
-DlgUser::DlgUser(wxWindow *parent, mjDoc *p_Doc, const wxString& title) :
+DlgUser::DlgUser(wxWindow *parent, MainDoc *p_Doc, const wxString& title) :
   wxDialog(parent, ID_DIALOG_DSN, title)
 {
  int chSize;                          // Height of Font * 1.4 = Height of wxTextCtrl

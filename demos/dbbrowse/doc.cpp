@@ -39,7 +39,7 @@ wxConfigBase   *p_ProgramCfg;       // All Config and Path information
 wxLogTextCtrl  *p_LogBook;          // All Log messages
 wxString        LogBuf;             // String for all Logs
 //----------------------------------------------------------------------------------------
-mjDoc::mjDoc()
+MainDoc::MainDoc()
 {
  db_Br          = NULL;
  p_DSN          = NULL;
@@ -58,7 +58,7 @@ mjDoc::mjDoc()
  ft_Doc = new wxFont(wxSystemSettings::GetSystemFont(wxSYS_SYSTEM_FONT));
 }
 //----------------------------------------------------------------------------------------
-mjDoc::~mjDoc()
+MainDoc::~MainDoc()
 {
  // ----------------------------------------------------------
  // -E-> The Tree Controls take to long to close : Why ??
@@ -75,10 +75,10 @@ mjDoc::~mjDoc()
  p_Splitter = NULL;
  delete p_Splitter;
  delete [] db_Br;
- //  wxMessageBox("~mjDoc");
+ //  wxMessageBox("~MainDoc");
 }
 //----------------------------------------------------------------------------------------
-bool mjDoc::OnNewDocument()
+bool MainDoc::OnNewDocument()
 {
  wxStopWatch sw;
  //---------------------------------------------------------------------------------------
@@ -86,14 +86,14 @@ bool mjDoc::OnNewDocument()
   return FALSE;
  p_PgmCtrl->OnPopulate();
  //---------------------------------------------------------------------------------------
- wxLogMessage(_("-I-> mjDoc::OnNewDocument() - End - Time needed : %ld ms"),sw.Time());
+ wxLogMessage(_("-I-> MainDoc::OnNewDocument() - End - Time needed : %ld ms"),sw.Time());
  return TRUE;
 }
 //----------------------------------------------------------------------------------------
-bool mjDoc::OnInitView()
+bool MainDoc::OnInitView()
 {
  Sash = p_ProgramCfg->Read("/MainFrame/Sash", 200);
- // wxMessageBox("OnInitView() - Begin ","-I->mjDoc::OnInitView");
+ // wxMessageBox("OnInitView() - Begin ","-I->MainDoc::OnInitView");
  //---------------------------------------------------------------------------------------
  // create "workplace" window
  //---------------------------------------------------------------------------------------
@@ -136,13 +136,13 @@ bool mjDoc::OnInitView()
  if (!OnInitODBC())
   return FALSE;
  //---------------------------------------------------------------------------------------
- Temp0.Printf(_("-I-> mjDoc::OnInitView() - End - %d DSN's found"),i_DSN);
+ Temp0.Printf(_("-I-> MainDoc::OnInitView() - End - %d DSN's found"),i_DSN);
  p_MainFrame->SetStatusText(Temp0, 0);
  wxLogMessage(Temp0);
  return TRUE;
 }
 //----------------------------------------------------------------------------------------
-bool mjDoc::OnInitODBC()
+bool MainDoc::OnInitODBC()
 {
  char Dsn[SQL_MAX_DSN_LENGTH + 1];
  char DsDesc[255]; // BJO20002501 instead of 512
@@ -222,7 +222,7 @@ bool mjDoc::OnInitODBC()
  return TRUE;
 }
 //----------------------------------------------------------------------------------------
-bool mjDoc::OnChosenDSN(int Which)
+bool MainDoc::OnChosenDSN(int Which)
 {
  // wxLogMessage("OnChosenDSN(%d) - Begin",Which);
  //---------------------------------------------------------------------------------------
@@ -251,7 +251,7 @@ bool mjDoc::OnChosenDSN(int Which)
  return TRUE;
 }
 //----------------------------------------------------------------------------------------
-bool mjDoc::OnChosenTbl(int Tab,wxString Table)
+bool MainDoc::OnChosenTbl(int Tab,wxString Table)
 {
  // wxLogMessage("OnChosenTbl(%d,%s)",Tab,Table.c_str());
  //-------------------------
@@ -307,10 +307,10 @@ bool mjDoc::OnChosenTbl(int Tab,wxString Table)
  return TRUE;;
 }
 //----------------------------------------------------------------------------------------
-void mjDoc::OnLeer(wxString Aufrufer)
+void MainDoc::OnLeer(wxString Aufrufer)
 {
- // Temp0.Printf(_("\nmjDoc::OnLeer(%s) : auch diese funktion steht eines Tages zur Verfügung !"),Aufrufer.c_str());
- Temp0.Printf(_("\nmjDoc::OnLeer(%s) : even this function will one day be available !"),Aufrufer.c_str());
+ // Temp0.Printf(_("\nMainDoc::OnLeer(%s) : auch diese funktion steht eines Tages zur Verfügung !"),Aufrufer.c_str());
+ Temp0.Printf(_("\nMainDoc::OnLeer(%s) : even this function will one day be available !"),Aufrufer.c_str());
  wxLogMessage(Temp0);  Temp0.Empty();
  return;
 }

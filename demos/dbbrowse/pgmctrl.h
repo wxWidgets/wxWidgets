@@ -8,7 +8,7 @@
 // Copyright:   (c) Mark Johnson, Berlin Germany, mj10777@gmx.net
 // Licence:     wxWindows license
 //----------------------------------------------------------------------------------------
-class mjDoc;               // Declared in doc.h file
+class MainDoc;             // Declared in doc.h file
 //----------------------------------------------------------------------------------------
 class TreeData : public wxTreeItemData
 {
@@ -37,7 +37,7 @@ class PgmCtrl : public wxTreeCtrl
   PgmCtrl(wxWindow *parent);
   PgmCtrl(wxWindow *parent, const wxWindowID id,const wxPoint& pos, const wxSize& size,long style);
   virtual ~PgmCtrl();
-  mjDoc *pDoc;
+  MainDoc *pDoc;
 //----------------------------------------------------------------------------------------
   int i_TabArt;   // Tab = 0 ; Page = 1;
   int i_ViewNr;   // View Nummer in Tab / Page

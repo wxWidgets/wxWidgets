@@ -34,7 +34,7 @@ class MainFrame: public wxFrame
   wxHtmlHelpController *p_Help;
   //--------------------------------------------------------------------------------------
   int DiffW, DiffH;
-  mjDoc *pDoc;
+  MainDoc *pDoc;
   DocSplitterWindow *p_Splitter;
   //--------------------------------------------------------------------------------------
  DECLARE_EVENT_TABLE()

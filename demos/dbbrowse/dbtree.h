@@ -8,7 +8,7 @@
 // Licence:     wxWindows license
 // RCS-ID:      $Id$
 //----------------------------------------------------------------------------------------
-class mjDoc;               // Declared in Doc.h file
+class MainDoc;             // Declared in Doc.h file
 //----------------------------------------------------------------------------------------
 class DBTreeData : public wxTreeItemData
 {
@@ -42,7 +42,7 @@ class DBTree : public wxTreeCtrl
   DBTree(wxWindow *parent);
   DBTree(wxWindow *parent, const wxWindowID id,const wxPoint& pos, const wxSize& size,long style);
   virtual ~DBTree();
-  mjDoc *pDoc;
+  MainDoc *pDoc;
   wxDbInf *ct_BrowserDB;
 //----------------------------------------------------------------------------------------
   int       i_TabArt;   // Tab = 0 ; Page = 1;
