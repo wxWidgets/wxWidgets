@@ -23,6 +23,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_STATLINE
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -63,3 +65,5 @@ bool wxStaticLine::Create( wxWindow *parent,
 
     return TRUE;
 }
+
+#endif //wxUSE_STATLINE
