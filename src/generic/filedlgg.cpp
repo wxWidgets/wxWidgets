@@ -1239,8 +1239,8 @@ void wxFileDialog::DoSetFilterIndex(int filterindex)
     m_filterIndex = filterindex;
     if ( str->Left(2) == wxT("*.") )
     {
-        m_filterExtension = str->Mid(2);
-        if (m_filterExtension == _T("*"))
+        m_filterExtension = str->Mid(1);
+        if (m_filterExtension == _T(".*"))
             m_filterExtension.clear();
     }
     else

@@ -71,6 +71,9 @@ wxGTK:
 - made wxTextCtrl::EmulateKeyPress() work for Delete and Backspace
 - fixed wxTopLevelWindow::ShowFullScreen to work with kwin, IceWM and
   window managers that support _NET_WM_STATE_FULLSCREEN
+- Added wxEVT_MENU_OPEN event generation.
+- Fixed bug in generic file selector causing incomplete file extensions to
+  be appended to filenames with no extension.
 
 wxMSW:
 
