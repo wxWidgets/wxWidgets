@@ -3629,12 +3629,10 @@ void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
         wxapp_install_idle_handler();
 
     wxRect myRect(0,0,0,0);
-    if (m_wxwindow)
+    if (m_wxwindow && rect)
+    {
         myRect.SetSize(wxSize( m_wxwindow->allocation.width,
                                m_wxwindow->allocation.height));
-
-    if (rect)
-    {
         myRect.Intersect(*rect);
         if (!myRect.width || !myRect.height)
             // nothing to do, rectangle is empty
