@@ -4,7 +4,7 @@ static char *undo_xpm[] = {
 "    16    15        3            1",
 /* colors */
 ". c #000080",
-"# c #c0c0c0",
+"# c None",
 "a c #808080",
 /* pixels */
 "################",

@@ -186,7 +186,7 @@ void ctMainFrame::OnAbout(wxCommandEvent& event)
 {
     wxString msg = wxGetApp().GetSettings().GetAppName() + wxT(" (c) Julian Smart");
     wxString caption = wxT("About ") + wxGetApp().GetSettings().GetAppName();
-    wxMessageBox(msg, caption, wxID_OK|wxICON_INFORMATION);
+    wxMessageBox(msg, caption, wxOK|wxICON_INFORMATION);
 }
 
 void ctMainFrame::OnOpen(wxCommandEvent& event)
