@@ -70,59 +70,44 @@ IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
 
 // Colour
 
-wxColour::wxColour ()
+void wxColour::Init()
 {
-  m_isInit = FALSE;
-  m_pixel = 0;
-  m_red = m_blue = m_green = 0;
-}
-
-wxColour::wxColour (unsigned char r, unsigned char g, unsigned char b)
-{
-  m_red = r;
-  m_green = g;
-  m_blue = b;
-  m_isInit = TRUE;
-  m_pixel = PALETTERGB (m_red, m_green, m_blue);
+    m_isInit = FALSE;
+    m_pixel = 0;
+    m_red =
+    m_blue =
+    m_green = 0;
 }
 
 wxColour::wxColour (const wxColour& col)
 {
-  m_red = col.m_red;
-  m_green = col.m_green;
-  m_blue = col.m_blue;
-  m_isInit = col.m_isInit;
-  m_pixel = col.m_pixel;
+    *this = col;
 }
 
-wxColour& wxColour::operator =(const wxColour& col)
+wxColour& wxColour::operator=(const wxColour& col)
 {
-  m_red = col.m_red;
-  m_green = col.m_green;
-  m_blue = col.m_blue;
-  m_isInit = col.m_isInit;
-  m_pixel = col.m_pixel;
-  return *this;
+    m_red = col.m_red;
+    m_green = col.m_green;
+    m_blue = col.m_blue;
+    m_isInit = col.m_isInit;
+    m_pixel = col.m_pixel;
+    return *this;
 }
 
-void wxColour::InitFromName(const wxString& col)
+void wxColour::InitFromName(const wxString& name)
 {
-  wxColour *the_colour = wxTheColourDatabase->FindColour (col);
-  if (the_colour)
+    if ( wxTheColourDatabase )
     {
-      m_red = the_colour->Red ();
-      m_green = the_colour->Green ();
-      m_blue = the_colour->Blue ();
-      m_isInit = TRUE;
+        wxColour col = wxTheColourDatabase->Find(name);
+        if ( col.Ok() )
+        {
+            *this = col;
+            return;
+        }
     }
-  else
-    {
-      m_red = 0;
-      m_green = 0;
-      m_blue = 0;
-      m_isInit = FALSE;
-    }
-  m_pixel = PALETTERGB (m_red, m_green, m_blue);
+
+    // leave invalid
+    Init();
 }
 
 wxColour::~wxColour()
@@ -131,9 +116,10 @@ wxColour::~wxColour()
 
 void wxColour::Set (unsigned char r, unsigned char g, unsigned char b)
 {
-  m_red = r;
-  m_green = g;
-  m_blue = b;
-  m_isInit = TRUE;
-  m_pixel = PALETTERGB (m_red, m_green, m_blue);
+    m_red = r;
+    m_green = g;
+    m_blue = b;
+    m_isInit = TRUE;
+    m_pixel = PALETTERGB (m_red, m_green, m_blue);
 }
+
