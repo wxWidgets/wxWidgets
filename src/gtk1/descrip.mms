@@ -122,7 +122,7 @@ SOURCES =\
 	gauge.cpp,\
 	gdiobj.cpp,\
         glcanvas.cpp,\
-	gsockgtk.c,\
+	gsockgtk.cpp,\
         icon.cpp,\
 	listbox.cpp,\
 	main.cpp,\
@@ -198,7 +198,7 @@ frame.obj : frame.cpp
 gauge.obj : gauge.cpp
 gdiobj.obj : gdiobj.cpp
 glcanvas.obj : glcanvas.cpp
-gsockgtk.obj : gsockgtk.c
+gsockgtk.obj : gsockgtk.cpp
 icon.obj : icon.cpp
 listbox.obj : listbox.cpp
 main.obj : main.cpp

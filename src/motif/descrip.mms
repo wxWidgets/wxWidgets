@@ -104,7 +104,7 @@ SOURCES = \
 		frame.cpp,\
 		gauge.cpp,\
 		gdiobj.cpp,\
-		gsockmot.c,\
+		gsockmot.cpp,\
 		icon.cpp,\
 		listbox.cpp,\
 		main.cpp,\
@@ -166,7 +166,7 @@ font.obj : font.cpp
 frame.obj : frame.cpp
 gauge.obj : gauge.cpp
 gdiobj.obj : gdiobj.cpp
-gsockmot.obj : gsockmot.c
+gsockmot.obj : gsockmot.cpp
 icon.obj : icon.cpp
 listbox.obj : listbox.cpp
 main.obj : main.cpp
