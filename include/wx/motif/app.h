@@ -76,10 +76,13 @@ public:
     // Motif-specific
     WXAppContext   GetAppContext() const { return m_appContext; }
     WXWidget       GetTopLevelWidget();
+    WXWidget       GetTopLevelRealizedWidget();
     WXColormap     GetMainColormap(WXDisplay* display);
     WXDisplay*     GetInitialDisplay() const { return m_initialDisplay; }
 
     void           SetTopLevelWidget(WXDisplay* display, WXWidget widget);
+    void           SetTopLevelRealizedWidget(WXDisplay* display,
+                                             WXWidget widget);
 
     // This handler is called when a property change event occurs
     virtual void   HandlePropertyChange(WXEvent *event);

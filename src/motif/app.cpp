@@ -38,6 +38,7 @@
 #pragma message disable nosimpint
 #endif
 #include <Xm/Xm.h>
+#include <Xm/Label.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xresource.h>
@@ -53,10 +54,14 @@
 struct wxPerDisplayData
 {
     wxPerDisplayData()
-        { m_visualInfo = NULL; m_topLevelWidget = NULL; }
+    {
+        m_visualInfo = NULL;
+        m_topLevelWidget = NULL;
+        m_topLevelRealizedWidget = NULL;
+    }
 
     wxXVisualInfo* m_visualInfo;
-    Widget         m_topLevelWidget;
+    Widget         m_topLevelWidget, m_topLevelRealizedWidget;
 };
 
 static void wxTLWidgetDestroyCallback(Widget w, XtPointer clientData,
@@ -274,8 +279,12 @@ static void wxTLWidgetDestroyCallback(Widget w, XtPointer clientData,
                                       XtPointer ptr)
 {
     if( wxTheApp )
+    {
         wxTheApp->SetTopLevelWidget( (WXDisplay*)XtDisplay(w),
                                      (WXWidget)NULL );
+        wxTheApp->SetTopLevelRealizedWidget( (WXDisplay*)XtDisplay(w),
+                                             (WXWidget)NULL );
+    }
 }
 
 WXWidget wxCreateTopLevelWidget( WXDisplay* display )
@@ -285,14 +294,26 @@ WXWidget wxCreateTopLevelWidget( WXDisplay* display )
                                    applicationShellWidgetClass,
                                    (Display*)display,
                                    NULL, 0 );
-    XtSetMappedWhenManaged( tlw, False );
-    XtRealizeWidget( tlw );
+    XtVaSetValues( tlw,
+                   XmNoverrideRedirect, True,
+                   NULL );
 
     XtAddCallback( tlw, XmNdestroyCallback,
                    (XtCallbackProc)wxTLWidgetDestroyCallback,
                    (XtPointer)NULL );
 
     return (WXWidget)tlw;
+}
+
+WXWidget wxCreateTopLevelRealizedWidget( WXDisplay* display )
+{
+    Widget rTlw = XtVaCreateWidget( "dummy_widget", xmLabelWidgetClass,
+                                    (Widget)wxTheApp->GetTopLevelWidget(),
+                                    NULL);
+    XtSetMappedWhenManaged( rTlw, False );
+    XtRealizeWidget( rTlw );
+
+    return (WXWidget)rTlw;
 }
 
 WXWidget wxApp::GetTopLevelWidget()
@@ -309,9 +330,30 @@ WXWidget wxApp::GetTopLevelWidget()
     return tlw;
 }
 
+WXWidget wxApp::GetTopLevelRealizedWidget()
+{
+    WXDisplay* display = wxGetDisplay();
+    wxPerDisplayDataMap::iterator it = m_perDisplayData->find( display );
+
+    if( it != m_perDisplayData->end() && it->second->m_topLevelRealizedWidget )
+        return (WXWidget)it->second->m_topLevelRealizedWidget;
+
+    WXWidget rTlw = wxCreateTopLevelRealizedWidget( display );
+    SetTopLevelRealizedWidget( display, rTlw );
+
+    return rTlw;
+}
+
 void wxApp::SetTopLevelWidget(WXDisplay* display, WXWidget widget)
 {
-    (*m_perDisplayData)[display]->m_topLevelWidget = (Widget)widget;
+    GetOrCreatePerDisplayData( *m_perDisplayData, display )
+        .m_topLevelWidget = (Widget)widget;
+}
+
+void wxApp::SetTopLevelRealizedWidget(WXDisplay* display, WXWidget widget)
+{
+    GetOrCreatePerDisplayData( *m_perDisplayData, display )
+        .m_topLevelRealizedWidget = (Widget)widget;
 }
 
 // Yield to other processes

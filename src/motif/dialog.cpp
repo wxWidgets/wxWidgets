@@ -291,8 +291,8 @@ void wxDialog::SetTitle(const wxString& title)
 
 bool wxDialog::Show( bool show )
 {
-    if( !wxTopLevelWindowMotif::Show( show ) )
-        return FALSE;
+    if( !wxWindowBase::Show( show ) )
+        return false;
 
     m_isShown = show;
 

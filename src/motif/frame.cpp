@@ -430,8 +430,8 @@ void wxFrame::DoSetSize(int x, int y, int width, int height, int WXUNUSED(sizeFl
 
 bool wxFrame::Show( bool show )
 {
-    if( !wxTopLevelWindowMotif::Show( show ) )
-        return FALSE;
+    if( !wxWindowBase::Show( show ) )
+        return false;
 
     m_isShown = show;
 
@@ -442,15 +442,14 @@ bool wxFrame::Show( bool show )
     SetVisibleStatus(show);
     if (show)
     {
-        XtMapWidget (shell);
-        XRaiseWindow (XtDisplay(shell), XtWindow(shell));
+        XtPopup(shell, XtGrabNone);
     }
     else
     {
-        XtUnmapWidget(shell);
+        XtPopdown(shell);
     }
 
-    return TRUE;
+    return true;
 }
 
 void wxFrame::SetTitle(const wxString& title)
