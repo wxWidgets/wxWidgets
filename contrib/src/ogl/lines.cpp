@@ -749,7 +749,7 @@ void wxLineShape::DrawArrow(wxDC& dc, wxArrowHead *arrow, double xOffset, bool p
 
       dc.SetPen(* m_pen);
       if (arrow->_GetType() == ARROW_HOLLOW_CIRCLE)
-        dc.SetBrush(* g_oglWhiteBackgroundBrush);
+        dc.SetBrush(GetBackgroundBrush());
       else
         dc.SetBrush(* m_brush);
 
