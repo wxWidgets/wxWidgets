@@ -92,9 +92,6 @@ protected:
     // 16 'custom' colours
     wxColour customColours[16];
 
-    // One single custom colour (use sliders)
-    wxColour singleCustomColour;
-
     // Which colour is selected? An index into one of the two areas.
     int colourSelection;
     int whichKind; // 1 for standard colours, 2 for custom colours,
