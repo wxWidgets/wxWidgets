@@ -76,7 +76,7 @@ colrdlgg.cpp	Generic	Generic
 dcbuffer.cpp	Generic
 dcpsg.cpp	Generic
 dirctrlg.cpp	Generic
-dirdlgg.cpp	Generic	NotWin32,NotOS2
+dirdlgg.cpp	Generic	NotWin32
 dragimgg.cpp	Generic	NotOS2
 fdrepdlg.cpp	Generic	NotMSW
 filedlgg.cpp	Generic	NotMSW,NotX,NotOS2,NotMac
@@ -671,7 +671,6 @@ dcscreen.cpp	OS2
 dialog.cpp	OS2
 #dialup.cpp	OS2
 dir.cpp	OS2	Base
-dirdlg.cpp	OS2
 dnd.cpp	OS2
 filedlg.cpp	OS2
 font.cpp	OS2
@@ -1392,7 +1391,6 @@ dialog.h	OS2H
 radiobox.h	OS2H
 toolbar.h	OS2H
 checkbox.h	OS2H
-dirdlg.h	OS2H
 mdi.h	OS2H
 radiobut.h	OS2H
 tooltip.h	OS2H
