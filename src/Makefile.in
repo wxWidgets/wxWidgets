@@ -89,11 +89,11 @@ all::
 	@if test ! -d motif; then mkdir motif; fi
 	@if test ! -d motif/xmcombo; then mkdir motif/xmcombo; fi
 	@if test ! -d common; then mkdir common; fi
+	@if test ! -d unix; then mkdir unix; fi
 	@if test ! -d generic; then mkdir generic; fi
 	@if test ! -d png; then mkdir png; fi
 	@if test ! -d zlib; then mkdir zlib; fi
 	@if test ! -d iodbc; then mkdir iodbc; fi
-	@if test ! -d unix; then mkdir unix; fi
 
 install::
 	@echo " "
@@ -193,6 +193,7 @@ clean::
 	$(RM) -rf qt
 	$(RM) -rf motif
 	$(RM) -rf common
+	$(RM) -rf unix
 	$(RM) -rf generic
 	$(RM) -rf png
 	$(RM) -rf zlib
