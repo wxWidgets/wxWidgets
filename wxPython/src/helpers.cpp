@@ -1818,7 +1818,8 @@ long wxPyGetWinHandle(wxWindow* win) {
 #endif
     
 #ifdef __WXMAC__
-    return (long)MAC_WXHWND(win->MacGetRootWindow());
+    //return (long)MAC_WXHWND(win->MacGetTopLevelWindowRef());
+    return (long)win->GetHandle();
 #endif
 
     return 0;
