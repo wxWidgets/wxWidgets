@@ -21,6 +21,7 @@
 #endif
 
 #include "wx/display.h"
+#include "wx/intl.h"
 #include "wx/log.h"
 
 #ifndef WX_PRECOMP
@@ -191,7 +192,7 @@ wxArrayVideoModes wxDisplay::GetModes(const wxVideoMode& mode) const
     }
     else //OOPS!
     {
-        wxLogSysError("XF86VidModeGetAllModeLines Failed in wxX11Display::GetModes()!");
+        wxLogSysError(_("Failed to enumerate video modes"));
     }
 
     return Modes;
@@ -252,7 +253,7 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
         }
         else //OOPS!
         {
-            wxLogSysError("XF86VidModeGetAllModeLines Failed in wxX11Display::ChangeMode()!");
+            wxLogSysError(_("Failed to change video mode"));
             return false;
         }
     }
