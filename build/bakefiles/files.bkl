@@ -245,6 +245,7 @@
 <!-- ====================================================================== -->
 
 <set var="GUICMN_SRC">
+    src/generic/selstore.cpp
     src/generic/busyinfo.cpp
     src/generic/calctrl.cpp
     src/generic/choicdgg.cpp
@@ -338,6 +339,7 @@
     src/common/xpmdecod.cpp
 </set>
 <set var="GUICMN_HDR">
+    wx/selstore.h
     wx/generic/accel.h
     wx/generic/calctrl.h
     wx/generic/caret.h
