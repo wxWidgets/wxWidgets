@@ -257,8 +257,8 @@ into the control than the limit set by
 Default constructor.
 
 \func{}{wxTextCtrl}{\param{wxWindow* }{parent}, \param{wxWindowID}{ id},\rtfsp
-\param{const wxString\& }{value = ``"}, \param{const wxPoint\& }{pos}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
-\param{long}{ style = 0}, \param{const wxValidator\& }{validator}, \param{const wxString\& }{name = ``text"}}
+\param{const wxString\& }{value = ``"}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = wxTextCtrlNameStr}}
 
 Constructor, creating and showing a text control.
 
@@ -372,8 +372,8 @@ Copies the selected text to the clipboard under Motif and MS Windows.
 \membersection{wxTextCtrl::Create}\label{wxtextctrlcreate}
 
 \func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID}{ id},\rtfsp
-\param{const wxString\& }{value = ``"}, \param{const wxPoint\& }{pos}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
-\param{long}{ style = 0}, \param{const wxValidator\& }{validator}, \param{const wxString\& }{name = ``text"}}
+\param{const wxString\& }{value = ``"}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = wxTextCtrlNameStr}}
 
 Creates the text control for two-step construction. Derived classes
 should call or replace this function. See \helpref{wxTextCtrl::wxTextCtrl}{wxtextctrlconstr}\rtfsp
