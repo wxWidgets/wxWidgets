@@ -386,7 +386,7 @@ def DrawArcToEllipse(x1, y1, width1, height1, x2, y2, x3, y3):
     E = (A + B)
     F = (C - (2 * A * x1) - (2 * B * x2))
     G = ((A * x1 * x1) + (B * x2 * x2) - (C * x2) + D - 1)
-    H = (float(y3 - y2) / (x2 - x2))
+    H = (float(y3 - y2) / (x3 - x2))
     K = ((F * F) - (4 * E * G))
 
     if K >= 0:
