@@ -125,8 +125,8 @@
 	    $EXTRA_LIBS.=" png jpeg tiff";
 	}
 	foreach ( split(/ /, $EXTRA_LIBS) ) {
-	    $DEBUG_EXTRA_LIBS .= "$WXDIR\\lib\\$_.lib ";
-	    $RELEASE_EXTRA_LIBS .= "$WXDIR\\lib\\$_" . "d.lib ";
+	    $RELEASE_EXTRA_LIBS .= "$WXDIR\\lib\\$_.lib ";
+	    $DEBUG_EXTRA_LIBS .= "$WXDIR\\lib\\$_" . "d.lib ";
 	}
 
 	#! the wxWin lib name itself is composed from the basename with various
