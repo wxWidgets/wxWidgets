@@ -629,7 +629,7 @@ static pascal OSStatus wxMacTopLevelWindowEventHandler( EventHandlerCallRef hand
                     adjustR.SetHeight( toplevelWindow->GetMinHeight() ) ;
                 const Rect adjustedRect = { adjustR.y + top  , adjustR.x + left , adjustR.y + adjustR.height - bottom , adjustR.x + adjustR.width - right } ;
                 if ( !EqualRect( &newRect , &adjustedRect ) )
-                    cEvent.SetParameter( kEventParamCurrentBounds , adjustedRect ) ;
+                    cEvent.SetParameter<Rect>( kEventParamCurrentBounds , &adjustedRect ) ;
             }
 
             result = noErr ;
