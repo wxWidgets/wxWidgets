@@ -1,7 +1,7 @@
 
-  Welcome to wxWindows/Motif 2.2.0
+  Welcome to wxWindows/Motif 2.2.1
 
-You have downloaded version 2.2.0 of the Motif port of
+You have downloaded version 2.2.1 of the Motif port of
 the wxWindows GUI library.
 
 More information about the wxWindows project as a whole
@@ -33,7 +33,7 @@ Alternatively, you may also use the bug reporting system
 linked from the wxWindows web page.
 
 The library produced by the install process will be called 
-libwx_motif.a (static) and libwx_motif-2.2.so.0.0.0 (shared) so that
+libwx_motif.a (static) and libwx_motif-2.2.so.0.1.1 (shared) so that
 once a binary incompatible version of wxWindows/Motif comes out 
 we'll augment the library version number to avoid linking problems.
 

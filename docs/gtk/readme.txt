@@ -38,7 +38,7 @@ VERSION OF GTK, WXGTK, WHAT DISTRIBUTION YOU USE AND WHAT ERROR
 WAS REPORTED. I know this has no effect, but I tried...
 
 The library produced by the install process will be called 
-libwx_gtk.a (static) and libwx_gtk-2.2.so.0.0.0 (shared) so 
+libwx_gtk.a (static) and libwx_gtk-2.2.so.0.1.1 (shared) so
 that once a binary incompatible version of wxWindows/Gtk comes 
 out we'll augment the library version number to avoid linking 
 problems.
