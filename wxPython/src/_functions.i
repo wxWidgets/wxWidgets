@@ -57,7 +57,7 @@ wxString wxGetOsDescription();
 // // The arrays will contain an equal number of items found before the error.
 // // wildCard is in the form:
 // // "All files (*)|*|Image Files (*.jpeg *.png)|*.jpg;*.png"
-// int wxParseWildcard(const wxString& wildCard, wxArrayString& descriptions, wxArrayString& filters);
+// int wxParseCommonDialogsFilter(const wxString& wildCard, wxArrayString& descriptions, wxArrayString& filters);
 
 #if defined(__WXMSW__) || defined(__WXMAC__)
 long wxGetFreeMemory();

@@ -88,7 +88,7 @@ int wxFileDialogBase::ParseWildcard(const wxString& filterStr,
                                     wxArrayString& descriptions,
                                     wxArrayString& filters)
 {
-    return ::wxParseWildcard(filterStr, descriptions, filters);
+    return ::wxParseCommonDialogsFilter(filterStr, descriptions, filters);
 }
 #endif // WXWIN_COMPATIBILITY_2_4
 
@@ -175,7 +175,7 @@ wxString wxFileSelector(const wxChar *title,
 
         wxArrayString descriptions, filters;
         // don't care about errors, handled already by wxFileDialog
-        (void)wxParseWildcard(filter2, descriptions, filters);
+        (void)wxParseCommonDialogsFilter(filter2, descriptions, filters);
         for (size_t n=0; n<filters.GetCount(); n++)
                 {
             if (filters[n].Contains(defaultExtension))

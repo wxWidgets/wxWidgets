@@ -901,7 +901,7 @@ wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
 
     // interpret wildcards
     wxArrayString wildDescriptions, wildFilters;
-    if ( !wxParseWildcard(m_wildCard, wildDescriptions, wildFilters) )
+    if ( !wxParseCommonDialogsFilter(m_wildCard, wildDescriptions, wildFilters) )
     {
         wxFAIL_MSG( wxT("Wrong file type description") );
     }

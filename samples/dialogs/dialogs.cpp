@@ -647,7 +647,7 @@ void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
 #ifdef __WXMOTIF__
                     _T("C++ files (*.cpp)|*.cpp")
 #else
-                    _T("C++ files (*.h;*.cpp)|*.h;*.cpp")
+                    _T("C++ files (*.cpp;*.h)|*.cpp;*.h")
 #endif
                  );
 
@@ -698,7 +698,7 @@ void MyFrame::FilesOpen(wxCommandEvent& WXUNUSED(event) )
 #ifdef __WXMOTIF__
                     _T("C++ files (*.cpp)|*.cpp");
 #else
-                    _T("All files (*.*)|*.*|C++ files (*.h;*.cpp)|*.h;*.cpp");
+                    _T("All files (*.*)|*.*|C++ files (*.cpp;*.h)|*.cpp;*.h");
 #endif
     wxFileDialog dialog(this, _T("Testing open multiple file dialog"),
                         wxEmptyString, wxEmptyString, wildcards,
@@ -756,7 +756,7 @@ void MyFrame::FileOpenGeneric(wxCommandEvent& WXUNUSED(event) )
                     _T("Testing open file dialog"),
                     wxEmptyString,
                     wxEmptyString,
-                    _T("C++ files (*.h;*.cpp)|*.h;*.cpp")
+                    _T("C++ files (*.cpp;*.h)|*.cpp;*.h")
                  );
 
     dialog.SetDirectory(wxGetHomeDir());
@@ -777,7 +777,7 @@ void MyFrame::FileOpenGeneric(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::FilesOpenGeneric(wxCommandEvent& WXUNUSED(event) )
 {
-    wxString wildcards = _T("All files (*.*)|*.*|C++ files (*.h;*.cpp)|*.h;*.cpp");
+    wxString wildcards = _T("All files (*.*)|*.*|C++ files (*.cpp;*.h)|*.cpp;*.h");
     wxGenericFileDialog dialog(this, _T("Testing open multiple file dialog"),
                         wxEmptyString, wxEmptyString, wildcards,
                         wxMULTIPLE);

@@ -1137,7 +1137,7 @@ void wxGenericDirCtrl::SetFilter(const wxString& filter)
 bool wxGenericDirCtrl::ExtractWildcard(const wxString& filterStr, int n, wxString& filter, wxString& description)
 {
     wxArrayString filters, descriptions;
-    int count = wxParseWildcard(filterStr, filters, descriptions);
+    int count = wxParseCommonDialogsFilter(filterStr, descriptions, filters);
     if (count > 0 && n < count)
     {
         filter = filters[n];
@@ -1154,7 +1154,7 @@ bool wxGenericDirCtrl::ExtractWildcard(const wxString& filterStr, int n, wxStrin
 // filterStr is in the form: "All files (*.*)|*.*|JPEG Files (*.jpeg)|*.jpg"
 int wxGenericDirCtrl::ParseFilter(const wxString& filterStr, wxArrayString& filters, wxArrayString& descriptions)
 {
-    return wxParseWildcard(filterStr, descriptions, filters );
+    return wxParseCommonDialogsFilter(filterStr, descriptions, filters );
 }
 #endif // WXWIN_COMPATIBILITY_2_4
 
@@ -1266,7 +1266,7 @@ void wxDirFilterListCtrl::FillFilterList(const wxString& filter, int defaultFilt
 {
     Clear();
     wxArrayString descriptions, filters;
-    size_t n = (size_t) wxParseWildcard(filter, filters, descriptions);
+    size_t n = (size_t) wxParseCommonDialogsFilter(filter, filters, descriptions);
 
     if (n > 0 && defaultFilter < (int) n)
     {

@@ -1838,9 +1838,9 @@ time_t WXDLLEXPORT wxFileModificationTime(const wxString& filename)
 
 // Parses the filterStr, returning the number of filters.
 // Returns 0 if none or if there's a problem.
-// filterStr is in the form: "All files (*.*)|*.*|JPEG Files (*.jpeg)|*.jpg"
+// filterStr is in the form: "All files (*.*)|*.*|JPEG Files (*.jpeg)|*.jpeg"
 
-int WXDLLEXPORT wxParseWildcard(const wxString& filterStr, wxArrayString& descriptions, wxArrayString& filters)
+int WXDLLEXPORT wxParseCommonDialogsFilter(const wxString& filterStr, wxArrayString& descriptions, wxArrayString& filters)
 {
     descriptions.Clear();
     filters.Clear();
@@ -1855,10 +1855,10 @@ int WXDLLEXPORT wxParseWildcard(const wxString& filterStr, wxArrayString& descri
         if ( pos == wxNOT_FOUND )
         {
             // if there are no '|'s at all in the string just take the entire
-            // string as filter
+            // string as filter and make description empty for later autocompletion
             if ( filters.IsEmpty() )
             {
-                descriptions.Add(filterStr);
+                descriptions.Add(wxEmptyString);
                 filters.Add(filterStr);
             }
             else
@@ -1884,6 +1884,62 @@ int WXDLLEXPORT wxParseWildcard(const wxString& filterStr, wxArrayString& descri
 
         descriptions.Add(description);
         filters.Add(filter);
+    }
+
+#if defined(__WXMOTIF__)
+    // split it so there is one wildcard per entry
+    for( size_t i = 0 ; i < descriptions.GetCount() ; i++ )
+    {
+        pos = filters[i].Find(wxT(';'));
+        if (pos != wxNOT_FOUND)
+        {
+            // first split only filters
+            descriptions.Insert(descriptions[i],i+1);
+            filters.Insert(filters[i].Mid(pos+1),i+1);
+            filters[i]=filters[i].Left(pos);
+
+            // autoreplace new filter in description with pattern:
+            //     C/C++ Files(*.cpp;*.c;*.h)|*.cpp;*.c;*.h
+            // cause split into:
+            //     C/C++ Files(*.cpp)|*.cpp
+            //     C/C++ Files(*.c;*.h)|*.c;*.h
+            // and next iteration cause another split into:
+            //     C/C++ Files(*.cpp)|*.cpp
+            //     C/C++ Files(*.c)|*.c
+            //     C/C++ Files(*.h)|*.h
+            for ( size_t k=i;k<i+2;k++ )
+            {
+                pos = descriptions[k].Find(filters[k]);
+                if (pos != wxNOT_FOUND)
+                {
+                    wxString before = descriptions[k].Left(pos);
+                    wxString after = descriptions[k].Mid(pos+filters[k].Len());
+                    pos = before.Find(_T('('),true);
+                    if (pos>before.Find(_T(')'),true))
+                    {
+                        before = before.Left(pos+1);
+                        before << filters[k];
+                        pos = after.Find(_T(')'));
+                        int pos1 = after.Find(_T('('));
+                        if (pos != wxNOT_FOUND && (pos<pos1 || pos1==wxNOT_FOUND))
+                        {
+                            before << after.Mid(pos);
+                            descriptions[k] = before;
+                        }
+                    }
+                }
+            }
+        }
+    }
+#endif
+
+    // autocompletion
+    for( size_t j = 0 ; j < descriptions.GetCount() ; j++ )
+    {
+        if ( descriptions[j] == wxEmptyString && filters[j] != wxEmptyString )
+        {
+            descriptions[j].Printf(_("Files (%s)"), filters[j].c_str());
+        }
     }
 
     return filters.GetCount();

@@ -230,37 +230,22 @@ int wxFileDialog::ShowModal()
 
     of.Flags             = msw_flags;
 
+    wxArrayString wildDescriptions, wildFilters;
 
-    //=== Like Alejandro Sierra's wildcard modification >>===================
-    /*
-       In wxFileSelector you can put, instead of a single wild_card,
-       pairs of strings separated by '|'.
-       The first string is a description, and the
-       second is the wild card. You can put any number of pairs.
+    size_t items = wxParseCommonDialogsFilter(m_wildCard, wildDescriptions, wildFilters);
 
-       eg.  "description1 (*.ex1)|*.ex1|description2 (*.ex2)|*.ex2"
+    wxASSERT_MSG( items > 0 , _T("empty wildcard list") );
 
-       If you put a single wild card, it works as before the modification.
-     */
-    //=======================================================================
-
-    wxString theFilter;
-    if ( wxStrlen(m_wildCard) == 0 )
-        theFilter = wxString(wxT("*.*"));
-    else
-        theFilter = m_wildCard ;
     wxString filterBuffer;
 
-    if ( !wxStrchr( theFilter, wxT('|') ) ) {    // only one filter ==> default text
-        filterBuffer.Printf(_("Files (%s)|%s"),
-                            theFilter.c_str(), theFilter.c_str());
+    for (i = 0; i < items ; i++)
+    {
+        filterBuffer += wildDescriptions[i];
+        filterBuffer += wxT("|");
+        filterBuffer += wildFilters[i];
+        filterBuffer += wxT("|");
     }
-    else {                                // more then one filter
-        filterBuffer = theFilter;
 
-    }
-
-    filterBuffer += wxT("|");
     // Replace | with \0
     for (i = 0; i < filterBuffer.Len(); i++ ) {
         if ( filterBuffer.GetChar(i) == wxT('|') ) {
@@ -268,7 +253,7 @@ int wxFileDialog::ShowModal()
         }
     }
 
-    of.lpstrFilter  = (LPTSTR)(const wxChar *)filterBuffer;
+    of.lpstrFilter  = (LPTSTR)filterBuffer.c_str();
     of.nFilterIndex = m_filterIndex + 1;
 
     //=== Setting defaultFileName >>=========================================

@@ -181,7 +181,7 @@ the corresponding topic.
 \helpref{wxNow}{wxnow}\\
 \helpref{wxOnAssert}{wxonassert}\\
 \helpref{wxOpenClipboard}{wxopenclipboard}\\
-\helpref{wxParseWildcard}{wxparsewildcard}\\
+\helpref{wxParseCommonDialogsFilter}{wxparsecommondialogsfilter}\\
 \helpref{wxPathOnly}{wxpathonly}\\
 \helpref{wxPostDelete}{wxpostdelete}\\
 \helpref{wxPostEvent}{wxpostevent}\\
@@ -1094,13 +1094,15 @@ Makes the directory \arg{dir}, returning true if successful.
 supported (Unix) and doesn't have effect for the other ones.
 
 
-\membersection{::wxParseWildcard}\label{wxparsewildcard}
+\membersection{::wxParseCommonDialogsFilter}\label{wxparsecommondialogsfilter}
 
-\func{int}{wxParseWildcard}{\param{const wxString\& }{wildCard}, \param{wxArrayString\& }{descriptions}, \param{wxArrayString\& }{filters}}
+\func{int}{wxParseCommonDialogsFilter}{\param{const wxString\& }{wildCard}, \param{wxArrayString\& }{descriptions}, \param{wxArrayString\& }{filters}}
 
 Parses the \arg{wildCard}, returning the number of filters.
 Returns 0 if none or if there's a problem.
 The arrays will contain an equal number of items found before the error.
+On platforms where native dialogs handle only one filter per entry,
+entries in arrays are automatically adjusted.
 \arg{wildCard} is in the form:
 \begin{verbatim}
  "All files (*)|*|Image Files (*.jpeg *.png)|*.jpg;*.png"
