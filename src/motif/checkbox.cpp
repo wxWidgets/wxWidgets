@@ -171,6 +171,7 @@ void wxCheckBox::DoSet3StateValue(wxCheckBoxState state)
     case wxCHK_UNCHECKED: value = XmUNSET; break;
     case wxCHK_CHECKED: value = XmSET; break;
     case wxCHK_UNDETERMINED: value = XmINDETERMINATE; break;
+    default: wxASSERT(0); return;
     }
 
     XtVaSetValues( (Widget) m_mainWidget,
