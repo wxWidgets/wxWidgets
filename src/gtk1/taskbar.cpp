@@ -84,6 +84,7 @@ extern "C" void wxPopupMenuPositionCallback( GtkMenu *menu,
                                              gboolean * WXUNUSED(whatever),
                                              gpointer user_data );
 
+#if wxUSE_MENUS_NATIVE
 bool wxTaskBarIconAreaBase::DoPopupMenu( wxMenu *menu, int x, int y )
 {
     wxCHECK_MSG( m_widget != NULL, false, wxT("invalid window") );
@@ -140,6 +141,7 @@ bool wxTaskBarIconAreaBase::DoPopupMenu( wxMenu *menu, int x, int y )
 
     return true;
 }
+#endif // wxUSE_MENUS_NATIVE
 
 #endif // __WXGTK20__
 #endif // GTK_CHECK_VERSION(2, 1, 0)
