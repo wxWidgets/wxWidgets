@@ -36471,6 +36471,7 @@ if test "$wxUSE_DEBUGREPORT" = "yes"; then
 #define wxUSE_DEBUGREPORT 1
 _ACEOF
 
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS debugrpt"
 fi
 
 if test "$wxUSE_SNGLINST_CHECKER" = "yes"; then

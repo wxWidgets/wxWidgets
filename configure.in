@@ -4874,6 +4874,7 @@ fi
 
 if test "$wxUSE_DEBUGREPORT" = "yes"; then
     AC_DEFINE(wxUSE_DEBUGREPORT)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS debugrpt"
 fi
 
 if test "$wxUSE_SNGLINST_CHECKER" = "yes"; then
