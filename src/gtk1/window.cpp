@@ -248,6 +248,8 @@ void debug_focus_in( GtkWidget* widget, const wxChar* name, const wxChar *window
     }
 }
 
+#else
+#define DEBUG_MAIN_THREAD
 #endif // Debug
 
 //-----------------------------------------------------------------------------
