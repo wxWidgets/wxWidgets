@@ -21,13 +21,16 @@
 #include "wx/icon.h"
 #include "wx/log.h"
 #include "wx/image.h"
+#include "wx/xpmdecod.h"
 
-extern "C" 
+#ifndef __UNIX__
+  #define OBSOLETE_XPM_DATA_HANDLER
+#endif
+
+extern "C"
 {
-#ifdef __UNIX__
-    #include "xpm/xpm.h"
-#else
-	#include "xpm.h"
+#ifdef OBSOLETE_XPM_DATA_HANDLER
+  #include "xpm.h"
 #endif
 } ;
 
@@ -200,9 +203,9 @@ wxBitmapRefData::wxBitmapRefData()
     m_quality = 0;
     m_numColors = 0;
     m_bitmapMask = NULL;
-		m_hBitmap = NULL ;
-		m_hPict = NULL ;
-		m_bitmapType = kMacBitmapTypeUnknownType ;
+    m_hBitmap = NULL ;
+    m_hPict = NULL ;
+    m_bitmapType = kMacBitmapTypeUnknownType ;
 }
 
 wxBitmapRefData::~wxBitmapRefData()
@@ -265,55 +268,54 @@ wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits
     M_BITMAPDATA->m_numColors = 0;
     if ( no_bits == 1 )
     {
-	M_BITMAPDATA->m_bitmapType = kMacBitmapTypeGrafWorld ;
-	M_BITMAPDATA->m_hBitmap = wxMacCreateGWorld( the_width , the_height , no_bits ) ;
-	M_BITMAPDATA->m_ok = (M_BITMAPDATA->m_hBitmap != NULL ) ;
+        M_BITMAPDATA->m_bitmapType = kMacBitmapTypeGrafWorld ;
+        M_BITMAPDATA->m_hBitmap = wxMacCreateGWorld( the_width , the_height , no_bits ) ;
+        M_BITMAPDATA->m_ok = (M_BITMAPDATA->m_hBitmap != NULL ) ;
 	
-	CGrafPtr 	origPort ;
-	GDHandle	origDevice ;
+        CGrafPtr 	origPort ;
+        GDHandle	origDevice ;
 	
-	GetGWorld( &origPort , &origDevice ) ;
-	SetGWorld( M_BITMAPDATA->m_hBitmap , NULL ) ;
-	LockPixels( GetGWorldPixMap( M_BITMAPDATA->m_hBitmap ) ) ;
+        GetGWorld( &origPort , &origDevice ) ;
+        SetGWorld( M_BITMAPDATA->m_hBitmap , NULL ) ;
+        LockPixels( GetGWorldPixMap( M_BITMAPDATA->m_hBitmap ) ) ;
 	
-	// bits is a char array
+        // bits is a char array
 	
-	unsigned char* linestart = (unsigned char*) bits ;
-	int linesize = ( the_width / (sizeof(unsigned char) * 8)) ;
-	if ( the_width % (sizeof(unsigned char) * 8) ) {
-	    linesize += sizeof(unsigned char);
-	}
+        unsigned char* linestart = (unsigned char*) bits ;
+        int linesize = ( the_width / (sizeof(unsigned char) * 8)) ;
+        if ( the_width % (sizeof(unsigned char) * 8) ) {
+            linesize += sizeof(unsigned char);
+        }
 	
-	RGBColor colors[2] = { 
-	    { 0xFFFF , 0xFFFF , 0xFFFF } ,
-	    { 0, 0 , 0 } 
-	} ;
+        RGBColor colors[2] = { 
+            { 0xFFFF , 0xFFFF , 0xFFFF } ,
+            { 0, 0 , 0 } 
+        } ;
 	
-	for ( int y = 0 ; y < the_height ; ++y , linestart += linesize )
-	{
-	    for ( int x = 0 ; x < the_width ; ++x )
-	    {
-		int index = x / 8 ;
-		int bit = x % 8 ;
-		int mask = 1 << bit ;
-		if ( linestart[index] & mask )
-		{
-		    SetCPixel( x , y , &colors[1] ) ;
-		}
-		else
-		{
-		    SetCPixel( x , y , &colors[0] ) ;
-		}
-	    }
-	    
-	}
-	UnlockPixels( GetGWorldPixMap( M_BITMAPDATA->m_hBitmap ) ) ;
+        for ( int y = 0 ; y < the_height ; ++y , linestart += linesize )
+        {
+            for ( int x = 0 ; x < the_width ; ++x )
+            {
+                int index = x / 8 ;
+                int bit = x % 8 ;
+                int mask = 1 << bit ;
+                if ( linestart[index] & mask )
+                {
+                    SetCPixel( x , y , &colors[1] ) ;
+                }
+                else
+                {
+                    SetCPixel( x , y , &colors[0] ) ;
+                }
+            }
+        }
+        UnlockPixels( GetGWorldPixMap( M_BITMAPDATA->m_hBitmap ) ) ;
 	
-	SetGWorld( origPort , origDevice ) ;
+        SetGWorld( origPort , origDevice ) ;
     }
     else
     {
-	wxFAIL_MSG(wxT("multicolor BITMAPs not yet implemented"));
+        wxFAIL_MSG(wxT("multicolor BITMAPs not yet implemented"));
     }
     
     if ( wxTheBitmapList ) {
@@ -345,14 +347,33 @@ wxBitmap::wxBitmap(const wxString& filename, long type)
         wxTheBitmapList->AddBitmap(this);
 }
 
-wxBitmap::wxBitmap(const char **data)
+bool wxBitmap::CreateFromXpm(const char **bits)
 {
-    (void) Create((void *)data, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
+    wxCHECK_MSG( bits != NULL, FALSE, wxT("invalid bitmap data") )
+    wxXPMDecoder decoder;
+    wxImage img = decoder.ReadData(bits);
+    wxCHECK_MSG( img.Ok(), FALSE, wxT("invalid bitmap data") )    
+    *this = wxBitmap(img);   
+    if ( wxTheBitmapList ) wxTheBitmapList->AddBitmap(this);
+    return TRUE;
 }
 
-wxBitmap::wxBitmap(char **data)
+wxBitmap::wxBitmap(const char **bits)
 {
-    (void) Create((void *)data, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
+#ifdef OBSOLETE_XPM_DATA_HANDLER
+    (void) Create((void *)bits, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
+#else
+    (void) CreateFromXpm(bits);
+#endif
+}
+
+wxBitmap::wxBitmap(char **bits)
+{
+#ifdef OBSOLETE_XPM_DATA_HANDLER
+    (void) Create((void *)bits, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
+#else
+    (void) CreateFromXpm((const char **)bits);
+#endif
 }
 
 wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
@@ -567,7 +588,7 @@ wxBitmap::wxBitmap(const wxImage& image, int depth)
 
     // Create mask
     if ( image.HasMask() ) {
-        wxMask *mask = new wxMask( maskBitmap );
+        SetMask(new wxMask( maskBitmap ));
     }
     
     UnlockPixels( GetGWorldPixMap(GetHBITMAP()) );
@@ -1264,7 +1285,7 @@ bool wxXPMFileHandler::SaveFile(wxBitmap *bitmap, const wxString& name, int type
 #endif
 }
 
-
+#ifdef OBSOLETE_XPM_DATA_HANDLER
 class WXDLLEXPORT wxXPMDataHandler: public wxBitmapHandler
 {
   DECLARE_DYNAMIC_CLASS(wxXPMDataHandler)
@@ -1282,10 +1303,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxXPMDataHandler, wxBitmapHandler)
 
 bool wxXPMDataHandler::Create(wxBitmap *bitmap, void *data, long flags, int width, int height, int depth)
 {
- 	XImage *		ximage = NULL ;
- 	XImage *		xshapeimage = NULL ;
-  	int     		ErrorStatus;
-  	XpmAttributes 	xpmAttr;
+    XImage *		ximage = NULL ;
+    XImage *		xshapeimage = NULL ;
+    int     		ErrorStatus;
+    XpmAttributes 	xpmAttr;
 
     xpmAttr.valuemask = XpmReturnInfos; // get infos back
     ErrorStatus = XpmCreateImageFromData( GetMainDevice() , (char **)data,
@@ -1293,27 +1314,27 @@ bool wxXPMDataHandler::Create(wxBitmap *bitmap, void *data, long flags, int widt
 
     if (ErrorStatus == XpmSuccess)
     {
-			M_BITMAPHANDLERDATA->m_ok = FALSE;
-			M_BITMAPHANDLERDATA->m_numColors = 0;
-			M_BITMAPHANDLERDATA->m_hBitmap = ximage->gworldptr ;
+        M_BITMAPHANDLERDATA->m_ok = FALSE;
+        M_BITMAPHANDLERDATA->m_numColors = 0;
+        M_BITMAPHANDLERDATA->m_hBitmap = ximage->gworldptr ;
 	  
-			M_BITMAPHANDLERDATA->m_width = ximage->width;
-			M_BITMAPHANDLERDATA->m_height = ximage->height;
-			M_BITMAPHANDLERDATA->m_depth = ximage->depth;
-			M_BITMAPHANDLERDATA->m_numColors = xpmAttr.npixels;
+        M_BITMAPHANDLERDATA->m_width = ximage->width;
+        M_BITMAPHANDLERDATA->m_height = ximage->height;
+        M_BITMAPHANDLERDATA->m_depth = ximage->depth;
+        M_BITMAPHANDLERDATA->m_numColors = xpmAttr.npixels;
     	XpmFreeAttributes(&xpmAttr);
-	    M_BITMAPHANDLERDATA->m_ok = TRUE;
-			ximage->gworldptr = NULL ;
-			XImageFree(ximage); // releases the malloc, but does not detroy
+        M_BITMAPHANDLERDATA->m_ok = TRUE;
+        ximage->gworldptr = NULL ;
+        XImageFree(ximage); // releases the malloc, but does not detroy
 		                  // the bitmap
-			M_BITMAPHANDLERDATA->m_bitmapType = kMacBitmapTypeGrafWorld ;
-			if ( xshapeimage != NULL )
-			{
-				wxMask* m = new wxMask() ;
-				m->SetMaskBitmap( xshapeimage->gworldptr ) ;
-				M_BITMAPHANDLERDATA->m_bitmapMask = m ;
-			}
-			return TRUE;
+        M_BITMAPHANDLERDATA->m_bitmapType = kMacBitmapTypeGrafWorld ;
+        if ( xshapeimage != NULL )
+        {
+        	wxMask* m = new wxMask() ;
+        	m->SetMaskBitmap( xshapeimage->gworldptr ) ;
+        	M_BITMAPHANDLERDATA->m_bitmapMask = m ;
+        }
+        return TRUE;
     } 
     else
     {
@@ -1322,6 +1343,7 @@ bool wxXPMDataHandler::Create(wxBitmap *bitmap, void *data, long flags, int widt
     }
   return FALSE;
 }
+#endif
 
 class WXDLLEXPORT wxBMPResourceHandler: public wxBitmapHandler
 {
@@ -1416,10 +1438,12 @@ void wxBitmap::CleanUpHandlers()
 
 void wxBitmap::InitStandardHandlers()
 {
-	AddHandler( new wxPICTResourceHandler ) ;
-	AddHandler( new wxICONResourceHandler ) ;
-	AddHandler(new wxXPMFileHandler);
-  	AddHandler(new wxXPMDataHandler);
-	AddHandler(new wxBMPResourceHandler);
-	AddHandler(new wxBMPFileHandler);
+    AddHandler(new wxPICTResourceHandler) ;
+    AddHandler(new wxICONResourceHandler) ;
+    AddHandler(new wxXPMFileHandler);
+#ifdef OBSOLETE_XPM_DATA_HANDLER
+    AddHandler(new wxXPMDataHandler);
+#endif
+    AddHandler(new wxBMPResourceHandler);
+    AddHandler(new wxBMPFileHandler);
 }
