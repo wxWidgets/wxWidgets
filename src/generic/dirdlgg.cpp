@@ -268,6 +268,8 @@ void wxDirCtrl::OnExpandItem( const wxTreeEvent &event )
   }
   CreateItems(event.GetItem());
   wxEndBusyCursor();
+  
+  SortChildren( event.GetItem() );
 };
 
 

@@ -1,9 +1,11 @@
 
-  Welcome to wxWindows/Gtk,
+  Welcome to wxWindows for GTK 1.0,
   
-you have downloaded version 1.99 of the GTK+ port of C++ library
-wxWindows. Information on how to install can be found in the
-file INSTALL.txt, but if you cannot wait, this should work on
+you have downloaded the first beta version of the upcoming
+release 2.0 of the GTK+ 1.0 port of wxWindows library.
+ 
+Information on how to install can be found in the file 
+INSTALL.txt, but if you cannot wait, this should work on
 all systems
 
 configure --without-threads
