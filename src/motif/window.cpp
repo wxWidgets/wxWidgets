@@ -1372,13 +1372,6 @@ void wxWindow::DoSetClientSize(int width, int height)
         XtVaSetValues(widget, XmNheight, height, NULL);
 }
 
-// For implementation purposes - sometimes decorations make the client area
-// smaller
-wxPoint wxWindow::GetClientAreaOrigin() const
-{
-    return wxPoint(0, 0);
-}
-
 void wxWindow::DoMoveWindowIntr(int xx, int yy, int w, int h,
                                 int flags)
 {

@@ -148,10 +148,6 @@ public:
     void ClearUpdateRegion() { m_updateRegion.Clear(); }
     void SetUpdateRegion(const wxRegion& region) { m_updateRegion = region; }
     
-    // For implementation purposes - sometimes decorations make the client area
-    // smaller
-    virtual wxPoint GetClientAreaOrigin() const;
-
     // Process idle (send update events)
     void OnInternalIdle();
     
