@@ -32,6 +32,7 @@
 #include "wx/dc.h"
 
 #include "wx/settings.h"
+#include "wx/splitter.h"
 
 #include "wx/renderer.h"
 
@@ -205,29 +206,32 @@ wxRendererGeneric::DrawTreeItemButton(wxWindow * WXUNUSED(win),
 // ----------------------------------------------------------------------------
 
 wxPoint
-wxRendererGeneric::GetSplitterSashAndBorder(const wxWindow * WXUNUSED(win))
+wxRendererGeneric::GetSplitterSashAndBorder(const wxWindow *win)
 {
     // see below
-    return wxPoint(7, 2);
+    return win->HasFlag(wxSP_3D) ? wxPoint(7, 2) : wxPoint(3, 0);
 }
 
 void
-wxRendererGeneric::DrawSplitterBorder(wxWindow * WXUNUSED(win),
+wxRendererGeneric::DrawSplitterBorder(wxWindow *win,
                                       wxDC& dc,
                                       const wxRect& rectOrig)
 {
-    wxRect rect = rectOrig;
-    DrawShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
-    DrawShadedRect(dc, &rect, m_penBlack, m_penLightGrey);
+    if ( win->HasFlag(wxSP_3D) )
+    {
+        wxRect rect = rectOrig;
+        DrawShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
+        DrawShadedRect(dc, &rect, m_penBlack, m_penLightGrey);
+    }
 }
 
 void
-wxRendererGeneric::DrawSplitterSash(wxWindow * WXUNUSED(win),
+wxRendererGeneric::DrawSplitterSash(wxWindow *win,
                                     wxDC& dc,
                                     const wxSize& size,
                                     wxCoord position)
 {
-    // we draw a Win32-like sash here:
+    // we draw a Win32-like grey sash with possible 3D border here:
     //
     //   ---- this is position
     //  /
@@ -242,24 +246,32 @@ wxRendererGeneric::DrawSplitterSash(wxWindow * WXUNUSED(win),
     // GWGGGDB  and lower letters are our border (already drawn)
     // GWGGGDB
     // wWGGGDd
+    //
+    // only the middle 3 columns are drawn unless wxSP_3D is specified
 
     const wxCoord h = size.y;
 
     // from left to right
-    dc.SetPen(m_penLightGrey);
-    dc.DrawLine(position, 1, position, h - 1);
+    if ( win->HasFlag(wxSP_3D) )
+    {
+        dc.SetPen(m_penLightGrey);
+        dc.DrawLine(position, 1, position, h - 1);
 
-    dc.SetPen(m_penHighlight);
-    dc.DrawLine(position + 1, 0, position + 1, h);
+        dc.SetPen(m_penHighlight);
+        dc.DrawLine(position + 1, 0, position + 1, h);
+    }
 
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.SetBrush(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE)));
     dc.DrawRectangle(position + 2, 0, 3, h);
 
-    dc.SetPen(m_penDarkGrey);
-    dc.DrawLine(position + 5, 0, position + 5, h);
+    if ( win->HasFlag(wxSP_3D) )
+    {
+        dc.SetPen(m_penDarkGrey);
+        dc.DrawLine(position + 5, 0, position + 5, h);
 
-    dc.SetPen(m_penBlack);
-    dc.DrawLine(position + 6, 1, position + 6, h - 1);
+        dc.SetPen(m_penBlack);
+        dc.DrawLine(position + 6, 1, position + 6, h - 1);
+    }
 }
 
