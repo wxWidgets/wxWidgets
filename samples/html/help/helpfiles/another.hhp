@@ -1,6 +1,0 @@
-[OPTIONS]
-Compatibility=1.1
-Contents file=another.hhc
-Display compile progress=No
-Title=Another book
-Default topic=another.htm
