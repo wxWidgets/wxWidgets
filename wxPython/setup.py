@@ -873,14 +873,21 @@ if not GL_ONLY and BUILD_DLLWIDGET:
 # Tools and scripts
 #----------------------------------------------------------------------
 
-TOOLS = [("wxPython/tools",        glob.glob("tools/*.py")),
-         ("wxPython/tools/XRCed",  glob.glob("tools/XRCed/*.py") +
-                                   glob.glob("tools/XRCed/*.xrc") +
-                                   ["tools/XRCed/CHANGES",
-                                    "tools/XRCed/TODO",
-                                    "tools/XRCed/README"]),
-         ]
+## TOOLS = [("wxPython/tools",        glob.glob("tools/*.py")),
+##          ("wxPython/tools/XRCed",  glob.glob("tools/XRCed/*.py") +
+##                                    glob.glob("tools/XRCed/*.xrc") +
+##                                    ["tools/XRCed/CHANGES",
+##                                     "tools/XRCed/TODO",
+##                                     "tools/XRCed/README"]),
+##          ]
 
+SCRIPTS = ['scripts/img2png',
+           'scripts/img2xpm',
+           'scripts/img2py',
+           'scripts/xrced',
+           'scripts/pyshell',
+           'scripts/pycrust',
+           ],
 
 
 
@@ -915,13 +922,7 @@ if __name__ == "__main__":
 
               ##data_files = TOOLS,
 
-              scripts = ['scripts/img2png',
-                         'scripts/img2xpm',
-                         'scripts/img2py',
-                         'scripts/xrced',
-                         'scripts/pyshell',
-                         'scripts/pycrust',
-                         ],
+              scripts = SCRIPTS,
               )
 
     else:

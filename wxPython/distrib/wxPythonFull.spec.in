@@ -6,9 +6,13 @@
 %define lcport 	@LCPORT@
 %define tarname @TARNAME@
 %define version @VERSION@
-%define ver2    2.3
+%define ver2    @VER2@
 %define release 1
 %define wxpref  %{pref}/lib/wxPython
+
+# Should --enable-debug_flag be used in release builds?
+%define debug_flag 1
+
 
 %if %{debug}
     %define name      wxPython%{port}-py%{pyver}-dbg
@@ -16,6 +20,13 @@
 %else
     %define name      wxPython%{port}-py%{pyver}
     %define othername wxPython%{port}-py%{pyver}-dbg
+%endif
+
+
+%if %{debug} || %{debug_flag}
+    %define wxconfigname %{wxpref}/bin/wx%{lcport}d-%{ver2}-config
+%else
+    %define wxconfigname %{wxpref}/bin/wx%{lcport}-%{ver2}-config
 %endif
 
 
@@ -91,6 +102,9 @@ cd build
 	--enable-debug \
 %else
 	--enable-optimise \
+%if %{debug_flag}
+	--enable-debug_flag \
+%endif
 %endif
 	--with-libjpeg=builtin \
 	--with-libpng=builtin \
@@ -127,7 +141,6 @@ cd ../wxPython
 
 #----------------------------------------------------------------
 %install
-## ** [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
 %find_lang wxstd
 cd wxPython
 %{python} setup.py \
@@ -166,18 +179,14 @@ cd wxPython
 %{wxpref}/lib/libwx*
 %{pref}/lib/python*
 %{wxpref}/share/
-
+%{pref}/bin/*
 
 
 %files devel
 %defattr(-,root,root)
 %{wxpref}/include/wx
 %{wxpref}/lib/wx
-%if %{debug}
-    %{wxpref}/bin/wx%{lcport}d-%{ver2}-config
-%else
-    %{wxpref}/bin/wx%{lcport}-%{ver2}-config
-%endif
+%{wxconfigname}
 %{wxpref}/bin/wx-config
 
 

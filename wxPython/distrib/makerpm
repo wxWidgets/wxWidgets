@@ -54,6 +54,7 @@ version=$2
 pyver=$3
 shift;shift;shift
 
+ver2=`echo ${version} | cut -c 1,2,3`
 tarver=${tarname}-${version}
 
 
@@ -74,6 +75,7 @@ function makespec {
 	| sed s:@LCPORT@:${lcport}:g \
 	| sed s:@TARNAME@:${tarname}:g \
 	| sed s:@VERSION@:${version}:g \
+	| sed s:@VER2@:${ver2}:g \
 	> ${distdir}/wxPython${port}.spec
 }
 
@@ -136,7 +138,9 @@ if [ -z "${skipcvs}" ]; then
     rm `find . -name .cvsignore`
     rm *.spec
     rm -rf demos
-#     rm -rf docs
+#    rm -rf docs
+    rm -rf docs/html
+    rm -rf docs/latex
     rm -rf samples
     rm -rf utils
 #     rm -rf include/wx/mgl
