@@ -22,6 +22,15 @@ enum {
 };
 
 //---------------------------------------------------------------------------
+
+%typemap(in) (int points, wxPoint* points_array ) {
+    $2 = wxPoint_LIST_helper($input, &$1);
+    if ($2 == NULL) SWIG_fail;
+}
+%typemap(freearg) (int points, wxPoint* points_array ) {
+    if ($2) delete [] $2;
+}
+
 //---------------------------------------------------------------------------
 
 class wxPseudoMetaFile : public wxObject {
@@ -69,9 +78,9 @@ public:
     void DrawEllipse(const wxRect& rect);
     void DrawPoint(const wxPoint& pt);
     void DrawText(const wxString& text, const wxPoint& pt);
-    void DrawLines(int PCOUNT, wxPoint* points);
-    void DrawPolygon(int PCOUNT, wxPoint* points, int flags = 0);
-    void DrawSpline(int PCOUNT, wxPoint* points);
+    void DrawLines(int points, wxPoint* points_array);
+    void DrawPolygon(int points, wxPoint* points_array, int flags = 0);
+    void DrawSpline(int points, wxPoint* points_array);
     void SetClippingRect(const wxRect& rect);
     void DestroyClippingRect();
     void SetPen(wxPen* pen, bool isOutline = FALSE);
@@ -286,12 +295,14 @@ public:
     void DrawAtAngle(int angle);
     void DrawEllipticArc(const wxRect& rect, double startAngle, double endAngle);
     void DrawLine(const wxPoint& point1, const wxPoint& point2);
-    void DrawLines(int PCOUNT, wxPoint* points);
+    void DrawLines(int points, wxPoint* points_array);
     void DrawPoint(const wxPoint& point);
-    void DrawPolygon(int PCOUNT, wxPoint* points, int flags = 0);
+    
+    void DrawPolygon(int points, wxPoint* points_array, int flags = 0);
+    
     void DrawRectangle(const wxRect& rect);
     void DrawRoundedRectangle(const wxRect& rect, double radius);
-    void DrawSpline(int PCOUNT, wxPoint* points);
+    void DrawSpline(int points, wxPoint* points_array);
     void DrawText(const wxString& text, const wxPoint& point);
     int GetAngle();
 

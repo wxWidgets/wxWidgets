@@ -10252,18 +10252,17 @@ static PyObject *_wrap_PseudoMetaFile_DrawLines(PyObject *self, PyObject *args, 
     wxPoint *arg3 = (wxPoint *) 0 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
-    PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "PCOUNT",(char *) "points", NULL 
+        (char *) "self",(char *) "points", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:PseudoMetaFile_DrawLines",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PseudoMetaFile_DrawLines",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPseudoMetaFile,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
-    if (PyErr_Occurred()) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_wxPoint,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        arg3 = wxPoint_LIST_helper(obj1, &arg2);
+        if (arg3 == NULL) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->DrawLines(arg2,arg3);
@@ -10272,8 +10271,14 @@ static PyObject *_wrap_PseudoMetaFile_DrawLines(PyObject *self, PyObject *args, 
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
+    {
+        if (arg3) delete [] arg3;
+    }
     return resultobj;
     fail:
+    {
+        if (arg3) delete [] arg3;
+    }
     return NULL;
 }
 
@@ -10287,20 +10292,19 @@ static PyObject *_wrap_PseudoMetaFile_DrawPolygon(PyObject *self, PyObject *args
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
-    PyObject * obj3 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "PCOUNT",(char *) "points",(char *) "flags", NULL 
+        (char *) "self",(char *) "points",(char *) "flags", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|O:PseudoMetaFile_DrawPolygon",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:PseudoMetaFile_DrawPolygon",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPseudoMetaFile,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
-    if (PyErr_Occurred()) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_wxPoint,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    if (obj3) {
-        arg4 = (int) SWIG_AsInt(obj3); 
+    {
+        arg3 = wxPoint_LIST_helper(obj1, &arg2);
+        if (arg3 == NULL) SWIG_fail;
+    }
+    if (obj2) {
+        arg4 = (int) SWIG_AsInt(obj2); 
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
@@ -10311,8 +10315,14 @@ static PyObject *_wrap_PseudoMetaFile_DrawPolygon(PyObject *self, PyObject *args
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
+    {
+        if (arg3) delete [] arg3;
+    }
     return resultobj;
     fail:
+    {
+        if (arg3) delete [] arg3;
+    }
     return NULL;
 }
 
@@ -10324,18 +10334,17 @@ static PyObject *_wrap_PseudoMetaFile_DrawSpline(PyObject *self, PyObject *args,
     wxPoint *arg3 = (wxPoint *) 0 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
-    PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "PCOUNT",(char *) "points", NULL 
+        (char *) "self",(char *) "points", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:PseudoMetaFile_DrawSpline",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PseudoMetaFile_DrawSpline",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPseudoMetaFile,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
-    if (PyErr_Occurred()) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_wxPoint,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        arg3 = wxPoint_LIST_helper(obj1, &arg2);
+        if (arg3 == NULL) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->DrawSpline(arg2,arg3);
@@ -10344,8 +10353,14 @@ static PyObject *_wrap_PseudoMetaFile_DrawSpline(PyObject *self, PyObject *args,
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
+    {
+        if (arg3) delete [] arg3;
+    }
     return resultobj;
     fail:
+    {
+        if (arg3) delete [] arg3;
+    }
     return NULL;
 }
 
@@ -14986,18 +15001,17 @@ static PyObject *_wrap_PyDrawnShape_DrawLines(PyObject *self, PyObject *args, Py
     wxPoint *arg3 = (wxPoint *) 0 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
-    PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "PCOUNT",(char *) "points", NULL 
+        (char *) "self",(char *) "points", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:PyDrawnShape_DrawLines",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyDrawnShape_DrawLines",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPyDrawnShape,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
-    if (PyErr_Occurred()) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_wxPoint,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        arg3 = wxPoint_LIST_helper(obj1, &arg2);
+        if (arg3 == NULL) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->DrawLines(arg2,arg3);
@@ -15006,8 +15020,14 @@ static PyObject *_wrap_PyDrawnShape_DrawLines(PyObject *self, PyObject *args, Py
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
+    {
+        if (arg3) delete [] arg3;
+    }
     return resultobj;
     fail:
+    {
+        if (arg3) delete [] arg3;
+    }
     return NULL;
 }
 
@@ -15053,20 +15073,19 @@ static PyObject *_wrap_PyDrawnShape_DrawPolygon(PyObject *self, PyObject *args, 
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
-    PyObject * obj3 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "PCOUNT",(char *) "points",(char *) "flags", NULL 
+        (char *) "self",(char *) "points",(char *) "flags", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|O:PyDrawnShape_DrawPolygon",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:PyDrawnShape_DrawPolygon",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPyDrawnShape,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
-    if (PyErr_Occurred()) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_wxPoint,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    if (obj3) {
-        arg4 = (int) SWIG_AsInt(obj3); 
+    {
+        arg3 = wxPoint_LIST_helper(obj1, &arg2);
+        if (arg3 == NULL) SWIG_fail;
+    }
+    if (obj2) {
+        arg4 = (int) SWIG_AsInt(obj2); 
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
@@ -15077,8 +15096,14 @@ static PyObject *_wrap_PyDrawnShape_DrawPolygon(PyObject *self, PyObject *args, 
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
+    {
+        if (arg3) delete [] arg3;
+    }
     return resultobj;
     fail:
+    {
+        if (arg3) delete [] arg3;
+    }
     return NULL;
 }
 
@@ -15158,18 +15183,17 @@ static PyObject *_wrap_PyDrawnShape_DrawSpline(PyObject *self, PyObject *args, P
     wxPoint *arg3 = (wxPoint *) 0 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
-    PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "PCOUNT",(char *) "points", NULL 
+        (char *) "self",(char *) "points", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:PyDrawnShape_DrawSpline",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:PyDrawnShape_DrawSpline",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPyDrawnShape,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int) SWIG_AsInt(obj1); 
-    if (PyErr_Occurred()) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_wxPoint,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        arg3 = wxPoint_LIST_helper(obj1, &arg2);
+        if (arg3 == NULL) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->DrawSpline(arg2,arg3);
@@ -15178,8 +15202,14 @@ static PyObject *_wrap_PyDrawnShape_DrawSpline(PyObject *self, PyObject *args, P
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
+    {
+        if (arg3) delete [] arg3;
+    }
     return resultobj;
     fail:
+    {
+        if (arg3) delete [] arg3;
+    }
     return NULL;
 }
 

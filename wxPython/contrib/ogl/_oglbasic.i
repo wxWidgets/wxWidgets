@@ -145,7 +145,7 @@ public:
 
 class wxPyShape : public wxPyShapeEvtHandler {
 public:
-    %pythonAppend wxPyShape "self._setOORandCallbackInfo(PyShapeEvtHandler)"
+    %pythonAppend wxPyShape "self._setOORandCallbackInfo(PyShape)"
     
     wxPyShape(wxPyShapeCanvas *can = NULL);  
 
