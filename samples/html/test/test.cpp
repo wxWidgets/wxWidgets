@@ -109,29 +109,17 @@
    // `Main program' equivalent: the program execution "starts" here
    bool MyApp::OnInit()
    {
-     wxLogDebug("[starting testing app]");
-     #if wxUSE_LIBPNG
-     wxImage::AddHandler(new wxPNGHandler);
-     #endif
-     #if wxUSE_LIBJPEG
-     wxImage::AddHandler(new wxJPEGHandler);
-     #endif
-     #if wxUSE_GIF
-     wxImage::AddHandler(new wxGIFHandler);
-     #endif
+     wxInitAllImageHandlers();
      #if wxUSE_FS_INET
      wxFileSystem::AddHandler(new wxInternetFSHandler);
      #endif
     // Create the main application window
       MyFrame *frame = new MyFrame("wxHtmlWindow testing application",
          wxPoint(50, 50), wxSize(640, 480));
-      MyFrame *frame2 = new MyFrame("wxHtmlWindow testing application, frame 2",
-         wxPoint(150, 50), wxSize(320, 240));
    
     // Show it and tell the application that it's our main window
     // @@@ what does it do exactly, in fact? is it necessary here?
       frame->Show(TRUE);
-      frame2->Show(TRUE);
       SetTopWindow(frame);
 
    
