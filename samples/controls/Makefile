@@ -1,0 +1,28 @@
+#
+# File:		Makefile for samples
+# Author:	Robert Roebling
+# Created:	1999
+# Updated:	
+# Copyright:	(c) 1998 Robert Roebling
+#
+# This makefile requires a Unix version of wxWindows
+# to be installed on your system. This is most often
+# done typing "make install" when using the complete
+# sources of wxWindows or by installing the two
+# RPM packages wxGTK.XXX.rpm and wxGTK-devel.XXX.rpm
+# under Linux.
+#
+
+CC = gcc
+
+PROGRAM = controls
+
+$(PROGRAM): $(PROGRAM).o
+	$(CC) -o $(PROGRAM) \
+	$(PROGRAM).o `wx-config --libs`
+
+$(PROGRAM).o: $(PROGRAM).cpp
+	$(CC) `wx-config --cflags` -c $(PROGRAM).cpp
+
+clean: 
+	rm -f *.o $(PROGRAM)
