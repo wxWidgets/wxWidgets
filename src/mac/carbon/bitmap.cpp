@@ -254,6 +254,7 @@ void wxMacReleaseBitmapButton( ControlButtonContentInfo*info )
     }
 }
 
+#define M_BITMAPDATA ((wxBitmapRefData *)m_refData)
 
 void wxBitmapRefData::Init()
 {
@@ -539,9 +540,9 @@ bool wxBitmap::CopyFromIcon(const wxIcon& icon)
         Handle imagehandle = NewHandle(0) ;
         Handle maskhandle = NewHandle(0) ;
         
-        OSType maskType ;
-        OSType dataType ;
-        IconSelectorValue selector ;    
+        OSType maskType = 0;
+        OSType dataType = 0;
+        IconSelectorValue selector = 0 ;    
         if ( w == 128 )
         {
             dataType = kThumbnail32BitData ;
