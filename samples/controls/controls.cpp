@@ -574,9 +574,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     };
 
     // fill the image list
-    wxImageList *imagelist = new wxImageList(32, 32);
+    wxBitmap bmp(list_xpm);
 
-    imagelist-> Add( wxBitmap( list_xpm ));
+    wxImageList *imagelist = new wxImageList(bmp.GetWidth(), bmp.GetHeight());
+
+    imagelist-> Add( bmp );
     imagelist-> Add( wxBitmap( choice_xpm ));
     imagelist-> Add( wxBitmap( combo_xpm ));
     imagelist-> Add( wxBitmap( text_xpm ));
