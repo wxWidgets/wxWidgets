@@ -199,7 +199,7 @@
 //
 // Recommended setting: 1 for win32 else 0
 #if defined(__WIN32__)
-    #define wxUSE_WCHAR_T 0 //? unresolved external symbol wxCharsetToCodepage
+    #define wxUSE_WCHAR_T 1
 #else
     #define wxUSE_WCHAR_T 0
 #endif
