@@ -56,7 +56,11 @@ const short kwxMacAppleMenuId = 1 ;
 
 // Construct a menu with optional title (then use append)
 
+#ifdef __UNIX__
+short wxMenu::s_macNextMenuId = 3 ;
+#else
 short wxMenu::s_macNextMenuId = 2 ;
+#endif
 
 void wxMenu::Init()
 {
