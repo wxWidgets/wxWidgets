@@ -56,6 +56,12 @@
 #   define wxUSE_EXCEPTIONS 0
 #endif /* wxNO_EXCEPTIONS */
 
+/* we also must disable exceptions if compiler doesn't support them */
+#if defined(_MSC_VER) && !defined(_CPPUNWIND)
+#   undef wxUSE_EXCEPTIONS
+#   define wxUSE_EXCEPTIONS 0
+#endif /* VC++ without exceptions support */
+
 
 /*
    tests for non GUI features
