@@ -27,9 +27,7 @@ all clean:
 	-$(MAKE) -C checklst -f $(MAKEFILE) $@
 	-$(MAKE) -C config -f $(MAKEFILE) $@
 	-$(MAKE) -C controls -f $(MAKEFILE) $@
-	-$(MAKE) -C db -f $(MAKEFILE) $@
 	-$(MAKE) -C dialogs -f $(MAKEFILE) $@
-	-$(MAKE) -C dialup -f $(MAKEFILE) $@
 	-$(MAKE) -C dnd -f $(MAKEFILE) $@
 	-$(MAKE) -C docview -f $(MAKEFILE) $@
 	-$(MAKE) -C docvwmdi -f $(MAKEFILE) $@
@@ -71,7 +69,6 @@ all clean:
 	-$(MAKE) -C sockets -f $(MAKEFILE) $@
 	-$(MAKE) -C splitter -f $(MAKEFILE) $@
 	-$(MAKE) -C statbar -f $(MAKEFILE) $@
-	-$(MAKE) -C tab -f $(MAKEFILE) $@
 	-$(MAKE) -C taskbar -f $(MAKEFILE) $@
 	-$(MAKE) -C text -f $(MAKEFILE) $@
 	-$(MAKE) -C thread -f $(MAKEFILE) $@
@@ -82,6 +79,10 @@ all clean:
 	-$(MAKE) -C validate -f $(MAKEFILE) $@
 	-$(MAKE) -C wizard -f $(MAKEFILE) $@
 
+# Don't compile or don't link
+#	-$(MAKE) -C dialup -f $(MAKEFILE) $@
+#	-$(MAKE) -C db -f $(MAKEFILE) $@
+#	-$(MAKE) -C tab -f $(MAKEFILE) $@
 
 # Samples untested
 #

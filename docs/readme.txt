@@ -231,5 +231,5 @@ web site) or contact Julian Smart <julian.smart@ukonline.co.uk>.
 
 Good luck!
 
-The wxWindows Team, 28th January, 2001
+The wxWindows Team, 18th May, 2001
 

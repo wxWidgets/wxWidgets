@@ -1,7 +1,7 @@
 
-  Welcome to wxWindows/Motif 2.2.1
+  Welcome to wxWindows/Motif 2.2.7
 
-You have downloaded version 2.2.1 of the Motif port of
+You have downloaded version 2.2.7 of the Motif port of
 the wxWindows GUI library.
 
 More information about the wxWindows project as a whole
