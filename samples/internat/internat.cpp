@@ -139,7 +139,7 @@ bool MyApp::OnInit()
             _T("Russian"),
 #if wxUSE_UNICODE
             _T("Japanese"),
-            _T("Georgian (no translation)"),
+            _T("Georgian"),
 #endif
             _T("English"),
             _T("English (U.S.)")

@@ -15,9 +15,11 @@ program_dir = samples/internat
 
 DATAFILES=fr/internat.po fr/internat.mo \
 	de/internat.po de/internat.mo \
+	ja/internat.po ja/internat.mo \
+	ka/internat.po ka/internat.mo \
 	ru/internat.po ru/internat.mo
 
-DATADIRS=fr de ru
+DATADIRS=fr de ja ka ru
 
 PROGRAM=internat
 
