@@ -148,9 +148,8 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
 
                         // found a match
                         if (match_pos == tag_len) {
-                            // These 2 lines commented:
-                            //pos = pos - tag_len - 3; pos is not used outside of while loop
-                            //stpos = pos; Value is local to while loop, no need to set it
+                            pos = pos - tag_len - 3;
+                            stpos = pos;
                             break;
                         }
                         else {
