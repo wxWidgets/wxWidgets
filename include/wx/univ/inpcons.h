@@ -136,7 +136,6 @@ private:
     void classname::OnActivate(wxActivateEvent& event) \
     { \
         wxInputConsumer::OnActivate(event); \
-    } \
-
+    }
 
 #endif // _WX_UNIV_INPCONS_H_
