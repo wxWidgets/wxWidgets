@@ -50,7 +50,7 @@
 
 BEGIN_EVENT_TABLE(PreferencesDialog, wxDialog)
     EVT_BUTTON( XRCID( "my_button" ), PreferencesDialog::OnMyButtonClicked )
-    EVT_UPDATE_UI(XRCID( "my_checkbox" ), PreferencesDialog::OuUpdateUIMyCheckbox )
+    EVT_UPDATE_UI(XRCID( "my_checkbox" ), PreferencesDialog::OnUpdateUIMyCheckbox )
     // Note that the ID here isn't a XRCID, it is one of the standard wx ID's.
     EVT_BUTTON( wxID_OK, PreferencesDialog::OnOK )
 END_EVENT_TABLE()
@@ -80,7 +80,7 @@ void PreferencesDialog::OnMyButtonClicked( wxCommandEvent &WXUNUSED(event) )
 
 // Update the enabled/disabled state of the edit/delete buttons depending on
 // whether a row (item) is selected in the listctrl
-void PreferencesDialog::OuUpdateUIMyCheckbox( wxUpdateUIEvent &WXUNUSED(event) )
+void PreferencesDialog::OnUpdateUIMyCheckbox( wxUpdateUIEvent &WXUNUSED(event) )
 {
     // Get a boolean value of whether the checkbox is checked
     bool myCheckBoxIsChecked;

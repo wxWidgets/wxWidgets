@@ -54,7 +54,7 @@ private:
 
     // Stuff to do when a "My Checkbox" gets updated
     // (drawn, or it changes its value)
-    void OuUpdateUIMyCheckbox( wxUpdateUIEvent &event );
+    void OnUpdateUIMyCheckbox( wxUpdateUIEvent &event );
 
     // Override base class functions of a wxDialog.
     void OnOK( wxCommandEvent &event );
