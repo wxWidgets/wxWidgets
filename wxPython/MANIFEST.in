@@ -57,6 +57,13 @@ include samples/StyleEditor/*.cfg
 include samples/pySketch/*.py
 include samples/pySketch/images/*.bmp
 include samples/frogedit/*.py
+include samples/embedded/*.py
+include samples/embedded/*.cpp
+include samples/embedded/*.txt
+include samples/embedded/*.vc
+include samples/embedded/*.unx
+include samples/embedded/*.ico
+include samples/embedded/*.xpm
 
 
 include wxPython/lib/*.py

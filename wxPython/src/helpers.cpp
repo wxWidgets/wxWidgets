@@ -80,8 +80,11 @@ BOOL WINAPI DllMain(
     LPVOID      lpvReserved  // reserved
    )
 {
-    wxSetInstance(hinstDLL);
-    return 1;
+    // If wxPython is embedded in another wxWindows app then
+    // the inatance has already been set.
+    if (! wxGetInstance())
+        wxSetInstance(hinstDLL);
+    return TRUE;
 }
 #endif
 
@@ -179,12 +182,12 @@ void __wxPreStart()
     wxPyTMutex = new wxMutex;
 #endif
 
-    // Bail out if there is already windows created.  This means that the
+    // Bail out if there is already a wxApp created.  This means that the
     // toolkit has already been initialized, as in embedding wxPython in
-    // a C++ wxWindows app.
-    if (wxTopLevelWindows.Number() > 0)
+    // a C++ wxWindows app, so we don't need to call wxEntryStart.
+    if (wxTheApp != NULL) {
         return;
-
+    }
     wxPyDoCleanup = TRUE;
 
     int argc = 0;
@@ -527,8 +530,6 @@ PyObject* wxPyConstructObject(void* ptr,
 PyObject* wxPyConstructObject(void* ptr,
                               const wxString& className,
                               int setThisOwn) {
-    PyObject* obj;
-
     if (!ptr) {
         Py_INCREF(Py_None);
         return Py_None;

@@ -167,6 +167,14 @@ Source: "samples\pySketch\images\*.bmp";   DestDir: "{app}\wxPython\samples\pySk
 
 Source: "samples\frogedit\*.py";           DestDir: "{app}\wxPython\samples\frogedit"; Components: samples
 
+Source: "samples\embedded\*.py";           DestDir: "{app}\wxPython\samples\embedded"; Components: samples
+Source: "samples\embedded\*.cpp";          DestDir: "{app}\wxPython\samples\embedded"; Components: samples
+Source: "samples\embedded\*.txt";          DestDir: "{app}\wxPython\samples\embedded"; Components: samples
+Source: "samples\embedded\*.vc";           DestDir: "{app}\wxPython\samples\embedded"; Components: samples
+Source: "samples\embedded\*.unx";          DestDir: "{app}\wxPython\samples\embedded"; Components: samples
+Source: "samples\embedded\*.ico";          DestDir: "{app}\wxPython\samples\embedded"; Components: samples
+Source: "samples\embedded\*.xpm";          DestDir: "{app}\wxPython\samples\embedded"; Components: samples
+
 ;;------------------------------------------------------------
 
 [Icons]

@@ -1,0 +1,29 @@
+#
+# Makefile for Unix
+#
+# This makefile requires a Unix version of wxWindows
+# to be installed on your system. This is most often
+# done typing "make install" when using the complete
+# sources of wxWindows or by installing the two
+# RPM packages wxGTK.XXX.rpm and wxGTK-devel.XXX.rpm
+# under Linux.
+#
+
+PROGRAM = embedded
+OBJECTS = $(PROGRAM).o
+
+CXX = $(shell wx-config --cxx)
+
+
+.SUFFIXES:	.o .cpp
+
+.cpp.o :
+	$(CXX) -c `wx-config --cxxflags` -o $@ $<
+
+all:    $(PROGRAM)
+
+$(PROGRAM):	$(OBJECTS)
+	$(CXX) -o $(PROGRAM) $(OBJECTS) `wx-config --libs`
+
+clean:
+	rm -f *.o $(PROGRAM)

@@ -109,7 +109,7 @@ public:
 %inline %{
     wxPyApp* wxGetApp() {
         //return wxPythonApp;
-        return (wxPyApp*)wxGetApp();
+        return (wxPyApp*)wxTheApp;
     }
 %}
 

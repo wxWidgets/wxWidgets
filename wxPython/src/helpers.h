@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////
 // Name:        helpers.h
-// Purpose:     Helper functions/classes for the wxPython extenaion module
+// Purpose:     Helper functions/classes for the wxPython extension module
 //
 // Author:      Robin Dunn
 //
@@ -278,7 +278,9 @@ struct wxPyCoreAPI {
 };
 
 #ifdef wxPyUSE_EXPORT
-static wxPyCoreAPI* wxPyCoreAPIPtr = NULL;  // Each module needs one, but doesn't have to use it.
+// Notice that this is static, not extern.  This is by design, each module
+// needs one, but doesn't have to use it.
+static wxPyCoreAPI* wxPyCoreAPIPtr = NULL;
 #endif
 
 
