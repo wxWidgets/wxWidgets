@@ -25,9 +25,6 @@
 #include "wx/filesys.h"
 #include "wx/hashmap.h"
 
-WX_DECLARE_HASH_MAP_WITH_DECL( long, long, wxIntegerHash, wxIntegerEqual,
-                               wxLongToLongHashMap, class WXDLLIMPEXP_BASE );
-
 //---------------------------------------------------------------------------
 // wxZipFSHandler
 //---------------------------------------------------------------------------

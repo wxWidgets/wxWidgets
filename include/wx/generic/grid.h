@@ -81,9 +81,6 @@ class WXDLLEXPORT wxComboBox;
 class WXDLLEXPORT wxTextCtrl;
 class WXDLLEXPORT wxSpinCtrl;
 
-WX_DECLARE_HASH_MAP_WITH_DECL( long, long, wxIntegerHash, wxIntegerEqual,
-                               wxLongToLongHashMap, class WXDLLIMPEXP_ADV );
-
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------

@@ -655,5 +655,12 @@ public: \
         (hashmap).clear();                                                   \
     }
 
+//---------------------------------------------------------------------------
+// Declarations of common hashmap classes
+
+WX_DECLARE_HASH_MAP_WITH_DECL( long, long, wxIntegerHash, wxIntegerEqual,
+                               wxLongToLongHashMap, class WXDLLIMPEXP_BASE );
+
+
 #endif // _WX_HASHMAP_H_
 
