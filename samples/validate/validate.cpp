@@ -15,7 +15,7 @@
 // from a text control. All validators transfer data, but not
 // all test validity, so don't be confused by the name.
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #   pragma implementation
 #endif // __GNUG__
 
