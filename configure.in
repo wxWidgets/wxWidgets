@@ -2304,9 +2304,19 @@ AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_CACHE_CHECK([if size_t is unsigned int],
     wx_cv_size_t_is_uint,
+    dnl an obvious check like AC_TRY_COMPILE[struct Foo { ... };] doesn't work
+    dnl with egcs (at least) up to 1.1.1 as it allows you to compile duplicate
+    dnl methods in a local class (i.e. class inside a function) declaration
+    dnl without any objections!!
+    dnl
+    dnl hence the hack below: we must have Foo at global scope!
     AC_TRY_COMPILE([#include <stddef.h>],
         [
+            return 0; }
+
             struct Foo { void foo(size_t); void foo(unsigned int); };
+
+            int bar() {
         ],
         wx_cv_size_t_is_uint=no,
         wx_cv_size_t_is_uint=yes
@@ -2320,7 +2330,11 @@ else
         wx_cv_size_t_is_ulong,
         AC_TRY_COMPILE([#include <stddef.h>],
             [
+                return 0; }
+
                 struct Foo { void foo(size_t); void foo(unsigned long); };
+
+                int bar() {
             ],
             wx_cv_size_t_is_ulong=no,
             wx_cv_size_t_is_ulong=yes
