@@ -1,36 +1,6 @@
-\documentstyle[a4,makeidx,verbatim,texhelp,fancyhea,mysober,mytitle]{report}
-\newcommand{\indexit}[1]{#1\index{#1}}%
-\newcommand{\pipe}[0]{$\|$\ }%
-\definecolour{black}{0}{0}{0}%
-\definecolour{cyan}{0}{255}{255}%
-\definecolour{green}{0}{255}{0}%
-\definecolour{magenta}{255}{0}{255}%
-\definecolour{red}{255}{0}{0}%
-\definecolour{blue}{0}{0}{200}%
-\definecolour{yellow}{255}{255}{0}%
-\definecolour{white}{255}{255}{255}%
-\input psbox.tex
-\parskip=10pt
-\parindent=0pt
-\title{Guide to porting applications from wxWindows 1.xx to 2.0}
-\author{Julian Smart}
-\date{March 1999}
-\makeindex
-\begin{document}
-\maketitle
-\pagestyle{fancyplain}
-\bibliographystyle{plain}
-\setheader{{\it CONTENTS}}{}{}{}{}{{\it CONTENTS}}
-\setfooter{\thepage}{}{}{}{}{\thepage}%
-\pagenumbering{roman}
-\tableofcontents
-%
-\chapter{About this document}\label{about}
-\pagenumbering{arabic}%
-\setheader{{\it Porting guide}}{}{}{}{}{{\it Porting guide}}%
-\setfooter{\thepage}{}{}{}{}{\thepage}%
+\chapter{Porting from wxWindows 1.xx}\label{porting}
 
-This document gives guidelines and tips for porting applications from
+This addendum gives guidelines and tips for porting applications from
 version 1.xx of wxWindows to version 2.0.
 
 The first section offers tips for writing 1.xx applications in a way to
@@ -53,7 +23,7 @@ future.
 
 {\it Please note that this document is a work in progress.}
 
-\chapter{Preparing for version 2.0}\label{preparing}
+\section{Preparing for version 2.0}\label{portingpreparing}
 
 Even before compiling with version 2.0, there's also a lot you can do right now to make porting
 relatively simple. Here are a few tips.
@@ -122,13 +92,13 @@ zero in the {\it multiple} parameter. The {\it multiple} parameter will be remov
 MDI sample is. In wxWindows 2.0, MDI functionality is separated into distinct classes.
 \end{itemize}
 
-\chapter{The new event system}\label{eventsystem}
+\section{The new event system}\label{portingeventsystem}
 
 The way that events are handled has been radically changed in wxWindows 2.0. Please
 read the topic `Event handling overview' in the wxWindows 2.0 manual for background
 on this.
 
-\section{Callbacks}
+\subsection{Callbacks}
 
 Instead of callbacks for panel items, menu command events, control commands and other events are directed to
 the originating window, or an ancestor, or an event handler that has been plugged into the window
@@ -151,14 +121,14 @@ Control commands, such as button commands, can be routed to a derived button cla
 the parent window, or even the frame. Here, you use a function of the form EVT\_BUTTON(id, func).
 Similar macros exist for other control commands.
 
-\section{Other events}
+\subsection{Other events}
 
 To intercept other events, you used to override virtual functions, such as OnSize. Now, while you can use
 the OnSize name for such event handlers (or any other name of your choice), it has only a single argument
 (wxSizeEvent) and must again be `mapped' using the EVT\_SIZE macro. The same goes for all other events,
 including OnClose (although in fact you can still use the old, virtual form of OnClose for the time being).
 
-\chapter{Class hierarchy}\label{classhierarchy}
+\section{Class hierarchy}\label{portingclasshierarchy}
 
 The class hierarchy has changed somewhat. wxToolBar and wxButtonBar
 classes have been split into several classes, and are derived from wxControl (which was
@@ -170,9 +140,9 @@ There are new MDI classes so that wxFrame does not have to be overloaded with th
 functionality.
 
 There are new device context classes, with wxPanelDC and wxCanvasDC disappearing.
-See \helpref{Device contexts and painting}{dc}.
+See \helpref{Device contexts and painting}{portingdc}.
 
-\chapter{GDI objects}\label{gdiobjects}
+\section{GDI objects}\label{portinggdiobjects}
 
 These objects - instances of classes such as wxPen, wxBrush, wxBitmap (but not wxColour) -
 are now implemented with reference-counting. This makes assignment a very cheap operation,
@@ -192,7 +162,7 @@ unless this causes too much of an overhead in your application.
 At a minimum, you will have to make sure that calls to SetPen, SetBrush etc. work. Also, where you pass NULL to these
 functions, you will need to use an identifier such as wxNullPen or wxNullBrush.
 
-\chapter{Dialogs and controls}\label{dialogscontrols}
+\section{Dialogs and controls}\label{portingdialogscontrols}
 
 \wxheading{Labels}
 
@@ -252,7 +222,7 @@ instead, which takes standard dialogs and panels and associates controls with pr
 You may also find that the new validation method, combined with dialog resources, is easier
 and more flexible than using wxForm.
 
-\chapter{Device contexts and painting}\label{dc}
+\section{Device contexts and painting}\label{portingdc}
 
 In wxWindows 2.0, device contexts are used for drawing into, as per 1.xx, but the way
 they are accessed and constructed is a bit different.
@@ -274,9 +244,9 @@ no longer exists.
 
 wxMetaFile and wxMetaFileDC have been renamed to wxMetafile and wxMetafileDC.
 
-\chapter{Miscellaneous}
+\section{Miscellaneous}
 
-\section{Strings}
+\subsection{Strings}
 
 wxString has replaced char* in the majority of cases. For passing strings into functions,
 this should not normally require you to change your code if the syntax is otherwise the
@@ -307,7 +277,7 @@ with this:
 To indicate an empty return value or a problem, a function may return either the
 empty string (``") or a null string. You can check for a null string with wxString::IsNull().
 
-\section{Use of const}
+\subsection{Use of const}
 
 The {\bf const} keyword is now used to denote constant functions that do not affect the
 object, and for function arguments to denote that the object passed cannot be changed.
@@ -318,19 +288,19 @@ check whether there is a parameter mismatch (or function type mismatch) involvin
 
 Try to use the {\bf const} keyword in your own code where possible.
 
-\chapter{Backward compatibility}\label{compat}
+\section{Backward compatibility}\label{portingcompat}
 
 Some wxWindows 1.xx functionality has been left to ease the transition to 2.0. This functionality
 (usually) only works if you compile with WXWIN\_COMPATIBILITY set to 1 in setup.h.
 
 Mostly this defines old names to be the new names (e.g. wxRectangle is defined to be wxRect).
 
-\chapter{Quick reference}\label{quickreference}
+\section{Quick reference}\label{portingquickreference}
 
 This section allows you to quickly find features that
 need to be converted.
 
-\section{Include files}
+\subsection{Include files}
 
 Use the form:
 
@@ -362,30 +332,30 @@ For precompiled header support, use this form:
 #include <wx/toolbar.h>
 \end{verbatim}
 
-\section{IPC classes}
+\subsection{IPC classes}
 
 These are now separated out into wxDDEServer/Client/Connection (Windows only) and wxTCPServer/Client/Connection
 (Windows and Unix). Take care to use wxString for your overridden function arguments, instead of char*, as per
 the documentation.
 
-\section{MDI style frames}
+\subsection{MDI style frames}
 
 MDI is now implemented as a family of separate classes, so you can't switch to MDI just by
 using a different frame style. Please see the documentation for the MDI frame classes, and the MDI
 sample may be helpful too.
 
-\section{OnActivate}
+\subsection{OnActivate}
 
 Replace the arguments with one wxActivateEvent\& argument, make sure the function isn't virtual,
 and add an EVT\_ACTIVATE event table entry.
 
-\section{OnChar}
+\subsection{OnChar}
 
 This is now a non-virtual function, with the same wxKeyEvent\& argument as before.
 Add an EVT\_CHAR macro to the event table
 for your window, and the implementation of your function will need very few changes.
 
-\section{OnClose}
+\subsection{OnClose}
 
 The old virtual function OnClose is now obsolete.
 Add an OnCloseWindow event handler using an EVT\_CLOSE event table entry. For details
@@ -394,7 +364,7 @@ topic so please read it very carefully. Basically, OnCloseWindow is now responsi
 destroying a window with Destroy(), but the default implementation (for example for wxDialog) may not
 destroy the window, so to be sure, always provide this event handler so it's obvious what's going on.
 
-\section{OnEvent}
+\subsection{OnEvent}
 
 This is now a non-virtual function, with the same wxMouseEvent\& argument as before. However
 you may wish to rename it OnMouseEvent. Add an EVT\_MOUSE\_EVENTS macro to the event table
@@ -403,12 +373,12 @@ However, if you wish to intercept different events using different functions, yo
 specify specific events in your event table, such as EVT\_LEFT\_DOWN.
 
 Your OnEvent function is likely to have references to GetDC(), so make sure you create
-a wxClientDC instead. See \helpref{Device contexts}{dc}.
+a wxClientDC instead. See \helpref{Device contexts}{portingdc}.
 
 If you are using a wxScrolledWindow (formerly wxCanvas), you should call
 PrepareDC(dc) to set the correct translation for the current scroll position.
 
-\section{OnMenuCommand}
+\subsection{OnMenuCommand}
 
 You need to replace this virtual function with a series of non-virtual functions, one for
 each case of your old switch statement. Each function takes a wxCommandEvent\& argument.
@@ -416,7 +386,7 @@ Create an event table for your frame
 containing EVT\_MENU macros, and insert DECLARE\_EVENT\_TABLE() in your frame class, as
 per the samples.
 
-\section{OnPaint}
+\subsection{OnPaint}
 
 This is now a non-virtual function, with a wxPaintEvent\& argument.
 Add an EVT\_PAINT macro to the event table
@@ -428,12 +398,12 @@ obtain the device context.
 If you are using a wxScrolledWindow (formerly wxCanvas), you should call
 PrepareDC(dc) to set the correct translation for the current scroll position.
 
-\section{OnSize}
+\subsection{OnSize}
 
 Replace the arguments with one wxSizeEvent\& argument, make it non-virtual, and add to your
 event table using EVT\_SIZE.
 
-\section{wxApp definition}
+\subsection{wxApp definition}
 
 The definition of OnInit has changed. Return a bool value, not a wxFrame.
 
@@ -441,51 +411,51 @@ Also, do {\it not} declare a global application object. Instead, use the macros
 DECLARE\_APP and IMPLEMENT\_APP as per the samples. Remove any occurrences of IMPLEMENT\_WXWIN\_MAIN:
 this is subsumed in IMPLEMENT\_APP.
 
-\section{wxButton}
+\subsection{wxButton}
 
 For bitmap buttons, use wxBitmapButton.
 
-\section{wxCanvas}
+\subsection{wxCanvas}
 
 Change the name to wxScrolledWindow.
 
-\section{wxDialogBox}
+\subsection{wxDialogBox}
 
 Change the name to wxDialog, and for modal dialogs, use ShowModal instead of Show.
 
-\section{wxDialog::Show}
+\subsection{wxDialog::Show}
 
 If you used {\bf Show} to show a modal dialog or to override the standard
 modal dialog {\bf Show}, use {\bf ShowModal} instead.
 
 \wxheading{See also}
 
-\helpref{Dialogs and controls}{dialogscontrols}
+\helpref{Dialogs and controls}{portingdialogscontrols}
 
-\section{wxForm}
+\subsection{wxForm}
 
 Sorry, this class is no longer available. Try using the wxPropertyListView or wxPropertyFormView class
 instead, or use .wxr files and validators.
 
-\section{wxPoint}
+\subsection{wxPoint}
 
 The old wxPoint is called wxRealPoint, and wxPoint now uses integers.
 
-\section{wxRectangle}
+\subsection{wxRectangle}
 
 This is now called wxRect.
 
-\section{wxScrollBar}
+\subsection{wxScrollBar}
 
 The function names have changed for this class: please refer to the documentation for wxScrollBar. Instead
 of setting properties individually, you will call SetScrollbar with several parameters.
 
-\section{wxText, wxMultiText, wxTextWindow}
+\subsection{wxText, wxMultiText, wxTextWindow}
 
 Change all these to wxTextCtrl. Add the window style wxTE\_MULTILINE if you
 wish to have a multi-line text control.
 
-\section{wxToolBar}
+\subsection{wxToolBar}
 
 This name is an alias for the most popular form of toolbar for your platform. There is now a family
 of toolbar classes, with for example wxToolBar95, wxToolBarMSW and wxToolBarSimple classes existing
@@ -495,4 +465,3 @@ Toolbar management is supported by frames, so calling wxFrame::CreateToolBar and
 enough, and the SDI or MDI frame will manage the positioning for you. The client area of the frame is the space
 left over when the menu bar, toolbar and status bar have been taken into account.
 
-\end{document}
