@@ -241,6 +241,8 @@ enum {
     wxTB_DOCKABLE,
     wxTB_NOICONS,
     wxTB_TEXT,
+    wxTB_NODIVIDER,
+    wxTB_NOALIGN,
 
     wxCOLOURED,
     wxFIXED_LENGTH,
