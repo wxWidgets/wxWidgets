@@ -113,6 +113,7 @@ public:
     void PrepareDC(wxDC& dc);
 
     int         m_backgroundMode;
+    int         m_textureBackground;
     int         m_mapMode;
     double      m_xUserScale;
     double      m_yUserScale;
@@ -203,8 +204,9 @@ enum
     Colour_TextBackground,
     Colour_Background,
     Colour_BackgroundMode,
+    Colour_TextureBackgound,
 
-    MenuOption_Last = Colour_BackgroundMode
+    MenuOption_Last = Colour_TextureBackgound
 };
 
 // ----------------------------------------------------------------------------
@@ -816,6 +818,20 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
     if ( m_owner->m_colourBackground.Ok() )
         dc.SetTextBackground( m_owner->m_colourBackground );
 
+    if ( m_owner->m_textureBackground) {
+        if ( m_owner->m_backgroundBrush.Ok() )
+            dc.SetBackground( m_owner->m_backgroundBrush );
+        else {
+            wxBrush b(wxColour(0,128,0), wxSOLID);
+            dc.SetBackground(b);
+        }
+        dc.Clear();
+
+        dc.SetPen(*wxMEDIUM_GREY_PEN);
+        for (int i=0; i<200; i++)
+            dc.DrawLine(0, i*10, i*10, 0);
+    }
+
     switch ( m_show )
     {
         case Show_Default:
@@ -928,6 +944,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuColour->Append( Colour_TextBackground, "Text background..." );
     menuColour->Append( Colour_Background, "Background colour..." );
     menuColour->Append( Colour_BackgroundMode, "Opaque/transparent\tCtrl-B", "", TRUE );
+    menuColour->Append( Colour_TextureBackgound, "Draw textured background\tCtrl-T", "", TRUE);
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar;
@@ -955,6 +972,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     m_backgroundMode = wxSOLID;
     m_colourForeground = *wxRED;
     m_colourBackground = *wxBLUE;
+    m_textureBackground = FALSE;
 
     m_canvas = new MyCanvas( this );
     m_canvas->SetScrollbars( 10, 10, 100, 240 );
@@ -1058,6 +1076,10 @@ void MyFrame::OnOption(wxCommandEvent& event)
         case Colour_BackgroundMode:
             m_backgroundMode = m_backgroundMode == wxSOLID ? wxTRANSPARENT
                                                            : wxSOLID;
+            break;
+
+        case Colour_TextureBackgound:
+            m_textureBackground = ! m_textureBackground;
             break;
 
         default:
