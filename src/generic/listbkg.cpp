@@ -53,11 +53,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxListbookEvent, wxNotifyEvent)
 
 const wxEventType wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING = wxNewEventType();
 const wxEventType wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED = wxNewEventType();
+const int wxID_LISTBOOKLISTVIEW = wxNewId();
 
 BEGIN_EVENT_TABLE(wxListbook, wxBookCtrl)
     EVT_SIZE(wxListbook::OnSize)
 
-    EVT_LIST_ITEM_SELECTED(wxID_ANY, wxListbook::OnListSelected)
+    EVT_LIST_ITEM_SELECTED(wxID_LISTBOOKLISTVIEW, wxListbook::OnListSelected)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -99,7 +100,7 @@ wxListbook::Create(wxWindow *parent,
     m_list = new wxListView
                  (
                     this,
-                    -1,
+                    wxID_LISTBOOKLISTVIEW,
                     wxDefaultPosition,
                     wxDefaultSize,
                     wxLC_ICON | wxLC_SINGLE_SEL
