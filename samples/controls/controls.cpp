@@ -553,8 +553,6 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                             wxPoint(0, 250), wxSize(100, 50), wxTE_MULTILINE);
     m_text->SetBackgroundColour(wxT("wheat"));
 
-    if ( 0 )
-        wxLog::AddTraceMask(_T("focus"));
     m_logTargetOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_text));
 
     m_notebook = new wxNotebook(this, ID_NOTEBOOK);
