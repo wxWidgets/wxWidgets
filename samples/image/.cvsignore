@@ -1,4 +1,7 @@
 test.png
 saved.xpm
 makemac?Data
-PPC?Debug*
+*Classic?Debug*
+*Classic?Release*
+*Carbon?Debug*
+*Carbon?Release*
