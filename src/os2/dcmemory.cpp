@@ -204,7 +204,7 @@ void wxMemoryDC::DoDrawRectangle(
         {
             unsigned char*          pucData = NULL;
             unsigned char*          pucBits;
-            int                     nBytesPerLine = vWidth * 3;
+            int                     nBytesPerLine = m_vSelectedBitmap.GetWidth() * 3;
             LONG                    lScans = 0L;
             POINTL                  vPoint;
             LONG                    lColor;
@@ -231,14 +231,13 @@ void wxMemoryDC::DoDrawRectangle(
             pucBits = pucData;
             for (int i = 0; i < m_vSelectedBitmap.GetHeight(); i++)
             {
-                for (int j = vX; j < m_vSelectedBitmap.GetWidth(); j++)
+                for (int j = 0; j < m_vSelectedBitmap.GetWidth(); j++)
                 {
                     if (i >= vY && j >= vX && i < vHeight && j < vWidth)
                     {
-                        vPoint.x = j; vPoint.y = i;
                         if (i == vY || j == vX ||
                             i == m_vSelectedBitmap.GetWidth() -1 ||
-                            j == m_vSelectedBitmap.GetHeight()
+                            j == m_vSelectedBitmap.GetHeight() - 1
                            )
                             lColor = m_pen.GetColour().GetPixel();
                         else

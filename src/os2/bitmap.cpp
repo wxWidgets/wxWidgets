@@ -600,7 +600,7 @@ bool wxBitmap::CreateFromImage (
     HDC                             hDC   = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDop, NULLHANDLE);
     HPS                             hPS   = ::GpiCreatePS(vHabmain, hDC, &vSize, PU_PELS | GPIA_ASSOC);
     LONG                            lScans;
-    HDC                             hDCScreen = ::WinOpenWindowDC(HWND_DESKTOP);
+    HDC                             hDCScreen = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDop, NULLHANDLE);
     HPS                             hPSScreen;
     HBITMAP                         hBmp;
     HBITMAP                         hBmpOld;
@@ -661,6 +661,7 @@ bool wxBitmap::CreateFromImage (
         // Have to do something similar to WIN32's StretchDIBits, use GpiBitBlt
         // in combination with setting the bits into the selected bitmap
         //
+        vInfo.cBitCount       = 16;
         if ((lScans = ::GpiSetBitmapBits( hPS
                                          ,0             // Start at the bottom
                                          ,(LONG)nHeight // One line per scan
@@ -674,6 +675,25 @@ bool wxBitmap::CreateFromImage (
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
         }
+
+        //
+        // for debugging----
+        //
+LONG        alFormats[24];
+::GpiQueryDeviceBitmapFormats(hPS, 24, alFormats);
+if ((lScans = ::GpiQueryBitmapBits( hPS
+                                   ,0L
+                                   ,(LONG)nHeight
+                                   ,(PBYTE)pucBits
+                                   ,&vInfo
+                                  )) == GPI_ALTERROR)
+{
+    ERRORID                     vError;
+    wxString                    sError;
+
+    vError = ::WinGetLastError(vHabmain);
+    sError = wxPMErrorToStr(vError);
+}
 
         hPSScreen = ::GpiCreatePS( vHabmain
                                   ,hDCScreen
@@ -708,11 +728,11 @@ bool wxBitmap::CreateFromImage (
     //
     if (rImage.HasMask())
     {
-        vHeader.cbFix     =  sizeof(BITMAPINFOHEADER2);
+        vHeader.cbFix     = 16;
         vHeader.cx        = nWidth;
         vHeader.cy        = nHeight;
         vHeader.cPlanes   = 1;
-        vHeader.cBitCount = 1;
+        vHeader.cBitCount = 24;
         hBmp = ::GpiCreateBitmap( hPS
                                  ,&vHeader
                                  ,0L
@@ -725,7 +745,6 @@ bool wxBitmap::CreateFromImage (
         else
             nHeight = nSizeLimit / nBytePerLine;
         vHeader.cy = (DWORD)(nHeight);
-        vHeader.cbImage = nBytePerLine * nHeight;
         nOrigin = 0;
 
         unsigned char               cRed   = rImage.GetMaskRed();
@@ -745,7 +764,6 @@ bool wxBitmap::CreateFromImage (
                 //
                 nHeight         = nHRemain;
                 vHeader.cy      = (DWORD)(nHeight);
-                vHeader.cbImage = nBytePerLine * nHeight;
             }
             ptbits = pucBits;
             for (int j = 0; j < nHeight; j++)
@@ -801,7 +819,7 @@ bool wxBitmap::CreateFromImage (
 
         pMask->SetMaskBitmap((WXHBITMAP)hBmp);
         SetMask(pMask);
-        hBmpOld = ::GpiSetBitmap(hPS, hBmp);
+        hBmpOld = ::GpiSetBitmap(hPS, hBmpOld);
     }
 
     //
@@ -982,7 +1000,7 @@ wxImage wxBitmap::ConvertToImage() const
         HPS                         hMemPS = ::GpiCreatePS( vHabmain
                                                            ,hMemDC
                                                            ,&vSizlPage
-                                                           ,PU_PELS | GPIA_ASSOC | GPIT_MICRO
+                                                           ,PU_PELS | GPIA_ASSOC
                                                           );
         ::GpiSetColor(hMemPS, OS2RGB(0, 0, 0));
         ::GpiSetBackColor(hMemPS, OS2RGB(255, 255, 255) );
