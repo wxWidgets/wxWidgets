@@ -157,6 +157,8 @@ typedef unsigned int    uint;
 typedef signed   int    EBool;
 typedef unsigned int    size_t
 typedef int             wxPrintQuality;
+typedef int             wxCoord;
+
 
 //---------------------------------------------------------------------------
 
@@ -352,14 +354,6 @@ enum {
     wxSIZE_AUTO,
     wxSIZE_USE_EXISTING,
     wxSIZE_ALLOW_MINUS_ONE,
-#ifndef __WXGTK__
-    wxDF_TEXT,
-    wxDF_BITMAP,
-    wxDF_METAFILE,
-    wxDF_DIB,
-    wxDF_OEMTEXT,
-    wxDF_FILENAME,
-#endif
     wxPORTRAIT,
     wxLANDSCAPE,
     wxPRINT_QUALITY_HIGH,

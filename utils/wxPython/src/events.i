@@ -145,8 +145,8 @@ public:
     bool Moving();
     bool Entering();
     bool Leaving();
-    void Position(long *OUTPUT, long *OUTPUT);
     wxPoint GetPosition();
+    %name(GetPositionTuple)void GetPosition(long *OUTPUT, long *OUTPUT);
     wxPoint GetLogicalPosition(const wxDC& dc);
     long GetX();
     long GetY();

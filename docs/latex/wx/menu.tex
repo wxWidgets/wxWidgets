@@ -41,8 +41,7 @@ this window.
 
 \membersection{wxMenu::wxMenu}\label{wxmenuconstr}
 
-\func{}{wxMenu}{\param{const wxString\& }{title = ""},
- \param{const wxFunction}{ func = NULL}, \param{long}{ style = 0}}
+\func{}{wxMenu}{\param{const wxString\& }{title = ""}, \param{long}{ style = 0}}
 
 Constructs a wxMenu object.
 
@@ -50,18 +49,8 @@ Constructs a wxMenu object.
 
 \docparam{title}{A title for the popup menu: the empty string denotes no title.}
 
-\docparam{func}{A callback function if the menu is used as a popup using \helpref{wxWindow::PopupMenu}{wxwindowpopupmenu}.}
-
 \docparam{style}{If set to \tt{wxMENU_TEAROFF}, the menu will be detachable.}
 
-\pythonnote{The wxPython version of the \tt{wxMenu} constructor
-doesn't accept the callback argument because of reference counting
-issues.  There is a specialized wxMenu constructor called 
-\tt{wxPyMenu} which does and can be used for PopupMenus when callbacks
-are needed.  You must retain a reference to the menu while useing it
-otherwise your callback function will get dereferenced when the menu
-does.
-}
 
 \func{}{wxMenu}{\param{long}{ style}}
 

@@ -7,6 +7,8 @@ from windows import *
 
 from gdi import *
 
+from clip_dnd import *
+
 from frames import *
 
 from stattool import *

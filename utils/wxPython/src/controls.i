@@ -375,6 +375,14 @@ public:
     bool CanUndo();
     void GetSelection(long* OUTPUT, long* OUTPUT);
     bool IsEditable();
+    void Undo();
+    void Redo();
+
+    %addmethods {
+        void write(const wxString& text) {
+            self->AppendText(text + '\n');
+        }
+    }
 };
 
 //----------------------------------------------------------------------

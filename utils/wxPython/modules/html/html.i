@@ -51,90 +51,7 @@ wxSize wxPyDefaultSize(wxDefaultSize);
 %}
 
 %pragma(python) code = "import wx"
-%pragma(python) code = "widget = htmlc"
 
-%{
-
-#if 0
-static PyObject* mod_dict = NULL; // will be set by init
-
-#include <wx/html/mod_templ.h>
-
-TAG_HANDLER_BEGIN(PYTHONTAG, "PYTHON")
-    TAG_HANDLER_PROC(tag)
-    {
-        wxWindow *wnd;
-        wxString errmsg;
-        char pbuf[256];
-
-        int fl = 0;
-
-        bool doSave = wxPyRestoreThread();
-        while (1) {
-           if (tag.HasParam("FLOAT"))
-               tag.ScanParam("FLOAT", "%i", &fl);
-           PyObject* pyfunc = PyDict_GetItemString(mod_dict, "WidgetStarter");
-           if (pyfunc == NULL) {
-               errmsg = "Could not find object WidgetStarter";
-               break;
-           }
-           if (! PyCallable_Check(pyfunc)) {
-               errmsg = "WidgetStarter does not appear to be callable";
-               break;
-           }
-           SWIG_MakePtr(pbuf, m_WParser->GetWindow(), "_wxPyHtmlWindow_p");
-           PyObject* arglist = Py_BuildValue("(s,s)", pbuf,
-                               (const char*)tag.GetAllParams());
-           if (! arglist) {
-               errmsg = "Failed making argument list";
-               break;
-           }
-           PyObject* ret = PyEval_CallObject(pyfunc, arglist);
-           Py_DECREF(arglist);
-           if (ret == NULL) {
-              errmsg = "An error occured while calling WidgetStarter";
-              if (PyErr_Occurred())
-                 PyErr_Print();
-              break;
-           }
-           wnd = NULL;
-           if (PyString_Check(ret)) {
-              char* thisc = PyString_AsString(ret);
-              SWIG_GetPtr(thisc, (void**)&wnd, "_wxWindow_p");
-           }
-           Py_DECREF(ret);
-           if (! wnd) {
-               errmsg = "Could not make a wxWindow pointer from return ptr";
-               break;
-           }
-           wxPySaveThread(doSave);
-           wnd -> Show(TRUE);
-           m_WParser->OpenContainer()->InsertCell(new wxHtmlWidgetCell(wnd, fl));
-           return FALSE;
-        }
-
-        wxPySaveThread(doSave);
-
-        /* we got out of the loop. Must be an error. Show a box stating it. */
-        wnd = new wxTextCtrl( m_WParser -> GetWindow(), -1,
-                              errmsg, wxPoint(0,0),
-                              wxSize(300, 100), wxTE_MULTILINE );
-        wnd -> Show(TRUE);
-        m_WParser->OpenContainer()->InsertCell(new wxHtmlWidgetCell(wnd, 100));
-        return FALSE;
-    }
-
-TAG_HANDLER_END(PYTHONTAG)
-
-TAGS_MODULE_BEGIN(PythonTag)
-
-    TAGS_MODULE_ADD(PYTHONTAG)
-
-TAGS_MODULE_END(PythonTag)
-
-// Note: see also the init function where we add the module!
-#endif
-%}
 
 //---------------------------------------------------------------------------
 
@@ -606,22 +523,10 @@ public:
 
 %init %{
 
-#if 0
-    /* This is a bit cheesy. SWIG happens to call the dictionary d...
-     * I save it here, 'cause I don't know how to get it back later! */
-    mod_dict = d;
-#endif
-
     inithtmlhelpc();
 
     wxClassInfo::CleanUpClasses();
     wxClassInfo::InitializeClasses();
-
-#if 0
-    /* specifically add our python tag handler; it doesn't seem to
-     * happen by itself... */
-    wxHtmlWinParser::AddModule(new HTML_ModulePythonTag());
-#endif
 
     // Until wxFileSystem is wrapped...
     #if wxUSE_FS_ZIP

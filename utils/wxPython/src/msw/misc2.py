@@ -6,6 +6,10 @@ from windows import *
 from misc import *
 
 from gdi import *
+
+from clip_dnd import *
+
+from events import *
 class wxToolTipPtr :
     def __init__(self,this):
         self.this = this
@@ -85,6 +89,33 @@ class wxCaret(wxCaretPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(misc2c.new_wxCaret,_args,_kwargs)
         self.thisown = 1
+
+
+
+
+class wxFontEnumeratorPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self,misc2c=misc2c):
+        if self.thisown == 1 :
+            misc2c.delete_wxFontEnumerator(self)
+    def _setSelf(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFontEnumerator__setSelf,(self,) + _args, _kwargs)
+        return val
+    def EnumerateFacenames(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFontEnumerator_EnumerateFacenames,(self,) + _args, _kwargs)
+        return val
+    def EnumerateEncodings(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFontEnumerator_EnumerateEncodings,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxFontEnumerator instance at %s>" % (self.this,)
+class wxFontEnumerator(wxFontEnumeratorPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(misc2c.new_wxFontEnumerator,_args,_kwargs)
+        self.thisown = 1
+        self._setSelf(self)
 
 
 
@@ -191,6 +222,8 @@ wxToolTip_SetDelay = misc2c.wxToolTip_SetDelay
 wxCaret_GetBlinkTime = misc2c.wxCaret_GetBlinkTime
 
 wxCaret_SetBlinkTime = misc2c.wxCaret_SetBlinkTime
+
+wxPostEvent = misc2c.wxPostEvent
 
 
 

@@ -1,6 +1,6 @@
 \section{\class{wxCustomDataObject}}\label{wxcustomdataobject}
 
-wxCustomDataObject is a specialization of 
+wxCustomDataObject is a specialization of
 \helpref{wxDataObjectSimple}{wxdataobjectsimple} for some
 application-specific data in arbitrary (either custom or one of the standard
 ones). The only restriction is that it is supposed that this data can be
@@ -8,8 +8,8 @@ copied bitwise (i.e. with {\tt memcpy()}), so it would be a bad idea to make
 it contain a C++ object (though C struct is fine).
 
 By default, wxCustomDataObject stores the data inside in a buffer. To put the
-data into the buffer you may use either 
-\helpref{SetData}{wxcustomdataobjectsetdata} or 
+data into the buffer you may use either
+\helpref{SetData}{wxcustomdataobjectsetdata} or
 \helpref{TakeData}{wxcustomdataobjecttakedata} depending on whether you want
 the object to make a copy of data or not.
 
@@ -20,9 +20,9 @@ the virtual functions mentioned below.
 \wxheading{Virtual functions to override}
 
 This class may be used as is, but if you don't want store the data inside the
-object but provide it on demand instead, you should override 
+object but provide it on demand instead, you should override
 \helpref{GetSize}{wxcustomdataobjectgetsize},
-\helpref{GetData}{wxcustomdataobjectgetdata} and 
+\helpref{GetData}{wxcustomdataobjectgetdata} and
 \helpref{SetData}{wxcustomdataobjectsetdata} (or may be only the first two or
 only the last one if you only allow reading/writing the data)
 
@@ -46,7 +46,7 @@ only the last one if you only allow reading/writing the data)
 \func{}{wxCustomDataObject}{\param{const wxDataFormat\& }{format = wxFormatInvalid}}
 
 The constructor accepts a {\it format} argument which specifies the (single)
-format supported by this object. If it isn't set here, 
+format supported by this object. If it isn't set here,
 \helpref{SetFormat}{wxdataobjectsimplesetformat} should be used.
 
 \membersection{wxCustomDataObject::\destruct{wxCustomDataObject}}\label{wxcustomdataobjectdtor}
@@ -68,6 +68,9 @@ This function is called to allocate {\it size} bytes of memory from SetData().
 The default version just uses the operator new.
 
 \membersection{wxCustomDataObject::Free}\label{wxcustomdataobjectfree}
+
+\pythonnote{This method expects a string in wxPython.  You can pass
+nearly any object by pickling it first.}
 
 \func{virtual void}{Free}{\void}
 

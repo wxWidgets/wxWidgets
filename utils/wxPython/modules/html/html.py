@@ -9,6 +9,8 @@ from windows import *
 
 from gdi import *
 
+from clip_dnd import *
+
 from events import *
 
 from mdi import *
@@ -33,7 +35,6 @@ from printfw import *
 
 from sizers import *
 import wx
-widget = htmlc
 class wxHtmlTagPtr :
     def __init__(self,this):
         self.this = this
@@ -685,7 +686,7 @@ wxPAGE_ALL = htmlc.wxPAGE_ALL
 
 # Stuff these names into the wx namespace so wxPyConstructObject can find them
 import wx
-wx.wxHtmlTagPtr             = wxHtmlTag
+wx.wxHtmlTagPtr             = wxHtmlTagPtr
 wx.wxHtmlParserPtr          = wxHtmlParserPtr
 wx.wxHtmlWinParserPtr       = wxHtmlWinParserPtr
 wx.wxHtmlTagHandlerPtr      = wxHtmlTagHandlerPtr
@@ -693,5 +694,5 @@ wx.wxHtmlWinTagHandlerPtr   = wxHtmlWinTagHandlerPtr
 wx.wxHtmlCellPtr            = wxHtmlCellPtr
 wx.wxHtmlContainerCellPtr   = wxHtmlContainerCellPtr
 wx.wxHtmlWidgetCellPtr      = wxHtmlWidgetCellPtr
-wx.HtmlHistoryItemPtr     = HtmlHistoryItemPtr
+wx.HtmlHistoryItemPtr       = HtmlHistoryItemPtr
 wx.wxHtmlWindowPtr          = wxHtmlWindowPtr

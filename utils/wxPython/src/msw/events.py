@@ -267,12 +267,12 @@ class wxMouseEventPtr(wxEventPtr):
     def Leaving(self, *_args, **_kwargs):
         val = apply(eventsc.wxMouseEvent_Leaving,(self,) + _args, _kwargs)
         return val
-    def Position(self, *_args, **_kwargs):
-        val = apply(eventsc.wxMouseEvent_Position,(self,) + _args, _kwargs)
-        return val
     def GetPosition(self, *_args, **_kwargs):
         val = apply(eventsc.wxMouseEvent_GetPosition,(self,) + _args, _kwargs)
         if val: val = wxPointPtr(val) ; val.thisown = 1
+        return val
+    def GetPositionTuple(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_GetPositionTuple,(self,) + _args, _kwargs)
         return val
     def GetLogicalPosition(self, *_args, **_kwargs):
         val = apply(eventsc.wxMouseEvent_GetLogicalPosition,(self,) + _args, _kwargs)

@@ -781,7 +781,16 @@ class wxApp(wxPyApp):
 
 #----------------------------------------------------------------------------
 # DO NOT hold any other references to this object.  This is how we know when
-# to cleanup system resources that wxWin is holding...
+# to cleanup system resources that wxWin is holding.  When this module is
+# unloaded, the refcount on __cleanMeUp goes to zero and it calls the
+# wxApp_CleanUp function.
+
+class __wxPyCleanup:
+    def __init__(self):
+        self.cleanup = wxc.wxApp_CleanUp
+    def __del__(self):
+        self.cleanup()
+
 __cleanMeUp = __wxPyCleanup()
 #----------------------------------------------------------------------------
 

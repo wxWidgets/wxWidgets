@@ -27,7 +27,7 @@
 %import _defs.i
 %import misc.i
 %import gdi.i
-
+%import clip_dnd.i
 
 %pragma(python) code = "import wx"
 
@@ -310,6 +310,9 @@ public:
     wxValidator* GetValidator();
     void SetValidator(const wxValidator& validator);
 
+    void SetDropTarget(wxDropTarget* target);
+    wxDropTarget* GetDropTarget();
+    %pragma(python) addtomethod = "SetDropTarget:_args[0].thisown = 0"
 };
 
 //%clear int* x, int* y;
@@ -453,66 +456,88 @@ public:
     void AppendSeparator();
     void Break();
     void Check(int id, bool flag);
+    bool IsChecked(int id);
     void Enable(int id, bool enable);
+    bool IsEnabled(int id);
+
     int FindItem(const wxString& itemString);
+    %name(FindItemById)wxMenuItem* FindItem(int id/*, wxMenu **menu = NULL*/);
+
     wxString GetTitle();
     void SetTitle(const wxString& title);
-    wxMenuItem* FindItemForId(int id);
-    wxString GetHelpString(int id);
+
     wxString GetLabel(int id);
-    void SetHelpString(int id, const wxString& helpString);
-    bool IsChecked(int id);
-    bool IsEnabled(int id);
     void SetLabel(int id, const wxString& label);
+
+    wxString GetHelpString(int id);
+    void SetHelpString(int id, const wxString& helpString);
     void UpdateUI(wxEvtHandler* source = NULL);
+
+    bool Delete(int id);
+    %name(DeleteItem)bool Delete(wxMenuItem *item);
+    bool Insert(size_t pos, wxMenuItem *item);
+    wxMenuItem *Remove(int id);
+    %name(RemoveItem) wxMenuItem *Remove(wxMenuItem *item);
 
     %addmethods {
         void Destroy() {
             delete self;
         }
     }
+    %name(DestroyId)bool Destroy(int id);
+    %name(DestroyItem)bool Destroy(wxMenuItem *item);
 
+    size_t GetMenuItemCount();
+    //wxMenuItemList& GetMenuItems();
+    %addmethods {
+        PyObject* GetMenuItems() {
+            wxMenuItemList& list = self->GetMenuItems();
+            return wxPy_ConvertList(&list, "wxMenuItem");
+        }
+    }
+
+    void SetEventHandler(wxEvtHandler *handler);
+    wxEvtHandler *GetEventHandler();
+
+    void SetInvokingWindow(wxWindow *win);
+    wxWindow *GetInvokingWindow();
+
+    long GetStyle();
+
+    bool IsAttached();
+
+    void SetParent(wxMenu *parent);
+    wxMenu *GetParent();
 };
 
 
-//
-// This one knows how to set a callback and handle INC- and DECREFing it.  To
-// be used for PopupMenus, but you must retain a referece to it while using
-// it.
-//
-//  class wxPyMenu : public wxMenu {
-//  public:
-//      wxPyMenu(const wxString& title = wxPyEmptyStr, PyObject* func = NULL);
-//      ~wxPyMenu();
-//  };
-
 //----------------------------------------------------------------------
 
-class wxMenuBar : public wxEvtHandler {
+class wxMenuBar : public wxWindow {
 public:
     wxMenuBar();
 
-    void Append(wxMenu *menu, const wxString& title);
-    void Check(int id, bool flag);
-//    bool Checked(int id);
-    void Enable(int id, bool enable);
-//    bool Enabled(int id);
-    bool IsChecked(int id);
-    bool IsEnabled(int id);
-    int FindMenuItem(const wxString& menuString, const wxString& itemString);
-    wxMenuItem * FindItemForId(int id);
-    void SetLabel(int id, const wxString& label);
-    void EnableTop(int pos, bool enable);
-    wxString GetHelpString(int id);
-    wxString GetLabel(int id);
-    void SetHelpString(int id, const wxString& helpString);
-    wxString GetLabelTop(int pos);
-    void SetLabelTop(int pos, const wxString& label);
-    int GetMenuCount();
-    wxMenu* GetMenu(int i);
-    void Refresh();
+    bool Append(wxMenu *menu, const wxString& title);
+    bool Insert(size_t pos, wxMenu *menu, const wxString& title);
+    size_t GetMenuCount();
+    wxMenu *GetMenu(size_t pos);
     wxMenu *Replace(size_t pos, wxMenu *menu, const wxString& title);
     wxMenu *Remove(size_t pos);
+    void EnableTop(size_t pos, bool enable);
+    void SetLabelTop(size_t pos, const wxString& label);
+    wxString GetLabelTop(size_t pos);
+    int FindMenuItem(const wxString& menuString, const wxString& itemString);
+    %name(FindItemById)wxMenuItem* FindItem(int id/*, wxMenu **menu = NULL*/);
+    void Enable(int id, bool enable);
+    void Check(int id, bool check);
+    bool IsChecked(int id);
+    bool IsEnabled(int id);
+
+    void SetLabel(int id, const wxString &label);
+    wxString GetLabel(int id);
+
+    void SetHelpString(int id, const wxString& helpString);
+    wxString GetHelpString(int id);
 
 };
 
@@ -521,45 +546,51 @@ public:
 
 class wxMenuItem {
 public:
-//#ifndef __WXGTK__
     wxMenuItem(wxMenu* parentMenu=NULL, int id=ID_SEPARATOR,
                const wxString& text = wxPyEmptyStr,
-               const wxString& helpString = wxPyEmptyStr,
-               bool checkable = FALSE, wxMenu* subMenu = NULL);
-//#else
-//    wxMenuItem();
-//#endif
+               const wxString& help = wxPyEmptyStr,
+               bool isCheckable = FALSE, wxMenu* subMenu = NULL);
 
+
+    wxMenu *GetMenu();
+    void SetId(int id);
+    int  GetId();
     bool IsSeparator();
-    bool IsEnabled();
-    bool IsChecked();
+    void SetText(const wxString& str);
+    wxString GetLabel();
+    const wxString& GetText();
+    void SetCheckable(bool checkable);
     bool IsCheckable();
     bool IsSubMenu();
-    int  GetId();
-    void SetId(int id);
-    wxMenu* GetSubMenu();
-    wxString GetHelp();
-    void SetHelp(const wxString& strHelp);
-    void Enable(bool bDoEnable = TRUE);
-    void Check(bool bDoCheck = TRUE);
-
-//#ifdef __WXMSW__
-    wxColour& GetBackgroundColour();
-    wxBitmap GetBitmap(bool checked = TRUE);
-    wxFont& GetFont();
-    int GetMarginWidth();
-    wxColour& GetTextColour();
-    void SetBackgroundColour(const wxColour& colour);
-    void SetBitmaps(const wxBitmap& checked, const wxBitmap& unchecked = wxNullBitmap);
-    void SetFont(const wxFont& font);
-    void SetMarginWidth(int width);
-    void SetText(const wxString& str);
-    const wxString& GetText();
-    void SetTextColour(const wxColour& colour);
-    void DeleteSubMenu();
-    void SetCheckable(bool checkable);
     void SetSubMenu(wxMenu *menu);
-//#endif
+    wxMenu *GetSubMenu();
+    void Enable(bool enable = TRUE);
+    bool IsEnabled();
+    void Check(bool check = TRUE);
+    bool IsChecked();
+    void Toggle();
+    void SetHelp(const wxString& str);
+    const wxString& GetHelp();
+    wxAcceleratorEntry *GetAccel();
+    void SetAccel(wxAcceleratorEntry *accel);
+
+//  #ifdef __WXMSW__
+//      wxColour& GetBackgroundColour();
+//      wxBitmap GetBitmap(bool checked = TRUE);
+//      wxFont& GetFont();
+//      int GetMarginWidth();
+//      wxColour& GetTextColour();
+//      void SetBackgroundColour(const wxColour& colour);
+//      void SetBitmaps(const wxBitmap& checked, const wxBitmap& unchecked = wxNullBitmap);
+//      void SetFont(const wxFont& font);
+//      void SetMarginWidth(int width);
+//      void SetText(const wxString& str);
+//      const wxString& GetText();
+//      void SetTextColour(const wxColour& colour);
+//      void DeleteSubMenu();
+//      void SetCheckable(bool checkable);
+//      void SetSubMenu(wxMenu *menu);
+//  #endif
 };
 
 //---------------------------------------------------------------------------

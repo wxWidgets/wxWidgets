@@ -7,6 +7,8 @@ from windows import *
 
 from gdi import *
 
+from clip_dnd import *
+
 from events import *
 
 from controls import *
@@ -414,6 +416,12 @@ class wxTreeCtrlPtr(wxControlPtr):
     def SetStateImageList(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_SetStateImageList,(self,) + _args, _kwargs)
         return val
+    def GetSpacing(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeCtrl_GetSpacing,(self,) + _args, _kwargs)
+        return val
+    def SetSpacing(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeCtrl_SetSpacing,(self,) + _args, _kwargs)
+        return val
     def GetItemText(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_GetItemText,(self,) + _args, _kwargs)
         return val
@@ -583,6 +591,9 @@ class wxTreeCtrlPtr(wxControlPtr):
     def HitTest(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_HitTest,(self,) + _args, _kwargs)
         if val: val = wxTreeItemIdPtr(val) ; val.thisown = 1
+        return val
+    def SetItemDropHighlight(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeCtrl_SetItemDropHighlight,(self,) + _args, _kwargs)
         return val
     def GetBoundingRect(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_GetBoundingRect,(self,) + _args, _kwargs)

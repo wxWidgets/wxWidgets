@@ -19,9 +19,7 @@
 #include <wx/resource.h>
 #include <wx/tooltip.h>
 #include <wx/caret.h>
-#ifdef NOT_READY_YET
 #include <wx/fontenum.h>
-#endif
 %}
 
 //----------------------------------------------------------------------
@@ -34,6 +32,7 @@
 %import windows.i
 %import misc.i
 %import gdi.i
+%import events.i
 
 //---------------------------------------------------------------------------
 // Dialog Functions
@@ -292,7 +291,6 @@ public:
 %}
 
 //----------------------------------------------------------------------
-#ifdef NOT_READY_YET
 
 %{
 class wxPyFontEnumerator : public wxFontEnumerator {
@@ -300,34 +298,29 @@ public:
     wxPyFontEnumerator() {}
     ~wxPyFontEnumerator() {}
 
-    bool EnumerateFamilies(int fixedWidthOnly = FALSE);
-    bool EnumerateEncodings(const char* family = "");
-
-    DEC_PYCALLBACK_BOOL_STRING(OnFontFamily);
+    DEC_PYCALLBACK_BOOL_STRING(OnFacename);
     DEC_PYCALLBACK_BOOL_STRINGSTRING(OnFontEncoding);
 
     PYPRIVATE;
 };
 
-IMP_PYCALLBACK_BOOL_STRING(wxPyFontEnumerator, wxFontEnumerator, OnFontFamily);
+IMP_PYCALLBACK_BOOL_STRING(wxPyFontEnumerator, wxFontEnumerator, OnFacename);
 IMP_PYCALLBACK_BOOL_STRINGSTRING(wxPyFontEnumerator, wxFontEnumerator, OnFontEncoding);
 
 %}
 
 %name(wxFontEnumerator) class wxPyFontEnumerator {
 public:
-    wxPyFontEnumerator() {}
-    ~wxPyFontEnumerator() {}
+    wxPyFontEnumerator();
+    ~wxPyFontEnumerator();
+    void _setSelf(PyObject* self);
     %pragma(python) addtomethod = "__init__:self._setSelf(self)"
 
-    bool EnumerateFamilies(int fixedWidthOnly = FALSE);
-    bool EnumerateEncodings(const char* family = "");
-
-    bool base_OnFontFamily(const wxString& family);
-    bool base_OnFontEncoding(const wxString& family,
-                             const wxString& encoding);
+    bool EnumerateFacenames(
+        wxFontEncoding encoding = wxFONTENCODING_SYSTEM, // all
+        bool fixedWidthOnly = FALSE);
+    bool EnumerateEncodings(const char* facename = "");
 };
-#endif
 
 //----------------------------------------------------------------------
 
@@ -337,7 +330,9 @@ public:
     ~wxBusyCursor();
 };
 
+//----------------------------------------------------------------------
 
+void wxPostEvent(wxEvtHandler *dest, wxEvent& event);
 
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------

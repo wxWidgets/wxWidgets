@@ -51,7 +51,7 @@
 //---------------------------------------------------------------------------
 
 
-#define __version__ "0.0.0"   // The real value is in build.py...
+#define __version__ "0.0.0"   // The real value is now in build.py...
 
 wxPoint     wxPyDefaultPosition;
 wxSize      wxPyDefaultSize;
@@ -104,26 +104,13 @@ public:
 
 
 //----------------------------------------------------------------------
-// An instance of this object is created in the main wx module.  As long
-// as there are no extra references to it then when the wx module is being
-// unloaded from memory then this object's destructor will be called. When
-// it is then we'll use that as a signal to clean up wxWindows
+// this is used to cleanup after wxWindows when Python shuts down.
 
-%{
-class __wxPyCleanup {
-public:
-    __wxPyCleanup()  { }
-    ~__wxPyCleanup() { wxApp::CleanUp(); }
-};
+%inline %{
+    void wxApp_CleanUp() {
+        wxApp::CleanUp();
+    }
 %}
-
-// now to swigify it...
-class __wxPyCleanup {
-public:
-    __wxPyCleanup();
-    ~__wxPyCleanup();
-};
-
 
 //----------------------------------------------------------------------
 // This code gets added to the module initialization function
@@ -146,6 +133,7 @@ extern "C" SWIGEXPORT(void) initwindows3c();
 extern "C" SWIGEXPORT(void) initimagec();
 extern "C" SWIGEXPORT(void) initprintfwc();
 extern "C" SWIGEXPORT(void) initsizersc();
+extern "C" SWIGEXPORT(void) initclip_dndc();
 %}
 
 
@@ -174,6 +162,7 @@ extern "C" SWIGEXPORT(void) initsizersc();
     initimagec();
     initprintfwc();
     initsizersc();
+    initclip_dndc();
 %}
 
 //----------------------------------------------------------------------

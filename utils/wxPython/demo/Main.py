@@ -23,7 +23,7 @@ _useNestedSplitter = true
 _treeList = [
     ('Managed Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame']),
 
-    ('Miscellaneous Windows', ['wxGrid', 'wxSashWindow',
+    ('Non-Managed Windows', ['wxGrid', 'wxSashWindow',
                                'wxScrolledWindow', 'wxSplitterWindow',
                                'wxStatusBar', 'wxToolBar', 'wxNotebook',
                                'wxHtmlWindow']),
@@ -40,8 +40,9 @@ _treeList = [
 
     ('Window Layout', ['wxLayoutConstraints', 'Sizers', 'OldSizers']),
 
-    ('Miscellaneous', ['wxTimer', 'wxValidator', 'wxGLCanvas', 'DialogUnits',
-                       'wxImage', 'PrintFramework', 'wxOGL']),
+    ('Miscellaneous', [ 'DragAndDrop', 'CustomDragAndDrop', 'FontEnumerator',
+                        'wxTimer', 'wxValidator', 'wxGLCanvas', 'DialogUnits',
+                        'wxImage', 'PrintFramework', 'wxOGL']),
 
     ('wxPython Library', ['OldSizers', 'Layoutf', 'wxScrolledMessageDialog',
                           'wxMultipleChoiceDialog', 'wxPlotCanvas', 'wxFloatBar',

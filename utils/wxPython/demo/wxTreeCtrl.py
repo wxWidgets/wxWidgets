@@ -13,11 +13,12 @@ class TestTreeCtrlPanel(wxPanel):
         tID = NewId()
 
         self.tree = wxTreeCtrl(self, tID, wxDefaultPosition, wxDefaultSize,
-                               wxTR_HAS_BUTTONS | wxTR_EDIT_LABELS) #| wxTR_MULTIPLE)
+                               wxTR_HAS_BUTTONS | wxTR_EDIT_LABELS)# | wxTR_MULTIPLE)
 
         self.root = self.tree.AddRoot("The Root Item")
         for x in range(15):
             child = self.tree.AppendItem(self.root, "Item %d" % x)
+            #self.tree.SelectItem(child)
             for y in range(5):
                 last = self.tree.AppendItem(child, "item %d-%s" % (x, chr(ord("a")+y)))
                 for z in range(5):
@@ -35,14 +36,14 @@ class TestTreeCtrlPanel(wxPanel):
         EVT_RIGHT_UP(self.tree, self.OnRightUp)
 
     def OnRightClick(self, event):
-        (x,y) = event.Position();
-        item = self.tree.HitTest(wxPoint(x,y))
+        pt = event.GetPosition();
+        item = self.tree.HitTest(pt)
         self.log.WriteText("OnRightClick: %s\n" % self.tree.GetItemText(item))
         self.tree.SelectItem(item)
 
     def OnRightUp(self, event):
-        (x,y) = event.Position();
-        item = self.tree.HitTest(wxPoint(x,y))
+        pt = event.GetPosition();
+        item = self.tree.HitTest(pt)
         self.log.WriteText("OnRightUp: %s (manually starting label edit)\n"
                            % self.tree.GetItemText(item))
         self.tree.EditLabel(item)
@@ -69,8 +70,8 @@ class TestTreeCtrlPanel(wxPanel):
 
 
     def OnLeftDClick(self, event):
-        (x,y) = event.Position();
-        item = self.tree.HitTest(wxPoint(x,y))
+        pt = event.GetPosition();
+        item = self.tree.HitTest(pt)
         self.log.WriteText("OnLeftDClick: %s\n" % self.tree.GetItemText(item))
 
 

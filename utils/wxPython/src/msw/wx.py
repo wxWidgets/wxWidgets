@@ -9,6 +9,8 @@ from windows import *
 
 from gdi import *
 
+from clip_dnd import *
+
 from events import *
 
 from mdi import *
@@ -114,23 +116,6 @@ class wxPyApp(wxPyAppPtr):
 
 
 
-class __wxPyCleanupPtr :
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def __del__(self,wxc=wxc):
-        if self.thisown == 1 :
-            wxc.delete___wxPyCleanup(self)
-    def __repr__(self):
-        return "<C __wxPyCleanup instance at %s>" % (self.this,)
-class __wxPyCleanup(__wxPyCleanupPtr):
-    def __init__(self,*_args,**_kwargs):
-        self.this = apply(wxc.new___wxPyCleanup,_args,_kwargs)
-        self.thisown = 1
-
-
-
-
 
 
 #-------------- FUNCTION WRAPPERS ------------------
@@ -152,6 +137,8 @@ ptrmap = wxc.ptrmap
 _wxStart = wxc._wxStart
 
 _wxSetDictionary = wxc._wxSetDictionary
+
+wxApp_CleanUp = wxc.wxApp_CleanUp
 
 
 
@@ -336,12 +323,6 @@ wxSIZE_AUTO_HEIGHT = wxc.wxSIZE_AUTO_HEIGHT
 wxSIZE_AUTO = wxc.wxSIZE_AUTO
 wxSIZE_USE_EXISTING = wxc.wxSIZE_USE_EXISTING
 wxSIZE_ALLOW_MINUS_ONE = wxc.wxSIZE_ALLOW_MINUS_ONE
-wxDF_TEXT = wxc.wxDF_TEXT
-wxDF_BITMAP = wxc.wxDF_BITMAP
-wxDF_METAFILE = wxc.wxDF_METAFILE
-wxDF_DIB = wxc.wxDF_DIB
-wxDF_OEMTEXT = wxc.wxDF_OEMTEXT
-wxDF_FILENAME = wxc.wxDF_FILENAME
 wxPORTRAIT = wxc.wxPORTRAIT
 wxLANDSCAPE = wxc.wxLANDSCAPE
 wxPRINT_QUALITY_HIGH = wxc.wxPRINT_QUALITY_HIGH
@@ -1615,7 +1596,16 @@ class wxApp(wxPyApp):
 
 #----------------------------------------------------------------------------
 # DO NOT hold any other references to this object.  This is how we know when
-# to cleanup system resources that wxWin is holding...
+# to cleanup system resources that wxWin is holding.  When this module is
+# unloaded, the refcount on __cleanMeUp goes to zero and it calls the
+# wxApp_CleanUp function.
+
+class __wxPyCleanup:
+    def __init__(self):
+        self.cleanup = wxc.wxApp_CleanUp
+    def __del__(self):
+        self.cleanup()
+
 __cleanMeUp = __wxPyCleanup()
 #----------------------------------------------------------------------------
 

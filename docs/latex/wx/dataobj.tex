@@ -33,7 +33,7 @@ enum Direction
 };
 \end{verbatim}
 
-which allows to distinguish between them. See 
+which allows to distinguish between them. See
 \helpref{wxDataFormat}{wxdataformat} documentation for more about formats.
 
 Not surprizingly, being 'smart' comes at a price of added complexity. This is
@@ -42,8 +42,8 @@ but may be annoying if you only want to do something simple like cut and paste
 text.
 
 To provide a solution for both cases, wxWindows has two predefined classes
-which derive from wxDataObject: \helpref{wxDataObjectSimple}{wxdataobjectsimple} and 
-\helpref{wxDataObjectComposite}{wxdataobjectcomposite}. 
+which derive from wxDataObject: \helpref{wxDataObjectSimple}{wxdataobjectsimple} and
+\helpref{wxDataObjectComposite}{wxdataobjectcomposite}.
 \helpref{wxDataObjectSimple}{wxdataobjectsimple} is
 the simplest wxDataObject possible and only holds data in a single format (such
 as HTML or text) and \helpref{wxDataObjectComposite}{wxdataobjectcomposite} is
@@ -86,12 +86,12 @@ clipboard after having pressed 'Copy' - in reality it is only declared to be
 available.
 
 There are several predefined data object classes derived from
-wxDataObjectSimple: \helpref{wxFileDataObject}{wxfiledataobject}, 
-\helpref{wxTextDataObject}{wxtextdataobject} and 
+wxDataObjectSimple: \helpref{wxFileDataObject}{wxfiledataobject},
+\helpref{wxTextDataObject}{wxtextdataobject} and
 \helpref{wxBitmapDataObject}{wxbitmapdataobject} which can be used without
 change.
 
-You may also derive your own data object classes from 
+You may also derive your own data object classes from
 \helpref{wxCustomDataObject}{wxprivatedataobject} for user-defined types. The
 format of user-defined data is given as mime-type string literal, such as
 "application/word" or "image/png". These strings are used as they are under
@@ -100,13 +100,17 @@ Windows equivalent under Win32 (using the OLE IDataObject for data exchange to
 and from the clipboard and for drag and drop). Note that the format string
 translation under Windows is not yet finished.
 
+\pythonnote{At this time this class is directly usable from wxPython.
+Derive a class from \helpref{wxPyDataObjectSimple}{wxdataobjectsimple}
+instead.}
+
 \wxheading{Virtual functions to override}
 
 Each class derived directly from wxDataObject must override and implement all
 of its functions which are pure virtual in the base class.
 
 The data objects which only render their data or only set it (i.e. work in
-only one direction), should return 0 from 
+only one direction), should return 0 from
 \helpref{GetFormatCount}{wxdataobjectgetformatcount}.
 
 \wxheading{Derived from}
@@ -119,15 +123,15 @@ None
 
 \wxheading{See also}
 
-\helpref{Clipboard and drag and drop overview}{wxdndoverview}, 
-\helpref{DnD sample}{samplednd}, 
-\helpref{wxFileDataObject}{wxfiledataobject}, 
-\helpref{wxTextDataObject}{wxtextdataobject}, 
-\helpref{wxBitmapDataObject}{wxbitmapdataobject}, 
-\helpref{wxPrivateDataObject}{wxprivatedataobject}, 
-\helpref{wxDropTarget}{wxdroptarget}, 
-\helpref{wxDropSource}{wxdropsource}, 
-\helpref{wxTextDropTarget}{wxtextdroptarget}, 
+\helpref{Clipboard and drag and drop overview}{wxdndoverview},
+\helpref{DnD sample}{samplednd},
+\helpref{wxFileDataObject}{wxfiledataobject},
+\helpref{wxTextDataObject}{wxtextdataobject},
+\helpref{wxBitmapDataObject}{wxbitmapdataobject},
+\helpref{wxPrivateDataObject}{wxprivatedataobject},
+\helpref{wxDropTarget}{wxdroptarget},
+\helpref{wxDropSource}{wxdropsource},
+\helpref{wxTextDropTarget}{wxtextdroptarget},
 \helpref{wxFileDropTarget}{wxfiledroptarget}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
@@ -148,7 +152,7 @@ Destructor.
 
 \constfunc{virtual void}{GetAllFormats}{ \param{wxDataFormat *}{formats}, \param{Direction}{ dir = Get}}
 
-Copy all supported formats in the given direction to the array pointed to by 
+Copy all supported formats in the given direction to the array pointed to by
 {\it formats}. There is enough space for GetFormatCount(dir) formats in it.
 
 \membersection{wxDataObject::GetDataHere}\label{wxdataobjectgetdatahere}

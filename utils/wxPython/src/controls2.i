@@ -320,6 +320,9 @@ public:
     void SetImageList(wxImageList *imageList);
     void SetStateImageList(wxImageList *imageList);
 
+    unsigned int GetSpacing();
+    void SetSpacing(unsigned int spacing);
+
     wxString GetItemText(const wxTreeItemId& item);
     int GetItemImage(const wxTreeItemId& item);
     int GetItemSelectedImage(const wxTreeItemId& item);
@@ -440,16 +443,18 @@ public:
 #ifdef __WXMSW__
     wxTextCtrl* EditLabel(const wxTreeItemId& item);
     wxTextCtrl* GetEditControl();
-    void EndEditLabel(const wxTreeItemId& item, bool discardChanges = FALSE);
+    void EndEditLabel(const wxTreeItemId& item, int discardChanges = FALSE);
 #else
     void EditLabel(const wxTreeItemId& item);
 #endif
 
     void SortChildren(const wxTreeItemId& item);
 
-    void SetItemBold(const wxTreeItemId& item, bool bold = TRUE);
+    void SetItemBold(const wxTreeItemId& item, int bold = TRUE);
     bool IsBold(const wxTreeItemId& item) const;
     wxTreeItemId HitTest(const wxPoint& point);
+
+    void SetItemDropHighlight(const wxTreeItemId& item, int highlight = TRUE);
 
 #ifdef __WXMSW__
     //bool GetBoundingRect(const wxTreeItemId& item, wxRect& rect, int textOnly = FALSE)

@@ -1994,53 +1994,6 @@ static PyObject *_wrap_wxMouseEvent_Leaving(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
-#define wxMouseEvent_Position(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Position(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxMouseEvent_Position(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxMouseEvent * _arg0;
-    long * _arg1;
-    long  temp;
-    long * _arg2;
-    long  temp0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-{
-  _arg1 = &temp;
-}
-{
-  _arg2 = &temp0;
-}
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxMouseEvent_Position",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMouseEvent_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMouseEvent_Position. Expected _wxMouseEvent_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxMouseEvent_Position(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-{
-    PyObject *o;
-    o = PyInt_FromLong((long) (*_arg1));
-    _resultobj = t_output_helper(_resultobj, o);
-}
-{
-    PyObject *o;
-    o = PyInt_FromLong((long) (*_arg2));
-    _resultobj = t_output_helper(_resultobj, o);
-}
-    return _resultobj;
-}
-
 #define wxMouseEvent_GetPosition(_swigobj)  (_swigobj->GetPosition())
 static PyObject *_wrap_wxMouseEvent_GetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2067,6 +2020,53 @@ static PyObject *_wrap_wxMouseEvent_GetPosition(PyObject *self, PyObject *args, 
     wxPy_END_ALLOW_THREADS;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxPoint_p");
     _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxMouseEvent_GetPositionTuple(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetPosition(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxMouseEvent_GetPositionTuple(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxMouseEvent * _arg0;
+    long * _arg1;
+    long  temp;
+    long * _arg2;
+    long  temp0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+{
+  _arg1 = &temp;
+}
+{
+  _arg2 = &temp0;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxMouseEvent_GetPositionTuple",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMouseEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMouseEvent_GetPositionTuple. Expected _wxMouseEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxMouseEvent_GetPositionTuple(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg1));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
+}
     return _resultobj;
 }
 
@@ -5040,8 +5040,8 @@ static PyMethodDef eventscMethods[] = {
 	 { "wxMouseEvent_GetY", (PyCFunction) _wrap_wxMouseEvent_GetY, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMouseEvent_GetX", (PyCFunction) _wrap_wxMouseEvent_GetX, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMouseEvent_GetLogicalPosition", (PyCFunction) _wrap_wxMouseEvent_GetLogicalPosition, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMouseEvent_GetPositionTuple", (PyCFunction) _wrap_wxMouseEvent_GetPositionTuple, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMouseEvent_GetPosition", (PyCFunction) _wrap_wxMouseEvent_GetPosition, METH_VARARGS | METH_KEYWORDS },
-	 { "wxMouseEvent_Position", (PyCFunction) _wrap_wxMouseEvent_Position, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMouseEvent_Leaving", (PyCFunction) _wrap_wxMouseEvent_Leaving, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMouseEvent_Entering", (PyCFunction) _wrap_wxMouseEvent_Entering, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMouseEvent_Moving", (PyCFunction) _wrap_wxMouseEvent_Moving, METH_VARARGS | METH_KEYWORDS },
@@ -5181,6 +5181,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_signed_long","_long",0},
     { "_wxMenuEvent","_class_wxMenuEvent",0},
     { "_class_wxPyCommandEvent","_wxPyCommandEvent",0},
+    { "_wxPrintQuality","_wxCoord",0},
     { "_wxPrintQuality","_int",0},
     { "_wxPrintQuality","_signed_int",0},
     { "_wxPrintQuality","_unsigned_int",0},
@@ -5199,6 +5200,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxDropFilesEvent","_class_wxDropFilesEvent",0},
     { "_class_wxAcceleratorTable","_wxAcceleratorTable",0},
     { "_wxSpinEvent","_class_wxSpinEvent",0},
+    { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
     { "_size_t","_unsigned_int",0},
     { "_size_t","_int",0},
@@ -5215,6 +5217,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxIdleEvent","_class_wxIdleEvent",0},
     { "_class_wxUpdateUIEvent","_wxUpdateUIEvent",0},
     { "_wxShowEvent","_class_wxShowEvent",0},
+    { "_uint","_wxCoord",0},
     { "_uint","_wxPrintQuality",0},
     { "_uint","_size_t",0},
     { "_uint","_unsigned_int",0},
@@ -5305,6 +5308,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxScrollEvent","_class_wxSpinEvent",SwigwxSpinEventTowxScrollEvent},
     { "_wxScrollEvent","_wxSpinEvent",SwigwxSpinEventTowxScrollEvent},
     { "_wxScrollEvent","_class_wxScrollEvent",0},
+    { "_EBool","_wxCoord",0},
     { "_EBool","_wxPrintQuality",0},
     { "_EBool","_signed_int",0},
     { "_EBool","_int",0},
@@ -5322,6 +5326,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxFocusEvent","_class_wxFocusEvent",0},
     { "_wxMaximizeEvent","_class_wxMaximizeEvent",0},
     { "_wxAcceleratorEntry","_class_wxAcceleratorEntry",0},
+    { "_signed_int","_wxCoord",0},
     { "_signed_int","_wxPrintQuality",0},
     { "_signed_int","_EBool",0},
     { "_signed_int","_wxWindowID",0},
@@ -5346,6 +5351,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxMaximizeEvent","_wxMaximizeEvent",0},
     { "_class_wxAcceleratorEntry","_wxAcceleratorEntry",0},
     { "_unsigned_char","_byte",0},
+    { "_unsigned_int","_wxCoord",0},
     { "_unsigned_int","_wxPrintQuality",0},
     { "_unsigned_int","_size_t",0},
     { "_unsigned_int","_uint",0},
@@ -5359,6 +5365,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxScrollEvent","_wxScrollEvent",0},
     { "_wxJoystickEvent","_class_wxJoystickEvent",0},
     { "_class_wxPaletteChangedEvent","_wxPaletteChangedEvent",0},
+    { "_wxWindowID","_wxCoord",0},
     { "_wxWindowID","_wxPrintQuality",0},
     { "_wxWindowID","_size_t",0},
     { "_wxWindowID","_EBool",0},
@@ -5367,6 +5374,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxWindowID","_signed_int",0},
     { "_wxWindowID","_unsigned_int",0},
     { "_class_wxScrollWinEvent","_wxScrollWinEvent",0},
+    { "_int","_wxCoord",0},
     { "_int","_wxPrintQuality",0},
     { "_int","_size_t",0},
     { "_int","_EBool",0},
@@ -5386,6 +5394,14 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxLayoutConstraints","_wxLayoutConstraints",0},
     { "_wxIconizeEvent","_class_wxIconizeEvent",0},
     { "_class_wxIdleEvent","_wxIdleEvent",0},
+    { "_wxCoord","_int",0},
+    { "_wxCoord","_signed_int",0},
+    { "_wxCoord","_unsigned_int",0},
+    { "_wxCoord","_wxWindowID",0},
+    { "_wxCoord","_uint",0},
+    { "_wxCoord","_EBool",0},
+    { "_wxCoord","_size_t",0},
+    { "_wxCoord","_wxPrintQuality",0},
     { "_wxEraseEvent","_class_wxEraseEvent",0},
     { "_class_wxJoystickEvent","_wxJoystickEvent",0},
     { "_wxRegion","_class_wxRegion",0},

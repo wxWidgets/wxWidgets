@@ -45,8 +45,8 @@ Or you can send mail directly to the list using this address:
 
 ----------------------------------------------------------------------
 
-What's new in 2.1.6
--------------------
+What's new in 2.1.11
+--------------------
 wxImage.SetData now makes a copy of the image data before giving it to
 wxImage.  I mistakenly thought that wxImage would copy the data
 itself.
@@ -65,6 +65,22 @@ Fixed deadlock problem that happened when using threads.
 
 Added new HTML printing classes.
 
+Added wxWindow.GetHandle
+
+Apparently wxMouseEvent.Position has been depreciated in wxWindows as
+it is no longer available by default.  You can use GetPositionTuple
+(returning a tuple with x,y) instead, or GetPosition (returning a
+wxPoint.)
+
+Added wxPostEvent function that allows events to be posted and then
+processed later.  This is a thread-safe way to interact with the GUI
+thread from other threads.
+
+Added Clipboard and Drag-and-Drop classes.
+
+Added wxFontEnumerator.
+
+Many updates to wxMenu, wxMenuBar.
 
 
 
