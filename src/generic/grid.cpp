@@ -513,7 +513,7 @@ void wxGridCellTextEditor::DoBeginEdit(const wxString& startValue)
     Text()->SetFocus();
 }
 
-bool wxGridCellTextEditor::EndEdit(int row, int col, bool saveValue,
+bool wxGridCellTextEditor::EndEdit(int row, int col,
                                    wxGrid* grid)
 {
     wxASSERT_MSG(m_control,
@@ -648,7 +648,7 @@ void wxGridCellNumberEditor::BeginEdit(int row, int col, wxGrid* grid)
     }
 }
 
-bool wxGridCellNumberEditor::EndEdit(int row, int col, bool saveValue,
+bool wxGridCellNumberEditor::EndEdit(int row, int col,
                                      wxGrid* grid)
 {
     bool changed;
@@ -733,7 +733,7 @@ void wxGridCellFloatEditor::BeginEdit(int row, int col, wxGrid* grid)
     DoBeginEdit(GetString());
 }
 
-bool wxGridCellFloatEditor::EndEdit(int row, int col, bool saveValue,
+bool wxGridCellFloatEditor::EndEdit(int row, int col,
                                      wxGrid* grid)
 {
     double value;
@@ -824,7 +824,6 @@ void wxGridCellBoolEditor::BeginEdit(int row, int col, wxGrid* grid)
 }
 
 bool wxGridCellBoolEditor::EndEdit(int row, int col,
-                                   bool saveValue,
                                    wxGrid* grid)
 {
     wxASSERT_MSG(m_control,
@@ -925,7 +924,6 @@ void wxGridCellChoiceEditor::BeginEdit(int row, int col, wxGrid* grid)
 }
 
 bool wxGridCellChoiceEditor::EndEdit(int row, int col,
-                                     bool saveValue,
                                      wxGrid* grid)
 {
     wxString value = Combo()->GetValue();
@@ -5411,7 +5409,7 @@ void wxGrid::SaveEditControlValue()
 
         wxGridCellAttr* attr = GetCellAttr(row, col);
         wxGridCellEditor* editor = attr->GetEditor(this, row, col);
-        bool changed = editor->EndEdit(row, col, TRUE, this);
+        bool changed = editor->EndEdit(row, col, this);
 
         attr->DecRef();
 

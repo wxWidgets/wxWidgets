@@ -260,11 +260,9 @@ public:
     // to begin editing.  Set the focus to the edit control.
     virtual void BeginEdit(int row, int col, wxGrid* grid) = 0;
 
-    // Complete the editing of the current cell.  If saveValue is
-    // true then send the new value back to the table.  Returns true
-    // if the value has changed.  If necessary, the control may be
-    // destroyed.
-    virtual bool EndEdit(int row, int col,  bool saveValue, wxGrid* grid) = 0;
+    // Complete the editing of the current cell. Returns true if the value has
+    // changed.  If necessary, the control may be destroyed.
+    virtual bool EndEdit(int row, int col, wxGrid* grid) = 0;
 
     // Reset the value in the control back to its starting value
     virtual void Reset() = 0;
@@ -311,7 +309,7 @@ public:
     virtual void PaintBackground(const wxRect& rectCell, wxGridCellAttr *attr);
 
     virtual void BeginEdit(int row, int col, wxGrid* grid);
-    virtual bool EndEdit(int row, int col,  bool saveValue, wxGrid* grid);
+    virtual bool EndEdit(int row, int col, wxGrid* grid);
 
     virtual void Reset();
     virtual void StartingKey(wxKeyEvent& event);
@@ -341,7 +339,7 @@ public:
                         wxEvtHandler* evtHandler);
 
     virtual void BeginEdit(int row, int col, wxGrid* grid);
-    virtual bool EndEdit(int row, int col,  bool saveValue, wxGrid* grid);
+    virtual bool EndEdit(int row, int col, wxGrid* grid);
 
     virtual void Reset();
     virtual void StartingKey(wxKeyEvent& event);
@@ -372,7 +370,7 @@ public:
                         wxEvtHandler* evtHandler);
 
     virtual void BeginEdit(int row, int col, wxGrid* grid);
-    virtual bool EndEdit(int row, int col,  bool saveValue, wxGrid* grid);
+    virtual bool EndEdit(int row, int col, wxGrid* grid);
 
     virtual void Reset();
     virtual void StartingKey(wxKeyEvent& event);
@@ -398,7 +396,7 @@ public:
     virtual void Show(bool show, wxGridCellAttr *attr = (wxGridCellAttr *)NULL);
 
     virtual void BeginEdit(int row, int col, wxGrid* grid);
-    virtual bool EndEdit(int row, int col,  bool saveValue, wxGrid* grid);
+    virtual bool EndEdit(int row, int col, wxGrid* grid);
 
     virtual void Reset();
     virtual void StartingClick();
@@ -425,7 +423,7 @@ public:
     virtual void PaintBackground(const wxRect& rectCell, wxGridCellAttr *attr);
 
     virtual void BeginEdit(int row, int col, wxGrid* grid);
-    virtual bool EndEdit(int row, int col,  bool saveValue, wxGrid* grid);
+    virtual bool EndEdit(int row, int col, wxGrid* grid);
 
     virtual void Reset();
 
