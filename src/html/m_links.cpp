@@ -48,7 +48,7 @@ class wxHtmlAnchorCell : public wxHtmlCell
 
 
 
-TAG_HANDLER_BEGIN(A, wxT("A"))
+TAG_HANDLER_BEGIN(A, "A")
 
     TAG_HANDLER_PROC(tag)
     {

@@ -519,7 +519,7 @@ void wxHtmlTableCell::Layout(int w)
 //-----------------------------------------------------------------------------
 
 
-TAG_HANDLER_BEGIN(TABLE, wxT("TABLE,TR,TD,TH"))
+TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
 
     TAG_HANDLER_VARS
         wxHtmlTableCell* m_Table;
