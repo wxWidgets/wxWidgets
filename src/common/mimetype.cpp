@@ -79,6 +79,10 @@
 //      to open/print the file (the positional parameters are introduced by %1,
 //      %2, ... in these strings, we change them to %s ourselves)
 
+// although I don't know of any official documentation which mentions this
+// location, uses it, so it isn't likely to change
+static const wxChar *MIME_DATABASE_KEY = wxT("MIME\\Database\\Content Type\\");
+
 class wxFileTypeImpl
 {
 public:
@@ -134,6 +138,8 @@ public:
     wxFileType *GetFileTypeFromExtension(const wxString& ext);
     wxFileType *GetFileTypeFromMimeType(const wxString& mimeType);
 
+    size_t EnumAllFileTypes(wxFileType **filetypes);
+
     // this are NOPs under Windows
     bool ReadMailcap(const wxString& filename, bool fallback = TRUE)
         { return TRUE; }
@@ -160,6 +166,8 @@ public :
     // implement containing class functions
     wxFileType *GetFileTypeFromExtension(const wxString& ext);
     wxFileType *GetFileTypeFromMimeType(const wxString& mimeType);
+
+    size_t EnumAllFileTypes(wxFileType **filetypes);
 
     // this are NOPs under MacOS
     bool ReadMailcap(const wxString& filename, bool fallback = TRUE) { return TRUE; }
@@ -345,6 +353,8 @@ public:
     // implement containing class functions
     wxFileType *GetFileTypeFromExtension(const wxString& ext);
     wxFileType *GetFileTypeFromMimeType(const wxString& mimeType);
+
+    size_t EnumAllFileTypes(wxFileType **filetypes);
 
     bool ReadMailcap(const wxString& filename, bool fallback = FALSE);
     bool ReadMimeTypes(const wxString& filename);
@@ -644,6 +654,13 @@ void wxMimeTypesManager::AddFallbacks(const wxFileTypeInfo *filetypes)
     }
 }
 
+size_t wxMimeTypesManager::EnumAllFileTypes(wxFileType **filetypes)
+{
+    wxCHECK_MSG( filetypes, 0u, _T("bad pointer in EnumAllFileTypes") );
+
+    return m_impl->EnumAllFileTypes(filetypes);
+}
+
 // ============================================================================
 // real (OS specific) implementation
 // ============================================================================
@@ -896,11 +913,7 @@ wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ext)
 wxFileType *
 wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
 {
-    // HACK I don't know of any official documentation which mentions this
-    //      location, but as a matter of fact IE uses it, so why not we?
-    static const wxChar *szMimeDbase = wxT("MIME\\Database\\Content Type\\");
-
-    wxString strKey = szMimeDbase;
+    wxString strKey = MIME_DATABASE_KEY;
     strKey << mimeType;
 
     // suppress possible error messages
@@ -932,8 +945,15 @@ wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
     return NULL;
 }
 
-#elif defined ( __WXMAC__ )
+size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxFileType **filetypes)
+{
+    // enumerate all keys under MIME_DATABASE_KEY
+    wxRegKey key(wxRegKey::HKCR, MIME_DATABASE_KEY);
 
+    return 0;
+}
+
+#elif defined ( __WXMAC__ )
 
 bool wxFileTypeImpl::GetCommand(wxString *command, const char *verb) const
 {
@@ -948,12 +968,12 @@ bool wxFileTypeImpl::GetExtensions(wxArrayString& extensions)
 
 bool wxFileTypeImpl::GetMimeType(wxString *mimeType) const
 {
-	if ( m_strFileType.Length() > 0 )
-	{
-		*mimeType = m_strFileType ;
-		return TRUE ;
-	}
-	else
+    if ( m_strFileType.Length() > 0 )
+    {
+        *mimeType = m_strFileType ;
+        return TRUE ;
+    }
+    else
     return FALSE;
 }
 
@@ -972,73 +992,74 @@ bool wxFileTypeImpl::GetDescription(wxString *desc) const
 wxFileType *
 wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& e)
 {
-	wxString ext = e ;
-	ext = ext.Lower() ;
-	if ( ext == "txt" )
-	{
-      wxFileType *fileType = new wxFileType;
-      fileType->m_impl->SetFileType("text/text");
-      fileType->m_impl->SetExt(ext);
-      return fileType;
-  }
-	else if ( ext == "htm" || ext == "html" )
-	{
-      wxFileType *fileType = new wxFileType;
-      fileType->m_impl->SetFileType("text/html");
-      fileType->m_impl->SetExt(ext);
-      return fileType;
-	}
-	else if ( ext == "gif" )
-	{
-      wxFileType *fileType = new wxFileType;
-      fileType->m_impl->SetFileType("image/gif");
-      fileType->m_impl->SetExt(ext);
-      return fileType;
-	}
-	else if ( ext == "png" )
-	{
-      wxFileType *fileType = new wxFileType;
-      fileType->m_impl->SetFileType("image/png");
-      fileType->m_impl->SetExt(ext);
-      return fileType;
-	}
-	else if ( ext == "jpg" || ext == "jpeg" )
-	{
-      wxFileType *fileType = new wxFileType;
-      fileType->m_impl->SetFileType("image/jpeg");
-      fileType->m_impl->SetExt(ext);
-      return fileType;
-	}
-	else if ( ext == "bmp" )
-	{
-      wxFileType *fileType = new wxFileType;
-      fileType->m_impl->SetFileType("image/bmp");
-      fileType->m_impl->SetExt(ext);
-      return fileType;
-	}
-	else if ( ext == "tif" || ext == "tiff" )
-	{
-      wxFileType *fileType = new wxFileType;
-      fileType->m_impl->SetFileType("image/tiff");
-      fileType->m_impl->SetExt(ext);
-      return fileType;
-	}
-	else if ( ext == "xpm" )
-	{
-      wxFileType *fileType = new wxFileType;
-      fileType->m_impl->SetFileType("image/xpm");
-      fileType->m_impl->SetExt(ext);
-      return fileType;
-	}
-	else if ( ext == "xbm" )
-	{
-      wxFileType *fileType = new wxFileType;
-      fileType->m_impl->SetFileType("image/xbm");
-      fileType->m_impl->SetExt(ext);
-      return fileType;
-	}
-  // unknown extension
-  return NULL;
+    wxString ext = e ;
+    ext = ext.Lower() ;
+    if ( ext == "txt" )
+    {
+        wxFileType *fileType = new wxFileType;
+        fileType->m_impl->SetFileType("text/text");
+        fileType->m_impl->SetExt(ext);
+        return fileType;
+    }
+    else if ( ext == "htm" || ext == "html" )
+    {
+        wxFileType *fileType = new wxFileType;
+        fileType->m_impl->SetFileType("text/html");
+        fileType->m_impl->SetExt(ext);
+        return fileType;
+    }
+    else if ( ext == "gif" )
+    {
+        wxFileType *fileType = new wxFileType;
+        fileType->m_impl->SetFileType("image/gif");
+        fileType->m_impl->SetExt(ext);
+        return fileType;
+    }
+    else if ( ext == "png" )
+    {
+        wxFileType *fileType = new wxFileType;
+        fileType->m_impl->SetFileType("image/png");
+        fileType->m_impl->SetExt(ext);
+        return fileType;
+    }
+    else if ( ext == "jpg" || ext == "jpeg" )
+    {
+        wxFileType *fileType = new wxFileType;
+        fileType->m_impl->SetFileType("image/jpeg");
+        fileType->m_impl->SetExt(ext);
+        return fileType;
+    }
+    else if ( ext == "bmp" )
+    {
+        wxFileType *fileType = new wxFileType;
+        fileType->m_impl->SetFileType("image/bmp");
+        fileType->m_impl->SetExt(ext);
+        return fileType;
+    }
+    else if ( ext == "tif" || ext == "tiff" )
+    {
+        wxFileType *fileType = new wxFileType;
+        fileType->m_impl->SetFileType("image/tiff");
+        fileType->m_impl->SetExt(ext);
+        return fileType;
+    }
+    else if ( ext == "xpm" )
+    {
+        wxFileType *fileType = new wxFileType;
+        fileType->m_impl->SetFileType("image/xpm");
+        fileType->m_impl->SetExt(ext);
+        return fileType;
+    }
+    else if ( ext == "xbm" )
+    {
+        wxFileType *fileType = new wxFileType;
+        fileType->m_impl->SetFileType("image/xbm");
+        fileType->m_impl->SetExt(ext);
+        return fileType;
+    }
+
+    // unknown extension
+    return NULL;
 }
 
 // MIME type -> extension -> file type
@@ -1047,6 +1068,14 @@ wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
 {
     return NULL;
 }
+
+size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxFileType **filetypes)
+{
+    wxFAIL_MSG( _T("TODO") ); // VZ: don't know anything about this for Mac
+
+    return 0;
+}
+
 #else  // Unix
 
 MailCapEntry *
@@ -1443,11 +1472,8 @@ bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
         strExtensions.Replace(wxT(","), wxT(" "));
 
         // also deal with the leading dot
-#if defined(__VISAGECPP__) && __IBMCPP__ >= 400
-        if ( !strExtensions.IsEmpty() && strExtensions[size_t(0)] == wxT('.') ) {
-#else
-        if ( !strExtensions.IsEmpty() && strExtensions[0] == wxT('.') ) {
-#endif
+        if ( !strExtensions.IsEmpty() && strExtensions[0u] == wxT('.') )
+        {
             strExtensions.erase(0, 1);
         }
 
@@ -1734,6 +1760,20 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
     }
 
     return TRUE;
+}
+
+size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxFileType **filetypes)
+{
+    size_t count = m_aTypes.GetCount();
+
+    *filetypes = new wxFileType *[count];
+    for ( size_t n = 0; n < count; n++ )
+    {
+        (*filetypes)[n] = new wxFileType;
+        (*filetypes)[n]->m_impl->Init(this, n);
+    }
+
+    return count;
 }
 
 #endif
