@@ -395,6 +395,20 @@ Copies the selected text to the clipboard and removes the selection.
 
 Resets the internal `modified' flag as if the current edits had been saved.
 
+\membersection{wxTextCtrl::EmulateKeyPress}
+
+\func{bool}{EmulateKeyPress}{\param{const wxKeyEvent\& }{event}}
+
+This functions inserts into the control the character which would have been
+inserted if the given key event had occured in the text control. The 
+{\it event} object should be the same as the one passed to {\tt EVT\_KEY\_DOWN}
+handler previously by wxWindows.
+
+\wxheading{Return value}
+
+{\tt TRUE} if the event resulted in a change to the control, {\tt FALSE}
+otherwise.
+
 \membersection{wxTextCtrl::GetDefaultStyle}\label{wxtextctrlgetdefaultstyle}
 
 \constfunc{const wxTextAttr\& }{GetDefaultStyle}{\void}

@@ -203,6 +203,10 @@ public:
     virtual void WriteText(const wxString& text) = 0;
     virtual void AppendText(const wxString& text) = 0;
 
+    // insert the character which would have resulted from this key event,
+    // return TRUE if anything has been inserted
+    virtual bool EmulateKeyPress(const wxKeyEvent& event);
+
     // text control under some platforms supports the text styles: these
     // methods allow to apply the given text style to the given selection or to
     // set/get the style which will be used for all appended text

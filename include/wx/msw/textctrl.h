@@ -82,6 +82,10 @@ public:
     virtual void WriteText(const wxString& text);
     virtual void AppendText(const wxString& text);
 
+#ifdef __WIN32__
+    virtual bool EmulateKeyPress(const wxKeyEvent& event);
+#endif // __WIN32__
+
 #if wxUSE_RICHEDIT
     // apply text attribute to the range of text (only works with richedit
     // controls)

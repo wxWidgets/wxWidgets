@@ -708,73 +708,7 @@ bool wxGridCellTextEditor::IsAcceptedKey(wxKeyEvent& event)
 
 void wxGridCellTextEditor::StartingKey(wxKeyEvent& event)
 {
-    // we don't check for !HasModifiers() because IsAcceptedKey() did it
-
-    // insert the key in the control
-    wxChar ch;
-    int keycode = event.GetKeyCode();
-    switch ( keycode )
-    {
-        case WXK_NUMPAD0:
-        case WXK_NUMPAD1:
-        case WXK_NUMPAD2:
-        case WXK_NUMPAD3:
-        case WXK_NUMPAD4:
-        case WXK_NUMPAD5:
-        case WXK_NUMPAD6:
-        case WXK_NUMPAD7:
-        case WXK_NUMPAD8:
-        case WXK_NUMPAD9:
-            ch = _T('0') + keycode - WXK_NUMPAD0;
-            break;
-
-        case WXK_MULTIPLY:
-        case WXK_NUMPAD_MULTIPLY:
-            ch = _T('*');
-            break;
-
-        case WXK_ADD:
-        case WXK_NUMPAD_ADD:
-            ch = _T('+');
-            break;
-
-        case WXK_SUBTRACT:
-        case WXK_NUMPAD_SUBTRACT:
-            ch = _T('-');
-            break;
-
-        case WXK_DECIMAL:
-        case WXK_NUMPAD_DECIMAL:
-            ch = _T('.');
-            break;
-
-        case WXK_DIVIDE:
-        case WXK_NUMPAD_DIVIDE:
-            ch = _T('/');
-            break;
-
-        default:
-            if ( keycode < 256 && keycode >= 0 && isprint(keycode) )
-            {
-                // FIXME this is not going to work for non letters...
-                if ( !event.ShiftDown() )
-                {
-                    keycode = tolower(keycode);
-                }
-
-                ch = (wxChar)keycode;
-            }
-            else
-            {
-                ch = _T('\0');
-            }
-    }
-
-    if ( ch )
-    {
-        Text()->AppendText(ch);
-    }
-    else
+    if ( !Text()->EmulateKeyPress(event) )
     {
         event.Skip();
     }

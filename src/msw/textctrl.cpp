@@ -692,6 +692,25 @@ void wxTextCtrl::Clear()
     ::SetWindowText(GetHwnd(), wxT(""));
 }
 
+#ifdef __WIN32__
+
+bool wxTextCtrl::EmulateKeyPress(const wxKeyEvent& event)
+{
+    SetFocus();
+
+    size_t lenOld = GetValue().length();
+
+    wxUint32 code = event.GetRawKeyCode();
+    ::keybd_event(code, 0, 0 /* key press */, NULL);
+    ::keybd_event(code, 0, KEYEVENTF_KEYUP, NULL);
+
+    // assume that any alphanumeric key changes the total number of characters
+    // in the control - this should work in 99% of cases
+    return GetValue().length() != lenOld;
+}
+
+#endif // __WIN32__
+
 // ----------------------------------------------------------------------------
 // Clipboard operations
 // ----------------------------------------------------------------------------

@@ -143,6 +143,7 @@ All (GUI):
 - added wxImage::FloodFill and implemented wxWindowDC::DoFloodFill method
   for GTK+, Mac, MGL, X11, Motif ports (Chris Elliott)
 - added (platform-dependent) scan code to wxKeyEvent (Bryce Denney)
+- added wxTextCtrl::EmulateKeyPress()
 
 wxMSW:
 
