@@ -396,6 +396,7 @@ wxListbook::InsertPage(size_t n,
         page->Hide();
     }
 
+    InvalidateBestSize();
     return true;
 }
 

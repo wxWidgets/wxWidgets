@@ -560,6 +560,7 @@ bool wxNotebook::DeleteAllPages()
 
     wxASSERT_MSG( GetPageCount() == 0, _T("all pages must have been deleted") );
 
+    InvalidateBestSize();
     return wxNotebookBase::DeleteAllPages();
 }
 
@@ -701,6 +702,7 @@ bool wxNotebook::InsertPage( size_t position,
     gtk_signal_connect( GTK_OBJECT(m_widget), "switch_page",
       GTK_SIGNAL_FUNC(gtk_notebook_page_change_callback), (gpointer)this );
 
+    InvalidateBestSize();
     return TRUE;
 }
 

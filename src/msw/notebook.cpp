@@ -553,6 +553,7 @@ bool wxNotebook::DeleteAllPages()
 
   m_nSelection = -1;
 
+  InvalidateBestSize();
   return true;
 }
 
@@ -669,6 +670,7 @@ bool wxNotebook::InsertPage(size_t nPage,
     if ( selNew != -1 )
         SetSelection(selNew);
 
+    InvalidateBestSize();
     return true;
 }
 

@@ -279,6 +279,7 @@ wxNotebookPage* wxNotebook::DoRemovePage(size_t nPage)
     if(m_nSelection >= 0) {
         m_pages[m_nSelection]->Show(true);
     }
+    InvalidateBestSize();
     return page;
 }
 
@@ -288,6 +289,7 @@ bool wxNotebook::DeleteAllPages()
     WX_CLEAR_ARRAY(m_pages) ;
     MacSetupTabs();
     m_nSelection = -1 ;
+    InvalidateBestSize();
     return TRUE;
 }
 
@@ -345,6 +347,7 @@ bool wxNotebook::InsertPage(size_t nPage,
     if ( selNew != -1 )
         SetSelection(selNew);
 
+    InvalidateBestSize();
     return true;
 }
 

@@ -122,10 +122,19 @@ public:
     virtual bool DeletePage(size_t n);
 
     // remove one page from the notebook, without deleting it
-    virtual bool RemovePage(size_t n) { return DoRemovePage(n) != NULL; }
+    virtual bool RemovePage(size_t n)
+    {
+        InvalidateBestSize();
+        return DoRemovePage(n) != NULL;
+    }
 
     // remove all pages and delete them
-    virtual bool DeleteAllPages() { WX_CLEAR_ARRAY(m_pages); return true; }
+    virtual bool DeleteAllPages()
+    {
+        InvalidateBestSize();
+        WX_CLEAR_ARRAY(m_pages);
+        return true;
+    }
 
     // adds a new page to the control
     virtual bool AddPage(wxWindow *page,
@@ -133,6 +142,7 @@ public:
                          bool bSelect = false,
                          int imageId = -1)
     {
+        InvalidateBestSize();
         return InsertPage(GetPageCount(), page, text, bSelect, imageId);
     }
 

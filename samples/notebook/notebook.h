@@ -130,9 +130,6 @@ private:
     // Sizer that contains the notebook and controls on the left
     wxBoxSizer *m_sizerTop;
 
-    // Sizer for m_notebook
-    wxBookCtrlSizer *m_sizerNotebook;
-
     wxImageList *m_imageList;
 
     DECLARE_EVENT_TABLE()

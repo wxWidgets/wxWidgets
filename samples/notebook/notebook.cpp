@@ -390,11 +390,8 @@ void MyFrame::ReInitNotebook()
             m_notebook->AddPage(page, str, false, m_notebook->GetIconIndex() );
         }
 
-        if (m_sizerNotebook)
-        {
-            m_sizerTop->Remove(m_sizerNotebook);
-        }
-
+        m_sizerTop->Remove(notebook);
+        
         delete notebook;
 
         // restore selection
@@ -406,8 +403,7 @@ void MyFrame::ReInitNotebook()
     }
 
 
-    m_sizerNotebook = new wxBookCtrlSizer(m_notebook);
-    m_sizerTop->Add(m_sizerNotebook, 1, wxEXPAND | wxALL, 4);
+    m_sizerTop->Add(m_notebook, 1, wxEXPAND | wxALL, 4);
     m_sizerTop->Layout();
 }
 
