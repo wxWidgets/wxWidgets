@@ -35,37 +35,39 @@
 DlgUser::DlgUser(wxWindow *parent, MainDoc *p_Doc, const wxString& title) :
   wxDialog(parent, ID_DIALOG_DSN, title)
 {
-// int chSize;                          // Height of Font * 1.4 = Height of wxTextCtrl
+ int chSize;                          // Height of Font * 1.4 = Height of wxTextCtrl
  SetBackgroundColour("wheat");
  pDoc = p_Doc;
  wxLayoutConstraints* layout;
  SetAutoLayout(TRUE);
 
  m_Label1 = new wxStaticText(this, -1, _("User ID:"));
-// m_Label1->SetFont(* pDoc->ft_Doc);
+ m_Label1->SetFont(* pDoc->ft_Doc);
  layout = new wxLayoutConstraints;
  layout->left.SameAs(this, wxLeft, 10);
  layout->top.SameAs(this, wxTop, 10);
  layout->height.AsIs();
  layout->width.Absolute(75);
  m_Label1->SetConstraints(layout);
-
+ 
+ int w;
+ m_Label1->GetSize(&w, &chSize); 
  
  m_UserName = new wxTextCtrl(this, -1, "");
  m_UserName->SetFont(* pDoc->ft_Doc);
- //chSize = m_Label1->GetCharHeight()*1.4;
+ chSize = m_UserName->GetCharHeight()*1.4;
 
  layout = new wxLayoutConstraints;
  layout->left.SameAs(m_Label1, wxRight, 10);
  layout->centreY.SameAs(m_Label1,wxCentreY);
  layout->width.Absolute(200);
- //layout->height.Absolute(chSize);
- layout->height.AsIs();
+ layout->height.Absolute(chSize);
+ // layout->height.AsIs();
  m_UserName->SetConstraints(layout);
 
 
  m_Label2 = new wxStaticText(this, -1, _("Password:"));
-// m_Label2->SetFont(* pDoc->ft_Doc);
+ m_Label2->SetFont(* pDoc->ft_Doc);
  layout = new wxLayoutConstraints;
  layout->left.SameAs(m_Label1, wxLeft);
  layout->top.SameAs(m_Label1, wxBottom, 10);
@@ -74,17 +76,17 @@ DlgUser::DlgUser(wxWindow *parent, MainDoc *p_Doc, const wxString& title) :
  m_Label2->SetConstraints(layout);
 
  m_Password = new wxTextCtrl(this, -1, "", wxDefaultPosition, wxDefaultSize, wxTE_PASSWORD);
-// m_Password->SetFont(* pDoc->ft_Doc);
+ m_Password->SetFont(* pDoc->ft_Doc);
  layout = new wxLayoutConstraints;
  layout->left.SameAs(m_UserName, wxLeft);
  layout->width.SameAs(m_UserName, wxWidth);
  layout->centreY.SameAs(m_Label2,wxCentreY);
- //layout->height.Absolute(chSize);
- layout->height.AsIs();
+ layout->height.Absolute(chSize);
+ //layout->height.AsIs();
  m_Password->SetConstraints(layout);
 
  m_OK = new wxButton(this, wxID_OK, _("OK"));
-// m_OK->SetFont(* pDoc->ft_Doc);
+ m_OK->SetFont(* pDoc->ft_Doc);
  layout = new wxLayoutConstraints;
  layout->left.SameAs(this, wxLeft, 10);
  layout->top.SameAs(m_Label2, wxBottom,10);
@@ -93,7 +95,7 @@ DlgUser::DlgUser(wxWindow *parent, MainDoc *p_Doc, const wxString& title) :
  m_OK->SetConstraints(layout);
 
  m_Cancel = new wxButton(this, wxID_CANCEL, _("Cancel"));
-// m_Cancel->SetFont(* pDoc->ft_Doc);
+ m_Cancel->SetFont(* pDoc->ft_Doc);
  layout = new wxLayoutConstraints;
  layout->left.SameAs(m_OK, wxRight, 10);
  layout->top.SameAs(m_OK, wxTop);
