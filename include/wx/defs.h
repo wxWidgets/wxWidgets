@@ -689,70 +689,199 @@ enum
     #endif // Win16/!Win16
 #endif // wxUSE_COMPATIBLE_COORD_TYPES/!wxUSE_COMPATIBLE_COORD_TYPES
 
-// fixed length types
 
-#define wxInt8    char    signed
-#define wxUint8   char  unsigned
+// ----------------------------------------------------------------------------
+// define fixed length types
+// ----------------------------------------------------------------------------
 
+// chars are always one byte (by definition), shorts are always two (in
+// practice)
+
+// 8bit
+#ifndef SIZEOF_CHAR
+    #define SIZEOF_CHAR 1
+#endif
+typedef signed char wxInt8;
+typedef unsigned char wxUint8;
+typedef wxUint8 wxByte;
+
+
+// 16bit
+#ifdef SIZEOF_SHORT
+    #if SIZEOF_SHORT != 2
+        #error "wxWindows assumes sizeof(short) == 2, please fix the code"
+    #endif
+#else
+    #define SIZEOF_SHORT 2
+#endif
+
+typedef signed short wxInt16;
+typedef unsigned short wxUint16;
+
+typedef wxUint16 wxWord;
+
+/*
+  things are getting more interesting with ints, longs and pointers
+
+  there are several different standard data models described by this table:
+
+  +-----------+----------------------------+
+  |type\model | LP64 ILP64 LLP64 ILP32 LP32|
+  +-----------+----------------------------+
+  |char       |  8     8     8     8     8 |
+  |short      | 16    16    16    16    16 |
+  |int        | 32    64    32    32    16 |
+  |long       | 64    64    32    32    32 |
+  |long long  |             64             |
+  |void *     | 64    64    64    32    32 |
+  +-----------+----------------------------+
+
+  Win16 used LP32 (but we don't support it any longer), Win32 obviously used
+  ILP32 and Win64 uses LLP64 (a.k.a. P64)
+
+  Under Unix LP64 is the most widely used (the only I've ever seen, in fact)
+ */
+
+// 32bit
 #ifdef __WINDOWS__
-    #if defined(__WIN16__)
-        #define wxInt16    int    signed
-        #define wxUint16   int  unsigned
-        #define wxInt32   long    signed
-        #define wxUint32  long  unsigned
-    #elif defined(__WIN32__)
-        #define wxInt16  short    signed
-        #define wxUint16 short  unsigned
-        #define wxInt32    int    signed
-        #define wxUint32   int  unsigned
+    #if defined(__WIN64__)
+        // you may remove this #error and try to compile the library, please
+        // report the results to wx-dev@lists.wxwindows.org if you do!
+        #error "wxWindows hasn't been tested under Win64, continue at your own risk"
+
+        // the same definitions as for Win32 _should_ work here as only
+        // sizeof(void *) changes, but it must be tested first
+    #endif // __WIN64__
+
+    // Win64 uses LLP64 model and so ints and longs have the same size as in
+    // Win32
+    #if defined(__WIN32__)
+        typedef int wxInt32;
+        typedef unsigned int wxUint32;
+
+        // conside that if SIZEOF_INT is defined, all the other ones are too
+        #ifndef SIZEOF_INT
+            #define SIZEOF_INT 4
+            #define SIZEOF_LONG 4
+            #define SIZEOF_WCHAR_T 2
+
+            #define wxSIZE_T_IS_UINT
+            #undef wxSIZE_T_IS_ULONG
+
+            #ifdef __WIN64__
+                #define SIZEOF_INT_P 8
+            #else // Win32
+                #define SIZEOF_INT_P 4
+            #endif // Win64/32
+        #endif // !defined(SIZEOF_INT)
     #else
-        // Win64 will have different type sizes
-        #error "Please define a 32 bit type"
+        #error "Unsupported Windows version"
     #endif
 #else // !Windows
-    // SIZEOF_XXX are defined by configure
-    #if defined(SIZEOF_INT) && (SIZEOF_INT == 4)
-        #define wxInt16  short    signed
-        #define wxUint16 short  unsigned
-        #define wxInt32    int    signed
-        #define wxUint32   int  unsigned
-    #elif defined(SIZEOF_INT) && (SIZEOF_INT == 2)
-        #define wxInt16    int    signed
-        #define wxUint16   int  unsigned
-        #define wxInt32   long    signed
-        #define wxUint32  long  unsigned
-    #else
-        // assume sizeof(int) == 4 - what else can we do
+    // SIZEOF_XXX are normally defined by configure
+    #ifdef SIZEOF_INT
+        #if SIZEOF_INT == 8
+            // must be ILP64 data model, there is normally a special 32 bit
+            // type in it but we don't know what it is...
+            #error "No 32bit int type on this platform"
+        #elif SIZEOF_INT == 4
+            typedef int wxInt32;
+            typedef unsigned int wxUint32;
+        #elif SIZEOF_INT == 2
+            // must be LP32
+            #if SIZEOF_LONG != 4
+                #error "No 32bit int type on this platform"
+            #endif
+
+            typedef long wxInt32;
+            typedef unsigned long wxUint32;
+        #elif
+            // wxWindows is not ready for 128bit systems yet...
+            #error "Unknown sizeof(int) value, what are you compiling for?"
+        #endif
+    #else // !defined(SIZEOF_INT)
+        // assume sizeof(int) == 4 -- what else can we do?
         wxCOMPILE_TIME_ASSERT( sizeof(int) == 4, IntMustBeExactly4Bytes);
 
-        #define wxInt16  short    signed
-        #define wxUint16 short  unsigned
-        #define wxInt32    int    signed
-        #define wxUint32   int  unsigned
+        #define SIZEOF_INT 4
+
+        typedef int wxInt32;
+        typedef unsigned int wxUint32;
+
+        #if wxUSE_WCHAR_T
+            // also assume that sizeof(wchar_t) == 4 under Unix, this is by far
+            // the most common case
+            wxCOMPILE_TIME_ASSERT( sizeof(wchar_t) == 4,
+                                    Wchar_tMustBeExactly4Bytes);
+        #endif // wxUSE_WCHAR_T
     #endif
 #endif // Win/!Win
 
+typedef wxUint32 wxDword;
+
+
+// 64 bit
+
+// NB: we #define and not typedef wxLongLong_t because we want to be able to
+//     use 'unsigned wxLongLong_t' as well and because we use "#ifdef
+//     wxLongLong_t" in wx/longlong.h
+
+// to avoid compilation problems on 64bit machines with ambiguous method calls
+// we will need to define this
+#undef wxLongLongIsLong
+
+// first check for generic cases which are long on 64bit machine and "long
+// long", then check for specific compilers
 #if defined(SIZEOF_LONG) && (SIZEOF_LONG == 8)
-#define wxInt64   long    signed
-#define wxUint64  long  unsigned
-#elif defined(SIZEOF_LONG_LONG) && (SIZEOF_LONG_LONG == 8)
-#define wxInt64   long long    signed
-#define wxUint64  long long  unsigned
-#else   // FIXME: what else can we do here aside from implementing wxULongLong
-#define wxInt64   wxLongLong
-#define wxUint64  wxULongLong
+    #define wxLongLong_t long
+    #define wxLongLongSuffix l
+    #define wxLongLongFmtSpec _T("l")
+    #define wxLongLongIsLong
+#elif (defined(__VISUALC__) && defined(__WIN32__)) || defined( __VMS__ )
+    #define wxLongLong_t __int64
+    #define wxLongLongSuffix i64
+    #define wxLongLongFmtSpec _T("I64")
+#elif defined(__BORLANDC__) && defined(__WIN32__) && (__BORLANDC__ >= 0x520)
+    #define wxLongLong_t __int64
+    #define wxLongLongSuffix i64
+    #define wxLongLongFmtSpec _T("Ld")
+#elif (defined(SIZEOF_LONG_LONG) && SIZEOF_LONG_LONG >= 8)  || \
+        defined(__MINGW32__) || \
+        defined(__GNUC__) || \
+        defined(__CYGWIN__) || \
+        defined(__WXMICROWIN__) || \
+        (defined(__DJGPP__) && __DJGPP__ >= 2)
+    #define wxLongLong_t long long
+    #define wxLongLongSuffix ll
+    #define wxLongLongFmtSpec _T("ll")
+#elif defined(__MWERKS__)
+    #if __option(longlong)
+        #define wxLongLong_t long long
+        #define wxLongLongSuffix ll
+        #define wxLongLongFmtSpec _T("ll")
+    #else
+        #error "The 64 bit integer support in CodeWarrior has been disabled."
+        #error "See the documentation on the 'longlong' pragma."
+    #endif
+#elif defined(__VISAGECPP__) && __IBMCPP__ >= 400
+    #define wxLongLong_t long long
 #endif
 
-#define  wxByte   wxUint8
-#define  wxWord   wxUint16
+
+#ifdef wxLongLong_t
+    typedef wxLongLong_t wxInt64;
+    typedef unsigned wxLongLong_t wxUint64;
+#endif
+
 
 // base floating point types
-// wxFloat32 : 32 bit IEEE float ( 1 sign , 8 exponent bits , 23 fraction bits
-// wxFloat64 : 64 bit IEEE float ( 1 sign , 11 exponent bits , 52 fraction bits
-// wxDouble : native fastest representation that has at least wxFloat64
-//            precision, so use the IEEE types for storage , and this for calculations
+// wxFloat32: 32 bit IEEE float ( 1 sign, 8 exponent bits, 23 fraction bits
+// wxFloat64: 64 bit IEEE float ( 1 sign, 11 exponent bits, 52 fraction bits
+// wxDouble: native fastest representation that has at least wxFloat64
+//           precision, so use the IEEE types for storage, and this for
+//           calculations
 
-typedef float wxFloat32 ;
+typedef float wxFloat32;
 #if (defined( __WXMAC__ ) || defined(__WXCOCOA__))  && defined (__MWERKS__)
     typedef short double wxFloat64;
 #else
@@ -762,7 +891,7 @@ typedef float wxFloat32 ;
 #if defined( __WXMAC__ )  && !defined( __POWERPC__ )
     typedef long double wxDouble;
 #else
-    typedef double wxDouble ;
+    typedef double wxDouble;
 #endif
 
 // ----------------------------------------------------------------------------
@@ -787,13 +916,13 @@ typedef float wxFloat32 ;
 // assembler versions for these
 #ifdef __POWERPC__
     inline wxUint16 wxUINT16_SWAP_ALWAYS( wxUint16 i )
-        {return (__lhbrx( &i , 0 ) ) ;}
+        {return (__lhbrx( &i , 0 ) );}
     inline wxInt16 wxINT16_SWAP_ALWAYS( wxInt16 i )
-        {return (__lhbrx( &i , 0 ) ) ;}
+        {return (__lhbrx( &i , 0 ) );}
     inline wxUint32 wxUINT32_SWAP_ALWAYS( wxUint32 i )
-        {return (__lwbrx( &i , 0 ) ) ;}
+        {return (__lwbrx( &i , 0 ) );}
     inline wxInt32 wxINT32_SWAP_ALWAYS( wxInt32 i )
-        {return (__lwbrx( &i , 0 ) ) ;}
+        {return (__lwbrx( &i , 0 ) );}
 #else
     #pragma parameter __D0 wxUINT16_SWAP_ALWAYS(__D0)
     pascal wxUint16 wxUINT16_SWAP_ALWAYS(wxUint16 value)
@@ -1988,26 +2117,26 @@ enum wxUpdateUI
 
 typedef unsigned char WXCOLORREF[6];
 typedef void*       WXHBITMAP;
-typedef void*       WXHMETAFILE ;
-typedef void*       WXHICON ;
-typedef void*       WXHCURSOR ;
-typedef void*       WXHRGN ;
-typedef void*       WXRECTPTR ;
-typedef void*       WXPOINTPTR ;
-typedef void*       WXHWND ;
-typedef void*       WXEVENTREF ;
-typedef void*		WXEVENTHANDLERREF ;
-typedef void*       WXEVENTHANDLERCALLREF ;
-typedef void*       WXAPPLEEVENTREF ;
-typedef void*       WXHDC ;
-typedef void*       WXHMENU ;
+typedef void*       WXHMETAFILE;
+typedef void*       WXHICON;
+typedef void*       WXHCURSOR;
+typedef void*       WXHRGN;
+typedef void*       WXRECTPTR;
+typedef void*       WXPOINTPTR;
+typedef void*       WXHWND;
+typedef void*       WXEVENTREF;
+typedef void*       WXEVENTHANDLERREF;
+typedef void*       WXEVENTHANDLERCALLREF;
+typedef void*       WXAPPLEEVENTREF;
+typedef void*       WXHDC;
+typedef void*       WXHMENU;
 typedef unsigned int    WXUINT;
 typedef unsigned long   WXDWORD;
 typedef unsigned short  WXWORD;
 
-typedef void*       WXWidget ;
-typedef void*       WXWindow ;
-typedef void*       WXDisplay ;
+typedef void*       WXWidget;
+typedef void*       WXWindow;
+typedef void*       WXDisplay;
 /*
 typedef WindowPtr       WXHWND;
 typedef Handle          WXHANDLE;
