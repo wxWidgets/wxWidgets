@@ -113,6 +113,11 @@
      #if wxUSE_FS_INET
      wxFileSystem::AddHandler(new wxInternetFSHandler);
      #endif
+
+      SetVendorName("wxWindows");
+      SetAppName("wxHtmlTest"); 
+      // the following call to wxConfig::Get will use it to create an object...
+
     // Create the main application window
       MyFrame *frame = new MyFrame("wxHtmlWindow testing application",
          wxPoint(50, 50), wxSize(640, 480));
@@ -158,15 +163,11 @@
    
       CreateStatusBar(1);
 
-      {
-      wxConfig *cfg = new wxConfig("wxHtmlTest");
       m_Html = new wxHtmlWindow(this);
       m_Html -> SetRelatedFrame(this, "HTML : %s");
       m_Html -> SetRelatedStatusBar(0);
-      m_Html -> ReadCustomization(cfg);
-      delete cfg;
+      m_Html -> ReadCustomization(wxConfig::Get());
       m_Html -> LoadPage("test.htm");
-      }
    }
 
 
@@ -175,10 +176,8 @@
    void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
    {
     // TRUE is to force the frame to close
-    wxLogDebug("about to save config...");
-    wxConfig *cfg = new wxConfig("wxHtmlTest");
-    m_Html -> WriteCustomization(cfg);
-    delete cfg;
+    m_Html -> WriteCustomization(wxConfig::Get());
+    delete wxConfig::Set(NULL);
     Close(TRUE);
    }
 

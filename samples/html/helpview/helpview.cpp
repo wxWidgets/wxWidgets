@@ -48,7 +48,6 @@ class MyApp : public wxApp
 
     private:
         wxHtmlHelpController *help;
-        wxConfig* config;
 };
 
 
@@ -64,9 +63,11 @@ bool MyApp::OnInit()
     wxInitAllImageHandlers();
     wxFileSystem::AddHandler(new wxZipFSHandler);
 
-    config = new wxConfig("wxHTMLhelp");
+    SetVendorName("wxWindows");
+    SetAppName("wxHTMLHelp"); 
+    wxConfig::Get(); // create an instance
+
     help = new wxHtmlHelpController;
-    help -> UseConfig(config);
     
     if (argc < 2) {
         wxLogError("Usage : helpview <helpfile> [<more helpfiles>]");
@@ -90,7 +91,7 @@ bool MyApp::OnInit()
 int MyApp::OnExit()
 {
     delete help;
-    delete config;
+    delete wxConfig::Set(NULL);
 
     return 0;
 }

@@ -58,7 +58,6 @@
       void OnClose(wxCloseEvent& event);
    private:
       wxHtmlHelpController help;
-      wxConfig* config;
    
     // any class wishing to process wxWindows events must use this macro
     DECLARE_EVENT_TABLE()
@@ -113,6 +112,9 @@
         wxImage::AddHandler(new wxJPEGHandler);
        #endif
 
+      SetVendorName("wxWindows");
+      SetAppName("wxHTMLHelp"); 
+
     // Create the main application window
       MyFrame *frame = new MyFrame("HTML Help Sample",
          wxPoint(50, 50), wxSize(150, 50));
@@ -151,9 +153,7 @@
     // ... and attach this menu bar to the frame
       SetMenuBar(menuBar);
 
-      config = new wxConfig("wxHTMLhelp");
-
-      help.UseConfig(config);
+      help.UseConfig(wxConfig::Get());
       bool ret;
       ret = help.AddBook("helpfiles/testing.hhp");
       if (! ret)
@@ -184,8 +184,8 @@
        if ( help.GetFrame() ) // returns NULL if no help frame active
            help.GetFrame()->Close(TRUE);
        // now we can safely delete the config pointer
-       delete config;
        event.Skip();   
+       delete wxConfig::Set(NULL);
    }
 
 
