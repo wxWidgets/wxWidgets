@@ -51,9 +51,6 @@
 
 #if defined(__WIN32__) && !defined(HAVE_FTIME)
     #define HAVE_FTIME
-    #ifdef (__VISUALC__)
-        #define ftime _ftime
-    #endif
 #endif
 
 #include <time.h>
