@@ -539,7 +539,6 @@ class wxListCtrl: public wxControl
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
       long style = 0, const wxString &name = "listctrl" );
     void OnSize( wxSizeEvent &event );
-    void SetBackgroundColour( const wxColour& col );
     bool GetColumn( int col, wxListItem& item );
     bool SetColumn( int col, wxListItem& item );
     int GetColumnWidth( int col );
@@ -606,13 +605,13 @@ class wxListCtrl: public wxControl
     wxColour GetBackgroundColour() const
       { return m_mainWin->GetBackgroundColour(); }
     void SetBackgroundColour( const wxColour &colour )
-      { m_mainWin->SetBackgroundColour(); }
+      { m_mainWin->SetBackgroundColour(colour); }
     wxColour GetForegroundColour() const
       { return m_mainWin->GetForegroundColour(); }
     void SetForegroundColour( const wxColour &colour )
-      { return m_mainWin->GetForegroundColour(); }
+      { m_mainWin->SetForegroundColour(colour); }
     bool PopupMenu( wxMenu *menu, int x, int y )
-      { m_mainWin->PopupMenu( menu, x, y ); }
+      { return m_mainWin->PopupMenu( menu, x, y ); }
 
   protected:
 

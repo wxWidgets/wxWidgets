@@ -2204,13 +2204,6 @@ void wxListCtrl::SetWindowStyleFlag( long flag )
   wxWindow::SetWindowStyleFlag( flag );
 };
 
-void wxListCtrl::SetBackgroundColour(const wxColour& col)
-{
-  // This is from Julian. You know.
-  // Not in wxWin 1.xx ???
-  wxWindow::SetBackgroundColour( (wxColour&)col );
-};
-
 bool wxListCtrl::GetColumn(int col, wxListItem &item) 
 {
   m_mainWin->GetColumn( col, item );
