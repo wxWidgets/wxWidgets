@@ -76,7 +76,7 @@ enum INTERNAL_HIT_CODES
 wxToolWindow::wxToolWindow()
 
     : mpClientWnd   ( NULL ),
-  
+
 #ifndef __WXMSW__
     mTitleFont( 8, wxSWISS,  wxNORMAL, wxNORMAL ),
 #else
@@ -96,12 +96,12 @@ wxToolWindow::wxToolWindow()
 
     mResizeStarted( false ),
     mRealTimeUpdatesOn( true ),
-   
+
     mMTolerance   ( 5 ), // mouse-resizing tollerance
 
     mCursorType( HITS_WND_NOTHING ),
     mMouseCaptured( false ),
-  
+
     mpScrDc( NULL )
 
 {
@@ -109,19 +109,19 @@ wxToolWindow::wxToolWindow()
 
 wxToolWindow::~wxToolWindow()
 {
-    if ( mpScrDc ) delete mpScrDc; 
+    if ( mpScrDc ) delete mpScrDc;
 
     for( size_t i = 0; i != mButtons.Count(); ++i )
         delete mButtons[i];
 }
 
 void wxToolWindow::LayoutMiniButtons()
-{  
+{
     int w,h;
 
     GetSize( &w, &h );
 
-    int x = w - mWndHorizGap - mInTitleMargin - BTN_BOX_WIDTH; 
+    int x = w - mWndHorizGap - mInTitleMargin - BTN_BOX_WIDTH;
     int y = mWndVertGap + 2;
 
     for( size_t i = 0; i != mButtons.Count(); ++i )
@@ -166,7 +166,7 @@ void wxToolWindow::OnPaint( wxPaintEvent& WXUNUSED(event) )
 
     wxBrush backGround( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNFACE), wxSOLID );
     //dc.SetBrush( *wxLIGHT_GREY_BRUSH );
-    dc.SetBrush( backGround ); 
+    dc.SetBrush( backGround );
     dc.SetPen( *wxTRANSPARENT_PEN );
 
     int y = mWndVertGap + mTitleHeight + mClntVertGap;
@@ -249,11 +249,11 @@ int wxToolWindow::HitTestWindow( wxMouseEvent& event )
 
     int k = mMTolerance;
 
-    if ( !( pos.x >= r.x && pos.y >= r.y && 
+    if ( !( pos.x >= r.x && pos.y >= r.y &&
             pos.x < r.x + r.width &&
-            pos.y < r.y + r.height ) 
+            pos.y < r.y + r.height )
        )
-        return HITS_WND_NOTHING; 
+        return HITS_WND_NOTHING;
 
     if ( pos.y <= r.y + k )
     {
@@ -303,7 +303,7 @@ int wxToolWindow::HitTestWindow( wxMouseEvent& event )
 
 void wxToolWindow::DrawHintRect( const wxRect& r )
 {
-    // BUG BUG BUG (wx):: somehow stippled brush works only  
+    // BUG BUG BUG (wx):: somehow stippled brush works only
     //                    when the bitmap created on stack, not
     //                    as a member of the class
 
@@ -381,7 +381,7 @@ void wxToolWindow::SetHintCursor( int type )
             case HITS_WND_TITLE  : SetCursor( wxCURSOR_ARROW ); break;
             case HITS_WND_CLIENT : SetCursor( wxCURSOR_ARROW ); break;
 
-            default: break; 
+            default: break;
         }
 
         if (mMouseCaptured)
@@ -398,41 +398,41 @@ void wxToolWindow::SetHintCursor( int type )
     }
 }
 
-#define INFINITY 32768
+#define FL_INFINITY 32768
 
 static inline void clip_to( int& value, long from, long till )
 {
-    if ( value < from ) 
+    if ( value < from )
         value = from;
 
-    if ( value > till ) 
+    if ( value > till )
         value = till;
 }
 
 void wxToolWindow::AdjustRectPos( const wxRect& original, const wxSize& newDim, wxRect& newRect )
 {
-    if ( mCursorType == HITS_WND_TOP_EDGE || 
+    if ( mCursorType == HITS_WND_TOP_EDGE ||
          mCursorType == HITS_WND_TOP_LEFT_CORNER )
     {
         newRect.x = original.x + original.width  - newDim.x;
         newRect.y = original.y + original.height - newDim.y;
     }
     else
-    if ( mCursorType == HITS_WND_LEFT_EDGE || 
+    if ( mCursorType == HITS_WND_LEFT_EDGE ||
          mCursorType == HITS_WND_BOTTOM_LEFT_CORNER )
     {
         newRect.x = original.x + original.width  - newDim.x;
         newRect.y = original.y;
     }
     else
-    if ( mCursorType == HITS_WND_RIGHT_EDGE || 
+    if ( mCursorType == HITS_WND_RIGHT_EDGE ||
          mCursorType == HITS_WND_TOP_RIGHT_CORNER )
     {
         newRect.x = original.x;
         newRect.y = original.y + original.height - newDim.y;
     }
     else
-    if ( mCursorType == HITS_WND_BOTTOM_EDGE || 
+    if ( mCursorType == HITS_WND_BOTTOM_EDGE ||
          mCursorType == HITS_WND_BOTTOM_RIGHT_CORNER )
     {
         newRect.x = original.x;
@@ -464,44 +464,44 @@ void wxToolWindow::CalcResizedRect( wxRect& rect, wxPoint& delta, const wxSize& 
         default: break;
     }
 
-    if ( mCursorType == HITS_WND_TOP_EDGE || 
+    if ( mCursorType == HITS_WND_TOP_EDGE ||
          mCursorType == HITS_WND_TOP_LEFT_CORNER )
     {
         left += delta.x;
         top  += delta.y;
 
-        clip_to( left, -INFINITY, mInitialRect.x + mInitialRect.width  - minDim.x  );
-        clip_to( top,  -INFINITY, mInitialRect.y + mInitialRect.height - minDim.y );
+        clip_to( left, -FL_INFINITY, mInitialRect.x + mInitialRect.width  - minDim.x  );
+        clip_to( top,  -FL_INFINITY, mInitialRect.y + mInitialRect.height - minDim.y );
     }
     else
-    if ( mCursorType == HITS_WND_LEFT_EDGE || 
+    if ( mCursorType == HITS_WND_LEFT_EDGE ||
          mCursorType == HITS_WND_BOTTOM_LEFT_CORNER )
     {
         left   += delta.x;
         bottom += delta.y;
 
-        clip_to( left,    -INFINITY, mInitialRect.x + mInitialRect.width  - minDim.x  );
-        clip_to( bottom,  mInitialRect.y + minDim.y, INFINITY );
+        clip_to( left,    -FL_INFINITY, mInitialRect.x + mInitialRect.width  - minDim.x  );
+        clip_to( bottom,  mInitialRect.y + minDim.y, FL_INFINITY );
     }
     else
-    if ( mCursorType == HITS_WND_RIGHT_EDGE || 
+    if ( mCursorType == HITS_WND_RIGHT_EDGE ||
         mCursorType == HITS_WND_TOP_RIGHT_CORNER )
     {
         right += delta.x;
         top   += delta.y;
 
-        clip_to( right, mInitialRect.x + minDim.x, INFINITY );
-        clip_to( top,   -INFINITY, mInitialRect.y + mInitialRect.height - minDim.y );
+        clip_to( right, mInitialRect.x + minDim.x, FL_INFINITY );
+        clip_to( top,   -FL_INFINITY, mInitialRect.y + mInitialRect.height - minDim.y );
     }
     else
-    if ( mCursorType == HITS_WND_BOTTOM_EDGE || 
+    if ( mCursorType == HITS_WND_BOTTOM_EDGE ||
          mCursorType == HITS_WND_BOTTOM_RIGHT_CORNER )
     {
         right  += delta.x;
         bottom += delta.y;
 
-        clip_to( right,  mInitialRect.x + minDim.x,  INFINITY );
-        clip_to( bottom, mInitialRect.y + minDim.y, INFINITY );
+        clip_to( right,  mInitialRect.x + minDim.x,  FL_INFINITY );
+        clip_to( bottom, mInitialRect.y + minDim.y, FL_INFINITY );
     }
     else
     {
@@ -557,7 +557,7 @@ void wxToolWindow::OnMotion( wxMouseEvent& event )
         wxSize borderDim( ( mWndHorizGap + mClntHorizGap )*2,
                           ( mWndVertGap  + mClntVertGap  )*2 + mTitleHeight );
 
-        wxSize preferred = GetPreferredSize( wxSize( newRect.width  - borderDim.x, 
+        wxSize preferred = GetPreferredSize( wxSize( newRect.width  - borderDim.x,
                                              newRect.height - borderDim.y ) );
 
         preferred.x += borderDim.x;
@@ -594,8 +594,8 @@ void wxToolWindow::OnLeftDown( wxMouseEvent& event )
     {
         mButtons[i]->OnLeftDown( wxPoint( event.m_x, event.m_y ) );
 
-        if ( mButtons[i]->IsPressed() ) 
-            return; // button hitted, 
+        if ( mButtons[i]->IsPressed() )
+            return; // button hitted,
     }
 
     if ( result >= HITS_WND_LEFT_EDGE || result == HITS_WND_TITLE )
@@ -609,7 +609,7 @@ void wxToolWindow::OnLeftDown( wxMouseEvent& event )
             mMouseCaptured = false;
         }*/
 
-        if ( result == HITS_WND_TITLE && 
+        if ( result == HITS_WND_TITLE &&
              HandleTitleClick( event ) )
             return;
 
@@ -651,7 +651,7 @@ void wxToolWindow::OnLeftUp( wxMouseEvent& event )
         }
     }
 
-    if ( mResizeStarted ) 
+    if ( mResizeStarted )
     {
         mResizeStarted = false;
 
@@ -684,10 +684,10 @@ void wxToolWindow::OnSize( wxSizeEvent& WXUNUSED(event) )
         int x = mWndHorizGap + mClntHorizGap;
         int y = mWndVertGap  + mTitleHeight + mClntVertGap;
 
-        mpClientWnd->SetSize( x-1, y-1, 
+        mpClientWnd->SetSize( x-1, y-1,
                               w - 2*(mWndHorizGap + mClntHorizGap),
-                              h - y - mClntVertGap - mWndVertGap, 
-                              0  
+                              h - y - mClntVertGap - mWndVertGap,
+                              0
                             );
     }
 
@@ -828,15 +828,15 @@ void cbMiniButton::Draw( wxDC& dc )
 
     if ( !mPressed )
     {
-        dc.DrawLine( mPos.x + 1, mPos.y + BTN_BOX_HEIGHT - 2, 
+        dc.DrawLine( mPos.x + 1, mPos.y + BTN_BOX_HEIGHT - 2,
                      mPos.x + BTN_BOX_WIDTH - 1, mPos.y + BTN_BOX_HEIGHT - 2 );
 
-        dc.DrawLine( mPos.x + BTN_BOX_WIDTH - 2, mPos.y + 1, 
+        dc.DrawLine( mPos.x + BTN_BOX_WIDTH - 2, mPos.y + 1,
                      mPos.x + BTN_BOX_WIDTH - 2, mPos.y + BTN_BOX_HEIGHT - 1 );
     }
     else
     {
-        dc.DrawLine( mPos.x + 1, mPos.y + 1, 
+        dc.DrawLine( mPos.x + 1, mPos.y + 1,
                      mPos.x + BTN_BOX_WIDTH - 2, mPos.y + 1 );
 
         dc.DrawLine( mPos.x + 1, mPos.y + 1,
@@ -848,21 +848,21 @@ void cbMiniButton::Draw( wxDC& dc )
     else
         dc.SetPen( *wxWHITE_PEN );
 
-    dc.DrawLine( mPos.x, mPos.y + BTN_BOX_HEIGHT - 1,  
+    dc.DrawLine( mPos.x, mPos.y + BTN_BOX_HEIGHT - 1,
                  mPos.x + BTN_BOX_WIDTH, mPos.y + BTN_BOX_HEIGHT - 1 );
 
     dc.DrawLine( mPos.x + BTN_BOX_WIDTH - 1, mPos.y ,
                  mPos.x + BTN_BOX_WIDTH - 1, mPos.y + BTN_BOX_HEIGHT );
 }
 
-bool cbMiniButton::WasClicked() 
-{ 
-    return mWasClicked; 
+bool cbMiniButton::WasClicked()
+{
+    return mWasClicked;
 }
 
-void cbMiniButton::Reset() 
-{ 
-    mWasClicked = false; 
+void cbMiniButton::Reset()
+{
+    mWasClicked = false;
 }
 
 /***** Implementation fro class cbCloseBox *****/
@@ -872,13 +872,13 @@ void cbCloseBox::Draw( wxDC& dc )
 #if defined(__WXGTK__) || defined(__WXX11__)
 
     cbMiniButton::Draw( dc );
-    
+
     wxPen pen( wxColour( 64,64,64 ) ,1, wxSOLID );
-    
+
     dc.SetPen( pen );
-    
+
     int width = BTN_BOX_WIDTH - 7;
-    
+
     int xOfs = (mPressed) ? 4 : 3;
     int yOfs = (mPressed) ? 4 : 3;
 
@@ -889,13 +889,13 @@ void cbCloseBox::Draw( wxDC& dc )
                      mPos.y + yOfs - one,
                      mPos.x + xOfs + i + width,
                      mPos.y + yOfs + width  + one);
-    
+
         dc.DrawLine( mPos.x + xOfs + i + width ,
                      mPos.y + yOfs - one - one,
                      mPos.x + xOfs + i - one,
                      mPos.y + yOfs + width );
     }
-    
+
 #else
 
     cbMiniButton::Draw( dc );
@@ -1050,8 +1050,8 @@ void cbFloatedBarWindow::PositionFloatedWnd( int scrX,  int scrY,
 {
     wxSize minDim = GetMinimalWndDim();
 
-    SetSize( scrX - mWndHorizGap - mClntHorizGap, 
-             scrY - mClntVertGap - mTitleHeight - mWndVertGap, 
+    SetSize( scrX - mWndHorizGap - mClntHorizGap,
+             scrY - mClntVertGap - mTitleHeight - mWndVertGap,
              width + minDim.x, height + minDim.y, 0 );
 }
 
@@ -1071,7 +1071,7 @@ wxSize cbFloatedBarWindow::GetPreferredSize( const wxSize& given )
     }
     else
     {
-        if ( mpBar->IsFixed() ) 
+        if ( mpBar->IsFixed() )
             return mpBar->mDimInfo.mSizes[ wxCBAR_FLOATING ];
         else
             return given; // not-fixed bars are resized exactly the way user wants
@@ -1127,7 +1127,7 @@ bool cbFloatedBarWindow::HandleTitleClick( wxMouseEvent& event )
     bounds.width  = w;
     bounds.height = h;
 
-    cbStartBarDraggingEvent dragEvt( mpBar, wxPoint(msX,msY), 
+    cbStartBarDraggingEvent dragEvt( mpBar, wxPoint(msX,msY),
                                      mpLayout->GetPanesArray()[FL_ALIGN_TOP] );
 
     mpLayout->FirePluginEvent( dragEvt );
