@@ -601,7 +601,8 @@ void wxShape::FormatText(wxDC& dc, const wxString& s, int i)
     return;
 
   wxShapeRegion *region = (wxShapeRegion *)node->Data();
-  region->SetText(s);
+  // region->SetText(s);  // don't set the formatted text yet, it will be done below
+  region->m_regionText = s;
   dc.SetFont(* region->GetFont());
 
   region->GetSize(&w, &h);
