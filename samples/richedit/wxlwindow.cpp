@@ -153,20 +153,14 @@ wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
    m_bitmap = new wxBitmap(4,4);
    m_bitmapSize = wxPoint(4,4);
    m_llist = new wxLayoutList();
+#ifdef __WXMSW__
+   SetAutoDeleteSelection(true);
+#else
    SetAutoDeleteSelection(false);
+#endif
    m_BGbitmap = NULL;
    m_ScrollToCursor = false;
    SetWrapMargin(0);
-
-   // initially the list is empty, so why would we need the scrollbars?
-#if 0
-   wxPoint max = m_llist->GetSize();
-   SetScrollbars(X_SCROLL_PAGE, Y_SCROLL_PAGE,
-                 max.x / X_SCROLL_PAGE + 1, max.y / Y_SCROLL_PAGE + 1);
-   EnableScrolling(true, true);
-   m_maxx = max.x + X_SCROLL_PAGE;
-   m_maxy = max.y + Y_SCROLL_PAGE;
-#endif // 0
 
    // no scrollbars initially
    m_hasHScrollbar =
@@ -338,12 +332,6 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
                 m_llist->DrawCursor(dc, m_HaveFocus && IsEditable(), offset);
              }
 
-             // VZ: this should be unnecessary because mouse can only click on a
-             //     visible part of the canvas
-#if 0
-             ScrollToCursor();
-#endif // 0
-
 #ifdef __WXGTK__
              DoPaint(); // DoPaint suppresses flicker under GTK
 #endif // wxGTK
@@ -429,7 +417,10 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
    // pressed. OnKeyUp() cannot catch all Shift-Up events.
    if(!event.ShiftDown())
       m_Selecting = false;
-   
+
+   // If we deleted the selection here, we must not execute the
+   // deletion in Delete/Backspace handling.
+   bool deletedSelection = false;
    // pressing any non-arrow key optionally replaces the selection:
    if(m_AutoDeleteSelection
       && !m_Selecting
@@ -437,7 +428,10 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
       && ! IsDirectionKey(keyCode)
       && ! (event.AltDown() || ctrlDown)
       )
+   {
       m_llist->DeleteSelection();
+      deletedSelection = true;
+   }
    
    // <Shift>+<arrow> starts selection
    if ( IsDirectionKey(keyCode) )
@@ -521,7 +515,8 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
                break;
             case WXK_DELETE :
             case 'd':
-               m_llist->Delete(1);
+               if(! deletedSelection) // already done
+                  m_llist->Delete(1);
                break;
             case 'y':
                m_llist->DeleteLines(1);
@@ -576,11 +571,13 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
                if(event.ShiftDown())
                   Cut();
                else
-                  m_llist->Delete(1);
+                  if(! deletedSelection)
+                     m_llist->Delete(1);
                break;
             case WXK_BACK: // backspace
-               if(m_llist->MoveCursorHorizontally(-1))
-                  m_llist->Delete(1);
+               if(! deletedSelection)
+                  if(m_llist->MoveCursorHorizontally(-1))
+                     m_llist->Delete(1);
                break;
             case WXK_RETURN:
                if(m_WrapMargin > 0)
@@ -963,7 +960,7 @@ wxLayoutWindow::Paste(bool primary)
          wxTheClipboard->GetData(&wxldo);
          {
          }
-         //FIXME: missing functionality m_llist->Insert(wxldo.GetList());
+         //FIXME: missing functionality  m_llist->Insert(wxldo.GetList());
       }
       else
 #endif
