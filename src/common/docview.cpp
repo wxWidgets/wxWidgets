@@ -1349,8 +1349,22 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
                                         0,
                                         wxTheApp->GetTopWindow());
 
-    if (!pathTmp.IsEmpty() && wxFileExists(pathTmp))
+    if (!pathTmp.IsEmpty())
     {
+        if (!wxFileExists(pathTmp))
+        {
+            wxString msgTitle;
+            if (!wxTheApp->GetAppName().IsEmpty())
+                msgTitle = wxTheApp->GetAppName();
+            else
+                msgTitle = wxString(_("File error"));
+            
+            (void)wxMessageBox(_("Sorry, could not open this file."), msgTitle, wxOK | wxICON_EXCLAMATION,
+                wxTheApp->GetTopWindow());
+
+            path = wxT("");
+            return (wxDocTemplate *) NULL;
+        }
         m_lastDirectory = wxPathOnly(pathTmp);
 
         path = pathTmp;

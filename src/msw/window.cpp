@@ -1344,7 +1344,11 @@ int wxWindow::GetCharWidth() const
 {
     // +1 is needed because Windows apparently adds it when calculating the
     // dialog units size in pixels
+#if wxDIALOG_UNIT_COMPATIBILITY
+    return wxGetTextMetrics(this).tmAveCharWidth ;
+#else
     return wxGetTextMetrics(this).tmAveCharWidth + 1;
+#endif
 }
 
 void wxWindow::GetTextExtent(const wxString& string,
@@ -4279,21 +4283,25 @@ static TEXTMETRIC wxGetTextMetrics(const wxWindow *win)
     HWND hwnd = GetHwndOf(win);
     HDC hdc = ::GetDC(hwnd);
 
+#if !wxDIALOG_UNIT_COMPATIBILITY
     // and select the current font into it
     HFONT hfont = GetHfontOf(win->GetFont());
     if ( hfont )
     {
         hfont = (HFONT)::SelectObject(hdc, hfont);
     }
+#endif
 
     // finally retrieve the text metrics from it
     GetTextMetrics(hdc, &tm);
 
+#if !wxDIALOG_UNIT_COMPATIBILITY
     // and clean up
     if ( hfont )
     {
         (void)::SelectObject(hdc, hfont);
     }
+#endif
 
     ::ReleaseDC(hwnd, hdc);
 
