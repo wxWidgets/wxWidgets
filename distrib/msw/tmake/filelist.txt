@@ -452,6 +452,8 @@ dnd.cpp	O
 filedlg.cpp	O
 font.cpp	O
 fontdlg.cpp	O
+fontenum.cpp	O
+fontutil.cpp	O
 frame.cpp	O
 gauge.cpp	O
 gdiimage.cpp	O
@@ -466,6 +468,7 @@ mdi.cpp	O
 menu.cpp	O
 menuitem.cpp	O
 metafile.cpp	O
+mimetype.cpp	O
 minifram.cpp	O
 msgdlg.cpp	O
 nativdlg.cpp	O
