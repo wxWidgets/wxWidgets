@@ -58,6 +58,8 @@ public:
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
     virtual bool IsFullScreen() const { return m_fsIsShowing; }
 
+    virtual bool Show(bool show = TRUE);
+
     virtual void SetTitle(const wxString &title) { m_title = title; }
     virtual wxString GetTitle() const { return m_title; }
 

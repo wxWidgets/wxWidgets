@@ -136,6 +136,14 @@ bool wxTopLevelWindowMGL::ShowFullScreen(bool show, long style)
     return TRUE;
 }
 
+bool wxTopLevelWindowMGL::Show(bool show)
+{
+    bool ret = wxTopLevelWindowBase::Show(show);
+    if ( ret && show )
+        SetFocus();
+    return ret;
+}
+
 void wxTopLevelWindowMGL::Maximize(bool maximize)
 {
     if ( maximize && !m_isMaximized )
