@@ -1,0 +1,75 @@
+C++ Features
+============
+
+- Namespaces
+- STL containers compatibility
+- Exception Handling
+
+Core
+====
+
+- use wxEventLoop in all builds
+- remove wxCOMPATIBILITY (1.X)
+- Modularization/Build System/Project File Generation
+- RTTI native Support, Properties/Member-Metadata, 2-Step Init with virtual create
+
+Documentation
+=============
+
+- Possibilities moving doc into header files with tool support ? directions ?
+- wxDC : Precise definition of default/initial state. 
+- wxDC : Pixelwise definition of operations.
+
+wxEvents
+========
+
+Change Idle Handling
+--------------------
+Current Implementation is using too many CPU cycles
+
+Loose Coupling Event-Source Event-Sink
+--------------------------------------
+kind of the NextStep/C# very performant coupling, exposing events via Metadata
+
+Remove Lazy Init of Eventtables
+-------------------------------
+Was introduced as a bug-fix, not needed anymore, consumes considerably CPU
+
+
+Modules/Plugins
+===============
+
+Architecture
+------------
+
+we aim to arrive at a lazy initializiation of modules only when they are first 
+needed. A dependency information about on which other modules this depends is 
+needed. Dynamic Plug-In loading and unloading must be compatible with that.
+
+wxUniversal
+===========
+
+- Renderers within native ports
+
+wxPrinting
+==========
+
+- Page preflighting capabilities in order to determine number of pages
+- Preview enhancement
+
+wxStaticBox
+===========
+
+hide the platform problems (GTK:'children' must be siblings) in encapsulation 
+in order to avoid problems on ports where the hierarchy must be 'correct'
+
+wxMiscellaneous
+===============
+
+- wxDC Support for point to char-position with text rendering
+- wxLocale Extension (eg Currency)
+- wxStreams review
+
+
+
+
