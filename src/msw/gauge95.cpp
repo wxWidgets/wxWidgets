@@ -68,8 +68,17 @@ bool wxGauge95::Create(wxWindow *parent, wxWindowID id,
   int height = size.y;
 
   long msFlags = WS_CHILD | WS_VISIBLE | WS_TABSTOP;
+
+#ifndef PBS_VERTICAL
+#define PBS_VERTICAL 0x04
+#endif
+
   if (m_windowStyle & wxGA_VERTICAL)
     msFlags |= PBS_VERTICAL;
+
+#ifndef PBS_SMOOTH
+#define PBS_SMOOTH 0x01
+#endif
 
   if (m_windowStyle & wxGA_SMOOTH)
     msFlags |= PBS_SMOOTH;
