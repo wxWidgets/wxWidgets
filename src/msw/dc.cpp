@@ -276,12 +276,16 @@ void wxDC::SelectOldObjects(WXHDC dc)
     m_clipY2 = (wxCoord) YDEV2LOG(rect.bottom); \
 }
 
-void wxDC::DoSetClippingRegion(wxCoord cx, wxCoord cy, wxCoord cw, wxCoord ch)
+void wxDC::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
 {
     m_clipping = TRUE;
 
-    HRGN hrgn = ::CreateRectRgn(XLOG2DEV(cx), YLOG2DEV(cy),
-                                XLOG2DEV(cx + cw), YLOG2DEV(cy + ch));
+    // the region coords are always the device ones, so do the translation
+    // manually
+    HRGN hrgn = ::CreateRectRgn(LogicalToDeviceX(x),
+                                LogicalToDeviceY(y),
+                                LogicalToDeviceX(x + w),
+                                LogicalToDeviceY(y + h));
     if ( !hrgn )
     {
         wxLogLastError(_T("CreateRectRgn"));
