@@ -301,6 +301,11 @@ void wxHelpProvider::AddHelp(wxWindowID WXUNUSED(id),
 {
 }
 
+// removes the association
+void wxHelpProvider::RemoveHelp(wxWindowBase* WXUNUSED(window))
+{
+}
+
 wxHelpProvider::~wxHelpProvider()
 {
 }
@@ -327,6 +332,12 @@ void wxSimpleHelpProvider::AddHelp(wxWindowBase *window, const wxString& text)
 void wxSimpleHelpProvider::AddHelp(wxWindowID id, const wxString& text)
 {
     m_hashIds.Put(id, text);
+}
+
+// removes the association
+void wxSimpleHelpProvider::RemoveHelp(wxWindowBase* window)
+{
+    m_hashWindows.Delete((long)window);
 }
 
 bool wxSimpleHelpProvider::ShowHelp(wxWindowBase *window)

@@ -28,6 +28,8 @@ See also <a href="faq.htm">top-level FAQ page</a>.
 <li><a href="#gnome">Does wxGTK have GNOME support?</a></li>
 <li><a href="#redhat">Warning about GTK libraries supplied with RedHat</a></li>
 <li><a href="#wxgtk">What is wxWindows 2 for GTK?</a></li>
+<li><a href="#bincompat">What range of Intel Linux platforms will a given application binary be usable on?</li>
+
 <hr>
 
 wxWindows 2 for GTK is a port of wxWindows to the <a href="http://www.gimp.org/gtk" target=_top>GTK+ toolkit</a>,
@@ -53,6 +55,17 @@ the client will get notified twice, first getting a LOST event and then a CONNEC
 This problem can be solved by updating GTK with an official distribution of the library.
 <P>
 
+<h3><a name="bincompat">What range of Intel Linux platforms will a given application binary be usable on?</h3>
+
+Robert Roebling replies:<P>
+
+"The important thing is the libc version that your app
+is linked against. The most recent version is 2.2.5
+and programs linked against it will not run with version
+2.1.X so that you will fare best if you compile your app
+on a 2.1.X system. It will then run on practically all
+Linux distros (if you link you app statically against
+the image libraries and std C++ lib)."
 
 </font>
 

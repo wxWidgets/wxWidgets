@@ -310,6 +310,30 @@ wxString wxStringHashTable::Get(long key, bool *wasFound) const
     return _T("");
 }
 
+bool wxStringHashTable::Delete(long key) const
+{
+    wxCHECK_MSG( m_hashSize, FALSE, _T("must call Create() first") );
+
+    size_t slot = (size_t)abs((int)(key % (long)m_hashSize));
+
+    wxArrayLong *keys = m_keys[slot];
+    if ( keys )
+    {
+        size_t count = keys->GetCount();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            if ( keys->Item(n) == key )
+            {
+                keys.RemoveAt(n);
+                m_values[slot]->RemoveAt(n);
+                return TRUE;
+            }
+        }
+    }
+
+    return FALSE;
+}
+
 // ----------------------------------------------------------------------------
 // old not type safe wxHashTable
 // ----------------------------------------------------------------------------

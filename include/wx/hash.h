@@ -127,6 +127,9 @@ public:
     // and the wasFound is set to FALSE if not NULL
     wxString Get(long key, bool *wasFound = NULL) const;
 
+    // remove the item, returning TRUE if the item was found and deleted
+    bool Delete(long key) const;
+
     // clean up
     void Destroy();
 

@@ -124,6 +124,9 @@ public:
     // the application, for example)
     virtual void AddHelp(wxWindowID id, const wxString& text);
 
+    // removes the association
+    virtual void RemoveHelp(wxWindowBase* window);
+
     // virtual dtor for any base class
     virtual ~wxHelpProvider();
 
@@ -142,6 +145,7 @@ public:
     virtual bool ShowHelp(wxWindowBase *window);
     virtual void AddHelp(wxWindowBase *window, const wxString& text);
     virtual void AddHelp(wxWindowID id, const wxString& text);
+    virtual void RemoveHelp(wxWindowBase* window);
 
 protected:
     // we use 2 hashes for storing the help strings associated with windows

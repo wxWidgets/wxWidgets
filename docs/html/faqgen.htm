@@ -1,4 +1,3 @@
-
 <HTML>
 
 <HEAD>
@@ -31,6 +30,7 @@ See also <a href="faq.htm">top-level FAQ page</a>.
 <li><a href="#specific">How does wxWindows 2 support platform-specific features?</a></li>
 <li><a href="#stl">Does wxWindows use STL? or the standard string class?</a></li>
 <li><a href="#richedit">Is there a rich edit/markup widget for wxWindows 2?</a></ li>
+<li><a href="#exceptions">How to use C++ exceptions with wxWindows?</a></ li>
 <li><a href="#dev">How is wxWindows 2 being developed?</a></li>
 <li><a href="#distrib">How is wxWindows 2 distributed?</a></li>
 <li><a href="#future">What are the plans for the future?</a></li>
@@ -171,6 +171,34 @@ no wxWindows wrapper for these (but text attribute functions are being added in 
 </ul>
 
 <P>
+
+<h3><a name="exceptions">How to use C++ exceptions with wxWindows?</a></h3>
+
+wxWindows library itself is unfortunately <i>not</i> exception-safe (as its
+initial version predates, by far, the addition of the exceptions to the C++
+language). However you can still use the exceptions in your own code and use
+the other libraries using the exceptions for the error reporting together with
+wxWindows.
+
+<p>
+There are a few issues to keep in mind, though:
+<ul>
+    <li>You shouldn&#39;t let the exceptions propagate through wxWindows code,
+        in particular you should always catch the exceptions thrown by the
+        functions called from an event handler in the handler itself and not
+        let them propagate upwards to wxWindows.
+
+    <li>You may need to ensure that the compiler support for the exceptions is
+        enabled as, considering that wxWindows itself doesn&#39;t use the
+        exceptions and turning their support on results in the library size
+        augmentation of 10% to 20%, it is turned off by default for a few
+        compilers. Moreover, for gcc (or at least its mingw version) you must
+        also turn on the RTTI support to be able to use the exceptions, so you
+        should use <tt>--disable-no_rtti --disable-no_exceptions</tt> options
+        when configuring the library (attention to the double negation).
+</ul>
+
+<p>
 
 <H3><a name="dev">How is wxWindows 2 being developed?</a></H3>
 
