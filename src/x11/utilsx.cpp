@@ -18,6 +18,7 @@
 
 #ifdef HAVE_XSHAPE
 #ifdef __VMS
+# include "wx/vms_x_fix.h"
 # include <X11/shape.h>
 #else
 # include <X11/extensions/shape.h>

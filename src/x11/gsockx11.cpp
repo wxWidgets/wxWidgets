@@ -24,8 +24,8 @@ typedef void (*wxSocketCallback) (int fd, void* data);
 typedef enum
 { wxSocketTableInput, wxSocketTableOutput } wxSocketTableType ;
 
-void wxRegisterSocketCallback(int fd, wxSocketTableType socketType, wxSocketCallback cback, void* data);
-void wxUnregisterSocketCallback(int fd, wxSocketTableType socketType);
+extern "C" void wxRegisterSocketCallback(int fd, wxSocketTableType socketType, wxSocketCallback cback, void* data);
+extern "C" void wxUnregisterSocketCallback(int fd, wxSocketTableType socketType);
 
 
 static void _GSocket_X11_Input(int *fid, void* data)

@@ -19,6 +19,7 @@ CXX_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/ieee=denorm\
 .ifdef __WXX11__
 CXX_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1)/float=ieee\
 	/name=(as_is,short)/assume=(nostdnew,noglobal_array_new)
+.else
 CXX_DEFINE =
 .endif
 .endif

@@ -746,7 +746,9 @@ Window wxGetWindowParent(Window window)
 
     return (Window) 0;
 
-    Window parent, root = 0;
+#ifndef __VMS
+   // VMS chokes on unreacheable code
+   Window parent, root = 0;
 #if wxUSE_NANOX
     int noChildren = 0;
 #else
@@ -767,6 +769,7 @@ Window wxGetWindowParent(Window window)
         return parent;
     else
         return (Window) 0;
+#endif
 }
 
 void wxApp::Exit()

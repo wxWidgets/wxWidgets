@@ -38,7 +38,7 @@ OBJECTS = \
 		region.obj,\
 		utilsx.obj
 
-OBJECTS_X11=dc.obj,\
+OBJECTS_X11=app.obj,dc.obj,\
 		dcclient.obj,\
 		dcmemory.obj,\
 		dcscreen.obj,\
@@ -56,10 +56,16 @@ OBJECTS_X11=dc.obj,\
 		settings.obj,\
 		toplevel.obj,\
 		utils.obj,\
-		window.obj
+		window.obj,\
+		colour.obj,\
+		cursor.obj,\
+		data.obj,\
+		dataobj.obj,\
+		clipbrd.obj
 
 
 SOURCES = \
+		app.cpp,\
 		bitmap.cpp,\
 		brush.cpp,\
 		glcanvas.cpp,\
@@ -77,14 +83,19 @@ SOURCES = \
 		icon.cpp,\
 		main.cpp,\
 		minifram.cpp,\
-		nanox.cpp,\
+		nanox.c,\
 		palette.cpp,\
 		popupwin.cpp,\
 		reparent.cpp,\
 		settings.cpp,\
 		toplevel.cpp,\
 		utils.cpp,\
-		window.cpp
+		window.cpp,\
+		colour.cpp,\
+		cursor.cpp,\
+		data.cpp,\
+		dataobj.cpp,\
+		clipbrd.cpp
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -115,7 +126,7 @@ gsockx11.obj : gsockx11.cpp
 icon.obj : icon.cpp
 main.obj : main.cpp
 minifram.obj : minifram.cpp
-nanox.obj : nanox.cpp
+nanox.obj : nanox.c
 palette.obj : palette.cpp
 popupwin.obj : popupwin.cpp
 reparent.obj : reparent.cpp
@@ -123,3 +134,9 @@ settings.obj : settings.cpp
 toplevel.obj : toplevel.cpp
 utils.obj : utils.cpp
 window.obj : window.cpp
+colour.obj : colour.cpp
+app.obj : app.cpp
+cursor.obj : cursor.cpp
+data.obj : data.cpp
+dataobj.obj : dataobj.cpp
+clipbrd.obj : clipbrd.cpp

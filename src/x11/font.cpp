@@ -770,6 +770,7 @@ bool wxFont::IsFixedWidth() const
     wxCHECK_MSG( Ok(), FALSE, wxT("invalid font") );
 
 #if wxUSE_UNICODE
+   return wxFontBase::IsFixedWidth();
 #else
     // Robert, is this right? HasNativeFont doesn't exist.
     if ( TRUE )
@@ -781,9 +782,10 @@ bool wxFont::IsFixedWidth() const
 
         return spacing.Upper() == _T('M');
     }
+   // Unreaceable code for now
+   // return wxFontBase::IsFixedWidth();
 #endif
 
-    return wxFontBase::IsFixedWidth();
 }
 
 // ----------------------------------------------------------------------------

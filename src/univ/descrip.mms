@@ -94,11 +94,11 @@ SOURCES =\
 		winuniv.cpp \
 		combobox.cpp \
 		ctrlrend.cpp \
-		gtk.cpp \
-		metal.cpp \
 		radiobox.cpp \
 		scrthumb.cpp \
-		win32.cpp
+		[.themes]gtk.cpp \
+		[.themes]metal.cpp \
+		[.themes]win32.cpp
    
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -137,8 +137,11 @@ topluniv.obj : topluniv.cpp
 winuniv.obj : winuniv.cpp
 combobox.obj : combobox.cpp
 ctrlrend.obj : ctrlrend.cpp
-gtk.obj : gtk.cpp
-metal.obj : metal.cpp
+gtk.obj : [.themes]gtk.cpp
+	cxx $(CXXFLAGS)$(CXX_DEFINE) [.themes]gtk.cpp
+metal.obj : [.themes]metal.cpp
+	cxx $(CXXFLAGS)$(CXX_DEFINE) [.themes]metal.cpp
 radiobox.obj : radiobox.cpp
 scrthumb.obj : scrthumb.cpp
-win32.obj : win32.cpp
+win32.obj : [.themes]win32.cpp
+	cxx $(CXXFLAGS)$(CXX_DEFINE) [.themes]win32.cpp
