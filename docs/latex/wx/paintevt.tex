@@ -74,8 +74,7 @@ void MyWindow::OnPaint(wxPaintEvent\& event)
     vH = upd.GetH();
 
     // Alternatively we can do this:
-    // wxRect rect;
-    // upd.GetRect(&rect);
+    // wxRect rect(upd.GetRect());
 
     // Repaint this rectangle
     ...some code...
