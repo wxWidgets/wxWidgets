@@ -68,7 +68,6 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
 
 void wxRadioButton::SetValue(bool val)
 {
-	int i;
 	wxRadioButton *cycle;
 	  if ( GetControlValue( (ControlHandle) m_macControl ) == val )
 	    return ;

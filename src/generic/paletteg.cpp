@@ -72,6 +72,7 @@ wxPalette::wxPalette(int n, const unsigned char *red, const unsigned char *green
 }
 
 wxPalette::wxPalette(const wxPalette& palette)
+    : wxGDIObject()
 {
     Ref(palette);
 }

@@ -47,6 +47,7 @@ wxPropertyValue::wxPropertyValue(void)
 }
 
 wxPropertyValue::wxPropertyValue(const wxPropertyValue& copyFrom)
+    : wxObject()
 {
   m_value.string = (wxChar*) NULL;
   m_modifiedFlag = FALSE;
@@ -834,6 +835,7 @@ wxProperty::wxProperty(void)
 }
 
 wxProperty::wxProperty(wxProperty& copyFrom)
+    : wxObject()
 {
   m_value = copyFrom.GetValue();
   m_name = copyFrom.GetName();

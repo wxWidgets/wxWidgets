@@ -28,8 +28,8 @@
     #pragma hdrstop
 #endif
 
-#if !(defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXPM__)) || defined(__WXMAC__) || \
-    defined(__WXUNIVERSAL__)
+#if !(defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXPM__)) || \
+    defined(__WXMAC__) || defined(__WXUNIVERSAL__)
 
 #ifndef WX_PRECOMP
     #include "wx/textctrl.h"
@@ -134,7 +134,7 @@ BEGIN_EVENT_TABLE(wxSpinCtrlButton, wxSpinButton)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrl, wxControl)
-
+    
 // ============================================================================
 // implementation
 // ============================================================================

@@ -64,7 +64,6 @@ static pascal void wxMacListDefinition( short message, Boolean isSelected, Rect 
                                      Cell cell, short dataOffset, short dataLength,
                                      ListHandle listHandle )
 {
-    FontInfo fontInfo;
     GrafPtr savePort;
     GrafPtr grafPtr;
     RgnHandle savedClipRegion;
@@ -681,10 +680,10 @@ void wxListBox::MacSetSelection( int n , bool select )
     Cell cell = { 0 , 0 } ;
     if ( ! (m_windowStyle & wxLB_MULTIPLE) )
     {
-    if ( LGetSelect( true , &cell , (ListHandle)m_macList ) )
-    {
-        LSetSelect( false , cell , (ListHandle)m_macList ) ;
-    }
+        if ( LGetSelect( true , &cell , (ListHandle)m_macList ) )
+        {
+            LSetSelect( false , cell , (ListHandle)m_macList ) ;
+        }
     }
     
     cell.v = n ;
