@@ -961,6 +961,25 @@ void wxGridCellStringRenderer::SetTextColoursAndFont(wxGrid& grid,
     dc.SetFont( attr.GetFont() );
 }
 
+wxSize wxGridCellStringRenderer::DoGetBestSize(wxGridCellAttr& attr,
+                                               wxDC& dc,
+                                               const wxString& text)
+{
+    wxCoord x, y;
+    dc.SetFont(attr.GetFont());
+    dc.GetTextExtent(text, &x, &y);
+
+    return wxSize(x, y);
+}
+
+wxSize wxGridCellStringRenderer::GetBestSize(wxGrid& grid,
+                                             wxGridCellAttr& attr,
+                                             wxDC& dc,
+                                             int row, int col)
+{
+    return DoGetBestSize(attr, dc, grid.GetCellValue(row, col));
+}
+
 void wxGridCellStringRenderer::Draw(wxGrid& grid,
                                     wxGridCellAttr& attr,
                                     wxDC& dc,
@@ -983,6 +1002,23 @@ void wxGridCellStringRenderer::Draw(wxGrid& grid,
                            rect, hAlign, vAlign);
 }
 
+// ----------------------------------------------------------------------------
+// wxGridCellNumberRenderer
+// ----------------------------------------------------------------------------
+
+wxString wxGridCellNumberRenderer::GetString(wxGrid& grid, int row, int col)
+{
+    wxGridTableBase *table = grid.GetTable();
+    wxString text;
+    if ( table->CanGetValueAs(row, col, wxGRID_VALUE_NUMBER) )
+    {
+        text.Printf(_T("%ld"), table->GetValueAsLong(row, col));
+    }
+    //else: leave the string empty or put 0 into it?
+
+    return text;
+}
+
 void wxGridCellNumberRenderer::Draw(wxGrid& grid,
                                     wxGridCellAttr& attr,
                                     wxDC& dc,
@@ -1002,15 +1038,15 @@ void wxGridCellNumberRenderer::Draw(wxGrid& grid,
     wxRect rect = rectCell;
     rect.Inflate(-1);
 
-    wxGridTableBase *table = grid.GetTable();
-    wxString text;
-    if ( table->CanGetValueAs(row, col, wxGRID_VALUE_NUMBER) )
-    {
-        text.Printf(_T("%ld"), table->GetValueAsLong(row, col));
-    }
-    //else: leave the string empty or put 0 into it?
+    grid.DrawTextRectangle(dc, GetString(grid, row, col), rect, hAlign, vAlign);
+}
 
-    grid.DrawTextRectangle(dc, text, rect, hAlign, vAlign);
+wxSize wxGridCellNumberRenderer::GetBestSize(wxGrid& grid,
+                                             wxGridCellAttr& attr,
+                                             wxDC& dc,
+                                             int row, int col)
+{
+    return DoGetBestSize(attr, dc, GetString(grid, row, col));
 }
 
 // ----------------------------------------------------------------------------
@@ -1021,6 +1057,24 @@ wxGridCellFloatRenderer::wxGridCellFloatRenderer(int width, int precision)
 {
     SetWidth(width);
     SetPrecision(precision);
+}
+
+wxString wxGridCellFloatRenderer::GetString(wxGrid& grid, int row, int col)
+{
+    wxGridTableBase *table = grid.GetTable();
+    wxString text;
+    if ( table->CanGetValueAs(row, col, wxGRID_VALUE_FLOAT) )
+    {
+        if ( !m_format )
+        {
+            m_format.Printf(_T("%%%d.%d%%f"), m_width, m_precision);
+        }
+
+        text.Printf(m_format, table->GetValueAsDouble(row, col));
+    }
+    //else: leave the string empty or put 0 into it?
+
+    return text;
 }
 
 void wxGridCellFloatRenderer::Draw(wxGrid& grid,
@@ -1042,25 +1096,53 @@ void wxGridCellFloatRenderer::Draw(wxGrid& grid,
     wxRect rect = rectCell;
     rect.Inflate(-1);
 
-    wxGridTableBase *table = grid.GetTable();
-    wxString text;
-    if ( table->CanGetValueAs(row, col, wxGRID_VALUE_FLOAT) )
-    {
-        if ( !m_format )
-        {
-            m_format.Printf(_T("%%%d.%d%%f"), m_width, m_precision);
-        }
+    grid.DrawTextRectangle(dc, GetString(grid, row, col), rect, hAlign, vAlign);
+}
 
-        text.Printf(m_format, table->GetValueAsDouble(row, col));
-    }
-    //else: leave the string empty or put 0 into it?
-
-    grid.DrawTextRectangle(dc, text, rect, hAlign, vAlign);
+wxSize wxGridCellFloatRenderer::GetBestSize(wxGrid& grid,
+                                            wxGridCellAttr& attr,
+                                            wxDC& dc,
+                                            int row, int col)
+{
+    return DoGetBestSize(attr, dc, GetString(grid, row, col));
 }
 
 // ----------------------------------------------------------------------------
 // wxGridCellBoolRenderer
 // ----------------------------------------------------------------------------
+
+wxSize wxGridCellBoolRenderer::ms_sizeCheckMark;
+
+// between checkmark and box
+static const wxCoord wxGRID_CHECKMARK_MARGIN = 4;
+
+wxSize wxGridCellBoolRenderer::GetBestSize(wxGrid& grid,
+                                           wxGridCellAttr& WXUNUSED(attr),
+                                           wxDC& WXUNUSED(dc),
+                                           int WXUNUSED(row),
+                                           int WXUNUSED(col))
+{
+    // compute it only once (no locks for MT safeness in GUI thread...)
+    if ( !ms_sizeCheckMark.x )
+    {
+        // get checkbox size
+        wxCoord checkSize = 0;
+        wxCheckBox *checkbox = new wxCheckBox(&grid, -1, wxEmptyString);
+        wxSize size = checkbox->GetBestSize();
+        checkSize = size.y + wxGRID_CHECKMARK_MARGIN;
+
+        // FIXME wxGTK::wxCheckBox::GetBestSize() gives "wrong" result
+#ifdef __WXGTK__
+        checkSize -= size.y / 2;
+#endif
+
+        delete checkbox;
+
+        ms_sizeCheckMark.x = ms_sizeCheckMark.y = checkSize;
+    }
+
+    return ms_sizeCheckMark;
+}
 
 void wxGridCellBoolRenderer::Draw(wxGrid& grid,
                                   wxGridCellAttr& attr,
@@ -1071,37 +1153,19 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
 {
     wxGridCellRenderer::Draw(grid, attr, dc, rect, row, col, isSelected);
 
-    // between checkmark and box
-    static const wxCoord margin = 4;
-
-    // get checkbox size
-    static wxCoord s_checkSize = 0;
-    if ( s_checkSize == 0 )
-    {
-        // compute it only once (no locks for MT safeness in GUI thread...)
-        wxCheckBox *checkbox = new wxCheckBox(&grid, -1, wxEmptyString);
-        wxSize size = checkbox->GetBestSize();
-        s_checkSize = size.y + margin;
-
-        // FIXME wxGTK::wxCheckBox::GetBestSize() is really weird...
-#ifdef __WXGTK__
-        s_checkSize -= size.y / 2;
-#endif
-
-        delete checkbox;
-    }
-
     // draw a check mark in the centre (ignoring alignment - TODO)
+    wxSize size = GetBestSize(grid, attr, dc, row, col);
     wxRect rectMark;
-    rectMark.x = rect.x + rect.width/2 - s_checkSize/2;
-    rectMark.y = rect.y + rect.height/2 - s_checkSize/2;
-    rectMark.width = rectMark.height = s_checkSize;
+    rectMark.x = rect.x + rect.width/2 - size.x/2;
+    rectMark.y = rect.y + rect.height/2 - size.y/2;
+    rectMark.width = size.x;
+    rectMark.height = size.y;
 
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
     dc.SetPen(wxPen(attr.GetTextColour(), 1, wxSOLID));
     dc.DrawRectangle(rectMark);
 
-    rectMark.Inflate(-margin);
+    rectMark.Inflate(-wxGRID_CHECKMARK_MARGIN);
 
     bool value;
     if (grid.GetTable()->CanGetValueAs(row, col, wxT("bool")))
@@ -6597,6 +6661,62 @@ int wxGrid::GetColMinimalWidth(int col) const
 {
     wxObject *obj = m_colMinWidths.Get(m_dragRowOrCol);
     return obj ? (int)obj : WXGRID_MIN_COL_WIDTH;
+}
+
+void wxGrid::AutoSizeColumn( int col, bool setAsMin )
+{
+    wxClientDC dc(m_gridWin);
+
+    wxCoord width, widthMax = 0;
+    for ( int row = 0; row < m_numRows; row++ )
+    {
+        wxGridCellAttr* attr = GetCellAttr(row, col);
+        wxGridCellRenderer* renderer = attr->GetRenderer(GetDefaultRendererForCell(row,col));
+        if ( renderer )
+        {
+            width = renderer->GetBestSize(*this, *attr, dc, row, col).x;
+            if ( width > widthMax )
+            {
+                widthMax = width;
+            }
+        }
+
+        attr->DecRef();
+    }
+
+    // now also compare with the column label width
+    dc.SetFont( GetLabelFont() );
+    dc.GetTextExtent( GetColLabelValue(col), &width, NULL );
+    if ( width > widthMax )
+    {
+        widthMax = width;
+    }
+
+    if ( !widthMax )
+    {
+        // empty column - give default width (notice that if widthMax is less
+        // than default width but != 0, it's ok)
+        widthMax = m_defaultColWidth;
+    }
+    else
+    {
+        // leave some space around text
+        widthMax += 10;
+    }
+
+    SetColSize(col, widthMax);
+    if ( setAsMin )
+    {
+        SetColMinimalWidth(col, widthMax);
+    }
+}
+
+void wxGrid::AutoSizeColumns( bool setAsMin )
+{
+    for ( int col = 0; col < m_numCols; col++ )
+    {
+        AutoSizeColumn(col, setAsMin);
+    }
 }
 
 //

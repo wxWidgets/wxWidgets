@@ -959,8 +959,13 @@ BugsGridFrame::BugsGridFrame()
     wxGridTableBase *table = new BugsGridTable();
     grid->SetTable(table, TRUE);
 
-    for ( size_t row = 0; row < WXSIZEOF(gs_dataBugsGrid); row++ )
-    {
-        grid->SetReadOnly(row, Col_Id);
-    }
+    wxGridCellAttr *attrRO = new wxGridCellAttr,
+                   *attrRangeEditor = new wxGridCellAttr;
+    attrRO->SetReadOnly();
+    attrRangeEditor->SetEditor(new wxGridCellNumberEditor(1, 5));
+
+    grid->SetColAttr(Col_Id, attrRO);
+    grid->SetColAttr(Col_Priority, attrRangeEditor);
+
+    grid->AutoSizeColumns();
 }

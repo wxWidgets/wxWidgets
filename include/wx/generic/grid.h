@@ -105,6 +105,12 @@ public:
                       int row, int col,
                       bool isSelected) = 0;
 
+    // get the preferred size of the cell for its contents
+    virtual wxSize GetBestSize(wxGrid& grid,
+                               wxGridCellAttr& attr,
+                               wxDC& dc,
+                               int row, int col) = 0;
+
     // virtual dtor for any base class
     virtual ~wxGridCellRenderer();
 };
@@ -121,12 +127,23 @@ public:
                       int row, int col,
                       bool isSelected);
 
+    // return the string extent
+    virtual wxSize GetBestSize(wxGrid& grid,
+                               wxGridCellAttr& attr,
+                               wxDC& dc,
+                               int row, int col);
+
 protected:
     // set the text colours before drawing
     void SetTextColoursAndFont(wxGrid& grid,
                                wxGridCellAttr& attr,
                                wxDC& dc,
                                bool isSelected);
+
+    // calc the string extent for given string/font
+    wxSize DoGetBestSize(wxGridCellAttr& attr,
+                         wxDC& dc,
+                         const wxString& text);
 };
 
 // the default renderer for the cells containing numeric (long) data
@@ -140,6 +157,14 @@ public:
                       const wxRect& rect,
                       int row, int col,
                       bool isSelected);
+
+    virtual wxSize GetBestSize(wxGrid& grid,
+                               wxGridCellAttr& attr,
+                               wxDC& dc,
+                               int row, int col);
+
+protected:
+    wxString GetString(wxGrid& grid, int row, int col);
 };
 
 class WXDLLEXPORT wxGridCellFloatRenderer : public wxGridCellStringRenderer
@@ -161,6 +186,13 @@ public:
                       int row, int col,
                       bool isSelected);
 
+    virtual wxSize GetBestSize(wxGrid& grid,
+                               wxGridCellAttr& attr,
+                               wxDC& dc,
+                               int row, int col);
+protected:
+    wxString GetString(wxGrid& grid, int row, int col);
+
 private:
     // formatting parameters
     int m_width,
@@ -180,6 +212,15 @@ public:
                       const wxRect& rect,
                       int row, int col,
                       bool isSelected);
+
+    // return the checkmark size
+    virtual wxSize GetBestSize(wxGrid& grid,
+                               wxGridCellAttr& attr,
+                               wxDC& dc,
+                               int row, int col);
+
+private:
+    static wxSize ms_sizeCheckMark;
 };
 
 // ----------------------------------------------------------------------------
@@ -1001,6 +1042,14 @@ public:
 
     void     SetColSize( int col, int width );
 
+    // automatically size the column to fit to its contents, if setAsMin is
+    // TRUE, this optimal width will also be set as minimal width for this
+    // column
+    void     AutoSizeColumn( int col, bool setAsMin = TRUE );
+
+    // auto size all columns (very ineffective for big grids!)
+    void     AutoSizeColumns( bool setAsMin = TRUE );
+
     // column won't be resized to be lesser width - this must be called during
     // the grid creation because it won't resize the column if it's already
     // narrower than the minimal width
@@ -1505,8 +1554,6 @@ protected:
     DECLARE_DYNAMIC_CLASS( wxGrid )
     DECLARE_EVENT_TABLE()
 };
-
-
 
 // ----------------------------------------------------------------------------
 // Grid event class and event types
