@@ -135,6 +135,7 @@ make prefix=$RPM_BUILD_ROOT%{wxpref} install
 cd ../wxPython
 %{python} setup.py \
 	IN_CVS_TREE=1 \
+	NO_SCRIPTS=1 \
 	WX_CONFIG="$RPM_BUILD_ROOT%{wxpref}/bin/wx-config --prefix=$RPM_BUILD_ROOT%{wxpref}" \
 	build
 
@@ -145,9 +146,29 @@ cd ../wxPython
 cd wxPython
 %{python} setup.py \
 	IN_CVS_TREE=1 \
+	NO_SCRIPTS=1 \
 	WX_CONFIG="$RPM_BUILD_ROOT%{wxpref}/bin/wx-config --prefix=$RPM_BUILD_ROOT%{wxpref}" \
 	install \
 	--root=$RPM_BUILD_ROOT
+
+# Since I want this RPM to be as generic as possible I won't let
+# distutils copy the scripts, since it will mangle the #! line
+# to use the real python pathname.  Since some distros install
+# python 2.2 as python2 and others as python, then I can't let
+# it do that otherwise the dependencies will be fouled up.  Copy
+# them manually instead:
+
+mkdir -p $RPM_BUILD_ROOT/usr/bin
+for s in \
+	img2png \
+	img2py \
+	img2xpm \
+	pycrust \
+	pyshell \
+	xrced; do
+    cp scripts/$s $RPM_BUILD_ROOT/usr/bin
+done
+
 
 
 
