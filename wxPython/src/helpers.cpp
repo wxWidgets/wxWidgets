@@ -1441,10 +1441,14 @@ long wxPyGetWinHandle(wxWindow* win) {
     // Find and return the actual X-Window.
 #ifdef __WXGTK__
     if (win->m_wxwindow) {
+#ifdef __WXGTK20__
+        return (long) GDK_WINDOW_XWINDOW(GTK_PIZZA(win->m_wxwindow)->bin_window);
+#else
         GdkWindowPrivate* bwin = (GdkWindowPrivate*)GTK_PIZZA(win->m_wxwindow)->bin_window;
         if (bwin) {
             return (long)bwin->xwindow;
         }
+#endif
     }
 #endif
     return 0;
