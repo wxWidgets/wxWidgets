@@ -1587,7 +1587,7 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
     tmTimeOnly.tm_year = 76;
     tmTimeOnly.tm_isdst = 0;        // no DST, we adjust for tz ourselves
 
-    wxString tmp, res;
+    wxString tmp, res, fmt;
     for ( const wxChar *p = format; *p; p++ )
     {
         if ( *p != _T('%') )
@@ -1598,8 +1598,28 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
             continue;
         }
 
-        // start of the format specification
+        // set the default format
         switch ( *++p )
+        {
+            case _T('Y'):               // year has 4 digits
+                fmt = _T("%04d");
+                break;
+
+            case _T('j'):               // day of year has 3 digits
+                fmt = _T("%03d");
+                break;
+
+            default:
+                // it's either another valid format specifier in which case
+                // the format is "%02d" (for all the rest) or we have the
+                // field width preceding the format in which case it will
+                // override the default format anyhow
+                fmt = _T("%02d");
+        }
+
+restart:
+        // start of the format specification
+        switch ( *p )
         {
             case _T('a'):       // a weekday name
             case _T('A'):
@@ -1746,13 +1766,11 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
                 break;
 
             case _T('d'):       // day of a month (01-31)
-                tmp.Printf(_T("%02d"), tm.mday);
-                res += tmp;
+                res += wxString::Format(fmt, tm.mday);
                 break;
 
             case _T('H'):       // hour in 24h format (00-23)
-                tmp.Printf(_T("%02d"), tm.hour);
-                res += tmp;
+                res += wxString::Format(fmt, tm.hour);
                 break;
 
             case _T('I'):       // hour in 12h format (01-12)
@@ -1760,24 +1778,20 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
                     // 24h -> 12h, 0h -> 12h too
                     int hour12 = tm.hour > 12 ? tm.hour - 12
                                               : tm.hour ? tm.hour : 12;
-                    tmp.Printf(_T("%02d"), hour12);
-                    res += tmp;
+                    res += wxString::Format(fmt, hour12);
                 }
                 break;
 
             case _T('j'):       // day of the year
-                tmp.Printf(_T("%03d"), GetDayOfYear(tz));
-                res += tmp;
+                res += wxString::Format(fmt, GetDayOfYear(tz));
                 break;
 
             case _T('m'):       // month as a number (01-12)
-                tmp.Printf(_T("%02d"), tm.mon + 1);
-                res += tmp;
+                res += wxString::Format(fmt, tm.mon + 1);
                 break;
 
             case _T('M'):       // minute as a decimal number (00-59)
-                tmp.Printf(_T("%02d"), tm.min);
-                res += tmp;
+                res += wxString::Format(fmt, tm.min);
                 break;
 
             case _T('p'):       // AM or PM string
@@ -1785,24 +1799,22 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
                 break;
 
             case _T('S'):       // second as a decimal number (00-61)
-                tmp.Printf(_T("%02d"), tm.sec);
-                res += tmp;
+                res += wxString::Format(fmt, tm.sec);
                 break;
 
             case _T('U'):       // week number in the year (Sunday 1st week day)
-                tmp.Printf(_T("%02d"),
-                           (GetDayOfYear(tz) - tm.GetWeekDay() + 7) / 7);
-                res += tmp;
+                {
+                    int week = (GetDayOfYear(tz) - tm.GetWeekDay() + 7) / 7;
+                    res += wxString::Format(fmt, week);
+                }
                 break;
 
             case _T('W'):       // week number in the year (Monday 1st week day)
-                tmp.Printf(_T("%02d"), GetWeekOfYear(tz));
-                res += tmp;
+                res += wxString::Format(fmt, GetWeekOfYear(tz));
                 break;
 
             case _T('w'):       // weekday as a number (0-6), Sunday = 0
-                tmp.Printf(_T("%d"), tm.GetWeekDay());
-                res += tmp;
+                res += wxString::Format(fmt, tm.GetWeekDay());
                 break;
 
             // case _T('x'): -- handled with "%c"
@@ -1813,13 +1825,11 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
                 break;
 
             case _T('y'):       // year without century (00-99)
-                tmp.Printf(_T("%02d"), tm.year % 100);
-                res += tmp;
+                res += wxString::Format(fmt, tm.year % 100);
                 break;
 
             case _T('Y'):       // year with century
-                tmp.Printf(_T("%04d"), tm.year);
-                res += tmp;
+                res += wxString::Format(fmt, tm.year);
                 break;
 
             case _T('Z'):       // timezone name
@@ -1827,6 +1837,24 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
                 break;
 
             default:
+                // is it the format width?
+                fmt.Empty();
+                while ( *p == _T('-') || *p == _T('+') ||
+                        *p == _T(' ') || wxIsdigit(*p) )
+                {
+                    fmt += *p;
+                }
+
+                if ( !fmt.IsEmpty() )
+                {
+                    // we've only got the flags and width so far in fmt
+                    fmt.Prepend(_T('%'));
+                    fmt.Append(_T('d'));
+
+                    goto restart;
+                }
+
+                // no, it wasn't the width
                 wxFAIL_MSG(_T("unknown format specificator"));
 
                 // fall through and just copy it nevertheless

@@ -1105,14 +1105,15 @@ wxString& wxString::operator<<(double d)
 /* static */
 wxString wxString::Format(const wxChar *pszFormat, ...)
 {
-  va_list argptr;
-  va_start(argptr, pszFormat);
+    va_list argptr;
+    va_start(argptr, pszFormat);
 
-  wxString s = FormatV(pszFormat, argptr);
+    wxString s;
+    s.PrintfV(pszFormat, argptr);
 
-  va_end(argptr);
+    va_end(argptr);
 
-  return s;
+    return s;
 }
 
 /* static */
