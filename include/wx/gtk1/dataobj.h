@@ -81,7 +81,7 @@ public:
   void SetId( const wxChar *id );
   
   GdkAtom GetAtom();
-      
+  void SetAtom(GdkAtom atom) { m_hasAtom = TRUE; m_atom = atom; }
 private:
 
   wxDataType  m_type;
