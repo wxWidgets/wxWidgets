@@ -255,12 +255,21 @@ void wxWebKitCtrl::SetPageSource(wxString& source, const wxString& baseUrl){
 }
 
 void wxWebKitCtrl::OnSize(wxSizeEvent &event){
-    if ( GetParent()->IsKindOf( CLASSINFO( wxNotebook) ) ){
-        NSRect bounds = [m_webView frame];
-        bounds.origin.x += GetParent()->GetPosition().x;
-        bounds.origin.y += 18;
-        [m_webView setFrame:bounds];
-     } 
+    wxWindow* parent = GetParent();
+    bool inNotebook = false;
+    int x, y; 
+    while(parent != NULL)
+    {
+        if( parent->IsKindOf( CLASSINFO( wxNotebook ) ) ){
+            NSRect bounds = [m_webView frame];
+            bounds.origin.x += parent->GetPosition().x;
+            bounds.origin.y += 18;
+            [m_webView setFrame:bounds];
+            break;
+            }
+        parent = parent->GetParent();
+    }
+    
     [m_webView display];
     event.Skip();
 }
