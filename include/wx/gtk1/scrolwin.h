@@ -127,7 +127,7 @@ public:
 
     // Override this function if you don't want to have wxScrolledWindow
     // automatically change the origin according to the scroll position.
-    void PrepareDC(wxDC& dc) { DoPrepareDC(); }
+    void PrepareDC(wxDC& dc) { DoPrepareDC(dc); }
 
     // lay out the window and its children
     virtual bool Layout();
