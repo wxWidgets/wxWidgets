@@ -604,6 +604,15 @@ class wxProcessPtr(wxEvtHandlerPtr):
     def CloseOutput(self, *_args, **_kwargs):
         val = apply(misc2c.wxProcess_CloseOutput,(self,) + _args, _kwargs)
         return val
+    def IsInputOpened(self, *_args, **_kwargs):
+        val = apply(misc2c.wxProcess_IsInputOpened,(self,) + _args, _kwargs)
+        return val
+    def IsInputAvailable(self, *_args, **_kwargs):
+        val = apply(misc2c.wxProcess_IsInputAvailable,(self,) + _args, _kwargs)
+        return val
+    def IsErrorAvailable(self, *_args, **_kwargs):
+        val = apply(misc2c.wxProcess_IsErrorAvailable,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxProcess instance at %s>" % (self.this,)
 class wxProcess(wxProcessPtr):

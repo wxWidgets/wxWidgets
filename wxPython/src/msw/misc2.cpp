@@ -6567,6 +6567,90 @@ static PyObject *_wrap_wxProcess_CloseOutput(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
+#define wxProcess_IsInputOpened(_swigobj)  (_swigobj->IsInputOpened())
+static PyObject *_wrap_wxProcess_IsInputOpened(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPyProcess * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxProcess_IsInputOpened",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyProcess_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxProcess_IsInputOpened. Expected _wxPyProcess_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxProcess_IsInputOpened(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxProcess_IsInputAvailable(_swigobj)  (_swigobj->IsInputAvailable())
+static PyObject *_wrap_wxProcess_IsInputAvailable(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPyProcess * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxProcess_IsInputAvailable",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyProcess_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxProcess_IsInputAvailable. Expected _wxPyProcess_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxProcess_IsInputAvailable(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxProcess_IsErrorAvailable(_swigobj)  (_swigobj->IsErrorAvailable())
+static PyObject *_wrap_wxProcess_IsErrorAvailable(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPyProcess * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxProcess_IsErrorAvailable",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyProcess_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxProcess_IsErrorAvailable. Expected _wxPyProcess_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxProcess_IsErrorAvailable(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static void *SwigwxJoystickTowxObject(void *ptr) {
     wxJoystick *src;
     wxObject *dest;
@@ -10483,6 +10567,9 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxJoystick_GetPosition", (PyCFunction) _wrap_wxJoystick_GetPosition, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxJoystick", (PyCFunction) _wrap_delete_wxJoystick, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxJoystick", (PyCFunction) _wrap_new_wxJoystick, METH_VARARGS | METH_KEYWORDS },
+	 { "wxProcess_IsErrorAvailable", (PyCFunction) _wrap_wxProcess_IsErrorAvailable, METH_VARARGS | METH_KEYWORDS },
+	 { "wxProcess_IsInputAvailable", (PyCFunction) _wrap_wxProcess_IsInputAvailable, METH_VARARGS | METH_KEYWORDS },
+	 { "wxProcess_IsInputOpened", (PyCFunction) _wrap_wxProcess_IsInputOpened, METH_VARARGS | METH_KEYWORDS },
 	 { "wxProcess_CloseOutput", (PyCFunction) _wrap_wxProcess_CloseOutput, METH_VARARGS | METH_KEYWORDS },
 	 { "wxProcess_GetOutputStream", (PyCFunction) _wrap_wxProcess_GetOutputStream, METH_VARARGS | METH_KEYWORDS },
 	 { "wxProcess_GetErrorStream", (PyCFunction) _wrap_wxProcess_GetErrorStream, METH_VARARGS | METH_KEYWORDS },

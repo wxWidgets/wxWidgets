@@ -398,7 +398,7 @@ wxPyMake_TEMPLATE(wxGridTableBase)
     void CBNAME(int a, const wxString& c)  {                                    \
         bool found;                                                             \
         wxPyBeginBlockThreads();                                                \
-        if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                          \
+        if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
             PyObject* s = wx2PyString(c);                                       \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iO)",a,s));          \
             Py_DECREF(s);                                                       \
