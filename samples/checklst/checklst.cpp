@@ -48,7 +48,7 @@ public:
     // ctor & dtor
     CheckListBoxFrame(wxFrame *frame, const wxChar *title,
                       int x, int y, int w, int h);
-    virtual ~CheckListBoxFrame();
+    virtual ~CheckListBoxFrame(){};
 
     // notifications
     void OnQuit(wxCommandEvent& event);
@@ -241,10 +241,6 @@ void CheckListBoxFrame::CreateCheckListbox(long flags)
 
     m_pListBox->Check(2);
     m_pListBox->Select(3);
-}
-
-CheckListBoxFrame::~CheckListBoxFrame()
-{
 }
 
 void CheckListBoxFrame::OnQuit(wxCommandEvent& WXUNUSED(event))

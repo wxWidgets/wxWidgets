@@ -345,10 +345,10 @@ protected:
 
     struct ShapeDump
     {
-        int x, y,       // position
-            w, h,       // size
-            r, g, b,    // colour
-            k;          // kind
+        wxCoord x, y,             // position
+                w, h;             // size
+        int k;                    // kind
+        unsigned char r, g, b;    // colour
     };
 
     wxPoint  m_pos;
@@ -747,16 +747,16 @@ public:
 
     // override base class (pure) virtuals
     virtual wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def)
-    { 
+    {
 #if wxUSE_STATUSBAR
-        m_frame->SetStatusText(_T("Mouse entered the frame")); 
+        m_frame->SetStatusText(_T("Mouse entered the frame"));
 #endif // wxUSE_STATUSBAR
-        return OnDragOver(x, y, def); 
+        return OnDragOver(x, y, def);
     }
     virtual void OnLeave()
-    { 
+    {
 #if wxUSE_STATUSBAR
-        m_frame->SetStatusText(_T("Mouse left the frame")); 
+        m_frame->SetStatusText(_T("Mouse left the frame"));
 #endif // wxUSE_STATUSBAR
     }
     virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def)
@@ -1645,7 +1645,7 @@ void DnDShapeDialog::OnColour(wxCommandEvent& WXUNUSED(event))
     data.SetChooseFull(true);
     for (int i = 0; i < 16; i++)
     {
-        wxColour colour(i*16, i*16, i*16);
+        wxColour colour((unsigned char)(i*16), (unsigned char)(i*16), (unsigned char)(i*16));
         data.SetCustomColour(i, colour);
     }
 
