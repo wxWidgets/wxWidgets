@@ -341,7 +341,7 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
                 // want the new one)
                 if ( sel == -1 )
                 {
-                    m_value = GetValue();
+                    m_value = wxGetWindowText(GetHwnd());
                 }
                 else // we're synthesizing text updated event from sel change
                 {
@@ -481,6 +481,7 @@ void wxComboBox::SetValue(const wxString& value)
     else
         SetWindowText(GetHwnd(), value.c_str());
 
+    m_value = value;
     m_selectionOld = GetSelection();
 }
 
