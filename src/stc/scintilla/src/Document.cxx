@@ -2,7 +2,7 @@
 /** @file Document.cxx
  ** Text document that handles notifications, DBCS, styling, words and end of line.
  **/
-// Copyright 1998-2002 by Neil Hodgson <neilh@scintilla.org>
+// Copyright 1998-2003 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #include <stdlib.h>
@@ -21,6 +21,22 @@
 // This is ASCII specific but is safe with chars >= 0x80
 static inline bool isspacechar(unsigned char ch) {
 	return (ch == ' ') || ((ch >= 0x09) && (ch <= 0x0d));
+}
+
+static inline bool IsPunctuation(char ch) {
+	return isascii(ch) && ispunct(ch);
+}
+
+static inline bool IsADigit(char ch) {
+	return isascii(ch) && isdigit(ch);
+}
+
+static inline bool IsLowerCase(char ch) {
+	return isascii(ch) && islower(ch);
+}
+
+static inline bool IsUpperCase(char ch) {
+	return isascii(ch) && isupper(ch);
 }
 
 Document::Document() {
@@ -218,32 +234,12 @@ bool Document::IsCrLf(int pos) {
 	return (cb.CharAt(pos) == '\r') && (cb.CharAt(pos + 1) == '\n');
 }
 
-bool Document::IsDBCS(int pos) {
-	if (dbcsCodePage) {
-		if (SC_CP_UTF8 == dbcsCodePage) {
-			unsigned char ch = static_cast<unsigned char>(cb.CharAt(pos));
-			return ch >= 0x80;
-		} else {
-			// Anchor DBCS calculations at start of line because start of line can
-			// not be a DBCS trail byte.
-			int startLine = pos;
-			while (startLine > 0 && cb.CharAt(startLine) != '\r' && cb.CharAt(startLine) != '\n')
-				startLine--;
-			while (startLine <= pos) {
-				if (Platform::IsDBCSLeadByte(dbcsCodePage, cb.CharAt(startLine))) {
-					startLine++;
-					if (startLine >= pos)
-						return true;
-				}
-				startLine++;
-			}
-		}
-	}
-	return false;
-}
+static const int maxBytesInDBCSCharacter=5;
 
 int Document::LenChar(int pos) {
-	if (IsCrLf(pos)) {
+	if (pos < 0) {
+		return 1;
+	} else if (IsCrLf(pos)) {
 		return 2;
 	} else if (SC_CP_UTF8 == dbcsCodePage) {
 		unsigned char ch = static_cast<unsigned char>(cb.CharAt(pos));
@@ -257,8 +253,14 @@ int Document::LenChar(int pos) {
 			return lengthDoc -pos;
 		else
 			return len;
-	} else if (IsDBCS(pos)) {
-		return 2;
+	} else if (dbcsCodePage) {
+		char mbstr[maxBytesInDBCSCharacter+1];
+		int i;
+		for (i=0; i<Platform::DBCSCharMaxLength(); i++) {
+			mbstr[i] = cb.CharAt(pos+i);
+		}
+		mbstr[i] = '\0';
+		return Platform::DBCSCharLength(dbcsCodePage, mbstr);
 	} else {
 		return 1;
 	}
@@ -308,26 +310,28 @@ int Document::MovePositionOutsideChar(int pos, int moveDir, bool checkLineEnd) {
 			// Anchor DBCS calculations at start of line because start of line can
 			// not be a DBCS trail byte.
 			int startLine = pos;
+
 			while (startLine > 0 && cb.CharAt(startLine) != '\r' && cb.CharAt(startLine) != '\n')
 				startLine--;
-			bool atLeadByte = false;
 			while (startLine < pos) {
-				if (atLeadByte)
-					atLeadByte = false;
-				else if (Platform::IsDBCSLeadByte(dbcsCodePage, cb.CharAt(startLine)))
-					atLeadByte = true;
-				else
-					atLeadByte = false;
-				startLine++;
-			}
+				char mbstr[maxBytesInDBCSCharacter+1];
+				int i;
+				for(i=0;i<Platform::DBCSCharMaxLength();i++) {
+					mbstr[i] = cb.CharAt(startLine+i);
+				}
+				mbstr[i] = '\0';
 
-
-			if (atLeadByte) {
-				// Position is between a lead byte and a trail byte
-				if (moveDir > 0)
-					return pos + 1;
-				else
-					return pos - 1;
+				int mbsize = Platform::DBCSCharLength(dbcsCodePage, mbstr);
+				if (startLine + mbsize == pos) {
+					return pos;
+				} else if (startLine + mbsize > pos) {
+					if (moveDir > 0) {
+						return startLine + mbsize;
+					} else {
+						return startLine;
+					}
+				}
+				startLine += mbsize;
 			}
 		}
 	}
@@ -524,7 +528,7 @@ bool Document::InsertString(int position, const char *s, size_t insertLength) {
 			sWithStyle[i*2] = s[i];
 			sWithStyle[i*2 + 1] = 0;
 		}
-		changed = InsertStyledString(position*2, sWithStyle, 
+		changed = InsertStyledString(position*2, sWithStyle,
 			static_cast<int>(insertLength*2));
 		delete []sWithStyle;
 	}
@@ -545,11 +549,9 @@ void Document::DelCharBack(int pos) {
 		return;
 	} else if (IsCrLf(pos - 2)) {
 		DeleteChars(pos - 2, 2);
-	} else if (SC_CP_UTF8 == dbcsCodePage) {
+	} else if (dbcsCodePage) {
 		int startChar = MovePositionOutsideChar(pos - 1, -1, false);
 		DeleteChars(startChar, pos - startChar);
-	} else if (IsDBCS(pos - 1)) {
-		DeleteChars(pos - 2, 2);
 	} else {
 		DeleteChars(pos - 1, 1);
 	}
@@ -745,7 +747,7 @@ int Document::ExtendWordSelect(int pos, int delta, bool onlyWordCharacters) {
 }
 
 /**
- * Find the start of the next word in either a forward (delta >= 0) or backwards direction 
+ * Find the start of the next word in either a forward (delta >= 0) or backwards direction
  * (delta < 0).
  * This is looking for a transition between character classes although there is also some
  * additional movement to transit white space.
@@ -798,7 +800,7 @@ bool Document::IsWordEndAt(int pos) {
 }
 
 /**
- * Check that the given range is has transitions between character classes at both 
+ * Check that the given range is has transitions between character classes at both
  * ends and where the characters on the inside are word or punctuation characters.
  */
 bool Document::IsWordAt(int start, int end) {
@@ -853,16 +855,10 @@ long Document::FindText(int minPos, int maxPos, const char *s,
 		if (!pre)
 			return -1;
 
-		int startPos;
-		int endPos;
+		int increment = (minPos <= maxPos) ? 1 : -1;
 
-		if (minPos <= maxPos) {
-			startPos = minPos;
-			endPos = maxPos;
-		} else {
-			startPos = maxPos;
-			endPos = minPos;
-		}
+		int startPos = minPos;
+		int endPos = maxPos;
 
 		// Range endpoints should not be inside DBCS characters, but just in case, move them.
 		startPos = MovePositionOutsideChar(startPos, 1, false);
@@ -878,7 +874,9 @@ long Document::FindText(int minPos, int maxPos, const char *s,
 		//     Replace: $(\1-\2)
 		int lineRangeStart = LineFromPosition(startPos);
 		int lineRangeEnd = LineFromPosition(endPos);
-		if ((startPos >= LineEnd(lineRangeStart)) && (lineRangeStart < lineRangeEnd)) {
+		if ((increment == 1) &&
+			(startPos >= LineEnd(lineRangeStart)) &&
+			(lineRangeStart < lineRangeEnd)) {
 			// the start position is at end of line or between line end characters.
 			lineRangeStart++;
 			startPos = LineStart(lineRangeStart);
@@ -886,27 +884,16 @@ long Document::FindText(int minPos, int maxPos, const char *s,
 		int pos = -1;
 		int lenRet = 0;
 		char searchEnd = s[*length - 1];
-		if (*length == 1) {
-			// These produce empty selections so nudge them on if needed
-			if (s[0] == '^') {
-				if (startPos == LineStart(lineRangeStart))
-					startPos++;
-			} else if (s[0] == '$') {
-				if ((startPos == LineEnd(lineRangeStart)) && (lineRangeStart < lineRangeEnd))
-					startPos = LineStart(lineRangeStart + 1);
-			}
-			lineRangeStart = LineFromPosition(startPos);
-			lineRangeEnd = LineFromPosition(endPos);
-		}
-		for (int line = lineRangeStart; line <= lineRangeEnd; line++) {
+		int lineRangeBreak = lineRangeEnd + increment;
+		for (int line = lineRangeStart; line != lineRangeBreak; line += increment) {
 			int startOfLine = LineStart(line);
 			int endOfLine = LineEnd(line);
-			if (line == lineRangeStart) {
+			if ((increment == 1) && (line == lineRangeStart)) {
 				if ((startPos != startOfLine) && (s[0] == '^'))
 					continue;	// Can't match start of line if start position after start of line
 				startOfLine = startPos;
 			}
-			if (line == lineRangeEnd) {
+			if ((increment == 1) && (line == lineRangeEnd)) {
 				if ((endPos != endOfLine) && (searchEnd == '$'))
 					continue;	// Can't match end of line if end position before end of line
 				endOfLine = endPos;
@@ -916,6 +903,20 @@ long Document::FindText(int minPos, int maxPos, const char *s,
 			if (success) {
 				pos = pre->bopat[0];
 				lenRet = pre->eopat[0] - pre->bopat[0];
+				if (increment == -1) {
+					// Check for the last match on this line.
+					while (success && (pre->eopat[0] < endOfLine)) {
+						success = pre->Execute(di, pre->eopat[0], endOfLine);
+						if (success) {
+							if (pre->eopat[0] <= minPos) {
+								pos = pre->bopat[0];
+								lenRet = pre->eopat[0] - pre->bopat[0];
+							} else {
+								success = 0;
+							}
+						}
+					}
+				}
 				break;
 			}
 		}
@@ -1033,16 +1034,17 @@ int Document::LinesTotal() {
 
 void Document::ChangeCase(Range r, bool makeUpperCase) {
 	for (int pos = r.start; pos < r.end; pos++) {
-		char ch = CharAt(pos);
-		if (dbcsCodePage && IsDBCS(pos)) {
-			pos += LenChar(pos);
+		int len = LenChar(pos);
+		if (dbcsCodePage && (len > 1)) {
+			pos += len;
 		} else {
+			char ch = CharAt(pos);
 			if (makeUpperCase) {
-				if (islower(ch)) {
+				if (IsLowerCase(ch)) {
 					ChangeChar(pos, static_cast<char>(MakeUpperCase(ch)));
 				}
 			} else {
-				if (isupper(ch)) {
+				if (IsUpperCase(ch)) {
 					ChangeChar(pos, static_cast<char>(MakeLowerCase(ch)));
 				}
 			}
@@ -1067,7 +1069,7 @@ void Document::SetWordChars(unsigned char *chars) {
 		}
 	} else {
 		for (ch = 0; ch < 256; ch++) {
-			if (ch >= 0x80 || isalnum(ch) || ch == '_') 
+			if (ch >= 0x80 || isalnum(ch) || ch == '_')
 				charClass[ch] = ccWord;
 		}
 	}
@@ -1092,6 +1094,7 @@ bool Document::SetStyleFor(int length, char style) {
 		return false;
 	} else {
 		enteredCount++;
+		style &= stylingMask;
 		int prevEndStyled = endStyled;
 		if (cb.SetStyleFor(endStyled, length, style, stylingMask)) {
 			DocModification mh(SC_MOD_CHANGESTYLE | SC_PERFORMED_USER,
@@ -1206,7 +1209,7 @@ void Document::NotifyModified(DocModification mh) {
 }
 
 bool Document::IsWordPartSeparator(char ch) {
-	return ispunct(ch) && (WordCharClass(ch) == ccWord);
+	return (WordCharClass(ch) == ccWord) && IsPunctuation(ch);
 }
 
 int Document::WordPartLeft(int pos) {
@@ -1221,31 +1224,38 @@ int Document::WordPartLeft(int pos) {
 		if (pos > 0) {
 			startChar = cb.CharAt(pos);
 			--pos;
-			if (islower(startChar)) {
-				while (pos > 0 && islower(cb.CharAt(pos)))
+			if (IsLowerCase(startChar)) {
+				while (pos > 0 && IsLowerCase(cb.CharAt(pos)))
 					--pos;
-				if (!isupper(cb.CharAt(pos)) && !islower(cb.CharAt(pos)))
+				if (!IsUpperCase(cb.CharAt(pos)) && !IsLowerCase(cb.CharAt(pos)))
 					++pos;
-			} else if (isupper(startChar)) {
-				while (pos > 0 && isupper(cb.CharAt(pos)))
+			} else if (IsUpperCase(startChar)) {
+				while (pos > 0 && IsUpperCase(cb.CharAt(pos)))
 					--pos;
-				if (!isupper(cb.CharAt(pos)))
+				if (!IsUpperCase(cb.CharAt(pos)))
 					++pos;
-			} else if (isdigit(startChar)) {
-				while (pos > 0 && isdigit(cb.CharAt(pos)))
+			} else if (IsADigit(startChar)) {
+				while (pos > 0 && IsADigit(cb.CharAt(pos)))
 					--pos;
-				if (!isdigit(cb.CharAt(pos)))
+				if (!IsADigit(cb.CharAt(pos)))
 					++pos;
-			} else if (ispunct(startChar)) {
-				while (pos > 0 && ispunct(cb.CharAt(pos)))
+			} else if (IsPunctuation(startChar)) {
+				while (pos > 0 && IsPunctuation(cb.CharAt(pos)))
 					--pos;
-				if (!ispunct(cb.CharAt(pos)))
+				if (!IsPunctuation(cb.CharAt(pos)))
 					++pos;
 			} else if (isspacechar(startChar)) {
 				while (pos > 0 && isspacechar(cb.CharAt(pos)))
 					--pos;
 				if (!isspacechar(cb.CharAt(pos)))
 					++pos;
+			} else if (!isascii(startChar)) {
+				while (pos > 0 && !isascii(cb.CharAt(pos)))
+					--pos;
+				if (isascii(cb.CharAt(pos)))
+					++pos;
+			} else {
+				++pos;
 			}
 		}
 	}
@@ -1260,29 +1270,34 @@ int Document::WordPartRight(int pos) {
 			++pos;
 		startChar = cb.CharAt(pos);
 	}
-	if (islower(startChar)) {
-		while (pos < length && islower(cb.CharAt(pos)))
+	if (!isascii(startChar)) {
+		while (pos < length && !isascii(cb.CharAt(pos)))
 			++pos;
-	} else if (isupper(startChar)) {
-		if (islower(cb.CharAt(pos + 1))) {
+	} else if (IsLowerCase(startChar)) {
+		while (pos < length && IsLowerCase(cb.CharAt(pos)))
 			++pos;
-			while (pos < length && islower(cb.CharAt(pos)))
+	} else if (IsUpperCase(startChar)) {
+		if (IsLowerCase(cb.CharAt(pos + 1))) {
+			++pos;
+			while (pos < length && IsLowerCase(cb.CharAt(pos)))
 				++pos;
 		} else {
-			while (pos < length && isupper(cb.CharAt(pos)))
+			while (pos < length && IsUpperCase(cb.CharAt(pos)))
 				++pos;
 		}
-		if (islower(cb.CharAt(pos)) && isupper(cb.CharAt(pos - 1)))
+		if (IsLowerCase(cb.CharAt(pos)) && IsUpperCase(cb.CharAt(pos - 1)))
 			--pos;
-	} else if (isdigit(startChar)) {
-		while (pos < length && isdigit(cb.CharAt(pos)))
+	} else if (IsADigit(startChar)) {
+		while (pos < length && IsADigit(cb.CharAt(pos)))
 			++pos;
-	} else if (ispunct(startChar)) {
-		while (pos < length && ispunct(cb.CharAt(pos)))
+	} else if (IsPunctuation(startChar)) {
+		while (pos < length && IsPunctuation(cb.CharAt(pos)))
 			++pos;
 	} else if (isspacechar(startChar)) {
 		while (pos < length && isspacechar(cb.CharAt(pos)))
 			++pos;
+	} else {
+		++pos;
 	}
 	return pos;
 }
