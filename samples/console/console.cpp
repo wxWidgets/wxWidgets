@@ -77,7 +77,7 @@
     #define TEST_ZIP
     #define TEST_ZLIB
 #else
-    #define TEST_CMDLINE
+    #define TEST_FILENAME
 #endif
 
 #ifdef TEST_SNGLINST
@@ -743,19 +743,42 @@ static void TestFileConfRead()
 static struct FileNameInfo
 {
     const wxChar *fullname;
+    const wxChar *volume;
     const wxChar *path;
     const wxChar *name;
     const wxChar *ext;
+    bool isAbsolute;
+    wxPathFormat format;
 } filenames[] =
 {
-    { _T("/usr/bin/ls"), _T("/usr/bin"), _T("ls"), _T("") },
-    { _T("/usr/bin/"), _T("/usr/bin"), _T(""), _T("") },
-    { _T("~/.zshrc"), _T("~"), _T(".zshrc"), _T("") },
-    { _T("../../foo"), _T("../.."), _T("foo"), _T("") },
-    { _T("foo.bar"), _T(""), _T("foo"), _T("bar") },
-    { _T("~/foo.bar"), _T("~"), _T("foo"), _T("bar") },
-    { _T("Mahogany-0.60/foo.bar"), _T("Mahogany-0.60"), _T("foo"), _T("bar") },
-    { _T("/tmp/wxwin.tar.bz"), _T("/tmp"), _T("wxwin.tar"), _T("bz") },
+    // Unix file names
+    { _T("/usr/bin/ls"), _T(""), _T("/usr/bin"), _T("ls"), _T(""), TRUE, wxPATH_UNIX },
+    { _T("/usr/bin/"), _T(""), _T("/usr/bin"), _T(""), _T(""), TRUE, wxPATH_UNIX },
+    { _T("~/.zshrc"), _T(""), _T("~"), _T(".zshrc"), _T(""), TRUE, wxPATH_UNIX },
+    { _T("../../foo"), _T(""), _T("../.."), _T("foo"), _T(""), FALSE, wxPATH_UNIX },
+    { _T("foo.bar"), _T(""), _T(""), _T("foo"), _T("bar"), FALSE, wxPATH_UNIX },
+    { _T("~/foo.bar"), _T(""), _T("~"), _T("foo"), _T("bar"), TRUE, wxPATH_UNIX },
+    { _T("/foo"), _T(""), _T("/"), _T("foo"), _T(""), TRUE, wxPATH_UNIX },
+    { _T("Mahogany-0.60/foo.bar"), _T(""), _T("Mahogany-0.60"), _T("foo"), _T("bar"), FALSE, wxPATH_UNIX },
+    { _T("/tmp/wxwin.tar.bz"), _T(""), _T("/tmp"), _T("wxwin.tar"), _T("bz"), TRUE, wxPATH_UNIX },
+
+    // Windows file names
+    { _T("foo.bar"), _T(""), _T(""), _T("foo"), _T("bar"), FALSE, wxPATH_DOS },
+    { _T("\\foo.bar"), _T(""), _T("\\"), _T("foo"), _T("bar"), FALSE, wxPATH_DOS },
+    { _T("c:foo.bar"), _T("c"), _T(""), _T("foo"), _T("bar"), FALSE, wxPATH_DOS },
+    { _T("c:\\foo.bar"), _T("c"), _T("\\"), _T("foo"), _T("bar"), TRUE, wxPATH_DOS },
+    { _T("c:\\Windows\\command.com"), _T("c"), _T("\\Windows"), _T("command"), _T("com"), TRUE, wxPATH_DOS },
+    { _T("\\\\server\\foo.bar"), _T("server"), _T("\\"), _T("foo"), _T("bar"), TRUE, wxPATH_DOS },
+
+    // Mac file names
+    { _T("Volume:Dir:File"), _T("Volume"), _T("Dir"), _T("File"), _T(""), TRUE, wxPATH_MAC },
+    { _T(":Dir:File"), _T(""), _T("Dir"), _T("File"), _T(""), FALSE, wxPATH_MAC },
+    { _T(":File"), _T(""), _T(""), _T("File"), _T(""), FALSE, wxPATH_MAC },
+    { _T("File"), _T(""), _T(""), _T("File"), _T(""), FALSE, wxPATH_MAC },
+
+    // VMS file names
+    { _T("device:[dir1.dir2.dir3]file.txt"), _T("device"), _T("dir1.dir2.dir3"), _T("file"), _T("txt"), TRUE, wxPATH_VMS },
+    { _T("file.txt"), _T(""), _T(""), _T("file"), _T("txt"), FALSE, wxPATH_VMS },
 };
 
 static void TestFileNameConstruction()
@@ -764,16 +787,29 @@ static void TestFileNameConstruction()
 
     for ( size_t n = 0; n < WXSIZEOF(filenames); n++ )
     {
-        wxFileName fn(filenames[n].fullname, wxPATH_UNIX);
+        const FileNameInfo& fni = filenames[n];
 
-        printf("Filename: '%s'\t", fn.GetFullPath().c_str());
-        if ( !fn.Normalize(wxPATH_NORM_ALL, _T(""), wxPATH_UNIX) )
+        wxFileName fn(fni.fullname, fni.format);
+
+        wxString fullname = fn.GetFullPath(fni.format);
+        if ( fullname != fni.fullname )
+        {
+            printf("ERROR: fullname should be '%s'\n", fni.fullname);
+        }
+
+        bool isAbsolute = fn.IsAbsolute(fni.format);
+        printf("'%s' is %s (%s)\n\t",
+               fullname.c_str(),
+               isAbsolute ? "absolute" : "relative",
+               isAbsolute == fni.isAbsolute ? "ok" : "ERROR");
+
+        if ( !fn.Normalize(wxPATH_NORM_ALL, _T(""), fni.format) )
         {
             puts("ERROR (couldn't be normalized)");
         }
         else
         {
-            printf("normalized: '%s'\n", fn.GetFullPath().c_str());
+            printf("normalized: '%s'\n", fn.GetFullPath(fni.format).c_str());
         }
     }
 
@@ -786,22 +822,26 @@ static void TestFileNameSplit()
 
     for ( size_t n = 0; n < WXSIZEOF(filenames); n++ )
     {
-        const FileNameInfo &fni = filenames[n];
-        wxString path, name, ext;
-        wxFileName::SplitPath(fni.fullname, &path, &name, &ext);
+        const FileNameInfo& fni = filenames[n];
+        wxString volume, path, name, ext;
+        wxFileName::SplitPath(fni.fullname,
+                              &volume, &path, &name, &ext, fni.format);
 
-        printf("%s -> path = '%s', name = '%s', ext = '%s'",
-               fni.fullname, path.c_str(), name.c_str(), ext.c_str());
+        printf("%s -> volume = '%s', path = '%s', name = '%s', ext = '%s'",
+               fni.fullname,
+               volume.c_str(), path.c_str(), name.c_str(), ext.c_str());
+
+        if ( volume != fni.volume )
+            printf(" (ERROR: volume = '%s')", fni.volume);
         if ( path != fni.path )
             printf(" (ERROR: path = '%s')", fni.path);
         if ( name != fni.name )
             printf(" (ERROR: name = '%s')", fni.name);
         if ( ext != fni.ext )
             printf(" (ERROR: ext = '%s')", fni.ext);
+
         puts("");
     }
-
-    puts("");
 }
 
 static void TestFileNameComparison()
@@ -5147,10 +5187,10 @@ int main(int argc, char **argv)
 #endif // TEST_FILE
 
 #ifdef TEST_FILENAME
+    TestFileNameConstruction();
     TestFileNameSplit();
     if ( 0 )
     {
-        TestFileNameConstruction();
         TestFileNameCwd();
         TestFileNameComparison();
         TestFileNameOperations();
