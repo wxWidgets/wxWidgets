@@ -251,5 +251,71 @@ bool wxHtmlHelpController::Quit()
     return TRUE;
 }
 
+// Make the help controller's frame 'modal' if
+// needed
+void wxHtmlHelpController::AddGrabIfNeeded()
+{
+    // So far, wxGTK only
+#ifdef __WXGTK__
+    bool needGrab = FALSE;
+    
+    // Check if there are any modal windows present,
+    // in which case we need to add a grab.
+    for ( wxWindowList::Node * node = wxTopLevelWindows.GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxWindow *win = node->GetData();
+        wxDialog *dialog = wxDynamicCast(win, wxDialog);
+
+        if (dialog && dialog->IsModal())
+            needGrab = TRUE;
+    }
+
+    if (needGrab && m_helpFrame)
+        m_helpFrame->AddGrab();
+#endif
+}
+
+bool wxHtmlHelpController::Display(const wxString& x)
+{
+    CreateHelpWindow();
+    bool success = m_helpFrame->Display(x);
+    AddGrabIfNeeded();
+    return success;    
+}
+
+bool wxHtmlHelpController::Display(int id)
+{
+    CreateHelpWindow();
+    bool success = m_helpFrame->Display(id);
+    AddGrabIfNeeded();
+    return success;
+}
+
+bool wxHtmlHelpController::DisplayContents()
+{
+    CreateHelpWindow();
+    bool success = m_helpFrame->DisplayContents();
+    AddGrabIfNeeded();
+    return success;
+}
+
+bool wxHtmlHelpController::DisplayIndex()
+{
+    CreateHelpWindow();
+    bool success = m_helpFrame->DisplayIndex();
+    AddGrabIfNeeded();
+    return success;
+}
+
+bool wxHtmlHelpController::KeywordSearch(const wxString& keyword)
+{
+    CreateHelpWindow();
+    bool success = m_helpFrame->KeywordSearch(keyword);
+    AddGrabIfNeeded();
+    return success;
+}
+
 #endif // wxUSE_WXHTML_HELP
 

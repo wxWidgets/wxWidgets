@@ -111,7 +111,8 @@ static gint gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WX
         wxapp_install_idle_handler();
 
     if (win->IsEnabled() &&
-        (g_openDialogs == 0 || (win->GetExtraStyle() & wxTOPLEVEL_EX_DIALOG)))
+        (g_openDialogs == 0 || (win->GetExtraStyle() & wxTOPLEVEL_EX_DIALOG) ||
+         win->IsGrabbed()))
         win->Close();
 
     return TRUE;
@@ -302,6 +303,7 @@ void wxTopLevelWindowGTK::Init()
     m_fsIsShowing = FALSE;
     m_themeEnabled = TRUE;
     m_gdkDecor = m_gdkFunc = 0;
+    m_grabbed = FALSE;
 }
 
 bool wxTopLevelWindowGTK::Create( wxWindow *parent,
@@ -472,6 +474,12 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
 
 wxTopLevelWindowGTK::~wxTopLevelWindowGTK()
 {
+    if (m_grabbed)
+    {
+        wxASSERT_MSG( FALSE, "Window still grabbed");
+        RemoveGrab();
+    }
+    
     m_isBeingDeleted = TRUE;
 
     // it may also be GtkScrolledWindow in the case of an MDI child
@@ -869,3 +877,22 @@ void wxTopLevelWindowGTK::SetIconizeState(bool iconize)
     }
 }
 
+void wxTopLevelWindowGTK::AddGrab()
+{
+    if (!m_grabbed)
+    {
+        m_grabbed = TRUE;
+        gtk_grab_add( m_widget );
+        gtk_main();
+        gtk_grab_remove( m_widget );
+    }
+}
+
+void wxTopLevelWindowGTK::RemoveGrab()
+{
+    if (m_grabbed)
+    {
+        gtk_main_quit();
+        m_grabbed = FALSE;
+    }
+}

@@ -1442,6 +1442,13 @@ void wxHtmlHelpFrame::OnCloseWindow(wxCloseEvent& evt)
     GetSize(&m_Cfg.w, &m_Cfg.h);
     GetPosition(&m_Cfg.x, &m_Cfg.y);
 
+#ifdef __WXGTK__
+    if (IsGrabbed())
+    {
+        RemoveGrab();
+    }
+#endif
+    
     if (m_Splitter && m_Cfg.navig_on) m_Cfg.sashpos = m_Splitter->GetSashPosition();
 
     if (m_Config)

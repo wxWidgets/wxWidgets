@@ -36,26 +36,13 @@ public:
     void SetTitleFormat(const wxString& format);
     void SetTempDir(const wxString& path) { m_helpData.SetTempDir(path); }
     bool AddBook(const wxString& book, bool show_wait_msg = FALSE);
-    bool Display(const wxString& x)
-    {
-        CreateHelpWindow(); return m_helpFrame->Display(x);
-    }
-    bool Display(int id)
-    {
-        CreateHelpWindow(); return m_helpFrame->Display(id);
-    }
-    bool DisplayContents()
-    {
-        CreateHelpWindow(); return m_helpFrame->DisplayContents();
-    }
-    bool DisplayIndex()
-    {
-        CreateHelpWindow(); return m_helpFrame->DisplayIndex();
-    }
-    bool KeywordSearch(const wxString& keyword)
-    {
-        CreateHelpWindow(); return m_helpFrame->KeywordSearch(keyword);
-    }
+
+    bool Display(const wxString& x);
+    bool Display(int id);
+    bool DisplayContents();
+    bool DisplayIndex();
+    bool KeywordSearch(const wxString& keyword);
+
     wxHtmlHelpFrame* GetFrame() { return m_helpFrame; }
     void UseConfig(wxConfigBase *config, const wxString& rootpath = wxEmptyString);
 
@@ -93,6 +80,10 @@ public:
     virtual void OnQuit() {};
 
     void OnCloseFrame(wxCloseEvent& evt);
+
+    // Make the help controller's frame 'modal' if
+    // needed
+    void AddGrabIfNeeded();
 
 protected:
     virtual wxHtmlHelpFrame* CreateHelpFrame(wxHtmlHelpData *data);

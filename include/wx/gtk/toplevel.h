@@ -65,6 +65,12 @@ public:
     virtual void SetTitle( const wxString &title );
     virtual wxString GetTitle() const { return m_title; }
 
+    // Experimental, to allow help windows to be
+    // viewable from within modal dialogs
+    virtual void AddGrab();
+    virtual void RemoveGrab();
+    virtual bool IsGrabbed() const { return m_grabbed; }
+
     // implementation from now on
     // --------------------------
 
@@ -111,6 +117,9 @@ protected:
 
     // is the frame currently iconized?
     bool m_isIconized;
+    // is the frame currently grabbed explicitly
+    // by the application?
+    bool m_grabbed;
 };
 
 #endif // __GTKTOPLEVELH__
