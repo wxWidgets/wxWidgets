@@ -2555,7 +2555,7 @@ if test "$wxUSE_THREADS" = "yes" ; then
     dnl find if POSIX threads are available
 
     dnl AIX calls the library libpthreads - thanks IBM!
-    if test "$wxUSE_AIX" = 1; then
+    if test "$USE_AIX" = 1; then
         THREADS_LIB=pthreads
     else
         THREADS_LIB=pthread
@@ -2661,6 +2661,14 @@ if test "$wxUSE_THREADS" = "yes" ; then
   ])
 
   THREADS_LINK="-l$THREADS_LINK"
+
+  dnl building MT programs under Solaris with the native compiler requires -mt
+  dnl switch
+  if test "$USE_SOLARIS" = "yes" -a "$GCC" != "yes"; then
+      CFLAGS="${CFLAGS} -mt"
+      CXXFLAGS="${CXXFLAGS} -mt"
+      LDFLAGS="${LDFLAGS} -mt"
+  fi
 fi
 
 dnl from if !MSW
