@@ -197,7 +197,8 @@ public:
 	 const char     *GetQueryTableName()  { return queryTableName; }
 	 const char     *GetTablePath()       { return tablePath; }
 
-    int             GetNumberOfColumns() { return noCols; }  // number of "defined" columns for this wxDbTable instance
+         int GetNumberOfColumns() { return noCols; }  // number of "defined" columns for this wxDbTable instance
+         void SetNumberOfColumns(int n) {noCols = n;}
 
 	 const char     *GetFromClause()      { return from; }
 	 const char     *GetOrderByClause()   { return orderBy; }
