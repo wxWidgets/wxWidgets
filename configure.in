@@ -437,6 +437,11 @@ if test "$ac_cv_header_linux_joystick_h" = "yes"; then
 fi
 AC_SUBST(GTK_JOYSTICK)
 
+dnl check for vprintf/vsprintf() which are GNU extensions
+AC_FUNC_VPRINTF
+dnl check for vsnprintf() which is another GNU extension
+AC_CHECK_FUNC(vsnprintf)
+
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 AC_CHECK_HEADERS(iostream)
