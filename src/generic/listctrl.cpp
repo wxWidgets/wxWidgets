@@ -4663,7 +4663,7 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
         return FALSE;
 
     // don't create the inner window with the border
-    style &= ~wxSUNKEN_BORDER;
+    style &= ~wxBORDER_MASK;
 
     m_mainWin = new wxListMainWindow( this, -1, wxPoint(0,0), size, style );
 
