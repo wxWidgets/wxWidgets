@@ -424,7 +424,7 @@ void wxPyApp::_BootstrapApp()
         // On wxGTK the locale will be changed to match the system settings, but
         // Python needs to have LC_NUMERIC set to "C" in order for the floating
         // point conversions and such to work right.
-#ifdef __WXGTK__
+#if defined(__WXGTK__) && PYTHON_API_VERSION <= 1012
         setlocale(LC_NUMERIC, "C");
 #endif
     
@@ -635,7 +635,7 @@ PyObject* __wxPySetDictionary(PyObject* /* self */, PyObject* args)
     PyDict_SetItemString(wxPython_dict, "USE_UNICODE", PyInt_FromLong(wxUSE_UNICODE));
     PyDict_SetItemString(wxPython_dict, "__WXDEBUG__", PyInt_FromLong(wxdebug));
 
-    
+    // Make a tuple of strings that gives more info about the platform.
     PyObject* PlatInfo = PyList_New(0);
     PyObject* obj;
 
@@ -649,7 +649,7 @@ PyObject* __wxPySetDictionary(PyObject* /* self */, PyObject* args)
 #if wxUSE_UNICODE
     _AddInfoString("unicode");
 #else
-    _AddInfoString("ascii");
+    _AddInfoString("ansi");
 #endif
 #ifdef __WXGTK__
 #ifdef __WXGTK20__
@@ -1088,11 +1088,12 @@ void wxPySaveThreadState(PyThreadState* tstate) {
             if (info.tstate != tstate)
                 wxLogMessage("*** tstate mismatch!???");
 #endif
-            // info.tstate = tstate;    *** DO NOT update existing ones???
+            info.tstate = tstate;    // allow for transient tstates
             // Normally it will never change, but apparently COM callbacks
             // (i.e. ActiveX controls) will (incorrectly IMHO) use a transient
             // tstate which will then be garbage the next time we try to use
             // it...
+            
             wxPyTMutex->Unlock();
             return;
         }
