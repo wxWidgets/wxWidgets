@@ -179,8 +179,8 @@ wxCursor::wxCursor(const wxImage& image)
     const int w = wxCursorRefData::GetStandardWidth();
     const int h = wxCursorRefData::GetStandardHeight();
 
-    const int hotSpotX = image.GetOptionInt(wxCUR_HOTSPOT_X);
-    const int hotSpotY = image.GetOptionInt(wxCUR_HOTSPOT_Y);
+    const int hotSpotX = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X);
+    const int hotSpotY = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y);
 
     wxASSERT_MSG( hotSpotX >= 0 && hotSpotX < w &&
                     hotSpotY >= 0 && hotSpotY < h,
