@@ -203,12 +203,12 @@ COND_SHARED_0___fllib___depname = \
 all: $(__fldll___depname) $(__fllib___depname)
 
 install: all $(__install_fldll___depname) $(__install_fllib___depname)
-	$(INSTALL_DIR) $(DESTDIR)$(includedir)
+	$(INSTALL_DIR) $(DESTDIR)$(includedir)/wx-2.5
 	for f in wx/fl/antiflickpl.h wx/fl/bardragpl.h wx/fl/barhintspl.h wx/fl/cbcustom.h wx/fl/controlbar.h wx/fl/dynbarhnd.h wx/fl/dyntbar.h wx/fl/dyntbarhnd.h wx/fl/fldefs.h wx/fl/frmview.h wx/fl/garbagec.h wx/fl/gcupdatesmgr.h wx/fl/hintanimpl.h wx/fl/newbmpbtn.h wx/fl/panedrawpl.h wx/fl/rowdragpl.h wx/fl/rowlayoutpl.h wx/fl/toolwnd.h wx/fl/updatesmgr.h; do \
-	if test ! -d $(DESTDIR)$(includedir)/`dirname $$f` ; then \
-	$(INSTALL_DIR) $(DESTDIR)$(includedir)/`dirname $$f`; \
+	if test ! -d $(DESTDIR)$(includedir)/wx-2.5/`dirname $$f` ; then \
+	$(INSTALL_DIR) $(DESTDIR)$(includedir)/wx-2.5/`dirname $$f`; \
 	fi; \
-	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(DESTDIR)$(includedir)/$$f; \
+	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(DESTDIR)$(includedir)/wx-2.5/$$f; \
 	done
 
 uninstall: 

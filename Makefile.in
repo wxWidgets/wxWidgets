@@ -6972,12 +6972,12 @@ install: all $(__install_wxregex___depname) $(__install_wxzlib___depname) $(__in
 	(cd $(srcdir) ; $(INSTALL_DATA)  wxwin.m4 $(DESTDIR)$(datadir)/aclocal)
 	$(INSTALL_DIR) $(DESTDIR)$(libdir)/wx/include/$(TOOLCHAIN_NAME)/wx
 	(cd ./ ; $(INSTALL_DATA)  lib/wx/include/$(TOOLCHAIN_NAME)/wx/setup.h $(DESTDIR)$(libdir)/wx/include/$(TOOLCHAIN_NAME)/wx)
-	$(INSTALL_DIR) $(DESTDIR)$(includedir)
+	$(INSTALL_DIR) $(DESTDIR)$(includedir)/wx-2.5
 	for f in $(ALL_HEADERS); do \
-	if test ! -d $(DESTDIR)$(includedir)/`dirname $$f` ; then \
-	$(INSTALL_DIR) $(DESTDIR)$(includedir)/`dirname $$f`; \
+	if test ! -d $(DESTDIR)$(includedir)/wx-2.5/`dirname $$f` ; then \
+	$(INSTALL_DIR) $(DESTDIR)$(includedir)/wx-2.5/`dirname $$f`; \
 	fi; \
-	$(INSTALL_DATA) $(srcdir)/include//$$f $(DESTDIR)$(includedir)/$$f; \
+	$(INSTALL_DATA) $(srcdir)/include//$$f $(DESTDIR)$(includedir)/wx-2.5/$$f; \
 	done
 	@echo " "
 	@echo " ------------------------------------------------------"

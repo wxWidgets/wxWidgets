@@ -199,12 +199,12 @@ COND_SHARED_0___deprecatedlib___depname = \
 all: $(__deprecateddll___depname) $(__deprecatedlib___depname)
 
 install: all $(__install_deprecateddll___depname) $(__install_deprecatedlib___depname)
-	$(INSTALL_DIR) $(DESTDIR)$(includedir)
+	$(INSTALL_DIR) $(DESTDIR)$(includedir)/wx-2.5
 	for f in wx/deprecated/expr.h wx/deprecated/prop.h wx/deprecated/propform.h wx/deprecated/proplist.h wx/deprecated/resource.h wx/deprecated/setup.h wx/deprecated/tbarsmpl.h wx/deprecated/treelay.h wx/deprecated/wxexpr.h; do \
-	if test ! -d $(DESTDIR)$(includedir)/`dirname $$f` ; then \
-	$(INSTALL_DIR) $(DESTDIR)$(includedir)/`dirname $$f`; \
+	if test ! -d $(DESTDIR)$(includedir)/wx-2.5/`dirname $$f` ; then \
+	$(INSTALL_DIR) $(DESTDIR)$(includedir)/wx-2.5/`dirname $$f`; \
 	fi; \
-	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(DESTDIR)$(includedir)/$$f; \
+	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(DESTDIR)$(includedir)/wx-2.5/$$f; \
 	done
 
 uninstall: 

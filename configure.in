@@ -1353,18 +1353,6 @@ AC_PROG_CXX
 
 AC_LANG_RESTORE
 
-dnl check if compiler includes /usr/local/include in
-dnl default include files search path.
-AC_MSG_CHECKING([for /usr/local/include in default include path])
-GCC_SEARCHES_USR_LOCAL_INCLUDE="no"
-if test "$GCC" = "yes" ; then
-  echo | gcc -v -x c++ -E - 2>&1 | sed -n '/^#include </,$p' | \
-  	sed -n '1,/End of search list\./p' | \
-        grep '^ */usr/local/include$' 2>&1 /dev/null \
-  && GCC_SEARCHES_USR_LOCAL_INCLUDE="yes"
-fi
-AC_MSG_RESULT([$GCC_SEARCHES_USR_LOCAL_INCLUDE])
-
 dnl ranlib command
 dnl   defines RANLIB with the appropriate command
 AC_PROG_RANLIB
@@ -6246,7 +6234,6 @@ AC_SUBST(MACRESWXCONFIG)
 
 dnl other tools
 AC_SUBST(GCC)
-AC_SUBST(GCC_SEARCHES_USR_LOCAL_INCLUDE)
 AC_SUBST(DLLTOOL)
 AC_SUBST(AS)
 AC_SUBST(NM)

@@ -176,12 +176,12 @@ COND_SHARED_0___netutilslib___depname = \
 all: $(__netutilsdll___depname) $(__netutilslib___depname)
 
 install: all $(__install_netutilsdll___depname) $(__install_netutilslib___depname)
-	$(INSTALL_DIR) $(DESTDIR)$(includedir)
+	$(INSTALL_DIR) $(DESTDIR)$(includedir)/wx-2.5
 	for f in wx/net/email.h wx/net/msg.h wx/net/smapi.h wx/net/web.h; do \
-	if test ! -d $(DESTDIR)$(includedir)/`dirname $$f` ; then \
-	$(INSTALL_DIR) $(DESTDIR)$(includedir)/`dirname $$f`; \
+	if test ! -d $(DESTDIR)$(includedir)/wx-2.5/`dirname $$f` ; then \
+	$(INSTALL_DIR) $(DESTDIR)$(includedir)/wx-2.5/`dirname $$f`; \
 	fi; \
-	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(DESTDIR)$(includedir)/$$f; \
+	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(DESTDIR)$(includedir)/wx-2.5/$$f; \
 	done
 
 uninstall: 

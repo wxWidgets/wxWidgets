@@ -286,12 +286,12 @@ COND_SHARED_0___stclib___depname = \
 all: $(__stcdll___depname) $(__stclib___depname)
 
 install: all $(__install_stcdll___depname) $(__install_stclib___depname)
-	$(INSTALL_DIR) $(DESTDIR)$(includedir)
+	$(INSTALL_DIR) $(DESTDIR)$(includedir)/wx-2.5
 	for f in wx/stc/stc.h; do \
-	if test ! -d $(DESTDIR)$(includedir)/`dirname $$f` ; then \
-	$(INSTALL_DIR) $(DESTDIR)$(includedir)/`dirname $$f`; \
+	if test ! -d $(DESTDIR)$(includedir)/wx-2.5/`dirname $$f` ; then \
+	$(INSTALL_DIR) $(DESTDIR)$(includedir)/wx-2.5/`dirname $$f`; \
 	fi; \
-	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(DESTDIR)$(includedir)/$$f; \
+	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(DESTDIR)$(includedir)/wx-2.5/$$f; \
 	done
 
 uninstall: 

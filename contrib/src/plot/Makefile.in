@@ -171,12 +171,12 @@ COND_SHARED_0___plotlib___depname = \
 all: $(__plotdll___depname) $(__plotlib___depname)
 
 install: all $(__install_plotdll___depname) $(__install_plotlib___depname)
-	$(INSTALL_DIR) $(DESTDIR)$(includedir)
+	$(INSTALL_DIR) $(DESTDIR)$(includedir)/wx-2.5
 	for f in wx/plot/plot.h wx/plot/plot_dwn.bmp wx/plot/plot_enl.bmp wx/plot/plot_shr.bmp wx/plot/plot_up.bmp wx/plot/plot_zin.bmp wx/plot/plot_zot.bmp wx/plot/wxplot.rc; do \
-	if test ! -d $(DESTDIR)$(includedir)/`dirname $$f` ; then \
-	$(INSTALL_DIR) $(DESTDIR)$(includedir)/`dirname $$f`; \
+	if test ! -d $(DESTDIR)$(includedir)/wx-2.5/`dirname $$f` ; then \
+	$(INSTALL_DIR) $(DESTDIR)$(includedir)/wx-2.5/`dirname $$f`; \
 	fi; \
-	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(DESTDIR)$(includedir)/$$f; \
+	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(DESTDIR)$(includedir)/wx-2.5/$$f; \
 	done
 
 uninstall: 

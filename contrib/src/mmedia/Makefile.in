@@ -224,12 +224,12 @@ COND_PLATFORM_UNIX_1___MMEDIA_PLATFORM_SRC_OBJECTS_1 =  \
 all: $(__mmediadll___depname) $(__mmedialib___depname)
 
 install: all $(__install_mmediadll___depname) $(__install_mmedialib___depname)
-	$(INSTALL_DIR) $(DESTDIR)$(includedir)
+	$(INSTALL_DIR) $(DESTDIR)$(includedir)/wx-2.5
 	for f in wx/mmedia/cdbase.h wx/mmedia/cdunix.h wx/mmedia/cdwin.h wx/mmedia/sndaiff.h wx/mmedia/sndbase.h wx/mmedia/sndcodec.h wx/mmedia/sndcpcm.h wx/mmedia/sndesd.h wx/mmedia/sndfile.h wx/mmedia/sndg72x.h wx/mmedia/sndmsad.h wx/mmedia/sndoss.h wx/mmedia/sndpcm.h wx/mmedia/sndulaw.h wx/mmedia/sndwav.h wx/mmedia/sndwin.h wx/mmedia/vidbase.h wx/mmedia/vidwin.h wx/mmedia/vidxanm.h; do \
-	if test ! -d $(DESTDIR)$(includedir)/`dirname $$f` ; then \
-	$(INSTALL_DIR) $(DESTDIR)$(includedir)/`dirname $$f`; \
+	if test ! -d $(DESTDIR)$(includedir)/wx-2.5/`dirname $$f` ; then \
+	$(INSTALL_DIR) $(DESTDIR)$(includedir)/wx-2.5/`dirname $$f`; \
 	fi; \
-	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(DESTDIR)$(includedir)/$$f; \
+	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(DESTDIR)$(includedir)/wx-2.5/$$f; \
 	done
 
 uninstall: 

@@ -181,12 +181,12 @@ COND_SHARED_0___gizmoslib___depname = \
 all: $(__gizmosdll___depname) $(__gizmoslib___depname)
 
 install: all $(__install_gizmosdll___depname) $(__install_gizmoslib___depname)
-	$(INSTALL_DIR) $(DESTDIR)$(includedir)
+	$(INSTALL_DIR) $(DESTDIR)$(includedir)/wx-2.5
 	for f in wx/gizmos/dynamicsash.h wx/gizmos/editlbox.h wx/gizmos/ledctrl.h wx/gizmos/multicell.h wx/gizmos/splittree.h wx/gizmos/statpict.h wx/gizmos/gizmos.h; do \
-	if test ! -d $(DESTDIR)$(includedir)/`dirname $$f` ; then \
-	$(INSTALL_DIR) $(DESTDIR)$(includedir)/`dirname $$f`; \
+	if test ! -d $(DESTDIR)$(includedir)/wx-2.5/`dirname $$f` ; then \
+	$(INSTALL_DIR) $(DESTDIR)$(includedir)/wx-2.5/`dirname $$f`; \
 	fi; \
-	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(DESTDIR)$(includedir)/$$f; \
+	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(DESTDIR)$(includedir)/wx-2.5/$$f; \
 	done
 
 uninstall: 
