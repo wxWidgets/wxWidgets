@@ -243,6 +243,7 @@
 %rename(EXEC_SYNC)                          wxEXEC_SYNC;
 %rename(EXEC_NOHIDE)                        wxEXEC_NOHIDE;
 %rename(EXEC_MAKE_GROUP_LEADER)             wxEXEC_MAKE_GROUP_LEADER;
+%rename(EXEC_NODISABLE)                     wxEXEC_NODISABLE;
 %rename(Execute)                            wxExecute;
 %rename(Kill)                               wxKill;
 %rename(JOYSTICK1)                          wxJOYSTICK1;
