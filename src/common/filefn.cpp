@@ -123,11 +123,18 @@
     #include <windows.h>
 #endif
 
+// TODO: Borland probably has _wgetcwd as well?
+#ifdef _MSC_VER
+    #define HAVE_WGETCWD
+#endif
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
 
-#define _MAXPATHLEN 500
+#ifndef _MAXPATHLEN
+    #define _MAXPATHLEN 1024
+#endif
 
 extern wxChar *wxBuffer;
 
@@ -274,8 +281,8 @@ wxString wxPathList::FindAbsoluteValidPath (const wxString& file)
         return f;
 
     wxString buf;
-    wxGetWorkingDirectory(buf.GetWriteBuf(_MAXPATHLEN), _MAXPATHLEN - 1);
-    buf.UngetWriteBuf();
+    wxGetWorkingDirectory(wxStringBuffer(buf, _MAXPATHLEN), _MAXPATHLEN);
+
     if ( !wxEndsWithPathSeparator(buf) )
     {
         buf += wxFILE_SEP_PATH;
@@ -1369,103 +1376,105 @@ wxString wxFindNextFile()
 // copies into buf.
 wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
 {
-  if (!buf)
-    buf = new wxChar[sz+1];
-#if wxUSE_UNICODE
-  char *cbuf = new char[sz+1];
-#ifdef _MSC_VER
-  if (_getcwd(cbuf, sz) == NULL) {
-#elif defined(__WXMAC__) && !defined(__DARWIN__)
-    enum
+    if ( !buf )
     {
-        SFSaveDisk = 0x214, CurDirStore = 0x398
-    };
-    FSSpec cwdSpec ;
-
-    FSMakeFSSpec( - *(short *) SFSaveDisk , *(long *) CurDirStore , NULL , &cwdSpec ) ;
-    wxString res = wxMacFSSpec2UnixFilename( &cwdSpec ) ;
-    strcpy( buf , res ) ;
-    if (0) {
-#else
-  if (getcwd(cbuf, sz) == NULL) {
-#endif
-    delete [] cbuf;
-#else // wxUnicode
-#ifdef _MSC_VER
-  if (_getcwd(buf, sz) == NULL) {
-#elif defined(__WXMAC__) && !defined(__DARWIN__)
-    FSSpec cwdSpec ;
-    FCBPBRec pb;
-    OSErr error;
-    Str255  fileName ;
-    pb.ioNamePtr = (StringPtr) &fileName;
-    pb.ioVRefNum = 0;
-    pb.ioRefNum = LMGetCurApRefNum();
-    pb.ioFCBIndx = 0;
-    error = PBGetFCBInfoSync(&pb);
-    if ( error == noErr )
-    {
-        cwdSpec.vRefNum = pb.ioFCBVRefNum;
-        cwdSpec.parID = pb.ioFCBParID;
-        cwdSpec.name[0] = 0 ;
-        wxString res = wxMacFSSpec2MacFilename( &cwdSpec ) ;
-
-        strcpy( buf , res ) ;
-        buf[res.length()]=0 ;
+        buf = new wxChar[sz + 1];
     }
-    else
-        buf[0] = 0 ;
-    /*
-    this version will not always give back the application directory on mac
-    enum
-    {
-        SFSaveDisk = 0x214, CurDirStore = 0x398
-    };
-    FSSpec cwdSpec ;
 
-    FSMakeFSSpec( - *(short *) SFSaveDisk , *(long *) CurDirStore , NULL , &cwdSpec ) ;
-    wxString res = wxMacFSSpec2UnixFilename( &cwdSpec ) ;
-    strcpy( buf , res ) ;
-    */
-    if (0) {
-#elif defined(__VISAGECPP__) || (defined (__OS2__) && defined (__WATCOMC__))
-    APIRET rc;
-    rc = ::DosQueryCurrentDir( 0 // current drive
-                              ,buf
-                              ,(PULONG)&sz
-                             );
-    if (rc != 0) {
-#else
-  if (getcwd(buf, sz) == NULL) {
-#endif
-#endif
-    buf[0] = wxT('.');
-    buf[1] = wxT('\0');
-  }
+    bool ok;
+
+    // for the compilers which have Unicode version of _getcwd(), call it
+    // directly, for the others call the ANSI version and do the translation
 #if wxUSE_UNICODE
-  else {
-    wxConvFile.MB2WC(buf, cbuf, sz);
-    delete [] cbuf;
-  }
-#endif
+    #ifdef HAVE_WGETCWD
+        ok = _wgetcwd(buf, sz) != NULL;
+    #else // !HAVE_WGETCWD
+        wxCharBuffer cbuf(sz);
+    #endif
+#endif //
 
+#if !wxUSE_UNICODE || !defined(HAVE_WGETCWD)
+    #ifdef _MSC_VER
+        ok = _getcwd(buf, sz) != NULL;
+    #elif defined(__WXMAC__) && !defined(__DARWIN__)
+        FSSpec cwdSpec ;
+        FCBPBRec pb;
+        OSErr error;
+        Str255  fileName ;
+        pb.ioNamePtr = (StringPtr) &fileName;
+        pb.ioVRefNum = 0;
+        pb.ioRefNum = LMGetCurApRefNum();
+        pb.ioFCBIndx = 0;
+        error = PBGetFCBInfoSync(&pb);
+        if ( error == noErr )
+        {
+            cwdSpec.vRefNum = pb.ioFCBVRefNum;
+            cwdSpec.parID = pb.ioFCBParID;
+            cwdSpec.name[0] = 0 ;
+            wxString res = wxMacFSSpec2MacFilename( &cwdSpec ) ;
+
+            strcpy( buf , res ) ;
+            buf[res.length()]=0 ;
+
+            ok = TRUE;
+        }
+        else
+        {
+            ok = FALSE;
+        }
+    #elif defined(__VISAGECPP__) || (defined (__OS2__) && defined (__WATCOMC__))
+        APIRET rc;
+        rc = ::DosQueryCurrentDir( 0 // current drive
+                                  ,buf
+                                  ,(PULONG)&sz
+                                 );
+        ok = rc != 0;
+    #else // !Win32/VC++ !Mac !OS2
+        ok = getcwd(buf, sz) != NULL;
+    #endif // platform
+#endif // !wxUSE_UNICODE || !HAVE_WGETCWD
+
+    if ( !ok )
+    {
+        wxLogSysError(_("Failed to get the working directory"));
+
+        // VZ: the old code used to return "." on error which didn't make any
+        //     sense at all to me - empty string is a better error indicator
+        //     (NULL might be even better but I'm afraid this could lead to
+        //     problems with the old code assuming the return is never NULL)
+        buf[0] = _T('\0');
+    }
+    else // ok, but we might need to massage the path into the right format
+    {
 #ifdef __DJGPP__
-  // VS: DJGPP is a strange mix of DOS and UNIX API and returns paths with 
-  //     / deliminers. We don't like that.
-  for (wxChar *ch = buf; *ch; ch++)
-    if (*ch == wxT('/')) *ch = wxT('\\');
-#endif
+        // VS: DJGPP is a strange mix of DOS and UNIX API and returns paths
+        //     with / deliminers. We don't like that.
+        for (wxChar *ch = buf; *ch; ch++)
+        {
+            if (*ch == wxT('/'))
+                *ch = wxT('\\');
+        }
+#endif // __DJGPP__
 
-  return buf;
+#ifdef __CYGWIN10__
+        // another example of DOS/Unix mix
+        wxString pathUnix = buf;
+        cygwin_conv_to_full_win32_path(pathUnix, buf);
+#endif // __CYGWIN10__
+
+        // finally convert the result to Unicode if needed
+#if wxUSE_UNICODE && !defined(HAVE_WGETCWD)
+        wxConvFile.MB2WC(buf, cbuf, sz);
+#endif // wxUSE_UNICODE
+    }
+
+    return buf;
 }
 
 wxString wxGetCwd()
 {
-    static const size_t maxPathLen = 1024;
-
     wxString str;
-    wxGetWorkingDirectory(str.GetWriteBuf(maxPathLen), maxPathLen);
-    str.UngetWriteBuf();
+    wxGetWorkingDirectory(wxStringBuffer(str, _MAXPATHLEN), _MAXPATHLEN);
 
     return str;
 }
