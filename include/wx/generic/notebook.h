@@ -31,13 +31,6 @@
 class WXDLLEXPORT wxImageList;
 class WXDLLEXPORT wxWindow;
 
-// Already defined in wx/notebook.h
-#if 0
-// array of notebook pages
-typedef wxWindow wxNotebookPage;  // so far, any window can be a page
-WX_DEFINE_ARRAY(wxNotebookPage *, wxArrayPages);
-#endif
-
 // ----------------------------------------------------------------------------
 // wxNotebook
 // ----------------------------------------------------------------------------
@@ -173,11 +166,6 @@ protected:
   // helper functions
   void ChangePage(int nOldSel, int nSel); // change pages
 
-#if 0
-  wxImageList  *m_pImageList; // we can have an associated image list
-  wxArrayPages  m_aPages;     // array of pages
-#endif
-  
   int m_nSelection;           // the current selection (-1 if none)
 
   wxTabView*   m_tabView;
