@@ -109,6 +109,8 @@ All (GUI):
 - added wxTaskBarIcon::CreatePopupMenu which is now recommended way
   of showing popup menu; calling wxTaskBarIcon::PopupMenu directly
   is discouraged
+- Added ..._CMD_... variants for wxGrid event table entry macros
+  taking window identifiers
 
 Unix:
 
