@@ -443,6 +443,7 @@ bool read_a_line(wxChar *buf)
   int ch = -2;
   unsigned long bufIndex = 0;
   buf[0] = 0;
+  char lastChar = _T(' ');
 
   while (ch != EOF && ch != 10)
   {
@@ -459,13 +460,14 @@ bool read_a_line(wxChar *buf)
          ((bufIndex == 16) && (wxStrncmp(buf, _T("\\end{toocomplex}"), 16) == 0)))
       readInVerbatim = false;
 
+    lastChar = ch;
     ch = getc(Inputs[CurrentInputIndex]);
 
     if (checkCurleyBraces)
     {
-        if (ch == '{' && !readInVerbatim)
+        if (ch == '{' && !readInVerbatim && lastChar != _T('\\'))
            leftCurley++;
-        if (ch == '}' && !readInVerbatim)
+        if (ch == '}' && !readInVerbatim && lastChar != _T('\\'))
         {
            rightCurley++;
            if (rightCurley > leftCurley)
@@ -597,10 +599,10 @@ bool read_a_line(wxChar *buf)
                     // There should NOT be a '\' before the '_'
                     if ((bufIndex > 0 && (buf[bufIndex-1] == '\\')) && (buf[0] != '%'))
                     {
-                        wxString errBuf;
-                        errBuf.Printf(_T("An underscore ('_') was detected at line %lu inside file %s that should NOT have a '\\' before it."),
-                            LineNumbers[CurrentInputIndex], (const wxChar*) currentFileName.c_str());
-                        OnError((wxChar *)errBuf.c_str());
+//                        wxString errBuf;
+//                        errBuf.Printf(_T("An underscore ('_') was detected at line %lu inside file %s that should NOT have a '\\' before it."),
+//                            LineNumbers[CurrentInputIndex], (const wxChar*) currentFileName.c_str());
+//                        OnError((wxChar *)errBuf.c_str());
                     }
                 }
                 else
