@@ -17,7 +17,7 @@
 #include "wx/stubs/timer.h"
 #endif
 
-class wxChrono
+class WXDLLEXPORT wxChrono
 {
 public: 
   wxChrono();
