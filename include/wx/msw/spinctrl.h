@@ -67,6 +67,7 @@ public:
 protected:
     virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual wxSize DoGetBestSize() const;
+    virtual void SetFocus();
 
     // the handler for wxSpinButton events
     void OnSpinChange(wxSpinEvent& event);

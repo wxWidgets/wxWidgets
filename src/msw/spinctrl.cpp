@@ -232,6 +232,11 @@ bool wxSpinCtrl::Enable(bool enable)
     return TRUE;
 }
 
+void wxSpinCtrl::SetFocus()
+{
+    ::SetFocus((HWND)m_hwndBuddy);
+}
+
 // ----------------------------------------------------------------------------
 // event processing
 // ----------------------------------------------------------------------------
