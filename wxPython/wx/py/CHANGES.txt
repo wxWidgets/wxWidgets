@@ -9,7 +9,7 @@ Removed docs tabs from crust interface:
 
 Fixed Calltip tab refresh problem on Windows.
 
-shell.autoCompleteAutoHide added with default of True.
+shell.autoCompleteAutoHide added with default of False.
 
 Changed default namespace of Shell to __main__.__dict__, instead of an
 empty dictionary.

@@ -82,7 +82,7 @@ class EditWindow(stc.StyledTextCtrl):
         self.autoCompleteIncludeDouble = True
         self.autoCompleteCaseInsensitive = True
         self.AutoCompSetIgnoreCase(self.autoCompleteCaseInsensitive)
-        self.autoCompleteAutoHide = True
+        self.autoCompleteAutoHide = False
         self.AutoCompSetAutoHide(self.autoCompleteAutoHide)
         self.AutoCompStops(' .,;:([)]}\'"\\<>%^&+-=*/|`')
         # Do we want to automatically pop up command argument help?
