@@ -747,11 +747,9 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     if ( m_font.Ok() )
     {
-        wxNativeFontInfo *info = m_font.GetNativeFontInfo();
+        const wxNativeFontInfo *info = m_font.GetNativeFontInfo();
         if ( info )
         {
-            delete info;
-
             wxString fontDesc = m_font.GetNativeFontInfoUserDesc();
             fontInfo.Printf(wxT("Native font info: %s"), fontDesc.c_str());
 
