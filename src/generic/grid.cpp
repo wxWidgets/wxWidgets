@@ -797,8 +797,9 @@ void wxGridCellNumberEditor::BeginEdit(int row, int col, wxGrid* grid)
     }
     else
     {
+        m_valueOld = 0;
         wxString sValue = table->GetValue(row, col);
-        if (! sValue.ToLong(&m_valueOld))
+        if (! sValue.ToLong(&m_valueOld) && ! sValue.IsEmpty())
         {
             wxFAIL_MSG( _T("this cell doesn't have numeric value") );
             return;
@@ -820,16 +821,20 @@ bool wxGridCellNumberEditor::EndEdit(int row, int col,
                                      wxGrid* grid)
 {
     bool changed;
-    long value;
+    long value = 0;
+    wxString text;
 
     if ( HasRange() )
     {
         value = Spin()->GetValue();
         changed = value != m_valueOld;
+        if (changed)
+            text = wxString::Format(wxT("%ld"), value);
     }
     else
     {
-        changed = Text()->GetValue().ToLong(&value) && (value != m_valueOld);
+        text = Text()->GetValue();
+        changed = (text.IsEmpty() || text.ToLong(&value)) && (value != m_valueOld);
     }
 
     if ( changed )
@@ -837,7 +842,7 @@ bool wxGridCellNumberEditor::EndEdit(int row, int col,
         if (grid->GetTable()->CanSetValueAs(row, col, wxGRID_VALUE_NUMBER))
             grid->GetTable()->SetValueAsLong(row, col, value);
         else
-            grid->GetTable()->SetValue(row, col, wxString::Format(wxT("%ld"), value));
+            grid->GetTable()->SetValue(row, col, text);
     }
 
     return changed;
@@ -965,8 +970,9 @@ void wxGridCellFloatEditor::BeginEdit(int row, int col, wxGrid* grid)
     }
     else
     {
+        m_valueOld = 0.0;
         wxString sValue = table->GetValue(row, col);
-        if (! sValue.ToDouble(&m_valueOld))
+        if (! sValue.ToDouble(&m_valueOld) && ! sValue.IsEmpty())
         {
             wxFAIL_MSG( _T("this cell doesn't have float value") );
             return;
@@ -979,13 +985,15 @@ void wxGridCellFloatEditor::BeginEdit(int row, int col, wxGrid* grid)
 bool wxGridCellFloatEditor::EndEdit(int row, int col,
                                      wxGrid* grid)
 {
-    double value;
-    if ( Text()->GetValue().ToDouble(&value) && (value != m_valueOld) )
+    double value = 0.0;
+    wxString text(Text()->GetValue());
+
+    if ( (text.IsEmpty() || text.ToDouble(&value)) && (value != m_valueOld) )
     {
         if (grid->GetTable()->CanSetValueAs(row, col, wxGRID_VALUE_FLOAT))
             grid->GetTable()->SetValueAsDouble(row, col, value);
         else
-            grid->GetTable()->SetValue(row, col, wxString::Format(wxT("%f"), value));
+            grid->GetTable()->SetValue(row, col, text);
 
         return TRUE;
     }
