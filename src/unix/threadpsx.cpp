@@ -59,6 +59,12 @@
     #include <sys/resource.h>
 #endif
 
+#ifdef __VMS
+    #define THR_ID(thr) ((long long)(thr)->GetId())
+#else
+    #define THR_ID(thr) ((long)(thr)->GetId())
+#endif
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -712,12 +718,8 @@ void *wxThreadInternal::PthreadStart(wxThread *thread)
 {
     wxThreadInternal *pthread = thread->m_internal;
 
-#ifdef __VMS
-   wxLogTrace(TRACE_THREADS, _T("Thread %ld started."), (long long)pthread->GetId());
-#else
-   wxLogTrace(TRACE_THREADS, _T("Thread %ld started."), (long)pthread->GetId());
-#endif
-   
+    wxLogTrace(TRACE_THREADS, _T("Thread %ld started."), THR_ID(pthread));
+
     // associate the thread pointer with the newly created thread so that
     // wxThread::This() will work
     int rc = pthread_setspecific(gs_keySelf, thread);
@@ -753,22 +755,16 @@ void *wxThreadInternal::PthreadStart(wxThread *thread)
     if ( !dontRunAtAll )
     {
         // call the main entry
-        wxLogTrace(TRACE_THREADS, _T("Thread %ld about to enter its Entry()."),
-#ifdef __VMS
-                   (long long)pthread->GetId());
-#else
-                   (long)pthread->GetId());
-#endif
-       
+        wxLogTrace(TRACE_THREADS,
+                   _T("Thread %ld about to enter its Entry()."),
+                   THR_ID(pthread));
+
         pthread->m_exitcode = thread->Entry();
 
-        wxLogTrace(TRACE_THREADS, _T("Thread %ld Entry() returned %lu."),
-#ifdef __VMS
-                   (long long)pthread->GetId(), (unsigned long)pthread->m_exitcode);
-#else
-                   (long)pthread->GetId(), (unsigned long)pthread->m_exitcode);
-#endif
-       
+        wxLogTrace(TRACE_THREADS,
+                   _T("Thread %ld Entry() returned %lu."),
+                   THR_ID(pthread), (unsigned long)pthread->m_exitcode);
+
         {
             wxCriticalSectionLocker lock(thread->m_critsect);
 
@@ -877,12 +873,9 @@ void wxThreadInternal::Wait()
         wxMutexGuiLeave();
 
     wxLogTrace(TRACE_THREADS,
-#ifdef __VMS
-               _T("Starting to wait for thread %ld to exit."), (long long)GetId());
-#else
-               _T("Starting to wait for thread %ld to exit."), (long)GetId());
-#endif
-   
+               _T("Starting to wait for thread %ld to exit."),
+               THR_ID(this));
+
     // to avoid memory leaks we should call pthread_join(), but it must only be
     // done once so use a critical section to serialize the code below
     {
@@ -920,12 +913,9 @@ void wxThreadInternal::Pause()
     wxCHECK_RET( m_state == STATE_PAUSED,
                  wxT("thread must first be paused with wxThread::Pause().") );
 
-#ifdef __VMS
-   wxLogTrace(TRACE_THREADS, _T("Thread %ld goes to sleep."), (long long)GetId());
-#else
-   wxLogTrace(TRACE_THREADS, _T("Thread %ld goes to sleep."), (long)GetId());
-#endif
-   
+   wxLogTrace(TRACE_THREADS,
+              _T("Thread %ld goes to sleep."), THR_ID(this));
+
     // wait until the semaphore is Post()ed from Resume()
     m_semSuspend.Wait();
 }
@@ -939,12 +929,9 @@ void wxThreadInternal::Resume()
     // TestDestroy() since the last call to Pause() for example
     if ( IsReallyPaused() )
     {
-#ifdef __VMS
-       wxLogTrace(TRACE_THREADS, _T("Waking up thread %ld"), (long long)GetId());
-#else
-       wxLogTrace(TRACE_THREADS, _T("Waking up thread %ld"), (long)GetId());
-#endif
-       
+       wxLogTrace(TRACE_THREADS,
+                  _T("Waking up thread %ld"), THR_ID(this));
+
         // wake up Pause()
         m_semSuspend.Post();
 
@@ -953,12 +940,8 @@ void wxThreadInternal::Resume()
     }
     else
     {
-        wxLogTrace(TRACE_THREADS, _T("Thread %ld is not yet really paused"),
-#ifdef __VMS
-                   (long long)GetId());
-#else
-                   (long)GetId());
-#endif
+        wxLogTrace(TRACE_THREADS,
+                   _T("Thread %ld is not yet really paused"), THR_ID(this));
     }
 
     SetState(STATE_RUNNING);
@@ -1031,18 +1014,23 @@ int wxThread::GetCPUCount()
     return -1;
 }
 
+// VMS is a 64 bit system and threads have 64 bit pointers.
+// FIXME: also needed for other systems????
 #ifdef __VMS
-  // VMS is a 64 bit system and threads have 64 bit pointers.
-  // ??? also needed for other systems????
 unsigned long long wxThread::GetCurrentId()
 {
     return (unsigned long long)pthread_self();
-#else
+}
+
+#else // !__VMS
+
 unsigned long wxThread::GetCurrentId()
 {
     return (unsigned long)pthread_self();
-#endif
 }
+
+#endif // __VMS/!__VMS
+
 
 bool wxThread::SetConcurrency(size_t level)
 {
