@@ -1851,7 +1851,7 @@ static wxBitmap *GetTickBitmap()
     {
         s_loaded = TRUE; // set it to TRUE anyhow, we won't try again
 
-        #if defined(__WXMSW__) || defined(__WXOS2__)
+        #if defined(__WXMSW__) || defined(__WXPM__)
             s_tickBitmap = new wxBitmap("tick_bmp", wxBITMAP_TYPE_RESOURCE);
         #else
             s_tickBitmap = new wxBitmap( tick_xpm );
@@ -1870,7 +1870,7 @@ static wxBitmap *GetCrossBitmap()
     {
         s_loaded = TRUE; // set it to TRUE anyhow, we won't try again
 
-        #if defined(__WXMSW__) || defined(__WXOS2__)
+        #if defined(__WXMSW__) || defined(__WXPM__)
             s_crossBitmap =  new wxBitmap("cross_bmp", wxBITMAP_TYPE_RESOURCE);
         #else // XPMs
             s_crossBitmap =  new wxBitmap( cross_xpm );
