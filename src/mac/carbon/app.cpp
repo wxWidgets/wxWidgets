@@ -1783,6 +1783,7 @@ int wxKeyCodeToMacModifier(wxKeyCode key)
 
 bool wxGetKeyState(wxKeyCode key) //virtual key code if < 10.2.x, else see below
 {
+// TODO:  Have it use HID Manager on OSX...
 //if OS X > 10.2 (i.e. 10.2.x)
 //a known apple bug prevents the system from determining led
 //states with GetKeys... can only determine caps lock led
