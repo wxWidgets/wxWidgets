@@ -1086,7 +1086,7 @@ void wxTextCtrl::Remove( long from, long to )
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
 #ifdef __WXGTK20__
-    if ( m_windowStyle & wxTE_MULTILINE )
+    if (m_windowStyle & wxTE_MULTILINE)
     {
         GtkTextBuffer *
             text_buffer = gtk_text_view_get_buffer( GTK_TEXT_VIEW(m_text) );
@@ -1227,7 +1227,14 @@ bool wxTextCtrl::IsEditable() const
     wxCHECK_MSG( m_text != NULL, FALSE, wxT("invalid text ctrl") );
 
 #ifdef __WXGTK20__
-    return gtk_editable_get_editable(GTK_EDITABLE(m_text));
+    if (m_windowStyle & wxTE_MULTILINE)
+    {
+        return gtk_text_view_get_editable(GTK_TEXT_VIEW(m_text));
+    }
+    else
+    {
+        return gtk_editable_get_editable(GTK_EDITABLE(m_text));
+    }
 #else
     return GTK_EDITABLE(m_text)->editable;
 #endif
