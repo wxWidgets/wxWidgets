@@ -254,10 +254,11 @@ implements the following methods:\par
 
 \membersection{wxWindow::Close}\label{wxwindowclose}
 
-\func{virtual bool}{Close}{\param{bool}{ force = {\tt FALSE}}}
+\func{bool}{Close}{\param{bool}{ force = {\tt FALSE}}}
 
-The purpose of this call is to provide a safer way of destroying a window than using
-the {\it delete} operator.
+This function simply generates a \helpref{wxCloseEvent}{wxcloseevent} whose
+handler usually tries to close the window. It doesn't close the window itself,
+however.
 
 \wxheading{Parameters}
 
@@ -266,22 +267,24 @@ of this window, {\tt TRUE} if it cannot.}
 
 \wxheading{Remarks}
 
-Close calls the \helpref{close handler}{wxcloseevent} for the window, providing an opportunity for the window to
-choose whether to destroy the window.
+Close calls the \helpref{close handler}{wxcloseevent} for the window, providing
+an opportunity for the window to choose whether to destroy the window.
+Usually it is only used with the top level windows (wxFrame and wxDialog
+classes) as the others are not supposed to have any special OnClose() logic.
 
 The close handler should check whether the window is being deleted forcibly,
-using \helpref{wxCloseEvent::GetForce}{wxcloseeventgetforce}, in which case it should
-destroy the window using \helpref{wxWindow::Destroy}{wxwindowdestroy}.
+using \helpref{wxCloseEvent::GetForce}{wxcloseeventgetforce}, in which case it
+should destroy the window using \helpref{wxWindow::Destroy}{wxwindowdestroy}.
 
-Applies to managed windows (wxFrame and wxDialog classes) only.
+{\it Note} that calling Close does not guarantee that the window will be
+destroyed; but it provides a way to simulate a manual close of a window, which
+may or may not be implemented by destroying the window. The default
+implementation of wxDialog::OnCloseWindow does not necessarily delete the
+dialog, since it will simply simulate an wxID\_CANCEL event which is handled by
+the appropriate button event handler and may do anything at all.
 
-{\it Note} that calling Close does not guarantee that the window will be destroyed; but it
-provides a way to simulate a manual close of a window, which may or may not be implemented by
-destroying the window. The default implementation of wxDialog::OnCloseWindow does not
-necessarily delete the dialog, since it will simply simulate an wxID\_CANCEL event which
-itself only hides the dialog.
-
-To guarantee that the window will be destroyed, call \helpref{wxWindow::Destroy}{wxwindowdestroy} instead.
+To guarantee that the window will be destroyed, call 
+\helpref{wxWindow::Destroy}{wxwindowdestroy} instead
 
 \wxheading{See also}
 
@@ -375,7 +378,7 @@ implements the following methods:\par
 
 Destroys the window safely. Use this function instead of the delete operator, since
 different window classes can be destroyed differently. Frames and dialogs
-are not destroyed immediately when this function is called - they are added
+are not destroyed immediately when this function is called -- they are added
 to a list of windows to be deleted on idle time, when all the window's events
 have been processed. This prevents problems with events being sent to non-existent
 windows.
