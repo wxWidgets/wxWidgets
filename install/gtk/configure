@@ -5652,9 +5652,9 @@ EOF
 
 fi
 
-DEBUG=
+WXDEBUG=
 if test "$USE_DEBUG_INFO" = 1 ; then
-  DEBUG="-g"
+  WXDEBUG="-g"
 fi
 
 
@@ -6570,7 +6570,7 @@ s%@host_alias@%$host_alias%g
 s%@host_cpu@%$host_cpu%g
 s%@host_vendor@%$host_vendor%g
 s%@host_os@%$host_os%g
-s%@DEBUG@%$DEBUG%g
+s%@WXDEBUG@%$WXDEBUG%g
 s%@PROFILE@%$PROFILE%g
 s%@OPTIMISE@%$OPTIMISE%g
 s%@RPC@%$RPC%g
