@@ -1419,8 +1419,8 @@ static void GetStaticBoxBorders( wxStaticBox *box,
         *borderTop = 5;
     else
 #endif // __WXGTK__
-        *borderTop = 15;
-    (void)box;
+        *borderTop = box->GetCharHeight();
+
     *borderOther = 5;
 }
 
