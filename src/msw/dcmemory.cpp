@@ -41,7 +41,7 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-    IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxDC)
+IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxDC)
 
 // ============================================================================
 // implementation
@@ -139,6 +139,13 @@ void wxMemoryDC::DoGetSize(int *width, int *height) const
     }
 }
 
+// the rest of this file deals with drawing rectangles workaround, disabled by
+// default
+
+#define wxUSE_MEMORY_DC_DRAW_RECTANGLE 0
+
+#if wxUSE_MEMORY_DC_DRAW_RECTANGLE
+
 // For some reason, drawing a rectangle on a memory DC has problems.
 // Use this substitute if we can.
 static void wxDrawRectangle(wxDC& dc, wxCoord x, wxCoord y, wxCoord width, wxCoord height)
@@ -167,11 +174,13 @@ static void wxDrawRectangle(wxDC& dc, wxCoord x, wxCoord y, wxCoord width, wxCoo
     }
 }
 
+#endif // wxUSE_MEMORY_DC_DRAW_RECTANGLE
+
 void wxMemoryDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
     // Set this to 1 to work around an apparent video driver bug
     // (visible with e.g. 70x70 rectangle on a memory DC; see Drawing sample)
-#if 0
+#if wxUSE_MEMORY_DC_DRAW_RECTANGLE
     if (m_brush.Ok() && m_pen.Ok() &&
         (m_brush.GetStyle() == wxSOLID || m_brush.GetStyle() == wxTRANSPARENT) &&
         (m_pen.GetStyle() == wxSOLID || m_pen.GetStyle() == wxTRANSPARENT) &&
@@ -180,11 +189,9 @@ void wxMemoryDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord he
         wxDrawRectangle(* this, x, y, width, height);
     }
     else
+#endif // wxUSE_MEMORY_DC_DRAW_RECTANGLE
     {
         wxDC::DoDrawRectangle(x, y, width, height);
     }
-#else
-    wxDC::DoDrawRectangle(x, y, width, height);
-#endif
 }
 
