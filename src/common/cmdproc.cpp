@@ -65,9 +65,9 @@ wxCommandProcessor::wxCommandProcessor(int maxCommands)
 #endif // wxUSE_MENUS
     m_undoAccelerator = wxT("\tCtrl+Z");
     m_redoAccelerator = wxT("\tCtrl+Y");
-#if !wxUSE_STL
-    m_currentCommand = NULL;
-#endif
+
+    m_lastSavedCommand =
+    m_currentCommand = wxList::compatibility_iterator();
 }
 
 wxCommandProcessor::~wxCommandProcessor()
@@ -118,6 +118,10 @@ void wxCommandProcessor::Store(wxCommand *command)
         wxCommand *firstCommand = (wxCommand *)firstNode->GetData();
         delete firstCommand;
         m_commands.Erase(firstNode);
+
+        // Make sure m_lastSavedCommand won't point to freed memory
+        if ( m_lastSavedCommand == firstNode )
+            m_lastSavedCommand = wxList::compatibility_iterator();
     }
 
     // Correct a bug: we must chop off the current 'branch'
@@ -132,6 +136,11 @@ void wxCommandProcessor::Store(wxCommand *command)
             wxList::compatibility_iterator next = node->GetNext();
             delete (wxCommand *)node->GetData();
             m_commands.Erase(node);
+
+            // Make sure m_lastSavedCommand won't point to freed memory
+            if ( m_lastSavedCommand == node )
+                m_lastSavedCommand = wxList::compatibility_iterator();
+
             node = next;
         }
     }
@@ -312,7 +321,9 @@ void wxCommandProcessor::ClearCommands()
         m_commands.Erase(node);
         node = m_commands.GetFirst();
     }
+
     m_currentCommand = wxList::compatibility_iterator();
+    m_lastSavedCommand = wxList::compatibility_iterator();
 }
 
 
