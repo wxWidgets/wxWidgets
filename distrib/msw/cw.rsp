@@ -1,4 +1,8 @@
 src/*.mcp
+src/jpeg/*.mcp
+src/png/*.mcp
+src/tiff/*.mcp
+src/zlib/*.mcp
 src/common/cwy_tab.c
 src/common/cwlex_yy.c
 include/wx_cw.pch

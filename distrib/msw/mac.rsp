@@ -8,6 +8,10 @@ distrib/msw/*.rsp
 distrib/msw/*.bat
 
 src/*.mcp
+src/jpeg/*.mcp
+src/png/*.mcp
+src/tiff/*.mcp
+src/zlib/*.mcp
 
 src/common/dosyacc.c
 src/common/doslex.c
