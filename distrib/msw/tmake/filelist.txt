@@ -427,6 +427,7 @@ m_image.cpp	H
 m_layout.cpp	H
 m_links.cpp	H
 m_list.cpp	H
+m_dflist.cpp	H
 m_pre.cpp	H
 m_tables.cpp	H
 htmprint.cpp	H

@@ -637,6 +637,10 @@ SOURCE=.\html\m_list.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\html\m_dflist.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\html\m_pre.cpp
 # End Source File
 # Begin Source File
