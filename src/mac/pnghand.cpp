@@ -823,7 +823,7 @@ bool wxPNGReader::SaveXPM(char *filename, char *name)
     if ( !GetPalette() )
         return FALSE;
 
-    ofstream str(filename);
+    wxSTD ofstream str(filename);
     if ( str.bad() )
         return FALSE;
 
