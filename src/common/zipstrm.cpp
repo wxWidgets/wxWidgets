@@ -1930,14 +1930,18 @@ bool wxZipOutputStream::DoCreate(wxZipEntry *entry, bool raw /*=false*/)
 
     // and if this is the first entry test for seekability
     if (m_headerOffset == 0 && m_parent_o_stream->IsSeekable()) {
+#if wxUSE_LOG
         bool logging = wxLog::IsEnabled();
         wxLogNull nolog;
+#endif // wxUSE_LOG
         wxFileOffset here = m_parent_o_stream->TellO();
 
         if (here != wxInvalidOffset && here >= 4) {
             if (m_parent_o_stream->SeekO(here - 4) == here - 4) {
                 m_offsetAdjustment = here - 4;
+#if wxUSE_LOG
                 wxLog::EnableLogging(logging);
+#endif // wxUSE_LOG
                 m_parent_o_stream->SeekO(here);
             }
         }
