@@ -50,14 +50,10 @@ wxPenRefData::~wxPenRefData()
 
 wxPen::wxPen()
 {
-    if ( wxThePenList )
-        wxThePenList->AddPen(this);
 }
 
 wxPen::~wxPen()
 {
-    if (wxThePenList)
-        wxThePenList->RemovePen(this);
 }
 
 // Should implement Create
@@ -74,9 +70,6 @@ wxPen::wxPen(const wxColour& col, int Width, int Style)
     M_PENDATA->m_dash = 0 ;
 
     RealizeResource();
-
-    if ( wxThePenList )
-        wxThePenList->AddPen(this);
 }
 
 wxPen::wxPen(const wxBitmap& stipple, int Width)
@@ -92,9 +85,6 @@ wxPen::wxPen(const wxBitmap& stipple, int Width)
     M_PENDATA->m_dash = 0 ;
 
     RealizeResource();
-
-    if ( wxThePenList )
-        wxThePenList->AddPen(this);
 }
 
 void wxPen::Unshare()

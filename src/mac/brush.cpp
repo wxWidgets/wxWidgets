@@ -40,14 +40,10 @@ wxBrushRefData::~wxBrushRefData()
 // Brushes
 wxBrush::wxBrush()
 {
-    if ( wxTheBrushList )
-        wxTheBrushList->AddBrush(this);
 }
 
 wxBrush::~wxBrush()
 {
-    if ( wxTheBrushList )
-        wxTheBrushList->RemoveBrush(this);
 }
 
 wxBrush::wxBrush(const wxColour& col, int Style)
@@ -58,9 +54,6 @@ wxBrush::wxBrush(const wxColour& col, int Style)
     M_BRUSHDATA->m_style = Style;
 
     RealizeResource();
-
-    if ( wxTheBrushList )
-        wxTheBrushList->AddBrush(this);
 }
 
 wxBrush::wxBrush(const wxBitmap& stipple)
@@ -71,9 +64,6 @@ wxBrush::wxBrush(const wxBitmap& stipple)
     M_BRUSHDATA->m_stipple = stipple;
 
     RealizeResource();
-
-    if ( wxTheBrushList )
-        wxTheBrushList->AddBrush(this);
 }
 
 void wxBrush::Unshare()
