@@ -1,0 +1,3644 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wxWindows 2.3.3\n"
+"POT-Creation-Date: 2001-12-17 16:47+0100\n"
+"PO-Revision-Date: 2002-09-09 18:07--800\n"
+"Last-Translator: Hakki Dogusan <dogusanh@tr.net>\n"
+"Language-Team: Hakki Dogusan <dogusanh@tr.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-9\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../src/generic/dirctrlg.cpp:1303
+#: ../src/generic/dirdlgg.cpp:544
+msgid "\n"
+"(Do you have the required permissions?)"
+msgstr "\n"
+"(Gerekli yetkiniz var mý?)"
+
+#: ../src/generic/dirctrlg.cpp:1290
+#: ../src/generic/dirdlgg.cpp:531
+msgid ""
+"\n"
+"does not exist\n"
+"Create it now?"
+msgstr ""
+"\n"
+"yok\n"
+"Þimdi yaratýlsýn mý?"
+
+#: ../src/common/log.cpp:241
+#, c-format
+msgid " (error %ld: %s)"
+msgstr " (hata %ld: %s)"
+
+#: ../src/common/docview.cpp:1205
+msgid " - "
+msgstr "-"
+
+#: ../src/html/htmprint.cpp:507
+msgid " Preview"
+msgstr "Önizleme"
+
+#: ../src/generic/filedlgg.cpp:439
+msgid " bytes "
+msgstr "baytlar"
+
+#: ../src/common/paper.cpp:124
+msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+msgstr "#10 Zarf, 4 1/8 x 9 1/2 inç"
+
+#: ../src/common/paper.cpp:125
+msgid "#11 Envelope, 4 1/2 x 10 3/8 in"
+msgstr "#11 Zarf, 4 1/2 x 10 3/8 inç"
+
+#: ../src/common/paper.cpp:126
+msgid "#12 Envelope, 4 3/4 x 11 in"
+msgstr "#12 Zarf, 4 3/4 x 11 inç"
+
+#: ../src/common/paper.cpp:127
+msgid "#14 Envelope, 5 x 11 1/2 in"
+msgstr "#14 Zarf, 5 x 11 1/2 inç"
+
+#: ../src/common/paper.cpp:123
+msgid "#9 Envelope, 3 7/8 x 8 7/8 in"
+msgstr "#9 Zarf, 3 7/8 x 8 7/8 inç"
+
+#: ../src/common/resourc2.cpp:265
+#: ../src/common/resourc2.cpp:1326
+#: ../src/common/resource.cpp:1777
+#: ../src/common/resource.cpp:1907
+#: ../src/common/resource.cpp:2983
+#, c-format
+msgid "#define %s must be an integer."
+msgstr "#define %s bir tamsayý olmalýdýr."
+
+#: ../src/html/helpfrm.cpp:854
+#: ../src/html/helpfrm.cpp:855
+#: ../src/html/helpfrm.cpp:1447
+#: ../src/html/helpfrm.cpp:1477
+#, c-format
+msgid "%i of %i"
+msgstr "%i / %i"
+
+#: ../src/common/cmdline.cpp:772
+#, c-format
+msgid "%s (or %s)"
+msgstr "%s (veya %s)"
+
+#: ../src/generic/logg.cpp:233
+#, c-format
+msgid "%s Error"
+msgstr "%s Hata"
+
+#: ../src/generic/logg.cpp:241
+#, c-format
+msgid "%s Information"
+msgstr "%s Bilgi"
+
+#: ../src/generic/logg.cpp:237
+#, c-format
+msgid "%s Warning"
+msgstr "%s Uyarý"
+
+#: ../src/common/resourc2.cpp:709
+#: ../src/common/resource.cpp:2359
+#, c-format
+msgid "%s not a bitmap resource specification."
+msgstr "%s resim kaynaðý tanýmý deðil."
+
+#: ../src/common/resourc2.cpp:860
+#: ../src/common/resource.cpp:2509
+#, c-format
+msgid "%s not an icon resource specification."
+msgstr "%s ikon kaynaðý tanýmý deðil."
+
+#: ../src/common/resourc2.cpp:357
+#: ../src/common/resourc2.cpp:1422
+#: ../src/common/resource.cpp:1870
+#: ../src/common/resource.cpp:1999
+#: ../src/common/resource.cpp:3080
+#, c-format
+msgid "%s: ill-formed resource file syntax."
+msgstr "%s: hatalý oluþturulmuþ kaynak dosyasiý."
+
+#: ../src/msw/mdi.cpp:181
+msgid "&Arrange Icons"
+msgstr "Si&mgeleri Düzenle"
+
+#: ../src/generic/fdrepdlg.cpp:170
+#: ../src/generic/wizard.cpp:239
+msgid "&Cancel"
+msgstr "Ýptal"
+
+#: ../src/msw/mdi.cpp:177
+msgid "&Cascade"
+msgstr "&Kademelendir"
+
+#: ../src/generic/logg.cpp:475
+#: ../src/generic/tipdlg.cpp:170
+msgid "&Close"
+msgstr "&Kapat"
+
+#: ../src/generic/logg.cpp:679
+msgid "&Details"
+msgstr "&Detaylar"
+
+#: ../src/generic/fdrepdlg.cpp:168
+msgid "&Find"
+msgstr "B&ul"
+
+#: ../src/generic/wizard.cpp:355
+msgid "&Finish"
+msgstr "&Bitir"
+
+#: ../src/generic/wizard.cpp:228
+msgid "&Help"
+msgstr "&Yardým"
+
+#: ../src/generic/logg.cpp:476
+msgid "&Log"
+msgstr "&Günlük"
+
+#: ../src/msw/mdi.cpp:182
+msgid "&Next"
+msgstr "&Sonraki"
+
+#: ../src/generic/wizard.cpp:236
+#: ../src/generic/wizard.cpp:357
+msgid "&Next >"
+msgstr "&Sonraki >"
+
+#: ../src/generic/tipdlg.cpp:175
+msgid "&Next Tip"
+msgstr "%Sonraki Ýpucu"
+
+#: ../src/common/cmdproc.cpp:248
+#: ../src/common/cmdproc.cpp:259
+msgid "&Redo"
+msgstr "Geri al iptal"
+
+#: ../src/common/cmdproc.cpp:242
+#: ../src/common/cmdproc.cpp:269
+msgid "&Redo "
+msgstr "Geri al iptal"
+
+#: ../src/generic/fdrepdlg.cpp:174
+msgid "&Replace"
+msgstr "&Deðiþtir"
+
+#: ../src/generic/logg.cpp:471
+#: ../src/generic/logg.cpp:765
+msgid "&Save..."
+msgstr "Kay&det"
+
+#: ../src/generic/tipdlg.cpp:172
+msgid "&Show tips at startup"
+msgstr "%Baþlangýçta ipuçlarýný göster"
+
+#: ../src/common/cmdproc.cpp:254
+msgid "&Undo"
+msgstr "&Geri Al"
+
+#: ../src/common/cmdproc.cpp:229
+msgid "&Undo "
+msgstr "&Geri Al"
+
+#: ../src/msw/mdi.cpp:1308
+#: ../src/msw/mdi.cpp:1315
+#: ../src/msw/window.cpp:2700
+msgid "&Window"
+msgstr "&Pencere"
+
+#: ../src/common/config.cpp:394
+#: ../src/msw/regconf.cpp:264
+#, c-format
+msgid "'%s' has extra '..', ignored."
+msgstr "'%s' içinde fazladan '..' var, gözardý edildi."
+
+#: ../src/common/valtext.cpp:140
+#, c-format
+msgid "'%s' is invalid"
+msgstr "'%s' geçersiz"
+
+#: ../src/common/cmdline.cpp:694
+#, c-format
+msgid "'%s' is not a correct numeric value for option '%s'."
+msgstr "'%s' seçenek '%s' için doðru bir sayýsal deðer deðil."
+
+#: ../src/common/intl.cpp:436
+#, c-format
+msgid "'%s' is not a valid message catalog."
+msgstr "'%s' geçerli bir mesaj kataloðu deðil."
+
+#: ../src/common/textbuf.cpp:245
+#, c-format
+msgid "'%s' is probably a binary buffer."
+msgstr "'%s' muhtemelen ikili tampon."
+
+#: ../src/common/valtext.cpp:178
+#, c-format
+msgid "'%s' should be numeric."
+msgstr "'%s' sayýsal olmalý"
+
+#: ../src/common/valtext.cpp:160
+#, c-format
+msgid "'%s' should only contain ASCII characters."
+msgstr "'%s' sadece ASCII karakterler içermeli."
+
+#: ../src/common/valtext.cpp:166
+#, c-format
+msgid "'%s' should only contain alphabetic characters."
+msgstr "'%s' sadece alfabetik karakterler içermeli."
+
+#: ../src/common/valtext.cpp:172
+#, c-format
+msgid "'%s' should only contain alphabetic or numeric characters."
+msgstr "'%s' sadece alfabetik veya sayýsal karakterler içermeli."
+
+#: ../src/html/helpfrm.cpp:773
+msgid "(Help)"
+msgstr "(Yardým)"
+
+#: ../src/html/helpfrm.cpp:336
+#: ../src/html/helpfrm.cpp:922
+#: ../src/html/helpfrm.cpp:1504
+msgid "(bookmarks)"
+msgstr "(yer imleri)"
+
+#: ../src/common/resourc2.cpp:297
+#: ../src/common/resourc2.cpp:1362
+#: ../src/common/resource.cpp:1809
+#: ../src/common/resource.cpp:1939
+#: ../src/common/resource.cpp:3019
+msgid ", expected static, #include or #define\n"
+"whilst parsing resource."
+msgstr ", kaynaðý ayrýþtýrýrken statik, #include veya #define\n"
+"bekleniyor."
+
+#: ../src/generic/dirctrlg.cpp:644
+#: ../src/generic/dirdlgg.cpp:263
+#: ../src/generic/filedlgg.cpp:833
+msgid "."
+msgstr "."
+
+#: ../src/generic/dirctrlg.cpp:645
+#: ../src/generic/dirdlgg.cpp:264
+#: ../src/generic/filedlgg.cpp:834
+msgid ".."
+msgstr ".."
+
+#: ../src/common/paper.cpp:120
+msgid "10 x 14 in"
+msgstr "10 x 14 inç"
+
+#: ../src/common/paper.cpp:121
+msgid "11 x 17 in"
+msgstr "11 x 17 inç"
+
+#: ../src/common/paper.cpp:139
+msgid "6 3/4 Envelope, 3 5/8 x 6 1/2 in"
+msgstr "6 3/4 Zarf, 3 5/8 x 6 1/2 inç"
+
+#: ../src/html/htmprint.cpp:281
+msgid ": file does not exist!"
+msgstr ": dosya yok !"
+
+#: ../src/common/fontmap.cpp:606
+msgid ": unknown charset"
+msgstr ": bilinmeyen karakter kümesi"
+
+#: ../src/common/fontmap.cpp:837
+msgid ": unknown encoding"
+msgstr ": tanýmsýz kodlama"
+
+#: ../src/generic/wizard.cpp:233
+msgid "< &Back"
+msgstr "< &Geri"
+
+#: ../src/generic/filedlgg.cpp:467
+msgid "<DIR>"
+msgstr "<DÝZÝN>"
+
+#: ../src/generic/filedlgg.cpp:434
+msgid "<DIR> "
+msgstr "<DÝZÝN>"
+
+#: ../src/generic/filedlgg.cpp:468
+msgid "<LINK>"
+msgstr "<KISA YOL>"
+
+#: ../src/generic/filedlgg.cpp:435
+msgid "<LINK> "
+msgstr "<KISA YOL>"
+
+#: ../src/html/helpfrm.cpp:1071
+msgid "<html><body>Normal face<br>(and <u>underlined</u>. <i>Italic face.</i> <b>Bold face.</b> <b><i>Bold italic face.</i></b><br><font size=-2>font size -2</font><br><font size=-1>font size -1</font><br><font size=+0>font size +0</font><br><font size=+1>font size +1</font><br><font size=+2>font size +2</font><br><font size=+3>font size +3</font><br><font size=+4>font size +4</font><br><p><tt>Fixed size face.<br> <b>bold</b> <i>italic</i> <b><i>bold italic <u>underlined</u></i></b><br><font size=-2>font size -2</font><br><font size=-1>font size -1</font><br><font size=+0>font size +0</font><br><font size=+1>font size +1</font><br><font size=+2>font size +2</font><br><font size=+3>font size +3</font><br><font size=+4>font size +4</font></tt></body></html>"
+msgstr "<html><body>Normal face<br>(and <u>underlined</u>. <i>Italic face.</i> <b>Bold face.</b> <b><i>Bold italic face.</i></b><br><font size=-2>font size -2</font><br><font size=-1>font size -1</font><br><font size=+0>font size +0</font><br><font size=+1>font size +1</font><br><font size=+2>font size +2</font><br><font size=+3>font size +3</font><br><font size=+4>font size +4</font><br><p><tt>Fixed size face.<br> <b>bold</b> <i>italic</i> <b><i>bold italic <u>underlined</u></i></b><br><font size=-2>font size -2</font><br><font size=-1>font size -1</font><br><font size=+0>font size +0</font><br><font size=+1>font size +1</font><br><font size=+2>font size +2</font><br><font size=+3>font size +3</font><br><font size=+4>font size +4</font></tt></body></html>"
+
+#: ../src/common/paper.cpp:113
+msgid "A3 sheet, 297 x 420 mm"
+msgstr "A3 sayfa, 297 x 420 mm"
+
+#: ../src/common/paper.cpp:104
+#: ../src/generic/dcpsg.cpp:2545
+msgid "A4 sheet, 210 x 297 mm"
+msgstr "A4 sayfa, 210 x 297 mm"
+
+#: ../src/common/paper.cpp:114
+msgid "A4 small sheet, 210 x 297 mm"
+msgstr "A4 sayfa, 210 x 297 mm"
+
+#: ../src/common/paper.cpp:115
+msgid "A5 sheet, 148 x 210 mm"
+msgstr "A5 sayfa, 148 x 210 mm"
+
+#: ../src/generic/fontdlgg.cpp:327
+msgid "ABCDEFGabcdefg12345"
+msgstr "ABCDEFGabcdefg12345"
+
+#: ../src/common/ftp.cpp:369
+msgid "ASCII"
+msgstr "ASCII"
+
+#: ../src/html/helpfrm.cpp:330
+msgid "Add current page to bookmarks"
+msgstr "Geçerli sayfayý yer imlerine ekle"
+
+#: ../src/generic/colrdlgg.cpp:273
+msgid "Add to custom colours"
+msgstr "Tanýmlý renklere ekle"
+
+#: ../src/html/helpctrl.cpp:90
+#, c-format
+msgid "Adding book %s"
+msgstr "%s kitabý ekleniyor"
+
+#: ../src/generic/prntdlgg.cpp:161
+msgid "All"
+msgstr "Tümü"
+
+#: ../include/wx/defs.h:1626
+#: ../src/generic/filedlgg.cpp:950
+msgid "All files (*)|*"
+msgstr "Tüm dosyalar (*)|*"
+
+#: ../include/wx/defs.h:1623
+msgid "All files (*.*)|*.*"
+msgstr "Tüm dosyalar (*.*)|*.*"
+
+#: ../src/unix/dialup.cpp:362
+msgid "Already dialling ISP."
+msgstr "ISP zaten aranýyor."
+
+#: ../src/generic/logg.cpp:1020
+#, c-format
+msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
+msgstr "'%s' günlük dosyasýna ekle ([Hayýr] seçilirse üstüne yazýlacak)?"
+
+#: ../src/common/fontmap.cpp:116
+msgid "Arabic (ISO-8859-6)"
+msgstr "Arapça (ISO-8859-6)"
+
+#: ../src/common/paper.cpp:134
+msgid "B4 Envelope, 250 x 353 mm"
+msgstr "B4 Zarf, 250 x 353 mm"
+
+#: ../src/common/paper.cpp:116
+msgid "B4 sheet, 250 x 354 mm"
+msgstr "B4 sayfa, 250 x 354 mm"
+
+#: ../src/common/paper.cpp:135
+msgid "B5 Envelope, 176 x 250 mm"
+msgstr "B5 Zarf, 176 x 250 mm"
+
+#: ../src/common/paper.cpp:117
+msgid "B5 sheet, 182 x 257 millimeter"
+msgstr "B5 sayfa, 182 x 257 mm"
+
+#: ../src/common/paper.cpp:136
+msgid "B6 Envelope, 176 x 125 mm"
+msgstr "B6 Zarf, 176 x 125 mm"
+
+#: ../src/common/imagbmp.cpp:277
+msgid "BMP: Couldn't save invalid image."
+msgstr "BMP:Geçersiz imaj kaydedilemedi."
+
+#: ../src/common/imagbmp.cpp:481
+msgid "BMP: Couldn't write RGB color map."
+msgstr "BMP: RGB renk haritasý yazýlamadý."
+
+#: ../src/common/imagbmp.cpp:613
+msgid "BMP: Couldn't write data."
+msgstr "BMP: Veri yazýlamadý."
+
+#: ../src/common/imagbmp.cpp:386
+msgid "BMP: Couldn't write the file (Bitmap) header."
+msgstr "BMP: Resim baþlýðý (Bitmap) yazýlamadý."
+
+#: ../src/common/imagbmp.cpp:407
+msgid "BMP: Couldn't write the file (BitmapInfo) header."
+msgstr "BMP: Resim bilgi baþlýðý (BitmapInfo) yazýlamadý."
+
+#: ../src/common/imagbmp.cpp:311
+msgid "BMP: wImage doesn't have own wxPalette."
+msgstr "BMP: wxImage'nin kendi wxPalette'si yok."
+
+#: ../src/generic/helpwxht.cpp:157
+msgid "Back"
+msgstr "Geri"
+
+#: ../src/common/dlgcmn.cpp:176
+msgid "Backward"
+msgstr "Geriye"
+
+#: ../src/common/fontmap.cpp:123
+msgid "Baltic (ISO-8859-13)"
+msgstr "Baltýk (ISO-8859-13)"
+
+#: ../src/common/fontmap.cpp:114
+msgid "Baltic (old) (ISO-8859-4)"
+msgstr "Baltýk (eski) (ISO-8859-4)"
+
+#: ../src/common/resourc2.cpp:840
+#: ../src/common/resource.cpp:2489
+#, c-format
+msgid "Bitmap resource specification %s not found."
+msgstr "Resim kaynak tanýmý %s bulunamadý."
+
+#: ../src/generic/fontdlgg.cpp:219
+msgid "Bold"
+msgstr "Kalýn"
+
+#: ../src/generic/prntdlgg.cpp:660
+msgid "Bottom margin (mm):"
+msgstr "Alt boþluk (mm):"
+
+#: ../src/common/paper.cpp:105
+msgid "C sheet, 17 x 22 in"
+msgstr "C sayfa, 17 x 22 inç"
+
+#: ../src/generic/logg.cpp:473
+msgid "C&lear"
+msgstr "T&emizle"
+
+#: ../src/common/paper.cpp:130
+msgid "C3 Envelope, 324 x 458 mm"
+msgstr "C3 Zarf, 324 x 458 mm"
+
+#: ../src/common/paper.cpp:131
+msgid "C4 Envelope, 229 x 324 mm"
+msgstr "C4 Zarf, 229 x 324 mm"
+
+#: ../src/common/paper.cpp:129
+msgid "C5 Envelope, 162 x 229 mm"
+msgstr "C5 Zarf, 162 x 229 mm"
+
+#: ../src/common/paper.cpp:132
+msgid "C6 Envelope, 114 x 162 mm"
+msgstr "C6 Zarf, 114 x 162 mm"
+
+#: ../src/common/paper.cpp:133
+msgid "C65 Envelope, 114 x 229 mm"
+msgstr "C65 Zarf, 114 x 229 mm"
+
+#: ../src/msw/thread.cpp:243
+msgid "Can not create event object."
+msgstr "Oluþ objesi yaratýlamadý."
+
+#: ../src/msw/thread.cpp:145
+msgid "Can not create mutex"
+msgstr "Muteks yaratýlamadý"
+
+#: ../src/common/filefn.cpp:1324
+#, c-format
+msgid "Can not enumerate files '%s'"
+msgstr "'%s' dosyalarý sayýlamýyor"
+
+#: ../src/mgl/dir.cpp:202
+#: ../src/msw/dir.cpp:296
+#: ../src/unix/dir.cpp:224
+#, c-format
+msgid "Can not enumerate files in directory '%s'"
+msgstr "'%s' dizinindeki dosyalar sayýlamýyor"
+
+#: ../src/mac/thread.cpp:439
+#: ../src/msw/thread.cpp:583
+#, c-format
+msgid "Can not resume thread %x"
+msgstr "%x iþ parçacýðý yeniden baþlatýlamadý"
+
+#: ../src/msw/thread.cpp:461
+msgid "Can not start thread: error writing TLS."
+msgstr "Ýþ parçacýðý baþlatýlamadý: TLS yazma hatasý."
+
+#: ../src/mac/thread.cpp:415
+#: ../src/msw/thread.cpp:568
+#, c-format
+msgid "Can not suspend thread %x"
+msgstr "%x iþ parçacýðý beklemeye alýnamadý"
+
+#: ../src/msw/thread.cpp:902
+msgid "Can not wait for thread termination"
+msgstr "Ýþ parçacýðýnýn bitmesi beklenemiyor"
+
+#: ../src/common/cmdproc.cpp:231
+msgid "Can't &Undo "
+msgstr "&Geri al yapýlamýyor"
+
+#: ../src/common/image.cpp:1207
+#, c-format
+msgid "Can't check image format of file '%s': file does not exist."
+msgstr "'%s' dosyasýnýn imaj biçemi kontrol edilemiyor: dosya yok."
+
+#: ../src/msw/registry.cpp:421
+#, c-format
+msgid "Can't close registry key '%s'"
+msgstr "'%s' kayýt anahtarý kapatýlamadý"
+
+#: ../src/msw/registry.cpp:493
+#, c-format
+msgid "Can't copy values of unsupported type %d."
+msgstr "Desteklenmeyen %d tipinin deðerleri kopyalanamýyor."
+
+#: ../src/msw/toplevel.cpp:223
+#, c-format
+msgid "Can't create dialog using template '%s'"
+msgstr "'%s' þablonu kullanarak pencere yaratýlamýyor"
+
+#: ../src/msw/listctrl.cpp:270
+msgid "Can't create list control window, check that comctl32.dll is installed."
+msgstr "Liste nesnesi yaratýlamýyor; comctl32.dll'nin yüklü olduðunu denetleyiniz."
+
+#: ../src/msw/registry.cpp:402
+#, c-format
+msgid "Can't create registry key '%s'"
+msgstr "'%s' kayýt anahtarý yaratýlamadý"
+
+#: ../src/msw/utilsexc.cpp:485
+msgid "Can't create the inter-process read pipe"
+msgstr "Süreç-arasý okuma borusu yaratýlamýyor"
+
+#: ../src/msw/utilsexc.cpp:497
+msgid "Can't create the inter-process write pipe"
+msgstr "Süreç-arasý yazma borusu yaratýlamýyor"
+
+#: ../src/mac/thread.cpp:394
+#: ../src/msw/thread.cpp:550
+msgid "Can't create thread"
+msgstr "Ýþ parçacýðý yaratýlamýyor"
+
+#: ../src/msw/window.cpp:2855
+#, c-format
+msgid "Can't create window of class %s"
+msgstr "%s sýnýfýnýn penceresi yaratýlamýyor"
+
+#: ../src/msw/registry.cpp:661
+#, c-format
+msgid "Can't delete key '%s'"
+msgstr "'%s' anahtarý silinemedi"
+
+#: ../src/msw/iniconf.cpp:447
+#, c-format
+msgid "Can't delete the INI file '%s'"
+msgstr "'%s' INI dosyasý silinemedi"
+
+#: ../src/msw/registry.cpp:686
+#, c-format
+msgid "Can't delete value '%s' from key '%s'"
+msgstr "'%s' deðeri '%s' anahtarýndan silinemiyor"
+
+#: ../src/msw/registry.cpp:697
+#, c-format
+msgid "Can't delete value of key '%s'"
+msgstr "'%s' anahtarýnýn deðeri silinemiyor"
+
+#: ../src/msw/registry.cpp:1025
+#, c-format
+msgid "Can't enumerate subkeys of key '%s'"
+msgstr "'%s' anahtarýnýn alt-anahtarlarý sayýlamýyor"
+
+#: ../src/msw/registry.cpp:980
+#, c-format
+msgid "Can't enumerate values of key '%s'"
+msgstr "'%s' anahtarýnýn deðerleri sayýlamýyor"
+
+#: ../src/common/ffile.cpp:226
+#, c-format
+msgid "Can't find current position in file '%s'"
+msgstr "'%s' dosyasýndaki geçerli yer bulunamýyor"
+
+#: ../src/common/object.cpp:335
+#: ../src/common/object.cpp:360
+#, c-format
+msgid "Can't find the serialization object '%s' for the object '%s'."
+msgstr "'%s' diziselleþtirme nesnesi '%s' nesnesi için bulunamýyor."
+
+#: ../src/msw/registry.cpp:351
+#, c-format
+msgid "Can't get info about registry key '%s'"
+msgstr "'%s' kayýt anahtarý hakkýnda bilgi alýnamýyor"
+
+#: ../src/common/image.cpp:904
+#: ../src/common/image.cpp:924
+#, c-format
+msgid "Can't load image from file '%s': file does not exist."
+msgstr "Ýmaj '%s' dosyasýndan yüklenemiyor: dosya yok."
+
+#: ../src/common/object.cpp:328
+msgid "Can't load wxSerial dynamic library."
+msgstr "wxSerial devingen kitaplýðý yüklenemiyor."
+
+#: ../src/msw/dib.cpp:434
+#, c-format
+msgid "Can't open file '%s'"
+msgstr "'%s' dosyasý açýlamadý"
+
+#: ../src/msw/registry.cpp:377
+#, c-format
+msgid "Can't open registry key '%s'"
+msgstr "'%s' kayýt anahtarý açýlamadý"
+
+#: ../src/msw/registry.cpp:904
+#, c-format
+msgid "Can't read value of '%s'"
+msgstr "'%s''nin deðeri okunamadý"
+
+#: ../src/msw/registry.cpp:777
+#: ../src/msw/registry.cpp:816
+#, c-format
+msgid "Can't read value of key '%s'"
+msgstr "'%s' anahtarýnýn deðeri okunamýyor"
+
+#: ../src/generic/logg.cpp:535
+#: ../src/generic/logg.cpp:930
+msgid "Can't save log contents to file."
+msgstr "Günlük içeriði dosyaya kaydedilemiyor."
+
+#: ../src/msw/thread.cpp:513
+msgid "Can't set thread priority"
+msgstr "Ýþ parçacýðý önceliði ayarlanamýyor"
+
+#: ../src/msw/registry.cpp:802
+#: ../src/msw/registry.cpp:928
+#, c-format
+msgid "Can't set value of '%s'"
+msgstr "'%s' nin deðeri deðiþtirilemiyor"
+
+#: ../src/common/dlgcmn.cpp:189
+#: ../src/common/prntbase.cpp:109
+#: ../src/generic/dcpsg.cpp:2269
+#: ../src/generic/dirctrlg.cpp:1249
+#: ../src/generic/dirdlgg.cpp:418
+#: ../src/generic/filedlgg.cpp:1041
+#: ../src/generic/fontdlgg.cpp:259
+#: ../src/generic/prntdlgg.cpp:466
+#: ../src/generic/progdlgg.cpp:206
+#: ../src/generic/proplist.cpp:525
+#: ../src/gtk/filedlg.cpp:173
+#: ../src/gtk/fontdlg.cpp:178
+#: ../src/html/helpfrm.cpp:1053
+#: ../src/motif/msgdlg.cpp:180
+msgid "Cancel"
+msgstr "Ýptal"
+
+#: ../contrib/src/xrc/xmlres.cpp:726
+#: ../contrib/src/xrc/xmlres.cpp:767
+msgid "Cannot convert dialog units: dialog unknown."
+msgstr "Ýletiþim birimi çevrilemiyor: bilinmeyen iletiþim."
+
+#: ../contrib/src/xrc/xml.cpp:372
+msgid "Cannot find XML I/O handler capable of loading this format."
+msgstr "Bu biçemi yükleyebilecek XML I/O iþleyici bulunamýyor."
+
+#: ../contrib/src/xrc/xml.cpp:398
+msgid "Cannot find XML I/O handler capable of saving in this format."
+msgstr "Bu biçemi kaydedebilecek XML I/O iþleyici bulunamýyor."
+
+#: ../src/msw/dialup.cpp:525
+#, c-format
+msgid "Cannot find active dialup connection: %s"
+msgstr "Aktif çevirmeli baðlantý bulunamýyor: %s"
+
+#: ../contrib/src/xrc/xmlres.cpp:206
+#, c-format
+msgid "Cannot find container for unknown control '%s'."
+msgstr "Bilinmeyen '%s' kontrolü için taþýyýcý bulunamýyor."
+
+#: ../contrib/src/xrc/xmlres.cpp:781
+#, c-format
+msgid "Cannot find font node '%s'."
+msgstr "'%s' yazýtipi düðümü bulunamýyor."
+
+#: ../src/msw/dialup.cpp:839
+msgid "Cannot find the location of address book file"
+msgstr "Adres defteri dosyasýnýn yeri bulunamýyor"
+
+#: ../src/unix/threadpsx.cpp:976
+#, c-format
+msgid "Cannot get priority range for scheduling policy %d."
+msgstr "Listeleme ilkesi %d için öncelik aralýðý alýnamýyor."
+
+#: ../src/unix/utilsunx.cpp:863
+msgid "Cannot get the hostname"
+msgstr "Makine adý alýnamýyor"
+
+#: ../src/unix/utilsunx.cpp:899
+msgid "Cannot get the official hostname"
+msgstr "Resmi makine adý alýnamýyor"
+
+#: ../src/msw/dialup.cpp:940
+msgid "Cannot hang up - no active dialup connection."
+msgstr "Kapatýlamýyor - aktif çevirmeli baðlantý yok."
+
+#: ../src/msw/app.cpp:257
+msgid "Cannot initialize OLE"
+msgstr "OLE baþlatýlamadý"
+
+#: ../contrib/src/xrc/xmlres.cpp:308
+#, c-format
+msgid "Cannot load resources from file '%s'."
+msgstr "Kaynaklar '%s' dosyasýndan yüklenemedi."
+
+#: ../src/html/htmlfilt.cpp:147
+#, c-format
+msgid "Cannot open HTML document: %s"
+msgstr "%s HTML dökumaný açýlamýyor"
+
+#: ../src/html/helpdata.cpp:585
+#, c-format
+msgid "Cannot open HTML help book: %s"
+msgstr "%s HTML yardým kitapçýðý açýlamýyor"
+
+#: ../src/generic/helpext.cpp:96
+#, c-format
+msgid "Cannot open URL '%s'"
+msgstr "URL '%s' açýlamadý"
+
+#: ../src/html/helpdata.cpp:268
+#, c-format
+msgid "Cannot open contents file: %s"
+msgstr "%s içerik dosyasý açýlamýyor"
+
+#: ../contrib/src/xrc/xmlres.cpp:282
+#, c-format
+msgid "Cannot open file '%s'."
+msgstr "'%s' dosyasý açýlamýyor."
+
+#: ../src/generic/dcpsg.cpp:1584
+msgid "Cannot open file for PostScript printing!"
+msgstr "Dosya PostScript yazdýrma için açýlamýyor!"
+
+#: ../src/html/helpdata.cpp:284
+#, c-format
+msgid "Cannot open index file: %s"
+msgstr "'%s' dizin dosyasý açýlamýyor"
+
+#: ../contrib/src/xrc/xmlres.cpp:714
+#, c-format
+msgid "Cannot parse coordinates from '%s'."
+msgstr "Konumlar '%s' içinden ayrýþtýrýlamýyor."
+
+#: ../contrib/src/xrc/xmlres.cpp:755
+#, c-format
+msgid "Cannot parse dimension from '%s'."
+msgstr "Boyutlar '%s' içinden ayrýþtýrýlamýyor."
+
+#: ../src/html/helpfrm.cpp:1336
+msgid "Cannot print empty page."
+msgstr "Boþ sayfa basýlamýyor."
+
+#: ../src/unix/threadpsx.cpp:957
+msgid "Cannot retrieve thread scheduling policy."
+msgstr "Ýþparçacýðý listeleme ilkesi alýnamýyor."
+
+#: ../src/unix/threadpsx.cpp:606
+msgid "Cannot start thread: error writing TLS"
+msgstr "Ýþ parçacýðý baþlatýlamýyor: TLS yazma hatasý"
+
+#: ../src/html/helpfrm.cpp:459
+msgid "Case sensitive"
+msgstr "Büyük küçük harfe duyarlý"
+
+#: ../src/common/fontmap.cpp:124
+msgid "Celtic (ISO-8859-14)"
+msgstr "Keltçe (ISO-8859-14)"
+
+#: ../src/common/fontmap.cpp:112
+msgid "Central European (ISO-8859-2)"
+msgstr "Orta Avrupa (ISO-8859-2)"
+
+#: ../src/msw/dialup.cpp:774
+msgid "Choose ISP to dial"
+msgstr "Çevrilecek ISP'yi seçiniz"
+
+#: ../src/gtk/fontdlg.cpp:159
+msgid "Choose font"
+msgstr "Yazý tipi seç"
+
+#: ../src/msw/glcanvas.cpp:437
+msgid "ChoosePixelFormat failed."
+msgstr "ChoosePixelFormat baþarýsýz oldu."
+
+#: ../src/generic/logg.cpp:473
+msgid "Clear the log contents"
+msgstr "Günlük içeriðini temizle"
+
+#: ../src/common/prntbase.cpp:359
+#: ../src/generic/progdlgg.cpp:342
+#: ../src/generic/proplist.cpp:520
+msgid "Close"
+msgstr "Kapat"
+
+#: ../src/generic/logg.cpp:475
+msgid "Close this window"
+msgstr "Bu pencereyi kapat"
+
+#: ../src/generic/dirctrlg.cpp:486
+msgid "Computer"
+msgstr "Bilgisayar"
+
+#: ../src/common/fileconf.cpp:867
+#, c-format
+msgid "Config entry name cannot start with '%c'."
+msgstr "Ayar bilgi adý '%c' ile baþlayamaz."
+
+#: ../src/generic/filedlgg.cpp:1204
+#: ../src/gtk/filedlg.cpp:72
+msgid "Confirm"
+msgstr "Onayla"
+
+#: ../src/msw/mimetype.cpp:684
+msgid "Confirm registry update"
+msgstr "Kayýt deðiþikligini onaylayýnýz"
+
+#: ../src/html/htmlwin.cpp:263
+msgid "Connecting..."
+msgstr "Baðlanýlýyor..."
+
+#: ../src/generic/helpxlp.cpp:242
+#, c-format
+msgid "Connection to wxHelp timed out in %d seconds"
+msgstr "wxHelp'e baðlantý %d saniyede zamanaþýmýna uðradý"
+
+#: ../src/generic/helpwxht.cpp:159
+#: ../src/html/helpfrm.cpp:362
+#: ../src/html/helpfrm.cpp:371
+msgid "Contents"
+msgstr "Ýçerik"
+
+#: ../src/common/strconv.cpp:608
+#, c-format
+msgid "Convertion to charset '%s' doesn't work."
+msgstr "'%s' karakter kümesine dönüþüm çalýþmýyor."
+
+#: ../src/generic/prntdlgg.cpp:194
+msgid "Copies:"
+msgstr "Kopya adedi:"
+
+#: ../src/common/resourc2.cpp:287
+#: ../src/common/resource.cpp:1799
+#: ../src/common/resource.cpp:1929
+#, c-format
+msgid "Could not find resource include file %s."
+msgstr "%s kaynak içerme dosyasý bulunamadý."
+
+#: ../src/generic/tabg.cpp:1044
+msgid "Could not find tab for id"
+msgstr "Kimlik için sekme bulunamýyor"
+
+#: ../src/msw/textctrl.cpp:1644
+#, c-format
+msgid "Could not load Rich Edit DLL '%s'"
+msgstr "Zengin Metin Düzenleyicisi DLL '%s' yüklenemedi"
+
+#: ../src/common/resource.cpp:795
+#, c-format
+msgid "Could not resolve control class or id '%s'. Use (non-zero) integer instead\n"
+" or provide #define (see manual for caveats)"
+msgstr "'%s' kontrol sýnýfý veya kimliði çözülemedi. Yerine (sýfýrdan farklý) tamsayý kullanýn\n"
+"veya #define saðlayýn (el kitabýna bakýnýz)"
+
+#: ../src/common/resource.cpp:1244
+#, c-format
+msgid "Could not resolve menu id '%s'. Use (non-zero) integer instead\n"
+"or provide #define (see manual for caveats)"
+msgstr "'%s' menü kimliði çözülemedi. Yerine (sýfýrdan farklý) tamsayý kullanýn\n"
+"veya #define saðlayýn (el kitabýna bakýnýz)"
+
+#: ../src/common/prntbase.cpp:715
+msgid "Could not start document preview."
+msgstr "Döküman önizleme baþlatýlamadý."
+
+#: ../src/generic/printps.cpp:197
+#: ../src/msw/printwin.cpp:252
+msgid "Could not start printing."
+msgstr "Yazdýrma baþlatýlamadý."
+
+#: ../src/common/wincmn.cpp:850
+msgid "Could not transfer data to window"
+msgstr "Bilgi pencereye yollanamadý"
+
+#: ../src/msw/thread.cpp:187
+msgid "Couldn't acquire a mutex lock"
+msgstr "Muteks kilidi alýnamýyor"
+
+#: ../src/msw/dragimag.cpp:148
+#: ../src/msw/dragimag.cpp:184
+#: ../src/msw/imaglist.cpp:152
+#: ../src/msw/imaglist.cpp:174
+#: ../src/msw/imaglist.cpp:187
+msgid "Couldn't add an image to the image list."
+msgstr "Ýmaj imaj listesine eklenemedi."
+
+#: ../src/msw/timer.cpp:105
+msgid "Couldn't create a timer"
+msgstr "Zamanlayýcý yaratýlamadý"
+
+#: ../src/mgl/cursor.cpp:121
+#: ../src/mgl/cursor.cpp:146
+msgid "Couldn't create cursor."
+msgstr "Ýmleç yaratýlamadý."
+
+#: ../src/common/dynlib.cpp:337
+#, c-format
+msgid "Couldn't find symbol '%s' in a dynamic library"
+msgstr "'%s' sembolü devingen kitaplýkta bulunamadý"
+
+#: ../src/mac/thread.cpp:469
+#: ../src/msw/thread.cpp:609
+msgid "Couldn't get the current thread pointer"
+msgstr "Geçerli iþparçacýðý imleci alýnamýyor"
+
+#: ../src/common/imagpng.cpp:249
+msgid "Couldn't load a PNG image - file is corrupted or not enough memory."
+msgstr "PNG imaji yüklenemedi -dosya bozuk veya bellek yetersiz."
+
+#: ../src/msw/ole/dataobj.cpp:143
+#, c-format
+msgid "Couldn't register clipboard format '%s'."
+msgstr "'%s' pano biçemi kaydedilemedi."
+
+#: ../src/msw/thread.cpp:219
+msgid "Couldn't release a mutex"
+msgstr "Muteks býrakýlamýyor"
+
+#: ../src/msw/listctrl.cpp:651
+#, c-format
+msgid "Couldn't retrieve information about list control item %d."
+msgstr "%d liste kontrolü elemaný hakkýnda bilgi alýnamadý."
+
+#: ../src/mac/thread.cpp:706
+#: ../src/msw/thread.cpp:989
+msgid "Couldn't terminate thread"
+msgstr "Ýþ parçacýðý sonlandýrýlamýyor"
+
+#: ../src/generic/dirctrlg.cpp:1356
+#: ../src/generic/dirdlgg.cpp:565
+msgid "Create directory"
+msgstr "Dizin yarat"
+
+#: ../src/generic/filedlgg.cpp:1008
+msgid "Create new directory"
+msgstr "Yeni dizin yarat"
+
+#: ../src/generic/filedlgg.cpp:1015
+msgid "Current directory:"
+msgstr "Geçerli dizin:"
+
+#: ../src/common/fontmap.cpp:115
+msgid "Cyrillic (ISO-8859-5)"
+msgstr "Kril (ISO-8859-5)"
+
+#: ../src/common/paper.cpp:106
+msgid "D sheet, 22 x 34 in"
+msgstr "D sayfa, 22 x 34 inç"
+
+#: ../src/msw/dde.cpp:587
+msgid "DDE poke request failed"
+msgstr "DDE itme isteði baþarýsýz"
+
+#: ../src/common/imagbmp.cpp:809
+msgid "DIB Header: Cannot deal with 4bit encoded yet."
+msgstr "DIB baþlýðý: 4ikili kodlamaya henüz ulaþýlamýyor."
+
+#: ../src/common/imagbmp.cpp:1027
+msgid "DIB Header: Encoding doesn't match bitdepth."
+msgstr "DIB baþlýðý: Kodlama ikili derinliðiyle uyumlu deðil."
+
+#: ../src/common/imagbmp.cpp:990
+msgid "DIB Header: Image height > 32767 pixels for file."
+msgstr "DIB baþlýðý: Dosyanýn imaj yüksekliði > 32767 piksel."
+
+#: ../src/common/imagbmp.cpp:984
+msgid "DIB Header: Image width > 32767 pixels for file."
+msgstr "DIB baþlýðý: Dosyanýn imaj geniþliði > 32767 piksel."
+
+#: ../src/common/imagbmp.cpp:1004
+msgid "DIB Header: Unknown bitdepth in file."
+msgstr "DIB baþlýðý: Dosyada bilinmeyen ikili derinliði."
+
+#: ../src/common/imagbmp.cpp:1013
+msgid "DIB Header: Unknown encoding in file."
+msgstr "DIB baþlýðý: Dosyada bilinmeyen kodlama."
+
+#: ../src/common/paper.cpp:128
+msgid "DL Envelope, 110 x 220 mm"
+msgstr "DL Zarf, 110 x 220 mm"
+
+#: ../src/generic/filedlgg.cpp:646
+msgid "Date"
+msgstr "Tarih"
+
+#: ../src/generic/fontdlgg.cpp:209
+msgid "Decorative"
+msgstr "Süslü"
+
+#: ../src/common/fontmap.cpp:366
+msgid "Default encoding"
+msgstr "Varsayýlan kodlama"
+
+#: ../src/unix/snglinst.cpp:270
+#, c-format
+msgid "Deleted stale lock file '%s'."
+msgstr "Silininen eski kilit dosyasý '%s'."
+
+#: ../src/msw/dialup.cpp:361
+msgid "Dial up functions are unavailable because the remote access service (RAS) is not installed on this machine. Please install it."
+msgstr "Uzaktan eriþim servisi (RAS) kurulu olmadýðý için çevirme iþlevleri yok. Lütfen kurunuz."
+
+#: ../src/msw/toplevel.cpp:221
+msgid "Did you forget to include wx/msw/wx.rc in your resources?"
+msgstr "Kaynaklarýnýza wx/msw/wx.rc'yi koymayý unuttunuz mu?"
+
+#: ../src/generic/tipdlg.cpp:177
+msgid "Did you know..."
+msgstr "Biliyor muydunuz..."
+
+#: ../src/common/filefn.cpp:1219
+#, c-format
+msgid "Directory '%s' couldn't be created"
+msgstr "'%s' dizini yaratýlamadý"
+
+#: ../src/generic/dirctrlg.cpp:1291
+#: ../src/generic/dirdlgg.cpp:532
+msgid "Directory does not exist"
+msgstr "Dizin yok"
+
+#: ../src/html/helpfrm.cpp:426
+msgid "Display all index items that contain given substring. Search is case insensitive."
+msgstr "Verilen alt-dizgiyi içeren tüm indeks elemanlarýný göster. Arama küçük-büyük harf duyarlýdýr."
+
+#: ../src/html/helpfrm.cpp:600
+msgid "Display options dialog"
+msgstr "Seçenek penceresini göster"
+
+#: ../src/msw/mimetype.cpp:677
+#, c-format
+msgid ""
+"Do you want to overwrite the command used to %s files with extension \"%s\" ?\n"
+"Current value is \n"
+"%s, \n"
+"New value is \n"
+"%s %1"
+msgstr ""
+"Dosyalarý %s için kullanýlan komutu deðiþtirmek istiyor musunuz (\"%s\" uzantýlý dosyalar) ?\n"
+"Geçerli deðer \n"
+"%s, \n"
+"Yeni deðer \n"
+"%s %1"
+
+#: ../src/common/docview.cpp:439
+#, c-format
+msgid "Do you want to save changes to document %s?"
+msgstr "%s dökümanýnda yapýlan deðiþiklikleri kaydetmek istiyor musunuz?"
+
+#: ../src/common/strconv.cpp:618
+#, c-format
+msgid "Don't know how to convert to/from charset '%s'."
+msgstr "'%s' karakter kümesi(ne/nden) nasýl çevrileceði bilinmiyor."
+
+#: ../src/html/htmlwin.cpp:318
+msgid "Done"
+msgstr "Tamamlandý"
+
+#: ../src/generic/progdlgg.cpp:354
+msgid "Done."
+msgstr "Tamamlandý."
+
+#: ../src/generic/fdrepdlg.cpp:157
+msgid "Down"
+msgstr "Aþaðý"
+
+#: ../src/common/paper.cpp:107
+msgid "E sheet, 34 x 44 in"
+msgstr "E sayfa, 34 x 44 inç"
+
+#: ../src/generic/progdlgg.cpp:178
+msgid "Elapsed time : "
+msgstr "Geçen süre :"
+
+#: ../src/generic/helphtml.cpp:320
+msgid "Entries found"
+msgstr "Öðe bulundu"
+
+#: ../src/common/config.cpp:345
+#, c-format
+msgid "Environment variables expansion failed: missing '%c' at position %d in '%s'."
+msgstr "Çevre deðiþkenleri açma baþarýsýz: eksik '%c', yer %d, '%s' içinde."
+
+#: ../src/generic/dirctrlg.cpp:648
+#: ../src/generic/dirctrlg.cpp:666
+#: ../src/generic/dirctrlg.cpp:677
+#: ../src/generic/dirctrlg.cpp:1391
+#: ../src/generic/dirdlgg.cpp:267
+#: ../src/generic/dirdlgg.cpp:285
+#: ../src/generic/dirdlgg.cpp:296
+#: ../src/generic/dirdlgg.cpp:598
+#: ../src/generic/filedlgg.cpp:742
+#: ../src/generic/filedlgg.cpp:837
+#: ../src/generic/filedlgg.cpp:851
+#: ../src/generic/filedlgg.cpp:864
+#: ../src/generic/filedlgg.cpp:1170
+#: ../src/generic/filedlgg.cpp:1219
+#: ../src/generic/helpxlp.cpp:243
+#: ../src/gtk/filedlg.cpp:80
+#: ../src/gtk/fontdlg.cpp:72
+msgid "Error"
+msgstr "Hata"
+
+#: ../src/unix/utilsunx.cpp:1176
+#: ../src/unix/utilsunx.cpp:1184
+msgid "Error "
+msgstr "Hata"
+
+#: ../src/generic/dirctrlg.cpp:1304
+#: ../src/generic/dirdlgg.cpp:545
+msgid "Error creating directory"
+msgstr "Dizin yaratýlamadý"
+
+#: ../src/common/imagbmp.cpp:1036
+msgid "Error in reading image DIB ."
+msgstr "DIB imaji okuma hatasý"
+
+#: ../src/common/log.cpp:369
+msgid "Error: "
+msgstr "Hata:"
+
+#: ../src/common/fontmap.cpp:113
+msgid "Esperanto (ISO-8859-3)"
+msgstr "Esperanto (ISO-8859-3)"
+
+#: ../src/generic/progdlgg.cpp:186
+msgid "Estimated time : "
+msgstr "Tahmini süre :"
+
+#: ../src/generic/dirctrlg.cpp:619
+#: ../src/generic/dirdlgg.cpp:216
+msgid "Etcetera"
+msgstr "Ve benzeri"
+
+#: ../src/msw/utilsexc.cpp:588
+#, c-format
+msgid "Execution of command '%s' failed"
+msgstr "'%s' komutunun iþlemesi baþarýsýz oldu"
+
+#: ../src/common/paper.cpp:112
+msgid "Executive, 7 1/4 x 10 1/2 in"
+msgstr "Executive, 7 1/4 x 10 1/2 inç"
+
+#: ../src/common/resourc2.cpp:326
+#: ../src/common/resourc2.cpp:1391
+#: ../src/common/resource.cpp:1838
+#: ../src/common/resource.cpp:1968
+#: ../src/common/resource.cpp:3048
+msgid "Expected '*' whilst parsing resource."
+msgstr "Kaynaðý ayrýþtýrýrken '*' bekleniyor."
+
+#: ../src/common/resourc2.cpp:342
+#: ../src/common/resourc2.cpp:1407
+#: ../src/common/resource.cpp:1855
+#: ../src/common/resource.cpp:1984
+#: ../src/common/resource.cpp:3065
+msgid "Expected '=' whilst parsing resource."
+msgstr "Kaynaðý ayrýþtýrýrken '=' bekleniyor."
+
+#: ../src/common/resourc2.cpp:312
+#: ../src/common/resourc2.cpp:1377
+#: ../src/common/resource.cpp:1824
+#: ../src/common/resource.cpp:1954
+#: ../src/common/resource.cpp:3034
+msgid "Expected 'char' whilst parsing resource."
+msgstr "Kaynaðý ayrýþtýrýrken 'char' bekleniyor."
+
+#: ../src/msw/dialup.cpp:869
+#: ../src/msw/dialup.cpp:874
+#, c-format
+msgid "Failed to %s dialup connection: %s"
+msgstr "Çevirmeli baðlantý %s baþarýsýz: %s"
+
+#: ../src/unix/snglinst.cpp:244
+msgid "Failed to access lock file."
+msgstr "Kilit dosyasýna eriþilemedi."
+
+#: ../src/common/filename.cpp:158
+msgid "Failed to close file handle"
+msgstr "Dosya tanýtýcý kapatýlamadý"
+
+#: ../src/unix/snglinst.cpp:309
+#, c-format
+msgid "Failed to close lock file '%s'"
+msgstr "'%s' kilit dosyasy kapatýlamadý"
+
+#: ../src/msw/clipbrd.cpp:127
+msgid "Failed to close the clipboard."
+msgstr "Pano kapatýlamadý"
+
+#: ../src/msw/dialup.cpp:808
+msgid "Failed to connect: missing username/password."
+msgstr "Baðlanýlamadý: eksik kullanýcý adý/þifre."
+
+#: ../src/msw/dialup.cpp:754
+msgid "Failed to connect: no ISP to dial."
+msgstr "Baðlanýlamadý: çevrilecek ISP yok."
+
+#: ../src/msw/registry.cpp:597
+#, c-format
+msgid "Failed to copy registry value '%s'"
+msgstr "Kayýt deðeri '%s' kopyalanamadý"
+
+#: ../src/msw/registry.cpp:606
+#, c-format
+msgid "Failed to copy the contents of registry key '%s' to '%s'."
+msgstr "Kayýt anahtarý '%s''nin içeriði '%s''e kopyalanamadý"
+
+#: ../src/msw/dde.cpp:924
+msgid "Failed to create DDE string"
+msgstr "DDE dizgisi yaratýlamadý"
+
+#: ../src/msw/mdi.cpp:407
+msgid "Failed to create MDI parent frame."
+msgstr "MDI ana çerçeve yaratýlamadý."
+
+#: ../src/msw/statbr95.cpp:110
+msgid "Failed to create a status bar."
+msgstr "Durum çubuðu yaratýlamadý."
+
+#: ../src/common/filename.cpp:625
+msgid "Failed to create a temporary file name"
+msgstr "Geçici dosya adý yaratýlamadý"
+
+#: ../src/msw/dde.cpp:401
+#, c-format
+msgid "Failed to create connection to server '%s' on topic '%s'"
+msgstr "'%s' merkezine '%s' konusunda baðlantý kurulamadý"
+
+#: ../src/generic/dirctrlg.cpp:1302
+#: ../src/generic/dirdlgg.cpp:543
+msgid "Failed to create directory "
+msgstr "Dizin yaratýlamadý"
+
+#: ../src/msw/mimetype.cpp:168
+#, c-format
+msgid "Failed to create registry entry for '%s' files."
+msgstr "'%s' dosyalarý için kayýt girdisi yaratýlamadý."
+
+#: ../src/msw/fdrepdlg.cpp:442
+#, c-format
+msgid "Failed to create the standard find/replace dialog (error code %d)"
+msgstr "Standart bul/deðiþtir penceresi yaratýlamadý (hata kodu %d)"
+
+#: ../src/html/winpars.cpp:413
+#, c-format
+msgid "Failed to display HTML document in %s encoding"
+msgstr "HTML dökümaný %s kodlamada gösterilemedi"
+
+#: ../src/mac/clipbrd.cpp:162
+#: ../src/msw/clipbrd.cpp:139
+msgid "Failed to empty the clipboard."
+msgstr "Pano temizlenemedi."
+
+#: ../src/msw/dde.cpp:606
+msgid "Failed to establish an advise loop with DDE server"
+msgstr "DDE merkeziyle danýþma döngüsü saðlanamadý"
+
+#: ../src/msw/dialup.cpp:646
+#, c-format
+msgid "Failed to establish dialup connection: %s"
+msgstr "Çevirmeli baðlantý gerçekleþtirilemedi: %s"
+
+#: ../src/unix/utilsunx.cpp:563
+#: ../src/unix/utilsunx.cpp:591
+#, c-format
+msgid "Failed to execute '%s'\n"
+msgstr "'%s' çalýþtýrýlamadý\n"
+
+#: ../src/common/resourc2.cpp:808
+#: ../src/common/resource.cpp:2458
+#, c-format
+msgid "Failed to find XBM resource %s.\n"
+"Forgot to use wxResourceLoadBitmapData?"
+msgstr "%s XBM kaynaðý bulunamadý.\n"
+"wxResourceLoadBitmapData'yý kullanmayý unuttunuz mu?"
+
+#: ../src/common/resourc2.cpp:959
+#: ../src/common/resource.cpp:2608
+#, c-format
+msgid "Failed to find XBM resource %s.\n"
+"Forgot to use wxResourceLoadIconData?"
+msgstr "%s XBM kaynaðý bulunamadý.\n"
+"wxResourceLoadIconData'yý kullanmayý unuttunuz mu?"
+
+#: ../src/common/resourc2.cpp:823
+#: ../src/common/resource.cpp:2473
+#, c-format
+msgid "Failed to find XPM resource %s.\n"
+"Forgot to use wxResourceLoadBitmapData?"
+msgstr "%s XBM kaynaðý bulunamadý.\n"
+"wxResourceLoadBitmapData'yý kullanmayý unuttunuz mu?"
+
+#: ../src/msw/dialup.cpp:706
+#, c-format
+msgid "Failed to get ISP names: %s"
+msgstr "ISP adlarý alýnamadý: %s"
+
+#: ../src/mac/clipbrd.cpp:113
+msgid "Failed to get clipboard data."
+msgstr "Pano verisi alýnamadý."
+
+#: ../src/msw/clipbrd.cpp:628
+msgid "Failed to get data from the clipboard"
+msgstr "Panodan veri alýnamadý"
+
+#: ../src/common/timercmn.cpp:277
+msgid "Failed to get the UTC system time."
+msgstr "UTC sistem zamaný alýnamadý."
+
+#: ../src/common/timercmn.cpp:228
+msgid "Failed to get the local system time"
+msgstr "Yerel sistem zamaný alýnamadý"
+
+#: ../src/univ/theme.cpp:122
+msgid "Failed to initialize GUI: no built-in themes found."
+msgstr "GUI baþlatma baþarýsýz: gömülü tema yok."
+
+#: ../src/msw/helpchm.cpp:80
+msgid "Failed to initialize MS HTML Help."
+msgstr "MS HTML Yardým baþlatýlamadý."
+
+#: ../src/msw/glcanvas.cpp:739
+msgid "Failed to initialize OpenGL"
+msgstr "OpenGL baþlatýlamadý"
+
+#: ../src/unix/threadpsx.cpp:776
+msgid "Failed to join a thread, potential memory leak detected - please restart the program"
+msgstr "Ýþparçacýðýna baðlanýlamadý, olasý bellek sýzýntýsý bulundu - lütfen programý yeniden baþlatýnýz"
+
+#: ../src/msw/utils.cpp:673
+#, c-format
+msgid "Failed to kill process %d"
+msgstr "%d iþi öldürülemedi"
+
+#: ../src/common/dynlib.cpp:263
+#, c-format
+msgid "Failed to load shared library '%s'"
+msgstr "Paylaþýlýmlý kütük '%s' yüklenemedi"
+
+#: ../src/common/dynlib.cpp:251
+#, c-format
+msgid "Failed to load shared library '%s' Error '%s'"
+msgstr "Paylaþýlýmlý kütük '%s' yüklenemedi, hata '%s'"
+
+#: ../src/unix/snglinst.cpp:193
+#, c-format
+msgid "Failed to lock the lock file '%s'"
+msgstr "'%s' kilit dosyasý kilitlenemedi"
+
+#: ../src/common/regex.cpp:251
+#, c-format
+msgid "Failed to match '%s' in regular expression: %s"
+msgstr "Düzenli ifadede '%s' bulunamadý: %s"
+
+#: ../src/common/filename.cpp:1561
+#, c-format
+msgid "Failed to modify file times for '%s'"
+msgstr "Dosya zamanlarý '%s' için düzenlenemedi"
+
+#: ../src/common/filename.cpp:147
+#, c-format
+msgid "Failed to open '%s' for reading"
+msgstr "'%s' okuma için açýlamadý"
+
+#: ../src/common/filename.cpp:614
+msgid "Failed to open temporary file."
+msgstr "Geçici dosya açýlamadý."
+
+#: ../src/msw/clipbrd.cpp:107
+msgid "Failed to open the clipboard."
+msgstr "Pano açýlamadý."
+
+#: ../src/msw/clipbrd.cpp:544
+msgid "Failed to put data on the clipboard"
+msgstr "Veri panoya konulamadý"
+
+#: ../src/unix/snglinst.cpp:253
+msgid "Failed to read PID from lock file."
+msgstr "Kilit dosyasýndan PID okunamadý."
+
+#: ../src/unix/utilsunx.cpp:662
+msgid "Failed to redirect child process input/output"
+msgstr "Alt iþ girdi/çýktýsý yönlendirilemedi"
+
+#: ../src/msw/dde.cpp:285
+#, c-format
+msgid "Failed to register DDE server '%s'"
+msgstr "'%s' DDE merkezine kaydolunamadý"
+
+#: ../src/common/fontmap.cpp:654
+#, c-format
+msgid "Failed to remember the encoding for the charset '%s'."
+msgstr "Karakter kümesi '%s' için kodlama anýmsanamadý."
+
+#: ../src/unix/snglinst.cpp:297
+#, c-format
+msgid "Failed to remove lock file '%s'"
+msgstr "'%s' kilit dosyasý kaldýrýlamadý"
+
+#: ../src/unix/snglinst.cpp:263
+#, c-format
+msgid "Failed to remove stale lock file '%s'."
+msgstr "Eski kilit dosyasý '%s' kaldýrýlamadý."
+
+#: ../src/msw/registry.cpp:443
+#, c-format
+msgid "Failed to rename registry value '%s' to '%s'."
+msgstr "'%s' kayýt deðeri '%s' olarak adlandýrýlamadý."
+
+#: ../src/msw/registry.cpp:543
+#, c-format
+msgid "Failed to rename the registry key '%s' to '%s'."
+msgstr "'%s' kayýt anahtarý '%s' olarak adlandýrýlamadý."
+
+#: ../src/msw/clipbrd.cpp:433
+msgid "Failed to retrieve data from the clipboard."
+msgstr "Panodan veri alýnamadý."
+
+#: ../src/common/filename.cpp:1627
+#, c-format
+msgid "Failed to retrieve file times for '%s'"
+msgstr "'%s' için dosya zamanlarý alýnamadý"
+
+#: ../src/msw/dialup.cpp:470
+msgid "Failed to retrieve text of RAS error message"
+msgstr "RAS hata mesajýnýn içeriði alýnamadý"
+
+#: ../src/msw/clipbrd.cpp:658
+msgid "Failed to retrieve the supported clipboard formats"
+msgstr "Desteklenen pano biçemleri alýnamadý"
+
+#: ../src/msw/dde.cpp:651
+msgid "Failed to send DDE advise notification"
+msgstr "DDE danýþma uyarýsý gönderilemedi"
+
+#: ../src/common/ftp.cpp:368
+#, c-format
+msgid "Failed to set FTP transfer mode to %s."
+msgstr "FTP iletme durumu %s'ye ayarlanamadý."
+
+#: ../src/msw/clipbrd.cpp:305
+msgid "Failed to set clipboard data."
+msgstr "Pano verisi konulamadý."
+
+#: ../src/common/file.cpp:516
+msgid "Failed to set temporary file permissions"
+msgstr "Geçici dosya yetkileri uygulanamadý"
+
+#: ../src/unix/threadpsx.cpp:1093
+#, c-format
+msgid "Failed to set thread priority %d."
+msgstr "Ýþ parçacýðý önceliði %d ayarlanamadý."
+
+#: ../src/common/fs_mem.cpp:168
+#, c-format
+msgid "Failed to store image '%s' to memory VFS!"
+msgstr "'%s' imajý bellek VFS'ye yerleþtirilemedi!"
+
+#: ../src/unix/threadpsx.cpp:1279
+msgid "Failed to terminate a thread."
+msgstr "Ýþ parçacýðý sonlandýrýlamadý."
+
+#: ../src/msw/dde.cpp:625
+msgid "Failed to terminate the advise loop with DDE server"
+msgstr "DDE merkeziyle danýþma döngüsü sonlandýrýlamadý"
+
+#: ../src/msw/dialup.cpp:948
+#, c-format
+msgid "Failed to terminate the dialup connection: %s"
+msgstr "Çevirmeli baðlantý sonlandýrýlamadý: %s"
+
+#: ../src/common/filename.cpp:1576
+#, c-format
+msgid "Failed to touch the file '%s'"
+msgstr "'%s' dosyasýna dokunulamadý"
+
+#: ../src/unix/snglinst.cpp:303
+#, c-format
+msgid "Failed to unlock lock file '%s'"
+msgstr "'%s' kilit dosyasýnýn kilidi kaldýrýlamadý"
+
+#: ../src/msw/dde.cpp:301
+#, c-format
+msgid "Failed to unregister DDE server '%s'"
+msgstr "'%s' DDE merkeziyle kayýt iptali yapýlamadý"
+
+#: ../src/unix/snglinst.cpp:174
+#, c-format
+msgid "Failed to write to lock file '%s'"
+msgstr "'%s' kilit dosyasýna yazýlamadý"
+
+#: ../src/generic/logg.cpp:368
+msgid "Fatal error"
+msgstr "Kritik hata"
+
+#: ../src/common/log.cpp:362
+msgid "Fatal error: "
+msgstr "Kritik hata:"
+
+#: ../src/mac/app.cpp:907
+#: ../src/msw/app.cpp:1396
+msgid "Fatal error: exiting"
+msgstr "Kritik hata: çýkýlýyor"
+
+#: ../src/mgl/bitmap.cpp:544
+#, c-format
+msgid "File %s does not exist."
+msgstr "'%s' dosyasý yok."
+
+#: ../src/generic/filedlgg.cpp:1201
+#: ../src/gtk/filedlg.cpp:69
+#, c-format
+msgid "File '%s' already exists, do you really want to overwrite it?"
+msgstr "'%s' dosyasý zaten var, üstüne yazýlsýn mý?"
+
+#: ../src/common/textcmn.cpp:158
+msgid "File couldn't be loaded."
+msgstr "Dosya yüklenemedi."
+
+#: ../src/common/docview.cpp:295
+#: ../src/common/docview.cpp:331
+#: ../src/common/docview.cpp:1387
+msgid "File error"
+msgstr "Dosya hatasý"
+
+#: ../src/generic/dirctrlg.cpp:666
+#: ../src/generic/dirdlgg.cpp:285
+#: ../src/generic/filedlgg.cpp:851
+msgid "File name exists already."
+msgstr "Dosya adý zaten var."
+
+#: ../src/msw/filedlg.cpp:349
+#, c-format
+msgid "Files (%s)|%s"
+msgstr "Dosyalar (%s)|%s"
+
+#: ../src/html/helpfrm.cpp:400
+msgid "Find"
+msgstr "Bul"
+
+#: ../src/html/helpfrm.cpp:1032
+msgid "Fixed font:"
+msgstr "Sabit yazý tipi:"
+
+#: ../src/common/paper.cpp:118
+msgid "Folio, 8 1/2 x 13 in"
+msgstr "Kitap yapraðý, 8 1/2 x 13 inç"
+
+#: ../src/generic/fontdlgg.cpp:126
+msgid "Font"
+msgstr "Yazý tipi"
+
+#: ../src/html/helpfrm.cpp:1042
+msgid "Font size:"
+msgstr "Yazý boyutu"
+
+#: ../src/unix/utilsunx.cpp:619
+msgid "Fork failed"
+msgstr "Ayrýlma baþarýsýz"
+
+#: ../src/common/dlgcmn.cpp:173
+#: ../src/generic/helpwxht.cpp:158
+msgid "Forward"
+msgstr "Ýleri"
+
+#: ../src/common/resourc2.cpp:295
+#: ../src/common/resourc2.cpp:1360
+#: ../src/common/resource.cpp:1807
+#: ../src/common/resource.cpp:1937
+#: ../src/common/resource.cpp:3017
+msgid "Found "
+msgstr "Bulundu"
+
+#: ../src/html/helpfrm.cpp:721
+#, c-format
+msgid "Found %i matches"
+msgstr "%i benzer bulundu"
+
+#: ../src/generic/prntdlgg.cpp:185
+msgid "From:"
+msgstr "Kaynak:"
+
+#: ../src/common/imaggif.cpp:74
+msgid "GIF: data stream seems to be truncated."
+msgstr "GIF: veri kýrpýlmýþ görülüyor."
+
+#: ../src/common/imaggif.cpp:58
+msgid "GIF: error in GIF image format."
+msgstr "GIF: imaj biçemi hatasý."
+
+#: ../src/common/imaggif.cpp:61
+msgid "GIF: not enough memory."
+msgstr "GIF: yetersiz bellek."
+
+#: ../src/common/imaggif.cpp:64
+msgid "GIF: unknown error!!!"
+msgstr "GIF: bilinmeyen hata!!!"
+
+#: ../src/univ/themes/gtk.cpp:578
+msgid "GTK+ theme"
+msgstr "GTK+ temasý"
+
+#: ../src/common/paper.cpp:142
+msgid "German Legal Fanfold, 8 1/2 x 13 in"
+msgstr "Alman Yasal Fanfold, 8 1/2 x 13 inç"
+
+#: ../src/common/paper.cpp:141
+msgid "German Std Fanfold, 8 1/2 x 12 in"
+msgstr "Alman Standart Fanfold, 8 1/2 x 12 inç"
+
+#: ../src/common/image.cpp:753
+msgid "GetUnusedColour:: No Unused Color in image "
+msgstr "GetUnusedColour:: Ýmajda kullanýlmayan renk yok"
+
+#: ../src/html/helpfrm.cpp:566
+msgid "Go back"
+msgstr "Geri git"
+
+#: ../src/html/helpfrm.cpp:569
+msgid "Go forward"
+msgstr "Ýleri git"
+
+#: ../src/html/helpfrm.cpp:574
+msgid "Go one level up in document hierarchy"
+msgstr "Döküman sýradüzeninde bir seviye yukarý git"
+
+#: ../src/generic/filedlgg.cpp:1000
+msgid "Go to home directory"
+msgstr "Ev dizinine git"
+
+#: ../src/generic/filedlgg.cpp:994
+msgid "Go to parent directory"
+msgstr "Ana dizine git"
+
+#: ../src/common/fontmap.cpp:117
+msgid "Greek (ISO-8859-7)"
+msgstr "Yunanca (ISO-8859-7)"
+
+#: ../src/html/htmlwin.cpp:360
+#, c-format
+msgid "HTML anchor %s does not exist."
+msgstr "%s HTML çengeli yok."
+
+#: ../src/html/helpfrm.cpp:1350
+msgid "HTML files (*.htm)|*.htm|HTML files (*.html)|*.html|Help books (*.htb)|*.htb|Help books (*.zip)|*.zip|HTML Help Project (*.hhp)|*.hhp|All files (*.*)|*"
+msgstr "HTML dosyalarý (*.htm)|*.htm|HTML dosyalarý (*.html)|*.html|Yardým kitaplarý (*.htb)|*.htb|Yardým kitaplarý (*.zip)|*.zip|HTML Yardým Projesi (*.hhp)|*.hhp|Tüm dosyalar (*.*)|*"
+
+#: ../src/common/fontmap.cpp:118
+msgid "Hebrew (ISO-8859-8)"
+msgstr "Ýbranice (ISO-8859-8)"
+
+#: ../src/common/dlgcmn.cpp:185
+#: ../src/generic/proplist.cpp:530
+#: ../src/html/helpfrm.cpp:262
+#: ../src/msw/mdi.cpp:1304
+msgid "Help"
+msgstr "Yardým"
+
+#: ../src/html/helpfrm.cpp:1015
+msgid "Help Browser Options"
+msgstr "Yardým Gezgini Seçenekleri"
+
+#: ../src/generic/helphtml.cpp:319
+#: ../src/generic/helphtml.cpp:320
+msgid "Help Index"
+msgstr "Yardým Dizini"
+
+#: ../src/html/helpfrm.cpp:1334
+msgid "Help Printing"
+msgstr "Yardým Yazdýrma"
+
+#: ../src/generic/helpwxht.cpp:251
+#: ../src/html/helpctrl.cpp:44
+#, c-format
+msgid "Help: %s"
+msgstr "Yardým: %s"
+
+#: ../src/common/imagbmp.cpp:103
+msgid "ICO: Error Image too tall for an icon."
+msgstr "ICO: Hata: Ýmaj ikon için çok uzun."
+
+#: ../src/common/imagbmp.cpp:109
+msgid "ICO: Error Image too wide for an icon."
+msgstr "ICO: Hata: Ýmaj ikon için çok geniþ."
+
+#: ../src/common/imagbmp.cpp:201
+msgid "ICO: Error calculating size of DIB ."
+msgstr "ICO: Hata: DIB boyutu hesaplama."
+
+#: ../src/common/imagbmp.cpp:194
+msgid "ICO: Error calculating size of Mask DIB ."
+msgstr "ICO: Hata: Maske DIB boyutu hesaplama."
+
+#: ../src/common/imagbmp.cpp:186
+msgid "ICO: Error calculating size of XOR DIB ."
+msgstr "ICO: Hata: XOR DIB boyutu hesaplama."
+
+#: ../src/common/imagbmp.cpp:1049
+msgid "ICO: Error in reading mask DIB."
+msgstr "ICO: Hata: Maske DIB okuma."
+
+#: ../src/common/imagbmp.cpp:130
+msgid "ICO: Error writing ICONDIR header."
+msgstr "ICO: Hata: ICONDIR baþlýðý yazma."
+
+#: ../src/common/imagbmp.cpp:231
+msgid "ICO: Error writing ICONDIRENTRY header."
+msgstr "ICO: Hata: ICONDIRENTRY baþlýðý yazma."
+
+#: ../src/common/imagbmp.cpp:248
+msgid "ICO: Error writing Mask DIB ."
+msgstr "ICO: Hata: Maske DIB yazma."
+
+#: ../src/common/imagbmp.cpp:240
+msgid "ICO: Error writing XOR DIB ."
+msgstr "ICO: Hata: XOR DIB yazma."
+
+#: ../src/common/resourc2.cpp:989
+#: ../src/common/resourc2.cpp:1000
+#: ../src/common/resource.cpp:2638
+#: ../src/common/resource.cpp:2649
+#, c-format
+msgid "Icon resource specification %s not found."
+msgstr "%s ikon kaynak tanýmý bulunamadý."
+
+#: ../src/common/resource.cpp:250
+msgid "Ill-formed resource file syntax."
+msgstr "Hatalý kaynak dosyasý sözdizimi."
+
+#: ../src/generic/dirctrlg.cpp:648
+#: ../src/generic/dirdlgg.cpp:267
+#: ../src/generic/filedlgg.cpp:837
+msgid "Illegal directory name."
+msgstr "Geçersiz dizin adý."
+
+#: ../src/generic/filedlgg.cpp:1170
+msgid "Illegal file specification."
+msgstr "Geçersiz dosya tanýmý."
+
+#: ../src/common/image.cpp:776
+msgid "Image and Mask have different sizes"
+msgstr "Ýmaj ve Maske farklý boyutlarda"
+
+#: ../src/msw/textctrl.cpp:269
+msgid "Impossible to create a rich edit control, using simple text control instead. Please reinstall riched32.dll"
+msgstr "Zengin metin kontrolü yaratýlamýyor, yerine basit yazý kontrolü kullanýlýyor. Lütfen riched32.dll'yi yeniden kurunuz."
+
+#: ../src/unix/utilsunx.cpp:367
+msgid "Impossible to get child process input"
+msgstr "Alt iþ girdisi alýnamýyor"
+
+#: ../src/common/filefn.cpp:1088
+#, c-format
+msgid "Impossible to get permissions for file '%s'"
+msgstr "'%s' dosyasý için izinler alýnamýyor"
+
+#: ../src/common/filefn.cpp:1102
+#, c-format
+msgid "Impossible to overwrite the file '%s'"
+msgstr "'%s' dosyasýnýn üstüne yazýlamýyor"
+
+#: ../src/common/filefn.cpp:1152
+#, c-format
+msgid "Impossible to set permissions for the file '%s'"
+msgstr "'%s' dosyasý için izinler konulamýyor"
+
+#: ../src/html/helpdata.cpp:319
+msgid "Incorrect version of HTML help book"
+msgstr "Hatalý HTML yardým kitabý sürümü"
+
+#: ../src/html/helpfrm.cpp:432
+msgid "Index"
+msgstr "Dizin"
+
+#: ../src/common/fontmap.cpp:122
+msgid "Indian (ISO-8859-12)"
+msgstr "Hintçe (ISO-8859-12)"
+
+#: ../src/common/imagtiff.cpp:175
+msgid "Invalid TIFF image index."
+msgstr "Geçersiz TIFF imaj indeksi."
+
+#: ../contrib/src/xrc/xmlres.cpp:313
+#, c-format
+msgid "Invalid XRC resource '%s': doesn't have root node 'resource'."
+msgstr "Geçersiz '%s' XRC kaynaðý: 'resource' kök düðümü yok."
+
+#: ../src/common/appcmn.cpp:282
+#, c-format
+msgid "Invalid display mode specification '%s'."
+msgstr "Geçersiz '%s' görüntü durum tanýmý."
+
+#: ../src/unix/snglinst.cpp:281
+#, c-format
+msgid "Invalid lock file '%s'."
+msgstr "Geçersiz kilit dosyasý '%s'."
+
+#: ../src/common/regex.cpp:173
+#, c-format
+msgid "Invalid regular expression '%s': %s"
+msgstr "Geçersiz düzenli ifade '%s': %s"
+
+#: ../src/generic/fontdlgg.cpp:215
+msgid "Italic"
+msgstr "Eðik"
+
+#: ../src/common/paper.cpp:137
+msgid "Italy Envelope, 110 x 230 mm"
+msgstr "Ýtalyan Zarf, 110 x 230 mm"
+
+#: ../src/common/imagjpeg.cpp:206
+msgid "JPEG: Couldn't load - file is probably corrupted."
+msgstr "JPEG: Yüklenemedi - dosya muhtemelen kýrpýlmýþ."
+
+#: ../src/common/imagjpeg.cpp:320
+msgid "JPEG: Couldn't save image."
+msgstr "JPEG: imaj kaydedilemedi."
+
+#: ../src/common/fontmap.cpp:126
+msgid "KOI8-R"
+msgstr "KOI8-R"
+
+#: ../src/generic/dcpsg.cpp:2260
+#: ../src/generic/prntdlgg.cpp:439
+#: ../src/generic/prntdlgg.cpp:635
+msgid "Landscape"
+msgstr "Yatay"
+
+#: ../src/common/paper.cpp:110
+msgid "Ledger, 17 x 11 in"
+msgstr "Ledger, 17 x 11 inç"
+
+#: ../src/generic/prntdlgg.cpp:647
+msgid "Left margin (mm):"
+msgstr "Sol boþluk (mm):"
+
+#: ../src/common/paper.cpp:103
+msgid "Legal, 8 1/2 x 14 in"
+msgstr "Legal, 8 1/2 x 14 inç"
+
+#: ../src/common/paper.cpp:108
+msgid "Letter Small, 8 1/2 x 11 in"
+msgstr "Letter Küçük, 8 1/2 x 11 inç"
+
+#: ../src/common/paper.cpp:102
+msgid "Letter, 8 1/2 x 11 in"
+msgstr "Letter, 8 1/2 x 11 inç"
+
+#: ../src/generic/fontdlgg.cpp:218
+msgid "Light"
+msgstr "Açýk"
+
+#: ../src/generic/filedlgg.cpp:1406
+#: ../src/gtk/filedlg.cpp:249
+#: ../src/motif/filedlg.cpp:357
+#: ../src/msw/filedlg.cpp:514
+#, c-format
+msgid "Load %s file"
+msgstr "%s dosyasýný yükle"
+
+#: ../src/html/htmlwin.cpp:285
+msgid "Loading : "
+msgstr "Yükleniyor :"
+
+#: ../src/common/imagbmp.cpp:660
+#: ../src/common/imagbmp.cpp:674
+msgid "Loading DIB : Couldn't allocate memory."
+msgstr "DIB yükleme: Bellek alýnamadý."
+
+#: ../src/common/imagpnm.cpp:72
+msgid "Loading Grey Ascii PNM image is not yet implemented."
+msgstr "Gri Ascii PNM imaj yükleme henüz uygulanmadý."
+
+#: ../src/common/imagpnm.cpp:75
+msgid "Loading Grey Raw PNM image is not yet implemented."
+msgstr "Gri Ham PNM imaj yükleme henüz uygulanmadý."
+
+#: ../src/generic/logg.cpp:538
+#, c-format
+msgid "Log saved to the file '%s'."
+msgstr "Günlük '%s' dosyasýna kaydedildi."
+
+#: ../src/gtk/mdi.cpp:435
+msgid "MDI child"
+msgstr "MDI "
+
+#: ../src/msw/helpchm.cpp:70
+msgid "MS HTML Help functions are unavailable because the MS HTML Help library is not installed on this machine. Please install it."
+msgstr "MS HTML Yardým kütüphanesi kurulu olmadýðý için yardým iþlevleri kullanýlamýyor. Lütfen kurunuz."
+
+#: ../src/unix/mimetype.cpp:2412
+#, c-format
+msgid "Mailcap file %s, line %d: incomplete entry ignored."
+msgstr "%s Mailcap dosyasý, satýr %d: eksik girdi gözardý edildi."
+
+#: ../src/generic/fdrepdlg.cpp:152
+msgid "Match case"
+msgstr "Küçük büyük harf eþle"
+
+#: ../src/common/fs_mem.cpp:145
+#, c-format
+msgid "Memory VFS already contains file '%s'!"
+msgstr "Bellek VFS zaten '%s' dosyasýný içeriyor!"
+
+#: ../src/unix/mimetype.cpp:2077
+#, c-format
+msgid "Mime.types file %s, line %d: unterminated quoted string."
+msgstr "%s Mime tip dosyasý, satýr %d: sonlandýrýlmamýþ týrnaklý dizgi."
+
+#: ../src/mgl/app.cpp:169
+#, c-format
+msgid "Mode %ix%i-%i not available."
+msgstr "%ix%i-%i durumu yok."
+
+#: ../src/generic/fontdlgg.cpp:210
+msgid "Modern"
+msgstr "Modern"
+
+#: ../src/common/paper.cpp:138
+msgid "Monarch Envelope, 3 7/8 x 7 1/2 in"
+msgstr "Monarþi Zarf, 3 7/8 x 7 1/2 inç"
+
+#: ../src/common/dlgcmn.cpp:182
+msgid "More..."
+msgstr "Daha..."
+
+#: ../src/generic/dirctrlg.cpp:615
+#: ../src/generic/dirdlgg.cpp:212
+msgid "Mounted Devices"
+msgstr "Baðlý Araçlar"
+
+#: ../src/generic/dirdlgg.cpp:207
+msgid "My Harddisk"
+msgstr "Sabit diskim"
+
+#: ../src/generic/dirctrlg.cpp:614
+#: ../src/generic/dirdlgg.cpp:211
+msgid "My Home"
+msgstr "Evim"
+
+#: ../src/generic/filedlgg.cpp:644
+msgid "Name"
+msgstr "Ýsim"
+
+#: ../src/generic/dirctrlg.cpp:1255
+#: ../src/generic/dirdlgg.cpp:420
+msgid "New..."
+msgstr "Yeni..."
+
+#: ../src/generic/filedlgg.cpp:727
+msgid "NewName"
+msgstr "Yeni isim"
+
+#: ../src/html/helpfrm.cpp:580
+msgid "Next page"
+msgstr "Sonraki sayfa"
+
+#: ../src/common/dlgcmn.cpp:152
+#: ../src/common/dlgcmn.cpp:162
+#: ../src/mac/msgdlg.cpp:84
+#: ../src/motif/msgdlg.cpp:180
+msgid "No"
+msgstr "Hayýr"
+
+#: ../src/common/image.cpp:784
+msgid "No Unused Color in image being masked"
+msgstr "Maskelenen imajda kullanýlmamýþ renk yok"
+
+#: ../src/common/resourc2.cpp:814
+#: ../src/common/resourc2.cpp:965
+#: ../src/common/resource.cpp:2464
+#: ../src/common/resource.cpp:2614
+msgid "No XBM facility available!"
+msgstr "XBM olanaðý yok!"
+
+#: ../src/common/resourc2.cpp:983
+#: ../src/common/resource.cpp:2632
+msgid "No XPM icon facility available!"
+msgstr "XPM ikon olanaðý yok!"
+
+#: ../src/generic/helphtml.cpp:314
+msgid "No entries found."
+msgstr "Girdi bulunamadý."
+
+#: ../src/common/fontmap.cpp:845
+#, c-format
+msgid ""
+"No font for displaying text in encoding '%s' found,\n"
+"but an alternative encoding '%s' is available.\n"
+"Do you want to use this encoding (otherwise you will have to choose another one)?"
+msgstr ""
+"'%s' kodlamada gösterim için yazýtipi yok,\n"
+"ama alternatif '%s' kodlama var.\n"
+"Bu kodlamayý kullanmak istiyor musunuz (aksi halde baþka bir tane seçmelisiniz) ?"
+
+#: ../src/common/fontmap.cpp:850
+#, c-format
+msgid ""
+"No font for displaying text in encoding '%s' found.\n"
+"Would you like to select a font to be used for this encoding\n"
+"(otherwise the text in this encoding will not be shown correctly)?"
+msgstr ""
+"'%s' kodlamada gösterim için yazýtipi yok.\n"
+"Bu kodlamayý kullanmak için bir yazýtipi seçmek istiyor musunuz\n"
+"(aksi halde bu kodlamadaki yazý doðru olarak gösterilmeyecektir) ?"
+
+#: ../contrib/src/xrc/xmlres.cpp:396
+#, c-format
+msgid "No handler found for XML node '%s', class '%s'!"
+msgstr "'%s' XML düðümü için iþleyici bulunamadý, sýnýf '%s'!"
+
+#: ../src/common/image.cpp:1009
+msgid "No handler found for image type."
+msgstr "Ýmaj tipi için iþleyici bulunamadý."
+
+#: ../src/common/image.cpp:1017
+#: ../src/common/image.cpp:1051
+#, c-format
+msgid "No image handler for type %d defined."
+msgstr "%d tipi için imaj iþleyici tanýmlanmamýþ."
+
+#: ../src/common/image.cpp:1035
+#: ../src/common/image.cpp:1067
+#, c-format
+msgid "No image handler for type %s defined."
+msgstr "%s tipi için imaj iþleyici tanýmlanmamýþ."
+
+#: ../src/html/helpfrm.cpp:710
+msgid "No matching page found yet"
+msgstr "Henüz çakýþan bir sayfa bulunamadý"
+
+#: ../src/common/fontmap.cpp:120
+msgid "Nordic (ISO-8859-10)"
+msgstr "Norveçce (ISO-8859-10)"
+
+#: ../src/generic/fontdlgg.cpp:214
+#: ../src/generic/fontdlgg.cpp:217
+msgid "Normal"
+msgstr "Normal"
+
+#: ../src/html/helpfrm.cpp:1024
+msgid "Normal font:"
+msgstr "Normal yazý tipi:"
+
+#: ../src/common/paper.cpp:122
+msgid "Note, 8 1/2 x 11 in"
+msgstr "Not, 8 1/2 x 11 inç"
+
+#: ../src/common/dlgcmn.cpp:168
+#: ../src/generic/dcpsg.cpp:2268
+#: ../src/generic/dirctrlg.cpp:1247
+#: ../src/generic/dirdlgg.cpp:416
+#: ../src/generic/filedlgg.cpp:1032
+#: ../src/generic/fontdlgg.cpp:258
+#: ../src/generic/logg.cpp:723
+#: ../src/generic/prntdlgg.cpp:465
+#: ../src/generic/proplist.cpp:513
+#: ../src/gtk/filedlg.cpp:167
+#: ../src/gtk/fontdlg.cpp:172
+#: ../src/html/helpfrm.cpp:1052
+msgid "OK"
+msgstr "Tamam"
+
+#: ../src/html/helpfrm.cpp:588
+#: ../src/html/helpfrm.cpp:1345
+msgid "Open HTML document"
+msgstr "HTML dökümaný aç"
+
+#: ../src/generic/dirctrlg.cpp:677
+#: ../src/generic/dirctrlg.cpp:1391
+#: ../src/generic/dirdlgg.cpp:296
+#: ../src/generic/dirdlgg.cpp:598
+#: ../src/generic/filedlgg.cpp:742
+#: ../src/generic/filedlgg.cpp:864
+msgid "Operation not permitted."
+msgstr "Ýþleme izin verilmiyor."
+
+#: ../src/common/cmdline.cpp:627
+#, c-format
+msgid "Option '%s' requires a value, '=' expected."
+msgstr "Seçenek '%s' bir deðer gerektirir, '=' bekleniyor."
+
+#: ../src/common/cmdline.cpp:647
+#, c-format
+msgid "Option '%s' requires a value."
+msgstr "Seçenek '%s' bir deðer gerektirir."
+
+#: ../src/common/cmdline.cpp:708
+#, c-format
+msgid "Option '%s': '%s' cannot be converted to a date."
+msgstr "Seçenek '%s': '%s' tarihe çevrilemiyor."
+
+#: ../src/generic/prntdlgg.cpp:445
+msgid "Options"
+msgstr "Seçenekler"
+
+#: ../src/generic/prntdlgg.cpp:441
+#: ../src/generic/prntdlgg.cpp:636
+msgid "Orientation"
+msgstr "Yönlendirme"
+
+#: ../src/common/imagpcx.cpp:461
+#: ../src/common/imagpcx.cpp:484
+msgid "PCX: couldn't allocate memory"
+msgstr "PCX: bellek yaratýlamadý."
+
+#: ../src/common/imagpcx.cpp:460
+msgid "PCX: image format unsupported"
+msgstr "PCX: imaj biçemi desteklenmiyor"
+
+#: ../src/common/imagpcx.cpp:483
+msgid "PCX: invalid image"
+msgstr "PCX: geçersiz imaj"
+
+#: ../src/common/imagpcx.cpp:447
+msgid "PCX: this is not a PCX file."
+msgstr "PCX: bu bir PCX dosyasý deðil."
+
+#: ../src/common/imagpcx.cpp:463
+#: ../src/common/imagpcx.cpp:485
+msgid "PCX: unknown error !!!"
+msgstr "PCX: bilinmeyen hata !!!"
+
+#: ../src/common/imagpcx.cpp:462
+msgid "PCX: version number too low"
+msgstr "PCX: sürüm numarasý çok düþük"
+
+#: ../src/common/imagpnm.cpp:96
+msgid "PNM: Couldn't allocate memory."
+msgstr "PNM: bellek yaratýlamadý."
+
+#: ../src/common/imagpnm.cpp:80
+msgid "PNM: File format is not recognized."
+msgstr "PNM: Dosya biçemi tanýmlanamadý."
+
+#: ../src/common/imagpnm.cpp:112
+msgid "PNM: File seems truncated."
+msgstr "PNM: Dosya kýrpýlmýþ görünüyor."
+
+#: ../src/common/prntbase.cpp:736
+#, c-format
+msgid "Page %d"
+msgstr "Sayfa %d"
+
+#: ../src/common/prntbase.cpp:734
+#, c-format
+msgid "Page %d of %d"
+msgstr "Sayfa %d / %d"
+
+#: ../src/generic/prntdlgg.cpp:602
+msgid "Page Setup"
+msgstr "Sayfa düzeni"
+
+#: ../src/generic/prntdlgg.cpp:162
+msgid "Pages"
+msgstr "Sayfalar"
+
+#: ../src/generic/prntdlgg.cpp:553
+#: ../src/generic/prntdlgg.cpp:624
+#: ../src/generic/prntdlgg.cpp:806
+msgid "Paper Size"
+msgstr "Kaðýt boyutu"
+
+#: ../src/generic/prntdlgg.cpp:431
+#: ../src/generic/prntdlgg.cpp:613
+#: ../src/generic/prntdlgg.cpp:802
+msgid "Paper size"
+msgstr "Kaðýt boyutu"
+
+#: ../src/generic/filedlgg.cpp:648
+msgid "Permissions"
+msgstr "Yetkiler"
+
+#: ../src/unix/utilsunx.cpp:562
+#: ../src/unix/utilsunx.cpp:590
+msgid "Pipe creation failed"
+msgstr "Boru yaratýlamadý"
+
+#: ../src/gtk/fontdlg.cpp:72
+msgid "Please choose a valid font."
+msgstr "Lütfen geçerli bir yazý tipi seçiniz."
+
+#: ../src/generic/filedlgg.cpp:1219
+#: ../src/gtk/filedlg.cpp:80
+msgid "Please choose an existing file."
+msgstr "Lütfen varolan bir dosya seçiniz."
+
+#: ../src/msw/dialup.cpp:775
+msgid "Please choose which ISP do you want to connect to"
+msgstr "Lütfen baðlanmak istediðiniz ISP'yi seçiniz"
+
+#: ../src/msw/listctrl.cpp:491
+#, c-format
+msgid ""
+"Please install a newer version of comctl32.dll\n"
+"(at least version 4.70 is required but you have %d.%02d)\n"
+"or this program won't operate correctly."
+msgstr ""
+"Lütfen comctl32.dll'nin daha yeni bir sürümünü kurunuz\n"
+"(en azýndan sürüm 4.70 gerekmekte ama %d.%02d var)\n"
+"aksi halde bu program düzgün olarak çalýþamaz."
+
+#: ../src/common/prntbase.cpp:107
+msgid "Please wait..."
+msgstr "Lütfen bekleyiniz..."
+
+#: ../src/generic/dcpsg.cpp:2259
+#: ../src/generic/prntdlgg.cpp:438
+#: ../src/generic/prntdlgg.cpp:634
+msgid "Portrait"
+msgstr "Dikey"
+
+#: ../src/generic/dcpsg.cpp:389
+msgid "PostScript"
+msgstr "PostScript"
+
+#: ../src/generic/prntdlgg.cpp:270
+msgid "PostScript file"
+msgstr "PostScript dosyasý"
+
+#: ../src/generic/dcpsg.cpp:2301
+msgid "PostScript:"
+msgstr "PostScript:"
+
+#: ../src/generic/dcpsg.cpp:2264
+msgid "Preview Only"
+msgstr "Sadece önizleme"
+
+#: ../src/html/helpfrm.cpp:1046
+msgid "Preview:"
+msgstr "Önizleme:"
+
+#: ../src/html/helpfrm.cpp:577
+msgid "Previous page"
+msgstr "Önceki sayfa"
+
+#: ../src/generic/prntdlgg.cpp:111
+#: ../src/generic/prntdlgg.cpp:125
+msgid "Print"
+msgstr "Yazdýr"
+
+#: ../src/common/docview.cpp:896
+msgid "Print Preview"
+msgstr "Baský Önizleme"
+
+#: ../src/common/prntbase.cpp:691
+#: ../src/common/prntbase.cpp:715
+msgid "Print Preview Failure"
+msgstr "Baský Önizleme Hatasý"
+
+#: ../src/generic/prntdlgg.cpp:170
+msgid "Print Range"
+msgstr "Aralýk yazdýr"
+
+#: ../src/generic/prntdlgg.cpp:406
+#: ../src/generic/prntdlgg.cpp:413
+msgid "Print Setup"
+msgstr "Yazdýrma ayarlarý"
+
+#: ../src/generic/prntdlgg.cpp:453
+msgid "Print in colour"
+msgstr "Renkli yazdýr"
+
+#: ../src/generic/prntdlgg.cpp:455
+msgid "Print spooling"
+msgstr "Yazdýrma kuyruðu"
+
+#: ../src/html/helpfrm.cpp:594
+msgid "Print this page"
+msgstr "Sayfayý yazdýr"
+
+#: ../src/generic/dcpsg.cpp:2263
+#: ../src/generic/prntdlgg.cpp:148
+msgid "Print to File"
+msgstr "Dosyaya yazdýr"
+
+#: ../src/common/prntbase.cpp:366
+msgid "Print..."
+msgstr "Yazdýr..."
+
+#: ../src/generic/dcpsg.cpp:2274
+msgid "Printer Command: "
+msgstr "Yazdýrma komutu:"
+
+#: ../src/generic/dcpsg.cpp:2279
+msgid "Printer Options: "
+msgstr "Yazýcý Seçenekleri:"
+
+#: ../src/generic/dcpsg.cpp:358
+msgid "Printer Settings"
+msgstr "Yazýcý Ayarlarý:"
+
+#: ../src/generic/prntdlgg.cpp:457
+msgid "Printer command:"
+msgstr "Yazdýrma komutu:"
+
+#: ../src/generic/prntdlgg.cpp:147
+msgid "Printer options"
+msgstr "Yazýcý seçenekleri"
+
+#: ../src/generic/prntdlgg.cpp:461
+msgid "Printer options:"
+msgstr "Yazýcý seçenekleri:"
+
+#: ../src/generic/prntdlgg.cpp:680
+msgid "Printer..."
+msgstr "Yazýcý..."
+
+#: ../src/common/prntbase.cpp:106
+#: ../src/common/prntbase.cpp:148
+msgid "Printing"
+msgstr "Yazdýrýlýyor"
+
+#: ../src/common/prntbase.cpp:120
+msgid "Printing Error"
+msgstr "Yazdýrma hatasý"
+
+#: ../src/generic/printps.cpp:220
+#, c-format
+msgid "Printing page %d..."
+msgstr "Yazdýrýlan sayfa %d..."
+
+#: ../src/generic/printps.cpp:180
+msgid "Printing..."
+msgstr "Yazdýrýlýyor..."
+
+#: ../src/common/log.cpp:363
+msgid "Program aborted."
+msgstr "Program durduruldu."
+
+#: ../src/common/paper.cpp:119
+msgid "Quarto, 215 x 275 mm"
+msgstr "Quarto, 215 x 275 mm"
+
+#: ../src/generic/logg.cpp:1022
+msgid "Question"
+msgstr "Soru"
+
+#: ../src/common/ffile.cpp:125
+#: ../src/common/ffile.cpp:146
+#, c-format
+msgid "Read error on file '%s'"
+msgstr "'%s' dosyasýnda okuma hatasý"
+
+#: ../src/msw/registry.cpp:535
+#, c-format
+msgid "Registry key '%s' already exists."
+msgstr "'%s' kayýt anahtarý zaten var."
+
+#: ../src/msw/registry.cpp:504
+#, c-format
+msgid "Registry key '%s' does not exist, cannot rename it."
+msgstr "'%s' kayýt anahtarý yok, yeniden adlandýrýlamýyor."
+
+#: ../src/msw/registry.cpp:631
+#, c-format
+msgid ""
+"Registry key '%s' is needed for normal system operation,\n"
+"deleting it will leave your system in unusable state:\n"
+"operation aborted."
+msgstr ""
+"'%s' kayýt anahtarý normal sistem iþlemi için gerekiyor,\n"
+"silinmesi sistemi kararsýz bir hale getirecektir:\n"
+"iþlem durduruldu."
+
+#: ../src/msw/registry.cpp:435
+#, c-format
+msgid "Registry value '%s' already exists."
+msgstr "'%s' kayýt deðeri zaten var."
+
+#: ../src/generic/helphtml.cpp:319
+msgid "Relevant entries:"
+msgstr "Ýlgili girdiler:"
+
+#: ../src/generic/progdlgg.cpp:194
+msgid "Remaining time : "
+msgstr "Kalan süre :"
+
+#: ../src/html/helpfrm.cpp:329
+msgid "Remove current page from bookmarks"
+msgstr "Geçerli sayfayý yer-imlerinden çýkar"
+
+#: ../src/generic/fdrepdlg.cpp:177
+msgid "Replace &all"
+msgstr "Tümünü deðiþtir"
+
+#: ../src/generic/fdrepdlg.cpp:129
+msgid "Replace with:"
+msgstr "Yeni deðer:"
+
+#: ../contrib/src/xrc/xmlres.cpp:330
+msgid "Resource files must have same version number!"
+msgstr "Kaynak dosyalarý ayný sürüme sahip olmalýdýr!"
+
+#: ../src/generic/prntdlgg.cpp:659
+msgid "Right margin (mm):"
+msgstr "Sað boþluk (mm):"
+
+#: ../src/generic/fontdlgg.cpp:208
+msgid "Roman"
+msgstr "Roman"
+
+#: ../src/generic/filedlgg.cpp:1422
+#: ../src/gtk/filedlg.cpp:265
+#: ../src/motif/filedlg.cpp:359
+#: ../src/msw/filedlg.cpp:516
+#, c-format
+msgid "Save %s file"
+msgstr "%s dosyasýný kaydet"
+
+#: ../src/common/docview.cpp:248
+msgid "Save as"
+msgstr "Farklý kaydet"
+
+#: ../src/generic/logg.cpp:471
+msgid "Save log contents to file"
+msgstr "Günlük içeriðini dosyaya kaydet"
+
+#: ../src/generic/fontdlgg.cpp:211
+msgid "Script"
+msgstr "Betik"
+
+#: ../src/generic/helpwxht.cpp:161
+#: ../src/html/helpfrm.cpp:475
+#: ../src/html/helpfrm.cpp:495
+msgid "Search"
+msgstr "Ara"
+
+#: ../src/html/helpfrm.cpp:477
+msgid "Search contents of help book(s) for all occurences of the text you typed above"
+msgstr "Yukarda yazdýðýnýz yazýnýn tüm tekrarlarý için yardým kitaplarý içeriðini araþtýr"
+
+#: ../src/generic/fdrepdlg.cpp:158
+msgid "Search direction"
+msgstr "Arama yönü"
+
+#: ../src/generic/fdrepdlg.cpp:117
+msgid "Search for:"
+msgstr "Aranan:"
+
+#: ../src/html/helpfrm.cpp:871
+msgid "Search in all books"
+msgstr "Tüm kitaplarda ara"
+
+#: ../src/html/helpfrm.cpp:710
+msgid "Searching..."
+msgstr "Aranýyor..."
+
+#: ../src/generic/dirctrlg.cpp:488
+#: ../src/generic/dirdlgg.cpp:190
+msgid "Sections"
+msgstr "Bölümler"
+
+#: ../src/common/ffile.cpp:213
+#, c-format
+msgid "Seek error on file '%s'"
+msgstr "'%s' dosyasýnda arama hatasý"
+
+#: ../src/common/docview.cpp:1490
+msgid "Select a document template"
+msgstr "Bir döküman þablonu seçiniz"
+
+#: ../src/common/docview.cpp:1556
+msgid "Select a document view"
+msgstr "Bir döküman görünümü seçiniz"
+
+#: ../src/common/docview.cpp:1370
+#: ../src/common/docview.cpp:1421
+msgid "Select a file"
+msgstr "Bir dosya seçiniz"
+
+#: ../src/generic/dcpsg.cpp:2262
+msgid "Send to Printer"
+msgstr "Yazýcýya gönder"
+
+#: ../src/common/cmdline.cpp:664
+#, c-format
+msgid "Separator expected after the option '%s'."
+msgstr "'%s' seçeneðinden sonra ayraç bekleniyor."
+
+#: ../src/msw/glcanvas.cpp:441
+msgid "SetPixelFormat failed."
+msgstr "SetPixelFormat baþarýsýz oldu."
+
+#: ../src/common/dlgcmn.cpp:179
+msgid "Setup"
+msgstr "Kur"
+
+#: ../src/generic/prntdlgg.cpp:153
+msgid "Setup..."
+msgstr "Kur..."
+
+#: ../src/msw/dialup.cpp:546
+msgid "Several active dialup connections found, choosing one randomly."
+msgstr "Birçok aktif çevirmeli baðlantý bulundu, biri rasgele seçiliyor."
+
+#: ../src/html/helpfrm.cpp:391
+msgid "Show all"
+msgstr "Tümünü göster"
+
+#: ../src/html/helpfrm.cpp:425
+msgid "Show all items in index"
+msgstr "Dizindeki tüm öðeleri göster"
+
+#: ../src/generic/filedlgg.cpp:1038
+msgid "Show hidden files"
+msgstr "Gizli dosyalarý göster"
+
+#: ../src/html/helpfrm.cpp:561
+msgid "Show/hide navigation panel"
+msgstr "Dolaþma panosunu göster/gizle"
+
+#: ../src/generic/filedlgg.cpp:645
+msgid "Size"
+msgstr "Boyut"
+
+#: ../src/generic/fontdlgg.cpp:216
+msgid "Slant"
+msgstr "Eðik"
+
+#: ../src/common/docview.cpp:305
+msgid "Sorry, could not open this file for saving."
+msgstr "Üzgünüm, bu dosya saklanmak için açýlamýyor."
+
+#: ../src/common/docview.cpp:341
+#: ../src/common/docview.cpp:353
+#: ../src/common/docview.cpp:1389
+msgid "Sorry, could not open this file."
+msgstr "Üzgünüm, bu dosya açýlamýyor."
+
+#: ../src/common/docview.cpp:312
+msgid "Sorry, could not save this file."
+msgstr "Üzgünüm, bu dosya kaydedilemiyor."
+
+#: ../src/common/prntbase.cpp:691
+msgid "Sorry, not enough memory to create a preview."
+msgstr "Üzgünüm, önizleme için bellek yetersiz."
+
+#: ../src/common/paper.cpp:111
+msgid "Statement, 5 1/2 x 8 1/2 in"
+msgstr "Statement, 5 1/2 x 8 1/2 inç"
+
+#: ../src/generic/logg.cpp:588
+msgid "Status: "
+msgstr "Durum:"
+
+#: ../src/generic/fontdlgg.cpp:212
+msgid "Swiss"
+msgstr "Ýsveç"
+
+#: ../src/common/imagtiff.cpp:196
+#: ../src/common/imagtiff.cpp:207
+#: ../src/common/imagtiff.cpp:318
+msgid "TIFF: Couldn't allocate memory."
+msgstr "TIFF: Bellek yetersiz."
+
+#: ../src/common/imagtiff.cpp:167
+msgid "TIFF: Error loading image."
+msgstr "TIFF: Imaj yükleme hatasý."
+
+#: ../src/common/imagtiff.cpp:218
+msgid "TIFF: Error reading image."
+msgstr "TIFF: Imaj okuma hatasý."
+
+#: ../src/common/imagtiff.cpp:295
+msgid "TIFF: Error saving image."
+msgstr "TIFF: Imaj saklama hatasý."
+
+#: ../src/common/imagtiff.cpp:342
+msgid "TIFF: Error writing image."
+msgstr "TIFF: Imaj yazma hatasý."
+
+#: ../src/common/paper.cpp:109
+msgid "Tabloid, 11 x 17 in"
+msgstr "Tabloid, 11 x 17 inç"
+
+#: ../src/generic/fontdlgg.cpp:213
+msgid "Teletype"
+msgstr "Teletype"
+
+#: ../src/common/docview.cpp:1491
+msgid "Templates"
+msgstr "Þablonlar"
+
+#: ../src/generic/dirctrlg.cpp:620
+#: ../src/generic/dirdlgg.cpp:217
+msgid "Temporary"
+msgstr "Geçici"
+
+#: ../src/common/fontmap.cpp:121
+msgid "Thai (ISO-8859-11)"
+msgstr "Thai (ISO-8859-11)"
+
+#: ../src/generic/dirctrlg.cpp:613
+#: ../src/generic/dirdlgg.cpp:209
+msgid "The Computer"
+msgstr "Bilgisayar"
+
+#: ../src/common/ftp.cpp:569
+msgid "The FTP server doesn't support passive mode."
+msgstr "FTP merkezi pasif durumu desteklemiyor."
+
+#: ../src/common/fontmap.cpp:610
+#, c-format
+msgid ""
+"The charset '%s' is unknown. You may select\n"
+"another charset to replace it with or choose\n"
+"[Cancel] if it cannot be replaced"
+msgstr ""
+"'%s' karakter kümesi bilinmiyor. Yerine\n"
+"baþka birtane seçebilirsiniz veya eðer\n"
+"yerine konulamýyorsa (Vazgeç)'i seçiniz"
+
+#: ../src/msw/ole/dataobj.cpp:161
+#, c-format
+msgid "The clipboard format '%d' doesn't exist."
+msgstr "'%d' pano biçemi yok."
+
+#: ../src/generic/dirctrlg.cpp:1288
+#: ../src/generic/dirdlgg.cpp:529
+msgid "The directory "
+msgstr "Dizin"
+
+#: ../src/common/docview.cpp:1744
+#, c-format
+msgid "The file '%s' doesn't exist and couldn't be opened.\n"
+"It has been removed from the most recently used files list."
+msgstr "'%s' dosyasý yok ve açýlamadý.\n"
+"Geçmiþ kullanýlan dosyalar listesinden çýkarýldý."
+
+#: ../src/common/filename.cpp:780
+#, c-format
+msgid "The path '%s' contains too many \"..\"!"
+msgstr "'%s' yolu çok fazla \"..\" içeriyor !"
+
+#: ../src/common/cmdline.cpp:798
+#, c-format
+msgid "The required parameter '%s' was not specified."
+msgstr "Gerekli '%s' parametresi belirtilmemiþ."
+
+#: ../src/common/textcmn.cpp:187
+msgid "The text couldn't be saved."
+msgstr "Döküman kaydedilemedi."
+
+#: ../src/common/cmdline.cpp:777
+#, c-format
+msgid "The value for the option '%s' must be specified."
+msgstr "'%s' seçeneði için deðer belirtilmelidir."
+
+#: ../src/msw/dialup.cpp:422
+#, c-format
+msgid "The version of remote access service (RAS) installed on this machine is tooold, please upgrade (the following required function is missing: %s)."
+msgstr "Bu makinede kurulu Uzak Eriþim Hizmeti (RAS) sürümü çok eski, lütfen yenileyiniz (gereken þu iþlev yok: %s)."
+
+#: ../src/msw/thread.cpp:1112
+msgid "Thread module initialization failed: can not store value in thread local storage"
+msgstr "Ýþparçacýðý birimi baþlatma baþarýsýz: yerel depoya deðer koyulamýyor"
+
+#: ../src/unix/threadpsx.cpp:1469
+msgid "Thread module initialization failed: failed to create thread key"
+msgstr "Ýþparçacýðý birimi baþlatma baþarýsýz: anahtar yaratma baþarýsýz"
+
+#: ../src/msw/thread.cpp:1100
+msgid "Thread module initialization failed: impossible to allocate index in thread local storage"
+msgstr "Ýþparçacýðý birimi baþlatma baþarýsýz: yerel depoda indeks oluþturulamýyor"
+
+#: ../src/unix/threadpsx.cpp:984
+msgid "Thread priority setting is ignored."
+msgstr "Ýþ parçacýðý öncelik ayarlarý gözardý edildi."
+
+#: ../src/msw/mdi.cpp:178
+msgid "Tile &Horizontally"
+msgstr "Yatay döþe"
+
+#: ../src/msw/mdi.cpp:179
+msgid "Tile &Vertically"
+msgstr "Dikey döþe"
+
+#: ../src/generic/filedlgg.cpp:647
+msgid "Time"
+msgstr "Zaman"
+
+#: ../src/generic/tipdlg.cpp:162
+msgid "Tip of the Day"
+msgstr "Günün ipucu"
+
+#: ../src/generic/tipdlg.cpp:138
+msgid "Tips not available, sorry!"
+msgstr "Üzgünüm, ipucu yok!"
+
+#: ../src/generic/prntdlgg.cpp:189
+msgid "To:"
+msgstr "Nereye:"
+
+#: ../src/generic/prntdlgg.cpp:648
+msgid "Top margin (mm):"
+msgstr "Üst boþluk (mm):"
+
+#: ../src/common/fs_mem.cpp:203
+#, c-format
+msgid "Trying to remove file '%s' from memory VFS, but it is not loaded!"
+msgstr "Bellek VFS'den '%s' dosyasýný kaldýrma deneniyor, ama dosya yüklü deðil!"
+
+#: ../src/common/sckaddr.cpp:108
+msgid "Trying to solve a NULL hostname: giving up"
+msgstr "NULL Makine adý çözme deneniyor: vazgeçildi"
+
+#: ../src/common/fontmap.cpp:119
+msgid "Turkish (ISO-8859-9)"
+msgstr "Türkçe (ISO-8859-9)"
+
+#: ../src/common/paper.cpp:140
+msgid "US Std Fanfold, 14 7/8 x 11 in"
+msgstr "US Std Fanfold, 14 7/8 x 11 inç"
+
+#: ../src/html/htmlwin.cpp:271
+#, c-format
+msgid "Unable to open requested HTML document: %s"
+msgstr "Ýstenen HTML dökümaný açýlamýyor: %s"
+
+#: ../src/generic/fontdlgg.cpp:244
+msgid "Underline"
+msgstr "Altçizgi"
+
+#: ../src/common/resourc2.cpp:305
+#: ../src/common/resourc2.cpp:319
+#: ../src/common/resourc2.cpp:335
+#: ../src/common/resourc2.cpp:349
+#: ../src/common/resourc2.cpp:1370
+#: ../src/common/resourc2.cpp:1384
+#: ../src/common/resourc2.cpp:1400
+#: ../src/common/resourc2.cpp:1414
+#: ../src/common/resource.cpp:1817
+#: ../src/common/resource.cpp:1831
+#: ../src/common/resource.cpp:1848
+#: ../src/common/resource.cpp:1862
+#: ../src/common/resource.cpp:1947
+#: ../src/common/resource.cpp:1961
+#: ../src/common/resource.cpp:1977
+#: ../src/common/resource.cpp:1991
+#: ../src/common/resource.cpp:3027
+#: ../src/common/resource.cpp:3041
+#: ../src/common/resource.cpp:3058
+#: ../src/common/resource.cpp:3072
+msgid "Unexpected end of file whilst parsing resource."
+msgstr "Kaynak ayrýþtýrýlýrken beklenmeyen dosya sonu."
+
+#: ../src/common/cmdline.cpp:749
+#, c-format
+msgid "Unexpected parameter '%s'"
+msgstr "Beklenmeyen parametre '%s'"
+
+#: ../src/common/fontmap.cpp:140
+msgid "Unicode 7 bit (UTF-7)"
+msgstr "7 ikili evrensel kod (UTF-7)"
+
+#: ../src/common/fontmap.cpp:141
+msgid "Unicode 8 bit (UTF-8)"
+msgstr "8 ikili evrensel kod (UTF-8)"
+
+#: ../src/msw/dde.cpp:1020
+#, c-format
+msgid "Unknown DDE error %08x"
+msgstr "Bilinmeyen DDE hatasý %08x"
+
+#: ../src/common/strconv.cpp:888
+#, c-format
+msgid "Unknown encoding '%s'!"
+msgstr "Bilinmeyen kodlama '%s'!"
+
+#: ../src/common/fontmap.cpp:383
+#, c-format
+msgid "Unknown encoding (%d)"
+msgstr "Bilinmeyen kodlama (%d)"
+
+#: ../src/unix/mimetype.cpp:2120
+#, c-format
+msgid "Unknown field in file %s, line %d: '%s'."
+msgstr "%s dosyasýnda bilinmeyen alan, satýr %d: '%s'."
+
+#: ../src/common/cmdline.cpp:533
+#, c-format
+msgid "Unknown long option '%s'"
+msgstr "Blinmeyen long seçenek '%s'"
+
+#: ../src/common/cmdline.cpp:555
+#, c-format
+msgid "Unknown option '%s'"
+msgstr "Bilinmeyen seçenek '%s'"
+
+#: ../contrib/src/xrc/xmlres.cpp:488
+msgid "Unknown style flag "
+msgstr "Bilinmeyen biçim bayraðý"
+
+#: ../src/common/mimecmn.cpp:167
+#, c-format
+msgid "Unmatched '{' in an entry for mime type %s."
+msgstr "%s MIME tipi girdisinde uymayan '{'."
+
+#: ../src/common/cmdproc.cpp:226
+#: ../src/common/cmdproc.cpp:241
+#: ../src/common/cmdproc.cpp:268
+msgid "Unnamed command"
+msgstr "Adsýz komut"
+
+#: ../src/common/resourc2.cpp:687
+#: ../src/common/resource.cpp:2336
+#, c-format
+msgid "Unrecognized style %s whilst parsing resource."
+msgstr "Kaynak ayrýþtýrýlýrken tanýmlanamayan %s biçimi."
+
+#: ../src/mac/clipbrd.cpp:53
+#: ../src/msw/clipbrd.cpp:273
+#: ../src/msw/clipbrd.cpp:374
+msgid "Unsupported clipboard format."
+msgstr "Desteklenmeyen pano biçemi."
+
+#: ../src/common/appcmn.cpp:266
+#, c-format
+msgid "Unsupported theme '%s'."
+msgstr "Desteklenmeyen tema '%s'."
+
+#: ../src/generic/fdrepdlg.cpp:157
+msgid "Up"
+msgstr "Yukarý"
+
+#: ../src/common/cmdline.cpp:834
+#, c-format
+msgid "Usage: %s"
+msgstr "Kullaným: %s"
+
+#: ../src/generic/dirctrlg.cpp:617
+#: ../src/generic/dirdlgg.cpp:214
+msgid "User"
+msgstr "Kullanýcý"
+
+#: ../src/generic/dirctrlg.cpp:616
+#: ../src/generic/dirdlgg.cpp:213
+msgid "User Local"
+msgstr "Yerel kullanýcý"
+
+#: ../src/common/valtext.cpp:188
+msgid "Validation conflict"
+msgstr "Doðrulama çeliþkisi"
+
+#: ../src/generic/dirctrlg.cpp:618
+#: ../src/generic/dirdlgg.cpp:215
+msgid "Variables"
+msgstr "Deðiþkenler"
+
+#: ../src/generic/filedlgg.cpp:986
+msgid "View files as a detailed view"
+msgstr "Dosyalarý detaylý görünümde göster"
+
+#: ../src/generic/filedlgg.cpp:980
+msgid "View files as a list view"
+msgstr "Dosyalarý liste görünümde göster"
+
+#: ../src/common/docview.cpp:1557
+msgid "Views"
+msgstr "Görünümler"
+
+#: ../src/unix/utilsunx.cpp:767
+msgid "Waiting for subprocess termination failed"
+msgstr "Altiþ sonlandýrma beklemesi baþarýsýz"
+
+#: ../src/common/docview.cpp:436
+#: ../src/common/resource.cpp:124
+msgid "Warning"
+msgstr "Uyarý"
+
+#: ../src/common/log.cpp:373
+msgid "Warning: "
+msgstr "Uyarý:"
+
+#: ../src/html/htmlpars.cpp:357
+msgid "Warning: attempt to remove HTML tag handler from empty stack."
+msgstr "Uyarý: boþ yýðýndan HTML etiket iþleyici kaldýrma denemesi."
+
+#: ../src/common/fontmap.cpp:111
+msgid "Western European (ISO-8859-1)"
+msgstr "Batý Avrupa (ISO-8859-1)"
+
+#: ../src/common/fontmap.cpp:125
+msgid "Western European with Euro (ISO-8859-15)"
+msgstr "Batý Avrupa (Euro) (ISO-8859-15)"
+
+#: ../src/generic/fdrepdlg.cpp:149
+msgid "Whole word"
+msgstr "Tam kelime"
+
+#: ../src/html/helpfrm.cpp:467
+msgid "Whole words only"
+msgstr "Yalnýz tam kelimeler"
+
+#: ../src/univ/themes/win32.cpp:1106
+msgid "Win32 theme"
+msgstr "Win32 temasý"
+
+#: ../src/msw/utils.cpp:862
+msgid "Win32s on Windows 3.1"
+msgstr "Windows 3.1 üstünde Win32s"
+
+#: ../src/msw/mdi.cpp:1338
+msgid "Window"
+msgstr "Pencere"
+
+#: ../src/msw/utils.cpp:894
+msgid "Windows 3.1"
+msgstr "Windows 3.1"
+
+#: ../src/msw/utils.cpp:866
+#, c-format
+msgid "Windows 9%c"
+msgstr "Windows 9%c"
+
+#: ../src/common/fontmap.cpp:137
+msgid "Windows Arabic (CP 1256)"
+msgstr "Windows Arapça (CP 1256)"
+
+#: ../src/common/fontmap.cpp:138
+msgid "Windows Baltic (CP 1257)"
+msgstr "Windows Baltýk (CP 1257)"
+
+#: ../src/common/fontmap.cpp:131
+msgid "Windows Central European (CP 1250)"
+msgstr "Windows Orta Avrupa (CP 1250)"
+
+#: ../src/common/fontmap.cpp:128
+msgid "Windows Chinese Simplified (CP 936)"
+msgstr "Windows Basitleþtirilmiþ Çince (CP 936)"
+
+#: ../src/common/fontmap.cpp:130
+msgid "Windows Chinese Traditional (CP 950)"
+msgstr "Windows Geleneksel Çince (CP 950)"
+
+#: ../src/common/fontmap.cpp:132
+msgid "Windows Cyrillic (CP 1251)"
+msgstr "Windows Rusça (CP 1251)"
+
+#: ../src/common/fontmap.cpp:134
+msgid "Windows Greek (CP 1253)"
+msgstr "Windows Yunanca (CP 1253)"
+
+#: ../src/common/fontmap.cpp:136
+msgid "Windows Hebrew (CP 1255)"
+msgstr "Windows Ýbranice (CP 1255)"
+
+#: ../src/common/fontmap.cpp:127
+msgid "Windows Japanese (CP 932)"
+msgstr "Windows Japonca (CP 932)"
+
+#: ../src/common/fontmap.cpp:129
+msgid "Windows Korean (CP 949)"
+msgstr "Windows Korece (CP 949)"
+
+#: ../src/common/fontmap.cpp:135
+msgid "Windows Turkish (CP 1254)"
+msgstr "Windows Türkçe (CP 1254)"
+
+#: ../src/common/fontmap.cpp:133
+msgid "Windows Western European (CP 1252)"
+msgstr "Windows Batý Avrupa (CP 1252)"
+
+#: ../src/common/fontmap.cpp:139
+msgid "Windows/DOS OEM (CP 437)"
+msgstr "Windows/DOS OEM (CP 437)"
+
+#: ../src/common/ffile.cpp:160
+#, c-format
+msgid "Write error on file '%s'"
+msgstr "'%s' dosyasýna yazma hatasý"
+
+#: ../src/generic/dcpsg.cpp:2319
+msgid "X Scaling"
+msgstr "X Ölçekleme"
+
+#: ../src/generic/dcpsg.cpp:2328
+msgid "X Translation"
+msgstr "X Çevrim"
+
+#: ../contrib/src/xrc/xmlexpat.cpp:185
+#, c-format
+msgid "XML parsing error: '%s' at line %d"
+msgstr "XML ayrýþtýrma hatasý: '%s', satýr %d"
+
+#: ../src/common/xpmdecod.cpp:757
+msgid "XPM: Malformed pixel data!"
+msgstr "XPM: Bozuk piksel verisi!"
+
+#: ../src/common/xpmdecod.cpp:710
+#: ../src/common/xpmdecod.cpp:719
+#, c-format
+msgid "XPM: malformed colour definition '%s'!"
+msgstr "XPM: bozuk renk tanýmý '%s'!"
+
+#: ../contrib/src/xrc/xmlres.cpp:371
+#, c-format
+msgid "XRC resource '%s' (class '%s') not found!"
+msgstr "XRC '%s' kaynaðý (sýnýf '%s') bulunamadý!"
+
+#: ../contrib/src/xrc/xmlres.cpp:624
+#: ../contrib/src/xrc/xmlres.cpp:634
+#, c-format
+msgid "XRC resource: Cannot create bitmap from '%s'."
+msgstr "XRC kaynaðý: Ýkieþlem '%s''den yaratýlamadý."
+
+#: ../contrib/src/xrc/xh_dlg.cpp:53
+#: ../contrib/src/xrc/xh_frame.cpp:58
+msgid "XRC resource: Cannot create dialog without instance."
+msgstr "XRC kaynaðý: Örnek olmadan iletiþim yaratýlamýyor."
+
+#: ../contrib/src/xrc/xmlres.cpp:604
+#, c-format
+msgid "XRC resource: Incorrect colour specification '%s' for property '%s'."
+msgstr "XRC kaynaðý: Hatalý '%s' renk tanýmý, '%s' özelliði için."
+
+#: ../src/generic/dcpsg.cpp:2323
+msgid "Y Scaling"
+msgstr "Y Ölçekleme"
+
+#: ../src/generic/dcpsg.cpp:2332
+msgid "Y Translation"
+msgstr "Y Çevrim"
+
+#: ../src/common/dlgcmn.cpp:150
+#: ../src/common/dlgcmn.cpp:157
+#: ../src/mac/msgdlg.cpp:83
+#: ../src/motif/msgdlg.cpp:180
+msgid "Yes"
+msgstr "Evet"
+
+#: ../src/generic/dirctrlg.cpp:1355
+#: ../src/generic/dirdlgg.cpp:564
+msgid "You cannot add a new directory to this section."
+msgstr "Bu bölüme yeni dizin ekleyemezsiniz."
+
+#: ../src/common/fs_zip.cpp:86
+#: ../src/common/fs_zip.cpp:123
+msgid "ZIP handler currently supports only local files!"
+msgstr "ZIP iþleyici þimdilik sadece yerel dosyalarý destekler!"
+
+#: ../src/common/docview.cpp:1893
+msgid "[EMPTY]"
+msgstr "[BOÞ]"
+
+#: ../src/msw/dde.cpp:987
+msgid "a DDEML application has created a prolonged race condition."
+msgstr "bir DDEML uygulamasý uzun yarýþ durumu yarattý."
+
+#: ../src/msw/dde.cpp:975
+msgid ""
+"a DDEML function was called without first calling the DdeInitialize function,\n"
+"or an invalid instance identifier\n"
+"was passed to a DDEML function."
+msgstr "DDEML iþlevi öncelikle DdeInitialize iþlevi çaðrýlmaksýzýn çaðrýldý,\n"
+"veya DDEML iþlevine geçersiz bir örnek tanýmlayýcýsý geçirildi."
+
+#: ../src/msw/dde.cpp:993
+msgid "a client's attempt to establish a conversation has failed."
+msgstr "istemcinin konuþma kurma denemesi baþarýsýz."
+
+#: ../src/msw/dde.cpp:990
+msgid "a memory allocation failed."
+msgstr "bellek ayýrma baþarýsýz."
+
+#: ../src/msw/dde.cpp:984
+msgid "a parameter failed to be validated by the DDEML."
+msgstr "parametrenin DDEML tarafýndan doðrulanmasý baþarýsýz."
+
+#: ../src/msw/dde.cpp:966
+msgid "a request for a synchronous advise transaction has timed out."
+msgstr "eþzamanlý danýþma iþi isteði zamanaþýmýna uðradý."
+
+#: ../src/msw/dde.cpp:972
+msgid "a request for a synchronous data transaction has timed out."
+msgstr "eþzamanlý veri iþi isteði zamanaþýmýna uðradý."
+
+#: ../src/msw/dde.cpp:981
+msgid "a request for a synchronous execute transaction has timed out."
+msgstr "eþzamanlý çalýþtýrma iþi isteði zamanaþýmýna uðradý."
+
+#: ../src/msw/dde.cpp:999
+msgid "a request for a synchronous poke transaction has timed out."
+msgstr "eþzamanlý itme iþi isteði zamanaþýmýna uðradý."
+
+#: ../src/msw/dde.cpp:1014
+msgid "a request to end an advise transaction has timed out."
+msgstr "danýþma iþi bitirme isteði zamanaþýmýna uðradý."
+
+#: ../src/msw/dde.cpp:1008
+msgid ""
+"a server-side transaction was attempted on a conversation\n"
+"that was terminated by the client, or the server\n"
+"terminated before completing a transaction."
+msgstr ""
+"istemci tarafýndan sonlandýrýlmýþ bir görüþme üstünde\n"
+"merkez-tarafý iþ denendi, veya merkez\n"
+"iþ bitmeden sonlandýrýldý."
+
+#: ../src/msw/dde.cpp:996
+msgid "a transaction failed."
+msgstr "iþ baþarýsýz."
+
+#: ../src/common/menucmn.cpp:80
+msgid "alt"
+msgstr "alt"
+
+#: ../src/msw/dde.cpp:978
+msgid ""
+"an application initialized as APPCLASS_MONITOR has\n"
+"attempted to perform a DDE transaction,\n"
+"or an application initialized as APPCMD_CLIENTONLY has \n"
+"attempted to perform server transactions."
+msgstr ""
+"APPCLASS_MONITOR olarak baþlatýlmýþ bir uygulama\n"
+"DDE iþi gerçekleþtirmeyi denedi,\n"
+"veya APPCMD_CLIENTONLY olarak baþlatýlmýþ bir uygulama\n"
+"merkez iþi gerçekleþtirmeyi denedi."
+
+#: ../src/msw/dde.cpp:1002
+msgid "an internal call to the PostMessage function has failed. "
+msgstr "PostMessage iþlevine içsel çaðrý baþarýsýz."
+
+#: ../src/msw/dde.cpp:1011
+msgid "an internal error has occurred in the DDEML."
+msgstr "DDEML'de içsel hata oluþtu."
+
+#: ../src/msw/dde.cpp:1017
+msgid ""
+"an invalid transaction identifier was passed to a DDEML function.\n"
+"Once the application has returned from an XTYP_XACT_COMPLETE callback,\n"
+"the transaction identifier for that callback is no longer valid."
+msgstr ""
+"DDEML iþlevine geçersiz iþ tanýtýcý geçirilmiþ.\n"
+"Uygulama XTYP_XACT_COMPLETE geri-çaðrýdan döndüðünde\n"
+"bu geri-çaðrýnýn iþ tanýtýcýsý geçersiz olacaktýr."
+
+#: ../src/common/fileconf.cpp:1555
+#, c-format
+msgid "attempt to change immutable key '%s' ignored."
+msgstr "deðiþmez anahtar '%s''ý deðiþtirme denemesi gözardý edildi."
+
+#: ../src/common/ftp.cpp:369
+msgid "binary"
+msgstr "ikili"
+
+#: ../src/common/ffile.cpp:93
+#, c-format
+msgid "can't close file '%s'"
+msgstr "'%s' dosyasý kapatýlamýyor"
+
+#: ../src/common/file.cpp:272
+#, c-format
+msgid "can't close file descriptor %d"
+msgstr "dosya betimleyicisi %d kapatýlamýyor"
+
+#: ../src/common/file.cpp:543
+#, c-format
+msgid "can't commit changes to file '%s'"
+msgstr "'%s' dosyasýndaki deðiþiklikler iþlenemiyor"
+
+#: ../src/common/file.cpp:215
+#, c-format
+msgid "can't create file '%s'"
+msgstr "'%s' dosyasý yaratýlamýyor"
+
+#: ../src/common/fileconf.cpp:1024
+#, c-format
+msgid "can't delete user configuration file '%s'"
+msgstr "kullanýcý yapýlandýrma dosyasý '%s' silinemiyor"
+
+#: ../src/common/file.cpp:455
+#, c-format
+msgid "can't determine if the end of file is reached on descriptor %d"
+msgstr "betimleyici %d üstündeki dosyanýn sonuna ulaþýlýp ulaþýlamadýðý tesbit edilemiyor"
+
+#: ../src/common/file.cpp:421
+#, c-format
+msgid "can't find length of file on file descriptor %d"
+msgstr "betimleyici %d üstündeki dosyanýn uzunluðu bulunamýyor"
+
+#: ../src/msw/utils.cpp:366
+msgid "can't find user's HOME, using current directory."
+msgstr "kullanýcýnýn EV'i bulunamýyor, geçerli dizin kullanýlýyor."
+
+#: ../src/common/file.cpp:335
+#, c-format
+msgid "can't flush file descriptor %d"
+msgstr "dosya betimleyicisi %d temizlenemiyor"
+
+#: ../src/common/file.cpp:389
+#, c-format
+msgid "can't get seek position on file descriptor %d"
+msgstr "dosya betimleyicisi %d üstündeki arama yeri alýnamýyor"
+
+#: ../src/common/fontmap.cpp:746
+msgid "can't load any font, aborting"
+msgstr "hiç yazýtipi yüklenemedi, durduruluyor"
+
+#: ../src/common/ffile.cpp:77
+#: ../src/common/file.cpp:258
+#, c-format
+msgid "can't open file '%s'"
+msgstr "'%s' dosyasý açýlamýyor"
+
+#: ../src/common/fileconf.cpp:386
+#, c-format
+msgid "can't open global configuration file '%s'."
+msgstr "genel yapýlandýrma dosyasý '%s' açýlamýyor"
+
+#: ../src/common/fileconf.cpp:398
+#, c-format
+msgid "can't open user configuration file '%s'."
+msgstr "kullanýcý yapýlandýrma dosyasý '%s' açýlamýyor"
+
+#: ../src/common/fileconf.cpp:904
+msgid "can't open user configuration file."
+msgstr "kullanýcý yapýlandýrma dosyasý açýlamýyor"
+
+#: ../src/common/file.cpp:298
+#, c-format
+msgid "can't read from file descriptor %d"
+msgstr "dosya betimleyicisi %d'den okunamýyor"
+
+#: ../src/common/file.cpp:538
+#, c-format
+msgid "can't remove file '%s'"
+msgstr "'%s' dosyasý silinemedi"
+
+#: ../src/common/file.cpp:554
+#, c-format
+msgid "can't remove temporary file '%s'"
+msgstr "geçici '%s' dosyasý silinemedi"
+
+#: ../src/common/file.cpp:375
+#, c-format
+msgid "can't seek on file descriptor %d"
+msgstr "dosya betimleyicisi %d üstünde arama yapýlamýyor"
+
+#: ../src/common/textfile.cpp:178
+#, c-format
+msgid "can't write buffer '%s' to disk."
+msgstr "'%s' tamponu diske yazýlamadý"
+
+#: ../src/common/file.cpp:320
+#, c-format
+msgid "can't write to file descriptor %d"
+msgstr "dosya betimleyicisi %d'ye yazýlamýyor"
+
+#: ../src/common/fileconf.cpp:911
+msgid "can't write user configuration file."
+msgstr "kullanýcý yapýlandýrma dosyasý yazýlamadý"
+
+#: ../src/common/intl.cpp:398
+#, c-format
+msgid "catalog file for domain '%s' not found."
+msgstr "'%s' etki alaný için katalog bulunamadý."
+
+#: ../contrib/src/xrc/xh_frame.cpp:72
+msgid "centered"
+msgstr "ortalý"
+
+#: ../src/common/menucmn.cpp:78
+msgid "ctrl"
+msgstr "ctrl"
+
+#: ../src/common/cmdline.cpp:947
+msgid "date"
+msgstr "tarih"
+
+#: ../src/common/fontmap.cpp:393
+msgid "default"
+msgstr "varsayýlan"
+
+#: ../src/common/datetime.cpp:3227
+msgid "eighteenth"
+msgstr "onsekizinci"
+
+#: ../src/common/datetime.cpp:3217
+msgid "eighth"
+msgstr "sekizinci"
+
+#: ../src/common/datetime.cpp:3220
+msgid "eleventh"
+msgstr "onbirinci"
+
+#: ../src/common/fileconf.cpp:1542
+#, c-format
+msgid "entry '%s' appears more than once in group '%s'"
+msgstr "'%s' girdisi '%s' grubunda birden fazla görülüyor"
+
+#: ../src/msw/dialup.cpp:870
+#: ../src/msw/dialup.cpp:875
+msgid "establish"
+msgstr "kurmak"
+
+#: ../src/common/ffile.cpp:174
+#, c-format
+msgid "failed to flush the file '%s'"
+msgstr "'%s' dosyasý temizlenemedi"
+
+#: ../src/common/datetime.cpp:3224
+msgid "fifteenth"
+msgstr "onbeþinci"
+
+#: ../src/common/datetime.cpp:3214
+msgid "fifth"
+msgstr "beþinci"
+
+#: ../src/common/fileconf.cpp:610
+#, c-format
+msgid "file '%s', line %d: '%s' ignored after group header."
+msgstr "dosya '%s', satýr %d: '%s' grup baþlýðýndan sonra gözardý edildi."
+
+#: ../src/common/fileconf.cpp:639
+#, c-format
+msgid "file '%s', line %d: '=' expected."
+msgstr "dosya '%s', satýr %d: '=' bekleniyor."
+
+#: ../src/common/fileconf.cpp:665
+#, c-format
+msgid "file '%s', line %d: key '%s' was first found at line %d."
+msgstr "dosya '%s', satýr %d: anahtar '%s' ilk olarak %d satýrýnda bulundu."
+
+#: ../src/common/fileconf.cpp:655
+#, c-format
+msgid "file '%s', line %d: value for immutable key '%s' ignored."
+msgstr "dosya '%s', satýr %d: '%s' deðiþmez anahtarý için deðer gözardý edildi."
+
+#: ../src/common/fileconf.cpp:578
+#, c-format
+msgid "file '%s': unexpected character %c at line %d."
+msgstr "dosya '%s': beklenmedik karakter %c,  satýr: %d."
+
+#: ../src/common/datetime.cpp:3210
+msgid "first"
+msgstr "birinci"
+
+#: ../src/common/datetime.cpp:3223
+msgid "fourteenth"
+msgstr "ondördüncü"
+
+#: ../src/common/datetime.cpp:3213
+msgid "fourth"
+msgstr "dördüncü"
+
+#: ../src/common/appcmn.cpp:216
+msgid "generate verbose log messages"
+msgstr "sözel günlük uyarýlarý üret"
+
+#: ../src/common/timercmn.cpp:273
+msgid "gmtime() failed"
+msgstr "gmtime() baþarýsýz oldu"
+
+#: ../src/msw/dialup.cpp:870
+#: ../src/msw/dialup.cpp:875
+msgid "initiate"
+msgstr "baþlat"
+
+#: ../src/common/file.cpp:459
+msgid "invalid eof() return value."
+msgstr "geçersiz eof() sonuç deðeri"
+
+#: ../src/generic/logg.cpp:1036
+msgid "invalid message box return value"
+msgstr "geçersiz ileti kutusu sonuç deðeri"
+
+#: ../src/html/helpfrm.cpp:1017
+msgid "large"
+msgstr "büyük"
+
+#: ../src/common/intl.cpp:611
+#, c-format
+msgid "locale '%s' can not be set."
+msgstr "'%s' yereli ayarlanamýyor."
+
+#: ../src/common/intl.cpp:393
+#, c-format
+msgid "looking for catalog '%s' in path '%s'."
+msgstr "'%s' kataloðu için '%s' dizinine bakýlýyor."
+
+#: ../src/html/helpfrm.cpp:1017
+msgid "medium"
+msgstr "orta"
+
+#: ../src/common/datetime.cpp:3375
+msgid "midnight"
+msgstr "geceyarýsý"
+
+#: ../src/common/timercmn.cpp:269
+msgid "mktime() failed"
+msgstr "mktime() baþarýsýz"
+
+#: ../src/common/datetime.cpp:3228
+msgid "nineteenth"
+msgstr "ondokuzuncu"
+
+#: ../src/common/datetime.cpp:3218
+msgid "ninth"
+msgstr "dokuzuncu"
+
+#: ../src/msw/dde.cpp:962
+msgid "no DDE error."
+msgstr "DDE yok hatasý."
+
+#: ../src/html/helpdata.cpp:565
+msgid "noname"
+msgstr "adsýz"
+
+#: ../src/common/datetime.cpp:3374
+msgid "noon"
+msgstr "öðlen"
+
+#: ../src/common/cmdline.cpp:946
+msgid "num"
+msgstr "num"
+
+#: ../src/msw/dde.cpp:1005
+msgid "reentrancy problem."
+msgstr "yeniden-giriþ sorunu."
+
+#: ../src/common/datetime.cpp:3211
+msgid "second"
+msgstr "ikinci"
+
+#: ../src/common/datetime.cpp:3226
+msgid "seventeenth"
+msgstr "onyedinci"
+
+#: ../src/common/datetime.cpp:3216
+msgid "seventh"
+msgstr "yedinci"
+
+#: ../src/common/menucmn.cpp:82
+msgid "shift"
+msgstr "shift"
+
+#: ../src/common/appcmn.cpp:206
+msgid "show this help message"
+msgstr "bu yardým uyarýsýný göster"
+
+#: ../src/common/datetime.cpp:3225
+msgid "sixteenth"
+msgstr "onaltýncý"
+
+#: ../src/common/datetime.cpp:3215
+msgid "sixth"
+msgstr "altýncý"
+
+#: ../src/html/helpfrm.cpp:1017
+msgid "small"
+msgstr "küçük"
+
+#: ../src/common/appcmn.cpp:238
+msgid "specify display mode to use (e.g. 640x480-16)"
+msgstr "kullanýlacak görüntü biçimini belirleyiniz (ör. 640x480-16)"
+
+#: ../src/common/appcmn.cpp:225
+msgid "specify the theme to use"
+msgstr "kullanýlacak temayý belirleyiniz"
+
+#: ../src/common/cmdline.cpp:945
+msgid "str"
+msgstr "str"
+
+#: ../src/common/datetime.cpp:3219
+msgid "tenth"
+msgstr "onuncu"
+
+#: ../src/msw/dde.cpp:969
+msgid "the response to the transaction caused the DDE_FBUSY bit to be set."
+msgstr "iþe yanýt DDE_FBUSY bitinin yerleþtirilmesine yolaçtý."
+
+#: ../src/common/datetime.cpp:3212
+msgid "third"
+msgstr "üçüncü"
+
+#: ../src/common/datetime.cpp:3222
+msgid "thirteenth"
+msgstr "onüçüncü"
+
+#: ../src/common/datetime.cpp:3054
+msgid "today"
+msgstr "bugün"
+
+#: ../src/common/datetime.cpp:3056
+msgid "tomorrow"
+msgstr "yarýn"
+
+#: ../src/common/datetime.cpp:3221
+msgid "twelfth"
+msgstr "yirminci"
+
+#: ../src/common/datetime.cpp:3229
+msgid "twentieth"
+msgstr "onikinci"
+
+#: ../src/common/fileconf.cpp:1662
+#, c-format
+msgid "unexpected \" at position %d in '%s'."
+msgstr "beklenmedik \" yer: %d; '%s' içinde."
+
+#: ../src/generic/progdlgg.cpp:276
+msgid "unknown"
+msgstr "bilinmeyen"
+
+#: ../src/common/regex.cpp:144
+msgid "unknown error"
+msgstr "bilinmeyen hata"
+
+#: ../src/msw/dialup.cpp:473
+#, c-format
+msgid "unknown error (error code %08x)."
+msgstr "bilinmeyen hata (hata kodu %08x)."
+
+#: ../src/common/textbuf.cpp:229
+msgid "unknown line terminator"
+msgstr "bilinmeyen satýr sonlayýcý"
+
+#: ../src/common/file.cpp:358
+msgid "unknown seek origin"
+msgstr "bilinmeyen arama baþlangýcý"
+
+#: ../src/common/fontmap.cpp:410
+#, c-format
+msgid "unknown-%d"
+msgstr "bilinmeyen-%d"
+
+#: ../src/common/docview.cpp:405
+msgid "unnamed"
+msgstr "isimsiz"
+
+#: ../src/common/docview.cpp:1187
+#, c-format
+msgid "unnamed%d"
+msgstr "isimsiz%d"
+
+#: ../src/common/intl.cpp:403
+#, c-format
+msgid "using catalog '%s' from '%s'."
+msgstr "katalog '%s' '%s' den kullanýlýyor"
+
+#: ../src/html/helpfrm.cpp:1017
+msgid "very large"
+msgstr "çok büyük"
+
+#: ../src/html/helpfrm.cpp:1017
+msgid "very small"
+msgstr "çok küçük"
+
+#: ../src/common/timercmn.cpp:301
+msgid "wxGetTimeOfDay failed."
+msgstr "wxGetTimeOfDay baþarýsýz."
+
+#: ../src/common/socket.cpp:347
+#: ../src/common/socket.cpp:401
+msgid "wxSocket: invalid signature in ReadMsg."
+msgstr "wxSocket: ReadMsg içinde geçersiz imza."
+
+#: ../src/common/socket.cpp:921
+msgid "wxSocket: unknown event!."
+msgstr "wxSocket: bilinmeyen olay!."
+
+#: ../src/motif/app.cpp:586
+#, c-format
+msgid "wxWindows could not open display for '%s': exiting."
+msgstr "wxWindows '%s' için görüntüyü açamadý: çýkýlýyor."
+
+#: ../src/common/datetime.cpp:3055
+msgid "yesterday"
+msgstr "dün"
+
