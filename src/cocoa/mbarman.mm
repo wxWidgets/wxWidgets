@@ -71,7 +71,7 @@ wxMenuBarManager::wxMenuBarManager()
     [m_menuApp addItem: menuitem];
     [menuitem release];
 /**/[m_menuApp addItem: [NSMenuItem separatorItem]];
-/**/menuitem = [[NSMenuItem alloc] initWithTitle:@"Quit" action:@selector(terminate:) keyEquivalent:@"Q"];
+/**/menuitem = [[NSMenuItem alloc] initWithTitle:@"Quit" action:@selector(terminate:) keyEquivalent:@"q"];
     [menuitem setTarget: theNSApplication];
     [m_menuApp addItem: menuitem];
     [menuitem release];
