@@ -47,7 +47,10 @@
 #endif // __WXMSW__
 
 IMPLEMENT_DYNAMIC_CLASS(wxPopupTransientWindow, wxPopupWindow)
-IMPLEMENT_DYNAMIC_CLASS(wxPopupComboWindow, wxPopupTransientWindow)
+
+#if wxUSE_COMBOBOX && defined(__WXUNIVERSAL__)
+    IMPLEMENT_DYNAMIC_CLASS(wxPopupComboWindow, wxPopupTransientWindow)
+#endif
 
 // ----------------------------------------------------------------------------
 // private classes
