@@ -232,7 +232,6 @@ void wxColour::Set( unsigned char red, unsigned char green, unsigned char blue )
 {
     AllocExclusive();
 
-    m_refData = new wxColourRefData();
 #if wxUSE_NANOX
     M_COLDATA->m_color.red = ((unsigned short)red) ;
     M_COLDATA->m_color.green = ((unsigned short)green) ;
