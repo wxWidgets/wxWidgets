@@ -3383,6 +3383,8 @@ bool wxWindowMSW::HandleCreate(WXLPCREATESTRUCT cs, bool *mayCreate)
 #ifndef __WXWINCE__
     if ( ((CREATESTRUCT *)cs)->dwExStyle & WS_EX_CONTROLPARENT )
         EnsureParentHasControlParentStyle(GetParent());
+#else
+    wxUnusedVar(cs);
 #endif // !__WXWINCE__
 
     // TODO: should generate this event from WM_NCCREATE
@@ -3723,9 +3725,7 @@ wxWindowMSW::MSWOnDrawItem(int WXUNUSED_UNLESS_ODRAWN(id),
 }
 
 bool
-wxWindowMSW::MSWOnMeasureItem(int WXUNUSED_UNLESS_ODRAWN(id),
-                              WXMEASUREITEMSTRUCT *
-                                  WXUNUSED_UNLESS_ODRAWN(itemStruct))
+wxWindowMSW::MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
 {
 #if wxUSE_OWNER_DRAWN && wxUSE_MENUS_NATIVE
     // is it a menu item?
@@ -3750,7 +3750,10 @@ wxWindowMSW::MSWOnMeasureItem(int WXUNUSED_UNLESS_ODRAWN(id),
     {
         return item->MSWOnMeasure(itemStruct);
     }
-#endif // wxUSE_OWNER_DRAWN
+#else
+    wxUnusedVar(id);
+    wxUnusedVar(itemStruct);
+#endif // wxUSE_OWNER_DRAWN && wxUSE_MENUS_NATIVE
 
     return false;
 }
