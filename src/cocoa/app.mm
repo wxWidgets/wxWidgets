@@ -51,7 +51,6 @@ wxPoseAsInitializer *wxPoseAsInitializer::sm_first = NULL;
 
 - (void)doIdle: (id)data;
 - (void)sendEvent: (NSEvent*)anEvent;
-- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication;
 @end // wxPoserNSApplication
 
 WX_IMPLEMENT_POSER(wxPoserNSApplication);
@@ -98,6 +97,24 @@ WX_IMPLEMENT_POSER(wxPoserNSApplication);
     [super sendEvent: anEvent];
 }
 
+@end // wxPoserNSApplication
+
+// ========================================================================
+// wxNSApplicationDelegate
+// ========================================================================
+@interface wxNSApplicationDelegate : NSObject
+{
+}
+
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication;
+- (void)applicationWillBecomeActive:(NSNotification *)notification;
+- (void)applicationDidBecomeActive:(NSNotification *)notification;
+- (void)applicationWillResignActive:(NSNotification *)notification;
+- (void)applicationDidResignActive:(NSNotification *)notification;
+@end // interface wxNSApplicationDelegate : NSObject
+
+@implementation wxNSApplicationDelegate : NSObject
+
 // NOTE: Terminate means that the event loop does NOT return and thus
 // cleanup code doesn't properly execute.  Furthermore, wxWindows has its
 // own exit on frame delete mechanism.
@@ -106,7 +123,27 @@ WX_IMPLEMENT_POSER(wxPoserNSApplication);
     return NO;
 }
 
-@end // wxPoserNSApplication
+- (void)applicationWillBecomeActive:(NSNotification *)notification
+{
+    wxTheApp->CocoaDelegate_applicationWillBecomeActive();
+}
+
+- (void)applicationDidBecomeActive:(NSNotification *)notification
+{
+    wxTheApp->CocoaDelegate_applicationDidBecomeActive();
+}
+
+- (void)applicationWillResignActive:(NSNotification *)notification
+{
+    wxTheApp->CocoaDelegate_applicationWillResignActive();
+}
+
+- (void)applicationDidResignActive:(NSNotification *)notification
+{
+    wxTheApp->CocoaDelegate_applicationDidResignActive();
+}
+
+@end // implementation wxNSApplicationDelegate : NSObject
 
 // ========================================================================
 // wxApp
@@ -152,8 +189,14 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
 void wxApp::CleanUp()
 {
+    wxAutoNSAutoreleasePool pool;
+
     wxDC::CocoaShutdownTextSystem();
     wxMenuBarManager::DestroyInstance();
+
+    [m_cocoaApp setDelegate:nil];
+    [m_cocoaAppDelegate release];
+    m_cocoaAppDelegate = NULL;
 
     wxAppBase::CleanUp();
 }
@@ -176,6 +219,7 @@ wxApp::wxApp()
     argc = 0;
     argv = NULL;
     m_cocoaApp = NULL;
+    m_cocoaAppDelegate = NULL;
 }
 
 void wxApp::CocoaInstallIdleHandler()
@@ -196,6 +240,22 @@ void wxApp::CocoaInstallIdleHandler()
     [[ NSRunLoop currentRunLoop ] performSelector:@selector(doIdle:) target:m_cocoaApp argument:NULL order:0 modes:[NSArray arrayWithObjects:NSDefaultRunLoopMode, /* NSConnectionReplyRunLoopMode,*/ NSModalPanelRunLoopMode, /**/NSEventTrackingRunLoopMode,/**/ nil] ];
 }
 
+void wxApp::CocoaDelegate_applicationWillBecomeActive()
+{
+}
+
+void wxApp::CocoaDelegate_applicationDidBecomeActive()
+{
+}
+
+void wxApp::CocoaDelegate_applicationWillResignActive()
+{
+}
+
+void wxApp::CocoaDelegate_applicationDidResignActive()
+{
+}
+
 bool wxApp::OnInitGui()
 {
     wxAutoNSAutoreleasePool pool;
@@ -204,6 +264,8 @@ bool wxApp::OnInitGui()
 
     // Create the app using the sharedApplication method
     m_cocoaApp = [NSApplication sharedApplication];
+    m_cocoaAppDelegate = [[wxNSApplicationDelegate alloc] init];
+    [m_cocoaApp setDelegate:m_cocoaAppDelegate];
 
     wxMenuBarManager::CreateInstance();
 

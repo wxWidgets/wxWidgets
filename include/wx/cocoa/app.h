@@ -35,8 +35,13 @@ public:
     inline WX_NSApplication GetNSApplication() { return m_cocoaApp; }
     void CocoaInstallRequestedIdleHandler() { if(m_isIdle) CocoaInstallIdleHandler(); }
     inline void CocoaRequestIdle() { m_isIdle = true; }
+    virtual void CocoaDelegate_applicationWillBecomeActive();
+    virtual void CocoaDelegate_applicationDidBecomeActive();
+    virtual void CocoaDelegate_applicationWillResignActive();
+    virtual void CocoaDelegate_applicationDidResignActive();
 protected:
     WX_NSApplication m_cocoaApp;
+    struct objc_object *m_cocoaAppDelegate;
     WX_NSThread m_cocoaMainThread;
     void CocoaInstallIdleHandler();
     bool m_isIdle;
