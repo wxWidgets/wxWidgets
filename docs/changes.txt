@@ -42,6 +42,8 @@ wxMSW:
 wxGTK:
 
 - fixed configure bug: it didn't define HAVE_VSNPRINTF properly always
+- fixed keyboard input in wxSpinCtrl
+
 wxHTML:
 
 - fixed bug in parsing tags with whitespaces around '=' in tags,
