@@ -341,7 +341,7 @@ size_t wxTextDataObject::GetSize() const
 
 void wxTextDataObject::WriteString( const wxString &str, void *dest ) const
 {
-    memcpy( dest, m_data.c_str(), GetSize() );
+    memcpy( dest, m_data.mbc_str(), GetSize() );
 }
     
 // ----------------------------------------------------------------------------
@@ -368,7 +368,7 @@ wxString wxFileDataObject::GetFiles() const
     
 void wxFileDataObject::WriteData( void *dest ) const
 {
-    memcpy( dest, m_files.c_str(), GetSize() );
+    memcpy( dest, m_files.mbc_str(), GetSize() );
 }
  
 size_t wxFileDataObject::GetSize() const

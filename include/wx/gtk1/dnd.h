@@ -111,7 +111,7 @@ public:
   virtual bool OnData( int x, int y );
     
   /* you have to override OnDropData to get at the text */
-  virtual bool OnDropText( int x, int y, const char *text ) = 0;
+  virtual bool OnDropText( int x, int y, const wxChar *text ) = 0;
     
 };
 

@@ -470,7 +470,7 @@ bool wxTextDropTarget::OnData( int x, int y )
     wxTextDataObject data;
     if (!GetData( &data )) return FALSE;
     
-    OnDropText( x, y, data.GetText().mbc_str() );
+    OnDropText( x, y, data.GetText() );
     
     return TRUE;
 }
@@ -591,6 +591,7 @@ source_drag_data_get  (GtkWidget          *WXUNUSED(widget),
 	if (data_object->GetFormat().GetAtom() == selection_data->target)
 	{
 	    size_t data_size = data_object->GetSize();
+	    
 	    if (data_size > 0)
 	    {
 	        guchar *buffer = new guchar[data_size];

@@ -42,7 +42,7 @@ class DnDText : public wxTextDropTarget
 public:
   DnDText(wxListBox *pOwner) { m_pOwner = pOwner; }
 
-  virtual bool OnDropText(long x, long y, const char *psz );
+  virtual bool OnDropText(int x, int y, const wxChar* psz );
 
 private:
   wxListBox *m_pOwner;
@@ -53,8 +53,8 @@ class DnDFile : public wxFileDropTarget
 public:
   DnDFile(wxListBox *pOwner) { m_pOwner = pOwner; }
 
-  virtual bool OnDropFiles(long x, long y,
-                           size_t nFiles, const char * const aszFiles[] );
+  virtual bool OnDropFiles(int x, int y,
+                           size_t nFiles, const wxChar* const aszFiles[] );
 
 private:
   wxListBox *m_pOwner;
@@ -349,18 +349,18 @@ DnDFrame::~DnDFrame()
 // ----------------------------------------------------------------------------
 // Notifications called by the base class
 // ----------------------------------------------------------------------------
-bool DnDText::OnDropText(long, long, const char *psz)
+bool DnDText::OnDropText( int, int, const wxChar *psz )
 {
   m_pOwner->Append(psz);
 
   return TRUE;
 }
 
-bool DnDFile::OnDropFiles(long, long, size_t nFiles,
-                          const char * const aszFiles[])
+bool DnDFile::OnDropFiles( int, int, size_t nFiles,
+                           const wxChar* const aszFiles[])
 {
   wxString str;
-  str.Printf("%d files dropped", nFiles);
+  str.Printf( _T("%d files dropped"), nFiles);
   m_pOwner->Append(str);
   for ( size_t n = 0; n < nFiles; n++ ) {
     m_pOwner->Append(aszFiles[n]);
