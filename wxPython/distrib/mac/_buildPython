@@ -127,6 +127,15 @@ done
 cd $curDir
 
 #-----------------------------------
+msg Adjusting ownership and permission
+
+for d in Applications Library; do
+    msgdo chown -R root:admin "$dstPath/$temp/$pkgRoot/$d"
+    msgdo chmod -R g+w "$dstPath/$temp/$pkgRoot/$d"
+done
+msgdo chown -R root:wheel "$dstPath/$temp/$pkgRoot/usr"
+
+#-----------------------------------
 msg making installer package
 msgdo cp -pR "$progDir/resourcesPython" "$dstPath/$temp/"
 msgdo mv "$dstPath/$temp/resourcesPython" "$dstPath/$temp/resources"
