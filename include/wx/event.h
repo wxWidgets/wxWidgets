@@ -94,7 +94,7 @@ const wxEventType wxEVT_KEY_DOWN =                          wxEVT_FIRST + 215;
 const wxEventType wxEVT_KEY_UP =                            wxEVT_FIRST + 216;
 
  /*
-  * Scrollbar event identifiers
+  * wxScrollbar and wxSlider event identifiers
   */
 const wxEventType wxEVT_SCROLL_TOP =                        wxEVT_FIRST + 300;
 const wxEventType wxEVT_SCROLL_BOTTOM =                     wxEVT_FIRST + 301;
@@ -104,6 +104,20 @@ const wxEventType wxEVT_SCROLL_PAGEUP =                     wxEVT_FIRST + 304;
 const wxEventType wxEVT_SCROLL_PAGEDOWN =                   wxEVT_FIRST + 305;
 const wxEventType wxEVT_SCROLL_THUMBTRACK =                 wxEVT_FIRST + 306;
 
+ /*
+  * Scroll events from wxWindow
+  */
+const wxEventType wxEVT_SCROLLWIN_TOP =                     wxEVT_FIRST + 320;
+const wxEventType wxEVT_SCROLLWIN_BOTTOM =                  wxEVT_FIRST + 321;
+const wxEventType wxEVT_SCROLLWIN_LINEUP =                  wxEVT_FIRST + 322;
+const wxEventType wxEVT_SCROLLWIN_LINEDOWN =                wxEVT_FIRST + 323;
+const wxEventType wxEVT_SCROLLWIN_PAGEUP =                  wxEVT_FIRST + 324;
+const wxEventType wxEVT_SCROLLWIN_PAGEDOWN =                wxEVT_FIRST + 325;
+const wxEventType wxEVT_SCROLLWIN_THUMBTRACK =              wxEVT_FIRST + 326;
+
+ /*
+  * System events
+  */
 const wxEventType wxEVT_SIZE =                              wxEVT_FIRST + 400;
 const wxEventType wxEVT_MOVE =                              wxEVT_FIRST + 401;
 const wxEventType wxEVT_CLOSE_WINDOW =                      wxEVT_FIRST + 402;
@@ -396,7 +410,8 @@ private:
     DECLARE_DYNAMIC_CLASS(wxNotifyEvent)
 };
 
-// Scroll event class
+// Scroll event class, derived form wxCommandEvent. wxScrollEvents are
+// sent by wxSlider and wxScrollbar.
 /*
  wxEVT_SCROLL_TOP
  wxEVT_SCROLL_BOTTOM
@@ -425,6 +440,41 @@ public:
     int GetPosition() const { return m_commandInt ; }
     void SetOrientation(int orient) { m_extraLong = (long) orient; }
     void SetPosition(int pos) { m_commandInt = pos; }
+};
+
+// ScrollWin event class, derived fom wxEvent. wxScrollWinEvents
+// are sent by wxWindow.
+/*
+ wxEVT_SCROLLWIN_TOP
+ wxEVT_SCROLLWIN_BOTTOM
+ wxEVT_SCROLLWIN_LINEUP
+ wxEVT_SCROLLWIN_LINEDOWN
+ wxEVT_SCROLLWIN_PAGEUP
+ wxEVT_SCROLLWIN_PAGEDOWN
+ wxEVT_SCROLLWIN_THUMBTRACK
+*/
+
+class WXDLLEXPORT wxScrollWinEvent : public wxEvent
+{
+    DECLARE_DYNAMIC_CLASS(wxScrollWinEvent)
+
+public:
+    wxScrollWinEvent(wxEventType commandType = wxEVT_NULL,
+                     int pos = 0, int orient = 0);
+    ~wxScrollWinEvent() {}
+
+    /*
+     * Accessors
+     */
+
+    int GetOrientation() const { return (int) m_extraLong ; }
+    int GetPosition() const { return m_commandInt ; }
+    void SetOrientation(int orient) { m_extraLong = (long) orient; }
+    void SetPosition(int pos) { m_commandInt = pos; }
+
+public:
+    int               m_commandInt;    // Additional information
+    long              m_extraLong;     
 };
 
 // Mouse event class

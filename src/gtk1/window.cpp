@@ -339,10 +339,16 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
     if (g_blockEventsOnDrag) return FALSE;
 
 /*
-    printf( "OnKeyPress from " );
-    if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-        printf( win->GetClassInfo()->GetClassName() );
-    printf( ".\n" );
+    printf( "KeyDown-ScanCode is: %d.\n", gdk_event->keyval );
+    if (gdk_event->state & GDK_SHIFT_MASK)
+      printf( "ShiftDown.\n" );
+    else
+      printf( "ShiftUp.\n" );
+    if (gdk_event->state & GDK_CONTROL_MASK)
+      printf( "ControlDown.\n" );
+    else
+      printf( "ControlUp.\n" );
+    printf( "\n" );
 */
 
     long key_code = 0;
@@ -427,6 +433,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
     if (!key_code) return FALSE;
 
     wxKeyEvent event( wxEVT_KEY_DOWN );
+    event.SetTimestamp( gdk_event->time );
     event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK);
     event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK);
     event.m_altDown = (gdk_event->state & GDK_MOD1_MASK);
@@ -521,10 +528,16 @@ static gint gtk_window_key_release_callback( GtkWidget *widget, GdkEventKey *gdk
     if (g_blockEventsOnDrag) return FALSE;
 
 /*
-    printf( "OnKeyRelease from " );
-    if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-        printf( win->GetClassInfo()->GetClassName() );
-    printf( ".\n" );
+    printf( "KeyUp-ScanCode is: %d.\n", gdk_event->keyval );
+    if (gdk_event->state & GDK_SHIFT_MASK)
+      printf( "ShiftDown.\n" );
+    else
+      printf( "ShiftUp.\n" );
+    if (gdk_event->state & GDK_CONTROL_MASK)
+      printf( "ControlDown.\n" );
+    else
+      printf( "ControlUp.\n" );
+    printf( "\n" );
 */
 
     long key_code = 0;
@@ -609,6 +622,7 @@ static gint gtk_window_key_release_callback( GtkWidget *widget, GdkEventKey *gdk
     if (!key_code) return FALSE;
 
     wxKeyEvent event( wxEVT_KEY_UP );
+    event.SetTimestamp( gdk_event->time );
     event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK);
     event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK);
     event.m_altDown = (gdk_event->state & GDK_MOD1_MASK);
@@ -703,6 +717,7 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
     }
 
     wxMouseEvent event( event_type );
+    event.SetTimestamp( gdk_event->time );
     event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK);
     event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK);
     event.m_altDown = (gdk_event->state & GDK_MOD1_MASK);
@@ -813,6 +828,7 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
     }
 
     wxMouseEvent event( event_type );
+    event.SetTimestamp( gdk_event->time );
     event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK);
     event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK);
     event.m_altDown = (gdk_event->state & GDK_MOD1_MASK);
@@ -922,6 +938,7 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
 */
 
     wxMouseEvent event( wxEVT_MOTION );
+    event.SetTimestamp( gdk_event->time );
     event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK);
     event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK);
     event.m_altDown = (gdk_event->state & GDK_MOD1_MASK);
@@ -1103,6 +1120,7 @@ static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_
         gdk_window_set_cursor( widget->window, win->GetCursor().GetCursor() );
 
     wxMouseEvent event( wxEVT_ENTER_WINDOW );
+    event.SetTimestamp( gdk_event->time );
     event.SetEventObject( win );
 
     int x = 0;
@@ -1149,6 +1167,7 @@ static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_
         gdk_window_set_cursor( widget->window, wxSTANDARD_CURSOR->GetCursor() );
 
     wxMouseEvent event( wxEVT_LEAVE_WINDOW );
+    event.SetTimestamp( gdk_event->time );
     event.SetEventObject( win );
 
     int x = 0;

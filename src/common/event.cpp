@@ -37,6 +37,7 @@
     IMPLEMENT_DYNAMIC_CLASS(wxCommandEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxNotifyEvent, wxCommandEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxScrollEvent, wxCommandEvent)
+    IMPLEMENT_DYNAMIC_CLASS(wxScrollWinEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxMouseEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxKeyEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxSizeEvent, wxEvent)
@@ -151,6 +152,19 @@ wxScrollEvent::wxScrollEvent(wxEventType commandType,
                              int pos,
                              int orient)
              : wxCommandEvent(commandType, id)
+{
+    m_extraLong = orient;
+    m_commandInt = pos;
+}
+
+/*
+ * ScrollWin events
+ */
+
+wxScrollWinEvent::wxScrollWinEvent(wxEventType commandType,
+                                   int pos,
+                                   int orient)
+             : wxEvent(commandType)
 {
     m_extraLong = orient;
     m_commandInt = pos;
