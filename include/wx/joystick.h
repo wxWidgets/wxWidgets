@@ -1,6 +1,8 @@
 #ifndef _WX_JOYSTICK_H_BASE_
 #define _WX_JOYSTICK_H_BASE_
 
+#if wxUSE_JOYSTICK
+
 #if defined(__WXMSW__)
 #include "wx/msw/joystick.h"
 #elif defined(__WXMOTIF__)
@@ -14,6 +16,8 @@
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/joystick.h"
 #endif
+
+#endif // wxUSE_JOYSTICK
 
 #endif
     // _WX_JOYSTICK_H_BASE_
