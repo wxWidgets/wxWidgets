@@ -62,6 +62,10 @@ public:
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
     virtual bool IsFullScreen() const { return m_fsIsShowing; }
 
+    // wxMSW only: EnableCloseButton(FALSE) may be used to remove the "Close"
+    // button from the title bar
+    bool EnableCloseButton(bool enable = TRUE);
+
     // implementation from now on
     // --------------------------
 

@@ -127,38 +127,6 @@ bool wxDialog::Create(wxWindow *parent,
     return TRUE;
 }
 
-bool wxDialog::EnableCloseButton(bool enable)
-{
-#ifndef __WXMICROWIN__
-    // get system (a.k.a. window) menu
-    HMENU hmenu = ::GetSystemMenu(GetHwnd(), FALSE /* get it */);
-    if ( !hmenu )
-    {
-        wxLogLastError(_T("GetSystemMenu"));
-
-        return FALSE;
-    }
-
-    // enabling/disabling the close item from it also automatically
-    // disables/enabling the close title bar button
-    if ( !::EnableMenuItem(hmenu, SC_CLOSE,
-                           MF_BYCOMMAND | (enable ? MF_ENABLED : MF_GRAYED)) )
-    {
-        wxLogLastError(_T("EnableMenuItem(SC_CLOSE)"));
-
-        return FALSE;
-    }
-
-    // update appearance immediately
-    if ( !::DrawMenuBar(GetHwnd()) )
-    {
-        wxLogLastError(_T("DrawMenuBar"));
-    }
-#endif
-
-    return TRUE;
-}
-
 void wxDialog::SetModal(bool flag)
 {
     if ( flag )

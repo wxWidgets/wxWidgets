@@ -70,9 +70,6 @@ public:
     // returns TRUE if we're in a modal loop
     bool IsModalShowing() const;
 
-    // wxMSW only: remove the "Close" button from the dialog
-    bool EnableCloseButton(bool enable = TRUE);
-
     // implementation only from now on
     // -------------------------------
 
