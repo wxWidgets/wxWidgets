@@ -267,7 +267,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "grid"=.\grid\grid.dsp - Package Owner=<4>
+Project: "griddemo"=.\grid\griddemo.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -544,18 +544,6 @@ Package=<4>
 ###############################################################################
 
 Project: "nativdlg"=.\nativdlg\nativdlg.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "newgrid"=.\newgrid\newgrid.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
