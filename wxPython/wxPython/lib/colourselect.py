@@ -9,3 +9,4 @@ __doc__ =  wx.lib.colourselect.__doc__
 ColourSelect = wx.lib.colourselect.ColourSelect
 ColourSelectEvent = wx.lib.colourselect.ColourSelectEvent
 EVT_COLOURSELECT = wx.lib.colourselect.EVT_COLOURSELECT
+wxEVT_COMMAND_COLOURSELECT = wx.lib.colourselect.wxEVT_COMMAND_COLOURSELECT

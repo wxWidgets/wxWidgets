@@ -86,8 +86,10 @@ class ColourSelect(wx.BitmapButton):
         self.SetColour(colour)
 
     def SetColour(self, colour):
-        if type(colour) == type( () ):
-            colour = wxColour(*colour)
+        if type(colour) == tuple:
+            colour = wx.Colour(*colour)
+        if type(colour) == str:
+            colour = wx.NamedColour(colour)
             
         self.colour = colour
         bmp = self.MakeBitmap()
