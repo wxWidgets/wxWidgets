@@ -161,7 +161,7 @@ MyFrame::MyFrame(const wxString& title)
     SetMenuBar(menuBar);
 #endif // wxUSE_MENUS
 
-#if wxUSE_STATUSBAR && !defined(__WXWINCE__)
+#if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
     SetStatusText(_T("Welcome to wxWindows!"));
