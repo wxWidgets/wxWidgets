@@ -19,8 +19,11 @@ WX_DECLARE_OBJC_HASHMAP(NSControl);
 class wxCocoaNSControl
 {
     WX_DECLARE_OBJC_INTERFACE(NSControl)
-protected:
+public:
+    virtual void CocoaTarget_action() {}
 //    virtual void Cocoa_didChangeText(void) = 0;
+protected:
+    static struct objc_object *sm_cocoaTarget;
 };
 
 #endif // _WX_COCOA_NSCONTROL_H_

@@ -19,12 +19,39 @@
 
 #include "wx/wxprec.h"
 #ifndef WX_PRECOMP
+    #include "wx/log.h"
 #endif // WX_PRECOMP
 
 #include "wx/cocoa/NSControl.h"
 
-// ----------------------------------------------------------------------------
-// globals
-// ----------------------------------------------------------------------------
+#import <Foundation/NSObject.h>
+
+// ============================================================================
+// @class wxNSControlTarget
+// ============================================================================
+@interface wxNSControlTarget : NSObject
+{
+}
+
+- (void)wxNSControlAction: (id)sender;
+@end //interface wxNSControlTarget
+
+@implementation wxNSControlTarget : NSObject
+
+- (void)wxNSControlAction: (id)sender
+{
+    wxLogDebug("wxNSControlAction");
+    wxCocoaNSControl *wxcontrol = wxCocoaNSControl::GetFromCocoa(sender);
+    wxCHECK_RET(wxcontrol,"wxNSControlAction received but no wxCocoaNSControl exists!");
+    wxcontrol->CocoaTarget_action();
+}
+
+@end //implementation wxNSControlTarget
+
+// ============================================================================
+// wxNSControl
+// ============================================================================
 WX_IMPLEMENT_OBJC_INTERFACE(NSControl)
+
+struct objc_object *wxCocoaNSControl::sm_cocoaTarget = [[wxNSControlTarget alloc] init];
 
