@@ -3003,20 +3003,8 @@ void wxWindowGTK::DoGetPosition( int *x, int *y ) const
         dy = pizza->yoffset;
     }
     
-    int nx = m_x - dx;
-    int ny = m_y - dy;
-    
-    if ( !IsTopLevel() && m_parent )
-    {
-        // We may be faking the client origin. So a window that's really at (0,
-        // 30) may appear (to wxWin apps) to be at (0, 0).
-        wxPoint pt(m_parent->GetClientAreaOrigin());
-        nx -= pt.x;
-        ny -= pt.y;
-    }
-
-    if (x) (*x) = nx;
-    if (y) (*y) = ny;
+    if (x) (*x) = m_x - dx;
+    if (y) (*y) = m_y - dy;
 }
 
 void wxWindowGTK::DoClientToScreen( int *x, int *y ) const
