@@ -25,15 +25,11 @@
     #define wxUSE_TEXTFILE 0
 #endif // wxUSE_FILE
 
-#if wxUSE_TEXTFILE
-
-#include "wx/string.h"
-#include "wx/file.h"
-#include "wx/dynarray.h"
-
 // ----------------------------------------------------------------------------
-// wxTextFile
+// constants
 // ----------------------------------------------------------------------------
+
+// NB: this is always defined, even if !wxUSE_TEXTFILE
 
 // the line termination type
 enum wxTextFileType
@@ -44,6 +40,16 @@ enum wxTextFileType
     wxTextFileType_Mac,   //                         'CR' = 0xD = 13 = '\r'
     wxTextFileType_Os2    //                         'CR' 'LF'
 };
+
+#if wxUSE_TEXTFILE
+
+#include "wx/string.h"
+#include "wx/file.h"
+#include "wx/dynarray.h"
+
+// ----------------------------------------------------------------------------
+// wxTextFile
+// ----------------------------------------------------------------------------
 
 WX_DEFINE_EXPORTED_ARRAY(wxTextFileType, ArrayFileType);
 
