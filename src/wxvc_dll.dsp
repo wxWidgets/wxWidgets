@@ -170,6 +170,10 @@ SOURCE=.\common\dynlib.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\encconv.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\event.cpp
 # End Source File
 # Begin Source File
@@ -257,6 +261,14 @@ SOURCE=.\common\image.cpp
 # Begin Source File
 
 SOURCE=.\common\imaggif.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\imagpcx.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\imagpnm.cpp
 # End Source File
 # Begin Source File
 

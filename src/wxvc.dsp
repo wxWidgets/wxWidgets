@@ -163,6 +163,10 @@ SOURCE=.\common\dynlib.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\encconv.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\event.cpp
 # End Source File
 # Begin Source File
