@@ -289,8 +289,6 @@ bool wxMenuBar::Append(wxMenu * menu, const wxString& title)
         menu->SetButtonWidget(w);
     }
 
-    //menu->SetMenuBar(this);
-
     m_titles.Add(title);
 
     return wxMenuBarBase::Append(menu, title);
@@ -522,7 +520,6 @@ WXWidget wxMenu::CreateMenu (wxMenuBar * menuBar, WXWidget parent, wxMenu * topM
 
     m_menuWidget = (WXWidget) menu;
 
-    m_menuBar = menuBar;
     m_topLevelMenu = topMenu;
 
     for ( wxMenuItemList::compatibility_iterator node = GetMenuItems().GetFirst();
