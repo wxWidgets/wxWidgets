@@ -139,7 +139,9 @@ AUTOCONF_ALL = \
 	../../samples/widgets/Makefile.in \
 	../../samples/wizard/Makefile.in \
 	../../samples/wxtest/Makefile.in \
-	../../utils/HelpGen/Makefile.in
+	../../utils/HelpGen/Makefile.in \
+	../../utils/Makefile.in \
+	../../utils/tex2rtf/src/Makefile.in
 BORLAND_ALL = \
 	../../contrib/build/animate/makefile.bcc \
 	../../contrib/build/deprecated/makefile.bcc \
@@ -266,6 +268,8 @@ BORLAND_ALL = \
 	../../samples/wizard/makefile.bcc \
 	../../samples/wxtest/makefile.bcc \
 	../../utils/HelpGen/makefile.bcc \
+	../../utils/makefile.bcc \
+	../../utils/tex2rtf/src/makefile.bcc \
 	../msw/makefile.bcc
 MINGW_ALL = \
 	../../contrib/build/animate/makefile.gcc \
@@ -393,6 +397,8 @@ MINGW_ALL = \
 	../../samples/wizard/makefile.gcc \
 	../../samples/wxtest/makefile.gcc \
 	../../utils/HelpGen/makefile.gcc \
+	../../utils/makefile.gcc \
+	../../utils/tex2rtf/src/makefile.gcc \
 	../msw/makefile.gcc
 MSVC_ALL = \
 	../../contrib/build/animate/makefile.vc \
@@ -520,6 +526,8 @@ MSVC_ALL = \
 	../../samples/wizard/makefile.vc \
 	../../samples/wxtest/makefile.vc \
 	../../utils/HelpGen/makefile.vc \
+	../../utils/makefile.vc \
+	../../utils/tex2rtf/src/makefile.vc \
 	../msw/makefile.vc
 MSVC6PRJ_ALL = \
 	../../contrib/build/animate/animate.dsw \
@@ -642,6 +650,7 @@ MSVC6PRJ_ALL = \
 	../../samples/wizard/wizard.dsw \
 	../../samples/wxtest/wxtest.dsw \
 	../../utils/HelpGen/helpgen.dsw \
+	../../utils/tex2rtf/src/tex2rtf.dsw \
 	../msw/wx.dsw
 WATCOM_ALL = \
 	../../contrib/build/animate/makefile.wat \
@@ -769,6 +778,8 @@ WATCOM_ALL = \
 	../../samples/wizard/makefile.wat \
 	../../samples/wxtest/makefile.wat \
 	../../utils/HelpGen/makefile.wat \
+	../../utils/makefile.wat \
+	../../utils/tex2rtf/src/makefile.wat \
 	../msw/makefile.wat
 
 all: $(COMPAT_TARGETS) autoconf borland mingw msvc msvc6prj watcom
@@ -908,6 +919,8 @@ clean:
 	rm -f ../../samples/wizard/Makefile.in
 	rm -f ../../samples/wxtest/Makefile.in
 	rm -f ../../utils/HelpGen/Makefile.in
+	rm -f ../../utils/Makefile.in
+	rm -f ../../utils/tex2rtf/src/Makefile.in
 	rm -f ../../contrib/build/animate/makefile.bcc
 	rm -f ../../contrib/build/deprecated/makefile.bcc
 	rm -f ../../contrib/build/fl/makefile.bcc
@@ -1033,6 +1046,8 @@ clean:
 	rm -f ../../samples/wizard/makefile.bcc
 	rm -f ../../samples/wxtest/makefile.bcc
 	rm -f ../../utils/HelpGen/makefile.bcc
+	rm -f ../../utils/makefile.bcc
+	rm -f ../../utils/tex2rtf/src/makefile.bcc
 	rm -f ../msw/makefile.bcc
 	rm -f ../../contrib/build/animate/makefile.gcc
 	rm -f ../../contrib/build/deprecated/makefile.gcc
@@ -1159,6 +1174,8 @@ clean:
 	rm -f ../../samples/wizard/makefile.gcc
 	rm -f ../../samples/wxtest/makefile.gcc
 	rm -f ../../utils/HelpGen/makefile.gcc
+	rm -f ../../utils/makefile.gcc
+	rm -f ../../utils/tex2rtf/src/makefile.gcc
 	rm -f ../msw/makefile.gcc
 	rm -f ../../contrib/build/animate/makefile.vc
 	rm -f ../../contrib/build/deprecated/makefile.vc
@@ -1285,6 +1302,8 @@ clean:
 	rm -f ../../samples/wizard/makefile.vc
 	rm -f ../../samples/wxtest/makefile.vc
 	rm -f ../../utils/HelpGen/makefile.vc
+	rm -f ../../utils/makefile.vc
+	rm -f ../../utils/tex2rtf/src/makefile.vc
 	rm -f ../msw/makefile.vc
 	rm -f ../../contrib/build/animate/animate.dsw
 	rm -f ../../contrib/build/deprecated/deprecated.dsw
@@ -1406,6 +1425,7 @@ clean:
 	rm -f ../../samples/wizard/wizard.dsw
 	rm -f ../../samples/wxtest/wxtest.dsw
 	rm -f ../../utils/HelpGen/helpgen.dsw
+	rm -f ../../utils/tex2rtf/src/tex2rtf.dsw
 	rm -f ../msw/wx.dsw
 	rm -f ../../contrib/build/animate/makefile.wat
 	rm -f ../../contrib/build/deprecated/makefile.wat
@@ -1532,6 +1552,8 @@ clean:
 	rm -f ../../samples/wizard/makefile.wat
 	rm -f ../../samples/wxtest/makefile.wat
 	rm -f ../../utils/HelpGen/makefile.wat
+	rm -f ../../utils/makefile.wat
+	rm -f ../../utils/tex2rtf/src/makefile.wat
 	rm -f ../msw/makefile.wat
 
 
@@ -4038,6 +4060,43 @@ Makefile: regenMakefile.py
 	touch $@
 ../../utils/HelpGen/helpgen.dsw: $(SDEPS) ../../utils/HelpGen/helpgen.bkl
 	$(BAKEFILE) -fmsvc6prj -o$@  -DWXTOPDIR=../../ $(DSWFLAGS)  ../../utils/HelpGen/helpgen.bkl
+	touch $@
+
+
+../../utils/tex2rtf/src/Makefile.in: $(SDEPS) ../../utils/tex2rtf/src/tex2rtf.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DWXTOPDIR=../../../ -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../utils/tex2rtf/src/tex2rtf.bkl
+	touch $@
+../../utils/tex2rtf/src/makefile.bcc: $(SDEPS) ../../utils/tex2rtf/src/tex2rtf.bkl
+	$(BAKEFILE) -fborland -o$@  -DWXTOPDIR=../../../ -DOPTIONS_FILE=../../../build/msw/config.bcc -DWRITE_OPTIONS_FILE=0  ../../utils/tex2rtf/src/tex2rtf.bkl
+	touch $@
+../../utils/tex2rtf/src/makefile.vc: $(SDEPS) ../../utils/tex2rtf/src/tex2rtf.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DWXTOPDIR=../../../ -DOPTIONS_FILE=../../../build/msw/config.vc -DWRITE_OPTIONS_FILE=0  ../../utils/tex2rtf/src/tex2rtf.bkl
+	touch $@
+../../utils/tex2rtf/src/makefile.gcc: $(SDEPS) ../../utils/tex2rtf/src/tex2rtf.bkl
+	$(BAKEFILE) -fmingw -o$@  -DWXTOPDIR=../../../ -DOPTIONS_FILE=../../../build/msw/config.gcc -DWRITE_OPTIONS_FILE=0  ../../utils/tex2rtf/src/tex2rtf.bkl
+	touch $@
+../../utils/tex2rtf/src/makefile.wat: $(SDEPS) ../../utils/tex2rtf/src/tex2rtf.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DWXTOPDIR=../../../ -DOPTIONS_FILE=../../../build/msw/config.wat -DWRITE_OPTIONS_FILE=0  ../../utils/tex2rtf/src/tex2rtf.bkl
+	touch $@
+../../utils/tex2rtf/src/tex2rtf.dsw: $(SDEPS) ../../utils/tex2rtf/src/tex2rtf.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  -DWXTOPDIR=../../../ $(DSWFLAGS)  ../../utils/tex2rtf/src/tex2rtf.bkl
+	touch $@
+
+
+../../utils/Makefile.in: ../../utils/utils.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../utils/utils.bkl
+	touch $@
+../../utils/makefile.bcc: ../../utils/utils.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../build/msw/config.bcc -DWRITE_OPTIONS_FILE=0 ../../utils/utils.bkl
+	touch $@
+../../utils/makefile.vc: ../../utils/utils.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../build/msw/config.vc -DWRITE_OPTIONS_FILE=0 ../../utils/utils.bkl
+	touch $@
+../../utils/makefile.gcc: ../../utils/utils.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../build/msw/config.gcc -DWRITE_OPTIONS_FILE=0 ../../utils/utils.bkl
+	touch $@
+../../utils/makefile.wat: ../../utils/utils.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../build/msw/config.wat -DWRITE_OPTIONS_FILE=0 ../../utils/utils.bkl
 	touch $@
 
 
