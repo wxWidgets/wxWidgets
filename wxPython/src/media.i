@@ -179,7 +179,8 @@ public:
     %pythonAppend wxMediaCtrl()    ""
 
 
-    wxMediaCtrl(wxWindow* parent, wxWindowID id=-1,
+    wxMediaCtrl(wxWindow* parent,
+                wxWindowID id=-1,
                 const wxString& fileName = wxPyEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
@@ -192,7 +193,8 @@ public:
 
     %extend {
         %name(MediaCtrlFromURI)
-             wxMediaCtrl(wxWindow* parent, wxWindowID id=-1,
+             wxMediaCtrl(wxWindow* parent,
+                         wxWindowID id=-1,
                          const wxString& location=wxPyEmptyString,
                          const wxPoint& pos = wxDefaultPosition,
                          const wxSize& size = wxDefaultSize,
@@ -205,7 +207,8 @@ public:
                                    pos, size, style, szBackend, validator, name);
         }
 
-        bool CreateFromURI(wxWindow* parent, wxWindowID id=-1,
+        bool CreateFromURI(wxWindow* parent,
+                           wxWindowID id=-1,
                            const wxString& location=wxPyEmptyString,
                            const wxPoint& pos = wxDefaultPosition,
                            const wxSize& size = wxDefaultSize,
@@ -220,7 +223,8 @@ public:
     }
 
 
-    bool Create(wxWindow* parent, wxWindowID id=-1,
+    bool Create(wxWindow* parent,
+                wxWindowID id=-1,
                 const wxString& fileName = wxPyEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
@@ -249,9 +253,9 @@ public:
     double GetPlaybackRate();
     bool SetPlaybackRate(double dRate);
 
-    bool SetPosition(wxLongLong where);
-    wxLongLong GetPosition();
-    wxLongLong GetDuration();
+    %name(SetMediaPosition) bool SetPosition(wxLongLong where);
+    %name(GetMediaPosition) wxLongLong GetPosition();
+    %name(GetMediaDuration) wxLongLong GetDuration();
 };
 
 

@@ -3,6 +3,8 @@ import wx
 import wx.media
 import os
 
+from Main import opj
+
 #----------------------------------------------------------------------
 
 class TestPanel(wx.Panel):
@@ -12,23 +14,27 @@ class TestPanel(wx.Panel):
                           style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 
         # Create some controls
-        self.mc = wx.media.MediaCtrl(self)
-        self.mc.SetMinSize((320,200))
+        self.mc = wx.media.MediaCtrl(self, -1, opj("data/testmovie.mpg"),
+                                     style=wx.SIMPLE_BORDER)
+        self.mc.SetBackgroundColour("black")
+        #self.mc.SetMinSize((320,200))
+        self.mc.Stop()
 
         btn1 = wx.Button(self, -1, "Load File")
         self.Bind(wx.EVT_BUTTON, self.OnLoadFile, btn1)
         
-        btn2 = wx.Button(self, -1, "Load URL")
-        self.Bind(wx.EVT_BUTTON, self.OnLoadURI, btn2)
+        btn2 = wx.Button(self, -1, "Play")
+        self.Bind(wx.EVT_BUTTON, self.OnPlay, btn2)
         
-        btn3 = wx.Button(self, -1, "Play")
-        self.Bind(wx.EVT_BUTTON, self.OnPlay, btn3)
+        btn3 = wx.Button(self, -1, "Pause")
+        self.Bind(wx.EVT_BUTTON, self.OnPause, btn3)
         
-        btn4 = wx.Button(self, -1, "Pause")
-        self.Bind(wx.EVT_BUTTON, self.OnPause, btn4)
+        btn4 = wx.Button(self, -1, "Stop")
+        self.Bind(wx.EVT_BUTTON, self.OnStop, btn4)
+
+        btn5 = wx.ToggleButton(self, -1, "Loop")
+        self.Bind(wx.EVT_TOGGLEBUTTON, self.OnLoopToggle, btn5)
         
-        btn5 = wx.Button(self, -1, "Stop")
-        self.Bind(wx.EVT_BUTTON, self.OnStop, btn5)
 
         # setup the layout
         sizer = wx.GridBagSizer(5,5)
@@ -48,8 +54,8 @@ class TestPanel(wx.Panel):
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
             if not self.mc.Load(path):
-                wx.MessageBox("Unable to load %s." % path,
-                              "ERROR: Unsupported format?",
+                wx.MessageBox("Unable to load %s: Unsupported format?" % path,
+                              "ERROR",
                               wx.ICON_ERROR | wx.OK)
             else:
                 self.mc.SetBestFittingSize()
@@ -57,19 +63,10 @@ class TestPanel(wx.Panel):
         dlg.Destroy()
         
     
-    def OnLoadURI(self, evt):
-        dlg = wx.TextEntryDialog(self, "URL:", "Please enter the URL of a media file",
-                                 "http://www.mwscomp.com/movies/grail/tim-the-enchanter.avi")
-        if dlg.ShowModal() == wx.ID_OK:
-            url = dlg.GetValue()
-            if not self.mc.LoadFromURI(url):
-                wx.MessageBox("Unable to load %s." % url,
-                              "ERROR", wx.ICON_ERROR | wx.OK)
-            else:
-                self.mc.SetBestFittingSize()
-                self.GetSizer().Layout()
-        dlg.Destroy()
-            
+    def OnLoopToggle(self, evt):
+        btn = evt.GetEventObject()
+        self.mc.Loop(btn.GetValue())
+                     
     
     def OnPlay(self, evt):
         self.mc.Play()
