@@ -68,6 +68,12 @@ All (GUI):
   generated at all, so you must call event.Skip() in your OnKeyDown() if
   you want to get OnChar() as well
 
+- the (command) events are not propagated beyond the first top level window
+  containing them because they now have wxWS_EX_BLOCK_EVENTS style by default,
+  you need to explicitly unset it if you want to have the old behaviour when
+  you could process the events from the controls in a dialog in its parent
+  frame.
+
 - in general, the key events sent for the various non ASCII key combinations
   have been changed to make them consistent over all supported platforms,
   please see the wxKeyEvent documentation for details
@@ -216,7 +222,6 @@ wxMotif:
 - fixed "make install"
 
 
->>>>>>> 1.212.2.72
 2.4.1
 -----
 
