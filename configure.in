@@ -395,12 +395,6 @@ dnl ---------------------------------------------------------------------------
 dnl the file passed to AC_INIT should be specific to our package
 AC_INIT(wx-config.in)
 
-AC_CANONICAL_SYSTEM
-
-dnl When making releases do:
-dnl
-dnl WX_RELEASE_NUMBER += 1
-dnl WX_INTERFACE_AGE += 1
 dnl WX_BINARY_AGE += 1
 dnl
 dnl if any functions have been added, do:
@@ -1514,7 +1508,17 @@ fi
 if test "$wxUSE_GTK" = 1; then
     dnl avoid calling AM_PATH_GTK twice, so check first for the newer version
     dnl and only then, if it wasn't found, for an older one
-    AM_PATH_GTK(1.2.3, WXGTK12=1, AC_MSG_ERROR(Is gtk-config in path and GTK+ is version 1.2.3 or above?))
+    AM_PATH_GTK(1.2.3, WXGTK12=1)
+
+    if test "$WXGTK12" != 1; then
+        AC_MSG_ERROR([
+            Please check that gtk-config is in path, the directory
+            where GTK+ libraries are installed (returned by
+            'gtk-config --libs' command) is in LD_LIBRARY_PATH or
+            equivalent variable and GTK+ is version 1.2.3 or above.
+        ])
+    fi
+
 dnl it doesn't really work with 1.3.0 now...
 dnl    AM_PATH_GTK(1.3.0,
 dnl        WXGTK13=1,
