@@ -2775,7 +2775,7 @@ else
                  wx_cv_func_statvfs=no
             ]
         )
-    ]
+    )
 
     if test "$wx_cv_func_statvfs" = "yes"; then
         AC_DEFINE(HAVE_STATVFS)
