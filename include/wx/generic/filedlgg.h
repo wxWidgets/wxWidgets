@@ -62,7 +62,7 @@ public:
     void SetFilename(const wxString& name) { m_fileName = name; }
     void SetWildcard(const wxString& wildCard) { m_wildCard = wildCard; }
     void SetStyle(long style) { m_dialogStyle = style; }
-    void SetFilterIndex(int filterIndex) { m_filterIndex = filterIndex; }
+    void SetFilterIndex(int filterIndex);
 
     wxString GetMessage() const { return m_message; }
     wxString GetPath() const { return m_path; }
