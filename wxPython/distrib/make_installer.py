@@ -1,3 +1,16 @@
+# -*- coding: iso-8859-1 -*-
+#----------------------------------------------------------------------
+# Name:        make_installer.py
+# Purpose:     A script to create the wxPython windows installer
+#
+# Author:      Robin Dunn
+#
+# Created:     30-April-2001
+# RCS-ID:      $Id$
+# Copyright:   (c) 2003 by Total Control Software
+# Licence:     wxWindows license
+#----------------------------------------------------------------------
+
 """
 This script will generate a setup script for InnoSetup and then run it
 to make the installer executable.  If all goes right the proper versions
@@ -25,7 +38,7 @@ AppCopyright = Copyright © 2003 Total Control Software
 DefaultDirName = {code:GetInstallDir|c:\DoNotInstallHere}
 DefaultGroupName = wxPython %(SHORTVER)s for Python %(PYTHONVER)s
 AlwaysCreateUninstallIcon = yes
-AdminPrivilegesRequired = yes
+AdminPrivilegesRequired = no
 OutputDir = dist
 WizardStyle = modern
 UninstallStyle = modern
@@ -45,7 +58,7 @@ AppPublisherURL = http://wxPython.org/
 LicenseFile = licence\licence.txt
 CodeFile = %(IFSFILE)s
 
-;; WizardDebug = yes
+;;WizardDebug = yes
 
 ;;------------------------------------------------------------
 
@@ -64,9 +77,12 @@ Name: samples; Description: "Sample applications";           Types: full
 ;;------------------------------------------------------------
 
 [Files]
-Source: "%(SYSDIR)s\MSVCRT.dll";            DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: sharedfile uninsneveruninstall restartreplace; Components: core
-Source: "%(SYSDIR)s\MSVCIRT.dll";           DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: sharedfile uninsneveruninstall restartreplace; Components: core
-Source: "%(SYSDIR)s\MSVCP60.dll";           DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: sharedfile uninsneveruninstall restartreplace; Components: core
+Source: "%(SYSDIR)s\MSVCRT.dll";            DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: sharedfile uninsneveruninstall restartreplace; Check: IsSysInstall; Components: core
+Source: "%(SYSDIR)s\MSVCIRT.dll";           DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: sharedfile uninsneveruninstall restartreplace; Check: IsSysInstall; Components: core
+Source: "%(SYSDIR)s\MSVCP60.dll";           DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: sharedfile uninsneveruninstall restartreplace; Check: IsSysInstall; Components: core
+Source: "%(SYSDIR)s\MSVCRT.dll";            DestDir: "{code:GetPythonDir}"; CopyMode: alwaysskipifsameorolder; Flags: uninsneveruninstall; Check: IsNotSysInstall; Components: core
+Source: "%(SYSDIR)s\MSVCIRT.dll";           DestDir: "{code:GetPythonDir}"; CopyMode: alwaysskipifsameorolder; Flags: uninsneveruninstall; Check: IsNotSysInstall; Components: core
+Source: "%(SYSDIR)s\MSVCP60.dll";           DestDir: "{code:GetPythonDir}"; CopyMode: alwaysskipifsameorolder; Flags: uninsneveruninstall; Check: IsNotSysInstall; Components: core
 
 Source: "%(WXDIR)s\lib\%(WXDLL)s";          DestDir: "{app}\wxPython"; Components: core
 %(MSLU)s
@@ -136,7 +152,7 @@ Source: "demo\data\*.py";                   DestDir: "{app}\wxPython\demo\data";
 Source: "demo\data\*.png";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
 Source: "demo\data\*.bmp";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
 Source: "demo\data\*.i";                    DestDir: "{app}\wxPython\demo\data"; Components: demo
-;;Source: "demo\data\*.h";                    DestDir: "{app}\wxPython\demo\data"; Components: demo
+Source: "demo\data\*.dat";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
 Source: "demo\data\*.txt";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
 Source: "demo\data\*.wav";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
 Source: "demo\data\*.wdr";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
@@ -330,12 +346,17 @@ Type: files; Name: "{app}\wx\tools\XRCed\*.pyo";
 IFS_Template = r"""
 program Setup;
 var
-    PythonDir : String;
+    PythonDir  : String;
     InstallDir : String;
+    sysInstall : Boolean;
 
 
 function InitializeSetup(): Boolean;
 begin
+
+    (* -------------------------------------------------------------- *)
+    (* Figure out what to use as a default installation dir           *)
+    
     if not RegQueryStringValue(HKEY_LOCAL_MACHINE,
                                'Software\Python\PythonCore\%(PYTHONVER)s\InstallPath',
                                '', PythonDir) then begin
@@ -352,7 +373,53 @@ begin
     end;
     InstallDir := PythonDir;
     %(IF22)s
+
+
+    (* -------------------------------------------------------------- *)
+    (* And now where to put the system DLLs                           *)
+
+    sysInstall := False;
+
+    (* Check if Python has a regkey in HKLM, if so it installed the DLLs in the SYSTEM dir *)
+    if RegValueExists(HKEY_LOCAL_MACHINE,
+                      'Software\Python\PythonCore\%(PYTHONVER)s\InstallPath', '') then begin
+        sysInstall := True;
+    end;    
+
+    (* If so, ensure that the user can write to HKLM *)
+    if sysInstall and not RegWriteStringValue(HKEY_LOCAL_MACHINE,
+                                             'Software\Python\PythonCore\%(PYTHONVER)s\Modules\wxPython',
+                                             '', '%(VERSION)s') then begin
+        (* if not then revert to installing to the Python dir *)
+        sysInstall := False;
+        (* and put the regkey in HKCU *)
+        RegWriteStringValue(HKEY_CURRENT_USER,
+                            'Software\Python\PythonCore\%(PYTHONVER)s\Modules\wxPython',
+                            '', '%(VERSION)s');
+    end;
+
     Result := true;
+end;
+
+
+function IsSysInstall(): Boolean;
+begin
+    Result :=  sysInstall;
+end;
+function IsNotSysInstall(): Boolean;
+begin
+    Result := not sysInstall;
+end;
+
+
+
+function GetDLLDir(Default: String): String;
+begin
+    if sysInstall then begin
+        Result := Default;
+    end else begin
+        Result := PythonDir;
+    end;
 end;
 
 
@@ -360,6 +427,7 @@ function GetPythonDir(Default: String): String;
 begin
     Result := PythonDir;
 end;
+
 
 function GetInstallDir(Default: String): String;
 begin
@@ -430,6 +498,14 @@ def build_locale_string():
     os.path.walk('wxPython\\locale', walk_helper, stringlst)
     return '\n'.join(stringlst)
 
+def get_system_dir():
+    for p in [r"C:\WINNT\SYSTEM32",
+              r"C:\WINDOWS\SYSTEM32",
+              ]:
+        if os.path.exists(p):
+            return p
+    raise IOError, "System dir not found"
+
 
 #----------------------------------------------------------------------
 
@@ -446,7 +522,7 @@ def main():
     PYVER      = "Py" + PYTHONVER[0] + PYTHONVER[2]
     WXDIR      = os.environ["WXWIN"]
     WXPYDIR    = os.path.join(WXDIR, "wxPython")
-    SYSDIR     = r"C:\WINNT\SYSTEM32"
+    SYSDIR     = get_system_dir()
     ISSFILE    = "__wxPython.iss"
     IFSFILE    = "__wxPython.ifs"
     LOCALE     = build_locale_string()
