@@ -86,7 +86,7 @@
 #include <string.h>
 #include <ctype.h>
 
-#if defined(__WIN95__) && !(defined(__GNUWIN32_OLD__) || defined(__TWIN32__))
+#if defined(__WIN95__) && !((defined(__GNUWIN32_OLD__) || defined(__TWIN32__)) && !defined(__CYGWIN10__))
     #include <commctrl.h>
 #endif
 

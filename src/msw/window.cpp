@@ -84,7 +84,7 @@
 
 #include <string.h>
 
-#ifndef __GNUWIN32_OLD__
+#if !defined(__GNUWIN32_OLD__) || defined(__CYGWIN10__)
     #include <shellapi.h>
     #include <mmsystem.h>
 #endif
@@ -93,7 +93,7 @@
     #include <windowsx.h>
 #endif
 
-#if !defined(__GNUWIN32_OLD__) && !defined(__TWIN32__)
+#if (!defined(__GNUWIN32_OLD__) && !defined(__TWIN32__)) || defined(__CYGWIN10__)
     #ifdef __WIN95__
         #include <commctrl.h>
     #endif

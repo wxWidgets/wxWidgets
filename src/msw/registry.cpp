@@ -316,7 +316,7 @@ bool wxRegKey::GetKeyInfo(size_t *pnSubKeys,
 #if defined(__WIN32__) && !defined(__TWIN32__)
 
     // old gcc headers incorrectly prototype RegQueryInfoKey()
-#ifdef __GNUWIN32_OLD__
+#if defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__)
     #define REG_PARAM   (size_t *)
 #else
     #define REG_PARAM   (LPDWORD)

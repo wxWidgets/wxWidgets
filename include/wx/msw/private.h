@@ -68,7 +68,7 @@ WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
 // this defines a CASTWNDPROC macro which casts a pointer to the type of a
 // window proc
 
-#ifdef __GNUWIN32_OLD__
+#if defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__)
     #define CASTWNDPROC (long unsigned)
 #else
     #if defined(STRICT) || defined(__GNUC__)

@@ -60,7 +60,7 @@
 #   include <fstream>
 #endif
 
-#if wxUSE_RICHEDIT && !defined(__GNUWIN32_OLD__)
+#if wxUSE_RICHEDIT && (!defined(__GNUWIN32_OLD__) || defined(__CYGWIN10__))
     #include <richedit.h>
 #endif
 

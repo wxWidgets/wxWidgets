@@ -15,7 +15,7 @@
 
 // Cygwin / Mingw32 with gcc >= 2.95 use new windows headers which
 // are more ms-like (header author is Anders Norlander, hence the name)
-#if (defined(__MINGW32__) || defined(__CYGWIN__)) && ((__GNUC__>2) ||((__GNUC__==2) && (__GNUC_MINOR__>=95)))
+#if (defined(__MINGW32__) || defined(__CYGWIN__)) && ((__GNUC__>2) || ((__GNUC__==2) && (__GNUC_MINOR__>=95)))
     #ifndef wxUSE_NORLANDER_HEADERS
         #define wxUSE_NORLANDER_HEADERS 1
     #endif
@@ -30,6 +30,11 @@
 // in wx/msw/gnuwin32/extra.h
 #if defined(__GNUC__) && !wxUSE_NORLANDER_HEADERS
     #define __GNUWIN32_OLD__
+#endif
+
+// Cygwin 1.0
+#if defined(__CYGWIN__) && ((__GNUC__==2) && (__GNUC_MINOR__==9))
+    #define __CYGWIN10__
 #endif
 
 #endif

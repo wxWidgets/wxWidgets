@@ -31,7 +31,7 @@
 #include <windows.h>
 #include <windowsx.h>
 
-#ifdef __GNUWIN32_OLD__
+#if defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__)
     #include "wx/msw/gnuwin32/extra.h"
 #else
     #include <mmsystem.h>

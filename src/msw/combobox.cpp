@@ -41,7 +41,7 @@
 #include "wx/msw/private.h"
 
 #if wxUSE_TOOLTIPS
-    #ifndef __GNUWIN32_OLD__
+    #if !defined(__GNUWIN32_OLD__) || defined(__CYGWIN10__)
         #include <commctrl.h>
     #endif
     #include "wx/tooltip.h"
@@ -115,7 +115,7 @@ LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
 #endif // 0
 
         // deal with tooltips here
-#if wxUSE_TOOLTIPS
+#if wxUSE_TOOLTIPS && defined(TTN_NEEDTEXT)
         case WM_NOTIFY:
             {
                 wxCHECK_MSG( win, 0, _T("should have a parent") );

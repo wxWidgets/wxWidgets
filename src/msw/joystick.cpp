@@ -24,7 +24,7 @@
 #include "wx/window.h"
 #include "wx/msw/private.h"
 
-#ifndef __GNUWIN32_OLD__
+#if !defined(__GNUWIN32_OLD__) || defined(__CYGWIN10__)
     #include <mmsystem.h>
 #endif
 
