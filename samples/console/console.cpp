@@ -95,7 +95,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = true;
 #else
-    #define TEST_SOCKETS
+    #define TEST_FILECONF
 
     static const bool TEST_ALL = false;
 #endif
@@ -798,6 +798,12 @@ static void TestFileConfRead()
 
         cont = fileconf.GetNextEntry(name, dummy);
     }
+
+    static const wxChar *testEntry = _T("TestEntry");
+    wxPrintf(_T("\nTesting deletion of newly created \"Test\" entry: "));
+    fileconf.Write(testEntry, _T("A value"));
+    fileconf.DeleteEntry(testEntry);
+    wxPrintf(fileconf.HasEntry(testEntry) ? _T("ERROR\n") : _T("ok\n"));
 }
 
 #endif // TEST_FILECONF
