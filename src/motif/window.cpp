@@ -2099,22 +2099,21 @@ static void wxCanvasInputEvent(Widget drawingArea,
                     {
                         // I have a dclick
                         canvas->SetLastClick(0, ts);
-                        switch ( eventType )
+
+                        wxEventType typeDouble;
+                        if ( eventType == wxEVT_LEFT_DOWN )
+                            typeDouble = wxEVT_LEFT_DCLICK;
+                        else if ( eventType == wxEVT_MIDDLE_DOWN )
+                            typeDouble = wxEVT_MIDDLE_DCLICK;
+                        else if ( eventType == wxEVT_RIGHT_DOWN )
+                            typeDouble = wxEVT_RIGHT_DCLICK;
+                        else
+                            typeDouble = wxEVT_NULL;
+
+                        if ( typeDouble != wxEVT_NULL )
                         {
-                        case wxEVT_LEFT_DOWN:
-                            wxevent.SetEventType(wxEVT_LEFT_DCLICK);
-                            break;
-                        case wxEVT_MIDDLE_DOWN:
-                            wxevent.SetEventType(wxEVT_MIDDLE_DCLICK);
-                            break;
-                        case wxEVT_RIGHT_DOWN:
-                            wxevent.SetEventType(wxEVT_RIGHT_DCLICK);
-                            break;
-
-                        default :
-                            break;
+                            wxevent.SetEventType(typeDouble);
                         }
-
                     }
                     else
                     {
