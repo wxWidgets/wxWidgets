@@ -42,6 +42,13 @@
         <dir cond="FORMAT=='autoconf'">samples</dir>
         <dir cond="FORMAT!='autoconf' and TOOLKIT in ['MSW','MGL']">../../samples</dir>
     </subproject>
+    
+    <!-- WXRC compiler is built by default: -->
+    <subproject id="wxrc" cond="FORMAT=='autoconf'">
+        <dependency-of>all</dependency-of>
+        <installable>yes</installable>
+        <dir>utils/wxrc</dir>
+    </subproject>
 
     <if cond="FORMAT=='autoconf'">       
         <!-- "make install": -->
