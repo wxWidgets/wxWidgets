@@ -1542,7 +1542,7 @@ wxTopLevelWindowMac* wxWindowMac::MacGetTopLevelWindow() const
     return win ;
 }
 
-const wxRegion& wxWindowMac::MacGetVisibleRegion()
+const wxRegion& wxWindowMac::MacGetVisibleRegion( bool respectChildrenAndSiblings )
 {
   RgnHandle visRgn = NewRgn() ;
   RgnHandle tempRgn = NewRgn() ;
@@ -1576,42 +1576,45 @@ const wxRegion& wxWindowMac::MacGetVisibleRegion()
       parent = parent->GetParent() ;
     }
   }
-  if ( GetWindowStyle() & wxCLIP_CHILDREN )
+  if ( respectChildrenAndSiblings )
   {
-    for (wxNode *node = GetChildren().First(); node; node = node->Next())
-    {
-        wxWindowMac *child = (wxWindowMac*)node->Data();
+      if ( GetWindowStyle() & wxCLIP_CHILDREN )
+      {
+        for (wxNode *node = GetChildren().First(); node; node = node->Next())
+        {
+            wxWindowMac *child = (wxWindowMac*)node->Data();
 
-        if ( !child->IsTopLevel() && child->IsShown() )
-        {
-            SetRectRgn( tempRgn , child->m_x , child->m_y , child->m_x + child->m_width ,  child->m_y + child->m_height ) ;
-            DiffRgn( visRgn , tempRgn , visRgn ) ;
+            if ( !child->IsTopLevel() && child->IsShown() )
+            {
+                SetRectRgn( tempRgn , child->m_x , child->m_y , child->m_x + child->m_width ,  child->m_y + child->m_height ) ;
+                DiffRgn( visRgn , tempRgn , visRgn ) ;
+            }
         }
-    }
-  }
+      }
 
-  if ( (GetWindowStyle() & wxCLIP_SIBLINGS) && GetParent() )
-  {
-    bool thisWindowThrough = false ;
-    for (wxNode *node = GetParent()->GetChildren().First(); node; node = node->Next())
-    {
-        wxWindowMac *sibling = (wxWindowMac*)node->Data();
-        if ( sibling == this )
+      if ( (GetWindowStyle() & wxCLIP_SIBLINGS) && GetParent() )
+      {
+        bool thisWindowThrough = false ;
+        for (wxNode *node = GetParent()->GetChildren().First(); node; node = node->Next())
         {
-          thisWindowThrough = true ;
-          continue ;
-        }
-        if( !thisWindowThrough )
-        {
-          continue ;
-        }
+            wxWindowMac *sibling = (wxWindowMac*)node->Data();
+            if ( sibling == this )
+            {
+              thisWindowThrough = true ;
+              continue ;
+            }
+            if( !thisWindowThrough )
+            {
+              continue ;
+            }
 
-        if ( !sibling->IsTopLevel() && sibling->IsShown() )
-        {
-            SetRectRgn( tempRgn , sibling->m_x - m_x , sibling->m_y - m_y , sibling->m_x + sibling->m_width - m_x ,  sibling->m_y + sibling->m_height - m_y ) ;
-            DiffRgn( visRgn , tempRgn , visRgn ) ;
+            if ( !sibling->IsTopLevel() && sibling->IsShown() )
+            {
+                SetRectRgn( tempRgn , sibling->m_x - m_x , sibling->m_y - m_y , sibling->m_x + sibling->m_width - m_x ,  sibling->m_y + sibling->m_height - m_y ) ;
+                DiffRgn( visRgn , tempRgn , visRgn ) ;
+            }
         }
-    }
+      }
   }
   m_macVisibleRegion = visRgn ;
   DisposeRgn( visRgn ) ;

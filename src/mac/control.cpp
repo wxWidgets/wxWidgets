@@ -42,6 +42,7 @@ END_EVENT_TABLE()
 #endif
 
 #include "wx/mac/uma.h"
+#include "wx/mac/private.h"
 
 // Item members
 
@@ -694,13 +695,14 @@ void wxControl::MacRedrawControl()
     {
         wxClientDC dc(this) ;
         wxMacPortSetter helper(&dc) ;
-        
-        // the controls sometimes draw outside their boundaries, this
-        // should be resolved differently but is not trivial (e.g. drop shadows)
-        // since adding them to the border would yield in enormous gaps between
-        // the controls
-        Rect r = { 0 , 0 , 32000 , 32000 } ;
-        ClipRect( &r ) ;
+
+        int x = 0 , y = 0;
+        GetParent()->MacWindowToRootWindow( &x,&y ) ;
+        RgnHandle clrgn = NewRgn() ;
+        CopyRgn( (RgnHandle) GetParent()->MacGetVisibleRegion().GetWXHRGN() , clrgn ) ;
+        OffsetRgn( clrgn , x , y ) ;
+        SetClip( clrgn ) ;
+
         wxDC::MacSetupBackgroundForCurrentPort( MacGetBackgroundBrush() ) ;
         UMADrawControl( (ControlHandle) m_macControl ) ;
     }
@@ -712,12 +714,13 @@ void wxControl::OnPaint(wxPaintEvent& event)
     {
         wxPaintDC dc(this) ;
         wxMacPortSetter helper(&dc) ;
-        // the controls sometimes draw outside their boundaries, this
-        // should be resolved differently but is not trivial (e.g. drop shadows)
-        // since adding them to the border would yield in enormous gaps between
-        // the controls
-        Rect r = { 0 , 0 , 32000 , 32000 } ;
-        ClipRect( &r ) ;
+
+        int x = 0 , y = 0;
+        GetParent()->MacWindowToRootWindow( &x,&y ) ;
+        RgnHandle clrgn = NewRgn() ;
+        CopyRgn( (RgnHandle) GetParent()->MacGetVisibleRegion().GetWXHRGN() , clrgn ) ;
+        OffsetRgn( clrgn , x , y ) ;
+        SetClip( clrgn ) ;
 
         wxDC::MacSetupBackgroundForCurrentPort( MacGetBackgroundBrush() ) ;
         UMADrawControl( (ControlHandle) m_macControl ) ;
