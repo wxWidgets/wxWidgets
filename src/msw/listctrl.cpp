@@ -1436,7 +1436,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             break;
 #endif // 0
 
-#ifdef NM_CUSTOMDRAW
+#if defined(_WIN32_IE) && _WIN32_IE >= 0x300
         case NM_CUSTOMDRAW:
             {
                 LPNMLVCUSTOMDRAW lplvcd = (LPNMLVCUSTOMDRAW)lParam;
@@ -1517,7 +1517,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 }
             }
             break;
-#endif // NM_CUSTOMDRAW
+#endif // _WIN32_IE >= 0x300
 
         default:
             return wxControl::MSWOnNotify(idCtrl, lParam, result);
