@@ -20,6 +20,50 @@
 // compiler and OS identification
 // ----------------------------------------------------------------------------
 
+// first define Windows symbols if they're not defined on the command line: we
+// can autodetect everything we need if _WIN32 is defined
+#if defined(_WIN32) || defined(WIN32) || defined(__NT__)
+    #ifndef __WXMSW__
+        #define __WXMSW__
+    #endif
+
+    #ifndef __WIN32__
+        #define __WIN32__
+    #endif
+
+    // Win95 means Win95-style UI, i.e. Win9x/NT 4+
+    #if !defined(__WIN95__) && defined(WINVER) && (WINVER >= 0x0400)
+        #define __WIN95__
+    #endif
+#endif // Win32
+
+#ifdef __WXWINE__
+    #ifndef __WIN32__
+        #define __WIN32__
+    #endif
+    #ifndef __WIN95__
+        #define __WIN95__
+    #endif
+    #ifndef STRICT
+        #define STRICT
+    #endif
+#endif // WINE
+
+#if defined(TWIN32) && !defined(__TWIN32__)
+    #define __TWIN32__
+#endif // Twin32
+
+#include "wx/setup.h"
+
+// just in case they were defined in setup.h
+#ifdef PACKAGE
+#undef PACKAGE
+#endif
+
+#ifdef VERSION
+#undef VERSION
+#endif
+
 // OS: first test for generic Unix defines, then for particular flavours and
 //     finally for Unix-like systems
 #if defined(__UNIX__) || defined(__unix) || defined(__unix__) || \
@@ -52,6 +96,11 @@
         #define OS2EMX_PLAIN_CHAR
     #endif
 
+    // define __HPUX__ for HP-UX where standard macro is __hpux
+    #if defined(__hpux) && !defined(__HPUX__)
+        #define __HPUX__
+    #endif // HP-UX
+
     #if defined(__APPLE__)
         // MacOS X
         #ifndef __WXMAC__
@@ -68,7 +117,7 @@
 
         #define PM_USE_SESSION_APIS 0
         #include <Carbon/Carbon.h>
-    #endif
+    #endif // __APPLE__
 #elif defined(applec) || \
       defined(THINK_C) || \
       (defined(__MWERKS__) && !defined(__INTEL__))
@@ -112,6 +161,11 @@
         #define __WINDOWS__
     #endif  // Windows
 
+    // to be changed for Win64!
+    #ifndef __WIN32__
+        #define __WIN16__
+    #endif
+
     // define another standard symbol for Microsoft Visual C++: the standard one
     // (_MSC_VER) is also defined by Metrowerks compiler
     #if defined(_MSC_VER) && !defined(__MWERKS__)
@@ -123,6 +177,12 @@
         #define __SYMANTECC__
     #endif  // compiler
 #endif  // OS
+
+// if we're on a Unix system but didn't use configure (so that setup.h didn't
+// define __UNIX__), do define __UNIX__ now
+#if !defined(__UNIX__) && defined(__UNIX_LIKE__)
+    #define __UNIX__
+#endif // Unix
 
 // LINKAGEMODE mode is empty for everyting except OS/2
 #ifndef LINKAGEMODE
@@ -182,6 +242,8 @@
     #define va_list __gnuc_va_list
 #endif // HP-UX
 
+// This macro can be used to check that the version of mingw32 compiler is
+// at least maj.min
 #if defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || defined( __CYGWIN__ )
     #include "wx/msw/gccpriv.h"
 #else
@@ -189,9 +251,6 @@
     #define wxCHECK_W32API_VERSION(maj, min) (0)
 #endif
 
-//////////////////////////////////////////////////////////////////////////////////
-// Currently Only MS-Windows/NT, XView and Motif are supported
-//
 #if defined(__HPUX__) && !defined(__WXGTK__)
     #ifndef __WXMOTIF__
         #define __WXMOTIF__
@@ -202,77 +261,18 @@
     #define __X__
 #endif
 
-#ifdef __WXMSW__
-
-#if defined(_WIN32) || defined(WIN32) || defined(__NT__)
-    #ifndef __WIN32__
-        #define __WIN32__
-    #endif
-#endif
-
-#ifdef __WXWINE__
-  #ifndef __WIN32__
-    #define __WIN32__
-  #endif
-  #ifndef __WIN95__
-    #define __WIN95__
-  #endif
-  #ifndef STRICT
-    #define STRICT
-  #endif
-#endif
-
-#ifndef __WIN32__
-#define __WIN16__
-#endif
-
-#if !defined(__WIN95__) && (WINVER >= 0x0400)
-#define __WIN95__
-#endif
-
-#if defined(TWIN32) && !defined(__TWIN32__)
-#define __TWIN32__
-#endif
-
-#endif // wxMSW
-
 // Make sure the environment is set correctly
 #if defined(__WXMSW__) && defined(__X__)
     #error "Target can't be both X and Windows"
 #elif !defined(__WXMOTIF__) && !defined(__WXMSW__) && !defined(__WXGTK__) && \
       !defined(__WXPM__) && !defined(__WXMAC__) && !defined(__X__) && \
       !defined(__WXQT__) && !defined(__WXSTUBS__) && wxUSE_GUI
-    #error "No Target! Use -D[__WXMOTIF__|__WXGTK__|__WXMSW__|__WXMAC__|__WXQT__|__WXPM__|__WXSTUBS__]"
+    #ifdef __UNIX__
+        #error "No Target! You should wx-config program for compilation flags!"
+    #else // !Unix
+        #error "No Target! You should supplied makefiles for compilation!"
+    #endif // Unix/!Unix
 #endif
-
-// ----------------------------------------------------------------------------
-// wxWindows options
-// ----------------------------------------------------------------------------
-
-#include <stddef.h>
-
-#include "wx/setup.h"
-
-// just in case they were defined in setup.h
-#ifdef PACKAGE
-#undef PACKAGE
-#endif
-
-#ifdef VERSION
-#undef VERSION
-#endif
-
-// this has to be done after including setup.h which might
-// define __HPUX__ 1 itself
-#if defined(__hpux) && !defined(__HPUX__)
-    #define __HPUX__
-#endif // HP-UX
-
-// if we're on a Unix system but didn't use configure (so that setup.h didn't
-// define __UNIX__), do define __UNIX__ now
-#if !defined(__UNIX__) && defined(__UNIX_LIKE__)
-    #define __UNIX__
-#endif // Unix
 
 #include "wx/version.h"
 
@@ -499,6 +499,9 @@ class WXDLLEXPORT wxEvent;
 #ifdef __cplusplus
 #include "wx/debug.h"
 #endif
+
+// NULL declaration
+#include <stddef.h>
 
 //@{
 /// delete pointer if it is not NULL and NULL it afterwards
