@@ -1914,6 +1914,13 @@ bool wxTreeCtrl::GetBoundingRect(const wxTreeItemId& item,
                                  bool textOnly) const
 {
     RECT rc;
+
+    // Virtual root items have no bounding rectangle
+    if ( IS_VIRTUAL_ROOT(item) )
+    {
+        return FALSE;
+    }
+
     if ( TreeView_GetItemRect(GetHwnd(), HITEM(item),
                               &rc, textOnly) )
     {
@@ -2413,7 +2420,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             }
             break;
 
-        // NB: MSLU is broken and sends TVN_SELCHANGEDA instead of 
+        // NB: MSLU is broken and sends TVN_SELCHANGEDA instead of
         //     TVN_SELCHANGEDW in Unicode mode under Win98. Therefore
         //     we have to handle both messages:
         case TVN_SELCHANGEDA:
@@ -2428,7 +2435,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     eventType = wxEVT_COMMAND_TREE_SEL_CHANGING;
                 //else: already set above
 
-                if (hdr->code == TVN_SELCHANGINGW || 
+                if (hdr->code == TVN_SELCHANGINGW ||
                     hdr->code == TVN_SELCHANGEDW)
                 {
                     NM_TREEVIEWW* tv = (NM_TREEVIEWW *)lParam;
@@ -2631,7 +2638,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 HWND hText = TreeView_GetEditControl(GetHwnd());
                 if(hText != NULL)
                 {
-                    // MBN: if m_textCtrl already has an HWND, it is a stale 
+                    // MBN: if m_textCtrl already has an HWND, it is a stale
                     // pointer from a previous edit (because the user
                     // didn't modify the label before dismissing the control,
                     // and TVN_ENDLABELEDIT was not sent), so delete it

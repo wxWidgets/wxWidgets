@@ -314,7 +314,7 @@ void wxRemotelyScrolledTreeCtrl::AdjustRemoteScrollbars()
         if (scrolledWindow)
         {
             wxRect itemRect;
-            if (GetBoundingRect(GetRootItem(), itemRect))
+            if (GetBoundingRect(GetFirstVisibleItem(), itemRect))
             {
                 // Actually, the real height seems to be 1 less than reported
                 // (e.g. 16 instead of 16)
