@@ -1615,7 +1615,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/carbon/dnd.cpp
     src/mac/carbon/filedlg.cpp
     src/mac/carbon/font.cpp
-    src/mac/carbon/fontdlg.cpp
+    src/mac/carbon/fontdlg.mm
     src/mac/carbon/fontenum.cpp
     src/mac/carbon/fontutil.cpp
     src/mac/carbon/frame.cpp
