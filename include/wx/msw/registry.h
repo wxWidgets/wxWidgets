@@ -1,37 +1,27 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/registry.h
+// Name:        wx/msw/registry.h
 // Purpose:     Registry classes and functions
 // Author:      Vadim Zeitlin
 // Modified by:
-// Created:     03.04.198
+// Created:     03.04.1998
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef   _REGISTRY_H
-#define   _REGISTRY_H
+#ifndef _WX_MSW_REGISTRY_H_
+#define _WX_MSW_REGISTRY_H_
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma interface "registry.h"
 #endif
 
-// ----------------------------------------------------------------------------
-// types used in this module
-// ----------------------------------------------------------------------------
-
-/*
-#ifndef   HKEY_DEFINED
-  #define HKEY_DEFINED
-  #define HKEY unsigned long
-#endif
-*/
-
-typedef unsigned long ulong;
+class WXDLLIMPEXP_BASE wxOutputStream;
 
 // ----------------------------------------------------------------------------
 // class wxRegKey encapsulates window HKEY handle
 // ----------------------------------------------------------------------------
+
 class WXDLLIMPEXP_BASE wxRegKey
 {
 public:
@@ -42,7 +32,6 @@ public:
   {
     Type_None,                       // No value type
     Type_String,                     // Unicode nul terminated string
-#ifdef  __WIN32__
     Type_Expand_String,              // Unicode nul terminated string
                                      // (with environment variable references)
     Type_Binary,                     // Free form binary
@@ -55,25 +44,24 @@ public:
     Type_Resource_list,              // Resource list in the resource map
     Type_Full_resource_descriptor,   // Resource list in the hardware description
     Type_Resource_requirements_list  // ???
-#endif  //WIN32
   };
 
   // predefined registry keys
   enum StdKey
   {
-    HKCR        // classes root
-#ifdef  __WIN32__
-    ,
+    HKCR,       // classes root
     HKCU,       // current user
     HKLM,       // local machine
-    HKUSR,      // users
+    HKUSR       // users
+#ifndef __WXWINCE__
+    ,
     HKPD        // performance data (WinNT/2K only)
+#endif
 #if WINVER >= 0x0400
     ,
     HKCC,       // current config (starting from Win95/NT 4.0)
     HKDD        // dynamic data (Win95/98 only)
 #endif  // Winver
-#endif  // Win32/16
   };
 
   // access mode for the key
@@ -192,7 +180,6 @@ public:
     // retrieve either raw or expanded string value
   bool  QueryValue(const wxChar *szValue, wxString& strValue, bool raw) const;
 
-#ifdef  __WIN32__
     // set the numeric value
   bool  SetValue(const wxChar *szValue, long lValue);
     // return the numeric value
@@ -201,7 +188,6 @@ public:
   bool  SetValue(const wxChar *szValue, const wxMemoryBuffer& buf);
     // return the binary value
   bool  QueryValue(const wxChar *szValue, wxMemoryBuffer& buf) const;
-#endif  //Win32
 
   // query existence of a key/value
     // return true if value exists
@@ -222,6 +208,17 @@ public:
   bool  GetFirstKey  (wxString& strKeyName  , long& lIndex);
   bool  GetNextKey   (wxString& strKeyName  , long& lIndex) const;
 
+  // export the contents of this key and all its subkeys to the given file
+  // (which won't be overwritten, it's an error if it already exists)
+  //
+  // note that we export the key in REGEDIT4 format, not RegSaveKey() binary
+  // format nor newer REGEDIT5 one
+  bool Export(const wxString& filename) const;
+
+  // same as above but write to the given (opened) stream
+  bool Export(wxOutputStream& ostr) const;
+
+
   // for wxRegConfig usage only: preallocate some memory for the name
   void ReserveMemoryForName(size_t bytes) { m_strKey.reserve(bytes); }
 
@@ -233,16 +230,26 @@ private:
     m_dwLastError = 0;
   }
 
-  // no copy ctor/assignment operator
-  wxRegKey(const wxRegKey& key);            // not implemented
-  wxRegKey& operator=(const wxRegKey& key); // not implemented
+  // recursive helper for Export()
+  bool DoExport(wxOutputStream& ostr) const;
+
+  // export a single value
+  bool DoExportValue(wxOutputStream& ostr, const wxString& name) const;
+
+  // return the text representation (in REGEDIT4 format) of the value with the
+  // given name
+  wxString FormatValue(const wxString& name) const;
+
 
   WXHKEY      m_hKey,           // our handle
               m_hRootKey;       // handle of the top key (i.e. StdKey)
   wxString    m_strKey;         // key name (relative to m_hRootKey)
 
   long        m_dwLastError;    // last error (0 if none)
+
+
+  DECLARE_NO_COPY_CLASS(wxRegKey)
 };
 
-#endif  //_REGISTRY_H
+#endif // _WX_MSW_REGISTRY_H_
 

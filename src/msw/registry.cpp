@@ -27,13 +27,10 @@
 #include  "wx/string.h"
 #include  "wx/intl.h"
 #include  "wx/log.h"
+#include  "wx/file.h"
+#include  "wx/wfstream.h"
 
 // Windows headers
-/*
-#define   STRICT
-#define   WIN32_LEAN_AND_MEAN
-*/
-
 #include  "wx/msw/wrapwin.h"
 
 #ifdef __WXWINCE__
@@ -72,7 +69,6 @@ static struct
 aStdKeys[] =
 {
   { HKEY_CLASSES_ROOT,      wxT("HKEY_CLASSES_ROOT"),      wxT("HKCR") },
-#ifdef  __WIN32__
   { HKEY_CURRENT_USER,      wxT("HKEY_CURRENT_USER"),      wxT("HKCU") },
   { HKEY_LOCAL_MACHINE,     wxT("HKEY_LOCAL_MACHINE"),     wxT("HKLM") },
   { HKEY_USERS,             wxT("HKEY_USERS"),             wxT("HKU")  }, // short name?
@@ -85,7 +81,6 @@ aStdKeys[] =
   { HKEY_DYN_DATA,          wxT("HKEY_DYN_DATA"),          wxT("HKDD") }, // short name?
 #endif  //GNUWIN32
 #endif  //WINVER >= 4.0
-#endif  //WIN32
 };
 
 // the registry name separator (perhaps one day MS will change it to '/' ;-)
@@ -492,13 +487,13 @@ bool wxRegKey::CopyValue(const wxChar *szValue,
                        keyDst.SetValue(szValueNew, dwVal);
             }
 
-#ifdef  __WIN32__
         case Type_Binary:
         {
             wxMemoryBuffer buf;
             return QueryValue(szValue,buf) &&
                    keyDst.SetValue(szValueNew,buf);
         }
+
         // these types are unsupported because I am not sure about how
         // exactly they should be copied and because they shouldn't
         // occur among the application keys (supposedly created with
@@ -511,7 +506,6 @@ bool wxRegKey::CopyValue(const wxChar *szValue,
         case Type_Resource_list:
         case Type_Full_resource_descriptor:
         case Type_Resource_requirements_list:
-#endif // Win32
         default:
             wxLogError(_("Can't copy values of unsupported type %d."),
                        GetValueType(szValue));
@@ -797,7 +791,6 @@ wxRegKey::ValueType wxRegKey::GetValueType(const wxChar *szValue) const
     return (ValueType)dwType;
 }
 
-#ifdef  __WIN32__
 bool wxRegKey::SetValue(const wxChar *szValue, long lValue)
 {
   if ( CONST_CAST Open() ) {
@@ -890,8 +883,6 @@ bool wxRegKey::QueryValue(const wxChar *szValue, wxMemoryBuffer& buffer) const
 }
 
 
-
-#endif  //Win32
 
 bool wxRegKey::QueryValue(const wxChar *szValue,
                           wxString& strValue,
@@ -1091,6 +1082,271 @@ bool wxRegKey::IsNumericValue(const wxChar *szValue) const
         default:
             return false;
     }
+}
+
+// ----------------------------------------------------------------------------
+// exporting registry keys to file
+// ----------------------------------------------------------------------------
+
+// helper functions for writing ASCII strings (even in Unicode build)
+static inline bool WriteAsciiChar(wxOutputStream& ostr, char ch)
+{
+    ostr.PutC(ch);
+    return ostr.IsOk();
+}
+
+static inline bool WriteAsciiEOL(wxOutputStream& ostr)
+{
+    // as we open the file in text mode, it is enough to write LF without CR
+    return WriteAsciiChar(ostr, '\n');
+}
+
+static inline bool WriteAsciiString(wxOutputStream& ostr, const char *p)
+{
+    return ostr.Write(p, strlen(p)).IsOk();
+}
+
+static inline bool WriteAsciiString(wxOutputStream& ostr, const wxString& s)
+{
+#if wxUSE_UNICODE
+    wxCharBuffer name(s.mb_str());
+    ostr.Write(name, strlen(name));
+#else
+    ostr.Write(s, s.length());
+#endif
+
+    return ostr.IsOk();
+}
+
+bool wxRegKey::Export(const wxString& filename) const
+{
+    if ( wxFile::Exists(filename) )
+    {
+        wxLogError(_("Exporting registry key: file \"%s\" already exists and won't be overwritten."),
+                   filename.c_str());
+        return false;
+    }
+
+    wxFFileOutputStream ostr(filename, _T("w"));
+
+    return ostr.Ok() && Export(ostr);
+}
+
+bool wxRegKey::Export(wxOutputStream& ostr) const
+{
+    // write out the header
+    if ( !WriteAsciiString(ostr, "REGEDIT4\n\n") )
+        return false;
+
+    return DoExport(ostr);
+}
+
+static
+wxString
+FormatAsHex(const void *data,
+            size_t size,
+            wxRegKey::ValueType type = wxRegKey::Type_Binary)
+{
+    wxString value(_T("hex"));
+
+    // binary values use just "hex:" prefix while the other ones must indicate
+    // the real type
+    if ( type != wxRegKey::Type_Binary )
+        value << _T('(') << type << _T(')');
+    value << _T(':');
+
+    // write all the rest as comma-separated bytes
+    value.reserve(3*size + 10);
+    const char * const p = wx_static_cast(const char *, data);
+    for ( size_t n = 0; n < size; n++ )
+    {
+        // TODO: line wrapping: although not required by regedit, this makes
+        //       the generated files easier to read and compare with the files
+        //       produced by regedit
+        if ( n )
+            value << _T(',');
+
+        value << wxString::Format(_T("%02x"), p[n]);
+    }
+
+    return value;
+}
+
+static inline
+wxString FormatAsHex(const wxString& value, wxRegKey::ValueType type)
+{
+    return FormatAsHex(value.c_str(), value.length() + 1, type);
+}
+
+wxString wxRegKey::FormatValue(const wxString& name) const
+{
+    wxString rhs;
+    const ValueType type = GetValueType(name);
+    switch ( type )
+    {
+        case Type_String:
+            {
+                wxString value;
+                if ( !QueryValue(name, value) )
+                    break;
+
+                // quotes and backslashes must be quoted, linefeeds are not
+                // allowed in string values
+                rhs.reserve(value.length() + 2);
+                rhs = _T('"');
+
+                // there can be no NULs here
+                bool useHex = false;
+                for ( const wxChar *p = value.c_str(); *p && !useHex; p++ )
+                {
+                    switch ( *p )
+                    {
+                        case _T('\n'):
+                            // we can only represent this string in hex
+                            useHex = true;
+                            break;
+
+                        case _T('"'):
+                        case _T('\\'):
+                            // escape special symbol
+                            rhs += _T('\\');
+                            // fall through
+
+                        default:
+                            rhs += *p;
+                    }
+                }
+
+                if ( useHex )
+                    rhs = FormatAsHex(value, Type_String);
+                else
+                    rhs += _T('"');
+            }
+            break;
+
+        case Type_Dword:
+        /* case Type_Dword_little_endian: == Type_Dword */
+            {
+                long value;
+                if ( !QueryValue(name, &value) )
+                    break;
+
+                rhs.Printf(_T("dword:%08x"), value);
+            }
+            break;
+
+        case Type_Expand_String:
+        case Type_Multi_String:
+            {
+                wxString value;
+                if ( !QueryRawValue(name, value) )
+                    break;
+
+                rhs = FormatAsHex(value, type);
+            }
+            break;
+
+        case Type_Binary:
+            {
+                wxMemoryBuffer buf;
+                if ( !QueryValue(name, buf) )
+                    break;
+
+                rhs = FormatAsHex(buf.GetData(), buf.GetDataLen());
+            }
+            break;
+
+        // no idea how those appear in REGEDIT4 files
+        case Type_None:
+        case Type_Dword_big_endian:
+        case Type_Link:
+        case Type_Resource_list:
+        case Type_Full_resource_descriptor:
+        case Type_Resource_requirements_list:
+        default:
+            wxLogWarning(_("Can't export value of unsupported type %d."), type);
+    }
+
+    return rhs;
+}
+
+bool wxRegKey::DoExportValue(wxOutputStream& ostr, const wxString& name) const
+{
+    // first examine the value type: if it's unsupported, simply skip it
+    // instead of aborting the entire export process because we failed to
+    // export a single value
+    wxString value = FormatValue(name);
+    if ( value.empty() )
+    {
+        wxLogWarning(_("Ignoring value \"%s\" of the key \"%s\"."),
+                     name.c_str(), GetName().c_str());
+        return true;
+    }
+
+    // we do have the text representation of the value, now write everything
+    // out
+
+    // special case: unnamed/default value is represented as just "@"
+    if ( name.empty() )
+    {
+        if ( !WriteAsciiChar(ostr, '@') )
+            return false;
+    }
+    else // normal, named, value
+    {
+        if ( !WriteAsciiChar(ostr, '"') ||
+                !WriteAsciiString(ostr, name) ||
+                    !WriteAsciiChar(ostr, '"') )
+            return false;
+    }
+
+    if ( !WriteAsciiChar(ostr, '=') )
+        return false;
+
+    return WriteAsciiString(ostr, value) && WriteAsciiEOL(ostr);
+}
+
+bool wxRegKey::DoExport(wxOutputStream& ostr) const
+{
+    // write out this key name
+    if ( !WriteAsciiChar(ostr, '[') )
+        return false;
+
+    if ( !WriteAsciiString(ostr, GetName(false /* no short prefix */)) )
+        return false;
+
+    if ( !WriteAsciiChar(ostr, ']') || !WriteAsciiEOL(ostr) )
+        return false;
+
+    // dump all our values
+    long dummy;
+    wxString name;
+    wxRegKey& self = wx_const_cast(wxRegKey&, *this);
+    bool cont = self.GetFirstValue(name, dummy);
+    while ( cont )
+    {
+        if ( !DoExportValue(ostr, name) )
+            return false;
+
+        cont = GetNextValue(name, dummy);
+    }
+
+    // always terminate values by blank line, even if there were no values
+    if ( !WriteAsciiEOL(ostr) )
+        return false;
+
+    // recurse to subkeys
+    cont = self.GetFirstKey(name, dummy);
+    while ( cont )
+    {
+        wxRegKey subkey(*this, name);
+        if ( !subkey.DoExport(ostr) )
+            return false;
+
+        cont = GetNextKey(name, dummy);
+    }
+
+    return true;
 }
 
 // ============================================================================
