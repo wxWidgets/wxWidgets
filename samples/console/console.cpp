@@ -35,7 +35,7 @@
 
 // what to test (in alphabetic order)?
 
-#define TEST_ARRAYS
+//#define TEST_ARRAYS
 //#define TEST_CMDLINE
 //#define TEST_DATETIME
 //#define TEST_DIR
@@ -48,7 +48,7 @@
 //#define TEST_LONGLONG
 //#define TEST_MIME
 //#define TEST_INFO_FUNCTIONS
-//#define TEST_SOCKETS
+#define TEST_SOCKETS
 //#define TEST_STRINGS
 //#define TEST_THREADS
 //#define TEST_TIMER
@@ -1006,7 +1006,7 @@ static void TestSocketClient()
 
 static void TestProtocolFtp()
 {
-    puts("*** Testing wxFTP ***\n");
+    puts("*** Testing wxFTP download ***\n");
 
     wxLog::AddTraceMask(_T("ftp"));
 
@@ -1072,6 +1072,49 @@ static void TestProtocolFtp()
 
             delete [] data;
             delete in;
+        }
+    }
+}
+
+static void TestProtocolFtpUpload()
+{
+    puts("*** Testing wxFTP uploading ***\n");
+
+    wxLog::AddTraceMask(_T("ftp"));
+
+    static const char *hostname = "localhost";
+
+    printf("--- Attempting to connect to %s:21...\n", hostname);
+
+    wxFTP ftp;
+    ftp.SetUser("zeitlin");
+    ftp.SetPassword("insert your password here");
+    if ( !ftp.Connect(hostname) )
+    {
+        printf("ERROR: failed to connect to %s\n", hostname);
+    }
+    else
+    {
+        printf("--- Connected to %s, current directory is '%s'\n",
+               hostname, ftp.Pwd().c_str());
+
+        // upload a file
+        static const char *file1 = "test1";
+        static const char *file2 = "test2";
+        wxOutputStream *out = ftp.GetOutputStream(file1);
+        if ( out )
+        {
+            printf("--- Uploading to %s ---\n", file1);
+            out->Write("First hello", 11);
+            delete out;
+        }
+
+        out = ftp.GetOutputStream(file2);
+        if ( out )
+        {
+            printf("--- Uploading to %s ---\n", file1);
+            out->Write("Second hello", 12);
+            delete out;
         }
     }
 }
@@ -2951,13 +2994,13 @@ int main(int argc, char **argv)
 #endif // TEST_INFO_FUNCTIONS
 
 #ifdef TEST_SOCKETS
-    if ( 1 )
-        TestSocketServer();
     if ( 0 )
     {
+        TestSocketServer();
         TestSocketClient();
         TestProtocolFtp();
     }
+        TestProtocolFtpUpload();
 #endif // TEST_SOCKETS
 
 #ifdef TEST_TIMER
