@@ -317,8 +317,9 @@ wxGenericTreeItem *wxGenericTreeItem::HitTest( const wxPoint& point,
       int image_h;
 
       // assuming every image (normal and selected ) has the same size !
-      if (theTree->m_imageListNormal)
+      if ((m_image!=-1) && theTree->m_imageListNormal)
           theTree->m_imageListNormal->GetSize(m_image, image_w, image_h);
+
       if ((image_w != -1) && (point.x <= m_x + image_w + 1))
 	flags|=wxTREE_HITTEST_ONITEMICON;
       else
