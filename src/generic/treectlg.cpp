@@ -3452,7 +3452,11 @@ void wxGenericTreeCtrl::OnGetToolTip( wxTreeEvent &event )
 
 //static
 wxVisualAttributes
+#if _USE_VISATTR
 wxGenericTreeCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
+#else
+wxGenericTreeCtrl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
+#endif
 {
 #if _USE_VISATTR
     // Use the same color scheme as wxListBox
