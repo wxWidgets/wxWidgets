@@ -174,7 +174,7 @@ class DoodleWindow(wx.Window):
             dc.BeginDrawing()
             dc.SetPen(self.pen)
             pos = event.GetPosition()
-            coords = (self.pos, pos)
+            coords = (self.pos.x, self.pos.y, pos.x, pos.y)
             self.curLine.append(coords)
             dc.DrawLine(*coords)
             self.pos = pos

@@ -321,7 +321,7 @@ class ColourIndicator(wx.Window):
             pen = wx.Pen(self.colour, self.thickness)
             dc.BeginDrawing()
             dc.SetPen(pen)
-            dc.DrawLine((10, sz.height/2), (sz.width-10, sz.height/2))
+            dc.DrawLine(10, sz.height/2, sz.width-10, sz.height/2)
             dc.EndDrawing()
 
 
@@ -399,5 +399,5 @@ class DoodleApp(wx.App):
 #----------------------------------------------------------------------
 
 if __name__ == '__main__':
-    app = DoodleApp(0)
+    app = DoodleApp(redirect=True)
     app.MainLoop()
