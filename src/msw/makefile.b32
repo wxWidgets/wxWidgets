@@ -723,13 +723,11 @@ $(CFG): makefile.b32
 	copy &&!
 -H=$(WXDIR)\src\msw\wx32.csm
 -3
--P
 -d
--w-hid
+-R-
+-X
 -w-par
--w-pia
 -w-aus
--w-rch
 -WE
 -tWM
 
