@@ -84,15 +84,23 @@ LIB32=link.exe -lib
 # Name "NetVC - Win32 Debug"
 # Begin Source File
 
-SOURCE=.\smapi.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\email.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\web.cpp
+SOURCE=..\..\include\wx\net\email.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\net\msg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\readme.txt
+# End Source File
+# Begin Source File
+
+SOURCE=.\smapi.cpp
 # End Source File
 # Begin Source File
 
@@ -100,7 +108,11 @@ SOURCE=..\..\include\wx\net\smapi.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\readme.txt
+SOURCE=.\web.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\net\web.h
 # End Source File
 # End Target
 # End Project

@@ -31,11 +31,19 @@
 #include "wx/net/smapi.h"
 #endif
 
+#ifdef __UNIX__
+#include "wx/filefn.h"
+#include "wx/timer.h"
+#include "wx/wfstream.h"
+#include "stdlib.h"
+#include "process.h"
+#endif
+
 // Send a message.
 // Specify profile, or leave it to wxWindows to find the current user name
 
 #ifdef __WXMSW__
-bool wxEmail::Send(wxMailMessage& message, const wxString& profileName)
+bool wxEmail::Send(wxMailMessage& message, const wxString& profileName, const wxString& WXUNUSED(sendMail))
 {
     wxASSERT (message.m_to.GetCount() > 0) ;
 
@@ -51,6 +59,64 @@ bool wxEmail::Send(wxMailMessage& message, const wxString& profileName)
         return FALSE;
 
     return session.Send(message);
+}
+#elif defined(__UNIX__)
+bool wxEmail::Send(wxMailMessage& message, const wxString& profileName, const wxString& sendMail)
+{
+    wxASSERT (message.m_to.GetCount() > 0) ;
+
+    // The 'from' field is optionally supplied by the app; it's not needed
+    // by MAPI, and on Unix, will be guessed if not supplied.
+    wxString from = message.m_from;
+    if (from.IsEmpty())
+    {
+        from = wxGetEmailAddress();
+    }
+
+    wxASSERT (!from.IsEmpty());
+
+    wxString msg;
+    msg << wxT("To: ");
+
+    size_t i;
+    for (i = 0; i < message.m_to.GetCount(); i++)
+    {
+        msg << message.m_to[i];
+        if (i < message.m_to.GetCount())
+            msg << wxT(", ");
+    }
+
+    msg << wxT("\nFrom: ") << from << wxT("\nSubject: ") << message.m_subject;
+    msg << wxT("\n\n") << message.m_body;
+
+    wxString filename;
+    filename.Printf(wxT("/tmp/msg-%ld-%ld-%ld.txt"), (long) getpid(), wxGetLocalTime(),
+        (long) rand());
+
+    {
+        wxFileOutputStream stream(filename);
+        if (stream.Ok())
+        {
+            stream.Write(msg, msg.Length());
+        }
+        else
+        {
+            return FALSE ;
+        }
+    }
+
+    // TODO search for a suitable sendmail if sendMail is empty
+    wxString sendmail(sendMail);
+
+    wxString cmd;
+    cmd << sendmail << wxT(" < ") << filename;
+
+    // TODO: check return code
+    wxSystem(cmd.c_str());
+
+    wxRemoveFile(filename);
+
+    return TRUE;
 }
 #else
 #error Send not yet implemented for this platform.

@@ -27,12 +27,14 @@ public:
 
     // A common usage
     wxMailMessage(const wxString& subject, const wxString& to,
-        const wxString& body, const wxString& attachment = wxEmptyString,
+        const wxString& body, const wxString& from = wxEmptyString,
+        const wxString& attachment = wxEmptyString,
         const wxString& attachmentTitle = wxEmptyString)
     {
         m_to.Add(to);
         m_subject = subject;
         m_body = body;
+        m_from = from;
         if (!attachment.IsEmpty())
         {
             m_attachments.Add(attachment);
@@ -52,9 +54,11 @@ public:
 
     void SetSubject(const wxString& subject) { m_subject = subject; }
     void SetBody(const wxString& body) { m_body = body; }
+    void SetFrom(const wxString& from) { m_from = from; }
 
 public:
     wxArrayString  m_to;               //The To: Recipients
+    wxString       m_from;             //The From: email address (optional)
     wxArrayString  m_cc;               //The CC: Recipients
     wxArrayString  m_bcc;              //The BCC Recipients
     wxString       m_subject;         //The Subject of the message

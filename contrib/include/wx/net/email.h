@@ -33,7 +33,8 @@ public:
 
     // Send a message.
     // Specify profile, or leave it to wxWindows to find the current user name
-    static bool Send(wxMailMessage& message, const wxString& profileName = wxEmptyString );
+    static bool Send(wxMailMessage& message, const wxString& profileName = wxEmptyString,
+        const wxString& sendMail = wxT("/usr/lib/sendmail -t"));
     
 protected:
 };

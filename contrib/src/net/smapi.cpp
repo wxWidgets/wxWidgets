@@ -286,6 +286,17 @@ bool wxMapiSession::Send(wxMailMessage& message)
     
     //Allocate the recipients array
     mapiMessage.lpRecips = new MapiRecipDesc[mapiMessage.nRecipCount];
+
+    // If we have a 'From' field, use it
+    if (!message.m_from.IsEmpty())
+    {
+        mapiMessage.lpOriginator = new MapiRecipDesc;
+        ZeroMemory(mapiMessage.lpOriginator, sizeof(MapiRecipDesc));
+
+        mapiMessage.lpOriginator->ulRecipClass = MAPI_ORIG;
+        // TODO Do we have to call Resolve?
+        mapiMessage.lpOriginator->lpszName = (LPSTR) message.m_from.c_str();
+    }
     
     //Setup the "To" recipients
     int nRecipIndex = 0;
@@ -413,8 +424,9 @@ bool wxMapiSession::Send(wxMailMessage& message)
     if (nAttachmentSize)
         delete [] mapiMessage.lpFiles;
     
-    //Free up the Recipients memory
+    //Free up the Recipients and Originator memory
     delete [] mapiMessage.lpRecips;
+    delete mapiMessage.lpOriginator;
     
     return bSuccess;
 }
