@@ -630,7 +630,7 @@ void wxGridTextCtrl::OnKeyDown( wxKeyEvent& event )
             {
                 if ( !m_grid->ProcessEvent( event ) )
                 {
-#ifdef __WXMOTIF__
+#if defined(__WXMOTIF__) || defined(__WXGTK__)
                     // wxMotif needs a little extra help...
                     //
                     int pos = GetInsertionPoint();
@@ -2445,7 +2445,7 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 }
                 else
                 {
-                    event.Skip()
+                    event.Skip();
                 }
 
             case WXK_RETURN:
