@@ -87,7 +87,9 @@ public:
 
 #ifdef __UNIX__
 #include <sys/socket.h>
-#include <sys/un.h>
+#ifndef __VMS__
+# include <sys/un.h>
+#endif
 
 class WXDLLEXPORT wxUNIXaddress : public wxSockAddress {
   DECLARE_DYNAMIC_CLASS(wxUNIXaddress)
