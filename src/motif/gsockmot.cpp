@@ -13,7 +13,7 @@
 #include <X11/Intrinsic.h>
 #include <wx/gsocket.h>
 #include <wx/app.h>
-#include "../unix/gsockunx.h"
+#include <wx/unix/gsockunx.h>
 
 #define wxAPP_CONTEXT ((XtAppContext)wxTheApp->GetAppContext())
 
