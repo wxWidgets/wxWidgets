@@ -84,6 +84,23 @@
     #define LVN_ODCACHEHINT (-113)
 #endif
 
+#ifndef ListView_GetHeader
+    #define ListView_GetHeader(w) (HWND)SendMessage((w),LVM_GETHEADER,0,0)
+#endif
+
+#ifndef LVM_GETHEADER
+    #define LVM_GETHEADER (LVM_FIRST+31)
+#endif
+
+#ifndef Header_GetItemRect
+    #define Header_GetItemRect(w,i,r) \
+            (BOOL)SendMessage((w),HDM_GETITEMRECT,(WPARAM)(i),(LPARAM)(r))
+#endif
+
+#ifndef HDM_GETITEMRECT
+    #define HDM_GETITEMRECT (HDM_FIRST+7)
+#endif
+
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
