@@ -106,11 +106,11 @@ INCOMPATIBLE CHANGES SINCE 2.4.x
 ! wxURL has undergone some radical changes.
 
     * Many accessors of wxURL - GetHostName, GetProtocolName, and GetPath,
-      have been replaced by its parent's (wxURI) counterparts.
+      have been replaced by its parent's (wxURI) counterparts - GetServer,
+      GetScheme, and GetPath, respectively.
   
-    * ConvertToValidURI has been replaced by wxURI, and even applications
-      with 2.4 compatability enabled will have the second parameter, delims,
-      completely ignored.
+    * ConvertToValidURI has been replaced by wxURI.  Do not use 
+      ConvertToValidURI for future applications.
 
     * ConvertFromURI has been replaced by wxURI::Unescape.
     
@@ -220,7 +220,8 @@ All:
 - added wxTextInputStream::operator>>(wchar_t) for compilers which support this
 - added wxURI, a class for dealing with Uniform Resource Identifiers
 - changed wxURL to inherit from wxURI and provide assignment and comparison
-- Added UTF7 character conversion for platforms that don't support it
+- implemented wxConvUTF7 (modified patch from Fredrik Roubert)
+- added versions of MB2WC and WC2MB for wxMBConv that for embedded null chars
 
 All (GUI):
 

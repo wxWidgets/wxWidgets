@@ -1226,9 +1226,52 @@ bool wxURI::IsDigit(const wxChar& c)
 
 #include "wx/url.h"
 
-wxString wxURL::ConvertToValidURI(const wxString& uri, const wxChar* WXUNUSED(delims))
+//Note that this old code really doesn't convert to a URI that well and looks
+//more like a dirty hack than anything else...
+
+wxString wxURL::ConvertToValidURI(const wxString& uri, const wxChar* delims)
 {
-    return wxURI(uri).BuildURI();
+  wxString out_str;
+  wxString hexa_code;
+  size_t i;
+
+  for (i = 0; i < uri.Len(); i++)
+  {
+    wxChar c = uri.GetChar(i);
+
+    if (c == wxT(' '))
+    {
+      // GRG, Apr/2000: changed to "%20" instead of '+'
+
+      out_str += wxT("%20");
+    }
+    else
+    {
+      // GRG, Apr/2000: modified according to the URI definition (RFC 2396)
+      //
+      // - Alphanumeric characters are never escaped
+      // - Unreserved marks are never escaped
+      // - Delimiters must be escaped if they appear within a component
+      //     but not if they are used to separate components. Here we have
+      //     no clear way to distinguish between these two cases, so they
+      //     are escaped unless they are passed in the 'delims' parameter
+      //     (allowed delimiters).
+
+      static const wxChar marks[] = wxT("-_.!~*()'");
+
+      if ( !wxIsalnum(c) && !wxStrchr(marks, c) && !wxStrchr(delims, c) )
+      {
+        hexa_code.Printf(wxT("%%%02X"), c);
+        out_str += hexa_code;
+      }
+      else
+      {
+        out_str += c;
+      }
+    }
+  }
+
+  return out_str;
 }
 
 wxString wxURL::ConvertFromURI(const wxString& uri)

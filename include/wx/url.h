@@ -75,7 +75,7 @@ public:
     wxString GetHostName() const     { return m_server; }
     wxString GetPath() const         { return m_path; }
 
-    //Use wxURI instead - delims is ignored
+    //Use wxURI instead - this does not work that well
     static wxString ConvertToValidURI(
                         const wxString& uri,
                         const wxChar* delims = wxT(";/?:@&=+$,")
