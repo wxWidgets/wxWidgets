@@ -125,10 +125,10 @@ void wxDynamicToolBar::AddTool( int toolIndex,
 }
 
 void wxDynamicToolBar::AddTool( int toolIndex, 
-								const wxString& imageFileName,
-								int imageFileType, 
-								const wxString& labelText, bool alignTextRight,
-								bool isFlat )
+                                const wxString& imageFileName,
+                                wxBitmapType imageFileType, 
+                                const wxString& labelText, bool alignTextRight,
+                                bool isFlat )
 {
 	wxNewBitmapButton* pBtn =
 
