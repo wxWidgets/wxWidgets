@@ -181,7 +181,7 @@ wxFileStream::wxFileStream(const wxString& fileName)
 wxFFileInputStream::wxFFileInputStream(const wxString& fileName)
   : wxInputStream()
 {
-    m_file = new wxFFile(fileName, "r");
+    m_file = new wxFFile(fileName, "rb");
     m_file_destroy = TRUE;
 }
 
