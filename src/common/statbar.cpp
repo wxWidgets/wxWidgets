@@ -61,6 +61,14 @@ wxStatusBarBase::~wxStatusBarBase()
     FreeWidths();
     FreeStacks();
     InitStyles();
+
+    // notify the frame that it doesn't have a status bar any longer to avoid
+    // dangling pointers
+    wxFrameBase *frame = wxDynamicCast(GetParent(), wxFrameBase);
+    if ( frame && frame->GetStatusBar() == this )
+    {
+        frame->SetStatusBar(NULL);
+    }
 }
 
 // ----------------------------------------------------------------------------
