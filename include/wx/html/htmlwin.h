@@ -37,6 +37,10 @@ class wxHtmlProcessorList;
 // wxHtmlWindow flags:
 #define wxHW_SCROLLBAR_NEVER    0x0002
 #define wxHW_SCROLLBAR_AUTO     0x0004
+#define wxHW_NO_SELECTION       0x0008
+
+#define wxHW_DEFAULT_STYLE      wxHW_SCROLLBAR_AUTO
+
 
 // enums for wxHtmlWindow::OnOpeningURL
 enum wxHtmlOpeningStatus
@@ -46,16 +50,16 @@ enum wxHtmlOpeningStatus
     wxHTML_REDIRECT
 };
 
-//--------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // wxHtmlWindow
 //                  (This is probably the only class you will directly use.)
 //                  Purpose of this class is to display HTML page (either local
-//                  file or downloaded via HTTP protocol) in a window. Width
-//                  of window is constant - given in constructor - virtual height
-//                  is changed dynamicly depending on page size.
-//                  Once the window is created you can set it's content by calling
+//                  file or downloaded via HTTP protocol) in a window. Width of
+//                  window is constant - given in constructor - virtual height
+//                  is changed dynamicly depending on page size.  Once the
+//                  window is created you can set it's content by calling
 //                  SetPage(text) or LoadPage(filename).
-//--------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
 {
@@ -67,7 +71,7 @@ public:
     wxHtmlWindow(wxWindow *parent, wxWindowID id = -1,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
-                 long style = wxHW_SCROLLBAR_AUTO,
+                 long style = wxHW_DEFAULT_STYLE,
                  const wxString& name = wxT("htmlWindow"))
     {
         Init();
@@ -213,6 +217,10 @@ protected:
 
     // cleans static variables
     static void CleanUpStatics();
+
+    // Returns true if text selection is enabled (wxClipboard must be available
+    // and wxHW_NO_SELECTION not used)
+    bool IsSelectionEnabled() const;
 
 protected:
     // This is pointer to the first cell in parsed data.
