@@ -544,6 +544,7 @@ sizer.h	W
 slider.h	W
 socket.h	W
 spinbutt.h	W
+spinctrl.h	W
 splitter.h	W
 statbmp.h	W
 statbox.h	W
@@ -639,6 +640,7 @@ scrolbar.h	K
 settings.h	K
 slider.h	K
 spinbutt.h	K
+spinctrl.h	K
 statbmp.h	K
 statbox.h	K
 statline.h	K
@@ -843,7 +845,6 @@ htmltag.h	L
 htmlwin.h	L
 winpars.h	L
 m_templ.h	L
-version.h	L
 
 caret.h	N
 choicdgg.h	N

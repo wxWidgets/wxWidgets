@@ -285,6 +285,7 @@ ZLIBDIR  = $(WXDIR)/src/zlib
 GTKDIR   = $(WXDIR)/src/gtk
 MOTIFDIR = $(WXDIR)/src/motif
 MSWDIR   = $(WXDIR)/src/msw
+ODBCDIR  = $(WXDIR)/src/iodbc
 INCDIR   = $(WXDIR)/include
 SAMPDIR  = $(WXDIR)/samples
 UTILSDIR = $(WXDIR)/utils
@@ -614,8 +615,8 @@ preinstall: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx-config $(
 write_message:
 	@echo " "
 	@echo " The installation of wxWindows is finished.  On certain"
-	@echo " platforms (e.g. Linux, Solaris) you'll now have to run"
-	@echo " ldconfig if you installed a shared library."
+	@echo " platforms (e.g. Linux) you'll now have to run ldconfig"
+	@echo " if you installed a shared library."
 	@echo " "
 	@echo " wxWindows comes with  no guarantees  and doesn't claim"
 	@echo " to be suitable for any purpose."
@@ -703,6 +704,7 @@ ALL_DIST:
 	mkdir $(DISTDIR)/src/png
 	mkdir $(DISTDIR)/src/jpeg
 	mkdir $(DISTDIR)/src/zlib
+	mkdir $(DISTDIR)/src/iodbc
 	cp $(SRCDIR)/*.in $(DISTDIR)/src
 	cp $(COMMDIR)/*.cpp $(DISTDIR)/src/common
 	cp $(COMMDIR)/*.c $(DISTDIR)/src/common
@@ -724,6 +726,13 @@ ALL_DIST:
 	cp $(JPEGDIR)/*.h $(DISTDIR)/src/jpeg
 	cp $(JPEGDIR)/*.c $(DISTDIR)/src/jpeg
 	cp $(JPEGDIR)/README $(DISTDIR)/src/jpeg
+	cp $(ODBCDIR)/*.h $(DISTDIR)/src/iodbc
+	cp $(ODBCDIR)/*.c $(DISTDIR)/src/iodbc
+	cp $(ODBCDIR)/*.ci $(DISTDIR)/src/iodbc
+	cp $(ODBCDIR)/*.exp $(DISTDIR)/src/iodbc
+	cp $(ODBCDIR)/README $(DISTDIR)/src/iodbc
+	cp $(ODBCDIR)/NEWS $(DISTDIR)/src/iodbc
+	cp $(ODBCDIR)/Changes.log $(DISTDIR)/src/iodbc
 
 GTK_DIST:
 	cp $(WXDIR)/wxGTK.spec $(DISTDIR)
@@ -873,6 +882,18 @@ SAMPLES_DIST:
 	cp $(SAMPDIR)/image/Makefile.in $(DISTDIR)/samples/image
 	cp $(SAMPDIR)/image/*.cpp $(DISTDIR)/samples/image
 	cp $(SAMPDIR)/image/horse.* $(DISTDIR)/samples/image
+	mkdir $(DISTDIR)/samples/internat
+	mkdir $(DISTDIR)/samples/internat/de
+	mkdir $(DISTDIR)/samples/internat/fr
+	cp $(SAMPDIR)/internat/Makefile.in $(DISTDIR)/samples/internat
+	cp $(SAMPDIR)/internat/*.cpp $(DISTDIR)/samples/internat
+	cp $(SAMPDIR)/internat/*.xpm $(DISTDIR)/samples/internat
+	cp $(SAMPDIR)/internat/*.txt $(DISTDIR)/samples/internat
+	cp $(SAMPDIR)/internat/*.po $(DISTDIR)/samples/internat
+	cp $(SAMPDIR)/internat/fr/*.po $(DISTDIR)/samples/internat/fr
+	cp $(SAMPDIR)/internat/de/*.mo $(DISTDIR)/samples/internat/de
+	cp $(SAMPDIR)/internat/fr/*.po $(DISTDIR)/samples/internat/fr
+	cp $(SAMPDIR)/internat/de/*.mo $(DISTDIR)/samples/internat/de
 	mkdir $(DISTDIR)/samples/layout
 	cp $(SAMPDIR)/layout/Makefile.in $(DISTDIR)/samples/layout
 	cp $(SAMPDIR)/layout/*.cpp $(DISTDIR)/samples/layout
@@ -974,23 +995,32 @@ SAMPLES_DIST:
 UTILS_DIST:
 	mkdir $(DISTDIR)/utils
 	cp $(UTILSDIR)/Makefile.in $(DISTDIR)/utils
+	
 	mkdir $(DISTDIR)/utils/wxMMedia2
-	cp $(UTILSDIR)/wxMMedia2/Makefile.in $(DISTDIR)/utils/wxMMedia2
 	mkdir $(DISTDIR)/utils/wxMMedia2/lib
+	mkdir $(DISTDIR)/utils/wxMMedia2/sample
+	cp $(UTILSDIR)/wxMMedia2/Makefile.in $(DISTDIR)/utils/wxMMedia2
 	cp $(UTILSDIR)/wxMMedia2/lib/Makefile.in $(DISTDIR)/utils/wxMMedia2/lib
 	cp $(UTILSDIR)/wxMMedia2/lib/*.h $(DISTDIR)/utils/wxMMedia2/lib
 	cp $(UTILSDIR)/wxMMedia2/lib/*.cpp $(DISTDIR)/utils/wxMMedia2/lib
 	cp $(UTILSDIR)/wxMMedia2/lib/*.def $(DISTDIR)/utils/wxMMedia2/lib
-	mkdir $(DISTDIR)/utils/wxMMedia2/sample
 	cp $(UTILSDIR)/wxMMedia2/sample/Makefile.in $(DISTDIR)/utils/wxMMedia2/sample
 	cp $(UTILSDIR)/wxMMedia2/sample/*.cpp $(DISTDIR)/utils/wxMMedia2/sample
+	
 	mkdir $(DISTDIR)/utils/glcanvas
+	mkdir $(DISTDIR)/utils/glcanvas/$(TOOLKITDIR)
 	cp $(UTILSDIR)/glcanvas/Makefile.in $(DISTDIR)/utils/glcanvas
 	cp $(UTILSDIR)/glcanvas/docs/notes.txt $(DISTDIR)/utils/glcanvas/NOTES.txt
-	mkdir $(DISTDIR)/utils/glcanvas/$(TOOLKITDIR)
 	cp $(UTILSDIR)/glcanvas/$(TOOLKITDIR)/Makefile.in $(DISTDIR)/utils/glcanvas/$(TOOLKITDIR)
 	cp $(UTILSDIR)/glcanvas/$(TOOLKITDIR)/*.h $(DISTDIR)/utils/glcanvas/$(TOOLKITDIR)
 	cp $(UTILSDIR)/glcanvas/$(TOOLKITDIR)/*.cpp $(DISTDIR)/utils/glcanvas/$(TOOLKITDIR)
+	
+	mkdir $(DISTDIR)/utils/ogl
+	mkdir $(DISTDIR)/utils/ogl/src
+	cp $(UTILSDIR)/ogl/Makefile.in $(DISTDIR)/utils/ogl
+	cp $(UTILSDIR)/ogl/src/Makefile.in $(DISTDIR)/utils/ogl/src
+	cp $(UTILSDIR)/ogl/src/*.h $(DISTDIR)/utils/ogl/src
+	cp $(UTILSDIR)/ogl/src/*.cpp $(DISTDIR)/utils/ogl/src
 	
 MISC_DIST:
 	mkdir $(DISTDIR)/misc
