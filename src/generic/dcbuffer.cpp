@@ -14,8 +14,14 @@
     #pragma implementation "dcbuffer.h"
 #endif
 
+#include "wx/wxprec.h"
+
 #ifdef __BORLANDC__
     #pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+#include "wx/window.h"
 #endif
 
 #include "wx/dcbuffer.h"
