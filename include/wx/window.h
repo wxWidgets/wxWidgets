@@ -172,8 +172,8 @@ public:
 
         // the title (or label, see below) of the window: the text which the
         // window shows
-    virtual void SetTitle( const wxString & WXUNUSED(title) ) { }
-    virtual wxString GetTitle() const { return ""; }
+    virtual void SetTitle( const wxString& title ) { m_title = title; }
+    virtual wxString GetTitle() const { return m_title; }
 
         // label is just the same as the title (but for, e.g., buttons it
         // makes more sense to speak about labels)
@@ -786,6 +786,9 @@ protected:
     // the window id - a number which uniquely identifies a window among
     // its siblings unless it is -1
     wxWindowID           m_windowId;
+    
+    // the window label
+    wxString             m_title;
 
     // the parent window of this window (or NULL) and the list of the children
     // of this window
@@ -996,7 +999,7 @@ private:
         #define sm_classwxWindowGTK sm_classwxWindow
     #endif // wxUniv
     #include "wx/gtk/window.h"
-#elif defined(__WXGL__)
+#elif defined(__WXMGL__)
     #ifdef __WXUNIVERSAL__
         #define wxWindowNative wxWindowMGL
     #else // !wxUniv
