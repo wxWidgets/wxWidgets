@@ -187,7 +187,7 @@ This demo shows various ways of using the <b><i>new
 </i></b> PrintOut class.  To understand the class you need to examine the demo examples
 and the library <a href="%s">printout.py</a> module classes.
 <p>
-The initial class primarily contains a Table preview/printing class.  There is alot of flexibility
+The initial class primarily contains a Table preview/printing class.  There is a lot of flexibility
 in manipulating the placement, sizing, colours, alignment of the table text and cell background colors.
 There are also a number of options for printing Header and Footer information on the page.
 <p>

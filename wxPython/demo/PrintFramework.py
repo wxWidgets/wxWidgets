@@ -69,7 +69,7 @@ class MyPrintout(wxPrintout):
         # Use x or y scaling factor, whichever fits on the DC
         actualScale = min(scaleX, scaleY)
 
-        # Calculate the position on the DC for centring the graphic
+        # Calculate the position on the DC for centering the graphic
         posX = (w - (self.canvas.getWidth() * actualScale)) / 2.0
         posY = (h - (self.canvas.getHeight() * actualScale)) / 2.0
 

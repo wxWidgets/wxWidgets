@@ -188,7 +188,7 @@ class InnerTile(wxPanel):
         r = InnerTile.START_COLOR_TUPLE[0] + (InnerTile.DELTAS[0] * percent)
         g = InnerTile.START_COLOR_TUPLE[1] + (InnerTile.DELTAS[1] * percent)
         b = InnerTile.START_COLOR_TUPLE[2] + (InnerTile.DELTAS[2] * percent)
-        self.setColor(wxColor(r,g,b))
+        self.setColor(wxColor(int(r), int(g), int(b)))
 
 
 

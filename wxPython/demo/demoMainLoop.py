@@ -93,7 +93,7 @@ class MyApp(wx.App):
             while self.Pending():
                 self.Dispatch()
 
-            # Send idle events to idle handlers.  You may want to throtle
+            # Send idle events to idle handlers.  You may want to throttle
             # this back a bit so there is not too much CPU time spent in
             # the idle handlers.  For this example, I'll just snooze a
             # little...

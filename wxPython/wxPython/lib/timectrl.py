@@ -342,7 +342,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
             # require explicit field change, select entire field on entry,
             # and require a resultant valid entry to allow character entry:
             hourfield = Field(formatcodes='_0<rSV', validRegex='0[1-9]| [1-9]|1[012]', validRequired=True)
-            ampmfield = Field(formatcodes='S')
+            ampmfield = Field(formatcodes='S', emptyInvalid = True, validRequired = True)
 
         # Field 1 is always a zero-padded right-insert minute field,
         # similarly configured as above:

@@ -438,6 +438,7 @@ wxDD_DEFAULT_STYLE = wxc.wxDD_DEFAULT_STYLE
 wxMENU_TEAROFF = wxc.wxMENU_TEAROFF
 wxMB_DOCKABLE = wxc.wxMB_DOCKABLE
 wxNO_FULL_REPAINT_ON_RESIZE = wxc.wxNO_FULL_REPAINT_ON_RESIZE
+wxFULL_REPAINT_ON_RESIZE = wxc.wxFULL_REPAINT_ON_RESIZE
 wxLEFT = wxc.wxLEFT
 wxRIGHT = wxc.wxRIGHT
 wxUP = wxc.wxUP
@@ -1901,8 +1902,11 @@ of your Mac."""
         # KeyboardInterrupt???)  but will later segfault on exit.  By
         # setting the default handler then the app will exit, as
         # expected (depending on platform.)
-        import signal
-        signal.signal(signal.SIGINT, signal.SIG_DFL)
+        try:
+            import signal
+            signal.signal(signal.SIGINT, signal.SIG_DFL)
+        except:
+            pass
 
         # this initializes wxWindows and then calls our OnInit
         _wxStart(self.OnInit)

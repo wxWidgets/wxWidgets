@@ -160,7 +160,7 @@ class SimpleGrid(wxGrid): ##, wxGridAutoEditMixin):
 
         # Show how to stay in a cell that has bad data.  We can't just
         # call SetGridCursor here since we are nested inside one so it
-        # won't have any effect.  Instead, set coordinants to move to in
+        # won't have any effect.  Instead, set coordinates to move to in
         # idle time.
         value = self.GetCellValue(evt.GetRow(), evt.GetCol())
         if value == 'no good':

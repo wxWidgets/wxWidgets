@@ -58,7 +58,7 @@ def makeRandomRectangles(num, W, H):
 
 
 def makeRandomText(num):
-    Np = 8 # number of charcters in text
+    Np = 8 # number of characters in text
     text = []
     for i in range(num):
         word = []
@@ -386,7 +386,7 @@ drawing routines.  Currently they are:
     DrawLineList(sequence, pens=None)
 </pre>
      Where sequence is a tuple, list, whatever of 4 element tuples
-     (x1,y1, x2,y2) andd pens is either None, a single pen or a list
+     (x1,y1, x2,y2) and pens is either None, a single pen or a list
      of pens.
 
 <pre>

@@ -77,7 +77,7 @@ def runTest(frame, nb, log):
 
 
 overview = """\
-This demo is a contrived example of defining an event class in wxPython and sending it up the containment heirachy for processing.
+This demo is a contrived example of defining an event class in wxPython and sending it up the containment hierarchy for processing.
 """
 
 

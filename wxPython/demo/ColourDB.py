@@ -5,11 +5,6 @@ from wxPython.lib import colourdb
 import images
 
 
-# This loads a whole bunch of new color names and values
-# into wxTheColourDatabase
-
-colourdb.updateColourDB()
-
 #----------------------------------------------------------------------
 
 class TestWindow(wxScrolledWindow):
@@ -28,7 +23,7 @@ class TestWindow(wxScrolledWindow):
         dc = wxClientDC(self)
         dc.SetFont(self.font)
 
-        w,h,d,e = dc.GetFullTextExtent("Wy") # a wide character and one that decends
+        w,h,d,e = dc.GetFullTextExtent("Wy") # a wide character and one that descends
         self.textHeight = h + d
         self.lineHeight = self.textHeight + 5
         self.cellWidth = w
@@ -120,6 +115,10 @@ class TestPanel(wxPanel):
 
 
 def runTest(frame, nb, log):
+    # This loads a whole bunch of new color names and values
+    # into wxTheColourDatabase
+    colourdb.updateColourDB()
+
     win = TestPanel(nb)
     return win
 

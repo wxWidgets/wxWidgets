@@ -1,4 +1,4 @@
-"""Decorator classes for documentation and shell scripting.
+"""StyledTextCtrl decorator class module.
 """
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"

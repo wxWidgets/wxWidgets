@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #----------------------------------------------------------------------
 
-import sys, os, glob, fnmatch
+import sys, os, glob, fnmatch, commands
 from distutils.core      import setup, Extension
 from distutils.file_util import copy_file
 from distutils.dir_util  import mkpath
@@ -479,6 +479,8 @@ elif os.name == 'posix':
     if debug:
         cflags.append('-g')
         cflags.append('-O0')
+    else:
+        cflags.append('-O3')
 
     lflags = os.popen(WX_CONFIG + ' --libs', 'r').read()[:-1]
     lflags = lflags.split()
@@ -517,11 +519,12 @@ elif os.name == 'posix':
 
         cflags += portcfg.split()
 
-        # Some distros (e.g. Mandrake) put libGLU in /usr/X11R6/lib, but
-        # wx-config doesn't output that for some reason.  For now, just
-        # add it unconditionally but we should really check if the lib is
-        # really found there or wx-config should be fixed.
-        libdirs.append("/usr/X11R6/lib")
+    # If you get unresolved symbol errors on Solaris and are using gcc, then
+    # uncomment this block to add the right flags to the link step and build
+    # again.
+    ## if os.uname()[0] == 'SunOS':
+    ##     libs.append('gcc')
+    ##     libdirs.append(commands.getoutput("gcc -print-search-dirs | grep '^install' | awk '{print $2}'")[:-1])
 
 
     # Move the various -I, -D, etc. flags we got from the *config scripts

@@ -41,12 +41,21 @@ from wxBookCtrl.
 
 
 
-2.4.1.x
+2.4.2.4
 -------
 
 Use wxSTC in the demo for displaying the soucre code of the samples.
 
+Lots of bug fixes and such from the wxWindows folks.
 
+Added wxPython.lib.newevent from Miki Tebeka.  Its usage is
+demonstrated in the Threads sample in the demo.
+
+Updates to wxMaskedEditCtrl.
+
+Added wxMaskedNumCtrl.
+
+Added Chris Barker's FloatCanvas.
 
 
 

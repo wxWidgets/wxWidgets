@@ -21,15 +21,17 @@ import os, sys, glob
 wxmodule_template = """
 \"\"\"Renamer stub: provides a way to drop the wx prefix from wxPython objects.\"\"\"
 
-__cvsid__ = \"\x24Id: \x24\"
-__revision__ = \"\x24Revision: \x24\"[11:-2]
-
 from wx import _rename
 from wxPython%(prefix)s import %(suffix)s
 _rename(globals(), %(suffix)s.__dict__, modulename='%(name)s')
 del %(suffix)s
 del _rename
 """
+
+call_main = """
+if __name__ == '__main__':
+    main()
+"""    
 
 wxPython_dir = "../wxPython"
 
@@ -50,6 +52,9 @@ skip_modules = [ '__init__', '__version__',
                  ]
 
 
+add_call_main = ['py/PyAlaCarte.py',  'py/PyAlaMode.py',  'py/PyCrust.py',
+                 'py/PyFilling.py',  'py/PyShell.py',  'py/PyWrap.py'
+                 ]
 
 
 
@@ -104,6 +109,8 @@ for subdir in subpackage_list:
         content = wxmodule_template % globals()
         f = open(fname, 'w')
         f.write(content)
+        if fname in add_call_main:
+            f.write(call_main)            
         f.close()
         print fname + ' created'
 

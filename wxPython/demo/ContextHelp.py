@@ -81,8 +81,8 @@ def runTest(frame, nb, log):
 
 
 overview = """
-This demo shows how to encorporate Context Sensitive
-help into your applicaiton using the wxSimpleHelpProvider class.
+This demo shows how to incorporate Context Sensitive
+help into your application using the wxSimpleHelpProvider class.
 
 """
 

@@ -83,7 +83,7 @@ class CustomDataTable(wxPyGridTableBase):
 
     # Called to determine the kind of editor/renderer to use by
     # default, doesn't necessarily have to be the same type used
-    # nativly by the editor/renderer if they know how to convert.
+    # natively by the editor/renderer if they know how to convert.
     def GetTypeName(self, row, col):
         return self.dataTypes[col]
 

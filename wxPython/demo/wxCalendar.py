@@ -481,7 +481,7 @@ class PrintCalend:
 
                 year, month = self.IncMonth(year, month)
                 y = y + 3.5
-            x = x + 4.0     # next colum
+            x = x + 4.0     # next column
 
         DC.EndDrawing()
 

@@ -362,7 +362,7 @@ theTests = [
      ),
 
     ("Add a stretchable", makeSimpleBox3,
-     "We've added one more button with the strechable flag turned on.  Notice "
+     "We've added one more button with the stretchable flag turned on.  Notice "
      "how it grows to fill the extra space in the otherwise fixed dimension."
      ),
 
@@ -372,7 +372,7 @@ theTests = [
      ),
 
     ("Weighting factor", makeSimpleBox5,
-     "This one shows more than one strechable, but one of them has a weighting "
+     "This one shows more than one stretchable, but one of them has a weighting "
      "factor so it gets more of the free space."
      ),
 
@@ -421,7 +421,7 @@ theTests = [
      ),
 
     ("Boxes inside a Border", makeBoxInBorder,
-     "Sizers of different types can be nested withing each other as well. "
+     "Sizers of different types can be nested within each other as well. "
      "Here is a box sizer with several buttons embedded within a border sizer."
      ),
 
@@ -434,7 +434,7 @@ theTests = [
     ("Simple Grid", makeGrid1,
      "This is an example of the wxGridSizer.  In this case all row heights "
      "and column widths are kept the same as all the others and all items "
-     "fill their available space.  The horzontal and vertical gaps are set to "
+     "fill their available space.  The horizontal and vertical gaps are set to "
      "2 pixels each."
      ),
 
@@ -461,7 +461,7 @@ theTests = [
 
     ("Proportional resize", makeSimpleBoxShaped,
      "Managed items can preserve their original aspect ratio.  The last item has the "
-     "wxSHAPED flag set and will resize proportional to its origingal size."
+     "wxSHAPED flag set and will resize proportional to its original size."
      ),
 
     ("Proportional resize with Alignments", makeShapes,

@@ -28,6 +28,8 @@ _treeList = [
     ('Recent Additions', [
         'wxVListBox',
         'wxListbook',
+        'wxMaskedNumCtrl',
+        'FloatCanvas',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -100,7 +102,7 @@ _treeList = [
         'wxValidator',
         ]),
 
-    # controls coming from other librairies
+    # controls coming from other libraries
     ('More Windows/Controls', [
         #'wxFloatBar',          deprecated
         #'wxMVCTree',           deprecated
@@ -109,6 +111,7 @@ _treeList = [
         'ColourSelect',
         'ContextHelp',
         'FancyText',
+        'FloatCanvas',
         'FileBrowseButton',
         'GenericButtons',
         'MaskedEditControls',
@@ -128,6 +131,7 @@ _treeList = [
         'wxIntCtrl',
         'wxLEDNumberCtrl',
         'wxMimeTypesManager',
+        'wxMaskedNumCtrl',
         'wxMultiSash',
         'wxPopupControl',
         'wxStyledTextCtrl_1',
@@ -212,6 +216,7 @@ _treeList = [
 
 
 #---------------------------------------------------------------------------
+# Show how to derive a custom wxLog class
 
 class MyLog(wx.PyLog):
     def __init__(self, textCtrl, logTime=0):
@@ -235,6 +240,7 @@ class MyTP(wx.PyTipProvider):
 # A class to be used to display source code in the demo.  Try using the
 # wxSTC in the wxStyledTextCtrl_2 sample first, fall back to wxTextCtrl
 # if there is an error, such as the stc module not being present.
+#
 
 try:
     ##raise ImportError
@@ -814,7 +820,7 @@ platform GUI library, which is written in C++.
 <p> Like Python and wxWindows, wxPython is <b>Open Source</b> which
 means that it is free for anyone to use and the source code is
 available for anyone to look at and modify.  Or anyone can contribute
-fixes or enhnacments to the project.
+fixes or enhancements to the project.
 
 <p> wxPython is a <b>cross-platform</b> toolkit.  This means that the
 same program will run on multiple platforms without modification.

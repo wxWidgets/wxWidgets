@@ -29,7 +29,7 @@ class TestPanel(wxPanel):
         EVT_KILL_FOCUS(t1, self.OnKillFocus)
         EVT_WINDOW_DESTROY(t1, self.OnWindowDestroy)
 
-        l2 = wxStaticText(self, -1, "Passsword")
+        l2 = wxStaticText(self, -1, "Password")
         t2 = wxTextCtrl(self, -1, "", size=(125, -1), style=wxTE_PASSWORD)
         EVT_TEXT(self, t2.GetId(), self.EvtText)
 
@@ -47,8 +47,6 @@ class TestPanel(wxPanel):
         b3 = wxButton(self, -1, "Test WriteText")
         EVT_BUTTON(self, b3.GetId(), self.OnTestWriteText)
         self.tc = t3
-        b4 = wxButton(self, -1, "Test Simulated Event")
-        EVT_BUTTON(self, b4.GetId(), self.OnTestEvent)
 
 
         l4 = wxStaticText(self, -1, "Rich Text")
@@ -74,7 +72,6 @@ class TestPanel(wxPanel):
         bsizer.Add(b, 0, wxGROW|wxALL, 4)
         bsizer.Add(b2, 0, wxGROW|wxALL, 4)
         bsizer.Add(b3, 0, wxGROW|wxALL, 4)
-        bsizer.Add(b4, 0, wxGROW|wxALL, 4)
 
         sizer = wxFlexGridSizer(cols=3, hgap=6, vgap=6)
         sizer.AddMany([ l1, t1, (0,0),
@@ -143,14 +140,6 @@ class TestPanel(wxPanel):
                        "\tGetLastPosition:\t%d\n"
                        "\tlen(text):\t\t%d\n"
                        % (ip, text[ip], lp, len(text)))
-
-
-    def OnTestEvent(self, evt):
-        ke = wxKeyEvent(wxEVT_CHAR)
-        ke.SetEventObject(self.tc1)
-        ke.SetId(self.tc1.GetId())
-        ke.m_keyCode = ord('A')
-        self.tc1.GetEventHandler().ProcessEvent(ke)
 
 
 #---------------------------------------------------------------------------

@@ -1,3 +1,11 @@
+0.1.1-4
+-------
+
+Fixed problems with wxStaticBitmap (stock_id attribute, icon type
+switching).
+
+Changed some dimensions in properties panel elements.
+
 0.1.1-3
 -------
 

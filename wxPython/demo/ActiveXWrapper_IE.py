@@ -11,7 +11,7 @@ you can use just like wxWindow, (set the size and position, use in a
 sizer, etc.) except its contents will be the COM control.
 
 <p>
-This demo embeds the Internet Exploer WebBrowser control, and shows
+This demo embeds the Internet Explorer WebBrowser control, and shows
 how to receive events from the COM control.  (The title bar and status
 bar are updated as pages change, in addition to the log messages being
 shown.)

@@ -61,7 +61,7 @@ class TestVirtualList(wxListCtrl):
     # "virtualness" of the list...  Normally you would
     # determine the text, attributes and/or image based
     # on values from some external data source, but for
-    # this demo we'll just calcualte them
+    # this demo we'll just calculate them
     def OnGetItemText(self, item, col):
         return "Item %d, column %d" % (item, col)
 

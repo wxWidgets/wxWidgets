@@ -50,7 +50,17 @@ Clear as mud?  Good.  Let's get started.
    You may want to use --enable-debug instead of --enable-optimise if
    you need to run though a debugger and want full debugging symbols.
 
-   if you want to use the image and zlib libraries included with
+   SOLARIS NOTE: The --enable-rpath option may cause problems when
+   using wxGTK on Solaris when compiling wxPython in step 4 below.
+   The woraround is to not use --enable-rpath flag for configure, but
+   in that case all wxPython applications must have the
+   LD_LIBRARY_PATH set to include $WXPREF/lib, or you can use the
+   'crle' program to modify the runtime linking environment.  If this
+   is the only installation of wxGTK on the system then you can use a
+   system library path for WXPREF and not have to worry about it at
+   all.
+
+   If you want to use the image and zlib libraries included with
    wxWindows instead of those already installed on your system, (for
    example, to reduce dependencies on 3rd party libraries) then you
    can add these flags to the configure command:
@@ -61,8 +71,8 @@ Clear as mud?  Good.  Let's get started.
                      --with-zlib=builtin \
 
    If you would like to use GTK 2.x and unicode, then add the
-   following flags.  Please note that this is still beta-level
-   quality, but does look and work quite nice for the most part:
+   following flags.  Please note that this is still considered beta,
+   but does look and work quite nice for the most part:
 
 		     --enable-gtk2 \
 		     --enable-unicode \
@@ -99,7 +109,7 @@ Clear as mud?  Good.  Let's get started.
    setup.py command line to disable the building of the glcanvas
    module.
 
-   If you would like to install to someplace besides the Python
+   If you would like to install to some place besides the Python
    site-packages directory (such as to your home directory) then you
    can add "--root=<path>" after the "install" command.  To use
    wxPython like this you'll need to ensure that the directory
@@ -116,6 +126,12 @@ Clear as mud?  Good.  Let's get started.
 
         python demo.py
 
+   SOLARIS NOTE: If you get unresolved symbol errors when importing
+   wxPython and you are running on Solaris and building with gcc, then
+   you may be able to work around the problem by uncommenting a bit of
+   code in setup.py and building again.  Look for 'SunOS' in setup.py
+   and uncomment the block containing it.  The problem is that Sun's ld
+   does not automatically add libgcc to the link step.
 
 7. That's all, except for the having fun part!
 

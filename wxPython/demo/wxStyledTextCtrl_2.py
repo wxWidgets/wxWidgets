@@ -103,9 +103,9 @@ class PythonSTC(wxStyledTextCtrl):
         self.StyleSetSpec(wxSTC_STYLE_BRACEBAD,    "fore:#000000,back:#FF0000,bold")
 
         # Python styles
-        # White space
-        self.StyleSetSpec(wxSTC_P_DEFAULT, "fore:#808080,face:%(helv)s,size:%(size)d" % faces)
-        # Comment
+        # Default 
+        self.StyleSetSpec(wxSTC_P_DEFAULT, "fore:#000000,face:%(helv)s,size:%(size)d" % faces)
+        # Comments
         self.StyleSetSpec(wxSTC_P_COMMENTLINE, "fore:#007F00,face:%(other)s,size:%(size)d" % faces)
         # Number
         self.StyleSetSpec(wxSTC_P_NUMBER, "fore:#007F7F,size:%(size)d" % faces)
@@ -126,7 +126,7 @@ class PythonSTC(wxStyledTextCtrl):
         # Operators
         self.StyleSetSpec(wxSTC_P_OPERATOR, "bold,size:%(size)d" % faces)
         # Identifiers
-        self.StyleSetSpec(wxSTC_P_IDENTIFIER, "fore:#808080,face:%(helv)s,size:%(size)d" % faces)
+        self.StyleSetSpec(wxSTC_P_IDENTIFIER, "fore:#000000,face:%(helv)s,size:%(size)d" % faces)
         # Comment-blocks
         self.StyleSetSpec(wxSTC_P_COMMENTBLOCK, "fore:#7F7F7F,size:%(size)d" % faces)
         # End of line where string is not closed

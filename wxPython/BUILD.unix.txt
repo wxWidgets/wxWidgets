@@ -6,7 +6,7 @@ directions for how to build wxPython the "new way."  This files
 describes the "old way" to build on unix-like systems.  The difference
 is very simple:  The new way uses a private copy of wxGTK while the
 old way uses either an existing wxGTK that may be installed and used
-by other apps, or you can build a wxGTK that will be accissible by
+by other apps, or you can build a wxGTK that will be accessable by
 other apps.
 
 

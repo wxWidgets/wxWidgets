@@ -56,10 +56,6 @@ extern PyObject *SWIG_newvarlink(void);
 
 #include "wxPython.h"
 
-#ifdef __WXMAC__  // avoid a bug in Carbon headers
-#define scalb scalbn
-#endif
-
 #ifdef __WXMSW__
 #include "myglcanvas.h"
 #else

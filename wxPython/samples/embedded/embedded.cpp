@@ -84,7 +84,7 @@ void MyApp::Init_wxPython()
     wxPyCoreAPI_IMPORT();
 
     // Ensure that the new classes defined in the wxPython wrappers are
-    // recognised by the wx RTTI system.  (If you don't use wxWindow in
+    // recognised by the wx RTTI system.  (If you don't use wxWindows in
     // your C++ app you won't need to do this.)
     wxClassInfo::CleanUpClasses();
     wxClassInfo::InitializeClasses();

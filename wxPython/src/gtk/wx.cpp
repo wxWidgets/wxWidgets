@@ -2415,6 +2415,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxMENU_TEAROFF", PyInt_FromLong((long) wxMENU_TEAROFF));
 	 PyDict_SetItemString(d,"wxMB_DOCKABLE", PyInt_FromLong((long) wxMB_DOCKABLE));
 	 PyDict_SetItemString(d,"wxNO_FULL_REPAINT_ON_RESIZE", PyInt_FromLong((long) wxNO_FULL_REPAINT_ON_RESIZE));
+	 PyDict_SetItemString(d,"wxFULL_REPAINT_ON_RESIZE", PyInt_FromLong((long) wxFULL_REPAINT_ON_RESIZE));
 	 PyDict_SetItemString(d,"wxLEFT", PyInt_FromLong((long) wxLEFT));
 	 PyDict_SetItemString(d,"wxRIGHT", PyInt_FromLong((long) wxRIGHT));
 	 PyDict_SetItemString(d,"wxUP", PyInt_FromLong((long) wxUP));

@@ -26,7 +26,8 @@ class EditorFrame(frame.Frame):
 
     def __init__(self, parent=None, id=-1, title='PyAlaCarte',
                  pos=wx.DefaultPosition, size=(800, 600), 
-                 style=wx.DEFAULT_FRAME_STYLE, filename=None):
+                 style=wx.DEFAULT_FRAME_STYLE | wx.NO_FULL_REPAINT_ON_RESIZE,
+                 filename=None):
         """Create EditorFrame instance."""
         frame.Frame.__init__(self, parent, id, title, pos, size, style)
         self.buffers = {}
@@ -142,6 +143,7 @@ class EditorFrame(frame.Frame):
         self.bufferDestroy()
         buffer = Buffer()
         self.panel = panel = wx.Panel(parent=self, id=-1)
+        wx.EVT_ERASE_BACKGROUND(panel, lambda x: x)        
         editor = Editor(parent=panel)
         panel.editor = editor
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -153,6 +155,8 @@ class EditorFrame(frame.Frame):
         buffer.open(filename)
         self.setEditor(editor)
         self.editor.setFocus()
+        self.SendSizeEvent()
+        
 
     def bufferDestroy(self):
         """Destroy the current buffer."""
@@ -163,6 +167,7 @@ class EditorFrame(frame.Frame):
             del self.buffers[self.buffer.id]
             self.buffer = None
             self.panel.Destroy()
+
 
     def bufferHasChanged(self):
         """Return True if buffer has changed since last save."""
@@ -256,7 +261,8 @@ class EditorNotebookFrame(EditorFrame):
 
     def __init__(self, parent=None, id=-1, title='PyAlaMode',
                  pos=wx.DefaultPosition, size=(800, 600), 
-                 style=wx.DEFAULT_FRAME_STYLE, filename=None):
+                 style=wx.DEFAULT_FRAME_STYLE | wx.NO_FULL_REPAINT_ON_RESIZE,
+                 filename=None):
         """Create EditorNotebookFrame instance."""
         self.notebook = None
         EditorFrame.__init__(self, parent, id, title, pos,
@@ -318,6 +324,7 @@ class EditorNotebookFrame(EditorFrame):
         """Create new buffer."""
         buffer = Buffer()
         panel = wx.Panel(parent=self.notebook, id=-1)
+        wx.EVT_ERASE_BACKGROUND(panel, lambda x: x)        
         editor = Editor(parent=panel)
         panel.editor = editor
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -364,7 +371,7 @@ class EditorNotebook(wx.Notebook):
 
     def __init__(self, parent):
         """Create EditorNotebook instance."""
-        wx.Notebook.__init__(self, parent, id=-1)
+        wx.Notebook.__init__(self, parent, id=-1, style=wx.NO_FULL_REPAINT_ON_RESIZE)
         wx.EVT_NOTEBOOK_PAGE_CHANGING(self, self.GetId(),
                                       self.OnPageChanging)
         wx.EVT_NOTEBOOK_PAGE_CHANGED(self, self.GetId(),
