@@ -303,11 +303,26 @@ class wxRectPtr :
     def SetBottom(self, *_args, **_kwargs):
         val = apply(miscc.wxRect_SetBottom,(self,) + _args, _kwargs)
         return val
+    def Deflate(self, *_args, **_kwargs):
+        val = apply(miscc.wxRect_Deflate,(self,) + _args, _kwargs)
+        return val
     def Inflate(self, *_args, **_kwargs):
         val = apply(miscc.wxRect_Inflate,(self,) + _args, _kwargs)
         return val
+    def InsideXY(self, *_args, **_kwargs):
+        val = apply(miscc.wxRect_InsideXY,(self,) + _args, _kwargs)
+        return val
     def Inside(self, *_args, **_kwargs):
         val = apply(miscc.wxRect_Inside,(self,) + _args, _kwargs)
+        return val
+    def Intersects(self, *_args, **_kwargs):
+        val = apply(miscc.wxRect_Intersects,(self,) + _args, _kwargs)
+        return val
+    def OffsetXY(self, *_args, **_kwargs):
+        val = apply(miscc.wxRect_OffsetXY,(self,) + _args, _kwargs)
+        return val
+    def Offset(self, *_args, **_kwargs):
+        val = apply(miscc.wxRect_Offset,(self,) + _args, _kwargs)
         return val
     def Set(self, *_args, **_kwargs):
         val = apply(miscc.wxRect_Set,(self,) + _args, _kwargs)

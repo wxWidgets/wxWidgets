@@ -2331,6 +2331,52 @@ static PyObject *_wrap_wxImage_GetData(PyObject *self, PyObject *args, PyObject 
     return _resultobj;
 }
 
+static void  wxImage_SetDataBuffer(wxImage *self,PyObject * data) {
+            unsigned char* buffer;
+            int size;
+
+            if (!PyArg_Parse(data, "w#", &buffer, &size))
+                return;
+
+            if (size != self->GetWidth() * self->GetHeight() * 3) {
+                PyErr_SetString(PyExc_TypeError, "Incorrect buffer size");
+                return;
+            }
+
+            self->SetData(buffer);
+        }
+static PyObject *_wrap_wxImage_SetDataBuffer(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxImage * _arg0;
+    PyObject * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","data", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxImage_SetDataBuffer",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxImage_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImage_SetDataBuffer. Expected _wxImage_p.");
+        return NULL;
+        }
+    }
+{
+  _arg1 = _obj1;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxImage_SetDataBuffer(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static void  wxImage_SetData(wxImage *self,PyObject * data) {
             unsigned char* dataPtr;
 
@@ -3157,6 +3203,7 @@ static PyMethodDef imagecMethods[] = {
 	 { "wxImage_GetMaskRed", (PyCFunction) _wrap_wxImage_GetMaskRed, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_SetMaskColour", (PyCFunction) _wrap_wxImage_SetMaskColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_SetData", (PyCFunction) _wrap_wxImage_SetData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxImage_SetDataBuffer", (PyCFunction) _wrap_wxImage_SetDataBuffer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_GetData", (PyCFunction) _wrap_wxImage_GetData, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_GetDataBuffer", (PyCFunction) _wrap_wxImage_GetDataBuffer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_Paste", (PyCFunction) _wrap_wxImage_Paste, METH_VARARGS | METH_KEYWORDS },
