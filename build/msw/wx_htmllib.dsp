@@ -21,10 +21,10 @@ CFG=htmllib - Win32 Unicode Debug
 !MESSAGE "htmllib - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "htmllib - Win32 Unicode Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "htmllib - Win32 Unicode Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "htmllib - Win32 wxUniv Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "htmllib - Win32 wxUniv Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "htmllib - Win32 wxUniv Unicode Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "htmllib - Win32 wxUniv Unicode Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "htmllib - Win32 Universal Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "htmllib - Win32 Universal Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "htmllib - Win32 Universal Unicode Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "htmllib - Win32 Universal Unicode Release" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -126,7 +126,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswu\wxmsw25u_html.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswu\wxmsw25u_html.lib"
 
-!ELSEIF  "$(CFG)" == "htmllib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "htmllib - Win32 Universal Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -149,7 +149,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswunivd\wxmswuniv25d_html.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswunivd\wxmswuniv25d_html.lib"
 
-!ELSEIF  "$(CFG)" == "htmllib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "htmllib - Win32 Universal Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -172,7 +172,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswuniv\wxmswuniv25_html.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswuniv\wxmswuniv25_html.lib"
 
-!ELSEIF  "$(CFG)" == "htmllib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "htmllib - Win32 Universal Unicode Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -195,7 +195,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswunivud\wxmswuniv25ud_html.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswunivud\wxmswuniv25ud_html.lib"
 
-!ELSEIF  "$(CFG)" == "htmllib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "htmllib - Win32 Universal Unicode Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -226,10 +226,10 @@ LIB32=link.exe -lib
 # Name "htmllib - Win32 Release"
 # Name "htmllib - Win32 Unicode Debug"
 # Name "htmllib - Win32 Unicode Release"
-# Name "htmllib - Win32 wxUniv Debug"
-# Name "htmllib - Win32 wxUniv Release"
-# Name "htmllib - Win32 wxUniv Unicode Debug"
-# Name "htmllib - Win32 wxUniv Unicode Release"
+# Name "htmllib - Win32 Universal Debug"
+# Name "htmllib - Win32 Universal Release"
+# Name "htmllib - Win32 Universal Unicode Debug"
+# Name "htmllib - Win32 Universal Unicode Release"
 # Begin Group "Common Headers"
 
 # PROP Default_Filter ""
@@ -263,10 +263,6 @@ SOURCE=..\..\include\wx\html\htmlfilt.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\htmllbox.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\html\htmlpars.h
 # End Source File
 # Begin Source File
@@ -292,6 +288,10 @@ SOURCE=..\..\include\wx\html\m_templ.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\html\winpars.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\htmllbox.h
 # End Source File
 # Begin Source File
 

@@ -121,4 +121,4 @@ uninstall:
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all clean distclean install uninstall
+.PHONY: all clean data distclean install uninstall

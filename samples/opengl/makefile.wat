@@ -4,7 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-!include ../../build/config.wat
+!include ../../build/msw/config.wat
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -31,6 +31,7 @@ WATCOM_CWD = $+ $(%cdrive):$(%cwd) $-
 ### Variables: ###
 
 
+MAKEARGS = 
 
 
 ### Targets: ###
@@ -45,15 +46,15 @@ clean : .SYMBOLIC
 
 cube : .SYMBOLIC 
 	cd cube
-	wmake $(__MAKEOPTS__) all
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
 	cd $(WATCOM_CWD)
 
 isosurf : .SYMBOLIC 
 	cd isosurf
-	wmake $(__MAKEOPTS__) all
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
 	cd $(WATCOM_CWD)
 
 penguin : .SYMBOLIC 
 	cd penguin
-	wmake $(__MAKEOPTS__) all
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
 	cd $(WATCOM_CWD)

@@ -8,7 +8,7 @@
 BCCDIR = $(MAKEDIR)\..
 !endif
 
-!include ../../build/config.bcc
+!include ../../build/msw/config.bcc
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -30,7 +30,7 @@ WXTEST_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS_6) $(__DEBUGINFO) \
 	-I.\..\..\src\tiff -I.\..\..\src\jpeg -I.\..\..\src\png -I.\..\..\src\zlib \
 	-I.\..\..\src\regex -I.\..\..\src\expat\lib -I. $(__DLLFLAG_p) $(CXXFLAGS)
 WXTEST_OBJECTS =  \
-	$(OBJS)\wxtest_wxtest.obj
+	$(OBJS)\wxtest_test.obj
 
 ### Conditionally set variables: ###
 
@@ -136,6 +136,8 @@ __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 __WXUNIV_DEFINE_p_1 = -d__WXUNIVERSAL__
 !endif
 
+MAKEARGS = -DBUILD=$(BUILD) -DCFG=$(CFG) -DCPPFLAGS=$(CPPFLAGS) -DCXX=$(CXX) -DCXXFLAGS=$(CXXFLAGS) -DDEBUG_FLAG=$(DEBUG_FLAG) -DDEBUG_INFO=$(DEBUG_INFO) -DLDFLAGS=$(LDFLAGS) -DMONOLITHIC=$(MONOLITHIC) -DOFFICIAL_BUILD=$(OFFICIAL_BUILD) -DRUNTIME_LIBS=$(RUNTIME_LIBS) -DSHARED=$(SHARED) -DUNICODE=$(UNICODE) -DUSE_GUI=$(USE_GUI) -DWXUNIV=$(WXUNIV)
+
 
 all: $(OBJS)
 $(OBJS):
@@ -145,7 +147,7 @@ $(OBJS):
 
 all: $(OBJS)\wxtest.exe
 
-$(OBJS)\wxtest_wxtest.obj: .\wxtest.cpp
+$(OBJS)\wxtest_test.obj: .\test.cpp
 	$(CXX) -q -c -P -o$@ $(WXTEST_CXXFLAGS) $**
 
 $(OBJS)\wxtest_wxtest.res: .\wxtest.rc

@@ -8,7 +8,7 @@
 BCCDIR = $(MAKEDIR)\..
 !endif
 
-!include ../../build/config.bcc
+!include ../../build/msw/config.bcc
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -28,7 +28,7 @@ LISTBOX_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS_6) $(__DEBUGINFO) \
 	-I.\..\..\src\tiff -I.\..\..\src\jpeg -I.\..\..\src\png -I.\..\..\src\zlib \
 	-I.\..\..\src\regex -I.\..\..\src\expat\lib -I. $(__DLLFLAG_p) $(CXXFLAGS)
 LISTBOX_OBJECTS =  \
-	$(OBJS)\listbox_listbox.obj
+	$(OBJS)\listbox_lboxtest.obj
 OBJS = \
 	bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 
@@ -136,6 +136,8 @@ __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 __WXUNIV_DEFINE_p_1 = -d__WXUNIVERSAL__
 !endif
 
+MAKEARGS = -DBUILD=$(BUILD) -DCFG=$(CFG) -DCPPFLAGS=$(CPPFLAGS) -DCXX=$(CXX) -DCXXFLAGS=$(CXXFLAGS) -DDEBUG_FLAG=$(DEBUG_FLAG) -DDEBUG_INFO=$(DEBUG_INFO) -DLDFLAGS=$(LDFLAGS) -DMONOLITHIC=$(MONOLITHIC) -DOFFICIAL_BUILD=$(OFFICIAL_BUILD) -DRUNTIME_LIBS=$(RUNTIME_LIBS) -DSHARED=$(SHARED) -DUNICODE=$(UNICODE) -DUSE_GUI=$(USE_GUI) -DWXUNIV=$(WXUNIV)
+
 
 all: $(OBJS)
 $(OBJS):
@@ -145,7 +147,7 @@ $(OBJS):
 
 all: $(OBJS)\listbox.exe
 
-$(OBJS)\listbox_listbox.obj: .\listbox.cpp
+$(OBJS)\listbox_lboxtest.obj: .\lboxtest.cpp
 	$(CXX) -q -c -P -o$@ $(LISTBOX_CXXFLAGS) $**
 
 $(OBJS)\listbox_listbox.res: .\listbox.rc

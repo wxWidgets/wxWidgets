@@ -4,7 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-!include ../../../build/config.wat
+!include ../../../build/msw/config.wat
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -178,6 +178,7 @@ XRCDEMO_OBJECTS =  &
 	$(OBJS)\xrcdemo_derivdlg.obj &
 	$(OBJS)\xrcdemo_custclas.obj
 
+MAKEARGS = BUILD=$(BUILD) CFG=$(CFG) CPPFLAGS=$(CPPFLAGS) CXX=$(CXX) CXXFLAGS=$(CXXFLAGS) DEBUG_FLAG=$(DEBUG_FLAG) DEBUG_INFO=$(DEBUG_INFO) LDFLAGS=$(LDFLAGS) MONOLITHIC=$(MONOLITHIC) OFFICIAL_BUILD=$(OFFICIAL_BUILD) RUNTIME_LIBS=$(RUNTIME_LIBS) SHARED=$(SHARED) UNICODE=$(UNICODE) USE_GUI=$(USE_GUI) WXUNIV=$(WXUNIV)
 
 
 all : $(OBJS)
@@ -210,7 +211,7 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\xrcdemo.exe del $(OBJS)\xrcdemo.exe
 
-data :  
+data : .SYMBOLIC 
 	if not exist $(OBJS)/rc mkdir $(OBJS)/rc
 	for %f in (appicon.ico appicon.xpm artprov.xpm artprov.xrc basicdlg.xpm basicdlg.xrc controls.xpm controls.xrc custclas.xpm custclas.xrc derivdlg.xpm derivdlg.xrc fileopen.gif filesave.gif frame.xrc fuzzy.gif menu.xrc platform.xpm platform.xrc quotes.gif resource.xrc scanning.gif sppicon.ico toolbar.xrc uncenter.xpm uncenter.xrc update.gif variable.xpm variable.xrc) do if not exist $(OBJS)/rc\%f copy ./rc\%f $(OBJS)/rc
 

@@ -105,7 +105,7 @@ COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 	$(__INC_TIFF_p_1) $(__INC_JPEG_p_1) $(__INC_PNG_p_1) $(__INC_ZLIB_p_1) \
 	$(__INC_ODBC_p_1) $(__INC_REGEX_p_1) $(__INC_EXPAT_p_1) -i $(srcdir) \
 	$(__DLLFLAG_p_1) -i $(srcdir)/../../include -o svgtest$(EXEEXT) Carbon.r \
-	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.r samples/sample.r
+	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.r ../../../samples/sample.r
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_1 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = \
 @COND_MONOLITHIC_0@	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)
@@ -145,7 +145,7 @@ svgtest$(EXEEXT): $(SVGTEST_OBJECTS) $(__svgtest___win32rc)
 	$(__svgtest___mac_rezcmd)
 	$(__svgtest___mac_setfilecmd)
 
-svgtest_sample_rc.o: $(srcdir)/samples/sample.rc
+svgtest_sample_rc.o: $(srcdir)/../../../samples/sample.rc
 	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include $(__INC_TIFF_p_2) $(__INC_JPEG_p_2) $(__INC_PNG_p_2) $(__INC_ZLIB_p_2) $(__INC_ODBC_p_2) $(__INC_REGEX_p_2) $(__INC_EXPAT_p_2) --include-dir $(srcdir) $(__DLLFLAG_p_2)
 
 svgtest_svgtest.o: $(srcdir)/svgtest.cpp

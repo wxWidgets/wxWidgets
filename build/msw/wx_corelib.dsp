@@ -21,10 +21,10 @@ CFG=corelib - Win32 Unicode Debug
 !MESSAGE "corelib - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "corelib - Win32 Unicode Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "corelib - Win32 Unicode Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "corelib - Win32 wxUniv Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "corelib - Win32 wxUniv Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "corelib - Win32 wxUniv Unicode Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "corelib - Win32 wxUniv Unicode Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "corelib - Win32 Universal Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "corelib - Win32 Universal Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "corelib - Win32 Universal Unicode Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "corelib - Win32 Universal Unicode Release" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -126,7 +126,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswu\wxmsw25u_core.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswu\wxmsw25u_core.lib"
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -149,7 +149,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswunivd\wxmswuniv25d_core.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswunivd\wxmswuniv25d_core.lib"
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -172,7 +172,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswuniv\wxmswuniv25_core.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswuniv\wxmswuniv25_core.lib"
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -195,7 +195,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswunivud\wxmswuniv25ud_core.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswunivud\wxmswuniv25ud_core.lib"
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -226,28 +226,16 @@ LIB32=link.exe -lib
 # Name "corelib - Win32 Release"
 # Name "corelib - Win32 Unicode Debug"
 # Name "corelib - Win32 Unicode Release"
-# Name "corelib - Win32 wxUniv Debug"
-# Name "corelib - Win32 wxUniv Release"
-# Name "corelib - Win32 wxUniv Unicode Debug"
-# Name "corelib - Win32 wxUniv Unicode Release"
+# Name "corelib - Win32 Universal Debug"
+# Name "corelib - Win32 Universal Release"
+# Name "corelib - Win32 Universal Unicode Debug"
+# Name "corelib - Win32 Universal Unicode Release"
 # Begin Group "Common Headers"
 
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\include\wx\generic\accel.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\accel.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\accel.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\ole\access.h
 # End Source File
 # Begin Source File
 
@@ -259,19 +247,7 @@ SOURCE=..\..\include\wx\afterstd.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\univ\app.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\app.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\artprov.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\ole\automtn.h
 # End Source File
 # Begin Source File
 
@@ -279,23 +255,7 @@ SOURCE=..\..\include\wx\bitmap.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\bitmap.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\bmpbuttn.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\univ\bmpbuttn.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\bmpbuttn.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\brush.h
 # End Source File
 # Begin Source File
 
@@ -311,18 +271,6 @@ SOURCE=..\..\include\wx\button.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\button.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\univ\button.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\caret.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\caret.h
 # End Source File
 # Begin Source File
@@ -331,27 +279,7 @@ SOURCE=..\..\include\wx\checkbox.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\univ\checkbox.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\checkbox.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\univ\checklst.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\checklst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\checklst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\choicdgg.h
 # End Source File
 # Begin Source File
 
@@ -363,19 +291,7 @@ SOURCE=..\..\include\wx\choice.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\choice.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\univ\choice.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\clipbrd.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\clipbrd.h
 # End Source File
 # Begin Source File
 
@@ -387,15 +303,7 @@ SOURCE=..\..\include\wx\cmndata.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\colordlg.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\colordlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\colour.h
 # End Source File
 # Begin Source File
 
@@ -403,31 +311,7 @@ SOURCE=..\..\include\wx\colour.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\generic\colrdlgg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\univ\colschem.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\combobox.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\univ\combobox.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\combobox.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\univ\control.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\control.h
 # End Source File
 # Begin Source File
 
@@ -443,15 +327,7 @@ SOURCE=..\..\include\wx\ctrlsub.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\cursor.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\cursor.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\ole\dataform.h
 # End Source File
 # Begin Source File
 
@@ -459,31 +335,11 @@ SOURCE=..\..\include\wx\dataobj.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\ole\dataobj.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\ole\dataobj2.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\dc.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\dc.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\dcclient.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\dcclient.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\dcmemory.h
 # End Source File
 # Begin Source File
 
@@ -499,15 +355,7 @@ SOURCE=..\..\include\wx\dcprint.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\dcprint.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\dcps.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\dcpsg.h
 # End Source File
 # Begin Source File
 
@@ -515,19 +363,7 @@ SOURCE=..\..\include\wx\dcscreen.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\dcscreen.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\univ\dialog.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\dialog.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\dialog.h
 # End Source File
 # Begin Source File
 
@@ -535,27 +371,11 @@ SOURCE=..\..\include\wx\dialup.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\dib.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\dirctrl.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\generic\dirctrlg.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\dirdlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\dirdlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\dirdlgg.h
 # End Source File
 # Begin Source File
 
@@ -575,23 +395,7 @@ SOURCE=..\..\include\wx\docview.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\dragimag.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\dragimag.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\dragimgg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\ole\dropsrc.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\ole\droptgt.h
 # End Source File
 # Begin Source File
 
@@ -599,15 +403,7 @@ SOURCE=..\..\include\wx\effects.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\enhmeta.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\evtloop.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\fdrepdlg.h
 # End Source File
 # Begin Source File
 
@@ -615,19 +411,7 @@ SOURCE=..\..\include\wx\fdrepdlg.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\fdrepdlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\filedlg.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\filedlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\filedlgg.h
 # End Source File
 # Begin Source File
 
@@ -639,19 +423,7 @@ SOURCE=..\..\include\wx\font.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\font.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\fontdlg.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\fontdlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\fontdlgg.h
 # End Source File
 # Begin Source File
 
@@ -663,19 +435,7 @@ SOURCE=..\..\include\wx\fontutil.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\frame.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\univ\frame.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\frame.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\univ\gauge.h
 # End Source File
 # Begin Source File
 
@@ -683,15 +443,7 @@ SOURCE=..\..\include\wx\gauge.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\gauge95.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\gdicmn.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\gdiimage.h
 # End Source File
 # Begin Source File
 
@@ -699,7 +451,111 @@ SOURCE=..\..\include\wx\gdiobj.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\gdiobj.h
+SOURCE=..\..\include\wx\generic\accel.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\choicdgg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\colrdlgg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\dcpsg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\dirctrlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\dirdlgg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\dragimgg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\fdrepdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\filedlgg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\fontdlgg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\imaglist.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\listctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\logg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\mdig.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\msgdlgg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\notebook.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\panelg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\prntdlgg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\progdlgg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\scrolwin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\spinctlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\splitter.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\statusbr.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\tabg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\textdlgg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\timer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\treectlg.h
 # End Source File
 # Begin Source File
 
@@ -723,27 +579,11 @@ SOURCE=..\..\include\wx\helpbase.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\helpbest.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\helpchm.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\helphtml.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\include\wx\helpwin.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\helpwin.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\icon.h
 # End Source File
 # Begin Source File
 
@@ -775,15 +615,7 @@ SOURCE=..\..\include\wx\imagjpeg.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\generic\imaglist.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\imaglist.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\imaglist.h
 # End Source File
 # Begin Source File
 
@@ -807,31 +639,11 @@ SOURCE=..\..\include\wx\imagxpm.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\iniconf.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\univ\inpcons.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\univ\inphand.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\layout.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\include\wx\listbase.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\univ\listbox.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\listbox.h
 # End Source File
 # Begin Source File
 
@@ -843,39 +655,11 @@ SOURCE=..\..\include\wx\listctrl.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\generic\listctrl.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\listctrl.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\logg.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\matrix.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\include\wx\mdi.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\mdi.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\mdig.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\univ\menu.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\menu.h
 # End Source File
 # Begin Source File
 
@@ -887,23 +671,203 @@ SOURCE=..\..\include\wx\menuitem.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\menuitem.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\univ\menuitem.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\metafile.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\metafile.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\include\wx\minifram.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msgdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\accel.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\app.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\bitmap.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\bmpbuttn.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\brush.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\button.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\caret.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\checkbox.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\checklst.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\choice.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\clipbrd.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\colordlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\colour.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\combobox.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\control.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\cursor.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\dc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\dcclient.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\dcmemory.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\dcprint.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\dcscreen.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\dialog.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\dib.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\dirdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\dragimag.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\enhmeta.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\fdrepdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\filedlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\font.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\fontdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\frame.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\gauge95.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\gdiimage.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\gdiobj.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\gnuwin32\winresrc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\helpbest.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\helpchm.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\helpwin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\icon.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\imaglist.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\iniconf.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\listbox.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\listctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\mdi.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\menu.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\menuitem.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\metafile.h
 # End Source File
 # Begin Source File
 
@@ -915,15 +879,7 @@ SOURCE=..\..\include\wx\msw\missing.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msgdlg.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\msw\msgdlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\msgdlgg.h
 # End Source File
 # Begin Source File
 
@@ -935,23 +891,171 @@ SOURCE=..\..\include\wx\msw\msvcrt.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\notebook.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\notebook.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\univ\notebook.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\msw\notebook.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\ole\access.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\ole\automtn.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\ole\dataform.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\ole\dataobj.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\ole\dataobj2.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\ole\dropsrc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\ole\droptgt.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\ole\oleutils.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\ole\uuid.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\palette.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\pen.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\printdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\printwin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\private.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\radiobox.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\radiobut.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\regconf.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\region.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\registry.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\scrolbar.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\setup0.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\slider95.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\slidrmsw.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\spinbutt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\spinctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\statbmp.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\statbox.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\statbr95.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\statline.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\stattext.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\tabctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\tbar95.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\tbarmsw.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\textctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\tglbtn.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\timer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\tooltip.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\toplevel.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\treectrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\window.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\notebook.h
 # End Source File
 # Begin Source File
 
@@ -963,23 +1067,11 @@ SOURCE=..\..\include\wx\palette.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\palette.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\panel.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\generic\panelg.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\paper.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\pen.h
 # End Source File
 # Begin Source File
 
@@ -999,31 +1091,11 @@ SOURCE=..\..\include\wx\printdlg.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\printdlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\printwin.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\private.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\prntbase.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\generic\prntdlgg.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\progdlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\progdlgg.h
 # End Source File
 # Begin Source File
 
@@ -1035,19 +1107,7 @@ SOURCE=..\..\include\wx\quantize.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\radiobox.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\radiobox.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\univ\radiobox.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\univ\radiobut.h
 # End Source File
 # Begin Source File
 
@@ -1055,31 +1115,11 @@ SOURCE=..\..\include\wx\radiobut.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\radiobut.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\rawbmp.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\regconf.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\region.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\region.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\registry.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\univ\renderer.h
 # End Source File
 # Begin Source File
 
@@ -1091,35 +1131,11 @@ SOURCE=..\..\include\wx\scopeguard.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\univ\scrarrow.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\scrolbar.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\univ\scrolbar.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\scrolbar.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\scrolwin.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\scrolwin.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\univ\scrthumb.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\univ\scrtimer.h
 # End Source File
 # Begin Source File
 
@@ -1131,10 +1147,6 @@ SOURCE=..\..\include\wx\settings.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\setup0.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\sizer.h
 # End Source File
 # Begin Source File
@@ -1143,35 +1155,7 @@ SOURCE=..\..\include\wx\slider.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\univ\slider.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\slider95.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\slidrmsw.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\spinbutt.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\univ\spinbutt.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\spinbutt.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\spinctlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\spinctrl.h
 # End Source File
 # Begin Source File
 
@@ -1183,10 +1167,6 @@ SOURCE=..\..\include\wx\splitter.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\generic\splitter.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\stack.h
 # End Source File
 # Begin Source File
@@ -1195,31 +1175,7 @@ SOURCE=..\..\include\wx\statbmp.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\univ\statbmp.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\statbmp.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\univ\statbox.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\statbox.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\statbox.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\statbr95.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\statline.h
 # End Source File
 # Begin Source File
 
@@ -1227,31 +1183,11 @@ SOURCE=..\..\include\wx\statline.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\univ\statline.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\stattext.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\stattext.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\univ\stattext.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\statusbr.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\statusbr.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\univ\statusbr.h
 # End Source File
 # Begin Source File
 
@@ -1263,23 +1199,7 @@ SOURCE=..\..\include\wx\tabctrl.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\tabctrl.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\tabg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\tbar95.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\tbarbase.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\tbarmsw.h
 # End Source File
 # Begin Source File
 
@@ -1287,15 +1207,7 @@ SOURCE=..\..\include\wx\tbarsmpl.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\univ\textctrl.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\textctrl.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\textctrl.h
 # End Source File
 # Begin Source File
 
@@ -1303,23 +1215,7 @@ SOURCE=..\..\include\wx\textdlg.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\generic\textdlgg.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\tglbtn.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\tglbtn.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\univ\theme.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\timer.h
 # End Source File
 # Begin Source File
 
@@ -1327,15 +1223,7 @@ SOURCE=..\..\include\wx\timer.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\timer.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\tipwin.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\univ\toolbar.h
 # End Source File
 # Begin Source File
 
@@ -1347,19 +1235,7 @@ SOURCE=..\..\include\wx\tooltip.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\tooltip.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\toplevel.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\toplevel.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\univ\toplevel.h
 # End Source File
 # Begin Source File
 
@@ -1367,19 +1243,155 @@ SOURCE=..\..\include\wx\treebase.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\generic\treectlg.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\treectrl.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\treectrl.h
+SOURCE=..\..\include\wx\univ\app.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\ole\uuid.h
+SOURCE=..\..\include\wx\univ\bmpbuttn.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\button.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\checkbox.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\checklst.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\choice.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\colschem.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\combobox.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\control.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\dialog.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\frame.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\gauge.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\inpcons.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\inphand.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\listbox.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\menu.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\menuitem.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\notebook.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\radiobox.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\radiobut.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\renderer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\scrarrow.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\scrolbar.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\scrthumb.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\scrtimer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\slider.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\spinbutt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\statbmp.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\statbox.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\statline.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\stattext.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\statusbr.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\textctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\theme.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\toolbar.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\toplevel.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\univ\window.h
 # End Source File
 # Begin Source File
 
@@ -1407,19 +1419,7 @@ SOURCE=..\..\include\wx\vscroll.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\window.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\window.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\univ\window.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\gnuwin32\winresrc.h
 # End Source File
 # Begin Source File
 
@@ -1453,16 +1453,16 @@ SOURCE=..\..\src\generic\accel.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -1496,16 +1496,16 @@ SOURCE=..\..\src\generic\colrdlgg.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -1539,16 +1539,16 @@ SOURCE=..\..\src\generic\dirdlgg.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -1578,16 +1578,16 @@ SOURCE=..\..\src\generic\fdrepdlg.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -1613,16 +1613,16 @@ SOURCE=..\..\src\generic\filedlgg.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -1648,16 +1648,16 @@ SOURCE=..\..\src\generic\fontdlgg.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -1683,16 +1683,16 @@ SOURCE=..\..\src\generic\imaglist.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -1718,16 +1718,16 @@ SOURCE=..\..\src\generic\listctrl.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -1757,16 +1757,16 @@ SOURCE=..\..\src\generic\mdig.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -1792,16 +1792,16 @@ SOURCE=..\..\src\generic\msgdlgg.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -1835,16 +1835,16 @@ SOURCE=..\..\src\generic\prntdlgg.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -1890,19 +1890,19 @@ SOURCE=..\..\src\generic\statusbr.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -1929,16 +1929,16 @@ SOURCE=..\..\src\generic\tabg.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -1992,16 +1992,16 @@ SOURCE=..\..\src\univ\bmpbuttn.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -2027,16 +2027,16 @@ SOURCE=..\..\src\univ\button.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -2062,16 +2062,16 @@ SOURCE=..\..\src\univ\checkbox.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -2097,16 +2097,16 @@ SOURCE=..\..\src\univ\checklst.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -2132,16 +2132,16 @@ SOURCE=..\..\src\univ\choice.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -2167,16 +2167,16 @@ SOURCE=..\..\src\univ\colschem.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -2202,16 +2202,16 @@ SOURCE=..\..\src\univ\combobox.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -2237,16 +2237,16 @@ SOURCE=..\..\src\univ\control.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -2272,16 +2272,16 @@ SOURCE=..\..\src\univ\ctrlrend.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -2307,16 +2307,16 @@ SOURCE=..\..\src\univ\dialog.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -2342,16 +2342,16 @@ SOURCE=..\..\src\univ\framuniv.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -2377,51 +2377,16 @@ SOURCE=..\..\src\univ\gauge.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
-
-
-!ENDIF
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\univ\themes\gtk.cpp
-
-!IF  "$(CFG)" == "corelib - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -2447,16 +2412,16 @@ SOURCE=..\..\src\univ\inpcons.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -2482,16 +2447,16 @@ SOURCE=..\..\src\univ\inphand.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -2517,16 +2482,16 @@ SOURCE=..\..\src\univ\listbox.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -2552,51 +2517,16 @@ SOURCE=..\..\src\univ\menu.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
-
-
-!ENDIF
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\univ\themes\metal.cpp
-
-!IF  "$(CFG)" == "corelib - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -2622,16 +2552,16 @@ SOURCE=..\..\src\univ\notebook.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -2657,16 +2587,16 @@ SOURCE=..\..\src\univ\radiobox.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -2692,16 +2622,16 @@ SOURCE=..\..\src\univ\radiobut.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -2727,16 +2657,16 @@ SOURCE=..\..\src\univ\scrarrow.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -2762,16 +2692,16 @@ SOURCE=..\..\src\univ\scrolbar.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -2797,16 +2727,16 @@ SOURCE=..\..\src\univ\scrthumb.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -2832,16 +2762,16 @@ SOURCE=..\..\src\univ\slider.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -2867,16 +2797,16 @@ SOURCE=..\..\src\univ\spinbutt.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -2902,16 +2832,16 @@ SOURCE=..\..\src\univ\statbmp.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -2937,16 +2867,16 @@ SOURCE=..\..\src\univ\statbox.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -2972,16 +2902,16 @@ SOURCE=..\..\src\univ\statline.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -3007,16 +2937,16 @@ SOURCE=..\..\src\univ\stattext.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -3042,16 +2972,16 @@ SOURCE=..\..\src\univ\statusbr.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -3077,16 +3007,16 @@ SOURCE=..\..\src\univ\textctrl.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -3112,16 +3042,16 @@ SOURCE=..\..\src\univ\theme.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -3129,7 +3059,7 @@ SOURCE=..\..\src\univ\theme.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\univ\toolbar.cpp
+SOURCE=..\..\src\univ\themes\gtk.cpp
 
 !IF  "$(CFG)" == "corelib - Win32 Debug"
 
@@ -3147,16 +3077,16 @@ SOURCE=..\..\src\univ\toolbar.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -3164,7 +3094,7 @@ SOURCE=..\..\src\univ\toolbar.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\univ\topluniv.cpp
+SOURCE=..\..\src\univ\themes\metal.cpp
 
 !IF  "$(CFG)" == "corelib - Win32 Debug"
 
@@ -3182,16 +3112,16 @@ SOURCE=..\..\src\univ\topluniv.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -3217,16 +3147,86 @@ SOURCE=..\..\src\univ\themes\win32.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
+
+
+!ENDIF
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\univ\toolbar.cpp
+
+!IF  "$(CFG)" == "corelib - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
+
+
+!ENDIF
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\univ\topluniv.cpp
+
+!IF  "$(CFG)" == "corelib - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -3252,16 +3252,16 @@ SOURCE=..\..\src\univ\winuniv.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 
 !ENDIF
@@ -3591,54 +3591,19 @@ SOURCE=..\..\src\msw\accel.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ENDIF
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\msw\ole\access.cpp
-
-!IF  "$(CFG)" == "corelib - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -3648,10 +3613,6 @@ SOURCE=..\..\src\msw\ole\access.cpp
 # Begin Source File
 
 SOURCE=..\..\src\msw\app.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\msw\ole\automtn.cpp
 # End Source File
 # Begin Source File
 
@@ -3673,19 +3634,19 @@ SOURCE=..\..\src\msw\bmpbuttn.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -3712,19 +3673,19 @@ SOURCE=..\..\src\msw\button.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -3751,19 +3712,19 @@ SOURCE=..\..\src\msw\checkbox.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -3786,19 +3747,19 @@ SOURCE=..\..\src\msw\checklst.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -3821,19 +3782,19 @@ SOURCE=..\..\src\msw\choice.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -3860,19 +3821,19 @@ SOURCE=..\..\src\msw\colordlg.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -3899,19 +3860,19 @@ SOURCE=..\..\src\msw\combobox.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -3934,19 +3895,19 @@ SOURCE=..\..\src\msw\control.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -3960,10 +3921,6 @@ SOURCE=..\..\src\msw\cursor.cpp
 # Begin Source File
 
 SOURCE=..\..\src\msw\data.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\msw\ole\dataobj.cpp
 # End Source File
 # Begin Source File
 
@@ -4001,19 +3958,19 @@ SOURCE=..\..\src\msw\dialog.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4052,32 +4009,24 @@ SOURCE=..\..\src\msw\dragimag.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
 !ENDIF
 
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\msw\ole\dropsrc.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\msw\ole\droptgt.cpp
 # End Source File
 # Begin Source File
 
@@ -4109,19 +4058,19 @@ SOURCE=..\..\src\msw\fdrepdlg.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4144,19 +4093,19 @@ SOURCE=..\..\src\msw\filedlg.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4183,19 +4132,19 @@ SOURCE=..\..\src\msw\fontdlg.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4226,19 +4175,19 @@ SOURCE=..\..\src\msw\frame.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4261,19 +4210,19 @@ SOURCE=..\..\src\msw\gauge95.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4316,19 +4265,19 @@ SOURCE=..\..\src\msw\imaglist.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4351,19 +4300,19 @@ SOURCE=..\..\src\msw\iniconf.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4386,19 +4335,19 @@ SOURCE=..\..\src\msw\listbox.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4421,19 +4370,19 @@ SOURCE=..\..\src\msw\listctrl.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4460,19 +4409,19 @@ SOURCE=..\..\src\msw\mdi.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4495,19 +4444,19 @@ SOURCE=..\..\src\msw\menu.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4530,19 +4479,19 @@ SOURCE=..\..\src\msw\menuitem.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4565,19 +4514,19 @@ SOURCE=..\..\src\msw\metafile.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4604,19 +4553,19 @@ SOURCE=..\..\src\msw\msgdlg.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4643,19 +4592,19 @@ SOURCE=..\..\src\msw\nativdlg.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4678,19 +4627,19 @@ SOURCE=..\..\src\msw\notebook.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4699,7 +4648,62 @@ SOURCE=..\..\src\msw\notebook.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\msw\ole\access.cpp
+
+!IF  "$(CFG)" == "corelib - Win32 Debug"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\msw\ole\automtn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\msw\ole\dataobj.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\msw\ole\dropsrc.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\msw\ole\droptgt.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\msw\ole\oleutils.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\msw\ole\uuid.cpp
 # End Source File
 # Begin Source File
 
@@ -4717,19 +4721,19 @@ SOURCE=..\..\src\msw\ownerdrw.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4760,19 +4764,19 @@ SOURCE=..\..\src\msw\penwin.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4799,19 +4803,19 @@ SOURCE=..\..\src\msw\printdlg.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4834,19 +4838,19 @@ SOURCE=..\..\src\msw\printwin.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4869,19 +4873,19 @@ SOURCE=..\..\src\msw\radiobox.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4904,19 +4908,19 @@ SOURCE=..\..\src\msw\radiobut.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4947,19 +4951,19 @@ SOURCE=..\..\src\msw\scrolbar.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4986,19 +4990,19 @@ SOURCE=..\..\src\msw\slider95.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -5021,19 +5025,19 @@ SOURCE=..\..\src\msw\spinbutt.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -5056,19 +5060,19 @@ SOURCE=..\..\src\msw\spinctrl.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -5091,19 +5095,19 @@ SOURCE=..\..\src\msw\statbmp.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -5126,19 +5130,19 @@ SOURCE=..\..\src\msw\statbox.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -5161,19 +5165,19 @@ SOURCE=..\..\src\msw\statbr95.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -5196,19 +5200,19 @@ SOURCE=..\..\src\msw\statline.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -5231,19 +5235,19 @@ SOURCE=..\..\src\msw\stattext.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -5266,19 +5270,19 @@ SOURCE=..\..\src\msw\tabctrl.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -5301,19 +5305,19 @@ SOURCE=..\..\src\msw\tbar95.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -5336,19 +5340,19 @@ SOURCE=..\..\src\msw\textctrl.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -5371,19 +5375,19 @@ SOURCE=..\..\src\msw\tglbtn.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -5418,19 +5422,19 @@ SOURCE=..\..\src\msw\treectrl.cpp
 !ELSEIF  "$(CFG)" == "corelib - Win32 Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Debug"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "corelib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "corelib - Win32 Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -5440,10 +5444,6 @@ SOURCE=..\..\src\msw\treectrl.cpp
 # Begin Source File
 
 SOURCE=..\..\src\msw\utilsgui.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\msw\ole\uuid.cpp
 # End Source File
 # Begin Source File
 

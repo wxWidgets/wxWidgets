@@ -21,10 +21,10 @@ CFG=advlib - Win32 Unicode Debug
 !MESSAGE "advlib - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "advlib - Win32 Unicode Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "advlib - Win32 Unicode Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "advlib - Win32 wxUniv Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "advlib - Win32 wxUniv Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "advlib - Win32 wxUniv Unicode Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "advlib - Win32 wxUniv Unicode Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "advlib - Win32 Universal Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "advlib - Win32 Universal Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "advlib - Win32 Universal Unicode Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "advlib - Win32 Universal Unicode Release" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -126,7 +126,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswu\wxmsw25u_adv.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswu\wxmsw25u_adv.lib"
 
-!ELSEIF  "$(CFG)" == "advlib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "advlib - Win32 Universal Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -149,7 +149,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswunivd\wxmswuniv25d_adv.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswunivd\wxmswuniv25d_adv.lib"
 
-!ELSEIF  "$(CFG)" == "advlib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "advlib - Win32 Universal Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -172,7 +172,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswuniv\wxmswuniv25_adv.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswuniv\wxmswuniv25_adv.lib"
 
-!ELSEIF  "$(CFG)" == "advlib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "advlib - Win32 Universal Unicode Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -195,7 +195,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswunivud\wxmswuniv25ud_adv.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswunivud\wxmswuniv25ud_adv.lib"
 
-!ELSEIF  "$(CFG)" == "advlib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "advlib - Win32 Universal Unicode Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -226,17 +226,13 @@ LIB32=link.exe -lib
 # Name "advlib - Win32 Release"
 # Name "advlib - Win32 Unicode Debug"
 # Name "advlib - Win32 Unicode Release"
-# Name "advlib - Win32 wxUniv Debug"
-# Name "advlib - Win32 wxUniv Release"
-# Name "advlib - Win32 wxUniv Unicode Debug"
-# Name "advlib - Win32 wxUniv Unicode Release"
+# Name "advlib - Win32 Universal Debug"
+# Name "advlib - Win32 Universal Release"
+# Name "advlib - Win32 Universal Unicode Debug"
+# Name "advlib - Win32 Universal Unicode Release"
 # Begin Group "Common Headers"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\calctrl.h
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\include\wx\calctrl.h
@@ -247,7 +243,7 @@ SOURCE=..\..\include\wx\dcbuffer.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\grid.h
+SOURCE=..\..\include\wx\generic\calctrl.h
 # End Source File
 # Begin Source File
 
@@ -267,23 +263,7 @@ SOURCE=..\..\include\wx\generic\helpext.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\joystick.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\joystick.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\laywin.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\generic\laywin.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\sashwin.h
 # End Source File
 # Begin Source File
 
@@ -295,11 +275,39 @@ SOURCE=..\..\include\wx\generic\splash.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\splash.h
+SOURCE=..\..\include\wx\generic\wizard.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\grid.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\joystick.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\laywin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\joystick.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\include\wx\msw\taskbar.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\wave.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\sashwin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\splash.h
 # End Source File
 # Begin Source File
 
@@ -311,15 +319,7 @@ SOURCE=..\..\include\wx\tipdlg.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\wave.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\wave.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\wizard.h
 # End Source File
 # Begin Source File
 

@@ -37,6 +37,7 @@ DISPLAY_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
 	-I$(srcdir) $(__DLLFLAG_p) $(CXXFLAGS)
 DISPLAY_OBJECTS =  \
+	$(__display___win32rc) \
 	display_display.o
 LIBDIRNAME = $(top_builddir)lib
 
@@ -53,20 +54,35 @@ LIBDIRNAME = $(top_builddir)lib
 @COND_WXUNIV_1@WXUNIVNAME = univ
 @COND_SHARED_1@__DLLFLAG_p = -DWXUSINGDLL
 @COND_SHARED_1@__DLLFLAG_p_1 = -d WXUSINGDLL
+@COND_SHARED_1@__DLLFLAG_p_2 = --define WXUSINGDLL
 @COND_WXUSE_EXPAT_BUILTIN@__INC_EXPAT_p = -I$(top_srcdir)/src/expat/lib
 @COND_WXUSE_EXPAT_BUILTIN@__INC_EXPAT_p_1 = -i $(top_srcdir)/src/expat/lib
+@COND_WXUSE_EXPAT_BUILTIN@__INC_EXPAT_p_2 = \
+@COND_WXUSE_EXPAT_BUILTIN@	--include-dir $(top_srcdir)/src/expat/lib
 @COND_WXUSE_LIBJPEG_BUILTIN@__INC_JPEG_p = -I$(top_srcdir)/src/jpeg
 @COND_WXUSE_LIBJPEG_BUILTIN@__INC_JPEG_p_1 = -i $(top_srcdir)/src/jpeg
+@COND_WXUSE_LIBJPEG_BUILTIN@__INC_JPEG_p_2 = \
+@COND_WXUSE_LIBJPEG_BUILTIN@	--include-dir $(top_srcdir)/src/jpeg
 @COND_WXUSE_ODBC_BUILTIN@__INC_ODBC_p = -I$(top_srcdir)/src/odbc
 @COND_WXUSE_ODBC_BUILTIN@__INC_ODBC_p_1 = -i $(top_srcdir)/src/odbc
+@COND_WXUSE_ODBC_BUILTIN@__INC_ODBC_p_2 = \
+@COND_WXUSE_ODBC_BUILTIN@	--include-dir $(top_srcdir)/src/odbc
 @COND_WXUSE_LIBPNG_BUILTIN@__INC_PNG_p = -I$(top_srcdir)/src/png
 @COND_WXUSE_LIBPNG_BUILTIN@__INC_PNG_p_1 = -i $(top_srcdir)/src/png
+@COND_WXUSE_LIBPNG_BUILTIN@__INC_PNG_p_2 = \
+@COND_WXUSE_LIBPNG_BUILTIN@	--include-dir $(top_srcdir)/src/png
 @COND_WXUSE_REGEX_BUILTIN@__INC_REGEX_p = -I$(top_srcdir)/src/regex
 @COND_WXUSE_REGEX_BUILTIN@__INC_REGEX_p_1 = -i $(top_srcdir)/src/regex
+@COND_WXUSE_REGEX_BUILTIN@__INC_REGEX_p_2 = \
+@COND_WXUSE_REGEX_BUILTIN@	--include-dir $(top_srcdir)/src/regex
 @COND_WXUSE_LIBTIFF_BUILTIN@__INC_TIFF_p = -I$(top_srcdir)/src/tiff
 @COND_WXUSE_LIBTIFF_BUILTIN@__INC_TIFF_p_1 = -i $(top_srcdir)/src/tiff
+@COND_WXUSE_LIBTIFF_BUILTIN@__INC_TIFF_p_2 = \
+@COND_WXUSE_LIBTIFF_BUILTIN@	--include-dir $(top_srcdir)/src/tiff
 @COND_WXUSE_ZLIB_BUILTIN@__INC_ZLIB_p = -I$(top_srcdir)/src/zlib
 @COND_WXUSE_ZLIB_BUILTIN@__INC_ZLIB_p_1 = -i $(top_srcdir)/src/zlib
+@COND_WXUSE_ZLIB_BUILTIN@__INC_ZLIB_p_2 = \
+@COND_WXUSE_ZLIB_BUILTIN@	--include-dir $(top_srcdir)/src/zlib
 @COND_WXUSE_EXPAT_BUILTIN@__LIB_EXPAT_p = \
 @COND_WXUSE_EXPAT_BUILTIN@	-lwxexpat$(WXDEBUGFLAG)$(HOST_SUFFIX)
 @COND_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN@__LIB_JPEG_p \
@@ -89,7 +105,7 @@ COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 	$(__INC_TIFF_p_1) $(__INC_JPEG_p_1) $(__INC_PNG_p_1) $(__INC_ZLIB_p_1) \
 	$(__INC_ODBC_p_1) $(__INC_REGEX_p_1) $(__INC_EXPAT_p_1) -i $(srcdir) \
 	$(__DLLFLAG_p_1) -o display$(EXEEXT) Carbon.r \
-	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.r
+	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.r ../../samples/sample.r
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_1 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = \
 @COND_MONOLITHIC_0@	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)
@@ -101,9 +117,11 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_1 = -d __WXUNIVERSAL__
+@COND_WXUNIV_1@__WXUNIV_DEFINE_p_2 = --define __WXUNIVERSAL__
 @COND_PLATFORM_MAC_1@__display___mac_rezcmd = $(__MACOSX_RESOURCES_p_1)
 @COND_PLATFORM_MAC_1@__display___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -a C display$(EXEEXT)
+@COND_PLATFORM_WIN32_1@__display___win32rc = display_sample_rc.o
 
 ### Targets: ###
 
@@ -114,13 +132,16 @@ clean:
 	rm -f ./*.o
 	rm -f display$(EXEEXT)
 
-display$(EXEEXT): $(DISPLAY_OBJECTS)
+display$(EXEEXT): $(DISPLAY_OBJECTS) $(__display___win32rc)
 	$(CXX) -o $@ $(DISPLAY_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
 	$(__display___mac_rezcmd)
 	$(__display___mac_setfilecmd)
 
 display_display.o: $(srcdir)/display.cpp
 	$(CXXC) -c -o $@ $(DISPLAY_CXXFLAGS) $<
+
+display_sample_rc.o: $(srcdir)/../../samples/sample.rc
+	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include $(__INC_TIFF_p_2) $(__INC_JPEG_p_2) $(__INC_PNG_p_2) $(__INC_ZLIB_p_2) $(__INC_ODBC_p_2) $(__INC_REGEX_p_2) $(__INC_EXPAT_p_2) --include-dir $(srcdir) $(__DLLFLAG_p_2)
 
 distclean: clean
 	rm -f configure config.cache config.log config.status

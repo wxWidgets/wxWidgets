@@ -4,7 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-include ../../build/config.gcc
+include ../../build/msw/config.gcc
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -139,6 +139,8 @@ endif
 ifeq ($(WXUNIV),1)
 __WXUNIV_DEFINE_p_1 = --define __WXUNIVERSAL__
 endif
+
+MAKEARGS = BUILD=$(BUILD) CFG=$(CFG) CPPFLAGS=$(CPPFLAGS) CXX=$(CXX) CXXFLAGS=$(CXXFLAGS) DEBUG_FLAG=$(DEBUG_FLAG) DEBUG_INFO=$(DEBUG_INFO) GCC_VERSION=$(GCC_VERSION) LDFLAGS=$(LDFLAGS) MONOLITHIC=$(MONOLITHIC) OFFICIAL_BUILD=$(OFFICIAL_BUILD) SHARED=$(SHARED) UNICODE=$(UNICODE) USE_GUI=$(USE_GUI) WXUNIV=$(WXUNIV)
 
 
 all: $(OBJS)

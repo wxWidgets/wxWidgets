@@ -21,10 +21,10 @@ CFG=basedll - Win32 DLL Debug
 !MESSAGE "basedll - Win32 DLL Release" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE "basedll - Win32 DLL Unicode Debug" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE "basedll - Win32 DLL Unicode Release" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "basedll - Win32 DLL wxUniv Debug" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "basedll - Win32 DLL wxUniv Release" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "basedll - Win32 DLL wxUniv Unicode Debug" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "basedll - Win32 DLL wxUniv Unicode Release" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "basedll - Win32 DLL Universal Debug" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "basedll - Win32 DLL Universal Release" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "basedll - Win32 DLL Universal Unicode Debug" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "basedll - Win32 DLL Universal Unicode Release" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE 
 
 # Begin Project
@@ -135,7 +135,7 @@ LINK32=link.exe
 # ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_mswudll\wxbase250u_vc_custom.dll" /libpath:"..\..\lib\vc_mswudll" /implib:"..\..\lib\vc_mswudll\wxbase25u.lib"
 # ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_mswudll\wxbase250u_vc_custom.dll" /libpath:"..\..\lib\vc_mswudll" /implib:"..\..\lib\vc_mswudll\wxbase25u.lib"
 
-!ELSEIF  "$(CFG)" == "basedll - Win32 DLL wxUniv Debug"
+!ELSEIF  "$(CFG)" == "basedll - Win32 DLL Universal Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -160,7 +160,7 @@ LINK32=link.exe
 # ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_mswunivddll\wxbase250d_vc_custom.dll" /libpath:"..\..\lib\vc_mswunivddll" /implib:"..\..\lib\vc_mswunivddll\wxbase25d.lib" /debug
 # ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_mswunivddll\wxbase250d_vc_custom.dll" /libpath:"..\..\lib\vc_mswunivddll" /implib:"..\..\lib\vc_mswunivddll\wxbase25d.lib" /debug
 
-!ELSEIF  "$(CFG)" == "basedll - Win32 DLL wxUniv Release"
+!ELSEIF  "$(CFG)" == "basedll - Win32 DLL Universal Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -185,7 +185,7 @@ LINK32=link.exe
 # ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_mswunivdll\wxbase250_vc_custom.dll" /libpath:"..\..\lib\vc_mswunivdll" /implib:"..\..\lib\vc_mswunivdll\wxbase25.lib"
 # ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_mswunivdll\wxbase250_vc_custom.dll" /libpath:"..\..\lib\vc_mswunivdll" /implib:"..\..\lib\vc_mswunivdll\wxbase25.lib"
 
-!ELSEIF  "$(CFG)" == "basedll - Win32 DLL wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "basedll - Win32 DLL Universal Unicode Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -210,7 +210,7 @@ LINK32=link.exe
 # ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_mswunivuddll\wxbase250ud_vc_custom.dll" /libpath:"..\..\lib\vc_mswunivuddll" /implib:"..\..\lib\vc_mswunivuddll\wxbase25ud.lib" /debug
 # ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_mswunivuddll\wxbase250ud_vc_custom.dll" /libpath:"..\..\lib\vc_mswunivuddll" /implib:"..\..\lib\vc_mswunivuddll\wxbase25ud.lib" /debug
 
-!ELSEIF  "$(CFG)" == "basedll - Win32 DLL wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "basedll - Win32 DLL Universal Unicode Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -243,10 +243,10 @@ LINK32=link.exe
 # Name "basedll - Win32 DLL Release"
 # Name "basedll - Win32 DLL Unicode Debug"
 # Name "basedll - Win32 DLL Unicode Release"
-# Name "basedll - Win32 DLL wxUniv Debug"
-# Name "basedll - Win32 DLL wxUniv Release"
-# Name "basedll - Win32 DLL wxUniv Unicode Debug"
-# Name "basedll - Win32 DLL wxUniv Unicode Release"
+# Name "basedll - Win32 DLL Universal Debug"
+# Name "basedll - Win32 DLL Universal Release"
+# Name "basedll - Win32 DLL Universal Unicode Debug"
+# Name "basedll - Win32 DLL Universal Unicode Release"
 # Begin Group "Setup Headers"
 
 # PROP Default_Filter ""
@@ -294,7 +294,7 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "basedll - Win32 DLL wxUniv Debug"
+!ELSEIF  "$(CFG)" == "basedll - Win32 DLL Universal Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_mswunivddll\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
@@ -304,7 +304,7 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "basedll - Win32 DLL wxUniv Release"
+!ELSEIF  "$(CFG)" == "basedll - Win32 DLL Universal Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_mswunivdll\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
@@ -314,7 +314,7 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "basedll - Win32 DLL wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "basedll - Win32 DLL Universal Unicode Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_mswunivuddll\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
@@ -324,7 +324,7 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "basedll - Win32 DLL wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "basedll - Win32 DLL Universal Unicode Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_mswunivudll\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
@@ -367,10 +367,6 @@ SOURCE=..\..\include\wx\build.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\chkconf.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\chkconf.h
 # End Source File
 # Begin Source File
@@ -395,10 +391,6 @@ SOURCE=..\..\include\wx\containr.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\crashrpt.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\datetime.h
 # End Source File
 # Begin Source File
@@ -408,10 +400,6 @@ SOURCE=..\..\include\wx\datstrm.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\dde.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\dde.h
 # End Source File
 # Begin Source File
 
@@ -491,10 +479,6 @@ SOURCE=..\..\include\wx\fs_zip.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\gccpriv.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\hash.h
 # End Source File
 # Begin Source File
@@ -567,10 +551,6 @@ SOURCE=..\..\include\wx\memtext.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\mimetype.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\mimetype.h
 # End Source File
 # Begin Source File
@@ -584,6 +564,38 @@ SOURCE=..\..\include\wx\msgout.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\mstream.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\chkconf.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\crashrpt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\dde.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\gccpriv.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\mimetype.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\winundef.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\wrapcctl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\wrapwin.h
 # End Source File
 # Begin Source File
 
@@ -672,18 +684,6 @@ SOURCE=..\..\include\wx\volume.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\wfstream.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\winundef.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\wrapcctl.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\wrapwin.h
 # End Source File
 # Begin Source File
 

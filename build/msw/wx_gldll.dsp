@@ -21,10 +21,10 @@ CFG=gldll - Win32 DLL Debug
 !MESSAGE "gldll - Win32 DLL Release" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE "gldll - Win32 DLL Unicode Debug" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE "gldll - Win32 DLL Unicode Release" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "gldll - Win32 DLL wxUniv Debug" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "gldll - Win32 DLL wxUniv Release" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "gldll - Win32 DLL wxUniv Unicode Debug" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "gldll - Win32 DLL wxUniv Unicode Release" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "gldll - Win32 DLL Universal Debug" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "gldll - Win32 DLL Universal Release" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "gldll - Win32 DLL Universal Unicode Debug" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "gldll - Win32 DLL Universal Unicode Release" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE 
 
 # Begin Project
@@ -135,7 +135,7 @@ LINK32=link.exe
 # ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wxmsw25u_core.lib wxbase25u.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_mswudll\wxmsw250u_gl_vc_custom.dll" /libpath:"..\..\lib\vc_mswudll" /implib:"..\..\lib\vc_mswudll\wxmsw25u_gl.lib"
 # ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wxmsw25u_core.lib wxbase25u.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_mswudll\wxmsw250u_gl_vc_custom.dll" /libpath:"..\..\lib\vc_mswudll" /implib:"..\..\lib\vc_mswudll\wxmsw25u_gl.lib"
 
-!ELSEIF  "$(CFG)" == "gldll - Win32 DLL wxUniv Debug"
+!ELSEIF  "$(CFG)" == "gldll - Win32 DLL Universal Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -160,7 +160,7 @@ LINK32=link.exe
 # ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wxmswuniv25d_core.lib wxbase25d.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_mswunivddll\wxmswuniv250d_gl_vc_custom.dll" /libpath:"..\..\lib\vc_mswunivddll" /implib:"..\..\lib\vc_mswunivddll\wxmswuniv25d_gl.lib" /debug
 # ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wxmswuniv25d_core.lib wxbase25d.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_mswunivddll\wxmswuniv250d_gl_vc_custom.dll" /libpath:"..\..\lib\vc_mswunivddll" /implib:"..\..\lib\vc_mswunivddll\wxmswuniv25d_gl.lib" /debug
 
-!ELSEIF  "$(CFG)" == "gldll - Win32 DLL wxUniv Release"
+!ELSEIF  "$(CFG)" == "gldll - Win32 DLL Universal Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -185,7 +185,7 @@ LINK32=link.exe
 # ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wxmswuniv25_core.lib wxbase25.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_mswunivdll\wxmswuniv250_gl_vc_custom.dll" /libpath:"..\..\lib\vc_mswunivdll" /implib:"..\..\lib\vc_mswunivdll\wxmswuniv25_gl.lib"
 # ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wxmswuniv25_core.lib wxbase25.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_mswunivdll\wxmswuniv250_gl_vc_custom.dll" /libpath:"..\..\lib\vc_mswunivdll" /implib:"..\..\lib\vc_mswunivdll\wxmswuniv25_gl.lib"
 
-!ELSEIF  "$(CFG)" == "gldll - Win32 DLL wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "gldll - Win32 DLL Universal Unicode Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -210,7 +210,7 @@ LINK32=link.exe
 # ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wxmswuniv25ud_core.lib wxbase25ud.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_mswunivuddll\wxmswuniv250ud_gl_vc_custom.dll" /libpath:"..\..\lib\vc_mswunivuddll" /implib:"..\..\lib\vc_mswunivuddll\wxmswuniv25ud_gl.lib" /debug
 # ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wxmswuniv25ud_core.lib wxbase25ud.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_mswunivuddll\wxmswuniv250ud_gl_vc_custom.dll" /libpath:"..\..\lib\vc_mswunivuddll" /implib:"..\..\lib\vc_mswunivuddll\wxmswuniv25ud_gl.lib" /debug
 
-!ELSEIF  "$(CFG)" == "gldll - Win32 DLL wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "gldll - Win32 DLL Universal Unicode Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -243,10 +243,10 @@ LINK32=link.exe
 # Name "gldll - Win32 DLL Release"
 # Name "gldll - Win32 DLL Unicode Debug"
 # Name "gldll - Win32 DLL Unicode Release"
-# Name "gldll - Win32 DLL wxUniv Debug"
-# Name "gldll - Win32 DLL wxUniv Release"
-# Name "gldll - Win32 DLL wxUniv Unicode Debug"
-# Name "gldll - Win32 DLL wxUniv Unicode Release"
+# Name "gldll - Win32 DLL Universal Debug"
+# Name "gldll - Win32 DLL Universal Release"
+# Name "gldll - Win32 DLL Universal Unicode Debug"
+# Name "gldll - Win32 DLL Universal Unicode Release"
 # Begin Group "Common Headers"
 
 # PROP Default_Filter ""

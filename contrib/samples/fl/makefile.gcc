@@ -4,7 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-include ../../../build/config.gcc
+include ../../../build/msw/config.gcc
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -167,6 +167,8 @@ ifeq ($(WXUNIV),1)
 __WXUNIV_DEFINE_p_11 = --define __WXUNIVERSAL__
 endif
 
+MAKEARGS = BUILD=$(BUILD) CFG=$(CFG) CPPFLAGS=$(CPPFLAGS) CXX=$(CXX) CXXFLAGS=$(CXXFLAGS) DEBUG_FLAG=$(DEBUG_FLAG) DEBUG_INFO=$(DEBUG_INFO) GCC_VERSION=$(GCC_VERSION) LDFLAGS=$(LDFLAGS) MONOLITHIC=$(MONOLITHIC) OFFICIAL_BUILD=$(OFFICIAL_BUILD) SHARED=$(SHARED) UNICODE=$(UNICODE) USE_GUI=$(USE_GUI) WXUNIV=$(WXUNIV)
+
 
 all: $(OBJS)
 $(OBJS):
@@ -180,31 +182,31 @@ $(OBJS)\fl_demo1_fl_demo1.o: .\fl_demo1.cpp
 	$(CXX) -c -o $@ $(FL_DEMO1_CXXFLAGS) $<
 
 $(OBJS)\fl_demo1_fl_demo1_rc.o: .\fl_demo1.rc
-	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_11) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_14) --include-dir ./../../../include --include-dir $(LIBDIRNAME) --include-dir ./../../../src/tiff --include-dir ./../../../src/jpeg --include-dir ./../../../src/png --include-dir ./../../../src/zlib  --include-dir ./../../../src/regex --include-dir ./../../../src/expat/lib --include-dir . $(__DLLFLAG_p_12) --include-dir ./../../include --define BMP_DIR=\"bitmaps/\"
+	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_11) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_14) --include-dir ./../../../include --include-dir $(LIBDIRNAME) --include-dir ./../../../src/tiff --include-dir ./../../../src/jpeg --include-dir ./../../../src/png --include-dir ./../../../src/zlib  --include-dir ./../../../src/regex --include-dir ./../../../src/expat/lib --include-dir . $(__DLLFLAG_p_12) --include-dir ./../../include --define BMP_DIR="bitmaps/"
 
 $(OBJS)\fl_demo2_fl_demo2.o: .\fl_demo2.cpp
 	$(CXX) -c -o $@ $(FL_DEMO2_CXXFLAGS) $<
 
 $(OBJS)\fl_demo2_fl_demo2_rc.o: .\fl_demo2.rc
-	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_11) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_14) --include-dir ./../../../include --include-dir $(LIBDIRNAME) --include-dir ./../../../src/tiff --include-dir ./../../../src/jpeg --include-dir ./../../../src/png --include-dir ./../../../src/zlib  --include-dir ./../../../src/regex --include-dir ./../../../src/expat/lib --include-dir . $(__DLLFLAG_p_12) --include-dir ./../../include --define BMP_DIR=\"bitmaps/\"
+	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_11) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_14) --include-dir ./../../../include --include-dir $(LIBDIRNAME) --include-dir ./../../../src/tiff --include-dir ./../../../src/jpeg --include-dir ./../../../src/png --include-dir ./../../../src/zlib  --include-dir ./../../../src/regex --include-dir ./../../../src/expat/lib --include-dir . $(__DLLFLAG_p_12) --include-dir ./../../include --define BMP_DIR="bitmaps/"
 
 $(OBJS)\fl_sample1_fl_sample1.o: .\fl_sample1.cpp
 	$(CXX) -c -o $@ $(FL_SAMPLE1_CXXFLAGS) $<
 
 $(OBJS)\fl_sample1_fl_sample1_rc.o: .\fl_sample1.rc
-	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_11) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_14) --include-dir ./../../../include --include-dir $(LIBDIRNAME) --include-dir ./../../../src/tiff --include-dir ./../../../src/jpeg --include-dir ./../../../src/png --include-dir ./../../../src/zlib  --include-dir ./../../../src/regex --include-dir ./../../../src/expat/lib --include-dir . $(__DLLFLAG_p_12) --include-dir ./../../include --define BMP_DIR=\"bitmaps/\"
+	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_11) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_14) --include-dir ./../../../include --include-dir $(LIBDIRNAME) --include-dir ./../../../src/tiff --include-dir ./../../../src/jpeg --include-dir ./../../../src/png --include-dir ./../../../src/zlib  --include-dir ./../../../src/regex --include-dir ./../../../src/expat/lib --include-dir . $(__DLLFLAG_p_12) --include-dir ./../../include --define BMP_DIR="bitmaps/"
 
 $(OBJS)\fl_sample2_fl_sample2.o: .\fl_sample2.cpp
 	$(CXX) -c -o $@ $(FL_SAMPLE2_CXXFLAGS) $<
 
 $(OBJS)\fl_sample2_fl_sample2_rc.o: .\fl_sample2.rc
-	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_11) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_14) --include-dir ./../../../include --include-dir $(LIBDIRNAME) --include-dir ./../../../src/tiff --include-dir ./../../../src/jpeg --include-dir ./../../../src/png --include-dir ./../../../src/zlib  --include-dir ./../../../src/regex --include-dir ./../../../src/expat/lib --include-dir . $(__DLLFLAG_p_12) --include-dir ./../../include --define BMP_DIR=\"bitmaps/\"
+	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_11) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_14) --include-dir ./../../../include --include-dir $(LIBDIRNAME) --include-dir ./../../../src/tiff --include-dir ./../../../src/jpeg --include-dir ./../../../src/png --include-dir ./../../../src/zlib  --include-dir ./../../../src/regex --include-dir ./../../../src/expat/lib --include-dir . $(__DLLFLAG_p_12) --include-dir ./../../include --define BMP_DIR="bitmaps/"
 
 $(OBJS)\fl_sample3_fl_sample3.o: .\fl_sample3.cpp
 	$(CXX) -c -o $@ $(FL_SAMPLE3_CXXFLAGS) $<
 
 $(OBJS)\fl_sample3_fl_sample3_rc.o: .\fl_sample3.rc
-	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_11) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_14) --include-dir ./../../../include --include-dir $(LIBDIRNAME) --include-dir ./../../../src/tiff --include-dir ./../../../src/jpeg --include-dir ./../../../src/png --include-dir ./../../../src/zlib  --include-dir ./../../../src/regex --include-dir ./../../../src/expat/lib --include-dir . $(__DLLFLAG_p_12) --include-dir ./../../include --define BMP_DIR=\"bitmaps/\"
+	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_11) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_14) --include-dir ./../../../include --include-dir $(LIBDIRNAME) --include-dir ./../../../src/tiff --include-dir ./../../../src/jpeg --include-dir ./../../../src/png --include-dir ./../../../src/zlib  --include-dir ./../../../src/regex --include-dir ./../../../src/expat/lib --include-dir . $(__DLLFLAG_p_12) --include-dir ./../../include --define BMP_DIR="bitmaps/"
 
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o

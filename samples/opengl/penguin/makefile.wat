@@ -4,7 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-!include ../../../build/config.wat
+!include ../../../build/msw/config.wat
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -174,6 +174,7 @@ PENGUIN_OBJECTS =  &
 	$(OBJS)\penguin_lw.obj &
 	$(OBJS)\penguin_trackball.obj
 
+MAKEARGS = BUILD=$(BUILD) CC=$(CC) CFG=$(CFG) CFLAGS=$(CFLAGS) CPPFLAGS=$(CPPFLAGS) CXX=$(CXX) CXXFLAGS=$(CXXFLAGS) DEBUG_FLAG=$(DEBUG_FLAG) DEBUG_INFO=$(DEBUG_INFO) LDFLAGS=$(LDFLAGS) MONOLITHIC=$(MONOLITHIC) OFFICIAL_BUILD=$(OFFICIAL_BUILD) RUNTIME_LIBS=$(RUNTIME_LIBS) SHARED=$(SHARED) UNICODE=$(UNICODE) USE_GUI=$(USE_GUI) WXUNIV=$(WXUNIV)
 
 
 all : $(OBJS)
@@ -203,7 +204,7 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\penguin.exe del $(OBJS)\penguin.exe
 
-data :  
+data : .SYMBOLIC 
 	if not exist $(OBJS) mkdir $(OBJS)
 	for %f in (penguin.lwo) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 

@@ -4,7 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-!include ../../../build/config.wat
+!include ../../../build/msw/config.wat
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -158,7 +158,7 @@ FL_DEMO1_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_5) $(__OPTIMIZEFLAG) -bm &
 	$(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(LIBDIRNAME) &
 	-i=.\..\..\..\src\tiff -i=.\..\..\..\src\jpeg -i=.\..\..\..\src\png &
 	-i=.\..\..\..\src\zlib -i=.\..\..\..\src\regex -i=.\..\..\..\src\expat\lib &
-	-i=. $(__DLLFLAG_p) -i=.\..\..\include -dBMP_DIR=\"bitmaps/\" $(CXXFLAGS)
+	-i=. $(__DLLFLAG_p) -i=.\..\..\include -dBMP_DIR="bitmaps/" $(CXXFLAGS)
 FL_DEMO1_OBJECTS =  &
 	$(OBJS)\fl_demo1_fl_demo1.obj
 FL_DEMO2_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_5) $(__OPTIMIZEFLAG) -bm &
@@ -166,7 +166,7 @@ FL_DEMO2_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_5) $(__OPTIMIZEFLAG) -bm &
 	$(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(LIBDIRNAME) &
 	-i=.\..\..\..\src\tiff -i=.\..\..\..\src\jpeg -i=.\..\..\..\src\png &
 	-i=.\..\..\..\src\zlib -i=.\..\..\..\src\regex -i=.\..\..\..\src\expat\lib &
-	-i=. $(__DLLFLAG_p) -i=.\..\..\include -dBMP_DIR=\"bitmaps/\" $(CXXFLAGS)
+	-i=. $(__DLLFLAG_p) -i=.\..\..\include -dBMP_DIR="bitmaps/" $(CXXFLAGS)
 FL_DEMO2_OBJECTS =  &
 	$(OBJS)\fl_demo2_fl_demo2.obj
 FL_SAMPLE1_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_5) $(__OPTIMIZEFLAG) -bm &
@@ -174,7 +174,7 @@ FL_SAMPLE1_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_5) $(__OPTIMIZEFLAG) -bm &
 	$(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(LIBDIRNAME) &
 	-i=.\..\..\..\src\tiff -i=.\..\..\..\src\jpeg -i=.\..\..\..\src\png &
 	-i=.\..\..\..\src\zlib -i=.\..\..\..\src\regex -i=.\..\..\..\src\expat\lib &
-	-i=. $(__DLLFLAG_p) -i=.\..\..\include -dBMP_DIR=\"bitmaps/\" $(CXXFLAGS)
+	-i=. $(__DLLFLAG_p) -i=.\..\..\include -dBMP_DIR="bitmaps/" $(CXXFLAGS)
 FL_SAMPLE1_OBJECTS =  &
 	$(OBJS)\fl_sample1_fl_sample1.obj
 FL_SAMPLE2_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_5) $(__OPTIMIZEFLAG) -bm &
@@ -182,7 +182,7 @@ FL_SAMPLE2_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_5) $(__OPTIMIZEFLAG) -bm &
 	$(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(LIBDIRNAME) &
 	-i=.\..\..\..\src\tiff -i=.\..\..\..\src\jpeg -i=.\..\..\..\src\png &
 	-i=.\..\..\..\src\zlib -i=.\..\..\..\src\regex -i=.\..\..\..\src\expat\lib &
-	-i=. $(__DLLFLAG_p) -i=.\..\..\include -dBMP_DIR=\"bitmaps/\" $(CXXFLAGS)
+	-i=. $(__DLLFLAG_p) -i=.\..\..\include -dBMP_DIR="bitmaps/" $(CXXFLAGS)
 FL_SAMPLE2_OBJECTS =  &
 	$(OBJS)\fl_sample2_fl_sample2.obj
 FL_SAMPLE3_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_5) $(__OPTIMIZEFLAG) -bm &
@@ -190,7 +190,7 @@ FL_SAMPLE3_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_5) $(__OPTIMIZEFLAG) -bm &
 	$(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(LIBDIRNAME) &
 	-i=.\..\..\..\src\tiff -i=.\..\..\..\src\jpeg -i=.\..\..\..\src\png &
 	-i=.\..\..\..\src\zlib -i=.\..\..\..\src\regex -i=.\..\..\..\src\expat\lib &
-	-i=. $(__DLLFLAG_p) -i=.\..\..\include -dBMP_DIR=\"bitmaps/\" $(CXXFLAGS)
+	-i=. $(__DLLFLAG_p) -i=.\..\..\include -dBMP_DIR="bitmaps/" $(CXXFLAGS)
 FL_SAMPLE3_OBJECTS =  &
 	$(OBJS)\fl_sample3_fl_sample3.obj
 LIBDIRNAME = &
@@ -198,6 +198,7 @@ LIBDIRNAME = &
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 
+MAKEARGS = BUILD=$(BUILD) CFG=$(CFG) CPPFLAGS=$(CPPFLAGS) CXX=$(CXX) CXXFLAGS=$(CXXFLAGS) DEBUG_FLAG=$(DEBUG_FLAG) DEBUG_INFO=$(DEBUG_INFO) LDFLAGS=$(LDFLAGS) MONOLITHIC=$(MONOLITHIC) OFFICIAL_BUILD=$(OFFICIAL_BUILD) RUNTIME_LIBS=$(RUNTIME_LIBS) SHARED=$(SHARED) UNICODE=$(UNICODE) USE_GUI=$(USE_GUI) WXUNIV=$(WXUNIV)
 
 
 all : $(OBJS)
@@ -212,31 +213,31 @@ $(OBJS)\fl_demo1_fl_demo1.obj :  .AUTODEPEND .\fl_demo1.cpp
 	$(CXX) -zq -fo=$^@ $(FL_DEMO1_CXXFLAGS) $<
 
 $(OBJS)\fl_demo1_fl_demo1.res :  .AUTODEPEND .\fl_demo1.rc
-	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\..\src\tiff -i=.\..\..\..\src\jpeg -i=.\..\..\..\src\png -i=.\..\..\..\src\zlib  -i=.\..\..\..\src\regex -i=.\..\..\..\src\expat\lib -i=. $(__DLLFLAG_p) -i=.\..\..\include -dBMP_DIR=\"bitmaps/\" $<
+	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\..\src\tiff -i=.\..\..\..\src\jpeg -i=.\..\..\..\src\png -i=.\..\..\..\src\zlib  -i=.\..\..\..\src\regex -i=.\..\..\..\src\expat\lib -i=. $(__DLLFLAG_p) -i=.\..\..\include -dBMP_DIR="bitmaps/" $<
 
 $(OBJS)\fl_demo2_fl_demo2.obj :  .AUTODEPEND .\fl_demo2.cpp
 	$(CXX) -zq -fo=$^@ $(FL_DEMO2_CXXFLAGS) $<
 
 $(OBJS)\fl_demo2_fl_demo2.res :  .AUTODEPEND .\fl_demo2.rc
-	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\..\src\tiff -i=.\..\..\..\src\jpeg -i=.\..\..\..\src\png -i=.\..\..\..\src\zlib  -i=.\..\..\..\src\regex -i=.\..\..\..\src\expat\lib -i=. $(__DLLFLAG_p) -i=.\..\..\include -dBMP_DIR=\"bitmaps/\" $<
+	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\..\src\tiff -i=.\..\..\..\src\jpeg -i=.\..\..\..\src\png -i=.\..\..\..\src\zlib  -i=.\..\..\..\src\regex -i=.\..\..\..\src\expat\lib -i=. $(__DLLFLAG_p) -i=.\..\..\include -dBMP_DIR="bitmaps/" $<
 
 $(OBJS)\fl_sample1_fl_sample1.obj :  .AUTODEPEND .\fl_sample1.cpp
 	$(CXX) -zq -fo=$^@ $(FL_SAMPLE1_CXXFLAGS) $<
 
 $(OBJS)\fl_sample1_fl_sample1.res :  .AUTODEPEND .\fl_sample1.rc
-	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\..\src\tiff -i=.\..\..\..\src\jpeg -i=.\..\..\..\src\png -i=.\..\..\..\src\zlib  -i=.\..\..\..\src\regex -i=.\..\..\..\src\expat\lib -i=. $(__DLLFLAG_p) -i=.\..\..\include -dBMP_DIR=\"bitmaps/\" $<
+	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\..\src\tiff -i=.\..\..\..\src\jpeg -i=.\..\..\..\src\png -i=.\..\..\..\src\zlib  -i=.\..\..\..\src\regex -i=.\..\..\..\src\expat\lib -i=. $(__DLLFLAG_p) -i=.\..\..\include -dBMP_DIR="bitmaps/" $<
 
 $(OBJS)\fl_sample2_fl_sample2.obj :  .AUTODEPEND .\fl_sample2.cpp
 	$(CXX) -zq -fo=$^@ $(FL_SAMPLE2_CXXFLAGS) $<
 
 $(OBJS)\fl_sample2_fl_sample2.res :  .AUTODEPEND .\fl_sample2.rc
-	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\..\src\tiff -i=.\..\..\..\src\jpeg -i=.\..\..\..\src\png -i=.\..\..\..\src\zlib  -i=.\..\..\..\src\regex -i=.\..\..\..\src\expat\lib -i=. $(__DLLFLAG_p) -i=.\..\..\include -dBMP_DIR=\"bitmaps/\" $<
+	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\..\src\tiff -i=.\..\..\..\src\jpeg -i=.\..\..\..\src\png -i=.\..\..\..\src\zlib  -i=.\..\..\..\src\regex -i=.\..\..\..\src\expat\lib -i=. $(__DLLFLAG_p) -i=.\..\..\include -dBMP_DIR="bitmaps/" $<
 
 $(OBJS)\fl_sample3_fl_sample3.obj :  .AUTODEPEND .\fl_sample3.cpp
 	$(CXX) -zq -fo=$^@ $(FL_SAMPLE3_CXXFLAGS) $<
 
 $(OBJS)\fl_sample3_fl_sample3.res :  .AUTODEPEND .\fl_sample3.rc
-	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\..\src\tiff -i=.\..\..\..\src\jpeg -i=.\..\..\..\src\png -i=.\..\..\..\src\zlib  -i=.\..\..\..\src\regex -i=.\..\..\..\src\expat\lib -i=. $(__DLLFLAG_p) -i=.\..\..\include -dBMP_DIR=\"bitmaps/\" $<
+	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\..\src\tiff -i=.\..\..\..\src\jpeg -i=.\..\..\..\src\png -i=.\..\..\..\src\zlib  -i=.\..\..\..\src\regex -i=.\..\..\..\src\expat\lib -i=. $(__DLLFLAG_p) -i=.\..\..\include -dBMP_DIR="bitmaps/" $<
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj

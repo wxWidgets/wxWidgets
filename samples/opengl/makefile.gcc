@@ -4,7 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-include ../../build/config.gcc
+include ../../build/msw/config.gcc
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -16,6 +16,8 @@ include ../../build/config.gcc
 ### Conditionally set variables: ###
 
 
+MAKEARGS = GCC_VERSION=$(GCC_VERSION)
+
 
 ### Targets: ###
 
@@ -25,12 +27,12 @@ clean:
 	-if exist .\*.o del .\*.o
 
 cube: 
-	(cd cube && $(MAKE) all)
+	$(MAKE) -C cube -f makefile.gcc $(MAKEARGS) all
 
 isosurf: 
-	(cd isosurf && $(MAKE) all)
+	$(MAKE) -C isosurf -f makefile.gcc $(MAKEARGS) all
 
 penguin: 
-	(cd penguin && $(MAKE) all)
+	$(MAKE) -C penguin -f makefile.gcc $(MAKEARGS) all
 
 .PHONY: all clean cube isosurf penguin

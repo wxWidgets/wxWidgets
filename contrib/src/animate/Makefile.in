@@ -35,7 +35,6 @@ TOOLKIT_VERSION = @TOOLKIT_VERSION@
 VENDOR = @VENDOR@
 includedir = @includedir@
 libdir = @libdir@
-srcdir = @srcdir@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 
@@ -44,14 +43,14 @@ top_srcdir = @top_srcdir@
 ANIMATEDLL_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
 	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
-	-I$(srcdir)/../../include -DWXUSINGDLL -DWXMAKINGDLL_ANIMATE $(CXXFLAGS) \
-	$(PIC_FLAG)
+	-I../../src/animate/../../include -DWXUSINGDLL -DWXMAKINGDLL_ANIMATE \
+	$(CXXFLAGS) $(PIC_FLAG)
 ANIMATEDLL_OBJECTS =  \
 	animatedll_animate.o
 ANIMATELIB_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
 	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
-	-I$(srcdir)/../../include $(CXXFLAGS)
+	-I../../src/animate/../../include $(CXXFLAGS)
 ANIMATELIB_OBJECTS =  \
 	animatelib_animate.o
 LIBDIRNAME = $(top_builddir)lib
@@ -171,7 +170,7 @@ all: $(__animatedll___depname) $(__animatelib___depname)
 @COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(ANIMATEDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__animatedll___macinstnamecmd) $(__animatedll___importlib) $(__animatedll___soname_flags) $(__animatedll___macver)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p)
 @COND_SHARED_1@	$(__animatedll___so_symlinks_cmd)
 
-animatedll_animate.o: $(srcdir)/animate.cpp
+animatedll_animate.o: ../../src/animate/animate.cpp
 	$(CXXC) -c -o $@ $(ANIMATEDLL_CXXFLAGS) $<
 
 @COND_SHARED_0@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate-2.5$(HOST_SUFFIX).a: $(ANIMATELIB_OBJECTS)
@@ -179,7 +178,7 @@ animatedll_animate.o: $(srcdir)/animate.cpp
 @COND_SHARED_0@	$(AR) rcu $@ $(ANIMATELIB_OBJECTS)
 @COND_SHARED_0@	$(RANLIB) $@
 
-animatelib_animate.o: $(srcdir)/animate.cpp
+animatelib_animate.o: ../../src/animate/animate.cpp
 	$(CXXC) -c -o $@ $(ANIMATELIB_CXXFLAGS) $<
 
 clean: 
@@ -200,7 +199,7 @@ install: all $(__install_animatedll___depname) $(__install_animatelib___depname)
 	if test ! -d $(includedir)/`dirname $$f` ; then \
 	$(INSTALL_DIR) $(includedir)/`dirname $$f`; \
 	fi; \
-	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(includedir)/$$f; \
+	$(INSTALL_DATA) ../../src/animate/../../include//$$f $(includedir)/$$f; \
 	done
 
 install-strip: install

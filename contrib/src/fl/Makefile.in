@@ -35,7 +35,6 @@ TOOLKIT_VERSION = @TOOLKIT_VERSION@
 VENDOR = @VENDOR@
 includedir = @includedir@
 libdir = @libdir@
-srcdir = @srcdir@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 
@@ -44,7 +43,7 @@ top_srcdir = @top_srcdir@
 FLDLL_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
 	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
-	-I$(srcdir)/../../include -DWXUSINGDLL -DWXMAKINGDLL_FL $(CXXFLAGS) \
+	-I../../src/fl/../../include -DWXUSINGDLL -DWXMAKINGDLL_FL $(CXXFLAGS) \
 	$(PIC_FLAG)
 FLDLL_OBJECTS =  \
 	fldll_antiflickpl.o \
@@ -67,7 +66,7 @@ FLDLL_OBJECTS =  \
 FLLIB_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
 	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
-	-I$(srcdir)/../../include $(CXXFLAGS)
+	-I../../src/fl/../../include $(CXXFLAGS)
 FLLIB_OBJECTS =  \
 	fllib_antiflickpl.o \
 	fllib_bardragpl.o \
@@ -214,55 +213,55 @@ distclean: clean
 @COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(FLDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__fldll___macinstnamecmd) $(__fldll___importlib) $(__fldll___soname_flags) $(__fldll___macver)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p)
 @COND_SHARED_1@	$(__fldll___so_symlinks_cmd)
 
-fldll_antiflickpl.o: $(srcdir)/antiflickpl.cpp
+fldll_antiflickpl.o: ../../src/fl/antiflickpl.cpp
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_bardragpl.o: $(srcdir)/bardragpl.cpp
+fldll_bardragpl.o: ../../src/fl/bardragpl.cpp
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_barhintspl.o: $(srcdir)/barhintspl.cpp
+fldll_barhintspl.o: ../../src/fl/barhintspl.cpp
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_cbcustom.o: $(srcdir)/cbcustom.cpp
+fldll_cbcustom.o: ../../src/fl/cbcustom.cpp
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_controlbar.o: $(srcdir)/controlbar.cpp
+fldll_controlbar.o: ../../src/fl/controlbar.cpp
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_dyntbar.o: $(srcdir)/dyntbar.cpp
+fldll_dyntbar.o: ../../src/fl/dyntbar.cpp
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_dyntbarhnd.o: $(srcdir)/dyntbarhnd.cpp
+fldll_dyntbarhnd.o: ../../src/fl/dyntbarhnd.cpp
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_frmview.o: $(srcdir)/frmview.cpp
+fldll_frmview.o: ../../src/fl/frmview.cpp
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_garbagec.o: $(srcdir)/garbagec.cpp
+fldll_garbagec.o: ../../src/fl/garbagec.cpp
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_gcupdatesmgr.o: $(srcdir)/gcupdatesmgr.cpp
+fldll_gcupdatesmgr.o: ../../src/fl/gcupdatesmgr.cpp
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_hintanimpl.o: $(srcdir)/hintanimpl.cpp
+fldll_hintanimpl.o: ../../src/fl/hintanimpl.cpp
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_newbmpbtn.o: $(srcdir)/newbmpbtn.cpp
+fldll_newbmpbtn.o: ../../src/fl/newbmpbtn.cpp
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_panedrawpl.o: $(srcdir)/panedrawpl.cpp
+fldll_panedrawpl.o: ../../src/fl/panedrawpl.cpp
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_rowdragpl.o: $(srcdir)/rowdragpl.cpp
+fldll_rowdragpl.o: ../../src/fl/rowdragpl.cpp
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_rowlayoutpl.o: $(srcdir)/rowlayoutpl.cpp
+fldll_rowlayoutpl.o: ../../src/fl/rowlayoutpl.cpp
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_toolwnd.o: $(srcdir)/toolwnd.cpp
+fldll_toolwnd.o: ../../src/fl/toolwnd.cpp
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-fldll_updatesmgr.o: $(srcdir)/updatesmgr.cpp
+fldll_updatesmgr.o: ../../src/fl/updatesmgr.cpp
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
 @COND_SHARED_0@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl-2.5$(HOST_SUFFIX).a: $(FLLIB_OBJECTS)
@@ -270,55 +269,55 @@ fldll_updatesmgr.o: $(srcdir)/updatesmgr.cpp
 @COND_SHARED_0@	$(AR) rcu $@ $(FLLIB_OBJECTS)
 @COND_SHARED_0@	$(RANLIB) $@
 
-fllib_antiflickpl.o: $(srcdir)/antiflickpl.cpp
+fllib_antiflickpl.o: ../../src/fl/antiflickpl.cpp
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_bardragpl.o: $(srcdir)/bardragpl.cpp
+fllib_bardragpl.o: ../../src/fl/bardragpl.cpp
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_barhintspl.o: $(srcdir)/barhintspl.cpp
+fllib_barhintspl.o: ../../src/fl/barhintspl.cpp
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_cbcustom.o: $(srcdir)/cbcustom.cpp
+fllib_cbcustom.o: ../../src/fl/cbcustom.cpp
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_controlbar.o: $(srcdir)/controlbar.cpp
+fllib_controlbar.o: ../../src/fl/controlbar.cpp
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_dyntbar.o: $(srcdir)/dyntbar.cpp
+fllib_dyntbar.o: ../../src/fl/dyntbar.cpp
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_dyntbarhnd.o: $(srcdir)/dyntbarhnd.cpp
+fllib_dyntbarhnd.o: ../../src/fl/dyntbarhnd.cpp
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_frmview.o: $(srcdir)/frmview.cpp
+fllib_frmview.o: ../../src/fl/frmview.cpp
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_garbagec.o: $(srcdir)/garbagec.cpp
+fllib_garbagec.o: ../../src/fl/garbagec.cpp
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_gcupdatesmgr.o: $(srcdir)/gcupdatesmgr.cpp
+fllib_gcupdatesmgr.o: ../../src/fl/gcupdatesmgr.cpp
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_hintanimpl.o: $(srcdir)/hintanimpl.cpp
+fllib_hintanimpl.o: ../../src/fl/hintanimpl.cpp
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_newbmpbtn.o: $(srcdir)/newbmpbtn.cpp
+fllib_newbmpbtn.o: ../../src/fl/newbmpbtn.cpp
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_panedrawpl.o: $(srcdir)/panedrawpl.cpp
+fllib_panedrawpl.o: ../../src/fl/panedrawpl.cpp
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_rowdragpl.o: $(srcdir)/rowdragpl.cpp
+fllib_rowdragpl.o: ../../src/fl/rowdragpl.cpp
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_rowlayoutpl.o: $(srcdir)/rowlayoutpl.cpp
+fllib_rowlayoutpl.o: ../../src/fl/rowlayoutpl.cpp
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_toolwnd.o: $(srcdir)/toolwnd.cpp
+fllib_toolwnd.o: ../../src/fl/toolwnd.cpp
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-fllib_updatesmgr.o: $(srcdir)/updatesmgr.cpp
+fllib_updatesmgr.o: ../../src/fl/updatesmgr.cpp
 	$(CXXC) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
 install: all $(__install_fldll___depname) $(__install_fllib___depname)
@@ -327,7 +326,7 @@ install: all $(__install_fldll___depname) $(__install_fllib___depname)
 	if test ! -d $(includedir)/`dirname $$f` ; then \
 	$(INSTALL_DIR) $(includedir)/`dirname $$f`; \
 	fi; \
-	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(includedir)/$$f; \
+	$(INSTALL_DATA) ../../src/fl/../../include//$$f $(includedir)/$$f; \
 	done
 
 install-strip: install

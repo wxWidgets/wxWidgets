@@ -8,7 +8,7 @@
 BCCDIR = $(MAKEDIR)\..
 !endif
 
-!include ../../../build/config.bcc
+!include ../../../build/msw/config.bcc
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -74,8 +74,17 @@ __DEBUG_DEFINE_p = -D__WXDEBUG__
 !if "$(DEBUG_FLAG)" == "1"
 __DEBUG_DEFINE_p = -D__WXDEBUG__
 !endif
+!if "$(BUILD)" == "debug" && "$(DEBUG_FLAG)" == "default"
+__DEBUG_DEFINE_p_1 = -d__WXDEBUG__
+!endif
+!if "$(DEBUG_FLAG)" == "1"
+__DEBUG_DEFINE_p_1 = -d__WXDEBUG__
+!endif
 !if "$(SHARED)" == "1"
 __DLLFLAG_p = -DWXUSINGDLL
+!endif
+!if "$(SHARED)" == "1"
+__DLLFLAG_p_1 = -dWXUSINGDLL
 !endif
 !if "$(USE_GUI)" == "1"
 __LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib
@@ -107,6 +116,9 @@ __RUNTIME_LIBS_7 =
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p = -DwxUSE_UNICODE=1
 !endif
+!if "$(UNICODE)" == "1"
+__UNICODE_DEFINE_p_1 = -dwxUSE_UNICODE=1
+!endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_BASE_p = wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
 !endif
@@ -121,6 +133,11 @@ __WXLIB_MONO_p = \
 !if "$(WXUNIV)" == "1"
 __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 !endif
+!if "$(WXUNIV)" == "1"
+__WXUNIV_DEFINE_p_1 = -d__WXUNIVERSAL__
+!endif
+
+MAKEARGS = -DBUILD=$(BUILD) -DCFG=$(CFG) -DCPPFLAGS=$(CPPFLAGS) -DCXX=$(CXX) -DCXXFLAGS=$(CXXFLAGS) -DDEBUG_FLAG=$(DEBUG_FLAG) -DDEBUG_INFO=$(DEBUG_INFO) -DLDFLAGS=$(LDFLAGS) -DMONOLITHIC=$(MONOLITHIC) -DOFFICIAL_BUILD=$(OFFICIAL_BUILD) -DRUNTIME_LIBS=$(RUNTIME_LIBS) -DSHARED=$(SHARED) -DUNICODE=$(UNICODE) -DUSE_GUI=$(USE_GUI) -DWXUNIV=$(WXUNIV)
 
 
 all: $(OBJS)
@@ -131,6 +148,9 @@ $(OBJS):
 
 all: $(OBJS)\svgtest.exe
 
+$(OBJS)\svgtest_sample.res: .\..\..\..\samples\sample.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i.\..\..\..\include -i$(LIBDIRNAME) -i.\..\..\..\src\tiff -i.\..\..\..\src\jpeg -i.\..\..\..\src\png -i.\..\..\..\src\zlib  -i.\..\..\..\src\regex -i.\..\..\..\src\expat\lib -i. $(__DLLFLAG_p_1) $**
+
 $(OBJS)\svgtest_svgtest.obj: .\svgtest.cpp
 	$(CXX) -q -c -P -o$@ $(SVGTEST_CXXFLAGS) $**
 
@@ -139,7 +159,7 @@ clean:
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\svgtest.exe del $(OBJS)\svgtest.exe
 
-$(OBJS)\svgtest.exe: $(SVGTEST_OBJECTS)
+$(OBJS)\svgtest.exe: $(SVGTEST_OBJECTS)  $(OBJS)\svgtest_sample.res
 	ilink32 -Tpe -q $(LDFLAGS) $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa  @&&|
-	c0w32.obj $(SVGTEST_OBJECTS),$@,, wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg.lib $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  import32.lib ole2w32.lib  cw32mt$(__RUNTIME_LIBS_7).lib,,
+	c0w32.obj $(SVGTEST_OBJECTS),$@,, wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg.lib $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  import32.lib ole2w32.lib  cw32mt$(__RUNTIME_LIBS_7).lib,, $(OBJS)\svgtest_sample.res
 |

@@ -21,18 +21,18 @@ CFG=wxzlib - Win32 DLL Release
 !MESSAGE "wxzlib - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "wxzlib - Win32 Unicode Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "wxzlib - Win32 Unicode Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxzlib - Win32 wxUniv Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxzlib - Win32 wxUniv Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxzlib - Win32 wxUniv Unicode Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxzlib - Win32 wxUniv Unicode Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxzlib - Win32 Universal Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxzlib - Win32 Universal Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxzlib - Win32 Universal Unicode Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxzlib - Win32 Universal Unicode Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "wxzlib - Win32 DLL Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "wxzlib - Win32 DLL Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "wxzlib - Win32 DLL Unicode Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "wxzlib - Win32 DLL Unicode Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxzlib - Win32 DLL wxUniv Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxzlib - Win32 DLL wxUniv Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxzlib - Win32 DLL wxUniv Unicode Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxzlib - Win32 DLL wxUniv Unicode Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxzlib - Win32 DLL Universal Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxzlib - Win32 DLL Universal Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxzlib - Win32 DLL Universal Unicode Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxzlib - Win32 DLL Universal Unicode Release" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -134,7 +134,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswu\wxzlib.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswu\wxzlib.lib"
 
-!ELSEIF  "$(CFG)" == "wxzlib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "wxzlib - Win32 Universal Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -157,7 +157,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswunivd\wxzlibd.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswunivd\wxzlibd.lib"
 
-!ELSEIF  "$(CFG)" == "wxzlib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "wxzlib - Win32 Universal Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -180,7 +180,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswuniv\wxzlib.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswuniv\wxzlib.lib"
 
-!ELSEIF  "$(CFG)" == "wxzlib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "wxzlib - Win32 Universal Unicode Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -203,7 +203,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswunivud\wxzlibd.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswunivud\wxzlibd.lib"
 
-!ELSEIF  "$(CFG)" == "wxzlib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "wxzlib - Win32 Universal Unicode Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -318,7 +318,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswudll\wxzlib.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswudll\wxzlib.lib"
 
-!ELSEIF  "$(CFG)" == "wxzlib - Win32 DLL wxUniv Debug"
+!ELSEIF  "$(CFG)" == "wxzlib - Win32 DLL Universal Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -341,7 +341,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswunivddll\wxzlibd.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswunivddll\wxzlibd.lib"
 
-!ELSEIF  "$(CFG)" == "wxzlib - Win32 DLL wxUniv Release"
+!ELSEIF  "$(CFG)" == "wxzlib - Win32 DLL Universal Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -364,7 +364,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswunivdll\wxzlib.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswunivdll\wxzlib.lib"
 
-!ELSEIF  "$(CFG)" == "wxzlib - Win32 DLL wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "wxzlib - Win32 DLL Universal Unicode Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -387,7 +387,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswunivuddll\wxzlibd.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswunivuddll\wxzlibd.lib"
 
-!ELSEIF  "$(CFG)" == "wxzlib - Win32 DLL wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "wxzlib - Win32 DLL Universal Unicode Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -418,18 +418,18 @@ LIB32=link.exe -lib
 # Name "wxzlib - Win32 Release"
 # Name "wxzlib - Win32 Unicode Debug"
 # Name "wxzlib - Win32 Unicode Release"
-# Name "wxzlib - Win32 wxUniv Debug"
-# Name "wxzlib - Win32 wxUniv Release"
-# Name "wxzlib - Win32 wxUniv Unicode Debug"
-# Name "wxzlib - Win32 wxUniv Unicode Release"
+# Name "wxzlib - Win32 Universal Debug"
+# Name "wxzlib - Win32 Universal Release"
+# Name "wxzlib - Win32 Universal Unicode Debug"
+# Name "wxzlib - Win32 Universal Unicode Release"
 # Name "wxzlib - Win32 DLL Debug"
 # Name "wxzlib - Win32 DLL Release"
 # Name "wxzlib - Win32 DLL Unicode Debug"
 # Name "wxzlib - Win32 DLL Unicode Release"
-# Name "wxzlib - Win32 DLL wxUniv Debug"
-# Name "wxzlib - Win32 DLL wxUniv Release"
-# Name "wxzlib - Win32 DLL wxUniv Unicode Debug"
-# Name "wxzlib - Win32 DLL wxUniv Unicode Release"
+# Name "wxzlib - Win32 DLL Universal Debug"
+# Name "wxzlib - Win32 DLL Universal Release"
+# Name "wxzlib - Win32 DLL Universal Unicode Debug"
+# Name "wxzlib - Win32 DLL Universal Unicode Release"
 # Begin Group "Source Files"
 
 # PROP Default_Filter ""

@@ -21,10 +21,10 @@ CFG=dbgridlib - Win32 Unicode Debug
 !MESSAGE "dbgridlib - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "dbgridlib - Win32 Unicode Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "dbgridlib - Win32 Unicode Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "dbgridlib - Win32 wxUniv Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "dbgridlib - Win32 wxUniv Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "dbgridlib - Win32 wxUniv Unicode Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "dbgridlib - Win32 wxUniv Unicode Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "dbgridlib - Win32 Universal Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "dbgridlib - Win32 Universal Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "dbgridlib - Win32 Universal Unicode Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "dbgridlib - Win32 Universal Unicode Release" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -126,7 +126,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswu\wxmsw25u_dbgrid.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswu\wxmsw25u_dbgrid.lib"
 
-!ELSEIF  "$(CFG)" == "dbgridlib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "dbgridlib - Win32 Universal Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -149,7 +149,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswunivd\wxmswuniv25d_dbgrid.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswunivd\wxmswuniv25d_dbgrid.lib"
 
-!ELSEIF  "$(CFG)" == "dbgridlib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "dbgridlib - Win32 Universal Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -172,7 +172,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswuniv\wxmswuniv25_dbgrid.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswuniv\wxmswuniv25_dbgrid.lib"
 
-!ELSEIF  "$(CFG)" == "dbgridlib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "dbgridlib - Win32 Universal Unicode Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -195,7 +195,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswunivud\wxmswuniv25ud_dbgrid.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswunivud\wxmswuniv25ud_dbgrid.lib"
 
-!ELSEIF  "$(CFG)" == "dbgridlib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "dbgridlib - Win32 Universal Unicode Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -226,10 +226,10 @@ LIB32=link.exe -lib
 # Name "dbgridlib - Win32 Release"
 # Name "dbgridlib - Win32 Unicode Debug"
 # Name "dbgridlib - Win32 Unicode Release"
-# Name "dbgridlib - Win32 wxUniv Debug"
-# Name "dbgridlib - Win32 wxUniv Release"
-# Name "dbgridlib - Win32 wxUniv Unicode Debug"
-# Name "dbgridlib - Win32 wxUniv Unicode Release"
+# Name "dbgridlib - Win32 Universal Debug"
+# Name "dbgridlib - Win32 Universal Release"
+# Name "dbgridlib - Win32 Universal Unicode Debug"
+# Name "dbgridlib - Win32 Universal Unicode Release"
 # Begin Group "Common Headers"
 
 # PROP Default_Filter ""

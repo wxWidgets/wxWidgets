@@ -21,10 +21,10 @@ CFG=baselib - Win32 Unicode Debug
 !MESSAGE "baselib - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "baselib - Win32 Unicode Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "baselib - Win32 Unicode Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "baselib - Win32 wxUniv Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "baselib - Win32 wxUniv Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "baselib - Win32 wxUniv Unicode Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "baselib - Win32 wxUniv Unicode Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "baselib - Win32 Universal Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "baselib - Win32 Universal Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "baselib - Win32 Universal Unicode Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "baselib - Win32 Universal Unicode Release" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -126,7 +126,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswu\wxbase25u.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswu\wxbase25u.lib"
 
-!ELSEIF  "$(CFG)" == "baselib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "baselib - Win32 Universal Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -149,7 +149,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswunivd\wxbase25d.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswunivd\wxbase25d.lib"
 
-!ELSEIF  "$(CFG)" == "baselib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "baselib - Win32 Universal Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -172,7 +172,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswuniv\wxbase25.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswuniv\wxbase25.lib"
 
-!ELSEIF  "$(CFG)" == "baselib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "baselib - Win32 Universal Unicode Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -195,7 +195,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswunivud\wxbase25ud.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswunivud\wxbase25ud.lib"
 
-!ELSEIF  "$(CFG)" == "baselib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "baselib - Win32 Universal Unicode Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -226,10 +226,10 @@ LIB32=link.exe -lib
 # Name "baselib - Win32 Release"
 # Name "baselib - Win32 Unicode Debug"
 # Name "baselib - Win32 Unicode Release"
-# Name "baselib - Win32 wxUniv Debug"
-# Name "baselib - Win32 wxUniv Release"
-# Name "baselib - Win32 wxUniv Unicode Debug"
-# Name "baselib - Win32 wxUniv Unicode Release"
+# Name "baselib - Win32 Universal Debug"
+# Name "baselib - Win32 Universal Release"
+# Name "baselib - Win32 Universal Unicode Debug"
+# Name "baselib - Win32 Universal Unicode Release"
 # Begin Group "Setup Headers"
 
 # PROP Default_Filter ""
@@ -277,7 +277,7 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "baselib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "baselib - Win32 Universal Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_mswunivd\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
@@ -287,7 +287,7 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "baselib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "baselib - Win32 Universal Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_mswuniv\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
@@ -297,7 +297,7 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "baselib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "baselib - Win32 Universal Unicode Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_mswunivud\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
@@ -307,7 +307,7 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "baselib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "baselib - Win32 Universal Unicode Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_mswunivu\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
@@ -350,10 +350,6 @@ SOURCE=..\..\include\wx\build.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\chkconf.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\chkconf.h
 # End Source File
 # Begin Source File
@@ -378,10 +374,6 @@ SOURCE=..\..\include\wx\containr.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\crashrpt.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\datetime.h
 # End Source File
 # Begin Source File
@@ -391,10 +383,6 @@ SOURCE=..\..\include\wx\datstrm.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\dde.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\dde.h
 # End Source File
 # Begin Source File
 
@@ -474,10 +462,6 @@ SOURCE=..\..\include\wx\fs_zip.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\gccpriv.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\hash.h
 # End Source File
 # Begin Source File
@@ -550,10 +534,6 @@ SOURCE=..\..\include\wx\memtext.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\mimetype.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\mimetype.h
 # End Source File
 # Begin Source File
@@ -567,6 +547,38 @@ SOURCE=..\..\include\wx\msgout.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\mstream.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\chkconf.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\crashrpt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\dde.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\gccpriv.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\mimetype.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\winundef.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\wrapcctl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\wrapwin.h
 # End Source File
 # Begin Source File
 
@@ -655,18 +667,6 @@ SOURCE=..\..\include\wx\volume.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\wfstream.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\winundef.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\wrapcctl.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\wrapwin.h
 # End Source File
 # Begin Source File
 

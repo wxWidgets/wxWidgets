@@ -4,7 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-!include ../../build/config.wat
+!include ../../build/msw/config.wat
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -162,10 +162,11 @@ LISTBOX_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
 	-i=.\..\..\src\zlib -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. &
 	$(__DLLFLAG_p) $(CXXFLAGS)
 LISTBOX_OBJECTS =  &
-	$(OBJS)\listbox_listbox.obj
+	$(OBJS)\listbox_lboxtest.obj
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 
+MAKEARGS = BUILD=$(BUILD) CFG=$(CFG) CPPFLAGS=$(CPPFLAGS) CXX=$(CXX) CXXFLAGS=$(CXXFLAGS) DEBUG_FLAG=$(DEBUG_FLAG) DEBUG_INFO=$(DEBUG_INFO) LDFLAGS=$(LDFLAGS) MONOLITHIC=$(MONOLITHIC) OFFICIAL_BUILD=$(OFFICIAL_BUILD) RUNTIME_LIBS=$(RUNTIME_LIBS) SHARED=$(SHARED) UNICODE=$(UNICODE) USE_GUI=$(USE_GUI) WXUNIV=$(WXUNIV)
 
 
 all : $(OBJS)
@@ -176,7 +177,7 @@ $(OBJS) :
 
 all : .SYMBOLIC $(OBJS)\listbox.exe
 
-$(OBJS)\listbox_listbox.obj :  .AUTODEPEND .\listbox.cpp
+$(OBJS)\listbox_lboxtest.obj :  .AUTODEPEND .\lboxtest.cpp
 	$(CXX) -zq -fo=$^@ $(LISTBOX_CXXFLAGS) $<
 
 $(OBJS)\listbox_listbox.res :  .AUTODEPEND .\listbox.rc

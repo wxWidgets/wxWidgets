@@ -21,10 +21,10 @@ CFG=netlib - Win32 Unicode Debug
 !MESSAGE "netlib - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "netlib - Win32 Unicode Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "netlib - Win32 Unicode Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "netlib - Win32 wxUniv Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "netlib - Win32 wxUniv Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "netlib - Win32 wxUniv Unicode Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "netlib - Win32 wxUniv Unicode Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "netlib - Win32 Universal Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "netlib - Win32 Universal Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "netlib - Win32 Universal Unicode Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "netlib - Win32 Universal Unicode Release" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -126,7 +126,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswu\wxbase25u_net.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswu\wxbase25u_net.lib"
 
-!ELSEIF  "$(CFG)" == "netlib - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "netlib - Win32 Universal Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -149,7 +149,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswunivd\wxbase25d_net.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswunivd\wxbase25d_net.lib"
 
-!ELSEIF  "$(CFG)" == "netlib - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "netlib - Win32 Universal Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -172,7 +172,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswuniv\wxbase25_net.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswuniv\wxbase25_net.lib"
 
-!ELSEIF  "$(CFG)" == "netlib - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "netlib - Win32 Universal Unicode Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -195,7 +195,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswunivud\wxbase25ud_net.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswunivud\wxbase25ud_net.lib"
 
-!ELSEIF  "$(CFG)" == "netlib - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "netlib - Win32 Universal Unicode Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -226,28 +226,28 @@ LIB32=link.exe -lib
 # Name "netlib - Win32 Release"
 # Name "netlib - Win32 Unicode Debug"
 # Name "netlib - Win32 Unicode Release"
-# Name "netlib - Win32 wxUniv Debug"
-# Name "netlib - Win32 wxUniv Release"
-# Name "netlib - Win32 wxUniv Unicode Debug"
-# Name "netlib - Win32 wxUniv Unicode Release"
+# Name "netlib - Win32 Universal Debug"
+# Name "netlib - Win32 Universal Release"
+# Name "netlib - Win32 Universal Unicode Debug"
+# Name "netlib - Win32 Universal Unicode Release"
 # Begin Group "Common Headers"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\include\wx\protocol\file.h
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\include\wx\fs_inet.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\protocol\ftp.h
+SOURCE=..\..\include\wx\gsocket.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\gsocket.h
+SOURCE=..\..\include\wx\protocol\file.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\protocol\ftp.h
 # End Source File
 # Begin Source File
 

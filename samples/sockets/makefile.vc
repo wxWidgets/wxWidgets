@@ -4,7 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-!include <../../build/config.vc>
+!include <../../build/msw/config.vc>
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -181,10 +181,10 @@ __WXUNIV_DEFINE_p_0 = /d __WXUNIVERSAL__
 ____DEBUGINFO = /d _DEBUG
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
-____DEBUGINFO = /d NDEBUG
+____DEBUGINFO = 
 !endif
 !if "$(DEBUG_INFO)" == "0"
-____DEBUGINFO = /d NDEBUG
+____DEBUGINFO = 
 !endif
 !if "$(DEBUG_INFO)" == "1"
 ____DEBUGINFO = /d _DEBUG
@@ -193,16 +193,16 @@ ____DEBUGINFO = /d _DEBUG
 ____DEBUGINFO_0 = /D_DEBUG
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
-____DEBUGINFO_0 = /DNDEBUG
+____DEBUGINFO_0 = 
 !endif
 !if "$(DEBUG_INFO)" == "0"
-____DEBUGINFO_0 = /DNDEBUG
+____DEBUGINFO_0 = 
 !endif
 !if "$(DEBUG_INFO)" == "1"
 ____DEBUGINFO_0 = /D_DEBUG
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
-____DEBUGRUNTIME_12_p = /DNDEBUG
+____DEBUGRUNTIME_12_p = 
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "1"
 ____DEBUGRUNTIME_12_p = /D_DEBUG
@@ -211,7 +211,7 @@ ____DEBUGRUNTIME_12_p = /D_DEBUG
 ____DEBUGRUNTIME_12_p = $(____DEBUGINFO_0)
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
-____DEBUGRUNTIME_12_p_1 = /d NDEBUG
+____DEBUGRUNTIME_12_p_1 = 
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "1"
 ____DEBUGRUNTIME_12_p_1 = /d _DEBUG
@@ -220,7 +220,7 @@ ____DEBUGRUNTIME_12_p_1 = /d _DEBUG
 ____DEBUGRUNTIME_12_p_1 = $(____DEBUGINFO)
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
-____DEBUGRUNTIME_2_p = /DNDEBUG
+____DEBUGRUNTIME_2_p = 
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "1"
 ____DEBUGRUNTIME_2_p = /D_DEBUG
@@ -229,7 +229,7 @@ ____DEBUGRUNTIME_2_p = /D_DEBUG
 ____DEBUGRUNTIME_2_p = $(____DEBUGINFO_0)
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
-____DEBUGRUNTIME_2_p_1 = /d NDEBUG
+____DEBUGRUNTIME_2_p_1 = 
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "1"
 ____DEBUGRUNTIME_2_p_1 = /d _DEBUG

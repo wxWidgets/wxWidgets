@@ -35,7 +35,6 @@ TOOLKIT_VERSION = @TOOLKIT_VERSION@
 VENDOR = @VENDOR@
 includedir = @includedir@
 libdir = @libdir@
-srcdir = @srcdir@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 
@@ -45,14 +44,14 @@ LIBDIRNAME = $(top_builddir)lib
 SVGDLL_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
 	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
-	-I$(srcdir)/../../include -DWXUSINGDLL -DWXMAKINGDLL_SVG $(CXXFLAGS) \
+	-I../../src/svg/../../include -DWXUSINGDLL -DWXMAKINGDLL_SVG $(CXXFLAGS) \
 	$(PIC_FLAG)
 SVGDLL_OBJECTS =  \
 	svgdll_dcsvg.o
 SVGLIB_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
 	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
-	-I$(srcdir)/../../include $(CXXFLAGS)
+	-I../../src/svg/../../include $(CXXFLAGS)
 SVGLIB_OBJECTS =  \
 	svglib_dcsvg.o
 
@@ -184,7 +183,7 @@ install: all $(__install_svgdll___depname) $(__install_svglib___depname)
 	if test ! -d $(includedir)/`dirname $$f` ; then \
 	$(INSTALL_DIR) $(includedir)/`dirname $$f`; \
 	fi; \
-	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(includedir)/$$f; \
+	$(INSTALL_DATA) ../../src/svg/../../include//$$f $(includedir)/$$f; \
 	done
 
 install-strip: install
@@ -204,7 +203,7 @@ install-strip: install
 @COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(SVGDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__svgdll___macinstnamecmd) $(__svgdll___importlib) $(__svgdll___soname_flags) $(__svgdll___macver)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p)
 @COND_SHARED_1@	$(__svgdll___so_symlinks_cmd)
 
-svgdll_dcsvg.o: $(srcdir)/dcsvg.cpp
+svgdll_dcsvg.o: ../../src/svg/dcsvg.cpp
 	$(CXXC) -c -o $@ $(SVGDLL_CXXFLAGS) $<
 
 @COND_SHARED_0@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg-2.5$(HOST_SUFFIX).a: $(SVGLIB_OBJECTS)
@@ -212,7 +211,7 @@ svgdll_dcsvg.o: $(srcdir)/dcsvg.cpp
 @COND_SHARED_0@	$(AR) rcu $@ $(SVGLIB_OBJECTS)
 @COND_SHARED_0@	$(RANLIB) $@
 
-svglib_dcsvg.o: $(srcdir)/dcsvg.cpp
+svglib_dcsvg.o: ../../src/svg/dcsvg.cpp
 	$(CXXC) -c -o $@ $(SVGLIB_CXXFLAGS) $<
 
 uninstall: 

@@ -4,7 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-!include <../../build/config.vc>
+!include <../../build/msw/config.vc>
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -19,23 +19,23 @@
 
 ### Targets: ###
 
-all: cube isosurf penguin
+all: sub_cube sub_isosurf sub_penguin
 
 clean: 
 	-if exist .\*.obj del .\*.obj
 	-if exist .\*.res del .\*.res
 
-cube: 
+sub_cube: 
 	cd cube
-	$(MAKE) /$(MAKEFLAGS) all
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
 	cd $(MAKEDIR)
 
-isosurf: 
+sub_isosurf: 
 	cd isosurf
-	$(MAKE) /$(MAKEFLAGS) all
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
 	cd $(MAKEDIR)
 
-penguin: 
+sub_penguin: 
 	cd penguin
-	$(MAKE) /$(MAKEFLAGS) all
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
 	cd $(MAKEDIR)

@@ -8,7 +8,7 @@
 BCCDIR = $(MAKEDIR)\..
 !endif
 
-!include ../../build/config.bcc
+!include ../../build/msw/config.bcc
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -24,6 +24,8 @@ BCCDIR = $(MAKEDIR)\..
 ### Conditionally set variables: ###
 
 
+MAKEARGS = 
+
 
 ### Targets: ###
 
@@ -34,10 +36,16 @@ clean:
 	-if exist .\*.res del .\*.res
 
 cube: 
-	(cd cube && $(MAKE) all)
+	cd cube
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
 
 isosurf: 
-	(cd isosurf && $(MAKE) all)
+	cd isosurf
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
 
 penguin: 
-	(cd penguin && $(MAKE) all)
+	cd penguin
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..

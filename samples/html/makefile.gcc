@@ -4,7 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-include ../../build/config.gcc
+include ../../build/msw/config.gcc
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -16,36 +16,38 @@ include ../../build/config.gcc
 ### Conditionally set variables: ###
 
 
+MAKEARGS = GCC_VERSION=$(GCC_VERSION)
+
 
 ### Targets: ###
 
 all: about help helpview printing test virtual widget zip
 
 about: 
-	(cd about && $(MAKE) all)
+	$(MAKE) -C about -f makefile.gcc $(MAKEARGS) all
 
 clean: 
 	-if exist .\*.o del .\*.o
 
 help: 
-	(cd help && $(MAKE) all)
+	$(MAKE) -C help -f makefile.gcc $(MAKEARGS) all
 
 helpview: 
-	(cd helpview && $(MAKE) all)
+	$(MAKE) -C helpview -f makefile.gcc $(MAKEARGS) all
 
 printing: 
-	(cd printing && $(MAKE) all)
+	$(MAKE) -C printing -f makefile.gcc $(MAKEARGS) all
 
 test: 
-	(cd test && $(MAKE) all)
+	$(MAKE) -C test -f makefile.gcc $(MAKEARGS) all
 
 virtual: 
-	(cd virtual && $(MAKE) all)
+	$(MAKE) -C virtual -f makefile.gcc $(MAKEARGS) all
 
 widget: 
-	(cd widget && $(MAKE) all)
+	$(MAKE) -C widget -f makefile.gcc $(MAKEARGS) all
 
 zip: 
-	(cd zip && $(MAKE) all)
+	$(MAKE) -C zip -f makefile.gcc $(MAKEARGS) all
 
 .PHONY: all about clean help helpview printing test virtual widget zip

@@ -21,18 +21,18 @@ CFG=wxjpeg - Win32 DLL Release
 !MESSAGE "wxjpeg - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "wxjpeg - Win32 Unicode Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "wxjpeg - Win32 Unicode Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxjpeg - Win32 wxUniv Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxjpeg - Win32 wxUniv Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxjpeg - Win32 wxUniv Unicode Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxjpeg - Win32 wxUniv Unicode Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxjpeg - Win32 Universal Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxjpeg - Win32 Universal Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxjpeg - Win32 Universal Unicode Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxjpeg - Win32 Universal Unicode Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "wxjpeg - Win32 DLL Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "wxjpeg - Win32 DLL Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "wxjpeg - Win32 DLL Unicode Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "wxjpeg - Win32 DLL Unicode Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxjpeg - Win32 DLL wxUniv Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxjpeg - Win32 DLL wxUniv Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxjpeg - Win32 DLL wxUniv Unicode Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxjpeg - Win32 DLL wxUniv Unicode Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxjpeg - Win32 DLL Universal Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxjpeg - Win32 DLL Universal Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxjpeg - Win32 DLL Universal Unicode Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxjpeg - Win32 DLL Universal Unicode Release" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -134,7 +134,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswu\wxjpeg.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswu\wxjpeg.lib"
 
-!ELSEIF  "$(CFG)" == "wxjpeg - Win32 wxUniv Debug"
+!ELSEIF  "$(CFG)" == "wxjpeg - Win32 Universal Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -157,7 +157,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswunivd\wxjpegd.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswunivd\wxjpegd.lib"
 
-!ELSEIF  "$(CFG)" == "wxjpeg - Win32 wxUniv Release"
+!ELSEIF  "$(CFG)" == "wxjpeg - Win32 Universal Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -180,7 +180,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswuniv\wxjpeg.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswuniv\wxjpeg.lib"
 
-!ELSEIF  "$(CFG)" == "wxjpeg - Win32 wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "wxjpeg - Win32 Universal Unicode Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -203,7 +203,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswunivud\wxjpegd.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswunivud\wxjpegd.lib"
 
-!ELSEIF  "$(CFG)" == "wxjpeg - Win32 wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "wxjpeg - Win32 Universal Unicode Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -318,7 +318,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswudll\wxjpeg.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswudll\wxjpeg.lib"
 
-!ELSEIF  "$(CFG)" == "wxjpeg - Win32 DLL wxUniv Debug"
+!ELSEIF  "$(CFG)" == "wxjpeg - Win32 DLL Universal Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -341,7 +341,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswunivddll\wxjpegd.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswunivddll\wxjpegd.lib"
 
-!ELSEIF  "$(CFG)" == "wxjpeg - Win32 DLL wxUniv Release"
+!ELSEIF  "$(CFG)" == "wxjpeg - Win32 DLL Universal Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -364,7 +364,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswunivdll\wxjpeg.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswunivdll\wxjpeg.lib"
 
-!ELSEIF  "$(CFG)" == "wxjpeg - Win32 DLL wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "wxjpeg - Win32 DLL Universal Unicode Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -387,7 +387,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\vc_mswunivuddll\wxjpegd.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\vc_mswunivuddll\wxjpegd.lib"
 
-!ELSEIF  "$(CFG)" == "wxjpeg - Win32 DLL wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "wxjpeg - Win32 DLL Universal Unicode Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -418,18 +418,18 @@ LIB32=link.exe -lib
 # Name "wxjpeg - Win32 Release"
 # Name "wxjpeg - Win32 Unicode Debug"
 # Name "wxjpeg - Win32 Unicode Release"
-# Name "wxjpeg - Win32 wxUniv Debug"
-# Name "wxjpeg - Win32 wxUniv Release"
-# Name "wxjpeg - Win32 wxUniv Unicode Debug"
-# Name "wxjpeg - Win32 wxUniv Unicode Release"
+# Name "wxjpeg - Win32 Universal Debug"
+# Name "wxjpeg - Win32 Universal Release"
+# Name "wxjpeg - Win32 Universal Unicode Debug"
+# Name "wxjpeg - Win32 Universal Unicode Release"
 # Name "wxjpeg - Win32 DLL Debug"
 # Name "wxjpeg - Win32 DLL Release"
 # Name "wxjpeg - Win32 DLL Unicode Debug"
 # Name "wxjpeg - Win32 DLL Unicode Release"
-# Name "wxjpeg - Win32 DLL wxUniv Debug"
-# Name "wxjpeg - Win32 DLL wxUniv Release"
-# Name "wxjpeg - Win32 DLL wxUniv Unicode Debug"
-# Name "wxjpeg - Win32 DLL wxUniv Unicode Release"
+# Name "wxjpeg - Win32 DLL Universal Debug"
+# Name "wxjpeg - Win32 DLL Universal Release"
+# Name "wxjpeg - Win32 DLL Universal Unicode Debug"
+# Name "wxjpeg - Win32 DLL Universal Unicode Release"
 # Begin Group "Source Files"
 
 # PROP Default_Filter ""

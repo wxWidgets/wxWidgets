@@ -4,7 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-!include <../../build/config.vc>
+!include <../../build/msw/config.vc>
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!

@@ -4,7 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-!include ../../build/config.wat
+!include ../../build/msw/config.wat
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -31,6 +31,7 @@ WATCOM_CWD = $+ $(%cdrive):$(%cwd) $-
 ### Variables: ###
 
 
+MAKEARGS = 
 
 
 ### Targets: ###
@@ -39,7 +40,7 @@ all : .SYMBOLIC about help helpview printing test virtual widget zip
 
 about : .SYMBOLIC 
 	cd about
-	wmake $(__MAKEOPTS__) all
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
 	cd $(WATCOM_CWD)
 
 clean : .SYMBOLIC 
@@ -50,35 +51,35 @@ clean : .SYMBOLIC
 
 help : .SYMBOLIC 
 	cd help
-	wmake $(__MAKEOPTS__) all
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
 	cd $(WATCOM_CWD)
 
 helpview : .SYMBOLIC 
 	cd helpview
-	wmake $(__MAKEOPTS__) all
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
 	cd $(WATCOM_CWD)
 
 printing : .SYMBOLIC 
 	cd printing
-	wmake $(__MAKEOPTS__) all
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
 	cd $(WATCOM_CWD)
 
 test : .SYMBOLIC 
 	cd test
-	wmake $(__MAKEOPTS__) all
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
 	cd $(WATCOM_CWD)
 
 virtual : .SYMBOLIC 
 	cd virtual
-	wmake $(__MAKEOPTS__) all
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
 	cd $(WATCOM_CWD)
 
 widget : .SYMBOLIC 
 	cd widget
-	wmake $(__MAKEOPTS__) all
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
 	cd $(WATCOM_CWD)
 
 zip : .SYMBOLIC 
 	cd zip
-	wmake $(__MAKEOPTS__) all
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
 	cd $(WATCOM_CWD)

@@ -4,7 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-!include ../../build/config.wat
+!include ../../build/msw/config.wat
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -164,8 +164,9 @@ WXTEST_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
 	-i=.\..\..\src\zlib -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. &
 	$(__DLLFLAG_p) $(CXXFLAGS)
 WXTEST_OBJECTS =  &
-	$(OBJS)\wxtest_wxtest.obj
+	$(OBJS)\wxtest_test.obj
 
+MAKEARGS = BUILD=$(BUILD) CFG=$(CFG) CPPFLAGS=$(CPPFLAGS) CXX=$(CXX) CXXFLAGS=$(CXXFLAGS) DEBUG_FLAG=$(DEBUG_FLAG) DEBUG_INFO=$(DEBUG_INFO) LDFLAGS=$(LDFLAGS) MONOLITHIC=$(MONOLITHIC) OFFICIAL_BUILD=$(OFFICIAL_BUILD) RUNTIME_LIBS=$(RUNTIME_LIBS) SHARED=$(SHARED) UNICODE=$(UNICODE) USE_GUI=$(USE_GUI) WXUNIV=$(WXUNIV)
 
 
 all : $(OBJS)
@@ -176,7 +177,7 @@ $(OBJS) :
 
 all : .SYMBOLIC $(OBJS)\wxtest.exe
 
-$(OBJS)\wxtest_wxtest.obj :  .AUTODEPEND .\wxtest.cpp
+$(OBJS)\wxtest_test.obj :  .AUTODEPEND .\test.cpp
 	$(CXX) -zq -fo=$^@ $(WXTEST_CXXFLAGS) $<
 
 $(OBJS)\wxtest_wxtest.res :  .AUTODEPEND .\wxtest.rc

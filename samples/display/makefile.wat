@@ -4,7 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-!include ../../build/config.wat
+!include ../../build/msw/config.wat
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -166,6 +166,7 @@ LIBDIRNAME = &
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 
+MAKEARGS = BUILD=$(BUILD) CFG=$(CFG) CPPFLAGS=$(CPPFLAGS) CXX=$(CXX) CXXFLAGS=$(CXXFLAGS) DEBUG_FLAG=$(DEBUG_FLAG) DEBUG_INFO=$(DEBUG_INFO) LDFLAGS=$(LDFLAGS) MONOLITHIC=$(MONOLITHIC) OFFICIAL_BUILD=$(OFFICIAL_BUILD) RUNTIME_LIBS=$(RUNTIME_LIBS) SHARED=$(SHARED) UNICODE=$(UNICODE) USE_GUI=$(USE_GUI) WXUNIV=$(WXUNIV)
 
 
 all : $(OBJS)
@@ -179,6 +180,9 @@ all : .SYMBOLIC $(OBJS)\display.exe
 $(OBJS)\display_display.obj :  .AUTODEPEND .\display.cpp
 	$(CXX) -zq -fo=$^@ $(DISPLAY_CXXFLAGS) $<
 
+$(OBJS)\display_sample.res :  .AUTODEPEND .\..\..\samples\sample.rc
+	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png -i=.\..\..\src\zlib  -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. $(__DLLFLAG_p) $<
+
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
@@ -186,7 +190,7 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\display.exe del $(OBJS)\display.exe
 
-$(OBJS)\display.exe :  $(DISPLAY_OBJECTS)
+$(OBJS)\display.exe :  $(DISPLAY_OBJECTS) $(OBJS)\display_sample.res
 	@%create $(OBJS)\display.lbc
 	@%append $(OBJS)\display.lbc option quiet
 	@%append $(OBJS)\display.lbc name $^@
@@ -194,5 +198,5 @@ $(OBJS)\display.exe :  $(DISPLAY_OBJECTS)
 	@%append $(OBJS)\display.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(DISPLAY_OBJECTS)) do @%append $(OBJS)\display.lbc file %i
 	@for %i in ( $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\display.lbc library %i
-	@%append $(OBJS)\display.lbc
+	@%append $(OBJS)\display.lbc option resource=$(OBJS)\display_sample.res
 	wlink @$(OBJS)\display.lbc

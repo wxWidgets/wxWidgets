@@ -21,10 +21,10 @@ CFG=dbgriddll - Win32 DLL Debug
 !MESSAGE "dbgriddll - Win32 DLL Release" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE "dbgriddll - Win32 DLL Unicode Debug" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE "dbgriddll - Win32 DLL Unicode Release" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "dbgriddll - Win32 DLL wxUniv Debug" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "dbgriddll - Win32 DLL wxUniv Release" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "dbgriddll - Win32 DLL wxUniv Unicode Debug" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "dbgriddll - Win32 DLL wxUniv Unicode Release" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "dbgriddll - Win32 DLL Universal Debug" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "dbgriddll - Win32 DLL Universal Release" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "dbgriddll - Win32 DLL Universal Unicode Debug" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "dbgriddll - Win32 DLL Universal Unicode Release" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE 
 
 # Begin Project
@@ -135,7 +135,7 @@ LINK32=link.exe
 # ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ..\..\lib\vc_mswudll\wxmsw25u_adv.lib ..\..\lib\vc_mswudll\wxbase25u_odbc.lib ..\..\lib\vc_mswudll\wxmsw25u_core.lib ..\..\lib\vc_mswudll\wxbase25u.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_mswudll\wxmsw250u_dbgrid_vc_custom.dll" /libpath:"..\..\lib\vc_mswudll" /implib:"..\..\lib\vc_mswudll\wxmsw25u_dbgrid.lib"
 # ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ..\..\lib\vc_mswudll\wxmsw25u_adv.lib ..\..\lib\vc_mswudll\wxbase25u_odbc.lib ..\..\lib\vc_mswudll\wxmsw25u_core.lib ..\..\lib\vc_mswudll\wxbase25u.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_mswudll\wxmsw250u_dbgrid_vc_custom.dll" /libpath:"..\..\lib\vc_mswudll" /implib:"..\..\lib\vc_mswudll\wxmsw25u_dbgrid.lib"
 
-!ELSEIF  "$(CFG)" == "dbgriddll - Win32 DLL wxUniv Debug"
+!ELSEIF  "$(CFG)" == "dbgriddll - Win32 DLL Universal Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -160,7 +160,7 @@ LINK32=link.exe
 # ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ..\..\lib\vc_mswunivddll\wxmswuniv25d_adv.lib ..\..\lib\vc_mswunivddll\wxbase25d_odbc.lib ..\..\lib\vc_mswunivddll\wxmswuniv25d_core.lib ..\..\lib\vc_mswunivddll\wxbase25d.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_mswunivddll\wxmswuniv250d_dbgrid_vc_custom.dll" /libpath:"..\..\lib\vc_mswunivddll" /implib:"..\..\lib\vc_mswunivddll\wxmswuniv25d_dbgrid.lib" /debug
 # ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ..\..\lib\vc_mswunivddll\wxmswuniv25d_adv.lib ..\..\lib\vc_mswunivddll\wxbase25d_odbc.lib ..\..\lib\vc_mswunivddll\wxmswuniv25d_core.lib ..\..\lib\vc_mswunivddll\wxbase25d.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_mswunivddll\wxmswuniv250d_dbgrid_vc_custom.dll" /libpath:"..\..\lib\vc_mswunivddll" /implib:"..\..\lib\vc_mswunivddll\wxmswuniv25d_dbgrid.lib" /debug
 
-!ELSEIF  "$(CFG)" == "dbgriddll - Win32 DLL wxUniv Release"
+!ELSEIF  "$(CFG)" == "dbgriddll - Win32 DLL Universal Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -185,7 +185,7 @@ LINK32=link.exe
 # ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ..\..\lib\vc_mswunivdll\wxmswuniv25_adv.lib ..\..\lib\vc_mswunivdll\wxbase25_odbc.lib ..\..\lib\vc_mswunivdll\wxmswuniv25_core.lib ..\..\lib\vc_mswunivdll\wxbase25.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_mswunivdll\wxmswuniv250_dbgrid_vc_custom.dll" /libpath:"..\..\lib\vc_mswunivdll" /implib:"..\..\lib\vc_mswunivdll\wxmswuniv25_dbgrid.lib"
 # ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ..\..\lib\vc_mswunivdll\wxmswuniv25_adv.lib ..\..\lib\vc_mswunivdll\wxbase25_odbc.lib ..\..\lib\vc_mswunivdll\wxmswuniv25_core.lib ..\..\lib\vc_mswunivdll\wxbase25.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_mswunivdll\wxmswuniv250_dbgrid_vc_custom.dll" /libpath:"..\..\lib\vc_mswunivdll" /implib:"..\..\lib\vc_mswunivdll\wxmswuniv25_dbgrid.lib"
 
-!ELSEIF  "$(CFG)" == "dbgriddll - Win32 DLL wxUniv Unicode Debug"
+!ELSEIF  "$(CFG)" == "dbgriddll - Win32 DLL Universal Unicode Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -210,7 +210,7 @@ LINK32=link.exe
 # ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ..\..\lib\vc_mswunivuddll\wxmswuniv25ud_adv.lib ..\..\lib\vc_mswunivuddll\wxbase25ud_odbc.lib ..\..\lib\vc_mswunivuddll\wxmswuniv25ud_core.lib ..\..\lib\vc_mswunivuddll\wxbase25ud.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_mswunivuddll\wxmswuniv250ud_dbgrid_vc_custom.dll" /libpath:"..\..\lib\vc_mswunivuddll" /implib:"..\..\lib\vc_mswunivuddll\wxmswuniv25ud_dbgrid.lib" /debug
 # ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ..\..\lib\vc_mswunivuddll\wxmswuniv25ud_adv.lib ..\..\lib\vc_mswunivuddll\wxbase25ud_odbc.lib ..\..\lib\vc_mswunivuddll\wxmswuniv25ud_core.lib ..\..\lib\vc_mswunivuddll\wxbase25ud.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_mswunivuddll\wxmswuniv250ud_dbgrid_vc_custom.dll" /libpath:"..\..\lib\vc_mswunivuddll" /implib:"..\..\lib\vc_mswunivuddll\wxmswuniv25ud_dbgrid.lib" /debug
 
-!ELSEIF  "$(CFG)" == "dbgriddll - Win32 DLL wxUniv Unicode Release"
+!ELSEIF  "$(CFG)" == "dbgriddll - Win32 DLL Universal Unicode Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -243,10 +243,10 @@ LINK32=link.exe
 # Name "dbgriddll - Win32 DLL Release"
 # Name "dbgriddll - Win32 DLL Unicode Debug"
 # Name "dbgriddll - Win32 DLL Unicode Release"
-# Name "dbgriddll - Win32 DLL wxUniv Debug"
-# Name "dbgriddll - Win32 DLL wxUniv Release"
-# Name "dbgriddll - Win32 DLL wxUniv Unicode Debug"
-# Name "dbgriddll - Win32 DLL wxUniv Unicode Release"
+# Name "dbgriddll - Win32 DLL Universal Debug"
+# Name "dbgriddll - Win32 DLL Universal Release"
+# Name "dbgriddll - Win32 DLL Universal Unicode Debug"
+# Name "dbgriddll - Win32 DLL Universal Unicode Release"
 # Begin Group "Common Headers"
 
 # PROP Default_Filter ""

@@ -35,7 +35,6 @@ TOOLKIT_VERSION = @TOOLKIT_VERSION@
 VENDOR = @VENDOR@
 includedir = @includedir@
 libdir = @libdir@
-srcdir = @srcdir@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 
@@ -45,8 +44,8 @@ LIBDIRNAME = $(top_builddir)lib
 NETUTILSDLL_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
 	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
-	-I$(srcdir)/../../include -DWXUSINGDLL -DWXMAKINGDLL_NETUTILS $(CXXFLAGS) \
-	$(PIC_FLAG)
+	-I../../src/net/../../include -DWXUSINGDLL -DWXMAKINGDLL_NETUTILS \
+	$(CXXFLAGS) $(PIC_FLAG)
 NETUTILSDLL_OBJECTS =  \
 	netutilsdll_email.o \
 	netutilsdll_smapi.o \
@@ -54,7 +53,7 @@ NETUTILSDLL_OBJECTS =  \
 NETUTILSLIB_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
 	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
-	-I$(srcdir)/../../include $(CXXFLAGS)
+	-I../../src/net/../../include $(CXXFLAGS)
 NETUTILSLIB_OBJECTS =  \
 	netutilslib_email.o \
 	netutilslib_smapi.o \
@@ -189,7 +188,7 @@ install: all $(__install_netutilsdll___depname) $(__install_netutilslib___depnam
 	if test ! -d $(includedir)/`dirname $$f` ; then \
 	$(INSTALL_DIR) $(includedir)/`dirname $$f`; \
 	fi; \
-	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(includedir)/$$f; \
+	$(INSTALL_DATA) ../../src/net/../../include//$$f $(includedir)/$$f; \
 	done
 
 install-strip: install
@@ -209,13 +208,13 @@ install-strip: install
 @COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(NETUTILSDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__netutilsdll___macinstnamecmd) $(__netutilsdll___importlib) $(__netutilsdll___soname_flags) $(__netutilsdll___macver)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p)
 @COND_SHARED_1@	$(__netutilsdll___so_symlinks_cmd)
 
-netutilsdll_email.o: $(srcdir)/email.cpp
+netutilsdll_email.o: ../../src/net/email.cpp
 	$(CXXC) -c -o $@ $(NETUTILSDLL_CXXFLAGS) $<
 
-netutilsdll_smapi.o: $(srcdir)/smapi.cpp
+netutilsdll_smapi.o: ../../src/net/smapi.cpp
 	$(CXXC) -c -o $@ $(NETUTILSDLL_CXXFLAGS) $<
 
-netutilsdll_web.o: $(srcdir)/web.cpp
+netutilsdll_web.o: ../../src/net/web.cpp
 	$(CXXC) -c -o $@ $(NETUTILSDLL_CXXFLAGS) $<
 
 @COND_SHARED_0@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netutils-2.5$(HOST_SUFFIX).a: $(NETUTILSLIB_OBJECTS)
@@ -223,13 +222,13 @@ netutilsdll_web.o: $(srcdir)/web.cpp
 @COND_SHARED_0@	$(AR) rcu $@ $(NETUTILSLIB_OBJECTS)
 @COND_SHARED_0@	$(RANLIB) $@
 
-netutilslib_email.o: $(srcdir)/email.cpp
+netutilslib_email.o: ../../src/net/email.cpp
 	$(CXXC) -c -o $@ $(NETUTILSLIB_CXXFLAGS) $<
 
-netutilslib_smapi.o: $(srcdir)/smapi.cpp
+netutilslib_smapi.o: ../../src/net/smapi.cpp
 	$(CXXC) -c -o $@ $(NETUTILSLIB_CXXFLAGS) $<
 
-netutilslib_web.o: $(srcdir)/web.cpp
+netutilslib_web.o: ../../src/net/web.cpp
 	$(CXXC) -c -o $@ $(NETUTILSLIB_CXXFLAGS) $<
 
 uninstall: 

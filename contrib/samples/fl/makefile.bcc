@@ -8,7 +8,7 @@
 BCCDIR = $(MAKEDIR)\..
 !endif
 
-!include ../../../build/config.bcc
+!include ../../../build/msw/config.bcc
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -169,6 +169,8 @@ __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 __WXUNIV_DEFINE_p_11 = -d__WXUNIVERSAL__
 !endif
 
+MAKEARGS = -DBUILD=$(BUILD) -DCFG=$(CFG) -DCPPFLAGS=$(CPPFLAGS) -DCXX=$(CXX) -DCXXFLAGS=$(CXXFLAGS) -DDEBUG_FLAG=$(DEBUG_FLAG) -DDEBUG_INFO=$(DEBUG_INFO) -DLDFLAGS=$(LDFLAGS) -DMONOLITHIC=$(MONOLITHIC) -DOFFICIAL_BUILD=$(OFFICIAL_BUILD) -DRUNTIME_LIBS=$(RUNTIME_LIBS) -DSHARED=$(SHARED) -DUNICODE=$(UNICODE) -DUSE_GUI=$(USE_GUI) -DWXUNIV=$(WXUNIV)
+
 
 all: $(OBJS)
 $(OBJS):
@@ -182,31 +184,31 @@ $(OBJS)\fl_demo1_fl_demo1.obj: .\fl_demo1.cpp
 	$(CXX) -q -c -P -o$@ $(FL_DEMO1_CXXFLAGS) $**
 
 $(OBJS)\fl_demo1_fl_demo1.res: .\fl_demo1.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_11) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_15) -i.\..\..\..\include -i$(LIBDIRNAME) -i.\..\..\..\src\tiff -i.\..\..\..\src\jpeg -i.\..\..\..\src\png -i.\..\..\..\src\zlib  -i.\..\..\..\src\regex -i.\..\..\..\src\expat\lib -i. $(__DLLFLAG_p_12) -i.\..\..\include -dBMP_DIR=\"bitmaps/\" $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_11) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_15) -i.\..\..\..\include -i$(LIBDIRNAME) -i.\..\..\..\src\tiff -i.\..\..\..\src\jpeg -i.\..\..\..\src\png -i.\..\..\..\src\zlib  -i.\..\..\..\src\regex -i.\..\..\..\src\expat\lib -i. $(__DLLFLAG_p_12) -i.\..\..\include -dBMP_DIR="bitmaps/" $**
 
 $(OBJS)\fl_demo2_fl_demo2.obj: .\fl_demo2.cpp
 	$(CXX) -q -c -P -o$@ $(FL_DEMO2_CXXFLAGS) $**
 
 $(OBJS)\fl_demo2_fl_demo2.res: .\fl_demo2.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_11) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_15) -i.\..\..\..\include -i$(LIBDIRNAME) -i.\..\..\..\src\tiff -i.\..\..\..\src\jpeg -i.\..\..\..\src\png -i.\..\..\..\src\zlib  -i.\..\..\..\src\regex -i.\..\..\..\src\expat\lib -i. $(__DLLFLAG_p_12) -i.\..\..\include -dBMP_DIR=\"bitmaps/\" $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_11) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_15) -i.\..\..\..\include -i$(LIBDIRNAME) -i.\..\..\..\src\tiff -i.\..\..\..\src\jpeg -i.\..\..\..\src\png -i.\..\..\..\src\zlib  -i.\..\..\..\src\regex -i.\..\..\..\src\expat\lib -i. $(__DLLFLAG_p_12) -i.\..\..\include -dBMP_DIR="bitmaps/" $**
 
 $(OBJS)\fl_sample1_fl_sample1.obj: .\fl_sample1.cpp
 	$(CXX) -q -c -P -o$@ $(FL_SAMPLE1_CXXFLAGS) $**
 
 $(OBJS)\fl_sample1_fl_sample1.res: .\fl_sample1.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_11) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_15) -i.\..\..\..\include -i$(LIBDIRNAME) -i.\..\..\..\src\tiff -i.\..\..\..\src\jpeg -i.\..\..\..\src\png -i.\..\..\..\src\zlib  -i.\..\..\..\src\regex -i.\..\..\..\src\expat\lib -i. $(__DLLFLAG_p_12) -i.\..\..\include -dBMP_DIR=\"bitmaps/\" $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_11) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_15) -i.\..\..\..\include -i$(LIBDIRNAME) -i.\..\..\..\src\tiff -i.\..\..\..\src\jpeg -i.\..\..\..\src\png -i.\..\..\..\src\zlib  -i.\..\..\..\src\regex -i.\..\..\..\src\expat\lib -i. $(__DLLFLAG_p_12) -i.\..\..\include -dBMP_DIR="bitmaps/" $**
 
 $(OBJS)\fl_sample2_fl_sample2.obj: .\fl_sample2.cpp
 	$(CXX) -q -c -P -o$@ $(FL_SAMPLE2_CXXFLAGS) $**
 
 $(OBJS)\fl_sample2_fl_sample2.res: .\fl_sample2.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_11) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_15) -i.\..\..\..\include -i$(LIBDIRNAME) -i.\..\..\..\src\tiff -i.\..\..\..\src\jpeg -i.\..\..\..\src\png -i.\..\..\..\src\zlib  -i.\..\..\..\src\regex -i.\..\..\..\src\expat\lib -i. $(__DLLFLAG_p_12) -i.\..\..\include -dBMP_DIR=\"bitmaps/\" $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_11) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_15) -i.\..\..\..\include -i$(LIBDIRNAME) -i.\..\..\..\src\tiff -i.\..\..\..\src\jpeg -i.\..\..\..\src\png -i.\..\..\..\src\zlib  -i.\..\..\..\src\regex -i.\..\..\..\src\expat\lib -i. $(__DLLFLAG_p_12) -i.\..\..\include -dBMP_DIR="bitmaps/" $**
 
 $(OBJS)\fl_sample3_fl_sample3.obj: .\fl_sample3.cpp
 	$(CXX) -q -c -P -o$@ $(FL_SAMPLE3_CXXFLAGS) $**
 
 $(OBJS)\fl_sample3_fl_sample3.res: .\fl_sample3.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_11) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_15) -i.\..\..\..\include -i$(LIBDIRNAME) -i.\..\..\..\src\tiff -i.\..\..\..\src\jpeg -i.\..\..\..\src\png -i.\..\..\..\src\zlib  -i.\..\..\..\src\regex -i.\..\..\..\src\expat\lib -i. $(__DLLFLAG_p_12) -i.\..\..\include -dBMP_DIR=\"bitmaps/\" $**
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_11) $(__DEBUG_DEFINE_p_14) $(__UNICODE_DEFINE_p_15) -i.\..\..\..\include -i$(LIBDIRNAME) -i.\..\..\..\src\tiff -i.\..\..\..\src\jpeg -i.\..\..\..\src\png -i.\..\..\..\src\zlib  -i.\..\..\..\src\regex -i.\..\..\..\src\expat\lib -i. $(__DLLFLAG_p_12) -i.\..\..\include -dBMP_DIR="bitmaps/" $**
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj

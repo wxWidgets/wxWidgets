@@ -4,7 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-!include ../../build/config.wat
+!include ../../build/msw/config.wat
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -164,8 +164,9 @@ VSCROLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
 	-i=.\..\..\src\zlib -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. &
 	$(__DLLFLAG_p) $(CXXFLAGS)
 VSCROLL_OBJECTS =  &
-	$(OBJS)\vscroll_vscroll.obj
+	$(OBJS)\vscroll_vstest.obj
 
+MAKEARGS = BUILD=$(BUILD) CFG=$(CFG) CPPFLAGS=$(CPPFLAGS) CXX=$(CXX) CXXFLAGS=$(CXXFLAGS) DEBUG_FLAG=$(DEBUG_FLAG) DEBUG_INFO=$(DEBUG_INFO) LDFLAGS=$(LDFLAGS) MONOLITHIC=$(MONOLITHIC) OFFICIAL_BUILD=$(OFFICIAL_BUILD) RUNTIME_LIBS=$(RUNTIME_LIBS) SHARED=$(SHARED) UNICODE=$(UNICODE) USE_GUI=$(USE_GUI) WXUNIV=$(WXUNIV)
 
 
 all : $(OBJS)
@@ -176,11 +177,11 @@ $(OBJS) :
 
 all : .SYMBOLIC $(OBJS)\vscroll.exe
 
-$(OBJS)\vscroll_vscroll.obj :  .AUTODEPEND .\vscroll.cpp
-	$(CXX) -zq -fo=$^@ $(VSCROLL_CXXFLAGS) $<
-
 $(OBJS)\vscroll_vscroll.res :  .AUTODEPEND .\vscroll.rc
 	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png -i=.\..\..\src\zlib  -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. $(__DLLFLAG_p) $<
+
+$(OBJS)\vscroll_vstest.obj :  .AUTODEPEND .\vstest.cpp
+	$(CXX) -zq -fo=$^@ $(VSCROLL_CXXFLAGS) $<
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj

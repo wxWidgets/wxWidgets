@@ -4,7 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-!include <../../build/config.vc>
+!include <../../build/msw/config.vc>
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -19,48 +19,48 @@
 
 ### Targets: ###
 
-all: about help helpview printing test virtual widget zip
+all: sub_about sub_help sub_helpview sub_printing sub_test sub_virtual sub_widget sub_zip
 
-about: 
+sub_about: 
 	cd about
-	$(MAKE) /$(MAKEFLAGS) all
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
 	cd $(MAKEDIR)
 
 clean: 
 	-if exist .\*.obj del .\*.obj
 	-if exist .\*.res del .\*.res
 
-help: 
+sub_help: 
 	cd help
-	$(MAKE) /$(MAKEFLAGS) all
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
 	cd $(MAKEDIR)
 
-helpview: 
+sub_helpview: 
 	cd helpview
-	$(MAKE) /$(MAKEFLAGS) all
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
 	cd $(MAKEDIR)
 
-printing: 
+sub_printing: 
 	cd printing
-	$(MAKE) /$(MAKEFLAGS) all
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
 	cd $(MAKEDIR)
 
-test: 
+sub_test: 
 	cd test
-	$(MAKE) /$(MAKEFLAGS) all
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
 	cd $(MAKEDIR)
 
-virtual: 
+sub_virtual: 
 	cd virtual
-	$(MAKE) /$(MAKEFLAGS) all
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
 	cd $(MAKEDIR)
 
-widget: 
+sub_widget: 
 	cd widget
-	$(MAKE) /$(MAKEFLAGS) all
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
 	cd $(MAKEDIR)
 
-zip: 
+sub_zip: 
 	cd zip
-	$(MAKE) /$(MAKEFLAGS) all
+	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
 	cd $(MAKEDIR)

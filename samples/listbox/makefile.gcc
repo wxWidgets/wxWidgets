@@ -4,7 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-include ../../build/config.gcc
+include ../../build/msw/config.gcc
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -20,7 +20,7 @@ LISTBOX_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) \
 	-I.\..\..\src\jpeg -I.\..\..\src\png -I.\..\..\src\zlib -I.\..\..\src\regex \
 	-I.\..\..\src\expat\lib -I. $(__DLLFLAG_p) $(CXXFLAGS)
 LISTBOX_OBJECTS =  \
-	$(OBJS)\listbox_listbox.o \
+	$(OBJS)\listbox_lboxtest.o \
 	$(OBJS)\listbox_listbox_rc.o
 OBJS = \
 	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
@@ -130,6 +130,8 @@ ifeq ($(WXUNIV),1)
 __WXUNIV_DEFINE_p_1 = --define __WXUNIVERSAL__
 endif
 
+MAKEARGS = BUILD=$(BUILD) CFG=$(CFG) CPPFLAGS=$(CPPFLAGS) CXX=$(CXX) CXXFLAGS=$(CXXFLAGS) DEBUG_FLAG=$(DEBUG_FLAG) DEBUG_INFO=$(DEBUG_INFO) GCC_VERSION=$(GCC_VERSION) LDFLAGS=$(LDFLAGS) MONOLITHIC=$(MONOLITHIC) OFFICIAL_BUILD=$(OFFICIAL_BUILD) SHARED=$(SHARED) UNICODE=$(UNICODE) USE_GUI=$(USE_GUI) WXUNIV=$(WXUNIV)
+
 
 all: $(OBJS)
 $(OBJS):
@@ -139,7 +141,7 @@ $(OBJS):
 
 all: $(OBJS)\listbox.exe
 
-$(OBJS)\listbox_listbox.o: .\listbox.cpp
+$(OBJS)\listbox_lboxtest.o: .\lboxtest.cpp
 	$(CXX) -c -o $@ $(LISTBOX_CXXFLAGS) $<
 
 $(OBJS)\listbox_listbox_rc.o: .\listbox.rc

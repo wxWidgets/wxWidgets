@@ -8,7 +8,7 @@
 BCCDIR = $(MAKEDIR)\..
 !endif
 
-!include ../../build/config.bcc
+!include ../../build/msw/config.bcc
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -24,35 +24,53 @@ BCCDIR = $(MAKEDIR)\..
 ### Conditionally set variables: ###
 
 
+MAKEARGS = 
+
 
 ### Targets: ###
 
 all: about help helpview printing test virtual widget zip
 
 about: 
-	(cd about && $(MAKE) all)
+	cd about
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
 
 clean: 
 	-if exist .\*.obj del .\*.obj
 	-if exist .\*.res del .\*.res
 
 help: 
-	(cd help && $(MAKE) all)
+	cd help
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
 
 helpview: 
-	(cd helpview && $(MAKE) all)
+	cd helpview
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
 
 printing: 
-	(cd printing && $(MAKE) all)
+	cd printing
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
 
 test: 
-	(cd test && $(MAKE) all)
+	cd test
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
 
 virtual: 
-	(cd virtual && $(MAKE) all)
+	cd virtual
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
 
 widget: 
-	(cd widget && $(MAKE) all)
+	cd widget
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
 
 zip: 
-	(cd zip && $(MAKE) all)
+	cd zip
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..
