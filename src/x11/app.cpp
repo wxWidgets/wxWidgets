@@ -293,8 +293,17 @@ void wxApp::ProcessXEvent(WXEvent* _event)
     // Find the first wxWindow that corresponds to this event window
     // TODO: may need to translate coordinates from actualWindow
     // to window, if the receiving window != wxWindow window
-    while (window && !(win = wxGetWindowFromTable(window)))
-        window = wxGetWindowParent(window);
+    //    while (window && !(win = wxGetWindowFromTable(window)))
+    //        window = wxGetWindowParent(window);
+
+    // Because we're receiving events after a window
+    // has been destroyed, assume a 1:1 match between
+    // Window and wxWindow, so if it's not in the table,
+    // it must have been destroyed.
+
+    win = wxGetWindowFromTable(window);
+    if (!win)
+	return;
 
     switch (event->type)
     {
