@@ -230,8 +230,12 @@ void wxLogGui::Flush()
     m_bHasMessages = FALSE;
 
     wxString appName = wxTheApp->GetAppName();
+    
+#if 0
+    // This skrews up names likes "wxDesigner"
     if ( !!appName )
         appName[0u] = wxToupper(appName[0u]);
+#endif
 
     long style;
     wxString titleFormat;
@@ -727,9 +731,9 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     // to close the log dialog with <Esc> which wouldn't work otherwise (as it
     // translates into click on cancel button)
     wxButton *btnOk = new wxButton(this, wxID_CANCEL, _("OK"));
-    sizerButtons->Add(btnOk, 0, wxCENTRE|wxBOTTOM, MARGIN/2);
+    sizerButtons->Add(btnOk, 0, wxGROW|wxBOTTOM, MARGIN/2);
     m_btnDetails = new wxButton(this, wxID_MORE, ms_details + _T(" >>"));
-    sizerButtons->Add(m_btnDetails, 0, wxCENTRE|wxTOP, MARGIN/2 - 1);
+    sizerButtons->Add(m_btnDetails, 0, wxGROW|wxTOP, MARGIN/2 - 1);
 
 #ifndef __WIN16__
     wxIcon icon = wxTheApp->GetStdIcon((int)(style & wxICON_MASK));
