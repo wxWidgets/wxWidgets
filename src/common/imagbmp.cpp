@@ -117,7 +117,7 @@ bool wxBMPHandler::SaveDib(wxImage *image,
             )
         {
             if ( verbose )
-                wxLogError(_("BMP: wImage doesn't have own wxPalette."));
+                wxLogError(_("BMP: wxImage doesn't have own wxPalette."));
             return FALSE;
         }
         bpp = 8;
