@@ -89,6 +89,11 @@ bool wxMenuBar::Create(long style)
 {
     if(!CocoaCreate("wxMenuBar"))
         return false;
+    NSMenuItem *dummyItem = [[NSMenuItem alloc] initWithTitle:@"App menu"
+        /* Note: title gets clobbered by app name anyway */
+        action:nil keyEquivalent:@""];
+    [m_cocoaNSMenu addItem:dummyItem];
+    [dummyItem release];
     return true;
 }
 
@@ -120,6 +125,8 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 {
     wxAutoNSAutoreleasePool pool;
     wxLogDebug("insert pos=%lu, menu=%p, title=%s",pos,menu,title.c_str());
+    // Get the current menu at this position
+    wxMenu *nextmenu = GetMenu(pos);
     if(!wxMenuBarBase::Insert(pos,menu,title))
         return false;
     wxASSERT(menu);
@@ -129,7 +136,9 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
     [menu->GetNSMenu() setTitle:menuTitle];
     [newItem setSubmenu:menu->GetNSMenu()];
 
-    [m_cocoaNSMenu insertItem:newItem atIndex:pos];
+    int itemindex = [m_cocoaNSMenu indexOfItemWithSubmenu:nextmenu->GetNSMenu()];
+    wxASSERT(itemindex>=0);
+    [m_cocoaNSMenu insertItem:newItem atIndex:itemindex];
 
     [menuTitle release];
     [newItem release];
@@ -143,7 +152,12 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
 
 wxMenu *wxMenuBar::Remove(size_t pos)
 {
-    return NULL;
+    wxMenu *menu = wxMenuBarBase::Remove(pos);
+    wxASSERT(menu);
+    int itemindex = [GetNSMenu() indexOfItemWithSubmenu:menu->GetNSMenu()];
+    wxASSERT(itemindex>=0);
+    [m_cocoaNSMenu removeItemAtIndex:itemindex];
+    return menu;
 }
 
 
@@ -162,7 +176,10 @@ void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
 
 wxString wxMenuBar::GetLabelTop(size_t pos) const
 {
-    return wxEmptyString;
+    wxMenu *menu = GetMenu(pos);
+    int itemindex = [m_cocoaNSMenu indexOfItemWithSubmenu:menu->GetNSMenu()];
+    wxASSERT(itemindex>=0);
+    return wxString([[[m_cocoaNSMenu itemAtIndex:itemindex] title] lossyCString]);
 }
 
 void wxMenuBar::Attach(wxFrame *frame)
