@@ -120,10 +120,6 @@ void wxWindowMac::Init()
 
     m_hScrollBar = NULL ;
     m_vScrollBar = NULL ;
-
-#if  wxUSE_DRAG_AND_DROP
-  m_pDropTarget = NULL;
-#endif
 }
 
 // Destructor
@@ -273,12 +269,12 @@ void wxWindowMac::ReleaseMouse()
 
 void wxWindowMac::SetDropTarget(wxDropTarget *pDropTarget)
 {
-  if ( m_pDropTarget != 0 ) {
-    delete m_pDropTarget;
+  if ( m_dropTarget != 0 ) {
+    delete m_dropTarget;
   }
 
-  m_pDropTarget = pDropTarget;
-  if ( m_pDropTarget != 0 )
+  m_dropTarget = pDropTarget;
+  if ( m_dropTarget != 0 )
   {
     // TODO
   }
@@ -1300,16 +1296,28 @@ wxWindowMac* wxWindowMac::s_lastMouseWindow = NULL ;
 
 bool wxWindowMac::MacGetWindowFromPointSub( const wxPoint &point , wxWindowMac** outWin ) 
 {
-    if ((point.x < m_x) || (point.y < m_y) ||
-        (point.x > (m_x + m_width)) || (point.y > (m_y + m_height)))
-        return FALSE;
+    if ( IsTopLevel() )
+    {
+      if ((point.x < 0) || (point.y < 0) ||
+          (point.x > (m_width)) || (point.y > (m_height)))
+          return FALSE;
+    }
+    else
+    {
+      if ((point.x < m_x) || (point.y < m_y) ||
+          (point.x > (m_x + m_width)) || (point.y > (m_y + m_height)))
+          return FALSE;
+    }
     
     WindowRef window = MacGetRootWindow() ;
 
     wxPoint newPoint( point ) ;
 
-    newPoint.x -= m_x;
-    newPoint.y -= m_y;
+    if ( !IsTopLevel() )
+    {
+      newPoint.x -= m_x;
+      newPoint.y -= m_y;
+    }
     
     for (wxNode *node = GetChildren().First(); node; node = node->Next())
     {
@@ -1332,13 +1340,13 @@ bool wxWindowMac::MacGetWindowFromPoint( const wxPoint &screenpoint , wxWindowMa
     Point pt = { screenpoint.y , screenpoint.x } ;
     if ( ::FindWindow( pt , &window ) == 3 )
     {
-            wxPoint point( screenpoint ) ;
-            wxWindowMac* win = wxFindWinFromMacWindow( window ) ;
-            if ( win )
-            {
-            win->ScreenToClient( point ) ;
+        wxPoint point( screenpoint ) ;
+        wxWindowMac* win = wxFindWinFromMacWindow( window ) ;
+        if ( win )
+        {
+            point = win->ScreenToClient( point ) ;
             return win->MacGetWindowFromPointSub( point , outWin ) ;
-    }
+        }
     }
     return FALSE ;
 }
@@ -1442,19 +1450,22 @@ const wxRegion& wxWindowMac::MacGetVisibleRegion()
     DiffRgn( visRgn , tempRgn , visRgn ) ;
   }
 
-  wxWindow* parent = GetParent() ;
-  while( parent )
+  if ( !IsTopLevel() )
   {
-    wxSize size = parent->GetSize() ;
-    int x , y ;
-    x = y = 0 ;
-    parent->MacWindowToRootWindow( &x, &y ) ;
-    MacRootWindowToWindow( &x , &y ) ;
-    SetRectRgn( tempRgn , x , y , x + size.x , y + size.y ) ;
-    SectRgn( visRgn , tempRgn , visRgn ) ;
-    if ( parent->IsTopLevel() )
-      break ;
-    parent = parent->GetParent() ;
+    wxWindow* parent = GetParent() ;
+    while( parent )
+    {
+      wxSize size = parent->GetSize() ;
+      int x , y ;
+      x = y = 0 ;
+      parent->MacWindowToRootWindow( &x, &y ) ;
+      MacRootWindowToWindow( &x , &y ) ;
+      SetRectRgn( tempRgn , x , y , x + size.x , y + size.y ) ;
+      SectRgn( visRgn , tempRgn , visRgn ) ;
+      if ( parent->IsTopLevel() )
+        break ;
+      parent = parent->GetParent() ;
+    }
   }
   if ( GetWindowStyle() & wxCLIP_CHILDREN )
   {

@@ -254,7 +254,7 @@ bool wxClipboard::AddData( wxDataObject *data )
               wxMetafileDataObject* metaFileDataObject =
                 (wxMetafileDataObject*) data;
               wxMetafile metaFile = metaFileDataObject->GetMetafile();
-      				PicHandle pict = metaFile->GetHMETAFILE() ;
+      				PicHandle pict = metaFile.GetHMETAFILE() ;
       				HLock( (Handle) pict ) ;
       #if !TARGET_CARBON
       				err = PutScrap( GetHandleSize(  (Handle) pict ) , 'PICT' , *pict ) ;

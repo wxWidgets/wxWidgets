@@ -92,10 +92,13 @@ bool wxMetaFile::SetClipboard(int width, int height)
     if (!alreadyOpen)
     {
         wxTheClipboard->Open();
-        if (!wxTheClipboard->Clear()) return FALSE;
+        wxTheClipboard->Clear();
     }
-    bool success = wxSetClipboardData(wxDF_METAFILE, this, width,height);
-    if (!alreadyOpen) wxCloseClipboard();
+    wxDataObject *data =
+      new wxMetafileDataObject( *this) ;
+    bool success = wxTheClipboard->SetData(data);
+    if (!alreadyOpen) 
+      wxTheClipboard->Close();
 	    return (bool) success;
 #endif
     return TRUE ;
@@ -183,5 +186,27 @@ wxMetaFile *wxMetaFileDC::Close()
 	ClosePicture() ;
 	return m_metaFile;
 }
+
+#if wxUSE_DATAOBJ
+size_t wxMetafileDataObject::GetDataSize() const
+{
+  return GetHandleSize( (Handle) (*((wxMetafile*)&m_metafile)).GetHMETAFILE() ) ;
+}
+
+bool wxMetafileDataObject::GetDataHere(void *buf) const
+{
+  memcpy( buf , (*(*((wxMetafile*)&m_metafile)).GetHMETAFILE()) ,
+    GetHandleSize( (Handle) (*((wxMetafile*)&m_metafile)).GetHMETAFILE() ) ) ;
+  return true ;
+}
+
+bool wxMetafileDataObject::SetData(size_t len, const void *buf)
+{
+  Handle handle = (Handle) m_metafile.GetHMETAFILE() ;
+  SetHandleSize( handle , len ) ;
+  memcpy( *handle , buf , len ) ;
+  return true ;
+}
+#endif
 
 #endif

@@ -40,6 +40,7 @@
 #include "wx/mac/uma.h"
 #include "wx/mac/aga.h"
 #include "wx/tooltip.h"
+#include "wx/dnd.h"
 
 #define wxMAC_DEBUG_REDRAW 0
 #ifndef wxMAC_DEBUG_REDRAW
@@ -680,3 +681,4 @@ void wxTopLevelWindowMac::MacInvalidate( const Rect * rect, bool eraseBackground
 #endif
   SetPort( formerPort ) ;
 }
+

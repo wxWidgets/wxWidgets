@@ -77,7 +77,7 @@ void wxDataFormat::SetType(  wxDataFormatId  Type )
     else if (m_type == wxDF_BITMAP || m_type == wxDF_METAFILE )
         m_format = 'PICT';
     else if (m_type == wxDF_FILENAME)
-        m_format = 'SPEC';
+        m_format = kDragFlavorTypeHFS ;
     else
     {
        wxFAIL_MSG( wxT("invalid dataformat") );
@@ -105,7 +105,7 @@ void wxDataFormat::SetId(  NativeFormat  format )
     if (m_format == 'PICT')
         m_type = wxDF_BITMAP;
     else
-    if (m_format == 'SPEC')
+    if (m_format == kDragFlavorTypeHFS )
         m_type = wxDF_FILENAME;
     else
         m_type = wxDF_PRIVATE;
@@ -198,7 +198,7 @@ bool wxFileDataObject::SetData(
 , const void*                       pBuf
 )
 {
-    /* TODO */
+    m_filenames.Empty();
 
     wxString                        sFile( (const char *)pBuf);  /* char, not wxChar */
 
