@@ -27,14 +27,14 @@
 #include "wx/intl.h"
 #include "wx/log.h"
 
-// When using configure, the path must be "zlib.h" I don't know
-// what other ports (wxMac, wxMotif without configure) need here.
-// If we are building with configure (defines __WX_SETUP_H__), 
-// we trust the zlib path is given as a -I option.
-#if defined(__WXMSW__) && !defined(__WX_SETUP_H__)
+// normally, the compiler options should contain -I../zlib, but it is
+// apparently not the case for all MSW makefiles and so, unless we use
+// configure (which defines __WX_SETUP_H__) or it is explicitly overridden by
+// the user (who can define wxUSE_ZLIB_H_IN_PATH), we hardcode the path here
+#if defined(__WXMSW__) && !defined(__WX_SETUP_H__) && !defined(wxUSE_ZLIB_H_IN_PATH)
    #include "../zlib/zlib.h"
 #else
-   #include "zlib.h"
+   #include <zlib.h>
 #endif
 
 #define ZSTREAM_BUFFER_SIZE 1024
@@ -85,7 +85,7 @@ size_t wxZlibInputStream::OnSysRead(void *buffer, size_t size)
   while (m_inflate->avail_out > 0) {
     if (m_inflate->avail_in == 0) {
 
-      m_parent_i_stream->Read(m_z_buffer, m_z_size);
+      m_parent_i_stream->Read(m_z_buffer, wxMin(m_z_size, size));
       m_inflate->next_in = m_z_buffer;
       m_inflate->avail_in = m_parent_i_stream->LastRead();
 
@@ -94,6 +94,13 @@ size_t wxZlibInputStream::OnSysRead(void *buffer, size_t size)
       { 
         m_lasterror = m_parent_i_stream->LastError();
         return 0; // failed to read anything
+      }
+
+      if ( m_inflate->avail_in == 0 )
+      {
+          // EOF
+          m_lasterror = wxStream_EOF;
+          break;
       }
     }
     err = inflate(m_inflate, Z_FINISH);

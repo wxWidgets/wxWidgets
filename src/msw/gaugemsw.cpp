@@ -104,7 +104,10 @@ bool wxGaugeMSW::Create(wxWindow *parent, wxWindowID id,
   int height = size.y;
 
   long msFlags = WS_CHILD | WS_VISIBLE | WS_TABSTOP;
-  msFlags |= ZYZGS_3D;
+  bool want3D;
+  WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D);
+  if (want3D)
+    msFlags |= ZYZGS_3D;
 
   HWND wx_button =
       CreateWindowEx(MakeExtendedStyle(m_windowStyle), wxT("zYzGauge"), NULL, msFlags,
@@ -128,6 +131,9 @@ bool wxGaugeMSW::Create(wxWindow *parent, wxWindowID id,
 
   SendMessage(GetHwnd(), ZYZG_SETFGCOLOR, 0, RGB(GetForegroundColour().Red(), GetForegroundColour().Green(), GetForegroundColour().Blue()));
   SendMessage(GetHwnd(), ZYZG_SETBKCOLOR, 0, RGB(GetBackgroundColour().Red(), GetBackgroundColour().Green(), GetBackgroundColour().Blue()));
+
+  //SetBezelFace(1);
+  //SetShadowWidth(1);
 
   SetFont(parent->GetFont());
 

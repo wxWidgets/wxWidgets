@@ -510,7 +510,9 @@ void MainWindow::Search(bool ask)
     if (s != "")
     {
       if (search_string) delete[] search_string;
+
       search_string = copystring(s);
+
       search_ok = TRUE;
     } else search_ok = FALSE;
   }
@@ -683,7 +685,9 @@ int MyApp::OnExit()
   delete NormalFont;
   delete BoldFont;
   delete ItalicFont;
-  delete poem_buffer;
+  delete[] poem_buffer;
+  if (search_string)
+      delete[] search_string;
 
   return 0;
 }
@@ -922,7 +926,7 @@ long MainWindow::DoSearch(void)
     FILE *file;
     long i = 0;
     int ch = 0;
-    char buf[100];
+    char buf[512];
     long find_start;
     long previous_poem_start;
 
@@ -993,7 +997,7 @@ long MainWindow::DoSearch(void)
 // Load index (or compile it if none found)
 void TryLoadIndex()
 {
-  index_ok = LoadIndex(index_filename);
+  index_ok = (LoadIndex(index_filename) != 0);
   if (!index_ok || (nitems == 0))
   {
       PoetryError("Index file not found; will compile new one", "wxPoem");
@@ -1021,7 +1025,7 @@ bool Compile(void)
     long i = 0;
     int j;
     int ch = 0;
-    char buf[100];
+    char buf[512];
 
     if (data_filename)
       sprintf(buf, "%s.dat", data_filename);

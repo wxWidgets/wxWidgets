@@ -48,7 +48,8 @@ class WXDLLEXPORT wxClientBase;
 class WXDLLEXPORT wxConnectionBase: public wxObject
 {
   DECLARE_CLASS(wxConnectionBase)
- public:
+
+public:
   inline wxConnectionBase(void) {}
   inline ~wxConnectionBase(void) {}
 
@@ -102,8 +103,7 @@ class WXDLLEXPORT wxConnectionBase: public wxObject
                                wxIPCFormat WXUNUSED(format) )
                              { return FALSE; };
 
-  // Callbacks to BOTH
-
+  // Callbacks to BOTH - override at will
   // Default behaviour is to delete connection and return TRUE
   virtual bool OnDisconnect(void) = 0;
 };
@@ -111,28 +111,35 @@ class WXDLLEXPORT wxConnectionBase: public wxObject
 class WXDLLEXPORT wxServerBase: public wxObject
 {
   DECLARE_CLASS(wxServerBase)
- public:
 
+public:
   inline wxServerBase(void) {}
   inline ~wxServerBase(void) {};
-  virtual bool Create(const wxString& serverName) = 0; // Returns FALSE if can't create server (e.g. port
-                                  // number is already in use)
-  virtual wxConnectionBase *OnAcceptConnection(const wxString& topic) = 0;
 
+  // Returns FALSE on error (e.g. port number is already in use)
+  virtual bool Create(const wxString& serverName) = 0;
+
+  // Callbacks to SERVER - override at will
+  virtual wxConnectionBase *OnAcceptConnection(const wxString& topic) = 0;
 };
 
 class WXDLLEXPORT wxClientBase: public wxObject
 {
   DECLARE_CLASS(wxClientBase)
- public:
+
+public:
   inline wxClientBase(void) {};
   inline ~wxClientBase(void) {};
-  virtual bool ValidHost(const wxString& host) = 0;
-  virtual wxConnectionBase *MakeConnection(const wxString& host, const wxString& server, const wxString& topic) = 0;
-                                                // Call this to make a connection.
-                                                // Returns NULL if cannot.
-  virtual wxConnectionBase *OnMakeConnection(void) = 0; // Tailor this to return own connection.
 
+  virtual bool ValidHost(const wxString& host) = 0;
+
+  // Call this to make a connection. Returns NULL if cannot.
+  virtual wxConnectionBase *MakeConnection(const wxString& host,
+                                           const wxString& server,
+                                           const wxString& topic) = 0;
+
+  // Callbacks to CLIENT - override at will
+  virtual wxConnectionBase *OnMakeConnection(void) = 0;
 };
 
 #endif

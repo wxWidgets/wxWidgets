@@ -20,7 +20,9 @@
   #pragma hdrstop
 #endif
 
-#if wxUSE_SOCKETS
+#include "wx/setup.h"
+
+#if wxUSE_SOCKETS && wxUSE_STREAMS
 
 #ifndef __MWERKS__
 #include <memory.h>
@@ -398,11 +400,23 @@ public:
     : wxSocketOutputStream(*sock), m_ftp(ftp_clt) {}
   virtual ~wxOutputFTPStream(void)
   {
-     if (LastError() != wxStream_NOERROR)
-       m_ftp->GetResult('2');
-     else
-       m_ftp->Abort();
-     delete m_o_socket;
+      if ( IsOk() )
+      {
+          // close data connection first, this will generate "transfer
+          // completed" reply
+          delete m_o_socket;
+
+          // read this reply
+          m_ftp->GetResult('2');
+      }
+      else
+      {
+          // abort data connection first
+          m_ftp->Abort();
+
+          // and close it after
+          delete m_o_socket;
+      }
   }
 };
 

@@ -96,12 +96,12 @@ wxBrush& wxBrush::operator = ( const wxBrush& brush )
     return *this;
 }
 
-bool wxBrush::operator == ( const wxBrush& brush )
+bool wxBrush::operator == ( const wxBrush& brush ) const
 {
     return m_refData == brush.m_refData;
 }
 
-bool wxBrush::operator != ( const wxBrush& brush )
+bool wxBrush::operator != ( const wxBrush& brush ) const
 {
     return m_refData != brush.m_refData;
 }

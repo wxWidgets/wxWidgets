@@ -83,17 +83,8 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
         NULL);
     XmStringFree (text);
 
-#ifdef __VMS__
-#pragma message disable voiincconext
-       // VMS gives here the compiler warning:
-       // conversion from pointer to function to void* permitted
-       // as an extension
-#endif
     XtAddCallback (radioButtonWidget, XmNvalueChangedCallback, (XtCallbackProc) wxRadioButtonCallback,
-        (XtCallbackProc) this);
-#ifdef __VMS__
-#pragma message enable voiincconext
-#endif
+        (XtPointer) this);
 
     m_mainWidget = (WXWidget) radioButtonWidget;
 

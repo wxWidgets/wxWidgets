@@ -427,7 +427,7 @@ void MyFrame::OnNewWindow()
   MyFrame *frame = new MyFrame(NULL, "Cube OpenGL Demo Clone",
                                wxPoint(50, 50), wxSize(400, 300));
   // Give it an icon
-#ifdef wx_msw
+#ifdef __WXMSW__
   frame->SetIcon(wxIcon("mondrian"));
 #endif
 

@@ -38,6 +38,15 @@ class WXDLLEXPORT wxPreviewCanvas;
 class WXDLLEXPORT wxPreviewControlBar;
 class WXDLLEXPORT wxPreviewFrame;
 
+
+enum wxPrinterError
+{
+    wxPRINTER_NO_ERROR = 0,
+    wxPRINTER_CANCELLED,
+    wxPRINTER_ERROR
+};
+
+
 /*
  * Represents the printer: manages printing a wxPrintout object
  */
@@ -56,6 +65,8 @@ public:
     wxPrintDialogData& GetPrintDialogData() const
         { return (wxPrintDialogData&) m_printDialogData; }
     bool GetAbort() const { return sm_abortIt; }
+    
+    static wxPrinterError GetLastError() { return sm_lastError; }
 
     ///////////////////////////////////////////////////////////////////////////
     // OVERRIDES
@@ -67,6 +78,9 @@ public:
 protected:
     wxPrintDialogData     m_printDialogData;
     wxPrintout*           m_currentPrintout;
+    
+    static wxPrinterError sm_lastError;
+    
 public:
     static wxWindow*      sm_abortWindow;
     static bool           sm_abortIt;

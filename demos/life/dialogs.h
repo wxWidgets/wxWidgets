@@ -44,7 +44,7 @@ public:
     ~LifeSamplesDialog();
 
     // members
-    const LifeShape& GetShape();
+    const LifePattern& GetPattern();
 
     // event handlers
     void OnListBox(wxCommandEvent &event);

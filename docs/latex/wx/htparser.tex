@@ -103,7 +103,7 @@ This must be called after DoParsing().
 \constfunc{wxFileSystem*}{GetFS}{\void}
 
 Returns pointer to the file system. Because each tag handler has
-reference to it's parent parser it can easily request the file by
+reference to it is parent parser it can easily request the file by
 calling
 
 \begin{verbatim}
@@ -131,7 +131,7 @@ Returns pointer to the source being parsed.
 
 \func{virtual void}{InitParser}{\param{const wxString\& }{source}}
 
-Setups the parser for parsing the {\it source} string. (Should be overriden
+Setups the parser for parsing the {\it source} string. (Should be overridden
 in derived class)
 
 \membersection{wxHtmlParser::Parse}\label{wxhtmlparserparse}
@@ -188,7 +188,7 @@ It is obvious that you cannot use only one tag handler for <param> tag.
 Instead you must use context-sensitive handlers for <param> inside <myitems>
 and <param> inside <execute>.        
 
-This is the prefered solution:
+This is the preferred solution:
 
 \begin{verbatim}
 TAG_HANDLER_BEGIN(MYITEM, "MYITEMS")

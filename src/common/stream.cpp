@@ -53,7 +53,13 @@ wxStreamBuffer::wxStreamBuffer(BufMode mode)
     m_buffer_size(0), m_fixed(TRUE), m_flushable(FALSE), m_stream(NULL),
     m_mode(mode), m_destroybuf(FALSE), m_destroystream(TRUE)
 {
-  m_stream = new wxStreamBase();
+  wxASSERT_MSG(mode != read_write, wxT("you have to use the other ctor for read_write mode") );
+  if ( mode == read )
+      m_stream = new wxInputStream;
+  else if ( mode == write)
+      m_stream = new wxOutputStream;
+  else
+      m_stream = NULL;
 }
 
 wxStreamBuffer::wxStreamBuffer(const wxStreamBuffer& buffer)
@@ -72,16 +78,20 @@ wxStreamBuffer::wxStreamBuffer(const wxStreamBuffer& buffer)
 
 wxStreamBuffer::~wxStreamBuffer()
 {
-  if (m_destroybuf)
-    wxDELETEA(m_buffer_start);
+  if (m_destroybuf && m_buffer_start) {
+	  free (m_buffer_start);
+	  m_buffer_start = NULL;
+  }
   if (m_destroystream)
     delete m_stream;
 }
 
 void wxStreamBuffer::SetBufferIO(char *buffer_start, char *buffer_end)
 {
-  if (m_destroybuf)
-    wxDELETEA(m_buffer_start);
+  if (m_destroybuf && m_buffer_start) {
+	  free (m_buffer_start);
+	  m_buffer_start = NULL;
+  }
   m_buffer_start = buffer_start;
   m_buffer_end   = buffer_end;
 
@@ -94,8 +104,10 @@ void wxStreamBuffer::SetBufferIO(size_t bufsize)
 {
   char *b_start;
 
-  if (m_destroybuf)
-    wxDELETEA(m_buffer_start);
+  if (m_destroybuf && m_buffer_start) {
+	  free (m_buffer_start);
+	  m_buffer_start = NULL;
+  }
 
   if (!bufsize) {
     m_buffer_start = (char*)NULL;
@@ -105,7 +117,7 @@ void wxStreamBuffer::SetBufferIO(size_t bufsize)
     return;
   }
 
-  b_start = new char[bufsize];
+  b_start = (char*) malloc(bufsize);
   SetBufferIO(b_start, b_start + bufsize);
   m_destroybuf = TRUE;
 }

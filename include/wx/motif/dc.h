@@ -162,8 +162,6 @@ public:
     // recompute scale?
     bool         m_needComputeScaleX, m_needComputeScaleY;
 
-    // wxPSDC wants to have this. Will disappear.
-    float        m_scaleFactor;
 };
 
 #endif

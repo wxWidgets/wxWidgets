@@ -51,7 +51,7 @@ identify the server and a topic name to identify the topic for the
 duration of the connection. Under Unix, the service name must contain an
 integer port identifier.
 
-The server then responds and either vetos the connection or allows it.
+The server then responds and either vetoes the connection or allows it.
 If allowed, a connection object is created which persists until the
 connection is closed.  The connection object is then used for subsequent
 messages between client and server.
@@ -132,7 +132,7 @@ To create a client which can communicate with a suitable server,
 you need to derive a class from wxDDEConnection and another from wxDDEClient.
 The custom wxDDEConnection class will intercept communications in
 a `conversation' with a server, and the custom wxDDEServer is required
-so that a user-overriden \helpref{wxDDEClient::OnMakeConnection}{wxddeclientonmakeconnection} member can return
+so that a user-overridden \helpref{wxDDEClient::OnMakeConnection}{wxddeclientonmakeconnection} member can return
 a wxDDEConnection of the required class, when a connection is made.
 
 For example:

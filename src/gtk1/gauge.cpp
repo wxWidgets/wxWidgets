@@ -42,6 +42,8 @@ bool wxGauge::Create( wxWindow *parent, wxWindowID id,  int range,
     m_useProgressBar = TRUE;
   
     m_widget = gtk_progress_bar_new();
+    if( style & wxGA_VERTICAL)
+        gtk_progress_bar_set_orientation( GTK_PROGRESS_BAR(m_widget) , GTK_PROGRESS_BOTTOM_TO_TOP );
   
     m_parent->DoAddChild( this );
   

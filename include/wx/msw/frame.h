@@ -96,6 +96,8 @@ public:
 
     WXHMENU GetWinMenu() const { return m_hMenu; }
 
+    virtual void RemoveChild(wxWindowBase *child);
+
     // event handlers
     bool HandlePaint();
     bool HandleSize(int x, int y, WXUINT flag);
@@ -148,6 +150,9 @@ protected:
 #if wxUSE_STATUSBAR
     static bool           m_useNativeStatusBar;
 #endif // wxUSE_STATUSBAR
+
+    // the last focused child: we restore focus to it on activation
+    wxWindow             *m_winLastFocused;
 
     // Data to save/restore when calling ShowFullScreen
     long                  m_fsStyle; // Passed to ShowFullScreen

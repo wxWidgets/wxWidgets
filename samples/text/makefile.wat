@@ -7,7 +7,7 @@
 
 WXDIR = $(%WXWIN)
 
-PROGRAM = controls
+PROGRAM = text
 OBJECTS = $(PROGRAM).obj
 
 !include $(WXDIR)\src\makeprog.wat

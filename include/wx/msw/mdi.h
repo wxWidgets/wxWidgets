@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mdi.h
+// Name:        wx/msw/mdi.h
 // Purpose:     MDI (Multiple Document Interface) classes
 // Author:      Julian Smart
 // Modified by:
@@ -121,7 +121,7 @@ private:
 class WXDLLEXPORT wxMDIChildFrame : public wxFrame
 {
 public:
-    wxMDIChildFrame();
+    wxMDIChildFrame() { Init(); }
     wxMDIChildFrame(wxMDIParentFrame *parent,
                     wxWindowID id,
                     const wxString& title,
@@ -130,6 +130,8 @@ public:
                     long style = wxDEFAULT_FRAME_STYLE,
                     const wxString& name = wxFrameNameStr)
     {
+        Init();
+
         Create(parent, id, title, pos, size, style, name);
     }
 
@@ -150,8 +152,10 @@ public:
     virtual void Restore();
     virtual void Activate();
 
-    // Handlers
+    // Implementation only from now on
+    // -------------------------------
 
+    // Handlers
     bool HandleMDIActivate(long bActivate, WXHWND, WXHWND);
     bool HandleWindowPosChanging(void *lpPos);
     bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
@@ -162,14 +166,22 @@ public:
 
     virtual void MSWDestroyWindow();
 
-    // Implementation
     bool ResetWindowStyle(void *vrect);
+
+    void OnIdle(wxIdleEvent& event);
 
 protected:
     virtual void DoGetPosition(int *x, int *y) const;
     virtual void DoSetClientSize(int width, int height);
     virtual void InternalSetMenuBar();
 
+    // common part of all ctors
+    void Init();
+
+private:
+    bool m_needsResize; // flag which tells us to artificially resize the frame
+
+    DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxMDIChildFrame)
 };
 
@@ -179,8 +191,6 @@ protected:
 
 class WXDLLEXPORT wxMDIClientWindow : public wxWindow
 {
-    DECLARE_DYNAMIC_CLASS(wxMDIClientWindow)
-
 public:
     wxMDIClientWindow() { Init(); }
     wxMDIClientWindow(wxMDIParentFrame *parent, long style = 0)
@@ -207,6 +217,7 @@ protected:
 
 private:
     DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxMDIClientWindow)
 };
 
 #endif

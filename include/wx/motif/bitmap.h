@@ -134,7 +134,7 @@ public:
   wxBitmap(); // Platform-specific
 
   // Copy constructors
-  wxBitmap(const wxBitmap& bitmap)
+  wxBitmap(const wxBitmap& bitmap) : wxGDIObject()
   { Ref(bitmap); if ( wxTheBitmapList ) wxTheBitmapList->AddBitmap(this); }
 
   // Initialize with raw XBM data
@@ -183,8 +183,8 @@ public:
   void SetMask(wxMask *mask) ;
 
   wxBitmap& operator = (const wxBitmap& bitmap) { if (*this == bitmap) return (*this); Ref(bitmap); return *this; }
-  bool operator == (const wxBitmap& bitmap) { return m_refData == bitmap.m_refData; }
-  bool operator != (const wxBitmap& bitmap) { return m_refData != bitmap.m_refData; }
+  bool operator == (const wxBitmap& bitmap) const { return m_refData == bitmap.m_refData; }
+  bool operator != (const wxBitmap& bitmap) const { return m_refData != bitmap.m_refData; }
 
   // Format handling
   static wxList& GetHandlers() { return sm_handlers; }

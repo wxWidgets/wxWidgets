@@ -14,6 +14,7 @@
 
 #include "wx/cursor.h"
 #include "wx/utils.h"
+#include "wx/app.h"
 
 #include <gdk/gdk.h>
 
@@ -155,6 +156,16 @@ extern wxCursor g_globalCursor;
 static wxCursor  gs_savedCursor;
 static int       gs_busyCount = 0;
 
+const wxCursor &wxBusyCursor::GetStoredCursor()
+{
+    return gs_savedCursor;
+}
+
+const wxCursor wxBusyCursor::GetBusyCursor()
+{
+    return wxCursor(wxCURSOR_WATCH);
+}
+
 void wxEndBusyCursor()
 {
     if (--gs_busyCount > 0)
@@ -163,7 +174,8 @@ void wxEndBusyCursor()
     wxSetCursor( gs_savedCursor );
     gs_savedCursor = wxNullCursor;
 
-    wxYield();
+    if (wxTheApp)
+        wxTheApp->SendIdleEvents();
 }
 
 void wxBeginBusyCursor( wxCursor *WXUNUSED(cursor) )
@@ -178,7 +190,8 @@ void wxBeginBusyCursor( wxCursor *WXUNUSED(cursor) )
 
     wxSetCursor( wxCursor(wxCURSOR_WATCH) );
 
-    wxYield();
+    if (wxTheApp)
+        wxTheApp->SendIdleEvents();
 }
 
 bool wxIsBusy()

@@ -60,15 +60,29 @@ public:
 // Public API
 
     // Default constructor
-    wxSplitterWindow();
+    wxSplitterWindow()
+    {
+        Init();
+    }
 
     // Normal constructor
     wxSplitterWindow(wxWindow *parent, wxWindowID id = -1,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxSP_3D|wxCLIP_CHILDREN,
-                     const wxString& name = "splitter");
+                     const wxString& name = "splitter")
+    {
+        Init();
+        Create(parent, id, pos, size, style, name);
+    }
+
     ~wxSplitterWindow();
+
+    bool Create(wxWindow *parent, wxWindowID id = -1,
+                     const wxPoint& pos = wxDefaultPosition,
+                     const wxSize& size = wxDefaultSize,
+                     long style = wxSP_3D|wxCLIP_CHILDREN,
+                     const wxString& name = "splitter");
 
     // Gets the only or left/top pane
     wxWindow *GetWindow1() const { return m_windowOne; }
@@ -164,22 +178,25 @@ public:
     void OnIdle(wxIdleEvent& event);
 
     // Draws borders
-    void DrawBorders(wxDC& dc);
+    virtual void DrawBorders(wxDC& dc);
 
     // Draws the sash
-    void DrawSash(wxDC& dc);
+    virtual void DrawSash(wxDC& dc);
 
     // Draws the sash tracker (for whilst moving the sash)
-    void DrawSashTracker(int x, int y);
+    virtual void DrawSashTracker(int x, int y);
 
     // Tests for x, y over sash
-    bool SashHitTest(int x, int y, int tolerance = 2);
+    virtual bool SashHitTest(int x, int y, int tolerance = 2);
 
     // Resizes subwindows
-    void SizeWindows();
+    virtual void SizeWindows();
 
     // Initialize colours
     void InitColours();
+
+    void SetNeedUpdating(bool needUpdating) { m_needUpdating = needUpdating; }
+    bool GetNeedUpdating() const { return m_needUpdating ; }
 
 protected:
     // our event handlers
@@ -191,9 +208,13 @@ protected:
 
     void SendUnsplitEvent(wxWindow *winRemoved);
 
+private:
+    void Init();
+
+
     int         m_splitMode;
     bool        m_permitUnsplitAlways;
-    bool        m_needUpdating; // when in live mode, set the to TRUE to resize children in idle
+    bool        m_needUpdating; // when in live mode, set this to TRUE to resize children in idle
     wxWindow*   m_windowOne;
     wxWindow*   m_windowTwo;
     int         m_dragMode;

@@ -336,9 +336,11 @@ framework.
 
 \membersection{wxDocument::SetFilename}
 
-\func{void}{SetFilename}{\param{const wxString\& }{filename}}
+\func{void}{SetFilename}{\param{const wxString\& }{filename}, \param{bool}{ notifyViews = FALSE}}
 
 Sets the filename for this document. Usually called by the framework.
+
+If {\it notifyViews} is TRUE, wxView::OnChangeFilename is called for all views.
 
 \membersection{wxDocument::SetTitle}
 

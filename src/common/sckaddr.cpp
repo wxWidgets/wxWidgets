@@ -108,7 +108,7 @@ bool wxIPV4address::Hostname(const wxString& name)
     return FALSE;
   }
 
-  return (GAddress_INET_SetHostName(m_address, name.fn_str()) == GSOCK_NOERROR);
+  return (GAddress_INET_SetHostName(m_address, name.mb_str()) == GSOCK_NOERROR);
 }
 
 bool wxIPV4address::Hostname(unsigned long addr)
@@ -118,7 +118,7 @@ bool wxIPV4address::Hostname(unsigned long addr)
 
 bool wxIPV4address::Service(const wxString& name)
 {
-  return (GAddress_INET_SetPortName(m_address, name.fn_str(), "tcp") == GSOCK_NOERROR);
+  return (GAddress_INET_SetPortName(m_address, name.mb_str(), "tcp") == GSOCK_NOERROR);
 }
 
 bool wxIPV4address::Service(unsigned short port)

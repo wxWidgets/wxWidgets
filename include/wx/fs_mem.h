@@ -8,7 +8,7 @@
 
 
 #ifdef __GNUG__
-#pragma implementation
+#pragma interface "fs_mem.h"
 #endif
 
 #include "wx/wxprec.h"

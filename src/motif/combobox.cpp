@@ -67,11 +67,6 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
         XmNstaticList, ((style & wxCB_SIMPLE) == wxCB_SIMPLE),
         NULL);
 
-    XtAddCallback (buttonWidget, XmNselectionCallback, (XtCallbackProc) wxComboBoxCallback,
-        (XtPointer) this);
-    XtAddCallback (buttonWidget, XmNvalueChangedCallback, (XtCallbackProc) wxComboBoxCallback,
-        (XtPointer) this);
-
     int i;
     for (i = 0; i < n; i++)
     {
@@ -90,6 +85,11 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 
     m_font = parent->GetFont();
     ChangeFont(FALSE);
+
+    XtAddCallback (buttonWidget, XmNselectionCallback, (XtCallbackProc) wxComboBoxCallback,
+        (XtPointer) this);
+    XtAddCallback (buttonWidget, XmNvalueChangedCallback, (XtCallbackProc) wxComboBoxCallback,
+        (XtPointer) this);
 
     SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
@@ -151,6 +151,16 @@ void wxComboBox::Delete(int n)
         delete[] (char *)node->Data();
         delete node;
     }
+    node = m_clientList.Nth( n );
+    if (node)
+    {
+        if ( HasClientObjectData() )
+        {
+            delete (wxClientData *)node->Data();
+        }
+        delete node;
+    }
+
     m_noStrings--;
 }
 
@@ -158,6 +168,21 @@ void wxComboBox::Clear()
 {
     XmComboBoxDeleteAllItems((Widget) m_mainWidget);
     m_stringList.Clear();
+
+    if ( HasClientObjectData() )
+    {
+        // destroy the data (due to Robert's idea of using wxList<wxObject>
+        // and not wxList<wxClientData> we can't just say
+        // m_clientList.DeleteContents(TRUE) - this would crash!
+        wxNode *node = m_clientList.First();
+        while ( node )
+        {
+            delete (wxClientData *)node->Data();
+            node = node->Next();
+        }
+    }
+    m_clientList.Clear();
+    m_noStrings = 0;
 }
 
 void wxComboBox::SetSelection (int n)

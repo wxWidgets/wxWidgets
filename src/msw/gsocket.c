@@ -97,7 +97,7 @@ GSocket *GSocket_new(void)
   if (!success)
   {
     free(socket);
-    return NULL;
+    socket = NULL;
   }
 
   return socket;
@@ -1377,6 +1377,7 @@ GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf)
  * Translation unit shouldn't be empty, so include this typedef to make the
  * compiler (VC++ 6.0, for example) happy
  */
-typedef (*wxDummy)();
+typedef void (*wxDummy)();
 
 #endif  /* wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__) */
+

@@ -42,6 +42,13 @@
 IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
 
 // ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+// the default font size in points
+static const int wxDEFAULT_FONT_SIZE = 12;
+
+// ----------------------------------------------------------------------------
 // wxFontRefData - the internal description of the font
 // ----------------------------------------------------------------------------
 
@@ -52,7 +59,7 @@ friend class WXDLLEXPORT wxFont;
 public:
     wxFontRefData()
     {
-        Init(12, wxDEFAULT, wxNORMAL, wxNORMAL, FALSE,
+        Init(wxDEFAULT_FONT_SIZE, wxDEFAULT, wxNORMAL, wxNORMAL, FALSE,
              "", wxFONTENCODING_DEFAULT);
     }
 
@@ -143,7 +150,7 @@ wxFontRefData::~wxFontRefData()
     {
         if ( !::DeleteObject((HFONT) m_hFont) )
         {
-            wxLogLastError("DeleteObject(font)");
+            wxLogLastError(wxT("DeleteObject(font)"));
         }
     }
 }
@@ -170,6 +177,12 @@ bool wxFont::Create(int pointSize,
                     wxFontEncoding encoding)
 {
     UnRef();
+
+    // wxDEFAULT is a valid value for the font size too so we must treat it
+    // specially here (otherwise the size would be 70 == wxDEFAULT value)
+    if ( pointSize == wxDEFAULT )
+        pointSize = wxDEFAULT_FONT_SIZE;
+
     m_refData = new wxFontRefData(pointSize, family, style, weight,
                                   underlined, faceName, encoding);
 
@@ -203,7 +216,7 @@ bool wxFont::RealizeResource()
     M_FONTDATA->m_faceName = lf.lfFaceName;
     if ( !M_FONTDATA->m_hFont )
     {
-        wxLogLastError("CreateFont");
+        wxLogLastError(wxT("CreateFont"));
 
         return FALSE;
     }
@@ -217,7 +230,7 @@ bool wxFont::FreeResource(bool force)
     {
         if ( !::DeleteObject((HFONT) M_FONTDATA->m_hFont) )
         {
-            wxLogLastError("DeleteObject(font)");
+            wxLogLastError(wxT("DeleteObject(font)"));
         }
 
         M_FONTDATA->m_hFont = 0;
@@ -228,6 +241,11 @@ bool wxFont::FreeResource(bool force)
 }
 
 WXHANDLE wxFont::GetResourceHandle()
+{
+    return GetHFONT();
+}
+
+WXHFONT wxFont::GetHFONT() const
 {
     if ( !M_FONTDATA )
         return 0;

@@ -93,53 +93,53 @@ wxPrintPaperDatabase::wxPrintPaperDatabase():wxList(wxKEY_STRING)
 void wxPrintPaperDatabase::CreateDatabase()
 {
 /*
-  AddPaperType(_("A4 210 x 297 mm"), 210, 297);
-  AddPaperType(_("A3 297 x 420 mm"), 297, 420);
-  AddPaperType(_("Letter 8 1/2 x 11 in"), 216, 279);
-  AddPaperType(_("Legal 8 1/2 x 14 in"), 216, 356);
+  AddPaperType(wxTRANSLATE("A4 210 x 297 mm"), 210, 297);
+  AddPaperType(wxTRANSLATE("A3 297 x 420 mm"), 297, 420);
+  AddPaperType(wxTRANSLATE("Letter 8 1/2 x 11 in"), 216, 279);
+  AddPaperType(wxTRANSLATE("Legal 8 1/2 x 14 in"), 216, 356);
 */
 
-    WXADDPAPER(wxPAPER_LETTER,             DMPAPER_LETTER,             "Letter, 8 1/2 x 11 in", 2159, 2794);
-    WXADDPAPER(wxPAPER_LEGAL,              DMPAPER_LEGAL,              "Legal, 8 1/2 x 14 in", 2159, 3556);
-    WXADDPAPER(wxPAPER_A4,                 DMPAPER_A4,                 "A4 sheet, 210 x 297 mm", 2100, 2970);
-    WXADDPAPER(wxPAPER_CSHEET,             DMPAPER_CSHEET,             "C sheet, 17 x 22 in", 4318, 5588);
-    WXADDPAPER(wxPAPER_DSHEET,             DMPAPER_DSHEET,             "D sheet, 22 x 34 in", 5588, 8636);
-    WXADDPAPER(wxPAPER_ESHEET,             DMPAPER_ESHEET,             "E sheet, 34 x 44 in", 8636, 11176);
-    WXADDPAPER(wxPAPER_LETTERSMALL,        DMPAPER_LETTERSMALL,        "Letter Small, 8 1/2 x 11 in", 2159, 2794);
-    WXADDPAPER(wxPAPER_TABLOID,            DMPAPER_TABLOID,            "Tabloid, 11 x 17 in", 2794, 4318);
-    WXADDPAPER(wxPAPER_LEDGER,             DMPAPER_LEDGER,             "Ledger, 17 x 11 in", 4318, 2794);
-    WXADDPAPER(wxPAPER_STATEMENT,          DMPAPER_STATEMENT,          "Statement, 5 1/2 x 8 1/2 in", 1397, 2159);
-    WXADDPAPER(wxPAPER_EXECUTIVE,          DMPAPER_EXECUTIVE,          "Executive, 7 1/4 x 10 1/2 in", 1842, 2667);
-    WXADDPAPER(wxPAPER_A3,                 DMPAPER_A3,                 "A3 sheet, 297 x 420 mm", 2970, 4200);
-    WXADDPAPER(wxPAPER_A4SMALL,            DMPAPER_A4SMALL,            "A4 small sheet, 210 x 297 mm", 2100, 2970);
-    WXADDPAPER(wxPAPER_A5,                 DMPAPER_A5,                 "A5 sheet, 148 x 210 mm", 1480, 2100);
-    WXADDPAPER(wxPAPER_B4,                 DMPAPER_B4,                 "B4 sheet, 250 x 354 mm", 2500, 3540);
-    WXADDPAPER(wxPAPER_B5,                 DMPAPER_B5,                 "B5 sheet, 182 x 257 millimeter", 1820, 2570);
-    WXADDPAPER(wxPAPER_FOLIO,              DMPAPER_FOLIO,              "Folio, 8 1/2 x 13 in", 2159, 3302);
-    WXADDPAPER(wxPAPER_QUARTO,             DMPAPER_QUARTO,             "Quarto, 215 x 275 mm", 2150, 2750);
-    WXADDPAPER(wxPAPER_10X14,              DMPAPER_10X14,              "10 x 14 in", 2540, 3556);
-    WXADDPAPER(wxPAPER_11X17,              DMPAPER_11X17,              "11 x 17 in", 2794, 4318);
-    WXADDPAPER(wxPAPER_NOTE,               DMPAPER_NOTE,               "Note, 8 1/2 x 11 in", 2159, 2794);
-    WXADDPAPER(wxPAPER_ENV_9,              DMPAPER_ENV_9,              "#9 Envelope, 3 7/8 x 8 7/8 in", 984, 2254);
-    WXADDPAPER(wxPAPER_ENV_10,             DMPAPER_ENV_10,             "#10 Envelope, 4 1/8 x 9 1/2 in", 1048, 2413);
-    WXADDPAPER(wxPAPER_ENV_11,             DMPAPER_ENV_11,             "#11 Envelope, 4 1/2 x 10 3/8 in", 1143, 2635);
-    WXADDPAPER(wxPAPER_ENV_12,             DMPAPER_ENV_12,             "#12 Envelope, 4 3/4 x 11 in", 1206, 2794);
-    WXADDPAPER(wxPAPER_ENV_14,             DMPAPER_ENV_14,             "#14 Envelope, 5 x 11 1/2 in", 1270, 2921);
-    WXADDPAPER(wxPAPER_ENV_DL,             DMPAPER_ENV_DL,             "DL Envelope, 110 x 220 mm", 1100, 2200);
-    WXADDPAPER(wxPAPER_ENV_C5,             DMPAPER_ENV_C5,             "C5 Envelope, 162 x 229 mm", 1620, 2290);
-    WXADDPAPER(wxPAPER_ENV_C3,             DMPAPER_ENV_C3,             "C3 Envelope, 324 x 458 mm", 3240, 4580);
-    WXADDPAPER(wxPAPER_ENV_C4,             DMPAPER_ENV_C4,             "C4 Envelope, 229 x 324 mm", 2290, 3240);
-    WXADDPAPER(wxPAPER_ENV_C6,             DMPAPER_ENV_C6,             "C6 Envelope, 114 x 162 mm", 1140, 1620);
-    WXADDPAPER(wxPAPER_ENV_C65,            DMPAPER_ENV_C65,            "C65 Envelope, 114 x 229 mm", 1140, 2290);
-    WXADDPAPER(wxPAPER_ENV_B4,             DMPAPER_ENV_B4,             "B4 Envelope, 250 x 353 mm", 2500, 3530);
-    WXADDPAPER(wxPAPER_ENV_B5,             DMPAPER_ENV_B5,             "B5 Envelope, 176 x 250 mm", 1760, 2500);
-    WXADDPAPER(wxPAPER_ENV_B6,             DMPAPER_ENV_B6,             "B6 Envelope, 176 x 125 mm", 1760, 1250);
-    WXADDPAPER(wxPAPER_ENV_ITALY,          DMPAPER_ENV_ITALY,          "Italy Envelope, 110 x 230 mm", 1100, 2300);
-    WXADDPAPER(wxPAPER_ENV_MONARCH,        DMPAPER_ENV_MONARCH,        "Monarch Envelope, 3 7/8 x 7 1/2 in", 984, 1905);
-    WXADDPAPER(wxPAPER_ENV_PERSONAL,       DMPAPER_ENV_PERSONAL,       "6 3/4 Envelope, 3 5/8 x 6 1/2 in", 921, 1651);
-    WXADDPAPER(wxPAPER_FANFOLD_US,         DMPAPER_FANFOLD_US,         "US Std Fanfold, 14 7/8 x 11 in", 3778, 2794);
-    WXADDPAPER(wxPAPER_FANFOLD_STD_GERMAN, DMPAPER_FANFOLD_STD_GERMAN, "German Std Fanfold, 8 1/2 x 12 in", 2159, 3048);
-    WXADDPAPER(wxPAPER_FANFOLD_LGL_GERMAN, DMPAPER_FANFOLD_LGL_GERMAN, "German Legal Fanfold, 8 1/2 x 13 in", 2159, 3302);
+    WXADDPAPER(wxPAPER_LETTER,             DMPAPER_LETTER,             wxTRANSLATE("Letter, 8 1/2 x 11 in"), 2159, 2794);
+    WXADDPAPER(wxPAPER_LEGAL,              DMPAPER_LEGAL,              wxTRANSLATE("Legal, 8 1/2 x 14 in"), 2159, 3556);
+    WXADDPAPER(wxPAPER_A4,                 DMPAPER_A4,                 wxTRANSLATE("A4 sheet, 210 x 297 mm"), 2100, 2970);
+    WXADDPAPER(wxPAPER_CSHEET,             DMPAPER_CSHEET,             wxTRANSLATE("C sheet, 17 x 22 in"), 4318, 5588);
+    WXADDPAPER(wxPAPER_DSHEET,             DMPAPER_DSHEET,             wxTRANSLATE("D sheet, 22 x 34 in"), 5588, 8636);
+    WXADDPAPER(wxPAPER_ESHEET,             DMPAPER_ESHEET,             wxTRANSLATE("E sheet, 34 x 44 in"), 8636, 11176);
+    WXADDPAPER(wxPAPER_LETTERSMALL,        DMPAPER_LETTERSMALL,        wxTRANSLATE("Letter Small, 8 1/2 x 11 in"), 2159, 2794);
+    WXADDPAPER(wxPAPER_TABLOID,            DMPAPER_TABLOID,            wxTRANSLATE("Tabloid, 11 x 17 in"), 2794, 4318);
+    WXADDPAPER(wxPAPER_LEDGER,             DMPAPER_LEDGER,             wxTRANSLATE("Ledger, 17 x 11 in"), 4318, 2794);
+    WXADDPAPER(wxPAPER_STATEMENT,          DMPAPER_STATEMENT,          wxTRANSLATE("Statement, 5 1/2 x 8 1/2 in"), 1397, 2159);
+    WXADDPAPER(wxPAPER_EXECUTIVE,          DMPAPER_EXECUTIVE,          wxTRANSLATE("Executive, 7 1/4 x 10 1/2 in"), 1842, 2667);
+    WXADDPAPER(wxPAPER_A3,                 DMPAPER_A3,                 wxTRANSLATE("A3 sheet, 297 x 420 mm"), 2970, 4200);
+    WXADDPAPER(wxPAPER_A4SMALL,            DMPAPER_A4SMALL,            wxTRANSLATE("A4 small sheet, 210 x 297 mm"), 2100, 2970);
+    WXADDPAPER(wxPAPER_A5,                 DMPAPER_A5,                 wxTRANSLATE("A5 sheet, 148 x 210 mm"), 1480, 2100);
+    WXADDPAPER(wxPAPER_B4,                 DMPAPER_B4,                 wxTRANSLATE("B4 sheet, 250 x 354 mm"), 2500, 3540);
+    WXADDPAPER(wxPAPER_B5,                 DMPAPER_B5,                 wxTRANSLATE("B5 sheet, 182 x 257 millimeter"), 1820, 2570);
+    WXADDPAPER(wxPAPER_FOLIO,              DMPAPER_FOLIO,              wxTRANSLATE("Folio, 8 1/2 x 13 in"), 2159, 3302);
+    WXADDPAPER(wxPAPER_QUARTO,             DMPAPER_QUARTO,             wxTRANSLATE("Quarto, 215 x 275 mm"), 2150, 2750);
+    WXADDPAPER(wxPAPER_10X14,              DMPAPER_10X14,              wxTRANSLATE("10 x 14 in"), 2540, 3556);
+    WXADDPAPER(wxPAPER_11X17,              DMPAPER_11X17,              wxTRANSLATE("11 x 17 in"), 2794, 4318);
+    WXADDPAPER(wxPAPER_NOTE,               DMPAPER_NOTE,               wxTRANSLATE("Note, 8 1/2 x 11 in"), 2159, 2794);
+    WXADDPAPER(wxPAPER_ENV_9,              DMPAPER_ENV_9,              wxTRANSLATE("#9 Envelope, 3 7/8 x 8 7/8 in"), 984, 2254);
+    WXADDPAPER(wxPAPER_ENV_10,             DMPAPER_ENV_10,             wxTRANSLATE("#10 Envelope, 4 1/8 x 9 1/2 in"), 1048, 2413);
+    WXADDPAPER(wxPAPER_ENV_11,             DMPAPER_ENV_11,             wxTRANSLATE("#11 Envelope, 4 1/2 x 10 3/8 in"), 1143, 2635);
+    WXADDPAPER(wxPAPER_ENV_12,             DMPAPER_ENV_12,             wxTRANSLATE("#12 Envelope, 4 3/4 x 11 in"), 1206, 2794);
+    WXADDPAPER(wxPAPER_ENV_14,             DMPAPER_ENV_14,             wxTRANSLATE("#14 Envelope, 5 x 11 1/2 in"), 1270, 2921);
+    WXADDPAPER(wxPAPER_ENV_DL,             DMPAPER_ENV_DL,             wxTRANSLATE("DL Envelope, 110 x 220 mm"), 1100, 2200);
+    WXADDPAPER(wxPAPER_ENV_C5,             DMPAPER_ENV_C5,             wxTRANSLATE("C5 Envelope, 162 x 229 mm"), 1620, 2290);
+    WXADDPAPER(wxPAPER_ENV_C3,             DMPAPER_ENV_C3,             wxTRANSLATE("C3 Envelope, 324 x 458 mm"), 3240, 4580);
+    WXADDPAPER(wxPAPER_ENV_C4,             DMPAPER_ENV_C4,             wxTRANSLATE("C4 Envelope, 229 x 324 mm"), 2290, 3240);
+    WXADDPAPER(wxPAPER_ENV_C6,             DMPAPER_ENV_C6,             wxTRANSLATE("C6 Envelope, 114 x 162 mm"), 1140, 1620);
+    WXADDPAPER(wxPAPER_ENV_C65,            DMPAPER_ENV_C65,            wxTRANSLATE("C65 Envelope, 114 x 229 mm"), 1140, 2290);
+    WXADDPAPER(wxPAPER_ENV_B4,             DMPAPER_ENV_B4,             wxTRANSLATE("B4 Envelope, 250 x 353 mm"), 2500, 3530);
+    WXADDPAPER(wxPAPER_ENV_B5,             DMPAPER_ENV_B5,             wxTRANSLATE("B5 Envelope, 176 x 250 mm"), 1760, 2500);
+    WXADDPAPER(wxPAPER_ENV_B6,             DMPAPER_ENV_B6,             wxTRANSLATE("B6 Envelope, 176 x 125 mm"), 1760, 1250);
+    WXADDPAPER(wxPAPER_ENV_ITALY,          DMPAPER_ENV_ITALY,          wxTRANSLATE("Italy Envelope, 110 x 230 mm"), 1100, 2300);
+    WXADDPAPER(wxPAPER_ENV_MONARCH,        DMPAPER_ENV_MONARCH,        wxTRANSLATE("Monarch Envelope, 3 7/8 x 7 1/2 in"), 984, 1905);
+    WXADDPAPER(wxPAPER_ENV_PERSONAL,       DMPAPER_ENV_PERSONAL,       wxTRANSLATE("6 3/4 Envelope, 3 5/8 x 6 1/2 in"), 921, 1651);
+    WXADDPAPER(wxPAPER_FANFOLD_US,         DMPAPER_FANFOLD_US,         wxTRANSLATE("US Std Fanfold, 14 7/8 x 11 in"), 3778, 2794);
+    WXADDPAPER(wxPAPER_FANFOLD_STD_GERMAN, DMPAPER_FANFOLD_STD_GERMAN, wxTRANSLATE("German Std Fanfold, 8 1/2 x 12 in"), 2159, 3048);
+    WXADDPAPER(wxPAPER_FANFOLD_LGL_GERMAN, DMPAPER_FANFOLD_LGL_GERMAN, wxTRANSLATE("German Legal Fanfold, 8 1/2 x 13 in"), 2159, 3302);
 
 /* Another time!
 #ifdef __WIN95__

@@ -39,18 +39,27 @@
 
 #define USE_HTML_HELP 1
 
+// Use old-style HTML help if 1
+#define USE_OLD_HTML_HELP 0
+
 #if !wxUSE_HTML
 #undef USE_HTML_HELP
 #define USE_HTML_HELP 0
 #endif
 
 #if USE_HTML_HELP
-
 #include <wx/filesys.h>
 #include <wx/fs_zip.h>
 
+#if USE_OLD_HTML_HELP
 #include "wx/generic/helpwxht.h"
+#endif
+
 #include "wx/html/helpctrl.h"
+#endif
+
+#if wxUSE_MS_HTML_HELP
+#include "wx/msw/helpchm.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -88,8 +97,13 @@ public:
     wxHelpController& GetHelpController() { return m_help; }
 
 #if USE_HTML_HELP
+#if USE_OLD_HTML_HELP
     wxHelpControllerHtml& GetHtmlHelpController() { return m_htmlHelp; }
+#endif
     wxHtmlHelpController& GetAdvancedHtmlHelpController() { return m_advancedHtmlHelp; }
+#endif
+#if wxUSE_MS_HTML_HELP
+    wxCHMHelpController& GetMSHtmlHelpController() { return m_msHtmlHelp; }
 #endif
 
     // event handlers (these functions should _not_ be virtual)
@@ -97,6 +111,7 @@ public:
     void OnHelp(wxCommandEvent& event);
     void OnHtmlHelp(wxCommandEvent& event);
     void OnAdvancedHtmlHelp(wxCommandEvent& event);
+    void OnMSHtmlHelp(wxCommandEvent& event);
 
     void ShowHelp(int commandId, wxHelpControllerBase& helpController);
 
@@ -104,8 +119,14 @@ private:
    wxHelpController         m_help;
 
 #if USE_HTML_HELP
+#if USE_OLD_HTML_HELP
    wxHelpControllerHtml     m_htmlHelp;
+#endif
    wxHtmlHelpController     m_advancedHtmlHelp;
+#endif
+
+#if wxUSE_MS_HTML_HELP
+    wxCHMHelpController     m_msHtmlHelp;
 #endif
 
     // any class wishing to process wxWindows events must use this macro
@@ -138,6 +159,12 @@ enum
     HelpDemo_Advanced_Html_Help_Functions,
     HelpDemo_Advanced_Html_Help_Help,
     HelpDemo_Advanced_Html_Help_Search,
+
+    HelpDemo_MS_Html_Help_Index,
+    HelpDemo_MS_Html_Help_Classes,
+    HelpDemo_MS_Html_Help_Functions,
+    HelpDemo_MS_Html_Help_Help,
+    HelpDemo_MS_Html_Help_Search,
 
     HelpDemo_Help_KDE,
     HelpDemo_Help_GNOME,
@@ -172,6 +199,12 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(HelpDemo_Advanced_Html_Help_Functions, MyFrame::OnAdvancedHtmlHelp)
     EVT_MENU(HelpDemo_Advanced_Html_Help_Help, MyFrame::OnAdvancedHtmlHelp)
     EVT_MENU(HelpDemo_Advanced_Html_Help_Search, MyFrame::OnAdvancedHtmlHelp)
+
+    EVT_MENU(HelpDemo_MS_Html_Help_Index, MyFrame::OnMSHtmlHelp)
+    EVT_MENU(HelpDemo_MS_Html_Help_Classes, MyFrame::OnMSHtmlHelp)
+    EVT_MENU(HelpDemo_MS_Html_Help_Functions, MyFrame::OnMSHtmlHelp)
+    EVT_MENU(HelpDemo_MS_Html_Help_Help, MyFrame::OnMSHtmlHelp)
+    EVT_MENU(HelpDemo_MS_Html_Help_Search, MyFrame::OnMSHtmlHelp)
 
     EVT_MENU(HelpDemo_Help_KDE, MyFrame::OnHelp)
     EVT_MENU(HelpDemo_Help_GNOME, MyFrame::OnHelp)
@@ -229,18 +262,29 @@ bool MyApp::OnInit()
 #if USE_HTML_HELP
     // initialise the standard HTML help system: this means that the HTML docs are in the
     // subdirectory doc for platforms using HTML help
+#if USE_OLD_HTML_HELP
     if ( !frame->GetHtmlHelpController().Initialize("doc") )
     {
         wxLogError("Cannot initialize the HTML help system, aborting.");
 
         return FALSE;
     }
+#endif
 
     // initialise the advanced HTML help system: this means that the HTML docs are in .htb
     // (zipped) form
     if ( !frame->GetAdvancedHtmlHelpController().Initialize("doc") )
     {
         wxLogError("Cannot initialize the advanced HTML help system, aborting.");
+
+        return FALSE;
+    }
+#endif
+
+#if wxUSE_MS_HTML_HELP
+    if ( !frame->GetMSHtmlHelpController().Initialize("doc") )
+    {
+        wxLogError("Cannot initialize the MS HTML help system, aborting.");
 
         return FALSE;
     }
@@ -269,18 +313,29 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(HelpDemo_Help_Help, "&About Help Demo...");
     menuFile->Append(HelpDemo_Help_Search, "&Search help...");
 #if USE_HTML_HELP
+#if USE_OLD_HTML_HELP
     menuFile->AppendSeparator();
     menuFile->Append(HelpDemo_Html_Help_Index, "HTML &Help Index...");
     menuFile->Append(HelpDemo_Html_Help_Classes, "HTML &Help on Classes...");
     menuFile->Append(HelpDemo_Html_Help_Functions, "HTML &Help on Functions...");
     menuFile->Append(HelpDemo_Html_Help_Help, "HTML &About Help Demo...");
     menuFile->Append(HelpDemo_Html_Help_Search, "HTML &Search help...");
+#endif
     menuFile->AppendSeparator();
     menuFile->Append(HelpDemo_Advanced_Html_Help_Index, "Advanced HTML &Help Index...");
     menuFile->Append(HelpDemo_Advanced_Html_Help_Classes, "Advanced HTML &Help on Classes...");
     menuFile->Append(HelpDemo_Advanced_Html_Help_Functions, "Advanced HTML &Help on Functions...");
     menuFile->Append(HelpDemo_Advanced_Html_Help_Help, "Advanced HTML &About Help Demo...");
     menuFile->Append(HelpDemo_Advanced_Html_Help_Search, "Advanced HTML &Search help...");
+#endif
+
+#if wxUSE_MS_HTML_HELP
+    menuFile->AppendSeparator();
+    menuFile->Append(HelpDemo_MS_Html_Help_Index, "MS HTML &Help Index...");
+    menuFile->Append(HelpDemo_MS_Html_Help_Classes, "MS HTML &Help on Classes...");
+    menuFile->Append(HelpDemo_MS_Html_Help_Functions, "MS HTML &Help on Functions...");
+    menuFile->Append(HelpDemo_MS_Html_Help_Help, "MS HTML &About Help Demo...");
+    menuFile->Append(HelpDemo_MS_Html_Help_Search, "MS HTML &Search help...");
 #endif
 
 #ifndef __WXMSW__
@@ -331,7 +386,7 @@ void MyFrame::OnHelp(wxCommandEvent& event)
 
 void MyFrame::OnHtmlHelp(wxCommandEvent& event)
 {
-#if USE_HTML_HELP
+#if USE_HTML_HELP && USE_OLD_HTML_HELP
     ShowHelp(event.GetId(), m_htmlHelp);
 #endif
 }
@@ -343,38 +398,111 @@ void MyFrame::OnAdvancedHtmlHelp(wxCommandEvent& event)
 #endif
 }
 
+void MyFrame::OnMSHtmlHelp(wxCommandEvent& event)
+{
+#if wxUSE_MS_HTML_HELP
+    ShowHelp(event.GetId(), m_msHtmlHelp);
+#endif
+}
+
+/*
+ Notes: ShowHelp uses section ids for displaying particular topics,
+ but you might want to use a unique keyword to display a topic, instead.
+
+ Section ids are specified as follows for the different formats.
+
+ WinHelp
+
+   The [MAP] section specifies the topic to integer id mapping, e.g.
+
+   [MAP]
+   #define intro       100
+   #define functions   1
+   #define classes     2
+   #define about       3
+
+   The identifier name corresponds to the label used for that topic.
+   You could also put these in a .h file and #include it in both the MAP
+   section and your C++ source.
+
+   Note that Tex2RTF doesn't currently generate the MAP section automatically.
+
+ MS HTML Help
+
+   The [MAP] section specifies the HTML filename root to integer id mapping, e.g.
+
+   [MAP]
+   #define doc1       100
+   #define doc3       1
+   #define doc2       2
+   #define doc4       3
+
+   The identifier name corresponds to the HTML filename used for that topic.
+   You could also put these in a .h file and #include it in both the MAP
+   section and your C++ source.
+
+   Note that Tex2RTF doesn't currently generate the MAP section automatically.
+
+ Simple wxHTML Help and External HTML Help
+
+   A wxhelp.map file is used, for example:
+
+   0 wx.htm             ; wxWindows: Help index; additional keywords like overview
+   1 wx204.htm          ; wxWindows Function Reference
+   2 wx34.htm           ; wxWindows Class Reference
+
+   Note that Tex2RTF doesn't currently generate the MAP section automatically.
+
+ Advanced HTML Help
+
+   An extension to the .hhc file format is used, specifying a new parameter
+   with name="ID":
+
+   <OBJECT type="text/sitemap">
+   <param name="Local" value="doc2.htm#classes">
+   <param name="Name" value="Classes">
+   <param name="ID" value=2>
+   </OBJECT>
+
+   Again, this is not generated automatically by Tex2RTF, though it could
+   be added quite easily.
+
+   Unfortunately adding the ID parameters appears to interfere with MS HTML Help,
+   so you should not try to compile a .chm file from a .hhc file with
+   this extension, or the contents will be messed up.
+ */
+
 void MyFrame::ShowHelp(int commandId, wxHelpControllerBase& helpController)
 {
    switch(commandId)
    {
-
-   // Note: For WinHelp, these ids are specified in the map session, mapping
-   // topic names to numbers.
-   // For HTML and external help, a wxhelp.map file is used.
-
    case HelpDemo_Help_Classes:
    case HelpDemo_Html_Help_Classes:
    case HelpDemo_Advanced_Html_Help_Classes:
+   case HelpDemo_MS_Html_Help_Classes:
       helpController.DisplaySection(2);
-
-      // if (helpController.IsKindOf(CLASSINFO(wxHtmlHelpController)))
-      // ((wxHtmlHelpController&)helpController).Display("Classes"); // An alternative form for this controller
+      //helpController.DisplaySection("Classes"); // An alternative form for most controllers
 
       break;
    case HelpDemo_Help_Functions:
    case HelpDemo_Html_Help_Functions:
    case HelpDemo_Advanced_Html_Help_Functions:
+   case HelpDemo_MS_Html_Help_Functions:
       helpController.DisplaySection(1);
+      //helpController.DisplaySection("Functions"); // An alternative form for most controllers
       break;
    case HelpDemo_Help_Help:
    case HelpDemo_Html_Help_Help:
    case HelpDemo_Advanced_Html_Help_Help:
+   case HelpDemo_MS_Html_Help_Help:
       helpController.DisplaySection(3);
+      //helpController.DisplaySection("About"); // An alternative form for most controllers
       break;
 
    case HelpDemo_Help_Search:
    case HelpDemo_Html_Help_Search:
    case HelpDemo_Advanced_Html_Help_Search:
+   case HelpDemo_MS_Html_Help_Search:
    {
       wxString key = wxGetTextFromUser("Search for?",
                                        "Search help for keyword",
@@ -388,6 +516,7 @@ void MyFrame::ShowHelp(int commandId, wxHelpControllerBase& helpController)
    case HelpDemo_Help_Index:
    case HelpDemo_Html_Help_Index:
    case HelpDemo_Advanced_Html_Help_Index:
+   case HelpDemo_MS_Html_Help_Index:
       helpController.DisplayContents();
       break;
 

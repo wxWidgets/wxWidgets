@@ -45,28 +45,19 @@ BEGIN_EVENT_TABLE(wxSashWindow, wxWindow)
     EVT_MOUSE_EVENTS(wxSashWindow::OnMouseEvent)
 END_EVENT_TABLE()
 
-wxSashWindow::wxSashWindow()
+bool wxSashWindow::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos,
+    const wxSize& size, long style, const wxString& name)
 {
-    m_draggingEdge = wxSASH_NONE;
-    m_dragMode = wxSASH_DRAG_NONE;
-    m_oldX = 0;
-    m_oldY = 0;
-    m_firstX = 0;
-    m_firstY = 0;
-    m_borderSize = 3 ;
-    m_extraBorderSize = 0;
-    m_sashCursorWE = NULL;
-    m_sashCursorNS = NULL;
-
-    m_minimumPaneSizeX = 0;
-    m_minimumPaneSizeY = 0;
-    m_maximumPaneSizeX = 10000;
-    m_maximumPaneSizeY = 10000;
+    return wxWindow::Create(parent, id, pos, size, style, name);
 }
 
-wxSashWindow::wxSashWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos,
-    const wxSize& size, long style, const wxString& name)
-  :wxWindow(parent, id, pos, size, style, name)
+wxSashWindow::~wxSashWindow()
+{
+    delete m_sashCursorWE;
+    delete m_sashCursorNS;
+}
+
+void wxSashWindow::Init()
 {
     m_draggingEdge = wxSASH_NONE;
     m_dragMode = wxSASH_DRAG_NONE;
@@ -85,12 +76,6 @@ wxSashWindow::wxSashWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos,
 
     // Eventually, we'll respond to colour change messages
     InitColours();
-}
-
-wxSashWindow::~wxSashWindow()
-{
-    delete m_sashCursorWE;
-    delete m_sashCursorNS;
 }
 
 void wxSashWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
@@ -415,7 +400,7 @@ void wxSashWindow::DrawBorders(wxDC& dc)
     wxPen lightShadowPen(m_lightShadowColour, 1, wxSOLID);
     wxPen hilightPen(m_hilightColour, 1, wxSOLID);
 
-    if ( GetWindowStyleFlag() & wxSW_3D )
+    if ( GetWindowStyleFlag() & wxSW_3DBORDER )
     {
         dc.SetPen(mediumShadowPen);
         dc.DrawLine(0, 0, w-1, 0);
@@ -480,7 +465,7 @@ void wxSashWindow::DrawSash(wxSashEdgePosition edge, wxDC& dc)
         dc.SetBrush(faceBrush);
         dc.DrawRectangle(sashPosition, 0, GetEdgeMargin(edge), h);
 
-        if (GetWindowStyleFlag() & wxSW_3D)
+        if (GetWindowStyleFlag() & wxSW_3DSASH)
         {
             if (edge == wxSASH_LEFT)
             {
@@ -491,9 +476,9 @@ void wxSashWindow::DrawSash(wxSashEdgePosition edge, wxDC& dc)
             }
             else
             {
-                // Draw a light grey line on the right to indicate that the
+                // Draw a highlight line on the right to indicate that the
                 // sash is raised
-                dc.SetPen(lightShadowPen);
+                dc.SetPen(hilightPen);
                 dc.DrawLine(w - GetEdgeMargin(edge), 0, w - GetEdgeMargin(edge), h);
             }
         }
@@ -510,13 +495,13 @@ void wxSashWindow::DrawSash(wxSashEdgePosition edge, wxDC& dc)
         dc.SetBrush(faceBrush);
         dc.DrawRectangle(0, sashPosition, w, GetEdgeMargin(edge));
 
-        if (GetWindowStyleFlag() & wxSW_3D)
+        if (GetWindowStyleFlag() & wxSW_3DSASH)
         {
             if (edge == wxSASH_BOTTOM)
             {
-                // Draw a light grey line on the bottom to indicate that the
+                // Draw a highlight line on the bottom to indicate that the
                 // sash is raised
-                dc.SetPen(lightShadowPen);
+                dc.SetPen(hilightPen);
                 dc.DrawLine(0, h - GetEdgeMargin(edge), w, h - GetEdgeMargin(edge));
             }
             else

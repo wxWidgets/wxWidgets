@@ -79,7 +79,10 @@ public:
     static bool RegisterWindowClasses();
     // Convert Windows to argc, argv style
     void ConvertToStandardCommandArgs(char* p);
+    
+    /*virtual*/ void DoMessage(WXMSG *pMsg);
     virtual bool DoMessage();
+    
     virtual bool ProcessMessage(WXMSG* pMsg);
     void DeletePendingObjects();
     bool ProcessIdle();

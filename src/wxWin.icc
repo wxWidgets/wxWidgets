@@ -16,6 +16,8 @@ option ProjectOptions = gen(arch, "pentium2"), lang(longlong, "yes"),  gen(mangl
    perform
    {
        run before '-mkdir ' '..\\src\\common\\dbgos240'
+       run before 'copy ' '..\\src\common\\dosyacc.c ' '..\\src\\common\\y_tab.c'
+       run before 'copy ' '..\\src\common\\doslex.c ' '..\\src\\common\\lex_yy.c'
    }
    target type("lib") "..\\LIB\\wx40.lib"
    {

@@ -1,20 +1,39 @@
 #
-# File:		makefile.unx
+# File:		Makefile
 # Author:	Julian Smart
-# Created:	1998
+# Created:	1999
 # Updated:	
-# Copyright:	(c) 1998 Julian Smart
+# Copyright:	(c) 2000 Julian Smart
 #
-# "%W% %G%"
+# Makefile for OGL demo (GTK version)
 #
-# Makefile for OGLEdit example (UNIX).
+# This makefile requires wxWindows/GTK to be 
+# installed (possibly using "make install")
+# on your system.
+#
 
-PROGRAM=ogledit
+CPP = gcc -g
+CC = gcc
+WXCONFIG=../../../../wx-config
+WXINCLUDE=-I../../../../include -I../../../include
+WXLIB=-L../../../../lib -L../../../src/ogl
 
-OBJECTS=$(PROGRAM).o doc.o view.o palette.o
+OBJECTS=ogledit.o palette.o doc.o view.o
 
-# EXTRACPPFLAGS=-I$(WXDIR)/contrib/include
-EXTRALDLIBS=-logl$(GUISUFFIX)
+ogledit: $(OBJECTS)
+	$(CPP) -o ogledit $(OBJECTS) `$(WXCONFIG) --libs` $(WXLIB) -logl
 
-include ../../../../src/makeprog.env
+ogledit.o: ogledit.cpp
+	$(CPP) `$(WXCONFIG) --cflags` -I../../src $(WXINCLUDE) -c ogledit.cpp
 
+palette.o: palette.cpp
+	$(CPP) `$(WXCONFIG) --cflags` -I../../src $(WXINCLUDE) -c palette.cpp
+
+doc.o: doc.cpp
+	$(CPP) `$(WXCONFIG) --cflags` -I../../src $(WXINCLUDE) -c doc.cpp
+
+view.o: view.cpp
+	$(CPP) `$(WXCONFIG) --cflags` -I../../src $(WXINCLUDE) -c view.cpp
+
+clean: 
+	rm -f *.o ogledit

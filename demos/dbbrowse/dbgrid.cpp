@@ -74,6 +74,8 @@ DBGrid::DBGrid(wxWindow *parent, const wxWindowID id,const wxPoint& pos,const wx
 //----------------------------------------------------------------------------------------
 DBGrid::~DBGrid()
 {
+ delete popupMenu1;
+ delete popupMenu2;
 }
 //----------------------------------------------------------------------------------------
 int  DBGrid::OnTableView(wxString Table)
@@ -122,7 +124,7 @@ int  DBGrid::OnTableView(wxString Table)
       }
       if (z % 50 == 0)
       {
-       Temp0.Printf(_("-I-> DBGrid::OnTableView(%s) - Record %6d has been read."),Table.c_str(),z);
+       Temp0.Printf(_("-I-> DBGrid::OnTableView(%s) - Record %6d (from %d) has been read."),Table.c_str(),z,(db_Br+i_Which)->i_Records);
        pDoc->p_MainFrame->SetStatusText(Temp0, 0);
       }
      }  // for (z=0;z<(db_Br+i_Which)->i_Records;z++)

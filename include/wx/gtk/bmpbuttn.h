@@ -74,6 +74,10 @@ public:
     void SetBitmapLabel( const wxBitmap& bitmap );
     void SetBitmapSelected( const wxBitmap& bitmap );
     
+    void SetMargins(int x, int y) { m_marginX = x; m_marginY = y; }
+    int GetMarginX() const { return m_marginX; }
+    int GetMarginY() const { return m_marginY; }
+
     virtual bool Enable(bool enable);
   
     // implementation
@@ -93,6 +97,10 @@ public:
     wxBitmap     m_focus;
     wxBitmap     m_selected;   
   
+protected:
+    int      m_marginX;
+    int      m_marginY;
+
 private:
     DECLARE_DYNAMIC_CLASS(wxBitmapButton)
 };

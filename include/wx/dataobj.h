@@ -250,7 +250,7 @@ private:
 // wxDataObject directly.
 // ----------------------------------------------------------------------------
 
-WX_DECLARE_LIST(wxDataObjectSimple, wxSimpleDataObjectList);
+WX_DECLARE_EXPORTED_LIST(wxDataObjectSimple, wxSimpleDataObjectList);
 
 class WXDLLEXPORT wxDataObjectComposite : public wxDataObject
 {

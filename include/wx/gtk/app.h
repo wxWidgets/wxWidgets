@@ -92,4 +92,6 @@ extern "C"
   }
 #endif
 
+int WXDLLEXPORT wxEntry( int argc, char *argv[] );
+
 #endif // __GTKAPPH__

@@ -472,7 +472,7 @@ void wxClipboard::Clear()
 #if wxUSE_OLE_CLIPBOARD
     if ( FAILED(OleSetClipboard(NULL)) )
     {
-        wxLogLastError("OleSetClipboard(NULL)");
+        wxLogLastError(wxT("OleSetClipboard(NULL)"));
     }
 #endif
 }
@@ -482,7 +482,7 @@ bool wxClipboard::Flush()
 #if wxUSE_OLE_CLIPBOARD
     if ( FAILED(OleFlushClipboard()) )
     {
-        wxLogLastError("OleFlushClipboard");
+        wxLogLastError(wxT("OleFlushClipboard"));
 
         return FALSE;
     }
@@ -815,14 +815,14 @@ bool wxClipboard::GetData( wxDataObject& data )
         }
 #endif // wxUSE_METAFILE
     }
-#else // !wxUSE_DATAOBJ
-    wxFAIL_MSG( wxT("no clipboard implementation") );
-#endif // wxUSE_OLE_CLIPBOARD/wxUSE_DATAOBJ
 
     return FALSE;
+#else // !wxUSE_DATAOBJ
+    wxFAIL_MSG( wxT("no clipboard implementation") );
+
+    return FALSE;
+#endif // wxUSE_OLE_CLIPBOARD/wxUSE_DATAOBJ
 }
 
-#else
-    #error "Please turn wxUSE_CLIPBOARD on to compile this file."
 #endif // wxUSE_CLIPBOARD
 

@@ -12,7 +12,7 @@ It provides more information than wxWindow's input stream
 {\bf Note:} Any pointer returned by wxFSFile's member is valid
 only as long as wxFSFile object exists. For example a call to GetStream()
 doesn't {\it create} the stream but only returns the pointer to it. In
-other words after 10 calls to GetStream() you'll obtain ten identical
+other words after 10 calls to GetStream() you will obtain ten identical
 pointers.
 
 \wxheading{Derived from}
@@ -52,7 +52,7 @@ functions.
 
 \wxheading{Notes}
 
-It is seldom used by the application programmer but you'll need it if
+It is seldom used by the application programmer but you will need it if
 you are writing your own virtual FS. For example you may need something
 similar to wxMemoryInputStream, but because wxMemoryInputStream
 doesn't free the memory when destroyed and thus passing a memory stream

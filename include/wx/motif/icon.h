@@ -42,7 +42,7 @@ public:
   wxIcon();
 
   // Copy constructors
-  inline wxIcon(const wxIcon& icon) { Ref(icon); }
+  inline wxIcon(const wxIcon& icon) : wxBitmap() { Ref(icon); }
 
   // Initialize with XBM data
   wxIcon(const char bits[], int width, int height);
@@ -61,8 +61,8 @@ public:
     { return wxBitmap::LoadFile(name, type); }
 
   inline wxIcon& operator = (const wxIcon& icon) { if (*this == icon) return (*this); Ref(icon); return *this; }
-  inline bool operator == (const wxIcon& icon) { return m_refData == icon.m_refData; }
-  inline bool operator != (const wxIcon& icon) { return m_refData != icon.m_refData; }
+  inline bool operator == (const wxIcon& icon) const { return m_refData == icon.m_refData; }
+  inline bool operator != (const wxIcon& icon) const { return m_refData != icon.m_refData; }
 
   virtual bool Ok() const { return ((m_refData != NULL) && (M_ICONDATA->m_ok)); }
 };

@@ -55,7 +55,7 @@ class WXDLLEXPORT wxPalette: public wxGDIObject
 
 public:
   wxPalette();
-  wxPalette(const wxPalette& palette) { Ref(palette); }
+  wxPalette(const wxPalette& palette) : wxGDIObject() { Ref(palette); }
 
   wxPalette(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
   ~wxPalette();
@@ -66,8 +66,8 @@ public:
   virtual bool Ok() const { return (m_refData != NULL) ; }
 
   wxPalette& operator = (const wxPalette& palette) { if (*this == palette) return (*this); Ref(palette); return *this; }
-  bool operator == (const wxPalette& palette) { return m_refData == palette.m_refData; }
-  bool operator != (const wxPalette& palette) { return m_refData != palette.m_refData; }
+  bool operator == (const wxPalette& palette) const { return m_refData == palette.m_refData; }
+  bool operator != (const wxPalette& palette) const { return m_refData != palette.m_refData; }
 
   // Motif-specific
   WXColormap GetXColormap(WXDisplay* display = NULL) const;

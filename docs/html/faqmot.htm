@@ -8,10 +8,10 @@
 
 <font face="Arial, Lucida Sans, Helvetica">
 
-<table width=100% border=4 cellpadding=5 cellspacing=0>
+<table width=100% border=0 cellpadding=5 cellspacing=0>
 <tr>
-<td bgcolor="#660000">
-<font size=+1 face="Arial, Lucida Sans, Helvetica" color="#FFFFFF">
+<td bgcolor="#C4ECF9">
+<font size=+1 face="Arial, Lucida Sans, Helvetica" color="#000000">
 wxWindows 2 for Motif FAQ
 </font>
 </td>
@@ -22,8 +22,16 @@ wxWindows 2 for Motif FAQ
 
 See also <a href="faq.htm">top-level FAQ page</a>.
 <hr>
+<h3>List of questions in this category</a></h3>
+<ul>
+<li><a href="#versiob">What version of Motif do I need?</a></li>
+<li><a href="#missing">What features are missing or partially implemented?</a></li>
+<li><a href="#dialoged">Does Dialog Editor work with wxWindows for Motif?</a></li>
+<li><a href="#refresh">Why are windows are not refreshed properly until I resize them?</a></li>
+</ul>
+<hr>
 
-<h3>What version of Motif do I need?</h3>
+<h3><a name="versiob">What version of Motif do I need?</a></h3>
 
 You will need version 1.2 or above. Version 2 should also be fine. Some people
 have had a positive experience with <a href="www.lesstif.org" target=_top>Lesstif</a>,
@@ -31,7 +39,7 @@ a free Motif clone. (Note from Julian Smart - I use the Linux version of MetroLi
 
 <P>
 
-<h3>What features are missing or partially implemented?</h3>
+<h3><a name="missing">What features are missing or partially implemented?</a></h3>
 
 The following classes are not yet implemented: wxSpinButton, wxCheckListBox, wxJoyStick,
 wxGLCanvas.<P>
@@ -53,32 +61,23 @@ system is in preparation.
 
 <p>
 
-<h3>Does Dialog Editor work with wxWindows for Motif?</h3>
+<h3><a name="dialoged">Does Dialog Editor work with wxWindows for Motif?</a></h3>
 
 Suport for Dialog Editor is almost there, but there are some wrinkles to iron
-out. You may find it's useful though: compile it and see.
+out. You may find it&#39;s useful though: compile it and see.
 <P>
 
-<h3>How do I switch between debugging and release compilation modes?</h3>
-
-Unfortunately the makefile system doesn't currently allow you to compile
-for both simultaneously: you need
-to recompile wxWindows and your application having adjusted make.env. However,
-you could rename the binary and release library archives, and adjust your makefiles
-to use the appropriate one (or change a symbolic link).
-<P>
-
-<h3>Why are windows are not refreshed properly until I resize them?</h3>
+<h3><a name="refresh">Why are windows are not refreshed properly until I resize them?</a></h3>
 
 Very occasionally you can experience this glitch, probably because sometimes the
 window tries to resize and repaint itself before the final size is known. The workaround
 is to add code like this after window creation and initialization:<P>
 
 <PRE>
-#ifdef __WXMOTIF__
+&#35;ifdef __WXMOTIF__
   wxNoOptimize noOptimize;
-  window->SetSize(-1, -1, w, h);
-#endif
+  window-&#62;SetSize(-1, -1, w, h);
+&#35;endif
 </PRE>
 <P>
 

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        encconv.h
+// Name:        wx/encconv.h
 // Purpose:     wxEncodingConverter class for converting between different
 //              font encodings
 // Author:      Vaclav Slavik
@@ -7,26 +7,31 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ENCCONV_H__
-#define __ENCCONV_H__
+#ifndef _WX_ENCCONV_H_
+#define _WX_ENCCONV_H_
 
 #ifdef __GNUG__
 #pragma interface "encconv.h"
 #endif
 
 #include "wx/defs.h"
-#include "wx/font.h"
+#include "wx/object.h"
+#include "wx/fontenc.h"
 #include "wx/dynarray.h"
 
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
 
-
-enum {
+enum
+{
     wxCONVERT_STRICT,
     wxCONVERT_SUBSTITUTE
 };
 
 
-enum {
+enum
+{
     wxPLATFORM_CURRENT = -1,
 
     wxPLATFORM_UNIX = 0,
@@ -35,8 +40,11 @@ enum {
     wxPLATFORM_MAC
 };
 
-WX_DEFINE_ARRAY(wxFontEncoding, wxFontEncodingArray);
+// ----------------------------------------------------------------------------
+// types
+// ----------------------------------------------------------------------------
 
+WX_DEFINE_ARRAY(wxFontEncoding, wxFontEncodingArray);
 
 //--------------------------------------------------------------------------------
 // wxEncodingConverter
@@ -52,7 +60,7 @@ class WXDLLEXPORT wxEncodingConverter : public wxObject
             ~wxEncodingConverter() { if (m_Table) delete[] m_Table; }
 
             // Initialize convertion. Both output or input encoding may
-            // be wxFONTENCODING_UNICODE, but only if wxUSE_UNICODE is set to 1.
+            // be wxFONTENCODING_UNICODE, but only if wxUSE_WCHAR_T is set to 1.
             //
             // All subsequent calls to Convert() will interpret it's argument
             // as a string in input_enc encoding and will output string in
@@ -82,15 +90,15 @@ class WXDLLEXPORT wxEncodingConverter : public wxObject
 
             // Convert input string according to settings passed to Init.
             // Note that you must call Init before using Convert!
-            void Convert(const wxChar* input, wxChar* output);
-            void Convert(wxChar* str) { Convert(str, str); }
-            wxString Convert(const wxString& input);
-
-#if wxUSE_UNICODE // otherwise wxChar === char
-            void Convert(const char* input, wxChar* output);
-            void Convert(const wxChar* input, char* output);
             void Convert(const char* input, char* output);
             void Convert(char* str) { Convert(str, str); }
+            wxString Convert(const wxString& input);
+
+#if wxUSE_WCHAR_T
+            void Convert(const char* input, wchar_t* output);
+            void Convert(const wchar_t* input, char* output);
+            void Convert(const wchar_t* input, wchar_t* output);
+            void Convert(wchar_t* str) { Convert(str, str); }
 #endif
             // Return equivalent(s) for given font that are used
             // under given platform. wxPLATFORM_CURRENT means the plaform
@@ -129,28 +137,15 @@ class WXDLLEXPORT wxEncodingConverter : public wxObject
 
     private:
 
-            wxChar *m_Table;
+#if wxUSE_WCHAR_T
+            wchar_t *m_Table;
+#else
+            char *m_Table;
+#endif
             bool m_UnicodeInput, m_UnicodeOutput;
             bool m_JustCopy;
 
 };
 
 
-#endif  // __ENCCONV_H__
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#endif  // _WX_ENCCONV_H_

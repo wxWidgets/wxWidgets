@@ -74,9 +74,10 @@ private:
 	CellBuffer cb;
 	bool wordchars[256];
 	int stylingPos;
-	int stylingMask;
+	char stylingMask;
 	int endStyled;
 	int enteredCount;
+	int enteredReadOnlyCount;
 	
 	WatcherWithUserData *watchers;
 	int lenWatchers;
@@ -86,8 +87,11 @@ public:
 	int stylingBitsMask;
 	
 	int eolMode;
+	// dbcsCodePage can also be SC_CP_UTF8 to enable UTF-8 mode
 	int dbcsCodePage;
 	int tabInChars;
+	int indentInChars;
+	bool useTabs;
 	
 	Document();
 	virtual ~Document();
@@ -98,6 +102,7 @@ public:
 	int LineFromPosition(int pos);
 	int ClampPositionIntoDocument(int pos);
 	bool IsCrLf(int pos);
+	int LenChar(int pos);
 	int MovePositionOutsideChar(int pos, int moveDir, bool checkLineEnd=true);
 
 	// Gateways to modifying document
@@ -108,21 +113,28 @@ public:
 	bool CanUndo() { return cb.CanUndo(); }
 	bool CanRedo() { return cb.CanRedo(); }
 	void DeleteUndoHistory() { cb.DeleteUndoHistory(); }
-	undoCollectionType SetUndoCollection(undoCollectionType collectUndo) {
+	bool SetUndoCollection(bool collectUndo) {
 		return cb.SetUndoCollection(collectUndo);
 	}
-	void AppendUndoStartAction() { cb.AppendUndoStartAction(); }
+	bool IsCollectingUndo() { return cb.IsCollectingUndo(); }
 	void BeginUndoAction() { cb.BeginUndoAction(); }
 	void EndUndoAction() { cb.EndUndoAction(); }
 	void SetSavePoint();
 	bool IsSavePoint() { return cb.IsSavePoint(); }
+
+	int GetLineIndentation(int line);
+	void SetLineIndentation(int line, int indent);
+	int GetLineIndentPosition(int line);
+	int GetColumn(int position);
 	void Indent(bool forwards, int lineBottom, int lineTop);
 	void ConvertLineEnds(int eolModeSet);
 	void SetReadOnly(bool set) { cb.SetReadOnly(set); }
+	bool IsReadOnly() { return cb.IsReadOnly(); }
 
 	void InsertChar(int pos, char ch);
 	void InsertString(int position, const char *s);
 	void InsertString(int position, const char *s, int insertLength);
+	void ChangeChar(int pos, char ch);
 	void DelChar(int pos);
 	int DelCharBack(int pos);
 
@@ -132,17 +144,19 @@ public:
 	}
 	char StyleAt(int position) { return cb.StyleAt(position); }
 	int GetMark(int line) { return cb.GetMark(line); }
-	int AddMark(int line, int markerNum) { return cb.AddMark(line, markerNum); }
-	void DeleteMark(int line, int markerNum) { cb.DeleteMark(line, markerNum); }
-	void DeleteMarkFromHandle(int markerHandle) { cb.DeleteMarkFromHandle(markerHandle); }
-	void DeleteAllMarks(int markerNum) { cb.DeleteAllMarks(markerNum); }
+	int AddMark(int line, int markerNum);
+	void DeleteMark(int line, int markerNum);
+	void DeleteMarkFromHandle(int markerHandle);
+	void DeleteAllMarks(int markerNum);
 	int LineFromHandle(int markerHandle) { return cb.LineFromHandle(markerHandle); }
 	int LineStart(int line);
+	int LineEnd(int line);
 	int LineEndPosition(int position);
 	int VCHomePosition(int position);
 
 	int SetLevel(int line, int level);
 	int GetLevel(int line) { return cb.GetLevel(line); }
+	void ClearLevels() { cb.ClearLevels(); }
 	int GetLastChild(int lineParent, int level=-1);
 	int GetFoldParent(int line);
 
@@ -150,9 +164,12 @@ public:
 	int ExtendWordSelect(int pos, int delta);
 	int NextWordStart(int pos, int delta);
 	int Length() { return cb.Length(); }
-	long FindText(int minPos, int maxPos, const char *s, bool caseSensitive, bool word);
-	long FindText(WORD iMessage,WPARAM wParam,LPARAM lParam);
+	long FindText(int minPos, int maxPos, const char *s, 
+		bool caseSensitive, bool word, bool wordStart);
+	long FindText(int iMessage, unsigned long wParam, long lParam);
 	int LinesTotal();
+	
+	void ChangeCase(Range r, bool makeUpperCase);
 	
 	void SetWordChars(unsigned char *chars);
 	void SetStylingBits(int bits);
@@ -160,6 +177,7 @@ public:
 	void SetStyleFor(int length, char style);
 	void SetStyles(int length, char *styles);
 	int GetEndStyled() { return endStyled; }
+	bool EnsureStyledTo(int pos);
 
 	int SetLineState(int line, int state) { return cb.SetLineState(line, state); }
 	int GetLineState(int line) { return cb.GetLineState(line); }
@@ -173,12 +191,16 @@ public:
 private:
 	bool IsDBCS(int pos);
 	bool IsWordChar(unsigned char ch);
+	bool IsWordStartAt(int pos);
+	bool IsWordEndAt(int pos);
 	bool IsWordAt(int start, int end);
 	void ModifiedAt(int pos);
-		
+	
 	void NotifyModifyAttempt();
 	void NotifySavePoint(bool atSavePoint);
 	void NotifyModified(DocModification mh);
+	
+	int IndentSize() { return indentInChars ? indentInChars : tabInChars; }
 };
 
 // To optimise processing of document modifications by DocWatchers, a hint is passed indicating the 
@@ -205,6 +227,16 @@ public:
 		line(0),
 		foldLevelNow(0),
 		foldLevelPrev(0) {}
+
+    DocModification(int modificationType_, const Action &act, int linesAdded_=0) :
+		modificationType(modificationType_),
+		position(act.position / 2),
+		length(act.lenData),
+		linesAdded(linesAdded_),
+		text(act.data),
+		line(0),
+		foldLevelNow(0),
+		foldLevelPrev(0) {}
 };
 
 // A class that wants to receive notifications from a Document must be derived from DocWatcher 
@@ -217,6 +249,7 @@ public:
 	virtual void NotifySavePoint(Document *doc, void *userData, bool atSavePoint) = 0;
 	virtual void NotifyModified(Document *doc, DocModification mh, void *userData) = 0;
 	virtual void NotifyDeleted(Document *doc, void *userData) = 0;
+	virtual void NotifyStyleNeeded(Document *doc, void *userData, int endPos) = 0;
 };
 
 #endif

@@ -14,16 +14,17 @@ use strict;
 
 my $CVS = "cvs -z3";    # the cvs command
 
+# the regexp for cvs revision number
+my $RE_CVS_REV = "\\d+(?:\\.\\d+)+";
+
 sub dec_rev($)
 {
     my $rev = $_[0];
 
     # decrement the revision number to get the previos one
-    # (FIXME this is totally bogus, won't work with branches)
-    my $revlen = length($rev) - rindex($rev, '.') - 1;
-    my $m = 10**$revlen;
+    $rev =~ s/(\d+)$/$1 - 1/e;
 
-    return int($rev) . "." . ($rev*$m - int($rev)*$m - 1)
+    return $rev;
 }
 
 sub get_last_rev($)
@@ -39,7 +40,7 @@ sub get_last_rev($)
         while (<INPUT>) {
             # notice that we shouldn't have '$' followed by 'Id' or cvs will
             # substitute it!
-            if ( /\$(Id): $basename,v (\d+\.\d+)/ ) {
+            if ( /\$(Id): $basename,v ($RE_CVS_REV)/ ) {
                 return &dec_rev($2);
             }
         }
@@ -48,7 +49,7 @@ sub get_last_rev($)
     open(INPUT, "$CVS -q status $file |") or return 0;
 
     while (<INPUT>) {
-        if ( /Working revision:\s+(\d+\.\d+)/ ) {
+        if ( /Working revision:\s+($RE_CVS_REV)/ ) {
             return &dec_rev($1);
         }
     }

@@ -19,7 +19,9 @@ class MyApp: public wxApp
     int     m_maxX;
     int     m_maxY;
 
+#if wxUSE_WAVE
     wxWave  m_fire;
+#endif // wxUSE_WAVE
 };
 
 DECLARE_APP(MyApp)

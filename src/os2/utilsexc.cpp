@@ -35,8 +35,6 @@
 #include <ctype.h>
 #ifdef __EMX__
 #include <dirent.h>
-#else
-#include <direct.h>
 #endif
 
 #include <sys/stat.h>

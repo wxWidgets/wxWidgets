@@ -18,7 +18,6 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma interface "numdlgg.cpp"
     #pragma implementation "numdlgg.cpp"
 #endif
 
@@ -45,7 +44,9 @@
   #include "wx/statline.h"
 #endif
 
+#if !defined(__WIN16__) && wxUSE_SPINCTRL
 #include "wx/spinctrl.h"
+#endif
 
 // this is where wxGetNumberFromUser() is declared
 #include "wx/textdlg.h"
@@ -129,7 +130,7 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
     wxString valStr;
     valStr.Printf(wxT("%lu"), m_value);
     m_spinctrl = new wxSpinCtrl(this, -1, valStr, wxDefaultPosition, wxSize( 140, -1 ) );
-#ifndef __WIN16__
+#if !defined(__WIN16__) && wxUSE_SPINCTRL
     m_spinctrl->SetRange((int)m_min, (int)m_max);
 #endif
     inputsizer->Add( m_spinctrl, 1, wxCENTER | wxLEFT | wxRIGHT, 10 );

@@ -103,6 +103,9 @@ protected:
     // common part of all ctors
     void Init();
 
+    // common part of Destroy() and ~wxDialog
+    void CleanUp();
+
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);

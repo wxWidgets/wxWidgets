@@ -30,7 +30,12 @@
  * Predictor Tag Support (used by multiple codecs).
  */
 #include "tiffiop.h"
+/* Watcom C++ (or its make utility) doesn't like long filenames */
+#ifdef __WATCOMC__
+#include "tif_pred.h"
+#else
 #include "tif_predict.h"
+#endif
 
 #include <assert.h>
 

@@ -39,7 +39,7 @@
 #endif
 
 #include "wx/msw/dib.h"
-#include "wx/msw/tabctrl.h"
+#include "wx/tabctrl.h"
 #include "wx/app.h"
 #include "wx/msw/private.h"
 #include "wx/msw/imaglist.h"

@@ -86,7 +86,7 @@ public:
     void OnAsyncExec(wxCommandEvent& event);
     void OnShell(wxCommandEvent& event);
     void OnExecWithRedirect(wxCommandEvent& event);
-    void OnDDEExec(wxCommandEvent& event);
+    void OnExecWithPipe(wxCommandEvent& event);
 
     void OnAbout(wxCommandEvent& event);
 
@@ -94,12 +94,28 @@ public:
     void OnIdle(wxIdleEvent& event);
 
     // for MyPipedProcess
-    void OnProcessTerminated(MyPipedProcess *process)
-        { m_running.Remove(process); }
+    void OnProcessTerminated(MyPipedProcess *process);
     wxListBox *GetLogListBox() const { return m_lbox; }
 
 private:
+    void ShowOutput(const wxString& cmd,
+                    const wxArrayString& output,
+                    const wxString& title);
+
+    // last command we executed
     wxString m_cmdLast;
+
+#ifdef __WINDOWS__
+    void OnDDEExec(wxCommandEvent& event);
+    void OnDDERequest(wxCommandEvent& event);
+
+    bool GetDDEServer();
+
+    // last params of a DDE transaction
+    wxString m_server,
+             m_topic,
+             m_cmdDde;
+#endif // __WINDOWS__
 
     wxListBox *m_lbox;
 
@@ -141,7 +157,23 @@ public:
 
     virtual void OnTerminate(int pid, int status);
 
-    bool HasInput();
+    virtual bool HasInput();
+};
+
+// A version of MyPipedProcess which also sends input to the stdin of the
+// child process
+class MyPipedProcess2 : public MyPipedProcess
+{
+public:
+    MyPipedProcess2(MyFrame *parent, const wxString& cmd, const wxString& input)
+        : MyPipedProcess(parent, cmd), m_input(input)
+        {
+        }
+
+    virtual bool HasInput();
+
+private:
+    wxString m_input;
 };
 
 // ----------------------------------------------------------------------------
@@ -158,7 +190,9 @@ enum
     Exec_AsyncExec,
     Exec_Shell,
     Exec_DDEExec,
+    Exec_DDERequest,
     Exec_Redirect,
+    Exec_Pipe,
     Exec_About = 300
 };
 
@@ -179,8 +213,13 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Exec_AsyncExec, MyFrame::OnAsyncExec)
     EVT_MENU(Exec_Shell, MyFrame::OnShell)
     EVT_MENU(Exec_Redirect, MyFrame::OnExecWithRedirect)
-    EVT_MENU(Exec_DDEExec, MyFrame::OnDDEExec)
+    EVT_MENU(Exec_Pipe, MyFrame::OnExecWithPipe)
 
+#ifdef __WINDOWS__
+    EVT_MENU(Exec_DDEExec, MyFrame::OnDDEExec)
+    EVT_MENU(Exec_DDERequest, MyFrame::OnDDERequest)
+#endif // __WINDOWS__
+    
     EVT_MENU(Exec_About, MyFrame::OnAbout)
 
     EVT_IDLE(MyFrame::OnIdle)
@@ -232,11 +271,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     wxApp::s_macAboutMenuItemId = Exec_About;
 #endif
 
-    // set the frame icon
-#ifndef __WXGTK__
-    SetIcon(wxICON(mondrian));
-#endif
-
     // create a menu bar
     wxMenu *menuFile = new wxMenu(_T(""), wxMENU_TEAROFF);
     menuFile->Append(Exec_ClearLog, _T("&Clear log\tCtrl-C"),
@@ -251,12 +285,16 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                      _T("Launch a program and return immediately"));
     execMenu->Append(Exec_Shell, _T("Execute &shell command...\tCtrl-S"),
                      _T("Launch a shell and execute a command in it"));
+    execMenu->AppendSeparator();
     execMenu->Append(Exec_Redirect, _T("Capture command &output...\tCtrl-O"),
                      _T("Launch a program and capture its output"));
+    execMenu->Append(Exec_Pipe, _T("&Pipe through command...\tCtrl-P"),
+                     _T("Pipe a string through a filter"));
 
 #ifdef __WINDOWS__
     execMenu->AppendSeparator();
     execMenu->Append(Exec_DDEExec, _T("Execute command via &DDE...\tCtrl-D"));
+    execMenu->Append(Exec_DDERequest, _T("Send DDE &request...\tCtrl-R"));
 #endif
 
     wxMenu *helpMenu = new wxMenu(_T(""), wxMENU_TEAROFF);
@@ -387,21 +425,15 @@ void MyFrame::OnExecWithRedirect(wxCommandEvent& WXUNUSED(event))
 
     if ( sync )
     {
-        wxArrayString output;
-        int code = wxExecute(cmd, output);
+        wxArrayString output, errors;
+        int code = wxExecute(cmd, output, errors);
         wxLogStatus(_T("command '%s' terminated with exit code %d."),
                     cmd.c_str(), code);
 
         if ( code != -1 )
         {
-            m_lbox->Append(wxString::Format(_T("--- Output of '%s' ---"),
-                                            cmd.c_str()));
-
-            size_t count = output.GetCount();
-            for ( size_t n = 0; n < count; n++ )
-            {
-                m_lbox->Append(output[n]);
-            }
+            ShowOutput(cmd, output, _T("Output"));
+            ShowOutput(cmd, errors, _T("Errors"));
         }
     }
     else // async exec
@@ -422,47 +454,121 @@ void MyFrame::OnExecWithRedirect(wxCommandEvent& WXUNUSED(event))
     m_cmdLast = cmd;
 }
 
-void MyFrame::OnDDEExec(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnExecWithPipe(wxCommandEvent& WXUNUSED(event))
 {
-#ifdef __WINDOWS__
-    wxString server = wxGetTextFromUser(_T("Server to connect to:"),
-                                        DIALOG_TITLE, _T("IExplore"));
-    if ( !server )
-        return;
+    if ( !m_cmdLast )
+        m_cmdLast = _T("tr [a-z] [A-Z]");
 
-    wxString topic = wxGetTextFromUser(_T("DDE topic:"),
-                                       DIALOG_TITLE, _T("WWW_OpenURL"));
-    if ( !topic )
-        return;
-
-    wxString cmd = wxGetTextFromUser(_T("DDE command:"),
+    wxString cmd = wxGetTextFromUser(_T("Enter the command: "),
                                      DIALOG_TITLE,
-                                     _T("\"file:F:\\wxWindows\\samples\\"
-                                        "image\\horse.gif\",,-1,,,,,"));
+                                     m_cmdLast);
+
     if ( !cmd )
         return;
 
-    wxDDEClient client;
-    wxConnectionBase *conn = client.MakeConnection("", server, topic);
-    if ( !conn )
+    wxString input = wxGetTextFromUser(_T("Enter the string to send to it: "),
+                                       DIALOG_TITLE);
+    if ( !input )
+        return;
+
+    // always execute the filter asynchronously
+    MyPipedProcess2 *process = new MyPipedProcess2(this, cmd, input);
+    int pid = wxExecute(cmd, FALSE /* async */, process);
+    if ( pid )
     {
-        wxLogError(_T("Failed to connect to the DDE server '%s'."),
-                   server.c_str());
+        wxLogStatus(_T("Process %ld (%s) launched."), pid, cmd.c_str());
+
+        m_running.Add(process);
     }
     else
     {
-        if ( !conn->Execute(cmd) )
+        wxLogError(_T("Execution of '%s' failed."), cmd.c_str());
+
+        delete process;
+    }
+
+    m_cmdLast = cmd;
+}
+
+#ifdef __WINDOWS__
+
+bool MyFrame::GetDDEServer()
+{
+    wxString server = wxGetTextFromUser(_T("Server to connect to:"),
+                                        DIALOG_TITLE, m_server);
+    if ( !server )
+        return FALSE;
+
+    m_server = server;
+
+    wxString topic = wxGetTextFromUser(_T("DDE topic:"), DIALOG_TITLE, m_topic);
+    if ( !topic )
+        return FALSE;
+
+    m_topic = topic;
+
+    wxString cmd = wxGetTextFromUser(_T("DDE command:"), DIALOG_TITLE, m_cmdDde);
+    if ( !cmd )
+        return FALSE;
+
+    m_cmdDde = cmd;
+
+    return TRUE;
+}
+
+void MyFrame::OnDDEExec(wxCommandEvent& WXUNUSED(event))
+{
+    if ( !GetDDEServer() )
+        return;
+
+    wxDDEClient client;
+    wxConnectionBase *conn = client.MakeConnection("", m_server, m_topic);
+    if ( !conn )
+    {
+        wxLogError(_T("Failed to connect to the DDE server '%s'."),
+                   m_server.c_str());
+    }
+    else
+    {
+        if ( !conn->Execute(m_cmdDde) )
         {
             wxLogError(_T("Failed to execute command '%s' via DDE."),
-                       cmd.c_str());
+                       m_cmdDde.c_str());
         }
         else
         {
             wxLogStatus(_T("Successfully executed DDE command"));
         }
     }
-#endif // __WINDOWS__
 }
+
+void MyFrame::OnDDERequest(wxCommandEvent& WXUNUSED(event))
+{
+    if ( !GetDDEServer() )
+        return;
+
+    wxDDEClient client;
+    wxConnectionBase *conn = client.MakeConnection("", m_server, m_topic);
+    if ( !conn )
+    {
+        wxLogError(_T("Failed to connect to the DDE server '%s'."),
+                   m_server.c_str());
+    }
+    else
+    {
+        if ( !conn->Request(m_cmdDde) )
+        {
+            wxLogError(_T("Failed to  send request '%s' via DDE."),
+                       m_cmdDde.c_str());
+        }
+        else
+        {
+            wxLogStatus(_T("Successfully sent DDE request."));
+        }
+    }
+}
+
+#endif // __WINDOWS__
 
 // input polling
 void MyFrame::OnIdle(wxIdleEvent& event)
@@ -475,6 +581,31 @@ void MyFrame::OnIdle(wxIdleEvent& event)
             event.RequestMore();
         }
     }
+}
+
+void MyFrame::OnProcessTerminated(MyPipedProcess *process)
+{
+    m_running.Remove(process);
+}
+
+
+void MyFrame::ShowOutput(const wxString& cmd,
+                         const wxArrayString& output,
+                         const wxString& title)
+{
+    size_t count = output.GetCount();
+    if ( !count )
+        return;
+
+    m_lbox->Append(wxString::Format(_T("--- %s of '%s' ---"),
+                                    title.c_str(), cmd.c_str()));
+
+    for ( size_t n = 0; n < count; n++ )
+    {
+        m_lbox->Append(output[n]);
+    }
+
+    m_lbox->Append(_T("--- End of output ---"));
 }
 
 // ----------------------------------------------------------------------------
@@ -496,6 +627,8 @@ void MyProcess::OnTerminate(int pid, int status)
 
 bool MyPipedProcess::HasInput()
 {
+    bool hasInput = FALSE;
+
     wxInputStream& is = *GetInputStream();
     if ( !is.Eof() )
     {
@@ -503,16 +636,28 @@ bool MyPipedProcess::HasInput()
 
         // this assumes that the output is always line buffered
         wxString msg;
-        msg << m_cmd << _T(": ") << tis.ReadLine();
+        msg << m_cmd << _T(" (stdout): ") << tis.ReadLine();
 
         m_parent->GetLogListBox()->Append(msg);
 
-        return TRUE;
+        hasInput = TRUE;
     }
-    else
+
+    wxInputStream& es = *GetErrorStream();
+    if ( !es.Eof() )
     {
-        return FALSE;
+        wxTextInputStream tis(es);
+
+        // this assumes that the output is always line buffered
+        wxString msg;
+        msg << m_cmd << _T(" (stderr): ") << tis.ReadLine();
+
+        m_parent->GetLogListBox()->Append(msg);
+
+        hasInput = TRUE;
     }
+
+    return hasInput;
 }
 
 void MyPipedProcess::OnTerminate(int pid, int status)
@@ -524,4 +669,25 @@ void MyPipedProcess::OnTerminate(int pid, int status)
     m_parent->OnProcessTerminated(this);
 
     MyProcess::OnTerminate(pid, status);
+}
+
+// ----------------------------------------------------------------------------
+// MyPipedProcess2
+// ----------------------------------------------------------------------------
+
+bool MyPipedProcess2::HasInput()
+{
+    if ( !!m_input )
+    {
+        wxTextOutputStream os(*GetOutputStream());
+        os.WriteString(m_input);
+
+        CloseOutput();
+        m_input.clear();
+
+        // call us once again - may be we'll have output
+        return TRUE;
+    }
+
+    return MyPipedProcess::HasInput();
 }

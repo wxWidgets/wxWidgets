@@ -161,6 +161,10 @@ public:
     wxWindow* GetWindowChild1(wxWindowID id);
     wxWindow* GetWindowChild(wxWindowID id);
 
+    // a MSW only function which sends a size event to the window using its
+    // current size - this has an effect of refreshing the window layout
+    void SendSizeEvent();
+
     // implementation from now on
     // --------------------------
 

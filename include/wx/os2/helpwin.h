@@ -42,8 +42,9 @@ class WXDLLEXPORT wxWinHelpController: public wxHelpControllerBase
 protected:
   wxString m_helpFile;
 private:
-  // virtual function hiding supression :: do not use
-    bool Initialize(const wxString& file, int WXUNUSED(server) ) { return(Initialize(file)); }
+    // virtual function hiding supression :: do not use
+    bool Initialize(const wxString& rFile, int WXUNUSED(nServer) ) { return(Initialize(rFile)); }
+    bool DisplaySection(const wxString& rSection) { return wxHelpControllerBase::DisplaySection(rSection); }
 };
 
 #endif

@@ -74,6 +74,8 @@ public:
     void OnSetFgColour(wxCommandEvent& event);
     void OnSetBgColour(wxCommandEvent& event);
     void OnToggleMultiSel(wxCommandEvent& event);
+    void OnShowColInfo(wxCommandEvent& event);
+    void OnUpdateShowColInfo(wxUpdateUIEvent& event);
 
     void BusyOn(wxCommandEvent& event);
     void BusyOff(wxCommandEvent& event);
@@ -109,6 +111,7 @@ enum
     LIST_SET_BG_COL,
     LIST_TOGGLE_MULTI_SEL,
     LIST_TOGGLE_FIRST,
+    LIST_SHOW_COL_INFO,
 
     LIST_CTRL                   = 1000
 };

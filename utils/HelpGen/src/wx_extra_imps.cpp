@@ -13,18 +13,6 @@
     #include "wx/defs.h"
 #endif
 
-char *
-copystring (const char *s)
-{
-  if (s == NULL) s = "";
-  size_t len = strlen (s) + 1;
-
-  char *news = new char[len];
-  memcpy (news, s, len);    // Should be the fastest
-
-  return news;
-}
-
 #ifdef __WXMSW__
 // from filefn.cpp
 void WXDLLEXPORT wxSplitPath(const char *pszFileName,
@@ -73,9 +61,4 @@ const char *wxLocale::GetString(const char *szOrigString,
     return szOrigString;
 }
 
-#else // !MSW
-const char *wxGetTranslation(const char *str)
-{
-    return str;
-}
 #endif // MSW

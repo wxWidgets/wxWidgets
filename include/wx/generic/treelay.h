@@ -61,7 +61,7 @@ public:
     inline long GetLeftMargin(void) const { return m_leftMargin; }
     
     inline bool GetOrientation(void) const { return m_orientation; }
-    inline void SetOrientation(bool or) { m_orientation = or; }
+    inline void SetOrientation(bool orient) { m_orientation = orient; }
     
 private:
     void CalcLayout(long node_id, int level, wxDC& dc);

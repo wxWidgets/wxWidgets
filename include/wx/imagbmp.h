@@ -16,28 +16,29 @@
 
 #include "wx/image.h"
 
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // wxBMPHandler
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxBMPHandler: public wxImageHandler
+class WXDLLEXPORT wxBMPHandler : public wxImageHandler
 {
-  DECLARE_DYNAMIC_CLASS(wxBMPHandler)
-
 public:
-
-  inline wxBMPHandler()
+  wxBMPHandler()
   {
-      m_name = "BMP file";
-      m_extension = "bmp";
+      m_name = _T("BMP file");
+      m_extension = _T("bmp");
       m_type = wxBITMAP_TYPE_BMP;
-      m_mime = "image/bmp";
+      m_mime = _T("image/bmp");
   };
 
 #if wxUSE_STREAMS
+  virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
+
   virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=0 );
   virtual bool DoCanRead( wxInputStream& stream );
-#endif
+#endif // wxUSE_STREAMS
+
+  DECLARE_DYNAMIC_CLASS(wxBMPHandler)
 };
 
 

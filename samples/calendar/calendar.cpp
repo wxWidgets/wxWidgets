@@ -259,30 +259,30 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnCalMonday(wxCommandEvent& event)
 {
-    m_panel->StartWithMonday(GetMenuBar()->IsChecked(event.GetInt()));
+    m_panel->StartWithMonday(GetMenuBar()->IsChecked(event.GetId()));
 }
 
 void MyFrame::OnCalHolidays(wxCommandEvent& event)
 {
-    bool enable = GetMenuBar()->IsChecked(event.GetInt());
+    bool enable = GetMenuBar()->IsChecked(event.GetId());
     m_panel->GetCal()->EnableHolidayDisplay(enable);
 }
 
 void MyFrame::OnCalSpecial(wxCommandEvent& event)
 {
-    m_panel->HighlightSpecial(GetMenuBar()->IsChecked(event.GetInt()));
+    m_panel->HighlightSpecial(GetMenuBar()->IsChecked(event.GetId()));
 }
 
 void MyFrame::OnCalAllowMonth(wxCommandEvent& event)
 {
-    bool allow = GetMenuBar()->IsChecked(event.GetInt());
+    bool allow = GetMenuBar()->IsChecked(event.GetId());
 
     m_panel->GetCal()->EnableMonthChange(allow);
 }
 
 void MyFrame::OnCalAllowYear(wxCommandEvent& event)
 {
-    bool allow = GetMenuBar()->IsChecked(event.GetInt());
+    bool allow = GetMenuBar()->IsChecked(event.GetId());
 
     m_panel->GetCal()->EnableYearChange(allow);
 }

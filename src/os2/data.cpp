@@ -36,12 +36,6 @@ wxCursor *g_globalCursor = NULL;
 // Message Strings for Internationalization
 char **wx_msg_str = (char**)NULL;
 
-// Custom OS version, as optionally placed in wx.ini/.wxrc
-// Currently this can be Win95, Windows, Win32s, WinNT.
-// For some systems, you can't tell until run-time what services you
-// have. See wxGetOsVersion, which uses this string if present.
-char *wxOsVersion = NULL;
-
 int wxPageNumber;
 
 // GDI Object Lists

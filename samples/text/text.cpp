@@ -70,7 +70,7 @@ public:
     void OnText(wxCommandEvent& event);
     void OnMouseEvent(wxMouseEvent& event);
 
-    bool  m_hasCapture;
+    bool m_hasCapture;
 
 private:
     static inline wxChar GetChar(bool on, wxChar c) { return on ? c : _T('-'); }
@@ -139,6 +139,10 @@ public:
     void OnFileSave(wxCommandEvent& event);
     void OnFileLoad(wxCommandEvent& event);
 
+    void OnSetEditable(wxCommandEvent& event);
+    void OnSetEnabled(wxCommandEvent& event);
+    void OnClear(wxCommandEvent& event);
+
     void OnIdle( wxIdleEvent& event );
 
 private:
@@ -163,7 +167,7 @@ enum
     TEXT_ABOUT,
     TEXT_LOAD,
     TEXT_SAVE,
-    TEXT_CLEAR,
+    TEXT_CLEAR_LOG,
 
     // clipboard menu
     TEXT_CLIPBOARD_COPY = 200,
@@ -173,9 +177,12 @@ enum
     TEXT_TOOLTIPS_SETDELAY = 300,
     TEXT_TOOLTIPS_ENABLE,
 
-    // move menu
+    // text menu
     TEXT_MOVE_ENDTEXT = 400,
-    TEXT_MOVE_ENDENTRY
+    TEXT_MOVE_ENDENTRY,
+    TEXT_SET_EDITABLE,
+    TEXT_SET_ENABLED,
+    TEXT_CLEAR
 };
 
 bool MyApp::OnInit()
@@ -186,7 +193,7 @@ bool MyApp::OnInit()
     frame->SetSizeHints( 500, 400 );
 
     wxMenu *file_menu = new wxMenu;
-    file_menu->Append(TEXT_CLEAR, "&Clear the log\tCtrl-C",
+    file_menu->Append(TEXT_CLEAR_LOG, "&Clear the log\tCtrl-C",
                       "Clear the log window contents");
     file_menu->Append(TEXT_SAVE, "&Save file\tCtrl-S",
                       "Save the text control contents to file");
@@ -219,10 +226,15 @@ bool MyApp::OnInit()
     menu_bar->Append(menuClipboard, "&Clipboard");
 #endif // wxUSE_CLIPBOARD
 
-    wxMenu *menuMove = new wxMenu;
-    menuMove->Append(TEXT_MOVE_ENDTEXT, "To the end of &text");
-    menuMove->Append(TEXT_MOVE_ENDENTRY, "To the end of &entry");
-    menu_bar->Append(menuMove, "&Move");
+    wxMenu *menuText = new wxMenu;
+    menuText->Append(TEXT_MOVE_ENDTEXT, "Move cursor to the end of &text");
+    menuText->Append(TEXT_MOVE_ENDENTRY, "Move cursor to the end of &entry");
+    menuText->Append(TEXT_SET_EDITABLE, "Toggle &editable state", "", TRUE);
+    menuText->Append(TEXT_SET_ENABLED, "Toggle e&nabled state", "", TRUE);
+    menuText->Append(TEXT_CLEAR, "&Clear text");
+    menuText->Check(TEXT_SET_EDITABLE, TRUE);
+    menuText->Check(TEXT_SET_ENABLED, TRUE);
+    menu_bar->Append(menuText, "&Text");
 
     frame->SetMenuBar(menu_bar);
 
@@ -447,6 +459,10 @@ void MyTextCtrl::OnText(wxCommandEvent& event)
     {
         wxLogMessage(_T("Text changed in control '%s'"), data);
     }
+    else
+    {
+        wxLogMessage(_T("Text changed in some control"));
+    }
 }
 
 void MyTextCtrl::OnChar(wxKeyEvent& event)
@@ -488,11 +504,12 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
                         "Current line, column: (%ld, %ld)\n"
                         "Number of lines: %ld\n"
                         "Current line length: %ld\n"
-                        "Total text length: %ld"),
+                        "Total text length: %u (%ld)"),
                         pos,
                         line, column,
                         GetNumberOfLines(),
                         GetLineLength(line),
+                        GetValue().length(),
                         GetLastPosition());
             }
             break;
@@ -527,9 +544,16 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
             WriteText("\n");
             break;
 
-        default:
-            LogEvent( wxT("Key down"), event);
+        case WXK_F6:
+            SetValue("F6 was just pressed.");
+            break;
+
+        case WXK_F7:
+            ShowPosition(10);
+            break;
     }
+
+    LogEvent( wxT("Key down"), event);
 
     event.Skip();
 }
@@ -554,7 +578,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     // single line text controls
 
     m_text = new MyTextCtrl( this, -1, "Single line.",
-      wxPoint(10,10), wxSize(140,-1), 0);
+                             wxPoint(10,10), wxSize(140,-1),
+                             wxTE_PROCESS_ENTER);
     m_text->SetForegroundColour(*wxBLUE);
     m_text->SetBackgroundColour(*wxLIGHT_GREY);
     (*m_text) << " Appended.";
@@ -569,18 +594,42 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     // multi line text controls
 
-    m_horizontal = new MyTextCtrl( this, -1, "Multiline text control with a horizontal scrollbar.",
+    m_horizontal = new MyTextCtrl( this, -1, "",
       wxPoint(10,170), wxSize(140,70), wxTE_MULTILINE | wxHSCROLL );
-    m_horizontal->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxNORMAL,
-                                 FALSE, "", wxFONTENCODING_ISO8859_2)); //wxFONTENCODING_KOI8));
-    //m_horizontal->SetValue("ËÁÖÅÔÓÑ ÕÄÁÞÎÙÍ");
-    m_horizontal->SetValue("®lu»ouèký kùò zbìsile èe¹tina «»");
+
+    // a little hack to use the command line argument for encoding testing
+    if ( wxTheApp->argc == 2 )
+    {
+        switch ( wxTheApp->argv[1][0] )
+        {
+            case '2':
+                m_horizontal->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxNORMAL,
+                                             FALSE, "",
+                                             wxFONTENCODING_ISO8859_2));
+                m_horizontal->SetValue("®lu»ouèký kùò zbìsile èe¹tina «»");
+                break;
+
+            default:
+                m_horizontal->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxNORMAL,
+                                             FALSE, "",
+                                             wxFONTENCODING_KOI8));
+                m_horizontal->SetValue("ËÁÖÅÔÓÑ ÕÄÁÞÎÙÍ");
+        }
+    }
+    else
+    {
+        m_horizontal->SetValue("Text in default encoding:\n"
+                               "Multiline text control with a horizontal scrollbar.");
+    }
 
     m_multitext = new MyTextCtrl( this, -1, "Multi line.",
       wxPoint(180,10), wxSize(240,70), wxTE_MULTILINE );
+    m_multitext->SetFont(*wxITALIC_FONT);
     (*m_multitext) << " Appended.";
     m_multitext->SetInsertionPoint(0);
     m_multitext->WriteText( "Prepended. " );
+    m_multitext->SetForegroundColour(*wxRED);
+    m_multitext->SetBackgroundColour(*wxLIGHT_GREY);
 
 #if wxUSE_TOOLTIPS
     m_multitext->SetToolTip("Press F1 here for statitics, F4 for capture and uncapture mouse.");
@@ -595,9 +644,14 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_enter->SetClientData((void *)_T("enter"));
 
     m_textrich = new MyTextCtrl(this, -1, "Allows more than 30Kb of text\n"
-                                "(even under broken Win9x)",
+                                "(even under broken Win9x)\n"
+                                "and a very very very very very "
+                                "very very very long line to test"
+                                "wxHSCROLL style",
                                 wxPoint(450, 10), wxSize(200, 230),
-                                wxTE_RICH | wxTE_MULTILINE);
+                                wxTE_RICH | wxTE_MULTILINE | wxHSCROLL);
+    m_textrich->SetForegroundColour(wxColour(0, 255, 255));
+    m_textrich->SetBackgroundColour(*wxBLUE);
 }
 
 void MyPanel::OnSize( wxSizeEvent &event )
@@ -713,11 +767,11 @@ void MyPanel::DoMoveToEndOfEntry()
 //----------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MENU(TEXT_QUIT,   MyFrame::OnQuit)
-    EVT_MENU(TEXT_ABOUT,  MyFrame::OnAbout)
-    EVT_MENU(TEXT_SAVE,   MyFrame::OnFileSave)
-    EVT_MENU(TEXT_LOAD,   MyFrame::OnFileLoad)
-    EVT_MENU(TEXT_CLEAR,  MyFrame::OnLogClear)
+    EVT_MENU(TEXT_QUIT,     MyFrame::OnQuit)
+    EVT_MENU(TEXT_ABOUT,    MyFrame::OnAbout)
+    EVT_MENU(TEXT_SAVE,     MyFrame::OnFileSave)
+    EVT_MENU(TEXT_LOAD,     MyFrame::OnFileLoad)
+    EVT_MENU(TEXT_CLEAR_LOG,MyFrame::OnLogClear)
 
 #if wxUSE_TOOLTIPS
     EVT_MENU(TEXT_TOOLTIPS_SETDELAY,  MyFrame::OnSetTooltipDelay)
@@ -731,6 +785,10 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU(TEXT_MOVE_ENDTEXT,       MyFrame::OnMoveToEndOfText)
     EVT_MENU(TEXT_MOVE_ENDENTRY,      MyFrame::OnMoveToEndOfEntry)
+
+    EVT_MENU(TEXT_SET_EDITABLE,       MyFrame::OnSetEditable)
+    EVT_MENU(TEXT_SET_ENABLED,        MyFrame::OnSetEnabled)
+    EVT_MENU(TEXT_CLEAR,              MyFrame::OnClear)
 
     EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
@@ -803,6 +861,38 @@ void MyFrame::OnToggleTooltips(wxCommandEvent& event)
 void MyFrame::OnLogClear(wxCommandEvent& WXUNUSED(event))
 {
     m_panel->m_log->Clear();
+}
+
+void MyFrame::OnSetEditable(wxCommandEvent& WXUNUSED(event))
+{
+    static bool s_editable = TRUE;
+
+    s_editable = !s_editable;
+    m_panel->m_text->SetEditable(s_editable);
+    m_panel->m_password->SetEditable(s_editable);
+    m_panel->m_multitext->SetEditable(s_editable);
+    m_panel->m_textrich->SetEditable(s_editable);
+}
+
+void MyFrame::OnSetEnabled(wxCommandEvent& WXUNUSED(event))
+{
+    bool enabled = m_panel->m_text->IsEnabled();
+    enabled = !enabled;
+
+    m_panel->m_text->Enable(enabled);
+    m_panel->m_password->Enable(enabled);
+    m_panel->m_multitext->Enable(enabled);
+    m_panel->m_readonly->Enable(enabled);
+    m_panel->m_textrich->Enable(enabled);
+}
+
+void MyFrame::OnClear(wxCommandEvent& WXUNUSED(event))
+{
+    m_panel->m_text->Clear();
+    m_panel->m_password->Clear();
+    m_panel->m_multitext->Clear();
+    m_panel->m_readonly->Clear();
+    m_panel->m_textrich->Clear();
 }
 
 void MyFrame::OnFileSave(wxCommandEvent& event)

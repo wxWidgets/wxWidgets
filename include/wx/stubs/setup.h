@@ -103,23 +103,28 @@
                                   // Define 1 to use ODBC classes
 
 #define wxODBC_FWD_ONLY_CURSORS   1
-                                  // Some databases/ODBC drivers only allow forward scrolling cursors.
-                                  // Unless you specifically want to use backward scrolling
-                                  // cursors, and you know that all of the databases/ODBC drivers
-                                  // that you will use these odbc classes with allow backward 
-                                  // scrolling cursors, this setting should remain set to 1
-                                  // for maximum database/driver compatibilty
+                                  // For backward compatibility reasons, this parameter now only
+                                  // controls the default scrolling method used by cursors.  This
+                                  // default behavior can be overriden by setting the second param
+                                  // of wxDB::GetDbConnection() to indicate whether the connection
+                                  // (and any wxTable()s that use the connection) should support
+                                  // forward only scrolling of cursors, or both forward and backward
+                                  // Support for backward scrolling cursors is dependent on the
+                                  // data source as well as the ODBC driver being used.
 
+#define wxODBC_BACKWARD_COMPATABILITY 0
+                                // Default is 0.  Set to 1 to use the deprecated classes, enum
+                                // types, function, member variables.  With a setting of 1, full
+                                // backward compatability with the 2.0.x release is possible.
+                                // It is STRONGLY recommended that this be set to 0, as 
+                                // future development will be done only on the non-deprecated
+                                // functions/classes/member variables/etc.
 
 #define wxUSE_IOSTREAMH     1
                                   // VC++ 4.2 and above allows <iostream> and <iostream.h>
                                   // but you can't mix them. Set to 1 for <iostream.h>,
                                   // 0 for <iostream>
 
-#define wxUSE_WXCONFIG      1
-                                  // if enabled, compiles built-in OS independent wxConfig
-                                  // class and it's file (any platform) and registry (Win)
-                                  // based implementations
 #define wxUSE_TIMEDATE      1
                                   // Use time and date
 #define wxUSE_THREADS       0

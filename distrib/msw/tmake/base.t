@@ -44,6 +44,17 @@
         $project{"BASE_UNIX_DEPS"} .= $filedep . " ";
     }
 
+    foreach $file (sort keys %wxMSW) {
+        next unless $wxMSW{$file} =~ /\bB\b/;
+
+        ($fileobj = $file) =~ s/cp?p?$/\o/;
+        ($filedep = $file) =~ s/cp?p?$/\d/;
+
+        $project{"BASE_SOURCES"} .= "msw/" . $file . " ";
+        $project{"BASE_MSW_OBJS"} .= $fileobj . " ";
+        $project{"BASE_MSW_DEPS"} .= $filedep . " ";
+    }
+
     #! find all our headers
     foreach $file (sort keys %wxWXINCLUDE) {
         next unless $wxWXINCLUDE{$file} =~ /\bB\b/;
@@ -55,6 +66,12 @@
         next unless $wxUNIXINCLUDE{$file} =~ /\bB\b/;
 
         $project{"BASE_HEADERS"} .= "unix/" . $file . " "
+    }
+
+    foreach $file (sort keys %wxMSWINCLUDE) {
+        next unless $wxMSWINCLUDE{$file} =~ /\bB\b/;
+
+        $project{"BASE_HEADERS"} .= "msw/" . $file . " "
     }
 
     foreach $file (sort keys %wxPROTOCOLINCLUDE) {
@@ -80,5 +97,12 @@ BASE_DEPS = \
 BASE_UNIX_OBJS = \
 		#$ ExpandList("BASE_UNIX_OBJS");
 
-BASE_DEPS = \
-		#$ ExpandList("BASE_DEPS");
+BASE_UNIX_DEPS = \
+		#$ ExpandList("BASE_UNIX_DEPS");
+
+BASE_MSW_OBJS = \
+		#$ ExpandList("BASE_MSW_OBJS");
+
+BASE_MSW_DEPS = \
+		#$ ExpandList("BASE_MSW_DEPS");
+

@@ -76,8 +76,8 @@ public:
     wxAcceleratorTable(int n, wxAcceleratorEntry entries[]); // Load from array
 
     // Copy constructors
-    wxAcceleratorTable(const wxAcceleratorTable& accel) { Ref(accel); }
-    wxAcceleratorTable(const wxAcceleratorTable* accel) { if (accel) Ref(*accel); }
+    wxAcceleratorTable(const wxAcceleratorTable& accel) : wxObject() { Ref(accel); }
+    wxAcceleratorTable(const wxAcceleratorTable* accel) : wxObject() { if (accel) Ref(*accel); }
 
     ~wxAcceleratorTable();
 

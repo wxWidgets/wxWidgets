@@ -27,7 +27,7 @@ wxFilterIn/OutputStream
 \end{enumerate}
 
 wxStreamBase is the base definition of a stream. It defines, for example,
-the API of OnSysRead, OnSysWrite, OnSysSeek and OnSysTell. These functions are
+the API of OnSysRead, OnSysWrite, OnSysSeek and OnSysTell. These functions 
 are really implemented by the "IO" classes.
 wxInputStream and wxOutputStream inherit from it.
 
@@ -39,8 +39,8 @@ wxInputStream is the base class for read-only streams. It implements Read,
 SeekI (I for Input), and all read or IO generic related functions.
 wxOutputStream does the same thing but it is for write-only streams.
 
-wxFilterIn/OutputStream is base class definition for stream filtering.
-I mean by stream filtering, a stream which does no syscall but filter datas
+wxFilterIn/OutputStream is the base class definition for stream filtering.
+Stream filtering means a stream which does no syscall but filters data
 which are passed to it and then pass them to another stream.
 For example, wxZLibInputStream is an inline stream decompressor.
 

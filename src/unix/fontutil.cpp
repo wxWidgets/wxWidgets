@@ -171,6 +171,7 @@ bool wxGetNativeFontEncoding(wxFontEncoding encoding,
         case wxFONTENCODING_ISO8859_9:
         case wxFONTENCODING_ISO8859_10:
         case wxFONTENCODING_ISO8859_11:
+        case wxFONTENCODING_ISO8859_12:
         case wxFONTENCODING_ISO8859_13:
         case wxFONTENCODING_ISO8859_14:
         case wxFONTENCODING_ISO8859_15:

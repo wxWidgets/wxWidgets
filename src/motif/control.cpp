@@ -67,7 +67,7 @@ wxControl::~wxControl()
     wxPanel *panel = wxDynamicCast(GetParent(), wxPanel);
     if (panel)
     {
-        if (panel->GetDefaultItem() == this)
+        if ( (wxControl *)panel->GetDefaultItem() == this)
             panel->SetDefaultItem((wxButton*) NULL);
     }
 }

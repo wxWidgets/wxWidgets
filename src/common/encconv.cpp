@@ -26,15 +26,20 @@
 #ifdef __BORLANDC__
 #include "../common/unictabl.inc"
 #else
-#include "unictabl.inc" 
+#include "unictabl.inc"
 #endif
 
+#if wxUSE_WCHAR_T
+typedef wchar_t tchar;
+#else
+typedef char tchar;
+#endif
 
 static wxUint16* LINKAGEMODE GetEncTable(wxFontEncoding enc)
 {
     for (int i = 0; encodings_list[i].table != NULL; i++)
     {
-        if (encodings_list[i].encoding == enc) 
+        if (encodings_list[i].encoding == enc)
             return encodings_list[i].table;
     }
     return NULL;
@@ -56,12 +61,12 @@ static int LINKAGEMODE CompareCharsetItems(const void *i1, const void *i2)
 static CharsetItem* LINKAGEMODE BuildReverseTable(wxUint16 *tbl)
 {
     CharsetItem *rev = new CharsetItem[128];
-    
+
     for (int i = 0; i < 128; i++)
         rev[i].c = 128 + i, rev[i].u = tbl[i];
 
     qsort(rev, 128, sizeof(CharsetItem), CompareCharsetItems);
-    
+
     return rev;
 }
 
@@ -83,37 +88,37 @@ bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_e
 
     if (m_Table) {delete[] m_Table; m_Table = NULL;}
 
-#if !wxUSE_UNICODE
+#if !wxUSE_WCHAR_T
     if (input_enc == wxFONTENCODING_UNICODE || output_enc == wxFONTENCODING_UNICODE) return FALSE;
 #endif
 
     if (input_enc == output_enc) {m_JustCopy = TRUE; return TRUE;}
-    
+
     m_UnicodeOutput = (output_enc == wxFONTENCODING_UNICODE);
     m_JustCopy = FALSE;
-    
+
     if (input_enc == wxFONTENCODING_UNICODE)
     {
         if ((out_tbl = GetEncTable(output_enc)) == NULL) return FALSE;
 
-        m_Table = new wxChar[65536];
-        for (i = 0; i < 128; i++)  m_Table[i] = (wxChar)i; // 7bit ASCII
-        for (i = 128; i < 65536; i++)  m_Table[i] = (wxChar)'?'; 
+        m_Table = new tchar[65536];
+        for (i = 0; i < 128; i++)  m_Table[i] = (tchar)i; // 7bit ASCII
+        for (i = 128; i < 65536; i++)  m_Table[i] = (tchar)'?';
                 // FIXME - this should be character that means `unicode to charset' impossible, not '?'
 
         if (method == wxCONVERT_SUBSTITUTE)
         {
             for (i = 0; i < encoding_unicode_fallback_count; i++)
-                m_Table[encoding_unicode_fallback[i].c] = (wxChar) encoding_unicode_fallback[i].s;
+                m_Table[encoding_unicode_fallback[i].c] = (tchar) encoding_unicode_fallback[i].s;
         }
 
         for (i = 0; i < 128; i++)
-            m_Table[out_tbl[i]] = (wxChar)(128 + i);
+            m_Table[out_tbl[i]] = (tchar)(128 + i);
 
         m_UnicodeInput = TRUE;
         return TRUE;
     }
-    
+
     else
     {
         if ((in_tbl = GetEncTable(input_enc)) == NULL) return FALSE;
@@ -121,114 +126,37 @@ bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_e
             if ((out_tbl = GetEncTable(output_enc)) == NULL) return FALSE;
 
         m_UnicodeInput = FALSE;
-        
-        m_Table = new wxChar[256];
-        for (i = 0; i < 128; i++)  m_Table[i] = (wxChar)i; // 7bit ASCII
-        
+
+        m_Table = new tchar[256];
+        for (i = 0; i < 128; i++)  m_Table[i] = (tchar)i; // 7bit ASCII
+
         if (output_enc == wxFONTENCODING_UNICODE)
         {
-            for (i = 0; i < 128; i++)  m_Table[128 + i] = (wxChar)in_tbl[i]; // wxChar is 2byte now
+            for (i = 0; i < 128; i++)  m_Table[128 + i] = (tchar)in_tbl[i];
             return TRUE;
         }
-        else 
+        else
         {
             CharsetItem *rev = BuildReverseTable(out_tbl);
             CharsetItem *item, key;
-            
-            for (i = 0; i < 128; i++)  
+
+            for (i = 0; i < 128; i++)
             {
                 key.u = in_tbl[i];
                 item = (CharsetItem*) bsearch(&key, rev, 128, sizeof(CharsetItem), CompareCharsetItems);
                 if (item == NULL && method == wxCONVERT_SUBSTITUTE)
-                    item = (CharsetItem*) bsearch(&key, encoding_unicode_fallback, 
+                    item = (CharsetItem*) bsearch(&key, encoding_unicode_fallback,
                                 encoding_unicode_fallback_count, sizeof(CharsetItem), CompareCharsetItems);
                 if (item)
-                    m_Table[128 + i] = (wxChar)item -> c;
+                    m_Table[128 + i] = (tchar)item -> c;
                 else
                     m_Table[128 + i] = 128 + i; // don't know => don't touch
             }
-            
+
             delete[] rev;
             return TRUE;
         }
     }
-}
-
-
-
-void wxEncodingConverter::Convert(const wxChar* input, wxChar* output)
-{
-    if (m_JustCopy)
-    {
-        wxStrcpy(output, input);
-        return;
-    }
-    
-    wxASSERT_MSG(m_Table != NULL, wxT("You must call wxEncodingConverter::Init() before actually converting!"));
-    
-    const wxChar *i;
-    wxChar *o;
-    
-    if (m_UnicodeInput)
-        for (i = input, o = output; *i != 0; i++, o++)
-            *o = (wxChar)(m_Table[(wxUint16)*i]);
-    else
-        for (i = input, o = output; *i != 0; i++, o++)
-            *o = (wxChar)(m_Table[(wxUint8)*i]);
-    *o = 0;
-}
-
-
-#if wxUSE_UNICODE // otherwise wxChar === char
-
-void wxEncodingConverter::Convert(const char* input, wxChar* output)
-{
-    wxASSERT_MSG(!m_UnicodeInput, wxT("You cannot convert from unicode if input is const char*!"));
-
-    const char *i;
-    wxChar *o;
-
-    if (m_JustCopy)
-    {
-        for (i = input, o = output; *i != 0;)
-            *(o++) = (wxChar)(*(i++));
-        *o = 0;
-        return;
-    }
-    
-    wxASSERT_MSG(m_Table != NULL, wxT("You must call wxEncodingConverter::Init() before actually converting!"));
-       
-    for (i = input, o = output; *i != 0;)
-        *(o++) = (wxChar)(m_Table[(wxUint8)*(i++)]);
-    *o = 0;
-}
-
-
-
-void wxEncodingConverter::Convert(const wxChar* input, char* output)
-{
-    wxASSERT_MSG(!m_UnicodeOutput, wxT("You cannot convert to unicode if output is const char*!"));
-
-    const wxChar *i;
-    char *o;
-
-    if (m_JustCopy)
-    {
-        for (i = input, o = output; *i != 0;)
-            *(o++) = (char)(*(i++));
-        *o = 0;
-        return;
-    }
-    
-    wxASSERT_MSG(m_Table != NULL, wxT("You must call wxEncodingConverter::Init() before actually converting!"));
-       
-    if (m_UnicodeInput)
-        for (i = input, o = output; *i != 0; i++, o++)
-            *o = (char)(m_Table[(wxUint16)*i]);
-    else
-        for (i = input, o = output; *i != 0; i++, o++)
-            *o = (char)(m_Table[(wxUint8)*i]);
-    *o = 0;
 }
 
 
@@ -246,26 +174,103 @@ void wxEncodingConverter::Convert(const char* input, char* output)
         strcpy(output, input);
         return;
     }
-    
+
     wxASSERT_MSG(m_Table != NULL, wxT("You must call wxEncodingConverter::Init() before actually converting!"));
-       
+
     for (i = input, o = output; *i != 0;)
         *(o++) = (char)(m_Table[(wxUint8)*(i++)]);
     *o = 0;
 }
 
-#endif // wxUSE_UNICODE
+
+#if wxUSE_WCHAR_T
+
+void wxEncodingConverter::Convert(const char* input, wchar_t* output)
+{
+    wxASSERT_MSG(m_UnicodeOutput, wxT("You cannot convert to 8-bit if output is const wchar_t*!"));
+    wxASSERT_MSG(!m_UnicodeInput, wxT("You cannot convert from unicode if input is const char*!"));
+
+    const char *i;
+    wchar_t *o;
+
+    if (m_JustCopy)
+    {
+        for (i = input, o = output; *i != 0;)
+            *(o++) = (wchar_t)(*(i++));
+        *o = 0;
+        return;
+    }
+
+    wxASSERT_MSG(m_Table != NULL, wxT("You must call wxEncodingConverter::Init() before actually converting!"));
+
+    for (i = input, o = output; *i != 0;)
+        *(o++) = (wchar_t)(m_Table[(wxUint8)*(i++)]);
+    *o = 0;
+}
+
+
+
+void wxEncodingConverter::Convert(const wchar_t* input, char* output)
+{
+    wxASSERT_MSG(!m_UnicodeOutput, wxT("You cannot convert to unicode if output is const char*!"));
+    wxASSERT_MSG(m_UnicodeInput, wxT("You cannot convert from 8-bit if input is const wchar_t*!"));
+
+    const wchar_t *i;
+    char *o;
+
+    if (m_JustCopy)
+    {
+        for (i = input, o = output; *i != 0;)
+            *(o++) = (char)(*(i++));
+        *o = 0;
+        return;
+    }
+
+    wxASSERT_MSG(m_Table != NULL, wxT("You must call wxEncodingConverter::Init() before actually converting!"));
+
+    for (i = input, o = output; *i != 0;)
+        *(o++) = (char)(m_Table[(wxUint16)*(i++)]);
+    *o = 0;
+}
+
+
+
+void wxEncodingConverter::Convert(const wchar_t* input, wchar_t* output)
+{
+    wxASSERT_MSG(m_UnicodeOutput, wxT("You cannot convert to 8-bit if output is const wchar_t*!"));
+    wxASSERT_MSG(m_UnicodeInput, wxT("You cannot convert from 8-bit if input is const wchar_t*!"));
+
+    const wchar_t *i;
+    wchar_t *o;
+
+    if (m_JustCopy)
+    {
+        // wcscpy() is not guaranteed to exist
+        for (i = input, o = output; *i != 0;)
+            *(o++) = (*(i++));
+        *o = 0;
+        return;
+    }
+
+    wxASSERT_MSG(m_Table != NULL, wxT("You must call wxEncodingConverter::Init() before actually converting!"));
+
+    for (i = input, o = output; *i != 0;)
+        *(o++) = (wchar_t)(m_Table[(wxUint8)*(i++)]);
+    *o = 0;
+}
+
+#endif // wxUSE_WCHAR_T
 
 
 wxString wxEncodingConverter::Convert(const wxString& input)
 {
     if (m_JustCopy) return input;
-    
+
     wxString s;
     const wxChar *i;
-    
+
     wxASSERT_MSG(m_Table != NULL, wxT("You must call wxEncodingConverter::Init() before actually converting!"));
-    
+
     if (m_UnicodeInput)
         for (i = input.c_str(); *i != 0; i++)
             s << (wxChar)(m_Table[(wxUint16)*i]);
@@ -282,7 +287,7 @@ wxString wxEncodingConverter::Convert(const wxString& input)
 
 
 // Following tables describe classes of encoding equivalence.
-// 
+//
 
 #define STOP wxFONTENCODING_SYSTEM
 
@@ -291,17 +296,17 @@ wxString wxEncodingConverter::Convert(const wxString& input)
            // max no. of encodings for one language used on one platform
            // Anybody thinks 5 is not enough? ;-)
 
-static wxFontEncoding 
+static wxFontEncoding
     EquivalentEncodings[][NUM_OF_PLATFORMS][ENC_PER_PLATFORM+1] = {
 
     // *** Please put more common encodings as first! ***
 
-    // West European
+    // Western European
     {
         /* unix    */ {wxFONTENCODING_ISO8859_1, wxFONTENCODING_ISO8859_15, STOP},
         /* windows */ {wxFONTENCODING_CP1252, STOP},
         /* os2     */ {STOP},
-        /* mac     */ {STOP}   
+        /* mac     */ {STOP}
     },
 
     // Central European
@@ -309,15 +314,15 @@ static wxFontEncoding
         /* unix    */ {wxFONTENCODING_ISO8859_2, STOP},
         /* windows */ {wxFONTENCODING_CP1250, STOP},
         /* os2     */ {STOP},
-        /* mac     */ {STOP}   
+        /* mac     */ {STOP}
     },
-    
+
     // Baltic
     {
-        /* unix    */ {wxFONTENCODING_ISO8859_13, STOP},
+        /* unix    */ {wxFONTENCODING_ISO8859_13, wxFONTENCODING_ISO8859_4, STOP},
         /* windows */ {wxFONTENCODING_CP1257, STOP},
         /* os2     */ {STOP},
-        /* mac     */ {STOP}   
+        /* mac     */ {STOP}
     },
 
     // Hebrew
@@ -325,7 +330,7 @@ static wxFontEncoding
         /* unix    */ {wxFONTENCODING_ISO8859_8, STOP},
         /* windows */ {wxFONTENCODING_CP1255, STOP},
         /* os2     */ {STOP},
-        /* mac     */ {STOP}   
+        /* mac     */ {STOP}
     },
 
     // Greek
@@ -333,7 +338,7 @@ static wxFontEncoding
         /* unix    */ {wxFONTENCODING_ISO8859_7, STOP},
         /* windows */ {wxFONTENCODING_CP1253, STOP},
         /* os2     */ {STOP},
-        /* mac     */ {STOP}   
+        /* mac     */ {STOP}
     },
 
     // Arabic
@@ -341,7 +346,7 @@ static wxFontEncoding
         /* unix    */ {wxFONTENCODING_ISO8859_6, STOP},
         /* windows */ {wxFONTENCODING_CP1256, STOP},
         /* os2     */ {STOP},
-        /* mac     */ {STOP}   
+        /* mac     */ {STOP}
     },
 
     // Turkish
@@ -349,24 +354,15 @@ static wxFontEncoding
         /* unix    */ {wxFONTENCODING_ISO8859_9, STOP},
         /* windows */ {wxFONTENCODING_CP1254, STOP},
         /* os2     */ {STOP},
-        /* mac     */ {STOP}   
+        /* mac     */ {STOP}
     },
 
     // Cyrillic
     {
-        /* unix    */ {wxFONTENCODING_ISO8859_13, wxFONTENCODING_ISO8859_4,
-                       wxFONTENCODING_ISO8859_15, wxFONTENCODING_ISO8859_1, STOP},
-        /* windows */ {wxFONTENCODING_CP1257, wxFONTENCODING_CP1252, STOP},
-        /* os2     */ {STOP},
-        /* mac     */ {STOP}   
-    },
-
-    // Russia and other KOI-8 users:
-    {
         /* unix    */ {wxFONTENCODING_KOI8, wxFONTENCODING_ISO8859_5, STOP},
         /* windows */ {wxFONTENCODING_CP1251, STOP},
         /* os2     */ {STOP},
-        /* mac     */ {STOP}   
+        /* mac     */ {STOP}
     },
 
     {{STOP},{STOP},{STOP},{STOP}} /* Terminator */
@@ -390,7 +386,7 @@ wxFontEncodingArray wxEncodingConverter::GetPlatformEquivalents(wxFontEncoding e
         platform = wxPLATFORM_MAC;
 #endif
     }
-    
+
     int i, clas, e ;
     wxFontEncoding *f;
     wxFontEncodingArray arr;
@@ -406,11 +402,11 @@ wxFontEncodingArray wxEncodingConverter::GetPlatformEquivalents(wxFontEncoding e
                         if (*f == enc) arr.Add(enc);
                     for (f = EquivalentEncodings[clas][platform]; *f != STOP; f++)
                         if (arr.Index(*f) == wxNOT_FOUND) arr.Add(*f);
-                    i = NUM_OF_PLATFORMS/*hack*/; break; 
+                    i = NUM_OF_PLATFORMS/*hack*/; break;
                 }
         clas++;
     }
-    
+
     return arr;
 }
 
@@ -421,7 +417,7 @@ wxFontEncodingArray wxEncodingConverter::GetAllEquivalents(wxFontEncoding enc)
     int i, clas, e, j ;
     wxFontEncoding *f;
     wxFontEncodingArray arr;
-    
+
     arr = GetPlatformEquivalents(enc); // we want them to be first items in array
 
     clas = 0;
@@ -432,12 +428,12 @@ wxFontEncodingArray wxEncodingConverter::GetAllEquivalents(wxFontEncoding enc)
                 if (EquivalentEncodings[clas][i][e] == enc)
                 {
                     for (j = 0; j < NUM_OF_PLATFORMS; j++)
-                        for (f = EquivalentEncodings[clas][j]; *f != STOP; f++) 
-                            if (arr.Index(*f) == wxNOT_FOUND) arr.Add(*f);                            
-                    i = NUM_OF_PLATFORMS/*hack*/; break; 
+                        for (f = EquivalentEncodings[clas][j]; *f != STOP; f++)
+                            if (arr.Index(*f) == wxNOT_FOUND) arr.Add(*f);
+                    i = NUM_OF_PLATFORMS/*hack*/; break;
                 }
         clas++;
     }
-    
+
     return arr;
 }

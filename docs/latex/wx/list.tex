@@ -19,7 +19,7 @@ data but make all of its dangerous (because untyped) functions protected, so
 that they can only be used from derived classes which, in turn, expose a type
 safe interface. With this approach a new wxList-like class must be defined for
 each list type (i.e. list of ints, of wxStrings or of MyObjects). This is done
-with {\it WX\_DECLARE\_LIST} and {\it WX\_IMPLEMENT\_LIST} macros like this
+with {\it WX\_DECLARE\_LIST} and {\it WX\_DEFINE\_LIST} macros like this
 (notice the similarity with WX\_DECLARE\_OBJARRAY and WX\_IMPLEMENT\_OBJARRAY
 macros):
 
@@ -51,8 +51,8 @@ macros):
     // also have MyList::Node type which is the type-safe version of wxNode.
     MyList list;
     MyListElement element;
-    list.Add(element);      // ok
-    list.Add(17);           // error: incorrect type
+    list.Append(element);      // ok
+    list.Append(17);           // error: incorrect type
 
     // let's iterate over the list
     for ( MyList::Node *node = list.GetFirst(); node; node = node->GetNext() )

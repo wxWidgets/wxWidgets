@@ -1,6 +1,4 @@
-#
-# Makefile : Builds wxWindows contrib src for Unix.
-#
+# $Id$
 
 CONTRIB_SUBDIRS=ogl mmedia stc
 

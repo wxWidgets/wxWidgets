@@ -1,6 +1,6 @@
 src/jpeg/make*
-src/jpeg/jpeg.dsp
-src/jpeg/jpeg.dsw
+src/jpeg/JpegVC.dsp
+src/jpeg/JpegVC.dsw
 src/jpeg/*.c
 src/jpeg/*.h
 src/jpeg/README

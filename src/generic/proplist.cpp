@@ -72,7 +72,7 @@ static wxBitmap *GetCrossBitmap();
 // Property text edit control
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxPropertyTextEdit, wxTextCtrl)
+IMPLEMENT_DYNAMIC_CLASS(wxPropertyTextEdit, wxTextCtrl)
 
 wxPropertyTextEdit::wxPropertyTextEdit(wxPropertyListView *v, wxWindow *parent,
     const wxWindowID id, const wxString& value,
@@ -675,7 +675,7 @@ void wxPropertyListView::OnText(wxCommandEvent& event)
 // Property dialog box
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxPropertyListDialog, wxDialog)
+IMPLEMENT_DYNAMIC_CLASS(wxPropertyListDialog, wxDialog)
 
 BEGIN_EVENT_TABLE(wxPropertyListDialog, wxDialog)
     EVT_BUTTON(wxID_CANCEL,                wxPropertyListDialog::OnCancel)
@@ -735,7 +735,7 @@ bool wxPropertyListDialog::ProcessEvent(wxEvent& event)
 // Property panel
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxPropertyListPanel, wxPanel)
+IMPLEMENT_DYNAMIC_CLASS(wxPropertyListPanel, wxPanel)
 
 BEGIN_EVENT_TABLE(wxPropertyListPanel, wxPanel)
     EVT_SIZE(wxPropertyListPanel::OnSize)
@@ -771,7 +771,7 @@ void wxPropertyListPanel::OnSize(wxSizeEvent& WXUNUSED(event))
 // Property frame
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxPropertyListFrame, wxFrame)
+IMPLEMENT_DYNAMIC_CLASS(wxPropertyListFrame, wxFrame)
 
 BEGIN_EVENT_TABLE(wxPropertyListFrame, wxFrame)
     EVT_CLOSE(wxPropertyListFrame::OnCloseWindow)

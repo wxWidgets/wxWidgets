@@ -155,17 +155,36 @@ typedef unsigned int UINT16;
 typedef short INT16;
 #endif
 
+#if defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || defined( __CYGWIN__ )
+#include <wx/msw/gccpriv.h>
+#else
+#undef wxCHECK_W32API_VERSION
+#define wxCHECK_W32API_VERSION(maj, min) (0)
+#endif
+
 /* INT32 must hold at least signed 32-bit values. */
 
-/* Modified JACS 23/4/99. 1200 means VC++ 6 */
-#if !defined(XMD_H) && !(_MSC_VER >= 1200) && !(__BORLANDC__ >= 0x550)  /* X11/xmd.h correctly defines INT32 */
+/* you may define INT32_DEFINED if it is already defined somewhere */
+#ifndef INT32_DEFINED
+#ifdef XMD_H
+/* X11/xmd.h correctly defines INT32 */
+#define INT32_DEFINED
+#elif (_MSC_VER >= 1200) || (__BORLANDC__ >= 0x550) || \
+      wxCHECK_W32API_VERSION( 0, 5 ) || \
+      ((defined(__MINGW32__) || defined(__CYGWIN__)) \
+       && ((__GNUC__>2) || ((__GNUC__==2) && (__GNUC_MINOR__>95))))
+
+/* INT32 is defined in windows.h  for these compilers */
+#define INT32_DEFINED
+#include <windows.h>
+#endif
+#endif /* !INT32_DEFINED */
+
+#ifndef INT32_DEFINED
 typedef long INT32;
 #endif
 
-/* Added JACS 23/4/99, to get INT32 definition */
-#if (_MSC_VER >= 1200) || (__BORLANDC__ >= 0x550)
-#include <windows.h>
-#endif
+#undef INT32_DEFINED
 
 /* Datatype used for image dimensions.  The JPEG standard only supports
  * images up to 64K*64K due to 16-bit fields in SOF markers.  Therefore

@@ -747,11 +747,16 @@ bool wxWindow::SetCursor(const wxCursor& cursor)
         return FALSE;
     }
 
-    wxASSERT_MSG( m_cursor.Ok(),
-                  wxT("cursor must be valid after call to the base version"));
+    //    wxASSERT_MSG( m_cursor.Ok(),
+    //                  wxT("cursor must be valid after call to the base version"));
+    wxCursor* cursor2 = NULL;
+    if (m_cursor.Ok())
+        cursor2 = & m_cursor;
+    else
+        cursor2 = wxSTANDARD_CURSOR;
 
     WXDisplay *dpy = GetXDisplay();
-    WXCursor x_cursor = m_cursor.GetXCursor(dpy);
+    WXCursor x_cursor = cursor2->GetXCursor(dpy);
 
     Widget w = (Widget) GetMainWidget();
     Window win = XtWindow(w);

@@ -22,7 +22,9 @@ $(TARGET)_resources.o:  $(TARGET).rc
 clean:
 	-$(RM) *.o
 	-$(RM) $(TARGET)_resources.o
-	-$(RM) $(TARGET).exe 
 	-$(RM) core 
 	-$(RM) *.rsc
 	-$(RM) *.res
+
+cleanall: clean
+	-$(RM) $(TARGET).exe 
