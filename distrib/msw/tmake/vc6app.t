@@ -136,7 +136,7 @@
 	#! the wxWin lib name itself is composed from the basename with various
 	#! suffixes: 'u' for Unicode, 'd' for debug and we also need the version
 	#! for the DLL
-	$DLL_VERSION = "232";
+	$DLL_VERSION = "233";
 
 	$project{"WX_LINK_DEBUG"} = $DEBUG_EXTRA_LIBS . "$WX_BASENAME$DEBUG_SUFFIX.lib";
 	$project{"WX_LINK_RELEASE"} = $RELEASE_EXTRA_LIBS . "$WX_BASENAME.lib";
