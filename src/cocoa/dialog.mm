@@ -170,7 +170,7 @@ int wxDialog::ShowModal()
 
 void wxDialog::EndModal(int retCode)
 {
-    wxASSERT(IsModal(), wxT("EndModal() should only be used within ShowModal()"));
+    wxASSERT_MSG(IsModal(), wxT("EndModal() should only be used within ShowModal()"));
     SetReturnCode(retCode);
     Show(false);
 }
