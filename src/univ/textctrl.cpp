@@ -72,6 +72,7 @@ void wxTextCtrl::Init()
 
     m_colStart = 0;
     m_ofsHorz = 0;
+    m_posLastVisible = 0;
 
     m_curPos =
     m_curRow =
@@ -687,6 +688,10 @@ void wxTextCtrl::UpdateTextRect()
     m_rectText = GetRenderer()->
                     GetTextClientArea(this,
                                       wxRect(wxPoint(0, 0), GetClientSize()));
+
+    // it will be updated the next time we're redrawn, don't redo the (rather
+    // complex and time consuming) calculation of it here
+    m_posLastVisible = m_rectText.width;
 }
 
 void wxTextCtrl::OnSize(wxSizeEvent& event)
@@ -934,7 +939,11 @@ void wxTextCtrl::ScrollText(long col)
         m_ofsHorz = ofsHorz;
         m_colStart = col;
 
-        ScrollWindow(dx, 0, &m_rectText);
+        // NB3: scroll only the text shown, not the entire text area (there may
+        //      be blank area at the end)
+        wxRect rectText = m_rectText;
+        rectText.width = m_posLastVisible;
+        ScrollWindow(dx, 0, &rectText);
     }
 }
 
@@ -1112,6 +1121,10 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
             continue;
         }
 
+        // don't show the columns which are scrolled out to the left
+        if ( colStart > m_colStart )
+            colStart = m_colStart;
+
         (void)HitTest(pt2, &colEnd, NULL);
 
         // extract the part of line we need to redraw
@@ -1141,6 +1154,9 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
         {
             rectText.width -= GetTextWidth(text.Last());
             text.RemoveLast();
+
+            // remember the position of the last pixel shown
+            m_posLastVisible = rectText.GetRight() - m_rectText.GetLeft();
 
             if ( !text )
             {

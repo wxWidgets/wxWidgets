@@ -291,10 +291,11 @@ private:
     // the rectangle (in client coordinates) to draw text inside
     wxRect m_rectText;
 
-    // for the controls without horz scrollbar: the offset by which the window
-    // is scrolled to the right and the first visible position
+    // for the controls without horz scrollbar only: the position of the first
+    // and last visible pixels and the first visible column
+    wxCoord m_ofsHorz,
+            m_posLastVisible;
     long m_colStart;
-    wxCoord m_ofsHorz;
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxTextCtrl)
