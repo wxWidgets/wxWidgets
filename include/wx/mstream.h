@@ -15,7 +15,7 @@
 
 #if wxUSE_STREAMS
 
-class wxMemoryInputStream: public wxInputStream {
+class WXDLLEXPORT wxMemoryInputStream: public wxInputStream {
  private:
   size_t m_length;
   
@@ -37,7 +37,7 @@ class wxMemoryInputStream: public wxInputStream {
   off_t OnSysTell() const;
 };
 
-class wxMemoryOutputStream:  public wxOutputStream {
+class WXDLLEXPORT wxMemoryOutputStream:  public wxOutputStream {
  public:
   wxMemoryOutputStream(char *data = NULL, size_t length = 0);
   virtual ~wxMemoryOutputStream();

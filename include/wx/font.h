@@ -128,7 +128,7 @@ enum wxFontEncoding
 
 class WXDLLEXPORT wxFontRefData;
 
-class wxFontBase : public wxGDIObject
+class WXDLLEXPORT wxFontBase : public wxGDIObject
 {
 public:
     // creator function

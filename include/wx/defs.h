@@ -378,6 +378,22 @@ typedef int wxWindowID;
 #    define WXDLLEXPORT_CTORFN
 #  endif
 
+#elif defined(__GNUC__)
+
+#  ifdef WXMAKINGDLL
+#    define WXDLLEXPORT __declspec( dllexport )
+#    define WXDLLEXPORT_DATA(type) __declspec( dllexport ) type
+#    define WXDLLEXPORT_CTORFN
+#  elif defined(WXUSINGDLL)
+#    define WXDLLEXPORT __declspec( dllimport )
+#    define WXDLLEXPORT_DATA(type) __declspec( dllimport ) type
+#    define WXDLLEXPORT_CTORFN
+#  else
+#    define WXDLLEXPORT
+#    define WXDLLEXPORT_DATA(type) type
+#    define WXDLLEXPORT_CTORFN
+#  endif
+
 #elif defined(__WXPM__)
 
 #  ifdef WXMAKINGDLL

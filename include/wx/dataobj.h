@@ -87,7 +87,7 @@ public:
 
 // the value for default argument to some functions (corresponds to
 // wxDF_INVALID)
-extern const wxDataFormat& wxFormatInvalid;
+extern WXDLLEXPORT const wxDataFormat& wxFormatInvalid;
 
 // ----------------------------------------------------------------------------
 // wxDataObject represents a piece of data which knows which formats it

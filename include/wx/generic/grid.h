@@ -52,7 +52,7 @@
 #define WXGRID_DEFAULT_TOPEDIT_HEIGHT         60
 
 
-class wxGrid;
+class WXDLLEXPORT wxGrid;
 
 
 //////////////////////////////////////////////////////////////////////
@@ -283,7 +283,7 @@ class wxGridTextCtrl : public wxTextCtrl
 };
 
 
-class wxGrid : public wxPanel
+class WXDLLEXPORT wxGrid : public wxPanel
 {
     DECLARE_DYNAMIC_CLASS( wxGrid )
 

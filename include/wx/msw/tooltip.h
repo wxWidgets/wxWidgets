@@ -9,7 +9,7 @@
 // Licence:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
 
-class wxToolTip : public wxObject
+class WXDLLEXPORT wxToolTip : public wxObject
 {
 public:
     // ctor & dtor
