@@ -228,9 +228,9 @@ void wxMacToolTip::Draw()
 #endif
 	  {
    		wxMacPortStateHelper help( (GrafPtr) GetWindowPort( m_window ) );
- 
+#if TARGET_CARBON	
   		bool useDrawThemeText =  ( DrawThemeTextBox != (void*) kUnresolvedCFragSymbolAddress ) ;
-  		
+#endif		
   		m_shown = true ;
 
         FontFamilyID fontId ;
@@ -280,8 +280,10 @@ void wxMacToolTip::Draw()
   		m_rect.left = m_position.x + kTipOffset;
   		m_rect.top = m_position.y + kTipOffset;
   		m_rect.right = m_rect.left + width + 2 * kTipBorder;
+#if TARGET_CARBON	
   		if ( useDrawThemeText )
   		    m_rect.right += kTipBorder ;
+#endif
   		m_rect.bottom = m_rect.top + height + 2 * kTipBorder;
   		ClipRect( &m_rect ) ;
   		BackColor( whiteColor ) ;
@@ -316,6 +318,7 @@ void wxMacToolTip::Draw()
   		{
   			if( text[i] == 13 || text[i] == 10)
   			{
+#if TARGET_CARBON
             	if ( useDrawThemeText )
             	{
     	            Rect frame ;
@@ -335,6 +338,7 @@ void wxMacToolTip::Draw()
    				    height += lineh ;
                }
                 else
+#endif
                 {
   				    ::DrawText( text , laststop , i - laststop ) ;
   				    height += lineh ;
@@ -344,6 +348,7 @@ void wxMacToolTip::Draw()
   			}
   			i++ ;
   		}
+#if TARGET_CARBON
         if ( useDrawThemeText )
         {
             Rect frame ;
@@ -362,6 +367,7 @@ void wxMacToolTip::Draw()
             CFRelease( mString ) ;
         }
         else
+#endif
         {
   		    ::DrawText( text , laststop , i - laststop ) ;
   		}
