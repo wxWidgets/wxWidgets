@@ -102,7 +102,6 @@ clipcmn.cpp	C
 config.cpp	C	B
 ctrlcmn.cpp	C
 ctrlsub.cpp	C
-#date.cpp	C	B
 datetime.cpp	C	32,B
 datstrm.cpp	C
 db.cpp	C
@@ -175,7 +174,6 @@ string.cpp	C	B
 tbarbase.cpp	C
 textcmn.cpp	C
 textfile.cpp	C	B
-#time.cpp	C	B
 timercmn.cpp	C	B
 tokenzr.cpp	C	B
 txtstrm.cpp	C	B
