@@ -2784,7 +2784,7 @@ static PyObject *_wrap_ComboBox_Create(PyObject *self, PyObject *args, PyObject 
     long arg8 = (long) 0 ;
     wxValidator const &arg9_defvalue = wxDefaultValidator ;
     wxValidator *arg9 = (wxValidator *) &arg9_defvalue ;
-    wxString const &arg10_defvalue = wxPyComboBoxNameStr ;
+    wxString const &arg10_defvalue = wxPyChoiceNameStr ;
     wxString *arg10 = (wxString *) &arg10_defvalue ;
     bool result;
     bool temp4 = False ;

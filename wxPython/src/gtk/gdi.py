@@ -45,10 +45,31 @@ _gdi.GDIObject_swigregister(GDIObjectPtr)
 #---------------------------------------------------------------------------
 
 class Colour(core.Object):
+    """
+    A colour is an object representing a combination of Red, Green, and Blue (RGB)
+    intensity values, and is used to determine drawing colours, window colours,
+    etc.  Valid RGB values are in the range 0 to 255.
+
+    In wxPython there are typemaps that will automatically convert from a colour
+    name, or from a "#RRGGBB" colour hex value string to a wx.Colour object when
+    calling C++ methods that expect a wxColour.  This means that the following are
+    all equivallent:
+
+        win.SetBackgroundColour(wxColour(0,0,255))
+        win.SetBackgroundColour("BLUE")
+        win.SetBackgroundColour("#0000FF")
+
+    You can retrieve the various current system colour settings with
+    wx.SystemSettings.GetColour.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxColour instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(unsigned char red=0, unsigned char green=0, unsigned char blue=0) -> Colour"""
+        """
+        __init__(unsigned char red=0, unsigned char green=0, unsigned char blue=0) -> Colour
+
+        Constructs a colour from red, green and blue values.
+        """
         newobj = _gdi.new_Colour(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -60,44 +81,103 @@ class Colour(core.Object):
         except: pass
 
     def Red(*args, **kwargs):
-        """Red() -> unsigned char"""
+        """
+        Red() -> unsigned char
+
+        Returns the red intensity.
+        """
         return _gdi.Colour_Red(*args, **kwargs)
 
     def Green(*args, **kwargs):
-        """Green() -> unsigned char"""
+        """
+        Green() -> unsigned char
+
+        Returns the green intensity.
+        """
         return _gdi.Colour_Green(*args, **kwargs)
 
     def Blue(*args, **kwargs):
-        """Blue() -> unsigned char"""
+        """
+        Blue() -> unsigned char
+
+        Returns the blue intensity.
+        """
         return _gdi.Colour_Blue(*args, **kwargs)
 
     def Ok(*args, **kwargs):
-        """Ok() -> bool"""
+        """
+        Ok() -> bool
+
+        Returns True if the colour object is valid (the colour has been
+        initialised with RGB values).
+        """
         return _gdi.Colour_Ok(*args, **kwargs)
 
     def Set(*args, **kwargs):
-        """Set(unsigned char red, unsigned char green, unsigned char blue)"""
+        """
+        Set(unsigned char red, unsigned char green, unsigned char blue)
+
+        Sets the RGB intensity values.
+        """
         return _gdi.Colour_Set(*args, **kwargs)
 
     def SetRGB(*args, **kwargs):
-        """SetRGB(unsigned long colRGB)"""
+        """
+        SetRGB(unsigned long colRGB)
+
+        Sets the RGB intensity values from a packed RGB value.
+        """
         return _gdi.Colour_SetRGB(*args, **kwargs)
 
+    def SetFromName(*args, **kwargs):
+        """
+        SetFromName(String colourName)
+
+        Sets the RGB intensity values using a colour name listed in wx.TheColourDatabase.
+        """
+        return _gdi.Colour_SetFromName(*args, **kwargs)
+
+    def GetPixel(*args, **kwargs):
+        """
+        GetPixel() -> long
+
+        Returns a pixel value which is platform-dependent. On Windows, a
+        COLORREF is returned. On X, an allocated pixel value is returned.
+        -1 is returned if the pixel is invalid (on X, unallocated).
+        """
+        return _gdi.Colour_GetPixel(*args, **kwargs)
+
     def __eq__(*args, **kwargs):
-        """__eq__(Colour colour) -> bool"""
+        """
+        __eq__(Colour colour) -> bool
+
+        Compare colours for equality
+        """
         return _gdi.Colour___eq__(*args, **kwargs)
 
     def __ne__(*args, **kwargs):
-        """__ne__(Colour colour) -> bool"""
+        """
+        __ne__(Colour colour) -> bool
+
+        Compare colours for inequality
+        """
         return _gdi.Colour___ne__(*args, **kwargs)
 
-    def InitFromName(*args, **kwargs):
-        """InitFromName(String colourName)"""
-        return _gdi.Colour_InitFromName(*args, **kwargs)
-
     def Get(*args, **kwargs):
-        """Get() -> PyObject"""
+        """
+        Get() -> (r, g, b)
+
+        Returns the RGB intensity values as a tuple.
+        """
         return _gdi.Colour_Get(*args, **kwargs)
+
+    def GetRGB(*args, **kwargs):
+        """
+        GetRGB() -> unsigned long
+
+        Return the colour as a packed RGB value
+        """
+        return _gdi.Colour_GetRGB(*args, **kwargs)
 
     asTuple = Get
     def __str__(self):                  return str(self.asTuple())
@@ -115,13 +195,21 @@ class ColourPtr(Colour):
 _gdi.Colour_swigregister(ColourPtr)
 
 def NamedColour(*args, **kwargs):
-    """NamedColour(String colorName) -> Colour"""
+    """
+    NamedColour(String colorName) -> Colour
+
+    Constructs a colour object using a colour name listed in wx.TheColourDatabase.
+    """
     val = _gdi.new_NamedColour(*args, **kwargs)
     val.thisown = 1
     return val
 
 def ColourRGB(*args, **kwargs):
-    """ColourRGB(unsigned long colRGB) -> Colour"""
+    """
+    ColourRGB(unsigned long colRGB) -> Colour
+
+    Constructs a colour from a packed RGB value.
+    """
     val = _gdi.new_ColourRGB(*args, **kwargs)
     val.thisown = 1
     return val
