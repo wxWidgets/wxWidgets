@@ -634,12 +634,8 @@ wxSize wxWindowBase::DoGetVirtualSize() const
 {
     wxSize  s( GetClientSize() );
 
-    if( m_virtualSize.GetWidth() != -1 )
-        s.SetWidth( m_virtualSize.GetWidth() );
-    if( m_virtualSize.GetHeight() != -1 )
-        s.SetHeight( m_virtualSize.GetHeight() );
-
-    return s;
+    return wxSize( wxMax( m_virtualSize.GetWidth(), s.GetWidth() ),
+                   wxMax( m_virtualSize.GetHeight(), s.GetHeight() ) );
 }
 
 // ----------------------------------------------------------------------------

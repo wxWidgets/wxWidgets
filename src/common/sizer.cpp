@@ -1114,16 +1114,29 @@ void wxFlexGridSizer::RecalcSizes()
 
 wxSize wxFlexGridSizer::CalcMin()
 {
-    int nrows, ncols;
+    int     nrows,
+            ncols;
+    size_t  i, s;
+
     if ( !CalcRowsCols(nrows, ncols) )
         return wxSize(10, 10);
+
+    // We have to clear the old sizes out if any item has wxADJUST_MINSIZE
+    // set on it.  Its probably quicker to just always do it than test for
+    // that though.  At least do it before resizing the arrays, SetCount will
+    // initialise new elements to zero.
+    for( s = m_rowHeights.GetCount(), i = 0; i < s; ++i )
+        m_rowHeights[ i ] = 0;
+
+    for( s = m_colWidths.GetCount(), i = 0; i < s; ++i )
+        m_colWidths[ i ] = 0;
 
     m_rowHeights.SetCount(nrows);
     m_colWidths.SetCount(ncols);
 
-    int                      i = 0;
     wxSizerItemList::Node   *node = m_children.GetFirst();
 
+    i = 0;
     while (node)
     {
         wxSizerItem    *item = node->GetData();
