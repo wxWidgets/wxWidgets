@@ -404,7 +404,6 @@ void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
         }
         else
         {
-            w = w - xborder ;
             if ( m_macMinimumStatic )
                 m_macMinimumStatic->Move(GetPosition().x + 0, GetPosition().y + sliderBreadth + wxSLIDER_BORDERTEXT);
             if ( m_macMaximumStatic )
@@ -412,6 +411,7 @@ void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
                 GetPosition().y + sliderBreadth + wxSLIDER_BORDERTEXT);
             if ( m_macValueStatic )
                 m_macValueStatic->Move(GetPosition().x + w, GetPosition().y + 0);
+            w = w - xborder ;
         }
     }
     //If the control has labels, we still need to call this again because
