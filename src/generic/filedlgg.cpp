@@ -1064,6 +1064,8 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     if ( m_filterExtension == ".*" ) m_filterExtension = wxEmptyString;
 
     // layout
+    
+    bool is_pda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
 
     wxBoxSizer *mainsizer = new wxBoxSizer( wxVERTICAL );
 
@@ -1114,13 +1116,13 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
 #endif
     buttonsizer->Add( butNewDir, 0, wxALL, 5 );
 
-    if (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA)
+    if (is_pda)
         mainsizer->Add( buttonsizer, 0, wxALL | wxEXPAND, 0 );
     else
         mainsizer->Add( buttonsizer, 0, wxALL | wxEXPAND, 5 );
 
     wxBoxSizer *staticsizer = new wxBoxSizer( wxHORIZONTAL );
-    if (wxSystemSettings::GetScreenType() > wxSYS_SCREEN_PDA)
+    if (is_pda)
         staticsizer->Add( new wxStaticText( this, -1, _("Current directory:") ), 0, wxRIGHT, 10 );
     m_static = new wxStaticText( this, -1, m_dir );
     staticsizer->Add( m_static, 1 );
@@ -1137,7 +1139,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     m_list->SetNewDirControl(butNewDir);
     m_list->SetGoToParentControl(butDirUp);
 
-    if (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA)
+    if (is_pda)
     {
         // PDAs have a different screen layout
         mainsizer->Add( m_list, 1, wxEXPAND | wxLEFT|wxRIGHT, 5 );
