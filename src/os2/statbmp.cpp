@@ -16,6 +16,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/dcclient.h"
 #include "wx/window.h"
 #include "wx/os2/private.h"
 

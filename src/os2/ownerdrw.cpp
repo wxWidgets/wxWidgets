@@ -28,6 +28,7 @@
 
 #if wxUSE_OWNER_DRAWN
 
+#include "wx/settings.h"
 #include "wx/ownerdrw.h"
 #include "wx/menuitem.h"
 
