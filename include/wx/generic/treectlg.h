@@ -53,7 +53,11 @@ public:
     wxGenericTreeCtrl(wxWindow *parent, wxWindowID id = -1,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
+#ifdef __WXMAC__
+               long style = wxTR_MAC_BUTTONS | wxTR_NO_LINES,
+#else
                long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
+#endif
                const wxValidator &validator = wxDefaultValidator,
                const wxString& name = wxTreeCtrlNameStr)
     {
@@ -66,7 +70,11 @@ public:
     bool Create(wxWindow *parent, wxWindowID id = -1,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
+#ifdef __WXMAC__
+               long style = wxTR_MAC_BUTTONS | wxTR_NO_LINES,
+#else
+               long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
+#endif
                 const wxValidator &validator = wxDefaultValidator,
                 const wxString& name = wxTreeCtrlNameStr);
 

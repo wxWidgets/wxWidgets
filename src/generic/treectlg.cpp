@@ -663,7 +663,10 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent, wxWindowID id,
     SetValidator( validator );
 #endif
 
+#ifndef __WXMAC__
     SetBackgroundColour( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_LISTBOX ) );
+#endif
+
 //  m_dottedPen = wxPen( "grey", 0, wxDOT );  too slow under XFree86
     m_dottedPen = wxPen( "grey", 0, 0 );
 
@@ -841,15 +844,15 @@ bool wxGenericTreeCtrl::IsVisible(const wxTreeItemId& item) const
 {
     wxCHECK_MSG( item.IsOk(), FALSE, wxT("invalid tree item") );
 
-	// An item is only visible if it's not a descendant of a collapsed item
+    // An item is only visible if it's not a descendant of a collapsed item
     wxGenericTreeItem *pItem = (wxGenericTreeItem*) item.m_pItem;
-	wxGenericTreeItem* parent = pItem->GetParent();
-	while (parent)
-	{
-		if (!parent->IsExpanded())
-			return FALSE;
-		parent = parent->GetParent();
-	}
+    wxGenericTreeItem* parent = pItem->GetParent();
+    while (parent)
+    {
+        if (!parent->IsExpanded())
+            return FALSE;
+        parent = parent->GetParent();
+    }
 
     int startX, startY;
     GetViewStart(& startX, & startY);
@@ -859,8 +862,8 @@ bool wxGenericTreeCtrl::IsVisible(const wxTreeItemId& item) const
     wxRect rect;
     if (!GetBoundingRect(item, rect))
         return FALSE;
-	if (rect.GetWidth() == 0 || rect.GetHeight() == 0)
-		return FALSE;
+    if (rect.GetWidth() == 0 || rect.GetHeight() == 0)
+        return FALSE;
     if (rect.GetBottom() < 0 || rect.GetTop() > clientSize.y)
         return FALSE;
     if (rect.GetRight() < 0 || rect.GetLeft() > clientSize.x)
@@ -1039,10 +1042,10 @@ wxTreeItemId wxGenericTreeCtrl::GetNextVisible(const wxTreeItemId& item) const
   wxTreeItemId id = item;
   while (id.IsOk())
   {
-	  id = GetNext(id);
+      id = GetNext(id);
 
-	  if (id.IsOk() && IsVisible(id))
-		  return id;
+      if (id.IsOk() && IsVisible(id))
+          return id;
   }
   return wxTreeItemId();
 }
@@ -1840,24 +1843,59 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
 
 //        if (!item->HasChildren()) endX += (m_indent+5);
         if (!item->HasChildren()) endX += 20;
-
-        if (drawLines)
-            dc.DrawLine( startX, y, endX, y );
-
-        if (item->HasPlus())
+        
+        if (HasFlag( wxTR_MAC_BUTTONS ))
+        {
+            if (item->HasPlus())
+            {
+                dc.SetPen( *wxBLACK_PEN );
+                dc.SetBrush( *m_hilightBrush );
+                
+                wxPoint button[3];
+                int x = horizX + m_indent;
+                
+                if (item->IsExpanded())
+                {
+                    button[0].x = x-5;
+                    button[0].y = y-2;
+                    button[1].x = x+5;
+                    button[1].y = y-2;
+                    button[2].x = x;
+                    button[2].y = y+3;
+                }
+                else
+                {
+                    button[0].y = y-5;
+                    button[0].x = x-2;
+                    button[1].y = y+5;
+                    button[1].x = x-2;
+                    button[2].y = y;
+                    button[2].x = x+3;
+                }
+                dc.DrawPolygon( 3, button );
+                
+                dc.SetPen( m_dottedPen );
+            }
+        }
+        else
         {
             if (drawLines)
-                dc.DrawLine( horizX+(m_indent+5), y, horizX+(m_indent+15), y );
-            dc.SetPen( *wxGREY_PEN );
-            dc.SetBrush( *wxWHITE_BRUSH );
-            dc.DrawRectangle( horizX+(m_indent-5), y-4, 11, 9 );
+                dc.DrawLine( startX, y, endX, y );
 
-            dc.SetPen( *wxBLACK_PEN );
-            dc.DrawLine( horizX+(m_indent-2), y, horizX+(m_indent+3), y );
-            if (!item->IsExpanded())
-                dc.DrawLine( horizX+m_indent, y-2, horizX+m_indent, y+3 );
+            if (item->HasPlus())
+            {
+                if (drawLines)
+                    dc.DrawLine( horizX+(m_indent+5), y, horizX+(m_indent+15), y );
+                dc.SetPen( *wxGREY_PEN );
+                dc.SetBrush( *wxWHITE_BRUSH );
+                dc.DrawRectangle( horizX+(m_indent-5), y-4, 11, 9 );
 
-            dc.SetPen( m_dottedPen );
+                dc.SetPen( *wxBLACK_PEN );
+                dc.DrawLine( horizX+(m_indent-2), y, horizX+(m_indent+3), y );
+                if (!item->IsExpanded())
+                    dc.DrawLine( horizX+m_indent, y-2, horizX+m_indent, y+3 );
+                dc.SetPen( m_dottedPen );
+            }
         }
 
         wxPen *pen = wxTRANSPARENT_PEN;
@@ -2262,10 +2300,10 @@ bool wxGenericTreeCtrl::GetBoundingRect(const wxTreeItemId& item,
     GetViewStart(& startX, & startY);
 
     rect.x = i->GetX() - startX*PIXELS_PER_UNIT;
-	rect.y = i->GetY() - startY*PIXELS_PER_UNIT;
+    rect.y = i->GetY() - startY*PIXELS_PER_UNIT;
     rect.width = i->GetWidth();
-	//rect.height = i->GetHeight();
-	rect.height = GetLineHeight(i);
+    //rect.height = i->GetHeight();
+    rect.height = GetLineHeight(i);
 
     return TRUE;
 }

@@ -218,14 +218,14 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
 
     m_treeCtrl = new MyTreeCtrl(this, TreeTest_Ctrl,
                                 wxDefaultPosition, wxDefaultSize,
-                                wxTR_HAS_BUTTONS | // wxTR_NO_LINES |
+                                wxTR_MAC_BUTTONS | wxTR_NO_LINES |
                                 wxTR_EDIT_LABELS |
 #ifndef NO_VARIABLE_HEIGHT
                                 wxTR_HAS_VARIABLE_ROW_HEIGHT |
 #endif
                                 wxSUNKEN_BORDER);
 
-    m_treeCtrl->SetBackgroundColour(wxColour(204, 205, 79));
+//    m_treeCtrl->SetBackgroundColour( *wxLIGHT_GREY );
 
     m_textCtrl = new wxTextCtrl(this, -1, "",
                                 wxDefaultPosition, wxDefaultSize,
