@@ -2,7 +2,7 @@
 #define _WX_DIRDLG_H_BASE_
 
 #if defined(__WXMSW__)
-#ifdef __WIN16__
+#if defined(__WIN16__) || defined(__GNUWIN32__)
 #include "wx/generic/dirdlgg.h"
 #else
 #include "wx/msw/dirdlg.h"

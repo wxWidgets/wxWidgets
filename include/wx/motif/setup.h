@@ -127,6 +127,10 @@
 #define wxUSE_THREADS       0
                                   // Use threads
 
+#define wxUSE_ZLIB          1
+                                  // Use zlib for compression in streams and PNG code
+#define wxUSE_LIBPNG        1
+                                  // Use PNG bitmap code
 /*
  * Finer detail
  *

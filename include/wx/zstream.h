@@ -15,7 +15,7 @@
 #pragma interface
 #endif
 
-#include "defs.h"
+#include "wx/defs.h"
 
 #ifdef wxUSE_ZLIB
 

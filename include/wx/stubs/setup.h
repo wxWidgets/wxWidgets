@@ -111,6 +111,15 @@
                                   // if enabled, compiles built-in OS independent wxConfig
                                   // class and it's file (any platform) and registry (Win)
                                   // based implementations
+#define wxUSE_TIMEDATE      1
+                                  // Use time and date
+#define wxUSE_THREADS       0
+                                  // Use threads
+
+#define wxUSE_ZLIB          1
+                                  // Use zlib for compression in streams and PNG code
+#define wxUSE_LIBPNG        1
+                                  // Use PNG bitmap code
 /*
  * Finer detail
  *
