@@ -1949,16 +1949,22 @@ wxLayoutList::LineBreak(void)
 
    m_CursorLine = m_CursorLine->Break(m_CursorPos.x, this);
    if(setFirst) // we were at beginning of first line
-      m_FirstLine = m_CursorLine->GetPreviousLine();
+      m_FirstLine = m_CursorLine;
+   wxASSERT(m_FirstLine);
    if(m_CursorPos.x != 0)
       m_CursorPos.y++;
    m_CursorPos.x = 0;
 
+
+   // The following code will produce a height which is guaranteed to
+   // be too high: old lineheight + the height of both new lines.
+   // We can probably drop the old line height and start with height = 
+   // 0. FIXME
    wxLayoutLine *prev = m_CursorLine->GetPreviousLine();
-   wxCHECK_MSG(prev, false, "just broke the line, where is the previous one?");
-
-   height += prev->GetHeight();
-
+   if(prev)
+      height += prev->GetHeight();
+   height += m_CursorLine->GetHeight();
+   
    m_movedCursor = true;
 
    SetUpdateRect(position);
@@ -2156,15 +2162,24 @@ wxLayoutList::Layout(wxDC &dc, CoordType bottom, bool forceAll,
          // The following Layout() calls will update our
          // m_CurrentStyleInfo if needed.
          if(line == m_CursorLine)
+         {
             line->Layout(dc, this,
                          (wxPoint *)&m_CursorScreenPos,
                          (wxPoint *)&m_CursorSize,
                          &m_CursorStyleInfo,
                          m_CursorPos.x);
-         if(cpos && line->GetLineNumber() == cpos->y)
-            line->Layout(dc, this,
-                         cpos,
-                         csize, NULL, cpos->x);
+            // we cannot layout the line twice, so copy the coords:
+            if(cpos && line ->GetLineNumber() == cpos->y)
+            {
+               *cpos = m_CursorScreenPos;
+               *csize = m_CursorSize;
+            }
+         }
+         else
+            if(cpos && line->GetLineNumber() == cpos->y)
+               line->Layout(dc, this,
+                            cpos,
+                            csize, NULL, cpos->x);
          else
             line->Layout(dc, this);
          // little condition to speed up redrawing:
@@ -2238,11 +2253,7 @@ wxLayoutList::Draw(wxDC &dc,
          }
          line->Draw(dc, this, offset);
       }
-#if 0
-         else
-         line->Layout(dc, this);
-#endif
-         // little condition to speed up redrawing:
+      // little condition to speed up redrawing:
       if(bottom != -1 && line->GetPosition().y > bottom) break;
       line = line->GetNextLine();
    }
