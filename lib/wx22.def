@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  G:\DEV\WX22\WXWINDOWS\LIB\wx.lib
+;From library:  G:\DEV\WX2\WXWINDOWS\LIB\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -50,6 +50,8 @@ EXPORTS
       AddSwitch__15wxCmdLineParserFRC8wxStringN21i
       ;wxArrayOptions::Add(const wxCmdLineOption&)
       Add__14wxArrayOptionsFRC15wxCmdLineOption
+      ;wxCmdLineParser::Reset()
+      Reset__15wxCmdLineParserFv
       ;wxCmdLineParser::SetCmdLine(int,char**)
       SetCmdLine__15wxCmdLineParserFiPPc
       ;wxArrayOptions::wxArrayOptions(const wxArrayOptions&)
@@ -256,6 +258,75 @@ EXPORTS
       ;wxConfigBase::ms_bAutoCreate
       ms_bAutoCreate__12wxConfigBase
       __vft12wxConfigBase
+  ;From object file:  ..\common\cshelp.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxContextHelpButton::wxContextHelpButton(wxWindow*,int,const wxPoint&,const wxSize&,long)
+      __ct__19wxContextHelpButtonFP8wxWindowiRC7wxPointRC6wxSizel
+      ;wxContextHelp::sm_classwxContextHelp
+      sm_classwxContextHelp__13wxContextHelp
+      ;wxSimpleHelpProvider::GetHelp(const wxWindowBase*)
+      GetHelp__20wxSimpleHelpProviderFPC12wxWindowBase
+      ;wxHelpControllerHelpProvider::ShowHelp(wxWindowBase*)
+      ShowHelp__28wxHelpControllerHelpProviderFP12wxWindowBase
+      ;wxHelpProvider::~wxHelpProvider()
+      __dt__14wxHelpProviderFv
+      ;wxContextHelpButton::sm_eventTable
+      sm_eventTable__19wxContextHelpButton
+      ;wxContextHelp::~wxContextHelp()
+      __dt__13wxContextHelpFv
+      ;wxHelpProviderModule::OnInit()
+      OnInit__20wxHelpProviderModuleFv
+      ;wxContextHelpEvtHandler::ProcessEvent(wxEvent&)
+      ProcessEvent__23wxContextHelpEvtHandlerFR7wxEvent
+      ;wxSimpleHelpProvider::ShowHelp(wxWindowBase*)
+      ShowHelp__20wxSimpleHelpProviderFP12wxWindowBase
+      ;wxHelpProviderModule::sm_classwxHelpProviderModule
+      sm_classwxHelpProviderModule__20wxHelpProviderModule
+      ;wxContextHelpButton::sm_eventTableEntries
+      sm_eventTableEntries__19wxContextHelpButton
+      ;wxHelpProvider::AddHelp(int,const wxString&)
+      AddHelp__14wxHelpProviderFiRC8wxString
+      ;wxHelpControllerHelpProvider::wxHelpControllerHelpProvider(wxHelpControllerBase*)
+      __ct__28wxHelpControllerHelpProviderFP20wxHelpControllerBase
+      ;wxContextId(int)
+      wxContextId__Fi
+      ;wxConstructorForwxContextHelp()
+      wxConstructorForwxContextHelp__Fv
+      ;wxConstructorForwxHelpProviderModule()
+      wxConstructorForwxHelpProviderModule__Fv
+      __vft20wxSimpleHelpProvider14wxHelpProvider
+      __vft14wxHelpProvider
+      ;wxContextHelp::EventLoop()
+      EventLoop__13wxContextHelpFv
+      ;wxSimpleHelpProvider::AddHelp(int,const wxString&)
+      AddHelp__20wxSimpleHelpProviderFiRC8wxString
+      ;wxContextHelp::wxContextHelp(wxWindow*,unsigned long)
+      __ct__13wxContextHelpFP8wxWindowUl
+      ;wxContextHelpButton::OnContextHelp(wxCommandEvent&)
+      OnContextHelp__19wxContextHelpButtonFR14wxCommandEvent
+      ;wxContextHelp::DispatchEvent(wxWindow*,const wxPoint&)
+      DispatchEvent__13wxContextHelpFP8wxWindowRC7wxPoint
+      ;wxContextHelp::EndContextHelp()
+      EndContextHelp__13wxContextHelpFv
+      ;wxContextHelp::BeginContextHelp(wxWindow*)
+      BeginContextHelp__13wxContextHelpFP8wxWindow
+      ;wxHelpProvider::AddHelp(wxWindowBase*,const wxString&)
+      AddHelp__14wxHelpProviderFP12wxWindowBaseRC8wxString
+      __vft19wxContextHelpButton8wxObject
+      __vft23wxContextHelpEvtHandler8wxObject
+      __vft20wxHelpProviderModule8wxObject
+      __vft13wxContextHelp8wxObject
+      ;wxContextHelpButton::GetEventTable() const
+      GetEventTable__19wxContextHelpButtonCFv
+      ;wxContextHelpButton::sm_classwxContextHelpButton
+      sm_classwxContextHelpButton__19wxContextHelpButton
+      ;wxHelpProvider::ms_helpProvider
+      ms_helpProvider__14wxHelpProvider
+      __vft28wxHelpControllerHelpProvider14wxHelpProvider
+      ;wxHelpProviderModule::OnExit()
+      OnExit__20wxHelpProviderModuleFv
+      ;wxSimpleHelpProvider::AddHelp(wxWindowBase*,const wxString&)
+      AddHelp__20wxSimpleHelpProviderFP12wxWindowBaseRC8wxString
   ;From object file:  ..\common\ctrlcmn.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxControlBase::Command(wxCommandEvent&)
@@ -1207,6 +1278,8 @@ EXPORTS
       sm_classwxNavigationKeyEvent__20wxNavigationKeyEvent
       ;wxInitDialogEvent::sm_classwxInitDialogEvent
       sm_classwxInitDialogEvent__17wxInitDialogEvent
+      ;wxHelpEvent::sm_classwxHelpEvent
+      sm_classwxHelpEvent__11wxHelpEvent
       ;wxFocusEvent::sm_classwxFocusEvent
       sm_classwxFocusEvent__12wxFocusEvent
       ;wxCloseEvent::sm_classwxCloseEvent
@@ -1287,6 +1360,8 @@ EXPORTS
       wxConstructorForwxSysColourChangedEvent__Fv
       ;wxConstructorForwxNavigationKeyEvent()
       wxConstructorForwxNavigationKeyEvent__Fv
+      ;wxConstructorForwxHelpEvent()
+      wxConstructorForwxHelpEvent__Fv
       ;wxEvtHandler::~wxEvtHandler()
       __dt__12wxEvtHandlerFv
       ;wxEvtHandler::GetEventTable() const
@@ -1435,7 +1510,7 @@ EXPORTS
       wxConstructorForwxFocusEvent__Fv
       ;wxEvtHandler::sm_eventTable
       sm_eventTable__12wxEvtHandler
-  ;From object file:  G:\DEV\WX22\WXWINDOWS\src\common\extended.c
+  ;From object file:  G:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -1968,6 +2043,8 @@ EXPORTS
       RemoveBitmap__12wxBitmapListFP8wxBitmap
       ;wxConstructorForwxPenList()
       wxConstructorForwxPenList__Fv
+      ;wxGetDisplaySizeMM()
+      wxGetDisplaySizeMM__Fv
       ;wxDeleteStockObjects()
       wxDeleteStockObjects__Fv
       ;wxConstructorForwxBitmapList()
@@ -2130,6 +2207,8 @@ EXPORTS
       Delete__11wxHashTableFli
       ;wxHashTableLong::Destroy()
       Destroy__15wxHashTableLongFv
+      ;wxStringHashTable::~wxStringHashTable()
+      __dt__17wxStringHashTableFv
       ;wxHashTable::Delete(const char*)
       Delete__11wxHashTableFPCc
       ;wxHashTableLong::Get(long) const
@@ -2156,12 +2235,15 @@ EXPORTS
       ;wxHashTable::Delete(long,const char*)
       Delete__11wxHashTableFlPCc
       __vft15wxHashTableLong8wxObject
+      __vft17wxStringHashTable8wxObject
       ;wxHashTable::Clear()
       Clear__11wxHashTableFv
       ;wxHashTableBase::Destroy()
       Destroy__15wxHashTableBaseFv
       ;wxHashTable::Destroy()
       Destroy__11wxHashTableFv
+      ;wxStringHashTable::Put(long,const wxString&)
+      Put__17wxStringHashTableFlRC8wxString
       ;wxHashTable::MakeKey(const char*) const
       MakeKey__11wxHashTableCFPCc
       ;wxHashTable::Put(long,const char*,wxObject*)
@@ -2170,6 +2252,8 @@ EXPORTS
       Put__11wxHashTableFPCcP8wxObject
       ;wxHashTableLong::Init(unsigned int)
       Init__15wxHashTableLongFUi
+      ;wxStringHashTable::wxStringHashTable(unsigned int)
+      __ct__17wxStringHashTableFUi
       ;wxHashTable::wxHashTable(int,int)
       __ct__11wxHashTableFiT1
       ;wxHashTableBase::wxHashTableBase()
@@ -2184,10 +2268,14 @@ EXPORTS
       Delete__15wxHashTableLongFl
       ;wxHashTable::Put(long,long,wxObject*)
       Put__11wxHashTableFlT1P8wxObject
+      ;wxStringHashTable::Get(long,unsigned long*) const
+      Get__17wxStringHashTableCFlPUl
       ;wxHashTable::DoCopy(const wxHashTable&)
       DoCopy__11wxHashTableFRC11wxHashTable
       ;wxHashTable::Get(long,long) const
       Get__11wxHashTableCFlT1
+      ;wxStringHashTable::Destroy()
+      Destroy__17wxStringHashTableFv
       ;wxHashTable::Get(long,const char*) const
       Get__11wxHashTableCFlPCc
   ;From object file:  ..\common\helpbase.cpp
@@ -2279,12 +2367,16 @@ EXPORTS
       InitStandardHandlers__7wxImageFv
       ;wxImage::GetWidth() const
       GetWidth__7wxImageCFv
+      ;wxImage::GetPalette() const
+      GetPalette__7wxImageCFv
       ;wxImage::GetData() const
       GetData__7wxImageCFv
       ;wxImage::Destroy()
       Destroy__7wxImageFv
       ;wxImage::Copy() const
       Copy__7wxImageCFv
+      ;wxImage::GetOptionInt(const wxString&) const
+      GetOptionInt__7wxImageCFRC8wxString
       ;wxImage::FindHandlerMime(const wxString&)
       FindHandlerMime__7wxImageFRC8wxString
       ;wxImage::Mirror(unsigned long) const
@@ -2298,12 +2390,16 @@ EXPORTS
       sm_handlers__7wxImage
       ;wxImage::wxImage(const wxImage&)
       __ct__7wxImageFRC7wxImage
+      ;wxImage::SetPalette(const wxPalette&)
+      SetPalette__7wxImageFRC9wxPalette
       ;wxImage::SaveFile(wxOutputStream&,int)
       SaveFile__7wxImageFR14wxOutputStreami
       ;wxImageHandler::LoadFile(wxImage*,wxInputStream&,unsigned long,int)
       LoadFile__14wxImageHandlerFP7wxImageR13wxInputStreamUli
       ;wxImageRefData::~wxImageRefData()
       __dt__14wxImageRefDataFv
+      ;wxImage::HasPalette() const
+      HasPalette__7wxImageCFv
       ;wxImage::GetMaskGreen() const
       GetMaskGreen__7wxImageCFv
       ;wxImage::SetRGB(int,int,unsigned char,unsigned char,unsigned char)
@@ -2341,6 +2437,8 @@ EXPORTS
       SetData__7wxImageFPUc
       ;wxImage::RemoveHandler(const wxString&)
       RemoveHandler__7wxImageFRC8wxString
+      ;wxImage::GetOption(const wxString&) const
+      GetOption__7wxImageCFRC8wxString
       ;wxImage::FindHandler(const wxString&)
       FindHandler__7wxImageFRC8wxString
       ;wxImage::Create(int,int,unsigned char*,unsigned long)
@@ -2356,6 +2454,8 @@ EXPORTS
       __vft14wxImageRefData15wxObjectRefData
       ;wxImage::wxImage(const wxImage*)
       __ct__7wxImageFPC7wxImage
+      ;wxImage::SetOption(const wxString&,const wxString&)
+      SetOption__7wxImageFRC8wxStringT1
       ;wxImage::SetMaskColour(unsigned char,unsigned char,unsigned char)
       SetMaskColour__7wxImageFUcN21
       ;wxImageHandler::GetImageCount(wxInputStream&)
@@ -2384,6 +2484,8 @@ EXPORTS
       GetBlue__7wxImageCFiT1
       ;wxImage::sm_classwxImage
       sm_classwxImage__7wxImage
+      ;wxImage::SetOption(const wxString&,int)
+      SetOption__7wxImageFRC8wxStringi
       ;wxImage::SaveFile(const wxString&,const wxString&)
       SaveFile__7wxImageFRC8wxStringT1
       ;wxImage::ComputeHistogram(wxHashTable&)
@@ -2396,6 +2498,8 @@ EXPORTS
       sm_classwxImageHandler__14wxImageHandler
       ;wxImage::wxImage(wxInputStream&,const wxString&)
       __ct__7wxImageFR13wxInputStreamRC8wxString
+      ;wxImage::HasOption(const wxString&) const
+      HasOption__7wxImageCFRC8wxString
   ;From object file:  ..\common\imaggif.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxGIFHandler::SaveFile(wxImage*,wxOutputStream&,unsigned long)
@@ -3130,6 +3234,8 @@ EXPORTS
       __vft19wxMemoryInputStream12wxStreamBase
       ;wxMemoryOutputStream::OnSysSeek(long,wxSeekMode)
       OnSysSeek__20wxMemoryOutputStreamFl10wxSeekMode
+      ;wxMemoryInputStream::Eof() const
+      Eof__19wxMemoryInputStreamCFv
       ;wxMemoryOutputStream::OnSysTell() const
       OnSysTell__20wxMemoryOutputStreamCFv
   ;From object file:  ..\common\object.cpp
@@ -3454,6 +3560,46 @@ EXPORTS
       GetLine__FP12wxSocketBaseR8wxString
       ;wxProtocol::ReadLine(wxSocketBase*,wxString&)
       ReadLine__10wxProtocolFP12wxSocketBaseR8wxString
+  ;From object file:  ..\common\quantize.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;compute_color(j_decompress*,box*,int)
+      compute_color__FP12j_decompressP3boxi
+      ;wxConstructorForwxQuantize()
+      wxConstructorForwxQuantize__Fv
+      ;update_box(j_decompress*,box*)
+      update_box__FP12j_decompressP3box
+      ;find_biggest_color_pop(box*,int)
+      find_biggest_color_pop__FP3boxi
+      ;wxQuantize::sm_classwxQuantize
+      sm_classwxQuantize__10wxQuantize
+      ;pass2_no_dither(j_decompress*,unsigned char**,unsigned char**,int)
+      pass2_no_dither__FP12j_decompressPPUcT2i
+      ;find_biggest_volume(box*,int)
+      find_biggest_volume__FP3boxi
+      ;wxQuantize::DoQuantize(unsigned int,unsigned int,unsigned char**,unsigned char**,unsigned char*,int)
+      DoQuantize__10wxQuantizeFUiT1PPUcT3PUci
+      ;finish_pass1(j_decompress*)
+      finish_pass1__FP12j_decompress
+      ;pass2_fs_dither(j_decompress*,unsigned char**,unsigned char**,int)
+      pass2_fs_dither__FP12j_decompressPPUcT2i
+      ;median_cut(j_decompress*,box*,int,int)
+      median_cut__FP12j_decompressP3boxiT3
+      ;new_color_map_2_quant(j_decompress*)
+      new_color_map_2_quant__FP12j_decompress
+      ;wxQuantize::Quantize(const wxImage&,wxImage&,wxPalette**,int,unsigned char**,int)
+      Quantize__10wxQuantizeFRC7wxImageR7wxImagePP9wxPaletteiPPUcT4
+      ;finish_pass2(j_decompress*)
+      finish_pass2__FP12j_decompress
+      ;prepare_range_limit_table(j_decompress*)
+      prepare_range_limit_table__FP12j_decompress
+      ;start_pass_2_quant(j_decompress*,unsigned long)
+      start_pass_2_quant__FP12j_decompressUl
+      ;prescan_quantize(j_decompress*,unsigned char**,unsigned char**,int)
+      prescan_quantize__FP12j_decompressPPUcT2i
+      ;jinit_2pass_quantizer(j_decompress*)
+      jinit_2pass_quantizer__FP12j_decompress
+      ;wxQuantize::Quantize(const wxImage&,wxImage&,int,unsigned char**,int)
+      Quantize__10wxQuantizeFRC7wxImageR7wxImageiPPUcT3
   ;From object file:  ..\common\resource.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxResourceTable::ParseResourceFile(wxInputStream*)
@@ -4574,6 +4720,8 @@ EXPORTS
       wxGetElapsedTime__FUl
       ;wxGetLocalTime()
       wxGetLocalTime__Fv
+      ;wxTimerBase::Start(int,unsigned long)
+      Start__11wxTimerBaseFiUl
       ;wxConstructorForwxTimerEvent()
       wxConstructorForwxTimerEvent__Fv
       ;wxStartTimer()
@@ -4594,6 +4742,14 @@ EXPORTS
       CountTokens__17wxStringTokenizerCFv
       ;wxStringTokenizer::Reinit(const wxString&)
       Reinit__17wxStringTokenizerFRC8wxString
+  ;From object file:  ..\common\treebase.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxConstructorForwxTreeEvent()
+      wxConstructorForwxTreeEvent__Fv
+      ;wxTreeEvent::wxTreeEvent(int,int)
+      __ct__11wxTreeEventFiT1
+      ;wxTreeEvent::sm_classwxTreeEvent
+      sm_classwxTreeEvent__11wxTreeEvent
   ;From object file:  ..\common\txtstrm.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxTextOutputStream::SetMode(wxEOL)
@@ -4673,7 +4829,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  G:\DEV\WX22\WXWINDOWS\src\common\unzip.c
+  ;From object file:  G:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -4761,6 +4917,8 @@ EXPORTS
       wxSetDetectableAutoRepeat__FUl
       ;wxGetTextFromUser(const wxString&,const wxString&,const wxString&,wxWindow*,int,int,unsigned long)
       wxGetTextFromUser__FRC8wxStringN21P8wxWindowiT5Ul
+      ;wxFindWindowAtPoint(wxWindow*,const wxPoint&)
+      wxFindWindowAtPoint__FP8wxWindowRC7wxPoint
       ;StringToDouble(char*,double*)
       StringToDouble__FPcPd
       ;StringToInt(char*,int*)
@@ -4789,6 +4947,8 @@ EXPORTS
       wxGetFullHostName__Fv
       ;wxFindWindowByName(const wxString&,wxWindow*)
       wxFindWindowByName__FRC8wxStringP8wxWindow
+      ;wxGenericFindWindowAtPoint(const wxPoint&)
+      wxGenericFindWindowAtPoint__FRC7wxPoint
       ;wxEnableTopLevelWindows(unsigned long)
       wxEnableTopLevelWindows__FUl
       ;wxGetEmailAddress(char*,int)
@@ -5459,10 +5619,14 @@ EXPORTS
       DoSetClientData__12wxWindowBaseFPv
       ;wxWindowBase::FindWindow(const wxString&)
       FindWindow__12wxWindowBaseFRC8wxString
+      ;wxWindowBase::SetHelpTextForId(const wxString&)
+      SetHelpTextForId__12wxWindowBaseFRC8wxString
       ;wxWindowBase::Close(unsigned long)
       Close__12wxWindowBaseFUl
       ;wxWindowBase::Show(unsigned long)
       Show__12wxWindowBaseFUl
+      ;wxWindowBase::OnHelp(wxHelpEvent&)
+      OnHelp__12wxWindowBaseFR11wxHelpEvent
       ;wxWindowBase::Centre(int)
       Centre__12wxWindowBaseFi
       ;wxWindowBase::SetSizeConstraint(int,int,int,int)
@@ -5477,6 +5641,8 @@ EXPORTS
       SetSizer__12wxWindowBaseFP7wxSizer
       ;wxWindowBase::IsTopLevel() const
       IsTopLevel__12wxWindowBaseCFv
+      ;wxWindowBase::GetHelpText() const
+      GetHelpText__12wxWindowBaseCFv
       ;wxWindowBase::DoGetClientData() const
       DoGetClientData__12wxWindowBaseCFv
       ;wxWindowBase::SetFont(const wxFont&)
@@ -5501,6 +5667,8 @@ EXPORTS
       Fit__12wxWindowBaseFv
       ;wxWindowBase::DeleteRelatedConstraints()
       DeleteRelatedConstraints__12wxWindowBaseFv
+      ;wxWindowBase::SetHelpText(const wxString&)
+      SetHelpText__12wxWindowBaseFRC8wxString
   ;From object file:  ..\common\wxchar.cpp
     ;PUBDEFs (Symbols available from object file):
       wcslen
@@ -6025,8 +6193,8 @@ EXPORTS
       ;wxInitializePrintSetupData(unsigned long)
       wxInitializePrintSetupData__FUl
       __vft18wxPostScriptModule8wxObject
-      ;wxPostScriptDC::DoDrawEllipticArc(int,int,int,int,double,double)
-      DoDrawEllipticArc__14wxPostScriptDCFiN31dT5
+      ;wxPostScriptDC::SetResolution(int)
+      SetResolution__14wxPostScriptDCFi
       ;wxSetPrinterScaling(double,double)
       wxSetPrinterScaling__FdT1
       ;wxPostScriptModule::sm_classwxPostScriptModule
@@ -6039,12 +6207,16 @@ EXPORTS
       DoDrawRectangle__14wxPostScriptDCFiN31
       ;wxPostScriptDC::DoDrawPolygon(int,wxPoint*,int,int,int)
       DoDrawPolygon__14wxPostScriptDCFiP7wxPointN31
-      ;wxPostScriptDC::wxPostScriptDC()
-      __ct__14wxPostScriptDCFv
+      ;wxPostScriptDC::DoDrawEllipticArc(int,int,int,int,double,double)
+      DoDrawEllipticArc__14wxPostScriptDCFiN31dT5
+      ;wxPostScriptDC::GetResolution()
+      GetResolution__14wxPostScriptDCFv
       ;wxGetPrinterFile()
       wxGetPrinterFile__Fv
       ;wxConstructorForwxPostScriptDC()
       wxConstructorForwxPostScriptDC__Fv
+      ;wxPostScriptDC::wxPostScriptDC()
+      __ct__14wxPostScriptDCFv
       ;wxPostScriptModule::OnExit()
       OnExit__18wxPostScriptModuleFv
       ;wxPostScriptDC::PrinterDialog(wxWindow*)
@@ -6114,6 +6286,8 @@ EXPORTS
       GetCharWidth__14wxPostScriptDCCFv
       ;wxPostScriptDC::DoDrawText(const wxString&,int,int)
       DoDrawText__14wxPostScriptDCFRC8wxStringiT2
+      ;wxPostScriptDC::ms_PSScaleFactor
+      ms_PSScaleFactor__14wxPostScriptDC
   ;From object file:  ..\generic\dragimgg.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxGenericDragImage::Create(const wxBitmap&,const wxCursor&,const wxPoint&)
@@ -6671,8 +6845,8 @@ EXPORTS
       DoDrawRect__18wxListHeaderWindowFP4wxDCiN32
       ;wxListHeaderData::GetText(wxString&)
       GetText__16wxListHeaderDataFR8wxString
-      ;wxListMainWindow::OnKeyDown(wxKeyEvent&)
-      OnKeyDown__16wxListMainWindowFR10wxKeyEvent
+      ;wxListMainWindow::GetItemRect(long,wxRect&)
+      GetItemRect__16wxListMainWindowFlR6wxRect
       __vft14wxListTextCtrl8wxObject
       ;wxListMainWindow::SetMode(long)
       SetMode__16wxListMainWindowFl
@@ -6680,8 +6854,8 @@ EXPORTS
       SetItemSpacing__10wxListCtrlFiUl
       ;wxListCtrl::SetDropTarget(wxDropTarget*)
       SetDropTarget__10wxListCtrlFP12wxDropTarget
-      ;wxListMainWindow::GetItemRect(long,wxRect&)
-      GetItemRect__16wxListMainWindowFlR6wxRect
+      ;wxListMainWindow::OnKeyDown(wxKeyEvent&)
+      OnKeyDown__16wxListMainWindowFR10wxKeyEvent
       ;wxListEvent::CopyObject(wxObject&) const
       CopyObject__11wxListEventCFR8wxObject
       ;wxListLineDataArray::operator=(const wxListLineDataArray&)
@@ -7040,6 +7214,8 @@ EXPORTS
       FindItem__10wxListCtrlFlRC7wxPointi
       ;wxListMainWindow::DeleteLine(wxListLineData*)
       DeleteLine__16wxListMainWindowFP14wxListLineData
+      ;wxListCtrl::AssignImageList(wxImageList*,int)
+      AssignImageList__10wxListCtrlFP11wxImageListi
       ;wxListLineDataArray::DoEmpty()
       DoEmpty__19wxListLineDataArrayFv
       ;wxConstructorForwxListItemData()
@@ -8550,257 +8726,268 @@ EXPORTS
       sm_eventTable__11wxTipDialog
       ;wxTipDialog::wxTipDialog(wxWindow*,wxTipProvider*,unsigned long)
       __ct__11wxTipDialogFP8wxWindowP13wxTipProviderUl
-  ;From object file:  ..\generic\treectrl.cpp
+  ;From object file:  ..\generic\tipwin.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxTreeRenameTimer::wxTreeRenameTimer(wxTreeCtrl*)
-      __ct__17wxTreeRenameTimerFP10wxTreeCtrl
+      ;wxTipWindow::OnKillFocus(wxFocusEvent&)
+      OnKillFocus__11wxTipWindowFR12wxFocusEvent
+      __vft11wxTipWindow8wxObject
+      ;wxTipWindow::Adjust(const wxString&,int)
+      Adjust__11wxTipWindowFRC8wxStringi
+      ;wxTipWindow::OnMouseClick(wxMouseEvent&)
+      OnMouseClick__11wxTipWindowFR12wxMouseEvent
+      ;wxTipWindow::wxTipWindow(wxWindow*,const wxString&,int)
+      __ct__11wxTipWindowFP8wxWindowRC8wxStringi
+      ;wxTipWindow::GetEventTable() const
+      GetEventTable__11wxTipWindowCFv
+      ;wxTipWindow::sm_eventTable
+      sm_eventTable__11wxTipWindow
+      ;wxTipWindow::sm_eventTableEntries
+      sm_eventTableEntries__11wxTipWindow
+      ;wxTipWindow::OnPaint(wxPaintEvent&)
+      OnPaint__11wxTipWindowFR12wxPaintEvent
+      ;wxTipWindow::OnActivate(wxActivateEvent&)
+      OnActivate__11wxTipWindowFR15wxActivateEvent
+  ;From object file:  ..\generic\treectlg.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxTreeRenameTimer::wxTreeRenameTimer(wxGenericTreeCtrl*)
+      __ct__17wxTreeRenameTimerFP17wxGenericTreeCtrl
       ;wxTreeTextCtrl::sm_eventTable
       sm_eventTable__14wxTreeTextCtrl
-      ;wxTreeCtrl::sm_eventTable
-      sm_eventTable__10wxTreeCtrl
-      ;wxTreeCtrl::Collapse(const wxTreeItemId&)
-      Collapse__10wxTreeCtrlFRC12wxTreeItemId
-      ;wxTreeCtrl::CollapseAndReset(const wxTreeItemId&)
-      CollapseAndReset__10wxTreeCtrlFRC12wxTreeItemId
-      ;wxTreeCtrl::GetLineHeight(wxGenericTreeItem*) const
-      GetLineHeight__10wxTreeCtrlCFP17wxGenericTreeItem
-      ;wxTreeCtrl::RefreshSubtree(wxGenericTreeItem*)
-      RefreshSubtree__10wxTreeCtrlFP17wxGenericTreeItem
-      ;wxTreeCtrl::RefreshLine(wxGenericTreeItem*)
-      RefreshLine__10wxTreeCtrlFP17wxGenericTreeItem
-      ;wxTreeCtrl::InsertItem(const wxTreeItemId&,unsigned int,const wxString&,int,int,wxTreeItemData*)
-      InsertItem__10wxTreeCtrlFRC12wxTreeItemIdUiRC8wxStringiT4P14wxTreeItemData
-      ;wxTreeCtrl::Init()
-      Init__10wxTreeCtrlFv
-      ;wxTreeTextCtrl::wxTreeTextCtrl(wxWindow*,const int,unsigned long*,wxString*,wxTreeCtrl*,const wxString&,const wxPoint&,const wxSize&,int,const wxValidator&,const wxString&)
-      __ct__14wxTreeTextCtrlFP8wxWindowCiPUlP8wxStringP10wxTreeCtrlRC8wxStringRC7wxPointRC6wxSizeiRC11wxValidatorT6
-      ;wxArrayTreeItemIds::DoCopy(const wxArrayTreeItemIds&)
-      DoCopy__18wxArrayTreeItemIdsFRC18wxArrayTreeItemIds
+      ;wxGenericTreeCtrl::sm_classwxGenericTreeCtrl
+      sm_classwxGenericTreeCtrl__17wxGenericTreeCtrl
+      ;wxGenericTreeCtrl::TagNextChildren(wxGenericTreeItem*,wxGenericTreeItem*,unsigned long)
+      TagNextChildren__17wxGenericTreeCtrlFP17wxGenericTreeItemT1Ul
+      ;wxGenericTreeCtrl::SetItemHasChildren(const wxTreeItemId&,unsigned long)
+      SetItemHasChildren__17wxGenericTreeCtrlFRC12wxTreeItemIdUl
+      ;wxGenericTreeCtrl::ScrollTo(const wxTreeItemId&)
+      ScrollTo__17wxGenericTreeCtrlFRC12wxTreeItemId
+      ;wxGenericTreeCtrl::OnSetFocus(wxFocusEvent&)
+      OnSetFocus__17wxGenericTreeCtrlFR12wxFocusEvent
+      ;wxGenericTreeCtrl::IsVisible(const wxTreeItemId&) const
+      IsVisible__17wxGenericTreeCtrlCFRC12wxTreeItemId
+      ;wxGenericTreeCtrl::GetParent(const wxTreeItemId&) const
+      GetParent__17wxGenericTreeCtrlCFRC12wxTreeItemId
+      ;wxGenericTreeCtrl::GetBoundingRect(const wxTreeItemId&,wxRect&,unsigned long) const
+      GetBoundingRect__17wxGenericTreeCtrlCFRC12wxTreeItemIdR6wxRectUl
+      ;wxGenericTreeCtrl::DrawLine(const wxTreeItemId&,unsigned long)
+      DrawLine__17wxGenericTreeCtrlFRC12wxTreeItemIdUl
+      ;wxGenericTreeCtrl::AssignImageList(wxImageList*)
+      AssignImageList__17wxGenericTreeCtrlFP11wxImageList
+      ;wxGenericTreeCtrl::GetLineHeight(wxGenericTreeItem*) const
+      GetLineHeight__17wxGenericTreeCtrlCFP17wxGenericTreeItem
+      ;wxGenericTreeCtrl::RefreshSubtree(wxGenericTreeItem*)
+      RefreshSubtree__17wxGenericTreeCtrlFP17wxGenericTreeItem
+      ;wxGenericTreeCtrl::PaintLevel(wxGenericTreeItem*,wxDC&,int,int&)
+      PaintLevel__17wxGenericTreeCtrlFP17wxGenericTreeItemR4wxDCiRi
+      ;wxGenericTreeCtrl::OnRenameTimer()
+      OnRenameTimer__17wxGenericTreeCtrlFv
+      ;wxConstructorForwxGenericTreeCtrl()
+      wxConstructorForwxGenericTreeCtrl__Fv
+      ;wxGenericTreeCtrl::GetFirstVisibleItem() const
+      GetFirstVisibleItem__17wxGenericTreeCtrlCFv
+      ;wxGenericTreeCtrl::AdjustMyScrollbars()
+      AdjustMyScrollbars__17wxGenericTreeCtrlFv
       ;wxGenericTreeItem::SetText(const wxString&)
       SetText__17wxGenericTreeItemFRC8wxString
-      ;wxGenericTreeItem::DeleteChildren(wxTreeCtrl*)
-      DeleteChildren__17wxGenericTreeItemFP10wxTreeCtrl
+      ;wxGenericTreeCtrl::GetSelections(wxArrayTreeItemIds&) const
+      GetSelections__17wxGenericTreeCtrlCFR18wxArrayTreeItemIds
+      ;wxGenericTreeCtrl::Edit(const wxTreeItemId&)
+      Edit__17wxGenericTreeCtrlFRC12wxTreeItemId
       ;wxTreeTextCtrl::sm_eventTableEntries
       sm_eventTableEntries__14wxTreeTextCtrl
       ;wxTreeTextCtrl::sm_classwxTreeTextCtrl
       sm_classwxTreeTextCtrl__14wxTreeTextCtrl
-      __vft10wxTreeCtrl8wxObject
-      ;wxTreeCtrl::TagNextChildren(wxGenericTreeItem*,wxGenericTreeItem*,unsigned long)
-      TagNextChildren__10wxTreeCtrlFP17wxGenericTreeItemT1Ul
-      ;wxTreeCtrl::SortChildren(const wxTreeItemId&)
-      SortChildren__10wxTreeCtrlFRC12wxTreeItemId
-      ;wxTreeCtrl::SetItemHasChildren(const wxTreeItemId&,unsigned long)
-      SetItemHasChildren__10wxTreeCtrlFRC12wxTreeItemIdUl
-      ;wxTreeCtrl::OnSetFocus(wxFocusEvent&)
-      OnSetFocus__10wxTreeCtrlFR12wxFocusEvent
-      ;wxTreeCtrl::OnChar(wxKeyEvent&)
-      OnChar__10wxTreeCtrlFR10wxKeyEvent
-      ;wxTreeCtrl::IsBold(const wxTreeItemId&) const
-      IsBold__10wxTreeCtrlCFRC12wxTreeItemId
-      ;wxTreeCtrl::GetPrevVisible(const wxTreeItemId&) const
-      GetPrevVisible__10wxTreeCtrlCFRC12wxTreeItemId
-      ;wxTreeCtrl::GetPrevSibling(const wxTreeItemId&) const
-      GetPrevSibling__10wxTreeCtrlCFRC12wxTreeItemId
-      ;wxTreeCtrl::GetNextSibling(const wxTreeItemId&) const
-      GetNextSibling__10wxTreeCtrlCFRC12wxTreeItemId
-      ;wxTreeCtrl::GetChildrenCount(const wxTreeItemId&,unsigned long)
-      GetChildrenCount__10wxTreeCtrlFRC12wxTreeItemIdUl
+      __vft17wxGenericTreeCtrl8wxObject
+      ;wxGenericTreeCtrl::SetItemBold(const wxTreeItemId&,unsigned long)
+      SetItemBold__17wxGenericTreeCtrlFRC12wxTreeItemIdUl
+      ;wxGenericTreeCtrl::OnKillFocus(wxFocusEvent&)
+      OnKillFocus__17wxGenericTreeCtrlFR12wxFocusEvent
+      ;wxGenericTreeCtrl::IsExpanded(const wxTreeItemId&) const
+      IsExpanded__17wxGenericTreeCtrlCFRC12wxTreeItemId
+      ;wxGenericTreeItem::GetSize(int&,int&,const wxGenericTreeCtrl*)
+      GetSize__17wxGenericTreeItemFRiT1PC17wxGenericTreeCtrl
+      ;wxGenericTreeCtrl::GetNext(const wxTreeItemId&) const
+      GetNext__17wxGenericTreeCtrlCFRC12wxTreeItemId
+      ;wxGenericTreeCtrl::GetNextSibling(const wxTreeItemId&) const
+      GetNextSibling__17wxGenericTreeCtrlCFRC12wxTreeItemId
+      ;wxGenericTreeCtrl::DeleteChildren(const wxTreeItemId&)
+      DeleteChildren__17wxGenericTreeCtrlFRC12wxTreeItemId
+      ;wxGenericTreeCtrl::Collapse(const wxTreeItemId&)
+      Collapse__17wxGenericTreeCtrlFRC12wxTreeItemId
       ;wxGenericTreeItem::wxGenericTreeItem(wxGenericTreeItem*,const wxString&,wxDC&,int,int,wxTreeItemData*)
       __ct__17wxGenericTreeItemFP17wxGenericTreeItemRC8wxStringR4wxDCiT4P14wxTreeItemData
-      ;wxTreeCtrl::SendDeleteEvent(wxGenericTreeItem*)
-      SendDeleteEvent__10wxTreeCtrlFP17wxGenericTreeItem
-      ;wxTreeCtrl::OnCompareItems(const wxTreeItemId&,const wxTreeItemId&)
-      OnCompareItems__10wxTreeCtrlFRC12wxTreeItemIdT1
-      ;wxTreeCtrl::CalculateLevel(wxGenericTreeItem*,wxDC&,int,int&)
-      CalculateLevel__10wxTreeCtrlFP17wxGenericTreeItemR4wxDCiRi
-      ;wxTreeCtrl::OnRenameAccept()
-      OnRenameAccept__10wxTreeCtrlFv
-      ;wxConstructorForwxTreeEvent()
-      wxConstructorForwxTreeEvent__Fv
+      ;wxGenericTreeCtrl::SetSpacing(unsigned int)
+      SetSpacing__17wxGenericTreeCtrlFUi
+      ;wxGenericTreeCtrl::PrependItem(const wxTreeItemId&,const wxString&,int,int,wxTreeItemData*)
+      PrependItem__17wxGenericTreeCtrlFRC12wxTreeItemIdRC8wxStringiT3P14wxTreeItemData
+      ;wxGenericTreeCtrl::DoInsertItem(const wxTreeItemId&,unsigned int,const wxString&,int,int,wxTreeItemData*)
+      DoInsertItem__17wxGenericTreeCtrlFRC12wxTreeItemIdUiRC8wxStringiT4P14wxTreeItemData
+      ;wxGenericTreeCtrl::AppendItem(const wxTreeItemId&,const wxString&,int,int,wxTreeItemData*)
+      AppendItem__17wxGenericTreeCtrlFRC12wxTreeItemIdRC8wxStringiT3P14wxTreeItemData
+      ;wxGenericTreeCtrl::~wxGenericTreeCtrl()
+      __dt__17wxGenericTreeCtrlFv
       ;wxConstructorForwxTreeCtrl()
       wxConstructorForwxTreeCtrl__Fv
-      ;wxTreeCtrl::UnselectAll()
-      UnselectAll__10wxTreeCtrlFv
-      ;wxTreeCtrl::SetItemTextColour(const wxTreeItemId&,const wxColour&)
-      SetItemTextColour__10wxTreeCtrlFRC12wxTreeItemIdRC8wxColour
-      ;wxTreeCtrl::SetItemBackgroundColour(const wxTreeItemId&,const wxColour&)
-      SetItemBackgroundColour__10wxTreeCtrlFRC12wxTreeItemIdRC8wxColour
-      ;wxTreeCtrl::GetStateImageList() const
-      GetStateImageList__10wxTreeCtrlCFv
-      ;wxTreeCtrl::GetCount() const
-      GetCount__10wxTreeCtrlCFv
-      ;wxTreeCtrl::CalculatePositions()
-      CalculatePositions__10wxTreeCtrlFv
-      ;wxTreeCtrl::Create(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxValidator&,const wxString&)
-      Create__10wxTreeCtrlFP8wxWindowiRC7wxPointRC6wxSizelRC11wxValidatorRC8wxString
-      ;wxTreeCtrl::PaintItem(wxGenericTreeItem*,wxDC&)
-      PaintItem__10wxTreeCtrlFP17wxGenericTreeItemR4wxDC
-      ;wxArrayTreeItemIds::Add(const wxTreeItemId&)
-      Add__18wxArrayTreeItemIdsFRC12wxTreeItemId
-      ;wxTreeCtrl::TagAllChildrenUntilLast(wxGenericTreeItem*,wxGenericTreeItem*,unsigned long)
-      TagAllChildrenUntilLast__10wxTreeCtrlFP17wxGenericTreeItemT1Ul
-      ;wxTreeCtrl::SetStateImageList(wxImageList*)
-      SetStateImageList__10wxTreeCtrlFP11wxImageList
-      ;wxTreeCtrl::SetImageList(wxImageList*)
-      SetImageList__10wxTreeCtrlFP11wxImageList
-      ;wxTreeCtrl::ScrollTo(const wxTreeItemId&)
-      ScrollTo__10wxTreeCtrlFRC12wxTreeItemId
-      ;wxTreeCtrl::OnIdle(wxIdleEvent&)
-      OnIdle__10wxTreeCtrlFR11wxIdleEvent
+      ;wxGenericTreeCtrl::GetStateImageList() const
+      GetStateImageList__17wxGenericTreeCtrlCFv
+      ;wxGenericTreeCtrl::GetImageList() const
+      GetImageList__17wxGenericTreeCtrlCFv
+      ;wxGenericTreeCtrl::GetCount() const
+      GetCount__17wxGenericTreeCtrlCFv
+      ;wxGenericTreeCtrl::CalculateSize(wxGenericTreeItem*,wxDC&)
+      CalculateSize__17wxGenericTreeCtrlFP17wxGenericTreeItemR4wxDC
       ;wxTreeTextCtrl::OnChar(wxKeyEvent&)
       OnChar__14wxTreeTextCtrlFR10wxKeyEvent
-      ;wxTreeCtrl::IsVisible(const wxTreeItemId&) const
-      IsVisible__10wxTreeCtrlCFRC12wxTreeItemId
-      ;wxArrayTreeItemIds::Index(const wxTreeItemId&,unsigned long) const
-      Index__18wxArrayTreeItemIdsCFRC12wxTreeItemIdUl
-      ;wxGenericTreeItem::GetSize(int&,int&,const wxTreeCtrl*)
-      GetSize__17wxGenericTreeItemFRiT1PC10wxTreeCtrl
-      ;wxTreeCtrl::GetParent(const wxTreeItemId&) const
-      GetParent__10wxTreeCtrlCFRC12wxTreeItemId
-      ;wxTreeCtrl::GetNextChild(const wxTreeItemId&,long&) const
-      GetNextChild__10wxTreeCtrlCFRC12wxTreeItemIdRl
-      ;wxTreeCtrl::GetLastChild(const wxTreeItemId&) const
-      GetLastChild__10wxTreeCtrlCFRC12wxTreeItemId
-      ;wxTreeCtrl::GetItemText(const wxTreeItemId&) const
-      GetItemText__10wxTreeCtrlCFRC12wxTreeItemId
-      ;wxTreeCtrl::DrawLine(const wxTreeItemId&,unsigned long)
-      DrawLine__10wxTreeCtrlFRC12wxTreeItemIdUl
-      ;wxTreeCtrl::HitTest(const wxPoint&,int&)
-      HitTest__10wxTreeCtrlFRC7wxPointRi
-      ;wxTreeEvent::wxTreeEvent(int,int)
-      __ct__11wxTreeEventFiT1
-      ;wxTreeCtrl::PrependItem(const wxTreeItemId&,const wxString&,int,int,wxTreeItemData*)
-      PrependItem__10wxTreeCtrlFRC12wxTreeItemIdRC8wxStringiT3P14wxTreeItemData
-      ;wxTreeCtrl::InsertItem(const wxTreeItemId&,const wxTreeItemId&,const wxString&,int,int,wxTreeItemData*)
-      InsertItem__10wxTreeCtrlFRC12wxTreeItemIdT1RC8wxStringiT4P14wxTreeItemData
-      ;wxGenericTreeItem::HitTest(const wxPoint&,const wxTreeCtrl*,int&)
-      HitTest__17wxGenericTreeItemFRC7wxPointPC10wxTreeCtrlRi
-      ;wxTreeCtrl::DrawDropEffect(wxGenericTreeItem*)
-      DrawDropEffect__10wxTreeCtrlFP17wxGenericTreeItem
-      ;wxTreeCtrl::AppendItem(const wxTreeItemId&,const wxString&,int,int,wxTreeItemData*)
-      AppendItem__10wxTreeCtrlFRC12wxTreeItemIdRC8wxStringiT3P14wxTreeItemData
-      ;wxTreeCtrl::GetItemImage(const wxTreeItemId&,wxTreeItemIcon) const
-      GetItemImage__10wxTreeCtrlCFRC12wxTreeItemId14wxTreeItemIcon
+      ;wxGenericTreeCtrl::sm_eventTableEntries
+      sm_eventTableEntries__17wxGenericTreeCtrl
+      ;wxGenericTreeCtrl::SetItemFont(const wxTreeItemId&,const wxFont&)
+      SetItemFont__17wxGenericTreeCtrlFRC12wxTreeItemIdRC6wxFont
+      ;wxGenericTreeCtrl::OnPaint(wxPaintEvent&)
+      OnPaint__17wxGenericTreeCtrlFR12wxPaintEvent
+      ;wxGenericTreeCtrl::OnIdle(wxIdleEvent&)
+      OnIdle__17wxGenericTreeCtrlFR11wxIdleEvent
+      ;wxGenericTreeCtrl::IsSelected(const wxTreeItemId&) const
+      IsSelected__17wxGenericTreeCtrlCFRC12wxTreeItemId
+      ;wxGenericTreeCtrl::IsBold(const wxTreeItemId&) const
+      IsBold__17wxGenericTreeCtrlCFRC12wxTreeItemId
+      ;wxGenericTreeCtrl::GetNextChild(const wxTreeItemId&,long&) const
+      GetNextChild__17wxGenericTreeCtrlCFRC12wxTreeItemIdRl
+      ;wxGenericTreeCtrl::GetItemText(const wxTreeItemId&) const
+      GetItemText__17wxGenericTreeCtrlCFRC12wxTreeItemId
+      ;wxGenericTreeCtrl::GetFirstChild(const wxTreeItemId&,long&) const
+      GetFirstChild__17wxGenericTreeCtrlCFRC12wxTreeItemIdRl
+      ;wxGenericTreeCtrl::GetChildrenCount(const wxTreeItemId&,unsigned long)
+      GetChildrenCount__17wxGenericTreeCtrlFRC12wxTreeItemIdUl
+      ;wxGenericTreeCtrl::ExpandAll(const wxTreeItemId&)
+      ExpandAll__17wxGenericTreeCtrlFRC12wxTreeItemId
+      ;wxGenericTreeCtrl::DrawBorder(const wxTreeItemId&)
+      DrawBorder__17wxGenericTreeCtrlFRC12wxTreeItemId
+      ;wxGenericTreeCtrl::Delete(const wxTreeItemId&)
+      Delete__17wxGenericTreeCtrlFRC12wxTreeItemId
+      ;wxGenericTreeCtrl::HitTest(const wxPoint&,int&)
+      HitTest__17wxGenericTreeCtrlFRC7wxPointRi
+      ;wxGenericTreeItem::HitTest(const wxPoint&,const wxGenericTreeCtrl*,int&)
+      HitTest__17wxGenericTreeItemFRC7wxPointPC17wxGenericTreeCtrlRi
+      ;wxGenericTreeCtrl::GetItemImage(const wxTreeItemId&,wxTreeItemIcon) const
+      GetItemImage__17wxGenericTreeCtrlCFRC12wxTreeItemId14wxTreeItemIcon
       ;wxConstructorForwxTreeTextCtrl()
       wxConstructorForwxTreeTextCtrl__Fv
       ;wxGenericTreeItem::~wxGenericTreeItem()
       __dt__17wxGenericTreeItemFv
-      ;wxTreeCtrl::~wxTreeCtrl()
-      __dt__10wxTreeCtrlFv
-      ;wxTreeCtrl::GetEventTable() const
-      GetEventTable__10wxTreeCtrlCFv
+      ;wxGenericTreeCtrl::Unselect()
+      Unselect__17wxGenericTreeCtrlFv
+      ;wxGenericTreeCtrl::OnRenameAccept()
+      OnRenameAccept__17wxGenericTreeCtrlFv
+      ;wxGenericTreeCtrl::GetEventTable() const
+      GetEventTable__17wxGenericTreeCtrlCFv
       ;wxGenericTreeItem::GetCurrentImage() const
       GetCurrentImage__17wxGenericTreeItemCFv
-      ;wxTreeCtrl::GetSelections(wxArrayTreeItemIds&) const
-      GetSelections__10wxTreeCtrlCFR18wxArrayTreeItemIds
-      ;wxTreeCtrl::FillArray(wxGenericTreeItem*,wxArrayTreeItemIds&) const
-      FillArray__10wxTreeCtrlCFP17wxGenericTreeItemR18wxArrayTreeItemIds
-      ;wxTreeCtrl::Edit(const wxTreeItemId&)
-      Edit__10wxTreeCtrlFRC12wxTreeItemId
-      ;wxTreeCtrl::sm_eventTableEntries
-      sm_eventTableEntries__10wxTreeCtrl
+      ;wxGenericTreeCtrl::DeleteAllItems()
+      DeleteAllItems__17wxGenericTreeCtrlFv
+      ;wxGenericTreeCtrl::CalculatePositions()
+      CalculatePositions__17wxGenericTreeCtrlFv
+      ;wxGenericTreeCtrl::SetItemText(const wxTreeItemId&,const wxString&)
+      SetItemText__17wxGenericTreeCtrlFRC12wxTreeItemIdRC8wxString
+      ;wxGenericTreeCtrl::ItemHasChildren(const wxTreeItemId&) const
+      ItemHasChildren__17wxGenericTreeCtrlCFRC12wxTreeItemId
+      ;wxGenericTreeCtrl::sm_eventTable
+      sm_eventTable__17wxGenericTreeCtrl
       __vft14wxTreeTextCtrl8wxObject
-      ;wxTreeCtrl::SetItemFont(const wxTreeItemId&,const wxFont&)
-      SetItemFont__10wxTreeCtrlFRC12wxTreeItemIdRC6wxFont
+      ;wxGenericTreeCtrl::Toggle(const wxTreeItemId&)
+      Toggle__17wxGenericTreeCtrlFRC12wxTreeItemId
+      ;wxGenericTreeCtrl::SortChildren(const wxTreeItemId&)
+      SortChildren__17wxGenericTreeCtrlFRC12wxTreeItemId
+      ;wxGenericTreeCtrl::SetStateImageList(wxImageList*)
+      SetStateImageList__17wxGenericTreeCtrlFP11wxImageList
+      ;wxGenericTreeCtrl::SetImageList(wxImageList*)
+      SetImageList__17wxGenericTreeCtrlFP11wxImageList
+      ;wxGenericTreeCtrl::OnMouse(wxMouseEvent&)
+      OnMouse__17wxGenericTreeCtrlFR12wxMouseEvent
       ;wxTreeTextCtrl::OnKillFocus(wxFocusEvent&)
       OnKillFocus__14wxTreeTextCtrlFR12wxFocusEvent
-      ;wxTreeCtrl::IsSelected(const wxTreeItemId&) const
-      IsSelected__10wxTreeCtrlCFRC12wxTreeItemId
-      ;wxTreeCtrl::IsExpanded(const wxTreeItemId&) const
-      IsExpanded__10wxTreeCtrlCFRC12wxTreeItemId
-      ;wxTreeCtrl::GetNextVisible(const wxTreeItemId&) const
-      GetNextVisible__10wxTreeCtrlCFRC12wxTreeItemId
-      ;wxTreeCtrl::GetItemData(const wxTreeItemId&) const
-      GetItemData__10wxTreeCtrlCFRC12wxTreeItemId
-      ;wxTreeCtrl::GetFirstChild(const wxTreeItemId&,long&) const
-      GetFirstChild__10wxTreeCtrlCFRC12wxTreeItemIdRl
-      ;wxTreeCtrl::ExpandAll(const wxTreeItemId&)
-      ExpandAll__10wxTreeCtrlFRC12wxTreeItemId
-      ;wxTreeCtrl::DrawBorder(const wxTreeItemId&)
-      DrawBorder__10wxTreeCtrlFRC12wxTreeItemId
-      ;wxTreeCtrl::Delete(const wxTreeItemId&)
-      Delete__10wxTreeCtrlFRC12wxTreeItemId
-      ;wxArrayTreeItemIds::Insert(const wxTreeItemId&,unsigned int)
-      Insert__18wxArrayTreeItemIdsFRC12wxTreeItemIdUi
-      ;wxTreeCtrl::UnselectAllChildren(wxGenericTreeItem*)
-      UnselectAllChildren__10wxTreeCtrlFP17wxGenericTreeItem
-      ;wxTreeCtrl::SetSpacing(unsigned int)
-      SetSpacing__10wxTreeCtrlFUi
-      ;wxTreeCtrl::SetItemData(const wxTreeItemId&,wxTreeItemData*)
-      SetItemData__10wxTreeCtrlFRC12wxTreeItemIdP14wxTreeItemData
+      ;wxGenericTreeCtrl::OnChar(wxKeyEvent&)
+      OnChar__17wxGenericTreeCtrlFR10wxKeyEvent
+      ;wxGenericTreeCtrl::GetPrev(const wxTreeItemId&) const
+      GetPrev__17wxGenericTreeCtrlCFRC12wxTreeItemId
+      ;wxGenericTreeCtrl::GetPrevVisible(const wxTreeItemId&) const
+      GetPrevVisible__17wxGenericTreeCtrlCFRC12wxTreeItemId
+      ;wxGenericTreeCtrl::GetPrevSibling(const wxTreeItemId&) const
+      GetPrevSibling__17wxGenericTreeCtrlCFRC12wxTreeItemId
+      ;wxGenericTreeCtrl::GetLastChild(const wxTreeItemId&) const
+      GetLastChild__17wxGenericTreeCtrlCFRC12wxTreeItemId
+      ;wxGenericTreeCtrl::Expand(const wxTreeItemId&)
+      Expand__17wxGenericTreeCtrlFRC12wxTreeItemId
+      ;wxGenericTreeItem::DeleteChildren(wxGenericTreeCtrl*)
+      DeleteChildren__17wxGenericTreeItemFP17wxGenericTreeCtrl
+      ;wxGenericTreeCtrl::AssignStateImageList(wxImageList*)
+      AssignStateImageList__17wxGenericTreeCtrlFP11wxImageList
+      ;wxGenericTreeCtrl::SendDeleteEvent(wxGenericTreeItem*)
+      SendDeleteEvent__17wxGenericTreeCtrlFP17wxGenericTreeItem
+      ;wxGenericTreeCtrl::UnselectAllChildren(wxGenericTreeItem*)
+      UnselectAllChildren__17wxGenericTreeCtrlFP17wxGenericTreeItem
+      ;wxGenericTreeCtrl::SetItemData(const wxTreeItemId&,wxTreeItemData*)
+      SetItemData__17wxGenericTreeCtrlFRC12wxTreeItemIdP14wxTreeItemData
+      ;wxGenericTreeCtrl::SetIndent(unsigned int)
+      SetIndent__17wxGenericTreeCtrlFUi
       ;wxGenericTreeItem::SetCross(int,int)
       SetCross__17wxGenericTreeItemFiT1
-      ;wxTreeCtrl::DoInsertItem(const wxTreeItemId&,unsigned int,const wxString&,int,int,wxTreeItemData*)
-      DoInsertItem__10wxTreeCtrlFRC12wxTreeItemIdUiRC8wxStringiT4P14wxTreeItemData
-      ;wxTreeCtrl::OnRenameTimer()
-      OnRenameTimer__10wxTreeCtrlFv
-      ;wxTreeCtrl::Unselect()
-      Unselect__10wxTreeCtrlFv
-      ;wxTreeCtrl::GetFirstVisibleItem() const
-      GetFirstVisibleItem__10wxTreeCtrlCFv
-      ;wxTreeCtrl::AdjustMyScrollbars()
-      AdjustMyScrollbars__10wxTreeCtrlFv
-      ;wxArrayTreeItemIds::wxArrayTreeItemIds(const wxArrayTreeItemIds&)
-      __ct__18wxArrayTreeItemIdsFRC18wxArrayTreeItemIds
-      ;wxTreeCtrl::SetItemText(const wxTreeItemId&,const wxString&)
-      SetItemText__10wxTreeCtrlFRC12wxTreeItemIdRC8wxString
-      ;wxTreeCtrl::CalculateSize(wxGenericTreeItem*,wxDC&)
-      CalculateSize__10wxTreeCtrlFP17wxGenericTreeItemR4wxDC
-      ;wxTreeCtrl::ItemHasChildren(const wxTreeItemId&) const
-      ItemHasChildren__10wxTreeCtrlCFRC12wxTreeItemId
-      ;wxTreeEvent::sm_classwxTreeEvent
-      sm_classwxTreeEvent__11wxTreeEvent
+      ;wxGenericTreeCtrl::OnCompareItems(const wxTreeItemId&,const wxTreeItemId&)
+      OnCompareItems__17wxGenericTreeCtrlFRC12wxTreeItemIdT1
+      ;wxGenericTreeCtrl::InsertItem(const wxTreeItemId&,unsigned int,const wxString&,int,int,wxTreeItemData*)
+      InsertItem__17wxGenericTreeCtrlFRC12wxTreeItemIdUiRC8wxStringiT4P14wxTreeItemData
+      ;wxGenericTreeCtrl::InsertItem(const wxTreeItemId&,const wxTreeItemId&,const wxString&,int,int,wxTreeItemData*)
+      InsertItem__17wxGenericTreeCtrlFRC12wxTreeItemIdT1RC8wxStringiT4P14wxTreeItemData
+      ;wxGenericTreeCtrl::CalculateLevel(wxGenericTreeItem*,wxDC&,int,int&)
+      CalculateLevel__17wxGenericTreeCtrlFP17wxGenericTreeItemR4wxDCiRi
+      ;wxGenericTreeCtrl::AddRoot(const wxString&,int,int,wxTreeItemData*)
+      AddRoot__17wxGenericTreeCtrlFRC8wxStringiT2P14wxTreeItemData
+      ;wxGenericTreeCtrl::Init()
+      Init__17wxGenericTreeCtrlFv
+      ;wxTreeTextCtrl::wxTreeTextCtrl(wxWindow*,const int,unsigned long*,wxString*,wxGenericTreeCtrl*,const wxString&,const wxPoint&,const wxSize&,int,const wxValidator&,const wxString&)
+      __ct__14wxTreeTextCtrlFP8wxWindowCiPUlP8wxStringP17wxGenericTreeCtrlRC8wxStringRC7wxPointRC6wxSizeiRC11wxValidatorT6
+      ;wxGenericTreeCtrl::SetItemImage(const wxTreeItemId&,int,wxTreeItemIcon)
+      SetItemImage__17wxGenericTreeCtrlFRC12wxTreeItemIdi14wxTreeItemIcon
+      ;wxGenericTreeCtrl::SelectItem(const wxTreeItemId&,unsigned long,unsigned long)
+      SelectItem__17wxGenericTreeCtrlFRC12wxTreeItemIdUlT2
+      ;wxGenericTreeCtrl::Create(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxValidator&,const wxString&)
+      Create__17wxGenericTreeCtrlFP8wxWindowiRC7wxPointRC6wxSizelRC11wxValidatorRC8wxString
+      ;wxGenericTreeCtrl::PaintItem(wxGenericTreeItem*,wxDC&)
+      PaintItem__17wxGenericTreeCtrlFP17wxGenericTreeItemR4wxDC
+      ;wxGenericTreeItem::GetChildrenCount(unsigned long) const
+      GetChildrenCount__17wxGenericTreeItemCFUl
       ;wxTreeCtrl::sm_classwxTreeCtrl
       sm_classwxTreeCtrl__10wxTreeCtrl
       __vft17wxTreeRenameTimer8wxObject
-      ;wxTreeCtrl::Toggle(const wxTreeItemId&)
-      Toggle__10wxTreeCtrlFRC12wxTreeItemId
-      ;wxTreeCtrl::SetItemBold(const wxTreeItemId&,unsigned long)
-      SetItemBold__10wxTreeCtrlFRC12wxTreeItemIdUl
-      ;wxTreeCtrl::OnPaint(wxPaintEvent&)
-      OnPaint__10wxTreeCtrlFR12wxPaintEvent
-      ;wxTreeCtrl::OnMouse(wxMouseEvent&)
-      OnMouse__10wxTreeCtrlFR12wxMouseEvent
-      ;wxTreeCtrl::OnKillFocus(wxFocusEvent&)
-      OnKillFocus__10wxTreeCtrlFR12wxFocusEvent
-      ;wxGenericTreeItem::GetChildrenCount(unsigned long) const
-      GetChildrenCount__17wxGenericTreeItemCFUl
-      ;wxTreeCtrl::Expand(const wxTreeItemId&)
-      Expand__10wxTreeCtrlFRC12wxTreeItemId
-      ;wxTreeCtrl::EnsureVisible(const wxTreeItemId&)
-      EnsureVisible__10wxTreeCtrlFRC12wxTreeItemId
-      ;wxTreeCtrl::DeleteChildren(const wxTreeItemId&)
-      DeleteChildren__10wxTreeCtrlFRC12wxTreeItemId
-      ;wxArrayTreeItemIds::RemoveAt(unsigned int)
-      RemoveAt__18wxArrayTreeItemIdsFUi
-      ;wxTreeCtrl::SetIndent(unsigned int)
-      SetIndent__10wxTreeCtrlFUi
-      ;wxTreeCtrl::SelectItemRange(wxGenericTreeItem*,wxGenericTreeItem*)
-      SelectItemRange__10wxTreeCtrlFP17wxGenericTreeItemT1
-      ;wxTreeCtrl::PaintLevel(wxGenericTreeItem*,wxDC&,int,int&)
-      PaintLevel__10wxTreeCtrlFP17wxGenericTreeItemR4wxDCiRi
-      ;wxTreeCtrl::AddRoot(const wxString&,int,int,wxTreeItemData*)
-      AddRoot__10wxTreeCtrlFRC8wxStringiT2P14wxTreeItemData
-      ;wxArrayTreeItemIds::DoEmpty()
-      DoEmpty__18wxArrayTreeItemIdsFv
-      ;wxArrayTreeItemIds::~wxArrayTreeItemIds()
-      __dt__18wxArrayTreeItemIdsFv
-      ;wxTreeCtrl::SetItemImage(const wxTreeItemId&,int,wxTreeItemIcon)
-      SetItemImage__10wxTreeCtrlFRC12wxTreeItemIdi14wxTreeItemIcon
-      ;wxTreeCtrl::SelectItem(const wxTreeItemId&,unsigned long,unsigned long)
-      SelectItem__10wxTreeCtrlFRC12wxTreeItemIdUlT2
-      ;wxGenericTreeItem::Reset()
-      Reset__17wxGenericTreeItemFv
+      ;wxGenericTreeCtrl::TagAllChildrenUntilLast(wxGenericTreeItem*,wxGenericTreeItem*,unsigned long)
+      TagAllChildrenUntilLast__17wxGenericTreeCtrlFP17wxGenericTreeItemT1Ul
+      ;wxGenericTreeCtrl::GetNextVisible(const wxTreeItemId&) const
+      GetNextVisible__17wxGenericTreeCtrlCFRC12wxTreeItemId
+      ;wxGenericTreeCtrl::GetItemData(const wxTreeItemId&) const
+      GetItemData__17wxGenericTreeCtrlCFRC12wxTreeItemId
+      ;wxGenericTreeCtrl::EnsureVisible(const wxTreeItemId&)
+      EnsureVisible__17wxGenericTreeCtrlFRC12wxTreeItemId
+      ;wxGenericTreeCtrl::CollapseAndReset(const wxTreeItemId&)
+      CollapseAndReset__17wxGenericTreeCtrlFRC12wxTreeItemId
+      ;wxGenericTreeCtrl::RefreshLine(wxGenericTreeItem*)
+      RefreshLine__17wxGenericTreeCtrlFP17wxGenericTreeItem
+      ;wxGenericTreeCtrl::SelectItemRange(wxGenericTreeItem*,wxGenericTreeItem*)
+      SelectItemRange__17wxGenericTreeCtrlFP17wxGenericTreeItemT1
+      ;wxGenericTreeCtrl::DrawDropEffect(wxGenericTreeItem*)
+      DrawDropEffect__17wxGenericTreeCtrlFP17wxGenericTreeItem
       ;wxTreeRenameTimer::Notify()
       Notify__17wxTreeRenameTimerFv
-      ;wxTreeCtrl::GetImageList() const
-      GetImageList__10wxTreeCtrlCFv
+      ;wxGenericTreeCtrl::UnselectAll()
+      UnselectAll__17wxGenericTreeCtrlFv
+      ;wxGenericTreeCtrl::SetItemTextColour(const wxTreeItemId&,const wxColour&)
+      SetItemTextColour__17wxGenericTreeCtrlFRC12wxTreeItemIdRC8wxColour
+      ;wxGenericTreeCtrl::SetItemBackgroundColour(const wxTreeItemId&,const wxColour&)
+      SetItemBackgroundColour__17wxGenericTreeCtrlFRC12wxTreeItemIdRC8wxColour
+      ;wxGenericTreeItem::Reset()
+      Reset__17wxGenericTreeItemFv
       ;wxTreeTextCtrl::GetEventTable() const
       GetEventTable__14wxTreeTextCtrlCFv
-      ;wxTreeCtrl::DeleteAllItems()
-      DeleteAllItems__10wxTreeCtrlFv
-      ;wxArrayTreeItemIds::operator=(const wxArrayTreeItemIds&)
-      __as__18wxArrayTreeItemIdsFRC18wxArrayTreeItemIds
+      ;wxGenericTreeCtrl::FillArray(wxGenericTreeItem*,wxArrayTreeItemIds&) const
+      FillArray__17wxGenericTreeCtrlCFP17wxGenericTreeItemR18wxArrayTreeItemIds
   ;From object file:  ..\generic\treelay.cpp
   ;From object file:  ..\generic\wizard.cpp
     ;PUBDEFs (Symbols available from object file):
@@ -10171,8 +10358,8 @@ EXPORTS
       wxCanvasNameStr
       wxCYAN_PEN
       wxButtonBarNameStr
-      wxNORMAL_FONT
       wxNullBitmap
+      wxNORMAL_FONT
       wxMEDIUM_GREY_BRUSH
       wxTheColourDatabase
       wxLIGHT_GREY
@@ -12698,6 +12885,8 @@ EXPORTS
       wxGetResource__FRC8wxStringT1PlT1
       ;wxGetOsVersion(int*,int*)
       wxGetOsVersion__FPiT1
+      ;wxDisplaySizeMM(int*,int*)
+      wxDisplaySizeMM__FPiT1
       ;wxBeginBusyCursor(wxCursor*)
       wxBeginBusyCursor__FP8wxCursor
       ;wxFlushEvents()
@@ -12881,6 +13070,10 @@ EXPORTS
       ;wxWindow::Enable(unsigned long)
       Enable__8wxWindowFUl
       wxWinHandleList
+      ;wxFindWindowAtPointer(wxPoint&)
+      wxFindWindowAtPointer__FR7wxPoint
+      ;wxFindWindowAtPoint(const wxPoint&)
+      wxFindWindowAtPoint__FRC7wxPoint
       ;wxWindow::SetFont(const wxFont&)
       SetFont__8wxWindowFRC6wxFont
       ;wxWindow::OnSysColourChanged(wxSysColourChangedEvent&)
@@ -12903,6 +13096,8 @@ EXPORTS
       AdjustForParentClientOrigin__8wxWindowFRiT1i
       ;wxWindow::Init()
       Init__8wxWindowFv
+      ;wxGetMousePosition()
+      wxGetMousePosition__Fv
       ;wxConstructorForwxWindow()
       wxConstructorForwxWindow__Fv
       ;wxWindow::SetupColours()
