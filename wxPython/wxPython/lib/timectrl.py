@@ -517,6 +517,9 @@ class wxTimeCtrl(wxMaskedTextCtrl):
             value = self.GetValue()
             dbg('value = "%s"' % value)
 
+        if type(value) == types.UnicodeType:
+            value = str(value)  # convert to regular string
+
         valid = True    # assume true
         if type(value) == types.StringType:
 
@@ -547,7 +550,7 @@ class wxTimeCtrl(wxMaskedTextCtrl):
                 hour, minute, second = value.hour, value.minute, value.second
             else:
                 # Not a valid function argument
-                if self.__accept_mx:
+                if accept_mx:
                     error = 'GetWxDateTime requires wxDateTime, mxDateTime or parsable time string, passed %s'% repr(value)
                 else:
                     error = 'GetWxDateTime requires wxDateTime or parsable time string, passed %s'% repr(value)
