@@ -1,6 +1,0 @@
-mondrian ICON "sample.ico"
-
-#define FOLDPANELBARTEST_QUIT     1
-#define FOLDPANELBARTEST_ABOUT    102
-
-#include "wx/msw/wx.rc"
