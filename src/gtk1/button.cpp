@@ -120,8 +120,8 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
         y_alignment = 1.0;
 
     gtk_misc_set_alignment (GTK_MISC (BUTTON_CHILD (m_widget)),
-			    x_alignment, y_alignment);
-                
+                            x_alignment, y_alignment);
+
     SetLabel( label );
 
     if (style & wxNO_BORDER)
