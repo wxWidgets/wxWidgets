@@ -124,7 +124,7 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index)
             // TODO
             return 0;
         case wxSYS_SCREEN_X:
-            return DisplayHeight( wxGlobalDisplay(), 0 );
+            return DisplayWidth( wxGlobalDisplay(), 0 );
             
         case wxSYS_SCREEN_Y:
             return DisplayHeight( wxGlobalDisplay(), 0 );
