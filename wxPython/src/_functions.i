@@ -13,10 +13,6 @@
 // Not a %module
 
 
-%{
-#include <wx/stockitem.h>
-%}
-
 //---------------------------------------------------------------------------
 
 MAKE_CONST_WXSTRING(FileSelectorPromptStr);
