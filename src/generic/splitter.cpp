@@ -266,6 +266,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
         }
 
         SizeWindows();
+        m_needUpdating = FALSE;
     }  // left up && dragging
     else if (event.Moving() && !event.Dragging())
     {
