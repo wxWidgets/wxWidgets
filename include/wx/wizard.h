@@ -212,7 +212,7 @@ typedef void (wxEvtHandler::*wxWizardEventFunction)(wxWizardEvent&);
 #define EVT_WIZARD_CANCEL(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_CANCEL, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxWizardEventFunction) & fn, (wxObject *)NULL),
 
 // the user pressed "Help" button 
-#define EVT_WIZARD_HELP(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_HELP, id, -1, (wxObjectEventFunction) (wxEventFunction) wxWizardEventFunction) & fn, (wxObject *)NULL),
+#define EVT_WIZARD_HELP(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_HELP, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxWizardEventFunction) & fn, (wxObject *)NULL),
 
 #endif // wxUSE_WIZARDDLG
 
