@@ -279,6 +279,10 @@ wxMotif:
 - improved colour settings return values (Ian Brown)
 - improved border style handling for wxStaticText (Ian Brown)
 - improved toolbar control alignment
+- implemented wxSpinButton
+- implemented wxCheckListBox
+- fixed wxSpinCtrl and wxStaticLine when used with sizers
+- wxStaticBitmap now shows transparent icons correctly
 
 wxHTML:
 
