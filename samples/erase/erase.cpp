@@ -181,6 +181,15 @@ MyCanvas::MyCanvas( MyFrame *parent )
 
 void MyCanvas::OnChar( wxKeyEvent &event )
 {
+#if wxUSE_UNICODE
+    if (event.m_uniChar)
+    {
+        m_text += event.m_uniChar;
+        Refresh();
+        return;
+    }
+#endif
+
     // some test cases
     switch (event.m_keyCode)
     {
@@ -192,7 +201,6 @@ void MyCanvas::OnChar( wxKeyEvent &event )
         default: m_text += event.m_keyCode; break;
     }
     
-    Refresh();
 }
 
 void MyCanvas::OnPaint( wxPaintEvent &event )
