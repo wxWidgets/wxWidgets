@@ -102,6 +102,15 @@ size_t wxStringInputStream::OnSysRead(void *buffer, size_t size)
 // ============================================================================
 
 // ----------------------------------------------------------------------------
+// seek/tell
+// ----------------------------------------------------------------------------
+
+off_t wxStringOutputStream::OnSysTell() const
+{
+    return wx_static_cast(off_t, m_pos);
+}
+
+// ----------------------------------------------------------------------------
 // actual IO
 // ----------------------------------------------------------------------------
 
@@ -112,10 +121,13 @@ size_t wxStringOutputStream::OnSysWrite(const void *buffer, size_t size)
 
     const wxChar *p = wx_static_cast(const wxChar *, buffer);
 
-    m_str->Append(wxString(p, p + len + 1));
+    m_str->Append(wxString(p, p + len));
 
     // return number of bytes actually written
-    return len*sizeof(wxChar);
+    len *= sizeof(wxChar);
+    m_pos += len;
+
+    return len;
 }
 
 #endif // wxUSE_STREAMS

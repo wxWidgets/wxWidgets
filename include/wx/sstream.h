@@ -68,6 +68,7 @@ public:
     const wxString& GetString() const { return *m_str; }
 
 protected:
+    virtual off_t OnSysTell() const;
     virtual size_t OnSysWrite(const void *buffer, size_t size);
 
 private:
