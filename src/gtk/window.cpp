@@ -1658,7 +1658,7 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *widget,
 
     if (win->m_isScrolling)
     {
-        wxEventType command = wxEVT_SCROLLWIN_THUMBRELEASE;
+        wxEventType command = wxEVT_SCROLL_THUMBRELEASE;
         int value = -1;
         int dir = -1;
 
