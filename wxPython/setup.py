@@ -13,7 +13,7 @@ from my_distutils import run_swig, contrib_copy_tree
 # flags and values that affect this script
 #----------------------------------------------------------------------
 
-VERSION          = "2.3.4.1"
+VERSION          = "2.3.4.2"
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
 AUTHOR_EMAIL     = "Robin Dunn <robin@alldunn.com>"
@@ -43,12 +43,11 @@ BUILD_CANVAS = 0   # Build a canvas module using the one in wx/contrib (experime
 BUILD_ART2D = 0    # Build a canvas module using code from the wxArt2D project (experimental)
 
 
-
-
 CORE_ONLY = 0      # if true, don't build any of the above
 
 GL_ONLY = 0        # Only used when making the -gl RPM.  See the "b" script
-                   # for the ugly details
+                   # for the ugly details  (TODO: This can be removed as I don't
+                   # build the RPMs that way anymore.)
 
 USE_SWIG = 0       # Should we actually execute SWIG, or just use the
                    # files already in the distribution?
