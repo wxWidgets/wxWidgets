@@ -179,8 +179,8 @@ BEGIN_EVENT_TABLE(ListboxWidgetsPage, WidgetsPage)
     EVT_LISTBOX_DCLICK(ListboxPage_Listbox, ListboxWidgetsPage::OnListboxDClick)
     EVT_CHECKLISTBOX(ListboxPage_Listbox, ListboxWidgetsPage::OnCheckListbox)
 
-    EVT_CHECKBOX(-1, ListboxWidgetsPage::OnCheckOrRadioBox)
-    EVT_RADIOBOX(-1, ListboxWidgetsPage::OnCheckOrRadioBox)
+    EVT_CHECKBOX(wxID_ANY, ListboxWidgetsPage::OnCheckOrRadioBox)
+    EVT_RADIOBOX(wxID_ANY, ListboxWidgetsPage::OnCheckOrRadioBox)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -215,7 +215,8 @@ ListboxWidgetsPage::ListboxWidgetsPage(wxNotebook *notebook,
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane
-    wxStaticBox *box = new wxStaticBox(this, -1, _T("&Set listbox parameters"));
+    wxStaticBox *box = new wxStaticBox(this, wxID_ANY,
+        _T("&Set listbox parameters"));
     wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
 
     static const wxString modes[] =
@@ -225,7 +226,7 @@ ListboxWidgetsPage::ListboxWidgetsPage(wxNotebook *notebook,
         _T("multiple"),
     };
 
-    m_radioSelMode = new wxRadioBox(this, -1, _T("Selection &mode:"),
+    m_radioSelMode = new wxRadioBox(this, wxID_ANY, _T("Selection &mode:"),
                                     wxDefaultPosition, wxDefaultSize,
                                     WXSIZEOF(modes), modes,
                                     1, wxRA_SPECIFY_COLS);
@@ -250,7 +251,8 @@ ListboxWidgetsPage::ListboxWidgetsPage(wxNotebook *notebook,
     sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     // middle pane
-    wxStaticBox *box2 = new wxStaticBox(this, -1, _T("&Change listbox contents"));
+    wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY,
+        _T("&Change listbox contents"));
     wxSizer *sizerMiddle = new wxStaticBoxSizer(box2, wxVERTICAL);
 
     wxSizer *sizerRow = new wxBoxSizer(wxHORIZONTAL);
@@ -268,14 +270,14 @@ ListboxWidgetsPage::ListboxWidgetsPage(wxNotebook *notebook,
 
     sizerRow = new wxBoxSizer(wxHORIZONTAL);
     btn = new wxButton(this, ListboxPage_Change, _T("C&hange current"));
-    m_textChange = new wxTextCtrl(this, ListboxPage_ChangeText, _T(""));
+    m_textChange = new wxTextCtrl(this, ListboxPage_ChangeText, wxEmptyString);
     sizerRow->Add(btn, 0, wxRIGHT, 5);
     sizerRow->Add(m_textChange, 1, wxLEFT, 5);
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
     sizerRow = new wxBoxSizer(wxHORIZONTAL);
     btn = new wxButton(this, ListboxPage_Delete, _T("&Delete this item"));
-    m_textDelete = new wxTextCtrl(this, ListboxPage_DeleteText, _T(""));
+    m_textDelete = new wxTextCtrl(this, ListboxPage_DeleteText, wxEmptyString);
     sizerRow->Add(btn, 0, wxRIGHT, 5);
     sizerRow->Add(m_textDelete, 1, wxLEFT, 5);
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
@@ -304,7 +306,6 @@ ListboxWidgetsPage::ListboxWidgetsPage(wxNotebook *notebook,
     // final initializations
     Reset();
 
-    SetAutoLayout(TRUE);
     SetSizer(sizerTop);
 
     sizerTop->Fit(this);
@@ -317,10 +318,10 @@ ListboxWidgetsPage::ListboxWidgetsPage(wxNotebook *notebook,
 void ListboxWidgetsPage::Reset()
 {
     m_radioSelMode->SetSelection(LboxSel_Single);
-    m_chkSort->SetValue(FALSE);
-    m_chkCheck->SetValue(FALSE);
-    m_chkHScroll->SetValue(TRUE);
-    m_chkVScroll->SetValue(FALSE);
+    m_chkSort->SetValue(false);
+    m_chkCheck->SetValue(false);
+    m_chkHScroll->SetValue(true);
+    m_chkVScroll->SetValue(false);
 }
 
 void ListboxWidgetsPage::CreateLbox()

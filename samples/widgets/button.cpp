@@ -127,8 +127,8 @@ BEGIN_EVENT_TABLE(ButtonWidgetsPage, WidgetsPage)
     EVT_BUTTON(ButtonPage_Reset, ButtonWidgetsPage::OnButtonReset)
     EVT_BUTTON(ButtonPage_ChangeLabel, ButtonWidgetsPage::OnButtonChangeLabel)
 
-    EVT_CHECKBOX(-1, ButtonWidgetsPage::OnCheckOrRadioBox)
-    EVT_RADIOBOX(-1, ButtonWidgetsPage::OnCheckOrRadioBox)
+    EVT_CHECKBOX(wxID_ANY, ButtonWidgetsPage::OnCheckOrRadioBox)
+    EVT_RADIOBOX(wxID_ANY, ButtonWidgetsPage::OnCheckOrRadioBox)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -159,7 +159,7 @@ ButtonWidgetsPage::ButtonWidgetsPage(wxNotebook *notebook,
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane
-    wxStaticBox *box = new wxStaticBox(this, -1, _T("&Set style"));
+    wxStaticBox *box = new wxStaticBox(this, wxID_ANY, _T("&Set style"));
 
     wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
 
@@ -189,10 +189,10 @@ ButtonWidgetsPage::ButtonWidgetsPage(wxNotebook *notebook,
         _T("bottom"),
     };
 
-    m_radioHAlign = new wxRadioBox(this, -1, _T("&Horz alignment"),
+    m_radioHAlign = new wxRadioBox(this, wxID_ANY, _T("&Horz alignment"),
                                    wxDefaultPosition, wxDefaultSize,
                                    WXSIZEOF(halign), halign);
-    m_radioVAlign = new wxRadioBox(this, -1, _T("&Vert alignment"),
+    m_radioVAlign = new wxRadioBox(this, wxID_ANY, _T("&Vert alignment"),
                                    wxDefaultPosition, wxDefaultSize,
                                    WXSIZEOF(valign), valign);
 
@@ -205,12 +205,12 @@ ButtonWidgetsPage::ButtonWidgetsPage(wxNotebook *notebook,
     sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     // middle pane
-    wxStaticBox *box2 = new wxStaticBox(this, -1, _T("&Operations"));
+    wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY, _T("&Operations"));
     wxSizer *sizerMiddle = new wxStaticBoxSizer(box2, wxVERTICAL);
 
     wxSizer *sizerRow = CreateSizerWithTextAndButton(ButtonPage_ChangeLabel,
                                                      _T("Change label"),
-                                                     -1,
+                                                     wxID_ANY,
                                                      &m_textLabel);
 
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
@@ -232,7 +232,6 @@ ButtonWidgetsPage::ButtonWidgetsPage(wxNotebook *notebook,
     // final initializations
     Reset();
 
-    SetAutoLayout(TRUE);
     SetSizer(sizerTop);
 
     sizerTop->Fit(this);
@@ -248,9 +247,9 @@ ButtonWidgetsPage::~ButtonWidgetsPage()
 
 void ButtonWidgetsPage::Reset()
 {
-    m_chkFit->SetValue(TRUE);
-    m_chkImage->SetValue(FALSE);
-    m_chkDefault->SetValue(FALSE);
+    m_chkFit->SetValue(true);
+    m_chkImage->SetValue(false);
+    m_chkDefault->SetValue(false);
 
     m_radioHAlign->SetSelection(ButtonHAlign_Centre);
     m_radioVAlign->SetSelection(ButtonVAlign_Centre);

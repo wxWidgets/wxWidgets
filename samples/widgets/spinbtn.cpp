@@ -152,8 +152,8 @@ BEGIN_EVENT_TABLE(SpinBtnWidgetsPage, WidgetsPage)
     EVT_SPIN_DOWN(SpinBtnPage_SpinBtn, SpinBtnWidgetsPage::OnSpinBtnDown)
     EVT_SPINCTRL(SpinBtnPage_SpinCtrl, SpinBtnWidgetsPage::OnSpinCtrl)
 
-    EVT_CHECKBOX(-1, SpinBtnWidgetsPage::OnCheckOrRadioBox)
-    EVT_RADIOBOX(-1, SpinBtnWidgetsPage::OnCheckOrRadioBox)
+    EVT_CHECKBOX(wxID_ANY, SpinBtnWidgetsPage::OnCheckOrRadioBox)
+    EVT_RADIOBOX(wxID_ANY, SpinBtnWidgetsPage::OnCheckOrRadioBox)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -188,7 +188,7 @@ SpinBtnWidgetsPage::SpinBtnWidgetsPage(wxNotebook *notebook,
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane
-    wxStaticBox *box = new wxStaticBox(this, -1, _T("&Set style"));
+    wxStaticBox *box = new wxStaticBox(this, wxID_ANY, _T("&Set style"));
     wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
 
     m_chkVert = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Vertical"));
@@ -200,14 +200,16 @@ SpinBtnWidgetsPage::SpinBtnWidgetsPage(wxNotebook *notebook,
     sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     // middle pane
-    wxStaticBox *box2 = new wxStaticBox(this, -1, _T("&Change spinbtn value"));
+    wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY,
+        _T("&Change spinbtn value"));
+
     wxSizer *sizerMiddle = new wxStaticBoxSizer(box2, wxVERTICAL);
 
     wxTextCtrl *text;
     wxSizer *sizerRow = CreateSizerWithTextAndLabel(_T("Current value"),
                                                     SpinBtnPage_CurValueText,
                                                     &text);
-    text->SetEditable(FALSE);
+    text->SetEditable(false);
 
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
@@ -222,7 +224,7 @@ SpinBtnWidgetsPage::SpinBtnWidgetsPage(wxNotebook *notebook,
                                             SpinBtnPage_MinText,
                                             &m_textMin);
 
-    m_textMax = new wxTextCtrl(this, SpinBtnPage_MaxText, _T(""));
+    m_textMax = new wxTextCtrl(this, SpinBtnPage_MaxText, wxEmptyString);
     sizerRow->Add(m_textMax, 1, wxLEFT | wxALIGN_CENTRE_VERTICAL, 5);
 
     m_textMin->SetValue( wxString::Format(_T("%d"), m_min) );
@@ -244,7 +246,6 @@ SpinBtnWidgetsPage::SpinBtnWidgetsPage(wxNotebook *notebook,
     sizerTop->Add(sizerRight, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
 
     // final initializations
-    SetAutoLayout(TRUE);
     SetSizer(sizerTop);
 
     sizerTop->Fit(this);
@@ -260,8 +261,8 @@ SpinBtnWidgetsPage::~SpinBtnWidgetsPage()
 
 void SpinBtnWidgetsPage::Reset()
 {
-    m_chkVert->SetValue(TRUE);
-    m_chkWrap->SetValue(FALSE);
+    m_chkVert->SetValue(true);
+    m_chkWrap->SetValue(false);
 }
 
 void SpinBtnWidgetsPage::CreateSpin()

@@ -108,14 +108,15 @@ bool MyApp::OnInit()
     menu_bar->Append(test_menu, _T("&Tests"));
     frame->SetMenuBar(menu_bar);
 
-    m_textCtrl = new wxTextCtrl(frame, -1, _T(""), wxPoint(0, 0), wxDefaultSize, wxTE_MULTILINE);
+    m_textCtrl = new wxTextCtrl(frame, wxID_ANY, wxEmptyString,
+        wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
 
     // Show the frame
-    frame->Show(TRUE);
+    frame->Show(true);
 
     SetTopWindow(frame);
 
-    return TRUE;
+    return true;
 }
 
 void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
@@ -958,7 +959,7 @@ void MyApp::DoMIMEDemo(wxCommandEvent& WXUNUSED(event))
             textCtrl << _T("MIME information about extension '") << ext << _T("'\n")
                      << _T("\tMIME type: ") << ( !type ? wxT("unknown")
                                                    : type.c_str() ) << '\n'
-                     << _T("\tDescription: ") << ( !desc ? wxT("") : desc.c_str() )
+                     << _T("\tDescription: ") << ( !desc ? wxEmptyString : desc.c_str() )
                         << '\n'
                      << _T("\tCommand to open: ") << ( !open ? wxT("no") : open.c_str() )
                         << '\n';
@@ -984,19 +985,19 @@ void MyApp::DoByteOrderDemo(wxCommandEvent& WXUNUSED(event))
     wxString text;
 
     wxInt32 var = 0xF1F2F3F4;
-    text = _T("");
+    text = wxEmptyString;
     text.Printf( _T("Value of wxInt32 is now: %#x.\n\n"), var );
     textCtrl.WriteText( text );
 
-    text = _T("");
+    text = wxEmptyString;
     text.Printf( _T("Value of swapped wxInt32 is: %#x.\n\n"), wxINT32_SWAP_ALWAYS( var ) );
     textCtrl.WriteText( text );
 
-    text = _T("");
+    text = wxEmptyString;
     text.Printf( _T("Value of wxInt32 swapped on little endian is: %#x.\n\n"), wxINT32_SWAP_ON_LE( var ) );
     textCtrl.WriteText( text );
 
-    text = _T("");
+    text = wxEmptyString;
     text.Printf( _T("Value of wxInt32 swapped on big endian is: %#x.\n\n"), wxINT32_SWAP_ON_BE( var ) );
     textCtrl.WriteText( text );
 }
@@ -1024,10 +1025,8 @@ void MyApp::DoVariantDemo(wxCommandEvent& WXUNUSED(event) )
     long l = var1;
 
     // suppress compile warnings about unused variables
-    if ( l < v )
-    {
-        ;
-    }
+    wxUnusedVar(l);
+    wxUnusedVar(v);
 
     wxStringList stringList;
     stringList.Add(_T("one")); stringList.Add(_T("two")); stringList.Add(_T("three"));
@@ -1051,10 +1050,13 @@ void MyApp::DoVariantDemo(wxCommandEvent& WXUNUSED(event) )
     var1 = wxVariant(new wxFont(wxSystemSettings::GetFont(wxSYS_OEM_FIXED_FONT)));
     textCtrl << _T("var1 = (wxfont)\"");
     wxFont* font = wxGetVariantCast(var1,wxFont);
-    if (font) {
-    	textCtrl << font->GetNativeFontInfoDesc() << _T("\"\n");
-    } else {
-	textCtrl << _T("(null)\"\n");
+    if (font)
+    {
+        textCtrl << font->GetNativeFontInfoDesc() << _T("\"\n");
+    }
+    else
+    {
+        textCtrl << _T("(null)\"\n");
     }
 }
 
@@ -1065,21 +1067,21 @@ END_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame(wxFrame *parent, const wxString& title,
-       const wxPoint& pos, const wxSize& size):
-  wxFrame(parent, -1, title, pos, size)
+    const wxPoint& pos, const wxSize& size)
+    : wxFrame(parent, wxID_ANY, title, pos, size)
 {}
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 {
-  Close(TRUE);
+    Close(true);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
-  wxMessageDialog dialog(this, _T("Tests various wxWindows types"),
-      _T("About Types"), wxYES_NO|wxCANCEL);
+    wxMessageDialog dialog(this, _T("Tests various wxWindows types"),
+        _T("About Types"), wxYES_NO|wxCANCEL);
 
-  dialog.ShowModal();
+    dialog.ShowModal();
 }
 
 

@@ -144,8 +144,8 @@ BEGIN_EVENT_TABLE(GaugeWidgetsPage, WidgetsPage)
 
     EVT_UPDATE_UI(GaugePage_CurValueText, GaugeWidgetsPage::OnUpdateUICurValueText)
 
-    EVT_CHECKBOX(-1, GaugeWidgetsPage::OnCheckOrRadioBox)
-    EVT_RADIOBOX(-1, GaugeWidgetsPage::OnCheckOrRadioBox)
+    EVT_CHECKBOX(wxID_ANY, GaugeWidgetsPage::OnCheckOrRadioBox)
+    EVT_RADIOBOX(wxID_ANY, GaugeWidgetsPage::OnCheckOrRadioBox)
 
     EVT_TIMER(GaugePage_Timer, GaugeWidgetsPage::OnProgressTimer)
 END_EVENT_TABLE()
@@ -176,7 +176,7 @@ GaugeWidgetsPage::GaugeWidgetsPage(wxNotebook *notebook,
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane
-    wxStaticBox *box = new wxStaticBox(this, -1, _T("&Set style"));
+    wxStaticBox *box = new wxStaticBox(this, wxID_ANY, _T("&Set style"));
 
     wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
 
@@ -189,14 +189,15 @@ GaugeWidgetsPage::GaugeWidgetsPage(wxNotebook *notebook,
     sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     // middle pane
-    wxStaticBox *box2 = new wxStaticBox(this, -1, _T("&Change gauge value"));
+    wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY,
+        _T("&Change gauge value"));
     wxSizer *sizerMiddle = new wxStaticBoxSizer(box2, wxVERTICAL);
 
     wxTextCtrl *text;
     wxSizer *sizerRow = CreateSizerWithTextAndLabel(_T("Current value"),
                                                     GaugePage_CurValueText,
                                                     &text);
-    text->SetEditable(FALSE);
+    text->SetEditable(false);
 
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
@@ -234,7 +235,6 @@ GaugeWidgetsPage::GaugeWidgetsPage(wxNotebook *notebook,
     // final initializations
     Reset();
 
-    SetAutoLayout(TRUE);
     SetSizer(sizerTop);
 
     sizerTop->Fit(this);
@@ -251,8 +251,8 @@ GaugeWidgetsPage::~GaugeWidgetsPage()
 
 void GaugeWidgetsPage::Reset()
 {
-    m_chkVert->SetValue(FALSE);
-    m_chkSmooth->SetValue(FALSE);
+    m_chkVert->SetValue(false);
+    m_chkSmooth->SetValue(false);
 }
 
 void GaugeWidgetsPage::CreateGauge()

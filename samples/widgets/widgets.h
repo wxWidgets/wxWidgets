@@ -40,24 +40,24 @@ protected:
     // (pointer to which will be saved in the provided variable if not NULL)
     // with the specified id
     wxSizer *CreateSizerWithText(wxControl *control,
-                                 wxWindowID id = -1,
+                                 wxWindowID id = wxID_ANY,
                                  wxTextCtrl **ppText = NULL);
 
     // create a sizer containing a label and a text ctrl
     wxSizer *CreateSizerWithTextAndLabel(const wxString& label,
-                                         wxWindowID id = -1,
+                                         wxWindowID id = wxID_ANY,
                                          wxTextCtrl **ppText = NULL);
 
     // create a sizer containing a button and a text ctrl
     wxSizer *CreateSizerWithTextAndButton(wxWindowID idBtn,
                                           const wxString& labelBtn,
-                                          wxWindowID id = -1,
+                                          wxWindowID id = wxID_ANY,
                                           wxTextCtrl **ppText = NULL);
 
     // create a checkbox and add it to the sizer
     wxCheckBox *CreateCheckBoxAndAddToSizer(wxSizer *sizer,
                                             const wxString& label,
-                                            wxWindowID id = -1);
+                                            wxWindowID id = wxID_ANY);
 
 public:
     // the head of the linked list containinginfo about all pages

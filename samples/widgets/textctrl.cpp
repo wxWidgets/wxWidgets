@@ -96,9 +96,9 @@ static const struct ControlValues
 } DEFAULTS =
 {
     TextLines_Multi,    // multiline
-    FALSE,              // not password
-    TRUE,               // do wrap lines
-    FALSE,              // not readonly
+    false,              // not password
+    true,               // do wrap lines
+    false,              // not readonly
 #ifdef __WXMSW__
     TextKind_Plain      // plain EDIT control
 #endif // __WXMSW__
@@ -233,8 +233,8 @@ BEGIN_EVENT_TABLE(TextWidgetsPage, WidgetsPage)
     EVT_TEXT(TextPage_Textctrl, TextWidgetsPage::OnText)
     EVT_TEXT_ENTER(TextPage_Textctrl, TextWidgetsPage::OnTextEnter)
 
-    EVT_CHECKBOX(-1, TextWidgetsPage::OnCheckOrRadioBox)
-    EVT_RADIOBOX(-1, TextWidgetsPage::OnCheckOrRadioBox)
+    EVT_CHECKBOX(wxID_ANY, TextWidgetsPage::OnCheckOrRadioBox)
+    EVT_RADIOBOX(wxID_ANY, TextWidgetsPage::OnCheckOrRadioBox)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -286,8 +286,8 @@ TextWidgetsPage::TextWidgetsPage(wxNotebook *notebook, wxImageList *imaglist)
         _T("multi line"),
     };
 
-    wxStaticBox *box = new wxStaticBox(this, -1, _T("&Set textctrl parameters"));
-    m_radioTextLines = new wxRadioBox(this, -1, _T("&Number of lines:"),
+    wxStaticBox *box = new wxStaticBox(this, wxID_ANY, _T("&Set textctrl parameters"));
+    m_radioTextLines = new wxRadioBox(this, wxID_ANY, _T("&Number of lines:"),
                                       wxDefaultPosition, wxDefaultSize,
                                       WXSIZEOF(modes), modes,
                                       1, wxRA_SPECIFY_COLS);
@@ -315,7 +315,7 @@ TextWidgetsPage::TextWidgetsPage(wxNotebook *notebook, wxImageList *imaglist)
         _T("rich edit 2.0"),
     };
 
-    m_radioKind = new wxRadioBox(this, -1, _T("Control &kind"),
+    m_radioKind = new wxRadioBox(this, wxID_ANY, _T("Control &kind"),
                                  wxDefaultPosition, wxDefaultSize,
                                  WXSIZEOF(kinds), kinds,
                                  1, wxRA_SPECIFY_COLS);
@@ -329,7 +329,7 @@ TextWidgetsPage::TextWidgetsPage(wxNotebook *notebook, wxImageList *imaglist)
     sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     // middle pane
-    wxStaticBox *box2 = new wxStaticBox(this, -1, _T("&Change contents:"));
+    wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY, _T("&Change contents:"));
     wxSizer *sizerMiddleUp = new wxStaticBoxSizer(box2, wxVERTICAL);
 
     btn = new wxButton(this, TextPage_Set, _T("&Set text value"));
@@ -347,7 +347,7 @@ TextWidgetsPage::TextWidgetsPage(wxNotebook *notebook, wxImageList *imaglist)
     btn = new wxButton(this, TextPage_Clear, _T("&Clear"));
     sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 1);
 
-    wxStaticBox *box4 = new wxStaticBox(this, -1, _T("&Info:"));
+    wxStaticBox *box4 = new wxStaticBox(this, wxID_ANY, _T("&Info:"));
     wxSizer *sizerMiddleDown = new wxStaticBoxSizer(box4, wxVERTICAL);
 
     m_textPosCur = CreateInfoText();
@@ -403,7 +403,7 @@ TextWidgetsPage::TextWidgetsPage(wxNotebook *notebook, wxImageList *imaglist)
                         0, wxALL, 5
                      );
 
-    m_textRange = new wxTextCtrl(this, -1, _T(""),
+    m_textRange = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
                                  wxDefaultPosition, wxDefaultSize,
                                  wxTE_READONLY);
     sizerMiddleDown->Add
@@ -421,7 +421,7 @@ TextWidgetsPage::TextWidgetsPage(wxNotebook *notebook, wxImageList *imaglist)
     sizerMiddle->Add(sizerMiddleDown, 1, wxGROW | wxTOP, 5);
 
     // right pane
-    wxStaticBox *box3 = new wxStaticBox(this, -1, _T("&Text:"));
+    wxStaticBox *box3 = new wxStaticBox(this, wxID_ANY, _T("&Text:"));
     m_sizerText = new wxStaticBoxSizer(box3, wxHORIZONTAL);
     Reset();
     CreateText();
@@ -433,7 +433,6 @@ TextWidgetsPage::TextWidgetsPage(wxNotebook *notebook, wxImageList *imaglist)
     sizerTop->Add(sizerMiddle, 0, wxGROW | wxALL, 10);
     sizerTop->Add(m_sizerText, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
 
-    SetAutoLayout(TRUE);
     SetSizer(sizerTop);
 
     sizerTop->Fit(this);
@@ -456,7 +455,7 @@ wxTextCtrl *TextWidgetsPage::CreateInfoText()
         GetTextExtent(_T("9999999"), &s_maxWidth, NULL);
     }
 
-    wxTextCtrl *text = new wxTextCtrl(this, -1, _T(""),
+    wxTextCtrl *text = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
                                       wxDefaultPosition,
                                       wxSize(s_maxWidth, -1),
                                       wxTE_READONLY);
@@ -469,12 +468,12 @@ wxSizer *TextWidgetsPage::CreateTextWithLabelSizer(const wxString& label,
                                                  wxTextCtrl *text2)
 {
     wxSizer *sizerRow = new wxBoxSizer(wxHORIZONTAL);
-    sizerRow->Add(new wxStaticText(this, -1, label), 0,
+    sizerRow->Add(new wxStaticText(this, wxID_ANY, label), 0,
                   wxALIGN_CENTRE_VERTICAL | wxRIGHT, 5);
     sizerRow->Add(text, 0, wxALIGN_CENTRE_VERTICAL);
     if ( text2 )
     {
-        sizerRow->Add(new wxStaticText(this, -1, label2), 0,
+        sizerRow->Add(new wxStaticText(this, wxID_ANY, label2), 0,
                       wxALIGN_CENTRE_VERTICAL | wxLEFT | wxRIGHT, 5);
         sizerRow->Add(text2, 0, wxALIGN_CENTRE_VERTICAL);
     }
@@ -510,7 +509,7 @@ void TextWidgetsPage::CreateText()
 
         case TextLines_Multi:
             flags |= wxTE_MULTILINE;
-            m_chkPassword->SetValue(FALSE);
+            m_chkPassword->SetValue(false);
             break;
     }
 
@@ -747,10 +746,10 @@ void TextWidgetsPage::OnText(wxCommandEvent& WXUNUSED(event))
     // small hack to suppress the very first message: by then the logging is
     // not yet redirected and so initial setting of the text value results in
     // an annoying message box
-    static bool s_firstTime = TRUE;
+    static bool s_firstTime = true;
     if ( s_firstTime )
     {
-        s_firstTime = FALSE;
+        s_firstTime = false;
         return;
     }
 

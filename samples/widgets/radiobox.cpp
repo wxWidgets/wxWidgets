@@ -142,8 +142,8 @@ BEGIN_EVENT_TABLE(RadioWidgetsPage, WidgetsPage)
 
     EVT_RADIOBOX(RadioPage_Radio, RadioWidgetsPage::OnRadioBox)
 
-    EVT_CHECKBOX(-1, RadioWidgetsPage::OnCheckOrRadioBox)
-    EVT_RADIOBOX(-1, RadioWidgetsPage::OnCheckOrRadioBox)
+    EVT_CHECKBOX(wxID_ANY, RadioWidgetsPage::OnCheckOrRadioBox)
+    EVT_RADIOBOX(wxID_ANY, RadioWidgetsPage::OnCheckOrRadioBox)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -172,7 +172,7 @@ RadioWidgetsPage::RadioWidgetsPage(wxNotebook *notebook,
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane
-    wxStaticBox *box = new wxStaticBox(this, -1, _T("&Set style"));
+    wxStaticBox *box = new wxStaticBox(this, wxID_ANY, _T("&Set style"));
 
     wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
 
@@ -185,7 +185,7 @@ RadioWidgetsPage::RadioWidgetsPage(wxNotebook *notebook,
         _T("top to bottom")
     };
 
-    m_radioDir = new wxRadioBox(this, -1, _T("Numbering:"),
+    m_radioDir = new wxRadioBox(this, wxID_ANY, _T("Numbering:"),
                                 wxDefaultPosition, wxDefaultSize,
                                 WXSIZEOF(layoutDir), layoutDir,
                                 1, wxRA_SPECIFY_COLS);
@@ -198,12 +198,12 @@ RadioWidgetsPage::RadioWidgetsPage(wxNotebook *notebook,
 
     wxSizer *sizerRow;
     sizerRow = CreateSizerWithTextAndLabel(_T("&Major dimension:"),
-                                           -1,
+                                           wxID_ANY,
                                            &m_textMajorDim);
     sizerLeft->Add(sizerRow, 0, wxGROW | wxALL, 5);
 
     sizerRow = CreateSizerWithTextAndLabel(_T("&Number of buttons:"),
-                                           -1,
+                                           wxID_ANY,
                                            &m_textNumBtns);
     sizerLeft->Add(sizerRow, 0, wxGROW | wxALL, 5);
 
@@ -217,29 +217,29 @@ RadioWidgetsPage::RadioWidgetsPage(wxNotebook *notebook,
     sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     // middle pane
-    wxStaticBox *box2 = new wxStaticBox(this, -1, _T("&Change parameters"));
+    wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY, _T("&Change parameters"));
     wxSizer *sizerMiddle = new wxStaticBoxSizer(box2, wxVERTICAL);
 
     sizerRow = CreateSizerWithTextAndLabel(_T("Current selection:"),
-                                           -1,
+                                           wxID_ANY,
                                            &m_textCurSel);
     sizerMiddle->Add(sizerRow, 0, wxGROW | wxALL, 5);
 
     sizerRow = CreateSizerWithTextAndButton(RadioPage_Selection,
                                             _T("&Change selection:"),
-                                           -1,
+                                           wxID_ANY,
                                            &m_textSel);
     sizerMiddle->Add(sizerRow, 0, wxGROW | wxALL, 5);
 
     sizerRow = CreateSizerWithTextAndButton(RadioPage_Label,
                                             _T("&Label for box:"),
-                                            -1,
+                                            wxID_ANY,
                                             &m_textLabel);
     sizerMiddle->Add(sizerRow, 0, wxGROW | wxALL, 5);
 
     sizerRow = CreateSizerWithTextAndButton(RadioPage_LabelBtn,
                                             _T("&Label for buttons:"),
-                                            -1,
+                                            wxID_ANY,
                                             &m_textLabelBtns);
     sizerMiddle->Add(sizerRow, 0, wxGROW | wxALL, 5);
 
@@ -257,7 +257,6 @@ RadioWidgetsPage::RadioWidgetsPage(wxNotebook *notebook,
     sizerTop->Add(sizerRight, 0, wxGROW | (wxALL & ~wxRIGHT), 10);
 
     // final initializations
-    SetAutoLayout(TRUE);
     SetSizer(sizerTop);
 
     sizerTop->Fit(this);
@@ -278,7 +277,7 @@ void RadioWidgetsPage::Reset()
     m_textLabel->SetValue(_T("I'm a radiobox"));
     m_textLabelBtns->SetValue(_T("item"));
 
-    m_chkVert->SetValue(FALSE);
+    m_chkVert->SetValue(false);
     m_radioDir->SetSelection(RadioDir_Default);
 }
 

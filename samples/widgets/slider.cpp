@@ -185,8 +185,8 @@ BEGIN_EVENT_TABLE(SliderWidgetsPage, WidgetsPage)
 
     EVT_COMMAND_SCROLL(SliderPage_Slider, SliderWidgetsPage::OnSlider)
 
-    EVT_CHECKBOX(-1, SliderWidgetsPage::OnCheckOrRadioBox)
-    EVT_RADIOBOX(-1, SliderWidgetsPage::OnCheckOrRadioBox)
+    EVT_CHECKBOX(wxID_ANY, SliderWidgetsPage::OnCheckOrRadioBox)
+    EVT_RADIOBOX(wxID_ANY, SliderWidgetsPage::OnCheckOrRadioBox)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -218,7 +218,7 @@ SliderWidgetsPage::SliderWidgetsPage(wxNotebook *notebook,
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane
-    wxStaticBox *box = new wxStaticBox(this, -1, _T("&Set style"));
+    wxStaticBox *box = new wxStaticBox(this, wxID_ANY, _T("&Set style"));
     wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
 
     m_chkVert = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Vertical"));
@@ -248,14 +248,14 @@ SliderWidgetsPage::SliderWidgetsPage(wxNotebook *notebook,
     sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     // middle pane
-    wxStaticBox *box2 = new wxStaticBox(this, -1, _T("&Change slider value"));
+    wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY, _T("&Change slider value"));
     wxSizer *sizerMiddle = new wxStaticBoxSizer(box2, wxVERTICAL);
 
     wxTextCtrl *text;
     wxSizer *sizerRow = CreateSizerWithTextAndLabel(_T("Current value"),
                                                     SliderPage_CurValueText,
                                                     &text);
-    text->SetEditable(FALSE);
+    text->SetEditable(false);
 
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
@@ -270,7 +270,7 @@ SliderWidgetsPage::SliderWidgetsPage(wxNotebook *notebook,
                                             SliderPage_MinText,
                                             &m_textMin);
 
-    m_textMax = new wxTextCtrl(this, SliderPage_MaxText, _T(""));
+    m_textMax = new wxTextCtrl(this, SliderPage_MaxText, wxEmptyString);
     sizerRow->Add(m_textMax, 1, wxLEFT | wxALIGN_CENTRE_VERTICAL, 5);
 
     m_textMin->SetValue( wxString::Format(_T("%d"), m_min) );
@@ -308,7 +308,6 @@ SliderWidgetsPage::SliderWidgetsPage(wxNotebook *notebook,
     sizerTop->Add(sizerRight, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
 
     // final initializations
-    SetAutoLayout(TRUE);
     SetSizer(sizerTop);
 
     sizerTop->Fit(this);
@@ -324,10 +323,10 @@ SliderWidgetsPage::~SliderWidgetsPage()
 
 void SliderWidgetsPage::Reset()
 {
-    m_chkVert->SetValue(FALSE);
-    m_chkTicks->SetValue(TRUE);
-    m_chkLabels->SetValue(TRUE);
-    m_chkBothSides->SetValue(FALSE);
+    m_chkVert->SetValue(false);
+    m_chkTicks->SetValue(true);
+    m_chkLabels->SetValue(true);
+    m_chkBothSides->SetValue(false);
 
     m_radioSides->SetSelection(StaticSides_Top);
 }
@@ -556,7 +555,7 @@ void SliderWidgetsPage::OnUpdateUIBothSides(wxUpdateUIEvent& event)
 #if defined(__WIN95__) || defined(__WXUNIVERSAL__)
     event.Enable( m_chkTicks->GetValue() );
 #else
-    event.Enable( FALSE );
+    event.Enable( false );
 #endif // defined(__WIN95__) || defined(__WXUNIVERSAL__)
 }
 

@@ -192,7 +192,7 @@ END_EVENT_TABLE()
 bool WidgetsApp::OnInit()
 {
     if ( !wxApp::OnInit() )
-        return FALSE;
+        return false;
 
     // the reason for having these ifdef's is that I often run two copies of
     // this sample side by side and it is useful to see which one is which
@@ -220,7 +220,7 @@ bool WidgetsApp::OnInit()
     //wxLog::AddTraceMask(_T("scrollbar"));
     //wxLog::AddTraceMask(_T("focus"));
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -228,7 +228,7 @@ bool WidgetsApp::OnInit()
 // ----------------------------------------------------------------------------
 
 WidgetsFrame::WidgetsFrame(const wxString& title)
-            : wxFrame(NULL, -1, title,
+            : wxFrame(NULL, wxID_ANY, title,
                       wxPoint(0, 50), wxDefaultSize,
                       wxDEFAULT_FRAME_STYLE |
                       wxNO_FULL_REPAINT_ON_RESIZE |
@@ -242,24 +242,25 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     m_imaglist = (wxImageList *)NULL;
 
     // create controls
-    m_panel = new wxPanel(this, -1, wxDefaultPosition, wxDefaultSize, wxCLIP_CHILDREN);
+    m_panel = new wxPanel(this, wxID_ANY,
+        wxDefaultPosition, wxDefaultSize, wxCLIP_CHILDREN);
 
     wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
 
     // we have 2 panes: notebook which pages demonstrating the controls in the
     // upper one and the log window with some buttons in the lower
 
-    m_notebook = new wxNotebook(m_panel, -1, wxDefaultPosition, wxDefaultSize, wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN);
+    m_notebook = new wxNotebook(m_panel, wxID_ANY, wxDefaultPosition,
+        wxDefaultSize, wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN);
     InitNotebook();
     wxSizer *sizerUp = new wxNotebookSizer(m_notebook);
 
     // the lower one only has the log listbox and a button to clear it
-    wxSizer *sizerDown = new wxStaticBoxSizer
-                             (
-                               new wxStaticBox(m_panel, -1, _T("&Log window")),
-                               wxVERTICAL
-                             );
-    m_lboxLog = new wxListBox(m_panel, -1);
+    wxSizer *sizerDown = new wxStaticBoxSizer(
+        new wxStaticBox( m_panel, wxID_ANY, _T("&Log window") ),
+        wxVERTICAL);
+
+    m_lboxLog = new wxListBox(m_panel, wxID_ANY);
     sizerDown->Add(m_lboxLog, 1, wxGROW | wxALL, 5);
     sizerDown->SetMinSize(100, 150);
 
@@ -276,7 +277,6 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     sizerTop->Add(0, 5, 0, wxGROW); // spacer in between
     sizerTop->Add(sizerDown, 0,  wxGROW | (wxALL & ~wxTOP), 10);
 
-    m_panel->SetAutoLayout(TRUE);
     m_panel->SetSizer(sizerTop);
 
     sizerTop->Fit(this);
@@ -317,7 +317,7 @@ void WidgetsFrame::InitNotebook()
         m_notebook->AddPage(
                             pages[n],
                             labels[n],
-                            FALSE, // don't select
+                            false, // don't select
                             n // image id
                            );
     }
@@ -363,7 +363,7 @@ WidgetsPageInfo::WidgetsPageInfo(Constructor ctor, const wxChar *label)
 // ----------------------------------------------------------------------------
 
 WidgetsPage::WidgetsPage(wxNotebook *notebook)
-           : wxPanel(notebook, -1,
+           : wxPanel(notebook, wxID_ANY,
                      wxDefaultPosition, wxDefaultSize,
                      wxNO_FULL_REPAINT_ON_RESIZE |
                      wxCLIP_CHILDREN |
@@ -376,7 +376,8 @@ wxSizer *WidgetsPage::CreateSizerWithText(wxControl *control,
                                           wxTextCtrl **ppText)
 {
     wxSizer *sizerRow = new wxBoxSizer(wxHORIZONTAL);
-    wxTextCtrl *text = new wxTextCtrl(this, id, _T(""), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
+    wxTextCtrl *text = new wxTextCtrl(this, id, wxEmptyString,
+        wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
 
     sizerRow->Add(control, 0, wxRIGHT | wxALIGN_CENTRE_VERTICAL, 5);
     sizerRow->Add(text, 1, wxLEFT | wxALIGN_CENTRE_VERTICAL, 5);
@@ -392,7 +393,8 @@ wxSizer *WidgetsPage::CreateSizerWithTextAndLabel(const wxString& label,
                                                   wxWindowID id,
                                                   wxTextCtrl **ppText)
 {
-    return CreateSizerWithText(new wxStaticText(this, -1, label), id, ppText);
+    return CreateSizerWithText(new wxStaticText(this, wxID_ANY, label),
+        id, ppText);
 }
 
 // create a sizer containing a button and a text ctrl

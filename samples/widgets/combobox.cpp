@@ -178,8 +178,8 @@ BEGIN_EVENT_TABLE(ComboboxWidgetsPage, WidgetsPage)
     EVT_TEXT(ComboPage_Combo, ComboboxWidgetsPage::OnComboText)
     EVT_TEXT_ENTER(ComboPage_Combo, ComboboxWidgetsPage::OnComboText)
 
-    EVT_CHECKBOX(-1, ComboboxWidgetsPage::OnCheckOrRadioBox)
-    EVT_RADIOBOX(-1, ComboboxWidgetsPage::OnCheckOrRadioBox)
+    EVT_CHECKBOX(wxID_ANY, ComboboxWidgetsPage::OnCheckOrRadioBox)
+    EVT_RADIOBOX(wxID_ANY, ComboboxWidgetsPage::OnCheckOrRadioBox)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -210,7 +210,7 @@ ComboboxWidgetsPage::ComboboxWidgetsPage(wxNotebook *notebook,
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane
-    wxStaticBox *box = new wxStaticBox(this, -1, _T("&Set style"));
+    wxStaticBox *box = new wxStaticBox(this, wxID_ANY, _T("&Set style"));
 
     // should be in sync with ComboKind_XXX values
     static const wxString kinds[] =
@@ -220,7 +220,7 @@ ComboboxWidgetsPage::ComboboxWidgetsPage(wxNotebook *notebook,
         _T("drop down"),
     };
 
-    m_radioKind = new wxRadioBox(this, -1, _T("Combobox &kind:"),
+    m_radioKind = new wxRadioBox(this, wxID_ANY, _T("Combobox &kind:"),
                                  wxDefaultPosition, wxDefaultSize,
                                  WXSIZEOF(kinds), kinds,
                                  1, wxRA_SPECIFY_COLS);
@@ -237,7 +237,8 @@ ComboboxWidgetsPage::ComboboxWidgetsPage(wxNotebook *notebook,
     sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     // middle pane
-    wxStaticBox *box2 = new wxStaticBox(this, -1, _T("&Change combobox contents"));
+    wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY,
+        _T("&Change combobox contents"));
     wxSizer *sizerMiddle = new wxStaticBoxSizer(box2, wxVERTICAL);
 
     wxSizer *sizerRow;
@@ -246,7 +247,7 @@ ComboboxWidgetsPage::ComboboxWidgetsPage(wxNotebook *notebook,
     sizerRow = CreateSizerWithTextAndLabel(_T("Current selection"),
                                            ComboPage_CurText,
                                            &text);
-    text->SetEditable(FALSE);
+    text->SetEditable(false);
 
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
@@ -288,7 +289,7 @@ ComboboxWidgetsPage::ComboboxWidgetsPage(wxNotebook *notebook,
 
     // right pane
     wxSizer *sizerRight = new wxBoxSizer(wxVERTICAL);
-    m_combobox = new wxComboBox(this, ComboPage_Combo, _T(""),
+    m_combobox = new wxComboBox(this, ComboPage_Combo, wxEmptyString,
                                 wxDefaultPosition, wxDefaultSize,
                                 0, NULL,
                                 0);
@@ -304,7 +305,6 @@ ComboboxWidgetsPage::ComboboxWidgetsPage(wxNotebook *notebook,
     // final initializations
     Reset();
 
-    SetAutoLayout(TRUE);
     SetSizer(sizerTop);
 
     sizerTop->Fit(this);
@@ -316,8 +316,8 @@ ComboboxWidgetsPage::ComboboxWidgetsPage(wxNotebook *notebook,
 
 void ComboboxWidgetsPage::Reset()
 {
-    m_chkSort->SetValue(FALSE);
-    m_chkReadonly->SetValue(FALSE);
+    m_chkSort->SetValue(false);
+    m_chkReadonly->SetValue(false);
 }
 
 void ComboboxWidgetsPage::CreateCombo()
@@ -360,7 +360,7 @@ void ComboboxWidgetsPage::CreateCombo()
         delete m_combobox;
     }
 
-    m_combobox = new wxComboBox(this, ComboPage_Combo, _T(""),
+    m_combobox = new wxComboBox(this, ComboPage_Combo, wxEmptyString,
                                 wxDefaultPosition, wxDefaultSize,
                                 0, NULL,
                                 flags);

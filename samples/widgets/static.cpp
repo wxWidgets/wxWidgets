@@ -191,8 +191,8 @@ BEGIN_EVENT_TABLE(StaticWidgetsPage, WidgetsPage)
     EVT_BUTTON(StaticPage_LabelText, StaticWidgetsPage::OnButtonLabelText)
     EVT_BUTTON(StaticPage_BoxText, StaticWidgetsPage::OnButtonBoxText)
 
-    EVT_CHECKBOX(-1, StaticWidgetsPage::OnCheckOrRadioBox)
-    EVT_RADIOBOX(-1, StaticWidgetsPage::OnCheckOrRadioBox)
+    EVT_CHECKBOX(wxID_ANY, StaticWidgetsPage::OnCheckOrRadioBox)
+    EVT_RADIOBOX(wxID_ANY, StaticWidgetsPage::OnCheckOrRadioBox)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -224,7 +224,7 @@ StaticWidgetsPage::StaticWidgetsPage(wxNotebook *notebook,
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane
-    wxStaticBox *box = new wxStaticBox(this, -1, _T("&Set style"));
+    wxStaticBox *box = new wxStaticBox(this, wxID_ANY, _T("&Set style"));
 
     wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
 
@@ -246,10 +246,10 @@ StaticWidgetsPage::StaticWidgetsPage(wxNotebook *notebook,
         _T("bottom"),
     };
 
-    m_radioHAlign = new wxRadioBox(this, -1, _T("&Horz alignment"),
+    m_radioHAlign = new wxRadioBox(this, wxID_ANY, _T("&Horz alignment"),
                                    wxDefaultPosition, wxDefaultSize,
                                    WXSIZEOF(halign), halign);
-    m_radioVAlign = new wxRadioBox(this, -1, _T("&Vert alignment"),
+    m_radioVAlign = new wxRadioBox(this, wxID_ANY, _T("&Vert alignment"),
                                    wxDefaultPosition, wxDefaultSize,
                                    WXSIZEOF(valign), valign);
 
@@ -260,19 +260,19 @@ StaticWidgetsPage::StaticWidgetsPage(wxNotebook *notebook,
     sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     // middle pane
-    wxStaticBox *box2 = new wxStaticBox(this, -1, _T("&Change labels"));
+    wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY, _T("&Change labels"));
     wxSizer *sizerMiddle = new wxStaticBoxSizer(box2, wxVERTICAL);
 
     wxSizer *sizerRow;
 
     sizerRow = CreateSizerWithTextAndButton(StaticPage_BoxText,
                                             _T("Change &box label"),
-                                            -1, &m_textBox);
+                                            wxID_ANY, &m_textBox);
     sizerMiddle->Add(sizerRow, 0, wxGROW | wxALL, 5);
 
     sizerRow = CreateSizerWithTextAndButton(StaticPage_LabelText,
                                             _T("Change &text label"),
-                                            -1, &m_textLabel);
+                                            wxID_ANY, &m_textLabel);
     sizerMiddle->Add(sizerRow, 0, wxGROW | wxALL, 5);
 
     m_textBox->SetValue(_T("This is a box"));
@@ -293,7 +293,6 @@ StaticWidgetsPage::StaticWidgetsPage(wxNotebook *notebook,
     // final initializations
     Reset();
 
-    SetAutoLayout(TRUE);
     SetSizer(sizerTop);
 
     sizerTop->Fit(this);
@@ -309,8 +308,8 @@ StaticWidgetsPage::~StaticWidgetsPage()
 
 void StaticWidgetsPage::Reset()
 {
-    m_chkVert->SetValue(FALSE);
-    m_chkAutoResize->SetValue(TRUE);
+    m_chkVert->SetValue(false);
+    m_chkAutoResize->SetValue(true);
 
     m_radioHAlign->SetSelection(StaticHAlign_Left);
     m_radioVAlign->SetSelection(StaticVAlign_Top);
@@ -379,17 +378,17 @@ void StaticWidgetsPage::CreateStatic()
     flagsText |= align;
     flagsBox |= align;
 
-    m_staticBox = new MyStaticBox(this, -1, m_textBox->GetValue(),
+    m_staticBox = new MyStaticBox(this, wxID_ANY, m_textBox->GetValue(),
                                   wxDefaultPosition, wxDefaultSize,
                                   flagsBox);
     m_sizerStatBox = new wxStaticBoxSizer(m_staticBox, isVert ? wxHORIZONTAL
                                                               : wxVERTICAL);
 
-    m_statText = new MyStaticText(this, -1, m_textLabel->GetValue(),
+    m_statText = new MyStaticText(this, wxID_ANY, m_textLabel->GetValue(),
                                   wxDefaultPosition, wxDefaultSize,
                                   flagsText);
 
-    m_statLine = new wxStaticLine(this, -1,
+    m_statLine = new wxStaticLine(this, wxID_ANY,
                                   wxDefaultPosition, wxDefaultSize,
                                   isVert ? wxLI_VERTICAL : wxLI_HORIZONTAL);
 
