@@ -823,7 +823,7 @@ void wxListBox::OnSize( const wxSizeEvent &event)
     LCellSize( pt , (ListHandle)m_macList ) ;
 }
 
-void wxListBox::MacHandleControlClick( WXWidget control , wxInt16 controlpart )
+void wxListBox::MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool WXUNUSED(mouseStillDown))
 {
     Boolean wasDoubleClick = false ;
     long    result ;

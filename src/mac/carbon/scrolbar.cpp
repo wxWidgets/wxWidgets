@@ -105,7 +105,7 @@ void wxScrollBar::Command(wxCommandEvent& event)
     ProcessCommand(event);
 }
 
-void wxScrollBar::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 
+void wxScrollBar::MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) 
 {
     if ( (ControlHandle) m_macControl == NULL )
         return ;
@@ -116,6 +116,10 @@ void wxScrollBar::MacHandleControlClick( WXWidget control , wxInt16 controlpart 
     
     wxEventType scrollEvent = wxEVT_NULL;
     int nScrollInc;
+    
+    // all events have already been reported during mouse down, except for THUMBRELEASE
+    if ( !mouseStillDown && controlpart !=kControlIndicatorPart )
+        return ;
     
     switch( controlpart )
     {
@@ -137,7 +141,10 @@ void wxScrollBar::MacHandleControlClick( WXWidget control , wxInt16 controlpart 
         break ;
     case kControlIndicatorPart :
         nScrollInc = 0 ;
-        scrollEvent = wxEVT_SCROLL_THUMBTRACK;
+        if ( mouseStillDown )
+            scrollEvent = wxEVT_SCROLL_THUMBTRACK;
+        else
+            scrollEvent = wxEVT_SCROLL_THUMBRELEASE;
         break ;
     default :
         wxFAIL_MSG(wxT("illegal scrollbar selector"));

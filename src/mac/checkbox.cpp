@@ -61,7 +61,7 @@ void wxCheckBox::Command (wxCommandEvent & event)
     ProcessCommand (event);
 }
 
-void wxCheckBox::MacHandleControlClick( WXWidget WXUNUSED(control), wxInt16 WXUNUSED(controlpart) ) 
+void wxCheckBox::MacHandleControlClick( WXWidget WXUNUSED(control), wxInt16 WXUNUSED(controlpart) , bool WXUNUSED(mouseStillDown) ) 
 {
     SetValue( !GetValue() ) ;
     wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, m_windowId );

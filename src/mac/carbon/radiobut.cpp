@@ -97,7 +97,7 @@ void wxRadioButton::Command (wxCommandEvent & event)
   ProcessCommand (event);
 }
 
-void wxRadioButton::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 
+void wxRadioButton::MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool WXUNUSED(mouseStillDown)) 
 {
     if ( GetValue() )
       return ;

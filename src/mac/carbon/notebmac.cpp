@@ -634,7 +634,7 @@ void  wxNotebook::OnMouse( wxMouseEvent &event )
 }
 
 
-void wxNotebook::MacHandleControlClick( WXWidget control , wxInt16 controlpart )
+void wxNotebook::MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool WXUNUSED( mouseStillDown ) )
 {
 #if 0
     wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, m_windowId , ::GetControl32BitValue((ControlHandle)m_macControl) - 1, m_nSelection);

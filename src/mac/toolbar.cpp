@@ -390,7 +390,7 @@ wxSize wxToolBar::GetToolSize() const
     return wxSize(m_defaultWidth + 4, m_defaultHeight + 4);
 }
 
-void wxToolBar::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 
+void wxToolBar::MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool WXUNUSED( mouseStillDown ) ) 
 {
     wxToolBarToolsList::Node *node;
     for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
@@ -602,15 +602,11 @@ void  wxToolBar::OnMouse( wxMouseEvent &event )
             if ( control && ::IsControlActive( control ) )
             {
                 {
-                    if ( controlpart == kControlIndicatorPart && !UMAHasAppearance() )
-                        controlpart = ::HandleControlClick( control , localwhere , modifiers , (ControlActionUPP) NULL ) ;
-                    else
-                        controlpart = ::HandleControlClick( control , localwhere , modifiers , (ControlActionUPP) -1 ) ;
+                    controlpart = ::HandleControlClick( control , localwhere , modifiers , (ControlActionUPP) -1 ) ;
                     wxTheApp->s_lastMouseDown = 0 ;
-                    if ( controlpart && ! ( ( UMAHasAppearance() || (controlpart != kControlIndicatorPart) ) 
-                        && (IsKindOf( CLASSINFO( wxScrollBar ) ) ) ) ) // otherwise we will get the event twice
+                    if ( control && controlpart != kControlNoPart ) // otherwise we will get the event twice
                     {
-                        MacHandleControlClick( control , controlpart ) ;
+                        MacHandleControlClick( control , controlpart , false /* not down anymore */ ) ;
                     }
                 }
             }

@@ -238,7 +238,7 @@ void wxSlider::Command (wxCommandEvent & event)
     ProcessCommand (event);
 }
 
-void wxSlider::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 
+void wxSlider::MacHandleControlClick( WXWidget control , wxInt16 controlpart, bool WXUNUSED(mouseStillDown) ) 
 {
     SInt16 value = ::GetControl32BitValue( (ControlHandle) m_macControl ) ;
     

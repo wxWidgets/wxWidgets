@@ -147,7 +147,7 @@ void wxSpinButton::MacHandleValueChanged( int inc )
     }
 }
 
-void wxSpinButton::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 
+void wxSpinButton::MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool WXUNUSED(mouseStillDown)) 
 {
     if ( (ControlHandle) m_macControl == NULL )
         return ;

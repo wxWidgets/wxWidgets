@@ -78,7 +78,7 @@ pascal void wxMacLiveScrollbarActionProc( ControlHandle control , ControlPartCod
         wxControl*  wx = (wxControl*) GetControlReference( control ) ;
         if ( wx )
         {
-            wx->MacHandleControlClick( control , partCode ) ;
+            wx->MacHandleControlClick( control , partCode , true /* stillDown */ ) ;
         }
     }
 }
@@ -365,7 +365,11 @@ void wxControl::MacPostControlCreate()
     {
         ControlFontStyleRec     controlstyle ;
         controlstyle.flags = kControlUseFontMask ;
-        controlstyle.font = kControlFontSmallSystemFont ;
+        
+        if (IsKindOf( CLASSINFO( wxButton ) ) )
+            controlstyle.font = kControlFontSmallSystemFont ; // eventually kControlFontBigSystemFont ;
+        else
+            controlstyle.font = kControlFontSmallSystemFont ;
         
         ::SetControlFontStyle( (ControlHandle) m_macControl , &controlstyle ) ;
     }
@@ -871,11 +875,9 @@ void  wxControl::OnMouseEvent( wxMouseEvent &event )
                 {
                     controlpart = ::HandleControlClick( control , localwhere , modifiers , (ControlActionUPP) -1 ) ;
                     wxTheApp->s_lastMouseDown = 0 ;
-                    if ( control && controlpart != kControlNoPart && 
-                        ! IsKindOf( CLASSINFO( wxScrollBar ) ) 
-                    ) // otherwise we will get the event twice for scrollbar
+                    if ( control && controlpart != kControlNoPart ) 
                     {
-                        MacHandleControlClick( control , controlpart ) ;
+                        MacHandleControlClick( control , controlpart , false /* mouse not down anymore */ ) ;
                     }
                 }
             }
@@ -895,7 +897,7 @@ bool wxControl::MacCanFocus() const
         return false ; 
 }
 
-void wxControl::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 
+void wxControl::MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool WXUNUSED( mouseStillDown ) ) 
 {
     wxASSERT_MSG( (ControlHandle) m_macControl != NULL , wxT("No valid mac control") ) ;
 }

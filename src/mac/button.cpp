@@ -117,7 +117,7 @@ void wxButton::Command (wxCommandEvent & event)
     ProcessCommand (event);
 }
 
-void wxButton::MacHandleControlClick( WXWidget WXUNUSED(control) , wxInt16 controlpart ) 
+void wxButton::MacHandleControlClick( WXWidget WXUNUSED(control) , wxInt16 controlpart , bool WXUNUSED(mouseStillDown) ) 
 {
     if ( controlpart != kControlNoPart )
     {

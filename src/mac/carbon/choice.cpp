@@ -207,7 +207,7 @@ wxClientData* wxChoice::DoGetItemClientObject( int n ) const
     return (wxClientData *)DoGetItemClientData(n);
 }
 
-void wxChoice::MacHandleControlClick( WXWidget control , wxInt16 controlpart )
+void wxChoice::MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool WXUNUSED(mouseStillDown)) 
 {
     wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, m_windowId );
     int n = GetSelection();
