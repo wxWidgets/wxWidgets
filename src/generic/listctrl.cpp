@@ -4659,9 +4659,13 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
     m_mainWin = new wxListMainWindow( this, wxID_ANY, wxPoint(0,0), size, style );
 
 #if defined( __WXMAC__ ) && __WXMAC_CARBON__
-    wxFont font ;
-    font.MacCreateThemeFont( kThemeViewsFont ) ;
-    SetFont( font ) ;
+    // Human Interface Guidelines ask us for a special font in this case
+    if ( GetWindowVariant() == wxWINDOW_VARIANT_NORMAL )
+    {
+        wxFont font ;
+        font.MacCreateThemeFont( kThemeViewsFont ) ;
+        SetFont( font ) ;
+    }
 #endif
     if ( InReportView() )
     {
