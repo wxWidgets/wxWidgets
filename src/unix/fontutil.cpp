@@ -614,6 +614,31 @@ static wxNativeFont wxLoadQueryFont(int pointSize,
         default:           xfamily = wxT("*");
     }
 #if wxUSE_NANOX
+    int xweight;
+    switch (weight)
+    {
+         case wxBOLD:
+             {
+                 xweight = MWLF_WEIGHT_BOLD;
+                 break;
+             }
+        case wxLIGHT:
+             {
+                 xweight = MWLF_WEIGHT_LIGHT;
+                 break;
+             }
+         case wxNORMAL:
+             {
+                 xweight = MWLF_WEIGHT_NORMAL;
+                 break;
+             }
+
+     default:
+             {
+                 xweight = MWLF_WEIGHT_DEFAULT;
+                 break;
+             }
+    }
     GR_SCREEN_INFO screenInfo;
     GrGetScreenInfo(& screenInfo);
 
@@ -622,15 +647,24 @@ static wxNativeFont wxLoadQueryFont(int pointSize,
     // A point is 1/20 of an inch.
     // An inch is 2.541 cm.
     // So pixelHeight = (pointSize / 20) (inches) * 2.541 (for cm) * yPixelsPerCM (for pixels)
-    
-    int pixelHeight = (int) ( (((float)pointSize) / 20.0) * 2.541 * (float) yPixelsPerCM) ;
+    // In fact pointSize is 10 * the normal point size so
+    // divide by 10.
+
+    // I don't know why this is necessary, but otherwise fonts
+    // are just too big.
+    float fudgeFactor = 0.6 ;
+    int pixelHeight = (int) ( (((float)pointSize) / 200.0) * 2.541 * (float) yPixelsPerCM * fudgeFactor) ;
+
+    // An alternative: assume that the screen is 72 dpi.
+    // This gets a similar result to above (pre-fudge factor)
+    //int pixelHeight = (int) (((float)pointSize / 200.0) * 72.0) ;
     
     GR_LOGFONT logFont;
     logFont.lfHeight = pixelHeight;
     logFont.lfWidth = 0;
     logFont.lfEscapement = 0;
     logFont.lfOrientation = 0;
-    logFont.lfWeight = weight; // TODO: check of conversion req'd
+    logFont.lfWeight = xweight;
     logFont.lfItalic = (style == wxNORMAL ? 0 : 1) ;
     logFont.lfUnderline = 0;
     logFont.lfStrikeOut = 0;

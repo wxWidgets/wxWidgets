@@ -518,6 +518,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
                 
                 win->GetEventHandler()->ProcessEvent( sizeEvent );
             }
+            break;
         }
 #if !wxUSE_NANOX
         case PropertyNotify:

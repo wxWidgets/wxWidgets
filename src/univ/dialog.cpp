@@ -153,6 +153,18 @@ bool wxDialog::Show(bool show)
             EndModal(wxID_CANCEL);
     }
 
+    // Not sure how to put this in platform-specific
+    // code just yet. Nano-X has to force a size event,
+    // else there's no initial size.
+#if wxUSE_NANOX
+    if (show)
+    {
+        wxSizeEvent event(GetSize(), GetId());
+        event.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(event);
+    }
+#endif
+
     bool ret = wxDialogBase::Show(show);
 
     if ( show ) 

@@ -284,6 +284,12 @@ typedef int (*XErrorHandler) (	    /* WARNING, this type not in Xlib spec */
 #define KeymapStateMask 0
 #define StructureNotifyMask GR_EVENT_MASK_UPDATE
 
+#ifdef ConfigureNotify
+/* XtoNX.h gets it wrong */
+#undef ConfigureNotify
+#endif
+#define ConfigureNotify GR_EVENT_TYPE_UPDATE
+
 #ifndef FocusIn
 #define FocusIn GR_EVENT_TYPE_FOCUS_IN
 #define FocusOut GR_EVENT_TYPE_FOCUS_OUT

@@ -86,6 +86,12 @@ tar cvf $2/wxMotif-${WXVER}.tar -T /tmp/wxmotif.txt
 gzip $2/wxMotif-${WXVER}.tar
 mv $2/wxMotif-${WXVER}.tar.gz $2/wxMotif-${WXVER}.tgz
 
+### wxX: combined wxMotif and wxX11 distributions
+ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/motif.rsp $1/distrib/msw/x11.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/ogl.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp` | uniq > /tmp/wxx.txt
+tar cvf $2/wxWindows-X-${WXVER}.tar -T /tmp/wxx.txt
+gzip $2/wxWindows-X-${WXVER}.tar
+mv $2/wxWindows-X-${WXVER}.tar.gz $2/wxWindows-X-${WXVER}.tgz
+
 ### wxMSW
 ls `cat $1/distrib/msw/msw.rsp $1/distrib/msw/vc.rsp $1/distrib/msw/bc.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp` > /tmp/wxmsw.txt
 tar cvf $2/wxMSW-${WXVER}.tar -T /tmp/wxmsw.txt

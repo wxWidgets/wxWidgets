@@ -163,7 +163,6 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
                   FocusChangeMask |
                   ColormapChangeMask |
                   StructureNotifyMask |
-                  ConfigureNotify |
                   PropertyChangeMask
                   );
     
