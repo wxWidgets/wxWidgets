@@ -623,8 +623,6 @@ wxYieldIfNeeded = miscc.wxYieldIfNeeded
 
 wxEnableTopLevelWindows = miscc.wxEnableTopLevelWindows
 
-wxGetResource = miscc.wxGetResource
-
 wxStripMenuCodes = miscc.wxStripMenuCodes
 
 wxGetEmailAddress = miscc.wxGetEmailAddress
