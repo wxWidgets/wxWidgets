@@ -1462,6 +1462,26 @@ void wxListHeaderWindow::DoDrawRect( wxDC *dc, int x, int y, int w, int h )
 
     gtk_paint_box (m_wxwindow->style, GTK_PIZZA(m_wxwindow)->bin_window, state, GTK_SHADOW_OUT,
                    (GdkRectangle*) NULL, m_wxwindow, "button", x-1, y-1, w+2, h+2);
+#elif defined( __WXMAC__  )
+    const int m_corner = 1;
+
+    dc->SetBrush( *wxTRANSPARENT_BRUSH );
+
+    dc->SetPen( wxPen( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNSHADOW ) , 1 , wxSOLID ) );
+    dc->DrawLine( x+w-m_corner+1, y, x+w, y+h );  // right (outer)
+    dc->DrawRectangle( x, y+h, w+1, 1 );          // bottom (outer)
+
+    wxPen pen( wxColour( 0x88 , 0x88 , 0x88 ), 1, wxSOLID );
+
+    dc->SetPen( pen );
+    dc->DrawLine( x+w-m_corner, y, x+w-1, y+h );  // right (inner)
+    dc->DrawRectangle( x+1, y+h-1, w-2, 1 );      // bottom (inner)
+
+    dc->SetPen( *wxWHITE_PEN );
+    dc->DrawRectangle( x, y, w-m_corner+1, 1 );   // top (outer)
+    dc->DrawRectangle( x, y, 1, h );              // left (outer)
+    dc->DrawLine( x, y+h-1, x+1, y+h-1 );
+    dc->DrawLine( x+w-1, y, x+w-1, y+1 );
 #else
     const int m_corner = 1;
 
@@ -2103,8 +2123,12 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
         if ( HasFlag(wxLC_HRULES) )
         {
+#ifdef __WXMAC__
+            wxPen pen(wxWHITE, 1, wxSOLID);
+#else
             wxPen pen(wxSystemSettings::
                         GetSystemColour(wxSYS_COLOUR_3DLIGHT), 1, wxSOLID);
+#endif
             wxSize clientSize = GetClientSize();
 
             for ( size_t i = m_lineFrom; i <= m_lineTo; i++ )
@@ -2128,8 +2152,12 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         // Draw vertical rules if required
         if ( HasFlag(wxLC_VRULES) && !IsEmpty() )
         {
+#ifdef __WXMAC__
+            wxPen pen(wxWHITE, 1, wxSOLID);
+#else
             wxPen pen(wxSystemSettings::
                         GetSystemColour(wxSYS_COLOUR_3DLIGHT), 1, wxSOLID);
+#endif
 
             int col = 0;
             wxRect firstItemRect;
@@ -2172,10 +2200,13 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         {
             rect = GetLine(m_current)->GetHighlightRect();
         }
-
+#ifdef __WXMAC__
+        // no rect outline, we already have the background color
+#else
         dc.SetPen( *wxBLACK_PEN );
         dc.SetBrush( *wxTRANSPARENT_BRUSH );
         dc.DrawRectangle( rect );
+#endif
     }
 
     dc.EndDrawing();
