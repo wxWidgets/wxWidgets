@@ -232,6 +232,14 @@ InputPath=..\..\include\wx\msw\setup.h
 
 !ELSEIF  "$(CFG)" == "regex - Win32 Debug Unicode"
 
+# Begin Custom Build - Creating ..\lib\mswud\wx\setup.h from $(InputPath)
+InputPath=..\..\include\wx\mswud\setup.h
+
+"../lib/mswud/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\lib\mswud\wx\setup.h
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "regex - Win32 Release With Debug Info"
 
 # Begin Custom Build - Creating ..\lib\msw\wx\setup.h from $(InputPath)
