@@ -820,8 +820,8 @@ wxString wxGetPasswordFromUser(const wxString& message,
     else
         style &= ~wxCENTRE;
 
-    wxTextEntryDialog dialog(parent, message, caption, defaultValue,
-                             style | wxTE_PASSWORD, wxPoint(x, y));
+    wxPasswordEntryDialog dialog(parent, message, caption, defaultValue,
+                             style, wxPoint(x, y));
     if ( dialog.ShowModal() == wxID_OK )
     {
         str = dialog.GetValue();
