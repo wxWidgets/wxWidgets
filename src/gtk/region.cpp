@@ -13,15 +13,8 @@
 
 #include "wx/region.h"
 
-#include "gdk/gdk.h"
-#include "gtk/gtk.h"
-
-#ifdef __WXDEBUG__
-#ifdef NULL
-#undef NULL
-#endif
-#define NULL ((void*)0L)
-#endif
+#include <gdk/gdk.h>
+#include <gtk/gtk.h>
 
 //-----------------------------------------------------------------------------
 // wxRegion

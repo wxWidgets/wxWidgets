@@ -17,10 +17,11 @@
 #if wxUSE_SCROLLBAR
 
 #include "wx/utils.h"
+
 #include <math.h>
 
-#include "gdk/gdk.h"
-#include "gtk/gtk.h"
+#include <gdk/gdk.h>
+#include <gtk/gtk.h>
 
 //-----------------------------------------------------------------------------
 // idle system
@@ -36,6 +37,8 @@ extern bool g_isIdle;
 extern bool   g_blockEventsOnDrag;
 extern bool   g_blockEventsOnScroll;
 
+static const float sensitivity = 0.02;
+
 //-----------------------------------------------------------------------------
 // "value_changed"
 //-----------------------------------------------------------------------------
@@ -48,7 +51,7 @@ static void gtk_scrollbar_callback( GtkAdjustment *adjust, wxScrollBar *win )
     if (g_blockEventsOnDrag) return;
     
     float diff = adjust->value - win->m_oldPos;
-    if (fabs(diff) < 0.2) return;
+    if (fabs(diff) < sensitivity) return;
     
     win->m_oldPos = adjust->value;
 
