@@ -740,12 +740,15 @@ typedef wxUint32 wxDword;
     #error "Pointers can't be stored inside integer types."
 #endif
 
+#ifdef __cplusplus
 /* And also define a simple function to cast pointer to it. */
 inline wxUIntPtr wxPtrToUInt(void *p)
 {
-    // VC++ 7.1 gives warnings about casts such as below even when they're
-    // explicit with /Wp64 option, suppress them as we really know what we're
-    // doing here
+    /*
+       VC++ 7.1 gives warnings about casts such as below even when they're
+       explicit with /Wp64 option, suppress them as we really know what we're
+       doing here
+     */
 #ifdef __VISUALC__
     #pragma warning(disable: 4311) /* pointer truncation from '' to '' */
 #endif
@@ -756,6 +759,7 @@ inline wxUIntPtr wxPtrToUInt(void *p)
     #pragma warning(default: 4311)
 #endif
 }
+#endif /*__cplusplus*/
 
 
 /*  64 bit */
@@ -1083,7 +1087,7 @@ enum wxStretch
     wxFIXED_MINSIZE           = 0x8000,
     wxTILE                    = 0xc000,
 
-    // for compatibility only, default now, don't use explicitly any more
+    /* for compatibility only, default now, don't use explicitly any more */
 #if WXWIN_COMPATIBILITY_2_4
     wxADJUST_MINSIZE          = 0x00100000
 #else
@@ -1234,7 +1238,7 @@ enum wxBorder
 #define wxDIALOG_EX_CONTEXTHELP 0x00000004
 
 /*  Create a window which is attachable to another top level window */
-#define wxFRAME_DRAWER          0x0020  
+#define wxFRAME_DRAWER          0x0020
 
 /*
  * MDI parent frame style flags
@@ -2123,8 +2127,8 @@ typedef unsigned long   WXDWORD;
 typedef unsigned short  WXWORD;
 
 
-//typedef void*       WXWidget;
-//typedef void*       WXWindow;
+/* typedef void*       WXWidget; */
+/* typedef void*       WXWindow; */
 typedef WX_OPAQUE_TYPE(ControlRef ) * WXWidget ;
 typedef WX_OPAQUE_TYPE(WindowRef) * WXWindow ;
 typedef void*       WXDisplay;
