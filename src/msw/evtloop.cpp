@@ -60,7 +60,7 @@ class WXDLLEXPORT wxEventLoopImpl
 {
 public:
     // ctor
-    wxEventLoopImpl() { SetExitCode(0); }
+    wxEventLoopImpl() { m_exitcode = 0; m_shouldExit = false; }
 
     // process a message
     void ProcessMessage(MSG *msg);
@@ -69,8 +69,9 @@ public:
     bool SendIdleMessage();
 
     // set/get the exit code
-    void SetExitCode(int exitcode) { m_exitcode = exitcode; }
+    void Exit(int exitcode) { m_exitcode = exitcode; m_shouldExit = true; }
     int GetExitCode() const { return m_exitcode; }
+    bool ShouldExit() const { return m_shouldExit; }
 
 private:
     // preprocess a message, return TRUE if processed (i.e. no further
@@ -79,6 +80,9 @@ private:
 
     // the exit code of the event loop
     int m_exitcode;
+
+    // true if we were asked to terminate
+    bool m_shouldExit;
 };
 
 // ----------------------------------------------------------------------------
@@ -258,6 +262,17 @@ int wxEventLoop::Run()
             while ( !Pending() && m_impl->SendIdleMessage() )
                 ;
 
+            // if the "should exit" flag is set, the loop should terminate but
+            // not before processing any remaining messages so while Pending()
+            // returns true, do process them
+            if ( m_impl->ShouldExit() )
+            {
+                while ( Pending() )
+                    Dispatch();
+
+                break;
+            }
+
             // a message came or no more idle processing to do, sit in
             // Dispatch() waiting for the next message
             if ( !Dispatch() )
@@ -276,11 +291,18 @@ void wxEventLoop::Exit(int rc)
 {
     wxCHECK_RET( IsRunning(), _T("can't call Exit() if not running") );
 
-    m_impl->SetExitCode(rc);
+    m_impl->Exit(rc);
 
     OnExit();
 
-    ::PostQuitMessage(rc);
+    // all we have to do to exit from the loop is to (maybe) wake it up so that
+    // it can notice that Exit() had been called
+    //
+    // in particular, we do *not* use PostQuitMessage() here because we're not
+    // sure that WM_QUIT is going to be processed by the correct event loop: it
+    // is possible that another one is started before this one has a chance to
+    // process WM_QUIT
+    ::PostMessage(NULL, WM_NULL, 0, 0);
 }
 
 // ----------------------------------------------------------------------------
