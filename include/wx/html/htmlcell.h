@@ -254,6 +254,10 @@ public:
     // Sets cell's behaviour on pagebreaks (see AdjustPagebreak). Default
     // is true - the cell can be split on two pages
     void SetCanLiveOnPagebreak(bool can) { m_CanLiveOnPagebreak = can; }
+    
+    // Can the line be broken before this cell?
+    virtual bool IsLinebreakAllowed() const
+        { return !IsFormattingCell(); }
 
     // Returns y-coordinates that contraint the cell, i.e. left is highest
     // and right lowest coordinate such that the cell lays between then.
@@ -338,6 +342,9 @@ public:
               wxHtmlRenderingInfo& info);
     wxCursor GetCursor() const;
     wxString ConvertToText(wxHtmlSelection *sel) const;
+    bool IsLinebreakAllowed() const { return m_allowLinebreak; }
+
+    void SetPreviousWord(wxHtmlWordCell *cell);
 
 protected:
     void SetSelectionPrivPos(wxDC& dc, wxHtmlSelection *s) const;
@@ -346,6 +353,7 @@ protected:
                unsigned& pos1, unsigned& pos2) const;
     
     wxString m_Word;
+    bool     m_allowLinebreak;
 };
 
 

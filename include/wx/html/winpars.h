@@ -176,13 +176,15 @@ private:
     wxString m_FontFaceFixed, m_FontFaceNormal;
             // html font sizes and faces of fixed and proportional fonts
 
-    DECLARE_NO_COPY_CLASS(wxHtmlWinParser)
-
 #if !wxUSE_UNICODE
     wxFontEncoding m_InputEnc, m_OutputEnc;
             // I/O font encodings
     wxEncodingConverter *m_EncConv;
 #endif
+
+    wxHtmlWordCell *m_lastWordCell;
+    
+    DECLARE_NO_COPY_CLASS(wxHtmlWinParser)
 };
 
 
@@ -190,12 +192,12 @@ private:
 
 
 
-//--------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 // wxHtmlWinTagHandler
 //                  This is basicly wxHtmlTagHandler except
 //                  it is extended with protected member m_Parser pointing to
 //                  the wxHtmlWinParser object
-//--------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_HTML wxHtmlWinTagHandler : public wxHtmlTagHandler
 {
@@ -217,13 +219,13 @@ protected:
 
 
 
-//--------------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 // wxHtmlTagsModule
 //                  This is basic of dynamic tag handlers binding.
 //                  The class provides methods for filling parser's handlers
 //                  hash table.
 //                  (See documentation for details)
-//--------------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_HTML wxHtmlTagsModule : public wxModule
 {
@@ -236,8 +238,8 @@ public:
     virtual void OnExit();
 
     // This is called by wxHtmlWinParser.
-    // The method must simply call parser->AddTagHandler(new <handler_class_name>);
-    // for each handler
+    // The method must simply call parser->AddTagHandler(new
+    // <handler_class_name>); for each handler
     virtual void FillHandlersTable(wxHtmlWinParser * WXUNUSED(parser)) { }
 };
 
@@ -245,8 +247,3 @@ public:
 #endif
 
 #endif // _WX_WINPARS_H_
-
-
-
-
-
