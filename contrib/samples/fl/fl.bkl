@@ -6,7 +6,7 @@
 
     <template id="fl_sample"
               template="wx_contrib_sample" template_append="wx_append">
-        <define>BMP_DIR=\"bitmaps/\"</define>
+        <define>BMP_DIR="bitmaps/"</define>
         <sources>$(id).cpp</sources>
         <win32-res>$(id).rc</win32-res>
         <wx-lib>fl</wx-lib>
