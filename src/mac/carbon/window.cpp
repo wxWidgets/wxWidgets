@@ -846,7 +846,7 @@ void wxWindowMac::MacSuperEnabled( bool enabled )
 
 bool wxWindowMac::MacIsReallyShown() const
 {
-    if ( m_isShown && (m_parent != NULL) ) {
+    if ( m_isShown && (m_parent != NULL && !IsTopLevel() ) ) {
         return m_parent->MacIsReallyShown();
     }
     return m_isShown;
