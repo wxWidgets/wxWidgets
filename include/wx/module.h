@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MODULEH__
-#define _WX_MODULEH__
+#ifndef _WX_MODULE_H_
+#define _WX_MODULE_H_
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma interface "module.h"
@@ -32,30 +32,31 @@ public:
     wxModule() {}
     virtual ~wxModule() {}
 
-    	// if module init routine returns FALSE application
-	// will fail to startup
+    // if module init routine returns false the application
+    // will fail to startup
 
     bool Init() { return OnInit(); }
     void Exit() { OnExit(); }
 
-	// Override both of these
+    // Override both of these
+
         // called on program startup
 
     virtual bool OnInit() = 0;
 
-    	// called just before program termination, but only if OnInit()
+        // called just before program termination, but only if OnInit()
         // succeeded
-    
+
     virtual void OnExit() = 0;
 
-    static void RegisterModule(wxModule* module);
+    static void RegisterModule(wxModule *module);
     static void RegisterModules();
     static bool InitializeModules();
     static void CleanUpModules();
 
-    	// used by wxObjectLoader when unloading shared libs's
+    // used by wxObjectLoader when unloading shared libs's
 
-    static void UnregisterModule(wxModule* module);
+    static void UnregisterModule(wxModule *module);
 
 protected:
     static wxModuleList m_modules;
@@ -63,5 +64,5 @@ protected:
     DECLARE_CLASS(wxModule)
 };
 
-#endif // _WX_MODULEH__
+#endif // _WX_MODULE_H_
 
