@@ -170,7 +170,7 @@ bool MyApp::OnInit()
   file_menu->Append(DIALOGS_REPLACE, "Find and &replace dialog\tShift-Ctrl-F", "", TRUE);
 #endif // wxUSE_FINDREPLDLG
   file_menu->AppendSeparator();
-  file_menu->Append(DIALOGS_MODAL, "Mo&dal dialog\tCtrl-D");
+  file_menu->Append(DIALOGS_MODAL, "Mo&dal dialog\tCtrl-W");
   file_menu->Append(DIALOGS_MODELESS, "Modeless &dialog\tCtrl-Z", "", TRUE);
   file_menu->AppendSeparator();
   file_menu->Append(wxID_EXIT, "E&xit\tAlt-X");
@@ -848,8 +848,10 @@ MyModalDialog::MyModalDialog(wxWindow *parent)
 
     m_btnFocused = new wxButton(this, -1, "Default button");
     m_btnDelete = new wxButton(this, -1, "&Delete button");
+    wxButton *btnOk = new wxButton(this, wxID_CANCEL, "&Close");
     sizerTop->Add(m_btnFocused, 0, wxALIGN_CENTER | wxALL, 5);
     sizerTop->Add(m_btnDelete, 0, wxALIGN_CENTER | wxALL, 5);
+    sizerTop->Add(btnOk, 0, wxALIGN_CENTER | wxALL, 5);
 
     SetAutoLayout(TRUE);
     SetSizer(sizerTop);
