@@ -43,7 +43,8 @@ class WXDLLEXPORT wxPageSetupData;
 // constants
 // ----------------------------------------------------------------------------
 
-// FIXME why all these enums start with 10 or 30?
+// This is not clear why all these enums start with 10 or 30 but do not change it
+// without good reason to avoid some subtle backwards compatibility breakage
 
 enum
 {
@@ -85,12 +86,12 @@ class WXDLLEXPORT wxPostScriptPrintNativeData: public wxPrintNativeDataBase
 public:
     wxPostScriptPrintNativeData();
     virtual ~wxPostScriptPrintNativeData();
-    
+
     virtual bool TransferTo( wxPrintData &data );
     virtual bool TransferFrom( const wxPrintData &data );
-    
+
     virtual bool Ok() const { return true; }
-    
+
     const wxString& GetPrinterCommand() const { return m_printerCommand; }
     const wxString& GetPrinterOptions() const { return m_printerOptions; }
     const wxString& GetPreviewCommand() const { return m_previewCommand; }
@@ -128,11 +129,11 @@ private:
 #if wxUSE_STREAMS
     wxOutputStream *m_outputStream;
 #endif
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxPostScriptPrintNativeData)
 };
-    
+
 // ----------------------------------------------------------------------------
 // Simulated Print and Print Setup dialogs for non-Windows platforms (and
 // Windows using PostScript print/preview)
@@ -194,7 +195,7 @@ public:
     void Init(wxPrintData* data);
 
     void OnPrinter(wxListEvent& event);
-    
+
     virtual bool TransferDataFromWindow();
     virtual bool TransferDataToWindow();
 
@@ -210,7 +211,7 @@ public:
 
     wxPrintData         m_printData;
     wxPrintData&        GetPrintData() { return m_printData; }
-    
+
     // After pressing OK, write data here.
     wxPrintData*        m_targetData;
 
