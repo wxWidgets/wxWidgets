@@ -1592,9 +1592,14 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
                 SetRowSize( m_dragRowOrCol, wxMax( y - rowTop, WXGRID_MIN_ROW_HEIGHT ) );
                 if ( !GetBatchCount() )
                 {
-                  // TODO: optimize this
-                  m_rowLabelWin->Refresh();
-                  m_gridWin->Refresh();
+                  // Only needed to get the correct rect.y:
+                  wxRect rect ( CellToRect( m_dragRowOrCol, 0 ) );
+                  rect.x = 0;
+                  rect.width = m_rowLabelWidth;
+                  rect.height = ch - rect.y;
+                  m_rowLabelWin->Refresh( TRUE, &rect );
+                  rect.width = cw;
+                  m_gridWin->Refresh( TRUE, &rect );
                 }
 
                 ShowCellEditControl();
@@ -1774,9 +1779,14 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
 
                 if ( !GetBatchCount() )
                 {
-                  // TODO: optimize this
-                  m_colLabelWin->Refresh();
-                  m_gridWin->Refresh();
+                  // Only needed to get the correct rect.x:
+                  wxRect rect ( CellToRect( 0, m_dragRowOrCol ) );
+                  rect.y = 0;
+                  rect.width = cw - rect.x;
+                  rect.height = m_colLabelHeight;
+                  m_colLabelWin->Refresh( TRUE, &rect );
+                  rect.height = ch;
+                  m_gridWin->Refresh( TRUE, &rect );
                 }
 
                 ShowCellEditControl();
@@ -3922,7 +3932,6 @@ void wxGrid::SetRowLabelAlignment( int horiz, int vert )
     if ( !GetBatchCount() )
     {
         m_rowLabelWin->Refresh();
-        m_colLabelWin->Refresh();
     }
 }
 
@@ -3940,7 +3949,6 @@ void wxGrid::SetColLabelAlignment( int horiz, int vert )
 
     if ( !GetBatchCount() )
     {
-        m_rowLabelWin->Refresh();
         m_colLabelWin->Refresh();
     }
 }
@@ -3952,9 +3960,13 @@ void wxGrid::SetRowLabelValue( int row, const wxString& s )
         m_table->SetRowLabelValue( row, s );
         if ( !GetBatchCount() )
         {
-            // TODO: Optimize this
-            //
-            m_rowLabelWin->Refresh();
+            wxRect rect = CellToRect( row, 0);
+            if ( rect.height > 0 )
+            {
+                rect.x = m_left;
+                rect.width = m_rowLabelWidth;
+                m_rowLabelWin->Refresh( TRUE, &rect );
+            }
         }
     }
 }
@@ -3966,9 +3978,13 @@ void wxGrid::SetColLabelValue( int col, const wxString& s )
         m_table->SetColLabelValue( col, s );
         if ( !GetBatchCount() )
         {
-            // TODO: optimize this
-            //
-            m_colLabelWin->Refresh();
+            wxRect rect = CellToRect( 0, col );
+            if ( rect.width > 0 )
+            {
+                rect.y = m_top;
+                rect.height = m_colLabelHeight;
+                m_colLabelWin->Refresh( TRUE, &rect );
+            }
         }
     }
 }
@@ -4272,21 +4288,56 @@ void wxGrid::SelectRow( int row, bool addToSelected )
 
     if ( IsSelection() && addToSelected )
     {
-        if ( m_selectedTopLeft.GetRow() > row )
+        wxRect  rect[4];
+        bool    need_refresh[4] = { FALSE, FALSE, FALSE, FALSE };
+        int     i;
+
+        wxCoord oldLeft   = m_selectedTopLeft.GetCol();
+        wxCoord oldTop    = m_selectedTopLeft.GetRow();
+        wxCoord oldRight  = m_selectedBottomRight.GetCol();
+        wxCoord oldBottom = m_selectedBottomRight.GetRow();
+
+        if ( oldTop > row )
+        {
+            need_refresh[0] = TRUE;
+            rect[0] = BlockToDeviceRect( wxGridCellCoords ( row, 0 ),
+                                         wxGridCellCoords ( oldTop - 1,
+                                                            m_numCols - 1 ) );
             m_selectedTopLeft.SetRow( row );
+        }
 
-        m_selectedTopLeft.SetCol( 0 );
+        if ( oldLeft > 0 )
+        {
+            need_refresh[1] = TRUE;
+            rect[1] = BlockToDeviceRect( wxGridCellCoords ( oldTop, 0 ),
+                                         wxGridCellCoords ( oldBottom,
+                                                            oldLeft - 1 ) );
 
-        if ( m_selectedBottomRight.GetRow() < row )
+            m_selectedTopLeft.SetCol( 0 );
+        }
+
+        if ( oldBottom < row )
+        {
+            need_refresh[2] = TRUE;
+            rect[2] = BlockToDeviceRect( wxGridCellCoords ( oldBottom + 1, 0 ),
+                                         wxGridCellCoords ( row,
+                                                            m_numCols - 1 ) );
             m_selectedBottomRight.SetRow( row );
+        }
 
-        m_selectedBottomRight.SetCol( m_numCols - 1 );
+        if ( oldRight < m_numCols - 1 )
+        {
+            need_refresh[3] = TRUE;
+            rect[3] = BlockToDeviceRect( wxGridCellCoords ( oldTop ,
+                                                            oldRight + 1 ),
+                                         wxGridCellCoords ( oldBottom,
+                                                            m_numCols - 1 ) );
+            m_selectedBottomRight.SetCol( m_numCols - 1 );
+        }
 
-        // TODO: optimize this so that we only refresh the newly
-        // selected cells
-        //
-        r = SelectionToDeviceRect();
-        if ( r != wxGridNoCellRect ) m_gridWin->Refresh( TRUE, &r );
+        for (i = 0; i < 4; i++ )
+            if ( need_refresh[i] && rect[i] != wxGridNoCellRect )
+                m_gridWin->Refresh( TRUE, &(rect[i]) );
     }
     else
     {
@@ -4312,28 +4363,62 @@ void wxGrid::SelectRow( int row, bool addToSelected )
 
 void wxGrid::SelectCol( int col, bool addToSelected )
 {
-    wxRect r;
-
     if ( IsSelection() && addToSelected )
     {
-        if ( m_selectedTopLeft.GetCol() > col )
+        wxRect  rect[4];
+        bool    need_refresh[4] = { FALSE, FALSE, FALSE, FALSE };
+        int     i;
+
+        wxCoord oldLeft   = m_selectedTopLeft.GetCol();
+        wxCoord oldTop    = m_selectedTopLeft.GetRow();
+        wxCoord oldRight  = m_selectedBottomRight.GetCol();
+        wxCoord oldBottom = m_selectedBottomRight.GetRow();
+
+        if ( oldLeft > col )
+        {
+            need_refresh[0] = TRUE;
+            rect[0] = BlockToDeviceRect( wxGridCellCoords ( 0, col ),
+                                         wxGridCellCoords ( m_numRows - 1, 
+                                                            oldLeft - 1 ) );
             m_selectedTopLeft.SetCol( col );
+        }
 
-        m_selectedTopLeft.SetRow( 0 );
+        if ( oldTop  > 0 )
+        {
+            need_refresh[1] = TRUE;
+            rect[1] = BlockToDeviceRect( wxGridCellCoords ( 0, oldLeft ),
+                                         wxGridCellCoords ( oldTop - 1, 
+                                                            oldRight ) );
+            m_selectedTopLeft.SetRow( 0 );
+        }
 
-        if ( m_selectedBottomRight.GetCol() < col )
+        if ( oldRight < col )
+        {
+            need_refresh[2] = TRUE;
+            rect[2] = BlockToDeviceRect( wxGridCellCoords ( 0, oldRight + 1 ),
+                                         wxGridCellCoords ( m_numRows - 1,
+                                                            col            ) );
             m_selectedBottomRight.SetCol( col );
+        }
 
-        m_selectedBottomRight.SetRow( m_numRows - 1 );
+        if ( oldBottom < m_numRows - 1 )
+        {
+            need_refresh[3] = TRUE;
+            rect[3] = BlockToDeviceRect( wxGridCellCoords ( oldBottom + 1,
+                                                            oldLeft ),
+                                         wxGridCellCoords ( m_numRows - 1,
+                                                            oldRight ) );
+            m_selectedBottomRight.SetRow( m_numRows - 1 );
+        }
 
-        // TODO: optimize this so that we only refresh the newly
-        // selected cells
-        //
-        r = SelectionToDeviceRect();
-        if ( r != wxGridNoCellRect ) m_gridWin->Refresh( TRUE, &r );
+        for (i = 0; i < 4; i++ )
+            if ( need_refresh[i] && rect[i] != wxGridNoCellRect )
+                m_gridWin->Refresh( TRUE, &(rect[i]) );
     }
     else
     {
+        wxRect r;
+    
         r = SelectionToDeviceRect();
         ClearSelection();
         if ( r != wxGridNoCellRect ) m_gridWin->Refresh( TRUE, &r );
@@ -4357,7 +4442,6 @@ void wxGrid::SelectCol( int col, bool addToSelected )
 void wxGrid::SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol )
 {
     int temp;
-    bool changed = FALSE;
     wxGridCellCoords updateTopLeft, updateBottomRight;
 
     if ( topRow > bottomRow )
@@ -4374,46 +4458,100 @@ void wxGrid::SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol )
         rightCol = temp;
     }
 
-    updateTopLeft = m_selectedTopLeft;
-    if (m_selectedTopLeft != wxGridCellCoords( topRow, leftCol ) )
-    {
-        m_selectedTopLeft = wxGridCellCoords( topRow, leftCol );
-        if (updateTopLeft == wxGridNoCellCoords)
-        {
-            updateTopLeft = m_selectedTopLeft;
-        }
-        else
-        {
-             if(updateTopLeft.GetRow() > topRow)
-                updateTopLeft.SetRow(topRow);
-            if (updateTopLeft.GetCol() > leftCol)
-              updateTopLeft.SetCol(leftCol);
-        }
-        changed = TRUE;
-    }
+    updateTopLeft = wxGridCellCoords( topRow, leftCol );
+    updateBottomRight = wxGridCellCoords( bottomRow, rightCol );
 
-    updateBottomRight = m_selectedBottomRight;
-    if (m_selectedBottomRight != wxGridCellCoords( bottomRow, rightCol ) )
+    if ( m_selectedTopLeft != updateTopLeft ||
+         m_selectedBottomRight != updateBottomRight )
     {
-        m_selectedBottomRight = wxGridCellCoords( bottomRow, rightCol );
-        if (updateBottomRight == wxGridNoCellCoords)
-        {
-            updateBottomRight = m_selectedBottomRight;
-        }
-        else
-        {
-            if (updateBottomRight.GetRow() < bottomRow)
-                updateBottomRight.SetRow(bottomRow);
-            if (updateBottomRight.GetCol() < rightCol)
-                updateBottomRight.SetCol(rightCol);
-        }
-        changed = TRUE;
-    }
+        // Compute two optimal update rectangles:
+        // Either one rectangle is a real subset of the
+        // other, or they are (almost) disjoint!
+        wxRect  rect[4];
+        bool    need_refresh[4] = { FALSE, FALSE, FALSE, FALSE };
+        int     i;
 
-    if (changed)
-    {
-        wxRect r( BlockToDeviceRect( updateTopLeft, updateBottomRight ) );
-        m_gridWin->Refresh( TRUE, &r );
+        // Store intermediate values
+        wxCoord oldLeft   = m_selectedTopLeft.GetCol();
+        wxCoord oldTop    = m_selectedTopLeft.GetRow();
+        wxCoord oldRight  = m_selectedBottomRight.GetCol();
+        wxCoord oldBottom = m_selectedBottomRight.GetRow();
+
+        // Determine the outer/inner coordinates.
+        if (oldLeft > leftCol)
+        {
+            temp = oldLeft;
+            oldLeft = leftCol;
+            leftCol = temp;
+	}
+        if (oldTop > topRow )
+        {
+            temp = oldTop;
+            oldTop = topRow;
+            topRow = temp;
+	}
+	if (oldRight < rightCol )
+        {
+            temp = oldRight;
+            oldRight = rightCol;
+            rightCol = temp;
+	}
+	if (oldBottom < bottomRow)
+	{
+            temp = oldBottom;
+            oldBottom = bottomRow;
+            bottomRow = temp;
+	}
+
+        // Now, either the stuff marked old is the outer
+        // rectangle or we don't have a situation where one
+        // is contained in the other.
+        
+	if ( oldLeft < leftCol )
+	{
+	    need_refresh[0] = TRUE;
+	    rect[0] = BlockToDeviceRect( wxGridCellCoords ( oldTop,
+							    oldLeft ),
+					 wxGridCellCoords ( oldBottom, 
+							    leftCol - 1 ) );
+	}
+
+	if ( oldTop  < topRow )
+	{
+	    need_refresh[1] = TRUE;
+	    rect[1] = BlockToDeviceRect( wxGridCellCoords ( oldTop,
+							    leftCol ),
+					 wxGridCellCoords ( topRow - 1, 
+							    rightCol ) );
+	}
+
+	if ( oldRight > rightCol )
+	{
+	    need_refresh[2] = TRUE;
+	    rect[2] = BlockToDeviceRect( wxGridCellCoords ( oldTop,
+							    rightCol + 1 ),
+					 wxGridCellCoords ( oldBottom,
+							    oldRight ) );
+	}
+
+	if ( oldBottom > bottomRow )
+	{
+	    need_refresh[3] = TRUE;
+	    rect[3] = BlockToDeviceRect( wxGridCellCoords ( bottomRow + 1,
+							    leftCol ),
+					 wxGridCellCoords ( oldBottom,
+							    rightCol ) );
+	}
+
+
+        // Change Selection
+        m_selectedTopLeft = updateTopLeft;
+        m_selectedBottomRight = updateBottomRight;
+        
+        // various Refresh() calls
+        for (i = 0; i < 4; i++ )
+            if ( need_refresh[i] && rect[i] != wxGridNoCellRect )
+                m_gridWin->Refresh( TRUE, &(rect[i]) );
     }
 
     // only generate an event if the block is not being selected by
