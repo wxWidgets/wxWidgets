@@ -767,11 +767,6 @@ void wxControl::MacRedrawControl()
 
 void wxControl::OnPaint(wxPaintEvent& event)
 {
-    if ( IsKindOf( CLASSINFO( wxBitmapButton ) ) )
-    {
-        int i ;
-        i = 0 ;
-    }
     if ( (ControlHandle) m_macControl )
     {
         wxPaintDC dc(this) ;

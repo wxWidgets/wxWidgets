@@ -46,6 +46,7 @@
     #include "wx/combobox.h"
     #include "wx/intl.h"
     #include "wx/sizer.h"
+    #include "wx/cmndata.h"
 #endif
 
 #if wxUSE_STATLINE
