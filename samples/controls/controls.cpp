@@ -209,6 +209,42 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
+// a radiobox which handles focus set/kill (for testing)
+class MyRadioBox : public wxRadioBox
+{
+public:
+    MyRadioBox(wxWindow *parent,
+               wxWindowID id,
+               const wxString& title = wxEmptyString,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               int n = 0, const wxString choices[] = NULL,
+               int majorDim = 1,
+               long style = wxRA_HORIZONTAL,
+               const wxValidator& validator = wxDefaultValidator,
+               const wxString& name = wxComboBoxNameStr)
+        : wxRadioBox(parent, id, title, pos, size, n, choices, majorDim,
+                     style, validator, name) { }
+
+protected:
+    void OnFocusGot(wxFocusEvent& event)
+    {
+        wxLogMessage(_T("MyRadioBox::OnFocusGot"));
+
+        event.Skip();
+    }
+
+    void OnFocusLost(wxFocusEvent& event)
+    {
+        wxLogMessage(_T("MyRadioBox::OnFocusLost"));
+
+        event.Skip();
+    }
+
+private:
+    DECLARE_EVENT_TABLE()
+};
+
 //----------------------------------------------------------------------
 // other
 //----------------------------------------------------------------------
@@ -421,6 +457,11 @@ BEGIN_EVENT_TABLE(MyComboBox, wxComboBox)
     EVT_KEY_UP(MyComboBox::OnKeyUp)
 END_EVENT_TABLE()
 
+BEGIN_EVENT_TABLE(MyRadioBox, wxRadioBox)
+    EVT_SET_FOCUS(MyRadioBox::OnFocusGot)
+    EVT_KILL_FOCUS(MyRadioBox::OnFocusLost)
+END_EVENT_TABLE()
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -593,7 +634,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     };
 
     panel = new wxPanel(m_notebook);
-    (void)new wxRadioBox( panel, ID_RADIOBOX, "&That", wxPoint(10,160), wxSize(-1,-1), WXSIZEOF(choices2), choices2, 1, wxRA_SPECIFY_ROWS );
+    (void)new MyRadioBox( panel, ID_RADIOBOX, "&That", wxPoint(10,160), wxSize(-1,-1), WXSIZEOF(choices2), choices2, 1, wxRA_SPECIFY_ROWS );
     m_radio = new wxRadioBox( panel, ID_RADIOBOX, "T&his", wxPoint(10,10), wxSize(-1,-1), WXSIZEOF(choices), choices, 1, wxRA_SPECIFY_COLS );
 
 #if wxUSE_TOOLTIPS
