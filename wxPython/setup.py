@@ -214,12 +214,12 @@ def Verify_WX_CONFIG():
             fp = os.path.join(p, WX_CONFIG)
             if os.path.exists(fp) and os.access(fp, os.X_OK):
                 # success
-                print "Found wx-config: " + fp
+                msg("Found wx-config: " + fp)
                 WX_CONFIG = fp
                 break
         else:
-            print "WX_CONFIG not specified and %s not found on $PATH " \
-                  "defaulting to \"wx-config\"" % WX_CONFIG
+            msg("WX_CONFIG not specified and %s not found on $PATH "
+                  "defaulting to \"wx-config\"" % WX_CONFIG)
             WX_CONFIG = 'wx-config'
 
 #----------------------------------------------------------------------
@@ -388,7 +388,6 @@ elif os.name == 'posix':
         GENDIR = 'gtk' # no code differences so use the same generated sources
         portcfg = os.popen('pkg-config gtk+-2.0 --cflags', 'r').read()[:-1]
         BUILD_BASE = BUILD_BASE + '-' + WXPORT
-        print "got here..."
     elif WXPORT == 'x11':
         WXPLAT = '__WXX11__'
         portcfg = ''
