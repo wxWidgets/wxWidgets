@@ -290,7 +290,8 @@ wxDllLoader::GetSymbol(wxDllType dllHandle, const wxString &name)
 #elif defined( __WXPM__ ) || defined(__EMX__)
     wxDllGetSymbol(dllHandle, symbol);
 #else
-    symbol = wxDllGetSymbol(dllHandle, name);
+    // mb_str() is necessary in Unicode build
+    symbol = wxDllGetSymbol(dllHandle, name.mb_str());
 #endif
 
     if ( !symbol )
