@@ -236,9 +236,10 @@ wxString wxMenuItemBase::GetLabelFromText(
     return label;
 }
 
-// radio group stuff
+//
+// Radio group stuff
 // -----------------
-
+//
 void wxMenuItem::SetAsRadioGroupStart()
 {
     m_bIsRadioGroupStart = TRUE;
@@ -248,22 +249,22 @@ void wxMenuItem::SetRadioGroupStart(
   int                               nStart
 )
 {
-    wxASSERT_MSG( !m_bIsRadioGroupStart,
-                  _T("should only be called for the next radio items") );
+    wxASSERT_MSG( !m_bIsRadioGroupStart
+                 ,_T("should only be called for the next radio items")
+                );
 
     m_vRadioGroup.m_nStart = nStart;
-} // end of wxMenuItem::SetRadioGroupStart
+} // wxMenuItem::SetRadioGroupStart
 
 void wxMenuItem::SetRadioGroupEnd(
   int                               nEnd
 )
 {
-    wxASSERT_MSG( m_bIsRadioGroupStart,
-                  _T("should only be called for the first radio item") );
-
+    wxASSERT_MSG( m_bIsRadioGroupStart
+                 ,_T("should only be called for the first radio item")
+                );
     m_vRadioGroup.m_nEnd = nEnd;
 } // end of wxMenuItem::SetRadioGroupEnd
-
 
 // change item state
 // -----------------
@@ -306,7 +307,8 @@ void wxMenuItem::Check(
         return;
 
     HMENU                           hMenu = GetHmenuOf(m_parentMenu);
-    if ( GetKind() == wxITEM_RADIO )
+
+    if (GetKind() == wxITEM_RADIO)
     {
         //
         // It doesn't make sense to uncheck a radio item - what would this do?
@@ -319,23 +321,26 @@ void wxMenuItem::Check(
         //
         const wxMenuItemList&       rItems = m_parentMenu->GetMenuItems();
         int                         nPos = rItems.IndexOf(this);
-        int                         nStart;
-        int                         nEnd;
 
-        wxCHECK_RET( nPos != wxNOT_FOUND,
-                     _T("menuitem not found in the menu items list?") );
+        wxCHECK_RET( nPos != wxNOT_FOUND
+                    ,_T("menuitem not found in the menu items list?")
+                   );
 
         //
         // Get the radio group range
         //
+        int                         nStart;
+        int                         nEnd;
 
         if (m_bIsRadioGroupStart)
         {
-            // we already have all information we need
+            //
+            // We already have all information we need
+            //
             nStart = nPos;
-            nEnd = m_vRadioGroup.m_nEnd;
+            nEnd   = m_vRadioGroup.m_nEnd;
         }
-        else // Next radio group item
+        else // next radio group item
         {
             //
             // Get the radio group end from the start item
@@ -351,26 +356,22 @@ void wxMenuItem::Check(
 
         for (int n = nStart; n <= nEnd && pNode; n++)
         {
+            if (n == nPos)
+            {
+                ::WinSendMsg( hMenu
+                             ,MM_SETITEMATTR
+                             ,MPFROM2SHORT(n, TRUE)
+                             ,MPFROM2SHORT(MIA_CHECKED, MIA_CHECKED)
+                            );
+            }
             if (n != nPos)
             {
                 pNode->GetData()->m_isChecked = FALSE;
-            }
-
-            if (n == nPos)
-            {
-                bOk = (bool)::WinSendMsg( hMenu
-                                         ,MM_SETITEMATTR
-                                         ,MPFROM2SHORT(n, TRUE)
-                                         ,MPFROM2SHORT(MIA_CHECKED, MIA_CHECKED)
-                                        );
-            }
-            else
-            {
-                bOk = (bool)::WinSendMsg( hMenu
-                                         ,MM_SETITEMATTR
-                                         ,MPFROM2SHORT(n, TRUE)
-                                         ,MPFROM2SHORT(MIA_CHECKED, FALSE)
-                                        );
+                ::WinSendMsg( hMenu
+                             ,MM_SETITEMATTR
+                             ,MPFROM2SHORT(n, TRUE)
+                             ,MPFROM2SHORT(MIA_CHECKED, FALSE)
+                            );
             }
             pNode = pNode->GetNext();
         }

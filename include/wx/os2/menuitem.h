@@ -49,7 +49,7 @@ public:
                ,int             nId = wxID_SEPARATOR
                ,const wxString& rStrName = ""
                ,const wxString& rWxHelp = ""
-               ,wxItemKind      kind = wxITEM_NORMAL
+               ,wxItemKind      eKind = wxITEM_NORMAL
                ,wxMenu*         pSubMenu = NULL
               );
 
@@ -88,6 +88,9 @@ public:
     //
     int GetRealId(void) const;
 
+    //
+    // Mark item as belonging to the given radio group
+    //
     void SetAsRadioGroupStart(void);
     void SetRadioGroupStart(int nStart);
     void SetRadioGroupEnd(int nEnd);
@@ -110,8 +113,13 @@ private:
     {
         int m_nStart;
         int m_nEnd;
-    }                               m_vRadioGroup;
+    } m_vRadioGroup;
+
+    //
+    // Does this item start a radio group?
+    //
     bool                            m_bIsRadioGroupStart;
+
     DECLARE_DYNAMIC_CLASS(wxMenuItem)
 }; // end of CLASS wxMenuItem
 

@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\DEV\Wx2\WxWindows\lib\wx.lib
+;From library:  F:\DEV\WX2\WXWINDOWS\LIB\WX.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1709,6 +1709,8 @@ EXPORTS
       wxConstructorForwxSysColourChangedEvent__Fv
       ;wxConstructorForwxNavigationKeyEvent()
       wxConstructorForwxNavigationKeyEvent__Fv
+      ;wxConstructorForwxMouseCaptureChangedEvent()
+      wxConstructorForwxMouseCaptureChangedEvent__Fv
       ;wxConstructorForwxHelpEvent()
       wxConstructorForwxHelpEvent__Fv
       ;wxEvtHandler::~wxEvtHandler()
@@ -1879,6 +1881,8 @@ EXPORTS
       sm_classwxScrollWinEvent__16wxScrollWinEvent
       ;wxNcPaintEvent::sm_classwxNcPaintEvent
       sm_classwxNcPaintEvent__14wxNcPaintEvent
+      ;wxMouseCaptureChangedEvent::sm_classwxMouseCaptureChangedEvent
+      sm_classwxMouseCaptureChangedEvent__26wxMouseCaptureChangedEvent
       ;wxIdleEvent::sm_classwxIdleEvent
       sm_classwxIdleEvent__11wxIdleEvent
       ;wxDropFilesEvent::sm_classwxDropFilesEvent
@@ -1921,7 +1925,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -6023,7 +6027,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -7706,12 +7710,16 @@ EXPORTS
       SetFilterIndex__16wxGenericDirCtrlFi
       ;wxDirFilterListCtrl::FillFilterList(const wxString&,int)
       FillFilterList__19wxDirFilterListCtrlFRC8wxStringi
+      ;wxGenericDirCtrl::ReCreateTree()
+      ReCreateTree__16wxGenericDirCtrlFv
       ;wxGenericDirCtrl::SetupSections()
       SetupSections__16wxGenericDirCtrlFv
       ;wxGenericDirCtrl::ShowHidden(unsigned long)
       ShowHidden__16wxGenericDirCtrlFUl
       ;wxGenericDirCtrl::OnCollapseItem(wxTreeEvent&)
       OnCollapseItem__16wxGenericDirCtrlFR11wxTreeEvent
+      ;wxGenericDirCtrl::CollapseDir(wxTreeItemId)
+      CollapseDir__16wxGenericDirCtrlF12wxTreeItemId
       ;wxDirItemData::HasSubDirs() const
       HasSubDirs__13wxDirItemDataCFv
       ;wxGenericDirCtrl::GetPath() const
@@ -13246,10 +13254,12 @@ EXPORTS
       OS2Command__6wxMenuFUiUs
       ;wxMenuBar::EnableTop(unsigned int,unsigned long)
       EnableTop__9wxMenuBarFUiUl
-      ;wxMenu::DoAppend(wxMenuItem*)
-      DoAppend__6wxMenuFP10wxMenuItem
+      ;wxMenu::Attach(wxMenuBarBase*)
+      Attach__6wxMenuFP13wxMenuBarBase
       ;wxMenu::DoRemove(wxMenuItem*)
       DoRemove__6wxMenuFP10wxMenuItem
+      ;wxMenu::DoAppend(wxMenuItem*)
+      DoAppend__6wxMenuFP10wxMenuItem
       ;wxMenu::CopyAccels(wxAcceleratorEntry*) const
       CopyAccels__6wxMenuCFP18wxAcceleratorEntry
       ;wxMenuBar::Refresh()
@@ -14977,8 +14987,8 @@ EXPORTS
       FindItemByHWND__8wxWindowCFUlT1
       ;wxWindow::HandleKeyUp(void*,void*)
       HandleKeyUp__8wxWindowFPvT1
-      ;wxWindow::HandleChar(unsigned long,void*,unsigned long)
-      HandleChar__8wxWindowFUlPvT1
+      ;wxWindow::HandleChar(void*,void*,unsigned long)
+      HandleChar__8wxWindowFPvT1Ul
       ;wxWindow::DoMoveWindow(int,int,int,int)
       DoMoveWindow__8wxWindowFiN31
       ;wxWindow::DoClientToScreen(int*,int*) const

@@ -113,6 +113,7 @@ static wxString TextToLabel(const wxString& rTitle)
 void wxMenu::Init()
 {
     m_bDoBreak = FALSE;
+    m_nStartRadioGroup = -1;
 
     //
     // Create the menu (to be used as a submenu or a popup)
@@ -151,9 +152,6 @@ void wxMenu::Init()
               );
         AppendSeparator();
     }
-    for (int i = 0; i < 128; i++)
-        m_vAccels[i] = NULL;
-    m_nNextAccel = 0;
 } // end of wxMenu::Init
 
 //
@@ -177,17 +175,7 @@ wxMenu::~wxMenu()
     //
     // Delete accels
     //
-#if (!(defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )))
-    for (int i = 0; i < 128; i++)
-    {
-        if (m_vAccels[i])
-        {
-            delete m_vAccels[i];
-            m_vAccels[i] = NULL;
-        }
-    }
-//    WX_CLEAR_ARRAY(m_vAccels);
-#endif
+    WX_CLEAR_ARRAY(m_vAccels);
 #endif // wxUSE_ACCEL
 } // end of wxMenu::~wxMenu
 
@@ -197,31 +185,26 @@ void wxMenu::Break()
     m_bDoBreak = TRUE;
 } // end of wxMenu::Break
 
-#if wxUSE_ACCEL
-
-void wxMenu::EndRadioGroup()
+void wxMenu::Attach(
+  wxMenuBarBase*                    pMenubar
+)
 {
-    //
-    // We're not inside a radio group any longer
-    //
-    m_nStartRadioGroup = -1;
-} // end of wxMenu::EndRadioGroup
+    wxMenuBase::Attach(pMenubar);
+    EndRadioGroup();
+} // end of wxMenu::Break;
+
+#if wxUSE_ACCEL
 
 int wxMenu::FindAccel(
   int                               nId
 ) const
 {
     size_t                          n;
-//    size_t                          nCount = m_vAccels.GetCount();
+    size_t                          nCount = m_vAccels.GetCount();
 
-    for (n = 0; n < m_nNextAccel; n++)
-    {
-        if (m_vAccels[n] != NULL)
-        {
-            if (m_vAccels[n]->m_command == nId)
-                return n;
-        }
-    }
+    for (n = 0; n < nCount; n++)
+        if (m_vAccels[n]->m_command == nId)
+            return n;
     return wxNOT_FOUND;
 } // end of wxMenu::FindAccel
 
@@ -246,6 +229,7 @@ void wxMenu::UpdateAccel(
         // Find the (new) accel for this item
         //
         wxAcceleratorEntry*         pAccel = wxGetAccelFromString(pItem->GetText());
+
         if (pAccel)
             pAccel->m_command = pItem->GetId();
 
@@ -260,17 +244,9 @@ void wxMenu::UpdateAccel(
             // No old, add new if any
             //
             if (pAccel)
-            {
-                if (m_nNextAccel < 128)
-                {
-                    m_vAccels[m_nNextAccel] = pAccel;
-                    m_nNextAccel++;
-                }
-                else
-                    return;     // skipping RebuildAccelTable() below
-            }
+                m_vAccels.Add(pAccel);
             else
-                return;     // skipping RebuildAccelTable() below
+                return;
         }
         else
         {
@@ -278,10 +254,10 @@ void wxMenu::UpdateAccel(
             // Replace old with new or just remove the old one if no new
             //
             delete m_vAccels[n];
-            m_vAccels[n] = NULL;
-
             if (pAccel)
                 m_vAccels[n] = pAccel;
+            else
+                m_vAccels.RemoveAt(n);
         }
 
         if (IsAttached())
@@ -437,6 +413,14 @@ bool wxMenu::DoInsertOrAppend(
     return FALSE;
 } // end of wxMenu::DoInsertOrAppend
 
+void wxMenu::EndRadioGroup()
+{
+    //
+    // We're not inside a radio group any longer
+    //
+    m_nStartRadioGroup = -1;
+} // end of wxMenu::EndRadioGroup
+
 bool wxMenu::DoAppend(
   wxMenuItem*                       pItem
 )
@@ -473,6 +457,7 @@ bool wxMenu::DoAppend(
             // We need to update its end item
             //
             pItem->SetRadioGroupStart(m_nStartRadioGroup);
+
             wxMenuItemList::Node*   pNode = GetMenuItems().Item(m_nStartRadioGroup);
 
             if (pNode)
@@ -489,16 +474,20 @@ bool wxMenu::DoAppend(
     {
         EndRadioGroup();
     }
+
     if (!wxMenuBase::DoAppend(pItem) || !DoInsertOrAppend(pItem))
     {
         return FALSE;
     }
     if (bCheck)
     {
+        //
+        // Check the item initially
+        //
         pItem->Check(TRUE);
     }
     return TRUE;
-} // end of wxMenu::DoInsert
+} // end of wxMenu::DoAppend
 
 bool wxMenu::DoInsert(
   size_t                            nPos
@@ -509,7 +498,8 @@ bool wxMenu::DoInsert(
                                   ,pItem) &&
              DoInsertOrAppend( pItem
                               ,nPos
-                             ));
+                             )
+           );
 } // end of wxMenu::DoInsert
 
 wxMenuItem* wxMenu::DoRemove(
@@ -543,7 +533,7 @@ wxMenuItem* wxMenu::DoRemove(
     if (n != wxNOT_FOUND)
     {
         delete m_vAccels[n];
-        m_vAccels[n] = NULL;
+        m_vAccels.RemoveAt(n);
     }
 
 #endif // wxUSE_ACCEL
@@ -1120,7 +1110,7 @@ void wxMenuBar::Attach(
   wxFrame*                          pFrame
 )
 {
-    wxASSERT_MSG( !IsAttached(), wxT("menubar already attached!") );
+    wxMenuBarBase::Attach(pFrame);
 
 #if wxUSE_ACCEL
     RebuildAccelTable();
@@ -1128,8 +1118,8 @@ void wxMenuBar::Attach(
     // Ensure the accelerator table is set to the frame (not the client!)
     //
     if (!::WinSetAccelTable( vHabmain
-                            ,(HWND)pFrame->GetHWND()
                             ,m_vAccelTable.GetHACCEL()
+                            ,(HWND)pFrame->GetFrame()
                            ))
         wxLogLastError("WinSetAccelTable");
 #endif // wxUSE_ACCEL

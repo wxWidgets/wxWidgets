@@ -403,7 +403,7 @@ bool wxComboBox::ProcessEditMsg(
             switch(vFlag)
             {
                 case KC_CHAR:
-                    return (HandleChar( SHORT1FROMMP(wParam)
+                    return (HandleChar( wParam
                                        ,lParam
                                        ,TRUE /* isASCII */
                                       ));
@@ -418,6 +418,13 @@ bool wxComboBox::ProcessEditMsg(
                                         ,lParam
                                        ));
             }
+            break;
+
+        case WM_SETFOCUS:
+            if (SHORT1FROMMP((MPARAM)lParam) == TRUE)
+                return(HandleSetFocus((WXHWND)(HWND)wParam));
+            else
+                return(HandleKillFocus((WXHWND)(HWND)wParam));
             break;
     }
     return FALSE;
@@ -440,6 +447,7 @@ MRESULT EXPENTRY wxComboEditWndProc(
         //
         // Forward some messages to the combobox
         //
+        case WM_SETFOCUS:
         case WM_CHAR:
             {
                 wxComboBox*         pCombo = wxDynamicCast( pWin

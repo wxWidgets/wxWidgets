@@ -405,7 +405,7 @@ public:
                          ,int    nY
                          ,WXUINT uFlags
                         );
-    bool HandleChar( WXDWORD  wParam
+    bool HandleChar( WXWPARAM wParam
                     ,WXLPARAM lParam
                     ,bool     bIsASCII = FALSE
                    );

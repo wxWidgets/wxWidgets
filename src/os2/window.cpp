@@ -2759,20 +2759,7 @@ MRESULT wxWindowOS2::OS2WindowProc(
                                 break;
 
                             default:
-                                if (m_bLastKeydownProcessed)
-                                {
-                                    //
-                                    // The key was handled in the EVT_KEY_DOWN and handling
-                                    // a key in an EVT_KEY_DOWN handler is meant, by
-                                    // design, to prevent EVT_CHARs from happening
-                                    //
-                                    m_bLastKeydownProcessed = FALSE;
-                                    bProcessed = TRUE;
-                                }
-                                else // do generate a CHAR event
-                                {
-                                    bProcessed = HandleChar((WXDWORD)wParam, lParam);
-                                }
+                                bProcessed = HandleChar(wParam, lParam);
                          }
                          break;
                     }
@@ -2790,7 +2777,7 @@ MRESULT wxWindowOS2::OS2WindowProc(
                         }
                         else // do generate a CHAR event
                         {
-                            bProcessed = HandleChar((WXDWORD)wParam, lParam, TRUE);
+                            bProcessed = HandleChar(wParam, lParam, TRUE);
                             break;
                         }
                     }
@@ -4050,7 +4037,7 @@ wxKeyEvent wxWindowOS2::CreateKeyEvent(
 // WM_KEYDOWN one
 //
 bool wxWindowOS2::HandleChar(
-  WXDWORD                           wParam
+  WXWPARAM                          wParam
 , WXLPARAM                          lParam
 , bool                              isASCII
 )
@@ -4073,7 +4060,7 @@ bool wxWindowOS2::HandleChar(
         //
         // If 1 -> 26, translate to CTRL plus a letter.
         //
-        vId = wParam;
+        vId = (int)wParam;
         if ((vId > 0) && (vId < 27))
         {
             switch (vId)
@@ -4098,7 +4085,7 @@ bool wxWindowOS2::HandleChar(
     }
     else  // we're called from WM_KEYDOWN
     {
-        vId = wxCharCodeOS2ToWX(wParam);
+        vId = wxCharCodeOS2ToWX((int)wParam);
         if (vId == 0)
             return FALSE;
     }
