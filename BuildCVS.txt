@@ -158,8 +158,10 @@ VII) Unix->Windows cross-compiling using configure
 
 First you'll need a cross-compiler; linux glibc binaries of mingw32 and
 cygwin32 (both based on egcs) can be found at
-ftp://ftp.objsw.com/pub/crossgcc/linux-x-win32. Otherwise you can
-compile one yourself. Check the relevant FAQs.
+ftp://ftp.objsw.com/pub/crossgcc/linux-x-win32. Alternative binaries,
+based on the latest MinGW release can be found at
+http://members.telering.at/jessich/mingw/mingwcross/mingw_cross.html 
+Otherwise you can compile one yourself.
 
 [ A Note about cygwin32 and mingw32: the main difference is that cygwin32
 binaries are always linked against cygwin.dll. This dll encapsulates most
@@ -179,8 +181,7 @@ To cross compile the windows library, do
 -> cd win32
 (or whatever you called it)
 Now run configure. There are two ways to do this
--> ../configure --host=i586-mingw32 --build=i586-linux --with-mingw \
-   --enable-dnd=no --without-odbc
+-> ../configure --host=i586-mingw32 --build=i586-linux --with-mingw
 where --build= should read whatever platform you're building on. Configure
 will notice that build and host platforms differ, and automatically prepend
 i586-mingw32- to gcc, ar, ld, etc (make sure they're in the PATH!).
@@ -188,29 +189,22 @@ The other way to run configure is by specifying the names of the binaries
 yourself:
 -> CC=i586-mingw32-gcc CXX=i586-mingw32-g++ RANLIB=i586-mingw32-ranlib \
    DLLTOOL=i586-mingw32-dlltool LD=i586-mingw32-ld NM=i586-mingw32-nm \
-   ../configure --host=i586-mingw32 --with-mingw --enable-dnd=no
+   ../configure --host=i586-mingw32 --with-mingw
 
 (all assuming you're using mingw32)
-Drag'n'drop is disabled because mingw32 lacks (AFAIK) OLE headers.
-
-[ Update: some new mingw32 versions now have a new set of windows header
-files, which apparently can handle ole. Untested at the moment ]
-
-ODBC files don't compile as of 13.10.99 - may be this will be fixed by the
-moment you're reading these lines.
-
-Configure will conclude that shared libraries are out of the question and
-opt for a static one. I haven't looked into DLL creation yet.
+By default this will compile a DLL, if you want a static library,
+specify --disable-shared.
 
 Type
 -> make
 and wait, wait, wait. Don't leave the room, because the minute you do there
 will be a compile error :-)
 
-NB: you risk to get quite a few warnings about "ANSI C++ forbids implicit
-    conversion from 'void *'" in all places where va_arg macro is used. This
-    is due to a bug in (some versions of) mingw32 headers which may be
-    corrected by editing the file
+NB: if you are using a very old compiler you risk to get quite a few warnings
+    about "ANSI C++ forbids implicit conversion from 'void *'" in all places
+    where va_arg macro is used. This is due to a bug in (some versions of)
+    mingw32 headers which may be corrected by upgrading your compier,
+    otherwise you might edit the file
 
     ${install_prefix}/lib/gcc-lib/i586-mingw32/egcs-2.91.57/include/stdarg.h
 
@@ -231,8 +225,9 @@ typedef void *__gnuc_va_list;
     and adding "|| defined(_WIN32)" to the list of platforms on which
     __gnuc_va_list is char *.
 
-If this is successful, you end up with a libwx_msw.a in win32/lib.  Now try
-building the minimal sample:
+If this is successful, you end up with a wx23_2.dll/libwx23_2.a in win32/lib
+( or just libwx_msw.a if you opted for a static build ).
+Now try building the minimal sample:
 
 -> cd samples/minimal
 -> make
@@ -252,6 +247,5 @@ Cross-compiling TODO:
 - resource compiling must be done manually for now (should/can we link the
 default wx resources into libwx_msw.a?) [ No we can't; the linker won't
 link it in... you have to supply an object file ]
-- dynamic libraries
 - static executables are HUGE -- there must be room for improvement.
 
