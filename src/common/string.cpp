@@ -880,6 +880,33 @@ int wxString::Find(const char *pszSub) const
 }
 
 // ---------------------------------------------------------------------------
+// stream-like operators
+// ---------------------------------------------------------------------------
+wxString& wxString::operator<<(int i)
+{
+    wxString res;
+    res.Printf("%d", i);
+
+    return (*this) << res;
+}
+
+wxString& wxString::operator<<(float f)
+{
+    wxString res;
+    res.Printf("%f", f);
+
+    return (*this) << res;
+}
+
+wxString& wxString::operator<<(double d)
+{
+    wxString res;
+    res.Printf("%g", d);
+
+    return (*this) << res;
+}
+
+// ---------------------------------------------------------------------------
 // formatted output
 // ---------------------------------------------------------------------------
 int wxString::Printf(const char *pszFormat, ...)
@@ -896,11 +923,53 @@ int wxString::Printf(const char *pszFormat, ...)
 
 int wxString::PrintfV(const char* pszFormat, va_list argptr)
 {
+#ifdef __WXMSW__
+  #ifdef _MSC_VER
+    #define wxVsprintf     _vsnprintf
+  #endif
+#else // guess that any Unix has snprintf() - feel free to insert additional
+      // platform/compiler tests here if this is not the case for you
+  #define wxVsprintf       vsnprintf
+#endif
+  
+#ifndef wxVsprintf
+  #pragma message("Using sprintf() because no snprintf()-like function defined")
+  #define wxVsprintf vsprintf
+#endif
+
+  // static buffer to avoid dynamic memory allocation each time
   static char s_szScratch[1024];
 
-  int iLen = vsprintf(s_szScratch, pszFormat, argptr);
+  int iLen = wxVsprintf(s_szScratch, WXSIZEOF(s_szScratch), pszFormat, argptr);
+  char *buffer;
+  if ( (size_t)iLen < WXSIZEOF(s_szScratch) ) {
+    buffer = s_szScratch;
+  }
+  else {
+      int size = WXSIZEOF(s_szScratch) * 2;
+      buffer = (char *)malloc(size);
+      while ( buffer != NULL ) {
+          iLen = wxVsprintf(buffer, WXSIZEOF(s_szScratch), pszFormat, argptr);
+          if ( iLen < size ) {
+              // ok, there was enough space
+              break;
+          }
+
+          // still not enough, double it again
+          buffer = (char *)realloc(buffer, size *= 2);
+      }
+
+      if ( !buffer ) {
+          // out of memory
+          return -1;
+      }
+  }
+
   AllocBeforeWrite(iLen);
-  strcpy(m_pchData, s_szScratch);
+  strcpy(m_pchData, buffer);
+
+  if ( buffer != s_szScratch )
+      free(buffer);
 
   return iLen;
 }

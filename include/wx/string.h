@@ -257,14 +257,23 @@ public:
   size_t Len() const { return GetStringData()->nDataLength; }
     /// string contains any characters?
   bool IsEmpty() const { return Len() == 0; }
-    /// reinitialize string (and free memory)
+    /// empty string contents
   void Empty()
   {
     if ( !IsEmpty() )
       Reinit();
 
+    // should be empty
     wxASSERT( GetStringData()->nDataLength == 0 );
-    wxASSERT( GetStringData()->nAllocLength == 0 );
+  }
+    /// empty the string and free memory
+  void Clear()
+  {
+    if ( !GetStringData()->IsEmpty() )
+      Reinit();
+
+    wxASSERT( GetStringData()->nDataLength == 0 );  // should be empty
+    wxASSERT( GetStringData()->nAllocLength == 0 ); // and not own any memory
   }
 
     /// Is an ascii value
@@ -372,6 +381,16 @@ public:
     //@}
   //@}
 
+  /** @name stream-like functions */
+  //@{
+        /// insert an int into string
+    wxString& operator<<(int i);
+        /// insert a float into string
+    wxString& operator<<(float f);
+        /// insert a double into string
+    wxString& operator<<(double d);
+  //@}
+  
   /** @name string comparison */
   //@{
     /**
