@@ -9,6 +9,7 @@ set -o errexit
 
 host=$2
 flavor=$3
+pyver=$4
 
 if [ $skiposx != yes ]; then
     # test if the target machine is online
@@ -31,7 +32,7 @@ if [ $skiposx != yes ]; then
     echo "Running build script on $host..."
     wxdir=$OSX_BUILD/wxPython-src-$VERSION
     cmd=./do-build-osx
-    ssh root@$host "cd $OSX_BUILD && $cmd $wxdir $OSX_BUILD $skipclean $VERSION $flavor $PYVER && rm $cmd"
+    ssh root@$host "cd $OSX_BUILD && $cmd $wxdir $OSX_BUILD $skipclean $VERSION $flavor $pyver && rm $cmd"
     
     echo "Fetching the results..."
     scp "root@$host:$OSX_BUILD/wxPython*-osx*"  $STAGING_DIR

@@ -230,9 +230,9 @@ if [ $skipbuild != yes ]; then
     if [ "$UID" = "0" ]; then
 	chmod a+w lib
 	if [ "$CHARTYPE" = "ansi" ]; then
-	    su robind -c "make lib/libwx_macd-2.5.3.r"
+	    su robind -c "make lib/libwx_macd-2.5.4.r"
 	else
-	    su robind -c "make lib/libwx_macud-2.5.3.r"
+	    su robind -c "make lib/libwx_macud-2.5.4.r"
 	fi
     fi
 

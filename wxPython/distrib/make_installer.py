@@ -405,6 +405,12 @@ Source: "samples\doodle\*.bat";             DestDir: "{app}\samples\doodle";
 Source: "samples\doodle\sample.ddl";        DestDir: "{app}\samples\doodle"; 
 Source: "samples\doodle\superdoodle.iss";   DestDir: "{app}\samples\doodle"; 
 
+Source: "samples\docview\*.py";                          DestDir: "{app}\samples\docview"; 
+Source: "samples\docview\activegrid\*.py";               DestDir: "{app}\samples\docview\activegrid"; 
+Source: "samples\docview\activegrid\tool\*.py";          DestDir: "{app}\samples\docview\activegrid\tool"; 
+Source: "samples\docview\activegrid\tool\data\*.txt";    DestDir: "{app}\samples\docview\activegrid\tool\data"; 
+Source: "samples\docview\activegrid\tool\images\*.jpg";  DestDir: "{app}\samples\docview\activegrid\tool\images"; 
+
 Source: "samples\embedded\*.py";            DestDir: "{app}\samples\embedded"; 
 Source: "samples\embedded\*.cpp";           DestDir: "{app}\samples\embedded"; 
 Source: "samples\embedded\*.txt";           DestDir: "{app}\samples\embedded"; 

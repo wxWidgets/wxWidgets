@@ -56,6 +56,11 @@ wxPython/include/wx/wxPython
 wxPython/licence
 wxPython/samples
 wxPython/samples/StyleEditor
+wxPython/samples/docview
+wxPython/samples/docview/activegrid
+wxPython/samples/docview/activegrid/tool
+wxPython/samples/docview/activegrid/tool/data
+wxPython/samples/docview/activegrid/tool/images
 wxPython/samples/doodle
 wxPython/samples/embedded
 wxPython/samples/frogedit

@@ -39,14 +39,14 @@ if [ $skiplinux != yes ]; then
 	hostAvailable=yes
     else
 	# Attempt to start the host via it's coLinux host, if there is one
-	if [ $coHost != none ]; then 
+	if [ $coHost != none -a $startcohost == yes ]; then 
 	    if TestOnline $coHost; then
 		echo "Attempting to start $host via coLinux on $coHost..."
 		ssh $coHost "/c/coLinux/VMs/$host.bat -d > /dev/null 2>&1 &"
 
 		# Give it time to boot and be ready for conenctions,
 		# and then test with ssh, limiting retries.
-		for x in `seq 12`; do
+		for x in `seq 36`; do
 		    sleep 5
 		    echo "checking..."
 		    if ssh root@$host "true" >/dev/null 2>&1; then

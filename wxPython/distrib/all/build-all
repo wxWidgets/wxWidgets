@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python -u
 #----------------------------------------------------------------------
 # Name:        build-all.py
 # Purpose:     Master build script for building all the installers and
@@ -73,7 +73,7 @@ config.skiplinux = "no"
 config.skipclean = "no"
 config.skipupload = "no"
 config.skipnewdocs = "no"
-
+config.startcohost = "yes"
 
 #----------------------------------------------------------------------
 # Define all the build tasks
@@ -93,34 +93,31 @@ initialTask = Task([ Job("", ["distrib/all/build-setup", CFGFILE]),
 # Build tasks.  Anything that can be done in parallel (depends greatly
 # on the nature of the build machine configurations...) is a separate
 # task.
-windowsTask = Task( [Job("beast", ["distrib/all/build-windows", CFGFILE, "2.3"]),
-                     Job("beast", ["distrib/all/build-windows", CFGFILE, "2.4"])
-                    ])
 
 jaguarTask =  Task( Job(config.OSX_HOST_jaguar,
-                        ["distrib/all/build-osx", CFGFILE, config.OSX_HOST_jaguar, "jaguar"]) )
+                        ["distrib/all/build-osx", CFGFILE, config.OSX_HOST_jaguar, "jaguar", "2.3"]) )
 
 pantherTask =  Task( Job(config.OSX_HOST_panther,
-                         ["distrib/all/build-osx", CFGFILE, config.OSX_HOST_panther, "panther"]) )
+                         ["distrib/all/build-osx", CFGFILE, config.OSX_HOST_panther, "panther", "2.3"]) )
 
-rpmTask1 = Task([ Job("co-rh9",    ["distrib/all/build-rpm", CFGFILE, "beast", "co-rh9",   "rh9",   "2.3"]),
-                  Job("co-rh9",    ["distrib/all/build-rpm", CFGFILE, "beast", "co-rh9",   "rh9",   "2.4"]),
-                  Job("co-fc2",    ["distrib/all/build-rpm", CFGFILE, "beast", "co-fc2",   "fc2",   "2.3"]),
-                  Job("co-fc2",    ["distrib/all/build-rpm", CFGFILE, "beast", "co-fc2",   "fc2",   "2.4"]),
-                  ])
+beastTask1 = Task( [Job("beast.23",     ["distrib/all/build-windows", CFGFILE, "2.3"]),
+                    Job("co-rh9.23",    ["distrib/all/build-rpm", CFGFILE, "beast", "co-rh9",   "rh9",   "2.3"]),
+                    Job("beast.24",     ["distrib/all/build-windows", CFGFILE, "2.4"]),
+                    Job("co-rh9.24",    ["distrib/all/build-rpm", CFGFILE, "beast", "co-rh9",   "rh9",   "2.4"]),
+                    ])
 
-rpmTask2 = Task([
-                  Job("co-mdk92",  ["distrib/all/build-rpm", CFGFILE, "beast", "co-mdk92", "mdk92", "2.3"]),
-                  Job("co-mdk92",  ["distrib/all/build-rpm", CFGFILE, "beast", "co-mdk92", "mdk92", "2.4"]),
-                  Job("co-mdk101", ["distrib/all/build-rpm", CFGFILE, "beast", "co-mdk101","mdk101","2.3"]),
-                  Job("co-mdk101", ["distrib/all/build-rpm", CFGFILE, "beast", "co-mdk101","mdk101","2.4"]),
-                  ])
+beastTask2 = Task([ Job("co-mdk92.23",  ["distrib/all/build-rpm", CFGFILE, "beast", "co-mdk92", "mdk92", "2.3"]),
+                    Job("co-mdk101.23", ["distrib/all/build-rpm", CFGFILE, "beast", "co-mdk101","mdk101","2.3"]),
+                    Job("co-fc2.23",    ["distrib/all/build-rpm", CFGFILE, "beast", "co-fc2",   "fc2",   "2.3"]),
+                    Job("co-mdk92.24",  ["distrib/all/build-rpm", CFGFILE, "beast", "co-mdk92", "mdk92", "2.4"]),
+                    Job("co-mdk101.24", ["distrib/all/build-rpm", CFGFILE, "beast", "co-mdk101","mdk101","2.4"]),
+                    Job("co-fc2.24",    ["distrib/all/build-rpm", CFGFILE, "beast", "co-fc2",   "fc2",   "2.4"]),
+                    ])
 
-buildTasks = [ windowsTask,
-               jaguarTask,
+buildTasks = [ jaguarTask,
                pantherTask,
-               rpmTask1,
-               rpmTask2,
+               beastTask1,
+               beastTask2,
                ]
 
 # Finalization.  This is for things that must wait until all the
@@ -150,6 +147,9 @@ def usage():
     print "   skiplinux    Don't do the remote Linux build"
     print "   skipclean    Don't do the cleanup step on the remote builds"
     print "   skipupload   Don't upload the builds to starship"
+    print ""
+    print "   nocohost     Don't start the coLinux sessions if they are"
+    print "                not already online"
     print ""
     
 
@@ -194,6 +194,9 @@ def main(args):
             
         elif flag == "skipupload":
             config.skipupload = "yes"
+
+        elif flag == "nocohost":
+            config.startcohost = "no"
             
         else:
             print 'Unknown flag: "%s"' % flag

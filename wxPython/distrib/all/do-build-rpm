@@ -74,9 +74,12 @@ cp wxPython-src-$VERSION.tar.gz $rpmtop/SOURCES
 echo "******************** PYVER = " $PYVER
 for ver in $PYVER; do 
     echo "Building the RPMs for Python $ver..."
-    DoRPMBuild $ver gtk  0
-    DoRPMBuild $ver gtk2 1
+
+    ## for now let's just do the gtk2 builds
+    ##DoRPMBuild $ver gtk  0
+
     DoRPMBuild $ver gtk2 0
+    DoRPMBuild $ver gtk2 1
 done
 
 
