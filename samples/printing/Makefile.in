@@ -9,6 +9,9 @@
 #
 # Makefile for printing example (UNIX).
 
+top_srcdir = @top_srcdir@
+top_builddir = ../..
+
 PROGRAM=printing
 
 OBJECTS=$(PROGRAM).o
