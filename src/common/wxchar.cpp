@@ -285,12 +285,20 @@ WXDLLEXPORT size_t wxStrspn(const wxChar *s, const wxChar *accept)
 
 WXDLLEXPORT wxChar * wxStrstr(const wxChar *haystack, const wxChar *needle)
 {
-  wxChar *fnd;
-  while ((fnd = wxStrchr(haystack, *needle))) {
-    if (!wxStrcmp(fnd, needle)) return fnd;
-    haystack = fnd + 1;
-  }
-  return (wxChar *)NULL;
+    wxCHECK_RET( needle, NULL, _T("NULL argument in wxStrstr") );
+
+    const size_t len = wxStrlen(needle);
+
+    wxChar *fnd;
+    while ( (fnd = wxStrchr(haystack, *needle)) )
+    {
+        if ( !wxStrncmp(fnd, needle, len) )
+            return fnd;
+
+        haystack = fnd + 1;
+    }
+
+    return (wxChar *)NULL;
 }
 
 WXDLLEXPORT double wxStrtod(const wxChar *nptr, wxChar **endptr)
