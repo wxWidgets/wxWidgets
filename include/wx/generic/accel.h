@@ -33,10 +33,12 @@ public:
     wxAcceleratorTable& operator=(const wxAcceleratorTable& accel)
       { if ( m_refData != accel.m_refData ) Ref(accel); return *this; }
 
+#if WXWIN_COMPATIBILITY_2_4
     bool operator==(const wxAcceleratorTable& accel) const
-        { return m_refData == accel.m_refData; } // FIXME: this is wrong (VZ)
+        { return m_refData == accel.m_refData; }
     bool operator!=(const wxAcceleratorTable& accel) const
         { return !(*this == accel); }
+#endif
 
     bool Ok() const;
 
