@@ -44,10 +44,6 @@ wxWindowDC::wxWindowDC(wxWindow *win) : m_wnd(win)
     {
         m_inPaintHandler = FALSE;
         
-        // VS: we have to update here so that screen's content is up-to-date
-        //     and blitting from wxWindowDC works as expected
-        win->Update();
-
         dc = new MGLDevCtx(MGL_wmBeginPaint(win->GetHandle()));
 
         MGLRegion clip;
