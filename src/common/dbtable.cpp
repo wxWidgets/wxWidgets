@@ -1441,6 +1441,42 @@ bool wxDbTable::DropIndex(const char * idxName)
 }  // wxDbTable::DropIndex()
 
 
+/********** wxDbTable::SetOrderByColNums() **********/
+bool wxDbTable::SetOrderByColNums(int first, ... )
+{
+    int         colNo = first;
+    va_list     argptr;
+
+    bool        abort = FALSE;
+    wxString    tempStr;
+
+    va_start(argptr, first);     /* Initialize variable arguments. */
+    while (!abort && (colNo != wxDB_NO_MORE_COLUMN_NUMBERS))
+    {
+        // Make sure the passed in column number
+        // is within the valid range of columns
+        //
+        // Valid columns are 0 thru noCols-1
+        if (colNo >= noCols || colNo < 0)
+        {
+            abort = TRUE;
+            continue;
+        }
+
+        if (colNo != first)
+            tempStr += ",";
+
+        tempStr += colDefs[colNo].ColName;
+        colNo = va_arg (argptr, int);
+    }
+    va_end (argptr);              /* Reset variable arguments.      */
+
+    SetOrderByClause(tempStr.c_str());
+
+    return (!abort);
+}  // wxDbTable::SetOrderByColNums()
+
+
 /********** wxDbTable::Insert() **********/
 int wxDbTable::Insert(void)
 {
@@ -1830,6 +1866,9 @@ bool wxDbTable::IsColNull(int colNo)
 /********** wxDbTable::CanSelectForUpdate() **********/
 bool wxDbTable::CanSelectForUpdate(void)
 {
+    if (queryOnly)
+        return FALSE;
+
     if (pDb->Dbms() == dbmsMY_SQL)
         return FALSE;
 
