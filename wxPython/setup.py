@@ -458,10 +458,10 @@ if BUILD_OGL:
 if BUILD_STC:
     msg('Preparing STC...')
     location = 'contrib/stc'
-    if os.name == 'nt':
-        STC_H = opj(WXDIR, 'contrib', 'include/wx/stc')
-    else:
-        STC_H = opj(WXPREFIX, 'include/wx-%d.%d/wx/stc' % (VER_MAJOR, VER_MINOR))
+    #if os.name == 'nt':
+    STC_H = opj(WXDIR, 'contrib', 'include/wx/stc')
+    #else:
+    #    STC_H = opj(WXPREFIX, 'include/wx-%d.%d/wx/stc' % (VER_MAJOR, VER_MINOR))
 
 ## NOTE: need to add something like this to the stc.bkl...
 
