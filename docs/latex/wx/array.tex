@@ -95,7 +95,9 @@ class MyDirectory
 ...
 
 // now that we have MyDirectory declaration in scope we may finish the
-// definition of ArrayOfDirectories
+// definition of ArrayOfDirectories -- note that this expands into some C++
+// code and so should only be compiled once (i.e., don't put this in the
+// header, but into a source file or you will get linkin errors)
 #include <wx/arrimpl.cpp> // this is a magic incantation which must be done!
 WX_DEFINE_OBJARRAY(ArrayOfDirectories);
 
@@ -237,7 +239,7 @@ This macro defines a new sorted array class named {\it name} and containing
 the elements of type {\it T}. Example:
 
 \begin{verbatim}
-WX_DEFINE_SORTED_ARRAY(int, wxArrayInt);
+WX_DEFINE_SORTED_ARRAY(int, wxSortedArrayInt);
 
 class MyClass;
 WX_DEFINE_SORTED_ARRAY(MyClass *, wxArrayOfMyClass);
@@ -251,7 +253,7 @@ int CompareInts(int n1, int n2)
     return n1 - n2;
 }
 
-wxArrayInt sorted(CompareInts);
+wxSortedArrayInt sorted(CompareInts);
 
 int CompareMyClassObjects(MyClass *item1, MyClass *item2)
 {
