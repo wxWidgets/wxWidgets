@@ -399,12 +399,17 @@ bool wxFont::FreeResource(
     return FALSE;
 } // end of wxFont::FreeResource
 
-WXHANDLE wxFont::GetResourceHandle()
+WXHANDLE wxFont::GetHFONT() const
 {
     if (!M_FONTDATA)
         return 0;
     else
         return (WXHANDLE)M_FONTDATA->m_hFont;
+} // end of wxFont::GetHFONT
+
+WXHANDLE wxFont::GetResourceHandle()
+{
+    return GetHFONT();
 } // end of wxFont::GetResourceHandle
 
 bool wxFont::IsFree() const

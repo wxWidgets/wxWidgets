@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\Dev\Wx2\Wxwindows\lib\wx.lib
+;From library:  H:\DEV\WX2\WXWINDOWS\lib\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1503,6 +1503,7 @@ EXPORTS
       CopyObject__14wxCommandEventCFR8wxObject
       wxEVT_SCROLL_LINEUP
       wxEVT_PAINT
+      wxEVT_NULL
       wxEVT_NC_RIGHT_UP
       wxEVT_NC_PAINT
       wxEVT_LEFT_UP
@@ -2838,6 +2839,37 @@ EXPORTS
       ;wxPNMHandler::DoCanRead(wxInputStream&)
       DoCanRead__12wxPNMHandlerFR13wxInputStream
   ;From object file:  ..\common\imagtiff.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxTIFFHandler::DoCanRead(wxInputStream&)
+      DoCanRead__13wxTIFFHandlerFR13wxInputStream
+      ;TIFFwxOpen(wxOutputStream&,const char*,const char*)
+      TIFFwxOpen__FR14wxOutputStreamPCcT2
+      ;wxTIFFHandler::LoadFile(wxImage*,wxInputStream&,unsigned long,int)
+      LoadFile__13wxTIFFHandlerFP7wxImageR13wxInputStreamUli
+      ;wxTIFFHandler::GetImageCount(wxInputStream&)
+      GetImageCount__13wxTIFFHandlerFR13wxInputStream
+      ;TIFFwxOpen(wxInputStream&,const char*,const char*)
+      TIFFwxOpen__FR13wxInputStreamPCcT2
+      ;wxTIFFHandler::SaveFile(wxImage*,wxOutputStream&,unsigned long)
+      SaveFile__13wxTIFFHandlerFP7wxImageR14wxOutputStreamUl
+      __vft13wxTIFFHandler8wxObject
+      ;wxConstructorForwxTIFFHandler()
+      wxConstructorForwxTIFFHandler__Fv
+      ;wxTIFFHandler::sm_classwxTIFFHandler
+      sm_classwxTIFFHandler__13wxTIFFHandler
+  ;From object file:  ..\common\imagxpm.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxConstructorForwxXPMHandler()
+      wxConstructorForwxXPMHandler__Fv
+      ;wxXPMHandler::sm_classwxXPMHandler
+      sm_classwxXPMHandler__12wxXPMHandler
+      __vft12wxXPMHandler8wxObject
+      ;wxXPMHandler::DoCanRead(wxInputStream&)
+      DoCanRead__12wxXPMHandlerFR13wxInputStream
+      ;wxXPMHandler::SaveFile(wxImage*,wxOutputStream&,unsigned long)
+      SaveFile__12wxXPMHandlerFP7wxImageR14wxOutputStreamUl
+      ;wxXPMHandler::LoadFile(wxImage*,wxInputStream&,unsigned long,int)
+      LoadFile__12wxXPMHandlerFP7wxImageR13wxInputStreamUli
   ;From object file:  ..\common\intl.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxLocale::Init(int,int)
@@ -9460,6 +9492,8 @@ EXPORTS
       Initialize__20wxHtmlHelpControllerFRC8wxString
       ;wxHtmlHelpController::SetFrameParameters(const wxString&,const wxSize&,const wxPoint&,unsigned long)
       SetFrameParameters__20wxHtmlHelpControllerFRC8wxStringRC6wxSizeRC7wxPointUl
+      ;wxHtmlHelpController::SetBookBasePath(const wxString&,int)
+      SetBookBasePath__20wxHtmlHelpControllerFRC8wxStringi
       ;wxConstructorForwxHtmlHelpController()
       wxConstructorForwxHtmlHelpController__Fv
       ;wxHtmlHelpController::~wxHtmlHelpController()
@@ -10579,8 +10613,6 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxClipboard::IsSupported(wxDataFormat)
       IsSupported__11wxClipboardF12wxDataFormat
-      ;wxClipboard::GetData(wxDataObject*)
-      GetData__11wxClipboardFP12wxDataObject
       ;wxGetClipboardFormatName(wxDataFormat,char*,int)
       wxGetClipboardFormatName__F12wxDataFormatPci
       ;wxClipboard::wxClipboard()
@@ -10618,6 +10650,8 @@ EXPORTS
       Flush__11wxClipboardFv
       ;wxIsClipboardFormatAvailable(wxDataFormat)
       wxIsClipboardFormatAvailable__F12wxDataFormat
+      ;wxClipboard::GetData(wxDataObject&)
+      GetData__11wxClipboardFR12wxDataObject
       ;wxClipboard::~wxClipboard()
       __dt__11wxClipboardFv
       ;wxClipboard::Clear()
@@ -11292,6 +11326,8 @@ EXPORTS
       OS2SelectMatchingFontByName__6wxFontFv
       ;wxFont::IsFree() const
       IsFree__6wxFontCFv
+      ;wxFont::GetHFONT() const
+      GetHFONT__6wxFontCFv
       ;wxFont::GetFamily() const
       GetFamily__6wxFontCFv
       ;wxFont::GetFaceName() const
@@ -13377,6 +13413,8 @@ EXPORTS
       ;wxDisplayDepth()
       wxDisplayDepth__Fv
       gs_wxBusyCursor
+      ;wxSetEnv(const wxString&,const char*)
+      wxSetEnv__FRC8wxStringPCc
       ;wxGetHomeDir(wxString*)
       wxGetHomeDir__FP8wxString
       ;wxUsleep(unsigned long)
@@ -13409,6 +13447,8 @@ EXPORTS
       wxIsBusy__Fv
       ;wxGetFreeMemory()
       wxGetFreeMemory__Fv
+      ;wxGetEnv(const wxString&,wxString*)
+      wxGetEnv__FRC8wxStringP8wxString
   ;From object file:  ..\os2\utilsexc.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxExecute(char**,unsigned long,wxProcess*)

@@ -30,14 +30,17 @@
 #else
 #include <utils.h>
 #include <sys\time.h>
+#include <types.h>
 #include <in.h>
 #include <netdb.h>
 #include <nerrno.h>
 #endif
 #if defined(__VISAGECPP__) && __IBMCPP__ < 400
+#include <machine\endian.h>
 #include <socket.h>
 #include <ioctl.h>
 #include <select.h>
+#include <unistd.h>
 #else
 #include <sys\socket.h>
 #include <sys\ioctl.h>
@@ -1160,7 +1163,7 @@ GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port,
 
       port_int = atoi(port);
       addr = (struct sockaddr_in *)address->m_addr;
-      addr->sin_port = htons(port_int);
+//      addr->sin_port = htons(port_int);
       return GSOCK_NOERROR;
     }
 
@@ -1182,7 +1185,7 @@ GSocketError GAddress_INET_SetPort(GAddress *address, unsigned short port)
   CHECK_ADDRESS(address, INET, GSOCK_INVADDR);
 
   addr = (struct sockaddr_in *)address->m_addr;
-  addr->sin_port = htons(port);
+//  addr->sin_port = htons(port);
 
   return GSOCK_NOERROR;
 }
@@ -1230,7 +1233,7 @@ unsigned short GAddress_INET_GetPort(GAddress *address)
   CHECK_ADDRESS(address, INET, 0);
 
   addr = (struct sockaddr_in *)address->m_addr;
-  return ntohs(addr->sin_port);
+  return /*ntohs*/(addr->sin_port);
 }
 
 /*

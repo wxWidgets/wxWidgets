@@ -241,6 +241,7 @@ COMMONOBJS = \
   ..\common\$D\imagpng.obj \
   ..\common\$D\imagpnm.obj \
   ..\common\$D\imagtiff.obj \
+  ..\common\$D\imagxpm.obj \
   ..\common\$D\intl.obj \
   ..\common\$D\ipcbase.obj \
   ..\common\$D\layout.obj \
@@ -354,6 +355,7 @@ COMLIBOBJS2 = \
   imagpng.obj \
   imagpnm.obj \
   imagtiff.obj \
+  imagxpm.obj \
   intl.obj \
   ipcbase.obj \
   layout.obj \
@@ -385,10 +387,10 @@ COMLIBOBJS2 = \
   socket.obj \
   strconv.obj \
   stream.obj \
-  string.obj \
-  tbarbase.obj
+  string.obj
 
 COMLIBOBJS3 = \
+  tbarbase.obj \
   textcmn.obj \
   textfile.obj \
   timercmn.obj \
@@ -692,6 +694,7 @@ $(COMLIBOBJS2):
   copy ..\common\$D\imagpng.obj
   copy ..\common\$D\imagpnm.obj
   copy ..\common\$D\imagtiff.obj
+  copy ..\common\$D\imagxpm.obj
   copy ..\common\$D\intl.obj
   copy ..\common\$D\ipcbase.obj
   copy ..\common\$D\layout.obj
@@ -724,9 +727,9 @@ $(COMLIBOBJS2):
   copy ..\common\$D\strconv.obj
   copy ..\common\$D\stream.obj
   copy ..\common\$D\string.obj
-  copy ..\common\$D\tbarbase.obj
 
 $(COMLIBOBJS3):
+  copy ..\common\$D\tbarbase.obj
   copy ..\common\$D\textcmn.obj
   copy ..\common\$D\textfile.obj
   copy ..\common\$D\timercmn.obj

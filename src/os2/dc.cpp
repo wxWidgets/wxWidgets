@@ -34,6 +34,27 @@
 
     IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
 
+//
+// wxWindows uses the Microsoft convention that the origin is the UPPER left.
+// Native OS/2 however in the GPI and PM define the origin as the LOWER left.
+// In order to map OS/2 GPI/PM y coordinates to wxWindows coordinates we must
+// perform the following transformation:
+//
+// Parent object height:     POBJHEIGHT
+// Desried origin:           WXORIGINY
+// Object to place's height: OBJHEIGHT
+//
+// To get the OS2 position from the wxWindows one:
+//
+// OS2Y = POBJHEIGHT - (WXORIGINY + OBJHEIGHT)
+//
+// For OS/2 wxDC's we will always determine m_vRclPaint as the size of the
+// OS/2 Presentation Space associated with the device context.  y is the
+// desired application's y coordinate of the origin in wxWindows space.
+// objy is the height of the object we are going to draw.
+//
+#define OS2Y(y, objy) ((m_vRclPaint.yTop - m_vRclPaint.yBottom) - (y + objy))
+
 // ---------------------------------------------------------------------------
 // constants
 // ---------------------------------------------------------------------------
@@ -233,19 +254,20 @@ void wxDC::SelectOldObjects(
 }
 
 void wxDC::DoSetClippingRegion(
-  wxCoord                           x
-, wxCoord                           y
-, wxCoord                           width
-, wxCoord                           height
+  wxCoord                           vX
+, wxCoord                           vY
+, wxCoord                           vWidth
+, wxCoord                           vHeight
 )
 {
     RECTL                           vRect;
 
+    vY = OS2Y(vY,vHeight);
     m_clipping    = TRUE;
-    vRect.xLeft   = XLOG2DEV(x);
-    vRect.yTop    = YLOG2DEV(m_vRclPaint.yTop - y);
-    vRect.xRight  = XLOG2DEV(x + width);
-    vRect.yBottom = YLOG2DEV(m_vRclPaint.yTop - (y + height));
+    vRect.xLeft   = vX;
+    vRect.yTop    = vY + vHeight;
+    vRect.xRight  = vX + vWidth;
+    vRect.yBottom = vY;
     ::GpiIntersectClipRectangle(m_hPS, &vRect);
     DO_SET_CLIPPING_BOX()
 } // end of wxDC::DoSetClippingRegion
@@ -328,7 +350,7 @@ int wxDC::GetDepth() const
 void wxDC::Clear()
 {
     ::GpiErase(m_hPS);
-}
+} // end of wxDC::Clear
 
 void wxDC::DoFloodFill(
   wxCoord                           vX
@@ -342,7 +364,7 @@ void wxDC::DoFloodFill(
     LONG                            lOptions;
 
     vPtlPos.x = vX;             // Loads x-coordinate
-    vPtlPos.y = vY;             // Loads y-coordinate
+    vPtlPos.y = OS2Y(vY,0);     // Loads y-coordinate
     ::GpiMove(m_hPS, &vPtlPos); // Sets current position
     lColor = rCol.GetPixel();
     lOptions = FF_BOUNDARY;
@@ -350,7 +372,7 @@ void wxDC::DoFloodFill(
         lOptions = FF_SURFACE;
 
     ::GpiFloodFill(m_hPS, lOptions, lColor);
-}
+} // end of wxDC::DoFloodFill
 
 bool wxDC::DoGetPixel(
   wxCoord                           vX
@@ -362,20 +384,37 @@ bool wxDC::DoGetPixel(
     LONG                            lColor;
 
     vPoint.x = vX;
-    vPoint.y = vY;
+    vPoint.y = OS2Y(vY,0);
     lColor = ::GpiSetPel(m_hPS, &vPoint);
-    pCol->Set((unsigned long)lColor);
-    if(lColor>= 0)
-        return(TRUE);
-    else
-        return(FALSE);
-}
+
+    //
+    // Get the color of the pen
+    //
+    LONG                            lPencolor = 0x00ffffff;
+
+    if (m_pen.Ok())
+    {
+        lPencolor = m_pen.GetColour().GetPixel();
+    }
+
+    //
+    // return the color of the pixel
+    //
+    if(pCol)
+        pCol->Set( GetRValue(lColor)
+                  ,GetGValue(lColor)
+                  ,GetBValue(lColor)
+                 );
+    return(lColor == lPencolor);
+} // end of wxDC::DoGetPixel
 
 void wxDC::DoCrossHair(
   wxCoord                           vX
 , wxCoord                           vY
 )
 {
+    vY = OS2Y(vY,0);
+
     wxCoord                         vX1 = vX - VIEWPORT_EXTENT;
     wxCoord                         vY1 = vY - VIEWPORT_EXTENT;
     wxCoord                         vX2 = vX + VIEWPORT_EXTENT;
@@ -383,22 +422,24 @@ void wxDC::DoCrossHair(
     POINTL                          vPoint[4];
 
     vPoint[0].x = vX1;
-    vPoint[0].y = m_vRclPaint.yTop - vY;
+    vPoint[0].y = vY;
 
     vPoint[1].x = vX2;
-    vPoint[1].y = m_vRclPaint.yTop - vY;
+    vPoint[1].y = vY;
 
     ::GpiMove(m_hPS, &vPoint[0]);
     ::GpiLine(m_hPS, &vPoint[1]);
 
     vPoint[2].x = vX;
-    vPoint[2].y = m_vRclPaint.yTop - vY1;
+    vPoint[2].y = vY1;
 
     vPoint[3].x = vX;
-    vPoint[3].y = m_vRclPaint.yTop - vY2;
+    vPoint[3].y = vY2;
 
     ::GpiMove(m_hPS, &vPoint[2]);
     ::GpiLine(m_hPS, &vPoint[3]);
+    CalcBoundingBox(vX1, vY1);
+    CalcBoundingBox(vX2, vY2);
 } // end of wxDC::DoCrossHair
 
 void wxDC::DoDrawLine(
@@ -410,12 +451,17 @@ void wxDC::DoDrawLine(
 {
     POINTL                          vPoint[2];
 
+    vY1 = OS2Y(vY1,0);
+    vY2 = OS2Y(vY2,0);
+
     vPoint[0].x = vX1;
-    vPoint[0].y = m_vRclPaint.yTop - vY1;
+    vPoint[0].y = vY1;
     vPoint[1].x = vX2;
-    vPoint[1].y = m_vRclPaint.yTop - vY2;
+    vPoint[1].y = vY2;
     ::GpiMove(m_hPS, &vPoint[0]);
     ::GpiLine(m_hPS, &vPoint[1]);
+    CalcBoundingBox(vX1, vY1);
+    CalcBoundingBox(vX2, vY2);
 } // end of wxDC::DoDrawLine
 
 //////////////////////////////////////////////////////////////////////////////
@@ -510,6 +556,12 @@ void wxDC::DoDrawArc(
     vPtlArc[1].x = vX2;
     vPtlArc[1].y = vY2;
     ::GpiPointArc(m_hPS, vPtlArc); // Draws the arc
+    CalcBoundingBox( (vXc - dRadius)
+                    ,(vYc - dRadius)
+                   );
+    CalcBoundingBox( (vXc + dRadius)
+                    ,(vYc + dRadius)
+                   );
 } // end of wxDC::DoDrawArc
 
 void wxDC::DoDrawCheckMark(
@@ -520,6 +572,8 @@ void wxDC::DoDrawCheckMark(
 )
 {
     POINTL                          vPoint[2];
+
+    vY1 = OS2Y(vY1,vHeight);
 
     vPoint[0].x = vX1;
     vPoint[0].y = vY1;
@@ -547,6 +601,16 @@ void wxDC::DoDrawCheckMark(
         ::GpiMove(m_hPS, &vPoint[0]);
         ::GpiLine(m_hPS, &vPoint[1]);
     }
+    CalcBoundingBox( vX1
+                    ,vY1
+                   );
+
+    wxCoord                         vX2 = vX1 + vWidth;
+    wxCoord                         vY2 = vY1 + vHeight;
+
+    CalcBoundingBox( vX2
+                    ,vY2
+                   );
 } // end of wxDC::DoDrawCheckMark
 
 void wxDC::DoDrawPoint(
@@ -555,10 +619,19 @@ void wxDC::DoDrawPoint(
 )
 {
     POINTL                          vPoint;
+    COLORREF                        vColor = 0x00ffffff;
 
+    if (m_pen.Ok())
+    {
+        vColor = m_pen.GetColour().GetPixel();
+    }
+    ::GpiSetColor(m_hPS, vColor);
     vPoint.x = vX;
-    vPoint.y = m_vRclPaint.yTop - vY;
+    vPoint.y = OS2Y(vY,0);
     ::GpiSetPel(m_hPS, &vPoint);
+    CalcBoundingBox( vX
+                    ,vY
+                   );
 } // end of wxDC::DoDrawPoint
 
 void wxDC::DoDrawPolygon(
@@ -615,8 +688,8 @@ void wxDC::DoDrawPolygon(
 
     for(i = 0; i < n; i++)
     {
-        vPlgn.aPointl[i].x = vPoints[i].x; // +xoffset;
-        vPlgn.aPointl[i].y = vPoints[i].y; // +yoffset;
+        vPlgn.aPointl[i].x = vPoints[i].x;         // +xoffset;
+        vPlgn.aPointl[i].y = OS2Y(vPoints[i].y,0); // +yoffset;
     }
     flModel = POLYGON_BOUNDARY;
     if(nFillStyle == wxWINDING_RULE)
@@ -625,7 +698,7 @@ void wxDC::DoDrawPolygon(
         flModel |= POLYGON_ALTERNATE;
 
     vPoint.x = vXoffset;
-    vPoint.y = vYoffset;
+    vPoint.y = OS2Y(vYoffset,0);
 
     ::GpiSetColor(m_hPS, lBorderColor);
     ::GpiMove(m_hPS, &vPoint);
@@ -640,21 +713,46 @@ void wxDC::DoDrawLines(
 , wxCoord                           vYoffset
 )
 {
-    int                             i;
     POINTL                          vPoint;
 
-    vPoint.x = vPoints[0].x + vXoffset;
-    vPoint.y = vPoints[0].y + vYoffset;
-    ::GpiMove(m_hPS, &vPoint);
-
-    LONG                            lBorderColor = m_pen.GetColour().GetPixel();
-
-    ::GpiSetColor(m_hPS, lBorderColor);
-    for(i = 1; i < n; i++)
+    if (vXoffset != 0L || vXoffset != 0L)
     {
+        int                             i;
+
         vPoint.x = vPoints[0].x + vXoffset;
-        vPoint.y = vPoints[0].y + vYoffset;
-        ::GpiLine(m_hPS, &vPoint);
+        vPoint.y = OS2Y(vPoints[0].y + vYoffset,0);
+        ::GpiMove(m_hPS, &vPoint);
+
+        LONG                            lBorderColor = m_pen.GetColour().GetPixel();
+
+        ::GpiSetColor(m_hPS, lBorderColor);
+        for(i = 1; i < n; i++)
+        {
+            vPoint.x = vPoints[i].x + vXoffset;
+            vPoint.y = OS2Y(vPoints[i].y + vYoffset,0);
+            ::GpiLine(m_hPS, &vPoint);
+        }
+    }
+    else
+    {
+        int                         i;
+
+        CalcBoundingBox( vPoints[i].x
+                        ,vPoints[i].y
+                       );
+        vPoint.x = vPoints[0].x;
+        vPoint.y = OS2Y(vPoints[0].y,0);
+        ::GpiMove(m_hPS, &vPoint);
+
+        for (i = 0; i < n; i++)
+        {
+            CalcBoundingBox( vPoints[i].x
+                            ,vPoints[i].y
+                           );
+            vPoint.x = vPoints[i].x;
+            vPoint.y = OS2Y(vPoints[i].y,0);
+            ::GpiLine(m_hPS, &vPoint);
+        }
     }
 } // end of wxDC::DoDrawLines
 
@@ -671,10 +769,15 @@ void wxDC::DoDrawRectangle(
     LONG                            lBorderColor;
     int                             nIsTRANSPARENT = 0;
 
+    vY = OS2Y(vY,vHeight);
+
+    wxCoord                         vX2 = vX + vWidth;
+    wxCoord                         vY2 = vY + vHeight;
+
     vPoint[0].x = vX;
-    vPoint[0].y = m_vRclPaint.yTop - (vY + vHeight);
+    vPoint[0].y = vY;
     vPoint[1].x = vX + vWidth;
-    vPoint[1].y = m_vRclPaint.yTop - vY;
+    vPoint[1].y = vY + vHeight;
     ::GpiMove(m_hPS, &vPoint[0]);
     lColor       = m_brush.GetColour().GetPixel();
     lBorderColor = m_pen.GetColour().GetPixel();
@@ -711,9 +814,9 @@ void wxDC::DoDrawRectangle(
                       ,lColor
                      );
         vPoint[0].x = vX + 1;
-        vPoint[0].y = m_vRclPaint.yTop - (vY + vHeight) + 1;
+        vPoint[0].y = vY + 1;
         vPoint[1].x = vX + vWidth - 2;
-        vPoint[1].y = m_vRclPaint.yTop - (vY + 2);
+        vPoint[1].y = vY + vHeight + 2;
         ::GpiMove(m_hPS, &vPoint[0]);
         ::GpiBox( m_hPS
                  ,lControl
@@ -722,6 +825,8 @@ void wxDC::DoDrawRectangle(
                  ,0L
                 );
     }
+    CalcBoundingBox(vX, vY);
+    CalcBoundingBox(vX2, vY2);
 } // end of wxDC::DoDrawRectangle
 
 void wxDC::DoDrawRoundedRectangle(
@@ -734,6 +839,11 @@ void wxDC::DoDrawRoundedRectangle(
 {
     POINTL                          vPoint[2];
     LONG                            lControl;
+
+    vY = OS2Y(vY,vHeight);
+
+    wxCoord                         vX2 = (vX + vWidth);
+    wxCoord                         vY2 = (vY + vHeight);
 
     vPoint[0].x = vX;
     vPoint[0].y = YLOG2DEV(vY) - vHeight;
@@ -750,6 +860,8 @@ void wxDC::DoDrawRoundedRectangle(
              ,(LONG)dRadius // horizontal corner radius
              ,(LONG)dRadius // vertical corner radius
             );
+    CalcBoundingBox(vX, vY);
+    CalcBoundingBox(vX2, vY2);
 } // end of wxDC::DoDrawRoundedRectangle
 
 // Draw Ellipse within box (x,y) - (x+width, y+height)
@@ -763,6 +875,8 @@ void wxDC::DoDrawEllipse(
     POINTL                          vPtlPos; // Structure for current position
     FIXED                           vFxMult; // Multiplier for ellipse
     ARCPARAMS                       vArcp;   // Structure for arc parameters
+
+    vY = OS2Y(vY,vHeight);
 
     vArcp.lR = 0;
     vArcp.lQ = vHeight/2;
@@ -785,6 +899,12 @@ void wxDC::DoDrawEllipse(
                  ,DRO_OUTLINE
                  ,vFxMult
                 ); // Draws full arc with center at current position
+
+    wxCoord                         vX2 = (vX + vWidth);
+    wxCoord                         vY2 = (vY + vHeight);
+
+    CalcBoundingBox(vX, vY);
+    CalcBoundingBox(vX2, vY2);
 } // end of wxDC::DoDrawEllipse
 
 void wxDC::DoDrawEllipticArc(
@@ -804,6 +924,8 @@ void wxDC::DoDrawEllipticArc(
     double                          dIntPart;
     double                          dFractPart;
     double                          dRadius;
+
+    vY = OS2Y(vY,vHeight);
 
     dFractPart = modf(dSa,&dIntPart);
     vFSa = MAKEFIXED((int)dIntPart, (int)(dFractPart * 0xffff) );
@@ -838,6 +960,11 @@ void wxDC::DoDrawEllipticArc(
                     ,vFSa
                     ,vFSweepa
                    );
+    wxCoord                         vX2 = (vX + vWidth);
+    wxCoord                         vY2 = (vY + vHeight);
+
+    CalcBoundingBox(vX, vY);
+    CalcBoundingBox(vX2, vY2);
 } // end of wxDC::DoDrawEllipticArc
 
 void wxDC::DoDrawIcon(
@@ -846,6 +973,7 @@ void wxDC::DoDrawIcon(
 , wxCoord                           vY
 )
 {
+    vY = OS2Y(vY,rIcon.GetHeight());
     wxCHECK_RET( rIcon.Ok(), wxT("invalid icon in DrawIcon") );
 
     ::WinDrawPointer( GetHPS()
@@ -854,6 +982,8 @@ void wxDC::DoDrawIcon(
                      ,(HPOINTER)GetHiconOf(rIcon)
                      ,DP_NORMAL
                     );
+    CalcBoundingBox(vX, vY);
+    CalcBoundingBox(vX + rIcon.GetWidth(), vY + rIcon.GetHeight());
 } // end of wxDC::DoDrawIcon
 
 void wxDC::DoDrawBitmap(
@@ -881,11 +1011,18 @@ void wxDC::DoDrawText(
 , wxCoord                           vY
 )
 {
+    wxCoord                         vWidth;
+    wxCoord                         vHeight;
+
     DrawAnyText( rsText
                 ,vX
                 ,vY
                );
-}
+
+    CalcBoundingBox(vX, vY);
+    GetTextExtent(rsText, &vWidth, &vHeight);
+    CalcBoundingBox((vX + vWidth), (vY + vHeight));
+} // end of wxDC::DoDrawText
 
 void wxDC::DrawAnyText(
   const wxString&                   rsText
@@ -896,6 +1033,8 @@ void wxDC::DrawAnyText(
     int                             nOldBackground = 0;
     POINTL                          vPtlStart;
     LONG                            lHits;
+    wxCoord                         vTextX = 0;
+    wxCoord                         vTextY = 0;
 
     //
     // prepare for drawing the text
@@ -920,8 +1059,12 @@ void wxDC::DrawAnyText(
     SetBkMode( m_hPS
               ,m_backgroundMode
              );
+    GetTextExtent( rsText
+                  ,&vTextX
+                  ,&vTextY
+                 );
     vPtlStart.x = vX;
-    vPtlStart.y = vY;
+    vPtlStart.y = OS2Y(vY,vTextY);
 
     lHits = ::GpiCharStringAt( m_hPS
                               ,&vPtlStart
@@ -1018,10 +1161,26 @@ void wxDC::DoDrawRotatedText(
 // set GDI objects
 // ---------------------------------------------------------------------------
 
-void wxDC::SetPalette(const wxPalette& palette)
+void wxDC::SetPalette(
+  const wxPalette&                  rPalette
+)
 {
-   // TODO
-}
+    if (m_hOldFont)
+    {
+        m_hOldFont = 0;
+    }
+    m_palette = rPalette;
+    if (!rPalette.Ok())
+    {
+        if (m_hOldFont)
+        {
+            m_hOldFont = 0;
+        }
+    }
+    HPALETTE                    hOldPal = ::GpiSelectPalette((HDC) m_hPS, (HPALETTE) m_palette.GetHPALETTE());
+    if (!m_hOldPalette)
+        m_hOldPalette = (WXHPALETTE)hOldPal;
+} // end of wxDC::SetPalette
 
 void wxDC::SetFont(
   const wxFont&                     rFont
@@ -1097,15 +1256,15 @@ void wxDC::SetBrush(
 {
     wxCHECK_RET( Ok(), wxT("invalid window dc") );
 
-    if (m_brush == rBrush)
-        return;
-    m_brush = rBrush;
-    if (!m_brush.Ok())
-        return;
-
     if (m_hOldBrush)
         m_hOldBrush = 0L;
     m_brush = rBrush;
+    if (!m_brush.Ok())
+    if (m_brush == rBrush)
+        return;
+    if (!m_brush.Ok())
+        if (m_hOldBrush)
+            m_hOldBrush = 0L;
 
     if (!m_brush.Ok())
     {
@@ -1122,77 +1281,153 @@ void wxDC::SetBrush(
         {
             m_brush.SetPS(m_hPS);
             if (!m_hOldBrush)
-                m_hOldBrush = m_brush.GetPS();
+                m_hOldBrush = (WXHWND)m_brush.GetPS();
         }
     }
 } // end of wxDC::SetBrush
 
-void wxDC::SetBackground(const wxBrush& brush)
+void wxDC::SetBackground(
+  const wxBrush&                    rBrush
+)
 {
-   // TODO
-}
+    m_backgroundBrush = rBrush;
+    if (!m_backgroundBrush.Ok())
+        return;
+    if (m_pCanvas)
+    {
+        bool                        bCustomColours = TRUE;
+
+        //
+        // If we haven't specified wxUSER_COLOURS, don't allow the panel/dialog box to
+        // change background colours from the control-panel specified colours.
+        //
+        if (m_pCanvas->IsKindOf(CLASSINFO(wxWindow)) &&
+            ((m_pCanvas->GetWindowStyleFlag() & wxUSER_COLOURS) != wxUSER_COLOURS))
+            bCustomColours = FALSE;
+        if (bCustomColours)
+        {
+            if (m_backgroundBrush.GetStyle()==wxTRANSPARENT)
+            {
+                m_pCanvas->SetTransparent(TRUE);
+            }
+            else
+            {
+                //
+                // Setting the background brush of a DC
+                // doesn't affect the window background colour. However,
+                // I'm leaving in the transparency setting because it's needed by
+                // various controls (e.g. wxStaticText) to determine whether to draw
+                // transparently or not. TODO: maybe this should be a new function
+                // wxWindow::SetTransparency(). Should that apply to the child itself, or the
+                // parent?
+                // m_canvas->SetBackgroundColour(m_backgroundBrush.GetColour());
+                //
+                m_pCanvas->SetTransparent(FALSE);
+            }
+        }
+    }
+    COLORREF                        vNewColor = m_backgroundBrush.GetColour().GetPixel();
+    (void)::GpiSetBackColor((HPS)m_hPS, (LONG)vNewColor);
+} // end of wxDC::SetBackground
 
 void wxDC::SetBackgroundMode(
   int                               nMode
 )
 {
     m_backgroundMode = nMode;
-}
+} // end of wxDC::SetBackgroundMode
 
-void wxDC::SetLogicalFunction(int function)
+void wxDC::SetLogicalFunction(
+  int                               nFunction
+)
 {
-   // TODO
-}
+    m_logicalFunction = nFunction;
+    SetRop((WXHDC)m_hDC);
+} // wxDC::SetLogicalFunction
 
-void wxDC::SetRop(WXHDC dc)
+void wxDC::SetRop(
+  WXHDC                             hDC
+)
 {
-    if (!dc || m_logicalFunction < 0)
+    if (!hDC || m_logicalFunction < 0)
         return;
 
-    int c_rop;
-    // These may be wrong
+    LONG                            lCRop;
     switch (m_logicalFunction)
     {
-// TODO: Figure this stuff out
-        //    case wxXOR: c_rop = R2_XORPEN; break;
-//    case wxXOR: c_rop = R2_NOTXORPEN; break;
-//    case wxINVERT: c_rop = R2_NOT; break;
-//    case wxOR_REVERSE: c_rop = R2_MERGEPENNOT; break;
-//    case wxAND_REVERSE: c_rop = R2_MASKPENNOT; break;
-//    case wxCLEAR: c_rop = R2_WHITE; break;
-//    case wxSET: c_rop = R2_BLACK; break;
-//    case wxSRC_INVERT: c_rop = R2_NOTCOPYPEN; break;
-//    case wxOR_INVERT: c_rop = R2_MERGENOTPEN; break;
-//    case wxAND: c_rop = R2_MASKPEN; break;
-//    case wxOR: c_rop = R2_MERGEPEN; break;
-//    case wxAND_INVERT: c_rop = R2_MASKNOTPEN; break;
-//    case wxEQUIV:
-//    case wxNAND:
-//    case wxCOPY:
-    default:
-//      c_rop = R2_COPYPEN;
-        break;
-    }
-//    SetROP2((HDC) dc, c_rop);
-}
+        case wxXOR:
+            lCRop = FM_XOR;
+            break;
 
-bool wxDC::StartDoc(const wxString& message)
+        case wxINVERT:
+            lCRop = FM_INVERT;
+            break;
+
+        case wxOR_REVERSE:
+            lCRop = FM_MERGESRCNOT;
+            break;
+
+        case wxAND_REVERSE:
+            lCRop = FM_NOTMASKSRC;
+            break;
+
+        case wxCLEAR:
+            lCRop = FM_ONE;
+            break;
+
+        case wxSET:
+            lCRop = FM_ZERO;
+            break;
+
+        case wxSRC_INVERT:
+            lCRop = FM_MERGENOTSRC;
+            break;
+
+        case wxOR_INVERT:
+            lCRop = FM_MERGESRCNOT;
+            break;
+
+        case wxAND:
+            lCRop = FM_AND;
+            break;
+
+        case wxOR:
+            lCRop = FM_OR;
+            break;
+
+        case wxAND_INVERT:
+            lCRop = FM_SUBTRACT;
+            break;
+
+        case wxEQUIV:
+        case wxNAND:
+        case wxCOPY:
+        default:
+            lCRop = FM_OVERPAINT;
+            break;
+    }
+    ::GpiSetMix((HPS)hDC, lCRop);
+} // end of wxDC::SetRop
+
+bool wxDC::StartDoc(
+  const wxString&                   rsMessage
+)
 {
     // We might be previewing, so return TRUE to let it continue.
     return TRUE;
-}
+} // end of wxDC::StartDoc
 
 void wxDC::EndDoc()
 {
-}
+} // end of wxDC::EndDoc
 
 void wxDC::StartPage()
 {
-}
+} // end of wxDC::StartPage
 
 void wxDC::EndPage()
 {
-}
+} // end of wxDC::EndPage
 
 // ---------------------------------------------------------------------------
 // text metrics
@@ -1295,60 +1530,156 @@ void wxDC::DoGetTextExtent(
         *pvExternalLeading = vFM.lExternalLeading;
 }
 
-void wxDC::SetMapMode( int mode )
+void wxDC::SetMapMode(
+  int                               nMode
+)
 {
-    // TODO:
-};
+    int                             nPixelWidth = 0;
+    int                             nPixelHeight = 0;
+    int                             nMmWidth = 1;
+    int                             nMmHeight = 1;
+    LONG                            lArray[CAPS_VERTICAL_RESOLUTION];
 
-void wxDC::SetUserScale(double x, double y)
+    m_mappingMode = nMode;
+
+    if(::DevQueryCaps( m_hDC
+                      ,CAPS_FAMILY
+                      ,CAPS_VERTICAL_RESOLUTION
+                      ,lArray
+                     ))
+    {
+        LONG                        lHorzRes;
+        LONG                        lVertRes;
+
+        nPixelWidth    = lArray[CAPS_WIDTH];
+        nPixelHeight   = lArray[CAPS_HEIGHT];
+        lHorzRes  = lArray[CAPS_HORIZONTAL_RESOLUTION]; // returns pel/meter
+        lVertRes  = lArray[CAPS_VERTICAL_RESOLUTION];   // returns pel/meter
+        nMmWidth  = (lHorzRes/1000) * nPixelWidth;
+        nMmWidth = (lVertRes/1000) * nPixelHeight;
+    }
+    if ((nPixelWidth == 0) || (nPixelHeight == 0) || (nMmWidth == 0) || (nMmHeight == 0))
+    {
+        return;
+    }
+
+    double                          dMm2pixelsX = nPixelWidth/nMmWidth;
+    double                          dMm2pixelsY = nPixelHeight/nMmHeight;
+
+    switch (nMode)
+    {
+        case wxMM_TWIPS:
+            m_logicalScaleX = (twips2mm * dMm2pixelsX);
+            m_logicalScaleY = (twips2mm * dMm2pixelsY);
+            break;
+
+        case wxMM_POINTS:
+            m_logicalScaleX = (pt2mm * dMm2pixelsX);
+            m_logicalScaleY = (pt2mm * dMm2pixelsY);
+            break;
+
+        case wxMM_METRIC:
+            m_logicalScaleX = dMm2pixelsX;
+            m_logicalScaleY = dMm2pixelsY;
+            break;
+
+        case wxMM_LOMETRIC:
+            m_logicalScaleX = (dMm2pixelsX/10.0);
+            m_logicalScaleY = (dMm2pixelsY/10.0);
+            break;
+
+        case wxMM_TEXT:
+        default:
+            m_logicalScaleX = 1.0;
+            m_logicalScaleY = 1.0;
+            break;
+    }
+    SIZEL                           vSize;
+    ULONG                           ulOptions;
+
+    ulOptions = ::GpiQueryPS(m_hPS, &vSize);
+    if (!ulOptions & PU_ARBITRARY)
+    {
+        ulOptions = PU_ARBITRARY | GPIF_DEFAULT;
+        ::GpiSetPS(m_hPS, &vSize, ulOptions);
+    }
+    m_nWindowExtX = (int)MS_XDEV2LOGREL(VIEWPORT_EXTENT);
+    m_nWindowExtY = (int)MS_YDEV2LOGREL(VIEWPORT_EXTENT);
+    // ????
+}; // end of wxDC::SetMapMode
+
+void wxDC::SetUserScale(
+  double                            dX
+, double                            dY
+)
 {
-    m_userScaleX = x;
-    m_userScaleY = y;
+    m_userScaleX = dX;
+    m_userScaleY = dY;
 
     SetMapMode(m_mappingMode);
-}
+} // end of wxDC::SetUserScale
 
-void wxDC::SetAxisOrientation(bool xLeftRight, bool yBottomUp)
+void wxDC::SetAxisOrientation(
+  bool                              bXLeftRight
+, bool                              bYBottomUp
+)
 {
-    m_signX = xLeftRight ? 1 : -1;
-    m_signY = yBottomUp ? -1 : 1;
+    m_signX = bXLeftRight ? 1 : -1;
+    m_signY = bYBottomUp ? -1 : 1;
 
     SetMapMode(m_mappingMode);
-}
+} // end of wxDC::SetAxisOrientation
 
-void wxDC::SetSystemScale(double x, double y)
+void wxDC::SetSystemScale(
+  double                            dX
+, double                            dY
+)
 {
-    m_scaleX = x;
-    m_scaleY = y;
+    m_scaleX = dX;
+    m_scaleY = dY;
 
     SetMapMode(m_mappingMode);
-}
+} // end of wxDC::SetSystemScale
 
-void wxDC::SetLogicalOrigin( wxCoord x, wxCoord y )
-{
-    // TODO:
-};
-
-void wxDC::SetDeviceOrigin(
-  wxCoord                           x
-, wxCoord                           y
+void wxDC::SetLogicalOrigin(
+  wxCoord                           vX
+, wxCoord                           vY
 )
 {
     RECTL                           vRect;
 
-    m_deviceOriginX = x;
-    m_deviceOriginY = y;
     ::GpiQueryPageViewport( m_hPS
                            ,&vRect
                           );
-    vRect.xLeft += x;
-    vRect.xRight += x;
-    vRect.yBottom -= y;
-    vRect.yTop -= y;
+    vRect.xRight -= vX;
+    vRect.yTop += vY;
+    vRect.xLeft = vX;
+    vRect.yBottom = vY;
     ::GpiSetPageViewport( m_hPS
                          ,&vRect
                         );
-};
+}; // end of wxDC::SetLogicalOrigin
+
+void wxDC::SetDeviceOrigin(
+  wxCoord                           vX
+, wxCoord                           vY
+)
+{
+    RECTL                           vRect;
+
+    m_deviceOriginX = vX;
+    m_deviceOriginY = vY;
+    ::GpiQueryPageViewport( m_hPS
+                           ,&vRect
+                          );
+    vRect.xLeft += vX;
+    vRect.xRight += vX;
+    vRect.yBottom -= vY;
+    vRect.yTop -= vY;
+    ::GpiSetPageViewport( m_hPS
+                         ,&vRect
+                        );
+}; // end of wxDC::SetDeviceOrigin
 
 // ---------------------------------------------------------------------------
 // coordinates transformations
@@ -1662,28 +1993,86 @@ bool wxDC::DoBlit(
     return bSuccess;
 }
 
-void wxDC::DoGetSize( int* width, int* height ) const
+void wxDC::DoGetSize(
+  int*                              pnWidth
+, int*                              pnHeight
+) const
 {
-    // TODO:
-};
+    LONG                            lArray[CAPS_HEIGHT];
 
-void wxDC::DoGetSizeMM( int* width, int* height ) const
+    if(::DevQueryCaps( m_hDC
+                      ,CAPS_FAMILY
+                      ,CAPS_HEIGHT
+                      ,lArray
+                     ))
+    {
+        *pnWidth  = lArray[CAPS_WIDTH];
+        *pnHeight = lArray[CAPS_HEIGHT];
+    }
+}; // end of wxDC::DoGetSize(
+
+void wxDC::DoGetSizeMM(
+  int*                              pnWidth
+, int*                              pnHeight
+) const
 {
-    // TODO:
-};
+    LONG                            lArray[CAPS_VERTICAL_RESOLUTION];
+
+    if(::DevQueryCaps( m_hDC
+                      ,CAPS_FAMILY
+                      ,CAPS_VERTICAL_RESOLUTION
+                      ,lArray
+                     ))
+    {
+        int                         nWidth;
+        int                         nHeight;
+        int                         nHorzRes;
+        int                         nVertRes;
+
+        nWidth    = lArray[CAPS_WIDTH];
+        nHeight   = lArray[CAPS_HEIGHT];
+        nHorzRes  = lArray[CAPS_HORIZONTAL_RESOLUTION]; // returns pel/meter
+        nVertRes  = lArray[CAPS_VERTICAL_RESOLUTION];   // returns pel/meter
+        nWidth  = (nHorzRes/1000) * nWidth;
+        nHeight = (nVertRes/1000) * nHeight;
+    }
+}; // end of wxDC::DoGetSizeMM
 
 wxSize wxDC::GetPPI() const
 {
-   int x = 1;
-   int y = 1;
-   // TODO:
-   return (wxSize(x,y));
-}
+    LONG                            lArray[CAPS_VERTICAL_RESOLUTION];
+    int                             nWidth;
+    int                             nHeight;
 
-void wxDC::SetLogicalScale( double x, double y )
+    if(::DevQueryCaps( m_hDC
+                      ,CAPS_FAMILY
+                      ,CAPS_VERTICAL_RESOLUTION
+                      ,lArray
+                     ))
+    {
+        int                         nPelWidth;
+        int                         nPelHeight;
+        int                         nHorzRes;
+        int                         nVertRes;
+
+        nPelWidth  = lArray[CAPS_WIDTH];
+        nPelHeight = lArray[CAPS_HEIGHT];
+        nHorzRes   = lArray[CAPS_HORIZONTAL_RESOLUTION]; // returns pel/meter
+        nVertRes   = lArray[CAPS_VERTICAL_RESOLUTION];   // returns pel/meter
+        nWidth   = (nHorzRes/39.3) * nPelWidth;
+        nHeight  = (nVertRes/39.3) * nPelHeight;
+    }
+    return (wxSize(nWidth,nHeight));
+} // end of wxDC::GetPPI
+
+void wxDC::SetLogicalScale(
+  double                            dX
+, double                            dY
+)
 {
-    // TODO:
-};
+    m_logicalScaleX = dX;
+    m_logicalScaleY = dY;
+}; // end of wxDC::SetLogicalScale
 
 #if WXWIN_COMPATIBILITY
 void wxDC::DoGetTextExtent(const wxString& string, float *x, float *y,
