@@ -74,6 +74,7 @@ wx_include_HEADERS = \
  gdicmn.h \
  gdiobj.h \
  grid.h \
+ gsocket.h \
  hash.h \
  help.h \
  helpbase.h \
