@@ -49,7 +49,7 @@ WX_DEFINE_LIST(wxArtProvidersList);
 // Cache class - stores already requested bitmaps
 // ----------------------------------------------------------------------------
 
-WX_DECLARE_STRING_HASH_MAP(wxBitmap, wxArtProviderBitmapsHash);
+WX_DECLARE_EXPORTED_STRING_HASH_MAP(wxBitmap, wxArtProviderBitmapsHash);
 
 class WXDLLEXPORT wxArtProviderCache
 {
@@ -59,7 +59,7 @@ public:
         { m_bitmapsHash[full_id] = bmp; }
 
     void Clear();
-    
+
     static wxString ConstructHashID(const wxArtID& id,
                                     const wxArtClient& client,
                                     const wxSize& size);
@@ -140,7 +140,7 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
         sm_cache->Clear();
         return TRUE;
     }
-    
+
     return FALSE;
 }
 
@@ -170,7 +170,7 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
             bmp = node->GetData()->CreateBitmap(id, client, size);
             if ( bmp.Ok() )
             {
-                if ( size != wxDefaultSize && 
+                if ( size != wxDefaultSize &&
                      (bmp.GetWidth() != size.x || bmp.GetHeight() != size.y) )
                 {
                     wxImage img = bmp.ConvertToImage();

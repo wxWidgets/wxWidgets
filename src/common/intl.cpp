@@ -147,7 +147,7 @@ static inline wxString ExtractNotLang(const wxString& langFull)
 // This is a "low-level" class and is used only by wxMsgCatalog
 // ----------------------------------------------------------------------------
 
-WX_DECLARE_STRING_HASH_MAP(wxString, wxMessagesHash)
+WX_DECLARE_EXPORTED_STRING_HASH_MAP(wxString, wxMessagesHash)
 
 class wxMsgCatalogFile
 {
@@ -194,7 +194,7 @@ private:
 
     const char *StringAtOfs(wxMsgTableEntry *pTable, size_t32 index) const
       { return (const char *)(m_pData + Swap(pTable[index].ofsString)); }
-      
+
     wxString GetCharset() const;
 
     // utility functions
@@ -430,7 +430,7 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash, bool convertEncoding) cons
         hash[key] = wxString(StringAtOfs(m_pTransTable, i), inputConv);
     #else
         if ( convertEncoding )
-            hash[key] = 
+            hash[key] =
                 wxString(inputConv.cMB2WC(StringAtOfs(m_pTransTable, i)),
                          wxConvLocal);
         else
@@ -457,7 +457,7 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash, bool convertEncoding) cons
                 wxFontEncodingArray a = wxEncodingConverter::GetPlatformEquivalents(enc);
                 if (a[0] == enc)
                     // no conversion needed, locale uses native encoding
-                    convertEncoding = FALSE; 
+                    convertEncoding = FALSE;
                 if (a.GetCount() == 0)
                     // we don't know common equiv. under this platform
                     convertEncoding = FALSE;
@@ -473,7 +473,7 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash, bool convertEncoding) cons
             for (size_t i = 0; i < m_numStrings; i++)
             {
                 wxString key(StringAtOfs(m_pOrigTable, i));
-                hash[key] = 
+                hash[key] =
                     converter.Convert(wxString(StringAtOfs(m_pTransTable, i)));
             }
         }
@@ -495,7 +495,7 @@ wxString wxMsgCatalogFile::GetCharset() const
 {
     // first, find encoding header:
     const char *hdr = StringAtOfs(m_pOrigTable, 0);
-    if ( hdr == NULL || hdr[0] != 0 ) 
+    if ( hdr == NULL || hdr[0] != 0 )
     {
         // not supported by this catalog, does not have correct header
         return wxEmptyString;
@@ -507,19 +507,19 @@ wxString wxMsgCatalogFile::GetCharset() const
     if ( pos == wxNOT_FOUND )
     {
         // incorrectly filled Content-Type header
-        return wxEmptyString; 
+        return wxEmptyString;
     }
 
     size_t n = pos + 34; /*strlen("Content-Type: text/plain; charset=")*/
     while ( header[n] != wxT('\n') )
         charset << header[n++];
-    
+
     if ( charset == wxT("CHARSET") )
     {
         // "CHARSET" is not valid charset, but lazy translator
         return wxEmptyString;
     }
-        
+
     return charset;
 }
 
@@ -527,13 +527,13 @@ wxString wxMsgCatalogFile::GetCharset() const
 // wxMsgCatalog class
 // ----------------------------------------------------------------------------
 
-bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName, 
+bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName,
                         bool bConvertEncoding)
 {
     wxMsgCatalogFile file;
-    
+
     m_name = szName;
-    
+
     if ( file.Load(szDirPrefix, szName) )
     {
         file.FillHash(m_messages, bConvertEncoding);
@@ -1196,7 +1196,7 @@ void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
           break;
       }
   }
-    
+
 #elif defined(__WIN32__)
     LCID lcid = GetUserDefaultLCID();
     if ( lcid != 0 )
@@ -1397,7 +1397,7 @@ const wxChar *wxLocale::GetString(const wxChar *szOrigString,
     const wxChar *pszTrans = NULL;
     wxMsgCatalog *pMsgCat;
 
-    if ( szDomain != NULL ) 
+    if ( szDomain != NULL )
     {
         pMsgCat = FindCatalog(szDomain);
 
@@ -1405,10 +1405,10 @@ const wxChar *wxLocale::GetString(const wxChar *szOrigString,
         if ( pMsgCat != NULL )
             pszTrans = pMsgCat->GetString(szOrigString);
     }
-    else 
+    else
     {
         // search in all domains
-        for ( pMsgCat = m_pMsgCat; pMsgCat != NULL; pMsgCat = pMsgCat->m_pNext ) 
+        for ( pMsgCat = m_pMsgCat; pMsgCat != NULL; pMsgCat = pMsgCat->m_pNext )
         {
             pszTrans = pMsgCat->GetString(szOrigString);
             if ( pszTrans != NULL )   // take the first found
@@ -1416,10 +1416,10 @@ const wxChar *wxLocale::GetString(const wxChar *szOrigString,
         }
     }
 
-    if ( pszTrans == NULL ) 
+    if ( pszTrans == NULL )
     {
 #ifdef __WXDEBUG__
-        if ( !NoTransErr::Suppress() ) 
+        if ( !NoTransErr::Suppress() )
         {
             NoTransErr noTransErr;
 
@@ -1447,7 +1447,7 @@ wxMsgCatalog *wxLocale::FindCatalog(const wxChar *szDomain) const
 {
     // linear search in the linked list
     wxMsgCatalog *pMsgCat;
-    for ( pMsgCat = m_pMsgCat; pMsgCat != NULL; pMsgCat = pMsgCat->m_pNext ) 
+    for ( pMsgCat = m_pMsgCat; pMsgCat != NULL; pMsgCat = pMsgCat->m_pNext )
     {
         if ( wxStricmp(pMsgCat->GetName(), szDomain) == 0 )
           return pMsgCat;
@@ -2321,7 +2321,7 @@ void wxLocale::InitLanguagesDB()
    LNG(wxLANGUAGE_YORUBA,                     "yo"   , 0              , 0                                 , "Yoruba")
    LNG(wxLANGUAGE_ZHUANG,                     "za"   , 0              , 0                                 , "Zhuang")
    LNG(wxLANGUAGE_ZULU,                       "zu"   , 0              , 0                                 , "Zulu")
-   
+
 };
 #undef LNG
 
