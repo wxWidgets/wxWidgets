@@ -726,9 +726,9 @@ void _GSocket_Configure_Callbacks(GSocket *socket)
   int count;
   for (count=0;count<GSOCK_MAX_EVENT;count++) {
     if ((socket->m_cbacks[count]) != NULL) {
-      GSocket_Enable(socket, count);
+      _GSocket_Enable(socket, count);
     } else {
-      GSocket_Disable(socket, count);
+      _GSocket_Disable(socket, count);
     }
   }
 }
