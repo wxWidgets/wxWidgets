@@ -43,7 +43,7 @@
 //     For now, instead of this, we just add all radiobox buttons to the
 //     tooltip control as well (see SetWindow) - this is probably less
 //     efficient, but it works.
-#define wxUSE_TTM_WINDOWFROMPOINT   0
+#define wxUSE_TTM_WINDOWFROMPOINT   1
 
 // ----------------------------------------------------------------------------
 // global variables
@@ -282,6 +282,7 @@ void wxToolTip::SetWindow(wxWindow *win)
         Add(m_window->GetHWND());
     }
 
+#if 1 //!wxUSE_TTM_WINDOWFROMPOINT
     // and all of its subcontrols (e.g. radiobuttons in a radiobox) as well
     wxControl *control = wxDynamicCast(m_window, wxControl);
     if ( control )
@@ -298,6 +299,7 @@ void wxToolTip::SetWindow(wxWindow *win)
             }
         }
     }
+#endif // !wxUSE_TTM_WINDOWFROMPOINT
 }
 
 void wxToolTip::SetTip(const wxString& tip)

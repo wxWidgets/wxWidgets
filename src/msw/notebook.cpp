@@ -83,7 +83,7 @@
 // event table
 // ----------------------------------------------------------------------------
 
-  BEGIN_EVENT_TABLE(wxNotebook, wxControl)
+BEGIN_EVENT_TABLE(wxNotebook, wxControl)
     EVT_NOTEBOOK_PAGE_CHANGED(-1, wxNotebook::OnSelChange)
 
     EVT_SIZE(wxNotebook::OnSize)
@@ -91,10 +91,10 @@
     EVT_SET_FOCUS(wxNotebook::OnSetFocus)
 
     EVT_NAVIGATION_KEY(wxNotebook::OnNavigationKey)
-  END_EVENT_TABLE()
+END_EVENT_TABLE()
 
-  IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxControl)
-  IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxNotifyEvent)
+IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxNotifyEvent)
 
 // ============================================================================
 // implementation

@@ -146,6 +146,9 @@ public:
     {
         return FALSE;
     }
+
+    // returns TRUE if this format is supported
+    bool IsSupported(const wxDataFormat& format, Direction dir = Get) const;
 };
 
 // ----------------------------------------------------------------------------

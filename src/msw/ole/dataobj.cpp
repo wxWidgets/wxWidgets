@@ -297,6 +297,10 @@ STDMETHODIMP wxIDataObject::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
             pmedium->tymed = TYMED_GDI;
             break;
 
+        case wxDF_ENHMETAFILE:
+            pmedium->tymed = TYMED_ENHMF;
+            break;
+
         case wxDF_METAFILE:
             pmedium->hGlobal = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE,
                                            sizeof(METAFILEPICT));
@@ -363,7 +367,15 @@ STDMETHODIMP wxIDataObject::GetDataHere(FORMATETC *pformatetc,
                 return E_UNEXPECTED;
             break;
 
+        case TYMED_ENHMF:
+            if ( !m_pDataObject->GetDataHere(wxDF_ENHMETAFILE,
+                                             &pmedium->hEnhMetaFile) )
+                return E_UNEXPECTED;
+            break;
+
         case TYMED_MFPICT:
+            // fall through - we pass METAFILEPICT through HGLOBAL
+
         case TYMED_HGLOBAL:
             {
                 // copy data
@@ -409,7 +421,12 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
             m_pDataObject->SetData(wxDF_BITMAP, 0, &pmedium->hBitmap);
             break;
 
+        case TYMED_ENHMF:
+            m_pDataObject->SetData(wxDF_ENHMETAFILE, 0, &pmedium->hEnhMetaFile);
+            break;
+
         case TYMED_MFPICT:
+            // fall through - we pass METAFILEPICT through HGLOBAL
         case TYMED_HGLOBAL:
             {
                 wxDataFormat format = pformatetc->cfFormat;
@@ -501,6 +518,10 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
 
             case TYMED_MFPICT:
                 pmedium->hMetaFilePict = 0;
+                break;
+
+            case TYMED_ENHMF:
+                pmedium->hEnhMetaFile = 0;
                 break;
         }
 
@@ -652,64 +673,47 @@ void wxDataObject::SetAutoDelete()
     m_pIDataObject = NULL;
 }
 
-bool wxDataObject::IsSupportedFormat(const wxDataFormat& format) const
-{
-    size_t nFormatCount = GetFormatCount();
-    if ( nFormatCount == 1 ) {
-        return format == GetPreferredFormat();
-    }
-    else {
-        wxDataFormat *formats = new wxDataFormat[nFormatCount];
-        GetAllFormats(formats);
-
-        size_t n;
-        for ( n = 0; n < nFormatCount; n++ ) {
-            if ( formats[n] == format )
-                break;
-        }
-
-        delete [] formats;
-
-        // found?
-        return n < nFormatCount;
-    }
-}
-
 #ifdef __WXDEBUG__
 
 const char *wxDataObject::GetFormatName(wxDataFormat format)
 {
-  // case 'xxx' is not a valid value for switch of enum 'wxDataFormat'
-  #ifdef __VISUALC__
-    #pragma warning(disable:4063)
-  #endif // VC++
+    // case 'xxx' is not a valid value for switch of enum 'wxDataFormat'
+    #ifdef __VISUALC__
+        #pragma warning(disable:4063)
+    #endif // VC++
 
-  static char s_szBuf[128];
-  switch ( format ) {
-    case CF_TEXT:         return "CF_TEXT";
-    case CF_BITMAP:       return "CF_BITMAP";
-    case CF_METAFILEPICT: return "CF_METAFILEPICT";
-    case CF_SYLK:         return "CF_SYLK";
-    case CF_DIF:          return "CF_DIF";
-    case CF_TIFF:         return "CF_TIFF";
-    case CF_OEMTEXT:      return "CF_OEMTEXT";
-    case CF_DIB:          return "CF_DIB";
-    case CF_PALETTE:      return "CF_PALETTE";
-    case CF_PENDATA:      return "CF_PENDATA";
-    case CF_RIFF:         return "CF_RIFF";
-    case CF_WAVE:         return "CF_WAVE";
-    case CF_UNICODETEXT:  return "CF_UNICODETEXT";
-    case CF_ENHMETAFILE:  return "CF_ENHMETAFILE";
-    case CF_HDROP:        return "CF_HDROP";
-    case CF_LOCALE:       return "CF_LOCALE";
-    default:
-      sprintf(s_szBuf, "clipboard format 0x%x (unknown)", format);
-      return s_szBuf;
-  }
+    static char s_szBuf[256];
+    switch ( format ) {
+        case CF_TEXT:         return "CF_TEXT";
+        case CF_BITMAP:       return "CF_BITMAP";
+        case CF_METAFILEPICT: return "CF_METAFILEPICT";
+        case CF_SYLK:         return "CF_SYLK";
+        case CF_DIF:          return "CF_DIF";
+        case CF_TIFF:         return "CF_TIFF";
+        case CF_OEMTEXT:      return "CF_OEMTEXT";
+        case CF_DIB:          return "CF_DIB";
+        case CF_PALETTE:      return "CF_PALETTE";
+        case CF_PENDATA:      return "CF_PENDATA";
+        case CF_RIFF:         return "CF_RIFF";
+        case CF_WAVE:         return "CF_WAVE";
+        case CF_UNICODETEXT:  return "CF_UNICODETEXT";
+        case CF_ENHMETAFILE:  return "CF_ENHMETAFILE";
+        case CF_HDROP:        return "CF_HDROP";
+        case CF_LOCALE:       return "CF_LOCALE";
 
-  #ifdef __VISUALC__
-    #pragma warning(default:4063)
-  #endif // VC++
+        default:
+            if ( !GetClipboardFormatName(format, s_szBuf, WXSIZEOF(s_szBuf)) )
+            {
+                // it must be a new predefined format we don't know the name of
+                sprintf(s_szBuf, "unknown CF (0x%04x)", format);
+            }
+
+            return s_szBuf;
+    }
+
+    #ifdef __VISUALC__
+        #pragma warning(default:4063)
+    #endif // VC++
 }
 
 #endif // Debug

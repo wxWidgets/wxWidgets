@@ -74,8 +74,8 @@
 #include "wx/intl.h"
 #include "wx/log.h"
 
-
 #include "wx/textctrl.h"
+#include "wx/notebook.h"
 
 #include <string.h>
 
@@ -1469,6 +1469,10 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
     {
         // intercept dialog navigation keys
         MSG *msg = (MSG *)pMsg;
+
+        // here we try to do all the job which ::IsDialogMessage() usually does
+        // internally
+#if 0
         bool bProcess = TRUE;
         if ( msg->message != WM_KEYDOWN )
             bProcess = FALSE;
@@ -1586,6 +1590,36 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
                 }
             }
         }
+#else
+        // let ::IsDialogMessage() do almost everything and handle just the
+        // things it doesn't here: Ctrl-TAB for switching notebook pages
+        if ( msg->message == WM_KEYDOWN )
+        {
+            // don't process system keys here
+            if ( !(HIWORD(msg->lParam) & KF_ALTDOWN) )
+            {
+                if ( (msg->wParam == VK_TAB) &&
+                     (::GetKeyState(VK_CONTROL) & 0x100) != 0 )
+                {
+                    // find the first notebook parent and change its page
+                    wxWindow *win = this;
+                    wxNotebook *nbook = NULL;
+                    while ( win && !nbook )
+                    {
+                        nbook = wxDynamicCast(win, wxNotebook);
+                        win = win->GetParent();
+                    }
+
+                    if ( nbook )
+                    {
+                        bool forward = !(::GetKeyState(VK_SHIFT) & 0x100);
+
+                        nbook->AdvanceSelection(forward);
+                    }
+                }
+            }
+        }
+#endif // 0
 
         if ( ::IsDialogMessage(GetHwnd(), msg) )
             return TRUE;

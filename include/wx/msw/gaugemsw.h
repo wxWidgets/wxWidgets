@@ -60,6 +60,9 @@ public:
     bool SetForegroundColour(const wxColour& col);
     bool SetBackgroundColour(const wxColour& col);
 
+    // overriden base class virtuals
+    virtual bool AcceptsFocus() const { return FALSE; }
+
     // Backward compatibility
 #if WXWIN_COMPATIBILITY
     void SetButtonColour(const wxColour& col) { SetForegroundColour(col); }

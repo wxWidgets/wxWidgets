@@ -224,6 +224,11 @@ inline void wxRGBToColour(wxColour& c, COLORREF rgb)
     c.Set(GetRValue(rgb), GetGValue(rgb), GetBValue(rgb));
 }
 
+// translations between HIMETRIC units (which OLE likes) and pixels (which are
+// liked by all the others) - implemented in msw/utilsexc.cpp
+extern void HIMETRICToPixel(LONG *x, LONG *y);
+extern void PixelToHIMETRIC(LONG *x, LONG *y);
+
 // ---------------------------------------------------------------------------
 // small helper classes
 // ---------------------------------------------------------------------------

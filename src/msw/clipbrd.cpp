@@ -146,10 +146,27 @@ bool wxIsClipboardOpened()
 
 bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat)
 {
-    // for bitmaps, DIBs will also do
-    return (::IsClipboardFormatAvailable(dataFormat) != 0) ||
-           (dataFormat.GetFormatId() == CF_BITMAP &&
-            ::IsClipboardFormatAvailable(CF_DIB));
+    if ( ::IsClipboardFormatAvailable(dataFormat) )
+    {
+        // ok from the first try
+        return TRUE;
+    }
+
+    // for several standard formats, we can convert from some other ones too
+    switch ( dataFormat.GetFormatId() )
+    {
+        // for bitmaps, DIBs will also do
+        case CF_BITMAP:
+            return ::IsClipboardFormatAvailable(CF_DIB) != 0;
+
+#if wxUSE_ENH_METAFILE
+        case CF_METAFILEPICT:
+            return ::IsClipboardFormatAvailable(CF_ENHMETAFILE) != 0;
+#endif // wxUSE_ENH_METAFILE
+
+        default:
+            return FALSE;
+    }
 }
 
 bool wxSetClipboardData(wxDataFormat dataFormat,
@@ -208,7 +225,10 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
                 break;
             }
 
-#if wxUSE_METAFILE
+    // VZ: I'm told that this code works, but it doesn't seem to work for me
+    //     and, anyhow, I'd be highly surprized if it did. So I leave it here
+    //     but IMNSHO it is completely broken.
+#if wxUSE_METAFILE && !defined(wxMETAFILE_IS_ENH)
         case wxDF_METAFILE:
             {
                 wxMetafile *wxMF = (wxMetafile *)data;
@@ -225,7 +245,20 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
                 handle = SetClipboardData(CF_METAFILEPICT, data);
                 break;
             }
-#endif
+#endif // wxUSE_METAFILE
+
+#if wxUSE_ENH_METAFILE
+        case wxDF_ENHMETAFILE:
+            {
+                wxEnhMetaFile *emf = (wxEnhMetaFile *)data;
+                wxEnhMetaFile emfCopy = *emf;
+
+                handle = SetClipboardData(CF_ENHMETAFILE,
+                                          (void *)emfCopy.GetHENHMETAFILE());
+            }
+            break;
+#endif // wxUSE_ENH_METAFILE
+
         case CF_SYLK:
         case CF_DIF:
         case CF_TIFF:
@@ -686,6 +719,10 @@ bool wxClipboard::GetData( wxDataObject& data )
 
                 case CF_METAFILEPICT:
                     formatEtc.tymed = TYMED_MFPICT;
+                    break;
+
+                case CF_ENHMETAFILE:
+                    formatEtc.tymed = TYMED_ENHMF;
                     break;
 
                 default:

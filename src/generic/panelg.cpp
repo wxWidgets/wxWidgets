@@ -179,7 +179,8 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
 void wxPanel::OnSize(wxSizeEvent& WXUNUSED(event))
 {
 #if wxUSE_CONSTRAINTS
-    if (GetAutoLayout()) Layout();
+    if (GetAutoLayout())
+        Layout();
 #endif
 }
 
@@ -215,9 +216,9 @@ void wxPanel::OnFocus(wxFocusEvent& event)
     if (m_winLastFocused)
     {
         // It might happen that the window got reparented or no longer 
-	// accepts the focus.
+    // accepts the focus.
         if ((m_winLastFocused->GetParent() == this) &&
-	    (m_winLastFocused->AcceptsFocus()))
+        (m_winLastFocused->AcceptsFocus()))
         {
             m_winLastFocused->SetFocus();
             return;

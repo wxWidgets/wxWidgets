@@ -50,10 +50,12 @@ all (GUI):
 
 wxMSW:
 
+- support for enhanced metafiles added, support for copying/pasting metafiles
+  (WMF and enhanced ones) fixed/added.
 - implemented setting colours for push buttons
 - wxTreeCtrl::IsVisible() bug fixed (thanks to Gary Chessun)
-- tooltips work with wxRadioBox
 - loading/saving big (> 32K) files in wxTextCtrl works
+- tooltips work with wxRadioBox
 - returning FALSE from OnPrintPage() aborts printing
 
 wxGTK:

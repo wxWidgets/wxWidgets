@@ -232,6 +232,7 @@ dirdlg.cpp	M	32
 dragimag.cpp	M
 dropsrc.cpp	M	O
 droptgt.cpp	M	O
+enhmeta.cpp	M	32
 filedlg.cpp	M
 font.cpp	M
 fontdlg.cpp	M
@@ -862,6 +863,7 @@ dib.h	9
 dibutils.h	9
 dirdlg.h	9
 dragimag.h	9
+enhmeta.h	9	32
 filedlg.h	9
 font.h	9
 fontdlg.h	9

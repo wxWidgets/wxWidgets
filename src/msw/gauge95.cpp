@@ -67,7 +67,7 @@ bool wxGauge95::Create(wxWindow *parent, wxWindowID id,
   int width = size.x;
   int height = size.y;
 
-  long msFlags = WS_CHILD | WS_VISIBLE | WS_TABSTOP;
+  long msFlags = WS_CHILD | WS_VISIBLE;
 
 #ifndef PBS_VERTICAL
 #define PBS_VERTICAL 0x04

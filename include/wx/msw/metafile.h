@@ -27,13 +27,6 @@
     #include "wx/dataobj.h"
 #endif
 
-// provide synonyms for all metafile classes
-#define wxMetaFile wxMetafile
-#define wxMetaFileDC wxMetafileDC
-#define wxMetaFileDataObject wxMetafileDataObject
-
-#define wxMakeMetaFilePlaceable wxMakeMetafilePlaceable
-
 // ----------------------------------------------------------------------------
 // Metafile and metafile device context classes
 // ----------------------------------------------------------------------------
@@ -70,6 +63,7 @@ public:
     bool Ok() const { return (M_METAFILEDATA && (M_METAFILEDATA->m_metafile != 0)); };
 
     // set/get the size of metafile for clipboard operations
+    wxSize GetSize() const { return wxSize(GetWidth(), GetHeight()); }
     int GetWidth() const { return M_METAFILEDATA->m_width; }
     int GetHeight() const { return M_METAFILEDATA->m_height; }
 
@@ -99,7 +93,7 @@ class WXDLLEXPORT wxMetafileDC: public wxDC
 public:
     // Don't supply origin and extent
     // Supply them to wxMakeMetaFilePlaceable instead.
-    wxMetafileDC(const wxString& file = "");
+    wxMetafileDC(const wxString& file = wxEmptyString);
 
     // Supply origin and extent (recommended).
     // Then don't need to supply them to wxMakeMetaFilePlaceable.

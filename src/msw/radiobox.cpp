@@ -156,7 +156,7 @@ wxRadioBox::wxRadioBox(wxWindow *parent, wxFunction func, const char *title,
     delete choices2;
 }
 
-#endif
+#endif // WXWIN_COMPATIBILITY
 
 // Radio box item
 wxRadioBox::wxRadioBox()
@@ -194,7 +194,8 @@ bool wxRadioBox::Create(wxWindow *parent,
         return FALSE;
 
     // create the static box
-    if ( !MSWCreateControl(wxT("BUTTON"), BS_GROUPBOX, pos, size, title, 0) )
+    if ( !MSWCreateControl(wxT("BUTTON"), BS_GROUPBOX | WS_GROUP,
+                           pos, size, title, 0) )
         return FALSE;
 
     // and now create the buttons

@@ -32,14 +32,15 @@
     #include "wx/setup.h"
 #endif
 
-#if wxUSE_METAFILE
-
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/app.h"
 #endif
 
 #include "wx/metafile.h"
+
+#if wxUSE_METAFILE && !defined(wxMETAFILE_IS_ENH)
+
 #include "wx/clipbrd.h"
 #include "wx/msw/private.h"
 
@@ -128,7 +129,13 @@ bool wxMetafile::Play(wxDC *dc)
     dc->BeginDrawing();
 
     if (dc->GetHDC() && M_METAFILEDATA->m_metafile)
-        PlayMetaFile(GetHdcOf(*dc), (HMETAFILE) M_METAFILEDATA->m_metafile);
+    {
+        if ( !::PlayMetaFile(GetHdcOf(*dc), (HMETAFILE)
+                             M_METAFILEDATA->m_metafile) )
+        {
+            wxLogLastError(_T("PlayMetaFile"));
+        }
+    }
 
     dc->EndDrawing();
 
@@ -458,13 +465,20 @@ size_t wxMetafileDataObject::GetDataSize() const
 bool wxMetafileDataObject::GetDataHere(void *buf) const
 {
     METAFILEPICT *mfpict = (METAFILEPICT *)buf;
-    const wxMetafile mf = GetMetafile();
-    mfpict->mm   = mf.GetWindowsMappingMode();
+    const wxMetafile& mf = GetMetafile();
+
+    wxCHECK_MSG( mf.GetHMETAFILE(), FALSE, _T("copying invalid metafile") );
+
+    // doesn't seem to work with any other mapping mode...
+    mfpict->mm   = MM_ANISOTROPIC; //mf.GetWindowsMappingMode();
     mfpict->xExt = mf.GetWidth();
     mfpict->yExt = mf.GetHeight();
-    mfpict->hMF  = (HMETAFILE)mf.GetHMETAFILE();
 
-    wxCHECK_MSG( mfpict->hMF, FALSE, _T("copying invalid metafile") );
+    // transform the picture size to HIMETRIC units (0.01mm) - as we don't know
+    // what DC the picture will be rendered to, use the default display one
+    PixelToHIMETRIC(&mfpict->xExt, &mfpict->yExt);
+
+    mfpict->hMF  = CopyMetaFile((HMETAFILE)mf.GetHMETAFILE(), NULL);
 
     return TRUE;
 }
@@ -475,8 +489,18 @@ bool wxMetafileDataObject::SetData(size_t WXUNUSED(len), const void *buf)
 
     wxMetafile mf;
     mf.SetWindowsMappingMode(mfpict->mm);
-    mf.SetWidth(mfpict->xExt);
-    mf.SetHeight(mfpict->yExt);
+
+    int w = mfpict->xExt,
+        h = mfpict->yExt;
+    if ( mfpict->mm == MM_ANISOTROPIC )
+    {
+        // in this case xExt and yExt contain suggested size in HIMETRIC units
+        // (0.01 mm) - transform this to something more reasonable (pixels)
+        HIMETRICToPixel(&w, &h);
+    }
+
+    mf.SetWidth(w);
+    mf.SetHeight(h);
     mf.SetHMETAFILE((WXHANDLE)mfpict->hMF);
 
     wxCHECK_MSG( mfpict->hMF, FALSE, _T("pasting invalid metafile") );

@@ -37,7 +37,8 @@ public:
     void SetAutoDelete();
 
     // return TRUE if we support this format in "Get" direction
-    bool IsSupportedFormat(const wxDataFormat& format) const;
+    bool IsSupportedFormat(const wxDataFormat& format) const
+        { return wxDataObjectBase::IsSupported(format, Get); }
 
 #ifdef __WXDEBUG__
     // function to return symbolic name of clipboard format (for debug messages)

@@ -161,6 +161,27 @@
 #define wxUSE_SLIDER       1
 
 // ----------------------------------------------------------------------------
+// Metafiles support
+// ----------------------------------------------------------------------------
+
+// Windows supports the graphics format known as metafile which is, though not
+// portable, is widely used under Windows and so is supported by wxWin (under
+// Windows only, of course). Win16 (Win3.1) used the so-called "Window
+// MetaFiles" or WMFs which were replaced with "Enhanced MetaFiles" or EMFs in
+// Win32 (Win9x, NT, 2000). Both of these are supported in wxWin and, by
+// default, WMFs will be used under Win16 and EMFs under Win32. This may be
+// changed by setting wxUSE_WIN_METAFILES_ALWAYS to 1 and/or setting
+// wxUSE_ENH_METAFILE to 0. You may also set wxUSE_METAFILE to 0 to not compile
+// in any metafile related classes at all.
+//
+// Default is 1 for wxUSE_ENH_METAFILE and 0 for wxUSE_WIN_METAFILES_ALWAYS.
+//
+// Recommended setting: default or 0 for everything for portable programs.
+#define wxUSE_METAFILE              1
+#define wxUSE_ENH_METAFILE          1
+#define wxUSE_WIN_METAFILES_ALWAYS  0
+
+// ----------------------------------------------------------------------------
 // Postscript support settings
 // ----------------------------------------------------------------------------
 
@@ -168,8 +189,6 @@
                                 // 0 for no PostScript device context
 #define wxUSE_AFM_FOR_POSTSCRIPT 0
                                 // 1 to use font metric files in GetTextExtent
-#define wxUSE_METAFILE    1
-                                // 0 for no Metafile and metafile device context
 #define wxUSE_IPC         1
                                 // 0 for no interprocess comms
 // Note: wxHELP uses IPC under X so these are interdependent!
