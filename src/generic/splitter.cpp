@@ -165,7 +165,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
         // We can stop dragging now and see what we've got.
         m_dragMode = wxSPLIT_DRAG_NONE;
         ReleaseMouse();
-	
+
         // Erase old tracker
         DrawSashTracker(m_oldX, m_oldY);
 
@@ -255,7 +255,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
 
         // Draw new one
         DrawSashTracker(x, y);
-	    
+
         m_oldX = x;
         m_oldY = y;
     }
@@ -591,8 +591,8 @@ bool wxSplitterWindow::Unsplit(wxWindow *toRemove)
     {
         wxWindow *win = m_windowTwo ;
         m_windowTwo = (wxWindow *) NULL;
-        m_sashPosition = 0;
         OnUnsplit(win);
+        m_sashPosition = 0;
         SizeWindows();
     }
     else if ( toRemove == m_windowOne )
@@ -600,12 +600,16 @@ bool wxSplitterWindow::Unsplit(wxWindow *toRemove)
         wxWindow *win = m_windowOne ;
         m_windowOne = m_windowTwo;
         m_windowTwo = (wxWindow *) NULL;
-        m_sashPosition = 0;
         OnUnsplit(win);
+        m_sashPosition = 0;
         SizeWindows();
     }
     else
+    {
+        wxFAIL_MSG("splitter: attempt to remove a non-existent window");
+
         return FALSE;
+    }
 
     return TRUE;
 }
