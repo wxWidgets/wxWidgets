@@ -39,27 +39,208 @@ static int bitcount( unsigned long n )
 #endif
 
 /*
+ * GLContext implementation
+ */
+
+IMPLEMENT_CLASS(wxGLContext,wxObject)
+
+wxGLContext::wxGLContext( bool WXUNUSED(isRGB), wxWindow *win, 
+                          const wxPalette& WXUNUSED(palette) )
+{
+    m_window = win;
+    // m_widget = win->m_wxwindow;
+
+    wxGLCanvas *gc = (wxGLCanvas*) win;
+    XVisualInfo *vi = (XVisualInfo *) gc->m_vi;
+    
+    wxCHECK_RET( vi, "invalid visual for OpenGl" );
+    
+    m_glContext = glXCreateContext( (Display *)m_window->GetXDisplay(), vi,
+                                    None, GL_TRUE);
+  
+    wxCHECK_RET( m_glContext, "Couldn't create OpenGl context" );
+}
+
+wxGLContext::wxGLContext( 
+               bool WXUNUSED(isRGB), wxWindow *win, 
+               const wxPalette& WXUNUSED(palette),
+               const wxGLContext *other        /* for sharing display lists */
+)
+{
+    m_window = win;
+    // m_widget = win->m_wxwindow;
+
+    wxGLCanvas *gc = (wxGLCanvas*) win;
+    XVisualInfo *vi = (XVisualInfo *) gc->m_vi;
+    
+    wxCHECK_RET( vi, "invalid visual for OpenGl" );
+    
+    if( other != 0 )
+        m_glContext = glXCreateContext( (Display *)m_window->GetXDisplay(), vi, 
+                                        other->m_glContext, GL_TRUE );
+    else
+        m_glContext = glXCreateContext( (Display *)m_window->GetXDisplay(), vi,
+                                        None, GL_TRUE );
+    
+    wxCHECK_RET( m_glContext, "Couldn't create OpenGl context" );
+}
+
+wxGLContext::~wxGLContext()
+{
+    if (!m_glContext) return;
+    
+    if (m_glContext == glXGetCurrentContext())
+    {
+        glXMakeCurrent( (Display*) m_window->GetXDisplay(), None, NULL);
+    }
+	
+    glXDestroyContext( (Display*) m_window->GetXDisplay(), m_glContext );
+}
+
+void wxGLContext::SwapBuffers()
+{
+    if (m_glContext)
+    {
+        Display* display = (Display*) m_window->GetXDisplay();
+        glXSwapBuffers(display, (Window) m_window->GetXWindow());
+    }
+}
+
+void wxGLContext::SetCurrent()
+{
+    if (m_glContext) 
+    { 
+        Display* display = (Display*) m_window->GetXDisplay();
+        glXMakeCurrent(display, (Window) m_window->GetXWindow(), 
+                       m_glContext );;
+    }
+}
+
+void wxGLContext::SetColour(const char *colour)
+{
+    wxColour *the_colour = wxTheColourDatabase->FindColour(colour);
+    if(the_colour) {
+	GLboolean b;
+	glGetBooleanv(GL_RGBA_MODE, &b);
+	if(b) {
+	    glColor3ub(the_colour->Red(),
+		       the_colour->Green(),
+		       the_colour->Blue());
+	} else {
+	    GLint pix = (GLint)the_colour->m_pixel;
+	    if(pix == -1) {
+		XColor exact_def;
+		exact_def.red = (unsigned short)the_colour->Red() << 8;
+		exact_def.green = (unsigned short)the_colour->Green() << 8;
+		exact_def.blue = (unsigned short)the_colour->Blue() << 8;
+		exact_def.flags = DoRed | DoGreen | DoBlue;
+		if(!XAllocColor((Display*) m_window->GetXDisplay(),
+                  (Colormap) wxTheApp->GetMainColormap(m_window->GetXDisplay()),
+                  &exact_def)) {
+		    wxDebugMsg("wxGLCanvas: cannot allocate color\n");
+		    return;
+		}
+		pix = the_colour->m_pixel = exact_def.pixel;
+	    }
+	    glIndexi(pix);
+	}
+    }
+}
+
+void wxGLContext::SetupPixelFormat()
+{
+}
+
+void wxGLContext::SetupPalette( const wxPalette& WXUNUSED(palette) )
+{
+}
+
+wxPalette wxGLContext::CreateDefaultPalette()
+{
+    return wxNullPalette;
+}
+
+
+
+
+/*
  * GLCanvas implementation
  */
 
 IMPLEMENT_CLASS(wxGLCanvas, wxScrolledWindow)
 
-wxGLCanvas::wxGLCanvas(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos,
+BEGIN_EVENT_TABLE(wxGLCanvas, wxScrolledWindow)
+//    EVT_SIZE(wxGLCanvas::OnSize)
+END_EVENT_TABLE()
+
+
+wxGLCanvas::wxGLCanvas( wxWindow *parent, wxWindowID id,
+                        const wxPoint& pos, const wxSize& size, 
+			long style, const wxString& name,
+                        int *attribList, 
+			const wxPalette& palette )
+: wxScrolledWindow(parent, id, pos, size, style, name)
+{
+    Create( parent, NULL, NULL, id, pos, size, style, name, attribList, palette );
+}
+
+wxGLCanvas::wxGLCanvas( wxWindow *parent, 
+                        const wxGLContext *shared,
+                        wxWindowID id,
+                        const wxPoint& pos, const wxSize& size, 
+			long style, const wxString& name,
+                        int *attribList, 
+			const wxPalette& palette )
+: wxScrolledWindow(parent, id, pos, size, style, name)
+{			
+    Create( parent, shared, NULL, id, pos, size, style, name, attribList, palette );
+}
+
+wxGLCanvas::wxGLCanvas( wxWindow *parent, 
+                        const wxGLCanvas *shared,
+                        wxWindowID id,
+                        const wxPoint& pos, const wxSize& size, 
+			long style, const wxString& name,
+                        int *attribList, 
+			const wxPalette& palette )
+: wxScrolledWindow(parent, id, pos, size, style, name)
+{			
+    Create( parent, NULL, shared, id, pos, size, style, name, attribList, palette );
+}
+
+
+/*
+bool wxGLCanvas::Create(wxWindow *parent,
+  const wxGLContext *shared, const wxGLCanvas *shared_context_of,
+  wxWindowID id = -1, const wxPoint& pos,
   const wxSize& size, long style, 
   const wxString& name, int *attribList, const wxPalette& palette):
     wxScrolledWindow(parent, id, pos, size, style, name)
+*/
+
+bool wxGLCanvas::Create( wxWindow *parent, 
+                         const wxGLContext *shared,
+                         const wxGLCanvas *shared_context_of,
+                         wxWindowID id,
+                         const wxPoint& pos, const wxSize& size, 
+			 long style, const wxString& name,
+                         int *attribList, 
+			 const wxPalette& palette)
 {
     XVisualInfo *vi, vi_templ;
     XWindowAttributes xwa;
     int val, n;
 
+    m_sharedContext = (wxGLContext*)shared;  // const_cast
+    m_sharedContextOf = (wxGLCanvas*)shared_context_of;  // const_cast
+    m_glContext = (wxGLContext*) NULL;
+
     Display* display = (Display*) GetXDisplay();
 
-    glx_cx = 0;
     // Check for the presence of the GLX extension
     if(!glXQueryExtension(display, NULL, NULL)) {
 	wxDebugMsg("wxGLCanvas: GLX extension is missing\n");
-	return;
+	return false;
     }
 
     if(attribList) {
@@ -107,7 +288,7 @@ wxGLCanvas::wxGLCanvas(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos,
       attribList = (int*) data;
       // Get an appropriate visual
       vi = glXChooseVisual(display, DefaultScreen(display), attribList);
-      if(!vi) return;
+      if(!vi) return false;
       
       // Here we should make sure that vi is the same visual as the
       // one used by the xwindow drawable in wxCanvas.  However,
@@ -118,9 +299,9 @@ wxGLCanvas::wxGLCanvas(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos,
 	XGetWindowAttributes(display, (Window) GetXWindow(), &xwa);
 	vi_templ.visualid = XVisualIDFromVisual(xwa.visual);
 	vi = XGetVisualInfo(display, VisualIDMask, &vi_templ, &n);
-	if(!vi) return;
+	if(!vi) return false;
 	glXGetConfig(display, vi, GLX_USE_GL, &val);
-	if(!val) return;
+	if(!val) return false;
 	// Basically, this is it.  It should be possible to use vi
 	// in glXCreateContext() below.  But this fails with Mesa.
 	// I notified the Mesa author about it; there may be a fix.
@@ -145,65 +326,62 @@ wxGLCanvas::wxGLCanvas(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos,
 	    a_list[n++] = val;
 	}
 	a_list[n] = None;
-	XFree(vi);
+	// XFree(vi);
 	vi = glXChooseVisual(display, DefaultScreen(display), a_list);
-	if(!vi) return;
+	if(!vi) return false;
 #endif /* OLD_MESA */
     }
 
+    m_vi = vi;  // safe for later use
+    
+    wxCHECK_MSG( m_vi, FALSE, "required visual couldn't be found" );
+
     // Create the GLX context and make it current
-    glx_cx = glXCreateContext(display, vi, 0, GL_TRUE);
+
+    wxGLContext *share= m_sharedContext;
+    if (share==NULL && m_sharedContextOf) 
+        share = m_sharedContextOf->GetContext();
+
+    m_glContext = new wxGLContext( TRUE, this, wxNullPalette, share );
+
 #ifndef OLD_MESA
-    XFree(vi);
+    // XFree(vi);
 #endif
     SetCurrent();
+
+    return true;
 }
 
 wxGLCanvas::~wxGLCanvas(void)
 {
-    Display* display = (Display*) GetXDisplay();
-    if(glx_cx) glXDestroyContext(display, glx_cx);
+    XVisualInfo *vi = (XVisualInfo *) m_vi;
+    
+    if (vi) XFree( vi );
+    if (m_glContext) delete m_glContext;
+
+    // Display* display = (Display*) GetXDisplay();
+    // if(glx_cx) glXDestroyContext(display, glx_cx);
 }
 
 void wxGLCanvas::SwapBuffers()
 {
-    Display* display = (Display*) GetXDisplay();
-    if(glx_cx) glXSwapBuffers(display, (Window) GetXWindow());
+    if( m_glContext ) m_glContext->SwapBuffers();
+
+    // Display* display = (Display*) GetXDisplay();
+    // if(glx_cx) glXSwapBuffers(display, (Window) GetXWindow());
 }
 
 void wxGLCanvas::SetCurrent()
 {
-    Display* display = (Display*) GetXDisplay();
-    if(glx_cx) glXMakeCurrent(display, (Window) GetXWindow(), glx_cx);
+    if( m_glContext ) m_glContext->SetCurrent();
+
+    // Display* display = (Display*) GetXDisplay();
+    // if(glx_cx) glXMakeCurrent(display, (Window) GetXWindow(), glx_cx);
 }
 
 void wxGLCanvas::SetColour(const char *col)
 {
-    wxColour *the_colour = wxTheColourDatabase->FindColour(col);
-    if(the_colour) {
-	GLboolean b;
-	glGetBooleanv(GL_RGBA_MODE, &b);
-	if(b) {
-	    glColor3ub(the_colour->Red(),
-		       the_colour->Green(),
-		       the_colour->Blue());
-	} else {
-	    GLint pix = (GLint)the_colour->m_pixel;
-	    if(pix == -1) {
-		XColor exact_def;
-		exact_def.red = (unsigned short)the_colour->Red() << 8;
-		exact_def.green = (unsigned short)the_colour->Green() << 8;
-		exact_def.blue = (unsigned short)the_colour->Blue() << 8;
-		exact_def.flags = DoRed | DoGreen | DoBlue;
-		if(!XAllocColor((Display*) GetXDisplay(), (Colormap) wxTheApp->GetMainColormap(GetXDisplay()), &exact_def)) {
-		    wxDebugMsg("wxGLCanvas: cannot allocate color\n");
-		    return;
-		}
-		pix = the_colour->m_pixel = exact_def.pixel;
-	    }
-	    glIndexi(pix);
-	}
-    }
+    if( m_glContext ) m_glContext->SetColour(col);
 }
 
 #endif
