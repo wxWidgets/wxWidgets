@@ -1629,7 +1629,7 @@ wxTreeListItem *wxTreeListItem::HitTest(const wxPoint& point,
     {
         // evaluate the item
         int h = theCtrl->GetLineHeight(this);
-        if ((point.y > m_y) && (point.y < m_y + h))
+        if ((point.y > m_y) && (point.y <= m_y + h))
         {
             // check for above/below middle
             int y_mid = m_y + h/2;
@@ -4024,12 +4024,8 @@ wxTreeItemId wxTreeListMainWindow::HitTest(const wxPoint& point, int& flags,
         return wxTreeItemId();
     }
 
-    wxClientDC dc(this);
-    PrepareDC(dc);
-    wxCoord x = dc.DeviceToLogicalX( point.x );
-    wxCoord y = dc.DeviceToLogicalY( point.y );
-    wxTreeListItem *hit = m_anchor->HitTest(wxPoint(x, y), this, flags,
-                                            column, 0);
+    wxTreeListItem *hit = m_anchor->HitTest(CalcUnscrolledPosition(point),
+                                            this, flags, column, 0);
     if (hit == NULL)
     {
         flags = wxTREE_HITTEST_NOWHERE;
@@ -4469,7 +4465,7 @@ void wxTreeListMainWindow::RefreshSubtree(wxTreeListItem *item)
 
     int cw = 0;
     int ch = 0;
-    GetClientSize( &cw, &ch );  // GetVirtualSize???
+    GetVirtualSize( &cw, &ch ); 
 
     wxRect rect;
     rect.x = dc.LogicalToDeviceX( 0 );
@@ -4491,7 +4487,7 @@ void wxTreeListMainWindow::RefreshLine( wxTreeListItem *item )
 
     int cw = 0;
     int ch = 0;
-    GetClientSize( &cw, &ch );   // GetVirtualSize ??
+    GetVirtualSize( &cw, &ch );  
 
     wxRect rect;
     rect.x = dc.LogicalToDeviceX( 0 );
@@ -4898,8 +4894,7 @@ void wxTreeListCtrl::ScrollTo(const wxTreeItemId& item)
 wxTreeItemId wxTreeListCtrl::HitTest(const wxPoint& pos, int& flags,
                                      int& column)
 {
-    return m_main_win->HitTest(m_main_win->ScreenToClient(ClientToScreen(pos)),
-                               flags, column);
+    return m_main_win->HitTest(pos, flags, column);
 }
 
 bool wxTreeListCtrl::GetBoundingRect(const wxTreeItemId& item, wxRect& rect,
