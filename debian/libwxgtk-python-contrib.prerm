@@ -2,7 +2,7 @@
 
 set -e
 
-PACKAGE="libwxgtk=V-python"
+PACKAGE="libwxgtk=V-python-contrib"
 
 dpkg --listfiles $PACKAGE |
 	awk '$0~/\.py$/ {print $0"c\n" $0"o"}' |

@@ -1,6 +1,10 @@
 wxwindows2.2 (2.2.2) unstable; urgency=low
 
   * added missing dependancy for contrib-dev package.  Closes: #70880
+  * by popular demand, added a package with the python-contrib libs.
+  * more tweaks to deb/rules.  autodetect the python install location,
+    and cache the results of configure tests for all packages.
+  * and of course a whole stack of minor fixes in the main codebase too.
 
  -- Ron Lee <ron@microtronics.com.au>  Tue,  5 Sep 2000 18:51:24 +0930
 
