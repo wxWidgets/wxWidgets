@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #----------------------------------------------------------------------
 
-import sys, os, glob, fnmatch
+import sys, os, glob, fnmatch, tempfile
 from distutils.core      import setup, Extension
 from distutils.file_util import copy_file
 from distutils.dir_util  import mkpath
@@ -17,7 +17,7 @@ VER_MAJOR        = 2      # The first three must match wxWindows
 VER_MINOR        = 5
 VER_RELEASE      = 1
 VER_SUBREL       = 0      # wxPython release num for x.y.z release of wxWindows
-VER_FLAGS        = "p4"   # release flags, such as prerelease num, unicode, etc.
+VER_FLAGS        = "p5"   # release flags, such as prerelease num, unicode, etc.
 
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
@@ -272,30 +272,28 @@ def run_swig(files, dir, gendir, package, USE_SWIG, force, swig_args, swig_deps=
                 #i_file = opj(i_file)     #'/'.join(i_file.split('\\'))
 
                 if BUILD_RENAMERS:
-                    #info_file = "./distrib/swig_info"
-                    #info_dict = { 'cmd'  : swig_cmd,
-                    #              'args' : swig_args +  ['-I'+dir]
-                    #              }
-                    #open(info_file, "w").write(str(args_dict))
-
+                    #tempfile.tempdir = sourcePath
+                    xmltemp = tempfile.mktemp('.xml')
+                    
                     # First run swig to produce the XML file, adding
                     # an extra -D that prevents the old rename
                     # directives from being used
                     cmd = [ swig_cmd ] + swig_args + \
-                          [ '-DBUILDING_RENAMERS', '-xmlout', xml_file ] + \
+                          [ '-DBUILDING_RENAMERS', '-xmlout', xmltemp ] + \
                           ['-I'+dir, '-o', cpp_file, i_file]
                     msg(' '.join(cmd))
                     spawn(cmd)
 
                     # Next run build_renamers to process the XML
                     cmd = [ sys.executable, '-u',
-                            './distrib/build_renamers.py', dir, basefile, xml_file] 
+                            './distrib/build_renamers.py', dir, basefile, xmltemp] 
                     msg(' '.join(cmd))
                     spawn(cmd)
-                    #os.remove(info_file)
+                    os.remove(xmltemp)
 
                 # Then run swig for real
-                cmd = [ swig_cmd ] + swig_args + ['-I'+dir, '-o', cpp_file, i_file]
+                cmd = [ swig_cmd ] + swig_args + ['-I'+dir, '-o', cpp_file,
+                                                  '-xmlout', xml_file, i_file]
                 msg(' '.join(cmd))
                 spawn(cmd)
 
