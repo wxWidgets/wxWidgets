@@ -485,7 +485,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
     }
 #endif // wxUSE_STATUSBAR
 
-    m_sizeSet = TRUE;
+    GtkUpdateSize();
 
     // send size event to frame
     wxSizeEvent event( wxSize(m_width,m_height), GetId() );
@@ -581,7 +581,7 @@ void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
     }
 
     // resize window in OnInternalIdle
-    m_sizeSet = FALSE;
+    GtkUpdateSize();
 }
 
 #endif // wxUSE_MENUS_NATIVE
@@ -598,7 +598,7 @@ wxToolBar* wxFrame::CreateToolBar( long style, wxWindowID id, const wxString& na
 
     m_insertInClientArea = TRUE;
 
-    m_sizeSet = FALSE;
+    GtkUpdateSize();
 
     return m_frameToolBar;
 }
@@ -643,7 +643,7 @@ wxStatusBar* wxFrame::CreateStatusBar(int number,
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
     // because it will change when toolbar is added
-    m_sizeSet = FALSE;
+    GtkUpdateSize();
 
     return wxFrameBase::CreateStatusBar( number, style, id, name );
 }
@@ -653,7 +653,7 @@ void wxFrame::PositionStatusBar()
     if ( !m_frameStatusBar )
         return;
 
-    m_sizeSet = FALSE;
+    GtkUpdateSize();
 }
 #endif // wxUSE_STATUSBAR
 
