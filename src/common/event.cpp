@@ -609,15 +609,7 @@ void wxEvtHandler::AddPendingEvent(wxEvent& event)
 
     wxLEAVE_CRIT_SECT(wxPendingEventsLocker);
 
-    // TODO: Wake up idle handler for the other platforms.
-#ifdef __WXGTK__
     wxWakeUpIdle();
-#elif wxUSE_GUI // this works for wxMSW, but may be for others too?
-    // might also send a dummy message to the top level window, this would
-    // probably be cleaner?
-    wxIdleEvent eventIdle;
-    wxTheApp->OnIdle(eventIdle);
-#endif // platform
 }
 
 void wxEvtHandler::ProcessPendingEvents()
@@ -631,6 +623,7 @@ void wxEvtHandler::ProcessPendingEvents()
     {
         event = (wxEvent *)node->Data();
         ProcessEvent(*event);
+        delete event;
         delete node;
         node = m_pendingEvents->First();
     }

@@ -1168,6 +1168,24 @@ bool wxYield()
     return TRUE;
 }
 
+//-----------------------------------------------------------------------------
+// wxWakeUpIdle
+//-----------------------------------------------------------------------------
+
+void wxWakeUpIdle()
+{
+    // Send the top window a dummy message so idle handler processing will
+    // start up again.  Doing it this way ensures that the idle handler
+    // wakes up in the right thread.
+    wxWindow *topWindow = wxTheApp->GetTopWindow();
+    if ( topWindow ) {
+        HWND hWnd = (HWND)topWindow->GetHWND();
+        ::PostMessage(hWnd, WM_NULL, 0, 0);
+    }
+}
+
+//-----------------------------------------------------------------------------
+
 wxIcon
 wxApp::GetStdIcon(int which) const
 {

@@ -767,6 +767,12 @@ void wxApp::OnIdle(
     sbInOnIdle = FALSE;
 }
 
+void wxWakeUpIdle()
+{
+    // **** please implement me! ****
+    // Wake up the idle handler processor, even if it is in another thread...
+}
+
 // Send idle event to all top-level windows
 bool wxApp::SendIdleEvents()
 {
