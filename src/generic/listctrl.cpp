@@ -616,12 +616,17 @@ public:
     // return the hit code for the corresponding position (in this line)
     long HitTestLine(size_t line, int x, int y) const;
 
+    // bring the selected item into view, scrolling to it if necessary
+    void MoveToItem(size_t item);
+
+    // bring the current item into view
+    void MoveToFocus() { MoveToItem(m_current); }
+
     void EditLabel( long item );
     void OnRenameTimer();
     void OnRenameAccept();
 
     void OnMouse( wxMouseEvent &event );
-    void MoveToFocus();
 
     // called to switch the selection from the current item to newCurrent,
     void OnArrowChar( size_t newCurrent, const wxKeyEvent& event );
@@ -662,7 +667,7 @@ public:
     int GetSelectedItemCount();
 
     // set the scrollbars and update the positions of the items
-    void RecalculatePositions();
+    void RecalculatePositions(bool noRefresh = FALSE);
 
     // refresh the window and the header
     void RefreshAll();
@@ -2876,12 +2881,12 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
     }
 }
 
-void wxListMainWindow::MoveToFocus()
+void wxListMainWindow::MoveToItem(size_t item)
 {
-    if ( !HasCurrent() )
+    if ( item == (size_t)-1 )
         return;
 
-    wxRect rect = GetLineRect(m_current);
+    wxRect rect = GetLineRect(item);
 
     int client_w, client_h;
     GetClientSize( &client_w, &client_h );
@@ -3619,7 +3624,7 @@ bool wxListMainWindow::GetItemPosition(long item, wxPoint& pos)
 // geometry calculation
 // ----------------------------------------------------------------------------
 
-void wxListMainWindow::RecalculatePositions()
+void wxListMainWindow::RecalculatePositions(bool noRefresh)
 {
     wxClientDC dc( this );
     dc.SetFont( GetFont() );
@@ -3721,10 +3726,13 @@ void wxListMainWindow::RecalculatePositions()
         SetScrollbars( m_xScroll, m_yScroll, (entireWidth+SCROLL_UNIT_X) / m_xScroll, 0, scroll_pos, 0, TRUE );
     }
 
-    // FIXME: why should we call it from here?
-    UpdateCurrent();
+    if ( !noRefresh )
+    {
+        // FIXME: why should we call it from here?
+        UpdateCurrent();
 
-    RefreshAll();
+        RefreshAll();
+    }
 }
 
 void wxListMainWindow::RefreshAll()
@@ -3902,14 +3910,15 @@ void wxListMainWindow::EnsureVisible( long index )
                  _T("invalid index in EnsureVisible") );
 
     // We have to call this here because the label in question might just have
-    // been added and no screen update taken place.
-    if (m_dirty)
-        wxSafeYield();
+    // been added and its position is not known yet
+    if ( m_dirty )
+    {
+        m_dirty = FALSE;
 
-    size_t oldCurrent = m_current;
-    m_current = (size_t)index;
-    MoveToFocus();
-    m_current = oldCurrent;
+        RecalculatePositions(TRUE /* no refresh */);
+    }
+
+    MoveToItem((size_t)index);
 }
 
 long wxListMainWindow::FindItem(long start, const wxString& str, bool WXUNUSED(partial) )
