@@ -107,12 +107,12 @@ void wxMenuBar::Append( wxMenu *menu, const wxString &title )
     {
         if (*pc == _T('&'))
 	{
-	    pc++; /* skip it */
 #if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
             str << _T('_');
 #endif
         }
-        str << *pc;
+        else
+           str << *pc;
     }
 
     /* this doesn't have much effect right now */
@@ -479,12 +479,12 @@ void wxMenuItem::SetName( const wxString& str )
     {
         if (*pc == _T('&'))
 	{
-	    pc++; /* skip it */
 #if (GTK_MINOR_VERSION > 0)
             m_text << _T('_');
 #endif
         }
-        m_text << *pc;
+        else
+           m_text << *pc;
     }
 
     if (m_menuItem)
@@ -629,8 +629,8 @@ void wxMenu::Append( int id, const wxString &item, const wxString &helpStr, bool
     
 #else
 
-    GtkWidget *menuItem = checkable ? gtk_check_menu_item_new_with_label( item.mb_str() )
-                                    : gtk_menu_item_new_with_label( item.mb_str() );
+    GtkWidget *menuItem = checkable ? gtk_check_menu_item_new_with_label( mitem->GetText().mb_str() )
+                                    : gtk_menu_item_new_with_label( mitem->GetText().mb_str() );
 				    
     gtk_signal_connect( GTK_OBJECT(menuItem), "activate",
                         GTK_SIGNAL_FUNC(gtk_menu_clicked_callback),
