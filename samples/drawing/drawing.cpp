@@ -885,7 +885,7 @@ void MyCanvas::DrawRegionsHelper(wxDC& dc, wxCoord x, bool firstTime)
     dc.DestroyClippingRegion();
 
     wxRegion region(x + 110, y + 20, 100, 270);
-#ifndef __WXMOTIF__
+#if !defined(__WXMOTIF__) && !defined(__WXMAC__)
     if ( !firstTime )
         region.Offset(10, 10);
 #endif
