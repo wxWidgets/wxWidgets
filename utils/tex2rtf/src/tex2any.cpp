@@ -75,7 +75,7 @@ int             HUGEFont3 = 28;
 // All of these tokens MUST be found on a line by themselves (no other
 // text) and must start at the first character of the line, or tex2rtf
 // will fail to process them correctly (a limitation of tex2rtf, not TeX)
-wxString syntaxTokens[] =
+static const wxString syntaxTokens[] =
 { "\\begin{verbatim}",
   "\\begin{toocomplex}",
   "\\end{verbatim}",
@@ -809,12 +809,16 @@ bool read_a_line(char *buf)
                   if (syntaxTokens[index] == "\\verb")
                   {
                       errBuf.Printf("'%s$....$' was detected at line %lu inside file %s.  Please replace this form with \\tt{....}",
-                                    syntaxTokens[index], LineNumbers[CurrentInputIndex], (const char*) currentFileName.c_str());
+                                    syntaxTokens[index].c_str(),
+                                    LineNumbers[CurrentInputIndex],
+                                    currentFileName.c_str());
                   }
                   else
                   {
                       errBuf.Printf("'%s' was detected at line %lu inside file %s that is not the only text on the line, starting at column one.",
-                                    syntaxTokens[index], LineNumbers[CurrentInputIndex], (const char*) currentFileName.c_str());
+                                    syntaxTokens[index].c_str(),
+                                    LineNumbers[CurrentInputIndex],
+                                    currentFileName.c_str());
                   }
                   OnError((char *)errBuf.c_str());
               }
