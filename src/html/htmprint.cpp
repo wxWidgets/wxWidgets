@@ -107,12 +107,13 @@ void wxHtmlDCRenderer::SetHtmlText(const wxString& html, const wxString& basepat
 
 int wxHtmlDCRenderer::Render(int x, int y, int from, int dont_render)
 {
-    int pbreak;
+    int pbreak, hght;
     
     if (m_Cells == NULL || m_DC == NULL) return 0;
     
     pbreak = (int)(from * m_Scale + m_Height);
     while (m_Cells -> AdjustPagebreak(&pbreak)) {}
+    hght = pbreak - (int)(from * m_Scale);
     
     if (!dont_render) {
         int w, h;
@@ -122,10 +123,10 @@ int wxHtmlDCRenderer::Render(int x, int y, int from, int dont_render)
 
         m_DC -> SetBrush(*wxWHITE_BRUSH);
         
-        m_DC -> SetClippingRegion(x * m_Scale, y * m_Scale, m_Width, m_Height);
+        m_DC -> SetClippingRegion(x * m_Scale, y * m_Scale, m_Width, hght);
         m_Cells -> Draw(*m_DC, 
                         x * m_Scale, (y - from) * m_Scale, 
-                        y * m_Scale, pbreak + (y - from) * m_Scale);
+                        y * m_Scale, pbreak + (y /*- from*/) * m_Scale);
         m_DC -> DestroyClippingRegion();
     }
     
