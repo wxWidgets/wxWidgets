@@ -843,8 +843,12 @@ void wxWindow::SetScrollbar(int orient,
     // give the window a chance to relayout
     if ( hasClientSizeChanged )
     {
+#if wxUSE_TWO_WINDOWS
+        wxWindowNative::SetSize( GetSize() );
+#else
         wxSizeEvent event(GetSize());
         (void)GetEventHandler()->ProcessEvent(event);
+#endif
     }
 }
 

@@ -42,6 +42,7 @@
 #include "wx/univ/renderer.h"
 #include "wx/univ/inphand.h"
 #include "wx/univ/theme.h"
+#include "wx/log.h"
 
 #define WXDEBUG_SCROLLBAR
 
@@ -388,7 +389,7 @@ void wxScrollBar::UpdateThumb()
         }
 #endif // WXDEBUG_SCROLLBAR
 
-                    Refresh(TRUE, &rect);
+                    Refresh(FALSE, &rect);
                 }
 
                 m_elementsState[n] &= ~wxCONTROL_DIRTY;

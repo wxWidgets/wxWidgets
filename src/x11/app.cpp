@@ -734,7 +734,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
         {
             if (!win->IsEnabled())
                 return FALSE;
-
+                
             // Here we check if the top level window is
             // disabled, which is one aspect of modality.
             wxWindow *tlw = win;

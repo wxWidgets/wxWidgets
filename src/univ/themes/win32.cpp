@@ -4145,6 +4145,8 @@ bool wxWin32ScrollBarInputHandler::HandleMouseMove(wxInputConsumer *control,
         // if we're scrolling the scrollbar because the arrow or the shaft was
         // pressed, check that the mouse stays on the same scrollbar element
 
+#if 0
+        // Always let thumb jump back if we leave the scrollbar
         if ( event.Moving() )
         {
             ht = m_renderer->HitTestScrollbar(scrollbar, event.GetPosition());
@@ -4153,6 +4155,21 @@ bool wxWin32ScrollBarInputHandler::HandleMouseMove(wxInputConsumer *control,
         {
             ht = wxHT_NOWHERE;
         }
+#else
+        // Jump back only if we get far away from it
+        wxPoint pos = event.GetPosition();
+        if (scrollbar->HasFlag( wxVERTICAL ))
+        {
+            if (pos.x > -20 && pos.x < scrollbar->GetSize().x+20)
+               pos.x = 5;
+        }
+        else
+        {
+            if (pos.y > -20 && pos.y < scrollbar->GetSize().y+20)
+               pos.y = 5;
+        }
+        ht = m_renderer->HitTestScrollbar(scrollbar, pos );
+#endif
 
         // if we're dragging the thumb and the mouse stays in the scrollbar, it
         // is still ok - we only want to catch the case when the mouse leaves

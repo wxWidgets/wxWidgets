@@ -40,6 +40,7 @@
 #include "wx/module.h"
 #include "wx/menuitem.h"
 #include "wx/log.h"
+#include "wx/univ/renderer.h"
 
 #if  wxUSE_DRAG_AND_DROP
     #include "wx/dnd.h"
@@ -837,15 +838,13 @@ void wxWindowX11::DoSetClientSize(int width, int height)
     {
         xwindow = (Window) m_clientWindow;
         
-        if (HasFlag( wxSUNKEN_BORDER) || HasFlag( wxRAISED_BORDER))
+        wxWindow *window = (wxWindow*) this;
+        wxRenderer *renderer = window->GetRenderer();
+        if (renderer)
         {
-            width -= 4;
-            height -= 4;
-        } else
-        if (HasFlag( wxSIMPLE_BORDER ))
-        {
-            width -= 2;
-            height -= 2;
+            wxRect border = renderer->GetBorderDimensions( (wxBorder)(m_windowStyle & wxBORDER_MASK) );
+            width -= border.x + border.width;
+            height -= border.y + border.height;
         }
         
         XResizeWindow( wxGlobalDisplay(), xwindow, width, height );
@@ -872,26 +871,22 @@ void wxWindowX11::DoMoveWindow(int x, int y, int width, int height)
     {
         xwindow = (Window) m_clientWindow;
         
-        if (HasFlag( wxSUNKEN_BORDER) || HasFlag( wxRAISED_BORDER))
+        wxWindow *window = (wxWindow*) this;
+        wxRenderer *renderer = window->GetRenderer();
+        if (renderer)
         {
-            x = 2;
-            y = 2;
-            width -= 4;
-            height -= 4;
-        } else
-        if (HasFlag( wxSIMPLE_BORDER ))
-        {
-            x = 1;
-            y = 1;
-            width -= 2;
-            height -= 2;
-        } else
+            wxRect border = renderer->GetBorderDimensions( (wxBorder)(m_windowStyle & wxBORDER_MASK) );
+            x = border.x;
+            y = border.y;
+            width -= border.x + border.width;
+            height -= border.y + border.height;
+        }
+        else
         {
             x = 0;
             y = 0;
         }
         
-        wxWindow *window = (wxWindow*) this;
         wxScrollBar *sb = window->GetScrollbar( wxHORIZONTAL );
         if (sb && sb->IsShown())
         {
@@ -1139,6 +1134,37 @@ void wxWindowX11::SendPaintEvents()
 
 void wxWindowX11::SendNcPaintEvents()
 {
+    wxWindow *window = (wxWindow*) this;
+
+    // All this for drawing the small square between the scrollbars.
+    int width = 0;
+    int height = 0;
+    int x = 0;
+    int y = 0;
+    wxScrollBar *sb = window->GetScrollbar( wxHORIZONTAL );
+    if (sb && sb->IsShown())
+    {
+        height = sb->GetSize().y;
+        y = sb->GetPosition().y;
+        
+        sb = window->GetScrollbar( wxVERTICAL );
+        if (sb && sb->IsShown())
+        {
+            width = sb->GetSize().x;
+            x = sb->GetPosition().x;
+
+            Display *xdisplay = wxGlobalDisplay();
+            Window xwindow = (Window) GetMainWindow();
+            Colormap cm = (Colormap) wxTheApp->GetMainColormap( wxGetDisplay() );
+            wxColour colour = wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE);
+            colour.CalcPixel( (WXColormap) cm );
+            
+            XSetForeground( xdisplay, g_eraseGC, colour.GetPixel() );
+        
+            XFillRectangle( xdisplay, xwindow, g_eraseGC, x, y, width, height );
+        }
+    }
+        
     wxNcPaintEvent nc_paint_event( GetId() );
     nc_paint_event.SetEventObject( this );
     GetEventHandler()->ProcessEvent( nc_paint_event );
