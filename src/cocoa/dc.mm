@@ -22,6 +22,7 @@
 #import <AppKit/NSAffineTransform.h>
 #import <AppKit/NSColor.h>
 #import <AppKit/NSTypeSetter.h>
+#import <AppKit/NSImage.h>
 
 IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
 wxDC *wxDC::sm_focusedDC = NULL;
@@ -257,7 +258,7 @@ wxCoord wxDC::GetCharWidth() const
 
 bool wxDC::CanDrawBitmap() const
 {
-    return false;
+    return true;
 }
 
 bool wxDC::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
@@ -308,6 +309,48 @@ void wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 
 void wxDC::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask)
 {
+    if(!bmp.Ok())
+        return;
+
+#if 0
+    // Draw a rect so we can see where it's supposed to be
+    wxLogDebug("image at (%d,%d) size %dx%d",x,y,bmp.GetWidth(),bmp.GetHeight());
+    NSBezierPath *bezpath = [NSBezierPath bezierPathWithRect:NSMakeRect(x,y,bmp.GetWidth(),bmp.GetHeight())];
+    [[NSColor blackColor] set];
+    [bezpath stroke];
+    [[NSColor blueColor] set];
+    [bezpath fill];
+#endif // 0
+
+    NSAffineTransform *transform = [NSAffineTransform transform];
+    [transform translateXBy:x yBy:y];
+
+    NSAffineTransform *flipTransform = [NSAffineTransform transform];
+    /*  x' = 1x + 0y + 0
+        y' = 0x + -1y + window's height
+    */
+    NSAffineTransformStruct matrix = {
+        1,  0
+    ,   0, -1
+    ,   0, bmp.GetHeight()
+    };
+    [flipTransform setTransformStruct: matrix];
+
+    NSGraphicsContext *context = [NSGraphicsContext currentContext];
+    [context saveGraphicsState];
+    [transform concat];
+    [flipTransform concat];
+
+    NSImage *nsimage = [[NSImage alloc]
+            initWithSize:NSMakeSize(bmp.GetWidth(), bmp.GetHeight())];
+    [nsimage addRepresentation: const_cast<wxBitmap&>(bmp).GetNSBitmapImageRep()];
+    [nsimage drawAtPoint: NSMakePoint(0,0)
+        fromRect: NSMakeRect(0.0,0.0,bmp.GetWidth(),bmp.GetHeight())
+        operation: NSCompositeCopy
+        fraction: 1.0];
+        
+    [nsimage release];
+    [context restoreGraphicsState];
 }
 
 bool wxDC::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col, int style)
