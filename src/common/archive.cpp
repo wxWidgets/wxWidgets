@@ -22,7 +22,7 @@
   #include "wx/defs.h"
 #endif
 
-#if wxUSE_ZLIB && wxUSE_STREAMS && wxUSE_ZIPSTREAM
+#if wxUSE_STREAMS && wxUSE_ARCSTREAM
 
 #include "wx/archive.h"
 #include "wx/html/forcelnk.h"
@@ -30,7 +30,9 @@
 IMPLEMENT_ABSTRACT_CLASS(wxArchiveEntry, wxObject)
 IMPLEMENT_ABSTRACT_CLASS(wxArchiveClassFactory, wxObject)
 
+#if wxUSE_ZIPSTREAM
 FORCE_LINK(zipstrm)
+#endif
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -71,4 +73,4 @@ wxArchiveEntry& wxArchiveEntry::operator=(const wxArchiveEntry& WXUNUSED(e))
     return *this;
 }
 
-#endif
+#endif // wxUSE_STREAMS && wxUSE_ARCSTREAM

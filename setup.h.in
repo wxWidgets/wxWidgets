@@ -240,6 +240,8 @@
 
 #define wxUSE_FS_INET       0
 
+#define wxUSE_ARCSTREAM     0
+
 #define wxUSE_ZIPSTREAM     0
 
 #define wxUSE_ZLIB          0

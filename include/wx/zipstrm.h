@@ -420,11 +420,30 @@ private:
 
 
 /////////////////////////////////////////////////////////////////////////////
+// Iterators
+
+#if wxUSE_STL || defined WX_TEST_ARCHIVE_ITERATOR
+typedef wxArchiveIterator<wxZipInputStream> wxZipIter;
+typedef wxArchiveIterator<wxZipInputStream,
+         std::pair<wxString, wxZipEntry*> > wxZipPairIter;
+#endif
+
+
+/////////////////////////////////////////////////////////////////////////////
 // wxZipClassFactory
 
 class WXDLLIMPEXP_BASE wxZipClassFactory : public wxArchiveClassFactory
 {
 public:
+    typedef wxZipEntry        entry_type;
+    typedef wxZipInputStream  instream_type;
+    typedef wxZipOutputStream outstream_type;
+    typedef wxZipNotifier     notifier_type;
+#if wxUSE_STL || defined WX_TEST_ARCHIVE_ITERATOR
+    typedef wxZipIter         iter_type;
+    typedef wxZipPairIter     pairiter_type;
+#endif
+
     wxZipEntry *NewEntry() const
         { return new wxZipEntry; }
     wxZipInputStream *NewStream(wxInputStream& stream) const
@@ -447,16 +466,6 @@ protected:
 private:
     DECLARE_DYNAMIC_CLASS(wxZipClassFactory)
 };
-
-
-/////////////////////////////////////////////////////////////////////////////
-// Iterators
-
-#if wxUSE_STL || defined WX_TEST_ARCHIVE_ITERATOR
-typedef wxArchiveIterator<wxZipInputStream> wxZipIter;
-typedef wxArchiveIterator<wxZipInputStream,
-         std::pair<wxString, wxZipEntry*> > wxZipPairIter;
-#endif
 
 
 /////////////////////////////////////////////////////////////////////////////

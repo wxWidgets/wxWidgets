@@ -391,6 +391,9 @@
 // Set to 1 to enable virtual Internet filesystem (requires wxUSE_FILESYSTEM)
 #define wxUSE_FS_INET       1
 
+// wxArchive classes for accessing archives such as zip and tar
+#define wxUSE_ARCSTREAM     1
+
 // Set to 1 to compile wxZipInput/OutputStream classes.
 #define wxUSE_ZIPSTREAM     1
 
@@ -575,11 +578,7 @@
 // Default is 1 for the platforms where native status bar is supported.
 //
 // Recommended setting: 1 (there is no advantage in using the generic one)
-#if defined(__WXMSW__) || defined(__WXMAC__)
 #define wxUSE_NATIVE_STATUSBAR        1
-#else
-#define wxUSE_NATIVE_STATUSBAR        0
-#endif
 
 // wxToolBar related settings: if wxUSE_TOOLBAR is 0, don't compile any toolbar
 // classes at all. Otherwise, use the native toolbar class unless

@@ -384,6 +384,9 @@
 // Set to 1 to enable virtual Internet filesystem (requires wxUSE_FILESYSTEM)
 #define wxUSE_FS_INET       0
 
+// wxArchive classes for accessing archives such as zip and tar
+#define wxUSE_ARCSTREAM     0
+
 // Set to 1 to compile wxZipInput/OutputStream classes.
 #define wxUSE_ZIPSTREAM     0
 

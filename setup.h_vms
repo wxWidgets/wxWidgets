@@ -249,6 +249,8 @@
 
 #define wxUSE_FS_INET       1
 
+#define wxUSE_ARCSTREAM     1
+
 #define wxUSE_ZIPSTREAM     1
 
 #define wxUSE_ZLIB          1

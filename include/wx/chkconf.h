@@ -924,6 +924,25 @@
 #   endif
 #endif  /* wxUSE_DYNLIB_CLASS */
 
+#if wxUSE_ZIPSTREAM
+#   if !wxUSE_ZLIB
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxZip requires wxZlib"
+#       else
+#           undef wxUSE_ZLIB
+#           define wxUSE_ZLIB 1
+#       endif
+#   endif
+#   if !wxUSE_ARCSTREAM
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxZip requires wxArchive"
+#       else
+#           undef wxUSE_ARCSTREAM
+#           define wxUSE_ARCSTREAM 1
+#       endif
+#   endif
+#endif /* wxUSE_ZIPSTREAM */
+
 /* the rest of the tests is for the GUI settings only */
 #if wxUSE_GUI
 

@@ -16,7 +16,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_ZLIB && wxUSE_STREAMS && wxUSE_ZIPSTREAM
+#if wxUSE_STREAMS && wxUSE_ARCSTREAM
 
 #include "wx/stream.h"
 #include "wx/filename.h"
@@ -158,47 +158,6 @@ protected:
 
 private:
     wxMBConv& m_conv;
-};
-
-
-/////////////////////////////////////////////////////////////////////////////
-// wxArchiveClassFactory
-//
-// A wxArchiveClassFactory instance for a particular archive type allows
-// the creation of the other classes that may be needed.
-
-class WXDLLIMPEXP_BASE wxArchiveClassFactory : public wxObject
-{
-public:
-    virtual ~wxArchiveClassFactory() { }
-
-    wxArchiveEntry *NewEntry() const
-        { return DoNewEntry(); }
-    wxArchiveInputStream *NewStream(wxInputStream& stream) const
-        { return DoNewStream(stream); }
-    wxArchiveOutputStream *NewStream(wxOutputStream& stream) const
-        { return DoNewStream(stream); }
-
-    virtual wxString GetInternalName(
-        const wxString& name,
-        wxPathFormat format = wxPATH_NATIVE) const = 0;
-
-    void SetConv(wxMBConv& conv) { m_pConv = &conv; }
-    wxMBConv& GetConv() const { return *m_pConv; }
-
-protected:
-    virtual wxArchiveEntry        *DoNewEntry() const = 0;
-    virtual wxArchiveInputStream  *DoNewStream(wxInputStream& stream) const = 0;
-    virtual wxArchiveOutputStream *DoNewStream(wxOutputStream& stream) const = 0;
-
-    wxArchiveClassFactory() : m_pConv(&wxConvLocal) { }
-    wxArchiveClassFactory& operator=(const wxArchiveClassFactory& WXUNUSED(f))
-        { return *this; }
-
-private:
-    wxMBConv *m_pConv;
-
-    DECLARE_ABSTRACT_CLASS(wxArchiveClassFactory)
 };
 
 
@@ -346,6 +305,56 @@ typedef wxArchiveIterator<wxArchiveInputStream,
 
 #endif // wxUSE_STL || defined WX_TEST_ARCHIVE_ITERATOR
 
-#endif // wxUSE_STREAMS
+
+/////////////////////////////////////////////////////////////////////////////
+// wxArchiveClassFactory
+//
+// A wxArchiveClassFactory instance for a particular archive type allows
+// the creation of the other classes that may be needed.
+
+class WXDLLIMPEXP_BASE wxArchiveClassFactory : public wxObject
+{
+public:
+    typedef wxArchiveEntry        entry_type;
+    typedef wxArchiveInputStream  instream_type;
+    typedef wxArchiveOutputStream outstream_type;
+    typedef wxArchiveNotifier     notifier_type;
+#if wxUSE_STL || defined WX_TEST_ARCHIVE_ITERATOR
+    typedef wxArchiveIter         iter_type;
+    typedef wxArchivePairIter     pairiter_type;
+#endif
+
+    virtual ~wxArchiveClassFactory() { }
+
+    wxArchiveEntry *NewEntry() const
+        { return DoNewEntry(); }
+    wxArchiveInputStream *NewStream(wxInputStream& stream) const
+        { return DoNewStream(stream); }
+    wxArchiveOutputStream *NewStream(wxOutputStream& stream) const
+        { return DoNewStream(stream); }
+
+    virtual wxString GetInternalName(
+        const wxString& name,
+        wxPathFormat format = wxPATH_NATIVE) const = 0;
+
+    void SetConv(wxMBConv& conv) { m_pConv = &conv; }
+    wxMBConv& GetConv() const { return *m_pConv; }
+
+protected:
+    virtual wxArchiveEntry        *DoNewEntry() const = 0;
+    virtual wxArchiveInputStream  *DoNewStream(wxInputStream& stream) const = 0;
+    virtual wxArchiveOutputStream *DoNewStream(wxOutputStream& stream) const = 0;
+
+    wxArchiveClassFactory() : m_pConv(&wxConvLocal) { }
+    wxArchiveClassFactory& operator=(const wxArchiveClassFactory& WXUNUSED(f))
+        { return *this; }
+
+private:
+    wxMBConv *m_pConv;
+
+    DECLARE_ABSTRACT_CLASS(wxArchiveClassFactory)
+};
+
+#endif // wxUSE_STREAMS && wxUSE_ARCSTREAM
 
 #endif // _WX_ARCHIVE_H__
