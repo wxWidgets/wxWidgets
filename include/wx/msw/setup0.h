@@ -1178,7 +1178,7 @@
 #define wxUSE_DEBUG_NEW_ALWAYS 0
 #endif
 
-#if defined(__WXMSW__) && defined(__WATCOMC__)
+#if defined(__WXMSW__) && (defined(__WATCOMC__) && __WATCOMC__ < 1200)
 /*
 #undef  wxUSE_GLCANVAS
 #define wxUSE_GLCANVAS 0
