@@ -1015,11 +1015,14 @@ int _GSocket_Send_Dgram(GSocket *socket, const char *buffer, int size)
  * -------------------------------------------------------------------------
  */
 
-/* CHECK_ADDRESS verifies that the current family is either GSOCK_NOFAMILY
- * or GSOCK_*family*, and if it is GSOCK_NOFAMILY, it initalizes address
- * to be a GSOCK_*family*. In other cases, it returns GSOCK_INVADDR.
+/* CHECK_ADDRESS verifies that the current address family is either
+ * GSOCK_NOFAMILY or GSOCK_*family*, and if it is GSOCK_NOFAMILY, it
+ * initalizes it to be a GSOCK_*family*. In other cases, it returns
+ * an appropiate error code.
+ *
+ * CHECK_ADDRESS_RETVAL does the same but returning 'retval' on error.
  */
-#define CHECK_ADDRESS(address, family, retval)                      \
+#define CHECK_ADDRESS(address, family)                              \
 {                                                                   \
   if (address->m_family == GSOCK_NOFAMILY)                          \
     if (_GAddress_Init_##family(address) != GSOCK_NOERROR)          \
@@ -1027,9 +1030,22 @@ int _GSocket_Send_Dgram(GSocket *socket, const char *buffer, int size)
   if (address->m_family != GSOCK_##family)                          \
   {                                                                 \
     address->m_error = GSOCK_INVADDR;                               \
+    return GSOCK_INVADDR;                                           \
+  }                                                                 \
+}
+
+#define CHECK_ADDRESS_RETVAL(address, family, retval)               \
+{                                                                   \
+  if (address->m_family == GSOCK_NOFAMILY)                          \
+    if (_GAddress_Init_##family(address) != GSOCK_NOERROR)          \
+      return retval;                                                \
+  if (address->m_family != GSOCK_##family)                          \
+  {                                                                 \
+    address->m_error = GSOCK_INVADDR;                               \
     return retval;                                                  \
   }                                                                 \
 }
+
 
 GAddress *GAddress_new(void)
 {
@@ -1186,7 +1202,7 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
 
   assert(address != NULL);
 
-  CHECK_ADDRESS(address, INET, GSOCK_INVADDR);
+  CHECK_ADDRESS(address, INET);
 
   addr = &(((struct sockaddr_in *)address->m_addr)->sin_addr);
 
@@ -1222,7 +1238,7 @@ GSocketError GAddress_INET_SetHostAddress(GAddress *address,
 
   assert(address != NULL);
 
-  CHECK_ADDRESS(address, INET, GSOCK_INVADDR);
+  CHECK_ADDRESS(address, INET);
 
   addr = &(((struct sockaddr_in *)address->m_addr)->sin_addr);
   addr->s_addr = hostaddr;
@@ -1237,7 +1253,7 @@ GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port,
   struct sockaddr_in *addr;
 
   assert(address != NULL);
-  CHECK_ADDRESS(address, INET, GSOCK_INVADDR);
+  CHECK_ADDRESS(address, INET);
 
   if (!port)
   {
@@ -1273,7 +1289,7 @@ GSocketError GAddress_INET_SetPort(GAddress *address, unsigned short port)
   struct sockaddr_in *addr;
 
   assert(address != NULL);
-  CHECK_ADDRESS(address, INET, GSOCK_INVADDR);
+  CHECK_ADDRESS(address, INET);
 
   addr = (struct sockaddr_in *)address->m_addr;
   addr->sin_port = htons(port);
@@ -1288,7 +1304,7 @@ GSocketError GAddress_INET_GetHostName(GAddress *address, char *hostname, size_t
   struct sockaddr_in *addr;
 
   assert(address != NULL);
-  CHECK_ADDRESS(address, INET, GSOCK_INVADDR);
+  CHECK_ADDRESS(address, INET);
 
   addr = (struct sockaddr_in *)address->m_addr;
   addr_buf = (char *)&(addr->sin_addr);
@@ -1310,7 +1326,7 @@ unsigned long GAddress_INET_GetHostAddress(GAddress *address)
   struct sockaddr_in *addr;
 
   assert(address != NULL);
-  CHECK_ADDRESS(address, INET, 0);
+  CHECK_ADDRESS_RETVAL(address, INET, 0);
 
   addr = (struct sockaddr_in *)address->m_addr;
 
@@ -1322,7 +1338,7 @@ unsigned short GAddress_INET_GetPort(GAddress *address)
   struct sockaddr_in *addr;
 
   assert(address != NULL);
-  CHECK_ADDRESS(address, INET, 0);
+  CHECK_ADDRESS_RETVAL(address, INET, 0);
 
   addr = (struct sockaddr_in *)address->m_addr;
   return ntohs(addr->sin_port);
