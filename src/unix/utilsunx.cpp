@@ -44,7 +44,11 @@
     #include <sys/statvfs.h>
 
     #define statfs statvfs
+# ifdef __HPUX__
+    #define wxStatFs struct statvfs
+# else
     #define wxStatFs statvfs_t
+# endif
 #elif HAVE_STATFS
     #define wxStatFs struct statfs
 #endif // HAVE_STAT[V]FS
