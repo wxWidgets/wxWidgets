@@ -307,7 +307,7 @@ void MyFrame::OnFocusLast(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnToggleFirstSel(wxCommandEvent& WXUNUSED(event))
 {
-    m_listCtrl->SetItemState(0, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+    m_listCtrl->SetItemState(0, (~m_listCtrl->GetItemState(0, wxLIST_STATE_SELECTED) ) & wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 }
 
 void MyFrame::OnDeselectAll(wxCommandEvent& WXUNUSED(event))
