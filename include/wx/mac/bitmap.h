@@ -27,6 +27,7 @@ class WXDLLEXPORT wxBitmap;
 class WXDLLEXPORT wxBitmapHandler;
 class WXDLLEXPORT wxIcon;
 class WXDLLEXPORT wxCursor;
+class WXDLLEXPORT wxImage;
 
 GWorldPtr 	wxMacCreateGWorld( int width , int height , int depth ) ;
 void 		wxMacDestroyGWorld( GWorldPtr gw ) ;
@@ -152,7 +153,13 @@ public:
 
   // If depth is omitted, will create a bitmap compatible with the display
   wxBitmap(int width, int height, int depth = -1);
+  
+  // Convert from wxImage:
+  wxBitmap(const wxImage& image, int depth = -1);
+  
   ~wxBitmap();
+  
+  wxImage ConvertToImage() const;
 
   // get the given part of bitmap
   wxBitmap GetSubBitmap( const wxRect& rect ) const;

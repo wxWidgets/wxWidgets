@@ -29,6 +29,7 @@ class WXDLLEXPORT wxIcon;
 class WXDLLEXPORT wxMask;
 class WXDLLEXPORT wxCursor;
 class WXDLLEXPORT wxControl;
+class WXDLLEXPORT wxImage;
 
 // ----------------------------------------------------------------------------
 // Bitmap data
@@ -105,6 +106,9 @@ public:
              ,int nDepth = -1
             );
 
+    wxBitmap( const wxImage& image, int depth = -1 ) 
+                         { (void)CreateFromImage(image, depth); }
+
     // we must have this, otherwise icons are silently copied into bitmaps using
     // the copy ctor but the resulting bitmap is invalid!
     inline wxBitmap(const wxIcon& rIcon)
@@ -131,6 +135,8 @@ public:
     }
 
     virtual ~wxBitmap();
+
+    wxImage ConvertToImage() const;  
 
     // get the given part of bitmap
     wxBitmap GetSubBitmap(const wxRect& rRect) const;
@@ -226,6 +232,7 @@ protected:
 
     // creates the bitmap from XPM data, supposed to be called from ctor
     bool CreateFromXpm(const char **bits);
+    bool CreateFromImage(const wxImage& image, int depth);
 
 private:
     bool CopyFromIconOrCursor(const wxGDIImage& rIcon);
