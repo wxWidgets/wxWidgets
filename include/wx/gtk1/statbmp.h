@@ -22,6 +22,7 @@
 #include "wx/object.h"
 #include "wx/control.h"
 #include "wx/bitmap.h"
+#include "wx/icon.h"
 
 //-----------------------------------------------------------------------------
 // classes
@@ -66,8 +67,7 @@ public:
     const wxBitmap& GetBitmap() const { return m_bitmap; }
 
     // for compatibility with wxMSW
-    wxIcon& GetIcon()
-        { return *(wxDynamicCast(&m_bitmap, wxIcon)); }
+    wxIcon& GetIcon();
 
 private:
     wxBitmap   m_bitmap;

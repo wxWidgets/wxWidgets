@@ -17,14 +17,10 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+  #pragma hdrstop
 #endif
 
 #if wxUSE_SOCKETS
-
-#ifndef WX_PRECOMP
-#include <wx/wx.h>
-#endif
 
 #include "wx/protocol/protocol.h"
 #include "wx/url.h"

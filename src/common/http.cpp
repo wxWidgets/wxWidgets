@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "http.h"
+  #pragma implementation "http.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
@@ -18,10 +18,6 @@
 
 #ifdef __BORLANDC__
   #pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-  #include "wx/defs.h"
 #endif
 
 #if wxUSE_SOCKETS

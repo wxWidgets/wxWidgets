@@ -26,10 +26,6 @@
   #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-  #include "wx/defs.h"
-#endif
-
 #if wxUSE_TIMEDATE
 
 #include "wx/date.h"

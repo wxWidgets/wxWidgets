@@ -83,4 +83,13 @@ void wxStaticBitmap::SetBitmap( const wxBitmap &bitmap )
     }
 }
 
+wxIcon& wxStaticBitmap::GetIcon()
+{
+    wxIcon *icon = wxDynamicCast(&m_bitmap, wxIcon);
+    
+    if (!icon) return wxNullIcon;
+    
+    return *icon;
+}
+
 #endif

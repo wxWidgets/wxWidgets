@@ -25,10 +25,6 @@
   #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-  #include "wx/defs.h"
-#endif
-
 #if wxUSE_FILE
 
 // standard

@@ -19,10 +19,6 @@
   #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-  #include "wx/defs.h"
-#endif
-
 #if wxUSE_SERIAL && wxUSE_STREAMS
 
 #include "wx/object.h"

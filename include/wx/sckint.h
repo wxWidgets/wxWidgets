@@ -15,12 +15,14 @@
 #pragma interface
 #endif
 
+#include "wx/defs.h"
+
 #if wxUSE_SOCKETS
 
-#include <wx/object.h>
-#include <wx/list.h>
-#include <wx/socket.h>
-#include <wx/thread.h>
+#include "wx/object.h"
+#include "wx/list.h"
+#include "wx/socket.h"
+#include "wx/thread.h"
 
 // Socket state
 class SocketState

@@ -18,11 +18,14 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+  #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+  #include "wx/utils.h"
+  #include "wx/dcclient.h"
+  #include "wx/dcmemory.h"
+  #include "wx/textctrl.h"
 #endif
 
 #include <string.h>

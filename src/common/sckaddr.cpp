@@ -10,14 +10,14 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "sckaddr.h"
+  #pragma implementation "sckaddr.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+  #pragma hdrstop
 #endif
 
 #if wxUSE_SOCKETS

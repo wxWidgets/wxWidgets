@@ -25,11 +25,7 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-    #include "wx/defs.h"
+  #pragma hdrstop
 #endif
 
 #if wxUSE_DOC_VIEW_ARCHITECTURE

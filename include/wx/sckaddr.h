@@ -8,8 +8,17 @@
 // Copyright:   (c) 1997, 1998 Guilhem Lavaux
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
+
 #ifndef _WX_NETWORK_ADDRESS_H
 #define _WX_NETWORK_ADDRESS_H
+
+#ifdef __GNUG__
+#pragma interface
+#endif
+
+#include "wx/defs.h"
+
+#if wxUSE_SOCKETS
 
 #if defined(__WINDOWS__) && defined(WXSOCK_INTERNAL)
 #include <winsock.h>
@@ -21,15 +30,7 @@
 #include <netinet/in.h>
 #endif
 
-#ifdef __GNUG__
-#pragma interface
-#endif
-
-#ifdef WXPREC
-#include <wx/wxprec.h>
-#else
-#include <wx/wx.h>
-#endif
+#include "wx/string.h"
 
 class WXDLLEXPORT wxSockAddress : public wxObject {
   DECLARE_ABSTRACT_CLASS(wxSockAddress)
@@ -132,5 +133,10 @@ public:
   inline int Type() { return wxSockAddress::UNIX; }
 };
 #endif
+  // __UNIX__
 
 #endif
+  // wxUSE_SOCKETS
+  
+#endif
+  // _WX_NETWORK_ADDRESS_H
