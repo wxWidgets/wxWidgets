@@ -665,7 +665,7 @@ void wxApp::CleanUp()
 
 #ifndef __DARWIN__
 #  if __option(profile)
-    ProfilerDump( "\papp.prof" ) ;
+    ProfilerDump( (StringPtr)"\papp.prof" ) ;
     ProfilerTerm() ;
 #  endif
 #endif
