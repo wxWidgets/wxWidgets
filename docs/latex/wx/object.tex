@@ -48,6 +48,13 @@ Pointer to an object which is the object's reference-counted data.
 \helpref{wxObject::GetRefData}{wxobjectgetrefdata},\rtfsp
 \helpref{wxObjectRefData}{wxobjectrefdata}
 
+\membersection{wxObject::CopyObject}\label{wxobjectcopyobject}
+
+\func{virtual void}{CopyObject}{\param{wxObject\&}{ object\_dest}}
+
+Create a copy of this object in object\_dest. Must perform a full copy of self
+so that object\_dest will be valid after this object is deleted
+
 \membersection{wxObject::Dump}\label{wxobjectdump}
 
 \func{void}{Dump}{\param{ostream\&}{ stream}}
