@@ -67,7 +67,9 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
 {
     m_dialogStyle = style;
 
+#if wxUSE_STATIC_BITMAP
     bool is_pda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
+#endif
 
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 

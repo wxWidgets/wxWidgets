@@ -49,6 +49,7 @@
 #include <oleacc.h>
 #include <winable.h>
 
+#include "wx/msw/winundef.h"
 #include "wx/msw/ole/oleutils.h"
 
 #ifndef CHILDID_SELF
@@ -79,7 +80,7 @@ class wxIEnumVARIANT : public IEnumVARIANT
 {
 public:
     wxIEnumVARIANT(const wxVariant& variant);
-    ~wxIEnumVARIANT() { }
+    virtual ~wxIEnumVARIANT() { }
 
     DECLARE_IUNKNOWN_METHODS;
 

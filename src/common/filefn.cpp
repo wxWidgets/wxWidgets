@@ -124,6 +124,11 @@
     #include <windows.h>
     #include "wx/msw/mslu.h"
 
+    // for _getcwd
+    #ifdef __MINGW32__
+        #include <io.h>
+    #endif
+
     // sys/cygwin.h is needed for cygwin_conv_to_full_win32_path()
     //
     // note that it must be included after <windows.h>
@@ -1493,7 +1498,7 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
     if ( needsANSI )
 #endif // wxUSE_UNICODE
     {
-    #ifdef _MSC_VER
+    #if defined(_MSC_VER) || defined(__MINGW32__)
         ok = _getcwd(cbuf, sz) != NULL;
     #elif defined(__WXMAC__) && !defined(__DARWIN__)
         FSSpec cwdSpec ;
