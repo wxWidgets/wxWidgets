@@ -33,7 +33,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxControl, wxWindow)
 wxControl::wxControl()
 {
     m_needParent = TRUE;
-    m_createComplete = false;
 }
 
 bool wxControl::Create( wxWindow *parent,
@@ -44,7 +43,6 @@ bool wxControl::Create( wxWindow *parent,
                       const wxValidator& validator,
                       const wxString &name )
 {
-    m_createComplete = false;
     bool ret = wxWindow::Create(parent, id, pos, size, style, name);
     
 #if wxUSE_VALIDATORS
@@ -68,14 +66,6 @@ void wxControl::SetLabel( const wxString &label )
         }
         m_label << *pc;
     }
-}
-
-void wxControl::PostSetLabel()
-{
-    // make sure the widget has been created, and that PostCreate has already
-    // been called
-    if (m_widget && m_createComplete && GetAdjustMinSizeFlag())
-        SetBestSize(wxDefaultSize);
 }
 
 wxString wxControl::GetLabel() const
@@ -113,7 +103,6 @@ void wxControl::PostCreation(const wxSize& size)
     InheritAttributes();
     ApplyWidgetStyle();
     SetInitialBestSize(size);
-    m_createComplete = true;
 }
 
 

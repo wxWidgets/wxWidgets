@@ -68,13 +68,6 @@ bool wxControlBase::Create(wxWindow *parent,
     return ret;
 }
 
-
-void wxControlBase::Init()
-{
-    m_adjustMinSize = true;
-}
-
-
 bool wxControlBase::CreateControl(wxWindowBase *parent,
                                   wxWindowID id,
                                   const wxPoint& pos,
@@ -121,24 +114,6 @@ void wxControlBase::InitCommandEvent(wxCommandEvent& event) const
             // nothing to do
             ;
     }
-}
-
-void wxControlBase::SetLabel(const wxString& label)
-{
-    wxWindow::SetLabel(label);
-    if (GetAdjustMinSizeFlag())
-        SetBestSize(wxDefaultSize);
-}
-
-
-bool wxControlBase::SetFont(const wxFont& font)
-{
-    bool ret = wxWindow::SetFont(font);
-
-    if (GetAdjustMinSizeFlag())
-        SetBestSize(wxDefaultSize);
-
-    return ret;
 }
 
 // ----------------------------------------------------------------------------

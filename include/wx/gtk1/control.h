@@ -58,7 +58,6 @@ public:
 protected:
     virtual wxSize DoGetBestSize() const;
     void PostCreation(const wxSize& size);
-    void PostSetLabel();
 
 #ifdef __WXGTK20__
     wxString PrepareLabelMnemonics( const wxString &label ) const;
@@ -89,7 +88,6 @@ protected:
 
     wxString   m_label;
     char       m_chAccel;  // enabled to avoid breaking binary compatibility later on
-    bool       m_createComplete;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxControl)

@@ -40,6 +40,10 @@ public:
                 long style = 0,
                 const wxString& name = wxStaticTextNameStr);
 
+    // override some methods to resize the window properly
+    virtual void SetLabel(const wxString& label);
+    virtual bool SetFont( const wxFont &font );
+
 protected:
     // implement/override some base class virtuals
     virtual wxBorder GetDefaultBorder() const;

@@ -57,8 +57,7 @@ public:
     wxString GetLabel() const;
     void SetLabel( const wxString &label );
 
-    bool GetAdjustMinSizeFlag() const { return !HasFlag(wxST_NO_AUTORESIZE); }
-    
+    bool SetFont( const wxFont &font );
     bool SetForegroundColour( const wxColour& colour );
 
     static wxVisualAttributes

@@ -184,7 +184,6 @@ void wxBitmapButton::SetLabel( const wxString &label )
     wxCHECK_RET( m_widget != NULL, wxT("invalid button") );
 
     wxControl::SetLabel( label );
-    PostSetLabel();
 }
 
 wxString wxBitmapButton::GetLabel() const

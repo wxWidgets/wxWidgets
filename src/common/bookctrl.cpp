@@ -46,10 +46,6 @@ void wxBookCtrl::Init()
 {
     m_imageList = NULL;
     m_ownsImageList = false;
-    // Unlike most controls, we don't want to adjust the min size
-    // when we set the font, since the page size is not related to
-    // the font size.
-    m_adjustMinSize = false;
 }
 
 bool

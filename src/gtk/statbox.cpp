@@ -89,7 +89,6 @@ void wxStaticBox::SetLabel( const wxString &label )
 
     gtk_frame_set_label( GTK_FRAME( m_widget ),
                          m_label.empty() ? (char *)NULL : (const char*) wxGTK_CONV( m_label ) );
-    PostSetLabel();
 }
 
 // static

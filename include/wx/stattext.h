@@ -17,8 +17,6 @@ public:
     virtual void ApplyParentThemeBackground(const wxColour& bg)
         { SetBackgroundColour(bg); }
 
-    bool GetAdjustMinSizeFlag() const { return !HasFlag(wxST_NO_AUTORESIZE); }
-    
 private:
     DECLARE_NO_COPY_CLASS(wxStaticTextBase)
 };

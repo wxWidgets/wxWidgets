@@ -41,6 +41,7 @@ class WXDLLEXPORT wxStaticText: public wxStaticTextBase
 
   // accessors
   void SetLabel( const wxString &str ) ;
+  bool SetFont( const wxFont &font );
 
   // operations
   virtual void Command(wxCommandEvent& WXUNUSED(event)) {};

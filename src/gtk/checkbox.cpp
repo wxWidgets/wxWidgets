@@ -158,8 +158,6 @@ void wxCheckBox::SetLabel( const wxString& label )
 #else
     gtk_label_set( GTK_LABEL(m_widgetLabel), wxGTK_CONV( GetLabel() ) );
 #endif
-
-    PostSetLabel();
 }
 
 bool wxCheckBox::Enable( bool enable )
