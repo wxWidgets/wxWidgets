@@ -402,9 +402,11 @@ public:
 
     virtual bool OnInit()
     {
+        // Must be done before modules are initialized
+#if 0
         if( pipe(idleFds) != 0 )
             return false;
-
+#endif
         return true;
     }
 
@@ -468,8 +470,18 @@ void wxApp::WakeUpIdle()
     ::wxBreakDispatch();
 }
 
+bool wxInitIdleFds()
+{
+    if( pipe(idleFds) != 0 )
+        return false;
+    return true;
+}
+
 bool wxAddIdleCallback()
 {
+    if (!wxInitIdleFds())
+        return false;
+    
     // install input handler for wxWakeUpIdle
     inputId = XtAppAddInput( (XtAppContext) wxTheApp->GetAppContext(),
                              idleFds[0],
