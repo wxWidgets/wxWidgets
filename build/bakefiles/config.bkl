@@ -5,9 +5,36 @@
     
     <set var="BUILDING_LIB" overwrite="0">0</set>
 
+    <option name="SHARED">
+        <values>0,1</values>
+        <values-description>,DLL</values-description>
+        <default-value>1</default-value>
+        <description>
+            What type of library to build?
+        </description>
+    </option>
+    
+    <option name="WXUNIV">
+        <values>0,1</values>
+        <values-description>,wxUniv</values-description>
+        <default-value>0</default-value>
+        <description>
+            Build wxUniversal instead of native port?
+        </description>
+    </option>
+
+    <option name="UNICODE">
+        <values>0,1</values>
+        <values-description>,Unicode</values-description>
+        <default-value>0</default-value>        
+        <description>
+            Compile Unicode build of wxWindows?
+        </description>
+    </option>
+
     <option name="BUILD">
-        <values>debug release</values>
-        <values-description>Debug Release</values-description>
+        <values>debug,release</values>
+        <values-description>Debug,Release</values-description>
         <default-value>release</default-value>
         <description>
             Type of compiled binaries
@@ -15,7 +42,7 @@
     </option>
     
     <option name="DEBUG_INFO">
-        <values>0 1 default</values>
+        <values>0,1,default</values>
         <default-value>default</default-value>
         <description>
 Should debugging info be included in the executables? The default value
@@ -25,7 +52,7 @@ and not included if BUILD=release.
     </option>
     
     <option name="DEBUG_FLAG">
-        <values>0 1 default</values>
+        <values>0,1,default</values>
         <default-value>default</default-value>
         <description>
 Should __WXDEBUG__ be defined? The default value "default" means that it will
@@ -35,7 +62,7 @@ be defined if BUILD=debug and not defined if BUILD=release.
 
     <if cond="FORMAT=='msvc'">
         <option name="DEBUG_RUNTIME_LIBS">
-            <values>0 1 default</values>
+            <values>0,1,default</values>
             <default-value>default</default-value>
             <description>
 Should link against debug RTL (msvcrtd.dll) or release (msvcrt.dll)?
@@ -46,37 +73,19 @@ Acts according to DEBUG_INFO by default.
     <if cond="FORMAT!='msvc'">
         <set var="DEBUG_RUNTIME_LIBS">default</set>
     </if>
-
-    <option name="UNICODE">
-        <values>0 1</values>
-        <values-description>Ansi Unicode</values-description>
-        <default-value>0</default-value>        
-        <description>
-            Compile Unicode build of wxWindows?
-        </description>
-    </option>
-
-    <option name="SHARED">
-        <values>0 1</values>
-        <values-description>LIB DLL</values-description>
-        <default-value>1</default-value>
-        <description>
-            What type of library to build?
-        </description>
-    </option>
     
     <option name="MONOLITHIC">
-        <values>0 1</values>
-        <values-description>Multilib Monolithic</values-description>
-        <default-value>1</default-value>
+        <values>0,1</values>
+        <values-description>Multilib,Monolithic</values-description>
+        <default-value>0</default-value>
         <description>
             Multiple libraries or single huge monolithic one?
         </description>
     </option>
     
     <option name="USE_GUI">
-        <values>0 1</values>
-        <values-description>Base GUI</values-description>
+        <values>0,1</values>
+        <values-description>Base,GUI</values-description>
         <default-value>1</default-value>
         <description>
             Build GUI libraries?
@@ -84,7 +93,7 @@ Acts according to DEBUG_INFO by default.
     </option>
     
     <option name="USE_HTML">
-        <values>0 1</values>
+        <values>0,1</values>
         <default-value>1</default-value>
         <description>
             Build wxHTML library (USE_GUI must be 1)?
@@ -92,7 +101,7 @@ Acts according to DEBUG_INFO by default.
     </option>
     
     <option name="USE_OPENGL">
-        <values>0 1</values>
+        <values>0,1</values>
         <default-value>0</default-value>
         <description>
             Build OpenGL canvas library (USE_GUI must be 1)?
@@ -100,24 +109,15 @@ Acts according to DEBUG_INFO by default.
     </option>
     
     <option name="USE_ODBC">
-        <values>0 1</values>
+        <values>0,1</values>
         <default-value>0</default-value>
         <description>
             Build ODBC database classes (USE_GUI must be 1)?
         </description>
     </option>
     
-    <option name="WXUNIV">
-        <values>0 1</values>
-        <values-description>Native wxUniv</values-description>
-        <default-value>0</default-value>
-        <description>
-            Build wxUniversal instead of native port?
-        </description>
-    </option>
-
     <option name="OFFICIAL_BUILD">
-        <values>0 1</values>
+        <values>0,1</values>
         <default-value>0</default-value>
         <description>
             Is this official build by wxWindows developers?
@@ -170,7 +170,7 @@ compiled .lib files and setup.h under the lib/ toplevel directory.
 
     <if cond="FORMAT!='autoconf'">
         <option name="RUNTIME_LIBS">
-            <values>dynamic static</values>
+            <values>dynamic,static</values>
             <default-value>dynamic</default-value>
             <description>
 Version of C runtime library to use. You can change this to
@@ -193,7 +193,7 @@ it if SHARED=1 unless you know what you are doing.
         <set var="EXTRACFLAGS"/>
 
         <set var="SRCDIR">
-            <if cond="BUILDING_LIB=='1'">..</if>
+            <if cond="BUILDING_LIB=='1'">..$(DIRSEP)..</if>
             <if cond="BUILDING_LIB=='0'">.</if>
         </set>
         <set var="TOP_SRCDIR">$(SRCDIR)/$(WXTOPDIR)</set>
@@ -201,7 +201,7 @@ it if SHARED=1 unless you know what you are doing.
     
     <if cond="FORMAT=='mingw'">
         <option name="GCC_VERSION">
-            <values>3 2.95</values>
+            <values>3,2.95</values>
             <default-value>3</default-value>
             <description>
 Set the version of your Mingw installation here.
