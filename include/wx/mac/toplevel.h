@@ -58,35 +58,36 @@ public:
     virtual void SetIcons(const wxIconBundle& icons) { SetIcon( icons.GetIcon( -1 ) ); }
     virtual void Restore();
 
-    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) { return FALSE; }
+    virtual bool ShowFullScreen(bool WXUNUSED(show), long WXUNUSED(style) = wxFULLSCREEN_ALL)
+    { return FALSE; }
     virtual bool IsFullScreen() const { return FALSE; }
 
     // implementation from now on
     // --------------------------
 
-	virtual void MacCreateRealWindow( const wxString& title,
-           const wxPoint& pos,
-           const wxSize& size,
-           long style,
-           const wxString& name ) ;
-	static WXWindow MacGetWindowInUpdate() { return s_macWindowInUpdate ; }
-	virtual void MacGetPortParams(WXPOINTPTR localOrigin, WXRECTPTR clipRect, WXWindow *window , wxWindowMac** rootwin ) ;
-  virtual void Clear() ;
-  virtual WXWidget MacGetContainerForEmbedding() ;
-  WXWindow MacGetWindowRef() { return m_macWindow ; }
-	virtual void MacActivate( WXEVENTREF ev , bool inIsActivating ) ;
-	virtual void MacUpdate( long timestamp ) ;
-	virtual void MacMouseDown( WXEVENTREF ev , short windowPart ) ;
-	virtual void MacMouseUp( WXEVENTREF ev , short windowPart ) ;
-	virtual void MacMouseMoved( WXEVENTREF ev , short windowPart ) ;
-	virtual void MacKeyDown( WXEVENTREF ev ) ;
-	virtual void MacFireMouseEvent( WXEVENTREF ev ) ;
-  virtual void Raise();
-  virtual void Lower();
-  virtual void SetTitle( const wxString& title);
-  virtual bool Show( bool show = TRUE );
-  virtual void DoMoveWindow(int x, int y, int width, int height);
-  void MacInvalidate( const WXRECTPTR rect, bool eraseBackground ) ;
+    virtual void MacCreateRealWindow( const wxString& title,
+                                      const wxPoint& pos,
+                                      const wxSize& size,
+                                      long style,
+                                      const wxString& name ) ;
+    static WXWindow MacGetWindowInUpdate() { return s_macWindowInUpdate ; }
+    virtual void MacGetPortParams(WXPOINTPTR localOrigin, WXRECTPTR clipRect, WXWindow *window , wxWindowMac** rootwin ) ;
+    virtual void Clear() ;
+    virtual WXWidget MacGetContainerForEmbedding() ;
+    WXWindow MacGetWindowRef() { return m_macWindow ; }
+    virtual void MacActivate( WXEVENTREF ev , bool inIsActivating ) ;
+    virtual void MacUpdate( long timestamp ) ;
+    virtual void MacMouseDown( WXEVENTREF ev , short windowPart ) ;
+    virtual void MacMouseUp( WXEVENTREF ev , short windowPart ) ;
+    virtual void MacMouseMoved( WXEVENTREF ev , short windowPart ) ;
+    virtual void MacKeyDown( WXEVENTREF ev ) ;
+    virtual void MacFireMouseEvent( WXEVENTREF ev ) ;
+    virtual void Raise();
+    virtual void Lower();
+    virtual void SetTitle( const wxString& title);
+    virtual bool Show( bool show = TRUE );
+    virtual void DoMoveWindow(int x, int y, int width, int height);
+    void MacInvalidate( const WXRECTPTR rect, bool eraseBackground ) ;
 protected:
     // common part of all ctors
     void Init();
@@ -105,7 +106,7 @@ protected:
     WXHRGN m_macNoEraseUpdateRgn ;
     bool m_macNeedsErasing ;
 
-	  static WXWindow s_macWindowInUpdate ;
+    static WXWindow s_macWindowInUpdate ;
 };
 
 // list of all frames and modeless dialogs

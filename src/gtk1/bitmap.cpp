@@ -814,6 +814,7 @@ wxImage wxBitmap::ConvertToImage() const
 }
 
 wxBitmap::wxBitmap( const wxBitmap& bmp )
+    : wxGDIObject()
 {
     Ref( bmp );
 }

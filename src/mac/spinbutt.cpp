@@ -27,7 +27,7 @@
 
 #if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
-    IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxScrollEvent);
+    IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxScrollEvent)
 #endif
 
 wxSpinButton::wxSpinButton()

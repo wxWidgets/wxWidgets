@@ -28,11 +28,17 @@ public:
   wxColour();
     // from RGB
   wxColour( unsigned char red, unsigned char green, unsigned char blue );
-  wxColour( unsigned long colRGB ) { Set(colRGB); }
+  wxColour( unsigned long colRGB )
+      : m_isInit(FALSE), m_red(0), m_blue(0), m_green(0)
+      { Set(colRGB); }
   
     // implicit conversion from the colour name
-  wxColour( const wxString &colourName ) { InitFromName(colourName); }
-  wxColour( const char *colourName ) { InitFromName(colourName); }
+  wxColour( const wxString &colourName )
+      : m_isInit(FALSE), m_red(0), m_blue(0), m_green(0)
+      { InitFromName(colourName); }
+  wxColour( const char *colourName )
+      : m_isInit(FALSE), m_red(0), m_blue(0), m_green(0)
+      { InitFromName(colourName); }
 
     // copy ctors and assignment operators
   wxColour( const wxColour& col );

@@ -92,7 +92,7 @@ public:
     virtual void* DoGetItemClientData(int n) const;
     virtual void DoSetItemClientObject(int n, wxClientData* clientData);
     virtual wxClientData* DoGetItemClientObject(int n) const;
-	  virtual void  	 DoSetSize(int x, int y,int width, int height,int sizeFlags = wxSIZE_AUTO ) ;
+    virtual void  	 DoSetSize(int x, int y,int width, int height,int sizeFlags = wxSIZE_AUTO ) ;
 
     // wxCheckListBox support
 #if wxUSE_OWNER_DRAWN
@@ -108,29 +108,29 @@ public:
 
     // Windows callbacks
 
-    virtual void SetupColours();
-    virtual void	MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
+    virtual void    SetupColours();
+    virtual void    MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
 
-  	void*		m_macList ;
-	wxArrayString 	m_stringArray ;
-	wxListDataArray m_dataArray ;
-	wxArrayInt m_selectionPreImage ;
-	void 			MacSetRedraw( bool doDraw ) ;
+    void*           m_macList ;
+    wxArrayString   m_stringArray ;
+    wxListDataArray m_dataArray ;
+    wxArrayInt      m_selectionPreImage ;
+    void            MacSetRedraw( bool doDraw ) ;
 protected:
-	void			MacDestroy() ;			
-	void			MacDelete( int n ) ;
-	void			MacInsert( int n , const char * text) ;
-	void			MacAppend( const char * text) ;
-	void			MacSet( int n , const char *text ) ;
-	void			MacClear() ;
-	void			MacSetSelection( int n , bool select ) ;
-	int 			MacGetSelection() const ;
-	int				MacGetSelections(wxArrayInt& aSelections) const ;
-	bool			MacIsSelected( int n ) const ;
-	void			MacScrollTo( int n ) ;
-	void			OnSize( const wxSizeEvent &size ) ;
-	void			MacDoClick() ;
-	void			MacDoDoubleClick() ;
+    void            MacDestroy() ;
+    void            MacDelete( int n ) ;
+    void            MacInsert( int n , const char * text) ;
+    void            MacAppend( const char * text) ;
+    void            MacSet( int n , const char *text ) ;
+    void            MacClear() ;
+    void            MacSetSelection( int n , bool select ) ;
+    int             MacGetSelection() const ;
+    int             MacGetSelections(wxArrayInt& aSelections) const ;
+    bool            MacIsSelected( int n ) const ;
+    void            MacScrollTo( int n ) ;
+    void            OnSize( const wxSizeEvent &size ) ;
+    void            MacDoClick() ;
+    void            MacDoDoubleClick() ;
 
     // do we have multiple selections?
     bool HasMultipleSelection() const;
@@ -150,7 +150,7 @@ protected:
 
 private:
     DECLARE_DYNAMIC_CLASS(wxListBox)
-	DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
 };
 
 #endif

@@ -81,6 +81,7 @@ wxGenericValidator::wxGenericValidator(wxArrayInt *val)
 }
 
 wxGenericValidator::wxGenericValidator(const wxGenericValidator& val)
+    : wxValidator()
 {
     Copy(val);
 }

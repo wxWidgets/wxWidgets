@@ -164,7 +164,6 @@ void wxStaticText::OnPaint( wxPaintEvent &event )
 
 wxSize wxStaticText::DoGetBestSize() const
 {
-    int x,y ;
     int widthTextMax = 0, widthLine,
         heightTextTotal = 0, heightLineDefault = 0, heightLine = 0;
         

@@ -39,7 +39,9 @@ public:
   wxBrush(short macThemeBrush ) ;
   wxBrush(const wxColour& col, int style);
   wxBrush(const wxBitmap& stipple);
-  inline wxBrush(const wxBrush& brush) { Ref(brush); }
+  wxBrush(const wxBrush& brush)
+      : wxGDIObject()
+      { Ref(brush); }
   ~wxBrush();
 
   virtual void SetColour(const wxColour& col)  ;
@@ -49,9 +51,12 @@ public:
   virtual void SetMacTheme(short macThemeBrush) ;
   virtual void SetMacThemeBackground(unsigned long macThemeBackground ,  WXRECTPTR extent) ;
 
-  inline wxBrush& operator = (const wxBrush& brush) { if (*this == brush) return (*this); Ref(brush); return *this; }
-  inline bool operator == (const wxBrush& brush) { return m_refData == brush.m_refData; }
-  inline bool operator != (const wxBrush& brush) { return m_refData != brush.m_refData; }
+  wxBrush& operator = (const wxBrush& brush)
+  { if (*this == brush) return (*this); Ref(brush); return *this; }
+  bool operator == (const wxBrush& brush)
+  { return m_refData == brush.m_refData; }
+  bool operator != (const wxBrush& brush)
+  { return m_refData != brush.m_refData; }
 
   wxMacBrushKind MacGetBrushKind()  const ;
 

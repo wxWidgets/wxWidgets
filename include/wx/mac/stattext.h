@@ -20,7 +20,7 @@ class WXDLLEXPORT wxStaticText: public wxStaticTextBase
 {
   DECLARE_DYNAMIC_CLASS(wxStaticText)
  public:
-  inline wxStaticText() { }
+  inline wxStaticText() : m_label() { }
 
   inline wxStaticText(wxWindow *parent, wxWindowID id,
            const wxString& label,

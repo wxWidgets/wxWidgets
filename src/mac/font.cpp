@@ -54,9 +54,9 @@ void wxFontRefData::Init(int pointSize,
     m_faceName = faceName;
     m_encoding = encoding;
 
-	m_macFontNum = 0 ;
-	m_macFontSize = 0;
-	m_macFontStyle = 0;
+    m_macFontNum = 0 ;
+    m_macFontSize = 0;
+    m_macFontStyle = 0;
     m_fontId = 0;
 }
 

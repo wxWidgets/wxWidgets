@@ -1650,10 +1650,12 @@ void _GSocket_Internal_Proc(unsigned long e , void* d )
 /* Hack added for Mac OS X */
 GSocketError GAddress_UNIX_GetPath(GAddress *addr, char *path, size_t buf)
 {
+    return GSOCK_INVADDR;
 }
 
 GSocketError GAddress_UNIX_SetPath(GAddress *addr, const char *path)
 {
+    return GSOCK_INVADDR;
 }
 
 #endif  /* wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__) */

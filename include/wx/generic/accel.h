@@ -28,7 +28,8 @@ public:
     virtual ~wxAcceleratorTable();
 
     wxAcceleratorTable(const wxAcceleratorTable& accel)
-      { Ref(accel); }
+        : wxObject()
+        { Ref(accel); }
     wxAcceleratorTable& operator=(const wxAcceleratorTable& accel)
       { if ( m_refData != accel.m_refData ) Ref(accel); return *this; }
 

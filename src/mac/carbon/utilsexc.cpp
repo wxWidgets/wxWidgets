@@ -35,7 +35,7 @@ long wxExecute(const wxString& command, int flags, wxProcess *handler)
 #ifdef __DARWIN__
 int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)
 {
-   wxFAIL_MSG(wxT("wxAddProcessCallback() function not ready"));
+   wxFAIL_MSG( _T("wxAddProcessCallback() function not yet implemented") );
    return 0;
 }
 #endif

@@ -73,7 +73,9 @@ public:
     wxRegion( size_t n, const wxPoint *points, int fillStyle = wxODDEVEN_RULE );
     ~wxRegion();
 
-    wxRegion( const wxRegion& region ) { Ref(region); }
+    wxRegion( const wxRegion& region )
+        : wxGDIObject()
+        { Ref(region); }
     wxRegion& operator = ( const wxRegion& region ) { Ref(region); return *this; }
 
     bool Ok() const { return m_refData != NULL; }

@@ -32,16 +32,16 @@ class WXDLLEXPORT wxIconBundle
 {
 public:
     // default constructor
-    wxIconBundle() {}
+    wxIconBundle() : m_icons() {}
     // initializes the bundle with the icon(s) found in the file
-    wxIconBundle( const wxString& file, long type )
+    wxIconBundle( const wxString& file, long type ) : m_icons()
         { AddIcon( file, type ); }
     // initializes the bundle with a single icon
-    wxIconBundle( const wxIcon& icon )
+    wxIconBundle( const wxIcon& icon ) : m_icons()
         { AddIcon( icon ); }
 
     const wxIconBundle& operator =( const wxIconBundle& ic );
-    wxIconBundle( const wxIconBundle& ic )
+    wxIconBundle( const wxIconBundle& ic ) : m_icons()
         { *this = ic; }
 
     ~wxIconBundle() { DeleteIcons(); }

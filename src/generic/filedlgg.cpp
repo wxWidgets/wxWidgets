@@ -579,7 +579,7 @@ void wxFileData::MakeItem( wxListItem &item )
 //  wxFileCtrl
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxFileCtrl,wxListCtrl);
+IMPLEMENT_DYNAMIC_CLASS(wxFileCtrl,wxListCtrl)
 
 BEGIN_EVENT_TABLE(wxFileCtrl,wxListCtrl)
     EVT_LIST_DELETE_ITEM(-1, wxFileCtrl::OnListDeleteItem)

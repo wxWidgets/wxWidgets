@@ -47,7 +47,7 @@ public:
     wxTime() : m_time(wxDateTime::Now()) { }
     wxTime(clockTy s) : m_time((time_t)(s - wxTIME_EPOCH_DIFF)) { }
     void operator=(const wxTime& t) { m_time = t.m_time; }
-    wxTime(const wxTime& t) { *this = t; }
+    wxTime(const wxTime& t) : wxObject() { *this = t; }
     wxTime(hourTy h, minuteTy m, secondTy s = 0, bool WXUNUSED(dst) = FALSE)
         : m_time(h, m, s) { }
 

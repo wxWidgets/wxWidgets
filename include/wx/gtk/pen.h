@@ -45,7 +45,9 @@ public:
     wxPen( const wxColour &colour, int width, int style );
     ~wxPen();
     
-    wxPen( const wxPen& pen ) { Ref(pen); }
+    wxPen( const wxPen& pen )
+        : wxGDIObject()
+        { Ref(pen); }
     wxPen& operator = ( const wxPen& pen ) { Ref(pen); return *this; }
     
     bool Ok() const { return m_refData != NULL; }

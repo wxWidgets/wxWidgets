@@ -46,8 +46,8 @@ public:
 #define M_ACCELDATA ((wxAcceleratorRefData *)m_refData)
 
 wxAcceleratorRefData::wxAcceleratorRefData()
+    : m_accels()
 {
-    m_accels.DeleteContents( TRUE );
 }
 
 wxAcceleratorRefData::~wxAcceleratorRefData()
@@ -57,7 +57,7 @@ wxAcceleratorRefData::~wxAcceleratorRefData()
 
 wxAcceleratorTable::wxAcceleratorTable()
 {
-  m_refData = NULL;
+    m_refData = NULL;
 }
 
 wxAcceleratorTable::~wxAcceleratorTable()

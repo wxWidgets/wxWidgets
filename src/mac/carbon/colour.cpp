@@ -52,6 +52,7 @@ wxColour::wxColour (unsigned char r, unsigned char g, unsigned char b)
 }
 
 wxColour::wxColour (const wxColour& col)
+    : wxObject()
 {
     m_red = col.m_red;
     m_green = col.m_green;

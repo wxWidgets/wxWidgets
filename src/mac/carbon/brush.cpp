@@ -46,14 +46,15 @@ protected:
 #define M_BRUSHDATA ((wxBrushRefData *)m_refData)
 
 wxBrushRefData::wxBrushRefData()
+    : m_style(wxSOLID)
 {
-    m_style = wxSOLID;
     m_macBrushKind = kwxMacBrushColour ;
 }
 
 wxBrushRefData::wxBrushRefData(const wxBrushRefData& data)
+    : wxGDIRefData()
+    , m_style(data.m_style)
 {
-  m_style = data.m_style;
   m_stipple = data.m_stipple;
   m_colour = data.m_colour;
   m_macBrushKind = data.m_macBrushKind ;

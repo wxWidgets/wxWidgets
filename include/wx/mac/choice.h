@@ -27,11 +27,14 @@ WX_DEFINE_ARRAY( char * , wxChoiceDataArray ) ;
 // Choice item
 class WXDLLEXPORT wxChoice: public wxChoiceBase
 {
-  DECLARE_DYNAMIC_CLASS(wxChoice)
+    DECLARE_DYNAMIC_CLASS(wxChoice)
 
- public:
-  wxChoice() {}
-  virtual ~wxChoice() ;
+public:
+    wxChoice()
+        : m_strings(), m_datas(), m_macPopUpMenuHandle(NULL)
+        {}
+    
+    virtual ~wxChoice() ;
 
   wxChoice(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,

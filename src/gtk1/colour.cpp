@@ -36,6 +36,7 @@ public:
     }
     
     wxColourRefData(const wxColourRefData& data)
+        : wxObjectRefData()
     {
         m_color = data.m_color;
         m_colormap = data.m_colormap;

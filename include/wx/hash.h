@@ -79,7 +79,8 @@ private:
 class WXDLLEXPORT wxHashTableLong : public wxObject
 {
 public:
-    wxHashTableLong(size_t size = wxHASH_SIZE_DEFAULT) { Init(size); }
+    wxHashTableLong(size_t size = wxHASH_SIZE_DEFAULT)
+        { Init(size); }
     virtual ~wxHashTableLong();
 
     void Create(size_t size = wxHASH_SIZE_DEFAULT);
@@ -158,7 +159,8 @@ public:
     ~wxHashTable();
 
     // copy ctor and assignment operator
-    wxHashTable(const wxHashTable& table) : wxObject() { DoCopy(table); }
+    wxHashTable(const wxHashTable& table) : wxObject()
+        { DoCopy(table); }
     wxHashTable& operator=(const wxHashTable& table)
         { Clear(); DoCopy(table); return *this; }
 

@@ -43,7 +43,9 @@ class WXDLLEXPORT wxImage;
 class WXDLLEXPORT wxImageHandler: public wxObject
 {
 public:
-    wxImageHandler() { m_name = ""; m_extension = ""; m_type = 0; }
+    wxImageHandler()
+        : m_name(""), m_extension(""), m_mime(), m_type(0)
+        { }
 
 #if wxUSE_STREAMS
     virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=-1 );

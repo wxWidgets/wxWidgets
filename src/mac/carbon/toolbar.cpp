@@ -169,9 +169,9 @@ bool wxToolBar::Realize()
         return FALSE;
 
     Point localOrigin ;
-    Rect clipRect ;
+    //    Rect clipRect ;
     WindowRef window = (WindowRef) MacGetRootWindow() ;
-    wxWindow *win ;
+    //    wxWindow *win ;
     
     int lx , ly ;
     lx = ly = 0 ;
@@ -360,9 +360,9 @@ void wxToolBar::MacSuperChangedPosition()
   {
 
     Point localOrigin ;
-    Rect clipRect ;
-    WindowRef window ;
-    wxWindow *win ;
+    //    Rect clipRect ;
+    //    WindowRef window ;
+    //    wxWindow *win ;
     int lx , ly ;
     lx = ly = 0 ;
     MacWindowToRootWindow( &lx , &ly ) ;

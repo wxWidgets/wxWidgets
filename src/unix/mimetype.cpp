@@ -1238,7 +1238,7 @@ bool wxFileTypeImpl::GetExtensions(wxArrayString& extensions)
 // overwriteprompt is TRUE, but this is currently ignored as *Associate* has
 // no overwrite prompt
 bool wxFileTypeImpl::SetCommand(const wxString& cmd, const wxString& verb, bool overwriteprompt /*= TRUE*/)
-    {
+{
     wxArrayString strExtensions;
     wxString strDesc, strIcon ;
 
@@ -1252,17 +1252,17 @@ bool wxFileTypeImpl::SetCommand(const wxString& cmd, const wxString& verb, bool 
     size_t i;
     bool Ok = TRUE;
     for (i = 0; i < strTypes.GetCount(); i++)
-        {
+    {
         if (!m_manager->DoAssociation (strTypes[i], strIcon, entry, strExtensions, strDesc))
-        Ok = FALSE;
-        }
+            Ok = FALSE;
+    }
 
     return Ok;
-    }
+}
 
 // ignore index on the grouds that we only have one icon in a Unix file
 bool wxFileTypeImpl::SetDefaultIcon(const wxString& strIcon /*= wxEmptyString*/, int /*index = 0*/)
-    {
+{
     if (strIcon.IsEmpty()) return FALSE;
     wxArrayString strExtensions;
     wxString strDesc;
@@ -1276,13 +1276,14 @@ bool wxFileTypeImpl::SetDefaultIcon(const wxString& strIcon /*= wxEmptyString*/,
     size_t i;
     bool Ok = TRUE;
     for (i = 0; i < strTypes.GetCount(); i++)
-        {
+    {
         if (!m_manager->DoAssociation (strTypes[i], strIcon, entry, strExtensions, strDesc))
-        Ok = FALSE;
-        }
+            Ok = FALSE;
+    }
 
     return Ok;
-    }
+}
+
 // ----------------------------------------------------------------------------
 // wxMimeTypesManagerImpl (Unix)
 // ----------------------------------------------------------------------------

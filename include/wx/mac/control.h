@@ -102,11 +102,11 @@ protected:
 
 protected:
    // For controls like radiobuttons which are really composite
-	WXWidget		m_macControl ;
-	bool				m_macControlIsShown ;
-   	wxList m_subControls;
-	int							m_macHorizontalBorder ;
-	int							m_macVerticalBorder ;
+   WXWidget m_macControl ;
+   bool     m_macControlIsShown ;
+   wxList   m_subControls;
+   int      m_macHorizontalBorder ;
+   int      m_macVerticalBorder ;
 
    virtual wxSize DoGetBestSize() const;
 

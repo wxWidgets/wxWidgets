@@ -174,6 +174,7 @@ void wxFontRefData::Init(int pointSize,
 }
 
 wxFontRefData::wxFontRefData( const wxFontRefData& data )
+    : wxObjectRefData()
 {
     m_pointSize = data.m_pointSize;
     m_family = data.m_family;

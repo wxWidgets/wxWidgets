@@ -253,7 +253,6 @@ bool wxTextCtrl::CanPaste() const
     if (!IsEditable())
         return FALSE;
 
-    long offset ;
 #if TARGET_CARBON
     OSStatus err = noErr;
     ScrapRef scrapRef;
@@ -275,6 +274,7 @@ bool wxTextCtrl::CanPaste() const
     return FALSE;
     
 #else
+    long offset ;
     if ( GetScrap( NULL , 'TEXT' , &offset ) > 0 )
     {
         return TRUE ;
@@ -304,7 +304,7 @@ void wxTextCtrl::SetInsertionPointEnd()
 
 long wxTextCtrl::GetInsertionPoint() const
 {
-   ControlEditTextSelectionRec selection ;
+    //   ControlEditTextSelectionRec selection ;
    TEHandle teH ;
    long size ;
    
@@ -315,7 +315,7 @@ long wxTextCtrl::GetInsertionPoint() const
 
 long wxTextCtrl::GetLastPosition() const
 {
-   ControlEditTextSelectionRec selection ;
+    //   ControlEditTextSelectionRec selection ;
    TEHandle teH ;
    long size ;
    
@@ -393,8 +393,8 @@ void wxTextCtrl::WriteText(const wxString& text)
    
     ::GetControlData( (ControlHandle) m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
    
-        TEInsert( wxBuffer , strlen( wxBuffer) , teH ) ;
-        Refresh() ;
+    TEInsert( wxBuffer , strlen( wxBuffer) , teH ) ;
+    Refresh() ;
 }
 
 void wxTextCtrl::AppendText(const wxString& text)

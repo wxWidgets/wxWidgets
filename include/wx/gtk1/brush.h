@@ -40,7 +40,9 @@ public:
     wxBrush( const wxBitmap &stippleBitmap );
     ~wxBrush();
     
-    wxBrush( const wxBrush &brush ) { Ref(brush); }
+    wxBrush( const wxBrush &brush )
+        : wxGDIObject()
+        { Ref(brush); }
     wxBrush& operator = ( const wxBrush& brush ) { Ref(brush); return *this; }
     
     bool Ok() const { return m_refData != NULL; }

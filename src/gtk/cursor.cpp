@@ -142,6 +142,7 @@ wxCursor::wxCursor(const char bits[], int width, int  height,
 
 
 wxCursor::wxCursor( const wxCursor &cursor )
+    : wxObject()
 {
     Ref( cursor );
 }

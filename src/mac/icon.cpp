@@ -31,24 +31,23 @@ wxIcon::wxIcon()
 }
 
 wxIcon::wxIcon(const char bits[], int width, int height) :
-    wxBitmap(bits,width,height )
+    wxBitmap(bits, width, height)
 {
     
 }
 
 wxIcon::wxIcon( const char **bits ) :
-    wxBitmap(bits  )
+    wxBitmap(bits)
 {
 }
 
 wxIcon::wxIcon( char **bits ) :
-    wxBitmap(bits )
+    wxBitmap(bits)
 {
 }
 
 wxIcon::wxIcon(const wxString& icon_file, int flags,
     int desiredWidth, int desiredHeight)
-
 {
     LoadFile(icon_file, (wxBitmapType) flags, desiredWidth, desiredHeight);
 }

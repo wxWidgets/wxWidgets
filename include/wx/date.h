@@ -55,7 +55,7 @@ public:
     wxDate(long j) : m_date((double)(j + 0.5)) { Init(); }
     wxDate(int m, int d, int y) : m_date(d, (wxDateTime::Month)m, y) { Init(); }
     wxDate(const wxString& dat) { Init(); (void)m_date.ParseDate(dat); }
-    wxDate(const wxDate &date) { *this = date; }
+    wxDate(const wxDate &date) : wxObject() { *this = date; }
 
     wxDate(const wxDateTime& dt) { Init(); m_date = dt; }
 

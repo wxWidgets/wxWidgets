@@ -52,7 +52,7 @@ name& name::operator=(const name& src)                                        \
   return *this;                                                               \
 }                                                                             \
                                                                               \
-name::name(const name& src)                                                   \
+name::name(const name& src) : wxArrayPtrVoid()                                \
 {                                                                             \
   DoCopy(src);                                                                \
 }                                                                             \

@@ -1390,6 +1390,7 @@ wxVariant::wxVariant(const wxArrayString& val, const wxString& name) // Strings
 }
 
 wxVariant::wxVariant(const wxVariant& variant)
+    : wxObject()
 {
     if (!variant.IsNull())
     {

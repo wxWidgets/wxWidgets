@@ -37,53 +37,59 @@
 
 class wxMacPortStateHelper 
 {
-public :
-	wxMacPortStateHelper( GrafPtr newport) ; 
-	wxMacPortStateHelper() ;
-	~wxMacPortStateHelper() ;
+    DECLARE_NO_COPY_CLASS(wxMacPortStateHelper)
+        
+public:
+    wxMacPortStateHelper( GrafPtr newport) ; 
+    wxMacPortStateHelper() ;
+    ~wxMacPortStateHelper() ;
 
-	void Setup( GrafPtr newport ) ;
-	void Clear() ;
-	bool IsCleared() { return m_clip == NULL ; }
-	GrafPtr GetCurrentPort() { return m_currentPort ; }
+    void Setup( GrafPtr newport ) ;
+    void Clear() ;
+    bool IsCleared() { return m_clip == NULL ; }
+    GrafPtr GetCurrentPort() { return m_currentPort ; }
 
-private :
-	GrafPtr			m_currentPort ;
-	GrafPtr			m_oldPort ;
-	RgnHandle		m_clip ;
-	ThemeDrawingState m_drawingState ;
-	short			m_textFont ;
-	short			m_textSize ;
-	short			m_textStyle ;
-	short 		m_textMode ;
+private:
+    GrafPtr	      m_currentPort ;
+    GrafPtr	      m_oldPort ;
+    RgnHandle	      m_clip ;
+    ThemeDrawingState m_drawingState ;
+    short	      m_textFont ;
+    short	      m_textSize ;
+    short	      m_textStyle ;
+    short 	      m_textMode ;
 } ;
 
 class WXDLLEXPORT wxMacPortSetter
 {
-public :
-	wxMacPortSetter( const wxDC* dc ) ;
-	~wxMacPortSetter() ;
-private :
-	wxMacPortStateHelper m_ph ;
-	const wxDC* m_dc ;
+    DECLARE_NO_COPY_CLASS(wxMacPortSetter)
+        
+public:
+    wxMacPortSetter( const wxDC* dc ) ;
+    ~wxMacPortSetter() ;
+private:
+    wxMacPortStateHelper m_ph ;
+    const wxDC* m_dc ;
 } ;
 
 class wxMacDrawingHelper
 {
-public :
-	wxMacDrawingHelper( wxWindowMac * theWindow , bool clientArea = false ) ;
-	~wxMacDrawingHelper() ;
-	bool Ok() { return m_ok ; }
-	void LocalToWindow( Rect *rect) { OffsetRect( rect , m_origin.h , m_origin.v ) ; }
-	void LocalToWindow( Point *pt ) { AddPt( m_origin , pt ) ; }
-	void LocalToWindow( RgnHandle rgn ) { OffsetRgn( rgn , m_origin.h , m_origin.v ) ; }
-  const Point& GetOrigin() { return m_origin ; }
-private :
-  Point     m_origin ;
-	GrafPtr 	m_formerPort ;
-	GrafPtr		m_currentPort ;
-	PenState 	m_savedPenState ;
-	bool			m_ok ;
+    DECLARE_NO_COPY_CLASS(wxMacDrawingHelper)
+        
+public:
+    wxMacDrawingHelper( wxWindowMac * theWindow , bool clientArea = false ) ;
+    ~wxMacDrawingHelper() ;
+    bool Ok() { return m_ok ; }
+    void LocalToWindow( Rect *rect) { OffsetRect( rect , m_origin.h , m_origin.v ) ; }
+    void LocalToWindow( Point *pt ) { AddPt( m_origin , pt ) ; }
+    void LocalToWindow( RgnHandle rgn ) { OffsetRgn( rgn , m_origin.h , m_origin.v ) ; }
+    const Point& GetOrigin() { return m_origin ; }
+private:
+    Point     m_origin ;
+    GrafPtr   m_formerPort ;
+    GrafPtr   m_currentPort ;
+    PenState  m_savedPenState ;
+    bool      m_ok ;
 } ;
 
 

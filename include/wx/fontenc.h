@@ -103,7 +103,11 @@ struct WXDLLEXPORT wxNativeEncodingInfo
     wxFontEncoding encoding;    // so that we know what this struct represents
 
 #if defined(__WXMSW__) || defined(__WXPM__) || defined(__WXMAC__)
-    wxNativeEncodingInfo() { charset = 0; /* ANSI_CHARSET */ }
+    wxNativeEncodingInfo()
+        : facename()
+        , encoding(wxFONTENCODING_SYSTEM)
+        , charset(0) /* ANSI_CHARSET */
+    { }
 
     int      charset;
 #elif defined(_WX_X_FONTLIKE)

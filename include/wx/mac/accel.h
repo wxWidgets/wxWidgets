@@ -27,14 +27,20 @@ public:
     wxAcceleratorTable(int n, wxAcceleratorEntry entries[]); // Load from array
 
     // Copy constructors
-    inline wxAcceleratorTable(const wxAcceleratorTable& accel) { Ref(accel); }
-    inline wxAcceleratorTable(const wxAcceleratorTable* accel) { if (accel) Ref(*accel); }
+    wxAcceleratorTable(const wxAcceleratorTable& accel)
+        : wxObject()
+    { Ref(accel); }
+    wxAcceleratorTable(const wxAcceleratorTable* accel)
+    { if (accel) Ref(*accel); }
 
     ~wxAcceleratorTable();
 
-    inline wxAcceleratorTable& operator = (const wxAcceleratorTable& accel) { if (*this == accel) return (*this); Ref(accel); return *this; }
-    inline bool operator == (const wxAcceleratorTable& accel) { return m_refData == accel.m_refData; }
-    inline bool operator != (const wxAcceleratorTable& accel) { return m_refData != accel.m_refData; }
+    wxAcceleratorTable& operator = (const wxAcceleratorTable& accel)
+    { if (*this == accel) return (*this); Ref(accel); return *this; }
+    bool operator == (const wxAcceleratorTable& accel)
+    { return m_refData == accel.m_refData; }
+    bool operator != (const wxAcceleratorTable& accel)
+    { return m_refData != accel.m_refData; }
 
     bool Ok() const;
 

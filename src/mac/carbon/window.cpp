@@ -124,6 +124,8 @@ void wxWindowMac::Init()
 
     m_hScrollBar = NULL ;
     m_vScrollBar = NULL ;
+
+    m_label = wxEmptyString;
 }
 
 // Destructor
@@ -676,12 +678,12 @@ wxPoint wxWindowMac::GetClientAreaOrigin() const
     return wxPoint(MacGetLeftBorderSize(  ) , MacGetTopBorderSize(  ) );
 }
 
-void wxWindow::SetTitle(const wxString& title)
+void wxWindowMac::SetTitle(const wxString& title)
 {
     m_label = title ;
 }
 
-wxString wxWindow::GetTitle() const
+wxString wxWindowMac::GetTitle() const
 {
     return m_label ;
 }

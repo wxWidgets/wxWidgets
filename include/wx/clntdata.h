@@ -39,7 +39,7 @@ public:
 class WXDLLEXPORT wxStringClientData : public wxClientData
 {
 public:
-    wxStringClientData() { }
+    wxStringClientData() : m_data() { }
     wxStringClientData( const wxString &data ) : m_data(data) { }
     void SetData( const wxString &data ) { m_data = data; }
     const wxString& GetData() const { return m_data; }

@@ -1042,10 +1042,10 @@ GSocketError _GSocket_Input_Timeout(GSocket *socket)
     if (ret == -1)
     {
       GSocket_Debug(( "GSocket_Input_Timeout, select returned -1\n" ));
-      if (errno == EBADF) GSocket_Debug(( "Invalid file descriptor\n" ));
-      if (errno == EINTR) GSocket_Debug(( "A non blocked signal was caught\n" ));
-      if (errno == EINVAL) GSocket_Debug(( "The highest number descriptor is negative\n" ));
-      if (errno == ENOMEM) GSocket_Debug(( "Not enough memory\n" ));
+      if (errno == EBADF) { GSocket_Debug(( "Invalid file descriptor\n" )); }
+      if (errno == EINTR) { GSocket_Debug(( "A non blocked signal was caught\n" )); }
+      if (errno == EINVAL) { GSocket_Debug(( "The highest number descriptor is negative\n" )); }
+      if (errno == ENOMEM) { GSocket_Debug(( "Not enough memory\n" )); }
       socket->m_error = GSOCK_TIMEDOUT;
       return GSOCK_TIMEDOUT;
     }
@@ -1083,17 +1083,19 @@ GSocketError _GSocket_Output_Timeout(GSocket *socket)
     if (ret == -1)
     {
       GSocket_Debug(( "GSocket_Output_Timeout, select returned -1\n" ));
-      if (errno == EBADF) GSocket_Debug(( "Invalid file descriptor\n" ));
-      if (errno == EINTR) GSocket_Debug(( "A non blocked signal was caught\n" ));
-      if (errno == EINVAL) GSocket_Debug(( "The highest number descriptor is negative\n" ));
-      if (errno == ENOMEM) GSocket_Debug(( "Not enough memory\n" ));
+      if (errno == EBADF) { GSocket_Debug(( "Invalid file descriptor\n" )); }
+      if (errno == EINTR) { GSocket_Debug(( "A non blocked signal was caught\n" )); }
+      if (errno == EINVAL) { GSocket_Debug(( "The highest number descriptor is negative\n" )); }
+      if (errno == ENOMEM) { GSocket_Debug(( "Not enough memory\n" )); }
       socket->m_error = GSOCK_TIMEDOUT;
       return GSOCK_TIMEDOUT;
     }
-    if ( ! FD_ISSET(socket->m_fd, &writefds) )
-      GSocket_Debug(( "GSocket_Output_Timeout is buggy!\n" ));
-    else
-      GSocket_Debug(( "GSocket_Output_Timeout seems correct\n" ));
+    if ( ! FD_ISSET(socket->m_fd, &writefds) ) {
+        GSocket_Debug(( "GSocket_Output_Timeout is buggy!\n" ));
+    }
+    else {
+        GSocket_Debug(( "GSocket_Output_Timeout seems correct\n" ));
+    }
   }
   else
   {

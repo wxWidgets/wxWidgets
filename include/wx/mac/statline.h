@@ -27,7 +27,7 @@ class WXDLLEXPORT wxStaticLine : public wxStaticLineBase
 
 public:
     // constructors and pseudo-constructors
-    wxStaticLine() { }
+    wxStaticLine() : m_statbox(NULL) { }
 
     wxStaticLine( wxWindow *parent,
                   wxWindowID id,
@@ -35,6 +35,7 @@ public:
                   const wxSize &size = wxDefaultSize,
                   long style = wxLI_HORIZONTAL,
                   const wxString &name = wxStaticTextNameStr )
+        : m_statbox(NULL)
     {
         Create(parent, id, pos, size, style, name);
     }

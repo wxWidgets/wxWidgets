@@ -146,7 +146,6 @@ wxMutexError wxMutex::TryLock()
     wxMacStCritical critical ;
     if ( UMASystemIsInitialized() )
     {
-        OSErr err ;
         ThreadID current = kNoThreadID;
         ::MacGetCurrentThread(&current);
         // if we are not the owner, give an error back
@@ -285,7 +284,7 @@ void wxCondition::Broadcast()
     // this works because all these threads are already waiting and so each
     // SetEvent() inside Signal() is really a PulseEvent() because the event
     // state is immediately returned to non-signaled
-    for ( int i = 0; i < m_internal->m_waiters.Count(); i++ )
+    for ( size_t i = 0; i < m_internal->m_waiters.Count(); i++ )
     {
         Signal();
     }
@@ -477,7 +476,7 @@ wxThread *wxThread::This()
 
     err = MacGetCurrentThread( &current ) ;
 
-    for ( int i = 0 ; i < s_threads.Count() ; ++i )
+    for ( size_t i = 0 ; i < s_threads.Count() ; ++i )
     {
         if ( ( (wxThread*) s_threads[i] )->GetId() == current )
             return (wxThread*) s_threads[i] ;

@@ -909,8 +909,8 @@ void  wxDC::DoDrawLines(int n, wxPoint points[],
 }
 
 void  wxDC::DoDrawPolygon(int n, wxPoint points[],
-                               wxCoord xoffset, wxCoord yoffset,
-                               int fillStyle )
+                          wxCoord xoffset, wxCoord yoffset,
+                          int fillStyle )
 {
   	wxCHECK_RET(Ok(), wxT("Invalid DC"));
   	wxMacPortSetter helper(this) ;
@@ -1201,7 +1201,6 @@ bool  wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
 	if ( LockPixels(bmappixels) )
 	{
         wxMacPortSetter helper(this) ;
-        RGBColor tempColor ;
     
     	if ( source->GetDepth() == 1 )
     	{

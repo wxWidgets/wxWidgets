@@ -169,7 +169,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxDefaultArtProviderModule, wxModule)
 
 wxBitmap wxDefaultArtProvider::CreateBitmap(const wxArtID& id,
                                             const wxArtClient& client,
-                                            const wxSize& size)
+                                            const wxSize& WXUNUSED(size))
 {
     // wxMessageBox icons:
     ART_MSGBOX(wxART_ERROR,       wxICON_ERROR,       error)

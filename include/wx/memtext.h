@@ -30,18 +30,18 @@ protected:
     virtual bool OnExists() const
         { return FALSE; }
 
-    virtual bool OnOpen(const wxString &strBufferName,
-                        wxTextBufferOpenMode OpenMode)
+    virtual bool OnOpen(const wxString & WXUNUSED(strBufferName),
+                        wxTextBufferOpenMode WXUNUSED(OpenMode))
         { return TRUE; }
 
     virtual bool OnClose()
         { return TRUE; }
 
-    virtual bool OnRead(wxMBConv& conv)
+    virtual bool OnRead(wxMBConv& WXUNUSED(conv))
         { return TRUE; }
 
-    virtual bool OnWrite(wxTextFileType typeNew,
-                         wxMBConv& conv = wxConvLibc)
+    virtual bool OnWrite(wxTextFileType WXUNUSED(typeNew),
+                         wxMBConv& WXUNUSED(conv) = wxConvLibc)
         { return TRUE; }
 };
 

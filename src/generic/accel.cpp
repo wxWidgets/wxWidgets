@@ -59,6 +59,7 @@ public:
     }
 
     wxAccelRefData(const wxAccelRefData& data)
+        : wxObjectRefData()
     {
         m_accels.DeleteContents(TRUE);
         m_accels = data.m_accels;

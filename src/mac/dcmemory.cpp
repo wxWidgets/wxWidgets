@@ -23,6 +23,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC,wxPaintDC)
 
 wxMemoryDC::wxMemoryDC(void)
+    : m_selected()
 {
   m_ok = TRUE;
     SetBackground(*wxWHITE_BRUSH);
@@ -32,8 +33,9 @@ wxMemoryDC::wxMemoryDC(void)
 };
 
 wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) )
+    : m_selected()
 {
- m_ok = TRUE;
+  m_ok = TRUE;
     SetBackground(*wxWHITE_BRUSH);
     SetBrush(*wxWHITE_BRUSH);
     SetPen(*wxBLACK_PEN);
