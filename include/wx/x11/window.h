@@ -107,8 +107,8 @@ public:
     virtual WXWindow GetMainWindow() const;
     
     // Get X11 window representing the client area
-    virtual WXWindow GetClientWindow() const;
-    
+    virtual WXWindow GetClientAreaWindow() const;
+
     void SetLastClick(int button, long timestamp)
         { m_lastButton = button; m_lastTS = timestamp; }
     

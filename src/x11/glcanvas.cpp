@@ -108,7 +108,7 @@ void wxGLContext::SwapBuffers()
     if (m_glContext)
     {
         Display* display = (Display*) wxGetDisplay();
-        glXSwapBuffers(display, (Window) m_window->GetClientWindow());
+        glXSwapBuffers(display, (Window) m_window->GetClientAreaWindow());
     }
 }
 
@@ -117,7 +117,7 @@ void wxGLContext::SetCurrent()
     if (m_glContext) 
     { 
         Display* display = (Display*) wxGetDisplay();
-        glXMakeCurrent(display, (Window) m_window->GetClientWindow(), 
+        glXMakeCurrent(display, (Window) m_window->GetClientAreaWindow(), 
                        m_glContext );;
     }
 }
@@ -294,7 +294,7 @@ bool wxGLCanvas::Create( wxWindow *parent,
     } else {
 	// By default, we use the visual of xwindow
         // NI: is this really senseful ? opengl in e.g. color index mode ?
-	XGetWindowAttributes(display, (Window) GetClientWindow(), &xwa);
+	XGetWindowAttributes(display, (Window) GetClientAreaWindow(), &xwa);
 	vi_templ.visualid = XVisualIDFromVisual(xwa.visual);
 	vi = XGetVisualInfo(display, VisualIDMask, &vi_templ, &n);
 	if(!vi) return false;
@@ -366,7 +366,7 @@ void wxGLCanvas::SwapBuffers()
     if( m_glContext ) m_glContext->SwapBuffers();
 
     // Display* display = (Display*) GetXDisplay();
-    // if(glx_cx) glXSwapBuffers(display, (Window) GetClientWindow());
+    // if(glx_cx) glXSwapBuffers(display, (Window) GetClientAreaWindow());
 }
 
 void wxGLCanvas::SetCurrent()
@@ -374,7 +374,7 @@ void wxGLCanvas::SetCurrent()
     if( m_glContext ) m_glContext->SetCurrent();
 
     // Display* display = (Display*) GetXDisplay();
-    // if(glx_cx) glXMakeCurrent(display, (Window) GetClientWindow(), glx_cx);
+    // if(glx_cx) glXMakeCurrent(display, (Window) GetClientAreaWindow(), glx_cx);
 }
 
 void wxGLCanvas::SetColour(const char *col)

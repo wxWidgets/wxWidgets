@@ -514,7 +514,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
         case Expose:
         {
 #if wxUSE_TWO_WINDOWS && !wxUSE_NANOX
-            if (event->xexpose.window != (Window)win->GetClientWindow())
+            if (event->xexpose.window != (Window)win->GetClientAreaWindow())
             {
                 XEvent tmp_event;
                 wxExposeInfo info;
@@ -556,7 +556,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
 
                 // If we only have one X11 window, always indicate
                 // that borders might have to be redrawn.
-                if (win->GetMainWindow() == win->GetClientWindow())
+                if (win->GetMainWindow() == win->GetClientAreaWindow())
                     win->NeedUpdateNcAreaInIdle();
 
                 // Only erase background, paint in idle time.

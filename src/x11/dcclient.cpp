@@ -2044,7 +2044,7 @@ wxClientDC::wxClientDC( wxWindow *window )
 {
     wxCHECK_RET( window, _T("NULL window in wxClientDC::wxClientDC") );
     
-    m_window = (WXWindow*) window->GetClientWindow();
+    m_window = (WXWindow*) window->GetClientAreaWindow();
     
 #if wxUSE_TWO_WINDOWS
 #else

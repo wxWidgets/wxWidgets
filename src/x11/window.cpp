@@ -147,7 +147,7 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
     m_foregroundColour = *wxBLACK;
     m_foregroundColour.CalcPixel( (WXColormap) cm ); 
 
-    Window xparent = (Window) parent->GetClientWindow();
+    Window xparent = (Window) parent->GetClientAreaWindow();
     
     // Add window's own scrollbars to main window, not to client window
     if (parent->GetInsertIntoMain())
@@ -602,7 +602,7 @@ void wxWindowX11::ScrollWindow(int dx, int dy, const wxRect *rect)
         m_clearRegion.Intersect( 0, 0, cw, ch );
     }
     
-    Window xwindow = (Window) GetClientWindow();
+    Window xwindow = (Window) GetClientAreaWindow();
 
     wxCHECK_RET( xwindow, wxT("invalid window") );
 
@@ -1129,7 +1129,7 @@ void wxWindowX11::SendEraseEvents()
     if (!GetEventHandler()->ProcessEvent(erase_event) )
     {
         Display *xdisplay = wxGlobalDisplay();
-        Window xwindow = (Window) GetClientWindow();
+        Window xwindow = (Window) GetClientAreaWindow();
         XSetForeground( xdisplay, g_eraseGC, m_backgroundColour.GetPixel() );
         
         wxRegionIterator upd( m_clearRegion );
@@ -1327,7 +1327,7 @@ WXWindow wxWindowX11::GetMainWindow() const
     return m_mainWindow;
 }
 
-WXWindow wxWindowX11::GetClientWindow() const
+WXWindow wxWindowX11::GetClientAreaWindow() const
 {
     return m_clientWindow;
 }
