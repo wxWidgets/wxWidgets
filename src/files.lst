@@ -97,7 +97,6 @@ ALL_HEADERS = \
 		cmdline.h \
 		confbase.h \
 		config.h \
-		date.h \
 		datetime.h \
 		datetime.inl \
 		datstrm.h \
@@ -139,6 +138,7 @@ ALL_HEADERS = \
 		listimpl.cpp \
 		log.h \
 		longlong.h \
+		math.h \
 		memconf.h \
 		memory.h \
 		memtext.h \
@@ -163,7 +163,6 @@ ALL_HEADERS = \
 		textfile.h \
 		thread.h \
 		thrimpl.cpp \
-		time.h \
 		timer.h \
 		tokenzr.h \
 		txtstrm.h \

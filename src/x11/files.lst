@@ -176,6 +176,7 @@ ALL_SOURCES = \
 		common/radiocmn.cpp \
 		common/regex.cpp \
 		common/resource.cpp \
+		common/rgncmn.cpp \
 		common/sckaddr.cpp \
 		common/sckfile.cpp \
 		common/sckipc.cpp \
@@ -278,7 +279,6 @@ ALL_HEADERS = \
 		ctrlsub.h \
 		cursor.h \
 		dataobj.h \
-		date.h \
 		datetime.h \
 		datetime.inl \
 		datstrm.h \
@@ -452,7 +452,6 @@ ALL_HEADERS = \
 		tglbtn.h \
 		thread.h \
 		thrimpl.cpp \
-		time.h \
 		timer.h \
 		tipdlg.h \
 		tipwin.h \
@@ -750,6 +749,7 @@ COMMONOBJS = \
 		radiocmn.o \
 		regex.o \
 		resource.o \
+		rgncmn.o \
 		sckaddr.o \
 		sckfile.o \
 		sckipc.o \

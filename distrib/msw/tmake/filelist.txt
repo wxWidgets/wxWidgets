@@ -221,6 +221,7 @@ protocol.cpp	Common	Socket,Base
 quantize.cpp	Common
 radiocmn.cpp	Common
 regex.cpp	Common	Base
+rgncmn.cpp	Common
 resource.cpp	Common
 sckaddr.cpp	Common	Socket,Base
 sckfile.cpp	Common	Socket,Base

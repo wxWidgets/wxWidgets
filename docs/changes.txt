@@ -63,6 +63,9 @@ All GUI ports:
             - use typesafe Get* instead
         wxListBase::operator wxList&()
             - use typesafe lists instead
+- Added wxTLW::SetShape with implementations for wxMSW and wxGTK (so
+  far).
+
 
 Unix:
 

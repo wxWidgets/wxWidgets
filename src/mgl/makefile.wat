@@ -90,6 +90,7 @@ GENERICOBJS= accel.obj &
 
 COMMONOBJS = &
 	y_tab.obj &
+	accesscmn.obj &
 	appcmn.obj &
 	artprov.obj &
 	artstd.obj &
@@ -117,6 +118,7 @@ COMMONOBJS = &
 	dobjcmn.obj &
 	docmdi.obj &
 	docview.obj &
+	dpycmn.obj &
 	dseldlg.obj &
 	dynarray.obj &
 	dynlib.obj &
@@ -176,7 +178,6 @@ COMMONOBJS = &
 	mstream.obj &
 	nbkbase.obj &
 	object.obj &
-	odbc.obj &
 	paper.obj &
 	popupcmn.obj &
 	prntbase.obj &
@@ -186,6 +187,7 @@ COMMONOBJS = &
 	radiocmn.obj &
 	regex.obj &
 	resource.obj &
+	rgncmn.obj &
 	sckaddr.obj &
 	sckfile.obj &
 	sckipc.obj &
@@ -534,6 +536,9 @@ win32.obj:     $(UNIVTHEMEDIR)\win32.cpp
 ########################################################
 # Common objects (always compiled)
 
+accesscmn.obj:     $(COMMDIR)\accesscmn.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
 appcmn.obj:     $(COMMDIR)\appcmn.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
@@ -613,6 +618,9 @@ docmdi.obj:     $(COMMDIR)\docmdi.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 docview.obj:     $(COMMDIR)\docview.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+dpycmn.obj:     $(COMMDIR)\dpycmn.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 dseldlg.obj:     $(COMMDIR)\dseldlg.cpp
@@ -792,9 +800,6 @@ nbkbase.obj:     $(COMMDIR)\nbkbase.cpp
 object.obj:     $(COMMDIR)\object.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
-odbc.obj:     $(COMMDIR)\odbc.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
-
 paper.obj:     $(COMMDIR)\paper.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
@@ -820,6 +825,9 @@ regex.obj:     $(COMMDIR)\regex.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 resource.obj:     $(COMMDIR)\resource.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+rgncmn.obj:     $(COMMDIR)\rgncmn.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 sckaddr.obj:     $(COMMDIR)\sckaddr.cpp

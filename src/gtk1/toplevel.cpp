@@ -513,10 +513,10 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
     m_fsIsShowing = show;
 
     GdkWindow *window = m_widget->window;
-    wxX11FullScreenMethod method = 
+    wxX11FullScreenMethod method =
         wxGetFullScreenMethodX11((WXDisplay*)GDK_DISPLAY(),
                                  (WXWindow)GDK_ROOT_WINDOW());
-    
+
     if (show)
     {
         m_fsSaveFlag = style;
@@ -538,7 +538,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
             gdk_window_set_decorations(window, (GdkWMDecoration)0);
             gdk_window_set_functions(window, (GdkWMFunction)0);
         }
-        
+
 		gdk_window_get_origin (m_widget->window, &root_x, &root_y);
 		gdk_window_get_geometry (m_widget->window, &client_x, &client_y,
 					 &width, &height, NULL);
@@ -561,12 +561,12 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
             gdk_window_set_decorations(window, (GdkWMDecoration)m_gdkDecor);
             gdk_window_set_functions(window, (GdkWMFunction)m_gdkFunc);
         }
-        
+
         wxSetFullScreenStateX11((WXDisplay*)GDK_DISPLAY(),
                                 (WXWindow)GDK_ROOT_WINDOW(),
                                 (WXWindow)GDK_WINDOW_XWINDOW(window),
                                 show, &m_fsSaveFrame, method);
-       
+
         SetSize(m_fsSaveFrame.x, m_fsSaveFrame.y,
                 m_fsSaveFrame.width, m_fsSaveFrame.height);
     }
@@ -971,6 +971,45 @@ void wxTopLevelWindowGTK::RemoveGrab()
         gtk_main_quit();
         m_grabbed = FALSE;
     }
+}
+
+
+// helper
+static bool do_shape_combine_region(GdkWindow* window, const wxRegion& region)
+{
+    if (window)
+    {
+        if (region.IsEmpty())
+        {
+            gdk_window_shape_combine_mask(window, NULL, 0, 0);
+        }
+        else
+        {
+#ifdef __WXGTK20__
+        gdk_window_shape_combine_region(window, region.GetRegion(), 0, 0);
+#else
+        wxBitmap bmp = region.ConvertToBitmap();
+        bmp.SetMask(new wxMask(bmp, *wxWHITE));
+        GdkBitmap* mask = bmp.GetMask()->GetBitmap();
+        gdk_window_shape_combine_mask(window, mask, 0, 0);
+#endif
+        return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+
+bool wxTopLevelWindowGTK::SetShape(const wxRegion& region)
+{
+    GdkWindow *window = NULL;
+    if (m_wxwindow)
+    {
+        window = GTK_PIZZA(m_wxwindow)->bin_window;
+        do_shape_combine_region(window, region);
+    }
+    window = m_widget->window;
+    return do_shape_combine_region(window, region);
 }
 
 // vi:sts=4:sw=4:et

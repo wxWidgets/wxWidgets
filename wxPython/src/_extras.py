@@ -730,7 +730,7 @@ def wxCallAfter(callable, *args, **kw):
 
     global _wxCallAfterId
     if _wxCallAfterId is None:
-        _wxCallAfterId = wxNewId()
+        _wxCallAfterId = wxNewEventType()
         app.Connect(-1, -1, _wxCallAfterId,
               lambda event: apply(event.callable, event.args, event.kw) )
     evt = wxPyEvent()

@@ -108,6 +108,11 @@ public:
     virtual wxString GetTitle() const = 0;
      */
 
+    // Set the shape of the window to the given region.
+    // Returns TRUE if the platform supports this feature (and the
+    // operation is successful.)
+    virtual bool SetShape(const wxRegion& region) { return FALSE; }
+
     // old functions, use the new ones instead!
 #if WXWIN_COMPATIBILITY_2
     bool Iconized() const { return IsIconized(); }

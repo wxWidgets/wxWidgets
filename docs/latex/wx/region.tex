@@ -43,10 +43,18 @@ Constructs a region by copying another region.
 \func{}{wxRegion}{\param{size\_t}{ n}, \param{const wxPoint }{*points}, \param{int }{fillStyle = wxWINDING\_RULE}}
 
 Constructs a region corresponding to the polygon made of {\it n} points in the
-provided array. {\it fillStyle} parameter may have values 
+provided array. {\it fillStyle} parameter may have values
 {\tt wxWINDING\_RULE} or {\tt wxODDEVEN\_RULE}.
 
 {\bf NB:} This constructor is only implemented for Win32 and GTK+ wxWindows ports.
+
+\func{}{wxRegion}{\param{const wxBitmap&}{ bmp},
+                  \param{const wxColour&}{ transColour = wxNullColour},
+		  \param{int}{ tolerance = 0}}
+
+Constructs a region using the non-transparent pixels of a bitmap.  See
+\helpref{Union}{wxregionunion} for more details.
+
 
 \membersection{wxRegion::\destruct{wxRegion}}
 
@@ -84,6 +92,13 @@ The return value is one of wxOutRegion, wxPartRegion and wxInRegion.
 
 On Windows, only wxOutRegion and wxInRegion are returned; a value wxInRegion then indicates that
 all or some part of the region is contained in this region.
+
+\membersection{wxRegion::ConvertToBitmap}\label{wxregionconverttobitmap}
+
+\constfunc{wxBitmap}{ConvertToBitmap}{}
+
+Convert the region to a black and white bitmap with the black pixels
+being inside the region.
 
 \membersection{wxRegion::GetBox}\label{wxregiongetbox}
 
@@ -167,6 +182,15 @@ Finds the union of this region and another, rectangular region.
 \func{bool}{Union}{\param{const wxRegion\&}{ region}}
 
 Finds the union of this region and another region.
+
+\func{bool}{Union}{\param{const wxBitmap&}{ bmp},
+                  \param{const wxColour&}{ transColour = wxNullColour},
+		  \param{int}{ tolerance = 0}}
+
+Finds the union of this region and the the non-transparent pixels of a
+bitmap.  If the bitmap has a mask then it will be used, otherwise the
+colour to be treated as transparent may be specified, along with an
+optional colour tolerance value.
 
 \wxheading{Return value}
 

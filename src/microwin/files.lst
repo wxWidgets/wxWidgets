@@ -46,6 +46,7 @@ ALL_SOURCES = \
 		generic/treectlg.cpp \
 		generic/treelay.cpp \
 		generic/wizard.cpp \
+		common/accesscmn.cpp \
 		common/appcmn.cpp \
 		common/artprov.cpp \
 		common/artstd.cpp \
@@ -72,6 +73,7 @@ ALL_SOURCES = \
 		common/dobjcmn.cpp \
 		common/docmdi.cpp \
 		common/docview.cpp \
+		common/dpycmn.cpp \
 		common/dseldlg.cpp \
 		common/dynarray.cpp \
 		common/dynlib.cpp \
@@ -131,7 +133,6 @@ ALL_SOURCES = \
 		common/mstream.cpp \
 		common/nbkbase.cpp \
 		common/object.cpp \
-		common/odbc.cpp \
 		common/paper.cpp \
 		common/popupcmn.cpp \
 		common/prntbase.cpp \
@@ -141,6 +142,7 @@ ALL_SOURCES = \
 		common/radiocmn.cpp \
 		common/regex.cpp \
 		common/resource.cpp \
+		common/rgncmn.cpp \
 		common/sckaddr.cpp \
 		common/sckfile.cpp \
 		common/sckipc.cpp \
@@ -234,6 +236,7 @@ ALL_SOURCES = \
 
 ALL_HEADERS = \
 		accel.h \
+		access.h \
 		app.h \
 		arrimpl.cpp \
 		artprov.h \
@@ -267,7 +270,6 @@ ALL_HEADERS = \
 		ctrlsub.h \
 		cursor.h \
 		dataobj.h \
-		date.h \
 		datetime.h \
 		datetime.inl \
 		datstrm.h \
@@ -290,6 +292,7 @@ ALL_HEADERS = \
 		dir.h \
 		dirctrl.h \
 		dirdlg.h \
+		display.h \
 		dnd.h \
 		docmdi.h \
 		docview.h \
@@ -364,6 +367,7 @@ ALL_HEADERS = \
 		listimpl.cpp \
 		log.h \
 		longlong.h \
+		math.h \
 		matrix.h \
 		mdi.h \
 		memconf.h \
@@ -380,7 +384,6 @@ ALL_HEADERS = \
 		mstream.h \
 		notebook.h \
 		object.h \
-		odbc.h \
 		ownerdrw.h \
 		palette.h \
 		panel.h \
@@ -399,6 +402,7 @@ ALL_HEADERS = \
 		quantize.h \
 		radiobox.h \
 		radiobut.h \
+		rawbmp.h \
 		regex.h \
 		region.h \
 		resource.h \
@@ -439,7 +443,6 @@ ALL_HEADERS = \
 		tglbtn.h \
 		thread.h \
 		thrimpl.cpp \
-		time.h \
 		timer.h \
 		tipdlg.h \
 		tipwin.h \
@@ -476,6 +479,7 @@ ALL_HEADERS = \
 		zipstrm.h \
 		zstream.h \
 		msw/accel.h \
+		msw/access.h \
 		msw/app.h \
 		msw/bitmap.h \
 		msw/bmpbuttn.h \
@@ -490,8 +494,6 @@ ALL_HEADERS = \
 		msw/colour.h \
 		msw/combobox.h \
 		msw/control.h \
-		msw/curico.h \
-		msw/curicop.h \
 		msw/cursor.h \
 		msw/dc.h \
 		msw/dcclient.h \
@@ -501,7 +503,6 @@ ALL_HEADERS = \
 		msw/dde.h \
 		msw/dialog.h \
 		msw/dib.h \
-		msw/dibutils.h \
 		msw/dirdlg.h \
 		msw/dragimag.h \
 		msw/enhmeta.h \
@@ -511,7 +512,6 @@ ALL_HEADERS = \
 		msw/fontdlg.h \
 		msw/frame.h \
 		msw/gauge95.h \
-		msw/gaugemsw.h \
 		msw/gccpriv.h \
 		msw/gdiimage.h \
 		msw/gdiobj.h \
@@ -635,6 +635,7 @@ ALL_HEADERS = \
 
 COMMONOBJS = \
 		parser.o \
+		accesscmn.o \
 		appcmn.o \
 		artprov.o \
 		artstd.o \
@@ -661,6 +662,7 @@ COMMONOBJS = \
 		dobjcmn.o \
 		docmdi.o \
 		docview.o \
+		dpycmn.o \
 		dseldlg.o \
 		dynarray.o \
 		dynlib.o \
@@ -720,7 +722,6 @@ COMMONOBJS = \
 		mstream.o \
 		nbkbase.o \
 		object.o \
-		odbc.o \
 		paper.o \
 		popupcmn.o \
 		prntbase.o \
@@ -730,6 +731,7 @@ COMMONOBJS = \
 		radiocmn.o \
 		regex.o \
 		resource.o \
+		rgncmn.o \
 		sckaddr.o \
 		sckfile.o \
 		sckipc.o \
