@@ -4,7 +4,7 @@
 // Author:      Mark Johnson
 // Modified by:
 // Created:     19991129
-/// RCS-ID:      $Id$
+// RCS-ID:      $Id$
 // Copyright:   (c) Mark Johnson, Berlin Germany, mj10777@gmx.net
 // Licence:     wxWindows license
 //---------------------------------------------------------------------------
@@ -63,10 +63,10 @@ DBTree::DBTree(wxWindow *parent, const wxWindowID id,const wxPoint& pos, const w
   //wxFont* ft_Temp = new wxFont(10,wxSWISS,wxNORMAL,wxBOLD,FALSE,"Comic Sans MS");
   wxFont* ft_Temp = new wxFont(wxSystemSettings::GetSystemFont(wxSYS_SYSTEM_FONT));
   SetFont(* ft_Temp);
-  
+
   // Make an image list containing small icons
   p_imageListNormal = new wxImageList(16, 16, TRUE);
-  
+
   // should correspond to TreeIc_xxx enum
 
 #if !defined(__WXMSW__)
@@ -77,7 +77,7 @@ DBTree::DBTree(wxWindow *parent, const wxWindowID id,const wxPoint& pos, const w
 #include "bitmaps/key.xpm"
 #include "bitmaps/keyf.xpm"
 #include "bitmaps/d_open.xpm"
-#include "bitmaps/d_closed.xpm" 
+#include "bitmaps/d_closed.xpm"
 #include "bitmaps/col.xpm"
 #endif
 
@@ -91,10 +91,10 @@ DBTree::DBTree(wxWindow *parent, const wxWindowID id,const wxPoint& pos, const w
    p_imageListNormal->Add(wxICON(DocOpen));
    p_imageListNormal->Add(wxICON(DocOpen));
 
- 
 
 
-  
+
+
   SetImageList(p_imageListNormal);
   ct_BrowserDB = NULL;
 }
@@ -115,110 +115,123 @@ DBTree::~DBTree()
 //---------------------------------------------------------------------------
 int  DBTree::OnPopulate()
 {
-  wxTreeItemId Root, Folder, Docu, Funkt;
-  int i,x,y;
-  wxString SQL_TYPE, DB_TYPE;
-
-  //----------------------------------------------------------------------------------------------------------------------------
-  if((pDoc->db_Br+i_Which)->Initialize(FALSE))
+ wxTreeItemId Root, Folder, Docu, Funkt;
+ int i,x,y, TableType;
+ wxString SQL_TYPE, DB_TYPE;
+ //----------------------------------------------------------------------------------------------------------------------------
+ if ((pDoc->db_Br+i_Which)->Initialize(FALSE))
+ {
+  wxBeginBusyCursor();
+  ct_BrowserDB = (pDoc->db_Br+i_Which)->OnGetCatalog(FALSE);
+  if (ct_BrowserDB)
+  { // Use the wxDatabase Information
+   Temp0.Printf("%s - (%s) (%s)", s_DSN.c_str(),ct_BrowserDB->catalog, ct_BrowserDB->schema);
+   // Root = AddRoot(Temp0,TreeIc_DsnOpen,TreeIc_DsnOpen,new DBTreeData("Root"));
+   Root = AddRoot(Temp0,TreeIc_Smile,TreeIc_Smile,new DBTreeData("Root"));
+   for (x=0;x<ct_BrowserDB->numTables;x++)
+   {
+    wxYield();
+    TableType = 0; // TABLE = 1 ; VIEW = 2 ; 0 We are not interested in
+    if (!wxStrcmp((ct_BrowserDB->pTableInf+x)->tableType,"TABLE"))    // only TABLES
+     TableType = 1;
+    if (!wxStrcmp((ct_BrowserDB->pTableInf+x)->tableType,"VIEW"))     // and  VIEWS
+     TableType = 2;
+    if (TableType)    // only TABLES or Views
     {
-      wxBeginBusyCursor();
-      ct_BrowserDB = (pDoc->db_Br+i_Which)->OnGetCatalog(FALSE);
-      if (ct_BrowserDB)
-	{ // Use the wxDatabase Information
-	  Temp0.Printf("%s - (%s) (%s)", s_DSN.c_str(),ct_BrowserDB->catalog, ct_BrowserDB->schema);
-	  Root = AddRoot(Temp0,TreeIc_DsnOpen,TreeIc_DsnOpen,new DBTreeData("Root"));
-	  for (x=0;x<ct_BrowserDB->numTables;x++)
-	    {
-              wxYield();
-	      if (!wxStrcmp((ct_BrowserDB->pTableInf+x)->tableType,"TABLE"))    // only TABLES
-		{
-		  Temp0.Printf(_("Tablename(%s) with (%d)Columns ; Remarks(%s)"),  (ct_BrowserDB->pTableInf+x)->tableName,
-			       (ct_BrowserDB->pTableInf+x)->numCols,
-			       (ct_BrowserDB->pTableInf+x)->tableRemarks);
-		  Temp1.Printf("TN(%s",(ct_BrowserDB->pTableInf+x)->tableName);
-		  //----
-		  (ct_BrowserDB->pTableInf+x)->pColInf = (pDoc->db_Br+i_Which)->OnGetColumns((ct_BrowserDB->pTableInf+x)->tableName,(ct_BrowserDB->pTableInf+x)->numCols,FALSE);
-		  //----
-		  if ((ct_BrowserDB->pTableInf+x)->pColInf)
-		    {
-		      Temp0.Printf(_("Tablename(%s) with (%d)Columns ; Remarks(%s)"),  (ct_BrowserDB->pTableInf+x)->tableName,
-				   (ct_BrowserDB->pTableInf+x)->numCols,
-				   (ct_BrowserDB->pTableInf+x)->tableRemarks);
-		      Folder = AppendItem(Root,Temp0,TreeIc_TAB,TreeIc_TAB, new DBTreeData(Temp1));
-		      for (y=0;y<(ct_BrowserDB->pTableInf+x)->numCols;y++)
-			{
-			  Temp1.Printf("FN(%s",((ct_BrowserDB->pTableInf+x)->pColInf+y)->colName);
-			  // Here is where we find out if the Column is a Primary / Foreign Key
-			  if (((ct_BrowserDB->pTableInf+x)->pColInf+y)->PkCol != 0)  // Primary Key
-			    {
-			      Docu = AppendItem(Folder,((ct_BrowserDB->pTableInf+x)->pColInf+y)->colName,TreeIc_KEY,TreeIc_KEY,new DBTreeData(Temp1));
-			      Temp2.Printf(_("This Key is used in the following Tables : %s"),((ct_BrowserDB->pTableInf+x)->pColInf+y)->PkTableName);
-			      Funkt = AppendItem(Docu,Temp2,TreeIc_DocClosed,TreeIc_DocOpen,new DBTreeData("KEY"));
-			    }
+     Temp1.Printf("TN(%s",(ct_BrowserDB->pTableInf+x)->tableName);
+     //----
+     (ct_BrowserDB->pTableInf+x)->pColInf = (pDoc->db_Br+i_Which)->OnGetColumns((ct_BrowserDB->pTableInf+x)->tableName,(ct_BrowserDB->pTableInf+x)->numCols,FALSE);
+     //----
+     if ((ct_BrowserDB->pTableInf+x)->pColInf)
+     {
+      if (TableType == 1)  // Table
+      {
+       Temp0.Printf(_("Table-Name(%s) with (%d)Columns ; Remarks(%s)"),  (ct_BrowserDB->pTableInf+x)->tableName,
+                              (ct_BrowserDB->pTableInf+x)->numCols,(ct_BrowserDB->pTableInf+x)->tableRemarks);
+       Folder = AppendItem(Root,Temp0,TreeIc_TAB,TreeIc_TAB, new DBTreeData(Temp1));
+      }
+      if (TableType == 2)  // View
+      {
+       Temp0.Printf(_("View-Name(%s) with (%d)Columns ; Remarks(%s)"),  (ct_BrowserDB->pTableInf+x)->tableName,
+                              (ct_BrowserDB->pTableInf+x)->numCols,(ct_BrowserDB->pTableInf+x)->tableRemarks);
+       Folder = AppendItem(Root,Temp0,TreeIc_VIEW,TreeIc_VIEW, new DBTreeData(Temp1));
+      }
+      for (y=0;y<(ct_BrowserDB->pTableInf+x)->numCols;y++)
+      {
+       Temp1.Printf("FN(%s",((ct_BrowserDB->pTableInf+x)->pColInf+y)->colName);
+       // Here is where we find out if the Column is a Primary / Foreign Key
+       if (((ct_BrowserDB->pTableInf+x)->pColInf+y)->PkCol != 0)  // Primary Key
+       {
+        Docu = AppendItem(Folder,((ct_BrowserDB->pTableInf+x)->pColInf+y)->colName,TreeIc_KEY,TreeIc_KEY,new DBTreeData(Temp1));
+        Temp2.Printf(_("This Key is used in the following Tables : %s"),((ct_BrowserDB->pTableInf+x)->pColInf+y)->PkTableName);
+        Funkt = AppendItem(Docu,Temp2,TreeIc_DocClosed,TreeIc_DocOpen,new DBTreeData("KEY"));
+       }
        else
-	 if (((ct_BrowserDB->pTableInf+x)->pColInf+y)->FkCol != 0) // Foreign Key
-	   {
-	     Docu = AppendItem(Folder,((ct_BrowserDB->pTableInf+x)->pColInf+y)->colName,TreeIc_KEYF,TreeIc_KEYF,new DBTreeData(Temp1));
-	     Temp2.Printf(_("This Foreign Key comes from the following Table : %s"),((ct_BrowserDB->pTableInf+x)->pColInf+y)->FkTableName);
-	     Funkt = AppendItem(Docu,Temp2,TreeIc_DocClosed,TreeIc_DocOpen,new DBTreeData("KEYF"));
-	   }
-	 else
-	   Docu = AppendItem(Folder,((ct_BrowserDB->pTableInf+x)->pColInf+y)->colName,TreeIc_COL,TreeIc_COL,new DBTreeData(Temp1));
-			  SQL_TYPE.Printf(_("SQL_C_???? (%d)"),((ct_BrowserDB->pTableInf+x)->pColInf+y)->sqlDataType);
-			  DB_TYPE.Printf(_("DB_DATA_TYPE_???? (%d)"),((ct_BrowserDB->pTableInf+x)->pColInf+y)->dbDataType);
-			  for (i=1;i<=(pDoc->db_Br+i_Which)->i_SqlTyp[0];i++)
-			    {
-			      if (((ct_BrowserDB->pTableInf+x)->pColInf+y)->sqlDataType == (pDoc->db_Br+i_Which)->i_SqlTyp[i])
-				{
-				  SQL_TYPE.Printf("%s(%d) ; ",(pDoc->db_Br+i_Which)->s_SqlTyp[i].c_str(),(pDoc->db_Br+i_Which)->i_SqlTyp[i]);
-				}
-			    } // for (i=1;i<=i_SqlTyp[0];i++)
-			  for (i=1;i<=(pDoc->db_Br+i_Which)->i_dbTyp[0];i++)
-			    {
-			      if (((ct_BrowserDB->pTableInf+x)->pColInf+y)->dbDataType == (pDoc->db_Br+i_Which)->i_dbTyp[i])
-				{
-				  DB_TYPE.Printf("%s(%d)",(pDoc->db_Br+i_Which)->s_dbTyp[i].c_str(),(pDoc->db_Br+i_Which)->i_dbTyp[i]);
-				}
-			    } // for (i=1;i<=i_dbTyp[0];i++)
-			  SQL_TYPE += DB_TYPE;
-			  Funkt = AppendItem(Docu,SQL_TYPE,TreeIc_DocClosed,TreeIc_DocOpen,new DBTreeData(SQL_TYPE));
-			  SQL_TYPE.Printf("%10s %d,%d",((ct_BrowserDB->pTableInf+x)->pColInf+y)->typeName,
-					  ((ct_BrowserDB->pTableInf+x)->pColInf+y)->columnSize,
-					  ((ct_BrowserDB->pTableInf+x)->pColInf+y)->decimalDigits);
-			  Funkt = AppendItem(Docu,SQL_TYPE,TreeIc_DocClosed,TreeIc_DocOpen,new DBTreeData(SQL_TYPE));
-			}  // for (y=0;y<(ct_BrowserDB->pTableInf+x)->numCols;y++)
-		    }   // if ((ct_BrowserDB->pTableInf+x)->pColInf)
-		  else
-		    Folder = AppendItem(Root,Temp0,TreeIc_FolderClosed,TreeIc_FolderOpen, new DBTreeData(Temp1));
-		}    // if ((ct_BrowserDB->pTableInf+x)->tableType == "TABLE")
-	    }     // for (x=0;x<ct_BrowserDB->numTables;x++)
-	}      // if (ct_BrowserDB)
-      else
-	wxLogMessage(_("\n-E-> DBTree::OnPopulate() : Invalid Catalog Pointer : Failed"));
-      wxEndBusyCursor();
-    }       // if((pDoc->db_Br+i_Which)->Initialize(FALSE))
+       {
+        if (((ct_BrowserDB->pTableInf+x)->pColInf+y)->FkCol != 0) // Foreign Key
+        {
+         Docu = AppendItem(Folder,((ct_BrowserDB->pTableInf+x)->pColInf+y)->colName,TreeIc_KEYF,TreeIc_KEYF,new DBTreeData(Temp1));
+         Temp2.Printf(_("This Foreign Key comes from the following Table : %s"),((ct_BrowserDB->pTableInf+x)->pColInf+y)->FkTableName);
+         Funkt = AppendItem(Docu,Temp2,TreeIc_DocClosed,TreeIc_DocOpen,new DBTreeData("KEYF"));
+        }
+        else
+         Docu = AppendItem(Folder,((ct_BrowserDB->pTableInf+x)->pColInf+y)->colName,TreeIc_COL,TreeIc_COL,new DBTreeData(Temp1));
+       }
+       SQL_TYPE.Printf(_("SQL_C_???? (%d)"),((ct_BrowserDB->pTableInf+x)->pColInf+y)->sqlDataType);
+       DB_TYPE.Printf(_("DB_DATA_TYPE_???? (%d)"),((ct_BrowserDB->pTableInf+x)->pColInf+y)->dbDataType);
+       for (i=1;i<=(pDoc->db_Br+i_Which)->i_SqlTyp[0];i++)
+       {
+        if (((ct_BrowserDB->pTableInf+x)->pColInf+y)->sqlDataType == (pDoc->db_Br+i_Which)->i_SqlTyp[i])
+        {
+         SQL_TYPE.Printf("%s(%d) ; ",(pDoc->db_Br+i_Which)->s_SqlTyp[i].c_str(),(pDoc->db_Br+i_Which)->i_SqlTyp[i]);
+        }
+       } // for (i=1;i<=i_SqlTyp[0];i++)
+       for (i=1;i<=(pDoc->db_Br+i_Which)->i_dbTyp[0];i++)
+       {
+        if (((ct_BrowserDB->pTableInf+x)->pColInf+y)->dbDataType == (pDoc->db_Br+i_Which)->i_dbTyp[i])
+        {
+         DB_TYPE.Printf("%s(%d)",(pDoc->db_Br+i_Which)->s_dbTyp[i].c_str(),(pDoc->db_Br+i_Which)->i_dbTyp[i]);
+        }
+       } // for (i=1;i<=i_dbTyp[0];i++)
+       SQL_TYPE += DB_TYPE;
+       Funkt = AppendItem(Docu,SQL_TYPE,TreeIc_DocClosed,TreeIc_DocOpen,new DBTreeData(SQL_TYPE));
+       SQL_TYPE.Printf("%10s %d,%d",((ct_BrowserDB->pTableInf+x)->pColInf+y)->typeName,
+        ((ct_BrowserDB->pTableInf+x)->pColInf+y)->columnSize,((ct_BrowserDB->pTableInf+x)->pColInf+y)->decimalDigits);
+       Funkt = AppendItem(Docu,SQL_TYPE,TreeIc_DocClosed,TreeIc_DocOpen,new DBTreeData(SQL_TYPE));
+      }  // for (y=0;y<(ct_BrowserDB->pTableInf+x)->numCols;y++)
+     }   // if ((ct_BrowserDB->pTableInf+x)->pColInf)
+     else
+      Folder = AppendItem(Root,Temp0,TreeIc_FolderClosed,TreeIc_FolderOpen, new DBTreeData(Temp1));
+    }    // if ((ct_BrowserDB->pTableInf+x)->tableType == "TABLE" or VIEW)
+    // else
+    //  wxLogMessage(_("\n-I-> if ! TABLE or VIEW  >%s<"),(ct_BrowserDB->pTableInf+x)->tableType);
+   }     // for (x=0;x<ct_BrowserDB->numTables;x++)
+  }      // if (ct_BrowserDB)
   else
-    {
-      return 0;
-      //wxLogMessage(_("\n-E-> DBTree::OnPopulate() : A valid Pointer could not be created : Failed"));
-    }
-  //----------------------------------------------------------------------------------------------------------------------------
-  Expand(Root);
-  //----------------------------------------------------------------------------------------------------------------------------
-  popupMenu1 = NULL;
-  popupMenu1 = new wxMenu("");
-  popupMenu1->Append(DATA_DB, _("Make wxDB.cpp/h "));
-  popupMenu1->AppendSeparator();
-  popupMenu1->Append(DATA_TABLE_ALL, _("Make all wxTable.cpp/h classes"));
-  popupMenu2 = NULL;
-  popupMenu2 = new wxMenu("");
-  popupMenu2->Append(DATA_SHOW, _("Show Data"));
-  popupMenu2->AppendSeparator();
-  popupMenu2->Append(DATA_TABLE, _("Make wxTable.cpp/h "));
-  //----------------------------------------------------------------------------------------------------------------------------
-
+   wxLogMessage(_("\n-E-> DBTree::OnPopulate() : Invalid Catalog Pointer : Failed"));
+  wxEndBusyCursor();
+ }       // if((pDoc->db_Br+i_Which)->Initialize(FALSE))
+ else
+ {
+  wxLogMessage(_("\n-E-> DBTree::OnPopulate() : A valid Pointer could not be created : Failed"));
   return 0;
+ }
+ //----------------------------------------------------------------------------------------------------------------------------
+ Expand(Root);
+ //----------------------------------------------------------------------------------------------------------------------------
+ popupMenu1 = NULL;
+ popupMenu1 = new wxMenu("");
+ popupMenu1->Append(DATA_DB, _("Make wxDB.cpp/h "));
+ popupMenu1->AppendSeparator();
+ popupMenu1->Append(DATA_TABLE_ALL, _("Make all wxTable.cpp/h classes"));
+ popupMenu2 = NULL;
+ popupMenu2 = new wxMenu("");
+ popupMenu2->Append(DATA_SHOW, _("Show Data"));
+ popupMenu2->AppendSeparator();
+ popupMenu2->Append(DATA_TABLE, _("Make wxTable.cpp/h "));
+ //----------------------------------------------------------------------------------------------------------------------------
+
+ return 0;
 }
 //---------------------------------------------------------------------------
 void DBTree::OnSelChanged(wxTreeEvent& WXUNUSED(event))

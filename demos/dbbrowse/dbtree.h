@@ -29,11 +29,12 @@ class DBTree : public wxTreeCtrl
    TreeIc_DsnClosed,                // dsnclose.ico
    TreeIc_DsnOpen,                  // dsnopen.ico
    TreeIc_TAB,                      // tab.ico
+   TreeIc_VIEW,                     // view.ico
    TreeIc_COL,                      // col.ico
    TreeIc_KEY,                      // key.ico
    TreeIc_KEYF,                     // keyf.ico
-   TreeIc_DocClosed,                // d_closed.ico
    TreeIc_DocOpen,                  // d_open.ico
+   TreeIc_DocClosed,                // d_closed.ico
    TreeIc_FolderClosed,             // f_closed.ico
    TreeIc_FolderOpen                // f_open.ico
   };
