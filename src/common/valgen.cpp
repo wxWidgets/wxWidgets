@@ -453,7 +453,7 @@ bool wxGenericValidator::TransferFromWindow(void)
     }
     else if (m_pString)
     {
-        *m_pString = pControl->SetStringSelection(* m_pString);
+        *m_pString = pControl->GetStringSelection();
         return TRUE;
     }
   } else
