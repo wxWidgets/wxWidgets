@@ -175,6 +175,7 @@ OTHER CHANGES
 
 wxBase:
 
+- building wxBase with Borland C++ is now supported (Michael Fieldings)
 - wxSemaphore class added, many fixed to wxCondition and wxThread (K.S. Sreeram)
 - fixes to the command line parsing error and usage messages
 - modified wxFileName::CreateTempFileName() to open the file atomically
