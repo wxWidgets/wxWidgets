@@ -35,13 +35,13 @@ FORCE_LINK_ME(m_pre)
 static wxString HtmlizeWhitespaces(const wxString& str)
 {
     wxString out;
-    size_t i = 0, len = str.Len();
+    size_t i = 0, j = 0, len = str.Len();
     for (i = 0; i < len; i++)
     {
         switch (str[i])
         {
             case wxT('<'):
-                while (i < len && str[i] != wxT('>')) 
+                while (i < len && str[i] != wxT('>'))
                     out << str[i++];
                 out << wxT('>');
                 break;
@@ -52,7 +52,7 @@ static wxString HtmlizeWhitespaces(const wxString& str)
                 out << wxT("<br>");
                 break;
             case wxT('\t'):
-                for (size_t j = 8 - i%8; j > 0; j--) out << wxT("&nbsp;");
+                for (j = 8 - i%8; j > 0; j--) out << wxT("&nbsp;");
                 break;
             default:
                 out << str[i];
@@ -92,7 +92,7 @@ TAG_HANDLER_BEGIN(PRE, "PRE")
         c = m_WParser->OpenContainer();
         c->SetAlignHor(wxHTML_ALIGN_LEFT);
 
-        wxString srcMid = 
+        wxString srcMid =
             m_WParser->GetSource()->Mid(tag.GetBeginPos(),
                                         tag.GetEndPos1() - tag.GetBeginPos());
         // It is safe to temporarily change the source being parsed,
