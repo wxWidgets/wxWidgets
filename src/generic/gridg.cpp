@@ -1417,8 +1417,9 @@ void wxGenericGrid::OnSelectCellImplementation(wxDC *dc, int row, int col)
   // Probably because of the SetValue?? JS.
   // 2) Arrrrrgh. This isn't needed anywhere, 
   // of course. One hour of debugging... RR.
-#ifndef __WXMSW__
-//  HighlightCell(dc);
+  // Put back for Motif only on advice of Michael Bedward
+#ifdef __WXMOTIF__
+  HighlightCell(dc);
 #endif
   dc->DestroyClippingRegion();
 

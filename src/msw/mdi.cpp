@@ -509,7 +509,7 @@ bool wxMDIParentFrame::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control)
 */
   }
 
-  return FALSE;
+  return wxWindow::MSWOnCommand(id, cmd, control);
 }
 
 void wxMDIParentFrame::MSWOnMenuHighlight(WXWORD nItem, WXWORD nFlags, WXHMENU hSysMenu)
@@ -901,7 +901,7 @@ bool wxMDIChildFrame::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control)
     return TRUE;
   }
   else
-    return FALSE;
+    return wxWindow::MSWOnCommand(id, cmd, control);
 }
 
 long wxMDIChildFrame::MSWDefWindowProc(WXUINT message, WXUINT wParam, WXLPARAM lParam)
