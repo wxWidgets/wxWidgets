@@ -110,6 +110,8 @@ void wxMetafile::SetHMETAFILE(WXHMETAFILE mf)
 {
     if (!m_refData)
         m_refData = new wxMetafileRefData;
+    if ( M_METAFILEDATA->m_metafile )
+        KillPicture( (PicHandle) M_METAFILEDATA->m_metafile ) ;
 
     M_METAFILEDATA->m_metafile = mf;
 }
@@ -130,48 +132,41 @@ bool wxMetaFile::Play(wxDC *dc)
     return TRUE;
 }
 
+wxSize wxMetaFile::GetSize() const
+{
+    wxSize size = wxDefaultSize ;
+    if ( Ok() )
+    {
+        PicHandle pict = (PicHandle) GetHMETAFILE() ;
+        Rect &r = (**pict).picFrame ;
+        size.x = r.right - r.left ;
+        size.y = r.bottom - r.top ;
+    }
+
+    return size;
+}
+
 /*
  * Metafile device context
  *
  */
 
-// Original constructor that does not takes origin and extent. If you use this,
-// *DO* give origin/extent arguments to wxMakeMetaFilePlaceable.
-wxMetaFileDC::wxMetaFileDC(const wxString& file)
-{
-    m_metaFile = NULL;
-    m_minX = 10000;
-    m_minY = 10000;
-    m_maxX = -10000;
-    m_maxY = -10000;
-    
-    wxASSERT_MSG( file.IsEmpty() , wxT("no file based metafile support yet") ) ;
-    
-    m_metaFile = new wxMetaFile(wxEmptyString) ;
-    Rect r={0,0,1000,1000} ;
-    
-    m_metaFile->SetHMETAFILE( OpenPicture( &r ) ) ;
-    ::GetPort( (GrafPtr*) &m_macPort ) ;    
-    m_ok = TRUE ;
-    
-    SetMapMode(wxMM_TEXT); 
-}
-
 // New constructor that takes origin and extent. If you use this, don't
 // give origin/extent arguments to wxMakeMetaFilePlaceable.
 
-wxMetaFileDC::wxMetaFileDC(const wxString& file, int xext, int yext, int xorg, int yorg)
+wxMetaFileDC::wxMetaFileDC(const wxString& filename ,
+                    int width , int height ,
+                    const wxString& WXUNUSED(description) )
 {
-    m_minX = 10000;
-    m_minY = 10000;
-    m_maxX = -10000;
-    m_maxY = -10000;
+    wxASSERT_MSG( width == 0 || height == 0 , _T("no arbitration of metafilesize supported") ) ;
+    wxASSERT_MSG( filename.IsEmpty() , _T("no file based metafile support yet")) ;
     
-    wxASSERT_MSG( file.IsEmpty() , wxT("no file based metafile support yet")) ;
+    m_metaFile = new wxMetaFile(filename) ;
+    Rect r={0,0,height,width} ;
     
-    m_metaFile = new wxMetaFile(wxEmptyString) ;
-    Rect r={yorg,xorg,yorg+yext,xorg+xext} ;
-    
+    RectRgn( (RgnHandle) m_macBoundaryClipRgn , &r ) ;
+    CopyRgn( (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn ) ;
+
     m_metaFile->SetHMETAFILE( OpenPicture( &r ) ) ;
     ::GetPort( (GrafPtr*) &m_macPort ) ;    
     m_ok = TRUE ;
@@ -181,6 +176,15 @@ wxMetaFileDC::wxMetaFileDC(const wxString& file, int xext, int yext, int xorg, i
 
 wxMetaFileDC::~wxMetaFileDC()
 {
+}
+
+void wxMetaFileDC::DoGetSize(int *width, int *height) const
+{
+    wxCHECK_RET( m_metaFile , _T("GetSize() doesn't work without a metafile") );
+
+    wxSize sz = m_metaFile->GetSize() ;
+    if (width) (*width) = sz.x;
+    if (height) (*height) = sz.y;
 }
 
 wxMetaFile *wxMetaFileDC::Close()
@@ -204,9 +208,10 @@ bool wxMetafileDataObject::GetDataHere(void *buf) const
 
 bool wxMetafileDataObject::SetData(size_t len, const void *buf)
 {
-    Handle handle = (Handle) m_metafile.GetHMETAFILE() ;
+    Handle handle = NewHandle( len ) ;
     SetHandleSize( handle , len ) ;
     memcpy( *handle , buf , len ) ;
+    m_metafile.SetHMETAFILE( handle ) ;
     return true ;
 }
 #endif
