@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\DEV\WX2\WXWINDOWS\LIB\wx.lib
+;From library:  F:\DEV\WX2\WXWINDOWS\LIB\WX.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1963,7 +1963,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -6246,7 +6246,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -11735,23 +11735,23 @@ EXPORTS
       SetMask__8wxBitmapFP6wxMask
   ;From object file:  ..\os2\bmpbuttn.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxBitmapButton::DrawFace(unsigned long,int,int,int,int,unsigned long)
-      DrawFace__14wxBitmapButtonFUliN32T1
-      ;wxBitmapButton::SetBitmapLabel(const wxBitmap&)
-      SetBitmapLabel__14wxBitmapButtonFRC8wxBitmap
+      ;wxBitmapButton::OS2OnDraw(void**)
+      OS2OnDraw__14wxBitmapButtonFPPv
+      ;wxBitmapButton::DrawButtonFocus(wxClientDC&)
+      DrawButtonFocus__14wxBitmapButtonFR10wxClientDC
+      ;wxBitmapButton::DrawFace(wxClientDC&,unsigned long)
+      DrawFace__14wxBitmapButtonFR10wxClientDCUl
       __vft14wxBitmapButton8wxObject
-      ;wxBitmapButton::DrawButtonDisable(unsigned long,int,int,int,int,unsigned long)
-      DrawButtonDisable__14wxBitmapButtonFUliN32T1
       ;wxConstructorForwxBitmapButton()
       wxConstructorForwxBitmapButton__Fv
       ;wxBitmapButton::SetDefault()
       SetDefault__14wxBitmapButtonFv
       ;wxBitmapButton::Create(wxWindow*,int,const wxBitmap&,const wxPoint&,const wxSize&,long,const wxValidator&,const wxString&)
       Create__14wxBitmapButtonFP8wxWindowiRC8wxBitmapRC7wxPointRC6wxSizelRC11wxValidatorRC8wxString
+      ;wxBitmapButton::DrawButtonDisable(wxClientDC&,wxBitmap&)
+      DrawButtonDisable__14wxBitmapButtonFR10wxClientDCR8wxBitmap
       ;wxBitmapButton::sm_classwxBitmapButton
       sm_classwxBitmapButton__14wxBitmapButton
-      ;wxBitmapButton::DrawButtonFocus(unsigned long,int,int,int,int,unsigned long)
-      DrawButtonFocus__14wxBitmapButtonFUliN32T1
   ;From object file:  ..\os2\brush.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxBrush::FreeResource(unsigned long)
@@ -14773,8 +14773,6 @@ EXPORTS
       GetEventTable__9wxToolBarCFv
       ;wxToolBar::CreateTool(int,const wxString&,const wxBitmap&,const wxBitmap&,wxItemKind,wxObject*,const wxString&,const wxString&)
       CreateTool__9wxToolBarFiRC8wxStringRC8wxBitmapT310wxItemKindP8wxObjectN22
-      ;wxDisableBitmap(const wxBitmap&,long)
-      wxDisableBitmap__FRC8wxBitmapl
       ;wxConstructorForwxToolBar()
       wxConstructorForwxToolBar__Fv
       ;wxToolBar::m_bInitialized
@@ -14925,6 +14923,8 @@ EXPORTS
       wxShell__FRC8wxString
       ;wxGetUserHome(const wxString&)
       wxGetUserHome__FRC8wxString
+      ;wxDisableBitmap(const wxBitmap&,long)
+      wxDisableBitmap__FRC8wxBitmapl
       ;wxWriteResource(const wxString&,const wxString&,const wxString&,const wxString&)
       wxWriteResource__FRC8wxStringN31
       ;wxWriteResource(const wxString&,const wxString&,long,const wxString&)

@@ -20,69 +20,83 @@ WXDLLEXPORT_DATA(extern const char*) wxButtonNameStr;
 
 class WXDLLEXPORT wxBitmapButton: public wxBitmapButtonBase
 {
-  DECLARE_DYNAMIC_CLASS(wxBitmapButton)
- public:
-  inline wxBitmapButton() { m_marginX = wxDEFAULT_BUTTON_MARGIN; m_marginY = wxDEFAULT_BUTTON_MARGIN; }
-  inline wxBitmapButton(wxWindow *parent, wxWindowID id, const wxBitmap& bitmap,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, long style = wxBU_AUTODRAW,
+public:
+    inline wxBitmapButton()
+    {
+        m_marginX = wxDEFAULT_BUTTON_MARGIN;
+        m_marginY = wxDEFAULT_BUTTON_MARGIN;
+    }
+    inline wxBitmapButton( wxWindow*          pParent
+                          ,wxWindowID         vId
+                          ,const wxBitmap&    rBitmap
+                          ,const wxPoint&     rPos = wxDefaultPosition
+                          ,const wxSize&      rSize = wxDefaultSize
+                          ,long               lStyle = wxBU_AUTODRAW
 #if wxUSE_VALIDATORS
-           const wxValidator& validator = wxDefaultValidator,
+                          ,const wxValidator& rValidator = wxDefaultValidator
 #endif
-           const wxString& name = wxButtonNameStr)
-  {
-      Create(parent, id, bitmap, pos, size, style, validator, name);
-  }
-
-  bool Create(wxWindow *parent, wxWindowID id, const wxBitmap& bitmap,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, long style = wxBU_AUTODRAW,
+                          ,const wxString&    rsName = wxButtonNameStr
+                         )
+    {
+        Create( pParent
+               ,vId
+               ,rBitmap
+               ,rPos
+               ,rSize
+               ,lStyle
 #if wxUSE_VALIDATORS
-           const wxValidator& validator = wxDefaultValidator,
+               ,rValidator
 #endif
-           const wxString& name = wxButtonNameStr);
+               ,rsName
+              );
+    }
 
-  virtual void SetLabel(const wxBitmap& bitmap)
-  {
-    SetBitmapLabel(bitmap);
-  }
+    bool Create( wxWindow*          pParent
+                ,wxWindowID         vId
+                ,const wxBitmap&    rBitmap
+                ,const wxPoint&     rPos = wxDefaultPosition
+                ,const wxSize&      rSize = wxDefaultSize
+                ,long               lStyle = wxBU_AUTODRAW
+#if wxUSE_VALIDATORS
+                ,const wxValidator& rValidator = wxDefaultValidator
+#endif
+                ,const wxString&    rsName = wxButtonNameStr
+               );
 
-  virtual void SetBitmapLabel(const wxBitmap& bitmap);
+    virtual void SetLabel(const wxBitmap& rBitmap)
+    {
+        SetBitmapLabel(rBitmap);
+    }
 
 #if WXWIN_COMPATIBILITY
-    wxBitmap *GetBitmap() const { return (wxBitmap *) & m_buttonBitmap; }
+    wxBitmap* GetBitmap(void) const
+    {
+        return (wxBitmap *)&m_buttonBitmap;
+    }
 #endif
 
-  inline wxBitmap& GetBitmapLabel() const { return (wxBitmap&) m_buttonBitmap; }
-  inline wxBitmap& GetBitmapSelected() const { return (wxBitmap&) m_buttonBitmapSelected; }
-  inline wxBitmap& GetBitmapFocus() const { return (wxBitmap&) m_buttonBitmapFocus; }
-  inline wxBitmap& GetBitmapDisabled() const { return (wxBitmap&) m_buttonBitmapDisabled; }
+    //
+    // Implementation
+    //
+    virtual void SetDefault();
+    virtual bool OS2OnDraw(WXDRAWITEMSTRUCT* pItem);
 
-  inline void SetBitmapSelected(const wxBitmap& sel) { m_buttonBitmapSelected = sel; };
-  inline void SetBitmapFocus(const wxBitmap& focus) { m_buttonBitmapFocus = focus; };
-  inline void SetBitmapDisabled(const wxBitmap& disabled) { m_buttonBitmapDisabled = disabled; };
-
-  inline void SetMargins(int x, int y) { m_marginX = x; m_marginY = y; }
-  inline int GetMarginX() { return m_marginX; }
-  inline int GetMarginY() { return m_marginY; }
-
-  virtual void SetDefault();
-//  virtual bool OS2OnDraw(WXDRAWITEMSTRUCT *item);
-  virtual void DrawFace( WXHDC dc, int left, int top, int right, int bottom, bool sel );
-  virtual void DrawButtonFocus( WXHDC dc, int left, int top, int right, int bottom, bool sel );
-  virtual void DrawButtonDisable( WXHDC dc, int left, int top, int right, int bottom, bool with_marg );
-
- protected:
-  wxBitmap m_buttonBitmap;
-  wxBitmap m_buttonBitmapSelected;
-  wxBitmap m_buttonBitmapFocus;
-  wxBitmap m_buttonBitmapDisabled;
-  int      m_marginX;
-  int      m_marginY;
 private:
-  virtual void SetLabel(const wxString& string)
-  { wxButton::SetLabel(string); };
-};
 
-#endif
-    // _WX_BMPBUTTN_H_
+    virtual void DrawFace( wxClientDC& rDC
+                          ,bool        bSel
+                         );
+    virtual void DrawButtonFocus(wxClientDC& rDC);
+    virtual void DrawButtonDisable( wxClientDC& rDC
+                                   ,wxBitmap&   rBmp
+                                  );
+    DECLARE_DYNAMIC_CLASS(wxBitmapButton)
+
+    virtual void SetLabel(const wxString& rsString)
+    {
+        wxButton::SetLabel(rsString);
+    }
+}; // end of CLASS wxBitmapButton
+
+#endif // _WX_BMPBUTTN_H_
+

@@ -12,6 +12,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_BMPBUTTON
+
 #ifndef WX_PRECOMP
 #include "wx/bmpbuttn.h"
 #endif
@@ -23,263 +25,307 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
 
 #define BUTTON_HEIGHT_FACTOR (EDIT_CONTROL_FACTOR * 1.1)
 
-bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bitmap,
-           const wxPoint& pos,
-           const wxSize& size, long style,
+bool wxBitmapButton::Create(
+  wxWindow*                         pParent
+, wxWindowID                        vId
+, const wxBitmap&                   rBitmap
+, const wxPoint&                    rPos
+, const wxSize&                     rSize
+, long                              lStyle
 #if wxUSE_VALIDATORS
-           const wxValidator& validator,
+, const wxValidator&                rValidator
 #endif
-           const wxString& name)
+, const wxString&                   rsName
+)
 {
-    m_buttonBitmap = bitmap;
-    SetName(name);
+    m_bmpNormal = rBitmap;
+    SetName(rsName);
 #if wxUSE_VALIDATORS
-    SetValidator(validator);
+    SetValidator(rValidator);
 #endif
 
-    parent->AddChild(this);
+    pParent->AddChild(this);
 
-    m_backgroundColour = parent->GetBackgroundColour() ;
-    m_foregroundColour = parent->GetForegroundColour() ;
-    m_windowStyle = style;
-    m_marginX = 0;
-    m_marginY = 0;
+    m_backgroundColour = pParent->GetBackgroundColour() ;
+    m_foregroundColour = pParent->GetForegroundColour() ;
+    m_windowStyle = lStyle;
 
-    if ( style & wxBU_AUTODRAW )
+    if (lStyle & wxBU_AUTODRAW)
     {
         m_marginX = wxDEFAULT_BUTTON_MARGIN;
         m_marginY = wxDEFAULT_BUTTON_MARGIN;
     }
 
-    int x = pos.x;
-    int y = pos.y;
-    int width = size.x;
-    int height = size.y;
+    int                             nX      = rPos.x;
+    int                             nY      = rPos.y;
+    int                             nWidth  = rSize.x;
+    int                             nHeight = rSize.y;
 
-    if (id == -1)
+    if (vId == -1)
         m_windowId = NewControlId();
     else
-        m_windowId = id;
+        m_windowId = vId;
 
-    if ( width == -1 && bitmap.Ok())
-        width = bitmap.GetWidth() + 2*m_marginX;
+    if (nWidth == -1 && rBitmap.Ok())
+        nWidth = rBitmap.GetWidth() + 2 * m_marginX;
 
-    if ( height == -1 && bitmap.Ok())
-        height = bitmap.GetHeight() + 2*m_marginY;
+    if (nHeight == -1 && rBitmap.Ok())
+        nHeight = rBitmap.GetHeight() + 2 * m_marginY;
 
-    // TODO:
-    /*
-    m_hWnd = (WXHWND)CreateWindowEx
-                   (
-                    0,
-                    wxT("BUTTON"),
-                    wxT(""),
-                    WS_VISIBLE | WS_TABSTOP | WS_CHILD | BS_OWNERDRAW ,
-                    0, 0, 0, 0,
-                    GetWinHwnd(parent),
-                    (HMENU)m_windowId,
-                    wxGetInstance(),
-                    NULL
-                   );
-    */
-    // Subclass again for purposes of dialog editing mode
+    ULONG                           ulOS2Style = WS_VISIBLE | WS_TABSTOP | BS_USERBUTTON;
+
+    if (m_windowStyle & wxCLIP_SIBLINGS)
+        ulOS2Style |= WS_CLIPSIBLINGS;
+
+    m_hWnd = (WXHWND)::WinCreateWindow( GetHwndOf(pParent)
+                                       ,WC_BUTTON
+                                       ,wxT("")
+                                       ,ulOS2Style
+                                       ,0, 0, 0, 0
+                                       ,GetHwndOf(pParent)
+                                       ,HWND_TOP
+                                       ,m_windowId
+                                       ,NULL
+                                       ,NULL
+                                      );
+
+    //
+    //Subclass again for purposes of dialog editing mode
+    //
     SubclassWin(m_hWnd);
-
-    SetFont(parent->GetFont()) ;
-
-    SetSize(x, y, width, height);
-
-    return FALSE;
-}
-
-void wxBitmapButton::SetBitmapLabel(const wxBitmap& bitmap)
-{
-    m_buttonBitmap = bitmap;
-}
-
-// TODO:
-/*
-bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
-{
-#if defined(__WIN95__)
-    long style = GetWindowLong((HWND) GetHWND(), GWL_STYLE);
-    if (style & BS_BITMAP)
-    {
-        // Let default procedure draw the bitmap, which is defined
-        // in the Windows resource.
-        return FALSE;
-    }
-#endif
-
-    LPDRAWITEMSTRUCT lpDIS = (LPDRAWITEMSTRUCT) item;
-
-    wxBitmap* bitmap = &m_buttonBitmap;
-
-    UINT state = lpDIS->itemState;
-    if ((state & ODS_SELECTED) && m_buttonBitmapSelected.Ok())
-        bitmap = &m_buttonBitmapSelected;
-    else if ((state & ODS_FOCUS) && m_buttonBitmapFocus.Ok())
-        bitmap = &m_buttonBitmapFocus;
-    else if ((state & ODS_DISABLED) && m_buttonBitmapDisabled.Ok())
-        bitmap = &m_buttonBitmapDisabled;
-
-    if ( !bitmap->Ok() )
-        return FALSE;
-
-    HDC hDC = lpDIS->hDC;
-    HDC memDC = ::CreateCompatibleDC(hDC);
-
-    HBITMAP old = (HBITMAP) ::SelectObject(memDC, (HBITMAP) bitmap->GetHBITMAP());
-
-    if (!old)
-        return FALSE;
-
-    int x = lpDIS->rcItem.left;
-    int y = lpDIS->rcItem.top;
-    int width = lpDIS->rcItem.right - x;
-    int height = lpDIS->rcItem.bottom - y;
-
-    // Draw the face, if auto-drawing
-    if ( GetWindowStyleFlag() & wxBU_AUTODRAW )
-        DrawFace((WXHDC) hDC, lpDIS->rcItem.left, lpDIS->rcItem.top, lpDIS->rcItem.right, lpDIS->rcItem.bottom,
-            ((state & ODS_SELECTED) == ODS_SELECTED));
-
-    // Centre the bitmap in the control area
-    int x1 = (int) (x + ((width - bitmap->GetWidth()) / 2));
-    int y1 = (int) (y + ((height - bitmap->GetHeight()) / 2));
-
-    if ( (state & ODS_SELECTED) && (GetWindowStyleFlag() & wxBU_AUTODRAW) )
-    {
-        x1 ++;
-        y1 ++;
-    }
-
-    ::BitBlt(hDC, x1, y1, bitmap->GetWidth(), bitmap->GetHeight(), memDC, 0, 0, SRCCOPY);
-
-    if ( (state & ODS_DISABLED) && (GetWindowStyleFlag() & wxBU_AUTODRAW) )
-        DrawButtonDisable( (WXHDC) hDC, lpDIS->rcItem.left, lpDIS->rcItem.top, lpDIS->rcItem.right, lpDIS->rcItem.bottom, TRUE ) ;
-    else if ( (state & ODS_FOCUS) && (GetWindowStyleFlag() & wxBU_AUTODRAW) )
-        DrawButtonFocus( (WXHDC) hDC, lpDIS->rcItem.left, lpDIS->rcItem.top, lpDIS->rcItem.right, lpDIS->rcItem.bottom, ((state & ODS_SELECTED) == ODS_SELECTED));
-
-    ::SelectObject(memDC, old);
-
-    ::DeleteDC(memDC);
-
+    SetFont(*wxSMALL_FONT);
+    SetSize( nX
+            ,nY
+            ,nWidth
+            ,nHeight
+           );
     return TRUE;
-}
-*/
+} // end of wxBitmapButton::Create
 
-void wxBitmapButton::DrawFace( WXHDC dc, int left, int top, int right, int bottom, bool sel )
+bool wxBitmapButton::OS2OnDraw(
+  WXDRAWITEMSTRUCT*                 pItem
+)
 {
-// TODO:
-/*
-  HPEN  oldp;
-  HBRUSH    oldb ;
+    PUSERBUTTON                     pUser     = (PUSERBUTTON)pItem;
+    bool                            bAutoDraw = (GetWindowStyleFlag() & wxBU_AUTODRAW) != 0;
 
-  HPEN penBorder;
-  HPEN penLight;
-  HPEN penShadow;
-  HBRUSH brushFace;
-  COLORREF ms_color;
+    if (!pUser)
+        return FALSE;
 
-    ms_color = GetSysColor(COLOR_WINDOWFRAME) ;
-    penBorder = CreatePen(PS_SOLID,0,ms_color) ;
+    wxBitmap*                       pBitmap;
+    RECTL                           vRect;
+    bool                            bIsSelected = pUser->fsState & BDS_HILITED;
+    wxClientDC                      vDc(this);
 
-    ms_color = GetSysColor(COLOR_BTNSHADOW) ;
-    penShadow = CreatePen(PS_SOLID,0,ms_color) ;
-
-    ms_color = GetSysColor(COLOR_BTNHIGHLIGHT) ;
-    penLight = CreatePen(PS_SOLID,0,ms_color) ;
-
-    ms_color = GetSysColor(COLOR_BTNFACE) ;
-    brushFace = CreateSolidBrush(ms_color) ;
-
-    oldp = (HPEN) SelectObject( (HDC) dc, GetStockObject( NULL_PEN ) ) ;
-    oldb = (HBRUSH) SelectObject( (HDC) dc, brushFace ) ;
-    Rectangle( (HDC) dc, left, top, right, bottom ) ;
-    SelectObject( (HDC) dc, penBorder) ;
-        MoveToEx((HDC) dc,left+1,top,NULL);LineTo((HDC) dc,right-1,top);
-        MoveToEx((HDC) dc,left,top+1,NULL);LineTo((HDC) dc,left,bottom-1);
-        MoveToEx((HDC) dc,left+1,bottom-1,NULL);LineTo((HDC) dc,right-1,bottom-1);
-        MoveToEx((HDC) dc,right-1,top+1,NULL);LineTo((HDC) dc,right-1,bottom-1);
-
-    SelectObject( (HDC) dc, penShadow) ;
-    if (sel)
-    {
-        MoveToEx((HDC) dc,left+1    ,bottom-2   ,NULL) ;
-        LineTo((HDC) dc,  left+1    ,top+1) ;
-        LineTo((HDC) dc,  right-2   ,top+1) ;
-    }
+    if (bIsSelected && m_bmpSelected.Ok())
+        pBitmap = &m_bmpSelected;
+    else if ((pUser->fsState & BDS_DEFAULT) && m_bmpFocus.Ok())
+        pBitmap = &m_bmpFocus;
+    else if ((pUser->fsState & BDS_DISABLED) && m_bmpDisabled.Ok())
+        pBitmap = &m_bmpDisabled;
     else
+        pBitmap = &m_bmpNormal;
+
+    if (!pBitmap->Ok() )
+        return FALSE;
+
+
+    //
+    // Centre the bitmap in the control area
+    //
+    int                             nX         = 0;
+    int                             nY         = 0;
+    int                             nX1        = 0;
+    int                             nY1        = 0;
+    int                             nWidth     = vDc.m_vRclPaint.xRight - vDc.m_vRclPaint.xLeft;
+    int                             nHeight    = vDc.m_vRclPaint.xRight - vDc.m_vRclPaint.xLeft;
+    int                             nBmpWidth  = pBitmap->GetWidth();
+    int                             nBmpHeight = pBitmap->GetHeight();
+
+    nX1 = nX + (nWidth - nBmpWidth) / 2;
+    nY1 = nX + (nHeight - nBmpHeight) / 2;
+
+    if (bIsSelected && bAutoDraw)
     {
-        MoveToEx((HDC) dc,left+1    ,bottom-2   ,NULL) ;
-        LineTo((HDC) dc,  right-2   ,bottom-2) ;
-        LineTo((HDC) dc,  right-2   ,top) ;
-        MoveToEx((HDC) dc,left+2    ,bottom-3   ,NULL) ;
-        LineTo((HDC) dc,  right-3   ,bottom-3) ;
-        LineTo((HDC) dc,  right-3   ,top+1) ;
-
-        SelectObject( (HDC) dc, penLight) ;
-
-        MoveToEx((HDC) dc,left+1    ,bottom-2   ,NULL) ;
-        LineTo((HDC) dc,  left+1    ,top+1) ;
-        LineTo((HDC) dc,  right-2   ,top+1) ;
+        nX1++;
+        nY1++;
     }
-    SelectObject((HDC) dc,oldp) ;
-    SelectObject((HDC) dc,oldb) ;
 
-  DeleteObject(penBorder);
-  DeleteObject(penLight);
-  DeleteObject(penShadow);
-  DeleteObject(brushFace);
-*/
-}
+    //
+    // Draw the button face
+    //
+    {
+        DrawFace( vDc
+                 ,bIsSelected
+                );
+    }
 
-#define FOCUS_MARGIN 6
+    //
+    // Draw the bitmap
+    //
+    vDc.DrawBitmap( *pBitmap
+                   ,nX1
+                   ,nY1
+                   ,TRUE
+                  );
 
-void wxBitmapButton::DrawButtonFocus( WXHDC dc, int left, int top, int right, int bottom, bool sel )
+    //
+    // Draw focus / disabled state, if auto-drawing
+    //
+    if ((pUser->fsState == BDS_DISABLED) && bAutoDraw)
+    {
+        DrawButtonDisable( vDc
+                          ,*pBitmap
+                         );
+    }
+    else if ((pUser->fsState == BDS_DEFAULT) && bAutoDraw)
+    {
+        DrawButtonFocus(vDc);
+    }
+    return TRUE;
+} // end of wxBitmapButton::OS2OnDraw
+
+void wxBitmapButton::DrawFace (
+  wxClientDC&                       rDC
+, bool                              bSel
+)
 {
-    // TODO:
-/*
-    RECT rect;
-    rect.left = left;
-    rect.top = top;
-    rect.right = right;
-    rect.bottom = bottom;
-    InflateRect( &rect, - FOCUS_MARGIN, - FOCUS_MARGIN ) ;
-    if ( sel )
-        OffsetRect( &rect, 1, 1 ) ;
-    DrawFocusRect( (HDC) dc, &rect ) ;
-*/
-}
+    //
+    // Set up drawing colors
+    //
+    wxPen                           vHiLitePen(wxColour(255, 255, 255), 1, wxSOLID); // White
+    wxPen                           vLitePen(wxColour(223, 223, 223), 1, wxSOLID); // Very Light Grey
+    wxPen                           vShadowPen(wxColour(191, 191, 191), 1, wxSOLID); // Medium Grey
+    wxPen                           vDarkShadowPen(wxColour(128, 128, 128), 1, wxSOLID);
+    wxColour                        vFaceColor(wxColour(204, 204, 204)); // Light Grey
 
-// extern HBRUSH wxDisableButtonBrush;
+    //
+    // Draw the main button face
+    //
+    ::WinFillRect(rDC.GetHPS(), &rDC.m_vRclPaint, vFaceColor.GetPixel());
 
-void wxBitmapButton::DrawButtonDisable( WXHDC dc, int left, int top, int right, int bottom, bool with_marg )
+    //
+    // Draw the border
+    //
+    rDC.SetPen(bSel ? vDarkShadowPen : vHiLitePen);
+    rDC.DrawLine( rDC.m_vRclPaint.xLeft
+                 ,rDC.m_vRclPaint.yTop
+                 ,rDC.m_vRclPaint.xRight - 1
+                 ,rDC.m_vRclPaint.yTop
+                );
+    rDC.DrawLine( rDC.m_vRclPaint.xLeft
+                 ,rDC.m_vRclPaint.yTop + 1
+                 ,rDC.m_vRclPaint.xLeft
+                 ,rDC.m_vRclPaint.yBottom - 1
+                );
+
+    rDC.SetPen(bSel ? vShadowPen : vLitePen);
+    rDC.DrawLine( rDC.m_vRclPaint.xLeft + 1
+                 ,rDC.m_vRclPaint.yTop + 1
+                 ,rDC.m_vRclPaint.xRight - 2
+                 ,rDC.m_vRclPaint.yTop + 1
+                );
+    rDC.DrawLine( rDC.m_vRclPaint.xLeft + 1
+                 ,rDC.m_vRclPaint.yTop + 2
+                 ,rDC.m_vRclPaint.xLeft + 1
+                 ,rDC.m_vRclPaint.yBottom - 2
+                );
+
+    rDC.SetPen(bSel ? vLitePen : vShadowPen);
+    rDC.DrawLine( rDC.m_vRclPaint.xLeft + 1
+                 ,rDC.m_vRclPaint.yBottom - 2
+                 ,rDC.m_vRclPaint.xRight - 1
+                 ,rDC.m_vRclPaint.yBottom - 2
+                );
+    rDC.DrawLine( rDC.m_vRclPaint.xRight - 2
+                 ,rDC.m_vRclPaint.yBottom - 3
+                 ,rDC.m_vRclPaint.xRight - 2
+                 ,rDC.m_vRclPaint.yTop
+                );
+
+    rDC.SetPen(bSel ? vDarkShadowPen : vHiLitePen);
+    rDC.DrawLine( rDC.m_vRclPaint.xLeft
+                 ,rDC.m_vRclPaint.yBottom - 1
+                 ,rDC.m_vRclPaint.xRight + 2
+                 ,rDC.m_vRclPaint.yBottom - 1
+                );
+    rDC.DrawLine( rDC.m_vRclPaint.xRight - 1
+                 ,rDC.m_vRclPaint.yBottom - 2
+                 ,rDC.m_vRclPaint.xRight - 1
+                 ,rDC.m_vRclPaint.yTop - 1
+                );
+} // end of wxBitmapButton::DrawFace
+
+void wxBitmapButton::DrawButtonFocus (
+  wxClientDC&                       rDC
+)
 {
-// TODO:
-/*
-    HBRUSH  old = (HBRUSH) SelectObject( (HDC) dc, wxDisableButtonBrush ) ;
+    wxPen                           vBlackPen(wxColour(0, 0, 0), 2, wxSOLID);
 
-    if ( with_marg )
-        ::PatBlt( (HDC) dc, left + m_marginX, top + m_marginY,
-            right - 2 * m_marginX, bottom - 2 * m_marginY,
-#ifdef __SALFORDC__
-                0xfa0089L ) ;
-#else
-                0xfa0089UL ) ;
-#endif
-    else    ::PatBlt( (HDC) dc, left, top, right, bottom,
-#ifdef __SALFORDC__
-       0xfa0089L ) ;
-#else
-       0xfa0089UL ) ;
-#endif
-    ::SelectObject( (HDC) dc, old ) ;
-*/
-}
+    //
+    // Draw a thick black line around the outside of the button
+    //
+    rDC.SetPen(vBlackPen);
+    rDC.DrawLine( rDC.m_vRclPaint.xLeft
+                 ,rDC.m_vRclPaint.yTop
+                 ,rDC.m_vRclPaint.xRight
+                 ,rDC.m_vRclPaint.yTop
+                );
+    rDC.DrawLine( rDC.m_vRclPaint.xRight
+                 ,rDC.m_vRclPaint.yTop
+                 ,rDC.m_vRclPaint.xRight
+                 ,rDC.m_vRclPaint.yBottom
+                );
+    rDC.DrawLine( rDC.m_vRclPaint.xRight
+                 ,rDC.m_vRclPaint.yBottom
+                 ,rDC.m_vRclPaint.xLeft
+                 ,rDC.m_vRclPaint.yBottom
+                );
+    rDC.DrawLine( rDC.m_vRclPaint.xLeft
+                 ,rDC.m_vRclPaint.yBottom
+                 ,rDC.m_vRclPaint.xLeft
+                 ,rDC.m_vRclPaint.yTop
+                );
+} // end of wxBitmapButton::DrawButtonFocus
+
+void wxBitmapButton::DrawButtonDisable(
+  wxClientDC&                       rDC
+, wxBitmap&                         rBmp
+)
+{
+    wxPen                           vGreyPen(wxColour(128, 128, 128), 2, wxSOLID);
+
+    //
+    // Draw a thick black line around the outside of the button
+    //
+    rDC.SetPen(vGreyPen);
+    rDC.DrawLine( rDC.m_vRclPaint.xLeft
+                 ,rDC.m_vRclPaint.yTop
+                 ,rDC.m_vRclPaint.xRight
+                 ,rDC.m_vRclPaint.yTop
+                );
+    rDC.DrawLine( rDC.m_vRclPaint.xRight
+                 ,rDC.m_vRclPaint.yTop
+                 ,rDC.m_vRclPaint.xRight
+                 ,rDC.m_vRclPaint.yBottom
+                );
+    rDC.DrawLine( rDC.m_vRclPaint.xRight
+                 ,rDC.m_vRclPaint.yBottom
+                 ,rDC.m_vRclPaint.xLeft
+                 ,rDC.m_vRclPaint.yBottom
+                );
+    rDC.DrawLine( rDC.m_vRclPaint.xLeft
+                 ,rDC.m_vRclPaint.yBottom
+                 ,rDC.m_vRclPaint.xLeft
+                 ,rDC.m_vRclPaint.yTop
+                );
+    wxDisableBitmap(rBmp, vGreyPen.GetColour().GetPixel());
+} // end of wxBitmapButton::DrawButtonDisable
 
 void wxBitmapButton::SetDefault()
 {
     wxButton::SetDefault();
 }
+
+#endif // ndef for wxUSE_BMPBUTTON
+

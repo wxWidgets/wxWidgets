@@ -39,6 +39,7 @@
 class WXDLLEXPORT wxFont;
 class WXDLLEXPORT wxWindow;
 class WXDLLEXPORT wxString;
+class WXDLLEXPORT wxBitmap;
 
 // ---------------------------------------------------------------------------
 // private constants
@@ -334,9 +335,12 @@ WXDLLEXPORT extern void wxOS2SetFont( HWND          hWnd
                                     );
 
 
-WXDLLEXPORT extern bool wxCheckWindowWndProc( WXHWND                            hWnd
-                                             ,WXFARPROC                         fnWndProc
+WXDLLEXPORT extern bool wxCheckWindowWndProc( WXHWND    hWnd
+                                             ,WXFARPROC fnWndProc
                                             );
+WXDLLEXPORT extern wxBitmap wxDisableBitmap( const wxBitmap& rBmp
+                                            ,long            lColor
+                                           );
 
-#endif
-    // _WX_PRIVATE_H_
+#endif // _WX_PRIVATE_H_
+
