@@ -791,8 +791,6 @@ void wxEvtHandler::Connect( int id, int lastId,
     m_dynamicEvents->Append( (wxObject*) entry );
 }
 
-#if 0
-// DW: not in header anymore???
 bool wxEvtHandler::Disconnect( int id, int lastId, wxEventType eventType,
                   wxObjectEventFunction func,
                   wxObject *userData )
@@ -819,7 +817,6 @@ bool wxEvtHandler::Disconnect( int id, int lastId, wxEventType eventType,
     }
     return FALSE;
 }
-#endif
 
 bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
 {
