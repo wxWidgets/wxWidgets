@@ -9,6 +9,7 @@ ALL_SOURCES = \
 		generic/dcbuffer.cpp \
 		generic/dcpsg.cpp \
 		generic/dirctrlg.cpp \
+		generic/dirdlgg.cpp \
 		generic/fdrepdlg.cpp \
 		generic/grid.cpp \
 		generic/gridctrl.cpp \
@@ -193,7 +194,6 @@ ALL_SOURCES = \
 		os2/dcscreen.cpp \
 		os2/dialog.cpp \
 		os2/dir.cpp \
-		os2/dirdlg.cpp \
 		os2/dnd.cpp \
 		os2/filedlg.cpp \
 		os2/font.cpp \
@@ -534,7 +534,6 @@ ALL_HEADERS = \
 		os2/dcprint.h \
 		os2/dcscreen.h \
 		os2/dialog.h \
-		os2/dirdlg.h \
 		os2/dnd.h \
 		os2/filedlg.h \
 		os2/font.h \
@@ -604,6 +603,7 @@ ALL_HEADERS = \
 		generic/imaglist.h \
 		generic/laywin.h \
 		generic/listctrl.h \
+		generic/mdig.cpp \
 		generic/msgdlgg.h \
 		generic/notebook.h \
 		generic/paletteg.h \
@@ -782,6 +782,7 @@ GENERICOBJS = \
 		dcbuffer.o \
 		dcpsg.o \
 		dirctrlg.o \
+		dirdlgg.o \
 		fdrepdlg.o \
 		grid.o \
 		gridctrl.o \
@@ -839,7 +840,6 @@ GUIOBJS = \
 		dcscreen.o \
 		dialog.o \
 		dir.o \
-		dirdlg.o \
 		dnd.o \
 		filedlg.o \
 		font.o \
