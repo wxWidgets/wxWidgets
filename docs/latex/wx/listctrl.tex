@@ -147,11 +147,18 @@ Deletes all the items in the list control.
 
 Deletes a column.
 
-\membersection{wxListCtrl::Edit}\label{wxlistctrledit}
+\membersection{wxListCtrl::EditLabel}\label{wxlistctrledit}
 
-\func{wxTextCtrl\&}{Edit}{\param{long }{item}}
+\func{wxTextCtrl *}{Edit}{\param{long }{item}}
 
-Starts editing a label.
+Starts editing the label of the given item, returning the text control that
+the tree control uses for editing. This function generates a
+EVT\_LIST\_BEGIN\_LABEL\_EDIT event and if the event handler returns FALSE, label
+editing will not start and NULL will be returned - be ready to handle this
+case.
+
+The text control returned should not be deleted by the application and is not
+valid any longer after the EVT\_LIST\_END\_LABEL\_EDIT event is received.
 
 \membersection{wxListCtrl::EnsureVisible}\label{wxlistctrlensurevisible}
 

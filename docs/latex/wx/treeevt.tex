@@ -4,6 +4,7 @@ A tree event holds information about events associated with wxTreeCtrl objects.
 
 \wxheading{Derived from}
 
+\helpref{wxNotifyEvent}{wxnotifyevent}\\
 \helpref{wxCommandEvent}{wxcommandevent}\\
 \helpref{wxEvent}{wxevent}\\
 \helpref{wxObject}{wxobject}
@@ -33,6 +34,12 @@ functions that take a wxTreeEvent argument.
 \twocolitem{{\bf EVT\_TREE\_KEY\_DOWN(id, func)}}{A key has been pressed.}
 \end{twocollist}%
 
+For the EVT\_TREE\_BEGIN\_EDIT, EVT\_TREE\_END\_LABEL\_EDIT,
+EVT\_TREE\_ITEM\_EXPANDING and EVT\_TREE\_SEL\_CHANGING events you may call
+\helpref{Veto()}{wxnotifyeventveto} to prevent the given operation from
+happening except for EVT\_TREE\_END\_LABEL\_EDIT means that the items label
+will not be changed.
+
 \wxheading{See also}
 
 \helpref{wxTreeCtrl}{wxtreectrl}
@@ -55,13 +62,13 @@ Key code if the event is a keypress event.
 
 \member{wxTreeItem}{m\_item}
 
-The item.
+The item (valid for all events).
 
 \membersection{wxTreeEvent::m\_oldItem}
 
 \member{long}{m\_oldItem}
 
-The old item index.
+The old item index (valid for EVT\_TREE\_ITEM\_CHANGING and CHANGED events)
 
 \membersection{wxTreeEvent::m\_pointDrag}
 

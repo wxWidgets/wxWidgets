@@ -1139,7 +1139,7 @@ void wxListMainWindow::DeleteLine( wxListLineData *line )
 
 /* *** */
 
-void wxListMainWindow::Edit( long item )
+wxTextCtrl *wxListMainWindow::EditLabel( long item )
 {
     wxNode *node = m_lines.Nth( item );
     wxCHECK_RET( node, _T("wrong index in wxListCtrl::Edit()") );
@@ -1152,7 +1152,8 @@ void wxListMainWindow::Edit( long item )
     m_currentEdit->GetItem( 0, le.m_item );
     GetParent()->GetEventHandler()->ProcessEvent( le );
     
-    if (!le.IsAllowed()) return;
+    if (!le.IsAllowed())
+        return (wxTextCtrl *)NULL;
     
     wxString s;
     m_currentEdit->GetText( 0, s );
@@ -1170,6 +1171,8 @@ void wxListMainWindow::Edit( long item )
     wxListTextCtrl *text = new wxListTextCtrl(
       this, -1, &m_renameAccept, &m_renameRes, this, s, wxPoint(x-4,y-4), wxSize(w+11,h+8) );
     text->SetFocus();
+
+    return text;
 }
 
 void wxListMainWindow::OnRenameTimer()

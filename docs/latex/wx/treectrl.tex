@@ -149,20 +149,21 @@ Deletes all the items in the control.
 
 \membersection{wxTreeCtrl::EditLabel}\label{wxtreectrleditlabel}
 
-\func{wxTextCtrl*}{EditLabel}{\param{const wxTreeItemId\&}{ item}, \param{wxClassInfo*}{ textControlClass = CLASSINFO(wxTextCtrl)}}
+\func{wxTextCtrl*}{EditLabel}{\param{const wxTreeItemId\&}{ item}}
 
-Starts editing the label of the given item, returning the text control that the tree control uses for editing.
+Starts editing the label of the given item, returning the text control that
+the tree control uses for editing. This function generates a
+EVT\_BEGIN\_LABEL\_EDIT event and if the event handler returns FALSE, label
+editing will not start and NULL will be returned - be ready to handle this
+case.
 
-Pass another {\it textControlClass} if a derived class is required. It usually will be, in order for
-the application to detect when editing has finished and to call \helpref{wxTreeCtrl::EndEditLabel}{wxtreectrlendeditlabel}.
-
-Do not delete the text control yourself.
-
-This function is currently supported under Windows only.
+The text control returned should not be deleted by the application and is not
+valid any longer after the EVT\_END\_LABEL\_EDIT event is received.
 
 \wxheading{See also}
 
-\helpref{wxTreeCtrl::EndEditLabel}{wxtreectrlendeditlabel}
+\helpref{wxTreeCtrl::EndEditLabel}{wxtreectrlendeditlabel},
+\helpref{wxTreeEvent}{wxtreeevent}
 
 \membersection{wxTreeCtrl::EndEditLabel}\label{wxtreectrlendeditlabel}
 
