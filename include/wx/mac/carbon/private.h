@@ -34,6 +34,10 @@
     #error "please update to Apple's lastest universal headers from http://developer.apple.com/sdk/"
 #endif
 
+#ifndef MAC_OS_X_VERSION_10_3
+    #define MAC_OS_X_VERSION_10_3 1030
+#endif
+
 #if wxUSE_GUI
 
 #include "wx/window.h"
