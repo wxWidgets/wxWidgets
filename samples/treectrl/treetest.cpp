@@ -279,7 +279,7 @@ MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
   // should correspond to TreeCtrlIcon_xxx enum
 #if defined(__WXMSW__) && defined(__WIN16__)
   // This is required in 16-bit Windows mode only because we can't load a specific (16x16)
-  // icon image, so it comes out blank (using the empty 32x32 icon).
+  // icon image, so it comes out stretched
   m_imageListNormal->Add(wxBitmap("bitmap1", wxBITMAP_TYPE_BMP_RESOURCE));
   m_imageListNormal->Add(wxBitmap("bitmap2", wxBITMAP_TYPE_BMP_RESOURCE));
 #else

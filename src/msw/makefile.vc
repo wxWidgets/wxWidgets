@@ -76,8 +76,7 @@ NONESSENTIALOBJS= \
   $(GENDIR)\msgdlgg.obj \
   $(GENDIR)\helpxlp.obj \
   $(GENDIR)\colrdlgg.obj \
-  $(GENDIR)\fontdlgg.obj \
-  $(COMMDIR)\postscrp.obj
+  $(GENDIR)\fontdlgg.obj
 
 COMMONOBJS = \
   $(COMMDIR)\cmndata.obj \
@@ -878,11 +877,6 @@ $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
 $(COMMDIR)/odbc.obj:     $*.$(SRCSUFF)
-        cl @<<
-$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
-<<
-
-$(COMMDIR)/postscrp.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<

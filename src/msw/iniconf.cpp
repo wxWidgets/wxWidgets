@@ -355,7 +355,7 @@ bool wxIniConfig::Read(const wxString& szKey, long *pl) const
 
   // is it really nMagic?
   lVal = GetPrivateProfileInt(m_strGroup, strKey, nMagic2, m_strLocalFilename);
-  if ( lVal == nMagic ) {
+  if ( lVal == nMagic2 ) {
     // the nMagic it returned was indeed read from the file
     *pl = lVal;
     return TRUE;

@@ -443,7 +443,7 @@ void wxListLineData::GetLabelExtent( int &x, int &y, int &width, int &height )
     height = m_bound_label.height;
 }
 
-void wxListLineData::GetRect( wxRectangle &rect )
+void wxListLineData::GetRect( wxRect &rect )
 {
     AssignRect( rect, m_bound_all );
 }
@@ -641,7 +641,7 @@ void wxListLineData::Draw( wxDC *dc )
     DoDraw( dc, m_hilighted, m_hilighted );
 }
 
-bool wxListLineData::IsInRect( int x, int y, const wxRectangle &rect )
+bool wxListLineData::IsInRect( int x, int y, const wxRect &rect )
 {
     return ((x >= rect.x) && (x <= rect.x+rect.width) && 
             (y >= rect.y) && (y <= rect.y+rect.height));
@@ -652,7 +652,7 @@ bool wxListLineData::IsHilighted( void )
     return m_hilighted;
 }
 
-void wxListLineData::AssignRect( wxRectangle &dest, int x, int y, int width, int height )
+void wxListLineData::AssignRect( wxRect &dest, int x, int y, int width, int height )
 {
     dest.x = x;
     dest.y = y;
@@ -660,7 +660,7 @@ void wxListLineData::AssignRect( wxRectangle &dest, int x, int y, int width, int
     dest.height = height;
 }
 
-void wxListLineData::AssignRect( wxRectangle &dest, const wxRectangle &source )
+void wxListLineData::AssignRect( wxRect &dest, const wxRect &source )
 {
     dest.x = source.x;
     dest.y = source.y;
@@ -1029,7 +1029,7 @@ void wxListMainWindow::RefreshLine( wxListLineData *line )
         wxClientDC dc(this);
         PrepareDC( dc );
         line->GetExtent( x, y, w, h );
-        wxRectangle rect(
+        wxRect rect(
           dc.LogicalToDeviceX(x-3),
           dc.LogicalToDeviceY(y-3),
           dc.LogicalToDeviceXRel(w+6),
@@ -1826,7 +1826,7 @@ int wxListMainWindow::GetItemCount( void )
     return m_lines.Number();
 }
 
-void wxListMainWindow::GetItemRect( long index, wxRectangle &rect )
+void wxListMainWindow::GetItemRect( long index, wxRect &rect )
 {
     wxNode *node = m_lines.Nth( index );
     if (node)
@@ -1848,7 +1848,7 @@ bool wxListMainWindow::GetItemPosition(long item, wxPoint& pos)
     wxNode *node = m_lines.Nth( item );
     if (node)
     {
-        wxRectangle rect;
+        wxRect rect;
         wxListLineData *line = (wxListLineData*)node->Data();
         line->GetRect( rect );
         pos.x = rect.x;
@@ -2511,7 +2511,7 @@ bool wxListCtrl::SetItemData( long item, long data )
     return TRUE;
 }
 
-bool wxListCtrl::GetItemRect( long item, wxRectangle &rect,  int WXUNUSED(code) ) const
+bool wxListCtrl::GetItemRect( long item, wxRect &rect,  int WXUNUSED(code) ) const
 {
     m_mainWin->GetItemRect( item, rect );
     return TRUE;

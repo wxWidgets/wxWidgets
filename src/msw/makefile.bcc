@@ -77,7 +77,6 @@ GENERICOBJS= \
   $(MSWDIR)\helpxlp.obj \
   $(MSWDIR)\laywin.obj \
   $(MSWDIR)\listctrl.obj \
-  $(MSWDIR)\msgdlgg.obj \
   $(MSWDIR)\notebook.obj \
   $(MSWDIR)\panelg.obj \
   $(MSWDIR)\prop.obj \
@@ -91,6 +90,7 @@ GENERICOBJS= \
   $(MSWDIR)\textdlgg.obj \
   $(MSWDIR)\treectrl.obj
 
+#  $(MSWDIR)\msgdlgg.obj \
 #  $(MSWDIR)\printps.obj \
 #  $(MSWDIR)\prntdlgg.obj \
 
@@ -115,7 +115,6 @@ COMMONOBJS = \
   $(MSWDIR)\memory.obj \
   $(MSWDIR)\module.obj \
   $(MSWDIR)\object.obj \
-  $(MSWDIR)\postscrp.obj \
   $(MSWDIR)\prntbase.obj \
   $(MSWDIR)\resource.obj \
   $(MSWDIR)\resourc2.obj \
@@ -506,8 +505,6 @@ $(MSWDIR)\object.obj:     $(COMMDIR)\object.$(SRCSUFF)
 
 $(MSWDIR)\odbc.obj:     $(COMMDIR)\odbc.$(SRCSUFF)
 
-$(MSWDIR)\postscrp.obj:     $(COMMDIR)\postscrp.$(SRCSUFF)
-
 $(MSWDIR)\prntbase.obj:     $(COMMDIR)\prntbase.$(SRCSUFF)
 
 $(MSWDIR)\resource.obj:     $(COMMDIR)\resource.$(SRCSUFF)
@@ -702,7 +699,7 @@ $(CFG): makefile.bcc
 -Fs-
 -Vf
 -Ff=4
--I$(WXINC);$(BCCDIR)\include;$(WXDIR)/src/png;$(WXDIR)/src/zlib
+-I$(WXINC);$(BCCDIR)\include;$(WXDIR)/src/png;$(WXDIR)/src/zlib;$(WXDIR)/src/xpm
 -I$(WXDIR)\include\wx\msw\gnuwin32
 -L$(BCCDIR)\lib
 -D__WXWIN__

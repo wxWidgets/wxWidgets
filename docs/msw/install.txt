@@ -137,6 +137,13 @@ Metrowerks CodeWarrior compilation
    Further project files for samples will be available in due
    course.
 
+NOTES:
+
+(a) Unfortunately CodeWarrior support is broken in this
+release. Stefan Csomor (csomor@advancedconcepts.ch) will rectify this shortly.
+(b) You need CodeWarrior Pro 4 plus the patches to 4.1 from the
+Metrowerks Web site.
+
 Symantec C++ compilation
 ------------------------
 

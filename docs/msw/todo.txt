@@ -33,19 +33,9 @@ e.g. ',' instead of '.' for decimal points.
 
 Supply correct ctl3d/odbc lib files for BC++, Watcom (corrupt?)
 
-16-bit compilation: replace small icons in treectrl/listctrl
-samples that also have a 32x32 icon, with icons with only one
-image, using Borland Image Editor. WIN16 doesn't have a function
-for specifying which image to use, so the larger one gets used
-erroneously.
+Implement new wxClipboard and DnD (Vadim)
 
-Add headers to VC++ project files.
-
-Implement Robert's wxClipboard.
-
-Distribution naming?
-
-wxToolTip
+Implement wxToolTip
 
 LOW PRIORITY (MEDIUM TERM)
 --------------------------
@@ -96,8 +86,6 @@ Doc/view - have some standard views/docs e.g. wxTextView.
 Miscellaneous file/system function wrappers.
 
 Bug database.
-
-OpenGL integration: check that wxGLCanvas works cross-platform.
 
 Menu bitmaps - document Vadim's enhancements.
 

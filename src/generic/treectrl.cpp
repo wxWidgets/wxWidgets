@@ -570,7 +570,7 @@ wxTreeItemId wxTreeCtrl::GetLastChild(const wxTreeItemId& item) const
   wxCHECK_MSG( item.IsOk(), wxTreeItemId(), "invalid tree item" );
 
   wxArrayTreeItems& children = item.m_pItem->GetChildren();
-  return children.IsEmpty() ? wxTreeItemId() : children.Last();
+  return (children.IsEmpty() ? wxTreeItemId() : wxTreeItemId(children.Last()));
 }
 
 wxTreeItemId wxTreeCtrl::GetNextSibling(const wxTreeItemId& item) const

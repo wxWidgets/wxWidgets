@@ -16,13 +16,13 @@ nul
 $(LIBS)
 $(TARGET).def
 !
-        rc -K $(TARGET).res
+        brc -K $(TARGET).res
 
 .$(SRCSUFF).obj:
 	bcc $(CPPFLAGS) -c {$< }
 
 $(TARGET).res :      $(TARGET).rc $(WXDIR)\include\wx\msw\wx.rc
-    rc -r /i$(BCCDIR)\include /i$(WXDIR)\include $(TARGET)
+    brc -r /i$(BCCDIR)\include /i$(WXDIR)\include $(TARGET)
 
 clean:
         -erase *.obj

@@ -40,7 +40,7 @@
 #ifndef XPM_h
 #define XPM_h
 
-#if defined(_WINDOWS) || defined(__WXMSW__) || defined(WIN32)
+#if (defined(_WINDOWS) || defined(__WXMSW__) || defined(WIN32)) && !defined(FOR_MSW)
 #define FOR_MSW
 #endif
 

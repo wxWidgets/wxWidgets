@@ -570,9 +570,6 @@ object.obj:     $(COMMDIR)\object.cpp
 odbc.obj:     $(COMMDIR)\odbc.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(COMMDIR)\odbc.cpp /BINARY odbc.obj
 
-postscrp.obj:     $(COMMDIR)\postcrp.cpp
-  $(CCC) $(CPPFLAGS) $(IFLAGS) $(COMMDIR)\postcrp.cpp /BINARY postscrp.obj
-
 prntbase.obj:     $(COMMDIR)\prntbase.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(COMMDIR)\prntbase.cpp /BINARY prntbase.obj
 

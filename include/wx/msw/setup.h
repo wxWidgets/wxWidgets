@@ -281,6 +281,13 @@
 
 #endif
 
+#if defined(__WXMSW__) && !defined(__WIN32__)
+
+#undef wxUSE_THREADS
+#define wxUSE_THREADS 0
+
+#endif
+
 // Minimal setup e.g. for compiling small utilities
 #define MINIMAL_WXWINDOWS_SETUP 0
 

@@ -5,6 +5,8 @@ include/wx_cw.pch
 include/wx_cw.pch++
 include/wx_cw_d.pch
 include/wx_cw_d.pch++
+include/wx_x86++_d.mch
+include/wx_x86_d.mch
 
 samples/bombs/make_cw.mcp
 

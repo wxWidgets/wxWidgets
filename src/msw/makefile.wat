@@ -223,7 +223,7 @@ $(LIBTARGET) : $(OBJECTS)
 #    wlib /b /c /n /p=512 $^@ @tmp.lbc
 	
 	
-clean:   $(EXTRATARGETSCLEAN)
+clean:   .SYMBOLIC $(EXTRATARGETSCLEAN)
     -erase *.obj
     -erase $(LIBTARGET)
     -erase *.pch
@@ -580,9 +580,6 @@ object.obj:     $(COMMDIR)\object.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 odbc.obj:     $(COMMDIR)\odbc.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
-
-postscrp.obj:     $(COMMDIR)\postcrp.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 prntbase.obj:     $(COMMDIR)\prntbase.cpp

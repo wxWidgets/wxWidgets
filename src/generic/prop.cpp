@@ -985,9 +985,9 @@ bool wxPropertySheet::SetProperty(const wxString name, wxPropertyValue value)
   wxProperty* prop = GetProperty(name);
   if(prop){
     prop->SetValue(value);
-    return true;
+    return TRUE;
   }else{
-    return false;
+    return FALSE;
   }
 }
 void wxPropertySheet::RemoveProperty(wxString name)
@@ -1002,7 +1002,7 @@ void wxPropertySheet::RemoveProperty(wxString name)
 }	
 bool wxPropertySheet::HasProperty(wxString name)
 { 
-	return (GetProperty(name)?true:false); 
+	return (GetProperty(name)?TRUE:FALSE); 
 }
 // Clear all properties
 void wxPropertySheet::Clear(void)

@@ -314,10 +314,10 @@ class WXDLLEXPORT wxListLineData : public wxObject
 
   public:
     wxList              m_items;
-    wxRectangle         m_bound_all;
-    wxRectangle         m_bound_label;
-    wxRectangle         m_bound_icon;
-    wxRectangle         m_bound_hilight;
+    wxRect         m_bound_all;
+    wxRect         m_bound_label;
+    wxRect         m_bound_icon;
+    wxRect         m_bound_hilight;
     int                 m_mode;
     bool                m_hilighted;
     wxBrush            *m_hilightBrush;
@@ -342,15 +342,15 @@ class WXDLLEXPORT wxListLineData : public wxObject
     void GetText( int index, wxString &s );
     void SetText( int index, const wxString s );
     int GetImage( int index );
-    void GetRect( wxRectangle &rect );
+    void GetRect( wxRect &rect );
     void Hilight( bool on );
     void ReverseHilight( void );
     void DrawRubberBand( wxDC *dc, bool on );
     void Draw( wxDC *dc );
-    bool IsInRect( int x, int y, const wxRectangle &rect );
+    bool IsInRect( int x, int y, const wxRect &rect );
     bool IsHilighted( void );
-    void AssignRect( wxRectangle &dest, int x, int y, int width, int height );
-    void AssignRect( wxRectangle &dest, const wxRectangle &source );
+    void AssignRect( wxRect &dest, int x, int y, int width, int height );
+    void AssignRect( wxRect &dest, const wxRect &source );
 };
 
 //-----------------------------------------------------------------------------
@@ -503,7 +503,7 @@ class WXDLLEXPORT wxListMainWindow: public wxScrolledWindow
     void SetItemState( long item, long state, long stateMask );
     int GetItemState( long item, long stateMask );
     int GetItemCount( void );
-    void GetItemRect( long index, wxRectangle &rect );
+    void GetItemRect( long index, wxRect &rect );
     bool GetItemPosition(long item, wxPoint& pos);
     int GetSelectedItemCount( void );
     void SetMode( long mode );
@@ -568,7 +568,7 @@ class WXDLLEXPORT wxListCtrl: public wxControl
     void SetItemText( long item, const wxString& str );
     long GetItemData( long item ) const;
     bool SetItemData( long item, long data );
-    bool GetItemRect( long item, wxRectangle& rect, int code = wxLIST_RECT_BOUNDS ) const;
+    bool GetItemRect( long item, wxRect& rect, int code = wxLIST_RECT_BOUNDS ) const;
     bool GetItemPosition( long item, wxPoint& pos ) const;
     bool SetItemPosition( long item, const wxPoint& pos ); // not supported in wxGLC
     int GetItemCount(void) const;
