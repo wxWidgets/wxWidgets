@@ -1441,22 +1441,11 @@ MSWSetImagePixels(Display *dc, XImage *image, unsigned int width, unsigned int h
     unsigned int x, y;
 
     SelectObject(*dc, image->bitmap);
-	if (image->depth == 1)
-	{
-		for (y = 0; y < height; y++) {
-			for (x = 0; x < width; x++) {
-				SetPixel(*dc, x, y, (pixels[*(data++)] ? RGB(255,255,255) : 0)); /* data is [x+y*width] */
-			}
-		}
-	}
-	else
-	{
-		for (y = 0; y < height; y++) {
-			for (x = 0; x < width; x++) {
-				SetPixel(*dc, x, y, pixels[*(data++)]); /* data is [x+y*width] */
-			}
-		}
-	}
+    for (y = 0; y < height; y++) {
+        for (x = 0; x < width; x++) {
+            SetPixel(*dc, x, y, pixels[*(data++)]); /* data is [x+y*width] */
+        }
+    }
 }
 #else
 void MSWSetImagePixels(Display *dc, XImage *image, unsigned int width, unsigned int height,
