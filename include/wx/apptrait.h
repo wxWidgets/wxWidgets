@@ -82,9 +82,7 @@ public:
 
     // wxStandardPaths object is normally the same for wxBase and wxGUI
     // except in the case of wxMac and wxCocoa
-#ifndef __WXPALMOS__
     virtual wxStandardPathsBase& GetStandardPaths();
-#endif
 
     // functions abstracting differences between GUI and console modes
     // ------------------------------------------------------------------------

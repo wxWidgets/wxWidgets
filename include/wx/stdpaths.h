@@ -89,6 +89,8 @@ protected:
     #include "wx/os2/stdpaths.h"
 #elif defined(__UNIX__)
     #include "wx/unix/stdpaths.h"
+#elif defined(__PALMOS__)
+    #include "wx/palmos/stdpaths.h"
 #endif
 
 #endif // _WX_STDPATHS_H_
