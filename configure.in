@@ -216,7 +216,6 @@ AC_DEFUN(WX_CPP_BOOL,
         return 0;
       ],
       [
-        AC_DEFINE(HAVE_BOOL)
         wx_cv_cpp_bool=yes
       ],
       [
@@ -2512,8 +2511,6 @@ if test "$wx_cv_func_vsscanf" = yes; then
     AC_DEFINE(HAVE_VSSCANF)
 fi
 
-AC_LANG_RESTORE
-
 dnl the following tests are for Unix(like) systems only
 if test "$TOOLKIT" != "MSW"; then
 
@@ -3323,11 +3320,14 @@ if test "$wxUSE_TIMEDATE" = "yes"; then
                 ],
                 [
                     wx_cv_struct_tm_has_gmtoff=yes
-                    AC_DEFINE(WX_GMTOFF_IN_TM)
                 ],
                 wx_cv_struct_tm_has_gmtoff=no
             )
         ])
+    fi
+
+    if test "$wx_cv_struct_tm_has_gmtoff" = "yes"; then
+        AC_DEFINE(WX_GMTOFF_IN_TM)
     fi
 
     dnl check for gettimeofday (SVr4, BSD 4.3) and ftime (V7, BSD 4.3) for the
