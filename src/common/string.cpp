@@ -1698,7 +1698,7 @@ size_t wxString::find(wxChar ch, size_t nStart) const
 size_t wxString::rfind(const wxString& str, size_t nStart) const
 {
   wxASSERT( str.GetStringData()->IsValid() );
-  wxASSERT( nStart <= Len() );
+  wxASSERT( nStart == npos || nStart <= Len() );
 
   // TODO could be made much quicker than that
   const wxChar *p = c_str() + (nStart == npos ? Len() : nStart);
@@ -1715,7 +1715,7 @@ size_t wxString::rfind(const wxString& str, size_t nStart) const
 #if !defined(__VISUALC__) || defined(__WIN32__)
 size_t wxString::rfind(const wxChar* sz, size_t nStart, size_t n) const
 {
-    return rfind(wxString(sz, n == npos ? 0 : n), nStart);
+    return rfind(wxString(sz, n == npos ? wxSTRING_MAXLEN : n), nStart);
 }
 
 size_t wxString::rfind(wxChar ch, size_t nStart) const
