@@ -9,8 +9,16 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma implementation "progdlgg.h"
+    #pragma implementation "progdlgg.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
@@ -19,6 +27,8 @@
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
+
+#if wxUSE_PROGRESSDLG
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
@@ -33,184 +43,212 @@
     #include "wx/dcclient.h"
 #endif
 
-#if wxUSE_PROGRESSDLG
-
 #include "wx/generic/progdlgg.h"
+
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
 
 #define LAYOUT_X_MARGIN 8
 #define LAYOUT_Y_MARGIN 8
 
-// wxTextEntryDialog
+// ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
+
+// update the label to show the given time (in seconds)
+static void SetTimeLabel(unsigned long val, wxStaticText *label);
+
+// ----------------------------------------------------------------------------
+// event tables
+// ----------------------------------------------------------------------------
 
 #if !USE_SHARED_LIBRARY
-    BEGIN_EVENT_TABLE(wxProgressDialog, wxFrame)
-       EVT_BUTTON(-1, wxProgressDialog::OnCancel)
+    BEGIN_EVENT_TABLE(wxProgressDialog, wxDialog)
+       EVT_BUTTON(wxID_CANCEL, wxProgressDialog::OnCancel)
        EVT_CLOSE(wxProgressDialog::OnClose)
     END_EVENT_TABLE()
 
-    IMPLEMENT_CLASS(wxProgressDialog, wxFrame)
+    IMPLEMENT_CLASS(wxProgressDialog, wxDialog)
 #endif
 
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxProgressDialog
+// ----------------------------------------------------------------------------
+
 wxProgressDialog::wxProgressDialog(wxString const &title,
-                                 wxString const &message,
-                                 int maximum,
-                                 wxWindow *parent,
-                                 int style)
+                                   wxString const &message,
+                                   int maximum,
+                                   wxWindow *parent,
+                                   int style)
+                : wxDialog(m_parent, -1, title)
 {
-   wxWindow *lastWindow = NULL;
-   bool hasAbortButton = (style & wxPD_CAN_ABORT) != 0;
-   m_state = hasAbortButton ? Continue : Uncancelable;
-   m_disableParentOnly = (style & wxPD_APP_MODAL) == 0;
-   m_parent = parent;
-   m_maximum = maximum;
+    bool hasAbortButton = (style & wxPD_CAN_ABORT) != 0;
+    m_state = hasAbortButton ? Continue : Uncancelable;
+    m_disableParentOnly = (style & wxPD_APP_MODAL) == 0;
+    m_parent = parent;
+    m_maximum = maximum;
 
-   m_elapsed = m_estimated = m_remaining = NULL;
-   if ((style & (wxPD_ELAPSED_TIME | wxPD_ESTIMATED_TIME |
-                 wxPD_REMAINING_TIME)) != 0)
-      m_time = new wxTime;
-   else
-      m_time = NULL;
+    wxLayoutConstraints *c;
 
-   wxFrame::Create(m_parent, -1, title, wxDefaultPosition,
-                   wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
-   SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+    wxClientDC dc(this);
+    dc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+    long widthText;
+    dc.GetTextExtent(message, &widthText, NULL);
 
-   wxLayoutConstraints *c;
+    m_msg = new wxStaticText(this, -1, message);
+    c = new wxLayoutConstraints;
+    c->left.SameAs(this, wxLeft, 2*LAYOUT_X_MARGIN);
+    c->top.SameAs(this, wxTop, 2*LAYOUT_Y_MARGIN);
+    c->width.AsIs();
+    c->height.AsIs();
+    m_msg->SetConstraints(c);
 
-   wxClientDC dc(this);
-   dc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
-   long widthText;
-   dc.GetTextExtent(message, &widthText, NULL);
+    wxSize sizeDlg, sizeLabel = m_msg->GetSize();
+    sizeDlg.y = 2*LAYOUT_Y_MARGIN + sizeLabel.y;
 
-   m_msg = new wxStaticText(this, -1, message);
-   c = new wxLayoutConstraints;
-   c->left.SameAs(this, wxLeft, 2*LAYOUT_X_MARGIN);
-   c->top.SameAs(this, wxTop, 2*LAYOUT_Y_MARGIN);
-   c->width.AsIs();
-   c->height.AsIs();
-   m_msg->SetConstraints(c);
-   lastWindow = m_msg;
+    wxWindow *lastWindow = m_msg;
 
-   if ( maximum > 0 )
-   {
-      m_gauge = new wxGauge(this, -1, maximum,
-                            wxDefaultPosition, wxDefaultSize,
-                            wxGA_HORIZONTAL | wxRAISED_BORDER);
-      c = new wxLayoutConstraints;
-      c->left.SameAs(this, wxLeft, 2*LAYOUT_X_MARGIN);
-      c->top.Below(m_msg, 2*LAYOUT_Y_MARGIN);
-      c->right.SameAs(this, wxRight, 2*LAYOUT_X_MARGIN);
-      c->height.AsIs();
-      m_gauge->SetConstraints(c);
-      m_gauge->SetValue(0);
-      lastWindow = m_gauge;
-   }
-   else
-      m_gauge = (wxGauge *)NULL;
+    if ( maximum > 0 )
+    {
+        m_gauge = new wxGauge(this, -1, maximum,
+                wxDefaultPosition, wxDefaultSize,
+                wxGA_HORIZONTAL | wxRAISED_BORDER);
+        c = new wxLayoutConstraints;
+        c->left.SameAs(this, wxLeft, 2*LAYOUT_X_MARGIN);
+        c->top.Below(m_msg, 2*LAYOUT_Y_MARGIN);
+        c->right.SameAs(this, wxRight, 2*LAYOUT_X_MARGIN);
+        c->height.AsIs();
+        m_gauge->SetConstraints(c);
+        m_gauge->SetValue(0);
+        lastWindow = m_gauge;
 
-   
-   if ( style & wxPD_ELAPSED_TIME )
-   {
-      m_elapsed = new wxStaticText(this, -1, "");
-      c = new wxLayoutConstraints;
-      c->right.SameAs(this, wxRight, 2*LAYOUT_X_MARGIN);
-      c->top.Below(lastWindow, LAYOUT_Y_MARGIN);
-      c->width.Absolute(60);
-      c->height.AsIs();
-      m_elapsed->SetConstraints(c);
+        wxSize sizeGauge = m_gauge->GetSize();
+        sizeDlg.y += 2*LAYOUT_Y_MARGIN + sizeGauge.y;
+    }
+    else
+        m_gauge = (wxGauge *)NULL;
 
-      wxStaticText *dummy = new wxStaticText(this, -1, _T("Elapsed time : "));
-      c = new wxLayoutConstraints;
-      c->right.LeftOf(m_elapsed);
-      c->top.SameAs(m_elapsed, wxTop, 0);
-      c->width.AsIs();
-      c->height.AsIs();
-      dummy->SetConstraints(c);      
+    // create the estimated/remaining/total time zones if requested
+    m_elapsed = m_estimated = m_remaining = NULL;
 
-      lastWindow = m_elapsed;
-   }
+    int nTimeLabels = 0;
+    if ( style & wxPD_ELAPSED_TIME )
+    {
+        nTimeLabels++;
 
-   if ( style & wxPD_ESTIMATED_TIME )
-   {
-      m_estimated = new wxStaticText(this, -1, "");
-      c = new wxLayoutConstraints;
-      c->right.SameAs(this, wxRight, 2*LAYOUT_X_MARGIN);
-      c->top.Below(lastWindow, 0);
-      c->width.Absolute(60);
-      c->height.AsIs();
-      m_estimated->SetConstraints(c);
+        m_elapsed = CreateLabel(_T("Elapsed time : "), &lastWindow);
+    }
 
-      wxStaticText *dummy = new wxStaticText(this, -1, _T("Estimated time : "));
-      c = new wxLayoutConstraints;
-      c->right.LeftOf(m_estimated);
-      c->top.SameAs(m_estimated, wxTop, 0);
-      c->width.AsIs();
-      c->height.AsIs();
-      dummy->SetConstraints(c);      
+    if ( style & wxPD_ESTIMATED_TIME )
+    {
+        nTimeLabels++;
 
-      lastWindow = m_estimated;
-   }
+        m_estimated = CreateLabel(_T("Estimated time : "), &lastWindow);
+    }
 
-   if ( style & wxPD_REMAINING_TIME )
-   {
-      m_remaining = new wxStaticText(this, -1, "");
-      c = new wxLayoutConstraints;
-      c->right.SameAs(this, wxRight, 2*LAYOUT_X_MARGIN);
-      c->top.Below(lastWindow, 0);
-      c->width.Absolute(60);
-      c->height.AsIs();
-      m_remaining->SetConstraints(c);
+    if ( style & wxPD_REMAINING_TIME )
+    {
+        nTimeLabels++;
 
-      wxStaticText *dummy = new wxStaticText(this, -1, _T("Remaining time : "));
-      c = new wxLayoutConstraints;
-      c->right.LeftOf(m_remaining);
-      c->top.SameAs(m_remaining, wxTop, 0);
-      c->width.AsIs();
-      c->height.AsIs();
-      dummy->SetConstraints(c);      
+        m_remaining = CreateLabel(_T("Remaining time : "), &lastWindow);
+    }
 
-      lastWindow = m_remaining;
-   }
+    if ( nTimeLabels > 0 )
+    {
+        // set it to the current time
+        m_timeStart = wxGetCurrentTime();
 
-   if ( hasAbortButton )
-   {
-      m_btnAbort = new wxButton(this, -1, _("Cancel"));
-      c = new wxLayoutConstraints;
-      c->centreX.SameAs(this, wxCentreX);
-      c->top.Below(lastWindow, 2*LAYOUT_Y_MARGIN);
-      c->width.AsIs();
-      c->height.AsIs();
-      m_btnAbort->SetConstraints(c);
-   }
-   else
-      m_btnAbort = (wxButton *)NULL;
+        sizeDlg.y += nTimeLabels * (sizeLabel.y + LAYOUT_Y_MARGIN);
+    }
 
-   SetAutoLayout(TRUE);
-   Layout();
+    if ( hasAbortButton )
+    {
+        m_btnAbort = new wxButton(this, wxID_CANCEL, _("Cancel"));
+        c = new wxLayoutConstraints;
 
-   // calc the height of the dialog
-   Fit();
-   // and set the width from it - unfortunately, Fit() makes the dialog way too
-   // wide under Windows, so try to find a reasonable value for the width, not
-   // too big and not too small
-   wxSize size = GetClientSize();
-   size.x = wxMax(3*widthText/2, 2*size.y);
-   SetClientSize(size);
+        // Windows dialogs usually have buttons in the lower right corner
+#ifdef __WXMSW__
+        c->right.SameAs(this, wxRight, 2*LAYOUT_X_MARGIN);
+#else // !MSW
+        c->centreX.SameAs(this, wxCentreX);
+#endif // MSW/!MSW
+        c->bottom.SameAs(this, wxBottom, 2*LAYOUT_Y_MARGIN);
 
-   Show(TRUE);
-   Centre(wxCENTER_FRAME | wxBOTH);
+        wxSize sizeBtn = wxButton::GetDefaultSize();
+        c->width.Absolute(sizeBtn.x);
+        c->height.Absolute(sizeBtn.y);
 
-   if(m_disableParentOnly)
-   {
-      if(m_parent)  m_parent->Enable(FALSE);
-   }
-   else
-      wxEnableTopLevelWindows(FALSE);
+        m_btnAbort->SetConstraints(c);
 
-   Enable(TRUE); // enable this window
-   wxYield();
+        sizeDlg.y += 2*LAYOUT_Y_MARGIN + sizeBtn.y;
+    }
+    else
+        m_btnAbort = (wxButton *)NULL;
+
+    SetAutoLayout(TRUE);
+    Layout();
+
+    sizeDlg.y += 2*LAYOUT_Y_MARGIN;
+
+    // try to make the dialog not square but rectangular of reasonabel width
+    sizeDlg.x = wxMax(widthText, 4*sizeDlg.y/3);
+    sizeDlg.x *= 3;
+    sizeDlg.x /= 2;
+    SetClientSize(sizeDlg);
+
+    Centre(wxCENTER_FRAME | wxBOTH);
+
+    if (m_disableParentOnly )
+    {
+        if ( m_parent )
+            m_parent->Enable(FALSE);
+    }
+    else
+    {
+        wxEnableTopLevelWindows(FALSE);
+    }
+
+    Show(TRUE);
+    Enable(TRUE); // enable this window
 }
 
+wxStaticText *wxProgressDialog::CreateLabel(const wxString& text,
+                                            wxWindow **lastWindow)
+{
+    wxLayoutConstraints *c;
+
+    wxStaticText *label = new wxStaticText(this, -1, _T("unknown"));
+    c = new wxLayoutConstraints;
+
+    // VZ: I like the labels be centered - if the others don't mind, you may
+    //     remove "#ifdef __WXMSW__" and use it for all ports
+#ifdef __WXMSW__
+    c->left.SameAs(this, wxCentreX, LAYOUT_X_MARGIN);
+#else // !MSW
+    c->right.SameAs(this, wxRight, 2*LAYOUT_X_MARGIN);
+#endif // MSW/!MSW
+    c->top.Below(*lastWindow, LAYOUT_Y_MARGIN);
+    c->width.AsIs();
+    c->height.AsIs();
+    label->SetConstraints(c);
+
+    wxStaticText *dummy = new wxStaticText(this, -1, text);
+    c = new wxLayoutConstraints;
+    c->right.LeftOf(label);
+    c->top.SameAs(label, wxTop, 0);
+    c->width.AsIs();
+    c->height.AsIs();
+    dummy->SetConstraints(c);
+
+    *lastWindow = label;
+
+    return label;
+}
 
 bool
 wxProgressDialog::Update(int value, const wxString& newmsg)
@@ -227,28 +265,13 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
 
    if ( (m_elapsed || m_remaining || m_estimated) && (value != 0) )
    {
-      wxTime timenow;
-      wxTime diff = timenow -  *m_time;
-      unsigned long secs = diff.GetSecond() + 60 * diff.GetMinute() + 60 * 60 * diff.GetHour();
-      unsigned long estim = secs * m_maximum / value; 
-      unsigned long remai = estim - secs; 
-      wxString s;
+      unsigned long elapsed = wxGetCurrentTime() - m_timeStart;
+      unsigned long estimated = elapsed * m_maximum / value;
+      unsigned long remaining = estimated - elapsed;
 
-      if (m_elapsed) 
-      {
-         s.Printf(_T("%i:%02i:%02i"), diff.GetHour(), diff.GetMinute(), diff.GetSecond());
-         if (s != m_elapsed->GetLabel()) m_elapsed->SetLabel(s);
-      }
-      if (m_estimated) 
-      {
-         s.Printf(_T("%i:%02i:%02i"), estim / (60 * 60), (estim / 60) % 60, estim % 60);
-         if (s != m_estimated->GetLabel()) m_estimated->SetLabel(s);
-      }
-      if (m_remaining) 
-      {
-         s.Printf(_T("%i:%02i:%02i"), remai / (60 * 60), (remai / 60) % 60, remai % 60);
-         if (s != m_remaining->GetLabel()) m_remaining->SetLabel(s);
-      }
+      SetTimeLabel(elapsed, m_elapsed);
+      SetTimeLabel(estimated, m_estimated);
+      SetTimeLabel(remaining, m_remaining);
    }
 
    if ( (value == m_maximum - 1) && !(GetWindowStyleFlag() & wxPD_AUTO_HIDE) )
@@ -259,43 +282,91 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
            m_btnAbort->SetLabel(_("Close"));
        }
 
-/*I think the default should be the other way round. If the
-  application wants to set a "Done." message at the end, it should
-  supply it. Any serious objections to this change? Makes the
-  application programmers' work a little easier.
-  if ( !newmsg )
+       if ( !newmsg )
        {
            // also provide the finishing message if the application didn't
            m_msg->SetLabel(_("Done."));
        }
-*/
+
+       // so that we return TRUE below and that out [Cancel] handler knew what
+       // to do
        m_state = Finished;
 
-       // so that we return TRUE below
-       m_state = Finished;
+       wxYield();
+
+       (void)ShowModal();
    }
-   wxYield();
+   else
+   {
+       // update the display
+       wxYield();
+   }
+
    return m_state != Canceled;
+}
+
+// ----------------------------------------------------------------------------
+// event handlers
+// ----------------------------------------------------------------------------
+
+void wxProgressDialog::OnCancel(wxCommandEvent& event)
+{
+    if ( m_state == Finished )
+    {
+        // this means that the count down is already finished and we're being
+        // shown as a modal dialog - so just let the default handler do the job
+        event.Skip();
+    }
+    else
+    {
+        // request to cancel was received, the next time Update() is called we
+        // will handle it
+        m_state = Canceled;
+    }
 }
 
 void wxProgressDialog::OnClose(wxCloseEvent& event)
 {
-   if ( m_state == Uncancelable )
-      event.Veto(TRUE);
-   else
-      m_state = Canceled;
+    if ( m_state == Uncancelable )
+        event.Veto(TRUE);
+    else
+        m_state = Canceled;
 }
 
+// ----------------------------------------------------------------------------
+// destruction
+// ----------------------------------------------------------------------------
 
 wxProgressDialog::~wxProgressDialog()
 {
-   if ( m_disableParentOnly )
-   {
-      if(m_parent) m_parent->Enable(TRUE);
-   }
-   else
-      wxEnableTopLevelWindows(TRUE);
-   if (m_time) delete m_time;
+    if ( m_disableParentOnly )
+    {
+        if ( m_parent )
+            m_parent->Enable(TRUE);
+    }
+    else
+    {
+        wxEnableTopLevelWindows(TRUE);
+    }
 }
 
-#endif
+// ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
+
+static void SetTimeLabel(unsigned long val, wxStaticText *label)
+{
+    if ( label )
+    {
+        wxString s;
+        unsigned long hours = val / 3600;
+        unsigned long minutes = (val % 3600) / 60;
+        unsigned long seconds = val % 60;
+        s.Printf(_T("%lu:%02lu:%02lu"), hours, minutes, seconds);
+
+        if ( s != label->GetLabel() )
+            label->SetLabel(s);
+    }
+}
+
+#endif // wxUSE_PROGRESSDLG

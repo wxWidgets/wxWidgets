@@ -269,3 +269,7 @@ void wxBitmapButton::DrawButtonDisable( WXHDC dc, int left, int top, int right, 
     ::SelectObject( (HDC) dc, old ) ;
 }
 
+void wxBitmapButton::SetDefault()
+{
+    wxButton::SetDefault();
+}

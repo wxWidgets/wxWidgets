@@ -192,10 +192,8 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
   if (style & wxCAPTION)
     msflags |= WS_CAPTION;
 
-  // Adding WS_CLIPCHILDREN causes children not to be properly
-  // drawn when first displaying them.
-//  if (style & wxCLIP_CHILDREN)
-//    msflags |= WS_CLIPCHILDREN;
+  if (style & wxCLIP_CHILDREN)
+    msflags |= WS_CLIPCHILDREN;
 
   wxWindow::MSWCreate(m_windowId, parent, wxMDIFrameClassName, this, title, x, y, width, height,
          msflags);
@@ -383,9 +381,9 @@ long wxMDIParentFrame::MSWWindowProc(WXUINT message,
             break;
 
         case WM_SIZE:
-            // we will leave this message to the base class version, but we
-            // must pass it to DefFrameProc() too
-            MSWDefWindowProc(message, wParam, lParam);
+            // as we don't (usually) resize the MDI client to exactly fit the
+            // client area (we put it below the toolbar, above statusbar &c),
+            // we should not pass this one to DefFrameProc
             break;
     }
 

@@ -52,15 +52,14 @@ public:
                 const wxString& name = "wxSpinButton");
 
 
-    // Attributes
-    ////////////////////////////////////////////////////////////////////////////
-
+    // accessors
     virtual int GetValue() const;
     virtual void SetValue(int val);
     virtual void SetRange(int minVal, int maxVal);
 
-    // IMPLEMENTATION
+    // implementation
     virtual bool MSWCommand(WXUINT param, WXWORD id);
+    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
     virtual bool MSWOnScroll(int orientation, WXWORD wParam,
                              WXWORD pos, WXHWND control);
 };

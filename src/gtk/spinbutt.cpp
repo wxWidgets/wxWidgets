@@ -67,7 +67,6 @@ static void gtk_spinbutt_callback( GtkWidget *WXUNUSED(widget), wxSpinButton *wi
 
     wxSpinEvent event( command, win->GetId());
     event.SetPosition( value );
-    event.SetOrientation( wxVERTICAL );
     event.SetEventObject( win );
 
     win->GetEventHandler()->ProcessEvent( event );

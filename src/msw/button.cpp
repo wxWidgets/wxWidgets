@@ -166,7 +166,9 @@ void wxButton::SetDefault()
         SendMessage(GetWinHwnd(parent), DM_SETDEFID, m_windowId, 0L);
     }
 
-    if ( btnOldDefault )
+    // this doesn't work with bitmap buttons because it also removes the
+    // "ownerdrawn" style...
+    if ( btnOldDefault && !wxDynamicCast(btnOldDefault, wxBitmapButton) )
     {
         // remove the BS_DEFPUSHBUTTON style from the other button
         long style = GetWindowLong(GetHwndOf(btnOldDefault), GWL_STYLE);

@@ -115,7 +115,7 @@ wxSpinButton::~wxSpinButton()
 
 int wxSpinButton::GetValue() const
 {
-    return LOWORD(::SendMessage(GetHwnd(), UDM_GETPOS, 0, 0));
+    return (short)LOWORD(::SendMessage(GetHwnd(), UDM_GETPOS, 0, 0));
 }
 
 void wxSpinButton::SetValue(int val)
@@ -133,50 +133,36 @@ void wxSpinButton::SetRange(int minVal, int maxVal)
 bool wxSpinButton::MSWOnScroll(int orientation, WXWORD wParam,
                                WXWORD pos, WXHWND control)
 {
-    if ( !control )
-        return FALSE;
+    wxCHECK_MSG( control, FALSE, _T("scrolling what?") )
 
-    wxSpinEvent event(wxEVT_NULL, m_windowId);
-    event.SetPosition(pos);
-    event.SetOrientation(orientation);
-    event.SetEventObject(this);
-
-    switch ( wParam )
+    if ( wParam != SB_THUMBPOSITION )
     {
-        case SB_TOP:
-            event.m_eventType = wxEVT_SCROLL_TOP;
-            break;
-
-        case SB_BOTTOM:
-            event.m_eventType = wxEVT_SCROLL_BOTTOM;
-            break;
-
-        case SB_LINEUP:
-            event.m_eventType = wxEVT_SCROLL_LINEUP;
-            break;
-
-        case SB_LINEDOWN:
-            event.m_eventType = wxEVT_SCROLL_LINEDOWN;
-            break;
-
-        case SB_PAGEUP:
-            event.m_eventType = wxEVT_SCROLL_PAGEUP;
-            break;
-
-        case SB_PAGEDOWN:
-            event.m_eventType = wxEVT_SCROLL_PAGEDOWN;
-            break;
-
-        case SB_THUMBTRACK:
-        case SB_THUMBPOSITION:
-            event.m_eventType = wxEVT_SCROLL_THUMBTRACK;
-            break;
-
-        default:
-            return FALSE;
+        // probable SB_ENDSCROLL - we don't react to it
+        return FALSE;
     }
 
+    wxSpinEvent event(wxEVT_SCROLL_THUMBTRACK, m_windowId);
+    event.SetPosition((short)pos);    // cast is important for negative values!
+    event.SetEventObject(this);
+
     return GetEventHandler()->ProcessEvent(event);
+}
+
+bool wxSpinButton::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
+{
+    LPNMUPDOWN lpnmud = (LPNMUPDOWN)lParam;
+
+    wxSpinEvent event(lpnmud->iDelta > 0 ? wxEVT_SCROLL_LINEUP
+                                         : wxEVT_SCROLL_LINEDOWN,
+                      m_windowId);
+    event.SetPosition(lpnmud->iPos + lpnmud->iDelta);
+    event.SetEventObject(this);
+
+    bool processed = GetEventHandler()->ProcessEvent(event);
+
+    *result = event.IsAllowed() ? 0 : 1;
+
+    return processed;
 }
 
 bool wxSpinButton::MSWCommand(WXUINT cmd, WXWORD id)

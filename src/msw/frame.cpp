@@ -175,8 +175,10 @@ void wxFrame::DoGetClientSize(int *x, int *y) const
   rect.bottom -= pt.y;
   rect.right -= pt.x;
 
-  *x = rect.right;
-  *y = rect.bottom;
+  if ( x )
+    *x = rect.right;
+  if ( y )
+    *y = rect.bottom;
 }
 
 // Set the client size (i.e. leave the calculation of borders etc.

@@ -1115,12 +1115,9 @@ void wxWindow::DoGetPosition(int *x, int *y) const
 
         // We may be faking the client origin. So a window that's really at (0,
         // 30) may appear (to wxWin apps) to be at (0, 0).
-        if ( parent )
-        {
-            wxPoint pt(parent->GetClientAreaOrigin());
-            point.x -= pt.x;
-            point.y -= pt.y;
-        }
+        wxPoint pt(parent->GetClientAreaOrigin());
+        point.x -= pt.x;
+        point.y -= pt.y;
     }
 
     if ( x )
@@ -1372,10 +1369,14 @@ void wxWindow::GetTextExtent(const wxString& string,
 
     ReleaseDC(hWnd, dc);
 
-    if ( x ) *x = sizeRect.cx;
-    if ( y ) *y = sizeRect.cy;
-    if ( descent ) *descent = tm.tmDescent;
-    if ( externalLeading ) *externalLeading = tm.tmExternalLeading;
+    if ( x )
+        *x = sizeRect.cx;
+    if ( y )
+        *y = sizeRect.cy;
+    if ( descent )
+        *descent = tm.tmDescent;
+    if ( externalLeading )
+        *externalLeading = tm.tmExternalLeading;
 }
 
 #if wxUSE_CARET && WXWIN_COMPATIBILITY
@@ -3319,8 +3320,11 @@ void wxGetCharSize(WXHWND wnd, int *x, int *y,wxFont *the_font)
         SelectObject(dc,was);
     }
     ReleaseDC((HWND)wnd, dc);
-    *x = tm.tmAveCharWidth;
-    *y = tm.tmHeight + tm.tmExternalLeading;
+
+    if ( x )
+        *x = tm.tmAveCharWidth;
+    if ( y )
+        *y = tm.tmHeight + tm.tmExternalLeading;
 
     //  if ( the_font )
     //    the_font->ReleaseResource();

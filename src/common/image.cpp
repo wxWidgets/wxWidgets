@@ -582,6 +582,9 @@ bool wxImageHandler::SaveFile( wxImage *WXUNUSED(image), wxOutputStream& WXUNUSE
 
 wxBitmap wxImage::ConvertToBitmap() const
 {
+    if ( !Ok() )
+        return wxNullBitmap;
+
     // sizeLimit is the MS upper limit for the DIB size
     int sizeLimit = 1024*768*3;
 
