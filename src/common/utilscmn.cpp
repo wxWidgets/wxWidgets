@@ -733,28 +733,23 @@ whereami(name)
 }
 
 #endif
-
+void wxEnableTopLevelWindows(bool enable)
+{
+   wxWindowList::Node *node;
+   for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
+      node->GetData()->Enable(enable);
+}
 
 // Yield to other apps/messages and disable user input
 bool wxSafeYield(wxWindow *win)
 {
-    wxWindowList::Node *node;
-    for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
-    {
-        node->GetData()->Enable(FALSE);
-    }
-
-    // always enable ourselves
-    if ( win )
-        win->Enable(TRUE);
-    bool rc = wxYield();
-
-    for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
-    {
-        node->GetData()->Enable(TRUE);
-    }
-
-    return rc;
+   wxEnableTopLevelWindow(FALSE);
+   // always enable ourselves
+   if ( win )
+      win->Enable(TRUE);
+   bool rc = wxYield();
+   wxEnableToplevelWindows(TRUE);
+   return rc;
 }
 
 /*

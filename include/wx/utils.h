@@ -239,6 +239,9 @@ WXDLLEXPORT bool wxYield();
 // Yield to other apps/messages and disable user input
 WXDLLEXPORT bool wxSafeYield(wxWindow *win = NULL);
 
+// Enable or disable input to all top level windows
+WXDLLEXPORT void wxEnableTopLevelWindows(bool enable = TRUE);
+
 // Check whether this window wants to process messages, e.g. Stop button
 // in long calculations.
 WXDLLEXPORT bool wxCheckForInterrupt(wxWindow *wnd);
