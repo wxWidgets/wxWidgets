@@ -261,7 +261,20 @@ Compiling using the makefiles (updated 24 Seot 02):
    and then for each sample,
    'make -f makefile.b32 WXUSINGDLL=1 FINAL=1'
 
-6. To make console mode applications with wxWindows functions go
+6. You can use the WXUNIVERSAL widgets instead of the native MSW
+   ones (eg if you want to build an application with the same
+   look and feel on all platforms)
+   Use the command
+   'make -f makefile.b32 WXUSINGUNIV=1'
+   Then run
+   'make -f makefile.b32 WXUSINGUNIV=1' in the sample directory  which you wish
+   to build using the wxUniversal widgets. Use 'SET WXTHEME=GTK' [or  WIN32 or METAL]
+   to test the existing themes
+   The makefile is written with the intention that you can build DLLs
+   and  do final releases by combinations of commandline parameters.
+   At the time of writing, (Oct 02) not all the wxDialogs are working
+
+7. To make console mode applications with wxWindows functions go
    to the src\msw directory
    'make -f makebase.b32 clean'
    'make -f makebase.b32'
