@@ -49,14 +49,14 @@ public:
 
     wxFileDialog(wxWindow *parent,
                  const wxString& message = wxFileSelectorPromptStr,
-                 const wxString& defaultDir = "",
-                 const wxString& defaultFile = "",
+                 const wxString& defaultDir = _T(""),
+                 const wxString& defaultFile = _T(""),
                  const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
                  long style = 0,
                  const wxPoint& pos = wxDefaultPosition);
     virtual ~wxFileDialog();
 
-    void SetMessage(const wxString& message) { m_message = message; }
+    void SetMessage(const wxString& message) { SetTitle(message); }
     void SetPath(const wxString& path);
     void SetDirectory(const wxString& dir) { m_dir = dir; }
     void SetFilename(const wxString& name) { m_fileName = name; }
@@ -75,6 +75,11 @@ public:
     // for multiple file selection
     void GetPaths(wxArrayString& paths) const;
     void GetFilenames(wxArrayString& files) const;
+
+    // implementation only from now on
+    // -------------------------------
+
+    virtual int ShowModal();
 
     void OnSelected( wxListEvent &event );
     void OnActivated( wxListEvent &event );
@@ -109,8 +114,9 @@ private:
     DECLARE_DYNAMIC_CLASS(wxFileDialog)
     DECLARE_EVENT_TABLE()
 
-    static long   s_lastViewStyle;  // list or report?
-    static bool   s_lastShowHidden; 
+    // these variables are preserved between wxFileDialog calls
+    static long ms_lastViewStyle;     // list or report?
+    static bool ms_lastShowHidden;    // did we show hidden files?
 };
 
 // File selector - backward compatibility
@@ -153,4 +159,5 @@ wxSaveFileSelector(const wxChar *what,
 
 #endif
     // _WX_DIRDLGG_H_
+
 
