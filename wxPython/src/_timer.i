@@ -56,11 +56,6 @@ void wxPyTimer::base_Notify() {
 public:
     %pythonAppend wxPyTimer         "self._setCallbackInfo(self, Timer, 0)"
 
-//     %pythonAppend wxTimer
-//     "if hasattr(self, 'Notify'):
-//             print 'bound EVT_TIMER to self.Notify'
-//             self.Bind(EVT_TIMER, self.Notify)
-//             self.SetOwner(self)";
 
     // if you don't call SetOwner() or provide an owner in the contstructor
     // then you must override Notify() inorder to receive the timer
