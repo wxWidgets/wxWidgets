@@ -120,7 +120,12 @@ static const EventTypeSpec eventList[] =
     { kEventClassControl , kEventControlEnabledStateChanged } ,
     { kEventClassControl , kEventControlHiliteChanged } ,
     { kEventClassControl , kEventControlSetFocusPart } ,
-//	{ kEventClassControl , kEventControlInvalidateForSizeChange } , // 10.3 only
+  
+    { kEventClassService , kEventServiceGetTypes },         
+    { kEventClassService , kEventServiceCopy },         
+    { kEventClassService , kEventServicePaste },  
+    
+ //	{ kEventClassControl , kEventControlInvalidateForSizeChange } , // 10.3 only
 //  { kEventClassControl , kEventControlBoundsChanged } ,
 #endif
 } ;
@@ -236,6 +241,80 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
     return result ;
 }
 
+static pascal OSStatus wxMacWindowServiceEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+{
+    OSStatus result = eventNotHandledErr ;
+
+    wxMacCarbonEvent cEvent( event ) ;
+    
+    ControlRef controlRef ;
+    wxWindowMac* thisWindow = (wxWindowMac*) data ;
+    wxTextCtrl* textCtrl = wxDynamicCast( thisWindow , wxTextCtrl ) ;
+    cEvent.GetParameter( kEventParamDirectObject , &controlRef ) ;
+
+    switch( GetEventKind( event ) )
+    {
+        case kEventServiceGetTypes :
+            if( textCtrl )
+            {
+                long from, to ;
+                textCtrl->GetSelection( &from , &to ) ;
+
+                CFMutableArrayRef copyTypes = 0 , pasteTypes = 0;                 
+                if( from != to )
+                    copyTypes = cEvent.GetParameter< CFMutableArrayRef >( kEventParamServiceCopyTypes , typeCFMutableArrayRef ) ;
+                if ( textCtrl->IsEditable() )
+                    pasteTypes = cEvent.GetParameter< CFMutableArrayRef >( kEventParamServicePasteTypes , typeCFMutableArrayRef ) ;
+                
+                static const OSType textDataTypes[] = { kTXNTextData /* , 'utxt' ,  'PICT', 'MooV',     'AIFF' */  }; 
+                for ( size_t i = 0 ; i < WXSIZEOF(textDataTypes) ; ++i )
+                {
+                    CFStringRef typestring = CreateTypeStringWithOSType(textDataTypes[i]);
+                    if ( typestring )
+                    {
+                        if ( copyTypes )
+                            CFArrayAppendValue (copyTypes, typestring) ;
+                        if ( pasteTypes )
+                            CFArrayAppendValue (pasteTypes, typestring) ;
+                        CFRelease( typestring ) ;
+                    }
+                }
+                result = noErr ;
+            }
+            break ;
+        case kEventServiceCopy :
+            if ( textCtrl )
+            {
+                long from, to ;
+                textCtrl->GetSelection( &from , &to ) ;
+                wxString val = textCtrl->GetValue() ;
+                val = val.Mid( from , to - from ) ;
+                ScrapRef scrapRef = cEvent.GetParameter< ScrapRef > ( kEventParamScrapRef , typeScrapRef ) ;
+                verify_noerr( ClearScrap( &scrapRef ) ) ;
+                verify_noerr( PutScrapFlavor( scrapRef , kTXNTextData , 0 , val.Length() , val.c_str() ) ) ;
+                result = noErr ;
+            }
+            break ;
+        case kEventServicePaste :
+            if ( textCtrl )
+            {
+                ScrapRef scrapRef = cEvent.GetParameter< ScrapRef > ( kEventParamScrapRef , typeScrapRef ) ;
+                Size textSize, pastedSize ;
+                verify_noerr( GetScrapFlavorSize (scrapRef, kTXNTextData, &textSize) ) ;
+                textSize++ ;
+                char *content = new char[textSize] ;
+                GetScrapFlavorData (scrapRef, kTXNTextData, &pastedSize, content );  
+                content[textSize-1] = 0 ;
+                textCtrl->WriteText( wxString( content ) ) ;
+                delete[] content ;
+                result = noErr ;
+            }
+            break ;
+    }
+    
+    return result ;
+} 
+
 pascal OSStatus wxMacWindowEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
     OSStatus result = eventNotHandledErr ;
@@ -245,6 +324,8 @@ pascal OSStatus wxMacWindowEventHandler( EventHandlerCallRef handler , EventRef 
         case kEventClassControl :
             result = wxMacWindowControlEventHandler( handler, event, data ) ;
             break ;
+        case kEventClassService :
+            result = wxMacWindowServiceEventHandler( handler, event , data ) ;
         default :
             break ;
     }
