@@ -159,13 +159,6 @@ LIB_CPP_SRC=\
  ../generic/textdlgg.cpp \
  ../generic/treectrl.cpp
 
-# If you're not using the generic ones, you
-# may wish to define platform-specific ones
-# dirdlg.cpp \
-# treectrl.cpp \
-# listctrl.cpp \
-# imaglist.cpp \
-
 ZLIB_SRC=\
   ../zlib/adler32.c ../zlib/deflate.c ../zlib/infblock.c\
   ../zlib/inflate.c ../zlib/zutil.c ../zlib/compress.c \
