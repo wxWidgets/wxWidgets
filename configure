@@ -86,7 +86,7 @@ ac_help="$ac_help
 ac_help="$ac_help
   --with-opengl           use OpenGL (or Mesa)"
 ac_help="$ac_help
-  --with-dmalloc          use dmalloc library (www.letters.com/dmalloc)"
+  --with-dmalloc          use dmalloc library (http://dmalloc.com/)"
 ac_help="$ac_help
   --with-regex            enable support for wxRegEx class"
 ac_help="$ac_help

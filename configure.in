@@ -1008,7 +1008,7 @@ WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxU
 fi
 dnl for GUI only
 
-WX_ARG_WITH(dmalloc,       [  --with-dmalloc          use dmalloc library (www.letters.com/dmalloc)], wxUSE_DMALLOC)
+WX_ARG_WITH(dmalloc,       [  --with-dmalloc          use dmalloc library (http://dmalloc.com/)], wxUSE_DMALLOC)
 WX_ARG_SYS_WITH(regex,     [  --with-regex            enable support for wxRegEx class], wxUSE_REGEX)
 WX_ARG_SYS_WITH(zlib,      [  --with-zlib             use zlib for LZW compression], wxUSE_ZLIB)
 WX_ARG_WITH(odbc,          [  --with-odbc             use the IODBC and wxODBC classes], wxUSE_ODBC)
