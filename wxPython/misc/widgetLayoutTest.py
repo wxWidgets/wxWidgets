@@ -295,6 +295,7 @@ class LayoutTestFrame(wx.Frame):
                 wx.MessageBox("Got a '%s' Exception!" % e.__class__.__name__, "Error")
                 import traceback
                 traceback.print_exc()
+                w.Destroy()
                 return
             
         # Put the widget in a sizer and the sizer in the testPanel
