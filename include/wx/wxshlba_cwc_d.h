@@ -20,11 +20,15 @@
 #error "profiling is not supported in debug versions"
 #else
 #ifdef __cplusplus
-	#if __POWERPC__
+	#ifdef __MACH__
+		#include <wxshlba_Mach++_d.mch>
+	#elif __POWERPC__
 		#include <wxshlba_Carbon++_d.mch>
 	#endif
 #else
-	#if __POWERPC__
+	#ifdef __MACH__
+		#include <wxshlba_Mach_d.mch>
+	#elif __POWERPC__
 		#include <wxshlba_Carbon_d.mch>
 	#endif
 #endif

@@ -28,11 +28,15 @@
 #endif
 #else
 #ifdef __cplusplus
-	#if __POWERPC__
+	#ifdef __MACH__
+		#include <wxshlba_Mach++.mch>
+	#elif __POWERPC__
 		#include <wxshlba_Carbon++.mch>
 	#endif
 #else
-	#if __POWERPC__
+	#ifdef __MACH__
+		#include <wxshlba_Mach.mch>
+	#elif __POWERPC__
 		#include <wxshlba_Carbon.mch>
 	#endif
 #endif
