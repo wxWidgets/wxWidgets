@@ -130,6 +130,7 @@ sckipc.cpp	C	S
 sckstrm.cpp	C	S
 socket.cpp	C	S
 stream.cpp	C
+strconv.cpp	C
 string.cpp	C
 tbarbase.cpp	C
 tbarsmpl.cpp	C	16
@@ -150,7 +151,7 @@ wfstream.cpp	C
 wincmn.cpp	C
 wxchar.cpp	C
 wxexpr.cpp	C
-zipstream.cpp	C
+zipstrm.cpp	C
 zstream.cpp	C
 
 accel.cpp	M
@@ -466,6 +467,7 @@ statbox.h	I	WX
 statline.h	I	WX
 stattext.h	I	WX
 statusbr.h	I	WX
+strconv.h	I	WX
 stream.h	I	WX
 string.h	I	WX
 tab.h	I	WX
@@ -507,7 +509,7 @@ wxexpr.h	I	WX
 wxhtml.h	I	WX
 wxprec.h	I	WX
 xpmhand.h	I	WX
-zipstream.h	I	WX
+zipstrm.h	I	WX
 zstream.h	I	WX
 
 accel.h	I	GTK

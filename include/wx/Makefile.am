@@ -147,6 +147,7 @@ wx_include_HEADERS = \
  stattext.h \
  statusbr.h \
  stream.h \
+ strconv.h \
  string.h \
  tab.h \
  tabctrl.h \
@@ -187,7 +188,7 @@ wx_include_HEADERS = \
  wxhtml.h \
  wxprec.h \
  xpmhand.h \
- zipstream.h \
+ zipstrm.h \
  zstream.h
 
 # setup.h is installed in another directory because several versions of wxwin

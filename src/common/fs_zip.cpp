@@ -24,7 +24,7 @@
 #endif
 
 #include "wx/filesys.h"
-#include "wx/zipstream.h"
+#include "wx/zipstrm.h"
 #include "wx/fs_zip.h"
 
 

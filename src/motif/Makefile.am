@@ -43,6 +43,7 @@ libwx_motif_la_SOURCES = \
  memory.cpp \
  module.cpp \
  object.cpp \
+ strconv.cpp \
  string.cpp \
  timercmn.cpp \
  utilscmn.cpp \
@@ -112,7 +113,7 @@ libwx_motif_la_SOURCES = \
  wincmn.cpp \
  wxexpr.cpp \
  unzip.c \
- zipstream.cpp \
+ zipstrm.cpp \
  zstream.cpp \
 \
  busyinfo.cpp \

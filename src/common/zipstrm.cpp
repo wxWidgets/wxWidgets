@@ -23,7 +23,7 @@
 #include "wx/intl.h"
 #include "wx/stream.h"
 #include "wx/wfstream.h"
-#include "wx/zipstream.h"
+#include "wx/zipstrm.h"
 
 /* Not the right solution (paths in makefiles) but... */
 #ifdef __BORLANDC__

@@ -86,6 +86,7 @@ libwx_gtk_la_SOURCES = \
  sckstrm.cpp \
  serbase.cpp \
  socket.cpp \
+ strconv.cpp \
  stream.cpp \
  string.cpp \
  tbarbase.cpp \
@@ -108,7 +109,7 @@ libwx_gtk_la_SOURCES = \
  wxchar.cpp \
  wxexpr.cpp \
  zstream.cpp \
- zipstream.cpp \
+ zipstrm.cpp \
 \
  db.cpp \
  dbtable.cpp \

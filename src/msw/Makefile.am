@@ -4,8 +4,8 @@
 ##
 ## Process this file with automake to produce Makefile.in
 
-AUTOMAKE_OPTIONS =
-# 1.3 no-dependencies
+AUTOMAKE_OPTIONS = 1.3
+# no-dependencies
 
 SUFFIXES = .cpp .c
 
@@ -41,6 +41,7 @@ libwx_msw_la_SOURCES = \
  module.cpp \
  object.cpp \
  string.cpp \
+ strconv.cpp \
  timercmn.cpp \
  utilscmn.cpp \
  tokenzr.cpp \
@@ -104,7 +105,7 @@ libwx_msw_la_SOURCES = \
  wfstream.cpp \
  wincmn.cpp \
  wxexpr.cpp \
- zipstream.cpp \
+ zipstrm.cpp \
  zstream.cpp \
 \
  busyinfo.cpp \
