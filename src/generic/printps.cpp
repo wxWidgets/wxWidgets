@@ -30,7 +30,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_PRINTING_ARCHITECTURE
+#if wxUSE_PRINTING_ARCHITECTURE && wxUSE_POSTSCRIPT
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
@@ -56,7 +56,7 @@
 
     IMPLEMENT_DYNAMIC_CLASS(wxPostScriptPrinter, wxPrinterBase)
     IMPLEMENT_CLASS(wxPostScriptPrintPreview, wxPrintPreviewBase)
-
+    
 // ============================================================================
 // implementation
 // ============================================================================
