@@ -52,7 +52,7 @@ wxAcceleratorRefData::wxAcceleratorRefData()
 
 wxAcceleratorRefData::~wxAcceleratorRefData()
 {
-    m_accels.DeleteContents( TRUE );
+    WX_CLEAR_LIST( wxAccelList, m_accels );
 }
 
 wxAcceleratorTable::wxAcceleratorTable()
@@ -88,10 +88,10 @@ int wxAcceleratorTable::GetCommand( wxKeyEvent &event )
 {
     if (!Ok()) return -1;
 
-    wxAccelList::Node *node = M_ACCELDATA->m_accels.GetFirst();
+    wxAccelList::compatibility_iterator node = M_ACCELDATA->m_accels.GetFirst();
     while (node)
     {
-        wxAcceleratorEntry *entry = (wxAcceleratorEntry*)node->GetData();
+        wxAcceleratorEntry *entry = node->GetData();
         if ((event.m_keyCode == entry->GetKeyCode()) &&
            (((entry->GetFlags() & wxACCEL_CTRL) == 0) || event.ControlDown()) &&
            (((entry->GetFlags() & wxACCEL_SHIFT) == 0) || event.ShiftDown()) &&

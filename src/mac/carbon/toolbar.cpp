@@ -313,7 +313,7 @@ bool wxToolBar::Realize()
     int maxToolHeight = 0;
 
     // Find the maximum tool width and height
-    wxToolBarToolsList::Node *node = m_tools.GetFirst();
+    wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
     while ( node )
     {
         wxToolBarTool *tool = (wxToolBarTool *)node->GetData();
@@ -411,7 +411,7 @@ void wxToolBar::MacSuperChangedPosition()
 
 wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
 {
-    wxToolBarToolsList::Node *node = m_tools.GetFirst();
+    wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
     while (node)
     {
         wxToolBarTool *tool = (wxToolBarTool *)node->GetData() ;
@@ -484,7 +484,7 @@ void wxToolBar::DoSetToggle(wxToolBarToolBase *WXUNUSED(tool), bool WXUNUSED(tog
 
 bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *tool)
 {
-    wxToolBarToolsList::Node *node;
+    wxToolBarToolsList::compatibility_iterator node;
     for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
     {
         wxToolBarToolBase *tool2 = node->GetData();

@@ -208,7 +208,7 @@ void wxMenuItem::Check(bool bDoCheck)
                 }
 
                 // also uncheck all the other items in this radio group
-                wxMenuItemList::Node *node = items.Item(start);
+                wxMenuItemList::compatibility_iterator node = items.Item(start);
                 for ( int n = start; n <= end && node; n++ )
                 {
                     if ( n != pos )
