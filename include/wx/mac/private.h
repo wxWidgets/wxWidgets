@@ -161,6 +161,16 @@ void wxMacCleanupConverters() ;
 void wxMacStringToPascal( const wxString&from , StringPtr to ) ;
 wxString wxMacMakeStringFromPascal( ConstStringPtr from ) ;
 
+void wxMacConvertNewlines13To10( char * data ) ;
+void wxMacConvertNewlines10To13( char * data ) ;
+void wxMacConvertNewlines13To10( wxString *data ) ;
+void wxMacConvertNewlines10To13( wxString *data ) ;
+
+#if wxUSE_UNICODE
+void wxMacConvertNewlines13To10( wxChar * data ) ;
+void wxMacConvertNewlines10To13( wxChar * data ) ;
+#endif
+
 #if TARGET_CARBON
 
 class wxMacCFStringHolder                                                             
