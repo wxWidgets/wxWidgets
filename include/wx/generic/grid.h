@@ -605,6 +605,13 @@ public:
         Merged
     };
 
+    enum wxAttrOverflowMode
+    {
+        Unset = -1,
+        Overflow,
+        SingleCell
+    };
+
     // ctors
     wxGridCellAttr(wxGridCellAttr *attrDefault = NULL)
     {
@@ -647,7 +654,8 @@ public:
         m_vAlign = vAlign;
     }
     void SetSize(int num_rows, int num_cols);
-    void SetOverflow( bool allow ) { m_overflow = allow; }
+    void SetOverflow(bool allow = TRUE)
+        { m_overflow = allow ? Overflow : SingleCell; }
     void SetReadOnly(bool isReadOnly = TRUE)
         { m_isReadOnly = isReadOnly ? ReadOnly : ReadWrite; }
 
@@ -667,13 +675,15 @@ public:
     bool HasRenderer() const { return m_renderer != NULL; }
     bool HasEditor() const { return m_editor != NULL; }
     bool HasReadWriteMode() const { return m_isReadOnly != Unset; }
+    bool HasOverflowMode() const { return m_overflow != Unset; }
 
     const wxColour& GetTextColour() const;
     const wxColour& GetBackgroundColour() const;
     const wxFont& GetFont() const;
     void GetAlignment(int *hAlign, int *vAlign) const;
     void GetSize(int *num_rows, int *num_cols) const;
-    bool GetOverflow() const { return m_overflow; }
+    bool GetOverflow() const
+        { return m_overflow != wxGridCellAttr::SingleCell; }
     wxGridCellRenderer *GetRenderer(wxGrid* grid, int row, int col) const;
     wxGridCellEditor *GetEditor(wxGrid* grid, int row, int col) const;
 
@@ -711,7 +721,8 @@ private:
              m_vAlign;
     int      m_sizeRows,
              m_sizeCols;
-    bool     m_overflow;
+
+    wxAttrOverflowMode  m_overflow;
 
     wxGridCellRenderer* m_renderer;
     wxGridCellEditor*   m_editor;

@@ -458,7 +458,7 @@ void wxGridCellEditor::PaintBackground(const wxRect& rectCell,
     wxGridWindow* gridWindow = wxDynamicCast(m_control->GetParent(), wxGridWindow);
     if (gridWindow)
         gridWindow->GetOwner()->PrepareDC(dc);
-    
+
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.SetBrush(wxBrush(attr->GetBackgroundColour(), wxSOLID));
     dc.DrawRectangle(rectCell);
@@ -2132,6 +2132,9 @@ void wxGridCellAttr::MergeWith(wxGridCellAttr *mergefrom)
     }
     if ( !HasReadWriteMode()  && mergefrom->HasReadWriteMode() )
         SetReadOnly(mergefrom->IsReadOnly());
+
+    if (!HasOverflowMode()  && mergefrom->HasOverflowMode() )
+        SetReadOnly(mergefrom->GetOverflow());
 
     SetDefAttr(mergefrom->m_defGridAttr);
 }
@@ -4832,7 +4835,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
     else if ( event.RightDown() )
     {
         row = YToRow(y);
-        if ( row >=0 && 
+        if ( row >=0 &&
 	    !SendEvent( wxEVT_GRID_LABEL_RIGHT_CLICK, row, -1, event ) )
         {
             // no default action at the moment
@@ -7103,10 +7106,10 @@ void wxGrid::DrawTextRectangle( wxDC& dc,
                                 int textOrientation )
 {
     wxArrayString lines;
-    
+
     StringToLines( value, lines );
-    
-    
+
+
     //Forward to new API.
     DrawTextRectangle(  dc,
         lines,
@@ -7114,7 +7117,7 @@ void wxGrid::DrawTextRectangle( wxDC& dc,
         horizAlign,
         vertAlign,
         textOrientation );
-    
+
 }
 
 void wxGrid::DrawTextRectangle( wxDC& dc,
@@ -7127,20 +7130,20 @@ void wxGrid::DrawTextRectangle( wxDC& dc,
     long textWidth, textHeight;
     long lineWidth, lineHeight;
     int nLines;
-    
+
     dc.SetClippingRegion( rect );
-    
+
     nLines = lines.GetCount();
     if( nLines > 0 )
     {
         int l;
         float x = 0.0, y = 0.0;
-        
+
         if( textOrientation == wxHORIZONTAL )
             GetTextBoxSize(dc, lines, &textWidth, &textHeight);
         else
             GetTextBoxSize( dc, lines, &textHeight, &textWidth );
-        
+
         switch( vertAlign )
         {
         case wxALIGN_BOTTOM:
@@ -7149,14 +7152,14 @@ void wxGrid::DrawTextRectangle( wxDC& dc,
             else
                 x = rect.x + rect.width - textWidth;
             break;
-            
+
         case wxALIGN_CENTRE:
             if( textOrientation == wxHORIZONTAL )
                 y = rect.y + ((rect.height - textHeight)/2);
             else
                 x = rect.x + ((rect.width - textWidth)/2);
             break;
-            
+
         case wxALIGN_TOP:
         default:
             if( textOrientation == wxHORIZONTAL )
@@ -7165,12 +7168,12 @@ void wxGrid::DrawTextRectangle( wxDC& dc,
                 x = rect.x + 1;
             break;
         }
-        
+
         // Align each line of a multi-line label
         for( l = 0; l < nLines; l++ )
         {
             dc.GetTextExtent(lines[l], &lineWidth, &lineHeight);
-            
+
             switch( horizAlign )
             {
             case wxALIGN_RIGHT:
@@ -7179,14 +7182,14 @@ void wxGrid::DrawTextRectangle( wxDC& dc,
                 else
                     y = rect.y + lineWidth + 1;
                 break;
-                
+
             case wxALIGN_CENTRE:
                 if( textOrientation == wxHORIZONTAL )
                     x = rect.x + ((rect.width - lineWidth)/2);
                 else
                     y = rect.y + rect.height - ((rect.height - lineWidth)/2);
                 break;
-                
+
             case wxALIGN_LEFT:
             default:
                 if( textOrientation == wxHORIZONTAL )
@@ -7195,7 +7198,7 @@ void wxGrid::DrawTextRectangle( wxDC& dc,
                     y = rect.y + rect.height - 1;
                 break;
             }
-            
+
             if( textOrientation == wxHORIZONTAL )
             {
                 dc.DrawText( lines[l], (int)x, (int)y );
@@ -7605,7 +7608,7 @@ static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
     if (coord < 0)
         return clipToMinMax && (nMax > 0) ? 0 : -1;
 
-	
+
     if (!defaultDist)
         defaultDist = 1;
 
@@ -8009,10 +8012,10 @@ bool wxGrid::MovePageUp()
 
         int y = GetRowTop(row);
         int newRow = internalYToRow( y - ch + 1 );
-        
+
         if ( newRow == row )
         {
-	    //row > 0 , so newrow can never be less than 0 here. 
+	    //row > 0 , so newrow can never be less than 0 here.
             newRow = row - 1;
         }
 
@@ -8039,7 +8042,7 @@ bool wxGrid::MovePageDown()
         int newRow = internalYToRow( y + ch );
         if ( newRow == row )
         {
-            // row < m_numRows , so newrow can't overflow here.	
+            // row < m_numRows , so newrow can't overflow here.
 	    newRow = row + 1;
         }
 
