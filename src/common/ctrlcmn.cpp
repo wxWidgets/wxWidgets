@@ -19,6 +19,7 @@
 
 #ifdef __GNUG__
     #pragma implementation "controlbase.h"
+    #pragma implementation "statbmpbase.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
@@ -34,6 +35,11 @@
     #include "wx/control.h"
     #include "wx/log.h"
 #endif
+
+#if wxUSE_STATBMP
+    #include "wx/bitmap.h"
+    #include "wx/statbmp.h"
+#endif // wxUSE_STATBMP
 
 // ============================================================================
 // implementation
@@ -138,6 +144,24 @@ wxBorder wxControlBase::GetDefaultBorder() const
 {
     return wxBORDER_NONE;
 }
+
+// ----------------------------------------------------------------------------
+// wxStaticBitmap
+// ----------------------------------------------------------------------------
+
+#if wxUSE_STATBMP
+
+wxSize wxStaticBitmapBase::DoGetBestSize() const
+{
+    wxBitmap bmp = GetBitmap();
+    if ( bmp.Ok() )
+        return wxSize(bmp.GetWidth(), bmp.GetHeight());
+
+    // this is completely arbitrary
+    return wxSize(16, 16);
+}
+
+#endif // wxUSE_STATBMP
 
 #endif // wxUSE_CONTROLS
 

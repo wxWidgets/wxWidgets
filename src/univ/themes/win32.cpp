@@ -83,6 +83,10 @@ public:
                             const wxRect& rect,
                             int flags = 0,
                             wxRect *rectIn = (wxRect *)NULL);
+    virtual void DrawHorizontalLine(wxDC& dc,
+                                    wxCoord y, wxCoord x1, wxCoord x2);
+    virtual void DrawVerticalLine(wxDC& dc,
+                                  wxCoord x, wxCoord y1, wxCoord y2);
     virtual void DrawFrame(wxDC& dc,
                            const wxString& label,
                            const wxRect& rect,
@@ -727,8 +731,28 @@ void wxWin32Renderer::DrawButtonBorder(wxDC& dc,
 }
 
 // ----------------------------------------------------------------------------
-// frame
+// lines and frame
 // ----------------------------------------------------------------------------
+
+void wxWin32Renderer::DrawHorizontalLine(wxDC& dc,
+                                         wxCoord y, wxCoord x1, wxCoord x2)
+{
+    dc.SetPen(m_penDarkGrey);
+    dc.DrawLine(x1, y, x2 + 1, y);
+    dc.SetPen(m_penHighlight);
+    y++;
+    dc.DrawLine(x1, y, x2 + 1, y);
+}
+
+void wxWin32Renderer::DrawVerticalLine(wxDC& dc,
+                                       wxCoord x, wxCoord y1, wxCoord y2)
+{
+    dc.SetPen(m_penDarkGrey);
+    dc.DrawLine(x, y1, x, y2 + 1);
+    dc.SetPen(m_penHighlight);
+    x++;
+    dc.DrawLine(x, y1, x, y2 + 1);
+}
 
 void wxWin32Renderer::DrawFrame(wxDC& dc,
                                 const wxString& label,

@@ -181,6 +181,7 @@ enum wxStockCursor
 // ---------------------------------------------------------------------------
 // wxSize
 // ---------------------------------------------------------------------------
+
 class WXDLLEXPORT wxSize
 {
 public:
@@ -194,7 +195,9 @@ public:
     wxSize(int xx, int yy) { Set(xx, yy); }
 
     // no copy ctor or assignment operator - the defaults are ok
+
     bool operator==(const wxSize& sz) const { return x == sz.x && y == sz.y; }
+    bool operator!=(const wxSize& sz) const { return x != sz.x || y != sz.y; }
 
     // FIXME are these really useful? If they're, we should have += &c as well
     wxSize operator+(const wxSize& sz) { return wxSize(x + sz.x, y + sz.y); }

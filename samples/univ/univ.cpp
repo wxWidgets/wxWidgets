@@ -36,9 +36,17 @@
 
     #include "wx/button.h"
     #include "wx/scrolbar.h"
+    #include "wx/statbmp.h"
     #include "wx/statbox.h"
+    #include "wx/statline.h"
     #include "wx/stattext.h"
 #endif
+
+// ----------------------------------------------------------------------------
+// resources
+// ----------------------------------------------------------------------------
+
+#include "wx/generic/tip.xpm"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -135,10 +143,14 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 
     (new wxStaticText(this, _T("&Disabled text"), wxPoint(10, 30)))->Disable();
 
+    new wxStaticLine(this, wxPoint(190, 10), 50, wxLI_VERTICAL);
+
     text = new wxStaticText(this, _T("Demo of &border styles:"), wxPoint(10, 60));
     text->SetFont(*wxITALIC_FONT);
     text->SetBackgroundColour(*wxWHITE);
     text->SetForegroundColour(*wxBLUE);
+
+    new wxStaticLine(this, wxPoint(10, 80), 120, wxLI_HORIZONTAL);
 
     wxCoord x = 10;
     #define CREATE_STATIC_BORDER_DEMO(border) \
@@ -179,6 +191,10 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 
     new wxButton(this, Univ_Button1, _T("&Press me"), wxPoint(10, 300));
     new wxButton(this, Univ_Button2, _T("&And me"), wxPoint(100, 300));
+
+    new wxStaticBitmap(this, wxBitmap(tipIcon), wxPoint(10, 350));
+    new wxStaticBitmap(this, -1, wxBitmap(tipIcon), wxPoint(50, 350),
+                       wxDefaultSize, wxSUNKEN_BORDER);
 
     wxScrollBar *sb;
     sb = new wxScrollBar(this, -1, wxPoint(200, 300), wxSize(300, -1));

@@ -97,6 +97,14 @@ public:
                                   int flags = 0,
                                   wxRect *rectIn = (wxRect *)NULL) = 0;
 
+    // draw a horizontal line
+    virtual void DrawHorizontalLine(wxDC& dc,
+                                    wxCoord y, wxCoord x1, wxCoord x2) = 0;
+
+    // draw a vertical line
+    virtual void DrawVerticalLine(wxDC& dc,
+                                  wxCoord x, wxCoord y1, wxCoord y2) = 0;
+
     // draw a frame with the label (horizontal alignment can be specified)
     virtual void DrawFrame(wxDC& dc,
                            const wxString& label,
@@ -198,6 +206,12 @@ public:
                            int align = wxALIGN_LEFT,
                            int indexAccel = -1)
         { m_renderer->DrawFrame(dc, label, rect, flags, align, indexAccel); }
+    virtual void DrawHorizontalLine(wxDC& dc,
+                                    wxCoord y, wxCoord x1, wxCoord x2)
+        { m_renderer->DrawHorizontalLine(dc, y, x1, x2); }
+    virtual void DrawVerticalLine(wxDC& dc,
+                                  wxCoord x, wxCoord y1, wxCoord y2)
+        { m_renderer->DrawVerticalLine(dc, x, y1, y2); }
     virtual void DrawButtonBorder(wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0,
@@ -248,7 +262,10 @@ public:
     void DrawLabel();
     void DrawBorder();
     void DrawButtonBorder();
+    // the line must be either horizontal or vertical
+    void DrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2);
     void DrawFrame();
+    void DrawBitmap(const wxBitmap& bitmap);
     void DrawBackgroundBitmap();
     void DrawScrollbar(const wxScrollBar *scrollbar);
 
@@ -259,6 +276,9 @@ public:
 
     const wxRect& GetRect() const { return m_rect; }
     wxRect& GetRect() { return m_rect; }
+
+protected:
+    void DoDrawBitmap(const wxBitmap& bmp, int alignment, wxStretch stretch);
 
 private:
     wxControl *m_ctrl;

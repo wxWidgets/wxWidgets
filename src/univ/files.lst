@@ -5,7 +5,9 @@ UNIVOBJS = \
            inphand.o \
            renderer.o \
            scrolbar.o \
+           statbmp.o \
            statbox.o \
+           statline.o \
            stattext.o \
            theme.o \
            gtk.o \
@@ -18,7 +20,9 @@ UNIVDEPS = \
            inphand.d \
            renderer.d \
            scrolbar.d \
+           statbmp.d \
            statbox.d \
+           statline.d \
            stattext.d \
            theme.d \
            gtk.d \

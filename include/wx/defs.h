@@ -1197,6 +1197,11 @@ enum wxBorder
 #define wxST_NO_AUTORESIZE    0x0001
 
 /*
+ * wxStaticBitmap flags
+ */
+#define wxBI_EXPAND           wxEXPAND
+
+/*
  * wxStaticLine flags
  */
 #define wxLI_HORIZONTAL         wxHORIZONTAL

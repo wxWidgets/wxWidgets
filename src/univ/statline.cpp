@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        univ/statbox.cpp
-// Purpose:     wxStaticBox implementation
+// Name:        univ/statline.cpp
+// Purpose:     wxStaticLine implementation
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     25.08.00
@@ -18,7 +18,7 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "univstatbox.h"
+    #pragma implementation "univstatline.h"
 #endif
 
 #include "wx/wxprec.h"
@@ -27,11 +27,11 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_STATBOX
+#if wxUSE_STATLINE
 
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
-    #include "wx/statbox.h"
+    #include "wx/statline.h"
     #include "wx/validate.h"
 #endif
 
@@ -41,34 +41,48 @@
 // implementation
 // ============================================================================
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxStaticLine, wxControl)
 
 // ----------------------------------------------------------------------------
-// wxStaticBox
+// wxStaticLine
 // ----------------------------------------------------------------------------
 
-bool wxStaticBox::Create(wxWindow *parent,
-                         wxWindowID id,
-                         const wxString &label,
-                         const wxPoint &pos,
-                         const wxSize &size,
-                         long style,
-                         const wxString &name)
+bool wxStaticLine::Create(wxWindow *parent,
+                          wxWindowID id,
+                          const wxPoint &pos,
+                          const wxSize &size,
+                          long style,
+                          const wxString &name)
 {
     if ( !wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
 
-    SetLabel(label);
+    wxSize sizeReal = AdjustSize(size);
+    if ( sizeReal != size )
+        SetSize(sizeReal);
 
     return TRUE;
 }
 
-void wxStaticBox::DoDraw(wxControlRenderer *renderer)
+void wxStaticLine::DoDraw(wxControlRenderer *renderer)
 {
     // we never have a border, so don't call the base class version whcih draws
     // it
-    renderer->DrawFrame();
+    wxSize sz = GetSize();
+    wxCoord x2, y2;
+    if ( IsVertical() )
+    {
+        x2 = 0;
+        y2 = sz.y;
+    }
+    else // horizontal
+    {
+        x2 = sz.x;
+        y2 = 0;
+    }
+
+    renderer->DrawLine(0, 0, x2, y2);
 }
 
-#endif // wxUSE_STATBOX
+#endif // wxUSE_STATLINE
 

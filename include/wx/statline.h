@@ -1,3 +1,13 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        wx/statline.h
+// Purpose:     wxStaticLine class interface
+// Author:      Vadim Zeitlin
+// Created:     28.06.99
+// Version:     $Id$
+// Copyright:   (c) 1999 Vadim Zeitlin
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
 #ifndef _WX_STATLINE_H_BASE_
 #define _WX_STATLINE_H_BASE_
 
@@ -36,9 +46,12 @@ public:
     // get the default size for the "lesser" dimension of the static line
     static int GetDefaultSize() { return 2; }
 
+    // overriden base class virtuals
+    virtual bool AcceptsFocus() const { return FALSE; }
+
 protected:
     // set the right size for the right dimension
-    wxSize AdjustSize(const wxSize& size)
+    wxSize AdjustSize(const wxSize& size) const
     {
         wxSize sizeReal(size);
         if ( IsVertical() )
@@ -54,13 +67,20 @@ protected:
 
         return sizeReal;
     }
+
+    virtual wxSize DoGetBestSize() const
+    {
+        return AdjustSize(wxDefaultSize);
+    }
 };
 
 // ----------------------------------------------------------------------------
 // now include the actual class declaration
 // ----------------------------------------------------------------------------
 
-#if defined(__WXMSW__)
+#if defined(__WXUNIVERSAL__)
+    #include "wx/univ/statline.h"
+#elif defined(__WXMSW__)
     #include "wx/msw/statline.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/statline.h"

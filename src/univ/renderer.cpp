@@ -222,12 +222,28 @@ void wxControlRenderer::DrawButtonBorder()
     m_renderer->DrawBackground(m_dc, m_rect, flags);
 }
 
+void wxControlRenderer::DrawBitmap(const wxBitmap& bitmap)
+{
+    int style = m_ctrl->GetWindowStyle();
+    DoDrawBitmap(bitmap,
+                 style & wxALIGN_MASK,
+                 style & wxBI_EXPAND ? wxEXPAND : wxSTRETCH_NOT);
+}
+
 void wxControlRenderer::DrawBackgroundBitmap()
 {
     // get the bitmap and the flags
     int alignment;
     wxStretch stretch;
     wxBitmap bmp = m_ctrl->GetBackgroundBitmap(&alignment, &stretch);
+
+    DoDrawBitmap(bmp, alignment, stretch);
+}
+
+void wxControlRenderer::DoDrawBitmap(const wxBitmap& bmp,
+                                     int alignment,
+                                     wxStretch stretch)
+{
     if ( !bmp.Ok() )
         return;
 
@@ -282,7 +298,7 @@ void wxControlRenderer::DrawBackgroundBitmap()
     }
 
     // do draw it
-    m_dc.DrawBitmap(bmp, x, y);
+    m_dc.DrawBitmap(bmp, x, y, TRUE /* use mask */);
 }
 
 void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar)
@@ -315,4 +331,15 @@ void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar)
                                 : wxHORIZONTAL,
                               thumbStart, thumbEnd, m_rect,
                               flags);
+}
+
+void wxControlRenderer::DrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
+{
+    wxASSERT_MSG( x1 == x2 || y1 == y2,
+                  _T("line must be either horizontal or vertical") );
+
+    if ( x1 == x2 )
+        m_renderer->DrawVerticalLine(m_dc, x1, y1, y2);
+    else // horizontal
+        m_renderer->DrawHorizontalLine(m_dc, y1, x1, x2);
 }

@@ -66,6 +66,10 @@ public:
                             const wxRect& rect,
                             int flags = 0,
                             wxRect *rectIn = (wxRect *)NULL);
+    virtual void DrawHorizontalLine(wxDC& dc,
+                                    wxCoord y, wxCoord x1, wxCoord x2);
+    virtual void DrawVerticalLine(wxDC& dc,
+                                  wxCoord x, wxCoord y1, wxCoord y2);
     virtual void DrawFrame(wxDC& dc,
                            const wxString& label,
                            const wxRect& rect,
@@ -492,8 +496,28 @@ void wxGTKRenderer::DrawButtonBorder(wxDC& dc,
 }
 
 // ----------------------------------------------------------------------------
-// frame
+// lines and frames
 // ----------------------------------------------------------------------------
+
+void wxGTKRenderer::DrawHorizontalLine(wxDC& dc,
+                                       wxCoord y, wxCoord x1, wxCoord x2)
+{
+    dc.SetPen(m_penDarkGrey);
+    dc.DrawLine(x1, y, x2 + 1, y);
+    dc.SetPen(m_penHighlight);
+    y++;
+    dc.DrawLine(x1, y, x2 + 1, y);
+}
+
+void wxGTKRenderer::DrawVerticalLine(wxDC& dc,
+                                     wxCoord x, wxCoord y1, wxCoord y2)
+{
+    dc.SetPen(m_penDarkGrey);
+    dc.DrawLine(x, y1, x, y2 + 1);
+    dc.SetPen(m_penHighlight);
+    x++;
+    dc.DrawLine(x, y1, x, y2 + 1);
+}
 
 void wxGTKRenderer::DrawFrame(wxDC& dc,
                                 const wxString& label,
@@ -520,25 +544,22 @@ void wxGTKRenderer::DrawFrame(wxDC& dc,
     // and overwrite it with label (if any)
     if ( !label.empty() )
     {
-        // TODO: the +5 and space insertion should be customizable
+        // TODO: the +2 should be customizable
 
         wxRect rectText;
-        rectText.x = rectFrame.x + 5;
+        rectText.x = rectFrame.x + 2;
         rectText.y = rect.y;
-        rectText.width = rectFrame.width - 7; // +2 border width
+        rectText.width = rectFrame.width - 4; // +2 border width
         rectText.height = height;
 
-        wxString label2;
-        label2 << _T(' ') << label << _T(' ');
-        if ( indexAccel != -1 )
-        {
-            // adjust it as we prepended a space
-            indexAccel++;
-        }
-
         dc.SetBackgroundMode(wxSOLID);
-        DrawLabel(dc, label2, rectText, flags, alignment, indexAccel);
+        DrawLabel(dc, label, rectText, flags, alignment, indexAccel);
         dc.SetBackgroundMode(wxTRANSPARENT);
+
+        // GTK+ does this - don't know if this is intentional or not
+        dc.SetPen(m_penHighlight);
+        dc.DrawPoint(rectFrame.GetPosition());
+        dc.DrawPoint(rectFrame.x + rectText.width, rectFrame.y);
     }
 }
 
