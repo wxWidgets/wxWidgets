@@ -211,12 +211,14 @@ bool wxDiagramClipboard::CopyToClipboard(double scale)
         // Copy the bitmap to the clipboard
         wxSetClipboardData(wxDF_BITMAP, newBitmap, 0, 0);
 
+#if 0 // TODO: replace this code (wxEnhMetaFile doesn't have SetClipboard)
         if (mf)
         {
             // Copy the metafile to the clipboard
             // Allow a small margin
             bool success = mf->SetClipboard((int)(mfDC.MaxX() + 15), (int)(mfDC.MaxY() + 15));
         }
+#endif
 
         // Close clipboard
         wxCloseClipboard();

@@ -965,7 +965,7 @@ void csCanvas::OnDragLeft(bool draw, double x, double y, int keys)
     wxClientDC dc(this);
     PrepareDC(dc);
 
-    dc.SetLogicalFunction(wxXOR);
+    dc.SetLogicalFunction(OGLRBLF);
     DrawOutline(dc, sg_initialX, sg_initialY, x, y);
 }
 
@@ -977,7 +977,7 @@ void csCanvas::OnBeginDragLeft(double x, double y, int keys)
     wxClientDC dc(this);
     PrepareDC(dc);
 
-    dc.SetLogicalFunction(wxXOR);
+    dc.SetLogicalFunction(OGLRBLF);
     DrawOutline(dc, sg_initialX, sg_initialY, x, y);
     CaptureMouse();
 }

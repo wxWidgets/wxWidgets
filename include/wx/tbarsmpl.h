@@ -155,7 +155,6 @@ protected:
     bool                  m_yScrollingEnabled;
     int                   m_xScrollPosition;
     int                   m_yScrollPosition;
-    bool                  m_calcScrolledOffset; // If TRUE, wxCanvasDC uses scrolled offsets
     int                   m_xScrollLines;
     int                   m_yScrollLines;
     int                   m_xScrollLinesPerPage;

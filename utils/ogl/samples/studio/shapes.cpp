@@ -194,7 +194,7 @@ void csEvtHandler::OnBeginDragRight(double x, double y, int keys, int attachment
   GetShape()->GetCanvas()->PrepareDC(dc);
 
   wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
-  dc.SetLogicalFunction(wxXOR);
+  dc.SetLogicalFunction(OGLRBLF);
   dc.SetPen(dottedPen);
   double xp, yp;
   GetShape()->GetAttachmentPositionEdge(attachment, &xp, &yp);
@@ -208,7 +208,7 @@ void csEvtHandler::OnDragRight(bool draw, double x, double y, int keys, int atta
   GetShape()->GetCanvas()->PrepareDC(dc);
 
   wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
-  dc.SetLogicalFunction(wxXOR);
+  dc.SetLogicalFunction(OGLRBLF);
   dc.SetPen(dottedPen);
   double xp, yp;
   GetShape()->GetAttachmentPositionEdge(attachment, &xp, &yp);
@@ -277,7 +277,7 @@ void csEvtHandler::OnDragLeft(bool draw, double x, double y, int keys, int attac
   wxClientDC dc(GetShape()->GetCanvas());
   GetShape()->GetCanvas()->PrepareDC(dc);
 
-  dc.SetLogicalFunction(wxXOR);
+  dc.SetLogicalFunction(OGLRBLF);
 
   wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
   dc.SetPen(dottedPen);
@@ -346,7 +346,7 @@ void csEvtHandler::OnBeginDragLeft(double x, double y, int keys, int attachment)
   double offsetX = xx - g_DragStartX;
   double offsetY = yy - g_DragStartY;
 
-  dc.SetLogicalFunction(wxXOR);
+  dc.SetLogicalFunction(OGLRBLF);
 
   wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
   dc.SetPen(dottedPen);

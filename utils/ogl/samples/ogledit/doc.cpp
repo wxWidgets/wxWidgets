@@ -495,7 +495,7 @@ void MyEvtHandler::OnBeginDragRight(double x, double y, int keys, int attachment
   GetShape()->GetCanvas()->PrepareDC(dc);
 
   wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
-  dc.SetLogicalFunction(wxXOR);
+  dc.SetLogicalFunction(OGLRBLF);
   dc.SetPen(dottedPen);
   double xp, yp;
   GetShape()->GetAttachmentPosition(attachment, &xp, &yp);
@@ -512,7 +512,7 @@ void MyEvtHandler::OnDragRight(bool draw, double x, double y, int keys, int atta
   GetShape()->GetCanvas()->PrepareDC(dc);
 
   wxPen dottedPen(wxColour(0, 0, 0), 1, wxDOT);
-  dc.SetLogicalFunction(wxXOR);
+  dc.SetLogicalFunction(OGLRBLF);
   dc.SetPen(dottedPen);
   double xp, yp;
   GetShape()->GetAttachmentPosition(attachment, &xp, &yp);

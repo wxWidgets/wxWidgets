@@ -143,6 +143,17 @@ void wxToolBarSimple::Init()
 
     m_defaultWidth = 16;
     m_defaultHeight = 15;
+
+    m_xScrollPixelsPerLine = 1;
+    m_yScrollPixelsPerLine = 1;
+    m_xScrollingEnabled = FALSE;
+    m_yScrollingEnabled = FALSE;
+    m_xScrollPosition = 0;
+    m_yScrollPosition = 0;
+    m_xScrollLines = 0;
+    m_yScrollLines = 0;
+    m_xScrollLinesPerPage = 0;
+    m_yScrollLinesPerPage = 0;
 }
 
 wxToolBarToolBase *wxToolBarSimple::AddTool(int id,
