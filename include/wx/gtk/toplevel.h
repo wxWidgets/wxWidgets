@@ -101,9 +101,6 @@ protected:
     // common part of all ctors
     void Init();
 
-    // focus event handler
-    void OnSetFocus(wxFocusEvent& event);
-
     // override wxWindow methods to take into account tool/menu/statusbars
     virtual void DoSetSize(int x, int y,
                            int width, int height,
@@ -114,8 +111,6 @@ protected:
 
     // is the frame currently iconized?
     bool m_isIconized;
-
-    DECLARE_EVENT_TABLE()
 };
 
 #endif // __GTKTOPLEVELH__

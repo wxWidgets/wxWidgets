@@ -248,10 +248,6 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
 // wxTopLevelWindowGTK itself
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxTopLevelWindowGTK, wxTopLevelWindowBase)
-    EVT_SET_FOCUS(wxTopLevelWindowGTK::OnSetFocus)
-END_EVENT_TABLE()
-
 //-----------------------------------------------------------------------------
 // InsertChild for wxTopLevelWindowGTK
 //-----------------------------------------------------------------------------
@@ -773,19 +769,6 @@ void wxTopLevelWindowGTK::OnInternalIdle()
     }
 
     wxWindow::OnInternalIdle();
-}
-
-void wxTopLevelWindowGTK::OnSetFocus(wxFocusEvent& event)
-{
-#if 0
-    if ( !g_delayedFocus || wxGetTopLevelParent(g_delayedFocus) != this )
-    {
-        // let the base class version set the focus to the first child which
-        // accepts it
-        event.Skip();
-    }
-    //else: the focus will be really set from OnInternalIdle() later
-#endif
 }
 
 // ----------------------------------------------------------------------------
