@@ -2883,9 +2883,9 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
 
     int currentX, currentY;
     GetPosition(&currentX, &currentY);
-    if (x == -1)
+    if (x == -1 && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
         x = currentX;
-    if (y == -1)
+    if (y == -1 && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
         y = currentY;
     AdjustForParentClientOrigin(x, y, sizeFlags);
 
