@@ -160,6 +160,7 @@ GSocket *GSocket_new(void)
   socket->m_timeout.tv_sec  = 10 * 60;  /* 10 minutes */
   socket->m_timeout.tv_usec = 0;
   socket->m_establishing    = FALSE;
+  socket->m_reusable        = FALSE;
 
   /* Per-socket GUI-specific initialization */
   success = _GSocket_GUI_Init_Socket(socket);
@@ -375,7 +376,6 @@ GSocketError GSocket_SetServer(GSocket *sck)
   /* Initialize all fields */
   sck->m_server   = TRUE;
   sck->m_stream   = TRUE;
-  sck->m_oriented = TRUE;
 
   /* Create the socket */
   sck->m_fd = socket(sck->m_local->m_realfamily, SOCK_STREAM, 0);
@@ -388,6 +388,13 @@ GSocketError GSocket_SetServer(GSocket *sck)
 
   ioctlsocket(sck->m_fd, FIONBIO, (u_long FAR *) &arg);
   _GSocket_Enable_Events(sck);
+
+  /* allow a socket to re-bind if the socket is in the TIME_WAIT
+     state after being previously closed.
+   */
+  if (sck->m_reusable) {
+    setsockopt(sck->m_fd, SOL_SOCKET, SO_REUSEADDR, (const char*)&arg, sizeof(u_long));
+  }
 
   /* Bind to the local address,
    * retrieve the actual address bound,
@@ -472,7 +479,6 @@ GSocket *GSocket_WaitConnection(GSocket *sck)
   /* Initialize all fields */
   connection->m_server   = FALSE;
   connection->m_stream   = TRUE;
-  connection->m_oriented = TRUE;
 
   /* Setup the peer address field */
   connection->m_peer = GAddress_new();
@@ -495,6 +501,24 @@ GSocket *GSocket_WaitConnection(GSocket *sck)
   _GSocket_Enable_Events(connection);
 
   return connection;
+}
+
+/* GSocket_SetReusable:
+*  Simply sets the m_resuable flag on the socket. GSocket_SetServer will
+*  make the appropriate setsockopt() call.
+*  Implemented as a GSocket function because clients (ie, wxSocketServer)
+*  don't have access to the GSocket struct information.
+*  Returns TRUE if the flag was set correctly, FALSE if an error occured
+*  (ie, if the parameter was NULL)
+*/
+int GSocket_SetReusable(GSocket *socket)
+{
+    /* socket must not be null, and must not be in use/already bound */
+    if (NULL != socket && socket->m_fd == INVALID_SOCKET) {
+        socket->m_reusable = TRUE;
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /* Client specific parts */
@@ -546,7 +570,6 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
 
   /* Streamed or dgram socket? */
   sck->m_stream   = (stream == GSOCK_STREAMED);
-  sck->m_oriented = TRUE;
   sck->m_server   = FALSE;
   sck->m_establishing = FALSE;
 
@@ -646,7 +669,6 @@ GSocketError GSocket_SetNonOriented(GSocket *sck)
   /* Initialize all fields */
   sck->m_stream   = FALSE;
   sck->m_server   = FALSE;
-  sck->m_oriented = FALSE;
 
   /* Create the socket */
   sck->m_fd = socket(sck->m_local->m_realfamily, SOCK_DGRAM, 0);
@@ -1003,25 +1025,6 @@ GSocketError GSocket_SetSockOpt(GSocket *socket, int level, int optname,
         return GSOCK_NOERROR;
     }
     return GSOCK_OPTERR;
-}
-
-GSocketError GSocket_SetReuseAddr(GSocket *socket)
-{
-  /* allow a socket to re-bind if the socket is in the TIME_WAIT
-     state after being previously closed.
-   */
-  u_long arg = 1;
-  setsockopt(socket->m_fd, SOL_SOCKET, SO_REUSEADDR, (const char*)&arg, sizeof(u_long));
-}
-
-void GSocket_Streamed(GSocket *socket)
-{
-    socket->m_stream = TRUE;
-}
-
-void GSocket_Unstreamed(GSocket *socket)
-{
-    socket->m_stream = FALSE;
 }
 
 /* Internals (IO) */
