@@ -1,3 +1,4 @@
+/* Version: $Id$ */
  %{
 #include "wx/setup.h"
 #include <string.h>
