@@ -365,6 +365,11 @@ bool wxDialog_IsModalShowing(wxDialog *self){
         }
 
 
+wxRect wxStatusBar_GetFieldRect(wxStatusBar *self,int i){
+            wxRect r;
+            self->GetFieldRect(i, r);
+            return r;
+        }
 
     static const wxChar* wxSplitterNameStr = wxT("splitter");
     DECLARE_DEF_STRING(SplitterNameStr);
@@ -1668,6 +1673,39 @@ static PyObject *_wrap_ScrolledWindow_GetScaleY(PyObject *self, PyObject *args, 
 static PyObject *_wrap_ScrolledWindow_CalcScrolledPosition__SWIG_0(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxScrolledWindow *arg1 = (wxScrolledWindow *) 0 ;
+    wxPoint *arg2 = 0 ;
+    wxPoint result;
+    wxPoint temp2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"OO:ScrolledWindow_CalcScrolledPosition",&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxScrolledWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxPoint_helper(obj1, &arg2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxScrolledWindow const *)arg1)->CalcScrolledPosition((wxPoint const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxPoint * resultptr;
+        resultptr = new wxPoint((wxPoint &) result);
+        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxPoint, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ScrolledWindow_CalcScrolledPosition__SWIG_1(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    wxScrolledWindow *arg1 = (wxScrolledWindow *) 0 ;
     int arg2 ;
     int arg3 ;
     int *arg4 = (int *) 0 ;
@@ -1702,39 +1740,6 @@ static PyObject *_wrap_ScrolledWindow_CalcScrolledPosition__SWIG_0(PyObject *sel
 }
 
 
-static PyObject *_wrap_ScrolledWindow_CalcScrolledPosition__SWIG_1(PyObject *self, PyObject *args) {
-    PyObject *resultobj;
-    wxScrolledWindow *arg1 = (wxScrolledWindow *) 0 ;
-    wxPoint *arg2 = 0 ;
-    wxPoint result;
-    wxPoint temp2 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    
-    if(!PyArg_ParseTuple(args,(char *)"OO:ScrolledWindow_CalcScrolledPosition",&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxScrolledWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        arg2 = &temp2;
-        if ( ! wxPoint_helper(obj1, &arg2)) SWIG_fail;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = ((wxScrolledWindow const *)arg1)->CalcScrolledPosition((wxPoint const &)*arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-        wxPoint * resultptr;
-        resultptr = new wxPoint((wxPoint &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxPoint, 1);
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject *_wrap_ScrolledWindow_CalcScrolledPosition(PyObject *self, PyObject *args) {
     int argc;
     PyObject *argv[4];
@@ -1760,7 +1765,7 @@ static PyObject *_wrap_ScrolledWindow_CalcScrolledPosition(PyObject *self, PyObj
                 _v = wxPySimple_typecheck(argv[1], wxT("wxPoint"), 2);
             }
             if (_v) {
-                return _wrap_ScrolledWindow_CalcScrolledPosition__SWIG_1(self,args);
+                return _wrap_ScrolledWindow_CalcScrolledPosition__SWIG_0(self,args);
             }
         }
     }
@@ -1784,7 +1789,7 @@ static PyObject *_wrap_ScrolledWindow_CalcScrolledPosition(PyObject *self, PyObj
                     _v = (PyInt_Check(argv[2]) || PyLong_Check(argv[2])) ? 1 : 0;
                 }
                 if (_v) {
-                    return _wrap_ScrolledWindow_CalcScrolledPosition__SWIG_0(self,args);
+                    return _wrap_ScrolledWindow_CalcScrolledPosition__SWIG_1(self,args);
                 }
             }
         }
@@ -1796,6 +1801,39 @@ static PyObject *_wrap_ScrolledWindow_CalcScrolledPosition(PyObject *self, PyObj
 
 
 static PyObject *_wrap_ScrolledWindow_CalcUnscrolledPosition__SWIG_0(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    wxScrolledWindow *arg1 = (wxScrolledWindow *) 0 ;
+    wxPoint *arg2 = 0 ;
+    wxPoint result;
+    wxPoint temp2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"OO:ScrolledWindow_CalcUnscrolledPosition",&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxScrolledWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxPoint_helper(obj1, &arg2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxScrolledWindow const *)arg1)->CalcUnscrolledPosition((wxPoint const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxPoint * resultptr;
+        resultptr = new wxPoint((wxPoint &) result);
+        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxPoint, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ScrolledWindow_CalcUnscrolledPosition__SWIG_1(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxScrolledWindow *arg1 = (wxScrolledWindow *) 0 ;
     int arg2 ;
@@ -1832,39 +1870,6 @@ static PyObject *_wrap_ScrolledWindow_CalcUnscrolledPosition__SWIG_0(PyObject *s
 }
 
 
-static PyObject *_wrap_ScrolledWindow_CalcUnscrolledPosition__SWIG_1(PyObject *self, PyObject *args) {
-    PyObject *resultobj;
-    wxScrolledWindow *arg1 = (wxScrolledWindow *) 0 ;
-    wxPoint *arg2 = 0 ;
-    wxPoint result;
-    wxPoint temp2 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    
-    if(!PyArg_ParseTuple(args,(char *)"OO:ScrolledWindow_CalcUnscrolledPosition",&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxScrolledWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        arg2 = &temp2;
-        if ( ! wxPoint_helper(obj1, &arg2)) SWIG_fail;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = ((wxScrolledWindow const *)arg1)->CalcUnscrolledPosition((wxPoint const &)*arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-        wxPoint * resultptr;
-        resultptr = new wxPoint((wxPoint &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxPoint, 1);
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject *_wrap_ScrolledWindow_CalcUnscrolledPosition(PyObject *self, PyObject *args) {
     int argc;
     PyObject *argv[4];
@@ -1890,7 +1895,7 @@ static PyObject *_wrap_ScrolledWindow_CalcUnscrolledPosition(PyObject *self, PyO
                 _v = wxPySimple_typecheck(argv[1], wxT("wxPoint"), 2);
             }
             if (_v) {
-                return _wrap_ScrolledWindow_CalcUnscrolledPosition__SWIG_1(self,args);
+                return _wrap_ScrolledWindow_CalcUnscrolledPosition__SWIG_0(self,args);
             }
         }
     }
@@ -1914,7 +1919,7 @@ static PyObject *_wrap_ScrolledWindow_CalcUnscrolledPosition(PyObject *self, PyO
                     _v = (PyInt_Check(argv[2]) || PyLong_Check(argv[2])) ? 1 : 0;
                 }
                 if (_v) {
-                    return _wrap_ScrolledWindow_CalcUnscrolledPosition__SWIG_0(self,args);
+                    return _wrap_ScrolledWindow_CalcUnscrolledPosition__SWIG_1(self,args);
                 }
             }
         }
@@ -4908,29 +4913,26 @@ static PyObject *_wrap_StatusBar_GetFieldRect(PyObject *self, PyObject *args, Py
     PyObject *resultobj;
     wxStatusBar *arg1 = (wxStatusBar *) 0 ;
     int arg2 ;
-    wxRect *arg3 = 0 ;
-    bool result;
-    wxRect temp3 ;
+    wxRect result;
     PyObject * obj0 = 0 ;
-    PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "i",(char *) "rect", NULL 
+        (char *) "self",(char *) "i", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO:StatusBar_GetFieldRect",kwnames,&obj0,&arg2,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:StatusBar_GetFieldRect",kwnames,&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxStatusBar,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
-        arg3 = &temp3;
-        if ( ! wxRect_helper(obj2, &arg3)) SWIG_fail;
-    }
-    {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxStatusBar const *)arg1)->GetFieldRect(arg2,*arg3);
+        result = wxStatusBar_GetFieldRect(arg1,arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    {
+        wxRect * resultptr;
+        resultptr = new wxRect((wxRect &) result);
+        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxRect, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -18685,6 +18687,32 @@ static PyObject *_wrap_Printout_SetDC(PyObject *self, PyObject *args, PyObject *
 }
 
 
+static PyObject *_wrap_Printout_SetPageSizePixels(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
+    int arg2 ;
+    int arg3 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "w",(char *) "h", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oii:Printout_SetPageSizePixels",kwnames,&obj0,&arg2,&arg3)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyPrintout,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetPageSizePixels(arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Printout_GetPageSizePixels(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
@@ -18717,32 +18745,6 @@ static PyObject *_wrap_Printout_GetPageSizePixels(PyObject *self, PyObject *args
         PyObject *o = PyInt_FromLong((long) (*arg3));
         resultobj = t_output_helper(resultobj,o);
     }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_Printout_SetPageSizePixels(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
-    int arg2 ;
-    int arg3 ;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "w",(char *) "h", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oii:Printout_SetPageSizePixels",kwnames,&obj0,&arg2,&arg3)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyPrintout,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetPageSizePixels(arg2,arg3);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
     return resultobj;
     fail:
     return NULL;
@@ -19117,6 +19119,32 @@ static PyObject *_wrap_Printout_base_OnPreparePrinting(PyObject *self, PyObject 
 }
 
 
+static PyObject *_wrap_Printout_base_HasPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
+    int arg2 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "page", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:Printout_base_HasPage",kwnames,&obj0,&arg2)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyPrintout,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->base_HasPage(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = PyInt_FromLong((long)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Printout_base_GetPageInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
@@ -19163,32 +19191,6 @@ static PyObject *_wrap_Printout_base_GetPageInfo(PyObject *self, PyObject *args,
         PyObject *o = PyInt_FromLong((long) (*arg5));
         resultobj = t_output_helper(resultobj,o);
     }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_Printout_base_HasPage(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPyPrintout *arg1 = (wxPyPrintout *) 0 ;
-    int arg2 ;
-    bool result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "page", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:Printout_base_HasPage",kwnames,&obj0,&arg2)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyPrintout,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->base_HasPage(arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -21668,8 +21670,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Printout_GetTitle", (PyCFunction) _wrap_Printout_GetTitle, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Printout_GetDC", (PyCFunction) _wrap_Printout_GetDC, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Printout_SetDC", (PyCFunction) _wrap_Printout_SetDC, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"Printout_GetPageSizePixels", (PyCFunction) _wrap_Printout_GetPageSizePixels, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Printout_SetPageSizePixels", (PyCFunction) _wrap_Printout_SetPageSizePixels, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Printout_GetPageSizePixels", (PyCFunction) _wrap_Printout_GetPageSizePixels, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Printout_SetPageSizeMM", (PyCFunction) _wrap_Printout_SetPageSizeMM, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Printout_GetPageSizeMM", (PyCFunction) _wrap_Printout_GetPageSizeMM, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Printout_SetPPIScreen", (PyCFunction) _wrap_Printout_SetPPIScreen, METH_VARARGS | METH_KEYWORDS },
@@ -21683,8 +21685,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Printout_base_OnBeginPrinting", (PyCFunction) _wrap_Printout_base_OnBeginPrinting, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Printout_base_OnEndPrinting", (PyCFunction) _wrap_Printout_base_OnEndPrinting, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Printout_base_OnPreparePrinting", (PyCFunction) _wrap_Printout_base_OnPreparePrinting, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"Printout_base_GetPageInfo", (PyCFunction) _wrap_Printout_base_GetPageInfo, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Printout_base_HasPage", (PyCFunction) _wrap_Printout_base_HasPage, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Printout_base_GetPageInfo", (PyCFunction) _wrap_Printout_base_GetPageInfo, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Printout_swigregister", Printout_swigregister, METH_VARARGS },
 	 { (char *)"new_PreviewCanvas", (PyCFunction) _wrap_new_PreviewCanvas, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"PreviewCanvas_swigregister", PreviewCanvas_swigregister, METH_VARARGS },

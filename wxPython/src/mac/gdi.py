@@ -146,13 +146,14 @@ class Palette(GDIObject):
         return _gdi.Palette_GetPixel(*args, **kwargs)
 
     def GetRGB(*args, **kwargs):
-        """GetRGB(int pixel, byte OUTPUT, byte OUTPUT, byte OUTPUT) -> bool"""
+        """GetRGB(int pixel) -> (R,G,B)"""
         return _gdi.Palette_GetRGB(*args, **kwargs)
 
     def Ok(*args, **kwargs):
         """Ok() -> bool"""
         return _gdi.Palette_Ok(*args, **kwargs)
 
+    def __nonzero__(self): return self.Ok() 
 
 class PalettePtr(Palette):
     def __init__(self, this):
@@ -2231,7 +2232,7 @@ class DC(core.Object):
         return _gdi.DC_DestroyClippingRegion(*args, **kwargs)
 
     def GetClippingBox(*args, **kwargs):
-        """GetClippingBox(int OUTPUT, int OUTPUT, int OUTPUT, int OUTPUT)"""
+        """GetClippingBox() -> (x, y, width, height)"""
         return _gdi.DC_GetClippingBox(*args, **kwargs)
 
     def GetClippingRect(*args, **kwargs):
@@ -2247,34 +2248,51 @@ class DC(core.Object):
         return _gdi.DC_GetCharWidth(*args, **kwargs)
 
     def GetTextExtent(*args, **kwargs):
-        """GetTextExtent(wxString string, int OUTPUT, int OUTPUT)"""
+        """GetTextExtent(wxString string) -> (width, height)
+
+Get the width and height of the text using the current font.
+Only works for single line strings."""
         return _gdi.DC_GetTextExtent(*args, **kwargs)
 
     def GetFullTextExtent(*args, **kwargs):
-        """GetFullTextExtent(wxString string, int OUTPUT, int OUTPUT, int OUTPUT, 
-    int OUTPUT, Font font=None)"""
+        """GetFullTextExtent(wxString string, Font font=None) ->
+   (width, height, descent, externalLeading)
+
+Get the width, height, decent and leading of the text using the current or specified font.
+Only works for single line strings."""
         return _gdi.DC_GetFullTextExtent(*args, **kwargs)
 
     def GetMultiLineTextExtent(*args, **kwargs):
-        """GetMultiLineTextExtent(wxString text, int OUTPUT, int OUTPUT, int OUTPUT, 
-    Font font=None)"""
+        """GetMultiLineTextExtent(wxString string, Font font=None) ->
+   (width, height, descent, externalLeading)
+
+Get the width, height, decent and leading of the text using the current or specified font.
+Works for single as well as multi-line strings."""
         return _gdi.DC_GetMultiLineTextExtent(*args, **kwargs)
 
-    def GetSizeTuple(*args, **kwargs):
-        """GetSizeTuple(int OUTPUT, int OUTPUT)"""
-        return _gdi.DC_GetSizeTuple(*args, **kwargs)
-
     def GetSize(*args, **kwargs):
-        """GetSize() -> Size"""
+        """GetSize() -> Size
+
+Get the DC size in device units."""
         return _gdi.DC_GetSize(*args, **kwargs)
 
-    def GetSizeMMWH(*args, **kwargs):
-        """GetSizeMMWH(int OUTPUT, int OUTPUT)"""
-        return _gdi.DC_GetSizeMMWH(*args, **kwargs)
+    def GetSizeTuple(*args, **kwargs):
+        """GetSizeTuple() -> (width, height)
+
+Get the DC size in device units."""
+        return _gdi.DC_GetSizeTuple(*args, **kwargs)
 
     def GetSizeMM(*args, **kwargs):
-        """GetSizeMM() -> Size"""
+        """GetSizeMM() -> Size
+
+Get the DC size in milimeters."""
         return _gdi.DC_GetSizeMM(*args, **kwargs)
+
+    def GetSizeMMTuple(*args, **kwargs):
+        """GetSizeMMTuple() -> (width, height)
+
+Get the DC size in milimeters."""
+        return _gdi.DC_GetSizeMMTuple(*args, **kwargs)
 
     def DeviceToLogicalX(*args, **kwargs):
         """DeviceToLogicalX(int x) -> int"""
@@ -2373,7 +2391,7 @@ class DC(core.Object):
         return _gdi.DC_SetMapMode(*args, **kwargs)
 
     def GetUserScale(*args, **kwargs):
-        """GetUserScale(double OUTPUT, double OUTPUT)"""
+        """GetUserScale() -> (xScale, yScale)"""
         return _gdi.DC_GetUserScale(*args, **kwargs)
 
     def SetUserScale(*args, **kwargs):
@@ -2381,32 +2399,32 @@ class DC(core.Object):
         return _gdi.DC_SetUserScale(*args, **kwargs)
 
     def GetLogicalScale(*args, **kwargs):
-        """GetLogicalScale(double OUTPUT, double OUTPUT)"""
+        """GetLogicalScale() -> (xScale, yScale)"""
         return _gdi.DC_GetLogicalScale(*args, **kwargs)
 
     def SetLogicalScale(*args, **kwargs):
         """SetLogicalScale(double x, double y)"""
         return _gdi.DC_SetLogicalScale(*args, **kwargs)
 
-    def GetLogicalOriginTuple(*args, **kwargs):
-        """GetLogicalOriginTuple(int OUTPUT, int OUTPUT)"""
-        return _gdi.DC_GetLogicalOriginTuple(*args, **kwargs)
-
     def GetLogicalOrigin(*args, **kwargs):
         """GetLogicalOrigin() -> Point"""
         return _gdi.DC_GetLogicalOrigin(*args, **kwargs)
+
+    def GetLogicalOriginTuple(*args, **kwargs):
+        """GetLogicalOriginTuple() -> (x,y)"""
+        return _gdi.DC_GetLogicalOriginTuple(*args, **kwargs)
 
     def SetLogicalOrigin(*args, **kwargs):
         """SetLogicalOrigin(int x, int y)"""
         return _gdi.DC_SetLogicalOrigin(*args, **kwargs)
 
-    def GetDeviceOriginTuple(*args, **kwargs):
-        """GetDeviceOriginTuple(int OUTPUT, int OUTPUT)"""
-        return _gdi.DC_GetDeviceOriginTuple(*args, **kwargs)
-
     def GetDeviceOrigin(*args, **kwargs):
         """GetDeviceOrigin() -> Point"""
         return _gdi.DC_GetDeviceOrigin(*args, **kwargs)
+
+    def GetDeviceOriginTuple(*args, **kwargs):
+        """GetDeviceOriginTuple() -> (x,y)"""
+        return _gdi.DC_GetDeviceOriginTuple(*args, **kwargs)
 
     def SetDeviceOrigin(*args, **kwargs):
         """SetDeviceOrigin(int x, int y)"""
@@ -2457,7 +2475,7 @@ class DC(core.Object):
         return _gdi.DC_MaxY(*args, **kwargs)
 
     def GetBoundingBox(*args, **kwargs):
-        """GetBoundingBox(int OUTPUT, int OUTPUT, int OUTPUT, int OUTPUT)"""
+        """GetBoundingBox() -> (x1,y1, x2,y2)"""
         return _gdi.DC_GetBoundingBox(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
@@ -2941,7 +2959,7 @@ class ImageList(core.Object):
         return _gdi.ImageList_RemoveAll(*args, **kwargs)
 
     def GetSize(*args, **kwargs):
-        """GetSize(int index, int OUTPUT, int OUTPUT)"""
+        """GetSize() -> (width,height)"""
         return _gdi.ImageList_GetSize(*args, **kwargs)
 
 

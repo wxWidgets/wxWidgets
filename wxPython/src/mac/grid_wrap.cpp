@@ -3151,18 +3151,22 @@ static PyObject *_wrap_new_GridCellChoiceEditor(PyObject *self, PyObject *args, 
     wxString *arg2 = (wxString *) NULL ;
     bool arg3 = (bool) False ;
     wxGridCellChoiceEditor *result;
+    PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
-    PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "LCOUNT",(char *) "choices",(char *) "allowOthers", NULL 
+        (char *) "choices",(char *) "allowOthers", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|iOO:new_GridCellChoiceEditor",kwnames,&arg1,&obj1,&obj2)) goto fail;
-    if (obj1) {
-        if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OO:new_GridCellChoiceEditor",kwnames,&obj0,&obj1)) goto fail;
+    if (obj0) {
+        {
+            arg1 = PyList_Size(obj0);
+            arg2 = wxString_LIST_helper(obj0);
+            if (arg2 == NULL) SWIG_fail;
+        }
     }
-    if (obj2) {
-        arg3 = PyInt_AsLong(obj2) ? true : false;
+    if (obj1) {
+        arg3 = PyInt_AsLong(obj1) ? true : false;
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
@@ -3173,8 +3177,14 @@ static PyObject *_wrap_new_GridCellChoiceEditor(PyObject *self, PyObject *args, 
         if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxGridCellChoiceEditor, 1);
+    {
+        if (arg2) delete [] arg2;
+    }
     return resultobj;
     fail:
+    {
+        if (arg2) delete [] arg2;
+    }
     return NULL;
 }
 

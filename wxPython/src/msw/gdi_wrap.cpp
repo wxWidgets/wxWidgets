@@ -11781,44 +11781,6 @@ static PyObject *_wrap_DC_GetMultiLineTextExtent(PyObject *self, PyObject *args,
 }
 
 
-static PyObject *_wrap_DC_GetSizeTuple(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxDC *arg1 = (wxDC *) 0 ;
-    int *arg2 = (int *) 0 ;
-    int *arg3 = (int *) 0 ;
-    int temp2 ;
-    int temp3 ;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    arg2 = &temp2;
-    arg3 = &temp3;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:DC_GetSizeTuple",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDC,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->GetSize(arg2,arg3);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    {
-        PyObject *o = PyInt_FromLong((long) (*arg2));
-        resultobj = t_output_helper(resultobj,o);
-    }
-    {
-        PyObject *o = PyInt_FromLong((long) (*arg3));
-        resultobj = t_output_helper(resultobj,o);
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject *_wrap_DC_GetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDC *arg1 = (wxDC *) 0 ;
@@ -11848,7 +11810,7 @@ static PyObject *_wrap_DC_GetSize(PyObject *self, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_DC_GetSizeMMWH(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_DC_GetSizeTuple(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDC *arg1 = (wxDC *) 0 ;
     int *arg2 = (int *) 0 ;
@@ -11862,11 +11824,11 @@ static PyObject *_wrap_DC_GetSizeMMWH(PyObject *self, PyObject *args, PyObject *
     
     arg2 = &temp2;
     arg3 = &temp3;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:DC_GetSizeMMWH",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:DC_GetSizeTuple",kwnames,&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDC,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        ((wxDC const *)arg1)->GetSizeMM(arg2,arg3);
+        (arg1)->GetSize(arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -11908,6 +11870,44 @@ static PyObject *_wrap_DC_GetSizeMM(PyObject *self, PyObject *args, PyObject *kw
         wxSize * resultptr;
         resultptr = new wxSize((wxSize &) result);
         resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxSize, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_DC_GetSizeMMTuple(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxDC *arg1 = (wxDC *) 0 ;
+    int *arg2 = (int *) 0 ;
+    int *arg3 = (int *) 0 ;
+    int temp2 ;
+    int temp3 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    arg2 = &temp2;
+    arg3 = &temp3;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:DC_GetSizeMMTuple",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDC,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        ((wxDC const *)arg1)->GetSizeMM(arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    {
+        PyObject *o = PyInt_FromLong((long) (*arg2));
+        resultobj = t_output_helper(resultobj,o);
+    }
+    {
+        PyObject *o = PyInt_FromLong((long) (*arg3));
+        resultobj = t_output_helper(resultobj,o);
     }
     return resultobj;
     fail:
@@ -12685,6 +12685,35 @@ static PyObject *_wrap_DC_SetLogicalScale(PyObject *self, PyObject *args, PyObje
 }
 
 
+static PyObject *_wrap_DC_GetLogicalOrigin(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxDC *arg1 = (wxDC *) 0 ;
+    wxPoint result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:DC_GetLogicalOrigin",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDC,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxDC const *)arg1)->GetLogicalOrigin();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxPoint * resultptr;
+        resultptr = new wxPoint((wxPoint &) result);
+        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxPoint, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_DC_GetLogicalOriginTuple(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDC *arg1 = (wxDC *) 0 ;
@@ -12723,35 +12752,6 @@ static PyObject *_wrap_DC_GetLogicalOriginTuple(PyObject *self, PyObject *args, 
 }
 
 
-static PyObject *_wrap_DC_GetLogicalOrigin(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxDC *arg1 = (wxDC *) 0 ;
-    wxPoint result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:DC_GetLogicalOrigin",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDC,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = ((wxDC const *)arg1)->GetLogicalOrigin();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-        wxPoint * resultptr;
-        resultptr = new wxPoint((wxPoint &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxPoint, 1);
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject *_wrap_DC_SetLogicalOrigin(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDC *arg1 = (wxDC *) 0 ;
@@ -12772,6 +12772,35 @@ static PyObject *_wrap_DC_SetLogicalOrigin(PyObject *self, PyObject *args, PyObj
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_DC_GetDeviceOrigin(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxDC *arg1 = (wxDC *) 0 ;
+    wxPoint result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:DC_GetDeviceOrigin",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDC,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxDC const *)arg1)->GetDeviceOrigin();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxPoint * resultptr;
+        resultptr = new wxPoint((wxPoint &) result);
+        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxPoint, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -12809,35 +12838,6 @@ static PyObject *_wrap_DC_GetDeviceOriginTuple(PyObject *self, PyObject *args, P
     {
         PyObject *o = PyInt_FromLong((long) (*arg3));
         resultobj = t_output_helper(resultobj,o);
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_DC_GetDeviceOrigin(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxDC *arg1 = (wxDC *) 0 ;
-    wxPoint result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:DC_GetDeviceOrigin",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDC,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = ((wxDC const *)arg1)->GetDeviceOrigin();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-        wxPoint * resultptr;
-        resultptr = new wxPoint((wxPoint &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxPoint, 1);
     }
     return resultobj;
     fail:
@@ -16856,10 +16856,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DC_GetTextExtent", (PyCFunction) _wrap_DC_GetTextExtent, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DC_GetFullTextExtent", (PyCFunction) _wrap_DC_GetFullTextExtent, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DC_GetMultiLineTextExtent", (PyCFunction) _wrap_DC_GetMultiLineTextExtent, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"DC_GetSizeTuple", (PyCFunction) _wrap_DC_GetSizeTuple, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DC_GetSize", (PyCFunction) _wrap_DC_GetSize, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"DC_GetSizeMMWH", (PyCFunction) _wrap_DC_GetSizeMMWH, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"DC_GetSizeTuple", (PyCFunction) _wrap_DC_GetSizeTuple, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DC_GetSizeMM", (PyCFunction) _wrap_DC_GetSizeMM, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"DC_GetSizeMMTuple", (PyCFunction) _wrap_DC_GetSizeMMTuple, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DC_DeviceToLogicalX", (PyCFunction) _wrap_DC_DeviceToLogicalX, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DC_DeviceToLogicalY", (PyCFunction) _wrap_DC_DeviceToLogicalY, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DC_DeviceToLogicalXRel", (PyCFunction) _wrap_DC_DeviceToLogicalXRel, METH_VARARGS | METH_KEYWORDS },
@@ -16888,11 +16888,11 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DC_SetUserScale", (PyCFunction) _wrap_DC_SetUserScale, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DC_GetLogicalScale", (PyCFunction) _wrap_DC_GetLogicalScale, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DC_SetLogicalScale", (PyCFunction) _wrap_DC_SetLogicalScale, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"DC_GetLogicalOriginTuple", (PyCFunction) _wrap_DC_GetLogicalOriginTuple, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DC_GetLogicalOrigin", (PyCFunction) _wrap_DC_GetLogicalOrigin, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"DC_GetLogicalOriginTuple", (PyCFunction) _wrap_DC_GetLogicalOriginTuple, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DC_SetLogicalOrigin", (PyCFunction) _wrap_DC_SetLogicalOrigin, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"DC_GetDeviceOriginTuple", (PyCFunction) _wrap_DC_GetDeviceOriginTuple, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DC_GetDeviceOrigin", (PyCFunction) _wrap_DC_GetDeviceOrigin, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"DC_GetDeviceOriginTuple", (PyCFunction) _wrap_DC_GetDeviceOriginTuple, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DC_SetDeviceOrigin", (PyCFunction) _wrap_DC_SetDeviceOrigin, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DC_SetAxisOrientation", (PyCFunction) _wrap_DC_SetAxisOrientation, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DC_GetLogicalFunction", (PyCFunction) _wrap_DC_GetLogicalFunction, METH_VARARGS | METH_KEYWORDS },
@@ -17939,5 +17939,9 @@ SWIGEXPORT(void) SWIG_init(void) {
     SWIG_addvarlink(SWIG_globals,(char*)"ThePenList",_wrap_ThePenList_get, _wrap_ThePenList_set);
     SWIG_addvarlink(SWIG_globals,(char*)"TheBrushList",_wrap_TheBrushList_get, _wrap_TheBrushList_set);
     SWIG_addvarlink(SWIG_globals,(char*)"TheColourDatabase",_wrap_TheColourDatabase_get, _wrap_TheColourDatabase_set);
+    
+    // Work around a chicken/egg problem in drawlist.cpp
+    wxPyDrawList_SetAPIPtr();
+    
 }
 

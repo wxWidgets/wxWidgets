@@ -993,7 +993,9 @@ class TextCtrl(core.Control):
         return _controls.TextCtrl_IsMultiLine(*args, **kwargs)
 
     def GetSelection(*args, **kwargs):
-        """GetSelection(long OUTPUT, long OUTPUT)"""
+        """GetSelection() -> (from, to)
+
+If the return values from and to are the same, there is no selection."""
         return _controls.TextCtrl_GetSelection(*args, **kwargs)
 
     def GetStringSelection(*args, **kwargs):
@@ -1065,7 +1067,7 @@ class TextCtrl(core.Control):
         return _controls.TextCtrl_XYToPosition(*args, **kwargs)
 
     def PositionToXY(*args, **kwargs):
-        """PositionToXY(long pos, long OUTPUT, long OUTPUT)"""
+        """PositionToXY(long pos) -> (x, y)"""
         return _controls.TextCtrl_PositionToXY(*args, **kwargs)
 
     def ShowPosition(*args, **kwargs):
@@ -1874,7 +1876,9 @@ class Notebook(BookCtrl):
         return _controls.Notebook_SetTabSize(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
-        """HitTest(Point pt, long OUTPUT) -> int"""
+        """HitTest(Point pt) -> (tab, where)
+
+Returns the tab which is hit, and flags indicating where using wxNB_HITTEST_ flags."""
         return _controls.Notebook_HitTest(*args, **kwargs)
 
     def CalcSizeFromPage(*args, **kwargs):
@@ -3220,7 +3224,10 @@ class ListCtrl(core.Control):
         return _controls.ListCtrl_FindItemAtPos(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
-        """HitTest(Point point, int OUTPUT) -> long"""
+        """HitTest(Point point) -> (item, where)
+
+Determines which item (if any) is at the specified point,
+giving details in the second return value (see wxLIST_HITTEST_... flags.)"""
         return _controls.ListCtrl_HitTest(*args, **kwargs)
 
     def InsertItem(*args, **kwargs):
@@ -3949,7 +3956,13 @@ class TreeCtrl(core.Control):
         return _controls.TreeCtrl_SortChildren(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
-        """HitTest(Point point, int OUTPUT) -> TreeItemId"""
+        """HitTest(Point point) -> (item, where)
+
+Determine which item (if any) belongs the given point.  The
+coordinates specified are relative to the client area of tree ctrl
+and the where return value is set to a bitmask of wxTREE_HITTEST_xxx
+constants.
+"""
         return _controls.TreeCtrl_HitTest(*args, **kwargs)
 
     def GetBoundingRect(*args, **kwargs):
@@ -4062,7 +4075,12 @@ class GenericDirCtrl(core.Control):
         return _controls.GenericDirCtrl_GetFilterListCtrl(*args, **kwargs)
 
     def FindChild(*args, **kwargs):
-        """FindChild(TreeItemId parentId, wxString path, bool OUTPUT) -> TreeItemId"""
+        """FindChild(wxTreeItemId parentId, wxString path) -> (item, done)
+
+Find the child that matches the first part of 'path'.  E.g. if a child path is
+"/usr" and 'path' is "/usr/include" then the child for /usr is returned.
+If the path string has been used (we're at the leaf), done is set to True
+"""
         return _controls.GenericDirCtrl_FindChild(*args, **kwargs)
 
     def DoResize(*args, **kwargs):
@@ -4160,15 +4178,15 @@ class PyControl(core.Control):
         return _controls.PyControl_base_DoSetVirtualSize(*args, **kwargs)
 
     def base_DoGetSize(*args, **kwargs):
-        """base_DoGetSize(int OUTPUT, int OUTPUT)"""
+        """base_DoGetSize() -> (width, height)"""
         return _controls.PyControl_base_DoGetSize(*args, **kwargs)
 
     def base_DoGetClientSize(*args, **kwargs):
-        """base_DoGetClientSize(int OUTPUT, int OUTPUT)"""
+        """base_DoGetClientSize() -> (width, height)"""
         return _controls.PyControl_base_DoGetClientSize(*args, **kwargs)
 
     def base_DoGetPosition(*args, **kwargs):
-        """base_DoGetPosition(int OUTPUT, int OUTPUT)"""
+        """base_DoGetPosition() -> (x,y)"""
         return _controls.PyControl_base_DoGetPosition(*args, **kwargs)
 
     def base_DoGetVirtualSize(*args, **kwargs):

@@ -506,7 +506,7 @@ class GridCellChoiceEditor(GridCellEditor):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellChoiceEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(int LCOUNT=0, wxString choices=None, bool allowOthers=False) -> GridCellChoiceEditor"""
+        """__init__(int choices=0, wxString choices_array=None, bool allowOthers=False) -> GridCellChoiceEditor"""
         newobj = _grid.new_GridCellChoiceEditor(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -696,11 +696,11 @@ class GridCellAttr(object):
         return _grid.GridCellAttr_GetFont(*args, **kwargs)
 
     def GetAlignment(*args, **kwargs):
-        """GetAlignment(int OUTPUT, int OUTPUT)"""
+        """GetAlignment() -> (hAlign, vAlign)"""
         return _grid.GridCellAttr_GetAlignment(*args, **kwargs)
 
     def GetSize(*args, **kwargs):
-        """GetSize(int OUTPUT, int OUTPUT)"""
+        """GetSize() -> (num_rows, num_cols)"""
         return _grid.GridCellAttr_GetSize(*args, **kwargs)
 
     def GetOverflow(*args, **kwargs):
@@ -1314,7 +1314,7 @@ class Grid(windows.ScrolledWindow):
         return _grid.Grid_DrawTextRectangle(*args, **kwargs)
 
     def GetTextBoxSize(*args, **kwargs):
-        """GetTextBoxSize(wxDC dc, wxArrayString lines, long OUTPUT, long OUTPUT)"""
+        """GetTextBoxSize(DC dc, list lines) -> (width, height)"""
         return _grid.Grid_GetTextBoxSize(*args, **kwargs)
 
     def BeginBatch(*args, **kwargs):
@@ -1494,11 +1494,11 @@ class Grid(windows.ScrolledWindow):
         return _grid.Grid_GetLabelFont(*args, **kwargs)
 
     def GetRowLabelAlignment(*args, **kwargs):
-        """GetRowLabelAlignment(int OUTPUT, int OUTPUT)"""
+        """GetRowLabelAlignment() -> (horiz, vert)"""
         return _grid.Grid_GetRowLabelAlignment(*args, **kwargs)
 
     def GetColLabelAlignment(*args, **kwargs):
-        """GetColLabelAlignment(int OUTPUT, int OUTPUT)"""
+        """GetColLabelAlignment() -> (horiz, vert)"""
         return _grid.Grid_GetColLabelAlignment(*args, **kwargs)
 
     def GetColLabelTextOrientation(*args, **kwargs):
@@ -1698,11 +1698,11 @@ class Grid(windows.ScrolledWindow):
         return _grid.Grid_GetCellFont(*args, **kwargs)
 
     def GetDefaultCellAlignment(*args, **kwargs):
-        """GetDefaultCellAlignment(int OUTPUT, int OUTPUT)"""
+        """GetDefaultCellAlignment() -> (horiz, vert)"""
         return _grid.Grid_GetDefaultCellAlignment(*args, **kwargs)
 
     def GetCellAlignment(*args, **kwargs):
-        """GetCellAlignment(int row, int col, int OUTPUT, int OUTPUT)"""
+        """GetCellAlignment() -> (horiz, vert)"""
         return _grid.Grid_GetCellAlignment(*args, **kwargs)
 
     def GetDefaultCellOverflow(*args, **kwargs):
@@ -1714,7 +1714,7 @@ class Grid(windows.ScrolledWindow):
         return _grid.Grid_GetCellOverflow(*args, **kwargs)
 
     def GetCellSize(*args, **kwargs):
-        """GetCellSize(int row, int col, int OUTPUT, int OUTPUT)"""
+        """GetCellSize(int row, int col) -> (num_rows, num_cols)"""
         return _grid.Grid_GetCellSize(*args, **kwargs)
 
     def SetDefaultRowSize(*args, **kwargs):

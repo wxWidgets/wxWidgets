@@ -4396,105 +4396,177 @@ class PyApp(EvtHandler):
         return _core.PyApp__setCallbackInfo(*args, **kwargs)
 
     def GetAppName(*args, **kwargs):
-        """GetAppName() -> wxString"""
+        """GetAppName() -> wxString
+
+Get the application name."""
         return _core.PyApp_GetAppName(*args, **kwargs)
 
     def SetAppName(*args, **kwargs):
-        """SetAppName(wxString name)"""
+        """SetAppName(wxString name)
+
+Set the application name. This value may be used automatically
+by wxConfig and such."""
         return _core.PyApp_SetAppName(*args, **kwargs)
 
     def GetClassName(*args, **kwargs):
         """GetClassName() -> wxString
 
-Returns the class name of the C++ object using wxRTTI."""
+Get the application's class name."""
         return _core.PyApp_GetClassName(*args, **kwargs)
 
     def SetClassName(*args, **kwargs):
-        """SetClassName(wxString name)"""
+        """SetClassName(wxString name)
+
+Set the application's class name. This value may be used for X-resources if
+applicable for the platform"""
         return _core.PyApp_SetClassName(*args, **kwargs)
 
     def GetVendorName(*args, **kwargs):
-        """GetVendorName() -> wxString"""
+        """GetVendorName() -> wxString
+
+Get the application's vendor name."""
         return _core.PyApp_GetVendorName(*args, **kwargs)
 
     def SetVendorName(*args, **kwargs):
-        """SetVendorName(wxString name)"""
+        """SetVendorName(wxString name)
+
+Set the application's vendor name. This value may be used automatically
+by wxConfig and such."""
         return _core.PyApp_SetVendorName(*args, **kwargs)
 
     def GetTraits(*args, **kwargs):
-        """GetTraits() -> wxAppTraits"""
+        """GetTraits() -> wxAppTraits
+
+Create the app traits object to which we delegate for everything which either
+should be configurable by the user (then he can change the default behaviour
+simply by overriding CreateTraits() and returning his own traits object) or
+which is GUI/console dependent as then wxAppTraits allows us to abstract the
+differences behind the common facade"""
         return _core.PyApp_GetTraits(*args, **kwargs)
 
     def ProcessPendingEvents(*args, **kwargs):
-        """ProcessPendingEvents()"""
+        """ProcessPendingEvents()
+
+Process all events in the wxPendingEvents list -- it is necessary to call this
+function to process posted events. This happens during each event loop
+iteration."""
         return _core.PyApp_ProcessPendingEvents(*args, **kwargs)
 
     def Yield(*args, **kwargs):
-        """Yield(bool onlyIfNeeded=False) -> bool"""
+        """Yield(bool onlyIfNeeded=False) -> bool
+
+Process all currently pending events right now, instead of waiting until
+return to the event loop.  It is an error to call Yield() recursively unless
+the value of onlyIfNeeded is True.
+
+WARNING: This function is dangerous as it can lead to unexpected
+         reentrancies (i.e. when called from an event handler it
+         may result in calling the same event handler again), use
+         with _extreme_ care or, better, don't use at all!
+"""
         return _core.PyApp_Yield(*args, **kwargs)
 
     def WakeUpIdle(*args, **kwargs):
-        """WakeUpIdle()"""
+        """WakeUpIdle()
+
+Make sure that idle events are sent again"""
         return _core.PyApp_WakeUpIdle(*args, **kwargs)
 
     def MainLoop(*args, **kwargs):
-        """MainLoop() -> int"""
+        """MainLoop() -> int
+
+Execute the main GUI loop, the function returns when the loop ends."""
         return _core.PyApp_MainLoop(*args, **kwargs)
 
     def Exit(*args, **kwargs):
-        """Exit()"""
+        """Exit()
+
+Exit the main loop thus terminating the application."""
         return _core.PyApp_Exit(*args, **kwargs)
 
     def ExitMainLoop(*args, **kwargs):
-        """ExitMainLoop()"""
+        """ExitMainLoop()
+
+Exit the main GUI loop during the next iteration (i.e. it does not
+stop the program immediately!)"""
         return _core.PyApp_ExitMainLoop(*args, **kwargs)
 
     def Pending(*args, **kwargs):
-        """Pending() -> bool"""
+        """Pending() -> bool
+
+Returns True if there are unprocessed events in the event queue."""
         return _core.PyApp_Pending(*args, **kwargs)
 
     def Dispatch(*args, **kwargs):
-        """Dispatch() -> bool"""
+        """Dispatch() -> bool
+
+Process the first event in the event queue (blocks until an event
+appears if there are none currently)"""
         return _core.PyApp_Dispatch(*args, **kwargs)
 
     def ProcessIdle(*args, **kwargs):
-        """ProcessIdle() -> bool"""
+        """ProcessIdle() -> bool
+
+Called from the MainLoop when the application becomes idle and sends an
+IdleEvent to all interested parties.  Returns True is more idle events are
+needed, False if not."""
         return _core.PyApp_ProcessIdle(*args, **kwargs)
 
     def SendIdleEvents(*args, **kwargs):
-        """SendIdleEvents(Window win, IdleEvent event) -> bool"""
+        """SendIdleEvents(Window win, IdleEvent event) -> bool
+
+Send idle event to window and all subwindows.  Returns True if more idle time
+is requested."""
         return _core.PyApp_SendIdleEvents(*args, **kwargs)
 
-    def OnIdle(*args, **kwargs):
-        """OnIdle(IdleEvent event)"""
-        return _core.PyApp_OnIdle(*args, **kwargs)
-
     def IsActive(*args, **kwargs):
-        """IsActive() -> bool"""
+        """IsActive() -> bool
+
+Return True if our app has focus."""
         return _core.PyApp_IsActive(*args, **kwargs)
 
     def SetTopWindow(*args, **kwargs):
-        """SetTopWindow(Window win)"""
+        """SetTopWindow(Window win)
+
+Set the "main" top level window"""
         return _core.PyApp_SetTopWindow(*args, **kwargs)
 
     def GetTopWindow(*args, **kwargs):
-        """GetTopWindow() -> Window"""
+        """GetTopWindow() -> Window
+
+Return the "main" top level window (if it hadn't been set previously with
+SetTopWindow(), will return just some top level window and, if there not any,
+will return None)"""
         return _core.PyApp_GetTopWindow(*args, **kwargs)
 
     def SetExitOnFrameDelete(*args, **kwargs):
-        """SetExitOnFrameDelete(bool flag)"""
+        """SetExitOnFrameDelete(bool flag)
+
+Control the exit behaviour: by default, the program will exit the main loop
+(and so, usually, terminate) when the last top-level program window is
+deleted.  Beware that if you disable this behaviour (with
+SetExitOnFrameDelete(False)), you'll have to call ExitMainLoop() explicitly
+from somewhere.
+"""
         return _core.PyApp_SetExitOnFrameDelete(*args, **kwargs)
 
     def GetExitOnFrameDelete(*args, **kwargs):
-        """GetExitOnFrameDelete() -> bool"""
+        """GetExitOnFrameDelete() -> bool
+
+Get the current exit behaviour setting."""
         return _core.PyApp_GetExitOnFrameDelete(*args, **kwargs)
 
     def SetUseBestVisual(*args, **kwargs):
-        """SetUseBestVisual(bool flag)"""
+        """SetUseBestVisual(bool flag)
+
+Set whether the app should try to use the best available visual on systems
+where more than one is available, (Sun, SGI, XFree86 4, etc.)"""
         return _core.PyApp_SetUseBestVisual(*args, **kwargs)
 
     def GetUseBestVisual(*args, **kwargs):
-        """GetUseBestVisual() -> bool"""
+        """GetUseBestVisual() -> bool
+
+Get current UseBestVisual setting."""
         return _core.PyApp_GetUseBestVisual(*args, **kwargs)
 
     def SetPrintMode(*args, **kwargs):
@@ -4505,13 +4577,24 @@ Returns the class name of the C++ object using wxRTTI."""
         """GetPrintMode() -> int"""
         return _core.PyApp_GetPrintMode(*args, **kwargs)
 
-    def GetAssertMode(*args, **kwargs):
-        """GetAssertMode() -> int"""
-        return _core.PyApp_GetAssertMode(*args, **kwargs)
-
     def SetAssertMode(*args, **kwargs):
-        """SetAssertMode(int mode)"""
+        """SetAssertMode(int mode)
+
+Set the OnAssert behaviour for debug and hybrid builds.  The following flags
+may be or'd together:
+
+ wxPYAPP_ASSERT_SUPPRESS         Don't do anything
+ wxPYAPP_ASSERT_EXCEPTION        Turn it into a Python exception if possible (default)
+ wxPYAPP_ASSERT_DIALOG           Display a message dialog
+ wxPYAPP_ASSERT_LOG              Write the assertion info to the wxLog
+"""
         return _core.PyApp_SetAssertMode(*args, **kwargs)
+
+    def GetAssertMode(*args, **kwargs):
+        """GetAssertMode() -> int
+
+Get the current OnAssert behaviour setting."""
+        return _core.PyApp_GetAssertMode(*args, **kwargs)
 
     def GetMacSupportPCMenuShortcuts(*args, **kwargs):
         """PyApp.GetMacSupportPCMenuShortcuts() -> bool"""
@@ -4564,11 +4647,16 @@ Returns the class name of the C++ object using wxRTTI."""
 
     SetMacHelpMenuTitleName = staticmethod(SetMacHelpMenuTitleName)
     def _BootstrapApp(*args, **kwargs):
-        """_BootstrapApp()"""
+        """_BootstrapApp()
+
+For internal use only"""
         return _core.PyApp__BootstrapApp(*args, **kwargs)
 
     def GetComCtl32Version(*args, **kwargs):
-        """PyApp.GetComCtl32Version() -> int"""
+        """PyApp.GetComCtl32Version() -> int
+
+Returns 400, 470, 471 for comctl32.dll 4.00, 4.70, 4.71 or 0 if it
+wasn't found at all.  Raises an exception on non-Windows platforms."""
         return _core.PyApp_GetComCtl32Version(*args, **kwargs)
 
     GetComCtl32Version = staticmethod(GetComCtl32Version)
@@ -4621,91 +4709,135 @@ def PyApp_SetMacHelpMenuTitleName(*args, **kwargs):
     return _core.PyApp_SetMacHelpMenuTitleName(*args, **kwargs)
 
 def PyApp_GetComCtl32Version(*args, **kwargs):
-    """PyApp_GetComCtl32Version() -> int"""
+    """PyApp_GetComCtl32Version() -> int
+
+Returns 400, 470, 471 for comctl32.dll 4.00, 4.70, 4.71 or 0 if it
+wasn't found at all.  Raises an exception on non-Windows platforms."""
     return _core.PyApp_GetComCtl32Version(*args, **kwargs)
 
 #---------------------------------------------------------------------------
 
 
 def Exit(*args, **kwargs):
-    """Exit()"""
+    """Exit()
+
+Force an exit of the application.  Convenience for wx.GetApp().Exit()"""
     return _core.Exit(*args, **kwargs)
 
 def Yield(*args, **kwargs):
-    """Yield() -> bool"""
+    """Yield() -> bool
+
+Yield to other apps/messages.  Convenience for wx.GetApp().Yield()"""
     return _core.Yield(*args, **kwargs)
 
 def YieldIfNeeded(*args, **kwargs):
-    """YieldIfNeeded() -> bool"""
+    """YieldIfNeeded() -> bool
+
+Yield to other apps/messages.  Convenience for wx.GetApp().Yield(True)"""
     return _core.YieldIfNeeded(*args, **kwargs)
 
 def SafeYield(*args, **kwargs):
-    """SafeYield(Window win=None, bool onlyIfNeeded=False) -> bool"""
+    """SafeYield(Window win=None, bool onlyIfNeeded=False) -> bool
+
+This function is similar to wx.Yield, except that it disables the user input
+to all program windows before calling wx.Yield and re-enables it again
+afterwards. If win is not None, this window will remain enabled, allowing the
+implementation of some limited user interaction.
+
+Returns the result of the call to wx.Yield."""
     return _core.SafeYield(*args, **kwargs)
 
 def WakeUpIdle(*args, **kwargs):
-    """WakeUpIdle()"""
+    """WakeUpIdle()
+
+Cause the message queue to become empty again, so idle events will be sent."""
     return _core.WakeUpIdle(*args, **kwargs)
 
 def PostEvent(*args, **kwargs):
-    """PostEvent(EvtHandler dest, Event event)"""
+    """PostEvent(EvtHandler dest, Event event)
+
+Send an event to a window or other wx.EvtHandler to be processed later."""
     return _core.PostEvent(*args, **kwargs)
 
 def App_CleanUp(*args, **kwargs):
-    """App_CleanUp()"""
+    """App_CleanUp()
+
+For internal use only, it is used to cleanup after wxWindows when Python shuts down."""
     return _core.App_CleanUp(*args, **kwargs)
 
 def GetApp(*args, **kwargs):
-    """GetApp() -> PyApp"""
+    """GetApp() -> PyApp
+
+Return a reference to the current wxApp object."""
     return _core.GetApp(*args, **kwargs)
 #----------------------------------------------------------------------
 
 class PyOnDemandOutputWindow:
+    """
+    A class that can be used for redirecting Python's stdout and
+    stderr streams.  It will do nothing until something is wrriten to
+    the stream at which point it will create a Frame with a text area
+    and write the text there.
+    """
     def __init__(self, title = "wxPython: stdout/stderr"):
         self.frame  = None
         self.title  = title
         self.parent = None
 
     def SetParent(self, parent):
+        """Set the window to be used as the popup Frame's parent."""
         self.parent = parent
 
+
+    def CreateOutputWindow(self, st):
+        self.frame = wx.Frame(self.parent, -1, self.title,
+                              style=wx.DEFAULT_FRAME_STYLE | wx.NO_FULL_REPAINT_ON_RESIZE)
+        self.text  = wxTextCtrl(self.frame, -1, "",
+                                style = wx.TE_MULTILINE | wx.TE_READONLY)
+        self.frame.SetSize((450, 300))
+        self.frame.Show(True)
+        EVT_CLOSE(self.frame, self.OnCloseWindow)
+        
+
+    # These methods provide the file-like output behaviour.
+    def write(self, text):
+        """
+        Create the output window if needed and write the string to it.
+        If not called in the context of the gui thread then uses
+        CallAfter to do the work there.
+        """        
+        if self.frame is None:
+            if not wx.Thread_IsMain():
+                wx.CallAfter(self.CreateOutputWindow, text)
+            else:
+                self.CreateOutputWindow(text)
+        else:
+            if not wx.Thread_IsMain():
+                wx.CallAfter(self.text.AppendText, text)
+            else:
+                self.text.AppendText(text)
+
+
+    def close(self):
+        if self.frame is not None:
+            wx.CallAfter(self.frame.Close)
+
+
     def OnCloseWindow(self, event):
-        if self.frame != None:
+        if self.frame is not None:
             self.frame.Destroy()
         self.frame = None
         self.text  = None
 
-    # These methods provide the file-like output behaviour.
-    def write(self, str):
-        if not wx.Thread_IsMain():
-            # Aquire the GUI mutex before making GUI calls.  Mutex is released
-            # when locker is deleted at the end of this function.
-            locker = wx.MutexGuiLocker()
-
-        if not self.frame:
-            self.frame = wx.Frame(self.parent, -1, self.title,
-                                 style=wx.DEFAULT_FRAME_STYLE | wx.NO_FULL_REPAINT_ON_RESIZE)
-            self.text  = wxTextCtrl(self.frame, -1, "",
-                                    style = wx.TE_MULTILINE | wx.TE_READONLY)
-            self.frame.SetSize((450, 300))
-            self.frame.Show(True)
-            EVT_CLOSE(self.frame, self.OnCloseWindow)
-        self.text.AppendText(str)
-
-    def close(self):
-        if self.frame != None:
-            if not wx.Thread_IsMain():
-                locker = wx.MutexGuiLocker()
-            self.frame.Close()
-
-
 #----------------------------------------------------------------------
-# The main application class.  Derive from this and implement an OnInit
-# method that creates a frame and then calls self.SetTopWindow(frame)
 
 _defRedirect = (wx.Platform == '__WXMSW__' or wx.Platform == '__WXMAC__')
 
 class App(wx.PyApp):
+    """
+    The main application class.  Derive from this and implement an OnInit
+    method that creates a frame and then calls self.SetTopWindow(frame)
+    """
     outputWindowClass = PyOnDemandOutputWindow
 
     def __init__(self, redirect=_defRedirect, filename=None, useBestVisual=False):
@@ -4796,13 +4928,20 @@ App_GetComCtl32Version           = _core.PyApp_GetComCtl32Version
 #----------------------------------------------------------------------------
 
 class PySimpleApp(wx.App):
-    def __init__(self, redirect=False, filename=None):
-        wx.App.__init__(self, redirect, filename)
+    """
+    A simple application class.  You can just create one of these and
+    then then make your top level windows later, and not have to worry
+    about OnInit."""
+
+    def __init__(self, redirect=False, filename=None, useBestVisual=False):
+        wx.App.__init__(self, redirect, filename, useBestVisual)
+        
     def OnInit(self):
         wx.InitAllImageHandlers()
         return True
 
 
+# Is anybody using this one?
 class PyWidgetTester(wx.App):
     def __init__(self, size = (250, 100)):
         self.size = size
@@ -5593,13 +5732,13 @@ Get the width, height, decent and leading of the text using the current or speci
         return _core.Window_GetToolTip(*args, **kwargs)
 
     def SetDropTarget(*args, **kwargs):
-        """SetDropTarget(wxDropTarget dropTarget)"""
+        """SetDropTarget(wxPyDropTarget dropTarget)"""
         val = _core.Window_SetDropTarget(*args, **kwargs)
         args[1].thisown = 0
         return val
 
     def GetDropTarget(*args, **kwargs):
-        """GetDropTarget() -> wxDropTarget"""
+        """GetDropTarget() -> wxPyDropTarget"""
         return _core.Window_GetDropTarget(*args, **kwargs)
 
     def DragAcceptFiles(*args, **kwargs):
@@ -7519,7 +7658,7 @@ class LayoutConstraints(Object):
         self.thisown = 1
         del newobj.thisown
     def SatisfyConstraints(*args, **kwargs):
-        """SatisfyConstraints(Window win, int OUTPUT) -> bool"""
+        """SatisfyConstraints(Window win) -> (areSatisfied, noChanges)"""
         return _core.LayoutConstraints_SatisfyConstraints(*args, **kwargs)
 
     def AreSatisfied(*args, **kwargs):
@@ -7536,16 +7675,13 @@ _core.LayoutConstraints_swigregister(LayoutConstraintsPtr)
 
 #----------------------------------------------------------------------------
 
-# Use Python's bool constants if available, make aliases if not
+# Use Python's bool constants if available, make some if not
 try:
     True
 except NameError:
-    True = 1==1
-    False = 1==0
+    __builtins__.True = 1==1
+    __builtins__.False = 1==0
 
-# Backwards compaatibility
-TRUE  = true  = True
-FALSE = false = False
 
 
 # workarounds for bad wxRTTI names
