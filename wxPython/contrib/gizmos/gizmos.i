@@ -553,9 +553,15 @@ public:
     void SetImageList(wxImageList *imageList);
     void SetStateImageList(wxImageList *imageList);
     void SetButtonsImageList(wxImageList *imageList);
+
     void AssignImageList(wxImageList *imageList);
+    %pragma(python) addtomethod = "AssignImageList:_args[0].thisown = 0"
+
     void AssignStateImageList(wxImageList *imageList);
+    %pragma(python) addtomethod = "AssignStateImageList:_args[0].thisown = 0"
+
     void AssignButtonsImageList(wxImageList *imageList);
+    %pragma(python) addtomethod = "AssignButtonsImageList:_args[0].thisown = 0"
 
 
 

@@ -3540,7 +3540,7 @@ void wxTreeListMainWindow::OnChar( wxKeyEvent &event )
     // right : open if parent and go next (or expand on Win32)
     // home  : go to root
     // end   : go to last item without opening parents
-    switch (event.KeyCode())
+    switch (event.GetKeyCode())
     {
 #ifndef __WXMSW__ // mimic the standard win32 tree ctrl
         case '+':
