@@ -27,62 +27,130 @@
 // wxNewSizerItem
 //---------------------------------------------------------------------------
 
-wxNewSizerItem::wxNewSizerItem( int width, int height, int option )
+wxNewSizerItem::wxNewSizerItem( int width, int height, int option, int flag, int border )
 {
     m_window = (wxWindow *) NULL;
     m_sizer = (wxNewSizer *) NULL;
+    m_option = option;
+    m_border = border;
+    m_flag = flag;
+    
+    // minimal size is the initial size
     m_minSize.x = width;
     m_minSize.y = height;
-    m_option = option;
+    
+    // size is set directly
+    m_size = m_minSize;
 }
 
-wxNewSizerItem::wxNewSizerItem( wxWindow *window, int option )
+wxNewSizerItem::wxNewSizerItem( wxWindow *window, int option, int flag, int border )
 {
     m_window = window;
     m_sizer = (wxNewSizer *) NULL;
-    m_minSize = window->GetSize();
     m_option = option;
+    m_border = border;
+    m_flag = flag;
+    
+    // minimal size is the initial size
+    m_minSize = window->GetSize();
+    
+    // size is calculated later
+    // m_size = ...
 }
 
-wxNewSizerItem::wxNewSizerItem( wxNewSizer *sizer, int option )
+wxNewSizerItem::wxNewSizerItem( wxNewSizer *sizer, int option, int flag, int border )
 {
     m_window = (wxWindow *) NULL;
     m_sizer = sizer;
-    m_minSize = sizer->GetSize();
     m_option = option;
+    m_border = border;
+    m_flag = flag;
+    
+    // minimal size is calculated later
+    // m_minSize = ...
+   
+    // size is calculated later
+    // m_size = ...
 }
 
 wxSize wxNewSizerItem::GetSize()
 {
+    wxSize ret;
     if (IsNewSizer())
-        return m_sizer->GetSize();
-	
+        ret = m_sizer->GetSize();
+    else
     if (IsWindow())
-        return m_window->GetSize();
-	
-    return m_minSize;
+        ret = m_window->GetSize();
+    else ret = m_size;
+    
+    if (m_flag & wxWEST)
+        ret.x += m_border;
+    if (m_flag & wxEAST)
+        ret.x += m_border;
+    if (m_flag & wxNORTH)
+        ret.y += m_border;
+    if (m_flag & wxSOUTH)
+        ret.y += m_border;
+    
+    return ret;
 }
 
 wxSize wxNewSizerItem::CalcMin()
 {
+    wxSize ret;
     if (IsNewSizer())
-        return m_sizer->CalcMin();
-	
+        ret = m_sizer->CalcMin();
+/*  
+    The minimum size of a window should be the
+    initial size, as saved in m_minSize, not the
+    current size.
+    
+    else
     if (IsWindow())
-        return m_window->GetSize();
-	
-    return m_minSize;
+        ret = m_window->GetSize();
+*/
+    else ret = m_minSize;
+    
+    if (m_flag & wxWEST)
+        ret.x += m_border;
+    if (m_flag & wxEAST)
+        ret.x += m_border;
+    if (m_flag & wxNORTH)
+        ret.y += m_border;
+    if (m_flag & wxSOUTH)
+        ret.y += m_border;
+    
+    return ret;
 }
 
 void wxNewSizerItem::SetDimension( wxPoint pos, wxSize size )
 {
+    if (m_flag & wxWEST)
+    {
+        pos.x += m_border;
+        size.x -= m_border;
+    }
+    if (m_flag & wxEAST)
+    {
+        size.x -= m_border;
+    }
+    if (m_flag & wxNORTH)
+    {
+        pos.y += m_border;
+        size.y -= m_border;
+    }
+    if (m_flag & wxSOUTH)
+    {
+        size.y -= m_border;
+    }
+	
     if (IsNewSizer())
         m_sizer->SetDimension( pos.x, pos.y, size.x, size.y );
 	
     if (IsWindow())
         m_window->SetSize( pos.x, pos.y, size.x, size.y );
-	
-    m_minSize = size;
+
+    m_size = size;
 }
 
 bool wxNewSizerItem::IsWindow()
@@ -113,19 +181,19 @@ wxNewSizer::~wxNewSizer()
 {
 }
    
-void wxNewSizer::Add( wxWindow *window, int option )
+void wxNewSizer::Add( wxWindow *window, int option, int flag, int border )
 {
-    m_children.Append( new wxNewSizerItem( window, option ) );
+    m_children.Append( new wxNewSizerItem( window, option, flag, border ) );
 }
 
-void wxNewSizer::Add( wxNewSizer *sizer, int option )
+void wxNewSizer::Add( wxNewSizer *sizer, int option, int flag, int border )
 {
-    m_children.Append( new wxNewSizerItem( sizer, option ) );
+    m_children.Append( new wxNewSizerItem( sizer, option, flag, border ) );
 }
 
-void wxNewSizer::Add( int width, int height, int option )
+void wxNewSizer::Add( int width, int height, int option, int flag, int border )
 {
-    m_children.Append( new wxNewSizerItem( width, height, option ) );
+    m_children.Append( new wxNewSizerItem( width, height, option, flag, border ) );
 }
 
 void wxNewSizer::Fit( wxWindow *window )
@@ -164,108 +232,15 @@ void wxNewSizer::SetDimension( int x, int y, int width, int height )
 }
 
 //---------------------------------------------------------------------------
-// wxBorderNewSizer
+// wxBox
 //---------------------------------------------------------------------------
 
-wxBorderNewSizer::wxBorderNewSizer( int sides )
-{
-    m_sides = sides;
-}
-
-void wxBorderNewSizer::Add( wxWindow *window, int option )
-{
-   wxCHECK_RET( m_children.GetCount() == 0, _T("border sizer can only hold one child") );
-   
-   wxNewSizer::Add( window, option );
-}
-
-void wxBorderNewSizer::Add( wxNewSizer *sizer, int option )
-{
-   wxCHECK_RET( m_children.GetCount() == 0, _T("border sizer can only hold one child") );
-   
-   wxNewSizer::Add( sizer, option );
-}
-
-void wxBorderNewSizer::Add( int width, int height, int option )
-{
-   wxCHECK_RET( m_children.GetCount() == 0, _T("border sizer can only hold one child") );
-   
-   wxNewSizer::Add( width, height, option );
-}
-
-void wxBorderNewSizer::RecalcSizes()
-{
-    wxNode *node = m_children.GetFirst();
-    
-    if (!node)
-    {
-        SetDimension( m_position.x, m_position.y, 2, 2 );
-        return;
-    }
-    
-    wxNewSizerItem *item = (wxNewSizerItem*) node->Data();
-    
-    wxSize size( m_size );
-    wxPoint pt( m_position );
-    int borderSize = item->GetOption();
-    
-    if (m_sides & wxWEST)
-    {
-        size.x -= borderSize;
-        pt.x += borderSize;
-    }
-    if (m_sides & wxEAST)
-    {
-        size.x -= borderSize;
-    }
-    if (m_sides & wxNORTH)
-    {
-        size.y -= borderSize;
-	pt.y += borderSize;
-    }
-    if (m_sides & wxSOUTH)
-    {
-        size.y -= borderSize;
-    }
-    
-    item->SetDimension( pt, size );
-}
-
-wxSize wxBorderNewSizer::CalcMin()
-{
-    wxNode *node = m_children.GetFirst();
-    
-    if (!node)
-        return wxSize(2,2);
-    
-    wxNewSizerItem *item = (wxNewSizerItem*) node->Data();
-    
-    wxSize size( item->CalcMin() );
-    
-    int borderSize = item->GetOption();
-    
-    if (m_sides & wxWEST)
-        size.x += borderSize;
-    if (m_sides & wxEAST)
-        size.x += borderSize;
-    if (m_sides & wxNORTH)
-        size.y += borderSize;
-    if (m_sides & wxSOUTH)
-        size.y += borderSize;
-	
-    return size;
-}
-
-//---------------------------------------------------------------------------
-// wxBoxNewSizer
-//---------------------------------------------------------------------------
-
-wxBoxNewSizer::wxBoxNewSizer( int orient )
+wxBox::wxBox( int orient )
 {
     m_orient = orient;
 }
 
-void wxBoxNewSizer::RecalcSizes()
+void wxBox::RecalcSizes()
 {
     if (m_children.GetCount() == 0)
     {
@@ -310,7 +285,19 @@ void wxBoxNewSizer::RecalcSizes()
 	        height = (delta * weight) + extra;
 		extra = 0; // only the first item will get the remainder as extra size
 	    }
-	    item->SetDimension( pt, wxSize( size.x, height) );
+	    
+	    wxPoint child_pos( pt );
+	    wxSize  child_size( wxSize( size.x, height) );
+	    
+	    if (item->GetFlag() & wxALIGN_RIGHT)
+	      child_pos.x += m_size.x - size.x;
+	    else if (item->GetFlag() & wxCENTER)
+	      child_pos.x += (m_size.x - size.x) / 2;
+	    else if (item->GetFlag() & wxEXPAND)
+	      child_size.x = m_size.x;
+	      
+	    item->SetDimension( child_pos, child_size );
+	    
 	    pt.y += height;
 	}
 	else
@@ -321,7 +308,19 @@ void wxBoxNewSizer::RecalcSizes()
 	        width = (delta * weight) + extra;
 		extra = 0; // only the first item will get the remainder as extra size
 	    }
-	    item->SetDimension( pt, wxSize(width, size.y) );
+	    
+	    wxPoint child_pos( pt );
+	    wxSize  child_size( wxSize(width, size.y) );
+	    
+	    if (item->GetFlag() & wxALIGN_BOTTOM)
+	      child_pos.y += m_size.y - size.y;
+	    else if (item->GetFlag() & wxCENTER)
+	      child_pos.y += (m_size.y - size.y) / 2;
+	    else if (item->GetFlag() & wxEXPAND)
+	      child_size.y = m_size.y;
+	      
+	    item->SetDimension( child_pos, child_size );
+	    
 	    pt.x += width;
 	}
 
@@ -329,7 +328,7 @@ void wxBoxNewSizer::RecalcSizes()
     }
 }
 
-wxSize wxBoxNewSizer::CalcMin()
+wxSize wxBox::CalcMin()
 {
     if (m_children.GetCount() == 0)
         return wxSize(2,2);

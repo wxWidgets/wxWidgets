@@ -370,56 +370,53 @@ NewSizerFrame::NewSizerFrame(wxFrame *frame, char *title, int x, int y ):
 {
   // we want to get a dialog that is stretchable because it
   // has a text ctrl in the middle. at the bottom, we have
-  // two buttons which are not supposed to get stretched
-  // and therefore we insert two spacers next to them
+  // two buttons which.
 
-  topsizer = new wxBoxNewSizer( wxVERTICAL );
+  topsizer = new wxBox( wxVERTICAL );
+  
+  // 1) top: create wxStaticText with minimum size equal to its default size
+  topsizer->Add( 
+    new wxStaticText( this, -1, "An explanation (wxALIGN_RIGHT)." ),
+    0,                         // make vertically unstretchable
+    wxALIGN_RIGHT |            // right align text
+    wxTOP | wxLEFT | wxRIGHT,  // make border all around except wxBOTTOM
+    5 );                      // set border width to 5
 
-  
-  // 1) upper part: text ctrl
-  
-  // make border around textctrl in all directions
-  wxBorderNewSizer *text_border = new wxBorderNewSizer();
-  
-  // make border around text ctrl 20 pixels wide
-  // minimum size for the text ctrl is 60x30
-  text_border->Add( new wxTextCtrl( this, -1, "My text.", wxDefaultPosition, wxSize(170,30), wxTE_MULTILINE), 5 );
-  
-  // add text ctrl with border to top sizer
-  // a value of more than zero indicates that it's stretchable
-  topsizer->Add( text_border, 1 );
+  // 2) top: create wxTextCtrl with minimum size (100x60)
+  topsizer->Add( 
+    new wxTextCtrl( this, -1, "My text (wxEXPAND).", wxDefaultPosition, wxSize(100,60), wxTE_MULTILINE),
+    1,            // make vertically stretchable
+    wxEXPAND |    // make horizontally stretchable
+    wxALL,        //   and make border all around
+    5 );         // set border width to 5
 
-  
-  // 2) middle part: static line
-  
-  // make border for beauty static line
-  wxBorderNewSizer *line_border = new wxBorderNewSizer();
 
-  // make border around static line 2 pixels wide
-  // minimum size for the static line is 3x3
-  line_border->Add( new wxStaticLine( this, -1, wxDefaultPosition, wxSize(170,3), wxHORIZONTAL), 5 );
-  
-  // add text ctrl with border to top sizer
-  topsizer->Add( line_border );
-  
+  // 3) middle: create wxStaticLine with minimum size (3x3)
+  topsizer->Add( 
+     new wxStaticLine( this, -1, wxDefaultPosition, wxSize(3,3), wxHORIZONTAL), 
+     0,           // make vertically unstretchable
+     wxEXPAND |   // make horizontally stretchable
+     wxALL,       //   and make border all around
+     5 );         // set border width to 5
+     
 
-  // 3) bottom: buttons  
+  // 4) bottom: create two centred wxButtons  
+  wxBox *button_box = new wxBox( wxHORIZONTAL );
+  button_box->Add(
+     new wxButton( this, -1, "Two buttons in a box" ), 
+     0,           // make horizontally unstretchable
+     wxALL,       // make border all around
+     7 );         // set border width to 7
+  button_box->Add(
+     new wxButton( this, -1, "(wxCENTER)" ), 
+     0,           // make horizontally unstretchable
+     wxALL,       // make border all around
+     7 );         // set border width to 7
   
-  // make border around button in all directions
-  wxBoxNewSizer *button_sizer = new wxBoxNewSizer( wxHORIZONTAL );
-  
-  // make border around buttons 5 pixels wide
-  // minimum size for the button is its default size
-  wxBorderNewSizer *button1_border = new wxBorderNewSizer();
-  button1_border->Add( new wxButton( this, -1, "Hello 1", wxDefaultPosition, wxSize(80,30) ), 5 );
-  button_sizer->Add( button1_border );
-  
-  wxBorderNewSizer *button2_border = new wxBorderNewSizer();
-  button2_border->Add( new wxButton( this, -1, "Hello 2", wxDefaultPosition, wxSize(80,30) ), 5 );
-  button_sizer->Add( button2_border );
-
-  // add buttons with border to top sizer
-  topsizer->Add( button_sizer );
+  topsizer->Add( 
+     button_box,
+     0,          // make vertically unstretchable
+     wxCENTER ); // no border and centre horizontally
 
   
   // set frame to minimum size

@@ -39,13 +39,13 @@ class WXDLLEXPORT wxNewSizerItem: public wxObject
 {
 public:
   // spacer
-  wxNewSizerItem( int width, int height, int option );
+  wxNewSizerItem( int width, int height, int option, int flag, int border );
 
   // window
-  wxNewSizerItem( wxWindow *window, int option );
+  wxNewSizerItem( wxWindow *window, int option, int flag, int border );
 
   // subsizer
-  wxNewSizerItem( wxNewSizer *sizer, int option );
+  wxNewSizerItem( wxNewSizer *sizer, int option, int flag, int border );
 
   virtual wxSize GetSize();
   virtual wxSize CalcMin();
@@ -61,12 +61,19 @@ public:
     { return m_sizer; }
   int GetOption() const
     { return m_option; }
+  int GetFlag() const
+    { return m_flag; }
+  int GetBorder() const
+    { return m_border; }
   
 protected:
   wxWindow    *m_window;
   wxNewSizer     *m_sizer;
+  wxSize       m_size;
   wxSize       m_minSize;
   int          m_option;
+  int          m_border;
+  int          m_flag;
 };
 
 //---------------------------------------------------------------------------
@@ -79,9 +86,9 @@ public:
    wxNewSizer();
    ~wxNewSizer();
    
-   virtual void Add( wxWindow *window, int option = 0 );
-   virtual void Add( wxNewSizer *sizer, int option = 0  );
-   virtual void Add( int width, int height, int option = 0  );
+   virtual void Add( wxWindow *window, int option = 0, int flag = 0, int border = 0 );
+   virtual void Add( wxNewSizer *sizer, int option = 0, int flag = 0, int border = 0 );
+   virtual void Add( int width, int height, int option = 0, int flag = 0, int border = 0  );
   
    void SetDimension( int x, int y, int width, int height );
   
@@ -109,42 +116,13 @@ protected:
 };
 
 //---------------------------------------------------------------------------
-// wxBorderNewSizer
+// wxBox
 //---------------------------------------------------------------------------
 
-#define wxWEST  wxLEFT
-#define wxEAST  wxRIGHT
-#define wxNORTH wxUP
-#define wxSOUTH wxDOWN
-#define wxALL_DIRECTIONS (wxNORTH | wxSOUTH | wxEAST | wxWEST)
-
-class WXDLLEXPORT wxBorderNewSizer: public wxNewSizer
+class WXDLLEXPORT wxBox: public wxNewSizer
 {
 public:
-   wxBorderNewSizer( int sides = wxALL_DIRECTIONS );
-   
-   virtual void Add( wxWindow *window, int option = 10 );
-   virtual void Add( wxNewSizer *sizer, int option = 10 );
-   virtual void Add( int width, int height, int option = 10 );
-   
-   void RecalcSizes();
-   wxSize CalcMin();
-   
-   int GetSides()
-     { return m_sides; }
-   
-protected:
-   int    m_sides;
-};
-  
-//---------------------------------------------------------------------------
-// wxBoxNewSizer
-//---------------------------------------------------------------------------
-
-class WXDLLEXPORT wxBoxNewSizer: public wxNewSizer
-{
-public:
-   wxBoxNewSizer( int orient );
+   wxBox( int orient );
    
    void RecalcSizes();
    wxSize CalcMin();

@@ -443,7 +443,8 @@ enum
   wxMOTIF_X,                // OSF Motif 1.x.x
   wxCOSE_X,                 // OSF Common Desktop Environment
   wxNEXTSTEP,               // NeXTStep
-  wxMACINTOSH,              // Apple System 7
+  wxMACINTOSH,              // Apple System 7 and 8
+  wxBEOS,                   // BeOS
   wxGTK,                    // GTK on X
   wxGTK_WIN32,              // GTK on Win32
   wxGTK_OS2,                // GTK on OS/2
@@ -577,6 +578,67 @@ enum
   #define wxUINT32_SWAP_ON_BE(val)  (val)
   #define wxINT32_SWAP_ON_BE(val)   (val)
 #endif
+
+// ----------------------------------------------------------------------------
+// Geometric flags
+// ----------------------------------------------------------------------------
+
+enum wxGeometryCentre
+{
+    wxCENTRE                  = 0x0001,
+    wxCENTER                  = wxCENTRE
+};
+
+// centering into frame rather than screen (obsolete)
+#define wxCENTER_FRAME          0x0000
+// centre on screen rather than parent
+#define wxCENTRE_ON_SCREEN      0x0002
+#define wxCENTER_ON_SCREEN      wxCENTRE_ON_SCREEN
+
+enum wxOrientation
+{
+    wxHORIZONTAL              = 0x0004,
+    wxVERTICAL                = 0x0008,
+    
+    wxBOTH                    = (wxVERTICAL | wxHORIZONTAL)
+};
+
+enum wxDirection
+{
+    wxLEFT                    = 0x0010,
+    wxRIGHT                   = 0x0020,
+    wxUP                      = 0x0040,
+    wxDOWN                    = 0x0080,
+    
+    wxTOP                     = wxUP,
+    wxBOTTOM                  = wxDOWN,
+    
+    wxNORTH                   = wxUP,
+    wxSOUTH                   = wxDOWN,
+    wxWEST                    = wxLEFT,
+    wxEAST                    = wxRIGHT,
+    
+    wxALL                     = (wxUP | wxDOWN | wxRIGHT | wxLEFT)
+};
+
+enum wxAlignment
+{
+    wxALIGN_NOT               = 0x0000,
+    wxALIGN_CENTER            = 0x0100,
+    wxALIGN_CENTRE            = wxALIGN_CENTER,
+    wxALIGN_LEFT              = wxALIGN_NOT,
+    wxALIGN_TOP               = wxALIGN_NOT,
+    wxALIGN_RIGHT             = 0x0200,
+    wxALIGN_BOTTOM            = 0x0400
+};
+
+enum wxStretch
+{
+    wxSTRETCH_NOT             = 0x0000,
+    wxSHRINK                  = 0x1000,
+    wxGROW                    = 0x2000,
+    wxEXPAND                  = wxGROW
+};
 
 // ----------------------------------------------------------------------------
 // Window style flags
@@ -715,13 +777,7 @@ enum
  * Apply to all panel items
  */
 #define wxCOLOURED          0x0800
-// Alignment for panel item labels: replaces characters with zeros
-// when creating label, so spaces can be included in string for alignment.
 #define wxFIXED_LENGTH      0x0400
-#define wxALIGN_LEFT        0x0000
-#define wxALIGN_CENTER      0x0100
-#define wxALIGN_CENTRE      0x0100
-#define wxALIGN_RIGHT       0x0200
 
 /*
  * Styles for wxListBox
@@ -920,33 +976,32 @@ enum
  * values do not correspond to the return values of the dialogs (for
  * those values, look at the wxID_XXX defines).
  */
-#define wxOK                    0x00000001
-#define wxYES_NO                0x00000002
-#define wxCANCEL                0x00000004
-#define wxYES                   0x00000008
-#define wxNO                    0x00000010
-#define wxNO_DEFAULT            0x00000020
+
+// wxCENTRE already defined as  0x00000001
+#define wxOK                    0x00000004
+#define wxYES_NO                0x00000008
+#define wxCANCEL                0x00000010
+#define wxYES                   0x00000020
+#define wxNO                    0x00000040
+#define wxNO_DEFAULT            0x00000080
 #define wxYES_DEFAULT           0x00000000  // has no effect
 
-#define wxICON_EXCLAMATION      0x00000040
-#define wxICON_HAND             0x00000080
+#define wxICON_EXCLAMATION      0x00000100
+#define wxICON_HAND             0x00000200
 #define wxICON_WARNING          wxICON_EXCLAMATION
 #define wxICON_ERROR            wxICON_HAND
-#define wxICON_QUESTION         0x00000100
-#define wxICON_INFORMATION      0x00000200
+#define wxICON_QUESTION         0x00000400
+#define wxICON_INFORMATION      0x00000800
 #define wxICON_STOP             wxICON_HAND
 #define wxICON_ASTERISK         wxICON_INFORMATION
-#define wxICON_MASK             (0x00000040|0x00000080|0x00000100|0x00000200)
+#define wxICON_MASK             (0x00000100|0x00000200|0x00000400|0x00000800)
 
-#define wxCENTRE                0x00000400
-#define wxCENTER                wxCENTRE
-
-#define  wxFORWARD              0x00000800
-#define  wxBACKWARD             0x00001000
-#define  wxRESET                0x00002000
-#define  wxHELP                 0x00004000
-#define  wxMORE                 0x00008000
-#define  wxSETUP                0x00010000
+#define  wxFORWARD              0x00001000
+#define  wxBACKWARD             0x00002000
+#define  wxRESET                0x00004000
+#define  wxHELP                 0x00008000
+#define  wxMORE                 0x00010000
+#define  wxSETUP                0x00020000
 
 // ----------------------------------------------------------------------------
 // standard IDs
@@ -1007,33 +1062,6 @@ enum
 #define wxID_RESET              5111
 
 #define wxID_HIGHEST            5999
-
-// ----------------------------------------------------------------------------
-// Orientations and directions
-// ----------------------------------------------------------------------------
-
-enum wxOrientation
-{
-    wxHORIZONTAL              = 0x0001,
-    wxVERTICAL                = 0x0002,
-    wxBOTH                    = (wxVERTICAL | wxHORIZONTAL)
-};
-
-enum wxDirection
-{
-    wxLEFT                    = 0x0010,
-    wxRIGHT                   = 0x0020,
-    wxUP                      = 0x0040,
-    wxDOWN                    = 0x0080
-};
-
-// wxCENTRE                   = 0x0400 (defined above)
-
-// centering into frame rather than screen (obsolete)
-#define wxCENTER_FRAME          0x0000
-// centre on screen rather than parent
-#define wxCENTRE_ON_SCREEN      0x0004
-#define wxCENTER_ON_SCREEN      wxCENTRE_ON_SCREEN
 
 // ----------------------------------------------------------------------------
 // Possible SetSize flags
