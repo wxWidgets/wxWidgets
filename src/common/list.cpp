@@ -373,9 +373,7 @@ void wxListBase::DoDeleteNode(wxNodeBase *node)
 
     // so that the node knows that it's being deleted by the list
     node->m_list = NULL;
-#if (!(defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )))
     delete node;
-#endif
 }
 
 wxNodeBase *wxListBase::DetachNode(wxNodeBase *node)
@@ -534,9 +532,7 @@ void wxListBase::Sort(const wxSortCompareFunction compfunc)
 
 void wxObjectListNode::DeleteData()
 {
-#if (!(defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )))
     delete (wxObject *)GetData();
-#endif
 }
 
 // -----------------------------------------------------------------------------

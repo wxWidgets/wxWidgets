@@ -3553,9 +3553,7 @@ wxDateTimeHolidayAuthority::GetHolidaysInRange(const wxDateTime& dtStart,
 /* static */
 void wxDateTimeHolidayAuthority::ClearAllAuthorities()
 {
-#if (!(defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )))
     WX_CLEAR_ARRAY(ms_authorities);
-#endif
 }
 
 /* static */

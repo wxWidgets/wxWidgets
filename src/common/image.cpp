@@ -181,20 +181,20 @@ void wxImage::Destroy()
 wxImage wxImage::Copy() const
 {
     wxImage image;
-    
+
     wxCHECK_MSG( Ok(), image, wxT("invalid image") );
 
     image.Create( M_IMGDATA->m_width, M_IMGDATA->m_height );
-    
+
     char unsigned *data = image.GetData();
 
     wxCHECK_MSG( data, image, wxT("unable to create image") );
-    
+
     if (M_IMGDATA->m_hasMask)
         image.SetMaskColour( M_IMGDATA->m_maskRed, M_IMGDATA->m_maskGreen, M_IMGDATA->m_maskBlue );
 
     memcpy( data, GetData(), M_IMGDATA->m_width*M_IMGDATA->m_height*3 );
-    
+
     return image;
 }
 
@@ -368,7 +368,7 @@ void wxImage::Paste( const wxImage &image, int x, int y )
     int yy = 0;
     int width = image.GetWidth();
     int height = image.GetHeight();
-    
+
     if (x < 0)
     {
         xx = -x;
@@ -379,25 +379,25 @@ void wxImage::Paste( const wxImage &image, int x, int y )
         yy = -y;
         height += y;
     }
-    
+
     if ((x+xx)+width > M_IMGDATA->m_width)
         width = M_IMGDATA->m_width - (x+xx);
     if ((y+yy)+height > M_IMGDATA->m_height)
         height = M_IMGDATA->m_height - (y+yy);
-    
+
     if (width < 1) return;
     if (height < 1) return;
-    
+
     if ((!HasMask() && !image.HasMask()) ||
-       ((HasMask() && image.HasMask() && 
-         (GetMaskRed()==image.GetMaskRed()) && 
-         (GetMaskGreen()==image.GetMaskGreen()) && 
+       ((HasMask() && image.HasMask() &&
+         (GetMaskRed()==image.GetMaskRed()) &&
+         (GetMaskGreen()==image.GetMaskGreen()) &&
          (GetMaskBlue()==image.GetMaskBlue()))))
     {
         width *= 3;
         unsigned char* source_data = image.GetData() + xx*3 + yy*3*image.GetWidth();
         int source_step = image.GetWidth()*3;
-        
+
         unsigned char* target_data = GetData() + (x+xx)*3 + (y+yy)*3*M_IMGDATA->m_width;
         int target_step = M_IMGDATA->m_width*3;
         for (int j = 0; j < height; j++)
@@ -887,9 +887,7 @@ void wxImage::CleanUpHandlers()
         wxImageHandler *handler = (wxImageHandler *)node->Data();
         wxNode *next = node->Next();
         delete handler;
-#if (!(defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )))
         delete node;
-#endif
         node = next;
     }
 }

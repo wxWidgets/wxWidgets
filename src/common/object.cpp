@@ -363,10 +363,7 @@ void wxObject::UnRef()
         wxASSERT_MSG( m_refData->m_count > 0, _T("invalid ref data count") );
 
         if ( !--m_refData->m_count )
-#if (!(defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )))
-// Until we figure this out
             delete m_refData;
-#endif
         m_refData = (wxObjectRefData *) NULL;
     }
 }
