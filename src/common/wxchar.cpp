@@ -613,6 +613,22 @@ int wxFputs(const wchar_t *ws, FILE *stream)
 }
 #endif // wxNEED_FPUTS
 
+#ifdef wxNEED_PUTS
+int wxPuts(const wxChar *ws)
+{
+    int rc = wxFputs(ws, stdout);
+    if ( rc != -1 )
+    {
+        if ( wxFputs(L"\n", stdout) == -1 )
+            return -1;
+
+        rc++;
+    }
+
+    return rc;
+}
+#endif // wxNEED_PUTS
+
 #ifdef wxNEED_PUTC
 int /* not wint_t */ wxPutc(wchar_t wc, FILE *stream)
 {

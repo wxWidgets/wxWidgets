@@ -199,6 +199,13 @@ versions, please update your code to not use them.
 OTHER CHANGES
 =============
 
+2.5.4
+-----
+
+Unix:
+
+- wxPuts() now correctly outputs trailing new line in Unicode build
+
 2.5.3
 -----
 

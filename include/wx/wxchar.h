@@ -393,9 +393,11 @@
         #define wxNEED_UNGETC
 
         #define wxNEED_FPUTS
+        #define wxNEED_PUTS
         #define wxNEED_PUTC
  
         int wxFputs(const wxChar *ch, FILE *stream);
+        int wxPuts(const wxChar *ws);
         int wxPutc(wxChar ch, FILE *stream);
         
         #ifdef __cplusplus
@@ -407,7 +409,6 @@
         #endif
 
         #define wxPutchar(wch) wxPutc(wch, stdout)
-        #define wxPuts(ws) wxFputs(ws, stdout)
             
         #define wxNEED_PRINTF_CONVERSION
         #define wxNEED_WX_STDIO_H
@@ -498,7 +499,8 @@
             #ifdef HAVE_PUTWS
                 #define wxPuts      putws
             #else
-                #define wxPuts(ws) wxFputs(ws, stdout)
+                #define wxNEED_PUTS
+                int wxPuts(const wxChar *ws)
             #endif
 
             /* we need %s to %ls conversion for printf and scanf etc */
