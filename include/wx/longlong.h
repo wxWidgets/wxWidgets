@@ -50,7 +50,7 @@
     #define wxLongLongIsLong
 #elif (defined(__VISUALC__) && defined(__WIN32__)) || defined( __VMS__ )
     #define wxLongLong_t __int64
-#elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x520)
+#elif defined(__BORLANDC__) && defined(__WIN32__) && (__BORLANDC__ >= 0x520)
     #define wxLongLong_t __int64
 #elif defined(__GNUG__)
     #define wxLongLong_t long long
@@ -72,7 +72,6 @@
     #pragma warning "Your compiler does not appear to support 64 bit "\
                     "integers, using emulation class instead."
 #endif
-
     #define wxUSE_LONGLONG_WX 1
 #endif // compiler
 
