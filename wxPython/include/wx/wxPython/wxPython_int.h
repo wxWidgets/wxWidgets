@@ -338,6 +338,7 @@ typedef swig_type_info* (*p_SWIG_Python_TypeCheck_t)(char *c, swig_type_info *);
 typedef void*           (*p_SWIG_Python_TypeCast_t)(swig_type_info *, void *);
 typedef swig_type_info* (*p_SWIG_Python_TypeDynamicCast_t)(swig_type_info *, void **);
 typedef const char*     (*p_SWIG_Python_TypeName_t)(const swig_type_info *);
+typedef const char *    (*p_SWIG_Python_TypePrettyName_t)(const swig_type_info *);
 typedef swig_type_info* (*p_SWIG_Python_TypeQuery_t)(const char *);
 typedef void            (*p_SWIG_Python_TypeClientData_t)(swig_type_info *, void *);
 typedef PyObject*       (*p_SWIG_Python_newvarlink_t)(void);
@@ -359,6 +360,7 @@ struct wxPyCoreAPI {
     p_SWIG_Python_TypeCast_t           p_SWIG_Python_TypeCast;
     p_SWIG_Python_TypeDynamicCast_t    p_SWIG_Python_TypeDynamicCast;
     p_SWIG_Python_TypeName_t           p_SWIG_Python_TypeName;
+    p_SWIG_Python_TypePrettyName_t     p_SWIG_Python_TypePrettyName; 
     p_SWIG_Python_TypeQuery_t          p_SWIG_Python_TypeQuery;
     p_SWIG_Python_TypeClientData_t     p_SWIG_Python_TypeClientData;
     p_SWIG_Python_newvarlink_t         p_SWIG_Python_newvarlink;

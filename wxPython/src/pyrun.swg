@@ -8,8 +8,6 @@
  *
  ************************************************************************/
 
-#include "Python.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -77,3 +75,4 @@ SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 #ifdef __cplusplus
 }
 #endif
+

@@ -137,6 +137,7 @@ static wxPyCoreAPI API = {
     (p_SWIG_Python_TypeCast_t)SWIG_Python_TypeCast,
     (p_SWIG_Python_TypeDynamicCast_t)SWIG_Python_TypeDynamicCast,
     (p_SWIG_Python_TypeName_t)SWIG_Python_TypeName,
+    (p_SWIG_Python_TypePrettyName_t)SWIG_Python_TypePrettyName,
     (p_SWIG_Python_TypeQuery_t)SWIG_Python_TypeQuery,
     (p_SWIG_Python_TypeClientData_t)SWIG_Python_TypeClientData,
     (p_SWIG_Python_newvarlink_t)SWIG_Python_newvarlink,

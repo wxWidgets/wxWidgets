@@ -28,6 +28,7 @@
 #define SWIG_TypeCast        SWIG_Python_TypeCast
 #define SWIG_TypeDynamicCast SWIG_Python_TypeDynamicCast
 #define SWIG_TypeName        SWIG_Python_TypeName
+#define SWIG_TypePrettyName  SWIG_Python_TypePrettyName
 #define SWIG_TypeQuery       SWIG_Python_TypeQuery
 #define SWIG_TypeClientData  SWIG_Python_TypeClientData
 #define SWIG_PackData        SWIG_Python_PackData 
@@ -104,6 +105,7 @@ SWIGIMPORT(swig_type_info *) SWIG_TypeCheck(char *c, swig_type_info *);
 SWIGIMPORT(void *)           SWIG_TypeCast(swig_type_info *, void *);
 SWIGIMPORT(swig_type_info *) SWIG_TypeDynamicCast(swig_type_info *, void **);
 SWIGIMPORT(const char *)     SWIG_TypeName(const swig_type_info *);
+SWIGIMPORT(const char *)     SWIG_TypePrettyName(const swig_type_info *);
 SWIGIMPORT(swig_type_info *) SWIG_TypeQuery(const char *);
 SWIGIMPORT(void)             SWIG_TypeClientData(swig_type_info *, void *);
 SWIGIMPORT(char *)           SWIG_PackData(char *, void *, int);
@@ -112,13 +114,14 @@ SWIGIMPORT(char *)           SWIG_UnpackData(char *, void *, int);
 #else
 
 static swig_type_info *swig_type_list = 0;
+static swig_type_info **swig_type_list_handle = &swig_type_list;
 
 /* Register a type mapping with the type-checking */
 SWIGRUNTIME(swig_type_info *)
 SWIG_TypeRegister(swig_type_info *ti) {
   swig_type_info *tc, *head, *ret, *next;
   /* Check to see if this type has already been registered */
-  tc = swig_type_list;
+  tc = *swig_type_list_handle;
   while (tc) {
     if (strcmp(tc->name, ti->name) == 0) {
       /* Already exists in the table.  Just add additional types to the list */
@@ -133,8 +136,8 @@ SWIG_TypeRegister(swig_type_info *ti) {
   next = 0;
 
   /* Place in list */
-  ti->prev = swig_type_list;
-  swig_type_list = ti;
+  ti->prev = *swig_type_list_handle;
+  *swig_type_list_handle = ti;
 
   /* Build linked lists */
   l1:
@@ -203,6 +206,26 @@ SWIG_TypeName(const swig_type_info *ty) {
   return ty->name;
 }
 
+/* Return the pretty name associated with this type,
+   that is an unmangled type name in a form presentable to the user.
+*/
+SWIGRUNTIME(const char *)
+SWIG_TypePrettyName(const swig_type_info *type) {
+  /* The "str" field contains the equivalent pretty names of the
+     type, separated by vertical-bar characters.  We choose
+     to print the last name, as it is often (?) the most
+     specific. */
+  if (type->str != NULL) {
+    const char *last_name = type->str;
+    const char *s;
+    for (s = type->str; *s; s++)
+      if (*s == '|') last_name = s+1;
+    return last_name;
+  }
+  else
+    return type->name;
+}
+
 /* 
    Compare two type names skipping the space characters, therefore
    "char*" == "char *" and "Class<int>" == "Class<int >", etc.
@@ -243,7 +266,7 @@ SWIG_TypeEquiv(const char *nb, const char *tb) {
 /* Search for a swig_type_info structure */
 SWIGRUNTIME(swig_type_info *)
 SWIG_TypeQuery(const char *name) {
-  swig_type_info *ty = swig_type_list;
+  swig_type_info *ty = *swig_type_list_handle;
   while (ty) {
     if (ty->str && (SWIG_TypeEquiv(ty->str,name))) return ty;
     if (ty->name && (strcmp(name,ty->name) == 0)) return ty;
@@ -261,7 +284,7 @@ SWIG_TypeClientData(swig_type_info *ti, void *clientdata) {
   equiv = ti->next;
   while (equiv) {
     if (!equiv->converter) {
-      tc = swig_type_list;
+      tc = *swig_type_list_handle;
       while (tc) {
         if ((strcmp(tc->name, equiv->name) == 0))
           SWIG_TypeClientData(tc,clientdata);
@@ -276,10 +299,10 @@ SWIG_TypeClientData(swig_type_info *ti, void *clientdata) {
 SWIGRUNTIME(char *)
 SWIG_PackData(char *c, void *ptr, int sz) {
   static char hex[17] = "0123456789abcdef";
-  int i;
   unsigned char *u = (unsigned char *) ptr;
+  const unsigned char *eu =  u + sz;
   register unsigned char uu;
-  for (i = 0; i < sz; i++,u++) {
+  for (; u != eu; ++u) {
     uu = *u;
     *(c++) = hex[(uu & 0xf0) >> 4];
     *(c++) = hex[uu & 0xf];
@@ -293,8 +316,8 @@ SWIG_UnpackData(char *c, void *ptr, int sz) {
   register unsigned char uu = 0;
   register int d;
   unsigned char *u = (unsigned char *) ptr;
-  int i;
-  for (i = 0; i < sz; i++, u++) {
+  const unsigned char *eu =  u + sz;
+  for (; u != eu; ++u) {
     d = *(c++);
     if ((d >= '0') && (d <= '9'))
       uu = ((d - '0') << 4);
@@ -317,7 +340,7 @@ SWIG_UnpackData(char *c, void *ptr, int sz) {
 #endif
 
 /***********************************************************************
- * python.swg
+ * pyrun.swg
  *
  *     This file contains the runtime support for Python modules
  *     and includes code for managing global variables and pointer
@@ -325,8 +348,6 @@ SWIG_UnpackData(char *c, void *ptr, int sz) {
  *
  * Author : David Beazley (beazley@cs.uchicago.edu)
  ************************************************************************/
-
-#include "Python.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -481,6 +502,7 @@ statichere PyTypeObject varlinktype = {
   0,                                  /* tp_clear */
   0,                                  /* tp_richcompare */
   0,                                  /* tp_weaklistoffset */
+#if PY_VERSION_HEX >= 0x02020000
   0,                                  /* tp_iter */
   0,                                  /* tp_iternext */
   0,                                  /* tp_methods */
@@ -501,6 +523,17 @@ statichere PyTypeObject varlinktype = {
   0,                                  /* tp_cache */
   0,                                  /* tp_subclasses */
   0,                                  /* tp_weaklist */
+#endif
+#if PY_VERSION_HEX >= 0x02030200
+  0,                                  /* tp_del */
+#endif
+#ifdef COUNT_ALLOCS
+  /* these must be last */
+  0,                                  /* tp_alloc */
+  0,                                  /* tp_free */
+  0,                                  /* tp_maxalloc */
+  0,                                  /*  tp_next */
+#endif
 };
 
 /* Create a variable linking object for use later */
@@ -574,7 +607,7 @@ SWIG_Python_ConvertPtr(PyObject *obj, void **ptr, swig_type_info *ty, int flags)
       goto type_error;
     }
   } 
-  c = PyString_AsString(obj);
+  c = PyString_AS_STRING(obj);
   /* Pointer values must start with leading underscore */
   if (*c != '_') {
     *ptr = (void *) 0;
@@ -602,19 +635,17 @@ cobject:
   }
 
   if ((pyobj) && (flags & SWIG_POINTER_DISOWN)) {
-    PyObject *zero = PyInt_FromLong(0);
-    PyObject_SetAttrString(pyobj,(char*)"thisown",zero);
-    Py_DECREF(zero);
+    PyObject_SetAttrString(pyobj,(char*)"thisown",Py_False);
   }
   return 0;
 
 type_error:
+  PyErr_Clear();
   if (flags & SWIG_POINTER_EXCEPTION) {
     if (ty && c) {
-      PyObject *err = 
-	PyString_FromFormat("Type error. Got %s, expected %s",c,ty->name);
-      PyErr_SetObject(PyExc_TypeError, err);
-      Py_DECREF(err);
+      PyErr_Format(PyExc_TypeError, 
+		   "Type error. Got %s, expected %s",
+		   c, ty->name);
     } else {
       PyErr_SetString(PyExc_TypeError,"Expected a pointer");
     }
@@ -637,7 +668,7 @@ SWIG_Python_ConvertPacked(PyObject *obj, void *ptr, int sz, swig_type_info *ty, 
   char  *c = 0;
 
   if ((!obj) || (!PyString_Check(obj))) goto type_error;
-  c = PyString_AsString(obj);
+  c = PyString_AS_STRING(obj);
   /* Pointer values must start with leading underscore */
   if (*c != '_') goto type_error;
   c++;
@@ -652,10 +683,9 @@ type_error:
 
   if (flags) {
     if (ty && c) {
-      PyObject *err = 
-	PyString_FromFormat("Type error. Got %s, expected %s",c,ty->name);
-      PyErr_SetObject(PyExc_TypeError, err);
-      Py_DECREF(err);
+      PyErr_Format(PyExc_TypeError, 
+		   "Type error. Got %s, expected %s",
+		   c, ty->name);
     } else {
       PyErr_SetString(PyExc_TypeError,"Expected a pointer");
     }
@@ -692,9 +722,7 @@ SWIG_Python_NewPointerObj(void *ptr, swig_type_info *type, int own) {
     Py_DECREF(args);
     if (inst) {
       if (own) {
-        PyObject *n = PyInt_FromLong(1);
-        PyObject_SetAttrString(inst,(char*)"thisown",n);
-        Py_DECREF(n);
+        PyObject_SetAttrString(inst,(char*)"thisown",Py_True);
       }
       robj = inst;
     }
@@ -769,61 +797,74 @@ static swig_type_info *swig_types[2];
 
 /* -------- TYPES TABLE (END) -------- */
 
+#define SWIG_init    initswigrun
 
-/*-----------------------------------------------
-              @(target):= _swigrun.so
-  ------------------------------------------------*/
-#define SWIG_init    init_swigrun
+#define SWIG_name    "swigrun"
 
-#define SWIG_name    "_swigrun"
+/* Auxiliar swig  macros that appear in the header */
 
-/* Auxiliar swig  macros */
+#define SWIG_OLDOBJ  1
+#define SWIG_NEWOBJ  SWIG_OLDOBJ + 1
+#define SWIG_PYSTR   SWIG_NEWOBJ + 1
 
 #ifdef __cplusplus
 #define SWIGSTATICINLINE(a) static inline a
 #define SWIGSTATIC(a) static a
-#define swig_new_array(type, size) (new type[(size)])
+#define swig_new_array(size,Type) (new Type[(size)])
+#define swig_delete(cptr) delete cptr
 #define swig_delete_array(cptr) delete[] cptr
-#define swig_const_cast(type,a) const_cast<type>(a)
-#define swig_static_cast(type,a) static_cast<type>(a)
-#define swig_reinterpret_cast(type,a) reinterpret_cast<type>(a)
-
-#ifdef HAVE_NUMERIC_CAST
-#define swig_numeric_cast(type,a) numeric_cast<type>(a)
-#else
-#define swig_numeric_cast(type,a) static_cast<type>(a)
-#endif
+#define swig_const_cast(a,Type) const_cast<Type >(a)
+#define swig_static_cast(a,Type) static_cast<Type >(a)
+#define swig_reinterpret_cast(a,Type) reinterpret_cast<Type >(a)
+#define swig_new_copy(ptr,Type) (new Type(*ptr))
+#define swig_numeric_cast(a,Type) static_cast<Type >(a)
 
 #else /* C case */
 
 #define SWIGSTATICINLINE(a) static a
 #define SWIGSTATIC(a) static a
-#define swig_new_array(type, size) ((type*) malloc((size)*sizeof(type)))
+#define swig_new_array(size,Type) ((Type*) malloc((size)*sizeof(Type)))
+#define swig_delete(cptr) free((char*)cptr)
 #define swig_delete_array(cptr) free((char*)cptr)
-#define swig_const_cast(type,a) (type)(a)
-#define swig_static_cast(type,a) (type)(a)
-#define swig_reinterpret_cast(type,a) (type)(a)
-#define swig_numeric_cast(type,a) (type)(a)
+#define swig_const_cast(a,Type) (Type)(a)
+#define swig_static_cast(a,Type) (Type)(a)
+#define swig_reinterpret_cast(a,Type) (Type)(a)
+#define swig_numeric_cast(a,Type) (Type)(a)
+#define swig_new_copy(ptr,Type)  ((Type*)memcpy(malloc(sizeof(Type)),ptr,sizeof(Type)))
 
 #endif /* __cplusplus */
 
 
-#define SWIG_FromSignedChar     PyInt_FromLong
-#define SWIG_FromUnsignedChar   PyInt_FromLong
-#define SWIG_FromShort         PyInt_FromLong
-#define SWIG_FromUnsignedShort  PyInt_FromLong
-#define SWIG_FromInt           PyInt_FromLong
-#define SWIG_FromLong          PyInt_FromLong
-#define SWIG_FromFloat         PyFloat_FromDouble
-#define SWIG_FromDouble        PyFloat_FromDouble
-#define SWIG_FromFloat         PyFloat_FromDouble
-#define SWIG_FromDouble        PyFloat_FromDouble
+/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_signed_SS_char PyInt_FromLong
+/*@@*/
+/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_unsigned_SS_char PyInt_FromLong
+/*@@*/
+/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_short PyInt_FromLong
+/*@@*/
+/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_unsigned_SS_short PyInt_FromLong
+/*@@*/
+/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_int PyInt_FromLong
+/*@@*/
+/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_long PyInt_FromLong
+/*@@*/
+/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_float PyFloat_FromDouble
+/*@@*/
+/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_double PyFloat_FromDouble
+/*@@*/
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 static PyMethodDef SwigMethods[] = {
-	 { NULL, NULL }
+	 { NULL, NULL, 0, NULL }
 };
 
 
@@ -840,7 +881,7 @@ _swigt__p_char,
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (END) -------- */
 
 static swig_const_info swig_const_table[] = {
-{0}};
+{0, 0, 0, 0.0, 0, 0}};
 
 #ifdef __cplusplus
 }

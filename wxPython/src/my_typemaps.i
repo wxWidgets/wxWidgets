@@ -283,62 +283,6 @@ MAKE_INT_ARRAY_TYPEMAPS(styles, styles_field)
 }
 
 
-// These fragments are iserted in modules that need to convert PyObjects to
-// integer values, my versions allow any numeric type to be used, as long as
-// it can be converted to a PyInt.  (Specifically, I allow floats where the
-// default SWIG_AsLong would raise an obsucre exception from within
-// PyLong_AsLong.)
-
-%fragment("SWIG_AsLong","header") %{
-SWIGSTATICINLINE(long)
-SWIG_AsLong(PyObject * obj)
-{
-    if (PyNumber_Check(obj))
-        return PyInt_AsLong(obj);
-    else {
-        PyObject* errmsg = PyString_FromFormat("Expected number, got %s",
-                                               obj->ob_type->tp_name);
-        PyErr_SetObject(PyExc_TypeError, errmsg);
-        Py_DECREF(errmsg);
-        return 0;
-    }
-}
-%}
-
-%fragment("SWIG_AsUnsignedLong","header", fragment="SWIG_AsLong") %{
-SWIGSTATICINLINE(unsigned long)
-SWIG_AsUnsignedLong(PyObject * obj) 
-{
-  if (PyLong_Check(obj)) {
-    return PyLong_AsUnsignedLong(obj);
-  } else {
-    long i = SWIG_AsLong(obj);
-    if ( !PyErr_Occurred() && (i < 0)) {
-      PyErr_SetString(PyExc_TypeError, "negative value received for unsigned type");
-    }
-    return i;
-  }
-}
-%}
-
-
-%fragment("SWIG_AsDouble","header") %{
-SWIGSTATICINLINE(double)
-SWIG_AsDouble(PyObject *obj)
-{
-    if (PyNumber_Check(obj))
-        return PyFloat_AsDouble(obj);
-    else {
-        PyObject* errmsg = PyString_FromFormat("Expected number, got %s",
-                                               obj->ob_type->tp_name);
-        PyErr_SetObject(PyExc_TypeError, errmsg);
-        Py_DECREF(errmsg);
-        return 0;
-    }
-}
-%}
-
-
 //---------------------------------------------------------------------------
 // Typemap for when GDI objects are returned by reference.  This will cause a
 // copy to be made instead of returning a reference to the same instance.  The
