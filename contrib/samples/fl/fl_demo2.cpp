@@ -55,46 +55,46 @@ IMPLEMENT_APP    (MyApp)
 bool MyApp::OnInit(void)
 {
     // Create the main frame window
-    MyFrame *frame = new MyFrame(NULL, "wxWindows 2.0 wxFrameLayout demo", 50, 50, 650, 540);
+    MyFrame *frame = new MyFrame(NULL, _("wxWindows 2.0 wxFrameLayout demo"), 50, 50, 650, 540);
     
     // Give it an icon
 #ifdef __WINDOWS__
-    frame->SetIcon(wxIcon("mondrian"));
+    frame->SetIcon(wxIcon(wxT("mondrian")));
 #endif
 #ifdef __X__
-    frame->SetIcon(wxIcon("aiai.xbm"));
+    frame->SetIcon(wxIcon(wxT("aiai.xbm")));
 #endif
     
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
     wxMenu *active_menu = new wxMenu;
     
-    file_menu->Append( ID_LOAD,  "&Load layouts"  );
-    file_menu->Append( ID_STORE, "&Store layouts" );
+    file_menu->Append( ID_LOAD,  _("&Load layouts")  );
+    file_menu->Append( ID_STORE, _("&Store layouts") );
     file_menu->AppendSeparator();
     
-    file_menu->Append( ID_AUTOSAVE, "&Auto Save Layouts", "save layouts on exit", TRUE );
+    file_menu->Append( ID_AUTOSAVE, _("&Auto Save Layouts"), _("save layouts on exit"), TRUE );
     file_menu->AppendSeparator();
     
-    file_menu->Append(MINIMAL_ABOUT, "A&bout !");
-    file_menu->Append(MINIMAL_QUIT, "E&xit\tTab");
+    file_menu->Append(MINIMAL_ABOUT, _("A&bout !"));
+    file_menu->Append(MINIMAL_QUIT, _("E&xit\tTab"));
     
-    //active_menu->Append( ID_SETTINGS, "&Settings...\tCtrl" );
+    //active_menu->Append( ID_SETTINGS, _("&Settings...\tCtrl") );
     //active_menu->AppendSeparator();
     
-    active_menu->Append( ID_REMOVE,    "&Remove Active" );
-    active_menu->Append( ID_REMOVEALL, "Remove &All" );
-    active_menu->Append( ID_RECREATE,  "Re&create" );
+    active_menu->Append( ID_REMOVE,    _("&Remove Active") );
+    active_menu->Append( ID_REMOVEALL, _("Remove &All") );
+    active_menu->Append( ID_RECREATE,  _("Re&create") );
     active_menu->AppendSeparator();
     
-    active_menu->Append( ID_FIRST,  "Activate f&irst layout \tF1", "activate it", TRUE );
-    active_menu->Append( ID_SECOND, "Activate &second layout\tF2","activate it",  TRUE );
-    active_menu->Append( ID_THIRD,  "Activate &third layout\tF3","activate it",   TRUE );
+    active_menu->Append( ID_FIRST,  _("Activate f&irst layout \tF1"), _("activate it"), TRUE );
+    active_menu->Append( ID_SECOND, _("Activate &second layout\tF2"), _("activate it"),  TRUE );
+    active_menu->Append( ID_THIRD,  _("Activate &third layout\tF3"), _("activate it"),   TRUE );
     
     wxMenuBar *menu_bar = new wxMenuBar;
     
-    menu_bar->Append(file_menu,   "&File");
-    menu_bar->Append(active_menu, "Active &Layout");
+    menu_bar->Append(file_menu,   _("&File"));
+    menu_bar->Append(active_menu, _("Active &Layout"));
     
     frame->CreateStatusBar(3);
     
@@ -154,7 +154,7 @@ END_EVENT_TABLE()
 
 // My frame constructor
 
-MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
+MyFrame::MyFrame(wxFrame *frame, const wxChar *title, int x, int y, int w, int h)
     : wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h)),
     mpNestedLayout( NULL ),
     mpAboutBoxLayout( NULL ),
@@ -168,7 +168,7 @@ MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
 {
     mpInternalFrm = (wxPanel*)this;
     
-    mAboutBox.Create( this, -1,  "About box in wxWindows style...",
+    mAboutBox.Create( this, -1,  _T("About box in wxWindows style..."),
                       wxDefaultPosition,
                       wxSize( 385,220),
                       wxDIALOG_MODAL | wxDEFAULT_DIALOG_STYLE | wxTAB_TRAVERSAL );
@@ -183,11 +183,11 @@ MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
     
     wxBitmap bmp1,bmp2;
     
-    if ( wxFileExists( BMP_DIR "folder_icon.bmp" ) )
-        bmp1.LoadFile( BMP_DIR "folder_icon.bmp", wxBITMAP_TYPE_BMP );
+    if ( wxFileExists( wxString(wxT(BMP_DIR)) + wxT("folder_icon.bmp") ) )
+        bmp1.LoadFile( wxString(wxT(BMP_DIR)) + wxT("folder_icon.bmp"), wxBITMAP_TYPE_BMP );
     
-    if ( wxFileExists( BMP_DIR "class_icon1.bmp" ) )
-        bmp2.LoadFile( BMP_DIR "class_icon1.bmp", wxBITMAP_TYPE_BMP );
+    if ( wxFileExists( wxString(wxT(BMP_DIR)) + wxT("class_icon1.bmp") ) )
+        bmp2.LoadFile( wxString(wxT(BMP_DIR)) + wxT("class_icon1.bmp"), wxBITMAP_TYPE_BMP );
     
     mImageList.Add( bmp1 );
     mImageList.Add( bmp2 );
@@ -198,7 +198,7 @@ MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
     
     mpNestedLayout = 0;
     
-    mpClntWindow = CreateTxtCtrl("client window");
+    mpClntWindow = CreateTxtCtrl(wxT("client window"));
     
     // Create all layouts
     for( i = 0; i != MAX_LAYOUTS; ++i )
@@ -242,12 +242,12 @@ bool MyFrame::OnClose(void)
 
 void MyFrame::OnLoad( wxCommandEvent& event )
 {
-    wxMessageBox("Hey - you found a BIG question-mark !!");
+    wxMessageBox(_("Hey - you found a BIG question-mark !!"));
 }
 
 void MyFrame::OnStore( wxCommandEvent& event )
 {
-    wxMessageBox("Hey - you found another BIG question-mark !!");
+    wxMessageBox(_("Hey - you found another BIG question-mark !!"));
 }
 
 void MyFrame::OnAutoSave( wxCommandEvent& event )
@@ -325,7 +325,7 @@ void MyFrame::OnAbout( wxCommandEvent& event )
 {
     wxFont font;
 #ifdef __WXMSW__
-    font.SetFaceName("MS Sans Serif");
+    font.SetFaceName(wxT("MS Sans Serif"));
 #else
     font.SetFamily( wxSWISS );
 #endif
@@ -366,7 +366,7 @@ void MyFrame::OnChar( wxKeyEvent& event )
             if ( event.m_keyCode == WXK_F4 && !event.AltDown() )
             {   
                 // "AI" :-)
-                wxMessageBox("There are only 3 layouts in this demo :-(");
+                wxMessageBox(_("There are only 3 layouts in this demo :-("));
             }
             else
             {
@@ -399,7 +399,7 @@ void MyFrame::OnChar( wxKeyEvent& event )
 
 void MyFrame::OnSayItsOk( wxCommandEvent& event )
 {
-    wxMessageBox("It's OK  :-)\n\n now click on the border around the button\n and try dragging it!" );
+    wxMessageBox(_("It's OK  :-)\n\n now click on the border around the button\n and try dragging it!") );
 }
 
 void MyFrame::OnBtnYes( wxCommandEvent& event )
@@ -425,13 +425,13 @@ void MyFrame::InitAboutBox()
     
     pArea->Create( &mAboutBox, -1 );
     
-    new wxStaticText(pArea, -1, "This is wxFrameLayout contribution demo.",
+    new wxStaticText(pArea, -1, _("This is wxFrameLayout contribution demo."),
         wxPoint(10, 10) );
     
-    new wxStaticText(pArea, -1, "Aleksandras Gluchovas (c) 1998",
+    new wxStaticText(pArea, -1, _("Aleksandras Gluchovas (c) 1998"),
         wxPoint(10, 30) );
     
-    new wxStaticText(pArea, -1, "<mailto:alex@soften.ktu.lt>",
+    new wxStaticText(pArea, -1, _("<mailto:alex@soften.ktu.lt>"),
         wxPoint(10, 50) );
     
     mpAboutBoxLayout = new wxFrameLayout( &mAboutBox, pArea, TRUE );
@@ -445,13 +445,13 @@ void MyFrame::InitAboutBox()
                    );  
     
     
-    wxButton* pYes = CreateButton("&Yes",   &mAboutBox, ID_SAY_ITSOK );
-    wxButton* pNo  = CreateButton("&No",    &mAboutBox, ID_BTN_NO );
-    wxButton* pEsc = CreateButton("Cancel", &mAboutBox, ID_BTN_ESC );
+    wxButton* pYes = CreateButton(_("&Yes"),   &mAboutBox, ID_SAY_ITSOK );
+    wxButton* pNo  = CreateButton(_("&No"),    &mAboutBox, ID_BTN_NO );
+    wxButton* pEsc = CreateButton(_("Cancel"), &mAboutBox, ID_BTN_ESC );
     
-    layout.AddBar( pEsc, sizes,  FL_ALIGN_BOTTOM, 0, 20, "cancel button");
-    layout.AddBar( pNo,  sizes,  FL_ALIGN_BOTTOM, 0, 20, "no button");
-    layout.AddBar( pYes, sizes,  FL_ALIGN_BOTTOM, 0, 20, "yes button");
+    layout.AddBar( pEsc, sizes,  FL_ALIGN_BOTTOM, 0, 20, _("cancel button"));
+    layout.AddBar( pNo,  sizes,  FL_ALIGN_BOTTOM, 0, 20, _("no button"));
+    layout.AddBar( pYes, sizes,  FL_ALIGN_BOTTOM, 0, 20, _("yes button"));
     
     layout.mBorderPen.SetColour( 192, 192, 192 );
     layout.SetMargins( 15, 15, 15, 15, wxALL_PANES );
@@ -492,13 +492,13 @@ wxTreeCtrl* MyFrame::CreateTreeCtrl( const wxString& label )
     
     if ( label[0] != 'X' )
     {
-        pTree->AppendItem(rootid, "Leaf1", 0);
-        pTree->AppendItem(rootid, "Leaf2", 0);
+        pTree->AppendItem(rootid, _("Leaf1"), 0);
+        pTree->AppendItem(rootid, _("Leaf2"), 0);
     }
     else
     {
-        pTree->AppendItem(rootid, "Scully", 0);
-        pTree->AppendItem(rootid, "Mulder", 0);
+        pTree->AppendItem(rootid, _("Scully"), 0);
+        pTree->AppendItem(rootid, _("Mulder"), 0);
     }
     
     return pTree;
@@ -509,10 +509,10 @@ wxChoice* MyFrame::CreateChoice( const wxString& txt )
     wxString choice_strings[5];
     
     choice_strings[0] = txt;
-    choice_strings[1] = "Julian";
-    choice_strings[2] = "Hattie";
-    choice_strings[3] = "Ken";
-    choice_strings[4] = "Dick";
+    choice_strings[1] = _("Julian");
+    choice_strings[2] = _("Hattie");
+    choice_strings[3] = _("Ken");
+    choice_strings[4] = _("Dick");
     
     wxChoice *choice = new wxChoice( mpInternalFrm, 301, wxDefaultPosition, 
                                         wxDefaultSize, 5, choice_strings);
@@ -558,21 +558,21 @@ void MyFrame::AddSearchToolbars( wxFrameLayout& layout, wxWindow* pParent )
     wxChoice* pChoice = new wxChoice( pTBar2, -1, wxDefaultPosition, wxSize( 140,25 ) );
     
     pTBar2->AddTool( 1, pChoice );
-    pTBar2->AddTool( 2, BMP_DIR "search.bmp" );
+    pTBar2->AddTool( 2, wxString(wxT(BMP_DIR)) + wxT("search.bmp") );
     //pTBar2->AddSeparator();
-    pTBar2->AddTool( 3, BMP_DIR "bookmarks.bmp" );
-    pTBar2->AddTool( 4, BMP_DIR "nextmark.bmp" );
-    pTBar2->AddTool( 5, BMP_DIR "prevmark.bmp" );
+    pTBar2->AddTool( 3, wxString(wxT(BMP_DIR)) + wxT("bookmarks.bmp") );
+    pTBar2->AddTool( 4, wxString(wxT(BMP_DIR)) + wxT("nextmark.bmp") );
+    pTBar2->AddTool( 5, wxString(wxT(BMP_DIR)) + wxT("prevmark.bmp") );
     
     wxDynamicToolBar* pTBar3 = new wxDynamicToolBar( mpInternalFrm, -1 );
     
-    pTBar3->AddTool( 1, BMP_DIR "open.bmp", wxBITMAP_TYPE_BMP, " Open " );
-    pTBar3->AddTool( 2, BMP_DIR "save.bmp", wxBITMAP_TYPE_BMP, " Save " );
-    pTBar3->AddTool( 3, BMP_DIR "saveall.bmp", wxBITMAP_TYPE_BMP, " Save All " );
+    pTBar3->AddTool( 1, wxString(wxT(BMP_DIR)) + wxT("open.bmp"), wxBITMAP_TYPE_BMP, wxString(_(" Open ")) );
+    pTBar3->AddTool( 2, wxString(wxT(BMP_DIR)) + wxT("save.bmp"), wxBITMAP_TYPE_BMP, wxString(_(" Save ")) );
+    pTBar3->AddTool( 3, wxString(wxT(BMP_DIR)) + wxT("saveall.bmp"), wxBITMAP_TYPE_BMP, wxString(_(" Save All ")) );
     //pTBar3->AddSeparator();
-    pTBar3->AddTool( 4, BMP_DIR "cut.bmp",   wxBITMAP_TYPE_BMP, " Open " );
-    pTBar3->AddTool( 5, BMP_DIR "copy.bmp",  wxBITMAP_TYPE_BMP, " Copy " );
-    pTBar3->AddTool( 6, BMP_DIR "paste.bmp", wxBITMAP_TYPE_BMP, " Paste " );
+    pTBar3->AddTool( 4, wxString(wxT(BMP_DIR)) + wxT("cut.bmp"),   wxBITMAP_TYPE_BMP, wxString(_(" Open ")) );
+    pTBar3->AddTool( 5, wxString(wxT(BMP_DIR)) + wxT("copy.bmp"),  wxBITMAP_TYPE_BMP, wxString(_(" Copy ")) );
+    pTBar3->AddTool( 6, wxString(wxT(BMP_DIR)) + wxT("paste.bmp"), wxBITMAP_TYPE_BMP, wxString(_(" Paste ")) );
     
 #ifdef __WXMSW__
     pTBar3->EnableTool( 2, FALSE );
@@ -580,11 +580,11 @@ void MyFrame::AddSearchToolbars( wxFrameLayout& layout, wxWindow* pParent )
     
     wxDynamicToolBar* pTBar4 = new wxDynamicToolBar( mpInternalFrm, -1 );
     
-    pTBar4->AddTool( 1, BMP_DIR "bookmarks.bmp", wxBITMAP_TYPE_BMP, "Bookmarks ", TRUE );
-    pTBar4->AddTool( 2, BMP_DIR "nextmark.bmp",  wxBITMAP_TYPE_BMP, "Next bookmark ", TRUE );
-    pTBar4->AddTool( 3, BMP_DIR "prevmark.bmp",  wxBITMAP_TYPE_BMP, "Prev bookmark ", TRUE );
+    pTBar4->AddTool( 1, wxString(wxT(BMP_DIR)) + wxT("bookmarks.bmp"), wxBITMAP_TYPE_BMP, wxString(_("Bookmarks ")), TRUE );
+    pTBar4->AddTool( 2, wxString(wxT(BMP_DIR)) + wxT("nextmark.bmp"),  wxBITMAP_TYPE_BMP, wxString(_("Next bookmark ")), TRUE );
+    pTBar4->AddTool( 3, wxString(wxT(BMP_DIR)) + wxT("prevmark.bmp"),  wxBITMAP_TYPE_BMP, wxString(_("Prev bookmark ")), TRUE );
     //pTBar4->AddSeparator();
-    pTBar4->AddTool( 4, BMP_DIR "search.bmp", wxBITMAP_TYPE_BMP, "Search ", TRUE );
+    pTBar4->AddTool( 4, wxString(wxT(BMP_DIR)) + wxT("search.bmp"), wxBITMAP_TYPE_BMP, wxString(_("Search ")), TRUE );
     
 #ifdef __WXMSW__
     pTBar4->EnableTool( 4, FALSE );
@@ -594,7 +594,7 @@ void MyFrame::AddSearchToolbars( wxFrameLayout& layout, wxWindow* pParent )
                    sizes2, FL_ALIGN_TOP,    
                    0,                
                    0,                
-                   "Search",       
+                   wxT("Search"),       
                    TRUE
                  );
     
@@ -602,7 +602,7 @@ void MyFrame::AddSearchToolbars( wxFrameLayout& layout, wxWindow* pParent )
                    sizes3, FL_ALIGN_BOTTOM, 
                    0,                
                    0,                
-                   "Titled",       
+                   wxT("Titled"),       
                    TRUE
                  );
     
@@ -610,7 +610,7 @@ void MyFrame::AddSearchToolbars( wxFrameLayout& layout, wxWindow* pParent )
                    sizes4, FL_ALIGN_BOTTOM, 
                    1,                
                    0,                
-                   "Bookmarks",       
+                   wxT("Bookmarks"),       
                    TRUE
                  );
 }
@@ -664,10 +664,10 @@ wxWindow* MyFrame::CreateDevLayout( wxFrameLayout& layout, wxWindow* pParent )
     
     pClassView->SetImageList( &mImageList );
     
-    wxTreeItemId rootId = pClassView->AddRoot( "wxWindows 2.0 classes", 0 );
+    wxTreeItemId rootId = pClassView->AddRoot( wxT("wxWindows 2.0 classes"), 0 );
     
-    pClassView->AppendItem( rootId, "wxWin Dynamic classes (grabbed at run-time)", 0 );
-    pClassView->AppendItem( rootId, "serializer-classes (grabbed at run-time)",    0 );
+    pClassView->AppendItem( rootId, _("wxWin Dynamic classes (grabbed at run-time)"), 0 );
+    pClassView->AppendItem( rootId, _("serializer-classes (grabbed at run-time)"),    0 );
     
     // now create "output" window
     wxNotebook*	pTabbedArea = new wxNotebook(pParent, -1);   
@@ -679,14 +679,14 @@ wxWindow* MyFrame::CreateDevLayout( wxFrameLayout& layout, wxWindow* pParent )
     pSheet3->Create( pTabbedArea, -1 );
     pSheet3->Show(FALSE);
     
-    pTabbedArea->AddPage( CreateTxtCtrl("build", pTabbedArea), "Build");
-    pTabbedArea->AddPage( CreateTxtCtrl("debug", pTabbedArea), "Debug");
-    pTabbedArea->AddPage( pSheet3, "is THIS recursive - or what !?");
-    pTabbedArea->AddPage( CreateTxtCtrl("profile", pTabbedArea), "Profile");
+    pTabbedArea->AddPage( CreateTxtCtrl(wxT("build"), pTabbedArea), wxT("Build"));
+    pTabbedArea->AddPage( CreateTxtCtrl(wxT("debug"), pTabbedArea), wxT("Debug"));
+    pTabbedArea->AddPage( pSheet3, wxT("is THIS recursive - or what !?"));
+    pTabbedArea->AddPage( CreateTxtCtrl(wxT("profile"), pTabbedArea), wxT("Profile"));
     
-    layout.AddBar( new StartButton95(pParent), sizes5, FL_ALIGN_TOP, 0, 0, "Start..." );
-    layout.AddBar( pClassView, sizes4, FL_ALIGN_LEFT, 0, 0, "Project Workplace" );
-    layout.AddBar( pTabbedArea, sizes4, FL_ALIGN_BOTTOM, 0, 50, "Output" );
+    layout.AddBar( new StartButton95(pParent), sizes5, FL_ALIGN_TOP, 0, 0, wxT("Start...") );
+    layout.AddBar( pClassView, sizes4, FL_ALIGN_LEFT, 0, 0, wxT("Project Workplace") );
+    layout.AddBar( pTabbedArea, sizes4, FL_ALIGN_BOTTOM, 0, 50, wxT("Output") );
     
     return pSheet3;
 }
@@ -750,11 +750,11 @@ void MyFrame::DropInSomeBars( int layoutNo )
         
         pGreenOne->SetBackgroundColour( wxColour(128,255,128) );
         
-        layout.AddBar( pGreenOne,                      sizes,  FL_ALIGN_TOP,         0, 50, "Bar1", TRUE );
-        layout.AddBar( new MyTestPanel(mpInternalFrm), sizes,  FL_ALIGN_TOP,         2, 50, "Bar2", TRUE );
-        layout.AddBar( new MyTestPanel(mpInternalFrm), sizes,  FL_ALIGN_BOTTOM,      2, 50, "Bar3", TRUE );
-        layout.AddBar( new MyTestPanel(mpInternalFrm), sizes,  FL_ALIGN_LEFT,        2, 50, "Bar4", TRUE );
-        layout.AddBar( new MyTestPanel(mpInternalFrm), sizes1, wxCBAR_HIDDEN, 2, 50, "Super-Bar", TRUE );
+        layout.AddBar( pGreenOne,                      sizes,  FL_ALIGN_TOP,         0, 50, wxT("Bar1"), TRUE );
+        layout.AddBar( new MyTestPanel(mpInternalFrm), sizes,  FL_ALIGN_TOP,         2, 50, wxT("Bar2"), TRUE );
+        layout.AddBar( new MyTestPanel(mpInternalFrm), sizes,  FL_ALIGN_BOTTOM,      2, 50, wxT("Bar3"), TRUE );
+        layout.AddBar( new MyTestPanel(mpInternalFrm), sizes,  FL_ALIGN_LEFT,        2, 50, wxT("Bar4"), TRUE );
+        layout.AddBar( new MyTestPanel(mpInternalFrm), sizes1, wxCBAR_HIDDEN, 2, 50, wxT("Super-Bar"), TRUE );
     }
     else
     {
@@ -762,15 +762,15 @@ void MyFrame::DropInSomeBars( int layoutNo )
         {
             // show off various wx-controls in the second layout
             
-            layout.AddBar( CreateTxtCtrl(),           sizes,  FL_ALIGN_TOP,    0, 50,  "Fixed text Area&0"     );
-            layout.AddBar( CreateButton("OK"),        sizes,  FL_ALIGN_TOP,    0, 100, "First Button"    );
-            layout.AddBar( CreateTxtCtrl(),           sizes1, FL_ALIGN_BOTTOM, 0, 50,  "First Tree"  );
-            layout.AddBar( CreateTreeCtrl("Root"),    sizes1, FL_ALIGN_LEFT,   0, 0,   "TreeCtrl Window" );
-            layout.AddBar( CreateChoice("Choice 1"),  sizes3, FL_ALIGN_TOP,    0, 0,   "Choice 1 (buggy)", FALSE, wxCBAR_HIDDEN );
-            layout.AddBar( CreateChoice("Choice 2"),  sizes3, FL_ALIGN_TOP,    0, 0,   "Choice 2 (buggy)", FALSE, wxCBAR_HIDDEN );
-            layout.AddBar( CreateTreeCtrl("X-Files"), sizes1, FL_ALIGN_RIGHT,  0, 100, "X-Files" );
-            layout.AddBar( CreateTxtCtrl("smaller1"), sizes3, FL_ALIGN_TOP,    0, 50,  "smaller Area1"     );
-            layout.AddBar( CreateTxtCtrl("smaller2"), sizes3, FL_ALIGN_TOP,    0, 50,  "sm&ller Area2"     );
+            layout.AddBar( CreateTxtCtrl(),                sizes,  FL_ALIGN_TOP,    0, 50,  wxT("Fixed text Area&0")     );
+            layout.AddBar( CreateButton(wxT("OK")),        sizes,  FL_ALIGN_TOP,    0, 100, wxT("First Button")    );
+            layout.AddBar( CreateTxtCtrl(),                sizes1, FL_ALIGN_BOTTOM, 0, 50,  wxT("First Tree")  );
+            layout.AddBar( CreateTreeCtrl(wxT("Root")),    sizes1, FL_ALIGN_LEFT,   0, 0,   wxT("TreeCtrl Window") );
+            layout.AddBar( CreateChoice(wxT("Choice 1")),  sizes3, FL_ALIGN_TOP,    0, 0,   wxT("Choice 1 (buggy)"), FALSE, wxCBAR_HIDDEN );
+            layout.AddBar( CreateChoice(wxT("Choice 2")),  sizes3, FL_ALIGN_TOP,    0, 0,   wxT("Choice 2 (buggy)"), FALSE, wxCBAR_HIDDEN );
+            layout.AddBar( CreateTreeCtrl(wxT("X-Files")), sizes1, FL_ALIGN_RIGHT,  0, 100, wxT("X-Files") );
+            layout.AddBar( CreateTxtCtrl(wxT("smaller1")), sizes3, FL_ALIGN_TOP,    0, 50,  wxT("smaller Area1")     );
+            layout.AddBar( CreateTxtCtrl(wxT("smaller2")), sizes3, FL_ALIGN_TOP,    0, 50,  wxT("sm&ller Area2")     );
         }
         else
         {
@@ -783,13 +783,13 @@ void MyFrame::DropInSomeBars( int layoutNo )
                 layout.SetPaneProperties( props, wxALL_PANES );
 #endif
                 
-                layout.AddBar( CreateTxtCtrl("Tool1"), sizes3,  FL_ALIGN_TOP,  0, 50,  "Fixed text Area1" );
-                layout.AddBar( CreateTxtCtrl("Tool2"), sizes3,  FL_ALIGN_TOP,  0, 50,  "Fixed text Area2" );
-                layout.AddBar( CreateTxtCtrl("Tool3"), sizes3,  FL_ALIGN_TOP,  0, 50,  "Fixed text Area3" );
-                layout.AddBar( CreateTxtCtrl("Tool4"), sizes3,  FL_ALIGN_TOP,  1, 50,  "Fixed text Area4" );
-                layout.AddBar( CreateTxtCtrl("Tool5"), sizes3,  FL_ALIGN_TOP,  1, 50,  "Fixed text Area5" );
-                layout.AddBar( CreateTxtCtrl("Tool6"), sizes3,  FL_ALIGN_TOP,  1, 50,  "Fixed text Area6" );
-                layout.AddBar( CreateTxtCtrl("Tool7"), sizes3,  FL_ALIGN_TOP,  2,250,  "Fixed text Area7" );
+                layout.AddBar( CreateTxtCtrl(wxT("Tool1")), sizes3,  FL_ALIGN_TOP,  0, 50,  wxT("Fixed text Area1") );
+                layout.AddBar( CreateTxtCtrl(wxT("Tool2")), sizes3,  FL_ALIGN_TOP,  0, 50,  wxT("Fixed text Area2") );
+                layout.AddBar( CreateTxtCtrl(wxT("Tool3")), sizes3,  FL_ALIGN_TOP,  0, 50,  wxT("Fixed text Area3") );
+                layout.AddBar( CreateTxtCtrl(wxT("Tool4")), sizes3,  FL_ALIGN_TOP,  1, 50,  wxT("Fixed text Area4") );
+                layout.AddBar( CreateTxtCtrl(wxT("Tool5")), sizes3,  FL_ALIGN_TOP,  1, 50,  wxT("Fixed text Area5") );
+                layout.AddBar( CreateTxtCtrl(wxT("Tool6")), sizes3,  FL_ALIGN_TOP,  1, 50,  wxT("Fixed text Area6") );
+                layout.AddBar( CreateTxtCtrl(wxT("Tool7")), sizes3,  FL_ALIGN_TOP,  2,250,  wxT("Fixed text Area7") );
                 
                 cbDimInfo sizes10( 175,35, // when docked horizontally      
                                    175,38, // when docked vertically        
@@ -806,19 +806,19 @@ void MyFrame::DropInSomeBars( int layoutNo )
                 
                 // 1001-1006 ids of command events fired by added tool-buttons
                 
-                pToolBar->AddTool( 1001, BMP_DIR "new.bmp" );
-                pToolBar->AddTool( 1002, BMP_DIR "open.bmp" );
-                pToolBar->AddTool( 1003, BMP_DIR "save.bmp" );
+                pToolBar->AddTool( 1001, wxString(wxT(BMP_DIR)) + wxT("new.bmp") );
+                pToolBar->AddTool( 1002, wxString(wxT(BMP_DIR)) + wxT("open.bmp") );
+                pToolBar->AddTool( 1003, wxString(wxT(BMP_DIR)) + wxT("save.bmp") );
                 
-                pToolBar->AddTool( 1004, BMP_DIR "cut.bmp" );
-                pToolBar->AddTool( 1005, BMP_DIR "copy.bmp" );
-                pToolBar->AddTool( 1006, BMP_DIR "paste.bmp" );
+                pToolBar->AddTool( 1004, wxString(wxT(BMP_DIR)) + wxT("cut.bmp") );
+                pToolBar->AddTool( 1005, wxString(wxT(BMP_DIR)) + wxT("copy.bmp") );
+                pToolBar->AddTool( 1006, wxString(wxT(BMP_DIR)) + wxT("paste.bmp") );
                 
                 layout.AddBar( pToolBar,              // bar window (can be NULL)
                                sizes10, FL_ALIGN_TOP, // alignment ( 0-top,1-bottom, etc)
                                0,                     // insert into 0th row (vert. position)
                                0,                     // offset from the start of row (in pixels)
-                               "Real-Toolbar",        // name to refere in customization pop-ups
+                               wxT("Real-Toolbar"),        // name to refere in customization pop-ups
                                FALSE
                              );
                 
@@ -831,7 +831,7 @@ void MyFrame::DropInSomeBars( int layoutNo )
                 // the third sheet of the outter one's output bar
                 
                 mpNestedLayout = new wxFrameLayout( pSheet3, 
-                    CreateTxtCtrl("\"Mobils in Mobile\" --C.Nemo",pSheet3), FALSE );
+                    CreateTxtCtrl(wxT("\"Mobils in Mobile\" --C.Nemo"),pSheet3), FALSE );
                 
                 CreateDevLayout( *mpNestedLayout, pSheet3 );
                 
@@ -960,17 +960,17 @@ void StartButton95::OnPaint( wxPaintEvent& event )
     
     if ( m_bPressed )
     {
-        if ( !m_PBmp.Ok() && wxFileExists( BMP_DIR "start95_pr.bmp" ) )
+        if ( !m_PBmp.Ok() && wxFileExists( wxString(wxT(BMP_DIR)) + wxT("start95_pr.bmp") ) )
             
-            m_PBmp.LoadFile( BMP_DIR "start95_pr.bmp", wxBITMAP_TYPE_BMP );
+            m_PBmp.LoadFile( wxString(wxT(BMP_DIR)) + wxT("start95_pr.bmp"), wxBITMAP_TYPE_BMP );
         
         pBmp = &m_PBmp;
     }
     else
     {
-        if ( !m_DBmp.Ok() && wxFileExists( BMP_DIR "start95_dp.bmp" ) )
+        if ( !m_DBmp.Ok() && wxFileExists( wxString(wxT(BMP_DIR)) + wxT("start95_dp.bmp") ) )
             
-            m_DBmp.LoadFile( BMP_DIR "start95_dp.bmp", wxBITMAP_TYPE_BMP );
+            m_DBmp.LoadFile( wxString(wxT(BMP_DIR)) + wxT("start95_dp.bmp"), wxBITMAP_TYPE_BMP );
         
         pBmp = &m_DBmp;
     }

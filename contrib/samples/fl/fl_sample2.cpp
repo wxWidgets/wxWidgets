@@ -49,7 +49,7 @@ protected:
     wxTextCtrl* CreateTextCtrl( const wxString& value );
         
 public:
-    MyFrame( wxWindow* parent, char *title );
+    MyFrame( wxWindow* parent, const wxChar *title );
     ~MyFrame();
     
     void populateMyFrame();
@@ -70,19 +70,19 @@ bool MyApp::OnInit(void)
 {
     // wxWindows boiler-plate:
     
-    MyFrame *frame = new MyFrame(NULL, "wxFrameLayout sample");
+    MyFrame *frame = new MyFrame(NULL, _("wxFrameLayout sample"));
     
     wxMenu *file_menu = new wxMenu;
     
-    file_menu->Append( ID_LOAD,  "&Load layout"  );
-    file_menu->Append( ID_STORE, "&Store layout"  );
+    file_menu->Append( ID_LOAD,  _("&Load layout")  );
+    file_menu->Append( ID_STORE, _("&Store layout")  );
     file_menu->AppendSeparator();
     
-    file_menu->Append( ID_QUIT, "E&xit" );
+    file_menu->Append( ID_QUIT, _("E&xit") );
     
     wxMenuBar *menu_bar = new wxMenuBar;
     
-    menu_bar->Append(file_menu, "&File");
+    menu_bar->Append(file_menu, _("&File"));
     
     frame->CreateStatusBar(3);
     frame->SetMenuBar(menu_bar);
@@ -102,18 +102,18 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU( ID_QUIT,  MyFrame::OnQuit  )
 END_EVENT_TABLE()
 
-MyFrame::MyFrame( wxWindow* parent, char *title )
-    : wxFrame( parent, -1, "NewTest-II", wxDefaultPosition,
+MyFrame::MyFrame( wxWindow* parent, const wxChar *title )
+    : wxFrame( parent, -1, _("NewTest-II"), wxDefaultPosition,
           wxSize( 700, 500 ),
           wxCLIP_CHILDREN | wxMINIMIZE_BOX | wxMAXIMIZE_BOX |
           wxTHICK_FRAME   | wxSYSTEM_MENU  | wxCAPTION,
-          "freimas" )
+          wxT("freimas") )
 {
 }
 
 void MyFrame::populateMyFrame()
 {
-    mpClientWnd = CreateTextCtrl( "Client window" );
+    mpClientWnd = CreateTextCtrl( _("Client window") );
     
     mpLayout = new wxFrameLayout( this, mpClientWnd );
         
@@ -135,14 +135,14 @@ void MyFrame::populateMyFrame()
         wxSleep(1);
         wxYield(); // CHECK!
         
-        char buf[4];
-        sprintf( buf, "%d", i );
-        wxString name = wxString("Bar-");
+        wxChar buf[4];
+        wxSprintf( buf, wxT("%d"), i );
+        wxString name = wxString(wxT("Bar-"));
         name += buf;
         
         //sizes.mIsFixed = i % 2 > 0; // every fifth bar is not fixed-size
         
-        if ( !sizes.mIsFixed ) name += " (flexible)";
+        if ( !sizes.mIsFixed ) name += wxT(" (flexible)");
         //      mpLayout->AddBar( CreateTextCtrl(name),// bar window
         mpLayout->AddBar( new wxTextCtrl(this, -1, name),// bar window
                           sizes, i % MAX_PANES,// alignment ( 0-top,1-bottom, etc)
@@ -177,12 +177,12 @@ wxTextCtrl* MyFrame::CreateTextCtrl( const wxString& value )
 
 void MyFrame::OnLoad( wxCommandEvent& event )
 {
-    wxMessageBox("Hey - you found a BIG question-mark !!");
+    wxMessageBox(wxT("Hey - you found a BIG question-mark !!"));
 }
 
 void MyFrame::OnStore( wxCommandEvent& event )
 {
-    wxMessageBox("Hey - you found another BIG question-mark !!");
+    wxMessageBox(wxT("Hey - you found another BIG question-mark !!"));
 }
 
 void MyFrame::OnQuit( wxCommandEvent& event )

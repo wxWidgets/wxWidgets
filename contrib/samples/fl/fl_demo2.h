@@ -80,10 +80,10 @@ protected:
     
     // helpers for control-creation
     
-    wxTextCtrl* CreateTxtCtrl ( const wxString& txt = "wxTextCtrl", wxWindow* parent = NULL  );
-    wxTreeCtrl* CreateTreeCtrl( const wxString& label = "TreeCtrl" );
-    wxChoice*   CreateChoice  ( const wxString& txt = "Choice1" );
-    wxButton*   CreateButton  ( const wxString& label = "wxButton", wxWindow* pParent = NULL, long id = ID_SAY_ITSOK );
+    wxTextCtrl* CreateTxtCtrl ( const wxString& txt = wxT("wxTextCtrl"), wxWindow* parent = NULL  );
+    wxTreeCtrl* CreateTreeCtrl( const wxString& label = wxT("TreeCtrl") );
+    wxChoice*   CreateChoice  ( const wxString& txt = wxT("Choice1") );
+    wxButton*   CreateButton  ( const wxString& label = wxT("wxButton"), wxWindow* pParent = NULL, long id = ID_SAY_ITSOK );
     
     // helpers for layout-creation
     
@@ -100,7 +100,7 @@ protected:
     
 public: /* public */
     
-    MyFrame( wxFrame *frame, char *title, int x, int y, int w, int h);
+    MyFrame( wxFrame *frame, const wxChar *title, int x, int y, int w, int h);
     
     ~MyFrame();
     

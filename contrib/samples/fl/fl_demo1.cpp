@@ -59,13 +59,13 @@ bool MyApp::OnInit(void)
     
     wxMenu *file_menu = new wxMenu;
     
-    file_menu->Append( NEW_TEST_LOAD, "&Load layouts"  );
-    file_menu->Append( NEW_TEST_SAVE, "&Store layouts" );
-    file_menu->Append( NEW_TEST_EXIT, "E&xit" );
+    file_menu->Append( NEW_TEST_LOAD, _("&Load layouts")  );
+    file_menu->Append( NEW_TEST_SAVE, _("&Store layouts") );
+    file_menu->Append( NEW_TEST_EXIT, _("E&xit") );
     
     wxMenuBar *menu_bar = new wxMenuBar;
     
-    menu_bar->Append(file_menu,   "&File");
+    menu_bar->Append(file_menu,   _("&File"));
     
     frame->SetMenuBar(menu_bar);
     
@@ -78,10 +78,10 @@ bool MyApp::OnInit(void)
     SetTopWindow(frame);
     
     
-    wxMessageBox("Hello, this demo has a bunch of yet-not-fixed-bugs and missing functionality\n" \
-                 "The ONLY purpose is to demonstrate self-layouting toolbars,\nflat-bitmapped-buttons and 2-new FL-plugins" \
-                 "(cbRowDragPlugin & cbBarHintsPlugin)\n\n" \
-                 "BTW, disabled images and label-text are rendered at run-time" );
+    wxMessageBox(_("Hello, this demo has a bunch of yet-not-fixed-bugs and missing functionality\n\
+The ONLY purpose is to demonstrate self-layouting toolbars,\nflat-bitmapped-buttons and 2-new FL-plugins \
+(cbRowDragPlugin & cbBarHintsPlugin)\n\n\
+BTW, disabled images and label-text are rendered at run-time") );
     
     return TRUE;
 }
@@ -98,12 +98,12 @@ END_EVENT_TABLE()
 
 void MyFrame::OnLoad( wxCommandEvent& event )
 {						
-    wxMessageBox("Hey - you found a BIG question-mark !!");
+    wxMessageBox(_T("Hey - you found a BIG question-mark !!"));
 }
 
 void MyFrame::OnSave( wxCommandEvent& event )
 {
-    wxMessageBox("Hey - you found another BIG question-mark !!");
+    wxMessageBox(_("Hey - you found another BIG question-mark !!"));
 }
 
 void MyFrame::OnExit( wxCommandEvent& event )
@@ -124,13 +124,13 @@ wxTextCtrl* MyFrame::CreateTextCtrl( const wxString& value )
 }
 
 MyFrame::MyFrame(wxFrame *frame)
-    : wxFrame( frame, -1, "wxWindows 2.0 wxFrameLayout Test Application", wxDefaultPosition, 
+    : wxFrame( frame, -1, _("wxWindows 2.0 wxFrameLayout Test Application"), wxDefaultPosition, 
           wxSize( 700, 500 ), 
           wxCLIP_CHILDREN | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | 
           wxTHICK_FRAME   | wxSYSTEM_MENU  | wxCAPTION, 
-          "freimas" )
+          wxT("freimas") )
 {
-    mpClientWnd = CreateTextCtrl( "Client window" );
+    mpClientWnd = CreateTextCtrl( _("Client window") );
     
     mpLayout = new wxFrameLayout( this, mpClientWnd );
     
@@ -183,27 +183,27 @@ MyFrame::MyFrame(wxFrame *frame)
                       new cbDynToolBarDimHandler()
                     ); 
     
-    mpLayout->AddBar( CreateTextCtrl("Hello"),  // bar window
+    mpLayout->AddBar( CreateTextCtrl(_("Hello")),  // bar window
                       sizes0, FL_ALIGN_TOP,     // alignment ( 0-top,1-bottom, etc)
                       0,                        // insert into 0th row (vert. position)
                       0,                        // offset from the start of row (in pixels)
-                      "InfoViewer1",            // name to refer in customization pop-ups
+                      _("InfoViewer1"),            // name to refer in customization pop-ups
                       TRUE
                     );
     
-    mpLayout->AddBar( CreateTextCtrl("Bye"),    // bar window
+    mpLayout->AddBar( CreateTextCtrl(_("Bye")),    // bar window
                       sizes0, FL_ALIGN_TOP,     // alignment ( 0-top,1-bottom, etc)
                       1,                        // insert into 0th row (vert. position)
                       0,                        // offset from the start of row (in pixels)
-                      "InfoViewer2",            // name to refer in customization pop-ups
+                      _("InfoViewer2"),            // name to refer in customization pop-ups
                       TRUE
                     );
     
-    mpLayout->AddBar( CreateTextCtrl("Fixed0"), // bar window
+    mpLayout->AddBar( CreateTextCtrl(_("Fixed0")), // bar window
                       sizes1, FL_ALIGN_TOP,     // alignment ( 0-top,1-bottom, etc)
                       0,                        // insert into 0th row (vert. position)
                       0,                        // offset from the start of row (in pixels)
-                      "ToolBar1",               // name to refer in customization pop-ups
+                      _("ToolBar1"),               // name to refer in customization pop-ups
                       TRUE
                     );
     
@@ -213,21 +213,21 @@ MyFrame::MyFrame(wxFrame *frame)
     
     // 1001-1006 ids of command events fired by added tool-buttons
 
-    pToolBar->AddTool( 1001, BMP_DIR "new.bmp" );
+    pToolBar->AddTool( 1001, wxString(wxT(BMP_DIR)) + wxT("new.bmp") );
     pToolBar->AddSeparator();
-    pToolBar->AddTool( 1002, BMP_DIR "open.bmp" );
-    pToolBar->AddTool( 1003, BMP_DIR "save.bmp" );
+    pToolBar->AddTool( 1002, wxString(wxT(BMP_DIR)) + wxT("open.bmp") );
+    pToolBar->AddTool( 1003, wxString(wxT(BMP_DIR)) + wxT("save.bmp") );
     pToolBar->AddSeparator(new wxMySeparatorLine(pToolBar, -1));    
-    pToolBar->AddTool( 1004, BMP_DIR "cut.bmp" );
-    pToolBar->AddTool( 1005, BMP_DIR "copy.bmp" );
-    pToolBar->AddTool( 1006, BMP_DIR "paste.bmp" );
+    pToolBar->AddTool( 1004, wxString(wxT(BMP_DIR)) + wxT("cut.bmp") );
+    pToolBar->AddTool( 1005, wxString(wxT(BMP_DIR)) + wxT("copy.bmp") );
+    pToolBar->AddTool( 1006, wxString(wxT(BMP_DIR)) + wxT("paste.bmp") );
     
     
     mpLayout->AddBar( pToolBar,             // bar window (can be NULL)
                       sizes2, FL_ALIGN_TOP, // alignment ( 0-top,1-bottom, etc)
                       0,                    // insert into 0th row (vert. position)
                       0,                    // offset from the start of row (in pixels)
-                      "ToolBar2",           // name to refer in customization pop-ups
+                      wxT("ToolBar2"),           // name to refer in customization pop-ups
                       FALSE
                     );
     

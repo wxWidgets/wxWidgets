@@ -52,7 +52,7 @@ protected:
     
     wxTextCtrl* CreateTextCtrl( const wxString& value );
 public:
-    MyFrame( wxWindow* parent, char *title );
+    MyFrame( wxWindow* parent, const wxChar *title );
     ~MyFrame();
     
     void OnLoad( wxCommandEvent& event );
@@ -74,19 +74,19 @@ bool MyApp::OnInit(void)
 {
     // wxWindows boiler-plate:
     
-    MyFrame *frame = new MyFrame(NULL, "wxFrameLayout sample");
+    MyFrame *frame = new MyFrame(NULL, _("wxFrameLayout sample"));
     
     wxMenu *file_menu = new wxMenu;
     
-    file_menu->Append( ID_LOAD,  "&Load layout"  );
-    file_menu->Append( ID_STORE, "&Store layout"  );
+    file_menu->Append( ID_LOAD,  _("&Load layout")  );
+    file_menu->Append( ID_STORE, _("&Store layout")  );
     file_menu->AppendSeparator();
     
-    file_menu->Append( ID_QUIT, "E&xit" );
+    file_menu->Append( ID_QUIT, _("E&xit") );
     
     wxMenuBar *menu_bar = new wxMenuBar;
     
-    menu_bar->Append(file_menu, "&File");
+    menu_bar->Append(file_menu, _("&File"));
     
     frame->CreateStatusBar(3);
     frame->SetMenuBar(menu_bar);
@@ -107,12 +107,12 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON( ID_BUTT2, MyFrame::OnButt2 )
 END_EVENT_TABLE()
 
-MyFrame::MyFrame( wxWindow* parent, char *title )
-    : wxFrame( parent, -1, "NewTest-II", wxDefaultPosition,
+MyFrame::MyFrame( wxWindow* parent, const wxChar *title )
+    : wxFrame( parent, -1, _("NewTest-II"), wxDefaultPosition,
           wxSize( 700, 500 ),
           wxCLIP_CHILDREN | wxMINIMIZE_BOX | wxMAXIMIZE_BOX |
           wxTHICK_FRAME   | wxSYSTEM_MENU  | wxCAPTION,
-          "freimas" )
+          wxT("freimas") )
 {
     
     mpClientWnd = new wxWindow(this, -1);    
@@ -135,14 +135,14 @@ MyFrame::MyFrame( wxWindow* parent, char *title )
     
     for( int i = 1; i <= 11; ++i )
     {
-        char buf[4];
-        sprintf( buf, "%d", i );
-        wxString name = wxString("Bar-");
+        wxChar buf[4];
+        wxSprintf( buf, wxT("%d"), i );
+        wxString name = wxString(wxT("Bar-"));
         name += buf;
         
         sizes.mIsFixed = (i !=3); // every fifth bar is not fixed-size
         
-        if ( !sizes.mIsFixed ) name += " (flexible)";
+        if ( !sizes.mIsFixed ) name += wxT(" (flexible)");
         //      mpLayout->AddBar( CreateTextCtrl(name),// bar window
         if(i != 4 && i!= 5 && i!=11) {
             mpLayout->AddBar( new wxTextCtrl(this, -1, name),// bar window
@@ -170,7 +170,7 @@ MyFrame::MyFrame( wxWindow* parent, char *title )
                               name          // name to refere in customization pop-ups
                             );
         } else if(i==11) {
-            mpLayout->AddBar( new wxButton(this, ID_BUTT2, name+"_2"),
+            mpLayout->AddBar( new wxButton(this, ID_BUTT2, name+wxT("_2")),
                               cbDimInfo( 100,100, 200,200, 400,400, TRUE, 5, 5), 
                               i % MAX_PANES,// alignment ( 0-top,1-bottom, etc)
                               0,            // insert into 0th row (vert. position)
@@ -204,12 +204,12 @@ wxTextCtrl* MyFrame::CreateTextCtrl( const wxString& value )
 
 void MyFrame::OnLoad( wxCommandEvent& event )
 {
-    wxMessageBox("Hey - you found a BIG question-mark !!");
+    wxMessageBox(_("Hey - you found a BIG question-mark !!"));
 }
 
 void MyFrame::OnStore( wxCommandEvent& event )
 {
-    wxMessageBox("Hey - you found another BIG question-mark !!");
+    wxMessageBox(_("Hey - you found another BIG question-mark !!"));
 }
 
 void MyFrame::OnQuit( wxCommandEvent& event )
@@ -228,7 +228,7 @@ void MyFrame::OnButt( wxCommandEvent& event )
     switch(i % 2) {
     case 0: 
         {
-            cbBarInfo* x = mpLayout->FindBarByName(wxString("Bar-1"));
+            cbBarInfo* x = mpLayout->FindBarByName(wxString(wxT("Bar-1")));
             if(x) 
                 mpLayout->InverseVisibility(x); 
             else    
@@ -237,7 +237,7 @@ void MyFrame::OnButt( wxCommandEvent& event )
         }
     case 1:
         {
-            cbBarInfo* x = mpLayout->FindBarByName(wxString("Bar-6"));
+            cbBarInfo* x = mpLayout->FindBarByName(wxString(wxT("Bar-6")));
             if(x) 
             {
                 if(i % 4 == 1) 
@@ -275,7 +275,7 @@ void MyFrame::OnButt2( wxCommandEvent& event )
     switch(i % 2) {
     case 0: 
         {
-            cbBarInfo* x = mpLayout->FindBarByName(wxString("Bar-1"));
+            cbBarInfo* x = mpLayout->FindBarByName(wxString(wxT("Bar-1")));
             if(x) 
             {
                 for(int a=0;a<MAX_BAR_STATES;a++)
@@ -298,7 +298,7 @@ void MyFrame::OnButt2( wxCommandEvent& event )
         }
     case 1:
         {
-            cbBarInfo* x = mpLayout->FindBarByName(wxString("Bar-1"));
+            cbBarInfo* x = mpLayout->FindBarByName(wxString(wxT("Bar-1")));
             if(x) 
             {
                 //mpLayout->InverseVisibility(x); 
