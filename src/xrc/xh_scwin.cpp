@@ -42,6 +42,7 @@ wxObject *wxScrolledWindowXmlHandler::DoCreateResource()
                     GetName());
 
     SetupWindow(control);
+    CreateChildren(control);
     
     return control;
 }
