@@ -45,7 +45,7 @@ class and 90\% of functionality of std::string class.
 \item {\bf Rich set of functions} Some of the functions present in wxString are
 very useful but don't exist in most of other string classes: for example, 
 \helpref{AfterFirst}{wxstringafterfirst}, 
-\helpref{BeforLast}{wxstringbeforlast}, \helpref{operator<<}{wxstringoperator} 
+\helpref{BeforeLast}{wxstringbeforelast}, \helpref{operator<<}{wxstringoperatorout} 
 or \helpref{Printf}{wxstringprintf}. Of course, all the standard string
 operations are supported as well.
 \item {\bf UNICODE} In this release, wxString only supports construction from
@@ -138,9 +138,9 @@ string with a NUL) and are in general not very safe (passing NULL to them will
 probably lead to program crash). Moreover, some of very useful functions are not
 standard at all. This is why in addition to all wxString functions, there are
 also a few of global string functions which try to correct these problems: 
-\helpref{IsEmpty()}{isempty} verifies whether the string is empty (returning
-TRUE for NULL pointers), \helpref{Strlen()}{strlen} also handles NULLs correctly
-and returns 0 for them and \helpref{Stricmp()}{stricmp} is just a
+\helpref{IsEmpty()}{wxstringisempty} verifies whether the string is empty (returning
+TRUE for NULL pointers), \helpref{Strlen()}{wxstringstrlen} also handles NULLs correctly
+and returns 0 for them and \helpref{Stricmp()}{wxstringstricmp} is just a
 platform-independent version of case-insensitive string comparison function
 known either as stricmp() or strcasecmp() on different platforms.
 
