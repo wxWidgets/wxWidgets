@@ -1808,13 +1808,17 @@ void wxListLineData::DrawTextFormatted(wxDC *dc,
         dc->GetTextExtent(ellipsis, &base_w, &h);
 
         // continue until we have enough space or only one character left
-        drawntext = text.Left(text.Length() - 1);
-        while (drawntext.Length() > 1)
+        wxCoord w_c, h_c;
+        size_t len = text.Length();
+        drawntext = text.Left(len);
+        while (len > 1)
         {
-            dc->GetTextExtent(drawntext, &w, &h);
+            dc->GetTextExtent(drawntext.Last(), &w_c, &h_c);
+            drawntext.RemoveLast();
+            len--;
+            w -= w_c;
             if (w + base_w <= width)
                 break;
-            drawntext = drawntext.Left(drawntext.Length() - 1);
         }
 
         // if still not enough space, remove ellipsis characters
