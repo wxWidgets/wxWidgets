@@ -474,14 +474,14 @@ the debugging version of the library is 90MB, with samples coming in
 at 40MB :-) However, wxWindows at least makes a good test suite for
 improving the compiler.
 
-Cygwin b19/b20/Mingw32 compilation
+Cygwin/Mingw32 compilation
 ----------------------------------
 
-wxWindows 2 supports Cygwin (formerly GnuWin32) b19, b20, Mingw32,
-and Mingw32/EGCS. Cygwin 1.1.0 and 1.1.1 are not yet supported.
+wxWindows 2 supports Cygwin (formerly GnuWin32) betas and
+releases, and Mingw32.
 
-Thanks are due to Keith Garry Boyce (garp@opustel.com) and Cygnus for making
-it all possible.
+Thanks are due to Keith Garry Boyce (garp@opustel.com), Cygnus
+and others for making it all possible.
 
 Both Cygwin and Mingw32 (the minimal distribution of Cygwin) can be used
 with the same makefiles.
@@ -491,11 +491,10 @@ Here are the steps required:
 - Retrieve and install the latest beta of Cygwin, or Mingw32, as per the
   instructions with either of these packages.
 
-- If using Mingw32 (including the EGCS variant), you need some
-  extra files to use the wxWindows makefiles. You can find these
-  files in ports/mingw32 on the ftp site or CD-ROM, as extra.zip.
-  These should be extracted to the Mingw32 directory.
-  If you have alread downloaded bison, flex, make, rm, cp, mv
+- If using Mingw32, you need some extra files to use the wxWindows
+  makefiles. You can find these files in ports/mingw32 on the ftp
+  site or CD-ROM, as extra.zip. These should be extracted to the Mingw32
+  directory. If you have alread downloaded bison, flex, make, rm, cp, mv
   from elsewhere, you won't need this.
 
   If using Mingw32 2.95 and below with wxWindows 2.1 or above, you
@@ -513,10 +512,9 @@ Here are the steps required:
   supplied).
 
 - Edit wx/src/makeg95.env and set the MINGW32 variable at the top of
-  the file to either 1 (you have Mingw32) or 0 (you have Cygwin32).
-  If using MINGW32, also set the MINGW32VERSION variable
-  appropriately. Note: Cygwin 1.1.0 and above may
-  need MINGW32 set to 1 to compile properly.
+  the file to either 1 (you have Mingw32 or Cygwin 1.x releases) or 0
+  (if you have Cygwin betas). If using Mingw32, also set the
+  MINGW32VERSION variable appropriately.
 
 - Set your WXWIN variable to where wxWindows is installed.
   *** IMPORTANT: For Cygwin/Mingw32, use forward slashes in the path, not
@@ -533,7 +531,7 @@ Here are the steps required:
 
 - Use the 'strip' command to reduce executable size.
 
-- With Cygnus Cygwin, you can invoke gdb --nw myfile.exe to
+- With Cygwin, you can invoke gdb --nw myfile.exe to
   debug an executable. If there are memory leaks, they will be
   flagged when the program quits.
 
@@ -585,11 +583,10 @@ Notes:
 
 References:
 
- - The GNU-WIN32 site is at
-     http://www.cygnus.com/gnu-win32/
+ - The Cygwin site is at
+     http://sourceware.cygnus.com
  - Mingw32 is available at:
-     ftp://www,mingw.org
- - See also http://web.ukonline.co.uk/julian.smart/wxwin/gnuwin32.htm
+     ftp://www.mingw.org
 
 TWIN32 and gcc on Linux
 -----------------------
