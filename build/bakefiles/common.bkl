@@ -321,11 +321,11 @@
                 include\wx\msw\setup.h
             </set>
             <set var="__custom_build_include_wx_msw_setup_h">
-Creating $(LIBDIRNAME)\wx\setup.h
+Creating $(SETUPHDIR)\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
 
-"$(LIBDIRNAME)\wx\setup.h" : $(DOLLAR)(SOURCE) "$(DOLLAR)(INTDIR)" "$(DOLLAR)(OUTDIR)"
-$(TAB)copy "$(DOLLAR)(InputPath)" $(LIBDIRNAME)\wx\setup.h
+"$(SETUPHDIR)\wx\setup.h" : $(DOLLAR)(SOURCE) "$(DOLLAR)(INTDIR)" "$(DOLLAR)(OUTDIR)"
+$(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
             </set>
         </if>
     </define-tag>
