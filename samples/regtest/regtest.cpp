@@ -172,7 +172,7 @@ class RegFrame : public wxFrame
 {
 public:
   // ctor & dtor
-  RegFrame(wxFrame *parent, char *title, int x, int y, int w, int h);
+  RegFrame(wxFrame *parent, wxChar *title, int x, int y, int w, int h);
   virtual ~RegFrame();
 
   // callbacks
@@ -273,23 +273,23 @@ END_EVENT_TABLE()
 wxMenu *CreateRegistryMenu()
 {
   wxMenu *pMenuNew = new wxMenu;
-  pMenuNew->Append(Menu_NewKey,    "&Key",          "Create a new key");
+  pMenuNew->Append(Menu_NewKey,    _T("&Key"),          _T("Create a new key"));
   pMenuNew->AppendSeparator();
-  pMenuNew->Append(Menu_NewText,   "&Text value",   "Create a new text value");
-  pMenuNew->Append(Menu_NewBinary, "&Binary value", "Create a new binary value");
+  pMenuNew->Append(Menu_NewText,   _T("&Text value"),   _T("Create a new text value"));
+  pMenuNew->Append(Menu_NewBinary, _T("&Binary value"), _T("Create a new binary value"));
 
   wxMenu *pMenuReg = new wxMenu;
-  pMenuReg->Append(Menu_New, "&New", pMenuNew);
-  pMenuReg->Append(Menu_Delete,   "&Delete...", "Delete selected key/value");
+  pMenuReg->Append(Menu_New, _T("&New"), pMenuNew);
+  pMenuReg->Append(Menu_Delete,   _T("&Delete..."), _T("Delete selected key/value"));
   pMenuReg->AppendSeparator();
-  pMenuReg->Append(Menu_GoTo,     "&Go to...\tCtrl-G",    "Go to registry key");
-  pMenuReg->Append(Menu_Expand,   "&Expand",    "Expand current key");
-  pMenuReg->Append(Menu_Collapse, "&Collapse",  "Collapse current key");
-  pMenuReg->Append(Menu_Toggle,   "&Toggle",    "Toggle current key");
+  pMenuReg->Append(Menu_GoTo,     _T("&Go to...\tCtrl-G"),    _T("Go to registry key"));
+  pMenuReg->Append(Menu_Expand,   _T("&Expand"),    _T("Expand current key"));
+  pMenuReg->Append(Menu_Collapse, _T("&Collapse"),  _T("Collapse current key"));
+  pMenuReg->Append(Menu_Toggle,   _T("&Toggle"),    _T("Toggle current key"));
   pMenuReg->AppendSeparator();
-  pMenuReg->Append(Menu_Refresh,  "&Refresh",   "Refresh the subtree");
+  pMenuReg->Append(Menu_Refresh,  _T("&Refresh"),   _T("Refresh the subtree"));
   pMenuReg->AppendSeparator();
-  pMenuReg->Append(Menu_Info,     "&Properties","Information about current selection");
+  pMenuReg->Append(Menu_Info,     _T("&Properties"),_T("Information about current selection"));
 
   return pMenuReg;
 }
@@ -303,7 +303,7 @@ IMPLEMENT_APP(RegApp)
 bool RegApp::OnInit()
 {
   // create the main frame window and show it
-  RegFrame *frame = new RegFrame(NULL, "wxRegTest", 50, 50, 600, 350);
+  RegFrame *frame = new RegFrame(NULL, _T("wxRegTest"), 50, 50, 600, 350);
   frame->Show(TRUE);
 
   SetTopWindow(frame);
@@ -315,7 +315,7 @@ bool RegApp::OnInit()
 // RegFrame
 // ----------------------------------------------------------------------------
 
-RegFrame::RegFrame(wxFrame *parent, char *title, int x, int y, int w, int h)
+RegFrame::RegFrame(wxFrame *parent, wxChar *title, int x, int y, int w, int h)
         : wxFrame(parent, -1, title, wxPoint(x, y), wxSize(w, h))
 {
   // this reduces flicker effects
@@ -323,20 +323,20 @@ RegFrame::RegFrame(wxFrame *parent, char *title, int x, int y, int w, int h)
 
   // set the icon
   // ------------
-  SetIcon(wxIcon("app_icon"));
+  SetIcon(wxIcon(_T("app_icon")));
 
   // create menu
   // -----------
   wxMenu *pMenuFile = new wxMenu;
-  pMenuFile->Append(Menu_Test, "Te&st", "Test key creation");
+  pMenuFile->Append(Menu_Test, _T("Te&st"), _T("Test key creation"));
   pMenuFile->AppendSeparator();
-  pMenuFile->Append(Menu_About, "&About...", "Show an extraordinarly beautiful dialog");
+  pMenuFile->Append(Menu_About, _T("&About..."), _T("Show an extraordinarly beautiful dialog"));
   pMenuFile->AppendSeparator();
-  pMenuFile->Append(Menu_Quit,  "E&xit", "Quit this program");
+  pMenuFile->Append(Menu_Quit,  _T("E&xit"), _T("Quit this program"));
 
   wxMenuBar *pMenu = new wxMenuBar;
-  pMenu->Append(pMenuFile, "&File");
-  pMenu->Append(CreateRegistryMenu(),  "&Registry");
+  pMenu->Append(pMenuFile, _T("&File"));
+  pMenu->Append(CreateRegistryMenu(),  _T("&Registry"));
   SetMenuBar(pMenu);
 
   // create child controls
@@ -362,9 +362,9 @@ void RegFrame::OnQuit(wxCommandEvent& event)
 void RegFrame::OnAbout(wxCommandEvent& event)
 {
   wxMessageDialog dialog(this,
-                         "wxRegistry sample\n"
-                         "© 1998, 2000 Vadim Zeitlin",
-                         "About wxRegTest", wxOK);
+                         _T("wxRegistry sample\n")
+                         _T("© 1998, 2000 Vadim Zeitlin"),
+                         _T("About wxRegTest"), wxOK);
 
   dialog.ShowModal();
 }
@@ -421,7 +421,7 @@ void RegFrame::OnNewKey(wxCommandEvent& WXUNUSED(event))
 {
   if ( m_treeCtrl->IsKeySelected() ) {
     m_treeCtrl->CreateNewKey(
-      wxGetTextFromUser("Enter the name of the new key"));
+      wxGetTextFromUser(_T("Enter the name of the new key")));
   }
 }
 
@@ -429,7 +429,7 @@ void RegFrame::OnNewText(wxCommandEvent& WXUNUSED(event))
 {
   if ( m_treeCtrl->IsKeySelected() ) {
     m_treeCtrl->CreateNewTextValue(
-      wxGetTextFromUser("Enter the name for the new text value"));
+      wxGetTextFromUser(_T("Enter the name for the new text value")));
   }
 }
 
@@ -437,7 +437,7 @@ void RegFrame::OnNewBinary(wxCommandEvent& WXUNUSED(event))
 {
   if ( m_treeCtrl->IsKeySelected() ) {
     m_treeCtrl->CreateNewBinaryValue(
-      wxGetTextFromUser("Enter the name for the new binary value"));
+      wxGetTextFromUser(_T("Enter the name for the new binary value")));
   }
 }
 
@@ -452,8 +452,8 @@ void RegFrame::OnInfo(wxCommandEvent& WXUNUSED(event))
 RegImageList::RegImageList() : wxImageList(16, 16, TRUE)
 {
   // should be in sync with enum RegImageList::RegIcon
-  static const char *aszIcons[] = { "key1","key2","key3","value1","value2" };
-  wxString str = "icon_";
+  static const wxChar *aszIcons[] = { _T("key1"),_T("key2"),_T("key3"),_T("value1"),_T("value2") };
+  wxString str = _T("icon_");
   for ( unsigned int n = 0; n < WXSIZEOF(aszIcons); n++ ) {
     Add(wxIcon(str + aszIcons[n], wxBITMAP_TYPE_ICO_RESOURCE));
   }
@@ -519,7 +519,7 @@ RegTreeCtrl::RegTreeCtrl(wxWindow *parent, wxWindowID id)
 
   // create root keys
   // ----------------
-  m_pRoot = InsertNewTreeNode(NULL, "Registry Root", RegImageList::Root);
+  m_pRoot = InsertNewTreeNode(NULL, _T("Registry Root"), RegImageList::Root);
 
   // create popup menu
   // -----------------
@@ -590,14 +590,14 @@ void RegTreeCtrl::OnMenuTest()
     return;
   }
 
-  wxRegKey key1(pNode->Key(), "key1");
+  wxRegKey key1(pNode->Key(), _T("key1"));
   if ( key1.Create() ) {
-    wxRegKey key2a(key1, "key2a"), key2b(key1, "key2b");
+    wxRegKey key2a(key1, _T("key2a")), key2b(key1, _T("key2b"));
     if ( key2a.Create() && key2b.Create() ) {
       // put some values under the newly created keys
-      key1.SetValue(wxT("first_term"), "10");
-      key1.SetValue(wxT("second_term"), "7");
-      key2a = "this is the unnamed value";
+      key1.SetValue(wxT("first_term"), _T("10"));
+      key1.SetValue(wxT("second_term"), _T("7"));
+      key2a = _T("this is the unnamed value");
       key2b.SetValue(wxT("sum"), 17);
 
       // refresh tree
@@ -760,8 +760,8 @@ void RegTreeCtrl::OnEndDrag(wxTreeEvent& event)
     nameDst << wxString(dst->FullName()).AfterFirst('\\') << '\\'
             << wxString(src->FullName()).AfterLast('\\');
 
-    wxString verb = m_copyOnDrop ? "copy" : "move";
-    wxString what = isKey ? "key" : "value";
+    wxString verb = m_copyOnDrop ? _T("copy") : _T("move");
+    wxString what = isKey ? _T("key") : _T("value");
 
     if ( wxMessageBox(wxString::Format
                         (
@@ -771,7 +771,7 @@ void RegTreeCtrl::OnEndDrag(wxTreeEvent& event)
                          nameSrc.c_str(),
                          nameDst.c_str()
                         ),
-                      "RegTest Confirm",
+                      _T("RegTest Confirm"),
                       wxICON_QUESTION | wxYES_NO | wxCANCEL, this) != wxYES ) {
       return;
     }
@@ -868,10 +868,10 @@ bool RegTreeCtrl::TreeNode::OnExpand()
   while ( bCont ) {
     wxString strItem;
     if (str.IsEmpty())
-        strItem = "<default>";
+        strItem = _T("<default>");
     else
         strItem = str;
-    strItem += " = ";
+    strItem += _T(" = ");
 
     // determine the appropriate icon
     RegImageList::Icon icon;
@@ -1088,13 +1088,13 @@ void RegTreeCtrl::DeleteSelected()
     return;
   }
 
-  wxString what = pCurrent->IsKey() ? "key" : "value";
+  wxString what = pCurrent->IsKey() ? _T("key") : _T("value");
   if ( wxMessageBox(wxString::Format
                     (
                       wxT("Do you really want to delete this %s?"),
                       what.c_str()
                     ),
-                    "Confirmation",
+                    _T("Confirmation"),
                     wxICON_QUESTION | wxYES_NO | wxCANCEL, this) != wxYES ) {
     return;
   }
@@ -1135,7 +1135,7 @@ void RegTreeCtrl::CreateNewTextValue(const wxString& strName)
     return;
   }
 
-  if ( pCurrent->Key().SetValue(strName, "") )
+  if ( pCurrent->Key().SetValue(strName, _T("")) )
     pCurrent->Refresh();
 }
 
