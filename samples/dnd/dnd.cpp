@@ -1216,10 +1216,10 @@ void DnDFrame::OnCopyBitmap(wxCommandEvent& WXUNUSED(event))
 
     wxImage image;
     image.LoadFile( dialog.GetPath(),
-#ifdef __WXMSW__
-                    wxBITMAP_TYPE_BMP
-#else
+#if wxUSE_LIBPNG
                     wxBITMAP_TYPE_PNG
+#else
+                    wxBITMAP_TYPE_BMP
 #endif
                   );
     if (!image.Ok())
