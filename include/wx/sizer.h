@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        sizer.h
-// Purpose:     provide wxSizer class for layouting
+// Purpose:     provide wxSizer class for layout
 // Author:      Robert Roebling and Robin Dunn
 // Modified by: Ron Lee
 // Created:
 // RCS-ID:      $Id$
-// Copyright:   (c) Robin Dunn, Dirk Holtwick and Robert Roebling
+// Copyright:   (c) Robin Dunn, Robert Roebling
 //              (c) 2003, Ron Lee
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
