@@ -161,7 +161,7 @@ wxLayoutObjectIcon::wxLayoutObjectIcon(wxIcon *icon)
 void
 wxLayoutObjectIcon::Draw(wxDC &dc, wxPoint const &translate)
 {
-   dc.DrawIcon(m_Icon,m_Position.x+translate.x, m_Position.y+translate.y);
+   dc.DrawIcon(m_Icon,wxPoint(m_Position.x+translate.x, m_Position.y+translate.y));
 }
 
 void
@@ -223,7 +223,7 @@ void
 wxLayoutObjectCmd::Draw(wxDC &dc, wxPoint const &translate)
 {
    wxASSERT(m_font);
-   dc.SetFont(m_font);
+   dc.SetFont(*m_font);
    if(m_ColourFG)
       dc.SetTextForeground(*m_ColourFG);
    if(m_ColourBG)
@@ -243,6 +243,8 @@ wxLayoutList::wxLayoutList()
 {
    m_DefaultSetting = NULL;
    m_WrapMargin = -1;
+   m_Editable = FALSE;
+
    Clear();
 }
 
@@ -462,8 +464,9 @@ wxLayoutList::EraseAndDraw(wxDC &dc, iterator start)
 
    //FIXME: wxGTK: MaxX()/MaxY() broken
    //WXL_VAR(dc.MaxX()); WXL_VAR(dc.MaxY());
-   dc.SetBrush(*wxWHITE_BRUSH);
-   dc.SetPen(wxPen(*wxWHITE,0,wxTRANSPARENT));
+
+   dc.SetBrush(wxBrush(*m_ColourBG, wxSOLID));
+   dc.SetPen(wxPen(*m_ColourBG,0,wxTRANSPARENT));
    dc.DrawRectangle(p.x,p.y,2000,2000); //dc.MaxX(),dc.MaxY());
    Draw(dc,-1,-1,start,wxPoint(0,0));
    //dc.DrawRectangle(p.x,p.y,2000,2000); //dc.MaxX(),dc.MaxY());
@@ -829,7 +832,7 @@ wxLayoutList::Delete(CoordType count)
 
    m_bModified = true;
    
-   CoordType offs;
+   CoordType offs = 0;
    wxLayoutObjectList::iterator i;
       
    do
@@ -1165,7 +1168,7 @@ wxLayoutList::Find(wxPoint coords) const
 
 
 void
-wxLayoutList::SetWrapMargin(long n = -1)
+wxLayoutList::SetWrapMargin(long n)
 {
    m_WrapMargin = n;
 }
@@ -1319,10 +1322,10 @@ wxLayoutPrintout::DrawHeader(wxDC &dc,
                              int pageno)
 {
    // make backups of all essential parameters
-   wxBrush *brush = dc.GetBrush();
-   wxPen   *pen = dc.GetPen();
-   wxFont  *font = dc.GetFont(),
-           *myfont;;
+   wxBrush &brush = dc.GetBrush();
+   wxPen   &pen = dc.GetPen();
+   wxFont  &font = dc.GetFont(),
+           *myfont;
    
    dc.SetBrush(*wxWHITE_BRUSH);
    dc.SetPen(wxPen(*wxBLACK,0,wxSOLID));
@@ -1343,9 +1346,9 @@ wxLayoutPrintout::DrawHeader(wxDC &dc,
    dc.DrawText(m_title, topleft.x+w,topleft.y+h/2);
 
    // restore settings
-   dc.SetPen(*pen);
-   dc.SetBrush(*brush);
-   dc.SetFont(*font);
+   dc.SetPen(pen);
+   dc.SetBrush(brush);
+   dc.SetFont(font);
 
    delete myfont;
 }
