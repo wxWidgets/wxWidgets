@@ -501,7 +501,14 @@ void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
     // to let the char through in that case, otherwise if only ctrl or only
     // alt let's skip it.
     bool ctrl = evt.ControlDown();
+#ifdef __WXMAC__
+    // On the Mac the Alt key is just a modifier key (like Shift) so we need
+    // to allow the char events to be processed when Alt is pressed.
+    // TODO:  Should we check MetaDown instead in this case?
+    bool alt = false;
+#else
     bool alt  = evt.AltDown();
+#endif
     bool skip = ((ctrl || alt) && ! (ctrl && alt));
 
     int key = evt.GetKeyCode();
