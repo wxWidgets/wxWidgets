@@ -66,8 +66,11 @@ public:
     void OnKeyDown(wxKeyEvent& event);
     void OnKeyUp(wxKeyEvent& event);
     void OnChar(wxKeyEvent& event);
+
     void OnText(wxCommandEvent& event);
     void OnTextURL(wxTextUrlEvent& event);
+    void OnTextMaxLen(wxCommandEvent& event);
+
     void OnMouseEvent(wxMouseEvent& event);
 
     bool m_hasCapture;
@@ -99,6 +102,7 @@ public:
     MyTextCtrl    *m_enter;
     MyTextCtrl    *m_tab;
     MyTextCtrl    *m_readonly;
+    MyTextCtrl    *m_limited;
 
     MyTextCtrl    *m_multitext;
     MyTextCtrl    *m_horizontal;
@@ -308,8 +312,11 @@ BEGIN_EVENT_TABLE(MyTextCtrl, wxTextCtrl)
     EVT_KEY_DOWN(MyTextCtrl::OnKeyDown)
     EVT_KEY_UP(MyTextCtrl::OnKeyUp)
     EVT_CHAR(MyTextCtrl::OnChar)
+
     EVT_TEXT(-1, MyTextCtrl::OnText)
     EVT_TEXT_URL(-1, MyTextCtrl::OnTextURL)
+    EVT_TEXT_MAXLEN(-1, MyTextCtrl::OnTextMaxLen)
+
     EVT_MOUSE_EVENTS(MyTextCtrl::OnMouseEvent)
 END_EVENT_TABLE()
 
@@ -524,6 +531,11 @@ void MyTextCtrl::OnText(wxCommandEvent& event)
     }
 }
 
+void MyTextCtrl::OnTextMaxLen(wxCommandEvent& event)
+{
+    wxLogMessage(_T("You can't enter more characters into this control."));
+}
+
 void MyTextCtrl::OnTextURL(wxTextUrlEvent& event)
 {
     const wxMouseEvent& ev = event.GetMouseEvent();
@@ -666,6 +678,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_readonly = new MyTextCtrl( this, -1, "Read only",
       wxPoint(10,90), wxSize(140,-1), wxTE_READONLY );
+
+    m_limited = new MyTextCtrl(this, -1, "Max 8 ch",
+                              wxPoint(10, 130), wxSize(140, -1));
+    m_limited->SetMaxLength(8);
 
     // multi line text controls
 
@@ -990,6 +1006,7 @@ void MyFrame::OnSetEnabled(wxCommandEvent& WXUNUSED(event))
     m_panel->m_password->Enable(enabled);
     m_panel->m_multitext->Enable(enabled);
     m_panel->m_readonly->Enable(enabled);
+    m_panel->m_limited->Enable(enabled);
     m_panel->m_textrich->Enable(enabled);
 }
 

@@ -74,6 +74,8 @@ public:
     // clears the dirty flag
     virtual void DiscardEdits();
 
+    virtual void SetMaxLength(unsigned long len);
+
     // writing text inserts it at the current position, appending always
     // inserts it at the end
     virtual void WriteText(const wxString& text);

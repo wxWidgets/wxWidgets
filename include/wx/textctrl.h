@@ -174,6 +174,10 @@ public:
     // clears the dirty flag
     virtual void DiscardEdits() = 0;
 
+    // set the max number of characters which may be entered in a single line
+    // text control
+    virtual void SetMaxLength(unsigned long WXUNUSED(len)) { }
+
     // writing text inserts it at the current position, appending always
     // inserts it at the end
     virtual void WriteText(const wxString& text) = 0;
@@ -289,6 +293,7 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_UPDATED, 7)
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_ENTER, 8)
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_URL, 13)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_MAXLEN, 14)
 END_DECLARE_EVENT_TYPES()
 
 #endif // !WXWIN_COMPATIBILITY_EVENT_TYPES
@@ -332,6 +337,7 @@ typedef void (wxEvtHandler::*wxTextUrlEventFunction)(wxTextUrlEvent&);
 #define EVT_TEXT(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TEXT_UPDATED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
 #define EVT_TEXT_ENTER(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TEXT_ENTER, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
 #define EVT_TEXT_URL(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TEXT_URL, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxTextUrlEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_TEXT_MAXLEN(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TEXT_MAXLEN, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
 
 #endif // wxUSE_TEXTCTRL
 

@@ -51,6 +51,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxTextUrlEvent, wxCommandEvent)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_TEXT_UPDATED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_TEXT_ENTER)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_TEXT_URL)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_TEXT_MAXLEN)
 
 // ----------------------------------------------------------------------------
 // ctor

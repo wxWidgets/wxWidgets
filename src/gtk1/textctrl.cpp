@@ -826,6 +826,14 @@ void wxTextCtrl::DiscardEdits()
     m_modified = FALSE;
 }
 
+void wxTextCtrl::SetMaxLength(unsigned long len)
+{
+    if ( !HasFlag(wxTE_MULTILINE) )
+    {
+        gtk_entry_set_max_length(GTK_ENTRY(m_text), len);
+    }
+}
+
 void wxTextCtrl::SetSelection( long from, long to )
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );

@@ -514,6 +514,28 @@ Sets the insertion point at the given position.
 Sets the insertion point at the end of the text control. This is equivalent
 to \helpref{SetInsertionPoint}{wxtextctrlsetinsertionpoint}(\helpref{GetLastPosition}{wxtextctrlgetlastposition}()).
 
+\membersection{wxTextCtrl::SetMaxLength}\label{wxtextctrlsetmaxlength}
+
+\func{virtual void}{SetMaxLength}{\param{unsigned long }{len}}
+
+This function sets the maximum number of characters the user can enter into the
+control. In other words, it allows to limit the text value length to {\it len}
+not counting the terminating {\tt NUL} character.
+
+If the user tries to enter more characters into the text control when it
+already is filled up to the maximal length, a 
+{\tt wxEVT\_COMMAND\_TEXT\_MAXLEN} event is sent to notify the program about it
+(giving it the possibility to show an explanatory message, for example) and the
+extra input is discarded.
+
+Note that this function may only be used with single line text controls.
+
+\wxheading{Compatibility}
+
+Only implemented in wxMSW/wxGTK starting with wxWindows 2.3.2.
+
+The {\tt wxEVT\_COMMAND\_TEXT\_MAXLEN} event is only sent by wxMSW.
+
 \membersection{wxTextCtrl::SetSelection}\label{wxtextctrlsetselection}
 
 \func{virtual void}{SetSelection}{\param{long}{ from}, \param{long}{ to}}

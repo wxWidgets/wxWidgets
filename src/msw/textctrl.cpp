@@ -878,6 +878,11 @@ wxString wxTextCtrl::GetLineText(long lineNo) const
     return str;
 }
 
+void wxTextCtrl::SetMaxLength(unsigned long len)
+{
+    ::SendMessage(GetHwnd(), EM_LIMITTEXT, len, 0);
+}
+
 // ----------------------------------------------------------------------------
 // Undo/redo
 // ----------------------------------------------------------------------------
@@ -1020,8 +1025,8 @@ bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
         case EN_KILLFOCUS:
             {
                 wxFocusEvent event(param == EN_KILLFOCUS ? wxEVT_KILL_FOCUS
-                        : wxEVT_SET_FOCUS,
-                        m_windowId);
+                                                         : wxEVT_SET_FOCUS,
+                                   m_windowId);
                 event.SetEventObject( this );
                 GetEventHandler()->ProcessEvent(event);
             }
@@ -1038,7 +1043,13 @@ bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 
         case EN_MAXTEXT:
             // the text size limit has been hit - increase it
-            AdjustSpaceLimit();
+            if ( !AdjustSpaceLimit() )
+            {
+                wxCommandEvent event(wxEVT_COMMAND_TEXT_MAXLEN, m_windowId);
+                InitCommandEvent(event);
+                event.SetString(GetValue());
+                ProcessCommand(event);
+            }
             break;
 
             // the other notification messages are not processed
@@ -1127,11 +1138,27 @@ void wxTextCtrl::OnEraseBackground(wxEraseEvent& event)
 }
 #endif
 
-void wxTextCtrl::AdjustSpaceLimit()
+bool wxTextCtrl::AdjustSpaceLimit()
 {
 #ifndef __WIN16__
-    unsigned int len = ::GetWindowTextLength(GetHwnd()),
-    limit = ::SendMessage(GetHwnd(), EM_GETLIMITTEXT, 0, 0);
+    unsigned int limit = ::SendMessage(GetHwnd(), EM_GETLIMITTEXT, 0, 0);
+
+    // HACK: we try to automatically extend the limit for the amount of text
+    //       to allow (interactively) entering more than 64Kb of text under
+    //       Win9x but we shouldn't reset the text limit which was previously
+    //       set explicitly with SetMaxLength()
+    //
+    //       we could solve this by storing the limit we set in wxTextCtrl but
+    //       to save space we prefer to simply test here the actual limit
+    //       value: we consider that SetMaxLength() can only be called for
+    //       values < 32Kb
+    if ( limit < 0x8000 )
+    {
+        // we've got more text than limit set by SetMaxLength()
+        return FALSE;
+    }
+
+    unsigned int len = ::GetWindowTextLength(GetHwnd());
     if ( len >= limit )
     {
         limit = len + 0x8000;    // 32Kb
@@ -1156,6 +1183,9 @@ void wxTextCtrl::AdjustSpaceLimit()
         }
     }
 #endif // !Win16
+
+    // we changed the limit
+    return TRUE;
 }
 
 bool wxTextCtrl::AcceptsFocus() const

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        textctrl.h
+// Name:        wx/msw/textctrl.h
 // Purpose:     wxTextCtrl class
 // Author:      Julian Smart
 // Modified by:
@@ -71,6 +71,8 @@ public:
 
     // clears the dirty flag
     virtual void DiscardEdits();
+
+    virtual void SetMaxLength(unsigned long len);
 
     // writing text inserts it at the current position, appending always
     // inserts it at the end
@@ -164,17 +166,20 @@ public:
     void OnUpdateRedo(wxUpdateUIEvent& event);
 
 protected:
-#if wxUSE_RICHEDIT
-    bool      m_isRich; // Are we using rich text edit to implement this?
-#endif
-
     // call this to increase the size limit (will do nothing if the current
     // limit is big enough)
-    void AdjustSpaceLimit();
+    //
+    // returns true if we increased the limit to allow entering more text,
+    // false if we hit the limit set by SetMaxLength() and so didn't change it
+    bool AdjustSpaceLimit();
 
     // override some base class virtuals
     virtual bool MSWShouldPreProcessMessage(WXMSG* pMsg);
     virtual wxSize DoGetBestSize() const;
+
+#if wxUSE_RICHEDIT
+    bool m_isRich; // Are we using rich text edit to implement this?
+#endif
 
 private:
     DECLARE_EVENT_TABLE()
