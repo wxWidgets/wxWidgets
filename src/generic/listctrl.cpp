@@ -3813,10 +3813,16 @@ void wxListMainWindow::DeleteItem( long lindex )
 
     size_t index = (size_t)lindex;
 
-    // select the next item when the selected one is deleted
-    if ( m_current >= index )
+    // we don't need to adjust the index for the previous items
+    if ( HasCurrent() && m_current >= index )
     {
-        m_current--;
+        // if the current item is being deleted, we want the next one to
+        // become selected - unless there is no next one - so don't adjust
+        // m_current in this case
+        if ( m_current != index || m_current == count - 1 )
+        {
+            m_current--;
+        }
     }
 
     if ( InReportView() )

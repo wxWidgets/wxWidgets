@@ -196,7 +196,6 @@ protected:
     virtual wxListItemAttr *OnGetItemAttr(long item) const;
 
     // it calls our OnGetXXX() functions
-
     friend class WXDLLEXPORT wxListMainWindow;
 
 private:
