@@ -414,7 +414,7 @@ void wxTextCtrl::SetInsertionPointEnd()
     pos = gtk_text_get_length( GTK_TEXT(m_text) );
   else
     pos = GTK_ENTRY(m_text)->text_length;
-  SetInsertionPoint( pos-1 );
+  SetInsertionPoint((pos-1)>0 ? (pos-1):0);
 }
 
 void wxTextCtrl::SetEditable( bool editable )
