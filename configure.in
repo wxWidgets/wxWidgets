@@ -4507,6 +4507,12 @@ fi
 AC_DEFINE_UNQUOTED(WXWIN_OS_DESCRIPTION, $OSINFO)
 
 dnl ---------------------------------------------------------------------------
+dnl define the variable containing the installation prefix (used in dcpsg.cpp)
+dnl ---------------------------------------------------------------------------
+
+AC_DEFINE_UNQUOTED(wxINSTALL_PREFIX, $prefix)
+
+dnl ---------------------------------------------------------------------------
 dnl Output the makefiles and such from the results found above
 dnl ---------------------------------------------------------------------------
 
