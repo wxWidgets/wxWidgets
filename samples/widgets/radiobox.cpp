@@ -56,6 +56,8 @@ enum
     RadioPage_Selection,
     RadioPage_Label,
     RadioPage_LabelBtn,
+    RadioPage_Enable2nd,
+    RadioPage_Show2nd,
     RadioPage_Radio
 };
 
@@ -109,6 +111,8 @@ protected:
 
     // the check/radio boxes for styles
     wxCheckBox *m_chkVert;
+    wxCheckBox *m_2ndEnabled;
+    wxCheckBox *m_2ndShown;
     wxRadioBox *m_radioDir;
 
     // the gauge itself and the sizer it is in
@@ -164,6 +168,8 @@ RadioWidgetsPage::RadioWidgetsPage(wxBookCtrl *book,
 
     // init everything
     m_chkVert = (wxCheckBox *)NULL;
+    m_2ndEnabled = (wxCheckBox *)NULL;
+    m_2ndShown = (wxCheckBox *)NULL;
 
     m_textNumBtns =
     m_textLabelBtns =
@@ -247,6 +253,9 @@ RadioWidgetsPage::RadioWidgetsPage(wxBookCtrl *book,
                                             &m_textLabelBtns);
     sizerMiddle->Add(sizerRow, 0, wxGROW | wxALL, 5);
 
+    m_2ndEnabled = CreateCheckBoxAndAddToSizer(sizerMiddle, _T("2nd item enabled"));
+    m_2ndShown = CreateCheckBoxAndAddToSizer(sizerMiddle, _T("2nd item shown"));
+
     // right pane
     wxSizer *sizerRight = new wxBoxSizer(wxHORIZONTAL);
     sizerRight->SetMinSize(150, 0);
@@ -278,6 +287,8 @@ void RadioWidgetsPage::Reset()
     m_textLabelBtns->SetValue(_T("item"));
 
     m_chkVert->SetValue(false);
+    m_2ndEnabled->SetValue(true);
+    m_2ndShown->SetValue(true);
     m_radioDir->SetSelection(RadioDir_Default);
 }
 
@@ -363,6 +374,9 @@ void RadioWidgetsPage::CreateRadio()
 
     m_sizerRadio->Add(m_radio, 1, wxGROW);
     m_sizerRadio->Layout();
+
+    m_radio->Enable( 1 , m_2ndEnabled->GetValue() );
+    m_radio->Show( 1 , m_2ndShown->GetValue() );
 }
 
 // ----------------------------------------------------------------------------
