@@ -1731,9 +1731,11 @@ class WXDLLIMPEXP_CORE wxNavigationKeyEvent : public wxEvent
 public:
     wxNavigationKeyEvent()
         : wxEvent(0, wxEVT_NAVIGATION_KEY),
-          m_flags(IsForward | Propagate),    // defaults are for TAB
+          m_flags(IsForward),    // defaults are for TAB
           m_focus((wxWindow *)NULL)
-        { }
+        {
+            m_propagationLevel = wxEVENT_PROPAGATE_NONE;
+        }
 
     wxNavigationKeyEvent(const wxNavigationKeyEvent& event)
         : wxEvent(event),
@@ -1754,14 +1756,6 @@ public:
     void SetWindowChange(bool bIs)
         { if ( bIs ) m_flags |= WinChange; else m_flags &= ~WinChange; }
 
-    // some navigation events are meant to be propagated upwards (Windows
-    // convention is to do this for TAB events) while others should always
-    // cycle inside the panel/radiobox/whatever we're current inside
-    bool ShouldPropagate() const
-        { return (m_flags & Propagate) != 0; }
-    void SetPropagate(bool bDoIt)
-        { if ( bDoIt ) m_flags |= Propagate; else m_flags &= ~Propagate; }
-
     // the child which has the focus currently (may be NULL - use
     // wxWindow::FindFocus then)
     wxWindow* GetCurrentFocus() const { return m_focus; }
@@ -1773,8 +1767,7 @@ private:
     enum
     {
         IsForward = 0x0001,
-        WinChange = 0x0002,
-        Propagate = 0x0004
+        WinChange = 0x0002
     };
 
     long m_flags;

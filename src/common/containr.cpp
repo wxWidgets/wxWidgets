@@ -293,6 +293,9 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
             // and instead give it to the first/last child depending from which
             // direction we're coming
             event.SetEventObject(m_winParent);
+            // disable propagation for this call as otherwise the event might
+            // bounce back to us.
+            wxPropagationDisabler disableProp(event);
             if ( !child->GetEventHandler()->ProcessEvent(event) )
             {
                 // set it first in case SetFocusFromKbd() results in focus
