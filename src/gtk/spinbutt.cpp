@@ -51,14 +51,13 @@ static void gtk_spinbutt_callback( GtkWidget *WXUNUSED(widget), wxSpinButton *wi
 
     float diff = win->m_adjust->value - win->m_oldPos;
     if (fabs(diff) < sensitivity) return;
-    win->m_oldPos = win->m_adjust->value;
 
     wxEventType command = wxEVT_NULL;
 
     float line_step = win->m_adjust->step_increment;
 
-    if (fabs(diff-line_step) < sensitivity) command = wxEVT_SCROLL_LINEDOWN;
-    else if (fabs(diff+line_step) < sensitivity) command = wxEVT_SCROLL_LINEUP;
+    if (fabs(diff-line_step) < sensitivity) command = wxEVT_SCROLL_LINEUP;
+    else if (fabs(diff+line_step) < sensitivity) command = wxEVT_SCROLL_LINEDOWN;
     else command = wxEVT_SCROLL_THUMBTRACK;
 
     int value = (int)ceil(win->m_adjust->value);
@@ -66,7 +65,27 @@ static void gtk_spinbutt_callback( GtkWidget *WXUNUSED(widget), wxSpinButton *wi
     wxSpinEvent event( command, win->GetId());
     event.SetPosition( value );
     event.SetEventObject( win );
-    win->GetEventHandler()->ProcessEvent( event );
+
+    if ((win->GetEventHandler()->ProcessEvent( event )) &&
+        !event.IsAllowed() )
+    {
+        /* program has vetoed */
+        win->m_adjust->value = win->m_oldPos;
+        
+        gtk_signal_disconnect_by_func( GTK_OBJECT (win->m_adjust),
+                        (GtkSignalFunc) gtk_spinbutt_callback,
+                        (gpointer) win );
+        
+        gtk_signal_emit_by_name( GTK_OBJECT(win->m_adjust), "value_changed" );
+
+        gtk_signal_connect( GTK_OBJECT (win->m_adjust),
+                        "value_changed",
+                        (GtkSignalFunc) gtk_spinbutt_callback,
+                        (gpointer) win );
+        return;
+    }
+    
+    win->m_oldPos = win->m_adjust->value;
     
     /* always send a thumbtrack event */
     if (command != wxEVT_SCROLL_THUMBTRACK)
@@ -109,7 +128,7 @@ bool wxSpinButton::Create(wxWindow *parent,
         !CreateBase( parent, id, pos, new_size, style, wxDefaultValidator, name ))
     {
         wxFAIL_MSG( wxT("wxXX creation failed") );
-	return FALSE;
+	    return FALSE;
     }
 
     m_oldPos = 0.0;
