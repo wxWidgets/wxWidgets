@@ -208,7 +208,8 @@ file or explpicitly set for the bitmap.
 
 :see: `SetMask`, `wx.Mask`
 ", "");
-    
+
+    // MSW only?    wxBitmap GetMaskBitmap() const;
 
     DocDeclStr(
         virtual void , SetMask(wxMask* mask),
