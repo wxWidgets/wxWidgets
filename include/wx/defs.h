@@ -619,6 +619,10 @@ typedef int wxWindowID;
     #define except(x) catch(...)
 #endif // Metrowerks
 
+#if defined(__WATCOMC__)
+    typedef short mode_t;
+#endif
+
 // where should i put this? we need to make sure of this as it breaks
 // the <iostream> code.
 #if !wxUSE_IOSTREAMH && defined(__WXDEBUG__)

@@ -530,8 +530,8 @@ wxSafeShowMessage(const wxString& title, const wxString& text);
                    (long)rc, wxSysErrorMsg(rc))
 #else // !VC++
     #define wxLogApiError(api, rc)                                            \
-        wxLogDebug(wxT("In file %s at line %d: '%s' failed with "             \
-                       "error 0x%08lx (%s)."),                                \
+        wxLogDebug(wxT("In file %s at line %d: '%s' failed with ")            \
+                   wxT("error 0x%08lx (%s)."),                                \
                    __TFILE__, __LINE__, api,                                  \
                    (long)rc, wxSysErrorMsg(rc))
 #endif // VC++/!VC++

@@ -74,9 +74,10 @@ enum wxSeekMode
 // Microsoft compiler loves underscores, feed them to it
 #if defined( __VISUALC__ ) \
     || ( defined(__MINGW32__) && !defined(__WINE__) && wxCHECK_W32API_VERSION( 0, 5 ) ) \
-    || ( defined(__MWERKS__) && defined(__WXMSW__) )
+    || ( defined(__MWERKS__) && defined(__WXMSW__) ) \
+    || ( defined(__WATCOMC__) && defined(__WXMSW__) )
     // functions
-#ifdef __BORLANDC__
+#if defined(__BORLANDC__) || defined(__WATCOMC__)
     #define   _tell        tell
 #endif
     #define   wxClose      _close
@@ -116,10 +117,14 @@ enum wxSeekMode
     #endif
 
     // types
+#if defined(__WATCOMC__)&& wxUSE_UNICODE
+    #define   wxStructStat struct _wstat
+#else
     #define   wxStructStat struct _stat
+#endif
 
     // constants (unless already defined by the user code)
-    #if !defined(O_RDONLY) && !defined(__BORLANDC__)
+    #if !defined(O_RDONLY) && !defined(__BORLANDC__) && !defined(__WATCOMC__)
         #define   O_RDONLY    _O_RDONLY
         #define   O_WRONLY    _O_WRONLY
         #define   O_RDWR      _O_RDWR
@@ -128,7 +133,7 @@ enum wxSeekMode
         #define   O_BINARY    _O_BINARY
     #endif
 
-    #ifndef __BORLANDC__
+    #if !defined(__BORLANDC__) && !defined(__WATCOMC__)
         #define   S_IFMT      _S_IFMT
         #define   S_IFDIR     _S_IFDIR
         #define   S_IFREG     _S_IFREG
