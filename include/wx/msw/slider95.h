@@ -99,6 +99,8 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
 
+    virtual wxSize DoGetBestSize() const;
+    
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxSlider95)
 };
 

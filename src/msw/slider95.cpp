@@ -124,18 +124,16 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& wxVALIDATOR_PARAM(validator),
            const wxString& name)
 {
+    // default is no border
     if ( (style & wxBORDER_MASK) == wxBORDER_DEFAULT )
         style |= wxBORDER_NONE;
 
-    SetName(name);
-#if wxUSE_VALIDATORS
-    SetValidator(validator);
-#endif // wxUSE_VALIDATORS
+    if ( !CreateBase(parent, id, pos, size, style, validator, name) )
+        return FALSE;
 
     if (parent) parent->AddChild(this);
 
-    SetBackgroundColour(parent->GetBackgroundColour()) ;
-    SetForegroundColour(parent->GetForegroundColour()) ;
+    InheritAttributes();
 
     m_staticValue = (WXHWND) NULL;;
     m_staticMin = (WXHWND) NULL;;
@@ -144,11 +142,6 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
     m_lineSize = 1;
     m_windowStyle = style;
     m_tickFreq = 0;
-
-    if ( id == -1 )
-        m_windowId = (int)NewControlId();
-    else
-        m_windowId = id;
 
     int x = pos.x;
     int y = pos.y;
@@ -547,7 +540,7 @@ void wxSlider95::DoSetSize(int x, int y, int width, int height, int sizeFlags)
             }
 
             if ( w1 < 0 )
-                w1 = 200;
+                w1 = 100;
             if ( h1 < 0 )
                 h1 = 20;
 
@@ -620,12 +613,93 @@ void wxSlider95::DoSetSize(int x, int y, int width, int height, int sizeFlags)
             if ( w1 < 0 )
                 w1 = 20;
             if ( h1 < 0 )
-                h1 = 200;
+                h1 = 100;
 
             ::MoveWindow(GetHwnd(), x1, y1, w1, h1, TRUE);
         }
     }
 }
+
+
+// A reimplementaion of the mess above changed a bit to just determine the min
+// size needed.  It would certainly be nice to refactor this and DoSetSize
+// somehow.
+wxSize wxSlider95::DoGetBestSize() const
+{
+    wxSize rv;
+    wxChar buf[300];
+    int cx;    
+    int cy;
+    int cyf;
+    int min_len = 0;
+    int max_len = 0;
+    
+    wxGetCharSize(GetHWND(), &cx, &cy, & this->GetFont());
+    
+    if ( !HasFlag(wxSL_VERTICAL))
+    {
+        rv = wxSize(100, 20);  // default size for the slider itself
+        
+        if (HasFlag(wxSL_LABELS))  // do we need to add more for the labels?
+        {
+            ::GetWindowText((HWND) m_staticMin, buf, 300);
+            GetTextExtent(buf, &min_len, &cyf,NULL,NULL, & this->GetFont());
+            rv.x += min_len + cx;
+
+            ::GetWindowText((HWND) m_staticMax, buf, 300);
+            GetTextExtent(buf, &max_len, &cyf,NULL,NULL, & this->GetFont());
+            rv.x += max_len + cx;
+
+            if (m_staticValue)
+            {
+                int new_width = (int)(wxMax(min_len, max_len));
+                int valueHeight = (int)cyf;
+            
+#ifdef __WIN32__
+                // For some reason, under Win95, the text edit control has
+                // a lot of space before the first character
+                new_width += 3*cx;
+#endif
+                // The height needs to be a bit bigger under Win95 if
+                // using native 3D effects.
+                valueHeight = (int) (valueHeight * 1.5) ;
+
+                rv.x += new_width + cx;
+                rv.y = wxMax(valueHeight, rv.y);
+            }
+        }
+    }
+    else // ! wxSL_HORIZONTAL
+    {
+        rv = wxSize(20, 100);  // default size for the slider itself
+
+        if (HasFlag(wxSL_LABELS)) // do we need to add more for the labels?
+        {
+            ::GetWindowText((HWND) m_staticMin, buf, 300);
+            GetTextExtent(buf, &min_len, &cyf,NULL,NULL, & this->GetFont());
+            rv.y += cy;
+
+            ::GetWindowText((HWND) m_staticMax, buf, 300);
+            GetTextExtent(buf, &max_len, &cyf,NULL,NULL, & this->GetFont());
+            rv.y += cy;
+            
+            if (m_staticValue)
+            {
+                int new_width = (int)(wxMax(min_len, max_len));
+                int valueHeight = (int)cyf;
+                new_width += cx;
+
+                // The height needs to be a bit bigger under Win95 if
+                // using native 3D effects.
+                valueHeight = (int) (valueHeight * 1.5) ;
+                rv.y += valueHeight;
+                rv.x = wxMax(new_width, rv.x);
+            }            
+        }
+    }
+    return rv;
+}
+
 
 void wxSlider95::SetRange(int minValue, int maxValue)
 {
