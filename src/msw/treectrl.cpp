@@ -2121,20 +2121,34 @@ long wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                     {
                         // avoid doing anything if we click on the only
                         // currently selected item
+                        
                         wxArrayTreeItemIds selections;
                         size_t count = GetSelections(selections);
                         if ( count == 0 ||
-                                count > 1 ||
-                                    HITEM(selections[0]) != htItem )
+                             count > 1 ||
+                             HITEM(selections[0]) != htItem )
                         {
-                            // clear the previously selected items
-                            UnselectAll();
+                            // clear the previously selected items, if the
+                            // user clicked outside of the present selection.
+                            // otherwise, perform the deselection on mouse-up.
+                            // this allows multiple drag and drop to work.
+                            
+                            if (IsItemSelected(GetHwnd(), htItem))
+                            {
+                                ::SetFocus(GetHwnd(), htItem);
+                            }
+                             else
+                            {
+                                UnselectAll();
 
-                            // prevent the click from starting in-place editing
-                            // which should only happen if we click on the
-                            // already selected item (and nothing else is
-                            // selected)
-                            TreeView_SelectItem(GetHwnd(), 0);
+                                // prevent the click from starting in-place editing
+                                // which should only happen if we click on the
+                                // already selected item (and nothing else is
+                                // selected)
+
+                                TreeView_SelectItem(GetHwnd(), 0);
+                                ::SelectItem(GetHwnd(), htItem);
+                            }
                         }
 
                         // reset on any click without Shift
@@ -2160,6 +2174,24 @@ long wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                 break;
 
             case WM_LBUTTONUP:
+
+                // facilitates multiple drag-and-drop
+                if (htItem && isMultiple)
+                {
+                    wxArrayTreeItemIds selections;
+                    size_t count = GetSelections(selections);
+
+                    if (count > 1 &&
+                        !(wParam & MK_CONTROL) &&
+                        !(wParam & MK_SHIFT))
+                    {
+                        UnselectAll();
+                        TreeView_SelectItem(GetHwnd(), htItem);
+                    }
+                }
+
+                // fall through
+
             case WM_RBUTTONUP:
                 if ( m_dragImage )
                 {

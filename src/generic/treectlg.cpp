@@ -3076,6 +3076,21 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
         }
         else if ( event.LeftUp() )
         {
+            // this facilitates multiple-item drag-and-drop
+
+            if (item && HasFlag(wxTR_MULTIPLE))
+            {
+                wxArrayTreeItemIds selections;
+                size_t count = GetSelections(selections);
+
+                if (count > 1 &&
+                    !event.ControlDown() &&
+                    !event.ShiftDown())
+                {
+                    SelectItem(item, true, false);
+                }
+            }
+
             if ( m_lastOnSame )
             {
                 if ( (item == m_current) &&
@@ -3118,14 +3133,24 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
                 return;
             }
 
-            // how should the selection work for this event?
-            bool is_multiple, extended_select, unselect_others;
-            EventFlagsToSelType(GetWindowStyleFlag(),
-                                event.ShiftDown(),
-                                event.ControlDown(),
-                                is_multiple, extended_select, unselect_others);
 
-            SelectItem(item, unselect_others, extended_select);
+            // clear the previously selected items, if the
+            // user clicked outside of the present selection.
+            // otherwise, perform the deselection on mouse-up.
+            // this allows multiple drag and drop to work.
+
+            if (!IsSelected(item))
+            {
+                // how should the selection work for this event?
+                bool is_multiple, extended_select, unselect_others;
+                EventFlagsToSelType(GetWindowStyleFlag(),
+                                    event.ShiftDown(),
+                                    event.ControlDown(),
+                                    is_multiple, extended_select, unselect_others);
+
+                SelectItem(item, unselect_others, extended_select);
+            }
+
 
             // For some reason, Windows isn't recognizing a left double-click,
             // so we need to simulate it here.  Allow 200 milliseconds for now.
