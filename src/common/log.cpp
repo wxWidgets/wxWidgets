@@ -770,7 +770,10 @@ wxLogChain::wxLogChain(wxLog *logger)
 
 wxLogChain::~wxLogChain()
 {
-    delete m_logNew;
+    delete m_logOld;
+
+    if ( m_logNew != this )
+        delete m_logNew;
 }
 
 void wxLogChain::SetLog(wxLog *logger)
