@@ -31,58 +31,67 @@
     wxSP_WRAP:         value wraps at either end
  */
 
-class WXDLLEXPORT wxSpinButton: public wxControl
+class WXDLLEXPORT wxSpinButton : public wxControl
 {
-  DECLARE_DYNAMIC_CLASS(wxSpinButton)
- public:
-  /*
-   * Public interface
-   */
+DECLARE_DYNAMIC_CLASS(wxSpinButton)
 
-  wxSpinButton(void);
-
-  inline wxSpinButton(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            long style = wxSP_VERTICAL, const wxString& name = "wxSpinButton")
-  {
-    Create(parent, id, pos, size, style, name);
-  }
-  ~wxSpinButton(void);
-
-  bool Create(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            long style = wxSP_VERTICAL, const wxString& name = "wxSpinButton");
-
-
-  // Attributes
-  ////////////////////////////////////////////////////////////////////////////
-
-  int GetValue(void) const ;
-  void SetValue(int val) ;
-  void SetRange(int minVal, int maxVal) ;
-  inline int GetMin(void) const { return m_min; }
-  inline int GetMax(void) const { return m_max; }
-
-  // Operations
-  ////////////////////////////////////////////////////////////////////////////
-
-  void Command(wxCommandEvent& event) { ProcessCommand(event); };
-
-  // IMPLEMENTATION
-  virtual bool MSWCommand(WXUINT param, WXWORD id);
-  virtual bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM *result);
-  virtual void MSWOnVScroll(WXWORD wParam, WXWORD pos, WXHWND control);
-  virtual void MSWOnHScroll(WXWORD wParam, WXWORD pos, WXHWND control);
-
+public:
+    /*
+     * Public interface
+     */
+    wxSpinButton();
+    
+    wxSpinButton(wxWindow *parent,
+                 wxWindowID id = -1,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = wxSP_VERTICAL | wxSP_ARROW_KEYS,
+                 const wxString& name = "wxSpinButton")
+    {
+        Create(parent, id, pos, size, style, name);
+    }
+    
+    virtual ~wxSpinButton();
+    
+    bool Create(wxWindow *parent,
+                wxWindowID id = -1,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxSP_VERTICAL | wxSP_ARROW_KEYS, 
+                const wxString& name = "wxSpinButton");
+    
+    
+    // Attributes
+    ////////////////////////////////////////////////////////////////////////////
+    
+    int GetValue() const ;
+    void SetValue(int val) ;
+    void SetRange(int minVal, int maxVal);
+    int GetMin() const { return m_min; }
+    int GetMax() const { return m_max; }
+    
+    // Operations
+    ////////////////////////////////////////////////////////////////////////////
+    
+    void Command(wxCommandEvent& event) { ProcessCommand(event); };
+    
+    // IMPLEMENTATION
+    virtual bool MSWCommand(WXUINT param, WXWORD id);
+    virtual bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM *result);
+    virtual void MSWOnVScroll(WXWORD wParam, WXWORD pos, WXHWND control);
+    virtual void MSWOnHScroll(WXWORD wParam, WXWORD pos, WXHWND control);
+    
 protected:
-  int   m_min;
-  int   m_max;
+    int   m_min;
+    int   m_max;
 };
 
 class WXDLLEXPORT wxSpinEvent: public wxScrollEvent
 {
-  DECLARE_DYNAMIC_CLASS(wxSpinEvent)
-
- public:
-  wxSpinEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
+    DECLARE_DYNAMIC_CLASS(wxSpinEvent)
+        
+public:
+    wxSpinEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
 };
 
 typedef void (wxEvtHandler::*wxSpinEventFunction)(wxSpinEvent&);
