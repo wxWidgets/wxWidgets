@@ -107,6 +107,7 @@ All (GUI):
 - wxTextCtrl::GetRange() added
 - added wxGetFontFromUser() convenience function
 - added EVT_MENU_OPEN and EVT_MENU_CLOSE events
+- added Hungarian translations (Janos Vegh)
 
 wxMSW:
 
