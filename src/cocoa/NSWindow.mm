@@ -124,7 +124,7 @@ void wxCocoaNSWindow::DisassociateNSWindow(WX_NSWindow cocoaNSWindow)
     }
 }
 
-wxMenuBar* wxCocoaNSWindow::GetAppMenuBar()
+wxMenuBar* wxCocoaNSWindow::GetAppMenuBar(wxCocoaNSWindow *win)
 {
     return NULL;
 }

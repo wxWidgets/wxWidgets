@@ -67,7 +67,7 @@ public:
     virtual void CocoaDelegate_windowDidResignKey(void);
     virtual void CocoaDelegate_windowDidBecomeMain(void);
     virtual void CocoaDelegate_windowDidResignMain(void);
-    virtual wxMenuBar* GetAppMenuBar();
+    virtual wxMenuBar* GetAppMenuBar(wxCocoaNSWindow *win);
 protected:
     void SetNSWindow(WX_NSWindow cocoaNSWindow);
     WX_NSWindow m_cocoaNSWindow;

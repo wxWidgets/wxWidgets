@@ -134,11 +134,11 @@ wxTopLevelWindowCocoa::~wxTopLevelWindowCocoa()
 // wxTopLevelWindowCocoa Cocoa Specifics
 // ----------------------------------------------------------------------------
 
-wxMenuBar* wxTopLevelWindowCocoa::GetAppMenuBar()
+wxMenuBar* wxTopLevelWindowCocoa::GetAppMenuBar(wxCocoaNSWindow *win)
 {
     wxTopLevelWindowCocoa *parent = wxDynamicCast(GetParent(),wxTopLevelWindow);
     if(parent)
-        return parent->GetAppMenuBar();
+        return parent->GetAppMenuBar(win);
     return NULL;
 }
 

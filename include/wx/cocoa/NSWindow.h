@@ -34,7 +34,7 @@ public:
     virtual void CocoaDelegate_windowDidResignKey(void) { }
     virtual void CocoaDelegate_windowDidBecomeMain(void) { }
     virtual void CocoaDelegate_windowDidResignMain(void) { }
-    virtual wxMenuBar* GetAppMenuBar();
+    virtual wxMenuBar* GetAppMenuBar(wxCocoaNSWindow *win);
 protected:
     static struct objc_object *sm_cocoaDelegate;
 };

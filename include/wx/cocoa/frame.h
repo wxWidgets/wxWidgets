@@ -51,7 +51,7 @@ protected:
 // Cocoa specifics
 // ------------------------------------------------------------------------
 public:
-    virtual wxMenuBar* GetAppMenuBar();
+    virtual wxMenuBar* GetAppMenuBar(wxCocoaNSWindow *win);
     // Returns the NSView for non-client drawing
     virtual WX_NSView GetNonClientNSView();
 protected:
