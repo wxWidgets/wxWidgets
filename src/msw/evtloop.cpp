@@ -73,6 +73,13 @@ public:
     int GetExitCode() const { return m_exitcode; }
     bool ShouldExit() const { return m_shouldExit; }
 
+    enum wxCatchAllResponse {
+        catch_continue,
+        catch_exit,
+        catch_rethrow
+    };
+    wxCatchAllResponse OnCatchAll();
+
 private:
     // preprocess a message, return TRUE if processed (i.e. no further
     // dispatching required)
@@ -213,6 +220,25 @@ bool wxEventLoopImpl::SendIdleMessage()
     return wxTheApp->ProcessIdle();
 }
 
+// ----------------------------------------------------------------------------
+// wxEventLoopImpl exception handling
+// ----------------------------------------------------------------------------
+
+wxEventLoopImpl::wxCatchAllResponse wxEventLoopImpl::OnCatchAll()
+{
+    switch (::MessageBox(NULL, 
+            _T("An unhandled exception occurred. 'Abort' will terminate the program,\r\n"
+            "'Retry' will close the current dialog, 'Ignore' will try to continue."), 
+            _T("Unhandled exception"), 
+            MB_ABORTRETRYIGNORE|MB_ICONERROR|MB_TASKMODAL))
+    {
+        case IDABORT: return catch_rethrow;
+        case IDRETRY: return catch_exit;
+        case IDIGNORE: return catch_continue;
+    }
+    return catch_rethrow;
+}
+
 // ============================================================================
 // wxEventLoop implementation
 // ============================================================================
@@ -249,13 +275,18 @@ int wxEventLoop::Run()
     // situations because it is supposed to be called synchronously,
     // wxModalEventLoop depends on this (so we can't just use ON_BLOCK_EXIT or
     // something similar here)
+#if wxUSE_EXCEPTIONS
+    bool retryAfterException;
+    do {
+        retryAfterException=false;
+#endif
     wxTRY
     {
         for ( ;; )
         {
-#if wxUSE_THREADS
+    #if wxUSE_THREADS
             wxMutexGuiLeaveOrEnter();
-#endif // wxUSE_THREADS
+    #endif // wxUSE_THREADS
 
             // generate and process idle events for as long as we don't have
             // anything else to do
@@ -281,8 +312,28 @@ int wxEventLoop::Run()
                 break;
             }
         }
+        }
+        wxCATCH_ALL( 
+            switch (m_impl->OnCatchAll()) {
+                case wxEventLoopImpl::catch_continue:
+                    retryAfterException=true;
+                    break;
+                case wxEventLoopImpl::catch_exit:
+                    OnExit();
+                    break;
+                case wxEventLoopImpl::catch_rethrow:
+                    OnExit();
+                    // should be replaced with wx macro, but
+                    // there is none yet. OTOH, wxCATCH_ALL isn't
+                    // expanded unless wxUSE_EXCEPTIONS, so its
+                    // safe to use throw here.
+                    throw;  
+                    break;
     }
-    wxCATCH_ALL( OnExit(); )
+        )
+#if wxUSE_EXCEPTIONS
+    } while (retryAfterException);
+#endif
 
     return m_impl->GetExitCode();
 }
