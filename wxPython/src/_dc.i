@@ -569,18 +569,6 @@ public:
 //---------------------------------------------------------------------------
 %newgroup
 
-enum
-{
-    // this is more efficient and hence default
-    wxBUFFER_DC_OVERWRITE_BG = 0,
-
-    // preserve the old background: more time consuming
-    wxBUFFER_DC_PRESERVE_BG = 1,
-
-    // flags used by default
-    wxBUFFER_DC_DEFAULT = wxBUFFER_DC_OVERWRITE_BG
-};
-
 
 class wxBufferedDC : public wxMemoryDC
 {
@@ -596,13 +584,17 @@ public:
     // Construct a wxBufferedDC with an internal buffer of 'area'
     // (where area is usually something like the size of the window
     // being buffered)
-    wxBufferedDC( wxDC *dc, const wxSize &area, int flags = wxBUFFER_DC_DEFAULT );
+    wxBufferedDC( wxDC *dc, const wxSize &area );
 
     
     // TODO: Keep this one too?
-    %pythonAppend wxBufferedDC( wxDC *dc, const wxSize &area, int flags = wxBUFFER_DC_DEFAULT )
+    %pythonAppend wxBufferedDC( wxDC *dc, const wxSize &area )
         "val._dc = args[0] # save a ref so the other dc will not be deleted before self";
-    %name(BufferedDCInternalBuffer) wxBufferedDC( wxDC *dc, const wxSize &area, int flags = wxBUFFER_DC_DEFAULT );
+    %name(BufferedDCInternalBuffer) wxBufferedDC( wxDC *dc, const wxSize &area );
+
+    
+    // The buffer is blit to the real DC when the BufferedDC is destroyed.
+    ~wxBufferedDC();
 
     
     // Blits the buffer to the dc, and detaches the dc from
@@ -614,16 +606,16 @@ public:
 };
 
 
+
+
+// Creates a double buffered wxPaintDC, optionally allowing the
+// user to specify their own buffer to use.
 class wxBufferedPaintDC : public wxBufferedDC
 {
 public:
 
-    %nokwargs wxBufferedPaintDC;
-    
-    wxBufferedPaintDC( wxWindow *window, const wxBitmap &buffer );
-
-    // this ctor creates a bitmap of the size of the window for buffering
-    wxBufferedPaintDC(wxWindow *window, int flags = wxBUFFER_DC_DEFAULT);
+    // If no bitmap is supplied by the user, a temporary one wil; be created.
+    wxBufferedPaintDC( wxWindow *window, const wxBitmap &buffer = wxNullBitmap );
 
 };
 
