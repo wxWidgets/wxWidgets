@@ -508,6 +508,12 @@
 #   include "wx/msw/wince/libraries.h"
 #endif
 
+/* Force inclusion of main PalmOS header: */
+#ifdef __WXPALMOS__
+#   include <PalmOS.h>
+#   undef Abs
+#endif
+
 /*
    This macro can be used to test the gcc version and can be used like this:
 
@@ -526,12 +532,14 @@
    This macro can be used to check that the version of mingw32 compiler is
    at least maj.min
  */
-#if defined(__WXPALMOS__)
-#    include "wx/palmos/gccpriv.h"
-#elif ( defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || \
+#if ( defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || \
     defined( __CYGWIN__ ) || \
       (defined(__WATCOMC__) && __WATCOMC__ >= 1200) ) && \
-    !defined(__DOS__) && !defined(__WXMOTIF__) && !defined(__WXGTK__) && !defined(__WXX11__)
+    !defined(__DOS__) && \
+    !defined(__WXMOTIF__) && \
+    !defined(__WXGTK__) && \
+    !defined(__WXX11__) && \
+    !defined(__WXPALMOS__)
 #    include "wx/msw/gccpriv.h"
 #else
 #    undef wxCHECK_W32API_VERSION
