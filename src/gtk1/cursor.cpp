@@ -72,6 +72,7 @@ wxCursor::wxCursor( int cursorId )
         case wxCURSOR_CROSS:            gdk_cur = GDK_CROSSHAIR; break;
         case wxCURSOR_SIZEWE:           gdk_cur = GDK_SB_H_DOUBLE_ARROW; break;
         case wxCURSOR_SIZENS:           gdk_cur = GDK_SB_V_DOUBLE_ARROW; break;
+        case wxCURSOR_ARROWWAIT:
         case wxCURSOR_WAIT:
         case wxCURSOR_WATCH:            gdk_cur = GDK_WATCH; break;
         case wxCURSOR_SIZING:           gdk_cur = GDK_SIZING; break;

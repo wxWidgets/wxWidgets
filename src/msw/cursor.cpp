@@ -191,6 +191,9 @@ wxCursor::wxCursor(int cursor_type)
 
   switch (cursor_type)
   {
+    case wxCURSOR_ARROWWAIT:
+      refData->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_APPSTARTING);
+      break;
     case wxCURSOR_WAIT:
       refData->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_WAIT);
       break;

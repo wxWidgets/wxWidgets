@@ -123,6 +123,8 @@ enum wxStockCursor
     wxCURSOR_BASED_ARROW_DOWN,
 #endif // X11
 
+    wxCURSOR_ARROWWAIT,
+
     wxCURSOR_MAX
 };
 
