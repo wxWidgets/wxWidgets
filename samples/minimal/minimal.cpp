@@ -165,24 +165,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
 
-    wxPanel *panel = new wxPanel(this, -1);
-    wxStaticBox *box = new wxStaticBox(panel, -1, "box");
-    wxComboBox *combo = new wxComboBox(panel, -1, "combo");
-    wxLayoutConstraints *c;
-    c = new wxLayoutConstraints;
-    c->left.SameAs(panel, wxLeft);
-    c->right.SameAs(panel, wxRight);
-    c->top.SameAs(panel, wxTop);
-    c->bottom.SameAs(panel, wxBottom);
-    box->SetConstraints(c);
-    c = new wxLayoutConstraints;
-    c->left.SameAs(box, wxLeft, 20);
-    c->right.SameAs(box, wxRight, 10);
-    c->top.SameAs(box, wxTop, 10);
-    c->bottom.SameAs(box, wxBottom, 10);
-    combo->SetConstraints(c);
-    panel->SetAutoLayout(TRUE);
-
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);

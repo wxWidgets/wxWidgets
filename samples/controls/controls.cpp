@@ -140,6 +140,8 @@ public:
     wxStaticText  *m_label;
 
 private:
+    wxLog *m_logTargetOld;
+
     DECLARE_EVENT_TABLE()
 };
 
@@ -220,7 +222,7 @@ bool MyApp::OnInit()
     MyFrame *frame = new MyFrame((wxFrame *) NULL,
             "Controls wxWindows App",
             x, y, 540, 430);
-    
+
     frame->SetSizeHints( 500, 425 );
 
     // Give it an icon
@@ -382,7 +384,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_text = new wxTextCtrl( this, -1, "This is the log window.\n", wxPoint(0,50), wxSize(100,50), wxTE_MULTILINE );
     //  m_text->SetBackgroundColour("wheat");
 
-    //delete wxLog::SetActiveTarget(new wxLogStderr);
+    //wxLog::AddTraceMask(_T("focus"));
+    m_logTargetOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_text));
 
     m_notebook = new wxNotebook( this, ID_NOTEBOOK, wxPoint(0,0), wxSize(200,150) );
 
@@ -1151,6 +1154,9 @@ void MyPanel::OnShowProgress( wxCommandEvent& WXUNUSED(event) )
 
 MyPanel::~MyPanel()
 {
+    //wxLog::RemoveTraceMask(_T("focus"));
+    delete wxLog::SetActiveTarget(m_logTargetOld);
+
     delete m_notebook->GetImageList();
 }
 
@@ -1265,11 +1271,11 @@ void MyFrame::OnIdle( wxIdleEvent& WXUNUSED(event) )
         wxString msg;
         msg.Printf(
 #ifdef __WXMSW__
-                _T("Focus: wxWindow = %p, HWND = %08x"),
+                _T("Focus: %s, HWND = %08x"),
 #else
-                _T("Focus: wxWindow = %p"),
+                _T("Focus: %s"),
 #endif
-                s_windowFocus
+                s_windowFocus->GetClassInfo()->GetClassName()
 #ifdef __WXMSW__
                 , s_windowFocus->GetHWND()
 #endif
