@@ -1835,15 +1835,24 @@ dnl ------------------------------------------------------------------------
 
 TIFF_INCLUDE=
 TIFF_LINK=
+TIFF_PREREQ_LINKS=-lm
 if test "$wxUSE_LIBTIFF" != "no" ; then
     AC_DEFINE(wxUSE_LIBTIFF)
 
     if test "$wxUSE_LIBTIFF" = "sys" -o "$wxUSE_LIBTIFF" = "yes" ; then
+        dnl libtiff may depend on libjpeg and libz so use them in the test
+        dnl below or it would fail
+        if test "$wxUSE_LIBJPEG" = "sys"; then
+            TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $JPEG_LINK"
+        fi
+        if test "$wxUSE_ZLIB" = "sys"; then
+            TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $ZLIB_LINK"
+        fi
         AC_CHECK_HEADER(tiffio.h,
                         AC_CHECK_LIB(tiff, TIFFError,
                                      TIFF_LINK=" -ltiff",
                                      ,
-                                     -lm)
+                                     $TIFF_PREREQ_LINKS)
                        )
 
         if test "x$TIFF_LINK" = "x" ; then
