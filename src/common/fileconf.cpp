@@ -294,7 +294,7 @@ wxString wxFileConfig::GetGlobalDir()
     return wxT(".\\");
 #elif defined(__WXWINCE__)
     strDir = wxT("\\Windows\\");
-#elif // Windows
+#else // Windows
 
     wxChar szWinDir[MAX_PATH];
     ::GetWindowsDirectory(szWinDir, MAX_PATH);
