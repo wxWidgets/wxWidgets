@@ -23,9 +23,12 @@
 #if wxUSE_PROPSHEET
 
 #ifndef WX_PRECOMP
+    #include "wx/choice.h"
+    #include "wx/checkbox.h"
+    #include "wx/slider.h"
+    #include "wx/msgdlg.h"
 #endif
 
-#include "wx/wx.h"
 #include "wx/propform.h"
 
 #include <ctype.h>

@@ -17,6 +17,7 @@
 #endif
 
 #include "wx/button.h"
+#include "wx/bitmap.h"
 
 WXDLLEXPORT_DATA(extern const char*) wxButtonNameStr;
 

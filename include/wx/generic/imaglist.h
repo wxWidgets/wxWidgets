@@ -16,9 +16,11 @@
 #endif
 
 #include "wx/defs.h"
-#include "wx/gdicmn.h"
-#include "wx/bitmap.h"
-#include "wx/dc.h"
+#include "wx/list.h"
+
+class WXDLLEXPORT wxDC;
+class WXDLLEXPORT wxBitmap;
+class WXDLLEXPORT wxColour;
 
 /*
  * wxImageList is used for wxListCtrl, wxTreeCtrl. These controls refer to

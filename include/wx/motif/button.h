@@ -17,7 +17,6 @@
 #endif
 
 #include "wx/control.h"
-#include "wx/gdicmn.h"
 
 WXDLLEXPORT_DATA(extern const char*) wxButtonNameStr;
 

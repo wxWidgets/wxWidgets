@@ -18,6 +18,7 @@
 #define XtWindow XTWINDOW
 #endif
 
+#include "wx/tab.h"
 #include "wx/mdi.h"
 #include "wx/menu.h"
 #include "wx/settings.h"

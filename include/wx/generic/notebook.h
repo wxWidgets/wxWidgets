@@ -18,10 +18,8 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
-#include "wx/dynarray.h"
 #include "wx/event.h"
 #include "wx/control.h"
-#include "wx/generic/tabg.h"
 
 // ----------------------------------------------------------------------------
 // types
@@ -30,29 +28,11 @@
 // fwd declarations
 class WXDLLEXPORT wxImageList;
 class WXDLLEXPORT wxWindow;
+class WXDLLEXPORT wxTabView;
 
 // ----------------------------------------------------------------------------
 // wxNotebook
 // ----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxNotebook;
-
-// This reuses wxTabView to draw the tabs.
-class WXDLLEXPORT wxNotebookTabView: public wxTabView
-{
-DECLARE_DYNAMIC_CLASS(wxNotebookTabView)
-public:
-  wxNotebookTabView(wxNotebook* notebook, long style = wxTAB_STYLE_DRAW_BOX | wxTAB_STYLE_COLOUR_INTERIOR);
-  ~wxNotebookTabView(void);
-
-  // Called when a tab is activated
-  virtual void OnTabActivate(int activateId, int deactivateId);
-  // Allows vetoing
-  virtual bool OnTabPreActivate(int activateId, int deactivateId);
-
-protected:
-   wxNotebook*      m_notebook;
-};
 
 class wxNotebook : public wxNotebookBase
 {

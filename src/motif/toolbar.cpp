@@ -25,7 +25,7 @@
 #define XtDisplay XTDISPLAY
 #endif
 
-#include "wx/wx.h"
+#include "wx/settings.h"
 #include "wx/app.h"
 #include "wx/timer.h"
 #include "wx/toolbar.h"

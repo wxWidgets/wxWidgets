@@ -23,7 +23,8 @@
 #if wxUSE_TAB_DIALOG
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+    #include "wx/settings.h"
+    #include "wx/intl.h"
 #endif
 
 #include <stdio.h>

@@ -21,7 +21,6 @@
 
 #if defined(__WXMGL__) || defined(__WXMAC__) || defined(__WXMOTIF__)
 
-#include "wx/wx.h"
 #include "wx/setup.h"
 #include "wx/utils.h"
 #include "wx/palette.h"
