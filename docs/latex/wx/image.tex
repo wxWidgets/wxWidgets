@@ -33,6 +33,7 @@ handler with \helpref{wxImage::AddHandler}{wximageaddhandler} or
 \twocolitem{\indexit{wxTIFFHandler}}{For loading and saving.}
 \twocolitem{\indexit{wxXPMHandler}}{For loading and saving.}
 \twocolitem{\indexit{wxICOHandler}}{For loading and saving.}
+\twocolitem{\indexit{wxCURHandler}}{For loading and saving.}
 \end{twocollist}
 
 When saving in PCX format, {\bf wxPCXHandler} will count the number of
@@ -85,15 +86,15 @@ Creates an image from given data with the given width and height. If
 image data in its destructor, otherwise it will free it by calling
 {\it free()}.
 
-\func{}{wxImage}{\param{const wxString\& }{name}, \param{long}{ type = wxBITMAP\_TYPE\_ANY}}
+\func{}{wxImage}{\param{const wxString\& }{name}, \param{long}{ type = wxBITMAP\_TYPE\_ANY}, \param{int}{ index = -1}}
 
-\func{}{wxImage}{\param{const wxString\& }{name}, \param{const wxString\&}{ mimetype}}
+\func{}{wxImage}{\param{const wxString\& }{name}, \param{const wxString\&}{ mimetype}, \param{int}{ index = -1}}
 
 Loads an image from a file.
 
-\func{}{wxImage}{\param{wxInputStream\& }{stream}, \param{long}{ type = wxBITMAP\_TYPE\_ANY}}
+\func{}{wxImage}{\param{wxInputStream\& }{stream}, \param{long}{ type = wxBITMAP\_TYPE\_ANY}, \param{int}{ index = -1}}
 
-\func{}{wxImage}{\param{wxInputStream\& }{stream}, \param{const wxString\&}{ mimetype}}
+\func{}{wxImage}{\param{wxInputStream\& }{stream}, \param{const wxString\&}{ mimetype}, \param{int}{ index = -1}}
 
 Loads an image from an input stream.
 
@@ -119,11 +120,17 @@ Loads an image from an input stream.
 \twocolitem{\indexit{wxBITMAP\_TYPE\_PNM}}{Load a PNM bitmap file.}
 \twocolitem{\indexit{wxBITMAP\_TYPE\_TIF}}{Load a TIFF bitmap file.}
 \twocolitem{\indexit{wxBITMAP\_TYPE\_XPM}}{Load a XPM bitmap file.}
-\twocolitem{\indexit{wxBITMAP\_TYPE\_ICO}}{Load a ICO Icon file.}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_ICO}}{Load a Windows icon file (ICO).}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_CUR}}{Load a Windows cursor file (CUR).}
 \twocolitem{\indexit{wxBITMAP\_TYPE\_ANY}}{Will try to autodetect the format.}
 \end{twocollist}}
 
 \docparam{mimetype}{MIME type string (for example 'image/jpeg')}
+
+\docparam{index}{Index of the image to load in the case that the image file contains multiple images.
+This is only used by ICO and TIFF handlers. The default value (-1) means 
+"choose the default image" and is interpreted as the first image (index=0) by 
+the TIFF handler and as the largest and most colourful one by the ICO handler.}
 
 \wxheading{Remarks}
 
@@ -132,6 +139,14 @@ Depending on how wxWindows has been configured, not all formats may be available
 Note: any handler other than BMP must be previously
 initialized with \helpref{wxImage::AddHandler}{wximageaddhandler} or 
 \helpref{wxInitAllImageHandlers}{wxinitallimagehandlers}.
+
+Note: you can use \helpref{GetOptionInt}{wximagegetoptionint} to get the 
+hotspot for loaded cursor file:
+\begin{verbatim}
+    int hotspot_x = image.GetOptionInt(wxCUR_HOTSPOT_X);
+    int hotspot_y = image.GetOptionInt(wxCUR_HOTSPOT_Y);
+
+\end{verbatim}
 
 \wxheading{See also}
 
@@ -309,6 +324,42 @@ chararcters in RGBGBRGB... format.
 
 Returns the green intensity at the given coordinate.
 
+\membersection{wxImage::GetImagesCount}\label{wximagegetimagescount}
+
+\func{static int}{GetImagesCount}{\param{const wxString\&}{ filename}, \param{long}{ type = wxBITMAP\_TYPE\_ANY}}
+
+\func{static int}{GetImagesCount}{\param{wxInputStream\&}{ stream}, \param{long}{ type = wxBITMAP\_TYPE\_ANY}}
+
+If the image file contains more than one image and the image handler is capable 
+of retrieving these individually, this function will return the number of
+available images.
+
+\docparam{name}{Name of the file to query.}
+
+\docparam{stream}{Opened input stream with image data. Currently, the stream must support seeking.}
+
+\docparam{type}{May be one of the following:
+
+\twocolwidtha{5cm}%
+\begin{twocollist}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_BMP}}{Load a Windows bitmap file.}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_GIF}}{Load a GIF bitmap file.}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_JPEG}}{Load a JPEG bitmap file.}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_PNG}}{Load a PNG bitmap file.}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_PCX}}{Load a PCX bitmap file.}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_PNM}}{Load a PNM bitmap file.}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_TIF}}{Load a TIFF bitmap file.}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_XPM}}{Load a XPM bitmap file.}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_ICO}}{Load a Windows icon file (ICO).}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_CUR}}{Load a Windows cursor file (CUR).}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_ANY}}{Will try to autodetect the format.}
+\end{twocollist}}
+
+\wxheading{Return value}
+
+Number of available images. For most image handlers, this is 1 (exceptions
+are TIFF and ICO formats).
+
 \membersection{wxImage::GetRed}\label{wximagegetred}
 
 \constfunc{unsigned char}{GetRed}{\param{int}{ x}, \param{int}{ y}}
@@ -450,16 +501,16 @@ of a given handler class in an application session.}
 
 \membersection{wxImage::LoadFile}\label{wximageloadfile}
 
-\func{bool}{LoadFile}{\param{const wxString\&}{ name}, \param{long}{ type = wxBITMAP\_TYPE\_ANY}}
+\func{bool}{LoadFile}{\param{const wxString\&}{ name}, \param{long}{ type = wxBITMAP\_TYPE\_ANY}, \param{int}{ index = -1}}
 
-\func{bool}{LoadFile}{\param{const wxString\&}{ name}, \param{const wxString\&}{ mimetype}}
+\func{bool}{LoadFile}{\param{const wxString\&}{ name}, \param{const wxString\&}{ mimetype}, \param{int}{ index = -1}}
 
 Loads an image from a file. If no handler type is provided, the library will
 try to autodetect the format.
 
-\func{bool}{LoadFile}{\param{wxInputStream\&}{ stream}, \param{long}{ type}}
+\func{bool}{LoadFile}{\param{wxInputStream\&}{ stream}, \param{long}{ type}, \param{int}{ index = -1}}
 
-\func{bool}{LoadFile}{\param{wxInputStream\&}{ stream}, \param{const wxString\&}{ mimetype}}
+\func{bool}{LoadFile}{\param{wxInputStream\&}{ stream}, \param{const wxString\&}{ mimetype}, \param{int}{ index = -1}}
 
 Loads an image from an input stream.
 
@@ -481,17 +532,29 @@ Loads an image from an input stream.
 \twocolitem{{\bf wxBITMAP\_TYPE\_PNM}}{Load a PNM image file.}
 \twocolitem{{\bf wxBITMAP\_TYPE\_TIF}}{Load a TIFF image file.}
 \twocolitem{{\bf wxBITMAP\_TYPE\_XPM}}{Load a XPM image file.}
-\twocolitem{{\bf wxBITMAP\_TYPE\_ICO}}{Load a ICO icon file.}
+\twocolitem{{\bf wxBITMAP\_TYPE\_ICO}}{Load a Windows icon file (ICO).}
+\twocolitem{{\bf wxBITMAP\_TYPE\_CUR}}{Load a Windows cursor file (CUR).}
 \twocolitem{{\bf wxBITMAP\_TYPE\_ANY}}{Will try to autodetect the format.}
 \end{twocollist}}
 
 \docparam{mimetype}{MIME type string (for example 'image/jpeg')}
 
+\docparam{index}{Index of the image to load in the case that the image file contains multiple images.
+This is only used by ICO and TIFF handlers. The default value (-1) means 
+"choose the default image" and is interpreted as the first image (index=0) by 
+the TIFF handler and as the largest and most colourful one by the ICO handler.}
+
 \wxheading{Remarks}
 
 Depending on how wxWindows has been configured, not all formats may be available.
 
-wxBITMAP\_TYPE\_ICO will laod the largest image found, with the most colours
+Note: you can use \helpref{GetOptionInt}{wximagegetoptionint} to get the 
+hotspot for loaded cursor file:
+\begin{verbatim}
+    int hotspot_x = image.GetOptionInt(wxCUR_HOTSPOT_X);
+    int hotspot_y = image.GetOptionInt(wxCUR_HOTSPOT_Y);
+
+\end{verbatim}
 
 \wxheading{Return value}
 
@@ -572,7 +635,9 @@ Saves a image in the given stream.
 \twocolitem{{\bf wxBITMAP\_TYPE\_PNM}}{Save a PNM image file (as raw RGB always).}
 \twocolitem{{\bf wxBITMAP\_TYPE\_TIFF}}{Save a TIFF image file.}
 \twocolitem{{\bf wxBITMAP\_TYPE\_XPM}}{Save a XPM image file.}
-\twocolitem{{\bf wxBITMAP\_TYPE\_ICO}}{Save a ICO image file. (The size may be up to 255 wide by 127 high. A single image is saved in 8 colors at the size supplied.)}
+\twocolitem{{\bf wxBITMAP\_TYPE\_ICO}}{Save a ICO image file. }
+\twocolitem{{\bf wxBITMAP\_TYPE\_ICO}}{Save a Windows icon file (ICO) (the size may be up to 255 wide by 127 high. A single image is saved in 8 colors at the size supplied).}
+\twocolitem{{\bf wxBITMAP\_TYPE\_CUR}}{Save a Windows cursor file (CUR).}
 \end{twocollist}}
 
 \docparam{mimetype}{MIME type.}
@@ -584,6 +649,15 @@ TRUE if the operation succeeded, FALSE otherwise.
 \wxheading{Remarks}
 
 Depending on how wxWindows has been configured, not all formats may be available.
+
+Note: you can use \helpref{GetOptionInt}{wximagegetoptionint} to set the 
+hotspot before saving an image into a cursor file (default hotspot is in 
+the centre of the image):
+\begin{verbatim}
+    image.SetOption(wxCUR_HOTSPOT_X, hotspotX);
+    image.SetOption(wxCUR_HOTSPOT_Y, hotspotY);
+
+\end{verbatim}
 
 \wxheading{See also}
 
@@ -869,9 +943,9 @@ Gets the name of this handler.
 
 Gets the file extension associated with this handler.
 
-\membersection{wxImageHandler::GetImageCount}\label{wximagehandlergetimagecount}
+\membersection{wxImageHandler::GetImagesCount}\label{wximagehandlergetimagescount}
 
-\func{int}{GetImageCount}{\param{wxInputStream\&}{ stream}}
+\func{int}{GetImagesCount}{\param{wxInputStream\&}{ stream}}
 
 If the image file contains more than one image and the image handler is capable 
 of retrieving these individually, this function will return the number of
@@ -881,7 +955,8 @@ available images.
 
 \wxheading{Return value}
 
-Number of available images. For most image handles, this defaults to 1.
+Number of available images. For most image handlers, this is 1 (exceptions
+are TIFF and ICO formats).
 
 \membersection{wxImageHandler::GetType}
 
