@@ -263,10 +263,14 @@ wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
             return;
         }
 
-        // MB2WC wants the buffer size, not the string length
-        if ( conv.MB2WC(m_pchData, psz, nLen + 1) != (size_t)-1 )
+        // MB2WC wants the buffer size, not the string length hence +1
+        nLen = conv.MB2WC(m_pchData, psz, nLen + 1);
+
+        if ( nLen != (size_t)-1 )
         {
-            // initialized ok
+            // initialized ok, set the real length as nLength specified by
+            // the caller could be greater than the real string length
+            GetStringData()->nDataLength = nLen;
             m_pchData[nLen] = 0;
             return;
         }
