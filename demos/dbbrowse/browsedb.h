@@ -1,26 +1,26 @@
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Name:        browsedb.h
-// Purpose:     a wxDB ;
+// Purpose:     a wxDB class
 // Author:      Mark Johnson, mj10777@gmx.net
 // Modified by:
 // Created:     19991127.mj10777
 // Copyright:   (c) Mark Johnson
 // Licence:     wxWindows license
 // RCS-ID:      $Id$
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 //-- Zu tun in browsedb.h
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 //-- 1)
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Global structure for holding ODBC connection information
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 extern struct DbStuff DbConnectInf;
 class mjDoc;
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class BrowserDB
 {
  public:
- //---------------------------------------------------------------------------
+ //---------------------------------------------------------------------------------------
  // Pointer to the main database connection used in the program.  This
  // pointer would normally be used for doing things as database lookups
  // for user login names and passwords, getting workstation settings, etc.
@@ -40,13 +40,13 @@ class BrowserDB
  //  the entire program to use for READ-ONLY database accesses, but for each
  //  table object which will do a CommitTrans() or RollbackTrans() that a
  // new wxDB object be created and used for it.
- //---------------------------------------------------------------------------
+ //---------------------------------------------------------------------------------------
   wxDB*          db_BrowserDB;
   wxDbInf*       ct_BrowserDB;
   wxColInf*      cl_BrowserDB;
   wxString       ODBCSource, UserName, Password;
   mjDoc *pDoc;
- //---------------------------------------------------------------------------
+ //---------------------------------------------------------------------------------------
   wxString       Temp0, Temp1, Temp2, Temp3, Temp4, Temp5;
   wxString       ODBCText;
   wxTextCtrl*    p_LogWindow;
@@ -57,12 +57,12 @@ class BrowserDB
   int            i_Which;
   int            i_Records;
   int            i_Cols;
- //---------------------------------------------------------------------------
+ //---------------------------------------------------------------------------------------
   BrowserDB();
   ~BrowserDB();
   void Zeiger_auf_NULL(int Art);
   bool Initialize(int Quite);
- //---------------------------------------------------------------------------
+ //---------------------------------------------------------------------------------------
   bool           OnStartDB(int Quite);
   bool           OnCloseDB(int Quite);
   bool           OnSelect(wxString tb_Name,int Quite);
@@ -72,6 +72,6 @@ class BrowserDB
   wxColInf*      OnGetColumns(char *tableName, int numCols,int Quite);
   void           OnFillSqlTyp();
   void           OnFilldbTyp();
- //---------------------------------------------------------------------------
+ //---------------------------------------------------------------------------------------
 };  // BrowserDB class definition
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------

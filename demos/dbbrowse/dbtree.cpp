@@ -1,124 +1,116 @@
-//---------------------------------------------------------------------------
-// Name:        DBTree.h
-// Purpose:     Programm Control with a Tree
+//----------------------------------------------------------------------------------------
+// Name:        DBTree.cpp/.h
+// Purpose:     Tree with Table and Views, branches show Field information
 // Author:      Mark Johnson
 // Modified by:
 // Created:     19991129
 // RCS-ID:      $Id$
 // Copyright:   (c) Mark Johnson, Berlin Germany, mj10777@gmx.net
 // Licence:     wxWindows license
-//---------------------------------------------------------------------------
-//-- all #ifdefs that the whole Project needs. ------------------------------
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
+//-- all #ifdefs that the whole Project needs. -------------------------------------------
+//----------------------------------------------------------------------------------------
 #ifdef __GNUG__
 #pragma implementation
 #pragma interface
 #endif
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 #ifndef __WXMSW__
 #endif
-//---------------------------------------------------------------------------
-//-- all #includes that every .cpp needs             --- 19990807.mj10777 ---
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
+//-- all #includes that every .cpp needs             --- 19990807.mj10777 ----------------
+//----------------------------------------------------------------------------------------
 #include "std.h"    // sorgsam Pflegen !
-//---------------------------------------------------------------------------
-//-- Global functions -------------------------------------------------------
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
+//-- Global functions --------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 static inline const char *bool2String(bool b)
 {
   return b ? "" : "not ";
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 BEGIN_EVENT_TABLE(DBTree, wxTreeCtrl)
-  EVT_MOTION (DBTree::OnMouseMove)
-  EVT_TREE_SEL_CHANGED(TREE_CTRL_DB, DBTree::OnSelChanged)
-  EVT_TREE_ITEM_RIGHT_CLICK(TREE_CTRL_DB,DBTree::OnRightSelect)
-  EVT_MENU(DATA_SHOW,DBTree::OnDBGrid)
-  EVT_MENU(DATA_DB,DBTree::OnDBClass)
-  EVT_MENU(DATA_TABLE,DBTree::OnTableClass)
-  EVT_MENU(DATA_TABLE_ALL,DBTree::OnTableClassAll)
-  END_EVENT_TABLE()
-  //---------------------------------------------------------------------------
-  // DBTree implementation
-  //---------------------------------------------------------------------------
-  IMPLEMENT_DYNAMIC_CLASS(DBTree, wxTreeCtrl)
-  //---------------------------------------------------------------------------
-  DBTree::DBTree(wxWindow *parent)  : wxTreeCtrl(parent)
+ EVT_MOTION (DBTree::OnMouseMove)
+ EVT_TREE_SEL_CHANGED(TREE_CTRL_DB, DBTree::OnSelChanged)
+ EVT_TREE_ITEM_RIGHT_CLICK(TREE_CTRL_DB,DBTree::OnRightSelect)
+ EVT_MENU(DATA_SHOW,DBTree::OnDBGrid)
+ EVT_MENU(DATA_DB,DBTree::OnDBClass)
+ EVT_MENU(DATA_TABLE,DBTree::OnTableClass)
+ EVT_MENU(DATA_TABLE_ALL,DBTree::OnTableClassAll)
+END_EVENT_TABLE()
+//----------------------------------------------------------------------------------------
+// DBTree implementation
+//----------------------------------------------------------------------------------------
+IMPLEMENT_DYNAMIC_CLASS(DBTree, wxTreeCtrl)
+//----------------------------------------------------------------------------------------
+DBTree::DBTree(wxWindow *parent)  : wxTreeCtrl(parent)
 {
 }
+//----------------------------------------------------------------------------------------
 DBTree::DBTree(wxWindow *parent, const wxWindowID id,const wxPoint& pos, const wxSize& size, long style)
   : wxTreeCtrl(parent, id, pos, size, style)
 {
-  //wxFont* ft_Temp = new wxFont(10,wxSWISS,wxNORMAL,wxBOLD,FALSE,"Comic Sans MS");
-  wxFont* ft_Temp = new wxFont(wxSystemSettings::GetSystemFont(wxSYS_SYSTEM_FONT));
-  SetFont(* ft_Temp);
-
-  // Make an image list containing small icons
-  p_imageListNormal = new wxImageList(16, 16, TRUE);
-
-  // should correspond to TreeIc_xxx enum
-
+ // Make an image list containing small icons
+ p_imageListNormal = new wxImageList(16, 16, TRUE);
+ // should correspond to TreeIc_xxx enum
 #if !defined(__WXMSW__)
-#include "bitmaps/logo.xpm"
-#include "bitmaps/dsnclose.xpm"
-#include "bitmaps/dsnopen.xpm"
-#include "bitmaps/tab.xpm"
-#include "bitmaps/key.xpm"
-#include "bitmaps/keyf.xpm"
-#include "bitmaps/d_open.xpm"
-#include "bitmaps/d_closed.xpm"
-#include "bitmaps/col.xpm"
+ #include "bitmaps/logo.xpm"
+ #include "bitmaps/dsnclose.xpm"
+ #include "bitmaps/dsnopen.xpm"
+ #include "bitmaps/tab.xpm"
+ #include "bitmaps/view.xpm"
+ #include "bitmaps/col.xpm"
+ #include "bitmaps/key.xpm"
+ #include "bitmaps/keyf.xpm"
+ #include "bitmaps/d_open.xpm"
+ #include "bitmaps/d_closed.xpm"
 #endif
-
-   p_imageListNormal->Add(wxICON(Logo));
-   p_imageListNormal->Add(wxICON(DsnClosed));
-   p_imageListNormal->Add(wxICON(DsnOpen));
-   p_imageListNormal->Add(wxICON(TAB));
-   p_imageListNormal->Add(wxICON(COL));
-   p_imageListNormal->Add(wxICON(KEY));
-   p_imageListNormal->Add(wxICON(KEYF));
-   p_imageListNormal->Add(wxICON(DocOpen));
-   p_imageListNormal->Add(wxICON(DocOpen));
-
-
-
-
-
-  SetImageList(p_imageListNormal);
-  ct_BrowserDB = NULL;
+ p_imageListNormal->Add(wxICON(aLogo));
+ p_imageListNormal->Add(wxICON(DsnClosed));
+ p_imageListNormal->Add(wxICON(DsnOpen));
+ p_imageListNormal->Add(wxICON(TAB));
+ p_imageListNormal->Add(wxICON(VIEW));
+ p_imageListNormal->Add(wxICON(COL));
+ p_imageListNormal->Add(wxICON(KEY));
+ p_imageListNormal->Add(wxICON(KEYF));
+ p_imageListNormal->Add(wxICON(DocOpen));
+ p_imageListNormal->Add(wxICON(DocOpen));
+ SetImageList(p_imageListNormal);
+ ct_BrowserDB = NULL;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 DBTree::~DBTree()
 {
-  // wxLogMessage("DBTree::~DBTree() - Vor  OnCloseDB()");
-  (pDoc->db_Br+i_Which)->OnCloseDB(FALSE);
-  // wxLogMessage("DBTree::~DBTree() - Nach OnCloseDB()");
-  (pDoc->db_Br+i_Which)->db_BrowserDB = NULL;
-  (pDoc->db_Br+i_Which)->ct_BrowserDB = NULL;
-  (pDoc->db_Br+i_Which)->cl_BrowserDB = NULL;
-  delete ct_BrowserDB;
-  delete p_imageListNormal;
+ // wxLogMessage("DBTree::~DBTree() - Vor  OnCloseDB()");
+ (pDoc->db_Br+i_Which)->OnCloseDB(FALSE);
+ // wxLogMessage("DBTree::~DBTree() - Nach OnCloseDB()");
+ (pDoc->db_Br+i_Which)->db_BrowserDB = NULL;
+ (pDoc->db_Br+i_Which)->ct_BrowserDB = NULL;
+ (pDoc->db_Br+i_Which)->cl_BrowserDB = NULL;
+ delete ct_BrowserDB;
+ delete p_imageListNormal;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 #undef TREE_EVENT_HANDLER
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 int  DBTree::OnPopulate()
 {
  wxTreeItemId Root, Folder, Docu, Funkt;
  int i,x,y, TableType;
  wxString SQL_TYPE, DB_TYPE;
- //----------------------------------------------------------------------------------------------------------------------------
+ SetFont(* pDoc->ft_Doc);
+ //---------------------------------------------------------------------------------------
  if ((pDoc->db_Br+i_Which)->Initialize(FALSE))
  {
   wxBeginBusyCursor();
@@ -215,9 +207,9 @@ int  DBTree::OnPopulate()
   wxLogMessage(_("\n-E-> DBTree::OnPopulate() : A valid Pointer could not be created : Failed"));
   return 0;
  }
- //----------------------------------------------------------------------------------------------------------------------------
+ //---------------------------------------------------------------------------------------
  Expand(Root);
- //----------------------------------------------------------------------------------------------------------------------------
+ //---------------------------------------------------------------------------------------
  popupMenu1 = NULL;
  popupMenu1 = new wxMenu("");
  popupMenu1->Append(DATA_DB, _("Make wxDB.cpp/h "));
@@ -228,11 +220,10 @@ int  DBTree::OnPopulate()
  popupMenu2->Append(DATA_SHOW, _("Show Data"));
  popupMenu2->AppendSeparator();
  popupMenu2->Append(DATA_TABLE, _("Make wxTable.cpp/h "));
- //----------------------------------------------------------------------------------------------------------------------------
-
+ //---------------------------------------------------------------------------------------
  return 0;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 void DBTree::OnSelChanged(wxTreeEvent& WXUNUSED(event))
 {
   int i;
@@ -242,163 +233,161 @@ void DBTree::OnSelChanged(wxTreeEvent& WXUNUSED(event))
   wxTreeItemId itemId = GetSelection();
   DBTreeData *item = (DBTreeData *)GetItemData(itemId);
   if ( item != NULL )
+  {
+   int Treffer = 0;
+   Temp1.Printf("%s",item->m_desc.c_str());
+   //-------------------------------------------------------------------------------------
+   if (Temp1.Contains("ODBC-"))
+   {
+    Temp1 = Temp1.Mid(5,wxSTRING_MAXLEN);
+    for (i=0;i<pDoc->i_DSN;i++)
     {
-      int Treffer = 0;
-      Temp1.Printf("%s",item->m_desc.c_str());
-      //-----------------------------------------------------------------------------------------
-      if (Temp1.Contains("ODBC-"))
-	{
-	  Temp1 = Temp1.Mid(5,wxSTRING_MAXLEN);
-	  for (i=0;i<pDoc->i_DSN;i++)
-	    {
-	      if (Temp1 == (pDoc->p_DSN+i)->Dsn)
-		{
-		  // pDoc->OnChosenDSN(i);
-		}
-	    }
-	  Treffer++;
-	}
-      //-----------------------------------------------------------------------------------------
-      if (Treffer == 0)
-	{
-	  //---------------------------------------------------
-	  /*
-	    Temp0.Printf(_("Item '%s': %sselected, %sexpanded, %sbold,"
-	    "%u children (%u immediately under this item)."),
-	    item->m_desc.c_str(),
-	    bool2String(IsSelected(itemId)),
-	    bool2String(IsExpanded(itemId)),
-	    bool2String(IsBold(itemId)),
-	    GetChildrenCount(itemId),
-	    GetChildrenCount(itemId));
-	    LogBuf.Printf("-I-> DBTree::OnSelChanged - %s",Temp0.c_str());
-	    wxLogMessage( "%s", LogBuf.c_str() );
-	    */
-	  //---------------------------------------------------
-	}
+    if (Temp1 == (pDoc->p_DSN+i)->Dsn)
+    {
+     // pDoc->OnChosenDSN(i);
     }
+   }
+   Treffer++;
+  }
+  //--------------------------------------------------------------------------------------
+  if (Treffer == 0)
+  {
+   //-------------------------------------------------------------------------------------
+   /*
+    Temp0.Printf(_("Item '%s': %sselected, %sexpanded, %sbold,"
+     "%u children (%u immediately under this item)."),
+     item->m_desc.c_str(),
+     bool2String(IsSelected(itemId)),
+     bool2String(IsExpanded(itemId)),
+     bool2String(IsBold(itemId)),
+     GetChildrenCount(itemId),
+     GetChildrenCount(itemId));
+     LogBuf.Printf("-I-> DBTree::OnSelChanged - %s",Temp0.c_str());
+     wxLogMessage( "%s", LogBuf.c_str() );
+     */
+   //-------------------------------------------------------------------------------------
+  }
+ }
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 void DBTree::OnRightSelect(wxTreeEvent& WXUNUSED(event))
 {
-  int i;
-  Temp0.Empty();
-  // Get the Information that we need
-  wxTreeItemId itemId = GetSelection();
-  DBTreeData *item = (DBTreeData *)GetItemData(itemId);
-  if ( item != NULL )
-    {
-      int Treffer = 0;
-      Temp1.Printf("%s",item->m_desc.c_str());
-      //-----------------------------------------------------------------------------------------
-      if (!wxStrcmp("Root",Temp1))
-	{
-	  PopupMenu(popupMenu1,TreePos.x,TreePos.y);
-	  Treffer++;
-	}
-      for (i=0;i<ct_BrowserDB->numTables;i++)
-	{
-	  Temp2.Printf("TN(%s",(ct_BrowserDB->pTableInf+i)->tableName);
-	  if (!wxStrcmp(Temp2,Temp1))
-	    {
-	      PopupMenu(popupMenu2,TreePos.x,TreePos.y);
-	      Treffer++;
-	    }
-	}
-      //-----------------------------------------------------------------------------------------
-      if (Treffer == 0)
-	{
-	  //---------------------------------------------------
-	  /*
-	    Temp0.Printf(_("Item '%s': %sselected, %sexpanded, %sbold,"
-	    "%u children (%u immediately under this item)."),
-	    item->m_desc.c_str(),
-	    bool2String(IsSelected(itemId)),
-	    bool2String(IsExpanded(itemId)),
-	    bool2String(IsBold(itemId)),
-	    GetChildrenCount(itemId),
-	    GetChildrenCount(itemId));
-	    LogBuf.Printf("-I-> DBTree::OnSelChanged - %s",Temp0.c_str());
-	    wxLogMessage( "%s", LogBuf.c_str() );
-	    */
-	  //---------------------------------------------------
-	}
-    }
+ int i;
+ Temp0.Empty();
+ // Get the Information that we need
+ wxTreeItemId itemId = GetSelection();
+ DBTreeData *item = (DBTreeData *)GetItemData(itemId);
+ if ( item != NULL )
+ {
+  int Treffer = 0;
+  Temp1.Printf("%s",item->m_desc.c_str());
+  //--------------------------------------------------------------------------------------
+  if (!wxStrcmp("Root",Temp1))
+  {
+   PopupMenu(popupMenu1,TreePos.x,TreePos.y);
+   Treffer++;
+  }
+  for (i=0;i<ct_BrowserDB->numTables;i++)
+  {
+   Temp2.Printf("TN(%s",(ct_BrowserDB->pTableInf+i)->tableName);
+   if (!wxStrcmp(Temp2,Temp1))
+   {
+    PopupMenu(popupMenu2,TreePos.x,TreePos.y);
+    Treffer++;
+   }
+  }
+  //--------------------------------------------------------------------------------------
+  if (Treffer == 0)
+  {
+   //-------------------------------------------------------------------------------------
+   /*
+     Temp0.Printf(_("Item '%s': %sselected, %sexpanded, %sbold,"
+     "%u children (%u immediately under this item)."),
+     item->m_desc.c_str(),
+     bool2String(IsSelected(itemId)),
+     bool2String(IsExpanded(itemId)),
+     bool2String(IsBold(itemId)),
+     GetChildrenCount(itemId),
+     GetChildrenCount(itemId));
+     LogBuf.Printf("-I-> DBTree::OnSelChanged - %s",Temp0.c_str());
+     wxLogMessage( "%s", LogBuf.c_str() );
+     */
+   //-------------------------------------------------------------------------------------
+  }
+ }
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 void DBTree::OnDBGrid(wxMenu& , wxCommandEvent& event)
 {
-  int i;
-  // Get the Information that we need
-  wxTreeItemId itemId = GetSelection();
-  DBTreeData *item = (DBTreeData *)GetItemData(itemId);
-  if ( item != NULL )
-    {
-      Temp1.Printf("%s",item->m_desc.c_str());
-      for (i=0;i<ct_BrowserDB->numTables;i++)
-	{
-	  Temp2.Printf("TN(%s",(ct_BrowserDB->pTableInf+i)->tableName);
-	  if (!wxStrcmp(Temp2,Temp1))
-	    {
-	      // Temp0.Printf("(%d) Here is where a GridCtrl for >%s< will be called! ",i,(ct_BrowserDB->pTableInf+i)->tableName);
-	      pDoc->OnChosenTbl(1,(ct_BrowserDB->pTableInf+i)->tableName);
-	      // wxMessageBox(Temp0);
-	    }
-	}
-    }
+ int i;
+ // Get the Information that we need
+ wxTreeItemId itemId = GetSelection();
+ DBTreeData *item = (DBTreeData *)GetItemData(itemId);
+ if ( item != NULL )
+ {
+  Temp1.Printf("%s",item->m_desc.c_str());
+  for (i=0;i<ct_BrowserDB->numTables;i++)
+  {
+   Temp2.Printf("TN(%s",(ct_BrowserDB->pTableInf+i)->tableName);
+   if (!wxStrcmp(Temp2,Temp1))
+   {
+    // Temp0.Printf("(%d) Here is where a GridCtrl for >%s< will be called! ",i,(ct_BrowserDB->pTableInf+i)->tableName);
+    pDoc->OnChosenTbl(1,(ct_BrowserDB->pTableInf+i)->tableName);
+    // wxMessageBox(Temp0);
+   }
+  }
+ }
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 void DBTree::OnDBClass(wxMenu& , wxCommandEvent& event)
 {
-  // int i;
-  // Get the Information that we need
-  wxTreeItemId itemId = GetSelection();
-  DBTreeData *item = (DBTreeData *)GetItemData(itemId);
-  if ( item != NULL )
-    {
-      Temp0.Printf(_("Here is where a wxDB Class for >%s< will be made! "),s_DSN.c_str());
-      wxMessageBox(Temp0);
-    }
+ // int i;
+ // Get the Information that we need
+ wxTreeItemId itemId = GetSelection();
+ DBTreeData *item = (DBTreeData *)GetItemData(itemId);
+ if ( item != NULL )
+ {
+  Temp0.Printf(_("Here is where a wxDB Class for >%s< will be made! "),s_DSN.c_str());
+  wxMessageBox(Temp0);
+ }
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 void DBTree::OnTableClass(wxMenu& , wxCommandEvent& event)
 {
-  int i;
-  // Get the Information that we need
-  wxTreeItemId itemId = GetSelection();
-  DBTreeData *item = (DBTreeData *)GetItemData(itemId);
-  if ( item != NULL )
-    {
-      Temp1.Printf("%s",item->m_desc.c_str());
-      for (i=0;i<ct_BrowserDB->numTables;i++)
-	{
-	  Temp2.Printf("TN(%s",(ct_BrowserDB->pTableInf+i)->tableName);
-	  if (!wxStrcmp(Temp2,Temp1))
-	    {
-	      Temp0.Printf(_("(%d) Here is where a wxTable Class for >%s< will be made! "),i,(ct_BrowserDB->pTableInf+i)->tableName);
-	      wxMessageBox(Temp0);
-	    }
-	}
-    }
+ int i;
+ // Get the Information that we need
+ wxTreeItemId itemId = GetSelection();
+ DBTreeData *item = (DBTreeData *)GetItemData(itemId);
+ if ( item != NULL )
+ {
+  Temp1.Printf("%s",item->m_desc.c_str());
+  for (i=0;i<ct_BrowserDB->numTables;i++)
+  {
+   Temp2.Printf("TN(%s",(ct_BrowserDB->pTableInf+i)->tableName);
+   if (!wxStrcmp(Temp2,Temp1))
+   {
+    Temp0.Printf(_("(%d) Here is where a wxTable Class for >%s< will be made! "),i,(ct_BrowserDB->pTableInf+i)->tableName);
+    wxMessageBox(Temp0);
+   }
+  }
+ }
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 void DBTree::OnTableClassAll(wxMenu& , wxCommandEvent& event)
 {
-  // int i;
-  // Get the Information that we need
-  wxTreeItemId itemId = GetSelection();
-  DBTreeData *item = (DBTreeData *)GetItemData(itemId);
-  if ( item != NULL )
-    {
-      Temp0.Printf(_("Here is where all wxTable Classes in >%s< will be made! "),s_DSN.c_str());
-      wxMessageBox(Temp0);
-    }
+ // int i;
+ // Get the Information that we need
+ wxTreeItemId itemId = GetSelection();
+ DBTreeData *item = (DBTreeData *)GetItemData(itemId);
+ if ( item != NULL )
+ {
+  Temp0.Printf(_("Here is where all wxTable Classes in >%s< will be made! "),s_DSN.c_str());
+  wxMessageBox(Temp0);
+ }
 }
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 void DBTree::OnMouseMove(wxMouseEvent &event)
 {
-  TreePos = event.GetPosition();
+ TreePos = event.GetPosition();
 }
-//------------------------------------------------------------------------------
-
-
+//----------------------------------------------------------------------------------------

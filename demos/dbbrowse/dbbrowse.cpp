@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Name:        dbbrowse.cpp
 // Purpose:     Through ODBC - Databases Browsen
 // Author:      Mark Johnson, mj10777@gmx.net
@@ -8,61 +8,50 @@
 // Copyright:   (c) Mark Johnson
 // Licence:     wxWindows license
 // RCS-ID:      $Id$
-//------------------------------------------------------------------------------
-//-- all #ifdefs that the whole Project needs. ------------------------------
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
+//-- all #ifdefs that the whole Project needs. -------------------------------------------
+//----------------------------------------------------------------------------------------
 #ifdef __GNUG__
  #pragma implementation
  #pragma interface
 #endif
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 #ifdef __BORLANDC__
  #pragma hdrstop
 #endif
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 #ifndef WX_PRECOMP
  #include "wx/wx.h"
 #endif
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 #ifndef __WXMSW__
 #endif
  #include "bitmaps/logo.xpm"
-//---------------------------------------------------------------------------
-//-- all #includes that every .cpp needs             --- 19990807.mj10777 ---
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
+//-- all #includes that every .cpp needs             --- 19990807.mj10777 ----------------
+//----------------------------------------------------------------------------------------
 #include "std.h"    // sorgsam Pflegen !
 #include <iostream>
-//---------------------------------------------------------------------------
-//-- Some Global Vars for this file ----------------------------------------
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
+//-- Some Global Vars for this file ------------------------------------------------------
+//----------------------------------------------------------------------------------------
 MainFrame *frame = NULL;      // The one and only MainFrame
-// wxLogNull logNo;              // No Log messages
-//---------------------------------------------------------------------------
-// verify that the item is ok and insult the user if it is not
-#define CHECK_ITEM(item)                                                \
- if (!item.IsOk())                                                      \
- {                                                                      \
-  wxMessageBox(_("Please select some item first!"),_("Tree sample error"),      \
-                 wxOK | wxICON_EXCLAMATION,this);                       \
-  return;                                                               \
- }                                                                      \
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 BEGIN_EVENT_TABLE(MainFrame, wxFrame)
  EVT_MENU(QUIT, MainFrame::OnQuit)
  EVT_MENU(ABOUT, MainFrame::OnAbout)
  EVT_MENU(HELP, MainFrame::OnHelp)
  EVT_SIZE(MainFrame::OnSize)
 END_EVENT_TABLE()
-//---------------------------------------------------------------------------
-IMPLEMENT_APP(MyApp)
-//---------------------------------------------------------------------------
-// `Main program' equivalent, creating windows and returning main app frame
-//---------------------------------------------------------------------------
-bool MyApp::OnInit(void)
+//----------------------------------------------------------------------------------------
+IMPLEMENT_APP(MainApp)
+//----------------------------------------------------------------------------------------
+// 'Main program' equivalent, creating windows and returning main app frame
+//----------------------------------------------------------------------------------------
+bool MainApp::OnInit(void)
 {
  //---------------------------------------------------------------------------------------
  // set the language to use
@@ -70,8 +59,10 @@ bool MyApp::OnInit(void)
  const char *language = NULL;
  const char *langid   = NULL;
  //---------------------------------------------------------------------------------------
+ //-- Graphic File suport - use only when needed, otherwise big .exe's
+ //---------------------------------------------------------------------------------------
 #if wxUSE_LIBPNG
- wxImage::AddHandler( new wxPNGHandler );   // use only when needed, otherwise big .exe's
+ wxImage::AddHandler( new wxPNGHandler );   // needed for help System
 #endif
 /*
 #if wxUSE_LIBJPEG
@@ -82,11 +73,11 @@ bool MyApp::OnInit(void)
  wxImage::AddHandler( new wxPNMHandler );   // use only when needed, otherwise big .exe's
 */
 #ifdef __WXMSW__
- // wxBitmap::AddHandler( new wxXPMFileHandler );   // use only when needed, otherwise big .exe's
- // wxBitmap::AddHandler( new wxXPMDataHandler );   // use only when needed, otherwise big .exe's
+ // wxBitmap::AddHandler( new wxXPMFileHandler );   // Attempt to use XPS instead of ico
+ // wxBitmap::AddHandler( new wxXPMDataHandler );   // - Attempt failed
 #endif
  //---------------------------------------------------------------------------------------
- langid = "std"; // BJO20000125 instead of ""
+ langid = "std"; // Standard language is "std" = english
  switch ( argc )
  {
   default:
@@ -114,13 +105,12 @@ bool MyApp::OnInit(void)
  // name is the name of the executable and the vendor name is the same)
  //---------------------------------------------------------------------------------------
  SetVendorName("mj10777");
- SetAppName("DBBrowser"); // not needed, it's the default value
+ SetAppName("DBBrowser");
  p_ProgramCfg = wxConfigBase::Get();
  // p_ProgramCfg->DeleteAll();
  p_ProgramCfg->SetPath("/");
  wxString Temp0, Temp1;
  Temp0.Empty();
-
  //---------------------------------------------------------------------------------------
  //-- Set the Language and remember it for the next time. --------------------------------
  //---------------------------------------------------------------------------------------
@@ -136,7 +126,7 @@ bool MyApp::OnInit(void)
  Temp0 = langid;
  p_ProgramCfg->Write("/Local/langid",Temp0); // >const char *langid< can't be used here
  //---------------------------------------------------------------------------------------
- // Support the following languages
+ // Support the following languages  (std = english)
  if (Temp0 != "std")
  {
   if (Temp0 == "cz")
@@ -172,37 +162,29 @@ bool MyApp::OnInit(void)
   p_ProgramCfg->Write("/Local/language",Temp0);
   Temp0 = "std";    // allways english if not german or french (at the moment austrian)
  }
-
+ //---------------------------------------------------------------------------------------
  Temp0 = "NONE";
  p_ProgramCfg->Write("/NONE",Temp0);
  p_ProgramCfg->Write("/Paths/NONE",Temp0);
  p_ProgramCfg->Write("/MainFrame/NONE",Temp0);
- //-----------------------------------------------------------------------------
+ //---------------------------------------------------------------------------------------
  p_ProgramCfg->Write("/Paths/Work",wxGetCwd());
  p_ProgramCfg->SetPath("/");
- //-----------------------------------------------------------------------------
- // or you could also write something like this:
- //  wxFileConfig *p_ProgramCfg = new wxFileConfig("conftest");
- //  wxConfigBase::Set(p_ProgramCfg);
- // where you can also specify the file names explicitly if you wish.
- // Of course, calling Set() is optional and you only must do it if
- // you want to later retrieve this pointer with Get().
- //----------------------------------------------------------------------------
- // SetPath() understands ".."
- // restore frame position and size
+ //---------------------------------------------------------------------------------------
+ // restore frame position and size, if empty start Values (1,1) and (750,600)
  int x = p_ProgramCfg->Read("/MainFrame/x", 1), y = p_ProgramCfg->Read("/MainFrame/y", 1),
-     w = p_ProgramCfg->Read("/MainFrame/w", 600), h = p_ProgramCfg->Read("/MainFrame/h", 450);
+     w = p_ProgramCfg->Read("/MainFrame/w", 750), h = p_ProgramCfg->Read("/MainFrame/h", 600);
  //---------------------------------------------------------------------------------------
  // Create the main frame window
- frame = new MainFrame((wxFrame *) NULL, (char *) _("DBBrowser - mj10777"),x,y,w,h);
+ frame = new MainFrame((wxFrame *) NULL, (char *) _("DBBrowser - mj10777"),wxPoint(x,y),wxSize(w,h));
  //---------------------------------------------------------------------------------------
- // This reduces flicker effects - even better would be to define OnEraseBackground
- // to do Temp0. When the list control's scrollbars are show or hidden, the
- // frame is sent a background erase event.
- //---------------------------------------------------------------------------------------
- frame->SetBackgroundColour( *wxWHITE );
+ // Set the Backgroundcolour (only need if your are NOT using wxSYS_COLOUR_BACKGROUND)
+ frame->SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BACKGROUND));
  // frame->SetBackgroundColour(wxColour(255, 255, 255));
-
+ // frame->SetBackgroundColour(* wxWHITE);
+ //---------------------------------------------------------------------------------------
+ // Give it an icon
+ frame->SetIcon(wxICON(aLogo));    // Programm Icon = lowest name in RC File
  //---------------------------------------------------------------------------------------
  // Make a menubar
  wxMenu *file_menu = new wxMenu;
@@ -223,9 +205,8 @@ bool MyApp::OnInit(void)
  //---------------------------------------------------------------------------------------
  int width, height;
  frame->GetClientSize(&width, &height);
-
- frame->p_Splitter = new DocSplitterWindow(frame, SPLITTER_WINDOW);
-
+ //---------------------------------------------------------------------------------------
+ frame->p_Splitter = new DocSplitterWindow(frame,-1);
  // p_Splitter->SetCursor(wxCursor(wxCURSOR_PENCIL));
  frame->pDoc                       = new mjDoc();
  frame->pDoc->p_MainFrame          = frame;
@@ -233,8 +214,6 @@ bool MyApp::OnInit(void)
  frame->pDoc->p_Splitter->pDoc     = frame->pDoc;       // ControlBase: saving the Sash
  if (!frame->pDoc->OnNewDocument())
   frame->Close(TRUE);
- // frame->Maximize();
- // frame->SetSize(-1,-1);               // the wxSplitter does not show correctly without this !
  frame->SetClientSize(width, height);    // the wxSplitter does not show correctly without this !
  //---------------------------------------------------------------------------------------
  //-- Problem : GetClientSize(Width,Hight) are not the same as the values given in the ---
@@ -246,49 +225,27 @@ bool MyApp::OnInit(void)
  //----------------------------------------------------------------------------
  //-- Help    :                                                                        ---
  //----------------------------------------------------------------------------
-
- frame->help.UseConfig(p_ProgramCfg);
- frame->help.AddBook(langhelp);
- /*
- if (!frame->help.AddBook("helpfiles/dbbrowse.hhp"))
-  wxMessageBox("Failed adding book helpfiles/dbbrowse.hhp");
- if (!frame->help.AddBook("helpfiles/testing.hhp"))
-  wxMessageBox("Failed adding book helpfiles/testing.hhp");
- if (!frame->help.AddBook("helpfiles/another.hhp"))
-   wxMessageBox("Failed adding book helpfiles/another.hhp");
- */
-
-
- //---------------------------------------------------------------------------------------
- p_ProgramCfg->Flush(TRUE);        // sicher Objekt
-
+ frame->p_Help = new wxHtmlHelpController();   // construct the Help System
+ frame->p_Help->UseConfig(p_ProgramCfg);       // Don't rember what this was for
+ frame->p_Help->AddBook(langhelp);             // Use the language set
+ frame->pDoc->p_Help = frame->p_Help;          // Save the information to the document
  //---------------------------------------------------------------------------------------
  // Show the frame
  frame->Show(TRUE);
  SetTopWindow(frame);
-
-
-
+ //---------------------------------------------------------------------------------------
+ p_ProgramCfg->Flush(TRUE);        // sicher Objekt
  return TRUE;
-}
-//---------------------------------------------------------------------------
+} // bool MainApp::OnInit(void)
+//----------------------------------------------------------------------------------------
 // My frame constructor
-//---------------------------------------------------------------------------
-MainFrame::MainFrame(wxFrame *frame, char *title, int x, int y, int w, int h):
-  wxFrame(frame, SPLITTER_FRAME, title, wxPoint(x, y), wxSize(w, h))
+//----------------------------------------------------------------------------------------
+MainFrame::MainFrame(wxFrame *frame, char *title,  const wxPoint& pos, const wxSize& size):
+  wxFrame(frame, -1, title,  pos, size)
 {
- InitializeMenu();
- // This reduces flicker effects - even better would be to define OnEraseBackground
- // to do Temp0. When the list control's scrollbars are show or hidden, the
- // frame is sent a background erase event.
- SetBackgroundColour( *wxWHITE );
- // frame->SetBackgroundColour(wxColour(255, 255, 255));
- //---------------------------------------------------------------------------------------
- // Give it an icon
- SetIcon( wxICON(Logo) );
- //---------------------------------------------------------------------------------------
+ //--- Everything is done in MainApp -----------------------------------------------------
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 MainFrame::~MainFrame(void)
 {
  // save the control's values to the config
@@ -307,36 +264,18 @@ MainFrame::~MainFrame(void)
  // Get() it doesn't try to create one if there is none (definitely not what
  // we want here!)
  // delete wxConfigBase::Set((wxConfigBase *) NULL);
- p_ProgramCfg->Flush(TRUE);        // sichert Objekt
- delete frame->pDoc;
+ p_ProgramCfg->Flush(TRUE);        // saves   Objekt
+ delete frame->pDoc;               // Cleanup
 }
-//--------------------------------------------------------------------------------------
-void MainFrame::InitializeMenu()
-{
- //---------------------------------------------------------------------------------------
- // Make a menubar
- //---------------------------------------------------------------------------------------
- wxMenu *file_menu = new wxMenu;
-
- file_menu->Append(ABOUT, _("&About"));
- file_menu->AppendSeparator();
- file_menu->Append(QUIT, _("E&xit"));
-
-
- wxMenuBar *menu_bar = new wxMenuBar;
- menu_bar->Append(file_menu, _("&File"));
- SetMenuBar(menu_bar);
-}
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 void MainFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
- // Close the help frame; this will cause the config data to
- // get written.
- if (help.GetFrame()) // returns NULL if no help frame active
-  help.GetFrame()->Close(TRUE);
+ // Close the help frame; this will cause the config data to get written.
+ if (p_Help->GetFrame()) // returns NULL if no help frame active
+  p_Help->GetFrame()->Close(TRUE);
  Close(TRUE);
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 void MainFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
  wxMessageDialog dialog(this, _("DBBrowser\nMark Johnson\nBerlin, Germany\nmj10777@gmx.net\n (c) 1999"),
@@ -344,9 +283,9 @@ void MainFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 
  dialog.ShowModal();
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 void MainFrame::OnHelp(wxCommandEvent& WXUNUSED(event))
 {
- help.Display("Main page");
+ p_Help->Display("Main page");
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Name:        DlgUser.h,cpp
 // Purpose:     Dialog mit Variable Gestaltung durch DlgUser.wxr
 // Author:      Mark Johnson, mj10777@gmx.net
@@ -7,44 +7,36 @@
 // Copyright:   (c) Mark Johnson
 // Licence:     wxWindows license
 // RCS-ID:      $Id$
-//---------------------------------------------------------------------------
-//-- all #ifdefs that the whole Project needs. ------------------------------
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
+//-- all #ifdefs that the whole Project needs. -------------------------------------------
+//----------------------------------------------------------------------------------------
 #ifdef __GNUG__
 #pragma implementation
 #pragma interface
 #endif
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
-//---------------------------------------------------------------------------
-//-- all #includes that every .cpp needs             ----19990807.mj10777 ---
-//---------------------------------------------------------------------------
-#include "dlguser.h"
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
+//-- all #includes that every .cpp needs             ----19990807.mj10777 ----------------
+//----------------------------------------------------------------------------------------
+#include "std.h"
+//----------------------------------------------------------------------------------------
 DlgUser::DlgUser(wxWindow *parent, const wxString& title) :
   wxDialog(parent, ID_DIALOG_DSN, title)
 {
-  SetBackgroundColour("wheat");
-  
-  wxLayoutConstraints* layout;
-  SetAutoLayout(TRUE);
- 
-//   m_Dsn = new wxStaticText(this, -1, "", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE);
-//   layout = new wxLayoutConstraints;
-//   layout->centreX.SameAs(this, wxCentreX);
-//   layout->top.SameAs(this, wxTop,10);
-//   layout->height.AsIs();
-//   layout->width.AsIs();
-//   m_Dsn->SetConstraints(layout);
+ SetBackgroundColour("wheat");
+
+ wxLayoutConstraints* layout;
+ SetAutoLayout(TRUE);
 
   m_Label1 = new wxStaticText(this, -1, _("User ID:"));
   layout = new wxLayoutConstraints;
@@ -61,9 +53,9 @@ DlgUser::DlgUser(wxWindow *parent, const wxString& title) :
   layout->centreY.SameAs(m_Label1,wxCentreY);
   layout->width.Absolute(200);
   layout->height.AsIs();
-  m_UserName->SetConstraints(layout); 
-  
-  
+  m_UserName->SetConstraints(layout);
+
+
   m_Label2 = new wxStaticText(this, -1, _("Password:"));
   layout = new wxLayoutConstraints;
   layout->left.SameAs(m_Label1, wxLeft);
@@ -71,7 +63,7 @@ DlgUser::DlgUser(wxWindow *parent, const wxString& title) :
   layout->height.AsIs();
   layout->width.SameAs(m_Label1, wxWidth);
   m_Label2->SetConstraints(layout);
-  
+
   m_Password = new wxTextCtrl(this, -1, "", wxDefaultPosition, wxDefaultSize, wxTE_PASSWORD);
   layout = new wxLayoutConstraints;
   layout->left.SameAs(m_UserName, wxLeft);
@@ -80,7 +72,7 @@ DlgUser::DlgUser(wxWindow *parent, const wxString& title) :
   layout->centreY.SameAs(m_Label2,wxCentreY);
   layout->height.AsIs();
   m_Password->SetConstraints(layout);
-  
+
   m_OK = new wxButton(this, wxID_OK, _("Ok"));
   layout = new wxLayoutConstraints;
   layout->left.SameAs(this, wxLeft, 10);
@@ -99,45 +91,28 @@ DlgUser::DlgUser(wxWindow *parent, const wxString& title) :
 
   m_OK->SetDefault();
   m_UserName->SetFocus();
-  
-  
+
   s_User = "";
   s_Password = "";
-  
   Layout();
-
-
-
-
-// wxButton *but1 = new wxButton(this, wxID_OK, "OK", wxPoint(55,110), wxSize(80, 30));
-//  wxButton *but2 = new wxButton(this, wxID_CANCEL, "Cancel", wxPoint(210,110), wxSize(80, 30));
-//  (void)new wxStaticText(this, -1,_("User ID"), wxPoint(20, 40), wxSize(50, 20),wxALIGN_LEFT);
-//  (void)new wxStaticText(this, -1,_("Password"), wxPoint(20, 80), wxSize(50, 20),wxALIGN_LEFT);
-  // but1->SetFocus();
-//  m_OK->SetDefault();
 }
-
- void DlgUser::OnInit()
- {
-   wxString Temp; Temp.Printf(_(">>> %s <<< "),s_DSN.c_str());
-   SetTitle(Temp);
-   
-   m_UserName->SetLabel(s_User);
-   m_Password->SetLabel(s_Password);
-
- //   (void)new wxStaticText(this, -1, Temp, wxPoint(10, 10), wxSize(300, 20),wxALIGN_CENTRE );
-//    tc_User     = new wxTextCtrl(this, ID_USER, s_User, wxPoint(75, 35), wxSize(200, 25), 0, wxDefaultValidator);
-//    tc_Password = new wxTextCtrl(this, ID_PASSWORD, s_Password, wxPoint(75, 75), wxSize(200, 25),wxTE_PASSWORD, wxDefaultValidator);
-//    tc_User->SetFocus();
- }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
+void DlgUser::OnInit()
+{
+ wxString Temp; Temp.Printf(_(">>> %s <<< "),s_DSN.c_str());
+ SetTitle(Temp);
+ m_UserName->SetLabel(s_User);
+ m_Password->SetLabel(s_Password);
+ m_Label1->SetFont(* pDoc->ft_Doc); m_Label2->SetFont(* pDoc->ft_Doc);
+ m_UserName->SetFont(* pDoc->ft_Doc); m_Password->SetFont(* pDoc->ft_Doc);
+ m_OK->SetFont(* pDoc->ft_Doc); m_Cancel->SetFont(* pDoc->ft_Doc);
+}
+//----------------------------------------------------------------------------------------
 BEGIN_EVENT_TABLE(DlgUser, wxDialog)
-  EVT_BUTTON(wxID_OK, DlgUser::OnOk)
-  EVT_BUTTON(wxID_CANCEL, DlgUser::OnCancel)
+ EVT_BUTTON(wxID_OK, DlgUser::OnOk)
+ EVT_BUTTON(wxID_CANCEL, DlgUser::OnCancel)
 END_EVENT_TABLE()
-  
-  
-  //---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 void DlgUser::OnOk(wxCommandEvent& WXUNUSED(event) )
 {
   //canceled = FALSE;
@@ -145,11 +120,11 @@ void DlgUser::OnOk(wxCommandEvent& WXUNUSED(event) )
   s_Password = m_Password->GetValue();
   EndModal(wxID_OK);
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 //void DlgUser::OnCancel(wxCommandEvent& WXUNUSED(event) )
 // {
 //   canceled = TRUE;
 //   EndModal(wxID_CANCEL);
 // }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 

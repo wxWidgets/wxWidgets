@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Name:        dbbrowse.h
 // Purpose:     Through ODBC - Databases Browsen
 // Author:      Mark Johnson, mj10777@gmx.net
@@ -7,49 +7,46 @@
 // Copyright:   (c) Mark Johnson
 // Licence:     wxWindows license
 // RCS-ID:      $Id$
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Define a new application type
-//------------------------------------------------------------------------------
-class MyApp: public wxApp
+//----------------------------------------------------------------------------------------
+class MainApp: public wxApp
 {
  public:
-  bool OnInit(void);
-  wxLocale m_locale; // locale we'll be using
+  bool OnInit(void); // Programmstart
+  wxLocale m_locale; // locale we'll be using and language support
 };
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Define a new frame type
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class MainFrame: public wxFrame
 {
  public:
-  MainFrame(wxFrame *frame, char *title, int x, int y, int w, int h);
+  MainFrame(wxFrame *frame, char *title,  const wxPoint& pos, const wxSize& size);
   ~MainFrame(void);
 
  public:
   // menu callbacks
-  void InitializeMenu();
   void OnQuit(wxCommandEvent& event);
   void OnAbout(wxCommandEvent& event);
   void OnHelp(wxCommandEvent& event);
-  //--------------------------------------------------------
-  wxHtmlHelpController help;
-  //--------------------------------------------------------
+  //--------------------------------------------------------------------------------------
+  wxHtmlHelpController *p_Help;
+  //--------------------------------------------------------------------------------------
   int DiffW, DiffH;
   mjDoc *pDoc;
   DocSplitterWindow *p_Splitter;
-  //--------------------------------------------------------
+  //--------------------------------------------------------------------------------------
  DECLARE_EVENT_TABLE()
 };
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // ID for the menu quit command
-//------------------------------------------------------------------------------
-#define QUIT                           1
-#define ABOUT                          2
-#define HELP                           3
-#define SPLITTER_FRAME               100
-#define SPLITTER_WINDOW              101
+//----------------------------------------------------------------------------------------
+#define QUIT                         777
+#define ABOUT                        778
+#define HELP                         779
 #define TREE_CTRL_PGM                102
 #define GRID_CTRL                    103
 #define TREE_CTRL_DB                 104
 #define GRID_CTRL_DB                 105
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------

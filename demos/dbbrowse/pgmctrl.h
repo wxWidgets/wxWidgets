@@ -1,4 +1,4 @@
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Name:        pgmctrl.h
 // Purpose:     Programm Control with a Tree
 // Author:      Mark Johnson
@@ -7,19 +7,17 @@
 // RCS-ID:      $Id$
 // Copyright:   (c) Mark Johnson, Berlin Germany, mj10777@gmx.net
 // Licence:     wxWindows license
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class mjDoc;               // Declared in doc.h file
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class TreeData : public wxTreeItemData
 {
-public:
+ public:
  TreeData(const wxString& desc) : m_desc(desc) { }
-
  void ShowInfo(wxTreeCtrl *tree);
-
-  wxString m_desc;
+ wxString m_desc;
 };
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class PgmCtrl : public wxTreeCtrl
 {
  public:
@@ -34,21 +32,21 @@ class PgmCtrl : public wxTreeCtrl
    TreeIc_FolderOpen                // f_open.ico
   };
   wxString Temp0, Temp1, Temp2, Temp3, Temp4, Temp5;
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
   PgmCtrl() { }
   PgmCtrl(wxWindow *parent);
   PgmCtrl(wxWindow *parent, const wxWindowID id,const wxPoint& pos, const wxSize& size,long style);
   virtual ~PgmCtrl();
   mjDoc *pDoc;
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
   int i_TabArt;   // Tab = 0 ; Page = 1;
   int i_ViewNr;   // View Nummer in Tab / Page
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
   wxImageList *p_imageListNormal;
   wxMenu   *popupMenu1; // OnDBClass
   wxPoint  TreePos;
   wxString SaveDSN;     // Needed for User and Password
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
  public:
   int  OnPopulate();
   void OnSelChanged(wxTreeEvent& event);
@@ -57,7 +55,7 @@ class PgmCtrl : public wxTreeCtrl
   void OnUserPassword();
 
  public:
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
   // NB: due to an ugly wxMSW hack you _must_ use DECLARE_DYNAMIC_CLASS()
   //     if you want your overloaded OnCompareItems() to be called.
   //     OTOH, if you don't want it you may omit the next line - this will
@@ -65,8 +63,8 @@ class PgmCtrl : public wxTreeCtrl
   DECLARE_DYNAMIC_CLASS(PgmCtrl)
   DECLARE_EVENT_TABLE()
 };
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 #define PGMCTRL_01_BEGIN     1000
 #define PGMCTRL_ODBC_USER    1001
 #define PGMCTRL_01_END       1010
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------

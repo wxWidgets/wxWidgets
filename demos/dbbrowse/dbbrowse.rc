@@ -1,4 +1,4 @@
-Logo                    ICON    "bitmaps\\logo.ico"
+aLogo                   ICON    "bitmaps\\logo.ico"
 Col                     ICON    "bitmaps\\col.ico"
 DSNClosed               ICON    "bitmaps\\dsnclose.ico"
 DSNOpen                 ICON    "bitmaps\\dsnopen.ico"
