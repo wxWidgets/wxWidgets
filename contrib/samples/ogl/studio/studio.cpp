@@ -168,9 +168,11 @@ bool csApp::OnInit(void)
   // The ordering of these is important for layout purposes
   CreateDiagramToolBar(frame);
   CreatePalette(frame);
-  CreateProjectWindow(frame);
 
+  /*
+  CreateProjectWindow(frame);
   FillProjectTreeCtrl();
+  */
 
   // Create the shape editing menu
   m_shapeEditMenu = new ShapeEditMenu;

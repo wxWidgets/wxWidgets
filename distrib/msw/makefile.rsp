@@ -26,6 +26,7 @@ samples/html/virtual/Makefile.in
 samples/html/widget/Makefile.in
 samples/html/zip/Makefile.in
 samples/image/Makefile.in
+samples/joytest/Makefile.in
 samples/layout/Makefile.in
 samples/listctrl/Makefile.in
 samples/mdi/Makefile.in

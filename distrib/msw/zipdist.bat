@@ -27,6 +27,7 @@ erase %dest\tex2rtf2.zip
 erase %dest\jpeg.zip
 erase %dest\tiff.zip
 erase %dest\dialoged.zip
+erase %dest\utils.zip
 
 if direxist %dest\wx deltree /Y %dest\wx
 
@@ -85,6 +86,10 @@ erase %dest\dialoged_source.zip
 zip32 -@ %dest\dialoged_source.zip < %src\distrib\msw\dialoged.rsp
 zip32 -j %dest\dialoged.zip %dest\dialoged_source.zip %src\bin\dialoged.exe %src\bin\dialoged.hlp %src\bin\dialoged.cnt
 erase %dest\dialoged_source.zip
+
+rem Misc. utils not in the main distribution
+zip32 -@ %dest\utils.zip < %src\distrib\msw\utils.rsp
+zip32 -@ -u %dest\utils.zip < %src\distrib\msw\utilmake.rsp
 
 copy %src\docs\changes.txt %dest
 copy %src\docs\msw\install.txt %dest\install_msw.txt
@@ -148,7 +153,8 @@ erase /Y %dest\setup.*
 rem Now invoke WISE install on the new wxwin2.wse
 set wisecmd="c:\Program Files\wise\wise32.exe" /C %WXWIN\distrib\msw\wxwin2.wse
 echo Invoking %wisecmd...
-start /w %wisecmd
+start %wisecmd
+pause Press any key to continue with the wxWindows distribution...
 Rem ren %WXWIN\deliver\setup.EXE %WXWIN\deliver\setup_%version%.exe
 
 cd %dest

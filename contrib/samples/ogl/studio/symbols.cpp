@@ -166,16 +166,31 @@ void csApp::InitSymbols()
     m_symbolDatabase->AddSymbol(new csSymbol("Group", shape));
 }
 
-wxBitmap* csSymbolDatabase::CreateToolBitmap(csSymbol* symbol)
+wxBitmap* csSymbolDatabase::CreateToolBitmap(csSymbol* symbol, const wxSize& toolSize)
 {
-    int objectBitmapSize = 32;
-
     symbol->GetShape()->Recompute();
 
-    wxBitmap *newBitmap = new wxBitmap(objectBitmapSize, objectBitmapSize);
+    wxBitmap *newBitmap = new wxBitmap(toolSize.x, toolSize.y);
 
+    // Test code
+#if 0
     wxMemoryDC memDC;
-        
+    memDC.SelectObject(*newBitmap);
+    memDC.SetPen(* wxBLACK_PEN);
+    memDC.SetBrush(* wxWHITE_BRUSH);
+    memDC.SetBackground(wxBrush(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE), wxSOLID));
+    memDC.SetLogicalFunction(wxCOPY);
+    memDC.Clear();
+
+    memDC.DrawLine(0, 0, toolSize.x, toolSize.y);
+    memDC.DrawLine(0, toolSize.y, toolSize.x, 0);
+
+    memDC.SelectObject(wxNullBitmap);
+#endif
+
+#if 1       
+    wxMemoryDC memDC;
+
     double height, width, maxSize;
     symbol->GetShape()->GetBoundingBoxMax(&width, &height);
 
@@ -185,18 +200,22 @@ wxBitmap* csSymbolDatabase::CreateToolBitmap(csSymbol* symbol)
         maxSize = width;
 
     double borderMargin = 4.0;
-    double scaleFactor = (double)(objectBitmapSize / (maxSize + 2*borderMargin));
-    double centreX = (double)((objectBitmapSize/scaleFactor)/2.0)-1;
+    double scaleFactor = (double)(toolSize.x / (maxSize + 2*borderMargin));
+    double centreX = (double)((toolSize.x/scaleFactor)/2.0)-1;
     double centreY = centreX;
 
     memDC.SelectObject(*newBitmap);
+
     memDC.SetUserScale(scaleFactor, scaleFactor);
 
     memDC.SetBackground(wxBrush(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE), wxSOLID));
     memDC.Clear();
+
     symbol->GetShape()->Show(TRUE);
     symbol->GetShape()->Move(memDC, centreX, centreY);
+
     memDC.SelectObject(wxNullBitmap);
+#endif
 
     return newBitmap;
 }

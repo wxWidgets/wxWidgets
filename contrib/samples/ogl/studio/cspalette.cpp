@@ -117,31 +117,81 @@ bool csApp::CreatePalette(wxFrame *parent)
 #ifdef __WXMSW__
     wxBitmap PaletteArrow("arrowtool");
     wxBitmap TextTool("texttool");
+    wxSize toolBitmapSize(32, 32);
 #elif defined(__WXGTK__) || defined(__WXMOTIF__)
     wxBitmap PaletteArrow(arrow_xpm);
     wxBitmap TextTool(texttool_xpm);
+    wxSize toolBitmapSize(22, 22);
 #endif
 
   csEditorToolPalette *palette = new csEditorToolPalette(m_diagramPaletteSashWindow, ID_DIAGRAM_PALETTE, wxPoint(0, 0), wxSize(-1, -1), wxTB_HORIZONTAL|wxNO_BORDER);
 
   palette->SetMargins(2, 2);
 
-  palette->SetToolBitmapSize(wxSize(32, 32));
+  palette->SetToolBitmapSize(toolBitmapSize);
 
   palette->AddTool(PALETTE_ARROW, PaletteArrow, wxNullBitmap, TRUE, 0, -1, NULL, "Pointer");
   palette->AddTool(PALETTE_TEXT_TOOL, TextTool, wxNullBitmap, TRUE, 0, -1, NULL, "Text");
 
+  char** symbols = new char*[20];
+  int noSymbols = 0;
+
+  symbols[noSymbols] = "Wide Rectangle";
+  noSymbols ++;
+
+  symbols[noSymbols] =  "Thin Rectangle";
+  noSymbols ++;
+ 
+  symbols[noSymbols] =  "Triangle";
+  noSymbols ++;
+
+  symbols[noSymbols] =  "Octagon";
+  noSymbols ++;
+
+  // For some reason, we're getting Gdk errors with
+  // some shapes, such as ones that use DrawEllipse.
+#ifndef __WXGTK__
+  symbols[noSymbols] =  "Group";
+  noSymbols ++;
+
+  symbols[noSymbols] =  "Circle";
+  noSymbols ++;
+
+  symbols[noSymbols] =  "Circle shadow";
+  noSymbols ++;
+
+  symbols[noSymbols] =  "SemiCircle";
+  noSymbols ++;
+#endif
+
+  int i;
+  for (i = 0; i < noSymbols; i++)
+  {
+      csSymbol* symbol = GetSymbolDatabase()->FindSymbol(symbols[i]);
+      if (symbol)
+      {
+           wxBitmap* bitmap = GetSymbolDatabase()->CreateToolBitmap(symbol, toolBitmapSize);
+           palette->AddTool(symbol->GetToolId(), *bitmap, wxNullBitmap, TRUE, 0, -1, NULL, symbol->GetName());
+
+           delete bitmap;
+      }
+  }
+  delete[] symbols;
+
+#if 0
   wxNode* node = GetSymbolDatabase()->GetSymbols().First();
   while (node)
   {
     csSymbol* symbol = (csSymbol*) node->Data();
-    wxBitmap* bitmap = GetSymbolDatabase()->CreateToolBitmap(symbol);
+
+    wxBitmap* bitmap = GetSymbolDatabase()->CreateToolBitmap(symbol, toolBitmapSize);
     palette->AddTool(symbol->GetToolId(), *bitmap, wxNullBitmap, TRUE, 0, -1, NULL, symbol->GetName());
 
     delete bitmap;
 
     node = node->Next();
   }
+#endif
 
   palette->Realize();
 

@@ -65,7 +65,7 @@ public:
     void ClearSymbols();
     csSymbol* FindSymbol(const wxString& name) const;
     csSymbol* FindSymbol(int toolId) const;
-    wxBitmap* CreateToolBitmap(csSymbol* symbol);
+    wxBitmap* CreateToolBitmap(csSymbol* symbol, const wxSize& sz);
 
 protected:
     wxList          m_symbols;
