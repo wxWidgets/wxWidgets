@@ -39,9 +39,12 @@ see also wxFRAME\_FLOAT\_ON\_PARENT. Windows only.}
 \twocolitem{\windowstyle{wxFRAME\_TOOL\_WINDOW}}{Causes a frame with a small
 titlebar to be created; the frame does not appear in the taskbar under Windows.}
 \twocolitem{\windowstyle{wxFRAME\_NO\_TASKBAR}}{Creates an otherwise normal
-frame but it does not appear in the taskbar under Windows (note that it will
-minimize to the desktop window which may seem strange to the users and thus it
-might be better to use this style only without wxMINIMIZE\_BOX style).
+frame but it does not appear in the taskbar under Windows or GTK+ (note that it
+will minimize to the desktop window under Windows which may seem strange to the
+users and thus it might be better to use this style only without
+wxMINIMIZE\_BOX style). In wxGTK, the flag is respected only if GTK+ is at
+least version 2.2 and the window manager supports 
+\urlref{\_NET\_WM\_STATE\_SKIP\_TASKBAR}{http://freedesktop.org/Standards/wm-spec/1.3/ar01s05.html} hint.
 Has no effect under other platforms.}
 \twocolitem{\windowstyle{wxFRAME\_FLOAT\_ON\_PARENT}}{The frame will always be
 on top of its parent (unlike wxSTAY\_ON\_TOP). A frame created with this style
