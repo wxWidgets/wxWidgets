@@ -1805,6 +1805,31 @@ implements the following methods:\par
 \end{twocollist}}
 }
 
+\membersection{wxWindow::ScrollLines}\label{wxwindowscrolllines}
+
+\func{virtual void}{ScrollLines}{\param{int }{lines}}
+
+Scrolls the window by the given number of lines down (if {\it lines} is
+positive) or up.
+
+This function is currently only implemented under MSW.
+
+\wxheading{See also}
+
+\helpref{ScrollPages}{wxwindowscrollpages}
+
+\membersection{wxWindow::ScrollPages}\label{wxwindowscrollpages}
+
+\func{virtual void}{ScrollPages}{\param{int }{pages}}
+
+Scrolls the window by the given number of pages down (if {\it pages} is
+positive) or up.
+
+This function is currently only implemented under MSW.
+
+\wxheading{See also}
+
+\helpref{ScrollLines}{wxwindowscrolllines}
 
 \membersection{wxWindow::ScrollWindow}\label{wxwindowscrollwindow}
 
