@@ -455,8 +455,8 @@ bool wxThreadInternal::Create(wxThread *thread)
     // creation instead of Win32 API one because otherwise we will have memory
     // leaks if the thread uses C RTL (and most threads do)
 #if defined(__VISUALC__) || \
-    (defined(__BORLANDC__) && (__BORLANDC__ >= 0x500)) \\
-    (defined(__GNUG__) && defined(__MSVCRT__)
+    (defined(__BORLANDC__) && (__BORLANDC__ >= 0x500)) || \
+    (defined(__GNUG__) && defined(__MSVCRT__))
     typedef unsigned (__stdcall *RtlThreadStart)(void *);
 
     m_hThread = (HANDLE)_beginthreadex(NULL, 0,
