@@ -10,7 +10,7 @@
 WX_LINGUAS := `ls *.po 2> /dev/null | sed -n 's/\(wxstd\)\?\.po//p'`
 
 # the programs we use (TODO: use configure to detect them)
-MSGFMT=msgfmt
+MSGFMT=msgfmt --verbose
 MSGMERGE=msgmerge
 XGETTEXT=xgettext
 XARGS=xargs
