@@ -75,7 +75,8 @@ wxSocketBase::wxSocketBase(wxSocketBase::wxSockFlags _flags,
   m_lcount(0), m_timeout(600),
   m_unread(NULL), m_unrd_size(0), m_unrd_cur(0),
   m_cbk(NULL), m_cdata(NULL),
-  m_connected(FALSE), m_notify_state(FALSE), m_id(-1),
+  m_connected(FALSE), m_establishing(FALSE),
+  m_notify_state(FALSE), m_id(-1),
   m_defering(NO_DEFER),
   m_states()
 {
@@ -88,7 +89,8 @@ wxSocketBase::wxSocketBase() :
   m_lcount(0), m_timeout(600),
   m_unread(NULL), m_unrd_size(0), m_unrd_cur(0),
   m_cbk(NULL), m_cdata(NULL),
-  m_connected(FALSE), m_notify_state(FALSE), m_id(-1),
+  m_connected(FALSE), m_establishing(FALSE),
+  m_notify_state(FALSE), m_id(-1),
   m_defering(NO_DEFER),
   m_states()
 {
@@ -120,6 +122,7 @@ bool wxSocketBase::Close()
     // Shutdown the connection.
     GSocket_Shutdown(m_socket);
     m_connected = FALSE;
+    m_establishing = FALSE;
   }
 
   return TRUE;
@@ -586,7 +589,7 @@ bool wxSocketBase::_Wait(long seconds, long milliseconds, int type)
   int state = -1;
   _wxSocketInternalTimer timer;
 
-  if (!m_connected || !m_socket)
+  if ((!m_connected && !m_establishing) || !m_socket)
     return FALSE;
 
   // Set the variable to change
@@ -609,13 +612,23 @@ bool wxSocketBase::_Wait(long seconds, long milliseconds, int type)
   // Notify will restore automatically the old GSocket flags
   Notify(old_notify_state);
 
+  // GRG: If a LOST event occured, we set m_establishing to
+  // FALSE here (this is a quick hack to make WaitOnConnect
+  // work; it will be removed when this function is modified
+  // so that it tells the caller which event occured).
+  //
+  if (state == GSOCK_LOST)
+    m_establishing = FALSE;
+
   return (state != GSOCK_MAX_EVENT);
 }
 
 bool wxSocketBase::Wait(long seconds, long milliseconds)
 {
-  return _Wait(seconds, milliseconds, GSOCK_INPUT_FLAG | GSOCK_OUTPUT_FLAG |
-                                      GSOCK_CONNECTION_FLAG | GSOCK_LOST_FLAG);
+  return _Wait(seconds, milliseconds, GSOCK_INPUT_FLAG |
+                                      GSOCK_OUTPUT_FLAG |
+                                      GSOCK_CONNECTION_FLAG |
+                                      GSOCK_LOST_FLAG);
 }
 
 bool wxSocketBase::WaitForRead(long seconds, long milliseconds)
@@ -641,16 +654,14 @@ wxSocketEventFlags wxSocketBase::EventToNotify(wxSocketNotify evt)
 {
   switch (evt)
   {
-  case GSOCK_INPUT:
-    return GSOCK_INPUT_FLAG;
-  case GSOCK_OUTPUT:
-    return GSOCK_OUTPUT_FLAG;
-  case GSOCK_CONNECTION:
-    return GSOCK_CONNECTION_FLAG;
-  case GSOCK_LOST:
-    return GSOCK_LOST_FLAG;
-  default:
-    return 0;
+    case GSOCK_INPUT:
+      return GSOCK_INPUT_FLAG;
+    case GSOCK_OUTPUT:
+      return GSOCK_OUTPUT_FLAG;
+    case GSOCK_CONNECTION:
+      return GSOCK_CONNECTION_FLAG;
+    case GSOCK_LOST:
+      return GSOCK_LOST_FLAG;
   }
   return 0;
 }
@@ -667,9 +678,11 @@ wxSocketBase::wxSockFlags wxSocketBase::GetFlags() const
 
 void wxSocketBase::SetNotify(wxSocketEventFlags flags)
 {
-  /* Check if server */
+  // GRG: A client can also have connection events!
+/*
   if (m_type != SOCK_SERVER)
     flags &= ~GSOCK_CONNECTION_FLAG;
+*/
 
   m_neededreq = flags;
   if (m_neededreq == 0)
@@ -682,7 +695,7 @@ void wxSocketBase::SetNotify(wxSocketEventFlags flags)
 // Automatic notifier
 // --------------------------------------------------------------
 
-static void wx_socket_fallback(GSocket *socket, GSocketEvent event, char *cdata)
+static void wx_socket_callback(GSocket *socket, GSocketEvent event, char *cdata)
 {
   wxSocketBase *sckobj = (wxSocketBase *)cdata;
 
@@ -700,7 +713,7 @@ void wxSocketBase::Notify(bool notify)
   if (!notify)
     return;
 
-  GSocket_SetCallback(m_socket, m_neededreq, wx_socket_fallback, (char *)this);
+  GSocket_SetCallback(m_socket, m_neededreq, wx_socket_callback, (char *)this);
 }
 
 void wxSocketBase::OnRequest(wxSocketNotify req_evt)
@@ -708,20 +721,33 @@ void wxSocketBase::OnRequest(wxSocketNotify req_evt)
   wxSocketEvent event(m_id);
   wxSocketEventFlags notify = EventToNotify(req_evt);
 
-  if (m_defering != NO_DEFER) {
-    DoDefer(req_evt);
-    return;
+  switch(req_evt)
+  {
+    case wxSOCKET_CONNECTION:
+      m_establishing = FALSE;
+      m_connected = TRUE;
+      break;
+    case wxSOCKET_LOST:
+      Close();
+      break;
+    case wxSOCKET_INPUT:
+    case wxSOCKET_OUTPUT:
+      if (m_defering != NO_DEFER)
+      {
+        DoDefer(req_evt);
+        // Do not notify to user
+        return;
+      }
+      break;
   }
 
-  if ((m_neededreq & notify) == notify) {
+  if ((m_neededreq & notify) == notify)
+  {
     event.m_socket = this;
     event.m_skevt  = req_evt;
     ProcessEvent(event);
     OldOnNotify(req_evt);
   }
-
-  if (req_evt == wxSOCKET_LOST)
-    Close();
 }
 
 void wxSocketBase::OldOnNotify(wxSocketNotify evt)
@@ -825,11 +851,28 @@ wxSocketServer::wxSocketServer(wxSockAddress& addr_man,
 // wxSocketServer Accept
 // --------------------------------------------------------------
 
-bool wxSocketServer::AcceptWith(wxSocketBase& sock)
+bool wxSocketServer::AcceptWith(wxSocketBase& sock, bool wait)
 {
   GSocket *child_socket;
 
+  // GRG: If wait == FALSE, then set the socket to
+  // nonblocking. I will set it back to blocking later,
+  // but I am not sure if this is really a good idea.
+  // IMO, all GSockets objects used in wxSocket should
+  // be non-blocking.
+  // --------------------------------
+
+  if (!wait)
+    GSocket_SetNonBlocking(m_socket, TRUE);
+
   child_socket = GSocket_WaitConnection(m_socket);
+
+  if (!wait)
+    GSocket_SetNonBlocking(m_socket, FALSE);
+
+  // GRG: this was not being handled!
+  if (child_socket == NULL)
+    return FALSE;
 
   sock.m_type = SOCK_INTERNAL;
   sock.m_socket = child_socket;
@@ -838,16 +881,23 @@ bool wxSocketServer::AcceptWith(wxSocketBase& sock)
   return TRUE;
 }
 
-wxSocketBase *wxSocketServer::Accept()
+wxSocketBase *wxSocketServer::Accept(bool wait)
 {
   wxSocketBase* sock = new wxSocketBase();
 
   sock->SetFlags((wxSockFlags)m_flags);
 
-  if (!AcceptWith(*sock))
+  if (!AcceptWith(*sock, wait))
     return NULL;
 
   return sock;
+}
+
+bool wxSocketServer::WaitOnAccept(long seconds, long milliseconds)
+{
+  // TODO: return immediately if there is already a pending connection.
+
+  return _Wait(seconds, milliseconds, GSOCK_CONNECTION_FLAG | GSOCK_LOST_FLAG);
 }
 
 // --------------------------------------------------------------
@@ -859,6 +909,7 @@ wxSocketBase *wxSocketServer::Accept()
 wxSocketClient::wxSocketClient(wxSockFlags _flags) :
   wxSocketBase(_flags, SOCK_CLIENT)
 {
+  m_establishing = FALSE;
 }
 
 // --------------------------------------------------------------
@@ -885,11 +936,15 @@ bool wxSocketClient::Connect(wxSockAddress& addr_man, bool wait)
   // Initializes all socket stuff ...
   // --------------------------------
   m_socket = GSocket_new();
+  m_connected = FALSE;
+  m_establishing = FALSE;
 
   if (!m_socket)
     return FALSE;
 
-  m_connected = FALSE;
+  // Update the flags of m_socket and enable BG events
+  SetFlags(m_flags);
+  Notify(TRUE);
 
   // GRG: If wait == FALSE, then set the socket to
   // nonblocking. I will set it back to blocking later,
@@ -900,33 +955,43 @@ bool wxSocketClient::Connect(wxSockAddress& addr_man, bool wait)
   if (!wait)
     GSocket_SetNonBlocking(m_socket, TRUE);
 
-  // Update the flags of m_socket.
-  SetFlags(m_flags);
-
-  // Try to connect
   GSocket_SetPeer(m_socket, addr_man.GetAddress());
   err = GSocket_Connect(m_socket, GSOCK_STREAMED);
 
   if (!wait)
     GSocket_SetNonBlocking(m_socket, FALSE);
 
+  if (err == GSOCK_WOULDBLOCK)
+    m_establishing = TRUE;
+
   if (err != GSOCK_NOERROR)
     return FALSE;
-
-  // Enables bg events.
-  // ------------------
-  Notify(TRUE);
 
   m_connected = TRUE;
   return TRUE;
 }
 
-bool wxSocketClient::WaitOnConnect(long seconds, long microseconds)
+bool wxSocketClient::WaitOnConnect(long seconds, long milliseconds)
 {
-  int ret = _Wait(seconds, microseconds, GSOCK_CONNECTION_FLAG | GSOCK_LOST_FLAG);
+  bool ret;
+
+  // Already connected
+  if (m_connected)
+    return TRUE;
+
+  // There is no connection in progress
+  if (!m_establishing)
+    return FALSE;
+
+  ret = _Wait(seconds, milliseconds, GSOCK_CONNECTION_FLAG | GSOCK_LOST_FLAG);
 
   if (ret)
-    m_connected = TRUE;
+  {
+    if (m_establishing)     // it wasn't GSOCK_LOST
+      m_connected = TRUE;
+
+    m_establishing = FALSE;
+  }
 
   return m_connected;
 }
