@@ -304,7 +304,7 @@ public:
       { wxASSERT( !IsEmpty() ); CopyBeforeWrite(); return m_pchData[Len()-1]; }
 
     // on 64bit systems, this gives overload problems:
-#if SIZEOF_INT <= 32
+#if SIZEOF_INT <= 4
     /// operator version of GetChar
     char  operator[](size_t n) const
       { ASSERT_VALID_INDEX( n ); return m_pchData[n]; }
