@@ -29,7 +29,7 @@ resource.  The name of the new "constructor" is the original name of
 the class with a "Pre" in it.  For example, wxPreWindow, wxPreFrame,
 etc.
 
-Updated to version 1.39 of Scintilla and updated wxStyledTextCtrl
+Updated to version 1.40 of Scintilla and updated wxStyledTextCtrl
 accordingly.
 
 Updated wxColumnSorterMixin to also be able to place sort icons on the

@@ -145,7 +145,7 @@ class PythonSTC(wxStyledTextCtrl):
                 kw.append("this_is_a_longer_value")
                 kw.append("this_is_a_much_much_much_much_much_much_much_longer_value")
 
-                kw.reverse()
+                #kw.sort()
 
                 self.AutoCompSetIgnoreCase(true)
                 self.AutoCompShow(0, string.join(kw))
