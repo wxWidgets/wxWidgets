@@ -5555,6 +5555,24 @@ INCLUDES="-I\${top_builddir}lib/wx/include/${TOOLCHAIN_NAME} \
 $REGEX_INCLUDE $ZLIB_INCLUDE $PNG_INCLUDE $JPEG_INCLUDE $TIFF_INCLUDE \
 $TOOLKIT_INCLUDE"
 
+dnl C/C++ compiler options used to compile wxWindows
+if test "$GXX" = yes ; then
+    dnl CXXWARNINGS="-Wall -W -Wcast-qual -Werror"
+    CXXWARNINGS="-Wall"
+    dnl should enable this one day...
+    dnl CXXWARNINGS="-Wall -Werror"
+fi
+
+EXTRA_CFLAGS="$WXDEBUG $WXODBCFLAG $PROFILE $OPTIMISE"
+
+dnl remove the extra white space from the cc/c++/ld options
+CPPFLAGS=`echo $INCLUDES $CPPFLAGS | sed 's/ \\+/ /g'`
+CFLAGS=`echo $CODE_GEN_FLAGS $EXTRA_CFLAGS $CFLAGS $CXXWARNINGS | sed 's/ \\+/ /g'`
+CXXFLAGS=`echo $CODE_GEN_FLAGS $CODE_GEN_FLAGS_CXX $EXTRA_CFLAGS $CXXFLAGS $CXXWARNINGS | sed 's/ \+/ /g'`
+LIBS=`echo $LIBS | sed 's/ \+/ /g'`
+
+LDFLAGS="$LDFLAGS $PROFILE"
+
 dnl wxGTK does not need TOOLKIT includes in wx-config
 if test "$wxUSE_GTK" = 1; then
     WXCONFIG_INCLUDE=
@@ -5602,23 +5620,7 @@ AC_SUBST(SAMPLES_RPATH_FLAG)
 
 AC_BAKEFILE
 
-dnl C/C++ compiler options used to compile wxWindows
-if test "$GXX" = yes ; then
-    dnl CXXWARNINGS="-Wall -W -Wcast-qual -Werror"
-    CXXWARNINGS="-Wall"
-    dnl should enable this one day...
-    dnl CXXWARNINGS="-Wall -Werror"
-fi
 
-EXTRA_CFLAGS="$WXDEBUG $WXODBCFLAG $PROFILE $OPTIMISE"
-
-dnl remove the extra white space from the cc/c++/ld options
-CPPFLAGS=`echo $INCLUDES $CPPFLAGS | sed 's/ \\+/ /g'`
-CFLAGS=`echo $EXTRA_CFLAGS $CFLAGS $CXXWARNINGS | sed 's/ \\+/ /g'`
-CXXFLAGS=`echo $EXTRA_CFLAGS $CXXFLAGS $CXXWARNINGS | sed 's/ \+/ /g'`
-LIBS=`echo $LIBS | sed 's/ \+/ /g'`
-
-LDFLAGS="$LDFLAGS $PROFILE"
 
 dnl for convenience, sort the samples in alphabetical order
 dnl
@@ -5660,8 +5662,6 @@ AC_SUBST(WX_ALL_INSTALLED)
 
 AC_SUBST(SHARED_LD)
 AC_SUBST(PIC_FLAG)
-AC_SUBST(CODE_GEN_FLAGS)
-AC_SUBST(CODE_GEN_FLAGS_CXX)
 
 AC_SUBST(WX_TARGET_LIBRARY_TYPE)
 
