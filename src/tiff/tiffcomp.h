@@ -89,7 +89,9 @@
  */
 #if defined(__MWERKS__) || defined(THINK_C) || defined(__PPCC__) || defined(__SYMANTEC__) || defined(__MRC__)
 #include <stdlib.h>
+#ifndef __MACH__
 #define	BSDTYPES
+#endif
 #define	HAVE_UNISTD_H	0
 #elif defined(_WINDOWS) || defined(__WIN32__) || defined(_Windows)
 #define BSDTYPES
