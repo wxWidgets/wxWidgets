@@ -2,7 +2,7 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
-2.4.1
+2.4.1.1
 -------
 
 Added wxScrolledPanel from Wil Sadkin
