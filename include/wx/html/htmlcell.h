@@ -89,7 +89,7 @@ class WXDLLEXPORT wxHtmlCell : public wxObject
                 // Example : m_Cell -> Find(wxHTML_COND_ISANCHOR, "news");
                 //   returns pointer to anchor news
 
-        virtual void OnMouseClick(wxWindow *parent, int x, int y, bool left, bool middle, bool right);
+        virtual void OnMouseClick(wxWindow *parent, int x, int y, const wxMouseEvent& event);
                 // This function is called when mouse button is clicked over the cell.
                 // left, middle, right are flags indicating whether the button was or wasn't
                 // pressed.
@@ -226,7 +226,7 @@ class WXDLLEXPORT wxHtmlContainerCell : public wxHtmlCell
         void SetBorder(const wxColour& clr1, const wxColour& clr2) {m_UseBorder = TRUE; m_BorderColour1 = clr1, m_BorderColour2 = clr2;}
         virtual wxHtmlLinkInfo* GetLink(int x = 0, int y = 0) const;
         virtual const wxHtmlCell* Find(int condition, const void* param) const;
-        virtual void OnMouseClick(wxWindow *parent, int x, int y, bool left, bool middle, bool right);
+        virtual void OnMouseClick(wxWindow *parent, int x, int y, const wxMouseEvent& event);
 
         wxHtmlCell* GetFirstCell() {return m_Cells;}
                 // returns pointer to the first cell in container or NULL
@@ -312,19 +312,23 @@ class WXDLLEXPORT wxHtmlLinkInfo : public wxObject
 {
     public:
         wxHtmlLinkInfo() : wxObject()
-                { m_Href = m_Target = wxEmptyString; }
+                { m_Href = m_Target = wxEmptyString; m_Event = NULL; }
         wxHtmlLinkInfo(const wxString& href, const wxString& target = wxEmptyString) : wxObject()
-                { m_Href = href; m_Target = target; }
+                { m_Href = href; m_Target = target; m_Event = NULL; }
         wxHtmlLinkInfo(const wxHtmlLinkInfo& l)
-                { m_Href = l.m_Href, m_Target = l.m_Target; }
+                { m_Href = l.m_Href, m_Target = l.m_Target, m_Event = l.m_Event; }
         wxHtmlLinkInfo& operator=(const wxHtmlLinkInfo& l)
-                { m_Href = l.m_Href, m_Target = l.m_Target; return *this; }
+                { m_Href = l.m_Href, m_Target = l.m_Target, m_Event = l.m_Event; return *this; }
+
+        void SetEvent(const wxMouseEvent *e) { m_Event = e; }
 
         wxString GetHref() const { return m_Href; }
         wxString GetTarget() const { return m_Target; }
+        const wxMouseEvent* GetEvent() const { return m_Event; }
 
     private:
         wxString m_Href, m_Target;
+        const wxMouseEvent *m_Event;
 };
 
 

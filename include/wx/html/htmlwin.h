@@ -136,11 +136,11 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
         static void AddFilter(wxHtmlFilter *filter);
                 // Adds input filter
 
-        virtual void OnLinkClicked(wxHtmlLinkInfo *link);
+        virtual void OnLinkClicked(const wxHtmlLinkInfo& link);
                 // called when users clicked on hypertext link. Default behavior is to
                 // call LoadPage(loc)
 
-	static void CleanUpStatics();
+        static void CleanUpStatics();
 	        // cleans static variables
 
         wxHtmlWinParser *GetParser() const { return m_Parser; }
@@ -163,7 +163,7 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
         void OnIdle(wxIdleEvent& event);
         void OnKeyDown(wxKeyEvent& event);
 
-	virtual wxHtmlFilter *GetDefaultFilter() {return new wxHtmlFilterPlainText;}
+        virtual wxHtmlFilter *GetDefaultFilter() {return new wxHtmlFilterPlainText;}
 	        // returns new filter (will be stored into m_DefaultFilter variable)
 
 
