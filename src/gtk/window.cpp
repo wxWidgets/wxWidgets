@@ -1693,21 +1693,6 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
     // a chance to correct this
     win->FixUpMouseEvent(widget, event.m_x, event.m_y);
 
-    if ( event_type == wxEVT_RIGHT_DOWN )
-    {
-        // generate a "context menu" event: this is similar to right mouse
-        // click under many GUIs except that it is generated differently
-        // (right up under MSW, ctrl-click under Mac, right down here) and
-        //
-        // (a) it's a command event and so is propagated to the parent
-        // (b) under MSW it can be generated from kbd too
-        // (c) it uses screen coords (because of (a))
-        wxContextMenuEvent evtCtx(wxEVT_CONTEXT_MENU,
-                                  win->GetId(),
-                                  win->ClientToScreen(event.GetPosition()));
-        (void)win->GetEventHandler()->ProcessEvent(evtCtx);
-    }
-
     // find the correct window to send the event too: it may be a different one
     // from the one which got it at GTK+ level because some control don't have
     // their own X window and thus cannot get any events.
@@ -1734,6 +1719,23 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
     {
         gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "button_press_event" );
         return TRUE;
+    }
+
+    if (event_type == wxEVT_RIGHT_DOWN)
+    {
+        // generate a "context menu" event: this is similar to right mouse
+        // click under many GUIs except that it is generated differently
+        // (right up under MSW, ctrl-click under Mac, right down here) and
+        //
+        // (a) it's a command event and so is propagated to the parent
+        // (b) under some ports it can be generated from kbd too
+        // (c) it uses screen coords (because of (a))
+        wxContextMenuEvent evtCtx(
+            wxEVT_CONTEXT_MENU,
+            win->GetId(),
+            win->ClientToScreen(event.GetPosition()));
+        evtCtx.SetEventObject(win);
+        return win->GetEventHandler()->ProcessEvent(evtCtx);
     }
 
     return FALSE;
@@ -1928,7 +1930,20 @@ static gint gtk_window_wheel_callback (GtkWidget * widget,
 
     return FALSE;
 }
-#endif
+
+//-----------------------------------------------------------------------------
+// "popup-menu"
+//-----------------------------------------------------------------------------
+static gboolean wxgtk_window_popup_menu_callback(GtkWidget*, wxWindowGTK* win)
+{
+    wxContextMenuEvent event(
+        wxEVT_CONTEXT_MENU,
+        win->GetId(),
+        wxPoint(-1, -1));
+    event.SetEventObject(win);
+    return win->GetEventHandler()->ProcessEvent(event);
+}
+#endif // __WXGTK20__
 
 //-----------------------------------------------------------------------------
 // "focus_in_event"
@@ -2907,6 +2922,8 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
 #ifdef __WXGTK20__
     gtk_signal_connect( GTK_OBJECT(widget), "scroll_event",
       GTK_SIGNAL_FUNC(gtk_window_wheel_callback), (gpointer)this );
+    g_signal_connect(widget, "popup_menu",
+        G_CALLBACK(wxgtk_window_popup_menu_callback), this);
 #endif
 
     gtk_signal_connect( GTK_OBJECT(widget), "enter_notify_event",

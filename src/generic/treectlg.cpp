@@ -3177,11 +3177,12 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
 
         if ( event.RightDown() )
         {
+            DoSelectItem(item, true, false);
             wxTreeEvent nevent(wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, GetId());
             nevent.m_item = item;
             nevent.m_pointDrag = CalcScrolledPosition(pt);
             nevent.SetEventObject(this);
-            GetEventHandler()->ProcessEvent(nevent);
+            event.Skip(!GetEventHandler()->ProcessEvent(nevent));
         }
         else if ( event.LeftUp() )
         {

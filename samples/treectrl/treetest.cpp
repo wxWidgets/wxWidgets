@@ -136,7 +136,6 @@ BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
     EVT_TREE_ITEM_EXPANDING(TreeTest_Ctrl, MyTreeCtrl::OnItemExpanding)
     EVT_TREE_ITEM_COLLAPSED(TreeTest_Ctrl, MyTreeCtrl::OnItemCollapsed)
     EVT_TREE_ITEM_COLLAPSING(TreeTest_Ctrl, MyTreeCtrl::OnItemCollapsing)
-    //EVT_TREE_ITEM_RIGHT_CLICK(TreeTest_Ctrl, MyTreeCtrl::OnItemRightClick)
 
     EVT_CONTEXT_MENU(MyTreeCtrl::OnContextMenu)
     EVT_TREE_SEL_CHANGED(TreeTest_Ctrl, MyTreeCtrl::OnSelChanged)
@@ -1145,11 +1144,6 @@ void MyTreeCtrl::OnItemActivated(wxTreeEvent& event)
     }
 
     wxLogMessage(wxT("OnItemActivated"));
-}
-
-void MyTreeCtrl::OnItemRightClick(wxTreeEvent& event)
-{
-    ShowMenu(event.GetItem(), event.GetPoint());
 }
 
 void MyTreeCtrl::OnContextMenu(wxContextMenuEvent& event)

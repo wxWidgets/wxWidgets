@@ -125,8 +125,7 @@ protected:
     void OnUpdateSubMenuRadio(wxUpdateUIEvent& event);
 
 #if USE_CONTEXT_MENU
-    void OnContextMenu(wxContextMenuEvent& event)
-        { ShowContextMenu(ScreenToClient(event.GetPosition())); }
+    void OnContextMenu(wxContextMenuEvent& event);
 #else
     void OnRightUp(wxMouseEvent& event)
         { ShowContextMenu(event.GetPosition()); }
@@ -999,6 +998,22 @@ void MyFrame::OnUpdateSubMenuRadio(wxUpdateUIEvent& event)
     else
         event.Check(false);
 }
+
+#if USE_CONTEXT_MENU
+void MyFrame::OnContextMenu(wxContextMenuEvent& event)
+{
+    wxPoint point = event.GetPosition();
+    // If from keyboard
+    if (point.x == -1 && point.y == -1) {
+        wxSize size = GetSize();
+        point.x = size.x / 2;
+        point.y = size.y / 2;
+    } else {
+        point = ScreenToClient(point);
+    }
+    ShowContextMenu(point);
+}
+#endif
 
 void MyFrame::OnSize(wxSizeEvent& WXUNUSED(event))
 {

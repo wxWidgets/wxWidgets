@@ -76,7 +76,6 @@ public:
     void OnContextMenu(wxContextMenuEvent& event);
     void OnGetInfo(wxTreeEvent& event);
     void OnTreeRMouseClick(wxTreeEvent& event);
-    void OnItemRightClick(wxTreeEvent& event);
     void OnSetInfo(wxTreeEvent& event);
     void OnItemExpanded(wxTreeEvent& event);
     void OnItemExpanding(wxTreeEvent& event);
