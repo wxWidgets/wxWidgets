@@ -277,8 +277,8 @@ wxHtmlImageCell::wxHtmlImageCell(wxFSFile *input, int w, int h, double scale, in
         if (w != -1) m_Width = w; else m_Width = ww;
         if (h != -1) m_Height = h; else m_Height = hh;
 
-        m_Width = (int)(scale * (double)w);
-        m_Height = (int)(scale * (double)h);
+        m_Width = (int)(scale * (double)m_Width);
+        m_Height = (int)(scale * (double)m_Height);
 
         if ((m_Width != ww) || (m_Height != hh)) {
             wxImage img2 = img -> Scale(m_Width, m_Height);
