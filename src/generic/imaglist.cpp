@@ -49,8 +49,11 @@ int wxImageList::Add( const wxBitmap &bitmap )
 };
 
 wxBitmap *wxImageList::GetBitmap(int index) {
-  wxNode *node = m_images.Nth( index );
-  return (wxBitmap*)node->Data();
+  wxNode *node = m_images.Nth(index);
+  if (node != NULL)
+    return (wxBitmap*)node->Data();
+
+  return NULL;
 }
     
 bool wxImageList::Replace( int index, const wxBitmap &bitmap )
