@@ -145,18 +145,18 @@ GridFrame::GridFrame()
     fileMenu->Append( wxID_EXIT, _T("E&xit\tAlt-X") );
 
     wxMenu *viewMenu = new wxMenu;
-    viewMenu->Append( ID_TOGGLEROWLABELS,  _T("&Row labels"), _T(""), TRUE );
-    viewMenu->Append( ID_TOGGLECOLLABELS,  _T("&Col labels"), _T(""), TRUE );
-    viewMenu->Append( ID_TOGGLEEDIT,  _T("&Editable"), _T(""), TRUE );
-    viewMenu->Append( ID_TOGGLEROWSIZING, _T("Ro&w drag-resize"), _T(""), TRUE );
-    viewMenu->Append( ID_TOGGLECOLSIZING, _T("C&ol drag-resize"), _T(""), TRUE );
-    viewMenu->Append( ID_TOGGLEGRIDSIZING, _T("&Grid drag-resize"), _T(""), TRUE );
-    viewMenu->Append( ID_TOGGLEGRIDLINES, _T("&Grid Lines"), _T(""), TRUE );
+    viewMenu->Append( ID_TOGGLEROWLABELS,  _T("&Row labels"), _T(""), wxITEM_CHECK );
+    viewMenu->Append( ID_TOGGLECOLLABELS,  _T("&Col labels"), _T(""), wxITEM_CHECK );
+    viewMenu->Append( ID_TOGGLEEDIT,  _T("&Editable"), _T(""), wxITEM_CHECK );
+    viewMenu->Append( ID_TOGGLEROWSIZING, _T("Ro&w drag-resize"), _T(""), wxITEM_CHECK );
+    viewMenu->Append( ID_TOGGLECOLSIZING, _T("C&ol drag-resize"), _T(""), wxITEM_CHECK );
+    viewMenu->Append( ID_TOGGLEGRIDSIZING, _T("&Grid drag-resize"), _T(""), wxITEM_CHECK );
+    viewMenu->Append( ID_TOGGLEGRIDLINES, _T("&Grid Lines"), _T(""), wxITEM_CHECK );
     viewMenu->Append( ID_SET_HIGHLIGHT_WIDTH, _T("&Set Cell Highlight Width..."), _T("") );
     viewMenu->Append( ID_SET_RO_HIGHLIGHT_WIDTH, _T("&Set Cell RO Highlight Width..."), _T("") );
     viewMenu->Append( ID_AUTOSIZECOLS, _T("&Auto-size cols") );
-    viewMenu->Append( ID_CELLOVERFLOW, _T("&Overflow cells"), _T(""), TRUE );
-    viewMenu->Append( ID_RESIZECELL, _T("&Resize cell (7,1)"), _T(""), TRUE );
+    viewMenu->Append( ID_CELLOVERFLOW, _T("&Overflow cells"), _T(""), wxITEM_CHECK );
+    viewMenu->Append( ID_RESIZECELL, _T("&Resize cell (7,1)"), _T(""), wxITEM_CHECK );
 
     wxMenu *rowLabelMenu = new wxMenu;
 
@@ -194,7 +194,7 @@ GridFrame::GridFrame()
     wxMenu *selectMenu = new wxMenu;
     selectMenu->Append( ID_SELECT_UNSELECT, _T("Add new cells to the selection"),
                         _T("When off, old selection is deselected before ")
-                        _T("selecting the new cells"), TRUE );
+                        _T("selecting the new cells"), wxITEM_CHECK );
     selectMenu->Append( ID_SELECT_ALL, _T("Select all"));
     selectMenu->Append( ID_SELECT_ROW, _T("Select row 2"));
     selectMenu->Append( ID_SELECT_COL, _T("Select col 2"));
