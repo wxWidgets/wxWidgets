@@ -348,7 +348,6 @@ Checking in src/common/wxexpr.cpp;
 new revision: 1.27; previous revision: 1.26
 done
 
-
 27. Fix assert (and crash in debug) in wxFileConfigGroup::DeleteSubgroupByName
 
 Checking in src/common/fileconf.cpp;
@@ -362,4 +361,54 @@ Checking in src/msw/scrolbar.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/msw/scrolbar.cpp,v  <--  scrolbar.cpp
 new revision: 1.24; previous revision: 1.23
 done
+
+29. Patch 664399: wxButton default size should not be adjusted
+    (wxUniv), cures overlapping buttons on e.g. wxWizard sample.
+
+Index: src/univ/button.cpp
+===================================================================
+RCS file: /pack/cvsroots/wxwindows/wxWindows/src/univ/button.cpp,v
+retrieving revision 1.15
+diff -r1.15 button.cpp
+116,117c116,117
+<         s_sizeBtn.x = 8*dc.GetCharWidth();
+<         s_sizeBtn.y = (11*dc.GetCharHeight())/10 + 2;
+---
+>         s_sizeBtn.x = dc.GetCharWidth()*10 + 2;
+>         s_sizeBtn.y = dc.GetCharHeight()*11/10 + 2;
+139,149c139,140
+<     // for compatibility with other ports, the buttons default size is never
+<     // less than the standard one, but not when display not PDAs.
+<     if (wxSystemSettings::GetScreenType() > wxSYS_SCREEN_PDA)
+<     {
+<         if ( !(GetWindowStyle() & wxBU_EXACTFIT) )
+<         {
+<             wxSize szDef = GetDefaultSize();
+<             if ( width < szDef.x )
+<                 width = szDef.x;
+<         }
+<     }
+---
+>     // The default size should not be adjusted, so the code is moved into the 
+>     // renderer. This is conceptual wrong but currently the only solution
+
+Index: src/univ/themes/win32.cpp
+===================================================================
+RCS file: /pack/cvsroots/wxwindows/wxWindows/src/univ/themes/win32.cpp,v
+retrieving revision 1.55
+diff -r1.55 win32.cpp
+3989a3990,4001
+>         // for compatibility with other ports, the buttons default size is never
+>         // less than the standard one, but not when display not PDAs.
+>         if (wxSystemSettings::GetScreenType() > wxSYS_SCREEN_PDA)
+>         {
+>             if ( !(window->GetWindowStyle() & wxBU_EXACTFIT) )
+>             {
+>                 wxSize szDef = wxButton::GetDefaultSize();
+>                 if ( size->x < szDef.x )
+>                     size->x = szDef.x;
+>             }
+>         }
+> 
+
 
