@@ -9,7 +9,8 @@ from bundlebuilder import buildapp
 
 
 # See below.  Set to wherever your wxMac dynlibs are installed.
-# (Probably /usr/local/wxPython-2.5.2.?/lib)
+# (Probably /usr/local/lib/wxPython-2.5.2.?/lib) If you don't use all
+# the contribs libs then you can use a more restrictive list.
 wxLibs = "/opt/wx/2.5/lib/libwx*2.5.2.[dr]*"
 
 
@@ -25,7 +26,7 @@ buildapp(
     # needed by extension modules, so we have to help it out.
     libs = glob.glob(wxLibs),
 
-    # Some modules will not be found automatically, so we ned to help
+    # Some modules will not be found automatically, so we need to help
     includeModules = ["cStringIO"],
     
     verbosity = 1
