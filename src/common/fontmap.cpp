@@ -57,8 +57,11 @@
 static const wxChar* FONTMAPPER_ROOT_PATH = wxT("/wxWindows/FontMapper");
 static const wxChar* FONTMAPPER_CHARSET_PATH = wxT("Charsets");
 static const wxChar* FONTMAPPER_CHARSET_ALIAS_PATH = wxT("Aliases");
+
+// we only ask questions in GUI mode
 #if wxUSE_GUI
     static const wxChar* FONTMAPPER_FONT_FROM_ENCODING_PATH = wxT("Encodings");
+    static const wxChar* FONTMAPPER_FONT_DONT_ASK = wxT("none");
 #endif // wxUSE_GUI
 
 // encodings supported by GetEncodingDescription
@@ -663,29 +666,41 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
 
         RestorePath(pathOld);
 
-        if ( !!fontinfo && !!facename )
+        // this special value means that we don't know of fonts for this
+        // encoding but, moreover, have already asked the user as well and he
+        // didn't specify any font neither
+        if ( fontinfo == FONTMAPPER_FONT_DONT_ASK )
         {
-            // we tried to find a match with facename - now try without it
-            fontinfo = config->Read(encName);
+            interactive = FALSE;
         }
+        else // use the info entered the last time
+        {
+            if ( !!fontinfo && !!facename )
+            {
+                // we tried to find a match with facename - now try without it
+                fontinfo = config->Read(encName);
+            }
 
-        if ( !!fontinfo )
-        {
-            if ( info->FromString(fontinfo) )
+            if ( !!fontinfo )
             {
-                if ( wxTestFontEncoding(*info) )
+                if ( info->FromString(fontinfo) )
                 {
-                    // ok, got something
-                    return TRUE;
+                    if ( wxTestFontEncoding(*info) )
+                    {
+                        // ok, got something
+                        return TRUE;
+                    }
+                    //else: no such fonts, look for something else
+                    //      (should we erase the outdated value?)
                 }
-                //else: no such fonts, look for something else
+                else
+                {
+                    wxLogDebug(wxT("corrupted config data: string '%s' is not a valid font encoding info"),
+                               fontinfo.c_str());
+                }
             }
-            else
-            {
-                wxLogDebug(wxT("corrupted config data: string '%s' is not a valid font encoding info"), fontinfo.c_str());
-            }
+            //else: there is no information in config about this encoding
         }
-        //else: there is no information in config about this encoding
     }
 #endif // wxUSE_CONFIG
 
@@ -698,7 +713,7 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
 
         // the message
         wxString msg;
-        msg.Printf(_("The encoding '%s' is unknown.\nWould you like to select a font to be used for this encoding\n(otherwise the text in this encoding will not be shown correctly)?"),
+        msg.Printf(_("No font for displaying text in encoding '%s' found.\nWould you like to select a font to be used for this encoding\n(otherwise the text in this encoding will not be shown correctly)?"),
                      GetEncodingDescription(encoding).c_str());
 
         wxWindow *parent = m_windowParent;
@@ -721,20 +736,32 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
                 info -> encoding = retData.GetEncoding();
 
 #if wxUSE_CONFIG
-            // remember this in the config
+                // remember this in the config
                 if ( ChangePath(FONTMAPPER_FONT_FROM_ENCODING_PATH, &pathOld) )
                 {
                     GetConfig()->Write(configEntry, info->ToString());
 
                     RestorePath(pathOld);
                 }
-#endif
+#endif // wxUSE_CONFIG
 
                 return TRUE;
             }
             //else: the user canceled the font selection dialog
         }
-        //else: the user doesn't want to select a font
+        else
+        {
+            // the user doesn't want to select a font for this encoding,
+            // remember it to avoid asking the same question again later
+#if wxUSE_CONFIG
+            if ( ChangePath(FONTMAPPER_FONT_FROM_ENCODING_PATH, &pathOld) )
+            {
+                GetConfig()->Write(configEntry, FONTMAPPER_FONT_DONT_ASK);
+
+                RestorePath(pathOld);
+            }
+#endif // wxUSE_CONFIG
+        }
     }
     //else: we're in non-interactive mode
 
