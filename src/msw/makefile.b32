@@ -1045,67 +1045,67 @@ $(MSWDIR)\winpars.obj: $(HTMLDIR)\winpars.$(SRCSUFF)
 
 all_utils:
     cd $(WXDIR)\utils
-    make -f makefile.b32
+    ${MAKE} -f makefile.b32
     cd $(WXDIR)\src\msw
 
 all_samples:
     cd $(WXDIR)\samples
-    make -f makefile.b32
+    ${MAKE} -f makefile.b32
     cd $(WXDIR)\src\msw
 
 all_execs:
     cd $(WXDIR)\utils
-    make -f makefile.b32 all_execs
+    ${MAKE} -f makefile.b32 all_execs
     cd $(WXDIR)\src\msw
 
 png:    $(CFG)
         cd $(WXDIR)\src\png
-        make -f makefile.b32
+        ${MAKE} -f makefile.b32
         cd $(WXDIR)\src\msw
 
 clean_png:
         cd $(WXDIR)\src\png
-        make -f makefile.b32 clean
+        ${MAKE} -f makefile.b32 clean
         cd $(WXDIR)\src\msw
 
 zlib:   $(CFG)
         cd $(WXDIR)\src\zlib
-        make -f makefile.b32 lib
+        ${MAKE} -f makefile.b32 lib
         cd $(WXDIR)\src\msw
 
 clean_zlib:
         cd $(WXDIR)\src\zlib
-        make -f makefile.b32 clean
+        ${MAKE} -f makefile.b32 clean
         cd $(WXDIR)\src\msw
 
 jpeg:    $(CFG)
         cd $(WXDIR)\src\jpeg
-        make -f makefile.b32
+        ${MAKE} -f makefile.b32
         cd $(WXDIR)\src\msw
 
 clean_jpeg:
         cd $(WXDIR)\src\jpeg
-        make -f makefile.b32 clean
+        ${MAKE} -f makefile.b32 clean
         cd $(WXDIR)\src\msw
 
 regex:   $(CFG)
         cd $(WXDIR)\src\regex
-        make -f makefile.b32 lib
+        ${MAKE} -f makefile.b32 lib
         cd $(WXDIR)\src\msw
 
 clean_regex:
         cd $(WXDIR)\src\regex
-        make -f makefile.b32 clean
+        ${MAKE} -f makefile.b32 clean
         cd $(WXDIR)\src\msw
 
 tiff:   $(CFG)
         cd $(WXDIR)\src\tiff
-        make -f makefile.b32 lib
+        ${MAKE} -f makefile.b32 lib
         cd $(WXDIR)\src\msw
 
 clean_tiff:
         cd $(WXDIR)\src\tiff
-        make -f makefile.b32 clean
+        ${MAKE} -f makefile.b32 clean
         cd $(WXDIR)\src\msw
 
 $(CFG): makefile.b32
@@ -1180,65 +1180,65 @@ portingps:	$(WXDIR)\docs\ps\porting.ps
 
 allhlp: wxhlp portinghlp prophlp
         cd $(WXDIR)\utils\dialoged\src
-        make -f makefile.b32 hlp
+        ${MAKE} -f makefile.b32 hlp
         cd $(THISDIR)
 
 #        cd $(WXDIR)\utils\wxhelp\src
-#        make -f makefile.b32 hlp
+#        ${MAKE} -f makefile.b32 hlp
 #        cd $(WXDIR)\utils\tex2rtf\src
-#        make -f makefile.b32 hlp
+#        ${MAKE} -f makefile.b32 hlp
 #        cd $(WXDIR)\utils\wxgraph\src
-#        make -f makefile.b32 hlp
+#        ${MAKE} -f makefile.b32 hlp
 #        cd $(WXDIR)\utils\wxchart\src
-#        make -f makefile.b32 hlp
+#        ${MAKE} -f makefile.b32 hlp
 #        cd $(WXDIR)\utils\wxtree\src
-#        make -f makefile.b32 hlp
+#        ${MAKE} -f makefile.b32 hlp
 #        cd $(WXDIR)\utils\wxbuild\src
-#        make -f makefile.b32 hlp
+#        ${MAKE} -f makefile.b32 hlp
 #        cd $(WXDIR)\utils\wxgrid\src
-#        make -f makefile.b32 hlp
+#        ${MAKE} -f makefile.b32 hlp
 
 allhtml: wxhtml portinghtml prophtml
         cd $(WXDIR)\utils\dialoged\src
-        make -f makefile.b32 html
+        ${MAKE} -f makefile.b32 html
         cd $(THISDIR)
 
-#        make -f makefile.b32 html
+#        ${MAKE} -f makefile.b32 html
 #        cd $(WXDIR)\utils\dialoged\src
-#        make -f makefile.b32 html
+#        ${MAKE} -f makefile.b32 html
 #        cd $(WXDIR)\utils\hytext\src
-#        make -f makefile.b32 html
+#        ${MAKE} -f makefile.b32 html
 #        cd $(WXDIR)\utils\wxhelp\src
-#        make -f makefile.b32 html
+#        ${MAKE} -f makefile.b32 html
 #        cd $(WXDIR)\utils\tex2rtf\src
-#        make -f makefile.b32 html
+#        ${MAKE} -f makefile.b32 html
 #        cd $(WXDIR)\utils\wxgraph\src
-#        make -f makefile.b32 html
+#        ${MAKE} -f makefile.b32 html
 #        cd $(WXDIR)\utils\wxchart\src
-#        make -f makefile.b32 html
+#        ${MAKE} -f makefile.b32 html
 #        cd $(WXDIR)\utils\wxtree\src
-#        make -f makefile.b32 html
+#        ${MAKE} -f makefile.b32 html
 
 allps: wxps referencps portingps propps
         cd $(WXDIR)\utils\dialoged\src
-        make -f makefile.b32 ps
+        ${MAKE} -f makefile.b32 ps
         cd $(THISDIR)
 
 allpdfrtf: pdfrtf portingpdfrtf proppdfrtf
         cd $(WXDIR)\utils\dialoged\src
-        make -f makefile.b32 pdfrtf
+        ${MAKE} -f makefile.b32 pdfrtf
         cd $(THISDIR)
 
 #        cd $(WXDIR)\utils\wxhelp\src
-#        make -f makefile.b32 ps
+#        ${MAKE} -f makefile.b32 ps
 #        cd $(WXDIR)\utils\tex2rtf\src
-#        make -f makefile.b32 ps
+#        ${MAKE} -f makefile.b32 ps
 #        cd $(WXDIR)\utils\wxgraph\src
-#        make -f makefile.b32 ps
+#        ${MAKE} -f makefile.b32 ps
 #        cd $(WXDIR)\utils\wxchart\src
-#        make -f makefile.b32 ps
+#        ${MAKE} -f makefile.b32 ps
 #        cd $(WXDIR)\utils\wxtree\src
-#        make -f makefile.b32 ps
+#        ${MAKE} -f makefile.b32 ps
 #        cd $(THISDIR)
 
 $(DOCDIR)/winhelp/wx.hlp:         $(DOCDIR)/latex/wx/wx.rtf $(DOCDIR)/latex/wx/wx.hpj
