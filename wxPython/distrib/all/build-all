@@ -218,11 +218,11 @@ function DoOSXBuild {
     # test if the target machine is online
     if ping -q -c1 -w1 $host > /dev/null; then
 	echo "-----------------------------------------------------------------"
-	echo " The $host machine is online, build continuing..."
+	echo " The $host machine is online, OSX-$flavor build continuing..."
 	echo "-----------------------------------------------------------------"
     else
 	echo "-----------------------------------------------------------------"
-	echo "The $host machine is offline, skipping the OSX $flavor build."
+	echo "The $host machine is offline, skipping the OSX-$flavor build."
 	echo "-----------------------------------------------------------------"
 	return 0
     fi
@@ -230,7 +230,7 @@ function DoOSXBuild {
     echo "-=-=- Starting OSX-$flavor build on $host..."
 
     echo "Copying source files and build script..."
-    ssh $host "mkdir -p $OSX_BUILD && rm -rf $OSX_BUILD/*"
+    ssh root@$host "mkdir -p $OSX_BUILD && rm -rf $OSX_BUILD/* || true"
     scp $STAGING_DIR/wxPythonSrc-$VERSION.tar.gz \
 	$STAGING_DIR/wxPythonDocs-$VERSION.tar.gz \
 	$STAGING_DIR/wxPythonDemo-$VERSION.tar.gz \

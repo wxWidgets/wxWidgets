@@ -33,7 +33,7 @@ shift;shift;shift;shift;shift
 PYVER=$@
 
 
-export PATH=/sw/bin:$PATH
+export PATH=/sw/bin:/usr/local/bin:$PATH
 
 
 # untar the source 

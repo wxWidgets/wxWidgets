@@ -18,7 +18,7 @@ set -o errexit
 
 echo "-=-=-=-  Hello from $HOSTNAME  -=-=-=-"
 
-if [ $# -lt 4]; then
+if [ $# -lt 4 ]; then
     echo "Usage: $0 WXDIR DESTDIR SKIPCLEAN VERSION PYVER..."
     exit 1
 fi
