@@ -26,6 +26,8 @@ class wxMemoryInputStream: public wxInputStream {
 
   char Peek();
 
+  wxStreamBuffer *InputStreamBuffer() const { return m_i_streambuf; }
+
  protected:
   wxStreamBuffer *m_i_streambuf;
 
@@ -39,6 +41,9 @@ class wxMemoryOutputStream:  public wxOutputStream {
  public:
   wxMemoryOutputStream(char *data = NULL, size_t length = 0);
   virtual ~wxMemoryOutputStream();
+  virtual size_t StreamSize() const { return m_o_streambuf->GetLastAccess(); }
+
+  wxStreamBuffer *OutputStreamBuffer() const { return m_o_streambuf; }
 
  protected:
   wxStreamBuffer *m_o_streambuf;
