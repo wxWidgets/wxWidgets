@@ -9,13 +9,7 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __WXMSW__
-#ifdef __WIN95__
-#define wxToolBar wxToolBar95
-#else
-#define wxToolBar wxToolBarMSW
-#endif
-#endif
+#include <wx/toolbar.h>
 
 // Define a new application
 class MyApp: public wxApp
