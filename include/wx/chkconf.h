@@ -1,13 +1,13 @@
-/**
-* Name:        wx/chkconf.h
-* Purpose:     check the config settings for consistency
-* Author:      Vadim Zeitlin
-* Modified by:
-* Created:     09.08.00
-* RCS-ID:      $Id$
-* Copyright:   (c) 2000 Vadim Zeitlin <vadim@wxwidgets.org>
-* Licence:     wxWindows licence
-*/
+/*
+ * Name:        wx/chkconf.h
+ * Purpose:     check the config settings for consistency
+ * Author:      Vadim Zeitlin
+ * Modified by:
+ * Created:     09.08.00
+ * RCS-ID:      $Id$
+ * Copyright:   (c) 2000 Vadim Zeitlin <vadim@wxwidgets.org>
+ * Licence:     wxWindows licence
+ */
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
 
@@ -22,6 +22,8 @@
 #elif defined(__WXMSW__)
 #  include "wx/msw/chkconf.h"
 #elif defined(__WXMAC__)
+#  include "wx/mac/chkconf.h"
+#elif defined(__WXMOTIF__)
 #  include "wx/mac/chkconf.h"
 #endif
 
@@ -1216,24 +1218,6 @@
 #   endif  /* wxUSE_DYNAMIC_LOADER */
 
 #endif /* wxMSW */
-
-/* wxMAC-specific dependencies */
-#ifdef __WXMAC__
-#   if wxUSE_UNICODE
-#       if !TARGET_CARBON
-#           ifdef wxABORT_ON_CONFIG_ERROR
-#               error "wxUSE_UNICODE is only supported for Carbon Targets."
-#           else
-#               define wxUSE_UNICODE 0
-#           endif
-#       endif
-#   endif
-#endif /* wxMAC */
-/* wxMotif-specific dependencies */
-#if defined(__WXMOTIF__) && wxUSE_NOTEBOOK && !wxUSE_TAB_DIALOG
-#  undef wxUSE_TAB_DIALOG
-#  define wxUSE_TAB_DIALOG 1
-#endif
 
 /* wxMGL-specific dependencies */
 #ifdef __WXMGL__
