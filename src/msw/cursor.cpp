@@ -73,7 +73,7 @@ wxCursor::wxCursor(const char WXUNUSED(bits)[], int WXUNUSED(width), int WXUNUSE
 
 wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int hotSpotY)
 {
-  m_refData = new wxIconRefData;
+  m_refData = new wxCursorRefData;
 
   M_CURSORDATA->m_destroyCursor = FALSE;
   M_CURSORDATA->m_hCursor = 0;
@@ -125,7 +125,7 @@ wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int ho
 // Cursors by stock number
 wxCursor::wxCursor(int cursor_type)
 {
-  m_refData = new wxIconRefData;
+  m_refData = new wxCursorRefData;
 
   switch (cursor_type)
   {

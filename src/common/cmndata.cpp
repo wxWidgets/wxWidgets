@@ -677,6 +677,7 @@ wxPrintDialogData::wxPrintDialogData()
     m_printAllPages = FALSE;
     m_printCollate = FALSE;
     m_printToFile = FALSE;
+    m_printSelection = FALSE;
     m_printEnableSelection = FALSE;
     m_printEnablePageNumbers = TRUE;
     m_printEnablePrintToFile = TRUE;
@@ -702,6 +703,7 @@ wxPrintDialogData::wxPrintDialogData(const wxPrintData& printData)
     m_printAllPages = FALSE;
     m_printCollate = FALSE;
     m_printToFile = FALSE;
+    m_printSelection = FALSE;
     m_printEnableSelection = FALSE;
     m_printEnablePageNumbers = TRUE;
     m_printEnablePrintToFile = TRUE;
@@ -789,6 +791,8 @@ void wxPrintDialogData::ConvertToNative()
 
     if ( m_printAllPages )
         pd->Flags |= PD_ALLPAGES;
+    if ( m_printAllPages )
+        pd->Flags |= PD_SELECTION;
     if ( m_printCollate )
         pd->Flags |= PD_COLLATE;
     if ( m_printToFile )
@@ -834,6 +838,7 @@ void wxPrintDialogData::ConvertFromNative()
     m_printNoCopies = pd->nCopies ;
 
     m_printAllPages = ((pd->Flags & PD_ALLPAGES) == PD_ALLPAGES);
+    m_printSelection = ((pd->Flags & PD_SELECTION) == PD_SELECTION);
     m_printCollate = ((pd->Flags & PD_COLLATE) == PD_COLLATE);
     m_printToFile = ((pd->Flags & PD_PRINTTOFILE) == PD_PRINTTOFILE);
     m_printEnablePrintToFile = ((pd->Flags & PD_DISABLEPRINTTOFILE) != PD_DISABLEPRINTTOFILE);
@@ -881,6 +886,7 @@ void wxPrintDialogData::operator=(const wxPrintDialogData& data)
     m_printAllPages = data.m_printAllPages;
     m_printCollate = data.m_printCollate;
     m_printToFile = data.m_printToFile;
+    m_printSelection = data.m_printSelection;
     m_printEnableSelection = data.m_printEnableSelection;
     m_printEnablePageNumbers = data.m_printEnablePageNumbers;
     m_printEnableHelp = data.m_printEnableHelp;
@@ -1012,7 +1018,6 @@ void wxPageSetupDialogData::ConvertToNative()
         GlobalFree(pd->hDevMode);
         pd->hDevMode = NULL;
     }
-
 
     pd->hDevMode = (HGLOBAL) m_printData.GetNativeData();
 

@@ -457,6 +457,13 @@ Returns a reference to the internal wxPrintData object.
 
 Returns TRUE if the user has selected printing to a file.
 
+\membersection{wxPrintDialogData::GetSelection}\label{wxprintdialogdatagetselection}
+
+\constfunc{bool}{GetSelection}{\void}
+
+Returns TRUE if the user requested that the selection be printed (where 'selection' is
+a concept specific to the application).
+
 \membersection{wxPrintDialogData::GetToPage}\label{wxprintdialogdatagettopage}
 
 \constfunc{int}{GetToPage}{\void}
@@ -504,6 +511,13 @@ Sets the internal wxPrintData.
 \func{void}{SetPrintToFile}{\param{bool }{flag}}
 
 Sets the 'Print to file' checkbox to TRUE or FALSE.
+
+\membersection{wxPrintDialogData::SetSelection}\label{wxprintdialogdatasetselection}
+
+\func{void}{SetSelection}{\param{bool}{ flag}}
+
+Selects the 'Selection' radio button. The effect of printing the selection depends on how the application
+implements this command, if at all.
 
 \membersection{wxPrintDialogData::SetSetupDialog}\label{wxprintdialogdatasetsetupdialog}
 

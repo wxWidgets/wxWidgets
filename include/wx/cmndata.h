@@ -222,6 +222,7 @@ class WXDLLEXPORT wxPrintDialogData: public wxObject
     int GetMaxPage() const { return m_printMaxPage; };
     int GetNoCopies() const { return m_printNoCopies; };
     bool GetAllPages() const { return m_printAllPages; };
+    bool GetSelection() const { return m_printSelection; };
     bool GetCollate() const { return m_printCollate; };
     bool GetPrintToFile() const { return m_printToFile; };
     bool GetSetupDialog() const { return m_printSetupDialog; };
@@ -232,6 +233,7 @@ class WXDLLEXPORT wxPrintDialogData: public wxObject
     void SetMaxPage(int v) { m_printMaxPage = v; };
     void SetNoCopies(int v) { m_printNoCopies = v; };
     void SetAllPages(bool flag) { m_printAllPages = flag; };
+    void SetSelection(bool flag) { m_printSelection = flag; };
     void SetCollate(bool flag) { m_printCollate = flag; };
     void SetPrintToFile(bool flag) { m_printToFile = flag; };
     void SetSetupDialog(bool flag) { m_printSetupDialog = flag; };
@@ -274,6 +276,7 @@ private:
     bool            m_printAllPages;
     bool            m_printCollate;
     bool            m_printToFile;
+    bool            m_printSelection;
     bool            m_printEnableSelection;
     bool            m_printEnablePageNumbers;
     bool            m_printEnableHelp;
