@@ -180,7 +180,7 @@ public:
                 char* name = "panel");
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
-    %pragma(python) addtomethod = "wxPreWindow:val._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreWindow:val._setOORInfo(val)"
 
 
     void CaptureMouse();
@@ -475,7 +475,7 @@ public:
                 char* name = "scrolledWindow");
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
-    %pragma(python) addtomethod = "wxPreScrolledWindow:val._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreScrolledWindow:val._setOORInfo(val)"
 
     void EnableScrolling(bool xScrolling, bool yScrolling);
     int GetScrollPageSize(int orient);

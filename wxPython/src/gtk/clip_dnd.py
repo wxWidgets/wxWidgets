@@ -255,6 +255,26 @@ class wxCustomDataObject(wxCustomDataObjectPtr):
 
 
 
+class wxURLDataObjectPtr(wxDataObjectCompositePtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def GetURL(self, *_args, **_kwargs):
+        val = apply(clip_dndc.wxURLDataObject_GetURL,(self,) + _args, _kwargs)
+        return val
+    def SetURL(self, *_args, **_kwargs):
+        val = apply(clip_dndc.wxURLDataObject_SetURL,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxURLDataObject instance at %s>" % (self.this,)
+class wxURLDataObject(wxURLDataObjectPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(clip_dndc.new_wxURLDataObject,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 class wxClipboardPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
@@ -503,4 +523,5 @@ wxDragError = clip_dndc.wxDragError
 wxDragNone = clip_dndc.wxDragNone
 wxDragCopy = clip_dndc.wxDragCopy
 wxDragMove = clip_dndc.wxDragMove
+wxDragLink = clip_dndc.wxDragLink
 wxDragCancel = clip_dndc.wxDragCancel

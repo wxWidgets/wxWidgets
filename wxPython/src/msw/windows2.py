@@ -123,7 +123,7 @@ class wxNotebook(wxNotebookPtr):
 def wxPreNotebook(*_args,**_kwargs):
     val = wxNotebookPtr(apply(windows2c.new_wxPreNotebook,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -230,7 +230,7 @@ class wxSplitterWindow(wxSplitterWindowPtr):
 def wxPreSplitterWindow(*_args,**_kwargs):
     val = wxSplitterWindowPtr(apply(windows2c.new_wxPreSplitterWindow,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 

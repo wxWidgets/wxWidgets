@@ -215,7 +215,7 @@ class wxCalendarCtrl(wxCalendarCtrlPtr):
 def wxPreCalendarCtrl(*_args,**_kwargs):
     val = wxCalendarCtrlPtr(apply(calendarc.new_wxPreCalendarCtrl,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 

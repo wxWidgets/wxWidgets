@@ -51,7 +51,7 @@ public:
                 char* name = "statusBar");
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
-    %pragma(python) addtomethod = "wxPreStatusBar:val._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreStatusBar:val._setOORInfo(val)"
 
     %addmethods {
         %new wxRect* GetFieldRect(long item) {
@@ -293,7 +293,7 @@ public:
               const char* name = wxToolBarNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
-    %pragma(python) addtomethod = "wxPreToolBar:val._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreToolBar:val._setOORInfo(val)"
 
     wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y);
 };
@@ -319,7 +319,7 @@ public:
                     const char* name = wxToolBarNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
-    %pragma(python) addtomethod = "wxPreToolBarSimple:val._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreToolBarSimple:val._setOORInfo(val)"
 
     wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y);
 };

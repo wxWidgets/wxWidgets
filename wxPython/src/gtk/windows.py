@@ -573,7 +573,7 @@ class wxWindow(wxWindowPtr):
 def wxPreWindow(*_args,**_kwargs):
     val = wxWindowPtr(apply(windowsc.new_wxPreWindow,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -684,7 +684,7 @@ class wxScrolledWindow(wxScrolledWindowPtr):
 def wxPreScrolledWindow(*_args,**_kwargs):
     val = wxScrolledWindowPtr(apply(windowsc.new_wxPreScrolledWindow,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 

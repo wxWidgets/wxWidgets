@@ -90,7 +90,7 @@ public:
                  const char* name = "sashWindow");
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
-    %pragma(python) addtomethod = "wxPreSashWindow:val._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreSashWindow:val._setOORInfo(val)"
 
     bool GetSashVisible(wxSashEdgePosition edge);
     int GetDefaultBorderSize();
@@ -180,7 +180,7 @@ public:
                 const char* name = "layoutWindow");
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
-    %pragma(python) addtomethod = "wxPreSashLayoutWindow:val._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreSashLayoutWindow:val._setOORInfo(val)"
 
     wxLayoutAlignment GetAlignment();
     wxLayoutOrientation GetOrientation();
@@ -212,7 +212,7 @@ public:
     %name(wxPrePopupWindow)wxPopupWindow();
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
-    %pragma(python) addtomethod = "wxPrePopupWindow:val._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPrePopupWindow:val._setOORInfo(val)"
 
     bool Create(wxWindow *parent, int flags = wxBORDER_NONE);
 
@@ -251,7 +251,7 @@ public:
     %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPopupTransientWindow)"
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
-    %pragma(python) addtomethod = "wxPrePopupTransientWindow:val._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPrePopupTransientWindow:val._setOORInfo(val)"
 
     // popup the window (this will show it too) and keep focus at winFocus
     // (or itself if it's NULL), dismiss the popup if we lose focus

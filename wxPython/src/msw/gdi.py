@@ -1032,12 +1032,49 @@ class wxWindowDC(wxWindowDCPtr):
 
 
 
+class wxMetaFilePtr(wxObjectPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self,gdic=gdic):
+        if self.thisown == 1 :
+            gdic.delete_wxMetaFile(self)
+    def Ok(self, *_args, **_kwargs):
+        val = apply(gdic.wxMetaFile_Ok,(self,) + _args, _kwargs)
+        return val
+    def SetClipboard(self, *_args, **_kwargs):
+        val = apply(gdic.wxMetaFile_SetClipboard,(self,) + _args, _kwargs)
+        return val
+    def GetSize(self, *_args, **_kwargs):
+        val = apply(gdic.wxMetaFile_GetSize,(self,) + _args, _kwargs)
+        if val: val = wxSizePtr(val) ; val.thisown = 1
+        return val
+    def GetWidth(self, *_args, **_kwargs):
+        val = apply(gdic.wxMetaFile_GetWidth,(self,) + _args, _kwargs)
+        return val
+    def GetHeight(self, *_args, **_kwargs):
+        val = apply(gdic.wxMetaFile_GetHeight,(self,) + _args, _kwargs)
+        return val
+    def GetFileName(self, *_args, **_kwargs):
+        val = apply(gdic.wxMetaFile_GetFileName,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxMetaFile instance at %s>" % (self.this,)
+class wxMetaFile(wxMetaFilePtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(gdic.new_wxMetaFile,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 class wxMetaFileDCPtr(wxDCPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
     def Close(self, *_args, **_kwargs):
         val = apply(gdic.wxMetaFileDC_Close,(self,) + _args, _kwargs)
+        if val: val = wxMetaFilePtr(val) 
         return val
     def __repr__(self):
         return "<C wxMetaFileDC instance at %s>" % (self.this,)

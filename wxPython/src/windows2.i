@@ -80,7 +80,7 @@ public:
                char* name = "notebook");
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
-    %pragma(python) addtomethod = "wxPreNotebook:val._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreNotebook:val._setOORInfo(val)"
 
     int GetPageCount();
     int SetSelection(int nPage);
@@ -177,7 +177,7 @@ public:
                 char* name = "splitterWindow");
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
-    %pragma(python) addtomethod = "wxPreSplitterWindow:val._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreSplitterWindow:val._setOORInfo(val)"
 
     // Gets the only or left/top pane
     wxWindow *GetWindow1();

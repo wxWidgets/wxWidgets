@@ -56,7 +56,6 @@ extern PyObject *SWIG_newvarlink(void);
 #define SWIG_name    "gdic"
 
 #include "helpers.h"
-#include <wx/metafile.h>
 #include <wx/imaglist.h>
 #ifndef __WXMSW__
 #include <wx/dcps.h>

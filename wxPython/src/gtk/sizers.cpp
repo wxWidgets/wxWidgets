@@ -837,6 +837,41 @@ static void *SwigwxSizerTowxObject(void *ptr) {
     return (void *) dest;
 }
 
+static void  wxSizer__setOORInfo(wxSizer *self,PyObject * _self) {
+            self->SetClientObject(new wxPyClientData(_self));
+        }
+static PyObject *_wrap_wxSizer__setOORInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizer * _arg0;
+    PyObject * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","_self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxSizer__setOORInfo",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizer__setOORInfo. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+{
+  _arg1 = _obj1;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxSizer__setOORInfo(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static void  wxSizer_Destroy(wxSizer *self) { delete self; }
 static PyObject *_wrap_wxSizer_Destroy(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2912,6 +2947,7 @@ static PyMethodDef sizerscMethods[] = {
 	 { "wxSizer_AddSizer", (PyCFunction) _wrap_wxSizer_AddSizer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizer_AddWindow", (PyCFunction) _wrap_wxSizer_AddWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizer_Destroy", (PyCFunction) _wrap_wxSizer_Destroy, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizer__setOORInfo", (PyCFunction) _wrap_wxSizer__setOORInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizerItem_GetUserData", (PyCFunction) _wrap_wxSizerItem_GetUserData, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizerItem_SetBorder", (PyCFunction) _wrap_wxSizerItem_SetBorder, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizerItem_SetFlag", (PyCFunction) _wrap_wxSizerItem_SetFlag, METH_VARARGS | METH_KEYWORDS },

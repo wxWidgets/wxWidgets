@@ -354,7 +354,7 @@ public:
                  int style = 0);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
-    %pragma(python) addtomethod = "wxPreFindReplaceDialog:val._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreFindReplaceDialog:val._setOORInfo(val)"
 
     const wxFindReplaceData *GetData();
     void SetData(wxFindReplaceData *data);

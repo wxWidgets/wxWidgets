@@ -168,7 +168,7 @@ public:
                 const char* name = "calendar");
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
-    %pragma(python) addtomethod = "wxPreCalendarCtrl:val._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreCalendarCtrl:val._setOORInfo(val)"
 
     // set/get the current date
     // ------------------------

@@ -52,7 +52,7 @@ public:
                      const char* name = "frame");
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
-    %pragma(python) addtomethod = "wxPreMDIParentFrame:val._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreMDIParentFrame:val._setOORInfo(val)"
 
     void ActivateNext();
     void ActivatePrevious();
@@ -96,7 +96,7 @@ public:
                     const char* name = "frame");
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
-    %pragma(python) addtomethod = "wxPreMDIChildFrame:val._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreMDIChildFrame:val._setOORInfo(val)"
 
     void Activate();
     void Maximize(bool maximize);
@@ -115,7 +115,7 @@ public:
     bool Create(wxMDIParentFrame* parent, long style = 0);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
-    %pragma(python) addtomethod = "wxPreMDIClientWindow:val._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreMDIClientWindow:val._setOORInfo(val)"
 };
 
 //---------------------------------------------------------------------------

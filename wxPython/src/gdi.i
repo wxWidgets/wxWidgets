@@ -15,7 +15,6 @@
 
 %{
 #include "helpers.h"
-#include <wx/metafile.h>
 #include <wx/imaglist.h>
 #ifndef __WXMSW__
 #include <wx/dcps.h>
@@ -830,7 +829,7 @@ public:
 
     %addmethods {
         // NOTE: These methods are VERY SIMILAR in implentation.  It would be
-        // nice to factor out code and or turn them into a set of
+        // nice to factor out common code and or turn them into a set of
         // template-like macros.
 
         // Draw a point for every set of coordinants in pyPoints, optionally
@@ -1076,11 +1075,39 @@ public:
 
 
 #ifdef __WXMSW__
+
+%{
+#include <wx/metafile.h>
+%}
+
+class wxMetaFile : public wxObject {
+public:
+    wxMetaFile(const wxString& filename = wxPyEmptyStr);
+    ~wxMetaFile();
+
+    bool Ok();
+    bool SetClipboard(int width = 0, int height = 0);
+
+    wxSize GetSize();
+    int GetWidth();
+    int GetHeight();
+
+    const wxString& GetFileName() const { return m_filename; }
+
+};
+
+// bool wxMakeMetaFilePlaceable(const wxString& filename,
+//                              int minX, int minY, int maxX, int maxY, float scale=1.0);
+
+
 class wxMetaFileDC : public wxDC {
 public:
-    wxMetaFileDC(const wxString& filename = wxPyEmptyStr);
+    wxMetaFileDC(const wxString& filename = wxPyEmptyStr,
+                 int width = 0, int height = 0,
+                 const wxString& description = wxPyEmptyStr);
     wxMetaFile* Close();
 };
+
 #endif
 
 //---------------------------------------------------------------------------

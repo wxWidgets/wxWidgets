@@ -671,7 +671,7 @@ class wxListCtrl(wxListCtrlPtr):
 def wxPreListCtrl(*_args,**_kwargs):
     val = wxListCtrlPtr(apply(controls2c.new_wxPreListCtrl,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -719,7 +719,7 @@ class wxListView(wxListViewPtr):
 def wxPreListView(*_args,**_kwargs):
     val = wxListViewPtr(apply(controls2c.new_wxPreListView,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -1104,7 +1104,7 @@ class wxTreeCtrl(wxTreeCtrlPtr):
 def wxPreTreeCtrl(*_args,**_kwargs):
     val = wxTreeCtrlPtr(apply(controls2c.new_wxPreTreeCtrl,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 

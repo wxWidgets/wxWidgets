@@ -61,7 +61,7 @@ class wxMDIParentFrame(wxMDIParentFramePtr):
 def wxPreMDIParentFrame(*_args,**_kwargs):
     val = wxMDIParentFramePtr(apply(mdic.new_wxPreMDIParentFrame,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -94,7 +94,7 @@ class wxMDIChildFrame(wxMDIChildFramePtr):
 def wxPreMDIChildFrame(*_args,**_kwargs):
     val = wxMDIChildFramePtr(apply(mdic.new_wxPreMDIChildFrame,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -118,7 +118,7 @@ class wxMDIClientWindow(wxMDIClientWindowPtr):
 def wxPreMDIClientWindow(*_args,**_kwargs):
     val = wxMDIClientWindowPtr(apply(mdic.new_wxPreMDIClientWindow,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 

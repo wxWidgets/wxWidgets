@@ -40,7 +40,7 @@ class wxControl(wxControlPtr):
 def wxPreControl(*_args,**_kwargs):
     val = wxControlPtr(apply(controlsc.new_wxPreControl,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -126,7 +126,7 @@ class wxButton(wxButtonPtr):
 def wxPreButton(*_args,**_kwargs):
     val = wxButtonPtr(apply(controlsc.new_wxPreButton,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -187,7 +187,7 @@ class wxBitmapButton(wxBitmapButtonPtr):
 def wxPreBitmapButton(*_args,**_kwargs):
     val = wxBitmapButtonPtr(apply(controlsc.new_wxPreBitmapButton,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -217,7 +217,7 @@ class wxCheckBox(wxCheckBoxPtr):
 def wxPreCheckBox(*_args,**_kwargs):
     val = wxCheckBoxPtr(apply(controlsc.new_wxPreCheckBox,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -262,7 +262,7 @@ class wxChoice(wxChoicePtr):
 def wxPreChoice(*_args,**_kwargs):
     val = wxChoicePtr(apply(controlsc.new_wxPreChoice,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -328,7 +328,7 @@ class wxComboBox(wxComboBoxPtr):
 def wxPreComboBox(*_args,**_kwargs):
     val = wxComboBoxPtr(apply(controlsc.new_wxPreComboBox,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -376,7 +376,7 @@ class wxGauge(wxGaugePtr):
 def wxPreGauge(*_args,**_kwargs):
     val = wxGaugePtr(apply(controlsc.new_wxPreGauge,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -400,7 +400,7 @@ class wxStaticBox(wxStaticBoxPtr):
 def wxPreStaticBox(*_args,**_kwargs):
     val = wxStaticBoxPtr(apply(controlsc.new_wxPreStaticBox,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -424,7 +424,7 @@ class wxStaticLine(wxStaticLinePtr):
 def wxPreStaticLine(*_args,**_kwargs):
     val = wxStaticLinePtr(apply(controlsc.new_wxPreStaticLine,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -454,7 +454,7 @@ class wxStaticText(wxStaticTextPtr):
 def wxPreStaticText(*_args,**_kwargs):
     val = wxStaticTextPtr(apply(controlsc.new_wxPreStaticText,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -514,7 +514,7 @@ class wxListBox(wxListBoxPtr):
 def wxPreListBox(*_args,**_kwargs):
     val = wxListBoxPtr(apply(controlsc.new_wxPreListBox,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -550,7 +550,7 @@ class wxCheckListBox(wxCheckListBoxPtr):
 def wxPreCheckListBox(*_args,**_kwargs):
     val = wxCheckListBoxPtr(apply(controlsc.new_wxPreCheckListBox,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -742,7 +742,7 @@ class wxTextCtrl(wxTextCtrlPtr):
 def wxPreTextCtrl(*_args,**_kwargs):
     val = wxTextCtrlPtr(apply(controlsc.new_wxPreTextCtrl,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -787,7 +787,7 @@ class wxScrollBar(wxScrollBarPtr):
 def wxPreScrollBar(*_args,**_kwargs):
     val = wxScrollBarPtr(apply(controlsc.new_wxPreScrollBar,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -826,7 +826,7 @@ class wxSpinButton(wxSpinButtonPtr):
 def wxPreSpinButton(*_args,**_kwargs):
     val = wxSpinButtonPtr(apply(controlsc.new_wxPreSpinButton,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -860,7 +860,7 @@ class wxStaticBitmap(wxStaticBitmapPtr):
 def wxPreStaticBitmap(*_args,**_kwargs):
     val = wxStaticBitmapPtr(apply(controlsc.new_wxPreStaticBitmap,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -931,7 +931,7 @@ class wxRadioBox(wxRadioBoxPtr):
 def wxPreRadioBox(*_args,**_kwargs):
     val = wxRadioBoxPtr(apply(controlsc.new_wxPreRadioBox,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -961,7 +961,7 @@ class wxRadioButton(wxRadioButtonPtr):
 def wxPreRadioButton(*_args,**_kwargs):
     val = wxRadioButtonPtr(apply(controlsc.new_wxPreRadioButton,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -1042,7 +1042,7 @@ class wxSlider(wxSliderPtr):
 def wxPreSlider(*_args,**_kwargs):
     val = wxSliderPtr(apply(controlsc.new_wxPreSlider,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -1081,7 +1081,7 @@ class wxSpinCtrl(wxSpinCtrlPtr):
 def wxPreSpinCtrl(*_args,**_kwargs):
     val = wxSpinCtrlPtr(apply(controlsc.new_wxPreSpinCtrl,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -1114,7 +1114,7 @@ class wxToggleButton(wxToggleButtonPtr):
 def wxPreToggleButton(*_args,**_kwargs):
     val = wxToggleButtonPtr(apply(controlsc.new_wxPreToggleButton,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 

@@ -61,7 +61,7 @@ class wxStatusBar(wxStatusBarPtr):
 def wxPreStatusBar(*_args,**_kwargs):
     val = wxStatusBarPtr(apply(stattoolc.new_wxPreStatusBar,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -319,7 +319,7 @@ class wxToolBar(wxToolBarPtr):
 def wxPreToolBar(*_args,**_kwargs):
     val = wxToolBarPtr(apply(stattoolc.new_wxPreToolBar,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -346,7 +346,7 @@ class wxToolBarSimple(wxToolBarSimplePtr):
 def wxPreToolBarSimple(*_args,**_kwargs):
     val = wxToolBarSimplePtr(apply(stattoolc.new_wxPreToolBarSimple,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 

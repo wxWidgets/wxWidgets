@@ -414,7 +414,7 @@ public:
     %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxListCtrl)"
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
-    %pragma(python) addtomethod = "wxPreListCtrl:val._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreListCtrl:val._setOORInfo(val)"
 
     // Set the control colours
     bool SetForegroundColour(const wxColour& col);
@@ -734,7 +734,7 @@ public:
                 const wxString &name = "listctrl" );
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
-    %pragma(python) addtomethod = "wxPreListView:val._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreListView:val._setOORInfo(val)"
 
     // [de]select an item
     void Select(long n, bool on = TRUE);
@@ -1064,7 +1064,7 @@ public:
     %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxTreeCtrl)"
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
-    %pragma(python) addtomethod = "wxPreTreeCtrl:val._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreTreeCtrl:val._setOORInfo(val)"
 
     size_t GetCount();
     unsigned int GetIndent();

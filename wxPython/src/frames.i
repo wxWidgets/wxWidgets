@@ -72,7 +72,7 @@ public:
                 const char* name = "frame");
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
-    %pragma(python) addtomethod = "wxPreTopLevelWindowXXX:val._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreTopLevelWindow:val._setOORInfo(val)"
 
     // maximize = TRUE => maximize, otherwise - restore
     virtual void Maximize(bool maximize = TRUE);
@@ -125,7 +125,7 @@ public:
                 char* name = "frame");
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
-    %pragma(python) addtomethod = "wxPreFrame:val._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreFrame:val._setOORInfo(val)"
 
     wxPoint GetClientAreaOrigin();
 
@@ -189,7 +189,7 @@ public:
                 const char* name = "dialogBox");
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
-    %pragma(python) addtomethod = "wxPreDialog:val._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreDialog:val._setOORInfo(val)"
 
     void Centre(int direction = wxBOTH);
     void EndModal(int retCode);
@@ -224,7 +224,7 @@ public:
                 char* name = "frame");
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
-    %pragma(python) addtomethod = "wxPreMiniFrame:val._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreMiniFrame:val._setOORInfo(val)"
 };
 
 

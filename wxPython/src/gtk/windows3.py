@@ -125,7 +125,7 @@ class wxSashWindow(wxSashWindowPtr):
 def wxPreSashWindow(*_args,**_kwargs):
     val = wxSashWindowPtr(apply(windows3c.new_wxPreSashWindow,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -236,7 +236,7 @@ class wxSashLayoutWindow(wxSashLayoutWindowPtr):
 def wxPreSashLayoutWindow(*_args,**_kwargs):
     val = wxSashLayoutWindowPtr(apply(windows3c.new_wxPreSashLayoutWindow,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -289,7 +289,7 @@ class wxPopupWindow(wxPopupWindowPtr):
 def wxPrePopupWindow(*_args,**_kwargs):
     val = wxPopupWindowPtr(apply(windows3c.new_wxPrePopupWindow,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
@@ -320,7 +320,7 @@ class wxPopupTransientWindow(wxPopupTransientWindowPtr):
 def wxPrePopupTransientWindow(*_args,**_kwargs):
     val = wxPopupTransientWindowPtr(apply(windows3c.new_wxPrePopupTransientWindow,_args,_kwargs))
     val.thisown = 1
-    val._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 
