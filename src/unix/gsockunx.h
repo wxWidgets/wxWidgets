@@ -52,14 +52,18 @@ void _GSocket_Detected_Read(GSocket *socket);
 void _GSocket_Detected_Write(GSocket *socket);
 void _GSocket_GUI_Init(GSocket *socket);
 void _GSocket_GUI_Destroy(GSocket *socket);
-void _GAddress_translate_from(GAddress *address,
+
+/* Translaters returns false when memory is exhausted */
+bool _GAddress_translate_from(GAddress *address,
                               struct sockaddr *addr, int len);
-void _GAddress_translate_to(GAddress *address,
+bool _GAddress_translate_to(GAddress *address,
                             struct sockaddr **addr, int *len);
 
+/* Initialisers returns FALSE when an error happened in the initialisation */
+
 /* Internet address family */
-void _GAddress_Init_INET(GAddress *address);
+bool _GAddress_Init_INET(GAddress *address);
 /* Local address family */
-void _GAddress_Init_UNIX(GAddress *address);
+bool _GAddress_Init_UNIX(GAddress *address);
 
 #endif

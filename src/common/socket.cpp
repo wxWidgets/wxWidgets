@@ -131,7 +131,7 @@ bool wxSocketBase::Close()
 class _wxSocketInternalTimer: public wxTimer {
  public:
   int *m_state;
-  int m_new_val;
+  unsigned long m_new_val;
 
   void Notify()
      {
@@ -165,7 +165,7 @@ int wxSocketBase::DeferRead(char *buffer, size_t nbytes)
   m_defer_timer  = &timer;
 
   timer.m_state = (int *)&m_defer_buffer;
-  timer.m_new_val = (int)NULL;
+  timer.m_new_val = 0;
 
   timer.Start(m_timeout * 1000, FALSE);
 
@@ -322,7 +322,7 @@ int wxSocketBase::DeferWrite(const char *buffer, size_t nbytes)
 
   // Start timer
   timer.m_state   = (int *)&m_defer_buffer;
-  timer.m_new_val = (int)NULL;
+  timer.m_new_val = 0;
 
   m_defer_timer   = &timer;
   timer.Start(m_timeout * 1000, FALSE);

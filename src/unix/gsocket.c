@@ -77,6 +77,9 @@ GSocket *GSocket_new()
 
   socket = (GSocket *)malloc(sizeof(GSocket));
 
+  if (socket == NULL)
+    return NULL;
+
   socket->m_fd                  = -1;
   for (i=0;i<GSOCK_MAX_EVENT;i++) {
     socket->m_fbacks[i]         = NULL;
@@ -203,7 +206,15 @@ GAddress *GSocket_GetLocal(GSocket *socket)
   }
 
   address = GAddress_new();
-  _GAddress_translate_from(address, &addr, size);
+  if (address == NULL) {
+    socket->m_error = GSOCK_MEMERR;
+    return NULL;
+  }
+  if (!_GAddress_translate_from(address, &addr, size)) {
+    socket->m_error = GSOCK_MEMERR;
+    GAddress_destroy(address);
+    return NULL;
+  }
 
   return address;
 }
@@ -489,15 +500,25 @@ void GSocket_SetNonBlocking(GSocket *socket, bool block)
 /*
  * GSocket_SetTimeout()
  */
+
+#ifndef LINUX
+#   define CAN_USE_TIMEOUT
+#elif defined(__GLIBC__) && defined(__GLIBC_MINOR__)
+#   if (__GLIBC__ == 2) && (__GLIBC_MINOR__ == 1)
+#      define CAN_USE_TIMEOUT
+#   endif
+#endif
+
 void GSocket_SetTimeout(GSocket *socket, unsigned long millisec)
 {
   assert(socket != NULL);
 
+ /* Neither GLIBC 2.0 nor the kernel 2.0.36 define SO_SNDTIMEO or
+    SO_RCVTIMEO. The man pages, that these flags should exist but
+    are read only. RR. */
+ /* OK, restrict this to GLIBC 2.1. GL. */
+#ifdef CAN_USE_TIMEOUT 
   socket->m_timeout = millisec;
-  /* Neither GLIBC 2.0 nor the kernel 2.0.36 define SO_SNDTIMEO or
-     SO_RCVTIMEO. The man pages, that these flags should exist but
-     are read only. RR. */
-#ifndef __LINUX__
   if (socket->m_fd != -1) {
     struct timeval tval;
 
@@ -554,8 +575,6 @@ void GSocket_SetCallback(GSocket *socket, GSocketEventFlags event,
     if ((event & (1 << count)) != 0) {
       socket->m_fbacks[count] = fallback;
       socket->m_data[count] = cdata;
-
-      _GSocket_Install_Callback(socket, count);
       _GSocket_Enable(socket, count);
     }
   }
@@ -575,7 +594,6 @@ void GSocket_UnsetCallback(GSocket *socket, GSocketEventFlags event)
     if ((event & (1 << count)) != 0) {
       _GSocket_Disable(socket, count);
       socket->m_fbacks[count] = NULL;
-      _GSocket_Uninstall_Callback(socket, count);
     }
   }
 }
@@ -651,9 +669,17 @@ int _GSocket_Recv_Dgram(GSocket *socket, char *buffer, int size)
   }
 
   /* Translate a system address into a GSocket address */
-  if (!socket->m_peer)
+  if (!socket->m_peer) {
     socket->m_peer = GAddress_new();
-  _GAddress_translate_from(socket->m_peer, &from, fromlen);
+    if (!socket->m_peer) {
+      socket->m_error = GSOCK_MEMERR;
+      return -1;
+    }
+  }
+  if (!_GAddress_translate_from(socket->m_peer, &from, fromlen)) {
+    socket->m_error = GSOCK_MEMERR;
+    return -1;
+  }
 
   return ret;
 }
@@ -686,7 +712,10 @@ int _GSocket_Send_Dgram(GSocket *socket, const char *buffer, int size)
     return -1;
   }
 
-  _GAddress_translate_to(socket->m_peer, &addr, &len);
+  if (!_GAddress_translate_to(socket->m_peer, &addr, &len)) {
+    socket->m_error = GSOCK_MEMERR;
+    return -1;
+  }
 
   MASK_SIGNAL();
   ret = sendto(socket->m_fd, buffer, size, 0, addr, len);
@@ -750,7 +779,10 @@ void _GSocket_Detected_Write(GSocket *socket)
 #define CHECK_ADDRESS(address, family, retval) \
 { \
   if (address->m_family == GSOCK_NOFAMILY) \
-    _GAddress_Init_##family(address); \
+    if (!_GAddress_Init_##family(address)) {\
+      address->m_error = GSOCK_MEMERR; \
+      return retval; \
+    }\
   if (address->m_family != GSOCK_##family) {\
     address->m_error = GSOCK_INVADDR; \
     return retval; \
@@ -762,6 +794,9 @@ GAddress *GAddress_new()
   GAddress *address;
 
   address = (GAddress *)malloc(sizeof(GAddress));
+
+  if (address == NULL)
+    return NULL;
 
   address->m_family  = GSOCK_NOFAMILY;
   address->m_addr    = NULL;
@@ -777,10 +812,18 @@ GAddress *GAddress_copy(GAddress *address)
   assert(address != NULL);
 
   addr2 = (GAddress *)malloc(sizeof(GAddress));
+
+  if (addr2 == NULL)
+    return NULL;
+
   memcpy(addr2, address, sizeof(GAddress));
 
   if (address->m_addr) {
     addr2->m_addr = (struct sockaddr *)malloc(addr2->m_len);
+    if (addr2->m_addr == NULL) {
+      free(addr2);
+      return NULL;
+    }
     memcpy(addr2->m_addr, address->m_addr, addr2->m_len);
   }
 
@@ -808,7 +851,7 @@ GAddressType GAddress_GetFamily(GAddress *address)
   return address->m_family;
 }
 
-void _GAddress_translate_from(GAddress *address, struct sockaddr *addr, int len){
+bool _GAddress_translate_from(GAddress *address, struct sockaddr *addr, int len){
   address->m_realfamily = addr->sa_family;
   switch (addr->sa_family) {
   case AF_INET:
@@ -833,10 +876,14 @@ void _GAddress_translate_from(GAddress *address, struct sockaddr *addr, int len)
 
   address->m_len  = len;
   address->m_addr = (struct sockaddr *)malloc(len);
+  if (address->m_addr == NULL)
+    return FALSE;
   memcpy(address->m_addr, addr, len);
+
+  return TRUE;
 }
 
-void _GAddress_translate_to(GAddress *address,
+bool _GAddress_translate_to(GAddress *address,
                             struct sockaddr **addr, int *len)
 {
   if (!address->m_addr) {
@@ -846,7 +893,11 @@ void _GAddress_translate_to(GAddress *address,
 
   *len = address->m_len;
   *addr = (struct sockaddr *)malloc(address->m_len);
+  if (*addr == NULL)
+    return FALSE;
+
   memcpy(*addr, address->m_addr, address->m_len);
+  return TRUE;
 }
 
 /*
@@ -855,14 +906,20 @@ void _GAddress_translate_to(GAddress *address,
  * -------------------------------------------------------------------------
  */
 
-void _GAddress_Init_INET(GAddress *address)
+bool _GAddress_Init_INET(GAddress *address)
 {
+  address->m_addr = (struct sockaddr *)malloc(sizeof(struct sockaddr_in));
+  if (address->m_addr == NULL)
+    return FALSE;
+
   address->m_len  = sizeof(struct sockaddr_in);
-  address->m_addr = (struct sockaddr *)malloc(address->m_len);
+
   address->m_family = GSOCK_INET;
   address->m_realfamily = PF_INET;
   ((struct sockaddr_in *)address->m_addr)->sin_family = AF_INET;
   ((struct sockaddr_in *)address->m_addr)->sin_addr.s_addr   = INADDR_ANY;
+
+  return TRUE;
 }
 
 GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
@@ -1006,14 +1063,19 @@ unsigned short GAddress_INET_GetPort(GAddress *address)
  * -------------------------------------------------------------------------
  */
 
-void _GAddress_Init_UNIX(GAddress *address)
+bool _GAddress_Init_UNIX(GAddress *address)
 {
-  address->m_len  = sizeof(struct sockaddr_un);
   address->m_addr = (struct sockaddr *)malloc(address->m_len);
+  if (address->m_addr == NULL)
+    return FALSE;
+
+  address->m_len  = sizeof(struct sockaddr_un);
   address->m_family = GSOCK_UNIX;
   address->m_realfamily = PF_UNIX;
   ((struct sockaddr_un *)address->m_addr)->sun_family = AF_UNIX;
   ((struct sockaddr_un *)address->m_addr)->sun_path[0] = 0;
+
+  return TRUE;
 }
 
 GSocketError GAddress_UNIX_SetPath(GAddress *address, const char *path)

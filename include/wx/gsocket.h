@@ -47,7 +47,8 @@ typedef enum {
   GSOCK_INVSOCK,
   GSOCK_NOHOST,
   GSOCK_INVPORT,
-  GSOCK_TRYAGAIN
+  GSOCK_TRYAGAIN,
+  GSOCK_MEMERR
 } GSocketError;
 
 typedef enum {
