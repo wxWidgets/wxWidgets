@@ -340,8 +340,11 @@ void wxScrolledWindow::SetScrollbars( int pixelsPerUnitX, int pixelsPerUnitY,
                                       int noUnitsX, int noUnitsY,
                                       int xPos, int yPos, bool noRefresh )
 {
-    int old_x = m_xScrollPixelsPerLine * m_xScrollPosition;
-    int old_y = m_yScrollPixelsPerLine * m_yScrollPosition;
+    int xs, ys;
+    GetViewStart (& xs, & ys);
+    
+    int old_x = m_xScrollPixelsPerLine * xs;
+    int old_y = m_yScrollPixelsPerLine * ys;
 
     m_xScrollPixelsPerLine = pixelsPerUnitX;
     m_yScrollPixelsPerLine = pixelsPerUnitY;
@@ -638,18 +641,24 @@ void wxScrolledWindow::GetViewStart (int *x, int *y) const
 
 void wxScrolledWindow::DoCalcScrolledPosition(int x, int y, int *xx, int *yy) const
 {
+    int xs, ys;
+    GetViewStart (& xs, & ys);
+    
     if ( xx )
-        *xx = x - m_xScrollPosition * m_xScrollPixelsPerLine;
+        *xx = x - xs * m_xScrollPixelsPerLine;
     if ( yy )
-        *yy = y - m_yScrollPosition * m_yScrollPixelsPerLine;
+        *yy = y - ys * m_yScrollPixelsPerLine;
 }
 
 void wxScrolledWindow::DoCalcUnscrolledPosition(int x, int y, int *xx, int *yy) const
 {
+    int xs, ys;
+    GetViewStart (& xs, & ys);
+    
     if ( xx )
-        *xx = x + m_xScrollPosition * m_xScrollPixelsPerLine;
+        *xx = x + xs * m_xScrollPixelsPerLine;
     if ( yy )
-        *yy = y + m_yScrollPosition * m_yScrollPixelsPerLine;
+        *yy = y + ys * m_yScrollPixelsPerLine;
 }
 
 int wxScrolledWindow::CalcScrollInc(wxScrollWinEvent& event)
