@@ -234,7 +234,7 @@ wxClientDC::~wxClientDC()
 /*
     if ( m_window->MacGetCGContextRef() == 0)
     {
-        CGContextRef cgContext = dynamic_cast<wxMacCGContext*>(m_graphicContext)->GetNativeContext() ;
+        CGContextRef cgContext = (wxMacCGContext*)(m_graphicContext)->GetNativeContext() ;
         CGContextFlush( cgContext ) ;
     }
 */

@@ -617,7 +617,7 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
     wxCoord ww = XLOG2DEVREL(w);
     wxCoord hh = YLOG2DEVREL(h);
 
-    CGContextRef cg = dynamic_cast<wxMacCGContext*>(m_graphicContext)->GetNativeContext() ;
+    CGContextRef cg = (wxMacCGContext*)(m_graphicContext)->GetNativeContext() ;
     CGImageRef image = (CGImageRef)( bmp.CGImageCreate() ) ;
     HIRect r = CGRectMake( xx , yy , ww , hh ) ;
     HIViewDrawCGImage( cg , &r , image ) ;
@@ -636,7 +636,7 @@ void wxDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
     wxCoord ww = XLOG2DEVREL(w);
     wxCoord hh = YLOG2DEVREL(h);
 
-    CGContextRef cg = dynamic_cast<wxMacCGContext*>(m_graphicContext)->GetNativeContext() ;
+    CGContextRef cg = (wxMacCGContext*)(m_graphicContext)->GetNativeContext() ;
     CGRect r = CGRectMake( 00 , 00 , ww , hh ) ;
     CGContextSaveGState(cg);    
     CGContextTranslateCTM(cg, xx , yy + hh );
@@ -655,7 +655,7 @@ void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord hei
     ww = XLOG2DEVREL(width);
     hh = YLOG2DEVREL(height);
 
-    CGContextRef cgContext = dynamic_cast<wxMacCGContext*>(m_graphicContext)->GetNativeContext() ;
+    CGContextRef cgContext = (wxMacCGContext*)(m_graphicContext)->GetNativeContext() ;
     CGRect clipRect = CGRectMake( xx ,yy , ww, hh ) ;
     CGContextClipToRect( cgContext , clipRect ) ;
 
@@ -732,7 +732,7 @@ void wxDC::DoSetClippingRegionAsRegion( const wxRegion &region  )
 void wxDC::DestroyClippingRegion()
 {
 //    CopyRgn( (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn ) ;
-    CGContextRef cgContext = dynamic_cast<wxMacCGContext*>(m_graphicContext)->GetNativeContext() ;
+    CGContextRef cgContext = (wxMacCGContext*)(m_graphicContext)->GetNativeContext() ;
     CGContextRestoreGState( cgContext );    
     CGContextSaveGState( cgContext );    
     SetPen( m_pen ) ;
@@ -1321,7 +1321,7 @@ bool  wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
         }
         if ( blit.Ok() )
         {
-            CGContextRef cg = dynamic_cast<wxMacCGContext*>(m_graphicContext)->GetNativeContext() ;
+            CGContextRef cg = (wxMacCGContext*)(m_graphicContext)->GetNativeContext() ;
             CGImageRef image = (CGImageRef)( blit.CGImageCreate() ) ;
             HIRect r = CGRectMake( xxdest , yydest , wwdest , hhdest ) ;
             HIViewDrawCGImage( cg , &r , image ) ;
@@ -1332,7 +1332,7 @@ bool  wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
     else
     {
     /*
-        CGContextRef cg = dynamic_cast<wxMacCGContext*>(source->GetGraphicContext())->GetNativeContext() ;
+        CGContextRef cg = (wxMacCGContext*)(source->GetGraphicContext())->GetNativeContext() ;
         void *data = CGBitmapContextGetData( cg ) ;
     */
         return FALSE ; // wxFAIL_MSG( wxT("Blitting is only supported from bitmap contexts") ) ;
@@ -1410,7 +1410,7 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
             atsuTags, atsuSizes, atsuValues ) ;
     }
     {
-        CGContextRef cgContext = dynamic_cast<wxMacCGContext*>(m_graphicContext)->GetNativeContext() ;
+        CGContextRef cgContext = (wxMacCGContext*)(m_graphicContext)->GetNativeContext() ;
         ATSUAttributeTag atsuTags[] =
         {
             kATSUCGContextTag ,
@@ -1465,13 +1465,13 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
         IntToFixed(drawX) , IntToFixed(drawY) , &rect );
     wxASSERT_MSG( status == noErr , wxT("couldn't measure the rotated text") );
 
-    CGContextSaveGState(dynamic_cast<wxMacCGContext*>(m_graphicContext)->GetNativeContext());    
-    CGContextTranslateCTM(dynamic_cast<wxMacCGContext*>(m_graphicContext)->GetNativeContext(), drawX, drawY);
-    CGContextScaleCTM(dynamic_cast<wxMacCGContext*>(m_graphicContext)->GetNativeContext(), 1, -1);
+    CGContextSaveGState((wxMacCGContext*)(m_graphicContext)->GetNativeContext());    
+    CGContextTranslateCTM((wxMacCGContext*)(m_graphicContext)->GetNativeContext(), drawX, drawY);
+    CGContextScaleCTM((wxMacCGContext*)(m_graphicContext)->GetNativeContext(), 1, -1);
     status = ::ATSUDrawText( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
         IntToFixed(0) , IntToFixed(0) );
     wxASSERT_MSG( status == noErr , wxT("couldn't draw the rotated text") );
-    CGContextRestoreGState( dynamic_cast<wxMacCGContext*>(m_graphicContext)->GetNativeContext() ) ;
+    CGContextRestoreGState( (wxMacCGContext*)(m_graphicContext)->GetNativeContext() ) ;
 
     CalcBoundingBox(XDEV2LOG(rect.left), YDEV2LOG(rect.top) );
     CalcBoundingBox(XDEV2LOG(rect.right), YDEV2LOG(rect.bottom) );
@@ -1656,7 +1656,7 @@ void  wxDC::Clear(void)
     if ( m_backgroundBrush.Ok() && m_backgroundBrush.GetStyle() != wxTRANSPARENT)
     {      
         HIRect rect = CGRectMake( -10000 , -10000 , 20000 , 20000 ) ;
-        CGContextRef cg = dynamic_cast<wxMacCGContext*>(m_graphicContext)->GetNativeContext() ;
+        CGContextRef cg = (wxMacCGContext*)(m_graphicContext)->GetNativeContext() ;
         switch( m_backgroundBrush.MacGetBrushKind() )
         {
             case kwxMacBrushTheme :

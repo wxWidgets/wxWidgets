@@ -52,7 +52,7 @@ wxMemoryDC::~wxMemoryDC()
     {
 #if wxMAC_USE_CORE_GRAPHICS
         m_selected.EndRawAccess() ;
-        CGContextRef bmCtx = dynamic_cast<wxMacCGContext*>(m_graphicContext)->GetNativeContext() ;
+        CGContextRef bmCtx = (wxMacCGContext*)(m_graphicContext)->GetNativeContext() ;
         delete m_graphicContext ;
         m_graphicContext = NULL ;
         CGContextRelease( bmCtx ) ;
@@ -68,7 +68,7 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
     {
 #if wxMAC_USE_CORE_GRAPHICS
         m_selected.EndRawAccess() ;
-        CGContextRef bmCtx = dynamic_cast<wxMacCGContext*>(m_graphicContext)->GetNativeContext() ;
+        CGContextRef bmCtx = (wxMacCGContext*)(m_graphicContext)->GetNativeContext() ;
         delete m_graphicContext ;
         m_graphicContext = NULL ;
         CGContextRelease( bmCtx ) ;

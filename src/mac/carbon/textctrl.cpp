@@ -2420,7 +2420,7 @@ ControlUserPaneFocusUPP gTPFocusProc = NULL;
 static pascal void wxMacControlUserPaneDrawProc(ControlRef control, SInt16 part)
 {
     wxTextCtrl *textCtrl =  wxDynamicCast( wxFindControlFromMacControl(control) , wxTextCtrl ) ;
-    wxMacMLTEClassicControl * win = textCtrl ? dynamic_cast<wxMacMLTEClassicControl*>(textCtrl->GetPeer()) : NULL ;
+    wxMacMLTEClassicControl * win = textCtrl ? (wxMacMLTEClassicControl*)(textCtrl->GetPeer()) : NULL ;
     if ( win )
         win->MacControlUserPaneDrawProc(part) ;
 }
@@ -2428,7 +2428,7 @@ static pascal void wxMacControlUserPaneDrawProc(ControlRef control, SInt16 part)
 static pascal ControlPartCode wxMacControlUserPaneHitTestProc(ControlRef control, Point where)
 {
     wxTextCtrl *textCtrl =  wxDynamicCast( wxFindControlFromMacControl(control) , wxTextCtrl ) ;
-    wxMacMLTEClassicControl * win = textCtrl ? dynamic_cast<wxMacMLTEClassicControl*>(textCtrl->GetPeer()) : NULL ;
+    wxMacMLTEClassicControl * win = textCtrl ? (wxMacMLTEClassicControl*)(textCtrl->GetPeer()) : NULL ;
     if ( win )
         return win->MacControlUserPaneHitTestProc(where.h , where.v) ;
     else
@@ -2438,7 +2438,7 @@ static pascal ControlPartCode wxMacControlUserPaneHitTestProc(ControlRef control
 static pascal ControlPartCode wxMacControlUserPaneTrackingProc(ControlRef control, Point startPt, ControlActionUPP actionProc)
 {
     wxTextCtrl *textCtrl =  wxDynamicCast( wxFindControlFromMacControl(control) , wxTextCtrl ) ;
-    wxMacMLTEClassicControl * win = textCtrl ? dynamic_cast<wxMacMLTEClassicControl*>(textCtrl->GetPeer()) : NULL ;
+    wxMacMLTEClassicControl * win = textCtrl ? (wxMacMLTEClassicControl*)(textCtrl->GetPeer()) : NULL ;
     if ( win )
         return win->MacControlUserPaneTrackingProc( startPt.h , startPt.v , (void*) actionProc) ;
     else
@@ -2448,7 +2448,7 @@ static pascal ControlPartCode wxMacControlUserPaneTrackingProc(ControlRef contro
 static pascal void wxMacControlUserPaneIdleProc(ControlRef control)
 {
     wxTextCtrl *textCtrl =  wxDynamicCast( wxFindControlFromMacControl(control) , wxTextCtrl ) ;
-    wxMacMLTEClassicControl * win = textCtrl ? dynamic_cast<wxMacMLTEClassicControl*>(textCtrl->GetPeer()) : NULL ;
+    wxMacMLTEClassicControl * win = textCtrl ? (wxMacMLTEClassicControl*)(textCtrl->GetPeer()) : NULL ;
     if ( win )
         win->MacControlUserPaneIdleProc() ;
 }
@@ -2456,7 +2456,7 @@ static pascal void wxMacControlUserPaneIdleProc(ControlRef control)
 static pascal ControlPartCode wxMacControlUserPaneKeyDownProc(ControlRef control, SInt16 keyCode, SInt16 charCode, SInt16 modifiers)
 {
     wxTextCtrl *textCtrl =  wxDynamicCast( wxFindControlFromMacControl(control) , wxTextCtrl ) ;
-    wxMacMLTEClassicControl * win = textCtrl ? dynamic_cast<wxMacMLTEClassicControl*>(textCtrl->GetPeer()) : NULL ;
+    wxMacMLTEClassicControl * win = textCtrl ? (wxMacMLTEClassicControl*)(textCtrl->GetPeer()) : NULL ;
     if ( win )
         return win->MacControlUserPaneKeyDownProc(keyCode,charCode,modifiers) ;
     else
@@ -2466,7 +2466,7 @@ static pascal ControlPartCode wxMacControlUserPaneKeyDownProc(ControlRef control
 static pascal void wxMacControlUserPaneActivateProc(ControlRef control, Boolean activating)
 {
     wxTextCtrl *textCtrl =  wxDynamicCast( wxFindControlFromMacControl(control) , wxTextCtrl ) ;
-    wxMacMLTEClassicControl * win = textCtrl ? dynamic_cast<wxMacMLTEClassicControl*>(textCtrl->GetPeer()) : NULL ;
+    wxMacMLTEClassicControl * win = textCtrl ? (wxMacMLTEClassicControl*)(textCtrl->GetPeer()) : NULL ;
     if ( win )
         win->MacControlUserPaneActivateProc(activating) ;
 }
@@ -2474,7 +2474,7 @@ static pascal void wxMacControlUserPaneActivateProc(ControlRef control, Boolean 
 static pascal ControlPartCode wxMacControlUserPaneFocusProc(ControlRef control, ControlFocusPart action)
 {
     wxTextCtrl *textCtrl =  wxDynamicCast( wxFindControlFromMacControl(control) , wxTextCtrl ) ;
-    wxMacMLTEClassicControl * win = textCtrl ? dynamic_cast<wxMacMLTEClassicControl*>(textCtrl->GetPeer()) : NULL ;
+    wxMacMLTEClassicControl * win = textCtrl ? (wxMacMLTEClassicControl*)(textCtrl->GetPeer()) : NULL ;
     if ( win )
         return win->MacControlUserPaneFocusProc(action) ;
     else
@@ -2485,7 +2485,7 @@ static pascal ControlPartCode wxMacControlUserPaneFocusProc(ControlRef control, 
 static pascal void wxMacControlUserPaneBackgroundProc(ControlRef control, ControlBackgroundPtr info)
 {
     wxTextCtrl *textCtrl =  wxDynamicCast( wxFindControlFromMacControl(control) , wxTextCtrl ) ;
-    wxMacMLTEClassicControl * win = textCtrl ? dynamic_cast<wxMacMLTEClassicControl*>(textCtrl->GetPeer()) : NULL ;
+    wxMacMLTEClassicControl * win = textCtrl ? (wxMacMLTEClassicControl*)(textCtrl->GetPeer()) : NULL ;
     if ( win )
         win->MacControlUserPaneBackgroundProc(info) ;
 }
