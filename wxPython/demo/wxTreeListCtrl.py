@@ -13,7 +13,8 @@ class TestPanel(wxPanel):
         EVT_SIZE(self, self.OnSize)
 
         self.tree = wxTreeListCtrl(self, -1, style = wxTR_DEFAULT_STYLE
-                                   #wxTR_TWIST_BUTTONS
+                                   #| wxTR_ROW_LINES
+                                   #| wxTR_NO_LINES | wxTR_TWIST_BUTTONS
                                    )
         isz = (16,16)
         il = wxImageList(isz[0], isz[1])
