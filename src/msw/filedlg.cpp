@@ -184,7 +184,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
     m_fileName = defaultFileName;
     m_dir = defaultDir;
     m_wildCard = wildCard;
-    m_filterIndex = 1;
+    m_filterIndex = 0;
 }
 
 void wxFileDialog::GetPaths(wxArrayString& paths) const
