@@ -227,7 +227,7 @@ The main wxWindows ftp site is at:
 A wxWindows CD-ROM with the latest distribution plus an HTML
 front-end and hundreds of MB of compilers, utilities and other
 material may be ordered from the CD-ROM page (see the wxWindows
-web site) or contact Julian Smart <julian.smart@ukonline.co.uk>.
+web site) or contact Julian Smart <julian.smart@btopenworld.com>.
 
 Good luck!
 
