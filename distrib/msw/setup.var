@@ -93,7 +93,7 @@ APPBINARY=$APPDIR/src/ReleaseStable/$APPNAME.exe
 # The location of the setup compiler
 #-------------------------------------------------------------------------
 
-SETUPCOMPILER="c:/Program Files/Inno Setup 2/compil32.exe"
+SETUPCOMPILER="c:/Program Files/Inno Setup 4/compil32.exe"
 
 #-------------------------------------------------------------------------
 # Whether we will compress the binary (0 or 1).

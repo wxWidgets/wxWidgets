@@ -25,9 +25,9 @@
     DisableStartupPrompt=0
     CreateAppDir=1
     DisableProgramGroupPage=0
-    AlwaysCreateUninstallIcon=1
+;    AlwaysCreateUninstallIcon=1
     Uninstallable=1
-    UninstallIconName=Uninstall %APPTITLE% %VERSION%
+;    UninstallIconName=Uninstall %APPTITLE% %VERSION%
     UninstallDisplayName=%APPTITLE% %VERSION%
     UninstallLogMode=Append
     DefaultDirName=c:\%APPTITLE%-%VERSION%
@@ -35,10 +35,10 @@
     LicenseFile=%LICENSEFILE%
     InfoBeforeFile=%READMEFILE%
     InfoAfterFile=%READMEAFTERFILE%
-    MessagesFile=compiler:default.isl
+;    MessagesFile=compiler:default.isl
     DiskSpanning=1
-    DiskSize=1457664
-    DiskClusterSize=512
+;    DiskSize=1457664
+;    DiskClusterSize=512
     ReserveBytes=0
     UseSetupLdr=1
     SourceDir=%SOURCEDIR%

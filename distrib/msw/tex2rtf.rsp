@@ -11,6 +11,7 @@ utils/tex2rtf/src/makefile.vms
 utils/tex2rtf/src/makefile.g95
 utils/tex2rtf/src/makengui.nt
 utils/tex2rtf/src/Makefile.in
+utils/tex2rtf/src/*.bkl
 utils/tex2rtf/src/*.dsp
 utils/tex2rtf/src/*.dsw
 utils/tex2rtf/src/*.xbm

@@ -1,6 +1,7 @@
 Makefile.in
 src/regex/Makefile.in
 locale/Makefile
+tests/Makefile.in
 samples/Makefile.in
 samples/access/Makefile.in
 samples/artprov/Makefile.in
@@ -63,6 +64,7 @@ samples/sound/Makefile.in
 samples/sockets/Makefile.in
 samples/splitter/Makefile.in
 samples/statbar/Makefile.in
+samples/taskbar/Makefile.in
 samples/text/Makefile.in
 samples/thread/Makefile.in
 samples/toolbar/Makefile.in
@@ -180,3 +182,4 @@ src/zlib/descrip.mms
 src/regex/descrip.mms
 utils/helpview/src/descrip.mms
 utils/tex2rtf/src/descrip.mms
+

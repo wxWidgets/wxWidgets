@@ -9,6 +9,7 @@
 ;    Name: {group}\Tutorial; Filename: {app}\docs\pdf\wxTutorial.pdf; WorkingDir: {app}; IconIndex: 0; Flags: useapppaths
     Name: {group}\Document Index; Filename: {app}\docs\html\index.htm; WorkingDir: {app}; IconIndex: 0; Flags: useapppaths
     Name: {group}\Widgets Sample; Filename: {app}\bin\widgets.exe; WorkingDir: {app}\bin; IconFilename: {app}\bin\widgets.exe; IconIndex: 0
+    Name: "{group}\Uninstall wxWindows %VERSION%"; Filename: "{uninstallexe}"
 
 [INI]
 

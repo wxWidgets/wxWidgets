@@ -21,6 +21,7 @@ src/os2/*.c
 src/os2/makefile.va
 src/os2/*.def
 src/os2/*.lst
+src/os2/*.sh
 
 include/wx/os2/*.h
 include/wx/os2/*.rc

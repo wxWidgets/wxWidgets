@@ -164,6 +164,7 @@ utils/hhp2cached/*.cpp
 utils/hhp2cached/*.def
 utils/hhp2cached/*.rc
 utils/hhp2cached/makefile*
+utils/hhp2cached/*.bkl
 utils/hhp2cached/*.xbm
 utils/hhp2cached/*.xpm
 utils/hhp2cached/*.txt
@@ -1370,10 +1371,35 @@ demos/dbbrowse/help.std/*.hhp
 demos/dbbrowse/help.std/*.hhk
 demos/dbbrowse/*.bkl
 
-tests/mbconv/*.cpp
-tests/mbconv/*.bkl
+tests/*.bkl
+tests/makefile*.*
+tests/test.dsp
+tests/test.dsw
+tests/*.cpp
+
+tests/filesys/*.cpp
+tests/filesys/*.h
+tests/filesys/*.bkl
+tests/filesys/*.inc
 
 tests/formatconverter/*.pl
 tests/formatconverter/*.cpp
 tests/formatconverter/*.txt
+
+tests/mbconv/*.cpp
+tests/mbconv/*.h
+tests/mbconv/*.bkl
+tests/mbconv/*.inc
+
+tests/regex/*.cpp
+tests/regex/*.h
+tests/regex/*.bkl
+tests/regex/*.inc
+tests/regex/*.pl
+tests/regex/*.test
+
+tests/streams/*.cpp
+tests/streams/*.h
+tests/streams/*.bkl
+tests/streams/*.inc
 
