@@ -25,12 +25,15 @@ class wxMouseEvent;
 
 #include <wx/string.h>
 
+#if wxUSE_TREELAYOUT
+
 class WXDLLEXPORT wxTreeLayout: public wxObject
 {
     DECLARE_ABSTRACT_CLASS(wxTreeLayout)
 
 public:
     wxTreeLayout();
+    virtual ~wxTreeLayout() { }
 
     // Redefine these
     virtual void GetChildren(long id, wxList& list) = 0;
@@ -105,7 +108,7 @@ class WXDLLEXPORT wxTreeLayoutStored: public wxTreeLayout
     DECLARE_DYNAMIC_CLASS(wxTreeLayoutStored)
 public:
     wxTreeLayoutStored(int noNodes = 200);
-    ~wxTreeLayoutStored(void);
+    virtual ~wxTreeLayoutStored(void);
     void Initialize(int n);
 
     wxString HitTest(wxMouseEvent& event, wxDC& dc);
@@ -139,6 +142,9 @@ private:
 
 // For backward compatibility
 #define wxStoredTree wxTreeLayoutStored
+
+#endif
+    // wxUSE_TREELAYOUT
 
 #endif
  // _WX_TREELAY_H_
