@@ -64,6 +64,9 @@ UNDEF_NDEBUG = 1   # Python 2.2 on Unix/Linux by default defines NDEBUG,
                    # on then you end up with mismatched class structures,
                    # and wxPython will crash.
 
+NO_SCRIPTS = 0     # Don't install the tool scripts
+
+
 WX_CONFIG = "wx-config"    # Usually you shouldn't need to touch this,
                            # but you can set it to pass an alternate
                            # version of wx-config or alternate flags,
@@ -138,7 +141,8 @@ if bcpp_compiling:
 # Boolean (int) flags
 for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 'BUILD_XRC',
              'BUILD_GIZMOS', 'BUILD_DLLWIDGET', 'BUILD_IEWIN',
-             'CORE_ONLY', 'USE_SWIG', 'IN_CVS_TREE', 'UNICODE', 'UNDEF_NDEBUG',
+             'CORE_ONLY', 'USE_SWIG', 'IN_CVS_TREE', 'UNICODE',
+             'UNDEF_NDEBUG', 'NO_SCRIPTS',
              'FINAL', 'HYBRID', ]:
     for x in range(len(sys.argv)):
         if string.find(sys.argv[x], flag) == 0:
@@ -307,6 +311,7 @@ elif os.name == 'posix' and sys.platform[:6] == "darwin":
     lflags = os.popen(WX_CONFIG + ' --libs', 'r').read()[:-1]
     lflags = string.split(lflags)
 
+    NO_SCRIPTS = 1
 
 
 elif os.name == 'posix':
@@ -881,14 +886,17 @@ if not GL_ONLY and BUILD_DLLWIDGET:
 ##                                     "tools/XRCed/README"]),
 ##          ]
 
-SCRIPTS = ['scripts/img2png',
-           'scripts/img2xpm',
-           'scripts/img2py',
-           'scripts/xrced',
-           'scripts/pyshell',
-           'scripts/pycrust',
-           ],
 
+if NO_SCRIPTS:
+    SCRIPTS = None
+else:
+    SCRIPTS = [opj('scripts/img2png'),
+               opj('scripts/img2xpm'),
+               opj('scripts/img2py'),
+               opj('scripts/xrced'),
+               opj('scripts/pyshell'),
+               opj('scripts/pycrust'),
+               ]
 
 
 #----------------------------------------------------------------------
@@ -921,7 +929,6 @@ if __name__ == "__main__":
               options = { 'build' : { 'build_base' : BUILD_BASE }},
 
               ##data_files = TOOLS,
-
               scripts = SCRIPTS,
               )
 

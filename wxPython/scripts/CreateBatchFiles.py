@@ -30,14 +30,18 @@ template = """\
 %s %s\\%s %%1 %%2 %%3 %%4 %%5 %%6 %%7 %%8 %%9
 """
 
-for script, usegui in scripts:
-    batfile = os.path.join(scriptdir, script + '.bat')
-    print "Creating", batfile
-    f = open(batfile, 'w')
-    if usegui:
-        f.write(template % (pythonw, scriptdir, script))
-    else:
-        f.write(template % (python, scriptdir, script))
-    f.close()
+def main():
+    for script, usegui in scripts:
+        batfile = os.path.join(scriptdir, script + '.bat')
+        print "Creating", batfile
+        f = open(batfile, 'w')
+        if usegui:
+            f.write(template % (pythonw, scriptdir, script))
+        else:
+            f.write(template % (python, scriptdir, script))
+        f.close()
 
+
+if __name__ == '__main__':
+    main()
 
