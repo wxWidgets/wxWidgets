@@ -445,7 +445,7 @@ wxFindWindowByLabel1 (const wxString& title, wxWindow * parent)
 
   if (parent)
     {
-      for (wxNode * node = parent->GetChildren()->First (); node; node = node->Next ())
+      for (wxNode * node = parent->GetChildren().First (); node; node = node->Next ())
 	{
 	  wxWindow *win = (wxWindow *) node->Data ();
 	  wxWindow *retwin = wxFindWindowByLabel1 (title, win);
@@ -501,7 +501,7 @@ wxFindWindowByName1 (const wxString& title, wxWindow * parent)
 
   if (parent)
     {
-      for (wxNode * node = parent->GetChildren()->First (); node; node = node->Next ())
+      for (wxNode * node = parent->GetChildren().First (); node; node = node->Next ())
 	{
 	  wxWindow *win = (wxWindow *) node->Data ();
 	  wxWindow *retwin = wxFindWindowByName1 (title, win);

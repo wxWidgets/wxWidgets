@@ -54,7 +54,6 @@ public:
   wxFont(void);
   wxFont(int PointSize, int Family, int Style, int Weight, bool underlined = FALSE, const wxString& Face = wxEmptyString);
   inline wxFont(const wxFont& font) { Ref(font); }
-  inline wxFont(const wxFont* font) { if (font) Ref(*font); }
 
   ~wxFont(void);
 

@@ -43,7 +43,6 @@ public:
 
   // Copy constructors
   inline wxIcon(const wxIcon& icon) { Ref(icon); }
-  inline wxIcon(const wxIcon* icon) { if (icon) Ref(*icon); }
 
   // Initialize with XBM data
   wxIcon(const char bits[], int width, int height);

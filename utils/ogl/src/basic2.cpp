@@ -503,8 +503,8 @@ void wxPolygonShape::OnDraw(wxDC& dc)
     if (m_shadowMode != SHADOW_NONE)
     {
       if (m_shadowBrush)
-        dc.SetBrush(m_shadowBrush);
-      dc.SetPen(g_oglTransparentPen);
+        dc.SetBrush(* m_shadowBrush);
+      dc.SetPen(* g_oglTransparentPen);
 
       dc.DrawPolygon(n, intPoints, WXROUND(m_xpos + m_shadowOffsetX), WXROUND(m_ypos + m_shadowOffsetY));
     }
@@ -512,12 +512,12 @@ void wxPolygonShape::OnDraw(wxDC& dc)
     if (m_pen)
     {
       if (m_pen->GetWidth() == 0)
-        dc.SetPen(g_oglTransparentPen);
+        dc.SetPen(* g_oglTransparentPen);
       else
-        dc.SetPen(m_pen);
+        dc.SetPen(* m_pen);
     }
     if (m_brush)
-      dc.SetBrush(m_brush);
+      dc.SetBrush(* m_brush);
     dc.DrawPolygon(n, intPoints, WXROUND(m_xpos), WXROUND(m_ypos));
 
     delete[] intPoints;
@@ -525,7 +525,7 @@ void wxPolygonShape::OnDraw(wxDC& dc)
 
 void wxPolygonShape::OnDrawOutline(wxDC& dc, double x, double y, double w, double h)
 {
-  dc.SetBrush(wxTRANSPARENT_BRUSH);
+  dc.SetBrush(* wxTRANSPARENT_BRUSH);
   // Multiply all points by proportion of new size to old size
   double x_proportion = (double)(fabs(w/m_originalWidth));
   double y_proportion = (double)(fabs(h/m_originalHeight));
@@ -879,8 +879,8 @@ void wxRectangleShape::OnDraw(wxDC& dc)
     if (m_shadowMode != SHADOW_NONE)
     {
       if (m_shadowBrush)
-        dc.SetBrush(m_shadowBrush);
-      dc.SetPen(g_oglTransparentPen);
+        dc.SetBrush(* m_shadowBrush);
+      dc.SetPen(* g_oglTransparentPen);
 
       if (m_cornerRadius != 0.0)
         dc.DrawRoundedRectangle(WXROUND(x1 + m_shadowOffsetX), WXROUND(y1 + m_shadowOffsetY),
@@ -892,12 +892,12 @@ void wxRectangleShape::OnDraw(wxDC& dc)
     if (m_pen)
     {
       if (m_pen->GetWidth() == 0)
-        dc.SetPen(g_oglTransparentPen);
+        dc.SetPen(* g_oglTransparentPen);
       else
-        dc.SetPen(m_pen);
+        dc.SetPen(* m_pen);
     }
     if (m_brush)
-      dc.SetBrush(m_brush);
+      dc.SetBrush(* m_brush);
 
     if (m_cornerRadius != 0.0)
       dc.DrawRoundedRectangle(WXROUND(x1), WXROUND(y1), WXROUND(m_width), WXROUND(m_height), m_cornerRadius);
@@ -1049,8 +1049,8 @@ void wxEllipseShape::OnDraw(wxDC& dc)
     if (m_shadowMode != SHADOW_NONE)
     {
       if (m_shadowBrush)
-        dc.SetBrush(m_shadowBrush);
-      dc.SetPen(g_oglTransparentPen);
+        dc.SetBrush(* m_shadowBrush);
+      dc.SetPen(* g_oglTransparentPen);
       dc.DrawEllipse((long) ((m_xpos - GetWidth()/2) + m_shadowOffsetX),
                       (long) ((m_ypos - GetHeight()/2) + m_shadowOffsetY),
                       (long) GetWidth(), (long) GetHeight());
@@ -1059,12 +1059,12 @@ void wxEllipseShape::OnDraw(wxDC& dc)
     if (m_pen)
     {
       if (m_pen->GetWidth() == 0)
-        dc.SetPen(g_oglTransparentPen);
+        dc.SetPen(* g_oglTransparentPen);
       else
-        dc.SetPen(m_pen);
+        dc.SetPen(* m_pen);
     }
     if (m_brush)
-      dc.SetBrush(m_brush);
+      dc.SetBrush(* m_brush);
     dc.DrawEllipse((long) (m_xpos - GetWidth()/2), (long) (m_ypos - GetHeight()/2), (long) GetWidth(), (long) GetHeight());
 }
 

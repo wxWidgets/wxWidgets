@@ -190,7 +190,7 @@ wxStatusBar *wxFrame::OnCreateStatusBar(int number, long style, wxWindowID id,
 
     // Set the height according to the font and the border size
     wxClientDC dc(statusBar);
-    dc.SetFont(* statusBar->GetFont());
+    dc.SetFont(statusBar->GetFont());
 
     long x, y;
     dc.GetTextExtent("X", &x, &y);
@@ -264,7 +264,7 @@ void wxFrame::SetMenuBar(wxMenuBar *menuBar)
 void wxFrame::Fit()
 {
   // Work out max. size
-  wxNode *node = GetChildren()->First();
+  wxNode *node = GetChildren().First();
   int max_width = 0;
   int max_height = 0;
   while (node)
@@ -321,7 +321,7 @@ void wxFrame::OnSize(wxSizeEvent& event)
 
   // do we have _exactly_ one child?
   wxWindow *child = NULL;
-  for ( wxNode *node = GetChildren()->First(); node; node = node->Next() )
+  for ( wxNode *node = GetChildren().First(); node; node = node->Next() )
   {
     wxWindow *win = (wxWindow *)node->Data();
     if ( !win->IsKindOf(CLASSINFO(wxFrame))  &&
@@ -351,7 +351,7 @@ void wxFrame::OnSize(wxSizeEvent& event)
 // subwindow found.
 void wxFrame::OnActivate(wxActivateEvent& event)
 {
-  for(wxNode *node = GetChildren()->First(); node; node = node->Next())
+  for(wxNode *node = GetChildren().First(); node; node = node->Next())
   {
     // Find a child that's a subwindow, but not a dialog box.
     wxWindow *child = (wxWindow *)node->Data();

@@ -48,8 +48,8 @@ wxMemoryDC::wxMemoryDC(void)
     XGCValues valReturn;
     XGetGCValues((Display*) m_display, (GC) m_gc, GCFont, &valReturn);
     m_oldFont = (WXFont) valReturn.font;
-    SetBrush (wxWHITE_BRUSH);
-    SetPen (wxBLACK_PEN);
+    SetBrush (* wxWHITE_BRUSH);
+    SetPen (* wxBLACK_PEN);
 };
 
 wxMemoryDC::wxMemoryDC( wxDC* dc )
@@ -77,8 +77,8 @@ wxMemoryDC::wxMemoryDC( wxDC* dc )
     XGCValues valReturn;
     XGetGCValues((Display*) m_display, (GC) m_gc, GCFont, &valReturn);
     m_oldFont = (WXFont) valReturn.font;
-    SetBrush (wxWHITE_BRUSH);
-    SetPen (wxBLACK_PEN);
+    SetBrush (* wxWHITE_BRUSH);
+    SetPen (* wxBLACK_PEN);
 };
 
 wxMemoryDC::~wxMemoryDC(void)
@@ -117,8 +117,8 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
     bool oldOpt = GetOptimization();
     SetOptimization(FALSE);
     
-    SetBrush (wxWHITE_BRUSH);
-    SetPen (wxBLACK_PEN);
+    SetBrush (* wxWHITE_BRUSH);
+    SetPen (* wxBLACK_PEN);
 
     SetOptimization(oldOpt);
 

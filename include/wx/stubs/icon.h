@@ -45,7 +45,6 @@ public:
 
   // Copy constructors
   inline wxIcon(const wxIcon& icon) { Ref(icon); }
-  inline wxIcon(const wxIcon* icon) { if (icon) Ref(*icon); }
 
   wxIcon(const char bits[], int width, int height);
   wxIcon(const wxString& name, long flags = wxBITMAP_TYPE_ICO_RESOURCE,

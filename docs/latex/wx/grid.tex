@@ -112,7 +112,7 @@ See also \helpref{wxGrid::BeginBatch}{wxgridbeginbatch}, \helpref{wxGrid::GetBat
 
 \membersection{wxGrid::GetBatchCount}\label{wxgridgetbatchcount}
 
-\func{void}{GetBatchCount}{\void}
+\constfunc{int}{GetBatchCount}{\void}
 
 Return the level of batch nesting. This is initially zero, and will be incremented
 every time BeginBatch is called, and decremented when EndBatch is called. When the
@@ -123,7 +123,7 @@ See also \helpref{wxGrid::BeginBatch}{wxgridbeginbatch}, \helpref{wxGrid::EndBat
 
 \membersection{wxGrid::GetCell}\label{wxgridgetcell}
 
-\func{wxGridCell *}{GetCell}{\param{int}{ row}, \param{int}{ col}}
+\constfunc{wxGridCell *}{GetCell}{\param{int}{ row}, \param{int}{ col}}
 
 Returns the grid cell object associated with this position.
 
@@ -131,95 +131,95 @@ wxGenericGrid implementation only.
 
 \membersection{wxGrid::GetCellAlignment}\label{wxgridgetcellalignment}
 
-\func{int}{GetCellAlignment}{\param{int}{ row}, \param{int}{ col}}
+\constfunc{int}{GetCellAlignment}{\param{int}{ row}, \param{int}{ col}}
 
-\func{int}{GetCellAlignment}{\void}
+\constfunc{int}{GetCellAlignment}{\void}
 
 Sets the text alignment for the cell at the given position, or the global alignment value.
 The return value is wxLEFT, wxRIGHT or wxCENTRE.
 
 \membersection{wxGrid::GetCellBackgroundColour}\label{wxgridgetcellbackgroundcolour}
 
-\func{wxColour\&}{GetCellBackgroundColour}{\param{int}{ row}, \param{int}{ col}}
+\constfunc{wxColour\&}{GetCellBackgroundColour}{\param{int}{ row}, \param{int}{ col}}
 
-\func{wxColour\&}{GetCellBackgroundColour}{\void}
+\constfunc{wxColour\&}{GetCellBackgroundColour}{\void}
 
 Gets the background colour for the cell at the given position, or the global background colour.
 
 \membersection{wxGrid::GetCells}\label{wxgridgetcells}
 
-\func{wxGridCell ***}{GetCells}{\void}
+\constfunc{wxGridCell ***}{GetCells}{\void}
 
 Returns the array of grid cell object associated with this wxGrid.
 
 \membersection{wxGrid::GetCellTextColour}\label{wxgridgetcelltextcolour}
 
-\func{wxColour\&}{GetCellTextColour}{\param{int}{ row}, \param{int}{ col}}
+\constfunc{wxColour\&}{GetCellTextColour}{\param{int}{ row}, \param{int}{ col}}
 
-\func{wxColour\&}{GetCellTextColour}{\void}
+\constfunc{wxColour\&}{GetCellTextColour}{\void}
 
 Gets the text colour for the cell at the given position, or the global text colour.
 
 \membersection{wxGrid::GetCellTextFont}\label{wxgridgetcelltextfont}
 
-\func{wxFont *}{GetCellTextFont}{\param{int}{ row}, \param{int}{ col}}
+\constfunc{const wxFont\&}{GetCellTextFont}{\param{int}{ row}, \param{int}{ col}}
 
-\func{wxFont *}{GetCellTextFont}{\void}
+\constfunc{wxFont\&}{GetCellTextFont}{\void}
 
 Gets the text font for the cell at the given position, or the global text font.
 
 \membersection{wxGrid::GetCellValue}\label{wxgridgetcellvalue}
 
-\func{wxString\&}{GetCellValue}{\param{int}{ row}, \param{int}{ col}}
+\constfunc{wxString\&}{GetCellValue}{\param{int}{ row}, \param{int}{ col}}
 
 Returns the cell value at the given position.
 
 \membersection{wxGrid::GetCols}\label{wxgridgetcols}
 
-\func{int}{GetCols}{\void}
+\constfunc{int}{GetCols}{\void}
 
 Returns the number of columns in the grid.
 
 \membersection{wxGrid::GetColumnWidth}\label{wxgridcolumnwidth}
 
-\func{int}{GetColumnWidth}{\param{int}{ col}}
+\constfunc{int}{GetColumnWidth}{\param{int}{ col}}
 
 Gets the width in pixels for column {\it col}.
 
 \membersection{wxGrid::GetCurrentRect}\label{wxgridgetcurrentrect}
 
-\func{wxRectangle *}{GetCurrentRect}{\void}
+\constfunc{wxRectangle *}{GetCurrentRect}{\void}
 
 Returns a pointer to the rectangle enclosing the currently selected cell.
 Do not delete this pointer.
 
 \membersection{wxGrid::GetCursorColumn}\label{wxgridgetcursorcolumn}
 
-\func{int}{GetCursorColumn}{\void}
+\constfunc{int}{GetCursorColumn}{\void}
 
 Returns the column position of the currently selected cell.
 
 \membersection{wxGrid::GetCursorRow}\label{wxgridgetcursorrow}
 
-\func{int}{GetCursorRow}{\void}
+\constfunc{int}{GetCursorRow}{\void}
 
 Returns the row position of the currently selected cell.
 
 \membersection{wxGrid::GetEditable}\label{wxgridgeteditable}
 
-\func{bool}{GetEditable}{\void}
+\constfunc{bool}{GetEditable}{\void}
 
 Returns TRUE if the grid cells can be edited.
 
 \membersection{wxGrid::GetHorizScrollBar}\label{wxgridgethorizscrollbar}
 
-\func{wxScrollBar *}{GetHorizScrollBar}{\void}
+\constfunc{wxScrollBar *}{GetHorizScrollBar}{\void}
 
 Returns a pointer to the horizontal scrollbar.
 
 \membersection{wxGrid::GetLabelAlignment}\label{wxgridgetlabelalignment}
 
-\func{int}{GetLabelAlignment}{\param{int}{ orientation}}
+\constfunc{int}{GetLabelAlignment}{\param{int}{ orientation}}
 
 Gets the row or column label alignment. {\it orientation} should
 be wxHORIZONTAL to specify column label, wxVERTICAL to specify row label.\rtfsp
@@ -227,32 +227,32 @@ be wxHORIZONTAL to specify column label, wxVERTICAL to specify row label.\rtfsp
 
 \membersection{wxGrid::GetLabelBackgroundColour}\label{wxgridgetlabelbackgroundcolour}
 
-\func{wxColour\&}{GetLabelBackgroundColour}{\void}
+\constfunc{wxColour\&}{GetLabelBackgroundColour}{\void}
 
 Gets a row and column label text colour.
 
 \membersection{wxGrid::GetLabelSize}\label{wxgridgetlabelsize}
 
-\func{int}{GetLabelSize}{\param{int}{ orientation}}
+\constfunc{int}{GetLabelSize}{\param{int}{ orientation}}
 
 Gets the row label height, or column label width, in pixels. {\it orientation} should
 be wxHORIZONTAL to specify column label, wxVERTICAL to specify row label.
 
 \membersection{wxGrid::GetLabelTextColour}\label{wxgridgetlabeltextcolour}
 
-\func{wxColour\&}{GetLabelTextColour}{\void}
+\constfunc{wxColour\&}{GetLabelTextColour}{\void}
 
 Gets a row and column label text colour.
 
 \membersection{wxGrid::GetLabelTextFont}\label{wxgridgetlabeltextfont}
 
-\func{wxFont *}{GetLabelTextFont}{\void}
+\constfunc{wxFont\&}{GetLabelTextFont}{\void}
 
 Gets the font to be used for the row and column labels.
 
 \membersection{wxGrid::GetLabelValue}\label{wxgridgetlabelvalue}
 
-\func{wxString\&}{GetLabelValue}{\param{int}{ orientation}, \param{int}{ pos}}
+\constfunc{wxString\&}{GetLabelValue}{\param{int}{ orientation}, \param{int}{ pos}}
 
 Gets a row or column label value. {\it orientation} should
 be wxHORIZONTAL to specify column label, wxVERTICAL to specify row label.\rtfsp
@@ -260,37 +260,37 @@ be wxHORIZONTAL to specify column label, wxVERTICAL to specify row label.\rtfsp
 
 \membersection{wxGrid::GetRowHeight}\label{wxgridgetrowheight}
 
-\func{int}{GetRowHeight}{\param{int}{ row}}
+\constfunc{int}{GetRowHeight}{\param{int}{ row}}
 
 Gets the height in pixels for row {\it row}.
 
 \membersection{wxGrid::GetRows}\label{wxgridgetrows}
 
-\func{int}{GetRows}{\void}
+\constfunc{int}{GetRows}{\void}
 
 Returns the number of rows in the grid.
 
 \membersection{wxGrid::GetScrollPosX}\label{wxgridgetscrollposx}
 
-\func{int}{GetScrollPosX}{\void}
+\constfunc{int}{GetScrollPosX}{\void}
 
 Returns the column scroll position.
 
 \membersection{wxGrid::GetScrollPosY}\label{wxgridgetscrollposy}
 
-\func{int}{GetScrollPosY}{\void}
+\constfunc{int}{GetScrollPosY}{\void}
 
 Returns the row scroll position.
 
 \membersection{wxGrid::GetTextItem}\label{wxgridgettextitem}
 
-\func{wxText *}{GetTextItem}{\void}
+\constfunc{wxText *}{GetTextItem}{\void}
 
 Returns a pointer to the text item used for entering text into a cell.
 
 \membersection{wxGrid::GetVertScrollBar}\label{wxgridgetvertscrollbar}
 
-\func{wxScrollBar *}{GetVertScrollBar}{\void}
+\constfunc{wxScrollBar *}{GetVertScrollBar}{\void}
 
 Returns a pointer to the vertical scrollbar.
 
@@ -417,9 +417,9 @@ Sets the text colour for the cell at the given position, or for the whole grid.
 
 \membersection{wxGrid::SetCellTextFont}\label{wxgridsetcelltextfont}
 
-\func{void}{SetCellTextFont}{\param{wxFont *}{font}, \param{int}{ row}, \param{int}{ col}}
+\func{void}{SetCellTextFont}{\param{const wxFont\&}{ font}, \param{int}{ row}, \param{int}{ col}}
 
-\func{void}{SetCellTextFont}{\param{wxFont *}{font}}
+\func{void}{SetCellTextFont}{\param{const wxFont\&}{ font}}
 
 Sets the text font for the cell at the given position, or for the whole grid.
 
@@ -437,7 +437,7 @@ Sets the width in pixels for column {\it col}.
 
 \membersection{wxGrid::SetDividerPen}\label{wxgridsetdividerpen}
 
-\func{void}{SetDividerPen}{\param{wxPen *}{pen}}
+\func{void}{SetDividerPen}{\param{const wxPen\&}{ pen}}
 
 Specifies the pen to be used for drawing the divisions between cells. The default
 is a light grey. If NULL is specified, the divisions will not be drawn.
@@ -488,7 +488,7 @@ Sets a row and column label text colour.
 
 \membersection{wxGrid::SetLabelTextFont}\label{wxgridsetlabeltextfont}
 
-\func{void}{SetLabelTextFont}{\param{wxFont *}{font}}
+\func{void}{SetLabelTextFont}{\param{const wxFont\&}{ font}}
 
 Sets the font to be used for the row and column labels.
 

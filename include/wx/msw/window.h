@@ -151,7 +151,7 @@ public:
 
   // Set the cursor
   virtual void SetCursor(const wxCursor& cursor);
-  inline virtual wxCursor *GetCursor() const { return (wxCursor *)& m_windowCursor; };
+  inline virtual wxCursor& GetCursor() const { return (wxCursor& ) m_windowCursor; };
 
   // Get the window with the focus
   static wxWindow *FindFocus();
@@ -288,7 +288,7 @@ public:
   inline wxWindow *GetParent() const;
   inline void SetParent(wxWindow *p) ;
   inline wxWindow *GetGrandParent() const;
-  inline wxList *GetChildren() const;
+  inline wxList& GetChildren() const;
   // Set this window to be the child of 'parent'.
   // Returns FALSE it's not possible (some systems
   // won't allow it)
@@ -296,7 +296,7 @@ public:
 
   // Set/get the window's font
   virtual void SetFont(const wxFont& f);
-  inline virtual wxFont *GetFont() const;
+  inline virtual wxFont& GetFont() const;
 
   // Set/get the window's validator
   void SetValidator(const wxValidator& validator);
@@ -351,8 +351,8 @@ public:
   // For backward compatibility
   inline virtual void SetButtonFont(const wxFont& font) { SetFont(font); }
   inline virtual void SetLabelFont(const wxFont& font) { SetFont(font); }
-  inline virtual wxFont  *GetLabelFont() const { return GetFont(); };
-  inline virtual wxFont  *GetButtonFont() const { return GetFont(); };
+  inline virtual wxFont& GetLabelFont() const { return GetFont(); };
+  inline virtual wxFont& GetButtonFont() const { return GetFont(); };
 
   // Get the default button, if there is one
   inline virtual wxButton *GetDefaultItem() const;
@@ -715,8 +715,8 @@ inline void wxWindow::SetId(int id) { m_windowId = id; }
 inline wxWindow *wxWindow::GetParent() const { return m_windowParent; }
 inline void wxWindow::SetParent(wxWindow *p) { m_windowParent = p; }
 inline wxWindow *wxWindow::GetGrandParent() const { return (m_windowParent ? m_windowParent->m_windowParent : NULL); }
-inline wxList *wxWindow::GetChildren() const { return m_children; }
-inline wxFont *wxWindow::GetFont() const { return (wxFont *) & m_windowFont; }
+inline wxList& wxWindow::GetChildren() const { return (wxList&) *m_children; }
+inline wxFont& wxWindow::GetFont() const { return (wxFont&) m_windowFont; }
 inline wxString wxWindow::GetName() const { return m_windowName; }
 inline void wxWindow::SetName(const wxString& name) { m_windowName = name; }
 inline long wxWindow::GetWindowStyleFlag() const { return m_windowStyle; }

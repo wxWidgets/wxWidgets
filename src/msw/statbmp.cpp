@@ -84,7 +84,7 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
   // Subclass again for purposes of dialog editing mode
   SubclassWin(m_hWnd);
 
-  SetFont(* GetParent()->GetFont());
+  SetFont(GetParent()->GetFont());
 
   SetSize(x, y, width, height);
   return TRUE;

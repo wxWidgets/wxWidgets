@@ -527,7 +527,7 @@ bool wxMDIParentFrame::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control)
   }
   if (id >= wxFIRST_MDI_CHILD && id <= wxLAST_MDI_CHILD)
   {
-    wxNode* node = GetChildren()->First();
+    wxNode* node = GetChildren().First();
     while (node)
     {
         wxWindow* child = (wxWindow*) node->Data();

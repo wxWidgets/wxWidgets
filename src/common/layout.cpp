@@ -731,7 +731,7 @@ int wxIndividualLayoutConstraint::GetEdge(wxEdge which,
   // know the dimension is obtainable immediately.
   // E.g. a wxExpandSizer may contain a button (but the button's
   // true parent is a panel, not the sizer)
-  if (other->GetChildren()->Member(thisWin))
+  if (other->GetChildren().Member(thisWin))
   {
     switch (which)
     {
@@ -1054,7 +1054,7 @@ bool wxOldDoLayout(wxWindow *win)
 
   doneSoFar.Append(win);
 
-  wxNode *node = win->GetChildren()->First();
+  wxNode *node = win->GetChildren().First();
   while (node)
   {
     wxWindow *child = (wxWindow *)node->Data();
@@ -1079,7 +1079,7 @@ bool wxOldDoLayout(wxWindow *win)
   while ((noChanges > 0) && (noIterations < maxIterations))
   {
     noChanges = 0;
-    wxNode *node = win->GetChildren()->First();
+    wxNode *node = win->GetChildren().First();
     while (node)
     {
       wxWindow *child = (wxWindow *)node->Data();
@@ -1104,7 +1104,7 @@ bool wxOldDoLayout(wxWindow *win)
 */
   // Now set the sizes and positions of the children, and
   // recursively call Layout().
-  node = win->GetChildren()->First();
+  node = win->GetChildren().First();
   while (node)
   {
     wxWindow *child = (wxWindow *)node->Data();
@@ -1203,7 +1203,7 @@ wxSizer::~wxSizer()
 {
   // Remove all children without deleting them,
   // or ~wxbWindow will delete proper windows _twice_
-  wxNode *node = GetChildren()->First();
+  wxNode *node = GetChildren().First();
   while (node)
   {
     wxNode *next = node->Next();
@@ -1249,7 +1249,7 @@ void wxSizer::SetBorder(int x, int y)
 void wxSizer::AddSizerChild(wxWindow *child)
 {
   child->SetSizerParent(this);
-  GetChildren()->Append(child);
+  GetChildren().Append(child);
 
   // Add some constraints for the purpose of storing
   // the relative position of the window/sizer
@@ -1272,7 +1272,7 @@ void wxSizer::AddSizerChild(wxWindow *child)
 
 void wxSizer::RemoveSizerChild(wxWindow *child)
 {
-  GetChildren()->DeleteObject(child);
+  GetChildren().DeleteObject(child);
 }
 
 void wxSizer::SetSize(int x, int y, int w, int h, int WXUNUSED(flags))
@@ -1382,7 +1382,7 @@ bool wxSizer::LayoutPhase1(int *noChanges)
       // Find the bounding box and set own size
       int maxX = 0;
       int maxY = 0;
-      wxNode *node = GetChildren()->First();
+      wxNode *node = GetChildren().First();
       while (node)
       {
         int x, y, width, height;
@@ -1580,7 +1580,7 @@ bool wxRowColSizer::LayoutPhase1(int *noChanges)
     int maxX = currentX;
     int maxY = currentY;
     
-    wxNode *node = GetChildren()->First();
+    wxNode *node = GetChildren().First();
     while (node)
     {
       wxWindow *win = (wxWindow *)node->Data();

@@ -405,9 +405,9 @@ wxBitmap wxBitmap::GetBitmapForDC(wxDC& dc) const
 */
     if( this->GetPalette() && this->GetPalette()->Ok() && (this->GetPalette()->GetHPALETTE() != 0) )
     {
-        tmpBitmap.SetPalette(this->GetPalette());
+        tmpBitmap.SetPalette(* this->GetPalette());
         memDC.SelectObject(tmpBitmap);
-        memDC.SetPalette(this->GetPalette());
+        memDC.SetPalette(* this->GetPalette());
         hPal = (HPALETTE) this->GetPalette()->GetHPALETTE();
     }
     else

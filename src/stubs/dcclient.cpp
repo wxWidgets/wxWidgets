@@ -15,6 +15,7 @@
 
 #include "wx/dcclient.h"
 #include "wx/dcmemory.h"
+#include "wx/region.h"
 #include <math.h>
 
 //-----------------------------------------------------------------------------

@@ -136,22 +136,22 @@ bool wxSliderMSW::Create(wxWindow *parent, wxWindowID id,
                          0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)NewControlId(),
                          wxGetInstance(), NULL);
 
-  SetFont(* parent->GetFont());
+  SetFont(parent->GetFont());
 
-  if (GetFont())
+  if (GetFont().Ok())
   {
 //    GetFont()->RealizeResource();
-    if (GetFont()->GetResourceHandle())
+    if (GetFont().GetResourceHandle())
     {
 		if ( m_staticMin )
       		SendMessage((HWND)m_staticMin,WM_SETFONT,
-                  	(WPARAM)GetFont()->GetResourceHandle(),0L);
+                  	(WPARAM)GetFont().GetResourceHandle(),0L);
 		if ( m_staticMax )
       		SendMessage((HWND)m_staticMax,WM_SETFONT,
-                  (WPARAM)GetFont()->GetResourceHandle(),0L);
+                  (WPARAM)GetFont().GetResourceHandle(),0L);
       	if (m_staticValue)
         	SendMessage((HWND)m_staticValue,WM_SETFONT,
-                    (WPARAM)GetFont()->GetResourceHandle(),0L);
+                    (WPARAM)GetFont().GetResourceHandle(),0L);
     }
   }
 
@@ -340,7 +340,7 @@ void wxSliderMSW::SetSize(int x, int y, int width, int height, int sizeFlags)
   int cy;
   int cyf;
 
-  wxGetCharSize(GetHWND(), &cx, &cy,GetFont());
+  wxGetCharSize(GetHWND(), &cx, &cy,& GetFont());
 
   if ((m_windowStyle & wxSL_VERTICAL) != wxSL_VERTICAL)
   {
@@ -349,12 +349,12 @@ void wxSliderMSW::SetSize(int x, int y, int width, int height, int sizeFlags)
     int min_len = 0;
 
     GetWindowText((HWND) m_staticMin, buf, 300);
-    GetTextExtent(buf, &min_len, &cyf,NULL,NULL, GetFont());
+    GetTextExtent(buf, &min_len, &cyf,NULL,NULL, & GetFont());
 
     int max_len = 0;
 
     GetWindowText((HWND) m_staticMax, buf, 300);
-    GetTextExtent(buf, &max_len, &cyf,NULL,NULL, GetFont());
+    GetTextExtent(buf, &max_len, &cyf,NULL,NULL, & GetFont());
     if (m_staticValue)
     {
       int new_width = (int)(wxMax(min_len, max_len));
@@ -400,11 +400,11 @@ void wxSliderMSW::SetSize(int x, int y, int width, int height, int sizeFlags)
 	{
     int min_len;
     GetWindowText((HWND) m_staticMin, buf, 300);
-    GetTextExtent(buf, &min_len, &cyf,NULL,NULL,GetFont());
+    GetTextExtent(buf, &min_len, &cyf,NULL,NULL,& GetFont());
 
     int max_len;
     GetWindowText((HWND) m_staticMax, buf, 300);
-    GetTextExtent(buf, &max_len, &cyf,NULL,NULL, GetFont());
+    GetTextExtent(buf, &max_len, &cyf,NULL,NULL, & GetFont());
 
     if (m_staticValue)
     {

@@ -43,8 +43,8 @@ public:
 
    inline virtual void SetLabelFont(const wxFont& font);
    inline virtual void SetButtonFont(const wxFont& font);
-   inline wxFont  *GetLabelFont(void) const ;
-   inline wxFont  *GetButtonFont(void) const ;
+   inline wxFont& GetLabelFont(void) const ;
+   inline wxFont& GetButtonFont(void) const ;
 #endif
 
    // Places item in centre of panel - so can't be used BEFORE panel->Fit()
@@ -78,8 +78,8 @@ DECLARE_EVENT_TABLE()
 inline void wxControl::Callback(const wxFunction function) { m_callback = function; };           // Adds callback
 
 #if WXWIN_COMPATIBILITY
-inline wxFont  *wxControl::GetLabelFont(void) const         { return GetFont() ; }
-inline wxFont  *wxControl::GetButtonFont(void) const        { return GetFont() ; }
+inline wxFont& wxControl::GetLabelFont(void) const         { return GetFont() ; }
+inline wxFont& wxControl::GetButtonFont(void) const        { return GetFont() ; }
 inline void wxControl::SetLabelFont(const wxFont& font) { SetFont(font); }
 inline void wxControl::SetButtonFont(const wxFont& font) { SetFont(font); }
 #endif

@@ -348,7 +348,7 @@ wxToolBarTool *wxToolBarMSW::AddTool(int index, const wxBitmap& bitmap, const wx
 
   wxToolBarTool *tool = new wxToolBarTool(index, bitmap, *bitmap2, toggle, xPos, yPos, helpString1, helpString2);
 #else
-  wxToolBarTool *tool = new wxToolBarTool(index, bitmap, (wxBitmap *)NULL, toggle, xPos, yPos, helpString1, helpString2);
+  wxToolBarTool *tool = new wxToolBarTool(index, bitmap, wxNullBitmap, toggle, xPos, yPos, helpString1, helpString2);
 #endif
 
   tool->m_clientData = clientData;

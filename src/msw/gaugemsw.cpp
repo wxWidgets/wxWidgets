@@ -128,7 +128,7 @@ bool wxGaugeMSW::Create(wxWindow *parent, wxWindowID id,
   SendMessage((HWND) GetHWND(), ZYZG_SETFGCOLOR, 0, RGB(GetForegroundColour().Red(), GetForegroundColour().Green(), GetForegroundColour().Blue()));
   SendMessage((HWND) GetHWND(), ZYZG_SETBKCOLOR, 0, RGB(GetBackgroundColour().Red(), GetBackgroundColour().Green(), GetBackgroundColour().Blue()));
 
-  SetFont(* parent->GetFont());
+  SetFont(parent->GetFont());
 
   if (width == -1)
     width = 50;

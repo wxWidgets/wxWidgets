@@ -605,7 +605,7 @@ void wxShape::FormatText(wxDC& dc, const wxString& s, int i)
     
   wxShapeRegion *region = (wxShapeRegion *)node->Data();
   region->SetText(s);
-  dc.SetFont(region->GetFont());
+  dc.SetFont(* region->GetFont());
 
   region->GetSize(&w, &h);
 
@@ -919,10 +919,10 @@ void wxShape::OnDrawContents(wxDC& dc)
   GetBoundingBoxMin(&bound_x, &bound_y);
     if (m_regions.Number() < 1) return;
 
-    if (m_pen) dc.SetPen(m_pen);
+    if (m_pen) dc.SetPen(* m_pen);
 
     wxShapeRegion *region = (wxShapeRegion *)m_regions.First()->Data();
-    if (region->GetFont()) dc.SetFont(region->GetFont());
+    if (region->GetFont()) dc.SetFont(* region->GetFont());
 
     dc.SetTextForeground(* (region->GetActualColourObject()));
     dc.SetBackgroundMode(wxTRANSPARENT);
@@ -988,8 +988,8 @@ void wxShape::OnEraseContents(wxDC& dc)
     if (m_pen)
       penWidth = m_pen->GetWidth();
 
-    dc.SetPen(g_oglWhiteBackgroundPen);
-    dc.SetBrush(g_oglWhiteBackgroundBrush);
+    dc.SetPen(* g_oglWhiteBackgroundPen);
+    dc.SetBrush(* g_oglWhiteBackgroundBrush);
     dc.DrawRectangle(WXROUND(topLeftX - penWidth), WXROUND(topLeftY - penWidth),
                       WXROUND(maxX + penWidth*2.0 + 4.0), WXROUND(maxY + penWidth*2.0 + 4.0));
 }
@@ -2535,8 +2535,8 @@ void wxShape::OnDrawControlPoints(wxDC& dc)
   if (!m_drawHandles)
     return;
     
-  dc.SetBrush(wxBLACK_BRUSH);
-  dc.SetPen(wxBLACK_PEN);
+  dc.SetBrush(* wxBLACK_BRUSH);
+  dc.SetPen(* wxBLACK_PEN);
 
   wxNode *node = m_controlPoints.First();
   while (node)

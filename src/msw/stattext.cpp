@@ -86,7 +86,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
   SubclassWin(m_hWnd);
 
-  SetFont(* parent->GetFont());
+  SetFont(parent->GetFont());
   SetSize(x, y, width, height);
 
   return TRUE;
@@ -114,7 +114,7 @@ void wxStaticText::SetSize(int x, int y, int width, int height, int sizeFlags)
   int cyf;
 
   ::GetWindowText((HWND) GetHWND(), buf, 300);
-  GetTextExtent(buf, &current_width, &cyf, NULL, NULL,GetFont());
+  GetTextExtent(buf, &current_width, &cyf, NULL, NULL, & GetFont());
 
   int ww, hh;
   GetSize(&ww, &hh);
@@ -126,7 +126,7 @@ void wxStaticText::SetSize(int x, int y, int width, int height, int sizeFlags)
   {
     int cx;
     int cy;
-    wxGetCharSize(GetHWND(), &cx, &cy,GetFont());
+    wxGetCharSize(GetHWND(), &cx, &cy, & GetFont());
     actualWidth = (int)(current_width + cx) ;
   }
 
@@ -159,7 +159,7 @@ void wxStaticText::SetLabel(const wxString& label)
     ::ScreenToClient((HWND) parent->GetHWND(), &point);
   }
 
-  GetTextExtent(label, &w, &h, NULL, NULL, GetFont());
+  GetTextExtent(label, &w, &h, NULL, NULL, & GetFont());
   MoveWindow((HWND) GetHWND(), point.x, point.y, (int)(w + 10), (int)h,
              TRUE);
   SetWindowText((HWND) GetHWND(), (const char *)label);

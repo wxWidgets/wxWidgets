@@ -44,7 +44,6 @@ public:
 
   // Copy constructors
   inline wxCursor(const wxCursor& cursor) { Ref(cursor); }
-  inline wxCursor(const wxCursor* cursor) { /* UnRef(); */ if (cursor) Ref(*cursor); }
 
   wxCursor(const char bits[], int width, int height, int hotSpotX = -1, int hotSpotY = -1,
     const char maskBits[] = NULL);

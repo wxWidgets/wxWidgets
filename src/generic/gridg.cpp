@@ -80,9 +80,9 @@ wxGenericGrid::wxGenericGrid(void)
   m_labelTextColour = *wxBLACK;
 //  m_labelBackgroundColour = *wxLIGHT_GREY;
   m_labelBackgroundColour = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
-  m_labelBackgroundBrush = (wxBrush *) NULL;
-  m_labelTextFont = (wxFont *) NULL;
-  m_cellTextFont = (wxFont *) NULL;
+  m_labelBackgroundBrush = wxNullBrush;
+  m_labelTextFont = wxNullFont;
+  m_cellTextFont = wxNullFont;
   m_textItem = (wxTextCtrl *) NULL;
   m_currentRectVisible = FALSE;
   m_editable = TRUE;
@@ -95,7 +95,7 @@ wxGenericGrid::wxGenericGrid(void)
   m_dragRowOrCol = 0;
   m_dragStartPosition = 0;
   m_dragLastPosition = 0;
-  m_divisionPen = (wxPen *) NULL;
+  m_divisionPen = wxNullPen;
   m_leftOfSheet = wxGRID_DEFAULT_SHEET_LEFT;
   m_topOfSheet = wxGRID_DEFAULT_SHEET_TOP;
   m_cellHeight = wxGRID_DEFAULT_CELL_HEIGHT;
@@ -122,8 +122,6 @@ wxGenericGrid::wxGenericGrid(void)
   m_rowLabelCells = (wxGridCell **) NULL;
   m_colLabelCells = (wxGridCell **) NULL;
   m_textItem = (wxTextCtrl *) NULL;
-  m_horizontalSashCursor = (wxCursor *) NULL;
-  m_verticalSashCursor = (wxCursor *) NULL;
 }
 
 bool wxGenericGrid::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
@@ -133,16 +131,14 @@ bool wxGenericGrid::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, 
   m_editingPanel = (wxPanel *) NULL;
   m_hScrollBar = (wxScrollBar *) NULL;
   m_vScrollBar = (wxScrollBar *) NULL;
-  m_horizontalSashCursor = (wxCursor *) NULL;
-  m_verticalSashCursor = (wxCursor *) NULL;
   m_cellTextColour = *wxBLACK;
   m_cellBackgroundColour = *wxWHITE;
   m_labelTextColour = *wxBLACK;
 //  m_labelBackgroundColour = *wxLIGHT_GREY;
   m_labelBackgroundColour = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
-  m_labelBackgroundBrush = (wxBrush *) NULL;
-  m_labelTextFont = wxTheFontList->FindOrCreateFont(10, wxSWISS, wxNORMAL, wxBOLD);
-  m_cellTextFont = wxTheFontList->FindOrCreateFont(10, wxSWISS, wxNORMAL, wxNORMAL);
+  m_labelBackgroundBrush = wxNullBrush;
+  m_labelTextFont = * wxTheFontList->FindOrCreateFont(10, wxSWISS, wxNORMAL, wxBOLD);
+  m_cellTextFont = * wxTheFontList->FindOrCreateFont(10, wxSWISS, wxNORMAL, wxNORMAL);
   m_textItem = (wxTextCtrl *) NULL;
   m_currentRectVisible = FALSE;
   m_editable = TRUE;
@@ -155,13 +151,13 @@ bool wxGenericGrid::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, 
   m_dragRowOrCol = 0;
   m_dragStartPosition = 0;
   m_dragLastPosition = 0;
-  m_divisionPen = wxThePenList->FindOrCreatePen("LIGHT GREY", 1, wxSOLID);
+  m_divisionPen = * wxThePenList->FindOrCreatePen("LIGHT GREY", 1, wxSOLID);
   m_doubleBufferingBitmap = (wxBitmap *) NULL;
 
-  if (!m_horizontalSashCursor)
+  if (!m_horizontalSashCursor.Ok())
   {
-    m_horizontalSashCursor = new wxCursor(wxCURSOR_SIZEWE);
-    m_verticalSashCursor = new wxCursor(wxCURSOR_SIZENS);
+    m_horizontalSashCursor = wxCursor(wxCURSOR_SIZEWE);
+    m_verticalSashCursor = wxCursor(wxCURSOR_SIZENS);
   }
 
   SetLabelBackgroundColour(m_labelBackgroundColour);
@@ -402,7 +398,7 @@ void wxGenericGrid::UpdateDimensions(void)
   }
 }
 
-wxGridCell *wxGenericGrid::GetCell(int row, int col)
+wxGridCell *wxGenericGrid::GetCell(int row, int col) const
 {
   if (!m_gridCells)
     return (wxGridCell *) NULL;
@@ -414,7 +410,7 @@ wxGridCell *wxGenericGrid::GetCell(int row, int col)
   if (!cell)
   {
     // m_gridCells[row][col] = OnCreateCell();
-    wxGridEvent g_evt(GetId(), wxEVT_GRID_CREATE_CELL, this, row, col);
+    wxGridEvent g_evt(GetId(), wxEVT_GRID_CREATE_CELL, (wxGenericGrid*) this, row, col);
     GetEventHandler()->ProcessEvent(g_evt);
     m_gridCells[row][col] = g_evt.m_cell;
     return m_gridCells[row][col];
@@ -556,7 +552,7 @@ void wxGenericGrid::DrawLabelAreas(wxDC *dc)
 //  dc->DrawRectangle(m_rightOfSheet, m_topOfSheet, cw - m_rightOfSheet, ch - m_topOfSheet);
 
   // Paint the label areas
-  dc->SetBrush(*m_labelBackgroundBrush);
+  dc->SetBrush(m_labelBackgroundBrush);
 //  dc->DrawRectangle(m_leftOfSheet, m_topOfSheet, m_rightOfSheet - m_leftOfSheet + 1, m_horizontalLabelHeight + 1);
   dc->DrawRectangle(m_leftOfSheet, m_topOfSheet, cw-m_leftOfSheet, m_horizontalLabelHeight + 1);
 //  dc->DrawRectangle(m_leftOfSheet, m_topOfSheet, m_verticalLabelWidth + 1, m_bottomOfSheet - m_topOfSheet + 1);
@@ -583,9 +579,9 @@ void wxGenericGrid::DrawGridLines(wxDC *dc)
 
   int i;
 
-  if (m_divisionPen)
+  if (m_divisionPen.Ok())
   {
-    dc->SetPen(*m_divisionPen);
+    dc->SetPen(m_divisionPen);
 
     int heightCount = m_topOfSheet + m_horizontalLabelHeight;
 
@@ -653,9 +649,9 @@ void wxGenericGrid::DrawGridLines(wxDC *dc)
 
   }
 
-  if (m_divisionPen)
+  if (m_divisionPen.Ok())
   {
-    dc->SetPen(*m_divisionPen);
+    dc->SetPen(m_divisionPen);
 
     // Draw vertical grey lines for cells
     int widthCount = m_leftOfSheet + m_verticalLabelWidth;
@@ -782,7 +778,7 @@ void wxGenericGrid::DrawColumnLabel(wxDC *dc, wxRect *rect, int col)
     rect2.width -= 5;
     rect2.height -= 4;
     dc->SetTextForeground(GetLabelTextColour());
-    dc->SetFont(*GetLabelTextFont());
+    dc->SetFont(GetLabelTextFont());
 	if ( !cell->GetTextValue().IsNull() )
     	DrawTextRect(dc, cell->GetTextValue(), &rect2, GetLabelAlignment(wxHORIZONTAL));
   }
@@ -835,7 +831,7 @@ void wxGenericGrid::DrawRowLabel(wxDC *dc, wxRect *rect, int row)
     rect2.width -= 5;
     rect2.height -= 4;
     dc->SetTextForeground(GetLabelTextColour());
-    dc->SetFont(*GetLabelTextFont());
+    dc->SetFont(GetLabelTextFont());
 	if ( !cell->GetTextValue().IsNull() )
     	DrawTextRect(dc, cell->GetTextValue(), &rect2, GetLabelAlignment(wxVERTICAL));
   }
@@ -874,7 +870,7 @@ void wxGenericGrid::DrawCellBackground(wxDC *dc, wxRect *rect, int row, int col)
   wxGridCell *cell = GetCell(row, col);
   if (cell)
   {
-    dc->SetBrush(*cell->GetBackgroundBrush());
+    dc->SetBrush(cell->GetBackgroundBrush());
     dc->SetPen(*wxTRANSPARENT_PEN);
 
 #if 0    // In wxWin 2.0 the dc code is exact. RR.
@@ -912,7 +908,7 @@ void wxGenericGrid::DrawCellValue(wxDC *dc, wxRect *rect, int row, int col)
     {
       dc->SetBackgroundMode(wxTRANSPARENT);
       dc->SetTextForeground(cell->GetTextColour());
-      dc->SetFont(*cell->GetFont());
+      dc->SetFont(cell->GetFont());
 
 	  if ( !cell->GetTextValue().IsNull() )
       	DrawTextRect(dc, cell->GetTextValue(), &rect2, cell->GetAlignment());
@@ -1239,13 +1235,13 @@ void wxGenericGrid::OnMouseEvent(wxMouseEvent& ev)
           if (orientation == wxHORIZONTAL)
           {
             m_dragStatus = wxGRID_DRAG_LEFT_RIGHT;
-            SetCursor(*m_horizontalSashCursor);
+            SetCursor(m_horizontalSashCursor);
             m_dragLastPosition = (int)ev.GetX();
           }
           else
           {
             m_dragStatus = wxGRID_DRAG_UP_DOWN;
-            SetCursor(*m_verticalSashCursor);
+            SetCursor(m_verticalSashCursor);
             m_dragLastPosition = (int)ev.GetY();
           }
           wxClientDC dc(this);
@@ -1272,7 +1268,7 @@ void wxGenericGrid::OnMouseEvent(wxMouseEvent& ev)
         dc.EndDrawing();
 
         m_dragLastPosition = (int)ev.GetX();
-        SetCursor(*m_horizontalSashCursor);
+        SetCursor(m_horizontalSashCursor);
         break;
       }
       case wxGRID_DRAG_UP_DOWN:
@@ -1286,7 +1282,7 @@ void wxGenericGrid::OnMouseEvent(wxMouseEvent& ev)
         dc.EndDrawing();
 
         m_dragLastPosition = (int)ev.GetY();
-        SetCursor(*m_verticalSashCursor);
+        SetCursor(m_verticalSashCursor);
         break;
       }
     }
@@ -1297,9 +1293,9 @@ void wxGenericGrid::OnMouseEvent(wxMouseEvent& ev)
     if (LabelSashHitTest((int)ev.GetX(), (int)ev.GetY(), &orientation, &rowOrCol, &startPos))
     {
       if (orientation == wxHORIZONTAL)
-        SetCursor(*m_horizontalSashCursor);
+        SetCursor(m_horizontalSashCursor);
        else
-        SetCursor(*m_verticalSashCursor);
+        SetCursor(m_verticalSashCursor);
     }
     else
       SetCursor(*wxSTANDARD_CURSOR);
@@ -1511,7 +1507,7 @@ void wxGenericGrid::DrawCellText(void)
   SetGridClippingRegion(& dc);
 
   dc.SetBackgroundMode(wxTRANSPARENT);
-  dc.SetBrush(*cell->GetBackgroundBrush());
+  dc.SetBrush(cell->GetBackgroundBrush());
 
   strcpy(szEdit, m_textItem->GetValue());
 
@@ -1816,7 +1812,7 @@ void wxGenericGrid::RefreshCell(int row, int col, bool setText)
     }
 }
 
-wxString& wxGenericGrid::GetCellValue(int row, int col)
+wxString& wxGenericGrid::GetCellValue(int row, int col) const
 {
   static wxString emptyString("");
 
@@ -1833,7 +1829,7 @@ void wxGenericGrid::SetColumnWidth(int col, int width)
     m_colWidths[col] = width;
 }
 
-int wxGenericGrid::GetColumnWidth(int col)
+int wxGenericGrid::GetColumnWidth(int col) const
 {
   if (col <= m_totalCols)
     return m_colWidths[col];
@@ -1847,7 +1843,7 @@ void wxGenericGrid::SetRowHeight(int row, int height)
     m_rowHeights[row] = height;
 }
 
-int wxGenericGrid::GetRowHeight(int row)
+int wxGenericGrid::GetRowHeight(int row) const
 {
   if (row <= m_totalRows)
     return m_rowHeights[row];
@@ -1865,7 +1861,7 @@ void wxGenericGrid::SetLabelSize(int orientation, int sz)
   SetCurrentRect(GetCursorRow(), GetCursorColumn());
 }
 
-int wxGenericGrid::GetLabelSize(int orientation)
+int wxGenericGrid::GetLabelSize(int orientation) const
 {
   if (orientation == wxHORIZONTAL)
     return m_horizontalLabelHeight;
@@ -1873,7 +1869,7 @@ int wxGenericGrid::GetLabelSize(int orientation)
     return m_verticalLabelWidth;
 }
 
-wxGridCell *wxGenericGrid::GetLabelCell(int orientation, int pos)
+wxGridCell *wxGenericGrid::GetLabelCell(int orientation, int pos) const
 {
   if (orientation == wxHORIZONTAL)
   {
@@ -1898,7 +1894,7 @@ void wxGenericGrid::SetLabelValue(int orientation, const wxString& val, int pos)
     cell->SetTextValue(val);
 }
 
-wxString& wxGenericGrid::GetLabelValue(int orientation, int pos)
+wxString& wxGenericGrid::GetLabelValue(int orientation, int pos) const
 {
  static wxString emptyString = "";
   wxGridCell *cell = GetLabelCell(orientation, pos);
@@ -1918,7 +1914,7 @@ void wxGenericGrid::SetLabelAlignment(int orientation, int align)
   SetCurrentRect(GetCursorRow(), GetCursorColumn());
 }
 
-int wxGenericGrid::GetLabelAlignment(int orientation)
+int wxGenericGrid::GetLabelAlignment(int orientation) const
 {
   if (orientation == wxHORIZONTAL)
     return m_horizontalLabelAlignment;
@@ -1935,7 +1931,7 @@ void wxGenericGrid::SetLabelTextColour(const wxColour& colour)
 void wxGenericGrid::SetLabelBackgroundColour(const wxColour& colour)
 {
   m_labelBackgroundColour = colour;
-  m_labelBackgroundBrush = wxTheBrushList->FindOrCreateBrush(m_labelBackgroundColour, wxSOLID);
+  m_labelBackgroundBrush = * wxTheBrushList->FindOrCreateBrush(m_labelBackgroundColour, wxSOLID);
 }
 
 void wxGenericGrid::SetEditable(bool edit)
@@ -1989,7 +1985,7 @@ void wxGenericGrid::SetCellAlignment(int flag, int row, int col)
     cell->SetAlignment(flag);
 }
 
-int wxGenericGrid::GetCellAlignment(int row, int col)
+int wxGenericGrid::GetCellAlignment(int row, int col) const
 {
   wxGridCell *cell = GetCell(row, col);
   if (cell)
@@ -2008,7 +2004,7 @@ void wxGenericGrid::SetCellAlignment(int flag)
         GetCell(i, j)->SetAlignment(flag);
 }
 
-int wxGenericGrid::GetCellAlignment(void)
+int wxGenericGrid::GetCellAlignment(void) const
 {
   return m_cellAlignment;
 }
@@ -2033,13 +2029,13 @@ void wxGenericGrid::SetCellBackgroundColour(const wxColour& val, int row, int co
   }
 }
 
-wxColour& wxGenericGrid::GetCellBackgroundColour(int row, int col)
+wxColour& wxGenericGrid::GetCellBackgroundColour(int row, int col) const
 {
   wxGridCell *cell = GetCell(row, col);
   if (cell)
     return cell->GetBackgroundColour();
   else
-    return m_cellBackgroundColour;
+    return (wxColour&) m_cellBackgroundColour;
 }
 
 void wxGenericGrid::SetCellTextColour(const wxColour& val, int row, int col)
@@ -2052,7 +2048,7 @@ void wxGenericGrid::SetCellTextColour(const wxColour& val, int row, int col)
   }
 }
 
-void wxGenericGrid::SetCellTextFont(wxFont *fnt, int row, int col)
+void wxGenericGrid::SetCellTextFont(const wxFont& fnt, int row, int col)
 {
   wxGridCell *cell = GetCell(row, col);
   if (cell)
@@ -2062,22 +2058,22 @@ void wxGenericGrid::SetCellTextFont(wxFont *fnt, int row, int col)
   }
 }
 
-wxFont *wxGenericGrid::GetCellTextFont(int row, int col)
+wxFont& wxGenericGrid::GetCellTextFont(int row, int col) const
 {
   wxGridCell *cell = GetCell(row, col);
   if (cell)
-    return cell->GetFont();
+    return (wxFont&) cell->GetFont();
   else
-    return m_cellTextFont;
+    return (wxFont&) m_cellTextFont;
 }
 
-wxColour& wxGenericGrid::GetCellTextColour(int row, int col)
+wxColour& wxGenericGrid::GetCellTextColour(int row, int col) const
 {
   wxGridCell *cell = GetCell(row, col);
   if (cell)
-    return cell->GetTextColour();
+    return (wxColour&) cell->GetTextColour();
   else
-    return m_cellTextColour;
+    return (wxColour&) m_cellTextColour;
 }
 
 void wxGenericGrid::SetCellTextColour(const wxColour& val)
@@ -2090,7 +2086,7 @@ void wxGenericGrid::SetCellTextColour(const wxColour& val)
         GetCell(i, j)->SetTextColour(val);
 }
 
-void wxGenericGrid::SetCellTextFont(wxFont *fnt)
+void wxGenericGrid::SetCellTextFont(const wxFont& fnt)
 {
   m_cellTextFont = fnt;
   int i,j;
@@ -2110,7 +2106,7 @@ void wxGenericGrid::SetCellBitmap(wxBitmap *bitmap, int row, int col)
   }
 }
 
-wxBitmap *wxGenericGrid::GetCellBitmap(int row, int col)
+wxBitmap *wxGenericGrid::GetCellBitmap(int row, int col) const
 {
   wxGridCell *cell = GetCell(row, col);
   if (cell)
@@ -2407,8 +2403,8 @@ void wxGenericGrid::SetGridCursor(int row, int col)
 wxGridCell::wxGridCell(wxGenericGrid *window)
 {
   cellBitmap = (wxBitmap *) NULL;
-  font = (wxFont *) NULL;
-  backgroundBrush = (wxBrush *) NULL;
+  font = wxNullFont;
+  backgroundBrush = wxNullBrush;
   if (window)
     textColour = window->GetCellTextColour();
   else
@@ -2421,7 +2417,7 @@ wxGridCell::wxGridCell(wxGenericGrid *window)
   if (window)
     font = window->GetCellTextFont();
   else
-    font = wxTheFontList->FindOrCreateFont(12, wxSWISS, wxNORMAL, wxNORMAL);
+    font = * wxTheFontList->FindOrCreateFont(12, wxSWISS, wxNORMAL, wxNORMAL);
 
   SetBackgroundColour(backgroundColour);
 
@@ -2438,7 +2434,7 @@ wxGridCell::~wxGridCell(void)
 void wxGridCell::SetBackgroundColour(const wxColour& colour)
 {
   backgroundColour = colour;
-  backgroundBrush = wxTheBrushList->FindOrCreateBrush(backgroundColour, wxSOLID);
+  backgroundBrush = * wxTheBrushList->FindOrCreateBrush(backgroundColour, wxSOLID);
 }
 
 void wxGenericGrid::OnText(wxCommandEvent& WXUNUSED(ev) )

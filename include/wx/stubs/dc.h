@@ -177,16 +177,16 @@ class WXDLLEXPORT wxDC: public wxObject
     virtual void Clear(void) = 0;
             
     virtual void SetFont( const wxFont &font ) = 0;
-    virtual wxFont *GetFont(void) const { return (wxFont*) &m_font; };
+    virtual wxFont& GetFont(void) const { return (wxFont&) m_font; };
     
     virtual void SetPen( const wxPen &pen ) = 0;
-    virtual wxPen *GetPen(void) const { return (wxPen*) &m_pen; };
+    virtual wxPen& GetPen(void) const { return (wxPen&) m_pen; };
     
     virtual void SetBrush( const wxBrush &brush ) = 0;
-    virtual wxBrush *GetBrush(void) const { return (wxBrush*) &m_brush; };
+    virtual wxBrush& GetBrush(void) const { return (wxBrush&) m_brush; };
 
     virtual void SetBackground( const wxBrush &brush ) = 0;
-    virtual wxBrush *GetBackground(void) const { return (wxBrush*) &m_backgroundBrush; };
+    virtual wxBrush& GetBackground(void) const { return (wxBrush&) m_backgroundBrush; };
 
     virtual void SetLogicalFunction( int function ) = 0;
     virtual int GetLogicalFunction(void) const { return m_logicalFunction; };

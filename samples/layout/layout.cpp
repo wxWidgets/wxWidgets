@@ -205,12 +205,12 @@ void MyFrame::OnSize(wxSizeEvent& WXUNUSED(event) )
 
 void MyFrame::Draw(wxDC& dc, bool WXUNUSED(draw_bitmaps) )
 {
-  dc.SetPen(wxGREEN_PEN);
+  dc.SetPen(* wxGREEN_PEN);
   dc.DrawLine(0, 0, 200, 200);
   dc.DrawLine(200, 0, 0, 200);
 
-  dc.SetBrush(wxCYAN_BRUSH);
-  dc.SetPen(wxRED_PEN);
+  dc.SetBrush(* wxCYAN_BRUSH);
+  dc.SetPen(* wxRED_PEN);
 
   dc.DrawRectangle(100, 100, 100, 50);
   dc.DrawRoundedRectangle(150, 150, 100, 50, 20);
@@ -219,7 +219,7 @@ void MyFrame::Draw(wxDC& dc, bool WXUNUSED(draw_bitmaps) )
   dc.DrawSpline(50, 200, 50, 100, 200, 10);
   dc.DrawLine(50, 230, 200, 230);
 
-  dc.SetPen(wxBLACK_PEN);
+  dc.SetPen(* wxBLACK_PEN);
   dc.DrawArc(50, 300, 100, 250, 100, 300 );
 }
 

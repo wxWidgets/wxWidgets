@@ -571,7 +571,7 @@ wxXSetBusyCursor (wxWindow * win, wxCursor * cursor)
 
   XFlush (display);
 
-  for(wxNode *node = win->GetChildren()->First (); node; node = node->Next())
+  for(wxNode *node = win->GetChildren().First (); node; node = node->Next())
   {
         wxWindow *child = (wxWindow *) node->Data ();
 	    wxXSetBusyCursor (child, cursor);

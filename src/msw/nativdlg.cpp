@@ -96,7 +96,7 @@ wxWindow* wxWindow::GetWindowChild1(wxWindowID& id)
 	if ( m_windowId == id )
 		return this;
 
-	wxNode *node = GetChildren()->First();
+	wxNode *node = GetChildren().First();
 	while ( node )
 	{
 		wxWindow* child = (wxWindow*) node->Data();

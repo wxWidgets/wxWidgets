@@ -98,7 +98,7 @@ void wxButton::SetDefault()
   // Because it's very hard to find wxButton in the same row,
   // correction is straighforward: we set resource for all wxButton
   // in this parent (but not sub panels)
-  for (wxNode * node = parent->GetChildren ()->First (); node; node = node->Next ())
+  for (wxNode * node = parent->GetChildren().First (); node; node = node->Next ())
     {
       wxButton *item = (wxButton *) node->Data ();
       if (item->IsKindOf(CLASSINFO(wxButton)))

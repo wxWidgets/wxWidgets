@@ -82,7 +82,7 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
   // Subclass again for purposes of dialog editing mode
   SubclassWin((WXHWND)wx_button);
 
-  SetFont(* parent->GetFont()) ;
+  SetFont(parent->GetFont()) ;
 
   SetSize(x, y, width, height);
   ShowWindow(wx_button, SW_SHOW);

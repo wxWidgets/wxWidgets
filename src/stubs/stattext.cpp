@@ -32,8 +32,8 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
   SetName(name);
   if (parent) parent->AddChild(this);
 
-  SetBackgroundColour(parent->GetDefaultBackgroundColour()) ;
-  SetForegroundColour(parent->GetDefaultForegroundColour()) ;
+  SetBackgroundColour(parent->GetBackgroundColour()) ;
+  SetForegroundColour(parent->GetForegroundColour()) ;
 
   if ( id == -1 )
   	m_windowId = (int)NewControlId();
@@ -42,7 +42,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
   m_windowStyle = style;
 
-  SetFont(* parent->GetFont());
+  SetFont(parent->GetFont());
 
   // TODO
   return FALSE;

@@ -105,7 +105,7 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
   // Subclass again for purposes of dialog editing mode
   SubclassWin(m_hWnd);
   
-  SetFont(*parent->GetFont());
+  SetFont(parent->GetFont());
 
   SetSize(x, y, width, height);
 
@@ -143,7 +143,7 @@ void wxCheckBox::SetSize(int x, int y, int width, int height, int sizeFlags)
 
   if ( !str.IsEmpty() )
   {
-    GetTextExtent(str, &current_width, &cyf, NULL, NULL, GetFont());
+    GetTextExtent(str, &current_width, &cyf, NULL, NULL, & GetFont());
     if (w1 < 0)
       w1 = (int)(current_width + RADIO_SIZE);
     if (h1 < 0)

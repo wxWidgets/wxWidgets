@@ -310,13 +310,13 @@ public:
   inline wxWindow *GetParent() const;
   inline void SetParent(wxWindow *p) ;
   inline wxWindow *GetGrandParent() const;
-  inline wxList *GetChildren() const;
+  inline wxList& GetChildren() const;
   // Reparents this window to have the new parent.
   virtual bool Reparent(wxWindow* parent);
 
   // Set/get the window's font
   virtual void SetFont(const wxFont& f);
-  inline virtual wxFont *GetFont() const;
+  inline virtual wxFont& GetFont() const;
 
   // Set/get the window's validator
   void SetValidator(const wxValidator& validator);
@@ -655,8 +655,8 @@ inline void wxWindow::SetId(int id) { m_windowId = id; }
 inline wxWindow *wxWindow::GetParent() const { return m_windowParent; }
 inline void wxWindow::SetParent(wxWindow *p) { m_windowParent = p; }
 inline wxWindow *wxWindow::GetGrandParent() const { return (m_windowParent ? m_windowParent->m_windowParent : (wxWindow*) NULL); }
-inline wxList *wxWindow::GetChildren() const { return m_children; }
-inline wxFont *wxWindow::GetFont() const { return (wxFont *) & m_windowFont; }
+inline wxList& wxWindow::GetChildren() const { return (wxList&) * m_children; }
+inline wxFont& wxWindow::GetFont() const { return (wxFont&) m_windowFont; }
 inline wxString wxWindow::GetName() const { return m_windowName; }
 inline void wxWindow::SetName(const wxString& name) { m_windowName = name; }
 inline long wxWindow::GetWindowStyleFlag() const { return m_windowStyle; }

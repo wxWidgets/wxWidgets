@@ -100,7 +100,7 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
     ::SetScrollPos(scroll_bar, SB_CTL, 0, FALSE);
     ShowWindow(scroll_bar, SW_SHOW);
 
-    SetFont(* parent->GetFont());
+    SetFont(parent->GetFont());
 
     m_hWnd = (WXHWND)scroll_bar;
 

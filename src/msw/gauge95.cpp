@@ -81,7 +81,7 @@ bool wxGauge95::Create(wxWindow *parent, wxWindowID id,
 
   SendMessage((HWND) GetHWND(), PBM_SETRANGE, 0, MAKELPARAM(0, range));
 
-  SetFont(* parent->GetFont());
+  SetFont(parent->GetFont());
 
   if (width == -1)
     width = 50;

@@ -72,7 +72,7 @@ void wxScrollBar::SetScrollbar(int position, int thumbSize, int range, int pageS
 
 void wxScrollBar::Command(wxCommandEvent& event)
 {
-    SetPosition(event.m_commandInt);
+    SetThumbPosition(event.m_commandInt);
     ProcessCommand(event);
 }
 

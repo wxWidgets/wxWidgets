@@ -942,7 +942,7 @@ void wxWindow::Refresh(bool eraseBack, const wxRect *rect)
 // Responds to colour changes: passes event on to children.
 void wxWindow::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
-    wxNode *node = GetChildren()->First();
+    wxNode *node = GetChildren().First();
     while ( node )
     {
         // Only propagate to non-top-level windows
@@ -1371,7 +1371,7 @@ bool wxWindow::IsEnabled() const
 // it's an application error (pops up a dialog)
 bool wxWindow::TransferDataToWindow()
 {
-	wxNode *node = GetChildren()->First();
+	wxNode *node = GetChildren().First();
 	while ( node )
 	{
 		wxWindow *child = (wxWindow *)node->Data();
@@ -1391,7 +1391,7 @@ bool wxWindow::TransferDataToWindow()
 // validation failed: don't quit
 bool wxWindow::TransferDataFromWindow()
 {
-	wxNode *node = GetChildren()->First();
+	wxNode *node = GetChildren().First();
 	while ( node )
 	{
 		wxWindow *child = (wxWindow *)node->Data();
@@ -1407,7 +1407,7 @@ bool wxWindow::TransferDataFromWindow()
 
 bool wxWindow::Validate()
 {
-	wxNode *node = GetChildren()->First();
+	wxNode *node = GetChildren().First();
 	while ( node )
 	{
 		wxWindow *child = (wxWindow *)node->Data();
@@ -1430,14 +1430,13 @@ wxWindow *wxWindow::FindFocus()
 
 void wxWindow::AddChild(wxWindow *child)
 {
-    GetChildren()->Append(child);
+    GetChildren().Append(child);
     child->m_windowParent = this;
 }
 
 void wxWindow::RemoveChild(wxWindow *child)
 {
-    if (GetChildren())
-        GetChildren()->DeleteObject(child);
+    GetChildren().DeleteObject(child);
     child->m_windowParent = NULL;
 }
 
@@ -1450,9 +1449,7 @@ bool wxWindow::Reparent(wxWindow* WXUNUSED(parent))
 
 void wxWindow::DestroyChildren()
 {
-  if (GetChildren())
-  {
-    wxNode *node = GetChildren()->First();
+    wxNode *node = GetChildren().First();
     while (node)
     {
       wxNode* next = node->Next();
@@ -1460,19 +1457,18 @@ void wxWindow::DestroyChildren()
       delete child;
       node = next;
     }
-    GetChildren()->Clear();
+    GetChildren().Clear();
 #if 0
     wxNode *node;
-    while ((node = GetChildren()->First()) != (wxNode *)NULL) {
+    while ((node = GetChildren().First()) != (wxNode *)NULL) {
       wxWindow *child;
       if ((child = (wxWindow *)node->Data()) != (wxWindow *)NULL) {
         delete child;
-		if ( GetChildren()->Member(child) )
+		if ( GetChildren().Member(child) )
 			delete node;
       }
     } /* while */
 #endif
-  }
 }
 
 void wxWindow::MakeModal(bool modal)
@@ -1687,7 +1683,7 @@ bool wxWindow::DoPhase(int phase)
   {
     noChanges = 0;
     noFailures = 0;
-    wxNode *node = GetChildren()->First();
+    wxNode *node = GetChildren().First();
     while (node)
     {
       wxWindow *child = (wxWindow *)node->Data();
@@ -1732,7 +1728,7 @@ void wxWindow::ResetConstraints()
     constr->centreX.SetDone(FALSE);
     constr->centreY.SetDone(FALSE);
   }
-  wxNode *node = GetChildren()->First();
+  wxNode *node = GetChildren().First();
   while (node)
   {
     wxWindow *win = (wxWindow *)node->Data();
@@ -1791,7 +1787,7 @@ void wxWindow::SetConstraintSizes(bool recurse)
 
   if (recurse)
   {
-    wxNode *node = GetChildren()->First();
+    wxNode *node = GetChildren().First();
     while (node)
     {
       wxWindow *win = (wxWindow *)node->Data();
@@ -1928,9 +1924,7 @@ bool wxWindow::Close(bool force)
 wxObject* wxWindow::GetChild(int number) const
 {
   // Return a pointer to the Nth object in the window
-  if (!GetChildren())
-    return(NULL) ;
-  wxNode *node = GetChildren()->First();
+  wxNode *node = GetChildren().First();
   int n = number;
   while (node && n--)
     node = node->Next() ;
@@ -1961,7 +1955,7 @@ void wxWindow::Fit()
 {
 	int maxX = 0;
 	int maxY = 0;
-	wxNode *node = GetChildren()->First();
+	wxNode *node = GetChildren().First();
 	while ( node )
 	{
 		wxWindow *win = (wxWindow *)node->Data();
@@ -2015,7 +2009,7 @@ wxWindow *wxWindow::FindWindow(long id)
 	if ( GetId() == id)
 		return this;
 
-	wxNode *node = GetChildren()->First();
+	wxNode *node = GetChildren().First();
 	while ( node )
 	{
 		wxWindow *child = (wxWindow *)node->Data();
@@ -2032,7 +2026,7 @@ wxWindow *wxWindow::FindWindow(const wxString& name)
 	if ( GetName() == name)
 		return this;
 
-	wxNode *node = GetChildren()->First();
+	wxNode *node = GetChildren().First();
 	while ( node )
 	{
 		wxWindow *child = (wxWindow *)node->Data();

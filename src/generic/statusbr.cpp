@@ -87,7 +87,7 @@ bool wxStatusBar::Create(wxWindow *parent, wxWindowID id,
   bool success = wxWindow::Create(parent, id, pos, size, style, name);
 
   // Don't wish this to be found as a child
-  parent->GetChildren()->DeleteObject(this);
+  parent->GetChildren().DeleteObject(this);
 
   InitColours();
 
@@ -172,8 +172,8 @@ void wxStatusBar::OnPaint(wxPaintEvent& WXUNUSED(event) )
   wxPaintDC dc(this);
 
   int i;
-  if ( GetFont() )
-    dc.SetFont(*GetFont());
+  if ( GetFont().Ok() )
+    dc.SetFont(GetFont());
   dc.SetBackgroundMode(wxTRANSPARENT);
 
   for ( i = 0; i < m_nFields; i ++ )

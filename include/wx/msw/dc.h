@@ -235,11 +235,11 @@ public:
   inline virtual bool Ok(void) const {return m_ok;};
   inline virtual int  GetMapMode(void) const {return m_mappingMode;};
 
-  inline virtual wxBrush *GetBackground(void) const { return (wxBrush*) &m_backgroundBrush ;}
-  inline virtual wxBrush *GetBrush(void) const { return (wxBrush*) &m_brush ;}
-  inline virtual wxFont  *GetFont(void) const { return (wxFont*) &m_font ;}
+  inline virtual wxBrush& GetBackground(void) const { return (wxBrush&) m_backgroundBrush ;}
+  inline virtual wxBrush& GetBrush(void) const { return (wxBrush&) m_brush ;}
+  inline virtual wxFont& GetFont(void) const { return (wxFont&) m_font ;}
   inline virtual int      GetLogicalFunction(void) const { return m_logicalFunction ;}
-  inline virtual wxPen   *GetPen(void) const { return (wxPen*) &m_pen ;}
+  inline virtual wxPen&   GetPen(void) const { return (wxPen&) m_pen ;}
   inline virtual wxColour&GetTextBackground(void) const { return (wxColour&) m_textBackgroundColour ;}
   inline virtual wxColour&GetTextForeground(void) const { return (wxColour&) m_textForegroundColour ;}
 

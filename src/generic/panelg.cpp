@@ -89,7 +89,7 @@ void wxPanel::OnNavigationKey(wxNavigationKeyEvent& event)
   }
 
   // first of all, find the window which currently has the focus
-  wxNode *node = GetChildren()->First();
+  wxNode *node = GetChildren().First();
   wxWindow *winFocus = event.GetCurrentFocus();
   
   // @@@ no FindFocus() in wxGTK
@@ -117,7 +117,7 @@ bool wxPanel::SetFocusToNextChild(wxNode *node, bool bForward)
 
   bool bFound = FALSE;  // have we found a window we will set focus to?
 
-  wxList *children = GetChildren();
+  wxList *children = & GetChildren();
   if ( node == NULL ) {
     // we've never had focus before
     node = bForward ? children->First() : children->Last();

@@ -216,7 +216,7 @@ void wxLineShape::FormatText(wxDC& dc, const wxString& s, int i)
     
   wxShapeRegion *region = (wxShapeRegion *)node->Data();
   region->SetText(s);
-  dc.SetFont(region->GetFont());
+  dc.SetFont(* region->GetFont());
 
   region->GetSize(&w, &h);
   // Initialize the size if zero
@@ -284,15 +284,15 @@ void wxLineShape::DrawRegion(wxDC& dc, wxShapeRegion *region, double x, double y
   // First, clear a rectangle for the text IF there is any
   if (region->GetFormattedText().Number() > 0)
   {
-      dc.SetPen(g_oglWhiteBackgroundPen);
-      dc.SetBrush(g_oglWhiteBackgroundBrush);
+      dc.SetPen(* g_oglWhiteBackgroundPen);
+      dc.SetBrush(* g_oglWhiteBackgroundBrush);
 
       // Now draw the text
-      if (region->GetFont()) dc.SetFont(region->GetFont());
+      if (region->GetFont()) dc.SetFont(* region->GetFont());
 
       dc.DrawRectangle((long)(xp - w/2.0), (long)(yp - h/2.0), (long)w, (long)h);
 
-      if (m_pen) dc.SetPen(m_pen);
+      if (m_pen) dc.SetPen(* m_pen);
       dc.SetTextForeground(* region->GetActualColourObject());
 
 #ifdef __WXMSW__
@@ -320,8 +320,8 @@ void wxLineShape::EraseRegion(wxDC& dc, wxShapeRegion *region, double x, double 
 
   if (region->GetFormattedText().Number() > 0)
   {
-      dc.SetPen(g_oglWhiteBackgroundPen);
-      dc.SetBrush(g_oglWhiteBackgroundBrush);
+      dc.SetPen(* g_oglWhiteBackgroundPen);
+      dc.SetBrush(* g_oglWhiteBackgroundBrush);
 
       dc.DrawRectangle((long)(xp - w/2.0), (long)(yp - h/2.0), (long)w, (long)h);
   }
@@ -727,8 +727,8 @@ void wxLineShape::DrawArrow(wxDC& dc, wxArrowHead *arrow, double xOffset, bool p
       points[2].x = (int) side2_x; points[2].y = (int) side2_y;
       points[3].x = (int) tip_x; points[3].y = (int) tip_y;
 
-      dc.SetPen(m_pen);
-      dc.SetBrush(m_brush);
+      dc.SetPen(* m_pen);
+      dc.SetBrush(* m_brush);
       dc.DrawPolygon(4, points);
       break;
     }
@@ -748,11 +748,11 @@ void wxLineShape::DrawArrow(wxDC& dc, wxArrowHead *arrow, double xOffset, bool p
       double x1 = (double)(x - (diameter/2.0));
       double y1 = (double)(y - (diameter/2.0));
 
-      dc.SetPen(m_pen);
+      dc.SetPen(* m_pen);
       if (arrow->_GetType() == ARROW_HOLLOW_CIRCLE)
-        dc.SetBrush(g_oglWhiteBackgroundBrush);
+        dc.SetBrush(* g_oglWhiteBackgroundBrush);
       else
-        dc.SetBrush(m_brush);
+        dc.SetBrush(* m_brush);
 
       dc.DrawEllipse((long) x1, (long) y1, (long) diameter, (long) diameter);
       break;
@@ -854,7 +854,7 @@ void wxLineShape::OnErase(wxDC& dc)
 
     double bound_x, bound_y;
     GetBoundingBoxMax(&bound_x, &bound_y);
-    if (m_font) dc.SetFont(m_font);
+    if (m_font) dc.SetFont(* m_font);
 
     // Undraw text regions
     for (int i = 0; i < 3; i++)
@@ -870,8 +870,8 @@ void wxLineShape::OnErase(wxDC& dc)
     }
 
     // Undraw line
-    dc.SetPen(g_oglWhiteBackgroundPen);
-    dc.SetBrush(g_oglWhiteBackgroundBrush);
+    dc.SetPen(* g_oglWhiteBackgroundPen);
+    dc.SetBrush(* g_oglWhiteBackgroundBrush);
 
     // Drawing over the line only seems to work if the line has a thickness
     // of 1.
@@ -1177,9 +1177,9 @@ void wxLineShape::OnDraw(wxDC& dc)
   if (m_lineControlPoints)
   {
     if (m_pen)
-      dc.SetPen(m_pen);
+      dc.SetPen(* m_pen);
     if (m_brush)
-      dc.SetBrush(m_brush);
+      dc.SetBrush(* m_brush);
 
     int n = m_lineControlPoints->Number();
     wxPoint *points = new wxPoint[n];
@@ -1211,7 +1211,7 @@ void wxLineShape::OnDraw(wxDC& dc)
       wxPen *solid_pen =
         wxThePenList->FindOrCreatePen(m_pen->GetColour(), 1, wxSOLID);
       if (solid_pen)
-        dc.SetPen(solid_pen);
+        dc.SetPen(* solid_pen);
     }
     DrawArrows(dc);
   }
@@ -1813,7 +1813,7 @@ void wxLineShape::OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, 
 
   if (lpt->m_type == CONTROL_POINT_ENDPOINT_FROM || lpt->m_type == CONTROL_POINT_ENDPOINT_TO)
   {
-    m_canvas->SetCursor(g_oglBullseyeCursor);
+    m_canvas->SetCursor(* g_oglBullseyeCursor);
     lpt->m_oldCursor = wxSTANDARD_CURSOR;
   }
 }
@@ -1847,7 +1847,7 @@ void wxLineShape::OnSizingEndDragLeft(wxControlPoint* pt, double x, double y, in
   if (lpt->m_type == CONTROL_POINT_ENDPOINT_FROM)
   {
     if (lpt->m_oldCursor)
-      m_canvas->SetCursor(lpt->m_oldCursor);
+      m_canvas->SetCursor(* lpt->m_oldCursor);
 
 //    this->Erase(dc);
 
@@ -1861,7 +1861,7 @@ void wxLineShape::OnSizingEndDragLeft(wxControlPoint* pt, double x, double y, in
   if (lpt->m_type == CONTROL_POINT_ENDPOINT_TO)
   {
     if (lpt->m_oldCursor)
-      m_canvas->SetCursor(lpt->m_oldCursor);
+      m_canvas->SetCursor(* lpt->m_oldCursor);
 
 //    lpt->m_xpos = x; lpt->m_ypos = y;
 
@@ -2429,11 +2429,11 @@ void wxLabelShape::OnDraw(wxDC& dc)
     if (m_pen)
     {
       if (m_pen->GetWidth() == 0)
-        dc.SetPen(g_oglTransparentPen);
+        dc.SetPen(* g_oglTransparentPen);
       else
-        dc.SetPen(m_pen);
+        dc.SetPen(* m_pen);
     }
-    dc.SetBrush(wxTRANSPARENT_BRUSH);
+    dc.SetBrush(* wxTRANSPARENT_BRUSH);
 
     if (m_cornerRadius > 0.0)
       dc.DrawRoundedRectangle(WXROUND(x1), WXROUND(y1), WXROUND(m_width), WXROUND(m_height), m_cornerRadius);

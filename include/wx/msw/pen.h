@@ -53,7 +53,6 @@ public:
   wxPen(const wxColour& col, int width, int style);
   wxPen(const wxBitmap& stipple, int width);
   inline wxPen(const wxPen& pen) { Ref(pen); }
-  inline wxPen(const wxPen* pen) { if (pen) Ref(*pen); }
   ~wxPen();
 
   inline wxPen& operator = (const wxPen& pen) { if (*this == pen) return (*this); Ref(pen); return *this; }

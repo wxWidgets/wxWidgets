@@ -124,7 +124,6 @@ public:
   // Copy constructors
   inline wxBitmap(const wxBitmap& bitmap)
   { Ref(bitmap); if ( wxTheBitmapList ) wxTheBitmapList->AddBitmap(this); }
-  inline wxBitmap(const wxBitmap* bitmap) { if (bitmap) Ref(*bitmap); if ( wxTheBitmapList ) wxTheBitmapList->AddBitmap(this); }
 
   // Initialize with raw data.
   wxBitmap(const char bits[], int width, int height, int depth = 1);

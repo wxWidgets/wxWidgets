@@ -41,7 +41,6 @@ class WXDLLEXPORT wxPalette: public wxGDIObject
 public:
   wxPalette();
   inline wxPalette(const wxPalette& palette) { Ref(palette); }
-  inline wxPalette(const wxPalette* palette) { UnRef(); if (palette) Ref(*palette); }
 
   wxPalette(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
   ~wxPalette();

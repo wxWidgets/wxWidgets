@@ -2301,7 +2301,7 @@ wxIcon wxResourceCreateIcon(const wxString& resource, wxResourceTable *table)
   else
   {
     wxLogWarning(_("Icon resource specification %s not found."), (const char*) resource);
-    return (wxIcon *) NULL;
+    return wxNullIcon;
   }
 }
 
@@ -2827,7 +2827,7 @@ bool wxWindow::LoadFromResource(wxWindow *parent, const wxString& resourceName, 
   }
 
   // Should have some kind of font at this point
-  if (!GetFont()->Ok())
+  if (!GetFont().Ok())
       SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
   if (!GetBackgroundColour().Ok())
       SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));

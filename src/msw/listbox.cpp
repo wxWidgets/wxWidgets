@@ -244,7 +244,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
   if ( (m_windowStyle & wxLB_MULTIPLE) == 0 )
     SendMessage(hwnd, LB_SETCURSEL, 0, 0);
 
-  SetFont(* parent->GetFont());
+  SetFont(parent->GetFont());
 
   SetSize(x, y, width, height);
 
@@ -495,7 +495,7 @@ void wxListBox::SetSize(int x, int y, int width, int height, int sizeFlags)
   int cx; // button font dimensions
   int cy;
 
-  wxGetCharSize(GetHWND(), &cx, &cy,GetFont());
+  wxGetCharSize(GetHWND(), &cx, &cy, & GetFont());
 
   float control_width, control_height, control_x, control_y;
 
@@ -540,8 +540,8 @@ void wxListBox::SetHorizontalExtent(const wxString& s)
     int existingExtent = (int)SendMessage(hwnd, LB_GETHORIZONTALEXTENT, 0, 0L);
     HDC dc = GetWindowDC(hwnd);
     HFONT oldFont = 0;
-    if (GetFont() && GetFont()->GetResourceHandle())
-      oldFont = (HFONT) ::SelectObject(dc, (HFONT) GetFont()->GetResourceHandle());
+    if (GetFont().Ok() && GetFont().GetResourceHandle())
+      oldFont = (HFONT) ::SelectObject(dc, (HFONT) GetFont().GetResourceHandle());
 
     GetTextMetrics(dc, &lpTextMetric);
     SIZE extentXY;
@@ -561,8 +561,8 @@ void wxListBox::SetHorizontalExtent(const wxString& s)
     int largestExtent = 0;
     HDC dc = GetWindowDC(hwnd);
     HFONT oldFont = 0;
-    if (GetFont() && GetFont()->GetResourceHandle())
-      oldFont = (HFONT) ::SelectObject(dc, (HFONT) GetFont()->GetResourceHandle());
+    if (GetFont().Ok() && GetFont().GetResourceHandle())
+      oldFont = (HFONT) ::SelectObject(dc, (HFONT) GetFont().GetResourceHandle());
 
     GetTextMetrics(dc, &lpTextMetric);
     int i;

@@ -438,7 +438,7 @@ bool wxApp::SendIdleEvents(wxWindow* win)
     if (event.MoreRequested())
         needMore = TRUE;
 
-	wxNode* node = win->GetChildren()->First();
+	wxNode* node = win->GetChildren().First();
 	while (node)
 	{
 		wxWindow* win = (wxWindow*) node->Data();

@@ -72,6 +72,8 @@ public:
   }
   bool operator != (const wxColour& colour) { return !(*this == colour); }
 
+  void InitFromName(const wxString& col);
+
 /* TODO
   WXCOLORREF GetPixel() const { return m_pixel; };
 */

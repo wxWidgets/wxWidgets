@@ -93,7 +93,7 @@ void wxDiagram::Redraw(wxDC& dc)
   if (m_shapeList)
   {
     if (GetCanvas())
-      GetCanvas()->SetCursor(wxHOURGLASS_CURSOR);
+      GetCanvas()->SetCursor(* wxHOURGLASS_CURSOR);
     wxNode *current = m_shapeList->First();
 
     while (current)
@@ -105,7 +105,7 @@ void wxDiagram::Redraw(wxDC& dc)
       current = current->Next();
     }
     if (GetCanvas())
-      GetCanvas()->SetCursor(wxSTANDARD_CURSOR);
+      GetCanvas()->SetCursor(* wxSTANDARD_CURSOR);
   }
 }
 

@@ -31,15 +31,15 @@ public:
     virtual void Notify() = 0;                 // Override this member
 
     // Returns the current interval time (0 if stop)
-    int Interval() const { return milli; }; 
-    bool OneShot() const { return oneShot; }
+    int Interval() const { return m_milli; }; 
+    bool OneShot() const { return m_oneShot; }
 
 protected:
-    bool oneShot ;
-    int  milli ;
-    int  lastMilli ;
+    bool m_oneShot ;
+    int  m_milli ;
+    int  m_lastMilli ;
 
-    long id;
+    long m_id;
 
 private:
     DECLARE_ABSTRACT_CLASS(wxTimer)

@@ -81,7 +81,7 @@ void wxDividedShape::OnDrawContents(wxDC& dc)
   double leftX = (double)(m_xpos - (m_width / 2.0));
   double rightX = (double)(m_xpos + (m_width / 2.0));
 
-  if (m_pen) dc.SetPen(m_pen);
+  if (m_pen) dc.SetPen(* m_pen);
 
   if (m_textColour) dc.SetTextForeground(* m_textColour);
 
@@ -108,7 +108,7 @@ void wxDividedShape::OnDrawContents(wxDC& dc)
   while (node)
   {
     wxShapeRegion *region = (wxShapeRegion *)node->Data();
-    dc.SetFont(region->GetFont());
+    dc.SetFont(* region->GetFont());
     dc.SetTextForeground(* region->GetActualColourObject());
 
     double proportion =
@@ -128,7 +128,7 @@ void wxDividedShape::OnDrawContents(wxDC& dc)
       wxPen *regionPen = region->GetActualPen();
       if (regionPen)
       {
-        dc.SetPen(regionPen);
+        dc.SetPen(* regionPen);
         dc.DrawLine(WXROUND(leftX), WXROUND(y), WXROUND(rightX), WXROUND(y));
       }
     }

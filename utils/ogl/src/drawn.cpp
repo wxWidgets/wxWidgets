@@ -431,7 +431,7 @@ void wxOpSetGDI::Do(wxDC& dc, double xoffset, double yoffset)
       if (m_image->m_outlineColours.Member((wxObject *)m_gdiIndex))
       {
         if (m_image->m_outlinePen)
-          dc.SetPen(m_image->m_outlinePen);
+          dc.SetPen(* m_image->m_outlinePen);
       }
       else
       {
@@ -440,7 +440,7 @@ void wxOpSetGDI::Do(wxDC& dc, double xoffset, double yoffset)
         {
           wxPen *pen = (wxPen *)node->Data();
           if (pen)
-            dc.SetPen(pen);
+            dc.SetPen(* pen);
         }
       }
       break;
@@ -456,14 +456,14 @@ void wxOpSetGDI::Do(wxDC& dc, double xoffset, double yoffset)
         {
           wxBrush *br = wxTheBrushList->FindOrCreateBrush(m_image->m_outlinePen->GetColour(), wxSOLID);
           if (br)
-            dc.SetBrush(br);
+            dc.SetBrush(* br);
         }
       }
       else if (m_image->m_fillColours.Member((wxObject *)m_gdiIndex))
       {
         if (m_image->m_fillBrush)
         {
-          dc.SetBrush(m_image->m_fillBrush);
+          dc.SetBrush(* m_image->m_fillBrush);
         }
       }
       else
@@ -473,7 +473,7 @@ void wxOpSetGDI::Do(wxDC& dc, double xoffset, double yoffset)
         {
           wxBrush *brush = (wxBrush *)node->Data();
           if (brush)
-            dc.SetBrush(brush);
+            dc.SetBrush(* brush);
         }
       }
       break;
@@ -485,7 +485,7 @@ void wxOpSetGDI::Do(wxDC& dc, double xoffset, double yoffset)
       {
         wxFont *font = (wxFont *)node->Data();
         if (font)
-          dc.SetFont(font);
+          dc.SetFont(* font);
       }
       break;
     }
@@ -1194,7 +1194,7 @@ void wxOpPolyDraw::ReadExpr(wxPseudoMetaFile *image, wxExpr *expr)
 // Draw an outline using the current operation.
 bool wxOpPolyDraw::OnDrawOutline(wxDC& dc, double x, double y, double w, double h, double oldW, double oldH)
 {
-    dc.SetBrush(wxTRANSPARENT_BRUSH);
+    dc.SetBrush(* wxTRANSPARENT_BRUSH);
 
     // Multiply all points by proportion of new size to old size
     double x_proportion = (double)(fabs(w/oldW));

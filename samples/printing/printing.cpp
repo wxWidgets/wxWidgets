@@ -512,7 +512,7 @@ void MyPrintout::DrawPageTwo(wxDC *dc)
   float bottomMarginLogical = (float)(logUnitsFactor*(pageHeightMM - bottomMargin));
   float rightMarginLogical = (float)(logUnitsFactor*(pageWidthMM - rightMargin));
 
-  dc->SetPen(wxRED_PEN);
+  dc->SetPen(* wxRED_PEN);
   dc->DrawLine( (long)leftMarginLogical, (long)topMarginLogical, 
                 (long)rightMarginLogical, (long)topMarginLogical);
   dc->DrawLine( (long)leftMarginLogical, (long)bottomMarginLogical, 

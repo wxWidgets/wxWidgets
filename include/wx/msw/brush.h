@@ -49,7 +49,6 @@ public:
   wxBrush(const wxColour& col, int style);
   wxBrush(const wxBitmap& stipple);
   inline wxBrush(const wxBrush& brush) { Ref(brush); }
-  inline wxBrush(const wxBrush* brush) { if (brush) Ref(*brush); }
   ~wxBrush(void);
 
   virtual void SetColour(const wxColour& col)  ;

@@ -224,7 +224,7 @@ void wxToolBarSimple::DrawTool(wxDC& dc, wxMemoryDC& memDC, wxToolBarTool *tool)
     {
       dc.SetClippingRegion(ax, ay, (bx-ax+1), (by-ay+1));
       dc.Blit((ax+1), (ay+1), (bx-ax-2), (by-ay-2), &memDC, 0, 0);
-      wxPen * old_pen = dc.GetPen();
+      wxPen * old_pen = & dc.GetPen();
       dc.SetPen( white_pen );
       dc.DrawLine(ax,(by-1),ax,ay);
       dc.DrawLine(ax,ay,(bx-1),ay);
@@ -276,7 +276,7 @@ void wxToolBarSimple::DrawTool(wxDC& dc, wxMemoryDC& memDC, wxToolBarTool *tool)
         memDC.SelectObject(tool->m_bitmap1);
         dc.SetClippingRegion(ax, ay, (bx-ax+1), (by-ay+1));
         dc.Blit((ax+2), (ay+2), (bx-ax-2), (by-ay-2), &memDC, 0, 0);
-        wxPen * old_pen = dc.GetPen();
+        wxPen * old_pen = & dc.GetPen();
         dc.SetPen( black_pen );
         dc.DrawLine(ax,(by-1),ax,ay);
         dc.DrawLine(ax,ay,(bx-1),ay);

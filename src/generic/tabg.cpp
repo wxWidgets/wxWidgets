@@ -825,7 +825,7 @@ void wxTabView::Draw(wxDC& dc)
 #ifndef wxUSE_NEW_METHOD
 	if (GetTabStyle() & wxTAB_STYLE_DRAW_BOX)
 	{
-		dc.SetPen(GetShadowPen());
+		dc.SetPen(* GetShadowPen());
 
 		// Draw bottom line
 		dc.DrawLine(
@@ -843,7 +843,7 @@ void wxTabView::Draw(wxDC& dc)
 				(GetViewRect().y + GetViewRect().height)
 				);
 
-		dc.SetPen(wxBLACK_PEN);
+		dc.SetPen(* wxBLACK_PEN);
 
 		// Draw bottom line
 		dc.DrawLine(

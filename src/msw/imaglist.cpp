@@ -167,7 +167,7 @@ bool wxImageList::Draw(int index, wxDC& dc, int x, int y,
 
 	if ( solidBackground )
 	{
-		wxBrush *brush = dc.GetBackground();
+		wxBrush *brush = & dc.GetBackground();
 		if ( brush && brush->Ok())
 		{
 			wxColour col(brush->GetColour());

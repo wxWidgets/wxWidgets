@@ -200,9 +200,9 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
   SubclassWin(GetHWND());
 
-  if ( parent->GetFont() && parent->GetFont()->Ok() )
+  if ( parent->GetFont().Ok() && parent->GetFont().Ok() )
   {
-  SetFont(* parent->GetFont());
+    SetFont(parent->GetFont());
   }
   else
   {
@@ -328,7 +328,7 @@ void wxTextCtrl::SetSize(int x, int y, int width, int height, int sizeFlags)
   int cx; // button font dimensions
   int cy;
 
-  wxGetCharSize(GetHWND(), &cx, &cy,GetFont());
+  wxGetCharSize(GetHWND(), &cx, &cy, & GetFont());
 
   int control_width, control_height, control_x, control_y;
 

@@ -376,10 +376,10 @@ void wxDC::ComputeScaleAndOrigin(void)
   {
     // this is a bit artificial, but we need to force wxDC to think
     // the pen has changed
-    wxPen* pen = GetPen();
+    wxPen* pen = & GetPen();
     wxPen tempPen;
     m_pen = tempPen;
-    SetPen(pen);
+    SetPen(* pen);
   }
 };
 

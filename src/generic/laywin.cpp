@@ -176,7 +176,7 @@ bool wxLayoutAlgorithm::LayoutMDIFrame(wxMDIParentFrame* frame, wxRect* r)
     wxCalculateLayoutEvent event;
     event.SetRect(rect);
 
-    wxNode* node = frame->GetChildren()->First();
+    wxNode* node = frame->GetChildren().First();
     while (node)
     {
         wxWindow* win = (wxWindow*) node->Data();
@@ -210,7 +210,7 @@ bool wxLayoutAlgorithm::LayoutFrame(wxFrame* frame, wxWindow* mainWindow)
     wxCalculateLayoutEvent event;
     event.SetRect(rect);
 
-    wxNode* node = frame->GetChildren()->First();
+    wxNode* node = frame->GetChildren().First();
     while (node)
     {
         wxWindow* win = (wxWindow*) node->Data();

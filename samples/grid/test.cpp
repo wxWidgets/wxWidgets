@@ -137,7 +137,7 @@ bool MyApp::OnInit(void)
   frame->grid->SetCellValue("First cell", 0, 0);
   frame->grid->SetCellValue("Another cell", 1, 1);
   frame->grid->SetCellValue("Yet another cell", 2, 2);
-  frame->grid->SetCellTextFont(wxTheFontList->FindOrCreateFont(10, wxROMAN, wxITALIC, wxNORMAL), 0, 0);
+  frame->grid->SetCellTextFont(* wxTheFontList->FindOrCreateFont(10, wxROMAN, wxITALIC, wxNORMAL), 0, 0);
   frame->grid->SetCellTextColour(*wxRED, 1, 1);
   frame->grid->SetCellBackgroundColour(*wxCYAN, 2, 2);
   if (cellBitmap1 && cellBitmap2)
@@ -207,10 +207,10 @@ void MyFrame::ToggleColLabel(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::ToggleDividers(wxCommandEvent& WXUNUSED(event))
 {
-      if (!grid->GetDividerPen())
-        grid->SetDividerPen(wxThePenList->FindOrCreatePen("LIGHT GREY", 1, wxSOLID));
+      if (!grid->GetDividerPen().Ok())
+        grid->SetDividerPen(* wxThePenList->FindOrCreatePen("LIGHT GREY", 1, wxSOLID));
       else
-        grid->SetDividerPen((wxPen *) NULL);
+        grid->SetDividerPen(wxNullPen);
       grid->Refresh();
 }
 

@@ -1403,7 +1403,7 @@ void wxWindowDC::SetPen( const wxPen &pen )
   m_currentPenDash = m_pen.GetDash();
 
   if (m_currentStyle == wxSTIPPLE)
-    m_currentStipple = m_pen.GetStipple ();
+    m_currentStipple = * m_pen.GetStipple ();
 
   bool sameStyle = (oldStyle == m_currentStyle &&
              oldFill == m_currentFill &&
@@ -1540,7 +1540,7 @@ void wxWindowDC::SetPen( const wxPen &pen )
     {
       Pixmap myStipple;
 
-      oldStipple = (wxBitmap*) NULL;    // For later reset!!
+      oldStipple = wxNullBitmap;    // For later reset!!
 
       switch (m_currentFill)
       {
@@ -1691,7 +1691,7 @@ void wxWindowDC::SetBrush( const wxBrush &brush )
 
   m_currentFill = m_brush.GetStyle ();
   if (m_currentFill == wxSTIPPLE)
-    m_currentStipple = m_brush.GetStipple ();
+    m_currentStipple = * m_brush.GetStipple ();
 
   wxColour oldBrushColour(m_currentColour);
   m_currentColour = m_brush.GetColour ();

@@ -87,7 +87,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
   // Subclass again for purposes of dialog editing mode
   SubclassWin((WXHWND)wx_button);
 
-  SetFont(* parent->GetFont());
+  SetFont(parent->GetFont());
 
   SetSize(x, y, width, height);
   ShowWindow(wx_button, SW_SHOW);
@@ -117,7 +117,7 @@ void wxButton::SetSize(int x, int y, int width, int height, int sizeFlags)
   int cyf;
   char buf[300];
   GetWindowText((HWND) GetHWND(), buf, 300);
-  GetTextExtent(buf, &current_width, &cyf,NULL,NULL,GetFont());
+  GetTextExtent(buf, &current_width, &cyf,NULL,NULL,& GetFont());
 
   // If we're prepared to use the existing width, then...
   if (width == -1 && ((sizeFlags & wxSIZE_AUTO_WIDTH) != wxSIZE_AUTO_WIDTH))
@@ -126,7 +126,7 @@ void wxButton::SetSize(int x, int y, int width, int height, int sizeFlags)
   {
     int cx;
     int cy;
-    wxGetCharSize(GetHWND(), &cx, &cy,GetFont());
+    wxGetCharSize(GetHWND(), &cx, &cy,& GetFont());
     actualWidth = (int)(current_width + 3*cx) ;
   }
   

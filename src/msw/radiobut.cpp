@@ -103,7 +103,7 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
   }
 #endif
 
-  SetFont(* parent->GetFont());
+  SetFont(parent->GetFont());
 
   // Subclass again for purposes of dialog editing mode
   SubclassWin((WXHWND)m_hWnd);
@@ -114,7 +114,7 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
   if (label != "")
   {
     int label_width, label_height;
-    GetTextExtent(label, &label_width, &label_height, NULL, NULL, GetFont());
+    GetTextExtent(label, &label_width, &label_height, NULL, NULL, & GetFont());
     if (width < 0)
       width = (int)(label_width + RADIO_SIZE);
     if (height<0)

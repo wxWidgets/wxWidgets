@@ -101,8 +101,8 @@ void wxCompositeShape::OnDraw(wxDC& dc)
   if (m_shadowMode != SHADOW_NONE)
   {
     if (m_shadowBrush)
-      dc.SetBrush(m_shadowBrush);
-    dc.SetPen(g_oglTransparentPen);
+      dc.SetBrush(* m_shadowBrush);
+    dc.SetPen(* g_oglTransparentPen);
 
     if (m_cornerRadius != 0.0)
       dc.DrawRoundedRectangle(WXROUND(x1 + m_shadowOffsetX), WXROUND(y1 + m_shadowOffsetY),
@@ -841,7 +841,7 @@ wxDivisionShape::~wxDivisionShape()
 
 void wxDivisionShape::OnDraw(wxDC& dc)
 {
-    dc.SetBrush(wxTRANSPARENT_BRUSH);
+    dc.SetBrush(* wxTRANSPARENT_BRUSH);
     dc.SetBackgroundMode(wxTRANSPARENT);
 
     double x1 = (double)(GetX() - (GetWidth()/2.0));
@@ -856,18 +856,18 @@ void wxDivisionShape::OnDraw(wxDC& dc)
 
     if (m_leftSide)
     {
-      dc.SetPen(m_leftSidePen);
+      dc.SetPen(* m_leftSidePen);
       dc.DrawLine(WXROUND(x1), WXROUND(y2), WXROUND(x1), WXROUND(y1));
     }
     if (m_topSide)
     {
-      dc.SetPen(m_topSidePen);
+      dc.SetPen(* m_topSidePen);
       dc.DrawLine(WXROUND(x1), WXROUND(y1), WXROUND(x2), WXROUND(y1));
     }
 
     // For testing purposes, draw a rectangle so we know
     // how big the division is.
-//    SetBrush(wxCYAN_BRUSH);
+//    SetBrush(* wxCYAN_BRUSH);
 //    wxRectangleShape::OnDraw(dc);
 }
 

@@ -127,7 +127,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
   // Subclass again for purposes of dialog editing mode
   SubclassWin(m_hWnd);
 
-  SetFont(* parent->GetFont());
+  SetFont(parent->GetFont());
   int i;
   for (i = 0; i < n; i++)
   {

@@ -35,7 +35,8 @@ High Priority
   painting a tiled bitmap, then a slight flicker might be seen unless
   X can be persuaded not to repaint the window background by default.
 
-- Finish wxNotebook.
+- wxNotebook bug: why doesn't the notebook sample appear until the
+  user resizes the window again? But it's OK for MDI. Strange.
 
 - wxSpinButton
 

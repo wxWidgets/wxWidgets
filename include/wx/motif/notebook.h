@@ -177,6 +177,7 @@ public:
   // callbacks
   // ---------
   void OnSize(wxSizeEvent& event);
+  void OnIdle(wxIdleEvent& event);
   void OnSelChange(wxNotebookEvent& event);
   void OnSetFocus(wxFocusEvent& event);
   void OnNavigationKey(wxNavigationKeyEvent& event);

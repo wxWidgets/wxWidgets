@@ -528,13 +528,13 @@ void wxListLineData::DoDraw( wxPaintDC *dc, bool hilight, bool paintBG )
   {
     if (hilight)
     {
-      dc->SetBrush( m_hilightBrush );
-      dc->SetPen( wxTRANSPARENT_PEN );
+      dc->SetBrush( * m_hilightBrush );
+      dc->SetPen( * wxTRANSPARENT_PEN );
     }
     else
     {
-      dc->SetBrush( wxWHITE_BRUSH );
-      dc->SetPen( wxTRANSPARENT_PEN );
+      dc->SetBrush( * wxWHITE_BRUSH );
+      dc->SetPen( * wxTRANSPARENT_PEN );
     }
     dc->DrawRectangle( m_bound_hilight.x, m_bound_hilight.y,
                        m_bound_hilight.width, m_bound_hilight.height );
@@ -615,8 +615,8 @@ void wxListLineData::DrawRubberBand( wxPaintDC *dc, bool on )
 {
   if (on)
   {
-    dc->SetPen( wxBLACK_PEN );
-    dc->SetBrush( wxTRANSPARENT_BRUSH );
+    dc->SetPen( * wxBLACK_PEN );
+    dc->SetBrush( * wxTRANSPARENT_BRUSH );
     dc->DrawRectangle( m_bound_hilight.x, m_bound_hilight.y,
                        m_bound_hilight.width, m_bound_hilight.height );
   }
@@ -720,7 +720,7 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
   dc.BeginDrawing();
 
-  dc.SetFont( *GetFont() );
+  dc.SetFont( GetFont() );
 
   int w = 0;
   int h = 0;
@@ -832,12 +832,12 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
   {
     if (hit_border)
     {
-      if (m_currentCursor == wxSTANDARD_CURSOR) SetCursor( m_resizeCursor );
+      if (m_currentCursor == wxSTANDARD_CURSOR) SetCursor( * m_resizeCursor );
       m_currentCursor = m_resizeCursor;
     }
     else
     {
-      if (m_currentCursor != wxSTANDARD_CURSOR) SetCursor( wxSTANDARD_CURSOR );
+      if (m_currentCursor != wxSTANDARD_CURSOR) SetCursor( * wxSTANDARD_CURSOR );
       m_currentCursor = wxSTANDARD_CURSOR;
     }
   }
@@ -1035,7 +1035,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
   dc.BeginDrawing();
 
-  dc.SetFont( *GetFont() );
+  dc.SetFont( GetFont() );
 
   wxNode *node = m_lines.First();
   while (node)
@@ -1863,7 +1863,7 @@ void wxListMainWindow::CalculatePositions( void )
   if (!m_lines.First()) return;
 
   wxPaintDC dc( this );
-  dc.SetFont( *GetFont() );
+  dc.SetFont( GetFont() );
 
   int iconSpacing = 0;
   if (m_mode & wxLC_ICON) iconSpacing = m_normal_spacing;

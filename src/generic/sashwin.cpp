@@ -527,9 +527,9 @@ void wxSashWindow::SizeWindows()
     int cw, ch;
     GetClientSize(&cw, &ch);
 
-    if (GetChildren()->Number() > 0)
+    if (GetChildren().Number() > 0)
     {
-        wxWindow* child = (wxWindow*) (GetChildren()->First()->Data());
+        wxWindow* child = (wxWindow*) (GetChildren().First()->Data());
 
         int x = 0;
         int y = 0;

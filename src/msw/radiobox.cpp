@@ -154,7 +154,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
   }
 #endif
 
-  SetFont(* parent->GetFont());
+  SetFont(parent->GetFont());
 
   SubclassWin((WXHWND)m_hWnd);
 
@@ -183,10 +183,10 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
    m_useCtl3D = TRUE;
   }
 #endif
-    if (GetFont())
+    if (GetFont().Ok())
     {
        SendMessage((HWND)m_radioButtons[i],WM_SETFONT,
-                    (WPARAM)GetFont()->GetResourceHandle(),0L);
+                    (WPARAM)GetFont().GetResourceHandle(),0L);
     }
     m_subControls.Append((wxObject *)newId);
   }
@@ -262,7 +262,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
   }
 #endif
 
-  SetFont(* parent->GetFont());
+  SetFont(parent->GetFont());
 
   // Subclass again for purposes of dialog editing mode
   SubclassWin((WXHWND)m_hWnd);
@@ -407,7 +407,7 @@ void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
   int current_width, cyf;
 
   int cx1,cy1 ;
-  wxGetCharSize(m_hWnd, &cx1, &cy1, GetFont());
+  wxGetCharSize(m_hWnd, &cx1, &cy1, & GetFont());
   // Attempt to have a look coherent with other platforms:
   // We compute the biggest toggle dim, then we align all
   // items according this value.
@@ -423,7 +423,7 @@ void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
     {
       // It's a labelled toggle
       GetWindowText((HWND) m_radioButtons[i], buf, 300);
-      GetTextExtent(buf, &current_width, &cyf,NULL,NULL, GetFont());
+      GetTextExtent(buf, &current_width, &cyf,NULL,NULL, & GetFont());
       eachWidth = (int)(current_width + RADIO_SIZE);
       eachHeight = (int)((3*cyf)/2);
     }
@@ -503,7 +503,7 @@ void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
     {
       // It's a labeled item
       GetWindowText((HWND) m_radioButtons[i], buf, 300);
-      GetTextExtent(buf, &current_width, &cyf,NULL,NULL,GetFont());
+      GetTextExtent(buf, &current_width, &cyf,NULL,NULL, & GetFont());
 
       // How do we find out radio button bitmap size!!
       // By adjusting them carefully, manually :-)
