@@ -206,6 +206,8 @@ bool wxGetNativeFontEncoding(wxFontEncoding encoding,
             return FALSE;
     }
 
+   info->encoding = encoding;
+
     return TRUE;
 }
 
