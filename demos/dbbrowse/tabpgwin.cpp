@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        No names yet.
+// Name:        tabpgwin.cpp
 // Purpose:     Contrib. demo
 // Author:      Aleksandras Gluchovas
 // Modified by: 19990908 : mj
@@ -18,7 +18,7 @@
 
 #ifdef __GNUG__
 #pragma implementation
-// #pragma interface
+//#pragma interface
 #endif
 
 // For compilers that support precompilation, includes "wx.h".

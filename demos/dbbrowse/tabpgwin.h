@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        No names yet.
+// Name:        tabpgwin.h
 // Purpose:     Contrib. demo
 // Author:      Aleksandras Gluchovas
 // Modified by: 19990908 : mj
@@ -17,12 +17,12 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __CONTROLAREA_G__
-#define __CONTROLAREA_G__
+#ifndef __TABPGWIN_G__
+#define __TABPGWIN_G__
 
-#ifdef __GNUG__
-#pragma interface "controlarea.h"
-#endif
+//#ifdef __GNUG__
+//#pragma interface
+//#endif
 
 #include "wx/defs.h"
 #include "wx/window.h"
