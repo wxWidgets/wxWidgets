@@ -79,14 +79,13 @@ Where compiled files are stored
 -------------------------------
 
 After succesful compilation you'll find the libraries in a subdirectory
-of lib directory named after the compiler, toolkit name and DLL and Unicode
-settings. A couple of examples:
+of lib directory named after the compiler and DLL/staitc settings.
+A couple of examples:
 
-  lib\vc_msw                    VC++ compiled static libraries
-  lib\vc_mswdll                 VC++ DLLs
-  lib\bcc_mswud                 Static libraries for Borland C++,
-                                Unicode debug build
-  lib\wat_mswunivdll            Watcom C++ DLLs of wxUniversal port
+  lib\vc_lib                    VC++ compiled static libraries
+  lib\vc_dll                    VC++ DLLs
+  lib\bcc_lib                   Static libraries for Borland C++
+  lib\wat_dll                   Watcom C++ DLLs
 
 Names of compiled wxWindows libraries follow this scheme: libraries that don't
 depend on GUI components begin with "wxbase" followed by version number and
@@ -103,7 +102,23 @@ libraries (release versions on left, debug on right side):
   wxmsw25_html.lib          wxmsw25d_html.lib
   wxmsw25_adv.lib           wxmsw25d_adv.lib
 
-These directories also contain wx/setup.h header.
+Their Unicode debug counterparts in wxUniversal build would be
+
+  wxbase25ud.lib
+  wxbase25ud_net.lib
+  wxbase25ud_xml.lib        (notice these libs are same for wxUniv and wxMSW)
+  wxmswuniv25ud_core.lib
+  wxmswuniv25ud_html.lib
+  wxmswuniv25ud_adv.lib
+
+These directories also contain subdirectory with wx/setup.h header. This
+subdirectory is named after port, Unicode, wxUniv and debug settings and 
+you must add it to include paths when compiling your application. Some
+examples:
+
+  lib\vc_lib\msw\wx\setup.h          VC++ static, wxMSW
+  lib\vc_lib\mswud\wx\setup.h        VC++ static, wxMSW, Unicode, debug
+  lib\vc_lib\mswunivd\wx\setup.h     VC++ static, wxUniversal, debug
 
 Below are compiler specific notes followed by customizing instructions that
 apply to all compilers (search for "Configuring the build").
@@ -739,19 +754,24 @@ compiler name. Examples of directory names:
   build\msw\bcc_mswunivd       SHARED=0, WXUNIV=1, BUILD=debug
   build\msw\vc_mswunivd        ditto, with Visual C++
 
-Libraries and DLLs are copied into subdirectory of lib directory with same
-name as the build\msw subdirectory used for object files:
+Libraries and DLLs are copied into subdirectory of lib directory with 
+name derived from compiler and static/DLL setting and setup.h into directory
+with name that contains other settings:
 
   lib\bcc_msw
-  lib\bcc_mswdll
-  lib\bcc_mswunivd
-  lib\vc_mswunivd
+  lib\bcc_lib\msw\wx\setup.h
+  lib\bcc_dll
+  lib\bcc_dll\msw\wx\setup.h
+  lib\bcc_lib
+  lib\bcc_lib\mswunivd\wx\setup.h
+  lib\vc_lib
+  lib\vc_lib\mswunivd\wx\setup.h
 
-Each lib\ subdirectory has wx subdirectory with setup.h. This file is copied
-there from include\wx\msw\setup.h (and if it doesn't exist, from
-include\wx\msw\setup0.h) and this is the copy of setup.h that is used by all
-samples and should be used by your apps as well. If you are doing changes to
-setup.h, you should do them in this file, _not_ in include\wx\msw\setup.h.
+Each lib\ subdirectory has wx subdirectory with setup.h as seen above.
+This file is copied there from include\wx\msw\setup.h (and if it doesn't exist,
+from include\wx\msw\setup0.h) and this is the copy of setup.h that is used by
+all samples and should be used by your apps as well. If you are doing changes
+to setup.h, you should do them in this file, _not_ in include\wx\msw\setup.h.
 
 If you set CFG to something, the value is appended to directory names. E.g.
 for CFG=MyBuild, you'll have object files in
@@ -762,8 +782,8 @@ for CFG=MyBuild, you'll have object files in
 
 and libraries in
 
-  lib\bcc_mswMyBuild
-  lib\bcc_mswdllMyBuild
+  lib\bcc_libMyBuild
+  lib\bcc_dllMyBuild
   etc.
 
 By now it is clear for CFG is for: builds with different CFG settings don't
