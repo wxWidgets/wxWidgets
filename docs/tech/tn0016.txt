@@ -174,7 +174,7 @@ a) Add files to files.bkl:
 b) Modify bakefile system in build/bakefiles/ to recognize wxFoo:
    * Add 'foo' to MAIN_LIBS and LIBS_NOGUI or LIBS_GUI (depending on whether
      the library depends on wxCore or not) to wxwin.py file.
-   * Add the library to DEPS_TABLE in wxwin.py
+   * Add the library to EXTRALIBS in wxwin.py
    * Add WXLIB_FOO definition to common.bkl (into the "Names of component
      libraries" section). It looks like this:
        <set var="WXLIB_FOO">
