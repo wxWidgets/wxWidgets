@@ -56,7 +56,7 @@ public:
     wxTreeItemId(long itemId) { m_pItem = (wxGenericTreeItem *)itemId; }
     operator long() const { return (long)m_pItem; }
 
-//protected:
+//protected: // not for gcc
     // for wxTreeCtrl usage only
     wxTreeItemId(wxGenericTreeItem *pItem) { m_pItem = pItem; }
     
@@ -262,6 +262,8 @@ public:
         // is the item visible (it might be outside the view or not expanded)?
     bool IsVisible(const wxTreeItemId& item) const;
         // does the item has any children?
+    bool HasChildren(const wxTreeItemId& item) const
+      { return ItemHasChildren(item); }
     bool ItemHasChildren(const wxTreeItemId& item) const;
         // is the item expanded (only makes sense if HasChildren())?
     bool IsExpanded(const wxTreeItemId& item) const;

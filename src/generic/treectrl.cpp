@@ -779,7 +779,7 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& itemId)
     event.m_item = item;
     event.m_itemOld = m_current;
     event.SetEventObject( this );
-    if ( ProcessEvent( event ) && event.WasVetoed() )
+    if ( GetEventHandler()->ProcessEvent( event ) && event.WasVetoed() )
       return;
 
     if ( m_current )
@@ -793,13 +793,46 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& itemId)
     RefreshLine( m_current );
 
     event.SetEventType(wxEVT_COMMAND_TREE_SEL_CHANGED);
-    ProcessEvent( event );
+    GetEventHandler()->ProcessEvent( event );
   }
 }
 
-void wxTreeCtrl::EnsureVisible(const wxTreeItemId& WXUNUSED(item))
+void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
 {
-  wxFAIL_MSG("not implemented");
+  wxGenericTreeItem *gitem = item.m_pItem;
+  
+  int item_y = gitem->GetY();
+  
+  int start_x = 0;
+  int start_y = 0;
+  ViewStart( &start_x, &start_y );
+  start_y *= 10;
+  
+  if (item_y < start_y+3)
+  {
+    int x = 0;
+    int y = 0;
+    m_anchor->GetSize( x, y );
+    y += 2*m_lineHeight;
+    int x_pos = GetScrollPos( wxHORIZONTAL );
+    SetScrollbars( 10, 10, x/10, y/10, x_pos, item_y/10 );
+    return;
+  }
+  
+  int w = 0;
+  int h = 0;
+  GetClientSize( &w, &h );
+  
+  if (item_y > start_y+h-26)
+  {
+    int x = 0;
+    int y = 0;
+    m_anchor->GetSize( x, y );
+    y += 2*m_lineHeight;
+    int x_pos = GetScrollPos( wxHORIZONTAL );
+    SetScrollbars( 10, 10, x/10, y/10, x_pos, (item_y-h+30)/10 );
+     return;
+  }  
 }
 
 void wxTreeCtrl::ScrollTo(const wxTreeItemId& WXUNUSED(item))
@@ -1033,7 +1066,91 @@ void wxTreeCtrl::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
 
 void wxTreeCtrl::OnChar( wxKeyEvent &event )
 {
-  // TODO process '+', '-' (expand/collapse branch) and cursor keys
+  if (m_current == 0)
+  { 
+     event.Skip();
+     return;
+  }
+  
+  switch (event.KeyCode())
+  {
+    case '+':
+    case WXK_ADD:
+    {
+      if (HasChildren(m_current) && !IsExpanded(m_current))
+      {
+        Expand(m_current);
+      }
+      return;
+    }
+    case '-':
+    case WXK_SUBTRACT:
+    {
+      if (IsExpanded(m_current))
+      {
+        Collapse(m_current);
+      }
+      return;
+    }
+    case ' ':
+    case WXK_RETURN:
+    {
+      wxTreeEvent event( wxEVT_COMMAND_TREE_KEY_DOWN, GetId() );
+      event.m_item = m_current;
+      event.m_code = 0;
+      event.SetEventObject( this );
+      GetEventHandler()->ProcessEvent( event );
+      return;
+    }
+    case WXK_UP:
+    {
+       wxTreeItemId prev = GetPrevSibling( m_current );
+       if (prev != 0)
+       { 
+	  SelectItem( prev );
+	   EnsureVisible( prev );
+       }
+       else
+       {
+         prev = GetParent( m_current );
+	 if (prev)
+	 {
+	   EnsureVisible( prev );
+	   SelectItem( prev );
+	 }
+       }
+      return;
+    }
+    case WXK_DOWN:
+    {
+      if (IsExpanded(m_current))
+      {
+        long cookie = 0;
+	wxTreeItemId child = GetFirstChild( m_current, cookie );
+	SelectItem( child );
+	EnsureVisible( child );
+      }
+      else
+      {
+	wxTreeItemId next = GetNextSibling( m_current );
+	if (next == 0)
+	{
+	  wxTreeItemId current = m_current;
+	  while (current && !next)
+	  {
+	    current = GetParent( current );
+	    if (current) next = GetNextSibling( current );
+	  }
+	}
+	if (next != 0)
+	{
+	   SelectItem( next );
+	   EnsureVisible( next );
+	}
+      }
+      return;
+    }
+  }
   event.Skip();
 }
 
@@ -1055,7 +1172,7 @@ void wxTreeCtrl::OnMouse( wxMouseEvent &event )
   if ( item == NULL )
     return;
 
-  SelectItem(item);
+  if (!IsSelected(item)) SelectItem(item);
 
   if ( event.LeftDClick() )
   {
@@ -1063,7 +1180,7 @@ void wxTreeCtrl::OnMouse( wxMouseEvent &event )
     event.m_item = item;
     event.m_code = 0;
     event.SetEventObject( this );
-    ProcessEvent( event );
+    GetEventHandler()->ProcessEvent( event );
   }
 
   if ( onButton )

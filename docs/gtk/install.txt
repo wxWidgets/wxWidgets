@@ -44,9 +44,11 @@ this has no effect, but I tried...
 
 wxWindows/GTK requires the GTK+ library to be installed on your system.
 It has to be a stable version, preferebly version 1.0.6. When using
-a version previous to 1.0.6 you'll get crashes here and there. Although
-wxWindows/GTK now compiles with GTK+ 1.1.3, it does not set work
-properly. Wait for a stable version GTK 1.2. 
+a version previous to 1.0.6 you'll get crashes here and there.
+
+wxWindows/GTK does NOT work with the 1.1.X versions of the GTK+ library
+and we will wait until the 1.2 version comes out and has stabilized
+until we'll work with that library.
 
 You can get the newest version of the GTK+ from the GTK homepage
 at

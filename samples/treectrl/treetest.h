@@ -54,7 +54,7 @@ public:
   void OnItemCollapsing(wxTreeEvent& event);
   void OnSelChanged(wxTreeEvent& event);
   void OnSelChanging(wxTreeEvent& event);
-  void OnKeyDown(wxTreeEvent& event);
+  void OnTreeKeyDown(wxTreeEvent& event);
 
   void GetItemsRecursively(const wxTreeItemId& idParent, long cookie);
 
@@ -88,8 +88,8 @@ public:
   void OnDeleteAll(wxCommandEvent& event);
   void OnRecreate(wxCommandEvent& event);
 
-  void OnSetBold(wxCommandEvent& event) { DoSetBold(TRUE); }
-  void OnClearBold(wxCommandEvent& event) { DoSetBold(FALSE); }
+  void OnSetBold(wxCommandEvent& WXUNUSED(event)) { DoSetBold(TRUE); }
+  void OnClearBold(wxCommandEvent& WXUNUSED(event)) { DoSetBold(FALSE); }
 
 private:
   MyTreeCtrl *m_treeCtrl;

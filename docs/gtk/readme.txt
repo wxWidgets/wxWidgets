@@ -1,7 +1,7 @@
 
   Welcome to wxWindows/Gtk,
   
-you have downloaded version 1.97 of the GTK+ port of C++ library
+you have downloaded version 1.99 of the GTK+ port of C++ library
 wxWindows. Information on how to install can be found in the
 file INSTALL.txt, but if you cannot wait, this should work on
 all systems
@@ -19,9 +19,15 @@ YOUR PROBLEM, SUCH AS YOUR VERSION OF GTK, WXGTK, WHAT
 DISTRIBUTION YOU USE AND WHAT ERROR WAS REPORTED. I know 
 this has no effect, but I tried...
 
-wxWindows/Gtk is still in development and you can have a look
-at the TODO.txt to see what's missing before an official beta
-and - more important - before we can aim at binary compatibility.
+This is the beta release which means that we have a feature
+freeze. We'll move up to versin 2.0 rather soon and from then
+on there will be no more binary incompatible changes. We might
+add more classes, but none that would alter the behaviour of
+the existing ones. The library produced by the install process
+of the final version will be called libwx_gtk_1_0.a (static)
+and libwx_gtk_1_0.so.2.0.0 (shared) so that once a version
+of wxWindows/Gtk for GTK 1.2 comes out we'll change the name
+of the library to avoid linking problems.
 
 More information is available from my homepage at
 
@@ -32,8 +38,8 @@ bug reports or comments to either the wxGTK mailing list or to
 the wxWindows developers list. Information on how to subscribe
 is available from my homepage.
 
-wxWindows/Gtk comes with no guarantee whatsoever. It might crash
-your harddisk or destroy your monitor. It doesn't claim to be
+wxWindows/Gtk doesn't come with any guarantee whatsoever. It might 
+crash your harddisk or destroy your monitor. It doesn't claim to be
 suitable for any special purpose.
 
   Regards,

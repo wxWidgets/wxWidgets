@@ -1,15 +1,9 @@
 
 -------------------- High priority ---------------------
 
-wxTreeCtrl
-  -> Keyboard handling.
-
 wxClipboard
   -> On the way, but not functional yet.
   
-Fix printing of bitmaps
-  -> No idea.
-
 -------------------- Low priority ---------------------
     
 OwnerDraw for wxListCtrl and others
