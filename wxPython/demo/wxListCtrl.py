@@ -163,6 +163,7 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
         self.currentItem = 0
         EVT_SIZE(self, self.OnSize)
         EVT_LIST_ITEM_SELECTED(self, tID, self.OnItemSelected)
+        EVT_LIST_ITEM_DESELECTED(self, tID, self.OnItemDeselected)
         EVT_LIST_ITEM_ACTIVATED(self, tID, self.OnItemActivated)
         EVT_LIST_DELETE_ITEM(self, tID, self.OnItemDelete)
         EVT_LIST_COL_CLICK(self, tID, self.OnColClick)
@@ -216,6 +217,13 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
             #event.Veto()  # doesn't work
             # this does
             self.list.SetItemState(10, 0, wxLIST_STATE_SELECTED)
+
+    # Show how to reselect something we don't want deselected
+    def OnItemDeselected(self, evt):
+        item = evt.GetItem()
+        if evt.m_itemIndex == 11:
+            wxCallAfter(self.list.SetItemState, 11, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
+
 
     def OnItemActivated(self, event):
         self.currentItem = event.m_itemIndex
