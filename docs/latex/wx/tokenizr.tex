@@ -16,7 +16,7 @@ For example:
 
 \begin{verbatim}
 
-wxStringTokenizer tkz("first:second:third:fourth", ":");
+wxStringTokenizer tkz(wxT("first:second:third:fourth"), wxT(":"));
 while ( tkz.HasMoreTokens() )
 {
     wxString token = tkz.GetNextToken();
