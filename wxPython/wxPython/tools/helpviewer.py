@@ -32,7 +32,7 @@ def main():
         return
 
     args = sys.argv[1:]
-    cachdir = None
+    cachedir = None
     if args[0][:7] == '--cache':
         cachedir = os.path.expanduser(args[0].split('=')[1])
         args = args[1:]
