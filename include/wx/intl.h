@@ -30,7 +30,7 @@
 // gettext() style macro (notice that xgettext should be invoked with "-k_"
 // option to extract the strings inside _() from the sources)
 #ifndef WXINTL_NO_GETTEXT_MACRO
-    #define   _(str)  wxGetTranslation(str)
+    #define   _(str)  wxGetTranslation(_T(str))
 #endif
 
 // ----------------------------------------------------------------------------
@@ -56,21 +56,21 @@ public:
         // call Init() if you use this ctor
     wxLocale();
         // the ctor has a side effect of changing current locale
-    wxLocale(const char *szName,              // name (for messages)
-             const char *szShort = (const char *) NULL,      // dir prefix (for msg files)
-             const char *szLocale = (const char *) NULL,     // locale (for setlocale)
+    wxLocale(const wxChar *szName,              // name (for messages)
+             const wxChar *szShort = (const wxChar *) NULL,      // dir prefix (for msg files)
+             const wxChar *szLocale = (const wxChar *) NULL,     // locale (for setlocale)
              bool bLoadDefault = TRUE)        // preload wxstd.mo?
         { Init(szName, szShort, szLocale, bLoadDefault); }
         // the same as a function (returns TRUE on success)
-    bool Init(const char *szName,
-              const char *szShort = (const char *) NULL,
-              const char *szLocale = (const char *) NULL,
+    bool Init(const wxChar *szName,
+              const wxChar *szShort = (const wxChar *) NULL,
+              const wxChar *szLocale = (const wxChar *) NULL,
               bool bLoadDefault = TRUE);
         // restores old locale
     ~wxLocale();
 
     // returns locale name
-    const char *GetLocale() const { return m_strLocale; }
+    const wxChar *GetLocale() const { return m_strLocale; }
 
     // add a prefix to the catalog lookup path: the message catalog files will be
     // looked up under prefix/<lang>/LC_MESSAGES, prefix/LC_MESSAGES and prefix
@@ -86,10 +86,10 @@ public:
     // The loaded catalog will be used for message lookup by GetString().
     //
     // Returns 'true' if it was successfully loaded
-    bool AddCatalog(const char *szDomain);
+    bool AddCatalog(const wxChar *szDomain);
 
     // check if the given catalog is loaded
-    bool IsLoaded(const char *szDomain) const;
+    bool IsLoaded(const wxChar *szDomain) const;
 
     // retrieve the translation for a string in all loaded domains unless
     // the szDomain parameter is specified (and then only this domain is
@@ -101,20 +101,20 @@ public:
     //
     // domains are searched in the last to first order, i.e. catalogs
     // added later override those added before.
-    const char *GetString(const char *szOrigString,
-                          const char *szDomain = (const char *) NULL) const;
+    const wxMB2WXbuf GetString(const wxChar *szOrigString,
+			       const wxChar *szDomain = (const wxChar *) NULL) const;
 
     // Returns the current short name for the locale
     const wxString& GetName() const { return m_strShort; }
 
 private:
     // find catalog by name in a linked list, return NULL if !found
-    wxMsgCatalog  *FindCatalog(const char *szDomain) const;
+    wxMsgCatalog  *FindCatalog(const wxChar *szDomain) const;
 
     wxString       m_strLocale,     // this locale name
                    m_strShort;      // short name for the locale
 
-    const char    *m_pszOldLocale;  // previous locale from setlocale()
+    const wxChar  *m_pszOldLocale;  // previous locale from setlocale()
     wxLocale      *m_pOldLocale;    // previous wxLocale
 
     wxMsgCatalog  *m_pMsgCat;       // pointer to linked list of catalogs
@@ -128,10 +128,10 @@ private:
 extern WXDLLEXPORT wxLocale* wxGetLocale();
 
 // get the translation of the string in the current locale
-inline const char *wxGetTranslation(const char *sz)
+inline const wxMB2WXbuf wxGetTranslation(const wxChar *sz)
 {
     wxLocale *pLoc = wxGetLocale();
-    return pLoc ? pLoc->GetString(sz) : sz;
+    return pLoc ? pLoc->GetString(sz) : (const wxMB2WXbuf)sz;
 }
 
 #endif
