@@ -12,6 +12,12 @@ and customized. FL handles many decoration and dragging
 issues, giving applications the kind of docking facilities
 that Visual C++ and Netscape Navigator possess.
 
+FL was written by Aleksandras Gluchovas, and is heavily used in
+wxWorkshop which he also wrote the bulk of.
+
+{\bf Please note} that this guide is in its infancy, and contributions
+from FL users are very welcome.
+
 The following screenshot (from fl\_demo1) shows a frame with a number of
 bars that can be dragged around. The vertical grippers with
 two lines allow a bar to be dragged in that row, changing the
@@ -30,7 +36,7 @@ to it when required.
 A close button (x) hides a bar completely. You can get it back again
 by right-clicking and selecting the appropriate menu item.
 
-A left or right pointing arrow button expands the pane in that direction.
+A left, right, up or down arrow button expands the pane in that direction.
 
 \center{\image{}{screen01.bmp}}
 
@@ -42,7 +48,7 @@ FL can be found under the 'contrib' hierarchy, in the following directories:
   contrib/src/fl
   contrib/include/wx/fl
   contrib/samples/fl
-  contrib/docs/latex/wx
+  contrib/docs/latex/fl
   docs/html/fl
   docs/htmlhelp/fl.chm
   docs/pdf/fl.pdf
@@ -56,7 +62,9 @@ To compile FL:
 and compile.
 \item Under Unix, FL should be configured when you configured
 wxWindows. Make FL by changing directory to contrib/src/fl and
-type 'make'.
+type 'make'. {\bf Note:} there is currently a
+problem with the wxWindows build system that means that
+only the static version of library can be built at present.
 \end{itemize}
 
 To use FL:
@@ -68,21 +76,38 @@ To use FL:
 
 \section{FL concepts}
 
+These are typical steps when adding FL functionality to your application.
+
+\begin{itemize}\itemsep=0pt
+\item include the appropriate header files;
+\item create a new \helpref{wxFrameLayout}{wxframelayout} passing the top-level frame and the window that
+is interpreted as the main 'client' window;
+\item set an updates manager for optimizing drag operations;
+\item add plugins for implementing various features;
+\item add bars;
+\item enable floating mode for the layout if required;
+\item delete the frame layout in the main frame's destructor.
+\end{itemize}
+
 The following is taken from fl\_demo1 and shows the main code implementing the
 user interface as illustrated in \helpref{What is FL?}{whatisfl}.
 
-Notable points in the code:
-
-\begin{itemize}\itemsep=0pt
-\item creating a new \helpref{wxFrameLayout}{wxframelayout} passing the top-level frame and the window that
-is interpreted as the main 'client' window;
-\item setting an updates manager for optimizing drag operations;
-\item adding plugins for implementing various features;
-\item adding bars;
-\item enabling floating mode.
-\end{itemize}
-
 \begin{verbatim}
+// fl headers
+#include "wx/fl/controlbar.h"     // core API
+
+// extra plugins
+#include "wx/fl/barhintspl.h"    // bevel for bars with "X"s and grooves
+#include "wx/fl/rowdragpl.h"     // NC-look with draggable rows
+#include "wx/fl/cbcustom.h"      // customization plugin
+#include "wx/fl/hintanimpl.h"
+
+// beauty-care
+#include "wx/fl/gcupdatesmgr.h"  // smooth d&d
+#include "wx/fl/antiflickpl.h"   // double-buffered repaint of decorations
+#include "wx/fl/dyntbar.h"       // auto-layout toolbar
+#include "wx/fl/dyntbarhnd.h"    // control-bar dimension handler for it
+
 MyFrame::MyFrame(wxFrame *frame)
     : wxFrame( frame, -1, "wxWindows 2.0 wxFrameLayout Test Application", wxDefaultPosition, 
           wxSize( 700, 500 ), 
@@ -135,7 +160,7 @@ MyFrame::MyFrame(wxFrame *frame)
                       sizes0, FL_ALIGN_TOP,     // alignment ( 0-top,1-bottom, etc)
                       0,                        // insert into 0th row (vert. position)
                       0,                        // offset from the start of row (in pixels)
-                      "InfoViewer1",            // name to refere in customization pop-ups
+                      "InfoViewer1",            // name for reference in customization pop-ups
                       TRUE
                     );
     
@@ -143,7 +168,7 @@ MyFrame::MyFrame(wxFrame *frame)
                       sizes0, FL_ALIGN_TOP,     // alignment ( 0-top,1-bottom, etc)
                       1,                        // insert into 0th row (vert. position)
                       0,                        // offset from the start of row (in pixels)
-                      "InfoViewer2",            // name to refere in customization pop-ups
+                      "InfoViewer2",            // name for reference in customization pop-ups
                       TRUE
                     );
     
@@ -151,7 +176,7 @@ MyFrame::MyFrame(wxFrame *frame)
                       sizes1, FL_ALIGN_TOP,     // alignment ( 0-top,1-bottom, etc)
                       0,                        // insert into 0th row (vert. position)
                       0,                        // offset from the start of row (in pixels)
-                      "ToolBar1",               // name to refer in customization pop-ups
+                      "ToolBar1",               // name for reference in customization pop-ups
                       TRUE
                     );
     
@@ -173,13 +198,17 @@ MyFrame::MyFrame(wxFrame *frame)
                       sizes2, FL_ALIGN_TOP, // alignment ( 0-top,1-bottom, etc)
                       0,                    // insert into 0th row (vert. position)
                       0,                    // offset from the start of row (in pixels)
-                      "ToolBar2",           // name to refere in customization pop-ups
+                      "ToolBar2",           // name for reference in customization pop-ups
                       FALSE
                     );
     
     mpLayout->EnableFloating( TRUE ); // off, thinking about wxGtk...
 }
+
+MyFrame::~MyFrame()
+{
+    if ( mpLayout) 
+        delete mpLayout; // should be destroyed manually
+}
 \end{verbatim}
-
-
 

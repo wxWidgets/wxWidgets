@@ -31,15 +31,15 @@
 #include "wx/fl/controlbar.h"     // core API
 
 // extra plugins
-#include "wx/fl/barhintspl.h"    // beveal for bars with "X"s and grooves
-#include "wx/fl/rowdragpl.h"     // NC-look with dragable rows
+#include "wx/fl/barhintspl.h"    // bevel for bars with "X"s and grooves
+#include "wx/fl/rowdragpl.h"     // NC-look with draggable rows
 #include "wx/fl/cbcustom.h"      // customization plugin
 #include "wx/fl/hintanimpl.h"
 
-// beuty-care
+// beauty-care
 #include "wx/fl/gcupdatesmgr.h"  // smooth d&d
 #include "wx/fl/antiflickpl.h"   // double-buffered repaint of decorations
-#include "wx/fl/dyntbar.h"       // auto-layouting toolbar
+#include "wx/fl/dyntbar.h"       // auto-layout toolbar
 #include "wx/fl/dyntbarhnd.h"    // control-bar dimension handler for it
 
 #include "fl_demo1.h"
@@ -151,7 +151,7 @@ MyFrame::MyFrame(wxFrame *frame)
     // setup plugins for testing
     mpLayout->PushDefaultPlugins();
     
-    mpLayout->AddPlugin( CLASSINFO( cbBarHintsPlugin ) ); // facny "X"es and beveal for bars
+    mpLayout->AddPlugin( CLASSINFO( cbBarHintsPlugin ) ); // fancy "X"es and bevel for bars
     mpLayout->AddPlugin( CLASSINFO( cbHintAnimationPlugin ) );
     mpLayout->AddPlugin( CLASSINFO( cbRowDragPlugin  ) );
     mpLayout->AddPlugin( CLASSINFO( cbAntiflickerPlugin ) );
@@ -187,7 +187,7 @@ MyFrame::MyFrame(wxFrame *frame)
                       sizes0, FL_ALIGN_TOP,     // alignment ( 0-top,1-bottom, etc)
                       0,                        // insert into 0th row (vert. position)
                       0,                        // offset from the start of row (in pixels)
-                      "InfoViewer1",            // name to refere in customization pop-ups
+                      "InfoViewer1",            // name to refer in customization pop-ups
                       TRUE
                     );
     
@@ -195,7 +195,7 @@ MyFrame::MyFrame(wxFrame *frame)
                       sizes0, FL_ALIGN_TOP,     // alignment ( 0-top,1-bottom, etc)
                       1,                        // insert into 0th row (vert. position)
                       0,                        // offset from the start of row (in pixels)
-                      "InfoViewer2",            // name to refere in customization pop-ups
+                      "InfoViewer2",            // name to refer in customization pop-ups
                       TRUE
                     );
     
@@ -226,11 +226,11 @@ MyFrame::MyFrame(wxFrame *frame)
                       sizes2, FL_ALIGN_TOP, // alignment ( 0-top,1-bottom, etc)
                       0,                    // insert into 0th row (vert. position)
                       0,                    // offset from the start of row (in pixels)
-                      "ToolBar2",           // name to refere in customization pop-ups
+                      "ToolBar2",           // name to refer in customization pop-ups
                       FALSE
                     );
     
-    mpLayout->EnableFloating( TRUE ); // off, thinking bout wxGtk...
+    mpLayout->EnableFloating( TRUE ); // off, thinking about wxGtk...
 }
 
 MyFrame::~MyFrame()

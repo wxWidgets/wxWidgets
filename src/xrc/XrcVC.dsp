@@ -144,6 +144,10 @@ SOURCE=.\xh_gauge.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\xh_gdctl.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\xh_html.cpp
 # End Source File
 # Begin Source File
