@@ -300,6 +300,7 @@ public:
 private:
     wxWindowList *m_winDisabled;
 
+    // not used any more but left here for binary compatibility
 #ifdef __WXMSW__
     wxWindow *m_winTop;
 #endif // MSW

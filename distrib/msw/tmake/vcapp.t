@@ -28,12 +28,17 @@
 	Project('CONFIG += wx');
     }
     if ( Config("wx") ) {
-	#! VC 6.0 supports env vars in include path
-	#! $WXDIR = $ENV{'WX'};
-	if ( $ENV{'wx'} ) { $WXDIR = "\$(wx)"; }
-	else { $WXDIR = "\$(WXWIN)"; }
-	$TMAKE_INCDIR_WX = $WXDIR . "\\include";
-	AddIncludePath($TMAKE_INCDIR_WX);
+	if ( Config("wxnodir") ) {
+	    $WXDIR = "..\\..";
+	}
+	else {
+	    #! VC 6.0 supports env vars in include path
+	    #! $WXDIR = $ENV{'WX'};
+	    if ( $ENV{'wx'} ) { $WXDIR = "\$(wx)"; }
+	    else { $WXDIR = "\$(WXWIN)"; }
+	}
+
+	AddIncludePath($WXDIR . "\\include");
     }
 
     if ( Config("unicode") ) {

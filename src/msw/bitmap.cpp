@@ -138,6 +138,10 @@ bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon)
     // wxWin convention
     refData->m_bitmapMask = new wxMask((WXHBITMAP)
                                         wxInvertMask(iconInfo.hbmMask, w, h));
+    if ( !::DeleteObject(iconInfo.hbmMask) )
+    {
+        wxLogLastError(_T("DeleteObject"));
+    }
 
 #if WXWIN_COMPATIBILITY_2
     refData->m_ok = TRUE;
