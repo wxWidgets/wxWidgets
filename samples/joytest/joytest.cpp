@@ -51,7 +51,7 @@ bool MyApp::OnInit()
     }
 
 #if wxUSE_SOUND
-    m_fire.Create(_T("gun.wav"));
+    m_fire.Create(_T("buttonpress.wav"));
 #endif // wxUSE_SOUND
 
     m_minX = stick.GetXMin();
@@ -162,11 +162,11 @@ void MyCanvas::OnJoystickEvent(wxJoystickEvent& event)
 /*
     for(int i = 0; i < nButtons; ++i)
     {
-        buf += wxString(wxT("[")) + 
+        buf += wxString(wxT("[")) +
         ((event.GetButtonState() & (1 << i)) ? wxT("Y") : wxT("N")) + wxString(wxT("]"));
     }
 */
-    
+
     frame->SetStatusText(buf);
 #endif // wxUSE_STATUSBAR
 
