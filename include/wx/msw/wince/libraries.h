@@ -22,8 +22,7 @@
 //     including libraries in project files.
 
 #if defined(__VISUALC__) && defined(__WXWINCE__)
-
-#if _WIN32_WCE >= 400
+#if (_WIN32_WCE >= 400) || defined(__POCKETPC__)
     #pragma comment(lib,"commdlg.lib")
 #endif
 

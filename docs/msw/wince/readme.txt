@@ -75,10 +75,8 @@ To compile using the emulator on eVC++3:
   and compile.
 
 - Open samples/minimal/minimal.vcw, select the
-  WIN32 (WCE x86 Debug) configuration, select Pocket PC 2002 and
-  Pocket PC 2002 Emulation as before, add commdlg.lib to the link
-  flags, and compile. Do not add commdlg.lib if compiling for
-  Smartphone.
+  WIN32 (WCE x86 Debug) configuration, and select Pocket PC 2002 and
+  Pocket PC 2002 Emulation as before.
 
 To compile using the emulator on eVC++4:
 
