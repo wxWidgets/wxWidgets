@@ -331,6 +331,9 @@ EVT_LIST_COL_BEGIN_DRAG    = wx.PyEventBinder(wxEVT_COMMAND_LIST_COL_BEGIN_DRAG 
 EVT_LIST_COL_DRAGGING      = wx.PyEventBinder(wxEVT_COMMAND_LIST_COL_DRAGGING     , 1)
 EVT_LIST_COL_END_DRAG      = wx.PyEventBinder(wxEVT_COMMAND_LIST_COL_END_DRAG     , 1)
 EVT_LIST_ITEM_FOCUSED      = wx.PyEventBinder(wxEVT_COMMAND_LIST_ITEM_FOCUSED     , 1)
+
+EVT_LIST_GET_INFO = wx._deprecated(EVT_LIST_GET_INFO)
+EVT_LIST_SET_INFO = wx._deprecated(EVT_LIST_SET_INFO)
 }
 
 //---------------------------------------------------------------------------
@@ -497,7 +500,7 @@ public:
     bool SetItemState(long item, long state, long stateMask) ;
 
     // Sets the item image
-    bool SetItemImage(long item, int image, int selImage) ;
+    bool SetItemImage(long item, int image, int selImage=-1) ;
 
     // Gets the item text
     wxString GetItemText(long item) const ;
