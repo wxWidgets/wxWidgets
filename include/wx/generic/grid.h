@@ -287,7 +287,7 @@ class wxGrid : public wxPanel
 {
     DECLARE_DYNAMIC_CLASS( wxGrid )
 
-  private:
+  protected:
     bool m_created;
 
     wxGridTableBase *m_table;
@@ -459,14 +459,21 @@ class wxGrid : public wxPanel
     void DrawGridLines( wxDC& dc );
     void DrawCells( wxDC& dc );
     void DrawCellBackground( wxDC& dc, const wxRect&, int row, int col );
-    void DrawCellValue( wxDC& dc, const wxRect&, int row, int col );
-
-    // this one is useful when you just need to draw one or a few
+    void DrawCellValue( wxDC& dc, const wxRect&, int row, int col,
+                        const wxString& value = wxEmptyString, bool useValueArg = FALSE );
+    
+    // this updates the displayed cell text value but not the underlying 
+    // table cell value (it is used to echo text being entered into
+    // the top edit control when in-place editing is turned off)
+    //
+    void DrawCellValue( const wxGridCellCoords& coords, const wxString& value );
+    
+    // these are useful when you just need to draw one or a few
     // cells
     void DrawCell( int row, int col );
     void DrawCell( const wxGridCellCoords& coords )
         { DrawCell( coords.GetRow(), coords.GetCol() ); }
-    
+        
     void DrawCellHighlight( wxDC& dc, int row, int col );
     void DrawCellHighlight( wxDC& dc, wxGridCellCoords& coords )
         { DrawCellHighlight( dc, coords.GetRow(), coords.GetCol() ); }
@@ -896,7 +903,7 @@ class WXDLLEXPORT wxGridEvent : public wxNotifyEvent
 {
     DECLARE_DYNAMIC_CLASS(wxGridEvent)
 
-  private:
+  protected:
     int         m_row;
     int         m_col;
     int         m_x;
@@ -931,7 +938,7 @@ class WXDLLEXPORT wxGridSizeEvent : public wxNotifyEvent
 {
     DECLARE_DYNAMIC_CLASS(wxGridSizeEvent)
 
-  private:
+  protected:
     int         m_rowOrCol;
     int         m_x;
     int         m_y;
@@ -964,7 +971,7 @@ class WXDLLEXPORT wxGridRangeSelectEvent : public wxNotifyEvent
 {
     DECLARE_DYNAMIC_CLASS(wxGridRangeSelectEvent)
 
-  private:
+  protected:
     wxGridCellCoords  m_topLeft;
     wxGridCellCoords  m_bottomRight;
     bool              m_control;

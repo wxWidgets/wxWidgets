@@ -1294,9 +1294,29 @@ void wxGrid::OnMouse( wxMouseEvent& ev )
                         {
 			    SelectBlock( cellCoords, cellCoords );
 			}
-			else if ( !IsInSelection( cellCoords ) )
+			else 
 			{
-			    SelectBlock( m_currentCellCoords, cellCoords );
+                            // check for the mouse being outside the cell area
+                            // (we still want to let the user grow the selected block)
+                            //
+                            if ( cellCoords.GetCol() == -1 )
+                            {
+                                if ( x >= m_right )
+                                    cellCoords.SetCol( m_numCols-1 );
+                                else
+                                    cellCoords.SetCol( m_scrollPosX );
+                            }
+                            
+                            if ( cellCoords.GetRow() == -1 )
+                            {
+                                if ( y >= m_bottom )
+                                    cellCoords.SetRow( m_numRows-1 );
+                                else
+                                    cellCoords.SetRow( m_scrollPosY );
+                            }
+                            
+                            if ( !IsInSelection( cellCoords ) )
+			        SelectBlock( m_currentCellCoords, cellCoords );
 			}
                     }
                 }
@@ -1913,20 +1933,38 @@ void wxGrid::OnText( wxKeyEvent& ev )
                     break;
             }
         }
-        else if ( ctrl == m_topEditCtrl &&
-                  IsCellEditControlEnabled() )
+        else if ( ctrl == m_topEditCtrl )
         {
-            switch ( m_editCtrlType )
+            if ( IsCellEditControlEnabled() )
             {
-                case wxGRID_TEXTCTRL:
-                    ((wxTextCtrl *)m_cellEditCtrl)->
-                        SetValue(((wxTextCtrl *)ctrl)->GetValue());
-                    break;
-                
-                case wxGRID_COMBOBOX:
-                    ((wxComboBox *)m_cellEditCtrl)->
-                        SetValue(((wxComboBox *)ctrl)->GetValue());
-                    break;
+                switch ( m_editCtrlType )
+                {
+                    case wxGRID_TEXTCTRL:
+                        ((wxTextCtrl *)m_cellEditCtrl)->
+                            SetValue(((wxTextCtrl *)ctrl)->GetValue());
+                        break;
+                    
+                    case wxGRID_COMBOBOX:
+                        ((wxComboBox *)m_cellEditCtrl)->
+                            SetValue(((wxComboBox *)ctrl)->GetValue());
+                        break;
+                }
+            }
+            else
+            {
+                // in the case when in-place editing is turned off we just want to 
+                // echo the text changes in the cell but not yet update the grid table
+                //
+                switch ( m_editCtrlType )
+                {
+                    case wxGRID_TEXTCTRL:
+                        DrawCellValue( m_currentCellCoords, ((wxTextCtrl *)ctrl)->GetValue() );
+                        break;
+                    
+                    case wxGRID_COMBOBOX:
+                        DrawCellValue( m_currentCellCoords, ((wxComboBox *)ctrl)->GetValue() );
+                        break;
+                }
             }
         }
     }
@@ -2993,7 +3031,11 @@ void wxGrid::DrawCellBackground( wxDC& dc, const wxRect& rect, int row, int col 
 }
 
 
-void wxGrid::DrawCellValue( wxDC& dc, const wxRect& rect, int row, int col )
+// This draws a text value in the given cell.  If useValueArg is FALSE
+// (the default) then the grid table value will be used
+//
+void wxGrid::DrawCellValue( wxDC& dc, const wxRect& rect, int row, int col,
+                            const wxString& value, bool useValueArg )
 {
     wxRect rect2;
     rect2 = rect;
@@ -3020,7 +3062,37 @@ void wxGrid::DrawCellValue( wxDC& dc, const wxRect& rect, int row, int col )
     
     int hAlign, vAlign;
     GetCellAlignment( row, col, &hAlign, &vAlign );
-    DrawTextRectangle( dc, GetCellValue( row, col ), rect2, hAlign, vAlign );
+    
+    if ( useValueArg )
+    {
+        DrawTextRectangle( dc, value, rect2, hAlign, vAlign );
+    }
+    else
+    {
+        DrawTextRectangle( dc, GetCellValue( row, col ), rect2, hAlign, vAlign );
+    }
+}
+
+
+// this is used to echo text being entered into the top edit control when 
+// in-place editing is turned off
+//
+void wxGrid::DrawCellValue( const wxGridCellCoords& coords, const wxString& value )
+{
+    if ( IsVisible( coords ) )
+    {
+        int row = coords.GetRow();
+        int col = coords.GetCol();
+        wxRect rect;
+        rect.x = m_colRights[ col ] - m_colWidths[ col ];
+        rect.y = m_rowBottoms[ row ] - m_rowHeights[ row ];
+        rect.width =  m_colWidths[ col ];
+        rect.height = m_rowHeights[ row ];
+
+        wxClientDC dc( this );
+        DrawCellBackground( dc, rect, row, col );
+        DrawCellValue( dc, rect, row, col, value, TRUE );
+    }
 }
 
 
@@ -3083,8 +3155,7 @@ void wxGrid::DrawCell( int row, int col )
 //
 void wxGrid::HideCurrentCellHighlight( wxDC& dc )
 {
-    if ( !m_cellEditCtrlEnabled  &&
-         m_currentCellHighlighted  &&
+    if ( m_currentCellHighlighted  &&
          m_currentCellCoords != wxGridNoCellCoords )
     {
         DrawCellHighlight( dc, m_currentCellCoords );
@@ -3097,8 +3168,7 @@ void wxGrid::HideCurrentCellHighlight( wxDC& dc )
 //
 void wxGrid::ShowCurrentCellHighlight( wxDC& dc )
 {
-    if ( !m_cellEditCtrlEnabled  &&
-         !m_currentCellHighlighted  &&
+    if ( !m_currentCellHighlighted  &&
          m_currentCellCoords != wxGridNoCellCoords )
     {
         DrawCellHighlight( dc, m_currentCellCoords );
