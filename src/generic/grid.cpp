@@ -5360,12 +5360,10 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
         HideCellEditControl();
         DisableCellEditControl();
 
-        wxRect r;
         if ( IsVisible( m_currentCellCoords ) )
         {
+            wxRect r;
             r = BlockToDeviceRect(m_currentCellCoords, m_currentCellCoords);
-            CalcCellsExposed( r );
-        
             if ( !m_gridLinesEnabled )
             {
                 r.x--;
@@ -5373,13 +5371,15 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
                 r.width++;
                 r.height++;
             }
+
+            CalcCellsExposed( r );
     
             // Otherwise refresh redraws the highlight!
             m_currentCellCoords = coords;
+
+            DrawGridCellArea(dc);
+            DrawAllGridLines( dc, r );
         }
-        
-        DrawGridCellArea(dc);
-        DrawAllGridLines( dc, r );
     }
 
     m_currentCellCoords = coords;
@@ -5932,15 +5932,15 @@ void wxGrid::EndBatch()
 {
     if ( m_batchCount > 0 )
     {
-	m_batchCount--;
-	if ( !m_batchCount )
-	{
-	    CalcDimensions();
-	    m_rowLabelWin->Refresh();
-	    m_colLabelWin->Refresh();
-	    m_cornerLabelWin->Refresh();
-	    m_gridWin->Refresh();
-	}
+        m_batchCount--;
+        if ( !m_batchCount )
+        {
+            CalcDimensions();
+            m_rowLabelWin->Refresh();
+            m_colLabelWin->Refresh();
+            m_cornerLabelWin->Refresh();
+            m_gridWin->Refresh();
+        }
     }
 }
 
