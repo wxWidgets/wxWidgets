@@ -2503,9 +2503,8 @@ void wxWin32Renderer::DrawTab(wxDC& dc,
     const wxSize indent = GetTabIndent();
     if ( flags & wxCONTROL_SELECTED )
     {
-        rect.Inflate( isVertical ? 0 : indent.x,
-                      isVertical ? indent.y : 0
-                    );
+        rect.Inflate( SELECT_FOR_VERTICAL( indent.x , 0),
+                      SELECT_FOR_VERTICAL( 0, indent.y ));
         switch ( dir )
         {
             default:
