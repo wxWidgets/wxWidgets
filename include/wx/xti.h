@@ -363,10 +363,12 @@ public :
     typedef void (*converterToString_t)( const wxxVariant& data , wxString &result ) ;
     typedef void (*converterFromString_t)( const wxString& data , wxxVariant &result ) ;
 
-    wxTypeInfo(wxTypeKind kind , converterToString_t to = NULL , converterFromString_t from= NULL, const wxString &name = wxEmptyString ) :
-    m_kind( kind) , m_toString(to) , m_fromString(from) , m_name(name)
+    wxTypeInfo(wxTypeKind kind,
+               converterToString_t to = NULL, converterFromString_t from = NULL,
+               const wxString &name = wxEmptyString):
+            m_toString(to), m_fromString(from), m_kind(kind), m_name(name) 
     {
-        Register() ;
+        Register();
     }
 
     virtual ~wxTypeInfo()
@@ -413,8 +415,8 @@ private :
 
     static wxTypeInfoMap*      sm_typeTable ;
 
-    wxTypeKind m_kind ;
-    wxString m_name ;
+    wxTypeKind m_kind;
+    wxString m_name;
 };
 
 class WXDLLIMPEXP_BASE wxBuiltInTypeInfo : public wxTypeInfo
@@ -652,28 +654,31 @@ void wxFromStringConverter( const wxString &s, wxxVariant &v) { T d ; wxStringRe
 
 class wxSetter
 {
-public :
+public:
     wxSetter( const wxString name ) { m_name = name ; }
+    virtual ~wxSetter() {}
     virtual void Set( wxObject *object, const wxxVariant &variantValue ) const = 0;
     const wxString& GetName() const { return m_name ; }
-private :
-    wxString m_name ;
-} ;
+private:
+    wxString m_name;
+};
 
 class wxGetter
 {
-public :
+public:
     wxGetter( const wxString name ) { m_name = name ; }
+    virtual ~wxGetter() {}
     virtual void Get( const wxObject *object , wxxVariant& result) const = 0;
     const wxString& GetName() const { return m_name ; }
-private :
-    wxString m_name ;
-} ;
+private:
+    wxString m_name;
+};
 
 class wxCollectionGetter
 {
 public :
     wxCollectionGetter( const wxString name ) { m_name = name ; }
+    virtual ~wxCollectionGetter() {}
     virtual void Get( const wxObject *object , wxxVariantArray& result) const = 0;
     const wxString& GetName() const { return m_name ; }
 private :
@@ -686,6 +691,7 @@ class wxAdder
 {
 public :
     wxAdder( const wxString name ) { m_name = name ; }
+    virtual ~wxAdder() {}
     virtual void Add( wxObject *object, const wxxVariant &variantValue ) const= 0;
     const wxString& GetName() const { return m_name ; }
 private :
@@ -845,16 +851,46 @@ enum {
 class WXDLLIMPEXP_BASE wxPropertyInfo
 {
 public :
-    wxPropertyInfo( wxPropertyInfo* &iter , const wxClassInfo* itsClass , const wxString& name  , const wxTypeInfo* typeInfo , wxPropertyAccessor *accessor , wxxVariant dv , wxPropertyInfoFlags flags = 0 , const wxString& helpString=wxEmptyString, const wxString& groupString=wxEmptyString ) :
-       m_name( name ) , m_itsClass( itsClass ) , m_typeInfo( typeInfo ) , m_accessor( accessor ) , m_defaultValue( dv ) , m_collectionElementTypeInfo(NULL) , m_helpString (helpString ) , m_groupString( groupString ) , m_flags(flags)
+    wxPropertyInfo(wxPropertyInfo* &iter,
+                   const wxClassInfo* itsClass,
+                   const wxString& name,
+                   const wxTypeInfo* typeInfo,
+                   wxPropertyAccessor *accessor,
+                   wxxVariant dv,
+                   wxPropertyInfoFlags flags = 0,
+                   const wxString& helpString = wxEmptyString,
+                   const wxString& groupString = wxEmptyString) :
+           m_name(name),
+           m_groupString(groupString),
+           m_helpString(helpString),
+           m_itsClass(itsClass),
+           m_flags(flags),
+           m_typeInfo(typeInfo),
+           m_collectionElementTypeInfo(NULL),
+           m_accessor(accessor),
+           m_defaultValue(dv)
        {
-           Insert(iter) ;
+           Insert(iter);
        }
 
-       wxPropertyInfo( wxPropertyInfo* &iter , const wxClassInfo* itsClass , const wxString& name , const wxTypeInfo* collTypeInfo , const wxTypeInfo* elemTypeInfo , wxPropertyAccessor *accessor , wxPropertyInfoFlags flags = 0 , const wxString& helpString=wxEmptyString, const wxString& groupString=wxEmptyString ) :
-       m_name( name ) , m_itsClass( itsClass ) , m_typeInfo( collTypeInfo ) , m_accessor( accessor ) , m_collectionElementTypeInfo(elemTypeInfo) , m_helpString (helpString ) , m_groupString( groupString ) , m_flags(flags)
+       wxPropertyInfo(wxPropertyInfo* &iter,
+                      const wxClassInfo* itsClass, const wxString& name,
+                      const wxTypeInfo* collTypeInfo,
+                      const wxTypeInfo* elemTypeInfo,
+                      wxPropertyAccessor *accessor,
+                      wxPropertyInfoFlags flags = 0,
+                      const wxString& helpString = wxEmptyString,
+                      const wxString& groupString = wxEmptyString) :
+           m_name(name),
+           m_groupString(groupString),
+           m_helpString(helpString),
+           m_itsClass(itsClass),
+           m_flags(flags),
+           m_typeInfo(collTypeInfo),
+           m_collectionElementTypeInfo(elemTypeInfo),
+           m_accessor(accessor)
        {
-           Insert(iter) ;
+           Insert(iter);
        }
 
        // return the class this property is declared in
@@ -901,8 +937,8 @@ private :
             i->m_next = this ;
         }
     }
-
-    wxString            m_name;
+    
+    wxString            m_name ;
     wxString            m_typeName ;
     wxString            m_groupString ;
     wxString            m_helpString ;
@@ -992,8 +1028,13 @@ static wxPropertyInfo _propertyInfo##name( first , #name , wxGetTypeInfo( (collt
 class wxHandlerInfo
 {
 public :
-    wxHandlerInfo( wxHandlerInfo* &iter , const wxString& name , wxObjectEventFunction address , const wxClassInfo* eventClassInfo ) :
-       m_name( name ) , m_eventClassInfo( eventClassInfo ) , m_eventFunction( address )
+    wxHandlerInfo(wxHandlerInfo* &iter,
+                  const wxString& name,
+                  wxObjectEventFunction address,
+                  const wxClassInfo* eventClassInfo) :
+            m_eventFunction(address),
+            m_name(name),
+            m_eventClassInfo(eventClassInfo)
        {
            m_next = NULL ;
            if ( iter == NULL )
@@ -1328,21 +1369,45 @@ public:
         wxVariantToObjectConverter _Converter2 ,
         wxObjectToVariantConverter _Converter3 ,
         wxObjectStreamingCallback _streamingCallback = NULL
-        ) : m_parents(_Parents) , m_unitName(_UnitName) ,m_className(_ClassName),
-        m_objectSize(size), m_objectConstructor(ctor) , m_firstProperty(_Props ) , m_firstHandler(_Handlers ) , m_constructor( _Constructor ) ,
-        m_constructorProperties(_ConstructorProperties) , m_constructorPropertiesCount(_ConstructorPropertiesCount),
-        m_variantOfPtrToObjectConverter( _PtrConverter1 ) , m_variantToObjectConverter( _Converter2 ) , m_objectToVariantConverter( _Converter3 ) ,
-        m_next(sm_first) , m_streamingCallback( _streamingCallback )
+        ) : 
+    
+            m_className(_ClassName),
+            m_objectSize(size),
+            m_objectConstructor(ctor),
+            m_next(sm_first),
+            m_firstProperty(_Props),
+            m_firstHandler(_Handlers),
+            m_parents(_Parents),
+            m_unitName(_UnitName),            
+            m_constructor(_Constructor),
+            m_constructorProperties(_ConstructorProperties),
+            m_constructorPropertiesCount(_ConstructorPropertiesCount),
+            m_variantOfPtrToObjectConverter(_PtrConverter1),
+            m_variantToObjectConverter(_Converter2),
+            m_objectToVariantConverter(_Converter3),
+            m_streamingCallback(_streamingCallback)
     {
         sm_first = this;
         Register() ;
     }
 
-    wxClassInfo(const wxChar *_UnitName, const wxChar *_ClassName, const wxClassInfo **_Parents) : m_parents(_Parents) , m_unitName(_UnitName) ,m_className(_ClassName),
-        m_objectSize(0), m_objectConstructor(NULL) , m_firstProperty(NULL ) , m_firstHandler(NULL ) , m_constructor( NULL ) ,
-        m_constructorProperties(NULL) , m_constructorPropertiesCount(0),
-        m_variantOfPtrToObjectConverter( NULL ) , m_variantToObjectConverter( NULL ) , m_objectToVariantConverter( NULL ) , m_next(sm_first) ,
-        m_streamingCallback( NULL )
+    wxClassInfo(const wxChar *_UnitName, const wxChar *_ClassName,
+                const wxClassInfo **_Parents) : 
+            m_className(_ClassName),
+            m_objectSize(0),
+            m_objectConstructor(NULL),
+            m_next(sm_first),
+            m_firstProperty(NULL),
+            m_firstHandler(NULL),
+            m_parents(_Parents),
+            m_unitName(_UnitName),
+            m_constructor(NULL),
+            m_constructorProperties(NULL),
+            m_constructorPropertiesCount(0),
+            m_variantOfPtrToObjectConverter(NULL),
+            m_variantToObjectConverter(NULL),
+            m_objectToVariantConverter(NULL),
+            m_streamingCallback(NULL)
     {
         sm_first = this;
         Register() ;
@@ -1386,10 +1451,11 @@ public:
         return false ;
     }
 
-    // if there is a callback registered with that class it will be called before this
-    // object will be written to disk, it can veto streaming out this object by returning
-    // false, if this class has not registered a callback, the search will go up the inheritance tree
-    // if no callback has been registered true will be returned by default
+    // if there is a callback registered with that class it will be called
+    // before this object will be written to disk, it can veto streaming out
+    // this object by returning false, if this class has not registered a
+    // callback, the search will go up the inheritance tree if no callback has
+    // been registered true will be returned by default
     bool BeforeWriteObject( const wxObject *obj, wxWriter *streamer , wxPersister *persister , wxxVariantArray &metadata) const  ;
 
     // gets the streaming callback from this class or any superclass
