@@ -132,7 +132,7 @@ wxTaskBarIconArea::wxTaskBarIconArea(wxTaskBarIcon *icon, const wxBitmap &bmp)
         SetLegacyWMProperties();
     }
 
-#ifdef __WXGTK20__
+#if defined(__WXGTK20__) && defined(TASKBAR_ICON_AREA_BASE_INCLUDED)
     m_invokingWindow = icon;
 #endif
    
