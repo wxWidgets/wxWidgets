@@ -152,9 +152,10 @@ protected:
 
     // Get the default size for the new window if no explicit size given. If
     // there are better default sizes then these can be changed, just as long
-    // as they are not too small for TLWs.
-    static int WidthDefault(int w) { return w == -1 ? 400 : w; }
-    static int HeightDefault(int h) { return h == -1 ? 250 : h; }
+    // as they are not too small for TLWs (and not larger than screen).
+    static wxSize GetDefaultSize();
+    static int WidthDefault(int w) { return w == -1 ? GetDefaultSize().x : w; }
+    static int HeightDefault(int h) { return h == -1 ? GetDefaultSize().y : h; }
 
     // the frame icon
     wxIconBundle m_icons;

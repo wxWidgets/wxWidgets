@@ -125,6 +125,30 @@ wxSize wxTopLevelWindowBase::GetMaxSize() const
     return size;
 }
 
+/* static */
+wxSize wxTopLevelWindowBase::GetDefaultSize()
+{
+    wxSize size = wxGetClientDisplayRect().GetSize();
+
+    // create proportionally bigger windows on small screens
+    if ( size.x >= 1024 )
+        size.x = 400;
+    else if ( size.x >= 800 )
+        size.x = 300;
+    else if ( size.x >= 320 )
+        size.x = 240;
+
+    if ( size.y >= 768 )
+        size.y = 250;
+    else if ( size.y > 200 )
+    {
+        size.y *= 2;
+        size.y /= 3;
+    }
+
+    return size;
+}
+
 // ----------------------------------------------------------------------------
 // wxTopLevelWindow size management: we exclude the areas taken by
 // menu/status/toolbars from the client area, so the client area is what's
