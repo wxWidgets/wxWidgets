@@ -81,7 +81,7 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_WXUSE_ODBC_BUILTIN@__wxodbc___depname = $(top_builddir)/lib/libwxodbc.a
 @COND_TOOLKIT_GTK@__LOWLEVEL_SRC_OBJECTS = fontenum.o fontutil.o utilsx11.o taskbarcmn.o taskbarx11.o printps.o gsockgtk.o win_gtk.o app.o bitmap.o brush.o clipbrd.o colour.o cursor.o data.o dataobj.o dc.o dcclient.o dcmemory.o dcscreen.o dnd.o evtloop.o font.o toplevel.o gdiobj.o icon.o monodll-main.o pen.o popupwin.o region.o settings.o timer.o tooltip.o utilsgtk.o window.o paletteg.o
 @COND_TOOLKIT_MOTIF@__LOWLEVEL_SRC_OBJECTS = fontenum.o fontutil.o utilsx11.o taskbarcmn.o taskbarx11.o printps.o monodll-region.o monodll-pen.o monodll-brush.o monodll-bitmap.o utilsx.o
-@COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS = monodll-app.o monodll-bitmap1.o monodll-brush1.o caret.o monodll-clipbrd.o monodll-colour.o monodll-cursor.o monodll-data.o monodll-dc.o monodll-dcclient.o monodll-dcmemory.o dcprint.o monodll-dcscreen.o dialup.o dib.o dirdlg.o display.o enhmeta.o helpbest.o monodll-evtloop.o monodll-font.o monodll-fontenum.o monodll-fontutil.o gdiimage.o monodll-gdiobj.o glcanvas.o helpchm.o helpwin.o monodll-icon.o joystick.o minifram.o palette.o monodll-pen1.o monodll-popupwin.o monodll-region1.o monodll-settings.o taskbarcmn.o taskbar.o monodll-timer.o monodll-tooltip.o monodll-toplevel.o wave.o monodll-window.o automtn.o monodll-dataobj.o dropsrc.o droptgt.o oleutils.o uuid.o
+@COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS = monodll-app.o monodll-bitmap1.o monodll-brush1.o caret.o monodll-clipbrd.o monodll-colour.o monodll-cursor.o monodll-data.o monodll-dc.o monodll-dcclient.o monodll-dcmemory.o dcprint.o monodll-dcscreen.o monodll-dialup.o dib.o dirdlg.o display.o enhmeta.o helpbest.o monodll-evtloop.o monodll-font.o monodll-fontenum.o monodll-fontutil.o gdiimage.o monodll-gdiobj.o glcanvas.o helpchm.o helpwin.o monodll-icon.o joystick.o minifram.o palette.o monodll-pen1.o monodll-popupwin.o monodll-region1.o monodll-settings.o taskbarcmn.o taskbar.o monodll-timer.o monodll-tooltip.o monodll-toplevel.o wave.o monodll-window.o automtn.o monodll-dataobj.o dropsrc.o droptgt.o oleutils.o uuid.o
 @COND_TOOLKIT_MAC@__LOWLEVEL_SRC_OBJECTS = 
 @COND_TOOLKIT_OS2@__LOWLEVEL_SRC_OBJECTS = 
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS = fontenum.o fontutil.o utilsx11.o taskbarcmn.o taskbarx11.o printps.o gsockx11.o nanox.o monodll-app1.o monodll-bitmap.o monodll-brush.o monodll-clipbrd1.o monodll-colour1.o monodll-cursor1.o monodll-data1.o monodll-dataobj1.o monodll-dc1.o monodll-dcclient1.o monodll-dcmemory1.o monodll-dcscreen1.o monodll-evtloop1.o monodll-font1.o monodll-gdiobj1.o monodll-glcanvas.o monodll-icon1.o monodll-joystick.o monodll-main1.o monodll-minifram.o monodll-palette.o monodll-pen.o monodll-popupwin1.o monodll-region.o reparent.o monodll-settings1.o monodll-toplevel1.o monodll-utils.o utilsx.o monodll-window1.o monodll-timer1.o
@@ -89,10 +89,10 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 @COND_SHARED_0_MONOLITHIC_1@__monolib___depname = $(top_builddir)/lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.a
 @COND_SHARED_1_MONOLITHIC_1@__install_monodll___depname = install_monodll
-@COND_PLATFORM_UNIX_1@BASE_PLATFORM_HDR = wx/unix/gsockunx.h \
+@COND_PLATFORM_UNIX_1@BASE_PLATFORM_HDR = wx/unix/dialup.h \
+@COND_PLATFORM_UNIX_1@    wx/unix/gsockunx.h     \
 @COND_PLATFORM_UNIX_1@    wx/unix/mimetype.h
-@COND_PLATFORM_MACOSX_1@BASE_PLATFORM_HDR = wx/unix/gsockunx.h \
-@COND_PLATFORM_MACOSX_1@    wx/unix/mimetype.h
+@COND_PLATFORM_MACOSX_1@BASE_PLATFORM_HDR = 
 @COND_PLATFORM_WIN32_1@BASE_PLATFORM_HDR = wx/msw/dde.h \
 @COND_PLATFORM_WIN32_1@    wx/msw/gccpriv.h \
 @COND_PLATFORM_WIN32_1@    wx/msw/mimetype.h \
@@ -427,18 +427,18 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_WXUSE_LIBTIFF_BUILTIN@__LIB_TIFF_DEP = $(__wxtiff___depname)
 @COND_TOOLKIT_GTK@__LOWLEVEL_SRC_OBJECTS_1 = fontenum.o fontutil.o utilsx11.o taskbarcmn.o taskbarx11.o printps.o gsockgtk.o win_gtk.o app.o bitmap.o brush.o clipbrd.o colour.o cursor.o data.o dataobj.o dc.o dcclient.o dcmemory.o dcscreen.o dnd.o evtloop.o font.o toplevel.o gdiobj.o icon.o monodll-main.o pen.o popupwin.o region.o settings.o timer.o tooltip.o utilsgtk.o window.o paletteg.o
 @COND_TOOLKIT_MOTIF@__LOWLEVEL_SRC_OBJECTS_1 = fontenum.o fontutil.o utilsx11.o taskbarcmn.o taskbarx11.o printps.o monodll-region.o monodll-pen.o monodll-brush.o monodll-bitmap.o utilsx.o
-@COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_1 = monodll-app.o monodll-bitmap1.o monodll-brush1.o caret.o monodll-clipbrd.o monodll-colour.o monodll-cursor.o monodll-data.o monodll-dc.o monodll-dcclient.o monodll-dcmemory.o dcprint.o monodll-dcscreen.o dialup.o dib.o dirdlg.o display.o enhmeta.o helpbest.o monodll-evtloop.o monodll-font.o monodll-fontenum.o monodll-fontutil.o gdiimage.o monodll-gdiobj.o glcanvas.o helpchm.o helpwin.o monodll-icon.o joystick.o minifram.o palette.o monodll-pen1.o monodll-popupwin.o monodll-region1.o monodll-settings.o taskbarcmn.o taskbar.o monodll-timer.o monodll-tooltip.o monodll-toplevel.o wave.o monodll-window.o automtn.o monodll-dataobj.o dropsrc.o droptgt.o oleutils.o uuid.o
+@COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_1 = monodll-app.o monodll-bitmap1.o monodll-brush1.o caret.o monodll-clipbrd.o monodll-colour.o monodll-cursor.o monodll-data.o monodll-dc.o monodll-dcclient.o monodll-dcmemory.o dcprint.o monodll-dcscreen.o monodll-dialup.o dib.o dirdlg.o display.o enhmeta.o helpbest.o monodll-evtloop.o monodll-font.o monodll-fontenum.o monodll-fontutil.o gdiimage.o monodll-gdiobj.o glcanvas.o helpchm.o helpwin.o monodll-icon.o joystick.o minifram.o palette.o monodll-pen1.o monodll-popupwin.o monodll-region1.o monodll-settings.o taskbarcmn.o taskbar.o monodll-timer.o monodll-tooltip.o monodll-toplevel.o wave.o monodll-window.o automtn.o monodll-dataobj.o dropsrc.o droptgt.o oleutils.o uuid.o
 @COND_TOOLKIT_MAC@__LOWLEVEL_SRC_OBJECTS_1 = 
 @COND_TOOLKIT_OS2@__LOWLEVEL_SRC_OBJECTS_1 = 
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_1 = fontenum.o fontutil.o utilsx11.o taskbarcmn.o taskbarx11.o printps.o gsockx11.o nanox.o monodll-app1.o monodll-bitmap.o monodll-brush.o monodll-clipbrd1.o monodll-colour1.o monodll-cursor1.o monodll-data1.o monodll-dataobj1.o monodll-dc1.o monodll-dcclient1.o monodll-dcmemory1.o monodll-dcscreen1.o monodll-evtloop1.o monodll-font1.o monodll-gdiobj1.o monodll-glcanvas.o monodll-icon1.o monodll-joystick.o monodll-main1.o monodll-minifram.o monodll-palette.o monodll-pen.o monodll-popupwin1.o monodll-region.o reparent.o monodll-settings1.o monodll-toplevel1.o monodll-utils.o utilsx.o monodll-window1.o monodll-timer1.o
 @COND_TOOLKIT_MGL@__LOWLEVEL_SRC_OBJECTS_1 = monodll-colour2.o monodll-dc2.o monodll-gdiobj2.o monodll-palette1.o monodll-region2.o monodll-brush2.o monodll-pen2.o monodll-font2.o monodll-data2.o monodll-fontenum1.o monodll-fontutil1.o monodll-evtloop2.o monodll-app2.o monodll-bitmap2.o dirmgl.o monodll-clipbrd2.o monodll-cursor2.o monodll-dcclient2.o monodll-dcmemory2.o monodll-dcscreen2.o monodll-toplevel2.o monodll-icon2.o monodll-settings2.o monodll-window2.o monodll-utils1.o monodll-timer1.o
 @COND_WXUSE_LIBJPEG_BUILTIN@__wxjpeg___depname = $(top_builddir)/lib/libwxjpeg.a
-@COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_1 = monolib-dir.o monolib-gsocket.o monolib-mimetype.o monolib-snglinst.o monolib-threadpsx.o monolib-utilsunx.o
-@COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_1 = monolib-dir.o monolib-gsocket.o monolib-mimetype.o monolib-snglinst.o monolib-threadpsx.o monolib-utilsunx.o
+@COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_1 = monolib-dialup.o monolib-dir.o monolib-gsocket.o monolib-mimetype.o monolib-snglinst.o monolib-threadpsx.o monolib-utilsunx.o
+@COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_1 = 
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_1 = monolib-gsocket1.o monolib-gsockmsw.o monolib-dde.o monolib-dir1.o monolib-main.o monolib-mimetype1.o monolib-regconf.o monolib-registry.o monolib-snglinst1.o monolib-thread.o monolib-utils.o monolib-utilsexc.o monolib-volume.o
 @COND_TOOLKIT_GTK@__LOWLEVEL_SRC_OBJECTS_2 = monolib-fontenum.o monolib-fontutil.o monolib-utilsx11.o monolib-taskbarcmn.o monolib-taskbarx11.o monolib-printps.o monolib-gsockgtk.o monolib-win_gtk.o monolib-app.o monolib-bitmap.o monolib-brush.o monolib-clipbrd.o monolib-colour.o monolib-cursor.o monolib-data.o monolib-dataobj.o monolib-dc.o monolib-dcclient.o monolib-dcmemory.o monolib-dcscreen.o monolib-dnd.o monolib-evtloop.o monolib-font.o monolib-toplevel.o monolib-gdiobj.o monolib-icon.o monolib-main1.o monolib-pen.o monolib-popupwin.o monolib-region.o monolib-settings.o monolib-timer.o monolib-tooltip.o monolib-utilsgtk.o monolib-window.o monolib-paletteg.o
 @COND_TOOLKIT_MOTIF@__LOWLEVEL_SRC_OBJECTS_2 = monolib-fontenum.o monolib-fontutil.o monolib-utilsx11.o monolib-taskbarcmn.o monolib-taskbarx11.o monolib-printps.o monolib-region1.o monolib-pen1.o monolib-brush1.o monolib-bitmap1.o monolib-utilsx.o
-@COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_2 = monolib-app1.o monolib-bitmap2.o monolib-brush2.o monolib-caret.o monolib-clipbrd1.o monolib-colour1.o monolib-cursor1.o monolib-data1.o monolib-dc1.o monolib-dcclient1.o monolib-dcmemory1.o monolib-dcprint.o monolib-dcscreen1.o monolib-dialup.o monolib-dib.o monolib-dirdlg.o monolib-display.o monolib-enhmeta.o monolib-helpbest.o monolib-evtloop1.o monolib-font1.o monolib-fontenum1.o monolib-fontutil1.o monolib-gdiimage.o monolib-gdiobj1.o monolib-glcanvas.o monolib-helpchm.o monolib-helpwin.o monolib-icon1.o monolib-joystick.o monolib-minifram.o monolib-palette.o monolib-pen2.o monolib-popupwin1.o monolib-region2.o monolib-settings1.o monolib-taskbarcmn.o monolib-taskbar.o monolib-timer1.o monolib-tooltip1.o monolib-toplevel1.o monolib-wave.o monolib-window1.o monolib-automtn.o monolib-dataobj1.o monolib-dropsrc.o monolib-droptgt.o monolib-oleutils.o monolib-uuid.o
+@COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_2 = monolib-app1.o monolib-bitmap2.o monolib-brush2.o monolib-caret.o monolib-clipbrd1.o monolib-colour1.o monolib-cursor1.o monolib-data1.o monolib-dc1.o monolib-dcclient1.o monolib-dcmemory1.o monolib-dcprint.o monolib-dcscreen1.o monolib-dialup1.o monolib-dib.o monolib-dirdlg.o monolib-display.o monolib-enhmeta.o monolib-helpbest.o monolib-evtloop1.o monolib-font1.o monolib-fontenum1.o monolib-fontutil1.o monolib-gdiimage.o monolib-gdiobj1.o monolib-glcanvas.o monolib-helpchm.o monolib-helpwin.o monolib-icon1.o monolib-joystick.o monolib-minifram.o monolib-palette.o monolib-pen2.o monolib-popupwin1.o monolib-region2.o monolib-settings1.o monolib-taskbarcmn.o monolib-taskbar.o monolib-timer1.o monolib-tooltip1.o monolib-toplevel1.o monolib-wave.o monolib-window1.o monolib-automtn.o monolib-dataobj1.o monolib-dropsrc.o monolib-droptgt.o monolib-oleutils.o monolib-uuid.o
 @COND_TOOLKIT_MAC@__LOWLEVEL_SRC_OBJECTS_2 = 
 @COND_TOOLKIT_OS2@__LOWLEVEL_SRC_OBJECTS_2 = 
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_2 = monolib-fontenum.o monolib-fontutil.o monolib-utilsx11.o monolib-taskbarcmn.o monolib-taskbarx11.o monolib-printps.o monolib-gsockx11.o monolib-nanox.o monolib-app2.o monolib-bitmap1.o monolib-brush1.o monolib-clipbrd2.o monolib-colour2.o monolib-cursor2.o monolib-data2.o monolib-dataobj2.o monolib-dc2.o monolib-dcclient2.o monolib-dcmemory2.o monolib-dcscreen2.o monolib-evtloop2.o monolib-font2.o monolib-gdiobj2.o monolib-glcanvas1.o monolib-icon2.o monolib-joystick1.o monolib-main2.o monolib-minifram1.o monolib-palette1.o monolib-pen1.o monolib-popupwin2.o monolib-region1.o monolib-reparent.o monolib-settings2.o monolib-toplevel2.o monolib-utils1.o monolib-utilsx.o monolib-window2.o monolib-timer2.o
@@ -465,18 +465,14 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_WXUSE_REGEX_BUILTIN@__LIB_REGEX_p = -lwxregex
 @COND_WXUSE_ODBC_BUILTIN@__LIB_ODBC_DEP = $(__wxodbc___depname)
 @COND_DEPS_TYPE_GCC@DEPS_FLAG = -MMD -MT$@ -MF$@.d
-@COND_PLATFORM_UNIX_1@BASE_PLATFORM_SRC = src/unix/dir.cpp \
+@COND_PLATFORM_UNIX_1@BASE_PLATFORM_SRC = src/unix/dialup.cpp \
+@COND_PLATFORM_UNIX_1@    src/unix/dir.cpp \
 @COND_PLATFORM_UNIX_1@    src/unix/gsocket.c \
 @COND_PLATFORM_UNIX_1@    src/unix/mimetype.cpp \
 @COND_PLATFORM_UNIX_1@    src/unix/snglinst.cpp \
 @COND_PLATFORM_UNIX_1@    src/unix/threadpsx.cpp \
 @COND_PLATFORM_UNIX_1@    src/unix/utilsunx.cpp
-@COND_PLATFORM_MACOSX_1@BASE_PLATFORM_SRC = src/unix/dir.cpp \
-@COND_PLATFORM_MACOSX_1@    src/unix/gsocket.c \
-@COND_PLATFORM_MACOSX_1@    src/unix/mimetype.cpp \
-@COND_PLATFORM_MACOSX_1@    src/unix/snglinst.cpp \
-@COND_PLATFORM_MACOSX_1@    src/unix/threadpsx.cpp \
-@COND_PLATFORM_MACOSX_1@    src/unix/utilsunx.cpp
+@COND_PLATFORM_MACOSX_1@BASE_PLATFORM_SRC = 
 @COND_PLATFORM_WIN32_1@BASE_PLATFORM_SRC = src/msw/gsocket.c \
 @COND_PLATFORM_WIN32_1@    src/msw/gsockmsw.c \
 @COND_PLATFORM_WIN32_1@    src/msw/dde.cpp \
@@ -499,7 +495,7 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_WXUSE_REGEX_BUILTIN@__wxregex___depname = $(top_builddir)/lib/libwxregex.a
 @COND_TOOLKIT_GTK@__LOWLEVEL_SRC_OBJECTS_3 = monolib-fontenum.o monolib-fontutil.o monolib-utilsx11.o monolib-taskbarcmn.o monolib-taskbarx11.o monolib-printps.o monolib-gsockgtk.o monolib-win_gtk.o monolib-app.o monolib-bitmap.o monolib-brush.o monolib-clipbrd.o monolib-colour.o monolib-cursor.o monolib-data.o monolib-dataobj.o monolib-dc.o monolib-dcclient.o monolib-dcmemory.o monolib-dcscreen.o monolib-dnd.o monolib-evtloop.o monolib-font.o monolib-toplevel.o monolib-gdiobj.o monolib-icon.o monolib-main1.o monolib-pen.o monolib-popupwin.o monolib-region.o monolib-settings.o monolib-timer.o monolib-tooltip.o monolib-utilsgtk.o monolib-window.o monolib-paletteg.o
 @COND_TOOLKIT_MOTIF@__LOWLEVEL_SRC_OBJECTS_3 = monolib-fontenum.o monolib-fontutil.o monolib-utilsx11.o monolib-taskbarcmn.o monolib-taskbarx11.o monolib-printps.o monolib-region1.o monolib-pen1.o monolib-brush1.o monolib-bitmap1.o monolib-utilsx.o
-@COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_3 = monolib-app1.o monolib-bitmap2.o monolib-brush2.o monolib-caret.o monolib-clipbrd1.o monolib-colour1.o monolib-cursor1.o monolib-data1.o monolib-dc1.o monolib-dcclient1.o monolib-dcmemory1.o monolib-dcprint.o monolib-dcscreen1.o monolib-dialup.o monolib-dib.o monolib-dirdlg.o monolib-display.o monolib-enhmeta.o monolib-helpbest.o monolib-evtloop1.o monolib-font1.o monolib-fontenum1.o monolib-fontutil1.o monolib-gdiimage.o monolib-gdiobj1.o monolib-glcanvas.o monolib-helpchm.o monolib-helpwin.o monolib-icon1.o monolib-joystick.o monolib-minifram.o monolib-palette.o monolib-pen2.o monolib-popupwin1.o monolib-region2.o monolib-settings1.o monolib-taskbarcmn.o monolib-taskbar.o monolib-timer1.o monolib-tooltip1.o monolib-toplevel1.o monolib-wave.o monolib-window1.o monolib-automtn.o monolib-dataobj1.o monolib-dropsrc.o monolib-droptgt.o monolib-oleutils.o monolib-uuid.o
+@COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_3 = monolib-app1.o monolib-bitmap2.o monolib-brush2.o monolib-caret.o monolib-clipbrd1.o monolib-colour1.o monolib-cursor1.o monolib-data1.o monolib-dc1.o monolib-dcclient1.o monolib-dcmemory1.o monolib-dcprint.o monolib-dcscreen1.o monolib-dialup1.o monolib-dib.o monolib-dirdlg.o monolib-display.o monolib-enhmeta.o monolib-helpbest.o monolib-evtloop1.o monolib-font1.o monolib-fontenum1.o monolib-fontutil1.o monolib-gdiimage.o monolib-gdiobj1.o monolib-glcanvas.o monolib-helpchm.o monolib-helpwin.o monolib-icon1.o monolib-joystick.o monolib-minifram.o monolib-palette.o monolib-pen2.o monolib-popupwin1.o monolib-region2.o monolib-settings1.o monolib-taskbarcmn.o monolib-taskbar.o monolib-timer1.o monolib-tooltip1.o monolib-toplevel1.o monolib-wave.o monolib-window1.o monolib-automtn.o monolib-dataobj1.o monolib-dropsrc.o monolib-droptgt.o monolib-oleutils.o monolib-uuid.o
 @COND_TOOLKIT_MAC@__LOWLEVEL_SRC_OBJECTS_3 = 
 @COND_TOOLKIT_OS2@__LOWLEVEL_SRC_OBJECTS_3 = 
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_3 = monolib-fontenum.o monolib-fontutil.o monolib-utilsx11.o monolib-taskbarcmn.o monolib-taskbarx11.o monolib-printps.o monolib-gsockx11.o monolib-nanox.o monolib-app2.o monolib-bitmap1.o monolib-brush1.o monolib-clipbrd2.o monolib-colour2.o monolib-cursor2.o monolib-data2.o monolib-dataobj2.o monolib-dc2.o monolib-dcclient2.o monolib-dcmemory2.o monolib-dcscreen2.o monolib-evtloop2.o monolib-font2.o monolib-gdiobj2.o monolib-glcanvas1.o monolib-icon2.o monolib-joystick1.o monolib-main2.o monolib-minifram1.o monolib-palette1.o monolib-pen1.o monolib-popupwin2.o monolib-region1.o monolib-reparent.o monolib-settings2.o monolib-toplevel2.o monolib-utils1.o monolib-utilsx.o monolib-window2.o monolib-timer2.o
@@ -892,8 +888,8 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_PLATFORM_WIN32_1@WXCOMPILER = _gcc
 @COND_WXUSE_ZLIB_BUILTIN@__LIB_ZLIB_p_1 = -lwxzlib
 @COND_WXUSE_ZLIB_BUILTIN@LIB_ZLIB = wxzlib
-@COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS = dir.o gsocket.o mimetype.o snglinst.o threadpsx.o utilsunx.o
-@COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS = dir.o gsocket.o mimetype.o snglinst.o threadpsx.o utilsunx.o
+@COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS = dialup.o dir.o gsocket.o mimetype.o snglinst.o threadpsx.o utilsunx.o
+@COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS = 
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS = monodll-gsocket.o gsockmsw.o dde.o monodll-dir.o main.o monodll-mimetype.o regconf.o registry.o monodll-snglinst.o thread.o utils.o utilsexc.o volume.o
 @COND_WXUSE_ZLIB_BUILTIN@__LIB_ZLIB_DEP = $(__wxzlib___depname)
 @COND_WXUSE_REGEX_BUILTIN@__LIB_REGEX_DEP = $(__wxregex___depname)
@@ -1947,6 +1943,9 @@ helpfrm.o: $(srcdir)/src/html/helpfrm.cpp
 dib.o: $(srcdir)/src/msw/dib.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
+monolib-dialup1.o: $(srcdir)/src/msw/dialup.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/include $(DEPS_FLAG) $(CXXFLAGS) $<
+
 monolib-dataobj3.o: $(srcdir)/src/motif/dataobj.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/include $(DEPS_FLAG) $(CXXFLAGS) $<
 
@@ -2416,7 +2415,7 @@ jchuff.o: $(srcdir)/src/jpeg/jchuff.c
 monolib-pen1.o: $(srcdir)/src/x11/pen.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/include $(DEPS_FLAG) $(CXXFLAGS) $<
 
-monolib-dialup.o: $(srcdir)/src/msw/dialup.cpp
+monolib-main1.o: $(srcdir)/src/gtk/main.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/include $(DEPS_FLAG) $(CXXFLAGS) $<
 
 monolib-colordlg1.o: $(srcdir)/src/mac/colordlg.cpp
@@ -2875,7 +2874,7 @@ monodll-radiobox2.o: $(srcdir)/src/mac/radiobox.cpp
 sysopt.o: $(srcdir)/src/common/sysopt.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
-monolib-main1.o: $(srcdir)/src/gtk/main.cpp
+monolib-dialup.o: $(srcdir)/src/unix/dialup.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/include $(DEPS_FLAG) $(CXXFLAGS) $<
 
 monolib-prntbase.o: $(srcdir)/src/common/prntbase.cpp
@@ -3156,9 +3155,6 @@ monodll-statline3.o: $(srcdir)/src/univ/statline.cpp
 
 pngerror.o: $(srcdir)/src/png/pngerror.c
 	$(CC) -c -o $@ $(CPPFLAGS) $(DEPS_FLAG) $(CFLAGS) $<
-
-dialup.o: $(srcdir)/src/msw/dialup.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 msgout.o: $(srcdir)/src/common/msgout.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
@@ -3927,6 +3923,9 @@ jdapimin.o: $(srcdir)/src/jpeg/jdapimin.c
 imagjpeg.o: $(srcdir)/src/common/imagjpeg.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
+monodll-dialup.o: $(srcdir)/src/msw/dialup.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
+
 tif_lzw.o: $(srcdir)/src/tiff/tif_lzw.c
 	$(CC) -c -o $@ $(CPPFLAGS) $(DEPS_FLAG) $(CFLAGS) $<
 
@@ -3959,6 +3958,9 @@ monolib-framecmn.o: $(srcdir)/src/common/framecmn.cpp
 
 monolib-zipstrm.o: $(srcdir)/src/common/zipstrm.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) -I$(srcdir)/include $(DEPS_FLAG) $(CXXFLAGS) $<
+
+progdlgg.o: $(srcdir)/src/generic/progdlgg.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 printps.o: $(srcdir)/src/generic/printps.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
@@ -5579,7 +5581,7 @@ monolib-statusbr.o: $(srcdir)/src/generic/statusbr.cpp
 tif_jpeg.o: $(srcdir)/src/tiff/tif_jpeg.c
 	$(CC) -c -o $@ $(CPPFLAGS) $(DEPS_FLAG) $(CFLAGS) $<
 
-progdlgg.o: $(srcdir)/src/generic/progdlgg.cpp
+dialup.o: $(srcdir)/src/unix/dialup.cpp
 	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -DWXMAKINGDLL $(DEPS_FLAG) $(CXXFLAGS) $(PIC_FLAG) $<
 
 monodll-settings5.o: $(srcdir)/src/os2/settings.cpp
