@@ -36,10 +36,17 @@ _WX_DEFINE_SORTED_TYPEARRAY_2(wxString, wxSortedArrayStringBase,
 class WXDLLIMPEXP_BASE wxArrayString : public wxArrayStringBase
 {
 public:
+    // type of function used by wxArrayString::Sort()
+    typedef int (wxCMPFUNC_CONV *CompareFunction)(const wxString& first,
+                                                  const wxString& second);
+
     wxArrayString() { }
     wxArrayString(const wxArrayString& a) : wxArrayStringBase(a) { }
 
     int Index(const wxChar* sz, bool bCase = true, bool bFromEnd = false) const;
+
+    void Sort(bool reverseOrder = false);
+    void Sort(CompareFunction function);
 };
 
 class WXDLLIMPEXP_BASE wxSortedArrayString : public wxSortedArrayStringBase

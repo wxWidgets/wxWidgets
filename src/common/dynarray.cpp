@@ -470,28 +470,53 @@ int wxArrayString::Index(const wxChar* sz, bool bCase, bool WXUNUSED(bFromEnd)) 
     return it == end() ? wxNOT_FOUND : it - begin();
 }
 
+template<class F>
 class wxStringCompareLess
 {
 public:
-    typedef int (wxCMPFUNC_CONV * fnc)(const wxChar*, const wxChar*);
-public:
-    wxStringCompareLess(fnc f) : m_f(f) { }
+    wxStringCompareLess(F f) : m_f(f) { }
     bool operator()(const wxChar* s1, const wxChar* s2)
         { return m_f(s1, s2) < 0; }
+    bool operator()(const wxString& s1, const wxString& s2)
+        { return m_f(s1, s2) < 0; }
 private:
-    fnc m_f;
+    F m_f;
 };
+
+template<class F>
+wxStringCompareLess<F> wxStringCompare(F f)
+{
+    return wxStringCompareLess<F>(f);
+}
+
+void wxArrayString::Sort(CompareFunction function)
+{
+    std::sort(begin(), end(), wxStringCompare(function));
+}
+
+void wxArrayString::Sort(bool reverseOrder)
+{
+    if (reverseOrder)
+    {
+        std::sort(begin(), end(), std::greater<wxString>());
+    }
+    else
+    {
+        std::sort(begin(), end());
+    }
+}
 
 int wxSortedArrayString::Index(const wxChar* sz, bool bCase, bool WXUNUSED(bFromEnd)) const
 {
     wxSortedArrayString::const_iterator it;
+    wxString s(sz);
 
     if (bCase)
-        it = std::lower_bound(begin(), end(), sz,
-                              wxStringCompareLess(wxStrcmpCppWrapper));
+        it = std::lower_bound(begin(), end(), s,
+                              wxStringCompare(wxStrcmpCppWrapper));
     else
-        it = std::lower_bound(begin(), end(), sz,
-                              wxStringCompareLess(wxStricmpCppWrapper));
+        it = std::lower_bound(begin(), end(), s,
+                              wxStringCompare(wxStricmpCppWrapper));
 
     if (it == end())
         return wxNOT_FOUND;
