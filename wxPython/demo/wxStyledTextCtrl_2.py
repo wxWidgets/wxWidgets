@@ -40,6 +40,9 @@ class PythonSTC(wxStyledTextCtrl):
     def __init__(self, parent, ID):
         wxStyledTextCtrl.__init__(self, parent, ID)
 
+        self.CmdKeyAssign(ord('B'), wxSTC_SCMOD_CTRL, wxSTC_CMD_ZOOMIN)
+        self.CmdKeyAssign(ord('N'), wxSTC_SCMOD_CTRL, wxSTC_CMD_ZOOMOUT)
+
         self.SetLexer(wxSTC_LEX_PYTHON)
         self.SetKeyWords(0, string.join(keyword.kwlist))
 
