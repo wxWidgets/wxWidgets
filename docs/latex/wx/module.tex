@@ -24,7 +24,7 @@ For example:
   DECLARE_DYNAMIC_CLASS(wxDDEModule)
   public:
       wxDDEModule() {}
-      bool OnInit() { wxDDEInitialize(); return TRUE; };
+      bool OnInit() { wxDDEInitialize(); return true; };
       void OnExit() { wxDDECleanUp(); };
   };
 
@@ -92,7 +92,7 @@ Provide this function with appropriate cleanup for your module.
 \func{virtual bool}{OnInit}{\void}
 
 Provide this function with appropriate initialization for your module. If the function
-returns FALSE, wxWindows will exit immediately.
+returns false, wxWindows will exit immediately.
 
 \membersection{wxModule::RegisterModule}\label{wxmoduleregistermodule}
 

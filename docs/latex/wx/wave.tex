@@ -20,7 +20,7 @@ on Windows and GTK (Linux) only.
 
 Default constructor.
 
-\func{}{wxWave}{\param{const wxString\&}{ fileName}, \param{bool}{ isResource = FALSE}}
+\func{}{wxWave}{\param{const wxString\&}{ fileName}, \param{bool}{ isResource = false}}
 
 Constructs a wave object from a file or resource. Call \helpref{wxWave::IsOk}{wxwaveisok} to
 determine whether this succeeded.
@@ -29,7 +29,7 @@ determine whether this succeeded.
 
 \docparam{fileName}{The filename or Windows resource.}
 
-\docparam{isResource}{TRUE if {\it fileName} is a resource, FALSE if it is a filename.}
+\docparam{isResource}{true if {\it fileName} is a resource, false if it is a filename.}
 
 \membersection{wxWave::\destruct{wxWave}}
 
@@ -39,7 +39,7 @@ Destroys the wxWave object.
 
 \membersection{wxWave::Create}\label{wxwavecreate}
 
-\func{bool}{Create}{\param{const wxString\&}{ fileName}, \param{bool}{ isResource = FALSE}}
+\func{bool}{Create}{\param{const wxString\&}{ fileName}, \param{bool}{ isResource = false}}
 
 Constructs a wave object from a file or resource.
 
@@ -47,21 +47,21 @@ Constructs a wave object from a file or resource.
 
 \docparam{fileName}{The filename or Windows resource.}
 
-\docparam{isResource}{TRUE if {\it fileName} is a resource, FALSE if it is a filename.}
+\docparam{isResource}{true if {\it fileName} is a resource, false if it is a filename.}
 
 \wxheading{Return value}
 
-TRUE if the call was successful, FALSE otherwise.
+true if the call was successful, false otherwise.
 
 \membersection{wxWave::IsOk}\label{wxwaveisok}
 
 \constfunc{bool}{IsOk}{\void}
 
-Returns TRUE if the object contains a successfully loaded file or resource, FALSE otherwise.
+Returns true if the object contains a successfully loaded file or resource, false otherwise.
 
 \membersection{wxWave::Play}\label{wxwaveplay}
 
-\constfunc{bool}{Play}{\param{bool}{ async = TRUE}, \param{bool}{ looped = FALSE}}
+\constfunc{bool}{Play}{\param{bool}{ async = true}, \param{bool}{ looped = false}}
 
 Plays the wave file synchronously or asynchronously, looped or single-shot.
 

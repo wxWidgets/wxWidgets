@@ -424,7 +424,7 @@ the necessary handle:
 \end{verbatim}
 
 When the wxDbConnectInf::AllocHenv() function is called successfully, a 
-value of TRUE will be returned. A value of FALSE means allocation failed, 
+value of true will be returned. A value of false means allocation failed, 
 and the handle will be undefined.
 
 A shorter form of doing the above steps is encapsulated into the 
@@ -579,9 +579,9 @@ can specify anywhere from one column up to all columns in the table.
 
 \begin{verbatim}
     table->SetColDefs(0, "FIRST_NAME", DB_DATA_TYPE_VARCHAR, FirstName,
-                      SQL_C_CHAR, sizeof(name), TRUE, TRUE);
+                      SQL_C_CHAR, sizeof(name), true, true);
     table->SetColDefs(1, "LAST_NAME", DB_DATA_TYPE_VARCHAR, LastName,
-                      SQL_C_CHAR, sizeof(LastName), TRUE, TRUE);
+                      SQL_C_CHAR, sizeof(LastName), true, true);
 \end{verbatim}
 
 Notice that column definitions start at index 0 and go up to one less than 
@@ -718,7 +718,7 @@ syntax problem in the WHERE clause that was specified. The exact SQL
 parsing the table's database connection's "errorList[]" array member for 
 the stored text of the error.
 
-When the \helpref{wxDbTable::Query}{wxdbtablequery} returns TRUE, the 
+When the \helpref{wxDbTable::Query}{wxdbtablequery} returns true, the 
 database was able to successfully complete the requested query using the 
 provided criteria. This does not mean that there are any rows in the 
 result set, it just mean that the query was successful.
@@ -740,7 +740,7 @@ set into the bound memory variables. After \helpref{wxDbTable::Query}{wxdbtableq
 has completed successfully, the default/current cursor is placed so it 
 is pointing just before the first record in the result set. If the 
 result set is empty (no rows matched the criteria), then any calls to 
-retrieve data from the result set will return FALSE.
+retrieve data from the result set will return false.
 
 \begin{verbatim}
     wxString msg;
@@ -762,7 +762,7 @@ in the result set.
 When \helpref{wxDbTable::GetNext}{wxdbtablegetnext} is called and there are 
 no rows remaining in the result set after the current cursor position, 
 \helpref{wxDbTable::GetNext}{wxdbtablegetnext} (as well as all the other 
-wxDbTable::GetXxxxx() functions) will return FALSE.
+wxDbTable::GetXxxxx() functions) will return false.
 
 {\bf Close the table}
 
@@ -894,7 +894,7 @@ functionality as the driver can emulate.
 \begin{itemize}\itemsep=0pt
 \item Does not support the SQL\_TIMESTAMP structure
 \item Supports only one cursor and one connect (apparently? with Microsoft driver only?)
-\item Does not automatically create the primary index if the 'keyField' param of SetColDef is TRUE. The user must create ALL indexes from their program with calls to \helpref{wxDbTable::CreateIndex}{wxdbtablecreateindex}
+\item Does not automatically create the primary index if the 'keyField' param of SetColDef is true. The user must create ALL indexes from their program with calls to \helpref{wxDbTable::CreateIndex}{wxdbtablecreateindex}
 \item Table names can only be 8 characters long
 \item Column names can only be 10 characters long
 \item Currently cannot CREATE a dBase table - bug or limitation of the drivers used??
@@ -916,7 +916,7 @@ functionality as the driver can emulate.
 {\it mySQL}
 \begin{itemize}\itemsep=0pt
 \item If a column is part of the Primary Key, the column cannot be NULL.
-\item Cannot support selecting for update [\helpref{wxDbTable::CanSelectForUpdate}{wxdbtablecanselectforupdate}]. Always returns FALSE.
+\item Cannot support selecting for update [\helpref{wxDbTable::CanSelectForUpdate}{wxdbtablecanselectforupdate}]. Always returns false.
 \item Columns that are part of primary or secondary keys must be defined as being NOT NULL when they are created. Some code is added in \helpref{wxDbTable::CreateIndex}{wxdbtablecreateindex} to try to adjust the column definition if it is not defined correctly, but it is experimental (as of wxWindows v2.2.1)
 \item Does not support sub-queries in SQL statements
 \end{itemize}
@@ -958,7 +958,7 @@ wxDbTable   *table = NULL;       // The data table to access
 wxChar       FirstName[50+1];    // buffer for data from column "FIRST_NAME"
 wxChar       LastName[50+1];     // buffer for data from column "LAST_NAME"
 
-bool         errorOccured = FALSE;
+bool         errorOccured = false;
 
 const wxChar tableName[]          = "CONTACTS";
 const UWORD  numTableColumns      = 2;           // Number of bound columns
@@ -990,9 +990,9 @@ table = new wxDbTable(db, tableName, numTableColumns, "",
 // returned back to the client.
 //
 table->SetColDefs(0, "FIRST_NAME", DB_DATA_TYPE_VARCHAR, FirstName,
-                  SQL_C_CHAR, sizeof(name), TRUE, TRUE);
+                  SQL_C_CHAR, sizeof(name), true, true);
 table->SetColDefs(1, "LAST_NAME", DB_DATA_TYPE_VARCHAR, LastName,
-                  SQL_C_CHAR, sizeof(LastName), TRUE, TRUE);
+                  SQL_C_CHAR, sizeof(LastName), true, true);
 
 // Open the table for access
 table->Open();
@@ -1015,7 +1015,7 @@ if (!table->Query())
 {
     wxMessageBox("Error on Query()","ERROR!",
                   wxOK | wxICON_EXCLAMATION);
-    errorOccured = TRUE;
+    errorOccured = true;
 }
 
 wxString msg;

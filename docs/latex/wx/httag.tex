@@ -88,7 +88,7 @@ and name of {\tt </table>} is "TABLE")
 
 \membersection{wxHtmlTag::GetParam}\label{wxhtmltaggetparam}
 
-\constfunc{wxString}{GetParam}{\param{const wxString\& }{par}, \param{bool }{with\_commas = FALSE}}
+\constfunc{wxString}{GetParam}{\param{const wxString\& }{par}, \param{bool }{with\_commas = false}}
 
 Returns the value of the parameter. You should check whether the
 parameter exists or not (use \helpref{HasParam}{wxhtmltaghasparam}) first.
@@ -97,7 +97,7 @@ parameter exists or not (use \helpref{HasParam}{wxhtmltaghasparam}) first.
 
 \docparam{par}{The parameter's name.}
 
-\docparam{with\_commas}{TRUE if you want to get commas as well. See example.}
+\docparam{with\_commas}{true if you want to get commas as well. See example.}
 
 \wxheading{Example}
 
@@ -109,7 +109,7 @@ dummy = tag.GetParam("SIZE");
    // dummy == "+2"
 dummy = tag.GetParam("COLOR");
    // dummy == "#0000FF"
-dummy = tag.GetParam("COLOR", TRUE);
+dummy = tag.GetParam("COLOR", true);
    // dummy == "\"#0000FF\"" -- see the difference!!
 \end{verbatim}
 
@@ -120,7 +120,7 @@ dummy = tag.GetParam("COLOR", TRUE);
 Interprets tag parameter {\it par} as colour specification and saves its value
 into wxColour variable pointed by {\it clr}.
 
-Returns TRUE on success and FALSE if {\it par} is not colour specification or
+Returns true on success and false if {\it par} is not colour specification or
 if the tag has no such parameter.
 
 \membersection{wxHtmlTag::GetParamAsInt}\label{wxhtmltaggetparamasint}
@@ -130,14 +130,14 @@ if the tag has no such parameter.
 Interprets tag parameter {\it par} as an integer and saves its value
 into int variable pointed by {\it value}.
 
-Returns TRUE on success and FALSE if {\it par} is not an integer or
+Returns true on success and false if {\it par} is not an integer or
 if the tag has no such parameter.
 
 \membersection{wxHtmlTag::HasEnding}\label{wxhtmltaghasending}
 
 \constfunc{bool}{HasEnding}{\void}
 
-Returns TRUE if this tag is paired with ending tag, FALSE otherwise.
+Returns true if this tag is paired with ending tag, false otherwise.
 
 See the example of HTML document:
 
@@ -158,7 +158,7 @@ is ending itself) of course doesn't have ending tag.
 
 \constfunc{bool}{HasParam}{\param{const wxString\& }{par}}
 
-Returns TRUE if the tag has a parameter of the given name. 
+Returns true if the tag has a parameter of the given name. 
 Example : {\tt <FONT SIZE=+2 COLOR="\#FF00FF">} has two parameters named
 "SIZE" and "COLOR".
 
@@ -170,7 +170,7 @@ Example : {\tt <FONT SIZE=+2 COLOR="\#FF00FF">} has two parameters named
 
 \constfunc{bool}{IsEnding}{\void}
 
-Returns TRUE if this tag is ending one.
+Returns true if this tag is ending one.
 ({\tt </FONT>} is ending tag, {\tt <FONT>} is not)
 
 \membersection{wxHtmlTag::ScanParam}\label{wxhtmltagscanparam}

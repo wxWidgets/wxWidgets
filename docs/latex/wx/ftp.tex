@@ -119,7 +119,7 @@ Destructor will close the connection if connected.
 
 \func{bool}{Abort}{\void}
 
-Aborts the download currently in process, returns {\tt TRUE} if ok, {\tt FALSE} 
+Aborts the download currently in process, returns {\tt true} if ok, {\tt false} 
 if an error occured.
 
 \membersection{wxFTP::CheckCommand}
@@ -131,7 +131,7 @@ the expected result.
 
 \wxheading{Return value}
 
-TRUE if the command has been sent successfully, else FALSE.
+true if the command has been sent successfully, else false.
 
 \membersection{wxFTP::SendCommand}\label{wxftpsendcommand}
 
@@ -154,21 +154,21 @@ command.
 \func{bool}{ChDir}{\param{const wxString\&}{ dir}}
 
 Change the current FTP working directory.
-Returns TRUE if successful.
+Returns true if successful.
 
 \membersection{wxFTP::MkDir}
 
 \func{bool}{MkDir}{\param{const wxString\&}{ dir}}
 
 Create the specified directory in the current FTP working directory.
-Returns TRUE if successful.
+Returns true if successful.
 
 \membersection{wxFTP::RmDir}
 
 \func{bool}{RmDir}{\param{const wxString\&}{ dir}}
 
 Remove the specified directory from the current FTP working directory.
-Returns TRUE if successful.
+Returns true if successful.
 
 \membersection{wxFTP::Pwd}
 
@@ -182,7 +182,7 @@ Returns the current FTP working directory.
 
 \func{bool}{Rename}{\param{const wxString\&}{ src}, \param{const wxString\&}{ dst}}
 
-Rename the specified {\it src} element to {\it dst}. Returns TRUE if successful.
+Rename the specified {\it src} element to {\it dst}. Returns true if successful.
 
 % ----------------------------------------------------------------------------
 
@@ -190,7 +190,7 @@ Rename the specified {\it src} element to {\it dst}. Returns TRUE if successful.
 
 \func{bool}{RmFile}{\param{const wxString\&}{ path}}
 
-Delete the file specified by {\it path}. Returns TRUE if successful.
+Delete the file specified by {\it path}. Returns true if successful.
 
 % ----------------------------------------------------------------------------
 
@@ -257,7 +257,7 @@ to specify a user and a password.
 
 \func{bool}{FileExists}{\param{const wxString\&}{ filename}}
 
-Returns {\tt TRUE} if the given remote file exists, {\tt FALSE} otherwise.
+Returns {\tt true} if the given remote file exists, {\tt false} otherwise.
 
 \membersection{wxFTP::GetFileSize}\label{wxftpgetfilesize}
 
@@ -295,7 +295,7 @@ winamp~1 exe    520196 02-25-1999  19:28  winamp204.exe
         1 file(s)           520 196 bytes
 \end{verbatim}
 
-Return value: TRUE if the file list was successfully retrieved, FALSE
+Return value: true if the file list was successfully retrieved, false
 otherwise.
 
 \wxheading{See also}
@@ -311,7 +311,7 @@ directory (optionally only of the files matching the {\it wildcard}, all files
 by default). This list always has the same format and contains one full
 (including the directory path) file name per line.
 
-Return value: TRUE if the file list was successfully retrieved, FALSE
+Return value: true if the file list was successfully retrieved, false
 otherwise.
 
 % ----------------------------------------------------------------------------

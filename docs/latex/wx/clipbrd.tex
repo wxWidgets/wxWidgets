@@ -7,7 +7,7 @@ To use the clipboard, you call member functions of the global {\bf wxTheClipboar
 
 See also the \helpref{wxDataObject overview}{wxdataobjectoverview} for further information.
 
-Call \helpref{wxClipboard::Open}{wxclipboardopen} to get ownership of the clipboard. If this operation returns TRUE, you
+Call \helpref{wxClipboard::Open}{wxclipboardopen} to get ownership of the clipboard. If this operation returns true, you
 now own the clipboard. Call \helpref{wxClipboard::SetData}{wxclipboardsetdata} to put data
 on the clipboard, or \helpref{wxClipboard::GetData}{wxclipboardgetdata} to
 retrieve data from the clipboard. Call \helpref{wxClipboard::Close}{wxclipboardclose} to close
@@ -97,26 +97,26 @@ Call this function to close the clipboard, having opened it with \helpref{wxClip
 Flushes the clipboard: this means that the data which is currently on
 clipboard will stay available even after the application exits (possibly
 eating memory), otherwise the clipboard will be emptied on exit.
-Returns FALSE if the operation is unsuccesful for any reason.
+Returns false if the operation is unsuccesful for any reason.
 
 \membersection{wxClipboard::GetData}\label{wxclipboardgetdata}
 
 \func{bool}{GetData}{\param{wxDataObject\&}{ data}}
 
 Call this function to fill {\it data} with data on the clipboard, if available in the required
-format. Returns TRUE on success.
+format. Returns true on success.
 
 \membersection{wxClipboard::IsOpened}\label{wxclipboardisopened}
 
 \constfunc{bool}{IsOpened}{\void}
 
-Returns TRUE if the clipboard has been opened.
+Returns true if the clipboard has been opened.
 
 \membersection{wxClipboard::IsSupported}\label{wxclipboardissupported}
 
 \func{bool}{IsSupported}{\param{const wxDataFormat\&}{ format}}
 
-Returns TRUE if the format of the given data object is available on the clipboard.
+Returns true if the format of the given data object is available on the clipboard.
 
 \membersection{wxClipboard::Open}\label{wxclipboardopen}
 
@@ -128,7 +128,7 @@ and \helpref{wxClipboard::GetData}{wxclipboardgetdata}.
 Call \helpref{wxClipboard::Close}{wxclipboardclose} when you have finished with the clipboard. You
 should keep the clipboard open for only a very short time.
 
-Returns TRUE on success. This should be tested (as in the sample shown above).
+Returns true on success. This should be tested (as in the sample shown above).
 
 \membersection{wxClipboard::SetData}\label{wxclipboardsetdata}
 
@@ -147,10 +147,10 @@ the data explicitly.
 
 \membersection{wxClipboard::UsePrimarySelection}\label{wxclipboarduseprimary}
 
-\func{void}{UsePrimarySelection}{\param{bool}{ primary = TRUE}}
+\func{void}{UsePrimarySelection}{\param{bool}{ primary = true}}
 
 On platforms supporting it (currently only GTK), selects the so called
 PRIMARY SELECTION as the clipboard as opposed to the normal clipboard,
-if {\it primary} is TRUE.
+if {\it primary} is true.
 
 

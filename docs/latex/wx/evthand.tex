@@ -110,7 +110,7 @@ is an alternative to the use of static event tables. See the 'dynamic' sample fo
  \param{wxObject*}{ userData = NULL}}
 
 Disconnects the given function dynamically from the event handler, using the specified
-parameters as search criteria and returning TRUE if a matching function has been
+parameters as search criteria and returning true if a matching function has been
 found and removed. This method can only disconnect functions which have been added
 using the \helpref{wxEvtHandler::Connect}{wxevthandlerconnect} method. There is no way
 to disconnect functions connected using the (static) event tables.
@@ -157,7 +157,7 @@ Get a pointer to the user-supplied client data object.
 
 \func{bool}{GetEvtHandlerEnabled}{\void}
 
-Returns TRUE if the event handler is enabled, FALSE otherwise.
+Returns true if the event handler is enabled, false otherwise.
 
 \wxheading{See also}
 
@@ -203,7 +203,7 @@ Processes an event, searching event tables and calling zero or more suitable eve
 
 \wxheading{Return value}
 
-TRUE if a suitable event handler function was found and executed, and the function did not
+true if a suitable event handler function was found and executed, and the function did not
 call \helpref{wxEvent::Skip}{wxeventskip}.
 
 \wxheading{Remarks}
@@ -227,14 +227,14 @@ The normal order of event table searching is as follows:
 \item If the object is disabled (via a call to \helpref{wxEvtHandler::SetEvtHandlerEnabled}{wxevthandlersetevthandlerenabled})
 the function skips to step (6).
 \item If the object is a wxWindow, {\bf ProcessEvent} is recursively called on the window's\rtfsp
-\helpref{wxValidator}{wxvalidator}. If this returns TRUE, the function exits.
+\helpref{wxValidator}{wxvalidator}. If this returns true, the function exits.
 \item {\bf SearchEventTable} is called for this event handler. If this fails, the base
 class table is tried, and so on until no more tables exist or an appropriate function was found,
 in which case the function exits.
 \item The search is applied down the entire chain of event handlers (usually the chain has a length
 of one). If this succeeds, the function exits.
 \item If the object is a wxWindow and the event is a wxCommandEvent, {\bf ProcessEvent} is
-recursively applied to the parent window's event handler. If this returns TRUE, the function exits.
+recursively applied to the parent window's event handler. If this returns true, the function exits.
 \item Finally, {\bf ProcessEvent} is called on the wxApp object.
 \end{enumerate}
 
@@ -257,7 +257,7 @@ is found.
 
 \wxheading{Return value}
 
-TRUE if a suitable event handler function was found and executed, and the function did not
+true if a suitable event handler function was found and executed, and the function did not
 call \helpref{wxEvent::Skip}{wxeventskip}.
 
 \wxheading{Remarks}
@@ -320,7 +320,7 @@ Enables or disables the event handler.
 
 \wxheading{Parameters}
 
-\docparam{enabled}{TRUE if the event handler is to be enabled, FALSE if it is to be disabled.}
+\docparam{enabled}{true if the event handler is to be enabled, false if it is to be disabled.}
 
 \wxheading{Remarks}
 

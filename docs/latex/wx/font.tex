@@ -129,7 +129,7 @@ wxSWISS\_FONT}
 Default constructor.
 
 \func{}{wxFont}{\param{int}{ pointSize}, \param{int}{ family}, \param{int}{ style}, \param{int}{ weight},
- \param{const bool}{ underline = FALSE}, \param{const wxString\& }{faceName = ""},
+ \param{const bool}{ underline = false}, \param{const wxString\& }{faceName = ""},
  \param{wxFontEncoding }{encoding = wxFONTENCODING\_DEFAULT}}
 
 Creates a font object (see \helpref{font encoding
@@ -155,7 +155,7 @@ overview}{wxfontencodingoverview} for the meaning of the last parameter).
 
 \docparam{weight}{One of {\bf wxNORMAL}, {\bf wxLIGHT} and {\bf wxBOLD}.}
 
-\docparam{underline}{The value can be TRUE or FALSE. At present this has an effect on Windows only.}
+\docparam{underline}{The value can be true or false. At present this has an effect on Windows only.}
 
 \docparam{faceName}{An optional string specifying the actual typeface to be used. If the empty string,
 a default typeface will chosen based on the family.}
@@ -204,8 +204,8 @@ application data structure, and there is a risk of double deletion.
 
 \constfunc{bool}{IsFixedWidth}{\void}
 
-Returns {\tt TRUE} if the font is a fixed width (or monospaced) font, 
-{\tt FALSE} if it is a proportional one or font is invalid.
+Returns {\tt true} if the font is a fixed width (or monospaced) font, 
+{\tt false} if it is a proportional one or font is invalid.
 
 \membersection{wxFont::GetDefaultEncoding}\label{wxfontgetdefaultencoding}
 
@@ -276,7 +276,7 @@ styles.
 
 \constfunc{bool}{GetUnderlined}{\void}
 
-Returns TRUE if the font is underlined, FALSE otherwise.
+Returns true if the font is underlined, false otherwise.
 
 \wxheading{See also}
 
@@ -297,7 +297,7 @@ weight identifiers.
 
 \constfunc{bool}{Ok}{\void}
 
-Returns {\tt TRUE} if this object is a valid font, {\tt FALSE} otherwise.
+Returns {\tt true} if this object is a valid font, {\tt false} otherwise.
 
 \membersection{wxFont::SetDefaultEncoding}\label{wxfontsetdefaultencoding}
 
@@ -400,7 +400,7 @@ Sets underlining.
 
 \wxheading{Parameters}
 
-\docparam{underlining}{TRUE to underline, FALSE otherwise.}
+\docparam{underlining}{true to underline, false otherwise.}
 
 \wxheading{See also}
 

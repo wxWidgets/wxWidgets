@@ -270,7 +270,7 @@ obtained from the ODBC manager.}
 
 Copies the current data of the column at position {\it col} into the buffer
 \rtfsp{\it dataPtr}. To be sure to get the right type of data, the user has to pass the
-correct data type. The function returns FALSE if {\it col} does not
+correct data type. The function returns false if {\it col} does not
 exist or the wrong data type was given.
 
 \func{bool}{GetFieldData}{\param{const wxString\& }{name}, \param{int}{ dataType}, \param{void *}{dataPtr}}
@@ -456,14 +456,14 @@ has the number 0.
 
 \func{bool}{IsBOF}{\void}
 
-Returns TRUE if the user tried to move the cursor before the first record
+Returns true if the user tried to move the cursor before the first record
 in the set.
 
 \membersection{wxRecordSet::IsFieldDirty}
 
 \func{bool}{IsFieldDirty}{\param{int}{ field}}
 
-Returns TRUE if the given field has been changed but not saved yet.
+Returns true if the given field has been changed but not saved yet.
 
 \func{bool}{IsFieldDirty}{\param{const wxString\& }{name}}
 
@@ -473,7 +473,7 @@ Same as above, but uses the column name as the identifier.
 
 \func{bool}{IsFieldNull}{\param{int}{ field}}
 
-Returns TRUE if the given field has no data.
+Returns true if the given field has no data.
 
 \func{bool}{IsFieldNull}{\param{const wxString\& }{ name}}
 
@@ -483,7 +483,7 @@ Same as above, but uses the column name as the identifier.
 
 \func{bool}{IsColNullable}{\param{int}{ col}}
 
-Returns TRUE if the given column may contain no data.
+Returns true if the given column may contain no data.
 
 \func{bool}{IsColNullable}{\param{const wxString\& }{name}}
 
@@ -493,7 +493,7 @@ Same as above, but uses the column name as the identifier.
 
 \func{bool}{IsEOF}{\void}
 
-Returns TRUE if the user tried to move the cursor behind the last record
+Returns true if the user tried to move the cursor behind the last record
 in the set.
 
 \membersection{wxRecordSet::IsDeleted}
@@ -506,7 +506,7 @@ Not implemented.
 
 \func{bool}{IsOpen}{\void}
 
-Returns TRUE if the parent database is open.
+Returns true if the parent database is open.
 
 \membersection{wxRecordSet::Move}
 
@@ -559,11 +559,11 @@ Re-executes the last query. Not implemented.
 
 \membersection{wxRecordSet::SetFieldDirty}
 
-\func{void}{SetFieldDirty}{\param{int}{ field}, \param{bool}{ dirty = TRUE}}
+\func{void}{SetFieldDirty}{\param{int}{ field}, \param{bool}{ dirty = true}}
 
 Sets the dirty tag of the field field. Not implemented.
 
-\func{void}{SetFieldDirty}{\param{const wxString\& }{name}, \param{bool}{ dirty = TRUE}}
+\func{void}{SetFieldDirty}{\param{const wxString\& }{name}, \param{bool}{ dirty = true}}
 
 Same as above, but uses the column name as the identifier.
 
@@ -575,7 +575,7 @@ Not implemented.
 
 \membersection{wxRecordSet::SetFieldNull}
 
-\func{void}{SetFieldNull}{\param{void *}{p}, \param{bool }{isNull = TRUE}}
+\func{void}{SetFieldNull}{\param{void *}{p}, \param{bool }{isNull = true}}
 
 Not implemented.
 

@@ -39,10 +39,10 @@ Normally you will write your application so that this button is only added to a 
 
 \membersection{wxContextHelp::wxContextHelp}
 
-\func{}{wxContextHelp}{\param{wxWindow*}{ window = NULL}, \param{bool}{ doNow = TRUE}}
+\func{}{wxContextHelp}{\param{wxWindow*}{ window = NULL}, \param{bool}{ doNow = true}}
 
 Constructs a context help object, calling \helpref{BeginContextHelp}{wxcontexthelpbegincontexthelp} if\rtfsp
-{\it doNow} is TRUE (the default).
+{\it doNow} is true (the default).
 
 If {\it window} is NULL, the top window is used.
 
@@ -59,7 +59,7 @@ Destroys the context help object.
 Puts the application into context-sensitive help mode. {\it window} is the window
 which will be used to catch events; if NULL, the top window will be used.
 
-Returns TRUE if the application was successfully put into context-sensitive help mode.
+Returns true if the application was successfully put into context-sensitive help mode.
 This function only returns when the event loop has finished.
 
 \membersection{wxContextHelp::EndContextHelp}\label{wxcontexthelpendcontexthelp}

@@ -7,7 +7,7 @@ A wxWindows application does not have a {\it main} procedure; the equivalent is 
 \rtfsp{\it OnInit} will usually create a top window as a bare minimum.
 
 Unlike in earlier versions of wxWindows, OnInit does not return a frame. Instead it
-returns a boolean value which indicates whether processing should continue (TRUE) or not (FALSE).
+returns a boolean value which indicates whether processing should continue (true) or not (false).
 You call \helpref{wxApp::SetTopWindow}{wxappsettopwindow} to let wxWindows know
 about the top window.
 
@@ -40,10 +40,10 @@ bool DerivedApp::OnInit()
 {
   wxFrame *the_frame = new wxFrame(NULL, ID_MYFRAME, argv[0]);
   ...
-  the_frame->Show(TRUE);
+  the_frame->Show(true);
   SetTopWindow(the_frame);
 
-  return TRUE;
+  return true;
 }
 \end{verbatim}
 

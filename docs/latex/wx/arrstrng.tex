@@ -84,14 +84,14 @@ Assignment operator.
 
 \constfunc{bool}{operator $==$}{\param{const wxArrayString\&}{ array}}
 
-Compares 2 arrays respecting the case. Returns TRUE only if the arrays have
+Compares 2 arrays respecting the case. Returns true only if the arrays have
 the same number of elements and the same strings in the same order.
 
 \membersection{wxArrayString::operator!=}\label{wxarraystringoperatornotequal}
 
 \constfunc{bool}{operator $!=$}{\param{const wxArrayString\&}{ array}}
 
-Compares 2 arrays respecting the case. Returns TRUE if the arrays have
+Compares 2 arrays respecting the case. Returns true if the arrays have
 different number of elements or if the elements don't match pairwise.
 
 \membersection{wxArrayString::operator[]}\label{wxarraystringoperatorindex}
@@ -163,10 +163,10 @@ Returns the number of items in the array.
 
 \membersection{wxArrayString::Index}\label{wxarraystringindex}
 
-\func{int}{Index}{\param{const char *}{ sz}, \param{bool}{ bCase = TRUE}, \param{bool}{ bFromEnd = FALSE}}
+\func{int}{Index}{\param{const char *}{ sz}, \param{bool}{ bCase = true}, \param{bool}{ bFromEnd = false}}
 
 Search the element in the array, starting from the beginning if
-{\it bFromEnd} is FALSE or from end otherwise. If {\it bCase}, comparison is
+{\it bFromEnd} is false or from end otherwise. If {\it bCase}, comparison is
 case sensitive (default), otherwise the case is ignored.
 
 This function uses linear search for wxArrayString and binary search for
@@ -197,7 +197,7 @@ could break the order of items and, for example, subsequent calls to
 
 \func{}{IsEmpty}{}
 
-Returns TRUE if the array is empty, FALSE otherwise. This function returns the
+Returns true if the array is empty, false otherwise. This function returns the
 same result as {\it GetCount() == 0} but is probably easier to read.
 
 \membersection{wxArrayString::Item}\label{wxarraystringitem}
@@ -243,10 +243,10 @@ See also: \helpref{Alloc}{wxarraystringalloc}, \helpref{Dynamic array memory man
 
 \membersection{wxArrayString::Sort}\label{wxarraystringsort}
 
-\func{void}{Sort}{\param{bool}{ reverseOrder = FALSE}}
+\func{void}{Sort}{\param{bool}{ reverseOrder = false}}
 
 Sorts the array in alphabetical order or in reverse alphabetical order if 
-{\it reverseOrder} is TRUE.
+{\it reverseOrder} is true.
 
 {\bf Warning:} this function should not be used with sorted array because it
 could break the order of items and, for example, subsequent calls to 

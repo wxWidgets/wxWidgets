@@ -8,13 +8,13 @@ also be invoked by the application itself programmatically, for example by
 calling the \helpref{wxWindow::Close}{wxwindowclose} function.
 
 You should check whether the application is forcing the deletion of the window
-using \helpref{wxCloseEvent::CanVeto}{wxcloseeventcanveto}. If this is {\tt FALSE},
+using \helpref{wxCloseEvent::CanVeto}{wxcloseeventcanveto}. If this is {\tt false},
 you {\it must} destroy the window using \helpref{wxWindow::Destroy}{wxwindowdestroy}.
-If the return value is TRUE, it is up to you whether you respond by destroying the window.
+If the return value is true, it is up to you whether you respond by destroying the window.
 
 If you don't destroy the window, you should call \helpref{wxCloseEvent::Veto}{wxcloseeventveto} to
 let the calling code know that you did not destroy the window. This allows the \helpref{wxWindow::Close}{wxwindowclose} function
-to return {\tt TRUE} or {\tt FALSE} depending on whether the close instruction was honoured or not.
+to return {\tt true} or {\tt false} depending on whether the close instruction was honoured or not.
 
 \wxheading{Derived from}
 
@@ -59,7 +59,7 @@ Constructor.
 
 \func{bool}{CanVeto}{\void}
 
-Returns TRUE if you can veto a system shutdown or a window close event.
+Returns true if you can veto a system shutdown or a window close event.
 Vetoing a window close event is not possible if the calling code wishes to
 force the application to exit, and so this function must be called to check this.
 
@@ -67,19 +67,19 @@ force the application to exit, and so this function must be called to check this
 
 \constfunc{bool}{GetLoggingOff}{\void}
 
-Returns TRUE if the user is logging off.
+Returns true if the user is logging off.
 
 \membersection{wxCloseEvent::GetSessionEnding}\label{wxcloseeventgetsessionending}
 
 \constfunc{bool}{GetSessionEnding}{\void}
 
-Returns TRUE if the session is ending.
+Returns true if the session is ending.
 
 \membersection{wxCloseEvent::GetForce}\label{wxcloseeventgetforce}
 
 \constfunc{bool}{GetForce}{\void}
 
-Returns TRUE if the application wishes to force the window to close.
+Returns true if the application wishes to force the window to close.
 This will shortly be obsolete, replaced by CanVeto.
 
 \membersection{wxCloseEvent::SetCanVeto}\label{wxcloseeventsetcanveto}
@@ -102,12 +102,12 @@ Sets the 'logging off' flag.
 
 \membersection{wxCloseEvent::Veto}\label{wxcloseeventveto}
 
-\func{void}{Veto}{\param{bool}{ veto = TRUE}}
+\func{void}{Veto}{\param{bool}{ veto = true}}
 
 Call this from your event handler to veto a system shutdown or to signal
 to the calling application that a window close did not happen.
 
 You can only veto a shutdown if \helpref{wxCloseEvent::CanVeto}{wxcloseeventcanveto} returns
-TRUE.
+true.
 
 

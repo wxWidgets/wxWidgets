@@ -228,8 +228,8 @@ bool MyApp::OnInit()
 
     MyFrame *frame = new MyFrame("XML resources demo",
                                  wxPoint(50, 50), wxSize(450, 340));
-    frame->Show(TRUE);
-    return TRUE;
+    frame->Show(true);
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -249,8 +249,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 // event handlers
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    // TRUE is to force the frame to close
-    Close(TRUE);
+    // true is to force the frame to close
+    Close(true);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))

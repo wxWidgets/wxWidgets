@@ -254,7 +254,7 @@ implements the following methods:\par
 
 \membersection{wxWindow::Close}\label{wxwindowclose}
 
-\func{bool}{Close}{\param{bool}{ force = {\tt FALSE}}}
+\func{bool}{Close}{\param{bool}{ force = {\tt false}}}
 
 This function simply generates a \helpref{wxCloseEvent}{wxcloseevent} whose
 handler usually tries to close the window. It doesn't close the window itself,
@@ -262,8 +262,8 @@ however.
 
 \wxheading{Parameters}
 
-\docparam{force}{{\tt FALSE} if the window's close handler should be able to veto the destruction
-of this window, {\tt TRUE} if it cannot.}
+\docparam{force}{{\tt false} if the window's close handler should be able to veto the destruction
+of this window, {\tt true} if it cannot.}
 
 \wxheading{Remarks}
 
@@ -385,7 +385,7 @@ windows.
 
 \wxheading{Return value}
 
-{\tt TRUE} if the window has either been successfully deleted, or it has been added
+{\tt true} if the window has either been successfully deleted, or it has been added
 to the list of windows pending real deletion.
 
 \membersection{wxWindow::DestroyChildren}
@@ -398,11 +398,11 @@ Destroys all children of a window.  Called automatically by the destructor.
 
 \func{void}{Disable}{\void}
 
-Disables the window, same as \helpref{Enable({\tt FALSE})}{wxwindowenable}.
+Disables the window, same as \helpref{Enable({\tt false})}{wxwindowenable}.
 
 \wxheading{Return value}
 
-Returns {\tt TRUE} if the window has been disabled, {\tt FALSE} if it had been
+Returns {\tt true} if the window has been disabled, {\tt false} if it had been
 already disabled before the call to this function.
 
 \membersection{wxWindow::DragAcceptFiles}\label{wxwindowdragacceptfiles}
@@ -413,7 +413,7 @@ Enables or disables eligibility for drop file events (OnDropFiles).
 
 \wxheading{Parameters}
 
-\docparam{accept}{If {\tt TRUE}, the window is eligible for drop file events. If {\tt FALSE}, the window
+\docparam{accept}{If {\tt true}, the window is eligible for drop file events. If {\tt false}, the window
 will not accept drop file events.}
 
 \wxheading{Remarks}
@@ -422,7 +422,7 @@ Windows only.
 
 \membersection{wxWindow::Enable}\label{wxwindowenable}
 
-\func{virtual bool}{Enable}{\param{bool}{ enable = {\tt TRUE}}}
+\func{virtual bool}{Enable}{\param{bool}{ enable = {\tt true}}}
 
 Enable or disable the window for user input. Note that when a parent window is
 disabled, all of its children are disabled as well and they are reenabled again
@@ -430,11 +430,11 @@ when the parent is.
 
 \wxheading{Parameters}
 
-\docparam{enable}{If {\tt TRUE}, enables the window for input. If {\tt FALSE}, disables the window.}
+\docparam{enable}{If {\tt true}, enables the window for input. If {\tt false}, disables the window.}
 
 \wxheading{Return value}
 
-Returns {\tt TRUE} if the window has been enabled or disabled, {\tt FALSE} if
+Returns {\tt true} if the window has been enabled or disabled, {\tt false} if
 nothing was done, i.e. if the window had already been in the specified state.
 
 \wxheading{See also}
@@ -922,7 +922,7 @@ Return the sizer associated with the window by a previous call to
 
 \constfunc{virtual void}{GetTextExtent}{\param{const wxString\& }{string}, \param{int* }{x}, \param{int* }{y},
  \param{int* }{descent = NULL}, \param{int* }{externalLeading = NULL},
- \param{const wxFont* }{font = NULL}, \param{bool}{ use16 = {\tt FALSE}}}
+ \param{const wxFont* }{font = NULL}, \param{bool}{ use16 = {\tt false}}}
 
 Gets the dimensions of the string as it would be drawn on the
 window with the currently selected font.
@@ -941,7 +941,7 @@ window with the currently selected font.
 
 \docparam{font}{Font to use instead of the current window font (optional).}
 
-\docparam{use16}{If {\tt TRUE}, {\it string} contains 16-bit characters. The default is {\tt FALSE}.}
+\docparam{use16}{If {\tt true}, {\it string} contains 16-bit characters. The default is {\tt false}.}
 
 
 \pythonnote{In place of a single overloaded method name, wxPython
@@ -1013,7 +1013,7 @@ method. {\bf GetWindowStyle()} is another name for the same function.
 
 \constfunc{virtual bool}{HasCapture}{\void}
 
-Returns TRUE if this window has the current mouse capture.
+Returns true if this window has the current mouse capture.
 
 \wxheading{See also}
 
@@ -1025,7 +1025,7 @@ Returns TRUE if this window has the current mouse capture.
 
 \func{bool}{Hide}{\void}
 
-Equivalent to calling \helpref{Show}{wxwindowshow}({\tt FALSE}).
+Equivalent to calling \helpref{Show}{wxwindowshow}({\tt false}).
 
 \membersection{wxWindow::InitDialog}\label{wxwindowinitdialog}
 
@@ -1038,7 +1038,7 @@ to the dialog via validators.
 
 \constfunc{virtual bool}{IsEnabled}{\void}
 
-Returns {\tt TRUE} if the window is enabled for input, {\tt FALSE} otherwise.
+Returns {\tt true} if the window is enabled for input, {\tt false} otherwise.
 
 \wxheading{See also}
 
@@ -1054,7 +1054,7 @@ Returns {\tt TRUE} if the window is enabled for input, {\tt FALSE} otherwise.
 
 \constfunc{bool}{IsExposed}{\param{wxRect }{\&rect}}
 
-Returns {\tt TRUE} if the given point or rectangle area has been exposed since the
+Returns {\tt true} if the given point or rectangle area has been exposed since the
 last repaint. Call this in an paint event handler to optimize redrawing by
 only redrawing those areas, which have been exposed.
 
@@ -1070,7 +1070,7 @@ implements the following methods:\par
 
 \constfunc{virtual bool}{IsRetained}{\void}
 
-Returns {\tt TRUE} if the window is retained, {\tt FALSE} otherwise.
+Returns {\tt true} if the window is retained, {\tt false} otherwise.
 
 \wxheading{Remarks}
 
@@ -1080,13 +1080,13 @@ Retained windows are only available on X platforms.
 
 \constfunc{virtual bool}{IsShown}{\void}
 
-Returns {\tt TRUE} if the window is shown, {\tt FALSE} if it has been hidden.
+Returns {\tt true} if the window is shown, {\tt false} if it has been hidden.
 
 \membersection{wxWindow::IsTopLevel}\label{wxwindowistoplevel}
 
 \constfunc{bool}{IsTopLevel}{\void}
 
-Returns {\tt TRUE} if the given window is a top-level one. Currently all frames and
+Returns {\tt true} if the given window is a top-level one. Currently all frames and
 dialogs are considered to be top-level windows (even if they have a parent
 window).
 
@@ -1118,7 +1118,7 @@ default resource table will be used.}
 
 \wxheading{Return value}
 
-{\tt TRUE} if the operation succeeded, otherwise {\tt FALSE}.
+{\tt true} if the operation succeeded, otherwise {\tt false}.
 
 \membersection{wxWindow::Lower}\label{wxwindowlower}
 
@@ -1137,8 +1137,8 @@ is not implemented anywhere).
 
 \wxheading{Parameters}
 
-\docparam{flag}{If {\tt TRUE}, this call disables all other windows in the application so that
-the user can only interact with this window. If {\tt FALSE}, the effect is reversed.}
+\docparam{flag}{If {\tt true}, this call disables all other windows in the application so that
+the user can only interact with this window. If {\tt false}, the effect is reversed.}
 
 \membersection{wxWindow::Move}\label{wxwindowmove}
 
@@ -1194,8 +1194,8 @@ implements the following methods:\par
 %%
 %% \wxheading{Remarks}
 %%
-%% If the window is being activated, \helpref{wxActivateEvent::GetActive}{wxactivateeventgetactive} returns {\tt TRUE},
-%% otherwise it returns {\tt FALSE} (it is being deactivated).
+%% If the window is being activated, \helpref{wxActivateEvent::GetActive}{wxactivateeventgetactive} returns {\tt true},
+%% otherwise it returns {\tt false} (it is being deactivated).
 %%
 %% \wxheading{See also}
 %%
@@ -1310,7 +1310,7 @@ implements the following methods:\par
 %%
 %% \wxheading{Return value}
 %%
-%% If {\tt TRUE} is returned by OnClose, the window will be deleted by the system, otherwise the
+%% If {\tt true} is returned by OnClose, the window will be deleted by the system, otherwise the
 %% attempt will be ignored. Do not delete the window from within this handler, although
 %% you may delete other windows.
 %%
@@ -1672,14 +1672,14 @@ implements the following methods:\par
 
 \membersection{wxWindow::PopEventHandler}\label{wxwindowpopeventhandler}
 
-\constfunc{wxEvtHandler*}{PopEventHandler}{\param{bool }{deleteHandler = {\tt FALSE}}}
+\constfunc{wxEvtHandler*}{PopEventHandler}{\param{bool }{deleteHandler = {\tt false}}}
 
 Removes and returns the top-most event handler on the event handler stack.
 
 \wxheading{Parameters}
 
-\docparam{deleteHandler}{If this is {\tt TRUE}, the handler will be deleted after it is removed. The
-default value is {\tt FALSE}.}
+\docparam{deleteHandler}{If this is {\tt true}, the handler will be deleted after it is removed. The
+default value is {\tt false}.}
 
 \wxheading{See also}
 
@@ -1768,7 +1768,7 @@ or frame).
 
 \membersection{wxWindow::Refresh}\label{wxwindowrefresh}
 
-\func{virtual void}{Refresh}{\param{bool}{ eraseBackground = {\tt TRUE}}, \param{const wxRect* }{rect
+\func{virtual void}{Refresh}{\param{bool}{ eraseBackground = {\tt true}}, \param{const wxRect* }{rect
 = NULL}}
 
 Causes a message or event to be generated to repaint the
@@ -1776,7 +1776,7 @@ window.
 
 \wxheading{Parameters}
 
-\docparam{eraseBackground}{If {\tt TRUE}, the background will be
+\docparam{eraseBackground}{If {\tt true}, the background will be
 erased.}
 
 \docparam{rect}{If non-NULL, only the given rectangle will
@@ -1833,7 +1833,7 @@ must be present in this windows event handlers chain}
 
 \wxheading{Return value}
 
-Returns {\tt TRUE} if it was found and {\tt FALSE} otherwise (this also results
+Returns {\tt true} if it was found and {\tt false} otherwise (this also results
 in an assert failure so this function should only be called when the
 handler is supposed to be there).
 
@@ -1887,7 +1887,7 @@ positive) or up.
 
 \wxheading{Return value}
 
-Returns {\tt TRUE} if the window was scrolled, {\tt FALSE} if it was already
+Returns {\tt true} if the window was scrolled, {\tt false} if it was already
 on top/bottom and nothing was done.
 
 \wxheading{Remarks}
@@ -1909,7 +1909,7 @@ positive) or up.
 
 \wxheading{Return value}
 
-Returns {\tt TRUE} if the window was scrolled, {\tt FALSE} if it was already
+Returns {\tt true} if the window was scrolled, {\tt false} if it was already
 on top/bottom and nothing was done.
 
 \wxheading{Remarks}
@@ -1962,7 +1962,7 @@ size changes.
 
 \wxheading{Parameters}
 
-\docparam{autoLayout}{Set this to {\tt TRUE} if you wish the Layout function to be called
+\docparam{autoLayout}{Set this to {\tt true} if you wish the Layout function to be called
 from within wxWindow::OnSize functions.}
 
 \wxheading{See also}
@@ -2272,7 +2272,7 @@ Obsolete - use \helpref{wxDC::SetPalette}{wxdcsetpalette} instead.
 
 \func{virtual void}{SetScrollbar}{\param{int }{orientation}, \param{int }{position},\rtfsp
 \param{int }{thumbSize}, \param{int }{range},\rtfsp
-\param{bool }{refresh = {\tt TRUE}}}
+\param{bool }{refresh = {\tt true}}}
 
 Sets the scrollbar properties of a built-in scrollbar.
 
@@ -2286,7 +2286,7 @@ Sets the scrollbar properties of a built-in scrollbar.
 
 \docparam{range}{The maximum position of the scrollbar.}
 
-\docparam{refresh}{{\tt TRUE} to redraw the scrollbar, {\tt FALSE} otherwise.}
+\docparam{refresh}{{\tt true} to redraw the scrollbar, {\tt false} otherwise.}
 
 \wxheading{Remarks}
 
@@ -2321,7 +2321,7 @@ from your \helpref{wxSizeEvent}{wxsizeevent} handler function.
 \begin{comment}
 \membersection{wxWindow::SetScrollPage}\label{wxwindowsetscrollpage}
 
-\func{virtual void}{SetScrollPage}{\param{int }{orientation}, \param{int }{pageSize}, \param{bool }{refresh = {\tt TRUE}}}
+\func{virtual void}{SetScrollPage}{\param{int }{orientation}, \param{int }{pageSize}, \param{bool }{refresh = {\tt true}}}
 
 Sets the page size of one of the built-in scrollbars.
 
@@ -2331,7 +2331,7 @@ Sets the page size of one of the built-in scrollbars.
 
 \docparam{pageSize}{Page size in scroll units.}
 
-\docparam{refresh}{{\tt TRUE} to redraw the scrollbar, {\tt FALSE} otherwise.}
+\docparam{refresh}{{\tt true} to redraw the scrollbar, {\tt false} otherwise.}
 
 \wxheading{Remarks}
 
@@ -2359,7 +2359,7 @@ handling of pages and ranges.
 
 \membersection{wxWindow::SetScrollPos}\label{wxwindowsetscrollpos}
 
-\func{virtual void}{SetScrollPos}{\param{int }{orientation}, \param{int }{pos}, \param{bool }{refresh = {\tt TRUE}}}
+\func{virtual void}{SetScrollPos}{\param{int }{orientation}, \param{int }{pos}, \param{bool }{refresh = {\tt true}}}
 
 Sets the position of one of the built-in scrollbars.
 
@@ -2369,7 +2369,7 @@ Sets the position of one of the built-in scrollbars.
 
 \docparam{pos}{Position in scroll units.}
 
-\docparam{refresh}{{\tt TRUE} to redraw the scrollbar, {\tt FALSE} otherwise.}
+\docparam{refresh}{{\tt true} to redraw the scrollbar, {\tt false} otherwise.}
 
 \wxheading{Remarks}
 
@@ -2386,7 +2386,7 @@ application to take note of scrollbar attributes and redraw contents accordingly
 \begin{comment}
 \membersection{wxWindow::SetScrollRange}\label{wxwindowsetscrollrange}
 
-\func{virtual void}{SetScrollRange}{\param{int }{orientation}, \param{int }{range}, \param{bool }{refresh = {\tt TRUE}}}
+\func{virtual void}{SetScrollRange}{\param{int }{orientation}, \param{int }{range}, \param{bool }{refresh = {\tt true}}}
 
 Sets the range of one of the built-in scrollbars.
 
@@ -2396,7 +2396,7 @@ Sets the range of one of the built-in scrollbars.
 
 \docparam{range}{Scroll range.}
 
-\docparam{refresh}{{\tt TRUE} to redraw the scrollbar, {\tt FALSE} otherwise.}
+\docparam{refresh}{{\tt true} to redraw the scrollbar, {\tt false} otherwise.}
 
 \wxheading{Remarks}
 
@@ -2515,24 +2515,24 @@ The resizing increments are only significant under Motif or Xt.
 
 \membersection{wxWindow::SetSizer}\label{wxwindowsetsizer}
 
-\func{void}{SetSizer}{\param{wxSizer* }{sizer}, \param{bool }{deleteOld=TRUE}}
+\func{void}{SetSizer}{\param{wxSizer* }{sizer}, \param{bool }{deleteOld=true}}
 
 Sets the window to have the given layout sizer. The window
 will then own the object, and will take care of its deletion.
 If an existing layout constraints object is already owned by the
-window, it will be deleted if the deleteOld parameter is TRUE.
+window, it will be deleted if the deleteOld parameter is true.
 
 Note that this function will also call 
-\helpref{SetAutoLayout}{wxwindowsetautolayout} implicitly with {\tt TRUE}
-parameter if the {\it sizer}\/ is non-NULL and {\tt FALSE} otherwise.
+\helpref{SetAutoLayout}{wxwindowsetautolayout} implicitly with {\tt true}
+parameter if the {\it sizer}\/ is non-NULL and {\tt false} otherwise.
 
 \wxheading{Parameters}
 
 \docparam{sizer}{The sizer to set. Pass NULL to disassociate and conditionally delete
 the window's sizer.  See below.}
 
-\docparam{deleteOld}{If TRUE (the default), this will delete any prexisting sizer.
-Pass FALSE if you wish to handle deleting the old sizer yourself.}
+\docparam{deleteOld}{If true (the default), this will delete any prexisting sizer.
+Pass false if you wish to handle deleting the old sizer yourself.}
 
 \wxheading{Remarks}
 
@@ -2546,7 +2546,7 @@ only the sizer will have effect.
 
 \membersection{wxWindow::SetSizerAndFit}\label{wxwindowsetsizerandfit}
 
-\func{void}{SetSizerAndFit}{\param{wxSizer* }{sizer}, \param{bool }{deleteOld=TRUE}}
+\func{void}{SetSizerAndFit}{\param{wxSizer* }{sizer}, \param{bool }{deleteOld=true}}
 
 The same as \helpref{SetSizer}{wxwindowsetsizer}, except it also sets the size hints
 for the window based on the sizer's minimum size.
@@ -2576,7 +2576,7 @@ obviously needs to support the notion of themes in user defined windows.
 One such platform is GTK+ where windows can have (very colourful) backgrounds
 defined by a user's selected theme.
 
-Dialogs, notebook pages and the status bar have this flag set to TRUE
+Dialogs, notebook pages and the status bar have this flag set to true
 by default so that the default look and feel is simulated best.
 
 \membersection{wxWindow::SetValidator}\label{wxwindowsetvalidator}
@@ -2659,7 +2659,7 @@ See \helpref{Window styles}{windowstyles} for more information about flags.
 
 \membersection{wxWindow::Show}\label{wxwindowshow}
 
-\func{virtual bool}{Show}{\param{bool}{ show = {\tt TRUE}}}
+\func{virtual bool}{Show}{\param{bool}{ show = {\tt true}}}
 
 Shows or hides the window. You may need to call \helpref{Raise}{wxwindowraise}
 for a top level window if you want to bring it to top, although this is not
@@ -2667,11 +2667,11 @@ needed if Show() is called immediately after the frame creation.
 
 \wxheading{Parameters}
 
-\docparam{show}{If {\tt TRUE} displays the window. Otherwise, hides it.}
+\docparam{show}{If {\tt true} displays the window. Otherwise, hides it.}
 
 \wxheading{Return value}
 
-{\tt TRUE} if the window has been shown or hidden or {\tt FALSE} if nothing was
+{\tt true} if the window has been shown or hidden or {\tt false} if nothing was
 done because it already was in the requested state.
 
 \wxheading{See also}
@@ -2690,7 +2690,7 @@ Reenables window updating after a previous call to
 \func{virtual bool}{TransferDataFromWindow}{\void}
 
 Transfers values from child controls to data areas specified by their validators. Returns
-{\tt FALSE} if a transfer failed.
+{\tt false} if a transfer failed.
 
 If the window has {\tt wxWS\_EX\_VALIDATE\_RECURSIVELY} extra style flag set,
 the method will also call TransferDataFromWindow() of all child windows.
@@ -2711,7 +2711,7 @@ the method will also call TransferDataToWindow() of all child windows.
 
 \wxheading{Return value}
 
-Returns {\tt FALSE} if a transfer failed.
+Returns {\tt false} if a transfer failed.
 
 \wxheading{See also}
 
@@ -2740,7 +2740,7 @@ the method will also call Validate() of all child windows.
 
 \wxheading{Return value}
 
-Returns {\tt FALSE} if any of the validations failed.
+Returns {\tt false} if any of the validations failed.
 
 \wxheading{See also}
 

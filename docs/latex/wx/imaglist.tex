@@ -28,7 +28,7 @@ wxImageList is used principally in conjunction with \helpref{wxTreeCtrl}{wxtreec
 
 Default constructor.
 
-\func{}{wxImageList}{\param{int }{width}, \param{int }{height}, \param{const bool }{mask = TRUE},\rtfsp
+\func{}{wxImageList}{\param{int }{width}, \param{int }{height}, \param{const bool }{mask = true},\rtfsp
 \param{int }{initialCount = 1}}
 
 Constructor specifying the image size, whether image masks should be created, and the initial size of the list.
@@ -39,7 +39,7 @@ Constructor specifying the image size, whether image masks should be created, an
 
 \docparam{height}{Height of the images in the list.}
 
-\docparam{mask}{TRUE if masks should be created for all images.}
+\docparam{mask}{true if masks should be created for all images.}
 
 \docparam{initialCount}{The initial size of the list.}
 
@@ -89,7 +89,7 @@ implements the following methods:\par
 }
 \membersection{wxImageList::Create}\label{wximagelistcreate}
 
-\func{bool}{Create}{\param{int }{width}, \param{int }{height}, \param{const bool }{mask = TRUE},\rtfsp
+\func{bool}{Create}{\param{int }{width}, \param{int }{height}, \param{const bool }{mask = true},\rtfsp
 \param{int }{initialCount = 1}}
 
 Initializes the list. See \helpref{wxImageList::wxImageList}{wximagelistconstr} for details.
@@ -98,7 +98,7 @@ Initializes the list. See \helpref{wxImageList::wxImageList}{wximagelistconstr} 
 
 \func{bool}{Draw}{\param{int}{ index}, \param{wxDC\&}{ dc}, \param{int }{x},\rtfsp
 \param{int }{x}, \param{int }{flags = wxIMAGELIST\_DRAW\_NORMAL},\rtfsp
-\param{const bool }{solidBackground = FALSE}}
+\param{const bool }{solidBackground = false}}
 
 Draws a specified image onto a device context.
 
@@ -148,7 +148,7 @@ parameter is ignored as all images in the list have the same size.
 
 \wxheading{Return value}
 
-TRUE if the function succeeded, FALSE if it failed (for example, if the image
+true if the function succeeded, false if it failed (for example, if the image
 list was not yet initialized).
 
 \membersection{wxImageList::Remove}\label{wximagelistremove}
@@ -183,7 +183,7 @@ Replaces the existing image with the new image.
 
 \wxheading{Return value}
 
-TRUE if the replacement was successful, FALSE otherwise.
+true if the replacement was successful, false otherwise.
 
 \wxheading{Remarks}
 

@@ -81,7 +81,7 @@ Commits previous transactions. Not implemented.
 
 \func{bool}{ErrorOccured}{\void}
 
-Returns TRUE if the last action caused an error.
+Returns true if the last action caused an error.
 
 \membersection{wxDatabase::ErrorSnapshot}
 
@@ -159,7 +159,7 @@ Returns the ODBC environment handle.
 
 \func{bool}{GetInfo}{\param{long}{ infoType}, \param{const wxString\& }{buf}, \param{int}{ bufSize=-1}}
 
-Returns requested information. The return value is TRUE if successful, FALSE otherwise.
+Returns requested information. The return value is true if successful, false otherwise.
 
 {\it infoType} is an ODBC identifier specifying the type of information to be returned.
 
@@ -183,11 +183,11 @@ Returns the current username.
 
 \membersection{wxDatabase::GetODBCVersionFloat}
 
-\func{float}{GetODBCVersionFloat}{\param{bool}{ implementation=TRUE}}
+\func{float}{GetODBCVersionFloat}{\param{bool}{ implementation=true}}
 
 Returns the version of ODBC in floating point format, e.g. 2.50.
 
-{\it implementation} should be TRUE to get the DLL version, or FALSE to get the
+{\it implementation} should be true to get the DLL version, or false to get the
 version defined in the {\tt sql.h} header file.
 
 This function can return the value 0.0 if the header version number is not defined (for early
@@ -195,11 +195,11 @@ versions of ODBC).
 
 \membersection{wxDatabase::GetODBCVersionString}
 
-\func{wxString}{GetODBCVersionString}{\param{bool}{ implementation=TRUE}}
+\func{wxString}{GetODBCVersionString}{\param{bool}{ implementation=true}}
 
 Returns the version of ODBC in string format, e.g. ``02.50".
 
-{\it implementation} should be TRUE to get the DLL version, or FALSE to get the
+{\it implementation} should be true to get the DLL version, or false to get the
 version defined in the {\tt sql.h} header file.
 
 This function can return the value ``00.00" if the header version number is not defined (for early
@@ -215,11 +215,11 @@ Not implemented.
 
 \func{bool}{IsOpen}{\void}
 
-Returns TRUE if a connection is open.
+Returns true if a connection is open.
 
 \membersection{wxDatabase::Open}\label{wxdatabaseopen}
 
-\func{bool}{Open}{\param{const wxString\& }{datasource}, \param{bool}{ exclusive = FALSE}, \param{bool }{readOnly = TRUE},
+\func{bool}{Open}{\param{const wxString\& }{datasource}, \param{bool}{ exclusive = false}, \param{bool }{readOnly = true},
  \param{const wxString\& }{username = ``ODBC"}, \param{const wxString\& }{password = ``"}}
 
 Connect to a data source. {\it datasource} contains the name of the ODBC data

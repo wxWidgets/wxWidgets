@@ -286,7 +286,7 @@ sizer.
 In order to query the size of notebook page, this page needs to have its
 own sizer, otherwise the wxNotebookSizer will ignore it. Notebook pages
 get their sizer by assigning one to them using \helpref{wxWindow::SetSizer}{wxwindowsetsizer} 
-and setting the auto-layout option to TRUE using 
+and setting the auto-layout option to true using 
 \helpref{wxWindow::SetAutoLayout}{wxwindowsetautolayout}. Here is one
 example showing how to add a notebook page that the notebook sizer is
 aware of:
@@ -303,7 +303,7 @@ aware of:
 
     // Add controls to panel and panelsizer here...
 
-    panel->SetAutoLayout( TRUE );
+    panel->SetAutoLayout( true );
     panel->SetSizer( panelsizer );
 \end{verbatim}
 

@@ -102,14 +102,14 @@ class is not meant to be used polymorphically.
 
 \func{bool}{Open}{\param{const wxString\& }{dir}}
 
-Open the directory for enumerating, returns TRUE on success or FALSE if an
+Open the directory for enumerating, returns true on success or false if an
 error occurred.
 
 \membersection{wxDir::IsOpened}\label{wxdirisopened}
 
 \constfunc{bool}{IsOpened}{\void}
 
-Returns TRUE if the directory was successfully opened by a previous call to 
+Returns true if the directory was successfully opened by a previous call to 
 \helpref{Open}{wxdiropen}.
 
 \membersection{wxDir::GetFirst}\label{wxdirgetfirst}
@@ -117,7 +117,7 @@ Returns TRUE if the directory was successfully opened by a previous call to
 \constfunc{bool}{GetFirst}{\param{wxString* }{filename}, \param{const wxString\& }{filespec = wxEmptyString}, \param{int }{flags = wxDIR\_DEFAULT}}
 
 Start enumerating all files matching {\it filespec} (or all files if it is
-empty) and flags, return TRUE on success.
+empty) and flags, return true on success.
 
 \membersection{wxDir::GetNext}\label{wxdirgetnext}
 
@@ -130,7 +130,7 @@ to \helpref{GetFirst}{wxdirgetfirst}.
 
 \func{bool}{HasFiles}{\param{const wxString\& }{filespec = wxEmptyString}}
 
-Returns {\tt TRUE} if the directory contains any files matching the given 
+Returns {\tt true} if the directory contains any files matching the given 
 {\it filespec}. If {\it filespec} is empty, look for any files at all. In any
 case, even hidden files are taken into account.
 
@@ -138,7 +138,7 @@ case, even hidden files are taken into account.
 
 \func{bool}{HasSubDirs}{\param{const wxString\& }{dirspec = wxEmptyString}}
 
-Returns {\tt TRUE} if the directory contains any subdirectories (if a non
+Returns {\tt true} if the directory contains any subdirectories (if a non
 empty {\it filespec} is given, only check for directories matching it).
 The hidden subdirectories are taken into account as well.
 

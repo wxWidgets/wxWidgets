@@ -113,8 +113,8 @@ Contains a string corresponding to a listbox or choice selection.
 \member{long}{m\_extraLong}
 
 Extra information. If the event comes from a listbox selection, it is
-a boolean determining whether the event was a selection (TRUE) or a
-deselection (FALSE). A listbox deselection only occurs for
+a boolean determining whether the event was a selection (true) or a
+deselection (false). A listbox deselection only occurs for
 multiple-selection boxes, and in this case the index and string values
 are indeterminate and the listbox must be examined by the application.
 
@@ -168,7 +168,7 @@ a deselection).
 \constfunc{bool}{IsChecked}{\void}
 
 This method can be used with checkbox and menu events: for the checkboxes, the
-method returns {\tt TRUE} for a selection event and {\tt FALSE} for a
+method returns {\tt true} for a selection event and {\tt false} for a
 deselection one. For the menu events, this method indicates if the menu item
 just has become checked or unchecked (and thus only makes sense for checkable
 menu items).
@@ -177,7 +177,7 @@ menu items).
 
 \func{bool}{IsSelection}{\void}
 
-For a listbox or choice event, returns TRUE if it is a selection, FALSE if it
+For a listbox or choice event, returns true if it is a selection, false if it
 is a deselection.
 
 \membersection{wxCommandEvent::SetClientData}

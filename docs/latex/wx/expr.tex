@@ -352,13 +352,13 @@ Construct a new, unhashed database, with an optional error handler. The
 error handler must be a function returning a bool and taking an integer and a string
 argument. When an error occurs when reading or writing a database, this function is
 called. The error is given as the first argument (currently one of WXEXPR\_ERROR\_GENERAL,
-WXEXPR\_ERROR\_SYNTAX) and an error message is given as the second argument. If FALSE
+WXEXPR\_ERROR\_SYNTAX) and an error message is given as the second argument. If false
 is returned by the error handler, processing of the wxExpr operation stops.
 
 Another way of handling errors is simply to call \helpref{wxExprDatabase::GetErrorCount}{wxexprdatabasegeterrorcount} after
 the operation, to check whether errors have occurred, instead of installing an error handler.
 If the error count is more than zero, \helpref{wxExprDatabase::Write}{wxexprdatabasewrite} and
-\rtfsp\helpref{wxExprDatabase::Read}{wxexprdatabaseread} will return FALSE to
+\rtfsp\helpref{wxExprDatabase::Read}{wxexprdatabaseread} will return false to
 the application.
 
 For example:
@@ -370,7 +370,7 @@ bool myErrorHandler(int err, chat *msg)
   {
     wxMessageBox(msg, "Syntax error");
   }
-  return FALSE;
+  return false;
 }
 
 wxExprDatabase database(myErrorHandler);
@@ -476,13 +476,13 @@ in the database constructor having the given string value.
 
 \func{bool}{Read}{\param{const wxString\&}{ filename}}
 
-Reads in the given file, returning TRUE if successful.
+Reads in the given file, returning true if successful.
 
 \membersection{wxExprDatabase::ReadFromString}\label{wxexprdatabasereadfromstring}
 
 \func{bool}{ReadFromString}{\param{const wxString\&}{ buffer}}
 
-Reads a Prolog database from the given string buffer, returning TRUE if
+Reads a Prolog database from the given string buffer, returning true if
 successful.
 
 \membersection{wxExprDatabase::Write}\label{wxexprdatabasewrite}

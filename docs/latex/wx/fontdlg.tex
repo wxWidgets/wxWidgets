@@ -23,7 +23,7 @@ This class holds a variety of information related to font dialogs.
 \func{}{wxFontData}{\void}
 
 Constructor. Initializes {\it fontColour} to black, {\it showHelp} to black,
-\rtfsp{\it allowSymbols} to TRUE, {\it enableEffects} to TRUE,
+\rtfsp{\it allowSymbols} to true, {\it enableEffects} to true,
 \rtfsp{\it minSize} to 0 and {\it maxSize} to 0.
 
 \membersection{wxFontData::\destruct{wxFontData}}
@@ -39,7 +39,7 @@ Destructor.
 Enables or disables `effects' under MS Windows only. This refers to the
 controls for manipulating colour, strikeout and underline properties.
 
-The default value is TRUE.
+The default value is true.
 
 \membersection{wxFontData::GetAllowSymbols}
 
@@ -48,7 +48,7 @@ The default value is TRUE.
 Under MS Windows, returns a flag determining whether symbol fonts can be selected. Has no
 effect on other platforms.
 
-The default value is TRUE.
+The default value is true.
 
 \membersection{wxFontData::GetColour}
 
@@ -62,9 +62,9 @@ The default value is black.
 
 \func{wxFont}{GetChosenFont}{\void}
 
-Gets the font chosen by the user. If the user pressed OK (wxFontDialog::Show returned TRUE), this returns
+Gets the font chosen by the user. If the user pressed OK (wxFontDialog::Show returned true), this returns
 a new font which is now `owned' by the application, and should be deleted
-if not required. If the user pressed Cancel (wxFontDialog::Show returned FALSE) or
+if not required. If the user pressed Cancel (wxFontDialog::Show returned false) or
 the colour dialog has not been invoked yet, this will return NULL.
 
 \membersection{wxFontData::GetEnableEffects}
@@ -74,7 +74,7 @@ the colour dialog has not been invoked yet, this will return NULL.
 Determines whether `effects' are enabled under Windows. This refers to the
 controls for manipulating colour, strikeout and underline properties.
 
-The default value is TRUE.
+The default value is true.
 
 \membersection{wxFontData::GetInitialFont}
 
@@ -87,9 +87,9 @@ previously been set by the application.
 
 \func{bool}{GetShowHelp}{\void}
 
-Returns TRUE if the Help button will be shown (Windows only).
+Returns true if the Help button will be shown (Windows only).
 
-The default value is FALSE.
+The default value is false.
 
 \membersection{wxFontData::SetAllowSymbols}
 
@@ -98,7 +98,7 @@ The default value is FALSE.
 Under MS Windows, determines whether symbol fonts can be selected. Has no
 effect on other platforms.
 
-The default value is TRUE.
+The default value is true.
 
 \membersection{wxFontData::SetChosenFont}
 
@@ -134,7 +134,7 @@ The default is 0, 0 (unrestricted range).
 
 Determines whether the Help button will be displayed in the font dialog (Windows only).
 
-The default value is FALSE.
+The default value is false.
 
 \membersection{wxFontData::operator $=$}
 
@@ -188,7 +188,7 @@ shown.
 \func{bool}{Create}{\param{wxWindow* }{parent}, \param{const wxFontData\& }{data}}
 
 Creates the dialog if it the wxFontDialog object had been initialized using the
-default constructor. Returns {\tt TRUE} on success and {\tt FALSE} if an error
+default constructor. Returns {\tt true} on success and {\tt false} if an error
 occured.
 
 \membersection{wxFontDialog::\destruct{wxFontDialog}}

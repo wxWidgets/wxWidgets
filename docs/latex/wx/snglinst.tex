@@ -15,7 +15,7 @@ wxSingleInstanceChecker class allows to check that only a single instance of a
 program is running. To do it, you should create an object of this class. As
 long as this object is alive, calls to 
 \helpref{IsAnotherRunning()}{wxsingleinstancecheckerisanotherrunning} from
-other processes will return {\tt TRUE}.
+other processes will return {\tt true}.
 
 As the object should have the life span as big as possible, it makes sense to
 create it either as a global or in \helpref{wxApp::OnInit}{wxapponinit}. For
@@ -30,12 +30,12 @@ bool MyApp::OnInit()
     {
         wxLogError(_("Another program instance is already running, aborting."));
 
-        return FALSE;
+        return false;
     }
 
     ... more initializations ...
 
-    return TRUE;
+    return true;
 }
 
 int MyApp::OnExit()
@@ -99,7 +99,7 @@ create the lock file in under Unix (default is
 
 \wxheading{Return value}
 
-Returns {\tt FALSE} if initialization failed, it doesn't mean that another
+Returns {\tt false} if initialization failed, it doesn't mean that another
 instance is running - use 
 \helpref{IsAnotherRunning()}{wxsingleinstancecheckerisanotherrunning} to check
 for it.
@@ -108,8 +108,8 @@ for it.
 
 \constfunc{bool}{IsAnotherRunning}{\void}
 
-Returns {\tt TRUE} if another copy of this program is already running, {\tt
-FALSE} otherwise.
+Returns {\tt true} if another copy of this program is already running, {\tt
+false} otherwise.
 
 \membersection{wxSingleInstanceChecker::\destruct{wxSingleInstanceChecker}}\label{wxsingleinstancecheckerdtor}
 

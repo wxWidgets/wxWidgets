@@ -55,9 +55,9 @@ Behaviour alters depending on the kind of property being edited. For example, a 
 the following behaviour:
 
 \begin{itemize}\itemsep=0pt
-\item Double-clicking on the item toggles between TRUE and FALSE.
-\item Showing the value list enables the user to select TRUE or FALSE.
-\item The user may be able to type in the word TRUE or FALSE, or the edit control
+\item Double-clicking on the item toggles between true and false.
+\item Showing the value list enables the user to select true or false.
+\item The user may be able to type in the word true or false, or the edit control
 may be read-only to disallow this since it is error-prone.
 \end{itemize}
 
@@ -180,7 +180,7 @@ void PropertyListTest(Bool useDialog)
   wxPropertySheet *sheet = new wxPropertySheet;
 
   sheet->AddProperty(new wxProperty("fred", 1.0, "real"));
-  sheet->AddProperty(new wxProperty("tough choice", (Bool)TRUE, "bool"));
+  sheet->AddProperty(new wxProperty("tough choice", (Bool)true, "bool"));
   sheet->AddProperty(new wxProperty("ian", (long)45, "integer", new wxIntegerListValidator(-50, 50)));
   sheet->AddProperty(new wxProperty("bill", 25.0, "real", new wxRealListValidator(0.0, 100.0)));
   sheet->AddProperty(new wxProperty("julian", "one", "string"));
@@ -196,7 +196,7 @@ void PropertyListTest(Bool useDialog)
   wxPropertyListFrame *propFrame = NULL;
   if (useDialog)
   {
-    propDialog = new wxPropertyListDialog(view, NULL, "Property Sheet Test", TRUE, -1, -1, 400, 500);
+    propDialog = new wxPropertyListDialog(view, NULL, "Property Sheet Test", true, -1, -1, 400, 500);
   }
   else
   {
@@ -209,14 +209,14 @@ void PropertyListTest(Bool useDialog)
   {
     view->ShowView(sheet, propDialog);
     propDialog->Centre(wxBOTH);
-    propDialog->Show(TRUE);
+    propDialog->Show(true);
   }
   else
   {
     propFrame->Initialize();
     view->ShowView(sheet, propFrame->GetPropertyPanel());
     propFrame->Centre(wxBOTH);
-    propFrame->Show(TRUE);
+    propFrame->Show(true);
   }
 }
 \end{verbatim}
@@ -240,7 +240,7 @@ void PropertyFormTest(Bool useDialog)
   wxPropertySheet *sheet = new wxPropertySheet;
 
   sheet->AddProperty(new wxProperty("fred", 25.0, "real", new wxRealFormValidator(0.0, 100.0)));
-  sheet->AddProperty(new wxProperty("tough choice", (Bool)TRUE, "bool"));
+  sheet->AddProperty(new wxProperty("tough choice", (Bool)true, "bool"));
   sheet->AddProperty(new wxProperty("ian", (long)45, "integer", new wxIntegerFormValidator(-50, 50)));
   sheet->AddProperty(new wxProperty("julian", "one", "string"));
   wxStringList *strings = new wxStringList("one", "two", "three", NULL);
@@ -252,7 +252,7 @@ void PropertyFormTest(Bool useDialog)
   wxPropertyFormFrame *propFrame = NULL;
   if (useDialog)
   {
-    propDialog = new wxPropertyFormDialog(view, NULL, "Property Form Test", TRUE, -1, -1, 400, 300);
+    propDialog = new wxPropertyFormDialog(view, NULL, "Property Form Test", true, -1, -1, 400, 300);
   }
   else
   {
@@ -286,7 +286,7 @@ void PropertyFormTest(Bool useDialog)
     view->AssociateNames();
     view->TransferToDialog();
     propDialog->Centre(wxBOTH);
-    propDialog->Show(TRUE);
+    propDialog->Show(true);
   }
   else
   {
@@ -294,7 +294,7 @@ void PropertyFormTest(Bool useDialog)
     view->AssociateNames();
     view->TransferToDialog();
     propFrame->Centre(wxBOTH);
-    propFrame->Show(TRUE);
+    propFrame->Show(true);
   }
 }
 \end{verbatim}

@@ -189,7 +189,7 @@ is now {\bf wxDialog:ShowModal}. This is part of a more fundamental change in wh
 control may tell the dialog that it caused the dismissal of a dialog, by
 calling {\bf wxDialog::EndModal} or {\bf wxWindow::SetReturnCode}. Using this
 information, {\bf ShowModal} now returns the id of the control that caused dismissal,
-giving greater feedback to the application than just TRUE or FALSE.
+giving greater feedback to the application than just true or false.
 
 If you overrode or called {\bf wxDialog::Show}, use {\bf ShowModal} and test for a returned identifier,
 commonly wxID\_OK or wxID\_CANCEL.

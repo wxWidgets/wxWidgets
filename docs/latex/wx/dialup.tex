@@ -66,8 +66,8 @@ done with it.
 
 \constfunc{bool}{IsOk}{\void}
 
-Returns {\tt TRUE} if the dialup manager was initialized correctly. If this
-function returns {\tt FALSE}, no other functions will work neither, so it is a
+Returns {\tt true} if the dialup manager was initialized correctly. If this
+function returns {\tt false}, no other functions will work neither, so it is a
 good idea to call this function and check its result before calling any other
 wxDialUpManager methods
 
@@ -89,7 +89,7 @@ their number (may be $0$).
 
 \membersection{wxDialUpManager::Dial}\label{wxdialupmanagerdial}
 
-\func{bool}{Dial}{\param{const wxString\& }{nameOfISP = wxEmptyString}, \param{const wxString\& }{username = wxEmptyString}, \param{const wxString\& }{password = wxEmptyString}, \param{bool }{async = TRUE}}
+\func{bool}{Dial}{\param{const wxString\& }{nameOfISP = wxEmptyString}, \param{const wxString\& }{username = wxEmptyString}, \param{const wxString\& }{password = wxEmptyString}, \param{bool }{async = true}}
 
 Dial the given ISP, use {\it username} and {\it password} to authenticate.
 
@@ -102,10 +102,10 @@ If no {\it nameOfISP} is given, the function will select the default one
 and if no username and/or password are given, the function will try to do
 without them, but will ask the user if really needed.
 
-If {\it async} parameter is {\tt FALSE}, the function waits until the end of dialing
-and returns {\tt TRUE} upon successful completion.
+If {\it async} parameter is {\tt false}, the function waits until the end of dialing
+and returns {\tt true} upon successful completion.
 
-If {\it async} is {\tt TRUE}, the function only initiates the connection and
+If {\it async} is {\tt true}, the function only initiates the connection and
 returns immediately - the result is reported via events (an event is sent
 anyhow, but if dialing failed it will be a DISCONNECTED one).
 
@@ -113,7 +113,7 @@ anyhow, but if dialing failed it will be a DISCONNECTED one).
 
 \constfunc{bool}{IsDialing}{\void}
 
-Returns TRUE if (async) dialing is in progress.
+Returns true if (async) dialing is in progress.
 
 \wxheading{See also}
 
@@ -124,7 +124,7 @@ Returns TRUE if (async) dialing is in progress.
 \func{bool}{CancelDialing}{\void}
 
 Cancel dialing the number initiated with \helpref{Dial}{wxdialupmanagerdial} 
-with async parameter equal to {\tt TRUE}.
+with async parameter equal to {\tt true}.
 
 Note that this won't result in DISCONNECTED event being sent.
 
@@ -142,7 +142,7 @@ Hang up the currently active dial up connection.
 
 \constfunc{bool}{IsAlwaysOnline}{\void}
 
-Returns {\tt TRUE} if the computer has a permanent network connection (i.e. is
+Returns {\tt true} if the computer has a permanent network connection (i.e. is
 on a LAN) and so there is no need to use Dial() function to go online.
 
 {\bf NB:} this functions tries to guess the result and it is not always
@@ -153,14 +153,14 @@ confirmation or give him a possibility to override it.
 
 \constfunc{bool}{IsOnline}{\void}
 
-Returns {\tt TRUE} if the computer is connected to the network: under Windows,
+Returns {\tt true} if the computer is connected to the network: under Windows,
 this just means that a RAS connection exists, under Unix we check that
 the "well-known host" (as specified by 
 \helpref{SetWellKnownHost}{wxdialupmanagersetwellknownhost}) is reachable.
 
 \membersection{wxDialUpManager::SetOnlineStatus}\label{wxdialupmanagersetonlinestatus}
 
-\func{void}{SetOnlineStatus}{\param{bool }{isOnline = TRUE}}
+\func{void}{SetOnlineStatus}{\param{bool }{isOnline = true}}
 
 Sometimes the built-in logic for determining the online status may fail,
 so, in general, the user should be allowed to override it. This function
@@ -182,7 +182,7 @@ often should we repeat the check (each minute by default). Under Windows, the
 notification about the change of connection status is sent by the system and so
 we don't do any polling and this parameter is ignored.
 
-Returns {\tt FALSE} if couldn't set up automatic check for online status.
+Returns {\tt false} if couldn't set up automatic check for online status.
 
 \membersection{wxDialUpManager::DisableAutoCheckOnlineStatus}\label{wxdialupmanagerdisableautocheckonlinestatus}
 

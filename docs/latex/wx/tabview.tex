@@ -49,7 +49,7 @@ A new layer (row) is started when the current layer has been filled up with tabs
 
 \membersection{wxTabView::CalculateTabWidth}\label{wxtabviewcalculatetabwidth}
 
-\func{int}{CalculateTabWidth}{\param{int}{ noTabs}, \param{bool}{ adjustView = FALSE}}
+\func{int}{CalculateTabWidth}{\param{int}{ noTabs}, \param{bool}{ adjustView = false}}
 
 The application can specify the tab width using this function, in terms
 of the number of tabs per layer (row) which will fit the view area, which
@@ -58,16 +58,16 @@ should have been set previously with SetViewRect.
 {\it noTabs} is the number of tabs which should take up the full width
 of the view area.
 
-{\it adjustView} can be set to TRUE in order to readjust the view width
+{\it adjustView} can be set to true in order to readjust the view width
 to exactly fit the given number of tabs. 
 
 The new tab width is returned.
 
 \membersection{wxTabView::ClearTabs}
 
-\func{void}{ClearTabs}{\param{bool }{deleteTabs=TRUE}}
+\func{void}{ClearTabs}{\param{bool }{deleteTabs=true}}
 
-Clears the tabs, deleting them if {\it deleteTabs} is TRUE.
+Clears the tabs, deleting them if {\it deleteTabs} is true.
 
 \membersection{wxTabView::Draw}
 
@@ -237,8 +237,8 @@ You may want to call this function if the view width has changed (for example, f
 
 \func{bool}{OnEvent}{\param{wxMouseEvent\& }{event}}
 
-Processes mouse events sent from the panel or dialog. Returns TRUE if the event was processed,
-FALSE otherwise.
+Processes mouse events sent from the panel or dialog. Returns true if the event was processed,
+false otherwise.
 
 \membersection{wxTabView::OnTabActivate}
 
@@ -252,7 +252,7 @@ Called when a tab is activated, with the new active tab id, and the former activ
 
 Called just before a tab is activated, with the new active tab id, and the former active tab id.
 
-If the function returns FALSE, the tab is not activated.
+If the function returns false, the tab is not activated.
 
 \membersection{wxTabView::SetBackgroundColour}
 
@@ -313,11 +313,11 @@ higher than the other tabs.
 
 \membersection{wxTabView::SetTabSelection}
 
-\func{void}{SetTabSelection}{\param{int}{ sel}, \param{bool}{ activateTool=TRUE}}
+\func{void}{SetTabSelection}{\param{int}{ sel}, \param{bool}{ activateTool=true}}
 
 Sets the selected tab, calling the application's OnTabActivate function.
 
-If {\it activateTool} is FALSE, OnTabActivate will not be called.
+If {\it activateTool} is false, OnTabActivate will not be called.
 
 \membersection{wxTabView::SetTextColour}
 

@@ -44,14 +44,14 @@ derived instance.
 
 \wxheading{Return value}
 
-TRUE if the function succeeded, FALSE otherwise.
+true if the function succeeded, false otherwise.
 
 \membersection{wxDebugContext::GetCheckPrevious}\label{wxdebugcontextgetcheckprevious}
 
 \func{bool}{GetCheckPrevious}{\void}
 
-Returns TRUE if the memory allocator checks all previous memory blocks for errors.
-By default, this is FALSE since it slows down execution considerably.
+Returns true if the memory allocator checks all previous memory blocks for errors.
+By default, this is false since it slows down execution considerably.
 
 \wxheading{See also}
 
@@ -61,7 +61,7 @@ By default, this is FALSE since it slows down execution considerably.
 
 \func{bool}{GetDebugMode}{\void}
 
-Returns TRUE if debug mode is on. If debug mode is on, the wxObject new and delete
+Returns true if debug mode is on. If debug mode is on, the wxObject new and delete
 operators store or use information about memory allocation. Otherwise,
 a straight malloc and free will be performed by these operators.
 
@@ -110,7 +110,7 @@ This is obsolete, replaced by \helpref{wxLog}{wxlog} functionality.
 
 \func{bool}{HasStream}{\void}
 
-Returns TRUE if there is a stream currently associated
+Returns true if there is a stream currently associated
 with the debug context.
 
 This is obsolete, replaced by \helpref{wxLog}{wxlog} functionality.
@@ -132,7 +132,7 @@ and whether instances of this class can be dynamically created.
 
 \membersection{wxDebugContext::PrintStatistics}\label{wxdebugcontextprintstatistics}
 
-\func{bool}{PrintStatistics}{\param{bool}{ detailed = TRUE}}
+\func{bool}{PrintStatistics}{\param{bool}{ detailed = true}}
 
 Performs a statistics analysis from the currently set checkpoint, writing
 to the current debug stream. The number of object and non-object
@@ -140,7 +140,7 @@ allocations is printed, together with the total size.
 
 \wxheading{Parameters}
 
-\docparam{detailed}{If TRUE, the function will also print how many
+\docparam{detailed}{If true, the function will also print how many
 objects of each class have been allocated, and the space taken by
 these class instances.}
 
@@ -150,7 +150,7 @@ these class instances.}
 
 \membersection{wxDebugContext::SetCheckpoint}\label{wxdebugcontextsetcheckpoint}
 
-\func{void}{SetCheckpoint}{\param{bool}{ all = FALSE}}
+\func{void}{SetCheckpoint}{\param{bool}{ all = false}}
 
 Sets the current checkpoint: Dump and PrintStatistics operations will
 be performed from this point on. This allows you to ignore allocations
@@ -158,7 +158,7 @@ that have been performed up to this point.
 
 \wxheading{Parameters}
 
-\docparam{all}{If TRUE, the checkpoint is reset to include all
+\docparam{all}{If true, the checkpoint is reset to include all
 memory allocations since the program started.}
 
 \membersection{wxDebugContext::SetCheckPrevious}\label{wxdebugcontextsetcheckprevious}
@@ -166,7 +166,7 @@ memory allocations since the program started.}
 \func{void}{SetCheckPrevious}{\param{bool}{ check}}
 
 Tells the memory allocator to check all previous memory blocks for errors.
-By default, this is FALSE since it slows down execution considerably.
+By default, this is false since it slows down execution considerably.
 
 \wxheading{See also}
 

@@ -78,13 +78,13 @@ Destructor.
 
 \constfunc{bool}{GetCollate}{\void}
 
-Returns TRUE if collation is on.
+Returns true if collation is on.
 
 \membersection{wxPrintData::GetColour}\label{wxprintdatagetcolour}
 
 \constfunc{bool}{GetColour}{\void}
 
-Returns TRUE if colour printing is on.
+Returns true if colour printing is on.
 
 \membersection{wxPrintData::GetDuplex}\label{wxprintdatagetduplex}
 
@@ -138,9 +138,9 @@ indicating the current resolution setting.
 
 \constfunc{bool}{Ok}{\void}
 
-Returns TRUE if the print data is valid for using in print dialogs.
-This can return FALSE on Windows if the current printer is not set, for example.
-On all other platforms, it returns TRUE.
+Returns true if the print data is valid for using in print dialogs.
+This can return false on Windows if the current printer is not set, for example.
+On all other platforms, it returns true.
 
 \membersection{wxPrintData::SetCollate}\label{wxprintdatasetcollate}
 
@@ -350,9 +350,9 @@ explicitly.
 
 \constfunc{bool}{Ok}{\void}
 
-Returns TRUE if the print data associated with the dialog is valid.
-This can return FALSE on Windows if the current printer is not set, for example.
-On all other platforms, it returns TRUE.
+Returns true if the print data associated with the dialog is valid.
+This can return false on Windows if the current printer is not set, for example.
+On all other platforms, it returns true.
 
 \membersection{wxPrintDialog::ShowModal}\label{wxprintdialogshowmodal}
 
@@ -429,13 +429,13 @@ Enables or disables the `Selection' radio button.
 
 \constfunc{bool}{GetAllPages}{\void}
 
-Returns TRUE if the user requested that all pages be printed.
+Returns true if the user requested that all pages be printed.
 
 \membersection{wxPrintDialogData::GetCollate}\label{wxprintdialogdatagetcollate}
 
 \constfunc{bool}{GetCollate}{\void}
 
-Returns TRUE if the user requested that the document(s) be collated.
+Returns true if the user requested that the document(s) be collated.
 
 \membersection{wxPrintDialogData::GetFromPage}\label{wxprintdialogdatagetfrompage}
 
@@ -471,13 +471,13 @@ Returns a reference to the internal wxPrintData object.
 
 \constfunc{bool}{GetPrintToFile}{\void}
 
-Returns TRUE if the user has selected printing to a file.
+Returns true if the user has selected printing to a file.
 
 \membersection{wxPrintDialogData::GetSelection}\label{wxprintdialogdatagetselection}
 
 \constfunc{bool}{GetSelection}{\void}
 
-Returns TRUE if the user requested that the selection be printed (where 'selection' is
+Returns true if the user requested that the selection be printed (where 'selection' is
 a concept specific to the application).
 
 \membersection{wxPrintDialogData::GetToPage}\label{wxprintdialogdatagettopage}
@@ -490,15 +490,15 @@ Returns the {\it to} page number, as entered by the user.
 
 \constfunc{bool}{Ok}{\void}
 
-Returns TRUE if the print data is valid for using in print dialogs.
-This can return FALSE on Windows if the current printer is not set, for example.
-On all other platforms, it returns TRUE.
+Returns true if the print data is valid for using in print dialogs.
+This can return false on Windows if the current printer is not set, for example.
+On all other platforms, it returns true.
 
 \membersection{wxPrintDialogData::SetCollate}\label{wxprintdialogdatasetcollate}
 
 \func{void}{SetCollate}{\param{bool }{flag}}
 
-Sets the 'Collate' checkbox to TRUE or FALSE.
+Sets the 'Collate' checkbox to true or false.
 
 \membersection{wxPrintDialogData::SetFromPage}\label{wxprintdialogdatasetfrompage}
 
@@ -534,7 +534,7 @@ Sets the internal wxPrintData.
 
 \func{void}{SetPrintToFile}{\param{bool }{flag}}
 
-Sets the 'Print to file' checkbox to TRUE or FALSE.
+Sets the 'Print to file' checkbox to true or false.
 
 \membersection{wxPrintDialogData::SetSelection}\label{wxprintdialogdatasetselection}
 
@@ -548,7 +548,7 @@ implements this command, if at all.
 \func{void}{SetSetupDialog}{\param{bool }{flag}}
 
 Determines whether the dialog to be shown will be the Print dialog
-(pass FALSE) or Print Setup dialog (pass TRUE).
+(pass false) or Print Setup dialog (pass true).
 
 Note that the setup dialog is (according to Microsoft) obsolete from
 Windows 95, though retained for backward compatibility.
@@ -614,7 +614,7 @@ Destructor.
 
 \func{bool}{Abort}{\void}
 
-Returns TRUE if the user has aborted the print job.
+Returns true if the user has aborted the print job.
 
 \membersection{wxPrinter::CreateAbortWindow}\label{wxprintercreateabortwindow}
 
@@ -650,12 +650,12 @@ Returns the \helpref{print data}{wxprintdata} associated with the printer object
 
 \membersection{wxPrinter::Print}\label{wxprinterprint}
 
-\func{bool}{Print}{\param{wxWindow *}{parent}, \param{wxPrintout *}{printout}, \param{bool }{prompt=TRUE}}
+\func{bool}{Print}{\param{wxWindow *}{parent}, \param{wxPrintout *}{printout}, \param{bool }{prompt=true}}
 
 Starts the printing process. Provide a parent window, a user-defined wxPrintout object which controls
 the printing of a document, and whether the print dialog should be invoked first.
 
-Print could return FALSE if there was a problem initializing the printer device context
+Print could return false if there was a problem initializing the printer device context
 (current printer not set, for example) or the user cancelled printing. Call
 \helpref{wxPrinter::GetLastError}{wxprintergetlasterror} to get detailed
 information about the kind of the error.
@@ -716,7 +716,7 @@ necessary for setting up a suitable printer device context. This
 is the recommended way to construct a wxPrinterDC.
 
 \func{}{wxPrinterDC}{\param{const wxString\& }{driver}, \param{const wxString\& }{device}, \param{const wxString\& }{output},
- \param{const bool }{interactive = TRUE}, \param{int }{orientation = wxPORTRAIT}}
+ \param{const bool }{interactive = true}, \param{int }{orientation = wxPORTRAIT}}
 
 Constructor. With empty strings for the first three arguments, the default printer dialog is
 displayed. {\it device} indicates the type of printer and {\it output}
@@ -854,21 +854,21 @@ Returns the title of the printout
 
 \func{bool}{HasPage}{\param{int}{ pageNum}}
 
-Should be overridden to return TRUE if the document has this page, or FALSE
-if not. Returning FALSE signifies the end of the document. By default,
+Should be overridden to return true if the document has this page, or false
+if not. Returning false signifies the end of the document. By default,
 HasPage behaves as if the document has only one page.
 
 \membersection{wxPrintout::IsPreview}\label{wxprintoutispreview}
 
 \func{bool}{IsPreview}{\void}
 
-Returns TRUE if the printout is currently being used for previewing.
+Returns true if the printout is currently being used for previewing.
 
 \membersection{wxPrintout::OnBeginDocument}\label{wxprintoutonbegindocument}
 
 \func{bool}{OnBeginDocument}{\param{int}{ startPage}, \param{int}{ endPage}}
 
-Called by the framework at the start of document printing. Return FALSE from
+Called by the framework at the start of document printing. Return false from
 this function cancels the print job. OnBeginDocument is called once for every
 copy printed.
 
@@ -915,7 +915,7 @@ number of pages in the document, for example.
 
 \func{bool}{OnPrintPage}{\param{int}{ pageNum}}
 
-Called by the framework when a page should be printed. Returning FALSE cancels
+Called by the framework when a page should be printed. Returning false cancels
 the print job. The application can use wxPrintout::GetDC to obtain a device
 context to draw on.
 
@@ -962,7 +962,7 @@ called, since they will be deleted in the wxPrintPreview constructor.
 The same does not apply to the {\it data} argument.
 
 Test the Ok member to check whether the wxPrintPreview object was created correctly.
-Ok could return FALSE if there was a problem initializing the printer device context
+Ok could return false if there was a problem initializing the printer device context
 (current printer not set, for example).
 
 \membersection{wxPrintPreview::\destruct{wxPrintPreview}}
@@ -1033,7 +1033,7 @@ or NULL if none exists.
 
 \func{bool}{Ok}{\void}
 
-Returns TRUE if the wxPrintPreview is valid, FALSE otherwise. It could return FALSE if there was a
+Returns true if the wxPrintPreview is valid, false otherwise. It could return false if there was a
 problem initializing the printer device context (current printer not set, for example).
 
 \membersection{wxPrintPreview::PaintPage}\label{wxprintpreviewpaintpage}
@@ -1055,7 +1055,7 @@ supplied in the wxPrintPreview constructor.
 Will normally be called by the {\bf Print...} panel item on the
 preview frame's control bar.
 
-Returns FALSE in case of error -- call
+Returns false in case of error -- call
 \helpref{wxPrinter::GetLastError}{wxprintergetlasterror} to get detailed
 information about the kind of the error.
 

@@ -193,31 +193,31 @@ The following priorities are defined:
 
 \constfunc{bool}{IsAlive}{\void}
 
-Returns TRUE if the thread is alive (i.e. started and not terminating).
+Returns true if the thread is alive (i.e. started and not terminating).
 
 \membersection{wxThread::IsDetached}\label{wxthreadisdetached}
 
 \constfunc{bool}{IsDetached}{\void}
 
-Returns TRUE if the thread is of the detached kind, FALSE if it is a joinable one.
+Returns true if the thread is of the detached kind, false if it is a joinable one.
 
 \membersection{wxThread::IsMain}\label{wxthreadismain}
 
 \func{static bool}{IsMain}{\void}
 
-Returns TRUE if the calling thread is the main application thread.
+Returns true if the calling thread is the main application thread.
 
 \membersection{wxThread::IsPaused}\label{wxthreadispaused}
 
 \constfunc{bool}{IsPaused}{\void}
 
-Returns TRUE if the thread is paused.
+Returns true if the thread is paused.
 
 \membersection{wxThread::IsRunning}\label{wxthreadisrunning}
 
 \constfunc{bool}{IsRunning}{\void}
 
-Returns TRUE if the thread is running.
+Returns true if the thread is running.
 
 \membersection{wxThread::Kill}\label{wxthreadkill}
 
@@ -314,7 +314,7 @@ Sets the thread concurrency level for this process. This is, roughly, the
 number of threads that the system tries to schedule to run in parallel.
 The value of $0$ for {\it level} may be used to set the default one.
 
-Returns TRUE on success or FALSE otherwise (for example, if this function is
+Returns true on success or false otherwise (for example, if this function is
 not implemented for this platform - currently everything except Solaris).
 
 \membersection{wxThread::TestDestroy}\label{wxthreadtestdestroy}
@@ -323,7 +323,7 @@ not implemented for this platform - currently everything except Solaris).
 
 This function should be called periodically by the thread to ensure that calls
 to \helpref{Pause}{wxthreadpause} and \helpref{Delete}{wxthreaddelete} will
-work. If it returns TRUE, the thread should exit as soon as possible.
+work. If it returns true, the thread should exit as soon as possible.
 
 \membersection{wxThread::This}\label{wxthreadthis}
 

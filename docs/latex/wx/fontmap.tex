@@ -11,15 +11,15 @@ names and the fonts present on the machine.
 The default implementations of all functions will ask the user if they are
 not capable of finding the answer themselves and store the answer in a
 config file (configurable via SetConfigXXX functions). This behaviour may
-be disabled by giving the value of FALSE to "interactive" parameter.
+be disabled by giving the value of false to "interactive" parameter.
 
 However, the functions will always consult the config file to allow the
 user-defined values override the default logic and there is no way to
 disable this - which shouldn't be ever needed because if "interactive" was
-never TRUE, the config file is never created anyhow.
+never true, the config file is never created anyhow.
 
 In case everything else fails (i.e. there is no record in config file
-and "interactive" is FALSE or user denied to choose any replacement), 
+and "interactive" is false or user denied to choose any replacement), 
 the class queries \helpref{wxEncodingConverter}{wxencodingconverter} 
 for "equivalent" encodings (e.g. iso8859-2 and cp1250) and tries them.
 
@@ -39,7 +39,7 @@ if (!wxFontMapper::Get()->IsEncodingAvailable(enc, facename))
 {
    wxFontEncoding alternative;
    if (wxFontMapper::Get()->GetAltForEncoding(enc, &alternative,
-                                              facename, FALSE))
+                                              facename, false))
    {
        wxEncodingConverter encconv;
        if (!encconv.Init(enc, alternative))
@@ -99,14 +99,14 @@ one.
 
 \membersection{wxFontMapper::GetAltForEncoding}\label{wxfontmappergetaltforencoding}
 
-\func{bool}{GetAltForEncoding}{\param{wxFontEncoding }{encoding}, \param{wxNativeEncodingInfo* }{info}, \param{const wxString\& }{facename = wxEmptyString}, \param{bool }{interactive = TRUE}}
+\func{bool}{GetAltForEncoding}{\param{wxFontEncoding }{encoding}, \param{wxNativeEncodingInfo* }{info}, \param{const wxString\& }{facename = wxEmptyString}, \param{bool }{interactive = true}}
 
-\func{bool}{GetAltForEncoding}{\param{wxFontEncoding }{encoding}, \param{wxFontEncoding* }{alt\_encoding}, \param{const wxString\& }{facename = wxEmptyString}, \param{bool }{interactive = TRUE}}
+\func{bool}{GetAltForEncoding}{\param{wxFontEncoding }{encoding}, \param{wxFontEncoding* }{alt\_encoding}, \param{const wxString\& }{facename = wxEmptyString}, \param{bool }{interactive = true}}
 
 Find an alternative for the given encoding (which is supposed to not be
-available on this system). If successful, return TRUE and fill info
+available on this system). If successful, return true and fill info
 structure with the parameters required to create the font, otherwise
-return FALSE.
+return false.
 
 The first form is for wxWindows' internal use while the second one
 is better suitable for general use -- it returns wxFontEncoding which
@@ -121,7 +121,7 @@ If no facename is given, find {\it any} font in this encoding.
 
 \membersection{wxFontMapper::CharsetToEncoding}\label{wxfontmappercharsettoencoding}
 
-\func{wxFontEncoding}{CharsetToEncoding}{\param{const wxString\& }{charset}, \param{bool }{interactive = TRUE}}
+\func{wxFontEncoding}{CharsetToEncoding}{\param{const wxString\& }{charset}, \param{bool }{interactive = true}}
 
 Returns the encoding for the given charset (in the form of RFC 2046) or
 wxFONTENCODING\_SYSTEM if couldn't decode it.

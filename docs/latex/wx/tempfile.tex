@@ -65,7 +65,7 @@ Associates wxTempFile with the file to be replaced and opens it. You should use
 
 \func{bool}{Open}{\param{const wxString\& }{strName}}
 
-Open the temporary file, returns {\tt TRUE} on success, {\tt FALSE} if an error
+Open the temporary file, returns {\tt true} on success, {\tt false} if an error
 occurred.
 
 {\it strName} is the name of file to be replaced. The temporary file is always
@@ -77,19 +77,19 @@ and the program should have write access to it for the function to succeed.
 
 \constfunc{bool}{IsOpened}{\void}
 
-Returns {\tt TRUE} if the file was successfully opened.
+Returns {\tt true} if the file was successfully opened.
 
 \membersection{wxTempFile::Write}\label{wxtempfilewrite}
 
 \func{bool}{Write}{\param{const void }{*p}, \param{size\_t }{n}}
 
-Write to the file, return {\tt TRUE} on success, {\tt FALSE} on failure.
+Write to the file, return {\tt true} on success, {\tt false} on failure.
 
 \membersection{wxTempFile::Write}\label{wxtempfilewrites}
 
 \func{bool}{Write}{\param{const wxString\& }{str}, \param{wxMBConv\&}{ conv = wxConvLibc}}
 
-Write to the file, return {\tt TRUE} on success, {\tt FALSE} on failure.
+Write to the file, return {\tt true} on success, {\tt false} on failure.
 
 The second argument is only meaningful in Unicode build of wxWindows when
 {\it conv} is used to convert {\it str} to multibyte representation.
@@ -99,7 +99,7 @@ The second argument is only meaningful in Unicode build of wxWindows when
 \func{bool}{Commit}{\void}
 
 Validate changes: deletes the old file of name m\_strName and renames the new
-file to the old name. Returns {\tt TRUE} if both actions succeeded. If {\tt FALSE} is
+file to the old name. Returns {\tt true} if both actions succeeded. If {\tt false} is
 returned it may unfortunately mean two quite different things: either that
 either the old file couldn't be deleted or that the new file couldn't be renamed
 to the old name.

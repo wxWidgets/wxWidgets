@@ -48,25 +48,25 @@ Return the text colour specified by this attribute.
 
 \constfunc{bool}{HasBackgroundColour}{\void}
 
-Returns {\tt TRUE} if this style specifies the background colour to use.
+Returns {\tt true} if this style specifies the background colour to use.
 
 \membersection{wxTextAttr::HasFont}
 
 \constfunc{bool}{HasFont}{\void}
 
-Returns {\tt TRUE} if this style specifies the font to use.
+Returns {\tt true} if this style specifies the font to use.
 
 \membersection{wxTextAttr::HasTextColour}
 
 \constfunc{bool}{HasTextColour}{\void}
 
-Returns {\tt TRUE} if this style specifies the foreground colour to use.
+Returns {\tt true} if this style specifies the foreground colour to use.
 
 \membersection{wxTextAttr::IsDefault}
 
 \constfunc{bool}{IsDefault}{\void}
 
-Returns {\tt TRUE} if this style specifies any non-default attributes.
+Returns {\tt true} if this style specifies any non-default attributes.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%% wxTextCtrl %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -358,34 +358,34 @@ the programmer should use \helpref{GetInsertionPoint}{wxtextctrlgetinsertionpoin
 
 \func{virtual bool}{CanCopy}{\void}
 
-Returns {\tt TRUE} if the selection can be copied to the clipboard.
+Returns {\tt true} if the selection can be copied to the clipboard.
 
 \membersection{wxTextCtrl::CanCut}\label{wxtextctrlcancut}
 
 \func{virtual bool}{CanCut}{\void}
 
-Returns {\tt TRUE} if the selection can be cut to the clipboard.
+Returns {\tt true} if the selection can be cut to the clipboard.
 
 \membersection{wxTextCtrl::CanPaste}\label{wxtextctrlcanpaste}
 
 \func{virtual bool}{CanPaste}{\void}
 
-Returns {\tt TRUE} if the contents of the clipboard can be pasted into the
+Returns {\tt true} if the contents of the clipboard can be pasted into the
 text control. On some platforms (Motif, GTK) this is an approximation
-and returns {\tt TRUE} if the control is editable, {\tt FALSE} otherwise.
+and returns {\tt true} if the control is editable, {\tt false} otherwise.
 
 \membersection{wxTextCtrl::CanRedo}\label{wxtextctrlcanredo}
 
 \func{virtual bool}{CanRedo}{\void}
 
-Returns {\tt TRUE} if there is a redo facility available and the last operation
+Returns {\tt true} if there is a redo facility available and the last operation
 can be redone.
 
 \membersection{wxTextCtrl::CanUndo}\label{wxtextctrlcanundo}
 
 \func{virtual bool}{CanUndo}{\void}
 
-Returns {\tt TRUE} if there is an undo facility available and the last operation
+Returns {\tt true} if there is an undo facility available and the last operation
 can be undone.
 
 \membersection{wxTextCtrl::Clear}\label{wxtextctrlclear}
@@ -439,7 +439,7 @@ under any platform but MSW.
 
 \wxheading{Return value}
 
-{\tt TRUE} if the event resulted in a change to the control, {\tt FALSE}
+{\tt true} if the event resulted in a change to the control, {\tt false}
 otherwise.
 
 \membersection{wxTextCtrl::GetDefaultStyle}\label{wxtextctrlgetdefaultstyle}
@@ -589,7 +589,7 @@ sequence in the native control.
 
 \constfunc{bool}{IsEditable}{\void}
 
-Returns {\tt TRUE} if the controls contents may be edited by user (note that it
+Returns {\tt true} if the controls contents may be edited by user (note that it
 always can be changed by the program), i.e. if the control hasn't been put in
 read-only mode by a previous call to 
 \helpref{SetEditable}{wxtextctrlseteditable}.
@@ -598,14 +598,14 @@ read-only mode by a previous call to
 
 \constfunc{bool}{IsModified}{\void}
 
-Returns {\tt TRUE} if the text has been modified by user. Note that calling 
+Returns {\tt true} if the text has been modified by user. Note that calling 
 \helpref{SetValue}{wxtextctrlsetvalue} doesn't make the control modified.
 
 \membersection{wxTextCtrl::IsMultiLine}\label{wxtextctrlismultiline}
 
 \constfunc{bool}{IsMultiLine}{\void}
 
-Returns {\tt TRUE} if this is a multi line edit control and {\tt FALSE}
+Returns {\tt true} if this is a multi line edit control and {\tt false}
 otherwise.
 
 \wxheading{See also}
@@ -616,7 +616,7 @@ otherwise.
 
 \constfunc{bool}{IsSingleLine}{\void}
 
-Returns {\tt TRUE} if this is a single line edit control and {\tt FALSE}
+Returns {\tt true} if this is a single line edit control and {\tt false}
 otherwise.
 
 \wxheading{See also}
@@ -635,7 +635,7 @@ Loads and displays the named file, if it exists.
 
 \wxheading{Return value}
 
-{\tt TRUE} if successful, {\tt FALSE} otherwise.
+{\tt true} if successful, {\tt false} otherwise.
 
 % VZ: commenting this out as: (a) the docs are wrong (you can't replace
 %     anything), (b) wxTextCtrl doesn't have any OnChar() anyhow
@@ -708,7 +708,7 @@ Converts given position to a zero-based column, line number pair.
 
 \wxheading{Return value}
 
-{\tt TRUE} on success, {\tt FALSE} on failure (most likely due to a too large position
+{\tt true} on success, {\tt false} on failure (most likely due to a too large position
 parameter).
 
 \wxheading{See also}
@@ -769,7 +769,7 @@ Saves the contents of the control in a text file.
 
 \wxheading{Return value}
 
-{\tt TRUE} if the operation was successful, {\tt FALSE} otherwise.
+{\tt true} if the operation was successful, {\tt false} otherwise.
 
 \membersection{wxTextCtrl::SetDefaultStyle}\label{wxtextctrlsetdefaultstyle}
 
@@ -794,7 +794,7 @@ wouldn't change it at all).
 
 \wxheading{Return value}
 
-{\tt TRUE} on success, {\tt FALSE} if an error occured - may also mean that
+{\tt true} on success, {\tt false} if an error occured - may also mean that
 the styles are not supported under this platform.
 
 \wxheading{See also}
@@ -809,7 +809,7 @@ Makes the text item editable or read-only, overriding the {\bf wxTE\_READONLY} f
 
 \wxheading{Parameters}
 
-\docparam{editable}{If {\tt TRUE}, the control is editable. If {\tt FALSE}, the control is read-only.}
+\docparam{editable}{If {\tt true}, the control is editable. If {\tt false}, the control is read-only.}
 
 \wxheading{See also}
 
@@ -888,7 +888,7 @@ background colour is not set in {\it style}, the values of\rtfsp
 
 \wxheading{Return value}
 
-{\tt TRUE} on success, {\tt FALSE} if an error occured - may also mean that
+{\tt true} on success, {\tt false} if an error occured - may also mean that
 the styles are not supported under this platform.
 
 \membersection{wxTextCtrl::SetValue}\label{wxtextctrlsetvalue}
@@ -896,7 +896,7 @@ the styles are not supported under this platform.
 \func{virtual void}{SetValue}{\param{const wxString\& }{ value}}
 
 Sets the text value and marks the control as not-modified (which means that 
-\helpref{IsModified}{wxtextctrlismodified} would return {\tt FALSE} immediately
+\helpref{IsModified}{wxtextctrlismodified} would return {\tt false} immediately
 after the call to SetValue).
 
 Note that this function will generate a {\tt wxEVT\_COMMAND\_TEXT\_UPDATED}

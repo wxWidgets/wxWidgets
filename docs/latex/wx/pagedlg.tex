@@ -54,9 +54,9 @@ Returns the \helpref{page setup data}{wxpagesetupdialogdata} associated with the
 
 \constfunc{bool}{Ok}{\void}
 
-Returns TRUE if the print data associated with the dialog data is valid.
-This can return FALSE on Windows if the current printer is not set, for example.
-On all other platforms, it returns TRUE.
+Returns true if the print data associated with the dialog data is valid.
+This can return false on Windows if the current printer is not set, for example.
+On all other platforms, it returns true.
 
 \membersection{wxPageSetupDialog::ShowModal}\label{wxpagesetupdialogshowmodal}
 
@@ -140,44 +140,44 @@ Enables or disables the {\bf Printer} button, which invokes a printer setup dial
 
 \constfunc{bool}{GetDefaultMinMargins}{\void}
 
-Returns TRUE if the page setup dialog will take its minimum margin values from the currently
+Returns true if the page setup dialog will take its minimum margin values from the currently
 selected printer properties. Windows only.
 
 \membersection{wxPageSetupDialogData::GetEnableMargins}\label{wxpagesetupdialogdatagetenablemargins}
 
 \constfunc{bool}{GetEnableMargins}{\void}
 
-Returns TRUE if the margin controls are enabled (Windows only).
+Returns true if the margin controls are enabled (Windows only).
 
 \membersection{wxPageSetupDialogData::GetEnableOrientation}\label{wxpagesetupdialogdatagetenableorientation}
 
 \constfunc{bool}{GetEnableOrientation}{\void}
 
-Returns TRUE if the orientation control is enabled (Windows only).
+Returns true if the orientation control is enabled (Windows only).
 
 \membersection{wxPageSetupDialogData::GetEnablePaper}\label{wxpagesetupdialogdatagetenablepaper}
 
 \constfunc{bool}{GetEnablePaper}{\void}
 
-Returns TRUE if the paper size control is enabled (Windows only).
+Returns true if the paper size control is enabled (Windows only).
 
 \membersection{wxPageSetupDialogData::GetEnablePrinter}\label{wxpagesetupdialogdatagetenableprinter}
 
 \constfunc{bool}{GetEnablePrinter}{\void}
 
-Returns TRUE if the printer setup button is enabled.
+Returns true if the printer setup button is enabled.
 
 \membersection{wxPageSetupDialogData::GetEnableHelp}\label{wxpagesetupdialogdatagetenablehelp}
 
 \constfunc{bool}{GetEnableHelp}{\void}
 
-Returns TRUE if the printer setup button is enabled.
+Returns true if the printer setup button is enabled.
 
 \membersection{wxPageSetupDialogData::GetDefaultInfo}\label{wxpagesetupdialogdatagetdefaultinfo}
 
 \constfunc{bool}{GetDefaultInfo}{\void}
 
-Returns TRUE if the dialog will simply return default printer information (such as orientation)
+Returns true if the dialog will simply return default printer information (such as orientation)
 instead of showing a dialog. Windows only.
 
 \membersection{wxPageSetupDialogData::GetMarginTopLeft}\label{wxpagesetupdialogdatagetmargintopleft}
@@ -230,22 +230,22 @@ Returns a reference to the \helpref{print data}{wxprintdata} associated with thi
 
 \constfunc{bool}{Ok}{\void}
 
-Returns TRUE if the print data associated with the dialog data is valid.
-This can return FALSE on Windows if the current printer is not set, for example.
-On all other platforms, it returns TRUE.
+Returns true if the print data associated with the dialog data is valid.
+This can return false on Windows if the current printer is not set, for example.
+On all other platforms, it returns true.
 
 \membersection{wxPageSetupDialogData::SetDefaultInfo}\label{wxpagesetupdialogdatasetdefaultinfo}
 
 \func{void}{SetDefaultInfo}{\param{bool}{ flag}}
 
-Pass TRUE if the dialog will simply return default printer information (such as orientation)
+Pass true if the dialog will simply return default printer information (such as orientation)
 instead of showing a dialog. Windows only.
 
 \membersection{wxPageSetupDialogData::SetDefaultMinMargins}\label{wxpagesetupdialogdatasetdefaultminmargins}
 
 \func{void}{SetDefaultMinMargins}{\param{bool}{ flag}}
 
-Pass TRUE if the page setup dialog will take its minimum margin values from the currently
+Pass true if the page setup dialog will take its minimum margin values from the currently
 selected printer properties. Windows only. Units are in millimetres
 
 \membersection{wxPageSetupDialogData::SetMarginTopLeft}\label{wxpagesetupdialogdatasetmargintopleft}

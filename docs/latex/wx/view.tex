@@ -70,9 +70,9 @@ This function calls wxView::OnActivateView.
 
 \membersection{wxView::Close}
 
-\func{virtual bool}{Close}{\param{bool}{ deleteWindow = TRUE}}
+\func{virtual bool}{Close}{\param{bool}{ deleteWindow = true}}
 
-Closes the view by calling OnClose. If {\it deleteWindow} is TRUE, this function should
+Closes the view by calling OnClose. If {\it deleteWindow} is true, this function should
 delete the window associated with the view.
 
 \membersection{wxView::GetDocument}
@@ -126,7 +126,7 @@ to close the associated document. Does not delete the view. The application
 may wish to do some cleaning up operations in this function, {\it if} a
 call to wxDocument::Close succeeded. For example, if your application's
 all share the same window, you need to disassociate the window from the view
-and perhaps clear the window. If {\it deleteWindow} is TRUE, delete the
+and perhaps clear the window. If {\it deleteWindow} is true, delete the
 frame associated with the view.
 
 \membersection{wxView::OnClosingDocument}\label{wxviewonclosingdocument}
@@ -146,7 +146,7 @@ wxView::OnCreate. In its OnCreate member function, the wxView can create a wxDoc
 or a derived class. This wxDocChildFrame provides user interface
 elements to view and/or edit the contents of the wxDocument.
 
-By default, simply returns TRUE. If the function returns FALSE, the
+By default, simply returns true. If the function returns false, the
 view will be deleted.
 
 \membersection{wxView::OnCreatePrintout}

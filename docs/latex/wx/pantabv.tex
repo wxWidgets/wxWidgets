@@ -36,7 +36,7 @@ will ensure that the tab background matches the dialog background.}
 \func{void}{\destruct{wxPanelTabView}}{\void}
 
 Destructor. This destructor deletes all the panels associated with the view.
-If you do not wish this to happen, call ClearWindows with argument FALSE before the
+If you do not wish this to happen, call ClearWindows with argument false before the
 view is likely to be destroyed. This will clear the list of windows, without deleting them.
 
 \membersection{wxPanelTabView::AddTabWindow}\label{wxpaneltabviewaddtabwindow}
@@ -48,9 +48,9 @@ is selected or deselected.
 
 \membersection{wxPanelTabView::ClearWindows}
 
-\func{void}{ClearWindows}{\param{bool}{ deleteWindows = TRUE}}
+\func{void}{ClearWindows}{\param{bool}{ deleteWindows = true}}
 
-Removes the child windows from the view. If {\it deleteWindows} is TRUE, the windows will be deleted.
+Removes the child windows from the view. If {\it deleteWindows} is true, the windows will be deleted.
 
 \membersection{wxPanelTabView::GetCurrentWindow}
 

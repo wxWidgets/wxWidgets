@@ -81,10 +81,10 @@ and forth without loss in that respect.
 
 Creates an image with the given width and height.
 
-\func{}{wxImage}{\param{int}{ width}, \param{int}{ height}, \param{unsigned char*}{ data}, \param{bool}{ static\_data=FALSE}}
+\func{}{wxImage}{\param{int}{ width}, \param{int}{ height}, \param{unsigned char*}{ data}, \param{bool}{ static\_data=false}}
 
 Creates an image from given data with the given width and height. If 
-{\it static\_data} is TRUE, then wxImage will not delete the actual
+{\it static\_data} is true, then wxImage will not delete the actual
 image data in its destructor, otherwise it will free it by calling
 {\it free()}.
 
@@ -199,7 +199,7 @@ of a given handler class in an application session.}
 
 \func{bool}{CanRead}{\param{const wxString\&}{ filename}}
 
-returns TRUE if the current image handlers can read this file
+returns true if the current image handlers can read this file
 
 \pythonnote{In wxPython this static method is named {\tt wxImage\_AddHandler}.}
 \membersection{wxImage::CleanUpHandlers}
@@ -271,7 +271,7 @@ Creates a fresh image.
 
 \wxheading{Return value}
 
-TRUE if the call succeeded, FALSE otherwise.
+true if the call succeeded, false otherwise.
 
 \membersection{wxImage::Destroy}\label{wximagedestroy}
 
@@ -296,7 +296,7 @@ order) by 1 until an unused colour is found or the colour space exhausted.
 
 \wxheading{Return value}
 
-Returns FALSE if there is no unused colour left, TRUE on success.
+Returns false if there is no unused colour left, true on success.
 
 \wxheading{Notes}
 
@@ -467,7 +467,7 @@ Gets the width of the image in pixels.
 
 \constfunc{bool}{HasMask}{\void}
 
-Returns TRUE if there is a mask active, FALSE otherwise.
+Returns true if there is a mask active, false otherwise.
 
 \membersection{wxImage::GetOption}\label{wximagegetoption}
 
@@ -500,7 +500,7 @@ Gets a user-defined option as an integer. The function is case-insensitive to {\
 
 \constfunc{bool}{HasOption}{\param{const wxString\&}{ name}}
 
-Returns TRUE if the given option is present. The function is case-insensitive to {\it name}.
+Returns true if the given option is present. The function is case-insensitive to {\it name}.
 
 \wxheading{See also}
 
@@ -596,8 +596,8 @@ hotspot for loaded cursor file:
 
 \wxheading{Return value}
 
-TRUE if the operation succeeded, FALSE otherwise. If the optional index parameter is out of range,
-FALSE is returned and a call to wxLogError() takes place.
+true if the operation succeeded, false otherwise. If the optional index parameter is out of range,
+false is returned and a call to wxLogError() takes place.
 
 \wxheading{See also}
 
@@ -625,7 +625,7 @@ mimetype from a file}
 
 \constfunc{bool}{Ok}{\void}
 
-Returns TRUE if image data is present.
+Returns true if image data is present.
 
 \membersection{wxImage::RemoveHandler}
 
@@ -638,7 +638,7 @@ is not deleted.
 
 \wxheading{Return value}
 
-TRUE if the handler was found and removed, FALSE otherwise.
+true if the handler was found and removed, false otherwise.
 
 \wxheading{See also}
 
@@ -689,7 +689,7 @@ Saves an image in the given stream.
 
 \wxheading{Return value}
 
-TRUE if the operation succeeded, FALSE otherwise.
+true if the operation succeeded, false otherwise.
 
 \wxheading{Remarks}
 
@@ -727,7 +727,7 @@ mimetype to the named file}
 
 \membersection{wxImage::Mirror}\label{wximagemirror}
 
-\constfunc{wxImage}{Mirror}{\param{bool}{ horizontally = TRUE}}
+\constfunc{wxImage}{Mirror}{\param{bool}{ horizontally = true}}
 
 Returns a mirrored copy of the image. The parameter {\it horizontally}
 indicates the orientation.
@@ -755,9 +755,9 @@ Returns the (modified) image itself.
 \membersection{wxImage::Rotate}\label{wximagerotate}
 
 \func{wxImage}{Rotate}{\param{double}{ angle}, \param{const wxPoint\& }{rotationCentre},
- \param{bool}{ interpolating = TRUE}, \param{wxPoint*}{ offsetAfterRotation = NULL}}
+ \param{bool}{ interpolating = true}, \param{wxPoint*}{ offsetAfterRotation = NULL}}
 
-Rotates the image about the given point, by {\it angle} radians. Passing TRUE
+Rotates the image about the given point, by {\it angle} radians. Passing true
 to {\it interpolating} results in better image quality, but is slower. If the
 image has a mask, then the mask colour is used for the uncovered pixels in the
 rotated image background. Else, black (rgb 0, 0, 0) will be used.
@@ -766,7 +766,7 @@ Returns the rotated image, leaving this image intact.
 
 \membersection{wxImage::Rotate90}\label{wximagerotate90}
 
-\constfunc{wxImage}{Rotate90}{\param{bool}{ clockwise = TRUE}}
+\constfunc{wxImage}{Rotate90}{\param{bool}{ clockwise = true}}
 
 Returns a copy of the image rotated 90 degrees in the direction
 indicated by {\it clockwise}.
@@ -822,7 +822,7 @@ Do not pass to this function a pointer obtained through
 
 \membersection{wxImage::SetMask}\label{wximagesetmask}
 
-\func{void}{SetMask}{\param{bool}{ hasMask = TRUE}}
+\func{void}{SetMask}{\param{bool}{ hasMask = true}}
 
 Specifies whether there is a mask or not. The area of the mask is determined by the current mask colour.
 
@@ -850,8 +850,8 @@ in {\it mask} has given RGB value.
 
 \wxheading{Return value}
 
-Returns FALSE if {\it mask} does not have same dimensions as the image or if
-there is no unused colour left. Returns TRUE if the mask was successfully 
+Returns false if {\it mask} does not have same dimensions as the image or if
+there is no unused colour left. Returns true if the mask was successfully 
 applied.
 
 \wxheading{Notes}
@@ -922,7 +922,7 @@ equal (a fast test).
 
 \wxheading{Return value}
 
-Returns TRUE if the images were effectively equal, FALSE otherwise.
+Returns true if the images were effectively equal, false otherwise.
 
 \membersection{wxImage::operator $!=$}
 
@@ -937,7 +937,7 @@ unequal (a fast test).
 
 \wxheading{Return value}
 
-Returns TRUE if the images were unequal, FALSE otherwise.
+Returns true if the images were unequal, false otherwise.
 
 \section{\class{wxImageHandler}}\label{wximagehandler}
 
@@ -1024,7 +1024,7 @@ Gets the MIME type associated with this handler.
 
 \membersection{wxImageHandler::LoadFile}\label{wximagehandlerloadfile}
 
-\func{bool}{LoadFile}{\param{wxImage* }{image}, \param{wxInputStream\&}{ stream}, \param{bool}{ verbose=TRUE}, \param{int}{ index=0}}
+\func{bool}{LoadFile}{\param{wxImage* }{image}, \param{wxInputStream\&}{ stream}, \param{bool}{ verbose=true}, \param{int}{ index=0}}
 
 Loads a image from a stream, putting the resulting data into {\it image}. If the image file contains
 more than one image and the image handler is capable of retrieving these individually, {\it index}
@@ -1036,13 +1036,13 @@ indicates which image to read from the stream.
 
 \docparam{stream}{Opened input stream for reading image data.}
 
-\docparam{verbose}{If set to TRUE, errors reported by the image handler will produce wxLogMessages.}
+\docparam{verbose}{If set to true, errors reported by the image handler will produce wxLogMessages.}
 
 \docparam{index}{The index of the image in the file (starting from zero).}
 
 \wxheading{Return value}
 
-TRUE if the operation succeeded, FALSE otherwise.
+true if the operation succeeded, false otherwise.
 
 \wxheading{See also}
 
@@ -1064,7 +1064,7 @@ Saves a image in the output stream.
 
 \wxheading{Return value}
 
-TRUE if the operation succeeded, FALSE otherwise.
+true if the operation succeeded, false otherwise.
 
 \wxheading{See also}
 

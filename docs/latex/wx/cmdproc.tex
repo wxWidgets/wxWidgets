@@ -38,7 +38,7 @@ Destructor.
 
 \func{virtual bool}{CanUndo}{\void}
 
-Returns TRUE if the currently-active command can be undone, FALSE otherwise.
+Returns true if the currently-active command can be undone, false otherwise.
 
 \membersection{wxCommandProcessor::ClearCommands}
 
@@ -132,7 +132,7 @@ Sets the string that will be appended to the Undo menu item.
 
 \membersection{wxCommandProcessor::Submit}
 
-\func{virtual bool}{Submit}{\param{wxCommand *}{command}, \param{bool}{ storeIt = TRUE}}
+\func{virtual bool}{Submit}{\param{wxCommand *}{command}, \param{bool}{ storeIt = true}}
 
 Submits a new command to the command processor. The command processor
 calls wxCommand::Do to execute the command; if it succeeds, the command

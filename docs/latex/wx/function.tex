@@ -305,9 +305,9 @@ you can initialize wxWindows from an Microsoft Foundation Classes application us
 this function.
 
 \func{void}{wxEntry}{\param{HANDLE}{ hInstance}, \param{HANDLE}{ hPrevInstance},
- \param{const wxString\& }{commandLine}, \param{int}{ cmdShow}, \param{bool}{ enterLoop = TRUE}}
+ \param{const wxString\& }{commandLine}, \param{int}{ cmdShow}, \param{bool}{ enterLoop = true}}
 
-wxWindows initialization under Windows (non-DLL). If {\it enterLoop} is FALSE, the
+wxWindows initialization under Windows (non-DLL). If {\it enterLoop} is false, the
 function will return immediately after calling wxApp::OnInit. Otherwise, the wxWindows
 message loop will be entered.
 
@@ -342,14 +342,14 @@ int CTheApp::ExitInstance()
 
 \membersection{::wxHandleFatalExceptions}\label{wxhandlefatalexceptions}
 
-\func{bool}{wxHandleFatalExceptions}{\param{bool}{ doIt = TRUE}}
+\func{bool}{wxHandleFatalExceptions}{\param{bool}{ doIt = true}}
 
-If {\it doIt} is TRUE, the fatal exceptions (also known as general protection
+If {\it doIt} is true, the fatal exceptions (also known as general protection
 faults under Windows or segmentation violations in the Unix world) will be
 caught and passed to \helpref{wxApp::OnFatalException}{wxapponfatalexception}.
 By default, i.e. before this function is called, they will be handled in the
 normal way which usually just means that the application will be terminated.
-Calling wxHandleFatalExceptions() with {\it doIt} equal to FALSE will restore
+Calling wxHandleFatalExceptions() with {\it doIt} equal to false will restore
 this default behaviour.
 
 \membersection{::wxInitAllImageHandlers}\label{wxinitallimagehandlers}
@@ -375,7 +375,7 @@ This function is used in wxBase only and only if you don't create
 \helpref{wxApp}{wxapp} object at all. In this case you must call it from your
 {\tt main()} function before calling any other wxWindows functions.
 
-If the function returns {\tt FALSE} the initialization could not be performed,
+If the function returns {\tt false} the initialization could not be performed,
 in this case the library cannot be used and
 \helpref{wxUninitialize}{wxuninitialize} shouldn't be called neither.
 
@@ -390,7 +390,7 @@ call to this function.
 \membersection{::wxSafeYield}\label{wxsafeyield}
 
 \func{bool}{wxSafeYield}{\param{wxWindow*}{ win = NULL}, \param{bool}{
-    onlyIfNeeded = FALSE}}
+    onlyIfNeeded = false}}
 
 This function is similar to wxYield, except that it disables the user input to
 all program windows before calling wxYield and re-enables it again
@@ -485,7 +485,7 @@ $-1$ if the process couldn't be started and typically 0 if the process
 terminated successfully. Also, while waiting for the process to
 terminate, wxExecute will call \helpref{wxYield}{wxyield}. The caller
 should ensure that this can cause no recursion, in the simplest case by
-calling \helpref{wxEnableTopLevelWindows(FALSE)}{wxenabletoplevelwindows}.
+calling \helpref{wxEnableTopLevelWindows(false)}{wxenabletoplevelwindows}.
 
 For asynchronous execution, however, the return value is the process id and
 zero value indicates that the command could not be executed. As an added
@@ -647,7 +647,7 @@ and that this function is only implemented under Unix and Win32.
 
 \wxheading{Returns}
 
-{\tt TRUE} on success, {\tt FALSE} if an error occured.
+{\tt true} on success, {\tt false} if an error occured.
 
 \wxheading{Include files}
 
@@ -722,7 +722,7 @@ threads.
 
 \func{bool}{wxDirExists}{\param{const wxString\& }{dirname}}
 
-Returns TRUE if the directory exists.
+Returns true if the directory exists.
 
 \membersection{::wxDos2UnixFilename}\label{wxdos2unixfilename}
 
@@ -735,7 +735,7 @@ slashes.
 
 \func{bool}{wxFileExists}{\param{const wxString\& }{filename}}
 
-Returns TRUE if the file exists. It also returns TRUE if the file is
+Returns true if the file exists. It also returns true if the file is
 a directory.
 
 \membersection{::wxFileModificationTime}\label{wxfilemodificationtime}
@@ -799,7 +799,7 @@ information is not needed.
 
 \wxheading{Returns}
 
-{\tt TRUE} on success, {\tt FALSE} if an error occured (for example, the
+{\tt true} on success, {\tt false} if an error occured (for example, the
 directory doesn't exist).
 
 \wxheading{Portability}
@@ -819,7 +819,7 @@ Returns the Windows directory under Windows; on other platforms returns the empt
 
 \func{bool}{wxIsAbsolutePath}{\param{const wxString\& }{filename}}
 
-Returns TRUE if the argument is an absolute filename, i.e. with a slash
+Returns true if the argument is an absolute filename, i.e. with a slash
 or drive name at the beginning.
 
 \membersection{::wxPathOnly}\label{wxpathonly}
@@ -841,15 +841,15 @@ slashes with backslashes.
 \param{const wxString\& }{file3}}
 
 Concatenates {\it file1} and {\it file2} to {\it file3}, returning
-TRUE if successful.
+true if successful.
 
 \membersection{::wxCopyFile}\label{wxcopyfile}
 
-\func{bool}{wxCopyFile}{\param{const wxString\& }{file1}, \param{const wxString\& }{file2}, \param{bool }{overwrite = TRUE}}
+\func{bool}{wxCopyFile}{\param{const wxString\& }{file1}, \param{const wxString\& }{file2}, \param{bool }{overwrite = true}}
 
-Copies {\it file1} to {\it file2}, returning TRUE if successful. If
-{\it overwrite} parameter is TRUE (default), the destination file is overwritten
-if it exists, but if {\it overwrite} is FALSE, the functions fails in this
+Copies {\it file1} to {\it file2}, returning true if successful. If
+{\it overwrite} parameter is true (default), the destination file is overwritten
+if it exists, but if {\it overwrite} is false, the functions fails in this
 case.
 
 \membersection{::wxGetCwd}\label{wxgetcwd}
@@ -894,21 +894,21 @@ instead.
 
 \func{bool}{wxIsWild}{\param{const wxString\& }{pattern}}
 
-Returns TRUE if the pattern contains wildcards. See \helpref{wxMatchWild}{wxmatchwild}.
+Returns true if the pattern contains wildcards. See \helpref{wxMatchWild}{wxmatchwild}.
 
 \membersection{::wxMatchWild}\label{wxmatchwild}
 
 \func{bool}{wxMatchWild}{\param{const wxString\& }{pattern}, \param{const wxString\& }{text}, \param{bool}{ dot\_special}}
 
-Returns TRUE if the {\it pattern}\/ matches the {\it text}\/; if {\it
-dot\_special}\/ is TRUE, filenames beginning with a dot are not matched
+Returns true if the {\it pattern}\/ matches the {\it text}\/; if {\it
+dot\_special}\/ is true, filenames beginning with a dot are not matched
 with wildcard characters. See \helpref{wxIsWild}{wxiswild}.
 
 \membersection{::wxMkdir}\label{wxmkdir}
 
 \func{bool}{wxMkdir}{\param{const wxString\& }{dir}, \param{int }{perm = 0777}}
 
-Makes the directory {\it dir}, returning TRUE if successful.
+Makes the directory {\it dir}, returning true if successful.
 
 {\it perm} is the access mask for the directory for the systems on which it is
 supported (Unix) and doesn't have effect for the other ones.
@@ -917,19 +917,19 @@ supported (Unix) and doesn't have effect for the other ones.
 
 \func{bool}{wxRemoveFile}{\param{const wxString\& }{file}}
 
-Removes {\it file}, returning TRUE if successful.
+Removes {\it file}, returning true if successful.
 
 \membersection{::wxRenameFile}\label{wxrenamefile}
 
 \func{bool}{wxRenameFile}{\param{const wxString\& }{file1}, \param{const wxString\& }{file2}}
 
-Renames {\it file1} to {\it file2}, returning TRUE if successful.
+Renames {\it file1} to {\it file2}, returning true if successful.
 
 \membersection{::wxRmdir}\label{wxrmdir}
 
 \func{bool}{wxRmdir}{\param{const wxString\& }{dir}, \param{int}{ flags=0}}
 
-Removes the directory {\it dir}, returning TRUE if successful. Does not work under VMS.
+Removes the directory {\it dir}, returning true if successful. Does not work under VMS.
 
 The {\it flags} parameter is reserved for future use.
 
@@ -937,7 +937,7 @@ The {\it flags} parameter is reserved for future use.
 
 \func{bool}{wxSetWorkingDirectory}{\param{const wxString\& }{dir}}
 
-Sets the current working directory, returning TRUE if the operation succeeded.
+Sets the current working directory, returning true if the operation succeeded.
 Under MS Windows, the current drive is also changed if {\it dir} contains a drive specification.
 
 \membersection{::wxSplitPath}\label{wxsplitfunction}
@@ -1026,7 +1026,7 @@ Copies the user's email address into the supplied buffer, by
 concatenating the values returned by \helpref{wxGetFullHostName}{wxgetfullhostname}\rtfsp
 and \helpref{wxGetUserId}{wxgetuserid}.
 
-Returns TRUE if successful, FALSE otherwise.
+Returns true if successful, false otherwise.
 
 \wxheading{Include files}
 
@@ -1061,8 +1061,8 @@ variable SYSTEM\_NAME; if this is not found, the entry {\bf HostName}\rtfsp
 in the {\bf wxWindows} section of the WIN.INI file is tried.
 
 The first variant of this function returns the hostname if successful or an
-empty string otherwise. The second (deprecated) function returns TRUE
-if successful, FALSE otherwise.
+empty string otherwise. The second (deprecated) function returns true
+if successful, false otherwise.
 
 \wxheading{See also}
 
@@ -1086,8 +1086,8 @@ variables USER and LOGNAME; if neither of these is found, the entry {\bf UserId}
 in the {\bf wxWindows} section of the WIN.INI file is tried.
 
 The first variant of this function returns the login name if successful or an
-empty string otherwise. The second (deprecated) function returns TRUE
-if successful, FALSE otherwise.
+empty string otherwise. The second (deprecated) function returns true
+if successful, false otherwise.
 
 \wxheading{See also}
 
@@ -1167,8 +1167,8 @@ is running, the entry {\bf Current} in the section {\bf User} of
 the PENWIN.INI file is used.
 
 The first variant of this function returns the user name if successful or an
-empty string otherwise. The second (deprecated) function returns {\tt TRUE}
-if successful, {\tt FALSE} otherwise.
+empty string otherwise. The second (deprecated) function returns {\tt true}
+if successful, {\tt false} otherwise.
 
 \wxheading{See also}
 
@@ -1193,8 +1193,8 @@ This function is deprecated, use \helpref{wxString}{wxstring} class instead.
 
 \func{bool}{wxIsEmpty}{\param{const char *}{ p}}
 
-Returns {\tt TRUE} if the pointer is either {\tt NULL} or points to an empty
-string, {\tt FALSE} otherwise.
+Returns {\tt true} if the pointer is either {\tt NULL} or points to an empty
+string, {\tt false} otherwise.
 
 \membersection{::wxStricmp}\label{wxstricmp}
 
@@ -1209,12 +1209,12 @@ case-sensitive comparison.
 \membersection{::wxStringMatch}\label{wxstringmatch}
 
 \func{bool}{wxStringMatch}{\param{const wxString\& }{s1}, \param{const wxString\& }{s2},\\
-  \param{bool}{ subString = TRUE}, \param{bool}{ exact = FALSE}}
+  \param{bool}{ subString = true}, \param{bool}{ exact = false}}
 
 {\bf NB:} This function is obsolete, use \helpref{wxString::Find}{wxstringfind} instead.
 
-Returns {\tt TRUE} if the substring {\it s1} is found within {\it s2},
-ignoring case if {\it exact} is FALSE. If {\it subString} is {\tt FALSE},
+Returns {\tt true} if the substring {\it s1} is found within {\it s2},
+ignoring case if {\it exact} is false. If {\it subString} is {\tt false},
 no substring matching is done.
 
 \membersection{::wxStringEq}\label{wxstringeq}
@@ -1479,7 +1479,7 @@ is valid) if the dialog was cancelled.
  \param{const wxArrayString\& }{aChoices},\\
  \param{wxWindow *}{parent = NULL},\\
  \param{int}{ x = -1}, \param{int}{ y = -1},\\
- \param{bool}{ centre = TRUE},\\
+ \param{bool}{ centre = true},\\
  \param{int }{width=150}, \param{int }{height=200}}
 
 \func{size\_t}{wxGetMultipleChoices}{\\
@@ -1489,7 +1489,7 @@ is valid) if the dialog was cancelled.
  \param{int}{ n}, \param{const wxString\& }{choices[]},\\
  \param{wxWindow *}{parent = NULL},\\
  \param{int}{ x = -1}, \param{int}{ y = -1},\\
- \param{bool}{ centre = TRUE},\\
+ \param{bool}{ centre = true},\\
  \param{int }{width=150}, \param{int }{height=200}}
 
 Pops up a dialog box containing a message, OK/Cancel buttons and a
@@ -1502,8 +1502,8 @@ You may pass the list of strings to choose from either using {\it choices}
 which is an array of {\it n} strings for the listbox or by using a single
 {\it aChoices} parameter of type \helpref{wxArrayString}{wxarraystring}.
 
-If {\it centre} is TRUE, the message text (which may include new line
-characters) is centred; if FALSE, the message is left-justified.
+If {\it centre} is true, the message text (which may include new line
+characters) is centred; if false, the message is left-justified.
 
 \wxheading{Include files}
 
@@ -1557,14 +1557,14 @@ to be used for entering passwords as the function name implies.
 
 \func{wxString}{wxGetTextFromUser}{\param{const wxString\& }{message}, \param{const wxString\& }{caption = ``Input text"},\\
  \param{const wxString\& }{default\_value = ``"}, \param{wxWindow *}{parent = NULL},\\
- \param{int}{ x = -1}, \param{int}{ y = -1}, \param{bool}{ centre = TRUE}}
+ \param{int}{ x = -1}, \param{int}{ y = -1}, \param{bool}{ centre = true}}
 
 Pop up a dialog box with title set to {\it caption}, {\it message}, and a
 \rtfsp{\it default\_value}.  The user may type in text and press OK to return this text,
 or press Cancel to return the empty string.
 
-If {\it centre} is TRUE, the message text (which may include new line characters)
-is centred; if FALSE, the message is left-justified.
+If {\it centre} is true, the message text (which may include new line characters)
+is centred; if false, the message is left-justified.
 
 \wxheading{Include files}
 
@@ -1575,7 +1575,7 @@ is centred; if FALSE, the message is left-justified.
 \func{int}{wxGetMultipleChoice}{\param{const wxString\& }{message}, \param{const wxString\& }{caption}, \param{int}{ n}, \param{const wxString\& }{choices[]},\\
  \param{int }{nsel}, \param{int *}{selection},
  \param{wxWindow *}{parent = NULL}, \param{int}{ x = -1}, \param{int}{ y = -1},\\
- \param{bool}{ centre = TRUE}, \param{int }{width=150}, \param{int }{height=200}}
+ \param{bool}{ centre = true}, \param{int }{width=150}, \param{int }{height=200}}
 
 Pops up a dialog box containing a message, OK/Cancel buttons and a multiple-selection
 listbox. The user may choose one or more item(s) and press OK or Cancel.
@@ -1589,8 +1589,8 @@ If Cancel is pressed, -1 is returned.
 
 {\it choices} is an array of {\it n} strings for the listbox.
 
-If {\it centre} is TRUE, the message text (which may include new line characters)
-is centred; if FALSE, the message is left-justified.
+If {\it centre} is true, the message text (which may include new line characters)
+is centred; if false, the message is left-justified.
 
 \wxheading{Include files}
 
@@ -1603,7 +1603,7 @@ is centred; if FALSE, the message is left-justified.
  \param{const wxArrayString\& }{aChoices},\\
  \param{wxWindow *}{parent = NULL},\\
  \param{int}{ x = -1}, \param{int}{ y = -1},\\
- \param{bool}{ centre = TRUE},\\
+ \param{bool}{ centre = true},\\
  \param{int }{width=150}, \param{int }{height=200}}
 
 \func{wxString}{wxGetSingleChoice}{\param{const wxString\& }{message},\\
@@ -1611,7 +1611,7 @@ is centred; if FALSE, the message is left-justified.
  \param{int}{ n}, \param{const wxString\& }{choices[]},\\
  \param{wxWindow *}{parent = NULL},\\
  \param{int}{ x = -1}, \param{int}{ y = -1},\\
- \param{bool}{ centre = TRUE},\\
+ \param{bool}{ centre = true},\\
  \param{int }{width=150}, \param{int }{height=200}}
 
 Pops up a dialog box containing a message, OK/Cancel buttons and a
@@ -1624,8 +1624,8 @@ You may pass the list of strings to choose from either using {\it choices}
 which is an array of {\it n} strings for the listbox or by using a single
 {\it aChoices} parameter of type \helpref{wxArrayString}{wxarraystring}.
 
-If {\it centre} is TRUE, the message text (which may include new line
-characters) is centred; if FALSE, the message is left-justified.
+If {\it centre} is true, the message text (which may include new line
+characters) is centred; if false, the message is left-justified.
 
 \wxheading{Include files}
 
@@ -1640,13 +1640,13 @@ and {\tt choices}.}
  \param{const wxString\& }{caption},\\
  \param{const wxArrayString\& }{aChoices},\\
  \param{wxWindow *}{parent = NULL}, \param{int}{ x = -1}, \param{int}{ y = -1},\\
- \param{bool}{ centre = TRUE}, \param{int }{width=150}, \param{int }{height=200}}
+ \param{bool}{ centre = true}, \param{int }{width=150}, \param{int }{height=200}}
 
 \func{int}{wxGetSingleChoiceIndex}{\param{const wxString\& }{message},\\
  \param{const wxString\& }{caption},\\
  \param{int}{ n}, \param{const wxString\& }{choices[]},\\
  \param{wxWindow *}{parent = NULL}, \param{int}{ x = -1}, \param{int}{ y = -1},\\
- \param{bool}{ centre = TRUE}, \param{int }{width=150}, \param{int }{height=200}}
+ \param{bool}{ centre = true}, \param{int }{width=150}, \param{int }{height=200}}
 
 As {\bf wxGetSingleChoice} but returns the index representing the selected
 string. If the user pressed cancel, -1 is returned.
@@ -1666,7 +1666,7 @@ and {\tt choices}.}
  \param{const wxString\& }{client\_data[]},\\
  \param{wxWindow *}{parent = NULL},\\
  \param{int}{ x = -1}, \param{int}{ y = -1},\\
- \param{bool}{ centre = TRUE}, \param{int }{width=150}, \param{int }{height=200}}
+ \param{bool}{ centre = true}, \param{int }{width=150}, \param{int }{height=200}}
 
 \func{wxString}{wxGetSingleChoiceData}{\param{const wxString\& }{message},\\
  \param{const wxString\& }{caption},\\
@@ -1674,7 +1674,7 @@ and {\tt choices}.}
  \param{const wxString\& }{client\_data[]},\\
  \param{wxWindow *}{parent = NULL},\\
  \param{int}{ x = -1}, \param{int}{ y = -1},\\
- \param{bool}{ centre = TRUE}, \param{int }{width=150}, \param{int }{height=200}}
+ \param{bool}{ centre = true}, \param{int }{width=150}, \param{int }{height=200}}
 
 As {\bf wxGetSingleChoice} but takes an array of client data pointers
 corresponding to the strings, and returns one of these pointers or NULL if
@@ -1693,7 +1693,7 @@ same length as the choices array.}
 
 \func{bool}{wxIsBusy}{\void}
 
-Returns TRUE if between two \helpref{wxBeginBusyCursor}{wxbeginbusycursor} and\rtfsp
+Returns true if between two \helpref{wxBeginBusyCursor}{wxbeginbusycursor} and\rtfsp
 \helpref{wxEndBusyCursor}{wxendbusycursor} calls.
 
 See also \helpref{wxBusyCursor}{wxbusycursor}.
@@ -1753,7 +1753,7 @@ The symbols are not shown when the generic function is used.
 
 \func{bool}{wxShowTip}{\param{wxWindow *}{parent},
  \param{wxTipProvider *}{tipProvider},
- \param{bool }{showAtStartup = TRUE}}
+ \param{bool }{showAtStartup = true}}
 
 This function shows a "startup tip" to the user. The return value is the
 state of the ``Show tips at startup'' checkbox.
@@ -1763,7 +1763,7 @@ state of the ``Show tips at startup'' checkbox.
 \docparam{tipProvider}{An object which is used to get the text of the tips.
 It may be created with the \helpref{wxCreateFileTipProvider}{wxcreatefiletipprovider} function.}
 
-\docparam{showAtStartup}{Should be TRUE if startup tips are shown, FALSE
+\docparam{showAtStartup}{Should be true if startup tips are shown, false
 otherwise. This is used as the initial value for "Show tips at startup"
 checkbox which is shown in the tips dialog.}
 
@@ -1816,7 +1816,7 @@ provide this info for all window managers, etc.
 
 \func{bool}{wxColourDisplay}{\void}
 
-Returns TRUE if the display is colour, FALSE otherwise.
+Returns true if the display is colour, false otherwise.
 
 \membersection{::wxDisplayDepth}\label{wxdisplaydepth}
 
@@ -2030,7 +2030,7 @@ class instead.
 
 \func{bool}{wxClipboardOpen}{\void}
 
-Returns TRUE if this application has already opened the clipboard.
+Returns true if this application has already opened the clipboard.
 
 \membersection{::wxCloseClipboard}\label{wxcloseclipboard}
 
@@ -2090,7 +2090,7 @@ length {\it maxCount}. {\it dataFormat} must not specify a predefined clipboard 
 
 \func{bool}{wxIsClipboardFormatAvailable}{\param{int}{dataFormat}}
 
-Returns TRUE if the given data format is available on the clipboard.
+Returns true if the given data format is available on the clipboard.
 
 \membersection{::wxOpenClipboard}\label{wxopenclipboard}
 
@@ -2220,7 +2220,7 @@ See also \helpref{wxDDEServer}{wxddeserver}, \helpref{wxDDEClient}{wxddeclient},
 
 \membersection{::wxEnableTopLevelWindows}\label{wxenabletoplevelwindows}
 
-\func{void}{wxEnableTopLevelWindow}{\param{bool}{ enable = TRUE}}
+\func{void}{wxEnableTopLevelWindow}{\param{bool}{ enable = true}}
 
 This function enables or disables all top level windows. It is used by
 \helpref{::wxSafeYield}{wxsafeyield}.
@@ -3388,11 +3388,11 @@ should be used instead. For retrieving the current time, you may also use
 
 \membersection{::wxGetElapsedTime}\label{wxgetelapsedtime}
 
-\func{long}{wxGetElapsedTime}{\param{bool}{ resetTimer = TRUE}}
+\func{long}{wxGetElapsedTime}{\param{bool}{ resetTimer = true}}
 
 Gets the time in milliseconds since the last \helpref{::wxStartTimer}{wxstarttimer}.
 
-If {\it resetTimer} is TRUE (the default), the timer is reset to zero
+If {\it resetTimer} is true (the default), the timer is reset to zero
 by this call.
 
 See also \helpref{wxTimer}{wxtimer}.
@@ -3521,7 +3521,7 @@ the global application object exists.
 
 \func{}{wxASSERT}{\param{}{condition}}
 
-Assert macro. An error message will be generated if the condition is FALSE in
+Assert macro. An error message will be generated if the condition is false in
 debug mode, but nothing will be done in the release build.
 
 Please note that the condition in wxASSERT() should have no side effects
@@ -3554,7 +3554,7 @@ You may use it like this, for example:
 
 \func{}{wxASSERT\_MSG}{\param{}{condition}, \param{}{msg}}
 
-Assert macro with message. An error message will be generated if the condition is FALSE.
+Assert macro with message. An error message will be generated if the condition is false.
 
 \wxheading{See also}
 
@@ -3707,7 +3707,7 @@ Returns the current value of the environment variable {\it var} in {\it value}.
 {\it value} may be {\tt NULL} if you just want to know if the variable exists
 and are not interested in its value.
 
-Returns {\tt TRUE} if the variable exists, {\tt FALSE} otherwise.
+Returns {\tt true} if the variable exists, {\tt false} otherwise.
 
 \membersection{wxSetEnv}\label{wxsetenv}
 
@@ -3716,7 +3716,7 @@ Returns {\tt TRUE} if the variable exists, {\tt FALSE} otherwise.
 Sets the value of the environment variable {\it var} (adding it if necessary)
 to {\it value}.
 
-Returns {\tt TRUE} on success.
+Returns {\tt true} on success.
 
 \membersection{wxUnsetEnv}\label{wxunsetenv}
 
@@ -3726,5 +3726,5 @@ Removes the variable {\it var} from the environment.
 \helpref{wxGetEnv}{wxgetenv} will return {\tt NULL} after the call to this
 function.
 
-Returns {\tt TRUE} on success.
+Returns {\tt true} on success.
 

@@ -57,7 +57,7 @@ Constructor.
 
 \func{virtual bool}{CanOpen}{\param{const wxString\& }{location}}
 
-Returns TRUE if the handler is able to open this file. This function doesn't
+Returns true if the handler is able to open this file. This function doesn't
 check whether the file exists or not, it only checks if it knows the protocol.
 Example:
 
@@ -122,7 +122,7 @@ Works like \helpref{wxFindFirstFile}{wxfindfirstfile}. Returns name of the first
 filename (within filesystem's current path) that matches {\it wildcard}. {\it flags} may be one of
 wxFILE (only files), wxDIR (only directories) or 0 (both).
 
-This method is only called if \helpref{CanOpen}{wxfilesystemhandlercanopen} returns TRUE.
+This method is only called if \helpref{CanOpen}{wxfilesystemhandlercanopen} returns true.
 
 \membersection{wxFileSystemHandler::FindNext}\label{wxfilesystemhandlerfindnext}
 
@@ -130,7 +130,7 @@ This method is only called if \helpref{CanOpen}{wxfilesystemhandlercanopen} retu
 
 Returns next filename that matches parameters passed to \helpref{FindFirst}{wxfilesystemfindfirst}.
 
-This method is only called if \helpref{CanOpen}{wxfilesystemhandlercanopen} returns TRUE and FindFirst
+This method is only called if \helpref{CanOpen}{wxfilesystemhandlercanopen} returns true and FindFirst
 returned a non-empty string.
 
 \membersection{wxFileSystemHandler::OpenFile}\label{wxfilesystemhandleropenfile}

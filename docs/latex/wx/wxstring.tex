@@ -92,7 +92,7 @@ so is the default version of \helpref{IsSameAs}{wxstringissameas}. For case
 insensitive comparisons you should use \helpref{CmpNoCase}{wxstringcmpnocase} or
 give a second parameter to IsSameAs. This last function is may be more
 convenient if only equality of the strings matters because it returns a boolean
-true value if the strings are the same and not 0 (which is usually FALSE in C)
+true value if the strings are the same and not 0 (which is usually false in C)
 as {\tt Cmp()} does.
 
 \helpref{Matches}{wxstringmatches} is a poor man's regular expression matcher:
@@ -149,7 +149,7 @@ functions.
 
 The string provides functions for conversion to signed and unsigned integer and
 floating point numbers. All three functions take a pointer to the variable to
-put the numeric value in and return TRUE if the {\bf entire} string could be
+put the numeric value in and return true if the {\bf entire} string could be
 converted to a number.
 
 \helpref{ToLong}{wxstringtolong}\\
@@ -567,7 +567,7 @@ See also: \helpref{Clear()}{wxstringclear}.
 
 \membersection{wxString::Find}\label{wxstringfind}
 
-\constfunc{int}{Find}{\param{char}{ ch}, \param{bool}{ fromEnd = FALSE}}
+\constfunc{int}{Find}{\param{char}{ ch}, \param{bool}{ fromEnd = false}}
 
 Searches for the given character. Returns the starting index, or -1 if not found.
 
@@ -652,11 +652,11 @@ Same as \helpref{wxString::Find}{wxstringfind}.
 
 Same as \helpref{wxString::Find}{wxstringfind}.
 
-\constfunc{size\_t}{Index}{\param{const char*}{ sz}, \param{bool}{ caseSensitive = TRUE}, \param{bool}{ fromEnd = FALSE}}
+\constfunc{size\_t}{Index}{\param{const char*}{ sz}, \param{bool}{ caseSensitive = true}, \param{bool}{ fromEnd = false}}
 
 Search the element in the array, starting from either side.
 
-If {\it fromEnd} is TRUE, reverse search direction.
+If {\it fromEnd} is true, reverse search direction.
 
 If {\bf caseSensitive}, comparison is case sensitive (the default).
 
@@ -673,46 +673,46 @@ Returns the index of the first item matched, or wxNOT\_FOUND.
 
 \constfunc{bool}{IsAscii}{\void}
 
-Returns TRUE if the string contains only ASCII characters.
+Returns true if the string contains only ASCII characters.
 
 \membersection{wxString::IsEmpty}\label{wxstringisempty}
 
 \constfunc{bool}{IsEmpty}{\void}
 
-Returns TRUE if the string is empty.
+Returns true if the string is empty.
 
 \membersection{wxString::IsNull}\label{wxstringisnull}
 
 \constfunc{bool}{IsNull}{\void}
 
-Returns TRUE if the string is empty (same as \helpref{IsEmpty}{wxstringisempty}).
+Returns true if the string is empty (same as \helpref{IsEmpty}{wxstringisempty}).
 
 \membersection{wxString::IsNumber}\label{wxstringisnumber}
 
 \constfunc{bool}{IsNumber}{\void}
 
-Returns TRUE if the string is an integer (with possible sign).
+Returns true if the string is an integer (with possible sign).
 
 \membersection{wxString::IsSameAs}\label{wxstringissameas}
 
-\constfunc{bool}{IsSameAs}{\param{const char*}{ psz}, \param{bool}{ caseSensitive = TRUE}}
+\constfunc{bool}{IsSameAs}{\param{const char*}{ psz}, \param{bool}{ caseSensitive = true}}
 
 Test for string equality, case-sensitive (default) or not.
 
-caseSensitive is TRUE by default (case matters).
+caseSensitive is true by default (case matters).
 
-Returns TRUE if strings are equal, FALSE otherwise.
+Returns true if strings are equal, false otherwise.
 
 See also \helpref{Cmp}{wxstringcmp}, \helpref{CmpNoCase}{wxstringcmpnocase}, \helpref{IsSameAs}{wxstringissameas2}
 
 \membersection{wxString::IsSameAs}\label{wxstringissameas2}
 
-\constfunc{bool}{IsSameAs}{\param{char}{ c}, \param{bool}{ caseSensitive = TRUE}}
+\constfunc{bool}{IsSameAs}{\param{char}{ c}, \param{bool}{ caseSensitive = true}}
 
 Test whether the string is equal to the single character {\it c}. The test is
-case-sensitive if {\it caseSensitive} is TRUE (default) or not if it is FALSE.
+case-sensitive if {\it caseSensitive} is true (default) or not if it is false.
 
-Returns TRUE if the string is equal to the character, FALSE otherwise.
+Returns true if the string is equal to the character, false otherwise.
 
 See also \helpref{Cmp}{wxstringcmp}, \helpref{CmpNoCase}{wxstringcmpnocase}, \helpref{IsSameAs}{wxstringissameas}
 
@@ -720,7 +720,7 @@ See also \helpref{Cmp}{wxstringcmp}, \helpref{CmpNoCase}{wxstringcmpnocase}, \he
 
 \constfunc{bool}{IsWord}{\void}
 
-Returns TRUE if the string is a word. TODO: what's the definition of a word?
+Returns true if the string is a word. TODO: what's the definition of a word?
 
 \membersection{wxString::Last}\label{wxstringlast}
 
@@ -778,7 +778,7 @@ Converts all characters to upper case.
 
 \constfunc{bool}{Matches}{\param{const char*}{ szMask}}
 
-Returns TRUE if the string contents matches a mask containing '*' and '?'.
+Returns true if the string contents matches a mask containing '*' and '?'.
 
 \membersection{wxString::Mid}\label{wxstringmid}
 
@@ -789,7 +789,7 @@ the string if {\it count} is the default value.
 
 \membersection{wxString::Pad}\label{wxstringpad}
 
-\func{wxString\&}{Pad}{\param{size\_t}{ count}, \param{char}{ pad = ' '}, \param{bool}{ fromRight = TRUE}}
+\func{wxString\&}{Pad}{\param{size\_t}{ count}, \param{char}{ pad = ' '}, \param{bool}{ fromRight = true}}
 
 Adds {\it count} copies of {\it pad} to the beginning, or to the end of the string (the default).
 
@@ -838,7 +838,7 @@ Removes the last character.
 
 \membersection{wxString::Replace}\label{wxstringreplace}
 
-\func{size\_t}{Replace}{\param{const char*}{ szOld}, \param{const char*}{ szNew}, \param{bool}{ replaceAll = TRUE}}
+\func{size\_t}{Replace}{\param{const char*}{ szOld}, \param{const char*}{ szNew}, \param{bool}{ replaceAll = true}}
 
 Replace first (or all) occurrences of substring with another one.
 
@@ -876,9 +876,9 @@ The same as Printf.
 \constfunc{bool}{StartsWith}{\param{const wxChar }{*prefix}, \param{wxString }{*rest = NULL}}
 
 This function can be used to test if the string starts with the specified 
-{\it prefix}. If it does, the function will return {\tt TRUE} and put the rest
+{\it prefix}. If it does, the function will return {\tt true} and put the rest
 of the string (i.e. after the prefix) into {\it rest} string if it is not 
-{\tt NULL}. Otherwise, the function returns {\tt FALSE} and doesn't modify the 
+{\tt NULL}. Otherwise, the function returns {\tt false} and doesn't modify the 
 {\it rest}.
 
 \membersection{wxString::Strip}\label{wxstringstrip}
@@ -906,8 +906,8 @@ inclusive.
 
 \constfunc{bool}{ToDouble}{\param{double}{ *val}}
 
-Attempts to convert the string to a floating point number. Returns TRUE on
-success (the number is stored in the location pointed to by {\it val}) or FALSE
+Attempts to convert the string to a floating point number. Returns true on
+success (the number is stored in the location pointed to by {\it val}) or false
 if the string does not represent such number.
 
 \wxheading{See also}
@@ -920,8 +920,8 @@ if the string does not represent such number.
 \constfunc{bool}{ToLong}{\param{long}{ *val}, \param{int }{base = $10$}}
 
 Attempts to convert the string to a signed integer in base {\it base}. Returns
-{\tt TRUE} on success in which case the number is stored in the location
-pointed to by {\it val} or {\tt FALSE} if the string does not represent a
+{\tt true} on success in which case the number is stored in the location
+pointed to by {\it val} or {\tt false} if the string does not represent a
 valid number in the given base.
 
 The value of {\it base} must be comprised between $2$ and $36$, inclusive, or
@@ -942,8 +942,8 @@ familiar with C) results.
 \constfunc{bool}{ToULong}{\param{unsigned long}{ *val}, \param{int }{base = $10$}}
 
 Attempts to convert the string to a ansigned integer in base {\it base}.
-Returns {\tt TRUE} on success in which case the number is stored in the
-location pointed to by {\it val} or {\tt FALSE} if the string does not
+Returns {\tt true} on success in which case the number is stored in the
+location pointed to by {\it val} or {\tt false} if the string does not
 represent a valid number in the given base.
 
 See \helpref{wxString::ToLong}{wxstringtolong} for the more detailed
@@ -956,7 +956,7 @@ description of the {\it base} parameter.
 
 \membersection{wxString::Trim}\label{wxstringtrim}
 
-\func{wxString\&}{Trim}{\param{bool}{ fromRight = TRUE}}
+\func{wxString\&}{Trim}{\param{bool}{ fromRight = true}}
 
 Removes spaces from the left or from the right (default).
 
@@ -999,7 +999,7 @@ The same as MakeUpper.
 
 \constfunc{bool}{operator!}{\void}
 
-Empty string is FALSE, so !string will only return TRUE if the string is empty.
+Empty string is false, so !string will only return true if the string is empty.
 This allows the tests for NULLness of a {\it const char *} pointer and emptyness
 of the string to look the same in the code and makes it easier to port old code
 to wxString.

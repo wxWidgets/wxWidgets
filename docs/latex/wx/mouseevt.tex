@@ -16,14 +16,14 @@ time.
 
 {\bf NB:} Note the difference between methods like
 \helpref{LeftDown}{wxmouseeventleftdown} and
-\helpref{LeftIsDown}{wxmouseeventleftisdown}: the former returns {\tt TRUE}
+\helpref{LeftIsDown}{wxmouseeventleftisdown}: the former returns {\tt true}
 when the event corresponds to the left mouse button click while the latter
-returns {\tt TRUE} if the left mouse button is currently being pressed. For
+returns {\tt true} if the left mouse button is currently being pressed. For
 example, when the user is dragging the mouse you can use
 \helpref{LeftIsDown}{wxmouseeventleftisdown} to test
 whether the left mouse button is (still) depressed. Also, by convention, if
-\helpref{LeftDown}{wxmouseeventleftdown} returns {\tt TRUE},
-\helpref{LeftIsDown}{wxmouseeventleftisdown} will also return {\tt TRUE} in
+\helpref{LeftDown}{wxmouseeventleftdown} returns {\tt true},
+\helpref{LeftIsDown}{wxmouseeventleftisdown} will also return {\tt true} in
 wxWindows whatever the underlying GUI behaviour is (which is
 platform-dependent). The same applies, of course, to other mouse buttons as
 well.
@@ -65,43 +65,43 @@ functions that take a wxMouseEvent argument.
 
 \member{bool}{m\_altDown}
 
-TRUE if the Alt key is pressed down.
+true if the Alt key is pressed down.
 
 \membersection{wxMouseEvent::m\_controlDown}
 
 \member{bool}{m\_controlDown}
 
-TRUE if control key is pressed down.
+true if control key is pressed down.
 
 \membersection{wxMouseEvent::m\_leftDown}
 
 \member{bool}{m\_leftDown}
 
-TRUE if the left mouse button is currently pressed down.
+true if the left mouse button is currently pressed down.
 
 \membersection{wxMouseEvent::m\_middleDown}
 
 \member{bool}{m\_middleDown}
 
-TRUE if the middle mouse button is currently pressed down.
+true if the middle mouse button is currently pressed down.
 
 \membersection{wxMouseEvent::m\_rightDown}
 
 \member{bool}{m\_rightDown}
 
-TRUE if the right mouse button is currently pressed down.
+true if the right mouse button is currently pressed down.
 
 \membersection{wxMouseEvent::m\_metaDown}
 
 \member{bool}{m\_metaDown}
 
-TRUE if the Meta key is pressed down.
+true if the Meta key is pressed down.
 
 \membersection{wxMouseEvent::m\_shiftDown}
 
 \member{bool}{m\_shiftDown}
 
-TRUE if shift is pressed down.
+true if shift is pressed down.
 
 \membersection{wxMouseEvent::m\_x}
 
@@ -162,13 +162,13 @@ Constructor. Valid event types are:
 
 \func{bool}{AltDown}{\void}
 
-Returns TRUE if the Alt key was down at the time of the event.
+Returns true if the Alt key was down at the time of the event.
 
 \membersection{wxMouseEvent::Button}
 
 \func{bool}{Button}{\param{int}{ button}}
 
-Returns TRUE if the identified mouse button is changing state. Valid
+Returns true if the identified mouse button is changing state. Valid
 values of {\it button} are 1, 2 or 3 for left, middle and right
 buttons respectively.
 
@@ -176,7 +176,7 @@ buttons respectively.
 
 \func{bool}{ButtonDClick}{\param{int}{ but = -1}}
 
-If the argument is omitted, this returns TRUE if the event was a mouse
+If the argument is omitted, this returns true if the event was a mouse
 double click event. Otherwise the argument specifies which double click event
 was generated (1, 2 or 3 for left, middle and right buttons respectively).
 
@@ -184,7 +184,7 @@ was generated (1, 2 or 3 for left, middle and right buttons respectively).
 
 \func{bool}{ButtonDown}{\param{int}{ but = -1}}
 
-If the argument is omitted, this returns TRUE if the event was a mouse
+If the argument is omitted, this returns true if the event was a mouse
 button down event. Otherwise the argument specifies which button-down event
 was generated (1, 2 or 3 for left, middle and right buttons respectively).
 
@@ -192,7 +192,7 @@ was generated (1, 2 or 3 for left, middle and right buttons respectively).
 
 \func{bool}{ButtonUp}{\param{int}{ but = -1}}
 
-If the argument is omitted, this returns TRUE if the event was a mouse
+If the argument is omitted, this returns true if the event was a mouse
 button up event. Otherwise the argument specifies which button-up event
 was generated (1, 2 or 3 for left, middle and right buttons respectively).
 
@@ -200,19 +200,19 @@ was generated (1, 2 or 3 for left, middle and right buttons respectively).
 
 \func{bool}{ControlDown}{\void}
 
-Returns TRUE if the control key was down at the time of the event.
+Returns true if the control key was down at the time of the event.
 
 \membersection{wxMouseEvent::Dragging}
 
 \func{bool}{Dragging}{\void}
 
-Returns TRUE if this was a dragging event (motion while a button is depressed).
+Returns true if this was a dragging event (motion while a button is depressed).
 
 \membersection{wxMouseEvent::Entering}\label{wxmouseevententering}
 
 \func{bool}{Entering}{\void}
 
-Returns TRUE if the mouse was entering the window.
+Returns true if the mouse was entering the window.
 
 See also \helpref{wxMouseEvent::Leaving}{wxmouseeventleaving}.
 
@@ -288,21 +288,21 @@ Returns Y coordinate of the physical mouse event position.
 
 \constfunc{bool}{IsButton}{\void}
 
-Returns TRUE if the event was a mouse button event (not necessarily a button down event -
+Returns true if the event was a mouse button event (not necessarily a button down event -
 that may be tested using {\it ButtonDown}).
 
 \membersection{wxMouseEvent::IsPageScroll}
 
 \constfunc{bool}{IsPageScroll}{\void}
 
-Returns TRUE if the system has been setup to do page scrolling with
+Returns true if the system has been setup to do page scrolling with
 the mouse wheel instead of line scrolling.
 
 \membersection{wxMouseEvent::Leaving}\label{wxmouseeventleaving}
 
 \constfunc{bool}{Leaving}{\void}
 
-Returns TRUE if the mouse was leaving the window.
+Returns true if the mouse was leaving the window.
 
 See also \helpref{wxMouseEvent::Entering}{wxmouseevententering}.
 
@@ -310,23 +310,23 @@ See also \helpref{wxMouseEvent::Entering}{wxmouseevententering}.
 
 \constfunc{bool}{LeftDClick}{\void}
 
-Returns TRUE if the event was a left double click.
+Returns true if the event was a left double click.
 
 \membersection{wxMouseEvent::LeftDown}\label{wxmouseeventleftdown}
 
 \constfunc{bool}{LeftDown}{\void}
 
-Returns TRUE if the left mouse button changed to down.
+Returns true if the left mouse button changed to down.
 
 \membersection{wxMouseEvent::LeftIsDown}\label{wxmouseeventleftisdown}
 
 \constfunc{bool}{LeftIsDown}{\void}
 
-Returns TRUE if the left mouse button is currently down, independent
+Returns true if the left mouse button is currently down, independent
 of the current event type.
 
 Please notice that it is {\bf not} the same as
-\helpref{LeftDown}{wxmouseeventleftdown} which returns TRUE if the left mouse
+\helpref{LeftDown}{wxmouseeventleftdown} which returns true if the left mouse
 button was just pressed. Rather, it describes the state of the mouse button
 before the event happened.
 
@@ -337,73 +337,73 @@ mouse" messages to determine whether the user is (still) dragging the mouse.
 
 \constfunc{bool}{LeftUp}{\void}
 
-Returns TRUE if the left mouse button changed to up.
+Returns true if the left mouse button changed to up.
 
 \membersection{wxMouseEvent::MetaDown}
 
 \constfunc{bool}{MetaDown}{\void}
 
-Returns TRUE if the Meta key was down at the time of the event.
+Returns true if the Meta key was down at the time of the event.
 
 \membersection{wxMouseEvent::MiddleDClick}
 
 \constfunc{bool}{MiddleDClick}{\void}
 
-Returns TRUE if the event was a middle double click.
+Returns true if the event was a middle double click.
 
 \membersection{wxMouseEvent::MiddleDown}
 
 \constfunc{bool}{MiddleDown}{\void}
 
-Returns TRUE if the middle mouse button changed to down.
+Returns true if the middle mouse button changed to down.
 
 \membersection{wxMouseEvent::MiddleIsDown}\label{wxmouseeventmiddleisdown}
 
 \constfunc{bool}{MiddleIsDown}{\void}
 
-Returns TRUE if the middle mouse button is currently down, independent
+Returns true if the middle mouse button is currently down, independent
 of the current event type.
 
 \membersection{wxMouseEvent::MiddleUp}
 
 \constfunc{bool}{MiddleUp}{\void}
 
-Returns TRUE if the middle mouse button changed to up.
+Returns true if the middle mouse button changed to up.
 
 \membersection{wxMouseEvent::Moving}
 
 \constfunc{bool}{Moving}{\void}
 
-Returns TRUE if this was a motion event (no buttons depressed).
+Returns true if this was a motion event (no buttons depressed).
 
 \membersection{wxMouseEvent::RightDClick}
 
 \constfunc{bool}{RightDClick}{\void}
 
-Returns TRUE if the event was a right double click.
+Returns true if the event was a right double click.
 
 \membersection{wxMouseEvent::RightDown}
 
 \constfunc{bool}{RightDown}{\void}
 
-Returns TRUE if the right mouse button changed to down.
+Returns true if the right mouse button changed to down.
 
 \membersection{wxMouseEvent::RightIsDown}\label{wxmouseeventrightisdown}
 
 \constfunc{bool}{RightIsDown}{\void}
 
-Returns TRUE if the right mouse button is currently down, independent
+Returns true if the right mouse button is currently down, independent
 of the current event type.
 
 \membersection{wxMouseEvent::RightUp}
 
 \constfunc{bool}{RightUp}{\void}
 
-Returns TRUE if the right mouse button changed to up.
+Returns true if the right mouse button changed to up.
 
 \membersection{wxMouseEvent::ShiftDown}
 
 \constfunc{bool}{ShiftDown}{\void}
 
-Returns TRUE if the shift key was down at the time of the event.
+Returns true if the shift key was down at the time of the event.
 

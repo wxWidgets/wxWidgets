@@ -89,7 +89,7 @@ mainly for backwards compatibility.
 Called by the server application to advise the client of a change
 in the data associated with the given item. Causes the client
 connection's \helpref{wxConnection::OnAdvise}{wxddeconnectiononadvise} member
-to be called. Returns TRUE if successful.
+to be called. Returns true if successful.
 
 \membersection{wxConnection::Execute}\label{wxddeconnectionexecute}
 
@@ -99,7 +99,7 @@ Called by the client application to execute a command on the
 server. Can also be used to transfer arbitrary data to the server
 (similar to \helpref{wxConnection::Poke}{wxddeconnectionpoke} in
 that respect). Causes the server connection's \helpref{wxConnection::OnExecute}{wxddeconnectiononexecute} 
-member to be called. Returns TRUE if successful.
+member to be called. Returns true if successful.
 
 \membersection{wxConnection::Disconnect}
 
@@ -108,7 +108,7 @@ member to be called. Returns TRUE if successful.
 Called by the client or server application to disconnect from the
 other program; it causes the \helpref{wxConnection::OnDisconnect}{wxddeconnectionondisconnect} 
 message to be sent to the corresponding connection object in the
-other program. Returns TRUE if successful or already disconnected.
+other program. Returns true if successful or already disconnected.
 The application that calls {\bf Disconnect} must explicitly delete
 its side of the connection.
 
@@ -163,7 +163,7 @@ course persist after the call returns.
 
 Message sent to the server application by the client, when the client
 wishes to start an `advise loop' for the given topic and item. The
-server can refuse to participate by returning FALSE.
+server can refuse to participate by returning false.
 
 \membersection{wxConnection::OnStopAdvise}\label{wxddeconnectiononstopadvise}
 
@@ -171,7 +171,7 @@ server can refuse to participate by returning FALSE.
 
 Message sent to the server application by the client, when the client
 wishes to stop an `advise loop' for the given topic and item. The
-server can refuse to stop the advise loop by returning FALSE, although
+server can refuse to stop the advise loop by returning false, although
 this doesn't have much meaning in practice.
 
 \membersection{wxConnection::Poke}\label{wxddeconnectionpoke}
@@ -184,7 +184,7 @@ server connection's \helpref{wxConnection::OnPoke}{wxddeconnectiononpoke} member
 be called. If size is -1 the size is computed from the string
 length of data.
 
-Returns TRUE if successful.
+Returns true if successful.
 
 \membersection{wxConnection::Request}\label{wxddeconnectionrequest}
 
@@ -206,7 +206,7 @@ does not need to be deleted.
 Called by the client application to ask if an advise loop can be
 started with the server. Causes the server connection's 
 \helpref{wxConnection::OnStartAdvise}{wxddeconnectiononstartadvise}\rtfsp
-member to be called. Returns TRUE if the server okays it, FALSE
+member to be called. Returns true if the server okays it, false
 otherwise.
 
 \membersection{wxConnection::StopAdvise}\label{wxddeconnectionstopadvise}
@@ -215,6 +215,6 @@ otherwise.
 
 Called by the client application to ask if an advise loop can be
 stopped. Causes the server connection's \helpref{wxConnection::OnStopAdvise}{wxddeconnectiononstopadvise} 
-member to be called. Returns TRUE if the server okays it, FALSE
+member to be called. Returns true if the server okays it, false
 otherwise.
 

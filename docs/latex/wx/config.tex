@@ -183,7 +183,7 @@ regardless of the platform (i.e. it is {\bf not} '$\backslash\backslash$' under 
 \membersection{Enumeration}
 
 The functions in this section allow to enumerate all entries and groups in the
-config file. All functions here return FALSE when there are no more items.
+config file. All functions here return false when there are no more items.
 
 You must pass the same index to GetNext and GetFirst (don't modify it).
 Please note that it is {\bf not} the index of the current item (you will have
@@ -276,7 +276,7 @@ arbitrary path (either relative or absolute), not just the key name.
 \membersection{Rename entries/groups}
 
 The functions in this section allow to rename entries or subgroups of the
-current group. They will return FALSE on error. typically because either the
+current group. They will return false on error. typically because either the
 entry/group with the original name doesn't exist, because the entry/group with
 the new name already exists or because the function is not supported in this
 wxConfig implementation.
@@ -315,8 +315,8 @@ the call to {\tt config->Read("UserData")} will return something like
 Although this feature is very useful, it may be annoying if you read a value
 which containts '\$' or '\%' symbols (\% is used for environment variables
 expansion under Windows) which are not used for environment variable
-expansion. In this situation you may call SetExpandEnvVars(FALSE) just before
-reading this value and SetExpandEnvVars(TRUE) just after. Another solution
+expansion. In this situation you may call SetExpandEnvVars(false) just before
+reading this value and SetExpandEnvVars(true) just after. Another solution
 would be to prefix the offending symbols with a backslash.
 
 The following functions control this option:
@@ -419,7 +419,7 @@ for use by desinstallation routine.
 
 \membersection{wxConfigBase::DeleteEntry}\label{wxconfigbasedeleteentry}
 
-\func{bool}{DeleteEntry}{\param{const wxString\& }{ key}, \param{bool}{ bDeleteGroupIfEmpty = TRUE}}
+\func{bool}{DeleteEntry}{\param{const wxString\& }{ key}, \param{bool}{ bDeleteGroupIfEmpty = true}}
 
 Deletes the specified entry and the group it belongs to if it was the last key
 in it and the second parameter is true.
@@ -434,21 +434,21 @@ Delete the group (with all subgroups)
 
 \constfunc{bool}{Exists}{\param{wxString\& }{strName}}
 
-returns TRUE if either a group or an entry with a given name exists
+returns true if either a group or an entry with a given name exists
 
 \membersection{wxConfigBase::Flush}\label{wxconfigbaseflush}
 
-\func{bool}{Flush}{\param{bool }{bCurrentOnly = FALSE}}
+\func{bool}{Flush}{\param{bool }{bCurrentOnly = false}}
 
 permanently writes all changes (otherwise, they're only written from object's
 destructor)
 
 \membersection{wxConfigBase::Get}\label{wxconfigbaseget}
 
-\func{static wxConfigBase *}{Get}{\param{bool }{CreateOnDemand = TRUE}}
+\func{static wxConfigBase *}{Get}{\param{bool }{CreateOnDemand = true}}
 
 Get the current config object. If there is no current object and
-{\it CreateOnDemand} is TRUE, creates one
+{\it CreateOnDemand} is true, creates one
 (using {\it Create}) unless DontCreateOnDemand was called previously.
 
 \membersection{wxConfigBase::GetAppName}\label{wxconfigbasegetappname}
@@ -534,11 +534,11 @@ and returns a 3-element list {\tt ( continue, str, index )}.}
 
 \membersection{wxConfigBase::GetNumberOfEntries}\label{wxconfigbasegetnumberofentries}
 
-\constfunc{uint }{GetNumberOfEntries}{\param{bool }{bRecursive = FALSE}}
+\constfunc{uint }{GetNumberOfEntries}{\param{bool }{bRecursive = false}}
 
 \membersection{wxConfigBase::GetNumberOfGroups}\label{wxconfigbasegetnumberofgroups}
 
-\constfunc{uint}{GetNumberOfGroups}{\param{bool }{bRecursive = FALSE}}
+\constfunc{uint}{GetNumberOfGroups}{\param{bool }{bRecursive = false}}
 
 Get number of entries/subgroups in the current group, with or without its
 subgroups.
@@ -559,31 +559,31 @@ Returns the vendor name.
 
 \constfunc{bool}{HasEntry}{\param{wxString\& }{strName}}
 
-returns TRUE if the entry by this name exists
+returns true if the entry by this name exists
 
 \membersection{wxConfigBase::HasGroup}\label{wxconfigbasehasgroup}
 
 \constfunc{bool}{HasGroup}{\param{const wxString\& }{strName}}
 
-returns TRUE if the group by this name exists
+returns true if the group by this name exists
 
 \membersection{wxConfigBase::IsExpandingEnvVars}\label{wxconfigbaseisexpandingenvvars}
 
 \constfunc{bool}{IsExpandingEnvVars}{\void}
 
-Returns TRUE if we are expanding environment variables in key values.
+Returns true if we are expanding environment variables in key values.
 
 \membersection{wxConfigBase::IsRecordingDefaults}\label{wxconfigbaseisrecordingdefaults}
 
 \constfunc{bool}{IsRecordingDefaults}{\void}
 
-Returns TRUE if we are writing defaults back to the config file.
+Returns true if we are writing defaults back to the config file.
 
 \membersection{wxConfigBase::Read}\label{wxconfigbaseread}
 
 \constfunc{bool}{Read}{\param{const wxString\& }{key}, \param{wxString*}{ str}}
 
-Read a string from the key, returning TRUE if the value was read. If the key
+Read a string from the key, returning true if the value was read. If the key
 was not found, {\it str} is not changed.
 
 \constfunc{bool}{Read}{\param{const wxString\& }{key}, \param{wxString*}{ str}, \param{const wxString\& }{defaultVal}}
@@ -591,7 +591,7 @@ was not found, {\it str} is not changed.
 Read a string from the key. The default value is returned if the key was not
 found.
 
-Returns TRUE if value was really read, FALSE if the default was used.
+Returns true if value was really read, false if the default was used.
 
 \constfunc{wxString}{Read}{\param{const wxString\& }{key}, \param{const
 wxString\& }{defaultVal}}
@@ -600,13 +600,13 @@ Another version of {\it Read()}, returning the string value directly.
 
 \constfunc{bool}{Read}{\param{const wxString\& }{ key}, \param{long*}{ l}}
 
-Reads a long value, returning TRUE if the value was found. If the value was
+Reads a long value, returning true if the value was found. If the value was
 not found, {\it l} is not changed.
 
 \constfunc{bool}{Read}{\param{const wxString\& }{ key}, \param{long*}{ l},
 \param{long}{ defaultVal}}
 
-Reads a long value, returning TRUE if the value was found. If the value was
+Reads a long value, returning true if the value was found. If the value was
 not found, {\it defaultVal} is used instead.
 
 \constfunc{long }{Read}{\param{const wxString\& }{key}, \param{long}{ defaultVal}}
@@ -633,24 +633,24 @@ won't work because the call is ambiguous: compiler can not choose between two
 
 \constfunc{bool}{Read}{\param{const wxString\& }{ key}, \param{double*}{ d}}
 
-Reads a double value, returning TRUE if the value was found. If the value was
+Reads a double value, returning true if the value was found. If the value was
 not found, {\it d} is not changed.
 
 \constfunc{bool}{Read}{\param{const wxString\& }{ key}, \param{double*}{ d},
  \param{double}{ defaultVal}}
 
-Reads a double value, returning TRUE if the value was found. If the value was
+Reads a double value, returning true if the value was found. If the value was
 not found, {\it defaultVal} is used instead.
 
 \constfunc{bool}{Read}{\param{const wxString\& }{ key}, \param{bool*}{ b}}
 
-Reads a bool value, returning TRUE if the value was found. If the value was
+Reads a bool value, returning true if the value was found. If the value was
 not found, {\it b} is not changed.
 
 \constfunc{bool}{Read}{\param{const wxString\& }{ key}, \param{bool*}{ d},
 \param{bool}{ defaultVal}}
 
-Reads a bool value, returning TRUE if the value was found. If the value was
+Reads a bool value, returning true if the value was found. If the value was
 not found, {\it defaultVal} is used instead.
 
 \pythonnote{In place of a single overloaded method name, wxPython
@@ -679,7 +679,7 @@ Renames an entry in the current group. The entries names (both the old and
 the new one) shouldn't contain backslashes, i.e. only simple names and not
 arbitrary paths are accepted by this function.
 
-Returns FALSE if the {\it oldName} doesn't exist or if {\it newName} already
+Returns false if the {\it oldName} doesn't exist or if {\it newName} already
 exists.
 
 \membersection{wxConfigBase::RenameGroup}\label{wxconfigbaserenamegroup}
@@ -690,7 +690,7 @@ Renames a subgroup of the current group. The subgroup names (both the old and
 the new one) shouldn't contain backslashes, i.e. only simple names and not
 arbitrary paths are accepted by this function.
 
-Returns FALSE if the {\it oldName} doesn't exist or if {\it newName} already
+Returns false if the {\it oldName} doesn't exist or if {\it newName} already
 exists.
 
 \membersection{wxConfigBase::Set}\label{wxconfigbaseset}
@@ -702,7 +702,7 @@ current object (both the parameter and returned value may be NULL)
 
 \membersection{wxConfigBase::SetExpandEnvVars}\label{wxconfigbasesetexpandenvvars}
 
-\func{void}{SetExpandEnvVars }{\param{bool }{bDoIt = TRUE}}
+\func{void}{SetExpandEnvVars }{\param{bool }{bDoIt = true}}
 
 Determine whether we wish to expand environment variables in key values.
 
@@ -716,7 +716,7 @@ exist it is created.
 
 \membersection{wxConfigBase::SetRecordDefaults}\label{wxconfigbasesetrecorddefaults}
 
-\func{void}{SetRecordDefaults}{\param{bool }{bDoIt = TRUE}}
+\func{void}{SetRecordDefaults}{\param{bool }{bDoIt = true}}
 
 Sets whether defaults are recorded to the config file whenever an attempt to
 read read the value which is not present in it is done.
@@ -749,7 +749,7 @@ value}}
 
 \func{bool}{Write}{\param{const wxString\& }{ key}, \param{bool}{ value}}
 
-These functions write the specified value to the config file and return TRUE
+These functions write the specified value to the config file and return true
 on success.
 
 \pythonnote{In place of a single overloaded method name, wxPython

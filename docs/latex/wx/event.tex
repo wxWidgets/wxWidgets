@@ -48,7 +48,7 @@ Identifier for the window.
 
 \member{bool}{m\_skipped}
 
-Set to TRUE by {\bf Skip} if this event should be skipped.
+Set to true by {\bf Skip} if this event should be skipped.
 
 \membersection{wxEvent::m\_timeStamp}
 
@@ -100,7 +100,7 @@ Returns the identifier associated with this event, such as a button command id.
 
 \func{bool}{GetSkipped}{\void}
 
-Returns TRUE if the event handler should be skipped, FALSE otherwise.
+Returns true if the event handler should be skipped, false otherwise.
 
 \membersection{wxEvent::GetTimestamp}
 
@@ -136,7 +136,7 @@ Sets the originating object.
 
 \membersection{wxEvent::Skip}\label{wxeventskip}
 
-\func{void}{Skip}{\param{bool}{ skip = TRUE}}
+\func{void}{Skip}{\param{bool}{ skip = true}}
 
 Called by an event handler to tell the event system that the
 event handler should be skipped, and the next valid handler used

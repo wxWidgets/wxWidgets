@@ -141,9 +141,9 @@ Closes the file.
 
 \membersection{wxFile::Create}\label{wxfilecreate}
 
-\func{bool}{Create}{\param{const char*}{ filename}, \param{bool}{ overwrite = FALSE}, \param{int }{access = wxS\_DEFAULT}}
+\func{bool}{Create}{\param{const char*}{ filename}, \param{bool}{ overwrite = false}, \param{int }{access = wxS\_DEFAULT}}
 
-Creates a file for writing. If the file already exists, setting {\bf overwrite} to TRUE
+Creates a file for writing. If the file already exists, setting {\bf overwrite} to true
 will ensure it is overwritten.
 
 \membersection{wxFile::Detach}\label{wxfiledetach}
@@ -151,7 +151,7 @@ will ensure it is overwritten.
 \func{void}{Detach}{\void}
 
 Get back a file descriptor from wxFile object - the caller is responsible for closing the file if this
-descriptor is opened. \helpref{IsOpened()}{wxfileisopened} will return FALSE after call to Detach().
+descriptor is opened. \helpref{IsOpened()}{wxfileisopened} will return false after call to Detach().
 
 \membersection{wxFile::fd}\label{wxfilefd}
 
@@ -163,12 +163,12 @@ Returns the file descriptor associated with the file.
 
 \constfunc{bool}{Eof}{\void}
 
-Returns TRUE if the end of the file has been reached.
+Returns true if the end of the file has been reached.
 
 Note that the behaviour of the file pointer based class 
 \helpref{wxFFile}{wxffile} is different as \helpref{wxFFile::Eof}{wxffileeof} 
-will return TRUE here only if an attempt has been made to read 
-{\it past} the last byte of the file, while wxFile::Eof() will return TRUE
+will return true here only if an attempt has been made to read 
+{\it past} the last byte of the file, while wxFile::Eof() will return true
 even before such attempt is made if the file pointer is at the last position
 in the file.
 
@@ -183,7 +183,7 @@ of using Eof() as this will not work for special files under Unix.
 
 \func{static bool}{Exists}{\param{const char*}{ filename}}
 
-Returns TRUE if the given name specifies an existing regular file (not a
+Returns true if the given name specifies an existing regular file (not a
 directory or a link)
 
 \membersection{wxFile::Flush}\label{wxfileflush}
@@ -200,7 +200,7 @@ due to a missing fsync function, which reduces the usefulness of this function
 
 \constfunc{bool}{IsOpened}{\void}
 
-Returns TRUE if the file has been opened.
+Returns true if the file has been opened.
 
 \membersection{wxFile::Length}\label{wxfilelength}
 
@@ -212,7 +212,7 @@ Returns the length of the file.
 
 \func{bool}{Open}{\param{const char*}{ filename}, \param{wxFile::OpenMode}{ mode = wxFile::read}}
 
-Opens the file, returning TRUE if successful.
+Opens the file, returning true if successful.
 
 \wxheading{Parameters}
 
@@ -293,7 +293,7 @@ the number of bytes actually written
 
 \func{bool}{Write}{\param{const wxString\& }{s}, \param{wxMBConv\&}{ conv = wxConvLibc}}
 
-Writes the contents of the string to the file, returns TRUE on success.
+Writes the contents of the string to the file, returns true on success.
 
 The second argument is only meaningful in Unicode build of wxWindows when
 {\it conv} is used to convert {\it s} to multibyte representation.

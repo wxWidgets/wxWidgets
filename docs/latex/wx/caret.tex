@@ -108,21 +108,21 @@ Get the window the caret is associated with.
 
 \func{void}{Hide}{\void}
 
-Same as \helpref{wxCaret::Show(FALSE)}{wxcaretshow}.
+Same as \helpref{wxCaret::Show(false)}{wxcaretshow}.
 
 \membersection{wxCaret::IsOk}\label{wxcaretisok}
 
 \constfunc{bool}{IsOk}{\void}
 
-Returns TRUE if the caret was created successfully.
+Returns true if the caret was created successfully.
 
 \membersection{wxCaret::IsVisible}\label{wxcaretisvisible}
 
 \constfunc{bool}{IsVisible}{\void}
 
-Returns TRUE if the caret is visible and FALSE if it is permanently
+Returns true if the caret is visible and false if it is permanently
 hidden (if it is is blinking and not shown currently but will be after the
-next blink, this method still returns TRUE).
+next blink, this method still returns true).
 
 \membersection{wxCaret::Move}\label{wxcaretmove}
 
@@ -158,7 +158,7 @@ Changes the size of the caret.
 
 \membersection{wxCaret::Show}\label{wxcaretshow}
 
-\func{void}{Show}{\param{bool }{show = TRUE}}
+\func{void}{Show}{\param{bool }{show = true}}
 
 Shows or hides the caret. Notice that if the caret was hidden $N$ times, it
 must be shown $N$ times as well to reappear on the screen.

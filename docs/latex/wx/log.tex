@@ -293,7 +293,7 @@ See also:
 
 \membersection{wxLog::SetVerbose}\label{wxlogsetverbose}
 
-\func{static void}{SetVerbose}{\param{bool }{ verbose = TRUE}}
+\func{static void}{SetVerbose}{\param{bool }{ verbose = true}}
 
 Activates or deactivates verbose mode in which the verbose messages are
 logged as the normal ones instead of being silently dropped.
@@ -348,7 +348,7 @@ for details.
 
 \func{static bool}{IsAllowedTraceMask}{\param{const wxChar *}{mask}}
 
-Returns TRUE if the {\it mask} is one of allowed masks for
+Returns true if the {\it mask} is one of allowed masks for
 \helpref{wxLogTrace}{wxlogtrace}.
 
 See also: \helpref{AddTraceMask}{wxlogaddtracemask},
@@ -423,8 +423,8 @@ NULL}).
 
 \constfunc{bool}{IsPassingMessages}{\void}
 
-Returns {\tt TRUE} if the messages are passed to the previously active log
-target (default) or {\tt FALSE} if \helpref{PassMessages}{wxlogchainpassmessages}
+Returns {\tt true} if the messages are passed to the previously active log
+target (default) or {\tt false} if \helpref{PassMessages}{wxlogchainpassmessages}
 had been called.
 
 \membersection{wxLogChain::PassMessages}\label{wxlogchainpassmessages}
@@ -432,10 +432,10 @@ had been called.
 \func{void}{PassMessages}{\param{bool }{passMessages}}
 
 By default, the log messages are passed to the previously active log target.
-Calling this function with {\tt FALSE} parameter disables this behaviour
+Calling this function with {\tt false} parameter disables this behaviour
 (presumably temporarily, as you shouldn't use wxLogChain at all otherwise) and
 it can be reenabled by calling it again with {\it passMessages} set to {\tt
-TRUE}.
+true}.
 
 \membersection{wxLogChain::SetLog}\label{wxlogchainsetlog}
 
@@ -685,7 +685,7 @@ them normally by showing the standard log dialog.
 
 \membersection{wxLogWindow::wxLogWindow}
 
-\func{}{wxLogWindow}{\param{wxFrame }{*parent}, \param{const wxChar }{*title}, \param{bool }{show = {\tt TRUE}}, \param{bool }{passToOld = {\tt TRUE}}}
+\func{}{wxLogWindow}{\param{wxFrame }{*parent}, \param{const wxChar }{*title}, \param{bool }{show = {\tt true}}, \param{bool }{passToOld = {\tt true}}}
 
 Creates the log frame window and starts collecting the messages in it.
 
@@ -695,16 +695,16 @@ Creates the log frame window and starts collecting the messages in it.
 
 \docparam{title}{The title for the log frame}
 
-\docparam{show}{{\tt TRUE} to show the frame initially (default), otherwise
+\docparam{show}{{\tt true} to show the frame initially (default), otherwise
 \helpref{wxLogWindow::Show}{wxlogwindowshow} must be called later.}
 
-\docparam{passToOld}{{\tt TRUE} to process the log messages normally in addition to
-logging them in the log frame (default), {\tt FALSE} to only log them in the
+\docparam{passToOld}{{\tt true} to process the log messages normally in addition to
+logging them in the log frame (default), {\tt false} to only log them in the
 log frame.}
 
 \membersection{wxLogWindow::Show}\label{wxlogwindowshow}
 
-\func{void}{Show}{\param{bool }{show = {\tt TRUE}}}
+\func{void}{Show}{\param{bool }{show = {\tt true}}}
 
 Shows or hides the frame.
 
@@ -730,7 +730,7 @@ Called if the user closes the window interactively, will not be
 called if it is destroyed for another reason (such as when program
 exits).
 
-Return {\tt TRUE} from here to allow the frame to close, {\tt FALSE} to
+Return {\tt true} from here to allow the frame to close, {\tt false} to
 prevent this from happening.
 
 \wxheading{See also}

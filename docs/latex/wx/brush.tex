@@ -67,7 +67,7 @@ data using the reference counting, are not affected.
 \func{}{wxBrush}{\void}
 
 Default constructor. The brush will be uninitialised, and \helpref{wxBrush::Ok}{wxbrushok} will
-return FALSE.
+return false.
 
 \func{}{wxBrush}{\param{const wxColour\&}{ colour}, \param{int}{ style}}
 
@@ -147,7 +147,7 @@ Returns a reference to the brush colour.
 \constfunc{wxBitmap *}{GetStipple}{\void}
 
 Gets a pointer to the stipple bitmap. If the brush does not have a wxSTIPPLE style,
-this bitmap may be non-NULL but uninitialised (\helpref{wxBitmap::Ok}{wxbitmapok} returns FALSE).
+this bitmap may be non-NULL but uninitialised (\helpref{wxBitmap::Ok}{wxbitmapok} returns false).
 
 \wxheading{See also}
 
@@ -181,7 +181,7 @@ Returns the brush style, one of:
 
 \constfunc{bool}{Ok}{\void}
 
-Returns TRUE if the brush is initialised. It will return FALSE if the default
+Returns true if the brush is initialised. It will return false if the default
 constructor has been used (for example, the brush is a member of a class, or
 NULL has been assigned to it).
 

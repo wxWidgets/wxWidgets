@@ -53,33 +53,33 @@ care about it.
 
 \membersection{wxFileSystem::ChangePathTo}\label{wxfilesystemchangepathto}
 
-\func{void}{ChangePathTo}{\param{const wxString\& }{location}, \param{bool }{is\_dir = FALSE}}
+\func{void}{ChangePathTo}{\param{const wxString\& }{location}, \param{bool }{is\_dir = false}}
 
 Sets the current location. {\it location} parameter passed to 
 \helpref{OpenFile}{wxfilesystemopenfile} is relative to this path.
 
-{\bf Caution! } Unless {\it is\_dir} is TRUE the {\it location} parameter
+{\bf Caution! } Unless {\it is\_dir} is true the {\it location} parameter
 is not the directory name but the name of the file in this directory. All these
 commands change the path to "dir/subdir/":
 
 \begin{verbatim}
   ChangePathTo("dir/subdir/xh.htm");
-  ChangePathTo("dir/subdir", TRUE);
-C  hangePathTo("dir/subdir/", TRUE);
+  ChangePathTo("dir/subdir", true);
+C  hangePathTo("dir/subdir/", true);
 \end{verbatim}
 
 \wxheading{Parameters}
 
 \docparam{location}{the new location. Its meaning depends on the value of {\it is\_dir}}
 
-\docparam{is\_dir}{if TRUE {\it location} is new directory. If FALSE (default) 
+\docparam{is\_dir}{if true {\it location} is new directory. If false (default) 
 {\it location} is {\bf file in} the new directory.}
 
 \wxheading{Example}
 
 \begin{verbatim}
   f = fs -> OpenFile("hello.htm"); // opens file 'hello.htm'
-  fs -> ChangePathTo("subdir/folder", TRUE);
+  fs -> ChangePathTo("subdir/folder", true);
   f = fs -> OpenFile("hello.htm"); // opens file 'subdir/folder/hello.htm' !!
 \end{verbatim}
 

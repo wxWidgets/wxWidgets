@@ -15,7 +15,7 @@ in turn generates an EVT\_CLOSE event: see \helpref{wxCloseEvent}{wxcloseevent}.
 It is the duty of the application to define a suitable event handler, and
 decide whether or not to destroy the window.
 If the application is for some reason forcing the application to close
-(\helpref{wxCloseEvent::CanVeto}{wxcloseeventcanveto} returns FALSE), the window should always be destroyed, otherwise there is the option to
+(\helpref{wxCloseEvent::CanVeto}{wxcloseeventcanveto} returns false), the window should always be destroyed, otherwise there is the option to
 ignore the request, or maybe wait until the user has answered a question
 before deciding whether it is safe to close. The handler for EVT\_CLOSE should
 signal to the calling code if it does not destroy the window, by calling 
@@ -35,13 +35,13 @@ certain that the window is destroyed.
 
 Your application can either use \helpref{wxWindow::Close}{wxwindowclose} event just as
 the framework does, or it can call \helpref{wxWindow::Destroy}{wxwindowdestroy} directly.
-If using Close(), you can pass a TRUE argument to this function to tell the event handler
+If using Close(), you can pass a true argument to this function to tell the event handler
 that we definitely want to delete the frame and it cannot be vetoed.
 
 The advantage of using Close instead of Destroy is that it will call any clean-up code
 defined by the EVT\_CLOSE handler; for example it may close a document contained in
 a window after first asking the user whether the work should be saved. Close can be vetoed
-by this process (return FALSE), whereas Destroy definitely destroys the window.
+by this process (return false), whereas Destroy definitely destroys the window.
 
 \wxheading{What is the default behaviour?}
 

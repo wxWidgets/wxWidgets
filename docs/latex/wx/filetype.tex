@@ -7,7 +7,7 @@ object may be created in several different ways: the program might know the file
 extension and wish to find out the corresponding MIME type or, conversely, it
 might want to find the right extension for the file to which it writes the
 contents of given MIME type. Depending on how it was created some fields may be
-unknown so the return value of all the accessors {\bf must} be checked: {\tt FALSE}
+unknown so the return value of all the accessors {\bf must} be checked: {\tt false}
 will be returned if the corresponding information couldn't be found.
 
 The objects of this class are never created by the application code but are
@@ -122,7 +122,7 @@ The destructor of this class is not virtual, so it should not be derived from.
 
 \func{bool}{GetMimeType}{\param{wxString*}{ mimeType}}
 
-If the function returns {\tt TRUE}, the string pointed to by {\it mimeType} is filled
+If the function returns {\tt true}, the string pointed to by {\it mimeType} is filled
 with full MIME type specification for this file type: for example, "text/plain".
 
 \membersection{wxFileType::GetMimeTypes}\label{wxfiletypegetmimetypes}
@@ -139,14 +139,14 @@ mime.types.
 
 \func{bool}{GetExtensions}{\param{wxArrayString\&}{ extensions}}
 
-If the function returns {\tt TRUE}, the array {\it extensions} is filled
+If the function returns {\tt true}, the array {\it extensions} is filled
 with all extensions associated with this file type: for example, it may
 contain the following two elements for the MIME type "text/html" (notice the
 absence of the leading dot): "html" and "htm".
 
 {\bf Windows:} This function is currently not implemented: there is no
 (efficient) way to retrieve associated extensions from the given MIME type on
-this platform, so it will only return {\tt TRUE} if the wxFileType object was created
+this platform, so it will only return {\tt true} if the wxFileType object was created
 by \helpref{GetFileTypeFromExtension}{wxmimetypesmanagergetfiletypefromextension} 
 function in the first place.
 
@@ -154,7 +154,7 @@ function in the first place.
 
 \func{bool}{GetIcon}{\param{wxIcon*}{ icon}}
 
-If the function returns {\tt TRUE}, the icon associated with this file type will be
+If the function returns {\tt true}, the icon associated with this file type will be
 created and assigned to the {\it icon} parameter.
 
 {\bf Unix:} MIME manager gathers information about icons from GNOME
@@ -165,7 +165,7 @@ of these desktop environments.
 
 \func{bool}{GetDescription}{\param{wxString*}{ desc}}
 
-If the function returns {\tt TRUE}, the string pointed to by {\it desc} is filled
+If the function returns {\tt true}, the string pointed to by {\it desc} is filled
 with a brief description for this file type: for example, "text document" for
 the "text/plain" MIME type.
 
@@ -175,7 +175,7 @@ the "text/plain" MIME type.
 
 \func{wxString}{GetOpenCommand}{\param{const wxString\&}{ filename}}
 
-With the first version of this method, if the {\tt TRUE} is returned, the
+With the first version of this method, if the {\tt true} is returned, the
 string pointed to by {\it command} is filled with the command which must be
 executed (see \helpref{wxExecute}{wxexecute}) in order to open the file of the
 given type. In this case, the name of the file as well as any other parameters
@@ -191,7 +191,7 @@ to open this kind of files).
 
 \func{bool}{GetPrintCommand}{\param{wxString*}{ command},\param{MessageParameters\&}{ params}}
 
-If the function returns {\tt TRUE}, the string pointed to by {\it command} is filled
+If the function returns {\tt true}, the string pointed to by {\it command} is filled
 with the command which must be executed (see \helpref{wxExecute}{wxexecute}) in
 order to print the file of the given type. The name of the file is
 retrieved from \helpref{MessageParameters}{wxfiletypemessageparameters} class.

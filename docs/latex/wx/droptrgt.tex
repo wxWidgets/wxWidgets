@@ -70,7 +70,7 @@ calling its \helpref{wxDataObject::SetData}{wxdataobjectsetdata} method.
 
 \func{virtual wxDragResult}{OnData}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{wxDragResult}{ def}}
 
-Called after \helpref{OnDrop}{wxdroptargetondrop} returns TRUE. By default this
+Called after \helpref{OnDrop}{wxdroptargetondrop} returns true. By default this
 will usually \helpref{GetData}{wxdroptargetgetdata} and will return the suggested
 default value {\it def}.
 
@@ -78,7 +78,7 @@ default value {\it def}.
 
 \func{virtual bool}{OnDrop}{\param{wxCoord }{x}, \param{wxCoord }{y}}
 
-Called when the user drops a data object on the target. Return FALSE to veto the operation.
+Called when the user drops a data object on the target. Return false to veto the operation.
 
 \wxheading{Parameters}
 
@@ -88,7 +88,7 @@ Called when the user drops a data object on the target. Return FALSE to veto the
 
 \wxheading{Return value}
 
-Return TRUE to accept the data, FALSE to veto the operation.
+Return true to accept the data, false to veto the operation.
 
 \membersection{wxDropTarget::OnEnter}\label{wxdroptargetonenter}
 

@@ -227,8 +227,8 @@ For a simple switch, you will simply call
 \helpref{Found}{wxcmdlineparserfoundswitch} to determine if the switch was given
 or not, for an option or a parameter, you will call a version of {\tt Found()} 
 which also returns the associated value in the provided variable. All 
-{\tt Found()} functions return TRUE if the switch or option were found in the
-command line or FALSE if they were not specified.
+{\tt Found()} functions return true if the switch or option were found in the
+command line or false if they were not specified.
 
 %%%%%%%%%%%%% Methods in alphabetic order %%%%%%%%%%%%%
 \helponly{\insertatlevel{2}{
@@ -326,7 +326,7 @@ start. Default is {\tt "-"} for Unix, {\tt "-/"} for Windows.
 
 \membersection{wxCmdLineParser::EnableLongOptions}\label{wxcmdlineparserenablelongoptions}
 
-\func{void}{EnableLongOptions}{\param{bool }{enable = TRUE}}
+\func{void}{EnableLongOptions}{\param{bool }{enable = true}}
 
 Enable or disable support for the long options.
 
@@ -341,13 +341,13 @@ them.
 
 \func{void}{DisableLongOptions}{\void}
 
-Identical to \helpref{EnableLongOptions(FALSE)}{wxcmdlineparserenablelongoptions}.
+Identical to \helpref{EnableLongOptions(false)}{wxcmdlineparserenablelongoptions}.
 
 \membersection{wxCmdLineParser::AreLongOptionsEnabled}\label{wxcmdlineparserarelongoptionsenabled}
 
 \func{bool}{AreLongOptionsEnabled}{\void}
 
-Returns TRUE if long options are enabled, otherwise FALSE.
+Returns true if long options are enabled, otherwise false.
 
 \wxheading{See also}
 
@@ -415,7 +415,7 @@ Add a parameter of the given {\it type} to the command line description.
 
 \membersection{wxCmdLineParser::Parse}\label{wxcmdlineparserparse}
 
-\func{int}{Parse}{\param{bool }{giveUsage = {\tt TRUE}}}
+\func{int}{Parse}{\param{bool }{giveUsage = {\tt true}}}
 
 Parse the command line, return $0$ if ok, $-1$ if {\tt "-h"} or {\tt "--help"} 
 option was encountered and the help message was given or a positive value if a
@@ -423,9 +423,9 @@ syntax error occured.
 
 \wxheading{Parameters}
 
-\docparam{giveUsage}{If {\tt TRUE} (default), the usage message is given if a
+\docparam{giveUsage}{If {\tt true} (default), the usage message is given if a
 syntax error was encountered while parsing the command line or if help was
-requested. If {\tt FALSE}, only error messages about possible syntax errors
+requested. If {\tt false}, only error messages about possible syntax errors
 are given, use \helpref{Usage}{wxcmdlineparserusage} to show the usage message
 from the caller if needed.}
 
@@ -445,27 +445,27 @@ will not be helpful to the user unless the descriptions were indeed specified.
 
 \constfunc{bool}{Found}{\param{const wxString\& }{name}}
 
-Returns TRUE if the given switch was found, FALSE otherwise.
+Returns true if the given switch was found, false otherwise.
 
 \membersection{wxCmdLineParser::Found}\label{wxcmdlineparserfoundstringoption}
 
 \constfunc{bool}{Found}{\param{const wxString\& }{name}, \param{wxString* }{value}}
 
-Returns TRUE if an option taking a string value was found and stores the
+Returns true if an option taking a string value was found and stores the
 value in the provided pointer (which should not be NULL).
 
 \membersection{wxCmdLineParser::Found}\label{wxcmdlineparserfoundintoption}
 
 \constfunc{bool}{Found}{\param{const wxString\& }{name}, \param{long* }{value}}
 
-Returns TRUE if an option taking an integer value was found and stores
+Returns true if an option taking an integer value was found and stores
 the value in the provided pointer (which should not be NULL).
 
 \membersection{wxCmdLineParser::Found}\label{wxcmdlineparserfounddateoption}
 
 \constfunc{bool}{Found}{\param{const wxString\& }{name}, \param{wxDateTime* }{value}}
 
-Returns TRUE if an option taking a date value was found and stores the
+Returns true if an option taking a date value was found and stores the
 value in the provided pointer (which should not be NULL).
 
 \membersection{wxCmdLineParser::GetParamCount}\label{wxcmdlineparsergetparamcount}

@@ -165,7 +165,7 @@ Returns the size available for the pages.
 
 \func{virtual bool}{HasNextPage}{\param{wxWizardPage *}{page}}
 
-Return {\tt TRUE} if this page is not the last one in the wizard. The base
+Return {\tt true} if this page is not the last one in the wizard. The base
 class version implements this by calling 
 \helpref{page->GetNext}{wxwizardpagegetnext} but this could be undesirable if,
 for example, the pages are created on demand only.
@@ -178,7 +178,7 @@ for example, the pages are created on demand only.
 
 \func{virtual bool}{HasPrevPage}{\param{wxWizardPage *}{page}}
 
-Return {\tt TRUE} if this page is not the last one in the wizard. The base
+Return {\tt true} if this page is not the last one in the wizard. The base
 class version implements this by calling 
 \helpref{page->GetPrev}{wxwizardpagegetprev} but this could be undesirable if,
 for example, the pages are created on demand only.
@@ -191,8 +191,8 @@ for example, the pages are created on demand only.
 
 \func{bool}{RunWizard}{\param{wxWizardPage* }{firstPage}}
 
-Executes the wizard starting from the given page, returns {\tt TRUE} if it was
-successfully finished or {\tt FALSE} if user cancelled it. The {\it firstPage} 
+Executes the wizard starting from the given page, returns {\tt true} if it was
+successfully finished or {\tt false} if user cancelled it. The {\it firstPage} 
 can not be {\tt NULL}.
 
 \membersection{wxWizard::SetPageSize}\label{wxwizardsetpagesize}

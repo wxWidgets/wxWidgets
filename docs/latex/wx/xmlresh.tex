@@ -53,8 +53,8 @@ Add styles common to all wxWindow-derived classes.
 
 \func{bool}{CanHandle}{\param{wxXmlNode* }{node}}
 
-Returns TRUE if it understands this node and can create
-a resource from it, FALSE otherwise.
+Returns true if it understands this node and can create
+a resource from it, false otherwise.
 
 \wxheading{Note}
 
@@ -65,7 +65,7 @@ safe to operate on {\it node} directly or to call IsOfClass.
 
 \membersection{wxXmlResourceHandler::CreateChildren}\label{wxxmlresourcehandlercreatechildren}
 
-\func{void}{CreateChildren}{\param{wxObject* }{parent}, \param{bool }{this\_hnd\_only = FALSE}}
+\func{void}{CreateChildren}{\param{wxObject* }{parent}, \param{bool }{this\_hnd\_only = false}}
 
 Creates children.
 
@@ -106,9 +106,9 @@ Gets a bitmap.
 
 \membersection{wxXmlResourceHandler::GetBool}\label{wxxmlresourcehandlergetbool}
 
-\func{bool}{GetBool}{\param{const wxString\& }{param}, \param{bool }{defaultv = FALSE}}
+\func{bool}{GetBool}{\param{const wxString\& }{param}, \param{bool }{defaultv = false}}
 
-Gets a bool flag (1, t, yes, on, true are TRUE, everything else is FALSE).
+Gets a bool flag (1, t, yes, on, true are true, everything else is false).
 
 \membersection{wxXmlResourceHandler::GetColour}\label{wxxmlresourcehandlergetcolour}
 

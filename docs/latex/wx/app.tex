@@ -91,7 +91,7 @@ This can be used for programming event loops, e.g.
 
 This function is called before processing any event and allows the application
 to preempt the processing of some events. If this method returns $-1$ the event
-is processed normally, otherwise either {\tt TRUE} or {\tt FALSE} should be
+is processed normally, otherwise either {\tt true} or {\tt false} should be
 returned and the event processing stops immediately considering that the event
 had been already processed (for the former return value) or that it is not
 going to be processed at all (for the latter one).
@@ -111,7 +111,7 @@ calling \helpref{wxApp::OnInit}{wxapponinit}, but the application can reset it a
 
 \constfunc{bool}{GetAuto3D}{\void}
 
-Returns TRUE if 3D control mode is on, FALSE otherwise.
+Returns true if 3D control mode is on, false otherwise.
 
 \wxheading{See also}
 
@@ -132,7 +132,7 @@ manner to refer to the application.
 
 \constfunc{bool}{GetExitFrameOnDelete}{\void}
 
-Returns TRUE if the application will exit when the top-level window is deleted, FALSE
+Returns true if the application will exit when the top-level window is deleted, false
 otherwise.
 
 \wxheading{See also}
@@ -159,8 +159,8 @@ function will find the first top-level window (frame or dialog) and return that.
 
 \constfunc{bool}{GetUseBestVisual}{\void}
 
-Returns TRUE if the application will use the best visual on systems that support
-different visuals, FALSE otherwise.
+Returns true if the application will use the best visual on systems that support
+different visuals, false otherwise.
 
 \wxheading{See also}
 
@@ -184,7 +184,7 @@ the top window.
 
 \func{bool}{Initialized}{\void}
 
-Returns TRUE if the application has been initialized (i.e. if\rtfsp
+Returns true if the application has been initialized (i.e. if\rtfsp
 \helpref{wxApp::OnInit}{wxapponinit} has returned successfully).  This can be useful for error
 message routines to determine which method of output is best for the
 current state of the program (some windowing systems may not like
@@ -242,7 +242,7 @@ Returns 0 under X, and the wParam of the WM\_QUIT message under Windows.
 \func{void}{OnAssert}{\param{const wxChar }{*file}, \param{int }{line}, \param{const wxChar }{*cond}, \param{const wxChar }{*msg}}
 
 This function is called when an assert failure occurs, i.e. the condition
-specified in \helpref{wxASSERT}{wxassert} macro evaluated to {\tt FALSE}.
+specified in \helpref{wxASSERT}{wxassert} macro evaluated to {\tt false}.
 It is only called in debug mode (when {\tt \_\_WXDEBUG\_\_} is defined) as
 asserts are not left in the release code at all.
 
@@ -279,8 +279,8 @@ Called when command line parsing fails (i.e. an incorrect command line option
 was specified by the user). The default behaviour is to show the program usage
 text and abort the program.
 
-Return {\tt TRUE} to continue normal execution or {\tt FALSE} to return 
-{\tt FALSE} from \helpref{OnInit}{wxapponinit} thus terminating the program.
+Return {\tt true} to continue normal execution or {\tt false} to return 
+{\tt false} from \helpref{OnInit}{wxapponinit} thus terminating the program.
 
 \wxheading{See also}
 
@@ -293,8 +293,8 @@ Return {\tt TRUE} to continue normal execution or {\tt FALSE} to return
 Called when the help option ({\tt --help}) was specified on the command line.
 The default behaviour is to show the program usage text and abort the program.
 
-Return {\tt TRUE} to continue normal execution or {\tt FALSE} to return 
-{\tt FALSE} from \helpref{OnInit}{wxapponinit} thus terminating the program.
+Return {\tt true} to continue normal execution or {\tt false} to return 
+{\tt false} from \helpref{OnInit}{wxapponinit} thus terminating the program.
 
 \wxheading{See also}
 
@@ -311,8 +311,8 @@ set from the command line.
 Don't forget to call the base class version unless you want to suppress
 processing of the standard command line options.
 
-Return {\tt TRUE} to continue normal execution or {\tt FALSE} to return 
-{\tt FALSE} from \helpref{OnInit}{wxapponinit} thus terminating the program.
+Return {\tt true} to continue normal execution or {\tt false} to return 
+{\tt false} from \helpref{OnInit}{wxapponinit} thus terminating the program.
 
 \wxheading{See also}
 
@@ -370,7 +370,7 @@ work and, in fact, probably won't.
 %%
 %%Use the EVT\_END\_SESSION event table macro to handle query end session events.
 %%
-%%The default handler calls \helpref{wxWindow::Close}{wxwindowclose} with a TRUE argument
+%%The default handler calls \helpref{wxWindow::Close}{wxwindowclose} with a true argument
 %%(forcing the application to close itself silently).
 %%
 %%\wxheading{Remarks}
@@ -398,7 +398,7 @@ Notice that if you want to to use the command line processing provided by
 wxWindows you have to call the base class version in the derived class
 OnInit().
 
-Return TRUE to continue processing, FALSE to exit the application.
+Return true to continue processing, false to exit the application.
 
 \membersection{wxApp::OnInitCmdLine}\label{wxapponinitcmdline}
 
@@ -416,7 +416,7 @@ This is an event handler function called when the operating system or GUI sessio
 about to close down. Typically, an application will try to save unsaved documents
 at this point.
 
-If \helpref{wxCloseEvent::CanVeto}{wxcloseeventcanveto} returns TRUE, the application
+If \helpref{wxCloseEvent::CanVeto}{wxcloseeventcanveto} returns true, the application
 is allowed to veto the shutdown by calling \helpref{wxCloseEvent::Veto}{wxcloseeventveto}.
 The application might veto the shutdown after prompting for documents to be saved, and the
 user has cancelled the save.
@@ -424,12 +424,12 @@ user has cancelled the save.
 Use the EVT\_QUERY\_END\_SESSION event table macro to handle query end session events.
 
 You should check whether the application is forcing the deletion of the window
-using \helpref{wxCloseEvent::GetForce}{wxcloseeventgetforce}. If this is TRUE,
+using \helpref{wxCloseEvent::GetForce}{wxcloseeventgetforce}. If this is true,
 destroy the window using \helpref{wxWindow::Destroy}{wxwindowdestroy}.
 If not, it is up to you whether you respond by destroying the window.
 
 The default handler calls \helpref{wxWindow::Close}{wxwindowclose} on the top-level window,
-and vetoes the shutdown if Close returns FALSE. This will be sufficient for many applications.
+and vetoes the shutdown if Close returns false. This will be sufficient for many applications.
 
 \wxheading{Remarks}
 
@@ -450,8 +450,8 @@ Under Windows, OnQueryEndSession is called in response to the WM\_QUERYENDSESSIO
 
 Windows-only function for processing a message. This function
 is called from the main message loop, checking for windows that
-may wish to process it. The function returns TRUE if the message
-was processed, FALSE otherwise. If you use wxWindows with another class
+may wish to process it. The function returns true if the message
+was processed, false otherwise. If you use wxWindows with another class
 library with its own message loop, you should make sure that this
 function is called to allow wxWindows to receive messages. For example,
 to allow co-existence with the Microsoft Foundation Classes, override
@@ -462,7 +462,7 @@ the PreTranslateMessage function:
 BOOL CTheApp::PreTranslateMessage(MSG *msg)
 {
   if (wxTheApp && wxTheApp->ProcessMessage((WXMSW *)msg))
-    return TRUE;
+    return true;
   else
     return CWinApp::PreTranslateMessage(msg);
 }
@@ -472,7 +472,7 @@ BOOL CTheApp::PreTranslateMessage(MSG *msg)
 
 \func{bool}{Pending}{\void}
 
-Returns TRUE if unprocessed events are in the window system event queue.
+Returns true if unprocessed events are in the window system event queue.
 
 \wxheading{See also}
 
@@ -491,7 +491,7 @@ Sends idle events to a window and its children.
 \wxheading{Remarks}
 
 These functions poll the top-level windows, and their children, for idle event processing.
-If TRUE is returned, more OnIdle processing is requested by one or more window.
+If true is returned, more OnIdle processing is requested by one or more window.
 
 \wxheading{See also}
 
@@ -519,8 +519,8 @@ Switches automatic 3D controls on or off.
 
 \wxheading{Parameters}
 
-\docparam{auto3D}{If TRUE, all controls will be created with 3D appearances unless
-overridden for a control or dialog. The default is TRUE}
+\docparam{auto3D}{If true, all controls will be created with 3D appearances unless
+overridden for a control or dialog. The default is true}
 
 \wxheading{Remarks}
 
@@ -550,8 +550,8 @@ top-level frame is deleted.
 
 \wxheading{Parameters}
 
-\docparam{flag}{If TRUE (the default), the application will exit when the top-level frame is
-deleted. If FALSE, the application will continue to run.}
+\docparam{flag}{If true (the default), the application will exit when the top-level frame is
+deleted. If false, the application will continue to run.}
 
 \wxheading{See also}
 
@@ -606,11 +606,11 @@ This function currently only has effect under GTK.
 
 \wxheading{Parameters}
 
-\docparam{flag}{If TRUE, the app will use the best visual.}
+\docparam{flag}{If true, the app will use the best visual.}
 
 \membersection{wxApp::Yield}\label{wxappyield}
 
-\func{bool}{Yield}{\param{bool}{ onlyIfNeeded = FALSE}}
+\func{bool}{Yield}{\param{bool}{ onlyIfNeeded = false}}
 
 Yields control to pending messages in the windowing system. This can be useful, for example, when a
 time-consuming process writes to a text window. Without an occasional
@@ -631,6 +631,6 @@ iteration), call \helpref{wxLog::FlushActive}{wxlogflushactive}.
 
 Calling Yield() recursively is normally an error and an assert failure is
 raised in debug build if such situation is detected. However if the the 
-{\it onlyIfNeeded} parameter is {\tt TRUE}, the method will just silently
-return {\tt FALSE} instead.
+{\it onlyIfNeeded} parameter is {\tt true}, the method will just silently
+return {\tt false} instead.
 

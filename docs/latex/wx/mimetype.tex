@@ -140,7 +140,7 @@ is unknown.
 
 \func{bool}{IsOfType}{\param{const wxString\&}{ mimeType}, \param{const wxString\&}{ wildcard}}
 
-This function returns TRUE if either the given {\it mimeType} is exactly the
+This function returns true if either the given {\it mimeType} is exactly the
 same as {\it wildcard} or if it has the same category and the subtype of
 {\it wildcard} is '*'. Note that the '*' wildcard is not allowed in
 {\it mimeType} itself.
@@ -150,7 +150,7 @@ necessary to convert the strings to the same case before calling it.
 
 \membersection{wxMimeTypesManager::ReadMailcap}\label{wxmimetypesmanagerreadmailcap}
 
-\func{bool}{ReadMailcap}{\param{const wxString\&}{ filename}, \param{bool}{ fallback = FALSE}}
+\func{bool}{ReadMailcap}{\param{const wxString\&}{ filename}, \param{bool}{ fallback = false}}
 
 Load additional file containing information about MIME types and associated
 information in mailcap format. See metamail(1) and mailcap(5) for more
@@ -160,9 +160,9 @@ information.
 overriding the settings found in the standard files: normally, entries from
 files loaded with ReadMailcap will override the entries from files loaded
 previously (and the standard ones are loaded in the very beginning), but this
-will not happen if this parameter is set to TRUE (default is FALSE).
+will not happen if this parameter is set to true (default is false).
 
-The return value is TRUE if there were no errors in the file or FALSE
+The return value is true if there were no errors in the file or false
 otherwise.
 
 \membersection{wxMimeTypesManager::ReadMimeTypes}\label{wxmimetypesmanagerreadmimetypes}
@@ -173,6 +173,6 @@ Load additional file containing information about MIME types and associated
 information in mime.types file format. See metamail(1) and mailcap(5) for more
 information.
 
-The return value is TRUE if there were no errors in the file or FALSE
+The return value is true if there were no errors in the file or false
 otherwise.
 

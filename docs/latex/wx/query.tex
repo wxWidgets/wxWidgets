@@ -71,13 +71,13 @@ Return the size of the data of the field field.
 
 \func{bool}{IsRowDirty}{\param{int}{ field}}
 
-Returns TRUE if the given field has been changed, but not saved.
+Returns true if the given field has been changed, but not saved.
 
 \membersection{wxQueryCol::IsNullable}
 
 \func{bool}{IsNullable}{\void}
 
-Returns TRUE if a column may contain no data.
+Returns true if a column may contain no data.
 
 \membersection{wxQueryCol::AppendField}
 
@@ -109,7 +109,7 @@ appending columns.
 
 \membersection{wxQueryCol::SetFieldDirty}
 
-\func{void}{SetFieldDirty}{\param{int}{ field}, \param{bool }{dirty = TRUE}}
+\func{void}{SetFieldDirty}{\param{int}{ field}, \param{bool }{dirty = true}}
 
 Sets the dirty tag of a given field.
 
@@ -180,7 +180,7 @@ Returns the type of the field (currently SQL\_CHAR, SQL\_VARCHAR or SQL\_INTEGER
 
 \func{bool}{IsDirty}{\void}
 
-Returns TRUE if the data of a field has been changed, but not saved.
+Returns true if the data of a field has been changed, but not saved.
 
 \membersection{wxQueryField::SetData}
 
@@ -191,7 +191,7 @@ field buffer.
   
 \membersection{wxQueryField::SetDirty}
 
-\func{void}{SetDirty}{\param{bool}{ dirty = TRUE}}
+\func{void}{SetDirty}{\param{bool}{ dirty = true}}
 
 Sets the dirty tag of a field.
 

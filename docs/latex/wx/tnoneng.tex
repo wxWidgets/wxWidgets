@@ -98,7 +98,7 @@ if (!wxFontMapper::Get()->IsEncodingAvailable(enc, facename))
 {
    wxFontEncoding alternative;
    if (wxTheFontMapper->GetAltForEncoding(enc, &alternative, 
-                                          facename, FALSE))
+                                          facename, false))
    {
        wxEncodingConverted encconv;
        if (!encconv.Init(enc, alternative))

@@ -179,27 +179,27 @@ The key string is copied and stored by the list implementation.
 \func{void}{Clear}{\void}
 
 Clears the list (but does not delete the client data stored with each node
-unless you called DeleteContents({\tt TRUE}), in which case it deletes data).
+unless you called DeleteContents({\tt true}), in which case it deletes data).
 
 \membersection{wxList::DeleteContents}\label{wxlistdeletecontents}
 
 \func{void}{DeleteContents}{\param{bool}{ destroy}}
 
-If {\it destroy} is {\tt TRUE}, instructs the list to call {\it delete} on the client contents of
-a node whenever the node is destroyed. The default is {\tt FALSE}.
+If {\it destroy} is {\tt true}, instructs the list to call {\it delete} on the client contents of
+a node whenever the node is destroyed. The default is {\tt false}.
 
 \membersection{wxList::DeleteNode}\label{wxlistdeletenode}
 
 \func{bool}{DeleteNode}{\param{wxNode<T> *}{node}}
 
-Deletes the given node from the list, returning {\tt TRUE} if successful.
+Deletes the given node from the list, returning {\tt true} if successful.
 
 \membersection{wxList::DeleteObject}\label{wxlistdeleteobject}
 
 \func{bool}{DeleteObject}{\param{T *}{object}}
 
 Finds the given client {\it object} and deletes the appropriate node from the list, returning
-{\tt TRUE} if successful. The application must delete the actual object separately.
+{\tt true} if successful. The application must delete the actual object separately.
 
 \membersection{wxList::Find}\label{wxlistfind}
 
@@ -259,7 +259,7 @@ Inserts the object before the given {\it node}.
 
 \constfunc{bool}{IsEmpty}{\void}
 
-Returns {\tt TRUE} if the list is empty, {\tt FALSE} otherwise.
+Returns {\tt true} if the list is empty, {\tt false} otherwise.
 
 % Use different label name to avoid clashing with wxListItem label
 \membersection{wxList::Item}\label{wxlistitemfunc}

@@ -37,7 +37,7 @@ Filename associated with this document (``" if none).
 
 \member{bool}{m\_documentModified}
 
-TRUE if the document has been modified, FALSE otherwise.
+true if the document has been modified, false otherwise.
 
 \membersection{wxDocument::m\_documentTemplate}
 
@@ -92,7 +92,7 @@ If the view is not already in the list of views, adds the view and calls OnChang
 
 \func{virtual bool}{Close}{\void}
 
-Closes the document, by calling OnSaveModified and then (if this returned TRUE) OnCloseDocument.
+Closes the document, by calling OnSaveModified and then (if this returned true) OnCloseDocument.
 This does not normally delete the document object: use DeleteAllViews to do this implicitly.
 
 \membersection{wxDocument::DeleteAllViews}
@@ -181,7 +181,7 @@ See also: \helpref{GetFirstView}{wxdocumentgetfirstview}
 
 \constfunc{virtual bool}{IsModified}{\void}
 
-Returns TRUE if the document has been modified since the last save, FALSE otherwise.
+Returns true if the document has been modified since the last save, false otherwise.
 You may need to override this if your document view maintains its own
 record of being modified (for example if using wxTextWindow to view and edit the document).
 
@@ -204,7 +204,7 @@ was configured.
 
 \func{virtual void}{Modify}{\param{bool}{ modify}}
 
-Call with TRUE to mark the document as modified since the last save, FALSE otherwise.
+Call with true to mark the document as modified since the last save, false otherwise.
 You may need to override this if your document view maintains its own
 record of being modified (for example if using wxTextWindow to view and edit the document).
 
@@ -223,7 +223,7 @@ one has just been removed).
 \func{virtual bool}{OnCloseDocument}{\void}
 
 The default implementation calls DeleteContents (an empty implementation)
-sets the modified flag to FALSE. Override this to
+sets the modified flag to false. Override this to
 supply additional behaviour when the document is closed with Close.
 
 \membersection{wxDocument::OnCreate}
@@ -233,7 +233,7 @@ supply additional behaviour when the document is closed with Close.
 Called just after the document object is created to give it a chance
 to initialize itself. The default implementation uses the
 template associated with the document to create an initial view.
-If this function returns FALSE, the document is deleted.
+If this function returns false, the document is deleted.
 
 \membersection{wxDocument::OnCreateCommandProcessor}
 
@@ -257,7 +257,7 @@ document, and notifies the views that the filename (in fact, the title) has chan
 \func{virtual bool}{OnOpenDocument}{\param{const wxString\& }{filename}}
 
 Constructs an input file stream for the given filename (which must not be empty),
-and calls LoadObject. If LoadObject returns TRUE, the document is set to
+and calls LoadObject. If LoadObject returns true, the document is set to
 unmodified; otherwise, an error message box is displayed. The document's
 views are notified that the filename has changed, to give windows an opportunity
 to update their titles. All of the document's views are then updated.
@@ -267,7 +267,7 @@ to update their titles. All of the document's views are then updated.
 \func{virtual bool}{OnSaveDocument}{\param{const wxString\& }{filename}}
 
 Constructs an output file stream for the given filename (which must not be empty),
-and calls SaveObject. If SaveObject returns TRUE, the document is set to
+and calls SaveObject. If SaveObject returns true, the document is set to
 unmodified; otherwise, an error message box is displayed.
 
 \membersection{wxDocument::OnSaveModified}
@@ -336,11 +336,11 @@ framework.
 
 \membersection{wxDocument::SetFilename}
 
-\func{void}{SetFilename}{\param{const wxString\& }{filename}, \param{bool}{ notifyViews = FALSE}}
+\func{void}{SetFilename}{\param{const wxString\& }{filename}, \param{bool}{ notifyViews = false}}
 
 Sets the filename for this document. Usually called by the framework.
 
-If {\it notifyViews} is TRUE, wxView::OnChangeFilename is called for all views.
+If {\it notifyViews} is true, wxView::OnChangeFilename is called for all views.
 
 \membersection{wxDocument::SetTitle}
 

@@ -22,7 +22,7 @@ subwindows and hiding one of them.
 
   rightWindow = new MyWindow(splitter);
   rightWindow->SetScrollbars(20, 20, 50, 50);
-  rightWindow->Show(FALSE);
+  rightWindow->Show(false);
 
   splitter->Initialize(leftWindow);
 
@@ -39,8 +39,8 @@ The next fragment shows how the splitter window can be manipulated after creatio
   {
         if ( splitter->IsSplit() )
             splitter->Unsplit();
-        leftWindow->Show(TRUE);
-        rightWindow->Show(TRUE);
+        leftWindow->Show(true);
+        rightWindow->Show(true);
         splitter->SplitVertically( leftWindow, rightWindow );
   }
 
@@ -48,8 +48,8 @@ The next fragment shows how the splitter window can be manipulated after creatio
   {
         if ( splitter->IsSplit() )
             splitter->Unsplit();
-        leftWindow->Show(TRUE);
-        rightWindow->Show(TRUE);
+        leftWindow->Show(true);
+        rightWindow->Show(true);
         splitter->SplitHorizontally( leftWindow, rightWindow );
   }
 

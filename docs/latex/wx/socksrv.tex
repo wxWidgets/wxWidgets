@@ -58,17 +58,17 @@ Destructor (it doesn't close the accepted connections).
 %
 \membersection{wxSocketServer::Accept}\label{wxsocketserveraccept}
 
-\func{wxSocketBase *}{Accept}{\param{bool}{ wait = TRUE}}
+\func{wxSocketBase *}{Accept}{\param{bool}{ wait = true}}
 
 Accepts an incoming connection request, and creates a new 
 \helpref{wxSocketBase}{wxsocketbase} object which represents
 the server-side of the connection.
 
-If {\it wait} is TRUE and there are no pending connections to be
+If {\it wait} is true and there are no pending connections to be
 accepted, it will wait for the next incoming connection to
 arrive. {\bf Warning:} This will block the GUI.
 
-If {\it wait} is FALSE, it will try to accept a pending connection
+If {\it wait} is false, it will try to accept a pending connection
 if there is one, but it will always return immediately without blocking
 the GUI. If you want to use Accept in this way, you can either check for
 incoming connections with \helpref{WaitForAccept}{wxsocketserverwaitforaccept} 
@@ -78,7 +78,7 @@ that there is an incoming connection waiting to be accepted.
 \wxheading{Return value}
 
 Returns an opened socket connection, or NULL if an error occurred or
-if the {\it wait} parameter was FALSE and there were no pending
+if the {\it wait} parameter was false and there were no pending
 connections.
 
 \wxheading{See also}
@@ -93,7 +93,7 @@ connections.
 %
 \membersection{wxSocketServer::AcceptWith}\label{wxsocketserveracceptwith}
 
-\func{bool}{AcceptWith}{\param{wxSocketBase\&}{ socket}, \param{bool}{ wait = TRUE}}
+\func{bool}{AcceptWith}{\param{wxSocketBase\&}{ socket}, \param{bool}{ wait = true}}
 
 Accept an incoming connection using the specified socket object.
 
@@ -103,8 +103,8 @@ Accept an incoming connection using the specified socket object.
 
 \wxheading{Return value}
 
-Returns TRUE on success, or FALSE if an error occurred or if the
-{\it wait} parameter was FALSE and there were no pending
+Returns true on success, or false if an error occurred or if the
+{\it wait} parameter was false and there were no pending
 connections.
 
 \helpref{wxSocketServer::WaitForAccept}{wxsocketserverwaitforaccept}, 
@@ -121,7 +121,7 @@ connections.
 
 This function waits for an incoming connection. Use it if you want to call 
 \helpref{Accept}{wxsocketserveraccept} or \helpref{AcceptWith}{wxsocketserveracceptwith} 
-with {\it wait} set to FALSE, to detect when an incoming connection is waiting
+with {\it wait} set to false, to detect when an incoming connection is waiting
 to be accepted.
 
 \wxheading{Parameters}
@@ -134,7 +134,7 @@ as set with \helpref{SetTimeout}{wxsocketbasesettimeout}.}
 
 \wxheading{Return value}
 
-Returns TRUE if an incoming connection arrived, FALSE if the timeout elapsed.
+Returns true if an incoming connection arrived, false if the timeout elapsed.
 
 \wxheading{See also}
 

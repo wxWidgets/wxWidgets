@@ -141,14 +141,14 @@ dtor not virtual, don't derive from this class
 
 \func{bool}{Compile}{\param{const wxString\& }{pattern}, \param{int }{flags = wxRE\_DEFAULT}}
 
-Compile the string into regular expression, return {\tt TRUE} if ok or {\tt FALSE} 
+Compile the string into regular expression, return {\tt true} if ok or {\tt false} 
 if string has a syntax error.
 
 \membersection{wxRegEx::IsValid}\label{wxregexisvalid}
 
 \constfunc{bool}{IsValid}{\void}
 
-Return {\tt TRUE} if this is a valid compiled regular expression, {\tt FALSE} 
+Return {\tt true} if this is a valid compiled regular expression, {\tt false} 
 otherwise.
 
 \membersection{wxRegEx::GetMatch}\label{wxregexgetmatch}
@@ -163,7 +163,7 @@ May only be called after successful call to \helpref{Matches()}{wxregexmatches}
 and only if {\tt wxRE\_NOSUB} was {\bf not} used in 
 \helpref{Compile()}{wxregexcompile}.
 
-Returns {\tt FALSE} if no match or if an error occured.
+Returns {\tt false} if no match or if an error occured.
 
 \constfunc{wxString}{GetMatch}{\param{const wxString\& }{text}, \param{size\_t }{index = 0}}
 
@@ -179,7 +179,7 @@ and only if {\tt wxRE\_NOSUB} was {\bf not} used in
 \constfunc{bool}{Matches}{\param{const wxChar* }{text}, \param{int }{flags = 0}}
 
 Matches the precompiled regular expression against the string {\it text},
-returns {\tt TRUE} if matches and {\tt FALSE} otherwise.
+returns {\tt true} if matches and {\tt false} otherwise.
 
 Flags may be combination of {\tt wxRE\_NOTBOL} and {\tt wxRE\_NOTEOL}.
 

@@ -50,7 +50,7 @@ data for the control. If such a variable address is not supplied by the user, th
 the validator should store the data internally.
 
 The \helpref{wxValidator::Validate}{wxvalidatorvalidate} member function should return
-TRUE if the data in the control (not the C++ variable) is valid. It should also show
+true if the data in the control (not the C++ variable) is valid. It should also show
 an appropriate message if data was not valid.
 
 The \helpref{wxValidator::TransferToWindow}{wxvalidatortransfertowindow} member function should
@@ -88,7 +88,7 @@ call \helpref{wxWindow::InitDialog}{wxwindowinitdialog} explicitly before showin
 window.}
 
 When the user clicks on a button, for example the OK button, the application should
-first call \helpref{wxWindow::Validate}{wxwindowvalidate}, which returns FALSE if
+first call \helpref{wxWindow::Validate}{wxwindowvalidate}, which returns false if
 any of the child window validators failed to validate the window data. The button handler
 should return immediately if validation failed. Secondly, the application should
 call \helpref{wxWindow::TransferDataFromWindow}{wxwindowtransferdatafromwindow} and
@@ -108,7 +108,7 @@ void wxDialog::OnOK(wxCommandEvent& event)
         else
         {
 		    SetReturnCode(wxID_OK);
-		    this->Show(FALSE);
+		    this->Show(false);
         }
 	}
 }

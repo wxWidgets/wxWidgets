@@ -56,7 +56,7 @@ width of the rectangle between calls to \helpref{Render}{wxhtmldcrendererrender}
 
 \membersection{wxHtmlDCRenderer::SetHtmlText}\label{wxhtmldcrenderersethtmltext}
 
-\func{void}{SetHtmlText}{\param{const wxString\& }{html}, \param{const wxString\& }{basepath = wxEmptyString}, \param{bool }{isdir = TRUE}}
+\func{void}{SetHtmlText}{\param{const wxString\& }{html}, \param{const wxString\& }{basepath = wxEmptyString}, \param{bool }{isdir = true}}
 
 Assign text to the renderer. \helpref{Render}{wxhtmldcrendererrender} then draws 
 the text onto DC.
@@ -68,12 +68,12 @@ the text onto DC.
 \docparam{basepath}{base directory (html string would be stored there if it was in
 file). It is used to determine path for loading images, for example.}
 
-\docparam{isdir}{FALSE if basepath is filename, TRUE if it is directory name
+\docparam{isdir}{false if basepath is filename, true if it is directory name
 (see \helpref{wxFileSystem}{wxfilesystem} for detailed explanation)}
 
 \membersection{wxHtmlDCRenderer::Render}\label{wxhtmldcrendererrender}
 
-\func{int}{Render}{\param{int }{x}, \param{int }{y}, \param{int }{from = 0}, \param{int }{dont\_render = FALSE}}
+\func{int}{Render}{\param{int }{x}, \param{int }{y}, \param{int }{from = 0}, \param{int }{dont\_render = false}}
 
 Renders HTML text to the DC.
 
@@ -83,7 +83,7 @@ Renders HTML text to the DC.
 
 \docparam{from}{y-coordinate of the very first visible cell}
 
-\docparam{dont\_render}{if TRUE then this method only returns y coordinate of the next page
+\docparam{dont\_render}{if true then this method only returns y coordinate of the next page
 and does not output anything}
 
 Returned value is y coordinate of first cell than didn't fit onto page.

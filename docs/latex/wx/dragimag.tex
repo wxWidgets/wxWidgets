@@ -110,7 +110,7 @@ have a mask.}
 
 \membersection{wxDragImage::BeginDrag}\label{wxdragimagebegindrag}
 
-\func{bool}{BeginDrag}{\param{const wxPoint\& }{hotspot}, \param{wxWindow* }{window}, \param{bool}{ fullScreen = FALSE}, \param{wxRect*}{ rect = NULL}}
+\func{bool}{BeginDrag}{\param{const wxPoint\& }{hotspot}, \param{wxWindow* }{window}, \param{bool}{ fullScreen = false}, \param{wxRect*}{ rect = NULL}}
 
 Start dragging the image, in a window or full screen.
 
@@ -133,12 +133,12 @@ Note that this call automatically calls CaptureMouse.
 of the image.}
 
 \docparam{window}{The window that captures the mouse, and within which the dragging
-is limited unless {\it fullScreen} is TRUE.}
+is limited unless {\it fullScreen} is true.}
 
 \docparam{boundingWindow}{In the second form of the function, specifies the
 area within which the drag occurs.}
 
-\docparam{fullScreen}{If TRUE, specifies that the drag will be visible over the full
+\docparam{fullScreen}{If true, specifies that the drag will be visible over the full
 screen, or over as much of the screen as is specified by {\it rect}. Note that the mouse will
 still be captured in {\it window}.}
 

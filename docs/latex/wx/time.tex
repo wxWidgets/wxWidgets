@@ -45,11 +45,11 @@ Initialize the object using the number of seconds that have elapsed since ???.
 
 Copy constructor.
 
-\func{}{wxTime}{\param{hourTy }{h}, \param{minuteTy }{m}, \param{secondTy }{s = 0}, \param{bool }{dst = FALSE}}
+\func{}{wxTime}{\param{hourTy }{h}, \param{minuteTy }{m}, \param{secondTy }{s = 0}, \param{bool }{dst = false}}
 
 Initialize using hours, minutes, seconds, and whether DST time.
 
-\func{}{wxTime}{\param{const wxDate\&}{ date}, \param{hourTy }{h = 0}, \param{minuteTy }{m = 0}, \param{secondTy }{s = 0}, \param{bool }{dst = FALSE}}
+\func{}{wxTime}{\param{const wxDate\&}{ date}, \param{hourTy }{h = 0}, \param{minuteTy }{m = 0}, \param{secondTy }{s = 0}, \param{bool }{dst = false}}
 
 Initialize using a \helpref{wxDate}{wxdate} object, hours, minutes, seconds, and whether DST time.
 
@@ -129,7 +129,7 @@ Formats the time according to the current formatting options: see \helpref{wxTim
 
 \constfunc{bool}{IsBetween}{\param{const wxTime\& }{a}, \param{const wxTime\& }{b}}
 
-Returns TRUE if this time is between the two given times.
+Returns true if this time is between the two given times.
 
 \membersection{wxTime::Max}\label{wxtimemax}
 

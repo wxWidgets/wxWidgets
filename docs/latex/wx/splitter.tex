@@ -190,7 +190,7 @@ This should be called if you wish to initially view only a single pane in the sp
 
 \constfunc{bool}{IsSplit}{\void}
 
-Returns TRUE if the window is split, FALSE otherwise.
+Returns true if the window is split, false otherwise.
 
 \membersection{wxSplitterWindow::OnDoubleClickSash}\label{wxsplitterwindowondoubleclicksash}
 
@@ -235,7 +235,7 @@ may wish to delete the window.
 \func{virtual bool}{OnSashPositionChange}{\param{int }{newSashPosition}}
 
 Application-overridable function called when the sash position is changed by 
-user. It may return FALSE to prevent the change or TRUE to allow it.
+user. It may return false to prevent the change or true to allow it.
 
 \wxheading{Parameters}
 
@@ -258,8 +258,8 @@ windows or only one.
 
 Both parameters should be non-NULL and {\it winOld} must specify one of the
 windows managed by the splitter. If the parameters are incorrect or the window
-couldn't be replaced, FALSE is returned. Otherwise the function will return
-TRUE, but please notice that it will not delete the replaced window and you
+couldn't be replaced, false is returned. Otherwise the function will return
+true, but please notice that it will not delete the replaced window and you
 may wish to do it yourself.
 
 \wxheading{See also}
@@ -274,7 +274,7 @@ may wish to do it yourself.
 
 \membersection{wxSplitterWindow::SetSashPosition}\label{wxsplitterwindowsetsashposition}
 
-\func{void}{SetSashPosition}{\param{int }{position}, \param{const bool}{ redraw = TRUE}}
+\func{void}{SetSashPosition}{\param{int }{position}, \param{const bool}{ redraw = true}}
 
 Sets the sash position.
 
@@ -282,7 +282,7 @@ Sets the sash position.
 
 \docparam{position}{The sash position in pixels.}
 
-\docparam{redraw}{If TRUE, resizes the panes and redraws the sash and border.}
+\docparam{redraw}{If true, resizes the panes and redraws the sash and border.}
 
 \wxheading{Remarks}
 
@@ -353,7 +353,7 @@ to choose the default position (half of the total window height).}
 
 \wxheading{Return value}
 
-TRUE if successful, FALSE otherwise (the window was already split).
+true if successful, false otherwise (the window was already split).
 
 \wxheading{Remarks}
 
@@ -386,7 +386,7 @@ to choose the default position (half of the total window width).}
 
 \wxheading{Return value}
 
-TRUE if successful, FALSE otherwise (the window was already split).
+true if successful, false otherwise (the window was already split).
 
 \wxheading{Remarks}
 
@@ -410,7 +410,7 @@ Unsplits the window.
 
 \wxheading{Return value}
 
-TRUE if successful, FALSE otherwise (the window was not split).
+true if successful, false otherwise (the window was not split).
 
 \wxheading{Remarks}
 

@@ -282,7 +282,7 @@ back later), you may use \helpref{RemoveTool}{wxtoolbarremovetool} instead.
 Note that it is unnecessary to call \helpref{Realize}{wxtoolbarrealize} for the
 change to take place, it will happen immediately.
 
-Returns TRUE if the tool was deleted, FALSE otherwise.
+Returns true if the tool was deleted, false otherwise.
 
 \wxheading{See also}
 
@@ -305,7 +305,7 @@ Enables or disables the tool.
 
 \docparam{toolId}{Tool to enable or disable.}
 
-\docparam{enable}{If TRUE, enables the tool, otherwise disables it.}
+\docparam{enable}{If true, enables the tool, otherwise disables it.}
 
 {\bf NB:} This function should only be called after 
 \helpref{Realize}{wxtoolbarrealize}.
@@ -411,7 +411,7 @@ Called to determine whether a tool is enabled (responds to user input).
 
 \wxheading{Return value}
 
-TRUE if the tool is enabled, FALSE otherwise.
+true if the tool is enabled, false otherwise.
 
 \wxheading{See also}
 
@@ -479,7 +479,7 @@ Gets the on/off state of a toggle tool.
 
 \wxheading{Return value}
 
-TRUE if the tool is toggled on, FALSE otherwise.
+true if the tool is toggled on, false otherwise.
 
 \wxheading{See also}
 
@@ -515,7 +515,7 @@ You must call \helpref{Realize}{wxtoolbarrealize} for the change to take place.
 
 \func{wxToolBarTool *}{InsertTool}{\param{size\_t }{pos},\rtfsp
 \param{int}{ toolId}, \param{const wxBitmap\&}{ bitmap1},\rtfsp
-\param{const wxBitmap\&}{ bitmap2 = wxNullBitmap}, \param{bool}{ isToggle = FALSE},\rtfsp
+\param{const wxBitmap\&}{ bitmap2 = wxNullBitmap}, \param{bool}{ isToggle = false},\rtfsp
 \param{wxObject* }{clientData = NULL}, \param{const wxString\& }{shortHelpString = ""}, \param{const wxString\& }{longHelpString = ""}}
 
 Inserts the tool with the specified attributes into the toolbar at the given
@@ -542,11 +542,11 @@ you should use the EVT\_MENU or EVT\_TOOL macro instead.
 
 \docparam{toolId}{The identifier passed to \helpref{wxToolBar::AddTool}{wxtoolbaraddtool}.}
 
-\docparam{toggleDown}{TRUE if the tool is a toggle and the toggle is down, otherwise is FALSE.}
+\docparam{toggleDown}{true if the tool is a toggle and the toggle is down, otherwise is false.}
 
 \wxheading{Return value}
 
-If the tool is a toggle and this function returns FALSE, the toggle
+If the tool is a toggle and this function returns false, the toggle
 toggle state (internal and visual) will not be changed. This provides a way of
 specifying that toggle operations are not permitted in some circumstances.
 
@@ -765,7 +765,7 @@ Toggles a tool on or off. This does not cause any event to get emitted.
 
 \docparam{toolId}{Tool in question.}
 
-\docparam{toggle}{If TRUE, toggles the tool on, otherwise toggles it off.}
+\docparam{toggle}{If true, toggles the tool on, otherwise toggles it off.}
 
 \wxheading{Remarks}
 

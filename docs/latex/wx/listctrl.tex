@@ -228,7 +228,7 @@ Ensures this item is visible.
 
 \membersection{wxListCtrl::FindItem}\label{wxlistctrlfinditem}
 
-\func{long}{FindItem}{\param{long }{start}, \param{const wxString\& }{str}, \param{const bool }{partial = FALSE}}
+\func{long}{FindItem}{\param{long }{start}, \param{const wxString\& }{str}, \param{const bool }{partial = false}}
 
 Find an item whose label matches this string, starting from the item after {\it start} or
 the beginning if {\it start} is -1.
@@ -246,7 +246,7 @@ the item after {\it start} or the beginning if {\it start} is -1.
 \pythonnote{In place of a single overloaded method name, wxPython
 implements the following methods:\par
 \indented{2cm}{\begin{twocollist}
-\twocolitem{{\bf FindItem(start, str, partial=FALSE)}}{}
+\twocolitem{{\bf FindItem(start, str, partial=false)}}{}
 \twocolitem{{\bf FindItemData(start, data)}}{}
 \twocolitem{{\bf FindItemAtPos(start, point, direction)}}{}
 \end{twocollist}}
@@ -255,7 +255,7 @@ implements the following methods:\par
 \perlnote{In wxPerl there are three methods instead of a single overloaded
 method:\par
 \indented{2cm}{\begin{twocollist}
-\twocolitem{{\bf FindItem( start, str, partial = FALSE ) }}{}
+\twocolitem{{\bf FindItem( start, str, partial = false ) }}{}
 \twocolitem{{\bf FindItemData( start, data ) }}{}
 \twocolitem{{\bf FindItemAtPos( start, point, direction )}}{}
 \end{twocollist}
@@ -374,7 +374,7 @@ returns a Wx::Rect ( or undef ).}
 \constfunc{int}{GetItemSpacing}{\param{bool }{isSmall}}
 
 Retrieves the spacing between icons in pixels.
-If {\it small} is TRUE, gets the spacing for the small icon
+If {\it small} is true, gets the spacing for the small icon
 view, otherwise the large icon view.
 
 \membersection{wxListCtrl::GetItemState}\label{wxlistctrlgetitemstate}
@@ -774,7 +774,7 @@ Sets the item text for this item.
 
 \membersection{wxListCtrl::SetSingleStyle}\label{wxlistctrlsetsinglestyle}
 
-\func{void}{SetSingleStyle}{\param{long }{style}, \param{const bool }{add = TRUE}}
+\func{void}{SetSingleStyle}{\param{long }{style}, \param{const bool }{add = true}}
 
 Adds or removes a single window style.
 

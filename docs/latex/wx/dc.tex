@@ -61,7 +61,7 @@ released for each drawing operation.
 
 \func{bool}{Blit}{\param{wxCoord}{ xdest}, \param{wxCoord}{ ydest}, \param{wxCoord}{ width}, \param{wxCoord}{ height},
   \param{wxDC* }{source}, \param{wxCoord}{ xsrc}, \param{wxCoord}{ ysrc}, \param{int}{ logicalFunc = wxCOPY},
-  \param{bool }{useMask = FALSE}, \param{wxCoord}{ xsrcMask = -1}, \param{wxCoord}{ ysrcMask = -1}}
+  \param{bool }{useMask = false}, \param{wxCoord}{ xsrcMask = -1}, \param{wxCoord}{ ysrcMask = -1}}
 
 Copy from a source DC to this DC, specifying the destination
 coordinates, size of area to copy, source DC, source coordinates,
@@ -85,7 +85,7 @@ logical function, whether to use a bitmap mask, and mask source position.
 
 \docparam{logicalFunc}{Logical function to use: see \helpref{wxDC::SetLogicalFunction}{wxdcsetlogicalfunction}.}
 
-\docparam{useMask}{If TRUE, Blit does a transparent blit using the mask that is associated with the bitmap
+\docparam{useMask}{If true, Blit does a transparent blit using the mask that is associated with the bitmap
 selected into the source device context. The Windows implementation does the following if MaskBlt cannot be used:
 
 \begin{enumerate}
@@ -133,7 +133,7 @@ See \helpref{wxMemoryDC}{wxmemorydc} for typical usage.
 
 \func{static bool}{CacheEnabled}{\void}
 
-On supported platforms (currently only Windows), returns TRUE
+On supported platforms (currently only Windows), returns true
 if the DC cache is enabled. The DC cache
 can speed up the \helpref{Blit}{wxdcblit} operation when
 drawing a large number of masked bitmaps.
@@ -243,7 +243,7 @@ The arc is drawn in an anticlockwise direction from the start point to the end p
 
 \func{void}{DrawBitmap}{\param{const wxBitmap\&}{ bitmap}, \param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{bool}{ transparent}}
 
-Draw a bitmap on the device context at the specified point. If {\it transparent} is TRUE and the bitmap has
+Draw a bitmap on the device context at the specified point. If {\it transparent} is true and the bitmap has
 a transparency mask, the bitmap will be drawn transparently.
 
 When drawing a mono-bitmap, the current text foreground colour will be used to draw the foreground
@@ -497,11 +497,11 @@ the {\it current brush colour}, and using a style:
 \item wxFLOOD\_BORDER: the area to be flooded is bounded by the given colour.
 \end{itemize}
 
-Returns FALSE if the operation failed.
+Returns false if the operation failed.
 
 {\it Note:} The present implementation for non-Windows platforms may fail to find
 colour borders if the pixels do not match the colour exactly. However the
-function will still return TRUE.
+function will still return true.
 
 \membersection{wxDC::GetBackground}\label{wxdcgetbackground}
 
@@ -577,7 +577,7 @@ Gets the {\it mapping mode} for the device context (see \helpref{wxDC::SetMapMod
 
 \func{bool}{GetOptimization}{\void}
 
-Returns TRUE if device context optimization is on.
+Returns true if device context optimization is on.
 See \helpref{wxDC::SetOptimization}{wxsetoptimization} for details.
 
 \membersection{wxDC::GetPen}\label{wxdcgetpen}
@@ -755,7 +755,7 @@ Gets the minimum vertical extent used in drawing commands so far.
 
 \func{bool}{Ok}{\void}
 
-Returns TRUE if the DC is ok to use.
+Returns true if the DC is ok to use.
 
 \membersection{wxDC::ResetBoundingBox}\label{wxdcresetboundingbox}
 
@@ -938,7 +938,7 @@ The mapping mode can be one of the following:
 
 \func{void}{SetOptimization}{\param{bool }{optimize}}
 
-If {\it optimize} is TRUE (the default), this function sets optimization mode on.
+If {\it optimize} is true (the default), this function sets optimization mode on.
 This currently means that under X, the device context will not try to set a pen or brush
 property if it is known to be set already. This approach can fall down
 if non-wxWindows code is using the same device context or window, for example

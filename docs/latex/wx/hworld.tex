@@ -105,15 +105,15 @@ As mentioned above, wxApp::OnInit() is called upon startup and should be
 used to initialize the program, maybe showing a "splash screen" and creating
 the main window (or several). The frame should get a title bar text ("Hello World")
 and a position and start-up size. One frame can also be declared to be the
-top window. Returning TRUE indicates a successful initialization.
+top window. Returning true indicates a successful initialization.
 
 \begin{verbatim}
 bool MyApp::OnInit()
 {
     MyFrame *frame = new MyFrame( "Hello World", wxPoint(50,50), wxSize(450,340) );
-    frame->Show( TRUE );
+    frame->Show( true );
     SetTopWindow( frame );
-    return TRUE;
+    return true;
 }
 \end{verbatim}
 
@@ -142,14 +142,14 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 \end{verbatim}
 
 Here are the actual event handlers. MyFrame::OnQuit() closes the main window
-by calling Close(). The parameter TRUE indicates that other windows have no veto
+by calling Close(). The parameter true indicates that other windows have no veto
 power such as after asking "Do you really want to close?". If there is no other 
 main window left, the application will quit.
 
 \begin{verbatim}
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    Close( TRUE );
+    Close( true );
 }
 \end{verbatim}
 

@@ -38,7 +38,7 @@ please look at the printout sample code.
     {
       wxPrinter printer;
       MyPrintout printout("My printout");
-      printer.Print(this, &printout, TRUE);
+      printer.Print(this, &printout, true);
       break;
     }
     case WXPRINT_PREVIEW:
@@ -48,14 +48,14 @@ please look at the printout sample code.
       wxPreviewFrame *frame = new wxPreviewFrame(preview, this, "Demo Print Preview", 100, 100, 600, 650);
       frame->Centre(wxBOTH);
       frame->Initialize();
-      frame->Show(TRUE);
+      frame->Show(true);
       break;
     }
     case WXPRINT_PRINT_SETUP:
     {
       wxPrintDialog printerDialog(this);
-      printerDialog.GetPrintData().SetSetupDialog(TRUE);
-      printerDialog.Show(TRUE);
+      printerDialog.GetPrintData().SetSetupDialog(true);
+      printerDialog.Show(true);
       break;
     }
 \end{verbatim}

@@ -72,16 +72,16 @@ A list of all document templates.
 
 \membersection{wxDocManager::wxDocManager}
 
-\func{void}{wxDocManager}{\param{long}{ flags = wxDEFAULT\_DOCMAN\_FLAGS}, \param{bool}{ initialize = TRUE}}
+\func{void}{wxDocManager}{\param{long}{ flags = wxDEFAULT\_DOCMAN\_FLAGS}, \param{bool}{ initialize = true}}
 
 Constructor. Create a document manager instance dynamically near the start of your application
 before doing any document or view operations.
 
 {\it flags} is currently unused.
 
-If {\it initialize} is TRUE, the \helpref{Initialize}{wxdocmanagerinitialize} function will be called
+If {\it initialize} is true, the \helpref{Initialize}{wxdocmanagerinitialize} function will be called
 to create a default history list object. If you derive from wxDocManager, you may wish to call the
-base constructor with FALSE, and then call Initialize in your own constructor, to allow
+base constructor with false, and then call Initialize in your own constructor, to allow
 your own Initialize or OnCreateFileHistory functions to be called.
 
 \membersection{wxDocManager::\destruct{wxDocManager}}
@@ -116,7 +116,7 @@ Adds the template to the document manager's template list.
 
 \membersection{wxDocManager::CloseDocuments}
 
-\func{bool}{CloseDocuments}{\param{bool }{force = TRUE}}
+\func{bool}{CloseDocuments}{\param{bool }{force = true}}
 
 Closes all currently opened documents.
 
@@ -262,7 +262,7 @@ the opportunity to override functionality. If OnCreateFileHistory was called
 from the constructor, an overridden virtual OnCreateFileHistory would not be
 called due to C++'s `interesting' constructor semantics. In fact Initialize
 \rtfsp{\it is} called from the wxDocManager constructor, but this can be
-vetoed by passing FALSE to the second argument, allowing the derived class's
+vetoed by passing false to the second argument, allowing the derived class's
 constructor to call Initialize, possibly calling a different OnCreateFileHistory
 from the default.
 
@@ -367,7 +367,7 @@ two values, eg:\par
 \membersection{wxDocManager::SelectDocumentType}
 
 \func{wxDocTemplate *}{SelectDocumentType}{\param{wxDocTemplate **}{templates},
- \param{int}{ noTemplates}, \param{bool}{ sort=FALSE}}
+ \param{int}{ noTemplates}, \param{bool}{ sort=false}}
 
 Returns a document template by asking the user (if there is more than one template).
 This function is used in wxDocManager::CreateDocument.
@@ -379,14 +379,14 @@ This function is used in wxDocManager::CreateDocument.
 \docparam{sort}{If more than one template is passed in in {\it templates}, 
 then this parameter indicates whether the list of templates that the user 
 will have to choose from is sorted or not when shown the choice box dialog.  
-Default is FALSE.}
+Default is false.}
 
 \perlnote{In wxPerl {\tt templates} is a reference to a list of templates.}
 
 \membersection{wxDocManager::SelectViewType}
 
 \func{wxDocTemplate *}{SelectViewType}{\param{wxDocTemplate **}{templates},
- \param{int}{ noTemplates}, \param{bool}{ sort=FALSE}}
+ \param{int}{ noTemplates}, \param{bool}{ sort=false}}
 
 Returns a document template by asking the user (if there is more than one template),
 displaying a list of valid views. This function is used in wxDocManager::CreateView.
@@ -400,7 +400,7 @@ those relevant to the document in question, and often there will only be one suc
 \docparam{sort}{If more than one template is passed in in {\it templates}, 
 then this parameter indicates whether the list of templates that the user 
 will have to choose from is sorted or not when shown the choice box dialog.  
-Default is FALSE.}
+Default is false.}
 
 \perlnote{In wxPerl {\tt templates} is a reference to a list of templates.}
 

@@ -37,7 +37,7 @@ because during a new node addition the list integrity is temporarily broken
         s_mutexProtectingTheGlobalList->Unlock();
     }
 
-    // return TRUE the given number is greater than all array elements
+    // return true the given number is greater than all array elements
     bool MyThread::IsGreater(int num)
     {
         // before using the list we must acquire the mutex
@@ -47,16 +47,16 @@ because during a new node addition the list integrity is temporarily broken
         for ( size_t n = 0; n < count; n++ )
         {
             if ( s_data[n] > num )
-                return FALSE;
+                return false;
         }
 
-        return TRUE;
+        return true;
     }
 \end{verbatim}
 }
 
 Notice how wxMutexLocker was used in the second function to ensure that the
-mutex is unlocked in any case: whether the function returns TRUE or FALSE
+mutex is unlocked in any case: whether the function returns true or false
 (because the destructor of the local object {\it lock} is always called). Using
 this class instead of directly using wxMutex is, in general safer and is even
 more so if your program uses C++ exceptions.

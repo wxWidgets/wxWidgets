@@ -117,9 +117,9 @@ table (see \helpref{wxGrid::SetTable}{wxgridsettable}).
 
 \membersection{wxGrid::AppendCols}\label{wxgridappendcols}
 
-\func{bool}{AppendCols}{\param{int }{numCols = 1}, \param{bool }{updateLabels = TRUE}}
+\func{bool}{AppendCols}{\param{int }{numCols = 1}, \param{bool }{updateLabels = true}}
 
-Appends one or more new columns to the right of the grid and returns TRUE if
+Appends one or more new columns to the right of the grid and returns true if
 successful. The updateLabels argument is not used at present.
 
 If you are using a derived grid table class you will need to override 
@@ -128,9 +128,9 @@ If you are using a derived grid table class you will need to override
 
 \membersection{wxGrid::AppendRows}\label{wxgridappendrows}
 
-\func{bool}{AppendRows}{\param{int }{numRows = 1}, \param{bool }{updateLabels = TRUE}}
+\func{bool}{AppendRows}{\param{int }{numRows = 1}, \param{bool }{updateLabels = true}}
 
-Appends one or more new rows to the bottom of the grid and returns TRUE if
+Appends one or more new rows to the bottom of the grid and returns true if
 successful. The updateLabels argument is not used at present.
 
 If you are using a derived grid table class you will need to override 
@@ -149,9 +149,9 @@ The memory requirements for this could become prohibitive if your grid is very l
 
 \membersection{wxGrid::AutoSizeColumn}\label{wxgridautosizecolumn}
 
-\func{void}{AutoSizeColumn}{\param{int }{col}, \param{bool }{setAsMin = TRUE}}
+\func{void}{AutoSizeColumn}{\param{int }{col}, \param{bool }{setAsMin = true}}
 
-Automatically sizes the column to fit its contents. If setAsMin is TRUE the calculated width will
+Automatically sizes the column to fit its contents. If setAsMin is true the calculated width will
 also be set as the minimal width for the column.
 
 \wxheading{Note}\\
@@ -160,9 +160,9 @@ The memory requirements for this could become prohibitive if your grid is very l
 
 \membersection{wxGrid::AutoSizeColumns}\label{wxgridautosizecolumns}
 
-\func{void}{AutoSizeColumns}{\param{bool }{setAsMin = TRUE}}
+\func{void}{AutoSizeColumns}{\param{bool }{setAsMin = true}}
 
-Automatically sizes all columns to fit their contents. If setAsMin is TRUE the calculated widths will
+Automatically sizes all columns to fit their contents. If setAsMin is true the calculated widths will
 also be set as the minimal widths for the columns.
 
 \wxheading{Note}\\
@@ -171,9 +171,9 @@ The memory requirements for this could become prohibitive if your grid is very l
 
 \membersection{wxGrid::AutoSizeRow}\label{wxgridautosizerow}
 
-\func{void}{AutoSizeRow}{\param{int }{row}, \param{bool }{setAsMin = TRUE}}
+\func{void}{AutoSizeRow}{\param{int }{row}, \param{bool }{setAsMin = true}}
 
-Automatically sizes the row to fit its contents. If setAsMin is TRUE the calculated height will
+Automatically sizes the row to fit its contents. If setAsMin is true the calculated height will
 also be set as the minimal height for the row.
 
 \wxheading{Note}\\
@@ -182,9 +182,9 @@ The memory requirements for this could become prohibitive if your grid is very l
 
 \membersection{wxGrid::AutoSizeRows}\label{wxgridautosizerows}
 
-\func{void}{AutoSizeRows}{\param{bool }{setAsMin = TRUE}}
+\func{void}{AutoSizeRows}{\param{bool }{setAsMin = true}}
 
-Automatically sizes all rows to fit their contents. If setAsMin is TRUE the calculated heights will
+Automatically sizes all rows to fit their contents. If setAsMin is true the calculated heights will
 also be set as the minimal heights for the rows.
 
 \wxheading{Note}\\
@@ -205,7 +205,7 @@ screen flicker. The final EndBatch will cause the grid to be repainted.
 
 \func{bool}{CanDragColSize}{\void}
 
-Returns TRUE if columns can be resized by dragging with the mouse. Columns can be resized
+Returns true if columns can be resized by dragging with the mouse. Columns can be resized
 by dragging the edges of their labels. If grid line dragging is enabled they can also be
 resized by dragging the right edge of the column in the grid cell area 
 (see \helpref{wxGrid::EnableDragGridSize}{wxgridenabledraggridsize}).
@@ -214,7 +214,7 @@ resized by dragging the right edge of the column in the grid cell area
 
 \func{bool}{CanDragRowSize}{\void}
 
-Returns TRUE if rows can be resized by dragging with the mouse. Rows can be resized
+Returns true if rows can be resized by dragging with the mouse. Rows can be resized
 by dragging the edges of their labels. If grid line dragging is enabled they can also be
 resized by dragging the lower edge of the row in the grid cell area 
 (see \helpref{wxGrid::EnableDragGridSize}{wxgridenabledraggridsize}).
@@ -223,14 +223,14 @@ resized by dragging the lower edge of the row in the grid cell area
 
 \func{bool}{CanDragGridSize}{\void}
 
-Return TRUE if the dragging of grid lines to resize rows and columns is enabled or FALSE otherwise.
+Return true if the dragging of grid lines to resize rows and columns is enabled or false otherwise.
 
 \membersection{wxGrid::CanEnableCellControl}\label{wxgridcanenablecellcontrol}
 
 \constfunc{bool}{CanEnableCellControl}{\void}
 
-Returns TRUE if the in-place edit control for the current grid cell can be used and
-FALSE otherwise (e.g. if the current cell is read-only).
+Returns true if the in-place edit control for the current grid cell can be used and
+false otherwise (e.g. if the current cell is read-only).
 
 \membersection{wxGrid::CellToRect}\label{wxgridcelltorect}
 
@@ -270,10 +270,10 @@ class and pass a table object to the grid with \helpref{wxGrid::SetTable}{wxgrid
 
 \membersection{wxGrid::DeleteCols}\label{wxgriddeletecols}
 
-\func{bool}{DeleteCols}{\param{int }{pos = 0}, \param{int }{numCols = 1}, \param{bool }{updateLabels = TRUE}}
+\func{bool}{DeleteCols}{\param{int }{pos = 0}, \param{int }{numCols = 1}, \param{bool }{updateLabels = true}}
 
 Deletes one or more columns from a grid starting at the specified position and returns
-TRUE if successful. The updateLabels argument is not used at present.
+true if successful. The updateLabels argument is not used at present.
 
 If you are using a derived grid table class you will need to override 
 \helpref{wxGridTableBase::DeleteCols}{wxgridtablebasedeletecols}. See 
@@ -281,10 +281,10 @@ If you are using a derived grid table class you will need to override
 
 \membersection{wxGrid::DeleteRows}\label{wxgriddeleterows}
 
-\func{bool}{DeleteRows}{\param{int }{pos = 0}, \param{int }{numRows = 1}, \param{bool }{updateLabels = TRUE}}
+\func{bool}{DeleteRows}{\param{int }{pos = 0}, \param{int }{numRows = 1}, \param{bool }{updateLabels = true}}
 
 Deletes one or more rows from a grid starting at the specified position and returns
-TRUE if successful. The updateLabels argument is not used at present.
+true if successful. The updateLabels argument is not used at present.
 
 If you are using a derived grid table class you will need to override 
 \helpref{wxGridTableBase::DeleteRows}{wxgridtablebasedeleterows}. See 
@@ -295,13 +295,13 @@ If you are using a derived grid table class you will need to override
 \func{void}{DisableCellEditControl}{\void}
 
 Disables in-place editing of grid cells. 
-Equivalent to calling EnableCellEditControl(FALSE).
+Equivalent to calling EnableCellEditControl(false).
 
 \membersection{wxGrid::DisableDragColSize}\label{wxgriddisabledragcolsize}
 
 \func{void}{DisableDragColSize}{\void}
 
-Disables column sizing by dragging with the mouse. Equivalent to passing FALSE to 
+Disables column sizing by dragging with the mouse. Equivalent to passing false to 
 \helpref{wxGrid::EnableDragColSize}{wxgridenabledragcolsize}. 
 
 \membersection{wxGrid::DisableDragGridSize}\label{wxgriddisabledraggridsize}
@@ -309,37 +309,37 @@ Disables column sizing by dragging with the mouse. Equivalent to passing FALSE t
 \func{void}{DisableDragGridSize}{\void}
 
 Disable mouse dragging of grid lines to resize rows and columns. Equivalent to passing
-FALSE to \helpref{wxGrid::EnableDragGridSize}{wxgridenabledraggridsize}
+false to \helpref{wxGrid::EnableDragGridSize}{wxgridenabledraggridsize}
 
 \membersection{wxGrid::DisableDragRowSize}\label{wxgriddisabledragrowsize}
 
 \func{void}{DisableDragRowSize}{\void}
 
-Disables row sizing by dragging with the mouse. Equivalent to passing FALSE to 
+Disables row sizing by dragging with the mouse. Equivalent to passing false to 
 \helpref{wxGrid::EnableDragRowSize}{wxgridenabledragrowsize}. 
 
 \membersection{wxGrid::EnableCellEditControl}\label{wxgridenablecelleditcontrol}
 
-\func{void}{EnableCellEditControl}{\param{bool }{enable = TRUE}}
+\func{void}{EnableCellEditControl}{\param{bool }{enable = true}}
 
 Enables or disables in-place editing of grid cell data. The grid will issue either a
 wxEVT\_GRID\_EDITOR\_SHOWN or wxEVT\_GRID\_EDITOR\_HIDDEN event.
 
 \membersection{wxGrid::EnableDragColSize}\label{wxgridenabledragcolsize}
 
-\func{void}{EnableDragColSize}{\param{bool }{enable = TRUE}}
+\func{void}{EnableDragColSize}{\param{bool }{enable = true}}
 
 Enables or disables column sizing by dragging with the mouse.
 
 \membersection{wxGrid::EnableDragGridSize}\label{wxgridenabledraggridsize}
 
-\func{void}{EnableDragGridSize}{\param{bool }{enable = TRUE}}
+\func{void}{EnableDragGridSize}{\param{bool }{enable = true}}
 
 Enables or disables row and column resizing by dragging gridlines with the mouse.
 
 \membersection{wxGrid::EnableDragRowSize}\label{wxgridenabledragrowsize}
 
-\func{void}{EnableDragRowSize}{\param{bool }{enable = TRUE}}
+\func{void}{EnableDragRowSize}{\param{bool }{enable = true}}
 
 Enables or disables row sizing by dragging with the mouse.
 
@@ -347,8 +347,8 @@ Enables or disables row sizing by dragging with the mouse.
 
 \func{void}{EnableEditing}{\param{bool }{edit}}
 
-If the edit argument is FALSE this function sets the whole grid as read-only. If the
-argument is TRUE the grid is set to the default state where cells may be editable. In the
+If the edit argument is false this function sets the whole grid as read-only. If the
+argument is true the grid is set to the default state where cells may be editable. In the
 default state you can set single grid cells and whole rows and columns to be editable or
 read-only via 
 \helpref{wxGridCellAttribute::SetReadOnly}{wxgridcellattrsetreadonly}. For single
@@ -361,7 +361,7 @@ For more information about controlling grid cell attributes see the
 
 \membersection{wxGrid::EnableGridLines}\label{wxgridenablegridlines}
 
-\func{void}{EnableGridLines}{\param{bool }{enable = TRUE}}
+\func{void}{EnableGridLines}{\param{bool }{enable = true}}
 
 Turns the drawing of grid lines on or off.
 
@@ -581,7 +581,7 @@ Returns the colour used for grid lines.
 
 \func{bool}{GridLinesEnabled}{\void}
 
-Returns TRUE if drawing of grid lines is turned on, FALSE otherwise.
+Returns true if drawing of grid lines is turned on, false otherwise.
 
 \membersection{wxGrid::GetLabelBackgroundColour}\label{wxgridgetlabelbackgroundcolour}
 
@@ -699,10 +699,10 @@ Hides the in-place cell edit control.
 
 \membersection{wxGrid::InsertCols}\label{wxgridinsertcols}
 
-\func{bool}{InsertCols}{\param{int }{pos = 0}, \param{int }{numCols = 1}, \param{bool }{updateLabels = TRUE}}
+\func{bool}{InsertCols}{\param{int }{pos = 0}, \param{int }{numCols = 1}, \param{bool }{updateLabels = true}}
 
 Inserts one or more new columns into a grid with the first new column at the
-specified position and returns TRUE if successful. The updateLabels argument is not
+specified position and returns true if successful. The updateLabels argument is not
 used at present. 
 
 The sequence of actions begins with the grid object requesting the underlying grid
@@ -716,10 +716,10 @@ table class.
 
 \membersection{wxGrid::InsertRows}\label{wxgridinsertrows}
 
-\func{bool}{InsertRows}{\param{int }{pos = 0}, \param{int }{numRows = 1}, \param{bool }{updateLabels = TRUE}}
+\func{bool}{InsertRows}{\param{int }{pos = 0}, \param{int }{numRows = 1}, \param{bool }{updateLabels = true}}
 
 Inserts one or more new rows into a grid with the first new row at the specified
-position and returns TRUE if successful. The updateLabels argument is not used at
+position and returns true if successful. The updateLabels argument is not used at
 present. 
 
 The sequence of actions begins with the grid object requesting the underlying grid
@@ -735,20 +735,20 @@ table class.
 
 \constfunc{bool}{IsCellEditControlEnabled}{\void}
 
-Returns TRUE if the in-place edit control is currently enabled.
+Returns true if the in-place edit control is currently enabled.
 
 \membersection{wxGrid::IsCurrentCellReadOnly}\label{wxgridiscurrentcellreadonly}
 
 \constfunc{bool}{IsCurrentCellReadOnly}{\void}
 
-Returns TRUE if the current cell has been set to read-only
+Returns true if the current cell has been set to read-only
 (see \helpref{wxGrid::SetReadOnly}{wxgridsetreadonly}).
 
 \membersection{wxGrid::IsEditable}\label{wxgridiseditable}
 
 \func{bool}{IsEditable}{\void}
 
-Returns FALSE if the whole grid has been set as read-only or TRUE otherwise.
+Returns false if the whole grid has been set as read-only or true otherwise.
 See \helpref{wxGrid::EnableEditing}{wxgridenableediting} for more information about
 controlling the editing status of grid cells.
 
@@ -764,22 +764,22 @@ Is this cell currently selected.
 
 \constfunc{bool}{IsReadOnly}{\param{int }{row}, \param{int }{col}}
 
-Returns TRUE if the cell at the specified location can't be edited.
+Returns true if the cell at the specified location can't be edited.
 See also \helpref{wxGrid::IsReadOnly}{wxgridisreadonly}.
 
 \membersection{wxGrid::IsSelection}\label{wxgridisselection}
 
 \func{bool}{IsSelection}{\void}
 
-Returns TRUE if there are currently rows, columns or blocks of cells selected.
+Returns true if there are currently rows, columns or blocks of cells selected.
 
 \membersection{wxGrid::IsVisible}\label{wxgridisvisible}
 
-\func{bool}{IsVisible}{\param{int }{row}, \param{int }{col}, \param{bool }{wholeCellVisible = TRUE}}
+\func{bool}{IsVisible}{\param{int }{row}, \param{int }{col}, \param{bool }{wholeCellVisible = true}}
 
-\func{bool}{IsVisible}{\param{const wxGridCellCoords\& }{coords}, \param{bool }{wholeCellVisible = TRUE}}
+\func{bool}{IsVisible}{\param{const wxGridCellCoords\& }{coords}, \param{bool }{wholeCellVisible = true}}
 
-Returns TRUE if a cell is either wholly visible (the default) or at least partially
+Returns true if a cell is either wholly visible (the default) or at least partially
 visible in the grid window.
 
 \membersection{wxGrid::MakeCellVisible}\label{wxgridmakecellvisible}
@@ -796,7 +796,7 @@ nothing if the cell is already visible.
 \func{bool}{MoveCursorDown}{\param{bool }{expandSelection}}
 
 Moves the grid cursor down by one row. If a block of cells was previously selected it
-will expand if the argument is TRUE or be cleared if the argument is FALSE.
+will expand if the argument is true or be cleared if the argument is false.
 
 \wxheading{Keyboard}\\
 This function is called for Down cursor key presses or Shift+Down to expand a selection.
@@ -806,7 +806,7 @@ This function is called for Down cursor key presses or Shift+Down to expand a se
 \func{bool}{MoveCursorLeft}{\param{bool }{expandSelection}}
 
 Moves the grid cursor left by one column. If a block of cells was previously selected it
-will expand if the argument is TRUE or be cleared if the argument is FALSE.
+will expand if the argument is true or be cleared if the argument is false.
 
 \wxheading{Keyboard}\\
 This function is called for Left cursor key presses or Shift+Left to expand a selection.
@@ -816,7 +816,7 @@ This function is called for Left cursor key presses or Shift+Left to expand a se
 \func{bool}{MoveCursorRight}{\param{bool }{expandSelection}}
 
 Moves the grid cursor right by one column. If a block of cells was previously selected it
-will expand if the argument is TRUE or be cleared if the argument is FALSE.
+will expand if the argument is true or be cleared if the argument is false.
 
 \wxheading{Keyboard}\\
 This function is called for Right cursor key presses or Shift+Right to expand a selection.
@@ -826,7 +826,7 @@ This function is called for Right cursor key presses or Shift+Right to expand a 
 \func{bool}{MoveCursorUp}{\param{bool }{expandSelection}}
 
 Moves the grid cursor up by one row. If a block of cells was previously selected it
-will expand if the argument is TRUE or be cleared if the argument is FALSE.
+will expand if the argument is true or be cleared if the argument is false.
 
 \wxheading{Keyboard}\\
 This function is called for Up cursor key presses or Shift+Up to expand a selection.
@@ -837,7 +837,7 @@ This function is called for Up cursor key presses or Shift+Up to expand a select
 
 Moves the grid cursor down in the current column such that it skips to the beginning or
 end of a block of non-empty cells. If a block of cells was previously selected it
-will expand if the argument is TRUE or be cleared if the argument is FALSE.
+will expand if the argument is true or be cleared if the argument is false.
 
 \wxheading{Keyboard}\\
 This function is called for the Ctrl+Down key combination. Shift+Ctrl+Down expands a selection.
@@ -848,7 +848,7 @@ This function is called for the Ctrl+Down key combination. Shift+Ctrl+Down expan
 
 Moves the grid cursor left in the current row such that it skips to the beginning or
 end of a block of non-empty cells. If a block of cells was previously selected it
-will expand if the argument is TRUE or be cleared if the argument is FALSE.
+will expand if the argument is true or be cleared if the argument is false.
 
 \wxheading{Keyboard}\\
 This function is called for the Ctrl+Left key combination. Shift+Ctrl+left expands a selection.
@@ -859,7 +859,7 @@ This function is called for the Ctrl+Left key combination. Shift+Ctrl+left expan
 
 Moves the grid cursor right in the current row such that it skips to the beginning or
 end of a block of non-empty cells. If a block of cells was previously selected it
-will expand if the argument is TRUE or be cleared if the argument is FALSE.
+will expand if the argument is true or be cleared if the argument is false.
 
 \wxheading{Keyboard}\\
 This function is called for the Ctrl+Right key combination. Shift+Ctrl+Right expands a selection.
@@ -870,7 +870,7 @@ This function is called for the Ctrl+Right key combination. Shift+Ctrl+Right exp
 
 Moves the grid cursor up in the current column such that it skips to the beginning or
 end of a block of non-empty cells. If a block of cells was previously selected it
-will expand if the argument is TRUE or be cleared if the argument is FALSE.
+will expand if the argument is true or be cleared if the argument is false.
 
 \wxheading{Keyboard}\\
 This function is called for the Ctrl+Up key combination. Shift+Ctrl+Up expands a selection.
@@ -913,27 +913,27 @@ Selects all cells in the grid.
 \membersection{wxGrid::SelectBlock}\label{wxgridselectblock}
 
 \func{void}{SelectBlock}{\param{int }{topRow}, \param{int }{leftCol}, 
-\param{int }{bottomRow}, \param{int }{rightCol}, \param{bool }{addToSelected = FALSE}}
+\param{int }{bottomRow}, \param{int }{rightCol}, \param{bool }{addToSelected = false}}
 
 \func{void}{SelectBlock}{\param{const wxGridCellCoords\& }{topLeft}, 
-\param{const wxGridCellCoords\& }{bottomRight}, \param{bool }{addToSelected = FALSE}}
+\param{const wxGridCellCoords\& }{bottomRight}, \param{bool }{addToSelected = false}}
 
-Selects a rectangular block of cells. If addToSelected is FALSE then any existing selection will be
-deselected; if TRUE the column will be added to the existing selection. 
+Selects a rectangular block of cells. If addToSelected is false then any existing selection will be
+deselected; if true the column will be added to the existing selection. 
 
 \membersection{wxGrid::SelectCol}\label{wxgridselectcol}
 
-\func{void}{SelectCol}{\param{int }{col}, \param{bool }{addToSelected = FALSE}}
+\func{void}{SelectCol}{\param{int }{col}, \param{bool }{addToSelected = false}}
 
-Selects the specified column. If addToSelected is FALSE then any existing selection will be
-deselected; if TRUE the column will be added to the existing selection.
+Selects the specified column. If addToSelected is false then any existing selection will be
+deselected; if true the column will be added to the existing selection.
 
 \membersection{wxGrid::SelectRow}\label{wxgridselectrow}
 
-\func{void}{SelectRow}{\param{int }{row}, \param{bool }{addToSelected = FALSE}}
+\func{void}{SelectRow}{\param{int }{row}, \param{bool }{addToSelected = false}}
 
-Selects the specified row. If addToSelected is FALSE then any existing selection will be
-deselected; if TRUE the row will be added to the existing selection.
+Selects the specified row. If addToSelected is false then any existing selection will be
+deselected; if true the row will be added to the existing selection.
 
 \membersection{wxGrid::SetCellAlignment}\label{wxgridsetcellalignment}
 
@@ -1081,7 +1081,7 @@ Sets the width of the specified column.
 This function does not refresh the grid. If you are calling it outside of a BeginBatch / EndBatch
 block you can use \helpref{wxGrid::ForceRefresh}{wxgridforcerefresh} to see the changes. 
 
-Automatically sizes the column to fit its contents. If setAsMin is TRUE the calculated width will
+Automatically sizes the column to fit its contents. If setAsMin is true the calculated width will
 also be set as the minimal width for the column.
 
 \wxheading{Note}\\
@@ -1130,17 +1130,17 @@ the \helpref{wxGrid overview}{gridoverview} for more information about cell edit
 
 \membersection{wxGrid::SetDefaultColSize}\label{wxgridsetdefaultcolsize}
 
-\func{void}{SetDefaultColSize}{\param{int }{width}, \param{bool }{resizeExistingCols = FALSE}}
+\func{void}{SetDefaultColSize}{\param{int }{width}, \param{bool }{resizeExistingCols = false}}
 
 Sets the default width for columns in the grid. This will only affect columns subsequently added to
-the grid unless resizeExistingCols is TRUE. 
+the grid unless resizeExistingCols is true. 
 
 \membersection{wxGrid::SetDefaultRowSize}\label{wxgridsetdefaultrowsize}
 
-\func{void}{SetDefaultRowSize}{\param{int }{height}, \param{bool }{resizeExistingRows = FALSE}}
+\func{void}{SetDefaultRowSize}{\param{int }{height}, \param{bool }{resizeExistingRows = false}}
 
 Sets the default height for rows in the grid. This will only affect rows subsequently added
-to the grid unless resizeExistingRows is TRUE.
+to the grid unless resizeExistingRows is true.
 
 \membersection{wxGrid::SetGridCursor}\label{wxgridsetgridcursor}
 
@@ -1175,7 +1175,7 @@ Sets the colour for row and column label text.
 
 \membersection{wxGrid::SetReadOnly}\label{wxgridsetreadonly}
 
-\func{void}{SetReadOnly}{\param{int }{row}, \param{int }{col}, \param{bool }{isReadOnly = TRUE}}
+\func{void}{SetReadOnly}{\param{int }{row}, \param{int }{col}, \param{bool }{isReadOnly = true}}
 
 Makes the cell at the specified location read-only or editable.
 See also \helpref{wxGrid::IsReadOnly}{wxgridisreadonly}.
@@ -1228,7 +1228,7 @@ Sets the height of the specified row.
 This function does not refresh the grid. If you are calling it outside of a BeginBatch / EndBatch
 block you can use \helpref{wxGrid::ForceRefresh}{wxgridforcerefresh} to see the changes. 
 
-Automatically sizes the column to fit its contents. If setAsMin is TRUE the calculated width will
+Automatically sizes the column to fit its contents. If setAsMin is true the calculated width will
 also be set as the minimal width for the column.
 
 \wxheading{Note}
@@ -1252,11 +1252,11 @@ Set the selection behaviour of the grid.
 
 \membersection{wxGrid::SetTable}\label{wxgridsettable}
 
-\func{bool}{SetTable}{\param{wxGridTableBase* }{table}, \param{bool }{takeOwnership = FALSE}, \param{wxGrid::wxGridSelectionModes }{selmode = wxGrid::wxGridSelectCells}}
+\func{bool}{SetTable}{\param{wxGridTableBase* }{table}, \param{bool }{takeOwnership = false}, \param{wxGrid::wxGridSelectionModes }{selmode = wxGrid::wxGridSelectCells}}
 
 Passes a pointer to a custom grid table to be used by the grid. This should be called
 after the grid constructor and before using the grid object. If takeOwnership is set to
-TRUE then the table will be deleted by the wxGrid destructor. 
+true then the table will be deleted by the wxGrid destructor. 
 
 Use this function instead of \helpref{wxGrid::CreateGrid}{wxgridcreategrid} when your
 application involves complex or non-string data or data sets that are too large to fit
@@ -1521,7 +1521,7 @@ Returned number of whole cols visible.
 
 \membersection{wxGrid::SetEditable}\label{wxgridseteditable}
 
-\func{void}{SetEditable}{\param{bool }{edit = TRUE}}
+\func{void}{SetEditable}{\param{bool }{edit = true}}
 
 
 \membersection{wxGrid::GetEditInPlace}\label{wxgridgeteditinplace}
@@ -1531,7 +1531,7 @@ Returned number of whole cols visible.
 
 \membersection{wxGrid::SetEditInPlace}\label{wxgridseteditinplace}
 
-\func{void}{SetEditInPlace}{\param{bool }{edit = TRUE}}
+\func{void}{SetEditInPlace}{\param{bool }{edit = true}}
 
 
 \membersection{wxGrid::SetCellBitmap}\label{wxgridsetcellbitmap}
@@ -1614,13 +1614,13 @@ This function must be public for compatibility.
 
 \membersection{wxGrid::SetOrCalcColumnSizes}\label{wxgridsetorcalccolumnsizes}
 
-\func{int}{SetOrCalcColumnSizes}{\param{bool }{calcOnly}, \param{bool }{setAsMin = TRUE}}
+\func{int}{SetOrCalcColumnSizes}{\param{bool }{calcOnly}, \param{bool }{setAsMin = true}}
 
 Common part of AutoSizeColumn/Row() and GetBestSize()
 
 \membersection{wxGrid::SetOrCalcRowSizes}\label{wxgridsetorcalcrowsizes}
 
-\func{int}{SetOrCalcRowSizes}{\param{bool }{calcOnly}, \param{bool }{setAsMin = TRUE}}
+\func{int}{SetOrCalcRowSizes}{\param{bool }{calcOnly}, \param{bool }{setAsMin = true}}
 
 \membersection{wxGrid::AutoSizeColOrRow}\label{wxgridautosizecolorrow}
 

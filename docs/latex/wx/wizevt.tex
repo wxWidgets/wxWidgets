@@ -51,7 +51,7 @@ the wizard (this event may also be vetoed).}
 
 \membersection{wxWizardEvent::wxWizardEvent}\label{wxwizardeventwxwizardevent}
 
-\func{}{wxWizardEvent}{\param{wxEventType }{type = wxEVT\_NULL}, \param{int }{id = -1}, \param{bool }{direction = TRUE}}
+\func{}{wxWizardEvent}{\param{wxEventType }{type = wxEVT\_NULL}, \param{int }{id = -1}, \param{bool }{direction = true}}
 
 Constructor. It is not normally used by the user code as the objects of this
 type are constructed by wxWizard.
@@ -61,9 +61,9 @@ type are constructed by wxWizard.
 \constfunc{bool}{GetDirection}{\void}
 
 Return the direction in which the page is changing: for {\tt
-EVT\_WIZARD\_PAGE\_CHANGING}, return {\tt TRUE} if we're going forward or
-FALSE otherwise and for {\tt EVT\_WIZARD\_PAGE\_CHANGED} return {\tt TRUE} if
-we came from the previous page and {\tt FALSE} if we returned from the next
+EVT\_WIZARD\_PAGE\_CHANGING}, return {\tt true} if we're going forward or
+false otherwise and for {\tt EVT\_WIZARD\_PAGE\_CHANGED} return {\tt true} if
+we came from the previous page and {\tt false} if we returned from the next
 one.
 
 \membersection{wxWizardEvent::GetPage}\label{wxwizardeventgetpage}

@@ -82,13 +82,13 @@ functions that take a wxKeyEvent argument.
 
 \member{bool}{m\_altDown}
 
-TRUE if the Alt key is pressed down.
+true if the Alt key is pressed down.
 
 \membersection{wxKeyEvent::m\_controlDown}
 
 \member{bool}{m\_controlDown}
 
-TRUE if control is pressed down.
+true if control is pressed down.
 
 \membersection{wxKeyEvent::m\_keyCode}
 
@@ -100,13 +100,13 @@ Virtual keycode. See \helpref{Keycodes}{keycodes} for a list of identifiers.
 
 \member{bool}{m\_metaDown}
 
-TRUE if the Meta key is pressed down.
+true if the Meta key is pressed down.
 
 \membersection{wxKeyEvent::m\_shiftDown}
 
 \member{bool}{m\_shiftDown}
 
-TRUE if shift is pressed down.
+true if shift is pressed down.
 
 \membersection{wxKeyEvent::m\_x}
 
@@ -130,13 +130,13 @@ Constructor. Currently, the only valid event types are wxEVT\_CHAR and wxEVT\_CH
 
 \constfunc{bool}{AltDown}{\void}
 
-Returns TRUE if the Alt key was down at the time of the key event.
+Returns true if the Alt key was down at the time of the key event.
 
 \membersection{wxKeyEvent::ControlDown}
 
 \constfunc{bool}{ControlDown}{\void}
 
-Returns TRUE if the control key was down at the time of the key event.
+Returns true if the control key was down at the time of the key event.
 
 \membersection{wxKeyEvent::GetKeyCode}
 
@@ -182,7 +182,7 @@ Returns the Y position of the event.
 
 \constfunc{bool}{MetaDown}{\void}
 
-Returns TRUE if the Meta key was down at the time of the key event.
+Returns true if the Meta key was down at the time of the key event.
 
 \membersection{wxKeyEvent::GetPosition}
 
@@ -196,7 +196,7 @@ Obtains the position at which the key was pressed.
 
 \constfunc{bool}{HasModifiers}{\void}
 
-Returns TRUE if either {\sc Ctrl} or {\sc Alt} keys was down
+Returns true if either {\sc Ctrl} or {\sc Alt} keys was down
 at the time of the key event. Note that this function does not take into
 account neither {\sc Shift} nor {\sc Meta} key states (the reason for ignoring
 the latter is that it is common for {\sc NumLock} key to be configured as
@@ -207,5 +207,5 @@ be still processed normally).
 
 \constfunc{bool}{ShiftDown}{\void}
 
-Returns TRUE if the shift key was down at the time of the key event.
+Returns true if the shift key was down at the time of the key event.
 

@@ -36,7 +36,7 @@ like this:
 \begin{verbatim}
 	wxDropSource dragSource( this );
 	dragSource.SetData( my_data );
-	wxDragResult result = dragSource.DoDragDrop( TRUE );
+	wxDragResult result = dragSource.DoDragDrop( true );
 \end{verbatim}
 \item {\bf Dragging:} The call to DoDragDrop() blocks the program until the user release the
 mouse button (unless you override \helpref{GiveFeedback}{wxdropsourcegivefeedback} function

@@ -12,7 +12,7 @@ gets the current Excel instance, and if it exists, makes the active cell bold.
 \begin{verbatim}
   wxAutomationObject excelObject;
   if (excelObject.GetInstance("Excel.Application"))
-      excelObject.PutProperty("ActiveCell.Font.Bold", TRUE);
+      excelObject.PutProperty("ActiveCell.Font.Bold", true);
 \end{verbatim}
 }
 
@@ -78,8 +78,8 @@ needing to call GetProperty several times using several temporary objects. For e
 
 \constfunc{bool}{CreateInstance}{\param{const wxString\&}{ classId}}
 
-Creates a new object based on the class id, returning TRUE if the object was successfully created,
-or FALSE if not.
+Creates a new object based on the class id, returning true if the object was successfully created,
+or false if not.
 
 \membersection{wxAutomationObject::GetDispatchPtr}\label{wxautomationobjectgetdispatchptr}
 
@@ -92,7 +92,7 @@ Gets the IDispatch pointer.
 \constfunc{bool}{GetInstance}{\param{const wxString\&}{ classId}}
 
 Retrieves the current object associated with a class id, and attaches the IDispatch pointer
-to this object. Returns TRUE if a pointer was successfully retrieved, FALSE otherwise.
+to this object. Returns true if a pointer was successfully retrieved, false otherwise.
 
 Note that this cannot cope with two instances of a given OLE object being active simultaneously,
 such as two copies of Excel running. Which object is referenced cannot currently be specified.
@@ -162,7 +162,7 @@ DISPATCH\_METHOD.}
 
 \wxheading{Return value}
 
-TRUE if the operation was successful, FALSE otherwise.
+true if the operation was successful, false otherwise.
 
 \wxheading{Remarks}
 

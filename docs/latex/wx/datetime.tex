@@ -533,7 +533,7 @@ given week day.
 
 \func{static bool}{IsLeapYear}{\param{int }{year = Inv\_Year}, \param{Calendar }{cal = Gregorian}}
 
-Returns {\tt TRUE} if the {\it year} is a leap one in the specified calendar.
+Returns {\tt true} if the {\it year} is a leap one in the specified calendar.
 
 This functions supports Gregorian and Julian calendars.
 
@@ -541,7 +541,7 @@ This functions supports Gregorian and Julian calendars.
 
 \func{static bool}{IsWestEuropeanCountry}{\param{Country }{country = Country\_Default}}
 
-This function returns {\tt TRUE} if the specified (or default) country is one
+This function returns {\tt true} if the specified (or default) country is one
 of Western European ones. It is used internally by wxDateTime to determine the
 DST convention and date and time formatting rules.
 
@@ -549,7 +549,7 @@ DST convention and date and time formatting rules.
 
 \func{static bool}{IsDSTApplicable}{\param{int }{year = Inv\_Year}, \param{Country }{country = Country\_Default}}
 
-Returns {\tt TRUE} if DST was used n the given year (the current one by
+Returns {\tt true} if DST was used n the given year (the current one by
 default) in the given country.
 
 \membersection{wxDateTime::Now}\label{wxdatetimenow}
@@ -779,7 +779,7 @@ Same as \helpref{Set}{wxdatetimesettm}.
 
 \constfunc{bool}{IsValid}{\void}
 
-Returns {\tt TRUE} if the object represents a valid time moment.
+Returns {\tt true} if the object represents a valid time moment.
 
 \membersection{wxDateTime::GetTm}\label{wxdatetimegettm}
 
@@ -874,13 +874,13 @@ both conventions for the week start. See the description of these
 
 \constfunc{bool}{IsWorkDay}{\param{Country }{country = Country\_Default}}
 
-Returns {\tt TRUE} is this day is not a holiday in the given country.
+Returns {\tt true} is this day is not a holiday in the given country.
 
 \membersection{wxDateTime::IsGregorianDate}\label{wxdatetimeisgregoriandate}
 
 \constfunc{bool}{IsGregorianDate}{\param{GregorianAdoption }{country = Gr\_Standard}}
 
-Returns {\tt TRUE} if the given date os later than the date of adoption of the
+Returns {\tt true} if the given date os later than the date of adoption of the
 Gregorian calendar in the given country (and hence the Gregorian calendar
 calculations make sense for it).
 
@@ -908,25 +908,25 @@ format.
 
 \constfunc{bool}{IsEqualTo}{\param{const wxDateTime\& }{datetime}}
 
-Returns {\tt TRUE} if the two dates are strictly identical.
+Returns {\tt true} if the two dates are strictly identical.
 
 \membersection{wxDateTime::IsEarlierThan}\label{wxdatetimeisearlierthan}
 
 \constfunc{bool}{IsEarlierThan}{\param{const wxDateTime\& }{datetime}}
 
-Returns {\tt TRUE} if this date precedes the given one.
+Returns {\tt true} if this date precedes the given one.
 
 \membersection{wxDateTime::IsLaterThan}\label{wxdatetimeislaterthan}
 
 \constfunc{bool}{IsLaterThan}{\param{const wxDateTime\& }{datetime}}
 
-Returns {\tt TRUE} if this date is later than the given one.
+Returns {\tt true} if this date is later than the given one.
 
 \membersection{wxDateTime::IsStrictlyBetween}\label{wxdatetimeisstrictlybetween}
 
 \constfunc{bool}{IsStrictlyBetween}{\param{const wxDateTime\& }{t1}, \param{const wxDateTime\& }{t2}}
 
-Returns {\tt TRUE} if this date lies strictly between the two others,
+Returns {\tt true} if this date lies strictly between the two others,
 
 \wxheading{See also}
 
@@ -936,8 +936,8 @@ Returns {\tt TRUE} if this date lies strictly between the two others,
 
 \constfunc{bool}{IsBetween}{\param{const wxDateTime\& }{t1}, \param{const wxDateTime\& }{t2}}
 
-Returns {\tt TRUE} if \helpref{IsStrictlyBetween}{wxdatetimeisstrictlybetween}
-is {\tt TRUE} or if the date is equal to one of the limit values.
+Returns {\tt true} if \helpref{IsStrictlyBetween}{wxdatetimeisstrictlybetween}
+is {\tt true} or if the date is equal to one of the limit values.
 
 \wxheading{See also}
 
@@ -947,19 +947,19 @@ is {\tt TRUE} or if the date is equal to one of the limit values.
 
 \constfunc{bool}{IsSameDate}{\param{const wxDateTime\& }{dt}}
 
-Returns {\tt TRUE} if the date is the same without comparing the time parts.
+Returns {\tt true} if the date is the same without comparing the time parts.
 
 \membersection{wxDateTime::IsSameTime}\label{wxdatetimeissametime}
 
 \constfunc{bool}{IsSameTime}{\param{const wxDateTime\& }{dt}}
 
-Returns {\tt TRUE} if the time is the same (although dates may differ).
+Returns {\tt true} if the time is the same (although dates may differ).
 
 \membersection{wxDateTime::IsEqualUpTo}\label{wxdatetimeisequalupto}
 
 \constfunc{bool}{IsEqualUpTo}{\param{const wxDateTime\& }{dt}, \param{const wxTimeSpan\& }{ts}}
 
-Returns {\tt TRUE} if the date is equal to another one up to the given time
+Returns {\tt true} if the date is equal to another one up to the given time
 interval, i.e. if the absolute difference between the two dates is less than
 this interval.
 
@@ -1207,7 +1207,7 @@ For example, {\tt SetToWeekDay(2, wxDateTime::Wed)} will set the date to the
 second Wednesday in the current month and
 {\tt SetToWeekDay(-1, wxDateTime::Sun)} -- to the last Sunday in it.
 
-Returns {\tt TRUE} if the date was modified successfully, {\tt FALSE}
+Returns {\tt true} if the date was modified successfully, {\tt false}
 otherwise meaning that the specified date doesn't exist.
 
 \membersection{wxDateTime::GetWeekDay}\label{wxdatetimegetweekday2}
@@ -1225,7 +1225,7 @@ The effect of calling this function is the same as of calling
 {\tt SetToWeekDay(-1, weekday, month, year)}. The date will be set to the last
 {\it weekday} in the given month and year (the current ones by default).
 
-Always returns {\tt TRUE}.
+Always returns {\tt true}.
 
 \membersection{wxDateTime::GetLastWeekDay}\label{wxdatetimegetlastweekday}
 
@@ -1239,8 +1239,8 @@ Returns the copy of this object to which
 \func{bool}{SetToTheWeek}{\param{wxDateTime\_t }{numWeek}, \param{WeekDay }{weekday = Mon}, \param{WeekFlags}{flags = {\tt Monday\_First}}}
 
 Set the date to the given {\it weekday} in the week with given number
-{\it numWeek}. The number should be in range $1\ldots53$ and {\tt FALSE} will
-be returned if the specified date doesn't exist. {\tt TRUE} is returned if the
+{\it numWeek}. The number should be in range $1\ldots53$ and {\tt false} will
+be returned if the specified date doesn't exist. {\tt true} is returned if the
 date was changed successfully.
 
 \membersection{wxDateTime::GetWeek}\label{wxdatetimegetweek}
@@ -1332,30 +1332,30 @@ year 1 is Rata Die day 1.
 
 \membersection{wxDateTime::ToTimezone}\label{wxdatetimetotimezone}
 
-\constfunc{wxDateTime}{ToTimezone}{\param{const TimeZone\& }{tz}, \param{bool }{noDST = FALSE}}
+\constfunc{wxDateTime}{ToTimezone}{\param{const TimeZone\& }{tz}, \param{bool }{noDST = false}}
 
-Transform the date to the given time zone. If {\it noDST} is {\tt TRUE}, no
+Transform the date to the given time zone. If {\it noDST} is {\tt true}, no
 DST adjustments will be made.
 
 Returns the date in the new time zone.
 
 \membersection{wxDateTime::MakeTimezone}\label{wxdatetimemaketimezone}
 
-\func{wxDateTime\&}{MakeTimezone}{\param{const TimeZone\& }{tz}, \param{bool }{noDST = FALSE}}
+\func{wxDateTime\&}{MakeTimezone}{\param{const TimeZone\& }{tz}, \param{bool }{noDST = false}}
 
 Modifies the object in place to represent the date in another time zone. If
-{\it noDST} is {\tt TRUE}, no DST adjustments will be made.
+{\it noDST} is {\tt true}, no DST adjustments will be made.
 
 \membersection{wxDateTime::ToGMT}\label{wxdatetimetogmt}
 
-\constfunc{wxDateTime}{ToGMT}{\param{bool }{noDST = FALSE}}
+\constfunc{wxDateTime}{ToGMT}{\param{bool }{noDST = false}}
 
 This is the same as calling \helpref{ToTimezone}{wxdatetimetotimezone} with
 the argument {\tt GMT0}.
 
 \membersection{wxDateTime::MakeGMT}\label{wxdatetimemakegmt}
 
-\func{wxDateTime\&}{MakeGMT}{\param{bool }{noDST = FALSE}}
+\func{wxDateTime\&}{MakeGMT}{\param{bool }{noDST = false}}
 
 This is the same as calling \helpref{MakeTimezone}{wxdatetimemaketimezone} with
 the argument {\tt GMT0}.
@@ -1364,7 +1364,7 @@ the argument {\tt GMT0}.
 
 \constfunc{int}{IsDST}{\param{Country }{country = Country\_Default}}
 
-Returns {\tt TRUE} if the DST is applied for this date in the given country.
+Returns {\tt true} if the DST is applied for this date in the given country.
 
 \wxheading{See also}
 

@@ -38,14 +38,14 @@ Destructor.
 
 \func{bool}{Ok}{\void}
 
-Returns TRUE if the metafile is valid.
+Returns true if the metafile is valid.
 
 \membersection{wxMetafile::Play}\label{wxmetafileplay}
 
 \func{bool}{Play}{\param{wxDC *}{dc}}
 
 Plays the metafile into the given device context, returning
-TRUE if successful.
+true if successful.
 
 \membersection{wxMetafile::SetClipboard}
 
@@ -64,7 +64,7 @@ to keep track of the maximum extent of drawing commands.
   wxMetafileDC dc;
   if (dc.Ok())
   {
-    Draw(dc, FALSE);
+    Draw(dc, false);
     wxMetafile *mf = dc.Close();
     if (mf)
     {

@@ -65,14 +65,14 @@ Returns the current interval for the timer (in milliseconds).
 
 \constfunc{bool}{IsOneShot}{\void}
 
-Returns {\tt TRUE} if the timer is one shot, i.e.\ if it will stop after firing the
+Returns {\tt true} if the timer is one shot, i.e.\ if it will stop after firing the
 first notification automatically.
 
 \membersection{wxTimer::IsRunning}\label{wxtimerisrunning}
 
 \constfunc{bool}{IsRunning}{\void}
 
-Returns {\tt TRUE} if the timer is running, {\tt FALSE} if it is stopped.
+Returns {\tt true} if the timer is running, {\tt false} if it is stopped.
 
 \membersection{wxTimer::Notify}\label{wxtimernotify}
 
@@ -93,14 +93,14 @@ id equal to {\it id}\/ specified here.
 
 \membersection{wxTimer::Start}\label{wxtimerstart}
 
-\func{bool}{Start}{\param{int}{milliseconds = -1}, \param{bool }{oneShot = {\tt FALSE}}}
+\func{bool}{Start}{\param{int}{milliseconds = -1}, \param{bool }{oneShot = {\tt false}}}
 
 (Re)starts the timer. If {\it milliseconds}\/ parameter is -1 (value by default),
-the previous value is used. Returns {\tt FALSE} if the timer could not be started,
-{\tt TRUE} otherwise (in MS Windows timers are a limited resource).
+the previous value is used. Returns {\tt false} if the timer could not be started,
+{\tt true} otherwise (in MS Windows timers are a limited resource).
 
-If {\it oneShot}\/ is {\tt FALSE} (the default), the \helpref{Notify}{wxtimernotify} 
-function will be called repeatedly until the timer is stopped. If {\tt TRUE},
+If {\it oneShot}\/ is {\tt false} (the default), the \helpref{Notify}{wxtimernotify} 
+function will be called repeatedly until the timer is stopped. If {\tt true},
 it will be called only once and the timer will stop automatically. To make your
 code more readable you may also use the following symbolic constants
 \twocolwidtha{5cm}%

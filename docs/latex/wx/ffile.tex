@@ -83,14 +83,14 @@ object.
 
 \func{bool}{Close}{\void}
 
-Closes the file and returns TRUE on success.
+Closes the file and returns true on success.
 
 \membersection{wxFFile::Detach}\label{wxffiledetach}
 
 \func{void}{Detach}{\void}
 
 Get back a file pointer from wxFFile object - the caller is responsible for closing the file if this
-descriptor is opened. \helpref{IsOpened()}{wxffileisopened} will return FALSE after call to Detach().
+descriptor is opened. \helpref{IsOpened()}{wxffileisopened} will return false after call to Detach().
 
 \membersection{wxFFile::fp}\label{wxffilefp}
 
@@ -102,25 +102,25 @@ Returns the file pointer associated with the file.
 
 \constfunc{bool}{Eof}{\void}
 
-Returns TRUE if the an attempt has been made to read {\it past}
+Returns true if the an attempt has been made to read {\it past}
 the end of the file. 
 
 Note that the behaviour of the file descriptor based class
 \helpref{wxFile}{wxfile} is different as \helpref{wxFile::Eof}{wxfileeof}
-will return TRUE here as soon as the last byte of the file has been
+will return true here as soon as the last byte of the file has been
 read.
 
 \membersection{wxFFile::Flush}\label{wxffileflush}
 
 \func{bool}{Flush}{\void}
 
-Flushes the file and returns TRUE on success.
+Flushes the file and returns true on success.
 
 \membersection{wxFFile::IsOpened}\label{wxffileisopened}
 
 \constfunc{bool}{IsOpened}{\void}
 
-Returns TRUE if the file has been opened.
+Returns true if the file has been opened.
 
 \membersection{wxFFile::Length}\label{wxffilelength}
 
@@ -132,7 +132,7 @@ Returns the length of the file.
 
 \func{bool}{Open}{\param{const char*}{ filename}, \param{const char*}{ mode = "r"}}
 
-Opens the file, returning TRUE if successful.
+Opens the file, returning true if successful.
 
 \wxheading{Parameters}
 
@@ -160,7 +160,7 @@ The number of bytes read.
 
 \func{bool}{Seek}{\param{long }{ofs}, \param{wxSeekMode }{mode = wxFromStart}}
 
-Seeks to the specified position and returns TRUE on success.
+Seeks to the specified position and returns true on success.
 
 \wxheading{Parameters}
 
@@ -173,7 +173,7 @@ Seeks to the specified position and returns TRUE on success.
 \func{bool}{SeekEnd}{\param{long }{ofs = 0}}
 
 Moves the file pointer to the specified number of bytes before the end of the file
-and returns TRUE on success.
+and returns true on success.
 
 \wxheading{Parameters}
 
@@ -205,7 +205,7 @@ Number of bytes written.
 
 \func{bool}{Write}{\param{const wxString\& }{s}, \param{wxMBConv\&}{ conv = wxConvLibc}}
 
-Writes the contents of the string to the file, returns TRUE on success.
+Writes the contents of the string to the file, returns true on success.
 
 The second argument is only meaningful in Unicode build of wxWindows when
 {\it conv} is used to convert {\it s} to multibyte representation.

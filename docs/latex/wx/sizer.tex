@@ -136,7 +136,7 @@ the child in the sizer, typically 0 for the first item. This method does not
 cause any layout or resizing to take place, call \helpref{wxSizer::Layout}{wxsizerlayout}
 to update the layout "on screen" after detaching a child from the sizer.
 
-Returns TRUE if the child item was found and detached, FALSE otherwise.
+Returns true if the child item was found and detached, false otherwise.
 
 \wxheading{See also}
 
@@ -244,7 +244,7 @@ it does not destroy the window as would usually be expected from Remove.  You sh
 \helpref{wxSizer::Detach}{wxsizerdetach} in new code instead.  There is currently no wxSizer
 method that will both detach and destroy a wxWindow item.
 
-Returns TRUE if the child item was found and removed, FALSE otherwise.
+Returns true if the child item was found and removed, false otherwise.
 
 \membersection{wxSizer::SetDimension}\label{wxsizersetdimension}
 
@@ -300,11 +300,11 @@ minimal size. For windows with managed scrollbars this will set them appropriate
 
 \membersection{wxSizer::Show}\label{wxsizershow}
 
-\func{void}{Show}{\param{wxWindow* }{window}, \param{bool }{show = TRUE}}
+\func{void}{Show}{\param{wxWindow* }{window}, \param{bool }{show = true}}
 
-\func{void}{Show}{\param{wxSizer* }{sizer}, \param{bool }{show = TRUE}}
+\func{void}{Show}{\param{wxSizer* }{sizer}, \param{bool }{show = true}}
 
-\func{void}{Show}{\param{size\_t }{index}, \param{bool }{show = TRUE}}
+\func{void}{Show}{\param{size\_t }{index}, \param{bool }{show = true}}
 
 Shows or hides the {\it window}, {\it sizer}, or item at {\it index}.
 To make a sizer item disappear or reappear, use Show() followed by Layout().

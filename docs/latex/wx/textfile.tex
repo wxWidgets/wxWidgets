@@ -119,14 +119,14 @@ be used in this case.
 
 \constfunc{bool}{Exists}{\void}
 
-Return TRUE if file exists - the name of the file should have been specified
+Return true if file exists - the name of the file should have been specified
 in the constructor before calling Exists().
 
 \membersection{wxTextFile::IsOpened}\label{wxtextfileisopened}
 
 \constfunc{bool}{IsOpened}{\void}
 
-Returns TRUE if the file is currently opened.
+Returns true if the file is currently opened.
 
 \membersection{wxTextFile::GetLineCount}\label{wxtextfilegetlinecount}
 
@@ -169,7 +169,7 @@ and used by \helpref{GetFirstLine()}{wxtextfilegetfirstline}/\helpref{GetNextLin
 
 \constfunc{bool}{Eof}{\void}
 
-Returns TRUE if the current line is the last one.
+Returns true if the current line is the last one.
 
 \membersection{wxTextFile::GetEOL}\label{wxtextfilegeteol}
 
@@ -291,5 +291,5 @@ The {\it conv} argument is only meaningful in Unicode build of wxWindows when
 it is used to convert all lines to multibyte representation before writing them
 them to physical file.
 
-Returns TRUE if operation succeeded, FALSE if it failed.
+Returns true if operation succeeded, false if it failed.
 

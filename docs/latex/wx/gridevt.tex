@@ -92,8 +92,8 @@ Default constructor.
 
 \func{}{wxGridEvent}{\param{int }{id}, \param{wxEventType }{type}, \param{wxObject* }{obj},
  \param{int }{row = -1}, \param{int }{col = -1}, \param{int }{x = -1}, \param{int }{y = -1},
- \param{bool }{sel = TRUE}, \param{bool }{control = FALSE}, \param{bool }{shift = FALSE},
- \param{bool }{alt = FALSE}, \param{bool }{meta = FALSE}}
+ \param{bool }{sel = true}, \param{bool }{control = false}, \param{bool }{shift = false},
+ \param{bool }{alt = false}, \param{bool }{meta = false}}
 
 \wxheading{Parameters}
 
@@ -101,13 +101,13 @@ Default constructor.
 
 \func{bool}{AltDown}{\void}
 
-Returns TRUE if the Alt key was down at the time of the event.
+Returns true if the Alt key was down at the time of the event.
 
 \membersection{wxGridEvent::ControlDown}\label{wxgrideventcontroldown}
 
 \func{bool}{ControlDown}{\void}
 
-Returns TRUE if the Control key was down at the time of the event.
+Returns true if the Control key was down at the time of the event.
 
 \membersection{wxGridEvent::GetCol}\label{wxgrideventgetcol}
 
@@ -131,20 +131,20 @@ Row at which the event occurred.
 
 \func{bool}{MetaDown}{\void}
 
-Returns TRUE if the Meta key was down at the time of the event.
+Returns true if the Meta key was down at the time of the event.
 
 \membersection{wxGridEvent::Selecting}\label{wxgrideventselecting}
 
 \func{bool}{Selecting}{\void}
 
-Returns TRUE if the user deselected a cell, FALSE if the user
+Returns true if the user deselected a cell, false if the user
 deselected a cell.
 
 \membersection{wxGridEvent::ShiftDown}\label{wxgrideventshiftdown}
 
 \func{bool}{ShiftDown}{\void}
 
-Returns TRUE if the Shift key was down at the time of the event.
+Returns true if the Shift key was down at the time of the event.
 
 \section{\class{wxGridRangeSelectEvent}}\label{wxgridrangeselectevent}
 
@@ -175,21 +175,21 @@ Default constructor.
 
 \func{}{wxGridRangeSelectEvent}{\param{int }{id}, \param{wxEventType }{type},
  \param{wxObject* }{obj}, \param{const wxGridCellCoords\& }{topLeft},
- \param{const wxGridCellCoords\& }{bottomRight}, \param{bool }{sel = TRUE},
- \param{bool }{control = FALSE}, \param{bool }{shift = FALSE}, \param{bool }{alt = FALSE},
- \param{bool }{meta = FALSE}}
+ \param{const wxGridCellCoords\& }{bottomRight}, \param{bool }{sel = true},
+ \param{bool }{control = false}, \param{bool }{shift = false}, \param{bool }{alt = false},
+ \param{bool }{meta = false}}
 
 \membersection{wxGridRangeSelectEvent::AltDown}\label{wxgridrangeselecteventaltdown}
 
 \func{bool}{AltDown}{\void}
 
-Returns TRUE if the Alt key was down at the time of the event.
+Returns true if the Alt key was down at the time of the event.
 
 \membersection{wxGridRangeSelectEvent::ControlDown}\label{wxgridrangeselecteventcontroldown}
 
 \func{bool}{ControlDown}{\void}
 
-Returns TRUE if the Control key was down at the time of the event.
+Returns true if the Control key was down at the time of the event.
 
 \membersection{wxGridRangeSelectEvent::GetBottomRightCoords}\label{wxgridrangeselecteventgetbottomrightcoords}
 
@@ -231,19 +231,19 @@ Top row of the rectangular area that was (de)selected.
 
 \func{bool}{MetaDown}{\void}
 
-Returns TRUE if the Meta key was down at the time of the event.
+Returns true if the Meta key was down at the time of the event.
 
 \membersection{wxGridRangeSelectEvent::Selecting}\label{wxgridrangeselecteventselecting}
 
 \func{bool}{Selecting}{\void}
 
-Returns TRUE if the area was selected, FALSE otherwise.
+Returns true if the area was selected, false otherwise.
 
 \membersection{wxGridRangeSelectEvent::ShiftDown}\label{wxgridrangeselecteventshiftdown}
 
 \func{bool}{ShiftDown}{\void}
 
-Returns TRUE if the Shift key was down at the time of the event.
+Returns true if the Shift key was down at the time of the event.
 
 \section{\class{wxGridSizeEvent}}\label{wxgridsizeevent}
 
@@ -281,20 +281,20 @@ Default constructor.
 
 \func{}{wxGridSizeEvent}{\param{int }{id}, \param{wxEventType }{type},
  \param{wxObject* }{obj}, \param{int }{rowOrCol = -1}, \param{int }{x = -1},
- \param{int }{y = -1}, \param{bool }{control = FALSE}, \param{bool }{shift = FALSE},
- \param{bool }{alt = FALSE}, \param{bool }{meta = FALSE}}
+ \param{int }{y = -1}, \param{bool }{control = false}, \param{bool }{shift = false},
+ \param{bool }{alt = false}, \param{bool }{meta = false}}
 
 \membersection{wxGridSizeEvent::AltDown}\label{wxgridsizeeventaltdown}
 
 \func{bool}{AltDown}{\void}
 
-Returns TRUE if the Alt key was down at the time of the event.
+Returns true if the Alt key was down at the time of the event.
 
 \membersection{wxGridSizeEvent::ControlDown}\label{wxgridsizeeventcontroldown}
 
 \func{bool}{ControlDown}{\void}
 
-Returns TRUE if the Control key was down at the time of the event.
+Returns true if the Control key was down at the time of the event.
 
 \membersection{wxGridSizeEvent::GetPosition}\label{wxgridsizeeventgetposition}
 
@@ -312,11 +312,11 @@ Row or column at that was resized.
 
 \func{bool}{MetaDown}{\void}
 
-Returns TRUE if the Meta key was down at the time of the event.
+Returns true if the Meta key was down at the time of the event.
 
 \membersection{wxGridSizeEvent::ShiftDown}\label{wxgridsizeeventshiftdown}
 
 \func{bool}{ShiftDown}{\void}
 
-Returns TRUE if the Shift key was down at the time of the event.
+Returns true if the Shift key was down at the time of the event.
 

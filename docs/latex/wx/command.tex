@@ -21,7 +21,7 @@ change the data or view.
 
 \membersection{wxCommand::wxCommand}
 
-\func{}{wxCommand}{\param{bool}{ canUndo = FALSE}, \param{const wxString\& }{name = NULL}}
+\func{}{wxCommand}{\param{bool}{ canUndo = false}, \param{const wxString\& }{name = NULL}}
 
 Constructor. wxCommand is an abstract class, so you will need to derive
 a new class and call this constructor from your own constructor.
@@ -43,15 +43,15 @@ Destructor.
 
 \func{bool}{CanUndo}{\void}
 
-Returns TRUE if the command can be undone, FALSE otherwise.
+Returns true if the command can be undone, false otherwise.
 
 \membersection{wxCommand::Do}
 
 \func{bool}{Do}{\void}
 
 Override this member function to execute the appropriate action when called.
-Return TRUE to indicate that the action has taken place, FALSE otherwise.
-Returning FALSE will indicate to the command processor that the action is
+Return true to indicate that the action has taken place, false otherwise.
+Returning false will indicate to the command processor that the action is
 not undoable and should not be added to the command history.
 
 \membersection{wxCommand::GetName}
@@ -65,8 +65,8 @@ Returns the command name.
 \func{bool}{Undo}{\void}
 
 Override this member function to un-execute a previous Do.
-Return TRUE to indicate that the action has taken place, FALSE otherwise.
-Returning FALSE will indicate to the command processor that the action is
+Return true to indicate that the action has taken place, false otherwise.
+Returning false will indicate to the command processor that the action is
 not redoable and no change should be made to the command history.
 
 How you implement this command is totally application dependent, but typical
