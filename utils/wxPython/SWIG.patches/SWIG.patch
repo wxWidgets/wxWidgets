@@ -1,0 +1,488 @@
+*** cplus.cxx.old	Mon Feb 02 14:55:42 1998
+--- cplus.cxx	Fri Aug 28 12:02:50 1998
+***************
+*** 581,612 ****
+  // Class for managing class members (internally)
+  // ----------------------------------------------------------------------
+  
+  static char   *inherit_base_class = 0;
+  
+- class CPP_class {
+- public:
+-   char        *classname;             // Real class name
+-   char        *classrename;           // New name of class (if applicable)
+-   char        *classtype;             // class type (struct, union, class)
+-   int          strip;                 // Strip off class declarator
+-   int          wextern;               // Value of extern wrapper variable for this class
+-   int          have_constructor;      // Status bit indicating if we've seen a constructor
+-   int          have_destructor;       // Status bit indicating if a destructor has been seen
+-   int          is_abstract;           // Status bit indicating if this is an abstract class
+-   int          generate_default;      // Generate default constructors
+-   int          objective_c;           // Set if this is an objective C class
+-   int          error;                 // Set if this class can't be generated
+-   int          line;                  // Line number
+-   char        **baseclass;            // Base classes (if any)
+-   Hash        *local;                 // Hash table for local types
+-   Hash        *scope;                 // Local scope hash table
+-   DocEntry    *de;                    // Documentation entry of class
+-   CPP_member  *members;               // Linked list of members
+-   CPP_class   *next;                  // Next class
+-   static CPP_class *classlist;        // List of all classes stored
+  
+!   CPP_class(char *name, char *ctype) {
+      CPP_class *c;
+      classname = copy_string(name);
+      classtype = copy_string(ctype);
+      classrename = 0;
+--- 581,593 ----
+  // Class for managing class members (internally)
+  // ----------------------------------------------------------------------
+  
+  static char   *inherit_base_class = 0;
++ CPP_class *CPP_class::classlist = 0;
++ CPP_class     *current_class;
+  
+  
+! CPP_class::CPP_class(char *name, char *ctype) {
+    CPP_class *c;
+    classname = copy_string(name);
+    classtype = copy_string(ctype);
+    classrename = 0;
+***************
+*** 642,650 ****
+    // ------------------------------------------------------------------------------
+    // Add a new C++ member to this class
+    // ------------------------------------------------------------------------------
+  
+!   void add_member(CPP_member *m) {
+      CPP_member *cm;
+      
+      // Set base class where this was defined
+      if (inherit_base_class)          
+--- 623,631 ----
+  // ------------------------------------------------------------------------------
+  // Add a new C++ member to this class
+  // ------------------------------------------------------------------------------
+  
+! void CPP_class::add_member(CPP_member *m) {
+    CPP_member *cm;
+  
+    // Set base class where this was defined
+    if (inherit_base_class)
+***************
+*** 664,672 ****
+    // ------------------------------------------------------------------------------
+    // Search for a member with the given name. Returns the member on success, 0 on failure
+    // ------------------------------------------------------------------------------
+  
+!   CPP_member *search_member(char *name) {
+      CPP_member *m;
+      char *c;
+      m = members;
+      while (m) {
+--- 645,653 ----
+  // ------------------------------------------------------------------------------
+  // Search for a member with the given name. Returns the member on success, 0 on failure
+  // ------------------------------------------------------------------------------
+  
+! CPP_member *CPP_class::search_member(char *name) {
+    CPP_member *m;
+    char *c;
+    m = members;
+    while (m) {
+***************
+*** 680,688 ****
+    // ------------------------------------------------------------------------------
+    // Inherit.  Put all the declarations associated with this class into the current
+    // ------------------------------------------------------------------------------
+  
+!   void inherit_decls(int mode) {
+      CPP_member *m;
+      m = members;
+      while (m) {
+        inherit_base_class = m->base;
+--- 661,669 ----
+  // ------------------------------------------------------------------------------
+  // Inherit.  Put all the declarations associated with this class into the current
+  // ------------------------------------------------------------------------------
+  
+! void CPP_class::inherit_decls(int mode) {
+    CPP_member *m;
+    m = members;
+    while (m) {
+      inherit_base_class = m->base;
+***************
+*** 696,704 ****
+    // ------------------------------------------------------------------------------
+    // Emit all of the declarations associated with this class 
+    // ------------------------------------------------------------------------------
+  
+!   void emit_decls() {
+      CPP_member    *m = members;
+      int  last_scope = name_scope(0);
+      abstract = is_abstract;
+      while (m) {
+--- 677,685 ----
+  // ------------------------------------------------------------------------------
+  // Emit all of the declarations associated with this class
+  // ------------------------------------------------------------------------------
+  
+! void CPP_class::emit_decls() {
+    CPP_member    *m = members;
+    int  last_scope = name_scope(0);
+    abstract = is_abstract;
+    while (m) {
+***************
+*** 713,721 ****
+    // ------------------------------------------------------------------------------  
+    // Search for a given class in the list
+    // ------------------------------------------------------------------------------
+  
+!   static CPP_class *search(char *name) {
+      CPP_class *c;
+      c = classlist;
+      if (!name) return 0;
+      while (c) {
+--- 694,702 ----
+  // ------------------------------------------------------------------------------
+  // Search for a given class in the list
+  // ------------------------------------------------------------------------------
+  
+! CPP_class *CPP_class::search(char *name) {
+    CPP_class *c;
+    c = classlist;
+    if (!name) return 0;
+    while (c) {
+***************
+*** 729,737 ****
+    // Add default constructors and destructors
+    //
+    // ------------------------------------------------------------------------------
+  
+!   void create_default() {
+      if (!generate_default) return;
+      
+      // Try to generate a constructor if not available.
+  
+--- 710,718 ----
+  // Add default constructors and destructors
+  //
+  // ------------------------------------------------------------------------------
+  
+! void CPP_class::create_default() {
+    if (!generate_default) return;
+  
+    // Try to generate a constructor if not available.
+  
+***************
+*** 751,764 ****
+    // ------------------------------------------------------------------------------
+    // Dump *all* of the classes saved out to the various
+    // language modules (this does what cplus_close_class used to do)
+    // ------------------------------------------------------------------------------
+-   static void create_all();
+- };
+- 
+- CPP_class *CPP_class::classlist = 0;
+- static CPP_class     *current_class;
+- 
+  void CPP_class::create_all() {
+    CPP_class *c;
+    c = classlist;
+    while (c) {
+--- 732,739 ----
+*** vector.cxx.old	Fri Aug 28 14:23:16 1998
+--- vector.cxx	Fri Aug 28 14:46:52 1998
+***************
+*** 0 ****
+--- 1,182 ----
++ 
++ /*******************************************************************************
++  * Simplified Wrapper and Interface Generator  (SWIG)
++  *
++  * Dave Beazley
++  *
++  * Department of Computer Science        Theoretical Division (T-11)
++  * University of Utah                    Los Alamos National Laboratory
++  * Salt Lake City, Utah  84112           Los Alamos, New Mexico  87545
++  * beazley@cs.utah.edu                   beazley@lanl.gov
++  *
++  * Copyright (c) 1995-1997
++  * The University of Utah and the Regents of the University of California
++  * All Rights Reserved
++  *
++  * Permission is hereby granted, without written agreement and without
++  * license or royalty fees, to use, copy, modify, and distribute this
++  * software and its documentation for any purpose, provided that
++  * (1) The above copyright notice and the following two paragraphs
++  * appear in all copies of the source code and (2) redistributions
++  * including binaries reproduces these notices in the supporting
++  * documentation.   Substantial modifications to this software may be
++  * copyrighted by their authors and need not follow the licensing terms
++  * described here, provided that the new terms are clearly indicated in
++  * all files where they apply.
++  *
++  * IN NO EVENT SHALL THE AUTHOR, THE UNIVERSITY OF CALIFORNIA, THE
++  * UNIVERSITY OF UTAH OR DISTRIBUTORS OF THIS SOFTWARE BE LIABLE TO ANY
++  * PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
++  * DAMAGES ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
++  * EVEN IF THE AUTHORS OR ANY OF THE ABOVE PARTIES HAVE BEEN ADVISED OF
++  * THE POSSIBILITY OF SUCH DAMAGE.
++  *
++  * THE AUTHOR, THE UNIVERSITY OF CALIFORNIA, AND THE UNIVERSITY OF UTAH
++  * SPECIFICALLY DISCLAIM ANY WARRANTIES,INCLUDING, BUT NOT LIMITED TO,
++  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++  * PURPOSE. THE SOFTWARE PROVIDED HEREUNDER IS ON AN "AS IS" BASIS, AND
++  * THE AUTHORS AND DISTRIBUTORS HAVE NO OBLIGATION TO PROVIDE MAINTENANCE,
++  * SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
++  *
++  *******************************************************************************/
++ 
++ #include "internal.h"
++ 
++ /*******************************************************************************
++  * $Header$
++  *
++  * File : vector.cxx
++  *
++  * A very simple Vector class.  Allways assumes that memory allocations are
++  * successful.  Should be made more robust...
++  *
++  *******************************************************************************/
++ 
++ void* Vector::s_nullPtr = NULL;
++ 
++ // -----------------------------------------------------------------------------
++ // Vector::Vector(size_t allocSize = 8)
++ //
++ // Constructor.  Creates a new Vector.
++ //
++ // Inputs : initial allocation size (optional)
++ //
++ // Output : New Vector object.
++ //
++ // Side Effects : None
++ // -----------------------------------------------------------------------------
++ 
++ Vector::Vector(size_t allocSize)
++     : m_size(allocSize),
++       m_count(0),
++       m_data(0)
++ {
++     if (m_size) {
++         m_data = new void*[m_size];
++         int i;
++         for (i=0; i<m_size;i++)
++             m_data[i] = 0;
++     }
++ }
++ 
++ 
++ // -----------------------------------------------------------------------------
++ // Vector::~Vector
++ //
++ // Destructor.  Only cleans up the vector, not its contents!
++ //
++ // -----------------------------------------------------------------------------
++ 
++ 
++ Vector::~Vector() {
++     if (m_data) {
++         delete [] m_data;
++     }
++ 
++     m_data = 0;
++     m_size = m_count = 0;
++ }
++ 
++ 
++ 
++ // -----------------------------------------------------------------------------
++ // size_t Vector::extend(size_t newSize)
++ //
++ // Extends the vector to at least newSize length.  Won't do anything if newSize
++ // is smaller than the current size of the vector.
++ //
++ // Returns the new allocated size.
++ //
++ // -----------------------------------------------------------------------------
++ 
++ #define GRANULARITY     16
++ 
++ size_t Vector::extend(size_t newSize) {
++ 
++     if (newSize > m_size) {
++         newSize = newSize + (GRANULARITY - (newSize % GRANULARITY));
++ 
++         void** temp = new void*[newSize];
++         memcpy(temp, m_data, m_size*sizeof(void*));
++ 
++         int i;
++         for (i=m_size; i<newSize; i++)
++             temp[i] = 0;
++ 
++         delete [] m_data;
++         m_data = temp;
++         m_size = newSize;
++     }
++     return m_size;
++ }
++ 
++ 
++ // -----------------------------------------------------------------------------
++ // Vector::append(void* object)
++ //
++ // Appends the object pointer to vector at index m_count.  Increments m_count.
++ // Returns the new count.
++ // -----------------------------------------------------------------------------
++ 
++ size_t Vector::append(void* object) {
++     if (m_count >= m_size) {
++         extend(m_count + 1);
++     }
++ 
++     m_data[m_count] = object;
++     m_count += 1;
++ 
++     return m_count;
++ }
++ 
++ 
++ // -----------------------------------------------------------------------------
++ // Vector::operator[] (size_t idx)
++ //
++ // Returns a reference to the void pointer at idx.  If idx is beyond the range
++ // of the vector, returns a reference to s_nullPtr.
++ //
++ // -----------------------------------------------------------------------------
++ 
++ void*& Vector::operator[] (size_t idx) {
++     if (idx >= m_size) {
++         s_nullPtr = 0;
++         return s_nullPtr;
++     }
++ 
++     return m_data[idx];
++ }
++ 
++ 
++ /***********************************************************************
++  *
++  * -- Revision History
++  * $Log$
++  * Revision 1.1  1998/10/03 05:56:03  RD
++  * *** empty log message ***
++  *
++  *
++  ***********************************************************************/
++ 
++ 
++ 
++ 
++ 
++ 
+*** makefile.msc.old	Mon Jun 23 15:15:32 1997
+--- makefile.msc	Fri Aug 28 10:21:58 1998
+***************
+*** 33,50 ****
+  # Normally, you shouldn't have to change anything below this point     #
+  ########################################################################
+  
+  LIBOBJS = main.obj scanner.obj symbol.obj include.obj types.obj parms.obj emit.obj newdoc.obj ascii.obj \
+!           html.obj latex.obj cplus.obj lang.obj hash.obj sstring.obj wrapfunc.obj getopt.obj comment.obj typemap.obj naming.obj
+  
+  LIBSRCS = main.cxx scanner.cxx symbol.cxx include.cxx types.cxx parms.cxx emit.cxx \
+! 	  newdoc.cxx ascii.cxx html.cxx latex.cxx cplus.cxx lang.cxx hash.cxx \
+            sstring.cxx wrapfunc.cxx getopt.cxx comment.cxx typemap.cxx naming.cxx
+  
+  LIBHEADERS = internal.h ../Include/swig.h latex.h ascii.h html.h nodoc.h
+  LIBNAME      = ..\libswig.lib
+  INCLUDE  = -I../Include -I$(STD_INC)
+! CFLAGS   = -Zi -nologo -DSWIG_LIB="\"$(SWIG_LIB)\"" -DSWIG_CC="\"$(CC)\""  -DMSDOS -DSTDC_HEADERS=1 -DHAVE_LIBDL=1 $(SWIG_OPTS)
+  LD_FLAGS    =  -VERBOSE
+  
+  
+  #
+--- 33,50 ----
+  # Normally, you shouldn't have to change anything below this point     #
+  ########################################################################
+  
+  LIBOBJS = main.obj scanner.obj symbol.obj include.obj types.obj parms.obj emit.obj newdoc.obj ascii.obj \
+!           html.obj latex.obj cplus.obj lang.obj hash.obj vector.obj sstring.obj wrapfunc.obj getopt.obj comment.obj typemap.obj naming.obj
+  
+  LIBSRCS = main.cxx scanner.cxx symbol.cxx include.cxx types.cxx parms.cxx emit.cxx \
+! 	  newdoc.cxx ascii.cxx html.cxx latex.cxx cplus.cxx lang.cxx hash.cxx vector.cxx \
+            sstring.cxx wrapfunc.cxx getopt.cxx comment.cxx typemap.cxx naming.cxx
+  
+  LIBHEADERS = internal.h ../Include/swig.h latex.h ascii.h html.h nodoc.h
+  LIBNAME      = ..\libswig.lib
+  INCLUDE  = -I../Include -I$(STD_INC)
+! CFLAGS   = -Zi -nologo -DSWIG_LIB="\"$(SWIG_LIB)\"" -DSWIG_CC="\"$(CC)\""  -DMSDOS -DSTDC_HEADERS=1 -DHAVE_LIBDL=1 $(SWIG_OPTS) $(OTHERFLAGS)
+  LD_FLAGS    =  -VERBOSE
+  
+  
+  #
+*** makefile.bc.old	Sun Jan 04 12:49:24 1998
+--- makefile.bc	Fri Aug 28 14:42:58 1998
+***************
+*** 34,47 ****
+  ########################################################################
+  
+  LIBOBJS = main.obj scanner.obj symbol.obj include.obj types.obj parms.obj \
+            emit.obj newdoc.obj ascii.obj \
+!           html.obj latex.obj cplus.obj lang.obj hash.obj sstring.obj \
+            wrapfunc.obj getopt.obj comment.obj typemap.obj naming.obj
+  
+  LIBSRCS = main.cxx scanner.cxx symbol.cxx include.cxx types.cxx parms.cxx \
+            emit.cxx newdoc.cxx ascii.cxx html.cxx latex.cxx cplus.cxx lang.cxx hash.cxx \
+!           sstring.cxx wrapfunc.cxx getopt.cxx comment.cxx typemap.cxx naming.cxx
+  
+  LIBHEADERS = internal.h ../Include/swig.h latex.h ascii.h html.h nodoc.h
+  LIBNAME      = ..\libswig.lib
+  INCLUDE  = -I../Include -I$(STD_INC)
+--- 34,47 ----
+  ########################################################################
+  
+  LIBOBJS = main.obj scanner.obj symbol.obj include.obj types.obj parms.obj \
+            emit.obj newdoc.obj ascii.obj \
+!           html.obj latex.obj cplus.obj lang.obj hash.obj vector.obj sstring.obj \
+            wrapfunc.obj getopt.obj comment.obj typemap.obj naming.obj
+  
+  LIBSRCS = main.cxx scanner.cxx symbol.cxx include.cxx types.cxx parms.cxx \
+            emit.cxx newdoc.cxx ascii.cxx html.cxx latex.cxx cplus.cxx lang.cxx hash.cxx \
+!           vector.cxx sstring.cxx wrapfunc.cxx getopt.cxx comment.cxx typemap.cxx naming.cxx
+  
+  LIBHEADERS = internal.h ../Include/swig.h latex.h ascii.h html.h nodoc.h
+  LIBNAME      = ..\libswig.lib
+  INCLUDE  = -I../Include -I$(STD_INC)
+*** Makefile.in.old	Wed May 28 22:56:56 1997
+--- Makefile.in	Fri Aug 28 14:43:36 1998
+***************
+*** 51,63 ****
+  # Normally, you shouldn't have to change anything below this point     #
+  ########################################################################
+  
+  LIBOBJS = main.o scanner.o symbol.o include.o types.o parms.o emit.o newdoc.o ascii.o \
+!           html.o latex.o cplus.o lang.o hash.o sstring.o wrapfunc.o getopt.o comment.o \
+            typemap.o naming.o
+  
+  LIBSRCS = main.cxx scanner.cxx symbol.cxx include.cxx types.cxx parms.cxx emit.cxx \
+! 	  newdoc.cxx ascii.cxx html.cxx latex.cxx cplus.cxx lang.cxx hash.cxx \
+            sstring.cxx wrapfunc.cxx getopt.cxx comment.cxx typemap.cxx naming.cxx
+  
+  LIBHEADERS = internal.h ../Include/swig.h latex.h ascii.h html.h nodoc.h
+  LIB      = ../libswig.a
+--- 51,63 ----
+  # Normally, you shouldn't have to change anything below this point     #
+  ########################################################################
+  
+  LIBOBJS = main.o scanner.o symbol.o include.o types.o parms.o emit.o newdoc.o ascii.o \
+!           html.o latex.o cplus.o lang.o hash.o vector.o sstring.o wrapfunc.o getopt.o comment.o \
+            typemap.o naming.o
+  
+  LIBSRCS = main.cxx scanner.cxx symbol.cxx include.cxx types.cxx parms.cxx emit.cxx \
+! 	  newdoc.cxx ascii.cxx html.cxx latex.cxx cplus.cxx lang.cxx hash.cxx vector.cxx \
+            sstring.cxx wrapfunc.cxx getopt.cxx comment.cxx typemap.cxx naming.cxx
+  
+  LIBHEADERS = internal.h ../Include/swig.h latex.h ascii.h html.h nodoc.h
+  LIB      = ../libswig.a

@@ -1,0 +1,136 @@
+*** python.cxx.old	Fri Jan 02 22:17:40 1998
+--- python.cxx	Fri Aug 28 14:49:18 1998
+***************
+*** 1679,1684 ****
+--- 1679,1701 ----
+  	      }
+  	    }
+  	  }
++         } else if (strcmp(cmd, "addtomethod") == 0) {
++             // parse value, expected to be in the form "methodName:line"
++             char* txtptr = strchr(value, ':');
++             if (txtptr) {
++                 // add name and line to a list in current_class
++                 *txtptr = 0;
++                 txtptr++;
++                 AddPragmaData* apData = new AddPragmaData(value, txtptr);
++                 current_class->addPragmas.append(apData);
++ 
++             } else {
++                 fprintf(stderr,"%s : Line %d. Malformed addtomethod pragma.  Should be \"methodName:text\"\n",
++                         input_file, line_number);
++             }
++         } else if (strcmp(cmd, "addtoclass") == 0) {
++                 AddPragmaData* apData = new AddPragmaData("__class__", value);
++                 current_class->addPragmas.append(apData);
+  	} else {
+  	  fprintf(stderr,"%s : Line %d. Unrecognized pragma.\n", input_file, line_number);
+  	}
+*** python.h.old	Thu Jul 24 22:18:50 1997
+--- python.h	Fri Aug 28 14:46:08 1998
+***************
+*** 185,191 ****
+--- 185,203 ----
+    void cpp_class_decl(char *, char *,char *);
+    void pragma(char *, char *, char *);
+    void add_typedef(DataType *t, char *name);
++ 
++   void emitAddPragmas(String& output, char* name, char* spacing);
+  };
+  
+  #define PYSHADOW_MEMBER  0x2
++ 
++ struct AddPragmaData {
++     String      m_method;
++     String      m_text;
++ 
++     AddPragmaData(char* method, char* text)
++         : m_method(method),
++           m_text(text)
++         {}
++ };
+  
+*** pycpp.cxx.old	Fri Jan 02 20:23:22 1998
+--- pycpp.cxx	Fri Aug 28 16:01:46 1998
+***************
+*** 276,281 ****
+--- 276,282 ----
+        }
+      }
+      //    if ((t->type != T_VOID) || (t->is_pointer))
++     emitAddPragmas(*pyclass, realname, tab8);
+      *pyclass << tab8 << "return val\n";
+  
+      // Change the usage string to reflect our shadow class
+***************
+*** 394,399 ****
+--- 395,401 ----
+        }
+        *construct << ")\n";
+        *construct << tab8 << "self.thisown = 1\n";
++       emitAddPragmas(*construct, "__init__", tab8);
+        have_constructor = 1;
+      } else {
+  
+***************
+*** 494,502 ****
+      *pyclass << tab4 << "def __del__(self):\n"
+  	     << tab8 << "if self.thisown == 1 :\n"
+  	     << tab8 << tab4 << module << "." << name_destroy(realname) << "(self.this)\n";
+!     
+      have_destructor = 1;
+- 
+      if (doc_entry) {
+        doc_entry->usage = "";
+        doc_entry->usage << "del this";
+--- 496,503 ----
+      *pyclass << tab4 << "def __del__(self):\n"
+  	     << tab8 << "if self.thisown == 1 :\n"
+  	     << tab8 << tab4 << module << "." << name_destroy(realname) << "(self.this)\n";
+!     emitAddPragmas(*pyclass, "__del__", tab8);
+      have_destructor = 1;
+      if (doc_entry) {
+        doc_entry->usage = "";
+        doc_entry->usage << "del this";
+***************
+*** 552,557 ****
+--- 553,560 ----
+  	   << tab8 << "return \"<C " << class_name <<" instance>\"\n";
+  
+        classes << repr;
++       emitAddPragmas(classes, "__class__", tab4);
++ 
+      }
+  
+      // Now build the real class with a normal constructor
+***************
+*** 747,752 ****
+--- 750,777 ----
+    }
+  }
+  
++ // --------------------------------------------------------------------------------
++ // PYTHON::emitAddPragmas(String& output, char* name, char* spacing);
++ //
++ // Search the current_class->addPragmas vector for any text belonging to name.
++ // Append the text properly spcaed to the output string.
++ //
++ // --------------------------------------------------------------------------------
++ 
++ void PYTHON::emitAddPragmas(String& output, char* name, char* spacing)
++ {
++     AddPragmaData*      apData;
++     size_t              count;
++     int                 i;
++ 
++     count = current_class->addPragmas.count();
++     for (i=0; i<count; i++) {
++         apData = (AddPragmaData*)current_class->addPragmas[i];
++         if (strcmp(apData->m_method, name) == 0) {
++             output << spacing << apData->m_text << "\n";
++         }
++     }
++ }
+  
+  /*********************************************************************************
+   *
