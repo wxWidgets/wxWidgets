@@ -39,6 +39,9 @@ functions that take a wxTreeEvent argument.
 \twocolitem{{\bf EVT\_TREE\_KEY\_DOWN(id, func)}}{A key has been pressed.}
 \twocolitem{{\bf EVT\_TREE\_SEL\_CHANGED(id, func)}}{Selection has changed.}
 \twocolitem{{\bf EVT\_TREE\_SEL\_CHANGING(id, func)}}{Selection is changing. This can be prevented by calling \helpref{Veto()}{wxnotifyeventveto}.}
+\twocolitem{{\bf EVT\_TREE\_KEY\_DOWN(id, func)}}{A key has been pressed.}
+\twocolitem{{\bf EVT\_TREE\_ITEM\_GETTOOLTIP(id, func)}}{The opportunity to set the item tooltip
+is being given to the application (call wxTreeEvent::SetToolTip). Windows only.}
 \end{twocollist}%
 
 \wxheading{See also}
@@ -97,4 +100,11 @@ Returns the position of the mouse pointer if the event is a drag event.
 
 Returns true if the label edit was cancelled. This should be
 called from within an EVT\_TREE\_END\_LABEL\_EDIT handler.
+
+\membersection{wxTreeEvent::SetToolTip}
+
+\func{void}{SetToolTip}{\param{const wxString\&}{ tooltip}}
+
+Set the tooltip for the item (valid for EVT\_TREE\_ITEM\_GETTOOLTIP events).
+Windows only.
 

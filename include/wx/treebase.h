@@ -274,6 +274,9 @@ public:
     bool IsEditCancelled() const { return m_editCancelled; }
     void SetEditCanceled(bool editCancelled) { m_editCancelled = editCancelled; }
 
+        // Set the tooltip for the item (for EVT\_TREE\_ITEM\_GETTOOLTIP events)
+    void SetToolTip(const wxString& toolTip) { m_label = toolTip; }
+
 #if WXWIN_COMPATIBILITY_2_2
     // for compatibility only, don't use
     int GetCode() const { return m_evtKey.GetKeyCode(); }
@@ -320,6 +323,7 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK, 616)
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_END_DRAG, 617)
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK, 618)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP, 619)
 END_DECLARE_EVENT_TYPES()
 
 // GetItem() returns the item being dragged, GetPoint() the mouse coords
@@ -374,6 +378,9 @@ END_DECLARE_EVENT_TYPES()
 
 // GetItem() returns the item whose state image was clicked on
 #define EVT_TREE_STATE_IMAGE_CLICK(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, NULL ),
+
+// GetItem() is the item for which the tooltip is being requested
+#define EVT_TREE_ITEM_GETTOOLTIP(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, (wxObject *) NULL ),
 
 #endif // wxUSE_TREECTRL
 

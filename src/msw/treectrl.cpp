@@ -674,6 +674,9 @@ bool wxTreeCtrl::Create(wxWindow *parent,
         wstyle |= TVS_CHECKBOXES;
 #endif // wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
 
+    // Need so that TVN_GETINFOTIP messages will be sent
+    wstyle |= TVS_INFOTIP;
+    
     // Create the tree control.
     if ( !MSWCreateControl(WC_TREEVIEW, wstyle) )
         return false;
@@ -2459,6 +2462,29 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 break;
             }
 
+
+        // These *must* not be removed or TVN_GETINFOTIP will
+        // not be processed each time the mouse is moved
+        // and the tooltip will only ever update once.
+        case TTN_NEEDTEXTA:
+        case TTN_NEEDTEXTW:
+            {
+                *result = 0;
+
+                break;
+            }
+
+        case TVN_GETINFOTIP:
+            {
+                eventType = wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP;
+                NMTVGETINFOTIP *info = (NMTVGETINFOTIP*)lParam;
+
+                // Which item are we trying to get a tooltip for?
+                event.m_item = (WXHTREEITEM) info->hItem;
+
+                break;
+            }
+        
         case TVN_GETDISPINFO:
             eventType = wxEVT_COMMAND_TREE_GET_INFO;
             // fall through
@@ -2805,6 +2831,16 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             DeleteTextCtrl();
             break;
 
+         case TVN_GETINFOTIP:
+            {
+                // If the user permitted a tooltip change, change it
+                if (event.IsAllowed())
+                {
+                    SetToolTip(event.m_label);
+                }
+            }
+            break;
+        
         case TVN_SELCHANGING:
         case TVN_ITEMEXPANDING:
             // return true to prevent the action from happening
