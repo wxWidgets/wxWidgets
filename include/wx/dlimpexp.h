@@ -142,6 +142,17 @@
 #    define WXDLLIMPEXP_DATA_ODBC(type) type
 #endif
 
+#ifdef WXMAKINGDLL_QA
+#    define WXDLLIMPEXP_QA WXEXPORT
+#    define WXDLLIMPEXP_DATA_QA(type) WXEXPORT type
+#elif defined(WXUSINGDLL)
+#    define WXDLLIMPEXP_QA WXIMPORT
+#    define WXDLLIMPEXP_DATA_QA(type) WXIMPORT type
+#else /* not making nor using DLL */
+#    define WXDLLIMPEXP_QA
+#    define WXDLLIMPEXP_DATA_QA(type) type
+#endif
+
 #ifdef WXMAKINGDLL_DBGRID
 #    define WXDLLIMPEXP_DBGRID WXEXPORT
 #    define WXDLLIMPEXP_DATA_DBGRID(type) WXEXPORT type

@@ -13,7 +13,7 @@
         <set var="BUILD_CFG_FILE" make_var="1">
             $(SETUPHDIR)$(DIRSEP)build.cfg
         </set>
-        
+
         <action id="build_cfg_file">
             <is-phony>1</is-phony>
             <dependency-of>all</dependency-of>
@@ -40,13 +40,14 @@
                 @echo USE_HTML=$(USE_HTML) >>$(BUILD_CFG_FILE)
                 @echo USE_ODBC=$(USE_ODBC) >>$(BUILD_CFG_FILE)
                 @echo USE_OPENGL=$(USE_OPENGL) >>$(BUILD_CFG_FILE)
+                @echo USE_QA=$(USE_QA) >>$(BUILD_CFG_FILE)
                 @echo COMPILER=$(COMPILER) >>$(BUILD_CFG_FILE)
                 @echo CC=$(CC) >>$(BUILD_CFG_FILE)
                 @echo CXX=$(CXX) >>$(BUILD_CFG_FILE)
                 @echo CFLAGS=$(CFLAGS) >>$(BUILD_CFG_FILE)
                 @echo CPPFLAGS=$(CPPFLAGS) >>$(BUILD_CFG_FILE)
                 @echo CXXFLAGS=$(CXXFLAGS) >>$(BUILD_CFG_FILE)
-                @echo LDFLAGS=$(LDFLAGS) >>$(BUILD_CFG_FILE)                
+                @echo LDFLAGS=$(LDFLAGS) >>$(BUILD_CFG_FILE)
             </command>
         </action>
 

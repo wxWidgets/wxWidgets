@@ -148,6 +148,9 @@
     <set var="WXLIB_NET">
         <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('net')))</if>
     </set>
+    <set var="WXLIB_QA">
+        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('qa')))</if>
+    </set>
     <set var="WXLIB_CORE">
         <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('core')))</if>
     </set>

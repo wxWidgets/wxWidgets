@@ -128,6 +128,12 @@ dnl ### begin block 20_COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1[wx.bkl] #
         COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1=""
     fi
     AC_SUBST(COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1)
+dnl ### begin block 20_COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_QA_1[wx.bkl] ###
+    COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_QA_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x0" -a "x$USE_GUI" = "x1" -a "x$USE_QA" = "x1" ; then
+        COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_QA_1=""
+    fi
+    AC_SUBST(COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_QA_1)
 dnl ### begin block 20_COND_MONOLITHIC_0_SHARED_0_USE_ODBC_1[wx.bkl] ###
     COND_MONOLITHIC_0_SHARED_0_USE_ODBC_1="#"
     if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x0" -a "x$USE_ODBC" = "x1" ; then
@@ -164,6 +170,12 @@ dnl ### begin block 20_COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1[wx.bkl] #
         COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1=""
     fi
     AC_SUBST(COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1)
+dnl ### begin block 20_COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_QA_1[wx.bkl] ###
+    COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_QA_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x1" -a "x$USE_GUI" = "x1" -a "x$USE_QA" = "x1" ; then
+        COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_QA_1=""
+    fi
+    AC_SUBST(COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_QA_1)
 dnl ### begin block 20_COND_MONOLITHIC_0_SHARED_1_USE_ODBC_1[wx.bkl] ###
     COND_MONOLITHIC_0_SHARED_1_USE_ODBC_1="#"
     if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x1" -a "x$USE_ODBC" = "x1" ; then

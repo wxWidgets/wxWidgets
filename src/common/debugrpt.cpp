@@ -53,11 +53,13 @@
     #include "wx/zipstrm.h"
 #endif // wxUSE_ZIPSTREAM
 
-#if wxUSE_STACKWALKER
+WX_CHECK_BUILD_OPTIONS("wxQA")
 
 // ----------------------------------------------------------------------------
 // XmlStackWalker: stack walker specialization which dumps stack in XML
 // ----------------------------------------------------------------------------
+
+#if wxUSE_STACKWALKER
 
 class XmlStackWalker : public wxStackWalker
 {

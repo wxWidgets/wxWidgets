@@ -14,6 +14,7 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/app.h"
+#include "wx/log.h"
 #include "wx/datetime.h"
 #include "wx/ffile.h"
 #include "wx/filename.h"

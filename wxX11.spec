@@ -159,7 +159,6 @@ wx/datetime.inl
 wx/datstrm.h
 wx/dde.h
 wx/debug.h
-wx/debugrpt.h
 wx/defs.h
 wx/dir.h
 wx/dlimpexp.h

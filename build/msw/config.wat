@@ -67,6 +67,9 @@ USE_OPENGL = 0
 # Build ODBC database classes (USE_GUI must be 1)? [0,1]
 USE_ODBC = 0
 
+# Build quality assurance classes library (USE_GUI must be 1)? [0,1]
+USE_QA = 0
+
 # Enable exceptions in compiled code. [0,1]
 USE_EXCEPTIONS = 1
 

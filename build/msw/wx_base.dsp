@@ -480,10 +480,6 @@ SOURCE=..\..\src\common\datstrm.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\debugrpt.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\common\dircmn.cpp
 # End Source File
 # Begin Source File
@@ -1142,10 +1138,6 @@ SOURCE=..\..\include\wx\dde.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\debug.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\debugrpt.h
 # End Source File
 # Begin Source File
 

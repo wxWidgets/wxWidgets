@@ -612,7 +612,7 @@ else
 
   DEFAULT_wxUSE_ON_FATAL_EXCEPTION=yes
   DEFAULT_wxUSE_STACKWALKER=yes
-  DEFAULT_wxUSE_DEBUGREPORT=no
+  DEFAULT_wxUSE_DEBUGREPORT=yes
   DEFAULT_wxUSE_SNGLINST_CHECKER=yes
   DEFAULT_wxUSE_STD_IOSTREAM=no
   DEFAULT_wxUSE_CMDLINE_PARSER=yes
@@ -6221,6 +6221,9 @@ if test "$wxUSE_ODBC" != "no" ; then
 fi
 if test "$wxUSE_HTML" = "yes" ; then
     CORE_GUI_LIBS="html $CORE_GUI_LIBS"
+fi
+if test "$wxUSE_DEBUGREPORT" = "yes" ; then
+    CORE_GUI_LIBS="qa $CORE_GUI_LIBS"
 fi
 if test "$wxUSE_XRC" = "yes" ; then
     CORE_GUI_LIBS="xrc $CORE_GUI_LIBS"

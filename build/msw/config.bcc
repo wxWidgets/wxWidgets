@@ -108,6 +108,11 @@ USE_OPENGL = 0
 USE_ODBC = 0
 !endif
 
+# Build quality assurance classes library (USE_GUI must be 1)? [0,1]
+!ifndef USE_QA
+USE_QA = 0
+!endif
+
 # Enable exceptions in compiled code. [0,1]
 !ifndef USE_EXCEPTIONS
 USE_EXCEPTIONS = 1

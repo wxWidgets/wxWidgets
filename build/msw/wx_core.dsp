@@ -4081,10 +4081,6 @@ SOURCE=..\..\src\generic\colrdlgg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\generic\dbgrptg.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\generic\dcpsg.cpp
 # End Source File
 # Begin Source File
@@ -8218,6 +8214,10 @@ SOURCE=..\..\include\wx\dcps.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\dcscreen.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\include\wx\debugrpt.h
 # End Source File
 # Begin Source File
 

@@ -39852,6 +39852,9 @@ fi
 if test "$wxUSE_HTML" = "yes" ; then
     CORE_GUI_LIBS="html $CORE_GUI_LIBS"
 fi
+if test "$wxUSE_DEBUGREPORT" = "yes" ; then
+    CORE_GUI_LIBS="qa $CORE_GUI_LIBS"
+fi
 if test "$wxUSE_XRC" = "yes" ; then
     CORE_GUI_LIBS="xrc $CORE_GUI_LIBS"
 fi

@@ -265,7 +265,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/config.cpp
     src/common/datetime.cpp
     src/common/datstrm.cpp
-    src/common/debugrpt.cpp
     src/common/dircmn.cpp
     src/common/dynarray.cpp
     src/common/dynlib.cpp
@@ -342,7 +341,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/datstrm.h
     wx/dde.h
     wx/debug.h
-    wx/debugrpt.h
     wx/defs.h
     wx/dir.h
     wx/dlimpexp.h
@@ -497,7 +495,18 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/url.h
 </set>
 
+<!-- ====================================================================== -->
+<!--                          wxQA (non GUI library)                        -->
+<!-- ====================================================================== -->
 
+<set var="QA_SRC" hints="files">
+    src/common/debugrpt.cpp
+    src/generic/dbgrptg.cpp
+</set>
+
+<set var="QA_HDR" hints="files">
+    include/wx/debugrpt.h
+</set>
 
 <!-- ====================================================================== -->
 <!--                            Common GUI files                            -->
@@ -582,7 +591,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/choicdgg.cpp
     src/generic/choicbkg.cpp
     src/generic/dcpsg.cpp
-    src/generic/dbgrptg.cpp
     src/generic/dirctrlg.cpp
     src/generic/dragimgg.cpp
     src/generic/listbkg.cpp
@@ -2924,7 +2932,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
             $(LOWLEVEL_HDR)
             $(GUI_CORE_HEADERS)
             $(ADVANCED_HDR) $(MEDIA_HDR) $(HTML_HDR)
-            $(OPENGL_HDR) $(DBGRID_HDR) $(XRC_HDR)
+            $(OPENGL_HDR) $(QA_HDR) $(DBGRID_HDR) $(XRC_HDR)
         </if>
     </set>
 

@@ -1,11 +1,11 @@
 <?xml version="1.0" ?>
 <!-- $Id$ -->
 <makefile>
-    
+
     <set var="MONOLIB_GUI_SRC">
         <if cond="USE_GUI=='1'">
-            $(CORE_SRC) $(ADVANCED_SRC) $(MEDIA_SRC) $(HTML_SRC) $(ODBC_SRC) $(DBGRID_SRC)
-            $(XRC_SRC) 
+            $(CORE_SRC) $(ADVANCED_SRC) $(MEDIA_SRC) $(HTML_SRC) $(ODBC_SRC) $(QA_SRC)
+            $(DBGRID_SRC) $(XRC_SRC)
         </if>
     </set>
     <set var="MONOLIB_SRC">
@@ -14,7 +14,7 @@
 
     <dll id="monodll" template="wx_dll"
          cond="SHARED=='1' and MONOLITHIC=='1'">
-        <define>wxUSE_BASE=1</define> 
+        <define>wxUSE_BASE=1</define>
         <define>WXMAKINGDLL</define>
         <sources>$(MONOLIB_SRC) $(PLUGIN_MONOLIB_SRC)</sources>
         <ldlibs>$(EXTRALIBS_XML)</ldlibs>
@@ -23,15 +23,15 @@
         <ldlibs>$(PLUGIN_MONOLIB_EXTRALIBS)</ldlibs>
         <msvc-headers>$(ALL_HEADERS)</msvc-headers>
     </dll>
-    
+
     <lib id="monolib" template="wx_lib"
          cond="SHARED=='0' and MONOLITHIC=='1'">
-        <define>wxUSE_BASE=1</define> 
+        <define>wxUSE_BASE=1</define>
         <sources>$(MONOLIB_SRC) $(PLUGIN_MONOLIB_SRC)</sources>
         <msvc-headers>$(ALL_HEADERS)</msvc-headers>
     </lib>
-    
-    
+
+
     <set var="MSVC6PRJ_MERGED_TARGETS_MONOLIB" append="1">mono=monolib+monodll</set>
     <!-- included by wx.bkl from opengl.bkl -->
     <set var="MSVC6PRJ_MERGED_TARGETS_MONOLIB" append="1">gl=gllib+gldll</set>
