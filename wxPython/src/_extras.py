@@ -551,19 +551,6 @@ def EVT_TOGGLEBUTTON(win, id, func):
 
 
 
-# Help events
-def EVT_HELP(win, id, func):
-    win.Connect(id, -1, wxEVT_HELP, func)
-
-def EVT_HELP_RANGE(win, id, id2, func):
-    win.Connect(id, id2, wxEVT_HELP, func)
-
-def EVT_DETAILED_HELP(win, id, func):
-    win.Connect(id, -1, wxEVT_DETAILED_HELP, func)
-
-def EVT_DETAILED_HELP_RANGE(win, id, id2, func):
-    win.Connect(id, id2, wxEVT_DETAILED_HELP, func)
-
 def EVT_CONTEXT_MENU(win, func):
     win.Connect(-1, -1, wxEVT_CONTEXT_MENU, func)
 
