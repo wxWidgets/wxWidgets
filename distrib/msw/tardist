@@ -24,66 +24,67 @@ cd $1
 echo Removing backup files...
 rm *~ */*~ */*/*~ */*/*/*~ */*/*/*/*~
 
-rm -f $2/wxgtk.tar.gz
-rm -f $2/wxmotif.tar.gz
-rm -f $2/wxdocsrc.tar.gz
-rm -f $2/wxhtml.tar.gz
-rm -f $2/wxpdf.tar.gz
-rm -f $2/wxstubs.tar.gz
-rm -f $2/tex2rtf.tar.gz
-rm -f $2/ogl.tar.gz
-rm -f $2/wxtree.tar.gz
+rm -f $2/wx200*.tgz
+rm -f $2/tex2rtf2.tgz
+rm -f $2/ogl3.tgz
+rm -f $2/treedraw.tar.gz
 rm -f $2/glcanvas.tar.gz
 
 echo Tarring...
 
+### Generic
+ls `cat $1/distrib/msw/generic.rsp` > /tmp/wxgen.txt
+tar cvf $2/wx200gen.tar -T /tmp/wxgen.txt
+gzip $2/wx200gen.tar
+mv $2/wx200gen.tar.gz $2/wx200gen.tgz
+
 ### wxGTK
 ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/gtk.rsp` > /tmp/wxgtk.txt
-tar cvf $2/wxgtk.tar -T /tmp/wxgtk.txt
-gzip $2/wxgtk.tar
-mv $2/wxgtk.tar.gz $2/wxgtk.tgz
+tar cvf $2/wx200gtk.tar -T /tmp/wxgtk.txt
+gzip $2/wx200gtk.tar
+mv $2/wx200gtk.tar.gz $2/wx200gtk.tgz
 
 ### wxMotif
 ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/motif.rsp` > /tmp/wxmotif.txt
-tar cvf $2/wxmotif.tar -T /tmp/wxmotif.txt
-gzip $2/wxmotif.tar
-mv $2/wxmotif.tar.gz $2/wxmotif.tgz
+tar cvf $2/wx200mot.tar -T /tmp/wxmotif.txt
+gzip $2/wx200mot.tar
+mv $2/wx200mot.tar.gz $2/wx200mot.tgz
 
 ### Doc sources
 ls `cat $1/distrib/msw/docsrc.rsp` > /tmp/docsrc.txt
-tar cvf $2/wxdocsrc.tar -T /tmp/docsrc.txt
-gzip $2/wxdocsrc.tar
-mv $2/wxdocsrc.tar.gz $2/wxdocsrc.tgz
+tar cvf $2/wx200doc.tar -T /tmp/docsrc.txt
+gzip $2/wx200doc.tar
+mv $2/wx200doc.tar.gz $2/wx200doc.tgz
 
 ### HTML docs
 ls `cat $1/distrib/msw/wx_html.rsp` > /tmp/html.txt
-tar cvf $2/wxhtml.tar -T /tmp/html.txt
-gzip $2/wxhtml.tar
-mv $2/wxhtml.tar.gz $2/wxhtml.tgz
+tar cvf $2/wx200htm.tar -T /tmp/html.txt
+gzip $2/wx200htm.tar
+mv $2/wx200htm.tar.gz $2/wx200htm.tgz
 
 ### PDF docs
 ls `cat $1/distrib/msw/wx_pdf.rsp` > /tmp/pdf.txt
-tar cvf $2/wxpdf.tar -T /tmp/pdf.txt
-gzip $2/wxpdf.tar
-mv $2/wxpdf.tar.gz $2/wxpdf.tgz
+tar cvf $2/wx200pdf.tar -T /tmp/pdf.txt
+gzip $2/wx200pdf.tar
+mv $2/wx200pdf.tar.gz $2/wx200pdf.tgz
 
 ### Stubs files
 ls `cat $1/distrib/msw/stubs.rsp` > /tmp/stubs.txt
-tar cvf $2/wxstubs.tar -T /tmp/stubs.txt
-gzip $2/wxstubs.tar
-mv $2/wxstubs.tar.gz $2/wxstubs.tgz
+tar cvf $2/wx200stubs.tar -T /tmp/stubs.txt
+gzip $2/wx200stubs.tar
+mv $2/wx200stubs.tar.gz $2/wx200stubs.tgz
 
 ### Tex2RTF
 ls `cat $1/distrib/msw/tex2rtf.rsp` > /tmp/tex2rtf.txt
-tar cvf $2/tex2rtf.tar -T /tmp/tex2rtf.txt
-gzip $2/tex2rtf.tar
-mv $2/tex2rtf.tar.gz $2/tex2rtf.tgz
+tar cvf $2/tex2rtf2.tar -T /tmp/tex2rtf.txt
+gzip $2/tex2rtf2.tar
+mv $2/tex2rtf2.tar.gz $2/tex2rtf2.tgz
 
 ### OGL
 ls `cat $1/distrib/msw/ogl.rsp` > /tmp/ogl.txt
-tar cvf $2/ogl.tar -T /tmp/ogl.txt
-gzip $2/ogl.tar
-mv $2/ogl.tar.gz $2/ogl.tgz
+tar cvf $2/ogl3.tar -T /tmp/ogl.txt
+gzip $2/ogl3.tar
+mv $2/ogl3.tar.gz $2/ogl3.tgz
 
 ### wxGLCanvas
 ls `cat $1/distrib/msw/glcanvas.rsp` > /tmp/glcanvas.txt
@@ -93,8 +94,8 @@ mv $2/glcanvas.tar.gz $2/glcanvas.tgz
 
 ### wxTreeLayout
 ls `cat $1/distrib/msw/wxtree.rsp` > /tmp/wxtree.txt
-tar cvf $2/wxtree.tar -T /tmp/wxtree.txt
-gzip $2/wxtree.tar
-mv $2/wxtree.tar.gz $2/wxtree.tgz
+tar cvf $2/treedraw.tar -T /tmp/wxtree.txt
+gzip $2/treedraw.tar
+mv $2/treedraw.tar.gz $2/treedraw.tgz
 
 echo Done!

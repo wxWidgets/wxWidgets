@@ -13,6 +13,7 @@ wxMSW:
 
 - Fixed problems with <return> in dialogs/panels.
 - Fixed window cursor setting.
+- Fixed toolbar sizing and edge-clipping problems.
 - Some makefile fixes.
 
 wxMotif:

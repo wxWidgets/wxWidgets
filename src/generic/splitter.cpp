@@ -146,7 +146,11 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
     event.Position(&x, &y);
 
     // reset the cursor
+#ifdef __WXMOTIF__
+    SetCursor(* wxSTANDARD_CURSOR);
+#else
     SetCursor(wxCursor());
+#endif
 
     if (event.LeftDown())
     {

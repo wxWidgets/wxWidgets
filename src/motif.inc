@@ -75,6 +75,7 @@ LIB_CPP_SRC=\
  motif/brush.cpp \
  motif/button.cpp \
  motif/checkbox.cpp \
+ motif/checklst.cpp \
  motif/choice.cpp \
  motif/clipbrd.cpp \
  motif/colour.cpp \

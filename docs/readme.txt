@@ -6,14 +6,14 @@ framework for writing advanced GUI applications using (where
 possible) the native controls.
 
 In addition to common and advanced GUI facilities such as frames, scrolling
-windows, toolbars, tree controls, icons, device contexts,
-printing, splitter windows and so on, there are wrappers for common
-file operations and facilities for writing TCP/IP applications.
+windows, toolbars, tree controls, icons, device contexts, printing,
+splitter windows and so on, there are wrappers for common file operations,
+and facilities for writing TCP/IP applications, thread handling, and more.
 Where certain features are not available on a platform, such as MDI and
 tree controls on Unix, they are emulated.
 
 A detailed 700-page reference manual is supplied in HTML, PDF and
-Windows Help form.
+Windows Help form: see the docs hierarchy.
 
 For a quick start, point your Web browser at docs/html/index.htm for a list of
 important documents and samples.
@@ -43,7 +43,7 @@ wx200msw.zip            Windows-specific source code
 wx200mot.zip            Motif-specific source code
 wx200gtk.zip            GTK-specific source code
 wx200stubs.zip          Stubs ('empty port') source. Needs
-                        wx200gen.zip/wxgen.tgz.
+                        wx200gen.zip/tgz.
 wx200doc.zip            Documentation source code (not required)
 wx200hlp.zip            WinHelp documentation
 wx200pdf.zip            Acrobat PDF documentation
@@ -56,14 +56,14 @@ The tarred, gzip archive comprises the following (or similar
 names). Not all of these files are available in all distributions, due
 to space restrictions.
 
-wxgtk.tgz               All wxGTK source and samples
-wxmotif.tgz             All wxMotif source and samples
-wxstubs.tgz             Stubs ('empty port') source. Needs
-                        wx200gen.zip/wxgen.tgz.
-wxgen.tgz               Generic code and samples (common to all ports)
-wxpdf.tgz               Acrobat PDF documentation
-wxhtml.tgz              HTML documentation
-wxdocsrc.tgz            Documentation source
+wx200gtk.tgz            All wxGTK source and samples
+wx200mot.tgz            All wxMotif source and samples
+wx200stubs.tgz          Stubs ('empty port') source. Needs
+                        wx200gen.zip/tgz.
+wx200gen.tgz            Generic code and samples (common to all ports)
+wx200pdf.tgz            Acrobat PDF documentation
+wx200htm.tgz            HTML documentation
+wx200src.tgz            Documentation source
 
 Installation
 ------------
@@ -131,5 +131,5 @@ or contact Julian Smart <julian.smart@ukonline.co.uk>.
 
 Good luck!
 
-The wxWindows Team, February 1999
+The wxWindows Team, March 1st, 1999
 

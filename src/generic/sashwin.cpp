@@ -111,7 +111,11 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
     wxSashEdgePosition sashHit = SashHitTest(x, y);
 
     // reset the cursor
+#ifdef __WXMOTIF__
+    SetCursor(* wxSTANDARD_CURSOR);
+#else
     SetCursor(wxCursor());
+#endif
 
 	if (event.LeftDown())
 	{

@@ -133,7 +133,7 @@ void wxMDIParentFrame::OnSize(wxSizeEvent& event)
 
 void wxMDIParentFrame::GetClientSize(int *width, int *height) const
 {
-    wxWindow::GetClientSize(width, height);
+    wxFrame::GetClientSize(width, height);
 }
 
 void wxMDIParentFrame::OnActivate(wxActivateEvent& event)
