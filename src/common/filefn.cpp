@@ -299,11 +299,17 @@ wxString wxPathList::FindAbsoluteValidPath (const wxString& file)
 bool
 wxFileExists (const wxString& filename)
 {
-#if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
+#if defined(__WIN32__) && !defined(__WXMICROWIN__)
     // GetFileAttributes can copy with network paths
-    DWORD ret = GetFileAttributes(filename);
-    DWORD isDir = (ret & FILE_ATTRIBUTE_DIRECTORY);
-    return ((ret != 0xffffffff) && (isDir == 0));
+    DWORD ret = ::GetFileAttributes(filename);
+    if ( ret == (DWORD)-1 )
+    {
+        wxLogLastError(_T("GetFileAttributes"));
+
+        return FALSE;
+    }
+
+    return !(ret & FILE_ATTRIBUTE_DIRECTORY);
 #else
     wxStructStat stbuf;
     if ( !filename.empty() && wxStat (OS_FILENAME(filename), &stbuf) == 0 )
@@ -321,7 +327,7 @@ wxIsAbsolutePath (const wxString& filename)
 #if defined(__WXMAC__) && !defined(__DARWIN__)
         // Classic or Carbon CodeWarrior like
         // Carbon with Apple DevTools is Unix like
-        
+
         // This seems wrong to me, but there is no fix. since
         // "MacOS:MyText.txt" is absolute whereas "MyDir:MyText.txt"
         // is not. Or maybe ":MyDir:MyText.txt" has to be used? RR.
@@ -687,7 +693,7 @@ wxChar *wxFileNameFromPath (wxChar *path)
     if (path)
     {
         register wxChar *tcp;
-        
+
         tcp = path + wxStrlen (path);
         while (--tcp >= path)
         {
@@ -721,7 +727,7 @@ wxString wxFileNameFromPath (const wxString& path1)
     {
         wxChar *path = WXSTRINGCAST path1 ;
         register wxChar *tcp;
-        
+
         tcp = path + wxStrlen (path);
         while (--tcp >= path)
         {
@@ -758,13 +764,13 @@ wxPathOnly (wxChar *path)
     if (path && *path)
     {
         static wxChar buf[_MAXPATHLEN];
-        
+
         // Local copy
         wxStrcpy (buf, path);
-        
+
         int l = wxStrlen(path);
         int i = l - 1;
-        
+
         // Search backward for a backward or forward slash
         while (i > -1)
         {
@@ -793,7 +799,7 @@ wxPathOnly (wxChar *path)
 #endif
             i --;
         }
-        
+
 #if defined(__WXMSW__) || defined(__WXPM__)
         // Try Drive specifier
         if (wxIsalpha (buf[0]) && buf[1] == wxT(':'))
@@ -814,10 +820,10 @@ wxString wxPathOnly (const wxString& path)
     if (path != wxT(""))
     {
         wxChar buf[_MAXPATHLEN];
-        
+
         // Local copy
         wxStrcpy (buf, WXSTRINGCAST path);
-        
+
         int l = path.Length();
         int i = l - 1;
 
@@ -849,7 +855,7 @@ wxString wxPathOnly (const wxString& path)
 #endif
             i --;
         }
-        
+
 #if defined(__WXMSW__) || defined(__WXPM__)
         // Try Drive specifier
         if (wxIsalpha (buf[0]) && buf[1] == wxT(':'))
@@ -879,7 +885,7 @@ wxString wxMacFSSpec2MacFilename( const FSSpec *spec )
     (void) FSpMakeFSRef( spec, &theRef );
     // get the POSIX path associated with the FSRef
     (void) FSRefMakePath( &theRef, (UInt8 *)thePath, sizeof(thePath) );
-    
+
     // create path string for return value
     wxString result( thePath ) ;
 #else
@@ -893,7 +899,7 @@ wxString wxMacFSSpec2MacFilename( const FSSpec *spec )
     (*myPath)[length] = 0 ;
     if ((length > 0) && ((*myPath)[length-1] == ':'))
         (*myPath)[length-1] = 0 ;
-    
+
     // create path string for return value
     wxString result( (char*) *myPath ) ;
 
@@ -936,7 +942,7 @@ wxString wxMac2UnixFilename (const char *str)
             *s = '.' ;
         else
             *s = '/' ;
-        
+
         while (*s)
         {
             if (*s == ':')
@@ -1274,11 +1280,17 @@ bool wxPathExists(const wxChar *pszPathName)
     }
 #endif // __WINDOWS__
 
-#if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
+#if defined(__WIN32__) && !defined(__WXMICROWIN__)
     // Stat can't cope with network paths
-    DWORD ret = GetFileAttributes(strPath.c_str());
-    DWORD isDir = (ret & FILE_ATTRIBUTE_DIRECTORY);
-    return ((ret != 0xffffffff) && (isDir != 0));
+    DWORD ret = ::GetFileAttributes(filename);
+    if ( ret == (DWORD)-1 )
+    {
+        wxLogLastError(_T("GetFileAttributes"));
+
+        return FALSE;
+    }
+
+    return (ret & FILE_ATTRIBUTE_DIRECTORY) != 0;
 #else
 
     wxStructStat st;
@@ -1332,13 +1344,13 @@ wxString wxFindFirstFile(const wxChar *spec, int flags)
     if (gs_dir)
         delete gs_dir;
     gs_dir = new wxDir(gs_dirPath);
-    
+
     if ( !gs_dir->IsOpened() )
     {
         wxLogSysError(_("Can not enumerate files '%s'"), spec);
         return wxEmptyString;
     }
-    
+
     int dirFlags = 0;
     switch (flags)
     {
@@ -1346,7 +1358,7 @@ wxString wxFindFirstFile(const wxChar *spec, int flags)
         case wxFILE: dirFlags = wxDIR_FILES; break;
         default:     dirFlags = wxDIR_DIRS | wxDIR_FILES; break;
     }
-    
+
     wxString result;
     gs_dir->GetFirst(&result, wxFileNameFromPath(spec), dirFlags);
     if ( result.IsEmpty() )
@@ -1364,13 +1376,13 @@ wxString wxFindNextFile()
 
     wxString result;
     gs_dir->GetNext(&result);
-    
+
     if ( result.IsEmpty() )
     {
         wxDELETE(gs_dir);
         return result;
     }
-    
+
     return gs_dirPath + result;
 }
 
