@@ -89,10 +89,7 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
                     m_selectedBitmap.GetHeight())];
 
         // Now copy the data
-        NSImage *nsimage = [[NSImage alloc]
-                initWithSize:NSMakeSize(m_selectedBitmap.GetWidth(),
-                    m_selectedBitmap.GetHeight())];
-        [nsimage addRepresentation: const_cast<wxBitmap&>(m_selectedBitmap).GetNSBitmapImageRep()];
+        NSImage *nsimage = [m_selectedBitmap.GetNSImage(false) retain];
         [m_cocoaNSImage lockFocus];
         [nsimage drawAtPoint: NSMakePoint(0,0)
             fromRect: NSMakeRect(0.0,0.0,m_selectedBitmap.GetWidth(),m_selectedBitmap.GetHeight())
