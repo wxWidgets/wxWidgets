@@ -6,7 +6,7 @@
 
 #define WX_COMP_INLINE_NO_CLASS // defined if the compiler does not want the classname repeated for inlines within a class definition
 
-#if __MWERKS__ >= 0x2400
+#if __MWERKS__ >= 0x2400 && __MWERKS__ <= 0x3200
 #pragma old_argmatch on
 #endif
 
