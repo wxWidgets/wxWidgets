@@ -646,10 +646,11 @@ void wxListBox::SetString(const int N, const wxString& s)
   if (sel >= 0)
     SetSelection(sel);
 
-  #if       USE_OWNER_DRAWN
-    // update item's text
-    m_aItems[N]->SetName(s);
-  #endif  //USE_OWNER_DRAWN
+#if       USE_OWNER_DRAWN
+  if ( m_windowStyle & wxLB_OWNERDRAW )
+	  // update item's text
+	  m_aItems[N]->SetName(s);
+#endif  //USE_OWNER_DRAWN
 }
 
 int wxListBox::Number (void) const
