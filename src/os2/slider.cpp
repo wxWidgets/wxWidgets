@@ -863,8 +863,10 @@ void wxSlider::GetSize(
         wxFindMaxSize( m_hStaticValue
                       ,&vRect
                      );
-    *pnWidth  = vRect.xRight - vRect.xLeft;
-    *pnHeight = vRect.yBottom - vRect.yTop;
+    if (pnWidth)
+        *pnWidth  = vRect.xRight - vRect.xLeft;
+    if (pnHeight)
+        *pnHeight = vRect.yTop - vRect.yBottom;
 } // end of wxSlider::GetSize
 
 int wxSlider::GetThumbLength() const
