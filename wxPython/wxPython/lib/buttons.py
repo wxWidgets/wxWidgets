@@ -212,8 +212,10 @@ class wxGenButton(wxControl):
 
     def DrawFocusIndicator(self, dc, w, h):
         bw = self.bezelWidth
-        dc.SetLogicalFunction(wxINVERT)
-        self.focusIndPen.SetColour(self.GetForegroundColour())
+        if self.hasFocus:
+            self.focusIndPen.SetColour(self.GetForegroundColour())
+        else:
+            self.focusIndPen.SetColour(self.GetBackgroundColour())
         ##self.focusIndPen.SetDashes([1,2,1,2])  # This isn't quite working the way I expected...
         dc.SetPen(self.focusIndPen)
         dc.SetBrush(wxTRANSPARENT_BRUSH)
@@ -225,7 +227,7 @@ class wxGenButton(wxControl):
         x1 = y1 = 0
         x2 = width-1
         y2 = height-1
-        dc = wxPaintDC(self)
+        dc = wxBufferedPaintDC(self)
         if self.up:
             dc.SetBackground(wxBrush(self.GetBackgroundColour(), wxSOLID))
         else:
