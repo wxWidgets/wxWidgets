@@ -240,6 +240,10 @@ SEARCH_INCLUDE="\
     /usr/X11R5/include        \
     /usr/X11R4/include        \
                               \
+    /usr/X11R6/lib            \
+    /usr/X11R5/lib            \
+    /usr/X11R4/lib            \
+                              \
     /usr/include/X11R6        \
     /usr/include/X11R5        \
     /usr/include/X11R4        \
@@ -994,6 +998,8 @@ GUI_TK_INCLUDE=
 GUI_TK_LIBRARY=
 GUI_TK_LINK=
 
+WX_LINK=
+
 MAKEINCLUDE=
 
 if test "$wxUSE_GTK" = 1; then
@@ -1003,6 +1009,7 @@ if test "$wxUSE_GTK" = 1; then
   ], AC_MSG_ERROR(Is gtk-config in path and GTK+ is version 1.0.4?))
   TOOLKIT=GTK
   TOOLKIT_DEF=__WXGTK__
+  WX_LINK=-lwx_gtk
   MAKEINCLUDE=../gtk.inc
 fi
 
@@ -1025,9 +1032,10 @@ if test "$wxUSE_QT" = 1; then
   else
      AC_MSG_ERROR(no)
   fi
-  GUI_TK_LINK="-lXext -lX11 -lqt -lm"
+  GUI_TK_LINK="-lX11 -lqt -lm"
   TOOLKIT=QT
   TOOLKIT_DEF=__WXQT__
+  WX_LINK=-lwx_qt
   MAKEINCLUDE=../qt.inc
 fi
 
@@ -1036,23 +1044,34 @@ if test "$wxUSE_MOTIF" = 1; then
    AC_PATH_FIND_INCLUDES($SEARCH_INCLUDE,Xm.h)
    if test "$ac_find_includes" != "" ; then
      AC_MSG_RESULT(found $ac_find_includes)
-     AC_MSG_CHECKING(for Motif or Lesstif library)
+     AC_MSG_CHECKING(for Motif/Lesstif library)
      AC_PATH_FIND_LIBRARIES($SEARCH_LIB,Xm)
      if test "$ac_find_libraries" != "" ; then
        AC_INCLUDE_PATH_EXIST($ac_find_includes,$CHECK_INCLUDE)
        AC_LINK_PATH_EXIST($ac_find_libraries,$CHECK_LIB)
-       CHECK_LINK="$CHECK_INCLUDE $ac_path_to_link"
+       CHECK_LINK="$CHECK_LIB $ac_path_to_link"
        CHECK_INCLUDE="$CHECK_INCLUDE $ac_path_to_include"
        AC_MSG_RESULT(found at $ac_find_libraries)
+       AC_MSG_CHECKING(for Xt library)
+       AC_PATH_FIND_LIBRARIES($SEARCH_LIB,Xt)
+       if test "$ac_find_libraries" != "" ; then
+         AC_LINK_PATH_EXIST($ac_find_libraries,$CHECK_LIB)
+         CHECK_LINK="$CHECK_LIB $ac_path_to_link"
+         AC_MSG_RESULT(found at $ac_find_libraries)
+       else
+         AC_MSG_ERROR(no)
+       fi
      else
        AC_MSG_ERROR(no)
      fi
   else
      AC_MSG_ERROR(no)
   fi
-  GUI_TK_LINK="-lXext -lXt -lX11 -lXm -lm"
+  GUI_TK_LINK="-lXt -lX11 -lXm -lm"
+  GUI_TK_LINK="$CHECK_LINK $GUI_TK_LINK"
   TOOLKIT=MOTIF
   TOOLKIT_DEF=__WXMOTIF__
+  WX_LINK=-lwx_motif
   MAKEINCLUDE=../motif.inc
 fi
 
@@ -1063,6 +1082,8 @@ fi
 AC_SUBST(GUI_TK_INCLUDE)
 AC_SUBST(GUI_TK_LIBRARY)
 AC_SUBST(GUI_TK_LINK)
+
+AC_SUBST(WX_LINK)
 
 AC_SUBST(TOOLKIT)
 AC_SUBST(TOOLKIT_DEF)

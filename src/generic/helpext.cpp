@@ -352,14 +352,14 @@ kbList::iterator::operator*()
 kbList::iterator &
 kbList::iterator::operator++()
 {
-   node  = node ? node->next : NULL;
+   node  = node ? node->next : (kbListNode*)NULL;
    return *this;
 }
 
 kbList::iterator &
 kbList::iterator::operator--()
 {
-   node = node ? node->prev : NULL; 
+   node = node ? node->prev : (kbListNode*)NULL; 
    return *this;
 }
 kbList::iterator &

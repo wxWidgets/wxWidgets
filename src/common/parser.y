@@ -124,7 +124,7 @@ arg1	:	WORD
 
 %%
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
 #include "lexer.c"
 #else
 #include "../common/lex_yy.c"

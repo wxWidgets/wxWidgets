@@ -39,6 +39,7 @@ LIB_CPP_SRC=\
  common/resource.cpp \
  common/serbase.cpp \
  common/string.cpp \
+ common/tbarbase.cpp \
  common/textfile.cpp \
  common/time.cpp \
  common/timercmn.cpp \
@@ -140,6 +141,9 @@ LIB_CPP_SRC=\
  generic/treectrl.cpp
   
 LIB_C_SRC=\
+\
+ motif/xmcombo/xmcombo.c \
+\
  common/extended.c \
 \
  png/png.c \
