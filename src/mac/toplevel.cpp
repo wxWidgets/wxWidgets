@@ -233,7 +233,7 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     WindowClass wclass = 0;
     WindowAttributes attr = kWindowNoAttributes ;
     
-    if ( HasFlag(wxTINY_CAPTION_HORIZ) ||  HasFlag(wxTINY_CAPTION_VERT) )
+    if ( HasFlag( wxFRAME_TOOL_WINDOW) || HasFlag(wxTINY_CAPTION_HORIZ) ||  HasFlag(wxTINY_CAPTION_VERT) )
     {
         wclass = kFloatingWindowClass ;
         if ( HasFlag(wxTINY_CAPTION_VERT) )
