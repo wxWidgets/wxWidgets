@@ -58,7 +58,7 @@ class MyChild: public wxMDIChildFrame
 {
 public:
     MyCanvas *canvas;
-    MyChild(wxMDIParentFrame *parent, const wxString& title, const wxPoint& pos, const wxSize& size, const long style);
+    MyChild(wxMDIParentFrame *parent, const wxString& title);
     ~MyChild();
 
     void OnActivate(wxActivateEvent& event);
