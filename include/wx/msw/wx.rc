@@ -150,3 +150,7 @@ cross_bmp               BITMAP  "wx/msw/cross.bmp"
 
 // For wxContextHelpButton
 csquery                 BITMAP "wx/msw/csquery.bmp"
+
+// For obtaining the RGB values of standard colours
+wxBITMAP_STD_COLOURS    BITMAP "wx/msw/colours.bmp"
+
