@@ -266,6 +266,9 @@ void MyFrame::LogDialog(wxCommandEvent& event)
         wxLogMessage("This is some message - everything is ok so far.");
         wxLogMessage("Another message...\n... this one is on multiple lines");
         wxLogWarning("And then something went wrong!");
+
+        // and if ~wxBusyCursor doesn't do it, then call it manually
+        wxYield();
     }
 
     wxLogError("Intermediary error handler decided to abort.");
