@@ -760,7 +760,7 @@ wxThreadInternal::WaitForTerminate(bool shouldCancel,
     if ( shouldResume )
         Resume();
 
-    // does is still run?
+    // is it still running?
     if ( isRunning || m_state == STATE_RUNNING )
     {
         if ( wxThread::IsMain() )
@@ -874,6 +874,12 @@ wxThreadInternal::WaitForTerminate(bool shouldCancel,
     if ( pRc )
         *pRc = rc;
 
+    // we don't need the thread handle any more
+    Free();
+
+    wxCriticalSectionLocker lock(critsect);
+    SetState(STATE_EXITED);
+
     return rc == (wxThread::ExitCode)-1 ? wxTHREAD_MISC_ERROR
                                         : wxTHREAD_NO_ERROR;
 }
@@ -936,10 +942,6 @@ bool wxThread::IsMain()
 {
     return ::GetCurrentThreadId() == gs_idMainThread;
 }
-
-#ifdef Yield
-#undef Yield
-#endif
 
 void wxThread::Yield()
 {
@@ -1135,30 +1137,12 @@ wxThread::ExitCode wxThread::Wait()
 
     (void)m_internal->WaitForTerminate(false, m_critsect, &rc);
 
-    m_internal->Free();
-
-    wxCriticalSectionLocker lock(m_critsect);
-    m_internal->SetState(STATE_EXITED);
-
     return rc;
 }
 
 wxThreadError wxThread::Delete(ExitCode *pRc)
 {
-    wxThreadError rc = m_internal->WaitForTerminate(true, m_critsect, pRc);
-
-    if ( IsDetached() )
-    {
-        delete this;
-    }
-    else // joinable
-    {
-        // update the status of the joinable thread
-        wxCriticalSectionLocker lock(m_critsect);
-        m_internal->SetState(STATE_EXITED);
-    }
-
-    return rc;
+    return m_internal->WaitForTerminate(true, m_critsect, pRc);
 }
 
 wxThreadError wxThread::Kill()
