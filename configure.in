@@ -396,6 +396,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_LIBPNG=no
   DEFAULT_wxUSE_LIBJPEG=no
   DEFAULT_wxUSE_LIBTIFF=no
+  DEFAULT_wxUSE_LIBXPM=no
   DEFAULT_wxUSE_ODBC=no
   DEFAULT_wxUSE_OPENGL=no
 
@@ -568,13 +569,14 @@ else
 
   DEFAULT_wxUSE_GUI=yes
 
-  DEFAULT_wxUSE_REGEX=yes
+  DEFAULT_wxUSE_REGEX=sys
   DEFAULT_wxUSE_XML=yes
-  DEFAULT_wxUSE_EXPAT=yes
-  DEFAULT_wxUSE_ZLIB=yes
-  DEFAULT_wxUSE_LIBPNG=yes
-  DEFAULT_wxUSE_LIBJPEG=yes
-  DEFAULT_wxUSE_LIBTIFF=yes
+  DEFAULT_wxUSE_EXPAT=sys
+  DEFAULT_wxUSE_ZLIB=sys
+  DEFAULT_wxUSE_LIBPNG=sys
+  DEFAULT_wxUSE_LIBJPEG=sys
+  DEFAULT_wxUSE_LIBTIFF=sys
+  DEFAULT_wxUSE_LIBXPM=sys
   DEFAULT_wxUSE_LIBMSPACK=yes
   DEFAULT_wxUSE_ODBC=no
   DEFAULT_wxUSE_OPENGL=no
@@ -2730,30 +2732,34 @@ equivalent variable and GTK+ is version 1.2.3 or above.
                 GUI_TK_LIBRARY="$GUI_TK_LIBRARY$ac_path_to_link"
                 AC_MSG_RESULT(found at $ac_find_libraries)
 
-                save_CFLAGS=$CFLAGS
-                CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+                AC_CACHE_CHECK([for X11/xpm.h],
+                    wx_cv_x11_xpm_h,
+                    [
+                        save_CFLAGS=$CFLAGS
+                        CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
 
-                AC_TRY_COMPILE(
-                    [
-                        #include <X11/xpm.h>
-                    ],
-                    [
-                        int version;
-                        version = XpmLibraryVersion();
-                    ],
-                    [
-                        xpm_link=" -lXpm"
-                        AC_DEFINE(wxHAVE_LIB_XPM)
-                        AC_MSG_RESULT(found in default search path)
-                        COMPILED_X_PROGRAM=0
-                    ],
-                    [
-                        AC_MSG_RESULT(no)
-                        AC_MSG_WARN(built-in less efficient XPM decoder will be used)
+                        AC_TRY_COMPILE(
+                            [
+                                #include <X11/xpm.h>
+                            ],
+                            [
+                                int version;
+                                version = XpmLibraryVersion();
+                            ],
+                            wx_cv_x11_xpm_h=yes,
+                            wx_cv_x11_xpm_h=no
+                        )
+
+                        CFLAGS=$save_CFLAGS
                     ]
                 )
 
-                CFLAGS=$save_CFLAGS
+                if test $wx_cv_x11_xpm_h = "yes"; then
+                    xpm_link=" -lXpm"
+                    AC_DEFINE(wxHAVE_LIB_XPM)
+                else
+                    AC_MSG_WARN([built-in less efficient XPM decoder will be used])
+                fi
             fi
 
         fi
@@ -6018,7 +6024,7 @@ dnl report on what we decided to do
 echo
 echo "Configured wxWindows ${WX_VERSION} for \`${host}'"
 echo ""
-echo "  Which GUI toolkit should wxWindows use?                 ${TOOLKIT:-base only}"
+echo "  Which GUI toolkit should wxWindows use?                 ${TOOLKIT_LOWERCASE:-base only}"
 echo "  Should wxWindows be compiled into single library?       ${wxUSE_MONOLITHIC:-yes}"
 
 echo "  Should wxWindows be compiled in debug mode?             ${wxUSE_DEBUG:-no}"
@@ -6034,6 +6040,9 @@ echo "                                       jpeg               ${wxUSE_LIBJPEG-
 echo "                                       png                ${wxUSE_LIBPNG-none}"
 echo "                                       regex              ${wxUSE_REGEX}"
 echo "                                       tiff               ${wxUSE_LIBTIFF-none}"
+if test "$wxUSE_X11" = 1 -o "$wxUSE_MOTIF" = 1; then
+echo "                                       xpm                ${wxUSE_LIBXPM-none}"
+fi
 echo "                                       zlib               ${wxUSE_ZLIB}"
 echo "                                       odbc               ${wxUSE_ODBC}"
 echo "                                       expat              ${wxUSE_EXPAT}"

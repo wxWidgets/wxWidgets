@@ -1048,6 +1048,7 @@ Optional Packages:
   --with-libpng           use libpng (PNG image format)
   --with-libjpeg          use libjpeg (JPEG file format)
   --with-libtiff          use libtiff (TIFF file format)
+  --with-libxpm           use libxpm (XPM file format)
   --with-libmspack        use libmspack (CHM help files loading)
   --with-opengl           use OpenGL (or Mesa)
   --with-dmalloc          use dmalloc library (http://dmalloc.com/)
@@ -2005,6 +2006,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_LIBPNG=no
   DEFAULT_wxUSE_LIBJPEG=no
   DEFAULT_wxUSE_LIBTIFF=no
+  DEFAULT_wxUSE_LIBXPM=no
   DEFAULT_wxUSE_ODBC=no
   DEFAULT_wxUSE_OPENGL=no
 
@@ -2177,13 +2179,14 @@ else
 
   DEFAULT_wxUSE_GUI=yes
 
-  DEFAULT_wxUSE_REGEX=yes
+  DEFAULT_wxUSE_REGEX=sys
   DEFAULT_wxUSE_XML=yes
-  DEFAULT_wxUSE_EXPAT=yes
-  DEFAULT_wxUSE_ZLIB=yes
-  DEFAULT_wxUSE_LIBPNG=yes
-  DEFAULT_wxUSE_LIBJPEG=yes
-  DEFAULT_wxUSE_LIBTIFF=yes
+  DEFAULT_wxUSE_EXPAT=sys
+  DEFAULT_wxUSE_ZLIB=sys
+  DEFAULT_wxUSE_LIBPNG=sys
+  DEFAULT_wxUSE_LIBJPEG=sys
+  DEFAULT_wxUSE_LIBTIFF=sys
+  DEFAULT_wxUSE_LIBXPM=sys
   DEFAULT_wxUSE_LIBMSPACK=yes
   DEFAULT_wxUSE_ODBC=no
   DEFAULT_wxUSE_OPENGL=no
@@ -2784,6 +2787,65 @@ echo "${ECHO_T}builtin version" >&6
           else
             { { echo "$as_me:$LINENO: error: Invalid value for --with-libtiff: should be yes, no, sys, or builtin" >&5
 echo "$as_me: error: Invalid value for --with-libtiff: should be yes, no, sys, or builtin" >&2;}
+   { (exit 1); exit 1; }; }
+          fi
+
+
+          echo "$as_me:$LINENO: checking for --with-libxpm" >&5
+echo $ECHO_N "checking for --with-libxpm... $ECHO_C" >&6
+          no_cache=0
+
+# Check whether --with-libxpm or --without-libxpm was given.
+if test "${with_libxpm+set}" = set; then
+  withval="$with_libxpm"
+
+                        if test "$withval" = yes; then
+                          ac_cv_use_libxpm='wxUSE_LIBXPM=yes'
+                        elif test "$withval" = no; then
+                          ac_cv_use_libxpm='wxUSE_LIBXPM=no'
+                        elif test "$withval" = sys; then
+                          ac_cv_use_libxpm='wxUSE_LIBXPM=sys'
+                        elif test "$withval" = builtin; then
+                          ac_cv_use_libxpm='wxUSE_LIBXPM=builtin'
+                        else
+                          { { echo "$as_me:$LINENO: error: Invalid value for --with-libxpm: should be yes, no, sys, or builtin" >&5
+echo "$as_me: error: Invalid value for --with-libxpm: should be yes, no, sys, or builtin" >&2;}
+   { (exit 1); exit 1; }; }
+                        fi
+
+else
+
+                        LINE=`grep "wxUSE_LIBXPM" ${wx_arg_cache_file}`
+                        if test "x$LINE" != x ; then
+                          eval "DEFAULT_$LINE"
+                        else
+                          no_cache=1
+                        fi
+
+                        ac_cv_use_libxpm='wxUSE_LIBXPM='$DEFAULT_wxUSE_LIBXPM
+
+fi;
+
+          eval "$ac_cv_use_libxpm"
+          if test "$no_cache" != 1; then
+            echo $ac_cv_use_libxpm >> ${wx_arg_cache_file}.tmp
+          fi
+
+          if test "$wxUSE_LIBXPM" = yes; then
+            echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+          elif test "$wxUSE_LIBXPM" = no; then
+            echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+          elif test "$wxUSE_LIBXPM" = sys; then
+            echo "$as_me:$LINENO: result: system version" >&5
+echo "${ECHO_T}system version" >&6
+          elif test "$wxUSE_LIBXPM" = builtin; then
+            echo "$as_me:$LINENO: result: builtin version" >&5
+echo "${ECHO_T}builtin version" >&6
+          else
+            { { echo "$as_me:$LINENO: error: Invalid value for --with-libxpm: should be yes, no, sys, or builtin" >&5
+echo "$as_me: error: Invalid value for --with-libxpm: should be yes, no, sys, or builtin" >&2;}
    { (exit 1); exit 1; }; }
           fi
 
@@ -9704,7 +9766,7 @@ echo "$as_me: error: Please specify at most one toolkit (maybe some are cached i
           echo "$var=$value" >> ${wx_arg_cache_file}
         fi
         if test "$value" = 1; then
-          toolkit_echo=`echo $toolkit | tr [A-Z] [a-z]`
+          toolkit_echo=`echo $toolkit | tr "[A-Z]" "[a-z]"`
           echo "$as_me:$LINENO: result: $toolkit_echo" >&5
 echo "${ECHO_T}$toolkit_echo" >&6
         fi
@@ -10626,8 +10688,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
   for ac_declaration in \
-   ''\
-   '#include <stdlib.h>' \
+   '' \
    'extern "C" void std::exit (int) throw (); using std::exit;' \
    'extern "C" void std::exit (int); using std::exit;' \
    'extern "C" void exit (int) throw ();' \
@@ -10641,8 +10702,8 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <stdlib.h>
 $ac_declaration
+#include <stdlib.h>
 int
 main ()
 {
@@ -11267,8 +11328,7 @@ else
   fi
 fi
 for ac_declaration in \
-   ''\
-   '#include <stdlib.h>' \
+   '' \
    'extern "C" void std::exit (int) throw (); using std::exit;' \
    'extern "C" void std::exit (int); using std::exit;' \
    'extern "C" void exit (int) throw ();' \
@@ -11282,8 +11342,8 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <stdlib.h>
 $ac_declaration
+#include <stdlib.h>
 int
 main ()
 {
@@ -22657,160 +22717,6 @@ _ACEOF
             fi
         fi
 
-        xpm_link=
-        echo "$as_me:$LINENO: checking for Xpm library" >&5
-echo $ECHO_N "checking for Xpm library... $ECHO_C" >&6
-
-ac_find_libraries=
-for ac_dir in $SEARCH_LIB /usr/lib;
-  do
-    for ac_extension in a so sl dylib; do
-      if test -f "$ac_dir/libXpm.$ac_extension"; then
-        ac_find_libraries=$ac_dir
-        break 2
-      fi
-    done
-  done
-
-        if test "$ac_find_libraries" != "" ; then
-
-  echo "$GUI_TK_LIBRARY" | grep "\-L$ac_find_libraries" > /dev/null
-  result=$?
-  if test $result = 0; then
-    ac_path_to_link=""
-  else
-    ac_path_to_link=" -L$ac_find_libraries"
-  fi
-
-            GUI_TK_LIBRARY="$GUI_TK_LIBRARY$ac_path_to_link"
-            xpm_link=" -lXpm"
-            cat >>confdefs.h <<\_ACEOF
-#define wxHAVE_LIB_XPM 1
-_ACEOF
-
-            echo "$as_me:$LINENO: result: found at $ac_find_libraries" >&5
-echo "${ECHO_T}found at $ac_find_libraries" >&6
-        else
-            cat >conftest.$ac_ext <<_ACEOF
-#line $LINENO "configure"
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-                    #include <X11/xpm.h>
-
-int
-main ()
-{
-
-                    int version;
-                    version = XpmLibraryVersion();
-
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext
-if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
-  (eval $ac_compile) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-         { ac_try='test -s conftest.$ac_objext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-
-                    xpm_link=" -lXpm"
-                    cat >>confdefs.h <<\_ACEOF
-#define wxHAVE_LIB_XPM 1
-_ACEOF
-
-                    echo "$as_me:$LINENO: result: found in default search path" >&5
-echo "${ECHO_T}found in default search path" >&6
-                    COMPILED_X_PROGRAM=0
-
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-
-                    echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                    { echo "$as_me:$LINENO: WARNING: library will be compiled without support for images in XPM format" >&5
-echo "$as_me: WARNING: library will be compiled without support for images in XPM format" >&2;}
-
-
-fi
-rm -f conftest.$ac_objext conftest.$ac_ext
-        fi
-
-        echo "$as_me:$LINENO: checking for XShapeQueryExtension in -lXext" >&5
-echo $ECHO_N "checking for XShapeQueryExtension in -lXext... $ECHO_C" >&6
-if test "${ac_cv_lib_Xext_XShapeQueryExtension+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lXext $GUI_TK_LIBRARY -lX11 $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-#line $LINENO "configure"
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char XShapeQueryExtension ();
-int
-main ()
-{
-XShapeQueryExtension ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-         { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_Xext_XShapeQueryExtension=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_Xext_XShapeQueryExtension=no
-fi
-rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_Xext_XShapeQueryExtension" >&5
-echo "${ECHO_T}$ac_cv_lib_Xext_XShapeQueryExtension" >&6
-if test $ac_cv_lib_Xext_XShapeQueryExtension = yes; then
-
-                      GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXext"
-                      wxHAVE_XEXT_LIB=1
-
-fi
-
-
         if test "$wxUSE_UNICODE" = "yes"; then
 
   succeeded=no
@@ -24299,104 +24205,6 @@ rm -f conftest.$ac_objext conftest.$ac_ext
             fi
         fi
 
-        xpm_link=
-        echo "$as_me:$LINENO: checking for Xpm library" >&5
-echo $ECHO_N "checking for Xpm library... $ECHO_C" >&6
-
-ac_find_libraries=
-for ac_dir in $SEARCH_LIB /usr/lib;
-  do
-    for ac_extension in a so sl dylib; do
-      if test -f "$ac_dir/libXpm.$ac_extension"; then
-        ac_find_libraries=$ac_dir
-        break 2
-      fi
-    done
-  done
-
-        if test "$ac_find_libraries" != "" ; then
-
-  echo "$GUI_TK_LIBRARY" | grep "\-L$ac_find_libraries" > /dev/null
-  result=$?
-  if test $result = 0; then
-    ac_path_to_link=""
-  else
-    ac_path_to_link=" -L$ac_find_libraries"
-  fi
-
-            GUI_TK_LIBRARY="$GUI_TK_LIBRARY$ac_path_to_link"
-
-            xpm_link=" -lXpm"
-            cat >>confdefs.h <<\_ACEOF
-#define wxHAVE_LIB_XPM 1
-_ACEOF
-
-            echo "$as_me:$LINENO: result: found at $ac_find_libraries" >&5
-echo "${ECHO_T}found at $ac_find_libraries" >&6
-        else
-            save_CFLAGS=$CFLAGS
-            CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
-
-            cat >conftest.$ac_ext <<_ACEOF
-#line $LINENO "configure"
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-                    #include <X11/xpm.h>
-
-int
-main ()
-{
-
-                    int version;
-                    version = XpmLibraryVersion();
-
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext
-if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
-  (eval $ac_compile) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-         { ac_try='test -s conftest.$ac_objext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-
-                    xpm_link=" -lXpm"
-                    cat >>confdefs.h <<\_ACEOF
-#define wxHAVE_LIB_XPM 1
-_ACEOF
-
-                    echo "$as_me:$LINENO: result: found in default search path" >&5
-echo "${ECHO_T}found in default search path" >&6
-                    COMPILED_X_PROGRAM=0
-
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-
-                    echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-                    { echo "$as_me:$LINENO: WARNING: library will be compiled without support for images in XPM format" >&5
-echo "$as_me: WARNING: library will be compiled without support for images in XPM format" >&2;}
-
-
-fi
-rm -f conftest.$ac_objext conftest.$ac_ext
-
-            CFLAGS=$save_CFLAGS
-        fi
-
         echo "$as_me:$LINENO: checking if we need -lXp and/or -lSM -lICE" >&5
 echo $ECHO_N "checking if we need -lXp and/or -lSM -lICE... $ECHO_C" >&6
         libp_link=""
@@ -24544,17 +24352,48 @@ rm -f conftest.$ac_objext conftest.$ac_ext
         TOOLKIT_VPATH="\${top_srcdir}/src/motif${PATH_IFS}\${top_srcdir}/src/motif/xmcombo${PATH_IFS}\${top_srcdir}/src/x11"
         TOOLKIT=MOTIF
         GUIDIST=MOTIF_DIST
-        wxHAVE_XEXT_LIB=1
     fi
 
-    if test "$wxUSE_X11" = 1 -o "$wxUSE_MOTIF" = 1 &&
-       test "$wxHAVE_XEXT_LIB" = 1; then
-        save_CFLAGS="$CFLAGS"
-        CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+    if test "$wxUSE_X11" = 1 -o "$wxUSE_MOTIF" = 1; then
+                if test "$wxUSE_LIBXPM" = "sys"; then
+            echo "$as_me:$LINENO: checking for Xpm library" >&5
+echo $ECHO_N "checking for Xpm library... $ECHO_C" >&6
 
-        echo "$as_me:$LINENO: checking for X11/extensions/shape.h" >&5
-echo $ECHO_N "checking for X11/extensions/shape.h... $ECHO_C" >&6
-        cat >conftest.$ac_ext <<_ACEOF
+ac_find_libraries=
+for ac_dir in $SEARCH_LIB /usr/lib;
+  do
+    for ac_extension in a so sl dylib; do
+      if test -f "$ac_dir/libXpm.$ac_extension"; then
+        ac_find_libraries=$ac_dir
+        break 2
+      fi
+    done
+  done
+
+            if test "$ac_find_libraries" != "" ; then
+
+  echo "$GUI_TK_LIBRARY" | grep "\-L$ac_find_libraries" > /dev/null
+  result=$?
+  if test $result = 0; then
+    ac_path_to_link=""
+  else
+    ac_path_to_link=" -L$ac_find_libraries"
+  fi
+
+                GUI_TK_LIBRARY="$GUI_TK_LIBRARY$ac_path_to_link"
+                echo "$as_me:$LINENO: result: found at $ac_find_libraries" >&5
+echo "${ECHO_T}found at $ac_find_libraries" >&6
+
+                echo "$as_me:$LINENO: checking for X11/xpm.h" >&5
+echo $ECHO_N "checking for X11/xpm.h... $ECHO_C" >&6
+if test "${wx_cv_x11_xpm_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+                        save_CFLAGS=$CFLAGS
+                        CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+
+                        cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
 /* confdefs.h.  */
 _ACEOF
@@ -24562,16 +24401,148 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-                        #include <X11/Xlib.h>
-                        #include <X11/extensions/shape.h>
+                                #include <X11/xpm.h>
 
 int
 main ()
 {
 
-                        int dummy1, dummy2;
-                        XShapeQueryExtension((Display*)NULL,
-                                             (int*)NULL, (int*)NULL);
+                                int version;
+                                version = XpmLibraryVersion();
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  wx_cv_x11_xpm_h=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+wx_cv_x11_xpm_h=no
+
+fi
+rm -f conftest.$ac_objext conftest.$ac_ext
+
+                        CFLAGS=$save_CFLAGS
+
+
+fi
+echo "$as_me:$LINENO: result: $wx_cv_x11_xpm_h" >&5
+echo "${ECHO_T}$wx_cv_x11_xpm_h" >&6
+
+                if test $wx_cv_x11_xpm_h = "yes"; then
+                    xpm_link=" -lXpm"
+                    cat >>confdefs.h <<\_ACEOF
+#define wxHAVE_LIB_XPM 1
+_ACEOF
+
+                else
+                    { echo "$as_me:$LINENO: WARNING: built-in less efficient XPM decoder will be used" >&5
+echo "$as_me: WARNING: built-in less efficient XPM decoder will be used" >&2;}
+                fi
+            fi
+
+        fi
+
+                echo "$as_me:$LINENO: checking for XShapeQueryExtension in -lXext" >&5
+echo $ECHO_N "checking for XShapeQueryExtension in -lXext... $ECHO_C" >&6
+if test "${ac_cv_lib_Xext_XShapeQueryExtension+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lXext $GUI_TK_LIBRARY -lX11 $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char XShapeQueryExtension ();
+int
+main ()
+{
+XShapeQueryExtension ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_Xext_XShapeQueryExtension=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_Xext_XShapeQueryExtension=no
+fi
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_Xext_XShapeQueryExtension" >&5
+echo "${ECHO_T}$ac_cv_lib_Xext_XShapeQueryExtension" >&6
+if test $ac_cv_lib_Xext_XShapeQueryExtension = yes; then
+
+                      GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXext"
+                      wxHAVE_XEXT_LIB=1
+
+fi
+
+
+        if test "$wxHAVE_XEXT_LIB" = 1; then
+            save_CFLAGS="$CFLAGS"
+            CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+
+            echo "$as_me:$LINENO: checking for X11/extensions/shape.h" >&5
+echo $ECHO_N "checking for X11/extensions/shape.h... $ECHO_C" >&6
+            cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+                            #include <X11/Xlib.h>
+                            #include <X11/extensions/shape.h>
+
+int
+main ()
+{
+
+                            int dummy1, dummy2;
+                            XShapeQueryExtension((Display*)NULL,
+                                                 (int*)NULL, (int*)NULL);
 
   ;
   return 0;
@@ -24590,11 +24561,11 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
 
-                        cat >>confdefs.h <<\_ACEOF
+                            cat >>confdefs.h <<\_ACEOF
 #define HAVE_XSHAPE 1
 _ACEOF
 
-                        echo "$as_me:$LINENO: result: found" >&5
+                            echo "$as_me:$LINENO: result: found" >&5
 echo "${ECHO_T}found" >&6
 
 else
@@ -24602,12 +24573,14 @@ else
 sed 's/^/| /' conftest.$ac_ext >&5
 
 
-                        echo "$as_me:$LINENO: result: not found" >&5
+                            echo "$as_me:$LINENO: result: not found" >&5
 echo "${ECHO_T}not found" >&6
 
 fi
 rm -f conftest.$ac_objext conftest.$ac_ext
-        CFLAGS="$save_CFLAGS"
+            CFLAGS="$save_CFLAGS"
+
+        fi
     fi
 
     if test "$wxUSE_MAC" = 1; then
@@ -34155,7 +34128,7 @@ fi
 
 
 
-TOOLKIT_LOWERCASE=`echo $TOOLKIT | tr [A-Z] [a-z]`
+TOOLKIT_LOWERCASE=`echo $TOOLKIT | tr "[A-Z]" "[a-z]"`
 
 
 
@@ -37724,7 +37697,7 @@ fi
 echo
 echo "Configured wxWindows ${WX_VERSION} for \`${host}'"
 echo ""
-echo "  Which GUI toolkit should wxWindows use?                 ${TOOLKIT:-base only}"
+echo "  Which GUI toolkit should wxWindows use?                 ${TOOLKIT_LOWERCASE:-base only}"
 echo "  Should wxWindows be compiled into single library?       ${wxUSE_MONOLITHIC:-yes}"
 
 echo "  Should wxWindows be compiled in debug mode?             ${wxUSE_DEBUG:-no}"
@@ -37740,6 +37713,9 @@ echo "                                       jpeg               ${wxUSE_LIBJPEG-
 echo "                                       png                ${wxUSE_LIBPNG-none}"
 echo "                                       regex              ${wxUSE_REGEX}"
 echo "                                       tiff               ${wxUSE_LIBTIFF-none}"
+if test "$wxUSE_X11" = 1 -o "$wxUSE_MOTIF" = 1; then
+echo "                                       xpm                ${wxUSE_LIBXPM-none}"
+fi
 echo "                                       zlib               ${wxUSE_ZLIB}"
 echo "                                       odbc               ${wxUSE_ODBC}"
 echo "                                       expat              ${wxUSE_EXPAT}"
