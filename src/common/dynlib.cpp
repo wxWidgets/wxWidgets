@@ -422,19 +422,12 @@ wxObject *wxLibraries::CreateObject(const wxString& path)
 //   supply the sun style dlopen functions in terms of Darwin NS*
 // ---------------------------------------------------------------------------
 
-extern "C" {
 #import <mach-o/dyld.h>
-};
-
-enum dyldErrorSource
-{
-    OFImage,
-};
 
 static char dl_last_error[1024];
 
 static
-void TranslateError(const char *path, enum dyldErrorSource type, int number)
+void TranslateError(const char *path, int number)
 {
     unsigned int index;
     static char *OFIErrorStrings[] =
@@ -449,21 +442,11 @@ void TranslateError(const char *path, enum dyldErrorSource type, int number)
     };
 #define NUM_OFI_ERRORS (sizeof(OFIErrorStrings) / sizeof(OFIErrorStrings[0]))
 
-    switch (type)
-    {
-     case OFImage:
-	 index = number;
-	 if (index > NUM_OFI_ERRORS - 1) {
-	     index = NUM_OFI_ERRORS - 1;
-	 }
-	 sprintf(dl_last_error, OFIErrorStrings[index], path, number);
-	 break;
-	 
-     default:
-	 sprintf(dl_last_error, "%s(%d): Totally unknown error type %d\n",
-		 path, number, type);
-	 break;
+    index = number;
+    if (index > NUM_OFI_ERRORS - 1) {
+        index = NUM_OFI_ERRORS - 1;
     }
+    sprintf(dl_last_error, OFIErrorStrings[index], path, number);
 }
 
 const char *dlerror()
@@ -480,20 +463,21 @@ void *dlopen(const char *path, int mode /* mode is ignored */)
     dyld_result = NSCreateObjectFileImageFromFile(path, &ofile);
     if (dyld_result != NSObjectFileImageSuccess)
     {
-	TranslateError(path, OFImage, dyld_result);
+	TranslateError(path, dyld_result);
     }
     else
     {
 	// NSLinkModule will cause the run to abort on any link error's
 	// not very friendly but the error recovery functionality is limited.
-	handle = NSLinkModule(ofile, path, TRUE);
+	handle = NSLinkModule(ofile, path, NSLINKMODULE_OPTION_BINDNOW);
     }
 
     return handle;
 }
 
-int dlclose(void *handle) /* stub only */
+int dlclose(void *handle)
 {
+    NSUnLinkModule( m_handle, NSUNLINKMODULE_OPTION_NONE);
     return 0;
 }
 

@@ -39,6 +39,19 @@
 
 #include "wx/dynload.h"
 
+#if defined(__DARWIN__)
+/* Porting notes:
+ *   The dlopen port is a port from dl_next.xs by Anno Siegel.
+ *   dl_next.xs is itself a port from dl_dlopen.xs by Paul Marquess.
+ *   The method used here is just to supply the sun style dlopen etc.
+ *   functions in terms of Darwin NS*.
+ */
+void *dlopen(const char *path, int mode /* mode is ignored */);
+void *dlsym(void *handle, const char *symbol);
+int   dlclose(void *handle);
+const char *dlerror(void);
+#endif
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -88,7 +101,7 @@ bool wxDynamicLibrary::Load(wxString libname, int flags)
         }
     }
 
-#if defined(__WXMAC__) && !defined(__UNIX__)
+#if defined(__WXMAC__) && !defined(__DARWIN__)
     FSSpec      myFSSpec;
     Ptr         myMainAddr;
     Str255      myErrName;
@@ -115,9 +128,9 @@ bool wxDynamicLibrary::Load(wxString libname, int flags)
     char    err[256] = "";
     DosLoadModule(err, sizeof(err), libname.c_str(), &m_handle);
 
-#elif defined(HAVE_DLOPEN)
+#elif defined(HAVE_DLOPEN) || defined(__DARWIN__)
 
-#ifdef __VMS
+#if defined(__VMS) || defined(__DARWIN__)
     m_handle = dlopen(libname.c_str(), 0);  // The second parameter is ignored
 #else
     int rtldFlags = 0;
@@ -141,7 +154,7 @@ bool wxDynamicLibrary::Load(wxString libname, int flags)
     }
 
     m_handle = dlopen(libname.c_str(), rtldFlags);
-#endif  // __VMS
+#endif  // __VMS || __DARWIN__
 
 #elif defined(HAVE_SHL_LOAD)
     int shlFlags = 0;
@@ -157,21 +170,6 @@ bool wxDynamicLibrary::Load(wxString libname, int flags)
         shlFlags |= BIND_IMMEDIATE;
     }
     m_handle = shl_load(libname.c_str(), BIND_DEFERRED, 0);
-
-#elif defined(__DARWIN__)
-    NSObjectFileImage   ofile;
-    int                 dyld_result = NSCreateObjectFileImageFromFile(libname.c_str(), &ofile);
-
-    if (dyld_result != NSObjectFileImageSuccess)
-    {
-        TranslateError(libname.c_str(), OFImage, dyld_result);
-    }
-    else
-    {
-        // NSLinkModule will cause the run to abort on any link error's
-        // not very friendly but the error recovery functionality is limited.
-        m_handle = NSLinkModule(ofile, libname.c_str(), TRUE);
-    }
 
 #elif defined(__WINDOWS__)
     m_handle = ::LoadLibrary(libname.c_str());
@@ -201,14 +199,14 @@ void wxDynamicLibrary::Unload()
     {
 #if defined(__WXPM__) || defined(__EMX__)
         DosFreeModule( m_handle );
-#elif defined(HAVE_DLOPEN)
+#elif defined(HAVE_DLOPEN) || defined(__DARWIN__)
         dlclose( m_handle );
 #elif defined(HAVE_SHL_LOAD)
         shl_unload( m_handle );
 #elif defined(__WINDOWS__)
         ::FreeLibrary( m_handle );
-#elif defined(__WXMAC__)
-        CloseConnection( &m_handle );
+#elif defined(__WXMAC__) && !defined(__DARWIN__)
+        CloseConnection( (CFragConnectionID*) &m_handle );
 #else
 #error  "runtime shared lib support not implemented"
 #endif
@@ -224,7 +222,7 @@ void *wxDynamicLibrary::GetSymbol(const wxString &name, bool *success) const
     bool     failed = FALSE;
     void    *symbol = 0;
 
-#if defined(__WXMAC__) && !defined(__UNIX__)
+#if defined(__WXMAC__) && !defined(__DARWIN__)
     Ptr                 symAddress;
     CFragSymbolClass    symClass;
     Str255              symName;
@@ -240,16 +238,12 @@ void *wxDynamicLibrary::GetSymbol(const wxString &name, bool *success) const
 #elif defined(__WXPM__) || defined(__EMX__)
     DosQueryProcAddr( m_handle, 1L, name.c_str(), (PFN*)symbol );
 
-#elif defined(HAVE_DLOPEN)
+#elif defined(HAVE_DLOPEN) || defined(__DARWIN__)
     symbol = dlsym( m_handle, name.c_str() );
 
 #elif defined(HAVE_SHL_LOAD)
     if( shl_findsym( &m_handle, name.c_str(), TYPE_UNDEFINED, &symbol ) != 0 )
         symbol = 0;
-
-#elif defined(__DARWIN__)
-    if( NSIsSymbolNameDefined( name.c_str() ) )
-        symbol = NSAddressOfSymbol( NSLookupAndBindSymbol( name.c_str() ) );
 
 #elif defined(__WINDOWS__)
     symbol = (void*) ::GetProcAddress( m_handle, name.mb_str() );
@@ -555,59 +549,6 @@ void wxPluginManager::Unload()
         m_entry = 0;
     }
 }
-
-
-#ifdef __DARWIN__
-// ---------------------------------------------------------------------------
-// For Darwin/Mac OS X
-//   supply the sun style dlopen functions in terms of Darwin NS*
-// ---------------------------------------------------------------------------
-
-extern "C" {
-#import <mach-o/dyld.h>
-};
-
-enum dyldErrorSource
-{
-    OFImage,
-};
-
-static char dl_last_error[1024];
-
-static void TranslateError(const char *path, enum dyldErrorSource type, int number)
-{
-    unsigned int index;
-    static char *OFIErrorStrings[] =
-    {
-	"%s(%d): Object Image Load Failure\n",
-	"%s(%d): Object Image Load Success\n",
-	"%s(%d): Not an recognisable object file\n",
-	"%s(%d): No valid architecture\n",
-	"%s(%d): Object image has an invalid format\n",
-	"%s(%d): Invalid access (permissions?)\n",
-	"%s(%d): Unknown error code from NSCreateObjectFileImageFromFile\n",
-    };
-#define NUM_OFI_ERRORS (sizeof(OFIErrorStrings) / sizeof(OFIErrorStrings[0]))
-
-    switch (type)
-    {
-     case OFImage:
-	 index = number;
-	 if (index > NUM_OFI_ERRORS - 1) {
-	     index = NUM_OFI_ERRORS - 1;
-	 }
-	 sprintf(dl_last_error, OFIErrorStrings[index], path, number);
-	 break;
-	 
-     default:
-	 sprintf(dl_last_error, "%s(%d): Totally unknown error type %d\n",
-		 path, number, type);
-	 break;
-    }
-}
-
-#endif // __DARWIN__
-
 
 // ---------------------------------------------------------------------------
 // wxDllLoader   (all these methods are static)
