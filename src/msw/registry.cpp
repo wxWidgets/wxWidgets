@@ -427,6 +427,18 @@ bool wxRegKey::DeleteSelf()
     }
   }
 
+  // prevent a buggy program from erasing one of the root registry keys or an
+  // immediate subkey (i.e. one which doesn't have '\\' inside) of any other
+  // key except HKCR (HKCR has some "deleteable" subkeys)
+  if ( m_strKey.IsEmpty() || (m_hRootKey != HKCR &&
+       m_strKey.Find(REG_SEPARATOR) == wxNOT_FOUND) ) {
+      wxLogError(_("Registry key '%s' is needed for normal system operation,\n"
+                   "deleting it will leave your system in unusable state:\n"
+                   "operation aborted."), GetFullName(this));
+
+      return FALSE;
+  }
+
   // we can't delete keys while enumerating because it confuses GetNextKey, so
   // we first save the key names and then delete them all
   wxArrayString astrSubkeys;

@@ -160,7 +160,21 @@ public:
 
   // access to values and subkeys
     // get value type
-  ValueType GetValueType(const char *szValue);
+  ValueType GetValueType(const char *szValue) const;
+    // returns TRUE if the value contains a number (else it's some string)
+  bool IsNumericValue(const char *szValue) const
+  { 
+      ValueType type = GetValueType(szValue);
+      switch ( type ) {
+        case Type_Dword:
+        case Type_Dword_little_endian:
+        case Type_Dword_big_endian:
+            return TRUE;
+
+        default:
+            return FALSE;
+      }
+  }
 
     // assignment operators set the default value of the key
   wxRegKey& operator=(const wxString& strValue)

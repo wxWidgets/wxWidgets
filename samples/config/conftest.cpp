@@ -202,18 +202,16 @@ void MyFrame::OnAbout(wxCommandEvent&)
 
 void MyFrame::OnDelete(wxCommandEvent&)
 {
-  // VZ: it seems that DeleteAll() wreaks havoc on NT. Disabled until I
-  // investigate it further, do _not_ compile this code in meanwhile!
-  // JACS: wxRegConfig::DeleteAll is disabled, so it's safe to call DeleteAll,
-  // it just won't do anything useful on Win95/NT.
     if ( wxConfigBase::Get()->DeleteAll() ) {
-    wxLogMessage("Config file/registry key successfully deleted.");
+        wxLogMessage("Config file/registry key successfully deleted.");
 
-    delete wxConfigBase::Set((wxConfigBase *) NULL);
-    wxConfigBase::DontCreateOnDemand();
-  }
-  else
-    wxLogError("Deleting config file/registry key failed.");
+        delete wxConfigBase::Set((wxConfigBase *) NULL);
+        wxConfigBase::DontCreateOnDemand();
+    }
+    else
+    {
+        wxLogError("Deleting config file/registry key failed.");
+    }
 }
 
 MyFrame::~MyFrame()

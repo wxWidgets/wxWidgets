@@ -528,16 +528,15 @@ bool wxRegConfig::DeleteAll()
 {
   m_keyLocal.Close();
   m_keyGlobal.Close();
-#if 1
-  wxFAIL_MSG("wxRegConfig::DeleteAll will wipe out your entire registry, so please do not use until it's fixed!");
-  return FALSE;
-#else
+
   bool bOk = m_keyLocalRoot.DeleteSelf();
-  if ( bOk )
+
+  // make sure that we opened m_keyGlobalRoot and so it has a reasonable name:
+  // otherwise we will delete HKEY_CLASSES_ROOT recursively
+  if ( bOk && m_keyGlobalRoot.IsOpened() )
     bOk = m_keyGlobalRoot.DeleteSelf();
 
   return bOk;
-#endif
 }
 
 #endif
