@@ -104,6 +104,7 @@ prntdlgg.cpp	Generic	NotMSW
 progdlgg.cpp	Generic
 sashwin.cpp	Generic
 scrlwing.cpp	Generic
+selstore.cpp	Generic
 spinctlg.cpp	Generic
 splash.cpp	Generic
 splitter.cpp	Generic
@@ -974,6 +975,7 @@ sckipc.h	WXH	Base
 sckstrm.h	WXH	Base
 scrolbar.h	WXH
 scrolwin.h	WXH
+selstore.h	WXH
 settings.h	WXH
 sizer.h	WXH
 slider.h	WXH
