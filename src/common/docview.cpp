@@ -1288,6 +1288,28 @@ wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
             }
         }
 
+        //see if this file is already open
+        for (size_t i = 0; i < GetDocuments().GetCount(); ++i)
+        {
+            wxDocument* currentDoc = (wxDocument*)(GetDocuments().Item(i)->GetData());
+#ifdef __WXMSW__
+            //file paths are case-insensitive on Windows
+            if (path2.CmpNoCase(currentDoc->GetFilename()) == 0)
+#else
+            if (path2.Cmp(currentDoc->GetFilename()) == 0)
+#endif
+            {
+                //file already open. Just activate it and return
+                if (currentDoc->GetFirstView())
+                {
+                    ActivateView(currentDoc->GetFirstView(), true);
+                    if (currentDoc->GetDocumentWindow())
+                        currentDoc->GetDocumentWindow()->SetFocus();
+                    return currentDoc;
+                }
+            }
+        }
+
         wxDocument *newDoc = temp->CreateDocument(path2, flags);
         if (newDoc)
         {
