@@ -115,6 +115,20 @@ ftp server at ftp://sourceware.cygnus.com/pub/cygwin/.
 Of course, you can also build the library using plain makefiles (see
 section I).
 
+IV) wxBase
+----------------------------------------
+
+wxBase is the non GUI part of wxWindows. Currently it can be only built using
+configure (i.e. under Unix and probably under Win32 with cygwin) and with
+Visual C++.
+
+To build it using configure, just add "--disable-gui" argument to it.
+
+To build wxBase with VC++, use the project files wxBase.dsp and wxBaseDll.dsp
+included in the CVS. See http://www.wxwindows.org/vadim/wxDocs/buildmsw.html
+for the instructions on how to generate the project files for the programs
+using wxBase.
+
 V) MacOS
 ----------------------------------------
 
