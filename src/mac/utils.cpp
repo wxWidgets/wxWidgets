@@ -18,7 +18,10 @@
 #include "wx/utils.h"
 #include "wx/app.h"
 #include "wx/apptrait.h"
-#include "wx/mac/uma.h"
+
+#if wxUSE_GUI
+    #include "wx/mac/uma.h"
+#endif
 
 #include <ctype.h>
 
@@ -51,6 +54,7 @@
     #include <wtime.h>
 #endif
 
+#if wxUSE_BASE
 
 #ifndef __DARWIN__
 // defined in unix/utilsunx.cpp for Mac OS X
@@ -193,11 +197,7 @@ void wxBell()
     SysBeep(30);
 }
 
-#if defined(__WXMAC__) && !defined(__DARWIN__)
 int wxAppTraits::GetOSVersion(int *majorVsn, int *minorVsn)
-#else
-int wxGUIAppTraits::GetOSVersion(int *majorVsn, int *minorVsn)
-#endif
 {
     long theSystem ;
 
@@ -217,6 +217,9 @@ int wxGUIAppTraits::GetOSVersion(int *majorVsn, int *minorVsn)
 #endif
 }
 
+#endif // wxUSE_BASE
+
+#if wxUSE_GUI
 
 // Reading and writing resources (eg WIN.INI, .Xdefaults)
 #if wxUSE_RESOURCES
@@ -349,48 +352,6 @@ wxString wxMacFindFolder( short        vol,
     return strDir ;
 }
 
-#ifndef __DARWIN__
-wxChar *wxGetUserHome (const wxString& user)
-{
-    // TODO
-    return NULL;
-}
-
-bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
-{
-    if ( path.empty() )
-        return FALSE;
-
-    wxString p = path ;
-    if (p[0] == ':' ) {
-      p = wxGetCwd() + p ;
-    }
-
-    int pos = p.Find(':') ;
-    if ( pos != wxNOT_FOUND ) {
-      p = p.Mid(1,pos) ;
-    }
-
-    p = p + wxT(":") ;
-
-    Str255 volumeName ;
-    XVolumeParam pb ;
-
-    wxMacStringToPascal( p  , volumeName ) ;
-    OSErr err = XGetVolumeInfoNoName( volumeName , 0 , &pb ) ;
-    if ( err == noErr ) {
-      if ( pTotal ) {
-        (*pTotal) = wxLongLong( pb.ioVTotalBytes ) ;
-      }
-      if ( pFree ) {
-        (*pFree) = wxLongLong( pb.ioVFreeBytes ) ;
-      }
-    }
-
-    return err == noErr ;
-}
-#endif
-
 // Check whether this window wants to process messages, e.g. Stop button
 // in long calculations.
 bool wxCheckForInterrupt(wxWindow *wnd)
@@ -491,6 +452,10 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
     return wxGenericFindWindowAtPoint(pt);
 }
 
+#endif // wxUSE_GUI
+
+#if wxUSE_BASE
+
 wxString wxGetOsDescription()
 {
 #ifdef WXWIN_OS_DESCRIPTION
@@ -500,6 +465,52 @@ wxString wxGetOsDescription()
     return wxT("MacOS") ; //TODO:define further
 #endif
 }
+
+#ifndef __DARWIN__
+wxChar *wxGetUserHome (const wxString& user)
+{
+    // TODO
+    return NULL;
+}
+
+bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
+{
+    if ( path.empty() )
+        return FALSE;
+
+    wxString p = path ;
+    if (p[0] == ':' ) {
+      p = wxGetCwd() + p ;
+    }
+
+    int pos = p.Find(':') ;
+    if ( pos != wxNOT_FOUND ) {
+      p = p.Mid(1,pos) ;
+    }
+
+    p = p + wxT(":") ;
+
+    Str255 volumeName ;
+    XVolumeParam pb ;
+
+    wxMacStringToPascal( p  , volumeName ) ;
+    OSErr err = XGetVolumeInfoNoName( volumeName , 0 , &pb ) ;
+    if ( err == noErr ) {
+      if ( pTotal ) {
+        (*pTotal) = wxLongLong( pb.ioVTotalBytes ) ;
+      }
+      if ( pFree ) {
+        (*pFree) = wxLongLong( pb.ioVFreeBytes ) ;
+      }
+    }
+
+    return err == noErr ;
+}
+#endif // !__DARWIN__
+
+#endif // wxUSE_BASE
+
+#if wxUSE_GUI
 
 //---------------------------------------------------------------------------
 // wxMac Specific utility functions
@@ -985,4 +996,6 @@ extern bool WXDLLEXPORT wxIsDebuggerRunning()
 }
 
 #endif // defined(__WXMAC__) && !defined(__DARWIN__) && (__MWERKS__ >= 0x2400)
+
+#endif // wxUSE_GUI
 
