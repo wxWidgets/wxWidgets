@@ -34,7 +34,7 @@ public:
         m_custom = false;
         m_show = true;
     }
-    ctProperty(const ctProperty& property) { Copy(property); }
+    ctProperty(const ctProperty& property) : wxObject() { Copy(property); }
     ctProperty(const wxString& descr, const wxVariant& variant,
         const wxString& editorType = wxEmptyString,
         bool readOnly = false)
@@ -91,7 +91,7 @@ public:
     inline const wxArrayString& GetChoices() const { return m_choices; }
     inline const wxString& GetDescription() const { return m_description; }
     inline bool IsCustom() const { return m_custom; }
-    
+
     inline void SetName(const wxString& name) { m_variant.SetName(name); }
     inline void SetValue(const wxString& value) { m_variant = value; }
     inline void SetValue(const wxVariant& value) { m_variant = value; }
@@ -134,7 +134,7 @@ class ctProperties: public wxObject
     DECLARE_CLASS(ctProperties)
 public:
     ctProperties() {}
-    ctProperties(const ctProperties& properties) { Copy(properties); }
+    ctProperties(const ctProperties& properties) : wxObject() { Copy(properties); }
     ~ctProperties() { Clear(); }
 
     void operator = (const ctProperties& properties) { Clear(); Copy(properties); }

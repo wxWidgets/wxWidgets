@@ -130,11 +130,11 @@ void ctConfigItemsSelector::CreateControls()
 
     item13->Add(5, 5, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxButton* item15 = new wxButton(item1, wxID_OK, _("&OK"), wxDefaultPosition, wxDefaultSize, 0);
+    wxButton* item15 = new wxButton(item1, wxID_OK);
     item15->SetDefault();
     item13->Add(item15, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxButton* item16 = new wxButton(item1, wxID_CANCEL, _("&Cancel"), wxDefaultPosition, wxDefaultSize, 0);
+    wxButton* item16 = new wxButton(item1, wxID_CANCEL);
     item13->Add(item16, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     GetSizer()->Fit(this);

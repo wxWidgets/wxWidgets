@@ -166,13 +166,13 @@ void ctCustomPropertyDialog::CreateControls()
 
     item21->Add(5, 5, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxButton* item23 = new wxButton(item1, wxID_OK, _("&OK"), wxDefaultPosition, wxDefaultSize, 0);
+    wxButton* item23 = new wxButton(item1, wxID_OK);
     item21->Add(item23, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxButton* item24 = new wxButton(item1, wxID_CANCEL, _("&Cancel"), wxDefaultPosition, wxDefaultSize, 0);
+    wxButton* item24 = new wxButton(item1, wxID_CANCEL);
     item21->Add(item24, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxButton* item25 = new wxButton(item1, wxID_HELP, _("&Help"), wxDefaultPosition, wxDefaultSize, 0);
+    wxButton* item25 = new wxButton(item1, wxID_HELP);
     item21->Add(item25, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     GetSizer()->Fit(this);
@@ -217,7 +217,7 @@ void ctCustomPropertyDialog::OnPropertyChoiceAdd( wxCommandEvent& WXUNUSED(event
         if ( m_customPropertyEditorType->GetSelection() > -1 && m_customPropertyEditorType->GetStringSelection() == wxT("choice") )
         {
             wxString str = wxGetTextFromUser(_T("New choice"), _("Add choice"));
-            if (!str.IsEmpty() && m_propertyChoices)
+            if (!str.empty() && m_propertyChoices)
             {
                 m_propertyChoices->Append(str);
                 m_choices.Add(str);
@@ -233,7 +233,7 @@ void ctCustomPropertyDialog::OnPropertyChoiceAdd( wxCommandEvent& WXUNUSED(event
 void ctCustomPropertyDialog::OnUpdatePropertyChoiceAdd( wxUpdateUIEvent& event )
 {
     if(m_customPropertyEditorType)
-        event.Enable( m_customPropertyEditorType->GetSelection() > -1 && 
+        event.Enable( m_customPropertyEditorType->GetSelection() > -1 &&
                       m_customPropertyEditorType->GetStringSelection() == wxT("choice") );
 }
 
@@ -257,7 +257,7 @@ void ctCustomPropertyDialog::OnPropertyChoiceRemove( wxCommandEvent& WXUNUSED(ev
 void ctCustomPropertyDialog::OnUpdatePropertyChoiceRemove( wxUpdateUIEvent& event )
 {
     if (m_customPropertyEditorType && m_propertyChoices)
-        event.Enable( m_customPropertyEditorType->GetSelection() > -1 && 
+        event.Enable( m_customPropertyEditorType->GetSelection() > -1 &&
                       m_customPropertyEditorType->GetStringSelection() == wxT("choice") &&
                       m_propertyChoices->GetSelection() > -1 );
 }

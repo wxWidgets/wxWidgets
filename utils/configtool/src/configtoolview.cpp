@@ -259,7 +259,7 @@ void ctConfigToolView::SyncItem(ctConfigTreeCtrl* treeControl, ctConfigItem* ite
     {
         if (!item->GetParent())
         {
-            item->SetTreeItem(treeControl->AddRoot(_(""), -1, -1, new ctTreeItemData(item)));
+            item->SetTreeItem(treeControl->AddRoot(wxEmptyString, -1, -1, new ctTreeItemData(item)));
         }
         else
         {
@@ -423,9 +423,8 @@ void ctConfigToolView::AddItem(ctConfigType type, const wxString& msg)
     ctConfigItem* sel = GetSelection();
     if (sel)
     {
-        wxString name = wxGetTextFromUser(_("Please enter a name for the new item."),
-            msg, wxT(""));
-        if (!name.IsEmpty())
+        wxString name = wxGetTextFromUser(_("Please enter a name for the new item."), msg);
+        if (!name.empty())
         {
             ctConfigItem* parent ;
             ctConfigItem* insertBefore ;
@@ -474,7 +473,7 @@ void ctConfigToolView::OnRenameItem(wxCommandEvent& WXUNUSED(event))
     {
         wxString name = wxGetTextFromUser(_("Please enter a new name for the item."),
             _("Rename item"), sel->GetName());
-        if (!name.IsEmpty())
+        if (!name.empty())
         {
             sel->SetName(name);
             SyncItem(wxGetApp().GetMainFrame()->GetConfigTreeCtrl(), sel);
@@ -686,7 +685,7 @@ void ctConfigToolView::OnItemHelp(wxCommandEvent& WXUNUSED(event))
     if ( doc && GetSelection() )
     {
         wxString helpTopic = GetSelection()->GetPropertyString(wxT("help-topic"));
-        if (!helpTopic.IsEmpty())
+        if (!helpTopic.empty())
         {
             wxGetApp().GetReferenceHelpController().DisplaySection(helpTopic);
         }
@@ -732,7 +731,7 @@ void ctConfigToolView::OnAddCustomProperty(wxCommandEvent& WXUNUSED(event))
             else if (type == wxT("long"))
                 property->GetVariant() = wxVariant((long) 0, name);
             else
-                property->GetVariant() = wxVariant(wxT(""), name);
+                property->GetVariant() = wxVariant(wxEmptyString, name);
             property->SetCustom(true);
             property->SetDescription(descr);
             property->SetChoices(choices);
@@ -791,7 +790,7 @@ void ctConfigToolView::OnEditCustomProperty(wxCommandEvent& WXUNUSED(event))
                     else if (type == wxT("long"))
                         property->GetVariant() = wxVariant((long) 0, name);
                     else
-                        property->GetVariant() = wxVariant(wxT(""), name);
+                        property->GetVariant() = wxVariant(wxEmptyString, name);
                 }
                 if (name != oldName)
                     property->GetVariant().SetName(name);
@@ -910,7 +909,7 @@ void ctConfigToolView::OnSaveSetupFile(wxCommandEvent& WXUNUSED(event))
 
     wxString filename = _T("setup.h");
     wxString path = wxGetApp().GetSettings().m_lastSetupSaveDir;
-    if (path.IsEmpty())
+    if (path.empty())
         path = doc->GetFrameworkDir(false);
     wxString wildcard = _T("Header files (*.h)|*.h|All files (*.*)|*.*");
 
@@ -942,7 +941,7 @@ void ctConfigToolView::OnSaveConfigureCommand(wxCommandEvent& WXUNUSED(event))
 
     wxString filename = _T("configurewx.sh");
     wxString path = wxGetApp().GetSettings().m_lastSetupSaveDir;
-    if (path.IsEmpty())
+    if (path.empty())
         path = doc->GetFrameworkDir(false);
     wxString wildcard = _T("Shell script files (*.sh)|*.sh|All files (*.*)|*.*");
 
@@ -1014,7 +1013,7 @@ void ctConfigToolView::OnGo(wxCommandEvent& WXUNUSED(event))
 {
     ctConfigToolDoc* doc = (ctConfigToolDoc*) GetDocument();
     wxString path = wxGetApp().GetSettings().m_lastSetupSaveDir;
-    if (!path.IsEmpty())
+    if (!path.empty())
     {
         if (wxGetApp().GetSettings().m_defaultFileKind == wxT("Setup file"))
         {
@@ -1075,7 +1074,7 @@ void ctConfigToolView::OnGo(wxCommandEvent& WXUNUSED(event))
 void ctConfigToolView::OnUpdateGo(wxUpdateUIEvent& event)
 {
     wxString path = wxGetApp().GetSettings().m_lastSetupSaveDir;
-    event.Enable(!path.IsEmpty());
+    event.Enable(!path.empty());
 }
 
 //----------------------------------------------------------------------------
@@ -1132,7 +1131,7 @@ bool ctFindReplaceDialog::DoFind(const wxString& textToFind, bool matchCase, boo
             return false;
     }
 
-    if (!sm_currentItem.IsEmpty())
+    if (!sm_currentItem.empty())
     {
         currentItem = doc->GetTopItem()->FindItem(sm_currentItem);
     }

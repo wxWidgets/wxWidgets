@@ -31,6 +31,7 @@
 #include "wx/notebook.h"
 #include "wx/dataobj.h"
 #include "wx/clipbrd.h"
+#include "wx/stockitem.h"
 #include "wxconfigtool.h"
 #include "mainframe.h"
 #include "appsettings.h"
@@ -258,12 +259,12 @@ void ctMainFrame::InitToolBar(wxToolBar* toolBar)
     toolBar->AddTool(wxID_SAVE, toolBarBitmaps[2], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL, wxT("Save project"));
 
     toolBar->AddSeparator();
-    toolBar->AddTool(wxID_CUT, toolBarBitmaps[4], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL, wxT("Cut"));
-    toolBar->AddTool(wxID_COPY, toolBarBitmaps[3], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL, wxT("Copy"));
-    toolBar->AddTool(wxID_PASTE, toolBarBitmaps[5], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL, wxT("Paste"));
+    toolBar->AddTool(wxID_CUT, toolBarBitmaps[4], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL, wxGetStockLabel(wxID_CUT, false));
+    toolBar->AddTool(wxID_COPY, toolBarBitmaps[3], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL, wxGetStockLabel(wxID_COPY, false));
+    toolBar->AddTool(wxID_PASTE, toolBarBitmaps[5], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL, wxGetStockLabel(wxID_PASTE, false));
     toolBar->AddSeparator();
-    toolBar->AddTool(wxID_UNDO, toolBarBitmaps[10], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL, wxT("Undo"));
-    toolBar->AddTool(wxID_REDO, toolBarBitmaps[11], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL, wxT("Redo"));
+    toolBar->AddTool(wxID_UNDO, toolBarBitmaps[10], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL, wxGetStockLabel(wxID_UNDO, false));
+    toolBar->AddTool(wxID_REDO, toolBarBitmaps[11], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL, wxGetStockLabel(wxID_REDO, false));
     toolBar->AddSeparator();
     toolBar->AddTool(ctID_GO, toolBarBitmaps[6], wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, (wxObject *) NULL, wxT("Save setup.h or configurewx.sh"));
     toolBar->AddSeparator();
@@ -282,30 +283,30 @@ wxMenuBar* ctMainFrame::CreateMenuBar()
 
     wxGetApp().GetFileHistory().UseMenu(fileMenu);
 
-    fileMenu->Append(wxID_NEW, wxT("&New...\tCtrl+N"), wxT("Create a new settings document"));
-    fileMenu->Append(wxID_OPEN, wxT("&Open...\tCtrl+O"), wxT("Open a settings document"));
-    fileMenu->Append(wxID_CLOSE, wxT("&Close\tCtrl+W"), wxT("Close the current settings document"));
+    fileMenu->Append(wxID_NEW, wxGetStockLabel(wxID_NEW, true, wxT("Ctrl+N")), wxT("Create a new settings document"));
+    fileMenu->Append(wxID_OPEN, wxGetStockLabel(wxID_OPEN, true, wxT("Ctrl+O")), wxT("Open a settings document"));
+    fileMenu->Append(wxID_CLOSE, wxGetStockLabel(wxID_CLOSE, true, wxT("Ctrl+W")), wxT("Close the current settings document"));
     fileMenu->AppendSeparator();
-    fileMenu->Append(wxID_SAVE, wxT("&Save\tCtrl+S"), wxT("Save the settings document"));
-    fileMenu->Append(wxID_SAVEAS, wxT("&Save As..."), wxT("Save the settings document under a new filename"));
+    fileMenu->Append(wxID_SAVE, wxGetStockLabel(wxID_SAVE, true, wxT("Ctrl+S")), wxT("Save the settings document"));
+    fileMenu->Append(wxID_SAVEAS, wxGetStockLabel(wxID_SAVEAS), wxT("Save the settings document under a new filename"));
     fileMenu->AppendSeparator();
     fileMenu->Append(ctID_SAVE_SETUP_FILE, wxT("Save Setup.&h...\tCtrl+H"), wxT("Save the setup.h file"));
     fileMenu->Append(ctID_SAVE_CONFIGURE_COMMAND, wxT("Save Configure Script...\tCtrl+G"), wxT("Save the configure script file"));
     fileMenu->AppendSeparator();
     fileMenu->Append(ctID_GO, wxT("&Go\tF5"), wxT("Quick-save the setup.h or configure.sh file"));
     fileMenu->AppendSeparator();
-    fileMenu->Append(wxID_EXIT, wxT("E&xit\tAlt+F4"), wxT("Exit the application"));
+    fileMenu->Append(wxID_EXIT, wxGetStockLabel(wxID_EXIT, true, wxT("Alt+F4")), wxT("Exit the application"));
 
     wxGetApp().GetDocManager()->FileHistoryUseMenu(fileMenu);
 
     wxMenu *editMenu = new wxMenu;
 
-    editMenu->Append(wxID_UNDO, _("&Undo\tCtrl+Z"));
-    editMenu->Append(wxID_REDO, _("&Redo\tCtrl+Y"));
+    editMenu->Append(wxID_UNDO, wxGetStockLabel(wxID_UNDO, true, wxT("Ctrl+Z")));
+    editMenu->Append(wxID_REDO, wxGetStockLabel(wxID_REDO, true, wxT("Ctrl+Y")));
     editMenu->AppendSeparator();
-    editMenu->Append(wxID_COPY, _("&Copy\tCtrl+C"));
-    editMenu->Append(wxID_CUT, _("Cu&t\tCtrl+X"));
-    editMenu->Append(wxID_PASTE, _("&Paste\tCtrl+V"));
+    editMenu->Append(wxID_COPY, wxGetStockLabel(wxID_CLOSE, true, wxT("Ctrl+C")));
+    editMenu->Append(wxID_CUT, wxGetStockLabel(wxID_CUT, true, wxT("Ctrl+X")));
+    editMenu->Append(wxID_PASTE, wxGetStockLabel(wxID_PASTE, true, wxT("Ctrl+V")));
     editMenu->AppendSeparator();
 
     wxMenu* itemMenu = new wxMenu;
@@ -331,7 +332,7 @@ wxMenuBar* ctMainFrame::CreateMenuBar()
     editMenu->Append(ctID_DELETE_ITEM, _("&Delete Option"), _("Delete a configuration option"));
     editMenu->Append(ctID_RENAME_ITEM, _("&Rename Option"), _("Rename a configuration option"));
     editMenu->AppendSeparator();
-    editMenu->Append(wxID_FIND, _("&Find...\tCtrl+F"), _("Search for a string in the settings document"));
+    editMenu->Append(wxID_FIND, wxGetStockLabel(wxID_FIND, true, wxT("Ctrl+F")), _("Search for a string in the settings document"));
 
     // Save for the command processor.
     m_editMenu = editMenu;
@@ -526,7 +527,7 @@ void ctOutputWindow::OnSaveText(wxCommandEvent& WXUNUSED(event))
     if (m_codeCtrl->IsModified())
     {
         wxString filename(m_filenameCtrl->GetValue());
-        if (!filename.IsEmpty())
+        if (!filename.empty())
         {
             m_codeCtrl->SaveFile(filename);
             m_codeCtrl->DiscardEdits();

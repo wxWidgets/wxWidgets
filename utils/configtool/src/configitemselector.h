@@ -49,7 +49,7 @@ class ctConfigItem;
  */
 
 class ctConfigItemsSelector: public wxDialog
-{    
+{
 public:
     /// Constructor
     ctConfigItemsSelector( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& caption = _("Configuration Items Selector"));

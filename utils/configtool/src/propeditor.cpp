@@ -187,7 +187,7 @@ bool ctPropertyEditor::CanEditDetails()
 
     int row;
     ctProperty* prop = FindSelectedProperty(row);
-    if (!prop || prop->GetEditorType().IsEmpty())
+    if (!prop || prop->GetEditorType().empty())
         return false;
     return true;
 }
@@ -383,7 +383,7 @@ bool ctPropertyEditor::DisplayDefaultProperty()
 bool ctPropertyEditor::EditDefaultProperty(ctConfigItem* item)
 {
     wxString defaultPropertyName = item->GetDefaultProperty();
-    if (!defaultPropertyName.IsEmpty())
+    if (!defaultPropertyName.empty())
     {
         ctProperty* prop = item->GetProperties().FindProperty(defaultPropertyName);
         if (prop)
@@ -809,10 +809,10 @@ bool ctMultiLineTextEditor::AddControls(wxWindow* parent, const wxString& msg)
 
     item4->Add( 5, 5, 1, wxALIGN_CENTRE|wxALL, 5 );
 
-    wxButton *item5 = new wxButton( parent, wxID_OK, _("&OK"), wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton *item5 = new wxButton( parent, wxID_OK);
     item4->Add( item5, 0, wxALIGN_CENTRE|wxALL, 5 );
 
-    wxButton *item6 = new wxButton( parent, wxID_CANCEL, _("&Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton *item6 = new wxButton( parent, wxID_CANCEL);
     item4->Add( item6, 0, wxALIGN_CENTRE|wxALL, 5 );
 
     item1->Add( item4, 0, wxGROW|wxALIGN_CENTER_VERTICAL, 5 );

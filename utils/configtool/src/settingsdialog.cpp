@@ -98,14 +98,14 @@ void ctSettingsDialog::CreateControls()
 
     item21->Add(5, 5, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxButton* item23 = new wxButton(item1, wxID_OK, _("&OK"), wxDefaultPosition, wxDefaultSize, 0);
+    wxButton* item23 = new wxButton(item1, wxID_OK);
     item23->SetDefault();
     item21->Add(item23, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxButton* item24 = new wxButton(item1, wxID_CANCEL, _("&Cancel"), wxDefaultPosition, wxDefaultSize, 0);
+    wxButton* item24 = new wxButton(item1, wxID_CANCEL);
     item21->Add(item24, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxButton* item25 = new wxButton(item1, wxID_HELP, _("&Help"), wxDefaultPosition, wxDefaultSize, 0);
+    wxButton* item25 = new wxButton(item1, wxID_HELP);
     item21->Add(item25, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 #if defined(__WXGTK__) || defined(__WXMAC__)
@@ -163,7 +163,7 @@ void ctSettingsDialog::OnHelp( wxCommandEvent& WXUNUSED(event) )
             helpTopic = wxT("Location settings dialog");
         }
 
-        if (!helpTopic.IsEmpty())
+        if (!helpTopic.empty())
         {
             wxGetApp().GetHelpController().DisplaySection(helpTopic);
         }

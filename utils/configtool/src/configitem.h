@@ -37,7 +37,7 @@ enum ctConfigType
     ctTypeInteger,      // An option with an integer value
     ctTypeBoolCheck,    // An on/off option
     ctTypeBoolRadio     // An on/off mutually exclusive option
-}; 
+};
 
 /*!
  * ctConfigItem represents a configuration setting.
@@ -56,7 +56,7 @@ public:
     ~ctConfigItem();
 
     /// Copy constructor.
-    ctConfigItem(const ctConfigItem& item)
+    ctConfigItem(const ctConfigItem& item) : wxObject()
     {
         (*this) = item;
     }

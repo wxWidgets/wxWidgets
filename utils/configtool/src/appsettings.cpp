@@ -80,7 +80,7 @@ ctSettings::ctSettings()
 }
 
 // Copy constructor
-ctSettings::ctSettings(const ctSettings& settings)
+ctSettings::ctSettings(const ctSettings& settings) : wxObject()
 {
     Copy(settings);
 }

@@ -92,10 +92,10 @@ public:
 
     /// Generate the text of a setup.h
     wxString GenerateSetup();
-        
+
     /// Helper function
     void GenerateSetup(ctConfigItem* item, wxString& str);
-        
+
     /// Generate a configure command
     wxString GenerateConfigureCommand();
 
@@ -104,10 +104,10 @@ public:
 
     /// Finds the next item in the tree
     ctConfigItem* FindNextItem(ctConfigItem* item, bool wrap);
-        
+
     /// Finds the next sibling in the tree
     ctConfigItem* FindNextSibling(ctConfigItem* item);
-        
+
 protected:
     ctConfigItem*   m_topItem;
     ctConfigItem*   m_clipboardItem;
@@ -127,7 +127,7 @@ public:
     ~ctConfiguration();
 
     /// Copy constructor.
-    ctConfiguration(const ctConfiguration& configuration)
+    ctConfiguration(const ctConfiguration& configuration) : wxObject()
     {
         (*this) = configuration;
     }
@@ -269,7 +269,7 @@ public:
     bool Do();
     bool Undo();
     bool DoAndUndo(bool doCmd); // Combine Do and Undo into one
-    
+
 protected:
     ctConfigItem*   m_activeState;
     ctConfigItem*   m_savedState;

@@ -54,7 +54,7 @@ class ctLocationSettingsDialog;
  */
 
 class ctSettingsDialog: public wxDialog
-{    
+{
 public:
     /// Constructor
     ctSettingsDialog( wxWindow* parent );
@@ -96,7 +96,7 @@ protected:
  */
 
 class ctGeneralSettingsDialog: public wxPanel
-{    
+{
 public:
     /// Constructor
     ctGeneralSettingsDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER|wxTAB_TRAVERSAL );
@@ -124,7 +124,7 @@ public:
  */
 
 class ctLocationSettingsDialog: public wxPanel
-{    
+{
 public:
     /// Constructor
     ctLocationSettingsDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER|wxTAB_TRAVERSAL );
