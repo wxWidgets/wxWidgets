@@ -156,17 +156,12 @@ bool wxFrameMSW::Create(wxWindow *parent,
 
   m_iconized = FALSE;
 
-  // the frame must have NULL parent HWND or it would be always on top of its
-  // parent which is not what we usually want (in fact, we only want it for
-  // frames with the special wxFRAME_FLOAT_ON_PARENT style)
-  if ( !(m_windowStyle & wxFRAME_FLOAT_ON_PARENT) )
-  {
-    parent = NULL;
-  }
-
   wxTopLevelWindows.Append(this);
 
-  MSWCreate(m_windowId, parent, wxFrameClassName, this, title,
+  // the frame must have NULL parent HWND or it would be always on top of its
+  // parent which is not what we usually want (in fact, we only want it for
+  // frames with the special wxFRAME_TOOL_WINDOW style handled elsewhere)
+  MSWCreate(m_windowId, NULL, wxFrameClassName, this, title,
             x, y, width, height, style);
 
   wxModelessWindows.Append(this);
