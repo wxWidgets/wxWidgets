@@ -87,12 +87,9 @@
     #define NOTEBOOK_PANEL(nb)  GTK_NOTEBOOK(nb)->panel
 #endif
 
-// VZ: I _think_ that in GTK+ 2.0 the scroll type is passed to the
-//     value_changed callback as a 2nd argument but I'm not at all sure about
-//     it, if this is false all occurences of this macro must be changed!
 #ifdef __WXGTK20__
-    #define SCROLLBAR_CBACK_ARG GtkScrollType scrollType,
-    #define GET_SCROLL_TYPE(w)   scrollType
+    #define SCROLLBAR_CBACK_ARG
+    #define GET_SCROLL_TYPE(w)   GTK_SCROLL_JUMP
 #else
     #define SCROLLBAR_CBACK_ARG
     #define GET_SCROLL_TYPE(w)   GTK_RANGE((w))->scroll_type

@@ -74,6 +74,8 @@ public:
     
     void OnPaint( wxPaintEvent &event );
     void OnEraseBackground( wxEraseEvent &event );
+    
+    wxBitmap    m_bitmap;
 
 private:
     DECLARE_EVENT_TABLE()
@@ -174,12 +176,21 @@ MyCanvas::MyCanvas( MyFrame *parent )
                     wxScrolledWindowStyle|wxNO_FULL_REPAINT_ON_RESIZE|wxSUNKEN_BORDER )
 {
     SetScrollbars( 10, 10, 40, 100, 0, 0 );
+    
+    m_bitmap = wxBitmap( mondrian_xpm );
+    
+    new wxStaticBitmap( this, -1, m_bitmap, wxPoint(80,20) );
 }
 
 void MyCanvas::OnPaint( wxPaintEvent &event )
 {
     wxPaintDC dc(this);
     PrepareDC( dc );
+    
+    dc.SetBrush( *wxBLACK_BRUSH );
+    dc.DrawRectangle( 0,0,200,50 );
+    
+    dc.DrawBitmap( m_bitmap, 10, 20, TRUE );
     
 #if 0  
     wxRegionIterator upd( GetUpdateRegion() );

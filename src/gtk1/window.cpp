@@ -4092,10 +4092,10 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
     m_clipPaintRegion = FALSE;
 #else
 
-    gdk_window_scroll( GTK_PIZZA(m_wxwindow)->bin_window, -dx, -dy );
+    gdk_window_scroll( GTK_PIZZA(m_wxwindow)->bin_window, dx, dy );
     
-    GTK_PIZZA(m_wxwindow)->xoffset -= dx;
-    GTK_PIZZA(m_wxwindow)->yoffset -= dy;
+    GTK_PIZZA(m_wxwindow)->xoffset += dx;
+    GTK_PIZZA(m_wxwindow)->yoffset += dy;
     
 #endif    
    
