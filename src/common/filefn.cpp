@@ -115,7 +115,7 @@
 #ifdef __WINDOWS__
     #include <windows.h>
     #include "wx/msw/mslu.h"
-    
+
     // sys/cygwin.h is needed for cygwin_conv_to_full_win32_path()
     //
     // note that it must be included after <windows.h>
@@ -922,7 +922,7 @@ wxString wxMacFSSpec2MacFilename( const FSSpec *spec )
         //   includes previously prepended path separator
         strcat(thePath, theFileName);
     }
-    
+
     // create path string for return value
     wxString result( thePath ) ;
 #else
@@ -1396,7 +1396,7 @@ wxString wxFindFirstFile(const wxChar *spec, int flags)
     }
 
     wxString result;
-    gs_dir->GetFirst(&result, wxFileNameFromPath((wxChar) spec), dirFlags);
+    gs_dir->GetFirst(&result, wxFileNameFromPath((wxChar*) spec), dirFlags);
     if ( result.IsEmpty() )
     {
         wxDELETE(gs_dir);
