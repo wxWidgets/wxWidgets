@@ -977,7 +977,8 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 {
     // Find out which MSW item before which we'll be inserting before
     // wxMenuBarBase::Insert is called and GetMenu(pos) is the new menu.
-    int mswpos = (pos == m_menus.GetCount())
+    // If IsAttached() is false this won't be used anyway
+    int mswpos = (!IsAttached() || (pos == m_menus.GetCount()))
         ?   -1 // append the menu
         :   MSWPositionForWxMenu(GetMenu(pos),pos);
 
