@@ -41,7 +41,7 @@
 #include "wx/sizer.h"
 
 #include "widgets.h"
-
+#if 1
 #include "icons/gauge.xpm"
 
 // ----------------------------------------------------------------------------
@@ -222,7 +222,7 @@ GaugeWidgetsPage::GaugeWidgetsPage(wxNotebook *notebook,
     wxSizer *sizerRight = new wxBoxSizer(wxHORIZONTAL);
     m_gauge = new wxGauge(this, GaugePage_Gauge, m_range);
     sizerRight->Add(m_gauge, 1, wxCENTRE | wxALL, 5);
-    sizerRight->SetMinSize(250, 0);
+    sizerRight->SetMinSize(150, 0);
     m_sizerGauge = sizerRight; // save it to modify it later
 
     // the 3 panes panes compose the window
@@ -400,3 +400,4 @@ void GaugeWidgetsPage::StopTimer()
     wxLogMessage(_T("Progress finished."));
 }
 
+#endif

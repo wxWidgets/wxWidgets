@@ -44,7 +44,7 @@
 #include "wx/artprov.h"
 
 #include "widgets.h"
-
+#if 1
 #include "icons/notebook.xpm"
 
 // ----------------------------------------------------------------------------
@@ -280,7 +280,7 @@ NotebookWidgetsPage::NotebookWidgetsPage(wxNotebook *notebook,
     wxSizer *sizerRight = new wxBoxSizer(wxHORIZONTAL);
     m_notebook = new wxNotebook(this, NotebookPage_Notebook);
     sizerRight->Add(m_notebook, 1, wxGROW | wxALL, 5);
-    sizerRight->SetMinSize(250, 0);
+    sizerRight->SetMinSize(150, 0);
     m_sizerNotebook = sizerRight; // save it to modify it later
 
     // the 3 panes panes compose the window
@@ -543,3 +543,4 @@ void NotebookWidgetsPage::OnPageChanged(wxNotebookEvent& event)
     event.Skip();
 }
 
+#endif

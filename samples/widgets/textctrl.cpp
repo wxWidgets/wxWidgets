@@ -41,6 +41,7 @@
 
 #include "widgets.h"
 
+#if 1
 #include "icons/text.xpm"
 
 // ----------------------------------------------------------------------------
@@ -322,7 +323,7 @@ TextWidgetsPage::TextWidgetsPage(wxNotebook *notebook, wxImageList *imaglist)
 #endif // __WXMSW__
 
     wxButton *btn = new wxButton(this, TextPage_Reset, _T("&Reset"));
-    sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
+    sizerLeft->Add(2, 2, 0, wxGROW | wxALL, 1); // spacer
     sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     // middle pane
@@ -330,19 +331,19 @@ TextWidgetsPage::TextWidgetsPage(wxNotebook *notebook, wxImageList *imaglist)
     wxSizer *sizerMiddleUp = new wxStaticBoxSizer(box2, wxVERTICAL);
 
     btn = new wxButton(this, TextPage_Set, _T("&Set text value"));
-    sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 5);
+    sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 1);
 
     btn = new wxButton(this, TextPage_Add, _T("&Append text"));
-    sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 5);
+    sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 1);
 
     btn = new wxButton(this, TextPage_Insert, _T("&Insert text"));
-    sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 5);
+    sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 1);
 
     btn = new wxButton(this, TextPage_Load, _T("&Load file"));
-    sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 5);
+    sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 1);
 
     btn = new wxButton(this, TextPage_Clear, _T("&Clear"));
-    sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 5);
+    sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 1);
 
     wxStaticBox *box4 = new wxStaticBox(this, -1, _T("&Info:"));
     wxSizer *sizerMiddleDown = new wxStaticBoxSizer(box4, wxVERTICAL);
@@ -422,7 +423,7 @@ TextWidgetsPage::TextWidgetsPage(wxNotebook *notebook, wxImageList *imaglist)
     m_sizerText = new wxStaticBoxSizer(box3, wxHORIZONTAL);
     Reset();
     CreateText();
-    m_sizerText->SetMinSize(250, 0);
+    m_sizerText->SetMinSize(150, 0);
 
     // the 3 panes panes compose the upper part of the window
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
@@ -755,4 +756,4 @@ void TextWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& event)
 {
     CreateText();
 }
-
+#endif

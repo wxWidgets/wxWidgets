@@ -39,7 +39,7 @@
 #include "wx/sizer.h"
 
 #include "widgets.h"
-
+#if 1
 #include "icons/button.xpm"
 
 // ----------------------------------------------------------------------------
@@ -220,7 +220,7 @@ ButtonWidgetsPage::ButtonWidgetsPage(wxNotebook *notebook,
     sizerRight->Add(0, 0, 1, wxCENTRE);
     sizerRight->Add(m_button, 1, wxCENTRE);
     sizerRight->Add(0, 0, 1, wxCENTRE);
-    sizerRight->SetMinSize(250, 0);
+    sizerRight->SetMinSize(150, 0);
     m_sizerButton = sizerRight; // save it to modify it later
 
     // the 3 panes panes compose the window
@@ -370,3 +370,4 @@ void ButtonWidgetsPage::OnButton(wxCommandEvent& event)
     wxLogMessage(_T("Test button clicked."));
 }
 
+#endif

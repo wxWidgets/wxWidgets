@@ -39,7 +39,7 @@
 #include "wx/sizer.h"
 
 #include "widgets.h"
-
+#if 1
 #include "icons/slider.xpm"
 
 // ----------------------------------------------------------------------------
@@ -248,7 +248,7 @@ SliderWidgetsPage::SliderWidgetsPage(wxNotebook *notebook,
 
     // right pane
     wxSizer *sizerRight = new wxBoxSizer(wxHORIZONTAL);
-    sizerRight->SetMinSize(250, 0);
+    sizerRight->SetMinSize(150, 0);
     m_sizerSlider = sizerRight; // save it to modify it later
 
     Reset();
@@ -256,7 +256,7 @@ SliderWidgetsPage::SliderWidgetsPage(wxNotebook *notebook,
 
     // the 3 panes panes compose the window
     sizerTop->Add(sizerLeft, 0, wxGROW | (wxALL & ~wxLEFT), 10);
-    sizerTop->Add(sizerMiddle, 1, wxGROW | wxALL, 10);
+    sizerTop->Add(sizerMiddle, 0, wxGROW | wxALL, 10);
     sizerTop->Add(sizerRight, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
 
     // final initializations
@@ -468,3 +468,4 @@ void SliderWidgetsPage::OnSlider(wxCommandEvent& event)
     wxLogMessage(_T("Slider value changed, now %d"), value);
 }
 
+#endif

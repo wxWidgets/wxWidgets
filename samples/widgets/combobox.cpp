@@ -41,7 +41,7 @@
 #include "wx/sizer.h"
 
 #include "widgets.h"
-
+#if 1
 #include "icons/combobox.xpm"
 
 // ----------------------------------------------------------------------------
@@ -277,7 +277,7 @@ ComboboxWidgetsPage::ComboboxWidgetsPage(wxNotebook *notebook,
                                 0, NULL,
                                 0);
     sizerRight->Add(m_combobox, 1, wxGROW | wxALL, 5);
-    sizerRight->SetMinSize(250, 0);
+    sizerRight->SetMinSize(150, 0);
     m_sizerCombo = sizerRight; // save it to modify it later
 
     // the 3 panes panes compose the window
@@ -507,3 +507,4 @@ void ComboboxWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& event)
 
 #endif //wxUSE_COMBOBOX
 
+#endif

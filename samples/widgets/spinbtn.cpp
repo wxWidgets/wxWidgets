@@ -41,7 +41,7 @@
 #include "wx/sizer.h"
 
 #include "widgets.h"
-
+#if 1
 #include "icons/spinbtn.xpm"
 
 // ----------------------------------------------------------------------------
@@ -224,7 +224,7 @@ SpinBtnWidgetsPage::SpinBtnWidgetsPage(wxNotebook *notebook,
 
     // right pane
     wxSizer *sizerRight = new wxBoxSizer(wxVERTICAL);
-    sizerRight->SetMinSize(250, 0);
+    sizerRight->SetMinSize(150, 0);
     m_sizerSpin = sizerRight; // save it to modify it later
 
     Reset();
@@ -232,7 +232,7 @@ SpinBtnWidgetsPage::SpinBtnWidgetsPage(wxNotebook *notebook,
 
     // the 3 panes panes compose the window
     sizerTop->Add(sizerLeft, 0, wxGROW | (wxALL & ~wxLEFT), 10);
-    sizerTop->Add(sizerMiddle, 1, wxGROW | wxALL, 10);
+    sizerTop->Add(sizerMiddle, 0, wxGROW | wxALL, 10);
     sizerTop->Add(sizerRight, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
 
     // final initializations
@@ -417,3 +417,4 @@ void SpinBtnWidgetsPage::OnSpinCtrl(wxCommandEvent& event)
 
     wxLogMessage(_T("Spin control value changed, now %d"), value);
 }
+#endif

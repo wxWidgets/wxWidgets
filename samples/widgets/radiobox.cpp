@@ -38,7 +38,7 @@
 #include "wx/sizer.h"
 
 #include "widgets.h"
-
+#if 1
 #include "icons/radiobox.xpm"
 
 // ----------------------------------------------------------------------------
@@ -66,7 +66,7 @@ enum
 
 // default values for the number of radiobox items
 static const size_t DEFAULT_NUM_ENTRIES = 12;
-static const size_t DEFAULT_MAJOR_DIM = 4;
+static const size_t DEFAULT_MAJOR_DIM = 3;
 
 // ----------------------------------------------------------------------------
 // RadioWidgetsPage
@@ -186,7 +186,8 @@ RadioWidgetsPage::RadioWidgetsPage(wxNotebook *notebook,
 
     m_radioDir = new wxRadioBox(this, -1, _T("Numbering:"),
                                 wxDefaultPosition, wxDefaultSize,
-                                WXSIZEOF(layoutDir), layoutDir);
+                                WXSIZEOF(layoutDir), layoutDir,
+                                1, wxRA_SPECIFY_COLS);
     sizerLeft->Add(m_radioDir, 0, wxGROW | wxALL, 5);
 
     // if it's not defined, we can't change the radiobox direction
@@ -195,12 +196,12 @@ RadioWidgetsPage::RadioWidgetsPage(wxNotebook *notebook,
 #endif // wxRA_LEFTTORIGHT
 
     wxSizer *sizerRow;
-    sizerRow = CreateSizerWithTextAndLabel(_T("&Major dimension"),
+    sizerRow = CreateSizerWithTextAndLabel(_T("&Major dimension:"),
                                            -1,
                                            &m_textMajorDim);
     sizerLeft->Add(sizerRow, 0, wxGROW | wxALL, 5);
 
-    sizerRow = CreateSizerWithTextAndLabel(_T("&Number of buttons"),
+    sizerRow = CreateSizerWithTextAndLabel(_T("&Number of buttons:"),
                                            -1,
                                            &m_textNumBtns);
     sizerLeft->Add(sizerRow, 0, wxGROW | wxALL, 5);
@@ -218,32 +219,32 @@ RadioWidgetsPage::RadioWidgetsPage(wxNotebook *notebook,
     wxStaticBox *box2 = new wxStaticBox(this, -1, _T("&Change parameters"));
     wxSizer *sizerMiddle = new wxStaticBoxSizer(box2, wxVERTICAL);
 
-    sizerRow = CreateSizerWithTextAndLabel(_T("Current selection"),
+    sizerRow = CreateSizerWithTextAndLabel(_T("Current selection:"),
                                            -1,
                                            &m_textCurSel);
     sizerMiddle->Add(sizerRow, 0, wxGROW | wxALL, 5);
 
     sizerRow = CreateSizerWithTextAndButton(RadioPage_Selection,
-                                            _T("&Change selection"),
+                                            _T("&Change selection:"),
                                            -1,
                                            &m_textSel);
     sizerMiddle->Add(sizerRow, 0, wxGROW | wxALL, 5);
 
     sizerRow = CreateSizerWithTextAndButton(RadioPage_Label,
-                                            _T("&Label for box"),
+                                            _T("&Label for box:"),
                                             -1,
                                             &m_textLabel);
     sizerMiddle->Add(sizerRow, 0, wxGROW | wxALL, 5);
 
     sizerRow = CreateSizerWithTextAndButton(RadioPage_LabelBtn,
-                                            _T("&Label for buttons"),
+                                            _T("&Label for buttons:"),
                                             -1,
                                             &m_textLabelBtns);
     sizerMiddle->Add(sizerRow, 0, wxGROW | wxALL, 5);
 
     // right pane
     wxSizer *sizerRight = new wxBoxSizer(wxHORIZONTAL);
-    sizerRight->SetMinSize(250, 0);
+    sizerRight->SetMinSize(150, 0);
     m_sizerRadio = sizerRight; // save it to modify it later
 
     Reset();
@@ -252,7 +253,7 @@ RadioWidgetsPage::RadioWidgetsPage(wxNotebook *notebook,
     // the 3 panes panes compose the window
     sizerTop->Add(sizerLeft, 0, wxGROW | (wxALL & ~wxLEFT), 10);
     sizerTop->Add(sizerMiddle, 1, wxGROW | wxALL, 10);
-    sizerTop->Add(sizerRight, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
+    sizerTop->Add(sizerRight, 0, wxGROW | (wxALL & ~wxRIGHT), 10);
 
     // final initializations
     SetAutoLayout(TRUE);
@@ -453,3 +454,4 @@ void RadioWidgetsPage::OnUpdateUIReset(wxUpdateUIEvent& event)
     event.Enable(enable);
 }
 
+#endif
