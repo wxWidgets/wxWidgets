@@ -16,7 +16,7 @@
 #pragma interface "wfstream.h"
 #endif
 
-#include "defs.h"
+#include "wx/defs.h"
 
 #if wxUSE_STREAMS && wxUSE_FILE
 
