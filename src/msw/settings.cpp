@@ -249,22 +249,13 @@ wxFont wxCreateFontFromStockObject(int index)
 
 wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 {
-#ifndef __WXWINCE__
-    // this one is special: we don't get it from GetStockObject()
-    if ( index == wxSYS_ICONTITLE_FONT )
-    {
-        LOGFONT lf;
-        SystemParametersInfo(SPI_GETICONTITLELOGFONT, sizeof(lf), &lf, 0);
-        return wxCreateFontFromLogFont(&lf);
-    }
-#endif // __WXWINCE__
-
     // wxWindow ctor calls GetSystemFont(wxSYS_DEFAULT_GUI_FONT) so we're
-    // called fairly often - this is why we cache this particular font
-    bool isDefaultRequested = index == wxSYS_DEFAULT_GUI_FONT;
-    if ( isDefaultRequested && gs_fontDefault )
+    // called fairly often -- this is why we cache this particular font
+    const bool isDefaultRequested = index == wxSYS_DEFAULT_GUI_FONT;
+    if ( isDefaultRequested )
     {
-        return *gs_fontDefault;
+        if ( gs_fontDefault )
+            return *gs_fontDefault;
     }
 
     wxFont font = wxCreateFontFromStockObject(index);
@@ -415,3 +406,60 @@ bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)
             return FALSE;
     }
 }
+
+// ----------------------------------------------------------------------------
+// function from wx/msw/wrapcctl.h: there is really no other place for it...
+// ----------------------------------------------------------------------------
+
+#if wxUSE_LISTCTRL || wxUSE_TREECTRL
+
+extern wxFont wxGetCCDefaultFont()
+{
+#ifndef __WXWINCE__
+    // under the systems enumerated below (anything released after Win98), the
+    // default font used for the common controls seems to be the desktop font
+    // which is also used for the icon titles and not the stock default GUI
+    // font
+    bool useIconFont;
+    int verMaj, verMin;
+    switch ( wxGetOsVersion(&verMaj, &verMin) )
+    {
+        case wxWIN95:
+            // 4.10 is Win98
+            useIconFont = verMin == 4 && verMin >= 10;
+            break;
+
+        case wxWINDOWS_NT:
+            // 5.0 is Win2k
+            useIconFont = verMaj >= 5;
+            break;
+
+        default:
+            useIconFont = false;
+    }
+
+    if ( useIconFont )
+    {
+        LOGFONT lf;
+        if ( ::SystemParametersInfo
+               (
+                    SPI_GETICONTITLELOGFONT,
+                    sizeof(lf),
+                    &lf,
+                    0
+               ) )
+        {
+            return wxFont(wxCreateFontFromLogFont(&lf));
+        }
+        else
+        {
+            wxLogLastError(_T("SystemParametersInfo(SPI_GETICONTITLELOGFONT"));
+        }
+    }
+#endif // __WXWINCE__
+
+    // fall back to the default font for the normal controls
+    return wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+}
+
+#endif // wxUSE_LISTCTRL || wxUSE_TREECTRL
