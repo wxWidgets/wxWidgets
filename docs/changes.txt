@@ -42,6 +42,9 @@ OTHER CHANGES
 
 All:
 
+- It is now possible to build several smaller libraries instead of single
+  huge wxWindows library; wxBase is now dependency of GUI ports rather then
+  separately compiled library
 - added wxDateSpan::operator==() and !=() (Lukasz Michalski)
 - added wxFileName::GetForbiddenChars() (Dimitri Schoolwerth)
 - use true/false throughout the library instead of TRUE/FALSE
