@@ -6,7 +6,9 @@
 %define lcport 	@LCPORT@
 %define tarname @TARNAME@
 %define version @VERSION@
+%define ver2    2.3
 %define release 1
+%define wxpref  %{pref}/lib/wxPython
 
 %if %{debug}
     %define name      wxPython%{port}-py%{pyver}-dbg
@@ -17,18 +19,19 @@
 %endif
 
 
-Summary: Cross platform GUI toolkit for Python using wx%{port}
-Name: %{name}
-Version: %{version}
-Release: %{release}
-Source0: %{tarname}-%{version}.tar.gz
-License: wxWindows Library Licence, Version 3
-url: http://wxPython.org/
-packager: Robin Dunn <robind@alldunn.com>
-Group: Development/Python
+#----------------------------------------------------------------
+Summary:   Cross platform GUI toolkit for Python using wx%{port}
+Name:      %{name}
+Version:   %{version}
+Release:   %{release}
+Source0:   %{tarname}-%{version}.tar.gz
+License:   wxWindows Library Licence, Version 3
+URL:       http://wxPython.org/
+Packager:  Robin Dunn <robind@alldunn.com>
+Group:     Development/Python
 BuildRoot: %{_tmppath}/%{name}-buildroot
-Prefix: %{pref}
-
+Prefix:    %{pref}
+#BuildRequires: %{python}
 
 Provides: wxwin
 Provides: wx%{port} = %{version}
@@ -37,10 +40,8 @@ Provides: wxPython  = %{version}
 
 # They conflict with each other, so let them replace each other
 Obsoletes: %{othername}
-# old wx and wxPython packages
-Obsoletes: wx%{port}, wxPython
-# and some funky mandrake names
-Obsoletes: wxGTK2.3, wxGTK6
+# old wxPython packages
+Obsoletes: wxPython
 
 
 %description
@@ -49,14 +50,27 @@ wxWindows C++ GUI library.  wxPython provides a large variety of
 window types and controls, all implemented with a native look and feel
 (and native runtime speed) on the platforms it is supported on.
 
-This package is implemented using the GTK port of wxWindows, and
+This package is implemented using the %{port} port of wxWindows, and
 includes the wx%{port} shared libs and etc.
 
 
+%package devel
+Summary: wxPython%{port} development files
+Group: Development/Libraries
+Requires: wxPython%{port} = %{version}
+
+
+%description devel
+This packages contains the headers and etc. for building apps or
+Python extension modules that use the same wx%{port} shared libraries
+that wxPython uses.
+
+#----------------------------------------------------------------
 %prep
 %setup -q -n %{tarname}-%{version}
 
 
+#----------------------------------------------------------------
 %build
 if [ "$SMP" != "" ]; then
     MAKE="make -j$SMP"
@@ -68,8 +82,9 @@ mkdir build
 cd build
 
 # Configure, trying to reduce dependencies
-../configure --with-%{lcport} --enable-soname --prefix=%{pref} \
-	--with-odbc \
+../configure --with-%{lcport} \
+	--prefix=%{wxpref} \
+	--disable-soname \
 	--with-opengl \
 %if %{debug}
 	--enable-debug \
@@ -82,6 +97,8 @@ cd build
 	--with-zlib=builtin \
 
 ##	--enable-debug_flag \
+##	--with-odbc \
+
 
 # Build wxWindows
 $MAKE
@@ -96,49 +113,74 @@ make allmo
 # three lines to %install if/when that happens.
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
 cd ../build
-make prefix=$RPM_BUILD_ROOT%{pref} install
+make prefix=$RPM_BUILD_ROOT%{wxpref} install
 
 
 # Now build wxPython
 cd ../wxPython
 %{python} setup.py \
 	IN_CVS_TREE=1 \
-	WX_CONFIG="$RPM_BUILD_ROOT%{pref}/bin/wx-config --prefix=$RPM_BUILD_ROOT%{pref}" \
+	WX_CONFIG="$RPM_BUILD_ROOT%{wxpref}/bin/wx-config --prefix=$RPM_BUILD_ROOT%{wxpref}" \
 	build
 
 
+#----------------------------------------------------------------
 %install
 ## ** [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
 %find_lang wxstd
 cd wxPython
 %{python} setup.py \
 	IN_CVS_TREE=1 \
-	WX_CONFIG="$RPM_BUILD_ROOT%{pref}/bin/wx-config --prefix=$RPM_BUILD_ROOT%{pref}" \
+	WX_CONFIG="$RPM_BUILD_ROOT%{wxpref}/bin/wx-config --prefix=$RPM_BUILD_ROOT%{wxpref}" \
 	install \
 	--root=$RPM_BUILD_ROOT
 
 
 
+#----------------------------------------------------------------
 %clean
 #[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
 
 
+#----------------------------------------------------------------
 %post
 /sbin/ldconfig
 
 
+#----------------------------------------------------------------
 %postun
 /sbin/ldconfig
 
 
 
+#----------------------------------------------------------------
 %files
+%doc docs/preamble.txt
+%doc docs/licence.txt
+%doc docs/readme.txt
+%doc docs/changes.txt
+%doc wxPython/README.txt
+%doc wxPython/CHANGES.txt
 %defattr(-,root,root)
-%{_libdir}/libwx*
-%{_libdir}/python*
-%{_datadir}
+%{wxpref}/lib/libwx*
+%{pref}/lib/python*
+%{wxpref}/share/
 
 
+
+%files devel
+%defattr(-,root,root)
+%{wxpref}/include/wx
+%{wxpref}/lib/wx
+%if %{debug}
+    %{wxpref}/bin/wx%{lcport}d-%{ver2}-config
+%else
+    %{wxpref}/bin/wx%{lcport}-%{ver2}-config
+%endif
+%{wxpref}/bin/wx-config
+
+
+#----------------------------------------------------------------
 %changelog
 
 # end of file
