@@ -4058,8 +4058,6 @@ void wxListMainWindow::EnsureVisible( long index )
     // been added and its position is not known yet
     if ( m_dirty )
     {
-        m_dirty = FALSE;
-
         RecalculatePositions(TRUE /* no refresh */);
     }
 
