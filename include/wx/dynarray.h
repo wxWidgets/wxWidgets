@@ -438,9 +438,26 @@ private:                                                            \
     typedef T _A##name;                                 \
     _WX_DEFINE_SORTED_ARRAY(_A##name, name, class WXDLLEXPORT)
 
+#define WX_DEFINE_EXPORTED_OBJARRAY(name)   WX_DEFINE_OBJARRAY(name)
 #define WX_DECLARE_EXPORTED_OBJARRAY(T, name)           \
     typedef T _L##name;                                 \
     _WX_DECLARE_OBJARRAY(_L##name, name, class WXDLLEXPORT)
+
+// ..and likewise these macros do very same thing as the ones above them too,
+// but allow the user to specify the export spec.  Needed if you have a dll
+// that wants to export a wxArray daubed with your own import/export goo.
+#define WX_DEFINE_USER_EXPORTED_ARRAY(T, name, usergoo)         \
+    typedef T _A##name;                                         \
+    _WX_DEFINE_ARRAY(_A##name, name, class usergoo)
+
+#define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY(T, name, usergoo)  \
+    typedef T _A##name;                                         \
+    _WX_DEFINE_SORTED_ARRAY(_A##name, name, class usergoo)
+
+#define WX_DEFINE_USER_EXPORTED_OBJARRAY(name)   WX_DEFINE_OBJARRAY(name)
+#define WX_DECLARE_USER_EXPORTED_OBJARRAY(T, name, usergoo)     \
+    typedef T _L##name;                                         \
+    _WX_DECLARE_OBJARRAY(_L##name, name, class usergoo)
 
 // ----------------------------------------------------------------------------
 /** @name Some commonly used predefined arrays */

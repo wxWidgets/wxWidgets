@@ -5,6 +5,7 @@ wxwindows2.3 (2.3.2) unstable; urgency=low
       Added .dll's to msw-cross packages.
       Added -dbg versions of the cross packages.
       Added experimental -univ(gtk) package.
+      Switched to python 2.1
 
  -- Ron Lee <ron@debian.org>  Thu, 27 Sep 2001 05:55:07 -0700
 
@@ -20,6 +21,12 @@ wxwindows2.3 (2.3.0) unstable; urgency=low
   * initial test builds, please do not release..
 
  -- Ron Lee <ron@debian.org>  Sat, 27 Jan 2001 01:51:24 -0800
+
+wxwindows2.2 (2.2.8.1) unstable; urgency=low
+
+  * Rebuild for python2.1  Closes: #119226, #118835
+
+ -- Ron Lee <ron@debian.org>  Mon, 12 Nov 2001 21:47:38 -0800
 
 wxwindows2.2 (2.2.8) unstable; urgency=medium
 

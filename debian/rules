@@ -799,6 +799,9 @@ binary-univ: control-files-stamp install-gtk-univ
 binary-doc: control-files-stamp install-doc
 	$(MAKE) -f debian/rules DH_OPTIONS=-p$(package_doc) binary-common
 
+binary-fast:control-files-stamp install-gtk-dbg install-msw-dev install-headers install-headers-msw
+	$(MAKE) -f debian/rules DH_OPTIONS="-p$(package_gtk_dbg) -p$(package_msw_dev) -p$(package_headers) -p$(package_headers_msw)" binary-common
+
 
 .PHONY: build build_all build_arch clean binary-indep binary-arch binary binary-common \
         binary-gtk binary-gtk-dev binary-gtk-dbg binary-wxbase binary-wxbase-dev \
