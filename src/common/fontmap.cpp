@@ -90,6 +90,8 @@ static wxFontEncoding gs_encodings[] =
     wxFONTENCODING_CP1256,
     wxFONTENCODING_CP1257,
     wxFONTENCODING_CP437,
+    wxFONTENCODING_UTF7,
+    wxFONTENCODING_UTF8,
 };
 
 // the descriptions for them
@@ -120,6 +122,8 @@ static const wxChar* gs_encodingDescs[] =
     wxTRANSLATE( "Windows Arabic (CP 1256)" ),
     wxTRANSLATE( "Windows Baltic (CP 1257)" ),
     wxTRANSLATE( "Windows/DOS OEM (CP 437)" ),
+    wxTRANSLATE( "Unicode 7 bit (UTF-7)" ),
+    wxTRANSLATE( "Unicode 8 bit (UTF-8)" ),
 };
 
 // and the internal names
@@ -150,6 +154,8 @@ static const wxChar* gs_encodingNames[] =
     wxT( "windows1256" ),
     wxT( "windows1257" ),
     wxT( "windows437" ),
+    wxT( "utf7" ),
+    wxT( "utf8" ),
 };
 
 // ----------------------------------------------------------------------------
@@ -399,7 +405,7 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
 
         RestorePath(pathOld);
     }
-#endif
+#endif // wxUSE_CONFIG
 
     // if didn't find it there, try to reckognise it ourselves
     if ( encoding == wxFONTENCODING_SYSTEM )
@@ -417,6 +423,10 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
 
         if ( !cs || cs == wxT("US-ASCII") )
             encoding = wxFONTENCODING_DEFAULT;
+        else if ( cs == wxT("UTF-7") )
+            encoding = wxFONTENCODING_UTF7;
+        else if ( cs == wxT("UTF-8") )
+            encoding = wxFONTENCODING_UTF8;
         else if ( cs == wxT("KOI8-R") || cs == wxT("KOI8-U") )
             encoding = wxFONTENCODING_KOI8;
         else if ( cs.Left(3) == wxT("ISO") )
@@ -696,7 +706,7 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
 
                     RestorePath(pathOld);
                 }
-#endif
+#endif // wxUSE_CONFIG
 
                 return TRUE;
             }
@@ -737,7 +747,7 @@ bool wxFontMapper::IsEncodingAvailable(wxFontEncoding encoding,
 {
     wxNativeEncodingInfo info;
 
-    if (wxGetNativeFontEncoding(encoding, &info))
+    if ( wxGetNativeFontEncoding(encoding, &info) )
     {
         info.facename = facename;
         return wxTestFontEncoding(info);

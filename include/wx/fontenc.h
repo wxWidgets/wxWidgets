@@ -63,7 +63,10 @@ enum wxFontEncoding
     wxFONTENCODING_CP1256,          // WinArabic
     wxFONTENCODING_CP1257,          // WinBaltic (same as Latin 7)
     wxFONTENCODING_CP12_MAX,
-    
+
+    wxFONTENCODING_UTF7,            // UTF-7 Unicode encoding
+    wxFONTENCODING_UTF8,            // UTF-8 Unicode encoding
+
     wxFONTENCODING_UNICODE,         // Unicode - currently used only by
                                     // wxEncodingConverter class
 

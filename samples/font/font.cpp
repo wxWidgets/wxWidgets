@@ -262,10 +262,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 class MyEncodingEnumerator : public wxFontEnumerator
 {
 public:
-    MyEncodingEnumerator() 
+    MyEncodingEnumerator()
         { m_n = 0; }
 
-    const wxString& GetText() const 
+    const wxString& GetText() const
         { return m_text; }
 
 protected:
@@ -299,10 +299,10 @@ void MyFrame::OnEnumerateEncodings(wxCommandEvent& WXUNUSED(event))
 class MyFontEnumerator : public wxFontEnumerator
 {
 public:
-    bool GotAny() const 
+    bool GotAny() const
         { return !m_facenames.IsEmpty(); }
 
-    const wxArrayString& GetFacenames() const 
+    const wxArrayString& GetFacenames() const
         { return m_facenames; }
 
 protected:
@@ -557,14 +557,15 @@ void MyFrame::OnViewMsg(wxCommandEvent& WXUNUSED(event))
 
     m_textctrl->LoadFile(filename);
 
-    if (!wxTheFontMapper->IsEncodingAvailable(fontenc))
+    if ( fontenc == wxFONTENCODING_UTF8 ||
+            !wxTheFontMapper->IsEncodingAvailable(fontenc) )
     {
         // try to find some similar encoding:
         wxFontEncoding encAlt;
         if ( wxTheFontMapper->GetAltForEncoding(fontenc, &encAlt) )
         {
             wxEncodingConverter conv;
-            
+
             if (conv.Init(fontenc, encAlt))
             {
                 fontenc = encAlt;
