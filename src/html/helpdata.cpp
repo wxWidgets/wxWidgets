@@ -78,6 +78,11 @@ wxHtmlHelpIndexCompareFunc(wxHtmlHelpDataItem **a, wxHtmlHelpDataItem **b)
     wxHtmlHelpDataItem *ia = *a;
     wxHtmlHelpDataItem *ib = *b;
 
+    if (ia == NULL)
+        return -1;
+    if (ib == NULL)
+        return 1;
+    
     if (ia->parent == ib->parent)
     {
         return ia->name.CmpNoCase(ib->name);
