@@ -1,11 +1,10 @@
 \section{Log classes overview}\label{wxlogoverview}
 
-Classes: \helpref{wxLog}{wxlog}
-
-%\helpref{wxLogStderr}{wxlogstderr},%
-%\helpref{wxLogOstream}{wxlogostream}, \helpref{wxLogTextCtrl}{wxlogtextctrl},%
-%\helpref{wxLogWindow}{wxlogwindow}, \helpref{wxLogGui}{wxloggui},%
-%\helpref{wxLogNull}{wxlognull}%
+Classes: \helpref{wxLog}{wxlog}\\
+\helpref{wxLogStderr}{wxlogstderr},\\
+\helpref{wxLogOstream}{wxlogostream}, \helpref{wxLogTextCtrl}{wxlogtextctrl},\\
+\helpref{wxLogWindow}{wxlogwindow}, \helpref{wxLogGui}{wxloggui},\\
+\helpref{wxLogNull}{wxlognull}
 
 This is a general overview of logging classes provided by wxWindows. The word
 logging here has a broad sense, including all of the program output, not only
@@ -126,8 +125,8 @@ clear the log, close it completely or save all messages to file.
 \item{\bf wxLogNull} The last log class is quite particular: it doesn't do
 anything. The objects of this class may be instantiated to (temporarily)
 suppress output of {\it wxLogXXX()} functions. As an example, trying to open a
-non-existing file will usually provoke an error message, but if you for some
-reason it's unwanted, just use this construction:
+non-existing file will usually provoke an error message, but if for some
+reasons it's unwanted, just use this construction:
 
 {\small
 \begin{verbatim}

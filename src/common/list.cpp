@@ -120,6 +120,11 @@ wxNodeBase::~wxNodeBase()
     // compatibility with old code
     if ( m_list != NULL )
     {
+        if ( m_list->m_keyType == wxKEY_STRING )
+        {
+            free(m_key.string);
+        }
+
         m_list->DetachNode(this);
     }
 }
@@ -348,6 +353,8 @@ void wxListBase::DoDeleteNode(wxNodeBase *node)
         node->DeleteData();
     }
 
+    // so that the node knows that it's being deleted by the list
+    node->m_list = NULL;
     delete node;
 }
 

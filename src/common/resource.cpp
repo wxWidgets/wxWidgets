@@ -559,17 +559,33 @@ bool wxResourceInterpretResources(wxResourceTable& table, wxExprDatabase& db)
   return TRUE;
 }
 
-static char *g_ValidControlClasses[] = { "wxButton", "wxBitmapButton", "wxMessage",
- "wxStaticText", "wxStaticBitmap", "wxText", "wxTextCtrl", "wxMultiText",
- "wxListBox", "wxRadioBox", "wxRadioButton", "wxCheckBox", "wxBitmapCheckBox",
- "wxGroupBox", "wxStaticBox", "wxSlider", "wxGauge", "wxScrollBar",
- "wxChoice", "wxComboBox" } ;
-static int g_ValidControlClassesCount = sizeof(g_ValidControlClasses) / sizeof(char *) ;
+static const char *g_ValidControlClasses[] =
+{
+    "wxButton",
+    "wxBitmapButton",
+    "wxMessage",
+    "wxStaticText",
+    "wxStaticBitmap",
+    "wxText",
+    "wxTextCtrl",
+    "wxMultiText",
+    "wxListBox",
+    "wxRadioBox",
+    "wxRadioButton",
+    "wxCheckBox",
+    "wxBitmapCheckBox",
+    "wxGroupBox",
+    "wxStaticBox",
+    "wxSlider",
+    "wxGauge",
+    "wxScrollBar",
+    "wxChoice",
+    "wxComboBox"
+};
 
 static bool wxIsValidControlClass(const wxString& c)
 {
-   int i;
-   for ( i = 0; i < g_ValidControlClassesCount; i++)
+   for ( size_t i = 0; i < WXSIZEOF(g_ValidControlClasses); i++ )
    {
       if ( c == g_ValidControlClasses[i] )
          return TRUE;

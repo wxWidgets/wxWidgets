@@ -301,12 +301,15 @@ size_t wxFile::Write(const void *pBuf, size_t nCount)
 bool wxFile::Flush()
 {
   if ( IsOpened() ) {
-		// @@@ fsync() is not ANSI (BSDish)
-//    if ( fsync(m_fd) == -1 ) { // TODO
-      if (wxTrue) {
-      wxLogSysError(_("can't flush file descriptor %d"), m_fd);
-      return FALSE;
-    }
+    #if defined(_MSC_VER) || wxHAVE_FSYNC
+        if ( fsync(m_fd) == -1 )
+        {
+            wxLogSysError(_("can't flush file descriptor %d"), m_fd);
+            return FALSE;
+        }
+    #else // no fsync
+        // just do nothing
+    #endif // fsync
   }
 
   return TRUE;

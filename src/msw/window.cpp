@@ -17,7 +17,7 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
@@ -39,11 +39,11 @@
 #endif
 
 #if     wxUSE_OWNER_DRAWN
-#include "wx/ownerdrw.h"
+    #include "wx/ownerdrw.h"
 #endif
 
 #if     wxUSE_DRAG_AND_DROP
-#include "wx/msw/ole/droptgt.h"
+    #include "wx/msw/ole/droptgt.h"
 #endif
 
 #include "wx/menuitem.h"
@@ -82,7 +82,7 @@
 #endif
 
 #ifdef  __WXDEBUG__
-const char *wxGetMessageName(int message);
+    const char *wxGetMessageName(int message);
 #endif  //__WXDEBUG__
 
 #define WINDOW_MARGIN 3 // This defines sensitivity of Leave events
@@ -841,7 +841,6 @@ LRESULT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
         wxWndHook = NULL;
         wnd->m_hWnd = (WXHWND) hWnd;
     }
-    //    wxDebugMsg("hWnd = %d, m_hWnd = %d, msg = %d\n", hWnd, m_hWnd, message);
 
     // Stop right here if we don't have a valid handle
     // in our wxWnd object.
@@ -866,17 +865,16 @@ LRESULT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 
 // Should probably have a test for 'genuine' NT
 #if defined(__WIN32__)
-#define DIMENSION_TYPE short
+    #define DIMENSION_TYPE short
 #else
-#define DIMENSION_TYPE int
+    #define DIMENSION_TYPE int
 #endif
 
 // Main Windows 3 window proc
 long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
     wxASSERT( m_lastMsg == message &&
-        m_lastWParam == wParam &&
-        m_lastLParam == lParam );
+              m_lastWParam == wParam && m_lastLParam == lParam );
 
 #ifdef __WXDEBUG__
     wxLogTrace(wxTraceMessages, "Processing %s(%lx, %lx)",
