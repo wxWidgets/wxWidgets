@@ -58,6 +58,12 @@
 #   Instead set set_x_mrg and set_y_mrg
 # o Changed default X and Y Margin to 0.
 # o Added wxCalendar.SetMargin.
+#
+# 17/03/2004 - Joerg "Adi" Sieker adi@sieker.info
+# o Added keyboard navigation to the control.
+#   Use the cursor keys to navigate through the ages. :)
+#   The Home key function as go to today
+# o select day is now a filled rect instead of just an outline
 
 import wx
 
@@ -117,8 +123,8 @@ def DefaultColors():
     colors[COLOR_FONT] = wx.SystemSettings_GetColour(wx.SYS_COLOUR_WINDOWTEXT)
     colors[COLOR_3D_LIGHT] = wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNHIGHLIGHT)
     colors[COLOR_3D_DARK] = wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNSHADOW)
-    colors[COLOR_HIGHLIGHT_FONT]  =  'PINK'
-    colors[COLOR_HIGHLIGHT_BACKGROUND] = 'RED'
+    colors[COLOR_HIGHLIGHT_FONT]  =  wx.SystemSettings_GetColour(wx.SYS_COLOUR_HIGHLIGHTTEXT)
+    colors[COLOR_HIGHLIGHT_BACKGROUND] = wx.SystemSettings_GetColour(wx.SYS_COLOUR_HIGHLIGHT)
     return colors
 # calendar drawing routing
 
@@ -235,11 +241,22 @@ class CalDraw:
             self.cal_sel[val] = (cfont, cbackgrd)
 
     # draw border around the outside of the main display rectangle
-    def DrawBorder(self, DC):   
-        brush = wx.Brush(MakeColor(self.colors[COLOR_BACKGROUND]), wx.SOLID)
-        DC.SetBrush(brush)
-        DC.SetPen(wx.Pen(MakeColor(self.colors[COLOR_BORDER]), 1))
+    def DrawBorder(self, DC, transparent = False):   
         if self.outer_border is True:
+            if transparent == False:
+                brush = wx.Brush(MakeColor(self.colors[COLOR_BACKGROUND]), wx.SOLID)
+            else:
+                brush = wx.TRANSPARENT_BRUSH
+            DC.SetBrush(brush)
+            DC.SetPen(wx.Pen(MakeColor(self.colors[COLOR_BORDER])))
+            # full display window area
+            rect = wx.Rect(self.cx_st, self.cy_st, self.sizew, self.sizeh)  
+            DC.DrawRectangleRect(rect)
+
+    def DrawFocusIndicator(self, DC):
+        if self.outer_border is True:
+            DC.SetBrush(wx.TRANSPARENT_BRUSH)
+            DC.SetPen(wx.Pen(MakeColor(self.colors[COLOR_HIGHLIGHT_BACKGROUND]), style=wx.DOT))
             # full display window area
             rect = wx.Rect(self.cx_st, self.cy_st, self.sizew, self.sizeh)  
             DC.DrawRectangleRect(rect)
@@ -298,6 +315,8 @@ class CalDraw:
     # get the display rectange list of the day grid
     def GetRect(self):      
         cnt = 0
+        h = 0
+        w = 0
         for y in self.gridy[1:-1]:
             if y == self.gridy[-2]:
                 h = h + self.restH
@@ -447,10 +466,7 @@ class CalDraw:
             DC.DrawText(day, point)
             cnt_x = cnt_x + 1
 
-    # draw the day numbers
-    def DrawNum(self, DC):      
-        f = wx.Font(10, self.font, wx.NORMAL, self.bold)      # initial font setting
-
+    def _CalcFontSize(self, DC, f):
         if self.num_auto == True:
             test_size = self.max_num_size      # max size
             test_day = ' 99 '
@@ -468,13 +484,18 @@ class CalDraw:
             f.SetPointSize(self.num_size)   # set fixed size
             DC.SetFont(f)
 
+    # draw the day numbers
+    def DrawNum(self, DC):      
+        f = wx.Font(10, self.font, wx.NORMAL, self.bold)      # initial font setting
+        self._CalcFontSize(DC, f)
+
         cnt_x = 0
         cnt_y = 1
         for val in self.cal_days:
             x = self.gridx[cnt_x]
             y = self.gridy[cnt_y]
 
-            self.DrawDayText(x, y, val, f, DC)
+            self._DrawDayText(x, y, val, f, DC)
 
             if cnt_x < 6:
                 cnt_x = cnt_x + 1
@@ -482,7 +503,8 @@ class CalDraw:
                 cnt_x = 0
                 cnt_y = cnt_y + 1
 
-    def DrawDayText(self, x, y, text, font, DC):
+    def _DrawDayText(self, x, y, text, font, DC):
+
         try:
             num_val = int(text)
             num_color = self.cal_sel[num_val][0]
@@ -513,24 +535,36 @@ class CalDraw:
         adj_v = adj_v + self.num_indent_vert
 
         DC.DrawText(text, (x+adj_h, y+adj_v))
+        
+    def DrawDayText(self, DC, key):
+        f = wx.Font(10, self.font, wx.NORMAL, self.bold)      # initial font setting
+        self._CalcFontSize(DC, f)
+
+        val = self.cal_days[key]
+        cnt_x = key % 7
+        cnt_y = int(key / 7)+1
+        x = self.gridx[cnt_x]
+        y = self.gridy[cnt_y]
+        self._DrawDayText(x, y, val, f, DC)
+
 
     # calculate the dimensions in the center of the drawing area
     def Center(self):       
         borderW = self.x_mrg * 2
         borderH = self.y_mrg + self.y_end + self.title_offset
 
-        self.cellW = int((self.sizew-borderW)/7)
-        self.cellH = int((self.sizeh-borderH)/7)
+        self.cellW = int((self.sizew - borderW)/7)
+        self.cellH = int((self.sizeh - borderH)/7)
 
         self.restW = ((self.sizew - borderW)%7 ) - 1
 
         # week title adjustment
-        self.weekHdrCellH = int(self.cellH*self.cal_week_scale)
+        self.weekHdrCellH = int(self.cellH * self.cal_week_scale)
         # recalculate the cell height exkl. the week header and
         # subtracting the size
-        self.cellH = int((self.sizeh-borderH-self.weekHdrCellH)/6)
+        self.cellH = int((self.sizeh - borderH - self.weekHdrCellH)/6)
 
-        self.restH = ((self.sizeh-borderH-self.weekHdrCellH)%6 ) - 1
+        self.restH = ((self.sizeh - borderH - self.weekHdrCellH)%6 ) - 1
         self.calW = self.cellW * 7
         self.calH = self.cellH * 6 + self.weekHdrCellH
 
@@ -623,12 +657,14 @@ class PrtCalDraw(CalDraw):
     def SetPreview(self, preview):
         self.preview = preview
 
-class Calendar(wx.Window):
-    def __init__(self, parent, id, pos=wx.DefaultPosition, size=wx.DefaultSize):
-        wx.Window.__init__(self, parent, id, pos, size)
+class Calendar( wx.PyControl ):
+    def __init__(self, parent, id, pos=wx.DefaultPosition, size=wx.Size(200,200),
+                   style= 0, validator=wx.DefaultValidator,
+                   name= "calendar"):
+        wx.PyControl.__init__(self, parent, id, pos, size, style | wx.WANTS_CHARS, validator, name)
 
+        self.hasFocus = False
         # set the calendar control attributes
-        self.cal = None
 
         self.hide_grid = False
         self.hide_title = False
@@ -649,6 +685,9 @@ class Calendar(wx.Window):
         self.Bind(wx.EVT_LEFT_DCLICK, self.OnLeftDEvent)
         self.Bind(wx.EVT_RIGHT_DOWN, self.OnRightEvent)
         self.Bind(wx.EVT_RIGHT_DCLICK, self.OnRightDEvent)
+        self.Bind(wx.EVT_SET_FOCUS, self.OnSetFocus)
+        self.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
+        self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
 
         self.sel_key = None      #  last used by
         self.sel_lst = []        # highlighted selected days
@@ -661,7 +700,10 @@ class Calendar(wx.Window):
 
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Bind(wx.EVT_SIZE, self.OnSize)
-
+        
+    def AcceptsFocus(self):
+        return self.IsShown() and self.IsEnabled()
+    
     def GetColor(self, name):
         return MakeColor(self.colors[name])
 
@@ -702,6 +744,65 @@ class Calendar(wx.Window):
     def OnRightDEvent(self, event):
         self.click = 'DRIGHT'
         self.ProcessClick(event)
+
+    def OnSetFocus(self, event):
+        self.hasFocus = True
+        self.DrawFocusIndicator(True)
+
+    def OnKillFocus(self, event):
+        self.hasFocus = False
+        self.DrawFocusIndicator(False)
+
+    def OnKeyDown(self, event):
+        if not self.hasFocus:
+            event.Skip()
+            return
+        
+        key_code = event.KeyCode()
+        
+        if key_code == wx.WXK_TAB:
+            forward = not event.ShiftDown()
+            ne = wx.NavigationKeyEvent()
+            ne.SetDirection(forward)
+            ne.SetCurrentFocus(self)
+            ne.SetEventObject(self)
+            self.GetParent().GetEventHandler().ProcessEvent(ne)
+            event.Skip()
+            return
+
+        delta = None
+
+        if key_code == wx.WXK_UP:
+            delta = -7 
+        elif key_code == wx.WXK_DOWN:
+            delta = 7 
+        elif key_code == wx.WXK_LEFT:
+            delta = -1 
+        elif key_code == wx.WXK_RIGHT:
+            delta = 1 
+        elif key_code == wx.WXK_HOME:
+            curDate = wx.DateTimeFromDMY(int(self.cal_days[self.sel_key]),self.month - 1,self.year)
+            newDate = wx.DateTime_Now()
+            ts = newDate - curDate
+            delta =  ts.GetDays()
+
+        if delta <> None:
+            curDate = wx.DateTimeFromDMY(int(self.cal_days[self.sel_key]),self.month - 1,self.year)
+            timeSpan = wx.TimeSpan_Days(delta)
+            newDate = curDate + timeSpan
+
+            if curDate.GetMonth() == newDate.GetMonth():
+                self.set_day = newDate.GetDay()
+                key = self.sel_key + delta
+                self.SelectDay(key)
+            else:
+                self.month = newDate.GetMonth() + 1
+                self.year = newDate.GetYear()
+                self.set_day = newDate.GetDay()
+                self.sel_key = None
+                self.DoDrawing(wx.ClientDC(self))
+
+        event.Skip()
 
     def SetSize(self, set_size):
         self.size = set_size
@@ -890,7 +991,36 @@ class Calendar(wx.Window):
         DC.EndDrawing()
 
     # draw the selection rectangle
-    def DrawRect(self, key, fgcolor = 'BLACK', width = 0):
+    def DrawFocusIndicator(self, draw):
+        DC = wx.ClientDC(self)
+        try:
+            if draw == True:
+                self.caldraw.DrawFocusIndicator(DC)
+            else:
+                self.caldraw.DrawBorder(DC,True)
+        except:
+            pass
+
+    def DrawRect(self, key, bgcolor = 'WHITE', fgcolor= 'PINK',width = 0):
+        if key == None:
+            return
+
+        DC = wx.ClientDC(self)
+        DC.BeginDrawing()
+
+        brush = wx.Brush(MakeColor(bgcolor))
+        DC.SetBrush(brush)
+
+        DC.SetPen(wx.TRANSPARENT_PEN)
+
+        rect = self.rg[key]
+        DC.DrawRectangle((rect.x+1, rect.y+1), (rect.width-2, rect.height-2))
+
+        self.caldraw.DrawDayText(DC,key)
+
+        DC.EndDrawing()
+        
+    def DrawRectOrg(self, key, fgcolor = 'BLACK', width = 0):
         if key == None:
             return
 
@@ -913,18 +1043,31 @@ class Calendar(wx.Window):
     # set the day selection
 
     def SetDay(self, day):
-        day = day + self.st_pos - 1
-        self.SelectDay(day)
+        d = day + self.st_pos - 1
+        self.SelectDay(d)
 
+    def IsDayInWeekend(self, key):
+        try:
+            t = Date(self.year, self.month, 1)
+            
+            day = self.cal_days[key]
+            day = int(day) + t.day_of_week
+            
+            if day % 7 == 6 or day % 7 == 0:
+                return True
+        except:
+            return False
+        
     def SelectDay(self, key):
         sel_size = 1
         # clear large selection
-        self.DrawRect(self.sel_key, self.GetColor(COLOR_BACKGROUND), sel_size)
+        
+        if self.sel_key != None:
+            (cfont, bgcolor) = self.__GetColorsForDay(self.sel_key)
+            self.DrawRect(self.sel_key, bgcolor,cfont, sel_size)
 
-        if self.hide_grid is False:
-            self.DrawRect(self.sel_key, self.GetColor(COLOR_GRID_LINES), sel_size)
+        self.DrawRect(key, self.GetColor(COLOR_HIGHLIGHT_BACKGROUND), self.GetColor(COLOR_HIGHLIGHT_FONT), sel_size)
 
-        self.DrawRect(key, self.GetColor(COLOR_HIGHLIGHT_BACKGROUND), sel_size)
         # store last used by
         self.sel_key = key
         self.select_day = None
@@ -935,6 +1078,21 @@ class Calendar(wx.Window):
         self.set_x_mrg = xmarg
         self.set_y_mrg = ymarg
         self.set_y_end = ymarg
+    def __GetColorsForDay(self, key):
+        cfont   = self.GetColor(COLOR_FONT)
+        bgcolor = self.GetColor(COLOR_BACKGROUND)
+
+        if self.IsDayInWeekend(key) is True and self.show_weekend is True:
+            cfont   = self.GetColor(COLOR_WEEKEND_FONT)
+            bgcolor = self.GetColor(COLOR_WEEKEND_BACKGROUND)
+
+        try:
+            dayIdx = int(self.cal_days[key])
+            (cfont, bgcolor) = self.caldraw.cal_sel[dayIdx]
+        except:
+            pass
+
+        return (cfont, bgcolor)
 
 class CalenDlg(wx.Dialog):
     def __init__(self, parent, month=None, day = None, year=None):
