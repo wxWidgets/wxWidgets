@@ -114,8 +114,8 @@
         <if cond="BUILD=='release'">off</if>
     </set>
     <set var="OPTIMIZEFLAG">
-        <if cond="BUILD=='debug'">speed</if>
-        <if cond="BUILD=='release'">off</if>
+        <if cond="BUILD=='debug'">off</if>
+        <if cond="BUILD=='release'">speed</if>
     </set>
     
     <template id="anylib">
