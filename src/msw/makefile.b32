@@ -50,7 +50,8 @@ PERIPH_TARGET=xpm $(PERIPH_TARGET)
 PERIPH_CLEAN_TARGET=clean_xpm $(PERIPH_CLEAN_TARGET)
 !endif
 
-PERIPH_LIBS=$(WXDIR)\lib\zlib.lib $(WXDIR)\lib\winpng.lib $(WXDIR)\lib\jpeg.lib $(PERIPH_LIBS)
+#PERIPH_LIBS=$(WXDIR)\lib\zlib.lib $(WXDIR)\lib\winpng.lib $(WXDIR)\lib\jpeg.lib $(PERIPH_LIBS)
+PERIPH_LIBS=
 PERIPH_TARGET=zlib png jpeg $(PERIPH_TARGET)
 PERIPH_CLEAN_TARGET=clean_zlib clean_png clean_jpeg $(PERIPH_CLEAN_TARGET)
 
@@ -99,6 +100,7 @@ GENERICOBJS= \
 COMMONOBJS = \
   $(MSWDIR)\config.obj \
   $(MSWDIR)\cmndata.obj \
+  $(MSWDIR)\dcbase.obj \
   $(MSWDIR)\docview.obj \
   $(MSWDIR)\docmdi.obj \
   $(MSWDIR)\dynarray.obj \
@@ -489,6 +491,8 @@ $(MSWDIR)\automtn.obj:     $(OLEDIR)\automtn.$(SRCSUFF)
 $(MSWDIR)\config.obj:     $(COMMDIR)\config.$(SRCSUFF)
 
 $(MSWDIR)\cmndata.obj:     $(COMMDIR)\cmndata.$(SRCSUFF)
+
+$(MSWDIR)\dcbase.obj:     $(COMMDIR)\dcbase.$(SRCSUFF)
 
 $(MSWDIR)\docview.obj:     $(COMMDIR)\docview.$(SRCSUFF)
 
