@@ -44,13 +44,13 @@ class WXDLLEXPORT wxWindow;
 
 #if wxUSE_GUI
 
-WXDLLEXPORT_DATA(extern HICON) wxSTD_FRAME_ICON;
-WXDLLEXPORT_DATA(extern HICON) wxSTD_MDIPARENTFRAME_ICON;
-WXDLLEXPORT_DATA(extern HICON) wxSTD_MDICHILDFRAME_ICON;
-WXDLLEXPORT_DATA(extern HICON) wxDEFAULT_FRAME_ICON;
-WXDLLEXPORT_DATA(extern HICON) wxDEFAULT_MDIPARENTFRAME_ICON;
-WXDLLEXPORT_DATA(extern HICON) wxDEFAULT_MDICHILDFRAME_ICON;
-WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
+extern WXDLLEXPORT_DATA(HICON) wxSTD_FRAME_ICON;
+extern WXDLLEXPORT_DATA(HICON) wxSTD_MDIPARENTFRAME_ICON;
+extern WXDLLEXPORT_DATA(HICON) wxSTD_MDICHILDFRAME_ICON;
+extern WXDLLEXPORT_DATA(HICON) wxDEFAULT_FRAME_ICON;
+extern WXDLLEXPORT_DATA(HICON) wxDEFAULT_MDIPARENTFRAME_ICON;
+extern WXDLLEXPORT_DATA(HICON) wxDEFAULT_MDICHILDFRAME_ICON;
+extern WXDLLEXPORT_DATA(HFONT) wxSTATUS_LINE_FONT;
 
 #endif // wxUSE_GUI
 
@@ -502,7 +502,7 @@ private:
 // global data
 // ---------------------------------------------------------------------------
 
-WXDLLIMPEXP_DATA_BASE(extern HINSTANCE) wxhInstance;
+extern WXDLLIMPEXP_DATA_BASE(HINSTANCE) wxhInstance;
 
 // ---------------------------------------------------------------------------
 // global functions
@@ -553,21 +553,21 @@ WXDLLEXPORT void wxSliderEvent(WXHWND control, WXWORD wParam, WXWORD pos);
 WXDLLEXPORT void wxScrollBarEvent(WXHWND hbar, WXWORD wParam, WXWORD pos);
 
 // Find maximum size of window/rectangle
-WXDLLEXPORT extern void wxFindMaxSize(WXHWND hwnd, RECT *rect);
+extern WXDLLEXPORT void wxFindMaxSize(WXHWND hwnd, RECT *rect);
 
 // Safely get the window text (i.e. without using fixed size buffer)
-WXDLLEXPORT extern wxString wxGetWindowText(WXHWND hWnd);
+extern WXDLLEXPORT wxString wxGetWindowText(WXHWND hWnd);
 
 // get the window class name
-WXDLLEXPORT extern wxString wxGetWindowClass(WXHWND hWnd);
+extern WXDLLEXPORT wxString wxGetWindowClass(WXHWND hWnd);
 
 // get the window id (should be unsigned, hence this is not wxWindowID which
 // is, for mainly historical reasons, signed)
-WXDLLEXPORT extern WXWORD wxGetWindowId(WXHWND hWnd);
+extern WXDLLEXPORT WXWORD wxGetWindowId(WXHWND hWnd);
 
 // check if hWnd's WNDPROC is wndProc. Return true if yes, false if they are
 // different
-WXDLLEXPORT extern bool wxCheckWindowWndProc(WXHWND hWnd, WXFARPROC wndProc);
+extern WXDLLEXPORT bool wxCheckWindowWndProc(WXHWND hWnd, WXFARPROC wndProc);
 
 // Does this window style specify any border?
 inline bool wxStyleHasBorder(long style)
@@ -582,17 +582,17 @@ inline bool wxStyleHasBorder(long style)
 
 // this function simply checks whether the given hWnd corresponds to a wxWindow
 // and returns either that window if it does or NULL otherwise
-WXDLLEXPORT extern wxWindow* wxFindWinFromHandle(WXHWND hWnd);
+extern WXDLLEXPORT wxWindow* wxFindWinFromHandle(WXHWND hWnd);
 
 // find the window for HWND which is part of some wxWindow, i.e. unlike
 // wxFindWinFromHandle() above it will also work for "sub controls" of a
 // wxWindow.
 //
 // returns the wxWindow corresponding to the given HWND or NULL.
-WXDLLEXPORT extern wxWindow *wxGetWindowFromHWND(WXHWND hwnd);
+extern WXDLLEXPORT wxWindow *wxGetWindowFromHWND(WXHWND hwnd);
 
 // Get the size of an icon
-WXDLLEXPORT extern wxSize wxGetHiconSize(HICON hicon);
+extern WXDLLEXPORT wxSize wxGetHiconSize(HICON hicon);
 
 // Lines are drawn differently for WinCE and regular WIN32
 WXDLLEXPORT void wxDrawLine(HDC hdc, int x1, int y1, int x2, int y2);

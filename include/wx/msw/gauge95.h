@@ -18,7 +18,7 @@
 
 #if wxUSE_GAUGE
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxGaugeNameStr;
+extern WXDLLEXPORT_DATA(const wxChar*) wxGaugeNameStr;
 
 // Group box
 class WXDLLEXPORT wxGauge95 : public wxGaugeBase

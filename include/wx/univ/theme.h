@@ -52,7 +52,7 @@ public:
     // get the renderer implementing all the control-drawing operations in
     // this theme
     virtual wxRenderer *GetRenderer() = 0;
-    
+
     // get the art provider to be used together with this theme
     virtual wxArtProvider *GetArtProvider() = 0;
 
@@ -105,7 +105,7 @@ struct WXDLLEXPORT wxThemeInfo
 // without it, an over optimizing linker may discard the object module
 // containing the theme implementation entirely
 #define WX_USE_THEME(themename)                                             \
-    WXDLLEXPORT_DATA(extern bool) wxThemeUse##themename;                    \
+    extern WXDLLEXPORT_DATA(bool) wxThemeUse##themename;                    \
     static struct wxThemeUserFor##themename                                 \
     {                                                                       \
         wxThemeUserFor##themename() { wxThemeUse##themename = true; }       \

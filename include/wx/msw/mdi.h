@@ -18,8 +18,8 @@
 
 #include "wx/frame.h"
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxFrameNameStr;
-WXDLLEXPORT_DATA(extern const wxChar*) wxStatusLineNameStr;
+extern WXDLLEXPORT_DATA(const wxChar*) wxFrameNameStr;
+extern WXDLLEXPORT_DATA(const wxChar*) wxStatusLineNameStr;
 
 class WXDLLEXPORT wxMDIClientWindow;
 class WXDLLEXPORT wxMDIChildFrame;
@@ -70,7 +70,7 @@ public:
     wxMenu* GetWindowMenu() const { return m_windowMenu; };
     void SetWindowMenu(wxMenu* menu) ;
     virtual void DoMenuUpdates(wxMenu* menu = NULL);
-    
+
     // MDI operations
     // --------------
     virtual void Cascade();
@@ -174,7 +174,7 @@ public:
     bool ResetWindowStyle(void *vrect);
 
     void OnIdle(wxIdleEvent& event);
-    
+
     virtual bool Show(bool show = true);
 
 protected:

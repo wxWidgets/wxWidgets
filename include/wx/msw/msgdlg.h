@@ -23,7 +23,7 @@
  * Message box dialog
  */
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxMessageBoxCaptionStr;
+extern WXDLLEXPORT_DATA(const wxChar*) wxMessageBoxCaptionStr;
 
 class WXDLLEXPORT wxMessageDialog: public wxDialog
 {

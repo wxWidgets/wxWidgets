@@ -15,7 +15,7 @@
     #pragma interface "univdialog.h"
 #endif
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxDialogNameStr;
+extern WXDLLEXPORT_DATA(const wxChar*) wxDialogNameStr;
 class WXDLLEXPORT wxWindowDisabler;
 class WXDLLEXPORT wxEventLoop;
 
