@@ -167,7 +167,9 @@ void wxDisplaySize(int *OUTPUT, int *OUTPUT);
 void wxEndBusyCursor();
 long wxExecute(const wxString& command, bool sync = FALSE);
 long wxGetElapsedTime(bool resetTimer = TRUE);
+#ifdef __WXMSW__
 long wxGetFreeMemory();
+#endif
 void wxGetMousePosition(int* OUTPUT, int* OUTPUT);
 bool wxIsBusy();
 wxString wxNow();

@@ -6605,6 +6605,33 @@ static PyObject *_wrap_wxMenuBar_GetMenu(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
+#define wxMenuBar_Refresh(_swigobj)  (_swigobj->Refresh())
+static PyObject *_wrap_wxMenuBar_Refresh(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxMenuBar * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxMenuBar_Refresh",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMenuBar_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenuBar_Refresh. Expected _wxMenuBar_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxMenuBar_Refresh(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define new_wxMenuItem() (new wxMenuItem())
 static PyObject *_wrap_new_wxMenuItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -7017,6 +7044,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxMenuItem_IsEnabled", (PyCFunction) _wrap_wxMenuItem_IsEnabled, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_IsSeparator", (PyCFunction) _wrap_wxMenuItem_IsSeparator, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxMenuItem", (PyCFunction) _wrap_new_wxMenuItem, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMenuBar_Refresh", (PyCFunction) _wrap_wxMenuBar_Refresh, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuBar_GetMenu", (PyCFunction) _wrap_wxMenuBar_GetMenu, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuBar_GetMenuCount", (PyCFunction) _wrap_wxMenuBar_GetMenuCount, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuBar_SetLabelTop", (PyCFunction) _wrap_wxMenuBar_SetLabelTop, METH_VARARGS | METH_KEYWORDS },

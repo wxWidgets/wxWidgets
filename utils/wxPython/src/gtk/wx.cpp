@@ -1686,6 +1686,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_uint",0},
     { "_class_wxRealPoint","_wxRealPoint",0},
     { "_wxNavigationKeyEvent","_class_wxNavigationKeyEvent",0},
+    { "_wxPNMHandler","_class_wxPNMHandler",0},
     { "_wxWindowCreateEvent","_class_wxWindowCreateEvent",0},
     { "_class_wxMenuItem","_wxMenuItem",0},
     { "_class_wxPaintEvent","_wxPaintEvent",0},
@@ -1739,6 +1740,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxButton","_wxButton",0},
     { "_wxRadioBox","_class_wxRadioBox",0},
     { "_class_wxFontData","_wxFontData",0},
+    { "_class_wxPNMHandler","_wxPNMHandler",0},
     { "_wxBoxSizer","_class_wxBoxSizer",0},
     { "_class___wxPyCleanup","___wxPyCleanup",0},
     { "_wxBitmap","_class_wxBitmap",0},
@@ -1882,6 +1884,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxImageList","_wxImageList",0},
     { "_class_wxBitmapButton","_wxBitmapButton",0},
     { "_wxFrame","_class_wxFrame",0},
+    { "_wxPCXHandler","_class_wxPCXHandler",0},
     { "_class_wxPaletteChangedEvent","_wxPaletteChangedEvent",0},
     { "_class_wxNotebook","_wxNotebook",0},
     { "_wxJPEGHandler","_class_wxJPEGHandler",0},
@@ -1942,6 +1945,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPreviewFrame","_class_wxPreviewFrame",0},
     { "_wxSizer","_class_wxSizer",0},
     { "_class_wxShowEvent","_wxShowEvent",0},
+    { "_class_wxPCXHandler","_wxPCXHandler",0},
     { "_wxActivateEvent","_class_wxActivateEvent",0},
     { "_wxGauge","_class_wxGauge",0},
     { "_class_wxCheckListBox","_wxCheckListBox",0},
@@ -2070,6 +2074,8 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxTE_READONLY", PyInt_FromLong((long) wxTE_READONLY));
 	 PyDict_SetItemString(d,"wxTE_RICH", PyInt_FromLong((long) wxTE_RICH));
 	 PyDict_SetItemString(d,"wxTE_MULTILINE", PyInt_FromLong((long) wxTE_MULTILINE));
+	 PyDict_SetItemString(d,"wxTE_AUTO_SCROLL", PyInt_FromLong((long) wxTE_AUTO_SCROLL));
+	 PyDict_SetItemString(d,"wxTE_NO_VSCROLL", PyInt_FromLong((long) wxTE_NO_VSCROLL));
 	 PyDict_SetItemString(d,"wxCB_SIMPLE", PyInt_FromLong((long) wxCB_SIMPLE));
 	 PyDict_SetItemString(d,"wxCB_DROPDOWN", PyInt_FromLong((long) wxCB_DROPDOWN));
 	 PyDict_SetItemString(d,"wxCB_SORT", PyInt_FromLong((long) wxCB_SORT));

@@ -707,6 +707,9 @@ class wxMenuBarPtr(wxEvtHandlerPtr):
         val = apply(windowsc.wxMenuBar_GetMenu,(self,) + _args, _kwargs)
         if val: val = wxMenuPtr(val) 
         return val
+    def Refresh(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuBar_Refresh,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxMenuBar instance at %s>" % (self.this,)
 class wxMenuBar(wxMenuBarPtr):
