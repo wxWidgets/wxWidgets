@@ -4876,7 +4876,7 @@ if test "$wxUSE_GUI" = "yes"; then
     export wx_cv_path_samplesubdirs wx_cv_if_gnu_make \
            wx_cv_path_ifs wx_cv_program_ext \
            wx_cv_target_library wx_cv_target_library_gl wx_cv_target_libtype
-    AC_CONFIG_SUBDIRS(demos samples utils contrib)
+    AC_CONFIG_SUBDIRS(demos samples utils contrib mobile)
 fi
 
 dnl create each of the files in the space separated list from the file.in

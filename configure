@@ -20523,7 +20523,7 @@ if test "$wxUSE_GUI" = "yes"; then
             export wx_cv_path_samplesubdirs wx_cv_if_gnu_make \
            wx_cv_path_ifs wx_cv_program_ext \
            wx_cv_target_library wx_cv_target_library_gl wx_cv_target_libtype
-    subdirs="demos samples utils contrib"
+    subdirs="demos samples utils contrib mobile"
 
 fi
 
@@ -21054,7 +21054,7 @@ if test "$no_recursion" != yes; then
     esac
   done
 
-  for ac_config_dir in demos samples utils contrib; do
+  for ac_config_dir in demos samples utils contrib mobile; do
 
     # Do not complain, so a configure script can configure whichever
     # parts of a large source tree are present.
