@@ -29,13 +29,13 @@
 
 //--------------------------------------------------------------------------------
 // wxHtmlWindow
-//                  (This is probably the only class you will directly use.) 
+//                  (This is probably the only class you will directly use.)
 //                  Purpose of this class is to display HTML page (either local
 //                  file or downloaded via HTTP protocol) in a window. Width
 //                  of window is constant - given in constructor - virtual height
 //                  is changed dynamicly depending on page size.
 //                  Once the window is created you can set it's content by calling
-//                  SetPage(text) or LoadPage(filename). 
+//                  SetPage(text) or LoadPage(filename).
 //--------------------------------------------------------------------------------
 
 
@@ -118,7 +118,7 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
 
     public:
         wxHtmlWindow() : wxScrolledWindow() {};
-        wxHtmlWindow(wxWindow *parent, wxWindowID id = -1, 
+        wxHtmlWindow(wxWindow *parent, wxWindowID id = -1,
                      const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
 		     long style = wxHW_SCROLLBAR_AUTO,
                      const wxString& name = "htmlWindow");
@@ -126,10 +126,10 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
 
         bool SetPage(const wxString& source);
                 // Set HTML page and display it. !! source is HTML document itself,
-                // it is NOT address/filename of HTML document. If you want to 
+                // it is NOT address/filename of HTML document. If you want to
                 // specify document location, use LoadPage() istead
                 // Return value : FALSE if an error occured, TRUE otherwise
-                
+
         bool LoadPage(const wxString& location);
                 // Load HTML page from given location. Location can be either
                 // a) /usr/wxGTK2/docs/html/wx.htm
@@ -143,10 +143,10 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
 
         wxString GetOpenedPage() const {return m_OpenedPage;}
                 // Returns full location of opened page
-        
+
         void SetRelatedFrame(wxFrame* frame, const wxString& format);
                 // sets frame in which page title will  be displayed. Format is format of
-                // frame title, e.g. "HtmlHelp : %s". It must contain exactly one %s 
+                // frame title, e.g. "HtmlHelp : %s". It must contain exactly one %s
         wxFrame* GetRelatedFrame() const {return m_RelatedFrame;}
 
         void SetRelatedStatusBar(int bar);
@@ -188,9 +188,12 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
         virtual void OnLinkClicked(const wxString& link);
                 // called when users clicked on hypertext link. Default behavior is to
                 // call LoadPage(loc)
-		
+
 	static void CleanUpStatics();
 	        // cleans static variables
+
+        wxHtmlWinParser *GetParser() const { return m_Parser; }
+                // return a pointer to the parser.
 
     protected:
         bool ScrollToAnchor(const wxString& anchor);
@@ -208,7 +211,7 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
         void OnMouseEvent(wxMouseEvent& event);
         void OnIdle(wxIdleEvent& event);
         void OnKeyDown(wxKeyEvent& event);
-	
+
 	virtual wxHtmlFilter *GetDefaultFilter() {return new wxHtmlFilterPlainText;}
 	        // returns new filter (will be stored into m_DefaultFilter variable)
 
