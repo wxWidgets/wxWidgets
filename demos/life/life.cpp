@@ -174,12 +174,12 @@ LifeFrame::LifeFrame() : wxFrame((wxFrame *)0, -1, _("Life!"), wxPoint(50, 50))
     wxToolBar *toolBar = CreateToolBar();
     toolBar->SetMargins(5, 5);
     toolBar->SetToolBitmapSize(wxSize(16, 16));
-    ADD_TOOL(ID_RESET,   tbBitmaps[0], _("Reset"), _("Start a new game"));
-    ADD_TOOL(ID_START,   tbBitmaps[1], _("Start"), _("Start"));
-    ADD_TOOL(ID_STOP,    tbBitmaps[2], _("Stop"),  _("Stop"));
+    ADD_TOOL(ID_RESET, tbBitmaps[0], _("Reset"), _("Start a new game"));
+    ADD_TOOL(ID_START, tbBitmaps[1], _("Start"), _("Start"));
+    ADD_TOOL(ID_STOP, tbBitmaps[2], _("Stop"), _("Stop"));
     toolBar->AddSeparator();
-    ADD_TOOL(ID_ZOOMIN,  tbBitmaps[3], _("Zoom in"),  _("Zoom in"));
-    ADD_TOOL(ID_ZOOMOUT, tbBitmaps[4], _("Zoom out"),  _("Zoom out"));
+    ADD_TOOL(ID_ZOOMIN, tbBitmaps[3], _("Zoom in"), _("Zoom in"));
+    ADD_TOOL(ID_ZOOMOUT, tbBitmaps[4], _("Zoom out"), _("Zoom out"));
     toolBar->Realize();
     toolBar->EnableTool(ID_STOP, FALSE);    // must be after Realize() !
 
@@ -209,10 +209,10 @@ LifeFrame::LifeFrame() : wxFrame((wxFrame *)0, -1, _("Life!"), wxPoint(50, 50))
     // component layout
     wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
     sizer->Add(new wxStaticLine(panel, -1), 0, wxGROW | wxCENTRE);
-    sizer->Add(m_canvas, 1, wxGROW | wxCENTRE | wxALL, 5);
+    sizer->Add(m_canvas, 1, wxGROW | wxCENTRE | wxALL, 2);
     sizer->Add(new wxStaticLine(panel, -1), 0, wxGROW | wxCENTRE);
-    sizer->Add(m_text, 0, wxCENTRE | wxTOP, 5);
-    sizer->Add(slider, 0, wxCENTRE | wxALL, 5);
+    sizer->Add(m_text, 0, wxCENTRE | wxTOP, 4);
+    sizer->Add(slider, 0, wxCENTRE | wxALL, 4);
     panel->SetSizer(sizer);
     panel->SetAutoLayout(TRUE);
     sizer->Fit(this);
@@ -748,10 +748,9 @@ void LifeCanvas::OnScroll(wxScrollWinEvent& event)
     WXTYPE type = event.GetEventType();
     int pos     = event.GetPosition();
     int orient  = event.GetOrientation();
-    bool scrolling = event.IsScrolling();
-    int  scrollinc = 0;
 
     // calculate scroll increment
+    int scrollinc = 0;
     switch (type)
     {
         case wxEVT_SCROLLWIN_TOP:
@@ -776,33 +775,28 @@ void LifeCanvas::OnScroll(wxScrollWinEvent& event)
         case wxEVT_SCROLLWIN_PAGEDOWN: scrollinc = +10; break;
         case wxEVT_SCROLLWIN_THUMBTRACK:
         {
-            if (scrolling)
+            if (orient == wxHORIZONTAL)
             {
-                // user is dragging the thumb in the scrollbar
-                if (orient == wxHORIZONTAL)
-                {
-                    scrollinc = pos - m_thumbX;
-                    m_thumbX = pos;
-                }
-                else
-                {
-                    scrollinc = pos - m_thumbY;
-                    m_thumbY = pos;
-                }
+                scrollinc = pos - m_thumbX;
+                m_thumbX = pos;
             }
             else
             {
-                // user released the thumb after dragging
-                m_thumbX = m_viewportW;
-                m_thumbY = m_viewportH;
+                scrollinc = pos - m_thumbY;
+                m_thumbY = pos;
             }
             break;
+        }
+        case wxEVT_SCROLLWIN_THUMBRELEASE:
+        {
+            m_thumbX = m_viewportW;
+            m_thumbY = m_viewportH;
         }
     }
 
 #ifdef __WXGTK__ // what about Motif?
     // wxGTK updates the thumb automatically (wxMSW doesn't); reset it back
-    if ((type != wxEVT_SCROLLWIN_THUMBTRACK) || !scrolling)
+    if (type != wxEVT_SCROLLWIN_THUMBTRACK)
     {
         SetScrollbar(wxHORIZONTAL, m_viewportW, m_viewportW, 3 * m_viewportW);
         SetScrollbar(wxVERTICAL,   m_viewportH, m_viewportH, 3 * m_viewportH);

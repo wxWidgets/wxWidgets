@@ -24,7 +24,7 @@
 #include <string.h>           // for memset
 
 
-#define ARRAYSIZE  1024      // size of the static arrays for BeginFind & co.
+#define ARRAYSIZE  8192       // size of the static array for BeginFind & co.
 #define ALLOCBOXES 16         // number of cellboxes to alloc at once
 
 // ==========================================================================
@@ -206,7 +206,7 @@ void Life::SetShape(const LifeShape& shape)
 // --------------------------------------------------------------------------
 
 // CreateBox:
-//  Creates a new box in x, y, either taking it from the list
+//  Creates a box in x, y, either taking it from the list
 //  of available boxes, or allocating a new one.
 //
 CellBox* Life::CreateBox(wxInt32 x, wxInt32 y, wxUint32 hv)
@@ -439,6 +439,7 @@ bool Life::FindMore(Cell *cells[], size_t *ncells)
 // Evolution engine
 // --------------------------------------------------------------------------
 
+extern unsigned char *g_tab;
 extern int g_tab1[];
 extern int g_tab2[];
 
@@ -448,7 +449,7 @@ extern int g_tab2[];
 bool Life::NextTic()
 {
     CellBox  *c, *up, *dn, *lf, *rt;
-    wxUint32 t1, t2, t3, t4;
+    wxUint32 t1, t2, t3;
     bool     changed = FALSE;
 
     m_numcells = 0;
@@ -699,64 +700,41 @@ bool Life::NextTic()
         t1 = c->m_live1;
         c->m_old1 = t1;
         t2 = 0;
-        int i;
-        for (i = 0; i <= 3; i++)
-        {
-            t3 = c->m_on[i];
-            if (!t3)
-            {
-                t1 >>= 8;
-                t2 >>= 8;
-                continue;
-            }
 
-            for (int j = 0; j < 8; j++)
-            {
-                t2 >>= 1;
-                t4 = t3 & 0x0000000f;
+        t3 = c->m_on[0];
+        t2 |= g_tab[ ((t3 & 0x0000ffff) << 4 ) + ((t1      ) & 0xf) ];
+        t2 |= g_tab[ ((t3 & 0xffff0000) >> 12) + ((t1 >> 4 ) & 0xf) ] << 4;
+        t3 = c->m_on[1];
+        t2 |= g_tab[ ((t3 & 0x0000ffff) << 4 ) + ((t1 >> 8 ) & 0xf) ] << 8;
+        t2 |= g_tab[ ((t3 & 0xffff0000) >> 12) + ((t1 >> 12) & 0xf) ] << 12;
+        t3 = c->m_on[2];
+        t2 |= g_tab[ ((t3 & 0x0000ffff) << 4 ) + ((t1 >> 16) & 0xf) ] << 16;
+        t2 |= g_tab[ ((t3 & 0xffff0000) >> 12) + ((t1 >> 20) & 0xf) ] << 20;
+        t3 = c->m_on[3];
+        t2 |= g_tab[ ((t3 & 0x0000ffff) << 4 ) + ((t1 >> 24) & 0xf) ] << 24;
+        t2 |= g_tab[ ((t3 & 0xffff0000) >> 12) + ((t1 >> 28) & 0xf) ] << 28;
 
-                if ((t4 == 3) || ((t4 == 2) && (t1 & 0x00000001)))
-                {
-                    t2 |= 0x80000000;
-                    m_numcells++;
-                }
-
-                t3 >>= 4;
-                t1 >>= 1;
-            }
-            c->m_on[i] = 0;
-        }
+        c->m_on[0] = c->m_on[1] = c->m_on[2] = c->m_on[3] = 0;
         c->m_live1 = t2;
 
         t1 = c->m_live2;
         c->m_old2 = t1;
         t2 = 0;
-        for (i = 4; i <= 7; i++)
-        {
-            t3 = c->m_on[i];
-            if (!t3)
-            {
-                t1 >>= 8;
-                t2 >>= 8;
-                continue;
-            }
 
-            for (int j = 0; j < 8; j++)
-            {
-                t2 >>= 1;
-                t4 = t3 & 0x0000000f;
+        t3 = c->m_on[4];
+        t2 |= g_tab[ ((t3 & 0x0000ffff) << 4 ) + ((t1      ) & 0xf) ];
+        t2 |= g_tab[ ((t3 & 0xffff0000) >> 12) + ((t1 >> 4 ) & 0xf) ] << 4;
+        t3 = c->m_on[5];
+        t2 |= g_tab[ ((t3 & 0x0000ffff) << 4 ) + ((t1 >> 8 ) & 0xf) ] << 8;
+        t2 |= g_tab[ ((t3 & 0xffff0000) >> 12) + ((t1 >> 12) & 0xf) ] << 12;
+        t3 = c->m_on[6];
+        t2 |= g_tab[ ((t3 & 0x0000ffff) << 4 ) + ((t1 >> 16) & 0xf) ] << 16;
+        t2 |= g_tab[ ((t3 & 0xffff0000) >> 12) + ((t1 >> 20) & 0xf) ] << 20;
+        t3 = c->m_on[7];
+        t2 |= g_tab[ ((t3 & 0x0000ffff) << 4 ) + ((t1 >> 24) & 0xf) ] << 24;
+        t2 |= g_tab[ ((t3 & 0xffff0000) >> 12) + ((t1 >> 28) & 0xf) ] << 28;
 
-                if ((t4 == 3) || ((t4 == 2) && (t1 & 0x00000001)))
-                {
-                    t2 |= 0x80000000;
-                    m_numcells++;
-                }
-
-                t3 >>= 4;
-                t1 >>= 1;
-            }
-            c->m_on[i] = 0;
-        }
+        c->m_on[4] = c->m_on[5] = c->m_on[6] = c->m_on[7] = 0;
         c->m_live2 = t2;
 
         // keep track of changes
@@ -781,9 +759,67 @@ bool Life::NextTic()
     return changed;
 }
 
-// --------------------------------------------------------------------------
-// Lookup tables - these will be generated on-the-fly soon.
-// --------------------------------------------------------------------------
+// ==========================================================================
+// LifeModule
+// ==========================================================================
+
+// A module to pregenerate lookup tables without having to do it
+// from the application.
+
+class LifeModule: public wxModule
+{
+DECLARE_DYNAMIC_CLASS(LifeModule)
+
+public:
+    LifeModule() {};
+    bool OnInit();
+    void OnExit();
+};
+
+IMPLEMENT_DYNAMIC_CLASS(LifeModule, wxModule)
+
+bool LifeModule::OnInit()
+{
+    // see below
+    g_tab = new unsigned char [0xfffff];
+
+    if (!g_tab) return FALSE;
+
+    for (wxUint32 i = 0; i < 0xfffff; i++)
+    {
+        wxUint32 val  = i >> 4;
+        wxUint32 old  = i & 0x0000f;
+        wxUint32 live = 0;
+
+        for (int j = 0; j < 4; j++)
+        {
+            live >>= 1;
+
+            if (((val & 0xf) == 3) || (((val & 0xf) == 2) && (old & 0x1)))
+                live |= 0x8;
+
+            old >>= 1;
+            val >>= 4;
+        }
+
+        g_tab[i] = (unsigned char) live;
+    }
+
+    return TRUE;
+}
+
+void LifeModule::OnExit()
+{
+    delete [] g_tab;
+}
+
+
+// This table converts from number of neighbors (like in on[]) to
+// bits, for a set of four cells. It takes as index a five-digit
+// hexadecimal value (0xNNNNB) where Ns hold number of neighbors
+// for each cell and B holds their previous state.
+//
+unsigned char *g_tab;
 
 // This table converts from bits (like in live1, live2) to number
 // of neighbors for each cell in the upper or lower row.
@@ -941,7 +977,7 @@ int g_tab1[]=
     0x11112110,
     0x11112121,
     0x11112221,
-    0x11112232,
+    0x11112232,                        
     0x11122100,
     0x11122111,
     0x11122211,
