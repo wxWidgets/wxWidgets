@@ -633,7 +633,8 @@ ODBCLIB_OBJECTS =  \
 	$(OBJS)\odbclib_db.obj \
 	$(OBJS)\odbclib_dbtable.obj
 WXEXPAT_CFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) \
-	-tWM -I$(LIBDIRNAME) -DCOMPILED_FROM_DSP $(CFLAGS)
+	-tWM -I$(LIBDIRNAME) -DCOMPILED_FROM_DSP $(CFLAGS) -w-8004 -w-8008 -w-8057 \
+	-w-8066
 WXEXPAT_OBJECTS =  \
 	$(OBJS)\wxexpat_xmlparse.obj \
 	$(OBJS)\wxexpat_xmlrole.obj \
