@@ -105,7 +105,7 @@
 // string functions
 // ----------------------------------------------------------------------------
 
-#if defined(__WXMAC__) && !defined(__DARWIN)
+#if defined(__WXMAC__) && !defined(__DARWIN__)
 int strcasecmp(const char *str_1, const char *str_2)
 {
   register char c1, c2;
