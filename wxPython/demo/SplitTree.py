@@ -9,12 +9,14 @@ class TestTree(wxRemotelyScrolledTreeCtrl):
     def __init__(self, parent, ID, pos=wxDefaultPosition, size=wxDefaultSize,
                  style=wxTR_HAS_BUTTONS):
         wxRemotelyScrolledTreeCtrl.__init__(self, parent, ID, pos, size, style)
-        self.SetBackgroundColour("LIGHT BLUE")
+        ##self.SetBackgroundColour("LIGHT BLUE")
 
         # make an image list
-        self.il = wxImageList(16, 16)
-        im1 = self.il.AddIcon(wxIconFromXPMData(images.getFolder1Data()))
-        im2 = self.il.AddIcon(wxIconFromXPMData(images.getFile1Data()))
+        im1 = im2 = -1
+        ##self.il = wxImageList(16, 16)
+        ##im1 = self.il.Add(images.getFolder1Bitmap())
+        ##im2 = self.il.Add(images.getFile1Bitmap())
+        ##self.SetImageList(self.il)
 
         # Add some items
         root = self.AddRoot("Root")
