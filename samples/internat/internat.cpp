@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        internat.cpp
-// Purpose:     Demonstrates internationalisation support
+// Purpose:     Demonstrates internationalisation (i18n) support
 // Author:      Vadim Zeitlin/Julian Smart
 // Modified by:
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -26,54 +26,65 @@
 #endif
 
 #include "wx/intl.h"
+#include "wx/file.h"
 #include "wx/log.h"
 
 // Define a new application type
 class MyApp: public wxApp
 {
 public:
-    MyApp();
-    bool OnInit(void);
+  MyApp();
+
+  virtual bool OnInit();
+
 protected:
-	wxLocale		m_locale;			  // locale we'll be using
+  wxLocale m_locale; // locale we'll be using
 };
 
 // Define a new frame type
 class MyFrame: public wxFrame
-{ public:
-    MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h);
-    
- public:
-    void OnQuit(wxCommandEvent& event);
-    void OnAbout(wxCommandEvent& event);
-	bool OnClose(void) { return TRUE; }
+{ 
+public:
+  MyFrame(wxFrame *frame, const char *title, int x, int y, int w, int h);
 
-   DECLARE_EVENT_TABLE()
-    
+public:
+  void OnQuit(wxCommandEvent& event);
+  void OnAbout(wxCommandEvent& event);
+  void OnPlay(wxCommandEvent& event);
+  void OnOpen(wxCommandEvent& event);
+  bool OnClose(void) { return TRUE; }
+  
+  DECLARE_EVENT_TABLE()
 };
 
 // ID for the menu commands
-#define MINIMAL_QUIT 	1
-#define MINIMAL_TEXT 	101
-#define MINIMAL_ABOUT 	102
+enum
+{
+  MINIMAL_QUIT,
+  MINIMAL_TEXT,
+  MINIMAL_ABOUT,
+  MINIMAL_TEST,
+  MINIMAL_OPEN
+};
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-	EVT_MENU(MINIMAL_QUIT, MyFrame::OnQuit)
-	EVT_MENU(MINIMAL_ABOUT, MyFrame::OnAbout)
+  EVT_MENU(MINIMAL_QUIT, MyFrame::OnQuit)
+  EVT_MENU(MINIMAL_ABOUT, MyFrame::OnAbout)
+  EVT_MENU(MINIMAL_TEST, MyFrame::OnPlay)
+  EVT_MENU(MINIMAL_OPEN, MyFrame::OnOpen)
 END_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
 
 
-MyApp::MyApp():
-  m_locale("french", "fr", "C")
+MyApp::MyApp() : m_locale("french", "fr", "C")
 {
   // catalogs we'll be using:
   /* not needed any more, done in wxLocale ctor
   m_locale.AddCatalog("wxstd");      // 1) for library messages
   */
   m_locale.AddCatalog("internat");      // 2) our private one
-  /* this catalog is installed in standard location on Liux systems,
+  /* this catalog is installed in standard location on Linux systems,
      it might not be installed on yours - just ignore the errrors
      or comment out this line then */
   m_locale.AddCatalog("fileutils");  // 3) and another just for testing
@@ -84,7 +95,7 @@ MyApp::MyApp():
 bool MyApp::OnInit(void)
 {
   // Create the main frame window
-  MyFrame *frame = new MyFrame(NULL, "Minimal wxWindows App", 50, 50, 450, 340);
+  MyFrame *frame = new MyFrame(NULL, _("Minimal wxWindows App"), 50, 50, 150, 40);
 
   // Give it an icon
 #ifdef __WXMSW__
@@ -96,44 +107,31 @@ bool MyApp::OnInit(void)
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
+  file_menu->Append(MINIMAL_ABOUT, _("&About"));
+  file_menu->AppendSeparator();
+  file_menu->Append(MINIMAL_QUIT, _("E&xit"));
 
-  file_menu->Append(MINIMAL_ABOUT, "&About");
-  file_menu->Append(MINIMAL_QUIT, "E&xit");
+  wxMenu *test_menu = new wxMenu;
+  test_menu->Append(MINIMAL_OPEN, _("&Open bogus file"));
+  test_menu->Append(MINIMAL_TEST, _("&Play a game"));
+
   wxMenuBar *menu_bar = new wxMenuBar;
-  menu_bar->Append(file_menu, "&File");
+  menu_bar->Append(file_menu, _("&File"));
+  menu_bar->Append(test_menu, _("&Test"));
   frame->SetMenuBar(menu_bar);
-
-  // Make a panel with a message
-  wxPanel *panel = new wxPanel(frame, -1, wxPoint(0, 0), wxSize(400, 200), wxTAB_TRAVERSAL);
-
-  wxString msgString;
-  int num = 2;
-  if ( num == 0 )
-    msgString = wxTString("you've probably entered an invalid number.");
-  else if ( num == 9 ) // this message is not translated
-    msgString = wxTString("You've found a bug in this program!");
-  else if ( num != 17 )
-    msgString = wxTString("bad luck! try again...");
-  else {
-    msgString = wxTString("congratulations! you've won. Here is the magic phrase:");
-  }
-
-  wxStaticText *msg = new wxStaticText(panel, 311, msgString, wxPoint(10, 10), wxSize(-1, -1),
-    0);
 
   // Show the frame
   frame->Show(TRUE);
-  
-
   SetTopWindow(frame);
 
   return TRUE;
 }
 
 // My frame constructor
-MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h):
-  wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
-{}
+MyFrame::MyFrame(wxFrame *frame, const char *title, int x, int y, int w, int h)
+       : wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
+{
+}
 
 void MyFrame::OnQuit(wxCommandEvent& event)
 {
@@ -142,10 +140,36 @@ void MyFrame::OnQuit(wxCommandEvent& event)
 
 void MyFrame::OnAbout(wxCommandEvent& event)
 {
-  wxMessageDialog dialog(this, "This is a minimal sample\nA second line in the message box",
-  	"About Minimal", wxYES_NO|wxCANCEL);
-
-  dialog.ShowModal();
+  wxMessageDialog(this, _("I18n sample\n© Vadim Zeitlin & Julian Smart"),
+                  _("About Internat"), wxOK | wxICON_INFORMATION).ShowModal();
 }
 
+void MyFrame::OnPlay(wxCommandEvent& event)
+{
+  wxString str = wxGetTextFromUser(_("Enter your number:"),
+                                   _("Try to guess my number!"),
+                                  "", this);
+  int num;
+  sscanf(str, "%d", &num);
+  if ( num == 0 )
+    str = _("you've probably entered an invalid number.");
+  else if ( num == 9 )  // this message is not translated (not in catalog)
+    str = _("you've found a bug in this program!");
+  else if ( num != 17 ) // a more implicit way to write _()
+    str = wxGetTranslation("bad luck! try again...");
+  else {
+    str.Empty();
+    // string must be split in two -- otherwise the translation won't be found
+    str << _("congratulations! you've won. Here is the magic phrase:")
+        << _("cannot create fifo `%s'");
+  }
 
+  wxMessageBox(str, _("Result"), wxOK | wxICON_INFORMATION);
+}
+
+void MyFrame::OnOpen(wxCommandEvent&)
+{
+  // open a bogus file -- the error message should be also translated if you've
+  // got wxstd.mo somewhere in the search path
+  wxFile file("NOTEXIST.ING");
+}
