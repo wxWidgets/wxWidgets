@@ -896,7 +896,7 @@ void wxGnomePrintDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord 
             double bluePS = (double)(blue) / 255.0;
             double greenPS = (double)(green) / 255.0;
 
-            gnome_print_setrgbcolor( m_gpc, redPS, bluePS, greenPS );
+            gnome_print_setrgbcolor( m_gpc, redPS, greenPS, bluePS );
 
             m_currentRed = red;
             m_currentBlue = blue;
@@ -1041,7 +1041,7 @@ void wxGnomePrintDC::SetPen( const wxPen& pen )
         double bluePS = (double)(blue) / 255.0;
         double greenPS = (double)(green) / 255.0;
 
-        gnome_print_setrgbcolor( m_gpc, redPS, bluePS, greenPS );
+        gnome_print_setrgbcolor( m_gpc, redPS, greenPS, bluePS );
 
         m_currentRed = red;
         m_currentBlue = blue;
@@ -1080,7 +1080,7 @@ void wxGnomePrintDC::SetBrush( const wxBrush& brush )
         double bluePS = (double)(blue) / 255.0;
         double greenPS = (double)(green) / 255.0;
 
-        gnome_print_setrgbcolor( m_gpc, redPS, bluePS, greenPS );
+        gnome_print_setrgbcolor( m_gpc, redPS, greenPS, bluePS );
 
         m_currentRed = red;
         m_currentBlue = blue;
