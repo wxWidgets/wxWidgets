@@ -237,7 +237,7 @@ void wxWindowMac::SetFocus()
             wxControl* control = wxDynamicCast( gFocusWindow , wxControl ) ;
             if ( control && control->GetMacControl() )
             {
-                UMASetKeyboardFocus( (WindowRef) gFocusWindow->MacGetRootWindow() , (ControlHandle) control->GetMacControl()  , kControlEditTextPart ) ;
+                UMASetKeyboardFocus( (WindowRef) gFocusWindow->MacGetRootWindow() , (ControlHandle) control->GetMacControl()  , kControlFocusNextPart ) ;
             }
       #endif
             wxFocusEvent event(wxEVT_SET_FOCUS, m_windowId);
