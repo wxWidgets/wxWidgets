@@ -31,7 +31,7 @@ struct kbListNode
    struct kbListNode *next;
    /// pointer to previous node or NULL
    struct kbListNode *prev;
-   /// pointer to the actual data 
+   /// pointer to the actual data
    void *element;
    /** Constructor - it automatically links the node into the list, if
        the iprev, inext parameters are given.
@@ -40,8 +40,8 @@ struct kbListNode
        @param inext if not NULL, use this as next element in list
    */
    kbListNode( void *ielement,
-               kbListNode *iprev = (kbListNode *) NULL,
-               kbListNode *inext = (kbListNode *) NULL);
+               kbListNode *iprev = NULL,
+               kbListNode *inext = NULL);
    /// Destructor.
    ~kbListNode();
 };
@@ -63,13 +63,19 @@ public:
       /** Constructor.
           @param n if not NULL, the node to which to point
       */
-      iterator(kbListNode *n = (kbListNode *) NULL);
+      iterator(kbListNode *n = NULL);
       /** Dereference operator.
           @return the data pointer of the node belonging to this
           iterator
       */
       void * operator*();
 
+      /** This operator allows us to write if(i). It is <em>not</em> a 
+          dereference operator and the result is always useless apart
+          from its logical value!
+      */
+      operator void*() const { return node == NULL ? (void*)0 : (void*)(-1); }
+      
       /** Increment operator - prefix, goes to next node in list.
           @return itself
       */
@@ -93,12 +99,12 @@ public:
       /** Comparison operator.
           @return true if not equal.
       */
-      bool operator !=(iterator const &) const; 
+      bool operator !=(iterator const &) const;
 
       /* Comparison operator.
          @return true if equal
       */
-      bool operator ==(iterator const &) const; 
+      bool operator ==(iterator const &) const;
 
       /** Returns a pointer to the node associated with this iterator.
           This function is not for general use and should be
@@ -135,7 +141,7 @@ public:
    */
    bool ownsObjects(void)
       { return ownsEntries; }
-   
+
    /** Add an entry at the end of the list.
        @param element pointer to data
    */
@@ -161,18 +167,22 @@ public:
    void *pop_front(void);
 
    /** Insert an element into the list.
-       @param i an iterator pointing to the element, before which the
-       new one should be inserted. After the insert operation i will
-       point to the newly inserted element.
+       @param i an iterator pointing to the element, before which the new one should be inserted
        @param element the element data
    */
    void insert(iterator & i, void *element);
 
+   /** Remove an element from the list _without_ deleting the object.
+       @param  i iterator pointing to the element to be deleted
+       @return the value of the element just removed
+   */
+   void *remove(iterator& i) { void *p = *i; doErase(i); return p; }
+
    /** Erase an element, move iterator to following element.
        @param i iterator pointing to the element to be deleted
    */
-   void erase(iterator & i);
-   
+   void erase(iterator & i) { deleteContent(i); doErase(i); }
+
    /* Get head of list.
       @return iterator pointing to head of list
    */
@@ -200,7 +210,7 @@ public:
    /* Query whether list is empty.
       @return true if list is empty
    */
-   bool empty(void) const
+   inline bool empty(void) const
       { return first == NULL ; }
 
 protected:
@@ -210,6 +220,18 @@ protected:
    kbListNode *first;
    /// pointer to last element in list
    kbListNode *last;
+protected:
+   /** Erase an element, move iterator to following element.
+       @param i iterator pointing to the element to be deleted
+   */
+   void doErase(iterator & i);
+
+   /** Deletes the actual content if ownsflag is set.
+       param iterator i
+   */
+   inline void deleteContent(iterator i)
+      { if(ownsEntries) delete *i; }
+
 
 private:
    /// forbid copy construction
@@ -240,20 +262,14 @@ public: \
          { node = i.Node(); } \
       friend class name; \
    public: \
-      inline iterator(kbListNode *n = (kbListNode *) NULL) \
+      inline iterator(kbListNode *n = NULL) \
          : kbList::iterator(n) {} \
       inline type * operator*() \
          /* the cast is needed for MS VC++ 5.0 */ \
          { return (type *)((kbList::iterator *)this)->operator*() ; } \
    }; \
-   inline name(bool ownsEntriesFlag = FALSE) \
+   inline name(bool ownsEntriesFlag = TRUE) \
       : kbList(ownsEntriesFlag) {} \
-   \
-   inline void push_back(type *element) \
-      { kbList::push_back((void *)element); } \
-   \
-   inline void push_front(type *element) \
-      { kbList::push_front((void *)element); } \
    \
    inline type *pop_back(void) \
       { return (type *) kbList::pop_back(); } \
@@ -261,11 +277,10 @@ public: \
    inline type *pop_front(void) \
       { return (type *) kbList::pop_front(); } \
    \
-   inline void insert(iterator & i, type *element) \
-      { kbList::insert(i, (void *) element); } \
-   \
+   type *remove(iterator& i) \
+      { return (type *)kbList::remove(i); } \
    inline void erase(iterator & i) \
-      { kbList::erase(i); } \
+      { deleteContent(i); kbList::erase(i); } \
    \
    inline iterator begin(void) const \
       { return kbList::begin(); } \
@@ -278,19 +293,19 @@ public: \
    ~name() \
    { \
       kbListNode *next; \
-      while ( first != (kbListNode *) NULL ) \
+      while ( first != NULL ) \
       { \
          next = first->next; \
          if(ownsEntries) \
-            delete typecast(first->element); \
+            delete (type *)first->element; \
          delete first; \
          first = next; \
       } \
    } \
-   private: \
-   inline type * typecast(void *ptr) \
-      { return (type *) ptr; } \
-   }
+protected: \
+   inline void deleteContent(iterator i) \
+      { if(ownsEntries) delete *i; } \
+}
 
 #ifdef   MCONFIG_H
 /// define the most commonly used list type once:

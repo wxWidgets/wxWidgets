@@ -6,9 +6,22 @@
  * $Id$          *
  *                                                                  *
  * $Log$
- * Revision 1.2  1998/08/12 08:33:23  KB
- * Cursor and insert/delete work much better now, code streamlined, still
- * a minor problem left.
+ * Revision 1.3  1998/11/19 20:34:50  KB
+ * fixes
+ *
+ * Revision 1.8  1998/09/23 08:57:27  KB
+ * changed deletion behaviour
+ *
+ * Revision 1.7  1998/08/16 21:21:29  VZ
+ *
+ * 1) fixed config file bug: it was never created (attempt to create ~/.M/config
+ *    always failed, must mkdir("~/.M") first)
+ * 2) "redesign" of "Folder properties" dialog and bug corrected, small change to
+ *    MInputBox (it was too wide)
+ * 3) bug in ProvFC when it didn't reckognize the books as being in the correct
+ *    format (=> messages "can't reopen book") corrected
+ * 4) I tried to enhance MDialog_About(), but it didn't really work... oh well,
+ *    I've never said I was an artist
  *
  * Revision 1.6  1998/07/08 11:56:56  KB
  * M compiles and runs on Solaris 2.5/gcc 2.8/c-client gso
@@ -40,11 +53,8 @@
 #   pragma implementation "kbList.h"
 #endif
 
-#ifdef   M_BASEDIR
-#   include   "Mconfig.h"
-#endif
-
 #include   "kbList.h"
+
 
 kbListNode::kbListNode( void *ielement,
                         kbListNode *iprev,
@@ -93,13 +103,13 @@ kbList::iterator::operator--()
    return *this;
 }
 kbList::iterator &
-kbList::iterator::operator++(int foo)
+kbList::iterator::operator++(int /* foo */)
 {
    return operator++();
 }
 
 kbList::iterator &
-kbList::iterator::operator--(int bar)
+kbList::iterator::operator--(int /* bar */)
 {
    return operator--();
 }
@@ -194,7 +204,7 @@ kbList::insert(kbList::iterator & i, void *element)
 }
 
 void
-kbList::erase(kbList::iterator & i)
+kbList::doErase(kbList::iterator & i)
 {
    kbListNode
       *node = i.Node(),
@@ -219,8 +229,9 @@ kbList::erase(kbList::iterator & i)
       next->prev = prev;
 
    // delete this node and contents:
-   if(ownsEntries)
-      delete *i;
+   // now done separately
+   //if(ownsEntries)
+   //delete *i;
    delete i.Node();
 
    // change the iterator to next element:

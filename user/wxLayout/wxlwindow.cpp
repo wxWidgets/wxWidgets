@@ -168,14 +168,14 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
       break;
    case WXK_END:
       p = m_llist.GetCursor();
-      p.x = m_llist.GetLineLength(m_llist.FindCurrentObject(NULL));
+      p.x = m_llist.GetLineLength(m_llist.GetCurrentObject());
       m_llist.SetCursor(p);
       break;
    case WXK_DELETE :
       if(event.ControlDown()) // delete to end of line
       {
          help = m_llist.GetLineLength(
-            m_llist.FindCurrentObject(NULL))
+            m_llist.GetCurrentObject())
             - m_llist.GetCursor().x;
          m_llist.Delete(help ? help : 1);
       }
@@ -195,6 +195,9 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
    case WXK_F1:
       m_llist.Debug();
       break;
+   case WXK_F2:
+      m_llist.WrapLine();
+      break;
 #endif
       
    default:
@@ -203,6 +206,7 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
          String tmp;
          tmp += keyCode;
          m_llist.Insert(tmp);
+         m_llist.WrapLine();
       }
       break;
    }

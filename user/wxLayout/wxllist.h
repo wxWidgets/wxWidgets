@@ -301,6 +301,13 @@ public:
    /// set font colours by name
    inline void SetFontColour(char const *fg, char const *bg = NULL) { SetFont(-1,-1,-1,-1,-1,fg,bg); }
       
+   /** Sets the wrap margin in cursor positions.
+       @param n the wrap margin, -1 to disable auto wrap
+   */
+   void SetWrapMargin(long n = -1);
+
+   /// Wraps the current line if word wrap is enabled.
+   void WrapLine(void);
    
    /** Re-layouts the list on a DC.
        @param dc the dc to layout for
@@ -371,7 +378,11 @@ public:
    /// return a pointer to the default settings (dangerous, why?) FIXME:
    wxLayoutObjectCmd const *GetDefaults(void) const { return m_DefaultSetting ; }
 
-   wxLayoutObjectList::iterator FindCurrentObject(CoordType *offset = NULL);
+   /// returns the iterator for the object under the cursor
+   wxLayoutObjectList::iterator GetCurrentObject(CoordType *offset =
+                                                 NULL)
+   { if(offset) *offset = m_CursorOffset; return m_CursorObject; }
+   
    // get the length of the line with the object pointed to by i, offs 
    // only used to decide whether we are before or after linebreak
    CoordType GetLineLength(wxLayoutObjectList::iterator i,
@@ -432,6 +443,10 @@ protected:
    /// find the object to the cursor position and returns the offset
    /// in there
    wxLayoutObjectList::iterator FindObjectCursor(wxPoint *cpos, CoordType *offset = NULL);
+   /// get the wrap margin
+   inline long GetWrapMargin(void) const { return m_WrapMargin; }
+   /// do we do wrapping?
+   inline bool DoWordWrap(void) const { return m_WrapMargin != -1; }
 private:
    /// Resets the font settings etc to default values
    void ResetSettings(wxDC &dc);
@@ -441,6 +456,8 @@ private:
    wxPoint m_FoundCursor;
    /// remembers the iterator to the object related to m_FoundCursor
    wxLayoutObjectList::iterator m_FoundIterator;
+   /// the wrap margin
+   long m_WrapMargin;
 };
 
 class wxLayoutPrintout: public wxPrintout

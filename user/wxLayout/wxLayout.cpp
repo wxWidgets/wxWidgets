@@ -33,7 +33,7 @@ IMPLEMENT_APP(MyApp)
    enum ids{ ID_EDIT = 1, ID_ADD_SAMPLE, ID_CLEAR, ID_PRINT,
              ID_PRINT_SETUP, ID_PAGE_SETUP, ID_PREVIEW, ID_PRINT_PS,
              ID_PRINT_SETUP_PS, ID_PAGE_SETUP_PS,ID_PREVIEW_PS,
-             ID_DPRINT,
+             ID_DPRINT, ID_WRAP, ID_NOWRAP,
              ID_WXLAYOUT_DEBUG, ID_QUIT, ID_CLICK, ID_HTML, ID_TEXT, ID_TEST };
 
 
@@ -81,7 +81,10 @@ MyFrame::MyFrame(void) :
   file_menu->Append(ID_PREVIEW_PS, "Print Preview PostScript", "Preview (PostScript)");
 #endif
   file_menu->AppendSeparator();
+  file_menu->Append(ID_WRAP, "Wrap mode", "Activate wrapping at pixel 200.");
+  file_menu->Append(ID_NOWRAP, "No-wrap mode", "Deactivate wrapping.");
 
+  file_menu->AppendSeparator();
 //   file_menu->Append( ID_DPRINT, "Direct Print");
    file_menu->Append( ID_TEXT, "Export Text");
    file_menu->Append( ID_HTML, "Export HTML");
@@ -221,6 +224,11 @@ void MyFrame::OnCommand( wxCommandEvent &event )
       break;
    case ID_PRINT:
       m_lwin->Print();
+      break;
+   case ID_NOWRAP:
+   case ID_WRAP:
+      m_lwin->GetLayoutList().SetWrapMargin(
+         event.GetId() == ID_NOWRAP ? -1 : 40);
       break;
    case ID_DPRINT:
    {
