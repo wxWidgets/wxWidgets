@@ -1112,6 +1112,13 @@ enum wxStretch
 #define wxHW_SCROLLBAR_AUTO     0x0004
 
 /*
+ * wxCalendarCtrl flags
+ */
+#define wxCAL_SUNDAY_FIRST      0x0000
+#define wxCAL_MONDAY_FIRST      0x0001
+#define wxCAL_SHOW_HOLIDAYS     0x0002
+
+/*
  * extended dialog specifiers. these values are stored in a different
  * flag and thus do not overlap with other style flags. note that these
  * values do not correspond to the return values of the dialogs (for

@@ -296,14 +296,13 @@ wxDateTime wxCalendarCtrl::GetStartDate() const
     wxDateTime::Tm tm = m_date.GetTm();
 
     wxDateTime date = wxDateTime(1, tm.mon, tm.year);
-    if ( date.GetWeekDay() != wxDateTime::Sun )
-    {
-        date.SetToPrevWeekDay(wxDateTime::Sun);
 
-        // be sure to do it or it might gain 1 hour if DST changed in between
-        date.ResetTime();
-    }
-    //else: we already have it
+    // rewind back
+    date.SetToPrevWeekDay(GetWindowStyle() & wxCAL_MONDAY_FIRST
+                          ? wxDateTime::Mon : wxDateTime::Sun);
+
+    // be sure to do it or it might gain 1 hour if DST changed in between
+    date.ResetTime();
 
     return date;
 }
@@ -315,7 +314,9 @@ bool wxCalendarCtrl::IsDateShown(const wxDateTime& date) const
 
 size_t wxCalendarCtrl::GetWeek(const wxDateTime& date) const
 {
-    return date.GetWeekOfMonth(wxDateTime::Sunday_First);
+    return date.GetWeekOfMonth(GetWindowStyle() & wxCAL_MONDAY_FIRST
+                               ? wxDateTime::Monday_First
+                               : wxDateTime::Sunday_First);
 }
 
 // ----------------------------------------------------------------------------
@@ -425,8 +426,6 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& event)
 {
     wxPaintDC dc(this);
 
-    wxDateTime::WeekDay wd;
-
     dc.SetFont(m_font);
 
     RecalcGeometry();
@@ -449,9 +448,17 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& event)
         dc.SetBackgroundMode(wxTRANSPARENT);
         dc.SetPen(*wxLIGHT_GREY_PEN);
         dc.DrawRectangle(0, 0, 7*m_widthCol, m_heightRow);
-        for ( wd = wxDateTime::Sun; wd < wxDateTime::Inv_WeekDay; wxNextWDay(wd) )
+
+        bool startOnMonday = (GetWindowStyle() & wxCAL_MONDAY_FIRST) != 0;
+        for ( size_t wd = 0; wd < 7; wd++ )
         {
-            dc.DrawText(m_weekdays[wd], wd*m_widthCol + 1, 0);
+            size_t n;
+            if ( startOnMonday )
+                n = wd == 6 ? 0 : wd + 1;
+            else
+                n = wd;
+
+            dc.DrawText(m_weekdays[n], wd*m_widthCol + 1, 0);
         }
     }
 
@@ -478,11 +485,11 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& event)
             continue;
         }
 
-#if DEBUG_PAINT        
+#if DEBUG_PAINT
         printf("painting week %d at y = %d\n", nWeek, y);
 #endif
 
-        for ( wd = wxDateTime::Sun; wd < wxDateTime::Inv_WeekDay; wxNextWDay(wd) )
+        for ( size_t wd = 0; wd < 7; wd++ )
         {
             if ( IsDateShown(date) )
             {
@@ -645,11 +652,21 @@ void wxCalendarCtrl::OnChar(wxKeyEvent& event)
             break;
 
         case WXK_RIGHT:
-            SetDateAndNotify(m_date + wxDateSpan::Day());
+            if ( event.ControlDown() )
+                SetDateAndNotify(wxDateTime(m_date).SetToNextWeekDay(
+                                 GetWindowStyle() & wxCAL_MONDAY_FIRST
+                                 ? wxDateTime::Sun : wxDateTime::Sat));
+            else
+                SetDateAndNotify(m_date + wxDateSpan::Day());
             break;
 
         case WXK_LEFT:
-            SetDateAndNotify(m_date - wxDateSpan::Day());
+            if ( event.ControlDown() )
+                SetDateAndNotify(wxDateTime(m_date).SetToPrevWeekDay(
+                                 GetWindowStyle() & wxCAL_MONDAY_FIRST
+                                 ? wxDateTime::Mon : wxDateTime::Sun));
+            else
+                SetDateAndNotify(m_date - wxDateSpan::Day());
             break;
 
         case WXK_UP:
@@ -661,7 +678,14 @@ void wxCalendarCtrl::OnChar(wxKeyEvent& event)
             break;
 
         case WXK_HOME:
-            SetDateAndNotify(wxDateTime::Today());
+            if ( event.ControlDown() )
+                SetDateAndNotify(wxDateTime::Today());
+            else
+                SetDateAndNotify(wxDateTime(1, m_date.GetMonth(), m_date.GetYear()));
+            break;
+
+        case WXK_END:
+            SetDateAndNotify(wxDateTime(m_date).SetToLastMonthDay());
             break;
 
         default:

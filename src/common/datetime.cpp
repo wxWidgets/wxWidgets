@@ -1379,7 +1379,10 @@ wxDateTime& wxDateTime::SetToLastMonthDay(Month month,
                                           int year)
 {
     // take the current month/year if none specified
-    ReplaceDefaultYearMonthWithCurrent(&year, &month);
+    if ( year == Inv_Year )
+        year = GetYear();
+    if ( month == Inv_Month )
+        month = GetMonth();
 
     return Set(GetNumOfDaysInMonth(year, month), month, year);
 }
