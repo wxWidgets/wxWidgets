@@ -154,14 +154,14 @@ int wxChoice::FindString(const wxString& s) const
 wxString wxChoice::GetString(int n) const
 {
     size_t len = (size_t)::SendMessage(GetHwnd(), CB_GETLBTEXTLEN, n, 0);
-    wxString str;
-    if ( ::SendMessage(GetHwnd(), CB_GETLBTEXT, n,
-                       (LPARAM)str.GetWriteBuf(len)) == CB_ERR )
-    {
-        wxLogLastError("SendMessage(CB_GETLBTEXT)");
+    wxString str = "";
+    if (len) {
+        if ( ::SendMessage(GetHwnd(), CB_GETLBTEXT, n,
+                           (LPARAM)str.GetWriteBuf(len)) == CB_ERR ) {
+            wxLogLastError("SendMessage(CB_GETLBTEXT)");
+        }
+        str.UngetWriteBuf();
     }
-
-    str.UngetWriteBuf();
 
     return str;
 }
