@@ -29,16 +29,11 @@ class WXDLLEXPORT wxDropSource: public wxDropSourceBase
 {
 public:
     /* constructor. set data later with SetData() */
-    wxDropSource( wxWindow*     pWin
-                 ,const wxIcon& rGo = wxNullIcon
-                 ,const wxIcon& rStop = wxNullIcon
-                );
+    wxDropSource(wxWindow* pWin);
 
     /* constructor for setting one data object */
     wxDropSource( wxDataObject& rData,
                   wxWindow*     pWin,
-                  const wxIcon& rGo = wxNullIcon,
-                  const wxIcon& rStop = wxNullIcon
                 );
     virtual ~wxDropSource();
 

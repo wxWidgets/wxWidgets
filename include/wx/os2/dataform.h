@@ -50,8 +50,8 @@ public:
     wxDataFormatId GetType() const;
 
 private:
-    wxDataFormatId   m_type;
-    NativeFormat     m_format;
+    wxDataFormatId                  m_vType;
+    NativeFormat                    m_vFormat;
 
     void PrepareFormats();
     void SetType( wxDataFormatId type );
