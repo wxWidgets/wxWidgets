@@ -67,7 +67,7 @@ wxRegion::wxRegion(WXHRGN hRegion)
     M_REGION = (HRGN) hRegion;
 }
 
-wxRegion::wxRegion(long x, long y, long w, long h)
+wxRegion::wxRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
 {
     m_refData = new wxRegionRefData;
     // TODO create rect region
@@ -104,7 +104,7 @@ void wxRegion::Clear()
 }
 
 //! Combine rectangle (x, y, w, h) with this.
-bool wxRegion::Combine(long x, long y, long width, long height, wxRegionOp op)
+bool wxRegion::Combine(wxCoord x, wxCoord y, wxCoord width, wxCoord height, wxRegionOp op)
 {
     // Don't change shared data
     if (!m_refData) {
@@ -195,7 +195,7 @@ bool wxRegion::Combine(const wxRect& rect, wxRegionOp op)
 //-----------------------------------------------------------------------------
 
 // Outer bounds of region
-void wxRegion::GetBox(long& x, long& y, long&w, long &h) const
+void wxRegion::GetBox(wxCoord& x, wxCoord& y, wxCoord&w, wxCoord &h) const
 {
     if (m_refData) {
         // TODO get box
@@ -206,7 +206,7 @@ void wxRegion::GetBox(long& x, long& y, long&w, long &h) const
 
 wxRect wxRegion::GetBox() const
 {
-    long x, y, w, h;
+    wxCoord x, y, w, h;
     GetBox(x, y, w, h);
     return wxRect(x, y, w, h);
 }
@@ -223,7 +223,7 @@ bool wxRegion::Empty() const
 //-----------------------------------------------------------------------------
 
 // Does the region contain the point (x,y)?
-wxRegionContain wxRegion::Contains(long x, long y) const
+wxRegionContain wxRegion::Contains(wxCoord x, wxCoord y) const
 {
     bool    bOK = FALSE; // temporary
     if (!m_refData)
@@ -250,7 +250,7 @@ wxRegionContain wxRegion::Contains(const wxPoint& pt) const
 }
 
 // Does the region contain the rectangle (x, y, w, h)?
-wxRegionContain wxRegion::Contains(long x, long y, long w, long h) const
+wxRegionContain wxRegion::Contains(wxCoord x, wxCoord y, wxCoord w, wxCoord h) const
 {
     bool    bOK = FALSE; // temporary
     if (!m_refData)
@@ -269,7 +269,7 @@ wxRegionContain wxRegion::Contains(const wxRect& rect) const
     if (!m_refData)
         return wxOutRegion;
 
-    long x, y, w, h;
+    wxCoord x, y, w, h;
     x = rect.x;
     y = rect.y;
     w = rect.GetWidth();
@@ -356,28 +356,28 @@ void wxRegionIterator::operator ++ (int)
         ++m_current;
 }
 
-long wxRegionIterator::GetX() const
+wxCoord wxRegionIterator::GetX() const
 {
     if (m_current < m_numRects)
         return m_rects[m_current].x;
     return 0;
 }
 
-long wxRegionIterator::GetY() const
+wxCoord wxRegionIterator::GetY() const
 {
     if (m_current < m_numRects)
         return m_rects[m_current].y;
     return 0;
 }
 
-long wxRegionIterator::GetW() const
+wxCoord wxRegionIterator::GetW() const
 {
     if (m_current < m_numRects)
         return m_rects[m_current].width ;
     return 0;
 }
 
-long wxRegionIterator::GetH() const
+wxCoord wxRegionIterator::GetH() const
 {
     if (m_current < m_numRects)
         return m_rects[m_current].height;
