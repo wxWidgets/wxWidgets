@@ -46,7 +46,8 @@
     #include <fstream>
 #endif
 
-#if !defined(__WATCOMC__) && !defined(__VMS__) && !defined( __MWERKS__ ) && !defined(__SALFORDC__)
+#if !defined(__WATCOMC__) && !(defined(__VMS__) && ( __VMS_VER < 70000000 ) )\
+     && !defined( __MWERKS__ ) && !defined(__SALFORDC__)
 #include <memory.h>
 #endif
 
