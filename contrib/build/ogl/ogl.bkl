@@ -52,6 +52,6 @@
         <sources>$(OGL_SRC)</sources>
     </lib>
     
-    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">ogl=ogldll+ogllib</set>
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">ogl=ogllib+ogldll</set>
 
 </makefile>

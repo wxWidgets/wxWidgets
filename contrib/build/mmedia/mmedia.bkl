@@ -85,7 +85,7 @@
         <sources>$(MMEDIA_SRC)</sources>
     </lib>
     
-    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">mmedia=mmediadll+mmedialib</set>
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">mmedia=mmedialib+mmediadll</set>
 
 </makefile>
 

@@ -38,6 +38,6 @@
         <sources>$(GIZMOS_SRC)</sources>
     </lib>
     
-    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">gizmos=gizmosdll+gizmoslib</set>
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">gizmos=gizmoslib+gizmosdll</set>
 
 </makefile>

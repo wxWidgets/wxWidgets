@@ -34,6 +34,6 @@
         <sources>$(PLOT_SRC)</sources>
     </lib>
     
-    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">plot=plotdll+plotlib</set>
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">plot=plotlib+plotdll</set>
 
 </makefile>

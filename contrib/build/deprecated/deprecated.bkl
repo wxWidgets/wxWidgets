@@ -49,7 +49,7 @@
         <sources>$(DEPRECATED_SRC)</sources>
     </lib>
     
-    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">deprecated=deprecateddll+deprecatedlib</set>
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">deprecated=deprecatedlib+deprecateddll</set>
 
 </makefile>
 

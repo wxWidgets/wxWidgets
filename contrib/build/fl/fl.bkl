@@ -61,7 +61,7 @@
         <sources>$(FL_SRC)</sources>
     </lib>
 
-    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">fl=fldll+fllib</set>
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">fl=fllib+fldll</set>
 
 </makefile>
 

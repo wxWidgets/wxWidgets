@@ -106,6 +106,6 @@
         <sources>$(XRC_SRC)</sources>
     </lib>
     
-    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">xrc=xrcdll+xrclib</set>
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">xrc=xrclib+xrcdll</set>
 
 </makefile>

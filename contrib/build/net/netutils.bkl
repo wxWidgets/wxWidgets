@@ -32,6 +32,6 @@
         <sources>$(NETUTILS_SRC)</sources>
     </lib>
     
-    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">netutils=netutilsdll+netutilslib</set>
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">netutils=netutilslib+netutilsdll</set>
 
 </makefile>
