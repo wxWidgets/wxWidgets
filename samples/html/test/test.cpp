@@ -3,7 +3,7 @@
 // Purpose:     wxHtml testing example
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma implementation "test.cpp"
     #pragma interface "test.cpp"
 #endif

@@ -17,7 +17,7 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma implementation "exec.cpp"
     #pragma interface "exec.cpp"
 #endif
@@ -33,6 +33,7 @@
 // need because it includes almost all "standard" wxWindows headers
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/log.h"
     #include "wx/frame.h"
     #include "wx/panel.h"
 

@@ -4,7 +4,7 @@
 //              demonstrates virtual file systems feature
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma implementation "test.cpp"
     #pragma interface "test.cpp"
 #endif

@@ -17,7 +17,7 @@
 // headers
 // --------------------------------------------------------------------------
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #  pragma implementation "client.cpp"
 #  pragma interface "client.cpp"
 #endif

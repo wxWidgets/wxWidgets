@@ -17,7 +17,7 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     // DO NOT use event.cpp here, it breaks statics initialization in
     // src/common/event.cpp and nothing works at all then!
     #pragma implementation "eventsample.cpp"

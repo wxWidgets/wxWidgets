@@ -17,7 +17,7 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma implementation "drawing.cpp"
     #pragma interface "drawing.cpp"
 #endif
