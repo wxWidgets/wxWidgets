@@ -3149,6 +3149,14 @@ class PyWindow(core.Window):
         """base_RemoveChild(Window child)"""
         return _windows.PyWindow_base_RemoveChild(*args, **kwargs)
 
+    def base_ShouldInheritColours(*args, **kwargs):
+        """base_ShouldInheritColours() -> bool"""
+        return _windows.PyWindow_base_ShouldInheritColours(*args, **kwargs)
+
+    def base_ApplyParentThemeBackground(*args, **kwargs):
+        """base_ApplyParentThemeBackground(Colour c)"""
+        return _windows.PyWindow_base_ApplyParentThemeBackground(*args, **kwargs)
+
 
 class PyWindowPtr(PyWindow):
     def __init__(self, this):
@@ -3156,6 +3164,12 @@ class PyWindowPtr(PyWindow):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = PyWindow
 _windows.PyWindow_swigregister(PyWindowPtr)
+
+def PrePyWindow(*args, **kwargs):
+    """PrePyWindow() -> PyWindow"""
+    val = _windows.new_PrePyWindow(*args, **kwargs)
+    val.thisown = 1
+    return val
 
 class PyPanel(Panel):
     def __repr__(self):
@@ -3247,6 +3261,14 @@ class PyPanel(Panel):
         """base_RemoveChild(Window child)"""
         return _windows.PyPanel_base_RemoveChild(*args, **kwargs)
 
+    def base_ShouldInheritColours(*args, **kwargs):
+        """base_ShouldInheritColours() -> bool"""
+        return _windows.PyPanel_base_ShouldInheritColours(*args, **kwargs)
+
+    def base_ApplyParentThemeBackground(*args, **kwargs):
+        """base_ApplyParentThemeBackground(Colour c)"""
+        return _windows.PyPanel_base_ApplyParentThemeBackground(*args, **kwargs)
+
 
 class PyPanelPtr(PyPanel):
     def __init__(self, this):
@@ -3254,6 +3276,124 @@ class PyPanelPtr(PyPanel):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = PyPanel
 _windows.PyPanel_swigregister(PyPanelPtr)
+
+def PrePyPanel(*args, **kwargs):
+    """PrePyPanel() -> PyPanel"""
+    val = _windows.new_PrePyPanel(*args, **kwargs)
+    val.thisown = 1
+    return val
+
+class PyScrolledWindow(ScrolledWindow):
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxPyScrolledWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, String name=PanelNameStr) -> PyScrolledWindow
+        """
+        newobj = _windows.new_PyScrolledWindow(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+        self._setOORInfo(self); self._setCallbackInfo(self, PyPanel)
+
+    def _setCallbackInfo(*args, **kwargs):
+        """_setCallbackInfo(PyObject self, PyObject _class)"""
+        return _windows.PyScrolledWindow__setCallbackInfo(*args, **kwargs)
+
+    def base_DoMoveWindow(*args, **kwargs):
+        """base_DoMoveWindow(int x, int y, int width, int height)"""
+        return _windows.PyScrolledWindow_base_DoMoveWindow(*args, **kwargs)
+
+    def base_DoSetSize(*args, **kwargs):
+        """base_DoSetSize(int x, int y, int width, int height, int sizeFlags=SIZE_AUTO)"""
+        return _windows.PyScrolledWindow_base_DoSetSize(*args, **kwargs)
+
+    def base_DoSetClientSize(*args, **kwargs):
+        """base_DoSetClientSize(int width, int height)"""
+        return _windows.PyScrolledWindow_base_DoSetClientSize(*args, **kwargs)
+
+    def base_DoSetVirtualSize(*args, **kwargs):
+        """base_DoSetVirtualSize(int x, int y)"""
+        return _windows.PyScrolledWindow_base_DoSetVirtualSize(*args, **kwargs)
+
+    def base_DoGetSize(*args, **kwargs):
+        """base_DoGetSize() -> (width, height)"""
+        return _windows.PyScrolledWindow_base_DoGetSize(*args, **kwargs)
+
+    def base_DoGetClientSize(*args, **kwargs):
+        """base_DoGetClientSize() -> (width, height)"""
+        return _windows.PyScrolledWindow_base_DoGetClientSize(*args, **kwargs)
+
+    def base_DoGetPosition(*args, **kwargs):
+        """base_DoGetPosition() -> (x,y)"""
+        return _windows.PyScrolledWindow_base_DoGetPosition(*args, **kwargs)
+
+    def base_DoGetVirtualSize(*args, **kwargs):
+        """base_DoGetVirtualSize() -> Size"""
+        return _windows.PyScrolledWindow_base_DoGetVirtualSize(*args, **kwargs)
+
+    def base_DoGetBestSize(*args, **kwargs):
+        """base_DoGetBestSize() -> Size"""
+        return _windows.PyScrolledWindow_base_DoGetBestSize(*args, **kwargs)
+
+    def base_InitDialog(*args, **kwargs):
+        """base_InitDialog()"""
+        return _windows.PyScrolledWindow_base_InitDialog(*args, **kwargs)
+
+    def base_TransferDataToWindow(*args, **kwargs):
+        """base_TransferDataToWindow() -> bool"""
+        return _windows.PyScrolledWindow_base_TransferDataToWindow(*args, **kwargs)
+
+    def base_TransferDataFromWindow(*args, **kwargs):
+        """base_TransferDataFromWindow() -> bool"""
+        return _windows.PyScrolledWindow_base_TransferDataFromWindow(*args, **kwargs)
+
+    def base_Validate(*args, **kwargs):
+        """base_Validate() -> bool"""
+        return _windows.PyScrolledWindow_base_Validate(*args, **kwargs)
+
+    def base_AcceptsFocus(*args, **kwargs):
+        """base_AcceptsFocus() -> bool"""
+        return _windows.PyScrolledWindow_base_AcceptsFocus(*args, **kwargs)
+
+    def base_AcceptsFocusFromKeyboard(*args, **kwargs):
+        """base_AcceptsFocusFromKeyboard() -> bool"""
+        return _windows.PyScrolledWindow_base_AcceptsFocusFromKeyboard(*args, **kwargs)
+
+    def base_GetMaxSize(*args, **kwargs):
+        """base_GetMaxSize() -> Size"""
+        return _windows.PyScrolledWindow_base_GetMaxSize(*args, **kwargs)
+
+    def base_AddChild(*args, **kwargs):
+        """base_AddChild(Window child)"""
+        return _windows.PyScrolledWindow_base_AddChild(*args, **kwargs)
+
+    def base_RemoveChild(*args, **kwargs):
+        """base_RemoveChild(Window child)"""
+        return _windows.PyScrolledWindow_base_RemoveChild(*args, **kwargs)
+
+    def base_ShouldInheritColours(*args, **kwargs):
+        """base_ShouldInheritColours() -> bool"""
+        return _windows.PyScrolledWindow_base_ShouldInheritColours(*args, **kwargs)
+
+    def base_ApplyParentThemeBackground(*args, **kwargs):
+        """base_ApplyParentThemeBackground(Colour c)"""
+        return _windows.PyScrolledWindow_base_ApplyParentThemeBackground(*args, **kwargs)
+
+
+class PyScrolledWindowPtr(PyScrolledWindow):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = PyScrolledWindow
+_windows.PyScrolledWindow_swigregister(PyScrolledWindowPtr)
+
+def PrePyScrolledWindow(*args, **kwargs):
+    """PrePyScrolledWindow() -> PyScrolledWindow"""
+    val = _windows.new_PrePyScrolledWindow(*args, **kwargs)
+    val.thisown = 1
+    return val
 
 #---------------------------------------------------------------------------
 
