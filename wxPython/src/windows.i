@@ -754,6 +754,8 @@ public:
     long GetStyle();
 
     bool IsAttached();
+    void Attach(wxMenuBar *menubar);
+    void Detach();
 
     void SetParent(wxMenu *parent);
     wxMenu *GetParent();
