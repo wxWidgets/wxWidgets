@@ -360,15 +360,24 @@ void wxScrollHelper::SetScrollbars(int pixelsPerUnitX,
     if (do_refresh && !noRefresh)
         m_targetWindow->Refresh(TRUE, GetScrollRect());
 
-    // TODO: check if we can use AdjustScrollbars always.
-#ifdef __WXUNIVERSAL__
-    AdjustScrollbars();
-#else    
-    // This is also done by AdjustScrollbars, above
+#ifndef __WXUNIVERSAL__
+    // If the target is not the same as the window with the scrollbars,
+    // then we need to update the scrollbars here, since they won't have
+    // been updated by SetVirtualSize().
+    if ( m_targetWindow != m_win )
+#endif // !__WXUNIVERSAL__
+    {
+        AdjustScrollbars();
+    }
+#ifndef __WXUNIVERSAL__
+    else
+    {
+        // otherwise this has been done by AdjustScrollbars, above
 #ifdef __WXMAC__
-    m_targetWindow->MacUpdateImmediately() ;
+        m_targetWindow->Update() ;
 #endif
-#endif
+    }
+#endif // !__WXUNIVERSAL__
 }
 
 // ----------------------------------------------------------------------------
@@ -496,7 +505,7 @@ void wxScrollHelper::HandleOnScroll(wxScrollWinEvent& event)
     }
 
 #ifdef __WXMAC__
-    m_targetWindow->MacUpdateImmediately() ;
+    m_targetWindow->Update() ;
 #endif
 }
 
@@ -604,7 +613,7 @@ int wxScrollHelper::CalcScrollInc(wxScrollWinEvent& event)
 void wxScrollHelper::AdjustScrollbars()
 {
 #ifdef __WXMAC__
-    m_targetWindow->MacUpdateImmediately();
+    m_targetWindow->Update();
 #endif
 
     int w = 0, h = 0;
@@ -758,7 +767,7 @@ void wxScrollHelper::AdjustScrollbars()
     }
 
 #ifdef __WXMAC__
-    m_targetWindow->MacUpdateImmediately();
+    m_targetWindow->Update();
 #endif
 }
 
@@ -824,7 +833,7 @@ void wxScrollHelper::Scroll( int x_pos, int y_pos )
         ((y_pos == -1) || (y_pos == m_yScrollPosition))) return;
 
 #ifdef __WXMAC__
-    m_targetWindow->MacUpdateImmediately();
+    m_targetWindow->Update();
 #endif
 
     int w, h;
@@ -874,7 +883,7 @@ void wxScrollHelper::Scroll( int x_pos, int y_pos )
     }
 
 #ifdef __WXMAC__
-    m_targetWindow->MacUpdateImmediately();
+    m_targetWindow->Update();
 #endif
 
 }
