@@ -222,7 +222,6 @@ void wxToolBar::Init()
     m_bg = (GdkColor *)NULL;
     m_toolbar = (GtkToolbar *)NULL;
     m_blockNextEvent = FALSE;
-    m_themeEnabled = TRUE;
 }
 
 wxToolBar::~wxToolBar()

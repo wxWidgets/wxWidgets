@@ -681,22 +681,6 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
                                 
     GtkPizza *pizza = GTK_PIZZA (widget);
 
-/*        
-    if (win->IsTopLevel())
-    {
-        gtk_paint_flat_box (win->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL,
-		    GTK_SHADOW_NONE, &gdk_event->area, win->m_widget, "base", 0, 0, -1, -1);
-    }
-    
-    wxWindow *parent = win->GetParent();
-    if (parent && GTK_IS_NOTEBOOK(parent->m_widget))
-    {
-        while (!parent->IsTopLevel())
-            parent = parent->GetParent();
-        gtk_paint_flat_box (parent->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL,
-		    GTK_SHADOW_NONE, &gdk_event->area, parent->m_widget, "base", 0, 0, -1, -1);
-    }
-*/
     if (win->GetThemeEnabled())
     {
         wxWindow *parent = win->GetParent();
@@ -714,18 +698,18 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
                                   gdk_event->area.width,
                                   gdk_event->area.height );
 
-        if (gdk_event->count == 0)
-        {
-            wxEraseEvent eevent( win->GetId() );
-            eevent.SetEventObject( win );
-            win->GetEventHandler()->ProcessEvent(eevent);
+    if (gdk_event->count == 0)
+    {
+        wxEraseEvent eevent( win->GetId() );
+        eevent.SetEventObject( win );
+        win->GetEventHandler()->ProcessEvent(eevent);
 
-            wxPaintEvent event( win->GetId() );
-            event.SetEventObject( win );
-            win->GetEventHandler()->ProcessEvent( event );
-
-            win->GetUpdateRegion().Clear();
-        }
+        wxPaintEvent event( win->GetId() );
+        event.SetEventObject( win );
+        win->GetEventHandler()->ProcessEvent( event );
+        
+        win->GetUpdateRegion().Clear();
+    }
     
         /* The following code will result in all window-less widgets
            being redrawn if the wxWindows class is given a chance to
@@ -805,31 +789,29 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
    
     GtkPizza *pizza = GTK_PIZZA (widget);
 
-    if (win->IsTopLevel())
+    if (win->GetThemeEnabled())
     {
-        gtk_paint_flat_box (win->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL, 
-		      GTK_SHADOW_NONE, rect, win->m_widget, "base", 0, 0, -1, -1);
-    }
-        
-    wxWindow *parent = win->GetParent();
-    if (parent && GTK_IS_NOTEBOOK(parent->m_widget))
-    {
-        while (!parent->IsTopLevel())
+        wxWindow *parent = win->GetParent();
+        while (parent && !parent->IsTopLevel())
             parent = parent->GetParent();
+        if (!parent)
+            parent = win;
+
         gtk_paint_flat_box (parent->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL,
 		    GTK_SHADOW_NONE, rect, parent->m_widget, "base", 0, 0, -1, -1);
     }
         
-        if (!(GTK_WIDGET_APP_PAINTABLE (widget)) &&
-             (pizza->clear_on_draw))
-        {
-            gdk_window_clear_area( pizza->bin_window,
+        
+    if (!(GTK_WIDGET_APP_PAINTABLE (widget)) &&
+         (pizza->clear_on_draw))
+    {
+        gdk_window_clear_area( pizza->bin_window,
                                rect->x, rect->y, rect->width, rect->height);
-        }
+    }
     
-        win->GetUpdateRegion().Union( rect->x, rect->y, rect->width, rect->height );
+    win->GetUpdateRegion().Union( rect->x, rect->y, rect->width, rect->height );
 
-        win->m_clipPaintRegion = TRUE;
+    win->m_clipPaintRegion = TRUE;
     
         wxEraseEvent eevent( win->GetId() );
         eevent.SetEventObject( win );
