@@ -307,7 +307,10 @@ public:
     void SetHeight(int h) { height = h; }
 
     wxPoint GetPosition() const { return wxPoint(x, y); }
+    void SetPosition( const wxPoint &p ) { x = p.x; y = p.y; }
+
     wxSize GetSize() const { return wxSize(width, height); }
+    void SetSize( const wxSize &s ) { width = s.GetWidth(); height = s.GetHeight(); }
 
     int GetLeft()   const { return x; }
     int GetTop()    const { return y; }
