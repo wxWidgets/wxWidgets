@@ -722,6 +722,7 @@ class wxPythonDemo(wx.Frame):
                 self.txt.Clear()
                 self.window = None
 
+        self.tree.SetFocus()
 
 
     #---------------------------------------------
