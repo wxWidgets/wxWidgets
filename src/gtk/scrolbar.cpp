@@ -88,7 +88,7 @@ static gint gtk_scrollbar_button_press_callback( GtkRange *WXUNUSED(widget),
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-    win->SetScrolling(TRUE);
+    win->m_isScrolling = TRUE;
 //  g_blockEventsOnScroll = TRUE;  doesn't work in DialogEd
   
     return FALSE;
@@ -104,7 +104,7 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *WXUNUSED(widget),
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-    win->SetScrolling(FALSE);
+    win->m_isScrolling = FALSE;
 //  g_blockEventsOnScroll = FALSE;
   
     gtk_signal_emit_by_name( GTK_OBJECT(win->m_adjust), "value_changed" );

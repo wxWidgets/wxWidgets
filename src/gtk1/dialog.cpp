@@ -79,7 +79,7 @@ static void gtk_dialog_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation
     {
         win->m_width = alloc->width;
         win->m_height = alloc->height;
-        win->UpdateSize();
+        win->GtkUpdateSize();
     }
 }
 

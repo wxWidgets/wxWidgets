@@ -94,7 +94,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
         wxFAIL_MSG( wxT("wxSlider creation failed") );
-	return FALSE;
+	    return FALSE;
     }
 
     m_oldPos = 0.0;

@@ -301,7 +301,7 @@ static void draw_frame( GtkWidget *widget, wxWindow *win )
     int dw = 0;
     int dh = 0;
 
-    if (win->HasScrolling())
+    if (win->m_hasScrolling)
     {
             GtkScrolledWindow *scroll_window = GTK_SCROLLED_WINDOW(widget);
             
@@ -1639,7 +1639,7 @@ static gint gtk_scrollbar_button_press_callback( GtkRange *WXUNUSED(widget),
 //
 //    if (gdk_event->window != widget->slider) return FALSE;
 
-    win->SetScrolling( TRUE );
+    g_blockEventsOnScroll = TRUE;
 
     return FALSE;
 }
@@ -1660,7 +1660,7 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *WXUNUSED(widget),
 //
 //    if (gdk_event->window != widget->slider) return FALSE;
 
-    win->SetScrolling( FALSE );
+    g_blockEventsOnScroll = FALSE;
 
     return FALSE;
 }
@@ -1715,10 +1715,23 @@ void gtk_window_size_callback( GtkWidget *WXUNUSED(widget),
     if (g_isIdle)
         wxapp_install_idle_handler();
     
-#if wxUSE_CONSTRAINTS
-    if (win->GetAutoLayout())
-        win->Layout();
-#endif
+    if (!win->m_hasScrolling) return;
+    
+    int client_width = 0;
+    int client_height = 0;
+    win->GetClientSize( &client_width, &client_height );
+    if ((client_width == win->m_oldClientWidth) && (client_height == win->m_oldClientHeight))
+        return;
+        
+    win->m_oldClientWidth = client_width;
+    win->m_oldClientHeight = client_height;
+    
+    if (!win->m_nativeSizeEvent)
+    {
+        wxSizeEvent event( win->GetSize(), win->GetId() );
+        event.SetEventObject( win );
+        win->GetEventHandler()->ProcessEvent( event );
+    }
 }
 
 
@@ -1913,7 +1926,6 @@ void wxWindow::Init()
     m_nativeSizeEvent = FALSE;
 
     m_hasScrolling = FALSE;
-    m_isScrolling = FALSE;
 
     m_hAdjust = (GtkAdjustment*) NULL;
     m_vAdjust = (GtkAdjustment*) NULL;
@@ -2346,6 +2358,11 @@ void wxWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )
                       m_height+border+bottom_border );
     }
 
+    if (m_hasScrolling)
+    {
+        GetClientSize( &m_oldClientWidth, &m_oldClientHeight );
+    }
+
 /*
     wxPrintf( "OnSize sent from " );
     if (GetClassInfo() && GetClassInfo()->GetClassName())
@@ -2449,7 +2466,7 @@ void wxWindow::DoSetClientSize( int width, int height )
             dh += 1 * 2;
         }
 
-        if (HasScrolling())
+        if (m_hasScrolling)
         {
             GtkScrolledWindow *scroll_window = GTK_SCROLLED_WINDOW(m_widget);
             
@@ -2511,7 +2528,7 @@ void wxWindow::DoGetClientSize( int *width, int *height ) const
             dh += 1 * 2;
         }
 
-        if (HasScrolling())
+        if (m_hasScrolling)
         {
             GtkScrolledWindow *scroll_window = GTK_SCROLLED_WINDOW(m_widget);
             
@@ -3317,20 +3334,13 @@ void wxWindow::SetScrollPos( int orient, int pos, bool WXUNUSED(refresh) )
         m_vAdjust->value = fpos;
     }
 
-/*
-    if (!m_isScrolling)
+    if (m_wxwindow->window)
     {
-*/
-        if (m_wxwindow->window)
-        {
-            if (orient == wxHORIZONTAL)
-                gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "value_changed" );
-            else
-                gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "value_changed" );
-        }
-/*
+        if (orient == wxHORIZONTAL)
+            gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "value_changed" );
+        else
+            gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "value_changed" );
     }
-*/
 }
 
 int wxWindow::GetScrollThumb( int orient ) const
@@ -3432,9 +3442,4 @@ void wxWindow::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
         Refresh( TRUE, &rect );
     }
 */
-}
-
-void wxWindow::SetScrolling(bool scroll)
-{
-    m_isScrolling = g_blockEventsOnScroll = scroll;
 }

@@ -106,12 +106,6 @@ public:
 
     virtual WXWidget GetHandle() const { return m_widget; }
 
-    // also sets the global flag
-    void SetScrolling(bool scroll);
-
-    bool HasScrolling() const { return m_hasScrolling; }
-    bool IsScrolling() const { return m_isScrolling; }
-
     /* I don't want users to override what's done in idle so everything that
        has to be done in idle time in order for wxGTK to work is done in
        OnInternalIdle */
@@ -157,11 +151,12 @@ public:
     // called from GTK signales handlers. it indicates that
     // the layouting functions have to be called later on
     // (i.e. in idle time, implemented in OnInternalIdle() ).
-    void UpdateSize() { m_sizeSet = FALSE; }
+    void GtkUpdateSize() { m_sizeSet = FALSE; }
 
     // position and size of the window
     int                  m_x, m_y;
     int                  m_width, m_height;
+    int                  m_oldClientWidth,m_oldClientHeight;
 
     /* see the docs in src/gtk/window.cpp */
     GtkWidget           *m_widget;
@@ -183,7 +178,6 @@ public:
     bool                 m_noExpose:1;          /* wxGLCanvas has its own redrawing */
     bool                 m_nativeSizeEvent:1;   /* wxGLCanvas sends wxSizeEvent upon "alloc_size" */
     bool                 m_hasScrolling:1;
-    bool                 m_isScrolling:1;
     bool                 m_hasVMT:1;
     bool                 m_sizeSet:1;
     bool                 m_resizing:1;
@@ -195,7 +189,6 @@ public:
     // these are true if the style were set before the widget was realized
     // (typcally in the constructor) but the actual GTK style must not be set
     // before the widget has been "realized"
-    bool                 m_delayedFont:1;
     bool                 m_delayedForegroundColour:1;
     bool                 m_delayedBackgroundColour:1;
     

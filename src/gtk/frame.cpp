@@ -126,7 +126,7 @@ static void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation*
 
         win->m_width = alloc->width;
         win->m_height = alloc->height;
-        win->UpdateSize();
+        win->GtkUpdateSize();
     }
 }
 
@@ -154,7 +154,7 @@ static void gtk_menu_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *
     if (!win->m_hasVMT) return;
 
     win->m_menuBarDetached = FALSE;
-    win->UpdateSize();
+    win->GtkUpdateSize();
 }
 
 //-----------------------------------------------------------------------------
@@ -166,7 +166,7 @@ static void gtk_menu_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *
     if (!win->m_hasVMT) return;
 
     win->m_menuBarDetached = TRUE;
-    win->UpdateSize();
+    win->GtkUpdateSize();
 }
 
 #if wxUSE_TOOLBAR
@@ -180,7 +180,7 @@ static void gtk_toolbar_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidge
 
     win->m_toolBarDetached = FALSE;
 
-    win->UpdateSize();
+    win->GtkUpdateSize();
 }
 
 //-----------------------------------------------------------------------------
@@ -195,7 +195,7 @@ static void gtk_toolbar_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidge
     if (!win->m_hasVMT) return;
 
     win->m_toolBarDetached = TRUE;
-    win->UpdateSize();
+    win->GtkUpdateSize();
 }
 #endif // wxUSE_TOOLBAR
 
@@ -386,7 +386,7 @@ static void wxInsertChildInFrame( wxFrame* parent, wxWindow* child )
     }
 
     /* resize on OnInternalIdle */
-    parent->UpdateSize();
+    parent->GtkUpdateSize();
 }
 
 // ----------------------------------------------------------------------------
@@ -963,7 +963,7 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
             GetChildren().DeleteObject( m_frameToolBar );
 
             gtk_widget_reparent( m_frameToolBar->m_widget, m_mainWidget );
-            UpdateSize();
+            GtkUpdateSize();
         }
     }
 }
