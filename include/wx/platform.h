@@ -1,13 +1,13 @@
-/*
- * Name:        wx/platform.h
- * Purpose:     define the OS and compiler identification macros
- * Author:      Vadim Zeitlin
- * Modified by:
- * Created:     29.10.01 (extracted from wx/defs.h)
- * RCS-ID:      $Id$
- * Copyright:   (c) 1997-2001 wxWindows team
- * Licence:     wxWindows licence
- */
+/**
+* Name:        wx/platform.h
+* Purpose:     define the OS and compiler identification macros
+* Author:      Vadim Zeitlin
+* Modified by:
+* Created:     29.10.01 (extracted from wx/defs.h)
+* RCS-ID:      $Id$
+* Copyright:   (c) 1997-2001 wxWindows team
+* Licence:     wxWindows licence
+*/
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
 

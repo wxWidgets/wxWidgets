@@ -1,13 +1,13 @@
-/* /////////////////////////////////////////////////////////////////////////// */
-/*  Name:        wx/version.h */
-/*  Purpose:     wxWindows version numbers */
-/*  Author:      Julian Smart */
-/*  Modified by: */
-/*  Created:     29/01/98 */
-/*  RCS-ID:      $Id$ */
-/*  Copyright:   (c) 1998 Julian Smart */
-/*  Licence:     wxWindows licence */
-/* /////////////////////////////////////////////////////////////////////////// */
+/**
+*  Name:        wx/version.h 
+*  Purpose:     wxWindows version numbers 
+*  Author:      Julian Smart 
+*  Modified by: Ryan Norton (Converted to C)
+*  Created:     29/01/98 
+*  RCS-ID:      $Id$ 
+*  Copyright:   (c) 1998 Julian Smart 
+*  Licence:     wxWindows licence 
+*/
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
 

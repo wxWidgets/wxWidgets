@@ -1935,10 +1935,6 @@ SOURCE=..\include\wx\dde.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\debug.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\dialog.h
 # End Source File
 # Begin Source File
@@ -3408,6 +3404,10 @@ SOURCE=..\include\wx\msw\gccpriv.h
 # Begin Source File
 
 SOURCE=..\include\wx\chkconf.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\debug.h
 # End Source File
 # Begin Source File
 
