@@ -354,7 +354,7 @@ void wxEndBusyCursor()
     gs_savedCursor = wxNullCursor;
 
     if (wxTheApp)
-        wxTheApp->SendIdleEvents();
+        wxTheApp->ProcessIdle();
 }
 
 void wxBeginBusyCursor( wxCursor *WXUNUSED(cursor) )
