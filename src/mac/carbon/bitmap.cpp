@@ -723,7 +723,6 @@ bool wxBitmap::Create(void *data, wxBitmapType type, int width, int height, int 
 wxBitmap::wxBitmap(const wxImage& image, int depth)
 {
     wxCHECK_RET( image.Ok(), wxT("invalid image") )
-    wxCHECK_RET( depth == -1, wxT("invalid bitmap depth") )
 
     m_refData = new wxBitmapRefData();
 
