@@ -263,14 +263,6 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
         b2 -> height.AsIs();
         m_SearchButton -> SetConstraints(b2);
 
-        wxLayoutConstraints *b3 = new wxLayoutConstraints;
-        m_SearchList = new wxListBox(dummy, wxID_HTML_SEARCHLIST, wxDefaultPosition, wxDefaultSize, 0);
-        b3 -> top.Below (m_SearchButton, 10);
-        b3 -> left.SameAs (dummy, wxLeft, 0);
-        b3 -> right.SameAs (dummy, wxRight, 0);
-        b3 -> bottom.SameAs (dummy, wxBottom, 0);
-        m_SearchList -> SetConstraints(b3);
-
         wxLayoutConstraints *b4 = new wxLayoutConstraints;
         m_SearchChoice = new wxChoice(dummy, wxID_HTML_SEARCHCHOICE, wxDefaultPosition,
                                       wxDefaultSize);
@@ -279,6 +271,14 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
         b4 -> right.SameAs (dummy, wxRight, 10);
         b4 -> height.AsIs();
         m_SearchChoice -> SetConstraints(b4);
+
+        wxLayoutConstraints *b3 = new wxLayoutConstraints;
+        m_SearchList = new wxListBox(dummy, wxID_HTML_SEARCHLIST, wxDefaultPosition, wxDefaultSize, 0);
+        b3 -> top.Below (m_SearchButton, 10);
+        b3 -> left.SameAs (dummy, wxLeft, 0);
+        b3 -> right.SameAs (dummy, wxRight, 0);
+        b3 -> bottom.SameAs (dummy, wxBottom, 0);
+        m_SearchList -> SetConstraints(b3);
 
         dummy -> SetAutoLayout(TRUE);
         dummy -> Layout();
