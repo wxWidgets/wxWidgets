@@ -937,8 +937,39 @@ wxString wxGetOsDescription()
                 break;
 
             case VER_PLATFORM_WIN32_WINDOWS:
-                str.Printf(_("Windows 9%c"),
-                           info.dwMinorVersion == 0 ? _T('5') : _T('8'));
+                switch (info.dwMinorVersion)
+                {
+                    case 0:
+                        if ( info.szCSDVersion[1] == 'B' ||
+                             info.szCSDVersion[1] == 'C' )
+                        {
+                            str = _("Windows 95 OSR2");
+                        }
+                        else
+                        {
+                            str = _("Windows 95");
+                        }
+                        break;
+                    case 10:
+                        if ( info.szCSDVersion[1] == 'B' ||
+                             info.szCSDVersion[1] == 'C' )
+                        {
+                            str = _("Windows 98 SE");
+                        }
+                        else
+                        {
+                            str = _("Windows 98");
+                        }
+                        break;
+                    case 90:
+                        str = _("Windows ME");
+                        break;
+                    default:
+                        str.Printf(_("Windows 9x (%d.%d)"),
+                                   info.dwMajorVersion,
+                                   info.dwMinorVersion);
+                        break;
+                }
                 if ( !wxIsEmpty(info.szCSDVersion) )
                 {
                     str << _T(" (") << info.szCSDVersion << _T(')');
@@ -946,10 +977,31 @@ wxString wxGetOsDescription()
                 break;
 
             case VER_PLATFORM_WIN32_NT:
-                str.Printf(_T("Windows NT %lu.%lu (build %lu"),
+                if ( info.dwMajorVersion == 5 )
+                {
+                    switch ( info.dwMinorVersion )
+                    {
+                        case 0:
+                            str.Printf(_("Windows 2000 (build %lu"),
+                                       info.dwBuildNumber);
+                            break;
+                        case 1:
+                            str.Printf(_("Windows XP (build %lu"),
+                                       info.dwBuildNumber);
+                            break;
+                        case 2:
+                            str.Printf(_("Windows Server 2003 (build %lu"),
+                                       info.dwBuildNumber);
+                            break;
+                    }
+                }
+                if ( wxIsEmpty(str) )
+                {
+                    str.Printf(_("Windows NT %lu.%lu (build %lu"),
                            info.dwMajorVersion,
                            info.dwMinorVersion,
                            info.dwBuildNumber);
+                }
                 if ( !wxIsEmpty(info.szCSDVersion) )
                 {
                     str << _T(", ") << info.szCSDVersion;

@@ -230,6 +230,7 @@ All:
   behavior between Unicode and non-unicode builds
 - BLOB example added to samples\db (thanks to Casey ODonnell)
 - use wxStream::GetLength() instead of deprecated GetSize()
+- wxGetOsDescription() is now more precise (Olly Betts)
 
 All (GUI):
 

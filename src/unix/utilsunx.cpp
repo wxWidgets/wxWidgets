@@ -837,11 +837,20 @@ bool wxGetUserName(wxChar *buf, int sz)
 
 wxString wxGetOsDescription()
 {
-#ifndef WXWIN_OS_DESCRIPTION
-    #error WXWIN_OS_DESCRIPTION should be defined in config.h by configure
-#else
-    return wxString::FromAscii( WXWIN_OS_DESCRIPTION );
-#endif
+    FILE *f = popen("uname -s -r -m", "r");
+    if (f)
+    {
+        char buf[256];
+        size_t c = fread(buf, 1, sizeof(buf) - 1, f);
+        pclose(f);
+        // Trim newline from output.
+        if (c && buf[c - 1] == '\n')
+            --c;
+        buf[c] = '\0';
+        return wxString::FromAscii( buf );
+    }
+    wxFAIL_MSG( _T("uname failed") );
+    return _T("");
 }
 
 #endif // !__WXMAC__

@@ -5745,7 +5745,7 @@ if test "$wxUSE_WIZARDDLG" = "yes"; then
 fi
 
 dnl ---------------------------------------------------------------------------
-dnl get the string with OS info - used by wxGetOsDescription()
+dnl get the string with OS info - used by wxGetOsDescription() on MacOS X
 dnl ---------------------------------------------------------------------------
 
 if test "$cross_compiling" = "yes"; then
