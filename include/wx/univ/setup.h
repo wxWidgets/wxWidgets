@@ -126,7 +126,7 @@
 #define wxUSE_GENERIC_DIALOGS_IN_MSW 0
 #define wxUSE_COMMON_DIALOGS 0
 #define wxUSE_TEXTDLG 0
-#define wxUSE_PROGRESSDLG 0
+#define wxUSE_PROGRESSDLG 1
 #define wxUSE_BUSYINFO      0
 #define wxUSE_DIRDLG 0
 #define wxUSE_FONTDLG 0
@@ -277,7 +277,7 @@
 #define wxUSE_GENERIC_DIALOGS_IN_MSW 0
 #define wxUSE_COMMON_DIALOGS 0
 #define wxUSE_TEXTDLG      0
-#define wxUSE_PROGRESSDLG  0
+#define wxUSE_PROGRESSDLG  1
 #define wxUSE_BUSYINFO     0
 #define wxUSE_DIRDLG       0
 #define wxUSE_FONTDLG      0
@@ -433,7 +433,7 @@
 #define wxUSE_GENERIC_DIALOGS_IN_MSW 0
 #define wxUSE_COMMON_DIALOGS 0
 #define wxUSE_TEXTDLG 0
-#define wxUSE_PROGRESSDLG 0
+#define wxUSE_PROGRESSDLG 1
 #define wxUSE_BUSYINFO      0
 #define wxUSE_DIRDLG 0
 #define wxUSE_FONTDLG 0
