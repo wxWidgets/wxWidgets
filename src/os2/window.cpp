@@ -1984,7 +1984,6 @@ MRESULT wxWindow::OS2WindowProc(
         case WM_MEASUREITEM:
             {
                 int                 nIdCtrl = (UINT)wParam;
-                char                zMsg[128];
 
                 if ( uMsg == WM_DRAWITEM )
                 {

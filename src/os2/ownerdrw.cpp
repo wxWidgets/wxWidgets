@@ -106,82 +106,21 @@ bool wxOwnerDrawn::OnDrawItem(
 {
     //
     // We do nothing on focus change
+    //
     if (eAction == wxODFocusChanged )
         return TRUE;
-    //
-    // WxWinGdi_CColour <-> RGB
-    //
-    #define   ToRGB(col)  OS2RGB(col.Red(), col.Green(), col.Blue())
-    #define   UnRGB(col)  GetRValue(col), GetGValue(col), GetBValue(col)
-
-    CHARBUNDLE                      vCbndText;
-    CHARBUNDLE                      vCbndBack;
-    HPS                             hPS= rDC.GetHPS();
-    ULONG                           lColBack;
-    ULONG                           lColText;
-
-    if (eStatus & wxODSelected)
-    {
-        lColBack = (ULONG)::WinQuerySysColor( HWND_DESKTOP
-                                             ,SYSCLR_MENUHILITEBGND // Light gray
-                                             ,0L
-                                            );
-        lColText = (ULONG)::WinQuerySysColor( HWND_DESKTOP
-                                             ,SYSCLR_MENUTEXT // Black
-                                             ,0L
-                                            );
-    }
-    else if (eStatus & wxODDisabled)
-    {
-        lColBack = (ULONG)::WinQuerySysColor( HWND_DESKTOP
-                                             ,SYSCLR_MENU // Light gray
-                                             ,0L
-                                            );
-        lColText = (ULONG)::WinQuerySysColor( HWND_DESKTOP
-                                             ,SYSCLR_MENUDISABLEDTEXT // dark gray
-                                             ,0L
-                                            );
-    }
-    else
-    {
-        //
-        // Fall back to default colors if none explicitly specified
-        //
-        lColBack = m_colBack.Ok() ? ToRGB(m_colBack) : ::WinQuerySysColor( HWND_DESKTOP
-                                                                          ,SYSCLR_MENU  // we are using gray for all our window backgrounds in wxWindows
-                                                                          ,0L
-                                                                         );
-        lColText = m_colText.Ok() ? ToRGB(m_colText) : ::WinQuerySysColor( HWND_DESKTOP
-                                                                          ,SYSCLR_WINDOWTEXT // Black
-                                                                          ,0L
-                                                                         );
-    }
-    vCbndText.lColor = (LONG)lColText;
-    vCbndBack.lColor = (LONG)lColBack;
-
-    ::GpiSetAttrs( hPS
-                  ,PRIM_CHAR
-                  ,CBB_BACK_COLOR
-                  ,0
-                  ,&vCbndBack
-                 );
-    ::GpiSetAttrs( hPS
-                  ,PRIM_CHAR
-                  ,CBB_COLOR
-                  ,0
-                  ,&vCbndText
-                 );
-
-
-    //
-    // Determine where to draw and leave space for a check-mark.
-    //
-    int                             nX = rRect.x + GetMarginWidth();
 
     //
     // Select the font and draw the text
     // ---------------------------------
     //
+
+    CHARBUNDLE                      vCbnd;
+    HPS                             hPS= rDC.GetHPS();
+    wxColour                        vColBack;
+    wxColour                        vColText;
+    COLORREF                        vRef;
+    char                            zMsg[128];
 
     //
     // Use default font if no font set
@@ -194,6 +133,82 @@ bool wxOwnerDrawn::OnDrawItem(
     {
         ::GpiSetCharSet(hPS, LCID_DEFAULT);
     }
+    if (eStatus & wxODSelected)
+    {
+        vRef = (ULONG)::WinQuerySysColor( HWND_DESKTOP
+                                         ,SYSCLR_MENUHILITEBGND // Light gray
+                                         ,0L
+                                        );
+        vColBack.Set( GetRValue(vRef)
+                     ,GetGValue(vRef)
+                     ,GetBValue(vRef)
+                    );
+        vColText = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_MENUTEXT);
+    }
+    else if (eStatus & wxODDisabled)
+    {
+        vRef = (ULONG)::WinQuerySysColor( HWND_DESKTOP
+                                         ,SYSCLR_MENU // Light gray
+                                         ,0L
+                                        );
+        vColBack.Set( GetRValue(vRef)
+                     ,GetGValue(vRef)
+                     ,GetBValue(vRef)
+                    );
+        vRef = (ULONG)::WinQuerySysColor( HWND_DESKTOP
+                                         ,SYSCLR_MENUDISABLEDTEXT // dark gray
+                                         ,0L
+                                        );
+        vColText.Set( GetRValue(vRef)
+                     ,GetGValue(vRef)
+                     ,GetBValue(vRef)
+                    );
+    }
+    else
+    {
+        //
+        // Fall back to default colors if none explicitly specified
+        //
+        vRef = ::WinQuerySysColor( HWND_DESKTOP
+                                  ,SYSCLR_MENU  // we are using gray for all our window backgrounds in wxWindows
+                                  ,0L
+                                 );
+        vColBack.Set( GetRValue(vRef)
+                     ,GetGValue(vRef)
+                     ,GetBValue(vRef)
+                    );
+        vRef = ::WinQuerySysColor( HWND_DESKTOP
+                                  ,SYSCLR_WINDOWTEXT // Black
+                                  ,0L
+                                 );
+        vColText.Set( GetRValue(vRef)
+                     ,GetGValue(vRef)
+                     ,GetBValue(vRef)
+                    );
+    }
+    vRef = vColBack.GetPixel();
+    vCbnd.lBackColor = (LONG)vRef;
+
+    vRef = vColText.GetPixel();
+    vCbnd.lColor = (LONG)vRef;
+
+        sprintf(zMsg, "Color: %ld", vRef);
+        wxMessageBox( "wxWindows Menu Sample"
+                     ,zMsg
+                     ,wxICON_INFORMATION
+                    );
+
+    ::GpiSetAttrs( hPS
+                  ,PRIM_CHAR
+                  ,CBB_COLOR | CBB_BACK_COLOR
+                  ,0
+                  ,&vCbnd
+                 );
+
+    //
+    // Determine where to draw and leave space for a check-mark.
+    //
+    int                             nX = rRect.x + GetMarginWidth();
 
     //
     // Unfortunately, unlike Win32, PM has no owner drawn specific text
@@ -206,7 +221,7 @@ bool wxOwnerDrawn::OnDrawItem(
     // Manually replace the tab with spaces
     //
     wxString                        sTgt = "\t";
-    wxString                        sReplace = " ";
+    wxString                        sReplace = "           ";
     size_t                          nIndex;
 
     nIndex = m_strName.Find(sTgt.c_str());
@@ -217,10 +232,15 @@ bool wxOwnerDrawn::OnDrawItem(
     if (nIndex != -1)
         m_strName.Replace(sTgt.c_str(), "", TRUE);
 
-    rDC.DrawText( m_strName
-                 ,nX
-                 ,rRect.y + 4
-                );
+    POINTL                          vPoint;
+
+    vPoint.x = nX;
+    vPoint.y = rRect.y + 4;
+    ::GpiCharStringAt( hPS
+                      ,&vPoint
+                      ,m_strName.length()
+                      ,(PCH)m_strName.c_str()
+                     );
 
 #if 0
     //
