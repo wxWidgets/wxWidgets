@@ -224,6 +224,12 @@ Checking in src/msw/window.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/msw/window.cpp,v  <--  window.cpp
 new revision: 1.432; previous revision: 1.431
 
+30. Fix enumerating groups/entries in wxRegConfig under '/':
+
+Checking in src/msw/regconf.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/msw/regconf.cpp,v  <--  regconf.cpp
+new revision: 1.48; previous revision: 1.47
+
 
 TODO for 2.4 (items that are not backports)
 ===========================================
