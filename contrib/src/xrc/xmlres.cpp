@@ -35,7 +35,7 @@
 #include "wx/fontmap.h"
 #include "wx/artprov.h"
 
-#include "wx/xrc/xml.h"
+#include "wx/xml/xml.h"
 #include "wx/xrc/xmlres.h"
 
 #include "wx/arrimpl.cpp"
