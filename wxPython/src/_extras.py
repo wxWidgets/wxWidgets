@@ -476,14 +476,6 @@ def EVT_COMMAND_ENTER(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_ENTER, func)
 
 
-# wxNotebook events
-def EVT_NOTEBOOK_PAGE_CHANGED(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, func)
-
-def EVT_NOTEBOOK_PAGE_CHANGING(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, func)
-
-
 # wxSpinButton
 def EVT_SPIN_UP(win, id, func):
     win.Connect(id, -1, wxEVT_SCROLL_LINEUP, func)

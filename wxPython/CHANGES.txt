@@ -35,6 +35,9 @@ copies of them.
 Added Python wrappers for the new wxVScrolledWindow, wxVListBox, and
 wxHtmlListBox classes.
 
+Added wrappers for wxBookCtrl and wxListbook.  wxNotebook now derives
+from wxBookCtrl.
+
 
 
 
