@@ -592,12 +592,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     SetEventMask( everyEvent ) ;
     UMAShowWatchCursor() ;
 
-#if defined(WXMAKINGDLL_CORE) && defined(__DARWIN__)
-    // open shared library resources from here since we don't have
-    //   __wxinitialize in Mach-O shared libraries
-    wxStAppResource::OpenSharedLibraryResource(NULL);
-#endif
-
 #ifndef __DARWIN__
 #  if __option(profile)
     ProfilerInit( collectDetailed, bestTimeBase , 40000 , 50 ) ;
@@ -709,12 +703,6 @@ void wxApp::CleanUp()
     ProfilerDump( (StringPtr)"\papp.prof" ) ;
     ProfilerTerm() ;
 #  endif
-#endif
-
-#if defined(WXMAKINGDLL_CORE) && defined(__DARWIN__)
-    // close shared library resources from here since we don't have
-    //   __wxterminate in Mach-O shared libraries
-    wxStAppResource::CloseSharedLibraryResource();
 #endif
 
     UMACleanupToolbox() ;

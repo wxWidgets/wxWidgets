@@ -156,20 +156,6 @@ public:
     DECLARE_EVENT_TABLE()
 };
 
-class WXDLLEXPORT wxStAppResource
-{
-public:
-    wxStAppResource() ;
-    ~wxStAppResource() ;
-
-    // opaque pointer for CFragInitBlock
-    static void OpenSharedLibraryResource(const void *) ;
-    static void CloseSharedLibraryResource() ;
-
-private:
-    short       m_currentRefNum ;
-} ;
-
 #endif
     // _WX_APP_H_
 
