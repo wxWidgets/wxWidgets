@@ -1444,9 +1444,11 @@ GdkPixmap *wxBitmap::GetPixmap() const
     // create the pixmap on the fly if we use Pixbuf representation:
     if (HasPixbuf() && !HasPixmap())
     {
+        delete M_BMPDATA->m_mask;
+        M_BMPDATA->m_mask = new wxMask();
         gdk_pixbuf_render_pixmap_and_mask(M_BMPDATA->m_pixbuf,
                                           &M_BMPDATA->m_pixmap,
-                                          NULL /*mask*/,
+                                          &M_BMPDATA->m_mask->m_bitmap,
                                           128 /*threshold*/);
     }
 #endif // __WXGTK20__
