@@ -317,7 +317,7 @@ void wxStoredTree::GetChildren(long id, wxList& list)
   }
 }
 
-wxStoredNode* wxStoredTree::GetNode(long id) const
+wxStoredNode* wxStoredTree::GetNode(long idx) const
 {
     wxASSERT(idx < m_num);
 

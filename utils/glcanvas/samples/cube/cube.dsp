@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /I "..\..\..\..\include" /I "..\..\..\..\include\wx\msw" /I "..\..\..\..\include\wx\generic" /I "..\..\..\..\include\wx\other" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\win" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D "__WINDOWS__" /D "STRICT" /YX"wx\wxprec.h" /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "..\..\..\..\include" /I "..\..\..\..\include\wx\msw" /I "..\..\..\..\include\wx\generic" /I "..\..\..\..\include\wx\other" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\win" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D "__WINDOWS__" /D "STRICT" /Fp"..\..\..\..\Release\wxWin.pch" /YX"wx\wxprec.h" /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o NUL /win32
 # ADD BASE RSC /l 0xc09 /d "NDEBUG"
@@ -88,6 +88,14 @@ LINK32=link.exe
 # Name "cube - Win32 Debug"
 # Begin Source File
 
+SOURCE=.\wx\msw\blank.cur
+# End Source File
+# Begin Source File
+
+SOURCE=.\wx\msw\bullseye.cur
+# End Source File
+# Begin Source File
+
 SOURCE=.\cube.cpp
 # End Source File
 # Begin Source File
@@ -97,19 +105,56 @@ SOURCE=.\cube.h
 # Begin Source File
 
 SOURCE=.\cube.rc
-
-!IF  "$(CFG)" == "cube - Win32 Release"
-
 # ADD BASE RSC /l 0xc09
 # ADD RSC /l 0xc09 /i "..\..\..\..\include"
+# End Source File
+# Begin Source File
 
-!ELSEIF  "$(CFG)" == "cube - Win32 Debug"
+SOURCE=.\wx\msw\hand.cur
+# End Source File
+# Begin Source File
 
-# ADD BASE RSC /l 0xc09
-# ADD RSC /l 0xc09 /i "..\..\..\..\include"
+SOURCE=.\wx\msw\magnif1.cur
+# End Source File
+# Begin Source File
 
-!ENDIF 
+SOURCE=.\mondrian.ico
+# End Source File
+# Begin Source File
 
+SOURCE=.\wx\msw\noentry.cur
+# End Source File
+# Begin Source File
+
+SOURCE=.\wx\msw\pbrush.cur
+# End Source File
+# Begin Source File
+
+SOURCE=.\wx\msw\pencil.cur
+# End Source File
+# Begin Source File
+
+SOURCE=.\wx\msw\pntleft.cur
+# End Source File
+# Begin Source File
+
+SOURCE=.\wx\msw\pntright.cur
+# End Source File
+# Begin Source File
+
+SOURCE=.\wx\msw\query.cur
+# End Source File
+# Begin Source File
+
+SOURCE=.\wx\msw\roller.cur
+# End Source File
+# Begin Source File
+
+SOURCE=.\wx\msw\size.cur
+# End Source File
+# Begin Source File
+
+SOURCE=.\wx\msw\watch1.cur
 # End Source File
 # End Target
 # End Project
