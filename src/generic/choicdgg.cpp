@@ -28,6 +28,8 @@
     #include "wx/listbox.h"
     #include "wx/stattext.h"
     #include "wx/intl.h"
+    #include "wx/dcclient.h"
+    #include "wx/settings.h"
 #endif
 
 #if wxUSE_STATLINE
