@@ -33,6 +33,7 @@
 #ifndef WX_PRECOMP
 #include "wx/utils.h"
 #include "wx/app.h"
+#include "wx/hash.h"
 #endif
 
 #if wxUSE_THREADS
