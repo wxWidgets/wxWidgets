@@ -1388,7 +1388,7 @@ public:
 
 #define IMP_PYCALLBACK_bool_any(CLASS, PCLASS, CBNAME, Type)                    \
     bool CLASS::CBNAME(Type& a) {                                               \
-        bool rv;                                                                \
+        bool rv=FALSE;                                                          \
         bool found;                                                             \
         wxPyTState* state = wxPyBeginBlockThreads();                            \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
@@ -1504,7 +1504,7 @@ public:
 
 #define IMP_PYCALLBACK_BOOL_ME(CLASS, PCLASS, CBNAME) \
     bool CLASS::CBNAME(wxMouseEvent& e) { \
-        bool rval; \
+        bool rval=FALSE; \
         bool found; \
         wxPyTState* state = wxPyBeginBlockThreads(); \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) { \
