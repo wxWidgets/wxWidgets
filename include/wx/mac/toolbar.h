@@ -31,14 +31,13 @@ class WXDLLEXPORT wxToolBar: public wxToolBarBase
    * Public interface
    */
 
-   wxToolBar() : m_macToolHandles() { Init(); }
+   wxToolBar() { Init(); }
 
 
   inline wxToolBar(wxWindow *parent, wxWindowID id,
                    const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
                    long style = wxNO_BORDER|wxTB_HORIZONTAL,
                    const wxString& name = wxToolBarNameStr)
-      : m_macToolHandles()
   {
     Init();
     Create(parent, id, pos, size, style, name);
@@ -87,8 +86,6 @@ protected:
                                           const wxString& shortHelp,
                                           const wxString& longHelp);
     virtual wxToolBarToolBase *CreateTool(wxControl *control);
-
-    wxArrayPtrVoid    m_macToolHandles ;
 
     DECLARE_EVENT_TABLE()
 };
