@@ -42,6 +42,7 @@
 #if wxUSE_TOOLBAR && wxUSE_TOOLBAR_NATIVE && (!defined(_WIN32_WCE) || (_WIN32_WCE >= 400 && !wxUSE_POCKETPC_UI))
 
 #include "wx/toolbar.h"
+#include "wx/sysopt.h"
 
 #include "wx/msw/private.h"
 
@@ -539,6 +540,22 @@ bool wxToolBar::Realize()
         MemoryHDC memoryDC2;
 #endif // USE_BITMAP_MASKS/!USE_BITMAP_MASKS
 
+        if (wxSystemOptions::GetOptionInt(wxT("no-remap")) == 1)
+        {
+#if USE_BITMAP_MASKS
+            dcAllButtons.SelectObject(wxNullBitmap);
+#endif
+
+            // Even if we're not remapping the bitmap
+            // content, we still have to remap the background.
+            hBitmap = (HBITMAP)MapBitmap((WXHBITMAP) hBitmap,
+                totalBitmapWidth, totalBitmapHeight);
+
+#if USE_BITMAP_MASKS
+            dcAllButtons.SelectObject(bitmap);
+#endif
+        }
+
         // the button position
         wxCoord x = 0;
 
@@ -553,13 +570,15 @@ bool wxToolBar::Realize()
                 const wxBitmap& bmp = tool->GetNormalBitmap();
                 if ( bmp.Ok() )
                 {
+                    int xOffset = wxMax(0, (m_defaultWidth - bmp.GetWidth())/2);
+                    int yOffset = wxMax(0, (m_defaultHeight - bmp.GetHeight())/2);
 #if USE_BITMAP_MASKS
                     // notice the last parameter: do use mask
-                    dcAllButtons.DrawBitmap(bmp, x, 0, TRUE);
+                    dcAllButtons.DrawBitmap(bmp, x+xOffset, yOffset, TRUE);
 #else // !USE_BITMAP_MASKS
                     SelectInHDC hdcSelector2(memoryDC2, GetHbitmapOf(bmp));
                     if ( !BitBlt(memoryDC,
-                                 x, 0,  m_defaultWidth, m_defaultHeight,
+                                 x+xOffset, yOffset,  m_defaultWidth, m_defaultHeight,
                                  memoryDC2,
                                  0, 0, SRCCOPY) )
                     {
@@ -587,9 +606,12 @@ bool wxToolBar::Realize()
         bitmap.SetHBITMAP(0);
 #endif // USE_BITMAP_MASKS/!USE_BITMAP_MASKS
 
-        // Map to system colours
-        hBitmap = (HBITMAP)MapBitmap((WXHBITMAP) hBitmap,
-                                     totalBitmapWidth, totalBitmapHeight);
+        if (!wxSystemOptions::HasOption(wxT("no-remap")) || wxSystemOptions::GetOptionInt(wxT("no-remap")) == 0)
+        {
+            // Map to system colours
+            hBitmap = (HBITMAP)MapBitmap((WXHBITMAP) hBitmap,
+                totalBitmapWidth, totalBitmapHeight);
+        }
 
         bool addBitmap = TRUE;
 

@@ -157,6 +157,10 @@ wxMSW:
 - background colour of a wxComboBox may now be set
 - fixed wxListCtrl::GetItemText/BackgroundColour()
 - Esc can now be used to close menus in the dialogs (Hartmut Honisch)
+- Added no-remap system option so colourful toolbar buttons
+  aren't mangled
+- Toolbar buttons are now centred if the bitmap size is smaller
+  than the specified default size
 
 wxGTK:
 
