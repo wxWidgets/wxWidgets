@@ -134,6 +134,7 @@ void wxLEDNumberCtrl::SetValue(wxString const &Value, bool Redraw)
 {
     if (Value != m_Value)
     {
+#ifdef __WXDEBUG__
         if (!Value.IsEmpty())
         {
             for(size_t i=0; i<Value.Length(); i++) {
@@ -142,6 +143,7 @@ void wxLEDNumberCtrl::SetValue(wxString const &Value, bool Redraw)
                              wxT("wxLEDNumberCtrl can only display numeric string values."));
             }
         }
+#endif
 
         m_Value = Value;
         RecalcInternals(GetClientSize());
@@ -191,7 +193,7 @@ void wxLEDNumberCtrl::OnPaint(wxPaintEvent &Event)
             DrawDigit(MemDc, DIGITALL, i);
 
         // Draw the digits.
-        switch (m_Value[i])
+        switch (m_Value.GetChar(i))
         {
             case '0' :
                 DrawDigit(MemDc, DIGIT0, i);
@@ -318,12 +320,12 @@ void wxLEDNumberCtrl::RecalcInternals(const wxSize &CurrentSize)
     if ((Height * 0.07) < 1)
         m_LineMargin = 1;
     else
-        m_LineMargin = Height * 0.07;
+        m_LineMargin = (int)(Height * 0.07);
 
     if ((Height * 0.35) < 1)
         m_LineLength = 1;
     else
-        m_LineLength = Height * 0.35;
+        m_LineLength = (int)(Height * 0.35);
 
     m_LineWidth = m_LineMargin;
 
