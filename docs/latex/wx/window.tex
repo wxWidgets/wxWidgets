@@ -31,6 +31,14 @@ events. Windows only.}
 \twocolitem{\windowstyle{wxNO\_3D}}{Prevents the children of this window taking on 3D styles, even though
 the application-wide policy is for 3D controls. Windows only.}
 \twocolitem{\windowstyle{wxTAB\_TRAVERSAL}}{Use this to enable tab traversal for non-dialog windows.}
+\twocolitem{\windowstyle{wxWANTS\_CHARS}}{Use this to indicate that the window
+wants to get all char events - even for keys like TAB or ENTER which are
+usually used for dialog navigation and which wouldn't be generated without
+this style}
+\twocolitem{\windowstyle{wxNO\_FULLREPAINT\_ON\_RESIZE}}{Disables repainting
+the window completely when its size is changed - you will have to repaint the
+new window area manually if you use style. Currently only has effect for
+wxMSW.}
 \twocolitem{\windowstyle{wxVSCROLL}}{Use this style to enable a vertical scrollbar. (Still used?) }
 \twocolitem{\windowstyle{wxHSCROLL}}{Use this style to enable a horizontal scrollbar. (Still used?) }
 \twocolitem{\windowstyle{wxCLIP\_CHILDREN}}{Use this style to eliminate flicker caused by the background being
