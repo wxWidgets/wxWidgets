@@ -22,8 +22,10 @@ LIBVERSION_AGE=0
 include $(top_srcdir)/$(libsrc_dir)/files.lst
 
 OBJECTS = $(FL_OBJECTS)
+DEPFILES= $(FL_OBJECTS:.o=.d)
 
 APPEXTRADEFS = -I$(top_srcdir)/contrib/include
 
 include $(top_builddir)/src/makelib.env
 
+-include $(DEPFILES)
