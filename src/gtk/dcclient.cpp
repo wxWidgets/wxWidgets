@@ -79,9 +79,8 @@ void gdk_wx_draw_bitmap     (GdkDrawable  *drawable,
                           gint                width,
                           gint                height)
 {
-#ifdef __WXGTK20__
     gint src_width, src_height;
-#else
+#ifndef __WXGTK20__
     GdkWindowPrivate *drawable_private;
     GdkWindowPrivate *src_private;
     GdkGCPrivate *gc_private;
