@@ -37,8 +37,6 @@
 class MyApp: public wxApp
 {
 public:
-  MyApp();
-
   virtual bool OnInit();
 
 protected:
@@ -81,9 +79,12 @@ END_EVENT_TABLE()
 IMPLEMENT_APP(MyApp)
 
 
-MyApp::MyApp() : m_locale("french", "fr", "C")
+// `Main program' equivalent, creating windows and returning main app frame
+bool MyApp::OnInit(void)
 {
-  // catalogs we'll be using:
+  // Initialize the catalogs we'll be using
+  m_locale.Init("french", "fr", "C");
+
   /* not needed any more, done in wxLocale ctor
   m_locale.AddCatalog("wxstd");      // 1) for library messages
   */
@@ -93,11 +94,6 @@ MyApp::MyApp() : m_locale("french", "fr", "C")
      or comment out this line then */
   m_locale.AddCatalog("fileutils");  // 3) and another just for testing
   
-}
-
-// `Main program' equivalent, creating windows and returning main app frame
-bool MyApp::OnInit(void)
-{
   // Create the main frame window
   MyFrame *frame = new MyFrame(NULL, _("Minimal wxWindows App"), 50, 50, 150, 40);
 
