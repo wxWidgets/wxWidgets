@@ -283,7 +283,6 @@ MSWOBJS = ..\msw\$D\accel.obj \
 		..\msw\$D\palette.obj \
 		..\msw\$D\pen.obj \
 		..\msw\$D\penwin.obj \
-		..\msw\$D\pnghand.obj \
 		..\msw\$D\printdlg.obj \
 		..\msw\$D\printwin.obj \
 		..\msw\$D\radiobox.obj \
@@ -309,6 +308,7 @@ MSWOBJS = ..\msw\$D\accel.obj \
 		..\msw\$D\timer.obj \
 		..\msw\$D\tooltip.obj \
 		..\msw\$D\treectrl.obj \
+		..\msw\$D\pnghand.obj \
 		..\msw\$D\utils.obj \
 		..\msw\$D\utilsexc.obj \
 		..\msw\ole\$D\uuid.obj \

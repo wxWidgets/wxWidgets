@@ -278,6 +278,10 @@ bool wxBitmap::LoadFile(const wxString& filename, long type)
 
   wxBitmapHandler *handler = FindHandler(type);
 
+#if 0
+  if ( handler == NULL )
+    return FALSE;
+#else
   if ( handler == NULL ) {
     wxImage image;
     if (!image.LoadFile( filename, type )) return FALSE;
@@ -288,7 +292,7 @@ bool wxBitmap::LoadFile(const wxString& filename, long type)
     }
     else return FALSE;
   }
-
+#endif
   return handler->LoadFile(this, filename, type, -1, -1);
 }
 
@@ -313,11 +317,16 @@ bool wxBitmap::SaveFile(const wxString& filename, int type, const wxPalette *pal
 {
   wxBitmapHandler *handler = FindHandler(type);
 
+#if 0
+  if ( handler == NULL )
+    return FALSE;
+#else
   if ( handler == NULL ) { // try wxImage
     wxImage image( *this );
     if (image.Ok()) return image.SaveFile( filename, type );
     else return FALSE;
   }
+#endif
 
   return handler->SaveFile(this, filename, type, palette);
 }

@@ -62,8 +62,6 @@
 #define wxUSE_DRAG_AND_DROP 1
                                 // 0 for no drag and drop
 
-#define wxUSE_TOOLBAR      1
-                                // Define 1 to use toolbar classes
 #define wxUSE_BUTTONBAR    1
                                 // Define 1 to use buttonbar classes (enhanced toolbar
                                 // for MS Windows)

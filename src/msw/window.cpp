@@ -1836,6 +1836,13 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             break;
 
         case WM_MOUSEMOVE:
+           {
+                short x = LOWORD(lParam);
+                short y = HIWORD(lParam);
+
+                processed = HandleMouseMove(x, y, wParam);
+                break;
+            }
         case WM_LBUTTONDOWN:
         case WM_LBUTTONUP:
         case WM_LBUTTONDBLCLK:

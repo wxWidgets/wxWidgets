@@ -27,13 +27,13 @@ $(OBJDIR):
 server$(GUISUFFIX): $(OBJDIR)/server.$(OBJSUFF) $(OBJDIR)/server_resources.$(OBJSUFF) $(WXLIB)
 	$(CC) $(LDFLAGS) -o server$(GUISUFFIX)$(EXESUFF) $(OBJDIR)/server.$(OBJSUFF) $(OBJDIR)/server_resources.$(OBJSUFF) $(LDLIBS)
 
-$(OBJDIR)/server.$(OBJSUFF):        server.$(SRCSUFF) server.h
+$(OBJDIR)/server.$(OBJSUFF):        server.$(SRCSUFF)
 	$(CC) -c $(CPPFLAGS) -o $@ server.$(SRCSUFF)
 
 client$(GUISUFFIX): $(OBJDIR)/client.$(OBJSUFF) $(OBJDIR)/client_resources.$(OBJSUFF) $(WXLIB)
 	$(CC) $(LDFLAGS) -o client$(GUISUFFIX)$(EXESUFF) $(OBJDIR)/client.$(OBJSUFF) $(OBJDIR)/client_resources.$(OBJSUFF) $(LDLIBS)
 
-$(OBJDIR)/client.$(OBJSUFF):        client.$(SRCSUFF) client.h
+$(OBJDIR)/client.$(OBJSUFF):        client.$(SRCSUFF)
 	$(CC) -c $(CPPFLAGS) -o $@ client.$(SRCSUFF)
         
 $(OBJDIR)/server_resources.o:  server.rc

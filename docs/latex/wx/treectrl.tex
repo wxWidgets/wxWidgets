@@ -255,16 +255,9 @@ Returns the first visible item.
 
 \membersection{wxTreeCtrl::GetImageList}\label{wxtreectrlgetimagelist}
 
-\constfunc{wxImageList*}{GetImageList}{\param{int }{which = wxIMAGE\_LIST\_NORMAL}}
+\constfunc{wxImageList*}{GetImageList}{\void}
 
-Returns the specified image list. {\it which} may be one of:
-
-\twocolwidtha{5cm}
-\begin{twocollist}\itemsep=0pt
-\twocolitem{\windowstyle{wxIMAGE\_LIST\_NORMAL}}{The normal (large icon) image list.}
-\twocolitem{\windowstyle{wxIMAGE\_LIST\_SMALL}}{The small icon image list.}
-\twocolitem{\windowstyle{wxIMAGE\_LIST\_STATE}}{The user-defined state image list (unimplemented).}
-\end{twocollist}
+Returns the normal image list.
 
 \membersection{wxTreeCtrl::GetIndent}\label{wxtreectrlgetindent}
 
@@ -420,6 +413,12 @@ Returns the number of selected items.
 \pythonnote{The wxPython version of this method accepts no parameters
 and returns a Python list of \tt{wxTreeItemId}'s.}
 
+\membersection{wxTreeCtrl::GetStateImageList}\label{wxtreectrlgetstateimagelist}
+
+\constfunc{wxImageList*}{GetStateImageList}{\void}
+
+Returns the state image list (from which application-defined state images are taken).
+
 \membersection{wxTreeCtrl::HitTest}\label{wxtreectrlhittest}
 
 \func{long}{HitTest}{\param{const wxPoint\& }{point}, \param{int\& }{flags}}
@@ -527,10 +526,9 @@ Sets the indentation for the tree control.
 
 \membersection{wxTreeCtrl::SetImageList}\label{wxtreectrlsetimagelist}
 
-\func{void}{SetImageList}{\param{wxImageList*}{ imageList}, \param{int }{which = wxIMAGE\_LIST\_NORMAL}}
+\func{void}{SetImageList}{\param{wxImageList*}{ imageList}}
 
-Sets the image list. {\it which} should be one of wxIMAGE\_LIST\_NORMAL, wxIMAGE\_LIST\_SMALL and
-wxIMAGE\_LIST\_STATE.
+Sets the normal image list.
 
 \membersection{wxTreeCtrl::SetItemBold}\label{wxtreectrlsetitembold}
 
@@ -584,6 +582,12 @@ Sets the selected item image (this function is obsolete, use
 \func{void}{SetItemText}{\param{const wxTreeItemId\&}{ item}, \param{const wxString\& }{text}}
 
 Sets the item label.
+
+\membersection{wxTreeCtrl::SetStateImageList}\label{wxtreectrlsetstateimagelist}
+
+\func{void}{SetStateImageList}{\param{wxImageList*}{ imageList}}
+
+Sets the state image list (from which application-defined state images are taken).
 
 \membersection{wxTreeCtrl::SortChildren}\label{wxtreectrlsortchildren}
 
