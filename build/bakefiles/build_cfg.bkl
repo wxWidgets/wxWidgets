@@ -10,11 +10,13 @@
 
     <if cond="FORMAT!='autoconf' and TOOLKIT=='MSW' and FORMAT!='msvc6prj' and FORMAT!='cbuilderx'">
 
-        <set var="BUILD_CFG_FILE">$(LIBDIRNAME)$(DIRSEP)build.cfg</set>
+        <set var="BUILD_CFG_FILE" make_var="1">
+            $(SETUPHDIR)$(DIRSEP)build.cfg
+        </set>
         
         <action id="build_cfg_file">
             <dependency-of>all</dependency-of>
-            <depends>libdir</depends>
+            <depends>libdir_setup</depends>
             <command>
                 @echo WXVER_MAJOR=$(WXVER_MAJOR) >$(BUILD_CFG_FILE)
                 @echo WXVER_MINOR=$(WXVER_MINOR) >>$(BUILD_CFG_FILE)
