@@ -46,7 +46,7 @@ class MimeTypesDemoPanel(wx.Panel):
         usizer.Add(t, 0, wx.ALL | wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL, 2)
 
         self.ext = wx.TextCtrl(self, -1, value="wav", style = wx.TE_PROCESS_ENTER )
-        usizer.Add(self.ext, 0, wx.FIXED_MINSIZE | wx.ALL | wx.ALIGN_TOP, 4)
+        usizer.Add(self.ext, 0, wx.ALL | wx.ALIGN_TOP, 4)
         self.Bind(wx.EVT_TEXT_ENTER, self.OnLookup, self.ext)
 
         # Select how to look it up
@@ -85,13 +85,13 @@ class MimeTypesDemoPanel(wx.Panel):
         llsizer.Add(t, (0, 0), (1, 1), wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 2)
 
         self.icon = wx.StaticBitmap(self, -1, images.getNoIconBitmap())
-        llsizer.Add(self.icon, (0, 1), (1, 1), wx.FIXED_MINSIZE | wx.ALL | wx.ALIGN_CENTER, 2)
+        llsizer.Add(self.icon, (0, 1), (1, 1), wx.ALL | wx.ALIGN_CENTER, 2)
 
         self.iconsource = wx.TextCtrl(self, -1, value="", size=(125, -1), style = wx.TE_READONLY )
         llsizer.Add(self.iconsource, (0, 2), (1, 1), wx.ALL | wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL, 2)
 
         self.iconoffset = wx.TextCtrl(self, -1, value="", size=(25,-1), style = wx.TE_READONLY )
-        llsizer.Add(self.iconoffset, (0, 3), (1, 1), wx.FIXED_MINSIZE | wx.ALL | wx.ALIGN_CENTER_VERTICAL, 2)
+        llsizer.Add(self.iconoffset, (0, 3), (1, 1), wx.ALL | wx.ALIGN_CENTER_VERTICAL, 2)
 
         #------- MIME Type
 
@@ -176,7 +176,7 @@ class MimeTypesDemoPanel(wx.Panel):
         lrsizer.Add(t, 0, wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 4)
 
         self.mimelist = wx.ListBox(self, -1, choices=[], style = wx.LB_SINGLE | wx.LB_SORT)
-        lrsizer.Add(self.mimelist, 1, wx.ALL | wx.EXPAND | wx.ALIGN_CENTER | wx.FIXED_SIZE, 4)
+        lrsizer.Add(self.mimelist, 1, wx.ALL | wx.EXPAND | wx.ALIGN_CENTER | wx.FIXED_MINSIZE, 4)
         self.Bind(wx.EVT_LISTBOX, self.OnListbox, self.mimelist)
 
         #----------------------------------------------------------------------------

@@ -28,10 +28,10 @@ class TestPanel( wx.Panel ):
 
         grid = wx.FlexGridSizer( 0, 2, 0, 0 )
         grid.Add( self.set_min, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
-        grid.Add( self.min, 0, wx.FIXED_MINSIZE|wx.ALIGN_LEFT|wx.ALL, 5 )
+        grid.Add( self.min, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
 
         grid.Add(self.set_max, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
-        grid.Add( self.max, 0, wx.FIXED_MINSIZE|wx.ALIGN_LEFT|wx.ALL, 5 )
+        grid.Add( self.max, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
 
         grid.Add( self.limit_target, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
         grid.Add( (20, 0), 0, wx.ALIGN_LEFT|wx.ALL, 5 )

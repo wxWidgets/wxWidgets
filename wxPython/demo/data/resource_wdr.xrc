@@ -74,7 +74,7 @@
                 </object>
               </object>
               <object class="sizeritem">
-                <flag>wxALIGN_CENTRE|wxLEFT|wxTOP|wxFIXED_MINSIZE</flag>
+                <flag>wxALIGN_CENTRE|wxLEFT|wxTOP</flag>
                 <border>5</border>
                 <object class="wxTextCtrl" name="ID_StateField">
                   <size>30,-1</size>
@@ -82,7 +82,7 @@
                 </object>
               </object>
               <object class="sizeritem">
-                <flag>wxALIGN_CENTRE|wxLEFT|wxRIGHT|wxTOP|wxFIXED_MINSIZE</flag>
+                <flag>wxALIGN_CENTRE|wxLEFT|wxRIGHT|wxTOP</flag>
                 <border>5</border>
                 <object class="wxTextCtrl" name="ID_ZipField">
                   <size>50,-1</size>

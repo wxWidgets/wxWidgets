@@ -79,16 +79,16 @@ value entry ctrl:""")
 
         grid1 = wx.FlexGridSizer( 0, 4, 0, 0 )
         grid1.Add( intlabel, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
-        grid1.Add( self.integerwidth, 0, wx.FIXED_MINSIZE|wx.ALIGN_LEFT|wx.ALL, 5 )
+        grid1.Add( self.integerwidth, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
 
         grid1.Add( groupcharlabel, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
-        grid1.Add( self.groupchar, 0, wx.FIXED_MINSIZE|wx.ALIGN_LEFT|wx.ALL, 5 )
+        grid1.Add( self.groupchar, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
 
         grid1.Add( fraclabel, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
-        grid1.Add( self.fractionwidth, 0, wx.FIXED_MINSIZE|wx.ALIGN_LEFT|wx.ALL, 5 )
+        grid1.Add( self.fractionwidth, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
 
         grid1.Add( decimalcharlabel, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
-        grid1.Add( self.decimalchar, 0, wx.FIXED_MINSIZE|wx.ALIGN_LEFT|wx.ALL, 5 )
+        grid1.Add( self.decimalchar, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
 
         grid1.Add( self.set_min, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
         grid1.Add( self.min, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
