@@ -35,6 +35,9 @@ match is found then that path is inserted into sys.path.
 import sys, os, glob, fnmatch
 
 
+_selected = None
+class wxversionError(Exception):
+    pass
 
 
 def require(versions):
@@ -59,14 +62,28 @@ def require(versions):
                         is increased for every specified optional component
                         that is specified and that matches.
     """
-    assert not sys.modules.has_key('wx') and not sys.modules.has_key('wxPython'), \
-           "wxversion.require() must be called before wxPython is imported"
-
     bestMatch = None
     bestScore = 0
     if type(versions) == str:
         versions = [versions]
-        
+
+    global _selected
+    if _selected is not None:
+        # A version was previously selected, ensure that it matches
+        # this new request
+        for ver in versions:
+            if _selected.Score(_wxPackageInfo(ver)) > 0:
+                return
+        # otherwise, raise an exception
+        raise wxversionError("A previously selected wx version does not match the new request.")
+
+    # If we get here then this is the first time wxversion is used.
+    # Ensure that wxPython hasn't been imported yet.
+    if sys.modules.has_key('wx') or sys.modules.has_key('wxPython'):
+        raise wxversionError("wxversion.require() must be called before wxPython is imported")
+
+    # Look for a matching version and manipulate the sys.path as
+    # needed to allow it to be imported.
     packages = _find_installed()
     for pkg in packages:
         for ver in versions:
@@ -75,11 +92,11 @@ def require(versions):
                 bestMatch = pkg
                 bestScore = score
 
-    assert bestMatch is not None, \
-           "Required version of wxPython not found"
+    if bestMatch is None:
+        raise wxversionError("Requested version of wxPython not found")
 
     sys.path.insert(0, bestMatch.pathname)
-        
+    _selected = bestMatch
         
 
 
@@ -165,12 +182,19 @@ class _wxPackageInfo(object):
 if __name__ == '__main__':
     import pprint
     def test(version):
+        # setup
         savepath = sys.path[:]
+
+        #test
         require(version)
         print "Asked for %s:\t got: %s" % (version, sys.path[0])
-        pprint.pprint(sys.path)
-        print
+        #pprint.pprint(sys.path)
+        #print
+
+        # reset
         sys.path = savepath[:]
+        global _selected
+        _selected = None
         
         
     # make some test dirs
@@ -202,14 +226,21 @@ if __name__ == '__main__':
     # available 2.4.  Should it give an error instead?  I don't think so...
     test("2.4-unicode") 
 
+    # Try asking for multiple versions
+    test(["2.6", "2.5.3", "2.5.2-gtk2"])
+
     try:
         # expecting an error on this one
         test("2.6")
-    except AssertionError:
-        print "Asked for 2.6:\t got: Assertion" 
+    except wxversionError, e:
+        print "Asked for 2.6:\t got Exception:", e 
 
-    # Try asking for multiple versions
-    test(["2.6", "2.5.3", "2.5.2-gtk2"])
+    # check for exception when incompatible versions are requested
+    try:
+        require("2.4")
+        require("2.5")
+    except wxversionError, e:
+        print "Asked for incompatible versions, got Exception:", e 
 
     # cleanup
     for name in names:
