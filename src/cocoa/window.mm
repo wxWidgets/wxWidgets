@@ -522,7 +522,7 @@ void wxWindowCocoa::SetInitialFrameRect(const wxPoint& pos, const wxSize& size)
     if(size.y!=-1)
         frameRect.size.height = size.y;
     frameRect.origin.x = pos.x;
-    frameRect.origin.y = parentRect.size.height-(pos.y+size.y);
+    frameRect.origin.y = parentRect.size.height-(pos.y+frameRect.size.height);
     [nsview setFrame: frameRect];
 }
 
