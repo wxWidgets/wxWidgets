@@ -36,6 +36,26 @@ enum wxPrintMode
     wxPRINT_MODE_STREAM = 4     // Send postscript data into a stream 
 };
 
+enum wxPrintBin
+{
+    wxPRINTBIN_DEFAULT,
+
+    wxPRINTBIN_ONLYONE,
+    wxPRINTBIN_LOWER,
+    wxPRINTBIN_MIDDLE,
+    wxPRINTBIN_MANUAL,
+    wxPRINTBIN_ENVELOPE,
+    wxPRINTBIN_ENVMANUAL,
+    wxPRINTBIN_AUTO,
+    wxPRINTBIN_TRACTOR,
+    wxPRINTBIN_SMALLFMT,
+    wxPRINTBIN_LARGEFMT,
+    wxPRINTBIN_LARGECAPACITY,
+    wxPRINTBIN_CASSETTE,
+    wxPRINTBIN_FORMSOURCE,
+
+    wxPRINTBIN_USER,
+};
 
 
 class wxPrintData : public wxObject {
@@ -59,7 +79,8 @@ public:
     const wxSize& GetPaperSize();
 
     int GetQuality();
-
+    wxPrintBin GetBin();
+    
     void SetNoCopies(int v);
     void SetCollate(bool flag);
     void SetOrientation(int orient);
@@ -70,7 +91,7 @@ public:
     void SetPaperId(wxPaperSize sizeId);
     void SetPaperSize(const wxSize& sz);
     void SetQuality(int quality);
-
+    void SetBin(wxPrintBin bin);
     // PostScript-specific data
     const wxString& GetPrinterCommand();
     const wxString& GetPrinterOptions();
