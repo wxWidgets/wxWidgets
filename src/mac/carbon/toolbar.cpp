@@ -632,7 +632,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos),
                 CreateIconControl( window , &toolrect , &info , false , &controlHandle ) ;
         #else        
                 SInt16 behaviour = kControlBehaviorOffsetContents ;
-                if ( CanBeToggled() )
+                if ( tool->CanBeToggled() )
                     behaviour += kControlBehaviorToggles ;
                 CreateBevelButtonControl( window , &toolrect , CFSTR("") , kControlBevelButtonNormalBevel , behaviour , &info , 
                     0 , 0 , 0 , &controlHandle ) ;
