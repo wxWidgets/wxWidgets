@@ -260,7 +260,7 @@ void cbRowLayoutPlugin::FitBarsToRange( int from, int till,
       {
             pBar->mBounds.width =
                 wxMax( mpPane->mProps.mMinCBarDim.x,
-                       int( double(freeSpc) * (pBar->mLenRatio/pcntSum) )
+                       (int)( double(freeSpc) * (pBar->mLenRatio/pcntSum) )
                      );
       }
         pBar = pBar->mpNext;
