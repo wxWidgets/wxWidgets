@@ -333,7 +333,7 @@ rcparser:
     nmake -f makefile.vc FINAL=$(FINAL)
     cd $(WXDIR)\src\msw
 
-clean: $(PERIPH_CLEAN_TARGET) clean_png clean_zlib clean_jpeg clean_xpm
+clean: $(PERIPH_CLEAN_TARGET) clean_png clean_zlib clean_xpm clean_jpeg 
         -erase $(LIBTARGET)
         -erase $(WXDIR)\lib\$(WXLIBNAME).pdb
         -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).dll
