@@ -88,9 +88,9 @@ wxDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     switch ( message )
     {
         case WM_INITDIALOG:
-            // for this message, returning TRUE tells system to set focus to the
-            // first control in the dialog box
-            return TRUE;
+            // for this message, returning TRUE tells system to set focus to
+            // the first control in the dialog box, but as we set the focus
+            // ourselves, we return FALSE from here as well, so fall through
 
         default:
             // for all the other ones, FALSE means that we didn't process the
