@@ -15,6 +15,11 @@ DEST="docs/xml/wxPython-metadata.xml"
 SRC="docs/xml-raw"
 
 
+classMap = {
+    'wxString'   : 'String',
+    'void'       : '',
+    }
+
 
 def getModuleNames():
     """
@@ -38,7 +43,14 @@ def getAttr(node, name):
         return None
 
 
-
+def fixType(typeStr):
+    """
+    Fixup type string, dropping the swig pointer and other flags
+    """
+    pos = typeStr.rfind('.')
+    if pos != -1:
+        typeStr = typeStr[pos+1:]
+    return classMap.get(typeStr, typeStr)
 
 
 def processModule(newDocNode, modulename):
@@ -100,7 +112,7 @@ def processInclude(moduleNode, includeNode):
             func = libxml2.newNode("method")
             func.setProp("name",    getAttr(node, "sym_name"))
             func.setProp("oldname", getAttr(node, "name"))
-            func.setProp("type",    getAttr(node, "type"))
+            func.setProp("type",    fixType(getAttr(node, "type")))
             doCheckOverloaded(func, node)
             doDocStrings(func, node)
             doParamList(func, node)
@@ -132,8 +144,11 @@ def processClass(parentNode, classNode):
     """
     # make class element
     klass = libxml2.newNode("class")
-    klass.setProp("name",    getAttr(classNode, "sym_name"))
-    klass.setProp("oldname", getAttr(classNode, "name"))
+    name = getAttr(classNode, "sym_name")
+    oldname = getAttr(classNode, "name")
+    classMap[oldname] = name
+    klass.setProp("name",    name)
+    klass.setProp("oldname", oldname)
     klass.setProp("module",  getAttr(classNode, "module"))
     doDocStrings(klass, classNode)
     parentNode.addChild(klass)
@@ -141,7 +156,8 @@ def processClass(parentNode, classNode):
     # check for baseclass(es)
     for node in classNode.xpathEval2("attributelist/baselist/base"):
         baseclass = libxml2.newNode("baseclass")
-        baseclass.setProp("name", node.prop("name"))
+        basename = node.prop("name")
+        baseclass.setProp("name", classMap.get(basename, basename))
         klass.addChild(baseclass)
 
     # check for constructors/destructors
@@ -162,7 +178,7 @@ def processClass(parentNode, classNode):
         if view == "memberfunctionHandler":
             func = libxml2.newNode("method")
             func.setProp("name", getAttr(node, "sym_name"))
-            func.setProp("type",    getAttr(node, "type"))
+            func.setProp("type", fixType(getAttr(node, "type")))
             doCheckOverloaded(func, node)
             doDocStrings(func, node)
             doParamList(func, node)
@@ -171,7 +187,7 @@ def processClass(parentNode, classNode):
         elif view == "staticmemberfunctionHandler":
             func = libxml2.newNode("staticmethod")
             func.setProp("name", getAttr(node, "sym_name"))
-            func.setProp("type",    getAttr(node, "type"))
+            func.setProp("type", fixType(getAttr(node, "type")))
             doCheckOverloaded(func, node)
             doDocStrings(func, node)
             doParamList(func, node)
@@ -180,7 +196,7 @@ def processClass(parentNode, classNode):
         elif view == "variableHandler":
             prop = libxml2.newNode("property")
             prop.setProp("name", getAttr(node, "sym_name"))
-            prop.setProp("type", getAttr(node, "type"))
+            prop.setProp("type", fixType(getAttr(node, "type")))
             if getAttr(node, "feature_immutable"):
                 prop.setProp("readonly", "yes")
             else:
@@ -199,8 +215,8 @@ def doParamList(parentNode, srcNode):
         plist = libxml2.newNode("paramlist")
         for p in params:
             pnode = libxml2.newNode("param")
-            pnode.setProp("name",    getAttr(p, "name"))
-            pnode.setProp("type",    getAttr(p, "type"))
+            pnode.setProp("name", getAttr(p, "name"))
+            pnode.setProp("type", fixType(getAttr(p, "type")))
             pnode.setProp("default", getAttr(p, "value"))
             plist.addChild(pnode)
         parentNode.addChild(plist)
@@ -255,7 +271,7 @@ def main():
         processModule(newTopNode, m)
 
     newDoc.saveFormatFile(DEST, True)
-
+    print "Wrote simplified metadata to", DEST
 
 #---------------------------------------------------------------------------
 
