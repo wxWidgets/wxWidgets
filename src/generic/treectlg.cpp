@@ -836,7 +836,9 @@ void wxGenericTreeCtrl::SetSpacing(unsigned int spacing)
     m_dirty = TRUE;
 }
 
-size_t wxGenericTreeCtrl::GetChildrenCount(const wxTreeItemId& item, bool recursively)
+size_t
+wxGenericTreeCtrl::GetChildrenCount(const wxTreeItemId& item,
+                                    bool recursively) const
 {
     wxCHECK_MSG( item.IsOk(), 0u, wxT("invalid tree item") );
 
