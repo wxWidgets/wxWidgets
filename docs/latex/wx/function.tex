@@ -235,6 +235,8 @@ the corresponding topic.
 \helpref{wxWakeUpIdle}{wxwakeupidle}\\
 \helpref{wxWriteResource}{wxwriteresource}\\
 \helpref{wxYield}{wxyield}\\
+\helpref{wx\_const\_cast}{wxconstcastraw}\\
+\helpref{wx\_static\_cast}{wxstaticcastraw}\\
 \helpref{\_}{underscore}\\
 \helpref{\_T}{underscoret}
 
@@ -3289,6 +3291,7 @@ supports {\it const\_cast} or into an old, C-style cast, otherwise.
 
 \wxheading{See also}
 
+\helpref{wx\_const\_cast}{wxconstcastraw}\\
 \helpref{wxDynamicCast}{wxdynamiccast}\\
 \helpref{wxStaticCast}{wxstaticcast}
 
@@ -3376,8 +3379,40 @@ This macro checks that the cast is valid in debug mode (an assert failure will
 result if {\tt wxDynamicCast(ptr, classname) == NULL}) and then returns the
 result of executing an equivalent of {\tt static\_cast<classname *>(ptr)}.
 
+\wxheading{See also}
+
+\helpref{wx\_static\_cast}{wxstaticcastraw}\\
 \helpref{wxDynamicCast}{wxdynamiccast}\\
 \helpref{wxConstCast}{wxconstcast}
+
+
+\membersection{wx\_const\_cast}\label{wxconstcastraw}
+
+\func{T}{wx\_const\_cast}{T, x}
+
+Same as \texttt{const\_cast<T>(x)} if the compiler supports const cast or 
+\texttt{(T)x} for old compilers. Unlike \helpref{wxConstCast}{wxconstcast},
+the cast it to the type \arg{T} and not to \texttt{T *} and also the order of
+arguments is the same as for the standard cast.
+
+\wxheading{See also}
+
+\helpref{wx\_static\_cast}{wxstaticcastraw}\\
+
+
+\membersection{wx\_static\_cast}\label{wxstaticcastraw}
+
+\func{T}{wx\_static\_cast}{T, x}
+
+Same as \texttt{static\_cast<T>(x)} if the compiler supports static cast or 
+\texttt{(T)x} for old compilers. Unlike \helpref{wxStaticCast}{wxstaticcast},
+there are no checks being done and the meaning of the macro arguments is exactly
+the same as for the standard static cast, i.e. \arg{T} is the full type name and
+star is not appended to it.
+
+\wxheading{See also}
+
+\helpref{wx\_const\_cast}{wxconstcastraw}\\
 
 
 

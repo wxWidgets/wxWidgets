@@ -544,7 +544,7 @@ public:
     // get the runtime identity of this object
     wxClassInfo *GetClassInfo() const
     {
-		return const_cast<wxClassInfo*>((const wxClassInfo*)m_classInfo);
+		return wx_const_cast(wxClassInfo *, m_classInfo);
     }
 
     wxObject* GetSuperClassInstance() const

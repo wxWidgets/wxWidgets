@@ -1,12 +1,12 @@
 /**
-*  Name:        defs.h 
-*  Purpose:     Declarations/definitions common to all wx source files 
-*  Author:      Julian Smart and others 
+*  Name:        defs.h
+*  Purpose:     Declarations/definitions common to all wx source files
+*  Author:      Julian Smart and others
 *  Modified by: Ryan Norton (Converted to C)
-*  Created:     01/02/97 
-*  RCS-ID:      $Id$ 
-*  Copyright:   (c) 
-*  Licence:     wxWindows licence 
+*  Created:     01/02/97
+*  RCS-ID:      $Id$
+*  Copyright:   (c)
+*  Licence:     wxWindows licence
 */
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
@@ -24,7 +24,7 @@
 
 #include "wx/platform.h"
 
-/*  RN - only double-check the environment when building in C++ 
+/*  RN - only double-check the environment when building in C++
     Shouldn't configure pass the environment to all sub-libs too? */
 #ifdef __cplusplus
 /*  Make sure the environment is set correctly */
@@ -283,11 +283,20 @@ typedef int wxWindowID;
     #endif
 #endif /*  HAVE_CXX_CASTS */
 
-#ifdef HAVE_CONST_CAST
-    #define wxConstCast(obj, className) const_cast<className *>(obj)
+#ifdef HAVE_STATIC_CAST
+    #define wx_static_cast(t, x) static_cast<t>(x)
 #else
-    #define wxConstCast(obj, className) ((className *)(obj))
+    #define wx_static_cast(t, x) ((t)(x))
 #endif
+
+#ifdef HAVE_CONST_CAST
+    #define wx_const_cast(t, x) const_cast<t>(x)
+#else
+    #define wx_const_cast(t, x) ((t)(x))
+#endif
+
+/* for consistency with wxStatic/DynamicCast defined in wx/object.h */
+#define wxConstCast(obj, className) wx_const_cast(className *, obj)
 
 #ifndef HAVE_STD_WSTRING
     #if defined(__VISUALC__) && (__VISUALC__ >= 1100)
@@ -744,7 +753,7 @@ typedef wxUint32 wxDword;
     #define wxLongLongSuffix l
     #define wxLongLongFmtSpec _T("l")
     #define wxLongLongIsLong
-#elif (defined(__VISUALC__) && defined(__WIN32__)) 
+#elif (defined(__VISUALC__) && defined(__WIN32__))
     #define wxLongLong_t __int64
     #define wxLongLongSuffix i64
     #define wxLongLongFmtSpec _T("I64")
@@ -756,7 +765,7 @@ typedef wxUint32 wxDword;
       #define wxLongLong_t __int64
       #define wxLongLongSuffix i64
       #define wxLongLongFmtSpec _T("Ld")
-#elif defined(__DIGITALMARS__) 
+#elif defined(__DIGITALMARS__)
       #define wxLongLong_t __int64
       #define wxLongLongSuffix LL
       #define wxLongLongFmtSpec _T("ll")
