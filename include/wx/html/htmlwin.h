@@ -237,6 +237,8 @@ protected:
     };
 
     // Copies selection to clipboard if the clipboard support is available
+    //
+    // returns true if anything was copied to clipboard, false otherwise
     bool CopySelection(ClipboardType t = Secondary);
 
 #if wxUSE_CLIPBOARD
