@@ -35,7 +35,7 @@ All GUI ports:
 
 - added alpha channel support to wxImage
 - added wxCLOSE_BOX style for dialogs and frames
-- added wxSplitterWindow handler to XRC
+- added wxSplitterWindow and wxWizard handlers to XRC
 - added proportion to wxFlexGridSizer::AddGrowableRow/Col (Maxim Babitski)
 - added wxFlexGridSizer::SetFlexibleDirection() (Szczepan Holyszewski)
 - implemented GetEditControl for wxGenericTreeCtrl (Peter Stieber)

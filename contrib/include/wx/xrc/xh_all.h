@@ -48,5 +48,6 @@
 #include "wx/xrc/xh_frame.h"
 #include "wx/xrc/xh_scwin.h"
 #include "wx/xrc/xh_split.h"
+#include "wx/xrc/xh_wizrd.h"
 
 #endif // _WX_XMLRES_H_
