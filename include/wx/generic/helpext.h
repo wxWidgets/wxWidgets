@@ -24,7 +24,7 @@
 /// Default browser name.
 #   define WXEXTHELP_DEFAULTBROWSER "netscape"
 /// Is default browse a variant of netscape?
-#   define WXEXTHELP_DEFAULTBROWSER_IS_NETSCAPE true
+#   define WXEXTHELP_DEFAULTBROWSER_IS_NETSCAPE TRUE
 #endif
 /// Name of environment variable to set help browser.
 #define   WXEXTHELP_ENVVAR_BROWSER   "WX_HELPBROWSER"
@@ -125,13 +125,15 @@ DECLARE_CLASS(wxExtHelpController)
    /// How many entries do we have in the map file?
    int              m_NumOfEntries;
    /// A list containing all id,url,documentation triples.
-   wxExtHelpMapList *m_MapList;
+   wxList          *m_MapList;
    /// How to call the html viewer.
    wxString         m_BrowserName;
    /// Is the viewer a variant of netscape?
    bool             m_BrowserIsNetscape;
    /// Call the browser using a relative URL.
    bool CallBrowser(wxString const &);
+   /// Deletes the list and all objects.
+   void DeleteList(void);
 };
 
 #endif  
