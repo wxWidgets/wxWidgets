@@ -1257,7 +1257,7 @@ WX_DECLARE_OBJARRAY(wxDateTime, wxDateTimeArray);
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxDateTimeHolidayAuthority;
-WX_DEFINE_ARRAY(wxDateTimeHolidayAuthority *, wxHolidayAuthoritiesArray);
+WX_DEFINE_EXPORTED_ARRAY(wxDateTimeHolidayAuthority *, wxHolidayAuthoritiesArray);
 
 class WXDLLEXPORT wxDateTimeHolidayAuthority
 {
