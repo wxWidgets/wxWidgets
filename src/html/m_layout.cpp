@@ -298,7 +298,14 @@ TAG_HANDLER_BEGIN(TITLE, "TITLE")
                 wxString title = m_WParser->GetSource()->Mid(
                                         tag.GetBeginPos(), 
                                         tag.GetEndPos1()-tag.GetBeginPos());
+#if !wxUSE_UNICODE
+                wxCSConv conv(m_WParser->GetInputEncoding());
+                printf("'%s'\n", title.c_str());
+                title = wxString(title.wc_str(conv), wxConvLocal);
+                printf("'%s'\n", title.c_str());
+#endif
                 title = m_WParser->GetEntitiesParser()->Parse(title);
+                printf("'%s'\n", title.c_str());
                 wfr->OnSetTitle(title);
             }
         }
