@@ -14,7 +14,6 @@
 #endif
 
 
-#include <wx/html/version.h>
 #include <wx/html/htmldefs.h>
 #include <wx/html/htmltag.h>
 #include <wx/html/htmlcell.h>
