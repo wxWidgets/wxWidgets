@@ -59,6 +59,8 @@ public:
     // Calls the callback and appropriate event handlers
     bool ProcessCommand(wxCommandEvent& event);
 
+    // Enables the control
+    virtual void CocoaSetEnabled(bool enable);
 protected:
     virtual wxSize DoGetBestSize() const;
 };

@@ -71,3 +71,8 @@ bool wxControl::ProcessCommand(wxCommandEvent& event)
     return GetEventHandler()->ProcessEvent(event);
 }
 
+void wxControl::CocoaSetEnabled(bool enable)
+{
+    [GetNSControl() setEnabled: enable];
+}
+
