@@ -99,6 +99,9 @@ else
     PYUNICODEOPT=0
 fi
 
+if [ "$HOSTNAME" = "bigmac.alldunn.com" ]; then
+    MAKEJOBS="--jobs=2"
+fi
 
 if [ -z "$TARBALLDIR" ]; then
     # this is a spot on my fileserver where the tarballs go, adjust
@@ -180,15 +183,20 @@ if [ $inplace = no ]; then
     cd $WXDIR/bld
     WXBLD=$WXDIR/bld
 else
-    # If building "inplace" then our build dir will be BUILDROOT,
-    # adjust the variables to find things that way.
-    WXDIR=$WXROOT
+
+    # If building "inplace" then our build dir will be off of the
+    # WXROOT like normal, adjust the variables to find things that
+    # way.
+    WXBLD=$WXROOT/build-$CHARTYPE
+    mkdir -p $WXBLD
+    cd $WXBLD
+    WXDIR=..
     SRCROOT=$WXROOT
-    WXBLD=$BUILDROOT
 fi
 
-echo "Using source tree: $WXDIR"
+echo "Using wx root dir: $WXROOT"
 echo "Using build dir:   $WXBLD" 
+echo "Using source tree: $WXDIR"
 
 #----------------------------------------------------------------------
 
@@ -227,13 +235,13 @@ if [ $skipbuild != yes ]; then
 	fi
     fi
 
-    make
-    make -C contrib/src/gizmos
-    make -C contrib/src/ogl CXXFLAGS="-DwxUSE_DEPRECATED=0"
-    make -C contrib/src/stc
+    make $MAKEJOBS
+    make $MAKEJOBS -C contrib/src/gizmos
+    make $MAKEJOBS -C contrib/src/ogl CXXFLAGS="-DwxUSE_DEPRECATED=0"
+    make $MAKEJOBS -C contrib/src/stc
 
     # Build wxPython
-    cd $WXDIR/wxPython
+    cd $WXROOT/wxPython
     $PYTHON setup.py \
 	UNICODE=$PYUNICODEOPT \
 	NO_SCRIPTS=1 \
@@ -260,7 +268,7 @@ if [ $skipinstall != yes ]; then
     ln -s ../lib/wx/config/* wx-config
 
     # and wxPython
-    cd $WXDIR/wxPython
+    cd $WXROOT/wxPython
     $PYTHON setup.py \
 	UNICODE=$PYUNICODEOPT \
 	NO_SCRIPTS=1 \
@@ -286,13 +294,13 @@ if [ $skipinstall != yes ]; then
 
     # install wxPython's tool scripts
     mkdir -p $INSTALLROOT$BINPREFIX
-    cd $WXDIR/wxPython/scripts
+    cd $WXROOT/wxPython/scripts
     python$PYVER CreateMacScripts.py $INSTALLROOT $BINPREFIX
 
 
     # Remove the .pyc/.pyo files they just take up space and can be recreated
     # during the install.
-    pushd $WXDIR/wxPython
+    pushd $WXROOT/wxPython
     $PYTHON $PROGDIR/../zappycfiles.py $INSTALLROOT > /dev/null
     popd
 
@@ -418,6 +426,9 @@ This disk image contains the following items:
         uninstallation.  It is a text-mode tool so you can either run
         it from a Terminal command line, or you can open it with
         PythonLauncher and let it create a Terminal to run it in.
+
+        NOTE: If you have versions prior to 2.5.3.1 installed, please
+        do run this uninstall tool to remove the older version.
 
 EOF
 
