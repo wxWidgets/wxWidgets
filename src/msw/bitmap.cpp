@@ -389,11 +389,11 @@ bool wxBitmap::Create(int w, int h, int d)
         }
 
         SetHBITMAP((WXHBITMAP)hbmp);
-    }
 
 #if WXWIN_COMPATIBILITY_2
-    GetBitmapData()->m_ok = hbmp != 0;
+        GetBitmapData()->m_ok = hbmp != 0;
 #endif // WXWIN_COMPATIBILITY_2
+    }
 
     return Ok();
 }

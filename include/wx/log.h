@@ -537,6 +537,20 @@ inline void WXDLLEXPORT wxVLog##level(arg1, const wxChar *szFormat, \
                                      va_list argptr) {}             \
 inline void WXDLLEXPORT wxLog##level(arg1, const wxChar *szFormat, ...) {}
 
+// Empty Class to fake wxLogNull
+class WXDLLEXPORT wxLogNull
+{
+public:
+    wxLogNull() {}
+};
+
+// Dummy macros to replace some functions.
+#define wxSysErrorCode() (unsigned long)0
+#define wxSysErrorMsg( X ) (const wxChar*)NULL
+
+// Fake symbolic trace masks... for those that are used frequently
+#define wxTRACE_OleCalls wxT("") // OLE interface calls
+
 #endif // wxUSE_LOG/!wxUSE_LOG
 
 // a generic function for all levels (level is passes as parameter)
@@ -626,4 +640,3 @@ void WXDLLEXPORT wxSafeShowMessage(const wxString& title, const wxString& text);
 
 #endif  // _WX_LOG_H_
 
-// vi:sts=4:sw=4:et

@@ -2035,25 +2035,6 @@ void wxDC::SetLogicalScale(double x, double y)
     m_logicalScaleY = y;
 }
 
-#if WXWIN_COMPATIBILITY
-void wxDC::DoGetTextExtent(const wxString& string, float *x, float *y,
-                         float *descent, float *externalLeading,
-                         wxFont *theFont, bool use16bit) const
-{
-#ifdef __WXMICROWIN__
-    if (!GetHDC()) return;
-#endif
-
-    wxCoord x1, y1, descent1, externalLeading1;
-    GetTextExtent(string, & x1, & y1, & descent1, & externalLeading1, theFont, use16bit);
-    *x = x1; *y = y1;
-    if (descent)
-        *descent = descent1;
-    if (externalLeading)
-        *externalLeading = externalLeading1;
-}
-#endif
-
 #if wxUSE_DC_CACHEING
 
 /*

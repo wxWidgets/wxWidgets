@@ -20,7 +20,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_IMAGE && wxUSE_STREAMS
+#if wxUSE_IMAGE
 
 #include "wx/imagbmp.h"
 #include "wx/bitmap.h"
@@ -51,6 +51,8 @@
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxBMPHandler,wxImageHandler)
+
+#if wxUSE_STREAMS
 
 #ifndef BI_RGB
 #define BI_RGB       0
@@ -964,6 +966,8 @@ bool wxBMPHandler::DoCanRead(wxInputStream& stream)
     return hdr[0] == 'B' && hdr[1] == 'M';
 }
 
+#endif // wxUSE_STREAMS
+
 
 #if wxUSE_ICO_CUR
 //-----------------------------------------------------------------------------
@@ -971,6 +975,8 @@ bool wxBMPHandler::DoCanRead(wxInputStream& stream)
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxICOHandler, wxBMPHandler)
+
+#if wxUSE_STREAMS
 
 struct ICONDIRENTRY
 {
@@ -1288,6 +1294,7 @@ bool wxICOHandler::DoCanRead(wxInputStream& stream)
     return hdr[0] == '\0' && hdr[1] == '\0' && hdr[2] == '\1' && hdr[3] == '\0';
 }
 
+#endif // wxUSE_STREAMS
 
 
 //-----------------------------------------------------------------------------
@@ -1295,6 +1302,8 @@ bool wxICOHandler::DoCanRead(wxInputStream& stream)
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxCURHandler, wxICOHandler)
+
+#if wxUSE_STREAMS
 
 bool wxCURHandler::DoCanRead(wxInputStream& stream)
 {
@@ -1307,11 +1316,15 @@ bool wxCURHandler::DoCanRead(wxInputStream& stream)
     return hdr[0] == '\0' && hdr[1] == '\0' && hdr[2] == '\2' && hdr[3] == '\0';
 }
 
+#endif // wxUSE_STREAMS
+
 //-----------------------------------------------------------------------------
 // wxANIHandler
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxANIHandler, wxCURHandler)
+
+#if wxUSE_STREAMS
 
 bool wxANIHandler::LoadFile(wxImage *image, wxInputStream& stream,
                             bool verbose, int index)
@@ -1470,6 +1483,8 @@ int wxANIHandler::GetImageCount(wxInputStream& stream)
     return wxNOT_FOUND;
 }
 
+#endif // wxUSE_STREAMS
+
 #endif // wxUSE_ICO_CUR
 
-#endif // wxUSE_IMAGE && wxUSE_STREAMS
+#endif // wxUSE_IMAGE

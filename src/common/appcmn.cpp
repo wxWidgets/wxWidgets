@@ -475,6 +475,7 @@ bool wxAppBase::CheckBuildOptions(const wxBuildOptions& opts)
 
 static void LINKAGEMODE SetTraceMasks()
 {
+#if wxUSE_LOG
     wxString mask;
     if ( wxGetEnv(wxT("WXTRACE"), &mask) )
     {
@@ -482,6 +483,7 @@ static void LINKAGEMODE SetTraceMasks()
         while ( tkn.HasMoreTokens() )
             wxLog::AddTraceMask(tkn.GetNextToken());
     }
+#endif // wxUSE_LOG
 }
 
 // wxASSERT() helper

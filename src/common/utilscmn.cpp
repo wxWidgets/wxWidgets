@@ -1069,6 +1069,7 @@ wxString wxGetCurrentDir()
 // wxDoExecuteWithCapture() helper: reads an entire stream into one array
 //
 // returns TRUE if ok, FALSE if error
+#if wxUSE_STREAMS
 static bool ReadAll(wxInputStream *is, wxArrayString& output)
 {
     wxCHECK_MSG( is, FALSE, _T("NULL stream in wxExecute()?") );
@@ -1097,6 +1098,7 @@ static bool ReadAll(wxInputStream *is, wxArrayString& output)
 
     return cont;
 }
+#endif // wxUSE_STREAMS
 
 // this is a private function because it hasn't a clean interface: the first
 // array is passed by reference, the second by pointer - instead we have 2

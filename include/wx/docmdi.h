@@ -18,7 +18,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_MDI_ARCHITECTURE && wxUSE_DOC_VIEW_ARCHITECTURE
+#if wxUSE_MDI_ARCHITECTURE
 
 #include "wx/docview.h"
 #include "wx/mdi.h"

@@ -79,7 +79,6 @@ public:
     virtual bool Show(bool show = TRUE);
 
     // event handlers
-    bool OnClose();
     void OnCharHook(wxKeyEvent& event);
     void OnCloseWindow(wxCloseEvent& event);
 

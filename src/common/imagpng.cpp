@@ -54,7 +54,7 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxPNGHandler,wxImageHandler)
 
-#if wxUSE_LIBPNG
+#if wxUSE_STREAMS
 
 #ifndef PNGLINKAGEMODE
     #ifdef __WATCOMC__

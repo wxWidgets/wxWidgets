@@ -894,7 +894,7 @@ wxList *wxFTP::GetList(const wxString& wildcard, bool details)
 {
  wxSocketBase *sock = GetPort();
  if (!sock)
-  return FALSE;
+  return NULL;
  wxList *file_list = new wxList;
  wxString line;
  // NLST : List of Filenames (including Directory's !)

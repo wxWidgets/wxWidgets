@@ -91,8 +91,10 @@ public :
     inline bool operator==(const wxPoint2DInt& pt) const;
     inline bool operator!=(const wxPoint2DInt& pt) const;
 
+#if wxUSE_STREAMS
     void WriteTo( wxDataOutputStream &stream ) const;
     void ReadFrom( wxDataInputStream &stream );
+#endif // wxUSE_STREAMS
 
     wxInt32 m_x;
     wxInt32 m_y;
@@ -738,8 +740,10 @@ public:
        bool operator == (const wxRect2DInt& rect) const;
        bool operator != (const wxRect2DInt& rect) const;
 
+#if wxUSE_STREAMS
        void WriteTo( wxDataOutputStream &stream ) const;
        void ReadFrom( wxDataInputStream &stream );
+#endif // wxUSE_STREAMS
 
        wxInt32 m_x;
        wxInt32 m_y;

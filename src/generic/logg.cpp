@@ -1146,7 +1146,7 @@ static int OpenLogFile(wxFile& file, wxString *pFilename)
 
 #endif // !(wxUSE_LOGGUI || wxUSE_LOGWINDOW)
 
-#if wxUSE_TEXTCTRL
+#if wxUSE_LOG && wxUSE_GUI && wxUSE_TEXTCTRL
 
 // ----------------------------------------------------------------------------
 // wxLogTextCtrl implementation
@@ -1173,6 +1173,6 @@ void wxLogTextCtrl::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
     m_pTextCtrl->AppendText(msg);
 }
 
-#endif // wxUSE_TEXTCTRL
+#endif // wxUSE_LOG && wxUSE_GUI && wxUSE_TEXTCTRL
 
 // vi:sts=4:sw=4:et

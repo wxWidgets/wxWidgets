@@ -152,6 +152,7 @@ void wxRect2DDouble::ConstrainTo( const wxRect2DDouble &rect )
 
 // wxPoint2D
 
+#if wxUSE_STREAMS
 void wxPoint2DInt::WriteTo( wxDataOutputStream &stream ) const
 {
     stream.Write32( m_x );
@@ -163,6 +164,7 @@ void wxPoint2DInt::ReadFrom( wxDataInputStream &stream )
     m_x = stream.Read32();
     m_y = stream.Read32();
 }
+#endif // wxUSE_STREAMS
 
 wxDouble wxPoint2DInt::GetVectorAngle() const
 {
@@ -338,6 +340,7 @@ wxRect2DInt& wxRect2DInt::operator=( const wxRect2DInt &r )
     return *this;
 }
 
+#if wxUSE_STREAMS
 void wxRect2DInt::WriteTo( wxDataOutputStream &stream ) const
 {
     stream.Write32( m_x );
@@ -353,5 +356,6 @@ void wxRect2DInt::ReadFrom( wxDataInputStream &stream )
     m_width = stream.Read32();
     m_height = stream.Read32();
 }
+#endif // wxUSE_STREAMS
 
 #endif // wxUSE_GEOMETRY

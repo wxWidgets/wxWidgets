@@ -1177,7 +1177,9 @@ bool wxWindowBase::TransferDataToWindow()
         if ( validator && !validator->TransferToWindow() )
         {
             wxLogWarning(_("Could not transfer data to window"));
+#if wxUSE_LOG
             wxLog::FlushActive();
+#endif // wxUSE_LOG
 
             return FALSE;
         }

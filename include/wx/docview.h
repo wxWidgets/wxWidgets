@@ -17,6 +17,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_DOC_VIEW_ARCHITECTURE
+
 #include "wx/list.h"
 #include "wx/cmndata.h"
 #include "wx/string.h"
@@ -586,6 +589,8 @@ bool WXDLLEXPORT wxTransferStreamToFile(wxSTD istream& stream, const wxString& f
 // converts from/to a stream to/from a temporary file.
 bool WXDLLEXPORT wxTransferFileToStream(const wxString& filename, wxOutputStream& stream);
 bool WXDLLEXPORT wxTransferStreamToFile(wxInputStream& stream, const wxString& filename);
-#endif
+#endif // wxUSE_STD_IOSTREAM
+
+#endif // wxUSE_DOC_VIEW_ARCHITECTURE
 
 #endif // _WX_DOCH__

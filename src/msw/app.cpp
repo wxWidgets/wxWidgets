@@ -701,8 +701,10 @@ int wxEntry(WXHINSTANCE hInstance,
         // we can't simply double-click on the error message and get to that
         // line in the source. So VC++ at least, let's have a sensible default.
 #ifdef __VISUALC__
+#if wxUSE_LOG
         wxLog::SetTimestamp(NULL);
-#endif
+#endif // wxUSE_LOG
+#endif // __VISUALC__
 
         // init the app
         int retValue = wxEntryInitGui() && wxTheApp->OnInit() ? 0 : -1;
@@ -1300,9 +1302,11 @@ bool wxApp::Yield(bool onlyIfNeeded)
     // MT-FIXME
     static bool s_inYield = FALSE;
 
+#if wxUSE_LOG
     // disable log flushing from here because a call to wxYield() shouldn't
     // normally result in message boxes popping up &c
     wxLog::Suspend();
+#endif // wxUSE_LOG
 
     if ( s_inYield )
     {
@@ -1333,8 +1337,10 @@ bool wxApp::Yield(bool onlyIfNeeded)
     // if there are pending events, we must process them.
     ProcessPendingEvents();
 
+#if wxUSE_LOG
     // let the logs be flashed again
     wxLog::Resume();
+#endif // wxUSE_LOG
 
     s_inYield = FALSE;
 

@@ -71,6 +71,17 @@ public:
 
     virtual void DoSetVirtualSize(int x, int y);
 
+#if WXWIN_COMPATIBILITY   
+     virtual void GetScrollUnitsPerPage(int *x_page, int *y_page) const;   
+     virtual void CalcUnscrolledPosition(int x, int y, float *xx, float *yy) const;
+     // Need to do this otherwise the compiler gets confuced 
+     // between float and int calls to this function.
+     void CalcUnscrolledPosition(int x, int y, int *xx, int *yy) const
+        { wxScrollHelper::CalcScrolledPosition(x, y, xx, yy); }
+     wxPoint CalcUnscrolledPosition(const wxPoint& pt) const
+        { return wxScrollHelper::CalcScrolledPosition(pt); }
+#endif // WXWIN_COMPATIBILITY
+
 protected:
     // this is needed for wxEVT_PAINT processing hack described in
     // wxScrollHelperEvtHandler::ProcessEvent()

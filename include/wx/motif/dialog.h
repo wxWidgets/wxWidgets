@@ -22,7 +22,7 @@ WXDLLEXPORT_DATA(extern const char*) wxDialogNameStr;
 class WXDLLEXPORT wxDialog : public wxDialogBase
 {
     DECLARE_DYNAMIC_CLASS(wxDialog)
-        
+
 public:
     wxDialog();
 
@@ -49,49 +49,48 @@ public:
     {
         Create(parent, id, title, pos, size, style, name);
     }
-    
+
     bool Create(wxWindow *parent, wxWindowID id,
         const wxString& title, // bool modal = FALSE, // TODO make this a window style?
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
         long style = wxDEFAULT_DIALOG_STYLE,
         const wxString& name = wxDialogNameStr);
-    
+
     ~wxDialog();
-    
+
     virtual bool Destroy();
 
     virtual bool Show(bool show = TRUE);
 
     void SetTitle(const wxString& title);
-    
+
     void SetModal(bool flag);
-    
+
     virtual bool IsModal() const
     { return ((GetWindowStyleFlag() & wxDIALOG_MODAL) == wxDIALOG_MODAL); }
-    
+
     virtual int ShowModal();
     virtual void EndModal(int retCode);
-    
+
     // Implementation
     virtual void ChangeFont(bool keepOriginalSize = TRUE);
     virtual void ChangeBackgroundColour();
     virtual void ChangeForegroundColour();
     inline WXWidget GetTopWidget() const { return m_mainWidget; }
     inline WXWidget GetClientWidget() const { return m_mainWidget; }
-    
+
     // Standard buttons
     void OnOK(wxCommandEvent& event);
     void OnApply(wxCommandEvent& event);
     void OnCancel(wxCommandEvent& event);
-    
+
     // Responds to colour changes
     void OnSysColourChanged(wxSysColourChangedEvent& event);
-    
-    //  bool OnClose();
+
     void OnCharHook(wxKeyEvent& event);
     void OnCloseWindow(wxCloseEvent& event);
-    
+
 private:
     virtual bool DoCreate( wxWindow* parent, wxWindowID id,
                            const wxString& title,
@@ -108,9 +107,9 @@ protected:
     virtual void DoSetSize(int x, int y,
         int width, int height,
         int sizeFlags = wxSIZE_AUTO);
-    
+
     virtual void DoSetClientSize(int width, int height);
-    
+
 private:
     DECLARE_EVENT_TABLE()
 };

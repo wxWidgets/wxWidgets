@@ -48,7 +48,7 @@ public:
                 const wxString& name = wxButtonNameStr);
 
 #if WXWIN_COMPATIBILITY
-    wxBitmap *GetBitmap() const { return (wxBitmap *) & m_bmp; }
+    wxBitmap *GetBitmap() const { return (wxBitmap *) &GetBitmapLabel(); }
 #endif
 
     // Implementation

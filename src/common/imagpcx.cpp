@@ -23,7 +23,7 @@
 #  include "wx/defs.h"
 #endif
 
-#if wxUSE_IMAGE && wxUSE_STREAMS && wxUSE_PCX
+#if wxUSE_IMAGE && wxUSE_PCX
 
 #include "wx/imagpcx.h"
 #include "wx/wfstream.h"
@@ -34,6 +34,14 @@
 #include "wx/hash.h"
 #include "wx/list.h"
 #include "wx/object.h"
+
+//-----------------------------------------------------------------------------
+// wxPCXHandler
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxPCXHandler,wxImageHandler)
+
+#if wxUSE_STREAMS
 
 //-----------------------------------------------------------------------------
 // RLE encoding and decoding
@@ -429,8 +437,6 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
 // wxPCXHandler
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxPCXHandler,wxImageHandler)
-
 bool wxPCXHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose, int WXUNUSED(index) )
 {
     int error;
@@ -494,5 +500,7 @@ bool wxPCXHandler::DoCanRead( wxInputStream& stream )
     return c == 10;
 }
 
-#endif // wxUSE_STREAMS && wxUSE_PCX
+#endif // wxUSE_STREAMS
+
+#endif // wxUSE_IMAGE && wxUSE_PCX
 

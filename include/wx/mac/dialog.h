@@ -87,7 +87,6 @@ public:
     // --------------
 
     // event handlers
-//    bool OnClose();
     void OnCharHook(wxKeyEvent& event);
     void OnCloseWindow(wxCloseEvent& event);
 

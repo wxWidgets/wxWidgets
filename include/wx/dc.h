@@ -602,7 +602,7 @@ public:
             float *descent = NULL, float *externalLeading = NULL,
             wxFont *theFont = NULL, bool use16bit = FALSE) const ;
     void GetSize(float* width, float* height) const { int w, h; GetSize(& w, & h); *width = w; *height = h; }
-    void GetSizeMM(float *width, float *height) const { long w, h; GetSizeMM(& w, & h); *width = (float) w; *height = (float) h; }
+    void GetSizeMM(float *width, float *height) const { int w, h; GetSizeMM(& w, & h); *width = (float) w; *height = (float) h; }
 
 #endif // WXWIN_COMPATIBILITY
 
