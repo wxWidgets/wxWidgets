@@ -107,7 +107,7 @@ typedef long celt;				/* type to hold chr, MCCE number, or
 	PUTTING PARENTHASES AROUND THIS, I.E. (1 << CHRBITS) WILL
 	CAUSE ALL CHARACTERS TO BE MATCHED!!!
 */
-/*#define CHR_MAX 1 << CHRBITS /*0xfffffffe*/		/* CHR_MAX-CHR_MIN+1 should fit in uchr */
+/*#define CHR_MAX 1 << CHRBITS /		 CHR_MAX-CHR_MIN+1 should fit in uchr */
 
 
 /* functions operating on chr */
