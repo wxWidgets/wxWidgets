@@ -135,7 +135,8 @@ void wxBell()
 
 wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
 {
-    wxToolkitInfo info;
+    static wxToolkitInfo info;
+
     info.shortName = _T("motif");
     info.name = _T("wxMotif");
 #ifdef __WXUNIVERSAL__
