@@ -159,7 +159,7 @@ extern FILE *CurrentOutput2;
 void AddMacroDef(int the_id, const char *name, int n, bool ignore = FALSE, bool forbidden = FALSE);
 void TexInitialize(int bufSize);
 void TexCleanUp(void);
-void TexOutput(char *s, bool ordinaryText = FALSE);
+void TexOutput(const char *s, bool ordinaryText = FALSE);
 char *GetArgData(TexChunk *chunk);
 char *GetArgData(void);             // Get the string for the current argument
 int GetNoArgs(void);                // Get the number of arguments for the current macro

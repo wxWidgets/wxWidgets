@@ -243,7 +243,7 @@ CustomMacro::~CustomMacro()
         delete [] macroBody;
 }
 
-void TexOutput(char *s, bool ordinaryText)
+void TexOutput(const char *s, bool ordinaryText)
 {
   int len = strlen(s);
 
