@@ -46,15 +46,13 @@ extern bool gUseNavServices ;
 // and a copy of the "previous" file spec of the reply record
 // so we can see if the selection has changed
 
-const int kwxMacFileTypes = 10 ;
-
 struct OpenUserDataRec {
   int           currentfilter ;
-  wxString      name [kwxMacFileTypes] ;
-  wxString      extensions[kwxMacFileTypes] ;
-	OSType				filtermactypes[kwxMacFileTypes] ;
-	int					  numfilters ;
+  wxArrayString      name ;
+  wxArrayString      extensions ;
+  wxArrayLong		filtermactypes ;
 };
+
 typedef struct OpenUserDataRec
 	OpenUserDataRec, *OpenUserDataRecPtr;
 
@@ -125,15 +123,15 @@ void MakeUserDataRec(OpenUserDataRec	*myData , const wxString& filter )
     int filterIndex = 0;
     bool isName = true ;
     wxString current ;
-    for( unsigned int i = 0; i < filter2.Len(); i++ )
+    for( unsigned int i = 0; i < filter2.Len() ; i++ )
     {
        if( filter2.GetChar(i) == wxT('|') )
        {
         if( isName ) {
-          myData->name[filterIndex] = current ;
+          myData->name.Add( current ) ;
         }
         else {
-          myData->extensions[filterIndex] = current.MakeUpper() ;
+          myData->extensions.Add( current.MakeUpper() ) ;
           ++filterIndex ;
         }
         isName = !isName ;
@@ -149,35 +147,32 @@ void MakeUserDataRec(OpenUserDataRec	*myData , const wxString& filter )
       
     wxASSERT_MSG( filterIndex == 0 || !isName , "incorrect format of format string" ) ;
     if ( current.IsEmpty() )
-        myData->extensions[filterIndex] = myData->name[filterIndex] ;
+        myData->extensions.Add( myData->name[filterIndex] ) ;
     else
-        myData->extensions[filterIndex] = current.MakeUpper() ;
+        myData->extensions.Add( current.MakeUpper() ) ;
+    if ( filterIndex == 0 || isName )
+        myData->name.Add( current.MakeUpper() ) ;
+        
     ++filterIndex ;
 
 
-		myData->numfilters = filterIndex ;
-		for ( int i = 0 ; i < myData->numfilters ; i++ )
+		for ( int i = 0 ; i < myData->extensions.GetCount() ; i++ )
 		{
 			int j ;
 			for ( j = 0 ; gfilters[j] ; j++ )
 			{
 				if ( strcmp( myData->extensions[i] , gfilters[j] ) == 0 )
 				{
-					myData->filtermactypes[i] = gfiltersmac[j] ;
+				    myData->filtermactypes.Add( gfiltersmac[j] ) ;
 					break ;
 				}
 			}
 			if( gfilters[j] == NULL )
 			{
-				myData->filtermactypes[i] = '****' ;
+				myData->filtermactypes.Add( '****' ) ;
 			}
 		}
 	}
-	else
-	{
-		myData->numfilters = 0 ;
-	}
-
 }
 
 static Boolean CheckFile( ConstStr255Param name , OSType type , OpenUserDataRecPtr data)
@@ -193,7 +188,7 @@ static Boolean CheckFile( ConstStr255Param name , OSType type , OpenUserDataRecP
     wxString file(filename) ;
     file.MakeUpper() ;
     
-    if ( data->numfilters > 0 )
+    if ( data->extensions.GetCount() > 0 )
     {
 	//for ( int i = 0 ; i < data->numfilters ; ++i )
 	    int i = data->currentfilter ;
@@ -430,10 +425,10 @@ int wxFileDialog::ShowModal()
 	  	MakeUserDataRec( &myData , m_wildCard ) ;
 	  	NavTypeListHandle typelist = NULL ;
 
-	  	if ( myData.numfilters > 0 )
+	  	if ( myData.extensions.GetCount() > 0 )
 	  	{
-	  	  mNavOptions.popupExtension = (NavMenuItemSpecArrayHandle) NewHandle( sizeof( NavMenuItemSpec ) * myData.numfilters ) ;
-	  	  for ( int i = 0 ; i < myData.numfilters ; ++i ) {
+	  	  mNavOptions.popupExtension = (NavMenuItemSpecArrayHandle) NewHandle( sizeof( NavMenuItemSpec ) * myData.extensions.GetCount() ) ;
+	  	  for ( int i = 0 ; i < myData.extensions.GetCount() ; ++i ) {
 	  	    (*mNavOptions.popupExtension)[i].version = kNavMenuItemSpecVersion ;
 	  	    (*mNavOptions.popupExtension)[i].menuCreator = 'WXNG' ;
 	  	    (*mNavOptions.popupExtension)[i].menuType = i ;
