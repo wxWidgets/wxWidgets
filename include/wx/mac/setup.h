@@ -267,6 +267,8 @@
 #define wxUSE_ZIPSTREAM     1 // 0
                                   // input stream for reading from zip archives
 
+// OpenGL canvas
+#define wxUSE_GLCANVAS       1
 /*
  * Finer detail
  *

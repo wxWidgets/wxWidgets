@@ -396,7 +396,7 @@ void wxTextCtrl::Replace(long from, long to, const wxString& value)
    	TESetSelect( from , to  , teH ) ;
    	TEDelete( teH ) ;
 		TEInsert( value , value.Length() , teH ) ;
-//	MacInvalidateControl() ;
+	Refresh() ;
 }
 
 void wxTextCtrl::Remove(long from, long to)
@@ -411,7 +411,7 @@ void wxTextCtrl::Remove(long from, long to)
    	UMASetControlData( m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection ) ;
 	UMAGetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
    	TEDelete( teH ) ;
-//	MacInvalidateControl() ;
+	Refresh() ;
 }
 
 void wxTextCtrl::SetSelection(long from, long to)

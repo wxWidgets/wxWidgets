@@ -71,7 +71,7 @@ void wxStaticBitmap::OnPaint( wxPaintEvent &event )
     wxPaintDC dc(this);
     PrepareDC(dc);
 	dc.SetPalette( *m_messageBitmap.GetPalette() ) ;
-	dc.DrawBitmap( m_messageBitmap , 0 , 0 ) ;
+	dc.DrawBitmap( m_messageBitmap , 0 , 0 , TRUE ) ;
 }
 
 wxSize wxStaticBitmap::DoGetBestSize() const

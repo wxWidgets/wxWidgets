@@ -350,6 +350,7 @@ bool wxApp::Initialize()
   // Mac-specific
 
   UMAInitToolbox( 4 ) ;
+  SetEventMask( everyEvent ) ;
 	UMAShowWatchCursor() ;
 
 #ifdef __UNIX__
@@ -457,6 +458,17 @@ bool wxApp::Initialize()
 #endif
   wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
   wxTheColourDatabase->Initialize();
+
+#if wxUSE_LOG
+    // flush the logged messages if any and install a 'safer' log target: the
+    // default one (wxLogGui) can't be used after the resources are freed just
+    // below and the user suppliedo ne might be even more unsafe (using any
+    // wxWindows GUI function is unsafe starting from now)
+    wxLog::DontCreateOnDemand();
+
+    // this will flush the old messages if any
+    delete wxLog::SetActiveTarget(new wxLogStderr);
+#endif // wxUSE_LOG
 
   wxInitializeStockLists();
   wxInitializeStockObjects();
@@ -953,7 +965,7 @@ void wxApp::MacDoOneEvent()
 {
   EventRecord event ;
 
-	long sleepTime = ::GetCaretTime();
+	long sleepTime = 1 ; // GetCaretTime() / 4 ;
 
 	if (WaitNextEvent(everyEvent, &event,sleepTime, s_macCursorRgn))
 	{
@@ -973,6 +985,7 @@ void wxApp::MacDoOneEvent()
 
 	// repeaters
 
+  DeletePendingObjects() ;
 	wxMacProcessNotifierAndPendingEvents() ;
 }
 
@@ -1050,6 +1063,8 @@ void wxApp::MacHandleMouseDownEvent( EventRecord *ev )
 
 	short windowPart = ::FindWindow(ev->where, &window);
 	wxWindow* win = wxFindWinFromMacWindow( window ) ;
+    if ( wxPendingDelete.Member(win) )
+        return ;
 
 	BitMap screenBits;
 	GetQDGlobalsScreenBits( &screenBits );
@@ -1166,7 +1181,7 @@ void wxApp::MacHandleMouseDownEvent( EventRecord *ev )
 					SetOrigin( 0 , 0 ) ;
 					SetPort( port ) ;
 				}
-				if ( window != frontWindow )
+				if ( window != frontWindow && wxTheApp->s_captureWindow == NULL )
 				{
 					if ( s_macIsInModalLoop )
 					{
@@ -1423,7 +1438,37 @@ void wxApp::MacHandleKeyDownEvent( EventRecord *ev )
 
 void wxApp::MacHandleKeyUpEvent( EventRecord *ev )
 {
-	// nothing to do
+	wxToolTip::RemoveToolTips() ;
+	
+	UInt32 menuresult = UMAMenuEvent(ev) ;
+	if ( HiWord( menuresult ) )
+	{
+	}
+	else
+	{
+		short keycode ;
+		short keychar ;
+		keychar = short(ev->message & charCodeMask);
+		keycode = short(ev->message & keyCodeMask) >> 8 ;
+
+		wxWindow* focus = wxWindow::FindFocus() ;
+		if ( focus )
+		{
+			long keyval = wxMacTranslateKey(keychar, keycode) ;
+			
+			wxKeyEvent event(wxEVT_KEY_UP);
+			event.m_shiftDown = ev->modifiers & shiftKey;
+			event.m_controlDown = ev->modifiers & controlKey;
+			event.m_altDown = ev->modifiers & optionKey;
+			event.m_metaDown = ev->modifiers & cmdKey;
+			event.m_keyCode = keyval;
+			event.m_x = ev->where.h;
+			event.m_y = ev->where.v;
+			event.m_timeStamp = ev->when;
+			event.SetEventObject(focus);
+			bool handled = focus->GetEventHandler()->ProcessEvent( event ) ;
+		}
+	}
 }
 
 void wxApp::MacHandleActivateEvent( EventRecord *ev )
@@ -1451,7 +1496,8 @@ void wxApp::MacHandleUpdateEvent( EventRecord *ev )
 	wxWindow * win = wxFindWinFromMacWindow( window ) ;
 	if ( win )
 	{
-		win->MacUpdate( ev ) ;
+        if ( !wxPendingDelete.Member(win) )
+			win->MacUpdate( ev ) ;
 	}
 	else
 	{

@@ -45,18 +45,11 @@ long wxDC::m_macCurrentPortId = 1 ;
 wxDC::wxDC()
 {
   m_ok = FALSE;
-//  m_optimize = FALSE;
-//  m_autoSetting = FALSE;
   m_colour = TRUE;
-  m_clipping = FALSE;
   
   m_mm_to_pix_x = mm2pt;
   m_mm_to_pix_y = mm2pt;
   
-  m_logicalOriginX = 0;
-  m_logicalOriginY = 0;
-  m_deviceOriginX = 0;
-  m_deviceOriginY = 0;
   m_internalDeviceOriginX = 0;
   m_internalDeviceOriginY = 0;
   m_externalDeviceOriginX = 0;
@@ -69,28 +62,12 @@ wxDC::wxDC()
   m_scaleX = 1.0;
   m_scaleY = 1.0;
   
-  m_mappingMode = wxMM_TEXT;
   m_needComputeScaleX = FALSE;
   m_needComputeScaleY = FALSE;
   
-  m_signX = 1;  // default x-axis left to right
-  m_signY = 1;  // default y-axis top down
-
   m_maxX = m_maxY = -100000;
   m_minY = m_minY =  100000;
 
-  m_logicalFunction = wxCOPY;
-//  m_textAlignment = wxALIGN_TOP_LEFT;
-  m_backgroundMode = wxTRANSPARENT;
-  
-  m_textForegroundColour = *wxBLACK;
-  m_textBackgroundColour = *wxWHITE;
-  m_pen = *wxBLACK_PEN;
-  m_font = *wxNORMAL_FONT;
-  m_brush = *wxTRANSPARENT_BRUSH;
-  m_backgroundBrush = *wxWHITE_BRUSH;
-  
-//  m_palette = wxAPP_COLOURMAP;
   m_macPort = NULL ;
   m_macMask = NULL ;
   m_ok = FALSE ;

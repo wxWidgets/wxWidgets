@@ -312,20 +312,13 @@ void wxSlider::MacHandleControlClick( ControlHandle control , SInt16 controlpart
 	SetValue( value ) ;		
 	
 	wxScrollEvent event(wxEVT_SCROLL_THUMBTRACK, m_windowId);
-	event.SetPosition(GetControlValue( m_macControl) );
+	event.SetPosition(value);
 	event.SetEventObject( this );
-
-#if WXWIN_COMPATIBILITY
-
-    wxEventType oldEvent = event.GetEventType();
-    event.SetEventType( wxEVT_COMMAND_SLIDER_UPDATED );
-    if ( !GetEventHandler()->ProcessEvent(event) )
-    {
-        event.SetEventType( oldEvent );
-        if (!GetParent()->GetEventHandler()->ProcessEvent(event))
-            event.Skip();
-    }
-#else
 	GetEventHandler()->ProcessEvent(event);
-#endif
+
+  wxCommandEvent cevent( wxEVT_COMMAND_SLIDER_UPDATED, m_windowId );
+  cevent.SetInt( value );
+  cevent.SetEventObject( this );
+
+  GetEventHandler()->ProcessEvent( cevent );
 }

@@ -113,6 +113,8 @@ void wxWindow::Init()
     // generic
     InitBase();
 
+    m_macEraseOnRedraw = true ;
+
     // MSW specific
     m_doubleClickAllowed = 0;
     m_winCaptured = FALSE;
@@ -130,6 +132,7 @@ void wxWindow::Init()
     m_isShown = TRUE;
 
 	m_macWindowData = NULL ;
+	m_macEraseOnRedraw = true ;
 
 	m_x = 0;
 	m_y = 0 ;	
@@ -811,6 +814,7 @@ void wxWindow::GetTextExtent(const wxString& string, int *x, int *y,
 
 void wxWindow::MacEraseBackground( Rect *rect )
 {
+/*
 	WindowRef window = GetMacRootWindow() ;
 	if ( m_backgroundColour == wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE) )
 	{
@@ -878,6 +882,7 @@ void wxWindow::MacEraseBackground( Rect *rect )
 			}
 		}
 	}
+*/
 }
 
 void wxWindow::Refresh(bool eraseBack, const wxRect *rect)
@@ -1827,8 +1832,10 @@ void wxWindow::MacRedraw( RgnHandle updatergn , long time)
 	  		if ( GetParent() && m_backgroundColour != GetParent()->GetBackgroundColour() )
 	  			eraseBackground = true ;
 			SetClip( updatergn ) ;
-			if ( eraseBackground )
+			if ( eraseBackground && m_macEraseOnRedraw )
 			{
+                // todo : find a clever algorithm, which only will do this
+                // if really necessary
 				EraseRgn( updatergn ) ;	
 			}
 		}
@@ -2310,37 +2317,7 @@ long wxWindow::MacRemoveBordersFromStyle( long style )
 {
 	return style & ~( wxDOUBLE_BORDER | wxSUNKEN_BORDER | wxRAISED_BORDER | wxBORDER | wxSTATIC_BORDER ) ;
 }
-/*
-wxMacFocusHelper::wxMacFocusHelper( wxWindow * theWindow ) 
-{
-	m_ok = false ;
-	Point localOrigin ;
-	Rect clipRect ;
-	WindowRef window ;
-	wxWindow *rootwin ;
-	m_currentPort = NULL ;
-	GetPort( &m_formerPort ) ;
-	if ( theWindow )
-	{
-	
-		theWindow->MacGetPortParams( &localOrigin , &clipRect , &window , &rootwin) ;
-		m_currentPort = UMAGetWindowPort( window ) ;
-		theWindow->MacSetPortFocusParams( localOrigin, clipRect, window , rootwin ) ; 
-		m_ok = true ;
-	}
-}
-	
-wxMacFocusHelper::~wxMacFocusHelper() 
-{
-	if ( m_ok )
-	{
-		SetPort( m_currentPort ) ;
-		SetOrigin( 0 , 0 ) ;
-	}
-	if ( m_formerPort != m_currentPort )
-		SetPort( m_formerPort ) ;
-}
-*/
+
 
 wxMacDrawingHelper::wxMacDrawingHelper( wxWindow * theWindow ) 
 {

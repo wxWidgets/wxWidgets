@@ -59,7 +59,6 @@ void wxMacCreateNotifierTable()
 
 void wxMacDestroyNotifierTable() 
 {
-	wxASSERT( gMacNotificationEvents.top == gMacNotificationEvents.bottom ) ;
 }
 
 wxMacNotifierTableRef wxMacGetNotifierTable() 

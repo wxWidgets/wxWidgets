@@ -61,6 +61,7 @@ wxWindowDC::wxWindowDC(wxWindow *the_canvas)
 
 	MacSetupPort() ;
  	m_ok = TRUE ;
+  SetBackground(wxBrush(the_canvas->GetBackgroundColour(), wxSOLID));
 }
 
 wxWindowDC::~wxWindowDC()

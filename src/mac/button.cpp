@@ -85,18 +85,20 @@ void wxButton::SetDefault()
 
 wxSize wxButton::DoGetBestSize() const
 {
+  wxSize sz = GetDefaultSize() ;
+  
     int wBtn = m_label.Length() * 8 + 12 ;
 	int hBtn = 20 ;
 	
-	if ( wBtn < 80 )
-		wBtn = 80 ;
-
-    return wxSize(wBtn, hBtn);
+  if (wBtn > sz.x) sz.x = wBtn;
+  if (hBtn > sz.y) sz.y = hBtn;
+  
+  return sz ;
 }
 
 wxSize wxButton::GetDefaultSize()
 {
-    int wBtn = 80 /* + 2 * m_macHorizontalBorder */ ; 
+    int wBtn = 70 /* + 2 * m_macHorizontalBorder */ ; 
 	int hBtn = 20 /* +  2 * m_macVerticalBorder */ ;
 
     return wxSize(wBtn, hBtn);

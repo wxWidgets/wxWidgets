@@ -23,11 +23,19 @@ IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC,wxPaintDC)
 
 wxMemoryDC::wxMemoryDC(void)
 {
+  m_ok = TRUE;
+    SetBackground(*wxWHITE_BRUSH);
+    SetBrush(*wxWHITE_BRUSH);
+    SetPen(*wxBLACK_PEN);
   m_ok = FALSE;
 };
 
 wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) )
 {
+ m_ok = TRUE;
+    SetBackground(*wxWHITE_BRUSH);
+    SetBrush(*wxWHITE_BRUSH);
+    SetPen(*wxBLACK_PEN);
   m_ok = FALSE;
 };
 
@@ -75,7 +83,7 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
   };
 };
 
-void wxMemoryDC::GetSize( int *width, int *height ) const
+void wxMemoryDC::DoGetSize( int *width, int *height ) const
 {
   if (m_selected.Ok())
   {

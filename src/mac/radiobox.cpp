@@ -105,8 +105,11 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 
     for (i = 0; i < n; i++)
     {
-        wxRadioButton *radBtn = new wxRadioButton(this, NewControlId(),choices[i],wxPoint(5,20*i+10));
-        m_radioButtonCycle=radBtn->AddInCycle(m_radioButtonCycle);
+        wxRadioButton *radBtn = new wxRadioButton(this, NewControlId(),choices[i],wxPoint(5,20*i+10),
+          wxDefaultSize , i == 0 ? wxRB_GROUP : 0 ) ;
+        if ( i == 0 )
+          m_radioButtonCycle = radBtn ;
+//        m_radioButtonCycle=radBtn->AddInCycle(m_radioButtonCycle);
     }
 
 	SetSelection(0);

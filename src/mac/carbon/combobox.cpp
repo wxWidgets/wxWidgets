@@ -215,8 +215,7 @@ void wxComboBox::MacHandleControlClick( ControlHandle control , SInt16 controlpa
     wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, m_windowId );
 	event.SetInt(GetSelection());
     event.SetEventObject(this);
-    event.SetString(copystring(GetStringSelection()));
+    event.SetString(GetStringSelection());
     ProcessCommand(event);
-    delete[] event.GetString();
 }
 

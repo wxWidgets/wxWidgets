@@ -39,15 +39,35 @@ bool wxGetFullHostName(wxChar *buf, int maxSize)
 // Get hostname only (without domain name)
 bool wxGetHostName(char *buf, int maxSize)
 {
-    // TODO
-    return FALSE;
+	// Gets Chooser name of user by examining a System resource.
+
+	const short kComputerNameID = -16413;
+	
+	short oldResFile = CurResFile() ;
+	UseResFile(0);
+	StringHandle chooserName = (StringHandle)::GetString(kComputerNameID);
+	UseResFile(oldResFile);
+
+	if (chooserName && *chooserName)
+	{
+	  int length = (*chooserName)[0] ;
+	  if ( length + 1 > maxSize )
+	  {
+	    length = maxSize - 1 ;
+	  }
+	  strncpy( buf , (char*) &(*chooserName)[1] , length ) ;
+	  buf[length] = 0 ;
+	}
+	else
+		buf[0] = 0 ;
+
+  return TRUE;
 }
 
 // Get user ID e.g. jacs
 bool wxGetUserId(char *buf, int maxSize)
 {
-    // TODO
-    return FALSE;
+  return wxGetUserName( buf , maxSize ) ;
 }
 
 const wxChar* wxGetHomeDir(wxString *pstr)
@@ -56,13 +76,32 @@ const wxChar* wxGetHomeDir(wxString *pstr)
 	return pstr->c_str() ;
 }
 
-
-
 // Get user name e.g. AUTHOR
 bool wxGetUserName(char *buf, int maxSize)
 {
-    // TODO
-    return FALSE;
+	// Gets Chooser name of user by examining a System resource.
+
+	const short kChooserNameID = -16096;
+	
+	short oldResFile = CurResFile() ;
+	UseResFile(0);
+	StringHandle chooserName = (StringHandle)::GetString(kChooserNameID);
+	UseResFile(oldResFile);
+
+	if (chooserName && *chooserName)
+	{
+	  int length = (*chooserName)[0] ;
+	  if ( length + 1 > maxSize )
+	  {
+	    length = maxSize - 1 ;
+	  }
+	  strncpy( buf , (char*) &(*chooserName)[1] , length ) ;
+	  buf[length] = 0 ;
+	}
+	else
+		buf[0] = 0 ;
+
+  return TRUE;
 }
 
 int wxKill(long pid, int sig)
@@ -83,13 +122,21 @@ bool wxShell(const wxString& command)
 // Get free memory in bytes, or -1 if cannot determine amount (e.g. on UNIX)
 long wxGetFreeMemory()
 {
-    // TODO
-    return 0;
+    return FreeMem() ;
+}
+
+void wxUsleep(unsigned long milliseconds)
+{
+		clock_t start = clock() ;
+		do 
+		{
+			YieldToAnyThread() ;
+		} while( clock() - start < milliseconds / CLOCKS_PER_SEC ) ;
 }
 
 void wxSleep(int nSecs)
 {
-    // TODO
+    wxUsleep(1000*nSecs);
 }
 
 // Consume all events until no more left
@@ -108,8 +155,9 @@ void wxDebugMsg(const char *fmt ...)
 
   va_start(ap, fmt);
 
-  // wvsprintf(buffer,fmt,ap) ;
-  // TODO: output buffer
+  vsprintf(buffer,fmt,ap) ;
+  strcat(buffer,";g") ;
+  debugstr(buffer) ;
 
   va_end(ap);
 }
@@ -117,27 +165,33 @@ void wxDebugMsg(const char *fmt ...)
 // Non-fatal error: pop up message box and (possibly) continue
 void wxError(const wxString& msg, const wxString& title)
 {
-    // TODO
+  wxSprintf(wxBuffer, wxT("%s\nContinue?"), WXSTRINGCAST msg);
+  if (wxMessageBox(wxBuffer, title, wxYES_NO) == wxID_NO )
     wxExit();
 }
 
 // Fatal error: pop up message box and abort
 void wxFatalError(const wxString& msg, const wxString& title)
 {
-    // TODO
+  wxSprintf(wxBuffer, wxT("%s: %s"), WXSTRINGCAST title, WXSTRINGCAST msg);
+  wxMessageBox(wxBuffer);
+  wxExit();
 }
 #endif // !__UNIX__
 
 // Emit a beeeeeep
 void wxBell()
 {
-    // TODO
+    SysBeep(30);
 }
 
 int wxGetOsVersion(int *majorVsn, int *minorVsn)
 {
-    // TODO
-    return 0;
+	long theSystem ;
+  Gestalt(gestaltSystemVersion, &theSystem) ;
+  *minorVsn = (theSystem & 0xFF ) ;
+  *majorVsn = (theSystem >> 8 ) ; // are there x-platform conventions ?
+  return wxMACINTOSH;
 }
 
 // Reading and writing resources (eg WIN.INI, .Xdefaults)

@@ -54,6 +54,14 @@ bool wxFrame::m_useNativeStatusBar = FALSE;
 
 void wxFrame::Init()
 {
+  m_frameMenuBar = NULL;
+
+#if wxUSE_TOOLBAR
+  m_frameToolBar = NULL ;
+#endif
+  m_frameStatusBar = NULL;
+  m_winLastFocused = NULL ;
+
     m_iconized = FALSE;
 
 #if wxUSE_TOOLTIPS
@@ -94,14 +102,6 @@ bool wxFrame::Create(wxWindow *parent,
            long style,
            const wxString& name)
 {
-  m_frameMenuBar = NULL;
-
-#if wxUSE_TOOLBAR
-  m_frameToolBar = NULL ;
-#endif
-  m_frameStatusBar = NULL;
-  m_winLastFocused = NULL ;
-
   SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
 
   if ( id > -1 )
@@ -229,7 +229,6 @@ void wxFrame::SetMenuBar(wxMenuBar *menuBar)
         return;
     }
   
-    m_frameMenuBar = NULL;
     m_frameMenuBar = menuBar;
 //    m_frameMenuBar->MacInstallMenuBar() ;
     m_frameMenuBar->Attach(this);

@@ -150,7 +150,7 @@ bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
 	m_x = x ;
 	m_y = y ;
   }
-
+  return true ;
 }
 
 wxToolBar::~wxToolBar()

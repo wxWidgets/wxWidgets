@@ -22,6 +22,8 @@ WXDLLEXPORT_DATA(extern const char*) wxRadioButtonNameStr;
 
 class WXDLLEXPORT wxRadioButton: public wxControl
 {
+  DECLARE_DYNAMIC_CLASS(wxRadioButton)
+ protected:
 public:
     inline wxRadioButton() {}
     inline wxRadioButton(wxWindow *parent, wxWindowID id,
@@ -51,14 +53,9 @@ public:
     wxRadioButton *AddInCycle(wxRadioButton *cycle);
     inline wxRadioButton *NextInCycle() {return m_cycle;}
     
-    void OnIdle( wxIdleEvent &event );
-
-protected:
+  protected:
+  
     wxRadioButton *m_cycle;
-
-private:      
-    DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxRadioButton)
 };
 
 // Not implemented

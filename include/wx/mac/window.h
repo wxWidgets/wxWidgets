@@ -270,14 +270,16 @@ public :
 	virtual void						MacGetPortClientParams(Point* localOrigin, Rect* clipRect, WindowRef *window  , wxWindow** rootwin) ;
 	virtual void						MacDoGetPortClientParams(Point* localOrigin, Rect* clipRect, WindowRef *window  , wxWindow** rootwin) ;
 	MacWindowData*						MacGetWindowData() { return m_macWindowData ; }
+	static WindowRef					MacGetWindowInUpdate() { return s_macWindowInUpdate ; }
 	bool								MacIsWindowScrollbar( const wxScrollBar* sb ) { return (m_hScrollBar == sb || m_vScrollBar == sb) ; }
 	static wxWindow*					s_lastMouseWindow ;
 private:
 	virtual bool						MacGetWindowFromPointSub( const wxPoint &point , wxWindow** outWin ) ;
 protected:
-
 	MacWindowData*				m_macWindowData ;
+	static WindowRef			s_macWindowInUpdate ;
 	RgnHandle					m_macUpdateRgn ;
+	bool						m_macEraseOnRedraw ;
 
 	int 									m_x ;
 	int 									m_y ;	

@@ -18,10 +18,6 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
 
-BEGIN_EVENT_TABLE(wxRadioButton, wxControl)
-   EVT_IDLE( wxRadioButton::OnIdle )
-END_EVENT_TABLE()
-
 #include <wx/mac/uma.h>
 
 bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
@@ -34,8 +30,6 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
 	Rect bounds ;
 	Str255 title ;
 	
-	m_cycle=NULL;
-	
 	MacPreControlCreate( parent , id ,  label , pos , size ,style, validator , name , &bounds , title ) ;
 
 	m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , title , true , 0 , 0 , 1, 
@@ -43,53 +37,28 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
 	
 	MacPostControlCreate() ;
 
-    return TRUE;
-}
-
-void wxRadioButton::OnIdle( wxIdleEvent &event )
-{
-    if (!m_cycle && HasFlag(wxRB_GROUP))
+  if (HasFlag(wxRB_GROUP))
+  {
+	  AddInCycle( NULL ) ;
+  }
+  else
+  {
+    /* search backward for last group start */
+    wxRadioButton *chief = (wxRadioButton*) NULL;
+    wxWindowList::Node *node = parent->GetChildren().GetLast();
+    while (node)
     {
-        // we are a stand-alone radiobutton and have
-        // the group flag indicating we have to collect
-        // the other radiobuttons belonging to this one
-        
-        bool reached_this = FALSE;
-        wxRadioButton *m_radioButtonCycle = NULL;
-        m_radioButtonCycle = AddInCycle( m_radioButtonCycle );
-        
-        wxWindow *parent = GetParent();
-        wxNode *node = parent->GetChildren().First();
-        while (node)
-        {
-            wxWindow *child = (wxWindow*) node->Data();
-            
-            node = node->Next();
-            
-            // start searching behind current radiobutton
-            if (!reached_this)
-            {
-                reached_this = (this == child);
-                continue;
-            }
-            
-            if (child->IsKindOf( CLASSINFO ( wxRadioButton ) ))
-            {
-                wxRadioButton *rb = (wxRadioButton*) child;
-                
-                // already reached next group
-                if (rb->HasFlag(wxRB_GROUP)) break;
-                
-                // part of a radiobox
-                if (rb->NextInCycle()) break;
-                
-                m_radioButtonCycle = rb->AddInCycle( m_radioButtonCycle );
-            } 
-        }
-    
+      wxWindow *child = node->GetData();
+      if (child->IsKindOf( CLASSINFO( wxRadioButton ) ) )
+      {
+          chief = (wxRadioButton*) child;
+         if (child->HasFlag(wxRB_GROUP)) break;
+      }
+      node = node->GetPrevious();
     }
-    
-    event.Skip( TRUE );
+    AddInCycle( chief ) ;
+  }
+    return TRUE;
 }
 
 void wxRadioButton::SetValue(bool val)
@@ -140,7 +109,8 @@ wxRadioButton *wxRadioButton::AddInCycle(wxRadioButton *cycle)
 		}
 	else {
 		current=cycle;
-  		while ((next=current->m_cycle)!=cycle) current=current->m_cycle;
+  		while ((next=current->m_cycle)!=cycle) 
+  		  current=current->m_cycle;
 	  	m_cycle=cycle;
 	  	current->m_cycle=this;
 	  	return(cycle);
