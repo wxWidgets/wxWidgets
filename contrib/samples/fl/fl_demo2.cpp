@@ -489,17 +489,17 @@ wxTreeCtrl* MyFrame::CreateTreeCtrl( const wxString& label )
 {
     wxTreeCtrl* pTree = new wxTreeCtrl( mpInternalFrm, wxID_ANY );
 
-    const wxTreeItemId rootid = pTree->AppendItem( (long)0, label, 0);
+    const wxTreeItemId rootid = pTree->AddRoot(label);
 
-    if ( label[0] != 'X' )
+    if ( label.StartsWith(_T("X")) )
     {
-        pTree->AppendItem(rootid, _("Leaf1"), 0);
-        pTree->AppendItem(rootid, _("Leaf2"), 0);
+        pTree->AppendItem(rootid, _("Scully"));
+        pTree->AppendItem(rootid, _("Mulder"));
     }
     else
     {
-        pTree->AppendItem(rootid, _("Scully"), 0);
-        pTree->AppendItem(rootid, _("Mulder"), 0);
+        pTree->AppendItem(rootid, _("Leaf1"));
+        pTree->AppendItem(rootid, _("Leaf2"));
     }
 
     return pTree;
