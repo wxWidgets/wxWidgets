@@ -823,7 +823,7 @@ wx_libs=$(echo "$input_parameters" | tr ',' ' ')
 if is_monolithic; then
 
     # Core libs are already built into the blob.
-    for i in @CORE_GUI_LIBS@ @CORE_BASE_LIBS@; do
+    for i in std @CORE_GUI_LIBS@ @CORE_BASE_LIBS@; do
         wx_libs=$(remove_field $i $wx_libs)
     done
 
