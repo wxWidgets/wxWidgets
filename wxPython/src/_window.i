@@ -1677,8 +1677,8 @@ toplevel parent of the window.", "");
         "Physically scrolls the pixels in the window and move child windows
 accordingly.  Use this function to optimise your scrolling
 implementations, to minimise the area that must be redrawn. Note that
-it is rarely required to call this function from a user program.",
-"
+it is rarely required to call this function from a user program.","
+
     :param dx:   Amount to scroll horizontally.
 
     :param dy:   Amount to scroll vertically.

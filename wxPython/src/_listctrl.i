@@ -650,7 +650,7 @@ public:
         long, HitTest(const wxPoint& point, int& OUTPUT),
         "HitTest(Point point) -> (item, where)",
         "Determines which item (if any) is at the specified point, giving
-details in the second return value (see wxLIST_HITTEST_... flags.)", "");
+details in the second return value (see wx.LIST_HITTEST flags.)", "");
 
     // Inserts an item, returning the index of the new item if successful,
     // -1 otherwise.

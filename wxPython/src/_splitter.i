@@ -179,13 +179,13 @@ splitter window.  The child window is shown if it is currently hidden.", "");
                                        wxWindow *window2,
                                        int sashPosition = 0),
         "Initializes the left and right panes of the splitter window.  The
-child windows are shown if they are currently hidden.",
-        "
+child windows are shown if they are currently hidden.","
+
     :param window1:       The left pane.
     :param window2:       The right pane.
     :param sashPosition:  The initial position of the sash. If this
                   value is positive, it specifies the size of the left
-                  pane. If it is negative, it is absolute value gives
+                  pane. If it is negative, its absolute value gives
                   the size of the right pane. Finally, specify 0
                   (default) to choose the default position (half of
                   the total window width).
@@ -205,13 +205,13 @@ application should check that the window is not currently split using
                                          wxWindow *window2,
                                          int sashPosition = 0),
         "Initializes the top and bottom panes of the splitter window.  The
-child windows are shown if they are currently hidden.",
-        "
+child windows are shown if they are currently hidden.","
+
     :param window1:       The top pane.
     :param window2:       The bottom pane.
     :param sashPosition:  The initial position of the sash. If this
                   value is positive, it specifies the size of the
-                  upper pane. If it is negative, it is absolute value
+                  upper pane. If it is negative, its absolute value
                   gives the size of the lower pane. Finally, specify 0
                   (default) to choose the default position (half of
                   the total window height).
@@ -319,6 +319,7 @@ Example values:
              automaticaly resized.
     0.5      Both windows grow equally.
     1.0      Only left/top window grows.
+    ======= =======================================
 
 The default value of sash gravity is 0.0. That value is compatible
 with the previous (before gravity was introduced) behaviour of the 

@@ -72,7 +72,7 @@ public:
                "Construct a Cursor from a file.  Specify the type of file using
 wx.BITAMP_TYPE* constants, and specify the hotspot if not using a .cur
 file.","
-:see: Alternate constructors `wx.StockCursor`,`wx.CursorFromImage`, `wx.CursorFromBits`");
+:see: Alternate constructors `wx.StockCursor`,`wx.CursorFromImage`");
         wxCursor(const wxString& cursorName, long type, int hotSpotX=0, int hotSpotY=0) {
 %#ifdef __WXGTK__
             wxImage img(cursorName, type);
@@ -97,7 +97,7 @@ stock cursors are available on all platforms.", "",
     DocCtorStrName(
         wxCursor(const wxImage& image),
         "Constructs a cursor from a `wx.Image`. The mask (if any) will be used
-as transparent.",
+for setting the transparent portions of the cursor.",
 "
 In MSW the cursor is resized to 32x32.
 
