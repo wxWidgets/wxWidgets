@@ -68,7 +68,7 @@ void TranslateError(const char *path, enum dyldErrorSource type, int number)
     }
 }
 
-void *dlopen(char *path, int mode /* mode is ignored */)
+void *dlopen(const char *path, int mode /* mode is ignored */)
 {
   int dyld_result;
   NSObjectFileImage ofile;
@@ -89,7 +89,7 @@ void *dlopen(char *path, int mode /* mode is ignored */)
   return handle;
 }
 
-void *dlsym(void *handle, char *symbol)
+void *dlsym(void *handle, const char *symbol)
 {
   void *addr;
   
