@@ -245,7 +245,7 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     {
         if ( HasFlag( wxDIALOG_MODAL ) )
         {
-            wclass = kMovableModalWindowClass ;
+            wclass = kDocumentWindowClass ; // kMovableModalWindowClass ;
         }
         else 
         {
