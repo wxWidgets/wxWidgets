@@ -1672,3 +1672,104 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
     return FALSE;
 }
 
+#ifdef __WXMAC__
+
+const short kMacExtensionMaxLength = 16 ;
+typedef struct
+{
+  char m_ext[kMacExtensionMaxLength] ;
+  OSType m_type ;
+  OSType m_creator ;
+} MacDefaultExtensionRecord ;
+
+#include "wx/dynarray.h"
+WX_DECLARE_OBJARRAY(MacDefaultExtensionRecord, MacDefaultExtensionArray) ;
+#include "wx/arrimpl.cpp"
+WX_DEFINE_OBJARRAY(MacDefaultExtensionArray) ;
+
+MacDefaultExtensionArray gMacDefaultExtensions ;
+bool gMacDefaultExtensionsInited = false ;
+
+static void MacEnsureDefaultExtensionsLoaded()
+{
+  if ( !gMacDefaultExtensionsInited )
+  {
+    // load the default extensions
+    MacDefaultExtensionRecord defaults[] =
+    {
+      { "txt" , 'TEXT' , 'ttxt' } ,
+      
+    } ;
+    // we could load the pc exchange prefs here too
+    
+    for ( int i = 0 ; i < WXSIZEOF( defaults ) ; ++i )
+    {
+      gMacDefaultExtensions.Add( defaults[i] ) ;
+    } 
+    gMacDefaultExtensionsInited = true ;
+  }
+}
+bool wxFileName::MacSetTypeAndCreator( wxUint32 type , wxUint32 creator ) 
+{
+  FInfo fndrInfo ;
+  FSSpec spec ;
+  wxMacFilename2FSSpec(GetFullPath(),&spec) ;
+  OSErr err = FSpGetFInfo( &spec , &fndrInfo ) ;
+  wxCHECK( err == noErr , false ) ;
+
+  fndrInfo.fdType = type ;
+  fndrInfo.fdCreator = creator ;
+  FSpSetFInfo( &spec , &fndrInfo ) ;
+  return true ;
+}
+
+bool wxFileName::MacGetTypeAndCreator( wxUint32 *type , wxUint32 *creator ) 
+{
+  FInfo fndrInfo ;
+  FSSpec spec ;
+  wxMacFilename2FSSpec(GetFullPath(),&spec) ;
+  OSErr err = FSpGetFInfo( &spec , &fndrInfo ) ;
+  wxCHECK( err == noErr , false ) ;
+
+  *type = fndrInfo.fdType ;
+  *creator = fndrInfo.fdCreator ;
+  return true ;
+}
+
+bool wxFileName::MacSetDefaultTypeAndCreator()
+{
+    wxUint32 type , creator ;
+    if ( wxFileName::MacFindDefaultTypeAndCreator(GetExt() , &type ,
+      &creator ) )
+    {
+      MacSetTypeAndCreator( type , creator ) ;
+    }  
+}
+
+bool wxFileName::MacFindDefaultTypeAndCreator( const wxString& ext , wxUint32 *type , wxUint32 *creator ) 
+{
+  MacEnsureDefaultExtensionsLoaded() ;
+  wxString extl = ext.Lower() ;
+  for( int i = gMacDefaultExtensions.Count() - 1 ; i >= 0 ; --i )
+  {
+    if ( gMacDefaultExtensions.Item(i).m_ext == extl )
+    {
+      *type = gMacDefaultExtensions.Item(i).m_type ;
+      *creator = gMacDefaultExtensions.Item(i).m_creator ;
+      return true ;
+    }
+  }
+  return false ;
+}
+
+void wxFileName::MacRegisterDefaultTypeAndCreator( const wxString& ext , wxUint32 type , wxUint32 creator )
+{
+  MacEnsureDefaultExtensionsLoaded() ;
+  MacDefaultExtensionRecord rec ;
+  rec.m_type = type ;
+  rec.m_creator = creator ;
+  strncpy( rec.m_ext , ext.Lower().c_str() , kMacExtensionMaxLength ) ;
+  gMacDefaultExtensions.Add( rec ) ;
+}
+#endif
+

@@ -196,6 +196,16 @@ public:
         return dtMod;
     }
 
+#ifdef __WXMAC__
+    bool MacSetTypeAndCreator( wxUint32 type , wxUint32 creator ) ;
+    bool MacGetTypeAndCreator( wxUint32 *type , wxUint32 *creator ) ;
+    // gets the 'common' type and creator for a certain extension
+    static bool MacFindDefaultTypeAndCreator( const wxString& ext , wxUint32 *type , wxUint32 *creator ) ;
+    // registers application defined extensions and their default type and creator
+    static void MacRegisterDefaultTypeAndCreator( const wxString& ext , wxUint32 type , wxUint32 creator ) ;
+    // looks up the appropriate type and creator from the registration and then sets
+    bool MacSetDefaultTypeAndCreator() ;
+#endif
     // various file/dir operations
 
         // retrieve the value of the current working directory
