@@ -9,7 +9,7 @@ Version: %{ver}
 Release: %{rel}
 Copyright: wxWindows Licence
 Group: X11/Libraries
-Source: wxGTK-%{ver}.tar.gz
+Source: wxGTK-%{ver}.tgz
 URL: http://wesley.informatik.uni-freiburg.de/~wxxt/docs.html
 Packager: Robert Roebling <roebling@ruf.uni-freiburg.de>
 BuildRoot: /tmp/wxgtk_root
@@ -38,11 +38,11 @@ Group: X11/Libraries
 Requires: wxGTK
 
 %description gl
-OpenGl add-on library files for wxGTK, the GTK+ 1.2 port of the wxWindows library.
+OpenGl add-on library for wxGTK, the GTK+ 1.2 port of the wxWindows library.
 
 %prep
 %setup -n wxGTK
-./configure --prefix=%{pref} --enable-burnt_name --with-odbc
+./configure --prefix=%{pref} --enable-burnt_name --with-odbc --with-opengl
 
 %build
 if [ "$SMP" != "" ]; then
