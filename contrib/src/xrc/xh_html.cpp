@@ -24,6 +24,7 @@
 #if wxUSE_HTML
 
 #include "wx/html/htmlwin.h"
+#include "wx/filesys.h"
 
 
 wxHtmlWindowXmlHandler::wxHtmlWindowXmlHandler() 
@@ -50,8 +51,19 @@ wxObject *wxHtmlWindowXmlHandler::DoCreateResource()
 
     if( HasParam( wxT("url") ))
     {
-        control->LoadPage( GetParamValue( wxT("url" )));
+        wxString url = GetParamValue(wxT("url" ));
+        wxFileSystem& fsys = GetCurFileSystem();
+        
+        wxFSFile *f = fsys.OpenFile(url);
+        if (f)
+        {
+            control->LoadPage(f->GetLocation());
+            delete f;
+        }
+        else
+            control->LoadPage(url);
     }
+    
     else if( HasParam( wxT("htmlcode") ))
     {
         control->SetPage( GetText(wxT("htmlcode")) );
