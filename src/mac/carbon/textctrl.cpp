@@ -353,7 +353,7 @@ static pascal ControlPartCode TPPaneKeyDownProc(ControlHandle theControl,
             memset( &ev , 0 , sizeof( ev ) ) ;
             ev.what = keyDown ;
             ev.modifiers = modifiers ;
-            ev.message = (( keyCode & keyCodeMask ) << 8 ) + ( charCode & charCodeMask ) ;
+            ev.message = (( keyCode << 8 ) & keyCodeMask ) + ( charCode & charCodeMask ) ;
             TXNKeyDown( (**tpvars).fTXNRec, &ev);
         }
     }
@@ -518,7 +518,7 @@ OSStatus mUPOpenControl(ControlHandle theControl, bool multiline)
 	  ( multiline ? kTXNWantVScrollBarMask : 0 ) |
 	    kTXNDontDrawCaretWhenInactiveMask |
 	    kTXNDontDrawSelectionWhenInactiveMask |
-		kTXNAlwaysWrapAtViewEdgeMask,
+		kTXNAlwaysWrapAtViewEdgeMask ,
         kTXNTextEditStyleFrameType,
         kTXNTextensionFile,
         kTXNSystemDefaultEncoding, 
@@ -1331,22 +1331,20 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
             break;
     }
     
-    EventRecord *ev = (EventRecord*) wxTheApp->MacGetCurrentEvent();
-    short keychar = short(ev->message & charCodeMask);
     if (!eat_key)
     {
-        short keycode = short(ev->message & keyCodeMask) >> 8 ;
-        ::HandleControlKey( (ControlHandle) m_macControl , keycode , keychar , ev->modifiers );
+        // default handling
+        event.Skip() ;
     }
-    if ( keychar >= 0x20 ||
-         event.KeyCode() == WXK_RETURN ||
-         event.KeyCode() == WXK_DELETE || 
-         event.KeyCode() == WXK_BACK)
+    if ( key >= 0x20 ||
+         key == WXK_RETURN ||
+         key == WXK_DELETE || 
+         key == WXK_BACK)
     {
         wxCommandEvent event1(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
         event1.SetString( GetValue() ) ;
         event1.SetEventObject( this );
-        GetEventHandler()->ProcessEvent(event1);
+        wxPostEvent(GetEventHandler(),event1);
     }
 }
 
