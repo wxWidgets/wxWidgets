@@ -7259,7 +7259,7 @@ static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
            i_min = 0;
     if (BorderArray.IsEmpty())
     {
-        return i_max;
+        return maxOnOverflow ? (int)i_max : -1;
     }
 
     if ( i_max >= BorderArray.GetCount())
