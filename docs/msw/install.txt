@@ -69,7 +69,8 @@ Visual C++ 4.0/5.0/6.0 compilation
 
 Using project files (VC++ 5 and 6 only):
 
-1. Unarchive wx2_x_y_vc.zip, the VC++ 5/6 project makefiles.
+1. Unarchive wxWindows-x.y.z-vc.zip, the VC++ 5/6 project
+   makefiles (already included in wxMSW-x.y.z.zip and the setup version).
 2. Open src/wxvc.dsp, set Debug or Release configuration for
    the wxvc project, and compile. Alternatively, use Batch Build
    to build both Debug and Release configurations.
@@ -228,6 +229,13 @@ Compiling using the makefiles:
    'make -f makefile.b32 clean'
    'make -f makefile.b32 FINAL=1'
    for the library and samples.
+5. To make and use wxWindows as a DLL, type
+   'make -f makefile.b32 clean'
+   'make -f makefile.b32 DLL=1'
+   and then for each sample,
+   'make -f makefile.b32 WXUSINGDLL=1'
+   Unfortunately there are still undiagnosed run-time problems
+   with this configuration.
 
 Note (1): the wxWindows library and (some) samples compile in 16-bit mode
 using makefile.bcc, but at present the wxWindows resource system is switched

@@ -126,7 +126,7 @@ PERIPH_CLEAN_TARGET=clean_zlib clean_png clean_jpeg clean_tiff $(PERIPH_CLEAN_TA
 DUMMY=dummy
 !else
 DUMMY=dummydll
-LIBS= cw32mt import32 ole2w32 odbc32 xpm zlib winpng jpeg tiff
+LIBS= cw32mti import32 ole2w32 odbc32 xpm zlib winpng jpeg tiff
 !endif
 
 LIBTARGET=$(WXLIB)
@@ -343,6 +343,7 @@ clean_tiff:
 
 $(CFG): makefile.b32
 	copy &&!
+-Hc
 -H=$(WXDIR)\src\msw\wx32.csm
 -3
 -d
@@ -359,6 +360,7 @@ $(CFG): makefile.b32
 -I$(WXDIR)\include\wx\msw\gnuwin32
 
 -L$(BCCDIR)\lib;$(BCCDIR)\lib\psdk
+-D_RTLDLL
 -D__WXWIN__
 -D__WXMSW__
 -D__WINDOWS__

@@ -13,7 +13,7 @@
 WXDIR = $(WXWIN)
 !include $(WXDIR)\src\makeb32.env
 
-LIBS=$(WXLIB) $(EXTRALIBS) cw32mt import32 ole2w32 winpng zlib jpeg xpm tiff odbc32
+LIBS=$(WXLIB) $(EXTRALIBS) cw32mti import32 ole2w32 winpng zlib jpeg xpm tiff odbc32
 
 # Note: you may need to remove some libraries for earlier versions of BC++, as below
 #LIBS=$(WXLIB) $(EXTRALIBS) cw32mt import32 ole2w32 winpng zlib xpm tiff

@@ -733,6 +733,12 @@
 #define wxUSE_MS_HTML_HELP 0
 #endif
 
+// wxUSE_DBEUG_NEW_ALWAYS = 1 not compatible with BC++ in DLL mode
+#if defined(__BORLANDC__) && (defined(WXMAKINGDLL) || defined(WXUSINGDLL))
+#undef wxUSE_DBEUG_NEW_ALWAYS
+#define wxUSE_DBEUG_NEW_ALWAYS 0
+#endif
+
 #if defined(__WXMSW__) && defined(__WATCOMC__)
 #undef wxUSE_LIBJPEG
 #define wxUSE_LIBJPEG 0
