@@ -2425,8 +2425,6 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     eventType = wxEVT_COMMAND_TREE_SEL_CHANGING;
                 //else: already set above
 
-                NM_TREEVIEW* tv = (NM_TREEVIEW *)lParam;
-
                 if (hdr->code == TVN_SELCHANGINGW || 
                     hdr->code == TVN_SELCHANGEDW)
                 {
