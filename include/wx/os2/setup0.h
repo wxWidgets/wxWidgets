@@ -315,6 +315,9 @@
 // text entry dialog and wxGetTextFromUser function
 #define wxUSE_TEXTDLG 1
 
+// use the number dialog
+#define wxUSE_NUMBERDLG 1
+
 // wxToolBar class
 #define wxUSE_TOOLBAR 1
 #define wxUSE_TOOLBAR_NATIVE 1

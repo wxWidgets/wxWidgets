@@ -16,7 +16,7 @@
     #pragma interface "toplevel.h"
 #endif
 
-enum ETemplateID { kResizeableDialog = 1000
+enum ETemplateID { kResizeableDialog = 127
                   ,kCaptionDialog
                   ,kNoCaptionDialog
                  };
@@ -65,6 +65,7 @@ public:
            virtual bool IsMaximized(void) const;
            virtual void Maximize(bool bMaximize = TRUE);
            virtual void Restore(void);
+           virtual void SendSizeEvent(void);
            virtual void SetIcon(const wxIcon& rIcon);
            virtual bool Show(bool bShow = TRUE);
            virtual bool ShowFullScreen( bool bShow

@@ -116,7 +116,6 @@ public:
                           ,WXHMENU hMenu
                          );
 
-    void SendSizeEvent(void);
     // tooltip management
 #if wxUSE_TOOLTIPS
     WXHWND GetToolTipCtrl(void) const { return m_hWndToolTip; }
