@@ -749,7 +749,9 @@ wxLayoutLine::Draw(wxDC &dc,
    CoordType xpos = 0; // cursorpos, lenght of line
 
    CoordType from, to, tempto;
-   llist->ApplyStyle(&((wxLayoutLine *)this)->m_StyleInfo, dc);
+   //FIXME This doesn't work yet, needs updating afterr default
+   //settings for list or a wxLayoutObjectCmd have changed:
+   //llist->ApplyStyle(&((wxLayoutLine *)this)->m_StyleInfo, dc);
    int highlight = llist->IsSelected(this, &from, &to);
 //   WXLO_DEBUG(("highlight=%d",  highlight ));
    if(highlight == 1) // we need to draw the whole line inverted!
@@ -817,7 +819,9 @@ wxLayoutLine::Layout(wxDC &dc,
       if(cursorSize) *cursorSize = wxPoint(0,0);
    }
 
-   llist->ApplyStyle(&m_StyleInfo, dc);
+   //FIXME This doesn't work yet, needs updating afterr default
+   //settings for list or a wxLayoutObjectCmd have changed:
+   //llist->ApplyStyle(&m_StyleInfo, dc);
    for(i = m_ObjectList.begin(); i != NULLIT; i++)
    {
       (**i).Layout(dc, llist);
@@ -1544,9 +1548,7 @@ wxLayoutList::Layout(wxDC &dc, CoordType bottom, bool forceAll)
    
    // first, make sure everything is calculated - this might not be
    // needed, optimise it later
-   //FIXME This doesn't work yet, needs updating afterr default
-   //settings for list or a wxLayoutObjectCmd have changed:
-   //   ApplyStyle(&m_DefaultSetting, dc);
+   ApplyStyle(&m_DefaultSetting, dc);
    while(line)
    {
       if(forceAll || line->IsDirty())
