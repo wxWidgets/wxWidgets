@@ -188,7 +188,7 @@ int wxBaseArray::Index(long lItem, bool bFromEnd) const
     }
   }
 
-  return NOT_FOUND;
+  return wxNOT_FOUND;
 }
 
 // search for an item in a sorted array (binary search)
@@ -211,7 +211,7 @@ int wxBaseArray::Index(long lItem, CMPFUNC fnCompare) const
       return i;
   }
 
-  return NOT_FOUND;
+  return wxNOT_FOUND;
 }
 // add item at the end
 void wxBaseArray::Add(long lItem)
@@ -275,7 +275,7 @@ void wxBaseArray::Remove(long lItem)
 {
   int iIndex = Index(lItem);
 
-  wxCHECK_RET( iIndex != NOT_FOUND,
+  wxCHECK_RET( iIndex != wxNOT_FOUND,
                "removing inexistent item in wxArray::Remove" );
 
   Remove((size_t)iIndex);

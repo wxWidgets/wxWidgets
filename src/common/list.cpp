@@ -131,7 +131,7 @@ wxNodeBase::~wxNodeBase()
 
 int wxNodeBase::IndexOf() const
 {
-    wxCHECK_MSG( m_list, NOT_FOUND, "node doesn't belong to a list in IndexOf");
+    wxCHECK_MSG( m_list, wxNOT_FOUND, "node doesn't belong to a list in IndexOf");
 
     // It would be more efficient to implement IndexOf() completely inside
     // wxListBase (only traverse the list once), but this is probably a more
@@ -337,7 +337,7 @@ int wxListBase::IndexOf(void *object) const
 {
     wxNodeBase *node = Find( object );
 
-    return node ? node->IndexOf() : NOT_FOUND;
+    return node ? node->IndexOf() : wxNOT_FOUND;
 }
 
 void wxListBase::DoDeleteNode(wxNodeBase *node)

@@ -327,7 +327,7 @@ public:
 
     // create new entry/subgroup returning pointer to newly created element
     ConfigGroup *AddSubgroup(const wxString& strName);
-    ConfigEntry *AddEntry   (const wxString& strName, int nLine = NOT_FOUND);
+    ConfigEntry *AddEntry   (const wxString& strName, int nLine = wxNOT_FOUND);
 
     // will also recursively set parent's dirty flag
     void SetDirty();

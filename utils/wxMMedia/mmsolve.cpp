@@ -57,11 +57,11 @@ bool wxMatchMimeType(const wxString& mime_obj, const wxString& type)
   if (mime_obj.Find('*') != -1) {
     wxString part_str1[2], part_str2[2];
 
-    part_str1[0] = mime_obj.Left('/');
-    part_str1[1] = mime_obj.After('/');
+    part_str1[0] = mime_obj.BeforeFirst('/');
+    part_str1[1] = mime_obj.AfterFirst('/');
    
-    part_str2[0] = type.Left('/');
-    part_str2[1] = type.After('/');
+    part_str2[0] = type.BeforeFirst('/');
+    part_str2[1] = type.AfterFirst('/');
 
     if (part_str1[0] == "*" && part_str1[1] == "*")
       return TRUE;

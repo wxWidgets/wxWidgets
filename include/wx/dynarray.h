@@ -123,8 +123,8 @@ protected:
     /**
       Search the element in the array, starting from the either side
       @param bFromEnd if TRUE, start from the end
-      @return index of the first item matched or NOT_FOUND
-      @see NOT_FOUND
+      @return index of the first item matched or wxNOT_FOUND
+      @see wxNOT_FOUND
      */
   int Index(long lItem, bool bFromEnd = FALSE) const;
     /// search for an item using binary search in a sorted array
@@ -193,7 +193,7 @@ public:                                                             \
   void Remove(size_t uiIndex) { wxBaseArray::Remove(uiIndex); }     \
   void Remove(T Item)                                               \
     { int iIndex = Index(Item);                                     \
-      wxCHECK2_MSG( iIndex != NOT_FOUND, return,                    \
+      wxCHECK2_MSG( iIndex != wxNOT_FOUND, return,                    \
         "removing inexisting element in wxArray::Remove" );         \
       wxBaseArray::Remove((size_t)iIndex); }                          \
                                                                     \
@@ -246,7 +246,7 @@ public:                                                             \
   void Remove(size_t uiIndex) { wxBaseArray::Remove(uiIndex); }     \
   void Remove(T Item)                                               \
     { int iIndex = Index(Item);                                     \
-      wxCHECK2_MSG( iIndex != NOT_FOUND, return,                    \
+      wxCHECK2_MSG( iIndex != wxNOT_FOUND, return,                    \
         "removing inexisting element in wxArray::Remove" );         \
       wxBaseArray::Remove((size_t)iIndex); }                        \
                                                                     \

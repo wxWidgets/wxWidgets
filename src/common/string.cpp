@@ -672,11 +672,11 @@ wxString wxString::Right(size_t nCount) const
 
 // get all characters after the last occurence of ch
 // (returns the whole string if ch not found)
-wxString wxString::Right(char ch) const
+wxString wxString::AfterLast(char ch) const
 {
   wxString str;
   int iPos = Find(ch, TRUE);
-  if ( iPos == NOT_FOUND )
+  if ( iPos == wxNOT_FOUND )
     str = *this;
   else
     str = c_str() + iPos + 1;
@@ -697,7 +697,7 @@ wxString wxString::Left(size_t nCount) const
 
 // get all characters before the first occurence of ch
 // (returns the whole string if ch not found)
-wxString wxString::Left(char ch) const
+wxString wxString::BeforeFirst(char ch) const
 {
   wxString str;
   for ( const char *pc = m_pchData; *pc != '\0' && *pc != ch; pc++ )
@@ -708,11 +708,11 @@ wxString wxString::Left(char ch) const
 
 /// get all characters before the last occurence of ch
 /// (returns empty string if ch not found)
-wxString wxString::Before(char ch) const
+wxString wxString::BeforeLast(char ch) const
 {
   wxString str;
   int iPos = Find(ch, TRUE);
-  if ( iPos != NOT_FOUND && iPos != 0 )
+  if ( iPos != wxNOT_FOUND && iPos != 0 )
     str = wxString(c_str(), iPos);
 
   return str;
@@ -720,11 +720,11 @@ wxString wxString::Before(char ch) const
 
 /// get all characters after the first occurence of ch
 /// (returns empty string if ch not found)
-wxString wxString::After(char ch) const
+wxString wxString::AfterFirst(char ch) const
 {
   wxString str;
   int iPos = Find(ch);
-  if ( iPos != NOT_FOUND )
+  if ( iPos != wxNOT_FOUND )
     str = c_str() + iPos + 1;
 
   return str;
@@ -911,7 +911,7 @@ wxString& wxString::Truncate(size_t uiLen)
 }
 
 // ---------------------------------------------------------------------------
-// finding (return NOT_FOUND if not found and index otherwise)
+// finding (return wxNOT_FOUND if not found and index otherwise)
 // ---------------------------------------------------------------------------
 
 // find a character
@@ -919,7 +919,7 @@ int wxString::Find(char ch, bool bFromEnd) const
 {
   const char *psz = bFromEnd ? strrchr(m_pchData, ch) : strchr(m_pchData, ch);
 
-  return (psz == NULL) ? NOT_FOUND : psz - m_pchData;
+  return (psz == NULL) ? wxNOT_FOUND : psz - m_pchData;
 }
 
 // find a sub-string (like strstr)
@@ -927,7 +927,7 @@ int wxString::Find(const char *pszSub) const
 {
   const char *psz = strstr(m_pchData, pszSub);
 
-  return (psz == NULL) ? NOT_FOUND : psz - m_pchData;
+  return (psz == NULL) ? wxNOT_FOUND : psz - m_pchData;
 }
 
 // ---------------------------------------------------------------------------
@@ -1385,7 +1385,7 @@ int wxArrayString::Index(const char *sz, bool bCase, bool bFromEnd) const
     }
   }
 
-  return NOT_FOUND;
+  return wxNOT_FOUND;
 }
 
 // add item at the end
@@ -1436,7 +1436,7 @@ void wxArrayString::Remove(const char *sz)
 {
   int iIndex = Index(sz);
 
-  wxCHECK_RET( iIndex != NOT_FOUND,
+  wxCHECK_RET( iIndex != wxNOT_FOUND,
                _("removing inexistent element in wxArrayString::Remove") );
 
   Remove(iIndex);

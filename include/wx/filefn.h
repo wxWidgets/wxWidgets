@@ -103,8 +103,9 @@ WXDLLEXPORT char* wxExpandPath(char *dest, const char *path);
 // Contract w.r.t environment (</usr/openwin/lib, OPENWHOME> -> ${OPENWINHOME}/lib)
 // and make (if under the home tree) relative to home
 // [caller must copy-- volatile]
-WXDLLEXPORT char* wxContractPath (const wxString& filename,
-   const wxString& envname = wxEmptyString, const wxString& user = wxEmptyString);
+WXDLLEXPORT char* wxContractPath(const wxString& filename,
+                                 const wxString& envname = "",
+                                 const wxString& user = "");
 
 // Destructive removal of /./ and /../ stuff
 WXDLLEXPORT char* wxRealPath(char *path);

@@ -89,7 +89,7 @@ wxIniConfig::wxIniConfig(const wxString& strAppName, const wxString& strVendor,
     // append the extension if none given and it's not an absolute file name
     // (otherwise we assume that they know what they're doing)
     if ( !wxIsPathSeparator(m_strLocalFilename[0u]) &&
-        m_strLocalFilename.Find('.') == NOT_FOUND )
+        m_strLocalFilename.Find('.') == wxNOT_FOUND )
     {
         m_strLocalFilename << ".ini";
     }

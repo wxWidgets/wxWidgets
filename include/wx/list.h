@@ -165,7 +165,7 @@ protected:
     void *GetData() const { return m_data; }
     void SetData(void *data) { m_data = data; }
 
-    // get 0-based index of this node within the list or NOT_FOUND
+    // get 0-based index of this node within the list or wxNOT_FOUND
     int IndexOf() const;
 
     virtual void DeleteData() { }
@@ -276,7 +276,7 @@ protected:
         // by key
     wxNodeBase *Find(const wxListKey& key) const;
 
-    // get 0-based index of object or NOT_FOUND
+    // get 0-based index of object or wxNOT_FOUND
     int IndexOf( void *object ) const;
 
     // this function allows the sorting of arbitrary lists by giving

@@ -195,7 +195,7 @@ class WXDLLEXPORT wxEvent;
 
  /** symbolic constant used by all Find()-like functions returning positive
       integer on success as failure indicator */
-#define NOT_FOUND       (-1)
+#define wxNOT_FOUND       (-1)
 
 // ----------------------------------------------------------------------------
 // Error codes

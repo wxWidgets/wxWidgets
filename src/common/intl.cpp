@@ -445,7 +445,7 @@ bool wxLocale::Init(const char *szName,
 
 void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
 {
-    if ( s_searchPrefixes.Index(prefix) == NOT_FOUND )
+    if ( s_searchPrefixes.Index(prefix) == wxNOT_FOUND )
     {
         s_searchPrefixes.Add(prefix);
     }

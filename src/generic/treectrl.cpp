@@ -579,7 +579,7 @@ wxTreeItemId wxTreeCtrl::GetNextSibling(const wxTreeItemId& item) const
 
   wxArrayTreeItems& siblings = parent->GetChildren();
   int index = siblings.Index(i);
-  wxASSERT( index != NOT_FOUND ); // I'm not a child of my parent?
+  wxASSERT( index != wxNOT_FOUND ); // I'm not a child of my parent?
 
   size_t n = (size_t)(index + 1);
   return n == siblings.Count() ? wxTreeItemId() : wxTreeItemId(siblings[n]);
@@ -599,7 +599,7 @@ wxTreeItemId wxTreeCtrl::GetPrevSibling(const wxTreeItemId& item) const
 
   wxArrayTreeItems& siblings = parent->GetChildren();
   int index = siblings.Index(i);
-  wxASSERT( index != NOT_FOUND ); // I'm not a child of my parent?
+  wxASSERT( index != wxNOT_FOUND ); // I'm not a child of my parent?
 
   return index == 0 ? wxTreeItemId()
                     : wxTreeItemId(siblings[(size_t)(index - 1)]);
@@ -707,7 +707,7 @@ wxTreeItemId wxTreeCtrl::InsertItem(const wxTreeItemId& parentId,
   }
 
   int index = parent->GetChildren().Index(idPrevious.m_pItem);
-  wxASSERT_MSG( index != NOT_FOUND,
+  wxASSERT_MSG( index != wxNOT_FOUND,
                 "previous item in wxTreeCtrl::InsertItem() is not a sibling" );
   return DoInsertItem(parentId, (size_t)index, text, image, selImage, data);
 }

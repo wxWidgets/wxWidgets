@@ -33,7 +33,13 @@
  * and things like that.
  *
  * $Log$
+ * Revision 1.4  1999/01/14 14:33:56  VZ
+ * 1. NOT_FOUND -> wxNOT_FOUND
+ * 2. wxString::Left(), Right(), Before(), After() clean up
+ * 3. wxLocale updates
+ *
  * Revision 1.3  1998/12/21 19:59:01  RD
+ *
  * Now compiles with /GX- on MSW.
  *
  ************************************************************************/
@@ -1216,7 +1222,7 @@ SWIGEXPORT(void,initwxc)() {
 	 PyDict_SetItemString(d,"wxMAJOR_VERSION", PyInt_FromLong((long) wxMAJOR_VERSION));
 	 PyDict_SetItemString(d,"wxMINOR_VERSION", PyInt_FromLong((long) wxMINOR_VERSION));
 	 PyDict_SetItemString(d,"wxRELEASE_NUMBER", PyInt_FromLong((long) wxRELEASE_NUMBER));
-	 PyDict_SetItemString(d,"NOT_FOUND", PyInt_FromLong((long) NOT_FOUND));
+	 PyDict_SetItemString(d,"wxNOT_FOUND", PyInt_FromLong((long) NOT_FOUND));
 	 PyDict_SetItemString(d,"wxVSCROLL", PyInt_FromLong((long) wxVSCROLL));
 	 PyDict_SetItemString(d,"wxHSCROLL", PyInt_FromLong((long) wxHSCROLL));
 	 PyDict_SetItemString(d,"wxCAPTION", PyInt_FromLong((long) wxCAPTION));

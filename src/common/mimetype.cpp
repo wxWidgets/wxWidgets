@@ -560,11 +560,11 @@ bool wxFileTypeImpl::GetIcon(wxIcon *icon) const
             // the format is the following: <full path to file>, <icon index>
             // NB: icon index may be negative as well as positive and the full
             //     path may contain the environment variables inside '%'
-            wxString strFullPath = strIcon.Before(','),
-            strIndex = strIcon.Right(',');
+            wxString strFullPath = strIcon.BeforeLast(','),
+            strIndex = strIcon.AfterLast(',');
 
-            // index may be omitted, in which case Before(',') is empty and
-            // Right(',') is the whole string
+            // index may be omitted, in which case BeforeLast(',') is empty and
+            // AfterLast(',') is the whole string
             if ( strFullPath.IsEmpty() ) {
                 strFullPath = strIndex;
                 strIndex = "0";
@@ -810,23 +810,23 @@ wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
 
     // first look for an exact match
     int index = m_aTypes.Index(mimetype);
-    if ( index == NOT_FOUND ) {
+    if ( index == wxNOT_FOUND ) {
         // then try to find "text/*" as match for "text/plain" (for example)
-        // NB: if mimeType doesn't contain '/' at all, Left() will return the
-        //     whole string - ok.
-        wxString strCategory = mimetype.Left('/');
+        // NB: if mimeType doesn't contain '/' at all, BeforeFirst() will return
+        //     the whole string - ok.
+        wxString strCategory = mimetype.BeforeFirst('/');
 
         size_t nCount = m_aTypes.Count();
         for ( size_t n = 0; n < nCount; n++ ) {
-            if ( (m_aTypes[n].Before('/') == strCategory ) &&
-                 m_aTypes[n].Right('/') == "*" ) {
+            if ( (m_aTypes[n].BeforeFirst('/') == strCategory ) &&
+                 m_aTypes[n].AfterFirst('/') == "*" ) {
                     index = n;
                     break;
             }
         }
     }
 
-    if ( index != NOT_FOUND ) {
+    if ( index != wxNOT_FOUND ) {
         wxFileType *fileType = new wxFileType;
         fileType->m_impl->Init(this, index);
 
@@ -955,7 +955,7 @@ void wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
         }
 
         int index = m_aTypes.Index(strMimeType);
-        if ( index == NOT_FOUND ) {
+        if ( index == wxNOT_FOUND ) {
             // add a new entry
             m_aTypes.Add(strMimeType);
             m_aEntries.Add(NULL);
@@ -1055,7 +1055,7 @@ void wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName)
                     switch ( currentToken ) {
                         case Field_Type:
                             strType = curField;
-                            if ( strType.Find('/') == NOT_FOUND ) {
+                            if ( strType.Find('/') == wxNOT_FOUND ) {
                                 // we interpret "type" as "type/*"
                                 strType += "/*";
                             }
@@ -1077,7 +1077,7 @@ void wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName)
                                 // is this something of the form foo=bar?
                                 const char *pEq = strchr(curField, '=');
                                 if ( pEq != NULL ) {
-                                    wxString lhs = curField.Left('='),
+                                    wxString lhs = curField.Before('='),
                                              rhs = curField.After('=');
 
                                     lhs.Trim(TRUE);     // from right
@@ -1170,7 +1170,7 @@ void wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName)
 
             strType.MakeLower();
             int nIndex = m_aTypes.Index(strType);
-            if ( nIndex == NOT_FOUND ) {
+            if ( nIndex == wxNOT_FOUND ) {
                 // new file type
                 m_aTypes.Add(strType);
 
@@ -1186,7 +1186,7 @@ void wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName)
                 // before, thus we Append() the new entry to the list if it has
                 // already occured in _this_ file, but Prepend() it if it
                 // occured in some of the previous ones.
-                if ( aEntryIndices.Index(nIndex) == NOT_FOUND ) {
+                if ( aEntryIndices.Index(nIndex) == wxNOT_FOUND ) {
                     // first time in this file
                     aEntryIndices.Add(nIndex);
                     entry->Prepend(m_aEntries[nIndex]);

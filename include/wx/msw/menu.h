@@ -78,7 +78,7 @@ public:
   virtual wxString GetHelpString(int id) const ;
 
   // find item
-    // Finds the item id matching the given string, NOT_FOUND if not found.
+    // Finds the item id matching the given string, wxNOT_FOUND if not found.
   virtual int FindItem(const wxString& itemString) const ;
     // Find wxMenuItem by ID, and item's menu too if itemMenu is !NULL.
   wxMenuItem *FindItemForId(int itemId, wxMenu **itemMenu = NULL) const;

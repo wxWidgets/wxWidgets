@@ -1228,7 +1228,7 @@ void wxFileConfig::ConfigEntry::SetValue(const wxString& strValue, bool bUser)
     }
     else {
       // add a new line to the file
-      wxASSERT( m_nLine == NOT_FOUND );   // consistency check
+      wxASSERT( m_nLine == wxNOT_FOUND );   // consistency check
 
       m_pLine = Group()->Config()->LineListInsert(strLine,
                                                   Group()->GetLastEntryLine());

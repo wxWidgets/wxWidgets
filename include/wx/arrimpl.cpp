@@ -99,7 +99,7 @@ int name::Index(const T& Item, bool bFromEnd) const                           \
     }                                                                         \
   }                                                                           \
                                                                               \
-  return NOT_FOUND;                                                           \
+  return wxNOT_FOUND;                                                           \
 }                                                                             
 
 // redefine the macro so that now it will generate the class implementation
