@@ -38,6 +38,11 @@
     #include "wx/scrolbar.h"
     #include "wx/slider.h"
     #include "wx/textctrl.h"
+
+    #ifdef __WXMSW__
+        // for COLOR_* constants
+        #include "wx/msw/private.h"
+    #endif
 #endif // WX_PRECOMP
 
 #include "wx/notebook.h"
