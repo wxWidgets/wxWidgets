@@ -297,7 +297,6 @@ wxMDIChildFrame::wxMDIChildFrame()
 {
     m_menuBar = (wxMenuBar *) NULL;
     m_page = (GtkNotebookPage *) NULL;
-    m_isFrame = FALSE;
 }
 
 wxMDIChildFrame::wxMDIChildFrame( wxMDIParentFrame *parent,
@@ -307,7 +306,6 @@ wxMDIChildFrame::wxMDIChildFrame( wxMDIParentFrame *parent,
 {
     m_menuBar = (wxMenuBar *) NULL;
     m_page = (GtkNotebookPage *) NULL;
-    m_isFrame = FALSE;
     Create( parent, id, title, wxDefaultPosition, size, style, name );
 }
 

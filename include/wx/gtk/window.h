@@ -217,7 +217,6 @@ public:
     bool                 m_hasVMT:1;
     bool                 m_sizeSet:1;
     bool                 m_resizing:1;
-    bool                 m_isFrame:1;           // faster than IS_KIND_OF
     bool                 m_acceptsFocus:1;      // true if not static
     bool                 m_hasFocus:1;          // true if == FindFocus()
     bool                 m_isScrolling:1;       // dragging scrollbar thumb?

@@ -298,7 +298,6 @@ void wxTopLevelWindowGTK::Init()
     m_miniTitle = 0;
     m_mainWidget = (GtkWidget*) NULL;
     m_insertInClientArea = TRUE;
-    m_isFrame = TRUE;
     m_isIconized = FALSE;
     m_fsIsShowing = FALSE;
     m_themeEnabled = TRUE;

@@ -2263,7 +2263,6 @@ void wxWindowGTK::Init()
 
     m_insertCallback = (wxInsertChildFunction) NULL;
 
-    m_isFrame = FALSE;
     m_acceptsFocus = FALSE;
     m_hasFocus = FALSE;
 
