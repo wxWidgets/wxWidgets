@@ -51,12 +51,17 @@
 // many versions of Unices have this function, but it is not defined in system
 // headers - please add your system here if it is the case for your OS.
 // SunOS < 5.6 (i.e. Solaris < 2.6) and DG-UX are like this.
-#if (defined(__SUN__) && !defined(__SunOs_5_6) && \
+#if !defined(HAVE_USLEEP) && \
+    (defined(__SUN__) && !defined(__SunOs_5_6) && \
                          !defined(__SunOs_5_7) && !defined(__SUNPRO_CC)) || \
      defined(__osf__)
     extern "C"
     {
-        void usleep(unsigned long usec);
+        #ifdef __SUN__
+            int usleep(unsigned int usec);
+        #else // !Sun
+            void usleep(unsigned long usec);
+        #endif // Sun/!Sun
     };
 #endif // Unices without usleep()
 

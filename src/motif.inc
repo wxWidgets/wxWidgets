@@ -122,11 +122,9 @@ LIB_CPP_SRC=\
  motif/stattext.cpp \
  motif/taskbar.cpp \
  motif/textctrl.cpp \
- motif/thread.cpp \
  motif/timer.cpp \
  motif/toolbar.cpp \
  motif/utils.cpp \
- motif/utilsexc.cpp \
  motif/wave.cpp \
  motif/window.cpp \
 \
@@ -155,7 +153,9 @@ LIB_CPP_SRC=\
  generic/statusbr.cpp \
  generic/tabg.cpp \
  generic/textdlgg.cpp \
- generic/treectrl.cpp
+ generic/treectrl.cpp \
+\
+ unix/utilsunx.cpp
   
 LIB_C_SRC=\
 \

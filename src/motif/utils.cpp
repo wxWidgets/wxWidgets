@@ -42,6 +42,8 @@
 
 #include <Xm/Xm.h>
 
+#include "wx/unix/execute.h"
+
 #include "wx/motif/private.h"
 
 // ----------------------------------------------------------------------------
@@ -122,7 +124,7 @@ bool wxCheckForInterrupt(wxWindow *wnd)
 // wxExecute stuff
 // ----------------------------------------------------------------------------
 
-static void xt_notify_end_process(XtPointer client, int *fid,
+static void xt_notify_end_process(XtPointer data, int *fid,
                                   XtInputId *id)
 {
     wxEndProcessData *proc_data = (wxEndProcessData *)data;
@@ -141,7 +143,7 @@ int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)
                                  fd,
                                  (XtPointer *) XtInputReadMask,
                                  (XtInputCallbackProc) xt_notify_end_process,
-                                 (XtPointer) process_data);
+                                 (XtPointer) proc_data);
 
     return (int)id;
 }
@@ -461,11 +463,9 @@ void wxXMergeDatabases (wxApp * theApp, Display * display)
         size_t len;
         environment = GetIniFile (filename, NULL);
         len = strlen (environment);
-#if defined(__SOLARIS__) || defined(__SVR4__) && !defined(__HPUX__)
-        (void) sysinfo (SI_HOSTNAME, environment + len, 1024 - len);
-#else
-        (void) gethostname (environment + len, 1024 - len);
-#endif
+        wxString hostname;
+        if ( wxGetHostName(hostname) )
+            strncat(environment, hostname, 1024 - len);
     }
     homeDB = XrmGetFileDatabase (environment);
     XrmMergeDatabases (homeDB, &wxResourceDatabase);
