@@ -49,12 +49,16 @@
 // singleton class so it can't be done in the dtor)
 class wxSystemSettingsModule : public wxModule
 {
+    friend class wxSystemSettings;
 public:
     virtual bool OnInit();
     virtual void OnExit();
 
 private:
     DECLARE_DYNAMIC_CLASS(wxSystemSettingsModule)
+
+    static wxArrayString   sm_optionNames;
+    static wxArrayString   sm_optionValues;
 };
 
 // ----------------------------------------------------------------------------
@@ -73,6 +77,9 @@ static wxFont *gs_fontDefault = NULL;
 
 IMPLEMENT_DYNAMIC_CLASS(wxSystemSettingsModule, wxModule)
 
+wxArrayString wxSystemSettingsModule::sm_optionNames;
+wxArrayString wxSystemSettingsModule::sm_optionValues;
+
 bool wxSystemSettingsModule::OnInit()
 {
     return TRUE;
@@ -80,6 +87,8 @@ bool wxSystemSettingsModule::OnInit()
 
 void wxSystemSettingsModule::OnExit()
 {
+    sm_optionNames.Clear();
+    sm_optionValues.Clear();
     delete gs_fontDefault;
 }
 
@@ -241,5 +250,47 @@ int wxSystemSettings::GetSystemMetric(int index)
         default:
             return 0;
     }
+}
+
+// Option functions (arbitrary name/value mapping)
+void wxSystemSettings::SetOption(const wxString& name, const wxString& value)
+{
+    int idx = wxSystemSettingsModule::sm_optionNames.Index(name, FALSE);
+    if (idx == wxNOT_FOUND)
+    {
+        wxSystemSettingsModule::sm_optionNames.Add(name);
+        wxSystemSettingsModule::sm_optionValues.Add(value);
+    }
+    else
+    {
+        wxSystemSettingsModule::sm_optionNames[idx] = name;
+        wxSystemSettingsModule::sm_optionValues[idx] = value;
+    }
+}
+
+void wxSystemSettings::SetOption(const wxString& name, int value)
+{
+    wxString valStr;
+    valStr.Printf(wxT("%d"), value);
+    SetOption(name, valStr);
+}
+
+wxString wxSystemSettings::GetOption(const wxString& name)
+{
+    int idx = wxSystemSettingsModule::sm_optionNames.Index(name, FALSE);
+    if (idx == wxNOT_FOUND)
+        return wxEmptyString;
+    else
+        return wxSystemSettingsModule::sm_optionValues[idx];
+}
+
+int wxSystemSettings::GetOptionInt(const wxString& name)
+{
+    return wxAtoi(GetOption(name));
+}
+
+bool wxSystemSettings::HasOption(const wxString& name)
+{
+    return (wxSystemSettingsModule::sm_optionNames.Index(name, FALSE) != wxNOT_FOUND);
 }
 

@@ -781,16 +781,23 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
     if ( useMask )
     {
 #ifdef __WIN32__
-        HDC hdcMem = ::CreateCompatibleDC(GetHdc());
-        ::SelectObject(hdcMem, GetHbitmapOf(bmp));
-
         // use MaskBlt() with ROP which doesn't do anything to dst in the mask
         // points
-        bool ok = ::MaskBlt(GetHdc(), x, y, width, height,
+        // On some systems, MaskBlt succeeds yet is much much slower
+        // than the wxWindows fall-back implementation. So we need
+        // to be able to switch this on and off at runtime.
+        bool ok = FALSE;
+        if (wxSystemSettings::GetOptionInt(wxT("no-maskblt")) == 0)
+        {
+            HDC hdcMem = ::CreateCompatibleDC(GetHdc());
+            ::SelectObject(hdcMem, GetHbitmapOf(bmp));
+
+            ok = ::MaskBlt(GetHdc(), x, y, width, height,
                             hdcMem, 0, 0,
                             hbmpMask, 0, 0,
                             MAKEROP4(SRCCOPY, DSTCOPY)) != 0;
-        ::DeleteDC(hdcMem);
+            ::DeleteDC(hdcMem);
+        }
 
         if ( !ok )
 #endif // Win32
@@ -1471,7 +1478,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
            return FALSE;
     }
 
-    bool success;
+    bool success = FALSE;
 
     if (useMask)
     {
@@ -1480,10 +1487,17 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
         // transparent, so use "DSTCOPY" ROP for the mask points (the usual
         // meaning of fg and bg is inverted which corresponds to wxWin notion
         // of the mask which is also contrary to the Windows one)
-        success = ::MaskBlt(GetHdc(), xdest, ydest, width, height,
+
+        // On some systems, MaskBlt succeeds yet is much much slower
+        // than the wxWindows fall-back implementation. So we need
+        // to be able to switch this on and off at runtime.
+        if (wxSystemSettings::GetOptionInt(wxT("no-maskblt")) == 0)
+        {
+           success = ::MaskBlt(GetHdc(), xdest, ydest, width, height,
                             GetHdcOf(*source), xsrc, ysrc,
                             (HBITMAP)mask->GetMaskBitmap(), xsrc, ysrc,
                             MAKEROP4(dwRop, DSTCOPY)) != 0;
+        }
 
         if ( !success )
 #endif // Win32
