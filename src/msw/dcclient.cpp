@@ -65,6 +65,7 @@ WX_DEFINE_OBJARRAY(wxArrayDCInfo);
 IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
 IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxWindowDC)
 IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxClientDC)
+IMPLEMENT_CLASS(wxPaintDCEx, wxPaintDC)
 
 // ----------------------------------------------------------------------------
 // global variables
@@ -303,5 +304,58 @@ WXHDC wxPaintDC::FindDCInCache(wxWindow* win)
         }
     }
     return 0;
+}
+
+/*
+ * wxPaintDCEx
+ */
+ 
+wxPaintDCEx::wxPaintDCEx(wxWindow *canvas, WXHDC dc) : saveState(0)
+{
+#ifdef __WXDEBUG__
+    if ( !dc )
+    {
+        wxFAIL_MSG( wxT("wxPaintDCEx requires an existing device context") );
+        return;
+    }
+#endif // __WXDEBUG__
+
+    m_canvas = canvas;
+
+    wxPaintDCInfo *info = FindInCache();
+    if ( info )
+    {
+        m_hDC = info->hdc;
+        info->count++;
+    }
+    else // not in cache, create a new one
+    {
+        m_hDC = dc;
+        ms_cache.Add(new wxPaintDCInfo(m_canvas, this));
+        saveState = SaveDC((HDC) dc);
+    }
+}
+
+wxPaintDCEx::~wxPaintDCEx()
+{
+    size_t index;
+    wxPaintDCInfo *info = FindInCache(&index);
+
+    wxCHECK_RET( info, wxT("existing DC should have a cache entry") );
+
+    if ( !--info->count )
+    {
+        RestoreDC((HDC) m_hDC, saveState);
+        ms_cache.RemoveAt(index);
+
+        // Reduce the number of bogus reports of non-freed memory
+        // at app exit
+        if (ms_cache.IsEmpty())
+            ms_cache.Clear();
+    }
+    //else: cached DC entry is still in use
+
+    // prevent the base class dtor from ReleaseDC()ing it again
+    m_hDC = 0;
 }
 

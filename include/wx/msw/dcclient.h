@@ -100,5 +100,23 @@ private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxPaintDC)
 };
 
+/*
+ * wxPaintDCEx
+ * This class is used when an application sends an HDC with the WM_PAINT
+ * message. It is used in HandlePaint and need not be used by an application.
+ */
+
+class WXDLLEXPORT wxPaintDCEx : public wxPaintDC
+{
+public:
+    wxPaintDCEx(wxWindow *canvas, WXHDC dc);
+    virtual ~wxPaintDCEx();
+private:
+    int saveState;
+
+    DECLARE_CLASS(wxPaintDCEx)
+    DECLARE_NO_COPY_CLASS(wxPaintDCEx)
+};
+
 #endif
     // _WX_DCCLIENT_H_

@@ -2344,8 +2344,17 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
             break;
 
         case WM_PAINT:
-            processed = HandlePaint();
-            break;
+            {
+                wxPaintDCEx *pdc = 0;
+                if (wParam) {
+                    pdc = new wxPaintDCEx(this, (WXHDC) wParam);
+                }
+                processed = HandlePaint();
+                if (pdc) {
+                    delete pdc;
+                }
+                break;
+            }
 
         case WM_CLOSE:
 #ifdef __WXUNIVERSAL__
