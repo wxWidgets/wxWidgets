@@ -149,6 +149,9 @@ private:
 #if wxUSE_TOOLTIPS
     WXHWND                m_hwndToolTip;
 #endif // tooltips
+#ifdef __WXWINCE__
+    WXHWND                m_commandBar;
+#endif
 
     // used by IconizeChildFrames(), see comments there
     bool m_wasMinimized;

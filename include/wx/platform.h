@@ -357,5 +357,9 @@
     #define wxUSE_HOTKEY 0
 #endif
 
+#if !defined(wxUSE_WXDIB) && defined(__WXMSW__)
+    #define wxUSE_WXDIB 1
+#endif
+
 #endif /* _WX_PLATFORM_H_ */
 

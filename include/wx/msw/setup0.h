@@ -638,6 +638,9 @@
 // bitmaps > 16MB on Win95/98/Me.  Set to 0 to use DDB's only.
 #define wxUSE_DIB_FOR_BITMAP 0
 
+// Set this to 1 to enable wxDIB
+#define wxUSE_WXDIB 1
+
 // ----------------------------------------------------------------------------
 // common dialogs
 // ----------------------------------------------------------------------------

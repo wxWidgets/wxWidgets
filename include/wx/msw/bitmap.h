@@ -26,7 +26,9 @@ class WXDLLEXPORT wxBitmapRefData;
 class WXDLLEXPORT wxControl;
 class WXDLLEXPORT wxCursor;
 class WXDLLEXPORT wxDC;
+#if wxUSE_WXDIB
 class WXDLLEXPORT wxDIB;
+#endif
 class WXDLLEXPORT wxIcon;
 class WXDLLEXPORT wxImage;
 class WXDLLEXPORT wxMask;
@@ -119,8 +121,10 @@ public:
     // copies the contents and mask of the given cursor to the bitmap
     bool CopyFromCursor(const wxCursor& cursor);
 
+#if wxUSE_WXDIB
     // copies from a device independent bitmap
     bool CopyFromDIB(const wxDIB& dib);
+#endif
 
     virtual bool Create(int width, int height, int depth = -1);
     virtual bool Create(int width, int height, const wxDC& dc);

@@ -555,6 +555,9 @@ WXDLLEXPORT extern wxWindow *wxGetWindowFromHWND(WXHWND hwnd);
 // Get the size of an icon
 WXDLLEXPORT extern wxSize wxGetHiconSize(HICON hicon);
 
+// Lines are drawn differently for WinCE and regular WIN32
+WXDLLEXPORT void wxDrawLine(HDC hdc, int x1, int y1, int x2, int y2);
+
 // LocalAlloc should be used on WinCE
 #ifdef __WXWINCE__
 #include <winbase.h>
@@ -563,7 +566,11 @@ WXDLLEXPORT extern wxSize wxGetHiconSize(HICON hicon);
 #define GlobalFree LocalFree
 #define GlobalLock(mem) mem
 #define GlobalUnlock(mem)
+#define GlobalSize LocalSize
 #define GPTR LPTR
+#define GHND LPTR
+#define GMEM_MOVEABLE 0
+#define GMEM_SHARE 0
 
 #if 0
 

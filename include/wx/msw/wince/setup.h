@@ -144,7 +144,7 @@
 // Default is 1
 //
 // Recommended setting: 1 if your compiler supports it.
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && !defined(__WXWINCE__)
     #define wxUSE_ON_FATAL_EXCEPTION 1
 #else
     #define wxUSE_ON_FATAL_EXCEPTION 0
@@ -284,7 +284,7 @@
 // Default is 1
 //
 // Recommended setting: 1 (but may be safely disabled if you don't use it)
-#define wxUSE_FSVOLUME      1
+#define wxUSE_FSVOLUME      0
 
 // use wxTextBuffer class: required by wxTextFile
 #define wxUSE_TEXTBUFFER    1
@@ -486,7 +486,7 @@
 #define wxUSE_BMPBUTTON    1    // wxBitmapButton
 #define wxUSE_CALENDARCTRL 1    // wxCalendarCtrl
 #define wxUSE_CHECKBOX     1    // wxCheckBox
-#define wxUSE_CHECKLISTBOX 1    // wxCheckListBox (requires wxUSE_OWNER_DRAWN)
+#define wxUSE_CHECKLISTBOX 0    // wxCheckListBox (requires wxUSE_OWNER_DRAWN)
 #define wxUSE_CHOICE       1    // wxChoice
 #define wxUSE_COMBOBOX     1    // wxComboBox
 #define wxUSE_GAUGE        1    // wxGauge
@@ -642,6 +642,9 @@
 // bitmaps > 16MB on Win95/98/Me.  Set to 0 to use DDB's only.
 #define wxUSE_DIB_FOR_BITMAP 0
 
+// Set this to 1 to enable wxDIB
+#define wxUSE_WXDIB 1
+
 // ----------------------------------------------------------------------------
 // common dialogs
 // ----------------------------------------------------------------------------
@@ -750,8 +753,8 @@
 // Default is 1 for wxUSE_ENH_METAFILE and 0 for wxUSE_WIN_METAFILES_ALWAYS.
 //
 // Recommended setting: default or 0 for everything for portable programs.
-#define wxUSE_METAFILE              1
-#define wxUSE_ENH_METAFILE          1
+#define wxUSE_METAFILE              0
+#define wxUSE_ENH_METAFILE          0
 #define wxUSE_WIN_METAFILES_ALWAYS  0
 
 // ----------------------------------------------------------------------------
@@ -762,7 +765,7 @@
 #define wxUSE_DOC_VIEW_ARCHITECTURE 1
 
 // Set to 0 to disable MDI document/view architecture
-#define wxUSE_MDI_ARCHITECTURE    1
+#define wxUSE_MDI_ARCHITECTURE    0
 
 // Set to 0 to disable print/preview architecture code
 #define wxUSE_PRINTING_ARCHITECTURE  0
@@ -838,7 +841,7 @@
 
 #define wxUSE_DRAGIMAGE 1
 
-#define wxUSE_IPC         1
+#define wxUSE_IPC         0
                                 // 0 for no interprocess comms
 #define wxUSE_HELP        0
                                 // 0 for no help facility
@@ -1018,11 +1021,11 @@
 // Recommended setting: 1, only set it to 0 if your compiler doesn't have
 //                      or can't compile <richedit.h>
 #if defined(__WIN95__) && !defined(__WINE__) && !defined(__GNUWIN32_OLD__)
-#define wxUSE_RICHEDIT  1
+#define wxUSE_RICHEDIT  0
 
 // TODO:  This should be ifdef'ed for any compilers that don't support
 //        RichEdit 2.0 but do have RichEdit 1.0...
-#define wxUSE_RICHEDIT2 1
+#define wxUSE_RICHEDIT2 0
 
 #else
 #define wxUSE_RICHEDIT  0
@@ -1035,7 +1038,7 @@
 // Default is 1.
 //
 // Recommended setting: 1, set to 0 for a small library size reduction
-#define wxUSE_OWNER_DRAWN 1
+#define wxUSE_OWNER_DRAWN 0
 
 // Set to 1 to compile MS Windows XP theme engine support
 #define wxUSE_UXTHEME           0

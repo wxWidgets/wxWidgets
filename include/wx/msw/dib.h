@@ -17,6 +17,8 @@ class WXDLLEXPORT wxPalette;
 
 #include "wx/msw/private.h"
 
+#if wxUSE_WXDIB
+
 // ----------------------------------------------------------------------------
 // wxDIB: represents a DIB section
 // ----------------------------------------------------------------------------
@@ -224,6 +226,9 @@ inline wxDIB::~wxDIB()
 {
     Free();
 }
+
+#endif
+    // wxUSE_WXDIB
 
 #endif // _WX_MSW_DIB_H_
 
