@@ -36,6 +36,7 @@
 #endif
 
 #include "wx/univ/renderer.h"
+#include "wx/univ/inphand.h"
 #include "wx/univ/theme.h"
 
 // ============================================================================
@@ -111,6 +112,29 @@ void wxButton::DoDraw(wxControlRenderer *renderer)
 {
     renderer->DrawButtonBorder();
     renderer->DrawLabel();
+}
+
+// ----------------------------------------------------------------------------
+// input processing
+// ----------------------------------------------------------------------------
+
+wxInputHandler *wxButton::CreateInputHandler() const
+{
+    return wxTheme::Get()->GetInputHandler(wxCONTROL_BUTTON);
+}
+
+bool wxButton::PerformAction(const wxControlAction& action)
+{
+    if ( action == wxACTION_BUTTON_TOGGLE )
+    {
+        m_isPressed = !m_isPressed;
+    }
+    else
+    {
+        return wxControl::PerformAction(action);
+    }
+
+    return TRUE;
 }
 
 // ----------------------------------------------------------------------------

@@ -828,16 +828,10 @@ wxAppInitializerFunction wxAppBase::m_appInitFn = (wxAppInitializerFunction) NUL
 
 wxApp::wxApp()
 {
-    m_topWindow = NULL;
-    wxTheApp = this;
-    m_wantDebugOutput = TRUE;
-
     argc = 0;
     argv = NULL;
     m_printMode = wxPRINT_WINDOWS;
-    m_exitOnFrameDelete = TRUE;
     m_auto3D = TRUE;
-    m_isActive = FALSE;
 }
 
 wxApp::~wxApp()

@@ -42,8 +42,6 @@ public:
     virtual bool Pending();
     virtual void Dispatch();
 
-    virtual bool IsActive() const { return m_isActive; }
-
     virtual wxIcon GetStdIcon(int which) const;
 
     virtual void SetPrintMode(int mode) { m_printMode = mode; }
@@ -65,14 +63,10 @@ public:
     void SetAuto3D(bool flag) { m_auto3D = flag; }
     bool GetAuto3D() const { return m_auto3D; }
 
-    // for private use only
-    void SetActive(bool isActive) { m_isActive = isActive; }
-
 protected:
     bool   m_showOnInit;
     int    m_printMode; // wxPRINT_WINDOWS, wxPRINT_POSTSCRIPT
     bool   m_auto3D ;   // Always use 3D controls, except where overriden
-    bool   m_isActive;
 
     /* Windows-specific wxApp definitions */
 

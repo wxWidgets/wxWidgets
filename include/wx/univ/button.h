@@ -16,8 +16,16 @@
     #pragma interface "univbutton.h"
 #endif
 
+class WXDLLEXPORT wxInputHandler;
+
 // ----------------------------------------------------------------------------
-// Pushbutton
+// the actions supported by this control
+// ----------------------------------------------------------------------------
+
+#define wxACTION_BUTTON_TOGGLE _T("toggle") // press/release the button
+
+// ----------------------------------------------------------------------------
+// wxButton: a push button
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxButton : public wxButtonBase
@@ -55,6 +63,8 @@ public:
     virtual bool IsDefault() const { return m_isDefault; }
 
 protected:
+    virtual wxInputHandler *CreateInputHandler() const;
+    virtual bool PerformAction(const wxControlAction& action);
     virtual wxSize DoGetBestSize() const;
     virtual void DoDraw(wxControlRenderer *renderer);
 

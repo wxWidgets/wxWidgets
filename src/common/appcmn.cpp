@@ -44,6 +44,21 @@
 // implementation
 // ===========================================================================
 
+wxAppBase::wxAppBase()
+{
+    wxTheApp = (wxApp *)this;
+
+    // VZ: what's this? is it obsolete?
+    m_wantDebugOutput = FALSE;
+
+#if wxUSE_GUI
+    m_topWindow = (wxWindow *)NULL;
+    m_useBestVisual = FALSE;
+    m_exitOnFrameDelete = TRUE;
+    m_isActive = TRUE;
+#endif // wxUSE_GUI
+}
+
 // ----------------------------------------------------------------------------
 // initialization and termination
 // ----------------------------------------------------------------------------
@@ -107,3 +122,26 @@ void wxAppBase::ProcessPendingEvents()
     wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
 }
 
+// ----------------------------------------------------------------------------
+// misc
+// ----------------------------------------------------------------------------
+
+#if wxUSE_GUI
+
+void wxAppBase::SetActive(bool active, wxWindow *lastFocus)
+{
+    static wxWindow *s_lastFocus = (wxWindow *)NULL;
+
+    m_isActive = active;
+
+    // if we're being deactivated remember the last focused window
+    if ( !active )
+    {
+        s_lastFocus = lastFocus;
+    }
+
+    if ( s_lastFocus )
+        s_lastFocus->Refresh();
+}
+
+#endif // wxUSE_GUI

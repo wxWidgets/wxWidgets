@@ -47,8 +47,6 @@ public:
     virtual bool Pending();
     virtual void Dispatch();
 
-    virtual bool IsActive() const;
-
     virtual wxIcon GetStdIcon(int which) const;
 
     // implementation only from now on
@@ -67,8 +65,6 @@ public:
     void SuppressIdleEvents(bool arg = TRUE) { m_suppressIdleEvents = arg; }
     bool GetSuppressIdleEvents() const { return m_suppressIdleEvents; }
 
-    void SetActive(bool isActive) { m_isActive = isActive; }
-
     bool            m_initialized;
 
     gint            m_idleTag;
@@ -80,9 +76,6 @@ public:
 private:
     // Set to TRUE while we are in wxYield().
     bool m_suppressIdleEvents;
-
-    // does any of our windows has focus?
-    bool m_isActive;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxApp)

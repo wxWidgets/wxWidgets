@@ -1,6 +1,7 @@
 UNIVOBJS = \
            button.o \
            control.o \
+           inphand.o \
            renderer.o \
            statbox.o \
            stattext.o \

@@ -11,8 +11,8 @@
 // Licence:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UNIX_THEME_H_
-#define _WX_UNIX_THEME_H_
+#ifndef _WX_UNIV_THEME_H_
+#define _WX_UNIV_THEME_H_
 
 #ifdef __GNUG__
     #pragma interface "theme.h"
@@ -23,7 +23,7 @@
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxRenderer;
-class WXDLLEXPORT wxInputHandler { };
+class WXDLLEXPORT wxInputHandler;
 class WXDLLEXPORT wxColourScheme { };
 
 class WXDLLEXPORT wxTheme
@@ -46,8 +46,14 @@ public:
 
     // the theme methods
     // -----------------
+
+    // get the renderer implementing all the control-drawing operations in
+    // this theme
     virtual wxRenderer *GetRenderer() = 0;
-    virtual wxInputHandler *GetInputHandler() = 0;
+
+    // get the input handler for the control with this name
+    virtual wxInputHandler *GetInputHandler(const wxString& control) = 0;
+
     virtual wxColourScheme *GetColourScheme() = 0;
 
     // implementation only from now on
@@ -96,5 +102,5 @@ private:
     wxTheme::wxThemeInfo classname::ms_info(wxCtorFor##themename,           \
                                             #themename, themedesc)
 
-#endif // _WX_UNIX_THEME_H_
+#endif // _WX_UNIV_THEME_H_
 

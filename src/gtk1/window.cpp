@@ -199,6 +199,11 @@ static wxWindow  *g_captureWindow = (wxWindow*) NULL;
 
 /* extern */ wxWindow  *g_focusWindow = (wxWindow*) NULL;
 
+// the last window which had the focus - this is normally never NULL (except
+// if we never had focus at all) as even when g_focusWindow is NULL it still
+// keeps its previous value
+static wxWindow *g_focusWindowLast = (wxWindow *)NULL;
+
 // if we detect that the app has got/lost the focus, we set this variable to
 // either TRUE or FALSE and an activate event will be sent during the next
 // OnIdle() call and it is reset to -1: this value means that we shouldn't
@@ -376,6 +381,8 @@ static void draw_frame( GtkWidget *widget, wxWindow *win )
             }
     }
 
+    // wxUniversal widgets draw the borders themselves
+#ifndef __WXUNIVERSAL__
     int dx = 0;
     int dy = 0;
     if (GTK_WIDGET_NO_WINDOW (widget))
@@ -417,6 +424,7 @@ static void draw_frame( GtkWidget *widget, wxWindow *win )
         gdk_gc_unref( gc );
         return;
     }
+#endif // __WXUNIVERSAL__
 }
 
 //-----------------------------------------------------------------------------
@@ -1508,6 +1516,7 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget, GdkEvent *WXUNUSED(
             break;
     }
 
+    g_focusWindowLast =
     g_focusWindow = win;
 
 /*
@@ -2176,6 +2185,7 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
 
     gtk_container_add( GTK_CONTAINER(m_widget), m_wxwindow );
 
+#ifndef __WXUNIVERSAL__
 #if (GTK_MINOR_VERSION > 0)
     GtkPizza *pizza = GTK_PIZZA(m_wxwindow);
 
@@ -2211,6 +2221,7 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
         gtk_viewport_set_shadow_type( viewport, GTK_SHADOW_NONE );
     }
 #endif // GTK_MINOR_VERSION
+#endif // __WXUNIVERSAL__
 
     GTK_WIDGET_SET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
     m_acceptsFocus = TRUE;
@@ -2569,7 +2580,7 @@ void wxWindow::OnInternalIdle()
         // do it only once
         g_sendActivateEvent = -1;
 
-        wxTheApp->SetActive(activate);
+        wxTheApp->SetActive(activate, g_focusWindowLast);
 
         wxActivateEvent event(wxEVT_ACTIVATE, activate, GetId());
         event.SetEventObject(this);
@@ -2635,6 +2646,7 @@ void wxWindow::DoSetClientSize( int width, int height )
         int dw = 0;
         int dh = 0;
 
+#ifndef __WXUNIVERSAL__
         if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER))
         {
             /* when using GTK 1.2 we set the shadow border size to 2 */
@@ -2647,6 +2659,7 @@ void wxWindow::DoSetClientSize( int width, int height )
             dw += 1 * 2;
             dh += 1 * 2;
         }
+#endif // __WXUNIVERSAL__
 
         if (m_hasScrolling)
         {
@@ -2697,6 +2710,7 @@ void wxWindow::DoGetClientSize( int *width, int *height ) const
         int dw = 0;
         int dh = 0;
 
+#ifndef __WXUNIVERSAL__
         if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER))
         {
             /* when using GTK 1.2 we set the shadow border size to 2 */
@@ -2709,6 +2723,7 @@ void wxWindow::DoGetClientSize( int *width, int *height ) const
             dw += 1 * 2;
             dh += 1 * 2;
         }
+#endif // __WXUNIVERSAL__
 
         if (m_hasScrolling)
         {

@@ -1884,19 +1884,7 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 
 #ifdef __WXUNIVERSAL__
         case WM_ACTIVATEAPP:
-            {
-                // refresh the focused window
-                static wxWindow *s_lastFocus = NULL;
-                wxTheApp->SetActive(wParam != 0);
-                if ( !wParam )
-                {
-                    // we're being de activated
-                    s_lastFocus = FindFocus();
-                }
-
-                if ( s_lastFocus )
-                    s_lastFocus->Refresh();
-            }
+            wxTheApp->SetActive(wParam != 0, FindFocus());
             break;
 #endif // __WXUNIVERSAL__
 

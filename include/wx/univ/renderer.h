@@ -19,8 +19,8 @@
     #pragma interface "renderer.h"
 #endif
 
-#ifndef _WX_UNIX_RENDERER_H_
-#define _WX_UNIX_RENDERER_H_
+#ifndef _WX_UNIV_RENDERER_H_
+#define _WX_UNIV_RENDERER_H_
 
 class WXDLLEXPORT wxControl;
 class WXDLLEXPORT wxDC;
@@ -90,6 +90,9 @@ public:
     // example) it is more complicated - the result being, in any case, that
     // the control looks "nice" if it uses the adjusted rectangle
     virtual void AdjustSize(wxSize *size, const wxWindow *window) = 0;
+
+    // virtual dtor for any base class
+    virtual ~wxRenderer();
 };
 
 // ----------------------------------------------------------------------------
@@ -176,5 +179,5 @@ private:
     wxRect m_rect;
 };
 
-#endif // _WX_UNIX_RENDERER_H_
+#endif // _WX_UNIV_RENDERER_H_
 

@@ -34,6 +34,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/univ/renderer.h"
+#include "wx/univ/inphand.h"
 #include "wx/univ/theme.h"
 
 // ============================================================================
@@ -111,9 +112,10 @@ wxTheme::wxThemeInfo::wxThemeInfo(wxTheme::Constructor c,
 }
 
 // ----------------------------------------------------------------------------
-// wxTheme dtor
+// assorted trivial dtors
 // ----------------------------------------------------------------------------
 
 wxTheme::~wxTheme()
 {
 }
+

@@ -245,12 +245,6 @@ END_EVENT_TABLE()
 
 wxApp::wxApp()
 {
-    wxTheApp = this;
-
-    m_topWindow = (wxWindow *) NULL;
-    m_exitOnFrameDelete = TRUE;
-    m_isActive = TRUE;
-
     m_idleTag = gtk_idle_add_priority( 1000, wxapp_idle_callback, (gpointer) NULL );
 
 #if wxUSE_THREADS
@@ -259,8 +253,6 @@ wxApp::wxApp()
 #endif
 
     m_colorCube = (unsigned char*) NULL;
-
-    m_useBestVisual = FALSE;
 }
 
 wxApp::~wxApp()
@@ -468,11 +460,6 @@ bool wxApp::Pending()
 void wxApp::Dispatch()
 {
     gtk_main_iteration();
-}
-
-bool wxApp::IsActive() const
-{
-    return m_isActive;
 }
 
 void wxApp::DeletePendingObjects()

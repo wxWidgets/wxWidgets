@@ -35,6 +35,7 @@
 #endif
 
 #include "wx/univ/renderer.h"
+#include "wx/univ/inphand.h"
 #include "wx/univ/theme.h"
 
 // ============================================================================
@@ -44,6 +45,18 @@
 IMPLEMENT_DYNAMIC_CLASS(wxControl, wxWindow)
 
 BEGIN_EVENT_TABLE(wxControl, wxControlBase)
+    EVT_KEY_DOWN(wxControl::OnKeyDown)
+    EVT_KEY_UP(wxControl::OnKeyUp)
+
+    EVT_LEFT_DOWN(wxControl::OnMouse)
+    EVT_LEFT_UP(wxControl::OnMouse)
+    EVT_RIGHT_DOWN(wxControl::OnMouse)
+    EVT_RIGHT_UP(wxControl::OnMouse)
+    EVT_MIDDLE_DOWN(wxControl::OnMouse)
+    EVT_MIDDLE_UP(wxControl::OnMouse)
+    EVT_LEAVE_WINDOW(wxControl::OnMouse)
+    EVT_ENTER_WINDOW(wxControl::OnMouse)
+
     EVT_PAINT(wxControl::OnPaint)
 END_EVENT_TABLE()
 
@@ -54,6 +67,24 @@ END_EVENT_TABLE()
 wxControl::wxControl()
 {
     m_indexAccel = -1;
+}
+
+bool wxControl::Create(wxWindow *parent,
+                       wxWindowID id,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       long style,
+                       const wxValidator& validator,
+                       const wxString& name)
+{
+    if ( !wxControlBase::Create(parent, id, pos, size, style, validator, name) )
+        return FALSE;
+
+    SetBackgroundColour(parent->GetBackgroundColour());
+
+    m_handler = CreateInputHandler();
+
+    return TRUE;
 }
 
 // ----------------------------------------------------------------------------
@@ -141,6 +172,45 @@ void wxControl::OnPaint(wxPaintEvent& event)
 void wxControl::DoDraw(wxControlRenderer *renderer)
 {
     renderer->DrawBorder();
+}
+
+// ----------------------------------------------------------------------------
+// input processing
+// ----------------------------------------------------------------------------
+
+wxInputHandler *wxControl::CreateInputHandler() const
+{
+    return wxTheme::Get()->GetInputHandler(wxCONTROL_DEFAULT);
+}
+
+void wxControl::OnKeyDown(wxKeyEvent& event)
+{
+    if ( PerformAction(m_handler->Map(event, TRUE)) )
+    {
+        Refresh();
+    }
+}
+
+void wxControl::OnKeyUp(wxKeyEvent& event)
+{
+    if ( PerformAction(m_handler->Map(event, FALSE)) )
+    {
+        Refresh();
+    }
+}
+
+void wxControl::OnMouse(wxMouseEvent& event)
+{
+    if ( PerformAction(m_handler->Map(event)) )
+    {
+        Refresh();
+    }
+}
+
+bool wxControl::PerformAction(const wxControlAction& action)
+{
+    // nothing to do
+    return FALSE;
 }
 
 #endif // wxUSE_CONTROLS

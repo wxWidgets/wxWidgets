@@ -32,10 +32,11 @@
 #endif // WX_PRECOMP
 
 #include "wx/univ/renderer.h"
+#include "wx/univ/inphand.h"
 #include "wx/univ/theme.h"
 
 // ----------------------------------------------------------------------------
-// private classes
+// wxWin32Renderer: draw the GUI elements in Win32 style
 // ----------------------------------------------------------------------------
 
 class wxWin32Renderer : public wxRenderer
@@ -94,26 +95,62 @@ private:
           m_penHighlight;
 };
 
+// ----------------------------------------------------------------------------
+// wxWin32InputHandler and derived classes: process the keyboard and mouse
+// messages according to Windows standards
+// ----------------------------------------------------------------------------
+
 class wxWin32InputHandler : public wxInputHandler
 {
+public:
+    virtual wxControlAction Map(const wxKeyEvent& event, bool pressed);
+    virtual wxControlAction Map(const wxMouseEvent& event);
 };
+
+class wxWin32ButtonInputHandler : public wxWin32InputHandler
+{
+public:
+    wxWin32ButtonInputHandler();
+
+    virtual wxControlAction Map(const wxKeyEvent& event, bool pressed);
+    virtual wxControlAction Map(const wxMouseEvent& event);
+
+private:
+    wxWindow *m_winCapture;
+};
+
+// ----------------------------------------------------------------------------
+// wxWin32ColourScheme
+// ----------------------------------------------------------------------------
 
 class wxWin32ColourScheme : public wxColourScheme
 {
 };
 
+// ----------------------------------------------------------------------------
+// wxWin32Theme
+// ----------------------------------------------------------------------------
+
+WX_DEFINE_ARRAY(wxInputHandler *, wxArrayHandlers);
+
 class wxWin32Theme : public wxTheme
 {
 public:
     wxWin32Theme();
+    virtual ~wxWin32Theme();
 
     virtual wxRenderer *GetRenderer() { return m_renderer; }
-    virtual wxInputHandler *GetInputHandler() { return m_handler; }
+    virtual wxInputHandler *GetInputHandler(const wxString& control);
     virtual wxColourScheme *GetColourScheme() { return m_scheme; }
 
 private:
     wxWin32Renderer *m_renderer;
-    wxWin32InputHandler *m_handler;
+
+    // the names of the already created handlers and the handlers themselves
+    // (these arrays are synchronized)
+    wxSortedArrayString m_handlerNames;
+    wxArrayHandlers m_handlers;
+
     wxWin32ColourScheme *m_scheme;
 
     WX_DECLARE_THEME();
@@ -132,13 +169,46 @@ WX_IMPLEMENT_THEME(wxWin32Theme, win32, wxTRANSLATE("Win32 theme"));
 wxWin32Theme::wxWin32Theme()
 {
     m_renderer = new wxWin32Renderer;
-    m_handler = NULL;
     m_scheme = NULL;
 }
 
-// ----------------------------------------------------------------------------
+wxWin32Theme::~wxWin32Theme()
+{
+    WX_CLEAR_ARRAY(m_handlers);
+}
+
+wxInputHandler *wxWin32Theme::GetInputHandler(const wxString& control)
+{
+    wxInputHandler *handler;
+    int n = m_handlerNames.Index(control);
+    if ( n == wxNOT_FOUND )
+    {
+        // create a new handler
+        n = m_handlerNames.Add(control);
+
+        if ( control == wxCONTROL_BUTTON )
+            handler = new wxWin32ButtonInputHandler;
+        else
+        {
+            wxASSERT_MSG( control == wxCONTROL_DEFAULT,
+                          _T("no input handler defined for this control") );
+
+            handler = new wxWin32InputHandler;
+        }
+
+        m_handlers.Insert(handler, n);
+    }
+    else // we already have it
+    {
+        handler = m_handlers[n];
+    }
+
+    return handler;
+}
+
+// ============================================================================
 // wxWin32Renderer
-// ----------------------------------------------------------------------------
+// ============================================================================
 
 // ----------------------------------------------------------------------------
 // construction
@@ -493,19 +563,19 @@ void wxWin32Renderer::AdjustSize(wxSize *size, const wxWindow *window)
         {
             case wxBORDER_SUNKEN:
             case wxBORDER_RAISED:
-                size->x += 2;
-                size->y += 2;
+                size->x += 4;
+                size->y += 4;
                 break;
 
             case wxBORDER_SIMPLE:
             case wxBORDER_STATIC:
-                size->x++;
-                size->y++;
+                size->x += 2;
+                size->y += 2;
                 break;
 
             case wxBORDER_DOUBLE:
-                size->x += 3;
-                size->y += 3;
+                size->x += 6;
+                size->y += 6;
                 break;
 
             default:
@@ -517,4 +587,63 @@ void wxWin32Renderer::AdjustSize(wxSize *size, const wxWindow *window)
                 break;
         }
     }
+}
+
+// ============================================================================
+// wxInputHandler
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxWin32InputHandler
+// ----------------------------------------------------------------------------
+
+wxControlAction wxWin32InputHandler::Map(const wxKeyEvent& event, bool pressed)
+{
+    return wxACTION_NONE;
+}
+
+wxControlAction wxWin32InputHandler::Map(const wxMouseEvent& event)
+{
+    return wxACTION_NONE;
+}
+
+// ----------------------------------------------------------------------------
+// wxWin32ButtonInputHandler
+// ----------------------------------------------------------------------------
+
+wxWin32ButtonInputHandler::wxWin32ButtonInputHandler()
+{
+    m_winCapture = NULL;
+}
+
+wxControlAction wxWin32ButtonInputHandler::Map(const wxKeyEvent& event,
+                                               bool pressed)
+{
+    int keycode = event.GetKeyCode();
+    if ( keycode == WXK_SPACE || keycode == WXK_RETURN )
+    {
+        return wxACTION_BUTTON_TOGGLE;
+    }
+
+    return wxWin32InputHandler::Map(event, pressed);
+}
+
+wxControlAction wxWin32ButtonInputHandler::Map(const wxMouseEvent& event)
+{
+    if ( event.IsButton() )
+    {
+        if ( event.ButtonDown() )
+        {
+            m_winCapture = wxWindow::FindFocus();
+            m_winCapture->CaptureMouse();
+        }
+        else // up
+        {
+            m_winCapture->ReleaseMouse();
+        }
+
+        return wxACTION_BUTTON_TOGGLE;
+    }
+
+    return wxWin32InputHandler::Map(event);
 }
