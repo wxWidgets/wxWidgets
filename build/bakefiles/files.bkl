@@ -170,7 +170,6 @@
     src/common/fs_mem.cpp
     src/common/msgout.cpp
     src/common/utilscmn.cpp
-    src/common/event.cpp
 </set>
 <set var="BASE_CMN_HDR">
     wx/arrimpl.cpp
