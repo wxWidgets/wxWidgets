@@ -328,7 +328,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     // least for MSW compatibility)
     wxSize size = sizeOrig;
     size.x = WidthDefault(size.x);
-    size.y = WidthDefault(size.y);
+    size.y = HeightDefault(size.y);
 
     wxTopLevelWindows.Append( this );
 

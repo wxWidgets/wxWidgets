@@ -1060,8 +1060,8 @@ protected:
     // Get the default size for the new window if no explicit size given. If
     // there are better default sizes then these can be changed, just as long
     // as they are not too small for TLWs.
-    static int WidthDefault(int w) { return w == -1 ? 400 : w; }
-    static int HeightDefault(int h) { return h == -1 ? 250 : h; }
+    static int WidthDefault(int w) { return w == -1 ? 20 : w; }
+    static int HeightDefault(int h) { return h == -1 ? 20 : h; }
 
     // set the best size for the control if the default size was given:
     // replaces the fields of size == -1 with the best values for them and
