@@ -81,8 +81,8 @@ protected:
     // wxStreamBase methods
     virtual size_t OnSysRead(void *buffer, size_t bufsize);
     virtual size_t OnSysWrite(const void *buffer, size_t bufsize);
-    virtual off_t OnSysSeek(off_t off, wxSeekMode mode);
-    virtual off_t OnSysTell() const;
+    virtual wxFileOffset OnSysSeek(wxFileOffset off, wxSeekMode mode);
+    virtual wxFileOffset OnSysTell() const;
 
     // helper
     static PyObject* getMethod(PyObject* py, char* name);

@@ -1385,8 +1385,8 @@ PyObject* wxPyCBInputStream::getMethod(PyObject* py, char* name) {
 size_t wxPyCBInputStream::GetSize() const {
     wxPyCBInputStream* self = (wxPyCBInputStream*)this; // cast off const
     if (m_seek && m_tell) {
-        off_t temp = self->OnSysTell();
-        off_t ret = self->OnSysSeek(0, wxFromEnd);
+        wxFileOffset temp = self->OnSysTell();
+        wxFileOffset ret = self->OnSysSeek(0, wxFromEnd);
         self->OnSysSeek(temp, wxFromStart);
         return ret;
     }
@@ -1426,10 +1426,10 @@ size_t wxPyCBInputStream::OnSysWrite(const void *buffer, size_t bufsize) {
     return 0;
 }
 
-off_t wxPyCBInputStream::OnSysSeek(off_t off, wxSeekMode mode) {
+wxFileOffset wxPyCBInputStream::OnSysSeek(wxFileOffset off, wxSeekMode mode) {
     bool blocked = wxPyBeginBlockThreads();
-#ifdef _LARGE_FILES
-    // off_t is a 64-bit value...
+#if defined( __WINCE__) || defined(_LARGE_FILES) || defined(__HUGEFILES_SUPPORTED)
+    // wxFileOffset is a 64-bit value...
     PyObject* arglist = Py_BuildValue("(Li)", off, mode);
 #else
     PyObject* arglist = Py_BuildValue("(ii)", off, mode);
@@ -1442,14 +1442,14 @@ off_t wxPyCBInputStream::OnSysSeek(off_t off, wxSeekMode mode) {
 }
 
 
-off_t wxPyCBInputStream::OnSysTell() const {
+wxFileOffset wxPyCBInputStream::OnSysTell() const {
     bool blocked = wxPyBeginBlockThreads();
     PyObject* arglist = Py_BuildValue("()");
     PyObject* result = PyEval_CallObject(m_tell, arglist);
     Py_DECREF(arglist);
-    off_t o = 0;
+    wxFileOffset o = 0;
     if (result != NULL) {
-#ifdef _LARGE_FILES
+#if defined( __WINCE__) || defined(_LARGE_FILES) || defined(__HUGEFILES_SUPPORTED)
         if (PyLong_Check(result))
             o = PyLong_AsLongLong(result);
         else
