@@ -562,8 +562,6 @@ bool wxMouseEvent::ButtonDClick(int but) const
         case wxMOUSE_BTN_RIGHT:
             return RightDClick();
     }
-
-    return false;
 }
 
 // return true if was a button down event
@@ -587,8 +585,6 @@ bool wxMouseEvent::ButtonDown(int but) const
         case wxMOUSE_BTN_RIGHT:
             return RightDown();
     }
-
-    return false;
 }
 
 // return true if was a button up event
@@ -612,8 +608,6 @@ bool wxMouseEvent::ButtonUp(int but) const
         case wxMOUSE_BTN_RIGHT:
             return RightUp();
     }
-
-    return false;
 }
 
 // return true if the given button is currently changing state
@@ -639,8 +633,6 @@ bool wxMouseEvent::Button(int but) const
         case wxMOUSE_BTN_RIGHT:
             return RightDown() || RightUp() || RightDClick();
     }
-
-    return false;
 }
 
 bool wxMouseEvent::ButtonIsDown(int but) const
@@ -663,8 +655,6 @@ bool wxMouseEvent::ButtonIsDown(int but) const
         case wxMOUSE_BTN_RIGHT:
             return RightIsDown();
     }
-
-    return false;
 }
 
 int wxMouseEvent::GetButton() const

@@ -596,60 +596,58 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
 
         return rt;
     }
-    else
+
+    wxFSFile *fi;
+    wxFileSystem fsys;
+
+    wxString title = _("noname"),
+             safetitle,
+             start = wxEmptyString,
+             contents = wxEmptyString,
+             index = wxEmptyString,
+             charset = wxEmptyString;
+
+    fi = fsys.OpenFile(book);
+    if (fi == NULL)
     {
-        wxFSFile *fi;
-        wxFileSystem fsys;
-
-        wxString title = _("noname"),
-                 safetitle,
-                 start = wxEmptyString,
-                 contents = wxEmptyString,
-                 index = wxEmptyString,
-                 charset = wxEmptyString;
-
-        fi = fsys.OpenFile(book);
-        if (fi == NULL)
-        {
-            wxLogError(_("Cannot open HTML help book: %s"), book.c_str());
-            return FALSE;
-        }
-        fsys.ChangePathTo(book);
-
-        const wxChar *lineptr;
-        wxChar linebuf[300];
-        wxString tmp;
-        wxHtmlFilterPlainText filter;
-        tmp = filter.ReadFile(*fi);
-        lineptr = tmp.c_str();
-
-        do 
-        {
-            lineptr = ReadLine(lineptr, linebuf, 300);
-            
-            for (wxChar *ch = linebuf; *ch != wxT('\0') && *ch != wxT('='); ch++)
-               *ch = tolower(*ch);
-
-            if (wxStrstr(linebuf, _T("title=")) == linebuf)
-                title = linebuf + wxStrlen(_T("title="));
-            if (wxStrstr(linebuf, _T("default topic=")) == linebuf)
-                start = linebuf + wxStrlen(_T("default topic="));
-            if (wxStrstr(linebuf, _T("index file=")) == linebuf)
-                index = linebuf + wxStrlen(_T("index file="));
-            if (wxStrstr(linebuf, _T("contents file=")) == linebuf)
-                contents = linebuf + wxStrlen(_T("contents file="));
-            if (wxStrstr(linebuf, _T("charset=")) == linebuf)
-                charset = linebuf + wxStrlen(_T("charset="));
-        } while (lineptr != NULL);
-
-        wxFontEncoding enc;
-        if (charset == wxEmptyString) enc = wxFONTENCODING_SYSTEM;
-        else enc = wxFontMapper::Get()->CharsetToEncoding(charset);
-        bool rtval = AddBookParam(*fi, enc,
-                                  title, contents, index, start, fsys.GetPath());
-        delete fi;
-        return rtval;
+        wxLogError(_("Cannot open HTML help book: %s"), book.c_str());
+        return FALSE;
     }
+    fsys.ChangePathTo(book);
+
+    const wxChar *lineptr;
+    wxChar linebuf[300];
+    wxString tmp;
+    wxHtmlFilterPlainText filter;
+    tmp = filter.ReadFile(*fi);
+    lineptr = tmp.c_str();
+
+    do 
+    {
+        lineptr = ReadLine(lineptr, linebuf, 300);
+        
+        for (wxChar *ch = linebuf; *ch != wxT('\0') && *ch != wxT('='); ch++)
+           *ch = tolower(*ch);
+
+        if (wxStrstr(linebuf, _T("title=")) == linebuf)
+            title = linebuf + wxStrlen(_T("title="));
+        if (wxStrstr(linebuf, _T("default topic=")) == linebuf)
+            start = linebuf + wxStrlen(_T("default topic="));
+        if (wxStrstr(linebuf, _T("index file=")) == linebuf)
+            index = linebuf + wxStrlen(_T("index file="));
+        if (wxStrstr(linebuf, _T("contents file=")) == linebuf)
+            contents = linebuf + wxStrlen(_T("contents file="));
+        if (wxStrstr(linebuf, _T("charset=")) == linebuf)
+            charset = linebuf + wxStrlen(_T("charset="));
+    } while (lineptr != NULL);
+
+    wxFontEncoding enc;
+    if (charset == wxEmptyString) enc = wxFONTENCODING_SYSTEM;
+    else enc = wxFontMapper::Get()->CharsetToEncoding(charset);
+    bool rtval = AddBookParam(*fi, enc,
+                              title, contents, index, start, fsys.GetPath());
+    delete fi;
+    return rtval;
 }
 
 wxString wxHtmlHelpData::FindPageByName(const wxString& x)

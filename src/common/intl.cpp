@@ -672,12 +672,11 @@ wxPluralFormsNode*wxPluralFormsParser::logicalOrExpression()
             rn->setNode(0, un.release());
             return rn.release();
         }
-        else
-        {
-            un->setNode(0, ln.release());
-            un->setNode(1, rn.release());
-            return un.release();
-        }
+
+
+        un->setNode(0, ln.release());
+        un->setNode(1, rn.release());
+        return un.release();
     }
     return ln.release();
 }
@@ -712,12 +711,10 @@ wxPluralFormsNode* wxPluralFormsParser::logicalAndExpression()
             rn->setNode(0, un.release());
             return rn.release();
         }
-        else
-        {
-            un->setNode(0, ln.release());
-            un->setNode(1, rn.release());
-            return un.release();
-        }
+
+        un->setNode(0, ln.release());
+        un->setNode(1, rn.release());
+        return un.release();
     }
     return ln.release();
 }
