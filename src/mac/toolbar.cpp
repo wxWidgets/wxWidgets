@@ -546,15 +546,15 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos),
     return TRUE;
 }
 
-void wxToolBar::DoSetToggle(wxToolBarToolBase *t, bool toggle)
+void wxToolBar::DoSetToggle(wxToolBarToolBase *WXUNUSED(tool), bool WXUNUSED(toggle))
 {
-       wxToolBarTool *tool = (wxToolBarTool *)t;
-       // TODO: set toggle state
+    wxFAIL_MSG( _T("not implemented") );
 }
 
-bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
+bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *WXUNUSED(tool))
 {
-        return TRUE ;
+    wxFAIL_MSG( _T("not implemented") );
+    return TRUE ;
 }
 
 void wxToolBar::OnPaint(wxPaintEvent& event)
