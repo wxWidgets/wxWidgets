@@ -37,7 +37,7 @@
 
 //#define TEST_ARRAYS
 //#define TEST_CMDLINE
-//#define TEST_DATETIME
+#define TEST_DATETIME
 //#define TEST_DIR
 //#define TEST_DLLLOADER
 //#define TEST_EXECUTE
@@ -48,7 +48,7 @@
 //#define TEST_MIME
 //#define TEST_INFO_FUNCTIONS
 //#define TEST_SOCKETS
-#define TEST_STRINGS
+//#define TEST_STRINGS
 //#define TEST_THREADS
 //#define TEST_TIMER
 //#define TEST_WCHAR
@@ -2017,6 +2017,23 @@ static void TestTimeHolidays()
     puts("");
 }
 
+static void TestTimeZoneBug()
+{
+    puts("\n*** testing for DST/timezone bug ***\n");
+
+    wxDateTime date = wxDateTime(1, wxDateTime::Mar, 2000);
+    for ( int i = 0; i < 31; i++ )
+    {
+        printf("Date %s: week day %s.\n",
+               date.Format(_T("%d-%m-%Y")).c_str(),
+               date.GetWeekDayName(date.GetWeekDay()).c_str());
+
+        date += wxDateSpan::Day();
+    }
+
+    puts("");
+}
+
 #if 0
 
 // test compatibility with the old wxDate/wxTime classes
@@ -2557,7 +2574,7 @@ static void TestStringTokenizer()
         }
 
         // if we emulate strtok(), check that we do it correctly
-        wxChar *buf, *s, *last;
+        wxChar *buf, *s = NULL, *last;
 
         if ( tkz.GetMode() == wxTOKEN_STRTOK )
         {
@@ -2873,7 +2890,9 @@ int main(int argc, char **argv)
         TestTimeFormat();
         TestTimeArithmetics();
         TestTimeHolidays();
+
     }
+        TestTimeZoneBug();
     if ( 0 )
         TestInteractive();
 #endif // TEST_DATETIME
