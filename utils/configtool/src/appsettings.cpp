@@ -58,7 +58,7 @@ ctSettings::ctSettings()
 
     m_frameSize = wxRect(10, 10, 600, 500);
     // m_backgroundColour = wxColour(140, 172, 179); // blue-grey
-    m_editWindowFont = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
+    m_editWindowFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
 
     m_appName = wxT("wxWidgets Configuration Tool");
     m_appNameShort = wxT("Configuration Tool");
@@ -123,7 +123,7 @@ void ctSettings::Copy (const ctSettings& settings)
 bool ctSettings::Init()
 {
     m_lastSetupSaveDir = wxEmptyString;
-    if (m_userName.IsEmpty())
+    if (m_userName.empty())
         m_userName = wxGetUserName();
 
     return true;
@@ -133,7 +133,7 @@ bool ctSettings::Init()
 wxString ctSettings::GenerateFilename(const wxString& rootName)
 {
     wxString path;
-    if (!m_lastFilename.IsEmpty())
+    if (!m_lastFilename.empty())
         path = wxPathOnly(m_lastFilename);
     else
         path = wxGetApp().GetAppDir();
@@ -196,7 +196,7 @@ bool ctSettings::LoadConfig()
 
     fontSpec = wxEmptyString;
     config.Read(wxT("Style/EditWindowFont"), & fontSpec);
-    if (!fontSpec.IsEmpty())
+    if (!fontSpec.empty())
         m_editWindowFont = apStringToFont(fontSpec);
 
     // Crash-resistance

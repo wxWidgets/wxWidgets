@@ -260,7 +260,7 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 
     return *gs_fontDefault;
 #else // !__WXWINCE__
-    // wxWindow ctor calls GetSystemFont(wxSYS_DEFAULT_GUI_FONT) so we're
+    // wxWindow ctor calls GetFont(wxSYS_DEFAULT_GUI_FONT) so we're
     // called fairly often -- this is why we cache this particular font
     const bool isDefaultRequested = index == wxSYS_DEFAULT_GUI_FONT;
     if ( isDefaultRequested )

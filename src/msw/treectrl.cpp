@@ -716,8 +716,8 @@ bool wxTreeCtrl::Create(wxWindow *parent,
         HDC hdcMem = CreateCompatibleDC(NULL);
 
         // create a mono bitmap of the standard size
-        int x = GetSystemMetrics(SM_CXMENUCHECK);
-        int y = GetSystemMetrics(SM_CYMENUCHECK);
+        int x = ::GetSystemMetrics(SM_CXMENUCHECK);
+        int y = ::GetSystemMetrics(SM_CYMENUCHECK);
         wxImageList imagelistCheckboxes(x, y, false, 2);
         HBITMAP hbmpCheck = CreateBitmap(x, y,   // bitmap size
                                          1,      // # of color planes
@@ -2225,7 +2225,7 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
         event.m_item = GetSelection();
         event.SetEventObject( this );
         GetEventHandler()->ProcessEvent( event );
-        
+
         return rc;
     }
 

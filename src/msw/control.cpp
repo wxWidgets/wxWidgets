@@ -222,8 +222,8 @@ wxSize wxControl::GetBestSpinerSize(const bool is_vertical) const
 #if defined(__SMARTPHONE__) && defined(__WXWINCE__)
                     0,GetCharHeight()
 #else
-                    GetSystemMetrics(is_vertical ? SM_CXVSCROLL : SM_CXHSCROLL),
-                    GetSystemMetrics(is_vertical ? SM_CYVSCROLL : SM_CYHSCROLL)
+                    ::GetSystemMetrics(is_vertical ? SM_CXVSCROLL : SM_CXHSCROLL),
+                    ::GetSystemMetrics(is_vertical ? SM_CYVSCROLL : SM_CYHSCROLL)
 #endif
     );
 

@@ -301,8 +301,8 @@ bool wxDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* window, bool fullS
 #else
         if (!m_hCursorImageList)
         {
-            int cxCursor = GetSystemMetrics(SM_CXCURSOR);
-            int cyCursor = GetSystemMetrics(SM_CYCURSOR);
+            int cxCursor = ::GetSystemMetrics(SM_CXCURSOR);
+            int cyCursor = ::GetSystemMetrics(SM_CYCURSOR);
 
             m_hCursorImageList = (WXHIMAGELIST) ImageList_Create(cxCursor, cyCursor, ILC_MASK, 1, 1);
         }
