@@ -102,6 +102,7 @@ ZLIBDIR  = $(WXDIR)/src/zlib
 REGEXDIR = $(WXDIR)/src/regex
 GTKDIR   = $(WXDIR)/src/gtk
 X11DIR   = $(WXDIR)/src/x11
+X11INC   = $(WXDIR)/include/wx/x11
 MGLDIR   = $(WXDIR)/src/mgl
 MOTIFDIR = $(WXDIR)/src/motif
 MSWDIR   = $(WXDIR)/src/msw
@@ -441,6 +442,7 @@ preinstall: $(build_libdir)/@WX_TARGET_LIBRARY@ $(top_builddir)/wx@TOOLCHAIN_NAM
 	@if test "$(USE_GUI)" = 1; then $(INSTALL_DIR) $(includedir)/wx/generic; fi
 	@if test "$(USE_GUI)" = 1; then $(INSTALL_DIR) $(includedir)/wx/univ; fi
 	@if test "@TOOLKIT_DIR@" = "msw"; then $(INSTALL_DIR) $(includedir)/wx/msw/ole; fi
+	@if test "@TOOLKIT_DIR@" = "motif"; then $(INSTALL_DIR) $(includedir)/wx/x11; fi
 
 	@# always install msw headers for wxBase, it's much simpler
 	@if test "$(USE_GUI)" = 0; then $(INSTALL_DIR) $(includedir)/wx/msw; fi
@@ -732,6 +734,11 @@ MOTIF_DIST: ALL_GUI_DIST
 	cp $(MOTIFDIR)/xmcombo/*.c $(DISTDIR)/src/motif/xmcombo
 	cp $(MOTIFDIR)/xmcombo/*.h $(DISTDIR)/src/motif/xmcombo
 	cp $(MOTIFDIR)/xmcombo/copying.txt $(DISTDIR)/src/motif/xmcombo
+	mkdir $(DISTDIR)/src/x11
+	mkdir $(DISTDIR)/include/wx/x11
+	cp $(X11DIR)/pen.cpp $(X11DIR)/brush.cpp $(DISTDIR)/src/x11
+	cp $(X11INC)/pen.h $(X11INC)/brush.h $(X11INC)/privx.h \
+		$(DISTDIR)/include/wx/x11
 
 MACX_DIST: ALL_GUI_DIST
 	cp $(INCDIR)/*.* $(DISTDIR)/include
@@ -773,6 +780,8 @@ MSW_DIST: ALL_GUI_DIST
 	cp $(MSWDIR)/*.def $(DISTDIR)/src/msw
 	cp $(MSWDIR)/ole/*.cpp $(DISTDIR)/src/msw/ole
 	cp $(MSWDIR)/wince/*.* $(DISTDIR)/src/msw/wince
+	mkdir $(DISTDIR)/contrib
+	cp -R $(WXDIR)/contrib $(DISTDIR)
 
 MSW_ZIP_TEXT_DIST: ALL_GUI_DIST
 	cp $(WXDIR)/wxWINE.spec $(DISTDIR)
@@ -1069,18 +1078,20 @@ SAMPLES_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/samples/internat
 	mkdir $(DISTDIR)/samples/internat/de
 	mkdir $(DISTDIR)/samples/internat/fr
+	mkdir $(DISTDIR)/samples/internat/ju
 	mkdir $(DISTDIR)/samples/internat/ru
 	cp $(SAMPDIR)/internat/Makefile.in $(DISTDIR)/samples/internat
 	cp $(SAMPDIR)/internat/makefile.unx $(DISTDIR)/samples/internat
 	cp $(SAMPDIR)/internat/*.cpp $(DISTDIR)/samples/internat
 	cp $(SAMPDIR)/internat/*.xpm $(DISTDIR)/samples/internat
 	cp $(SAMPDIR)/internat/*.txt $(DISTDIR)/samples/internat
-	cp $(SAMPDIR)/internat/*.po $(DISTDIR)/samples/internat
 	cp $(SAMPDIR)/internat/fr/*.mo $(DISTDIR)/samples/internat/fr
 	cp $(SAMPDIR)/internat/de/*.mo $(DISTDIR)/samples/internat/de
+	cp $(SAMPDIR)/internat/ja/*.mo $(DISTDIR)/samples/internat/ja
 	cp $(SAMPDIR)/internat/ru/*.mo $(DISTDIR)/samples/internat/ru
 	cp $(SAMPDIR)/internat/fr/*.po $(DISTDIR)/samples/internat/fr
 	cp $(SAMPDIR)/internat/de/*.po $(DISTDIR)/samples/internat/de
+	cp $(SAMPDIR)/internat/ja/*.po $(DISTDIR)/samples/internat/ja
 	cp $(SAMPDIR)/internat/ru/*.po $(DISTDIR)/samples/internat/ru
 
 	mkdir $(DISTDIR)/samples/ipc
