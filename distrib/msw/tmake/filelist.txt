@@ -1120,6 +1120,7 @@ scrolbar.h	MacH
 settings.h	MacH
 slider.h	MacH
 spinbutt.h	MacH
+spinctrl.h	MacH
 statbmp.h	MacH
 statbox.h	MacH
 statline.h	MacH
@@ -1309,7 +1310,6 @@ slider95.h	MSWH
 slidrmsw.h	MSWH
 spinctrl.h	MSWH
 spinbutt.h	MSWH
-spinctrl.h	MSWH
 statbmp.h	MSWH
 statbox.h	MSWH
 statbr95.h	MSWH

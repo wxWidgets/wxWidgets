@@ -583,6 +583,7 @@ ALL_HEADERS = \
 		mac/settings.h \
 		mac/slider.h \
 		mac/spinbutt.h \
+		mac/spinctrl.h \
 		mac/statbmp.h \
 		mac/statbox.h \
 		mac/statline.h \
