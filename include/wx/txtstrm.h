@@ -28,7 +28,7 @@ typedef wxTextOutputStream& (*__wxTextOutputManip)(wxTextOutputStream&);
 
 WXDLLEXPORT wxTextOutputStream &endl( wxTextOutputStream &stream );
 
-class WXDLLEXPORT wxTextInputStream 
+class WXDLLEXPORT wxTextInputStream
 {
 public:
     wxTextInputStream(wxInputStream& s, const wxString &sep=wxT(" \t") );
@@ -54,9 +54,9 @@ public:
     wxTextInputStream& operator>>(wxUint32& i);
     wxTextInputStream& operator>>(double& i);
     wxTextInputStream& operator>>(float& f);
-  
+
     wxTextInputStream& operator>>( __wxTextInputManip func) { return func(*this); }
-  
+
 protected:
     wxInputStream &m_input;
     wxString m_separators;
@@ -70,10 +70,10 @@ typedef enum {
   wxEOL_NATIVE,
   wxEOL_UNIX,
   wxEOL_MAC,
-  wxEOL_DOS,
+  wxEOL_DOS
 } wxEOL;
 
-class WXDLLEXPORT wxTextOutputStream 
+class WXDLLEXPORT wxTextOutputStream
 {
 public:
     wxTextOutputStream( wxOutputStream& s, wxEOL mode = wxEOL_NATIVE );
@@ -87,7 +87,7 @@ public:
     void Write8(wxUint8 i);
     virtual void WriteDouble(double d);
     virtual void WriteString(const wxString& string);
-  
+
     wxTextOutputStream& operator<<(const wxChar *string);
     wxTextOutputStream& operator<<(const wxString& string);
     wxTextOutputStream& operator<<(wxChar c);
@@ -97,9 +97,9 @@ public:
     wxTextOutputStream& operator<<(wxUint32 c);
     wxTextOutputStream& operator<<(double f);
     wxTextOutputStream& operator<<(float f);
- 
+
     wxTextOutputStream& operator<<( __wxTextOutputManip func) { return func(*this); }
-  
+
 protected:
     wxOutputStream &m_output;
     wxEOL           m_mode;
