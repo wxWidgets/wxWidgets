@@ -112,6 +112,3326 @@ static char* wxStringErrorMsg = "string type is required for parameter";
 #ifdef __cplusplus
 extern "C" {
 #endif
+#define new_wxGridCell() (new wxGridCell())
+static PyObject *_wrap_new_wxGridCell(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGridCell * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxGridCell",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxGridCell *)new_wxGridCell();
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCell_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define delete_wxGridCell(_swigobj) (delete _swigobj)
+static PyObject *_wrap_delete_wxGridCell(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGridCell * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxGridCell",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridCell_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxGridCell. Expected _wxGridCell_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        delete_wxGridCell(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGridCell_GetTextValue(_swigobj)  (_swigobj->GetTextValue())
+static PyObject *_wrap_wxGridCell_GetTextValue(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxGridCell * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGridCell_GetTextValue",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridCell_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridCell_GetTextValue. Expected _wxGridCell_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxString & _result_ref = wxGridCell_GetTextValue(_arg0);
+    _result = (wxString *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+    return _resultobj;
+}
+
+#define wxGridCell_SetTextValue(_swigobj,_swigarg0)  (_swigobj->SetTextValue(_swigarg0))
+static PyObject *_wrap_wxGridCell_SetTextValue(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGridCell * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","str", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGridCell_SetTextValue",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridCell_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridCell_SetTextValue. Expected _wxGridCell_p.");
+        return NULL;
+        }
+    }
+{
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGridCell_SetTextValue(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxGridCell_GetFont(_swigobj)  (_swigobj->GetFont())
+static PyObject *_wrap_wxGridCell_GetFont(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFont * _result;
+    wxGridCell * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGridCell_GetFont",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridCell_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridCell_GetFont. Expected _wxGridCell_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxFont & _result_ref = wxGridCell_GetFont(_arg0);
+    _result = (wxFont *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFont_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxGridCell_SetFont(_swigobj,_swigarg0)  (_swigobj->SetFont(_swigarg0))
+static PyObject *_wrap_wxGridCell_SetFont(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGridCell * _arg0;
+    wxFont * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","f", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGridCell_SetFont",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridCell_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridCell_SetFont. Expected _wxGridCell_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGridCell_SetFont. Expected _wxFont_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGridCell_SetFont(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGridCell_GetTextColour(_swigobj)  (_swigobj->GetTextColour())
+static PyObject *_wrap_wxGridCell_GetTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxGridCell * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGridCell_GetTextColour",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridCell_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridCell_GetTextColour. Expected _wxGridCell_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxColour & _result_ref = wxGridCell_GetTextColour(_arg0);
+    _result = (wxColour *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxGridCell_SetTextColour(_swigobj,_swigarg0)  (_swigobj->SetTextColour(_swigarg0))
+static PyObject *_wrap_wxGridCell_SetTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGridCell * _arg0;
+    wxColour * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","colour", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGridCell_SetTextColour",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridCell_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridCell_SetTextColour. Expected _wxGridCell_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGridCell_SetTextColour. Expected _wxColour_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGridCell_SetTextColour(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGridCell_GetBackgroundColour(_swigobj)  (_swigobj->GetBackgroundColour())
+static PyObject *_wrap_wxGridCell_GetBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxGridCell * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGridCell_GetBackgroundColour",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridCell_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridCell_GetBackgroundColour. Expected _wxGridCell_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxColour & _result_ref = wxGridCell_GetBackgroundColour(_arg0);
+    _result = (wxColour *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxGridCell_SetBackgroundColour(_swigobj,_swigarg0)  (_swigobj->SetBackgroundColour(_swigarg0))
+static PyObject *_wrap_wxGridCell_SetBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGridCell * _arg0;
+    wxColour * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","colour", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGridCell_SetBackgroundColour",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridCell_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridCell_SetBackgroundColour. Expected _wxGridCell_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGridCell_SetBackgroundColour. Expected _wxColour_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGridCell_SetBackgroundColour(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGridCell_GetBackgroundBrush(_swigobj)  (_swigobj->GetBackgroundBrush())
+static PyObject *_wrap_wxGridCell_GetBackgroundBrush(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBrush * _result;
+    wxGridCell * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGridCell_GetBackgroundBrush",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridCell_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridCell_GetBackgroundBrush. Expected _wxGridCell_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxBrush & _result_ref = wxGridCell_GetBackgroundBrush(_arg0);
+    _result = (wxBrush *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxBrush_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxGridCell_GetAlignment(_swigobj)  (_swigobj->GetAlignment())
+static PyObject *_wrap_wxGridCell_GetAlignment(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGridCell * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGridCell_GetAlignment",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridCell_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridCell_GetAlignment. Expected _wxGridCell_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGridCell_GetAlignment(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridCell_SetAlignment(_swigobj,_swigarg0)  (_swigobj->SetAlignment(_swigarg0))
+static PyObject *_wrap_wxGridCell_SetAlignment(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGridCell * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","align", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxGridCell_SetAlignment",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridCell_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridCell_SetAlignment. Expected _wxGridCell_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGridCell_SetAlignment(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGridCell_GetCellBitmap(_swigobj)  (_swigobj->GetCellBitmap())
+static PyObject *_wrap_wxGridCell_GetCellBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBitmap * _result;
+    wxGridCell * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGridCell_GetCellBitmap",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridCell_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridCell_GetCellBitmap. Expected _wxGridCell_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxBitmap *)wxGridCell_GetCellBitmap(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxGridCell_SetCellBitmap(_swigobj,_swigarg0)  (_swigobj->SetCellBitmap(_swigarg0))
+static PyObject *_wrap_wxGridCell_SetCellBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGridCell * _arg0;
+    wxBitmap * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","bitmap", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGridCell_SetCellBitmap",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridCell_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridCell_SetCellBitmap. Expected _wxGridCell_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGridCell_SetCellBitmap. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGridCell_SetCellBitmap(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static void *SwigwxGridTowxPanel(void *ptr) {
+    wxGrid *src;
+    wxPanel *dest;
+    src = (wxGrid *) ptr;
+    dest = (wxPanel *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxGridTowxWindow(void *ptr) {
+    wxGrid *src;
+    wxWindow *dest;
+    src = (wxGrid *) ptr;
+    dest = (wxWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxGridTowxEvtHandler(void *ptr) {
+    wxGrid *src;
+    wxEvtHandler *dest;
+    src = (wxGrid *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+#define new_wxGrid(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5) (new wxGrid(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
+static PyObject *_wrap_new_wxGrid(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _result;
+    wxWindow * _arg0;
+    wxWindowID  _arg1;
+    wxPoint * _arg2 = (wxPoint *) &wxPyDefaultPosition;
+    wxSize * _arg3 = (wxSize *) &wxPyDefaultSize;
+    long  _arg4 = (long ) 0;
+    char * _arg5 = (char *) "grid";
+    PyObject * _argo0 = 0;
+    wxPoint  temp;
+    PyObject * _obj2 = 0;
+    wxSize  temp0;
+    PyObject * _obj3 = 0;
+    char *_kwnames[] = { "parent","id","pos","size","style","name", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOls:new_wxGrid",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_arg5)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxGrid. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_obj2)
+{
+    _arg2 = &temp;
+    if (! wxPoint_helper(_obj2, &_arg2))
+        return NULL;
+}
+    if (_obj3)
+{
+    _arg3 = &temp0;
+    if (! wxSize_helper(_obj3, &_arg3))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxGrid *)new_wxGrid(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxGrid_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxGrid_AdjustScrollbars(_swigobj)  (_swigobj->AdjustScrollbars())
+static PyObject *_wrap_wxGrid_AdjustScrollbars(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_AdjustScrollbars",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_AdjustScrollbars. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_AdjustScrollbars(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_AppendCols(_swigobj,_swigarg0,_swigarg1)  (_swigobj->AppendCols(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxGrid_AppendCols(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGrid * _arg0;
+    int  _arg1 = (int ) 1;
+    int  _arg2 = (int ) TRUE;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","n","updateLabels", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|ii:wxGrid_AppendCols",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_AppendCols. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxGrid_AppendCols(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGrid_AppendRows(_swigobj,_swigarg0,_swigarg1)  (_swigobj->AppendRows(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxGrid_AppendRows(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGrid * _arg0;
+    int  _arg1 = (int ) 1;
+    int  _arg2 = (int ) TRUE;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","n","updateLabels", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|ii:wxGrid_AppendRows",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_AppendRows. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxGrid_AppendRows(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGrid_BeginBatch(_swigobj)  (_swigobj->BeginBatch())
+static PyObject *_wrap_wxGrid_BeginBatch(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_BeginBatch",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_BeginBatch. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_BeginBatch(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_CellHitTest(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->CellHitTest(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
+static PyObject *_wrap_wxGrid_CellHitTest(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGrid * _arg0;
+    int  _arg1;
+    int  _arg2;
+    int * _arg3;
+    int  temp;
+    int * _arg4;
+    int  temp0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x","y", NULL };
+
+    self = self;
+{
+  _arg3 = &temp;
+}
+{
+  _arg4 = &temp0;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxGrid_CellHitTest",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_CellHitTest. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxGrid_CellHitTest(_arg0,_arg1,_arg2,_arg3,_arg4);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg3));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg4));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+    return _resultobj;
+}
+
+static bool  wxGrid_CreateGrid(wxGrid *self,int  rows,int  cols,short  defaultWidth,short  defaultHeight) {
+            return self->CreateGrid(rows, cols, NULL, NULL,
+                                    defaultWidth, defaultHeight);
+        }
+static PyObject *_wrap_wxGrid_CreateGrid(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGrid * _arg0;
+    int  _arg1;
+    int  _arg2;
+    short  _arg3 = (short ) wxGRID_DEFAULT_CELL_WIDTH;
+    short  _arg4 = (short ) wxGRID_DEFAULT_CELL_HEIGHT;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","rows","cols","defaultWidth","defaultHeight", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii|hh:wxGrid_CreateGrid",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_CreateGrid. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxGrid_CreateGrid(_arg0,_arg1,_arg2,_arg3,_arg4);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGrid_CurrentCellVisible(_swigobj)  (_swigobj->CurrentCellVisible())
+static PyObject *_wrap_wxGrid_CurrentCellVisible(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_CurrentCellVisible",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_CurrentCellVisible. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxGrid_CurrentCellVisible(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGrid_DeleteCols(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->DeleteCols(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxGrid_DeleteCols(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGrid * _arg0;
+    int  _arg1 = (int ) 0;
+    int  _arg2 = (int ) 1;
+    bool  _arg3 = (bool ) TRUE;
+    PyObject * _argo0 = 0;
+    int tempbool3 = (int) TRUE;
+    char *_kwnames[] = { "self","pos","n","updateLabels", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iii:wxGrid_DeleteCols",_kwnames,&_argo0,&_arg1,&_arg2,&tempbool3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_DeleteCols. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+    _arg3 = (bool ) tempbool3;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxGrid_DeleteCols(_arg0,_arg1,_arg2,_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGrid_DeleteRows(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->DeleteRows(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxGrid_DeleteRows(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGrid * _arg0;
+    int  _arg1 = (int ) 0;
+    int  _arg2 = (int ) 1;
+    bool  _arg3 = (bool ) TRUE;
+    PyObject * _argo0 = 0;
+    int tempbool3 = (int) TRUE;
+    char *_kwnames[] = { "self","pos","n","updateLabels", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iii:wxGrid_DeleteRows",_kwnames,&_argo0,&_arg1,&_arg2,&tempbool3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_DeleteRows. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+    _arg3 = (bool ) tempbool3;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxGrid_DeleteRows(_arg0,_arg1,_arg2,_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGrid_EndBatch(_swigobj)  (_swigobj->EndBatch())
+static PyObject *_wrap_wxGrid_EndBatch(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_EndBatch",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_EndBatch. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_EndBatch(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_GetBatchCount(_swigobj)  (_swigobj->GetBatchCount())
+static PyObject *_wrap_wxGrid_GetBatchCount(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetBatchCount",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetBatchCount. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGrid_GetBatchCount(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGrid_GetCell(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetCell(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxGrid_GetCell(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGridCell * _result;
+    wxGrid * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","row","col", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxGrid_GetCell",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetCell. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxGridCell *)wxGrid_GetCell(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCell_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxGrid_GetCellAlignment(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetCellAlignment(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxGrid_GetCellAlignment(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGrid * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","row","col", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxGrid_GetCellAlignment",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetCellAlignment. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGrid_GetCellAlignment(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGrid_GetDefCellAlignment(_swigobj)  (_swigobj->GetCellAlignment())
+static PyObject *_wrap_wxGrid_GetDefCellAlignment(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetDefCellAlignment",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetDefCellAlignment. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGrid_GetDefCellAlignment(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGrid_GetCellBackgroundColour(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetCellBackgroundColour(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxGrid_GetCellBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxGrid * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","row","col", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxGrid_GetCellBackgroundColour",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetCellBackgroundColour. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxColour & _result_ref = wxGrid_GetCellBackgroundColour(_arg0,_arg1,_arg2);
+    _result = (wxColour *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxGrid_GetDefCellBackgroundColour(_swigobj)  (_swigobj->GetCellBackgroundColour())
+static PyObject *_wrap_wxGrid_GetDefCellBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetDefCellBackgroundColour",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetDefCellBackgroundColour. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxColour & _result_ref = wxGrid_GetDefCellBackgroundColour(_arg0);
+    _result = (wxColour *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+static PyObject * wxGrid_GetCells(wxGrid *self) {
+            int row, col;
+            PyObject* rows = PyList_New(0);
+            for (row=0; row < self->GetRows(); row++) {
+                PyObject* rowList = PyList_New(0);
+                for (col=0; col < self->GetCols(); col++) {
+                    wxGridCell* cell = self->GetCell(row, col);
+
+                    bool doSave = wxPyRestoreThread();
+                    PyObject* pyCell = wxPyConstructObject(cell, "wxGridCell");
+                    wxPySaveThread(doSave);
+
+                    if (PyList_Append(rowList, pyCell) == -1)
+                        return NULL;
+                }
+                if (PyList_Append(rows, rowList) == -1)
+                    return NULL;
+            }
+            return rows;
+        }
+static PyObject *_wrap_wxGrid_GetCells(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetCells",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetCells. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxGrid_GetCells(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
+#define wxGrid_GetCellTextColour(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetCellTextColour(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxGrid_GetCellTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxGrid * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","row","col", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxGrid_GetCellTextColour",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetCellTextColour. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxColour & _result_ref = wxGrid_GetCellTextColour(_arg0,_arg1,_arg2);
+    _result = (wxColour *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxGrid_GetDefCellTextColour(_swigobj)  (_swigobj->GetCellTextColour())
+static PyObject *_wrap_wxGrid_GetDefCellTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetDefCellTextColour",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetDefCellTextColour. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxColour & _result_ref = wxGrid_GetDefCellTextColour(_arg0);
+    _result = (wxColour *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxGrid_GetCellTextFont(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetCellTextFont(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxGrid_GetCellTextFont(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFont * _result;
+    wxGrid * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","row","col", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxGrid_GetCellTextFont",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetCellTextFont. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxFont & _result_ref = wxGrid_GetCellTextFont(_arg0,_arg1,_arg2);
+    _result = (wxFont *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFont_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxGrid_GetDefCellTextFont(_swigobj)  (_swigobj->GetCellTextFont())
+static PyObject *_wrap_wxGrid_GetDefCellTextFont(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFont * _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetDefCellTextFont",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetDefCellTextFont. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxFont & _result_ref = wxGrid_GetDefCellTextFont(_arg0);
+    _result = (wxFont *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFont_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxGrid_GetCellValue(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetCellValue(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxGrid_GetCellValue(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxGrid * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","row","col", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxGrid_GetCellValue",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetCellValue. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxString & _result_ref = wxGrid_GetCellValue(_arg0,_arg1,_arg2);
+    _result = (wxString *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+    return _resultobj;
+}
+
+#define wxGrid_GetCols(_swigobj)  (_swigobj->GetCols())
+static PyObject *_wrap_wxGrid_GetCols(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetCols",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetCols. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGrid_GetCols(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGrid_GetColumnWidth(_swigobj,_swigarg0)  (_swigobj->GetColumnWidth(_swigarg0))
+static PyObject *_wrap_wxGrid_GetColumnWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGrid * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","col", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxGrid_GetColumnWidth",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetColumnWidth. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGrid_GetColumnWidth(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGrid_GetCurrentRect(_swigobj)  (_swigobj->GetCurrentRect())
+static PyObject *_wrap_wxGrid_GetCurrentRect(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxRect * _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetCurrentRect",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetCurrentRect. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxRect (wxGrid_GetCurrentRect(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxRect_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxGrid_GetCursorColumn(_swigobj)  (_swigobj->GetCursorColumn())
+static PyObject *_wrap_wxGrid_GetCursorColumn(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetCursorColumn",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetCursorColumn. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGrid_GetCursorColumn(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGrid_GetCursorRow(_swigobj)  (_swigobj->GetCursorRow())
+static PyObject *_wrap_wxGrid_GetCursorRow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetCursorRow",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetCursorRow. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGrid_GetCursorRow(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGrid_GetEditable(_swigobj)  (_swigobj->GetEditable())
+static PyObject *_wrap_wxGrid_GetEditable(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetEditable",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetEditable. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxGrid_GetEditable(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGrid_GetHorizScrollBar(_swigobj)  (_swigobj->GetHorizScrollBar())
+static PyObject *_wrap_wxGrid_GetHorizScrollBar(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxScrollBar * _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetHorizScrollBar",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetHorizScrollBar. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxScrollBar *)wxGrid_GetHorizScrollBar(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxScrollBar_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxGrid_GetLabelAlignment(_swigobj,_swigarg0)  (_swigobj->GetLabelAlignment(_swigarg0))
+static PyObject *_wrap_wxGrid_GetLabelAlignment(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGrid * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","orientation", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxGrid_GetLabelAlignment",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetLabelAlignment. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGrid_GetLabelAlignment(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGrid_GetLabelBackgroundColour(_swigobj)  (_swigobj->GetLabelBackgroundColour())
+static PyObject *_wrap_wxGrid_GetLabelBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetLabelBackgroundColour",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetLabelBackgroundColour. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxColour & _result_ref = wxGrid_GetLabelBackgroundColour(_arg0);
+    _result = (wxColour *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxGrid_GetLabelSize(_swigobj,_swigarg0)  (_swigobj->GetLabelSize(_swigarg0))
+static PyObject *_wrap_wxGrid_GetLabelSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGrid * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","orientation", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxGrid_GetLabelSize",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetLabelSize. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGrid_GetLabelSize(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGrid_GetLabelTextColour(_swigobj)  (_swigobj->GetLabelTextColour())
+static PyObject *_wrap_wxGrid_GetLabelTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetLabelTextColour",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetLabelTextColour. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxColour & _result_ref = wxGrid_GetLabelTextColour(_arg0);
+    _result = (wxColour *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxGrid_GetLabelTextFont(_swigobj)  (_swigobj->GetLabelTextFont())
+static PyObject *_wrap_wxGrid_GetLabelTextFont(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFont * _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetLabelTextFont",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetLabelTextFont. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxFont & _result_ref = wxGrid_GetLabelTextFont(_arg0);
+    _result = (wxFont *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFont_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxGrid_GetLabelValue(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetLabelValue(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxGrid_GetLabelValue(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxGrid * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","orientation","pos", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxGrid_GetLabelValue",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetLabelValue. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxString & _result_ref = wxGrid_GetLabelValue(_arg0,_arg1,_arg2);
+    _result = (wxString *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+    return _resultobj;
+}
+
+#define wxGrid_GetRowHeight(_swigobj,_swigarg0)  (_swigobj->GetRowHeight(_swigarg0))
+static PyObject *_wrap_wxGrid_GetRowHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGrid * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","row", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxGrid_GetRowHeight",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetRowHeight. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGrid_GetRowHeight(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGrid_GetRows(_swigobj)  (_swigobj->GetRows())
+static PyObject *_wrap_wxGrid_GetRows(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetRows",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetRows. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGrid_GetRows(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGrid_GetScrollPosX(_swigobj)  (_swigobj->GetScrollPosX())
+static PyObject *_wrap_wxGrid_GetScrollPosX(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetScrollPosX",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetScrollPosX. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGrid_GetScrollPosX(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGrid_GetScrollPosY(_swigobj)  (_swigobj->GetScrollPosY())
+static PyObject *_wrap_wxGrid_GetScrollPosY(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetScrollPosY",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetScrollPosY. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGrid_GetScrollPosY(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGrid_GetTextItem(_swigobj)  (_swigobj->GetTextItem())
+static PyObject *_wrap_wxGrid_GetTextItem(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTextCtrl * _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetTextItem",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetTextItem. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxTextCtrl *)wxGrid_GetTextItem(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxTextCtrl_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxGrid_GetVertScrollBar(_swigobj)  (_swigobj->GetVertScrollBar())
+static PyObject *_wrap_wxGrid_GetVertScrollBar(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxScrollBar * _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetVertScrollBar",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetVertScrollBar. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxScrollBar *)wxGrid_GetVertScrollBar(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxScrollBar_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxGrid_InsertCols(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->InsertCols(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxGrid_InsertCols(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGrid * _arg0;
+    int  _arg1 = (int ) 0;
+    int  _arg2 = (int ) 1;
+    bool  _arg3 = (bool ) TRUE;
+    PyObject * _argo0 = 0;
+    int tempbool3 = (int) TRUE;
+    char *_kwnames[] = { "self","pos","n","updateLabels", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iii:wxGrid_InsertCols",_kwnames,&_argo0,&_arg1,&_arg2,&tempbool3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_InsertCols. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+    _arg3 = (bool ) tempbool3;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxGrid_InsertCols(_arg0,_arg1,_arg2,_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGrid_InsertRows(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->InsertRows(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxGrid_InsertRows(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGrid * _arg0;
+    int  _arg1 = (int ) 0;
+    int  _arg2 = (int ) 1;
+    bool  _arg3 = (bool ) TRUE;
+    PyObject * _argo0 = 0;
+    int tempbool3 = (int) TRUE;
+    char *_kwnames[] = { "self","pos","n","updateLabels", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iii:wxGrid_InsertRows",_kwnames,&_argo0,&_arg1,&_arg2,&tempbool3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_InsertRows. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+    _arg3 = (bool ) tempbool3;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxGrid_InsertRows(_arg0,_arg1,_arg2,_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGrid_OnActivate(_swigobj,_swigarg0)  (_swigobj->OnActivate(_swigarg0))
+static PyObject *_wrap_wxGrid_OnActivate(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","active", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxGrid_OnActivate",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_OnActivate. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_OnActivate(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_SetCellAlignment(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->SetCellAlignment(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxGrid_SetCellAlignment(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    int  _arg1;
+    int  _arg2;
+    int  _arg3;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","alignment","row","col", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oiii:wxGrid_SetCellAlignment",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_SetCellAlignment. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_SetCellAlignment(_arg0,_arg1,_arg2,_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_SetDefCellAlignment(_swigobj,_swigarg0)  (_swigobj->SetCellAlignment(_swigarg0))
+static PyObject *_wrap_wxGrid_SetDefCellAlignment(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","alignment", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxGrid_SetDefCellAlignment",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_SetDefCellAlignment. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_SetDefCellAlignment(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_SetCellBackgroundColour(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->SetCellBackgroundColour(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxGrid_SetCellBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    wxColour * _arg1;
+    int  _arg2;
+    int  _arg3;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","colour","row","col", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOii:wxGrid_SetCellBackgroundColour",_kwnames,&_argo0,&_argo1,&_arg2,&_arg3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_SetCellBackgroundColour. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGrid_SetCellBackgroundColour. Expected _wxColour_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_SetCellBackgroundColour(_arg0,*_arg1,_arg2,_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_SetDefCellBackgroundColour(_swigobj,_swigarg0)  (_swigobj->SetCellBackgroundColour(_swigarg0))
+static PyObject *_wrap_wxGrid_SetDefCellBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    wxColour * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","colour", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGrid_SetDefCellBackgroundColour",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_SetDefCellBackgroundColour. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGrid_SetDefCellBackgroundColour. Expected _wxColour_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_SetDefCellBackgroundColour(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_SetCellTextColour(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->SetCellTextColour(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxGrid_SetCellTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    wxColour * _arg1;
+    int  _arg2;
+    int  _arg3;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","colour","row","col", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOii:wxGrid_SetCellTextColour",_kwnames,&_argo0,&_argo1,&_arg2,&_arg3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_SetCellTextColour. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGrid_SetCellTextColour. Expected _wxColour_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_SetCellTextColour(_arg0,*_arg1,_arg2,_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_SetDefCellTextColour(_swigobj,_swigarg0)  (_swigobj->SetCellTextColour(_swigarg0))
+static PyObject *_wrap_wxGrid_SetDefCellTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    wxColour * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","colour", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGrid_SetDefCellTextColour",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_SetDefCellTextColour. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGrid_SetDefCellTextColour. Expected _wxColour_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_SetDefCellTextColour(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_SetCellTextFont(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->SetCellTextFont(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxGrid_SetCellTextFont(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    wxFont * _arg1;
+    int  _arg2;
+    int  _arg3;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","font","row","col", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOii:wxGrid_SetCellTextFont",_kwnames,&_argo0,&_argo1,&_arg2,&_arg3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_SetCellTextFont. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGrid_SetCellTextFont. Expected _wxFont_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_SetCellTextFont(_arg0,*_arg1,_arg2,_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_SetDefCellTextFont(_swigobj,_swigarg0)  (_swigobj->SetCellTextFont(_swigarg0))
+static PyObject *_wrap_wxGrid_SetDefCellTextFont(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    wxFont * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","font", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGrid_SetDefCellTextFont",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_SetDefCellTextFont. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGrid_SetDefCellTextFont. Expected _wxFont_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_SetDefCellTextFont(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_SetCellValue(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->SetCellValue(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxGrid_SetCellValue(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    wxString * _arg1;
+    int  _arg2;
+    int  _arg3;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","val","row","col", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOii:wxGrid_SetCellValue",_kwnames,&_argo0,&_obj1,&_arg2,&_arg3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_SetCellValue. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_SetCellValue(_arg0,*_arg1,_arg2,_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxGrid_SetColumnWidth(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetColumnWidth(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxGrid_SetColumnWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","col","width", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxGrid_SetColumnWidth",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_SetColumnWidth. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_SetColumnWidth(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_SetDividerPen(_swigobj,_swigarg0)  (_swigobj->SetDividerPen(_swigarg0))
+static PyObject *_wrap_wxGrid_SetDividerPen(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    wxPen * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","pen", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGrid_SetDividerPen",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_SetDividerPen. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPen_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGrid_SetDividerPen. Expected _wxPen_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_SetDividerPen(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_SetEditable(_swigobj,_swigarg0)  (_swigobj->SetEditable(_swigarg0))
+static PyObject *_wrap_wxGrid_SetEditable(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","editable", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxGrid_SetEditable",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_SetEditable. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_SetEditable(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_SetGridCursor(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetGridCursor(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxGrid_SetGridCursor(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","row","col", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxGrid_SetGridCursor",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_SetGridCursor. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_SetGridCursor(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_SetLabelAlignment(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetLabelAlignment(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxGrid_SetLabelAlignment(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","orientation","alignment", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxGrid_SetLabelAlignment",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_SetLabelAlignment. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_SetLabelAlignment(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_SetLabelBackgroundColour(_swigobj,_swigarg0)  (_swigobj->SetLabelBackgroundColour(_swigarg0))
+static PyObject *_wrap_wxGrid_SetLabelBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    wxColour * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","value", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGrid_SetLabelBackgroundColour",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_SetLabelBackgroundColour. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGrid_SetLabelBackgroundColour. Expected _wxColour_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_SetLabelBackgroundColour(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_SetLabelSize(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetLabelSize(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxGrid_SetLabelSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","orientation","size", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxGrid_SetLabelSize",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_SetLabelSize. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_SetLabelSize(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_SetLabelTextColour(_swigobj,_swigarg0)  (_swigobj->SetLabelTextColour(_swigarg0))
+static PyObject *_wrap_wxGrid_SetLabelTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    wxColour * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","value", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGrid_SetLabelTextColour",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_SetLabelTextColour. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxColour_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGrid_SetLabelTextColour. Expected _wxColour_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_SetLabelTextColour(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_SetLabelTextFont(_swigobj,_swigarg0)  (_swigobj->SetLabelTextFont(_swigarg0))
+static PyObject *_wrap_wxGrid_SetLabelTextFont(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    wxFont * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","font", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGrid_SetLabelTextFont",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_SetLabelTextFont. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGrid_SetLabelTextFont. Expected _wxFont_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_SetLabelTextFont(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_SetLabelValue(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->SetLabelValue(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxGrid_SetLabelValue(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    int  _arg1;
+    wxString * _arg2;
+    int  _arg3;
+    PyObject * _argo0 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","orientation","value","pos", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiOi:wxGrid_SetLabelValue",_kwnames,&_argo0,&_arg1,&_obj2,&_arg3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_SetLabelValue. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    if (!PyString_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_SetLabelValue(_arg0,_arg1,*_arg2,_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj2)
+        delete _arg2;
+}
+    return _resultobj;
+}
+
+#define wxGrid_SetRowHeight(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetRowHeight(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxGrid_SetRowHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","row","height", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxGrid_SetRowHeight",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_SetRowHeight. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_SetRowHeight(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_UpdateDimensions(_swigobj)  (_swigobj->UpdateDimensions())
+static PyObject *_wrap_wxGrid_UpdateDimensions(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_UpdateDimensions",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_UpdateDimensions. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_UpdateDimensions(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_GetEditInPlace(_swigobj)  (_swigobj->GetEditInPlace())
+static PyObject *_wrap_wxGrid_GetEditInPlace(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetEditInPlace",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetEditInPlace. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxGrid_GetEditInPlace(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGrid_SetEditInPlace(_swigobj,_swigarg0)  (_swigobj->SetEditInPlace(_swigarg0))
+static PyObject *_wrap_wxGrid_SetEditInPlace(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    int  _arg1 = (int ) TRUE;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","edit", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:wxGrid_SetEditInPlace",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_SetEditInPlace. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_SetEditInPlace(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static void *SwigwxGridEventTowxEvent(void *ptr) {
+    wxGridEvent *src;
+    wxEvent *dest;
+    src = (wxGridEvent *) ptr;
+    dest = (wxEvent *) src;
+    return (void *) dest;
+}
+
+#define wxGridEvent_m_row_set(_swigobj,_swigval) (_swigobj->m_row = _swigval,_swigval)
+static PyObject *_wrap_wxGridEvent_m_row_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGridEvent * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","m_row", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxGridEvent_m_row_set",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_m_row_set. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGridEvent_m_row_set(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_m_row_get(_swigobj) ((int ) _swigobj->m_row)
+static PyObject *_wrap_wxGridEvent_m_row_get(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGridEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGridEvent_m_row_get",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_m_row_get. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGridEvent_m_row_get(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_m_col_set(_swigobj,_swigval) (_swigobj->m_col = _swigval,_swigval)
+static PyObject *_wrap_wxGridEvent_m_col_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGridEvent * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","m_col", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxGridEvent_m_col_set",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_m_col_set. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGridEvent_m_col_set(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_m_col_get(_swigobj) ((int ) _swigobj->m_col)
+static PyObject *_wrap_wxGridEvent_m_col_get(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGridEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGridEvent_m_col_get",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_m_col_get. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGridEvent_m_col_get(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_m_x_set(_swigobj,_swigval) (_swigobj->m_x = _swigval,_swigval)
+static PyObject *_wrap_wxGridEvent_m_x_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGridEvent * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","m_x", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxGridEvent_m_x_set",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_m_x_set. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGridEvent_m_x_set(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_m_x_get(_swigobj) ((int ) _swigobj->m_x)
+static PyObject *_wrap_wxGridEvent_m_x_get(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGridEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGridEvent_m_x_get",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_m_x_get. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGridEvent_m_x_get(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_m_y_set(_swigobj,_swigval) (_swigobj->m_y = _swigval,_swigval)
+static PyObject *_wrap_wxGridEvent_m_y_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGridEvent * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","m_y", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxGridEvent_m_y_set",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_m_y_set. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGridEvent_m_y_set(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_m_y_get(_swigobj) ((int ) _swigobj->m_y)
+static PyObject *_wrap_wxGridEvent_m_y_get(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGridEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGridEvent_m_y_get",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_m_y_get. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGridEvent_m_y_get(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_m_control_set(_swigobj,_swigval) (_swigobj->m_control = _swigval,_swigval)
+static PyObject *_wrap_wxGridEvent_m_control_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGridEvent * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","m_control", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxGridEvent_m_control_set",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_m_control_set. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxGridEvent_m_control_set(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_m_control_get(_swigobj) ((bool ) _swigobj->m_control)
+static PyObject *_wrap_wxGridEvent_m_control_get(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGridEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGridEvent_m_control_get",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_m_control_get. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxGridEvent_m_control_get(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_m_shift_set(_swigobj,_swigval) (_swigobj->m_shift = _swigval,_swigval)
+static PyObject *_wrap_wxGridEvent_m_shift_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGridEvent * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","m_shift", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxGridEvent_m_shift_set",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_m_shift_set. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxGridEvent_m_shift_set(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_m_shift_get(_swigobj) ((bool ) _swigobj->m_shift)
+static PyObject *_wrap_wxGridEvent_m_shift_get(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGridEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGridEvent_m_shift_get",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_m_shift_get. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxGridEvent_m_shift_get(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_m_cell_set(_swigobj,_swigval) (_swigobj->m_cell = _swigval,_swigval)
+static PyObject *_wrap_wxGridEvent_m_cell_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGridCell * _result;
+    wxGridEvent * _arg0;
+    wxGridCell * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","m_cell", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGridEvent_m_cell_set",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_m_cell_set. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxGridCell_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGridEvent_m_cell_set. Expected _wxGridCell_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxGridCell *)wxGridEvent_m_cell_set(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCell_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxGridEvent_m_cell_get(_swigobj) ((wxGridCell *) _swigobj->m_cell)
+static PyObject *_wrap_wxGridEvent_m_cell_get(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGridCell * _result;
+    wxGridEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGridEvent_m_cell_get",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_m_cell_get. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxGridCell *)wxGridEvent_m_cell_get(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCell_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxGridEvent_GetRow(_swigobj)  (_swigobj->GetRow())
+static PyObject *_wrap_wxGridEvent_GetRow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGridEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGridEvent_GetRow",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_GetRow. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGridEvent_GetRow(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_GetCol(_swigobj)  (_swigobj->GetCol())
+static PyObject *_wrap_wxGridEvent_GetCol(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGridEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGridEvent_GetCol",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_GetCol. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGridEvent_GetCol(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_GetPosition(_swigobj)  (_swigobj->GetPosition())
+static PyObject *_wrap_wxGridEvent_GetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPoint * _result;
+    wxGridEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGridEvent_GetPosition",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_GetPosition. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxPoint (wxGridEvent_GetPosition(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxPoint_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxGridEvent_ControlDown(_swigobj)  (_swigobj->ControlDown())
+static PyObject *_wrap_wxGridEvent_ControlDown(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGridEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGridEvent_ControlDown",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_ControlDown. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxGridEvent_ControlDown(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_ShiftDown(_swigobj)  (_swigobj->ShiftDown())
+static PyObject *_wrap_wxGridEvent_ShiftDown(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGridEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGridEvent_ShiftDown",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_ShiftDown. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxGridEvent_ShiftDown(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_GetCell(_swigobj)  (_swigobj->GetCell())
+static PyObject *_wrap_wxGridEvent_GetCell(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGridCell * _result;
+    wxGridEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGridEvent_GetCell",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_GetCell. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxGridCell *)wxGridEvent_GetCell(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCell_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
 static void *SwigwxNotebookEventTowxNotifyEvent(void *ptr) {
     wxNotebookEvent *src;
     wxNotifyEvent *dest;
@@ -1721,6 +5041,109 @@ static PyMethodDef windows2cMethods[] = {
 	 { "wxNotebookEvent_SetOldSelection", (PyCFunction) _wrap_wxNotebookEvent_SetOldSelection, METH_VARARGS | METH_KEYWORDS },
 	 { "wxNotebookEvent_GetOldSelection", (PyCFunction) _wrap_wxNotebookEvent_GetOldSelection, METH_VARARGS | METH_KEYWORDS },
 	 { "wxNotebookEvent_GetSelection", (PyCFunction) _wrap_wxNotebookEvent_GetSelection, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridEvent_GetCell", (PyCFunction) _wrap_wxGridEvent_GetCell, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridEvent_ShiftDown", (PyCFunction) _wrap_wxGridEvent_ShiftDown, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridEvent_ControlDown", (PyCFunction) _wrap_wxGridEvent_ControlDown, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridEvent_GetPosition", (PyCFunction) _wrap_wxGridEvent_GetPosition, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridEvent_GetCol", (PyCFunction) _wrap_wxGridEvent_GetCol, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridEvent_GetRow", (PyCFunction) _wrap_wxGridEvent_GetRow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridEvent_m_cell_get", (PyCFunction) _wrap_wxGridEvent_m_cell_get, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridEvent_m_cell_set", (PyCFunction) _wrap_wxGridEvent_m_cell_set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridEvent_m_shift_get", (PyCFunction) _wrap_wxGridEvent_m_shift_get, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridEvent_m_shift_set", (PyCFunction) _wrap_wxGridEvent_m_shift_set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridEvent_m_control_get", (PyCFunction) _wrap_wxGridEvent_m_control_get, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridEvent_m_control_set", (PyCFunction) _wrap_wxGridEvent_m_control_set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridEvent_m_y_get", (PyCFunction) _wrap_wxGridEvent_m_y_get, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridEvent_m_y_set", (PyCFunction) _wrap_wxGridEvent_m_y_set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridEvent_m_x_get", (PyCFunction) _wrap_wxGridEvent_m_x_get, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridEvent_m_x_set", (PyCFunction) _wrap_wxGridEvent_m_x_set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridEvent_m_col_get", (PyCFunction) _wrap_wxGridEvent_m_col_get, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridEvent_m_col_set", (PyCFunction) _wrap_wxGridEvent_m_col_set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridEvent_m_row_get", (PyCFunction) _wrap_wxGridEvent_m_row_get, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridEvent_m_row_set", (PyCFunction) _wrap_wxGridEvent_m_row_set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_SetEditInPlace", (PyCFunction) _wrap_wxGrid_SetEditInPlace, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetEditInPlace", (PyCFunction) _wrap_wxGrid_GetEditInPlace, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_UpdateDimensions", (PyCFunction) _wrap_wxGrid_UpdateDimensions, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_SetRowHeight", (PyCFunction) _wrap_wxGrid_SetRowHeight, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_SetLabelValue", (PyCFunction) _wrap_wxGrid_SetLabelValue, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_SetLabelTextFont", (PyCFunction) _wrap_wxGrid_SetLabelTextFont, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_SetLabelTextColour", (PyCFunction) _wrap_wxGrid_SetLabelTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_SetLabelSize", (PyCFunction) _wrap_wxGrid_SetLabelSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_SetLabelBackgroundColour", (PyCFunction) _wrap_wxGrid_SetLabelBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_SetLabelAlignment", (PyCFunction) _wrap_wxGrid_SetLabelAlignment, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_SetGridCursor", (PyCFunction) _wrap_wxGrid_SetGridCursor, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_SetEditable", (PyCFunction) _wrap_wxGrid_SetEditable, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_SetDividerPen", (PyCFunction) _wrap_wxGrid_SetDividerPen, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_SetColumnWidth", (PyCFunction) _wrap_wxGrid_SetColumnWidth, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_SetCellValue", (PyCFunction) _wrap_wxGrid_SetCellValue, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_SetDefCellTextFont", (PyCFunction) _wrap_wxGrid_SetDefCellTextFont, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_SetCellTextFont", (PyCFunction) _wrap_wxGrid_SetCellTextFont, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_SetDefCellTextColour", (PyCFunction) _wrap_wxGrid_SetDefCellTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_SetCellTextColour", (PyCFunction) _wrap_wxGrid_SetCellTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_SetDefCellBackgroundColour", (PyCFunction) _wrap_wxGrid_SetDefCellBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_SetCellBackgroundColour", (PyCFunction) _wrap_wxGrid_SetCellBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_SetDefCellAlignment", (PyCFunction) _wrap_wxGrid_SetDefCellAlignment, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_SetCellAlignment", (PyCFunction) _wrap_wxGrid_SetCellAlignment, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_OnActivate", (PyCFunction) _wrap_wxGrid_OnActivate, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_InsertRows", (PyCFunction) _wrap_wxGrid_InsertRows, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_InsertCols", (PyCFunction) _wrap_wxGrid_InsertCols, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetVertScrollBar", (PyCFunction) _wrap_wxGrid_GetVertScrollBar, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetTextItem", (PyCFunction) _wrap_wxGrid_GetTextItem, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetScrollPosY", (PyCFunction) _wrap_wxGrid_GetScrollPosY, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetScrollPosX", (PyCFunction) _wrap_wxGrid_GetScrollPosX, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetRows", (PyCFunction) _wrap_wxGrid_GetRows, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetRowHeight", (PyCFunction) _wrap_wxGrid_GetRowHeight, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetLabelValue", (PyCFunction) _wrap_wxGrid_GetLabelValue, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetLabelTextFont", (PyCFunction) _wrap_wxGrid_GetLabelTextFont, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetLabelTextColour", (PyCFunction) _wrap_wxGrid_GetLabelTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetLabelSize", (PyCFunction) _wrap_wxGrid_GetLabelSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetLabelBackgroundColour", (PyCFunction) _wrap_wxGrid_GetLabelBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetLabelAlignment", (PyCFunction) _wrap_wxGrid_GetLabelAlignment, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetHorizScrollBar", (PyCFunction) _wrap_wxGrid_GetHorizScrollBar, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetEditable", (PyCFunction) _wrap_wxGrid_GetEditable, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetCursorRow", (PyCFunction) _wrap_wxGrid_GetCursorRow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetCursorColumn", (PyCFunction) _wrap_wxGrid_GetCursorColumn, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetCurrentRect", (PyCFunction) _wrap_wxGrid_GetCurrentRect, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetColumnWidth", (PyCFunction) _wrap_wxGrid_GetColumnWidth, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetCols", (PyCFunction) _wrap_wxGrid_GetCols, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetCellValue", (PyCFunction) _wrap_wxGrid_GetCellValue, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetDefCellTextFont", (PyCFunction) _wrap_wxGrid_GetDefCellTextFont, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetCellTextFont", (PyCFunction) _wrap_wxGrid_GetCellTextFont, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetDefCellTextColour", (PyCFunction) _wrap_wxGrid_GetDefCellTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetCellTextColour", (PyCFunction) _wrap_wxGrid_GetCellTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetCells", (PyCFunction) _wrap_wxGrid_GetCells, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetDefCellBackgroundColour", (PyCFunction) _wrap_wxGrid_GetDefCellBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetCellBackgroundColour", (PyCFunction) _wrap_wxGrid_GetCellBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetDefCellAlignment", (PyCFunction) _wrap_wxGrid_GetDefCellAlignment, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetCellAlignment", (PyCFunction) _wrap_wxGrid_GetCellAlignment, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetCell", (PyCFunction) _wrap_wxGrid_GetCell, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetBatchCount", (PyCFunction) _wrap_wxGrid_GetBatchCount, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_EndBatch", (PyCFunction) _wrap_wxGrid_EndBatch, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_DeleteRows", (PyCFunction) _wrap_wxGrid_DeleteRows, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_DeleteCols", (PyCFunction) _wrap_wxGrid_DeleteCols, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_CurrentCellVisible", (PyCFunction) _wrap_wxGrid_CurrentCellVisible, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_CreateGrid", (PyCFunction) _wrap_wxGrid_CreateGrid, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_CellHitTest", (PyCFunction) _wrap_wxGrid_CellHitTest, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_BeginBatch", (PyCFunction) _wrap_wxGrid_BeginBatch, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_AppendRows", (PyCFunction) _wrap_wxGrid_AppendRows, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_AppendCols", (PyCFunction) _wrap_wxGrid_AppendCols, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_AdjustScrollbars", (PyCFunction) _wrap_wxGrid_AdjustScrollbars, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxGrid", (PyCFunction) _wrap_new_wxGrid, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridCell_SetCellBitmap", (PyCFunction) _wrap_wxGridCell_SetCellBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridCell_GetCellBitmap", (PyCFunction) _wrap_wxGridCell_GetCellBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridCell_SetAlignment", (PyCFunction) _wrap_wxGridCell_SetAlignment, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridCell_GetAlignment", (PyCFunction) _wrap_wxGridCell_GetAlignment, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridCell_GetBackgroundBrush", (PyCFunction) _wrap_wxGridCell_GetBackgroundBrush, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridCell_SetBackgroundColour", (PyCFunction) _wrap_wxGridCell_SetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridCell_GetBackgroundColour", (PyCFunction) _wrap_wxGridCell_GetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridCell_SetTextColour", (PyCFunction) _wrap_wxGridCell_SetTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridCell_GetTextColour", (PyCFunction) _wrap_wxGridCell_GetTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridCell_SetFont", (PyCFunction) _wrap_wxGridCell_SetFont, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridCell_GetFont", (PyCFunction) _wrap_wxGridCell_GetFont, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridCell_SetTextValue", (PyCFunction) _wrap_wxGridCell_SetTextValue, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridCell_GetTextValue", (PyCFunction) _wrap_wxGridCell_GetTextValue, METH_VARARGS | METH_KEYWORDS },
+	 { "delete_wxGridCell", (PyCFunction) _wrap_delete_wxGridCell, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxGridCell", (PyCFunction) _wrap_new_wxGridCell, METH_VARARGS | METH_KEYWORDS },
 	 { NULL, NULL }
 };
 #ifdef __cplusplus
@@ -1735,6 +5158,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxEvent","_wxSplitterEvent",SwigwxSplitterEventTowxEvent},
     { "_wxEvent","_class_wxNotebookEvent",SwigwxNotebookEventTowxEvent},
     { "_wxEvent","_wxNotebookEvent",SwigwxNotebookEventTowxEvent},
+    { "_wxEvent","_class_wxGridEvent",SwigwxGridEventTowxEvent},
+    { "_wxEvent","_wxGridEvent",SwigwxGridEventTowxEvent},
     { "_wxEvent","_class_wxEvent",0},
     { "_class_wxActivateEvent","_wxActivateEvent",0},
     { "_signed_long","_long",0},
@@ -1758,6 +5183,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxEvtHandler","_wxSplitterWindow",SwigwxSplitterWindowTowxEvtHandler},
     { "_class_wxEvtHandler","_class_wxNotebook",SwigwxNotebookTowxEvtHandler},
     { "_class_wxEvtHandler","_wxNotebook",SwigwxNotebookTowxEvtHandler},
+    { "_class_wxEvtHandler","_class_wxGrid",SwigwxGridTowxEvtHandler},
+    { "_class_wxEvtHandler","_wxGrid",SwigwxGridTowxEvtHandler},
     { "_class_wxEvtHandler","_wxEvtHandler",0},
     { "_wxPaintEvent","_class_wxPaintEvent",0},
     { "_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0},
@@ -1766,6 +5193,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxNotifyEvent","_wxNotebookEvent",SwigwxNotebookEventTowxNotifyEvent},
     { "_wxNotifyEvent","_class_wxNotifyEvent",0},
     { "_wxMask","_class_wxMask",0},
+    { "_wxGrid","_class_wxGrid",0},
     { "_wxPen","_class_wxPen",0},
     { "_wxUpdateUIEvent","_class_wxUpdateUIEvent",0},
     { "_byte","_unsigned_char",0},
@@ -1801,6 +5229,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxPaintEvent","_wxPaintEvent",0},
     { "_wxSysColourChangedEvent","_class_wxSysColourChangedEvent",0},
     { "_class_wxPostScriptDC","_wxPostScriptDC",0},
+    { "_wxPanel","_class_wxGrid",SwigwxGridTowxPanel},
+    { "_wxPanel","_wxGrid",SwigwxGridTowxPanel},
     { "_wxPanel","_class_wxPanel",0},
     { "_wxInitDialogEvent","_class_wxInitDialogEvent",0},
     { "_wxCheckBox","_class_wxCheckBox",0},
@@ -1809,6 +5239,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxMask","_wxMask",0},
     { "_wxTextDataObject","_class_wxTextDataObject",0},
     { "_class_wxKeyEvent","_wxKeyEvent",0},
+    { "_class_wxGrid","_wxGrid",0},
     { "_wxColour","_class_wxColour",0},
     { "_class_wxDialog","_wxDialog",0},
     { "_class_wxFileDataObject","_wxFileDataObject",0},
@@ -1832,9 +5263,12 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxEvent","_wxSplitterEvent",SwigwxSplitterEventTowxEvent},
     { "_class_wxEvent","_class_wxNotebookEvent",SwigwxNotebookEventTowxEvent},
     { "_class_wxEvent","_wxNotebookEvent",SwigwxNotebookEventTowxEvent},
+    { "_class_wxEvent","_class_wxGridEvent",SwigwxGridEventTowxEvent},
+    { "_class_wxEvent","_wxGridEvent",SwigwxGridEventTowxEvent},
     { "_class_wxEvent","_wxEvent",0},
     { "_wxCheckListBox","_class_wxCheckListBox",0},
     { "_wxSplitterEvent","_class_wxSplitterEvent",0},
+    { "_wxGridEvent","_class_wxGridEvent",0},
     { "_wxRect","_class_wxRect",0},
     { "_wxCommandEvent","_class_wxSplitterEvent",SwigwxSplitterEventTowxCommandEvent},
     { "_wxCommandEvent","_wxSplitterEvent",SwigwxSplitterEventTowxCommandEvent},
@@ -1888,6 +5322,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxMaximizeEvent","_class_wxMaximizeEvent",0},
     { "_class_wxSpinButton","_wxSpinButton",0},
     { "_wxAcceleratorEntry","_class_wxAcceleratorEntry",0},
+    { "_class_wxPanel","_class_wxGrid",SwigwxGridTowxPanel},
+    { "_class_wxPanel","_wxGrid",SwigwxGridTowxPanel},
     { "_class_wxPanel","_wxPanel",0},
     { "_class_wxCheckBox","_wxCheckBox",0},
     { "_wxComboBox","_class_wxComboBox",0},
@@ -1915,6 +5351,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxWindow","_wxSplitterWindow",SwigwxSplitterWindowTowxWindow},
     { "_class_wxWindow","_class_wxNotebook",SwigwxNotebookTowxWindow},
     { "_class_wxWindow","_wxNotebook",SwigwxNotebookTowxWindow},
+    { "_class_wxWindow","_class_wxGrid",SwigwxGridTowxWindow},
+    { "_class_wxWindow","_wxGrid",SwigwxGridTowxWindow},
     { "_class_wxWindow","_wxWindow",0},
     { "_wxSplitterWindow","_class_wxSplitterWindow",0},
     { "_class_wxStaticText","_wxStaticText",0},
@@ -1931,6 +5369,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxPoint","_wxPoint",0},
     { "_wxRealPoint","_class_wxRealPoint",0},
     { "_class_wxRadioBox","_wxRadioBox",0},
+    { "_wxGridCell","_class_wxGridCell",0},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
     { "_wxMemoryDC","_class_wxMemoryDC",0},
@@ -2036,6 +5475,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxGauge","_class_wxGauge",0},
     { "_class_wxCheckListBox","_wxCheckListBox",0},
     { "_class_wxBusyInfo","_wxBusyInfo",0},
+    { "_class_wxGridEvent","_wxGridEvent",0},
     { "_class_wxCommandEvent","_class_wxSplitterEvent",SwigwxSplitterEventTowxCommandEvent},
     { "_class_wxCommandEvent","_wxSplitterEvent",SwigwxSplitterEventTowxCommandEvent},
     { "_class_wxCommandEvent","_class_wxNotebookEvent",SwigwxNotebookEventTowxCommandEvent},
@@ -2044,6 +5484,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxClientDC","_wxClientDC",0},
     { "_class_wxSizeEvent","_wxSizeEvent",0},
     { "_wxCustomDataObject","_class_wxCustomDataObject",0},
+    { "_class_wxGridCell","_wxGridCell",0},
     { "_class_wxSize","_wxSize",0},
     { "_class_wxBitmap","_wxBitmap",0},
     { "_class_wxMemoryDC","_wxMemoryDC",0},
@@ -2053,6 +5494,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxEvtHandler","_wxSplitterWindow",SwigwxSplitterWindowTowxEvtHandler},
     { "_wxEvtHandler","_class_wxNotebook",SwigwxNotebookTowxEvtHandler},
     { "_wxEvtHandler","_wxNotebook",SwigwxNotebookTowxEvtHandler},
+    { "_wxEvtHandler","_class_wxGrid",SwigwxGridTowxEvtHandler},
+    { "_wxEvtHandler","_wxGrid",SwigwxGridTowxEvtHandler},
     { "_wxEvtHandler","_class_wxEvtHandler",0},
     { "_wxMenuItem","_class_wxMenuItem",0},
     { "_class_wxScrollBar","_wxScrollBar",0},
@@ -2068,6 +5511,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxWindow","_wxSplitterWindow",SwigwxSplitterWindowTowxWindow},
     { "_wxWindow","_class_wxNotebook",SwigwxNotebookTowxWindow},
     { "_wxWindow","_wxNotebook",SwigwxNotebookTowxWindow},
+    { "_wxWindow","_class_wxGrid",SwigwxGridTowxWindow},
+    { "_wxWindow","_wxGrid",SwigwxGridTowxWindow},
     { "_wxWindow","_class_wxWindow",0},
     { "_class_wxWindowDestroyEvent","_wxWindowDestroyEvent",0},
 {0,0,0}};
@@ -2081,6 +5526,18 @@ SWIGEXPORT(void) initwindows2c() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("windows2c", windows2cMethods);
 	 d = PyModule_GetDict(m);
+	 PyDict_SetItemString(d,"wxGRID_TEXT_CTRL", PyInt_FromLong((long) wxGRID_TEXT_CTRL));
+	 PyDict_SetItemString(d,"wxGRID_HSCROLL", PyInt_FromLong((long) wxGRID_HSCROLL));
+	 PyDict_SetItemString(d,"wxGRID_VSCROLL", PyInt_FromLong((long) wxGRID_VSCROLL));
+	 PyDict_SetItemString(d,"wxEVT_GRID_SELECT_CELL", PyInt_FromLong((long) wxEVT_GRID_SELECT_CELL));
+	 PyDict_SetItemString(d,"wxEVT_GRID_CREATE_CELL", PyInt_FromLong((long) wxEVT_GRID_CREATE_CELL));
+	 PyDict_SetItemString(d,"wxEVT_GRID_CHANGE_LABELS", PyInt_FromLong((long) wxEVT_GRID_CHANGE_LABELS));
+	 PyDict_SetItemString(d,"wxEVT_GRID_CHANGE_SEL_LABEL", PyInt_FromLong((long) wxEVT_GRID_CHANGE_SEL_LABEL));
+	 PyDict_SetItemString(d,"wxEVT_GRID_CELL_CHANGE", PyInt_FromLong((long) wxEVT_GRID_CELL_CHANGE));
+	 PyDict_SetItemString(d,"wxEVT_GRID_CELL_LCLICK", PyInt_FromLong((long) wxEVT_GRID_CELL_LCLICK));
+	 PyDict_SetItemString(d,"wxEVT_GRID_CELL_RCLICK", PyInt_FromLong((long) wxEVT_GRID_CELL_RCLICK));
+	 PyDict_SetItemString(d,"wxEVT_GRID_LABEL_LCLICK", PyInt_FromLong((long) wxEVT_GRID_LABEL_LCLICK));
+	 PyDict_SetItemString(d,"wxEVT_GRID_LABEL_RCLICK", PyInt_FromLong((long) wxEVT_GRID_LABEL_RCLICK));
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)
