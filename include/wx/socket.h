@@ -95,8 +95,6 @@ public:
     SPEED = wxSOCKET_BLOCK
   };
 
-  typedef ::wxSockFlags wxSockFlags;
-
   // Type of request
 
   enum wxSockType { SOCK_CLIENT, SOCK_SERVER, SOCK_INTERNAL, SOCK_UNINIT };
