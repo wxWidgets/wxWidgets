@@ -282,7 +282,7 @@ public:
     virtual bool IsEditable() const = 0;
 
     // more readable flag testing methods
-    bool IsSingleLine() const { return !(GetWindowStyle() & wxTE_MULTILINE); }
+    bool IsSingleLine() const { return !HasFlag(wxTE_MULTILINE); }
     bool IsMultiLine() const { return !IsSingleLine(); }
 
     // If the return values from and to are the same, there is no selection.

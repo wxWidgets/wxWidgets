@@ -57,6 +57,7 @@
 
 #ifdef __WXMSW__
 #include <windows.h>
+#include "wx/msw/winundef.h"
 
 // FIXME - Mingw32 1.0 has both _getdrive() and _chdrive(). For now, let's assume
 //         older releases don't, but it should be verified and the checks modified

@@ -48,6 +48,7 @@
 
 #ifdef __WXMSW__
     #include <windows.h> // for DLGC_WANTARROWS
+    #include "wx/msw/winundef.h"
 #endif
 
 #ifdef __WXMOTIF__

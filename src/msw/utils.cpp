@@ -40,8 +40,8 @@
 #include "wx/msw/private.h"     // includes <windows.h>
 #include "wx/msw/missing.h"     // CHARSET_HANGUL
 
-#if defined(__GNUWIN32_OLD__) || defined(__WXWINCE__) \
-    || defined(__CYGWIN32__)
+// Doesn't work with Cygwin at present
+#if wxUSE_SOCKETS && (defined(__GNUWIN32_OLD__) || defined(__WXWINCE__) || defined(__CYGWIN32__))
     // apparently we need to include winsock.h to get WSADATA and other stuff
     // used in wxGetFullHostName() with the old mingw32 versions
     #include <winsock.h>
@@ -148,7 +148,7 @@ bool wxGetHostName(wxChar *buf, int maxSize)
 // get full hostname (with domain name if possible)
 bool wxGetFullHostName(wxChar *buf, int maxSize)
 {
-#if !defined( __WXMICROWIN__) && wxUSE_DYNAMIC_LOADER
+#if !defined( __WXMICROWIN__) && wxUSE_DYNAMIC_LOADER && wxUSE_SOCKETS
     // TODO should use GetComputerNameEx() when available
 
     // we don't want to always link with Winsock DLL as we might not use it at

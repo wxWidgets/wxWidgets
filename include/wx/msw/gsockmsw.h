@@ -23,7 +23,7 @@
 
 #include "wx/msw/wrapwin.h"
 
-#ifdef __WXWINCE__
+#if defined(__WXWINCE__)
 #include <winsock.h>
 #endif
 

@@ -326,7 +326,7 @@ Metrowerks CodeWarrior compilation
 Cygwin/MinGW compilation
 ------------------------
 
-wxWidgets 2 supports Cygwin (formerly GnuWin32) betas and
+wxWidgets supports Cygwin (formerly GnuWin32) betas and
 releases, and MinGW. Cygwin can be downloaded from:
 
     http://sources.redhat.com/cygwin/
@@ -339,6 +339,8 @@ Both Cygwin and MinGW can be used with configure (assuming you have MSYS
 installed in case of MinGW). You will need new enough MinGW version, preferably
 MinGW 2.0 (ships with gcc3) or at least 1.0 (gcc-2.95.3). GCC versions older
 than 2.95.3 don't work; you can use wxWidgets 2.4 with them.
+If using Cygwin, you must pass --disable-sockets to configure due to a header
+conflict in Cygwin.
 
 NOTE: some notes specific to old Cygwin (< 1.1.x) are at the end of this
       section (see OLD VERSIONS)
