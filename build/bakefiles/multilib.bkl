@@ -7,7 +7,6 @@
     
     <dll id="basedll" template="wx_dll"
          cond="SHARED=='1' and MONOLITHIC=='0'">
-        <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_BASE</define>
         <define>wxUSE_BASE=1</define>
         <define>wxUSE_GUI=0</define> 
@@ -27,7 +26,7 @@
     
     <dll id="coredll" template="wx_dll"
          cond="SHARED=='1' and USE_GUI=='1' and MONOLITHIC=='0'">
-        <define>WXUSINGDLL</define>
+        <define>WXUSINGDLL_BASE</define>
         <define>WXMAKINGDLL_CORE</define>
         <define>wxUSE_BASE=0</define> 
         <sources>$(BASE_AND_GUI_SRC) $(CORE_SRC)</sources>
@@ -47,7 +46,8 @@
     
     <dll id="htmldll" template="wx_dll"
          cond="SHARED=='1' and USE_GUI=='1' and MONOLITHIC=='0'">
-        <define>WXUSINGDLL</define>
+        <define>WXUSINGDLL_BASE</define>
+        <define>WXUSINGDLL_CORE</define>
         <define>WXMAKINGDLL_HTML</define>
         <sources>$(HTML_SRC)</sources>
         <library>coredll</library>
