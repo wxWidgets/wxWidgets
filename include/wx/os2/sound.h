@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wave.h
-// Purpose:     wxWave class (loads and plays short Windows .wav files).
+// Name:        sound.h
+// Purpose:     wxSound class (loads and plays short Windows .wav files).
 //              Optional on non-Windows platforms.
 // Author:      David Webster
 // Modified by:
@@ -10,18 +10,18 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_WAVE_H_
-#define _WX_WAVE_H_
+#ifndef _WX_SOUND_H_
+#define _WX_SOUND_H_
 
 #include "wx/object.h"
 
-class wxWave : public wxObject
+class wxSound : public wxSoundBase
 {
 public:
-  wxWave();
-  wxWave(const wxString& fileName, bool isResource = FALSE);
-  wxWave(int size, const wxByte* data);
-  ~wxWave();
+  wxSound();
+  wxSound(const wxString& fileName, bool isResource = FALSE);
+  wxSound(int size, const wxByte* data);
+  ~wxSound();
 
 public:
   // Create from resource or file
@@ -30,10 +30,11 @@ public:
   bool Create(int size, const wxByte* data);
 
   bool  IsOk() const { return (m_waveData ? TRUE : FALSE); };
-  bool  Play(bool async = TRUE, bool looped = FALSE) const;
 
 protected:
   bool  Free();
+  
+  bool  DoPlay(unsigned flags) const;
 
 private:
   wxByte* m_waveData;
@@ -42,4 +43,4 @@ private:
 };
 
 #endif
-    // _WX_WAVE_H_
+    // _WX_SOUND_H_

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wave.h
-// Purpose:     wxWave class
+// Name:        sound.h
+// Purpose:     wxSound class
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
@@ -9,43 +9,46 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_WAVE_H_
-#define _WX_WAVE_H_
+#ifndef _WX_SOUND_H_
+#define _WX_SOUND_H_
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "wave.h"
+#pragma interface "sound.h"
 #endif
 
-#if wxUSE_WAVE
+#if wxUSE_SOUND
 
 #include "wx/object.h"
 
-class WXDLLIMPEXP_ADV wxWave : public wxObject
+class WXDLLIMPEXP_ADV wxSound : public wxSoundBase
 {
 public:
-  wxWave();
-  wxWave(const wxString& fileName, bool isResource = FALSE);
-  wxWave(int size, const wxByte* data);
-  ~wxWave();
+  wxSound();
+  wxSound(const wxString& fileName, bool isResource = false);
+  wxSound(int size, const wxByte* data);
+  ~wxSound();
 
 public:
   // Create from resource or file
-  bool  Create(const wxString& fileName, bool isResource = FALSE);
+  bool  Create(const wxString& fileName, bool isResource = false);
   // Create from data
   bool Create(int size, const wxByte* data);
 
-  bool  IsOk() const { return (m_waveData ? TRUE : FALSE); };
-  bool  Play(bool async = TRUE, bool looped = FALSE) const;
+  bool  IsOk() const { return (m_waveData ? true : false); };
+    
+  static void Stop();
 
 protected:
   bool  Free();
+    
+  bool DoPlay(unsigned flags) const;
 
 private:
   wxByte* m_waveData;
   int   m_waveLength;
   bool  m_isResource;
 
-    DECLARE_NO_COPY_CLASS(wxWave)
+    DECLARE_NO_COPY_CLASS(wxSound)
 };
 #endif
 #endif

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wave.h
-// Purpose:     wxWave class (loads and plays short Windows .wav files).
+// Name:        sound.h
+// Purpose:     wxSound class (loads and plays short Windows .wav files).
 //              Optional on non-Windows platforms.
 // Author:      Stefan Csomor
 // Modified by:
@@ -10,33 +10,34 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_WAVE_H_
-#define _WX_WAVE_H_
+#ifndef _WX_SOUND_H_
+#define _WX_SOUND_H_
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "wave.h"
+#pragma interface "sound.h"
 #endif
 
-#if wxUSE_WAVE
+#if wxUSE_SOUND
 
 #include "wx/object.h"
 
-class WXDLLEXPORT wxWave : public wxObject
+class WXDLLEXPORT wxSound : public wxSoundBase
 {
 public:
-  wxWave();
-  wxWave(const wxString& fileName, bool isResource = FALSE);
-  wxWave(int size, const wxByte* data);
-  ~wxWave();
+  wxSound();
+  wxSound(const wxString& fileName, bool isResource = FALSE);
+  wxSound(int size, const wxByte* data);
+  ~wxSound();
 
 public:
   bool  Create(const wxString& fileName, bool isResource = FALSE);
   bool  IsOk() const { return !m_sndname.IsEmpty(); }
-  bool  Play(bool async = TRUE, bool looped = FALSE) const;
 
 protected:
   // prevent collision with some BSD definitions of macro Free()
   bool  FreeData();
+  
+  bool  DoPlay(unsigned flags) const;
 
 private:
   void* m_sndChan;
@@ -49,4 +50,4 @@ private:
 
 #endif
 #endif
-    // _WX_WAVE_H_
+    // _WX_SOUND_H_
