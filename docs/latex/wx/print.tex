@@ -804,7 +804,10 @@ achieving the correct scaling for the page.
 
 Pass a \helpref{wxPrintData}{wxprintdata} object with information
 necessary for setting up a suitable printer device context. This
-is the recommended way to construct a wxPrinterDC.
+is the recommended way to construct a wxPrinterDC.  Make sure you 
+specify a reference to a \helpref{wxPrintData}{wxprintdata} object,
+not a pointer - you may not even get a warning if you pass a pointer
+instead.
 
 \func{}{wxPrinterDC}{\param{const wxString\& }{driver}, \param{const wxString\& }{device}, \param{const wxString\& }{output},
  \param{const bool }{interactive = true}, \param{int }{orientation = wxPORTRAIT}}
