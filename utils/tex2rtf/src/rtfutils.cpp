@@ -2205,7 +2205,6 @@ void RTFOnMacro(int macroId, int no_args, bool start)
       {
         struc->currentItem += 1;
 
-        int indentSize = struc->indentation;
         int oldIndent = 0;
         wxNode *node2 = NULL;
         if (itemizeStack.Number() > 1) // TODO: do I actually mean Nth(0) here??

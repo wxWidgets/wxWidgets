@@ -588,7 +588,6 @@ void  wxToolBar::OnMouse( wxMouseEvent &event )
 			
 		ControlHandle	control ;
 		Point		localwhere ;
-		GrafPtr		port ;
 		SInt16		controlpart ;
 		WindowRef	window = (WindowRef) MacGetRootWindow() ;
 		
