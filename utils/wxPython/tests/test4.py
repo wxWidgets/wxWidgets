@@ -14,6 +14,7 @@
 
 from wxPython import *
 
+import time
 
 #---------------------------------------------------------------------------
 
@@ -221,6 +222,14 @@ class TestGrid(wxFrame):
 
 #---------------------------------------------------------------------------
 
+
+class ColoredPanel(wxWindow):
+    def __init__(self, parent, color):
+        wxWindow.__init__(self, parent, -1,
+                          wxPyDefaultPosition, wxPyDefaultSize, wxRAISED_BORDER)
+        self.SetBackgroundColour(color)
+
+
 class TestNotebookWindow(wxFrame):
     def __init__(self, parent):
         wxFrame.__init__(self, parent, -1, 'Test wxNotebook',
@@ -228,46 +237,189 @@ class TestNotebookWindow(wxFrame):
 
         nb = wxNotebook(self, -1)
 
-        win = wxWindow(nb, -1, wxPyDefaultPosition, wxPyDefaultSize, wxRAISED_BORDER)
-        win.SetBackgroundColour(wxBLUE)
+        win = ColoredPanel(nb, wxBLUE)
         nb.AddPage(win, "Blue")
+        st = wxStaticText(win, -1, "You can put any type of window here!", wxPoint(10, 10))
+        st.SetForegroundColour(wxWHITE)
+        st.SetBackgroundColour(wxBLUE)
 
-        win = wxWindow(nb, -1, wxPyDefaultPosition, wxPyDefaultSize, wxRAISED_BORDER)
-        win.SetBackgroundColour(wxRED)
+        win = ColoredPanel(nb, wxRED)
         nb.AddPage(win, "Red")
 
-        win = wxWindow(nb, -1, wxPyDefaultPosition, wxPyDefaultSize, wxRAISED_BORDER)
-        win.SetBackgroundColour(wxGREEN)
+        win = ColoredPanel(nb, wxGREEN)
         nb.AddPage(win, "Green")
 
-        win = wxWindow(nb, -1, wxPyDefaultPosition, wxPyDefaultSize, wxRAISED_BORDER)
-        win.SetBackgroundColour(wxCYAN)
+        win = ColoredPanel(nb, wxCYAN)
         nb.AddPage(win, "Cyan")
 
-        win = wxWindow(nb, -1, wxPyDefaultPosition, wxPyDefaultSize, wxRAISED_BORDER)
-        win.SetBackgroundColour(wxWHITE)
+        win = ColoredPanel(nb, wxWHITE)
         nb.AddPage(win, "White")
 
-        win = wxWindow(nb, -1, wxPyDefaultPosition, wxPyDefaultSize, wxRAISED_BORDER)
-        win.SetBackgroundColour(wxBLACK)
+        win = ColoredPanel(nb, wxBLACK)
         nb.AddPage(win, "Black")
 
-        win = wxWindow(nb, -1, wxPyDefaultPosition, wxPyDefaultSize, wxRAISED_BORDER)
-        win.SetBackgroundColour(wxNamedColour('MIDNIGHT BLUE'))
+        win = ColoredPanel(nb, wxNamedColour('MIDNIGHT BLUE'))
         nb.AddPage(win, "MIDNIGHT BLUE")
 
-        win = wxWindow(nb, -1, wxPyDefaultPosition, wxPyDefaultSize, wxRAISED_BORDER)
-        win.SetBackgroundColour(wxNamedColour('INDIAN RED'))
+        win = ColoredPanel(nb, wxNamedColour('INDIAN RED'))
         nb.AddPage(win, "INDIAN RED")
 
 
         nb.SetSelection(0)
-        self.SetSize(wxSize(500, 300))  # force a redraw so the notebook will draw
+        self.SetSize(wxSize(300, 300))  # force a redraw so the notebook will draw
 
 
     def OnCloseWindow(self, event):
         self.Destroy()
 
+#---------------------------------------------------------------------------
+
+class TestSplitterWindow(wxFrame):
+    def __init__(self, parent):
+        wxFrame.__init__(self, parent, -1, 'Test wxSplitterWindow',
+                         wxPyDefaultPosition, wxSize(500, 300))
+
+        splitter = wxSplitterWindow(self, -1)
+
+        p1 = ColoredPanel(splitter, wxRED)
+        wxStaticText(p1, -1, "Panel One", wxPoint(5,5)).SetBackgroundColour(wxRED)
+
+        p2 = ColoredPanel(splitter, wxBLUE)
+        wxStaticText(p2, -1, "Panel Two", wxPoint(5,5)).SetBackgroundColour(wxBLUE)
+
+        splitter.SplitVertically(p1, p2)
+
+
+    def OnCloseWindow(self, event):
+        self.Destroy()
+
+
+#---------------------------------------------------------------------------
+
+class CustomStatusBar(wxStatusBar):
+    def __init__(self, parent):
+        wxStatusBar.__init__(self, parent, -1)
+        self.SetFieldsCount(3)
+
+        self.SetStatusText("A Custom StatusBar...", 0)
+
+        self.cb = wxCheckBox(self, 1001, "toggle clock")
+        EVT_CHECKBOX(self, 1001, self.OnToggleClock)
+        self.cb.SetValue(true)
+
+        # figure out how tall to make it.
+        dc = wxClientDC(self)
+        dc.SetFont(self.GetFont())
+        (w,h, d,e) = dc.GetTextExtent('X')
+        h = int(h * 1.8)
+        self.SetSize(wxSize(100, h))
+
+        # start our timer
+        self.timer = wxPyTimer(self.Notify)
+        self.timer.Start(1000)
+        self.Notify()
+
+
+    # Time-out handler
+    def Notify(self):
+        t = time.localtime(time.time())
+        st = time.strftime("%d-%b-%Y   %I:%M:%S", t)
+        self.SetStatusText(st, 2)
+
+    # the checkbox was clicked
+    def OnToggleClock(self, event):
+        if self.cb.GetValue():
+            self.timer.Start(1000)
+            self.Notify()
+        else:
+            self.timer.Stop()
+
+    # reposition the checkbox
+    def OnSize(self, event):
+        rect = self.GetFieldRect(1)
+        self.cb.SetPosition(wxPoint(rect.x+2, rect.y+2))
+        self.cb.SetSize(wxSize(rect.width-4, rect.height-4))
+
+
+
+class TestCustomStatusBar(wxFrame):
+    def __init__(self, parent):
+        wxFrame.__init__(self, parent, -1, 'Test Custom StatusBar',
+                         wxPyDefaultPosition, wxSize(500, 300))
+        wxWindow(self, -1)
+
+        self.sb = CustomStatusBar(self)
+        self.SetStatusBar(self.sb)
+
+    def OnCloseWindow(self, event):
+        self.sb.timer.Stop()
+        self.Destroy()
+
+
+#---------------------------------------------------------------------------
+
+class TestToolBar(wxFrame):
+    def __init__(self, parent, log):
+        wxFrame.__init__(self, parent, -1, 'Test ToolBar',
+                         wxPyDefaultPosition, wxSize(500, 300))
+        self.log = log
+
+        wxWindow(self, -1)
+
+        tb = self.CreateToolBar()
+        #tb = wxToolBar(self, -1, wxPyDefaultPosition, wxPyDefaultSize,
+        #               wxTB_HORIZONTAL | wxNO_BORDER | wxTB_FLAT)
+        #self.SetToolBar(tb)
+
+        tb.AddTool(10, wxNoRefBitmap('bitmaps/new.bmp',   wxBITMAP_TYPE_BMP),
+                        NULL, false, -1, -1, "New")
+        EVT_TOOL(self, 10, self.OnToolClick)
+        EVT_TOOL_RCLICKED(self, 10, self.OnToolRClick)
+
+        tb.AddTool(20, wxNoRefBitmap('bitmaps/open.bmp',  wxBITMAP_TYPE_BMP),
+                        NULL, false, -1, -1, "Open")
+        EVT_TOOL(self, 20, self.OnToolClick)
+        EVT_TOOL_RCLICKED(self, 20, self.OnToolRClick)
+
+        tb.AddSeparator()
+        tb.AddTool(30, wxNoRefBitmap('bitmaps/copy.bmp',  wxBITMAP_TYPE_BMP),
+                        NULL, false, -1, -1, "Copy")
+        EVT_TOOL(self, 30, self.OnToolClick)
+        EVT_TOOL_RCLICKED(self, 30, self.OnToolRClick)
+
+        tb.AddTool(40, wxNoRefBitmap('bitmaps/paste.bmp', wxBITMAP_TYPE_BMP),
+                        NULL, false, -1, -1, "Paste")
+        EVT_TOOL(self, 40, self.OnToolClick)
+        EVT_TOOL_RCLICKED(self, 40, self.OnToolRClick)
+
+        tb.AddSeparator()
+
+        tb.AddTool(50, wxNoRefBitmap('bitmaps/tog1.bmp', wxBITMAP_TYPE_BMP),
+                        NULL, true, -1, -1, "Toggle this")
+        EVT_TOOL(self, 50, self.OnToolClick)
+        EVT_TOOL_RCLICKED(self, 50, self.OnToolRClick)
+
+        tb.AddTool(60, wxNoRefBitmap('bitmaps/tog1.bmp', wxBITMAP_TYPE_BMP),
+                        wxNoRefBitmap('bitmaps/tog2.bmp', wxBITMAP_TYPE_BMP),
+                        true, -1, -1, "Toggle with 2 bitmaps")
+        EVT_TOOL(self, 60, self.OnToolClick)
+        EVT_TOOL_RCLICKED(self, 60, self.OnToolRClick)
+
+        tb.Realize()
+
+
+    def OnCloseWindow(self, event):
+        self.Destroy()
+
+    def OnToolClick(self, event):
+        self.log.WriteText("tool %s clicked\n" % event.GetId())
+
+    def OnToolRClick(self, event):
+        self.log.WriteText("tool %s right-clicked\n" % event.GetId())
+
+
+#---------------------------------------------------------------------------
+#---------------------------------------------------------------------------
 #---------------------------------------------------------------------------
 
 class AppFrame(wxFrame):
@@ -361,6 +513,18 @@ class AppFrame(wxFrame):
         mID = NewId()
         menu.Append(mID, '&Notebook')
         EVT_MENU(self, mID, self.OnTestNotebook)
+
+        mID = NewId()
+        menu.Append(mID, '&Splitter Window')
+        EVT_MENU(self, mID, self.OnTestSplitter)
+
+        mID = NewId()
+        menu.Append(mID, '&Custom StatusBar')
+        EVT_MENU(self, mID, self.OnTestCustomStatusBar)
+
+        mID = NewId()
+        menu.Append(mID, '&ToolBar')
+        EVT_MENU(self, mID, self.OnTestToolBar)
 
         return menu
 
@@ -492,6 +656,19 @@ class AppFrame(wxFrame):
         win = TestNotebookWindow(self)
         win.Show(true)
 
+    def OnTestSplitter(self, event):
+        win = TestSplitterWindow(self)
+        win.Show(true)
+
+    def OnTestCustomStatusBar(self, event):
+        win = TestCustomStatusBar(self)
+        win.Show(true)
+
+    def OnTestToolBar(self, event):
+        win = TestToolBar(self, self)
+        win.Show(true)
+
+
 #---------------------------------------------------------------------------
 
 
@@ -540,6 +717,9 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.5  1998/10/02 06:42:28  RD
+# Version 0.4 of wxPython for MSW.
+#
 # Revision 1.4  1998/08/27 21:59:51  RD
 # Some chicken-and-egg problems solved for wxPython on wxGTK
 #

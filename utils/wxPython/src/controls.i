@@ -18,6 +18,9 @@
 
 #ifdef __WXMSW__
 #include <wx/spinbutt.h>
+#if wxUSE_OWNER_DRAWN
+#include <wx/checklst.h>
+#endif
 #endif
 %}
 
@@ -32,6 +35,8 @@
 %import windows.i
 %import gdi.i
 %import events.i
+
+%pragma(python) code = "import wxp"
 
 //----------------------------------------------------------------------
 
@@ -58,6 +63,9 @@ public:
              long style = 0,
              const wxValidator& validator = wxPyDefaultValidator,
              char* name = "button");
+
+    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+
     void SetDefault();
 };
 
@@ -71,6 +79,8 @@ public:
                    long style = wxBU_AUTODRAW,
                    const wxValidator& validator = wxPyDefaultValidator,
                    char* name = "button");
+
+    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
 
     wxBitmap& GetBitmapLabel();
 #ifdef __WXMSW__
@@ -96,6 +106,8 @@ public:
                const wxValidator& val = wxPyDefaultValidator,
                char* name = "checkBox");
 
+    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+
     bool GetValue();
     void SetValue(const bool state);
 };
@@ -111,6 +123,8 @@ public:
              long style = 0,
              const wxValidator& validator = wxPyDefaultValidator,
              char* name = "choice");
+
+    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
 
     void Append(const wxString& item);
     void Clear();
@@ -136,6 +150,8 @@ public:
                long style = 0,
                const wxValidator& validator = wxPyDefaultValidator,
                char* name = "comboBox");
+
+    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
 
     void Append(const wxString& item);
     // TODO: void Append(const wxString& item, char* clientData);
@@ -175,6 +191,8 @@ public:
             const wxValidator& validator = wxPyDefaultValidator,
             char* name = "gauge");
 
+    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+
     int GetBezelFace();
     int GetRange();
     int GetShadowWidth();
@@ -207,6 +225,8 @@ public:
                  long style = 0,
                  char* name = "staticText");
 
+    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+
     wxString GetLabel();
     void SetLabel(const wxString& label);
 };
@@ -222,6 +242,8 @@ public:
               long style = 0,
               const wxValidator& validator = wxPyDefaultValidator,
               char* name = "listBox");
+
+    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
 
     void Append(const wxString& item);
     // TODO:    void Append(const wxString& item, char* clientData);
@@ -248,6 +270,29 @@ public:
 
 //----------------------------------------------------------------------
 
+#ifdef __WXMSW__
+class wxCheckListBox : public wxListBox {
+public:
+    wxCheckListBox(wxWindow *parent, wxWindowID id,
+                   const wxPoint& pos = wxPyDefaultPosition,
+                   const wxSize& size = wxPyDefaultSize,
+                   int LCOUNT = 0,
+                   wxString* LIST = NULL,
+                   long style = 0,
+                   const wxValidator& validator = wxPyDefaultValidator,
+                   char* name = "listBox");
+
+    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+
+    bool  IsChecked(int uiIndex);
+    void  Check(int uiIndex, bool bCheck = TRUE);
+
+    int GetItemHeight();
+};
+#endif
+
+//----------------------------------------------------------------------
+
 class wxTextCtrl : public wxControl {
 public:
     wxTextCtrl(wxWindow* parent, wxWindowID id, char* value = "",
@@ -256,6 +301,8 @@ public:
                long style = 0,
                const wxValidator& validator = wxPyDefaultValidator,
                char* name = "text");
+
+    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
 
     void Clear();
     void Copy();
@@ -301,6 +348,8 @@ public:
                 const wxValidator& validator = wxPyDefaultValidator,
                 char* name = "scrollBar");
 
+    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+
     int GetRange();
     int GetPageSize();
     int GetPosition();
@@ -341,6 +390,8 @@ public:
                    long style = 0,
                    char* name = "staticBitmap");
 
+    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+
     wxBitmap& GetBitmap();
     void SetBitmap(const wxBitmap& bitmap);
 };
@@ -358,6 +409,8 @@ public:
                long style = wxRA_HORIZONTAL,
                const wxValidator& validator = wxPyDefaultValidator,
                char* name = "radioBox");
+
+    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
 
     %name(EnableBox)void Enable(bool enable);
     void Enable(int n, bool enable);
@@ -388,6 +441,8 @@ public:
                   const wxValidator& validator = wxPyDefaultValidator,
                   char* name = "radioButton");
 
+    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+
     bool GetValue();
     void SetValue(bool value);
 };
@@ -403,6 +458,8 @@ public:
              long style = wxSL_HORIZONTAL,
              const wxValidator& validator = wxPyDefaultValidator,
              char* name = "slider");
+
+    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
 
     void ClearSel();
     void ClearTicks();
@@ -432,6 +489,9 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.4  1998/10/02 06:40:35  RD
+// Version 0.4 of wxPython for MSW.
+//
 // Revision 1.3  1998/08/18 19:48:14  RD
 // more wxGTK compatibility things.
 //

@@ -10,6 +10,7 @@ from gdi import *
 from events import *
 
 from controls import *
+import wxp
 class wxListItemPtr :
     def __init__(self,this):
         self.this = this
@@ -183,6 +184,10 @@ class wxListCtrlPtr(wxControlPtr):
     def GetCountPerPage(self):
         val = controls2c.wxListCtrl_GetCountPerPage(self.this)
         return val
+    def GetEditControl(self):
+        val = controls2c.wxListCtrl_GetEditControl(self.this)
+        val = wxTextCtrlPtr(val)
+        return val
     def GetImageList(self,arg0):
         val = controls2c.wxListCtrl_GetImageList(self.this,arg0)
         return val
@@ -308,6 +313,7 @@ class wxListCtrl(wxListCtrlPtr):
         args = tuple(argl)
         self.this = apply(controls2c.new_wxListCtrl,(arg0.this,arg1,)+args)
         self.thisown = 1
+        wxp._StdWindowCallbacks(self)
 
 
 
@@ -542,92 +548,7 @@ class wxTreeCtrl(wxTreeCtrlPtr):
         args = tuple(argl)
         self.this = apply(controls2c.new_wxTreeCtrl,(arg0.this,)+args)
         self.thisown = 1
-
-
-
-
-class wxTabEventPtr(wxCommandEventPtr):
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def __repr__(self):
-        return "<C wxTabEvent instance>"
-class wxTabEvent(wxTabEventPtr):
-    def __init__(self,this):
-        self.this = this
-
-
-
-
-class wxTabCtrlPtr(wxControlPtr):
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def DeleteAllItems(self):
-        val = controls2c.wxTabCtrl_DeleteAllItems(self.this)
-        return val
-    def DeleteItem(self,arg0):
-        val = controls2c.wxTabCtrl_DeleteItem(self.this,arg0)
-        return val
-    def GetImageList(self):
-        val = controls2c.wxTabCtrl_GetImageList(self.this)
-        return val
-    def GetItemCount(self):
-        val = controls2c.wxTabCtrl_GetItemCount(self.this)
-        return val
-    def GetItemImage(self,arg0):
-        val = controls2c.wxTabCtrl_GetItemImage(self.this,arg0)
-        return val
-    def GetItemRect(self,arg0):
-        val = controls2c.wxTabCtrl_GetItemRect(self.this,arg0)
-        val = wxRectPtr(val)
-        val.thisown = 1
-        return val
-    def GetItemText(self,arg0):
-        val = controls2c.wxTabCtrl_GetItemText(self.this,arg0)
-        return val
-    def GetRowCount(self):
-        val = controls2c.wxTabCtrl_GetRowCount(self.this)
-        return val
-    def GetSelection(self):
-        val = controls2c.wxTabCtrl_GetSelection(self.this)
-        return val
-    def HitTest(self,arg0):
-        val = controls2c.wxTabCtrl_HitTest(self.this,arg0.this)
-        return val
-    def InsertItem(self,arg0,arg1,*args):
-        val = apply(controls2c.wxTabCtrl_InsertItem,(self.this,arg0,arg1,)+args)
-        return val
-    def SetItemImage(self,arg0,arg1):
-        val = controls2c.wxTabCtrl_SetItemImage(self.this,arg0,arg1)
-        return val
-    def SetImageList(self,arg0):
-        val = controls2c.wxTabCtrl_SetImageList(self.this,arg0)
-        return val
-    def SetItemSize(self,arg0):
-        val = controls2c.wxTabCtrl_SetItemSize(self.this,arg0.this)
-        return val
-    def SetItemText(self,arg0,arg1):
-        val = controls2c.wxTabCtrl_SetItemText(self.this,arg0,arg1)
-        return val
-    def SetPadding(self,arg0):
-        val = controls2c.wxTabCtrl_SetPadding(self.this,arg0.this)
-        return val
-    def SetSelection(self,arg0):
-        val = controls2c.wxTabCtrl_SetSelection(self.this,arg0)
-        return val
-    def __repr__(self):
-        return "<C wxTabCtrl instance>"
-class wxTabCtrl(wxTabCtrlPtr):
-    def __init__(self,arg0,arg1,*args) :
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        try: argl[1] = argl[1].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(controls2c.new_wxTabCtrl,(arg0.this,arg1,)+args)
-        self.thisown = 1
+        wxp._StdWindowCallbacks(self)
 
 
 

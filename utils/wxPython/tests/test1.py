@@ -30,7 +30,6 @@ class MyFrame(wxFrame):
         print "size:", size.width, size.height
 
     def OnMove(self, event):
-        # Hmmm...  Doesn't seem to be implmented in wxWin yet...
         pos = event.GetPosition()
         print "pos:", pos.x, pos.y
 
@@ -66,6 +65,9 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.2  1998/10/02 06:42:27  RD
+# Version 0.4 of wxPython for MSW.
+#
 # Revision 1.1  1998/08/09 08:28:05  RD
 # Initial version
 #

@@ -16,6 +16,7 @@
 #include "helpers.h"
 #include <wx/grid.h>
 #include <wx/notebook.h>
+#include <wx/splitter.h>
 %}
 
 //----------------------------------------------------------------------
@@ -30,6 +31,8 @@
 %import windows.i
 %import controls.i
 %import events.i
+
+%pragma(python) code = "import wxp"
 
 //---------------------------------------------------------------------------
 
@@ -69,6 +72,8 @@ public:
            const wxSize& size=wxPyDefaultSize,
            long style=0,
            char* name="grid");
+
+    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
 
     void AdjustScrollbars();
     bool AppendCols(int n=1, bool updateLabels=TRUE);
@@ -189,6 +194,8 @@ public:
                long style = 0,
                char* name = "notebook");
 
+    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+
     int GetPageCount();
     int SetSelection(int nPage);
     void AdvanceSelection(bool bForward = TRUE);
@@ -221,9 +228,50 @@ public:
 };
 
 //---------------------------------------------------------------------------
+
+class wxSplitterWindow : public wxWindow {
+public:
+    wxSplitterWindow(wxWindow* parent, wxWindowID id,
+                     const wxPoint& point = wxPyDefaultPosition,
+                     const wxSize& size = wxPyDefaultSize,
+                     long style=wxSP_3D,
+                     char* name = "splitterWindow");
+
+    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+
+    int GetMinimumPaneSize();
+    int GetSashPosition();
+    int GetSplitMode();
+    wxWindow* GetWindow1();
+    wxWindow* GetWindow2();
+    void Initialize(wxWindow* window);
+    bool IsSplit();
+
+    // TODO:  How to handle callbacks that don't come from
+    //        event system???
+    //
+    //void OnDoubleClickSash(int x, int y);
+    //void OnUnsplit(wxWindow* removed);
+
+    void SetSashPosition(int position, int redraw = TRUE);
+    void SetMinimumPaneSize(int paneSize);
+    void SetSplitMode(int mode);
+    bool SplitHorizontally(wxWindow* window1, wxWindow* window2, int sashPosition = -1);
+    bool SplitVertically(wxWindow* window1, wxWindow* window2, int sashPosition = -1);
+    bool Unsplit(wxWindow* toRemove = NULL);
+};
+
+//---------------------------------------------------------------------------
+
+
+
+//---------------------------------------------------------------------------
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.4  1998/10/02 06:40:43  RD
+// Version 0.4 of wxPython for MSW.
+//
 // Revision 1.3  1998/08/18 19:48:20  RD
 // more wxGTK compatibility things.
 //

@@ -92,6 +92,8 @@ class wxSlider;
 class wxPyTimer;
 class wxIndividualLayoutConstraint;
 class wxLayoutConstraints;
+class wxToolBar;
+class wxStatusBar;
 
 //---------------------------------------------------------------------------
 
@@ -113,9 +115,6 @@ enum {
     wxMINOR_VERSION,
     wxRELEASE_NUMBER,
 
-#ifdef __WXMSW__
-    UNKNOWN,
-#endif
     NOT_FOUND,
 
     wxVSCROLL,
@@ -158,6 +157,7 @@ enum {
     wxTB_3DBUTTONS,
     wxTB_HORIZONTAL,
     wxTB_VERTICAL,
+    wxTB_FLAT,
     wxCOLOURED,
     wxFIXED_LENGTH,
     wxALIGN_LEFT,
@@ -486,6 +486,7 @@ enum _Virtual_keycodes {
 };
 
 typedef enum {
+ wxCURSOR_NONE = 0,
  wxCURSOR_ARROW =  1,
  wxCURSOR_BULLSEYE,
  wxCURSOR_CHAR,
@@ -511,13 +512,13 @@ typedef enum {
  wxCURSOR_WAIT,
  wxCURSOR_WATCH,
  wxCURSOR_BLANK
-//#ifdef __X__
-//  /* Not yet implemented for Windows */
-//  , wxCURSOR_CROSS_REVERSE,
-//  wxCURSOR_DOUBLE_ARROW,
-//  wxCURSOR_BASED_ARROW_UP,
-//  wxCURSOR_BASED_ARROW_DOWN
-//#endif
+//  #ifndef __WXMSW__
+//    /* Not yet implemented for Windows */
+//    , wxCURSOR_CROSS_REVERSE,
+//    wxCURSOR_DOUBLE_ARROW,
+//    wxCURSOR_BASED_ARROW_UP,
+//    wxCURSOR_BASED_ARROW_DOWN
+//  #endif
 } _standard_cursors_t;
 
 
@@ -697,6 +698,9 @@ enum wxEventType {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.5  1998/10/02 06:40:32  RD
+// Version 0.4 of wxPython for MSW.
+//
 // Revision 1.4  1998/08/18 19:48:11  RD
 // more wxGTK compatibility things.
 //

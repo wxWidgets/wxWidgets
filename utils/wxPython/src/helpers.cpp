@@ -44,6 +44,7 @@ extern HINSTANCE wxhInstance;
 //----------------------------------------------------------------------
 // This gets run when the DLL is loaded.  We just need to save a handle.
 //----------------------------------------------------------------------
+
 BOOL WINAPI DllMain(
     HINSTANCE   hinstDLL,    // handle to DLL module
     DWORD       fdwReason,   // reason for calling function
@@ -123,7 +124,7 @@ void __wxPreStart()
         return;
 
 #ifdef __WXMSW__
-    wxApp::Initialize((WXHINSTANCE)wxhInstance);
+    wxApp::Initialize();
 #endif
 #ifdef __WXGTK__
     wxClassInfo::InitializeClasses();
@@ -256,7 +257,7 @@ PyObject* __wxSetDictionary(PyObject* /* self */, PyObject* args)
 static
 PyObject* wxPyConstructObject(void* ptr, char* className)
 {
-    char    buff[64];               // should be big enough...
+    char    buff[64];               // should always be big enough...
     char    swigptr[64];
 
     sprintf(buff, "_%s_p", className);
@@ -361,7 +362,6 @@ void wxPyTimer::Notify() {
         PyErr_Print();
     }
 }
-
 
 
 
@@ -651,7 +651,11 @@ wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source) {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.10  1998/10/02 06:40:39  RD
+// Version 0.4 of wxPython for MSW.
+//
 // Revision 1.9  1998/09/25 13:28:52  VZ
+//
 // USE_xxx constants renamed to wxUSE_xxx. This is an incompatible change, you
 // must recompile everything after upgrading!
 //

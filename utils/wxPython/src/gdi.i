@@ -56,6 +56,7 @@ public:
 
 %new wxBitmap* wxEmptyBitmap(int width, int height, int depth=-1);
 wxBitmap* wxNoRefBitmap(char* name, long flags);
+
 %{                              // Alternate 'constructor'
     wxBitmap* wxEmptyBitmap(int width, int height, int depth=-1) {
         return new wxBitmap(width, height, depth);
@@ -117,9 +118,9 @@ public:
     bool Ok();
 };
 
-%new wxCursor* wxStockCursor(int id);
+%name(wxStockCursor) %new wxCursor* wxPyStockCursor(int id);
 %{                              // Alternate 'constructor'
-    wxCursor* wxStockCursor(int id) {
+    wxCursor* wxPyStockCursor(int id) {
         return new wxCursor(id);
     }
 %}
@@ -484,6 +485,9 @@ extern wxColour wxNullColour;
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.4  1998/10/02 06:40:38  RD
+// Version 0.4 of wxPython for MSW.
+//
 // Revision 1.3  1998/08/18 19:48:16  RD
 // more wxGTK compatibility things.
 //

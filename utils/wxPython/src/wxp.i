@@ -34,6 +34,8 @@
 %import controls2.i
 %import windows2.i
 %import cmndlgs.i
+%import stattool.i
+%import frames.i
 
 
 
@@ -107,6 +109,8 @@ extern "C" SWIGEXPORT(void,initmdic)();
 extern "C" SWIGEXPORT(void,initcontrolsc)();
 extern "C" SWIGEXPORT(void,initcontrols2c)();
 extern "C" SWIGEXPORT(void,initcmndlgsc)();
+extern "C" SWIGEXPORT(void,initstattoolc)();
+extern "C" SWIGEXPORT(void,initframesc)();
 
 %}
 
@@ -128,6 +132,9 @@ extern "C" SWIGEXPORT(void,initcmndlgsc)();
     initcontrolsc();
     initcontrols2c();
     initcmndlgsc();
+    initstattoolc();
+    initframesc();
+
 %}
 
 //----------------------------------------------------------------------
@@ -140,6 +147,9 @@ extern "C" SWIGEXPORT(void,initcmndlgsc)();
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.7  1998/10/02 06:40:44  RD
+// Version 0.4 of wxPython for MSW.
+//
 // Revision 1.6  1998/08/27 21:59:10  RD
 // Some chicken-and-egg problems solved for wxPython on wxGTK
 //

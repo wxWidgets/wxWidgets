@@ -58,7 +58,6 @@ extern "C" char *SWIG_GetPtr(char *, void **, char *);
 // Non-const versions to keep SWIG happy.
 extern wxPoint  wxPyDefaultPosition;
 extern wxSize   wxPyDefaultSize;
-extern char*    wxPyPanelNameStr;
 extern wxString wxPyEmptyStr;
 
 //----------------------------------------------------------------------
@@ -103,6 +102,9 @@ private:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.5  1998/10/02 06:40:40  RD
+// Version 0.4 of wxPython for MSW.
+//
 // Revision 1.4  1998/08/27 21:59:09  RD
 // Some chicken-and-egg problems solved for wxPython on wxGTK
 //

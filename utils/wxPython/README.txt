@@ -10,7 +10,7 @@ extremly cool object oriented language.  It's easier than Perl and
 nearly as powerful.  It runs on more platforms than Java, and by some
 reports, is even faster than Java with a JIT compiler!
 
-So why would you wan to use wxPython over just C++ and wxWindows?
+So why would you want to use wxPython over just C++ and wxWindows?
 Personally I prefer using Python for everything.  I only use C++ when
 I absolutly have to eek more performance out of an algorithm, and even
 then I ususally code it as an extension module and leave the majority
@@ -41,6 +41,20 @@ application will cause problems.  However there is a plan to support
 this in the future.
 
 
+What's New in 0.4
+-----------------
+1. Worked on wxGTK compatibility.  It is partially working.  On a
+Solaris/Sparc box wxPython is working but only when it is statically
+linked with the Python interpreter.  When built as a dyamically loaded
+extension module, things acting weirdly and it soon seg-faults.  And on
+Linux ???????  (I don't know.  I can't get wxGTK to build right now.
+I'll have to look into that... :-)
+
+2. Added Toolbar, StatusBar and SplitterWindow classes.
+
+3. Varioius bug fixes, enhancements, etc.
+
+
 
 Build Instructions
 ------------------
@@ -65,8 +79,9 @@ PYTHONPATH, such as the site-packages directory on Unix systems.
 Win32
 -----
 
-1. Build wxWindows with USE_RESOURCE_LOADING_IN_MSW set to 1 in
-include/wx/msw/setup.h so icons can be loaded dynamically.
+1. Build wxWindows with wxUSE_RESOURCE_LOADING_IN_MSW set to 1 in
+include/wx/msw/setup.h so icons can be loaded dynamically.  While
+there, make sure wxUSE_OWNER_DRAWN is also set to 1.
 
 2. Change into the $(WXWIN)/utils/wxPython/src directory.
 

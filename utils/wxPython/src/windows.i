@@ -36,6 +36,7 @@
 %import misc.i
 %import gdi.i
 
+%pragma(python) code = "import wxp"
 
 //---------------------------------------------------------------------------
 
@@ -65,6 +66,7 @@ public:
              long style = 0,
              char* name = "panel");
 
+    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
 
     void CaptureMouse();
     void Center(int direction = wxHORIZONTAL);
@@ -179,50 +181,6 @@ public:
 %}
 #endif
 
-//----------------------------------------------------------------------
-
-class wxFrame : public wxWindow {
-public:
-    wxFrame(wxWindow* parent, const wxWindowID id, const wxString& title,
-            const wxPoint& pos = wxPyDefaultPosition,
-            const wxSize& size = wxPyDefaultSize,
-            long style = wxDEFAULT_FRAME_STYLE,
-            char* name = "frame");
-
-    void Centre(int direction = wxBOTH);
-#ifdef __WXMSW__
-    void Command(int id);
-#endif
-    bool CreateStatusBar(int number = 1);
-    wxMenuBar* GetMenuBar();
-    wxStatusBar* GetStatusBar();
-    wxString GetTitle();
-    void Iconize(bool iconize);
-    bool IsIconized();
-    void Maximize(bool maximize);
-#ifdef __WXMSW__
-    void SetAcceleratorTable(const wxAcceleratorTable& accel);
-#endif
-    void SetIcon(const wxIcon& icon);
-    void SetMenuBar(wxMenuBar* menuBar);
-    void SetStatusText(const wxString& text, int number = 0);
-    void SetStatusWidths(int LCOUNT, int* LIST); // use typemap
-    void SetTitle(const wxString& title);
-
-};
-
-//---------------------------------------------------------------------------
-
-#ifdef __WXMSW__
-class wxMiniFrame : public wxFrame {
-public:
-    wxMiniFrame(wxWindow* parent, const wxWindowID id, const wxString& title,
-                const wxPoint& pos = wxPyDefaultPosition,
-                const wxSize& size = wxPyDefaultSize,
-                long style = wxDEFAULT_FRAME_STYLE,
-                char* name = "frame");
-};
-#endif
 
 //---------------------------------------------------------------------------
 
@@ -234,6 +192,8 @@ public:
             const wxSize& size = wxPyDefaultSize,
             long style = wxTAB_TRAVERSAL,
             const char* name = "panel");
+
+    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
 
     void InitDialog();
 };
@@ -249,6 +209,8 @@ public:
              const wxSize& size = wxPyDefaultSize,
              long style = wxDEFAULT_DIALOG_STYLE,
              const char* name = "dialogBox");
+
+    %pragma(python) addtomethod = "__init__:wxp._StdDialogCallbacks(self)"
 
     void Centre(int direction = wxBOTH);
     void EndModal(int retCode);
@@ -272,6 +234,9 @@ public:
                      const wxSize& size = wxPyDefaultSize,
                      long style = wxHSCROLL | wxVSCROLL,
                      char* name = "scrolledWindow");
+
+    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wxp._StdOnScrollCallbacks(self)"
 
     void EnableScrolling(bool xScrolling, bool yScrolling);
     void GetScrollPixelsPerUnit(int* OUTPUT, int* OUTPUT);
@@ -382,6 +347,9 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.6  1998/10/02 06:40:43  RD
+// Version 0.4 of wxPython for MSW.
+//
 // Revision 1.5  1998/08/17 18:29:40  RD
 // Removed an extra method definition
 //

@@ -50,14 +50,18 @@ TARGET = wxpc
 
 OBJECTS = wxp.obj        helpers.obj    windows.obj    events.obj     \
 	  misc.obj       gdi.obj        mdi.obj        controls.obj   \
-	  controls2.obj  windows2.obj   cmndlgs.obj
+	  controls2.obj  windows2.obj   cmndlgs.obj    stattool.obj   \
+	  frames.obj
+
 
 PYMODULES = $(TARGETDIR)\wxp.py       $(TARGETDIR)\events.py    \
 	    $(TARGETDIR)\windows.py   $(TARGETDIR)\misc.py      \
 	    $(TARGETDIR)\gdi.py       $(TARGETDIR)\mdi.py       \
 	    $(TARGETDIR)\controls.py  $(TARGETDIR)\controls2.py \
             $(TARGETDIR)\windows2.py  $(TARGETDIR)\cmndlgs.py   \
-            $(TARGETDIR)\__init__.py
+	    $(TARGETDIR)\stattool.py  $(TARGETDIR)\frames.py    \
+	    $(TARGETDIR)\__init__.py
+
 
 #----------------------------------------------------------------------
 
@@ -179,6 +183,8 @@ $(GENCODEDIR)/mdi.cpp       $(GENCODEDIR)/mdi.py       : mdi.i        my_typemap
 $(GENCODEDIR)/controls.cpp  $(GENCODEDIR)/controls.py  : controls.i   my_typemaps.i _defs.i
 $(GENCODEDIR)/controls2.cpp $(GENCODEDIR)/controls2.py : controls2.i  my_typemaps.i _defs.i
 $(GENCODEDIR)/cmndlgs.cpp   $(GENCODEDIR)/cmndlgs.py   : cmndlgs.i    my_typemaps.i _defs.i
+$(GENCODEDIR)/stattool.cpp  $(GENCODEDIR)/stattool.py  : stattool.i   my_typemaps.i _defs.i
+$(GENCODEDIR)/frames.cpp    $(GENCODEDIR)/frames.py    : frames.i     my_typemaps.i _defs.i
 
 
 $(TARGETDIR)\wxp.py       : $(GENCODEDIR)\wxp.py
@@ -191,13 +197,19 @@ $(TARGETDIR)\mdi.py       : $(GENCODEDIR)\mdi.py
 $(TARGETDIR)\controls.py  : $(GENCODEDIR)\controls.py
 $(TARGETDIR)\controls2.py : $(GENCODEDIR)\controls2.py
 $(TARGETDIR)\cmndlgs.py   : $(GENCODEDIR)\cmndlgs.py
+$(TARGETDIR)\frames.py  : $(GENCODEDIR)\frames.py
+$(TARGETDIR)\stattool.py  : $(GENCODEDIR)\stattool.py
 $(TARGETDIR)\__init__.py  : __init__.py
 
 
 #------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.6  1998/10/02 06:40:41  RD
+# Version 0.4 of wxPython for MSW.
+#
 # Revision 1.5  1998/08/19 00:38:23  RD
+#
 # A few tweaks
 #
 # Revision 1.4  1998/08/18 21:55:10  RD

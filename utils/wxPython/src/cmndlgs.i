@@ -52,6 +52,8 @@ class wxColourDialog : public wxDialog {
 public:
     wxColourDialog(wxWindow* parent, wxColourData* data = NULL);
 
+    %pragma(python) addtomethod = "__init__:wxp._StdDialogCallbacks(self)"
+
 #ifdef __WXMSW__
     wxColourData& GetColourData();
 #else
@@ -71,6 +73,8 @@ public:
                 char* defaultPath = "",
                 long style = 0,
                 const wxPoint& pos = wxPyDefaultPosition);
+
+    %pragma(python) addtomethod = "__init__:wxp._StdDialogCallbacks(self)"
 
     wxString GetPath();
     wxString GetMessage();
@@ -92,6 +96,8 @@ public:
                  char* wildcard = "*.*",
                  long style = 0,
                  const wxPoint& pos = wxPyDefaultPosition);
+
+    %pragma(python) addtomethod = "__init__:wxp._StdDialogCallbacks(self)"
 
     wxString GetDirectory();
     wxString GetFilename();
@@ -134,6 +140,8 @@ public:
         }
     }
 
+    %pragma(python) addtomethod = "__init__:wxp._StdDialogCallbacks(self)"
+
     int GetSelection();
     wxString GetStringSelection();
     void SetSelection(int sel);
@@ -151,6 +159,8 @@ public:
                       char* defaultValue = "",
                       long style = wxOK | wxCANCEL | wxCENTRE,
                       const wxPoint& pos = wxPyDefaultPosition);
+
+    %pragma(python) addtomethod = "__init__:wxp._StdDialogCallbacks(self)"
 
     wxString GetValue();
     void SetValue(const wxString& value);
@@ -183,6 +193,8 @@ public:
 class wxFontDialog : public wxDialog {
 public:
     wxFontDialog(wxWindow* parent, wxFontData* data = NULL);
+
+    %pragma(python) addtomethod = "__init__:wxp._StdDialogCallbacks(self)"
 
     wxFontData& GetFontData();
     int ShowModal();
@@ -230,6 +242,8 @@ class wxPageSetupDialog : public wxDialog {
 public:
     wxPageSetupDialog(wxWindow* parent, wxPageSetupData* data = NULL);
 
+    %pragma(python) addtomethod = "__init__:wxp._StdDialogCallbacks(self)"
+
     wxPageSetupData& GetPageSetupData();
     int ShowModal();
 };
@@ -271,6 +285,8 @@ class wxPrintDialog : public wxDialog {
 public:
     wxPrintDialog(wxWindow* parent, wxPrintData* data = NULL);
 
+    %pragma(python) addtomethod = "__init__:wxp._StdDialogCallbacks(self)"
+
     wxPrintData& GetPrintData();
     wxDC* GetPrintDC();
     int ShowModal();
@@ -287,6 +303,8 @@ public:
                     long style = wxOK | wxCANCEL | wxCENTRE,
                     const wxPoint& pos = wxPyDefaultPosition);
 
+    %pragma(python) addtomethod = "__init__:wxp._StdDialogCallbacks(self)"
+
     int ShowModal();
 };
 
@@ -296,6 +314,9 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.4  1998/10/02 06:40:34  RD
+// Version 0.4 of wxPython for MSW.
+//
 // Revision 1.3  1998/08/18 19:48:13  RD
 // more wxGTK compatibility things.
 //

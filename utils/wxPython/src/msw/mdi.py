@@ -6,6 +6,15 @@ from misc import *
 from windows import *
 
 from gdi import *
+
+from frames import *
+
+from stattool import *
+
+from controls import *
+
+from events import *
+import wxp
 class wxMDIParentFramePtr(wxFramePtr):
     def __init__(self,this):
         self.this = this
@@ -38,7 +47,7 @@ class wxMDIParentFramePtr(wxFramePtr):
         val = wxWindowPtr(val)
         return val
     def SetToolBar(self,arg0):
-        val = mdic.wxMDIParentFrame_SetToolBar(self.this,arg0)
+        val = mdic.wxMDIParentFrame_SetToolBar(self.this,arg0.this)
         return val
     def Tile(self):
         val = mdic.wxMDIParentFrame_Tile(self.this)
@@ -55,6 +64,7 @@ class wxMDIParentFrame(wxMDIParentFramePtr):
         args = tuple(argl)
         self.this = apply(mdic.new_wxMDIParentFrame,(arg0.this,arg1,arg2,)+args)
         self.thisown = 1
+        wxp._StdFrameCallbacks(self)
 
 
 
@@ -93,6 +103,7 @@ class wxMDIChildFrame(wxMDIChildFramePtr):
         args = tuple(argl)
         self.this = apply(mdic.new_wxMDIChildFrame,(arg0.this,arg1,arg2,)+args)
         self.thisown = 1
+        wxp._StdFrameCallbacks(self)
 
 
 
@@ -107,6 +118,8 @@ class wxMDIClientWindow(wxMDIClientWindowPtr):
     def __init__(self,arg0,*args) :
         self.this = apply(mdic.new_wxMDIClientWindow,(arg0.this,)+args)
         self.thisown = 1
+        wxp._StdWindowCallbacks(self)
+        wxp._StdOnScrollCallbacks(self)
 
 
 

@@ -26,6 +26,9 @@
 %import _defs.i
 %import misc.i
 %import windows.i
+%import frames.i
+
+%pragma(python) code = "import wxp"
 
 //----------------------------------------------------------------------
 
@@ -38,6 +41,8 @@ public:
                      const wxSize& size = wxPyDefaultSize,
                      long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
                      const char* name = "frame");
+
+    %pragma(python) addtomethod = "__init__:wxp._StdFrameCallbacks(self)"
 
     void ActivateNext();
     void ActivatePrevious();
@@ -69,6 +74,8 @@ public:
                     long style = wxDEFAULT_FRAME_STYLE,
                     const char* name = "frame");
 
+    %pragma(python) addtomethod = "__init__:wxp._StdFrameCallbacks(self)"
+
     void Activate();
     void Maximize();
     void Restore();
@@ -85,12 +92,17 @@ public:
 class wxMDIClientWindow : public wxWindow {
 public:
     wxMDIClientWindow(wxMDIParentFrame* parent, long style = 0);
+    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wxp._StdOnScrollCallbacks(self)"
 };
 
 //---------------------------------------------------------------------------
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.4  1998/10/02 06:40:41  RD
+// Version 0.4 of wxPython for MSW.
+//
 // Revision 1.3  1998/08/18 19:48:18  RD
 // more wxGTK compatibility things.
 //

@@ -16,7 +16,9 @@
 #include "helpers.h"
 #include <wx/listctrl.h>
 #include <wx/treectrl.h>
+#if 0
 #include <wx/tabctrl.h>
+#endif
 %}
 
 //----------------------------------------------------------------------
@@ -31,6 +33,8 @@
 %import gdi.i
 %import events.i
 %import controls.i
+
+%pragma(python) code = "import wxp"
 
 //----------------------------------------------------------------------
 
@@ -91,6 +95,8 @@ public:
                char* name = "listctrl");
 #endif
 
+    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+
     bool Arrange(int flag = wxLIST_ALIGN_DEFAULT);
     bool DeleteItem(long item);
     bool DeleteAllItems();
@@ -109,7 +115,7 @@ public:
     bool GetColumn(int col, wxListItem& item);
     int GetColumnWidth(int col);
     int GetCountPerPage();
-#ifdef __WXMSW
+#ifdef __WXMSW__
     wxTextCtrl* GetEditControl();
 #endif
     wxImageList* GetImageList(int which);
@@ -293,6 +299,8 @@ public:
             char* name = "wxTreeCtrl");
 #endif
 
+    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+
     bool DeleteAllItems();
 #ifdef __WXMSW__
     bool DeleteItem(long item);
@@ -372,6 +380,7 @@ public:
 
 //----------------------------------------------------------------------
 
+#ifdef SKIPTHIS
 #ifdef __WXMSW__
 class wxTabEvent : public wxCommandEvent {
 public:
@@ -386,6 +395,8 @@ public:
               const wxSize& size = wxPyDefaultSize,
               long style = 0,
               char* name = "tabCtrl");
+
+    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
 
     bool DeleteAllItems();
     bool DeleteItem(int item);
@@ -419,6 +430,7 @@ public:
 };
 
 #endif
+#endif
 
 //----------------------------------------------------------------------
 
@@ -426,6 +438,9 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.4  1998/10/02 06:40:36  RD
+// Version 0.4 of wxPython for MSW.
+//
 // Revision 1.3  1998/08/18 19:48:15  RD
 // more wxGTK compatibility things.
 //

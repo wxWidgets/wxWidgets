@@ -333,6 +333,7 @@ PYMODULES = $(GENCODEDIR)/wxp.py       $(GENCODEDIR)/events.py    \
 	    $(GENCODEDIR)/gdi.py       $(GENCODEDIR)/mdi.py       \
 	    $(GENCODEDIR)/controls.py  $(GENCODEDIR)/controls2.py \
             $(GENCODEDIR)/windows2.py  $(GENCODEDIR)/cmndlgs.py   \
+            $(GENCODEDIR)/frames.py    $(GENCODEDIR)/stattool.py   \
 	    __init__.py
 
 
@@ -359,6 +360,8 @@ $(GENCODEDIR)/mdi.cpp       $(GENCODEDIR)/mdi.py       : mdi.i        my_typemap
 $(GENCODEDIR)/controls.cpp  $(GENCODEDIR)/controls.py  : controls.i   my_typemaps.i _defs.i
 $(GENCODEDIR)/controls2.cpp $(GENCODEDIR)/controls2.py : controls2.i  my_typemaps.i _defs.i
 $(GENCODEDIR)/cmndlgs.cpp   $(GENCODEDIR)/cmndlgs.py   : cmndlgs.i    my_typemaps.i _defs.i
+$(GENCODEDIR)/frames.cpp    $(GENCODEDIR)/frames.py    : frames.i     my_typemaps.i _defs.i
+$(GENCODEDIR)/stattool.cpp  $(GENCODEDIR)/stattool.py  : stattool.i   my_typemaps.i _defs.i
 
 $(GENCODEDIR)/helpers.cpp:
 	ln -s `pwd`/helpers.cpp $@
