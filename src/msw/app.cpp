@@ -263,9 +263,9 @@ bool wxApp::RegisterWindowClasses()
   memset(&wndclass3, 0, sizeof(WNDCLASS));   // start with NULL defaults
   // Use CS_OWNDC to avoid messing about restoring the context
   // for every graphic operation.
-//  wndclass3.style         = CS_HREDRAW | CS_VREDRAW | CS_OWNDC | CS_DBLCLKS ; 
+//  wndclass3.style         = CS_HREDRAW | CS_VREDRAW | CS_OWNDC | CS_DBLCLKS ;
   // wxWin 2.0
-  wndclass3.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS ; 
+  wndclass3.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS ;
   wndclass3.lpfnWndProc   = (WNDPROC)wxWndProc;
   wndclass3.cbClsExtra    = 0;
   wndclass3.cbWndExtra    = sizeof( DWORD ); // was 4
@@ -330,7 +330,7 @@ void wxApp::CleanUp()
 
   if (wxWinHandleList)
     delete wxWinHandleList ;
-    
+
   // do it as the very last thing because everything else can log messages
   delete wxLog::SetActiveTarget(NULL);
 }
@@ -351,6 +351,8 @@ void wxApp::CommonInit()
 
   wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
   wxTheColourDatabase->Initialize();
+
+  wxInitializeStockLists();
   wxInitializeStockObjects();
 
 #if USE_WX_RESOURCES
@@ -458,10 +460,10 @@ int wxEntry(WXHINSTANCE hInstance, WXHINSTANCE WXUNUSED(hPrevInstance), char *m_
 
   // Split command line into tokens, as in usual main(argc, argv)
   char **command = new char*[50];
-  
+
   int count = 0;
   char *buf = new char[strlen(m_lpCmdLine) + 1];
-  
+
   // Hangs around until end of app. in case
   // user carries pointers to the tokens
 
@@ -563,7 +565,7 @@ int wxEntry(WXHINSTANCE hInstance, WXHINSTANCE WXUNUSED(hPrevInstance), char *m_
 		wxTheApp->SetTopWindow(NULL);
 	}
   }
-  
+
   wxTheApp->OnExit();
   wxApp::CleanUp();
 
@@ -681,7 +683,7 @@ bool wxApp::DoMessage()
   {
     return FALSE;
   }
-    
+
   // Process the message
   if (!ProcessMessage((WXMSG *)&s_currentMsg))
   {
@@ -856,7 +858,7 @@ void wxApp::DeletePendingObjects()
   while (node)
   {
     wxObject *obj = (wxObject *)node->Data();
-    
+
     delete obj;
 
     if (wxPendingDelete.Member(obj))
@@ -942,13 +944,13 @@ int wxApp::GetComCtl32Version() const
     // have we loaded COMCTL32 yet?
     HMODULE theModule = ::GetModuleHandle("COMCTL32");
     int version = 0;
-	
+
     // if so, then we can check for the version
     if (theModule)
     {
         // InitCommonControlsEx is unique to 4.7 and later
         FARPROC theProc = ::GetProcAddress(theModule, "InitCommonControlsEx");
-		
+
         if (! theProc)
         {                    // not found, must be 4.00
 			version = 400;
