@@ -231,7 +231,7 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
     // dialog/frame and all children will inherit it by defult
     if ( parent && (parent->GetExtraStyle() & wxWS_EX_VALIDATE_RECURSIVELY) )
     {
-        SetExtraStyle(wxWS_EX_VALIDATE_RECURSIVELY);
+        SetExtraStyle(GetExtraStyle() | wxWS_EX_VALIDATE_RECURSIVELY);
     }
 
     return TRUE;
