@@ -83,11 +83,20 @@ void wxHtmlHelpController::CreateHelpWindow(bool show_progress)
         m_helpFrame->Raise();
         return ;
     }
-    m_helpFrame = new wxHtmlHelpFrame(&m_helpData);
 
+    if (m_Config == NULL) 
+    {
+        m_Config = wxConfigBase::Get(FALSE);
+        if (m_Config != NULL)
+            m_ConfigRoot = _T("wxWindows/wxHtmlHelpController");
+    }
+
+    m_helpFrame = new wxHtmlHelpFrame(&m_helpData);
     m_helpFrame->PushEventHandler(this);
+
     if (m_Config)
         m_helpFrame->UseConfig(m_Config, m_ConfigRoot);
+
     m_helpFrame->Create(NULL, wxID_HTML_HELPFRAME, wxEmptyString, m_FrameStyle);
     m_helpFrame->RefreshLists(show_progress);
     m_helpFrame->SetTitleFormat(m_titleFormat);

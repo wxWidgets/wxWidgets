@@ -157,6 +157,11 @@ reads and writes settings (including wxHtmlWindow's settings) when needed.
 
 The only thing you must do is create wxConfig object and call UseConfig.
 
+If you do not use {\it UseConfig}, wxHtmlHelpController will use 
+default wxConfig object if available (for details see 
+\helpref{wxConfigBase::Get}{wxconfigbaseget} and 
+\helpref{wxConfigBase::Set}{wxconfigbaseset}).
+
 \membersection{wxHtmlHelpController::WriteCustomization}\label{wxhtmlhelpcontrollerwritecustomization}
 
 \func{void}{WriteCustomization}{\param{wxConfigBase* }{cfg}, \param{wxString }{path = wxEmptyString}}
