@@ -472,6 +472,7 @@ wxStatusBar* wxFrame::OnCreateStatusBar(
     SWP                             vSwp;
     ERRORID                         vError;
     wxString                        sError;
+    HWND                            hWnd;
 
     pStatusBar = wxFrameBase::OnCreateStatusBar( nNumber
                                                 ,lulStyle
@@ -483,25 +484,26 @@ wxStatusBar* wxFrame::OnCreateStatusBar(
     // is the handle to the client window of the frame.  We don't want that,
     // so we have to set the parent to actually be the Frame.
     //
-    ::WinSetParent(pStatusBar->GetHWND(), m_hFrame, FALSE);
+    hWnd = pStatusBar->GetHWND();
+    if (!::WinSetParent(hWnd, m_hFrame, FALSE))
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError("Error setting parent for submenu. Error: %s\n", sError);
-        return NULL;
+        wxLogError("Error setting parent for statusbar. Error: %s\n", sError);
+//      return NULL;
     }
 
     //
     // Also we need to reset it positioning to enable the SHOW attribute
     //
-    if (!::WinQueryWindowPos(pStatusBar->GetHWND(), &vSwp))
+    if (!::WinQueryWindowPos((HWND)pStatusBar->GetHWND(), &vSwp))
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError("Error setting parent for submenu. Error: %s\n", sError);
+        wxLogError("Error querying frame for statusbar position. Error: %s\n", sError);
         return NULL;
     }
-    if (!::WinSetWindowPos( pStatusBar->GetHWND()
+    if (!::WinSetWindowPos( (HWND)pStatusBar->GetHWND()
                            ,HWND_TOP
                            ,vSwp.cx
                            ,vSwp.cy
@@ -512,7 +514,7 @@ wxStatusBar* wxFrame::OnCreateStatusBar(
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError("Error setting parent for submenu. Error: %s\n", sError);
+        wxLogError("Error setting statusbar position. Error: %s\n", sError);
         return NULL;
     }
     return pStatusBar;

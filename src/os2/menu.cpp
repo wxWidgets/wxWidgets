@@ -325,17 +325,20 @@ bool wxMenu::DoInsertOrAppend(
 
     if (nPos == (size_t)-1)
     {
-	rItem.iPosition = MIT_END;
+        rItem.iPosition = MIT_END;
     }
     else
     {
-	rItem.iPosition = nPos;
+        rItem.iPosition = nPos;
     }
 
     APIRET                          rc;
 
-    rc = (APIRET)::WinSendMsg(GetHmenu(), MM_INSERTITEM,
-			      (MPARAM)&rItem, (MPARAM)pData);
+    rc = (APIRET)::WinSendMsg( GetHmenu()
+                              ,MM_INSERTITEM
+                              ,(MPARAM)&rItem
+                              ,(MPARAM)pData
+                             );
     if (rc == MIT_MEMERROR || rc == MIT_ERROR)
     {
         vError = ::WinGetLastError(vHabmain);
