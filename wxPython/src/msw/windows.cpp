@@ -11603,76 +11603,6 @@ static PyObject *_wrap_wxMenuItem_SetBitmaps(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
-#define wxMenuItem_SetBitmap(_swigobj,_swigarg0)  (_swigobj->SetBitmap(_swigarg0))
-static PyObject *_wrap_wxMenuItem_SetBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxMenuItem * _arg0;
-    wxBitmap * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","bmpChecked", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxMenuItem_SetBitmap",_kwnames,&_argo0,&_argo1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMenuItem_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenuItem_SetBitmap. Expected _wxMenuItem_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxMenuItem_SetBitmap. Expected _wxBitmap_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxMenuItem_SetBitmap(_arg0,*_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxMenuItem_GetBitmap(_swigobj,_swigarg0)  (_swigobj->GetBitmap(_swigarg0))
-static PyObject *_wrap_wxMenuItem_GetBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxBitmap * _result;
-    wxMenuItem * _arg0;
-    bool  _arg1 = (bool ) TRUE;
-    PyObject * _argo0 = 0;
-    int tempbool1 = (int) TRUE;
-    char *_kwnames[] = { "self","bChecked", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:wxMenuItem_GetBitmap",_kwnames,&_argo0,&tempbool1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMenuItem_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenuItem_GetBitmap. Expected _wxMenuItem_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxBitmap (wxMenuItem_GetBitmap(_arg0,_arg1));
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxBitmap_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
 #define wxMenuItem_SetMarginWidth(_swigobj,_swigarg0)  (_swigobj->SetMarginWidth(_swigarg0))
 static PyObject *_wrap_wxMenuItem_SetMarginWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -11804,14 +11734,87 @@ static PyObject *_wrap_wxMenuItem_ResetOwnerDrawn(PyObject *self, PyObject *args
     return _resultobj;
 }
 
+#define wxMenuItem_SetBitmap(_swigobj,_swigarg0)  (_swigobj->SetBitmap(_swigarg0))
+static PyObject *_wrap_wxMenuItem_SetBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxMenuItem * _arg0;
+    wxBitmap * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","bitmap", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxMenuItem_SetBitmap",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMenuItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenuItem_SetBitmap. Expected _wxMenuItem_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxMenuItem_SetBitmap. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxMenuItem_SetBitmap(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxMenuItem_GetBitmap(_swigobj)  (_swigobj->GetBitmap())
+static PyObject *_wrap_wxMenuItem_GetBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBitmap * _result;
+    wxMenuItem * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxMenuItem_GetBitmap",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMenuItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenuItem_GetBitmap. Expected _wxMenuItem_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    const wxBitmap & _result_ref = wxMenuItem_GetBitmap(_arg0);
+    _result = (wxBitmap *) &_result_ref;
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
 static PyMethodDef windowscMethods[] = {
+	 { "wxMenuItem_GetBitmap", (PyCFunction) _wrap_wxMenuItem_GetBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMenuItem_SetBitmap", (PyCFunction) _wrap_wxMenuItem_SetBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_ResetOwnerDrawn", (PyCFunction) _wrap_wxMenuItem_ResetOwnerDrawn, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_IsOwnerDrawn", (PyCFunction) _wrap_wxMenuItem_IsOwnerDrawn, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_GetDefaultMarginWidth", (PyCFunction) _wrap_wxMenuItem_GetDefaultMarginWidth, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_GetMarginWidth", (PyCFunction) _wrap_wxMenuItem_GetMarginWidth, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_SetMarginWidth", (PyCFunction) _wrap_wxMenuItem_SetMarginWidth, METH_VARARGS | METH_KEYWORDS },
-	 { "wxMenuItem_GetBitmap", (PyCFunction) _wrap_wxMenuItem_GetBitmap, METH_VARARGS | METH_KEYWORDS },
-	 { "wxMenuItem_SetBitmap", (PyCFunction) _wrap_wxMenuItem_SetBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_SetBitmaps", (PyCFunction) _wrap_wxMenuItem_SetBitmaps, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_GetBackgroundColour", (PyCFunction) _wrap_wxMenuItem_GetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_SetBackgroundColour", (PyCFunction) _wrap_wxMenuItem_SetBackgroundColour, METH_VARARGS | METH_KEYWORDS },

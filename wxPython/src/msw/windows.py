@@ -1128,13 +1128,6 @@ class wxMenuItemPtr(wxObjectPtr):
     def SetBitmaps(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuItem_SetBitmaps,(self,) + _args, _kwargs)
         return val
-    def SetBitmap(self, *_args, **_kwargs):
-        val = apply(windowsc.wxMenuItem_SetBitmap,(self,) + _args, _kwargs)
-        return val
-    def GetBitmap(self, *_args, **_kwargs):
-        val = apply(windowsc.wxMenuItem_GetBitmap,(self,) + _args, _kwargs)
-        if val: val = wxBitmapPtr(val) ; val.thisown = 1
-        return val
     def SetMarginWidth(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuItem_SetMarginWidth,(self,) + _args, _kwargs)
         return val
@@ -1146,6 +1139,13 @@ class wxMenuItemPtr(wxObjectPtr):
         return val
     def ResetOwnerDrawn(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuItem_ResetOwnerDrawn,(self,) + _args, _kwargs)
+        return val
+    def SetBitmap(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuItem_SetBitmap,(self,) + _args, _kwargs)
+        return val
+    def GetBitmap(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuItem_GetBitmap,(self,) + _args, _kwargs)
+        if val: val = wxBitmapPtr(val) 
         return val
     def __repr__(self):
         return "<C wxMenuItem instance at %s>" % (self.this,)

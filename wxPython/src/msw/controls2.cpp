@@ -5036,7 +5036,7 @@ static wxWindow * wxPyListCtrl_GetMainWindow(wxPyListCtrl *self) {
         #ifdef __WXMSW__
             return self;
         #else
-            return (wxWindow*)m_mainWin;
+            return (wxWindow*)self->m_mainWin;
         #endif
         }
 static PyObject *_wrap_wxListCtrl_GetMainWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
