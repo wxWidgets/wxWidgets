@@ -433,6 +433,11 @@ void wxTextCtrl::SetValue(const wxString& str)
         return ;
 
     GetPeer()->SetStringValue(str) ;
+
+    wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
+    event.SetString( GetValue() ) ;
+    event.SetEventObject( this );
+    GetEventHandler()->ProcessEvent(event);
 }
 
 void wxTextCtrl::SetMaxLength(unsigned long len)
