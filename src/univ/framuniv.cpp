@@ -195,8 +195,7 @@ wxPoint wxFrame::GetClientAreaOrigin() const
     }
 #endif // wxUSE_MENUS
 
-   // This is done in wxFrameBase already
-#if 0 // wxUSE_TOOLBAR
+#if wxUSE_TOOLBAR
     if ( m_frameToolBar )
     {
         if ( m_frameToolBar->GetWindowStyleFlag() & wxTB_VERTICAL )

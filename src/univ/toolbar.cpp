@@ -264,8 +264,10 @@ bool wxToolBar::Realize()
     {
         SetSize(sz.x, m_maxHeight);
     }
-    
-    SetSize( x+16, m_defaultHeight + 14 );
+
+    // Commenting out Robert's fix since the above should be
+    // more general
+    //    SetSize( x+16, m_defaultHeight + 14 );
     
     return TRUE;
 }
