@@ -516,11 +516,14 @@ class WXDLLIMPEXP_BASE wxDelegateTypeInfo : public wxTypeInfo
 {
 public :
     wxDelegateTypeInfo( int eventType , wxClassInfo* eventClass , converterToString_t to = NULL , converterFromString_t from = NULL ) ;
+    wxDelegateTypeInfo( int eventType , int lastEventType, wxClassInfo* eventClass , converterToString_t to = NULL , converterFromString_t from = NULL ) ;
     int GetEventType() const { return m_eventType ; }
+    int GetLastEventType() const { return m_lastEventType ; }
     const wxClassInfo* GetEventClass() const { return m_eventClass ; }
 private :
     const wxClassInfo *m_eventClass; // (extended will merge into classinfo)
     int m_eventType ;
+    int m_lastEventType ;
 } ;
 
 template<typename T> const wxTypeInfo* wxGetTypeInfo( T * ) { return wxTypeInfo::FindType(typeid(T).name()) ; }
@@ -1132,6 +1135,10 @@ WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxPropertyInfo* , wxPropertyInfoMap , clas
 #define WX_DELEGATE( name , eventType , eventClass ) \
     static wxDelegateTypeInfo _typeInfo##name( eventType , CLASSINFO( eventClass ) ) ; \
     static wxPropertyInfo _propertyInfo##name( first ,class_t::GetClassInfoStatic() , wxT(#name) , &_typeInfo##name , NULL , wxxVariant() ) ; \
+
+#define WX_DELEGATE_RANGE( name , eventType , lastEventType , eventClass ) \
+    static wxDelegateTypeInfo _typeInfo##name( eventType , lastEventType , CLASSINFO( eventClass ) ) ; \
+    static wxPropertyInfo _propertyInfo##name( first , class_t::GetClassInfoStatic() , wxT(#name) , &_typeInfo##name , NULL , wxxVariant() ) ; \
 
 // ----------------------------------------------------------------------------
 // Handler Info
