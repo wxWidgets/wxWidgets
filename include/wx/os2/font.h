@@ -42,6 +42,20 @@ public:
         (void)Create(nSize, nFamily, nStyle, nWeight, bUnderlined, rsFace, vEncoding);
     }
 
+    wxFont(const wxNativeFontInfo& rInfo)
+    {
+        Init();
+
+        (void)Create( rInfo.pointSize
+                     ,rInfo.family
+                     ,rInfo.style
+                     ,rInfo.weight
+                     ,rInfo.underlined
+                     ,rInfo.faceName
+                     ,rInfo.encoding
+                    );
+    }
+
     bool Create( int             nSize
                 ,int             nFamily
                 ,int             nStyle
