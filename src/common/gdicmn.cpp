@@ -384,7 +384,6 @@ void wxInitializeStockObjects ()
 void 
 wxDeleteStockObjects ()
 {
-
   wxDELETE(wxNORMAL_FONT);
   wxDELETE(wxSMALL_FONT);
   wxDELETE(wxITALIC_FONT);

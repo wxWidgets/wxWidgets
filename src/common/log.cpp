@@ -421,6 +421,9 @@ void wxLogGui::Flush()
   if ( !m_bHasMessages )
     return;
 
+  // do it right now to block any new calls to Flush() while we're here
+  m_bHasMessages = FALSE;
+  
   // @@@ ugly...
 
   // concatenate all strings (but not too many to not overfill the msg box)
@@ -449,7 +452,6 @@ void wxLogGui::Flush()
   }
 
   // no undisplayed messages whatsoever
-  m_bHasMessages =
   m_bErrors      = FALSE;
   m_aMessages.Empty();
 }

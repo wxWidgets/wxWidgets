@@ -269,7 +269,8 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
   m_width = width;
   m_height = height;
 
-  gtk_widget_set_usize( m_widget, width, height );
+  // VZ: why??
+  //gtk_widget_set_usize( m_widget, width, height );
 
   int main_x = 0;
   int main_y = 0;
@@ -514,10 +515,19 @@ void wxFrame::SetTitle( const wxString &title )
   gtk_window_set_title( GTK_WINDOW(m_widget), title );
 }
 
-void wxFrame::SetSizeHints(int minW, int minH, int maxW, int maxH, int WXUNUSED(incW) )
+void wxFrame::SetSizeHints(int minW, int minH,
+                           int WXUNUSED(maxW), int WXUNUSED(maxH),
+                           int WXUNUSED(incW) )
 {
+  // gdk_window_set_hints alone doesn't really prevent the user from shrinking
+  // the window to the size smaller than (minW, minH)
+  gtk_widget_set_usize( GTK_WIDGET(m_widget), minW, minH );
+
+  /*
   gdk_window_set_hints( m_widget->window, -1, -1, 
-	                minW, minH, maxW, maxH, GDK_HINT_MIN_SIZE | GDK_HINT_MIN_SIZE );
+	                      minW, minH, maxW, maxH,
+                        GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE );
+  */
 }
 
 void wxFrame::SetIcon( const wxIcon &icon )
