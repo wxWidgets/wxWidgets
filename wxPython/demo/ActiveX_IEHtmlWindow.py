@@ -160,7 +160,9 @@ class TestPanel(wx.Window):
 
     def OnNewWindow2(self, evt):
         self.logEvt(evt)
-##        evt.Veto()   # TODO
+        # Veto the new window.  Cancel is defined as an "out" param
+        # for this event.  See iewin.py
+        evt.Cancel = True   
 
     def OnProgressChange(self, evt):
         self.logEvt(evt)

@@ -328,7 +328,7 @@ bool wxIEHtmlWin::GoHome()
 {
     try
     {
-        CallMethod("GoHome");
+        CallMethod(_T("GoHome"));
         return true;
     }
     catch(exception&)

@@ -299,6 +299,7 @@ static swig_type_info *swig_types[18];
 
 // Some conversion helpers
 static wxVariant _PyObj2Variant(PyObject* value);
+static bool  _PyObj2Variant(PyObject* value, wxVariant& wv);
 static PyObject* _Variant2PyObj(wxVariant& value, bool useNone=False);
 static wxString  _VARTYPEname(VARTYPE vt);
 
@@ -306,9 +307,9 @@ static wxString  _VARTYPEname(VARTYPE vt);
 inline bool wxPyErr_Occurred()
 {
     bool rval;
-    wxPyBeginBlockThreads();
+    bool blocked = wxPyBeginBlockThreads();
     rval = PyErr_Occurred() != NULL;
-    wxPyEndBlockThreads();
+    wxPyEndBlockThreads(blocked);
     return rval;
 }
 
@@ -517,7 +518,7 @@ public:
         NameMap::const_iterator it = m_methodNames.find(name);
         if (it == m_methodNames.end())     {
             wxString msg;
-            msg << "method <" << name << "> not found";
+            msg << _T("method <") << name << _T("> not found");
             wxPyErr_SetString(PyExc_KeyError, msg.mb_str());
             static wxFuncX BadVal;
             return BadVal;
@@ -529,7 +530,7 @@ public:
         NameMap::const_iterator it = m_propNames.find(name);
         if (it == m_propNames.end())     {
             wxString msg;
-            msg << "property <" << name << "> not found";
+            msg << _T("property <") << name << _T("> not found");
             wxPyErr_SetString(PyExc_KeyError, msg.mb_str());
             static wxPropX BadVal;
             return BadVal;
@@ -549,11 +550,11 @@ public:
     void SetAXProp(const wxString& name, PyObject* value)
     {        
         const wxPropX& prop = GetAXPropDesc(name);
-        wxPyBeginBlockThreads();
+        bool blocked = wxPyBeginBlockThreads();
         if (! PyErr_Occurred() ) {
             if (! prop.CanSet()) {
                 wxString msg;
-                msg << "property <" << name << "> is readonly";
+                msg << _T("property <") << name << _T("> is readonly");
                 PyErr_SetString(PyExc_TypeError, msg.mb_str());
                 goto done;
             } else {
@@ -563,9 +564,9 @@ public:
                 VARIANT v = {prop.arg.vt};
                 if (!VariantToMSWVariant(wxV, v) || PyErr_Occurred()) {
                     wxString msg;
-                    msg << "Unable to convert value to expected type: ("
-                        << _VARTYPEname(prop.arg.vt) << ") for property <"
-                        << name << ">";
+                    msg << _T("Unable to convert value to expected type: (")
+                        << _VARTYPEname(prop.arg.vt) << _T(") for property <")
+                        << name << _T(">");
                     PyErr_SetString(PyExc_TypeError, msg.mb_str());
                     goto done;
                 }
@@ -576,7 +577,7 @@ public:
             }
         }
     done:
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
     }
 
     
@@ -585,11 +586,11 @@ public:
     {        
         PyObject* rval = NULL;
         const wxPropX& prop = GetAXPropDesc(name);
-        wxPyBeginBlockThreads();
+        bool blocked = wxPyBeginBlockThreads();
         if (! PyErr_Occurred() ) {
             if (! prop.CanGet()) {
                 wxString msg;
-                msg << "property <" << name << "> is writeonly";
+                msg << _T("property <") << name << _T("> is writeonly");
                 PyErr_SetString(PyExc_TypeError, msg.mb_str());
                 goto done;
             } else {
@@ -599,9 +600,9 @@ public:
                 wxVariant wv;
                 if (!MSWVariantToVariant(v, wv) || PyErr_Occurred()) {
                     wxString msg;
-                    msg << "Unable to convert value to expected type: ("
-                        << _VARTYPEname(prop.arg.vt) << ") for property <"
-                        << name << ">";
+                    msg << _T("Unable to convert value to expected type: (")
+                        << _VARTYPEname(prop.arg.vt) << _T(") for property <")
+                        << name << _T(">");
                     PyErr_SetString(PyExc_TypeError, msg.mb_str());
                     goto done;
                 }
@@ -610,7 +611,7 @@ public:
             }
         }
     done:
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
         return rval;
     }
 
@@ -631,7 +632,7 @@ public:
         PyObject* rval = NULL;
         const wxFuncX& func = GetAXMethodDesc(name);
         
-        wxPyBeginBlockThreads();
+        bool blocked = wxPyBeginBlockThreads();
         if (! PyErr_Occurred() ) {
             nargs = func.params.size();
             if (nargs > 0)
@@ -662,9 +663,9 @@ public:
                             goto done;
                         if (!VariantToMSWVariant(wxV, vargs[nargs - i - 1]) || PyErr_Occurred()) {
                             wxString msg;
-                            msg << "Unable to convert value to expected type: ("
+                            msg << _T("Unable to convert value to expected type: (")
                                 << _VARTYPEname(vargs[nargs - i - 1].vt)
-                                << ") for parameter " << i;
+                                << _T(") for parameter ") << i;
                             PyErr_SetString(PyExc_TypeError, msg.mb_str());
                             goto done;
                         }
@@ -711,7 +712,7 @@ public:
                 PyErr_Clear();
         }
     done:
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
         if (vargs) {
             for (int i = 0; i < nargs; i++)
                 VariantClear(&vargs[i]);
@@ -734,20 +735,30 @@ SWIG_CheckLong(PyObject* obj)
   }
 }
 
-void wxActiveXEvent__preInit(wxActiveXEvent *self,PyObject *pyself){
-            wxPyBeginBlockThreads();
+void wxActiveXEvent__preCallInit(wxActiveXEvent *self,PyObject *pyself){
+            bool blocked = wxPyBeginBlockThreads();
             PyObject* pList = PyList_New(0);
             PyObject_SetAttrString(pyself, "paramList", pList);
             Py_DECREF(pList);
             for (int i=0; i<self->ParamCount(); i+=1) {
-                PyObject* name = PyString_FromString((char*)self->ParamName(i).mb_str());
+                PyObject* name = PyString_FromString((char*)(const char*)self->ParamName(i).mb_str());
                 PyObject* val = _Variant2PyObj((*self)[i], True);
                 PyObject_SetAttr(pyself, name, val);
                 PyList_Append(pList, name);
                 Py_DECREF(val);
                 Py_DECREF(name);
             }
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
+        }
+void wxActiveXEvent__postCallCleanup(wxActiveXEvent *self,PyObject *pyself){
+            bool blocked = wxPyBeginBlockThreads();
+            for (int i=0; i<self->ParamCount(); i+=1) {
+                PyObject* val = PyObject_GetAttrString(
+                    pyself, (char*)(const char*)self->ParamName(i).mb_str());
+                _PyObj2Variant(val, (*self)[i]);
+                Py_DECREF(val);
+            }
+            wxPyEndBlockThreads(blocked);
         }
 
 
@@ -759,9 +770,11 @@ wxVariant _PyObj2Variant(PyObject* value)
     if (value == Py_None)
         return rval;
     
+#if PYTHON_API_VERSION >= 1012  // Python 2.3+
     else if (PyBool_Check(value))
         rval = (value == Py_True) ? true : false;
-
+#endif
+    
     else if (PyInt_Check(value))
         rval = PyInt_AS_LONG(value);
 
@@ -774,6 +787,7 @@ wxVariant _PyObj2Variant(PyObject* value)
     // TODO:    PyList of strings --> wxArrayString
     //          wxDateTime
     //          list of objects
+    //          etc.
 
     else {
         PyErr_SetString(PyExc_TypeError, "Unsupported object type in _PyObj2Variant");
@@ -783,6 +797,26 @@ wxVariant _PyObj2Variant(PyObject* value)
     return rval;
 }
 
+// This one uses the type of the variant to try and force the conversion
+bool  _PyObj2Variant(PyObject* value, wxVariant& wv)
+{
+    wxString type = wv.GetType();
+
+    if ( type == _T("long") || type == _T("bool") || type == _T("char") )
+        wv = PyInt_AsLong(value);
+
+    else if ( type == _T("string") )
+        wv = Py2wxString(value);
+
+    else if ( type == _T("double") )
+        wv  = PyFloat_AsDouble(value);
+
+    else {
+        // it's some other type that we dont' handle yet.  Log it?
+        return false;
+    }
+    return true;
+}
  
 // Caller should already have the GIL!
 PyObject* _Variant2PyObj(wxVariant& value, bool useNone)
@@ -801,8 +835,10 @@ PyObject* _Variant2PyObj(wxVariant& value, bool useNone)
     else if (value.IsType(_T("double")))
         rval = PyFloat_FromDouble(value);
 
-    else if (value.IsType(_T("bool"))) 
-        rval = PyBool_FromLong((bool)value);
+    else if (value.IsType(_T("bool"))) {
+        rval = (bool)value ? Py_True : Py_False;
+        Py_INCREF(rval);
+    }
     
     else if (value.IsType(_T("string")))
         rval = wx2PyString(value);
@@ -971,7 +1007,11 @@ public:
         // need to prepend this as poxy MSHTML will not recognise a HTML comment
         // as starting a html document and treats it as plain text
         // Does nayone know how to force it to html mode ?
-        pstrm->prepend = "<html>";
+#if wxUSE_UNICODE
+        // TODO: What to do in this case???
+#else
+        pstrm->prepend = _T("<html>");
+#endif
 
         // strip leading whitespace as it can confuse MSHTML
         wxAutoOleInterface<IStream> strm(pstrm);
@@ -1279,7 +1319,9 @@ static PyObject *_wrap_ParamX_isPtr_get(PyObject *self, PyObject *args, PyObject
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     result = (bool) ((arg1)->isPtr);
     
-    resultobj = PyBool_FromLong((bool)result);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -1300,7 +1342,9 @@ static PyObject *_wrap_ParamX_isSafeArray_get(PyObject *self, PyObject *args, Py
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     result = (bool) ((arg1)->isSafeArray);
     
-    resultobj = PyBool_FromLong((bool)result);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -1321,7 +1365,9 @@ static PyObject *_wrap_ParamX_isOptional_get(PyObject *self, PyObject *args, PyO
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     result = (bool) ((arg1)->isOptional);
     
-    resultobj = PyBool_FromLong((bool)result);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -1427,7 +1473,9 @@ static PyObject *_wrap_ParamX_IsIn(PyObject *self, PyObject *args, PyObject *kwa
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyBool_FromLong((bool)result);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -1453,7 +1501,9 @@ static PyObject *_wrap_ParamX_IsOut(PyObject *self, PyObject *args, PyObject *kw
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyBool_FromLong((bool)result);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -1479,7 +1529,9 @@ static PyObject *_wrap_ParamX_IsRetVal(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyBool_FromLong((bool)result);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -1555,7 +1607,9 @@ static PyObject *_wrap_FuncX_hasOut_get(PyObject *self, PyObject *args, PyObject
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     result = (bool) ((arg1)->hasOut);
     
-    resultobj = PyBool_FromLong((bool)result);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -1715,7 +1769,9 @@ static PyObject *_wrap_PropX_putByRef_get(PyObject *self, PyObject *args, PyObje
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     result = (bool) ((arg1)->putByRef);
     
-    resultobj = PyBool_FromLong((bool)result);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -1741,7 +1797,9 @@ static PyObject *_wrap_PropX_CanGet(PyObject *self, PyObject *args, PyObject *kw
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyBool_FromLong((bool)result);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -1767,7 +1825,9 @@ static PyObject *_wrap_PropX_CanSet(PyObject *self, PyObject *args, PyObject *kw
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyBool_FromLong((bool)result);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -1800,7 +1860,9 @@ static PyObject *_wrap_ParamXArray___nonzero__(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyBool_FromLong((bool)result);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -1892,7 +1954,9 @@ static PyObject *_wrap_FuncXArray___nonzero__(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyBool_FromLong((bool)result);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -1984,7 +2048,9 @@ static PyObject *_wrap_PropXArray___nonzero__(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyBool_FromLong((bool)result);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -2825,7 +2891,7 @@ static PyObject *_wrap_ActiveXEvent_EventName(PyObject *self, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_ActiveXEvent__preInit(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_ActiveXEvent__preCallInit(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxActiveXEvent *arg1 = (wxActiveXEvent *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -2835,13 +2901,41 @@ static PyObject *_wrap_ActiveXEvent__preInit(PyObject *self, PyObject *args, PyO
         (char *) "self",(char *) "pyself", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:ActiveXEvent__preInit",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:ActiveXEvent__preCallInit",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxActiveXEvent,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     arg2 = obj1;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxActiveXEvent__preInit(arg1,arg2);
+        wxActiveXEvent__preCallInit(arg1,arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ActiveXEvent__postCallCleanup(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxActiveXEvent *arg1 = (wxActiveXEvent *) 0 ;
+    PyObject *arg2 = (PyObject *) 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "pyself", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:ActiveXEvent__postCallCleanup",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxActiveXEvent,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = obj1;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxActiveXEvent__postCallCleanup(arg1,arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -3014,7 +3108,9 @@ static PyObject *_wrap_IEHtmlWindowBase_LoadString(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyBool_FromLong((bool)result);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -3066,7 +3162,9 @@ static PyObject *_wrap_IEHtmlWindowBase_LoadStream(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyBool_FromLong((bool)result);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (created2)
         delete arg2;
@@ -3220,7 +3318,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ActiveXWindow_swigregister", ActiveXWindow_swigregister, METH_VARARGS },
 	 { (char *)"RegisterActiveXEvent", (PyCFunction) _wrap_RegisterActiveXEvent, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ActiveXEvent_EventName", (PyCFunction) _wrap_ActiveXEvent_EventName, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"ActiveXEvent__preInit", (PyCFunction) _wrap_ActiveXEvent__preInit, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ActiveXEvent__preCallInit", (PyCFunction) _wrap_ActiveXEvent__preCallInit, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ActiveXEvent__postCallCleanup", (PyCFunction) _wrap_ActiveXEvent__postCallCleanup, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ActiveXEvent_swigregister", ActiveXEvent_swigregister, METH_VARARGS },
 	 { (char *)"new_IEHtmlWindowBase", (PyCFunction) _wrap_new_IEHtmlWindowBase, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"IEHtmlWindowBase_SetCharset", (PyCFunction) _wrap_IEHtmlWindowBase_SetCharset, METH_VARARGS | METH_KEYWORDS },

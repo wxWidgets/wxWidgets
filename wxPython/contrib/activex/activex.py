@@ -367,15 +367,13 @@ class ActiveXEvent(core.CommandEvent):
         return "<%s.%s; proxy of C++ wxActiveXEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     eventName = property(_activex.ActiveXEvent_EventName)
 
-    def _preInit(*args, **kwargs):
-        """
-        _preInit(PyObject pyself)
+    def _preCallInit(*args, **kwargs):
+        """_preCallInit(PyObject pyself)"""
+        return _activex.ActiveXEvent__preCallInit(*args, **kwargs)
 
-        This is called by the EventThunker before calling the handler.
-        We'll convert and load the ActiveX event parameters into
-        attributes of the Python event object.
-        """
-        return _activex.ActiveXEvent__preInit(*args, **kwargs)
+    def _postCallCleanup(*args, **kwargs):
+        """_postCallCleanup(PyObject pyself)"""
+        return _activex.ActiveXEvent__postCallCleanup(*args, **kwargs)
 
 
 class ActiveXEventPtr(ActiveXEvent):

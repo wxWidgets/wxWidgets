@@ -1029,12 +1029,12 @@ wxVariant& wxActiveXEvent::operator[] (wxString name)
             return m_params[i];
     };
 
-    wxString err = "wxActiveXEvent::operator[] invalid name <" + name + ">";
-    err += "\r\nValid Names = :\r\n";
+    wxString err = _T("wxActiveXEvent::operator[] invalid name <") + name + _T(">");
+    err += _T("\r\nValid Names = :\r\n");
     for (i = 0; i < m_params.GetCount(); i++)
     {
         err += m_params[i].GetName();
-        err += "\r\n";
+        err += _T("\r\n");
     };
 
     wxASSERT_MSG(false, err);
@@ -1293,7 +1293,7 @@ const wxActiveX::PropX& wxActiveX::GetPropDesc(const wxString& name) const
     if (it == m_propNames.end())
     {
         wxString s;
-        s << "property <" << name << "> not found";
+        s << _T("property <") << name << _T("> not found");
         throw exception(s.mb_str());
     };
 
@@ -1316,7 +1316,7 @@ const wxActiveX::FuncX& wxActiveX::GetMethodDesc(const wxString& name) const
     if (it == m_methodNames.end())
     {
         wxString s;
-        s << "method <" << name << "> not found";
+        s << _T("method <") << name << _T("> not found");
         throw exception(s.mb_str());
     };
 
@@ -1347,7 +1347,7 @@ void wxActiveX::SetProp(const wxString &name, const wxVariant &value)
     if (! prop.CanSet())
     {
         wxString s;
-        s << "property <" << name << "> is readonly";
+        s << _T("property <") << name << _T("> is readonly");
         throw exception(s.mb_str());
     };
 
@@ -1384,7 +1384,7 @@ VARIANT wxActiveX::GetPropAsVariant(const wxString& name)
     if (! prop.CanGet())
     {
         wxString s;
-        s << "property <" << name << "> is writeonly";
+        s << _T("property <") << name << _T("> is writeonly");
         throw exception(s.mb_str());
     };
 
@@ -2491,7 +2491,7 @@ wxOleInit::~wxOleInit()
 
 bool GetSysErrMessage(int err, wxString& s)
 {
-    char buf[256];
+    wxChar buf[256];
     if (FormatMessage(
         FORMAT_MESSAGE_FROM_SYSTEM, NULL,
         err,0, buf, sizeof(buf), NULL) == 0)
@@ -2512,73 +2512,73 @@ wxString OLEHResultToString(HRESULT hr)
     switch (hr)
     {
     case S_OK:
-        return "";
+        return wxEmptyString;
 
     case CONNECT_E_CANNOTCONNECT:
-        return "Cannot connect to event interface (maybe not there ?) - see MSDN";
+        return _T("Cannot connect to event interface (maybe not there ?) - see MSDN");
 
     case DISP_E_MEMBERNOTFOUND:
-        return "The requested member does not exist, or the call to Invoke tried to set the value of a read-only property.";
+        return _T("The requested member does not exist, or the call to Invoke tried to set the value of a read-only property.");
 
     case DISP_E_BADVARTYPE:
-        return "One of the parameters in rgvarg is not a valid variant type.";
+        return _T("One of the parameters in rgvarg is not a valid variant type.");
 
     case DISP_E_BADPARAMCOUNT:
-        return "The number of elements provided to DISPPARAMS is different from the number of parameters accepted by the method or property";
+        return _T("The number of elements provided to DISPPARAMS is different from the number of parameters accepted by the method or property");
 
     case DISP_E_EXCEPTION:
-        return "The application needs to raise an exception. In this case, the structure passed in pExcepInfo should be filled in.";
+        return _T("The application needs to raise an exception. In this case, the structure passed in pExcepInfo should be filled in.");
 
     case DISP_E_TYPEMISMATCH:
-        return "One or more of the parameters could not be coerced. The index within rgvarg of the first parameter with the incorrect type is returned in the puArgErr parameter.";
+        return _T("One or more of the parameters could not be coerced. The index within rgvarg of the first parameter with the incorrect type is returned in the puArgErr parameter.");
 
     case DISP_E_PARAMNOTOPTIONAL:
-        return "A required parameter was omitted.";
+        return _T("A required parameter was omitted.");
 
     case DISP_E_PARAMNOTFOUND:
-        return "One of the parameter DISPIDs does not correspond to a parameter on the method. In this case, puArgErr should be set to the first parameter that contains the error.";
+        return _T("One of the parameter DISPIDs does not correspond to a parameter on the method. In this case, puArgErr should be set to the first parameter that contains the error.");
 
     case OLECMDERR_E_UNKNOWNGROUP:
-        return "The pguidCmdGroup parameter is not NULL but does not specify a recognized command group.";
+        return _T("The pguidCmdGroup parameter is not NULL but does not specify a recognized command group.");
 
     case OLECMDERR_E_NOTSUPPORTED:
-        return "The nCmdID parameter is not a valid command in the group identified by pguidCmdGroup.";
+        return _T("The nCmdID parameter is not a valid command in the group identified by pguidCmdGroup.");
 
     case OLECMDERR_E_DISABLED:
-        return "The command identified by nCmdID is currently disabled and cannot be executed.";
+        return _T("The command identified by nCmdID is currently disabled and cannot be executed.");
 
     case OLECMDERR_E_NOHELP:
-        return "The caller has asked for help on the command identified by nCmdID, but no help is available.";
+        return _T("The caller has asked for help on the command identified by nCmdID, but no help is available.");
 
     case OLECMDERR_E_CANCELED:
-        return "The user canceled the execution of the command.";
+        return _T("The user canceled the execution of the command.");
 
     case E_INVALIDARG:
-        return "E_INVALIDARG";
+        return _T("E_INVALIDARG");
 
     case E_OUTOFMEMORY:
-        return "E_OUTOFMEMORY";
+        return _T("E_OUTOFMEMORY");
 
     case E_NOINTERFACE:
-        return "E_NOINTERFACE";
+        return _T("E_NOINTERFACE");
 
     case E_UNEXPECTED:
-        return "E_UNEXPECTED";
+        return _T("E_UNEXPECTED");
 
     case STG_E_INVALIDFLAG:
-        return "STG_E_INVALIDFLAG";
+        return _T("STG_E_INVALIDFLAG");
 
     case E_FAIL:
-        return "E_FAIL";
+        return _T("E_FAIL");
 
     case E_NOTIMPL:
-        return "E_NOTIMPL";
+        return _T("E_NOTIMPL");
 
     default:
         {
-            char buf[64];
-            sprintf(buf, "Unknown - 0x%X", hr);
-            return wxString(buf);
+            wxString buf;
+            buf.Printf(_T("Unknown - 0x%X"), hr);
+            return buf;
         }
     };
 };
@@ -2710,5 +2710,5 @@ wxString GetIIDName(REFIID riid)
       return s;
   }
   else
-      return "StringFromIID() error";
+      return _T("StringFromIID() error");
 }
