@@ -93,7 +93,7 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
         m_mainWindow = (WXWindow) xwindow;
         wxAddWindowToTable( xwindow, (wxWindow*) this );
         
-        XMapWindow( xdisplay, xwindow );
+        // XMapWindow( xdisplay, xwindow );
     
         xattributes.event_mask = 
             ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
@@ -128,6 +128,7 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
         m_clientWindow = (WXWindow) xwindow;
         wxAddClientWindowToTable( xwindow, (wxWindow*) this );
         
+        m_isShown = FALSE;
         XMapWindow( xdisplay, xwindow );
     }
     else
@@ -147,7 +148,8 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
         m_clientWindow = (WXWindow) xwindow;
         wxAddWindowToTable( xwindow, (wxWindow*) this );
         
-        XMapWindow( xdisplay, xwindow );
+        m_isShown = FALSE;
+        // XMapWindow( xdisplay, xwindow );
     }
 #else
     fixme

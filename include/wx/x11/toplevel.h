@@ -88,6 +88,7 @@ protected:
     virtual void OnInternalIdle();
 
     virtual void DoGetClientSize( int *width, int *height ) const;
+    virtual void DoGetSize( int *width, int *height ) const;
     virtual void DoSetClientSize(int width, int height);
     virtual void DoSetSize(int x, int y,
         int width, int height,

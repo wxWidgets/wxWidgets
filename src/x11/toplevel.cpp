@@ -452,12 +452,28 @@ void wxTopLevelWindowX11::DoGetClientSize( int *width, int *height ) const
        *height = m_height;
 }
 
+void wxTopLevelWindowX11::DoGetSize( int *width, int *height ) const
+{
+    // TODO add non-client size
+
+    if (width)
+       *width = m_width;
+    if (height)
+       *height = m_height;
+}
+
 void wxTopLevelWindowX11::DoSetClientSize(int width, int height)
 {
-    // wxLogDebug("DoSetClientSize: %s (%ld) %dx%d", GetClassInfo()->GetClassName(), GetId(), width, height);
-    
+    int old_width = m_width;
+    int old_height = m_height;
+
     m_width = width;
     m_height = height;
+    
+    if (m_width == old_width && m_height == old_height)
+        return;
+        
+    // wxLogDebug("DoSetClientSize: %s (%ld) %dx%d", GetClassInfo()->GetClassName(), GetId(), width, height);
     
 #if !wxUSE_NANOX
     XSizeHints size_hints;
@@ -472,7 +488,10 @@ void wxTopLevelWindowX11::DoSetClientSize(int width, int height)
 
 void wxTopLevelWindowX11::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
-    // wxLogDebug("DoSetSize: %s (%ld) %d, %d %dx%d", GetClassInfo()->GetClassName(), GetId(), x, y, width, height);
+    int old_x = m_x;
+    int old_y = m_y;
+    int old_width = m_width;
+    int old_height = m_height;
 
     if (x != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
         m_x = x;
@@ -485,7 +504,12 @@ void wxTopLevelWindowX11::DoSetSize(int x, int y, int width, int height, int siz
         
     if (height != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
         m_height = height;
+        
+    if (m_x == old_x && m_y == old_y && m_width == old_width && m_height == old_height)
+        return;
     
+    // wxLogDebug("DoSetSize: %s (%ld) %d, %d %dx%d", GetClassInfo()->GetClassName(), GetId(), x, y, width, height);
+
 #if !wxUSE_NANOX    
     XSizeHints size_hints;
     size_hints.flags = 0;
