@@ -1436,8 +1436,10 @@ void wxVariant::operator= (const wxVariant& variant)
             delete m_data;
         m_data = (wxVariantData*) variant.GetData()->GetClassInfo()->CreateObject();
     }
-//    GetData()->Copy(* variant.GetData());
+
     variant.GetData()->Copy(* GetData());
+
+    m_name = variant.m_name;
 }
 
 // Assignment using data, e.g.
