@@ -63,7 +63,11 @@ PreviewFrame *PreviewFrame::Get()
 PreviewFrame::PreviewFrame()
     : wxFrame(EditorFrame::Get(), -1, _("Preview"),
               wxDefaultPosition, wxDefaultSize, 
-              wxDEFAULT_FRAME_STYLE | wxFRAME_NO_TASKBAR | wxFRAME_TOOL_WINDOW)
+              wxDEFAULT_FRAME_STYLE | wxFRAME_NO_TASKBAR
+#ifdef __WXMSW__
+              | wxFRAME_TOOL_WINDOW
+#endif
+              )
 {
     m_Dirty = FALSE;
     ms_Instance = this;

@@ -170,7 +170,7 @@ void wxRemotelyScrolledTreeCtrl::PrepareDC(wxDC& dc)
         scrolledWindow->GetScrollPixelsPerUnit(& xppu2, & yppu2);
 
         dc.SetDeviceOrigin( -startX * xppu1, -startY * yppu2 );
-        dc.SetUserScale( win->GetScaleX(), win->GetScaleY() );
+        //dc.SetUserScale( win->GetScaleX(), win->GetScaleY() );
     }
 }
 
@@ -576,7 +576,7 @@ void wxSplitterScrolledWindow::OnScroll(wxScrollWinEvent& event)
 
     int orient = event.GetOrientation();
 
-    int nScrollInc = CalcScrollInc(event);
+    int nScrollInc = 16;// FIXME CalcScrollInc(event);
     if (nScrollInc == 0)
     {
         inOnScroll = FALSE;

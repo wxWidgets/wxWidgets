@@ -255,7 +255,7 @@ void EditorFrame::SaveFile(const wxString& filename)
 {
     m_FileName = filename;
 
-    if (!m_Resource->Save(filename, wxXML_IO_LIBXML))
+    if (!m_Resource->Save(filename))
         wxLogError(_("Error saving ") + filename);
     else
         m_Modified = FALSE;

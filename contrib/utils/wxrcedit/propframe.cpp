@@ -201,7 +201,11 @@ PropertiesFrame *PropertiesFrame::Get()
 PropertiesFrame::PropertiesFrame()
     : wxFrame(EditorFrame::Get(), -1, _("Properties"),
               wxDefaultPosition, wxDefaultSize,
-              wxDEFAULT_FRAME_STYLE | wxFRAME_NO_TASKBAR | wxFRAME_TOOL_WINDOW)
+              wxDEFAULT_FRAME_STYLE | wxFRAME_NO_TASKBAR 
+#ifdef __WXMSW__
+              | wxFRAME_TOOL_WINDOW
+#endif
+              )
 {
     ms_Instance = this;
     m_Node = NULL;

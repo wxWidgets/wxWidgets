@@ -1,5 +1,7 @@
 #include "wx/msw/wx.rc"
 
+aaa      ICON   mondrian.ico
+
 close    BITMAP bitmaps/close.bmp
 open     BITMAP bitmaps/open.bmp
 preview  BITMAP bitmaps/preview.bmp
