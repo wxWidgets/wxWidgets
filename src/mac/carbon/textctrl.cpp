@@ -332,12 +332,18 @@ static pascal void TPPaneIdleProc(ControlHandle theControl) {
                     RectRgn((theRgn = NewRgn()), &varsp->fRTextArea);
                     TXNAdjustCursor(varsp->fTXNRec, theRgn);
                     DisposeRgn(theRgn);
-                 } else SetThemeCursor(kThemeArrowCursor);
+                 } 
+                 else 
+                 {
+                 //	SetThemeCursor(kThemeArrowCursor);
+                 }
             } else {
                 /* if it's in our bounds, set the cursor */
                 GetControlBounds(theControl, &bounds);
                 if (PtInRect(mousep, &bounds))
-                    SetThemeCursor(kThemeArrowCursor);
+                {
+                //    SetThemeCursor(kThemeArrowCursor);
+                }
             }
             
             HSetState((Handle) tpvars, state);
@@ -829,12 +835,14 @@ void wxTextCtrl::SetValue(const wxString& st)
     else
     {
         bool formerEditable = IsEditable() ;
-        SetEditable(true) ;
+        if ( !formerEditable )
+        	SetEditable(true) ;
       	TXNSetData( ((TXNObject) m_macTXN), kTXNTextData,  (void*)value.c_str(), value.Length(),
       	  kTXNStartOffset, kTXNEndOffset);
       	TXNSetSelection( (TXNObject) m_macTXN, 0, 0);
         TXNShowSelection( (TXNObject) m_macTXN, kTXNShowStart);
-        SetEditable(formerEditable) ;
+        if ( !formerEditable )
+        	SetEditable(formerEditable) ;
     }
     MacRedrawControl() ;
 }
@@ -849,7 +857,8 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
     if ( m_macUsesTXN )
     {
         bool formerEditable = IsEditable() ;
-        SetEditable(true) ;
+        if ( !formerEditable )
+        	SetEditable(true) ;
 		TXNTypeAttributes typeAttr[4] ;
 		Str255 fontName = "\pMonaco" ;
 		SInt16 fontSize = 12 ;
@@ -895,7 +904,8 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
                 start,end);
             wxASSERT_MSG( status == noErr , "Couldn't set text attributes" ) ;
         }
-        SetEditable(formerEditable) ;
+        if ( !formerEditable )
+        	SetEditable(formerEditable) ;
     }
     return TRUE ;
 }
@@ -1110,12 +1120,14 @@ void wxTextCtrl::Replace(long from, long to, const wxString& value)
     else
     {
         bool formerEditable = IsEditable() ;
-        SetEditable(true) ;
+        if ( !formerEditable )
+        	SetEditable(true) ;
 	    TXNSetSelection( ((TXNObject) m_macTXN) , from , to ) ;
 	    TXNClear( ((TXNObject) m_macTXN) ) ;
   	    TXNSetData( ((TXNObject) m_macTXN), kTXNTextData,  (void*)value.c_str(), value.Length(),
   	    kTXNUseCurrentSelection, kTXNUseCurrentSelection);
-  	    SetEditable( formerEditable ) ;
+        if ( !formerEditable )
+  	    	SetEditable( formerEditable ) ;
     }
     Refresh() ;
 }
@@ -1134,10 +1146,12 @@ void wxTextCtrl::Remove(long from, long to)
   else
   {
     bool formerEditable = IsEditable() ;
-    SetEditable(true) ;
+    if ( !formerEditable )
+    	SetEditable(true) ;
     TXNSetSelection( ((TXNObject) m_macTXN) , from , to ) ; 
     TXNClear( ((TXNObject) m_macTXN) ) ; 
-    SetEditable( formerEditable ) ;
+    if ( !formerEditable )
+    	SetEditable( formerEditable ) ;
   }
     Refresh() ;
 }
@@ -1196,14 +1210,16 @@ void wxTextCtrl::WriteText(const wxString& text)
     else
     {
         bool formerEditable = IsEditable() ;
-        SetEditable(true) ;
+        if ( !formerEditable )
+        	SetEditable(true) ;
 	    long start , end , dummy ;
 	    GetSelection( &start , &dummy ) ;
         TXNSetData( ((TXNObject) m_macTXN), kTXNTextData, (void*) (const char*)value, value.Length(),
           kTXNUseCurrentSelection, kTXNUseCurrentSelection);
     	GetSelection( &dummy , &end ) ;
         SetStyle( start , end , GetDefaultStyle() ) ;
-    	SetEditable( formerEditable ) ;
+        if ( !formerEditable )
+   			SetEditable( formerEditable ) ;
     }
     MacRedrawControl() ;
 }
