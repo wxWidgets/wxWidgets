@@ -27,7 +27,7 @@
 #endif
 
 // standard
-#if   defined(__WXMSW__) && !defined(__GNUWIN32__)
+#if defined(__WXMSW__) && !defined(__GNUWIN32__) && !defined(__WXWINE__)
   #include  <io.h>
 
 #ifndef __SALFORDC__

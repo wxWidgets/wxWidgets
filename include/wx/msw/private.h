@@ -51,19 +51,6 @@ WXDLLEXPORT_DATA(extern HICON) wxDEFAULT_MDICHILDFRAME_ICON;
 WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
 
 // ---------------------------------------------------------------------------
-// WINE implements the Win32 API
-// ---------------------------------------------------------------------------
-
-#ifdef __WXWINE__
-  #ifndef __WIN32__
-    #define __WIN32__
-  #endif
-  #ifndef STRICT
-    #define STRICT
-  #endif
-#endif
-
-// ---------------------------------------------------------------------------
 // this defines a CASTWNDPROC macro which casts a pointer to the type of a
 // window proc
 // ---------------------------------------------------------------------------

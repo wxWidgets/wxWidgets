@@ -666,7 +666,11 @@ bool wxListCtrl::GetItemRect(long item, wxRect& rect, int code) const
     else if ( code == wxLIST_RECT_LABEL )
         code2 = LVIR_LABEL;
 
+#ifdef __WXWINE__
+    bool success = (ListView_GetItemRect((HWND) GetHWND(), (int) item, &rect2 ) != 0);
+#else
     bool success = (ListView_GetItemRect((HWND) GetHWND(), (int) item, &rect2, code2) != 0);
+#endif
 
     rect.x = rect2.left;
     rect.y = rect2.top;

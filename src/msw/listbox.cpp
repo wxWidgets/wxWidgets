@@ -20,7 +20,6 @@
     #pragma hdrstop
 #endif
 
-#include <windowsx.h>
 #include "wx/window.h"
 #include "wx/msw/private.h"
 
@@ -32,6 +31,14 @@
 #include "wx/dc.h"
 #endif
 
+#include <windowsx.h>
+
+#ifdef __WXWINE__
+  #if defined(GetWindowStyle)
+    #undef GetWindowStyle
+  #endif
+#endif
+
 #include "wx/dynarray.h"
 #include "wx/log.h"
 
@@ -40,11 +47,37 @@
 #endif
 
 #ifndef __TWIN32__
-    #ifdef __GNUWIN32__
+    #if defined(__GNUWIN32__)
         #include <wx/msw/gnuwin32/extra.h>
     #endif
 #endif
 
+#ifdef __WXWINE__
+  #ifndef ListBox_SetItemData
+    #define ListBox_SetItemData(hwndCtl, index, data) \
+      ((int)(DWORD)SendMessage((hwndCtl), LB_SETITEMDATA, (WPARAM)(int)(index), (LPARAM)(data)))
+  #endif
+  #ifndef ListBox_GetHorizontalExtent
+    #define ListBox_GetHorizontalExtent(hwndCtl) \
+      ((int)(DWORD)SendMessage((hwndCtl), LB_GETHORIZONTALEXTENT, 0L, 0L))
+  #endif
+  #ifndef ListBox_GetSelCount
+    #define ListBox_GetSelCount(hwndCtl) \
+      ((int)(DWORD)SendMessage((hwndCtl), LB_GETSELCOUNT, 0L, 0L))
+  #endif
+  #ifndef ListBox_GetSelItems
+    #define ListBox_GetSelItems(hwndCtl, cItems, lpItems) \
+      ((int)(DWORD)SendMessage((hwndCtl), LB_GETSELITEMS, (WPARAM)(int)(cItems), (LPARAM)(int *)(lpItems)))
+  #endif
+  #ifndef ListBox_GetTextLen
+    #define ListBox_GetTextLen(hwndCtl, index) \
+      ((int)(DWORD)SendMessage((hwndCtl), LB_GETTEXTLEN, (WPARAM)(int)(index), 0L))
+  #endif
+  #ifndef ListBox_GetText
+    #define ListBox_GetText(hwndCtl, index, lpszBuffer) \
+      ((int)(DWORD)SendMessage((hwndCtl), LB_GETTEXT, (WPARAM)(int)(index), (LPARAM)(LPCTSTR)(lpszBuffer)))
+  #endif
+#endif
 
 #if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)

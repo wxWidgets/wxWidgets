@@ -25,7 +25,7 @@
     #include <iostream>
 #endif
 
-#if defined(__WIN95__) && !defined(__TWIN32__)
+#if defined(__WIN95__) && !defined(__TWIN32__) && !defined(__WXWINE__)
     #define wxUSE_RICHEDIT 1
 #else
     #define wxUSE_RICHEDIT 0

@@ -38,7 +38,73 @@ libwx_msw_la_SOURCES = \
  variant.cpp \
  wxchar.cpp \
 \
+ config.cpp \
+ date.cpp \
+ datstrm.cpp \
+ dcbase.cpp \
+ docmdi.cpp \
+ docview.cpp \
+ dynlib.cpp \
+ event.cpp \
+ file.cpp \
+ fileconf.cpp \
+ framecmn.cpp \
+ ftp.cpp \
+ gdicmn.cpp \
+ helpbase.cpp \
+ http.cpp \
+ image.cpp \
+ imaggif.cpp \
+ imagjpeg.cpp \
+ imagpng.cpp \
+ intl.cpp \
+ ipcbase.cpp \
+ layout.cpp \
+ log.cpp \
+ longlong.cpp \
+ mimetype.cpp \
+ mstream.cpp \
+ objstrm.cpp \
+ paper.cpp \
+ prntbase.cpp \
+ process.cpp \
+ protocol.cpp \
+ resource.cpp \
+ sckaddr.cpp \
+ sckfile.cpp \
+ sckint.cpp \
+ sckipc.cpp \
+ sckstrm.cpp \
+ serbase.cpp \
+ socket.cpp \
+ stream.cpp \
+ tbarbase.cpp \
+ tbarsmpl.cpp \
+ textfile.cpp \
+ time.cpp \
+ url.cpp \
+ validate.cpp \
+ valtext.cpp \
+ wfstream.cpp \
  wincmn.cpp \
+ wxexpr.cpp \
+ zstream.cpp \
+\
+ choicdgg.cpp \
+ gridg.cpp \
+ laywin.cpp \
+ panelg.cpp \
+ printps.cpp \
+ progdlgg.cpp \
+ prop.cpp \
+ propform.cpp \
+ proplist.cpp \
+ sashwin.cpp \
+ scrolwin.cpp \
+ splitter.cpp \
+ statusbr.cpp \
+ tabg.cpp \
+ textdlgg.cpp \
 \
  accel.cpp \
  app.cpp \
@@ -48,7 +114,6 @@ libwx_msw_la_SOURCES = \
  button.cpp \
  caret.cpp \
  checkbox.cpp \
- checklst.cpp \
  choice.cpp \
  clipbrd.cpp \
  colour.cpp \
@@ -66,17 +131,17 @@ libwx_msw_la_SOURCES = \
  filedlg.cpp \
  font.cpp \
  frame.cpp \
- gaugemsw.cpp \
+ gauge95.cpp \
  gdiobj.cpp \
  icon.cpp \
  imaglist.cpp \
  listbox.cpp \
- listctrlc.cpp \
  main.cpp \
  mdi.cpp \
  menu.cpp \
  menuitem.cpp \
  minifram.cpp \
+ msgdlg.cpp \
  notebook.cpp \
  ownerdrw.cpp \
  palette.cpp \
@@ -88,17 +153,16 @@ libwx_msw_la_SOURCES = \
  registry.cpp \
  scrolbar.cpp \
  settings.cpp \
- slidermsw.cpp \
+ slider95.cpp \
  spinbutt.cpp \
  statbmp.cpp \
  statbox.cpp \
  stattext.cpp \
- tbarmsw.cpp \
+ tbar95.cpp \
  textctrl.cpp \
  thread.cpp \
  timer.cpp \
  tooltip.cpp \
- treectrl.cpp \
  utils.cpp \
  utilsexc.cpp \
  wave.cpp \

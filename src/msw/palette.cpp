@@ -77,6 +77,12 @@ bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *gre
 {
   UnRef();
 
+#ifdef __WXWINE__
+
+  return (FALSE);
+  
+#else
+
   m_refData = new wxPaletteRefData;
 
   NPLOGPALETTE npPal = (NPLOGPALETTE)LocalAlloc(LMEM_FIXED, sizeof(LOGPALETTE) +
@@ -98,6 +104,8 @@ bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *gre
   M_PALETTEDATA->m_hPalette = (WXHPALETTE) CreatePalette((LPLOGPALETTE)npPal);
   LocalFree((HANDLE)npPal);
   return TRUE;
+  
+#endif
 }
 
 int wxPalette::GetPixel(const unsigned char red, const unsigned char green, const unsigned char blue) const

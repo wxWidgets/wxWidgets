@@ -124,6 +124,18 @@
 #define __WIN32__
 #endif
 
+#ifdef __WXWINE__
+  #ifndef __WIN32__
+    #define __WIN32__
+  #endif
+  #ifndef __WIN95__
+    #define __WIN95__
+  #endif
+  #ifndef STRICT
+    #define STRICT
+  #endif
+#endif
+
 #ifndef __WIN32__
 #define __WIN16__
 #endif
@@ -1286,7 +1298,7 @@ typedef void *          WXDRAWITEMSTRUCT;
 typedef void *          WXMEASUREITEMSTRUCT;
 typedef void *          WXLPCREATESTRUCT;
 
-#ifdef __GNUWIN32__
+#if defined(__GNUWIN32__) || defined(__WXWINE__)
     typedef int (*WXFARPROC)();
 #elif defined(__WIN32__)
     typedef int (__stdcall *WXFARPROC)();

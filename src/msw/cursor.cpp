@@ -54,7 +54,11 @@ wxCursorRefData::wxCursorRefData(void)
 wxCursorRefData::~wxCursorRefData(void)
 {
     if ( m_hCursor && m_destroyCursor)
+#ifdef __WXWINE__
+        ::DestroyCursor((HCURSOR) m_hCursor);
+#else
         ::DestroyCursor((HICON) m_hCursor);
+#endif
 }
 
 // Cursors

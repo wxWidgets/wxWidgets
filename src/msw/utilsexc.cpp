@@ -36,7 +36,7 @@
 
 #include <ctype.h>
 
-#if !defined(__GNUWIN32__) && !defined(__SALFORDC__)
+#if !defined(__GNUWIN32__) && !defined(__WXWINE__) && !defined(__SALFORDC__)
 #include <direct.h>
 #ifndef __MWERKS__
 #include <dos.h>
@@ -50,7 +50,7 @@
 #endif
 #endif
 
-#ifdef __WIN32__
+#if defined(__WIN32__) && !defined(__WXWINE__)
 #include <io.h>
 
 #ifndef __GNUWIN32__

@@ -1189,7 +1189,11 @@ void wxTextCtrl::AdjustSpaceLimit()
     {
         limit = len + 0x8000;    // 32Kb
 
+#if wxUSE_RICHEDIT
         if ( m_isRich || limit > 0xffff )
+#else
+        if ( limit > 0xffff )
+#endif
             ::SendMessage(GetHwnd(), EM_LIMITTEXT, 0, limit);
         else
             ::SendMessage(GetHwnd(), EM_LIMITTEXT, limit, 0);
