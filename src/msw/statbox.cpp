@@ -36,9 +36,9 @@
 #endif
 
 #include "wx/statbox.h"
+#include "wx/notebook.h"
 
 #include "wx/msw/private.h"
-#include "wx/msw/notebook.h"
 
 // ----------------------------------------------------------------------------
 // wxWin macros
