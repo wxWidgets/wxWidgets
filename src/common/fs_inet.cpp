@@ -8,7 +8,7 @@
 
 /*
 
-REMARKS : 
+REMARKS :
 
 This FS creates local cache (in /tmp directory). The cache is freed
 on program exit.
@@ -28,6 +28,8 @@ limitation)
 #ifdef __BORDLANDC__
 #pragma hdrstop
 #endif
+
+#if wxUSE_FS_INET
 
 #ifndef WXPRECOMP
 #include <wx/wx.h>
@@ -125,6 +127,4 @@ wxInternetFSHandler::~wxInternetFSHandler()
     }
 }
 
-
-
-
+#endif // wxUSE_FS_INET

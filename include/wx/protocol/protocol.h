@@ -15,6 +15,10 @@
 #pragma interface
 #endif
 
+#include "wx/defs.h"
+
+#if wxUSE_SOCKETS
+
 #include "wx/object.h"
 #include "wx/string.h"
 #include "wx/stream.h"
@@ -30,7 +34,7 @@ typedef enum {
  wxPROTO_NOFILE,
  wxPROTO_ABRT,
  wxPROTO_RCNCT,
- wxPROTO_STREAMING 
+ wxPROTO_STREAMING
 } wxProtocolError;
 
 // For protocols
@@ -76,4 +80,6 @@ public:
 
 wxProtocolError WXDLLEXPORT GetLine(wxSocketBase *sock, wxString& result);
 
-#endif
+#endif // wxUSE_SOCKETS
+
+#endif // _WX_PROTOCOL_PROTOCOL_H

@@ -16,6 +16,8 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_FS_INET || wxUSE_FS_ZIP
+
 #ifndef WXPRECOMP
 #include <wx/wx.h>
 #endif
@@ -66,7 +68,7 @@ wxString wxFileSystemHandler::GetProtocol(const wxString& location) const
 
     fnd = FALSE;
     for (i = l-1; (i >= 0) && ((location[i] != '#') || (!fnd)); i--) {
-	if ((location[i] == ':') && (i != 1 /*win: C:\path*/)) fnd = TRUE;
+        if ((location[i] == ':') && (i != 1 /*win: C:\path*/)) fnd = TRUE;
     }
     if (!fnd) return "file";
     for (++i; (i < l) && (location[i] != ':'); i++) s << location[i];
@@ -291,4 +293,5 @@ IMPLEMENT_DYNAMIC_CLASS(wxFileSystemModule, wxModule)
 
 
 
+#endif // wxUSE_FS_INET || wxUSE_FS_ZIP
 

@@ -293,6 +293,8 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_PROGRESSDLG=no
   DEFAULT_wxUSE_MINIFRAME=no
   DEFAULT_wxUSE_HTML=no
+  DEFAULT_wxUSE_FS_INET=no
+  DEFAULT_wxUSE_FS_ZIP=no
   DEFAULT_wxUSE_VALIDATORS=yes
 
   DEFAULT_wxUSE_ACCEL=no
@@ -393,6 +395,8 @@ else
   DEFAULT_wxUSE_PROGRESSDLG=yes
   DEFAULT_wxUSE_MINIFRAME=yes
   DEFAULT_wxUSE_HTML=no
+  DEFAULT_wxUSE_FS_INET=no
+  DEFAULT_wxUSE_FS_ZIP=no
   DEFAULT_wxUSE_VALIDATORS=yes
 
   DEFAULT_wxUSE_ACCEL=yes
@@ -525,6 +529,8 @@ WX_ARG_ENABLE(wcsrtombs,     [  --enable-wcsrtombs      use wcsrtombs instead of
 WX_ARG_ENABLE(wxprintfv,     [  --enable-wxprintfv      use wxWindows implementation of vprintf()], wxUSE_EXPERIMENTAL_PRINTF)
 WX_ARG_ENABLE(joystick,      [  --enable-joystick       compile in joystick support (Linux only)], wxUSE_JOYSTICK)
 WX_ARG_ENABLE(std_iostreams, [  --enable-std_iostreams  use standard C++ stream classes], wxUSE_STD_IOSTREAM)
+WX_ARG_ENABLE(fs_inet,       [  --enable-fs_inet        use virtual HTTP/FTP filesystems], wxUSE_FS_INET)
+WX_ARG_ENABLE(fs_zip,        [  --enable-fs_zip         use virtual ZIP filesystems], wxUSE_FS_ZIP)
 
 dnl ---------------------------------------------------------------------------
 dnl "big" options (i.e. those which change a lot of things throughout the library)
@@ -1540,6 +1546,14 @@ fi
 
 if test "$wxUSE_FILE" = "yes"; then
   AC_DEFINE(wxUSE_FILE)
+fi
+
+if test "$wxUSE_FS_INET" = "yes"; then
+  AC_DEFINE(wxUSE_FS_INET)
+fi
+
+if test "$wxUSE_FS_ZIP" = "yes"; then
+  AC_DEFINE(wxUSE_FS_ZIP)
 fi
 
 if test "$wxUSE_STD_IOSTREAM" = "yes"; then

@@ -113,8 +113,8 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
         gtk_signal_connect( GTK_OBJECT(m_radio), "clicked",
            GTK_SIGNAL_FUNC(gtk_radiobutton_clicked_callback), (gpointer*)this );
 
-        gtk_myfixed_put( GTK_MYFIXED(m_parent->m_wxwindow), 
-                         GTK_WIDGET(m_radio), 
+        gtk_myfixed_put( GTK_MYFIXED(m_parent->m_wxwindow),
+                         GTK_WIDGET(m_radio),
                          m_x+10, m_y+10+(i*24), 10, 10 );
     }
 
@@ -162,6 +162,14 @@ wxSize wxRadioBox::LayoutItems()
 {
     int x = 7;
     int y = 15;
+
+    if ( m_majorDim == 0 )
+    {
+        // avoid dividing by 0 below
+        wxFAIL_MSG( "dimension of radiobox should not be 0!" );
+
+        m_majorDim = 1;
+    }
 
     int num_per_major = (m_boxes.GetCount() - 1) / m_majorDim +1;
 
@@ -254,7 +262,7 @@ bool wxRadioBox::Show( bool show )
 
     if ((m_windowStyle & wxNO_BORDER) != 0)
         gtk_widget_hide( m_widget );
-    
+
     wxNode *node = m_boxes.First();
     while (node)
     {

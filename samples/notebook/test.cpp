@@ -6,7 +6,7 @@
 // Created:     26/10/98
 // RCS-ID:      $Id$
 // Copyright:   (c)
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".
@@ -41,7 +41,7 @@ bool MyApp::OnInit(void)
   // Quit immediately the dialog has been dismissed
   return FALSE;
 #else
-  frame = new MyFrame((wxFrame*) NULL, -1, (char *) "Notebook", wxPoint(-1, -1), wxSize(365, 390), wxDEFAULT_FRAME_STYLE);
+  frame = new MyFrame((wxFrame*) NULL, -1, "Notebook", wxPoint(-1, -1), wxSize(365, 390) );
 
   // Problem with generic wxNotebook implementation whereby it doesn't size properly unless
   // you set the size again
@@ -88,19 +88,33 @@ void MyApp::InitTabView(wxNotebook* notebook, wxWindow* window)
   //  panel1->SetBackgroundColour(wxColour("RED"));
   (void)new wxButton(panel1, -1, "Press me", wxPoint(10, 10));
   (void)new wxTextCtrl(panel1, -1, "1234", wxPoint(10, 40), wxSize(120, 150));
-  
+
   notebook->AddPage(panel1, "Cat", TRUE);
 
   wxPanel *panel2 = new wxPanel(notebook, -1);
+  panel2->SetAutoLayout(TRUE);
   panel2->SetBackgroundColour(wxColour("BLUE"));
 
   wxString animals[] = { "Fox", "Hare", "Rabbit", "Sabre-toothed tiger", "T Rex" };
-  (void)new wxListBox(panel2, -1, wxPoint(5, 5), wxSize(170, 80), 5, animals);
+  wxListBox *listbox = new wxListBox(panel2, -1, wxPoint(5, 5), wxSize(170, 80), 5, animals);
 
-  (void)new wxTextCtrl(panel2, -1, "Some notes about the animals in this house", wxPoint(5, 100), wxSize(170, 100),
-    wxTE_MULTILINE);
+  c = new wxLayoutConstraints;
+  c->left.SameAs(panel2, wxLeft, 4);
+  c->top.SameAs(panel2, wxTop, 4);
+  c->height.PercentOf(panel2, wxHeight, 50);
+  c->right.SameAs(panel2, wxRight, 4);
+  listbox->SetConstraints(c);
+
+  wxTextCtrl *text = new wxTextCtrl(panel2, -1, "Some notes about the animals in this house", wxPoint(5, 100), wxSize(170, 100), wxTE_MULTILINE);
+  c = new wxLayoutConstraints;
+  c->left.SameAs(panel2, wxLeft, 4);
+  c->bottom.SameAs(panel2, wxBottom, 4);
+  c->top.Below(listbox, 4);
+  c->right.SameAs(panel2, wxRight, 4);
+  text->SetConstraints(c);
 
   notebook->AddPage(panel2, "Dog");
+
   wxPanel *panel3 = new wxPanel(notebook, -1);
   panel3->SetBackgroundColour(wxColour("WHITE"));
   notebook->AddPage(panel3, "Goat");
@@ -108,11 +122,13 @@ void MyApp::InitTabView(wxNotebook* notebook, wxWindow* window)
   wxPanel *panel4 = new wxPanel(notebook, -1);
   panel4->SetBackgroundColour(wxColour("YELLOW"));
   notebook->AddPage(panel4, "Sheep");
-  
+
   wxPanel *panel5 = new wxPanel(notebook, -1);
   panel5->SetBackgroundColour(wxColour("MAGENTA"));
   (void)new wxStaticText(panel5, -1, "This page has been inserted, not added", wxPoint(10, 10) );
   notebook->InsertPage(0, panel5, "Sheep");
+
+  notebook->SetSelection(2);
 }
 
 BEGIN_EVENT_TABLE(MyDialog, wxDialog)
