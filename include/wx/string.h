@@ -410,7 +410,7 @@ public:
   wxString& operator<<(double d);
 
   // string comparison
-    // case-sensitive comparison: return 0 if =, +1 if > or -1 if <
+    // case-sensitive comparison (returns a value < 0, = 0 or > 0)
   int  Cmp(const char *psz) const { return strcmp(c_str(), psz); }
     // same as Cmp() but not case-sensitive
   int  CmpNoCase(const char *psz) const { return Stricmp(c_str(), psz); }
@@ -740,6 +740,10 @@ public:
 class WXDLLEXPORT wxArrayString
 {
 public:
+  // type of function used by wxArrayString::Sort()
+  typedef int (*CompareFunction)(const wxString& first,
+                                 const wxString& second);
+
   // constructors and destructor
     // default ctor
   wxArrayString();
@@ -792,12 +796,18 @@ public:
     // remove item by index
   void Remove(size_t nIndex);
 
-  // sort array elements
-  void Sort(bool bCase = TRUE, bool bReverse = FALSE);
+  // sorting
+    // sort array elements in alphabetical order (or reversed alphabetical
+    // order if reverseOrder parameter is TRUE)
+  void Sort(bool reverseOrder = FALSE);
+    // sort array elements using specified comparaison function
+  void Sort(CompareFunction compareFunction);
 
 private:
   void    Grow();     // makes array bigger if needed
   void    Free();     // free the string stored
+
+  void    DoSort();   // common part of all Sort() variants
 
   size_t  m_nSize,    // current size of the array
           m_nCount;   // current number of elements

@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "string.h"
+  #pragma implementation "string.h"
 #endif
 
 /*
@@ -28,7 +28,7 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+  #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
@@ -42,7 +42,7 @@
 #include <stdlib.h>
 
 #ifdef __SALFORDC__
-#include <clib.h>
+  #include <clib.h>
 #endif
 
 #if wxUSE_WCSRTOMBS
@@ -1448,10 +1448,78 @@ void wxArrayString::Remove(const char *sz)
   Remove(iIndex);
 }
 
-// sort array elements using passed comparaison function
+// ----------------------------------------------------------------------------
+// sorting
+// ----------------------------------------------------------------------------
 
-void wxArrayString::Sort(bool WXUNUSED(bCase), bool WXUNUSED(bReverse) )
+// we can only sort one array at a time with the quick-sort based
+// implementation
+#if wxUSE_THREADS
+  #include <wx/thread.h>
+
+  // need a critical section to protect access to gs_compareFunction and
+  // gs_sortAscending variables
+  static wxCriticalSection gs_critsectStringSort;
+
+  // call this before the value of the global sort vars is changed/after
+  // you're finished with them
+  #define START_SORT()     gs_critsectStringSort.Enter()
+  #define END_SORT()       gs_critsectStringSort.Leave()
+#else // !threads
+  #define START_SORT()
+  #define END_SORT()
+#endif // wxUSE_THREADS
+
+// function to use for string comparaison
+static wxArrayString::CompareFunction gs_compareFunction = NULL;
+
+// if we don't use the compare function, this flag tells us if we sort the
+// array in ascending or descending order
+static bool gs_sortAscending = TRUE;
+
+// function which is called by quick sort
+static int wxStringCompareFunction(const void *first, const void *second)
 {
-  //@@@@ TO DO
-  //qsort(m_pItems, m_nCount, sizeof(char *), fCmp);
+  wxString *strFirst = (wxString *)first;
+  wxString *strSecond = (wxString *)second;
+
+  if ( gs_compareFunction )
+    return gs_compareFunction(*strFirst, *strSecond);
+  else {
+    int result = strcmp(strFirst->c_str(), strSecond->c_str());
+
+    return gs_sortAscending ? result : -result;
+  }
+}
+
+// sort array elements using passed comparaison function
+void wxArrayString::Sort(CompareFunction compareFunction)
+{
+  START_SORT();
+
+  wxASSERT( !gs_compareFunction );  // must have been reset to NULL
+  gs_compareFunction = compareFunction;
+
+  DoSort();
+
+  END_SORT();
+}
+
+void wxArrayString::Sort(bool reverseOrder)
+{
+  START_SORT();
+
+  wxASSERT( !gs_compareFunction );  // must have been reset to NULL
+  gs_sortAscending = !reverseOrder;
+
+  DoSort();
+
+  END_SORT();
+}
+
+void wxArrayString::DoSort()
+{
+  // just sort the pointers using qsort() - of course it only works because
+  // wxString() *is* a pointer to its data
+  qsort(m_pItems, m_nCount, sizeof(char *), wxStringCompareFunction);
 }
