@@ -74,14 +74,14 @@ void wxFontPreviewer::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     if ( font.Ok() )
     {
-        dc.SetFont(GetFont());
+        dc.SetFont(font);
         // Calculate vertical centre
         long w, h;
         dc.GetTextExtent( wxT("X"), &w, &h);
         dc.SetTextForeground(GetForegroundColour());
         dc.SetClippingRegion(2, 2, size.x-4, size.y-4);
         dc.DrawText(_("ABCDEFGabcdefg12345"), 
-                    10, h/2 + size.y/2);
+                     10, size.y/2 - h/2);
         dc.DestroyClippingRegion();
     }
 }
@@ -191,6 +191,10 @@ bool wxGenericFontDialog::DoCreate(wxWindow *parent)
   InitializeFont();
   CreateWidgets();
  
+  // sets initial font in preview area
+  wxCommandEvent dummy;
+  OnChangeFont(dummy);
+  
   return TRUE;
 }
 
