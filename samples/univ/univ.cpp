@@ -53,6 +53,8 @@
 
 #include "wx/univ/theme.h"
 
+#define TEST_TEXT_ONLY
+
 //#define DEBUG_SCROLL
 //#define DEBUG_LISTBOX
 
@@ -214,7 +216,9 @@ bool MyUnivApp::OnInit()
 #ifdef DEBUG_LISTBOX
     wxLog::AddTraceMask(_T("listbox"));
 #endif
+#ifdef TEST_TEXT_ONLY
     wxLog::AddTraceMask(_T("text"));
+#endif
 
     return TRUE;
 }
@@ -226,7 +230,7 @@ bool MyUnivApp::OnInit()
 MyUnivFrame::MyUnivFrame(const wxString& title)
            : wxFrame(NULL, -1, title,
                      wxDefaultPosition,
-#if 0
+#ifndef TEST_TEXT_ONLY
                      wxSize(700, 700)
 #else
                      wxSize(240, 150)
@@ -236,7 +240,7 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     SetBackgroundColour(wxGetApp().GetBgColour());
 
     new wxStaticText(this, _T("Test static text"), wxPoint(10, 10));
-#if 0
+#ifndef TEST_TEXT_ONLY
     new wxStaticText(this,
                      _T("&Multi line\n(and very very very very long)\nstatic text"),
                      wxPoint(210, 10));
@@ -378,10 +382,10 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 
     new wxTextCtrl(this, -1, _T("Hello, Universe!"),
                    wxPoint(550, 150), wxDefaultSize);
-#else // 1
+#else // TEST_TEXT_ONLY
     new wxTextCtrl(this, -1, _T("Hello, Universe!"),
-                   wxPoint(10, 50), wxSize(200, -1));
-#endif // 0/1
+                   wxPoint(10, 40), wxSize(200, -1));
+#endif // !TEST_TEXT_ONLY/TEST_TEXT_ONLY
 }
 
 void MyUnivFrame::OnButton(wxCommandEvent& event)
@@ -438,13 +442,15 @@ void MyUnivCanvas::OnPaint(wxPaintEvent& event)
 
     static bool s_oddRepaint = TRUE;
     s_oddRepaint = !s_oddRepaint;
+
+#ifdef DEBUG_SCROLL
     wxCoord x, y;
     GetViewStart(&x, &y);
-#ifdef DEBUG_SCROLL
     wxLogDebug("Repainting with %s pen (at %dx%d)",
                s_oddRepaint ? "red" : "green",
                x, y);
 #endif // DEBUG_SCROLL
+
     dc.SetPen(s_oddRepaint ? *wxRED_PEN: *wxGREEN_PEN);
     dc.SetTextForeground(s_oddRepaint ? *wxRED : *wxGREEN);
 
@@ -452,7 +458,5 @@ void MyUnivCanvas::OnPaint(wxPaintEvent& event)
     dc.DrawText(_T("This is the top of the canvas"), 10, 10);
     dc.DrawLabel(_T("This is the bottom of the canvas"),
                  wxRect(0, 950, 950, 50), wxALIGN_RIGHT | wxBOTTOM);
-
-    //event.Skip();
 }
 

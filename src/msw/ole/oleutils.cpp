@@ -56,7 +56,7 @@ bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount)
   return FALSE;
 }
 
-#if wxUSE_DRAG_AND_DROP
+#if wxUSE_DRAG_AND_DROP || wxUSE_DATAOBJ
 
 // ----------------------------------------------------------------------------
 // Debug support

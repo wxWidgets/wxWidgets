@@ -42,6 +42,12 @@
 #include "wx/univ/theme.h"
 
 // ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+static const int BORDER_THICKNESS = 20;
+
+// ----------------------------------------------------------------------------
 // wxWin32Renderer: draw the GUI elements in Win32 style
 // ----------------------------------------------------------------------------
 
@@ -1068,13 +1074,18 @@ void wxWin32Renderer::DrawBorder(wxDC& dc,
                                  int WXUNUSED(flags),
                                  wxRect *rectIn)
 {
+    int i;
+
     wxRect rect = rectTotal;
 
     switch ( border )
     {
         case wxBORDER_SUNKEN:
-            DrawShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
-            DrawShadedRect(dc, &rect, m_penBlack, m_penLightGrey);
+            for ( i = 0; i < BORDER_THICKNESS / 2; i++ )
+            {
+                DrawShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
+                DrawShadedRect(dc, &rect, m_penBlack, m_penLightGrey);
+            }
             break;
 
         case wxBORDER_STATIC:
@@ -1082,7 +1093,8 @@ void wxWin32Renderer::DrawBorder(wxDC& dc,
             break;
 
         case wxBORDER_RAISED:
-            DrawRaisedBorder(dc, &rect);
+            for ( i = 0; i < BORDER_THICKNESS / 2; i++ )
+                DrawRaisedBorder(dc, &rect);
             break;
 
         case wxBORDER_DOUBLE:
@@ -1114,7 +1126,7 @@ wxRect wxWin32Renderer::GetBorderDimensions(wxBorder border) const
     {
         case wxBORDER_RAISED:
         case wxBORDER_SUNKEN:
-            width = 2;
+            width = BORDER_THICKNESS;
             break;
 
         case wxBORDER_SIMPLE:

@@ -377,7 +377,8 @@ wxPoint wxWindow::GetClientAreaOrigin() const
 
 void wxWindow::DoGetClientSize(int *width, int *height) const
 {
-    wxWindowNative::DoGetClientSize(width, height);
+    int w, h;
+    wxWindowNative::DoGetClientSize(&w, &h);
 
     // we assume that the scrollbars are positioned correctly (by a previous
     // call to PositionScrollbars()) here
@@ -386,33 +387,32 @@ void wxWindow::DoGetClientSize(int *width, int *height) const
     if ( m_renderer )
         rectBorder = m_renderer->GetBorderDimensions(GetBorder());
 
-    wxSize size = GetSize();
-
     bool inside = m_renderer->AreScrollbarsInsideBorder();
 
     if ( width )
     {
         // in any case, take account of the scrollbar
         if ( m_scrollbarVert )
-            *width -= size.x - m_scrollbarVert->GetPosition().x;
+            w -= m_scrollbarVert->GetSize().x;
 
         // if we don't have scrollbar or if it is outside the border (and not
         // blended into it), take account of the right border as well
-        if ( !m_scrollbarVert || !inside )
-            *width -= rectBorder.width;
+        if ( !m_scrollbarVert || inside )
+            w -= rectBorder.width;
 
-        *width -= rectBorder.x;
+        // and always account for the left border
+        *width = w - rectBorder.x;
     }
 
     if ( height )
     {
         if ( m_scrollbarHorz )
-            *height -= size.y - m_scrollbarHorz->GetPosition().y;
+            h -= m_scrollbarHorz->GetSize().y;
 
-        if ( !m_scrollbarHorz || !inside )
-            *height -= rectBorder.height;
+        if ( !m_scrollbarHorz || inside )
+            h -= rectBorder.height;
 
-        *height -= rectBorder.y;
+        *height = h - rectBorder.y;
     }
 }
 

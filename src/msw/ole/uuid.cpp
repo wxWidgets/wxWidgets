@@ -26,14 +26,12 @@
 
 #include  "wx/setup.h"
 
-#if wxUSE_DRAG_AND_DROP
+#if wxUSE_DRAG_AND_DROP || wxUSE_DATAOBJ
 
 // standard headers
 #include  <rpc.h>                       // UUID related functions
 
 #include  "wx/msw/ole/uuid.h"
-
-
 
 // ============================================================================
 // Implementation

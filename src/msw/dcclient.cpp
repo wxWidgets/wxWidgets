@@ -146,12 +146,18 @@ void wxClientDC::InitDC()
 
     SetBackground(wxBrush(m_canvas->GetBackgroundColour(), wxSOLID));
 
-    // clip the DC to avoid overwriting the non client area
+    // in wxUniv build we must manually do some DC adjustments usually
+    // performed by Windows for us
 #ifdef __WXUNIVERSAL__
     wxPoint ptOrigin = m_canvas->GetClientAreaOrigin();
-    SetDeviceOrigin(ptOrigin.x, ptOrigin.y);
-    wxSize size = m_canvas->GetClientSize();
-    SetClippingRegion(wxPoint(0, 0), size);
+    if ( ptOrigin.x || ptOrigin.y )
+    {
+        // no need to shift DC origin if shift is null
+        SetDeviceOrigin(ptOrigin.x, ptOrigin.y);
+    }
+
+    // clip the DC to avoid overwriting the non client area
+    SetClippingRegion(wxPoint(0, 0), m_canvas->GetClientSize());
 #endif // __WXUNIVERSAL__
 }
 

@@ -252,39 +252,45 @@ void wxDC::SelectOldObjects(WXHDC dc)
 // clipping
 // ---------------------------------------------------------------------------
 
-#define DO_SET_CLIPPING_BOX()                   \
-{                                               \
-    RECT rect;                                  \
-                                                \
-    GetClipBox(GetHdc(), &rect);                \
-                                                \
-    m_clipX1 = (wxCoord) XDEV2LOG(rect.left);   \
-    m_clipY1 = (wxCoord) YDEV2LOG(rect.top);    \
-    m_clipX2 = (wxCoord) XDEV2LOG(rect.right);  \
-    m_clipY2 = (wxCoord) YDEV2LOG(rect.bottom); \
+void wxDC::UpdateClipBox()
+{
+    RECT rect;
+    GetClipBox(GetHdc(), &rect);
+
+    m_clipX1 = (wxCoord) XDEV2LOG(rect.left);
+    m_clipY1 = (wxCoord) YDEV2LOG(rect.top);
+    m_clipX2 = (wxCoord) XDEV2LOG(rect.right);
+    m_clipY2 = (wxCoord) YDEV2LOG(rect.bottom);
 }
 
 void wxDC::DoSetClippingRegion(wxCoord cx, wxCoord cy, wxCoord cw, wxCoord ch)
 {
     m_clipping = TRUE;
-    IntersectClipRect(GetHdc(), XLOG2DEV(cx), YLOG2DEV(cy),
-                                XLOG2DEV(cx + cw), YLOG2DEV(cy + ch));
-    DO_SET_CLIPPING_BOX()
+
+    // NB: IntersectClipRect() accepts clogical coords and, as usual, excludes
+    //     the right and bottom edges, so account for it
+    if ( IntersectClipRect(GetHdc(),
+                           cx, cy, cx + cw + 1, cy + ch + 1) == ERROR )
+    {
+        wxLogLastError(wxT("IntersectClipRect"));
+    }
+
+    UpdateClipBox();
 }
 
 void wxDC::DoSetClippingRegionAsRegion(const wxRegion& region)
 {
-    wxCHECK_RET( region.GetHRGN(), wxT("invalid clipping region") );
+    wxCHECK_RET( GetHrgnOf(region), wxT("invalid clipping region") );
 
     m_clipping = TRUE;
 
 #ifdef __WIN16__
-    SelectClipRgn(GetHdc(), (HRGN) region.GetHRGN());
-#else
-    ExtSelectClipRgn(GetHdc(), (HRGN) region.GetHRGN(), RGN_AND);
-#endif
+    SelectClipRgn(GetHdc(), GetHrgnOf(region));
+#else // Win32
+    ExtSelectClipRgn(GetHdc(), GetHrgnOf(region), RGN_AND);
+#endif // Win16/32
 
-    DO_SET_CLIPPING_BOX()
+    UpdateClipBox();
 }
 
 void wxDC::DestroyClippingRegion()
@@ -298,6 +304,7 @@ void wxDC::DestroyClippingRegion()
         SelectClipRgn(GetHdc(), rgn);
         DeleteObject(rgn);
     }
+
     m_clipping = FALSE;
 }
 

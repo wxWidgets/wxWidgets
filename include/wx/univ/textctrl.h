@@ -231,6 +231,8 @@ protected:
                       const wxString& text,
                       long selStart, long selEnd);
 
+    void DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate);
+
     virtual void DoDraw(wxControlRenderer *renderer);
 
     // calc the size from the text extent

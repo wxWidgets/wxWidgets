@@ -32,12 +32,12 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
 
-    #include "wx/clipbrd.h"
-
     #include "wx/dcclient.h"
     #include "wx/validate.h"
     #include "wx/textctrl.h"
 #endif
+
+#include "wx/clipbrd.h"
 
 #include "wx/caret.h"
 
@@ -878,6 +878,9 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTest(const wxPoint& pos,
 
 void wxTextCtrl::ShowHorzPosition(wxCoord pos)
 {
+    // pos is the logical position to show
+
+    // m_ofsHorz is the fisrt logical position shown
     if ( pos < m_ofsHorz )
     {
         // scroll backwards
@@ -896,7 +899,8 @@ void wxTextCtrl::ShowHorzPosition(wxCoord pos)
             width = m_rectText.width;
         }
 
-        if ( pos > width )
+        // m_ofsHorz + width is the last logical position shown
+        if ( pos > m_ofsHorz + width)
         {
             // scroll forward
             long col;
@@ -1051,37 +1055,18 @@ void wxTextCtrl::DrawTextLine(wxDC& dc, const wxRect& rect,
     }
 }
 
-void wxTextCtrl::DoDraw(wxControlRenderer *renderer)
+void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
 {
-    // hide the caret while we're redrawing the window and show it after we are
-    // done with it
-    wxCaretSuspend cs(this);
-
-    // prepare the DC
-    wxDC& dc = renderer->GetDC();
-    dc.SetFont(GetFont());
-    dc.SetTextForeground(GetForegroundColour());
-
-    // get the intersection of the update region with the text area: note that
-    // the update region is in window coord and text area is in the client
-    // ones, so it must be shifted before computing intesection
-    wxRegion rgnUpdate = GetUpdateRegion();
-    wxRect rectTextArea = m_rectText;
-    wxPoint pt = GetClientAreaOrigin();
-    rectTextArea.x += pt.x;
-    rectTextArea.y += pt.y;
-    rgnUpdate.Intersect(rectTextArea);
-    wxRect rectUpdate = rgnUpdate.GetBox();
-
-    // FIXME: why is this needed (at least under MSW)?
-    rectUpdate.Inflate(2, 1);
-
     // debugging trick to see the update rect visually
-#if 0
-    static int s_count = 0;
-    dc.SetBrush(*(++s_count % 2 ? wxRED_BRUSH : wxGREEN_BRUSH));
-    dc.SetPen(*wxTRANSPARENT_PEN);
-    dc.DrawRectangle(rectUpdate);
+#if 1
+    if ( 0 )
+    {
+        wxWindowDC dc(this);
+        static int s_count = 0;
+        dc.SetBrush(*(++s_count % 2 ? wxRED_BRUSH : wxGREEN_BRUSH));
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.DrawRectangle(rectUpdate);
+    }
 #endif
 
     // calculate the range of lines to refresh
@@ -1105,8 +1090,6 @@ void wxTextCtrl::DoDraw(wxControlRenderer *renderer)
     rectText.y = m_rectText.y + lineStart*rectText.height;
 
     // do draw the invalidated parts of each line
-    // shouldn't be needed: dc.SetClippingRegion(rectUpdate);
-    DoPrepareDC(dc); // adjust for scrolling
     for ( long line = lineStart; line <= lineEnd; line++ )
     {
         // calculate the update rect in text positions for this line
@@ -1140,6 +1123,14 @@ void wxTextCtrl::DoDraw(wxControlRenderer *renderer)
         rectText.x = m_rectText.x + GetTextWidth(textLine.Left(colStart));
         rectText.width = GetTextWidth(text);
 
+        // check that the string that we draw fits entirely into the text area,
+        // we don't want to draw just a part of characters
+        while ( rectText.GetRight() > m_ofsHorz + m_rectText.width )
+        {
+            rectText.width -= GetTextWidth(text.Last());
+            text.RemoveLast();
+        }
+
         // do draw the text
         DrawTextLine(dc, rectText, text, selStart, selEnd);
         wxLogTrace(_T("text"), _T("Line %ld: positions %ld-%ld redrawn."),
@@ -1149,6 +1140,47 @@ void wxTextCtrl::DoDraw(wxControlRenderer *renderer)
         rectText.y += rectText.height;
         pt1.y += rectText.height;
         pt2.y += rectText.height;
+    }
+}
+
+void wxTextCtrl::DoDraw(wxControlRenderer *renderer)
+{
+    // hide the caret while we're redrawing the window and show it after we are
+    // done with it
+    wxCaretSuspend cs(this);
+
+    // prepare the DC
+    wxDC& dc = renderer->GetDC();
+    dc.SetFont(GetFont());
+    dc.SetTextForeground(GetForegroundColour());
+
+    // get the intersection of the update region with the text area: note that
+    // the update region is in window coord and text area is in the client
+    // ones, so it must be shifted before computing intesection
+    wxRegion rgnUpdate = GetUpdateRegion();
+    wxRect rectTextArea = m_rectText;
+    wxPoint pt = GetClientAreaOrigin();
+    rectTextArea.x += pt.x;
+    rectTextArea.y += pt.y;
+    rgnUpdate.Intersect(rectTextArea);
+
+#if 0
+    // even though the drawing is already clipped to the update region, we must
+    // explicitly clip it to the rect we will use as otherwise parts of letters
+    // might be drawn outside of it (if even a small part of a charater is
+    // inside, HitTest() will return its column and DrawText() can't draw only
+    // the part of the character, of course)
+    dc.SetClippingRegion(m_rectText);
+#endif // 0
+
+    // adjust for scrolling
+    DoPrepareDC(dc);
+
+    // and now refresh thei nvalidated parts of the window
+    wxRegionIterator iter(rgnUpdate);
+    for ( ; iter.HaveRects(); iter++ )
+    {
+        DoDrawTextInRect(dc, iter.GetRect());
     }
 }
 

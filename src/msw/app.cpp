@@ -239,7 +239,7 @@ bool wxApp::Initialize()
 
 #endif // __WIN95__
 
-#if wxUSE_OLE
+#if wxUSE_OLE || wxUSE_DRAG_AND_DROP || wxUSE_DATAOBJ
 
 #ifdef __WIN16__
     // for OLE, enlarge message queue to be as large as possible
@@ -250,6 +250,7 @@ bool wxApp::Initialize()
     // we need to initialize OLE library
     if ( FAILED(::OleInitialize(NULL)) )
         wxLogError(_("Cannot initialize OLE"));
+
 #endif // wxUSE_OLE
 
 #if wxUSE_CTL3D
@@ -257,7 +258,7 @@ bool wxApp::Initialize()
         wxLogError(wxT("Cannot register CTL3D"));
 
     Ctl3dAutoSubclass(wxhInstance);
-#endif
+#endif // wxUSE_CTL3D
 
     // VZ: these icons are not in wx.rc anyhow (but should they?)!
 #if 0
