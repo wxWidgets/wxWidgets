@@ -43,7 +43,7 @@ wxDataFormat::wxDataFormat( wxDataType type )
     }
     else
     {
-       wxFAIL_MSG( "invalid dataformat" )
+       wxFAIL_MSG( "invalid dataformat" );
     }
     
     m_hasAtom = FALSE;
