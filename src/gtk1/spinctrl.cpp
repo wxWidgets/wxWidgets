@@ -271,7 +271,7 @@ void wxSpinCtrl::OnChar( wxKeyEvent &event )
     if (event.GetKeyCode() == WXK_RETURN)
     {
         wxWindow *top_frame = m_parent;
-        while (top_frame->GetParent() && !(top_frame->GetParent()->IsTopLevel()))
+        while (top_frame->GetParent() && !(top_frame->IsTopLevel()))
             top_frame = top_frame->GetParent();
 
         if ( GTK_IS_WINDOW(top_frame->m_widget) )
@@ -281,7 +281,7 @@ void wxSpinCtrl::OnChar( wxKeyEvent &event )
             {
                 GtkWidget *widgetDef = window->default_widget;
 
-                if ( widgetDef && GTK_IS_WINDOW(widgetDef) )
+                if ( widgetDef )
                 {
                     gtk_widget_activate(widgetDef);
                     return;

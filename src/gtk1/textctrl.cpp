@@ -310,6 +310,8 @@ bool wxTextCtrl::Create( wxWindow *parent,
 
         if (!HasFlag(wxNO_BORDER))
             gtk_scrolled_window_set_shadow_type( GTK_SCROLLED_WINDOW(m_widget), GTK_SHADOW_IN );
+            
+        GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
 #else
         // create our control ...
         m_text = gtk_text_new( (GtkAdjustment *) NULL, (GtkAdjustment *) NULL );
@@ -443,8 +445,8 @@ bool wxTextCtrl::Create( wxWindow *parent,
     else
 #endif
     {
-    gtk_signal_connect( GTK_OBJECT(m_text), "changed",
-       GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
+        gtk_signal_connect( GTK_OBJECT(m_text), "changed",
+            GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
     }
 
     // we don't set a valid background colour, because the window
