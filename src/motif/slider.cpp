@@ -51,7 +51,10 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
                       const wxSize& size, long style,
                       const wxValidator& validator,
                       const wxString& name)
-{
+{    
+    if ( !((style & wxSL_HORIZONTAL) || (style & wxSL_VERTICAL)) )
+         style |= wxSL_HORIZONTAL;
+    
     SetName(name);
     SetValidator(validator);
     m_backgroundColour = parent->GetBackgroundColour();
