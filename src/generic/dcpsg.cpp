@@ -1556,7 +1556,7 @@ wxSize wxPostScriptDC::GetPPI(void) const
 bool wxPostScriptDC::StartDoc( const wxString& message )
 {
     wxCHECK_MSG( m_ok, false, wxT("invalid postscript dc") );
-    
+
     if (m_printData.GetPrintMode() != wxPRINT_MODE_STREAM )
     {
         if (m_printData.GetFilename() == wxEmptyString)
@@ -1718,7 +1718,7 @@ void wxPostScriptDC::EndDoc ()
 #endif
 
 #ifndef __WXMSW__
-    wxPostScriptPrintNativeData *data = 
+    wxPostScriptPrintNativeData *data =
         (wxPostScriptPrintNativeData *) m_printData.GetNativeData();
 
     if (m_ok && (m_printData.GetPrintMode() == wxPRINT_MODE_PRINTER))
@@ -1755,7 +1755,7 @@ void wxPostScriptDC::StartPage()
     wxCoord translate_x, translate_y;
     double scale_x, scale_y;
 
-    wxPostScriptPrintNativeData *data = 
+    wxPostScriptPrintNativeData *data =
         (wxPostScriptPrintNativeData *) m_printData.GetNativeData();
 
     translate_x = (wxCoord)data->GetPrinterTranslateX();
@@ -1833,7 +1833,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
 
     wxCHECK_RET( fontToUse, wxT("GetTextExtent: no font defined") );
 
-    if (string.IsEmpty())
+    if (string.empty())
     {
         if (x) (*x) = 0;
         if (y) (*y) = 0;
@@ -1967,12 +1967,12 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
 
         FILE *afmFile = NULL;
 
-        wxPostScriptPrintNativeData *data = 
+        wxPostScriptPrintNativeData *data =
             (wxPostScriptPrintNativeData *) m_printData.GetNativeData();
-            
+
         // Get the directory of the AFM files
         wxString afmName;
-        if (!data->GetFontMetricPath().IsEmpty())
+        if (!data->GetFontMetricPath().empty())
         {
             afmName = data->GetFontMetricPath();
             afmName << wxFILE_SEP_PATH << name;
@@ -2019,8 +2019,10 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
             /* init the widths array */
             for(int i=0; i<256; i++) lastWidths[i] = INT_MIN;
             /* some variables for holding parts of a line */
-            char cString[10],semiString[10],WXString[10],descString[20];
-            char upString[30], utString[30], encString[50];
+            char cString[10], semiString[10], WXString[10];
+            char descString[20];
+            char upString[30], utString[30];
+            char encString[50];
             char line[256];
             int ascii,cWidth;
             /* read in the file and parse it */
@@ -2187,9 +2189,9 @@ void wxPostScriptDC::PsPrintf( const wxChar* fmt, ... )
 
 void wxPostScriptDC::PsPrint( const char* psdata )
 {
-    wxPostScriptPrintNativeData *data = 
+    wxPostScriptPrintNativeData *data =
         (wxPostScriptPrintNativeData *) m_printData.GetNativeData();
-        
+
     switch (m_printData.GetPrintMode())
     {
 #if wxUSE_STREAMS
@@ -2212,9 +2214,9 @@ void wxPostScriptDC::PsPrint( const char* psdata )
 
 void wxPostScriptDC::PsPrint( int ch )
 {
-    wxPostScriptPrintNativeData *data = 
+    wxPostScriptPrintNativeData *data =
         (wxPostScriptPrintNativeData *) m_printData.GetNativeData();
-        
+
     switch (m_printData.GetPrintMode())
     {
 #if wxUSE_STREAMS
@@ -2223,7 +2225,7 @@ void wxPostScriptDC::PsPrint( int ch )
             {
                 wxOutputStream* outputstream = data->GetOutputStream();
                 wxCHECK_RET( outputstream, wxT("invalid outputstream") );
-                outputstream->PutC( ch );
+                outputstream->PutC( (char)ch );
             }
             break;
 #endif // wxUSE_STREAMS

@@ -177,7 +177,8 @@ wxRect wxRenderer::StandardGetScrollbarRect(const wxScrollBar *scrollbar,
     }
 
     wxSize sizeTotal = scrollbar->GetClientSize();
-    wxCoord *start, *width, length, arrow;
+    wxCoord *start, *width;
+    wxCoord length, arrow;
     wxRect rect;
     if ( scrollbar->IsVertical() )
     {
@@ -813,7 +814,8 @@ void wxControlRenderer::DrawProgressBar(const wxGauge *gauge)
         int steps = ((lenTotal + step - 1) * pos) / (max * step);
 
         // calc the coords of one small rect
-        wxCoord *px, dx, dy;
+        wxCoord *px;
+        wxCoord dx, dy;
         if ( gauge->IsVertical() )
         {
             // draw from bottom to top: so first set y to the bottom

@@ -502,7 +502,7 @@ void wxGridCellEditor::Show(bool show, wxGridCellAttr *attr)
             m_colBgOld = m_control->GetBackgroundColour();
             m_control->SetBackgroundColour(attr->GetBackgroundColour());
 
-	    // Workaround for GTK+1 font setting problem on some platforms
+            // Workaround for GTK+1 font setting problem on some platforms
 #if !defined(__WXGTK__) || defined(__WXGTK20__)
             m_fontOld = m_control->GetFont();
             m_control->SetFont(attr->GetFont());
@@ -525,7 +525,8 @@ void wxGridCellEditor::Show(bool show, wxGridCellAttr *attr)
             m_control->SetBackgroundColour(m_colBgOld);
             m_colBgOld = wxNullColour;
         }
-	// Workaround for GTK+1 font setting problem on some platforms
+
+        // Workaround for GTK+1 font setting problem on some platforms
 #if !defined(__WXGTK__) || defined(__WXGTK20__)
         if ( m_fontOld.Ok() )
         {
@@ -728,7 +729,7 @@ bool wxGridCellTextEditor::IsAcceptedKey(wxKeyEvent& event)
 
             default:
                 // accept 8 bit chars too if isprint() agrees
-                if ( (keycode < 255) && (wxIsprint(keycode)) )
+                if ( (keycode < 255) && (wxIsprint((wxChar)keycode)) )
                     return true;
         }
     }
@@ -835,7 +836,7 @@ void wxGridCellNumberEditor::BeginEdit(int row, int col, wxGrid* grid)
     {
         m_valueOld = 0;
         wxString sValue = table->GetValue(row, col);
-        if (! sValue.ToLong(&m_valueOld) && ! sValue.IsEmpty())
+        if (! sValue.ToLong(&m_valueOld) && ! sValue.empty())
         {
             wxFAIL_MSG( _T("this cell doesn't have numeric value") );
             return;
@@ -870,7 +871,7 @@ bool wxGridCellNumberEditor::EndEdit(int row, int col,
     else
     {
         text = Text()->GetValue();
-        changed = (text.IsEmpty() || text.ToLong(&value)) && (value != m_valueOld);
+        changed = (text.empty() || text.ToLong(&value)) && (value != m_valueOld);
     }
 
     if ( changed )
@@ -922,7 +923,7 @@ bool wxGridCellNumberEditor::IsAcceptedKey(wxKeyEvent& event)
                 return true;
 
             default:
-                if ( (keycode < 128) && wxIsdigit(keycode) )
+                if ( (keycode < 128) && wxIsdigit((wxChar)keycode) )
                     return true;
         }
     }
@@ -935,7 +936,7 @@ void wxGridCellNumberEditor::StartingKey(wxKeyEvent& event)
     if ( !HasRange() )
     {
         int keycode = event.GetKeyCode();
-        if ( wxIsdigit(keycode) || keycode == '+' || keycode == '-'
+        if ( wxIsdigit((wxChar)keycode) || keycode == '+' || keycode == '-'
             || keycode ==  WXK_NUMPAD0
             || keycode ==  WXK_NUMPAD1
             || keycode ==  WXK_NUMPAD2
@@ -1039,7 +1040,7 @@ void wxGridCellFloatEditor::BeginEdit(int row, int col, wxGrid* grid)
     {
         m_valueOld = 0.0;
         wxString sValue = table->GetValue(row, col);
-        if (! sValue.ToDouble(&m_valueOld) && ! sValue.IsEmpty())
+        if (! sValue.ToDouble(&m_valueOld) && ! sValue.empty())
         {
             wxFAIL_MSG( _T("this cell doesn't have float value") );
             return;
@@ -1055,7 +1056,7 @@ bool wxGridCellFloatEditor::EndEdit(int row, int col,
     double value = 0.0;
     wxString text(Text()->GetValue());
 
-    if ( (text.IsEmpty() || text.ToDouble(&value)) && (value != m_valueOld) )
+    if ( (text.empty() || text.ToDouble(&value)) && (value != m_valueOld) )
     {
         if (grid->GetTable()->CanSetValueAs(row, col, wxGRID_VALUE_FLOAT))
             grid->GetTable()->SetValueAsDouble(row, col, value);
@@ -1081,7 +1082,7 @@ void wxGridCellFloatEditor::StartingKey(wxKeyEvent& event)
     wxString strbuf(tmpbuf, *wxConvCurrent);
     bool is_decimal_point = ( strbuf ==
       wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER) );
-        if ( wxIsdigit(keycode) || keycode == '+' || keycode == '-'
+        if ( wxIsdigit((wxChar)keycode) || keycode == '+' || keycode == '-'
             || is_decimal_point
             || keycode ==  WXK_NUMPAD0
             || keycode ==  WXK_NUMPAD1
@@ -1188,11 +1189,11 @@ bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
                 tmpbuf[0] = (char) keycode;
                 tmpbuf[1] = '\0';
                 wxString strbuf(tmpbuf, *wxConvCurrent);
-                bool is_decimal_point = 
+                bool is_decimal_point =
                     ( strbuf == wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT,
                                                   wxLOCALE_CAT_NUMBER) );
                 if ( (keycode < 128) &&
-                     (wxIsdigit(keycode) || tolower(keycode) == 'e' ||
+                     (wxIsdigit((wxChar)keycode) || tolower(keycode) == 'e' ||
                       is_decimal_point || keycode == '+' || keycode == '-') )
                     return true;
             }

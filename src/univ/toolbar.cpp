@@ -77,7 +77,7 @@ public:
 
         // not pressed yet
         m_isInverted = false;
-        
+
         // mouse not here yet
         m_underMouse = false;
     }
@@ -93,7 +93,7 @@ public:
 
         // not pressed yet
         m_isInverted = false;
-        
+
         // mouse not here yet
         m_underMouse = false;
     }
@@ -108,7 +108,7 @@ public:
 
     // press the tool temporarily by inverting its toggle state
     void Invert() { m_isInverted = !m_isInverted; }
-    
+
     // Set underMouse
     void SetUnderMouse( bool under = true ) { m_underMouse = under; }
     bool IsUnderMouse() { return m_underMouse; }
@@ -123,7 +123,7 @@ public:
 private:
     // true if the tool is pressed
     bool m_isInverted;
-    
+
     // true if the tool is under the mouse
     bool m_underMouse;
 };
@@ -292,9 +292,9 @@ void wxToolBar::DoEnableTool(wxToolBarToolBase *tool, bool enable)
                 unsigned char blue = image.GetBlue(x,y);
                 if (!has_mask || red != mask_red || green != mask_green || blue != mask_blue)
                 {
-                    red = (((wxInt32) red  - bg_red) >> 1) + bg_red;
-                    green = (((wxInt32) green  - bg_green) >> 1) + bg_green;
-                    blue = (((wxInt32) blue  - bg_blue) >> 1) + bg_blue;
+                    red = (unsigned char)((((wxInt32) red  - bg_red) >> 1) + bg_red);
+                    green = (unsigned char)((((wxInt32) green  - bg_green) >> 1) + bg_green);
+                    blue = (unsigned char)((((wxInt32) blue  - bg_blue) >> 1) + bg_blue);
                     image.SetRGB( x, y, red, green, blue );
                 }
             }
@@ -309,9 +309,9 @@ void wxToolBar::DoEnableTool(wxToolBarToolBase *tool, bool enable)
                 unsigned char blue = image.GetBlue(x,y);
                 if (!has_mask || red != mask_red || green != mask_green || blue != mask_blue)
                 {
-                    red = (((wxInt32) red  - bg_red) >> 1) + bg_red;
-                    green = (((wxInt32) green  - bg_green) >> 1) + bg_green;
-                    blue = (((wxInt32) blue  - bg_blue) >> 1) + bg_blue;
+                    red = (unsigned char)((((wxInt32) red  - bg_red) >> 1) + bg_red);
+                    green = (unsigned char)((((wxInt32) green  - bg_green) >> 1) + bg_green);
+                    blue = (unsigned char)((((wxInt32) blue  - bg_blue) >> 1) + bg_blue);
                     image.SetRGB( x, y, red, green, blue );
                 }
             }
@@ -440,8 +440,8 @@ void wxToolBar::DoLayout()
             y = m_yMargin;
 
     const wxCoord widthTool = IsVertical() ? m_defaultHeight : m_defaultWidth;
-    wxCoord margin = IsVertical() ? m_xMargin : m_yMargin,
-           *pCur = IsVertical() ? &y : &x;
+    wxCoord margin = IsVertical() ? m_xMargin : m_yMargin;
+    wxCoord *pCur = IsVertical() ? &y : &x;
 
     // calculate the positions of all elements
     for ( wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
@@ -494,7 +494,7 @@ void wxToolBar::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     GetSize(&old_width, &old_height);
 
     wxToolBarBase::DoSetSize(x, y, width, height, sizeFlags);
-    
+
     // Correct width and height if needed.
     if ( width == wxDefaultCoord || height == wxDefaultCoord )
     {
@@ -506,12 +506,12 @@ void wxToolBar::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         if ( height == wxDefaultCoord )
             height = tmp_height;
     }
-  
+
     // We must refresh the frame size when the toolbar changes size
     // otherwise the toolbar can be shown incorrectly
     if ( old_width != width || old_height != height )
     {
-        // But before we send the size event check it 
+        // But before we send the size event check it
         // we have a frame that is not being deleted.
         wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
         if ( frame && !frame->IsBeingDeleted() )
@@ -588,13 +588,13 @@ void wxToolBar::DoDraw(wxControlRenderer *renderer)
             // we're beyond the area to redraw, nothing left to do
             break;
         }
-        
+
         if (tool->IsSeparator() && !HasFlag(wxTB_FLAT))
         {
             // Draw seperators only in flat mode
             continue;
         }
-        
+
         // deal with the flags
         int flags = 0;
 
@@ -647,7 +647,7 @@ bool wxToolBar::PerformAction(const wxControlAction& action,
     wxToolBarTool *tool = (wxToolBarTool*) FindById(numArg);
     if (!tool)
         return false;
-    
+
     if ( action == wxACTION_TOOLBAR_TOGGLE )
     {
         PerformAction( wxACTION_BUTTON_RELEASE, numArg );
@@ -657,7 +657,7 @@ bool wxToolBar::PerformAction(const wxControlAction& action,
     else if ( action == wxACTION_TOOLBAR_PRESS )
     {
         wxLogTrace(_T("toolbar"), _T("Button '%s' pressed."), tool->GetShortHelp().c_str());
-        
+
         tool->Invert();
 
         RefreshTool( tool );
@@ -667,7 +667,7 @@ bool wxToolBar::PerformAction(const wxControlAction& action,
         wxLogTrace(_T("toolbar"), _T("Button '%s' released."), tool->GetShortHelp().c_str());
 
         wxASSERT_MSG( tool->IsInverted(), _T("release unpressed button?") );
-    
+
         tool->Invert();
 
         RefreshTool( tool );
@@ -692,11 +692,11 @@ bool wxToolBar::PerformAction(const wxControlAction& action,
     else if ( action == wxACTION_TOOLBAR_ENTER )
     {
         wxCHECK_MSG( tool, false, _T("no tool to enter?") );
-        
+
         if ( HasFlag(wxTB_FLAT) && tool->IsEnabled() )
         {
             tool->SetUnderMouse( true );
-            
+
             if ( !tool->IsToggled() )
                 RefreshTool( tool );
         }
@@ -704,11 +704,11 @@ bool wxToolBar::PerformAction(const wxControlAction& action,
     else if ( action == wxACTION_TOOLBAR_LEAVE )
     {
         wxCHECK_MSG( tool, false, _T("no tool to leave?") );
-        
+
         if ( HasFlag(wxTB_FLAT) && tool->IsEnabled() )
         {
             tool->SetUnderMouse( false );
-            
+
             if ( !tool->IsToggled() )
                 RefreshTool( tool );
         }
@@ -753,10 +753,10 @@ bool wxStdToolbarInputHandler::HandleMouse(wxInputConsumer *consumer,
         {
             if ( !tool || !tool->IsEnabled() )
                 return true;
-                
+
             m_winCapture = tbar;
             m_winCapture->CaptureMouse();
-            
+
             m_toolCapture = tool;
 
             consumer->PerformAction( wxACTION_BUTTON_PRESS, tool->GetId() );
@@ -778,9 +778,9 @@ bool wxStdToolbarInputHandler::HandleMouse(wxInputConsumer *consumer,
                 else
                     consumer->PerformAction( wxACTION_TOOLBAR_LEAVE, m_toolCapture->GetId() );
             }
-            
+
             m_toolCapture = NULL;
-                
+
             return true;
         }
         //else: don't do anything special about the double click
@@ -795,7 +795,7 @@ bool wxStdToolbarInputHandler::HandleMouseMove(wxInputConsumer *consumer,
     if ( !wxStdInputHandler::HandleMouseMove(consumer, event) )
     {
         wxToolBar *tbar = wxStaticCast(consumer->GetInputWindow(), wxToolBar);
-        
+
         wxToolBarTool *tool;
         if ( event.Leaving() )
         {
@@ -807,43 +807,43 @@ bool wxStdToolbarInputHandler::HandleMouseMove(wxInputConsumer *consumer,
         {
             tool = (wxToolBarTool*) tbar->FindToolForPosition( event.GetX(), event.GetY() );
         }
-        
+
         if (m_toolCapture)
         {
             // During capture we only care of the captured tool
             if (tool && (tool != m_toolCapture))
                 tool = NULL;
-                
+
             if (tool == m_toolLast)
                 return true;
-                
+
             if (tool)
                 consumer->PerformAction( wxACTION_BUTTON_PRESS, m_toolCapture->GetId() );
             else
                 consumer->PerformAction( wxACTION_BUTTON_RELEASE, m_toolCapture->GetId() );
-                
+
             m_toolLast = tool;
         }
         else
         {
             if (tool == m_toolLast)
                return true;
-               
+
             if (m_toolLast)
             {
                 // Leave old tool if any
                 consumer->PerformAction( wxACTION_TOOLBAR_LEAVE, m_toolLast->GetId() );
             }
-            
+
             if (tool)
             {
                 // Enter new tool if any
                 consumer->PerformAction( wxACTION_TOOLBAR_ENTER, tool->GetId() );
             }
-        
+
             m_toolLast = tool;
         }
-        
+
         return true;
     }
 
@@ -853,7 +853,7 @@ bool wxStdToolbarInputHandler::HandleMouseMove(wxInputConsumer *consumer,
 bool wxStdToolbarInputHandler::HandleFocus(wxInputConsumer *consumer,
                                            const wxFocusEvent& WXUNUSED(event))
 {
-    if ( m_toolCapture ) 
+    if ( m_toolCapture )
     {
         // We shouldn't be left with a highlighted button
         consumer->PerformAction( wxACTION_TOOLBAR_LEAVE, m_toolCapture->GetId() );

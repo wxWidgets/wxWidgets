@@ -48,7 +48,7 @@
 // due to unsigned type nPage is always >= 0
 #define IS_VALID_PAGE(nPage) (((nPage) >= 0) && ((size_t(nPage)) < GetPageCount()))
 #else
-#define IS_VALID_PAGE(nPage) ((size_t(nPage)) < GetPageCount())
+#define IS_VALID_PAGE(nPage) (((size_t)nPage) < GetPageCount())
 #endif
 
 // ----------------------------------------------------------------------------
@@ -1285,9 +1285,9 @@ void wxNotebook::DoSetSize(int x, int y,
     wxSize old_client_size = GetClientSize();
 
     wxControl::DoSetSize(x, y, width, height, sizeFlags);
-    
+
     wxSize new_client_size = GetClientSize();
-    
+
     if (old_client_size != new_client_size)
         Relayout();
 }

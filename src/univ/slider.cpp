@@ -313,7 +313,7 @@ int wxSlider::GetThumbLength() const
 {
     wxSize sz = GetDefaultThumbSize();
     int len = (IsVert() ? sz.x : sz.y);
-    if (m_thumbSize > len) 
+    if (m_thumbSize > len)
     {
         return m_thumbSize;
     }
@@ -389,7 +389,7 @@ wxSize wxSlider::DoGetBestClientSize() const
     if ( HasTicks() )
     {
         wxCoord lenTick = GetRenderer()->GetSliderTickLen();
-        if (style & wxSL_BOTH) 
+        if (style & wxSL_BOTH)
         {
             lenTick = 2 * lenTick;
         }
@@ -482,25 +482,25 @@ void wxSlider::CalcGeometry()
 
         m_rectLabel = wxRect(rectTotal.GetPosition(), sizeLabels);
 
-        if (style & wxSL_TOP) 
+        if (style & wxSL_TOP)
         {
             // shrink and offset the slider to the bottom
             m_rectSlider.y += sizeLabels.y + SLIDER_LABEL_MARGIN;
             m_rectSlider.height -= sizeLabels.y + SLIDER_LABEL_MARGIN;
         }
-        else if (style & wxSL_BOTTOM) 
+        else if (style & wxSL_BOTTOM)
         {
             // shrink the slider and move the label to the bottom
             m_rectSlider.height -= sizeLabels.y + SLIDER_LABEL_MARGIN;
             m_rectLabel.y += m_rectSlider.height + SLIDER_LABEL_MARGIN;
         }
-        else if (style & wxSL_LEFT) 
+        else if (style & wxSL_LEFT)
         {
             // shrink and offset the slider to the right
             m_rectSlider.x += sizeLabels.x + SLIDER_LABEL_MARGIN;
             m_rectSlider.width -= sizeLabels.x + SLIDER_LABEL_MARGIN;
         }
-        else if (style & wxSL_RIGHT) 
+        else if (style & wxSL_RIGHT)
         {
             // shrink the slider and move the label to the right
             m_rectSlider.width -= sizeLabels.x + SLIDER_LABEL_MARGIN;
@@ -518,7 +518,7 @@ void wxSlider::CalcGeometry()
 
         if ( IsVert() )
         {
-            if (style & (wxSL_LEFT|wxSL_BOTH)) 
+            if (style & (wxSL_LEFT|wxSL_BOTH))
             {
                 m_rectTicks.x = m_rectSlider.x;
             }
@@ -530,7 +530,7 @@ void wxSlider::CalcGeometry()
         }
         else // horizontal
         {
-            if (style & (wxSL_TOP|wxSL_BOTH)) 
+            if (style & (wxSL_TOP|wxSL_BOTH))
             {
                 m_rectTicks.y = m_rectSlider.y;
             }
@@ -599,8 +599,9 @@ void wxSlider::CalcThumbRect(const wxRect *rectShaftIn,
     }
 
     wxCoord lenShaft,
-            lenThumb,
-           *p;
+            lenThumb;
+    wxCoord *p;
+
     wxRect rectThumb(rectShaft.GetPosition(), GetThumbSize());
     if ( isVertical )
     {
@@ -708,19 +709,19 @@ void wxSlider::DoDraw(wxControlRenderer *renderer)
     {
         // align it to be close to the shaft
         int align = 0;
-        if (style & wxSL_TOP) 
+        if (style & wxSL_TOP)
         {
             align = wxALIGN_CENTRE_HORIZONTAL|wxALIGN_TOP;
         }
-        else if (style & wxSL_BOTTOM) 
+        else if (style & wxSL_BOTTOM)
         {
             align = wxALIGN_CENTRE_HORIZONTAL|wxALIGN_BOTTOM;
         }
-        else if (style & wxSL_LEFT) 
+        else if (style & wxSL_LEFT)
         {
             align = wxALIGN_CENTRE_VERTICAL|wxALIGN_LEFT;
         }
-        else if (style & wxSL_RIGHT) 
+        else if (style & wxSL_RIGHT)
         {
             align = wxALIGN_CENTRE_VERTICAL|wxALIGN_RIGHT;
         }
@@ -799,14 +800,14 @@ wxScrollThumb::Shaft wxSlider::HitTest(const wxPoint& pt) const
     CalcThumbRect(&rectShaft, &rectThumb, NULL);
 
     // check for possible shaft or thumb hit
-    if (!rectShaft.Inside(pt) && !rectThumb.Inside(pt)) 
+    if (!rectShaft.Inside(pt) && !rectThumb.Inside(pt))
     {
         return wxScrollThumb::Shaft_None;
     }
 
     // the position to test and the start and end of the thumb
     wxCoord x, x1, x2, x3, x4;
-    if (IsVert()) 
+    if (IsVert())
     {
         x = pt.y;
         x1 = rectThumb.GetBottom();
@@ -822,7 +823,7 @@ wxScrollThumb::Shaft wxSlider::HitTest(const wxPoint& pt) const
         x3 = rectThumb.GetRight();
         x4 = rectShaft.GetRight();
     }
-    if ((x1 <= x) & (x < x2)) 
+    if ((x1 <= x) & (x < x2))
     {
         // or to the left
         return wxScrollThumb::Shaft_Above;
@@ -896,7 +897,7 @@ void wxSlider::SetShaftPartState(wxScrollThumb::Shaft shaftPart,
 
 void wxSlider::OnThumbDragStart(int pos)
 {
-    if (IsVert()) 
+    if (IsVert())
     {
         PerformAction(wxACTION_SLIDER_THUMB_DRAG, m_max - pos);
     }
@@ -908,7 +909,7 @@ void wxSlider::OnThumbDragStart(int pos)
 
 void wxSlider::OnThumbDrag(int pos)
 {
-    if (IsVert()) 
+    if (IsVert())
     {
         PerformAction(wxACTION_SLIDER_THUMB_MOVE, m_max - pos);
     }
@@ -920,7 +921,7 @@ void wxSlider::OnThumbDrag(int pos)
 
 void wxSlider::OnThumbDragEnd(int pos)
 {
-    if (IsVert()) 
+    if (IsVert())
     {
         PerformAction(wxACTION_SLIDER_THUMB_RELEASE, m_max - pos);
     }

@@ -163,7 +163,7 @@ private:
 private:
     wxTheme *m_win32Theme;
     wxMetalRenderer *m_renderer;
-    
+
     WX_DECLARE_THEME(Metal)
 };
 
@@ -587,7 +587,7 @@ void wxMetalRenderer::DrawMetal(wxDC &dc, const wxRect &rect )
     dc.SetPen(*wxTRANSPARENT_PEN);
     for (int y = rect.y; y < rect.height+rect.y; y++)
     {
-       int intens = 230 + 80 * (rect.y-y) / rect.height;
+       unsigned char intens = (unsigned char)(230 + 80 * (rect.y-y) / rect.height);
        dc.SetBrush( wxBrush( wxColour(intens,intens,intens), wxSOLID ) );
        dc.DrawRectangle( rect.x, y, rect.width, 1 );
     }

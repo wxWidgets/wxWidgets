@@ -97,9 +97,7 @@ wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]
     {
         const wxAcceleratorEntry& entry = entries[i];
 
-        int keycode = entry.GetKeyCode();
-        if ( wxIslower(keycode) )
-            keycode = wxToupper(keycode);
+        int keycode = wxToupper(entry.GetKeyCode());
 
         M_ACCELDATA->m_accels.Append(new wxAcceleratorEntry(entry.GetFlags(),
                                                             keycode,

@@ -135,7 +135,7 @@ bool wxListBox::Create(wxWindow *parent,
         style |= wxBORDER_SUNKEN;
 #endif
 
-    if ( !wxControl::Create(parent, id, pos, size, style, 
+    if ( !wxControl::Create(parent, id, pos, size, style,
                             validator, name) )
         return false;
 
@@ -1380,7 +1380,7 @@ bool wxStdListboxInputHandler::HandleKey(wxInputConsumer *consumer,
                 break;
 
             default:
-                if ( (keycode < 255) && wxIsalnum(keycode) )
+                if ( (keycode < 255) && wxIsalnum((wxChar)keycode) )
                 {
                     action = wxACTION_LISTBOX_FIND;
                     strArg = (wxChar)keycode;

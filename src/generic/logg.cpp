@@ -251,7 +251,7 @@ void wxLogGui::Flush()
     m_bHasMessages = false;
 
     wxString appName = wxTheApp->GetAppName();
-    if ( !!appName )
+    if ( !appName.empty() )
         appName[0u] = (wxChar)wxToupper(appName[0u]);
 
     long style;
@@ -317,7 +317,7 @@ void wxLogGui::Flush()
 
     // this catches both cases of 1 message with wxUSE_LOG_DIALOG and any
     // situation without it
-    if ( !!str )
+    if ( !str.empty() )
     {
         wxMessageBox(str, title, wxOK | style);
 
@@ -701,7 +701,7 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
                       wxDefaultPosition, wxDefaultSize,
                       wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
 {
-    if ( ms_details.IsEmpty() )
+    if ( ms_details.empty() )
     {
         // ensure that we won't loop here if wxGetTranslation()
         // happens to pop up a Log message while translating this :-)
