@@ -93,18 +93,18 @@ bool wxRadioButton::Create( wxWindow *parent, wxWindowID id, const wxString& lab
 	         chief = (wxRadioButton*) child;
 		 if (child->HasFlag(wxRB_GROUP)) break;
 	    }
-	    if (chief)
-	    {
-                /* we are part of the group started by chief */
-	        m_radioButtonGroup = gtk_radio_button_group( GTK_RADIO_BUTTON(chief->m_widget) );
-	    }
-	    else
-	    {
-                /* start a new group */
-                m_radioButtonGroup = (GSList*) NULL;
-	    }
 	    node = node->GetPrevious();
         }
+	if (chief)
+	{
+            /* we are part of the group started by chief */
+	    m_radioButtonGroup = gtk_radio_button_group( GTK_RADIO_BUTTON(chief->m_widget) );
+	}
+	else
+	{
+            /* start a new group */
+            m_radioButtonGroup = (GSList*) NULL;
+	}
     }
 
     m_widget = gtk_radio_button_new_with_label( m_radioButtonGroup, label.mbc_str() );

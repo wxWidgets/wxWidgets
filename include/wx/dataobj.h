@@ -85,8 +85,10 @@ private:
     size_t     m_size;
     void      *m_data;
 
+#if !defined(__WXGTK__) && !defined(__WXMOTIF__)
     // the data format
     wxDataFormat m_format;
+#endif
 };
 
 

@@ -1,4 +1,46 @@
 
+27th July '99: Eight wxGTK 2.1 snapshot released
+
+The new makefile system is not able to produce shared libraries 
+on Unix with the exception of Linux - libtool is really great...
+
+Work in wxPen, wxBrush and wxDC to match wxMSW more exactly and
+to implement missing feature etc.
+
+Reimplemented radio buttons. The first of a group of such buttons
+is now marked by having the wxRB_GROUP style.
+
+Complete redesign of all stream classes, including tests for them
+in the samples.
+
+Controls now send the same messages (or more importantly none if
+changed programmatically) as per wxMSW.
+
+New implementation of wxSocket using an intermediate library called
+GSocket. This willl hopefully change in the future.
+
+Reworked in-place editing of wxListCtrl and wxTreeCtrl.
+
+Fixed bug reporting two refreshes when scrolling.
+
+Disabled GUI threading as I have not been able to get this working
+correctly in _all_ circumstances.
+
+Corrected bug in wxComboBox client data code.
+
+Corrected reported but unverified bug in BMP loading code.
+
+Added a few more methods to wxStaticBitmap.
+
+Integration of wxHTML code in the main library, including wxZIPStream,
+wxFilesystem, wxHTMLHelpController and others.
+
+Added a wrapper for ffile() etc functions.
+
+New documentation.
+
+Fixed in unenclosed number of other bugs...
+
 25th June '99: Seventh wxGTK 2.1 snapshot released
 
 Many fixes to th new makefile system. The last version gave

@@ -1,5 +1,5 @@
 
-  Welcome to wxWindows/Gtk 2.1 snapshot 7,
+  Welcome to wxWindows/Gtk 2.1 snapshot 8,
 
 you have downloaded version 2.1 of the GTK+ 1.2 port of 
 the wxWindows GUI library. This is a developers release

@@ -427,7 +427,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_fontButton = new wxButton( panel, ID_SET_FONT, "Set more Italic font", wxPoint(340,30), wxSize(140,30) );
     (void)new wxButton( panel, ID_RADIOBOX_FONT, "Set Italic font", wxPoint(340,80), wxSize(140,30) );
     (void)new wxCheckBox( panel, ID_RADIOBOX_ENABLE, "Disable", wxPoint(340,130), wxSize(140,30) );
-    wxRadioButton *rb = new wxRadioButton( panel, ID_RADIOBUTTON_1, "Radiobutton1", wxPoint(210,170), wxSize(110,30) );
+    wxRadioButton *rb = new wxRadioButton( panel, ID_RADIOBUTTON_1, "Radiobutton1", wxPoint(210,170), wxSize(110,30), wxRB_GROUP );
     rb->SetValue( FALSE );
     (void)new wxRadioButton( panel, ID_RADIOBUTTON_2, "Radiobutton2", wxPoint(340,170), wxSize(110,30) );
     m_notebook->AddPage(panel, "wxRadioBox", FALSE, Image_Radio);

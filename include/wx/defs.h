@@ -706,18 +706,18 @@ enum
 #define wxCB_DROPDOWN       0x0020
 
 /*
- * wxRadioBox/wxRadioButton style flags
+ * wxRadioBox style flags
  */
- 
 // New, more intuitive names to specify majorDim argument
-// Same as wxRA_HORIZONTAL
-#define wxRA_SPECIFY_COLS   0x0001
-// Same as wxRA_VERTICAL
-#define wxRA_SPECIFY_ROWS   0x0002
-
+#define wxRA_SPECIFY_COLS   wxHORIZONTAL
+#define wxRA_SPECIFY_ROWS   wxVERTICAL
 // Old names for compatibility
 #define wxRA_HORIZONTAL     wxHORIZONTAL
 #define wxRA_VERTICAL       wxVERTICAL
+
+/*
+ * wxRadioButton style flag
+ */
 #define wxRB_GROUP          0x0004
 
 /*

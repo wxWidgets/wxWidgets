@@ -1,4 +1,30 @@
 
+Installing wxWindows 2.1
+------------------------
+
+[Notes from Robert Roebling for snapshot 8]
+
+This is a not-so-well tested snapshot release of wxWindows 2.1 for
+Microsoft Windows 95, 98 and NT. This is not a production release,
+although a huge number of bugs found in wxWindows 2.0 have been
+fixed.
+
+There have not been major changes in the way to build the library, 
+although the creation of the various makefiles has been automatized. 
+I myself use the GNU MingGW32 compiler from 
+
+  http://www.cygnus.com 
+  
+using the GNU make program from 
+
+  http://agnes.dida.physik.uni-essen.de/~janjaap/mingw32
+  
+and I have not tested any other compiler, but other developers use
+the makefiles for Borland C++, MS-Visual C++ 5.0 and 6.0 and probably
+Metrowerks C++.
+
+Expect problems.
+
 Installing wxWindows 2.0
 ------------------------
 
