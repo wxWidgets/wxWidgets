@@ -226,6 +226,20 @@ void wxFrame::GetClientSize( int *width, int *height ) const
   };
 };
 
+void wxFrame::SetClientSize( int const width, int const height )
+{
+  int h = height;
+  if (m_frameMenuBar) h += wxMENU_HEIGHT;
+  if (m_frameStatusBar) h += wxSTATUS_HEIGHT;
+  if (m_frameToolBar)
+  {
+    int y = 0;
+    m_frameToolBar->GetSize( NULL, &y );
+    h += y;
+  }
+  wxWindow::SetClientSize( width, h );
+};
+
 void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height )
 {
   // due to a bug in gtk, x,y are always 0

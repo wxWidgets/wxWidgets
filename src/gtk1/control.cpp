@@ -38,6 +38,7 @@ void wxControl::Command( wxCommandEvent &WXUNUSED(event) )
 
 void wxControl::SetLabel( const wxString &label )
 {
+  m_label = "";
   for ( const char *pc = label; *pc != '\0'; pc++ ) {
     if ( *pc == '&' ) {
       pc++; // skip it
@@ -47,7 +48,6 @@ void wxControl::SetLabel( const wxString &label )
 #endif
     }
 
-    m_label = "";
     m_label << *pc;
   }
 };

@@ -63,6 +63,7 @@ public:
   virtual void Enable( bool enable );
 
   virtual void GetClientSize( int *width, int *height ) const;
+  virtual void SetClientSize( int const width, int const height );
   
     // set minimal/maxmimal size for the frame
   virtual void SetSizeHints( int minW, int minH, int maxW, int maxH, int incW = -1 );
