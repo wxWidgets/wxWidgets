@@ -59,18 +59,21 @@ class PyColourBox(wxPanel):
         self.colour = colour
         self.colour_box.SetBackgroundColour(apply(wxColour, self.colour))
 
+    def Update(self):
+        wxPanel.Update(self)
+        self.colour_box.Update()
+
     def SetHighlight(self, val):
         """Accepts a boolean 'val' toggling the box's highlighting."""
         # XXX This code has been disabled for now until I can figure out
         # how to get this to work reliably across all platforms.
-#        if val:
+        if val:
             #A wxColourPtr is returned in windows, making this difficult
-            #red =(self.bg_colour.Red() + 25) % 255
-            #green =(self.bg_colour.Green() + 25) % 255
-            #blue =(self.bg_colour.Blue() + 25) % 255
-
-#            new_colour = wxColour(128, 128, 128)
-#            self.SetBackgroundColour(new_colour)
-#        else:
-#            self.SetBackgroundColour(self.real_bg)
+            red =(self.real_bg.Red() - 45) % 255
+            green =(self.real_bg.Green() - 45) % 255
+            blue =(self.real_bg.Blue() - 45) % 255
+            new_colour = wxColour(red, green, blue)
+            self.SetBackgroundColour(new_colour)
+        else:
+            self.SetBackgroundColour(self.real_bg)
         self.Refresh()

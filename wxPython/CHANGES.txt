@@ -6,6 +6,9 @@ CHANGES.txt for wxPython
 -------
 A few little but annoying bug fixes.
 
+Updated pycolourchooser.
+
+
 
 
 2.4.0.4

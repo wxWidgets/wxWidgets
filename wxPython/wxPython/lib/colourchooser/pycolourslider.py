@@ -17,13 +17,14 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 """
 
 import canvas
+import colorsys
 from wxPython.wx import *
 
 class PyColourSlider(canvas.Canvas):
     """A Pure-Python Colour Slider
 
-    The colour slider displays transitions between white to target-colour
-    to black, allowing the user to select a colour within the transition
+    The colour slider displays transitions from value 0 to value 1 in
+    HSV, allowing the user to select a colour within the transition
     spectrum.
 
     This class is best accompanying by a wxSlider that allows the user
@@ -60,9 +61,8 @@ class PyColourSlider(canvas.Canvas):
         return self.buffer.GetPixel(0, pos)
 
     def DrawBuffer(self):
-        """Actual implementation of the widget's drawing. Interpolation
-        is calculated between white and the target colour, and black and
-        the target colour to draw both halves of the slider."""
+        """Actual implementation of the widget's drawing. We simply draw
+        from value 0.0 to value 1.0 in HSV."""
         if self.base_colour is None:
             return
 
@@ -70,36 +70,13 @@ class PyColourSlider(canvas.Canvas):
         target_green = self.base_colour.Green()
         target_blue = self.base_colour.Blue()
 
-        half = self.HEIGHT / 2
-
-        wxYield()
-
-        # Interpolate between white and target in middle of slider
-        r_step = float(255 - target_red) / float(half)
-        g_step = float(255 - target_green) / float(half)
-        b_step = float(255 - target_blue) / float(half)
-        r, g, b = 255.0, 255.0, 255.0
-        for y_pos in range(0, half):
+        h,s,v = colorsys.rgb_to_hsv(target_red / 255.0, target_green / 255.0,
+                                    target_blue / 255.0)
+        v = 1.0
+        vstep = 1.0 / self.HEIGHT
+        for y_pos in range(0, self.HEIGHT):
+            r,g,b = [c * 255.0 for c in colorsys.hsv_to_rgb(h,s,v)]
             colour = wxColour(int(r), int(g),(b))
             self.buffer.SetPen(wxPen(colour, 1, wxSOLID))
             self.buffer.DrawRectangle(0, y_pos, 15, 1)
-            r, g, b = r - r_step, g - g_step, b - b_step
-
-        wxYield()
-
-        # Interpolate between target and black
-        r_step = float(target_red) / float(half)
-        g_step = float(target_green) / float(half)
-        b_step = float(target_blue) / float(half)
-        r, g, b = float(target_red), float(target_green), float(target_blue)
-        for y_pos in range(half, self.HEIGHT):
-            colour = wxColour(int(r), int(g), int(b))
-            self.buffer.SetPen(wxPen(colour, 1, wxSOLID))
-            self.buffer.DrawRectangle(0, y_pos, 15, 1)
-            r, g, b = r - r_step, g - g_step, b - b_step
-
-        wxYield()
-
-        # Correct the very last pixel from round-off error
-        self.buffer.SetPen(wxPen(wxColour(0, 0, 0), 1, wxSOLID))
-        self.buffer.DrawRectangle(0, self.HEIGHT - 1, 15, 1)
+            v = v - vstep

@@ -55,9 +55,9 @@ class Canvas(wxWindow):
     are also provided.
     """
     def __init__(self, parent, id,
-                  pos=wxDefaultPosition,
-                  size=wxDefaultSize,
-                  style=wxSIMPLE_BORDER):
+                 pos=wxDefaultPosition,
+                 size=wxDefaultSize,
+                 style=wxSIMPLE_BORDER):
         """Creates a canvas instance and initializes the off-screen
         buffer. Also sets the handler for rendering the canvas
         automatically via size and paint calls from the windowing
@@ -74,7 +74,7 @@ class Canvas(wxWindow):
     def MakeNewBuffer(self):
         size = self.GetSizeTuple()
         self.buffer = BitmapBuffer(size[0], size[1],
-                                    self.GetBackgroundColour())
+                                   self.GetBackgroundColour())
 
     def onSize(self, event):
         """Perform actual redraw to off-screen buffer only when the
@@ -89,9 +89,18 @@ class Canvas(wxWindow):
         """Explicitly tells the canvas to redraw it's contents."""
         self.onSize(None)
 
+    def Refresh(self):
+        """Re-draws the buffer contents on-screen."""
+        dc = wxClientDC(self)
+        self.Blit(dc)
+
     def onPaint(self, event):
         """Renders the off-screen buffer on-screen."""
         dc = wxPaintDC(self)
+        self.Blit(dc)
+
+    def Blit(self, dc):
+        """Performs the blit of the buffer contents on-screen."""
         width, height = self.buffer.GetSize()
         dc.BeginDrawing()
         dc.Blit(0, 0, width, height, self.buffer, 0, 0)

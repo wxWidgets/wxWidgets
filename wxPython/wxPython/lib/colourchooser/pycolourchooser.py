@@ -15,6 +15,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 import pycolourbox
 import pypalette
 import pycolourslider
+import colorsys
 from intl import _
 from wxPython.wx import *
 
@@ -84,7 +85,12 @@ class wxPyColourChooser(wxPanel):
         'WHITE',
     ]
 
-    custom_colours = [ (255, 255, 255) ] * 16
+    # Generate the custom colours. These colours are shared across
+    # all instances of the colour chooser
+    NO_CUSTOM_COLOURS = 16
+    custom_colours = [ (wxColour(255, 255, 255),
+                        pycolourslider.PyColourSlider.HEIGHT / 2)
+                     ] * NO_CUSTOM_COLOURS
     last_custom = 0
 
     idADD_CUSTOM = wxNewId()
@@ -119,11 +125,11 @@ class wxPyColourChooser(wxPanel):
         # Create the custom colours palette
         self.custom_boxs = [ ]
         custom_grid = wxGridSizer(2, 8)
-        for r, g, b in self.custom_colours:
+        for wxcolour, slidepos in self.custom_colours:
             new_id = wxNewId()
             custom = pycolourbox.PyColourBox(self, new_id)
             EVT_LEFT_DOWN(custom.GetColourBox(), lambda x, b=custom: self.onCustomClick(x, b))
-            custom.SetColourTuple((r, g, b))
+            custom.SetColour(wxcolour)
             custom_grid.Add(custom, 0, wxEXPAND)
             self.custom_boxs.append(custom)
 
@@ -140,7 +146,6 @@ class wxPyColourChooser(wxPanel):
         csizer.Add(self.add_button, 0, wxEXPAND)
 
         self.palette = pypalette.PyPalette(self, -1)
-        EVT_LEFT_DOWN(self.palette, self.onPaletteClick)
         self.colour_slider = pycolourslider.PyColourSlider(self, -1)
         self.slider = wxSlider(self, self.idSCROLL, 86, 0, self.colour_slider.HEIGHT - 1,
                                 style=wxSL_VERTICAL, size=wxSize(15, self.colour_slider.HEIGHT))
@@ -151,6 +156,12 @@ class wxPyColourChooser(wxPanel):
         psizer.Add(self.colour_slider, 0, wxALIGN_CENTER_VERTICAL)
         psizer.Add(self.slider, 0, wxALIGN_CENTER_VERTICAL)
 
+        # Register mouse events for dragging across the palette
+        EVT_LEFT_DOWN(self.palette, self.onPaletteDown)
+        EVT_LEFT_UP(self.palette, self.onPaletteUp)
+        EVT_MOTION(self.palette, self.onPaletteMotion)
+        self.mouse_down = False
+
         self.solid = pycolourbox.PyColourBox(self, -1, size=wxSize(75, 50))
         slabel = wxStaticText(self, -1, _("Solid Colour"))
         ssizer = wxBoxSizer(wxVERTICAL)
@@ -158,31 +169,53 @@ class wxPyColourChooser(wxPanel):
         ssizer.Add(1, 2)
         ssizer.Add(slabel, 0, wxALIGN_CENTER_HORIZONTAL)
 
-        rlabel = wxStaticText(self, -1, _("Red:"))
+        hlabel = wxStaticText(self, -1, _("H:"))
+        self.hentry = wxTextCtrl(self, -1)
+        self.hentry.SetSize((40, -1))
+        slabel = wxStaticText(self, -1, _("S:"))
+        self.sentry = wxTextCtrl(self, -1)
+        self.sentry.SetSize((40, -1))
+        vlabel = wxStaticText(self, -1, _("V:"))
+        self.ventry = wxTextCtrl(self, -1)
+        self.ventry.SetSize((40, -1))
+        hsvgrid = wxFlexGridSizer(1, 6, 2, 2)
+        hsvgrid.AddMany ([
+            (hlabel, 0, wxALIGN_CENTER_VERTICAL), (self.hentry, 0, 0),
+            (slabel, 0, wxALIGN_CENTER_VERTICAL), (self.sentry, 0, 0),
+            (vlabel, 0, wxALIGN_CENTER_VERTICAL), (self.ventry, 0, 0),
+        ])
+
+        rlabel = wxStaticText(self, -1, _("R:"))
         self.rentry = wxTextCtrl(self, -1)
         self.rentry.SetSize((40, -1))
-        glabel = wxStaticText(self, -1, _("Green:"))
+        glabel = wxStaticText(self, -1, _("G:"))
         self.gentry = wxTextCtrl(self, -1)
         self.gentry.SetSize((40, -1))
-        blabel = wxStaticText(self, -1, _("Blue:"))
+        blabel = wxStaticText(self, -1, _("B:"))
         self.bentry = wxTextCtrl(self, -1)
         self.bentry.SetSize((40, -1))
-        lgrid = wxFlexGridSizer(3, 2, 2, 2)
+        lgrid = wxFlexGridSizer(1, 6, 2, 2)
         lgrid.AddMany([
             (rlabel, 0, wxALIGN_CENTER_VERTICAL), (self.rentry, 0, 0),
             (glabel, 0, wxALIGN_CENTER_VERTICAL), (self.gentry, 0, 0),
             (blabel, 0, wxALIGN_CENTER_VERTICAL), (self.bentry, 0, 0),
         ])
 
-        gsizer = wxGridSizer(1, 2)
-        gsizer.Add(ssizer, 0, wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL)
+        gsizer = wxGridSizer(2, 1)
+        gsizer.SetVGap (10)
+        gsizer.SetHGap (2)
+        gsizer.Add(hsvgrid, 0, wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL)
         gsizer.Add(lgrid, 0, wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL)
+
+        hsizer = wxBoxSizer(wxHORIZONTAL)
+        hsizer.Add(ssizer, 0, wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL)
+        hsizer.Add(gsizer, 0, wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL)
 
         vsizer = wxBoxSizer(wxVERTICAL)
         vsizer.Add(1, 5)
         vsizer.Add(psizer, 0, 0)
         vsizer.Add(1, 15)
-        vsizer.Add(gsizer, 0, wxEXPAND)
+        vsizer.Add(hsizer, 0, wxEXPAND)
 
         sizer = wxBoxSizer(wxHORIZONTAL)
         sizer.Add(5, 1)
@@ -201,8 +234,8 @@ class wxPyColourChooser(wxPanel):
         for i in range(len(self.colour_names)):
             colour = wxTheColourDatabase.FindColour(self.colour_names[i])
             self.colour_boxs[i].SetColourTuple((colour.Red(),
-                                                 colour.Green(),
-                                                 colour.Blue()))
+                                                colour.Green(),
+                                                colour.Blue()))
 
     def onBasicClick(self, event, box):
         """Highlights the selected colour box and updates the solid colour
@@ -224,38 +257,95 @@ class wxPyColourChooser(wxPanel):
             self._old_custom_highlight.SetHighlight(False)
         box.SetHighlight(True)
         self._old_custom_highlight = box
+
+        # Update the colour panel and then the slider accordingly
+        box_index = self.custom_boxs.index(box)
+        base_colour, slidepos = self.custom_colours[box_index]
         self.UpdateColour(box.GetColour())
+        self.slider.SetValue(slidepos)
 
     def onAddCustom(self, event):
         """Adds a custom colour to the custom colour box set. Boxes are
         chosen in a round-robin fashion, eventually overwriting previously
         added colours."""
-        colour = self.solid.GetColour()
-        r, g, b = colour.Red(), colour.Green(), colour.Blue()
-        self.custom_colours[self.last_custom] = (r, g, b)
-        self.custom_boxs[self.last_custom].SetColour(colour)
-        self.last_custom = (self.last_custom + 1) % 16
+        # Store the colour and slider position so we can restore the
+        # custom colours just as they were
+        self.setCustomColour(self.last_custom,
+                             self.solid.GetColour(),
+                             self.colour_slider.GetBaseColour(),
+                             self.slider.GetValue())
+        self.last_custom = (self.last_custom + 1) % self.NO_CUSTOM_COLOURS
+
+    def setCustomColour (self, index, true_colour, base_colour, slidepos):
+        """Sets the custom colour at the given index. true_colour is wxColour
+        object containing the actual rgb value of the custom colour.
+        base_colour (wxColour) and slidepos (int) are used to configure the
+        colour slider and set everything to its original position."""
+        self.custom_boxs[index].SetColour(true_colour)
+        self.custom_colours[index] = (base_colour, slidepos)
 
     def UpdateColour(self, colour):
         """Performs necessary updates for when the colour selection has
         changed."""
+        # Reset the palette to erase any highlighting
+        self.palette.ReDraw()
+
+        # Set the color info
         self.solid.SetColour(colour)
         self.colour_slider.SetBaseColour(colour)
         self.colour_slider.ReDraw()
-        self.slider.SetValue(self.colour_slider.HEIGHT / 2)
+        self.slider.SetValue(0)
         self.UpdateEntries(colour)
 
     def UpdateEntries(self, colour):
-        """Updates the rgb text to display the new colour values."""
-        self.rentry.SetValue(str(colour.Red()))
-        self.gentry.SetValue(str(colour.Green()))
-        self.bentry.SetValue(str(colour.Blue()))
+        """Updates the color levels to display the new values."""
+        # Temporary bindings
+        r = colour.Red()
+        g = colour.Green()
+        b = colour.Blue()
 
-    def onPaletteClick(self, event):
-        """Retrieves a value from the palette when clicked and updates
+        # Update the RGB entries
+        self.rentry.SetValue(str(r))
+        self.gentry.SetValue(str(g))
+        self.bentry.SetValue(str(b))
+
+        # Convert to HSV
+        h,s,v = colorsys.rgb_to_hsv(r / 255.0, g / 255.0, b / 255.0)
+        self.hentry.SetValue("%.2f" % (h))
+        self.sentry.SetValue("%.2f" % (s))
+        self.ventry.SetValue("%.2f" % (v))
+
+    def onPaletteDown(self, event):
+        """Stores state that the mouse has been pressed and updates
         the selected colour values."""
-        colour = self.palette.GetValue(event.m_x, event.m_y)
+        self.mouse_down = True
+        self.palette.ReDraw()
+        self.doPaletteClick(event.m_x, event.m_y)
+
+    def onPaletteUp(self, event):
+        """Stores state that the mouse is no longer depressed."""
+        self.mouse_down = False
+
+    def onPaletteMotion(self, event):
+        """Updates the colour values during mouse motion while the
+        mouse button is depressed."""
+        if self.mouse_down:
+            self.doPaletteClick(event.m_x, event.m_y)
+
+    def doPaletteClick(self, m_x, m_y):
+        """Updates the colour values based on the mouse location
+        over the palette."""
+        # Get the colour value and update
+        colour = self.palette.GetValue(m_x, m_y)
         self.UpdateColour(colour)
+
+        # Highlight a fresh selected area
+        self.palette.ReDraw()
+        self.palette.HighlightPoint(m_x, m_y)
+
+        # Force an onscreen update
+        self.solid.Update()
+        self.colour_slider.Refresh()
 
     def onScroll(self, event):
         """Updates the solid colour display to reflect the changing slider."""
