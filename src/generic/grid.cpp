@@ -5302,54 +5302,33 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 DisableCellEditControl();
                 MakeCellVisible( coords );
 
-                // if this is the second click on this cell then start
-                // the edit control
-                if ( m_waitForSlowClick &&
-                     (coords == m_currentCellCoords) &&
-                     CanEnableCellControl())
+                if ( event.ControlDown() )
                 {
-                    EnableCellEditControl();
-
-                    wxGridCellAttr* attr = GetCellAttr(m_currentCellCoords);
-                    wxGridCellEditor *editor = attr->GetEditor(this,
-                                                               coords.GetRow(),
-                                                               coords.GetCol());
-                    editor->StartingClick();
-                    editor->DecRef();
-                    attr->DecRef();
-
-                    m_waitForSlowClick = FALSE;
+                    if ( m_selection )
+                    {
+                        m_selection->ToggleCellSelection( coords.GetRow(),
+                                                          coords.GetCol(),
+                                                          event.ControlDown(),
+                                                          event.ShiftDown(),
+                                                          event.AltDown(),
+                                                          event.MetaDown() );
+                    }
+                    m_selectingTopLeft = wxGridNoCellCoords;
+                    m_selectingBottomRight = wxGridNoCellCoords;
+                    m_selectingKeyboard = coords;
                 }
                 else
                 {
-                    if ( event.ControlDown() )
+                    m_waitForSlowClick = m_currentCellCoords == coords && coords != wxGridNoCellCoords;
+                    SetCurrentCell( coords );
+                    if ( m_selection )
                     {
-                        if ( m_selection )
+                        if ( m_selection->GetSelectionMode() !=
+                                wxGrid::wxGridSelectCells )
                         {
-                            m_selection->ToggleCellSelection( coords.GetRow(),
-                                                              coords.GetCol(),
-                                                              event.ControlDown(),
-                                                              event.ShiftDown(),
-                                                              event.AltDown(),
-                                                              event.MetaDown() );
-                        }
-                        m_selectingTopLeft = wxGridNoCellCoords;
-                        m_selectingBottomRight = wxGridNoCellCoords;
-                        m_selectingKeyboard = coords;
-                    }
-                    else
-                    {
-                        SetCurrentCell( coords );
-                        if ( m_selection )
-                        {
-                            if ( m_selection->GetSelectionMode() !=
-                                    wxGrid::wxGridSelectCells )
-                            {
-                                HighlightBlock( coords, coords );
-                            }
+                            HighlightBlock( coords, coords );
                         }
                     }
-                    m_waitForSlowClick = TRUE;
                 }
             }
         }
@@ -5384,7 +5363,20 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 m_winCapture = NULL;
             }
 
-            if ( m_selectingTopLeft != wxGridNoCellCoords &&
+            if ( coords == m_currentCellCoords && m_waitForSlowClick && CanEnableCellControl())
+            {
+                ClearSelection();
+                EnableCellEditControl();
+
+                wxGridCellAttr* attr = GetCellAttr(coords);
+                wxGridCellEditor *editor = attr->GetEditor(this, coords.GetRow(), coords.GetCol());
+                editor->StartingClick();
+                editor->DecRef();
+                attr->DecRef();
+
+                m_waitForSlowClick = FALSE;
+            }
+            else if ( m_selectingTopLeft != wxGridNoCellCoords &&
                  m_selectingBottomRight != wxGridNoCellCoords )
             {
                 if ( m_selection )
@@ -5401,11 +5393,11 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
 
                 m_selectingTopLeft = wxGridNoCellCoords;
                 m_selectingBottomRight = wxGridNoCellCoords;
-            }
 
-            // Show the edit control, if it has been hidden for
-            // drag-shrinking.
-            ShowCellEditControl();
+                // Show the edit control, if it has been hidden for
+                // drag-shrinking.
+                ShowCellEditControl();
+            }
         }
         else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW )
         {
@@ -7281,7 +7273,9 @@ bool wxGrid::IsCurrentCellReadOnly() const
 
 bool wxGrid::CanEnableCellControl() const
 {
-    return m_editable && !IsCurrentCellReadOnly();
+    return m_editable && (m_currentCellCoords != wxGridNoCellCoords) &&
+        !IsCurrentCellReadOnly();
+        
 }
 
 bool wxGrid::IsCellEditControlEnabled() const
@@ -7542,7 +7536,10 @@ static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
         if ( coord >= BorderArray[i_max])
         {
             i_min = i_max;
-            i_max = coord / minDist;
+            if (minDist)
+                i_max = coord / minDist;
+            else
+                i_max =  BorderArray.GetCount() - 1;
         }
         if ( i_max >= BorderArray.GetCount())
             i_max = BorderArray.GetCount() - 1;
@@ -9159,6 +9156,9 @@ void wxGrid::SetRowSize( int row, int height )
 {
     wxCHECK_RET( row >= 0 && row < m_numRows, _T("invalid row index") );
 
+    // See comment in SetColSize
+    if ( height < GetRowMinimalAcceptableHeight()) { return; }
+
     if ( m_rowHeights.IsEmpty() )
     {
         // need to really create the array
@@ -9200,6 +9200,14 @@ void wxGrid::SetColSize( int col, int width )
     wxCHECK_RET( col >= 0 && col < m_numCols, _T("invalid column index") );
 
     // should we check that it's bigger than GetColMinimalWidth(col) here?
+    //                                                                 (VZ)
+    // No, because it is reasonable to assume the library user know's
+    // what he is doing. However whe should test against the weaker
+    // constariant of minimalAcceptableWidth, as this breaks rendering
+    //
+    // This test then fixes sf.net bug #645734 and is needed for #832991
+
+    if ( width < GetColMinimalAcceptableWidth()) { return; }
 
     if ( m_colWidths.IsEmpty() )
     {
@@ -9223,12 +9231,16 @@ void wxGrid::SetColSize( int col, int width )
 
 void wxGrid::SetColMinimalWidth( int col, int width )
 {
-    m_colMinWidths.Put(col, width);
+    if (width > GetColMinimalAcceptableWidth()) {
+        m_colMinWidths.Put(col, width);
+    }
 }
 
 void wxGrid::SetRowMinimalHeight( int row, int width )
 {
-    m_rowMinHeights.Put(row, width);
+    if (width > GetRowMinimalAcceptableHeight()) {
+        m_rowMinHeights.Put(row, width);
+    }
 }
 
 int wxGrid::GetColMinimalWidth(int col) const
