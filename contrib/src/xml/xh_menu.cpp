@@ -65,16 +65,25 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
             p_menu->AppendSeparator();
         else if (m_Node->GetName() == _T("break"))
             p_menu->Break();
-        else
+        else /*menuitem*/
         {
             int id = GetID();
             bool checkable = GetBool(_T("checkable"));
+
             p_menu->Append(id, GetText(_T("label")), 
                            GetText(_T("help")), checkable);
             if (id != -1)
             {
                 p_menu->Enable(id, GetBool(_T("enabled"), TRUE));
                 if (checkable) p_menu->Check(id, GetBool(_T("checked")));
+                
+#if wxCHECK_VERSION(2,3,0) || defined(__WXMSW__)
+                if (HasParam(_T("bitmap")))
+                {
+                    wxMenuItem *mitem = p_menu->FindItem(id);
+                    mitem->SetBitmap(GetBitmap(_T("bitmap")));
+                }
+#endif
             }
         }
         return NULL;
