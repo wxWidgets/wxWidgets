@@ -95,7 +95,7 @@ wxRadioButton::~wxRadioButton()
             m_radioSlaves.GetFirst();
         wxASSERT(slaveNode);
         wxASSERT(slaveNode->GetData() == this);
-        m_radioSlaves.DeleteNode(slaveNode);
+        m_radioSlaves.Erase(slaveNode);
     
         // Now find the new master
         wxRadioButton *newMaster = NULL;
@@ -111,7 +111,7 @@ wxRadioButton::~wxRadioButton()
             wxASSERT(radioButton->m_radioMaster == this);
             radioButton->m_radioMaster = newMaster;
             newMaster->m_radioSlaves.Append(radioButton);
-            m_radioSlaves.DeleteNode(slaveNode);
+            m_radioSlaves.Erase(slaveNode);
         }
     }
     else if(m_radioMaster)
