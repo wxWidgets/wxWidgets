@@ -38,8 +38,8 @@ class WXDLLIMPEXP_FL wxDynToolInfo;
 typedef wxToolLayoutItem* wxToolLayoutItemPtrT;
 typedef wxDynToolInfo*    wxDynToolInfoPtrT;
 
-WXFL_DEFINE_ARRAY( wxToolLayoutItemPtrT, wxLayoutItemArrayT  );
-WXFL_DEFINE_ARRAY( wxDynToolInfoPtrT,    wxDynToolInfoArrayT );
+WXFL_DEFINE_ARRAY_NO_PTR( wxToolLayoutItemPtrT, wxLayoutItemArrayT  );
+WXFL_DEFINE_ARRAY_NO_PTR( wxDynToolInfoPtrT,    wxDynToolInfoArrayT );
 
 /*
 This is a base class for layout algorithm implementations.

@@ -44,8 +44,8 @@ class WXDLLIMPEXP_FL cbCommonPaneProperties;
 typedef cbBarInfo* BarInfoPtrT;
 typedef cbRowInfo* RowInfoPtrT;
 
-WXFL_DEFINE_ARRAY( BarInfoPtrT, BarArrayT );
-WXFL_DEFINE_ARRAY( RowInfoPtrT, RowArrayT );
+WXFL_DEFINE_ARRAY_NO_PTR( BarInfoPtrT, BarArrayT );
+WXFL_DEFINE_ARRAY_NO_PTR( RowInfoPtrT, RowArrayT );
 
 // control bar states
 

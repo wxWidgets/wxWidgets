@@ -31,7 +31,7 @@ class WXDLLIMPEXP_FL cbMiniButton;
 
 typedef cbMiniButton* cbMinitButtonPtrT;
 
-WXFL_DEFINE_ARRAY( cbMinitButtonPtrT, cbMiniButtonArrayT );
+WXFL_DEFINE_ARRAY_NO_PTR( cbMinitButtonPtrT, cbMiniButtonArrayT );
 
 /*
 A tool window is a special kind of frame that paints its own title, and

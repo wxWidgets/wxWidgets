@@ -87,7 +87,7 @@ class wxFrame;
 It is not clear what this class does. It is not used elsewhere in FL.
 */
 
-class WXDLLIMPEXP_FL wxFrameManager : wxObject
+class WXDLLIMPEXP_FL wxFrameManager : public wxObject
 {
 protected:
     wxList       mViews;
