@@ -303,12 +303,32 @@ void wxRadioBox::Show(int n, bool show)
 
 bool wxRadioBox::Enable(bool enable)
 {
-    return wxStaticBox::Enable(enable);
+    if ( !wxStaticBox::Enable(enable) )
+        return FALSE;
+
+    // also enable/disable the buttons
+    size_t count = m_buttons.GetCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        Enable(n, enable);
+    }
+
+    return TRUE;
 }
 
 bool wxRadioBox::Show(bool show)
 {
-    return wxStaticBox::Show(show);
+    if ( !wxStaticBox::Show(show) )
+        return FALSE;
+
+    // also show/hide the buttons
+    size_t count = m_buttons.GetCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        Show(n, show);
+    }
+
+    return TRUE;
 }
 
 wxString wxRadioBox::GetLabel() const
