@@ -119,7 +119,16 @@ HTMLOBJS = #$ ExpandGlue("WXHTMLOBJS", "", " &\n\t")
 # Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MGLOBJS) $(UNIVOBJS) $(UNIVTHEMEOBJS) $(HTMLOBJS)
 
-all:        $(OBJECTS) $(LIBTARGET) $(EXTRATARGETS) .SYMBOLIC
+SETUP_H=$(ARCHINCDIR)\wx\setup.h
+
+all:        $(SETUP_H) $(OBJECTS) $(LIBTARGET) $(EXTRATARGETS) .SYMBOLIC
+
+$(ARCHINCDIR)\wx:
+    mkdir $(ARCHINCDIR)
+    mkdir $(ARCHINCDIR)\wx
+
+$(SETUP_H): $(WXDIR)\include\wx\mgl\setup.h $(ARCHINCDIR)\wx
+    copy $(WXDIR)\include\wx\mgl\setup.h $@
 
 $(LIBTARGET) : $(OBJECTS)
     %create tmp.lbc
