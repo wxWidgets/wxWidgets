@@ -1156,12 +1156,12 @@ bool wxApp::ProcessMessage(WXMSG *wxmsg)
         // we need to find the dialog containing this control as
         // IsDialogMessage() just eats all the messages (i.e. returns TRUE for
         // them) if we call it for the control itself
-        while ( ::GetWindowLong(hwnd, GWL_STYLE) & WS_CHILD )
+        while ( hwnd && ::GetWindowLong(hwnd, GWL_STYLE) & WS_CHILD )
         {
             hwnd = ::GetParent(hwnd);
         }
 
-        return ::IsDialogMessage(hwnd, msg) != 0;
+        return hwnd && ::IsDialogMessage(hwnd, msg) != 0;
     }
 
 #if wxUSE_TOOLTIPS
