@@ -24,6 +24,9 @@ src/mac/*.lst
 src/mac/morefile/*.c
 src/mac/morefile/*.cpp
 src/mac/morefile/*.h
+src/mac/morefilex/*.c
+src/mac/morefilex/*.cpp
+src/mac/morefilex/*.h
 src/mac/Info.plist.in
 src/mac/wxmac.icns
 src/macsock/sock_PPC.lib
@@ -40,6 +43,7 @@ src/mac/macsock/*.lib
 
 include/wx_pb.h
 include/wx/mac/*.h
+include/wx/mac/private/*.h
 
 samples/samples.r
 samples/minimal/minimal.pbproj/project.pbxproj
