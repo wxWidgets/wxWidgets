@@ -127,6 +127,8 @@ following functions:
 \helpref{HasName}{wxfilenamehasname}\\
 \helpref{HasVolume}{wxfilenamehasvolume}\\
 \helpref{SetExt}{wxfilenamesetext}\\
+\helpref{ClearExt}{wxfilenameclearext}\\
+\helpref{SetEmptyExt}{wxfilenamesetemptyext}\\
 \helpref{SetName}{wxfilenamesetname}\\
 \helpref{SetVolume}{wxfilenamesetvolume}\\
 
@@ -251,6 +253,18 @@ temporary file couldn't be created, the object is put into the\rtfsp
 
 Reset all components to default, uninitialized state.
 
+
+\membersection{wxFileName::ClearExt}\label{wxfilenameclearext}
+
+\func{void}{SetClearExt}{\void}
+
+Removes the extension from the file name resulting in a 
+file name with no trailing dot.
+
+\wxheading{See also}
+
+\helpref{SetExt}{wxfilenamesetext}
+\helpref{SetEmptyExt}{wxfilenamesetemptyext}
 
 \membersection{wxFileName::CreateTempFileName}\label{wxfilenamecreatetempfilename}
 
@@ -754,8 +768,28 @@ Changes the current working directory.
 
 \func{void}{SetExt}{\param{const wxString\& }{ext}}
 
-Sets the extension of this file name.
+Sets the extension of the file name. Setting an empty string
+as the extension will remove the extension resulting in a file 
+name without a trailing dot, unlike a call to 
+\helpref{SetEmptyExt}{wxfilenamesetemptyext}.
 
+\wxheading{See also}
+
+\helpref{SetEmptyExt}{wxfilenamesetemptyext}
+\helpref{ClearExt}{wxfilenameclearext}
+
+\membersection{wxFileName::SetEmptyExt}\label{wxfilenamesetemptyext}
+
+\func{void}{SetEmptyExt}{\void}
+
+Sets the extension of the file name to be an empty extension. 
+This is different from having no extension at all as the file 
+name will have a trailing dot after a call to this method.
+
+\wxheading{See also}
+
+\helpref{SetExt}{wxfilenamesetext}
+\helpref{ClearExt}{wxfilenameclearext}
 
 \membersection{wxFileName::SetFullName}\label{wxfilenamesetfullname}
 
