@@ -300,8 +300,10 @@ void wxClassInfo::CleanUpClasses()
 
 wxObject *wxCreateDynamicObject(const wxChar *name)
 {
+#if defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT
  DEBUG_PRINTF(wxObject *wxCreateDynamicObject)
-
+#endif
+     
     if (wxClassInfo::sm_classTable)
     {
         wxClassInfo *info = (wxClassInfo *)wxClassInfo::sm_classTable->Get(name);
@@ -336,8 +338,10 @@ wxObject* wxCreateStoredObject( wxInputStream &stream )
 
 void wxObject::StoreObject( wxObjectOutputStream& stream )
 {
+#if defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT
  DEBUG_PRINTF(wxObject::StoreObject)
-
+#endif
+     
     wxString obj_name = wxString(GetClassInfo()->GetClassName()) + "_Serialize";
     wxLibrary *lib = wxTheLibraries.LoadLibrary("wxserial");
 
@@ -363,8 +367,10 @@ void wxObject::StoreObject( wxObjectOutputStream& stream )
 
 void wxObject::LoadObject( wxObjectInputStream& stream )
 {
+#if defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT
  DEBUG_PRINTF(wxObject::LoadObject)
-
+#endif
+     
     wxString obj_name = wxString(GetClassInfo()->GetClassName()) + "_Serialize";
     wxLibrary *lib = wxTheLibraries.LoadLibrary("wxserial");
 
@@ -392,8 +398,10 @@ void wxObject::LoadObject( wxObjectInputStream& stream )
 
 void wxObject::Ref(const wxObject& clone)
 {
+#if defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT
  DEBUG_PRINTF(wxObject::Ref)
-    // delete reference to old data
+#endif
+     // delete reference to old data
     UnRef();
     // reference new data
     if (clone.m_refData) {
