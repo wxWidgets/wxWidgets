@@ -304,11 +304,6 @@ bool wxMenu::DoInsertOrAppend(
         m_bDoBreak = FALSE;
     }
 
-    if (pItem->IsSeparator())
-    {
-        rItem.afStyle |= MIS_SEPARATOR;
-    }
-
     //
     // Id is the numeric id for normal menu items and HMENU for submenus as
     // required by ::MM_INSERTITEM message API
@@ -344,8 +339,13 @@ bool wxMenu::DoInsertOrAppend(
         pItem->m_vMenuData.afStyle = rItem.afStyle;
         pItem->m_vMenuData.hItem   = rItem.hItem;
     }
-    else if (!pItem->IsSeparator())
+    else
 #endif
+    if (pItem->IsSeparator())
+    {
+        rItem.afStyle = MIS_SEPARATOR;
+    }
+    else
     {
         //
         // Menu is just a normal string (passed in data parameter)
