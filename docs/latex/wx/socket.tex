@@ -593,6 +593,7 @@ The following flags can be used:
 \twocolitem{{\bf wxSOCKET\_NOWAIT}}{Read/write as much data as possible and return immediately.}
 \twocolitem{{\bf wxSOCKET\_WAITALL}}{Wait for all required data to be read/written unless an error occurs.}
 \twocolitem{{\bf wxSOCKET\_BLOCK}}{Block the GUI (do not yield) while reading/writing data.}
+\twocolitem{{\bf wxSOCKET\_REUSEADDR}}{Allows the use of an in-use port (wxServerSocket only)}
 \end{twocollist}
 
 A brief overview on how to use these flags follows.
@@ -626,6 +627,13 @@ during IO calls, so the GUI will remain blocked until the operation
 completes. If it is not used, then the application must take extra
 care to avoid unwanted reentrance.
 
+The {\bf wxSOCKET\_REUSEADDR} flag controls the use of the SO_REUSEADDR standard
+setsockopt() flag. This flag allows the socket to bind to a port that is already in use.
+This is mostly used on UNIX-based systems to allow rapid starting and stopping of a server - 
+otherwise you may have to wait several minutes for the port to become available.
+This option can have suprising platform dependent behavior, check the documentation for
+your platforms implementation of setsockopt().
+
 So:
 
 {\bf wxSOCKET\_NONE} will try to read at least SOME data, no matter how much.
@@ -638,6 +646,8 @@ the data.
 
 {\bf wxSOCKET\_BLOCK} has nothing to do with the previous flags and
 it controls whether the GUI blocks.
+
+(\bf wxSOCKET\_REUSEADDR} controls special platform-specific behavior for wxServerSocket.
 
 %
 % SetNotify

@@ -1068,6 +1068,11 @@ wxSocketServer::wxSocketServer(wxSockAddress& addr_man,
         // Setup the socket as server
 
     GSocket_SetLocal(m_socket, addr_man.GetAddress());
+    
+    if (GetFlags() & wxSOCKET_REUSEADDR) {
+        GSocket_SetReusable(m_socket);
+    }
+
     if (GSocket_SetServer(m_socket) != GSOCK_NOERROR)
     {
         GSocket_destroy(m_socket);

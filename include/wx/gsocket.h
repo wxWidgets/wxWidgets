@@ -235,6 +235,15 @@ GSocket *GSocket_WaitConnection(GSocket *socket);
  */
 GSocketError GSocket_Connect(GSocket *socket, GSocketStream stream);
 
+/* GSocket_SetReusable:
+*  Simply sets the m_resuable flag on the socket. GSocket_SetServer will
+*  make the appropriate setsockopt() call.
+*  Implemented as a GSocket function because clients (ie, wxSocketServer)
+*  don't have access to the GSocket struct information.
+*  Returns TRUE if the flag was set correctly, FALSE if an error occured
+*  (ie, if the parameter was NULL)
+*/
+int GSocket_SetReusable(GSocket *socket);
 
 /* Datagram sockets */
 
@@ -277,7 +286,6 @@ GSocketError GSocket_GetSockOpt(GSocket *socket, int level, int optname,
 
 GSocketError GSocket_SetSockOpt(GSocket *socket, int level, int optname, 
                                 const void *optval, int optlen);
-GSocketError GSocket_SetReuseAddr(GSocket *socket);
 
 void GSocket_Streamed(GSocket *socket);
 void GSocket_Unstreamed(GSocket *socket);
