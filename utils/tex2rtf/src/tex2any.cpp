@@ -363,9 +363,9 @@ bool FindEndEnvironment(char *buffer, int *pos, char *env)
 bool readingVerbatim = FALSE;
 bool readInVerbatim = FALSE;  // Within a verbatim, but not nec. verbatiminput
 
-  unsigned long leftCurly = 0;
-  unsigned long rightCurly = 0;
-  wxString currentFile = "";
+unsigned long leftCurly = 0;
+unsigned long rightCurly = 0;
+static wxString currentFileName = "";
 
 bool read_a_line(char *buf)
 {

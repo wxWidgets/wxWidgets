@@ -128,13 +128,25 @@ the layout "on screen" after removing a child fom the sizer.
 
 Returns TRUE if the child item was found and removed, FALSE otherwise.
 
+\membersection{wxSizer::SetMinSize}\label{wxsizersetminsize}
+
+\func{void}{SetMinSize}{\param{int }{width}, \param{int }{height}}
+
+\func{void}{SetMinSize}{\param{wxSize }{size}}
+
+Call this to give the sizer a minimal size. Normally, the sizer will calculate its
+minimal size based purely on how much space its children need. After calling this
+method \helpref{GetMinSize}{wxsizergetminsize} will return either the minimal size
+as requested by its children or the minimal size set here, depending on what is
+bigger.
+
 \membersection{wxSizer::SetDimension}\label{wxsizersetdimension}
 
 \func{void}{SetDimension}{\param{int }{x}, \param{int }{y}, \param{int }{width}, \param{int }{height}}
 
 Call this to force the sizer to take the given dimension and thus force the items owned
 by the sizer to resize themselves according to the rules defined by the paramater in the 
-\helpref{wxSizer::Add}{wxsizeradd} and \helpref{wxSizer::Prepend}{wxsizerprepend} methods.
+\helpref{Add}{wxsizeradd} and \helpref{Prepend}{wxsizerprepend} methods.
 
 \membersection{wxSizer::GetSize}\label{wxsizergetsize}
 
@@ -152,7 +164,9 @@ Returns the current position of the sizer.
 
 \func{wxSize}{GetMinSize}{\void}
 
-Returns the minimal size of the sizer.
+Returns the minimal size of the sizer. This is either the combined minimal
+size of all the children and their borders or the minimal size set by
+\helpref{SetMinSize}{wxsizersetminsize}, depending on what is bigger.
 
 \membersection{wxSizer::RecalcSizes}\label{wxsizerrecalcsizes}
 

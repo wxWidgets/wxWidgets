@@ -138,14 +138,35 @@ public:
     virtual bool Remove( wxSizer *sizer );
     virtual bool Remove( int pos );
 
-    void SetDimension( int x, int y, int width, int height );
-
+    void SetMinSize( int width, int height )
+        { DoSetMinSize( width, height ); }
+    void SetMinSize( wxSize size )
+        { DoSetMinSize( size.x, size.y ); }
+    
+    /* Searches recursively */
+    bool SetItemMinSize( wxWindow *window, int width, int height )
+        { return DoSetItemMinSize( window, width, height ); }
+    bool SetItemMinSize( wxWindow *window, wxSize size )
+        { return DoSetItemMinSize( window, size.x, size.y ); }
+        
+    /* Searches recursively */
+    bool SetItemMinSize( wxSizer *sizer, int width, int height )
+        { return DoSetItemMinSize( sizer, width, height ); }
+    bool SetItemMinSize( wxSizer *sizer, wxSize size )
+        { return DoSetItemMinSize( sizer, size.x, size.y ); }
+        
+    bool SetItemMinSize( int pos, int width, int height )
+        { return DoSetItemMinSize( pos, width, height ); }
+    bool SetItemMinSize( int pos, wxSize size )
+        { return DoSetItemMinSize( pos, size.x, size.y ); }
+        
     wxSize GetSize()
         { return m_size; }
     wxPoint GetPosition()
         { return m_position; }
-    wxSize GetMinSize()
-        { return CalcMin(); }
+        
+    /* Calculate the minimal size or return m_minSize if bigger. */
+    wxSize GetMinSize();
 
     virtual void RecalcSizes() = 0;
     virtual wxSize CalcMin() = 0;
@@ -158,13 +179,21 @@ public:
     wxList& GetChildren()
         { return m_children; }
 
+    void SetDimension( int x, int y, int width, int height );
+
 protected:
     wxSize  m_size;
+    wxSize  m_minSize;
     wxPoint m_position;
     wxList  m_children;
 
     wxSize GetMinWindowSize( wxWindow *window );
     
+    virtual void DoSetMinSize( int width, int height );
+    virtual bool DoSetItemMinSize( wxWindow *window, int width, int height );
+    virtual bool DoSetItemMinSize( wxSizer *sizer, int width, int height );
+    virtual bool DoSetItemMinSize( int pos, int width, int height );
+        
 private:
     DECLARE_CLASS(wxSizer);
 };

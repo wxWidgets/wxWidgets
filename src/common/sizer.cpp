@@ -235,6 +235,8 @@ bool wxSizerItem::IsSpacer()
 wxSizer::wxSizer()
 {
     m_children.DeleteContents( TRUE );
+    m_minSize.x = 0;
+    m_minSize.y = 0;
 }
 
 wxSizer::~wxSizer()
@@ -297,7 +299,7 @@ bool wxSizer::Remove( wxWindow *window )
 	    if (item->GetWindow() == window)
 	    {
             m_children.DeleteNode( node );
-	       return TRUE;
+	        return TRUE;
 	    }
         node = node->Next();
     }
@@ -368,6 +370,111 @@ void wxSizer::SetDimension( int x, int y, int width, int height )
     m_size.y = height;
     CalcMin();
     RecalcSizes();
+}
+
+wxSize wxSizer::GetMinSize()
+{ 
+    wxSize ret( CalcMin() );
+    if (ret.x < m_minSize.x) ret.x = m_minSize.x;
+    if (ret.y < m_minSize.y) ret.y = m_minSize.y;
+    return ret; 
+}
+
+void wxSizer::DoSetMinSize( int width, int height )
+{
+    m_minSize.x = width;
+    m_minSize.y = height;
+}
+
+bool wxSizer::DoSetItemMinSize( wxWindow *window, int width, int height )
+{
+    wxASSERT( window );
+
+    wxNode *node = m_children.First();
+    while (node)
+    {
+        wxSizerItem *item = (wxSizerItem*)node->Data();
+	    if (item->GetWindow() == window)
+	    {
+            item->SetInitSize( width, height );
+	        return TRUE;
+	    }
+        node = node->Next();
+    }
+
+    node = m_children.First();
+    while (node)
+    {
+        wxSizerItem *item = (wxSizerItem*)node->Data();
+	    if (item->GetSizer())
+	    {
+            /* It's a sizer, so lets search recursively. */
+            if (item->GetSizer()->DoSetItemMinSize( window, width, height ))
+            {
+                /* A child sizer found the requested windw, exit. */
+	            return TRUE;
+            }
+	    }
+        node = node->Next();
+    }
+
+    return FALSE;
+}
+
+bool wxSizer::DoSetItemMinSize( wxSizer *sizer, int width, int height )
+{
+    wxASSERT( sizer );
+
+    wxNode *node = m_children.First();
+    while (node)
+    {
+        wxSizerItem *item = (wxSizerItem*)node->Data();
+	    if (item->GetSizer() == sizer)
+	    {
+            item->GetSizer()->DoSetMinSize( width, height );
+	        return TRUE;
+	    }
+        node = node->Next();
+    }
+
+    node = m_children.First();
+    while (node)
+    {
+        wxSizerItem *item = (wxSizerItem*)node->Data();
+	    if (item->GetSizer())
+	    {
+            /* It's a sizer, so lets search recursively. */
+            if (item->GetSizer()->DoSetItemMinSize( sizer, width, height ))
+            {
+                /* A child sizer found the requested windw, exit. */
+	            return TRUE;
+            }
+	    }
+        node = node->Next();
+    }
+
+    return FALSE;
+}
+
+bool wxSizer::DoSetItemMinSize( int pos, int width, int height )
+{
+    wxNode *node = m_children.Nth( pos );
+    if (!node) return FALSE;
+
+    wxSizerItem *item = (wxSizerItem*) node->Data();
+    if (item->GetSizer())
+    {
+        /* Sizers contains the minimal size in them, if not calculated ... */
+        item->GetSizer()->DoSetMinSize( width, height );
+    }
+    else
+    {
+        /* ... whereas the minimal size of spacers and windows in stored 
+           in the item */
+        item->SetInitSize( width, height );
+    }
+
+    return TRUE;
 }
 
 //---------------------------------------------------------------------------
