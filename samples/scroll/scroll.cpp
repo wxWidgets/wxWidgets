@@ -43,6 +43,7 @@ public:
     void OnDeleteButton( wxCommandEvent &event );
     void OnMoveButton( wxCommandEvent &event );
     void OnScrollWin( wxCommandEvent &event );
+    void OnMouseDown( wxMouseEvent &event );
 
     wxButton *m_button;
 
@@ -95,6 +96,7 @@ IMPLEMENT_DYNAMIC_CLASS(MyCanvas, wxScrolledWindow)
 
 BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
   EVT_PAINT(                  MyCanvas::OnPaint)
+  EVT_LEFT_DOWN(              MyCanvas::OnMouseDown)
   EVT_BUTTON( ID_QUERYPOS,    MyCanvas::OnQueryPosition)
   EVT_BUTTON( ID_ADDBUTTON,   MyCanvas::OnAddButton)
   EVT_BUTTON( ID_DELBUTTON,   MyCanvas::OnDeleteButton)
@@ -174,20 +176,40 @@ MyCanvas::~MyCanvas()
 {
 }
 
+void MyCanvas::OnMouseDown( wxMouseEvent &event )
+{
+    wxPoint pt( event.GetPosition() );
+    int x,y;
+    CalcUnscrolledPosition( pt.x, pt.y, &x, &y );
+    wxLogMessage( "Mouse down event at: %d %d, scrolled: %d %d", pt.x, pt.y, x, y );
+}
+
+void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
+{
+    wxPaintDC dc( this );
+    PrepareDC( dc );
+
+    dc.DrawText( "Press mouse button to test calculations!", 160, 50 );
+
+    dc.DrawText( "Some text", 140, 140 );
+  
+    dc.DrawRectangle( 100, 160, 200, 200 );
+}
+
 void MyCanvas::OnQueryPosition( wxCommandEvent &WXUNUSED(event) )
 {
     wxPoint pt( m_button->GetPosition() );
-    wxLogMessage( """wxButton"" position %d %d", pt.x, pt.y );
-    if ((pt.x == 10) && (pt.y == 110))
-        wxLogMessage( "-> Correct." );
-    else
-        wxLogMessage( "-> Incorrect." );
+    wxLogMessage( "Position of ""Query position"" is %d %d", pt.x, pt.y );
+    pt = ClientToScreen( pt );
+    wxLogMessage( "Position of ""Query position"" on screen is %d %d", pt.x, pt.y );
 }
 
 void MyCanvas::OnAddButton( wxCommandEvent &WXUNUSED(event) )
 {
     wxLogMessage( "Inserting button at position 10,70..." );
-    (void) new wxButton( this, ID_NEWBUTTON, "new button", wxPoint(10,70), wxSize(80,25) );
+    wxButton *button = new wxButton( this, ID_NEWBUTTON, "new button", wxPoint(10,70), wxSize(80,25) );
+    wxPoint pt( button->GetPosition() );
+    wxLogMessage( "-> Position after inserting %d %d", pt.x, pt.y );
 }
 
 void MyCanvas::OnDeleteButton( wxCommandEvent &event )
@@ -204,7 +226,11 @@ void MyCanvas::OnMoveButton( wxCommandEvent &event )
 {
     wxLogMessage( "Moving button 10 pixels downward.." );
     wxWindow *win = FindWindow( event.GetId() );
-    win->Move( -1, win->GetPosition().y + 10 );
+    wxPoint pt( win->GetPosition() );
+    wxLogMessage( "-> Position before move is %d %d", pt.x, pt.y );
+    win->Move( -1, pt.y + 10 );
+    pt = win->GetPosition();
+    wxLogMessage( "-> Position after move is %d %d", pt.x, pt.y );
 }
 
 void MyCanvas::OnScrollWin( wxCommandEvent &WXUNUSED(event) )
@@ -213,18 +239,6 @@ void MyCanvas::OnScrollWin( wxCommandEvent &WXUNUSED(event) )
     int x,y;
     ViewStart( &x, &y );
     Scroll( -1, y+2 );
-}
-
-void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
-{
-    wxPaintDC dc( this );
-    PrepareDC( dc );
-
-    dc.DrawText( "Some text", 140, 140 );
-  
-    dc.DrawRectangle( 10, 70, 80, 25 );
-    
-    dc.DrawRectangle( 100, 160, 200, 200 );
 }
 
 // MyFrame

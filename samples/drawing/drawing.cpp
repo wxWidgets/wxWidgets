@@ -74,7 +74,6 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
     void OnOption(wxCommandEvent &event);
-    void OnMouseMove(wxMouseEvent &event);
 
     wxColour SelectColour();
     void PrepareDC(wxDC& dc);
@@ -105,6 +104,7 @@ public:
 
     void DrawTestLines( int x, int y, int width, wxDC &dc );    
     void OnPaint(wxPaintEvent &event);
+    void OnMouseMove(wxMouseEvent &event);
     
 protected:
     MyFrame *m_owner;
@@ -199,6 +199,7 @@ bool MyApp::OnInit()
 // handlers) which process them.
 BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
     EVT_PAINT  (MyCanvas::OnPaint)
+    EVT_MOTION (MyCanvas::OnMouseMove)
 END_EVENT_TABLE()
 
 MyCanvas::MyCanvas( MyFrame *parent )
@@ -307,6 +308,20 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 
 }
 
+void MyCanvas::OnMouseMove(wxMouseEvent &event)
+{
+    wxClientDC dc(this);
+    PrepareDC(dc);
+    m_owner->PrepareDC(dc);
+
+    wxPoint pos = event.GetPosition();
+    long x = dc.DeviceToLogicalX( pos.x );
+    long y = dc.DeviceToLogicalY( pos.y );
+    wxString str;
+    str.Printf( "Current mouse position: %d,%d", (int)x, (int)y );
+    m_owner->SetStatusText( str );
+}
+
 // ----------------------------------------------------------------------------
 // MyFrame
 // ----------------------------------------------------------------------------
@@ -315,7 +330,6 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MOTION    (MyFrame::OnMouseMove)
     EVT_MENU      (Minimal_Quit,     MyFrame::OnQuit)
     EVT_MENU      (Minimal_About,    MyFrame::OnAbout)
     EVT_MENU_RANGE(MenuOption_First, MenuOption_Last, MyFrame::OnOption)
@@ -502,19 +516,6 @@ void MyFrame::PrepareDC(wxDC& dc)
     dc.SetUserScale( m_xUserScale, m_yUserScale );
     dc.SetLogicalOrigin( m_xLogicalOrigin, m_yLogicalOrigin );
     dc.SetAxisOrientation( !m_xAxisReversed, m_yAxisReversed );
-}
-
-void MyFrame::OnMouseMove(wxMouseEvent &event)
-{
-    wxClientDC dc(this);
-    PrepareDC(dc);
-
-    wxPoint pos = event.GetPosition();
-    long x = dc.DeviceToLogicalX( pos.x );
-    long y = dc.DeviceToLogicalY( pos.y );
-    wxString str;
-    str.Printf( "Current mouse position: %d,%d", (int)x, (int)y );
-    SetStatusText( str );
 }
 
 wxColour MyFrame::SelectColour()

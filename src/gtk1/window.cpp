@@ -1711,6 +1711,12 @@ gtk_window_realized_callback( GtkWidget * WXUNUSED(widget), wxWindow *win )
 
 static void wxInsertChildInWindow( wxWindow* parent, wxWindow* child )
 {
+    /* the window might have been scrolled already, do we
+       have to adapt the position */
+    GtkMyFixed *myfixed = GTK_MYFIXED(parent->m_wxwindow);
+    child->m_x += myfixed->xoffset;
+    child->m_y += myfixed->yoffset;
+    
     gtk_myfixed_put( GTK_MYFIXED(parent->m_wxwindow),
                      GTK_WIDGET(child->m_widget),
                      child->m_x,
@@ -2114,17 +2120,19 @@ void wxWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )
     }
     else
     {
+        GtkMyFixed *myfixed = GTK_MYFIXED(m_parent->m_wxwindow);
+	
         if ((sizeFlags & wxSIZE_ALLOW_MINUS_ONE) == 0)
         {
-            if (x != -1) m_x = x;
-            if (y != -1) m_y = y;
+            if (x != -1) m_x = x + myfixed->xoffset;
+            if (y != -1) m_y = y + myfixed->yoffset;
             if (width != -1) m_width = width;
             if (height != -1) m_height = height;
         }
         else
         {
-            m_x = x;
-            m_y = y;
+            m_x = x + myfixed->xoffset;
+            m_y = y + myfixed->yoffset;
             m_width = width;
             m_height = height;
         }
@@ -2154,27 +2162,6 @@ void wxWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )
             bottom_border = 5;
         }
 
-        /* this is the result of hours of debugging: the following code
-           means that if we have a m_wxwindow and we set the size of
-           m_widget, m_widget (which is a GtkScrolledWindow) does NOT
-           automatically propagate its size down to its m_wxwindow,
-           which is its client area. therefore, we have to tell the
-           client area directly that it has to resize itself.
-           this will lead to that m_widget (GtkScrolledWindow) will
-           calculate how much size it needs for scrollbars etc and
-           it will then call XXX_size_allocate of its child, which
-           is m_wxwindow. m_wxwindow in turn will do the same with its
-           children and so on. problems can arise if this happens
-           before all the children have been realized as some widgets
-           stupidy need to be realized during XXX_size_allocate (e.g.
-           GtkNotebook) and they will segv if called otherwise. this
-           emergency is tested in gtk_myfixed_size_allocate. Normally
-           this shouldn't be needed and only gtk_widget_queue_resize()
-           should be enough to provoke a resize at the next appropriate
-           moment, but this seems to fail, e.g. when a wxNotebook contains
-           a wxSplitterWindow: the splitter window's children won't
-           show up properly resized then. */
-
         gtk_myfixed_set_size( GTK_MYFIXED(m_parent->m_wxwindow),
                               m_widget,
                               m_x-border,
@@ -2203,7 +2190,7 @@ void wxWindow::OnInternalIdle()
 	   as setting the cursor in a parent window also effects the
 	   windows above so that checking for the current cursor is
 	   not possible. */
-	   
+	
         if (m_wxwindow)
         {
             GdkWindow *window = GTK_MYFIXED(m_wxwindow)->bin_window;
@@ -2392,8 +2379,17 @@ void wxWindow::DoGetPosition( int *x, int *y ) const
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
 
-    if (x) (*x) = m_x;
-    if (y) (*y) = m_y;
+    int dx = 0;
+    int dy = 0;
+    if (m_parent && m_parent->m_wxwindow)
+    {
+        GtkMyFixed *myfixed = GTK_MYFIXED(m_parent->m_wxwindow);
+	dx = myfixed->xoffset;
+	dy = myfixed->yoffset;
+    }
+
+    if (x) (*x) = m_x - dx;
+    if (y) (*y) = m_y - dy;
 }
 
 void wxWindow::DoClientToScreen( int *x, int *y ) const
