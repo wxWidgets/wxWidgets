@@ -417,79 +417,48 @@ typedef int wxWindowID;
 // ----------------------------------------------------------------------------
 
 #if defined(__WXMSW__)
-
-// __declspec works in BC++ 5 and later, Watcom C++ 11.0 and later as well as VC++ and gcc
-#if defined(__VISUALC__) || defined(__BORLANDC__) || defined(__GNUC__) || defined(__WATCOMC__)
-#  ifdef WXMAKINGDLL
-#    define WXDLLEXPORT __declspec( dllexport )
-#    define WXDLLEXPORT_DATA(type) __declspec( dllexport ) type
-#    define WXDLLEXPORT_CTORFN
-#  elif defined(WXUSINGDLL)
-#    define WXDLLEXPORT __declspec( dllimport )
-#    define WXDLLEXPORT_DATA(type) __declspec( dllimport ) type
-#    define WXDLLEXPORT_CTORFN
-#  else
-#    define WXDLLEXPORT
-#    define WXDLLEXPORT_DATA(type) type
-#    define WXDLLEXPORT_CTORFN
-#  endif
-#else
-#    define WXDLLEXPORT
-#    define WXDLLEXPORT_DATA(type) type
-#    define WXDLLEXPORT_CTORFN
-#endif
-
+    // __declspec works in BC++ 5 and later, Watcom C++ 11.0 and later as well
+    // as VC++ and gcc
+    #if defined(__VISUALC__) || defined(__BORLANDC__) || defined(__GNUC__) || defined(__WATCOMC__)
+        #define WXEXPORT __declspec(dllexport)
+        #define WXIMPORT __declspec(dllimport)
+    #else // compiler doesn't support __declspec()
+        #define WXEXPORT
+        #define WXIMPORT
+    #endif
 #elif defined(__WXPM__)
-
-#  if defined (__WATCOMC__)
-
-#  ifdef WXMAKINGDLL
-#    define WXDLLEXPORT __declspec( dllexport )
-#    define WXDLLEXPORT_DATA(type) __declspec( dllexport ) type
-#    define WXDLLEXPORT_CTORFN
-// __declspec(dllimport) prepends __imp to imported symbols. We do NOT want that!
-//#  elif defined(WXUSINGDLL)
-//#    define WXDLLEXPORT __declspec( dllimport )
-//#    define WXDLLEXPORT_DATA(type) __declspec( dllimport ) type
-//#    define WXDLLEXPORT_CTORFN
-#  else
-#    define WXDLLEXPORT
-#    define WXDLLEXPORT_DATA(type) type
-#    define WXDLLEXPORT_CTORFN
-#  endif
-
-#  elif (!(defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )))
-
-#    ifdef WXMAKINGDLL
-#      define WXDLLEXPORT _Export
-#      define WXDLLEXPORT_DATA(type) _Export type
-#      define WXDLLEXPORT_CTORFN
-#    elif defined(WXUSINGDLL)
-#      define WXDLLEXPORT _Export
-#      define WXDLLEXPORT_DATA(type) _Export type
-#      define WXDLLEXPORT_CTORFN
-#    else
-#      define WXDLLEXPORT
-#      define WXDLLEXPORT_DATA(type) type
-#      define WXDLLEXPORT_CTORFN
-#    endif
-
-#  else
-
-#    define WXDLLEXPORT
-#    define WXDLLEXPORT_DATA(type) type
-#    define WXDLLEXPORT_CTORFN
-
-#  endif
-
-#else  // !(MSW or OS2)
-
-#  define WXDLLEXPORT
-#  define WXDLLEXPORT_DATA(type) type
-#  define WXDLLEXPORT_CTORFN
-
+    #if defined (__WATCOMC__)
+        #define WXEXPORT __declspec(dllexport)
+        // __declspec(dllimport) prepends __imp to imported symbols. We do NOT
+        // want that!
+        #define WXIMPORT
+    #elif (!(defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )))
+        #define WXEXPORT _Export
+        #define WXIMPORT _Export
+    #endif
 #endif
 
+// for other platforms/compilers we don't anything
+#ifndef WXEXPORT
+    #define WXEXPORT
+    #define WXIMPORT
+#endif
+
+// WXDLLEXPORT maps to export declaration when building the DLL, to import
+// declaration if using it or to nothing at all if we don't use wxWin DLL
+#ifdef WXMAKINGDLL
+    #define WXDLLEXPORT WXEXPORT
+    #define WXDLLEXPORT_DATA(type) WXEXPORT type
+    #define WXDLLEXPORT_CTORFN
+#elif defined(WXUSINGDLL)
+    #define WXDLLEXPORT WXIMPORT
+    #define WXDLLEXPORT_DATA(type) WXIMPORT type
+    #define WXDLLEXPORT_CTORFN
+#else // not making nor using DLL
+    #define WXDLLEXPORT
+    #define WXDLLEXPORT_DATA(type) type
+    #define WXDLLEXPORT_CTORFN
+#endif
 
 // For ostream, istream ofstream
 #if defined(__BORLANDC__) && defined( _RTLDLL )
