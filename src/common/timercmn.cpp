@@ -286,7 +286,6 @@ wxLongLong wxGetLocalTimeMillis()
     val *= wxGetLocalTime();
 
 #if defined(__VISAGECPP__)
-#warning "Possible clock skew bug in wxStopWatch!"
     DATETIME dt;
     ::DosGetDateTime(&dt);
     val += (dt.hundredths*10);
