@@ -99,7 +99,7 @@ wxCreateHiddenWindow(LPCTSTR *pclassname, LPCTSTR classname, WNDPROC wndproc);
 #error "MAXSOCKETS is too big!"
 #endif
 
-typedef int PASCAL (*WSAAsyncSelectFunc)(SOCKET,HWND,u_int,long);
+typedef int (PASCAL *WSAAsyncSelectFunc)(SOCKET,HWND,u_int,long);
 
 /* Global variables */
 
