@@ -385,65 +385,71 @@ wxHtmlImageCell::wxHtmlImageCell(wxWindow *window, wxFSFile *input,
     m_physX = m_physY = -1;
 #endif
 
-    if ( input )
+    if ( m_bmpW && m_bmpH )
     {
-        wxInputStream *s = input->GetStream();
-
-        if ( s )
+        if ( input )
         {
-            bool readImg = TRUE;
+            wxInputStream *s = input->GetStream();
+
+            if ( s )
+            {
+                bool readImg = TRUE;
 
 #if wxUSE_GIF && wxUSE_TIMER
-            if ( (input->GetLocation().Matches(wxT("*.gif")) ||
-                  input->GetLocation().Matches(wxT("*.GIF"))) && m_window )
-            {
-                m_gifDecoder = new wxGIFDecoder(s, TRUE);
-                if ( m_gifDecoder->ReadGIF() == wxGIF_OK )
+                if ( (input->GetLocation().Matches(wxT("*.gif")) ||
+                      input->GetLocation().Matches(wxT("*.GIF"))) && m_window )
                 {
-                    wxImage img;
-                    if ( m_gifDecoder->ConvertToImage(&img) )
-                        SetImage(img);
-
-                    readImg = FALSE;
-
-                    if ( m_gifDecoder->IsAnimation() )
+                    m_gifDecoder = new wxGIFDecoder(s, TRUE);
+                    if ( m_gifDecoder->ReadGIF() == wxGIF_OK )
                     {
-                        m_gifTimer = new wxGIFTimer(this);
-                        m_gifTimer->Start(m_gifDecoder->GetDelay(), TRUE);
+                        wxImage img;
+                        if ( m_gifDecoder->ConvertToImage(&img) )
+                            SetImage(img);
+
+                        readImg = FALSE;
+
+                        if ( m_gifDecoder->IsAnimation() )
+                        {
+                            m_gifTimer = new wxGIFTimer(this);
+                            m_gifTimer->Start(m_gifDecoder->GetDelay(), TRUE);
+                        }
+                        else
+                        {
+                            wxDELETE(m_gifDecoder);
+                        }
                     }
                     else
                     {
                         wxDELETE(m_gifDecoder);
                     }
                 }
-                else
+
+                if ( readImg )
+#endif // wxUSE_GIF && wxUSE_TIMER
                 {
-                    wxDELETE(m_gifDecoder);
+                    wxImage image(*s, wxBITMAP_TYPE_ANY);
+                    if ( image.Ok() )
+                        SetImage(image);
                 }
             }
-
-            if ( readImg )
-#endif // wxUSE_GIF && wxUSE_TIMER
+        }
+        else // input==NULL, use "broken image" bitmap
+        {
+            if ( m_bmpW == -1 && m_bmpH == -1 )
             {
-                SetImage(wxImage(*s, wxBITMAP_TYPE_ANY));
+                m_bmpW = 29;
+                m_bmpH = 31;
             }
+            else
+            {
+                m_showFrame = TRUE;
+                if ( m_bmpW == -1 ) m_bmpW = 31;
+                if ( m_bmpH == -1 ) m_bmpH = 33;
+            }
+            m_bitmap = new wxBitmap(broken_image_xpm);
         }
     }
-    else // input==NULL, use "broken image" bitmap
-    {
-        if ( m_bmpW == -1 && m_bmpH == -1 )
-        {
-            m_bmpW = 29;
-            m_bmpH = 31;
-        }
-        else
-        {
-            m_showFrame = TRUE;
-            if ( m_bmpW == -1 ) m_bmpW = 31;
-            if ( m_bmpH == -1 ) m_bmpH = 33;
-        }
-        m_bitmap = new wxBitmap(broken_image_xpm);
-    }
+    //else: ignore the 0-sized images used sometimes on the Web pages
 
     m_Width = (int)(scale * (double)m_bmpW);
     m_Height = (int)(scale * (double)m_bmpH);
