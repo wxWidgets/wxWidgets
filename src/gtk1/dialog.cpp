@@ -575,6 +575,8 @@ void wxDialog::SetIcon( const wxIcon &icon )
     m_icon = icon;
     if (!icon.Ok()) return;
 
+    if (!m_widget->window) return;
+
     wxMask *mask = icon.GetMask();
     GdkBitmap *bm = (GdkBitmap *) NULL;
     if (mask) bm = mask->GetBitmap();

@@ -62,8 +62,6 @@ public:
     virtual bool Show( bool show );
     virtual void Centre( int direction = wxHORIZONTAL );
 
-    virtual void GetClientSize( int *width, int *height ) const;
-
     virtual wxStatusBar* CreateStatusBar(int number=1, long style = wxST_SIZEGRIP, wxWindowID id = 0,
             const wxString& name = _T("statusBar"));
     virtual wxStatusBar *OnCreateStatusBar( int number, long style, wxWindowID id,
@@ -123,6 +121,7 @@ protected:
                            int sizeFlags = wxSIZE_AUTO);
 
     virtual void DoSetClientSize(int width, int height);
+    virtual void DoGetClientSize( int *width, int *height ) const;
 
 private:
     DECLARE_EVENT_TABLE()

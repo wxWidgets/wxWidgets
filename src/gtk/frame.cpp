@@ -538,11 +538,11 @@ void wxFrame::Centre( int direction )
     Move( x, y );
 }
 
-void wxFrame::GetClientSize( int *width, int *height ) const
+void wxFrame::DoGetClientSize( int *width, int *height ) const
 {
     wxASSERT_MSG( (m_widget != NULL), _T("invalid frame") );
 
-    wxWindow::GetClientSize( width, height );
+    wxWindow::DoGetClientSize( width, height );
     if (height)
     {
         /* menu bar */
