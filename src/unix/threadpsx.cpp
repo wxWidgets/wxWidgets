@@ -36,7 +36,7 @@
 #include "wx/log.h"
 #include "wx/intl.h"
 #include "wx/dynarray.h"
-#include "wx/timer.h"
+#include "wx/stopwatch.h"
 
 #include <stdio.h>
 #include <unistd.h>

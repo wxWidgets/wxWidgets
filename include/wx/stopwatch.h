@@ -10,7 +10,9 @@
 
 #ifndef _WX_STOPWATCH_H_
 #define _WX_STOPWATCH_H_
-//
+
+#include "wx/longlong.h"
+
 // ----------------------------------------------------------------------------
 // wxStopWatch: measure time intervals with up to 1ms resolution
 // ----------------------------------------------------------------------------

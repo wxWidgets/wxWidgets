@@ -33,8 +33,8 @@
     #include "wx/log.h"
 #endif //WX_PRECOMP
 
-#include "wx/timer.h"
 #include "wx/longlong.h"
+#include "wx/stopwatch.h"
 
 // ----------------------------------------------------------------------------
 // System headers

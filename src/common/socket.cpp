@@ -31,7 +31,7 @@
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/string.h"
-#include "wx/timer.h"
+#include "wx/stopwatch.h"
 #include "wx/utils.h"
 #include "wx/module.h"
 #include "wx/log.h"
