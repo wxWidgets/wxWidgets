@@ -65,9 +65,12 @@ void wxListBox::Init()
 
     // no items hence no current item
     m_current = -1;
+    m_currentChanged = FALSE;
 
     // no need to update anything initially
     m_updateCount = 0;
+    m_updateScrollbar =
+    m_showScrollbar = FALSE;
 }
 
 bool wxListBox::Create(wxWindow *parent,
@@ -82,6 +85,8 @@ bool wxListBox::Create(wxWindow *parent,
 {
     if ( !wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
+
+    SetWindow(this);
 
     SetBackgroundColour(*wxWHITE);
 
@@ -108,6 +113,8 @@ int wxListBox::DoAppend(const wxString& item)
     size_t index = m_strings.Add(item);
     m_clientData.Insert(NULL, index);
 
+    m_updateScrollbar = TRUE;
+
     RefreshItem(m_strings.GetCount() - 1);
 
     return index;
@@ -126,6 +133,8 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
         m_clientData.Insert(NULL, pos + n);
     }
 
+    m_updateScrollbar = TRUE;
+
     RefreshItems(pos, count);
 }
 
@@ -139,10 +148,10 @@ void wxListBox::DoSetItems(const wxArrayString& items, void **clientData)
     for ( size_t n = 0; n < count; n++ )
     {
         size_t index = m_strings.Add(items[n]);
-
-        if ( clientData )
-            m_clientData.Insert(clientData[n], index);
+        m_clientData.Insert(clientData ? clientData[n] : NULL, index);
     }
+
+    m_updateScrollbar = TRUE;
 
     RefreshAll();
 }
@@ -171,6 +180,8 @@ void wxListBox::Clear()
 {
     DoClear();
 
+    m_updateScrollbar = TRUE;
+
     RefreshAll();
 }
 
@@ -186,6 +197,8 @@ void wxListBox::Delete(int n)
     }
 
     m_clientData.RemoveAt(n);
+
+    m_updateScrollbar = TRUE;
 
     RefreshItems(n, GetCount() - n);
 }
@@ -266,11 +279,14 @@ int wxListBox::GetSelections(wxArrayInt& selections) const
 
 void wxListBox::Refresh(bool eraseBackground, const wxRect *rect)
 {
-    // do nothing here if we didn't call it ourselves
-    if ( m_updateCount )
-    {
-        wxControl::Refresh(eraseBackground, rect);
-    }
+    if ( rect )
+        wxLogTrace(_T("listbox"), _T("Refreshing (%d, %d)-(%d, %d)"),
+                   rect->x, rect->y,
+                   rect->x + rect->width, rect->y + rect->height);
+    else
+        wxLogTrace(_T("listbox"), _T("Refreshing all"));
+
+    wxControl::Refresh(eraseBackground, rect);
 }
 
 void wxListBox::RefreshItems(int from, int count)
@@ -339,6 +355,29 @@ void wxListBox::RefreshAll()
 
 void wxListBox::OnIdle(wxIdleEvent& event)
 {
+    if ( m_updateScrollbar )
+    {
+        // is our height enough to show all items?
+        wxCoord lineHeight = GetLineHeight();
+        bool showScrollbar = GetCount()*lineHeight > GetClientSize().y;
+        if ( showScrollbar != m_showScrollbar )
+        {
+            // TODO: support for horz scrollbar
+            SetScrollbars(0, lineHeight, 0, GetCount());
+
+            m_showScrollbar = showScrollbar;
+        }
+
+        m_updateScrollbar = FALSE;
+    }
+
+    if ( m_currentChanged )
+    {
+        EnsureVisible();
+
+        m_currentChanged = FALSE;
+    }
+
     if ( m_updateCount )
     {
         // only refresh the items which must be refreshed
@@ -375,6 +414,13 @@ void wxListBox::OnIdle(wxIdleEvent& event)
 void wxListBox::DoDraw(wxControlRenderer *renderer)
 {
     // draw the border first
+    if ( m_showScrollbar )
+    {
+        // we need to draw a border around the client area
+        renderer->GetRect().width -= GetScrollbar(wxVERTICAL)->GetSize().x;
+    }
+
+    // the base class version does it for us
     wxControl::DoDraw(renderer);
 
     // adjust the DC to account for scrolling
@@ -385,9 +431,9 @@ void wxListBox::DoDraw(wxControlRenderer *renderer)
 #if 0
     int y;
     GetViewStart(NULL, &y);
-#endif
     wxCoord lineHeight = GetLineHeight();
     wxRegion rgnUpdate = GetUpdateRegion();
+    //dc.SetClippingRegion(rgnUpdate);
     wxRect rectUpdate = rgnUpdate.GetBox();
     size_t itemFirst = rectUpdate.GetTop() / lineHeight,
            itemLast = (rectUpdate.GetBottom() + lineHeight - 1) / lineHeight,
@@ -398,11 +444,15 @@ void wxListBox::DoDraw(wxControlRenderer *renderer)
 
     if ( itemLast > itemMax )
         itemLast = itemMax;
+#else
+    size_t itemFirst = 0,
+           itemLast = m_strings.GetCount();
+#endif
 
     // do draw them
     wxLogTrace(_T("listbox"), _T("Repainting items %d..%d"),
                itemFirst, itemLast);
-    dc.SetClippingRegion(rgnUpdate);
+
     renderer->DrawItems(this, itemFirst, itemLast);
 }
 
@@ -424,7 +474,8 @@ bool wxListBox::SetFont(const wxFont& font)
 
 void wxListBox::CalcItemsPerPage()
 {
-    m_lineHeight = wxClientDC(this).GetCharHeight() + 2;
+    m_lineHeight = GetRenderer()->
+                    GetListboxItemHeight(wxClientDC(this).GetCharHeight());
     m_itemsPerPage = GetClientSize().y / m_lineHeight;
 }
 
@@ -528,13 +579,56 @@ bool wxListBox::SendEvent(int item, wxEventType type)
 
 void wxListBox::SetCurrentItem(int n)
 {
-    if ( m_current != -1 )
-        RefreshItem(n);
+    if ( n != m_current )
+    {
+        if ( m_current != -1 )
+            RefreshItem(n);
 
-    m_current = n;
+        m_current = n;
 
-    if ( m_current != -1 )
-        RefreshItem(n);
+        if ( m_current != -1 )
+        {
+            if ( !HasMultipleSelection() )
+            {
+                // for a single selection listbox, the current item is always
+                // the one selected
+                Select(TRUE);
+            }
+
+            m_currentChanged = TRUE;
+
+            RefreshItem(n);
+        }
+    }
+    //else: nothing to do
+}
+
+void wxListBox::EnsureVisible()
+{
+    if ( !m_showScrollbar )
+    {
+        // nothing to do - everything is shown anyhow
+        return;
+    }
+
+    int first;
+    GetViewStart(0, &first);
+    if ( first > m_current )
+    {
+        // we need to scroll upwards, so make the current item appear on top
+        // of the shown range
+        Scroll(0, m_current);
+    }
+    else
+    {
+        int last = first + GetClientSize().y / GetLineHeight() - 1;
+        if ( last < m_current )
+        {
+            // scroll down: the current item appears at the bottom of the
+            // range
+            Scroll(0, m_current - (last - first));
+        }
+    }
 }
 
 void wxListBox::ChangeCurrent(int diff)
@@ -625,6 +719,17 @@ bool wxListBox::PerformAction(const wxControlAction& action,
 wxStdListboxInputHandler::wxStdListboxInputHandler(wxInputHandler *handler)
                         : wxStdInputHandler(handler)
 {
+    m_winCapture = NULL;
+}
+
+int wxStdListboxInputHandler::HitTest(const wxListBox *lbox,
+                                      const wxMouseEvent& event)
+{
+    int y;
+    lbox->CalcUnscrolledPosition(0, event.GetPosition().y, NULL, &y);
+    int item = y / lbox->GetLineHeight();
+
+    return item < lbox->GetCount() ? item : -1;
 }
 
 bool wxStdListboxInputHandler::HandleKey(wxControl *control,
@@ -664,14 +769,53 @@ bool wxStdListboxInputHandler::HandleKey(wxControl *control,
 bool wxStdListboxInputHandler::HandleMouse(wxControl *control,
                                            const wxMouseEvent& event)
 {
-    if ( event.LeftDown() )
+    // single and extended listboxes behave similarly with respect to the
+    // mouse events: for both of them clicking the item selects or toggles it,
+    // but multiple selection listboxes are different: the item is focused
+    // when clicked and only toggled when the button is released
+    if ( ((control->GetWindowStyle() & wxLB_MULTIPLE) && event.ButtonUp())
+            || event.ButtonDown() || event.LeftDClick() )
     {
         wxListBox *lbox = wxStaticCast(control, wxListBox);
-        int item = event.GetPosition().y / lbox->GetLineHeight();
-        if ( item < lbox->GetCount() )
+        int item = HitTest(lbox, event);
+        if ( item != -1 )
         {
-            lbox->PerformAction(wxACTION_LISTBOX_SETFOCUS, item);
-            lbox->PerformAction(wxACTION_LISTBOX_TOGGLE);
+            wxControlAction action;
+            if ( event.ButtonUp() )
+            {
+                m_winCapture->ReleaseMouse();
+                m_winCapture = NULL;
+
+                action = wxACTION_LISTBOX_TOGGLE;
+            }
+            else if ( event.ButtonDown() )
+            {
+                if ( lbox->HasMultipleSelection() )
+                {
+                    if ( lbox->GetWindowStyle() & wxLB_MULTIPLE )
+                    {
+                        // capture the mouse to track the selected item
+                        m_winCapture = lbox;
+                        m_winCapture->CaptureMouse();
+
+                        action = wxACTION_LISTBOX_SETFOCUS;
+                    }
+                    else
+                    {
+                        action = wxACTION_LISTBOX_TOGGLE;
+                    }
+                }
+                else // single selection
+                {
+                    action = wxACTION_LISTBOX_SELECT;
+                }
+            }
+            else // event.LeftDClick()
+            {
+                action = wxACTION_LISTBOX_ACTIVATE;
+            }
+
+            lbox->PerformAction(action, item);
 
             return TRUE;
         }
@@ -684,8 +828,29 @@ bool wxStdListboxInputHandler::HandleMouse(wxControl *control,
 bool wxStdListboxInputHandler::HandleMouseMove(wxControl *control,
                                            const wxMouseEvent& event)
 {
-    // we don't react to this at all
-    return FALSE;
+    if ( !m_winCapture || (event.GetEventObject() != m_winCapture) )
+    {
+        // we don't react to this
+        return FALSE;
+    }
+
+    // TODO: not yet... should track the mouse outside and start an auto
+    //       scroll timer - but this should be probably done in
+    //       wxScrolledWindow itself (?)
+    if ( !event.Moving() )
+        return FALSE;
+
+    wxListBox *lbox = wxStaticCast(control, wxListBox);
+    int item = HitTest(lbox, event);
+    if ( item == -1 )
+    {
+        // mouse is below the last item
+        return FALSE;
+    }
+
+    lbox->PerformAction(wxACTION_LISTBOX_SETFOCUS, item);
+
+    return TRUE;
 }
 
 #endif // wxUSE_LISTBOX

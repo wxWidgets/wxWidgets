@@ -578,14 +578,22 @@ void wxControlRenderer::DrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 void wxControlRenderer::DrawItems(const wxListBox *lbox,
                                   size_t itemFirst, size_t itemLast)
 {
+    // prepare for the drawing: calc the initial position
     wxCoord lineHeight = lbox->GetLineHeight();
+    int lines, pixelsPerLine;
+    lbox->GetViewStart(NULL, &lines);
+    lbox->GetScrollPixelsPerUnit(NULL, &pixelsPerLine);
     wxRect rect = m_rect;
-    rect.y += itemFirst*lineHeight;
+    rect.y += itemFirst*lineHeight - lines*pixelsPerLine;
     rect.height = lineHeight;
+
+    // an item should have the focused rect only when the app has focus, so
+    // make sure that we never set wxCONTROL_FOCUSED flag if it doesn't
+    int itemCurrent = wxTheApp->IsActive() ? lbox->GetCurrentItem() : -1;
     for ( size_t n = itemFirst; n < itemLast; n++ )
     {
         int flags = 0;
-        if ( (int)n == lbox->GetCurrentItem() )
+        if ( (int)n == itemCurrent )
             flags |= wxCONTROL_FOCUSED;
         if ( lbox->IsSelected(n) )
             flags |= wxCONTROL_SELECTED;

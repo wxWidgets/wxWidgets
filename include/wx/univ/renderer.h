@@ -150,9 +150,6 @@ public:
     // the control looks "nice" if it uses the adjusted rectangle
     virtual void AdjustSize(wxSize *size, const wxWindow *window) = 0;
 
-    // hit testing functions
-    // ---------------------
-
     // gets the bounding box for a scrollbar element for the given (by default
     // - current) thumb position
     virtual wxRect GetScrollbarRect(const wxScrollBar *scrollbar,
@@ -169,6 +166,9 @@ public:
                                      int thumbPos = -1) = 0;
     virtual int PixelToScrollbar(const wxScrollBar *scrollbar,
                                  wxCoord coord) = 0;
+
+    // get the height of a listbox item from the base font height
+    virtual wxCoord GetListboxItemHeight(wxCoord fontHeight) = 0;
 
     // virtual dtor for any base class
     virtual ~wxRenderer();
@@ -288,6 +288,8 @@ public:
     virtual int PixelToScrollbar(const wxScrollBar *scrollbar,
                                  wxCoord coord)
         { return m_renderer->PixelToScrollbar(scrollbar, coord); }
+    virtual wxCoord GetListboxItemHeight(wxCoord fontHeight)
+        { return m_renderer->GetListboxItemHeight(fontHeight); }
 
 protected:
     wxRenderer *m_renderer;

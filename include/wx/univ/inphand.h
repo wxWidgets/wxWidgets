@@ -21,6 +21,7 @@
 
 #include "wx/univ/renderer.h"   // for wxHitTest
 
+class WXDLLEXPORT wxListBox;
 class WXDLLEXPORT wxRenderer;
 class WXDLLEXPORT wxScrollBar;
 
@@ -214,6 +215,14 @@ public:
                              const wxMouseEvent& event);
     virtual bool HandleMouseMove(wxControl *control,
                                  const wxMouseEvent& event);
+
+protected:
+    // get the listbox item under mouse and return -1 if there is none
+    int HitTest(const wxListBox *listbox, const wxMouseEvent& event);
+
+    wxRenderer *m_renderer;
+
+    wxWindow *m_winCapture;
 };
 
 #endif // _WX_UNIV_INPHAND_H_

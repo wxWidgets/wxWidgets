@@ -289,22 +289,37 @@ void wxWindow::SetScrollbar(int orient,
                             bool refresh)
 {
     wxScrollBar *scrollbar = GetScrollbar(orient);
-    if ( !scrollbar )
+    if ( range )
     {
-        // create it
-        scrollbar = new wxScrollBar(this, -1,
-                                    wxDefaultPosition, wxDefaultSize,
-                                    orient & wxVERTICAL ? wxSB_VERTICAL
-                                                        : wxSB_HORIZONTAL);
-        if ( orient & wxVERTICAL )
-            m_scrollbarVert = scrollbar;
-        else
-            m_scrollbarHorz = scrollbar;
+        if ( !scrollbar )
+        {
+            // create it
+            scrollbar = new wxScrollBar(this, -1,
+                                        wxDefaultPosition, wxDefaultSize,
+                                        orient & wxVERTICAL ? wxSB_VERTICAL
+                                                            : wxSB_HORIZONTAL);
+            if ( orient & wxVERTICAL )
+                m_scrollbarVert = scrollbar;
+            else
+                m_scrollbarHorz = scrollbar;
 
-        PositionScrollbars();
+            PositionScrollbars();
+        }
+
+        scrollbar->SetScrollbar(pos, thumb, range, thumb, refresh);
     }
+    else // no range means no scrollbar
+    {
+        if ( scrollbar )
+        {
+            delete scrollbar;
 
-    scrollbar->SetScrollbar(pos, thumb, range, thumb, refresh);
+            if ( orient & wxVERTICAL )
+                m_scrollbarVert = NULL;
+            else
+                m_scrollbarHorz = NULL;
+        }
+    }
 }
 
 void wxWindow::SetScrollPos(int orient, int pos, bool refresh)

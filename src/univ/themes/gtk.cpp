@@ -111,6 +111,8 @@ public:
     virtual wxCoord ScrollbarToPixel(const wxScrollBar *scrollbar,
                                      int thumbPos = -1);
     virtual int PixelToScrollbar(const wxScrollBar *scrollbar, wxCoord coord);
+    virtual wxCoord GetListboxItemHeight(wxCoord fontHeight)
+        { return fontHeight + 2; }
 
 protected:
     // DrawBackground() helpers
@@ -393,7 +395,7 @@ wxGTKRenderer::wxGTKRenderer(const wxColourScheme *scheme)
 {
     // init data
     m_scheme = scheme;
-    m_sizeScrollbarArrow = wxSize(16, 14);
+    m_sizeScrollbarArrow = wxSize(15, 14);
 
     // init pens
     m_penBlack = wxPen(scheme->Get(wxColourScheme::SHADOW_DARK), 0, wxSOLID);
@@ -522,8 +524,8 @@ void wxGTKRenderer::DrawBorder(wxDC& dc,
     switch ( border )
     {
         case wxBORDER_SUNKEN:
-            DrawShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
-            DrawShadedRect(dc, &rect, m_penBlack, m_penLightGrey);
+            DrawAntiShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
+            DrawAntiShadedRect(dc, &rect, m_penBlack, m_penLightGrey);
             break;
 
         case wxBORDER_STATIC:
@@ -721,6 +723,13 @@ void wxGTKRenderer::DrawItem(wxDC& dc,
         dc.SetTextForeground(m_scheme->Get(wxColourScheme::HIGHLIGHT_TEXT));
     }
 
+    if ( flags & wxCONTROL_FOCUSED )
+    {
+        dc.SetBrush(*wxTRANSPARENT_BRUSH);
+        wxRect rectFocus = rect;
+        DrawRect(dc, &rectFocus, m_penBlack);
+    }
+
     wxRect rectText = rect;
     rectText.x += 2;
     rectText.y++;
@@ -784,6 +793,8 @@ void wxGTKRenderer::DrawArrowBorder(wxDC& dc,
     rect2.Inflate(-1);
     rectInner.Inflate(-2);
 
+    DoDrawBackground(dc, m_scheme->Get(wxColourScheme::SCROLLBAR), *rect);
+
     // find the side not to draw and also adjust the rectangles to compensate
     // for it
     wxDirection sideToOmit;
@@ -792,7 +803,7 @@ void wxGTKRenderer::DrawArrowBorder(wxDC& dc,
         case wxUP:
             sideToOmit = wxDOWN;
             rect2.height += 1;
-            rectInner.height += 2;
+            rectInner.height += 1;
             break;
 
         case wxDOWN:
@@ -800,13 +811,13 @@ void wxGTKRenderer::DrawArrowBorder(wxDC& dc,
             rect2.y -= 1;
             rect2.height += 1;
             rectInner.y -= 2;
-            rectInner.height += 2;
+            rectInner.height += 1;
             break;
 
         case wxLEFT:
             sideToOmit = wxRIGHT;
             rect2.width += 1;
-            rectInner.width += 2;
+            rectInner.width += 1;
             break;
 
         case wxRIGHT:
@@ -814,7 +825,7 @@ void wxGTKRenderer::DrawArrowBorder(wxDC& dc,
             rect2.x -= 1;
             rect2.width += 1;
             rectInner.x -= 2;
-            rectInner.width += 2;
+            rectInner.width += 1;
             break;
 
         default:
@@ -844,7 +855,6 @@ void wxGTKRenderer::DrawArrowBorder(wxDC& dc,
     }
 
     *rect = rectInner;
-    DoDrawBackground(dc, m_scheme->Get(wxColourScheme::SCROLLBAR), rectInner);
 }
 
 // gtk_default_draw_arrow() takes ~350 lines and we can't do much better here

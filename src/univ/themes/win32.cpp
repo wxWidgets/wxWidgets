@@ -128,6 +128,8 @@ public:
     virtual wxCoord ScrollbarToPixel(const wxScrollBar *scrollbar,
                                      int thumbPos = -1);
     virtual int PixelToScrollbar(const wxScrollBar *scrollbar, wxCoord coord);
+    virtual wxCoord GetListboxItemHeight(wxCoord fontHeight)
+        { return fontHeight + 2; }
 
 protected:
     // common part of DrawLabel() and DrawItem()

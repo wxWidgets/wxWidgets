@@ -107,6 +107,7 @@ public:
 protected:
     // event handlers
     void OnButton(wxCommandEvent& event);
+    void OnListBox(wxCommandEvent& event);
     void OnLeftUp(wxMouseEvent& event);
 
 private:
@@ -139,6 +140,7 @@ IMPLEMENT_APP(MyUnivApp)
 
 BEGIN_EVENT_TABLE(MyUnivFrame, wxFrame)
     EVT_BUTTON(-1, MyUnivFrame::OnButton)
+    EVT_LISTBOX(-1, MyUnivFrame::OnListBox)
 
     EVT_LEFT_UP(MyUnivFrame::OnLeftUp)
 END_EVENT_TABLE()
@@ -311,10 +313,15 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
         _T("is one of my"),
         _T("really"),
         _T("wonderful"),
-        _T("examples."),
+        _T("examples"),
     };
-    new wxListBox(this, -1, wxPoint(550, 10), wxDefaultSize,
-                  WXSIZEOF(choices), choices);
+    wxListBox *lbox = new wxListBox(this, -1, wxPoint(550, 10), wxDefaultSize,
+                                    WXSIZEOF(choices), choices,
+                                    wxLB_MULTIPLE);
+    for ( int i = 0; i < 20; i++ )
+    {
+        lbox->Append(wxString::Format(_T("entry %d"), i));
+    }
 }
 
 void MyUnivFrame::OnButton(wxCommandEvent& event)
@@ -328,6 +335,11 @@ void MyUnivFrame::OnButton(wxCommandEvent& event)
     {
         wxLogDebug(_T("Another button pressed."));
     }
+}
+
+void MyUnivFrame::OnListBox(wxCommandEvent& event)
+{
+    wxLogDebug(_T("Listbox item %d selected."), event.GetInt());
 }
 
 void MyUnivFrame::OnLeftUp(wxMouseEvent& event)

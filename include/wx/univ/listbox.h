@@ -123,6 +123,7 @@ public:
     // actions
     void Activate();
     void Select(bool sel = TRUE);
+    void EnsureVisible();
 
     // get, calculating it if necessary, the number of items per page and the
     // height of each line
@@ -186,6 +187,15 @@ private:
 
     // the number of items per page
     size_t m_itemsPerPage;
+
+    // if the number of items has changed we may need to show/hide the
+    // scrollbar
+    bool m_updateScrollbar,
+         m_showScrollbar;
+
+    // if the current item has changed, we might need to scroll if it went out
+    // of the window
+    bool m_currentChanged;
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxListBox)
