@@ -27,7 +27,7 @@ class WXDLLEXPORT wxComboBox: public wxChoice
     DECLARE_DYNAMIC_CLASS(wxComboBox)
         
 public:
-    inline wxComboBox() {}
+    wxComboBox() {}
     ~wxComboBox();
     
     inline wxComboBox(wxWindow *parent, wxWindowID id,
@@ -39,7 +39,8 @@ public:
         const wxValidator& validator = wxDefaultValidator,
         const wxString& name = wxComboBoxNameStr)
     {
-        Create(parent, id, value, pos, size, n, choices, style, validator, name);
+        Create(parent, id, value, pos, size, n, choices,
+               style, validator, name);
     }
     
     bool Create(wxWindow *parent, wxWindowID id,
@@ -51,17 +52,14 @@ public:
         const wxValidator& validator = wxDefaultValidator,
         const wxString& name = wxComboBoxNameStr);
     
-    // List functions
-    virtual void Append(const wxString& item);
+    // implementation of wxControlWithItems
+    virtual int DoAppend(const wxString& item);
     virtual void Delete(int n);
     virtual void Clear();
     virtual int GetSelection() const ;
     virtual void SetSelection(int n);
     virtual int FindString(const wxString& s) const;
     virtual wxString GetString(int n) const ;
-    virtual wxString GetStringSelection() const ;
-    virtual bool SetStringSelection(const wxString& sel);
-    virtual inline int Number() const { return m_noStrings; }
     
     // Text field functions
     virtual wxString GetValue() const ;
@@ -86,7 +84,8 @@ public:
     virtual void ChangeForegroundColour();
     WXWidget GetTopWidget() const { return m_mainWidget; }
     WXWidget GetMainWidget() const { return m_mainWidget; }
-    
+
+    virtual wxSize DoGetBestSize() const;
 protected:
     virtual void DoSetSize(int x, int y,
         int width, int height,

@@ -65,6 +65,16 @@ public:
     bool InSetValue() const { return m_inSetValue; }
     
 protected:
+    // calls wxControlBase::CreateControl, also sets foreground, background and
+    // font to parent's values
+    bool CreateControl(wxWindow *parent,
+                       wxWindowID id,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       long style,
+                       const wxValidator& validator,
+                       const wxString& name);
+
 #if WXWIN_COMPATIBILITY
     wxFunction          m_callback;     // Callback associated with the window
 #endif // WXWIN_COMPATIBILITY

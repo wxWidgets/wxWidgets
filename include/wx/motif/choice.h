@@ -18,11 +18,16 @@
 
 WXDLLEXPORT_DATA(extern const char*) wxChoiceNameStr;
 
+#include "wx/clntdata.h"
+#include "wx/dynarray.h"
+
+WX_DEFINE_ARRAY(WXWidget, wxWidgetArray);
+
 // Choice item
 class WXDLLEXPORT wxChoice: public wxChoiceBase
 {
     DECLARE_DYNAMIC_CLASS(wxChoice)
-        
+
 public:
     wxChoice();
     ~wxChoice();
@@ -35,6 +40,7 @@ public:
         const wxValidator& validator = wxDefaultValidator,
         const wxString& name = wxChoiceNameStr)
     {
+        Init();
         Create(parent, id, pos, size, n, choices, style, validator, name);
     }
     
@@ -45,38 +51,28 @@ public:
         long style = 0,
         const wxValidator& validator = wxDefaultValidator,
         const wxString& name = wxChoiceNameStr);
-    
-    // Virtual functions required by wxControlWithItems.
-    // They are not all implemented yet :-(
+
+    // implementation of wxControlWithItems
     virtual int GetCount() const;
     virtual int DoAppend(const wxString& item);
-    virtual void DoInsertItems(const wxArrayString& items, int pos);
-    virtual void DoSetItems(const wxArrayString& items, void **clientData);
-    virtual void DoSetFirstItem(int n);
     virtual void DoSetItemClientData(int n, void* clientData);
     virtual void* DoGetItemClientData(int n) const;
     virtual void DoSetItemClientObject(int n, wxClientData* clientData);
     virtual wxClientData* DoGetItemClientObject(int n) const;
-    virtual void Select(int n);
-    virtual void SetString(int n, const wxString& s);
-    
-    // Original API
-    //    virtual void Append(const wxString& item);
+    virtual int GetSelection() const;
     virtual void Delete(int n);
-    virtual void Clear();
-    virtual int GetSelection() const ;
-    virtual void SetSelection(int n);
     virtual int FindString(const wxString& s) const;
-    virtual wxString GetString(int n) const ;
-    
-    virtual wxString GetStringSelection() const ;
-    virtual bool SetStringSelection(const wxString& sel);
-    
-    virtual int Number() const { return m_noStrings; }
-    virtual void Command(wxCommandEvent& event);
-    
+    virtual void Clear();
+    virtual void SetString(int n, const wxString& s);
+    virtual wxString GetString(int n) const;
+
+    // implementation of wxChoiceBase
+    virtual void SetSelection(int n);
     virtual void SetColumns(int n = 1 );
     virtual int GetColumns() const ;
+    
+    // Original API    
+    virtual void Command(wxCommandEvent& event);
     
     void SetFocus();
     
@@ -86,15 +82,25 @@ public:
     virtual void ChangeForegroundColour();
     WXWidget GetTopWidget() const { return m_formWidget; }
     WXWidget GetMainWidget() const { return m_buttonWidget; }
-    
+
+    virtual wxSize DoGetBestSize() const;
+
+    // implementation, for wxChoiceCallback
+    const wxWidgetArray& GetWidgets() const { return m_widgetArray; }
+    const wxStringList&  GetStrings() const { return m_stringList; }
 protected:
+    // minimum size for the text ctrl
+    wxSize GetItemsSize() const;
+    // common part of all contructors
+    void Init();
+
     int           m_noStrings;
     WXWidget      m_menuWidget;
     WXWidget      m_buttonWidget;
-    WXWidget*     m_widgetList ;
+    wxWidgetArray m_widgetArray;
     WXWidget      m_formWidget;
     wxStringList  m_stringList;
-    wxList        m_clientList;    // contains the client data for the items
+    wxClientDataDictionary m_clientDataDict;
      
     virtual void DoSetSize(int x, int y,
         int width, int height,

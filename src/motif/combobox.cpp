@@ -26,6 +26,8 @@
 #endif
 #include "xmcombo/xmcombo.h"
 
+#include "wx/motif/private.h"
+
 void  wxComboBoxCallback (Widget w, XtPointer clientData,
                           XmComboBoxSelectionCallbackStruct * cbs);
 
@@ -40,20 +42,10 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
                         const wxValidator& validator,
                         const wxString& name)
 {
-    SetName(name);
-    SetValidator(validator);
+    if( !CreateControl( parent, id, pos, size, style, validator, name ) )
+        return FALSE;
+
     m_noStrings = n;
-    m_windowStyle = style;
-    m_backgroundColour = parent->GetBackgroundColour();
-    // m_backgroundColour = * wxWHITE;
-    m_foregroundColour = parent->GetForegroundColour();
-
-    if (parent) parent->AddChild(this);
-
-    if ( id == -1 )
-        m_windowId = (int)NewControlId();
-    else
-        m_windowId = id;
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
@@ -70,12 +62,10 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     int i;
     for (i = 0; i < n; i++)
     {
-        XmString str = XmStringCreateLtoR((char*) (const char*) choices[i], XmSTRING_DEFAULT_CHARSET);
-        XmComboBoxAddItem(buttonWidget, str, 0);
-        XmStringFree(str);
+        wxXmString str( choices[i] );
+        XmComboBoxAddItem(buttonWidget, str(), 0);
         m_stringList.Add(choices[i]);
     }
-    m_noStrings = n;
 
     m_mainWidget = (Widget) buttonWidget;
 
@@ -83,7 +73,6 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 
     SetValue(value);
 
-    m_font = parent->GetFont();
     ChangeFont(FALSE);
 
     XtAddCallback (buttonWidget, XmNselectionCallback, (XtCallbackProc) wxComboBoxCallback,
@@ -104,12 +93,14 @@ wxComboBox::~wxComboBox()
     DetachWidget((Widget) m_mainWidget); // Removes event handlers
     XtDestroyWidget((Widget) m_mainWidget);
     m_mainWidget = (WXWidget) 0;
+    if ( HasClientObjectData() )
+        m_clientDataDict.DestroyData();
 }
 
 void wxComboBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
     // Necessary so it doesn't call wxChoice::SetSize
-    wxWindow::DoSetSize(x, y, width, height, sizeFlags);
+    wxWindow::DoSetSize(x, y, width, DoGetBestSize().y, sizeFlags);
 }
 
 wxString wxComboBox::GetValue() const
@@ -128,39 +119,31 @@ wxString wxComboBox::GetValue() const
 void wxComboBox::SetValue(const wxString& value)
 {
     m_inSetValue = TRUE;
-    if (!value.IsNull())
-        XmComboBoxSetString ((Widget) m_mainWidget, (char*) (const char*) value);
+    if( !value.empty() )
+        XmComboBoxSetString( (Widget)m_mainWidget, (char*)value.c_str() );
     m_inSetValue = FALSE;
 }
 
-void wxComboBox::Append(const wxString& item)
+int wxComboBox::DoAppend(const wxString& item)
 {
-    XmString str = XmStringCreateLtoR((char*) (const char*) item, XmSTRING_DEFAULT_CHARSET);
-    XmComboBoxAddItem((Widget) m_mainWidget, str, 0);
+    wxXmString str( item.c_str() );
+    XmComboBoxAddItem((Widget) m_mainWidget, str(), 0);
     m_stringList.Add(item);
-    XmStringFree(str);
     m_noStrings ++;
+
+    return GetCount() - 1;
 }
 
 void wxComboBox::Delete(int n)
 {
-    XmComboBoxDeletePos((Widget) m_mainWidget, n-1);
+    XmComboBoxDeletePos((Widget) m_mainWidget, n+1);
     wxNode *node = m_stringList.Nth(n);
     if (node)
     {
         delete[] (char *)node->Data();
         delete node;
     }
-    node = m_clientList.Nth( n );
-    if (node)
-    {
-        if ( HasClientObjectData() )
-        {
-            delete (wxClientData *)node->Data();
-        }
-        delete node;
-    }
-
+    m_clientDataDict.Delete(n, HasClientObjectData());
     m_noStrings--;
 }
 
@@ -170,18 +153,7 @@ void wxComboBox::Clear()
     m_stringList.Clear();
 
     if ( HasClientObjectData() )
-    {
-        // destroy the data (due to Robert's idea of using wxList<wxObject>
-        // and not wxList<wxClientData> we can't just say
-        // m_clientList.DeleteContents(TRUE) - this would crash!
-        wxNode *node = m_clientList.First();
-        while ( node )
-        {
-            delete (wxClientData *)node->Data();
-            node = node->Next();
-        }
-    }
-    m_clientList.Clear();
+        m_clientDataDict.DestroyData();
     m_noStrings = 0;
 }
 
@@ -201,43 +173,20 @@ int wxComboBox::GetSelection (void) const
 
 wxString wxComboBox::GetString(int n) const
 {
-    wxNode *node = m_stringList.Nth (n);
+    wxNode *node = m_stringList.Nth(n);
     if (node)
         return wxString((char *) node->Data ());
     else
         return wxEmptyString;
 }
 
-wxString wxComboBox::GetStringSelection() const
-{
-    int sel = GetSelection();
-    if (sel == -1)
-        return wxEmptyString;
-    else
-        return GetString(sel);
-}
-
-bool wxComboBox::SetStringSelection(const wxString& sel)
-{
-    int n = FindString(sel);
-    if (n == -1)
-        return FALSE;
-    else
-    {
-        SetSelection(n);
-        return TRUE;
-    }
-}
-
 int wxComboBox::FindString(const wxString& s) const
 {
     int *pos_list = NULL;
     int count = 0;
-    XmString text = XmStringCreateSimple ((char*) (const char*) s);
+    wxXmString text( s );
     bool found = (XmComboBoxGetMatchPos((Widget) m_mainWidget,
-        text, &pos_list, &count) != 0);
-
-    XmStringFree(text);
+        text(), &pos_list, &count) != 0);
 
     if (found && count > 0)
     {
@@ -322,7 +271,11 @@ void  wxComboBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
         {
             wxCommandEvent event (wxEVT_COMMAND_COMBOBOX_SELECTED, item->GetId());
             event.m_commandInt = cbs->index - 1;
-            //                event.m_commandString = item->GetString (event.m_commandInt);
+            event.m_commandString = item->GetString (event.m_commandInt);
+            if ( item->HasClientObjectData() )
+                event.SetClientObject( item->GetClientObject(cbs->index - 1) );
+            else if ( item->HasClientUntypedData() )
+                event.SetClientData( item->GetClientData(cbs->index - 1) );
             event.m_extraLong = TRUE;
             event.SetEventObject(item);
             item->ProcessCommand (event);
@@ -332,7 +285,7 @@ void  wxComboBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
         {
             wxCommandEvent event (wxEVT_COMMAND_TEXT_UPDATED, item->GetId());
             event.m_commandInt = -1;
-            //                event.m_commandString = item->GetValue();
+            event.m_commandString = item->GetValue();
             event.m_extraLong = TRUE;
             event.SetEventObject(item);
             item->ProcessCommand (event);
@@ -356,7 +309,21 @@ void wxComboBox::ChangeBackgroundColour()
 
 void wxComboBox::ChangeForegroundColour()
 {
-    wxWindow::ChangeBackgroundColour();
+    wxWindow::ChangeForegroundColour();
+}
+
+wxSize wxComboBox::DoGetBestSize() const
+{
+    if( (GetWindowStyle() & wxCB_DROPDOWN) == wxCB_DROPDOWN ||
+        (GetWindowStyle() & wxCB_READONLY) == wxCB_READONLY )
+    {
+        wxSize items = GetItemsSize();
+        // FIXME arbitrary constants
+        return wxSize( ( items.x ? items.x + 50 : 120 ),
+                         items.y + 10 );
+    }
+    else
+        return wxWindow::DoGetBestSize();
 }
 
 #endif
