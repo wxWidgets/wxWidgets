@@ -173,7 +173,7 @@ void MyFrame::OnPyFrame(wxCommandEvent& event)
     // C++ code in any way, you can execute it with PyRun_SimpleString.
 
 
-    // First, whenever you do anyting with Python objects or code, you
+    // First, whenever you do anything with Python objects or code, you
     // *MUST* aquire the Global Interpreter Lock and block other
     // Python threads from running.
     wxPyBeginBlockThreads();
