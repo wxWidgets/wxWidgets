@@ -895,11 +895,15 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param,
         wxString sid = bmpNode->GetPropVal(wxT("stock_id"), wxEmptyString);
         if ( !sid.empty() )
         {
-            wxString scl = bmpNode->GetPropVal(wxT("stock_client"), defaultArtClient);
+            wxString scl = bmpNode->GetPropVal(wxT("stock_client"), wxEmptyString);
+            if (scl.empty())
+                scl = defaultArtClient;
+            else
+                scl = wxART_MAKE_CLIENT_ID_FROM_STR(scl);
+            
             wxBitmap stockArt =
                 wxArtProvider::GetBitmap(wxART_MAKE_ART_ID_FROM_STR(sid),
-                                         wxART_MAKE_CLIENT_ID_FROM_STR(scl),
-                                         size);
+                                         scl, size);
             if ( stockArt.Ok() )
                 return stockArt;
         }
