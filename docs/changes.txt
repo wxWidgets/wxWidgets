@@ -32,10 +32,17 @@ wxMSW:
 
 - threads: bug in wxCondition::Broadcast fixed (Pieter van der Meulen)
 - fixed bug in MDI children flags (mis)handling
+- it is possible to compile wxCHMHelpController with other compilers than VisualC++
+  now and hhctrl.ocx is loaded at runtime.
+  
+wxGTK:
+
+- added support for wchar_t (wxUSE_WCHAR_T) under Unix
 
 wxHTML:
 
-- new feature, wxHtmlProcessor for on-the-fly modification of HTML markup
+- mew feature, wxHtmlProcessor for on-the-fly modification of HTML markup
+- visual enhancements to contents panel of wxHtmlHelpController
 
 2.2.0
 -----
