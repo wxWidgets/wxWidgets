@@ -74,7 +74,7 @@ bool wxControl::Create(wxWindow *parent,
     // less flicker and none of the standard controls needs to be entirely
     // repainted after resize anyhow.
     if ( !wxControlBase::Create(parent, id, pos, size,
-                                style | wxNO_FULL_REPAINT_ON_RESIZE,
+                                style | wxNO_FULL_REPAINT_ON_RESIZE ,
                                 validator, name) )
     {
         // underlying window creation failed?

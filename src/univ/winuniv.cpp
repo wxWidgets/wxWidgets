@@ -450,6 +450,61 @@ void wxWindow::OnSize(wxSizeEvent& event)
     {
         PositionScrollbars();
     }
+    
+#if 0
+    // Refresh the area (strip) previously occupied by the border
+    
+    if (HasFlag( wxNO_FULL_REPAINT_ON_RESIZE ))
+    {
+        wxSize newSize = event.GetSize();
+        
+        if (HasFlag( wxSIMPLE_BORDER ))
+        {
+            if (newSize.y > m_oldSize.y)
+            {
+                wxRect rect;
+                rect.x = 0;
+                rect.width = m_oldSize.x;
+                rect.y = m_oldSize.y;
+                rect.height = 1;
+                Refresh( TRUE, &rect );
+            }
+            if (newSize.x > m_oldSize.x)
+            {
+                wxRect rect;
+                rect.y = 0;
+                rect.height = m_oldSize.y;
+                rect.x = m_oldSize.x;
+                rect.width = 1;
+                Refresh( TRUE, &rect );
+            }
+        }
+        else
+        if (HasFlag( wxSUNKEN_BORDER ) || HasFlag( wxRAISED_BORDER ))
+        {
+            if (newSize.y > m_oldSize.y)
+            {
+                wxRect rect;
+                rect.x = 0;
+                rect.width = m_oldSize.x;
+                rect.y = m_oldSize.y-1;
+                rect.height = 2;
+                Refresh( TRUE, &rect );
+            }
+            if (newSize.x > m_oldSize.x)
+            {
+                wxRect rect;
+                rect.y = 0;
+                rect.height = m_oldSize.y;
+                rect.x = m_oldSize.x-1;
+                rect.width = 2;
+                Refresh( TRUE, &rect );
+            }
+        }
+        
+        m_oldSize = newSize;
+    }
+#endif
 
     event.Skip();
 }
