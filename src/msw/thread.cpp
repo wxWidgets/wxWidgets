@@ -48,6 +48,12 @@
 #define __MT__
 #endif
 
+#if defined(__BORLANDC__) && !defined(__MFC_COMPAT__)
+// Needed to know about _beginthreadex etc..
+#define __MFC_COMPAT__
+#endif
+
+
     #include <process.h>
 #endif
 
