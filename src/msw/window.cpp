@@ -1519,7 +1519,7 @@ void wxWindowMSW::DoSetToolTip(wxToolTip *tooltip)
     wxWindowBase::DoSetToolTip(tooltip);
 
     if ( m_tooltip )
-        m_tooltip->SetWindow(this);
+        m_tooltip->SetWindow((wxWindow *)this);
 }
 
 #endif // wxUSE_TOOLTIPS

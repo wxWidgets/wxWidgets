@@ -41,6 +41,7 @@
     #include "wx/validate.h"
 #endif
 
+#include "wx/tooltip.h"
 #include "wx/popupwin.h"
 
 #include "wx/univ/renderer.h"
@@ -350,6 +351,29 @@ bool wxComboControl::Show(bool show)
 
     return TRUE;
 }
+
+#if wxUSE_TOOLTIPS
+void wxComboControl::DoSetToolTip(wxToolTip *tooltip)
+{
+    wxControl::DoSetToolTip(tooltip);    
+
+    // Set tool tip for button and text box
+    if (m_text && m_btn)
+    {
+        if (tooltip)
+        {
+            const wxString &tip = tooltip->GetTip();
+            m_text->SetToolTip(tip);
+            m_btn->SetToolTip(tip);
+        }
+        else
+        {
+            m_text->SetToolTip(NULL);
+            m_btn->SetToolTip(NULL);
+        }
+    }
+}
+#endif // wxUSE_TOOLTIPS
 
 // ----------------------------------------------------------------------------
 // popup window handling

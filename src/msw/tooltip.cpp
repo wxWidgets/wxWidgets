@@ -352,7 +352,7 @@ void wxToolTip::SetWindow(wxWindow *win)
     {
         Add(m_window->GetHWND());
     }
-
+#if !defined(__WXUNIVERSAL__)
     // and all of its subcontrols (e.g. radiobuttons in a radiobox) as well
     wxControl *control = wxDynamicCast(m_window, wxControl);
     if ( control )
@@ -393,6 +393,7 @@ void wxToolTip::SetWindow(wxWindow *win)
             Add(hwndComboEdit);
         }
     }
+#endif // !defined(__WXUNIVERSAL__)
 }
 
 void wxToolTip::SetTip(const wxString& tip)
