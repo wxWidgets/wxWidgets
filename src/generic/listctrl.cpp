@@ -1808,8 +1808,6 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
 void wxListHeaderWindow::DrawCurrent()
 {
-    return;
-    
     int x1 = m_currentX;
     int y1 = 0;
     m_owner->ClientToScreen( &x1, &y1 );
@@ -1920,8 +1918,8 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
                 {
                     m_isDragging = TRUE;
                     m_currentX = x;
-                    DrawCurrent();
                     CaptureMouse();
+                    DrawCurrent();
                 }
                 //else: column resizing was vetoed by the user code
             }
@@ -1956,6 +1954,7 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
 void wxListHeaderWindow::OnSetFocus( wxFocusEvent &WXUNUSED(event) )
 {
     m_owner->SetFocus();
+    m_owner->Update();
 }
 
 bool wxListHeaderWindow::SendListEvent(wxEventType type, wxPoint pos)
