@@ -184,7 +184,7 @@ private:
     wxRegion m_region;
     wxRect*  m_rects;
 
-    DECLARE_DYNAMIC_CLASS(wxRegionIterator);
+    DECLARE_DYNAMIC_CLASS(wxRegionIterator)
 };
 
 #endif

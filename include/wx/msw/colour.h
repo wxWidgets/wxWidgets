@@ -40,6 +40,10 @@ public:
     // dtor
   ~wxColour();
 
+  // to have the matching Create also for this class 
+  void Create( unsigned char red, unsigned char green, unsigned char blue )
+  {	Set( red , green , blue ) ; }
+
   // Set() functions
   void Set( unsigned char red, unsigned char green, unsigned char blue );
   void Set(unsigned long colRGB)
