@@ -1489,7 +1489,6 @@ bool wxTextCtrl::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM *re
                 ::SetCursor(GetHcursorOf(wxCursor(wxCURSOR_HAND)));
                 *result = TRUE;
                 break;
-
             case WM_MOUSEMOVE:
             case WM_LBUTTONDOWN:
             case WM_LBUTTONUP:
