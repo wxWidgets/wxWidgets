@@ -308,14 +308,15 @@ wxEvent::wxEvent(int theId, wxEventType commandType )
 }
 
 wxEvent::wxEvent(const wxEvent &src)
+    : wxObject()
+    , m_eventObject(src.m_eventObject)
+    , m_eventType(src.m_eventType)
+    , m_timeStamp(src.m_timeStamp)
+    , m_id(src.m_id)
+    , m_callbackUserData(src.m_callbackUserData)
+    , m_skipped(src.m_skipped)
+    , m_isCommandEvent(src.m_isCommandEvent)
 {
-    m_eventType = src.m_eventType;
-    m_eventObject = src.m_eventObject;
-    m_timeStamp = src.m_timeStamp;
-    m_id = src.m_id;
-    m_skipped = src.m_skipped;
-    m_callbackUserData = src.m_callbackUserData;
-    m_isCommandEvent = src.m_isCommandEvent;
 }
 
 #if wxUSE_GUI
@@ -326,7 +327,7 @@ wxEvent::wxEvent(const wxEvent &src)
  */
 
 wxCommandEvent::wxCommandEvent(wxEventType commandType, int theId)
-  : wxEvent( theId, commandType )
+  : wxEvent(theId, commandType)
 {
     m_clientData = (char *) NULL;
     m_clientObject = (wxClientData *) NULL;
@@ -344,7 +345,7 @@ wxScrollEvent::wxScrollEvent(wxEventType commandType,
                              int id,
                              int pos,
                              int orient)
-             : wxCommandEvent(commandType, id)
+    : wxCommandEvent(commandType, id)
 {
     m_extraLong = orient;
     m_commandInt = pos;

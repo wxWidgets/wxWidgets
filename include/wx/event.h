@@ -334,6 +334,9 @@ END_DECLARE_EVENT_TYPES()
 
 class WXDLLEXPORT wxEvent : public wxObject
 {
+private:
+    wxEvent& operator=(const wxEvent&);
+    
 protected:
     wxEvent(const wxEvent&);                   // for implementing Clone()
 
@@ -401,8 +404,20 @@ private:
 
 class WXDLLEXPORT wxCommandEvent : public wxEvent
 {
+private:
+    wxCommandEvent& operator=(const wxCommandEvent& event);
+    
 public:
     wxCommandEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
+
+    wxCommandEvent(const wxCommandEvent& event)
+        : wxEvent(event)
+        , m_commandString(event.m_commandString)
+        , m_commandInt(event.m_commandInt)
+        , m_extraLong(event.m_extraLong)
+        , m_clientData(event.m_clientData)
+        , m_clientObject(event.m_clientObject)
+        { }
 
     // Set/Get client data from controls
     void SetClientData(void* clientData) { m_clientData = clientData; }
@@ -454,7 +469,14 @@ class WXDLLEXPORT wxNotifyEvent  : public wxCommandEvent
 {
 public:
     wxNotifyEvent(wxEventType commandType = wxEVT_NULL, int id = 0)
-                : wxCommandEvent(commandType, id) { m_bAllow = TRUE; }
+        : wxCommandEvent(commandType, id)
+        , m_bAllow(TRUE)
+        { }
+
+    wxNotifyEvent(const wxNotifyEvent& event)
+        : wxCommandEvent(event)
+        , m_bAllow(event.m_bAllow)
+        { }
 
     // veto the operation (usually it's allowed by default)
     void Veto() { m_bAllow = FALSE; }
@@ -731,12 +753,9 @@ class WXDLLEXPORT wxSetCursorEvent : public wxEvent
 {
 public:
     wxSetCursorEvent(wxCoord x = 0, wxCoord y = 0)
-    {
-        m_eventType = wxEVT_SET_CURSOR;
-
-        m_x = x;
-        m_y = y;
-    }
+        : wxEvent(0, wxEVT_SET_CURSOR)
+        , m_x(x), m_y(y), m_cursor()
+        { }
 
     wxCoord GetX() const { return m_x; }
     wxCoord GetY() const { return m_y; }
@@ -866,10 +885,14 @@ private:
 class WXDLLEXPORT wxSizeEvent : public wxEvent
 {
 public:
-    wxSizeEvent() { m_eventType = wxEVT_SIZE; }
+    wxSizeEvent()
+        : wxEvent(0, wxEVT_SIZE)
+        , m_size()
+        { }
     wxSizeEvent(const wxSize& sz, int id = 0)
-        : m_size(sz)
-        { m_eventType = wxEVT_SIZE; m_id = id; }
+        : wxEvent(id, wxEVT_SIZE)
+        , m_size(sz)
+        { }
 
     wxSize GetSize() const { return m_size; }
 
@@ -891,10 +914,14 @@ private:
 class WXDLLEXPORT wxMoveEvent : public wxEvent
 {
 public:
-    wxMoveEvent() { m_eventType = wxEVT_MOVE; }
+    wxMoveEvent()
+        : wxEvent(0, wxEVT_MOVE)
+        , m_pos()
+        { }
     wxMoveEvent(const wxPoint& pos, int id = 0)
-        : m_pos(pos)
-        { m_eventType = wxEVT_MOVE; m_id = id; }
+        : wxEvent(id, wxEVT_MOVE)
+        , m_pos(pos)
+        { }
 
     wxPoint GetPosition() const { return m_pos; }
 
@@ -922,10 +949,8 @@ class WXDLLEXPORT wxPaintEvent : public wxEvent
 {
 public:
     wxPaintEvent(int Id = 0)
+        : wxEvent(Id, wxEVT_PAINT)
     {
-        m_eventType = wxEVT_PAINT;
-        m_id = Id;
-
 #if defined(__WXDEBUG__) && (defined(__WXMSW__) || defined(__WXPM__))
         // set the internal flag for the duration of processing of WM_PAINT
         g_isPainting++;
@@ -948,7 +973,9 @@ private:
 class WXDLLEXPORT wxNcPaintEvent : public wxEvent
 {
 public:
-    wxNcPaintEvent(int id = 0) : wxEvent(id) { SetEventType(wxEVT_NC_PAINT); }
+    wxNcPaintEvent(int id = 0)
+        : wxEvent(id, wxEVT_NC_PAINT)
+        { }
 
     virtual wxEvent *Clone() const { return new wxNcPaintEvent(*this); }
 
@@ -963,9 +990,19 @@ private:
 
 class WXDLLEXPORT wxEraseEvent : public wxEvent
 {
+private:
+    wxEraseEvent& operator=(const wxEraseEvent& event);
+    
 public:
     wxEraseEvent(int Id = 0, wxDC *dc = (wxDC *) NULL)
-        { m_eventType = wxEVT_ERASE_BACKGROUND; m_id = Id; m_dc = dc; }
+        : wxEvent(Id, wxEVT_ERASE_BACKGROUND)
+        , m_dc(dc)
+        { }
+
+    wxEraseEvent(const wxEraseEvent& event)
+        : wxEvent(event)
+        , m_dc(event.m_dc)
+        { }
 
     wxDC *GetDC() const { return m_dc; }
 
@@ -985,9 +1022,19 @@ private:
 
 class WXDLLEXPORT wxFocusEvent : public wxEvent
 {
+private:
+    wxFocusEvent& operator=(const wxFocusEvent& event);
+    
 public:
     wxFocusEvent(wxEventType type = wxEVT_NULL, int id = 0)
-        { m_eventType = type; m_id = id; m_win = NULL; }
+        : wxEvent(id, type)
+        , m_win(NULL)
+        { }
+
+    wxFocusEvent(const wxFocusEvent& event)
+        : wxEvent(event)
+        , m_win(event.m_win)
+        { }
 
     // The window associated with this event is the window which had focus
     // before for SET event and the window which will have focus for the KILL
@@ -1029,7 +1076,9 @@ class WXDLLEXPORT wxActivateEvent : public wxEvent
 {
 public:
     wxActivateEvent(wxEventType type = wxEVT_NULL, bool active = TRUE, int Id = 0)
-        { m_eventType = type; m_active = active; m_id = Id; }
+        : wxEvent(Id, type)
+        , m_active(active)
+        { }
 
     bool GetActive() const { return m_active; }
 
@@ -1051,7 +1100,8 @@ class WXDLLEXPORT wxInitDialogEvent : public wxEvent
 {
 public:
     wxInitDialogEvent(int Id = 0)
-        { m_eventType = wxEVT_INIT_DIALOG; m_id = Id; }
+        : wxEvent(Id, wxEVT_INIT_DIALOG)
+        { }
 
     virtual wxEvent *Clone() const { return new wxInitDialogEvent(*this); }
 
@@ -1071,7 +1121,8 @@ class WXDLLEXPORT wxMenuEvent : public wxEvent
 public:
     wxMenuEvent(wxEventType type = wxEVT_NULL, int id = 0)
         : wxEvent(id, type)
-        { m_menuId = id; }
+        , m_menuId(id)
+        { }
 
     // only for wxEVT_MENU_HIGHLIGHT
     int GetMenuId() const { return m_menuId; }
@@ -1098,16 +1149,14 @@ class WXDLLEXPORT wxCloseEvent : public wxEvent
 {
 public:
     wxCloseEvent(wxEventType type = wxEVT_NULL, int id = 0)
-    {
-        m_eventType = type;
-        m_loggingOff = TRUE;
-        m_veto = FALSE;         // should be FALSE by default
-        m_id = id;
+        : wxEvent(id, type)
+        , m_loggingOff(TRUE)
+        , m_veto(FALSE)      // should be FALSE by default
+        , m_canVeto(TRUE)
 #if WXWIN_COMPATIBILITY
-        m_force = FALSE;
+        , m_force(FALSE)
 #endif // WXWIN_COMPATIBILITY
-        m_canVeto = TRUE;
-    }
+    { }
 
     void SetLoggingOff(bool logOff) { m_loggingOff = logOff; }
     bool GetLoggingOff() const { return m_loggingOff; }
@@ -1156,7 +1205,9 @@ class WXDLLEXPORT wxShowEvent : public wxEvent
 {
 public:
     wxShowEvent(int id = 0, bool show = FALSE)
-        { m_eventType = wxEVT_SHOW; m_id = id; m_show = show; }
+        : wxEvent(id, wxEVT_SHOW)
+        , m_show(show)
+        { }
 
     void SetShow(bool show) { m_show = show; }
     bool GetShow() const { return m_show; }
@@ -1178,7 +1229,9 @@ class WXDLLEXPORT wxIconizeEvent : public wxEvent
 {
 public:
     wxIconizeEvent(int id = 0, bool iconized = TRUE)
-        { m_eventType = wxEVT_ICONIZE; m_id = id; m_iconized = iconized; }
+        : wxEvent(id, wxEVT_ICONIZE)
+        , m_iconized(iconized)
+        { }
 
     // return true if the frame was iconized, false if restored
     bool Iconized() const { return m_iconized; }
@@ -1199,7 +1252,8 @@ class WXDLLEXPORT wxMaximizeEvent : public wxEvent
 {
 public:
     wxMaximizeEvent(int id = 0)
-        { m_eventType = wxEVT_MAXIMIZE; m_id = id; }
+        : wxEvent(id, wxEVT_MAXIMIZE)
+        { }
 
     virtual wxEvent *Clone() const { return new wxMaximizeEvent(*this); }
 
@@ -1239,13 +1293,13 @@ public:
                     int state = 0,
                     int joystick = wxJOYSTICK1,
                     int change = 0)
+        : wxEvent(0, type)
+        , m_pos(0, 0)
+        , m_zPosition(0)
+        , m_buttonChange(change)
+        , m_buttonState(state)
+        , m_joyStick(joystick)
     {
-        m_eventType = type;
-        m_buttonState = state;
-        m_pos = wxPoint(0,0);
-        m_zPosition = 0;
-        m_joyStick = joystick;
-        m_buttonChange = change;
     }
 
     wxPoint GetPosition() const { return m_pos; }
@@ -1298,6 +1352,9 @@ private:
 
 class WXDLLEXPORT wxDropFilesEvent : public wxEvent
 {
+private:
+    wxDropFilesEvent& operator=(const wxDropFilesEvent& event);
+    
 public:
     int       m_noFiles;
     wxPoint   m_pos;
@@ -1306,13 +1363,19 @@ public:
     wxDropFilesEvent(wxEventType type = wxEVT_NULL,
                      int noFiles = 0,
                      wxString *files = (wxString *) NULL)
-        { m_eventType = type; m_noFiles = noFiles; m_files = files; }
+        : wxEvent(0, type)
+        , m_noFiles(noFiles)
+        , m_pos()
+        , m_files(files)
+        { }
 
     // we need a copy ctor to avoid deleting m_files pointer twice
     wxDropFilesEvent(const wxDropFilesEvent& other)
-        : m_pos(other.m_pos)
+        : wxEvent(other)
+        , m_noFiles(other.m_noFiles)
+        , m_pos(other.m_pos)
+        , m_files(NULL)
     {
-        m_noFiles = other.m_noFiles;
         m_files = new wxString[m_noFiles];
         for ( int n = 0; n < m_noFiles; n++ )
         {
@@ -1344,16 +1407,14 @@ class WXDLLEXPORT wxUpdateUIEvent : public wxCommandEvent
 {
 public:
     wxUpdateUIEvent(wxWindowID commandId = 0)
-    {
-        m_eventType = wxEVT_UPDATE_UI;
-        m_id = commandId;
-        m_checked = FALSE;
-        m_setChecked = FALSE;
-        m_enabled = FALSE;
-        m_setEnabled = FALSE;
-        m_setText = FALSE;
-        m_text = "";
-    }
+        : wxCommandEvent(wxEVT_UPDATE_UI, commandId)
+        , m_checked(FALSE)
+        , m_enabled(FALSE) 
+        , m_setEnabled(FALSE)
+        , m_setText(FALSE)
+        , m_setChecked(FALSE)
+        , m_text("")
+        { }
 
     bool GetChecked() const { return m_checked; }
     bool GetEnabled() const { return m_enabled; }
@@ -1389,7 +1450,8 @@ class WXDLLEXPORT wxSysColourChangedEvent : public wxEvent
 {
 public:
     wxSysColourChangedEvent()
-        { m_eventType = wxEVT_SYS_COLOUR_CHANGED; }
+        : wxEvent(0, wxEVT_SYS_COLOUR_CHANGED)
+        { }
 
     virtual wxEvent *Clone() const { return new wxSysColourChangedEvent(*this); }
 
@@ -1405,9 +1467,19 @@ private:
 
 class WXDLLEXPORT wxMouseCaptureChangedEvent : public wxEvent
 {
+private:
+    wxMouseCaptureChangedEvent operator=(const wxMouseCaptureChangedEvent& event);
+    
 public:
-    wxMouseCaptureChangedEvent(wxWindowID id = 0, wxWindow* gainedCapture = NULL): wxEvent(id)
-        { m_eventType = wxEVT_MOUSE_CAPTURE_CHANGED; m_gainedCapture = gainedCapture; }
+    wxMouseCaptureChangedEvent(wxWindowID id = 0, wxWindow* gainedCapture = NULL)
+        : wxEvent(id, wxEVT_MOUSE_CAPTURE_CHANGED)
+        , m_gainedCapture(gainedCapture)
+        { }
+
+    wxMouseCaptureChangedEvent(const wxMouseCaptureChangedEvent& event)
+        : wxEvent(event)
+        , m_gainedCapture(event.m_gainedCapture)
+        { }
 
     virtual wxEvent *Clone() const { return new wxMouseCaptureChangedEvent(*this); }
 
@@ -1428,7 +1500,8 @@ private:
 
 public:
     wxDisplayChangedEvent()
-        { m_eventType = wxEVT_DISPLAY_CHANGED; }
+        : wxEvent(0, wxEVT_DISPLAY_CHANGED)
+        { }
 
     virtual wxEvent *Clone() const { return new wxDisplayChangedEvent(*this); }
 };
@@ -1439,12 +1512,19 @@ public:
 
 class WXDLLEXPORT wxPaletteChangedEvent : public wxEvent
 {
+private:
+    wxPaletteChangedEvent& operator=(const wxPaletteChangedEvent& event);
+    
 public:
-    wxPaletteChangedEvent(wxWindowID id = 0) : wxEvent(id)
-    {
-        m_eventType = wxEVT_PALETTE_CHANGED;
-        m_changedWindow = (wxWindow *) NULL;
-    }
+    wxPaletteChangedEvent(wxWindowID id = 0)
+        : wxEvent(id, wxEVT_PALETTE_CHANGED)
+        , m_changedWindow((wxWindow *) NULL)
+    { }
+
+    wxPaletteChangedEvent(const wxPaletteChangedEvent& event)
+        : wxEvent(event)
+        , m_changedWindow(event.m_changedWindow)
+        { }
 
     void SetChangedWindow(wxWindow* win) { m_changedWindow = win; }
     wxWindow* GetChangedWindow() const { return m_changedWindow; }
@@ -1466,8 +1546,10 @@ private:
 class WXDLLEXPORT wxQueryNewPaletteEvent : public wxEvent
 {
 public:
-    wxQueryNewPaletteEvent(wxWindowID id = 0): wxEvent(id)
-        { m_eventType = wxEVT_QUERY_NEW_PALETTE; m_paletteRealized = FALSE; }
+    wxQueryNewPaletteEvent(wxWindowID id = 0)
+        : wxEvent(id, wxEVT_QUERY_NEW_PALETTE)
+        , m_paletteRealized(FALSE)
+        { }
 
     // App sets this if it changes the palette.
     void SetPaletteRealized(bool realized) { m_paletteRealized = realized; }
@@ -1489,14 +1571,21 @@ private:
 // NB: don't derive from command event to avoid being propagated to the parent
 class WXDLLEXPORT wxNavigationKeyEvent : public wxEvent
 {
+private:
+    wxNavigationKeyEvent& operator=(const wxNavigationKeyEvent& event);
+    
 public:
     wxNavigationKeyEvent()
-    {
-        SetEventType(wxEVT_NAVIGATION_KEY);
+        : wxEvent(0, wxEVT_NAVIGATION_KEY)
+        , m_flags(IsForward | Propagate)    // defaults are for TAB
+        , m_focus((wxWindow *)NULL)
+        { }
 
-        m_flags = IsForward | Propagate;    // defaults are for TAB
-        m_focus = (wxWindow *)NULL;
-    }
+    wxNavigationKeyEvent(const wxNavigationKeyEvent& event)
+        : wxEvent(event)
+        , m_flags(event.m_flags)
+        , m_focus(event.m_focus)
+        { }
 
     // direction: forward (true) or backward (false)
     bool GetDirection() const
@@ -1589,11 +1678,9 @@ public:
     wxHelpEvent(wxEventType type = wxEVT_NULL,
                 wxWindowID id = 0,
                 const wxPoint& pt = wxDefaultPosition)
-    {
-        m_eventType = type;
-        m_id = id;
-        m_pos = pt;
-    }
+        : wxCommandEvent(type, id)
+        , m_pos(pt), m_target(), m_link()
+    { }
 
     // Position of event (in screen coordinates)
     const wxPoint& GetPosition() const { return m_pos; }
@@ -1630,13 +1717,11 @@ class WXDLLEXPORT wxContextMenuEvent : public wxCommandEvent
 {
 public:
     wxContextMenuEvent(wxEventType type = wxEVT_NULL,
-                wxWindowID id = 0,
-                const wxPoint& pt = wxDefaultPosition)
-    {
-        m_eventType = type;
-        m_id = id;
-        m_pos = pt;
-    }
+                       wxWindowID id = 0,
+                       const wxPoint& pt = wxDefaultPosition)
+        : wxCommandEvent(type, id)
+        , m_pos(pt)
+    { }
 
     // Position of event (in screen coordinates)
     const wxPoint& GetPosition() const { return m_pos; }
@@ -1660,7 +1745,9 @@ class WXDLLEXPORT wxIdleEvent : public wxEvent
 {
 public:
     wxIdleEvent()
-        { m_eventType = wxEVT_IDLE; m_requestMore = FALSE; }
+        : wxEvent(0, wxEVT_IDLE)
+        , m_requestMore(FALSE)
+        { }
 
     void RequestMore(bool needMore = TRUE) { m_requestMore = needMore; }
     bool MoreRequested() const { return m_requestMore; }
@@ -1717,14 +1804,24 @@ struct WXDLLEXPORT wxEventTableEntry
 // entries
 struct WXDLLEXPORT wxEventTableEntryBase
 {
+private:
+    wxEventTableEntryBase& operator=(const wxEventTableEntryBase& event);
+    
+public:
     wxEventTableEntryBase(int id, int idLast,
                           wxObjectEventFunction fn, wxObject *data)
-    {
-        m_id = id;
-        m_lastId = idLast;
-        m_fn = fn;
-        m_callbackUserData = data;
-    }
+        : m_id(id)
+        , m_lastId(idLast)
+        , m_fn(fn)
+        , m_callbackUserData(data)
+    { }
+
+    wxEventTableEntryBase(const wxEventTableEntryBase& event)
+        : m_id(event.m_id)
+        , m_lastId(event.m_lastId)
+        , m_fn(event.m_fn)
+        , m_callbackUserData(event.m_callbackUserData)
+    { }        
 
     // the range of ids for this entry: if m_lastId == -1, the range consists
     // only of m_id, otherwise it is m_id..m_lastId inclusive
@@ -1742,10 +1839,9 @@ struct WXDLLEXPORT wxEventTableEntry : public wxEventTableEntryBase
 {
     wxEventTableEntry(const int& evType, int id, int idLast,
                       wxObjectEventFunction fn, wxObject *data)
-                 : wxEventTableEntryBase(id, idLast, fn, data),
-                   m_eventType(evType)
-    {
-    }
+        : wxEventTableEntryBase(id, idLast, fn, data),
+        m_eventType(evType)
+    { }
 
     // the reference to event type: this allows us to not care about the
     // (undefined) order in which the event table entries and the event types
@@ -1762,9 +1858,8 @@ struct WXDLLEXPORT wxDynamicEventTableEntry : public wxEventTableEntryBase
     wxDynamicEventTableEntry(int evType, int id, int idLast,
                              wxObjectEventFunction fn, wxObject *data)
         : wxEventTableEntryBase(id, idLast, fn, data)
-    {
-        m_eventType = evType;
-    }
+        , m_eventType(evType)
+    { }
 
     // not a reference here as we can't keep a reference to a temporary int
     // created to wrap the constant value typically passed to Connect() - nor
