@@ -41,7 +41,7 @@ wxSoundStreamOSS::wxSoundStreamOSS(const wxString& dev_name)
 
   ioctl(m_fd, SNDCTL_DSP_GETBLKSIZE, &m_bufsize);
 
-  m_snderror = wxSOUND_NOERR;
+  m_snderror = wxSOUND_NOERROR;
 
   close(m_fd);
 
@@ -68,9 +68,9 @@ wxSoundStream& wxSoundStreamOSS::Read(void *buffer, wxUint32 len)
   m_q_filled  = TRUE;
 
   if (ret < 0)
-    m_snderror = wxSOUND_IOERR;
+    m_snderror = wxSOUND_IOERROR;
   else
-    m_snderror = wxSOUND_NOERR;
+    m_snderror = wxSOUND_NOERROR;
 
   return *this;
 }
@@ -83,9 +83,9 @@ wxSoundStream& wxSoundStreamOSS::Write(const void *buffer, wxUint32 len)
   m_q_filled  = TRUE;
 
   if (ret < 0)
-    m_snderror = wxSOUND_IOERR;
+    m_snderror = wxSOUND_IOERROR;
   else
-    m_snderror = wxSOUND_NOERR;
+    m_snderror = wxSOUND_NOERROR;
 
   return *this;
 }
@@ -110,7 +110,7 @@ bool wxSoundStreamOSS::SetSoundFormat(const wxSoundFormatBase& format)
 
   m_sndformat = format.Clone();
   if (!m_sndformat) {
-    m_snderror = wxSOUND_MEMERR;
+    m_snderror = wxSOUND_MEMERROR;
     return FALSE;
   }
   pcm_format = (wxSoundFormatPcm *)m_sndformat;
@@ -129,7 +129,7 @@ bool wxSoundStreamOSS::SetSoundFormat(const wxSoundFormatBase& format)
   ioctl(m_fd, SNDCTL_DSP_CHANNELS, &tmp);
   pcm_format->SetChannels(tmp);
 
-  m_snderror = wxSOUND_NOERR;
+  m_snderror = wxSOUND_NOERROR;
   if (*pcm_format != format) {
     m_snderror = wxSOUND_NOEXACT;
     return FALSE;
@@ -229,44 +229,43 @@ void wxSoundStreamOSS::WakeUpEvt(int evt)
 
 bool wxSoundStreamOSS::StartProduction(int evt)
 {
-  wxSoundFormatBase *old_frmt;
-
-  if (!m_oss_stop)
-    StopProduction();
-
-  old_frmt = m_sndformat->Clone();
-  if (!old_frmt) {
-    m_snderror = wxSOUND_MEMERR;
-    return FALSE;
-  }
-
-  if (evt == wxSOUND_OUTPUT)
-    m_fd = open(m_devname.mb_str(), O_WRONLY);
-  else if (evt == wxSOUND_INPUT)
-    m_fd = open(m_devname.mb_str(), O_RDONLY);
-
-  if (m_fd == -1) {
-    m_snderror = wxSOUND_INVDEV;
-    return FALSE;
-  }
-
-  SetSoundFormat(*old_frmt);
-  delete old_frmt;
-
+    wxSoundFormatBase *old_frmt;
+    
+    if (!m_oss_stop)
+        StopProduction();
+    
+    old_frmt = m_sndformat->Clone();
+    if (!old_frmt) {
+        m_snderror = wxSOUND_MEMERROR;
+        return FALSE;
+    }
+    
+    if (evt == wxSOUND_OUTPUT)
+        m_fd = open(m_devname.mb_str(), O_WRONLY);
+    else if (evt == wxSOUND_INPUT)
+        m_fd = open(m_devname.mb_str(), O_RDONLY);
+    
+    if (m_fd == -1) {
+        m_snderror = wxSOUND_INVDEV;
+        return FALSE;
+    }
+    
+    SetSoundFormat(*old_frmt);
+    delete old_frmt;
+    
+    int trig;
+    
+    if (evt == wxSOUND_OUTPUT) {
 #ifdef __WXGTK__
-  int trig;
-
-  if (evt == wxSOUND_OUTPUT) {
-    m_tag = gdk_input_add(m_fd, GDK_INPUT_WRITE, _wxSound_OSS_CBack, (gpointer)this);
-    trig = PCM_ENABLE_OUTPUT;
-  } else {
-    m_tag = gdk_input_add(m_fd, GDK_INPUT_READ, _wxSound_OSS_CBack, (gpointer)this);
-    trig = PCM_ENABLE_INPUT;
-  }
-#else
-  while (!m_oss_stop)
-    OnSoundEvent(evt);
+        m_tag = gdk_input_add(m_fd, GDK_INPUT_WRITE, _wxSound_OSS_CBack, (gpointer)this);
 #endif
+        trig = PCM_ENABLE_OUTPUT;
+    } else {
+#ifdef __WXGTK__
+        m_tag = gdk_input_add(m_fd, GDK_INPUT_READ, _wxSound_OSS_CBack, (gpointer)this);
+#endif
+        trig = PCM_ENABLE_INPUT;
+    }
 
   ioctl(m_fd, SNDCTL_DSP_SETTRIGGER, &trig);
 

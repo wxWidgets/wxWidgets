@@ -46,7 +46,7 @@ wxSoundStream::wxSoundStream()
   // Reset all variables to their neutral value.
   m_sndformat = NULL;
   m_handler = NULL;
-  m_snderror = wxSOUND_NOERR;
+  m_snderror = wxSOUND_NOERROR;
   m_lastcount = 0;
   for (i=0;i<2;i++)
     m_callback[i] = NULL;
@@ -85,7 +85,7 @@ bool wxSoundStream::SetSoundFormat(const wxSoundFormatBase& format)
 // call twice this function the previous registered callback is absolutely
 // ignored.
 // --------------------------------------------------------------------------
-void wxSoundStream::Register(int evt, wxSoundCallback cbk, char *cdata)
+void wxSoundStream::SetCallback(int evt, wxSoundCallback cbk, void *cdata)
 {
   int c;
 

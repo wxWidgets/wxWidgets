@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------
-// Name:       sndsnd.cpp
+// Name:       cdbase.cpp
 // Purpose:    wxMMedia
 // Author:     Guilhem Lavaux
 // Created:    1997

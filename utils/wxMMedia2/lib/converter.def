@@ -1,7 +1,5 @@
-#include <stdio.h>
-
 #define DEFINE_CONV(name, input_type, output_type, convert) \
-static void Convert_##name##(const char *buf_in, char *buf_out, wxUint32 len) \
+static void Convert_##name##(const void *buf_in, void *buf_out, wxUint32 len) \
 {\
   register input_type src; \
   register const input_type *t_buf_in = (input_type *)buf_in; \
@@ -13,6 +11,8 @@ static void Convert_##name##(const char *buf_in, char *buf_out, wxUint32 len) \
     len -= sizeof(input_type); \
   } \
 }
+
+// TODO: define converters for all other formats (32, 24)
 
 DEFINE_CONV(8_8_sign, wxUint8, wxUint8, (src ^ 0x80))
 
@@ -26,8 +26,14 @@ DEFINE_CONV(16_8_sign, wxUint16, wxUint8, (wxUint8)((src >> 8) ^ 0x80))
 DEFINE_CONV(16_swap_8, wxUint16, wxUint8, (wxUint8)(src & 0xff))
 DEFINE_CONV(16_swap_8_sign, wxUint16, wxUint8, (wxUint8)((src & 0xff) ^ 0x80))
 
+//DEFINE_CONV(24_8, wxUint32, wxUint8, (wxUint8)(src >> 16))
+//DEFINE_CONV(24_8_sig, wxUint32, wxUint8, (wxUint8)((src >> 16) ^ 0x80))
+
+//DEFINE_CONV(32_8, wxUint32, wxUint8, (wxUint8)(src >> 24))
+
 DEFINE_CONV(16_sign, wxUint16, wxUint16, (src ^ 0x8000))
 DEFINE_CONV(16_swap, wxUint16, wxUint16, (((src & 0xff) << 8) | ((src >> 8) & 0xff)))
-DEFINE_CONV(16_swap_16_sign, wxUint16, wxUint16, ((((src & 0xff) << 8) | ((src >> 8) & 0xff)) ^ 0x8000))
-DEFINE_CONV(16_sign_16_swap, wxUint16, wxUint16, ((((src & 0xff) << 8) | ((src >> 8) & 0xff)) ^ 0x80))
+// Problem.
+DEFINE_CONV(16_swap_16_sign, wxUint16, wxUint16, ((((src & 0xff) << 8) | ((src >> 8) & 0xff)) ^ 0x80))
+// DEFINE_CONV(16_sign_16_swap, wxUint16, wxUint16, ((((src & 0xff) << 8) | ((src >> 8) & 0xff)) ^ 0x8000))
 DEFINE_CONV(16_swap_16_sign_swap, wxUint16, wxUint16, (src ^ 0x80))

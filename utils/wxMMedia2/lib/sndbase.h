@@ -63,14 +63,14 @@ typedef enum {
 //   - wxSOUND_MEMERR:  Not enough memory.
 // ---------------------
 typedef enum {
-  wxSOUND_NOERR,
-  wxSOUND_IOERR,
+  wxSOUND_NOERROR,
+  wxSOUND_IOERROR,
   wxSOUND_INVFRMT,
   wxSOUND_INVDEV,
   wxSOUND_NOEXACT,
   wxSOUND_INVSTRM,
   wxSOUND_NOCODEC,
-  wxSOUND_MEMERR
+  wxSOUND_MEMERROR
 } wxSoundError;
 
 class WXDLLEXPORT wxSoundStream;
@@ -83,7 +83,7 @@ class WXDLLEXPORT wxSoundStream;
 //    - cdata: User callback data
 // ---------------------
 typedef void (*wxSoundCallback)(wxSoundStream *stream, int evt,
-                                char *cdata);
+                                void *cdata);
 
 //
 // Base class for sound format specification
@@ -128,7 +128,7 @@ class wxSoundStream {
   wxSoundFormatBase& GetSoundFormat() const { return *m_sndformat; }
 
   // Register a callback for a specified async event.
-  void Register(int evt, wxSoundCallback cbk, char *cdata);
+  void SetCallback(int evt, wxSoundCallback cbk, void *cdata);
 
   // Starts the async notifier. After this call, the stream begins either 
   // recording or playing or the two at the same time.
@@ -158,7 +158,7 @@ class wxSoundStream {
   wxSoundStream *m_handler;
 
   wxSoundCallback m_callback[2];
-  char *m_cdata[2];
+  void *m_cdata[2];
 
  protected:
   // Handles event

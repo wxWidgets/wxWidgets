@@ -59,7 +59,7 @@ wxSoundStreamESD::wxSoundStreamESD(const wxString& hostname)
   SetSoundFormat(pcm_default);
 
   // Initialize some variable
-  m_snderror = wxSOUND_NOERR;
+  m_snderror = wxSOUND_NOERROR;
   m_esd_stop = TRUE;
   m_q_filled = TRUE;
   m_fd_output= -1;
@@ -84,9 +84,9 @@ wxSoundStream& wxSoundStreamESD::Read(void *buffer, wxUint32 len)
   m_lastcount = (wxUint32)ret = read(m_fd_input, buffer, len);
 
   if (ret < 0)
-    m_snderror = wxSOUND_IOERR;
+    m_snderror = wxSOUND_IOERROR;
   else
-    m_snderror = wxSOUND_NOERR;
+    m_snderror = wxSOUND_NOERROR;
 
   return *this;
 }
@@ -101,9 +101,9 @@ wxSoundStream& wxSoundStreamESD::Write(const void *buffer, wxUint32 len)
   m_lastcount = (wxUint32)ret = write(m_fd_output, buffer, len);
 
   if (ret < 0)
-    m_snderror = wxSOUND_IOERR;
+    m_snderror = wxSOUND_IOERROR;
   else
-    m_snderror = wxSOUND_NOERR;
+    m_snderror = wxSOUND_NOERROR;
 
   m_q_filled = TRUE;
 
@@ -133,7 +133,7 @@ bool wxSoundStreamESD::SetSoundFormat(const wxSoundFormatBase& format)
 
   m_sndformat = format.Clone();
   if (!m_sndformat) {
-    m_snderror = wxSOUND_MEMERR;
+    m_snderror = wxSOUND_MEMERROR;
     return FALSE;
   }
   pcm_format = (wxSoundFormatPcm *)m_sndformat;
@@ -141,7 +141,7 @@ bool wxSoundStreamESD::SetSoundFormat(const wxSoundFormatBase& format)
   // Detect the best format
   DetectBest(pcm_format);
 
-  m_snderror = wxSOUND_NOERR;
+  m_snderror = wxSOUND_NOERROR;
   if (*pcm_format != format) {
     m_snderror = wxSOUND_NOEXACT;
     return FALSE;
@@ -256,7 +256,7 @@ void wxSoundStreamESD::DetectBest(wxSoundFormatPcm *pcm)
 {
   wxSoundFormatPcm best_pcm;
 
-  // We change neither the number of channels nor the sample rate
+  // We change neither the number of channels nor the sample rate because ESD is clever.
 
   best_pcm.SetSampleRate(pcm->GetSampleRate());
   best_pcm.SetChannels(pcm->GetChannels());

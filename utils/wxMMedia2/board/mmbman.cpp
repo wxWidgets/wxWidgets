@@ -298,7 +298,9 @@ wxString MMBoardSoundFile::GetStringInformation()
     case wxSOUND_PCM: {
         wxSoundFormatPcm *pcm_format = (wxSoundFormatPcm *)format;
       
-	info += wxT("PCM\n");
+	info += wxString::Format(wxT("PCM %s %s\n"),
+                                 pcm_format->Signed() ? wxT("signed") : wxT("unsigned"),
+                                 pcm_format->GetOrder() == wxLITTLE_ENDIAN ? wxT("little endian") : wxT("big endian"));
 	info += wxString::Format(wxT("Sampling rate: %d\n")
 				 wxT("Bits per sample: %d\n")
 				 wxT("Number of channels: %d\n"),

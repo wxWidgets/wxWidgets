@@ -99,6 +99,7 @@ bool wxSoundAiff::PrepareToPlay()
         m_snderror = wxSOUND_INVSTRM;
         return FALSE;
     }
+    m_snderror = wxSOUND_NOERROR;
     
     data.BigEndianOrdered(TRUE);
     
@@ -129,9 +130,11 @@ bool wxSoundAiff::PrepareToPlay()
                 wxUint32 num_samples;
                 double srate;
                 wxSoundFormatPcm sndformat;
-                
+
+                // Get sound data informations
                 data >> channels >> num_samples >> bps >> srate; 
-                
+
+                // Convert them in a wxSoundFormat object
                 sndformat.SetSampleRate((wxUint32) srate);
                 sndformat.SetBPS(bps);
                 sndformat.SetChannels(channels);
@@ -140,6 +143,7 @@ bool wxSoundAiff::PrepareToPlay()
                 
                 if (!SetSoundFormat(sndformat))
                     return FALSE;
+                // We pass all data left
                 m_input->SeekI(len-18, wxFromCurrent);
                 break;
             }
@@ -149,6 +153,7 @@ bool wxSoundAiff::PrepareToPlay()
                 // m_input->SeekI(len-4, wxFromCurrent); // Pass the rest
                 m_input->SeekI(ssnd + 4, wxFromCurrent);
                 m_base_offset = m_input->TellI();
+                // len-8 bytes of samples
                 FinishPreparation(len - 8);
                 end_headers = TRUE;
                 break;
@@ -175,6 +180,7 @@ bool wxSoundAiff::FinishRecording()
 
 bool wxSoundAiff::RepositionStream(wxUint32 position)
 {
+    // If the stream is not seekable "TellI() returns wxInvalidOffset" we cannot reposition stream
     if (m_base_offset == wxInvalidOffset)
         return FALSE;
     m_input->SeekI(m_base_offset, wxFromStart);

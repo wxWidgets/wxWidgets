@@ -59,6 +59,8 @@ protected:
     struct VIDW_Internal *m_internal;
     bool m_paused, m_stopped, m_remove_file;
     wxString m_filename;
+    double m_frameRate;
+    wxUint8 m_bps;
 
     void OpenFile();
 public:

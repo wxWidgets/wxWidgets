@@ -202,7 +202,7 @@ wxUint8 MMBoardApp::TestMultimediaCaps()
     // We now test the ESD support
     
     dev = new wxSoundStreamESD();
-    if (dev->GetError() == wxSOUND_NOERR) 
+    if (dev->GetError() == wxSOUND_NOERROR) 
         caps |= MM_SOUND_ESD;
     delete dev;
     
@@ -210,7 +210,7 @@ wxUint8 MMBoardApp::TestMultimediaCaps()
     // WARNING: There is a conflict between ESD and ALSA
     
     dev = new wxSoundStreamOSS();
-    if (dev->GetError() == wxSOUND_NOERR)
+    if (dev->GetError() == wxSOUND_NOERROR)
         caps |= MM_SOUND_OSS;
     delete dev;
 #endif

@@ -19,6 +19,7 @@
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/event.h"
+#include "wx/stream.h"
 
 // Process Event handling
 class WXDLLEXPORT wxProcessEvent : public wxEvent
@@ -51,7 +52,8 @@ class WXDLLEXPORT wxProcess : public wxEvtHandler
 DECLARE_DYNAMIC_CLASS(wxProcess)
 
 public:
-    wxProcess(wxEvtHandler *parent = (wxEvtHandler *) NULL, int id = -1);
+    wxProcess(wxEvtHandler *parent = (wxEvtHandler *) NULL, bool needPipe = FALSE, int id = -1);
+    ~wxProcess();
 
     virtual void OnTerminate(int pid, int status);
 
@@ -59,8 +61,21 @@ public:
     // before the process it started terminates
     void Detach();
 
+    // Pipe handling
+    wxInputStream *GetInputStream() const;
+    wxOutputStream *GetOutputStream() const;
+
+    // These functions should not be called by the usual user. They are only
+    // intended to be used by wxExecute.
+    // Install pipes
+    void SetPipeStreams(wxInputStream *in_stream, wxOutputStream *out_stream);
+    bool NeedPipe() const;
+
 protected:
     int m_id;
+    bool m_needPipe;
+    wxInputStream *m_in_stream;
+    wxOutputStream *m_out_stream;
 };
 
 typedef void (wxObject::*wxProcessEventFunction)(wxProcessEvent&);

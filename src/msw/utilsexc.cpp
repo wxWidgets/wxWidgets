@@ -37,6 +37,7 @@
 #include "wx/log.h"
 
 #ifdef __WIN32__
+    #include "wx/stream.h"
     #include "wx/process.h"
 #endif
 
@@ -119,6 +120,94 @@ public:
     DWORD      dwExitCode;    // the exit code of the process
     bool       state;         // set to FALSE when the process finishes
 };
+
+
+#ifdef __WIN32__
+// ----------------------------------------------------------------------------
+// wxPipeStreams
+// ----------------------------------------------------------------------------
+
+class wxPipeInputStream: public wxInputStream {
+public:
+    wxPipeInputStream(HANDLE hInput);
+    ~wxPipeInputStream();
+
+protected:
+    size_t OnSysRead(void *buffer, size_t len);
+
+protected:
+    HANDLE m_hInput;
+};
+
+class wxPipeOutputStream: public wxOutputStream {
+public:
+    wxPipeOutputStream(HANDLE hOutput);
+    ~wxPipeOutputStream();
+
+protected:
+    size_t OnSysWrite(const void *buffer, size_t len);
+
+protected:
+    HANDLE m_hOutput;
+};
+
+// ==================
+// wxPipeInputStream
+// ==================
+
+wxPipeInputStream::wxPipeInputStream(HANDLE hInput)
+{
+    m_hInput = hInput;
+}   
+
+wxPipeInputStream::~wxPipeInputStream()
+{
+    ::CloseHandle(m_hInput);
+}
+
+size_t wxPipeInputStream::OnSysRead(void *buffer, size_t len)
+{
+    DWORD bytesRead;
+
+    m_lasterror = wxSTREAM_NOERROR;
+    if (! ::ReadFile(m_hInput, buffer, len, &bytesRead, NULL) ) {
+        if (GetLastError() == ERROR_BROKEN_PIPE)
+            m_lasterror = wxSTREAM_EOF;
+        else
+            m_lasterror = wxSTREAM_READ_ERROR;
+    }
+    return bytesRead;
+}
+
+// ==================
+// wxPipeOutputStream
+// ==================
+
+wxPipeOutputStream::wxPipeOutputStream(HANDLE hOutput)
+{
+    m_hOutput = hOutput;
+}   
+
+wxPipeOutputStream::~wxPipeOutputStream()
+{
+    ::CloseHandle(m_hOutput);
+}
+
+size_t wxPipeOutputStream::OnSysWrite(const void *buffer, size_t len)
+{
+    DWORD bytesRead;
+
+    m_lasterror = wxSTREAM_NOERROR;
+    if (! ::WriteFile(m_hOutput, buffer, len, &bytesRead, NULL) ) {
+        if (GetLastError() == ERROR_BROKEN_PIPE)
+            m_lasterror = wxSTREAM_EOF;
+        else
+            m_lasterror = wxSTREAM_READ_ERROR;
+    }
+    return bytesRead;
+}
+
+#endif // __WIN32__
 
 // ============================================================================
 // implementation
@@ -289,7 +378,6 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
         // only reached for space not inside quotes
         break;
     }
-
     wxString commandArgs = pc;
 
     wxWindow *winTop = wxTheApp->GetTopWindow();
@@ -313,6 +401,46 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
 
     return result;
 #else // 1
+                     
+    HANDLE h_readPipe[2];
+    HANDLE h_writePipe[2];
+    HANDLE h_oldreadPipe;
+    HANDLE h_oldwritePipe;
+    BOOL inheritHandles;
+
+    // ------------------------------------
+    // Pipe handling
+    // We are in the case of opening a pipe
+    inheritHandles = FALSE;
+    if (handler && handler->NeedPipe()) {
+        SECURITY_ATTRIBUTES security;
+
+        security.nLength              = sizeof(security);
+        security.lpSecurityDescriptor = NULL;
+        security.bInheritHandle       = TRUE;
+
+        if (! ::CreatePipe(&h_readPipe[0], &h_readPipe[1], &security, 0) ) {
+            wxLogSysError(_T("Can't create the inter-process read pipe"));
+
+            return 0;
+        }
+
+        if (! ::CreatePipe(&h_writePipe[0], &h_writePipe[1], &security, 0) ) {
+            wxLogSysError(_T("Can't create the inter-process read pipe"));
+
+            return 0;
+        }
+
+        // We need to save the old stdio handles to restore them after the call
+        // to CreateProcess
+        h_oldreadPipe  = GetStdHandle(STD_INPUT_HANDLE);
+        h_oldwritePipe = GetStdHandle(STD_OUTPUT_HANDLE);
+
+        SetStdHandle(STD_INPUT_HANDLE, h_readPipe[0]);
+        SetStdHandle(STD_OUTPUT_HANDLE, h_writePipe[1]);
+
+        inheritHandles = TRUE;
+    }
 
     // create the process
     STARTUPINFO si;
@@ -327,7 +455,7 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
                          (wxChar *)command.c_str(),  // full command line
                          NULL,       // security attributes: defaults for both
                          NULL,       //   the process and its main thread
-                         FALSE,      // don't inherit handles
+                         inheritHandles,      // inherit handles if we need pipes
                          CREATE_DEFAULT_ERROR_MODE |
                          CREATE_SUSPENDED,           // flags
                          NULL,       // environment (use the same)
@@ -336,9 +464,29 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
                          &pi         // process info
                         ) == 0 )
     {
+        if (inheritHandles) {
+            ::CloseHandle(h_writePipe[0]);
+            ::CloseHandle(h_writePipe[1]);
+            ::CloseHandle(h_readPipe[0]);
+            ::CloseHandle(h_readPipe[1]);
+        }
         wxLogSysError(_("Execution of command '%s' failed"), command.c_str());
 
         return 0;
+    }
+
+    // Restore the old stdio handles
+    if (inheritHandles) {
+        SetStdHandle(STD_INPUT_HANDLE, h_oldreadPipe);
+        SetStdHandle(STD_OUTPUT_HANDLE, h_oldwritePipe);
+
+        ::CloseHandle(h_writePipe[1]);
+        ::CloseHandle(h_readPipe[0]);
+        // We can now initialize the wxStreams
+        wxInputStream *processOutput = new wxPipeInputStream(h_writePipe[0]);
+        wxOutputStream *processInput = new wxPipeOutputStream(h_readPipe[1]);
+
+        handler->SetPipeStreams(processOutput, processInput);
     }
 
     // register the class for the hidden window used for the notifications

@@ -325,7 +325,7 @@ wxString wxSoundFileStream::GetCodecName() const
 
 wxUint32 wxSoundFileStream::GetLength()
 {
-  if (m_input && !m_prepared && GetError() == wxSOUND_NOERR)
+  if (m_input && !m_prepared && GetError() == wxSOUND_NOERROR)
     return (PrepareToPlay()) ? m_length : 0;
 
   return m_length;
@@ -333,7 +333,7 @@ wxUint32 wxSoundFileStream::GetLength()
 
 wxUint32 wxSoundFileStream::GetPosition()
 {
-  if (!m_prepared && m_input != NULL && GetError() == wxSOUND_NOERR)
+  if (!m_prepared && m_input != NULL && GetError() == wxSOUND_NOERROR)
     PrepareToPlay();
 
   return m_length-m_bytes_left;
@@ -341,7 +341,7 @@ wxUint32 wxSoundFileStream::GetPosition()
 
 wxUint32 wxSoundFileStream::SetPosition(wxUint32 new_position)
 {
-  if (!m_prepared && m_input != NULL && GetError() == wxSOUND_NOERR)
+  if (!m_prepared && m_input != NULL && GetError() == wxSOUND_NOERROR)
     PrepareToPlay();
 
   if (!m_prepared)

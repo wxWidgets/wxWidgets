@@ -8,70 +8,124 @@
 #ifdef __GNUG__
 #pragma implementation "sndcpcm.cpp"
 #endif
-
 #include <wx/wxprec.h>
+
+#ifndef WX_PRECOMP
+#include <wx/debug.h>
+#include <wx/log.h>
+#endif
+
 #include "sndbase.h"
 #include "sndpcm.h"
 #include "sndcpcm.h"
 
 wxSoundStreamPcm::wxSoundStreamPcm(wxSoundStream& sndio)
- : wxSoundStreamCodec(sndio)
+        : wxSoundStreamCodec(sndio)
 {
-  m_function_in = NULL;
-  m_function_out = NULL;
+    m_function_in = NULL;
+    m_function_out = NULL;
+    m_prebuffer = NULL;
+    m_prebuffer_size = 0;
+    m_best_size = 0;
 }
 
 wxSoundStreamPcm::~wxSoundStreamPcm()
 {
+    if (m_prebuffer)
+        delete[] m_prebuffer;
 }
 
+wxUint32 wxSoundStreamPcm::GetBestSize() const
+{
+    return m_best_size;
+}
 
 #include "converter.def"
 
 // -----------------------------------------------------------------------
 // Main PCM stream converter table
 // -----------------------------------------------------------------------
-wxSoundStreamPcm::ConverterType s_converters[] = {
-  NULL,
-  Convert_8_8_sign,			/* 8 -> 8 sign */
-  NULL,
-  NULL,
-  NULL,
-  NULL,
+// Definition
+//   XX -> YY
+//   XX -> YY sign
+//
+//   XX swapped -> YY
+//   XX swapped -> YY sign
+//
+//   XX swapped -> YY swapped
+//   XX swapped -> YY swapped sign
+//
+//   XX stereo -> YY mono
+//   XX stereo -> YY mono sign
+//
+//   XX swapped stereo -> YY swapped mono
+//   XX swapped stereo -> YY swapped mono sign
+//
+//   XX swapped stereo -> YY swapped mono
+//   XX swapped stereo -> YY swapped mono sign
 
-  Convert_8_16,				/* 8 -> 16 */
-  Convert_8_16_sign,			/* 8 -> 16 sign */
-  Convert_8_16_swap,			/* 8 -> 16 swapped */
-  Convert_8_16_sign_swap,		/* 8 -> 16 sign swapped */
-  NULL,
-  NULL,
-
-  Convert_16_8,				/* 16 -> 8 */
-  Convert_16_8_sign,			/* 16 -> 8 sign */
-  Convert_16_swap_8,			/* 16 swapped -> 8 */
-  Convert_16_swap_8_sign,		/* 16 swapped -> 8 sign */
-  NULL,
-  NULL,
-
-  NULL,					/* 16 -> 16 */
-  Convert_16_sign,			/* 16 -> 16 sign */
-  Convert_16_swap,			/* 16 swapped -> 16 */
-  Convert_16_swap_16_sign,		/* 16 swapped -> 16 sign */
-  Convert_16_sign_16_swap,		/* 16 sign -> 16 swapped */
-  Convert_16_swap_16_sign_swap		/* 16 swapped -> 16 sign swapped */
+static wxSoundStreamPcm::ConverterType s_converters[4][3][2] = { 
+    {
+        {
+            NULL,
+            Convert_8_8_sign                    /* 8 -> 8 sign */
+        },
+        {
+            NULL,
+            NULL
+        },
+        {
+            NULL,
+            NULL
+        }
+    },
+    {
+        {
+            Convert_8_16,                       /* 8 -> 16 */
+            Convert_8_16_sign                   /* 8 -> 16 sign */
+        },
+        {
+            Convert_8_16_swap,                  /* 8 -> 16 swapped */
+            Convert_8_16_sign_swap              /* 8 -> 16 sign swapped */
+        },
+        {
+            NULL,
+            NULL
+        }
+    },
+    {
+        {
+            Convert_16_8,                       /* 16 -> 8 */
+            Convert_16_8_sign                   /* 16 -> 8 sign */
+        },
+        {
+            Convert_16_swap_8,                  /* 16 swapped -> 8 */
+            Convert_16_swap_8_sign              /* 16 swapped -> 8 sign */
+        },
+        {
+            NULL,
+            NULL 
+        },
+    },
+    
+    {
+        {
+            NULL,                               /* 16 -> 16 */
+            Convert_16_sign                     /* 16 -> 16 sign */
+        },
+        {
+            Convert_16_swap,                    /* 16 swapped -> 16 */
+            Convert_16_swap_16_sign             /* 16 swapped -> 16 sign */
+        },
+        {
+            NULL,
+            Convert_16_swap_16_sign_swap        /* 16 swapped -> 16 sign swapped */
+        }
+    }
 };
 
-#define CONVERT_BPS 0
-#define CONVERT_SIGN 1
-#define CONVERT_SWAP 2
-#define CONVERT_SIGN_SWAP 3
-#define CONVERT_SWAP_SIGN 4
-#define CONVERT_SWAP_SIGN_SWAP 5
-
-#define CONVERT_BASE_8_8 0
-#define CONVERT_BASE_8_16 6
-#define CONVERT_BASE_16_8 12 
-#define CONVERT_BASE_16_16 18
+// This is the buffer size multiplier. It gives the needed size of the output size.
+static float s_converters_multip[] = {1, 2, 0.5, 1};
 
 //
 // TODO: Read() and Write() aren't really safe. If you give it a buffer which
@@ -80,107 +134,163 @@ wxSoundStreamPcm::ConverterType s_converters[] = {
 
 wxSoundStream& wxSoundStreamPcm::Read(void *buffer, wxUint32 len)
 {
-  wxUint32 real_len;
-  char *tmp_buf;
+    wxUint32 in_bufsize;
 
-  if (!m_function_in) {
-    m_sndio->Read(buffer, len);
-    m_lastcount = m_sndio->GetLastAccess();
-    m_snderror = m_sndio->GetError();
+    // We must have a multiple of 2
+    len &= 0x01;
+    
+    if (!m_function_in) {
+        m_sndio->Read(buffer, len);
+        m_lastcount = m_sndio->GetLastAccess();
+        m_snderror = m_sndio->GetError();
+        return *this;
+    }
+
+    in_bufsize = GetReadSize(len);
+    
+    if (len <= m_best_size) {
+        m_sndio->Read(m_prebuffer, in_bufsize);
+        m_snderror  = m_sndio->GetError();
+        if (m_snderror != wxSOUND_NOERROR) {
+            m_lastcount = 0;
+            return *this;
+        }
+        
+        m_function_in(m_prebuffer, buffer, m_sndio->GetLastAccess());
+    } else {
+        char *temp_buffer;
+        
+        temp_buffer = new char[in_bufsize];
+        m_sndio->Read(temp_buffer, in_bufsize);
+
+        m_snderror =  m_sndio->GetError();
+        if (m_snderror != wxSOUND_NOERROR) {
+            m_lastcount = 0;
+            return *this;
+        }
+        
+        m_function_in(temp_buffer, buffer, m_sndio->GetLastAccess());
+        
+        delete[] temp_buffer;
+    }
+    
+    m_lastcount = (wxUint32)(m_sndio->GetLastAccess() * m_multiplier_in);
+    
     return *this;
-  }
-
-  real_len = (m_16_to_8) ? len / 2 : len;
-
-  tmp_buf = new char[real_len];
-
-  m_sndio->Read(tmp_buf, real_len);
-  m_lastcount = m_sndio->GetLastAccess();
-  m_snderror = m_sndio->GetError();
-  if (m_snderror != wxSOUND_NOERR)
-    return *this;
-
-  m_function_in(tmp_buf, (char *)buffer, m_lastcount);
-
-  delete[] tmp_buf;
-
-  if (m_16_to_8)
-    m_lastcount *= 2;
-
-  return *this;
 }
 
 wxSoundStream& wxSoundStreamPcm::Write(const void *buffer, wxUint32 len)
 {
-  char *tmp_buf;
-  wxUint32 len2;
+    wxUint32 out_bufsize;
+    
+    if (!m_function_out) {
+        m_sndio->Write(buffer, len);
+        m_lastcount = m_sndio->GetLastAccess();
+        m_snderror  = m_sndio->GetError();
+        return *this;
+    }
 
-  if (!m_function_out)
-    return m_sndio->Write(buffer, len);
+    out_bufsize = GetWriteSize(len);
 
-  len2 = (m_16_to_8) ? len / 2 : len;
+    if (len <= m_best_size) {
+        out_bufsize = GetWriteSize(len);
 
-  tmp_buf = new char[len2];
-  m_function_out((const char *)buffer, tmp_buf, len2);
-  m_sndio->Write(tmp_buf, len);
-  delete[] tmp_buf;
+        m_function_out(buffer, m_prebuffer, len);
+        m_sndio->Write(m_prebuffer, out_bufsize);
+        m_snderror  = m_sndio->GetError();
+        if (m_snderror != wxSOUND_NOERROR) {
+            m_lastcount = 0;
+            return *this;
+        }
+    } else {
+        char *temp_buffer;
+        
+        temp_buffer = new char[out_bufsize];
+        m_function_out(buffer, temp_buffer, len);
+        
+        m_sndio->Write(temp_buffer, out_bufsize);
+        m_snderror =  m_sndio->GetError();
+        if (m_snderror != wxSOUND_NOERROR) {
+            m_lastcount = 0;
+            return *this;
+        }
+        
+        delete[] temp_buffer;
+    }
 
-  m_lastcount = (m_16_to_8) ? 
-                    (m_sndio->GetLastAccess() * 2) : m_sndio->GetLastAccess();
+    m_lastcount = (wxUint32)(m_sndio->GetLastAccess() / m_multiplier_out);
 
-  return *this;
+    return *this;
 }
 
 bool wxSoundStreamPcm::SetSoundFormat(const wxSoundFormatBase& format)
 {
-  wxSoundFormatBase *new_format;
-  wxSoundFormatPcm *pcm_format, *pcm_format2;
-  ConverterType *current_table_out, *current_table_in;
-  int index;
-  bool change_sign;
-
-  if (m_sndio->SetSoundFormat(format)) {
-    m_function_out = NULL;
-    m_function_in = NULL;
-    return TRUE;
-  }
-  if (format.GetType() != wxSOUND_PCM) {
-    m_snderror = wxSOUND_INVFRMT;
-    return FALSE;
-  }
-  if (m_sndformat)
-    delete m_sndformat;
-
-  new_format = m_sndio->GetSoundFormat().Clone();
-  pcm_format = (wxSoundFormatPcm *)&format;
-  pcm_format2 = (wxSoundFormatPcm *)new_format;
-
-  // ----------------------------------------------------
-  // Select table to use:
-  //     * 8 bits -> 8 bits
-  //     * 16 bits -> 8 bits
-  //     * 8 bits -> 16 bits
-  //     * 16 bits -> 16 bits
-
-  m_16_to_8 = FALSE;
-  if (pcm_format->GetBPS() != pcm_format2->GetBPS()) {
-    m_16_to_8 = TRUE;
-    if (pcm_format2->GetBPS() == 8) {
-      current_table_out = &s_converters[CONVERT_BASE_16_8];
-      current_table_in  = &s_converters[CONVERT_BASE_8_16];
-    } else {
-      current_table_out = &s_converters[CONVERT_BASE_8_16];
-      current_table_in  = &s_converters[CONVERT_BASE_16_8];
+    wxSoundFormatBase *new_format;
+    wxSoundFormatPcm *pcm_format, *pcm_format2;
+    
+    if (m_sndio->SetSoundFormat(format)) {
+        m_function_out = NULL;
+        m_function_in = NULL;
+        return TRUE;
     }
-  } else if (pcm_format->GetBPS() == 16) {
-    current_table_out = &s_converters[CONVERT_BASE_16_16];
-    current_table_in  = &s_converters[CONVERT_BASE_16_16];
-  } else {
-    current_table_out = &s_converters[CONVERT_BASE_8_8];
-    current_table_in  = &s_converters[CONVERT_BASE_8_8];
-  }
+    if (format.GetType() != wxSOUND_PCM) {
+        m_snderror = wxSOUND_INVFRMT;
+        return FALSE;
+    }
+    if (m_sndformat)
+        delete m_sndformat;
+    
+    new_format = m_sndio->GetSoundFormat().Clone();
+    pcm_format = (wxSoundFormatPcm *)&format;
+    pcm_format2 = (wxSoundFormatPcm *)new_format;
 
-  change_sign = (pcm_format2->Signed() != pcm_format->Signed());
+#if 0
+    // ----------------------------------------------------
+    // Test whether we need to resample
+    if (pcm_format->GetSampleRate() != pcm_format2->GetSampleRate()) {
+        wxUint32 src_rate, dst_rate;
+
+        src_rate = pcm_format->GetSampleRate();
+        dst_rate = pcm_format2->GetSampleRate();
+        m_needResampling = TRUE;
+        if (src_rate < dst_rate)
+            m_expandSamples = TRUE;
+        else
+            m_expandSamples = FALSE;
+        m_pitch = (src_rate << FLOATBITS) / dst_rate;
+    }
+#endif
+    // ----------------------------------------------------
+    // Select table to use:
+    //     * 8 bits -> 8 bits
+    //     * 16 bits -> 8 bits
+    //     * 8 bits -> 16 bits
+    //     * 16 bits -> 16 bits
+
+    int table_no, table_no2;
+    int i_sign, i_swap;
+    
+    switch (pcm_format->GetBPS()) {
+        case 8:
+            table_no = 0;
+            break;
+        case 16:
+            table_no = 1;
+            break;
+    }
+    switch (pcm_format2->GetBPS()) {
+        case 8:
+            table_no2 = 0;
+            break;
+        case 16:
+            table_no2 = 1;
+            break;
+    }
+    
+    if (pcm_format2->Signed() != pcm_format->Signed())
+        i_sign = 1;
+    else
+        i_sign = 0;
 
 #define MY_ORDER wxBYTE_ORDER
 #if wxBYTE_ORDER == wxLITTLE_ENDIAN
@@ -189,36 +299,91 @@ bool wxSoundStreamPcm::SetSoundFormat(const wxSoundFormatBase& format)
 #define OTHER_ORDER wxLITTLE_ENDIAN
 #endif
 
-  // --------------------------------------------------------
-  // Find the good converter !
+    // --------------------------------------------------------
+    // Find the good converter !
 
+    if (pcm_format->GetOrder() == OTHER_ORDER) {
+        if (pcm_format->GetOrder() == pcm_format2->GetOrder())
+            i_swap = 2;
+        else
+            i_swap = 1;
+    } else {
+        if (pcm_format->GetOrder() == pcm_format2->GetOrder())
+            i_swap = 0;
+        else
+            i_swap = 1;
+    }
 
-  if (pcm_format->GetOrder() == OTHER_ORDER &&
-      pcm_format2->GetOrder() == OTHER_ORDER && change_sign) 
-    index = CONVERT_SWAP_SIGN_SWAP;
+    m_function_out = s_converters[table_no*2+table_no2][i_swap][i_sign];
+    m_function_in  = s_converters[table_no2*2+table_no][i_swap][i_sign];
+    m_multiplier_out = s_converters_multip[table_no*2+table_no2];
+    m_multiplier_in  = s_converters_multip[table_no2*2+table_no2];
 
-  else if (pcm_format->GetOrder() == OTHER_ORDER &&
-           pcm_format2->GetOrder() == MY_ORDER && change_sign) 
-    index = CONVERT_SWAP_SIGN;
+    if (m_prebuffer)
+        delete[] m_prebuffer;
 
-  else if (pcm_format->GetOrder() == MY_ORDER &&
-           pcm_format->GetOrder() == OTHER_ORDER && change_sign)
-    index = CONVERT_SIGN_SWAP;
+    // We try to minimize the need of dynamic memory allocation by preallocating a buffer. But
+    // to be sure it will be efficient we minimize the best size.
+    if (m_multiplier_in < m_multiplier_out) {
+        m_prebuffer_size = (wxUint32)(m_sndio->GetBestSize() * m_multiplier_out);
+        m_best_size = (wxUint32)(m_sndio->GetBestSize() * m_multiplier_in);
+    } else {
+        m_prebuffer_size = (wxUint32)(m_sndio->GetBestSize() * m_multiplier_in);
+        m_best_size = (wxUint32)(m_sndio->GetBestSize() * m_multiplier_out);
+    }
+    
+    m_prebuffer = new char[m_prebuffer_size];
+    
+    bool SetSoundFormatReturn;
 
-  else if (change_sign)
-    index = CONVERT_SIGN;
-
-  else if (!change_sign &&
-           pcm_format->GetOrder() != pcm_format2->GetOrder())
-    index = CONVERT_SWAP;
-
-  else
-    index = CONVERT_BPS;
-
-  m_function_out = current_table_out[index];
-  m_function_in  = current_table_in[index];
-
-  m_sndio->SetSoundFormat(*new_format);
-  m_sndformat = new_format;
-  return TRUE;
+    SetSoundFormatReturn = m_sndio->SetSoundFormat(*new_format);
+    wxASSERT( SetSoundFormatReturn );
+    
+    m_sndformat = new_format;
+    return TRUE;
 }
+
+wxUint32 wxSoundStreamPcm::GetWriteSize(wxUint32 len) const
+{
+    // For the moment, it is simple but next time it will become more complicated
+    // (Resampling)
+    return (wxUint32)(len * m_multiplier_out);
+}
+
+wxUint32 wxSoundStreamPcm::GetReadSize(wxUint32 len) const
+{
+    return (wxUint32)(len / m_multiplier_in);
+}
+
+// Resampling engine. NOT FINISHED and NOT INCLUDED but this is a first DRAFT.
+
+#if 0
+
+#define FLOATBITS 16
+#define INTBITS 16
+#define FLOATMASK 0xffff
+#define INTMASK 0xffff0000
+
+void ResamplingShrink_##DEPTH##(const void *source, void *destination, wxUint32 len)
+{
+    wxUint##DEPTH## *source_data, *dest_data;
+    wxUint32 pos;
+
+    source_data = (wxUint##DEPTH## *)source;
+    dest_data   = (wxUint##DEPTH## *)destination;
+    
+    pos = m_saved_pos;
+    while (len > 0) {
+        // Increment the position in the input buffer
+        pos += m_pitch;
+        if (pos & INTMASK) {
+            pos &= FLOATMASK;
+            
+            *dest_data ++ = *source_data;
+        }
+        len--;
+        source_data++;
+    }
+    m_saved_pos = pos;
+}
+#endif

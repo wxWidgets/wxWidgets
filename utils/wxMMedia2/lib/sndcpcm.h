@@ -20,21 +20,34 @@
 //
 
 class wxSoundStreamPcm: public wxSoundStreamCodec {
- public:
-  typedef void (*ConverterType)(const char *buf_in, char *buf_out, wxUint32 len);
+public:
+    typedef void (*ConverterType)(const void *buf_in, void *buf_out,
+                                  wxUint32 len);
+    
+    wxSoundStreamPcm(wxSoundStream& sndio);
+    ~wxSoundStreamPcm();
+    
+    wxSoundStream& Read(void *buffer, wxUint32 len);
+    wxSoundStream& Write(const void *buffer, wxUint32 len);
+    
+    bool SetSoundFormat(const wxSoundFormatBase& format);
+    
+    wxUint32 GetBestSize() const;
+    
+protected:
+    wxUint32 GetReadSize(wxUint32 len) const;
+    wxUint32 GetWriteSize(wxUint32 len) const;
 
-  wxSoundStreamPcm(wxSoundStream& sndio);
-  ~wxSoundStreamPcm();
+protected:
+    ConverterType m_function_out, m_function_in;
 
-  wxSoundStream& Read(void *buffer, wxUint32 len);
-  wxSoundStream& Write(const void *buffer, wxUint32 len);
-
-  bool SetSoundFormat(const wxSoundFormatBase& format);
-
- protected:
-  ConverterType m_function_out, m_function_in;
-
-  bool m_16_to_8;
+    // Static temporary buffer
+    char *m_prebuffer;
+    wxUint32 m_prebuffer_size;
+    // Estimated best size to fit into the static buffer
+    wxUint32 m_best_size;
+    // Multiplier for IO buffer size
+    float m_multiplier_in, m_multiplier_out;
 };
 
 #endif

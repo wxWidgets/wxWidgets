@@ -60,7 +60,7 @@ wxString wxSoundWave::GetCodecName() const
 bool wxSoundWave::CanRead()
 {
     wxUint32 len, signature1, signature2;
-    m_snderror = wxSOUND_NOERR;
+    m_snderror = wxSOUND_NOERROR;
 
     // Test the main signatures:
     //   "RIFF"

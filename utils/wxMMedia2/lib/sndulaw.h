@@ -12,6 +12,8 @@
 #pragma interface "sndulaw.h"
 #endif
 
+#include "wx/defs.h"
+
 #include "sndcodec.h"
 #include "sndbase.h"
 
@@ -19,26 +21,27 @@
 // ULAW format
 //
 class WXDLLEXPORT wxSoundFormatUlaw: public wxSoundFormatBase {
- public:
-  wxSoundFormatUlaw();
-  ~wxSoundFormatUlaw();
-
-  void SetSampleRate(wxUint32 srate);
-  wxUint32 GetSampleRate() const;
-
-  void SetChannels(wxUint8 channels);
-  wxUint8 GetChannels() const;
-
-  wxSoundFormatType GetType() const { return wxSOUND_ULAW; }
-  wxSoundFormatBase *Clone() const;
-
-  wxUint32 GetTimeFromBytes(wxUint32 bytes) const;
-  wxUint32 GetBytesFromTime(wxUint32 time) const;
-
-  bool operator !=(const wxSoundFormatBase& frmt2) const;
-
- protected:
-  wxUint32 m_srate;
+public:
+    wxSoundFormatUlaw();
+    ~wxSoundFormatUlaw();
+    
+    void SetSampleRate(wxUint32 srate);
+    wxUint32 GetSampleRate() const;
+    
+    void SetChannels(wxUint8 channels);
+    wxUint8 GetChannels() const;
+    
+    wxSoundFormatType GetType() const { return wxSOUND_ULAW; }
+    wxSoundFormatBase *Clone() const;
+    
+    wxUint32 GetTimeFromBytes(wxUint32 bytes) const;
+    wxUint32 GetBytesFromTime(wxUint32 time) const;
+    
+    bool operator !=(const wxSoundFormatBase& frmt2) const;
+    
+protected:
+    wxUint32 m_srate;
+    wxUint8 m_channels;
 };
 
 //
@@ -47,19 +50,19 @@ class WXDLLEXPORT wxSoundFormatUlaw: public wxSoundFormatBase {
 
 class WXDLLEXPORT wxSoundRouterStream;
 class WXDLLEXPORT wxSoundStreamUlaw: public wxSoundStreamCodec {
- public:
-  wxSoundStreamUlaw(wxSoundStream& sndio);
-  ~wxSoundStreamUlaw();
-
-  wxSoundStream& Read(void *buffer, wxUint32 len);
-  wxSoundStream& Write(const void *buffer, wxUint32 len);
-
-  bool SetSoundFormat(const wxSoundFormatBase& format);
-
-  wxUint32 GetBestSize() const;
-
- protected:
-  wxSoundRouterStream *m_router;
+public:
+    wxSoundStreamUlaw(wxSoundStream& sndio);
+    ~wxSoundStreamUlaw();
+    
+    wxSoundStream& Read(void *buffer, wxUint32 len);
+    wxSoundStream& Write(const void *buffer, wxUint32 len);
+    
+    bool SetSoundFormat(const wxSoundFormatBase& format);
+    
+    wxUint32 GetBestSize() const;
+    
+protected:
+    wxSoundRouterStream *m_router;
 };
 
 #endif

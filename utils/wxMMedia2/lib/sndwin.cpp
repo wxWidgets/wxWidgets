@@ -651,6 +651,7 @@ void wxSoundStreamWin::NotifyDoneBuffer(wxUint32 dev_handle, int flag)
 // -------------------------------------------------------------------------
 bool wxSoundStreamWin::SetSoundFormat(wxSoundFormatBase& base)
 {
+  // TODO: detect best format
   return wxSoundStream::SetSoundFormat(base);
 }
 
