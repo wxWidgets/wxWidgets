@@ -1723,7 +1723,7 @@ void DnDShapeFrame::OnDrop(wxCoord x, wxCoord y, DnDShape *shape)
     SetShape(shape);
 }
 
-void DnDShapeFrame::OnEditShape(wxCommandEvent& event)
+void DnDShapeFrame::OnEditShape(wxCommandEvent& WXUNUSED(event))
 {
     DnDShapeDialog dlg(this, m_shape);
     if ( dlg.ShowModal() == wxID_OK )
@@ -1737,19 +1737,19 @@ void DnDShapeFrame::OnEditShape(wxCommandEvent& event)
     }
 }
 
-void DnDShapeFrame::OnNewShape(wxCommandEvent& event)
+void DnDShapeFrame::OnNewShape(wxCommandEvent& WXUNUSED(event))
 {
     SetShape(new DnDEllipticShape(wxPoint(10, 10), wxSize(80, 60), *wxRED));
 
     SetStatusText(_T("You can now drag the shape to another frame"));
 }
 
-void DnDShapeFrame::OnClearShape(wxCommandEvent& event)
+void DnDShapeFrame::OnClearShape(wxCommandEvent& WXUNUSED(event))
 {
     SetShape(NULL);
 }
 
-void DnDShapeFrame::OnCopyShape(wxCommandEvent& event)
+void DnDShapeFrame::OnCopyShape(wxCommandEvent& WXUNUSED(event))
 {
     if ( m_shape )
     {
@@ -1765,7 +1765,7 @@ void DnDShapeFrame::OnCopyShape(wxCommandEvent& event)
     }
 }
 
-void DnDShapeFrame::OnPasteShape(wxCommandEvent& event)
+void DnDShapeFrame::OnPasteShape(wxCommandEvent& WXUNUSED(event))
 {
     wxClipboardLocker clipLocker;
     if ( !clipLocker )

@@ -597,17 +597,17 @@ void LboxTestFrame::OnButtonDeleteSel(wxCommandEvent& WXUNUSED(event))
     }
 }
 
-void LboxTestFrame::OnButtonClear(wxCommandEvent& event)
+void LboxTestFrame::OnButtonClear(wxCommandEvent& WXUNUSED(event))
 {
     m_lbox->Clear();
 }
 
-void LboxTestFrame::OnButtonClearLog(wxCommandEvent& event)
+void LboxTestFrame::OnButtonClearLog(wxCommandEvent& WXUNUSED(event))
 {
     m_lboxLog->Clear();
 }
 
-void LboxTestFrame::OnButtonAdd(wxCommandEvent& event)
+void LboxTestFrame::OnButtonAdd(wxCommandEvent& WXUNUSED(event))
 {
     static size_t s_item = 0;
 
@@ -630,7 +630,7 @@ void LboxTestFrame::OnButtonAddMany(wxCommandEvent& WXUNUSED(event))
     }
 }
 
-void LboxTestFrame::OnButtonAddSeveral(wxCommandEvent& event)
+void LboxTestFrame::OnButtonAddSeveral(wxCommandEvent& WXUNUSED(event))
 {
     wxArrayString items;
     items.Add(_T("First"));
@@ -680,7 +680,7 @@ void LboxTestFrame::OnListboxDClick(wxCommandEvent& event)
     wxLogMessage(_T("Listbox item %d double clicked"), event.GetInt());
 }
 
-void LboxTestFrame::OnCheckOrRadioBox(wxCommandEvent& event)
+void LboxTestFrame::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
 {
     m_dirty = TRUE;
 }

@@ -746,7 +746,7 @@ void MyFrame::OnExecWithPipe(wxCommandEvent& WXUNUSED(event))
     m_cmdLast = cmd;
 }
 
-void MyFrame::OnPOpen(wxCommandEvent& event)
+void MyFrame::OnPOpen(wxCommandEvent& WXUNUSED(event))
 {
     wxString cmd = wxGetTextFromUser(_T("Enter the command to launch: "),
                                      DIALOG_TITLE,
@@ -778,7 +778,7 @@ void MyFrame::OnPOpen(wxCommandEvent& event)
     new MyPipeFrame(this, cmd, process);
 }
 
-void MyFrame::OnFileExec(wxCommandEvent& event)
+void MyFrame::OnFileExec(wxCommandEvent& WXUNUSED(event))
 {
     static wxString s_filename;
 
@@ -1096,7 +1096,7 @@ void MyPipeFrame::OnClose(wxCloseEvent& event)
     event.Skip();
 }
 
-void MyPipeFrame::OnProcessTerm(wxProcessEvent& event)
+void MyPipeFrame::OnProcessTerm(wxProcessEvent& WXUNUSED(event))
 {
     delete m_process;
     m_process = NULL;

@@ -50,7 +50,7 @@ bool MyVFS::CanOpen(const wxString& location)
 
 
 
-wxFSFile* MyVFS::OpenFile(wxFileSystem& fs, const wxString& location)
+wxFSFile* MyVFS::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& location)
 {
     wxFSFile *f;
     wxInputStream *str;

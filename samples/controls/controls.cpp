@@ -981,7 +981,7 @@ void MyPanel::OnTestButton(wxCommandEvent& event)
                  event.GetId() == ID_BUTTON_TEST1 ? _T('1') : _T('2'));
 }
 
-void MyPanel::OnBmpButton(wxCommandEvent& event)
+void MyPanel::OnBmpButton(wxCommandEvent& WXUNUSED(event))
 {
     wxLogMessage(_T("Bitmap button clicked."));
 }
@@ -1607,7 +1607,7 @@ void MyFrame::OnClearLog(wxCommandEvent& WXUNUSED(event))
 }
 
 #if wxUSE_TOOLTIPS
-void MyFrame::OnSetTooltipDelay(wxCommandEvent& event)
+void MyFrame::OnSetTooltipDelay(wxCommandEvent& WXUNUSED(event))
 {
     static long s_delay = 5000;
 
@@ -1628,7 +1628,7 @@ void MyFrame::OnSetTooltipDelay(wxCommandEvent& event)
     wxLogStatus(this, _T("Tooltip delay set to %ld milliseconds"), s_delay);
 }
 
-void MyFrame::OnToggleTooltips(wxCommandEvent& event)
+void MyFrame::OnToggleTooltips(wxCommandEvent& WXUNUSED(event))
 {
     static bool s_enabled = TRUE;
 

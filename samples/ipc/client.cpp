@@ -160,21 +160,21 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
     the_list->Append(_T("Fruit"));
 }
 
-void MyFrame::OnExecute(wxCommandEvent& event)
+void MyFrame::OnExecute(wxCommandEvent& WXUNUSED(event))
 {
     if (the_connection)
         if (!the_connection->Execute(_T("Hello from the client!")))
             wxMessageBox(_T("Execute failed"), _T("Client Demo Error"));
 }
 
-void MyFrame::OnPoke(wxCommandEvent& event)
+void MyFrame::OnPoke(wxCommandEvent& WXUNUSED(event))
 {
     if (the_connection)
         if (!the_connection->Poke(_T("An item"), _T("Some data to poke at the server!")))
             wxMessageBox(_T("Poke failed"), _T("Client Demo Error"));
 }
 
-void MyFrame::OnRequest(wxCommandEvent& event)
+void MyFrame::OnRequest(wxCommandEvent& WXUNUSED(event))
 {
     if (the_connection)
     {
@@ -186,7 +186,7 @@ void MyFrame::OnRequest(wxCommandEvent& event)
     }
 }
 
-void MyFrame::OnExit(wxCommandEvent& event)
+void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 {
     Close();
 }
@@ -196,7 +196,7 @@ wxConnectionBase *MyClient::OnMakeConnection()
     return new MyConnection;
 }
 
-bool MyConnection::OnAdvise(const wxString& topic, const wxString& item, wxChar *data, int size, wxIPCFormat format)
+bool MyConnection::OnAdvise(const wxString& WXUNUSED(topic), const wxString& WXUNUSED(item), wxChar *data, int WXUNUSED(size), wxIPCFormat WXUNUSED(format))
 {
     if (the_list)
     {

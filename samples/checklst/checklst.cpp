@@ -257,25 +257,25 @@ void CheckListBoxFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
                  wxICON_INFORMATION, this);
 }
 
-void CheckListBoxFrame::OnCheckFirstItem(wxCommandEvent& event)
+void CheckListBoxFrame::OnCheckFirstItem(wxCommandEvent& WXUNUSED(event))
 {
     if ( !m_pListBox->IsEmpty() )
         m_pListBox->Check(0);
 }
 
-void CheckListBoxFrame::OnUncheckFirstItem(wxCommandEvent& event)
+void CheckListBoxFrame::OnUncheckFirstItem(wxCommandEvent& WXUNUSED(event))
 {
     if ( !m_pListBox->IsEmpty() )
         m_pListBox->Check(0, FALSE);
 }
 
-void CheckListBoxFrame::OnToggleFirstItem(wxCommandEvent& event)
+void CheckListBoxFrame::OnToggleFirstItem(wxCommandEvent& WXUNUSED(event))
 {
     if ( !m_pListBox->IsEmpty() )
         m_pListBox->Check(0, !m_pListBox->IsChecked(0));
 }
 
-void CheckListBoxFrame::OnAddItems(wxCommandEvent& event)
+void CheckListBoxFrame::OnAddItems(wxCommandEvent& WXUNUSED(event))
 {
     static size_t s_nItem = 0;
     wxArrayString items;

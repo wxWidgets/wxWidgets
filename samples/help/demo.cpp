@@ -448,14 +448,14 @@ void MyFrame::OnHelp(wxCommandEvent& event)
     ShowHelp(event.GetId(), m_help);
 }
 
-void MyFrame::OnShowContextHelp(wxCommandEvent& event)
+void MyFrame::OnShowContextHelp(wxCommandEvent& WXUNUSED(event))
 {
     // This starts context help mode, then the user
     // clicks on a window to send a help message
     wxContextHelp contextHelp(this);
 }
 
-void MyFrame::OnShowDialogContextHelp(wxCommandEvent& event)
+void MyFrame::OnShowDialogContextHelp(wxCommandEvent& WXUNUSED(event))
 {
     MyModalDialog dialog(this);
     dialog.ShowModal();

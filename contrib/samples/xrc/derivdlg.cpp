@@ -73,7 +73,7 @@ PreferencesDialog::~PreferencesDialog()
 // Private members (including the event handlers)
 //-----------------------------------------------------------------------------
 
-void PreferencesDialog::OnMyButtonClicked( wxCommandEvent &event )
+void PreferencesDialog::OnMyButtonClicked( wxCommandEvent &WXUNUSED(event) )
 {
     // Construct a message dialog.
     wxMessageDialog msgDlg(this, _("You clicked on My Button"));    
@@ -85,7 +85,7 @@ void PreferencesDialog::OnMyButtonClicked( wxCommandEvent &event )
 
 // Update the enabled/disabled state of the edit/delete buttons depending on 
 // whether a row (item) is selected in the listctrl
-void PreferencesDialog::OuUpdateUIMyCheckbox( wxUpdateUIEvent &event )
+void PreferencesDialog::OuUpdateUIMyCheckbox( wxUpdateUIEvent &WXUNUSED(event) )
 {
     // Get a boolean value of whether the checkbox is checked
     bool myCheckBoxIsChecked;    
@@ -102,7 +102,7 @@ void PreferencesDialog::OuUpdateUIMyCheckbox( wxUpdateUIEvent &event )
 }
 
 
-void PreferencesDialog::OnOK( wxCommandEvent& event )
+void PreferencesDialog::OnOK( wxCommandEvent& WXUNUSED(event) )
 {
     // Construct a message dialog (An extra parameters to put a cancel button on).
     wxMessageDialog msgDlg2(this, _("Press OK to close Derived dialog, or Cancel to abort"),

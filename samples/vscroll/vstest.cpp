@@ -73,7 +73,7 @@ public:
         if ( m_frameStatusBar )
         {
             wxSize sz = GetClientSize();
-            SetStatusText(wxString::Format("%dx%d", sz.x, sz.y), 1);
+            SetStatusText(wxString::Format(_T("%dx%d"), sz.x, sz.y), 1);
         }
 #endif // wxUSE_STATUSBAR
 
@@ -101,7 +101,7 @@ public:
     {
         m_frame->SetStatusText(wxString::Format
                                (
-                                    "Page size = %d, pos = %d, max = %d",
+                                    _T("Page size = %d, pos = %d, max = %d"),
                                     GetScrollThumb(wxVERTICAL),
                                     GetScrollPos(wxVERTICAL),
                                     GetScrollRange(wxVERTICAL)

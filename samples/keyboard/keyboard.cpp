@@ -320,7 +320,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     wxMessageBox(msg, _T("About wxKeyboard"), wxOK | wxICON_INFORMATION, this);
 }
 
-void MyFrame::OnClear(wxCommandEvent& event)
+void MyFrame::OnClear(wxCommandEvent& WXUNUSED(event))
 {
     m_lboxLog->Clear();
 }

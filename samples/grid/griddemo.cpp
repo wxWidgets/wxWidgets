@@ -1157,7 +1157,7 @@ int BugsGridTable::GetNumberCols()
     return Col_Max;
 }
 
-bool BugsGridTable::IsEmptyCell( int row, int col )
+bool BugsGridTable::IsEmptyCell( int WXUNUSED(row), int WXUNUSED(col) )
 {
     return FALSE;
 }

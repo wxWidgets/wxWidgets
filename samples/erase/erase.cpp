@@ -203,7 +203,7 @@ void MyCanvas::OnChar( wxKeyEvent &event )
     
 }
 
-void MyCanvas::OnPaint( wxPaintEvent &event )
+void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
     wxPaintDC dc(this);
     PrepareDC( dc );

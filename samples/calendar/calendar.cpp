@@ -340,12 +340,12 @@ void MyFrame::OnAllowYearUpdate(wxUpdateUIEvent& event)
     event.Enable( GetMenuBar()->IsChecked(Calendar_Cal_Month));
 }
 
-void MyFrame::OnSetDate(wxCommandEvent &event)
+void MyFrame::OnSetDate(wxCommandEvent &WXUNUSED(event))
 {
     m_panel->SetDate();
 }
 
-void MyFrame::OnToday(wxCommandEvent &event)
+void MyFrame::OnToday(wxCommandEvent &WXUNUSED(event))
 {
     m_panel->Today();
 }

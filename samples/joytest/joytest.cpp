@@ -167,7 +167,7 @@ MyFrame::~MyFrame()
     // Empty
 }
 
-void MyFrame::OnQuit(wxCommandEvent& event)
+void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
     Close(TRUE);
 }

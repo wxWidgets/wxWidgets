@@ -355,7 +355,7 @@ void MyFrame::OnPopEventHandler(wxCommandEvent& WXUNUSED(event))
     SetStatusText(wxString::Format(_T("Push count: %u"), m_nPush), Status_Push);
 }
 
-void MyFrame::OnTest(wxCommandEvent& event)
+void MyFrame::OnTest(wxCommandEvent& WXUNUSED(event))
 {
     wxLogMessage(_T("This is the test event handler in the main frame"));
 }
@@ -369,14 +369,14 @@ void MyFrame::OnUpdateUIPop(wxUpdateUIEvent& event)
 // custom event methods
 // ----------------------------------------------------------------------------
 
-void MyFrame::OnFireCustom(wxCommandEvent& event)
+void MyFrame::OnFireCustom(wxCommandEvent& WXUNUSED(event))
 {
     wxCommandEvent eventCustom(wxEVT_MY_CUSTOM_COMMAND);
 
     wxPostEvent(this, eventCustom);
 }
 
-void MyFrame::OnProcessCustom(wxCommandEvent& event)
+void MyFrame::OnProcessCustom(wxCommandEvent& WXUNUSED(event))
 {
     wxLogMessage(_T("Got a custom event!"));
 }

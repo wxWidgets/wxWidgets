@@ -312,7 +312,7 @@ void MyFrame::ChooseFontGeneric(wxCommandEvent& WXUNUSED(event) )
 }
 #endif // wxTEST_GENERIC_DIALOGS_IN_MSW
 
-void MyFrame::LogDialog(wxCommandEvent& event)
+void MyFrame::LogDialog(wxCommandEvent& WXUNUSED(event))
 {
     // calling wxYield() (as ~wxBusyCursor does) shouldn't result in messages
     // being flushed -- test it
@@ -635,7 +635,7 @@ void MyFrame::ModelessDlg(wxCommandEvent& event)
     }
 }
 
-void MyFrame::ShowTip(wxCommandEvent& event)
+void MyFrame::ShowTip(wxCommandEvent& WXUNUSED(event))
 {
 #if wxUSE_STARTUP_TIPS
     static size_t s_index = (size_t)-1;

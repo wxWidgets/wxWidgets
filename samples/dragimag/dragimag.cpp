@@ -455,7 +455,7 @@ bool MyApp::TileBitmap(const wxRect& rect, wxDC& dc, wxBitmap& bitmap)
     return TRUE;
 }
 
-void MyApp::OnUseScreen(wxCommandEvent& event)
+void MyApp::OnUseScreen(wxCommandEvent& WXUNUSED(event))
 {
     m_useScreen = !m_useScreen;
 }

@@ -69,7 +69,7 @@ void wxAnimationPlayer::SetAnimation(wxAnimationBase* animation, bool destroyAni
 }
 
 // Play
-bool wxAnimationPlayer::Play(wxWindow& window, const wxPoint& pos, bool looped)
+bool wxAnimationPlayer::Play(wxWindow& window, const wxPoint& pos, bool WXUNUSED(looped))
 {
     m_window = & window;
 
@@ -216,7 +216,7 @@ bool wxAnimationPlayer::GetTransparentColour(wxColour& col) const
 }
 
 // Play the frame
-bool wxAnimationPlayer::PlayFrame(int frame, wxWindow& window, const wxPoint& pos)
+bool wxAnimationPlayer::PlayFrame(int frame, wxWindow& window, const wxPoint& WXUNUSED(pos))
 {
     wxMemoryDC dc;
     dc.SelectObject(m_backingStore);
@@ -647,7 +647,7 @@ void wxAnimationCtrlBase::FitToAnimation()
     SetClientSize(sz);
 }
 
-void wxAnimationCtrlBase::OnPaint(wxPaintEvent& event)
+void wxAnimationCtrlBase::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
 

@@ -24,12 +24,12 @@ wxSizer *MyDialogFunc( wxWindow *parent, bool call_fit, bool set_sizer )
 {
     wxBoxSizer *item0 = new wxBoxSizer( wxVERTICAL );
 
-    wxStaticBox *item2 = new wxStaticBox( parent, -1, "Text" );
+    wxStaticBox *item2 = new wxStaticBox( parent, -1, _T("Text") );
     wxStaticBoxSizer *item1 = new wxStaticBoxSizer( item2, wxVERTICAL );
 
     wxBoxSizer *item3 = new wxBoxSizer( wxHORIZONTAL );
 
-    wxTextCtrl *item4 = new wxTextCtrl( parent, ID_TEXTCTRL, "", wxDefaultPosition, wxSize(80,-1), 0 );
+    wxTextCtrl *item4 = new wxTextCtrl( parent, ID_TEXTCTRL, wxEmptyString, wxDefaultPosition, wxSize(80,-1), 0 );
     item3->Add( item4, 0, wxALIGN_CENTRE|wxALL, 5 );
 
     item1->Add( item3, 0, wxALIGN_CENTRE|wxALL, 5 );
@@ -57,10 +57,10 @@ wxMenuBar *MyMenuBarFunc()
     wxMenuBar *item0 = new wxMenuBar;
     
     wxMenu* item1 = new wxMenu;
-    item1->Append( ID_ABOUT, "About...\tF1", "" );
-    item1->Append( ID_TEST, "Test...\tF2", "" );
-    item1->Append( ID_QUIT, "Quit\tCtrl-Q", "" );
-    item0->Append( item1, "File" );
+    item1->Append( ID_ABOUT, _T("About...\tF1"), wxEmptyString );
+    item1->Append( ID_TEST, _T("Test...\tF2"), wxEmptyString );
+    item1->Append( ID_QUIT, _T("Quit\tCtrl-Q"), wxEmptyString );
+    item0->Append( item1, _T("File") );
     
     return item0;
 }
