@@ -1758,7 +1758,7 @@ if test "$wxUSE_LIBPNG" != "no" ; then
                 fi
             else
                 dnl we are using the system library
-                wxUSE_LIBPNG=yes
+                wxUSE_LIBPNG=sys
             fi
         fi
     fi
