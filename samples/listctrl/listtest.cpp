@@ -631,7 +631,10 @@ void MyListCtrl::OnColClick(wxListEvent& event)
 void MyListCtrl::OnColRightClick(wxListEvent& event)
 {
     int col = event.GetColumn();
-    SetColumnImage(col, -1);
+    if ( col != -1 )
+    {
+        SetColumnImage(col, -1);
+    }
 
     wxLogMessage( wxT("OnColumnRightClick at %d."), event.GetColumn() );
 }

@@ -435,7 +435,7 @@ protected:
     wxCursor          *m_resizeCursor;
     bool               m_isDragging;
 
-    // column being resized
+    // column being resized or -1
     int m_column;
 
     // divider line position in logical (unscrolled) coords
@@ -2022,8 +2022,9 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
         int xpos = 0;
 
         // find the column where this event occured
-        int countCol = m_owner->GetColumnCount();
-        for (int col = 0; col < countCol; col++)
+        int col,
+            countCol = m_owner->GetColumnCount();
+        for (col = 0; col < countCol; col++)
         {
             xpos += m_owner->GetColumnWidth( col );
             m_column = col;
@@ -2043,6 +2044,9 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
 
             m_minX = xpos;
         }
+
+        if ( col == countCol )
+            m_column = -1;
 
         if (event.LeftDown() || event.RightUp())
         {
