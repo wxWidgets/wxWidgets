@@ -26,6 +26,9 @@
 #include "wx/intl.h"
 #include "wx/evtloop.h"
 
+#include "wx/univ/theme.h"
+#include "wx/univ/renderer.h"
+
 #if wxUSE_THREADS
     #include "wx/thread.h"
 #endif
@@ -858,37 +861,9 @@ bool wxApp::Yield(bool onlyIfNeeded)
     return TRUE;
 }
 
-// XPM hack: make the arrays const
-#define static static const
-
-#include "wx/generic/info.xpm"
-#include "wx/generic/error.xpm"
-#include "wx/generic/question.xpm"
-#include "wx/generic/warning.xpm"
-
-#undef static
-
-wxIcon
-wxApp::GetStdIcon(int which) const
+wxIcon wxApp::GetStdIcon(int which) const
 {
-    switch(which)
-    {
-        case wxICON_INFORMATION:
-            return wxIcon(info_xpm);
-
-        case wxICON_QUESTION:
-            return wxIcon(question_xpm);
-
-        case wxICON_EXCLAMATION:
-            return wxIcon(warning_xpm);
-
-        default:
-            wxFAIL_MSG("requested non existent standard icon");
-            // still fall through
-
-        case wxICON_HAND:
-            return wxIcon(error_xpm);
-    }
+    return wxTheme::Get()->GetRenderer()->GetStdIcon(which);
 }
 
 void wxApp::OnAssert(const wxChar *file, int line, const wxChar *msg)
