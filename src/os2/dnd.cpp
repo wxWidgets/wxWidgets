@@ -13,13 +13,14 @@
 #pragma implementation "dnd.h"
 #endif
 
-#define INCL_PM
-#define INCL_DOS
-#include <os2.h>
 #include "wx/window.h"
 #include "wx/app.h"
 #include "wx/gdicmn.h"
 #include "wx/dnd.h"
+
+#define INCL_PM
+#define INCL_DOS
+#include <os2.h>
 
 #if wxUSE_DRAG_AND_DROP
 
@@ -562,7 +563,7 @@ void wxDropSource::Init ()
     hStrContainer = ::DrgAddStrHandle(zContainer);
 
     m_pDragItem = new DRAGITEM[m_ulItems];
-    for (ULONG i = 0; i < m_ulItems; i++);
+    for (ULONG i = 0; i < m_ulItems; i++)
     {
         m_pDragItem[i].hwndItem          = m_pWindow->GetHWND();
         m_pDragItem[i].hstrType          = hStrType;
