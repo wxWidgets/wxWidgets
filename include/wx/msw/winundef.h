@@ -251,8 +251,33 @@
    }
 #endif
 
-// LoadLibrary
+// LoadIcon
+#ifdef LoadIcon
+    #undef LoadIcon
+    inline HICON LoadIcon(HINSTANCE hInstance, LPCTSTR lpIconName)
+    {
+        #ifdef _UNICODE
+            return LoadIconW(hInstance, lpIconName);
+        #else // ANSI
+            return LoadIconA(hInstance, lpIconName);
+        #endif // Unicode/ANSI
+    }
+#endif // LoadIcon
 
+// LoadBitmap
+#ifdef LoadBitmap
+    #undef LoadBitmap
+    inline HBITMAP LoadBitmap(HINSTANCE hInstance, LPCTSTR lpBitmapName)
+    {
+        #ifdef _UNICODE
+            return LoadBitmapW(hInstance, lpBitmapName);
+        #else // ANSI
+            return LoadBitmapA(hInstance, lpBitmapName);
+        #endif // Unicode/ANSI
+    }
+#endif // LoadBitmap
+
+// LoadLibrary
 #ifdef LoadLibrary
     #undef LoadLibrary
     #ifdef _UNICODE
@@ -326,7 +351,7 @@
 
 // For WINE
 
-#if defined(GetWindowStyle) || defined(__WXWINE__)
+#if defined(GetWindowStyle)
   #undef GetWindowStyle
 #endif
 

@@ -191,6 +191,11 @@ Unix:
 
 - fixed build problems with OpenGL when libGL(U) were in different directories
 
+wxMSW:
+
+- compilation fix for VC++ command line build (missing version.mak)
+- compilation fix for XRC with mingw32
+
 
 2.4.1
 -----
