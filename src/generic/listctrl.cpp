@@ -4444,58 +4444,13 @@ void wxListItem::ClearAttributes()
 }
 
 // -------------------------------------------------------------------------------------
-// wxListEvent
-// -------------------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxListEvent, wxNotifyEvent)
-
-wxListEvent::wxListEvent( wxEventType commandType, int id )
-           : wxNotifyEvent( commandType, id )
-{
-    m_code = 0;
-    m_itemIndex = 0;
-    m_oldItemIndex = 0;
-    m_col = 0;
-    m_cancelled = FALSE;
-    m_pointDrag.x = 0;
-    m_pointDrag.y = 0;
-}
-
-void wxListEvent::CopyObject(wxObject& object_dest) const
-{
-    wxListEvent *obj = (wxListEvent *)&object_dest;
-
-    wxNotifyEvent::CopyObject(object_dest);
-
-    obj->m_code = m_code;
-    obj->m_itemIndex = m_itemIndex;
-    obj->m_oldItemIndex = m_oldItemIndex;
-    obj->m_col = m_col;
-    obj->m_cancelled = m_cancelled;
-    obj->m_pointDrag = m_pointDrag;
-    obj->m_item.m_mask = m_item.m_mask;
-    obj->m_item.m_itemId = m_item.m_itemId;
-    obj->m_item.m_col = m_item.m_col;
-    obj->m_item.m_state = m_item.m_state;
-    obj->m_item.m_stateMask = m_item.m_stateMask;
-    obj->m_item.m_text = m_item.m_text;
-    obj->m_item.m_image = m_item.m_image;
-    obj->m_item.m_data = m_item.m_data;
-    obj->m_item.m_format = m_item.m_format;
-    obj->m_item.m_width = m_item.m_width;
-
-    if ( m_item.HasAttributes() )
-    {
-        obj->m_item.SetTextColour(m_item.GetTextColour());
-    }
-}
-
-// -------------------------------------------------------------------------------------
 // wxListCtrl
 // -------------------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxListCtrl, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxListView, wxListCtrl)
+
+IMPLEMENT_DYNAMIC_CLASS(wxListEvent, wxNotifyEvent)
 
 BEGIN_EVENT_TABLE(wxListCtrl,wxControl)
   EVT_SIZE(wxListCtrl::OnSize)
