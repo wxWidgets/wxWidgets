@@ -44,9 +44,10 @@ wxMemoryDC::wxMemoryDC(void)
     gcvalues.foreground = BlackPixel (display, DefaultScreen (display));
     gcvalues.background = WhitePixel (display, DefaultScreen (display));
     gcvalues.graphics_exposures = False;
+    gcvalues.subwindow_mode = IncludeInferiors;
     gcvalues.line_width = 1;
     m_gc = (WXGC) XCreateGC (display, RootWindow (display, DefaultScreen (display)),
-        GCForeground | GCBackground | GCGraphicsExposures | GCLineWidth,
+        GCForeground | GCBackground | GCGraphicsExposures | GCLineWidth | GCSubwindowMode,
         &gcvalues);
     
     m_backgroundPixel = (int) gcvalues.background;
@@ -74,9 +75,10 @@ wxMemoryDC::wxMemoryDC( wxDC* dc )
     gcvalues.foreground = BlackPixel (display, DefaultScreen (display));
     gcvalues.background = WhitePixel (display, DefaultScreen (display));
     gcvalues.graphics_exposures = False;
+    gcvalues.subwindow_mode = IncludeInferiors;
     gcvalues.line_width = 1;
     m_gc = (WXGC) XCreateGC (display, RootWindow (display, DefaultScreen (display)),
-        GCForeground | GCBackground | GCGraphicsExposures | GCLineWidth,
+        GCForeground | GCBackground | GCGraphicsExposures | GCLineWidth | GCSubwindowMode,
         &gcvalues);
     
     m_backgroundPixel = (int) gcvalues.background;
@@ -110,9 +112,10 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
         gcvalues.foreground = BlackPixel (display, DefaultScreen (display));
         gcvalues.background = WhitePixel (display, DefaultScreen (display));
         gcvalues.graphics_exposures = False;
+        gcvalues.subwindow_mode = IncludeInferiors;
         gcvalues.line_width = 1;
         m_gc = (WXGC) XCreateGC (display, RootWindow (display, DefaultScreen (display)),
-            GCForeground | GCBackground | GCGraphicsExposures | GCLineWidth,
+            GCForeground | GCBackground | GCGraphicsExposures | GCLineWidth | GCSubwindowMode,
             &gcvalues);
         
         m_backgroundPixel = (int) gcvalues.background;

@@ -153,6 +153,10 @@ static GdkGC* wxGetPoolGC( GdkWindow *window, wxPoolGCType type )
         {
             wxGCPool[i].m_gc = gdk_gc_new( window );
             gdk_gc_set_exposures( wxGCPool[i].m_gc, FALSE );
+            // This allows you to e.g. copy from the screen
+            // without clipping the windows on it.
+            gdk_gc_set_subwindow( wxGCPool[i].m_gc, 
+				  GDK_INCLUDE_INFERIORS );
             wxGCPool[i].m_type = type;
             wxGCPool[i].m_used = FALSE;
         }

@@ -14,6 +14,11 @@ initially call Show and then Move. If you wish to update the screen contents
 during the drag (for example, highlight an item as in the dragimag sample), first call Hide,
 update the screen, call Move, and then call Show.
 
+You can drag within one window, or you can use full-screen dragging
+either across the whole screen, or just restricted to one area
+of the screen to save resources. If you want the user to drag between
+two windows, then you will need to use full-screen dragging.
+
 Please see {\tt samples/dragimag} for an example.
 
 \wxheading{Derived from}
@@ -111,11 +116,6 @@ still be captured in {\it window}.}
 bounds the dragging operation. Specifying this can make the operation more efficient
 by cutting down on the area under consideration, and it can also make a visual difference
 since the drag is clipped to this area.}
-
-{\bf Please note:} full screen dragging only works on Windows at present,
-because on Motif and GTK, the wxScreenDC used to implement full screen dragging only looks at the X root window and not
-the windows on top, when copying from the screen to the backing bitmap.
-Suggestions for solving this one are welcome!
 
 \membersection{wxDragImage::EndDrag}\label{wxdragimageenddrag}
 
