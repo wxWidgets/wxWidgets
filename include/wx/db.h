@@ -49,10 +49,12 @@
 	#endif
 #endif
 
+#include "wx/setup.h"
+
 #if wxMAJOR_VERSION == 2
 	extern "C" {
-	#include "wx/unix/isql.h"
-	#include "wx/unix/isqlext.h"
+	#include "wx/isql.h"
+	#include "wx/isqlext.h"
 	}
 #else  // version == 1
 	extern "C" {

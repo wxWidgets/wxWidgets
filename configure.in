@@ -764,7 +764,7 @@ else
   DEFAULT_wxUSE_LIBPNG=yes
   DEFAULT_wxUSE_LIBJPEG=yes
   DEFAULT_wxUSE_LIBTIFF=yes
-  DEFAULT_wxUSE_ODBC=yes
+  DEFAULT_wxUSE_ODBC=no
 
   DEFAULT_wxUSE_STD_IOSTREAM=no
   DEFAULT_wxUSE_FILE=yes
@@ -3305,6 +3305,7 @@ AC_OUTPUT([
             Makefile
             demos/Makefile
             demos/bombs/Makefile
+            demos/dbbrowse/Makefile
             demos/forty/Makefile
             demos/fractal/Makefile
             demos/life/Makefile

@@ -622,6 +622,8 @@ imaglist.h	W
 intl.h	W	B
 ioswrap.h	W	B
 ipcbase.h	W
+isql.h	W
+isqlext.h	W
 joystick.h	W
 layout.h	W
 laywin.h	W
@@ -1040,8 +1042,6 @@ fontutil.h	S
 execute.h	S
 mimetype.h	S	B
 gsockunx.h	S
-isql.h	S
-isqlext.h	S
 
 file.h	P
 ftp.h	P
