@@ -81,7 +81,9 @@
 #include  <stdio.h>       // SEEK_xxx constants
 #include  <fcntl.h>       // O_RDONLY &c
 
-#ifndef __MWERKS__
+#ifdef __MWERKS__
+    #include <stat.h>
+#else
     #include  <sys/types.h>   // needed for stat
     #include  <sys/stat.h>    // stat
 #endif
@@ -296,7 +298,11 @@ size_t wxFile::Write(const void *pBuf, size_t nCount)
 
     // have to use scope resolution for the same reason as above
 #ifdef __MWERKS__
-    int iRc = ::write(m_fd, (const char *) pBuf, nCount);
+    #if __MWERKS__ >= 0x2400
+        int iRc = ::write(m_fd, const_cast<void*>( pBuf ), nCount);
+    #else
+        int iRc = ::write(m_fd, (const char*) pBuf, nCount);
+    #endif
 #else
     int iRc = ::wxWrite(m_fd, pBuf, nCount);
 #endif

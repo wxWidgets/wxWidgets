@@ -81,7 +81,11 @@
  */
 #if defined(__MWERKS__) || defined(THINK_C) || defined(__PPCC__) || defined(__SC__) || defined(__MRC__)
 #include <stdlib.h>
-#define	BSDTYPES
+    #if defined(_WINSOCKAPI_)        // winsock.h already defines BSD typedefs
+        // Don't need BSD types -- do nothing
+    #else
+        #define BSDTYPES
+    #endif
 #define	HAVE_UNISTD_H	0
 #elif defined(_WINDOWS) || defined(__WIN32__) || defined(_Windows)
 #define BSDTYPES

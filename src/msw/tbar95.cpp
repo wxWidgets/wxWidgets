@@ -24,6 +24,16 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if defined(__MWERKS__) && __MWERKS__ >= 0x2400        // don't quite understand why max isn't defined...
+    template <class T>
+    inline
+    const T&
+    max(const T& a, const T& b)
+    {
+        return a < b ? b : a;
+    }
+#endif
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif

@@ -140,8 +140,16 @@ void wxObject::operator delete(void* pData, wxChar* /* fileName */, int /* lineN
 }
 #endif
 
+// MW CW Pro 6
+#if defined(__MWERKS__) && (__MWERKS__ >= 0x2400)
+void wxObject::operator delete(void* buf, wxChar* /* fileName */, int /* lineNum */)
+{
+    wxDebugFree(buf);  // note different implementation than the above
+}
+#endif
+
 // Cause problems for VC++ - crashes
-#if (!defined(__VISUALC__) && wxUSE_ARRAY_MEMORY_OPERATORS ) || defined(__MWERKS__)
+#if (wxUSE_ARRAY_MEMORY_OPERATORS && !defined(__VISUALC__) )
 void * wxObject::operator new[] (size_t size, wxChar * fileName, int lineNum)
 {
     return wxDebugAlloc(size, fileName, lineNum, TRUE, TRUE);
@@ -151,7 +159,15 @@ void wxObject::operator delete[] (void * buf)
 {
     wxDebugFree(buf, TRUE);
 }
-#endif
+
+#if defined(__MWERKS__) && (__MWERKS__ >= 0x2400)
+void wxObject::operator delete[] (void * buf, wxChar* /* fileName */, int /* lineNum */)
+{
+    wxDebugFree(buf, TRUE);
+}
+#endif // MWERKS
+
+#endif // wxUSE_ARRAY_MEMORY_OPERATORS && !defined(__VISUALC__)
 
 #endif
 

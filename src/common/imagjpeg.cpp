@@ -29,7 +29,7 @@
 #include "wx/app.h"
 extern "C"
 {
-#ifdef __WATCOMC__
+#if defined(__WATCOMC__) || defined(__MWERKS__)
     #define HAVE_BOOLEAN
 #endif
     #include "jpeglib.h"

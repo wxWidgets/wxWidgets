@@ -28,7 +28,11 @@
 #if wxUSE_LONGLONG
 #include "wx/longlong.h"
 
+#ifdef __MWERKS__  
+#include <string.h>      // for memset() (memset() according to standard lives in <string.h>)
+#else
 #include <memory.h>     // for memset()
+#endif 
 #include <math.h>       // for fabs()
 
 // ============================================================================

@@ -1019,8 +1019,8 @@ void operator delete (void * buf)
 }
 #endif
 
-// VC++ 6.0
-#if defined(__VISUALC__) && (__VISUALC__ >= 1200)
+// VC++ 6.0 or MWERKS CW Pro6/7
+#if (defined(__VISUALC__) && (__VISUALC__ >= 1200)) || (defined(__MWERKS__) && (__MWERKS__ >= 0x2400))
 void operator delete(void* pData, wxChar* /* fileName */, int /* lineNum */)
 {
   wxDebugFree(pData, FALSE);

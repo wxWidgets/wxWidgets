@@ -17,7 +17,12 @@
 
 /* Include auto-config file to find out which system include files we need. */
 
+#if defined(__MWERKS__)
+#include "jconfig.h"
+#else
 #include "../src/jpeg/jconfig.h"		/* auto configuration options */
+#endif
+
 #define JCONFIG_INCLUDED	/* so that jpeglib.h doesn't do it again */
 
 /*

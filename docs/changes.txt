@@ -25,6 +25,11 @@ Unix:
 - fixed configure bug which prevented it from finding anything with some
   compiler versions
 
+wxMSW:
+
+- fixes to make it possible to build the library with CodwWarrior 7
+  (Igor Mikolic-Torreira)
+
 wxHTML:
 
 - fixed wxHtmlHelpController's cache files handling on big endian machines

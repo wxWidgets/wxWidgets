@@ -50,7 +50,9 @@
 #endif
 
 #if defined(__WIN32__) && !defined(HAVE_FTIME)
+    #if !defined(__MWERKS__)        // MWERKS does not provide ftime() in the MSL
     #define HAVE_FTIME
+    #endif
 #endif
 
 #if defined(__VISAGECPP__) && !defined(HAVE_FTIME)

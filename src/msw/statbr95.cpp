@@ -44,7 +44,7 @@
 // wxWindows macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxStatusBar95, wxWindow);
+IMPLEMENT_DYNAMIC_CLASS(wxStatusBar95, wxWindow)
 IMPLEMENT_DYNAMIC_CLASS(wxStatusBar, wxStatusBar95)
 
 // ----------------------------------------------------------------------------

@@ -27,14 +27,14 @@
 
 //---------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxSizerItem, wxObject);
-IMPLEMENT_ABSTRACT_CLASS(wxSizer, wxObject);
-IMPLEMENT_ABSTRACT_CLASS(wxGridSizer, wxSizer);
-IMPLEMENT_ABSTRACT_CLASS(wxFlexGridSizer, wxGridSizer);
-IMPLEMENT_ABSTRACT_CLASS(wxBoxSizer, wxSizer);
-IMPLEMENT_ABSTRACT_CLASS(wxStaticBoxSizer, wxBoxSizer);
+IMPLEMENT_ABSTRACT_CLASS(wxSizerItem, wxObject)
+IMPLEMENT_ABSTRACT_CLASS(wxSizer, wxObject)
+IMPLEMENT_ABSTRACT_CLASS(wxGridSizer, wxSizer)
+IMPLEMENT_ABSTRACT_CLASS(wxFlexGridSizer, wxGridSizer)
+IMPLEMENT_ABSTRACT_CLASS(wxBoxSizer, wxSizer)
+IMPLEMENT_ABSTRACT_CLASS(wxStaticBoxSizer, wxBoxSizer)
 #if wxUSE_NOTEBOOK
-IMPLEMENT_ABSTRACT_CLASS(wxNotebookSizer, wxSizer);
+IMPLEMENT_ABSTRACT_CLASS(wxNotebookSizer, wxSizer)
 #endif
 
 //---------------------------------------------------------------------------

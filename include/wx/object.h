@@ -115,12 +115,14 @@ WXDLLEXPORT wxObject* wxCreateStoredObject( wxInputStream& stream );
 
 // Single inheritance with one base class
 #define IMPLEMENT_DYNAMIC_CLASS(name, basename) \
+wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void); \
 wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void) \
    { return new name; }\
  wxClassInfo name::sm_class##name((wxChar *) wxT(#name), (wxChar *) wxT(#basename), (wxChar *) NULL, (int) sizeof(name), (wxObjectConstructorFn) wxConstructorFor##name);
 
 // Multiple inheritance with two base classes
 #define IMPLEMENT_DYNAMIC_CLASS2(name, basename1, basename2) \
+wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void); \
 wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void) \
    { return new name; }\
  wxClassInfo name::sm_class##name((wxChar *) wxT(#name), (wxChar *) wxT(#basename1), (wxChar *) wxT(#basename2), (int) sizeof(name), (wxObjectConstructorFn) wxConstructorFor##name);
@@ -212,7 +214,21 @@ class WXDLLEXPORT wxObject
 
   bool IsKindOf(wxClassInfo *info) const;
 
-#if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING
+#if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING // [
+
+#if defined(__MWERKS__)
+
+  void * operator new (size_t size, wxChar * fileName = NULL, int lineNum = 0);
+  void * operator new[] (size_t size, wxChar * fileName = NULL, int lineNum = 0);
+  void operator delete (void * buf);
+  void operator delete[] (void * buf);
+  #if __MWERKS__ >= 0x2400
+    void operator delete(void *buf, wxChar*, int);
+    void operator delete[](void *buf, wxChar*, int);
+  #endif
+    
+#else    // else !MWERKS
+
   void * operator new (size_t size, wxChar * fileName = NULL, int lineNum = 0);
   void operator delete (void * buf);
 
@@ -222,18 +238,14 @@ class WXDLLEXPORT wxObject
 #endif
 
     // Causes problems for VC++
-#if wxUSE_ARRAY_MEMORY_OPERATORS && !defined(__VISUALC__) && !defined( __MWERKS__)
+#if wxUSE_ARRAY_MEMORY_OPERATORS && !defined(__VISUALC__)
   void * operator new[] (size_t size, wxChar * fileName = NULL, int lineNum = 0);
   void operator delete[] (void * buf);
 #endif
 
-#ifdef __MWERKS__
-  void * operator new[] (size_t size, wxChar * fileName , int lineNum = 0);
-  void * operator new[] (size_t size) { return operator new[] ( size , NULL , 0 ) ; }
-  void operator delete[] (void * buf);
-#endif
+#endif    // MWERKS else case
 
-#endif // Debug & memory tracing
+#endif // ] Debug & memory tracing
 
 #if wxUSE_STD_IOSTREAM && (defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT)
   virtual void Dump(ostream& str);

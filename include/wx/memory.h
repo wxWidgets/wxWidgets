@@ -80,8 +80,8 @@ void operator delete (void * buf);
     WXDLLEXPORT void operator delete[] (void * buf);
 #endif
 
-// VC++ 6.0
-#if defined(__VISUALC__) && (__VISUALC__ >= 1200)
+// VC++ 6.0        or MWERKS CW Pro6 and later
+#if (defined(__VISUALC__) && (__VISUALC__ >= 1200)) || (defined(__MWERKS__) && (__MWERKS__ >= 0x2400))
     WXDLLEXPORT void operator delete(void *buf, wxChar*, int);
     WXDLLEXPORT void operator delete[](void *buf, wxChar*, int);
 #endif
