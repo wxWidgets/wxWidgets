@@ -77,10 +77,10 @@
             return (void *)0;
     }
 #elif defined(__APPLE__) && defined(__UNIX__)
-char *dlopen(char *path, int mode /* mode is ignored */);
-void *dlsym(void *handle, char *symbol);
+void *dlopen(const char *path, int mode /* mode is ignored */);
+void *dlsym(void *handle, const char *symbol);
 int   dlclose(void *handle);
-char *dlerror();
+const char *dlerror(void);
 
 #   define wxDllOpen(lib)                dlopen(lib.fn_str(), 0)
 #   define wxDllGetSymbol(handle, name)  dlsym(handle, name)
@@ -247,7 +247,7 @@ wxDllLoader::LoadLibrary(const wxString & libname, bool *success)
     char zError[256] = "";
     wxDllOpen(zError, libname, handle);
 #else // !Mac
-    handle = wxDllOpen((char *)libname.c_str());
+    handle = wxDllOpen(libname);
 #endif // OS
 
     if ( !handle )
@@ -321,7 +321,7 @@ wxDllLoader::GetSymbol(wxDllType dllHandle, const wxString &name)
     wxDllGetSymbol(dllHandle, symbol);
 #else
     // mb_str() is necessary in Unicode build
-    symbol = wxDllGetSymbol(dllHandle, (char *)name.mb_str());
+    symbol = wxDllGetSymbol(dllHandle, name.mb_str());
 #endif
 
     if ( !symbol )
