@@ -33,7 +33,7 @@ dnl adds support for --wx-prefix, --wx-exec-prefix, --with-wxdir and
 dnl --wx-config command line options
 dnl ---------------------------------------------------------------------------
 
-AC_DEFUN(AM_OPTIONS_WXCONFIG,
+AC_DEFUN([AM_OPTIONS_WXCONFIG],
 [
     AC_ARG_WITH(wxdir,
                 [  --with-wxdir=PATH       Use uninstalled version of wxWindows in PATH],
@@ -73,7 +73,7 @@ dnl ---------------------------------------------------------------------------
 dnl
 dnl Get the cflags and libraries from the wx-config script
 dnl
-AC_DEFUN(AM_PATH_WXCONFIG,
+AC_DEFUN([AM_PATH_WXCONFIG],
 [
   dnl do we have wx-config name: it can be wx-config or wxd-config or ...
   if test x${WX_CONFIG_NAME+set} != xset ; then
