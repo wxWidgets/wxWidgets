@@ -4719,20 +4719,23 @@ static void *SwigwxIconizeEventTowxObject(void *ptr) {
     return (void *) dest;
 }
 
-#define new_wxIconizeEvent(_swigarg0) (new wxIconizeEvent(_swigarg0))
+#define new_wxIconizeEvent(_swigarg0,_swigarg1) (new wxIconizeEvent(_swigarg0,_swigarg1))
 static PyObject *_wrap_new_wxIconizeEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxIconizeEvent * _result;
     int  _arg0 = (int ) 0;
-    char *_kwnames[] = { "id", NULL };
+    bool  _arg1 = (bool ) TRUE;
+    int tempbool1 = (int) TRUE;
+    char *_kwnames[] = { "id","iconized", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|i:new_wxIconizeEvent",_kwnames,&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|ii:new_wxIconizeEvent",_kwnames,&_arg0,&tempbool1)) 
         return NULL;
+    _arg1 = (bool ) tempbool1;
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxIconizeEvent *)new_wxIconizeEvent(_arg0);
+        _result = (wxIconizeEvent *)new_wxIconizeEvent(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
@@ -4743,6 +4746,34 @@ static PyObject *_wrap_new_wxIconizeEvent(PyObject *self, PyObject *args, PyObje
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+    return _resultobj;
+}
+
+#define wxIconizeEvent_Iconized(_swigobj)  (_swigobj->Iconized())
+static PyObject *_wrap_wxIconizeEvent_Iconized(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxIconizeEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxIconizeEvent_Iconized",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxIconizeEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxIconizeEvent_Iconized. Expected _wxIconizeEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxIconizeEvent_Iconized(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -6820,6 +6851,7 @@ static PyMethodDef eventscMethods[] = {
 	 { "wxJoystickEvent_GetPosition", (PyCFunction) _wrap_wxJoystickEvent_GetPosition, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxJoystickEvent", (PyCFunction) _wrap_new_wxJoystickEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxMaximizeEvent", (PyCFunction) _wrap_new_wxMaximizeEvent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxIconizeEvent_Iconized", (PyCFunction) _wrap_wxIconizeEvent_Iconized, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxIconizeEvent", (PyCFunction) _wrap_new_wxIconizeEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxShowEvent_GetShow", (PyCFunction) _wrap_wxShowEvent_GetShow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxShowEvent_SetShow", (PyCFunction) _wrap_wxShowEvent_SetShow, METH_VARARGS | METH_KEYWORDS },

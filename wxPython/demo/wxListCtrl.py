@@ -68,7 +68,8 @@ class TestListCtrlPanel(wxPanel):
 
         self.il = wxImageList(16, 16)
         bmp = images.getSmilesBitmap()
-        idx1 = self.il.AddWithColourMask(bmp, wxWHITE)
+        #idx1 = self.il.AddWithColourMask(bmp, wxWHITE)
+        idx1 = self.il.Add(bmp)
 
         self.list = wxListCtrl(self, tID,
                                style=wxLC_REPORT|wxSUNKEN_BORDER)
@@ -143,7 +144,6 @@ class TestListCtrlPanel(wxPanel):
             # this does
             self.list.SetItemState(10, 0, wxLIST_STATE_SELECTED)
 
-
     def OnItemActivated(self, event):
         self.currentItem = event.m_itemIndex
         self.log.WriteText("OnItemActivated: %s\n" % self.list.GetItemText(self.currentItem))
@@ -176,7 +176,10 @@ class TestListCtrlPanel(wxPanel):
         tPopupID3 = 2
         tPopupID4 = 3
         tPopupID5 = 5
-        menu.Append(tPopupID1, "One")
+        #menu.Append(tPopupID1, "One")
+        item = wxMenuItem(menu, tPopupID1,"One")
+        item.SetBitmap(images.getSmilesBitmap())
+        menu.AppendItem(item)
         menu.Append(tPopupID2, "Two")
         menu.Append(tPopupID3, "Three")
         menu.Append(tPopupID4, "DeleteAllItems")

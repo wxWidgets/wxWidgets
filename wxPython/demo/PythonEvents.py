@@ -4,7 +4,7 @@ import sys
 
 #----------------------------------------------------------------------
 
-myEVT_BUTTON_CLICKPOS = 5015
+myEVT_BUTTON_CLICKPOS = wxNewEventType()
 
 def EVT_BUTTON_CLICKPOS(win, id, func):
     win.Connect(id, -1, myEVT_BUTTON_CLICKPOS, func)

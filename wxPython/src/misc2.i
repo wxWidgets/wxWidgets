@@ -747,7 +747,7 @@ public:
     int GetUPosition() { return -1; }
     int GetVPosition() { return -1; }
     int GetMovementThreshold() { return -1; }
-    void SetMovementThreshold(int threshold) ;
+    void SetMovementThreshold(int threshold) {}
 
     bool IsOk(void) { return FALSE; }
     int GetNumberJoysticks() { return -1; }

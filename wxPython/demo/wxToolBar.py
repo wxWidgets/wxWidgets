@@ -16,6 +16,7 @@ class TestToolBar(wxFrame):
         wxWindow(self, -1).SetBackgroundColour(wxNamedColour("WHITE"))
 
         tb = self.CreateToolBar(wxTB_HORIZONTAL|wxNO_BORDER|wxTB_FLAT)
+        # wxTB_VERTICAL
         #tb = wxToolBarSimple(self, -1, wxDefaultPosition, wxDefaultSize,
         #               wxTB_HORIZONTAL | wxNO_BORDER | wxTB_FLAT)
         #self.SetToolBar(tb)

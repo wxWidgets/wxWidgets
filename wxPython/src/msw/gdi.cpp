@@ -120,6 +120,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
         return cArray;
     }
 
+
     wxBitmap* wxBitmapFromXPMData(PyObject* listOfStrings) {
         char**    cArray = NULL;
         wxBitmap* bmp;
@@ -138,18 +139,21 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     }
 
 
-
-#ifdef __WXMSW__
-    wxBitmap* wxBitmapFromData(PyObject* data, long type,
-                               int width, int height, int depth = 1) {
-        if (! PyString_Check(data)) {
-            PyErr_SetString(PyExc_TypeError, "Expected string object");
-            return NULL;
-        }
-
-        return new wxBitmap((void*)PyString_AsString(data), type, width, height, depth);
+    wxBitmap* wxBitmapFromBits(char* bits, int width, int height, int depth = 1 ) {
+        return new wxBitmap(bits, width, height, depth);
     }
-#endif
+
+
+//  #ifdef __WXMSW__
+//      wxBitmap* wxBitmapFromData(PyObject* data, long type,
+//                                 int width, int height, int depth = 1) {
+//          if (! PyString_Check(data)) {
+//              PyErr_SetString(PyExc_TypeError, "Expected string object");
+//              return NULL;
+//          }
+//          return new wxBitmap((void*)PyString_AsString(data), type, width, height, depth);
+//      }
+//  #endif
 
     wxMask* wxMaskColour(const wxBitmap& bitmap, const wxColour& colour) {
         return new wxMask(bitmap, colour);
@@ -335,27 +339,22 @@ static PyObject *_wrap_wxBitmapFromIcon(PyObject *self, PyObject *args, PyObject
     return _resultobj;
 }
 
-static PyObject *_wrap_wxBitmapFromData(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_wxBitmapFromBits(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxBitmap * _result;
-    PyObject * _arg0;
-    long  _arg1;
+    char * _arg0;
+    int  _arg1;
     int  _arg2;
-    int  _arg3;
-    int  _arg4 = (int ) 1;
-    PyObject * _obj0 = 0;
-    char *_kwnames[] = { "data","type","width","height","depth", NULL };
+    int  _arg3 = (int ) 1;
+    char *_kwnames[] = { "bits","width","height","depth", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Olii|i:wxBitmapFromData",_kwnames,&_obj0,&_arg1,&_arg2,&_arg3,&_arg4)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"sii|i:wxBitmapFromBits",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
 {
-  _arg0 = _obj0;
-}
-{
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxBitmap *)wxBitmapFromData(_arg0,_arg1,_arg2,_arg3,_arg4);
+        _result = (wxBitmap *)wxBitmapFromBits(_arg0,_arg1,_arg2,_arg3);
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
@@ -10987,7 +10986,7 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxIconFromXPMData", (PyCFunction) _wrap_wxIconFromXPMData, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEmptyIcon", (PyCFunction) _wrap_wxEmptyIcon, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMaskColour", (PyCFunction) _wrap_wxMaskColour, METH_VARARGS | METH_KEYWORDS },
-	 { "wxBitmapFromData", (PyCFunction) _wrap_wxBitmapFromData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBitmapFromBits", (PyCFunction) _wrap_wxBitmapFromBits, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBitmapFromIcon", (PyCFunction) _wrap_wxBitmapFromIcon, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBitmapFromXPMData", (PyCFunction) _wrap_wxBitmapFromXPMData, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEmptyBitmap", (PyCFunction) _wrap_wxEmptyBitmap, METH_VARARGS | METH_KEYWORDS },

@@ -206,6 +206,8 @@ public:
     void CentreOnScreen(int direction = wxBOTH );
     void CenterOnScreen(int direction = wxBOTH );
 
+    void Clear();
+
     // (uses apply'ed INOUT typemap, see above)
     %name(ClientToScreenXY)void ClientToScreen(int* x, int* y);
     wxPoint ClientToScreen(const wxPoint& pt);

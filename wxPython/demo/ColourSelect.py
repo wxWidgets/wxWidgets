@@ -34,20 +34,21 @@ class TestColourSelect(wxPanel):
         self.y_pos = self.y_pos + delta
 
         wxStaticText(self, -1, "Default", wxPoint(self.x_pos, self.y_pos), wxSize(-1, -1))   # name
-        self.colour_def = ColourSelect(self, wxPoint(self.x_pos+100, self.y_pos))   # default colour selection control
+        self.colour_def = ColourSelect(self, -1, pos=wxPoint(self.x_pos+100, self.y_pos))   # default colour selection control
 
         self.y_pos = self.y_pos + delta
         colours = [[255, 255, 0], [255, 0, 255], [0, 255, 0], [0, 0, 255]]   # list of initial colours for display
         self.names = names = [ "Default Size", "Another Size", "Another Colour", "Larger"]    # display names
-        sizes = [ None, wxSize(60, 20), None, wxSize(60, 60)]       # button sizes
+        sizes = [ wxDefaultSize, wxSize(60, 20), wxDefaultSize, wxSize(60, 60)]       # button sizes
         self.set_val = []
 
         for i in range(len(colours)):
             wxStaticText(self, -1, names[i], wxPoint(self.x_pos, self.y_pos), wxSize(-1, -1))   # name
 
-            val = ColourSelect(self, wxPoint(self.x_pos+100, self.y_pos), colours[i], sizes[i])     # colour selection button
+            val = ColourSelect(self, -1, colours[i], wxPoint(self.x_pos+100, self.y_pos), sizes[i])     # colour selection button
             self.set_val.append(val)     # store control for reference
             self.y_pos = self.y_pos + delta
+
 
     def OnClick(self, event):
         result = []

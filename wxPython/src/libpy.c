@@ -409,6 +409,8 @@ SWIG_GetPtrObj(PyObject *obj, void **ptr, char *type) {
       Py_DECREF(sobj);
   }
   str = PyString_AsString(sobj);
+  if (str == NULL)
+      return "";
   return SWIG_GetPtr(str,ptr,type);
 }
 

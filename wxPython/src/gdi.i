@@ -105,11 +105,12 @@ public:
 %new wxBitmap* wxEmptyBitmap(int width, int height, int depth=-1);
 %new wxBitmap* wxBitmapFromXPMData(PyObject* listOfStrings);
 %new wxBitmap* wxBitmapFromIcon(const wxIcon& icon);
+%new wxBitmap* wxBitmapFromBits(char* bits, int width, int height, int depth = 1 );
 
-#ifdef __WXMSW__
-%new wxBitmap* wxBitmapFromData(PyObject* data, long type,
-                                int width, int height, int depth = 1);
-#endif
+//  #ifdef __WXMSW__
+//  %new wxBitmap* wxBitmapFromData(PyObject* data, long type,
+//                                  int width, int height, int depth = 1);
+//  #endif
 
 
 
@@ -137,6 +138,7 @@ public:
         return cArray;
     }
 
+
     wxBitmap* wxBitmapFromXPMData(PyObject* listOfStrings) {
         char**    cArray = NULL;
         wxBitmap* bmp;
@@ -155,18 +157,21 @@ public:
     }
 
 
-
-#ifdef __WXMSW__
-    wxBitmap* wxBitmapFromData(PyObject* data, long type,
-                               int width, int height, int depth = 1) {
-        if (! PyString_Check(data)) {
-            PyErr_SetString(PyExc_TypeError, "Expected string object");
-            return NULL;
-        }
-
-        return new wxBitmap((void*)PyString_AsString(data), type, width, height, depth);
+    wxBitmap* wxBitmapFromBits(char* bits, int width, int height, int depth = 1 ) {
+        return new wxBitmap(bits, width, height, depth);
     }
-#endif
+
+
+//  #ifdef __WXMSW__
+//      wxBitmap* wxBitmapFromData(PyObject* data, long type,
+//                                 int width, int height, int depth = 1) {
+//          if (! PyString_Check(data)) {
+//              PyErr_SetString(PyExc_TypeError, "Expected string object");
+//              return NULL;
+//          }
+//          return new wxBitmap((void*)PyString_AsString(data), type, width, height, depth);
+//      }
+//  #endif
 %}
 
 //---------------------------------------------------------------------------

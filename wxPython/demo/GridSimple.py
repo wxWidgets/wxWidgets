@@ -1,11 +1,13 @@
 from wxPython.wx import *
 from wxPython.grid import *
+from wxPython.lib.mixins.grid import wxGridAutoEditMixin
 
 #---------------------------------------------------------------------------
 
-class SimpleGrid(wxGrid):
+class SimpleGrid(wxGrid, wxGridAutoEditMixin):
     def __init__(self, parent, log):
         wxGrid.__init__(self, parent, -1)
+        wxGridAutoEditMixin.__init__(self)
         self.log = log
         self.moveTo = None
 
@@ -25,6 +27,10 @@ class SimpleGrid(wxGrid):
         self.SetCellBackgroundColour(2, 2, wxCYAN)
         self.SetReadOnly(3, 3, true)
 
+        self.SetCellEditor(5, 0, wxGridCellNumberEditor())
+        self.SetCellValue(5, 0, "123")
+        self.SetCellEditor(6, 0, wxGridCellFloatEditor())
+        self.SetCellValue(6, 0, "123.34")
 
         # attribute objects let you keep a set of formatting values
         # in one spot, and reuse them if needed
@@ -135,11 +141,12 @@ class SimpleGrid(wxGrid):
         if value == 'no good':
             self.moveTo = evt.GetRow(), evt.GetCol()
 
+
     def OnIdle(self, evt):
         if self.moveTo != None:
             self.SetGridCursor(self.moveTo[0], self.moveTo[1])
             self.moveTo = None
-
+        evt.Skip()
 
 
     def OnSelectCell(self, evt):
@@ -155,9 +162,7 @@ class SimpleGrid(wxGrid):
         value = self.GetCellValue(row, col)
         if value == 'no good 2':
             return  # cancels the cell selection
-        else:
-            evt.Skip()
-
+        evt.Skip()
 
 
     def OnEditorShown(self, evt):

@@ -404,6 +404,8 @@ enum {
     wxID_PASTE,
     wxID_CLEAR,
     wxID_FIND,
+    wxID_DUPLICATE,
+    wxID_SELECTALL,
     wxID_FILE1,
     wxID_FILE2,
     wxID_FILE3,

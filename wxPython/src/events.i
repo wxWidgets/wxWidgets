@@ -291,7 +291,8 @@ public:
 
 class wxIconizeEvent: public wxEvent {
 public:
-    wxIconizeEvent(int id = 0);
+    wxIconizeEvent(int id = 0, bool iconized = TRUE);
+    bool Iconized();
 };
 
 //---------------------------------------------------------------------------

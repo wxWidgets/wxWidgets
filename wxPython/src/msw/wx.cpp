@@ -1931,6 +1931,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxRESIZE_BORDER", PyInt_FromLong((long) wxRESIZE_BORDER));
 	 PyDict_SetItemString(d,"wxDIALOG_MODAL", PyInt_FromLong((long) wxDIALOG_MODAL));
 	 PyDict_SetItemString(d,"wxDIALOG_MODELESS", PyInt_FromLong((long) wxDIALOG_MODELESS));
+	 PyDict_SetItemString(d,"wxDIALOG_NO_PARENT", PyInt_FromLong((long) wxDIALOG_NO_PARENT));
 	 PyDict_SetItemString(d,"wxDEFAULT_FRAME_STYLE", PyInt_FromLong((long) wxDEFAULT_FRAME_STYLE));
 	 PyDict_SetItemString(d,"wxDEFAULT_DIALOG_STYLE", PyInt_FromLong((long) wxDEFAULT_DIALOG_STYLE));
 	 PyDict_SetItemString(d,"wxFRAME_TOOL_WINDOW", PyInt_FromLong((long) wxFRAME_TOOL_WINDOW));
@@ -2115,6 +2116,8 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxID_PASTE", PyInt_FromLong((long) wxID_PASTE));
 	 PyDict_SetItemString(d,"wxID_CLEAR", PyInt_FromLong((long) wxID_CLEAR));
 	 PyDict_SetItemString(d,"wxID_FIND", PyInt_FromLong((long) wxID_FIND));
+	 PyDict_SetItemString(d,"wxID_DUPLICATE", PyInt_FromLong((long) wxID_DUPLICATE));
+	 PyDict_SetItemString(d,"wxID_SELECTALL", PyInt_FromLong((long) wxID_SELECTALL));
 	 PyDict_SetItemString(d,"wxID_FILE1", PyInt_FromLong((long) wxID_FILE1));
 	 PyDict_SetItemString(d,"wxID_FILE2", PyInt_FromLong((long) wxID_FILE2));
 	 PyDict_SetItemString(d,"wxID_FILE3", PyInt_FromLong((long) wxID_FILE3));

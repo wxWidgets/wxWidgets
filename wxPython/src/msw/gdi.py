@@ -1141,8 +1141,8 @@ def wxBitmapFromIcon(*_args, **_kwargs):
     if val: val = wxBitmapPtr(val); val.thisown = 1
     return val
 
-def wxBitmapFromData(*_args, **_kwargs):
-    val = apply(gdic.wxBitmapFromData,_args,_kwargs)
+def wxBitmapFromBits(*_args, **_kwargs):
+    val = apply(gdic.wxBitmapFromBits,_args,_kwargs)
     if val: val = wxBitmapPtr(val); val.thisown = 1
     return val
 

@@ -8,6 +8,16 @@ Added EVT_GRID_EDITOR_CREATED and wxGridEditorCreatedEvent so the user
 code can get access to the edit control when it is created, (to push
 on a custom event handler for example.)
 
+Added wxTextAttr class and SetStyle, SetDefaultStyle and
+GetDefaultStyle methods to wxTextCtrl.
+
+Added ability to use xml resource files.  Still need to add ability to
+subclass wxXmlResourceHandler, etc...
+
+Added wxGridAutoEditMixin to the mixins library package.
+
+Made ColourSelect be derived from wxButton.
+
 
 
 2.3.0

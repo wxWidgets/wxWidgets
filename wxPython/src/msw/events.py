@@ -640,6 +640,9 @@ class wxIconizeEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Iconized(self, *_args, **_kwargs):
+        val = apply(eventsc.wxIconizeEvent_Iconized,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxIconizeEvent instance at %s>" % (self.this,)
 class wxIconizeEvent(wxIconizeEventPtr):

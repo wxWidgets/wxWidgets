@@ -22,9 +22,7 @@ import images
 
 
 _treeList = [
-    ('New since last release', ['ColourSelect', 'ImageBrowser', 'infoframe',
-                                'ColourDB', 'wxToggleButton', 'OOR', 'wxWave',
-                                'wxJoystick',
+    ('New since last release', ['wxTextCtrl', 'XML_Resource'
                                 ]),
 
     ('Managed Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame']),
@@ -63,6 +61,7 @@ _treeList = [
                           'PyShell', 'wxCalendar', 'wxMVCTree', 'wxVTKRenderWindow',
                           'FileBrowseButton', 'GenericButtons', 'wxEditor',
                           'PyShellWindow', 'ColourSelect', 'ImageBrowser',
+                          'infoframe', 'ColourDB',
                           ]),
 
     ('Cool Contribs', ['pyTree', 'hangman', 'SlashDot', 'XMLtreeview']),
@@ -112,6 +111,9 @@ class wxPythonDemo(wxFrame):
         splitter = wxSplitterWindow(self, -1, style=wxNO_3D|wxSP_3D)
         splitter2 = wxSplitterWindow(splitter, -1, style=wxNO_3D|wxSP_3D)
 
+        def EmptyHandler(evt): pass
+        EVT_ERASE_BACKGROUND(splitter, EmptyHandler)
+        EVT_ERASE_BACKGROUND(splitter2, EmptyHandler)
 
         # Prevent TreeCtrl from displaying all items after destruction
         self.dying = false
@@ -176,7 +178,7 @@ class wxPythonDemo(wxFrame):
         EVT_LEFT_DOWN            (self.tree,      self.OnTreeLeftDown)
 
         # Create a Notebook
-        self.nb = wxNotebook(splitter2, -1)
+        self.nb = wxNotebook(splitter2, -1, style=wxCLIP_CHILDREN)
 
         # Set up a wxHtmlWindow on the Overview Notebook page
         # we put it in a panel first because there seems to be a
@@ -187,7 +189,7 @@ class wxPythonDemo(wxFrame):
             self.nb.AddPage(self.ovr, "Overview")
 
         else:  # hopefully I can remove this hacky code soon, see bug #216861
-            panel = wxPanel(self.nb, -1)
+            panel = wxPanel(self.nb, -1, style=wxCLIP_CHILDREN)
             self.ovr = wxHtmlWindow(panel, -1, size=(400, 400))
             self.nb.AddPage(panel, "Overview")
 
@@ -195,6 +197,8 @@ class wxPythonDemo(wxFrame):
                 ovr.SetSize(evt.GetSize())
 
             EVT_SIZE(panel, OnOvrSize)
+            EVT_ERASE_BACKGROUND(panel, EmptyHandler)
+
 
         self.SetOverview("Overview", overview)
 
@@ -470,7 +474,7 @@ class MyApp(wxApp):
 
 def main():
     try:
-        demoPath = os.path.split(__file__)[0]
+        demoPath = os.path.dirname(__file__)
         os.chdir(demoPath)
     except:
         pass

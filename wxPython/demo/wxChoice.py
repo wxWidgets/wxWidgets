@@ -15,12 +15,15 @@ class TestChoice(wxPanel):
                                wxPoint(15, 10))
 
         wxStaticText(self, -1, "Select one:", wxPoint(15, 50), wxSize(75, 20))
-        wxChoice(self, 40, (80, 50), (95, 125),
+        self.ch = wxChoice(self, 40, (80, 50), (95, 125),
                  choices = sampleList)
         EVT_CHOICE(self, 40, self.EvtChoice)
 
+
     def EvtChoice(self, event):
         self.log.WriteText('EvtChoice: %s\n' % event.GetString())
+        self.ch.Append("A new item")
+
 
 #---------------------------------------------------------------------------
 

@@ -350,6 +350,33 @@ public:
 
 //----------------------------------------------------------------------
 
+
+class wxTextAttr
+{
+public:
+    // ctors
+    wxTextAttr(const wxColour& colText = wxNullColour,
+               const wxColour& colBack = wxNullColour,
+               const wxFont& font = wxNullFont);
+    ~wxTextAttr();
+
+    // setters
+    void SetTextColour(const wxColour& colText);
+    void SetBackgroundColour(const wxColour& colBack);
+    void SetFont(const wxFont& font);
+
+    // accessors
+    bool HasTextColour() const;
+    bool HasBackgroundColour() const;
+    bool HasFont() const;
+
+    const wxColour& GetTextColour() const;
+    const wxColour& GetBackgroundColour() const;
+    const wxFont& GetFont() const;
+};
+
+
+
 class wxTextCtrl : public wxControl {
 public:
     wxTextCtrl(wxWindow* parent, wxWindowID id, char* value = "",
@@ -398,9 +425,13 @@ public:
     void Undo();
     void Redo();
 
+    bool SetStyle(long start, long end, const wxTextAttr& style);
+    bool SetDefaultStyle(const wxTextAttr& style);
+    const wxTextAttr& GetDefaultStyle() const;
+
     %addmethods {
         void write(const wxString& text) {
-            self->AppendText(text + '\n');
+            self->AppendText(text);
         }
     }
 };
