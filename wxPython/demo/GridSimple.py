@@ -53,6 +53,10 @@ class SimpleGrid(wxGrid): ##, wxGridAutoEditMixin):
 
         self.SetColLabelAlignment(wxALIGN_LEFT, wxALIGN_BOTTOM)
 
+        #self.SetDefaultCellOverflow(False)
+        #r = wxGridCellAutoWrapStringRenderer()
+        #self.SetCellRenderer(9, 1, r)
+
         # overflow cells
         self.SetCellValue( 9, 1, "This default cell will overflow into neighboring cells, but not if you turn overflow off.");
         self.SetCellSize(11, 1, 3, 3);
