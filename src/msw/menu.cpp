@@ -888,7 +888,7 @@ wxString wxMenuBar::GetLabelTop(size_t pos) const
     wxCHECK_MSG( pos < GetMenuCount(), wxEmptyString,
                  wxT("invalid menu index in wxMenuBar::GetLabelTop") );
 
-    return m_titles[pos];
+    return wxMenuItem::GetLabelFromText(m_titles[pos]);
 }
 
 // ---------------------------------------------------------------------------
