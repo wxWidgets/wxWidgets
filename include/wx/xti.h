@@ -1356,14 +1356,14 @@ struct wxConstructorBridge_8 : public wxConstructorBridge
 typedef wxObject *(*wxObjectConstructorFn)(void);
 typedef wxObject* (*wxVariantToObjectConverter)( wxxVariant &data ) ;
 typedef wxxVariant (*wxObjectToVariantConverter)( wxObject* ) ;
-class wxWriter ;
-class wxPersister ;
+class WXDLLIMPEXP_BASE wxWriter;
+class WXDLLIMPEXP_BASE wxPersister;
 typedef bool (*wxObjectStreamingCallback) ( const wxObject *, wxWriter * , wxPersister * , wxxVariantArray & ) ;
 
 class WXDLLIMPEXP_BASE wxClassInfo
 {
-    friend class WXDLLEXPORT wxPropertyInfo ;
-    friend class WXDLLEXPORT wxHandlerInfo ;
+    friend class WXDLLIMPEXP_BASE wxPropertyInfo ;
+    friend class WXDLLIMPEXP_BASE wxHandlerInfo ;
 public:
     wxClassInfo(const wxClassInfo **_Parents,
         const wxChar *_UnitName,
