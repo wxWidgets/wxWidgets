@@ -68,7 +68,8 @@ public:
   // comparison
   bool operator == (const wxColour& colour) const
   {
-    return (m_red == colour.m_red && 
+    return (m_isInit == colour.m_isInit &&
+            m_red == colour.m_red && 
             m_green == colour.m_green && 
             m_blue == colour.m_blue);
   }
