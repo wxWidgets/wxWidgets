@@ -801,6 +801,8 @@ void wxFrame::PositionToolBar()
         else
         {
             tw = rect.right;
+            if ( GetToolBar()->HasFlag(wxTB_FLAT ) )
+                th -= 3;
         }
 
         // Use the 'real' MSW position here

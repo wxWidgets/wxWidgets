@@ -237,6 +237,10 @@ bool wxToolBar::Create(wxWindow *parent,
 
     SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
 
+    // All the positioing code here doesn't have
+    // any effect since it is overridden later
+    // on. RR.
+    
     // position it
     int x = pos.x;
     int y = pos.y;
@@ -984,7 +988,10 @@ long wxToolBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
             else
             {
                 w = LOWORD(lParam);
-                h = r.bottom - r.top;
+                if (HasFlag( wxTB_FLAT ))
+                    h = r.bottom - r.top - 3;
+                else
+                    h = r.bottom - r.top;
                 if ( m_maxRows )
                 {
                     h += 6; // FIXME: this is the separator line height...
