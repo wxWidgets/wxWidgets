@@ -110,6 +110,7 @@ wxWindowDC::wxWindowDC( wxWindow *window )
     m_cmap = (GdkColormap *) NULL;
     m_owner = (wxWindow *)NULL;
     m_isMemDC = FALSE;
+    m_font = window->GetFont();
   
     wxASSERT_MSG( window, _T("DC needs a window") );
     
