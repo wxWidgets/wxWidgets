@@ -76,8 +76,7 @@ class TestPanel(wxPanel):
                                               wxNO_BORDER )
         valueWindow = TestValueWindow(splitter, -1, style=wxNO_BORDER)
 
-        splitter.SplitVertically(tree, valueWindow)
-        splitter.SetSashPosition(150)
+        splitter.SplitVertically(tree, valueWindow, 150)
         scroller.SetTargetWindow(tree)
         scroller.EnableScrolling(FALSE, FALSE)
 
