@@ -162,6 +162,8 @@
     #elif defined(__VISAGECPP__)
         #if __IBMCPP__ < 400
             typedef unsigned long bool;
+            #define true ((bool)1)
+            #define false ((bool)0)
         #endif
         #define HAVE_BOOL
     #endif // compilers
@@ -321,7 +323,7 @@ typedef int wxWindowID;
         #define WXEXPORT _Export
         #define WXIMPORT _Export
     #endif
-#elif defined(__WXMAC__)    
+#elif defined(__WXMAC__)
     #ifdef __MWERKS__
         #define WXEXPORT __declspec(export)
         #define WXIMPORT __declspec(import)
