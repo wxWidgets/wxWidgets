@@ -39,19 +39,14 @@ class WXDLLEXPORT wxWindowMac: public wxWindowBase
     
 public:
     
-    wxWindowMac()
-    { Init(); }
+    wxWindowMac() ;
 
     wxWindowMac(wxWindowMac *parent,
                 wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxPanelNameStr)
-    {
-        Init();
-        Create(parent, id, pos, size, style, name);
-    }
+                const wxString& name = wxPanelNameStr) ;
 
     virtual ~wxWindowMac();
 
