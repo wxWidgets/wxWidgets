@@ -1532,6 +1532,11 @@ wxString wxTextCtrl::GetLineText(long lineNo) const
 
 void wxTextCtrl::SetMaxLength(unsigned long len)
 {
+#if wxUSE_RICHEDIT
+    if (IsRich())
+        ::SendMessage(GetHwnd(), EM_EXLIMITTEXT, 0, (LPARAM) (DWORD) len);
+    else
+#endif
     ::SendMessage(GetHwnd(), EM_LIMITTEXT, len, 0);
 }
 
@@ -1551,6 +1556,11 @@ void wxTextCtrl::Redo()
 {
     if (CanRedo())
     {
+#if wxUSE_RICHEDIT
+        if (GetRichVersion() > 1)
+            ::SendMessage(GetHwnd(), EM_REDO, 0, 0);
+        else
+#endif
         // Same as Undo, since Undo undoes the undo, i.e. a redo.
         ::SendMessage(GetHwnd(), EM_UNDO, 0, 0);
     }
@@ -1563,6 +1573,11 @@ bool wxTextCtrl::CanUndo() const
 
 bool wxTextCtrl::CanRedo() const
 {
+#if wxUSE_RICHEDIT
+    if (GetRichVersion() > 1)
+        return ::SendMessage(GetHwnd(), EM_CANREDO, 0, 0) != 0;
+    else
+#endif
     return ::SendMessage(GetHwnd(), EM_CANUNDO, 0, 0) != 0;
 }
 

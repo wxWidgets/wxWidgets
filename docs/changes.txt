@@ -257,6 +257,7 @@ wxMSW:
 - support for alpha channel in toolbar bitmaps (Jurgen Doornik)
 - wxFileDialog can now be moved and centered (Randall Fox)
 - restored (and improved) possibility to use wx with MFC broken in 2.5.2
+- fixed wxTextCtrl::SetMaxLength for rich edit controls
 
 wxUniv/X11:
 
@@ -265,6 +266,7 @@ wxUniv/X11:
 wxWinCE:
 
 - added automatized but customizable handling of native SmartPhone menus
+- fixed wxRadioBox and wxStaticBox
 
 wxHTML:
 
