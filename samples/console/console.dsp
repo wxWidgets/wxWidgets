@@ -45,9 +45,9 @@ RSC=rc.exe
 # PROP Intermediate_Dir "BaseReleaseUnicodeDll"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W4 /O2 /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /YX /FD /c
-# ADD CPP /nologo /W4 /O2 /I "..\..\include" /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D WIN32 /D WINVER=0x400 /D _MT /D wxUSE_GUI=0 /YX /FD /c /MD  /D WXUSINGDLL  /D _UNICODE /D UNICODE  /I..\..\lib\basedllu 
-# ADD BASE RSC /l 0x409 /d "NDEBUG" /I "..\..\include"
-# ADD RSC /l 0x409 /d "NDEBUG" /I "..\..\include"
+# ADD CPP /nologo /W4 /O2 /I "../../include" /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D WIN32 /D WINVER=0x400 /D _MT /D wxUSE_GUI=0 /YX /FD /c /MD  /D WXUSINGDLL  /D _UNICODE /D UNICODE  /I..\..\lib\basedllu 
+# ADD BASE RSC /l 0x409 /d "NDEBUG" /I "../../include"
+# ADD RSC /l 0x409 /d "NDEBUG" /I "../../include"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -68,9 +68,9 @@ LINK32=link.exe
 # PROP Intermediate_Dir "BaseDebugUnicodeDll"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W4 /Zi /Od /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /YX /FD /c
-# ADD CPP /nologo /W4 /Zi /Od /I "..\..\include" /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D WIN32 /D WINVER=0x400 /D _MT /D wxUSE_GUI=0 /YX /FD /c /MDd /D "__WXDEBUG__" /D "WXDEBUG=1"  /D WXUSINGDLL  /D _UNICODE /D UNICODE  /I..\..\lib\basedllud 
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /I "..\..\include"
-# ADD RSC /l 0x409 /d "_DEBUG" /I "..\..\include"
+# ADD CPP /nologo /W4 /Zi /Od /I "../../include" /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D WIN32 /D WINVER=0x400 /D _MT /D wxUSE_GUI=0 /YX /FD /c /MDd /D "__WXDEBUG__" /D "WXDEBUG=1"  /D WXUSINGDLL  /D _UNICODE /D UNICODE  /I..\..\lib\basedllud 
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /I "../../include"
+# ADD RSC /l 0x409 /d "_DEBUG" /I "../../include"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -91,9 +91,9 @@ LINK32=link.exe
 # PROP Intermediate_Dir "BaseReleaseUnicode"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W4 /O2 /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /YX /FD /c
-# ADD CPP /nologo /W4 /O2 /I "..\..\include" /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D WIN32 /D WINVER=0x400 /D _MT /D wxUSE_GUI=0 /YX /FD /c /MD  /D _UNICODE /D UNICODE  /I..\..\lib\baseu 
-# ADD BASE RSC /l 0x409 /d "NDEBUG" /I "..\..\include"
-# ADD RSC /l 0x409 /d "NDEBUG" /I "..\..\include"
+# ADD CPP /nologo /W4 /O2 /I "../../include" /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D WIN32 /D WINVER=0x400 /D _MT /D wxUSE_GUI=0 /YX /FD /c /MD  /D _UNICODE /D UNICODE  /I..\..\lib\baseu 
+# ADD BASE RSC /l 0x409 /d "NDEBUG" /I "../../include"
+# ADD RSC /l 0x409 /d "NDEBUG" /I "../../include"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -114,9 +114,9 @@ LINK32=link.exe
 # PROP Intermediate_Dir "BaseDebugUnicode"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W4 /Zi /Od /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /YX /FD /c
-# ADD CPP /nologo /W4 /Zi /Od /I "..\..\include" /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D WIN32 /D WINVER=0x400 /D _MT /D wxUSE_GUI=0 /YX /FD /c /MDd /D "__WXDEBUG__" /D "WXDEBUG=1"  /D _UNICODE /D UNICODE  /I..\..\lib\baseud 
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /I "..\..\include"
-# ADD RSC /l 0x409 /d "_DEBUG" /I "..\..\include"
+# ADD CPP /nologo /W4 /Zi /Od /I "../../include" /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D WIN32 /D WINVER=0x400 /D _MT /D wxUSE_GUI=0 /YX /FD /c /MDd /D "__WXDEBUG__" /D "WXDEBUG=1"  /D _UNICODE /D UNICODE  /I..\..\lib\baseud 
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /I "../../include"
+# ADD RSC /l 0x409 /d "_DEBUG" /I "../../include"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -137,9 +137,9 @@ LINK32=link.exe
 # PROP Intermediate_Dir "BaseReleaseDll"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W4 /O2 /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /YX /FD /c
-# ADD CPP /nologo /W4 /O2 /I "..\..\include" /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D WIN32 /D WINVER=0x400 /D _MT /D wxUSE_GUI=0 /YX /FD /c /MD  /D WXUSINGDLL  /I..\..\lib\basedll 
-# ADD BASE RSC /l 0x409 /d "NDEBUG" /I "..\..\include"
-# ADD RSC /l 0x409 /d "NDEBUG" /I "..\..\include"
+# ADD CPP /nologo /W4 /O2 /I "../../include" /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D WIN32 /D WINVER=0x400 /D _MT /D wxUSE_GUI=0 /YX /FD /c /MD  /D WXUSINGDLL  /I..\..\lib\basedll 
+# ADD BASE RSC /l 0x409 /d "NDEBUG" /I "../../include"
+# ADD RSC /l 0x409 /d "NDEBUG" /I "../../include"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -160,9 +160,9 @@ LINK32=link.exe
 # PROP Intermediate_Dir "BaseDebugDll"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W4 /Zi /Od /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /YX /FD /c
-# ADD CPP /nologo /W4 /Zi /Od /I "..\..\include" /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D WIN32 /D WINVER=0x400 /D _MT /D wxUSE_GUI=0 /YX /FD /c /MDd /D "__WXDEBUG__" /D "WXDEBUG=1"  /D WXUSINGDLL  /I..\..\lib\basedlld 
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /I "..\..\include"
-# ADD RSC /l 0x409 /d "_DEBUG" /I "..\..\include"
+# ADD CPP /nologo /W4 /Zi /Od /I "../../include" /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D WIN32 /D WINVER=0x400 /D _MT /D wxUSE_GUI=0 /YX /FD /c /MDd /D "__WXDEBUG__" /D "WXDEBUG=1"  /D WXUSINGDLL  /I..\..\lib\basedlld 
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /I "../../include"
+# ADD RSC /l 0x409 /d "_DEBUG" /I "../../include"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -183,9 +183,9 @@ LINK32=link.exe
 # PROP Intermediate_Dir "BaseRelease"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W4 /O2 /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /YX /FD /c
-# ADD CPP /nologo /W4 /O2 /I "..\..\include" /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D WIN32 /D WINVER=0x400 /D _MT /D wxUSE_GUI=0 /YX /FD /c /MD  /I..\..\lib\base 
-# ADD BASE RSC /l 0x409 /d "NDEBUG" /I "..\..\include"
-# ADD RSC /l 0x409 /d "NDEBUG" /I "..\..\include"
+# ADD CPP /nologo /W4 /O2 /I "../../include" /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D WIN32 /D WINVER=0x400 /D _MT /D wxUSE_GUI=0 /YX /FD /c /MD  /I..\..\lib\base 
+# ADD BASE RSC /l 0x409 /d "NDEBUG" /I "../../include"
+# ADD RSC /l 0x409 /d "NDEBUG" /I "../../include"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -206,9 +206,9 @@ LINK32=link.exe
 # PROP Intermediate_Dir "BaseDebug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W4 /Zi /Od /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /YX /FD /c
-# ADD CPP /nologo /W4 /Zi /Od /I "..\..\include" /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D WIN32 /D WINVER=0x400 /D _MT /D wxUSE_GUI=0 /YX /FD /c /MDd /D "__WXDEBUG__" /D "WXDEBUG=1"  /I..\..\lib\based 
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /I "..\..\include"
-# ADD RSC /l 0x409 /d "_DEBUG" /I "..\..\include"
+# ADD CPP /nologo /W4 /Zi /Od /I "../../include" /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D WIN32 /D WINVER=0x400 /D _MT /D wxUSE_GUI=0 /YX /FD /c /MDd /D "__WXDEBUG__" /D "WXDEBUG=1"  /I..\..\lib\based 
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /I "../../include"
+# ADD RSC /l 0x409 /d "_DEBUG" /I "../../include"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
