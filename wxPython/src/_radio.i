@@ -88,7 +88,7 @@ public:
     }
 #endif
 
-    bool IsValid(int n) const;
+//    bool IsValid(int n) const;  ** not public
         
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
