@@ -9,16 +9,18 @@
                    template_append="wx_append_base">
         <sources>
             test.cpp
-            mbconv/main.cpp
-            formatconverter/formatconverter.cpp
-            regex/regex.cpp
-            regex/wxregex.cpp
+            arrays/arrays.cpp
+            datetime/datetime.cpp
             fileconf/fileconf.cpp
             filename/filename.cpp
             filesys/filesys.cpp
-            arrays/arrays.cpp
+            fontmap/fontmap.cpp
+            formatconverter/formatconverter.cpp
             hashes/hashes.cpp
             longlong/longlong.cpp
+            mbconv/main.cpp
+            regex/regex.cpp
+            regex/wxregex.cpp
             strings/strings.cpp
             strings/stdstrings.cpp
             strings/unicode.cpp
@@ -29,8 +31,7 @@
             streams/memstream.cpp
             streams/sstream.cpp
             streams/zlibstream.cpp
-            fontmap/fontmap.cpp
-            datetime/datetime.cpp
+			uris/uris.cpp
         </sources>
         <wx-lib>base</wx-lib>
     </exe>

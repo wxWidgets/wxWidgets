@@ -55,6 +55,13 @@ WXDLLFLAG =
 !ifeq SHARED 1
 WXDLLFLAG = dll
 !endif
+EXTRALIBS_FOR_BASE =
+!ifeq MONOLITHIC 0
+EXTRALIBS_FOR_BASE = 
+!endif
+!ifeq MONOLITHIC 1
+EXTRALIBS_FOR_BASE =  
+!endif
 __tex2rtf_gui___depname =
 !ifeq USE_GUI 1
 __tex2rtf_gui___depname = $(OBJS)\tex2rtf_gui.exe
@@ -184,8 +191,8 @@ SETUPHDIR = &
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 TEX2RTF_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
 	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
-	-i=.\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -dNO_GUI &
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	-i=.\..\..\..\include -i=$(SETUPHDIR) -wcd=549 -wcd=656 -wcd=657 -i=. &
+	$(__DLLFLAG_p) -dNO_GUI $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 TEX2RTF_OBJECTS =  &
 	$(OBJS)\tex2rtf_tex2rtf.obj &
 	$(OBJS)\tex2rtf_tex2any.obj &
@@ -197,8 +204,9 @@ TEX2RTF_OBJECTS =  &
 	$(OBJS)\tex2rtf_table.obj
 TEX2RTF_GUI_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
 	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
-	-i=.\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) &
-	-i=.\..\..\..\samples -dNOPCH $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	-i=.\..\..\..\include -i=$(SETUPHDIR) -wcd=549 -wcd=656 -wcd=657 -i=. &
+	$(__DLLFLAG_p) -i=.\..\..\..\samples -dNOPCH $(__EXCEPTIONSFLAG) $(CPPFLAGS) &
+	$(CXXFLAGS)
 TEX2RTF_GUI_OBJECTS =  &
 	$(OBJS)\tex2rtf_gui_tex2rtf.obj &
 	$(OBJS)\tex2rtf_gui_tex2any.obj &
@@ -233,7 +241,7 @@ $(OBJS)\tex2rtf.exe :  $(TEX2RTF_OBJECTS)
 	@%append $(OBJS)\tex2rtf.lbc option caseexact
 	@%append $(OBJS)\tex2rtf.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt ref 'main_'
 	@for %i in ($(TEX2RTF_OBJECTS)) do @%append $(OBJS)\tex2rtf.lbc file %i
-	@for %i in ( $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\tex2rtf.lbc library %i
+	@for %i in ( $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\tex2rtf.lbc library %i
 	@%append $(OBJS)\tex2rtf.lbc
 	wlink @$(OBJS)\tex2rtf.lbc
 
@@ -245,7 +253,7 @@ $(OBJS)\tex2rtf_gui.exe :  $(TEX2RTF_GUI_OBJECTS) $(OBJS)\tex2rtf_gui_sample.res
 	@%append $(OBJS)\tex2rtf_gui.lbc option caseexact
 	@%append $(OBJS)\tex2rtf_gui.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(TEX2RTF_GUI_OBJECTS)) do @%append $(OBJS)\tex2rtf_gui.lbc file %i
-	@for %i in ( $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib ) do @%append $(OBJS)\tex2rtf_gui.lbc library %i
+	@for %i in ( $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib ) do @%append $(OBJS)\tex2rtf_gui.lbc library %i
 	@%append $(OBJS)\tex2rtf_gui.lbc option resource=$(OBJS)\tex2rtf_gui_sample.res
 	wlink @$(OBJS)\tex2rtf_gui.lbc
 !endif

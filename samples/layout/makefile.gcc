@@ -54,6 +54,12 @@ endif
 ifeq ($(SHARED),1)
 WXDLLFLAG = dll
 endif
+ifeq ($(MONOLITHIC),0)
+EXTRALIBS_FOR_BASE = 
+endif
+ifeq ($(MONOLITHIC),1)
+EXTRALIBS_FOR_BASE =  
+endif
 ifeq ($(BUILD),debug)
 __OPTIMIZEFLAG_2 = -O0
 endif
@@ -167,7 +173,7 @@ clean:
 	-if exist $(OBJS)\layout.exe del $(OBJS)\layout.exe
 
 $(OBJS)\layout.exe: $(LAYOUT_OBJECTS) $(OBJS)\layout_layout_rc.o
-	$(CXX) -o $@ $(LAYOUT_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
+	$(CXX) -o $@ $(LAYOUT_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
 
 $(OBJS)\layout_layout.o: ./layout.cpp
 	$(CXX) -c -o $@ $(LAYOUT_CXXFLAGS) $<

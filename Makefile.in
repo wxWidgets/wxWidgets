@@ -303,6 +303,7 @@ ALL_BASE_HEADERS =  \
 	wx/tokenzr.h \
 	wx/txtstrm.h \
 	wx/types.h \
+	wx/uri.h \
 	wx/utils.h \
 	wx/variant.h \
 	wx/vector.h \
@@ -385,6 +386,7 @@ ALL_BASE_SOURCES =  \
 	src/common/tokenzr.cpp \
 	src/common/txtstrm.cpp \
 	src/common/unzip.c \
+	src/common/uri.cpp \
 	src/common/variant.cpp \
 	src/common/wfstream.cpp \
 	src/common/wxchar.cpp \
@@ -506,6 +508,7 @@ MONODLL_OBJECTS =  \
 	monodll_tokenzr.o \
 	monodll_txtstrm.o \
 	monodll_unzip.o \
+	monodll_uri.o \
 	monodll_variant.o \
 	monodll_wfstream.o \
 	monodll_wxchar.o \
@@ -592,6 +595,7 @@ MONOLIB_OBJECTS =  \
 	monolib_tokenzr.o \
 	monolib_txtstrm.o \
 	monolib_unzip.o \
+	monolib_uri.o \
 	monolib_variant.o \
 	monolib_wfstream.o \
 	monolib_wxchar.o \
@@ -679,6 +683,7 @@ BASEDLL_OBJECTS =  \
 	basedll_tokenzr.o \
 	basedll_txtstrm.o \
 	basedll_unzip.o \
+	basedll_uri.o \
 	basedll_variant.o \
 	basedll_wfstream.o \
 	basedll_wxchar.o \
@@ -750,6 +755,7 @@ BASELIB_OBJECTS =  \
 	baselib_tokenzr.o \
 	baselib_txtstrm.o \
 	baselib_unzip.o \
+	baselib_uri.o \
 	baselib_variant.o \
 	baselib_wfstream.o \
 	baselib_wxchar.o \
@@ -2023,12 +2029,8 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/wince/resources.h
 @COND_TOOLKIT_WINCE@GUI_HDR = $(COND_TOOLKIT_WINCE_GUI_HDR)
 @COND_TOOLKIT_COCOA@ADVANCED_PLATFORM_HDR = include/wx/cocoa/taskbar.h
-COND_TOOLKIT_GTK_ADVANCED_PLATFORM_HDR =  \
-	src/gtk/eggtrayicon.h \
-	wx/unix/joystick.h \
-	wx/unix/sound.h \
-	wx/unix/taskbarx11.h
-@COND_TOOLKIT_GTK@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_GTK_ADVANCED_PLATFORM_HDR)
+@COND_TOOLKIT_GTK@ADVANCED_PLATFORM_HDR = \
+@COND_TOOLKIT_GTK@	wx/unix/joystick.h wx/unix/sound.h wx/unix/taskbarx11.h
 COND_TOOLKIT_MAC_ADVANCED_PLATFORM_HDR =  \
 	wx/mac/carbon/drawer.h \
 	wx/mac/carbon/joystick.h \
@@ -8539,6 +8541,9 @@ monodll_txtstrm.o: $(srcdir)/src/common/txtstrm.cpp $(MONODLL_ODEP)
 monodll_unzip.o: $(srcdir)/src/common/unzip.c $(MONODLL_ODEP)
 	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
 
+monodll_uri.o: $(srcdir)/src/common/uri.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 monodll_variant.o: $(srcdir)/src/common/variant.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -11739,6 +11744,9 @@ monolib_txtstrm.o: $(srcdir)/src/common/txtstrm.cpp $(MONOLIB_ODEP)
 
 monolib_unzip.o: $(srcdir)/src/common/unzip.c $(MONOLIB_ODEP)
 	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
+
+monolib_uri.o: $(srcdir)/src/common/uri.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_variant.o: $(srcdir)/src/common/variant.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -14941,6 +14949,9 @@ basedll_txtstrm.o: $(srcdir)/src/common/txtstrm.cpp $(BASEDLL_ODEP)
 basedll_unzip.o: $(srcdir)/src/common/unzip.c $(BASEDLL_ODEP)
 	$(CCC) -c -o $@ $(BASEDLL_CFLAGS) $<
 
+basedll_uri.o: $(srcdir)/src/common/uri.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+
 basedll_variant.o: $(srcdir)/src/common/variant.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
@@ -15315,6 +15326,9 @@ baselib_txtstrm.o: $(srcdir)/src/common/txtstrm.cpp $(BASELIB_ODEP)
 
 baselib_unzip.o: $(srcdir)/src/common/unzip.c $(BASELIB_ODEP)
 	$(CCC) -c -o $@ $(BASELIB_CFLAGS) $<
+
+baselib_uri.o: $(srcdir)/src/common/uri.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 baselib_variant.o: $(srcdir)/src/common/variant.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<

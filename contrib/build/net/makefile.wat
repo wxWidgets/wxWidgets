@@ -62,6 +62,13 @@ WXDLLFLAG =
 !ifeq SHARED 1
 WXDLLFLAG = dll
 !endif
+EXTRALIBS_FOR_BASE =
+!ifeq MONOLITHIC 0
+EXTRALIBS_FOR_BASE = 
+!endif
+!ifeq MONOLITHIC 1
+EXTRALIBS_FOR_BASE =  
+!endif
 __netutilsdll___depname =
 !ifeq SHARED 1
 __netutilsdll___depname = &
@@ -190,9 +197,9 @@ SETUPHDIR = &
 NETUTILSDLL_CXXFLAGS = -bd $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\..\src\net\..\..\..\include -i=$(SETUPHDIR) &
-	-i=..\..\src\net\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_NETUTILS &
-	/fh=$(OBJS)\wxprec_netutilsdll.pch $(__EXCEPTIONSFLAG) $(CPPFLAGS) &
-	$(CXXFLAGS)
+	-wcd=549 -wcd=656 -wcd=657 -i=..\..\src\net\..\..\include -dWXUSINGDLL &
+	-dWXMAKINGDLL_NETUTILS /fh=$(OBJS)\wxprec_netutilsdll.pch &
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 NETUTILSDLL_OBJECTS =  &
 	$(OBJS)\netutilsdll_dummy.obj &
 	$(OBJS)\netutilsdll_email.obj &
@@ -200,7 +207,7 @@ NETUTILSDLL_OBJECTS =  &
 	$(OBJS)\netutilsdll_web.obj
 NETUTILSLIB_CXXFLAGS = $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
 	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
-	-i=..\..\src\net\..\..\..\include -i=$(SETUPHDIR) &
+	-i=..\..\src\net\..\..\..\include -i=$(SETUPHDIR) -wcd=549 -wcd=656 -wcd=657 &
 	-i=..\..\src\net\..\..\include /fh=$(OBJS)\wxprec_netutilslib.pch &
 	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 NETUTILSLIB_OBJECTS =  &
@@ -235,7 +242,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXD
 	@%append $(OBJS)\netutilsdll.lbc option caseexact
 	@%append $(OBJS)\netutilsdll.lbc $(LDFLAGS) $(__DEBUGINFO_2)  libpath $(LIBDIRNAME)
 	@for %i in ($(NETUTILSDLL_OBJECTS)) do @%append $(OBJS)\netutilsdll.lbc file %i
-	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p) ) do @%append $(OBJS)\netutilsdll.lbc library %i
+	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p) ) do @%append $(OBJS)\netutilsdll.lbc library %i
 	@%append $(OBJS)\netutilsdll.lbc
 	@%append $(OBJS)\netutilsdll.lbc system nt_dll
 	wlink @$(OBJS)\netutilsdll.lbc

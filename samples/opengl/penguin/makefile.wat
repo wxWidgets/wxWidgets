@@ -55,6 +55,17 @@ WXDLLFLAG =
 !ifeq SHARED 1
 WXDLLFLAG = dll
 !endif
+EXTRALIBS_FOR_BASE =
+!ifeq MONOLITHIC 0
+EXTRALIBS_FOR_BASE = 
+!endif
+!ifeq MONOLITHIC 1
+EXTRALIBS_FOR_BASE =  
+!endif
+__penguin___depname =
+!ifeq USE_OPENGL 1
+__penguin___depname = $(OBJS)\penguin.exe
+!endif
 __DEBUGINFO_0 =
 !ifeq BUILD debug
 !ifeq DEBUG_INFO default
@@ -175,12 +186,13 @@ SETUPHDIR = &
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 PENGUIN_CFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm $(__RUNTIME_LIBS_5) &
 	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
-	-i=.\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) &
-	-i=.\..\..\..\samples -dNOPCH $(CPPFLAGS) $(CFLAGS)
+	-i=.\..\..\..\include -i=$(SETUPHDIR) -wcd=549 -wcd=656 -wcd=657 -i=. &
+	$(__DLLFLAG_p) -i=.\..\..\..\samples -dNOPCH $(CPPFLAGS) $(CFLAGS)
 PENGUIN_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm $(__RUNTIME_LIBS_5) &
 	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
-	-i=.\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) &
-	-i=.\..\..\..\samples -dNOPCH $(__EXCEPTIONSFLAG_7) $(CPPFLAGS) $(CXXFLAGS)
+	-i=.\..\..\..\include -i=$(SETUPHDIR) -wcd=549 -wcd=656 -wcd=657 -i=. &
+	$(__DLLFLAG_p) -i=.\..\..\..\samples -dNOPCH $(__EXCEPTIONSFLAG_7) &
+	$(CPPFLAGS) $(CXXFLAGS)
 PENGUIN_OBJECTS =  &
 	$(OBJS)\penguin_penguin.obj &
 	$(OBJS)\penguin_lw.obj &
@@ -193,7 +205,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\penguin.exe data
+all : .SYMBOLIC $(__penguin___depname) data
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -202,6 +214,7 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\penguin.exe del $(OBJS)\penguin.exe
 
+!ifeq USE_OPENGL 1
 $(OBJS)\penguin.exe :  $(PENGUIN_OBJECTS) $(OBJS)\penguin_penguin.res
 	@%create $(OBJS)\penguin.lbc
 	@%append $(OBJS)\penguin.lbc option quiet
@@ -209,9 +222,10 @@ $(OBJS)\penguin.exe :  $(PENGUIN_OBJECTS) $(OBJS)\penguin_penguin.res
 	@%append $(OBJS)\penguin.lbc option caseexact
 	@%append $(OBJS)\penguin.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(PENGUIN_OBJECTS)) do @%append $(OBJS)\penguin.lbc file %i
-	@for %i in ( wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl.lib opengl32.lib glu32.lib $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib ) do @%append $(OBJS)\penguin.lbc library %i
+	@for %i in ( wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl.lib opengl32.lib glu32.lib $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib ) do @%append $(OBJS)\penguin.lbc library %i
 	@%append $(OBJS)\penguin.lbc option resource=$(OBJS)\penguin_penguin.res
 	wlink @$(OBJS)\penguin.lbc
+!endif
 
 data : .SYMBOLIC 
 	if not exist $(OBJS) mkdir $(OBJS)

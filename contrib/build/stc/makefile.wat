@@ -62,6 +62,13 @@ WXDLLFLAG =
 !ifeq SHARED 1
 WXDLLFLAG = dll
 !endif
+EXTRALIBS_FOR_BASE =
+!ifeq MONOLITHIC 0
+EXTRALIBS_FOR_BASE = 
+!endif
+!ifeq MONOLITHIC 1
+EXTRALIBS_FOR_BASE =  
+!endif
 __stcdll___depname =
 !ifeq SHARED 1
 __stcdll___depname = &
@@ -189,7 +196,7 @@ SETUPHDIR = &
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 STCDLL_CXXFLAGS = -bd $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
 	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
-	-i=..\..\src\stc\..\..\..\include -i=$(SETUPHDIR) &
+	-i=..\..\src\stc\..\..\..\include -i=$(SETUPHDIR) -wcd=549 -wcd=656 -wcd=657 &
 	-i=..\..\src\stc\..\..\include -i=..\..\src\stc\scintilla\include &
 	-i=..\..\src\stc\scintilla\src -d__WX__ -dSCI_LEXER -dLINK_LEXERS &
 	-dWXUSINGDLL -dWXMAKINGDLL_STC $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
@@ -265,7 +272,7 @@ STCDLL_OBJECTS =  &
 	$(OBJS)\stcdll_XPM.obj
 STCLIB_CXXFLAGS = $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
 	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
-	-i=..\..\src\stc\..\..\..\include -i=$(SETUPHDIR) &
+	-i=..\..\src\stc\..\..\..\include -i=$(SETUPHDIR) -wcd=549 -wcd=656 -wcd=657 &
 	-i=..\..\src\stc\..\..\include -i=..\..\src\stc\scintilla\include &
 	-i=..\..\src\stc\scintilla\src -d__WX__ -dSCI_LEXER -dLINK_LEXERS &
 	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
@@ -366,7 +373,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXD
 	@%append $(OBJS)\stcdll.lbc option caseexact
 	@%append $(OBJS)\stcdll.lbc $(LDFLAGS) $(__DEBUGINFO_2)  libpath $(LIBDIRNAME)
 	@for %i in ($(STCDLL_OBJECTS)) do @%append $(OBJS)\stcdll.lbc file %i
-	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p) ) do @%append $(OBJS)\stcdll.lbc library %i
+	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p) ) do @%append $(OBJS)\stcdll.lbc library %i
 	@%append $(OBJS)\stcdll.lbc
 	@%append $(OBJS)\stcdll.lbc system nt_dll
 	wlink @$(OBJS)\stcdll.lbc

@@ -62,6 +62,13 @@ WXDLLFLAG =
 !ifeq SHARED 1
 WXDLLFLAG = dll
 !endif
+EXTRALIBS_FOR_BASE =
+!ifeq MONOLITHIC 0
+EXTRALIBS_FOR_BASE = 
+!endif
+!ifeq MONOLITHIC 1
+EXTRALIBS_FOR_BASE =  
+!endif
 __plotdll___depname =
 !ifeq SHARED 1
 __plotdll___depname = &
@@ -189,16 +196,16 @@ SETUPHDIR = &
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 PLOTDLL_CXXFLAGS = -bd $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
 	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
-	-i=..\..\src\plot\..\..\..\include -i=$(SETUPHDIR) &
-	-i=..\..\src\plot\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_PLOT &
+	-i=..\..\src\plot\..\..\..\include -i=$(SETUPHDIR) -wcd=549 -wcd=656 &
+	-wcd=657 -i=..\..\src\plot\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_PLOT &
 	/fh=$(OBJS)\wxprec_plotdll.pch $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 PLOTDLL_OBJECTS =  &
 	$(OBJS)\plotdll_dummy.obj &
 	$(OBJS)\plotdll_plot.obj
 PLOTLIB_CXXFLAGS = $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
 	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
-	-i=..\..\src\plot\..\..\..\include -i=$(SETUPHDIR) &
-	-i=..\..\src\plot\..\..\include /fh=$(OBJS)\wxprec_plotlib.pch &
+	-i=..\..\src\plot\..\..\..\include -i=$(SETUPHDIR) -wcd=549 -wcd=656 &
+	-wcd=657 -i=..\..\src\plot\..\..\include /fh=$(OBJS)\wxprec_plotlib.pch &
 	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 PLOTLIB_OBJECTS =  &
 	$(OBJS)\plotlib_dummy.obj &
@@ -230,7 +237,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXD
 	@%append $(OBJS)\plotdll.lbc option caseexact
 	@%append $(OBJS)\plotdll.lbc $(LDFLAGS) $(__DEBUGINFO_2)  libpath $(LIBDIRNAME)
 	@for %i in ($(PLOTDLL_OBJECTS)) do @%append $(OBJS)\plotdll.lbc file %i
-	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p) ) do @%append $(OBJS)\plotdll.lbc library %i
+	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p) ) do @%append $(OBJS)\plotdll.lbc library %i
 	@%append $(OBJS)\plotdll.lbc
 	@%append $(OBJS)\plotdll.lbc system nt_dll
 	wlink @$(OBJS)\plotdll.lbc

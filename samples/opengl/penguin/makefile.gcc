@@ -60,6 +60,15 @@ endif
 ifeq ($(SHARED),1)
 WXDLLFLAG = dll
 endif
+ifeq ($(MONOLITHIC),0)
+EXTRALIBS_FOR_BASE = 
+endif
+ifeq ($(MONOLITHIC),1)
+EXTRALIBS_FOR_BASE =  
+endif
+ifeq ($(USE_OPENGL),1)
+__penguin___depname = $(OBJS)\penguin.exe
+endif
 ifeq ($(BUILD),debug)
 __OPTIMIZEFLAG_2 = -O0
 endif
@@ -166,14 +175,16 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\penguin.exe data
+all: $(__penguin___depname) data
 
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
 	-if exist $(OBJS)\penguin.exe del $(OBJS)\penguin.exe
 
+ifeq ($(USE_OPENGL),1)
 $(OBJS)\penguin.exe: $(PENGUIN_OBJECTS) $(OBJS)\penguin_penguin_rc.o
-	$(CXX) -o $@ $(PENGUIN_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows  -lwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl -lopengl32 -lglu32 $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
+	$(CXX) -o $@ $(PENGUIN_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows  -lwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl -lopengl32 -lglu32 $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
+endif
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)

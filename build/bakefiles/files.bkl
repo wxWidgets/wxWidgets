@@ -178,6 +178,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/tokenzr.cpp
     src/common/txtstrm.cpp
     src/common/unzip.c
+    src/common/uri.cpp
     src/common/variant.cpp
     src/common/wfstream.cpp
     src/common/wxchar.cpp
@@ -281,6 +282,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/tokenzr.h
     wx/txtstrm.h
     wx/types.h
+    wx/uri.h
     wx/utils.h
     wx/variant.h
     wx/vector.h

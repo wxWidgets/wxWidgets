@@ -40,16 +40,18 @@ TEST_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir) \
 	$(__DLLFLAG_p) $(CPPUNIT_CFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 TEST_OBJECTS =  \
 	test_test.o \
-	test_main.o \
-	test_formatconverter.o \
-	test_regex.o \
-	test_wxregex.o \
+	test_arrays.o \
+	test_datetime.o \
 	test_fileconf.o \
 	test_filename.o \
 	test_filesys.o \
-	test_arrays.o \
+	test_fontmap.o \
+	test_formatconverter.o \
 	test_hashes.o \
 	test_longlong.o \
+	test_main.o \
+	test_regex.o \
+	test_wxregex.o \
 	test_strings.o \
 	test_stdstrings.o \
 	test_unicode.o \
@@ -60,8 +62,7 @@ TEST_OBJECTS =  \
 	test_memstream.o \
 	test_sstream.o \
 	test_zlibstream.o \
-	test_fontmap.o \
-	test_datetime.o
+	test_uris.o
 
 ### Conditionally set variables: ###
 
@@ -140,16 +141,10 @@ data:
 test_test.o: $(srcdir)/test.cpp
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
-test_main.o: $(srcdir)/mbconv/main.cpp
+test_arrays.o: $(srcdir)/arrays/arrays.cpp
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
-test_formatconverter.o: $(srcdir)/formatconverter/formatconverter.cpp
-	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
-
-test_regex.o: $(srcdir)/regex/regex.cpp
-	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
-
-test_wxregex.o: $(srcdir)/regex/wxregex.cpp
+test_datetime.o: $(srcdir)/datetime/datetime.cpp
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
 test_fileconf.o: $(srcdir)/fileconf/fileconf.cpp
@@ -161,13 +156,25 @@ test_filename.o: $(srcdir)/filename/filename.cpp
 test_filesys.o: $(srcdir)/filesys/filesys.cpp
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
-test_arrays.o: $(srcdir)/arrays/arrays.cpp
+test_fontmap.o: $(srcdir)/fontmap/fontmap.cpp
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
+
+test_formatconverter.o: $(srcdir)/formatconverter/formatconverter.cpp
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
 test_hashes.o: $(srcdir)/hashes/hashes.cpp
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
 test_longlong.o: $(srcdir)/longlong/longlong.cpp
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
+
+test_main.o: $(srcdir)/mbconv/main.cpp
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
+
+test_regex.o: $(srcdir)/regex/regex.cpp
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
+
+test_wxregex.o: $(srcdir)/regex/wxregex.cpp
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
 test_strings.o: $(srcdir)/strings/strings.cpp
@@ -200,10 +207,7 @@ test_sstream.o: $(srcdir)/streams/sstream.cpp
 test_zlibstream.o: $(srcdir)/streams/zlibstream.cpp
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
-test_fontmap.o: $(srcdir)/fontmap/fontmap.cpp
-	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
-
-test_datetime.o: $(srcdir)/datetime/datetime.cpp
+test_uris.o: $(srcdir)/uris/uris.cpp
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
 

@@ -62,6 +62,13 @@ WXDLLFLAG =
 !ifeq SHARED 1
 WXDLLFLAG = dll
 !endif
+EXTRALIBS_FOR_BASE =
+!ifeq MONOLITHIC 0
+EXTRALIBS_FOR_BASE = 
+!endif
+!ifeq MONOLITHIC 1
+EXTRALIBS_FOR_BASE =  
+!endif
 __gizmosdll___depname =
 !ifeq SHARED 1
 __gizmosdll___depname = &
@@ -190,9 +197,9 @@ SETUPHDIR = &
 GIZMOSDLL_CXXFLAGS = -bd $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\..\src\gizmos\..\..\..\include -i=$(SETUPHDIR) &
-	-i=..\..\src\gizmos\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_GIZMOS &
-	/fh=$(OBJS)\wxprec_gizmosdll.pch $(__EXCEPTIONSFLAG) $(CPPFLAGS) &
-	$(CXXFLAGS)
+	-wcd=549 -wcd=656 -wcd=657 -i=..\..\src\gizmos\..\..\include -dWXUSINGDLL &
+	-dWXMAKINGDLL_GIZMOS /fh=$(OBJS)\wxprec_gizmosdll.pch $(__EXCEPTIONSFLAG) &
+	$(CPPFLAGS) $(CXXFLAGS)
 GIZMOSDLL_OBJECTS =  &
 	$(OBJS)\gizmosdll_dummy.obj &
 	$(OBJS)\gizmosdll_dynamicsash.obj &
@@ -203,9 +210,10 @@ GIZMOSDLL_OBJECTS =  &
 	$(OBJS)\gizmosdll_statpict.obj
 GIZMOSLIB_CXXFLAGS = $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
 	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
-	-i=..\..\src\gizmos\..\..\..\include -i=$(SETUPHDIR) &
-	-i=..\..\src\gizmos\..\..\include /fh=$(OBJS)\wxprec_gizmoslib.pch &
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	-i=..\..\src\gizmos\..\..\..\include -i=$(SETUPHDIR) -wcd=549 -wcd=656 &
+	-wcd=657 -i=..\..\src\gizmos\..\..\include &
+	/fh=$(OBJS)\wxprec_gizmoslib.pch $(__EXCEPTIONSFLAG) $(CPPFLAGS) &
+	$(CXXFLAGS)
 GIZMOSLIB_OBJECTS =  &
 	$(OBJS)\gizmoslib_dummy.obj &
 	$(OBJS)\gizmoslib_dynamicsash.obj &
@@ -241,7 +249,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXD
 	@%append $(OBJS)\gizmosdll.lbc option caseexact
 	@%append $(OBJS)\gizmosdll.lbc $(LDFLAGS) $(__DEBUGINFO_2)  libpath $(LIBDIRNAME)
 	@for %i in ($(GIZMOSDLL_OBJECTS)) do @%append $(OBJS)\gizmosdll.lbc file %i
-	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib  $(__WXLIB_BASE_p)  $(__WXLIB_CORE_p) ) do @%append $(OBJS)\gizmosdll.lbc library %i
+	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib  $(__WXLIB_BASE_p)  $(__WXLIB_CORE_p) ) do @%append $(OBJS)\gizmosdll.lbc library %i
 	@%append $(OBJS)\gizmosdll.lbc
 	@%append $(OBJS)\gizmosdll.lbc system nt_dll
 	wlink @$(OBJS)\gizmosdll.lbc

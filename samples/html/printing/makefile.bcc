@@ -57,6 +57,12 @@ WXUNIVNAME = univ
 !if "$(SHARED)" == "1"
 WXDLLFLAG = dll
 !endif
+!if "$(MONOLITHIC)" == "0"
+EXTRALIBS_FOR_BASE = 
+!endif
+!if "$(MONOLITHIC)" == "1"
+EXTRALIBS_FOR_BASE =  
+!endif
 !if "$(BUILD)" == "debug"
 __OPTIMIZEFLAG_2 = -Od
 !endif
@@ -173,7 +179,7 @@ clean:
 
 $(OBJS)\printing.exe: $(PRINTING_OBJECTS)  $(OBJS)\printing_printing.res
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa @&&|
-	c0w32.obj $(PRINTING_OBJECTS),$@,, $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib  import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,, $(OBJS)\printing_printing.res
+	c0w32.obj $(PRINTING_OBJECTS),$@,, $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib  import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,, $(OBJS)\printing_printing.res
 |
 
 data: 

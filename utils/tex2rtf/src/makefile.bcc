@@ -76,6 +76,12 @@ WXUNIVNAME = univ
 !if "$(SHARED)" == "1"
 WXDLLFLAG = dll
 !endif
+!if "$(MONOLITHIC)" == "0"
+EXTRALIBS_FOR_BASE = 
+!endif
+!if "$(MONOLITHIC)" == "1"
+EXTRALIBS_FOR_BASE =  
+!endif
 !if "$(USE_GUI)" == "1"
 __tex2rtf_gui___depname = $(OBJS)\tex2rtf_gui.exe
 !endif
@@ -201,13 +207,13 @@ clean:
 
 $(OBJS)\tex2rtf.exe: $(TEX2RTF_OBJECTS)
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -ap @&&|
-	c0x32.obj $(TEX2RTF_OBJECTS),$@,, $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib import32.lib cw32mt$(__RUNTIME_LIBS_0).lib,,
+	c0x32.obj $(TEX2RTF_OBJECTS),$@,, $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib import32.lib cw32mt$(__RUNTIME_LIBS_0).lib,,
 |
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\tex2rtf_gui.exe: $(TEX2RTF_GUI_OBJECTS)  $(OBJS)\tex2rtf_gui_sample.res
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa @&&|
-	c0w32.obj $(TEX2RTF_GUI_OBJECTS),$@,, $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib  import32.lib cw32mt$(__RUNTIME_LIBS_0).lib,, $(OBJS)\tex2rtf_gui_sample.res
+	c0w32.obj $(TEX2RTF_GUI_OBJECTS),$@,, $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib  import32.lib cw32mt$(__RUNTIME_LIBS_0).lib,, $(OBJS)\tex2rtf_gui_sample.res
 |
 !endif
 

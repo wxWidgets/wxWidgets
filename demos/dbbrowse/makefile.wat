@@ -55,6 +55,17 @@ WXDLLFLAG =
 !ifeq SHARED 1
 WXDLLFLAG = dll
 !endif
+EXTRALIBS_FOR_BASE =
+!ifeq MONOLITHIC 0
+EXTRALIBS_FOR_BASE = 
+!endif
+!ifeq MONOLITHIC 1
+EXTRALIBS_FOR_BASE =  
+!endif
+__dbbrowse___depname =
+!ifeq USE_ODBC 1
+__dbbrowse___depname = $(OBJS)\dbbrowse.exe
+!endif
 __DEBUGINFO_0 =
 !ifeq BUILD debug
 !ifeq DEBUG_INFO default
@@ -197,8 +208,9 @@ SETUPHDIR = &
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 DBBROWSE_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
 	$(__RUNTIME_LIBS_5) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) &
-	-i=.\..\..\samples -dNOPCH $(__EXCEPTIONSFLAG_7) $(CPPFLAGS) $(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(SETUPHDIR) -wcd=549 -wcd=656 &
+	-wcd=657 -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $(__EXCEPTIONSFLAG_7) &
+	$(CPPFLAGS) $(CXXFLAGS)
 DBBROWSE_OBJECTS =  &
 	$(OBJS)\dbbrowse_dbbrowse.obj &
 	$(OBJS)\dbbrowse_doc.obj &
@@ -216,7 +228,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\dbbrowse.exe data_help_std data_help_png
+all : .SYMBOLIC $(__dbbrowse___depname) data_help_std data_help_png
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -225,6 +237,7 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\dbbrowse.exe del $(OBJS)\dbbrowse.exe
 
+!ifeq USE_ODBC 1
 $(OBJS)\dbbrowse.exe :  $(DBBROWSE_OBJECTS) $(OBJS)\dbbrowse_dbbrowse.res
 	@%create $(OBJS)\dbbrowse.lbc
 	@%append $(OBJS)\dbbrowse.lbc option quiet
@@ -232,9 +245,10 @@ $(OBJS)\dbbrowse.exe :  $(DBBROWSE_OBJECTS) $(OBJS)\dbbrowse_dbbrowse.res
 	@%append $(OBJS)\dbbrowse.lbc option caseexact
 	@%append $(OBJS)\dbbrowse.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(DBBROWSE_OBJECTS)) do @%append $(OBJS)\dbbrowse.lbc file %i
-	@for %i in ( $(__WXLIB_DBGRID_p)  $(__WXLIB_ADV_p)  $(__WXLIB_ODBC_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib ) do @%append $(OBJS)\dbbrowse.lbc library %i
+	@for %i in ( $(__WXLIB_DBGRID_p)  $(__WXLIB_ADV_p)  $(__WXLIB_ODBC_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib ) do @%append $(OBJS)\dbbrowse.lbc library %i
 	@%append $(OBJS)\dbbrowse.lbc option resource=$(OBJS)\dbbrowse_dbbrowse.res
 	wlink @$(OBJS)\dbbrowse.lbc
+!endif
 
 data_help_std : .SYMBOLIC 
 	if not exist $(OBJS)\help.std mkdir $(OBJS)\help.std

@@ -55,6 +55,13 @@ WXDLLFLAG =
 !ifeq SHARED 1
 WXDLLFLAG = dll
 !endif
+EXTRALIBS_FOR_BASE =
+!ifeq MONOLITHIC 0
+EXTRALIBS_FOR_BASE = 
+!endif
+!ifeq MONOLITHIC 1
+EXTRALIBS_FOR_BASE =  
+!endif
 __DEBUGINFO_0 =
 !ifeq BUILD debug
 !ifeq DEBUG_INFO default
@@ -175,8 +182,9 @@ SETUPHDIR = &
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 DOCVIEW_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm $(__RUNTIME_LIBS_5) &
 	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
-	-i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples &
-	-dNOPCH $(__EXCEPTIONSFLAG_7) $(CPPFLAGS) $(CXXFLAGS)
+	-i=.\..\..\include -i=$(SETUPHDIR) -wcd=549 -wcd=656 -wcd=657 -i=. &
+	$(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $(__EXCEPTIONSFLAG_7) $(CPPFLAGS) &
+	$(CXXFLAGS)
 DOCVIEW_OBJECTS =  &
 	$(OBJS)\docview_docview.obj &
 	$(OBJS)\docview_doc.obj &
@@ -205,7 +213,7 @@ $(OBJS)\docview.exe :  $(DOCVIEW_OBJECTS) $(OBJS)\docview_docview.res
 	@%append $(OBJS)\docview.lbc option caseexact
 	@%append $(OBJS)\docview.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(DOCVIEW_OBJECTS)) do @%append $(OBJS)\docview.lbc file %i
-	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib ) do @%append $(OBJS)\docview.lbc library %i
+	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib ) do @%append $(OBJS)\docview.lbc library %i
 	@%append $(OBJS)\docview.lbc option resource=$(OBJS)\docview_docview.res
 	wlink @$(OBJS)\docview.lbc
 

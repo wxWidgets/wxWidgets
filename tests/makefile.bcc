@@ -32,16 +32,18 @@ TEST_CXXFLAGS = $(__RUNTIME_LIBS_6) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__DLLFLAG_p) $(CPPUNIT_CFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 TEST_OBJECTS =  \
 	$(OBJS)\test_test.obj \
-	$(OBJS)\test_main.obj \
-	$(OBJS)\test_formatconverter.obj \
-	$(OBJS)\test_regex.obj \
-	$(OBJS)\test_wxregex.obj \
+	$(OBJS)\test_arrays.obj \
+	$(OBJS)\test_datetime.obj \
 	$(OBJS)\test_fileconf.obj \
 	$(OBJS)\test_filename.obj \
 	$(OBJS)\test_filesys.obj \
-	$(OBJS)\test_arrays.obj \
+	$(OBJS)\test_fontmap.obj \
+	$(OBJS)\test_formatconverter.obj \
 	$(OBJS)\test_hashes.obj \
 	$(OBJS)\test_longlong.obj \
+	$(OBJS)\test_main.obj \
+	$(OBJS)\test_regex.obj \
+	$(OBJS)\test_wxregex.obj \
 	$(OBJS)\test_strings.obj \
 	$(OBJS)\test_stdstrings.obj \
 	$(OBJS)\test_unicode.obj \
@@ -52,8 +54,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_memstream.obj \
 	$(OBJS)\test_sstream.obj \
 	$(OBJS)\test_zlibstream.obj \
-	$(OBJS)\test_fontmap.obj \
-	$(OBJS)\test_datetime.obj
+	$(OBJS)\test_uris.obj
 
 ### Conditionally set variables: ###
 
@@ -77,6 +78,12 @@ WXUNIVNAME = univ
 !endif
 !if "$(SHARED)" == "1"
 WXDLLFLAG = dll
+!endif
+!if "$(MONOLITHIC)" == "0"
+EXTRALIBS_FOR_BASE = 
+!endif
+!if "$(MONOLITHIC)" == "1"
+EXTRALIBS_FOR_BASE =  
 !endif
 !if "$(BUILD)" == "debug"
 __OPTIMIZEFLAG_2 = -Od
@@ -171,7 +178,7 @@ clean:
 
 $(OBJS)\test.exe: $(TEST_OBJECTS)
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -ap $(CPPUNIT_LIBS) @&&|
-	c0x32.obj $(TEST_OBJECTS),$@,, $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,,
+	c0x32.obj $(TEST_OBJECTS),$@,, $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,,
 |
 
 data: 
@@ -181,16 +188,10 @@ data:
 $(OBJS)\test_test.obj: .\test.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
-$(OBJS)\test_main.obj: .\mbconv\main.cpp
+$(OBJS)\test_arrays.obj: .\arrays\arrays.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
-$(OBJS)\test_formatconverter.obj: .\formatconverter\formatconverter.cpp
-	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
-
-$(OBJS)\test_regex.obj: .\regex\regex.cpp
-	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
-
-$(OBJS)\test_wxregex.obj: .\regex\wxregex.cpp
+$(OBJS)\test_datetime.obj: .\datetime\datetime.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_fileconf.obj: .\fileconf\fileconf.cpp
@@ -202,13 +203,25 @@ $(OBJS)\test_filename.obj: .\filename\filename.cpp
 $(OBJS)\test_filesys.obj: .\filesys\filesys.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
-$(OBJS)\test_arrays.obj: .\arrays\arrays.cpp
+$(OBJS)\test_fontmap.obj: .\fontmap\fontmap.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_formatconverter.obj: .\formatconverter\formatconverter.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_hashes.obj: .\hashes\hashes.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_longlong.obj: .\longlong\longlong.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_main.obj: .\mbconv\main.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_regex.obj: .\regex\regex.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_wxregex.obj: .\regex\wxregex.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_strings.obj: .\strings\strings.cpp
@@ -241,8 +254,5 @@ $(OBJS)\test_sstream.obj: .\streams\sstream.cpp
 $(OBJS)\test_zlibstream.obj: .\streams\zlibstream.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
-$(OBJS)\test_fontmap.obj: .\fontmap\fontmap.cpp
-	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
-
-$(OBJS)\test_datetime.obj: .\datetime\datetime.cpp
+$(OBJS)\test_uris.obj: .\uris\uris.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
