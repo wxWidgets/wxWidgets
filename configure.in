@@ -257,7 +257,6 @@ case "${host}" in
     AC_DEFINE(__EMX__)
     PROGRAM_EXT=".exe"
     DEFAULT_DEFAULT_wxUSE_PM=1
-    LIBS="$LIBS -lstdcpp"
   ;;
 
   powerpc-*-darwin* )
@@ -1035,7 +1034,9 @@ dnl Path separator; ':' for unix, ';' for OS/2
 dnl Stem for flex output; lexyy for OS/2, lex.yy otherwise
 case "${host}" in
   *-pc-os2_emx | *-pc-os2-emx )
-    dnl PATH_IFS is autodetected by OS/2's configure (usually ';')
+    PATH_IFS=';'
+dnl Really ought to text for this as meanwhile there are flex versions using
+dnl lex.yy as well due to FAT support being more and more dropped...
     LEX_STEM="lexyy"
   ;;
   *)
@@ -1121,10 +1122,30 @@ else
 fi
 
 dnl ---------------------------------------------------------------------------
+dnl When we are using gcc on OS/2, we want to be either using resources (PM)
+dnl or a more complete POSIX emulation for Motif/GTK+/X11
+dnl ---------------------------------------------------------------------------
+dnl (OS/2-only piece)
+case "${host}" in
+  *-pc-os2_emx | *-pc-os2-emx )
+      dnl Explicitly link -lstdcpp, since we are using "gcc" not "g++"/"c++".
+      LIBS="$LIBS -lstdcpp"
+      if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_GTK" = 1 -o "$wxUSE_X11" = 1; then
+          dnl More complete Unix emulation for unix-like ports
+	  dnl by linking in POSIX/2's cExt (if available).
+          AC_CHECK_LIB(cExt, drand48, LIBS="$LIBS -lcExt")
+      else
+	  dnl Include resources for the "native" port (wxPM).
+          RESPROGRAMOBJ="\${top_srcdir}/include/wx/os2/wx.res"
+      fi
+  ;;
+esac
+dnl (end of OS/2-only piece)
+
+dnl ---------------------------------------------------------------------------
 dnl When we are using Cygwin with Motif/GTK+, we want it to appear like
 dnl 'just' a POSIX platform, so the Win32 API must not be available
 dnl ---------------------------------------------------------------------------
-
 dnl (Windows-only piece)
 wants_win32=0
 doesnt_want_win32=0
