@@ -916,12 +916,10 @@ int wxApp::MainLoop()
         wxMutexGuiLeaveOrEnter();
 #endif // wxUSE_THREADS
 
-        while ( !::PeekMessage(&s_currentMsg, 0, 0, 0, PM_NOREMOVE) &&
-                ProcessIdle() )
-        {
-        }
+        while ( !Pending() && ProcessIdle() )
+            ;
 
-
+        // a message came or no more idle processing to do
         DoMessage();
     }
 
@@ -940,12 +938,13 @@ bool wxApp::ProcessIdle()
 
 void wxApp::ExitMainLoop()
 {
+    // VZ: why not ::PostQuitMessage()?
     m_keepGoing = FALSE;
 }
 
 bool wxApp::Pending()
 {
-    return (::PeekMessage(&s_currentMsg, 0, 0, 0, PM_NOREMOVE) != 0);
+    return ::PeekMessage(&s_currentMsg, 0, 0, 0, PM_NOREMOVE) != 0;
 }
 
 void wxApp::Dispatch()

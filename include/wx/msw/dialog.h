@@ -60,42 +60,37 @@ public:
 
     ~wxDialog();
 
+    // override some base class virtuals
     virtual bool Destroy();
+    virtual bool Show(bool show);
+    virtual void Iconize(bool iconize);
+    virtual bool IsIconized() const;
 
-    virtual void DoSetClientSize(int width, int height);
+    virtual bool IsTopLevel() const { return TRUE; }
 
-    virtual void GetPosition(int *x, int *y) const;
+    void SetModal(bool flag);
+    virtual bool IsModal() const;
 
-    bool Show(bool show);
-    bool IsShown() const;
-    void Iconize(bool iconize);
+    // For now, same as Show(TRUE) but returns return code
+    virtual int ShowModal();
+
+    // may be called to terminate the dialog with the given return code
+    virtual void EndModal(int retCode);
+
+    // returns TRUE if we're in a modal loop
+    bool IsModalShowing() const;
 
 #if WXWIN_COMPATIBILITY
     bool Iconized() const { return IsIconized(); };
 #endif
 
-    virtual bool IsIconized() const;
-    void Fit();
+    // implementation only from now on
+    // -------------------------------
 
-    virtual bool IsTopLevel() const { return TRUE; }
-    
-    void SetTitle(const wxString& title);
-    wxString GetTitle() const ;
-
-    void OnSize(wxSizeEvent& event);
+    // event handlers
     bool OnClose();
     void OnCharHook(wxKeyEvent& event);
-    void OnPaint(wxPaintEvent& event);
     void OnCloseWindow(wxCloseEvent& event);
-
-    void SetModal(bool flag);
-
-    virtual void Centre(int direction = wxBOTH);
-    virtual bool IsModal() const;
-
-    // For now, same as Show(TRUE) but returns return code
-    virtual int ShowModal();
-    virtual void EndModal(int retCode);
 
     // Standard buttons
     void OnOK(wxCommandEvent& event);
@@ -105,30 +100,21 @@ public:
     // Responds to colour changes
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
-    // implementation
-    // --------------
-
+    // Windows callbacks
     long MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
+#if wxUSE_CTL3D
     virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
                                 WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
-
-    bool IsModalShowing() const { return m_modalShowing; }
-
-  // tooltip management
-#if wxUSE_TOOLTIPS
-    WXHWND GetToolTipCtrl() const { return m_hwndToolTip; }
-    void SetToolTipCtrl(WXHWND hwndTT) { m_hwndToolTip = hwndTT; }
-#endif // tooltips
+#endif // wxUSE_CTL3D
 
 protected:
-    bool   m_modalShowing;
-    WXHWND m_hwndOldFocus;  // the window which had focus before we were shown
+    // override more base class virtuals
+    virtual void DoSetClientSize(int width, int height);
+    virtual void DoGetPosition(int *x, int *y) const;
 
-private:
-#if wxUSE_TOOLTIPS
-    WXHWND                m_hwndToolTip;
-#endif // tooltips
+    // show modal dialog and enter modal loop
+    void DoShowModal();
 
 private:
     DECLARE_EVENT_TABLE()
