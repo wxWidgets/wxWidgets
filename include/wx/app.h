@@ -257,7 +257,7 @@ public:
                           const wxChar *cond,
                           const wxChar *msg);
 #endif // __WXDEBUG__
-    
+
     // check that the wxBuildOptions object (constructed in the application
     // itself, usually the one from IMPLEMENT_APP() macro) matches the build
     // options of the library and abort if it doesn't
@@ -471,9 +471,10 @@ public:
     // command line parsing (GUI-specific)
     // ------------------------------------------------------------------------
 
+#if wxUSE_CMDLINE_PARSER
     virtual bool OnCmdLineParsed(wxCmdLineParser& parser);
     virtual void OnInitCmdLine(wxCmdLineParser& parser);
-
+#endif
 
     // miscellaneous other stuff
     // ------------------------------------------------------------------------
