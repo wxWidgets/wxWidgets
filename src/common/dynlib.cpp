@@ -301,7 +301,7 @@ wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
 #endif
 
     bool success = FALSE;
-    wxDllType handle = wxDllLoader::LoadDll(lib_name, &success);
+    wxDllType handle = wxDllLoader::LoadLibrary(lib_name, &success);
     if(success)
     {
        lib = new wxLibrary(handle);
