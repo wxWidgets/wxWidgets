@@ -156,7 +156,7 @@ private:
     wxString     m_nameOld;           // the initial value of item being renamed
 
     TreeNode *GetNode(const wxTreeEvent& event)
-        { return (TreeNode *)GetItemData((WXHTREEITEM)event.GetItem()); }
+        { return (TreeNode *)GetItemData(event.GetItem()); }
 
 public:
     // create a new node and insert it to the tree

@@ -209,7 +209,7 @@ void wxRemotelyScrolledTreeCtrl::ScrollToLine(int WXUNUSED(posHoriz), int posVer
     {
 	    UINT sbCode = SB_THUMBPOSITION;
 	    HWND vertScrollBar = 0;
-	    MSWDefWindowProc((WXUINT) WM_VSCROLL, MAKELONG(sbCode, posVert), (WXHWND) vertScrollBar);
+	    MSWDefWindowProc((WXUINT) WM_VSCROLL, MAKELONG(sbCode, posVert), (WXLPARAM) vertScrollBar);
     }
 #if USE_GENERIC_TREECTRL
     else
