@@ -87,9 +87,9 @@ Returns a system font.
 \twocolitem{{\bf wxSYS\_SYSTEM\_FONT}}{System font.}
 \twocolitem{{\bf wxSYS\_DEVICE\_DEFAULT\_FONT}}{Device-dependent font (Windows NT only).}
 \twocolitem{{\bf wxSYS\_DEFAULT\_GUI\_FONT}}{Default font for user interface
-objects such as menus and dialog boxes.}
-\twocolitem{{\bf wxSYS\_ICONTITLE\_FONT}}{Font for the icon titles (Windows
-only, same as default GUI font on other platforms}
+objects such as menus and dialog boxes. Note that with modern GUIs nothing
+guarantees that the same font is used for all GUI elements, so some controls
+might use a different font by default.}
 \end{twocollist}
 
 \pythonnote{This static method is implemented in Python as a
