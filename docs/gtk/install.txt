@@ -21,8 +21,41 @@ If you want to remove wxWindows on Unix you can do this:
 
 su <type root password>
 make uninstall
-ldconfif
+ldconfig
 exit
+
+* The expert case
+-----------------
+
+If you want to do some more serious cross-platform programming
+with wxWindows, such as for GTK and Motif, you can now build
+two complete libraries and use them concurretly. For this end,
+you have to create a directory for each build of wxWindows -
+you may also want to create different versions of wxWindows
+and test them concurrently. Most typically, this would be a
+version configured with --enable-debug_flag and one without.
+Note, that only one build can currenty be installed, so you'd
+have to use local version of the library for that purpose.
+For building three version, one GTK, one Motif and a debug
+version of the GTK source, you'd do this:
+
+md buildmotif
+cd buildmotif
+../configure --with-motif
+make
+cd ..
+
+md buildgtk
+cd buildgtk
+../configure --with-gtk
+make
+cd ..
+
+md buildgtkd
+cd buildgtkd
+../configure --with-gtk --enable-debug
+make
+cd ..
 
 * The most simple errors
 ------------------------
@@ -48,10 +81,12 @@ If there is just any way for you to use egcs, use egcs.
 We are sorry, but we cannot fix gcc.
 
 You get immediate segfault when starting any sample
-or application: This is _always_ due to having compiled
+or application: This is either due to having compiled
 the library with different flags or options than your
-program. Typically you might have the __WXDEBUG__ option
-set for the library but not for your program.
+program - typically you might have the __WXDEBUG__ option
+set for the library but not for your program - or due
+to using a broken compiler (and its optimisation) such
+as GCC 2.8.
 
 * The most simple program
 -------------------------
@@ -172,7 +207,8 @@ not been defined. And Make in some circumstances as well...
 * General options
 -------------------
 
-         !!  DON'T USE YET !!
+The confiugre options have not yet been thoroughly tested
+in wxWindows snapshot 6.
 
 Normally, you won't have to choose a toolkit, because when
 you download wxGTK, it will default to --with-gtk etc. But
@@ -186,31 +222,31 @@ toolkit. You must do this by running configure with either of:
 
 The following options handle the kind of library you want to build.
 
-	--with-threads          Compile with thread support. Threads
+	--disable-threads       Compile without thread support. Threads
 	                        support is also required for the
 				socket code to work.
 
-	--without-shared        Do not create shared libraries.
+	--disable-shared        Do not create shared libraries.
 
-	--without-optimise	Do not optimise the code. Can
+	--disable-optimise	Do not optimise the code. Can
 	                        sometimes be useful for debugging
 				and is required on some architectures
 				such as Sun with gcc 2.8.X which
 				would otherwise produce segvs.
 
-	--with-profile          Add profiling info to the object 
+	--enable-profile        Add profiling info to the object 
 				files. Currently broken, I think.
 				
-	--with-mem_tracing      Add built-in memory tracing. 
+	--enable-mem_tracing    Add built-in memory tracing. 
 				
-	--with-dmalloc          Use the dmalloc memory debugger.
+	--enable-dmalloc        Use the dmalloc memory debugger.
 	                        Read more at www.letters.com/dmalloc/
 				
-	--with-debug_info	Add debug info to object files and
+	--enable-debug_info	Add debug info to object files and
 	                        executables for use with debuggers
 				such as gdb (or its many frontends).
 
-	--with-debug_flag	Define __DEBUG__ and __WXDEBUG__ when
+	--enable-debug_flag	Define __DEBUG__ and __WXDEBUG__ when
 	                        compiling. This enable wxWindows' very
 				useful internal debugging tricks (such
 				as automatically reporting illegal calls)
@@ -221,7 +257,8 @@ The following options handle the kind of library you want to build.
 * Feature Options
 -------------------
 
-         !!  DON'T USE YET !!
+The confiugre options have not yet been thoroughly tested
+in wxWindows snapshot 6.
 
 When producing an executable that is linked statically with wxGTK
 you'll be surprised at its immense size. This can sometimes be
@@ -235,21 +272,21 @@ are
 	
 	--without-odbc          Disables ODBC code.
 	
-        --without-wxresources   Disables the use of *.wxr type
+        --disable-wxresources   Disables the use of *.wxr type
 	                        resources.
 		
-	--without-threads       Disables threads. Will also
+	--disable-threads       Disables threads. Will also
 	                        disable sockets.
 
-	--without-sockets       Disables sockets.
+	--disable-sockets       Disables sockets.
 
-	--without-dnd           Disables Drag'n'Drop.
+	--disable-dnd           Disables Drag'n'Drop.
 	
-	--without-clipboard     Disables Clipboard.
+	--disable-clipboard     Disables Clipboard.
 	
-	--without-serial        Disables object instance serialiasation.
+	--disable-serial        Disables object instance serialiasation.
 	
-	--without-streams       Disables the wxStream classes.
+	--disable-streams       Disables the wxStream classes.
 	
 Apart from disabling certain features you can very often "strip"
 the program of its debugging information resulting in a significant
@@ -267,7 +304,7 @@ the library by typing:
 	make
 
 make yourself some coffee, as it will take some time. On an old
-386SX possibly week. During compilation, you'll get a few 
+386SX possibly two weeks. During compilation, you'll get a few 
 warning messages depending in your compiler.
 
 if you want to be more selective, you can change into a specific

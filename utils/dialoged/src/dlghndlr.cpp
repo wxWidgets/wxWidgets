@@ -784,7 +784,7 @@ void wxResourceEditorControlHandler::OnDragBegin(int x, int y, int WXUNUSED(keys
 
   dc.SetOptimization(FALSE);
 
-  dc.SetLogicalFunction(wxXOR);
+  dc.SetLogicalFunction(wxINVERT);
 
   wxPen pen(wxColour(0, 0, 0), 1, wxDOT);
   dc.SetPen(pen);
@@ -902,7 +902,7 @@ void wxResourceEditorControlHandler::OnDragContinue(bool WXUNUSED(paintIt), int 
     }
     dc.BeginDrawing();
 
-    dc.SetLogicalFunction(wxXOR);
+    dc.SetLogicalFunction(wxINVERT);
     wxPen pen(wxColour(0, 0, 0), 1, wxDOT);
     dc.SetPen(pen);
     dc.SetBrush(* wxTRANSPARENT_BRUSH);
@@ -914,7 +914,7 @@ void wxResourceEditorControlHandler::OnDragContinue(bool WXUNUSED(paintIt), int 
   else
   {
       dc.BeginDrawing();
-      dc.SetLogicalFunction(wxXOR);
+      dc.SetLogicalFunction(wxINVERT);
       wxPen pen(wxColour(0, 0, 0), 1, wxDOT);
       dc.SetPen(pen);
       dc.SetBrush(* wxTRANSPARENT_BRUSH);

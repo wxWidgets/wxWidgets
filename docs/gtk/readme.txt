@@ -10,7 +10,8 @@ Beginning from snapshot 6 wxWindows uses a completely
 new make file system on Unix that uses GNU automake,
 GNU autoconf and GNU autoheader. You do not need these
 programs in order to use the library, but for taking
-part in its development, they are required.
+part in its development, they are required. Read the
+INSTALL.txt file for learning what you can do with it.
 
 More information is available from my homepage at:
 

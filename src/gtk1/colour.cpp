@@ -118,7 +118,18 @@ wxColour& wxColour::operator = ( const wxColour& col )
 
 bool wxColour::operator == ( const wxColour& col ) const
 {
-    return m_refData == col.m_refData;
+    if (m_refData == col.m_refData) return TRUE;
+    
+    if (!m_refData) return FALSE;
+    if (!col.m_refData) return FALSE;
+    
+    GdkColor *own = &(((wxColourRefData*)m_refData)->m_color);
+    GdkColor *other = &(((wxColourRefData*)col.m_refData)->m_color);
+    if (own->red != other->red) return FALSE;
+    if (own->blue != other->blue) return FALSE;
+    if (own->green != other->green) return FALSE;
+    
+    return TRUE;
 }
 
 bool wxColour::operator != ( const wxColour& col) const

@@ -2582,7 +2582,6 @@ bool wxWindow::SetBackgroundColour( const wxColour &colour )
     }
 
     wxColour sysbg = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
-
     if (sysbg == m_backgroundColour)
     {
         m_backgroundColour = wxNullColour;
@@ -2621,7 +2620,7 @@ bool wxWindow::SetForegroundColour( const wxColour &colour )
     }
 
     wxColour sysbg = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
-    if (sysbg == m_foregroundColour)
+    if ( sysbg == m_backgroundColour )
     {
         m_backgroundColour = wxNullColour;
         ApplyWidgetStyle();
