@@ -295,8 +295,21 @@ void wxGridCellEditor::Create(wxWindow* WXUNUSED(parent),
                               wxWindowID WXUNUSED(id),
                               wxEvtHandler* evtHandler)
 {
-    if (evtHandler)
+    if ( evtHandler )
         m_control->PushEventHandler(evtHandler);
+}
+
+void wxGridCellEditor::PaintBackground(const wxRect& rectCell,
+                                       wxGridCellAttr *attr)
+{
+    // erase the background because we might not fill the cell
+    wxClientDC dc(m_control->GetParent());
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.SetBrush(wxBrush(attr->GetBackgroundColour(), wxSOLID));
+    dc.DrawRectangle(rectCell);
+
+    // redraw the control we just painted over
+    m_control->Refresh();
 }
 
 void wxGridCellEditor::Destroy()
@@ -408,6 +421,12 @@ void wxGridCellTextEditor::Create(wxWindow* parent,
     wxGridCellEditor::Create(parent, id, evtHandler);
 }
 
+void wxGridCellTextEditor::PaintBackground(const wxRect& WXUNUSED(rectCell),
+                                           wxGridCellAttr * WXUNUSED(attr))
+{
+    // as we fill the entire client area, don't do anything here to minimize
+    // flicker
+}
 
 void wxGridCellTextEditor::BeginEdit(int row, int col, wxGrid* grid)
 {
@@ -508,7 +527,6 @@ void wxGridCellBoolEditor::Create(wxWindow* parent,
 
 void wxGridCellBoolEditor::SetSize(const wxRect& r)
 {
-    m_rectCell = r;
     // position it in the centre of the rectangle (TODO: support alignment?)
     wxCoord w, h;
     m_control->GetSize(&w, &h);
@@ -516,7 +534,7 @@ void wxGridCellBoolEditor::SetSize(const wxRect& r)
     // the checkbox without label still has some space to the right in wxGTK,
     // so shift it to the right
 #ifdef __WXGTK__
-    w += 8;
+    w -= 8;
 #endif // GTK
 
     m_control->Move(r.x + r.width/2 - w/2, r.y + r.height/2 - h/2);
@@ -525,24 +543,12 @@ void wxGridCellBoolEditor::SetSize(const wxRect& r)
 void wxGridCellBoolEditor::Show(bool show, wxGridCellAttr *attr)
 {
     wxGridCellEditor::Show(show, attr);
-    if ( !show )
-        return;
-
-    // get the bg colour to use
-    wxColour colBg = attr ? attr->GetBackgroundColour() : *wxLIGHT_GREY;
-
-    // erase the background because we don't fill the cell
-    if ( m_rectCell.width > 0 )
+    if ( show )
     {
-        wxClientDC dc(m_control->GetParent());
-        dc.SetPen(*wxTRANSPARENT_PEN);
-        dc.SetBrush(wxBrush(colBg, wxSOLID));
-        dc.DrawRectangle(m_rectCell);
-
-        m_rectCell.width = 0;
+        // VZ: normally base class already does it, but it doesn't work (FIXME)
+        wxColour colBg = attr ? attr->GetBackgroundColour() : *wxLIGHT_GREY;
+        CBox()->SetBackgroundColour(colBg);
     }
-
-    CBox()->SetBackgroundColour(colBg);
 }
 
 void wxGridCellBoolEditor::BeginEdit(int row, int col, wxGrid* grid)
@@ -4047,23 +4053,32 @@ void wxGrid::DrawCell( wxDC& dc, const wxGridCellCoords& coords )
         DrawCellBorder( dc, coords );
 #endif
 
-    // don't draw the cell over the active edit control!
-    if ( (coords == m_currentCellCoords) && IsCellEditControlEnabled() )
-        return;
+    wxGridCellAttr* attr = GetCellAttr(row, col);
 
-    // but all the rest is drawn by the cell renderer and hence may be
-    // customized
+    bool isCurrent = coords == m_currentCellCoords;
+
     wxRect rect;
     rect.x = m_colRights[col] - m_colWidths[col];
     rect.y = m_rowBottoms[row] - m_rowHeights[row];
-    rect.width = m_colWidths[col]-1;
-    rect.height = m_rowHeights[row]-1;
+    rect.width = m_colWidths[col] - 1;
+    rect.height = m_rowHeights[row] - 1;
 
-    wxGridCellAttr* attr = GetCellAttr(row, col);
-    attr->GetRenderer()->Draw(*this, *attr, dc, rect, row, col, IsInSelection(coords));
+    // if the editor is shown, we should use it and not the renderer
+    if ( isCurrent && IsCellEditControlEnabled() )
+    {
+        attr->GetEditor()->PaintBackground(rect, attr);
+    }
+    else
+    {
+        // but all the rest is drawn by the cell renderer and hence may be
+        // customized
+        attr->GetRenderer()->Draw(*this, *attr, dc, rect, row, col, IsInSelection(coords));
 
-    if (m_currentCellCoords == coords)
-        DrawCellHighlight(dc, attr);
+        if ( isCurrent )
+        {
+            DrawCellHighlight(dc, attr);
+        }
+    }
 
     attr->DecRef();
 }

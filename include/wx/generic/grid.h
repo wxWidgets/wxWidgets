@@ -9,7 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
 #include "wx/defs.h"
 
 #if !defined(wxUSE_NEW_GRID) || !(wxUSE_NEW_GRID)
@@ -146,6 +145,10 @@ public:
     // colours/fonts for it
     virtual void Show(bool show, wxGridCellAttr *attr = (wxGridCellAttr *)NULL);
 
+    // Draws the part of the cell not occupied by the control: the base class
+    // version just fills it with background colour from the attribute
+    virtual void PaintBackground(const wxRect& rectCell, wxGridCellAttr *attr);
+
     // Fetch the value from the table and prepare the edit control
     // to begin editing.  Set the focus to the edit control.
     virtual void BeginEdit(int row, int col, wxGrid* grid) = 0;
@@ -193,6 +196,8 @@ public:
                         wxWindowID id,
                         wxEvtHandler* evtHandler);
 
+    virtual void PaintBackground(const wxRect& rectCell, wxGridCellAttr *attr);
+
     virtual void BeginEdit(int row, int col, wxGrid* grid);
     virtual bool EndEdit(int row, int col,  bool saveValue, wxGrid* grid);
 
@@ -229,8 +234,6 @@ protected:
 
 private:
     bool m_startValue;
-
-    wxRect m_rectCell;  // the total size of the cell
 };
 
 // ----------------------------------------------------------------------------
