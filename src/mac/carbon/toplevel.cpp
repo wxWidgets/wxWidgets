@@ -442,7 +442,19 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
             if ( control == 0 )
                 currentMouseWindow = (wxWindow*) data ;
             else
+            {
                 currentMouseWindow = wxFindControlFromMacControl( control ) ;
+                if ( currentMouseWindow == NULL )
+                {
+                	// for wxToolBar to function we have to send certaint events to it
+                	// instead of its children (wxToolBarTools)	
+                    ControlRef parent ;
+                    GetSuperControl(control, &parent );
+                    wxWindow *wxParent = wxFindControlFromMacControl( parent ) ;
+                    if ( wxParent && wxParent->IsKindOf( CLASSINFO( wxToolBar ) ) )
+                        currentMouseWindow = wxParent ;
+                }
+            }
         }        
     }
     
