@@ -10,12 +10,14 @@
 
 \section{\class{wxDatePickerCtrl}}\label{wxdatepickerctrl}
 
-This control allows the user to select a date. Unlike
+This control allows the user to select a date. Unlike 
 \helpref{wxCalendarCtrl}{wxcalendarctrl}, which is a relatively big control,
-it is implemented as a small window showing the currently selected date and
-allowing to edit it directly using the keyboard and may also display a popup
+wxDatePickerCtrl is implemented as a small window showing the currently selected date.
+The control can be edited using the keyboard, and can also display a popup
 window for more user-friendly date selection, depending on the styles used and
 the platform.
+
+It is only available if \texttt{wxUSE\_DATEPICKCTRL} is set to $1$.
 
 \wxheading{Derived from}
 
@@ -27,8 +29,6 @@ the platform.
 \wxheading{Include files}
 
 <wx/dateevt.h>
-
-(only available if \texttt{wxUSE\_DATEPICKCTRL} is set to $1$)
 
 \wxheading{Window styles}
 
@@ -169,5 +169,4 @@ Changes the current value of the control. The date should be valid and included
 in the currently selected range, if any.
 
 Calling this method does not result in a date change event.
-
 

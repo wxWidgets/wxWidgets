@@ -12,7 +12,7 @@
 \section{\class{wxStandardPaths}}\label{wxstandardpaths}
 
 wxStandardPaths returns the standard locations in the file system and should be
-used by the programs to find their data files in a portable way.
+used by applications to find their data files in a portable way.
 
 Please note that this is not a real class because object of this type are never
 created but more a namespace containing the class methods which are all static,
@@ -180,7 +180,7 @@ all platforms except Windows where it returns
 
 \func{static void}{SetInstallPrefix}{\param{const wxString\& }{prefix}}
 
-\textbf{Note: } This function is only available under Unix.
+\textbf{Note:} This function is only available under Unix.
 
 Lets wxStandardPaths know about the real program installation prefix on a Unix
 system. By default, the value returned by 

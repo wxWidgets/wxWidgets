@@ -10,15 +10,15 @@
 
 \section{\class{wxStackWalker}}\label{wxstackwalker}
 
-wxStackWalker allows to enumerate, or walk, the stack frames or, in other
-words, the functions callstack. It is mostly useful in only two situations:
+wxStackWalker allows an application to enumerate, or walk, the stack frames (the function callstack).
+It is mostly useful in only two situations: 
 inside \helpref{wxApp::OnFatalException}{wxapponfatalexception} function to
 programmatically get the location of the crash and, in debug builds, in 
 \helpref{wxApp::OnAssert}{wxapponassert} to report the caller of the failed
 assert.
 
-wxStackWalker works by repeatedly calling 
-\helpref{OnStackFrame}{wxstackwalkeronstackframe} method for each frame in the
+wxStackWalker works by repeatedly calling
+the \helpref{OnStackFrame}{wxstackwalkeronstackframe} method for each frame in the
 stack, so to use it you must derive your own class from it and override this
 method.
 

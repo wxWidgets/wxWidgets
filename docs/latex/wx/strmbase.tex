@@ -47,7 +47,7 @@ Destructor.
 \constfunc{wxFileOffset}{GetLength}{\void}
 
 Returns the length of the stream in bytes. If the length cannot be determined
-(this is always the case for socket streams for example), returns
+(this is always the case for socket streams for example), returns 
 \texttt{wxInvalidOffset}.
 
 \newsince{2.5.4}
@@ -130,5 +130,4 @@ real position.
 \func{size\_t}{OnSysWrite}{\param{void *}{buffer}, \param{size\_t}{ bufsize}}
 
 See \helpref{OnSysRead}{wxstreambaseonsysread}.
-
 
