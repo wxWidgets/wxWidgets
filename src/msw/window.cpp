@@ -1505,26 +1505,23 @@ void wxWindowMSW::DoMoveWindow(int x, int y, int width, int height)
         height = 0;
 
     HDWP hdwp = 0;
-    
-    if ( wxSystemOptions::GetOptionInt(wxT("msw.window.defersize")) == 1 )
-    {
-        // if our parent had prepared a defer window handle for us, use it (unless
-        // we are a top level window)
-        wxWindowMSW *parent = GetParent();
-        hdwp = (parent && !IsTopLevel()) ? (HDWP)parent->m_hDWP : NULL;
-        if ( hdwp )
-        {
-            hdwp = ::DeferWindowPos(hdwp, GetHwnd(), NULL,
-                                x, y, width, height,
-                                SWP_NOZORDER);
-            if ( !hdwp )
-            {
-                wxLogLastError(_T("DeferWindowPos"));
-            }
 
-            // hdwp must be updated as it may have been changed
-            parent->m_hDWP = (WXHANDLE)hdwp;
+    // if our parent had prepared a defer window handle for us, use it (unless
+    // we are a top level window)
+    wxWindowMSW *parent = GetParent();
+    hdwp = (parent && !IsTopLevel()) ? (HDWP)parent->m_hDWP : NULL;
+    if ( hdwp )
+    {
+        hdwp = ::DeferWindowPos(hdwp, GetHwnd(), NULL,
+                            x, y, width, height,
+                            SWP_NOZORDER);
+        if ( !hdwp )
+        {
+            wxLogLastError(_T("DeferWindowPos"));
         }
+
+        // hdwp must be updated as it may have been changed
+        parent->m_hDWP = (WXHANDLE)hdwp;
     }
 
     // otherwise (or if deferring failed) move the window in place immediately
@@ -4110,13 +4107,10 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
     const int numChildren = GetChildren().GetCount();
     if ( numChildren > 1 )
     {
-        if ( wxSystemOptions::GetOptionInt(wxT("msw.window.defersize")) == 1 )
+        m_hDWP = (WXHANDLE)::BeginDeferWindowPos(numChildren);
+        if ( !m_hDWP )
         {
-            m_hDWP = (WXHANDLE)::BeginDeferWindowPos(numChildren);
-            if ( !m_hDWP )
-            {
-                wxLogLastError(_T("BeginDeferWindowPos"));
-            }
+            wxLogLastError(_T("BeginDeferWindowPos"));
         }
     }
 
