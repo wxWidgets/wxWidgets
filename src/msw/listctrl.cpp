@@ -395,8 +395,8 @@ wxListCtrl::~wxListCtrl()
 
     if ( m_textCtrl )
     {
-        m_textCtrl->SetHWND(0);
         m_textCtrl->UnsubclassWin();
+        m_textCtrl->SetHWND(0);
         delete m_textCtrl;
         m_textCtrl = NULL;
     }
