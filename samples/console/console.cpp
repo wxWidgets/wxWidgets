@@ -3761,6 +3761,9 @@ static void TestZipFileSystem()
 #include "wx/datetime.h"
 
 // this test miscellaneous static wxDateTime functions
+
+#if TEST_ALL
+
 static void TestTimeStatic()
 {
     wxPuts(_T("\n*** wxDateTime static methods test ***"));
@@ -3839,6 +3842,10 @@ static void TestTimeDST()
     }
 }
 
+#endif // TEST_ALL
+
+#if TEST_INTERACTIVE
+
 static void TestDateTimeInteractive()
 {
     wxPuts(_T("\n*** interactive wxDateTime tests ***"));
@@ -3877,6 +3884,10 @@ static void TestDateTimeInteractive()
 
     wxPuts(_T("\n*** done ***"));
 }
+
+#endif // TEST_INTERACTIVE
+
+#if TEST_ALL
 
 static void TestTimeMS()
 {
@@ -3978,6 +3989,8 @@ static void TestTimeSpanFormat()
 
     wxPuts(wxEmptyString);
 }
+
+#endif // TEST_ALL
 
 #endif // TEST_DATETIME
 
