@@ -78,8 +78,6 @@ enum
 #if wxUSE_POSTSCRIPT
 class WXDLLEXPORT wxGenericPrintDialog : public wxDialog
 {
-    DECLARE_DYNAMIC_CLASS(wxGenericPrintDialog)
-
 public:
     wxGenericPrintDialog(wxWindow *parent,
                          wxPrintDialogData* data = (wxPrintDialogData*)NULL);
@@ -122,12 +120,11 @@ protected:
 
 private:
     DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxGenericPrintDialog)
 };
 
 class WXDLLEXPORT wxGenericPrintSetupDialog : public wxDialog
 {
-    DECLARE_CLASS(wxGenericPrintSetupDialog)
-
 public:
     // There are no configuration options for the dialog, so we
     // just pass the wxPrintData object (no wxPrintSetupDialogData class needed)
@@ -153,14 +150,15 @@ public:
     wxPrintData         m_printData;
     wxPrintData&        GetPrintData() { return m_printData; }
 #endif // wxUSE_POSTSCRIPT
+
+private:
+    DECLARE_CLASS(wxGenericPrintSetupDialog)
 };
 #endif
     // wxUSE_POSTSCRIPT
 
 class WXDLLEXPORT wxGenericPageSetupDialog : public wxDialog
 {
-    DECLARE_CLASS(wxGenericPageSetupDialog)
-
 public:
     wxGenericPageSetupDialog(wxWindow *parent, wxPageSetupData* data = (wxPageSetupData*) NULL);
     virtual ~wxGenericPageSetupDialog();
@@ -188,6 +186,7 @@ public:
 
 private:
     DECLARE_EVENT_TABLE()
+    DECLARE_CLASS(wxGenericPageSetupDialog)
 };
 
 #endif
