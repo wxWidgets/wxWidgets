@@ -737,7 +737,7 @@ bool DatabaseDemoApp::ReadParamFile(Cparameters &params)
     if ((paramFile = wxFopen(PARAM_FILENAME, wxT("r"))) == NULL)
     {
         wxString tStr;
-        tStr.Printf(wxT("Unable to open the parameter file '%s' for reading.\n\nYou must specify the data source, user name, and\npassword that will be used and save those settings."),PARAM_FILENAME);
+        tStr.Printf(wxT("Unable to open the parameter file '%s' for reading.\n\nYou must specify the data source, user name, and\npassword that will be used and save those settings."),PARAM_FILENAME.c_str());
         wxMessageBox(tStr,wxT("File I/O Error..."),wxOK | wxICON_EXCLAMATION);
 
         return false;
@@ -772,7 +772,7 @@ bool DatabaseDemoApp::WriteParamFile(Cparameters &WXUNUSED(params))
     if ((paramFile = wxFopen(PARAM_FILENAME, wxT("wt"))) == NULL)
     {
         wxString tStr;
-        tStr.Printf(wxT("Unable to write/overwrite '%s'."),PARAM_FILENAME);
+        tStr.Printf(wxT("Unable to write/overwrite '%s'."),PARAM_FILENAME.c_str());
         wxMessageBox(tStr,wxT("File I/O Error..."),wxOK | wxICON_EXCLAMATION);
         return false;
     }
@@ -1287,7 +1287,7 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& WXUNUSED(event))
         if (!Ok)
             return;
 
-        if (saveName.IsEmpty())
+        if (saveName.empty())
         {
             wxGetApp().Contact->Initialize();
             PutData();
@@ -1403,7 +1403,7 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& WXUNUSED(event))
         }
 
         // Enable/Disable the reset button
-        pResetBtn->Enable(!wxGetApp().Contact->qryWhereStr.IsEmpty());
+        pResetBtn->Enable(!wxGetApp().Contact->qryWhereStr.empty());
 
         return;
     }  // Query button
@@ -1523,7 +1523,7 @@ bool CeditorDlg::Initialize()
                                           wxGetApp().DbConnectInf->GetDefaultDir()))
     {
         wxString tStr;
-        tStr.Printf(wxT("Unable to open the table '%s'.  The table may\nneed to be created.\n\nDo you wish to try to create/clear the table?\n\n"),CONTACT_TABLE_NAME);
+        tStr.Printf(wxT("Unable to open the table '%s'.  The table may\nneed to be created.\n\nDo you wish to try to create/clear the table?\n\n"),CONTACT_TABLE_NAME.c_str());
         bool createTable = (wxMessageBox(tStr.c_str(),wxT("Confirm"),wxYES_NO|wxICON_QUESTION) == wxYES);
 
         if (!createTable)
@@ -1552,7 +1552,7 @@ bool CeditorDlg::Initialize()
                                                 wxGetApp().DbConnectInf->GetDefaultDir()))
         {
             wxString tStr;
-            tStr.Printf(wxT("Unable to open the table '%s' (likely due to\ninsufficient privileges of the logged in user).\n\n"),CONTACT_TABLE_NAME);
+            tStr.Printf(wxT("Unable to open the table '%s' (likely due to\ninsufficient privileges of the logged in user).\n\n"),CONTACT_TABLE_NAME.c_str());
 
             wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__TFILE__,__LINE__),
                          wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
@@ -1564,7 +1564,7 @@ bool CeditorDlg::Initialize()
                                            wxGetApp().DbConnectInf->GetDefaultDir()))
         {
             wxString tStr;
-            tStr.Printf(wxT("Unable to open the table '%s' as the table\ndoes not appear to exist in the tablespace available\nto the currently logged in user.\n\n"),CONTACT_TABLE_NAME);
+            tStr.Printf(wxT("Unable to open the table '%s' as the table\ndoes not appear to exist in the tablespace available\nto the currently logged in user.\n\n"),CONTACT_TABLE_NAME.c_str());
             wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__TFILE__,__LINE__),
                          wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
         }
@@ -1636,7 +1636,7 @@ bool CeditorDlg::Initialize()
     pPictSizeTxt      = new wxTextCtrl(this, EDITOR_DIALOG_PIC_SIZE_TEXT, wxEmptyString,          wxPoint(175,447), wxSize(120, 25), 0, wxDefaultValidator, wxT("PictSizeTxt"));
 #endif
 
-    // Now that all the widgets on the panel are created, its safe to allow ::OnCommand() to 
+    // Now that all the widgets on the panel are created, its safe to allow ::OnCommand() to
     // handle all widget processing
     widgetPtrsSet = true;
 
@@ -1802,7 +1802,7 @@ void CeditorDlg::SetMode(enum DialogModes m)
         pPrevBtn->Enable( !edit );
         pNextBtn->Enable( !edit );
         pQueryBtn->Enable( !edit );
-        pResetBtn->Enable( !edit && !wxGetApp().Contact->qryWhereStr.IsEmpty() );
+        pResetBtn->Enable( !edit && !wxGetApp().Contact->qryWhereStr.empty() );
         pNameListBtn->Enable( !edit );
     }
 
@@ -2049,7 +2049,7 @@ bool CeditorDlg::GetNextRec()
     w += wxT("'");
 
     // If a query where string is currently set, append that criteria
-    if (!wxGetApp().Contact->qryWhereStr.IsEmpty())
+    if (!wxGetApp().Contact->qryWhereStr.empty())
     {
         w += wxT(" AND (");
         w += wxGetApp().Contact->qryWhereStr;
@@ -2085,7 +2085,7 @@ bool CeditorDlg::GetPrevRec()
     w += wxT("'");
 
     // If a query where string is currently set, append that criteria
-    if (!wxGetApp().Contact->qryWhereStr.IsEmpty())
+    if (!wxGetApp().Contact->qryWhereStr.empty())
     {
         w += wxT(" AND (");
         w += wxGetApp().Contact->qryWhereStr;
@@ -2893,9 +2893,9 @@ END_EVENT_TABLE()
 
 CimageDlg::CimageDlg(wxWindow *parent, wxChar *pImageData, off_t iSize)
 : wxDialog(parent, IMAGE_DIALOG, wxT("BLOB Image"), wxDefaultPosition, wxDefaultSize),
-m_pImage(NULL),
+m_pDisplayBmp(NULL),
 m_pBmp(NULL),
-m_pDisplayBmp(NULL)
+m_pImage(NULL)
 {
     wxMemoryInputStream inStream(pImageData, iSize);
 
@@ -3351,7 +3351,7 @@ bool DbGridFrame::Initialize()
                                           wxGetApp().DbConnectInf->GetDefaultDir()))
         {
             wxString tStr;
-            tStr.Printf(wxT("Unable to open the table '%s'.\n\n"),CONTACT_TABLE_NAME);
+            tStr.Printf(wxT("Unable to open the table '%s'.\n\n"),CONTACT_TABLE_NAME.c_str());
             wxMessageBox(wxDbLogExtendedErrorMsg(tStr.c_str(),wxGetApp().Contact->GetDb(),__TFILE__,__LINE__),
                          wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
         }

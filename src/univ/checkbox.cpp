@@ -141,8 +141,9 @@ void wxCheckBox::DoDraw(wxControlRenderer *renderer)
 
     switch ( Get3StateValue() )
     {
-        case wxCHK_CHECKED:      flags |= wxCONTROL_CHECKED;
-        case wxCHK_UNDETERMINED: flags |= wxCONTROL_UNDETERMINED;
+        case wxCHK_CHECKED:      flags |= wxCONTROL_CHECKED;      break;
+        case wxCHK_UNDETERMINED: flags |= wxCONTROL_UNDETERMINED; break;
+        default:                 /* do nothing */                 break;
     }
 
     wxBitmap bitmap(GetBitmap(GetState(flags), m_status));
@@ -224,6 +225,7 @@ wxCheckBoxState wxCheckBox::DoGet3StateValue() const
     {
         case Status_Checked:    return wxCHK_CHECKED;
         case Status_Unchecked:  return wxCHK_UNCHECKED;
+        default:                /* go further */ break;
     }
     return wxCHK_UNDETERMINED;
 }

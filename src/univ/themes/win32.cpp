@@ -33,6 +33,7 @@
     #include "wx/dcmemory.h"
 
     #include "wx/button.h"
+    #include "wx/bmpbuttn.h"
     #include "wx/listbox.h"
     #include "wx/checklst.h"
     #include "wx/combobox.h"
