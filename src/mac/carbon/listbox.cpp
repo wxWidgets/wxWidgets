@@ -28,7 +28,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
 
 BEGIN_EVENT_TABLE(wxListBox, wxControl)
 #ifndef __WXMAC_OSX__
-    EVT_SIZE( wxListBox::OnSize )
+//    EVT_SIZE( wxListBox::OnSize )
     EVT_CHAR( wxListBox::OnChar )
 #endif
 END_EVENT_TABLE()
