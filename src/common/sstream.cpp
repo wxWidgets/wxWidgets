@@ -52,7 +52,7 @@ wxStringInputStream::wxStringInputStream(const wxString& s)
 wxStringInputStream::~wxStringInputStream()
 {
 #if wxUSE_UNICODE
-    delete m_buf;
+    delete[] m_buf;
 #endif
 }
 
