@@ -176,7 +176,7 @@ WXHWND wxToolTip::GetToolTipCtrl()
                  "can't create tooltip control outside a frame or a dialog" );
 
     HWND hwndTT = (HWND)(frame ? frame->GetToolTipCtrl()
-                                 : dialog->GetToolTipCtrl());
+                               : dialog->GetToolTipCtrl());
     if ( !hwndTT )
     {
         hwndTT = ::CreateWindow(TOOLTIPS_CLASS,
@@ -184,7 +184,7 @@ WXHWND wxToolTip::GetToolTipCtrl()
                                 TTS_ALWAYSTIP,
                                 CW_USEDEFAULT, CW_USEDEFAULT,
                                 CW_USEDEFAULT, CW_USEDEFAULT,
-                                (HWND)frame->GetHWND(), (HMENU)NULL,
+                                (HWND)parent->GetHWND(), (HMENU)NULL,
                                 wxGetInstance(), NULL);
 
         if ( hwndTT )
