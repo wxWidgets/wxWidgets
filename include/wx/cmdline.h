@@ -101,20 +101,30 @@ public:
 
     // default ctor or ctor giving the cmd line in either Unix or Win form
     wxCmdLineParser() { Init(); }
+    wxCmdLineParser(int argc, char **argv) { Init(); SetCmdLine(argc, argv); }
+#if wxUSE_UNICODE
     wxCmdLineParser(int argc, wxChar **argv) { Init(); SetCmdLine(argc, argv); }
+#endif // wxUSE_UNICODE
     wxCmdLineParser(const wxString& cmdline) { Init(); SetCmdLine(cmdline); }
 
     // the same as above, but also gives the cmd line description - otherwise,
     // use AddXXX() later
     wxCmdLineParser(const wxCmdLineEntryDesc *desc)
         { Init(); SetDesc(desc); }
+    wxCmdLineParser(const wxCmdLineEntryDesc *desc, int argc, char **argv)
+        { Init(); SetCmdLine(argc, argv); SetDesc(desc); }
+#if wxUSE_UNICODE
     wxCmdLineParser(const wxCmdLineEntryDesc *desc, int argc, wxChar **argv)
         { Init(); SetCmdLine(argc, argv); SetDesc(desc); }
+#endif // wxUSE_UNICODE
     wxCmdLineParser(const wxCmdLineEntryDesc *desc, const wxString& cmdline)
         { Init(); SetCmdLine(cmdline); SetDesc(desc); }
 
     // set cmd line to parse after using one of the ctors which don't do it
+    void SetCmdLine(int argc, char **argv);
+#if wxUSE_UNICODE
     void SetCmdLine(int argc, wxChar **argv);
+#endif // wxUSE_UNICODE
     void SetCmdLine(const wxString& cmdline);
 
     // not virtual, don't use this class polymorphically
