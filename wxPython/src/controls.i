@@ -560,6 +560,7 @@ public:
 
     // If the return values from and to are the same, there is no selection.
     void GetSelection(long* OUTPUT, long* OUTPUT) const;
+    wxString GetStringSelection();
 
     void Clear();
     void Replace(long from, long to, const wxString& value);

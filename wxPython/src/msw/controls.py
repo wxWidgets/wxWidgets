@@ -635,6 +635,9 @@ class wxTextCtrlPtr(wxControlPtr):
     def GetSelection(self, *_args, **_kwargs):
         val = apply(controlsc.wxTextCtrl_GetSelection,(self,) + _args, _kwargs)
         return val
+    def GetStringSelection(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_GetStringSelection,(self,) + _args, _kwargs)
+        return val
     def Clear(self, *_args, **_kwargs):
         val = apply(controlsc.wxTextCtrl_Clear,(self,) + _args, _kwargs)
         return val
