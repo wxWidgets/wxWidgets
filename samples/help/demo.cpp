@@ -61,11 +61,11 @@
 #include "wx/html/helpctrl.h"
 #endif
 
-#if wxUSE_MS_HTML_HELP
+#if wxUSE_MS_HTML_HELP && !defined(__WXUNIVERSAL__)
 #include "wx/msw/helpchm.h"
 #endif
 
-#if wxUSE_MS_HTML_HELP && wxUSE_WXHTML_HELP
+#if wxUSE_MS_HTML_HELP && wxUSE_WXHTML_HELP && !defined(__WXUNIVERSAL__)
 #include "wx/msw/helpbest.h"
 #endif
 
@@ -109,10 +109,10 @@ public:
 #if USE_HTML_HELP
     wxHtmlHelpController& GetAdvancedHtmlHelpController() { return m_advancedHtmlHelp; }
 #endif
-#if wxUSE_MS_HTML_HELP
+#if wxUSE_MS_HTML_HELP && !defined(__WXUNIVERSAL__)
     wxCHMHelpController& GetMSHtmlHelpController() { return m_msHtmlHelp; }
 #endif
-#if wxUSE_MS_HTML_HELP && wxUSE_WXHTML_HELP
+#if wxUSE_MS_HTML_HELP && wxUSE_WXHTML_HELP && !defined(__WXUNIVERSAL__)
     wxBestHelpController& GetBestHelpController() { return m_bestHelp; }
 #endif
 
@@ -120,8 +120,12 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnHelp(wxCommandEvent& event);
     void OnAdvancedHtmlHelp(wxCommandEvent& event);
+#if wxUSE_MS_HTML_HELP && !defined(__WXUNIVERSAL__)
     void OnMSHtmlHelp(wxCommandEvent& event);
+#endif
+#if wxUSE_MS_HTML_HELP && wxUSE_WXHTML_HELP && !defined(__WXUNIVERSAL__)
     void OnBestHelp(wxCommandEvent& event);
+#endif
 
     void OnShowContextHelp(wxCommandEvent& event);
     void OnShowDialogContextHelp(wxCommandEvent& event);
@@ -135,11 +139,11 @@ private:
    wxHtmlHelpController     m_advancedHtmlHelp;
 #endif
 
-#if wxUSE_MS_HTML_HELP
+#if wxUSE_MS_HTML_HELP && !defined(__WXUNIVERSAL__)
     wxCHMHelpController     m_msHtmlHelp;
 #endif
 
-#if wxUSE_MS_HTML_HELP && wxUSE_WXHTML_HELP
+#if wxUSE_MS_HTML_HELP && wxUSE_WXHTML_HELP && !defined(__WXUNIVERSAL__)
     wxBestHelpController    m_bestHelp;
 #endif
 
@@ -229,13 +233,17 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(HelpDemo_Advanced_Html_Help_Help, MyFrame::OnAdvancedHtmlHelp)
     EVT_MENU(HelpDemo_Advanced_Html_Help_Search, MyFrame::OnAdvancedHtmlHelp)
 
+#if wxUSE_MS_HTML_HELP && !defined(__WXUNIVERSAL__)
     EVT_MENU(HelpDemo_MS_Html_Help_Index, MyFrame::OnMSHtmlHelp)
     EVT_MENU(HelpDemo_MS_Html_Help_Classes, MyFrame::OnMSHtmlHelp)
     EVT_MENU(HelpDemo_MS_Html_Help_Functions, MyFrame::OnMSHtmlHelp)
     EVT_MENU(HelpDemo_MS_Html_Help_Help, MyFrame::OnMSHtmlHelp)
     EVT_MENU(HelpDemo_MS_Html_Help_Search, MyFrame::OnMSHtmlHelp)
+#endif
 
+#if wxUSE_MS_HTML_HELP && wxUSE_WXHTML_HELP && !defined(__WXUNIVERSAL__)
     EVT_MENU(HelpDemo_Best_Help_Index, MyFrame::OnBestHelp)
+#endif
 
     EVT_MENU(HelpDemo_Help_KDE, MyFrame::OnHelp)
     EVT_MENU(HelpDemo_Help_GNOME, MyFrame::OnHelp)
@@ -287,14 +295,14 @@ bool MyApp::OnInit()
                                  wxPoint(50, 50), wxSize(450, 340));
 
 #if !USE_SIMPLE_HELP_PROVIDER
-#if wxUSE_MS_HTML_HELP
+#if wxUSE_MS_HTML_HELP && !defined(__WXUNIVERSAL__)
     provider->SetHelpController(& frame->GetMSHtmlHelpController());
 #else
     provider->SetHelpController(& frame->GetHelpController());
 #endif
 #endif
 
-    frame->Show(TRUE);
+    frame->Show(true);
     SetTopWindow(frame);
 
     // initialise the help system: this means that we'll use doc.hlp file under
@@ -304,17 +312,17 @@ bool MyApp::OnInit()
     {
         wxLogError(wxT("Cannot initialize the help system, aborting."));
 
-        return FALSE;
+        return false;
     }
 
-#if wxUSE_MS_HTML_HELP
+#if wxUSE_MS_HTML_HELP && !defined(__WXUNIVERSAL__)
     if( !frame->GetMSHtmlHelpController().Initialize(_T("doc")) )
     {
         wxLogError(wxT("Cannot initialize the MS HTML Help system."));
     }
 #endif
 
-#if wxUSE_MS_HTML_HELP && wxUSE_WXHTML_HELP
+#if wxUSE_MS_HTML_HELP && wxUSE_WXHTML_HELP && !defined(__WXUNIVERSAL__)
     // you need to call Initialize in order to use wxBestHelpController
     if( !frame->GetBestHelpController().Initialize(_T("doc")) )
     {
@@ -329,7 +337,7 @@ bool MyApp::OnInit()
     {
         wxLogError(wxT("Cannot initialize the advanced HTML help system, aborting."));
 
-        return FALSE;
+        return false;
     }
 #endif
 
@@ -340,11 +348,11 @@ bool MyApp::OnInit()
     {
         wxLogError("Cannot initialize the MS HTML help system, aborting.");
 
-        return FALSE;
+        return false;
     }
 #endif
 
-    return TRUE;
+    return true;
 }
 
 int MyApp::OnExit()
@@ -385,7 +393,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(HelpDemo_Advanced_Html_Help_Search, _T("Advanced HTML &Search help..."));
 #endif
 
-#if wxUSE_MS_HTML_HELP
+#if wxUSE_MS_HTML_HELP && !defined(__WXUNIVERSAL__)
     menuFile->AppendSeparator();
     menuFile->Append(HelpDemo_MS_Html_Help_Index, _T("MS HTML &Help Index..."));
     menuFile->Append(HelpDemo_MS_Html_Help_Classes, _T("MS HTML &Help on Classes..."));
@@ -394,7 +402,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(HelpDemo_MS_Html_Help_Search, _T("MS HTML &Search help..."));
 #endif
 
-#if wxUSE_MS_HTML_HELP && wxUSE_WXHTML_HELP
+#if wxUSE_MS_HTML_HELP && wxUSE_WXHTML_HELP && !defined(__WXUNIVERSAL__)
     menuFile->AppendSeparator();
     menuFile->Append(HelpDemo_Best_Help_Index, _T("Best &Help Index..."));
 #endif
@@ -439,8 +447,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    // TRUE is to force the frame to close
-    Close(TRUE);
+    // true is to force the frame to close
+    Close(true);
 }
 
 void MyFrame::OnHelp(wxCommandEvent& event)
@@ -468,19 +476,19 @@ void MyFrame::OnAdvancedHtmlHelp(wxCommandEvent& event)
 #endif
 }
 
+#if wxUSE_MS_HTML_HELP && !defined(__WXUNIVERSAL__)
 void MyFrame::OnMSHtmlHelp(wxCommandEvent& event)
 {
-#if wxUSE_MS_HTML_HELP
     ShowHelp(event.GetId(), m_msHtmlHelp);
-#endif
 }
+#endif
 
+#if wxUSE_MS_HTML_HELP && wxUSE_WXHTML_HELP && !defined(__WXUNIVERSAL__)
 void MyFrame::OnBestHelp(wxCommandEvent& event)
 {
-#if wxUSE_MS_HTML_HELP && wxUSE_WXHTML_HELP
     ShowHelp(event.GetId(), m_bestHelp);
-#endif
 }
+#endif
 
 /*
  Notes: ShowHelp uses section ids for displaying particular topics,
@@ -632,7 +640,7 @@ MyModalDialog::MyModalDialog(wxWindow *parent)
     SetExtraStyle(wxDIALOG_EX_CONTEXTHELP);
 #endif
 
-    wxDialog::Create(parent, -1, wxString(_T("Modal dialog")));
+    wxDialog::Create(parent, wxID_ANY, wxString(_T("Modal dialog")));
 
     wxBoxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer *sizerRow = new wxBoxSizer(wxHORIZONTAL);
@@ -651,14 +659,14 @@ MyModalDialog::MyModalDialog(wxWindow *parent)
     sizerRow->Add(new wxContextHelpButton(this), 0, wxALIGN_CENTER | wxALL, 5);
 #endif
 
-    wxTextCtrl *text = new wxTextCtrl(this, -1, wxT("A demo text control"),
+    wxTextCtrl *text = new wxTextCtrl(this, wxID_ANY, wxT("A demo text control"),
                                       wxDefaultPosition, wxSize(300, 100),
                                       wxTE_MULTILINE);
     text->SetHelpText(_("Type text here if you have got nothing more interesting to do"));
     sizerTop->Add(text, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
     sizerTop->Add(sizerRow, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-    SetAutoLayout(TRUE);
+    SetAutoLayout(true);
     SetSizer(sizerTop);
 
     sizerTop->SetSizeHints(this);
