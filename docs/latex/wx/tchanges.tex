@@ -112,17 +112,17 @@ sizer->Add(win);
 
 \subsubsection{Massive wxURL Rewrite}\label{wxurlrewrite}
 
-wxURL has undergone some radical changes.
+\helpref{wxURL}{wxurl} has undergone some radical changes.
 
 \begin{itemize}\itemsep=0pt
-\item Many accessors of wxURL - GetHostName, GetProtocolName, and GetPath,
-      have been replaced by its parent's (wxURI) counterparts - GetServer,
-      GetScheme, and GetPath, respectively.
+\item Many accessors of \helpref{wxURL}{wxurl} - GetHostName, GetProtocolName, and GetPath,
+      have been replaced by its parent's (\helpref{wxURI}{wxuri}) counterparts - \helpref{GetServer}{wxurigetserver},
+      \helpref{GetScheme}{wxurigetscheme}, and \helpref{GetPath}{wxurigetpath}, respectively.
 
-\item ConvertToValidURI has been replaced by wxURI.  Do not use
+\item ConvertToValidURI has been replaced by \helpref{wxURI}{wxuri}.  Do not use
       ConvertToValidURI for future applications.
 
-\item ConvertFromURI has been replaced by wxURI::Unescape.
+\item ConvertFromURI has been replaced by \helpref{wxURI::Unescape}{wxuriunescape}.
 \end{itemize}
 
 
