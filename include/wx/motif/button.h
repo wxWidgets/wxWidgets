@@ -16,12 +16,10 @@
 #pragma interface "button.h"
 #endif
 
-#include "wx/control.h"
-
 WXDLLEXPORT_DATA(extern const char*) wxButtonNameStr;
 
 // Pushbutton
-class WXDLLEXPORT wxButton: public wxControl
+class WXDLLEXPORT wxButton: public wxButtonBase
 {
     DECLARE_DYNAMIC_CLASS(wxButton)
         
