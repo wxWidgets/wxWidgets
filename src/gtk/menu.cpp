@@ -180,7 +180,7 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
 	else
 	{
 	    /* the user pressed on the menu item -> report */
-	    item->m_isChecked;  /* make consistent again */
+	    item->m_isChecked = item->IsChecked();  /* make consistent again */
 	}
     }
 

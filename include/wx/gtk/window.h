@@ -40,8 +40,10 @@ extern wxList wxTopLevelWindows;
 
 class wxLayoutConstraints;
 class wxSizer;
+#if wxUSE_WX_RESOURCES
 class wxResourceTable;
 class wxItemResource;
+#endif
 
 class wxClientData;
 class wxVoidClientData;
@@ -120,10 +122,12 @@ public:
            const wxString& name = wxPanelNameStr);
   virtual ~wxWindow();
 
+#if wxUSE_WX_RESOURCES
   virtual bool LoadFromResource( wxWindow *parent, const wxString& resourceName,
                                  const wxResourceTable *table = (const wxResourceTable *) NULL);
   virtual wxControl *CreateItem(const wxItemResource* childResource, const wxItemResource* parentResource,
                                  const wxResourceTable *table = (const wxResourceTable *) NULL);
+#endif
 
   bool Close( bool force = FALSE );
   virtual bool Destroy();

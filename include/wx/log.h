@@ -180,6 +180,7 @@ private:
   FILE *m_fp;
 };
 
+#ifdef wxUSE_STD_IOSTREAM
 // log everything to an "ostream", cerr by default
 class WXDLLEXPORT wxLogStream : public wxLog
 {
@@ -194,9 +195,11 @@ protected:
   // @@ using ptr here to avoid including <iostream.h> from this file
   ostream *m_ostr;
 };
+#endif
 
 #ifndef wxUSE_NOGUI
 
+#ifdef wxUSE_STD_IOSTREAM
 // log everything to a text window (GUI only of course)
 class WXDLLEXPORT wxLogTextCtrl : public wxLogStream
 {
@@ -205,6 +208,7 @@ public:
   wxLogTextCtrl(wxTextCtrl *pTextCtrl);
  ~wxLogTextCtrl();
 };
+#endif
 
 // ----------------------------------------------------------------------------
 // GUI log target, the default one for wxWindows programs

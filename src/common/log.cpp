@@ -389,6 +389,7 @@ void wxLogStderr::DoLogString(const char *szString)
 // wxLogStream implementation
 // ----------------------------------------------------------------------------
 
+#ifdef wxUSE_STD_IOSTREAM
 wxLogStream::wxLogStream(ostream *ostr)
 {
   if ( ostr == NULL )
@@ -401,15 +402,17 @@ void wxLogStream::DoLogString(const char *szString)
 {
   (*m_ostr) << szString << endl << flush;
 }
+#endif
 
 #ifndef   wxUSE_NOGUI
+
 // ----------------------------------------------------------------------------
 // wxLogTextCtrl implementation
 // ----------------------------------------------------------------------------
-wxLogTextCtrl::wxLogTextCtrl(wxTextCtrl *pTextCtrl)
-// @@@ TODO: in wxGTK wxTextCtrl doesn't derive from streambuf
 
-// Also, in DLL mode in wxMSW, can't use it.
+#ifdef wxUSE_STD_IOSTREAM
+wxLogTextCtrl::wxLogTextCtrl(wxTextCtrl *pTextCtrl)
+// DLL mode in wxMSW, can't use it.
 #if defined(NO_TEXT_WINDOW_STREAM)
 #else
              : wxLogStream(new ostream(pTextCtrl))
@@ -421,6 +424,7 @@ wxLogTextCtrl::~wxLogTextCtrl()
 {
   delete m_ostr;
 }
+#endif
 
 // ----------------------------------------------------------------------------
 // wxLogGui implementation

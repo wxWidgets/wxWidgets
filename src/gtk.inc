@@ -8,6 +8,7 @@ LIB_MINOR=1
 
 # define library sources
 
+
 LIB_CPP_SRC=\
 \
  common/cmndata.cpp \
@@ -38,7 +39,6 @@ LIB_CPP_SRC=\
  common/dbtable.cpp \
  common/postscrp.cpp \
  common/prntbase.cpp \
- common/resource.cpp \
  common/serbase.cpp \
  common/string.cpp \
  common/textfile.cpp \
@@ -57,7 +57,6 @@ LIB_CPP_SRC=\
  common/validate.cpp \
  common/valtext.cpp \
  common/variant.cpp \
- common/wxexpr.cpp \
  common/socket.cpp \
  common/sckaddr.cpp \
  common/sckipc.cpp \
@@ -66,6 +65,8 @@ LIB_CPP_SRC=\
  common/ftp.cpp \
  common/url.cpp \
  common/tokenzr.cpp \
+ common/resource.cpp \
+ common/wxexpr.cpp \
 \
  gtk/accel.cpp \
  gtk/app.cpp \

@@ -75,6 +75,7 @@
 #endif
 
 #include "wx/setup.h"
+#include "wx/log.h"
 
 // No, Cygwin doesn't appear to have fnmatch.h after all.
 #if defined(HAVE_FNMATCH_H)
@@ -1091,7 +1092,7 @@ char *wxGetTempFileName(const wxString& prefix, char *buf)
 	  return buf;
 	}
     }
-  cerr << _("wxWindows: error finding temporary file name.\n");
+  wxLogError( _("wxWindows: error finding temporary file name.\n") );
   if (buf) buf[0] = 0;
   return (char *) NULL;
 #endif

@@ -21,10 +21,18 @@
 #include "wx/string.h"
 #include "wx/control.h"
 
+#ifdef wxUSE_STD_IOSTREAM
+
 #if wxUSE_IOSTREAMH
 #include <iostream.h>
 #else
 #include <iostream>
+#endif
+
+#else
+
+#define NO_TEXT_WINDOW_STREAM
+
 #endif
 
 //-----------------------------------------------------------------------------
@@ -43,7 +51,11 @@ extern const char *wxTextCtrlNameStr;
 //  wxTextCtrl
 //-----------------------------------------------------------------------------
 
+#ifndef NO_TEXT_WINDOW_STREAM
 class wxTextCtrl: public wxControl, public streambuf
+#else
+class wxTextCtrl: public wxControl
+#endif
 {
   DECLARE_EVENT_TABLE()
   DECLARE_DYNAMIC_CLASS(wxTextCtrl);
@@ -89,6 +101,7 @@ class wxTextCtrl: public wxControl, public streambuf
 
     void OnChar( wxKeyEvent &event );
 
+#ifndef NO_TEXT_WINDOW_STREAM
     int overflow(int i);
     int sync();
     int underflow();
@@ -99,6 +112,7 @@ class wxTextCtrl: public wxControl, public streambuf
     wxTextCtrl& operator<<(float f);
     wxTextCtrl& operator<<(double d);
     wxTextCtrl& operator<<(const char c);
+#endif
 
     void SetFont( const wxFont &font );
     void SetForegroundColour(const wxColour &colour);

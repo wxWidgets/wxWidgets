@@ -19,7 +19,9 @@
 #include "wx/memory.h"
 #include "wx/font.h"
 #include "wx/settings.h"
+#ifdef wxUSE_WX_RESOURCES
 #include "wx/resource.h"
+#endif
 #include "wx/module.h"
 #include "wx/image.h"
 #include "wx/thread.h"
@@ -320,8 +322,7 @@ void wxApp::CommonInit(void)
 #endif
 */
   wxSystemSettings::Init();
-  wxTheResourceCache = new wxResourceCache(wxKEY_STRING);
-
+  
   wxTheFontNameDirectory =  new wxFontNameDirectory;
   wxTheFontNameDirectory->Initialize();
 
@@ -331,7 +332,11 @@ void wxApp::CommonInit(void)
   wxInitializeStockLists();
   wxInitializeStockObjects();
 
+#ifdef wxUSE_WX_RESOURCES
+  wxTheResourceCache = new wxResourceCache(wxKEY_STRING);
+  
   wxInitializeResourceSystem();
+#endif
 
   wxImage::InitStandardHandlers();
 
@@ -344,13 +349,15 @@ void wxApp::CommonCleanUp(void)
     wxDELETE(wxTheFontNameDirectory);
     wxDeleteStockObjects();
 
+#ifdef wxUSE_WX_RESOURCES
     wxFlushResources();
 
     wxDELETE(wxTheResourceCache);
+    
+    wxCleanUpResourceSystem();
+#endif
 
     wxDeleteStockLists();
-
-    wxCleanUpResourceSystem();
 
     wxImage::CleanUpHandlers();
 

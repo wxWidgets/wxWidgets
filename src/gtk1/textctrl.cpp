@@ -68,13 +68,21 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
     EVT_CHAR(wxTextCtrl::OnChar)
 END_EVENT_TABLE()
 
+#ifndef NO_TEXT_WINDOW_STREAM
 wxTextCtrl::wxTextCtrl() : streambuf()
 {
     if (allocate()) setp(base(),ebuf());
 
     m_modified = FALSE;
 }
+#else
+wxTextCtrl::wxTextCtrl()
+{
+    m_modified = FALSE;
+}
+#endif
 
+#ifndef NO_TEXT_WINDOW_STREAM
 wxTextCtrl::wxTextCtrl( wxWindow *parent, wxWindowID id, const wxString &value,
       const wxPoint &pos, const wxSize &size,
       int style, const wxValidator& validator, const wxString &name ) : streambuf()
@@ -84,6 +92,15 @@ wxTextCtrl::wxTextCtrl( wxWindow *parent, wxWindowID id, const wxString &value,
     m_modified = FALSE;
     Create( parent, id, value, pos, size, style, validator, name );
 }
+#else
+wxTextCtrl::wxTextCtrl( wxWindow *parent, wxWindowID id, const wxString &value,
+      const wxPoint &pos, const wxSize &size,
+      int style, const wxValidator& validator, const wxString &name )
+{
+    m_modified = FALSE;
+    Create( parent, id, value, pos, size, style, validator, name );
+}
+#endif
 
 bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
       const wxPoint &pos, const wxSize &size,
@@ -621,6 +638,7 @@ void wxTextCtrl::OnChar( wxKeyEvent &key_event )
     key_event.Skip();
 }
 
+#ifndef NO_TEXT_WINDOW_STREAM
 int wxTextCtrl::overflow( int WXUNUSED(c) )
 {
     int len = pptr() - pbase();
@@ -697,6 +715,7 @@ wxTextCtrl& wxTextCtrl::operator<<(const char c)
     WriteText(buf);
     return *this;
 }
+#endif
 
 GtkWidget* wxTextCtrl::GetConnectWidget()
 {
