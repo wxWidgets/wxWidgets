@@ -14,7 +14,7 @@ class MyCanvas(wxScrolledWindow):
         self.maxHeight = 1000
         self.count = 0
 
-        self.SetBackgroundColour(wxNamedColor("WHITE"))
+        self.SetBackgroundColour("WHITE")
         EVT_LEFT_DOWN(self, self.OnLeftButtonEvent)
         EVT_LEFT_UP(self,   self.OnLeftButtonEvent)
         EVT_MOTION(self,    self.OnLeftButtonEvent)
@@ -47,11 +47,11 @@ class MyCanvas(wxScrolledWindow):
 
     def DoDrawing(self, dc):
         dc.BeginDrawing()
-        dc.SetPen(wxPen(wxNamedColour('RED')))
+        dc.SetPen(wxPen('RED'))
         dc.DrawRectangle(5, 5, 50, 50)
 
         dc.SetBrush(wxLIGHT_GREY_BRUSH)
-        dc.SetPen(wxPen(wxNamedColour('BLUE'), 4))
+        dc.SetPen(wxPen('BLUE', 4))
         dc.DrawRectangle(15, 15, 50, 50)
 
         dc.SetFont(wxFont(14, wxSWISS, wxNORMAL, wxNORMAL))
@@ -59,7 +59,7 @@ class MyCanvas(wxScrolledWindow):
         te = dc.GetTextExtent("Hello World")
         dc.DrawText("Hello World", 60, 65)
 
-        dc.SetPen(wxPen(wxNamedColour('VIOLET'), 4))
+        dc.SetPen(wxPen('VIOLET', 4))
         dc.DrawLine(5, 65+te[1], 60+te[0], 65+te[1])
 
         lst = [(100,110), (150,110), (150,160), (100,160)]
@@ -84,7 +84,7 @@ class MyCanvas(wxScrolledWindow):
         dc.DrawRectangle(50,500,50,50)
         dc.DrawRectangle(100,500,50,50)
 
-        dc.SetPen(wxPen(wxNamedColour('RED')))
+        dc.SetPen(wxPen('RED'))
         dc.DrawEllipticArc(200, 500, 50, 75, 0, 90)
 
         y = 20
@@ -97,7 +97,7 @@ class MyCanvas(wxScrolledWindow):
             dc.DrawLine(300, y, 400, y)
             y = y + 10
 
-        dc.SetBrush(wxNullBrush)
+        dc.SetBrush(wxTRANSPARENT_BRUSH)
         dc.SetPen(wxPen(wxColour(0xFF, 0x20, 0xFF), 1, wxSOLID))
         dc.DrawRectangle(450, 50, 100, 100)
         old_pen = dc.GetPen()
@@ -113,7 +113,7 @@ class MyCanvas(wxScrolledWindow):
 
 
     def DrawSavedLines(self, dc):
-        dc.SetPen(wxPen(wxNamedColour('MEDIUM FOREST GREEN'), 4))
+        dc.SetPen(wxPen('MEDIUM FOREST GREEN', 4))
         for line in self.lines:
             for coords in line:
                 apply(dc.DrawLine, coords)
@@ -138,7 +138,7 @@ class MyCanvas(wxScrolledWindow):
             dc = wxClientDC(self)
             self.PrepareDC(dc)
             dc.BeginDrawing()
-            dc.SetPen(wxPen(wxNamedColour('MEDIUM FOREST GREEN'), 4))
+            dc.SetPen(wxPen('MEDIUM FOREST GREEN', 4))
             coords = (self.x, self.y) + self.ConvertEventCoords(event)
             self.curLine.append(coords)
             apply(dc.DrawLine, coords)
