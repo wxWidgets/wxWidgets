@@ -434,12 +434,13 @@ void ScintillaWX::DoDragLeave() {
 // Redraw all of text area. This paint will not be abandoned.
 void ScintillaWX::FullPaint() {
     paintState = painting;
-    rcPaint = GetTextRectangle();
-    wxClientDC dc(wMain.GetID());
-    Surface surfaceWindow;
-    surfaceWindow.Init(&dc);
-    Paint(&surfaceWindow, rcPaint);
-    surfaceWindow.Release();
+//      rcPaint = GetTextRectangle();
+//      wxClientDC dc(wMain.GetID());
+//      Surface surfaceWindow;
+//      surfaceWindow.Init(&dc);
+//      Paint(&surfaceWindow, rcPaint);
+//      surfaceWindow.Release();
+    wMain.GetID()->Refresh(FALSE);
     paintState = notPainting;
 }
 
