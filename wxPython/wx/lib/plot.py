@@ -392,9 +392,6 @@ class PlotCanvas(wx.Window):
 
         self.SetBackgroundColour("white")
         
-        self.Bind(wx.EVT_PAINT, self.OnPaint)
-        self.Bind(wx.EVT_SIZE, self.OnSize)
-        
         # Create some mouse events for zooming
         self.Bind(wx.EVT_LEFT_DOWN, self.OnMouseLeftDown)
         self.Bind(wx.EVT_LEFT_UP, self.OnMouseLeftUp)
@@ -439,10 +436,13 @@ class PlotCanvas(wx.Window):
         self._fontSizeTitle= 15
         self._fontSizeLegend= 7
 
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
         # OnSize called to make sure the buffer is initialized.
         # This might result in OnSize getting called twice on some
         # platforms at initialization, but little harm done.
-        self.OnSize(None) # sets the initial size based on client size
+       	if wx.Platform != "__WXMAC__":
+       	    self.OnSize(None) # sets the initial size based on client size
 
         
     # SaveFile

@@ -799,7 +799,8 @@ class FloatCanvas(wx.Panel):
         self.StartMove = None
         self.PrevMoveBox = None
         # called just to make sure everything is initialized
-        self.OnSize(None)
+        if wx.Platform != "__WXMAC__":
+        	self.OnSize(None)
 
         
     def BuildToolbar(self):
