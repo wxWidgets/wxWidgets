@@ -873,11 +873,7 @@ void wxResourceManager::AddItemsRecursively(long parent, wxItemResource *resourc
   else
     imageId = 3;
   
-  long id = m_editorResourceTree->InsertItem(parent, theString
-#ifdef __WXMSW__
-     , imageId
-#endif
-   );
+  long id = m_editorResourceTree->AppendItem(parent, theString, imageId );
 
   m_editorResourceTree->SetItemData(id, new wxResourceTreeData(resource));
 
