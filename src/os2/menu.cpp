@@ -226,7 +226,7 @@ void wxMenu::UpdateAccel(
 
         if (IsAttached())
         {
-            m_menuBar->RebuildAccelTable();
+            GetMenuBar()->RebuildAccelTable();
         }
     }
 } // wxMenu::UpdateAccel
@@ -354,9 +354,9 @@ bool wxMenu::DoInsertOrAppend(
         //
         // If we're already attached to the menubar, we must update it
         //
-        if (IsAttached() && m_menuBar->IsAttached())
+        if (IsAttached() && GetMenuBar()->IsAttached())
         {
-            m_menuBar->Refresh();
+            GetMenuBar()->Refresh();
         }
         return TRUE;
     }
@@ -497,12 +497,12 @@ wxMenuItem* wxMenu::DoRemove(
                  ,MPFROM2SHORT(pItem->GetId(), TRUE)
                  ,(MPARAM)0
                 );
-    if (IsAttached() && m_menuBar->IsAttached())
+    if (IsAttached() && GetMenuBar()->IsAttached())
     {
         //
         // Otherwise, the chane won't be visible
         //
-        m_menuBar->Refresh();
+        GetMenuBar()->Refresh();
     }
 
     //
@@ -615,8 +615,8 @@ wxWindow* wxMenu::GetWindow() const
 {
     if (m_invokingWindow != NULL)
         return m_invokingWindow;
-    else if ( m_menuBar != NULL)
-        return m_menuBar->GetFrame();
+    else if ( GetMenuBar() != NULL)
+        return GetMenuBar()->GetFrame();
 
     return NULL;
 } // end of wxMenu::GetWindow

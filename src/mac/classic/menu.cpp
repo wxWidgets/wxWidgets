@@ -124,7 +124,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                wxASSERT_MSG( pSubMenu->m_hMenu != NULL , wxT("invalid submenu added"));
             pSubMenu->m_menuParent = this ;
 
-            if (wxMenuBar::MacGetInstalledMenuBar() == m_menuBar)
+            if (wxMenuBar::MacGetInstalledMenuBar() == GetMenuBar())
             {
                 pSubMenu->MacBeforeDisplay( true ) ;
              }
@@ -166,7 +166,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     // if we're already attached to the menubar, we must update it
     if ( IsAttached() )
     {
-        m_menuBar->Refresh();
+        GetMenuBar()->Refresh();
     }
     return TRUE ;
 }
@@ -263,7 +263,7 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
     if ( IsAttached() )
     {
         // otherwise, the change won't be visible
-        m_menuBar->Refresh();
+        GetMenuBar()->Refresh();
     }
 
     // and from internal data structures
@@ -303,8 +303,8 @@ wxWindow *wxMenu::GetWindow() const
 {
     if ( m_invokingWindow != NULL )
         return m_invokingWindow;
-    else if ( m_menuBar != NULL)
-        return (wxWindow *) m_menuBar->GetFrame();
+    else if ( GetMenuBar() != NULL)
+        return (wxWindow *) GetMenuBar()->GetFrame();
 
     return NULL;
 }

@@ -119,7 +119,7 @@ wxMenuItem* wxMenu::DoAppend(wxMenuItem *pItem)
     if (m_menuWidget)
     {
         // this is a dynamic Append
-        pItem->CreateItem(m_menuWidget, m_menuBar, m_topLevelMenu);
+        pItem->CreateItem(m_menuWidget, GetMenuBar(), m_topLevelMenu);
     }
 
     if ( pItem->IsSubMenu() )
