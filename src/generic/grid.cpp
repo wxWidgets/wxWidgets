@@ -36,8 +36,8 @@
 
 #include "wx/generic/grid.h"
 
-#ifndef DRAW_LINES
-#define DRAW_LINES 1
+#ifndef WXGRID_DRAW_LINES
+#define WXGRID_DRAW_LINES 1
 #endif
 
 //////////////////////////////////////////////////////////////////////
@@ -876,7 +876,7 @@ void wxGridWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     wxRegion reg = GetUpdateRegion();
     m_owner->CalcCellsExposed( reg );
     m_owner->DrawGridCellArea( dc );
-#if DRAW_LINES
+#if WXGRID_DRAW_LINES
     m_owner->DrawAllGridLines( dc, reg );
 #endif
 }
@@ -2621,7 +2621,7 @@ void wxGrid::DrawCell( wxDC& dc, const wxGridCellCoords& coords )
     if ( m_colWidths[coords.GetCol()] <=0  ||
          m_rowHeights[coords.GetRow()] <= 0 ) return;
 
-#if !DRAW_LINES
+#if !WXGRID_DRAW_LINES
     if ( m_gridLinesEnabled )
         DrawCellBorder( dc, coords );
 #endif
@@ -2752,12 +2752,17 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & reg )
       CalcUnscrolledPosition( x + w, y + h, &right, &bottom );
     }
 
+    // avoid drawing grid lines past the last row and col
+    //
+    right = wxMin( right, m_colRights[m_numCols-1] );
+    bottom = wxMin( bottom, m_rowBottoms[m_numRows-1] );
+
     dc.SetPen( wxPen(GetGridLineColour(), 1, wxSOLID) );
 
     // horizontal grid lines
     //
     int i;
-    for ( i = 0; i <= m_numRows; i++ )
+    for ( i = 0; i < m_numRows; i++ )
     {
         if ( m_rowBottoms[i] > bottom )
         {
@@ -2772,7 +2777,7 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & reg )
 
     // vertical grid lines
     //
-    for ( i = 0; i <= m_numCols; i++ )
+    for ( i = 0; i < m_numCols; i++ )
     {
         if ( m_colRights[i] > right )
         {
