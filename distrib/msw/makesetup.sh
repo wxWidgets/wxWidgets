@@ -135,6 +135,13 @@ dospinos2()
     $SCRIPTDIR/namedown include/wx/os2/*.H
     $SCRIPTDIR/namedown src/os2/*.CPP src/os2/*.I
 
+    echo Copying readme files...
+    cp $APPDIR/docs/os2/install.txt INSTALL-OS2.txt
+    cp $APPDIR/docs/licence.txt LICENCE.txt
+    cp $APPDIR/docs/lgpl.txt COPYING.LIB
+    cp $APPDIR/docs/changes.txt CHANGES.txt
+    cp $APPDIR/docs/readme.txt README.txt
+
     cd $DESTDIR
 
     rm -f wxOS2-$VERSION.zip
@@ -177,6 +184,14 @@ dospinmac()
     rm -f src/gtk/descrip.mms src/motif/descrip.mms docs/pdf/*.pdf
     rm -f -r docs/html/dialoged docs/html/tex2rtf docs/htmlhelp
 
+    echo Copying readme files...
+    cp $APPDIR/docs/mac/readme.txt README-MAC.txt
+    cp $APPDIR/docs/mac/install.txt INSTALL-MAC.txt
+    cp $APPDIR/docs/licence.txt LICENCE.txt
+    cp $APPDIR/docs/lgpl.txt COPYING.LIB
+    cp $APPDIR/docs/changes.txt CHANGES.txt
+    cp $APPDIR/docs/readme.txt README.txt
+
     cd $DESTDIR
 
     rm -f wxMac-$VERSION.zip
@@ -205,10 +220,31 @@ dospinmsw()
     zip $ZIPFLAGS -@ -u $DESTDIR/wxWindows-$VERSION-win.zip < $APPDIR/distrib/msw/utilmake.rsp
     zip $ZIPFLAGS -@ -u $DESTDIR/wxWindows-$VERSION-win.zip < $APPDIR/distrib/msw/univ.rsp
 
-    rearchive wxWindows-$VERSION-win.zip wxWindows-$VERSION $DESTDIR
+#    rearchive wxWindows-$VERSION-win.zip wxWindows-$VERSION $DESTDIR
+
+    if [ -d $DESTDIR/wxWindows-$VERSION ]; then
+        rm -f -r $DESTDIR/wxWindows-$VERSION
+    fi
+
+    mkdir $DESTDIR/wxWindows-$VERSION
+    cd $DESTDIR/wxWindows-$VERSION
+    unzip $ZIPFLAGS ../wxWindows-$VERSION-win.zip
 
     echo Removing .mms files
-    zip $ZIPFLAGS -d $DESTDIR/wxWindows-$VERSION-win.zip wxWindows-$VERSION/src/gtk/descrip.mms wxWindows-$VERSION/src/motif/descrip.mms
+    rm -f src/gtk/descrip.mms src/motif/descrip.mms
+
+    echo Copying readme files...
+    cp $APPDIR/docs/msw/readme.txt README-MSW.txt
+    cp $APPDIR/docs/msw/install.txt INSTALL-MSW.txt
+    cp $APPDIR/docs/licence.txt LICENCE.txt
+    cp $APPDIR/docs/lgpl.txt COPYING.LIB
+    cp $APPDIR/docs/changes.txt CHANGES.txt
+    cp $APPDIR/docs/readme.txt README.txt
+
+    cd $DESTDIR
+
+    rm -f wxWindows-$VERSION-win.zip
+    zip $ZIPFLAGS -r wxWindows-$VERSION-win.zip wxWindows-$VERSION/*
 }
 
 dospindocs()

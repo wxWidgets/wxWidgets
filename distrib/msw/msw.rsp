@@ -73,6 +73,9 @@ src/msw/version.rc
 src/msw/ole/*.cpp
 src/msw/*.prj
 
+src/msw/wince/*.cpp
+src/msw/wince/*.c
+
 include/wx/msw/*.h
 include/wx/msw/*.rc
 include/wx/msw/wx.manifest
@@ -84,6 +87,8 @@ include/wx/msw/ole/*.h
 include/wx/msw/*.cur
 include/wx/msw/*.ico
 include/wx/msw/*.bmp
+
+include/wx/msw/wince/*.h
 
 samples/*.rc
 samples/*.xpm
