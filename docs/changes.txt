@@ -63,6 +63,7 @@ All:
 - wxHTTP::GetResponse() added (David Nock)
 - added conversions to/from UTF 16/32 LE/BE (Andreas Pflug)
 - wxFileName::Normalize(wxPATH_NORM_ALL) doesn't lower filename case any more
+- seeveral wxZlibStreams bug fixes enhancements (M.J.Wetherell)
 
 All (GUI):
 

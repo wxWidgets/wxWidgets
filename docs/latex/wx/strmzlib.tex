@@ -6,6 +6,10 @@
 This stream uncompresses all data read from it. It uses the "filtered"
 stream to get new compressed data.
 
+The stream is not seekable, \helpref{SeekI()}{wxinputstreamseeki} returns
+ {\it wxInvalidOffset}. Also \helpref{GetSize()}{wxstreambasegetsize} is
+not supported, it always returns $0$.
+
 \wxheading{Derived from}
 
 \helpref{wxFilterInputStream}{wxfilterinputstream}
@@ -16,7 +20,28 @@ stream to get new compressed data.
 
 \wxheading{See also}
 
-\helpref{wxInputStream}{wxinputstream}
+\helpref{wxInputStream}{wxinputstream}, 
+ \helpref{wxZlibOutputStream}{wxzliboutputstream}.
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxZlibInputStream::wxZlibInputStream}
+
+\func{}{wxZlibInputStream}{\param{wxInputStream\&}{ stream}, \param{int}{ flags = 0}}
+
+{\it flags} should be omitted for normal usage. The flag {\it wxZLIB\_NO_HEADER}
+ is needed when wxZlibInputStream is used as an 'inflate' decompressor for gzip
+or zip files.
+
+{\it wxZLIB\_NO_HEADER} is currently the only flag:
+
+\begin{verbatim}
+// Flags
+enum {
+    wxZLIB_NO_HEADER = 1   // required for use in Gzip and Zip files
+}
+\end{verbatim}
+
 
 % -----------------------------------------------------------------------------
 % wxZlibOutputStream
@@ -25,6 +50,9 @@ stream to get new compressed data.
 
 This stream compresses all data written to it, and passes the compressed data
 to the "filtered" stream.
+
+The stream is not seekable, \helpref{SeekO()}{wxoutputstreamseeko} returns
+ {\it wxInvalidOffset}.
 
 \wxheading{Derived from}
 
@@ -36,16 +64,39 @@ to the "filtered" stream.
 
 \wxheading{See also}
 
-\helpref{wxOutputStream}{wxoutputstream}
+\helpref{wxOutputStream}{wxoutputstream},
+ \helpref{wxZlibInputStream}{wxzlibinputstream}
 
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 \membersection{wxZlibOutputStream::wxZlibOutputStream}
 
-\func{}{wxZlibOutputStream}{\param{wxOutputStream\&}{ stream},\param{int}{ level = -1}}
+\func{}{wxZlibOutputStream}{\param{wxOutputStream\&}{ stream}, \param{int}{ level = -1}, \param{int}{ flags = 0}}
 
 Creates a new write-only compressed stream. {\it level} means level of 
 compression. It is number between 0 and 9 (including these values) where
 0 means no compression and 9 best but slowest compression. -1 is default
 value (currently equivalent to 6).
+
+{\it flags} should be omitted for normal usage. The flag {\it wxZLIB\_NO_HEADER}
+ suppresses the generation of the zlib header and checksum, and is required
+when wxZlibOutputStream is used as a 'deflate' compressor for gzip or zip files.
+
+The following symbols can be use for the compression level and flags:
+
+\begin{verbatim}
+// Compression level
+enum {
+    wxZ_DEFAULT_COMPRESSION = -1,
+    wxZ_NO_COMPRESSION = 0,
+    wxZ_BEST_SPEED = 1,
+    wxZ_BEST_COMPRESSION = 9
+}
+
+// Flags
+enum {
+    wxZLIB_NO_HEADER = 1   // required for use in Gzip and Zip files
+}
+\end{verbatim}
+
