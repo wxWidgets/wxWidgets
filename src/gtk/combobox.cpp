@@ -262,6 +262,8 @@ int wxComboBox::DoAppend( const wxString &item )
 
     EnableEvents();
 
+    InvalidateBestSize();
+
     return count - 1;
 }
 
@@ -306,6 +308,8 @@ int wxComboBox::DoInsert( const wxString &item, int pos )
     m_clientObjectList.Insert( pos, (wxObject*) NULL );
 
     EnableEvents();
+    
+    InvalidateBestSize();
 
     return pos;
 }
@@ -371,6 +375,8 @@ void wxComboBox::Clear()
     m_clientDataList.Clear();
 
     EnableEvents();
+
+    InvalidateBestSize();
 }
 
 void wxComboBox::Delete( int n )
@@ -406,6 +412,8 @@ void wxComboBox::Delete( int n )
         m_clientDataList.Erase( node );
     
     EnableEvents();
+    
+    InvalidateBestSize();
 }
 
 void wxComboBox::SetString(int n, const wxString &text)
@@ -425,6 +433,8 @@ void wxComboBox::SetString(int n, const wxString &text)
     {
         wxFAIL_MSG( wxT("wxComboBox: wrong index") );
     }
+    
+    InvalidateBestSize();
 }
 
 int wxComboBox::FindString( const wxString &item ) const
@@ -587,6 +597,8 @@ void wxComboBox::SetValue( const wxString& value )
     wxString tmp = wxT("");
     if (!value.IsNull()) tmp = value;
     gtk_entry_set_text( GTK_ENTRY(entry), wxGTK_CONV( tmp ) );
+    
+    InvalidateBestSize();
 }
 
 void wxComboBox::Copy()
@@ -720,14 +732,6 @@ void wxComboBox::EnableEvents()
 void wxComboBox::OnSize( wxSizeEvent &event )
 {
     event.Skip();
-
-#if 0
-    int w = 21;
-    gtk_widget_set_usize( GTK_COMBO(m_widget)->entry, m_width-w-1, m_height );
-
-    gtk_widget_set_uposition( GTK_COMBO(m_widget)->button, m_x+m_width-w, m_y );
-    gtk_widget_set_usize( GTK_COMBO(m_widget)->button, w, m_height );
-#endif // 0
 }
 
 void wxComboBox::DoApplyWidgetStyle(GtkRcStyle *style)
@@ -767,7 +771,6 @@ wxSize wxComboBox::DoGetBestSize() const
 
     // we know better our horizontal extent: it depends on the longest string
     // in the combobox
-    ret.x = 0;
     if ( m_widget )
     {
         int width;
