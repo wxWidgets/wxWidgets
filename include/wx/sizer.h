@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        sizer.h
-// Purpose:     provide wxSizer class for layounting
+// Purpose:     provide wxSizer class for layouting
 // Author:      Robert Roebling and Robin Dunn
 // Modified by:
-// Created:     
+// Created:
 // RCS-ID:      $Id$
 // Copyright:   (c) Robin Dunn, Dirk Holtwick and Robert Roebling
 // Licence:     wxWindows licence
@@ -39,27 +39,30 @@ class wxStaticBoxSizer;
 
 class WXDLLEXPORT wxSizerItem: public wxObject
 {
+    DECLARE_CLASS(wxSizerItem);
 public:
   // spacer
-  wxSizerItem( int width, int height, int option, int flag, int border );
+  wxSizerItem( int width, int height, int option, int flag, int border, wxObject* userData);
 
   // window
-  wxSizerItem( wxWindow *window, int option, int flag, int border );
+  wxSizerItem( wxWindow *window, int option, int flag, int border, wxObject* userData );
 
   // subsizer
-  wxSizerItem( wxSizer *sizer, int option, int flag, int border );
+  wxSizerItem( wxSizer *sizer, int option, int flag, int border, wxObject* userData );
+
+  ~wxSizerItem();
 
   virtual wxSize GetSize();
   virtual wxSize CalcMin();
   virtual void SetDimension( wxPoint pos, wxSize size );
-  
+
   bool IsWindow();
   bool IsSizer();
   bool IsSpacer();
-  
-  wxWindow *GetWindow() const  
+
+  wxWindow *GetWindow() const
     { return m_window; }
-  wxSizer *GetSizer() const    
+  wxSizer *GetSizer() const
     { return m_sizer; }
   int GetOption() const
     { return m_option; }
@@ -67,7 +70,9 @@ public:
     { return m_flag; }
   int GetBorder() const
     { return m_border; }
-  
+  wxObject* GetUserData()
+    { return m_userData; }
+
 protected:
   wxWindow    *m_window;
   wxSizer     *m_sizer;
@@ -76,6 +81,7 @@ protected:
   int          m_option;
   int          m_border;
   int          m_flag;
+  wxObject    *m_userData;
 };
 
 //---------------------------------------------------------------------------
@@ -84,24 +90,25 @@ protected:
 
 class WXDLLEXPORT wxSizer: public wxObject
 {
+    DECLARE_CLASS(wxSizer);
 public:
    wxSizer();
    ~wxSizer();
-   
-   virtual void Add( wxWindow *window, int option = 0, int flag = 0, int border = 0 );
-   virtual void Add( wxSizer *sizer, int option = 0, int flag = 0, int border = 0 );
-   virtual void Add( int width, int height, int option = 0, int flag = 0, int border = 0  );
-  
-   virtual void Prepend( wxWindow *window, int option = 0, int flag = 0, int border = 0 );
-   virtual void Prepend( wxSizer *sizer, int option = 0, int flag = 0, int border = 0 );
-   virtual void Prepend( int width, int height, int option = 0, int flag = 0, int border = 0  );
-   
+
+   virtual void Add( wxWindow *window, int option = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
+   virtual void Add( wxSizer *sizer, int option = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
+   virtual void Add( int width, int height, int option = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
+
+   virtual void Prepend( wxWindow *window, int option = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
+   virtual void Prepend( wxSizer *sizer, int option = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
+   virtual void Prepend( int width, int height, int option = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
+
    virtual bool Remove( wxWindow *window );
    virtual bool Remove( wxSizer *sizer );
    virtual bool Remove( int pos );
-  
+
    void SetDimension( int x, int y, int width, int height );
-  
+
    wxSize GetSize()
      { return m_size; }
    wxPoint GetPosition()
@@ -111,17 +118,20 @@ public:
 
    virtual void RecalcSizes() = 0;
    virtual wxSize CalcMin() = 0;
-   
+
    virtual void Layout();
 
    void Fit( wxWindow *window );
    void SetSizeHints( wxWindow *window );
-   
+
+  wxList& GetChildren()
+    { return m_children; }
+
 protected:
    wxSize  m_size;
    wxPoint m_position;
    wxList  m_children;
-   
+
    wxSize GetMinWindowSize( wxWindow *window );
 };
 
@@ -131,15 +141,16 @@ protected:
 
 class WXDLLEXPORT wxBoxSizer: public wxSizer
 {
+    DECLARE_CLASS(wxBoxSizer);
 public:
    wxBoxSizer( int orient );
-   
+
    void RecalcSizes();
    wxSize CalcMin();
-   
+
    int GetOrientation()
      { return m_orient; }
-   
+
 protected:
     int m_orient;
     int m_stretchable;
@@ -148,22 +159,23 @@ protected:
     int m_fixedWidth;
     int m_fixedHeight;
 };
-  
+
 //---------------------------------------------------------------------------
 // wxStaticBoxSizer
 //---------------------------------------------------------------------------
 
 class WXDLLEXPORT wxStaticBoxSizer: public wxBoxSizer
 {
+    DECLARE_CLASS(wxStaticBoxSizer);
 public:
    wxStaticBoxSizer( wxStaticBox *box, int orient );
-   
+
    void RecalcSizes();
    wxSize CalcMin();
-   
+
    wxStaticBox *GetStaticBox()
      { return m_staticBox; }
-   
+
 protected:
    wxStaticBox   *m_staticBox;
 };
