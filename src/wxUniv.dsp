@@ -89,6 +89,10 @@ SOURCE=.\common\appcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\bmpbase.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\choiccmn.cpp
 # End Source File
 # Begin Source File

@@ -252,6 +252,10 @@ SOURCE=.\common\appcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\bmpbase.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\choiccmn.cpp
 # End Source File
 # Begin Source File
@@ -2656,10 +2660,6 @@ SOURCE=..\include\wx\msw\registry.h
 # Begin Source File
 
 SOURCE=..\include\wx\msw\scrolbar.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\msw\settings.h
 # End Source File
 # Begin Source File
 
