@@ -2558,6 +2558,6 @@ clean:
 	$(RM) *.d
 	$(RM) parser.c
 	$(RM) lexer.c
-	$(RM) ./lib/*
+	$(RM) ./lib/libwx*
 
 cleanall: clean
