@@ -303,6 +303,9 @@ public:
         Create(parent, id, pos, size, style, wxDefaultValidator, name);
     }
 
+    // focus/selection stuff
+    // ---------------------
+
     // [de]select an item
     void Select(long n, bool on = TRUE)
     {
@@ -331,6 +334,20 @@ public:
     // return TRUE if the item is selected
     bool IsSelected(long index)
         { return GetItemState(index, wxLIST_STATE_SELECTED) != 0; }
+
+    // columns
+    // -------
+
+    void SetColumnImage(int col, int image)
+    {
+        wxListItem item;
+        item.SetMask(wxLIST_MASK_IMAGE);
+        item.SetImage(image);
+        SetColumn(col, item);
+    }
+
+    void ClearColumnImage(int col) { SetColumnImage(col, -1); }
+
 private:
     DECLARE_DYNAMIC_CLASS(wxListView)
 };
