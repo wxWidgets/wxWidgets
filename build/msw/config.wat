@@ -10,7 +10,7 @@
 # -------------------------------------------------------------------------
 
 # Type of compiled binaries [debug,release]
-BUILD = release
+BUILD = debug
 
 # C compiler 
 CC = wcc386
@@ -56,7 +56,7 @@ OFFICIAL_BUILD = 0
 RUNTIME_LIBS = dynamic
 
 # What type of library to build? [0,1]
-SHARED = 1
+SHARED = 0
 
 # Compile Unicode build of wxWindows? [0,1]
 UNICODE = 0

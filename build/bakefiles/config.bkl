@@ -8,7 +8,7 @@
     <option name="SHARED">
         <values>0,1</values>
         <values-description>,DLL</values-description>
-        <default-value>1</default-value>
+        <default-value>0</default-value>
         <description>
             What type of library to build?
         </description>
@@ -48,7 +48,7 @@
     <option name="BUILD">
         <values>debug,release</values>
         <values-description>Debug,Release</values-description>
-        <default-value>release</default-value>
+        <default-value>debug</default-value>
         <description>
             Type of compiled binaries
         </description>
