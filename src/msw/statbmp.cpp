@@ -189,7 +189,6 @@ void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
     int w, h;
     GetPosition(&x, &y);
     GetSize(&w, &h);
-    RECT rect = { x, y, x + w, y + h };
 
 #ifdef __WIN32__
     HANDLE handle = m_isIcon ? (HANDLE)m_image.icon->GetHICON()
@@ -204,10 +203,14 @@ void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
             height = bitmap.GetHeight();
         if ( width && height )
         {
+            w = width;
+            h = height;
+
             ::MoveWindow((HWND)GetHWND(), x, y, width, height, FALSE);
         }
     }
 
+    RECT rect = { x, y, x + w, y + h };
     InvalidateRect((HWND)GetParent()->GetHWND(), &rect, TRUE);
 }
 
