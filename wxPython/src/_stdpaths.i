@@ -120,20 +120,21 @@ the 'Local Settings\\Application Data\\appname' directory.", "");
 prefix/lib/appname under Unix, program directory under Windows and
 Contents/Plugins app bundle subdirectory under Mac", "");
 
+
     
-#ifdef __WXGTK__
-    DocDeclStr(
-        void , SetInstallPrefix(const wxString& prefix),
-        "Set the program installation directory which is /usr/local by default.
+    DocStr(SetInstallPrefix,
+           "Set the program installation directory which is /usr/local by default.
 This value will be used by other methods such as `GetDataDir` and
 `GetPluginsDir` as the prefix for what they return. (This function
 only has meaning on Unix systems.)", "");
-    
 
-    DocDeclStr(
-        wxString , GetInstallPrefix() const,
-        "Get the program installation prefix. The default is the prefix where
+    DocStr(GetInstallPrefix,
+           "Get the program installation prefix. The default is the prefix where
 Python is installed. (This function only has meaning on Unix systems.)", "");
+    
+#ifdef __WXGTK__
+    void SetInstallPrefix(const wxString& prefix);
+    wxString GetInstallPrefix() const;
 #else
     %extend {
         void SetInstallPrefix(const wxString& prefix) {}
