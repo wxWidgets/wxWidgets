@@ -82,6 +82,8 @@ public:
     Constructor GetCtor() const { return m_ctor; }
     WidgetsPageInfo *GetNext() const { return m_next; }
 
+    void SetNext(WidgetsPageInfo *next) { m_next = next; }
+
 private:
     // the label of the page
     wxString m_label;
