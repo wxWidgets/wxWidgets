@@ -113,9 +113,16 @@ static wxString wxReplaceUnderscore( const wxString& title )
 
     /* GTK 1.2 wants to have "_" instead of "&" for accelerators */
     wxString str;
-    for ( pc = title; *pc != wxT('\0'); pc++ )
+    pc = title;
+    while (*pc != wxT('\0'))
     {
-        if (*pc == wxT('&'))
+        if ((*pc == wxT('&')) && (*(pc+1) == wxT('&')))
+        {
+            // "&" is doubled to indicate "&" instead of accelerator
+            ++pc;
+            str << wxT('&');
+        }
+        else if (*pc == wxT('&'))
         {
 #if GTK_CHECK_VERSION(1, 2, 0)
             str << wxT('_');
@@ -149,6 +156,7 @@ static wxString wxReplaceUnderscore( const wxString& title )
 
             str << *pc;
         }
+        ++pc;
     }
     return str;
 }
@@ -577,10 +585,9 @@ wxString wxMenuBar::GetLabelTop( size_t pos ) const
     wxString text( menu->GetTitle() );
     for ( const wxChar *pc = text.c_str(); *pc; pc++ )
     {
-        if ( *pc == wxT('_') || *pc == wxT('&') )
+        if ( *pc == wxT('_') )
         {
-            // '_' is the escape character for GTK+ and '&' is the one for
-            // wxWindows - skip both of them
+            // '_' is the escape character for GTK+
             continue;
         }
 
@@ -789,12 +796,6 @@ wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
         }
 #endif
 
-        if ( *pc == wxT('&') )
-        {
-            // wxMSW escapes &
-            continue;
-        }
-
         label += *pc;
     }
 
@@ -848,13 +849,18 @@ void wxMenuItem::DoSetText( const wxString& str )
     // '\t' is the deliminator indicating a hot key
     m_text.Empty();
     const wxChar *pc = str;
-    for (; (*pc != wxT('\0')) && (*pc != wxT('\t')); pc++ )
+    while ( (*pc != wxT('\0')) && (*pc != wxT('\t')) )
     {
-        if (*pc == wxT('&'))
+        if ((*pc == wxT('&')) && (*(pc+1) == wxT('&')))
+        {
+            // "&" is doubled to indicate "&" instead of accelerator
+            ++pc;
+            m_text << wxT('&');
+        }
+        else if (*pc == wxT('&'))
         {
             m_text << wxT('_');
         }
-
 #if GTK_CHECK_VERSION(2, 0, 0)
         else if ( *pc == wxT('_') )    // escape underscores
         {
@@ -878,10 +884,12 @@ void wxMenuItem::DoSetText( const wxString& str )
             m_text << wxT('\\');  /* ... and replace them with back slashes */
         }
 #endif
-        else
+        else {
             m_text << *pc;
+        }
+        ++pc;
     }
-
+    
     m_hotKey = wxT("");
 
     if(*pc == wxT('\t'))
@@ -957,9 +965,9 @@ wxString wxMenuItem::GetFactoryPath() const
 
     for ( const wxChar *pc = m_text.c_str(); *pc; pc++ )
     {
-        if ( *pc == wxT('_') || *pc == wxT('&') )
+        if ( *pc == wxT('_') )
         {
-            // remove '_' and '&' unconditionally
+            // remove '_' unconditionally
             continue;
         }
 
