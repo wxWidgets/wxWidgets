@@ -12,6 +12,7 @@
 #----------------------------------------------------------------------------
 
 from wxPython.wx import *
+from wxPython.lib.mixins.listctrl import wxColumnSorterMixin
 
 #---------------------------------------------------------------------------
 
@@ -59,7 +60,7 @@ musicdata = {
 
 import images
 
-class TestListCtrlPanel(wxPanel):
+class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
     def __init__(self, parent, log):
         wxPanel.__init__(self, parent, -1, style=wxWANTS_CHARS)
 
@@ -70,6 +71,11 @@ class TestListCtrlPanel(wxPanel):
         bmp = images.getSmilesBitmap()
         #idx1 = self.il.AddWithColourMask(bmp, wxWHITE)
         idx1 = self.il.Add(bmp)
+        bmp = images.getSmallUpArrowBitmap()
+        self.sm_up = self.il.Add(bmp)
+        bmp = images.getSmallDnArrowBitmap()
+        self.sm_dn = self.il.Add(bmp)
+
 
         self.list = wxListCtrl(self, tID,
                                style=wxLC_REPORT|wxSUNKEN_BORDER)#|wxLC_VRULES|wxLC_HRULES)
@@ -78,9 +84,29 @@ class TestListCtrlPanel(wxPanel):
         #  Why doesn't this show up on MSW???
         self.list.SetToolTip(wxToolTip("This is a ToolTip!"))
 
-        self.list.InsertColumn(0, "Artist")
-        self.list.InsertColumn(1, "Title", wxLIST_FORMAT_RIGHT)
-        self.list.InsertColumn(2, "Genre")
+        if 0:
+            # for normal simple columns, you can add them like this:
+            self.list.InsertColumn(0, "Artist")
+            self.list.InsertColumn(1, "Title", wxLIST_FORMAT_RIGHT)
+            self.list.InsertColumn(2, "Genre")
+        else:
+            # but since we want images on the column header we have to do it the hard way:
+            info = wxListItem()
+            info.m_mask = wxLIST_MASK_TEXT | wxLIST_MASK_IMAGE | wxLIST_MASK_FORMAT
+            info.m_image = -1
+            info.m_format = 0
+            info.m_text = "Artist"
+            self.list.InsertColumnInfo(0, info)
+
+            info.m_format = wxLIST_FORMAT_RIGHT
+            info.m_text = "Title"
+            self.list.InsertColumnInfo(1, info)
+
+            info.m_format = 0
+            info.m_text = "Genre"
+            self.list.InsertColumnInfo(2, info)
+
+
         items = musicdata.items()
         for x in range(len(items)):
             key, data = items[x]
@@ -89,20 +115,22 @@ class TestListCtrlPanel(wxPanel):
             self.list.SetStringItem(x, 2, data[2])
             self.list.SetItemData(x, key)
 
+        # Now that the list exists we can init the other base class,
+        # see wxPython/lib/mixins/listctrl.py
+        self.itemDataMap = musicdata
+        wxColumnSorterMixin.__init__(self, 3)
+        #self.SortListItems(0, true)
+
         self.list.SetColumnWidth(0, wxLIST_AUTOSIZE)
         self.list.SetColumnWidth(1, wxLIST_AUTOSIZE)
-        ##self.list.SetColumnWidth(2, wxLIST_AUTOSIZE)
 
+        # show how to select an item
         self.list.SetItemState(5, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
 
-        #self.list.SetItemState(25, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
-        #self.list.EnsureVisible(25)
-
-        # show how to change the colour of an item
+        # show how to change the colour of a couple items
         item = self.list.GetItem(1)
         item.SetTextColour(wxBLUE)
         self.list.SetItem(item)
-
         item = self.list.GetItem(4)
         item.SetTextColour(wxRED)
         self.list.SetItem(item)
@@ -113,6 +141,11 @@ class TestListCtrlPanel(wxPanel):
         EVT_LIST_ITEM_ACTIVATED(self, tID, self.OnItemActivated)
         EVT_LIST_DELETE_ITEM(self, tID, self.OnItemDelete)
         EVT_LIST_COL_CLICK(self, tID, self.OnColClick)
+        EVT_LIST_COL_RIGHT_CLICK(self, tID, self.OnColRightClick)
+        EVT_LIST_COL_BEGIN_DRAG(self, tID, self.OnColBeginDrag)
+        EVT_LIST_COL_DRAGGING(self, tID, self.OnColDragging)
+        EVT_LIST_COL_END_DRAG(self, tID, self.OnColEndDrag)
+
         EVT_LEFT_DCLICK(self.list, self.OnDoubleClick)
         EVT_RIGHT_DOWN(self.list, self.OnRightDown)
 
@@ -121,6 +154,16 @@ class TestListCtrlPanel(wxPanel):
 
         # for wxGTK
         EVT_RIGHT_UP(self.list, self.OnRightClick)
+
+
+    # Used by the wxColumnSorterMixin, see wxPython/lib/mixins/listctrl.py
+    def GetListCtrl(self):
+        return self.list
+
+    # Used by the wxColumnSorterMixin, see wxPython/lib/mixins/listctrl.py
+    def GetSortImages(self):
+        return (self.sm_dn, self.sm_up)
+
 
 
     def OnRightDown(self, event):
@@ -156,19 +199,19 @@ class TestListCtrlPanel(wxPanel):
         self.log.WriteText("OnItemDelete\n")
 
     def OnColClick(self, event):
-        self.log.WriteText("OnColClick: %d\n" % event.m_col)
-        self.col = event.m_col
-        self.list.SortItems(self.ColumnSorter)
+        self.log.WriteText("OnColClick: %d\n" % event.GetColumn())
 
-    def ColumnSorter(self, key1, key2):
-        item1 = musicdata[key1][self.col]
-        item2 = musicdata[key2][self.col]
+    def OnColRightClick(self, event):
+        self.log.WriteText("OnColRightClick: %d\n" % event.GetColumn())
 
-        # when the items are identical, compare someting else to make the sort key unique...
-        if item1 == item2:  return key1 - key2
-        elif item1 < item2: return -1
-        else:               return 1
+    def OnColBeginDrag(self, event):
+        self.log.WriteText("OnColBeginDrag\n")
 
+    def OnColDragging(self, event):
+        self.log.WriteText("OnColDragging\n")
+
+    def OnColEndDrag(self, event):
+        self.log.WriteText("OnColEndDrag\n")
 
     def OnDoubleClick(self, event):
         self.log.WriteText("OnDoubleClick item %s\n" % self.list.GetItemText(self.currentItem))

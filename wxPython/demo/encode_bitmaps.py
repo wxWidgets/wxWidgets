@@ -48,6 +48,9 @@ command_lines = [
 
     "-a -n GridBG bmp_source/GridBG.gif images.py",
 
+    "-a -n SmallUpArrow  -m #0000FF bmp_source/sm_up.bmp images.py",
+    "-a -n SmallDnArrow  -m #0000FF bmp_source/sm_down.bmp images.py",
+
     ]
 
 

@@ -24,16 +24,17 @@ import images
 _treeList = [
     ('New since last release', ['ContextHelp',
                                 'PyCrust',
-                                'VirtualListCtrl'
+                                'VirtualListCtrl',
+                                'wxListCtrl',
                                 ]),
 
-    ('Managed Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame']),
-
-    ('Non-Managed Windows', ['wxGrid', 'wxSashWindow',
-                             'wxScrolledWindow', 'wxSplitterWindow',
-                             'wxStatusBar', 'wxNotebook',
-                             'wxHtmlWindow',
-                             'wxStyledTextCtrl_1', 'wxStyledTextCtrl_2',]),
+    ('Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame',
+                 '',
+                 'wxGrid', 'wxSashWindow',
+                 'wxScrolledWindow', 'wxSplitterWindow',
+                 'wxStatusBar', 'wxNotebook',
+                 'wxHtmlWindow',
+                 'wxStyledTextCtrl_1', 'wxStyledTextCtrl_2',]),
 
     ('Common Dialogs', ['wxColourDialog', 'wxDirDialog', 'wxFileDialog',
                         'wxSingleChoiceDialog', 'wxTextEntryDialog',

@@ -73,9 +73,12 @@ include src/gtk/*.cpp
 include src/gtk/*.h
 include src/gtk/*.py
 
-# src/motif/*.cpp
-# src/motif/*.h
-# src/motif/*.py
+include tools/*.py
+tools\XRCed\CHANGES
+tools\XRCed\TODO
+tools\XRCed\README
+tools\XRCed\*.py
+tools\XRCed\*.xrc
 
 
 include contrib/glcanvas/*.i

@@ -60,6 +60,11 @@ enum {
     wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK,
     wxEVT_COMMAND_LIST_ITEM_ACTIVATED,
     wxEVT_COMMAND_LIST_CACHE_HINT,
+    wxEVT_COMMAND_LIST_COL_RIGHT_CLICK,
+    wxEVT_COMMAND_LIST_COL_BEGIN_DRAG,
+    wxEVT_COMMAND_LIST_COL_DRAGGING,
+    wxEVT_COMMAND_LIST_COL_END_DRAG,
+
 };
 
 
@@ -103,6 +108,18 @@ def EVT_LIST_INSERT_ITEM(win, id, func):
 def EVT_LIST_COL_CLICK(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_LIST_COL_CLICK, func)
 
+def EVT_LIST_COL_RIGHT_CLICK(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_COL_RIGHT_CLICK, func)
+
+def EVT_LIST_COL_BEGIN_DRAG(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_COL_BEGIN_DRAG, func)
+
+def EVT_LIST_COL_DRAGGING(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_COL_DRAGGING, func)
+
+def EVT_LIST_COL_END_DRAG(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_COL_END_DRAG, func)
+
 def EVT_LIST_ITEM_RIGHT_CLICK(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, func)
 
@@ -142,6 +159,7 @@ enum {
     wxLC_MASK_ALIGN,
     wxLC_MASK_SORT,
 
+    wxLC_USER_TEXT,
 };
 
 
@@ -308,6 +326,8 @@ public:
 
 class wxListEvent: public wxNotifyEvent {
 public:
+    wxListEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
+
     int           m_code;
     long          m_itemIndex;
     long          m_oldItemIndex;
@@ -329,6 +349,9 @@ public:
     long GetData();
     long GetMask();
     const wxListItem& GetItem();
+
+    long GetCacheFrom();
+    long GetCacheTo();
 };
 
 
@@ -633,11 +656,42 @@ public:
         }
     }
 
+    %pragma(python) addtoclass = "
+    # Some helpers...
+
+    def Select(self, idx, on=true):
+        '''[de]select an item'''
+        if on: state = wxLIST_STATE_SELECTED
+        else: state = 0
+        self.SetItemState(idx, state, wxLIST_STATE_SELECTED)
+
+    def Focus(self, idx):
+        '''Focus and show the given item'''
+        self.SetItemState(idx, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED)
+        self.EnsureVisible(idx)
+
+    def GetFocusedItem(self):
+        '''get the currently focused item or -1 if none'''
+        return self.GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED)
+
+    def IsSelected(self, idx):
+        '''return TRUE if the item is selected'''
+        return self.GetItemState(idx, wxLIST_STATE_SELECTED) != 0
+
+    def SetColumnImage(self, col, image):
+        item = wxListItem()
+        item.SetMask(wxLIST_MASK_IMAGE)
+        item.SetImage(image)
+        self.SetColumn(col, item)
+
+    def ClearColumnImage(self, col):
+        self.SetColumnImage(col, -1)
+    "
 };
 
 
 
-%{
+%{ // Python aware sorting function for wxPyListCtrl
     int wxCALLBACK wxPyListCtrl_SortItems(long item1, long item2, long funcPtr) {
         int retval = 0;
         PyObject* func = (PyObject*)funcPtr;
@@ -656,6 +710,50 @@ public:
     }
 
 %}
+
+//----------------------------------------------------------------------
+
+class wxListView : public wxPyListCtrl
+{
+public:
+    wxListView( wxWindow *parent,
+                wxWindowID id = -1,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxLC_REPORT,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString &name = "listctrl" );
+    %name(wxPreListView)wxListView();
+
+    bool Create( wxWindow *parent,
+                wxWindowID id = -1,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxLC_REPORT,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString &name = "listctrl" );
+
+
+    // [de]select an item
+    void Select(long n, bool on = TRUE);
+
+    // focus and show the given item
+    void Focus(long index);
+
+    // get the currently focused item or -1 if none
+    long GetFocusedItem() const;
+
+    // get first and subsequent selected items, return -1 when no more
+    long GetNextSelected(long item) const;
+    long GetFirstSelected() const;
+
+    // return TRUE if the item is selected
+    bool IsSelected(long index);
+
+    void SetColumnImage(int col, int image);
+    void ClearColumnImage(int col);
+};
+
 
 //----------------------------------------------------------------------
 

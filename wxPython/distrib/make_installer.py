@@ -113,6 +113,11 @@ Source: "%(WXDIR)s\docs\htmlhelp\wx.chm";   DestDir: "{app}\wxPython\docs"; Comp
 Source: "%(WXDIR)s\docs\htmlhelp\ogl.chm";  DestDir: "{app}\wxPython\docs"; Components: docs
 
 Source: "tools\*.py";                       DestDir: "{app}\wxPython\tools"; Components: tools
+Source: "tools\XRCed\CHANGES";              DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
+Source: "tools\XRCed\TODO";                 DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
+Source: "tools\XRCed\README";               DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
+Source: "tools\XRCed\*.py";                 DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
+Source: "tools\XRCed\*.xrc";                DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
 
 Source: "samples\doodle\*.py";              DestDir: "{app}\wxPython\samples\doodle"; Components: samples
 Source: "samples\doodle\*.txt";             DestDir: "{app}\wxPython\samples\doodle"; Components: samples

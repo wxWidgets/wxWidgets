@@ -19,7 +19,7 @@ Added XRCed to the wxPython Tools directory, contributed by Roman
 Rolinsky.
 
 Added a new "constructor" to most of the window classes that calls the
-default C++ contructor, (the on with no parameters) and also added the
+default C++ contructor, (the one with no parameters) and also added the
 coresponding Create(...) method.  This allows you to do a 2-step
 creation of windows which is sometimes required for doing things such
 as setting extended style flags before the window is created, or for
@@ -30,6 +30,10 @@ etc.
 
 Updated to version 1.39 of Scintilla and updated wxStyledTextCtrl
 accordingly.
+
+Updated wxColumnSorterMixin to also be able to place sort icons on the
+column headers, and updated the wxListCtrl demo to show it off by
+using wxColumnSorterMixin.
 
 
 
