@@ -323,8 +323,8 @@ static void TestDirTraverse()
     printf("There are %u files under '%s'\n", n, TESTDIR);
     if ( n > 1 )
     {
-        printf("First one is '%s'\n", files[0u]);
-        printf(" last one is '%s'\n", files[n - 1]);
+        printf("First one is '%s'\n", files[0u].c_str());
+        printf(" last one is '%s'\n", files[n - 1].c_str());
     }
 
     // enum again with custom traverser
@@ -422,7 +422,7 @@ static void TestEnvironment()
     printf("After 2nd wxSetEnv: getenv(%s) = %s\n",  var, MyGetEnv(var).c_str());
     wxUnsetEnv(var);
     printf("After wxUnsetEnv: getenv(%s) = %s\n",  var, MyGetEnv(var).c_str());
-    printf("PATH = %s\n",  MyGetEnv(_T("PATH")));
+    printf("PATH = %s\n",  MyGetEnv(_T("PATH")).c_str());
 }
 
 #endif // TEST_ENVIRON
@@ -1625,6 +1625,7 @@ static void TestBitOperations()
 
 static void TestLongLongComparison()
 {
+#if wxUSE_LONGLONG_WX
     puts("*** Testing wxLongLong comparison ***\n");
 
     static const long testLongs[] =
@@ -1670,6 +1671,7 @@ static void TestLongLongComparison()
                    res == (ls[m] == testLongs[n]) ? "ok" : "ERROR");
         }
     }
+#endif // wxUSE_LONGLONG_WX
 }
 
 #undef MAKE_LL
