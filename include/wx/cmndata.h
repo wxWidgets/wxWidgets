@@ -75,7 +75,17 @@ public:
 
     wxFontData& operator=(const wxFontData& data)
     {
-        (*this) = data;
+        wxObject::operator=(data);
+        fontColour     = data.fontColour;
+        showHelp       = data.showHelp;
+        allowSymbols   = data.allowSymbols;
+        enableEffects  = data.enableEffects;
+        initialFont    = data.initialFont;
+        chosenFont     = data.chosenFont;
+        minSize        = data.minSize;
+        maxSize        = data.maxSize;
+        m_encoding     = data.m_encoding;
+        m_encodingInfo = data.m_encodingInfo;
         return *this;
     }
                           
