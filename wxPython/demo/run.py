@@ -64,6 +64,7 @@ class RunDemoApp(wx.App):
         menuBar.Append(menu, "&File")
 
         ns = {}
+        ns['wx'] = wx
         ns['app'] = self
         ns['module'] = self.demoModule
         ns['frame'] = frame
