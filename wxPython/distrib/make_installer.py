@@ -100,7 +100,7 @@ Source: "demo\data\*.py";                   DestDir: "{app}\wxPython\demo\data";
 Source: "demo\data\*.png";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
 Source: "demo\data\*.bmp";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
 Source: "demo\data\*.i";                    DestDir: "{app}\wxPython\demo\data"; Components: demo
-Source: "demo\data\*.h";                    DestDir: "{app}\wxPython\demo\data"; Components: demo
+;;Source: "demo\data\*.h";                    DestDir: "{app}\wxPython\demo\data"; Components: demo
 Source: "demo\data\*.txt";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
 Source: "demo\data\*.wav";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
 Source: "demo\data\*.wdr";                  DestDir: "{app}\wxPython\demo\data"; Components: demo

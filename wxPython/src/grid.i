@@ -1281,24 +1281,6 @@ public:
     int      GetNumberCols();
 
 
-
-#ifdef NOTNEEDED // ????
-    // ------ display update functions
-    //
-    void CalcRowLabelsExposed( wxRegion& reg );
-    void CalcColLabelsExposed( wxRegion& reg );
-    void CalcCellsExposed( wxRegion& reg );
-
-    // ------ event handlers
-    //
-    void ProcessRowLabelMouseEvent( wxMouseEvent& event );
-    void ProcessColLabelMouseEvent( wxMouseEvent& event );
-    void ProcessCornerLabelMouseEvent( wxMouseEvent& event );
-    void ProcessGridCellMouseEvent( wxMouseEvent& event );
-    void DoEndDragResizeRow();
-    void DoEndDragResizeCol();
-#endif
-
     bool ProcessTableMessage( wxGridTableMessage& );
 
 
@@ -1315,26 +1297,11 @@ public:
     bool AppendCols( int numCols = 1, bool updateLabels=TRUE );
     bool DeleteCols( int pos = 0, int numCols = 1, bool updateLabels=TRUE );
 
-#ifdef NOTNEEDED // ????
-    void DrawGridCellArea( wxDC& dc );
-    void DrawGridSpace( wxDC& dc );
-    void DrawCellBorder( wxDC& dc, const wxGridCellCoords& );
-    void DrawAllGridLines( wxDC& dc, const wxRegion & reg );
-    void DrawCell( wxDC& dc, const wxGridCellCoords& );
-    void DrawHighlight(wxDC& dc);
-#endif
 
     // this function is called when the current cell highlight must be redrawn
     // and may be overridden by the user
     virtual void DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr );
 
-#ifdef NOTNEEDED // ????
-    void DrawRowLabels( wxDC& dc );
-    void DrawRowLabel( wxDC& dc, int row );
-
-    void DrawColLabels( wxDC& dc );
-    void DrawColLabel( wxDC& dc, int col );
-#endif
 
     // ------ Cell text drawing functions
     //
