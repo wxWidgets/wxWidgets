@@ -4408,7 +4408,8 @@ wxWindow* wxFindWindowAtPointer(wxPoint& pt)
 // Get the current mouse position.
 wxPoint wxGetMousePosition()
 {
-    extern MSG s_currentMsg;
-    return wxPoint(s_currentMsg.pt.x, s_currentMsg.pt.y);
+    POINT pt;
+    GetCursorPos( & pt );
+    return wxPoint(pt.x, pt.y);
 }
 
