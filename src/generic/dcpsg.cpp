@@ -233,6 +233,20 @@ static char wxPostScriptHeaderReencodeISO2[] =
 // wxPostScriptDC
 //-------------------------------------------------------------------------------
 
+float wxPostScriptDC::ms_PSScaleFactor = 10.0;
+
+void wxPostScriptDC::SetResolution(int ppi)
+{
+    ms_PSScaleFactor = (float)ppi / 72.0;
+}
+
+int wxPostScriptDC::GetResolution()
+{
+    return (int)(ms_PSScaleFactor * 72.0);
+}
+  
+
+
 wxPostScriptDC::wxPostScriptDC ()
 {
     m_pstream = (FILE*) NULL;
@@ -872,12 +886,11 @@ void wxPostScriptDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y,
 
     if (!image.Ok()) return;
 
+    wxCoord w = image.GetWidth();
+    wxCoord h = image.GetHeight();
+
     wxCoord ww = XLOG2DEVREL(image.GetWidth());
     wxCoord hh = YLOG2DEVREL(image.GetHeight());
-
-    image = image.Scale( ww, hh );
-
-    if (!image.Ok()) return;
 
     wxCoord xx = XLOG2DEV(x);
     wxCoord yy = YLOG2DEV(y + bitmap.GetHeight());
@@ -895,11 +908,12 @@ void wxPostScriptDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y,
             "[%d 0 0 %d 0 %d]\n"
             "{currentfile pix readhexstring pop}\n"
             "false 3 colorimage\n",
-            ww, ww, xx, yy, ww, hh, ww, hh, ww, -hh, hh );
+            w, w, xx, yy, ww, hh, w, h, w, -h, h );
 
-    for (int j = 0; j < hh; j++)
+
+    for (int j = 0; j < h; j++)
     {
-        for (int i = 0; i < ww; i++)
+        for (int i = 0; i < w; i++)
         {
             char buffer[5];
             LocalDecToHex( image.GetRed(i,j), buffer );
@@ -1006,12 +1020,12 @@ void wxPostScriptDC::SetFont( const wxFont& font )
     fprintf( m_pstream, " findfont\n" );
 
     sprintf( buffer, "%f scalefont setfont\n", YLOG2DEVREL(m_font.GetPointSize() * 1000) / 1000.0F);
-    for (int i = 0; i < 100; i++)
-        if (buffer[i] == ',') buffer[i] = '.';
-    fprintf( m_pstream, buffer );
                 // this is a hack - we must scale font size (in pts) according to m_scaleY but
                 // YLOG2DEVREL works with wxCoord type (int or longint). Se we first convert font size
                 // to 1/1000th of pt and then back.
+    for (int i = 0; i < 100; i++)
+        if (buffer[i] == ',') buffer[i] = '.';
+    fprintf( m_pstream, buffer );
 }
 
 void wxPostScriptDC::SetPen( const wxPen& pen )
@@ -1529,8 +1543,8 @@ void wxPostScriptDC::DoGetSize(int* width, int* height) const
         h = tmp;
     }
 
-    if (width) *width = w;
-    if (height) *height = h;
+    if (width) *width = (int)(w * ms_PSScaleFactor);
+    if (height) *height = (int)(h * ms_PSScaleFactor);
 }
 
 void wxPostScriptDC::DoGetSizeMM(int *width, int *height) const
@@ -1563,7 +1577,8 @@ void wxPostScriptDC::DoGetSizeMM(int *width, int *height) const
 // Resolution in pixels per logical inch
 wxSize wxPostScriptDC::GetPPI(void) const
 {
-    return wxSize(72, 72);
+    return wxSize((int)(72 * ms_PSScaleFactor), 
+                  (int)(72 * ms_PSScaleFactor));
 }
 
 
@@ -1799,7 +1814,8 @@ void wxPostScriptDC::StartPage()
     }
 
     char buffer[100];
-    sprintf( buffer, "%.8f %.8f scale\n", scale_x, scale_y );
+    sprintf( buffer, "%.8f %.8f scale\n", scale_x / ms_PSScaleFactor, 
+                                          scale_y / ms_PSScaleFactor);
     for (int i = 0; i < 100; i++)
         if (buffer[i] == ',') buffer[i] = '.';
     fprintf( m_pstream, buffer );
@@ -1840,7 +1856,7 @@ bool wxPostScriptDC::DoBlit( wxCoord xdest, wxCoord ydest,
 wxCoord wxPostScriptDC::GetCharHeight() const
 {
     if (m_font.Ok())
-        return  m_font.GetPointSize();
+        return m_font.GetPointSize();
     else
         return 12;
 }

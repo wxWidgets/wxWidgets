@@ -129,6 +129,12 @@ public:
   void SetPrintData(const wxPrintData& data) { m_printData = data; }
 
   virtual int GetDepth() const { return 24; }
+  
+  static void SetResolution(int ppi);
+  static int GetResolution();
+  
+private:  
+  static float ms_PSScaleFactor;
 
 protected:
 
