@@ -111,6 +111,7 @@ class TestPanel(wxWindow):
         if self.ie:
             self.ie.Cleanup()
             self.ie = None
+            self.frame = None
 
 
     def OnSize(self, evt):
@@ -215,7 +216,11 @@ if __name__ == '__main__':
                              style=wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE)
             self.CreateStatusBar()
             self.tp = TestPanel(self, sys.stdout, self)
+            EVT_CLOSE(self, self.OnCloseWindow)
 
+        def OnCloseWindow(self, evt):
+            self.tp.Destroy()
+            self.Destroy()
 
     app = wxPySimpleApp()
     frame = TestFrame()
