@@ -159,7 +159,7 @@ WX_NSImage wxBitmap::GetNSImage(bool useMask) const
     {
         // Show before/after to prove that the bitmap itself is not changed
         // even though we just composited onto the NSImage
-        wxLogTrace(wxTRACE_COCOA,"Before: bpp=%d",[M_BITMAPDATA->m_cocoaNSBitmapImageRep bitsPerPixel]);
+        wxLogTrace(wxTRACE_COCOA,wxT("Before: bpp=%d"),[M_BITMAPDATA->m_cocoaNSBitmapImageRep bitsPerPixel]);
         NSImage *maskImage = [[NSImage alloc]
                 initWithSize:NSMakeSize(GetWidth(), GetHeight())];
         [maskImage addRepresentation: GetMask()->GetNSBitmapImageRep()];
@@ -167,7 +167,7 @@ WX_NSImage wxBitmap::GetNSImage(bool useMask) const
         [maskImage compositeToPoint:NSZeroPoint operation:NSCompositeDestinationIn];
         [nsimage unlockFocus];
         [maskImage release];
-        wxLogTrace(wxTRACE_COCOA,"After: bpp=%d",[M_BITMAPDATA->m_cocoaNSBitmapImageRep bitsPerPixel]);
+        wxLogTrace(wxTRACE_COCOA,wxT("After: bpp=%d"),[M_BITMAPDATA->m_cocoaNSBitmapImageRep bitsPerPixel]);
     }
     return nsimage;
 }
