@@ -20,6 +20,9 @@ on the command line.
 import wx                  # This module uses the new wx namespace
 print "wx.VERSION_STRING = ", wx.VERSION_STRING
 
+assertMode = wx.PYAPP_ASSERT_DIALOG
+##assertMode = wx.PYAPP_ASSERT_EXCEPTION
+
 import sys, os
 
 #----------------------------------------------------------------------------
@@ -43,7 +46,7 @@ class RunDemoApp(wx.App):
         wx.InitAllImageHandlers()
         wx.Log_SetActiveTarget(wx.LogStderr())
 
-        self.SetAssertMode(wx.PYAPP_ASSERT_DIALOG)
+        self.SetAssertMode(assertMode)
 
         frame = wx.Frame(None, -1, "RunDemo: " + self.name, pos=(50,50), size=(0,0),
                         style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.DEFAULT_FRAME_STYLE)
