@@ -11924,6 +11924,7 @@ trap 'rm -fr `echo "
 	    samples/drawing/Makefile
 	    samples/dynamic/Makefile
 	    samples/image/Makefile
+	    samples/internat/Makefile
 	    samples/layout/Makefile
 	    samples/listctrl/Makefile
 	    samples/mdi/Makefile
@@ -12125,6 +12126,7 @@ CONFIG_FILES=\${CONFIG_FILES-"wx-config
 	    samples/drawing/Makefile
 	    samples/dynamic/Makefile
 	    samples/image/Makefile
+	    samples/internat/Makefile
 	    samples/layout/Makefile
 	    samples/listctrl/Makefile
 	    samples/mdi/Makefile

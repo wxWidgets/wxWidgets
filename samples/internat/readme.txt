@@ -44,7 +44,7 @@ A. First of all, you will need the GNU gettext tools (see the next question).
 
    # generate the .po file for the program itself
    # see `xgettext --help' for options, "-C" is important!
-   xgettext -C -o internat.po ../internat.cpp
+   xgettext -C -n -k_ -o internat.po ../internat.cpp
    
    # .po file for wxWindows might be generated in the same way, but for now just
    # take this one...
@@ -60,7 +60,7 @@ A. First of all, you will need the GNU gettext tools (see the next question).
 
    # run the sample to test it
    cd ..
-   ./$OSTYPE/internat <language> <langid>
+   ./internat <language> <langid>
 
 Q. How to get the gettext tools?
 A. For Unix, you should be able to get the source distribution of any GNU mirror

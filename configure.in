@@ -2783,6 +2783,7 @@ AC_OUTPUT([
 	    samples/drawing/Makefile
 	    samples/dynamic/Makefile
 	    samples/image/Makefile
+	    samples/internat/Makefile
 	    samples/layout/Makefile
 	    samples/listctrl/Makefile
 	    samples/mdi/Makefile

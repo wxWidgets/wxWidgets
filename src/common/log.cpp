@@ -507,6 +507,9 @@ void wxLogGui::Flush()
 
     // no undisplayed messages whatsoever
     Clear();
+    
+    // do it here again
+    m_bHasMessages = FALSE;
 }
 
 // the default behaviour is to discard all informational messages if there

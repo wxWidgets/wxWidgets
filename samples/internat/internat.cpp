@@ -61,7 +61,7 @@ public:
 // ID for the menu commands
 enum
 {
-  MINIMAL_QUIT,
+  MINIMAL_QUIT = 1,
   MINIMAL_TEXT,
   MINIMAL_ABOUT,
   MINIMAL_TEST,
@@ -114,11 +114,11 @@ bool MyApp::OnInit()
   /* this catalog is installed in standard location on Linux systems,
      it might not be installed on yours - just ignore the errrors
      or comment out this line then */
-  m_locale.AddCatalog("fileutils");  // 3) and another just for testing
+//  m_locale.AddCatalog("fileutils");  // 3) and another just for testing
   
   // Create the main frame window
   MyFrame *frame = new MyFrame((wxFrame *) NULL, _("International wxWindows App"),
-                               50, 50, 250, 40);
+                               50, 50, 350, 60);
 
   // Give it an icon
   frame->SetIcon(wxICON(mondrian));
