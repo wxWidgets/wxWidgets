@@ -58,7 +58,6 @@ void wxIconBundle::AddIcon( const wxString& file, long type )
     size_t count = wxImage::GetImageCount( file, type );
     size_t i;
     wxImage image;
-    wxIcon tmp;
 
     for( i = 0; i < count; ++i )
     {
@@ -69,8 +68,10 @@ void wxIconBundle::AddIcon( const wxString& file, long type )
             continue;
         }
 
-        tmp.CopyFromBitmap( wxBitmap( image ) );
-        AddIcon( tmp );
+        wxIcon* tmp = new wxIcon();
+        tmp->CopyFromBitmap( wxBitmap( image ) );
+        AddIcon( *tmp );
+        delete tmp;
     }
 }
 
