@@ -26,9 +26,7 @@
 #include "wx/wx.h"
 #endif
 
-#if !wxUSE_SASH
-    #error "Thisfile requires wxUSE_SASH to be defined."
-#endif // wxUSE_SASH
+#if wxUSE_SASH
 
 #include <math.h>
 #include <stdlib.h>
@@ -671,3 +669,4 @@ void wxSashWindow::SetSashVisible(wxSashEdgePosition edge, bool sash)
         m_sashes[edge].m_margin = 0;
 }
 
+#endif // wxUSE_SASH
