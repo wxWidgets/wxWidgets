@@ -693,9 +693,9 @@ void wxTextCtrl::SetSelection( long from, long to )
     gtk_editable_select_region( GTK_EDITABLE(m_text), (gint)from, (gint)to );
 }
 
-void wxTextCtrl::ShowPosition( long WXUNUSED(pos) )
+void wxTextCtrl::ShowPosition( long pos )
 {
-    wxFAIL_MSG( _T("wxTextCtrl::ShowPosition not implemented") );
+    SetInsertionPoint( pos );
 }
 
 long wxTextCtrl::GetInsertionPoint() const
@@ -825,17 +825,24 @@ bool wxTextCtrl::CanRedo() const
 // selection.
 void wxTextCtrl::GetSelection(long* from, long* to) const
 {
-    // TODO
-    *from = 0;
-    *to = 0;
-    wxFAIL_MSG( _T("wxTextCtrl::GetSelection not implemented") );
+    wxCHECK_RET( m_text != NULL, _T("invalid text ctrl") );
+    
+    if (!(GTK_EDITABLE(m_text)->has_selection))
+    {
+        if (from) *from = 0;
+	if (to)   *to = 0;
+	return;
+    }
+    
+    if (from) *from = (long) GTK_EDITABLE(m_text)->selection_start_pos;
+    if (to)   *to = (long) GTK_EDITABLE(m_text)->selection_end_pos;
 }
 
 bool wxTextCtrl::IsEditable() const
 {
-    // TODO
-    wxFAIL_MSG( _T("wxTextCtrl::IsEditable not implemented") );
-    return FALSE;
+    wxCHECK_MSG( m_text != NULL, FALSE, _T("invalid text ctrl") );
+
+    return GTK_EDITABLE(m_text)->editable;
 }
 
 void wxTextCtrl::Clear()
