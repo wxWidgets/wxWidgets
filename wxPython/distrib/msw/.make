@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /bin/bash
 
 
 function error {
@@ -88,14 +88,14 @@ echo ------------------
 echo cd $WXWIN/build/msw
 cd $WXWIN/build/msw
 $WXWIN/build/msw/.mymake $BUILD_TYPE $@
-if [ ! $? ]; then error; fi
+if [ ! $? = 0 ]; then error; fi
 
 
 echo ------------------
 echo cd ../../contrib/build/gizmos
 cd ../../contrib/build/gizmos
 $WXWIN/build/msw/.mymake $BUILD_TYPE $@
-if [ ! $? ]; then error; fi
+if [ ! $? = 0 ]; then error; fi
 cd -
 
 
@@ -103,7 +103,7 @@ echo ------------------
 echo cd ../../contrib/build/xrc
 cd ../../contrib/build/xrc
 $WXWIN/build/msw/.mymake $BUILD_TYPE $@
-if [ ! $? ]; then error; fi
+if [ ! $? = 0 ]; then error; fi
 cd -
 
 
@@ -111,7 +111,7 @@ echo ------------------
 echo cd ../../contrib/build/stc
 cd ../../contrib/build/stc
 $WXWIN/build/msw/.mymake $BUILD_TYPE $@
-if [ ! $? ]; then error; fi
+if [ ! $? = 0 ]; then error; fi
 cd -
 
 
@@ -119,7 +119,7 @@ echo ------------------
 echo cd ../../contrib/build/ogl
 cd ../../contrib/build/ogl
 $WXWIN/build/msw/.mymake $BUILD_TYPE CPPFLAGS="-DwxUSE_DEPRECATED=0" $@
-if [ ! $? ]; then error; fi
+if [ ! $? = 0 ]; then error; fi
 cd -
 
 
