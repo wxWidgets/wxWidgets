@@ -43,7 +43,7 @@ class WXDLLEXPORT wxRendererMSW : public wxDelegateRendererNative
 // ============================================================================
 
 /* static */
-wxRendererNative& wxRendererMSW::Get()
+wxRendererNative& wxRendererNative::Get()
 {
     static wxRendererMSW s_rendererMSW;
 
