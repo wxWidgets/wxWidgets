@@ -179,6 +179,7 @@ All:
 
 - always NUL-terminate the log messages
 - wxRegEx::Compile() now calculates the number of groups correctly
+- wxHTTP::GetHeader() didn't find headers which not all in upper case
 
 All (GUI):
 
