@@ -717,7 +717,9 @@ bool wxApp::OnInitGui()
 
 void wxApp::CleanUp()
 {
+#if wxUSE_TOOLTIPS
     wxToolTip::RemoveToolTips() ;
+#endif
 
     // One last chance for pending objects to be cleaned up
     wxTheApp->DeletePendingObjects();
