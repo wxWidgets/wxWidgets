@@ -255,7 +255,7 @@ def run_swig(files, dir, gendir, package, USE_SWIG, force, swig_args, swig_deps=
                 cpp_file = string.join(string.split(cpp_file, '\\'), '/')
                 i_file = string.join(string.split(i_file, '\\'), '/')
 
-                cmd = ['swig'] + swig_args + ['-c', '-o', cpp_file, i_file]
+                cmd = ['swig'] + swig_args + ['-I'+dir, '-c', '-o', cpp_file, i_file]
                 spawn(cmd, verbose=1)
 
         # copy the generated python file to the package directory

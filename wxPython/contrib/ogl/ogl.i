@@ -37,14 +37,6 @@
 %import oglcanvas.i
 
 
-%{
-#if defined(__WXMSW__)
-    wxString wxPyEmptyStr("");
-    wxPoint  wxPyDefaultPosition(-1, -1);
-    wxSize   wxPyDefaultSize(-1, -1);
-#endif
-%}
-
 %pragma(python) code = "import wx"
 
 //---------------------------------------------------------------------------
@@ -169,7 +161,7 @@ extern "C" SWIGEXPORT(void) initoglcanvasc();
 // And this gets appended to the shadow class file.
 //----------------------------------------------------------------------
 
-%pragma(python) include="_extras.py";
+%pragma(python) include="_oglextras.py";
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
