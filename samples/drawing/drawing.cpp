@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        drawing.cpp
-// Purpose:     Minimal wxWindows sample
+// Purpose:     shows and tests wxDC features
 // Author:      Robert Roebling
 // Modified by:
 // Created:     04/01/98
@@ -17,8 +17,8 @@
 // headers
 // ----------------------------------------------------------------------------
 #ifdef __GNUG__
-    #pragma implementation "minimal.cpp"
-    #pragma interface "minimal.cpp"
+    #pragma implementation "drawing.cpp"
+    #pragma interface "drawing.cpp"
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -33,6 +33,8 @@
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif
+
+#include "wx/colordlg.h"
 
 // ----------------------------------------------------------------------------
 // ressources
@@ -73,11 +75,20 @@ public:
     void OnOption(wxCommandEvent &event);
     void OnMouseMove(wxMouseEvent &event);
 
+    wxColour SelectColour() const;
+
+protected:
+    int      m_backgroundMode;
     int      m_mapMode;
     double   m_xUserScale;
     double   m_yUserScale;
     int      m_xLogicalOrigin;
     int      m_yLogicalOrigin;
+    bool     m_xAxisReversed,
+             m_yAxisReversed;
+    wxColour m_colourForeground,    // these are _text_ colours
+             m_colourBackground;
+    wxBrush  m_backgroundBrush;
 
 private:
     // any class wishing to process wxWindows events must use this macro
@@ -94,26 +105,35 @@ enum
     // menu items
     Minimal_Quit = 1,
     Minimal_About,
-    
-    MapMode_Text,
+
+    MenuOption_First,
+
+    MapMode_Text = MenuOption_First,
     MapMode_Lometric,
     MapMode_Twips,
     MapMode_Points,
     MapMode_Metric,
-    
+
     UserScale_StretchHoriz,
     UserScale_ShrinkHoriz,
     UserScale_StretchVertic,
     UserScale_ShrinkVertic,
-    
+    UserScale_Restore,
+
     AxisMirror_Horiz,
     AxisMirror_Vertic,
-    
+
     LogicalOrigin_MoveDown,
     LogicalOrigin_MoveUp,
     LogicalOrigin_MoveLeft,
     LogicalOrigin_MoveRight,
-    
+
+    Colour_TextForeground,
+    Colour_TextBackground,
+    Colour_Background,
+    Colour_BackgroundMode,
+
+    MenuOption_Last = Colour_BackgroundMode
 };
 
 // ----------------------------------------------------------------------------
@@ -127,28 +147,11 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MOTION (MyFrame::OnMouseMove)
     EVT_PAINT  (MyFrame::OnPaint)
-    
+
     EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
     EVT_MENU(Minimal_About, MyFrame::OnAbout)
-    
-    EVT_MENU(MapMode_Text, MyFrame::OnOption)
-    EVT_MENU(MapMode_Lometric, MyFrame::OnOption)
-    EVT_MENU(MapMode_Twips, MyFrame::OnOption)
-    EVT_MENU(MapMode_Points, MyFrame::OnOption)
-    EVT_MENU(MapMode_Metric, MyFrame::OnOption)
-    
-    EVT_MENU(UserScale_StretchHoriz, MyFrame::OnOption)
-    EVT_MENU(UserScale_ShrinkHoriz, MyFrame::OnOption)
-    EVT_MENU(UserScale_StretchVertic, MyFrame::OnOption)
-    EVT_MENU(UserScale_ShrinkVertic, MyFrame::OnOption)
-    
-    EVT_MENU(AxisMirror_Horiz, MyFrame::OnOption)
-    EVT_MENU(AxisMirror_Vertic, MyFrame::OnOption)
-    
-    EVT_MENU(LogicalOrigin_MoveDown, MyFrame::OnOption)
-    EVT_MENU(LogicalOrigin_MoveUp, MyFrame::OnOption)
-    EVT_MENU(LogicalOrigin_MoveLeft, MyFrame::OnOption)
-    EVT_MENU(LogicalOrigin_MoveRight, MyFrame::OnOption)
+
+    EVT_MENU_RANGE(MenuOption_First, MenuOption_Last, MyFrame::OnOption)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWindows to create
@@ -174,7 +177,6 @@ bool MyApp::OnInit()
                                  wxPoint(50, 50), wxSize(450, 340));
 
     // Show it and tell the application that it's our main window
-    // @@@ what does it do exactly, in fact? is it necessary here?
     frame->Show(TRUE);
     SetTopWindow(frame);
 
@@ -199,29 +201,37 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(Minimal_About, "&About...\tCtrl-A", "Show about dialog");
     menuFile->AppendSeparator();
     menuFile->Append(Minimal_Quit, "E&xit\tAlt-X", "Quit this program");
-    
+
     wxMenu *menuMapMode = new wxMenu;
     menuMapMode->Append( MapMode_Text, "&TEXT map mode" );
     menuMapMode->Append( MapMode_Lometric, "&LOMETRIC map mode" );
     menuMapMode->Append( MapMode_Twips, "T&WIPS map mode" );
     menuMapMode->Append( MapMode_Points, "&POINTS map mode" );
     menuMapMode->Append( MapMode_Metric, "&METRIC map mode" );
-    
+
     wxMenu *menuUserScale = new wxMenu;
     menuUserScale->Append( UserScale_StretchHoriz, "Stretch horizontally\tCtrl-H" );
     menuUserScale->Append( UserScale_ShrinkHoriz, "Shrink  horizontally\tCtrl-G" );
     menuUserScale->Append( UserScale_StretchVertic, "Stretch vertically\tCtrl-V" );
     menuUserScale->Append( UserScale_ShrinkVertic, "Shrink vertically\tCtrl-W" );
-    
+    menuUserScale->AppendSeparator();
+    menuUserScale->Append( UserScale_Restore, "Restore to normal\tCtrl-0" );
+
     wxMenu *menuAxis = new wxMenu;
-    menuAxis->Append( AxisMirror_Horiz, "Mirror horizontally" );
-    menuAxis->Append( AxisMirror_Vertic, "Mirror vertically" );
-    
+    menuAxis->Append( AxisMirror_Horiz, "Mirror horizontally\tCtrl-\\", "", TRUE );
+    menuAxis->Append( AxisMirror_Vertic, "Mirror vertically\tCtrl-/", "", TRUE );
+
     wxMenu *menuLogical = new wxMenu;
     menuLogical->Append( LogicalOrigin_MoveDown, "Move &down\tCtrl-D" );
     menuLogical->Append( LogicalOrigin_MoveUp, "Move &up\tCtrl-U" );
     menuLogical->Append( LogicalOrigin_MoveLeft, "Move &right\tCtrl-L" );
     menuLogical->Append( LogicalOrigin_MoveRight, "Move &left\tCtrl-R" );
+
+    wxMenu *menuColour = new wxMenu;
+    menuColour->Append( Colour_TextForeground, "Text foreground..." );
+    menuColour->Append( Colour_TextBackground, "Text background..." );
+    menuColour->Append( Colour_Background, "Background colour..." );
+    menuColour->Append( Colour_BackgroundMode, "Opaque/transparent\tCtrl-B", "", TRUE );
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar;
@@ -230,6 +240,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuBar->Append(menuUserScale, "&UserScale");
     menuBar->Append(menuAxis, "&Axis");
     menuBar->Append(menuLogical, "&LogicalOrigin");
+    menuBar->Append(menuColour, "&Colours");
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
@@ -237,12 +248,15 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
     SetStatusText("Welcome to wxWindows!");
-    
+
     m_mapMode = wxMM_TEXT;
     m_xUserScale = 1.0;
     m_yUserScale = 1.0;
     m_xLogicalOrigin = 0;
     m_yLogicalOrigin = 0;
+    m_xAxisReversed =
+    m_yAxisReversed = FALSE;
+    m_backgroundMode = wxSOLID;
 }
 
 
@@ -270,74 +284,134 @@ void MyFrame::OnOption(wxCommandEvent &event)
     {
         case MapMode_Text:
             m_mapMode = wxMM_TEXT;
-	    break;
+            break;
         case MapMode_Lometric:
             m_mapMode = wxMM_LOMETRIC;
-	    break;
-	case MapMode_Twips:
+            break;
+        case MapMode_Twips:
             m_mapMode = wxMM_TWIPS;
-	    break;
-	case MapMode_Points:
+            break;
+        case MapMode_Points:
             m_mapMode = wxMM_POINTS;
-	    break;
-	case MapMode_Metric:
+            break;
+        case MapMode_Metric:
             m_mapMode = wxMM_METRIC;
-	    break;
-	case LogicalOrigin_MoveDown:
-	    m_yLogicalOrigin += 10;
-	    break;
-	case LogicalOrigin_MoveUp:
-	    m_yLogicalOrigin -= 10;
-	    break;
-	case LogicalOrigin_MoveLeft:
-	    m_xLogicalOrigin += 10;
-	    break;
-	case LogicalOrigin_MoveRight:
-	    m_xLogicalOrigin -= 10;
-	    break;
-	case UserScale_StretchHoriz:
-	    m_xUserScale *= 1.10;
-	    break;
-	case UserScale_ShrinkHoriz:
-	    m_xUserScale /= 1.10;
-	    break;
-	case UserScale_StretchVertic:
-	    m_yUserScale *= 1.10;
-	    break;
-	case UserScale_ShrinkVertic:
-	    m_yUserScale /= 1.10;
-	    break;
+            break;
+
+        case LogicalOrigin_MoveDown:
+            m_yLogicalOrigin += 10;
+            break;
+        case LogicalOrigin_MoveUp:
+            m_yLogicalOrigin -= 10;
+            break;
+        case LogicalOrigin_MoveLeft:
+            m_xLogicalOrigin += 10;
+            break;
+        case LogicalOrigin_MoveRight:
+            m_xLogicalOrigin -= 10;
+            break;
+
+        case UserScale_StretchHoriz:
+            m_xUserScale *= 1.10;
+            break;
+        case UserScale_ShrinkHoriz:
+            m_xUserScale /= 1.10;
+            break;
+        case UserScale_StretchVertic:
+            m_yUserScale *= 1.10;
+            break;
+        case UserScale_ShrinkVertic:
+            m_yUserScale /= 1.10;
+            break;
+        case UserScale_Restore:
+            m_xUserScale =
+            m_yUserScale = 1.0;
+            break;
+
+        case AxisMirror_Vertic:
+            m_yAxisReversed = !m_yAxisReversed;
+            break;
+        case AxisMirror_Horiz:
+            m_xAxisReversed = !m_xAxisReversed;
+            break;
+
+        case Colour_TextForeground:
+            m_colourForeground = SelectColour();
+            break;
+        case Colour_TextBackground:
+            m_colourBackground = SelectColour();
+            break;
+        case Colour_Background:
+            {
+                wxColour col = SelectColour();
+                if ( col.Ok() )
+                {
+                    m_backgroundBrush.SetColour(col);
+                }
+            }
+            break;
+        case Colour_BackgroundMode:
+            m_backgroundMode = m_backgroundMode == wxSOLID ? wxTRANSPARENT
+                                                           : wxSOLID;
+            break;
+
+        default:
+            // skip Refresh()
+            return;
     }
-    
+
     Refresh();
 }
 
 void MyFrame::OnPaint(wxPaintEvent &WXUNUSED(event) )
 {
-  wxPaintDC dc(this);
-  dc.SetMapMode( m_mapMode );
-  dc.SetUserScale( m_xUserScale, m_yUserScale );
-  dc.SetLogicalOrigin( m_xLogicalOrigin, m_yLogicalOrigin );
+    wxPaintDC dc(this);
+    dc.SetMapMode( m_mapMode );
+    dc.SetUserScale( m_xUserScale, m_yUserScale );
+    dc.SetLogicalOrigin( m_xLogicalOrigin, m_yLogicalOrigin );
+    dc.SetAxisOrientation( m_xAxisReversed, m_yAxisReversed );
 
-  dc.DrawRectangle( 10, 10, 90, 90 );
-  dc.DrawRoundedRectangle( 10, 110, 90, 90, 5 );
-  
-  dc.DrawText( "This is text.", 110, 10 );
-  
-  dc.DrawIcon( wxICON(mondrian), 110, 40 );
+    dc.SetBackgroundMode( m_backgroundMode );
+    if ( m_backgroundBrush.Ok() )
+        dc.SetBackground( m_backgroundBrush );
+    if ( m_colourForeground.Ok() )
+        dc.SetTextForeground( m_colourForeground );
+    if ( m_colourBackground.Ok() )
+        dc.SetTextBackground( m_colourBackground );
+
+    dc.DrawRectangle( 10, 10, 90, 90 );
+    dc.DrawRoundedRectangle( 10, 110, 90, 90, 5 );
+
+    dc.DrawText( "This is text\n(on multiple lines)", 110, 10 );
+
+    dc.DrawIcon( wxICON(mondrian), 110, 40 );
 }
 
 void MyFrame::OnMouseMove(wxMouseEvent &event)
 {
-  wxClientDC dc(this);
-  dc.SetMapMode( m_mapMode );
-  dc.SetUserScale( m_xUserScale, m_yUserScale );
-  dc.SetLogicalOrigin( m_xLogicalOrigin, m_yLogicalOrigin );
+    wxClientDC dc(this);
+    dc.SetMapMode( m_mapMode );
+    dc.SetUserScale( m_xUserScale, m_yUserScale );
+    dc.SetLogicalOrigin( m_xLogicalOrigin, m_yLogicalOrigin );
 
-  wxPoint pos = event.GetPosition();
-  long x = dc.DeviceToLogicalX( pos.x );
-  long y = dc.DeviceToLogicalY( pos.y );
-  wxString str;
-  str.Printf( "Current mouse position: %d,%d", (int)x, (int)y );
-  SetStatusText( str );
+    wxPoint pos = event.GetPosition();
+    long x = dc.DeviceToLogicalX( pos.x );
+    long y = dc.DeviceToLogicalY( pos.y );
+    wxString str;
+    str.Printf( "Current mouse position: %d,%d", (int)x, (int)y );
+    SetStatusText( str );
+}
+
+wxColour MyFrame::SelectColour() const
+{
+    wxColour col;
+    wxColourData data;
+    wxColourDialog dialog(this, &data);
+
+    if ( dialog.ShowModal() == wxID_OK )
+    {
+        col = data.GetColour();
+    }
+
+    return col;
 }
