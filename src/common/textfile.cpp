@@ -91,83 +91,92 @@ bool wxTextFile::OnClose()
 
 bool wxTextFile::OnRead(wxMBConv& conv)
 {
-  // file should be opened and we must be in it's beginning
-  wxASSERT( m_file.IsOpened() && m_file.Tell() == 0 );
+    // file should be opened and we must be in it's beginning
+    wxASSERT( m_file.IsOpened() && m_file.Tell() == 0 );
 
-#if wxUSE_UNICODE
-  char conv_mbBuf[2];
-  wchar_t conv_wcBuf[2];
-  conv_mbBuf[1] = 0;
-#else
-  (void)conv;
-#endif
+    char *strBuf, *strPtr, *strEnd;
+    char ch, chLast = '\0';
+    char buf[1024];
+    int n, nRead;
 
-  wxString str;
-  char ch, chLast = '\0';
-  char buf[1024];
-  int n, nRead;
-  do {
-    nRead = m_file.Read(buf, WXSIZEOF(buf));
-    if ( nRead == wxInvalidOffset ) {
-      // read error (error message already given in wxFile::Read)
-      return FALSE;
+    strPtr = strBuf = new char[1024];
+    strEnd = strBuf + 1024;
+
+    do 
+    {
+        nRead = m_file.Read(buf, WXSIZEOF(buf));
+        if ( nRead == wxInvalidOffset ) 
+        {
+            // read error (error message already given in wxFile::Read)
+            delete[] strBuf;
+            return FALSE;
+        }
+
+        for (n = 0; n < nRead; n++)
+        {
+            ch = buf[n];
+            switch ( ch ) 
+            {
+                case '\n':
+                    // Dos/Unix line termination
+                    *strPtr = '\0';
+                    AddLine(wxString(strBuf, conv), 
+                            chLast == '\r' ? wxTextFileType_Dos
+                                           : wxTextFileType_Unix);
+                    strPtr = strBuf;
+                    chLast = '\n';
+                    break;
+
+                case '\r':
+                    if ( chLast == '\r' ) 
+                    {
+                        // Mac empty line
+                        AddLine(wxEmptyString, wxTextFileType_Mac);
+                    }
+                    else
+                        chLast = '\r';
+                    break;
+
+                default:
+                    if ( chLast == '\r' )
+                    {
+                        // Mac line termination
+                        *strPtr = '\0';
+                        AddLine(wxString(strBuf, conv), wxTextFileType_Mac);
+                        chLast = ch;
+                        strPtr = strBuf;
+                        *(strPtr++) = ch;
+                    }
+                    else 
+                    {
+                        // add to the current line
+                        *(strPtr++) = ch;
+                        if ( strPtr == strEnd )
+                        {
+                            // we must allocate more memory
+                            size_t size = strEnd - strBuf;
+                            char *newBuf = new char[size + 1024];
+                            memcpy(newBuf, strBuf, size);
+                            delete[] strBuf;
+                            strBuf = newBuf;
+                            strEnd = strBuf + size + 1024;
+                            strPtr = strBuf + size;
+                        }
+                    }
+            }
+        }
+    } while ( nRead == WXSIZEOF(buf) );
+
+    // anything in the last line?
+    if ( strPtr != strBuf ) 
+    {
+        *strPtr = '\0';
+        AddLine(wxString(strBuf, conv), 
+                wxTextFileType_None); // no line terminator
     }
 
-    for ( n = 0; n < nRead; n++ ) {
-      ch = buf[n];
-      switch ( ch ) {
-        case '\n':
-          // Dos/Unix line termination
-                AddLine(str, chLast == '\r' ? wxTextFileType_Dos
-                                      : wxTextFileType_Unix);
-          str.Empty();
-          chLast = '\n';
-          break;
-
-        case '\r':
-          if ( chLast == '\r' ) {
-            // Mac empty line
-                    AddLine(wxEmptyString, wxTextFileType_Mac);
-          }
-          else
-            chLast = '\r';
-          break;
-
-        default:
-          if ( chLast == '\r' ) {
-            // Mac line termination
-                    AddLine(str, wxTextFileType_Mac);
-            chLast = ch;
-#if wxUSE_UNICODE
-            conv_mbBuf[0] = ch;
-            if (conv.MB2WC(conv_wcBuf, conv_mbBuf, 2) == (size_t)-1)
-                conv_wcBuf[0] = ch;
-            str = conv_wcBuf[0];
-#else
-            str = ch;
-#endif
-          }
-          else {
-            // add to the current line
-#if wxUSE_UNICODE
-            conv_mbBuf[0] = ch;
-            if (conv.MB2WC(conv_wcBuf, conv_mbBuf, 2) == (size_t)-1)
-                conv_wcBuf[0] = ch;
-            str += conv_wcBuf[0];
-#else
-            str += ch;
-#endif
-          }
-      }
-    }
-  } while ( nRead == WXSIZEOF(buf) );
-
-  // anything in the last line?
-  if ( !str.IsEmpty() ) {
-        AddLine(str, wxTextFileType_None);  // no line terminator
-  }
-
-  return TRUE;
+    delete[] strBuf;
+    return TRUE;
 }
 
 
