@@ -329,6 +329,9 @@ public:
     // NB: the control should have toolbar as its parent
     virtual wxToolBarToolBase *AddControl(wxControl *control);
     virtual wxToolBarToolBase *InsertControl(size_t pos, wxControl *control);
+    
+    // get the control with the given id or return NULL
+    virtual wxControl *FindControl( int id );
 
     // add a separator to the toolbar
     virtual wxToolBarToolBase *AddSeparator();

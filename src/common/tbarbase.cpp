@@ -206,6 +206,24 @@ wxToolBarToolBase *wxToolBarBase::InsertControl(size_t pos, wxControl *control)
     return tool;
 }
 
+wxControl *wxToolBarBase::FindControl( int id )
+{
+    for ( wxToolBarToolsList::Node* node = m_tools.GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxControl *control = node->GetData()->GetControl();
+        
+        if (control)
+        {
+            if (control->GetId() == id)
+                return control;
+        }
+    }
+
+   return NULL;
+}
+
 wxToolBarToolBase *wxToolBarBase::AddSeparator()
 {
     return InsertSeparator(GetToolsCount());
