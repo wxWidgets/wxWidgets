@@ -66,7 +66,7 @@ int wxDirDialog::ShowModal(void)
   if (m_parent) hWnd = (HWND) m_parent->GetHWND();
 
     BROWSEINFO bi;
-    LPSTR lpBuffer; 
+    LPTSTR lpBuffer;
 //    LPITEMIDLIST pidlPrograms;  // PIDL for Programs folder 
     LPITEMIDLIST pidlBrowse;    // PIDL selected by user 
     LPMALLOC pMalloc = NULL;
@@ -97,7 +97,7 @@ int wxDirDialog::ShowModal(void)
     bi.hwndOwner = hWnd;
     bi.pidlRoot = NULL; // pidlPrograms; 
     bi.pszDisplayName = lpBuffer; 
-    bi.lpszTitle = m_message.mb_str(); // BC++ 4.52 says LPSTR, not LPTSTR?
+    bi.lpszTitle = m_message; // BC++ 4.52 says LPSTR, not LPTSTR?
     bi.ulFlags = 0; 
     bi.lpfn = NULL; 
     bi.lParam = 0; 
