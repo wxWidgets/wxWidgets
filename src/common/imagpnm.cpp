@@ -22,7 +22,7 @@
 #  include "wx/setup.h"
 #endif
 
-#if wxUSE_PNM
+#if wxUSE_IMAGE && wxUSE_PNM
 
 #include "wx/imagpnm.h"
 #include "wx/log.h"

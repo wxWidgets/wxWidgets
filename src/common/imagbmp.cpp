@@ -18,6 +18,10 @@
 #pragma hdrstop
 #endif
 
+#include "wx/defs.h"
+
+#if wxUSE_IMAGE
+
 #include "wx/imagbmp.h"
 #include "wx/bitmap.h"
 #include "wx/debug.h"
@@ -546,4 +550,4 @@ bool wxBMPHandler::DoCanRead( wxInputStream& stream )
 
 #endif // wxUSE_STREAMS
 
-
+#endif // wxUSE_IMAGE

@@ -20,7 +20,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_LIBJPEG
+#if wxUSE_IMAGE && wxUSE_LIBJPEG
 
 #include "wx/imagjpeg.h"
 #include "wx/bitmap.h"

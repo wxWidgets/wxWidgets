@@ -18,6 +18,10 @@
     #pragma hdrstop
 #endif
 
+#include "wx/defs.h"
+
+#if wxUSE_IMAGE
+
 #include "wx/image.h"
 #include "wx/bitmap.h"
 #include "wx/debug.h"
@@ -1460,3 +1464,4 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
     return rotated;
 }
 
+#endif // wxUSE_IMAGE

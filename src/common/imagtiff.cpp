@@ -20,7 +20,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_LIBTIFF
+#if wxUSE_IMAGE && wxUSE_LIBTIFF
 
 #include "wx/imagtiff.h"
 #include "wx/bitmap.h"

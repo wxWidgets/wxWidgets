@@ -23,7 +23,7 @@
 #  include "wx/defs.h"
 #endif
 
-#if wxUSE_STREAMS && wxUSE_PCX
+#if wxUSE_IMAGE && wxUSE_STREAMS && wxUSE_PCX
 
 #include "wx/imagpcx.h"
 #include "wx/wfstream.h"

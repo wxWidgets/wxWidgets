@@ -22,7 +22,7 @@
   #include "wx/defs.h"
 #endif
 
-#if wxUSE_LIBPNG
+#if wxUSE_IMAGE && wxUSE_LIBPNG
 
 #include "wx/imagpng.h"
 #include "wx/bitmap.h"
