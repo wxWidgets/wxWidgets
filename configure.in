@@ -2519,7 +2519,8 @@ if test "$wxUSE_SHARED" = "yes"; then
 
         SHARED_LD="${CXX} -shared -Wl,--out-implib,lib/${WX_LIBRARY_IMPORTLIB} -o"
         TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -DWXUSINGDLL=1"
-        WXMSW_DLL_DEFINES="-UWXUSINGDLL -DWXMAKINGDLL=1 -D_DLL=1 -D_WINDLL=1"
+
+        PIC_FLAG="-UWXUSINGDLL -DWXMAKINGDLL=1 -D_DLL=1 -D_WINDLL=1"
 
         dnl install shared libs without symlinks
         if test "$wxUSE_OPENGL" = "yes"; then
@@ -2528,9 +2529,6 @@ if test "$wxUSE_SHARED" = "yes"; then
         else
             WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_SHARED}"
         fi
-        dnl -fPIC is not required for mingw build -- all code is already
-        dnl position independent.
-        PIC_FLAG=
       ;;
 
       *-pc-os2_emx | *-pc-os2-emx )
@@ -4768,7 +4766,6 @@ AC_SUBST(OPENGL_LIBS)
 AC_SUBST(EXTRADEFS)
 AC_SUBST(LIBS)
 AC_SUBST(LD_LIBS)
-AC_SUBST(WXMSW_DLL_DEFINES)
 
 dnl additional resurces settings
 AC_SUBST(RESCOMP)

@@ -11909,7 +11909,8 @@ echo "$ac_t""$wx_cv_prog_icc" 1>&6
 
         SHARED_LD="${CXX} -shared -Wl,--out-implib,lib/${WX_LIBRARY_IMPORTLIB} -o"
         TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -DWXUSINGDLL=1"
-        WXMSW_DLL_DEFINES="-UWXUSINGDLL -DWXMAKINGDLL=1 -D_DLL=1 -D_WINDLL=1"
+
+        PIC_FLAG="-UWXUSINGDLL -DWXMAKINGDLL=1 -D_DLL=1 -D_WINDLL=1"
 
                 if test "$wxUSE_OPENGL" = "yes"; then
             WX_ALL_INSTALLED="preinstall_gl"
@@ -11917,7 +11918,6 @@ echo "$ac_t""$wx_cv_prog_icc" 1>&6
         else
             WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_SHARED}"
         fi
-                        PIC_FLAG=
       ;;
 
       *-pc-os2_emx | *-pc-os2-emx )
@@ -18403,9 +18403,8 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 
-
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:18409: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:18408: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -18679,7 +18678,6 @@ s%@EXTRA_LIBS@%$EXTRA_LIBS%g
 s%@OPENGL_LIBS@%$OPENGL_LIBS%g
 s%@EXTRADEFS@%$EXTRADEFS%g
 s%@LD_LIBS@%$LD_LIBS%g
-s%@WXMSW_DLL_DEFINES@%$WXMSW_DLL_DEFINES%g
 s%@RESFLAGS@%$RESFLAGS%g
 s%@RESPROGRAMOBJ@%$RESPROGRAMOBJ%g
 s%@WX_RESOURCES_MACOSX@%$WX_RESOURCES_MACOSX%g

@@ -17,13 +17,13 @@ include ./src/make.env
 ############## override make.env for PIC ##########################
 
 %.o : %.c
-	$(CC) -c $(CFLAGS) $(PICFLAGS) @WXMSW_DLL_DEFINES@ -o $@ $<
+	$(CC) -c $(CFLAGS) $(PICFLAGS) -o $@ $<
 
 %.o : %.cpp
-	$(CXX) -c $(CXXFLAGS) $(PICFLAGS) @WXMSW_DLL_DEFINES@ -o $@ $<
+	$(CXX) -c $(CXXFLAGS) $(PICFLAGS) -o $@ $<
 
 %.o : %.cxx
-	$(CXX) -c $(CXXFLAGS) $(PICFLAGS) @WXMSW_DLL_DEFINES@ -o $@ $<
+	$(CXX) -c $(CXXFLAGS) $(PICFLAGS) -o $@ $<
 
 %.r : %.rsrc
 	$(DEREZ) $^ Carbon.r -useDF > $@
