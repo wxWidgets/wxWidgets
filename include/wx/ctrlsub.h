@@ -105,6 +105,9 @@ protected:
 class WXDLLEXPORT wxControlWithItems : public wxControl, public wxItemContainer
 {
 public:
+    wxControlWithItems() { }
+    virtual ~wxControlWithItems();
+    
     // we have to redefine these functions here to avoid ambiguities in classes
     // deriving from us which would arise otherwise because both base classses
     // have the methods with the same names - hopefully, a smart compiler can

@@ -122,4 +122,9 @@ void *wxItemContainer::GetClientData(int n) const
     return DoGetItemClientData(n);
 }
 
+wxControlWithItems::~wxControlWithItems()
+{
+    // this destructor is required for Darwin
+}
+
 #endif // wxUSE_CONTROLS
