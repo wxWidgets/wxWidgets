@@ -53,7 +53,7 @@ WX_BEGIN_PROPERTIES_TABLE(wxButton)
 	WX_DELEGATE( OnClick , wxEVT_COMMAND_BUTTON_CLICKED , wxCommandEvent )
 
 	WX_PROPERTY( Font , wxFont , SetFont , GetFont  , )
-	WX_PROPERTY( Label,wxString, SetLabel, GetLabel, wxT("") )
+	WX_PROPERTY( Label,wxString, SetLabel, GetLabel, wxEmptyString )
 WX_END_PROPERTIES_TABLE()
 
 WX_BEGIN_HANDLERS_TABLE(wxButton)
