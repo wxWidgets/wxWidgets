@@ -4,7 +4,6 @@ from wx.py import shell, version
 class MyPanel(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent, -1)
-        print parent
 
         text = wx.StaticText(self, -1,
                             "Everything on this side of the splitter comes from Python.")

@@ -205,6 +205,8 @@ sys.stdin = sys.stderr = output\n\
 
 
 char* python_code2 = "\
+import sys\n\
+sys.path.append('.')\n\
 import embedded_sample\n\
 \n\
 def makeWindow(parent):\n\
