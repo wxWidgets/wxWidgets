@@ -133,13 +133,9 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
     wxIsInsideYield = TRUE;
 
-    if (!g_isIdle)
-    {
-        // We need to remove idle callbacks or the loop will
-        // never finish.
-        wxTheApp->RemoveIdleTag();
-        g_isIdle = TRUE;
-    }
+    // We need to remove idle callbacks or the loop will
+    // never finish.
+    wxTheApp->RemoveIdleTag();
 
     // disable log flushing from here because a call to wxYield() shouldn't
     // normally result in message boxes popping up &c
@@ -184,8 +180,7 @@ void wxApp::WakeUpIdle()
 #endif // wxUSE_THREADS_
 #endif // __WXGTK2__
 
-    if (g_isIdle)
-        wxapp_install_idle_handler();
+    wxapp_install_idle_handler();
 
 #ifndef __WXGTK20__
 #if wxUSE_THREADS
@@ -386,6 +381,11 @@ void wxapp_install_idle_handler()
     wxMutexLocker lock(gs_idleTagsMutex);
 #endif
 
+    // Don't install the handler if it's already installed. This test *MUST*
+    // be done when gs_idleTagsMutex is locked!
+    if (!g_isIdle)
+        return;
+
     // GD: this assert is raised when using the thread sample (which works)
     //     so the test is probably not so easy. Can widget callbacks be
     //     triggered from child threads and, if so, for which widgets?
@@ -437,6 +437,7 @@ wxApp::wxApp()
 #endif // __WXDEBUG__
 
     m_idleTag = 0;
+    g_isIdle = TRUE;
     wxapp_install_idle_handler();
 
 #if wxUSE_THREADS
@@ -702,6 +703,10 @@ void wxApp::RemoveIdleTag()
 #if wxUSE_THREADS
     wxMutexLocker lock(gs_idleTagsMutex);
 #endif
-    gtk_idle_remove( wxTheApp->m_idleTag );
-    wxTheApp->m_idleTag = 0;
+    if (!g_isIdle)
+    {
+        gtk_idle_remove( wxTheApp->m_idleTag );
+        wxTheApp->m_idleTag = 0;
+        g_isIdle = TRUE;
+    }
 }

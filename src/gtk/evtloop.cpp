@@ -101,16 +101,13 @@ void wxEventLoop::Exit(int rc)
 // wxEventLoop message processing dispatching
 // ----------------------------------------------------------------------------
 
-extern bool g_isIdle;
-
 bool wxEventLoop::Pending() const
 {
-    if (wxTheApp && !g_isIdle)
+    if (wxTheApp)
     {
         // We need to remove idle callbacks or gtk_events_pending will
         // never return false.
         wxTheApp->RemoveIdleTag();
-        g_isIdle = TRUE;
     }
 
     return gtk_events_pending();
