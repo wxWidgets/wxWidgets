@@ -1,3 +1,17 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        curicop.h
+// Purpose:     Private routines for cursor/icon handling
+// Author:      Various
+// Modified by:
+// Created:     01/02/97
+// RCS-ID:      $Id$
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
+#ifndef _WX_CURICOP_H_
+#define _WX_CURICOP_H_
+
 // PRIVATE STUFF FOLLOWS UNTIL END
 
 // Header signatures for various resources
@@ -60,4 +74,6 @@ typedef struct tagICONFILERES ICONFILERES;
 
 HANDLE ReadIcon( wxChar *szFileName, int *W = 0, int *H = 0);
 HICON  MakeIcon( HANDLE hDIB, HINSTANCE hInst);
+
+#endif
 

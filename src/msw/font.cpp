@@ -342,7 +342,7 @@ bool wxFont::RealizeResource()
         case wxFONTENCODING_CP1250:
             charset = ANSI_CHARSET;
             break;
-
+#if !defined(__WIN16__)
         case wxFONTENCODING_ISO8859_2:
         case wxFONTENCODING_CP1252:
             charset = EASTEUROPE_CHARSET;
@@ -377,6 +377,7 @@ bool wxFont::RealizeResource()
         case wxFONTENCODING_ISO8859_11:
             charset = THAI_CHARSET;
             break;
+#endif // BC++ 16-bit
 
         case wxFONTENCODING_CP437:
             charset = OEM_CHARSET;

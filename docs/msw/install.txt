@@ -178,8 +178,8 @@ if necessary) that the project settings, especially the list of defined
 symbols, struct packing, etc. are exactly the same for all items in
 the project. After this, delete everything (including PCH) and recompile.
 
-Visual C++ 1.5 compilation
---------------------------
+Visual C++ 1.5 compilation (16-bit)
+-----------------------------------
 
 1. Make sure your WXWIN variable is set, and uses the FAT (short
    name) form.
@@ -215,7 +215,11 @@ Note (1): the wxWindows library and (some) samples compile in 16-bit mode
 using makefile.bcc, but at present the wxWindows resource system is switched
 off in this mode. See issues.txt for details.
 
-Note (2): the wxWindows makefiles assume byte structure alignment. Please
+Note (2): unfortunately most samples won't link in 16-bit mode,
+because the automatic data segment exceeds 64K. The minimal
+sample links and runs, however.
+
+Note (3): the wxWindows makefiles assume byte structure alignment. Please
 make sure that your own project or makefile settings use the
 same alignment, or you could experience mysterious crashes. To
 change the alignment, add a suitable option to the $(CFG) target code
@@ -274,10 +278,11 @@ Metrowerks CodeWarrior compilation
    Further project files for samples will be available in due
    course.
 
-NOTES:
-
-You need CodeWarrior Pro 4 plus the patches to 4.1 from the
+Note (1): you need CodeWarrior Pro 4 plus the patches to 4.1 from the
 Metrowerks Web site.
+
+Note (2): unfortunately these files are not yet up-to-date for the
+current release.
 
 Symantec C++ compilation
 ------------------------

@@ -117,18 +117,7 @@ MSWOBJS = #$ ExpandList("WXMSWOBJS");
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS)
 
 # Normal, static library
-all:    $(DUMMYOBJ) $(WXDIR)\lib\wx1.lib $(WXDIR)\lib\wx2.lib $(WXDIR)\lib\wx3.lib
-
-
-# $(WXDIR)\lib\wx.lib:      dummy.obj $(OBJECTS) $(PERIPH_LIBS)
-# 	-erase $(LIBTARGET)
-# 	lib /PAGESIZE:128 @<<
-# $(LIBTARGET)
-# y
-# $(OBJECTS) $(PERIPH_LIBS)
-# nul
-# ;
-# <<
+all:    $(DUMMYOBJ) $(WXDIR)\lib\wx1.lib $(WXDIR)\lib\wx2.lib $(WXDIR)\lib\wx3.lib $(WXDIR)\lib\wx4.lib
 
 $(WXDIR)\lib\wx1.lib:      $(COMMONOBJS) $(PERIPH_LIBS)
 	-erase $(WXDIR)\lib\wx1.lib
@@ -150,12 +139,22 @@ nul
 ;
 <<
 
-$(WXDIR)\lib\wx3.lib:      $(MSWOBJS)
+$(WXDIR)\lib\wx3.lib:      $(MSWOBJS1)
 	-erase $(WXDIR)\lib\wx3.lib
 	lib /PAGESIZE:128 @<<
 $(WXDIR)\lib\wx3.lib
 y
-$(MSWOBJS)
+$(MSWOBJS1)
+nul
+;
+<<
+
+$(WXDIR)\lib\wx4.lib:      $(MSWOBJS2)
+	-erase $(WXDIR)\lib\wx4.lib
+	lib /PAGESIZE:128 @<<
+$(WXDIR)\lib\wx4.lib
+y
+$(MSWOBJS2)
 nul
 ;
 <<

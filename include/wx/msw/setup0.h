@@ -397,14 +397,14 @@
 #endif
 
 #if defined(__WXMSW__) && defined(__WATCOMC__)
-#undef wxUSE_ODBC
-#define wxUSE_ODBC 0
-
 #undef wxUSE_LIBJPEG
 #define wxUSE_LIBJPEG 0
 #endif
 
 #if defined(__WXMSW__) && !defined(__WIN32__)
+
+#undef wxUSE_SOCKETS
+#define wxUSE_SOCKETS 0
 
 #undef wxUSE_THREADS
 #define wxUSE_THREADS 0

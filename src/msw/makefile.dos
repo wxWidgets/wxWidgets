@@ -165,7 +165,7 @@ COMMONOBJS = \
 		$(COMMDIR)\zipstrm.obj \
 		$(COMMDIR)\zstream.obj
 
-MSWOBJS = $(MSWDIR)\accel.obj \
+MSWOBJS1 = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\app.obj \
 		$(MSWDIR)\bitmap.obj \
 		$(MSWDIR)\bmpbuttn.obj \
@@ -215,8 +215,9 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\nativdlg.obj \
 		$(MSWDIR)\ownerdrw.obj \
 		$(MSWDIR)\palette.obj \
-		$(MSWDIR)\pen.obj \
-		$(MSWDIR)\penwin.obj \
+		$(MSWDIR)\pen.obj
+
+MSWOBJS2 = $(MSWDIR)\penwin.obj \
 		$(MSWDIR)\printdlg.obj \
 		$(MSWDIR)\printwin.obj \
 		$(MSWDIR)\radiobox.obj \
@@ -245,21 +246,11 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 #  $(OLEDIR)\xpmhand \
 #  $(OLEDIR)\pnghand \
 
-OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS)
+OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS1) $(MSWOBJS2)
 
 # Normal, static library
-all:    $(DUMMYOBJ) $(WXDIR)\lib\wx1.lib $(WXDIR)\lib\wx2.lib $(WXDIR)\lib\wx3.lib
+all:    $(DUMMYOBJ) $(WXDIR)\lib\wx1.lib $(WXDIR)\lib\wx2.lib $(WXDIR)\lib\wx3.lib $(WXDIR)\lib\wx4.lib
 
-
-# $(WXDIR)\lib\wx.lib:      dummy.obj $(OBJECTS) $(PERIPH_LIBS)
-# 	-erase $(LIBTARGET)
-# 	lib /PAGESIZE:128 @<<
-# $(LIBTARGET)
-# y
-# $(OBJECTS) $(PERIPH_LIBS)
-# nul
-# ;
-# <<
 
 $(WXDIR)\lib\wx1.lib:      $(COMMONOBJS) $(PERIPH_LIBS)
 	-erase $(WXDIR)\lib\wx1.lib
@@ -281,12 +272,22 @@ nul
 ;
 <<
 
-$(WXDIR)\lib\wx3.lib:      $(MSWOBJS)
+$(WXDIR)\lib\wx3.lib:      $(MSWOBJS1)
 	-erase $(WXDIR)\lib\wx3.lib
 	lib /PAGESIZE:128 @<<
 $(WXDIR)\lib\wx3.lib
 y
-$(MSWOBJS)
+$(MSWOBJS1)
+nul
+;
+<<
+
+$(WXDIR)\lib\wx4.lib:      $(MSWOBJS2)
+	-erase $(WXDIR)\lib\wx4.lib
+	lib /PAGESIZE:128 @<<
+$(WXDIR)\lib\wx4.lib
+y
+$(MSWOBJS2)
 nul
 ;
 <<
@@ -477,9 +478,9 @@ $(MSWDIR)/gdiobj.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
-$(MSWDIR)/gsocket.obj:     $*.$(SRCSUFF)
+$(MSWDIR)/gsocket.obj:     $*.c
         cl @<<
-$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+$(CPPFLAGS2) /Fo$@ /c $*.c
 <<
 
 $(MSWDIR)/helpwin.obj:     $*.$(SRCSUFF)

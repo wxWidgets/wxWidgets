@@ -9,6 +9,9 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WX_DIB_H_
+#define _WX_DIB_H_
+
 // Save (device dependent) wxBitmap as a DIB
 bool             wxSaveBitmap(wxChar *filename, wxBitmap *bitmap, wxColourMap *colourmap = NULL);
 
@@ -23,4 +26,6 @@ BOOL   wxReadDIB(LPTSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette);
 HANDLE wxReadDIB2(LPTSTR lpFileName);
 LPSTR wxFindDIBBits (LPSTR lpbi);
 HPALETTE wxMakeDIBPalette(LPBITMAPINFOHEADER lpInfo);
+
+#endif
 

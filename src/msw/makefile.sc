@@ -143,7 +143,7 @@ COMMONOBJS = \
 
 MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\app.obj \
-		$(MSWDIR)\automtn.obj \
+		$(MSWDIR)\ole\automtn.obj \
 		$(MSWDIR)\bitmap.obj \
 		$(MSWDIR)\bmpbuttn.obj \
 		$(MSWDIR)\brush.obj \
@@ -172,8 +172,8 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\dibutils.obj \
 		$(MSWDIR)\dirdlg.obj \
 		$(MSWDIR)\dragimag.obj \
-		$(MSWDIR)\dropsrc.obj \
-		$(MSWDIR)\droptgt.obj \
+		$(MSWDIR)\ole\dropsrc.obj \
+		$(MSWDIR)\ole\droptgt.obj \
 		$(MSWDIR)\filedlg.obj \
 		$(MSWDIR)\font.obj \
 		$(MSWDIR)\fontdlg.obj \
@@ -194,7 +194,7 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\minifram.obj \
 		$(MSWDIR)\msgdlg.obj \
 		$(MSWDIR)\nativdlg.obj \
-		$(MSWDIR)\oleutils.obj \
+		$(MSWDIR)\ole\oleutils.obj \
 		$(MSWDIR)\ownerdrw.obj \
 		$(MSWDIR)\palette.obj \
 		$(MSWDIR)\pen.obj \
@@ -227,7 +227,7 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\tooltip.obj \
 		$(MSWDIR)\utils.obj \
 		$(MSWDIR)\utilsexc.obj \
-		$(MSWDIR)\uuid.obj \
+		$(MSWDIR)\ole\uuid.obj \
 		$(MSWDIR)\wave.obj \
 		$(MSWDIR)\window.obj \
 		$(MSWDIR)\xpmhand.obj

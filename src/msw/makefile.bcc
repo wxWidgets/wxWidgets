@@ -176,7 +176,7 @@ COMMONOBJS = \
 		$(MSWDIR)\wxexpr.obj \
 		$(MSWDIR)\zipstrm.obj \
 		$(MSWDIR)\zstream.obj \
-		${MSWDIR}\resourc2.cpp
+		${MSWDIR}\resourc2.obj
 
 MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\app.obj \
@@ -263,8 +263,13 @@ wx:    $(CFG) $(DUMMY).obj $(OBJECTS) $(PERIPH_TARGET) $(LIBTARGET)
 $(LIBTARGET): $(DUMMY).obj $(OBJECTS) $(PERIPH_LIBS)
 	erase $(LIBTARGET)
 	tlib $(LIBTARGET) /P1024 @&&!
-+$(OBJECTS:.obj =.obj +) +$(PERIPH_LIBS:.lib =.lib +)
++$(COMMONOBJS:.obj =.obj +)\
++$(GENERICOBJS:.obj =.obj +)\
++$(MSWOBJS:.obj =.obj +)\
++$(PERIPH_LIBS:.lib =.lib +)
 !
+
+#+$(OBJECTS:.obj =.obj +)
 
 dummy.obj: dummy.$(SRCSUFF) $(LOCALHEADERS) $(BASEHEADERS) $(WXDIR)\include\wx\wx.h
 dummydll.obj: dummydll.$(SRCSUFF) $(LOCALHEADERS) $(BASEHEADERS) $(WXDIR)\include\wx\wx.h
@@ -349,7 +354,7 @@ $(MSWDIR)\frame.obj: $(MSWDIR)\frame.$(SRCSUFF)
 
 $(MSWDIR)\gaugemsw.obj: $(MSWDIR)\gaugemsw.$(SRCSUFF)
 
-$(MSWDIR)\gdiobj.obj: $(MSWDIR)\gdi$(SRCSUFF).obj
+$(MSWDIR)\gdiobj.obj: $(MSWDIR)\gdiobj.$(SRCSUFF)
 
 $(MSWDIR)\gsocket.obj: $(MSWDIR)\gsocket.c
 
@@ -464,7 +469,7 @@ $(MSWDIR)\dcbase.obj: $(COMMDIR)\dcbase.$(SRCSUFF)
 
 $(MSWDIR)\dlgcmn.obj: $(COMMDIR)\dlgcmn.$(SRCSUFF)
 
-$(MSWDIR)\dobjcmn.obj: $(COMMDIR)\d$(SRCSUFF)cmn.obj
+$(MSWDIR)\dobjcmn.obj: $(COMMDIR)\dobjcmn.$(SRCSUFF)
 
 $(MSWDIR)\docmdi.obj: $(COMMDIR)\docmdi.$(SRCSUFF)
 
@@ -530,9 +535,9 @@ $(MSWDIR)\module.obj: $(COMMDIR)\module.$(SRCSUFF)
 
 $(MSWDIR)\mstream.obj: $(COMMDIR)\mstream.$(SRCSUFF)
 
-$(MSWDIR)\object.obj: $(COMMDIR)\$(SRCSUFF)ect.obj
+$(MSWDIR)\object.obj: $(COMMDIR)\object.$(SRCSUFF)
 
-$(MSWDIR)\objstrm.obj: $(COMMDIR)\$(SRCSUFF)strm.obj
+$(MSWDIR)\objstrm.obj: $(COMMDIR)\objstrm.$(SRCSUFF)
 
 $(MSWDIR)\paper.obj: $(COMMDIR)\paper.$(SRCSUFF)
 
@@ -590,9 +595,7 @@ $(MSWDIR)\zipstrm.obj: $(COMMDIR)\zipstrm.$(SRCSUFF)
 
 $(MSWDIR)\zstream.obj: $(COMMDIR)\zstream.$(SRCSUFF)
 
-${MSWDIR}\resourc2.cpp: ${COMMDIR}\resourc2.cpp
-
-
+${MSWDIR}\resourc2.obj: ${COMMDIR}\resourc2.$(SRCSUFF)
 
 ########################################################
 # Generic objects (not always compiled, depending on

@@ -293,6 +293,8 @@ bool wxCustomDataObject::SetData(size_t size, const void *buf)
 // some common dnd related code
 // ============================================================================
 
+#if wxUSE_DRAG_AND_DROP
+
 #include "wx/dnd.h"
 
 // ----------------------------------------------------------------------------
@@ -330,4 +332,6 @@ wxDragResult wxFileDropTarget::OnData(wxCoord x, wxCoord y, wxDragResult def)
     wxFileDataObject *dobj = (wxFileDataObject *)m_dataObject;
     return OnDropFiles(x, y, dobj->GetFilenames()) ? def : wxDragNone;
 }
+
+#endif
 

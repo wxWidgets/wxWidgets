@@ -203,7 +203,13 @@ void wxMenuItem::SetName(const wxString& strName)
 #endif  //owner drawn
         {
             flagsOld |= MF_STRING;
+// Don't know what the correct cast should be, but it doesn't
+// compile in BC++/16-bit without this cast.
+#if !defined(__WIN32__)
+            data = (char*) (const char*) strName;
+#else
             data = strName;
+#endif
         }
 
         if ( ::ModifyMenu(hMenu, id,

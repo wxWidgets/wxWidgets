@@ -244,7 +244,12 @@ public:
     void GetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) const
         { DoGetClippingBox(x, y, w, h); }
     void GetClippingBox(wxRect& rect) const
-        { DoGetClippingBox(&rect.x, &rect.y, &rect.width, &rect.height); }
+        {
+          // Necessary to use intermediate variables for 16-bit compilation
+          wxCoord x, y, w, h;
+          DoGetClippingBox(&x, &y, &w, &h);
+          rect.x = x; rect.y = y; rect.width = w; rect.height = h;
+        }
 
     // text extent
     // -----------

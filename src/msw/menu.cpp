@@ -261,7 +261,14 @@ void wxMenu::Append(wxMenuItem *pItem)
     {
         // menu is just a normal string (passed in data parameter)
         flags |= MF_STRING;
+
+// Don't know what the correct cast should be, but it doesn't
+// compile in BC++/16-bit without this cast.
+#if !defined(__WIN32__)
+        pData = (char*) (const char*) label;
+#else
         pData = label;
+#endif
     }
 
     if ( !::AppendMenu(GetHmenu(), flags, id, pData) )

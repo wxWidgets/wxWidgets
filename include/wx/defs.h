@@ -1607,6 +1607,16 @@ typedef unsigned short  WORD;
 #endif
 
 typedef WXHWND WXWidget;
+
+#if defined(__BORLANDC__) && !defined(__WIN32__)
+#ifndef LPTSTR
+#define LPTSTR LPSTR
+#endif
+#ifndef LPCTSTR
+#define LPCTSTR LPSTR
+#endif
+#endif
+
 #endif // MSW
 
 #ifdef __WXMOTIF__

@@ -482,7 +482,13 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
 bool wxWriteResource(const wxString& section, const wxString& entry, const wxString& value, const wxString& file)
 {
   if (file != wxT(""))
+// Don't know what the correct cast should be, but it doesn't
+// compile in BC++/16-bit without this cast.
+#if !defined(__WIN32__)
+    return (WritePrivateProfileString((const char*) section, (const char*) entry, (const char*) value, (const char*) file) != 0);
+#else
     return (WritePrivateProfileString((LPCTSTR)WXSTRINGCAST section, (LPCTSTR)WXSTRINGCAST entry, (LPCTSTR)value, (LPCTSTR)WXSTRINGCAST file) != 0);
+#endif
   else
     return (WriteProfileString((LPCTSTR)WXSTRINGCAST section, (LPCTSTR)WXSTRINGCAST entry, (LPCTSTR)WXSTRINGCAST value) != 0);
 }

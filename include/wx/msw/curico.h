@@ -9,6 +9,9 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WX_CURICO_H_
+#define _WX_CURICO_H_
+
 HICON    ReadIconFile(    wxChar *szFileName, HINSTANCE hInst,
                           int *W = 0, int *H = 0);
 HCURSOR  ReadCursorFile(  wxChar *szFileName, HINSTANCE hInst,
@@ -20,3 +23,6 @@ HICON    CursorToIcon(    wxChar *szFileName, HINSTANCE hInst,
 
 HCURSOR MakeCursorFromBitmap(HINSTANCE hInst, HBITMAP hBitmap, POINT *pPoint);
 HICON MakeIconFromBitmap(HINSTANCE hInst, HBITMAP hBitmap);
+
+#endif
+
