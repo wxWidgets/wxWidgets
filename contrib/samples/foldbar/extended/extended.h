@@ -9,7 +9,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/toolbar.h"
-#include "foldpanelbar.h"
+#include "wx/foldbar/foldpanelbar.h"
 
 wxMenuBar *CreateMenuBar(bool with_window);
 
