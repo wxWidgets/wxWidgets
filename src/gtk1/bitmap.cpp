@@ -682,10 +682,10 @@ wxImage wxBitmap::ConvertToImage() const
 {
     // the colour used as transparent one in wxImage and the one it is replaced
     // with when it really occurs in the bitmap
-    static const MASK_RED = 1;
-    static const MASK_GREEN = 2;
-    static const MASK_BLUE = 3;
-    static const MASK_BLUE_REPLACEMENT = 2;
+    static const int MASK_RED = 1;
+    static const int MASK_GREEN = 2;
+    static const int MASK_BLUE = 3;
+    static const int MASK_BLUE_REPLACEMENT = 2;
 
     wxImage image;
 
