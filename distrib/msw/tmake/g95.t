@@ -280,9 +280,27 @@ else
   OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) $(DIRDLGOBJ)
 endif
 
-ARCHINCDIR=$(subst /,\,$(WXDIR))\lib\msw$(INCEXT)
+# MBN: if anyone has a better solution for this kludge, step
+#      forward, *please*
+# this tests is we are on cygwin or not ( will _not_ work if you are using
+# ZSH on plain Win32, tought ); it uses the presence of "/"
+# in the PATH variable
 
-SETUP_H=$(ARCHINCDIR)\wx\setup.h
+# how do you do "VAR=\" ? BLEAGH!
+BACKSLASH=$(subst a,\,a)
+ifeq (,$(findstring /,$(PATH)))
+  IS_CYGWIN=0
+  PATH_SEPARATOR:=$(BACKSLASH)
+  PATH_SUBST=/
+else
+  IS_CYGWIN=1
+  PATH_SEPARATOR=/
+  PATH_SUBST:=$(BACKSLASH)
+endif
+
+ARCHINCDIR=$(subst $(PATH_SUBST),$(PATH_SEPARATOR),$(WXDIR)/lib/msw$(INCEXT))
+
+SETUP_H=$(ARCHINCDIR)/wx/setup.h
 
 ifndef WXMAKINGDLL
 all:    $(SETUP_H) $(OBJECTS) $(WXLIB) $(ZLIBLIB) $(PNGLIB) $(JPEGLIB) $(TIFFLIB) $(REGEXLIB)
@@ -290,12 +308,12 @@ else
 all:    $(SETUP_H) $(OBJECTS) $(ZLIBLIB) $(PNGLIB) $(JPEGLIB) $(TIFFLIB) $(REGEXLIB) $(WXDLL)
 endif
 
-$(ARCHINCDIR)\wx:
-	mkdir $(ARCHINCDIR)
-	mkdir $(ARCHINCDIR)\wx
+$(ARCHINCDIR)/wx:
+	mkdir $(subst $(PATH_SUBST),$(PATH_SEPARATOR),$(ARCHINCDIR))
+	mkdir $(subst $(PATH_SUBST),$(PATH_SEPARATOR),$(ARCHINCDIR)/wx)
 
-$(SETUP_H): $(ARCHINCDIR)\wx
-	$(COPY) $(WXDIR)\include\wx\msw\setup.h $@
+$(SETUP_H): $(ARCHINCDIR)/wx
+	$(COPY) $(subst $(PATH_SUBST),$(PATH_SEPARATOR),$(WXDIR)/include/wx/msw/setup.h) $(subst $(PATH_SUBST),$(PATH_SEPARATOR),$@)
 
 ifndef WXMAKINGDLL
 
