@@ -428,6 +428,8 @@ public:
     }
 
     void Clear() { wxHashTableBase::Clear(); }
+
+    size_t GetCount() const { return wxHashTableBase::GetCount(); }
 private:
     compatibility_iterator m_iter;
 };
