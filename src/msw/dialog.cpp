@@ -213,6 +213,9 @@ void wxDialog::OnCharHook(wxKeyEvent& event)
         cancelEvent.SetEventObject( this );
         GetEventHandler()->ProcessEvent(cancelEvent);
 
+        // ensure that there is another message for this window so the
+        // ShowModal loop will exit and won't get stuck in GetMessage().
+        ::PostMessage(GetHwnd(), WM_NULL, 0, 0);
         return;
     }
   }
