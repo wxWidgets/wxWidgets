@@ -39,13 +39,14 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxPropertySheetDialog, wxDialog)
 
+BEGIN_EVENT_TABLE(wxPropertySheetDialog, wxDialog)
+    EVT_ACTIVATE(wxPropertySheetDialog::OnActivate)
+END_EVENT_TABLE()
+
 bool wxPropertySheetDialog::Create(wxWindow* parent, wxWindowID id, const wxString& title, 
                                        const wxPoint& pos, const wxSize& sz, long style,
                                        const wxString& name)
 {
-#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
-    style = wxNO_BORDER;
-#endif    
     if (!wxDialog::Create(parent, id, title, pos, sz, style, name))
         return false;
     
@@ -79,6 +80,10 @@ void wxPropertySheetDialog::LayoutDialog()
 #if !defined(__SMARTPHONE__) && !defined(__POCKETPC__)
     GetSizer()->Fit(this);
     Centre(wxBOTH);
+#endif
+#if defined(__SMARTPHONE__)
+    if (m_bookCtrl)
+        m_bookCtrl->SetFocus();
 #endif
 }
 
@@ -121,5 +126,23 @@ void wxPropertySheetDialog::AddBookCtrl(wxSizer* sizer)
 #else
     sizer->Add( m_bookCtrl, 1, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 #endif
+}
+
+void wxPropertySheetDialog::OnActivate(wxActivateEvent& event)
+{
+#if defined(__SMARTPHONE__)
+    // Attempt to focus the choice control: not yet working, but might
+    // be a step in the right direction. OnActivate overrides the default
+    // handler in toplevel.cpp that sets the focus for the first child of
+    // of the dialog (the choicebook).
+    if (event.GetActive())
+    {
+        wxChoicebook* choiceBook = wxDynamicCast(GetBookCtrl(), wxChoicebook);     
+        if (choiceBook)
+            choiceBook->SetFocus();
+    }
+    else
+#endif
+        event.Skip();
 }
 
