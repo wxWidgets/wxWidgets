@@ -9269,6 +9269,8 @@ void wxGrid::SetRowSize( int row, int height )
 {
     wxCHECK_RET( row >= 0 && row < m_numRows, _T("invalid row index") );
 
+    // See comment in SetColSize
+    if ( height < GetRowMinimalAcceptableHeight()) { return; }
 
     if ( m_rowHeights.IsEmpty() )
     {
@@ -9311,7 +9313,15 @@ void wxGrid::SetColSize( int col, int width )
     wxCHECK_RET( col >= 0 && col < m_numCols, _T("invalid column index") );
 
     // should we check that it's bigger than GetColMinimalWidth(col) here?
-
+    //                                                                 (VZ)
+    // No, because it is reasonable to assume the library user know's
+    // what he is doing. However whe should test against the weaker 
+    // constariant of minimalAcceptableWidth, as this breaks rendering
+    // 
+    // This test then fixes sf.net bug #645734
+    
+    if ( width < GetColMinimalAcceptableWidth()) { return; }
+    
     if ( m_colWidths.IsEmpty() )
     {
         // need to really create the array
