@@ -619,10 +619,12 @@ bool wxListCtrl::GetColumn(int col, wxListItem& item) const
             item.m_format = wxLIST_FORMAT_CENTRE;
     }
 
+#if _WIN32_IE >= 0x0300
     if ( item.m_mask & wxLIST_MASK_IMAGE )
     {
         item.m_image = lvCol.iImage;
     }
+#endif
 
     return success;
 }
