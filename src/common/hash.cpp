@@ -753,11 +753,6 @@ wxHashTableBase::wxHashTableBase()
 {
 }
 
-wxHashTableBase::~wxHashTableBase()
-{
-    Destroy();
-}
-
 void wxHashTableBase::Create( wxKeyType keyType, size_t size )
 {
     m_keyType = keyType;
@@ -1038,7 +1033,7 @@ const wxHashTable& wxHashTable::operator=( const wxHashTable& table )
     return *this;
 }
 
-void wxHashTable::DoCopy( const wxHashTable& table )
+void wxHashTable::DoCopy( const wxHashTable& WXUNUSED(table) )
 {
     Create( m_keyType, m_size );
 

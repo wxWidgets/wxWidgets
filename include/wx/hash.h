@@ -159,7 +159,7 @@ public:
     typedef wxHashTableBase_Node Node;
 
     wxHashTableBase();
-    virtual ~wxHashTableBase();
+    virtual ~wxHashTableBase() { };
 
     void Create( wxKeyType keyType = wxKEY_INTEGER,
                  size_t size = wxHASH_SIZE_DEFAULT );
@@ -344,6 +344,8 @@ public:
         : wxHashTableBase() { Create( keyType, size ); BeginFind(); }
     wxHashTable( const wxHashTable& table );
 
+    virtual ~wxHashTable() { Destroy(); }
+
     const wxHashTable& operator=( const wxHashTable& );
 
     void Destroy() { Clear(); }
@@ -514,7 +516,7 @@ private:
                   size_t size = wxHASH_SIZE_DEFAULT)                          \
             : wxHashTableBase() { Create(keyType, size); }                    \
                                                                               \
-        ~hashclass() { Destroy(); }                                           \
+        virtual ~hashclass() { Destroy(); }                                   \
                                                                               \
         void Destroy() { Clear(); }                                           \
         void Put(long key, eltype *data) { DoPut(key, key, (void*)data); }    \
