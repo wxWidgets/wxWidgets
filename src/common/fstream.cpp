@@ -53,6 +53,11 @@ char wxFileInputStream::Peek()
   return 0;
 }
 
+size_t wxFileInputStream::StreamSize() const
+{
+  return m_file->Length();
+}
+
 size_t wxFileInputStream::OnSysRead(void *buffer, size_t size)
 {
   return m_file->Read(buffer, size);
@@ -76,6 +81,13 @@ wxFileOutputStream::wxFileOutputStream(const wxString& fileName)
 {
   m_file = new wxFile(fileName, wxFile::write);
   m_file_destroy = TRUE;
+  m_o_streambuf->SetBufferIO(1024);
+}
+
+wxFileOutputStream::wxFileOutputStream(wxFile& file)
+{
+  m_file = &file;
+  m_file_destroy = FALSE;
   m_o_streambuf->SetBufferIO(1024);
 }
 
@@ -116,4 +128,17 @@ void wxFileOutputStream::Sync()
 {
   wxOutputStream::Sync();
   m_file->Flush();
+}
+
+size_t wxFileOutputStream::StreamSize() const
+{
+  return m_file->Length();
+}
+
+// ----------------------------------------------------------------------------
+// wxFileStream
+// ----------------------------------------------------------------------------
+wxFileStream::wxFileStream(const wxString& fileName)
+ : wxFileInputStream(fileName), wxFileOutputStream(*wxFileInputStream::m_file)
+{
 }

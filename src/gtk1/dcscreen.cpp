@@ -209,7 +209,11 @@ gdk_window_transparent_new ( GdkWindow     *parent,
   if (attributes_mask & GDK_WA_TITLE)
     title = attributes->title;
   else
+#if (GTK_MINOR_VERSION == 1)
+    title = "Unknown"; // GLH: Well I don't know for the moment what to write here.
+#else
     title = gdk_progname;
+#endif
 
   XmbSetWMProperties (gprivate->xdisplay, gprivate->xwindow,
                       title, title,

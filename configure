@@ -6289,12 +6289,15 @@ EOF
  
 fi
 
+IODBC_C_SRC=""
 if test "$wxUSE_ODBC" = 1 ; then
   cat >> confdefs.h <<EOF
 #define wxUSE_ODBC $wxUSE_ODBC
 EOF
  
+  IODBC_C_SRC="\$(IODBC_C_SRC)"
 fi
+
 
 
 if test "$wxUSE_GAUGE" = 1 ; then
@@ -7274,6 +7277,7 @@ s%@WXDEBUG_DEFINE@%$WXDEBUG_DEFINE%g
 s%@EXTRA_LINK@%$EXTRA_LINK%g
 s%@PROFILE@%$PROFILE%g
 s%@OPTIMISE@%$OPTIMISE%g
+s%@IODBC_C_SRC@%$IODBC_C_SRC%g
 s%@METAFILE@%$METAFILE%g
 s%@HELP@%$HELP%g
 s%@WXGRAPH@%$WXGRAPH%g

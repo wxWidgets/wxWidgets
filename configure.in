@@ -1151,9 +1151,12 @@ if test "$wxUSE_LIBPNG" = 1 ; then
   AC_DEFINE_UNQUOTED(wxUSE_LIBPNG,$wxUSE_LIBPNG) 
 fi
 
+IODBC_C_SRC=""
 if test "$wxUSE_ODBC" = 1 ; then
   AC_DEFINE_UNQUOTED(wxUSE_ODBC,$wxUSE_ODBC) 
+  IODBC_C_SRC="\$(IODBC_C_SRC)"
 fi
+AC_SUBST(IODBC_C_SRC)
 
 dnl ----------------------------------------------------------------
 dnl Register GUI-control options for makefiles and setup.h

@@ -14,6 +14,23 @@ OS=@OS@
 RULE=gslib
 
 # define common stuff
+IODBC_C_SRC=\
+  iodbc/catalog.c \
+  iodbc/connect.c \
+  iodbc/dlf.c \
+  iodbc/dlproc.c \
+  iodbc/execute.c \
+  iodbc/fetch.c \
+  iodbc/hdbc.c \
+  iodbc/henv.c \
+  iodbc/herr.c \
+  iodbc/hstmt.c \
+  iodbc/info.c \
+  iodbc/itrace.c \
+  iodbc/main.c \
+  iodbc/misc.c \
+  iodbc/prepare.c \
+  iodbc/result.c
 
 # include gtk.inc, qt.inc or motif.inc here
 include @MAKEINCLUDE@
@@ -24,7 +41,7 @@ SHARED_LIBRARY=lib$(LIB_TARGET).so.$(LIB_MAJOR).$(LIB_MINOR)
 
 LIB_CPP_ALL_SRC=$(LIB_CPP_SRC) @GTK_JOYSTICK@ @UNIX_THREAD@
 
-LIB_C_ALL_SRC=$(LIB_C_SRC) parser.c
+LIB_C_ALL_SRC=$(LIB_C_SRC) @IOBC_C_SRC@ parser.c
 
 #define library objects
 LIB_OBJ=\

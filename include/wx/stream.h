@@ -37,13 +37,15 @@ wxOutputStream& WXDLLEXPORT wxEndL(wxOutputStream& o_stream);
 class WXDLLEXPORT wxStreamBuffer {
  public:
   typedef enum {
-    read, write
+    read, write, read_write
   } BufMode;
 
   // -----------
   // ctor & dtor
   // -----------
   wxStreamBuffer(wxStreamBase& stream, BufMode mode);
+  wxStreamBuffer(BufMode mode);
+  wxStreamBuffer(const wxStreamBuffer& buf);
   ~wxStreamBuffer();
 
   // -----------
@@ -53,6 +55,8 @@ class WXDLLEXPORT wxStreamBuffer {
   void Write(const void *buffer, size_t size);
   bool WriteBack(const char *buffer, size_t size);
   bool WriteBack(char c);
+  char GetChar();
+  void PutChar(char c);
   off_t Tell() const;
   off_t Seek(off_t pos, wxSeekMode mode);
 
@@ -68,7 +72,9 @@ class WXDLLEXPORT wxStreamBuffer {
   off_t GetIntPosition() const { return m_buffer_pos-m_buffer_start; }
   void SetIntPosition(off_t pos) { m_buffer_pos = m_buffer_start+pos; }
   size_t GetLastAccess() const { return m_buffer_end-m_buffer_start; }
+
   void Fixed(bool fixed) { m_fixed = fixed; }
+  void Flushable(bool f) { m_flushable = f; }
 
   bool FlushBuffer();
   bool FillBuffer();
@@ -88,10 +94,11 @@ class WXDLLEXPORT wxStreamBuffer {
   char *m_wback;
   size_t m_wbacksize, m_wbackcur;
 
-  bool m_fixed;
+  bool m_fixed, m_flushable;
 
   wxStreamBase *m_stream;
   BufMode m_mode;
+  bool m_destroybuf;
 };
 
 // ---------------------------------------------------------------------------
@@ -108,7 +115,8 @@ class WXDLLEXPORT wxStreamBase {
   wxStreamBase();
   virtual ~wxStreamBase();
 
-  wxStreamError LastError() { return m_lasterror; }
+  wxStreamError LastError() const { return m_lasterror; }
+  virtual size_t StreamSize() const { return ~((size_t)0); }
 
  protected:
   friend class wxStreamBuffer;
@@ -116,7 +124,7 @@ class WXDLLEXPORT wxStreamBase {
   virtual size_t OnSysRead(void *buffer, size_t bufsize);
   virtual size_t OnSysWrite(const void *buffer, size_t bufsize);
   virtual off_t OnSysSeek(off_t seek, wxSeekMode mode);
-  virtual off_t OnSysTell();
+  virtual off_t OnSysTell() const;
 
  protected:
   size_t m_lastcount;
@@ -220,6 +228,9 @@ class WXDLLEXPORT wxFilterInputStream: public wxInputStream {
 
   char Peek() { return m_parent_i_stream->Peek(); }
 
+  wxStreamError LastError() const { return m_parent_i_stream->LastError(); }
+  size_t StreamSize() const { return m_parent_i_stream->StreamSize(); }
+
  protected:
   wxInputStream *m_parent_i_stream;
 };
@@ -229,6 +240,9 @@ class WXDLLEXPORT wxFilterOutputStream: public wxOutputStream {
   wxFilterOutputStream();
   wxFilterOutputStream(wxOutputStream& stream);
   ~wxFilterOutputStream();
+
+  wxStreamError LastError() const { return m_parent_o_stream->LastError(); }
+  size_t StreamSize() const { return m_parent_o_stream->StreamSize(); }
 
  protected:
   wxOutputStream *m_parent_o_stream;

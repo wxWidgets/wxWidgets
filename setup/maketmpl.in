@@ -98,6 +98,7 @@ $(TOOLKIT_DEF) \
 -I.. \
 -I$(WXBASEDIR)/include \
 -I$(WXBASEDIR)/src/zlib \
+-I$(WXBASEDIR)/src/iodbc \
 $(GUI_TK_INCLUDE) \
 $(OPENGL_INCLUDE) \
 $(X_CFLAGS)

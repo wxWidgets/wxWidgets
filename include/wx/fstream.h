@@ -26,9 +26,10 @@ class wxFileInputStream: public wxInputStream {
   wxFileInputStream(const wxString& ifileName);
   wxFileInputStream(wxFile& file);
   wxFileInputStream(int fd);
-  virtual ~wxFileInputStream();
+  ~wxFileInputStream();
 
-  virtual char Peek();
+  char Peek();
+  size_t StreamSize() const;
 
   bool Ok() const { return m_file->IsOpened(); }
 
@@ -56,6 +57,7 @@ class wxFileOutputStream: public wxOutputStream {
      { return wxOutputStream::Write(buffer, size); }
 
   void Sync();
+  size_t StreamSize() const;
 
   bool Ok() const { return m_file->IsOpened(); }
 
@@ -69,6 +71,11 @@ class wxFileOutputStream: public wxOutputStream {
  protected:
   wxFile *m_file;
   bool m_file_destroy;
+};
+
+class wxFileStream: public wxFileInputStream, public wxFileOutputStream {
+ public:
+  wxFileStream(const wxString& fileName);
 };
 
 #endif
