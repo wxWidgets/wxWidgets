@@ -1075,6 +1075,12 @@ void wxWindow::DoSetToolTip(wxToolTip * WXUNUSED(tooltip))
 
 bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
 {
+    if ( x == -1 && y == -1 )
+    {
+        wxPoint mouse = ScreenToClient(wxGetMousePosition());
+        x = mouse.x; y = mouse.y;
+    }
+
     Widget widget = (Widget) GetMainWidget();
 
     /* The menuId field seems to be usused, so we'll use it to

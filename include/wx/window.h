@@ -804,9 +804,11 @@ public:
     virtual void DoUpdateWindowUI(wxUpdateUIEvent& event) ;
 
 #if wxUSE_MENUS
-    bool PopupMenu( wxMenu *menu, const wxPoint& pos )
+    bool PopupMenu(wxMenu *menu)
+        { return DoPopupMenu(menu, -1, -1); }
+    bool PopupMenu(wxMenu *menu, const wxPoint& pos)
         { return DoPopupMenu(menu, pos.x, pos.y); }
-    bool PopupMenu( wxMenu *menu, int x, int y )
+    bool PopupMenu(wxMenu *menu, int x, int y)
         { return DoPopupMenu(menu, x, y); }
 #endif // wxUSE_MENUS
 
@@ -1203,7 +1205,7 @@ protected:
 #endif // wxUSE_TOOLTIPS
 
 #if wxUSE_MENUS
-    virtual bool DoPopupMenu( wxMenu *menu, int x, int y ) = 0;
+    virtual bool DoPopupMenu(wxMenu *menu, int x, int y) = 0;
 #endif // wxUSE_MENUS
 
     // Makes an adjustment to the window position to make it relative to the

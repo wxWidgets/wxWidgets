@@ -364,7 +364,16 @@ bool wxWindowMac::DoPopupMenu(wxMenu *menu, int x, int y)
 {
     menu->SetInvokingWindow(this);
     menu->UpdateUI();
-    ClientToScreen( &x , &y ) ;
+    
+    if ( x == -1 && y == -1 )
+    {
+        wxPoint mouse = wxGetMousePosition();
+        x = mouse.x; y = mouse.y;
+    }
+    else
+    {
+        ClientToScreen( &x , &y ) ;
+    }
 
     menu->MacBeforeDisplay( true ) ;
     long menuResult = ::PopUpMenuSelect((MenuHandle) menu->GetHMenu() ,y,x, 0) ;

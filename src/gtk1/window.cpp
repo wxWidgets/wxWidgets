@@ -4285,30 +4285,44 @@ extern "C" void wxPopupMenuPositionCallback( GtkMenu *menu,
 
 bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
 {
-    wxCHECK_MSG( m_widget != NULL, FALSE, wxT("invalid window") );
+    wxCHECK_MSG( m_widget != NULL, false, wxT("invalid window") );
 
-    wxCHECK_MSG( menu != NULL, FALSE, wxT("invalid popup-menu") );
+    wxCHECK_MSG( menu != NULL, false, wxT("invalid popup-menu") );
 
     SetInvokingWindow( menu, this );
 
     menu->UpdateUI();
 
-    wxPoint pos(ClientToScreen(wxPoint(x, y)));
-
-    bool is_waiting = TRUE;
+    bool is_waiting = true;
 
     gtk_signal_connect( GTK_OBJECT(menu->m_menu),
                         "hide",
                         GTK_SIGNAL_FUNC(gtk_pop_hide_callback),
                         (gpointer)&is_waiting );
 
+    wxPoint pos;
+    gpointer userdata;
+    GtkMenuPositionFunc posfunc;
+    if ( x == -1 && y == -1 )
+    {
+        // use GTK's default positioning algorithm
+        userdata = NULL;
+        posfunc = NULL;
+    }
+    else
+    {
+        pos = ClientToScreen(wxPoint(x, y));
+        userdata = &pos;
+        posfunc = wxPopupMenuPositionCallback;
+    }
+
     gtk_menu_popup(
                   GTK_MENU(menu->m_menu),
                   (GtkWidget *) NULL,           // parent menu shell
                   (GtkWidget *) NULL,           // parent menu item
-                  wxPopupMenuPositionCallback,  // function to position it
-                  &pos,                         // client data
-                  0 /* FIXME! */,               // button used to activate it
+                  posfunc,                      // function to position it
+                  userdata,                     // client data
+                  0,                            // button used to activate it
 #ifdef __WXGTK20__
                   gtk_get_current_event_time()
 #else
@@ -4321,7 +4335,7 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
         gtk_main_iteration();
     }
 
-    return TRUE;
+    return true;
 }
 
 #endif // wxUSE_MENUS_NATIVE

@@ -1955,10 +1955,18 @@ bool wxWindowOS2::DoPopupMenu(
 
     pMenu->SetInvokingWindow(this);
     pMenu->UpdateUI();
-
-    DoClientToScreen( &nX
-                     ,&nY
-                    );
+    
+    if ( x == -1 && y == -1 )
+    {
+        wxPoint mouse = wxGetMousePosition();
+        nX = mouse.x; nY = mouse.y;
+    }
+    else
+    {
+        DoClientToScreen( &nX
+                         ,&nY
+                        );
+    }
     wxCurrentPopupMenu = pMenu;
 
     ::WinPopupMenu( hWndParent

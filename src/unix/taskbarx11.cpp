@@ -314,6 +314,6 @@ bool wxTaskBarIcon::PopupMenu(wxMenu *menu)
     if (!m_iconWnd)
         return false;
     wxSize size(m_iconWnd->GetClientSize());
-    m_iconWnd->PopupMenu(menu, size.x/2, size.y/2);
+    m_iconWnd->PopupMenu(menu);
     return true;
 }

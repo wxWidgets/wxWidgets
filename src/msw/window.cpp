@@ -1737,6 +1737,12 @@ bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
     menu->SetInvokingWindow(this);
     menu->UpdateUI();
 
+    if ( x == -1 && y == -1 )
+    {
+        wxPoint mouse = ScreenToClient(wxGetMousePosition());
+        x = mouse.x; y = mouse.y;
+    }
+
     HWND hWnd = GetHwnd();
     HMENU hMenu = GetHmenuOf(menu);
     POINT point;

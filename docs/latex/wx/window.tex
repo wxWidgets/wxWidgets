@@ -1987,6 +1987,8 @@ default value is {\tt false}.}
 
 \membersection{wxWindow::PopupMenu}\label{wxwindowpopupmenu}
 
+\func{bool}{PopupMenu}{\param{wxMenu* }{menu}}
+
 \func{bool}{PopupMenu}{\param{wxMenu* }{menu}, \param{const wxPoint\& }{pos}}
 
 \func{bool}{PopupMenu}{\param{wxMenu* }{menu}, \param{int }{x}, \param{int }{y}}
@@ -1994,7 +1996,8 @@ default value is {\tt false}.}
 Pops up the given menu at the specified coordinates, relative to this
 window, and returns control when the user has dismissed the menu. If a
 menu item is selected, the corresponding menu event is generated and will be
-processed as usually.
+processed as usually. If the coordinates are not specified, current mouse
+cursor position is used.
 
 \wxheading{Parameters}
 
@@ -2012,9 +2015,13 @@ processed as usually.
 
 \wxheading{Remarks}
 
-Just before the menu is popped up, \helpref{wxMenu::UpdateUI}{wxmenuupdateui} is called
-to ensure that the menu items are in the correct state. The menu does not get deleted
-by the window.
+Just before the menu is popped up, \helpref{wxMenu::UpdateUI}{wxmenuupdateui}
+is called to ensure that the menu items are in the correct state. The menu does
+not get deleted by the window.
+
+It is recommended to not explicitly specify coordinates when calling PopupMenu
+in response to mouse click, because some of the ports (namely, wxGTK) can do
+a better job of positioning the menu in that case.
 
 \pythonnote{In place of a single overloaded method name, wxPython
 implements the following methods:\par
