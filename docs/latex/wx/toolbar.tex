@@ -41,7 +41,15 @@ often have to be made in order to get optimal look on all platforms as some plat
 ignore the values for explicit placement and use their own layout and the meaning
 of a "separator" is a vertical line under Windows95 vs. simple space under GTK etc.
 
-{\bf wxToolBar95:} Note that this toolbar paints tools to reflect user-selected colours.
+{\bf wxToolBar95:} Note that this toolbar paints tools to reflect system-wide colours.
+If you use more than 16 colours in your tool bitmaps, you may wish to suppress
+this behaviour, otherwise system colours in your bitmaps will inadvertently be
+mapped to system colours. To do this, set the {\tt no-remap} system option
+before creating the toolbar:
+
+\begin{verbatim}
+  wxSystemOptions::SetOption(wxT("no-remap"), 1);
+\end{verbatim}
 
 \wxheading{Window styles}
 
