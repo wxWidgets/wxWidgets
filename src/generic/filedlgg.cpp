@@ -582,9 +582,12 @@ void wxFileCtrl::Update()
 
     SortItems( ListCompare, 0 );
 
-    SetColumnWidth( 1, wxLIST_AUTOSIZE );
-    SetColumnWidth( 2, wxLIST_AUTOSIZE );
-    SetColumnWidth( 3, wxLIST_AUTOSIZE );
+    if (my_style & wxLC_REPORT)
+    {
+       SetColumnWidth( 1, wxLIST_AUTOSIZE );
+       SetColumnWidth( 2, wxLIST_AUTOSIZE );
+       SetColumnWidth( 3, wxLIST_AUTOSIZE );
+    }
 }
 
 void wxFileCtrl::SetWild( const wxString &wild )
