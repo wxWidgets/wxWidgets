@@ -13,11 +13,7 @@
 #include <stdlib.h>
 #include "wx/unix/gsockunx.h"
 #include "wx/gsocket.h"
-
-extern int wxAppAddSocketHandler(int handle, int mask,
-				 void (*callback)(void*), void * gsock);
-
-extern void wxAppRemoveSocketHandler(int handle);
+#include "wx/app.h"
 
 #define wxSockReadMask  0x01
 #define wxSockWriteMask 0x02
@@ -80,17 +76,17 @@ void GSocketGUIFunctionsTableConcrete::Install_Callback(GSocket *socket, GSocket
     }
 
     if (m_id[c] != -1)
-        wxAppRemoveSocketHandler(m_id[c]);
+        wxTheApp->RemoveSocketHandler(m_id[c]);
 
     if (c == 0)
     {
-	m_id[0] = wxAppAddSocketHandler(socket->m_fd, wxSockReadMask,
-					_GSocket_PM_Input, (void *)socket);
+        m_id[0] = wxTheApp->AddSocketHandler(socket->m_fd, wxSockReadMask,
+                                             _GSocket_PM_Input, (void *)socket);
     }
     else
     {
-	m_id[1] = wxAppAddSocketHandler(socket->m_fd, wxSockWriteMask,
-					_GSocket_PM_Output, (void *)socket);
+        m_id[1] = wxTheApp->AddSocketHandler(socket->m_fd, wxSockWriteMask,
+                                             _GSocket_PM_Output, (void *)socket);
     }
 }
 
@@ -107,7 +103,7 @@ void GSocketGUIFunctionsTableConcrete::Uninstall_Callback(GSocket *socket, GSock
 	default: return;
     }
     if (m_id[c] != -1)
-        wxAppRemoveSocketHandler(m_id[c]);
+        wxTheApp->RemoveSocketHandler(m_id[c]);
 
     m_id[c] = -1;
 }

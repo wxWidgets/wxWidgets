@@ -115,34 +115,9 @@ struct GsocketCallbackInfo{
     void* gsock;
 };
 
-// These defines and wrapper functions are used here and in gsockpm.c
+// These defines are used here and in gsockpm.cpp
 #define wxSockReadMask  0x01
 #define wxSockWriteMask 0x02
-
-#ifdef __EMX__
-extern "C"
-int wxAppAddSocketHandler(int handle, int mask,
-                           void (*callback)(void*), void * gsock)
-{
-    return wxTheApp->AddSocketHandler(handle, mask, callback, gsock);
-}
-extern "C"
-void wxAppRemoveSocketHandler(int handle)
-{
-    wxTheApp->RemoveSocketHandler(handle);
-}
-#else
-//  Linkage mode problems using callbacks with extern C in a .cpp module
-int wxAppAddSocketHandler(int handle, int mask,
-                           void (*callback)(void*), void * gsock)
-{
-    return wxTheApp->AddSocketHandler(handle, mask, callback, gsock);
-}
-void wxAppRemoveSocketHandler(int handle)
-{
-    wxTheApp->RemoveSocketHandler(handle);
-}
-#endif
 
 void wxApp::HandleSockets()
 {
