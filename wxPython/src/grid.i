@@ -59,7 +59,7 @@ PyObject* wxPyMake_##TYPE(TYPE* source) { \
         /* Otherwise make a new wrapper for it the old fashioned way and \
            give it the OOR treatment */ \
         if (! target) { \
-            target = wxPyConstructObject(source, wxT(#TYPE), FALSE); \
+            target = wxPyConstructObject(source, wxT(#TYPE), False); \
             if (target) \
                 source->SetClientObject(new wxPyOORClientData(target)); \
         } \
@@ -796,7 +796,7 @@ public:
 
 
     bool EndEdit(int row, int col, wxGrid* grid) {
-        bool rv = FALSE;
+        bool rv = False;
         wxPyBeginBlockThreads();
         if (wxPyCBH_findCallback(m_myInst, "EndEdit")) {
             PyObject* go = wxPyMake_wxObject(grid);
@@ -954,7 +954,7 @@ public:
     %addtofunc wxGridCellChoiceEditor  "self._setOORInfo(self)"
     wxGridCellChoiceEditor(int LCOUNT = 0,
                            const wxString* choices = NULL,
-                           bool allowOthers = FALSE);
+                           bool allowOthers = False);
     virtual wxString GetValue();
 };
 
@@ -1013,8 +1013,8 @@ public:
     void SetFont(const wxFont& font);
     void SetAlignment(int hAlign, int vAlign);
     void SetSize(int num_rows, int num_cols);
-    void SetOverflow( bool allow = TRUE );
-    void SetReadOnly(bool isReadOnly = TRUE);
+    void SetOverflow( bool allow = True );
+    void SetReadOnly(bool isReadOnly = True);
 
     void SetRenderer(wxGridCellRenderer *renderer);
     void SetEditor(wxGridCellEditor* editor);
@@ -1438,7 +1438,7 @@ bool wxGridCellCoords_helper(PyObject* source, wxGridCellCoords** obj) {
         if (! wxPyConvertSwigPtr(source, (void **)&ptr, wxT("wxGridCellCoords")))
             goto error;
         *obj = ptr;
-        return TRUE;
+        return True;
     }
     // otherwise a 2-tuple of integers is expected
     else if (PySequence_Check(source) && PyObject_Length(source) == 2) {
@@ -1452,12 +1452,12 @@ bool wxGridCellCoords_helper(PyObject* source, wxGridCellCoords** obj) {
         **obj = wxGridCellCoords(PyInt_AsLong(o1), PyInt_AsLong(o2));
         Py_DECREF(o1);
         Py_DECREF(o2);
-        return TRUE;
+        return True;
     }
 
  error:
     PyErr_SetString(PyExc_TypeError, "Expected a 2-tuple of integers or a wxGridCellCoords object.");
-    return FALSE;
+    return False;
 }
 
 
@@ -1466,13 +1466,13 @@ bool wxGridCellCoords_typecheck(PyObject* source) {
     
     if (wxPySwigInstance_Check(source) &&
         wxPyConvertSwigPtr(source, (void **)&ptr, wxT("wxGridCellCoords")))
-        return true;
+        return True;
 
     PyErr_Clear();
     if (PySequence_Check(source) && PySequence_Length(source) == 2)
-        return true;
+        return True;
     
-    return false;
+    return False;
 }
 %}
 
@@ -1553,17 +1553,17 @@ public:
 
 
     wxGridTableBase * GetTable() const;
-    bool SetTable( wxGridTableBase *table, bool takeOwnership=FALSE,
+    bool SetTable( wxGridTableBase *table, bool takeOwnership=False,
                    WXGRIDSELECTIONMODES selmode =
                    wxGrid::wxGridSelectCells );
 
     void ClearGrid();
-    bool InsertRows( int pos = 0, int numRows = 1, bool updateLabels=TRUE );
-    bool AppendRows( int numRows = 1, bool updateLabels=TRUE );
-    bool DeleteRows( int pos = 0, int numRows = 1, bool updateLabels=TRUE );
-    bool InsertCols( int pos = 0, int numCols = 1, bool updateLabels=TRUE );
-    bool AppendCols( int numCols = 1, bool updateLabels=TRUE );
-    bool DeleteCols( int pos = 0, int numCols = 1, bool updateLabels=TRUE );
+    bool InsertRows( int pos = 0, int numRows = 1, bool updateLabels=True );
+    bool AppendRows( int numRows = 1, bool updateLabels=True );
+    bool DeleteRows( int pos = 0, int numRows = 1, bool updateLabels=True );
+    bool InsertCols( int pos = 0, int numCols = 1, bool updateLabels=True );
+    bool AppendCols( int numCols = 1, bool updateLabels=True );
+    bool DeleteCols( int pos = 0, int numCols = 1, bool updateLabels=True );
 
 
     // this function is called when the current cell highlight must be redrawn
@@ -1597,7 +1597,7 @@ public:
     void     EndBatch();
     int      GetBatchCount();
     void     ForceRefresh();
-    void     Refresh(bool eraseb=TRUE, const wxRect* rect= NULL);
+    void     Refresh(bool eraseb=True, const wxRect* rect= NULL);
 
 
     // ------ edit control functions
@@ -1605,7 +1605,7 @@ public:
     bool IsEditable();
     void EnableEditing( bool edit );
 
-    void EnableCellEditControl( bool enable = TRUE );
+    void EnableCellEditControl( bool enable = True );
     void DisableCellEditControl();
     bool CanEnableCellControl() const;
     bool IsCellEditControlEnabled() const;
@@ -1649,8 +1649,8 @@ public:
     // check to see if a cell is either wholly visible (the default arg) or
     // at least partially visible in the grid window
     //
-    bool IsVisible( int row, int col, bool wholeCellVisible = TRUE );
-    // TODO: ??? bool IsVisible( const wxGridCellCoords& coords, bool wholeCellVisible = TRUE );
+    bool IsVisible( int row, int col, bool wholeCellVisible = True );
+    // TODO: ??? bool IsVisible( const wxGridCellCoords& coords, bool wholeCellVisible = True );
     void MakeCellVisible( int row, int col );
     // TODO: ??? void MakeCellVisible( const wxGridCellCoords& coords );
 
@@ -1704,13 +1704,13 @@ public:
     void     SetCellHighlightPenWidth(int width);
     void     SetCellHighlightROPenWidth(int width);
 
-    void     EnableDragRowSize( bool enable = TRUE );
+    void     EnableDragRowSize( bool enable = True );
     void     DisableDragRowSize();
     bool     CanDragRowSize();
-    void     EnableDragColSize( bool enable = TRUE );
+    void     EnableDragColSize( bool enable = True );
     void     DisableDragColSize();
     bool     CanDragColSize();
-    void     EnableDragGridSize(bool enable = TRUE);
+    void     EnableDragGridSize(bool enable = True);
     void     DisableDragGridSize();
     bool     CanDragGridSize();
 
@@ -1727,7 +1727,7 @@ public:
     void     SetColFormatFloat(int col, int width = -1, int precision = -1);
     void     SetColFormatCustom(int col, const wxString& typeName);
 
-    void     EnableGridLines( bool enable = TRUE );
+    void     EnableGridLines( bool enable = True );
     bool     GridLinesEnabled();
 
     // ------ row and col formatting
@@ -1748,22 +1748,22 @@ public:
     bool     GetCellOverflow( int row, int col );
     void     GetCellSize( int row, int col, int *OUTPUT, int *OUTPUT );
 
-    void     SetDefaultRowSize( int height, bool resizeExistingRows = FALSE );
+    void     SetDefaultRowSize( int height, bool resizeExistingRows = False );
     void     SetRowSize( int row, int height );
-    void     SetDefaultColSize( int width, bool resizeExistingCols = FALSE );
+    void     SetDefaultColSize( int width, bool resizeExistingCols = False );
 
     void     SetColSize( int col, int width );
 
     // automatically size the column or row to fit to its contents, if
-    // setAsMin is TRUE, this optimal width will also be set as minimal width
+    // setAsMin is True, this optimal width will also be set as minimal width
     // for this column
-    void     AutoSizeColumn( int col, bool setAsMin = TRUE );
-    void     AutoSizeRow( int row, bool setAsMin = TRUE );
+    void     AutoSizeColumn( int col, bool setAsMin = True );
+    void     AutoSizeRow( int row, bool setAsMin = True );
 
 
     // auto size all columns (very ineffective for big grids!)
-    void     AutoSizeColumns( bool setAsMin = TRUE );
-    void     AutoSizeRows( bool setAsMin = TRUE );
+    void     AutoSizeColumns( bool setAsMin = True );
+    void     AutoSizeRows( bool setAsMin = True );
 
     // auto size the grid, that is make the columns/rows of the "right" size
     // and also set the grid size to just fit its contents
@@ -1822,19 +1822,19 @@ public:
     void SetCellValue( int row, int col, const wxString& s );
     // TODO: ??? void SetCellValue( const wxGridCellCoords& coords, const wxString& s )
 
-    // returns TRUE if the cell can't be edited
+    // returns True if the cell can't be edited
     bool IsReadOnly(int row, int col) const;
 
     // make the cell editable/readonly
-    void SetReadOnly(int row, int col, bool isReadOnly = TRUE);
+    void SetReadOnly(int row, int col, bool isReadOnly = True);
 
     // ------ selections of blocks of cells
     //
-    void SelectRow( int row, bool addToSelected = FALSE );
-    void SelectCol( int col, bool addToSelected = FALSE );
+    void SelectRow( int row, bool addToSelected = False );
+    void SelectCol( int col, bool addToSelected = False );
 
     void SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol,
-                      bool addToSelected = FALSE );
+                      bool addToSelected = False );
     // TODO: ??? void SelectBlock( const wxGridCellCoords& topLeft,
     // TODO: ???                   const wxGridCellCoords& bottomRight )
 
@@ -1906,8 +1906,8 @@ class wxGridEvent : public wxNotifyEvent
 {
 public:
     wxGridEvent(int id, wxEventType type, wxGrid* obj,
-                int row=-1, int col=-1, int x=-1, int y=-1, bool sel = TRUE,
-                bool control=FALSE, bool shift=FALSE, bool alt=FALSE, bool meta=FALSE);
+                int row=-1, int col=-1, int x=-1, int y=-1, bool sel = True,
+                bool control=False, bool shift=False, bool alt=False, bool meta=False);
 
     virtual int GetRow();
     virtual int GetCol();
@@ -1926,7 +1926,7 @@ class  wxGridSizeEvent : public wxNotifyEvent
 public:
     wxGridSizeEvent(int id, wxEventType type, wxGrid* obj,
                 int rowOrCol=-1, int x=-1, int y=-1,
-                bool control=FALSE, bool shift=FALSE, bool alt=FALSE, bool meta=FALSE);
+                bool control=False, bool shift=False, bool alt=False, bool meta=False);
 
     int         GetRowOrCol();
     wxPoint     GetPosition();
@@ -1944,9 +1944,9 @@ public:
     wxGridRangeSelectEvent(int id, wxEventType type, wxGrid* obj,
                            const wxGridCellCoords& topLeft,
                            const wxGridCellCoords& bottomRight,
-                           bool sel = TRUE,
-                           bool control=FALSE, bool shift=FALSE,
-                           bool alt=FALSE, bool meta=FALSE);
+                           bool sel = True,
+                           bool control=False, bool shift=False,
+                           bool alt=False, bool meta=False);
 
     wxGridCellCoords GetTopLeftCoords();
     wxGridCellCoords GetBottomRightCoords();

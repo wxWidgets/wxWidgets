@@ -37,9 +37,9 @@ public:
     %name(DragString)wxGenericDragImage(const wxString& str,
                                           const wxCursor& cursor = wxNullCursor);
 
-    %name(DragTreeItem)wxGenericDragImage(const wxTreeCtrl& treeCtrl, wxTreeItemId& id);
+    %name(DragTreeItem)wxGenericDragImage(const wxPyTreeCtrl& treeCtrl, wxTreeItemId& id);
 
-    %name(DragListItem)wxGenericDragImage(const wxListCtrl& listCtrl, long id);
+    %name(DragListItem)wxGenericDragImage(const wxPyListCtrl& listCtrl, long id);
 
     ~wxGenericDragImage();
 
@@ -50,7 +50,7 @@ public:
     // Begin drag. hotspot is the location of the drag position relative to the upper-left
     // corner of the image.
     bool BeginDrag(const wxPoint& hotspot, wxWindow* window,
-                   bool fullScreen = FALSE, wxRect* rect = NULL);
+                   bool fullScreen = False, wxRect* rect = NULL);
 
     // Begin drag. hotspot is the location of the drag position relative to the upper-left
     // corner of the image. This is full screen only. fullScreenRect gives the

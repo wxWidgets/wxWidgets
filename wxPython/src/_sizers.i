@@ -96,8 +96,8 @@ public:
 
 struct wxPySizerItemInfo {
     wxPySizerItemInfo()
-        : window(NULL), sizer(NULL), gotSize(false),
-          size(wxDefaultSize), gotPos(false), pos(-1)
+        : window(NULL), sizer(NULL), gotSize(False),
+          size(wxDefaultSize), gotPos(False), pos(-1)
     {}
     
     wxWindow* window;
@@ -128,13 +128,13 @@ static wxPySizerItemInfo wxPySizerItemTypeHelper(PyObject* item, bool checkSize,
             // try wxSize or (w,h)
             if ( checkSize && wxSize_helper(item, &sizePtr)) {
                 info.size = *sizePtr;
-                info.gotSize = true;
+                info.gotSize = True;
             }
 
             // or a single int
             if (checkIdx && PyInt_Check(item)) {
                 info.pos = PyInt_AsLong(item);
-                info.gotPos = true;
+                info.gotPos = True;
             }
         }
     }
@@ -175,7 +175,7 @@ public:
             
             wxPyUserData* data = NULL;
             wxPyBeginBlockThreads();
-            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, true, false);
+            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, True, False);
             if ( userData && (info.window || info.sizer || info.gotSize) )
                 data = new wxPyUserData(userData);
             wxPyEndBlockThreads();
@@ -196,7 +196,7 @@ public:
 
             wxPyUserData* data = NULL;
             wxPyBeginBlockThreads();
-            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, true, false);
+            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, True, False);
             if ( userData && (info.window || info.sizer || info.gotSize) )
                 data = new wxPyUserData(userData);
             wxPyEndBlockThreads();
@@ -218,7 +218,7 @@ public:
 
             wxPyUserData* data = NULL;
             wxPyBeginBlockThreads();
-            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, true, false);
+            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, True, False);
             if ( userData && (info.window || info.sizer || info.gotSize) )
                 data = new wxPyUserData(userData);
             wxPyEndBlockThreads();
@@ -236,7 +236,7 @@ public:
         
         bool Remove(PyObject* item) {
             wxPyBeginBlockThreads();
-            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, true);
+            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, False, True);
             wxPyEndBlockThreads();
             if ( info.window )
                 return self->Remove(info.window);
@@ -245,13 +245,13 @@ public:
             else if ( info.gotPos )
                 return self->Remove(info.pos);
             else 
-                return FALSE;
+                return False;
         }
 
         
-        void _SetItemMinSize(PyObject* item, wxSize size) {
+        void _SetItemMinSize(PyObject* item, const wxSize& size) {
             wxPyBeginBlockThreads();
-            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, true);
+            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, False, True);
             wxPyEndBlockThreads();
             if ( info.window )
                 self->SetItemMinSize(info.window, size);
@@ -270,7 +270,7 @@ public:
     %pythoncode {
     def AddMany(self, widgets):
         for childinfo in widgets:
-            if type(childinfo) != type(()):
+            if type(childinfo) != type(()) or (len(childinfo) == 2 and type(childinfo[0]) == type(1)):
                 childinfo = (childinfo, )
             self.Add(*childinfo)
 
@@ -316,7 +316,7 @@ public:
     void SetSizeHints( wxWindow *window );
     void SetVirtualSizeHints( wxWindow *window );
 
-    void Clear( bool delete_windows=FALSE );
+    void Clear( bool delete_windows=False );
     void DeleteWindows();
 
 
@@ -333,8 +333,8 @@ public:
     // in the layout calculations or not.
 
     %extend {
-        void Show(PyObject* item, bool show = TRUE) {
-            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, false);
+        void Show(PyObject* item, bool show = True) {
+            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, False, False);
             if ( info.window )
                 self->Show(info.window, show);
             else if ( info.sizer )
@@ -343,7 +343,7 @@ public:
 
         
         void Hide(PyObject* item) {
-            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, false);
+            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, False, False);
             if ( info.window )
                 self->Hide(info.window);
             else if ( info.sizer )
@@ -352,13 +352,13 @@ public:
 
         
         bool IsShown(PyObject* item) {
-            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, false);
+            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, False, False);
             if ( info.window ) 
                 return self->IsShown(info.window);
             else if ( info.sizer ) 
                 return self->IsShown(info.sizer);
             else
-                return false;
+                return False;
         }
     }
 
@@ -483,6 +483,10 @@ public:
     // flexible
     void SetNonFlexibleGrowMode(wxFlexSizerGrowMode mode);
     wxFlexSizerGrowMode GetNonFlexibleGrowMode();
+
+    // Read-only access to the row heights and col widths arrays
+    const wxArrayInt& GetRowHeights() const;
+    const wxArrayInt& GetColWidths() const;
 };
 
 //---------------------------------------------------------------------------

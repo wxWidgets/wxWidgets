@@ -55,6 +55,7 @@
 %include _dirctrl.i
 %include _pycontrol.i
 %include _cshelp.i
+%include _dragimg.i
 
 
 //---------------------------------------------------------------------------

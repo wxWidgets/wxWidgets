@@ -58,7 +58,7 @@ public:
     //
     // it is now valid to call Start() multiple times: this just restarts the
     // timer if it is already running
-    virtual bool Start(int milliseconds = -1, bool oneShot = FALSE);
+    virtual bool Start(int milliseconds = -1, bool oneShot = False);
 
     // stop the timer
     virtual void Stop();
@@ -67,13 +67,13 @@ public:
     // messages in it, use non default ctor or SetOwner() otherwise
     virtual void Notify();
 
-    // return TRUE if the timer is running
+    // return True if the timer is running
     virtual bool IsRunning() const;
 
     // get the (last) timer interval in the milliseconds
     int GetInterval() const;
 
-    // return TRUE if the timer is one shot
+    // return True if the timer is one shot
     bool IsOneShot() const;
 };
 
@@ -111,10 +111,10 @@ class wxTimerRunner
 public:
     %nokwargs wxTimerRunner;
     wxTimerRunner(wxTimer& timer);
-    wxTimerRunner(wxTimer& timer, int milli, bool oneShot = FALSE);
+    wxTimerRunner(wxTimer& timer, int milli, bool oneShot = False);
     ~wxTimerRunner();
 
-    void Start(int milli, bool oneShot = FALSE);
+    void Start(int milli, bool oneShot = False);
 };
 
 

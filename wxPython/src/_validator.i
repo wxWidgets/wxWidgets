@@ -56,7 +56,7 @@ public:
     // validators beep by default if invalid key is pressed, these functions
     // allow to change it
     static bool IsSilent();
-    static void SetBellOnError(int doIt = TRUE);
+    static void SetBellOnError(int doIt = True);
 
 };
 
@@ -78,7 +78,7 @@ public:
         self._setOORInfo(self)"
     wxPyValidator();
 
-    void _setCallbackInfo(PyObject* self, PyObject* _class, int incref=TRUE);
+    void _setCallbackInfo(PyObject* self, PyObject* _class, int incref=True);
 };
 
 

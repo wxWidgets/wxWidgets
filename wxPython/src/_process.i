@@ -113,10 +113,10 @@ public:
 
     void CloseOutput();
 
-    // return TRUE if the child process stdout is not closed
+    // return True if the child process stdout is not closed
     bool IsInputOpened() const;
 
-    // return TRUE if any input is available on the child process stdout/err
+    // return True if any input is available on the child process stdout/err
     bool IsInputAvailable() const;
     bool IsErrorAvailable() const;
 };

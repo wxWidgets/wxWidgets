@@ -49,7 +49,7 @@ public:
     void Move(const wxPoint& pt);
     %name(SetSizeWH) void SetSize(int width, int height);
     void SetSize(const wxSize& size);
-    void Show(int show = TRUE);
+    void Show(int show = True);
     void Hide();
 
     %pragma(python) addtoclass = "def __nonzero__(self): return self.IsOk()"
@@ -173,7 +173,7 @@ public:
     // path is optional and is ignored under Win32 and used as the directory to
     // create the lock file in under Unix (default is wxGetHomeDir())
     //
-    // returns FALSE if initialization failed, it doesn't mean that another
+    // returns False if initialization failed, it doesn't mean that another
     // instance is running - use IsAnotherRunning() to check it
     bool Create(const wxString& name, const wxString& path = wxPyEmptyString);
 
@@ -241,12 +241,12 @@ void wxDrawWindowOnDC(wxWindow* window, const wxDC& dc, int method)
             // WM_PRINT.  For most native widgets nothing is drawn to the dc
             // at all, with or without Themes.
             typedef BOOL (WINAPI *PrintWindow_t)(HWND, HDC, UINT);
-            static bool s_triedToLoad = false;
+            static bool s_triedToLoad = False;
             static PrintWindow_t pfnPrintWindow = NULL;
             if ( !s_triedToLoad )
             {
 
-                s_triedToLoad = true;
+                s_triedToLoad = True;
                 wxDynamicLibrary dllUser32(_T("user32.dll"));
                 if ( dllUser32.IsLoaded() )
                 {

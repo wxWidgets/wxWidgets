@@ -58,12 +58,12 @@ class wxWizardEvent : public wxNotifyEvent
 public:
     wxWizardEvent(wxEventType type = wxEVT_NULL,
                   int id = -1,
-                  bool direction = TRUE,
+                  bool direction = True,
                   wxWizardPage* page = NULL);
 
-    // for EVT_WIZARD_PAGE_CHANGING, return TRUE if we're going forward or
-    // FALSE otherwise and for EVT_WIZARD_PAGE_CHANGED return TRUE if we came
-    // from the previous page and FALSE if we returned from the next one
+    // for EVT_WIZARD_PAGE_CHANGING, return True if we're going forward or
+    // False otherwise and for EVT_WIZARD_PAGE_CHANGED return True if we came
+    // from the previous page and False if we returned from the next one
     // (this function doesn't make sense for CANCEL events)
     bool GetDirection() const { return m_direction; }
 
@@ -319,8 +319,8 @@ public:
     void Init();
 
 
-    // executes the wizard starting from the given page, returns TRUE if it was
-    // successfully finished, FALSE if user cancelled it
+    // executes the wizard starting from the given page, returns True if it was
+    // successfully finished, False if user cancelled it
     virtual bool RunWizard(wxWizardPage *firstPage);
 
     // get the current page (NULL if RunWizard() isn't running)
@@ -355,9 +355,9 @@ public:
     bool IsRunning() const { return m_page != NULL; }
 
     // show the prev/next page, but call TransferDataFromWindow on the current
-    // page first and return FALSE without changing the page if
-    // TransferDataFromWindow() returns FALSE - otherwise, returns TRUE
-    bool ShowPage(wxWizardPage *page, bool goingForward = TRUE);
+    // page first and return False without changing the page if
+    // TransferDataFromWindow() returns False - otherwise, returns True
+    bool ShowPage(wxWizardPage *page, bool goingForward = True);
 
     bool HasNextPage(wxWizardPage* page);
     bool HasPrevPage(wxWizardPage* page);

@@ -246,7 +246,7 @@ public:
 
     void CreateAbortWindow(wxWindow* parent, wxPyPrintout* printout);
     wxPrintDialogData& GetPrintDialogData();
-    bool Print(wxWindow *parent, wxPyPrintout *printout, int prompt=TRUE);
+    bool Print(wxWindow *parent, wxPyPrintout *printout, int prompt=True);
     wxDC* PrintDialog(wxWindow *parent);
     void ReportError(wxWindow *parent, wxPyPrintout *printout, const wxString& message);
     bool Setup(wxWindow *parent);
@@ -263,7 +263,7 @@ public:
 
 // Since this one would be tough and ugly to do with the Macros...
 void wxPyPrintout::GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *pageTo) {
-    bool hadErr = FALSE;
+    bool hadErr = False;
     bool found;
 
     wxPyBeginBlockThreads();
@@ -274,22 +274,22 @@ void wxPyPrintout::GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *p
 
             val = PyTuple_GetItem(result, 0);
             if (PyInt_Check(val))    *minPage = PyInt_AsLong(val);
-            else hadErr = TRUE;
+            else hadErr = True;
 
             val = PyTuple_GetItem(result, 1);
             if (PyInt_Check(val))    *maxPage = PyInt_AsLong(val);
-            else hadErr = TRUE;
+            else hadErr = True;
 
             val = PyTuple_GetItem(result, 2);
             if (PyInt_Check(val))    *pageFrom = PyInt_AsLong(val);
-            else hadErr = TRUE;
+            else hadErr = True;
 
             val = PyTuple_GetItem(result, 3);
             if (PyInt_Check(val))    *pageTo = PyInt_AsLong(val);
-            else hadErr = TRUE;
+            else hadErr = True;
         }
         else
-            hadErr = TRUE;
+            hadErr = True;
 
         if (hadErr) {
             PyErr_SetString(PyExc_TypeError, "GetPageInfo should return a tuple of 4 integers.");
@@ -507,7 +507,7 @@ public:
 
 #define IMP_PYCALLBACK_BOOL_PREWINDC(CLASS, PCLASS, CBNAME)                     \
     bool CLASS::CBNAME(wxPreviewCanvas* a, wxDC& b) {                           \
-        bool rval=FALSE;                                                        \
+        bool rval=False;                                                        \
         bool found;                                                             \
         wxPyBeginBlockThreads();                                                \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \

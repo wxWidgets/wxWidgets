@@ -11,18 +11,30 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
+// Globally turn on the autodoc feature
+%feature("autodoc", "1");  // 0 == no param types, 1 == show param types
+
 
 //---------------------------------------------------------------------------
 // some type definitions to simplify things for SWIG
 
-typedef int             wxWindowID;
-typedef int             wxCoord;
-typedef int             wxInt32;
-typedef unsigned int    wxUint32;
+// typedef int             wxWindowID;
+// typedef int             wxCoord;
+// typedef int             wxInt32;
+// typedef unsigned int    wxUint32;
 typedef int             wxEventType;
 typedef unsigned int    size_t;
 typedef unsigned int    time_t;
 typedef unsigned char   byte;
+
+#define wxWindowID      int
+#define wxCoord         int
+#define wxInt32         int
+#define wxUint32        unsigned int
+//#define wxEventType     int
+//#define size_t          unsigned int
+//#define time_t          unsigned int
+//#define byte            unsigned char
 
 
 //----------------------------------------------------------------------
@@ -38,7 +50,7 @@ typedef unsigned char   byte;
 
 #ifndef %pythoncode
 #define %pythoncode     %insert("python")
-#endif 
+#endif
 
 #define WXUNUSED(x)     x
 
@@ -59,10 +71,124 @@ typedef unsigned char   byte;
 %typemap(constcode) wxEventType "PyDict_SetItemString(d, \"$symname\", PyInt_FromLong($value));";
 
 
+
+// Macros for the docstring and autodoc features of SWIG.
+
+// Set the docsring for the given full or partial declaration
+#define DocStr(decl, docstr)     %feature("docstring") decl docstr
+
+// Set the autodoc string for a full or partial declaration
+#define DocA(decl, astr)        %feature("autodoc") decl astr
+
+// Set both the autodoc and docstring for a full or partial declaration
+%define DocAStr(decl, astr, docstr)
+    %feature("autodoc") decl astr;
+    %feature("docstring") decl docstr
+%enddef
+
+// Set the detailed reference docs for full or partial declaration
+#define DocRef(decl, str)       %feature("docref") decl str
+
+
+
+    
+// Set the docstring for a decl and then define the decl too.  Must use the
+// full declaration of the item.
+%define DocDeclStr(type, decl, docstr)
+    %feature("docstring") decl docstr;
+    type decl
+%enddef
+
+// As above, but also give the decl a new %name    
+%define DocDeclStrName(type, decl, docstr, newname)
+    %feature("docstring") decl docstr;
+    %name(newname) type decl
+%enddef
+
+    
+// Set the autodoc string for a decl and then define the decl too.  Must use the
+// full declaration of the item.
+%define DocDeclA(type, decl, astr)
+    %feature("autodoc") decl astr;
+    type decl
+%enddef
+
+// As above, but also give the decl a new %name    
+%define DocDeclAName(type, decl, astr, newname)
+    %feature("autodoc") decl astr;
+    %name(newname) type decl
+%enddef
+
+
+
+// Set the autodoc and the docstring for a decl and then define the decl too.
+// Must use the full declaration of the item.
+%define DocDeclAStr(type, decl, astr, docstr)
+    %feature("autodoc") decl astr;
+    %feature("docstring") decl docstr;
+    type decl
+%enddef
+
+// As above, but also give the decl a new %name    
+%define DocDeclAStrName(type, decl, astr, docstr, newname)
+    %feature("autodoc") decl astr;
+    %feature("docstring") decl docstr;
+    %name(newname) type decl
+%enddef
+
+
+
+
+// Set the docstring for a constructor decl and then define the decl too.
+// Must use the full declaration of the item.
+%define DocCtorStr(decl, docstr)
+    %feature("docstring") decl docstr;
+    decl
+%enddef
+
+// As above, but also give the decl a new %name    
+%define DocCtorStrName(decl, docstr, newname)
+    %feature("docstring") decl docstr;
+    %name(newname) decl
+%enddef
+
+    
+// Set the autodoc string for a decl and then define the decl too.  Must use the
+// full declaration of the item.
+%define DocCtorA(decl, astr)
+    %feature("autodoc") decl astr;
+    decl
+%enddef
+
+// As above, but also give the decl a new %name    
+%define DocCtorAname(decl, astr, newname)
+    %feature("autodoc") decl astr;
+    %name(newname) decl
+%enddef
+
+
+
+// Set the autodoc and the docstring for a decl and then define the decl too.
+// Must use the full declaration of the item.
+%define DocCtorAStr(decl, astr, docstr)
+    %feature("autodoc") decl astr;
+    %feature("docstring") decl docstr;
+    decl
+%enddef
+
+// As above, but also give the decl a new %name    
+%define DocCtorAStrName(decl, astr, docstr, newname)
+    %feature("autodoc") decl astr;
+    %feature("docstring") decl docstr;
+    %name(newname) decl
+%enddef
+
+    
+    
 %define %newgroup
 %pythoncode {
 %#---------------------------------------------------------------------------
-} 
+}
 %enddef
 
 //---------------------------------------------------------------------------
@@ -296,7 +422,7 @@ enum {
     wxID_IGNORE,
 
     wxID_HIGHEST,
-    
+
     wxOPEN,
     wxSAVE,
     wxHIDE_READONLY,

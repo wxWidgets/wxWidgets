@@ -63,7 +63,7 @@ public:
     int GetMovementThreshold() { return -1; }
     void SetMovementThreshold(int threshold) {}
 
-    bool IsOk(void) { return FALSE; }
+    bool IsOk(void) { return False; }
     int GetNumberJoysticks() { return -1; }
     int GetManufacturerId() { return -1; }
     int GetProductId() { return -1; }
@@ -87,16 +87,16 @@ public:
     int GetVMin() { return -1; }
     int GetVMax() { return -1; }
 
-    bool HasRudder() { return FALSE; }
-    bool HasZ() { return FALSE; }
-    bool HasU() { return FALSE; }
-    bool HasV() { return FALSE; }
-    bool HasPOV() { return FALSE; }
-    bool HasPOV4Dir() { return FALSE; }
-    bool HasPOVCTS() { return FALSE; }
+    bool HasRudder() { return False; }
+    bool HasZ() { return False; }
+    bool HasU() { return False; }
+    bool HasV() { return False; }
+    bool HasPOV() { return False; }
+    bool HasPOV4Dir() { return False; }
+    bool HasPOVCTS() { return False; }
 
-    bool SetCapture(wxWindow* win, int pollingFreq = 0) { return FALSE; }
-    bool ReleaseCapture() { return FALSE; }
+    bool SetCapture(wxWindow* win, int pollingFreq = 0) { return False; }
+    bool ReleaseCapture() { return False; }
 };
 #endif
 %}

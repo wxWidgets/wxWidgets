@@ -179,6 +179,7 @@ public:
 //---------------------------------------------------------------------------
 %newgroup
 
+
 // wxListItem: the item or column info, used to exchange data with wxListCtrl
 class wxListItem : public wxObject {
 public:
@@ -542,7 +543,7 @@ public:
     wxSize GetItemSpacing() const;
 
 #ifndef __WXMSW__
-    void SetItemSpacing( int spacing, bool isSmall = FALSE );
+    void SetItemSpacing( int spacing, bool isSmall = False );
 #endif
 
     // Gets the number of selected items in the list control
@@ -559,7 +560,7 @@ public:
     long GetTopItem() const ;
 
     // Add or remove a single window style
-    void SetSingleStyle(long style, bool add = TRUE) ;
+    void SetSingleStyle(long style, bool add = True) ;
 
     // Set the whole window style
     void SetWindowStyleFlag(long style) ;
@@ -581,7 +582,7 @@ public:
     %addtofunc AssignImageList "args[1].thisown = 0";    
     void AssignImageList(wxImageList *imageList, int which);
 
-    // returns true if it is a virtual list control
+    // returns True if it is a virtual list control
     bool IsVirtual() const;
 
     // refresh items selectively (only useful for virtual list controls)
@@ -621,7 +622,7 @@ public:
 
     // Find an item whose label matches this string, starting from the item after 'start'
     // or the beginning if 'start' is -1.
-    long FindItem(long start, const wxString& str, bool partial = FALSE);
+    long FindItem(long start, const wxString& str, bool partial = False);
 
     // Find an item whose data matches this data, starting from the item after 'start'
     // or the beginning if 'start' is -1.
@@ -677,18 +678,18 @@ public:
     %# Some helpers...
     def Select(self, idx, on=1):
         '''[de]select an item'''
-        if on: state = wxLIST_STATE_SELECTED
+        if on: state = wx.LIST_STATE_SELECTED
         else: state = 0
-        self.SetItemState(idx, state, wxLIST_STATE_SELECTED)
+        self.SetItemState(idx, state, wx.LIST_STATE_SELECTED)
 
     def Focus(self, idx):
         '''Focus and show the given item'''
-        self.SetItemState(idx, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED)
+        self.SetItemState(idx, wx.LIST_STATE_FOCUSED, wx.LIST_STATE_FOCUSED)
         self.EnsureVisible(idx)
 
     def GetFocusedItem(self):
         '''get the currently focused item or -1 if none'''
-        return self.GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED)
+        return self.GetNextItem(-1, wx.LIST_NEXT_ALL, wx.LIST_STATE_FOCUSED)
 
     def GetFirstSelected(self, *args):
         '''return first selected item, or -1 when none'''
@@ -696,22 +697,22 @@ public:
 
     def GetNextSelected(self, item):
         '''return subsequent selected items, or -1 when no more'''
-        return self.GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)
+        return self.GetNextItem(item, wx.LIST_NEXT_ALL, wx.LIST_STATE_SELECTED)
 
     def IsSelected(self, idx):
-        '''return TRUE if the item is selected'''
-        return self.GetItemState(idx, wxLIST_STATE_SELECTED) != 0
+        '''return True if the item is selected'''
+        return self.GetItemState(idx, wx.LIST_STATE_SELECTED) != 0
 
     def SetColumnImage(self, col, image):
         item = self.GetColumn(col)
-        # preserve all other attributes too
-        item.SetMask( wxLIST_MASK_STATE |
-                      wxLIST_MASK_TEXT  |
-                      wxLIST_MASK_IMAGE |
-                      wxLIST_MASK_DATA  |
-                      wxLIST_SET_ITEM   |
-                      wxLIST_MASK_WIDTH |
-                      wxLIST_MASK_FORMAT )
+        %# preserve all other attributes too
+        item.SetMask( wx.LIST_MASK_STATE |
+                      wx.LIST_MASK_TEXT  |
+                      wx.LIST_MASK_IMAGE |
+                      wx.LIST_MASK_DATA  |
+                      wx.LIST_SET_ITEM   |
+                      wx.LIST_MASK_WIDTH |
+                      wx.LIST_MASK_FORMAT )
         item.SetImage(image)
         self.SetColumn(col, item)
 
@@ -722,7 +723,7 @@ public:
         '''Append an item to the list control.  The entry parameter should be a
            sequence with an item for each column'''
         if len(entry):
-            if wx.wxUSE_UNICODE:
+            if wx.USE_UNICODE:
                 cvtfunc = unicode
             else:
                 cvtfunc = str
@@ -745,7 +746,7 @@ public:
         // or zero if the two items are equivalent.
         bool SortItems(PyObject* func) {
             if (!PyCallable_Check(func))
-                return FALSE;
+                return False;
             return self->SortItems((wxListCtrlCompare)wxPyListCtrl_SortItems, (long)func);
         }
     }
@@ -793,7 +794,7 @@ public:
                 const wxString& name = wxPyListCtrlNameStr);
 
     // [de]select an item
-    void Select(long n, bool on = TRUE);
+    void Select(long n, bool on = True);
 
     // focus and show the given item
     void Focus(long index);
@@ -805,7 +806,7 @@ public:
     long GetNextSelected(long item) const;
     long GetFirstSelected() const;
 
-    // return TRUE if the item is selected
+    // return True if the item is selected
     bool IsSelected(long index);
 
     void SetColumnImage(int col, int image);

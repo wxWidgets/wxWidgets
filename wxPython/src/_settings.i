@@ -161,7 +161,7 @@ public:
     // get a system-dependent metric
     static int GetMetric(wxSystemMetric index);
 
-    // return true if the port has certain feature
+    // return True if the port has certain feature
     static bool HasFeature(wxSystemFeature index);
 
 

@@ -59,19 +59,19 @@ public:
 
     // No constructor as it can not be used directly from Python
 
-    // maximize = TRUE => maximize, otherwise - restore
-    virtual void Maximize(bool maximize = TRUE);
+    // maximize = True => maximize, otherwise - restore
+    virtual void Maximize(bool maximize = True);
 
     // undo Maximize() or Iconize()
     virtual void Restore();
 
-    // iconize = TRUE => iconize, otherwise - restore
-    virtual void Iconize(bool iconize = TRUE);
+    // iconize = True => iconize, otherwise - restore
+    virtual void Iconize(bool iconize = True);
 
-    // return TRUE if the frame is maximized
+    // return True if the frame is maximized
     virtual bool IsMaximized() const;
 
-    // return TRUE if the frame is iconized
+    // return True if the frame is iconized
     virtual bool IsIconized() const;
 
     // get the frame icon
@@ -86,14 +86,14 @@ public:
     // maximize the window to cover entire screen
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
 
-    // return TRUE if the frame is in fullscreen mode
+    // return True if the frame is in fullscreen mode
     virtual bool IsFullScreen() const;
 
     virtual void SetTitle(const wxString& title);
     virtual wxString GetTitle() const;
 
     // Set the shape of the window to the given region.
-    // Returns TRUE if the platform supports this feature (and the operation
+    // Returns True if the platform supports this feature (and the operation
     // is successful.)
     virtual bool SetShape(const wxRegion& region);
 
@@ -149,7 +149,7 @@ public:
     virtual wxMenuBar *GetMenuBar() const;
 
 
-    // process menu command: returns TRUE if processed
+    // process menu command: returns True if processed
     bool ProcessCommand(int winid);
     %pythoncode { Command = ProcessCommand }
 
@@ -204,8 +204,8 @@ public:
     virtual void SetToolBar(wxToolBar *toolbar);
 
 
-    // show help text (typically in the statusbar); show is FALSE
-    // if you are hiding the help, TRUE otherwise
+    // show help text (typically in the statusbar); show is False
+    // if you are hiding the help, True otherwise
     virtual void DoGiveHelp(const wxString& text, bool show);
 
 
@@ -263,7 +263,7 @@ public:
     // may be called to terminate the dialog with the given return code
     virtual void EndModal(int retCode);
 
-    // returns TRUE if we're in a modal loop
+    // returns True if we're in a modal loop
     %extend {
         bool IsModalShowing() {
         #ifdef __WXGTK__

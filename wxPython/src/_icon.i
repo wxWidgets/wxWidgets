@@ -93,7 +93,7 @@ public:
     ~wxIconLocation();
 
 
-    // returns true if this object is valid/initialized
+    // returns True if this object is valid/initialized
     bool IsOk() const;
     %pythoncode { def __nonzero__(self): return self.Ok() }
 

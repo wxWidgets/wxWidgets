@@ -89,12 +89,12 @@ PyObject* wxPyConstructObject(void* ptr,
 // Extract a pointer to the wrapped C++ object from a Python proxy object.
 // Ensures that the proxy object is of the specified (or derived) type.  If
 // not able to perform the conversion then a Python exception is set and the
-// error should be handled properly in the caller.  Returns true on success.
+// error should be handled properly in the caller.  Returns True on success.
 bool wxPyConvertSwigPtr(PyObject* obj, void **ptr,
                         const wxChar* className) {
 
     swig_type_info* swigType = wxPyFindSwigType(className);
-    wxCHECK_MSG(swigType != NULL, false, wxT("Unknown type in wxPyConvertSwigPtr"));
+    wxCHECK_MSG(swigType != NULL, False, wxT("Unknown type in wxPyConvertSwigPtr"));
 
     return SWIG_Python_ConvertPtr(obj, ptr, swigType, SWIG_POINTER_EXCEPTION) != -1;
 }

@@ -190,13 +190,13 @@ public:
     // should be used instead for them
 
     // corresponds to wxCAL_NO_YEAR_CHANGE bit
-    void EnableYearChange(bool enable = TRUE);
+    void EnableYearChange(bool enable = True);
 
     // corresponds to wxCAL_NO_MONTH_CHANGE bit
-    void EnableMonthChange(bool enable = TRUE);
+    void EnableMonthChange(bool enable = True);
 
     // corresponds to wxCAL_SHOW_HOLIDAYS bit
-    void EnableHolidayDisplay(bool display = TRUE);
+    void EnableHolidayDisplay(bool display = True);
 
     // customization
     // -------------
@@ -238,8 +238,8 @@ public:
                                     wxDateTime::WeekDay *wd = NULL);
 
 
-    bool Enable(bool enable = TRUE);
-    bool Show(bool show = TRUE);
+    bool Enable(bool enable = True);
+    bool Show(bool show = True);
 
 };
 

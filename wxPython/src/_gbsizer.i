@@ -69,7 +69,12 @@ public:
     bool operator!=(const wxGBPosition& p) const;
 
     %extend {
-        PyObject* asTuple() {
+        void Set(int row=0, int col=0) {
+            self->SetRow(row);
+            self->SetCol(col);
+        }
+        
+        PyObject* Get() {
             wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->GetRow()));
@@ -79,17 +84,18 @@ public:
         }
     }
     %pythoncode {
-    def __str__(self):                   return str(self.asTuple())
-    def __repr__(self):                  return 'wxGBPosition'+str(self.asTuple())
-    def __len__(self):                   return len(self.asTuple())
-    def __getitem__(self, index):        return self.asTuple()[index]
+    asTuple = Get
+    def __str__(self):                   return str(self.Get())
+    def __repr__(self):                  return 'wx.GBPosition'+str(self.Get())
+    def __len__(self):                   return len(self.Get())
+    def __getitem__(self, index):        return self.Get()[index]
     def __setitem__(self, index, val):
         if index == 0: self.SetRow(val)
         elif index == 1: self.SetCol(val)
         else: raise IndexError
-    def __nonzero__(self):               return self.asTuple() != (0,0)
+    def __nonzero__(self):               return self.Get() != (0,0)
     def __getinitargs__(self):           return ()
-    def __getstate__(self):              return self.asTuple()
+    def __getstate__(self):              return self.Get()
     def __setstate__(self, state):       self.Set(*state)
     }
 
@@ -116,7 +122,12 @@ public:
     bool operator!=(const wxGBSpan& o) const;
 
     %extend {
-        PyObject* asTuple() {
+        void Set(int rowspan=1, int colspan=1) {
+            self->SetRowspan(rowspan);
+            self->SetColspan(colspan);
+        }
+        
+        PyObject* Get() {
             wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->GetRowspan()));
@@ -126,17 +137,18 @@ public:
         }
     }
     %pythoncode {
-    def __str__(self):                   return str(self.asTuple())
-    def __repr__(self):                  return 'wxGBSpan'+str(self.asTuple())
-    def __len__(self):                   return len(self.asTuple())
-    def __getitem__(self, index):        return self.asTuple()[index]
+    asTuple = Get
+    def __str__(self):                   return str(self.Get())
+    def __repr__(self):                  return 'wx.GBSpan'+str(self.Get())
+    def __len__(self):                   return len(self.Get())
+    def __getitem__(self, index):        return self.Get()[index]
     def __setitem__(self, index, val):
         if index == 0: self.SetRowspan(val)
         elif index == 1: self.SetColspan(val)
         else: raise IndexError
-    def __nonzero__(self):               return self.asTuple() != (0,0)
+    def __nonzero__(self):               return self.Get() != (0,0)
     def __getinitargs__(self):           return ()
-    def __getstate__(self):              return self.asTuple()
+    def __getstate__(self):              return self.Get()
     def __setstate__(self, state):       self.Set(*state)
     }
 
@@ -185,30 +197,30 @@ public:
 
     // Get the grid position of the item
     wxGBPosition GetPos() const;
-    %pythoncode { def GetPosTuple(self): return self.GetPos().asTuple() }
+    %pythoncode { def GetPosTuple(self): return self.GetPos().Get() }
 
     // Get the row and column spanning of the item
     wxGBSpan GetSpan() const;
-    %pythoncode { def GetSpanTuple(self): return self.GetSpan().asTuple() }
+    %pythoncode { def GetSpanTuple(self): return self.GetSpan().Get() }
 
     // If the item is already a member of a sizer then first ensure that there
     // is no other item that would intersect with this one at the new
-    // position, then set the new position.  Returns true if the change is
+    // position, then set the new position.  Returns True if the change is
     // successful and after the next Layout the item will be moved.
     bool SetPos( const wxGBPosition& pos );
 
     // If the item is already a member of a sizer then first ensure that there
     // is no other item that would intersect with this one with its new
-    // spanning size, then set the new spanning.  Returns true if the change
+    // spanning size, then set the new spanning.  Returns True if the change
     // is successful and after the next Layout the item will be resized.
     bool SetSpan( const wxGBSpan& span );
 
     %nokwargs Intersects;
     
-    // Returns true if this item and the other item instersect
+    // Returns True if this item and the other item instersect
     bool Intersects(const wxGBSizerItem& other);
 
-    // Returns true if the given pos/span would intersect with this item.
+    // Returns True if the given pos/span would intersect with this item.
     bool Intersects(const wxGBPosition& pos, const wxGBSpan& span);
 
     // Get the row and column of the endpoint of this item
@@ -229,8 +241,8 @@ class wxGridBagSizer : public wxFlexGridSizer
 public:
     wxGridBagSizer(int vgap = 0, int hgap = 0 );
 
-    // The Add method returns true if the item was successfully placed at the
-    // given cell position, false if something was already there.
+    // The Add method returns True if the item was successfully placed at the
+    // given cell position, False if something was already there.
     %extend {
         bool Add( PyObject* item,
                   const wxGBPosition& pos,
@@ -241,7 +253,7 @@ public:
 
             wxPyUserData* data = NULL;
             wxPyBeginBlockThreads();
-            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, true, false);
+            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, True, False);
             if ( userData && (info.window || info.sizer || info.gotSize) )
                 data = new wxPyUserData(userData);
             wxPyEndBlockThreads();
@@ -254,7 +266,7 @@ public:
             else if (info.gotSize)
                 return self->Add(info.size.GetWidth(), info.size.GetHeight(),
                                  pos, span, flag, border, data);
-            return false;
+            return False;
         }
     }
     
@@ -271,9 +283,9 @@ public:
     wxGBPosition GetItemPosition(wxSizer *sizer);
     wxGBPosition GetItemPosition(size_t index);
 
-    // Set the grid position of the specified item.  Returns true on success.
+    // Set the grid position of the specified item.  Returns True on success.
     // If the move is not allowed (because an item is already there) then
-    // false is returned.
+    // False is returned.
     %nokwargs SetItemPosition;
     bool SetItemPosition(wxWindow *window, const wxGBPosition& pos);
     bool SetItemPosition(wxSizer *sizer, const wxGBPosition& pos);
@@ -285,9 +297,9 @@ public:
     wxGBSpan GetItemSpan(wxSizer *sizer);
     wxGBSpan GetItemSpan(size_t index);
 
-    // Set the row/col spanning of the specified item. Returns true on
+    // Set the row/col spanning of the specified item. Returns True on
     // success.  If the move is not allowed (because an item is already there)
-    // then false is returned.
+    // then False is returned.
     %nokwargs SetItemSpan;
     bool SetItemSpan(wxWindow *window, const wxGBSpan& span);
     bool SetItemSpan(wxSizer *sizer, const wxGBSpan& span);
@@ -306,6 +318,13 @@ public:
     wxGBSizerItem* FindItemAtPosition(const wxGBPosition& pos);
 
     
+    // Return the sizer item located at the point given in pt, or NULL if
+    // there is no item at that point. The (x,y) coordinates in pt correspond
+    // to the client coordinates of the window using the sizer for
+    // layout. (non-recursive)
+    wxGBSizerItem* FindItemAtPoint(const wxPoint& pt);
+
+    
     // Return the sizer item that has a matching user data (it only compares
     // pointer values) or NULL if not found. (non-recursive)
     wxGBSizerItem* FindItemWithData(const wxObject* userData);
@@ -317,7 +336,7 @@ public:
 
 
     // Look at all items and see if any intersect (or would overlap) the given
-    // item.  Returns true if so, false if there would be no overlap.  If an
+    // item.  Returns True if so, False if there would be no overlap.  If an
     // excludeItem is given then it will not be checked for intersection, for
     // example it may be the item we are checking the position of.
     %nokwargs CheckForIntersection;

@@ -28,7 +28,7 @@
 class wxWave : public wxObject
 {
 public:
-    wxWave(const wxString& fileName, bool isResource = FALSE) {
+    wxWave(const wxString& fileName, bool isResource = False) {
         wxPyBeginBlockThreads();
         PyErr_SetString(PyExc_NotImplementedError, "wxWave is not available on this platform.");
         wxPyEndBlockThreads();
@@ -41,8 +41,8 @@ public:
 
     ~wxWave() {}
 
-    bool  IsOk() const { return FALSE; }
-    bool  Play(bool async = TRUE, bool looped = FALSE) const { return FALSE; }
+    bool  IsOk() const { return False; }
+    bool  Play(bool async = True, bool looped = False) const { return False; }
 };
 
 #endif
@@ -53,7 +53,7 @@ public:
 class wxWave /*: public wxObject*/
 {
 public:
-    wxWave(const wxString& fileName, bool isResource = FALSE);
+    wxWave(const wxString& fileName, bool isResource = False);
     %extend {
         %name(WaveData) wxWave(const wxString& data) {
             return new wxWave(data.Len(), (wxByte*)data.c_str());
@@ -63,7 +63,7 @@ public:
     ~wxWave();
 
     bool  IsOk() const;
-    bool  Play(bool async = TRUE, bool looped = FALSE) const;
+    bool  Play(bool async = True, bool looped = False) const;
 
     %pythoncode { def __nonzero__(self): return self.IsOk() }
 };

@@ -120,7 +120,7 @@ public:
     // Find the child that matches the first part of 'path'.
     // E.g. if a child path is "/usr" and 'path' is "/usr/include"
     // then the child for /usr is returned.
-    // If the path string has been used (we're at the leaf), done is set to TRUE
+    // If the path string has been used (we're at the leaf), done is set to True
     virtual wxTreeItemId FindChild(wxTreeItemId parentId, const wxString& path, bool& OUTPUT);
     
     // Resize the components of the control

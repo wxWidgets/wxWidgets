@@ -257,7 +257,7 @@ public:
                          // or use the default country with any other
 
         // Western European countries: we assume that they all follow the same
-        // DST rules (true or false?)
+        // DST rules (True or False?)
         Country_WesternEurope_Start,
         Country_EEC = Country_WesternEurope_Start,
         France,
@@ -318,7 +318,7 @@ public:
         // get the current country
     static Country GetCountry();
 
-        // return TRUE if the country is a West European one (in practice,
+        // return True if the country is a West European one (in practice,
         // this means that the same DST rules as for EEC apply)
     static bool IsWestEuropeanCountry(Country country = Country_Default);
 
@@ -334,7 +334,7 @@ public:
         // return the current month
     static Month GetCurrentMonth(Calendar cal = Gregorian);
 
-        // returns TRUE if the given year is a leap year in the given calendar
+        // returns True if the given year is a leap year in the given calendar
     static bool IsLeapYear(int year = Inv_Year, Calendar cal = Gregorian);
 
         // get the century (19 for 1999, 20 for 2000 and -5 for 492 BC)
@@ -365,7 +365,7 @@ public:
         // get the AM and PM strings in the current locale (may be empty)
     static void GetAmPmStrings(wxString *OUTPUT, wxString *OUTPUT);
 
-        // return TRUE if the given country uses DST for this year
+        // return True if the given country uses DST for this year
     static bool IsDSTApplicable(int year = Inv_Year,
                                 Country country = Country_Default);
 
@@ -478,7 +478,7 @@ public:
     wxDateTime GetPrevWeekDay(WeekDay weekday);
 
         // set to Nth occurence of given weekday in the given month of the
-        // given year (time is set to 0), return TRUE on success and FALSE on
+        // given year (time is set to 0), return True on success and False on
         // failure. n may be positive (1..5) or negative to count from the end
         // of the month (see helper function SetToLastWeekDay())
     bool SetToWeekDay(WeekDay weekday,
@@ -499,7 +499,7 @@ public:
                               int year = Inv_Year);
 
         // sets the date to the given day of the given week in the year,
-        // returns TRUE on success and FALSE if given date doesn't exist (e.g.
+        // returns True on success and False if given date doesn't exist (e.g.
         // numWeek is > 53)
     bool SetToTheWeek(wxDateTime_t numWeek, WeekDay weekday = Mon, WeekFlags flags = Monday_First);
     wxDateTime GetWeek(wxDateTime_t numWeek, WeekDay weekday = Mon, WeekFlags flags = Monday_First);
@@ -556,12 +556,12 @@ public:
     // timezone stuff
 
         // transform to any given timezone
-    wxDateTime ToTimezone(const wxDateTime::TimeZone& tz, bool noDST = FALSE);
-    wxDateTime& MakeTimezone(const wxDateTime::TimeZone& tz, bool noDST = FALSE);
+    wxDateTime ToTimezone(const wxDateTime::TimeZone& tz, bool noDST = False);
+    wxDateTime& MakeTimezone(const wxDateTime::TimeZone& tz, bool noDST = False);
 
         // transform to GMT/UTC
-    wxDateTime ToGMT(bool noDST = FALSE);
-    wxDateTime& MakeGMT(bool noDST = FALSE);
+    wxDateTime ToGMT(bool noDST = False);
+    wxDateTime& MakeGMT(bool noDST = False);
 
         // is daylight savings time in effect at this moment according to the
         // rules of the specified country?
@@ -575,7 +575,7 @@ public:
     // ------------------------------------------------------------------------
     // accessors
 
-        // is the date valid (TRUE even for non initialized objects)?
+        // is the date valid (True even for non initialized objects)?
     inline bool IsValid() const;
 
         // get the number of seconds since the Unix epoch - returns (time_t)-1
@@ -634,20 +634,20 @@ public:
     // ------------------------------------------------------------------------
     // comparison (see also functions below for operator versions)
 
-        // returns TRUE if the two moments are strictly identical
+        // returns True if the two moments are strictly identical
     inline bool IsEqualTo(const wxDateTime& datetime) const;
 
-        // returns TRUE if the date is strictly earlier than the given one
+        // returns True if the date is strictly earlier than the given one
     inline bool IsEarlierThan(const wxDateTime& datetime) const;
 
-        // returns TRUE if the date is strictly later than the given one
+        // returns True if the date is strictly later than the given one
     inline bool IsLaterThan(const wxDateTime& datetime) const;
 
-        // returns TRUE if the date is strictly in the given range
+        // returns True if the date is strictly in the given range
     inline bool IsStrictlyBetween(const wxDateTime& t1,
                                   const wxDateTime& t2) const;
 
-        // returns TRUE if the date is in the given range
+        // returns True if the date is in the given range
     inline bool IsBetween(const wxDateTime& t1, const wxDateTime& t2) const;
 
         // do these two objects refer to the same date?
@@ -908,12 +908,12 @@ public:
     inline bool IsEqualTo(const wxTimeSpan& ts) const;
 
         // compare two timestamps: works with the absolute values, i.e. -2
-        // hours is longer than 1 hour. Also, it will return FALSE if the
+        // hours is longer than 1 hour. Also, it will return False if the
         // timespans are equal in absolute value.
     inline bool IsLongerThan(const wxTimeSpan& ts) const;
 
         // compare two timestamps: works with the absolute values, i.e. 1
-        // hour is shorter than -2 hours. Also, it will return FALSE if the
+        // hour is shorter than -2 hours. Also, it will return False if the
         // timespans are equal in absolute value.
     bool IsShorterThan(const wxTimeSpan& t) const;
 

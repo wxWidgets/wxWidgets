@@ -54,17 +54,17 @@ public:
 //         bool __eq__(PyObject* obj) {
 //             wxColour  tmp;
 //             wxColour* ptr = &tmp;
-//             if (obj == Py_None)    return FALSE;
+//             if (obj == Py_None)    return False;
 //             wxPyBLOCK_THREADS(bool success = wxColour_helper(obj, &ptr); PyErr_Clear());
-//             if (! success)         return FALSE;
+//             if (! success)         return False;
 //             return *self == *ptr;
 //         }
 //         bool __ne__(PyObject* obj) {
 //             wxColour  tmp;
 //             wxColour* ptr = &tmp;
-//             if (obj == Py_None)    return TRUE;
+//             if (obj == Py_None)    return True;
 //             wxPyBLOCK_THREADS(bool success = wxColour_helper(obj, &ptr); PyErr_Clear());
-//             if (! success)         return TRUE;
+//             if (! success)         return True;
 //             return *self != *ptr;
 //         }
     }

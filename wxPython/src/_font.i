@@ -261,7 +261,7 @@ struct wxNativeEncodingInfo
 %}
 
 // test for the existence of the font described by this facename/encoding,
-// return TRUE if such font(s) exist, FALSE otherwise
+// return True if such font(s) exist, False otherwise
 bool wxTestFontEncoding(const wxNativeEncodingInfo& info);
 
 #else
@@ -271,7 +271,7 @@ bool wxTestFontEncoding(const wxNativeEncodingInfo& info);
         { PyErr_SetNone(PyExc_NotImplementedError); return NULL; }
     
     bool wxTestFontEncoding(const wxNativeEncodingInfo& info)
-        { PyErr_SetNone(PyExc_NotImplementedError); return false; }
+        { PyErr_SetNone(PyExc_NotImplementedError); return False; }
 %}
 #endif
 
@@ -284,11 +284,11 @@ bool wxTestFontEncoding(const wxNativeEncodingInfo& info);
 // The default implementations of all functions will ask the user if they are
 // not capable of finding the answer themselves and store the answer in a
 // config file (configurable via SetConfigXXX functions). This behaviour may
-// be disabled by giving the value of FALSE to "interactive" parameter.
+// be disabled by giving the value of False to "interactive" parameter.
 // However, the functions will always consult the config file to allow the
 // user-defined values override the default logic and there is no way to
 // disable this - which shouldn't be ever needed because if "interactive" was
-// never TRUE, the config file is never created anyhow.
+// never True, the config file is never created anyhow.
 //
 // This is a singleton class, font mapper objects can only be accessed using
 // wxFontMapper::Get().
@@ -309,9 +309,9 @@ public:
     // wxFONTENCODING_SYSTEM if couldn't decode it
     //
     // interactive parameter is ignored in the base class, we behave as if it
-    // were always false
+    // were always False
     virtual wxFontEncoding CharsetToEncoding(const wxString& charset,
-                                             bool interactive = true);
+                                             bool interactive = True);
 
 
     // get the number of font encodings we know about
@@ -347,7 +347,7 @@ public:
     %extend {
         PyObject* GetAltForEncoding(wxFontEncoding encoding,
                                     const wxString& facename = wxPyEmptyString,
-                                    bool interactive = TRUE) {
+                                    bool interactive = True) {
             wxFontEncoding alt_enc;
             if (self->GetAltForEncoding(encoding, &alt_enc, facename, interactive))
                 return PyInt_FromLong(alt_enc);
@@ -381,7 +381,7 @@ public:
 class wxFont : public wxGDIObject {
 public:
     wxFont( int pointSize, int family, int style, int weight,
-            bool underline=FALSE, const wxString& face = wxPyEmptyString,
+            bool underline=False, const wxString& face = wxPyEmptyString,
             wxFontEncoding encoding=wxFONTENCODING_DEFAULT);
     ~wxFont();
 
@@ -445,7 +445,7 @@ public:
     wxString GetWeightString() const;
 
     // Unofficial API, don't use
-    virtual void SetNoAntiAliasing( bool no = TRUE );
+    virtual void SetNoAntiAliasing( bool no = True );
     virtual bool GetNoAntiAliasing();
 
     // the default encoding is used for creating all fonts with default
@@ -487,7 +487,7 @@ public:
 
     bool EnumerateFacenames(
         wxFontEncoding encoding = wxFONTENCODING_SYSTEM, // all
-        bool fixedWidthOnly = FALSE);
+        bool fixedWidthOnly = False);
 
     bool EnumerateEncodings(const wxString& facename = wxPyEmptyString);
 

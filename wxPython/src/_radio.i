@@ -66,8 +66,8 @@ public:
     %pythoncode { SetItemLabel = SetString };
 
     // change the individual radio button state
-    %name(EnableItem) virtual void Enable(int n, bool enable = TRUE);
-    %name(ShowItem) virtual void Show(int n, bool show = TRUE);
+    %name(EnableItem) virtual void Enable(int n, bool enable = True);
+    %name(ShowItem) virtual void Show(int n, bool show = True);
 
 #ifndef __WXGTK__
     // layout parameters

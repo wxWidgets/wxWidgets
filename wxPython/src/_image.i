@@ -52,22 +52,22 @@ class wxImageHistogram /* : public wxImageHistogramBase */
 public:
     wxImageHistogram();
 
-    // get the key in the histogram for the given RGB values
+    DocStr(MakeKey, "Get the key in the histogram for the given RGB values");
     static unsigned long MakeKey(unsigned char r,
                                  unsigned char g,
                                  unsigned char b);
 
-    // find first colour that is not used in the image and has higher
-    // RGB values than RGB(startR, startG, startB)
-    //
-    // returns true and puts this colour in r, g, b (each of which may be NULL)
-    // on success or returns false if there are no more free colours
-    bool FindFirstUnusedColour(unsigned char *OUTPUT,
-                               unsigned char *OUTPUT,
-                               unsigned char *OUTPUT,
-                               unsigned char startR = 1,
-                               unsigned char startG = 0,
-                               unsigned char startB = 0 ) const;
+    DocDeclAStr(
+        bool, FindFirstUnusedColour(unsigned char *OUTPUT,
+                                    unsigned char *OUTPUT,
+                                    unsigned char *OUTPUT,
+                                    unsigned char startR = 1,
+                                    unsigned char startG = 0,
+                                    unsigned char startB = 0 ) const,
+        "FindFirstUnusedColour(int startR=1, int startG=0, int startB=0) -> (success, r, g, b)",
+        "Find first colour that is not used in the image and has higher RGB values than\n"
+        "startR, startG, startB.  Returns a tuple consisting of a success flag and rgb\n"
+        "values.");
 };
 
 
@@ -84,7 +84,7 @@ public:
     %name(ImageFromStream) wxImage(wxInputStream& stream, long type = wxBITMAP_TYPE_ANY, int index = -1);
     %name(ImageFromStreamMime) wxImage(wxInputStream& stream, const wxString& mimetype, int index = -1 );
     %extend {
-        %name(EmptyImage) wxImage(int width=0, int height=0, bool clear = TRUE) {
+        %name(EmptyImage) wxImage(int width=0, int height=0, bool clear = True) {
             if (width > 0 && height > 0)
                 return new wxImage(width, height, clear);
             else
@@ -103,7 +103,7 @@ public:
                 return NULL;
             }
             memcpy(copy, data, width*height*3);
-            return new wxImage(width, height, copy, FALSE);
+            return new wxImage(width, height, copy, False);
         }
     }
     
@@ -125,8 +125,14 @@ public:
 
     // find first colour that is not used in the image and has higher
     // RGB values than <startR,startG,startB>
-    bool FindFirstUnusedColour( byte *OUTPUT, byte *OUTPUT, byte *OUTPUT,
-                                byte startR = 0, byte startG = 0, byte startB = 0 ) const;
+    DocDeclAStr(
+        bool, FindFirstUnusedColour( byte *OUTPUT, byte *OUTPUT, byte *OUTPUT,
+                                     byte startR = 0, byte startG = 0, byte startB = 0 ) const,
+        "FindFirstUnusedColour(int startR=1, int startG=0, int startB=0) -> (success, r, g, b)",
+        "Find first colour that is not used in the image and has higher RGB values than\n"
+        "startR, startG, startB.  Returns a tuple consisting of a success flag and rgb\n"
+        "values.");
+
 
     // Set image's mask to the area of 'mask' that has <mr,mg,mb> colour
     bool SetMaskFromImage(const wxImage & mask,
@@ -270,13 +276,13 @@ public:
     unsigned char GetMaskRed();
     unsigned char GetMaskGreen();
     unsigned char GetMaskBlue();
-    void SetMask( bool mask = TRUE );
+    void SetMask( bool mask = True );
     bool HasMask();
 
     wxImage Rotate(double angle, const wxPoint & centre_of_rotation,
-                   bool interpolating = TRUE, wxPoint * offset_after_rotation = NULL) const ;
-    wxImage Rotate90( bool clockwise = TRUE ) ;
-    wxImage Mirror( bool horizontally = TRUE ) ;
+                   bool interpolating = True, wxPoint * offset_after_rotation = NULL) const ;
+    wxImage Rotate90( bool clockwise = True ) ;
+    wxImage Mirror( bool horizontally = True ) ;
 
     void Replace( unsigned char r1, unsigned char g1, unsigned char b1,
                   unsigned char r2, unsigned char g2, unsigned char b2 );

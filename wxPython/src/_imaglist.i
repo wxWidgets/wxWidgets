@@ -41,7 +41,7 @@ enum {
 //  two bitmaps, or an icon.
 class wxImageList : public wxObject {
 public:
-    wxImageList(int width, int height, int mask=TRUE, int initialCount=1);
+    wxImageList(int width, int height, int mask=True, int initialCount=1);
     ~wxImageList();
 
     int Add(const wxBitmap& bitmap, const wxBitmap& mask = wxNullBitmap);
@@ -56,7 +56,7 @@ public:
 #endif
 
     bool Draw(int index, wxDC& dc, int x, int x, int flags = wxIMAGELIST_DRAW_NORMAL,
-              const bool solidBackground = FALSE);
+              const bool solidBackground = False);
 
     int GetImageCount();
     bool Remove(int index);

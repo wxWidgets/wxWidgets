@@ -109,37 +109,67 @@ enum wxStockCursor
 //---------------------------------------------------------------------------
 %newgroup
 
+DocStr( wxSize,
+"wx.Size is a useful data structure used to represent the size of something.
+It simply contians integer width and height proprtites.  In most places in
+wxPython where a wx.Size is expected a (width,height) tuple can be used
+instead.");
+
 class wxSize
 {
 public:
-    //int x;        // TODO:  Can these be removed and just use width and height?
-    //int y;
     %name(width) int x;
     %name(height)int y;
 
-    wxSize(int w=0, int h=0);
+    DocCtorStr(
+        wxSize(int w=0, int h=0),
+        "Creates a size object.");
+
     ~wxSize();
 
-    bool operator==(const wxSize& sz) const;
-    bool operator!=(const wxSize& sz) const;
+    DocDeclStr(
+        bool, operator==(const wxSize& sz),
+        "Test for equality of wx.Size objects.");
 
-    wxSize operator+(const wxSize& sz);
-    wxSize operator-(const wxSize& sz);
+    DocDeclStr(
+        bool, operator!=(const wxSize& sz),
+        "Test for inequality.");
 
-    void IncTo(const wxSize& sz);
-    void DecTo(const wxSize& sz);
+    DocDeclStr(
+        wxSize, operator+(const wxSize& sz),
+        "Add sz's proprties to this and return the result.");
 
-    void Set(int xx, int yy);
+    DocDeclStr(
+        wxSize, operator-(const wxSize& sz),
+        "Subtract sz's properties from this and return the result.");
+
+    DocDeclStr(
+        void, IncTo(const wxSize& sz),
+        "Increments this object so that both of its dimensions are not less\n"
+        "than the corresponding dimensions of the size.");
+
+    DocDeclStr(
+        void, DecTo(const wxSize& sz),
+        "Decrements this object so that both of its dimensions are not greater\n"
+        "than the corresponding dimensions of the size.");
+
+    DocDeclStr(
+        void, Set(int w, int h),
+        "Set both width and height.");
+    
     void SetWidth(int w);
     void SetHeight(int h);
     int GetWidth() const;
     int GetHeight() const;
 
-    int GetX() const;
-    int GetY() const;
+    //int GetX() const;
+    //int GetY() const;
 
     %extend {
-        PyObject* asTuple() {
+        DocAStr(Get,
+               "Get() -> (width,height)",
+               "Returns the width and height properties as a tuple.");
+        PyObject* Get() {
             wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
@@ -149,17 +179,18 @@ public:
         }
     }
     %pythoncode {
-    def __str__(self):                   return str(self.asTuple())
-    def __repr__(self):                  return 'wxSize'+str(self.asTuple())
-    def __len__(self):                   return len(self.asTuple())
-    def __getitem__(self, index):        return self.asTuple()[index]
+    asTuple = Get
+    def __str__(self):                   return str(self.Get())
+    def __repr__(self):                  return 'wx.Size'+str(self.Get())
+    def __len__(self):                   return len(self.Get())
+    def __getitem__(self, index):        return self.Get()[index]
     def __setitem__(self, index, val):
         if index == 0: self.width = val
         elif index == 1: self.height = val
         else: raise IndexError
-    def __nonzero__(self):               return self.asTuple() != (0,0)
+    def __nonzero__(self):               return self.Get() != (0,0)
     def __getinitargs__(self):           return ()
-    def __getstate__(self):              return self.asTuple()
+    def __getstate__(self):              return self.Get()
     def __setstate__(self, state):       self.Set(*state)
     }
 
@@ -168,28 +199,51 @@ public:
 //---------------------------------------------------------------------------
 %newgroup
 
-
+DocStr( wxRealPoint,
+"A data structure for representing a point or position with floating point x
+and y properties.  In wxPython most places that expect a wx.RealPoint can also
+accept a (x,y) tuple.");
 class wxRealPoint
 {
 public:
     double x;
     double y;
 
-    wxRealPoint(double x=0.0, double y=0.0);
+    DocCtorStr(
+        wxRealPoint(double x=0.0, double y=0.0),
+        "Create a wx.RealPoint object");
+    
     ~wxRealPoint();
 
-    wxRealPoint operator+(const wxRealPoint& pt) const;
-    wxRealPoint operator-(const wxRealPoint& pt) const;
+    DocDeclStr(
+        bool, operator==(const wxRealPoint& pt),
+        "Test for equality of wx.RealPoint objects.");
 
-    bool operator==(const wxRealPoint& pt) const;
-    bool operator!=(const wxRealPoint& pt) const;
+    DocDeclStr(
+        bool, operator!=(const wxRealPoint& pt),
+        "Test for inequality of wx.RealPoint objects.");
+
+    
+    DocDeclStr(
+        wxRealPoint, operator+(const wxRealPoint& pt),
+        "Add pt's proprties to this and return the result.");
+
+    DocDeclStr(
+        wxRealPoint, operator-(const wxRealPoint& pt),
+        "Subtract pt's proprties from this and return the result");
+
 
     %extend {
+        DocStr(Set, "Set both the x and y properties");
         void Set(double x, double y) {
             self->x = x;
             self->y = y;
         }
-        PyObject* asTuple() {
+
+        DocAStr(Get,
+               "Get() -> (x,y)",
+               "Return the x and y properties as a tuple. ");
+        PyObject* Get() {
             wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyFloat_FromDouble(self->x));
@@ -200,48 +254,82 @@ public:
     }
 
     %pythoncode {
-    def __str__(self):                   return str(self.asTuple())
-    def __repr__(self):                  return 'wxRealPoint'+str(self.asTuple())
-    def __len__(self):                   return len(self.asTuple())
-    def __getitem__(self, index):        return self.asTuple()[index]
+    asTuple = Get
+    def __str__(self):                   return str(self.Get())
+    def __repr__(self):                  return 'wx.RealPoint'+str(self.Get())
+    def __len__(self):                   return len(self.Get())
+    def __getitem__(self, index):        return self.Get()[index]
     def __setitem__(self, index, val):
-        if index == 0: self.width = val
-        elif index == 1: self.height = val
+        if index == 0: self.x = val
+        elif index == 1: self.y = val
         else: raise IndexError
-    def __nonzero__(self):               return self.asTuple() != (0.0, 0.0)
+    def __nonzero__(self):               return self.Get() != (0.0, 0.0)
     def __getinitargs__(self):           return ()
-    def __getstate__(self):              return self.asTuple()
+    def __getstate__(self):              return self.Get()
     def __setstate__(self, state):       self.Set(*state)
     }
 };
 
+
 //---------------------------------------------------------------------------
 %newgroup
 
+
+DocStr(wxPoint,
+"A data structure for representing a point or position with integer x and y
+properties.  Most places in wxPython that expect a wx.Point can also accept a
+(x,y) tuple.");
 
 class wxPoint
 {
 public:
     int x, y;
 
-    wxPoint(int x=0, int y=0);
+    DocCtorStr(
+        wxPoint(int x=0, int y=0),
+        "Create a wx.Point object");
+
     ~wxPoint();
 
-    bool operator==(const wxPoint& p) const;
-    bool operator!=(const wxPoint& p) const;
+    
+    DocDeclStr(
+        bool, operator==(const wxPoint& pt),
+        "Test for equality of wx.Point objects.");
 
-    wxPoint operator+(const wxPoint& p) const;
-    wxPoint operator-(const wxPoint& p) const;
+    DocDeclStr(
+        bool, operator!=(const wxPoint& pt),
+        "Test for inequality of wx.Point objects.");
 
-    wxPoint& operator+=(const wxPoint& p);
-    wxPoint& operator-=(const wxPoint& p);
+    
+    DocDeclStr(
+        wxPoint, operator+(const wxPoint& pt),
+        "Add pt's proprties to this and return the result.");
 
+    DocDeclStr(
+        wxPoint, operator-(const wxPoint& pt),
+        "Subtract pt's proprties from this and return the result");
+
+
+    DocDeclStr(
+        wxPoint&, operator+=(const wxPoint& pt),
+        "Add pt to this object.");
+
+    DocDeclStr(
+        wxPoint&, operator-=(const wxPoint& pt),
+        "Subtract pt from this object.");
+
+    
     %extend {
+        DocStr(Set, "Set both the x and y properties");
         void Set(long x, long y) {
             self->x = x;
             self->y = y;
         }
-        PyObject* asTuple() {
+
+        DocAStr(Get,
+               "Get() -> (x,y)",
+               "Return the x and y properties as a tuple. ");
+        PyObject* Get() {
             wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
@@ -252,17 +340,18 @@ public:
     }
 
     %pythoncode {
-    def __str__(self):                   return str(self.asTuple())
-    def __repr__(self):                  return 'wxPoint'+str(self.asTuple())
-    def __len__(self):                   return len(self.asTuple())
-    def __getitem__(self, index):        return self.asTuple()[index]
+    asTuple = Get
+    def __str__(self):                   return str(self.Get())
+    def __repr__(self):                  return 'wx.Point'+str(self.Get())
+    def __len__(self):                   return len(self.Get())
+    def __getitem__(self, index):        return self.Get()[index]
     def __setitem__(self, index, val):
         if index == 0: self.x = val
         elif index == 1: self.y = val
         else: raise IndexError
-    def __nonzero__(self):               return self.asTuple() != (0,0)
+    def __nonzero__(self):               return self.Get() != (0,0)
     def __getinitargs__(self):           return ()
-    def __getstate__(self):              return self.asTuple()
+    def __getstate__(self):              return self.Get()
     def __setstate__(self, state):       self.Set(*state)
     }
 };
@@ -271,12 +360,28 @@ public:
 %newgroup
 
 
+DocStr(wxRect,
+"A class for representing and manipulating rectangles.  It has x, y, width and
+height properties.  In wxPython most palces that expect a wx.Rect can also
+accept a (x,y,width,height) tuple.");
+
 class wxRect
 {
 public:
-    wxRect(int x=0, int y=0, int width=0, int height=0);
-    %name(RectPP) wxRect(const wxPoint& topLeft, const wxPoint& bottomRight);
-    %name(RectPS) wxRect(const wxPoint& pos, const wxSize& size);
+    DocCtorStr(
+        wxRect(int x=0, int y=0, int width=0, int height=0),
+        "Create a new Rect object.");          
+
+    DocCtorStrName(
+        wxRect(const wxPoint& topLeft, const wxPoint& bottomRight),
+        "Create a new Rect object from Points representing two corners.",
+        RectPP);
+
+    DocCtorStrName(
+        wxRect(const wxPoint& pos, const wxSize& size),
+        "Create a new Rect from a position and size.",
+         RectPS);
+    
     ~wxRect();
 
     int GetX() const;
@@ -307,39 +412,83 @@ public:
     void SetTop(int top);
     void SetBottom(int bottom);
 
-    wxRect& Inflate(wxCoord dx, wxCoord dy);
-    wxRect& Deflate(wxCoord dx, wxCoord dy);
+    %pythoncode {
+        position = property(GetPosition, SetPosition)
+        size = property(GetSize, SetSize)
+        left = property(GetLeft, SetLeft)
+        right = property(GetRight, SetRight)
+        top = property(GetTop, SetTop)
+        bottom = property(GetBottom, SetBottom)
+    }
 
-    %name(OffsetXY)void Offset(wxCoord dx, wxCoord dy);
-    void Offset(const wxPoint& pt);
+    DocDeclStr(
+        wxRect&, Inflate(wxCoord dx, wxCoord dy),
+        "Increase the rectangle size by dx in x direction and dy in y direction. Both\n"
+        "(or one of) parameters may be negative to decrease the rectangle size.");
 
-    wxRect& Intersect(const wxRect& rect);
+    DocDeclStr(
+        wxRect&, Deflate(wxCoord dx, wxCoord dy),
+        "Decrease the rectangle size by dx in x direction and dy in y direction. Both\n"
+        "(or one of) parameters may be negative to increase the rectngle size. This\n"
+        "method is the opposite of Inflate.");
 
-    wxRect operator+(const wxRect& rect) const;
-    wxRect& operator+=(const wxRect& rect);
+    DocDeclStrName(
+        void, Offset(wxCoord dx, wxCoord dy),
+        "Moves the rectangle by the specified offset. If dx is positive, the rectangle\n"
+        "is moved to the right, if dy is positive, it is moved to the bottom, otherwise\n"
+        "it is moved to the left or top respectively.",
+        OffsetXY);
+    
+    DocDeclStr(
+        void, Offset(const wxPoint& pt),
+        "Same as OffsetXY but uses dx,dy from Point");
 
-    bool operator==(const wxRect& rect) const;
-    bool operator!=(const wxRect& rect) const { return !(*this == rect); }
+    DocDeclStr(
+        wxRect&, Intersect(const wxRect& rect),
+        "Return the intersectsion of this rectangle and rect.");
 
-    // return TRUE if the point is (not strcitly) inside the rect
+    DocDeclStr(
+        wxRect, operator+(const wxRect& rect) const,
+        "Add the properties of rect to this rectangle and return the result.");
+
+    DocDeclStr(
+        wxRect&, operator+=(const wxRect& rect),
+        "Add the properties of rect to this rectangle, updating this rectangle.");
+
+    DocDeclStr(
+        bool, operator==(const wxRect& rect) const,
+        "Test for equality.");
+
+    DocDeclStr(
+        bool, operator!=(const wxRect& rect) const,
+        "Test for inequality.");
+
+    
+    DocStr( Inside, "Return True if the point is (not strcitly) inside the rect.");
     %name(InsideXY)bool Inside(int x, int y) const;
     bool Inside(const wxPoint& pt) const;
 
-    // return TRUE if the rectangles have a non empty intersection
-    bool Intersects(const wxRect& rect) const;
+    DocDeclStr(    
+        bool, Intersects(const wxRect& rect) const,
+        "Returns True if the rectangles have a non empty intersection.");
 
+    
     int x, y, width, height;
 
 
     %extend {
-         void Set(int x=0, int y=0, int width=0, int height=0) {
+       DocStr(Set, "Set all rectangle properties.");
+        void Set(int x=0, int y=0, int width=0, int height=0) {
             self->x = x;
             self->y = y;
             self->width = width;
             self->height = height;
         }
 
-        PyObject* asTuple() {
+        DocAStr(Get,
+               "Get() -> (x,y,width,height)",
+               "Return the rectangle properties as a tuple.");
+        PyObject* Get() {
             wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(4);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
@@ -352,24 +501,28 @@ public:
     }
 
     %pythoncode {
-    def __str__(self):                   return str(self.asTuple())
-    def __repr__(self):                  return 'wxRect'+str(self.asTuple())
-    def __len__(self):                   return len(self.asTuple())
-    def __getitem__(self, index):        return self.asTuple()[index]
+    asTuple = Get
+    def __str__(self):                   return str(self.Get())
+    def __repr__(self):                  return 'wx.Rect'+str(self.Get())
+    def __len__(self):                   return len(self.Get())
+    def __getitem__(self, index):        return self.Get()[index]
     def __setitem__(self, index, val):
         if index == 0: self.x = val
         elif index == 1: self.y = val
         elif index == 2: self.width = val
         elif index == 3: self.height = val
         else: raise IndexError
-    def __nonzero__(self):               return self.asTuple() != (0,0,0,0)
+    def __nonzero__(self):               return self.Get() != (0,0,0,0)
     def __getinitargs__(self):           return ()
-    def __getstate__(self):              return self.asTuple()
+    def __getstate__(self):              return self.Get()
     def __setstate__(self, state):       self.Set(*state)
     }
 };
 
 
+DocAStr(wxIntersectRect,
+       "IntersectRect(Rect r1, Rect r2) -> Rect",
+       "Calculate and return the intersection of r1 and r2.");
 %inline %{
     PyObject* wxIntersectRect(wxRect* r1, wxRect* r2) {
         wxRegion  reg1(*r1);
@@ -383,7 +536,7 @@ public:
         if (dest != wxRect(0,0,0,0)) {
             wxPyBeginBlockThreads();
             wxRect* newRect = new wxRect(dest);
-            obj = wxPyConstructObject((void*)newRect, wxT("wxRect"), true);
+            obj = wxPyConstructObject((void*)newRect, wxT("wxRect"), True);
             wxPyEndBlockThreads();
             return obj;
         }
@@ -396,23 +549,32 @@ public:
 %newgroup
 
 
-// wxPoint2Ds represent a point or a vector in a 2d coordinate system
+DocStr(wxPoint2D,
+      "wx.Point2Ds represent a point or a vector in a 2d coordinate system with floating point values.");
 
 class wxPoint2D
 {
-public :
+public:
+    DocStr(wxPoint2D, "Create a w.Point2D object.");
     wxPoint2D( double x=0.0 , double y=0.0 );
     %name(Point2DCopy) wxPoint2D( const wxPoint2D &pt );
     %name(Point2DFromPoint) wxPoint2D( const wxPoint &pt );
 
-    // two different conversions to integers, floor and rounding
-    void GetFloor( int *OUTPUT , int *OUTPUT ) const;
-    void GetRounded( int *OUTPUT , int *OUTPUT ) const;
+    DocDeclAStr(
+        void, GetFloor( int *OUTPUT , int *OUTPUT ) const,
+        "GetFloor() -> (x,y)",
+        "Convert to integer");
+    
+    DocDeclAStr(
+        void, GetRounded( int *OUTPUT , int *OUTPUT ) const,
+        "GetRounded() -> (x,y)",
+        "Convert to integer");
 
     double GetVectorLength() const;
     double GetVectorAngle() const ;
     void SetVectorLength( double length );
     void SetVectorAngle( double degrees );
+
     // LinkError: void SetPolarCoordinates( double angle , double length );
     // LinkError: void Normalize();
     %pythoncode {
@@ -428,8 +590,9 @@ public :
     double GetDotProduct( const wxPoint2D &vec ) const;
     double GetCrossProduct( const wxPoint2D &vec ) const;
 
-    // the reflection of this point
-    wxPoint2D operator-();
+    DocDeclStr(
+        wxPoint2D, operator-(),
+        "the reflection of this point");
 
     wxPoint2D& operator+=(const wxPoint2D& pt);
     wxPoint2D& operator-=(const wxPoint2D& pt);
@@ -437,11 +600,14 @@ public :
     wxPoint2D& operator*=(const wxPoint2D& pt);
     wxPoint2D& operator/=(const wxPoint2D& pt);
 
-    bool operator==(const wxPoint2D& pt) const;
-    bool operator!=(const wxPoint2D& pt) const;
+    DocDeclStr(
+        bool, operator==(const wxPoint2D& pt) const,
+        "Test for equality");
+    
+    DocDeclStr(
+        bool, operator!=(const wxPoint2D& pt) const,
+        "Test for inequality");
 
-    double m_x;
-    double m_y;
     %name(x)double m_x;
     %name(y)double m_y;
 
@@ -450,7 +616,11 @@ public :
             self->m_x = x;
             self->m_y = y;
         }
-        PyObject* asTuple() {
+
+        DocAStr(Get,
+               "Get() -> (x,y)",
+               "Return x and y properties as a tuple.");               
+        PyObject* Get() {
             wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyFloat_FromDouble(self->m_x));
@@ -461,17 +631,18 @@ public :
     }
 
     %pythoncode {
-    def __str__(self):                   return str(self.asTuple())
-    def __repr__(self):                  return 'wxPoint2D'+str(self.asTuple())
-    def __len__(self):                   return len(self.asTuple())
-    def __getitem__(self, index):        return self.asTuple()[index]
+    asTuple = Get
+    def __str__(self):                   return str(self.Get())
+    def __repr__(self):                  return 'wx.Point2D'+str(self.Get())
+    def __len__(self):                   return len(self.Get())
+    def __getitem__(self, index):        return self.Get()[index]
     def __setitem__(self, index, val):
-        if index == 0: self.m_x = val
-        elif index == 1: self.m_yt = val
+        if index == 0: self.x = val
+        elif index == 1: self.y = val
         else: raise IndexError
-    def __nonzero__(self):               return self.asTuple() != (0.0, 0.0)
+    def __nonzero__(self):               return self.Get() != (0.0, 0.0)
     def __getinitargs__(self):           return ()
-    def __getstate__(self):              return self.asTuple()
+    def __getstate__(self):              return self.Get()
     def __setstate__(self, state):       self.Set(*state)
 
     }

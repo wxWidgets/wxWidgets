@@ -80,8 +80,8 @@ public:
 // the user to disable this (however, it's the program which should show, or
 // not, the dialog on startup depending on its value, not this class).
 //
-// The function returns TRUE if this checkbox is checked, FALSE otherwise.
-bool wxShowTip(wxWindow *parent, wxTipProvider *tipProvider, bool showAtStartup = TRUE);
+// The function returns True if this checkbox is checked, False otherwise.
+bool wxShowTip(wxWindow *parent, wxTipProvider *tipProvider, bool showAtStartup = True);
 
 // a function which returns an implementation of wxTipProvider using the
 // specified text file as the source of tips (each line is a tip).

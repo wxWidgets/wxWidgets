@@ -75,12 +75,12 @@ public:
     void DrawCircle(wxCoord x, wxCoord y, wxCoord radius);
     void DrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     void DrawIcon(const wxIcon& icon, wxCoord x, wxCoord y);
-    void DrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask = FALSE);
+    void DrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask = False);
     void DrawText(const wxString& text, wxCoord x, wxCoord y);
     void DrawRotatedText(const wxString& text, wxCoord x, wxCoord y, double angle);
     bool Blit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
               wxDC *source, wxCoord xsrc, wxCoord ysrc,
-              int rop = wxCOPY, bool useMask = FALSE,
+              int rop = wxCOPY, bool useMask = False,
               wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
 
 
@@ -140,8 +140,8 @@ public:
     %name(DrawIconXY) void DrawIcon(const wxIcon& icon, wxCoord x, wxCoord y);
     void DrawIcon(const wxIcon& icon, const wxPoint& pt);
 
-    %name(DrawBitmapXY) void DrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask = FALSE);
-    void DrawBitmap(const wxBitmap &bmp, const wxPoint& pt, bool useMask = FALSE);
+    %name(DrawBitmapXY) void DrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask = False);
+    void DrawBitmap(const wxBitmap &bmp, const wxPoint& pt, bool useMask = False);
 
     %name(DrawTextXY) void DrawText(const wxString& text, wxCoord x, wxCoord y);
     void DrawText(const wxString& text, const wxPoint& pt);
@@ -152,11 +152,11 @@ public:
     
     %name(BlitXY) bool Blit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                             wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                            int rop = wxCOPY, bool useMask = FALSE,
+                            int rop = wxCOPY, bool useMask = False,
                             wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
     bool Blit(const wxPoint& destPt, const wxSize& sz,  
               wxDC *source, const wxPoint& srcPt,
-              int rop = wxCOPY, bool useMask = FALSE,
+              int rop = wxCOPY, bool useMask = False,
               const wxPoint& srcPtMask = wxDefaultPosition);
 
 #endif
@@ -585,7 +585,7 @@ class wxMirrorDC : public wxDC
 public:
     // constructs a mirror DC associated with the given real DC
     //
-    // if mirror parameter is true, all vertical and horizontal coordinates are
+    // if mirror parameter is True, all vertical and horizontal coordinates are
     // exchanged, otherwise this class behaves in exactly the same way as a
     // plain DC
     //
@@ -603,7 +603,7 @@ class wxPostScriptDC : public wxDC {
 public:
     wxPostScriptDC(const wxPrintData& printData);
 //     %name(PostScriptDC2)wxPostScriptDC(const wxString& output,
-//                                          bool interactive = TRUE,
+//                                          bool interactive = True,
 //                                          wxWindow* parent = NULL);
 
     wxPrintData& GetPrintData();
@@ -697,7 +697,7 @@ public:
 //     %name(PrinterDC2) wxPrinterDC(const wxString& driver,
 //                                     const wxString& device,
 //                                     const wxString& output,
-//                                     bool interactive = TRUE,
+//                                     bool interactive = True,
 //                                     int orientation = wxPORTRAIT);
 };
 
@@ -719,7 +719,7 @@ public:
 //     %name(PrinterDC2) wxPrinterDC(const wxString& driver,
 //                                     const wxString& device,
 //                                     const wxString& output,
-//                                     bool interactive = TRUE,
+//                                     bool interactive = True,
 //                                     int orientation = wxPORTRAIT);
 };
 #endif

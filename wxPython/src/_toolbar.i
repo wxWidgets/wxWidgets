@@ -376,7 +376,7 @@ public:
     // there is no tool at this point (corrdinates are client)
     wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y);
 
-    // return TRUE if this is a vertical toolbar, otherwise FALSE
+    // return True if this is a vertical toolbar, otherwise False
     bool IsVertical();
 };
 

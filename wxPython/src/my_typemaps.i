@@ -37,140 +37,15 @@
 
 
 
-// %typemap(python,build) int LCOUNT {
-//     if (_in_choices) {
-//         $target = PyList_Size(_in_choices);
-//     }
-//     else {
-//         $target = 0;
-//     }
-// }
-
-
-
-// %typemap(python,in) byte* choices  {
-//     $target = byte_LIST_helper($source);
-//     if ($target == NULL) {
-//         return NULL;
-//     }
-// }
-// %typemap(python,freearg) byte* choices {
-//     delete [] $source;
-// }
-
-// // wxDash is a signed char
-// %typemap(python,in) wxDash* choices  {
-//     $target = (wxDash*)byte_LIST_helper($source);
-//     if ($target == NULL) {
-//         return NULL;
-//     }
-// }
-// %typemap(python,freearg) wxDash* choices {
-//     delete [] $source;
-// }
-
-
-// %typemap(python,in) int* choices  {
-//     $target = int_LIST_helper($source);
-//     if ($target == NULL) {
-//         return NULL;
-//     }
-// }
-// %typemap(python,freearg) int* choices {
-//     delete [] $source;
-// }
-
-
-// %typemap(python,in) long* choices {
-//     $target = long_LIST_helper($source);
-//     if ($target == NULL) {
-//         return NULL;
-//     }
-// }
-// %typemap(python,freearg) long* choices {
-//     delete [] $source;
-// }
-
-
-// %typemap(python,in) unsigned long* choices {
-//     $target = (unsigned long*)long_LIST_helper($source);
-//     if ($target == NULL) {
-//         return NULL;
-//     }
-// }
-// %typemap(python,freearg) unsigned long* choices {
-//     delete [] $source;
-// }
-
-
-// %typemap(python,in) char** choices {
-//     $target = string_LIST_helper($source);
-//     if ($target == NULL) {
-//         return NULL;
-//     }
-// }
-// %typemap(python,freearg) char** choices {
-//     delete [] $source;
-// }
-
-
-// %typemap(python,in) wxBitmap** choices  {
-//     $target = wxBitmap_LIST_helper($source);
-//     if ($target == NULL) {
-//         return NULL;
-//     }
-// }
-// %typemap(python,freearg) wxBitmap** choices {
-//     delete [] $source;
-// }
-
-// %typemap(python,in) wxString* choices  {
-//     $target = wxString_LIST_helper($source);
-//     if ($target == NULL) {
-//         return NULL;
-//     }
-// }
-// %typemap(python,freearg) wxString* choices {
-//     delete [] $source;
-// }
-
-// %typemap(python,in) wxAcceleratorEntry* choices  {
-//     $target = wxAcceleratorEntry_LIST_helper($source);
-//     if ($target == NULL) {
-//         return NULL;
-//     }
-// }
-// %typemap(python,freearg) wxAcceleratorEntry* choices {
-//     delete [] $source;
-// }
-
-// %typemap(python,build) int PCOUNT {
-// 	$target = NPOINTS;
-// }
-
-// %typemap(python,in) wxPoint* points (int NPOINTS) {
-//     $target = wxPoint_LIST_helper($source, &NPOINTS);
-// 	if ($target == NULL) {
-// 		return NULL;
-// 	}
-// }
-// %typemap(python,freearg) wxPoint* points {
-//     delete [] $source;
-// }
-
-
-
-
 //---------------------------------------------------------------------------
+// wxString typemaps
 
 
-%typemap(in) wxString& (bool temp=false) {
+%typemap(in) wxString& (bool temp=False) {
     $1 = wxString_in_helper($input);
     if ($1 == NULL) SWIG_fail;
-    temp = true;
+    temp = True;
 }
-
-
 %typemap(freearg) wxString& {
     if (temp$argnum)
         delete $1;
@@ -186,7 +61,7 @@
 %#endif
 }
 
-%typemap(python, out) wxString* {
+%typemap(out) wxString* {
 %#if wxUSE_UNICODE
     $result = PyUnicode_FromWideChar($1->c_str(), $1->Len());
 %#else
@@ -194,7 +69,7 @@
 %#endif
 }
 
-%typemap(python, varout) wxString {
+%typemap(varout) wxString {
 %#if wxUSE_UNICODE
     $result = PyUnicode_FromWideChar($1.c_str(), $1.Len());
 %#else
@@ -203,6 +78,14 @@
 }
 
 
+%typemap(in) wxString {
+    wxString* sptr = wxString_in_helper($input);
+    if (sptr == NULL) SWIG_fail;
+    $1 = *sptr;
+    delete sptr;
+}
+    
+   
 
 // //---------------------------------------------------------------------------
 

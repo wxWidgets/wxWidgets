@@ -146,10 +146,10 @@ bool wxPyDrawXXXPoint(wxDC& dc, PyObject* coords) {
 
     if (! wxPy2int_seq_helper(coords, &x, &y)) {
         PyErr_SetString(PyExc_TypeError, "Expected a sequence of (x,y) sequences.");
-        return FALSE;
+        return False;
     }
     dc.DrawPoint(x, y);
-    return TRUE;
+    return True;
 }
 
 bool wxPyDrawXXXLine(wxDC& dc, PyObject* coords) {
@@ -157,10 +157,10 @@ bool wxPyDrawXXXLine(wxDC& dc, PyObject* coords) {
 
     if (! wxPy4int_seq_helper(coords, &x1, &y1, &x2, &y2)) {
         PyErr_SetString(PyExc_TypeError, "Expected a sequence of (x1,y1, x1,y2) sequences.");
-        return FALSE;
+        return False;
     }
     dc.DrawLine(x1,y1, x2,y2);
-    return TRUE;
+    return True;
 }
 
 bool wxPyDrawXXXRectangle(wxDC& dc, PyObject* coords) {
@@ -168,10 +168,10 @@ bool wxPyDrawXXXRectangle(wxDC& dc, PyObject* coords) {
 
     if (! wxPy4int_seq_helper(coords, &x, &y, &w, &h)) {
         PyErr_SetString(PyExc_TypeError, "Expected a sequence of (x,y, w,h) sequences.");
-        return FALSE;
+        return False;
     }
     dc.DrawRectangle(x, y, w, h);
-    return TRUE;
+    return True;
 }
 
 bool wxPyDrawXXXEllipse(wxDC& dc, PyObject* coords) {
@@ -179,10 +179,10 @@ bool wxPyDrawXXXEllipse(wxDC& dc, PyObject* coords) {
 
     if (! wxPy4int_seq_helper(coords, &x, &y, &w, &h)) {
         PyErr_SetString(PyExc_TypeError, "Expected a sequence of (x,y, w,h) sequences.");
-        return FALSE;
+        return False;
     }
     dc.DrawEllipse(x, y, w, h);
-    return TRUE;
+    return True;
 }
 
 
@@ -193,10 +193,10 @@ bool wxPyDrawXXXPolygon(wxDC& dc, PyObject* coords) {
     points = wxPoint_LIST_helper(coords, &numPoints);
     if (! points) {
         PyErr_SetString(PyExc_TypeError, "Expected a sequence of sequences of (x,y) sequences.");
-        return FALSE;
+        return False;
     }
     dc.DrawPolygon(numPoints, points);
-    return TRUE;
+    return True;
 }
 
 

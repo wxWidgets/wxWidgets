@@ -382,7 +382,7 @@ public:
     // (treat as if the event table entry had not been found): this must be done
     // to allow the event processing by the base classes (calling event.Skip()
     // is the analog of calling the base class verstion of a virtual function)
-    void Skip(bool skip = TRUE);
+    void Skip(bool skip = True);
     bool GetSkipped() const;
 
     // Determine if this event should be propagating to the parent window.
@@ -451,7 +451,7 @@ public:
     // Get checkbox value
     bool IsChecked() const;
 
-    // TRUE if the listbox event was a selection.
+    // True if the listbox event was a selection.
     bool IsSelection() const;
 
     void SetExtraLong(long extraLong);
@@ -598,10 +598,16 @@ public:
     // True if the mouse is just leaving the window
     bool Leaving() const;
 
-    // Find the position of the event
-    wxPoint GetPosition();
-    %name(GetPositionTuple)void GetPosition(long *OUTPUT, long *OUTPUT);
 
+    DocStr(GetPosition,   // sets the docstring for both
+           "Returns the position of the mouse in window coordinates when the event happened.");
+    wxPoint GetPosition();
+
+    DocDeclAName(
+        void, GetPosition(long *OUTPUT, long *OUTPUT),
+        "GetPositionTuple() -> (x,y)",
+        GetPositionTuple);
+    
     // Find the logical position of the event given the DC
     wxPoint GetLogicalPosition(const wxDC& dc) const;
 
@@ -707,9 +713,15 @@ public:
     // get the raw key flags (platform-dependent)
     wxUint32 GetRawKeyFlags() const;
 
-    // Find the position of the event
+    
+    DocStr(GetPosition,   // sets the docstring for both
+           "Find the position of the event.");
     wxPoint GetPosition();
-    %name(GetPositionTuple) void GetPosition(long* OUTPUT, long* OUTPUT);
+
+    DocDeclAName(
+        void, GetPosition(long *OUTPUT, long *OUTPUT),
+        "GetPositionTuple() -> (x,y)",
+        GetPositionTuple);
 
     // Get X position
     wxCoord GetX() const;
@@ -843,7 +855,7 @@ public:
 class wxActivateEvent : public wxEvent
 {
 public:
-    wxActivateEvent(wxEventType type = wxEVT_NULL, bool active = TRUE, int Id = 0);
+    wxActivateEvent(wxEventType type = wxEVT_NULL, bool active = True, int Id = 0);
     bool GetActive() const;
 };
 
@@ -888,7 +900,7 @@ public:
     void SetLoggingOff(bool logOff);
     bool GetLoggingOff() const;
 
-    void Veto(bool veto = TRUE);
+    void Veto(bool veto = True);
     void SetCanVeto(bool canVeto);
     
     bool CanVeto() const;
@@ -902,7 +914,7 @@ public:
 class wxShowEvent : public wxEvent
 {
 public:
-    wxShowEvent(int winid = 0, bool show = FALSE);
+    wxShowEvent(int winid = 0, bool show = False);
     
     void SetShow(bool show);
     bool GetShow() const;
@@ -916,7 +928,7 @@ public:
 class wxIconizeEvent: public wxEvent
 {
 public:
-    wxIconizeEvent(int id = 0, bool iconized = TRUE);
+    wxIconizeEvent(int id = 0, bool iconized = True);
     bool Iconized();
 };
 
@@ -1095,7 +1107,7 @@ class wxNavigationKeyEvent : public wxEvent
 public:
     wxNavigationKeyEvent();
     
-    // direction: forward (true) or backward (false)
+    // direction: forward (True) or backward (False)
     bool GetDirection() const;
     void SetDirection(bool bForward);
 
@@ -1180,7 +1192,7 @@ class wxIdleEvent : public wxEvent
 public:
     wxIdleEvent();
     
-    void RequestMore(bool needMore = TRUE);
+    void RequestMore(bool needMore = True);
     bool MoreRequested() const;
 
     // Specify how wxWindows will send idle events: to

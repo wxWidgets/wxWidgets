@@ -47,7 +47,6 @@
 %include _dc.i
 %include _imaglist.i
 %include _stockobjs.i
-%include _dragimg.i
 %include _effects.i
 
 

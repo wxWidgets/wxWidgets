@@ -18,6 +18,8 @@
 %{
 %}
 
+MAKE_CONST_WXSTRING(PanelNameStr);
+
 //---------------------------------------------------------------------------
 %newgroup
 
@@ -45,14 +47,14 @@ public:
     // deleting the window
     // -------------------
 
-    // ask the window to close itself, return TRUE if the event handler
+    // ask the window to close itself, return True if the event handler
     // honoured our request
-    bool Close( bool force = FALSE );
+    bool Close( bool force = False );
 
-    // delete window unconditionally (dangerous!), returns TRUE if ok
+    // delete window unconditionally (dangerous!), returns True if ok
     virtual bool Destroy();
 
-    // delete all children of this window, returns TRUE if ok
+    // delete all children of this window, returns True if ok
     bool DestroyChildren();
 
     // is the window being deleted?
@@ -127,21 +129,34 @@ public:
     %name(SetClientRect) void SetClientSize(const wxRect& rect);
 
 
-    // get the window position
-    wxPoint GetPosition() const;
-    %name(GetPositionTuple) void GetPosition( int *OUTPUT, int *OUTPUT ) const;
+    DocStr(GetPosition,   // sets the docstring for both
+           "Get the window's position.");
+    wxPoint GetPosition();
+
+    DocDeclAName(
+        void, GetPosition(int *OUTPUT, int *OUTPUT),
+        "GetPositionTuple() -> (x,y)",
+        GetPositionTuple);
 
 
-    // get the window size
+    
+    DocStr(GetSize, "Get the window size.");
     wxSize GetSize() const;
-    %name(GetSizeTuple) void GetSize( int *OUTPUT, int *OUTPUT ) const;
-
+    DocDeclAName(
+        void, GetSize( int *OUTPUT, int *OUTPUT ) const,
+        "GetSizeTuple() -> (width, height)",
+        GetSizeTuple);
+    
+    
     // get the window position and size
     wxRect GetRect() const;
 
-    // get the window's client size
+    DocStr(GetClientSize, "Get the window's client size.");
     wxSize GetClientSize() const;
-    %name(GetClientSizeTuple) void GetClientSize( int *OUTPUT, int *OUTPUT ) const;
+    DocDeclAName(
+        void, GetClientSize( int *OUTPUT, int *OUTPUT ) const,
+        "GetClientSizeTuple() -> (width, height)",
+        GetClientSizeTuple);
 
 
     // get the origin of the client area of the window relative to the
@@ -152,10 +167,15 @@ public:
     // get the client rectangle in window (i.e. client) coordinates
     wxRect GetClientRect() const;
 
-    // get the size best suited for the window (in fact, minimal
-    // acceptable size using which it will still look "nice")
+    DocStr(GetBestSize,
+           "Get the size best suited for the window (in fact, minimal acceptable size\n"
+           "using which it will still look \"nice\")");
     wxSize GetBestSize() const;
-    %name(GetBestSizeTuple) void GetBestSize(int *OUTPUT, int *OUTPUT) const;
+    DocDeclAName(
+        void, GetBestSize(int *OUTPUT, int *OUTPUT) const,
+        "GetBestSizeTuple() -> (width, height)",
+        GetBestSizeTuple);
+    
 
     // There are times (and windows) where 'Best' size and 'Min' size
     // are vastly out of sync.  This should be remedied somehow, but in
@@ -203,16 +223,24 @@ public:
     // Override this method to control the values given to Sizers etc.
     virtual wxSize GetMaxSize() const;
 
-    // Methods for accessing the virtual size of a window.  For most
-    // windows this is just the client area of the window, but for
-    // some like scrolled windows it is more or less independent of
-    // the screen window size.  You may override the DoXXXVirtual
-    // methods below for classes where that is is the case.
-    void SetVirtualSize( const wxSize &size );
+    
+    DocStr(SetVirtualSize,
+           "Set the the virtual size of a window.  For most windows this is just the\n"
+           "client area of the window, but for some like scrolled windows it is more or\n"
+           "less independent of the screen window size.");
+    void SetVirtualSize(const wxSize& size );
     %name(SetVirtualSizeWH) void SetVirtualSize( int w, int h );
 
+    
+    DocStr(GetVirtualSize,
+           "Get the the virtual size of the window.  For most windows this is just\n" 
+           "the client area of the window, but for some like scrolled windows it is\n"
+           "more or less independent of the screen window size.");           
     wxSize GetVirtualSize() const;
-    %name(GetVirtualSizeTuple)void GetVirtualSize( int *OUTPUT, int *OUTPUT ) const;
+    DocDeclAName(
+        void, GetVirtualSize( int *OUTPUT, int *OUTPUT ) const,
+        "GetVirtualSizeTuple() -> (width, height)",
+        GetVirtualSizeTuple);
 
 
 // TODO: using directors?
@@ -232,13 +260,13 @@ public:
     // window state
     // ------------
 
-    // returns TRUE if window was shown/hidden, FALSE if the nothing was
+    // returns True if window was shown/hidden, False if the nothing was
     // done (window was already shown/hidden)
-    virtual bool Show( bool show = TRUE );
+    virtual bool Show( bool show = True );
     bool Hide();
 
-    // returns TRUE if window was enabled/disabled, FALSE if nothing done
-    virtual bool Enable( bool enable = TRUE );
+    // returns True if window was enabled/disabled, False if nothing done
+    virtual bool Enable( bool enable = True );
     bool Disable();
 
     bool IsShown() const;
@@ -263,14 +291,14 @@ public:
     long GetExtraStyle() const;
 
     // make the window modal (all other windows unresponsive)
-    virtual void MakeModal(bool modal = TRUE);
+    virtual void MakeModal(bool modal = True);
 
     virtual void SetThemeEnabled(bool enableTheme);
     virtual bool GetThemeEnabled() const;
 
     // controls by default inherit the colours of their parents, if a
     // particular control class doesn't want to do it, it can override
-    // ShouldInheritColours() to return false
+    // ShouldInheritColours() to return False
     virtual bool ShouldInheritColours() const;
 
 
@@ -325,8 +353,8 @@ public:
     // is this window a top level one?
     virtual bool IsTopLevel() const;
 
-    // change the real parent of this window, return TRUE if the parent
-    // was changed, FALSE otherwise (error or newParent == oldParent)
+    // change the real parent of this window, return True if the parent
+    // was changed, False otherwise (error or newParent == oldParent)
     virtual bool Reparent( wxWindow *newParent );
 
     // implementation mostly
@@ -357,11 +385,11 @@ public:
     // push/pop event handler: allows to chain a custom event handler to
     // alreasy existing ones
     void PushEventHandler( wxEvtHandler *handler );
-    wxEvtHandler *PopEventHandler( bool deleteHandler = FALSE );
+    wxEvtHandler *PopEventHandler( bool deleteHandler = False );
 
     // find the given handler in the event handler chain and remove (but
-    // not delete) it from the event handler chain, return TRUE if it was
-    // found and FALSE otherwise (this also results in an assert failure so
+    // not delete) it from the event handler chain, return True if it was
+    // found and False otherwise (this also results in an assert failure so
     // this function should only be called when the handler is supposed to
     // be there)
     bool RemoveEventHandler(wxEvtHandler *handler);
@@ -394,7 +422,7 @@ public:
         #if wxUSE_HOTKEY
             return self->RegisterHotKey(hotkeyId, modifiers, keycode);
         #else
-            return FALSE;
+            return False;
         #endif
         }
 
@@ -402,7 +430,7 @@ public:
         #if wxUSE_HOTKEY
             return self->UnregisterHotKey(hotkeyId);
         #else
-            return FALSE;
+            return False;
         #endif
         }
     }
@@ -449,7 +477,7 @@ public:
 
     // mark the specified rectangle (or the whole window) as "dirty" so it
     // will be repainted
-    virtual void Refresh( bool eraseBackground = TRUE,
+    virtual void Refresh( bool eraseBackground = True,
                           const wxRect *rect = NULL );
 
     // a less awkward wrapper for Refresh
@@ -489,19 +517,19 @@ public:
     // --------------------------
 
     // set/retrieve the window colours (system defaults are used by
-    // default): Set functions return TRUE if colour was changed
+    // default): Set functions return True if colour was changed
     virtual bool SetBackgroundColour( const wxColour &colour );
     virtual bool SetForegroundColour( const wxColour &colour );
 
     wxColour GetBackgroundColour() const;
     wxColour GetForegroundColour() const;
 
-    // set/retrieve the cursor for this window (SetCursor() returns TRUE
+    // set/retrieve the cursor for this window (SetCursor() returns True
     // if the cursor was really changed)
     virtual bool SetCursor( const wxCursor &cursor );
     wxCursor& GetCursor();
 
-    // set/retrieve the font for the window (SetFont() returns TRUE if the
+    // set/retrieve the font for the window (SetFont() returns True if the
     // font really changed)
     virtual bool SetFont( const wxFont &font );
     wxFont& GetFont();
@@ -516,13 +544,19 @@ public:
     virtual int GetCharHeight() const;
     virtual int GetCharWidth() const;
 
-    // get the width/height/... of the text using current or specified
-    // font
-    virtual void GetTextExtent(const wxString& string, int *OUTPUT, int *OUTPUT); // x, y
-    %name(GetFullTextExtent) virtual void GetTextExtent(const wxString& string,
-                                                        int *OUTPUT, int *OUTPUT, // x, y
-                                                        int *OUTPUT, int* OUTPUT, // descent, externalLeading
-                                                        const wxFont* font = NULL);
+
+    DocDeclAStr(
+        void, GetTextExtent(const wxString& string, int *OUTPUT, int *OUTPUT),
+        "GetTextExtent(wxString string) -> (width, height)",
+        "Get the width and height of the text using the current font.");
+    DocDeclAStrName(
+        void, GetTextExtent(const wxString& string,
+                            int *OUTPUT, int *OUTPUT, int *OUTPUT, int* OUTPUT, 
+                            const wxFont* font = NULL),
+        "GetFullTextExtent(wxString string, Font font=None) ->\n   (width, height, descent, externalLeading)",
+        "Get the width, height, decent and leading of the text using the current or specified font.",
+        GetFullTextExtent);
+
 
 
     // client <-> screen coords
@@ -554,7 +588,7 @@ public:
     // get border for the flags of this window
     wxBorder GetBorder() const { return GetBorder(GetWindowStyleFlag()); }
 
-    // send wxUpdateUIEvents to this window, and children if recurse is TRUE
+    // send wxUpdateUIEvents to this window, and children if recurse is True
     virtual void UpdateWindowUI(long flags = wxUPDATE_UI_NONE);
 
 // TODO: using directors?
@@ -589,8 +623,8 @@ public:
                                int pos,
                                int thumbvisible,
                                int range,
-                               bool refresh = TRUE );
-    virtual void SetScrollPos( int orient, int pos, bool refresh = TRUE );
+                               bool refresh = True );
+    virtual void SetScrollPos( int orient, int pos, bool refresh = True );
     virtual int GetScrollPos( int orient ) const;
     virtual int GetScrollThumb( int orient ) const;
     virtual int GetScrollRange( int orient ) const;
@@ -601,7 +635,7 @@ public:
 
     // scrolls window by line/page: note that not all controls support this
     //
-    // return TRUE if the position changed, FALSE otherwise
+    // return True if the position changed, False otherwise
     virtual bool ScrollLines(int WXUNUSED(lines));
     virtual bool ScrollPages(int WXUNUSED(pages));
 
@@ -674,8 +708,8 @@ public:
     virtual bool Layout();
 
     // sizers
-    void SetSizer(wxSizer *sizer, bool deleteOld = TRUE );
-    void SetSizerAndFit( wxSizer *sizer, bool deleteOld = TRUE );
+    void SetSizer(wxSizer *sizer, bool deleteOld = True );
+    void SetSizerAndFit( wxSizer *sizer, bool deleteOld = True );
 
     wxSizer *GetSizer() const;
 

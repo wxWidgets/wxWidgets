@@ -92,7 +92,7 @@ public:
     void base_OnDelete();
     void base_OnDraw(wxDC& dc);
     void base_OnDrawContents(wxDC& dc);
-    void base_OnDrawBranches(wxDC& dc, bool erase = FALSE);
+    void base_OnDrawBranches(wxDC& dc, bool erase = False);
     void base_OnMoveLinks(wxDC& dc);
     void base_OnErase(wxDC& dc);
     void base_OnEraseContents(wxDC& dc);
@@ -101,8 +101,8 @@ public:
     void base_OnLeftDoubleClick(double x, double y, int keys = 0, int attachment = 0);
     void base_OnRightClick(double x, double y, int keys = 0, int attachment = 0);
     void base_OnSize(double x, double y);
-    bool base_OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display = TRUE);
-    void base_OnMovePost(wxDC& dc, double x, double y, double old_x, double old_y, bool display = TRUE);
+    bool base_OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display = True);
+    void base_OnMovePost(wxDC& dc, double x, double y, double old_x, double old_y, bool display = True);
     void base_OnDragLeft(bool draw, double x, double y, int keys=0, int attachment = 0);
     void base_OnBeginDragLeft(double x, double y, int keys=0, int attachment = 0);
     void base_OnEndDragLeft(double x, double y, int keys=0, int attachment = 0);
@@ -112,7 +112,7 @@ public:
     void base_OnDrawOutline(wxDC& dc, double x, double y, double w, double h);
     void base_OnDrawControlPoints(wxDC& dc);
     void base_OnEraseControlPoints(wxDC& dc);
-    void base_OnMoveLink(wxDC& dc, bool moveControlPoints = TRUE);
+    void base_OnMoveLink(wxDC& dc, bool moveControlPoints = True);
     void base_OnSizingDragLeft(wxPyControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0);
     void base_OnSizingBeginDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
     void base_OnSizingEndDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
@@ -175,21 +175,21 @@ public:
     void ResetMandatoryControlPoints();
     bool Recompute();
     void CalculateSize();
-    void Select(bool select = TRUE, wxDC* dc = NULL);
-    void SetHighlight(bool hi = TRUE, bool recurse = FALSE);
+    void Select(bool select = True, wxDC* dc = NULL);
+    void SetHighlight(bool hi = True, bool recurse = False);
     bool IsHighlighted() ;
     bool Selected();
     bool AncestorSelected();
-    void SetSensitivityFilter(int sens = OP_ALL, bool recursive = FALSE);
+    void SetSensitivityFilter(int sens = OP_ALL, bool recursive = False);
     int GetSensitivityFilter();
-    void SetDraggable(bool drag, bool recursive = FALSE);
+    void SetDraggable(bool drag, bool recursive = False);
     void SetFixedSize(bool x, bool y);
     void GetFixedSize(bool *OUTPUT, bool *OUTPUT) ;
     bool GetFixedWidth();
     bool GetFixedHeight();
     void SetSpaceAttachments(bool sp);
     bool GetSpaceAttachments() ;
-    void SetShadowMode(int mode, bool redraw = FALSE);
+    void SetShadowMode(int mode, bool redraw = False);
     int GetShadowMode();
     bool HitTest(double x, double y, int *OUTPUT, double *OUTPUT);
     void SetCentreResize(bool cr);
@@ -233,14 +233,14 @@ public:
 
     void Show(bool show);
     bool IsShown();
-    void Move(wxDC& dc, double x1, double y1, bool display = TRUE);
+    void Move(wxDC& dc, double x1, double y1, bool display = True);
     void Erase(wxDC& dc);
     void EraseContents(wxDC& dc);
     void Draw(wxDC& dc);
     void Flash();
     void MoveLinks(wxDC& dc);
     void DrawContents(wxDC& dc);
-    void SetSize(double x, double y, bool recursive = TRUE);
+    void SetSize(double x, double y, bool recursive = True);
     void SetAttachmentSize(double x, double y);
     void Attach(wxPyShapeCanvas *can);
     void Detach();
@@ -299,8 +299,8 @@ public:
     wxRealPoint CalcSimpleAttachment(const wxRealPoint& pt1, const wxRealPoint& pt2,
                                      int nth, int noArcs, wxPyLineShape* line);
     bool AttachmentSortTest(int attachmentPoint, const wxRealPoint& pt1, const wxRealPoint& pt2);
-    void EraseLinks(wxDC& dc, int attachment = -1, bool recurse = FALSE);
-    void DrawLinks(wxDC& dc, int attachment = -1, bool recurse = FALSE);
+    void EraseLinks(wxDC& dc, int attachment = -1, bool recurse = False);
+    void DrawLinks(wxDC& dc, int attachment = -1, bool recurse = False);
     bool MoveLineToNewAttachment(wxDC& dc, wxPyLineShape *to_move,
                                  double x, double y);
 
@@ -331,7 +331,7 @@ public:
     int LogicalToPhysicalAttachment(int logicalAttachment);
     bool Draggable();
     bool HasDescendant(wxPyShape *image);
-    wxPyShape *CreateNewCopy(bool resetMapping = TRUE, bool recompute = TRUE);
+    wxPyShape *CreateNewCopy(bool resetMapping = True, bool recompute = True);
     void Copy(wxPyShape& copy);
     void CopyWithHandler(wxPyShape& copy);
     void Rotate(double x, double y, double theta);
@@ -345,7 +345,7 @@ public:
     void base_OnDelete();
     void base_OnDraw(wxDC& dc);
     void base_OnDrawContents(wxDC& dc);
-    void base_OnDrawBranches(wxDC& dc, bool erase = FALSE);
+    void base_OnDrawBranches(wxDC& dc, bool erase = False);
     void base_OnMoveLinks(wxDC& dc);
     void base_OnErase(wxDC& dc);
     void base_OnEraseContents(wxDC& dc);
@@ -354,8 +354,8 @@ public:
     void base_OnLeftDoubleClick(double x, double y, int keys = 0, int attachment = 0);
     void base_OnRightClick(double x, double y, int keys = 0, int attachment = 0);
     void base_OnSize(double x, double y);
-    bool base_OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display = TRUE);
-    void base_OnMovePost(wxDC& dc, double x, double y, double old_x, double old_y, bool display = TRUE);
+    bool base_OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display = True);
+    void base_OnMovePost(wxDC& dc, double x, double y, double old_x, double old_y, bool display = True);
     void base_OnDragLeft(bool draw, double x, double y, int keys=0, int attachment = 0);
     void base_OnBeginDragLeft(double x, double y, int keys=0, int attachment = 0);
     void base_OnEndDragLeft(double x, double y, int keys=0, int attachment = 0);
@@ -365,7 +365,7 @@ public:
     void base_OnDrawOutline(wxDC& dc, double x, double y, double w, double h);
     void base_OnDrawControlPoints(wxDC& dc);
     void base_OnEraseControlPoints(wxDC& dc);
-    void base_OnMoveLink(wxDC& dc, bool moveControlPoints = TRUE);
+    void base_OnMoveLink(wxDC& dc, bool moveControlPoints = True);
     void base_OnSizingDragLeft(wxPyControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0);
     void base_OnSizingBeginDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
     void base_OnSizingEndDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);

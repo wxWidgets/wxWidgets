@@ -86,13 +86,13 @@ public:
     // process all currently pending events right now
     //
     // it is an error to call Yield() recursively unless the value of
-    // onlyIfNeeded is TRUE
+    // onlyIfNeeded is True
     //
     // WARNING: this function is dangerous as it can lead to unexpected
     //          reentrancies (i.e. when called from an event handler it
     //          may result in calling the same event handler again), use
     //          with _extreme_ care or, better, don't use at all!
-    virtual bool Yield(bool onlyIfNeeded = false);
+    virtual bool Yield(bool onlyIfNeeded = False);
 
     // make sure that idle events are sent again
     virtual void WakeUpIdle();
@@ -108,7 +108,7 @@ public:
     // stop the program immediately!)
     virtual void ExitMainLoop();
 
-    // returns TRUE if there are unprocessed events in the event queue
+    // returns True if there are unprocessed events in the event queue
     virtual bool Pending();
 
     // process the first event in the event queue (blocks until an event
@@ -120,18 +120,18 @@ public:
     // becomes idle and normally just sends wxIdleEvent to all interested
     // parties
     //
-    // it should return TRUE if more idle events are needed, FALSE if not
+    // it should return True if more idle events are needed, False if not
     virtual bool ProcessIdle() ;
 
     // Send idle event to window and all subwindows
-    // Returns TRUE if more idle time is requested.
+    // Returns True if more idle time is requested.
     virtual bool SendIdleEvents(wxWindow* win, wxIdleEvent& event);
 
     // Perform standard OnIdle behaviour: call from port's OnIdle
     void OnIdle(wxIdleEvent& event);
 
 
-    // return TRUE if our app has focus
+    // return True if our app has focus
     virtual bool IsActive() const;
 
     // set the "main" top level window
@@ -145,7 +145,7 @@ public:
     // control the exit behaviour: by default, the program will exit the
     // main loop (and so, usually, terminate) when the last top-level
     // program window is deleted. Beware that if you disable this behaviour
-    // (with SetExitOnFrameDelete(FALSE)), you'll have to call
+    // (with SetExitOnFrameDelete(False)), you'll have to call
     // ExitMainLoop() explicitly from somewhere.
     void SetExitOnFrameDelete(bool flag);
     bool GetExitOnFrameDelete() const;
@@ -220,7 +220,7 @@ void  wxExit();
 // Yield to other apps/messages
 bool wxYield();
 bool wxYieldIfNeeded();
-bool wxSafeYield(wxWindow* win=NULL, bool onlyIfNeeded=FALSE);
+bool wxSafeYield(wxWindow* win=NULL, bool onlyIfNeeded=False);
 
 // Cause the message queue to become empty again
 void  wxWakeUpIdle();

@@ -65,7 +65,7 @@ public:
     virtual bool Flush();
 
     // X11 has two clipboards which get selected by this call. Empty on MSW.
-    virtual void UsePrimarySelection( bool primary = FALSE );
+    virtual void UsePrimarySelection( bool primary = False );
 };
 
 

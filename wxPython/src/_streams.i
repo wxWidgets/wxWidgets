@@ -27,15 +27,15 @@
 %typemap(in) wxInputStream*  (wxPyInputStream* temp, bool created) {
     if (wxPyConvertSwigPtr($input, (void **)&temp, wxT("wxPyInputStream"))) {
         $1 = temp->m_wxis;
-        created = false;
+        created = False;
     } else {
         PyErr_Clear();  // clear the failure of the wxPyConvert above
-        $1 = wxPyCBInputStream_create($input, false);
+        $1 = wxPyCBInputStream_create($input, False);
         if ($1 == NULL) {
             PyErr_SetString(PyExc_TypeError, "Expected wxInputStream or Python file-like object.");
             SWIG_fail;
         }
-        created = true;
+        created = True;
     }
 }
 %typemap(freearg) wxInputStream* {
@@ -54,7 +54,7 @@
     if ($1) {
         _ptr = new wxPyInputStream($1);
     }
-    $result = wxPyConstructObject(_ptr, wxT("wxPyInputStream"), true);
+    $result = wxPyConstructObject(_ptr, wxT("wxPyInputStream"), True);
 }
 
 

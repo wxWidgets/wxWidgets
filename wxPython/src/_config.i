@@ -78,7 +78,7 @@ public:
 
     // get the config object, creates it on demand unless DontCreateOnDemand
     // was called
-    static wxConfigBase *Get(bool createOnDemand = TRUE);
+    static wxConfigBase *Get(bool createOnDemand = True);
 
     // create a new config object: this function will create the "best"
     // implementation of wxConfig available for the current platform, see
@@ -144,16 +144,16 @@ public:
 
     // get number of entries/subgroups in the current group, with or without
     // it's subgroups
-    virtual size_t GetNumberOfEntries(bool bRecursive = FALSE) const;
-    virtual size_t GetNumberOfGroups(bool bRecursive = FALSE) const;
+    virtual size_t GetNumberOfEntries(bool bRecursive = False) const;
+    virtual size_t GetNumberOfGroups(bool bRecursive = False) const;
 
-    // returns TRUE if the group by this name exists
+    // returns True if the group by this name exists
     virtual bool HasGroup(const wxString& strName) const;
 
     // same as above, but for an entry
     virtual bool HasEntry(const wxString& strName) const;
 
-    // returns TRUE if either a group or an entry with a given name exist
+    // returns True if either a group or an entry with a given name exist
     bool Exists(const wxString& strName) const;
 
     // get the entry type
@@ -174,7 +174,7 @@ public:
             self->Read(key, &rv, defaultVal);
             return rv;
         }
-        bool ReadBool(const wxString& key, bool defaultVal = FALSE) {
+        bool ReadBool(const wxString& key, bool defaultVal = False) {
             bool rv;
             self->Read(key, &rv, defaultVal);
             return rv;
@@ -182,7 +182,7 @@ public:
     }
 
 
-    // write the value (return true on success)
+    // write the value (return True on success)
     bool Write(const wxString& key, const wxString& value);
     %name(WriteInt)bool Write(const wxString& key, long value);
     %name(WriteFloat)bool Write(const wxString& key, double value);
@@ -190,9 +190,9 @@ public:
 
 
     // permanently writes all changes
-    virtual bool Flush(bool bCurrentOnly = FALSE);
+    virtual bool Flush(bool bCurrentOnly = False);
 
-    // renaming, all functions return FALSE on failure (probably because the new
+    // renaming, all functions return False on failure (probably because the new
     // name is already taken by an existing entry)
     // rename an entry
     virtual bool RenameEntry(const wxString& oldName,
@@ -202,9 +202,9 @@ public:
                              const wxString& newName);
 
     // deletes the specified entry and the group it belongs to if
-    // it was the last key in it and the second parameter is true
+    // it was the last key in it and the second parameter is True
     virtual bool DeleteEntry(const wxString& key,
-                             bool bDeleteGroupIfEmpty = TRUE);
+                             bool bDeleteGroupIfEmpty = True);
 
     // delete the group (with all subgroups)
     virtual bool DeleteGroup(const wxString& key);
@@ -217,10 +217,10 @@ public:
     // we can automatically expand environment variables in the config entries
     // (this option is on by default, you can turn it on/off at any time)
     bool IsExpandingEnvVars() const;
-    void SetExpandEnvVars(bool bDoIt = TRUE);
+    void SetExpandEnvVars(bool bDoIt = True);
 
     // recording of default values
-    void SetRecordDefaults(bool bDoIt = TRUE);
+    void SetRecordDefaults(bool bDoIt = True);
     bool IsRecordingDefaults() const;
 
     // does expansion only if needed

@@ -195,7 +195,7 @@ public:
 
 %pythoncode {
 def XRCID(str_id):
-    return wxXmlResource_GetXRCID(str_id)
+    return XmlResource_GetXRCID(str_id)
 
 def XRCCTRL(window, str_id, *ignoreargs):
     return window.FindWindowById(XRCID(str_id))

@@ -24,8 +24,8 @@
 
 // flags for wxDropSource::DoDragDrop()
 //
-// NB: wxDrag_CopyOnly must be 0 (== FALSE) and wxDrag_AllowMove must be 1
-//     (== TRUE) for compatibility with the old DoDragDrop(bool) method!
+// NB: wxDrag_CopyOnly must be 0 (== False) and wxDrag_AllowMove must be 1
+//     (== True) for compatibility with the old DoDragDrop(bool) method!
 enum
 {
     wxDrag_CopyOnly    = 0, // allow only copying
@@ -149,7 +149,7 @@ public:
     // execute or otherwise mouse movement would be too slow
     DEC_PYCALLBACK_DR_2WXCDR(OnDragOver);
     
-    // called after OnDrop() returns TRUE: you will usually just call
+    // called after OnDrop() returns True: you will usually just call
     // GetData() from here and, probably, also refresh something to update the
     // new data and, finally, return the code indicating how did the operation
     // complete (returning default value in case of success and wxDragError on
@@ -157,7 +157,7 @@ public:
     DEC_PYCALLBACK_DR_2WXCDR_pure(OnData);
     
     // this function is called when data is dropped at position (x, y) - if it
-    // returns TRUE, OnData() will be called immediately afterwards which will
+    // returns True, OnData() will be called immediately afterwards which will
     // allow to retrieve the data dropped.
     DEC_PYCALLBACK_BOOL_INTINT(OnDrop);
 
@@ -194,7 +194,7 @@ public:
     bool base_OnDrop(wxCoord x, wxCoord y);
 
     // may be called *only* from inside OnData() and will fill m_dataObject
-    // with the data from the drop source if it returns TRUE
+    // with the data from the drop source if it returns True
     bool GetData();
 
 };
@@ -271,7 +271,7 @@ public:
 
 bool wxPyFileDropTarget::OnDropFiles(wxCoord x, wxCoord y,
                                      const wxArrayString& filenames) {
-    bool rval = FALSE;
+    bool rval = False;
     wxPyBeginBlockThreads();
     if (wxPyCBH_findCallback(m_myInst, "OnDropFiles")) {
         PyObject* list = wxArrayString2PyList_helper(filenames);

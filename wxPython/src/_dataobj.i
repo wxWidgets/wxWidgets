@@ -112,7 +112,7 @@ public:
     // get the number of formats we support
     virtual size_t GetFormatCount(Direction dir = Get) const;
 
-    // returns TRUE if this format is supported
+    // returns True if this format is supported
     bool IsSupported(const wxDataFormat& format, Direction dir = Get) const;
 
     // get the (total) size of data for the given format
@@ -128,11 +128,11 @@ public:
                                Direction dir = Get) const;
 
     // copy raw data (in the specified format) to the provided buffer, return
-    // TRUE if data copied successfully, FALSE otherwise
+    // True if data copied successfully, False otherwise
     virtual bool GetDataHere(const wxDataFormat& format, void *buf) const;
 
     // get data from the buffer of specified length (in the given format),
-    // return TRUE if the data was read successfully, FALSE otherwise
+    // return True if the data was read successfully, False otherwise
     virtual bool SetData(const wxDataFormat& format,
                          size_t len, const void * buf);
 };
@@ -143,7 +143,7 @@ public:
 
 
 // wxDataObjectSimple is a wxDataObject which only supports one format (in
-// both Get and Set directions, but you may return FALSE from GetDataHere() or
+// both Get and Set directions, but you may return False from GetDataHere() or
 // SetData() if one of them is not supported). This is the simplest possible
 // wxDataObject implementation.
 //
@@ -186,7 +186,7 @@ bool wxPyDataObjectSimple::GetDataHere(void *buf) const {
     // return either a string or None and then act appropriately with the
     // C++ version.
 
-    bool rval = FALSE;
+    bool rval = False;
     wxPyBeginBlockThreads();
     if (wxPyCBH_findCallback(m_myInst, "GetDataHere")) {
         PyObject* ro;
@@ -205,7 +205,7 @@ bool wxPyDataObjectSimple::GetDataHere(void *buf) const {
 bool wxPyDataObjectSimple::SetData(size_t len, const void *buf) const{
     // For this one we simply need to make a string from buf and len
     // and send it to the Python method.
-    bool rval = FALSE;
+    bool rval = False;
     wxPyBeginBlockThreads();
     if (wxPyCBH_findCallback(m_myInst, "SetData")) {
         PyObject* data = PyString_FromStringAndSize((char*)buf, len);
@@ -241,7 +241,7 @@ public:
     wxDataObjectComposite();
 
     %addtofunc Add "args[1].thisown = 0"
-    void Add(wxDataObjectSimple *dataObject, int preferred = FALSE);
+    void Add(wxDataObjectSimple *dataObject, int preferred = False);
 };
 
 //---------------------------------------------------------------------------
@@ -330,7 +330,7 @@ wxBitmap wxPyBitmapDataObject::GetBitmap() const {
 void wxPyBitmapDataObject::SetBitmap(const wxBitmap& bitmap) {
     wxPyBeginBlockThreads();
     if (wxPyCBH_findCallback(m_myInst, "SetBitmap")) {
-        PyObject* bo = wxPyConstructObject((void*)&bitmap, wxT("wxBitmap"), false);
+        PyObject* bo = wxPyConstructObject((void*)&bitmap, wxT("wxBitmap"), False);
         wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", bo));
         Py_DECREF(bo);
     }
@@ -393,7 +393,7 @@ public:
             else {
                 // raise a TypeError if not a string
                 PyErr_SetString(PyExc_TypeError, "String expected.");
-                return FALSE;
+                return False;
             }
         }
     }

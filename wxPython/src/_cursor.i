@@ -21,7 +21,7 @@ public:
     %extend {
         wxCursor(const wxString* cursorName, long flags, int hotSpotX=0, int hotSpotY=0) {
 #ifdef __WXGTK__
-            wxCHECK_MSG(FALSE, NULL,
+            wxCHECK_MSG(False, NULL,
                         wxT("wxCursor constructor not implemented for wxGTK, use wxStockCursor, wxCursorFromImage, or wxCursorFromBits instead."));
 #else
             return new wxCursor(*cursorName, flags, hotSpotX, hotSpotY);

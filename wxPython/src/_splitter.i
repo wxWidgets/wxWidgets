@@ -90,7 +90,7 @@ public:
 
     // Associates the given window with window 2, drawing the appropriate sash
     // and changing the split mode.
-    // Does nothing and returns FALSE if the window is already split.
+    // Does nothing and returns False if the window is already split.
     // A sashPosition of 0 means choose a default sash position,
     // negative sashPosition specifies the size of right/lower pane as it's
     // absolute value rather than the size of left/upper pane.
@@ -126,7 +126,7 @@ public:
     int GetBorderSize() const;
 
     // Set the sash position
-    void SetSashPosition(int position, bool redraw = TRUE);
+    void SetSashPosition(int position, bool redraw = True);
 
     // Gets the sash position
     int GetSashPosition() const;

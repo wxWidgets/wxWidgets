@@ -126,7 +126,7 @@ public:
 
     wxString GetName();
     bool HasParam(const wxString& par);
-    wxString GetParam(const wxString& par, int with_commas = FALSE);
+    wxString GetParam(const wxString& par, int with_commas = False);
 
     // Can't do this one as-is, but GetParam should be enough...
     //int ScanParam(const wxString& par, const char *format, void* param);
@@ -508,7 +508,7 @@ public:
     // Can the line be broken before this cell?
     bool IsLinebreakAllowed() const;
 
-    // Returns true for simple == terminal cells, i.e. not composite ones.
+    // Returns True for simple == terminal cells, i.e. not composite ones.
     // This if for internal usage only and may disappear in future versions!
     bool IsTerminalCell() const;
 
@@ -532,9 +532,9 @@ public:
     // (if it is the root, depth is 0)
     unsigned GetDepth() const;
 
-    // Returns true if the cell appears before 'cell' in natural order of
+    // Returns True if the cell appears before 'cell' in natural order of
     // cells (= as they are read). If cell A is (grand)parent of cell B,
-    // then both A.IsBefore(B) and B.IsBefore(A) always return true.
+    // then both A.IsBefore(B) and B.IsBefore(A) always return True.
     bool IsBefore(wxHtmlCell *cell) const;
 
     // Converts the cell into text representation. If sel != NULL then
@@ -610,9 +610,9 @@ class wxPyHtmlFilter : public wxHtmlFilter {
 public:
     wxPyHtmlFilter() : wxHtmlFilter() {}
 
-    // returns TRUE if this filter is able to open&read given file
+    // returns True if this filter is able to open&read given file
     virtual bool CanRead(const wxFSFile& file) const {
-        bool rval = FALSE;
+        bool rval = False;
         bool found;
         wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "CanRead"))) {
@@ -790,7 +790,7 @@ public:
     // Set HTML page and display it. !! source is HTML document itself,
     // it is NOT address/filename of HTML document. If you want to
     // specify document location, use LoadPage() istead
-    // Return value : FALSE if an error occured, TRUE otherwise
+    // Return value : False if an error occured, True otherwise
     bool SetPage(const wxString& source);
 
     // Load HTML page from given location. Location can be either
@@ -851,7 +851,7 @@ public:
     void WriteCustomization(wxConfigBase *cfg, wxString path = wxPyEmptyString);
 
     // Goes to previous/next page (in browsing history)
-    // Returns TRUE if successful, FALSE otherwise
+    // Returns True if successful, False otherwise
     bool HistoryBack();
     bool HistoryForward();
     bool HistoryCanBack();
@@ -898,7 +898,7 @@ public:
     void SetSize(int width, int height);
     void SetHtmlText(const wxString& html,
                      const wxString& basepath = wxPyEmptyString,
-                     bool isdir = TRUE);
+                     bool isdir = True);
     // Sets fonts to be used when displaying HTML page. (if size null then default sizes used).
     %extend {
         void SetFonts(wxString normal_face, wxString fixed_face, PyObject* sizes=NULL) {
@@ -909,7 +909,7 @@ public:
                 delete [] temp;
         }
     }
-    int Render(int x, int y, int from = 0, int dont_render = FALSE, int to = INT_MAX,
+    int Render(int x, int y, int from = 0, int dont_render = False, int to = INT_MAX,
                //int *known_pagebreaks = NULL, int number_of_pages = 0
                int* choices=NULL, int LCOUNT = 0
                );
@@ -933,7 +933,7 @@ public:
 
     void SetHtmlText(const wxString& html,
                      const wxString &basepath = wxPyEmptyString,
-                     bool isdir = TRUE);
+                     bool isdir = True);
     void SetHtmlFile(const wxString &htmlfile);
     void SetHeader(const wxString& header, int pg = wxPAGE_ALL);
     void SetFooter(const wxString& footer, int pg = wxPAGE_ALL);
@@ -1120,7 +1120,7 @@ public:
 
     void SetTitleFormat(const wxString& format);
     void SetTempDir(const wxString& path);
-    bool AddBook(const wxString& book, int show_wait_msg = FALSE);
+    bool AddBook(const wxString& book, int show_wait_msg = False);
     void Display(const wxString& x);
     %name(DisplayID) void Display(int id);
     void DisplayContents();

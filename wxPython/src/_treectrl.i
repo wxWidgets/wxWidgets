@@ -99,12 +99,12 @@ public:
 
     %extend {
         bool operator==(const wxTreeItemId* other) {
-            if (!other) return false;
+            if (!other) return False;
             return *self == *other;
         }
 
         bool operator!=(const wxTreeItemId* other) {
-            if (!other) return true;
+            if (!other) return True;
             return *self != *other;
         }
     }
@@ -295,8 +295,8 @@ public:
         bool found;
         wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "OnCompareItems"))) {
-            PyObject *o1 = wxPyConstructObject((void*)&item1, wxT("wxTreeItemId"), false);
-            PyObject *o2 = wxPyConstructObject((void*)&item2, wxT("wxTreeItemId"), false);
+            PyObject *o1 = wxPyConstructObject((void*)&item1, wxT("wxTreeItemId"), False);
+            PyObject *o2 = wxPyConstructObject((void*)&item2, wxT("wxTreeItemId"), False);
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OO)",o1,o2));
             Py_DECREF(o1);
             Py_DECREF(o2);
@@ -451,14 +451,14 @@ public:
     // allow the user to expand the items which don't have any children now
     // - but instead add them only when needed, thus minimizing memory
     // usage and loading time.
-    void SetItemHasChildren(const wxTreeItemId& item, bool has = TRUE);
+    void SetItemHasChildren(const wxTreeItemId& item, bool has = True);
 
     // the item will be shown in bold
-    void SetItemBold(const wxTreeItemId& item, bool bold = TRUE);
+    void SetItemBold(const wxTreeItemId& item, bool bold = True);
 
 #ifdef __WXMSW__
     // the item will be shown with a drop highlight
-    void SetItemDropHighlight(const wxTreeItemId& item, bool highlight = TRUE);
+    void SetItemDropHighlight(const wxTreeItemId& item, bool highlight = True);
 #endif
     
     // set the items text colour
@@ -487,19 +487,19 @@ public:
     bool IsBold(const wxTreeItemId& item) const;
 
 
-    // if 'recursively' is FALSE, only immediate children count, otherwise
+    // if 'recursively' is False, only immediate children count, otherwise
     // the returned number is the number of all items in this branch
     size_t GetChildrenCount(const wxTreeItemId& item,
-                            bool recursively = TRUE) /*const*/;
+                            bool recursively = True) /*const*/;
 
 
 
     // get the root tree item
-    // wxTreeItemId.IsOk() will return FALSE if there is no such item
+    // wxTreeItemId.IsOk() will return False if there is no such item
     wxTreeItemId GetRootItem() const;
 
     // get the item currently selected 
-    // wxTreeItemId.IsOk() will return FALSE if there is no such item
+    // wxTreeItemId.IsOk() will return False if there is no such item
     wxTreeItemId GetSelection() const;
 
     %extend {
@@ -515,7 +515,7 @@ public:
             num = self->GetSelections(array);
             for (x=0; x < num; x++) {
                 wxTreeItemId *tii = new wxTreeItemId(array.Item(x));
-                PyObject* item = wxPyConstructObject((void*)tii, wxT("wxTreeItemId"), true);
+                PyObject* item = wxPyConstructObject((void*)tii, wxT("wxTreeItemId"), True);
                 PyList_Append(rval, item);
             }
             wxPyEndBlockThreads();
@@ -524,7 +524,7 @@ public:
     }
 
     // get the parent of this item
-    // wxTreeItemId.IsOk() will return FALSE if there is no such item
+    // wxTreeItemId.IsOk() will return False if there is no such item
     wxTreeItemId GetItemParent(const wxTreeItemId& item) const;
 
 
@@ -537,8 +537,8 @@ public:
             wxTreeItemId ritem = self->GetFirstChild(item, cookie);
             wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
-            PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(&ritem, wxT("wxTreeItemId"), true));
-            PyTuple_SET_ITEM(tup, 1, wxPyConstructObject(cookie, wxT("wxTreeItemIdValue"), true));
+            PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(&ritem, wxT("wxTreeItemId"), True));
+            PyTuple_SET_ITEM(tup, 1, wxPyConstructObject(cookie, wxT("wxTreeItemIdValue"), True));
             wxPyEndBlockThreads();
             return tup;
         }
@@ -552,8 +552,8 @@ public:
             wxTreeItemId ritem = self->GetNextChild(item, cookie);
             wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
-            PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(&ritem, wxT("wxTreeItemId"), true));
-            PyTuple_SET_ITEM(tup, 1, wxPyConstructObject(cookie, wxT("wxTreeItemIdValue"), true));
+            PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(&ritem, wxT("wxTreeItemId"), True));
+            PyTuple_SET_ITEM(tup, 1, wxPyConstructObject(cookie, wxT("wxTreeItemIdValue"), True));
             wxPyEndBlockThreads();
             return tup;
         }            
@@ -669,7 +669,7 @@ public:
 
 #ifdef __WXMSW__
     // end editing and accept or discard the changes to item label
-    void EndEditLabel(const wxTreeItemId& item, bool discardChanges = FALSE);
+    void EndEditLabel(const wxTreeItemId& item, bool discardChanges = False);
 #endif
 
 
@@ -692,12 +692,12 @@ public:
 
     %extend {
         // get the bounding rectangle of the item (or of its label only)
-        PyObject* GetBoundingRect(const wxTreeItemId& item,  bool textOnly = FALSE) {
+        PyObject* GetBoundingRect(const wxTreeItemId& item,  bool textOnly = False) {
              wxRect rect;
             if (self->GetBoundingRect(item, rect, textOnly)) {
                 wxPyBeginBlockThreads();
                 wxRect* r = new wxRect(rect);
-                PyObject* val = wxPyConstructObject((void*)r, wxT("wxRect"), true);
+                PyObject* val = wxPyConstructObject((void*)r, wxT("wxRect"), True);
                 wxPyEndBlockThreads();
                 return val;
             }

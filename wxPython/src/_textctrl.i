@@ -137,7 +137,7 @@ public:
     long GetRightIndent() const;
     long GetFlags() const;
 
-    // returns false if we have any attributes set, true otherwise
+    // returns False if we have any attributes set, True otherwise
     bool IsDefault() const;
 
     // return the attribute having the valid font and colours: it uses the
@@ -221,7 +221,7 @@ public:
     virtual void AppendText(const wxString& text);
 
     // insert the character which would have resulted from this key event,
-    // return TRUE if anything has been inserted
+    // return True if anything has been inserted
     virtual bool EmulateKeyPress(const wxKeyEvent& event);
 
     // text control under some platforms supports the text styles: these
@@ -268,7 +268,7 @@ public:
 
 #ifdef __WXMSW__
     // Caret handling (Windows only)
-    bool ShowNativeCaret(bool show = true);
+    bool ShowNativeCaret(bool show = True);
     bool HideNativeCaret();
 #endif
 

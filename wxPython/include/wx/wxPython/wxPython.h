@@ -97,7 +97,7 @@ static void wxPyCoreAPI_IMPORT() {
 #define wxPyCBH_callCallbackObj(a, b)           (wxPyCoreAPIPtr->p_wxPyCBH_callCallbackObj(a, b))
 #define wxPyCBH_delete(a)                       (wxPyCoreAPIPtr->p_wxPyCBH_delete(a))
 
-#define wxPyMake_wxObject(a)                    (wxPyCoreAPIPtr->p_wxPyMake_wxObject(a,TRUE))
+#define wxPyMake_wxObject(a)                    (wxPyCoreAPIPtr->p_wxPyMake_wxObject(a,True))
 #define wxPyMake_wxObject2(a,b)                 (wxPyCoreAPIPtr->p_wxPyMake_wxObject(a,b))
 #define wxPyMake_wxSizer(a)                     (wxPyCoreAPIPtr->p_wxPyMake_wxSizer(a))
 #define wxPyPtrTypeMap_Add(a, b)                (wxPyCoreAPIPtr->p_wxPyPtrTypeMap_Add(a, b))

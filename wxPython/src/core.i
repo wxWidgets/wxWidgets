@@ -49,7 +49,7 @@ wx = _sys.modules[__name__]
 
 %{
     DECLARE_DEF_STRING(EmptyString);
-    DECLARE_DEF_STRING(PanelNameStr);
+//    DECLARE_DEF_STRING(PanelNameStr);
 %}
 
 //---------------------------------------------------------------------------

@@ -97,14 +97,14 @@ public:
     // adds a new page to the control
     virtual bool AddPage(wxWindow *page,
                          const wxString& text,
-                         bool select = false,
+                         bool select = False,
                          int imageId = -1);
 
     // the same as AddPage(), but adds the page at the specified position
     virtual bool InsertPage(size_t n,
                             wxWindow *page,
                             const wxString& text,
-                            bool select = false,
+                            bool select = False,
                             int imageId = -1)/* = 0*/;
 
     // set the currently selected page, return the index of the previously
@@ -115,7 +115,7 @@ public:
 
 
     // cycle thru the pages
-    void AdvanceSelection(bool forward = true);
+    void AdvanceSelection(bool forward = True);
 };
 
 
@@ -299,7 +299,7 @@ public:
                 long style = 0,
                 const wxString& name = wxPyEmptyString);
 
-    // returns true if we have wxLB_TOP or wxLB_BOTTOM style
+    // returns True if we have wxLB_TOP or wxLB_BOTTOM style
     bool IsVertical() const;
 
 };

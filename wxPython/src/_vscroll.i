@@ -87,7 +87,7 @@ public:
 
     // find the index of the line we need to show at the top of the window such
     // that the last (fully or partially) visible line is the given one
-    size_t FindFirstFromBottom(size_t lineLast, bool fullyVisible = false)
+    size_t FindFirstFromBottom(size_t lineLast, bool fullyVisible = False)
     { return wxVScrolledWindow::FindFirstFromBottom(lineLast, fullyVisible); }
 
     // get the total height of the lines between lineMin (inclusive) and
@@ -159,7 +159,7 @@ public:
     // scroll to the specified line: it will become the first visible line in
     // the window
     //
-    // return true if we scrolled the window, false if nothing was done
+    // return True if we scrolled the window, False if nothing was done
     bool ScrollToLine(size_t line);
 
     // scroll by the specified number of lines/pages
@@ -368,16 +368,16 @@ public:
     // selects or deselects the specified item which must be valid (i.e. not
     // equal to wxNOT_FOUND)
     //
-    // return true if the items selection status has changed or false
+    // return True if the items selection status has changed or False
     // otherwise
     //
     // this function is only valid for the multiple selection listboxes
-    bool Select(size_t item, bool select = true);
+    bool Select(size_t item, bool select = True);
 
     // selects the items in the specified range whose end points may be given
     // in any order
     //
-    // return true if any items selection status has changed, false otherwise
+    // return True if any items selection status has changed, False otherwise
     //
     // this function is only valid for the single selection listboxes
     bool SelectRange(size_t from, size_t to);
@@ -390,7 +390,7 @@ public:
     // select all items in the listbox
     //
     // the return code indicates if any items were affected by this operation
-    // (true) or if nothing has changed (false)
+    // (True) or if nothing has changed (False)
     bool SelectAll();
 
     // unselect all items in the listbox

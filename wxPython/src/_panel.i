@@ -18,7 +18,6 @@
 %{
 %}
 
-
 //---------------------------------------------------------------------------
 %newgroup
 
@@ -30,7 +29,7 @@ public:
     %addtofunc wxPanel()       ""
 
     wxPanel(wxWindow* parent,
-            const wxWindowID id,
+            const wxWindowID id=-1,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxTAB_TRAVERSAL | wxNO_BORDER,
@@ -54,7 +53,7 @@ public:
 
 // TODO: Add wrappers for the wxScrollHelper class, make wxScrolledWindow
 //       derive from it and wxPanel.  But what to do about wxGTK where this
-//       is not true?
+//       is not True?
 
 class wxScrolledWindow : public wxPanel
 {
@@ -82,7 +81,7 @@ public:
     virtual void SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
                                int noUnitsX, int noUnitsY,
                                int xPos = 0, int yPos = 0,
-                               bool noRefresh = FALSE );
+                               bool noRefresh = False );
 
     // scroll to the given (in logical coords) position
     virtual void Scroll(int x, int y);
@@ -94,13 +93,17 @@ public:
     // Set the x, y scrolling increments.
     void SetScrollRate( int xstep, int ystep );
 
-    // get the size of one logical unit in physical ones
+    %feature("autodoc") GetScrollPixelsPerUnit
+    "GetScrollPixelsPerUnit() -> (xUnit, yUnit)";
+    %feature("docstring") GetScrollPixelsPerUnit "
+        get the size of one logical unit in physical ones
+        "
     virtual void GetScrollPixelsPerUnit(int *OUTPUT,
                                         int *OUTPUT) const;
 
-    // Enable/disable Windows scrolling in either direction. If TRUE, wxWindows
+    // Enable/disable Windows scrolling in either direction. If True, wxWindows
     // scrolls the canvas and only a bit of the canvas is invalidated; no
-    // Clear() is necessary. If FALSE, the whole canvas is invalidated and a
+    // Clear() is necessary. If False, the whole canvas is invalidated and a
     // Clear() is necessary. Disable for when the scroll increment is used to
     // actually scroll a non-constant distance
     virtual void EnableScrolling(bool x_scrolling, bool y_scrolling);

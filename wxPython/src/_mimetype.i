@@ -193,7 +193,7 @@ public:
                 wxPyBeginBlockThreads();
                 PyObject* tuple = PyTuple_New(3);
                 PyTuple_SetItem(tuple, 0, wxPyConstructObject(new wxIcon(loc),
-                                                              wxT("wxIcon"), TRUE));
+                                                              wxT("wxIcon"), True));
                 PyTuple_SetItem(tuple, 1, wx2PyString(iconFile));
                 PyTuple_SetItem(tuple, 2, PyInt_FromLong(iconIndex));
                 wxPyEndBlockThreads();
@@ -264,9 +264,9 @@ public:
 
 
     // set an arbitrary command, ask confirmation if it already exists and
-    // overwriteprompt is TRUE
+    // overwriteprompt is True
     bool SetCommand(const wxString& cmd, const wxString& verb,
-                    bool overwriteprompt = TRUE);
+                    bool overwriteprompt = True);
 
     bool SetDefaultIcon(const wxString& cmd = wxPyEmptyString, int index = 0);
 
@@ -313,7 +313,7 @@ public:
         // check if the given MIME type is the same as the other one: the
         // second argument may contain wildcards ('*'), but not the first. If
         // the types are equal or if the mimeType matches wildcard the function
-        // returns TRUE, otherwise it returns FALSE
+        // returns True, otherwise it returns False
     static bool IsOfType(const wxString& mimeType, const wxString& wildcard);
 
     // ctor
@@ -342,18 +342,18 @@ public:
     %newobject GetFileTypeFromMimeType;
     wxFileType *GetFileTypeFromMimeType(const wxString& mimeType);
 
-    // other operations: return TRUE if there were no errors or FALSE if there
+    // other operations: return True if there were no errors or False if there
     // were some unreckognized entries (the good entries are always read anyhow)
     //
 
     // read in additional file (the standard ones are read automatically)
     // in mailcap format (see mimetype.cpp for description)
     //
-    // 'fallback' parameter may be set to TRUE to avoid overriding the
+    // 'fallback' parameter may be set to True to avoid overriding the
     // settings from other, previously parsed, files by this one: normally,
     // the files read most recently would override the older files, but with
-    // fallback == TRUE this won't happen
-    bool ReadMailcap(const wxString& filename, bool fallback = FALSE);
+    // fallback == True this won't happen
+    bool ReadMailcap(const wxString& filename, bool fallback = False);
 
     // read in additional file in mime.types format
     bool ReadMimeTypes(const wxString& filename);
@@ -369,7 +369,7 @@ public:
 
     // these functions can be used to provide default values for some of the
     // MIME types inside the program itself (you may also use
-    // ReadMailcap(filenameWithDefaultTypes, TRUE /* use as fallback */) to
+    // ReadMailcap(filenameWithDefaultTypes, True /* use as fallback */) to
     // achieve the same goal, but this requires having this info in a file).
     //
     void AddFallback(const wxFileTypeInfo& ft);

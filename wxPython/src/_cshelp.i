@@ -63,7 +63,7 @@ public:
 
 class wxContextHelp : public wxObject {
 public:
-    wxContextHelp(wxWindow* window = NULL, bool doNow = TRUE);
+    wxContextHelp(wxWindow* window = NULL, bool doNow = True);
     ~wxContextHelp();
 
     bool BeginContextHelp(wxWindow* window = NULL);

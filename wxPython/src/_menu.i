@@ -210,10 +210,10 @@ public:
     wxMenuBar(long style = 0);
 
 
-    // append a menu to the end of menubar, return TRUE if ok
+    // append a menu to the end of menubar, return True if ok
     virtual bool Append(wxMenu *menu, const wxString& title);
 
-    // insert a menu before the given position into the menubar, return TRUE
+    // insert a menu before the given position into the menubar, return True
     // if inserted ok
     virtual bool Insert(size_t pos, wxMenu *menu, const wxString& title);
 
@@ -236,7 +236,7 @@ public:
     virtual void EnableTop(size_t pos, bool enable);
 
     // is the menu enabled?
-    virtual bool IsEnabledTop(size_t WXUNUSED(pos)) const { return TRUE; }
+    virtual bool IsEnabledTop(size_t WXUNUSED(pos)) const { return True; }
 
     // get or change the label of the menu at given position
     virtual void SetLabelTop(size_t pos, const wxString& label);
@@ -277,7 +277,7 @@ public:
     // get the frame we are attached to (may return NULL)
     wxFrame *GetFrame() const;
 
-    // returns TRUE if we're attached to a frame
+    // returns True if we're attached to a frame
     bool IsAttached() const;
 
     // associate the menubar with the frame
@@ -331,10 +331,10 @@ public:
     wxMenu *GetSubMenu() const;
 
     // state
-    virtual void Enable(bool enable = TRUE);
+    virtual void Enable(bool enable = True);
     virtual bool IsEnabled() const;
 
-    virtual void Check(bool check = TRUE);
+    virtual void Check(bool check = True);
     virtual bool IsChecked() const;
     void Toggle();
 
@@ -370,7 +370,7 @@ public:
     bool IsOwnerDrawn();
 
     // switch on/off owner-drawing the item
-    void SetOwnerDrawn(bool ownerDrawn = TRUE);
+    void SetOwnerDrawn(bool ownerDrawn = True);
     void ResetOwnerDrawn();
 #else
     // just to keep the global  renamers in sync

@@ -135,7 +135,7 @@ public:
     ~wxXmlDocument();
 
 
-    // Parses .xml file and loads data. Returns TRUE on success, FALSE
+    // Parses .xml file and loads data. Returns True on success, False
     // otherwise.
     bool Load(const wxString& filename,
               const wxString& encoding = wxPyUTF8String);

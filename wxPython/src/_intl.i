@@ -317,8 +317,8 @@ public:
     %name(Init1)bool Init(const wxString& szName,
                           const wxString& szShort = wxPyEmptyString,
                           const wxString& szLocale = wxPyEmptyString,
-                          bool bLoadDefault = TRUE,
-                          bool bConvertEncoding = FALSE);
+                          bool bLoadDefault = True,
+                          bool bConvertEncoding = False);
 
     %name(Init2) bool Init(int language = wxLANGUAGE_DEFAULT,
                            int flags = wxLOCALE_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING);
@@ -350,7 +350,7 @@ public:
     // is used, the US default value is returned if everything else fails
     // static wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat);
 
-    // return TRUE if the locale was set successfully
+    // return True if the locale was set successfully
     bool IsOk() const;
     %pythoncode { def __nonzero__(self): return self.IsOk() };
 
@@ -381,7 +381,7 @@ public:
     //
     // The loaded catalog will be used for message lookup by GetString().
     //
-    // Returns 'true' if it was successfully loaded
+    // Returns 'True' if it was successfully loaded
     bool AddCatalog(const wxString& szDomain);
 
     // check if the given catalog is loaded
@@ -504,7 +504,7 @@ public:
     //     both modes gurantee that output string will have same length
     //     as input string
     //
-    // Returns FALSE if given conversion is impossible, TRUE otherwise
+    // Returns False if given conversion is impossible, True otherwise
     // (conversion may be impossible either if you try to convert
     // to Unicode with non-Unicode build of wxWindows or if input
     // or output encoding is not supported.)
@@ -564,7 +564,7 @@ public:
     // equivalent encodings, regardless the platform, including itself.
     static wxFontEncodingArray GetAllEquivalents(wxFontEncoding enc);
 
-    // Return true if [any text in] one multibyte encoding can be
+    // Return True if [any text in] one multibyte encoding can be
     // converted to another one losslessly.
     //
     // Do not call this with wxFONTENCODING_UNICODE, it doesn't make

@@ -32,7 +32,7 @@ long wxGetCurrentId();
 void wxBell();
 void wxEndBusyCursor();
 
-long wxGetElapsedTime(bool resetTimer = TRUE);
+long wxGetElapsedTime(bool resetTimer = True);
 void wxGetMousePosition(int* OUTPUT, int* OUTPUT);
 bool wxIsBusy();
 wxString wxNow();
@@ -118,7 +118,7 @@ wxString wxGetTextFromUser(const wxString& message,
                            const wxString& default_value = wxPyEmptyString,
                            wxWindow *parent = NULL,
                            int x = -1, int y = -1,
-                           bool centre = TRUE);
+                           bool centre = True);
 
 wxString wxGetPasswordFromUser(const wxString& message,
                                const wxString& caption = wxPyEmptyString,
@@ -131,21 +131,21 @@ wxString wxGetPasswordFromUser(const wxString& message,
 //                         int LCOUNT, char** choices,
 //                         int nsel, int *selection,
 //                         wxWindow *parent = NULL, int x = -1, int y = -1,
-//                         bool centre = TRUE, int width=150, int height=200);
+//                         bool centre = True, int width=150, int height=200);
 
 
 wxString wxGetSingleChoice(const wxString& message, const wxString& caption,
                            int choices, wxString* choices_array,
                            wxWindow *parent = NULL,
                            int x = -1, int y = -1,
-                           bool centre = TRUE,
+                           bool centre = True,
                            int width=150, int height=200);
 
 int wxGetSingleChoiceIndex(const wxString& message, const wxString& caption,
                            int choices, wxString* choices_array,
                            wxWindow *parent = NULL,
                            int x = -1, int y = -1,
-                           bool centre = TRUE,
+                           bool centre = True,
                            int width=150, int height=200);
 
 
@@ -223,7 +223,7 @@ public:
 #ifdef WXP_WITH_THREAD
         return wxThread::IsMain();
 #else
-        return TRUE;
+        return True;
 #endif
     }
 %}

@@ -64,12 +64,12 @@ public:
 
     // multiple selection logic
     virtual bool IsSelected(int n) const;
-    virtual void SetSelection(int n, bool select = TRUE);
+    virtual void SetSelection(int n, bool select = True);
     virtual void Select(int n);
     void Deselect(int n);
     void DeselectAll(int itemToLeaveSelected = -1);
 
-    virtual bool SetStringSelection(const wxString& s, bool select = TRUE);
+    virtual bool SetStringSelection(const wxString& s, bool select = True);
 
     // works for single as well as multiple selection listboxes (unlike
     // GetSelection which only works for listboxes with single selection)
@@ -99,7 +99,7 @@ public:
     // listbox and ensures that it is visible i.e. not scrolled out of view
     void AppendAndEnsureVisible(const wxString& s);
 
-    // return TRUE if this listbox is sorted
+    // return True if this listbox is sorted
     bool IsSorted() const;
 };
 
@@ -133,7 +133,7 @@ public:
                    const wxString& name = wxPyListBoxNameStr);
 
     bool  IsChecked(int index);
-    void  Check(int index, int check = TRUE);
+    void  Check(int index, int check = True);
 
 #ifndef __WXMAC__
     int GetItemHeight();
