@@ -493,6 +493,12 @@ GdkFont *GtkGetDefaultGuiFont()
         }
         gtk_widget_destroy( widget );
     }
+    else
+    {
+        // already have it, but ref it once more before returning
+        gdk_font_ref(g_systemDefaultGuiFont);
+    }
+
     return g_systemDefaultGuiFont;
 }
 
