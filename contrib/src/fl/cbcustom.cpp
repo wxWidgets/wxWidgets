@@ -121,8 +121,11 @@ void cbSimpleCustomizationPlugin::OnCustomizeLayout( cbCustomizeLayoutEvent& eve
 		++id;
 	}
 
+    // Customization dialog not implemented, so don't show the menu item
+#if 0
 	pMenu->AppendSeparator();
 	pMenu->Append( id, "Customize...", "Show layout customization dialog", FALSE );
+#endif    
 	mCustMenuItemId = id;
 
 	cbContextMenuHandler* pHandler = new cbContextMenuHandler();
