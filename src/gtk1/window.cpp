@@ -1174,9 +1174,37 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
     if ( !ret &&
          (gdk_event->keyval == GDK_Escape) )
     {
-        wxCommandEvent new_event(wxEVT_COMMAND_BUTTON_CLICKED,wxID_CANCEL);
-        new_event.SetEventObject( win );
-        ret = win->GetEventHandler()->ProcessEvent( new_event );
+        // however only do it if we have a Cancel button in the dialog,
+        // otherwise the user code may get confused by the events from a
+        // non-existing button and, worse, a wxButton might get button event
+        // from another button which is not really expected
+        wxWindow *winForCancel = win,
+                 *btnCancel = NULL;
+        while ( winForCancel )
+        {
+            btnCancel = winForCancel->FindWindow(wxID_CANCEL);
+            if ( btnCancel )
+            {
+                // found a cancel button
+                break;
+            }
+
+            if ( winForCancel->IsTopLevel() )
+            {
+                // no need to look further
+                break;
+            }
+
+            // maybe our parent has a cancel button?
+            winForCancel = winForCancel->GetParent();
+        }
+
+        if ( btnCancel )
+        {
+            wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
+            event.SetEventObject(btnCancel);
+            ret = btnCancel->GetEventHandler()->ProcessEvent(event);
+        }
     }
 
     // Doesn't work.
