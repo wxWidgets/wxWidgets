@@ -1592,6 +1592,8 @@ class wxGrid : public wxScrolledWindow
 {
 public:
     %pythonAppend wxGrid "self._setOORInfo(self)"
+    %pythonAppend wxGrid() ""
+    
     %typemap(out) wxGrid*;    // turn off this typemap
 
     wxGrid( wxWindow *parent,
