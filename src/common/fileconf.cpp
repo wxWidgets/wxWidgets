@@ -230,12 +230,13 @@ wxString wxFileConfig::GetLocalDir()
 #ifndef __WXMAC__
   wxGetHomeDir(&strDir);
 
-#ifndef __VMS__
-# ifdef  __UNIX__
-  if (strDir.Last() != wxT('/')) strDir << wxT('/');
+#ifdef  __UNIX__
+#ifdef __VMS
+   if (strDir.Last() != wxT(']'))
+#endif
+   if (strDir.Last() != wxT('/')) strDir << wxT('/');
 #else
   if (strDir.Last() != wxT('\\')) strDir << wxT('\\');
-#endif
 #endif
 #else
 	// no local dir concept on mac
@@ -267,12 +268,12 @@ wxString wxFileConfig::GetLocalFileName(const wxChar *szFile)
 #ifdef __VMS__ // On VMS I saw the problem that the home directory was appended
    // twice for the configuration file. Does that also happen for other
    // platforms?
-   wxString str = wxT( ' ' ); 
+   wxString str = wxT( '.' ); 
 #else
    wxString str = GetLocalDir();
 #endif
    
-  #ifdef  __UNIX__
+  #if defined( __UNIX__ ) && !defined( __VMS )
     str << wxT('.');
   #endif
 
