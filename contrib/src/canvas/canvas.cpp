@@ -90,6 +90,33 @@ void wxCanvasImage::WriteSVG( wxTextOutputStream &stream )
 }
 
 //----------------------------------------------------------------------------
+// wxCanvasCtrl
+//----------------------------------------------------------------------------
+
+wxCanvasControl::wxCanvasControl( wxWindow *control )
+   : wxCanvasObject( -1, -1, -1, -1 )
+{
+    m_control = control;
+    UpdateSize();
+}
+
+wxCanvasControl::~wxCanvasControl()
+{
+    m_control->Destroy();
+}
+
+void wxCanvasControl::Move( int x, int y )
+{
+    m_control->Move( x, y );
+}
+
+void wxCanvasControl::UpdateSize()
+{
+    m_control->GetSize( &m_area.width, &m_area.height );
+    m_control->GetPosition( &m_area.x, &m_area.y );
+}
+
+//----------------------------------------------------------------------------
 // wxCanvas
 //----------------------------------------------------------------------------
 
@@ -153,7 +180,7 @@ void wxCanvas::Update( int x, int y, int width, int height )
         ww = obj->GetWidth();
         hh = obj->GetHeight();
             
-        // if intersect
+        if (!obj->IsControl())
         {
             obj->Render( x, y, width, height );
         }
@@ -162,13 +189,8 @@ void wxCanvas::Update( int x, int y, int width, int height )
     }
 }
 
-void wxCanvas::UpdateNow()
+void wxCanvas::BlitBuffer( wxDC &dc )
 {
-    if (!m_needUpdate) return;
-    
-    wxClientDC dc( this );
-    PrepareDC( dc );
-    
     wxNode *node = m_updateRects.First();
     while (node)
     {
@@ -218,6 +240,18 @@ void wxCanvas::UpdateNow()
         m_updateRects.DeleteNode( node );
         node = m_updateRects.First();
     }
+    
+    m_needUpdate = FALSE;
+}
+
+void wxCanvas::UpdateNow()
+{
+    if (!m_needUpdate) return;
+    
+    wxClientDC dc( this );
+    PrepareDC( dc );
+    
+    BlitBuffer( dc );
 }
 
 void wxCanvas::Prepend( wxCanvasObject* obj )
@@ -266,9 +300,8 @@ void wxCanvas::Remove( wxCanvasObject* obj )
 
 void wxCanvas::OnPaint(wxPaintEvent &event)
 {
-#ifdef __WXMSW__
     wxPaintDC dc(this);
-#endif
+    PrepareDC( dc );
     
     m_needUpdate = TRUE;
 
@@ -290,6 +323,8 @@ void wxCanvas::OnPaint(wxPaintEvent &event)
         
         it++;
     }
+    
+    BlitBuffer( dc );
 }
 
 void wxCanvas::OnMouse(wxMouseEvent &event)

@@ -75,6 +75,23 @@ private:
 };
 
 //----------------------------------------------------------------------------
+// wxCanvasControl
+//----------------------------------------------------------------------------
+
+class wxCanvasControl: public wxCanvasObject
+{
+public:
+    wxCanvasControl( wxWindow *control );
+    ~wxCanvasControl();
+    
+    virtual void Move( int x, int y );
+    void UpdateSize();
+    
+private:
+    wxWindow     *m_control;
+};
+
+//----------------------------------------------------------------------------
 // wxCanvas
 //----------------------------------------------------------------------------
 
@@ -99,6 +116,8 @@ public:
     
     wxImage *GetBuffer()         { return &m_buffer; }
     bool NeedUpdate()            { return m_needUpdate; }
+    
+    void BlitBuffer( wxDC &dc );
     
 private:
     wxImage     m_buffer;

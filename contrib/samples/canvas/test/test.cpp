@@ -106,6 +106,9 @@ MyFrame::MyFrame()
   
   m_canvas->Append( new wxCanvasImage( image, 80, 50 ) );
   
+  wxButton *button = new wxButton( m_canvas, -1, "Hello", wxPoint(130,50) );
+  m_canvas->Append( new wxCanvasControl( button ) );
+  
   m_timer = new wxTimer( this );
   m_timer->Start( 150, FALSE );
 }
