@@ -185,6 +185,15 @@ public:
     // permanently writes all changes
   virtual bool Flush(bool bCurrentOnly = FALSE) = 0;
 
+  // renaming, all functions return FALSE on failure (probably because the new
+  // name is already taken by an existing entry)
+    // rename an entry
+  virtual bool RenameEntry(const wxString& oldName,
+                           const wxString& newName) = 0;
+    // rename a group
+  virtual bool RenameGroup(const wxString& oldName,
+                           const wxString& newName) = 0;
+
   // delete entries/groups
     // deletes the specified entry and the group it belongs to if
     // it was the last key in it and the second parameter is true

@@ -85,6 +85,10 @@ public:
 
   virtual bool Flush(bool /* bCurrentOnly = FALSE */ ) { return TRUE; }
 
+  // rename
+  virtual bool RenameEntry(const wxString& oldName, const wxString& newName);
+  virtual bool RenameGroup(const wxString& oldName, const wxString& newName);
+
   // delete
   virtual bool DeleteEntry(const wxString& key, bool bGroupIfEmptyAlso);
   virtual bool DeleteGroup(const wxString& key);

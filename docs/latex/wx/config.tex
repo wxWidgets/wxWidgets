@@ -257,6 +257,17 @@ arbitrary path (either relative or absolute), not just the key name.
 \helpref{Write}{wxconfigbasewrite}\\
 \helpref{Flush}{wxconfigbaseflush}
 
+\membersection{Rename entries/groups}
+
+The functions in this section allow to rename entries or subgroups of the
+current group. They will return FALSE on error. typically because either the
+entry/group with the original name doesn't exist, because the entry/group with
+the new name already exists or because the function is not supported in this
+wxConfig implementation.
+
+\helpref{RenameEntry}{wxconfigbaserenameentry}\\
+\helpref{RenameGroup}{wxconfigbaserenamegroup}
+
 \membersection{Delete entries/groups}
 
 The functions in this section delete entries and/or groups of entries from the
@@ -560,6 +571,28 @@ not found, {\it b} is not changed.
 
 Reads a bool value, returning TRUE if the value was found. If the value was
 not found, {\it defaultVal} is used instead.
+
+\membersection{wxConfigBase::RenameEntry}\label{wxconfigbaserenameentry}
+
+\func{bool}{RenameEntry}{\param{const wxString\& }{ oldName}, \param{const wxString\& }{ newName}}
+
+Renames an entry in the current group. The entries names (both the old and
+the new one) shouldn't contain backslashes, i.e. only simple names and not
+arbitrary paths are accepted by this function.
+
+Returns FALSE if the {\it oldName} doesn't exist or if {\it newName} already
+exists.
+
+\membersection{wxConfigBase::RenameGroup}\label{wxconfigbaserenamegroup}
+
+\func{bool}{RenameGroup}{\param{const wxString\& }{ oldName}, \param{const wxString\& }{ newName}}
+
+Renames a subgroup of the current group. The subgroup names (both the old and
+the new one) shouldn't contain backslashes, i.e. only simple names and not
+arbitrary paths are accepted by this function.
+
+Returns FALSE if the {\it oldName} doesn't exist or if {\it newName} already
+exists.
 
 \membersection{wxConfigBase::Set}\label{wxconfigbaseset}
 

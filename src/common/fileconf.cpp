@@ -73,10 +73,8 @@
 inline bool IsValid(char c) { return isalnum(c) || strchr("@_/-!.*%", c); }
 
 // compare functions for sorting the arrays
-static int CompareEntries(ConfigEntry *p1,
-                          ConfigEntry *p2);
-static int CompareGroups(ConfigGroup *p1,
-                         ConfigGroup *p2);
+static int CompareEntries(ConfigEntry *p1, ConfigEntry *p2);
+static int CompareGroups(ConfigGroup *p1, ConfigGroup *p2);
 
 // filter strings
 static wxString FilterIn(const wxString& str);
@@ -655,6 +653,50 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
 }
 
 // ----------------------------------------------------------------------------
+// renaming groups/entries
+// ----------------------------------------------------------------------------
+
+bool wxFileConfig::RenameEntry(const wxString& oldName,
+                               const wxString& newName)
+{
+    // check that the entry exists
+    ConfigEntry *oldEntry = m_pCurrentGroup->FindEntry(oldName);
+    if ( !oldEntry )
+        return FALSE;
+
+    // check that the new entry doesn't already exist
+    if ( m_pCurrentGroup->FindEntry(newName) )
+        return FALSE;
+
+    // delete the old entry, create the new one
+    wxString value = oldEntry->Value();
+    if ( !m_pCurrentGroup->DeleteEntry(oldName) )
+        return FALSE;
+
+    ConfigEntry *newEntry = m_pCurrentGroup->AddEntry(newName);
+    newEntry->SetValue(value);
+
+    return TRUE;
+}
+
+bool wxFileConfig::RenameGroup(const wxString& oldName,
+                               const wxString& newName)
+{
+    // check that the group exists
+    ConfigGroup *group = m_pCurrentGroup->FindSubgroup(oldName);
+    if ( !group )
+        return FALSE;
+
+    // check that the new group doesn't already exist
+    if ( m_pCurrentGroup->FindSubgroup(newName) )
+        return FALSE;
+
+    group->Rename(newName);
+
+    return TRUE;
+}
+
+// ----------------------------------------------------------------------------
 // delete groups/entries
 // ----------------------------------------------------------------------------
 
@@ -852,7 +894,7 @@ void ConfigGroup::SetLine(LineList *pLine)
       backwards in the config file (OTOH, it's not that important) and as we
       would still need to do it for the subgroups the code wouldn't have been
       significantly less complicated.
- */
+*/
 
 // Return the line which contains "[our name]". If we're still not in the list,
 // add our line to it immediately after the last line of our parent group if we
@@ -916,6 +958,18 @@ LineList *ConfigGroup::GetLastEntryLine()
 // ----------------------------------------------------------------------------
 // group name
 // ----------------------------------------------------------------------------
+
+void ConfigGroup::Rename(const wxString& newName)
+{
+    m_strName = newName;
+
+    LineList *line = GetGroupLine();
+    wxString strFullName;
+    strFullName << "[" << (GetFullName().c_str() + 1) << "]"; // +1: no '/'
+    line->SetText(strFullName);
+
+    SetDirty();
+}
 
 wxString ConfigGroup::GetFullName() const
 {
