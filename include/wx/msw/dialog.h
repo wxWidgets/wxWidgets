@@ -35,6 +35,8 @@ public:
              long style = wxDEFAULT_DIALOG_STYLE,
              const wxString& name = wxDialogNameStr)
     {
+        Init();
+
         long modalStyle = modal ? wxDIALOG_MODAL : wxDIALOG_MODELESS ;
         Create(parent, -1, title, wxPoint(x, y), wxSize(width, height),
                style | modalStyle, name);
@@ -48,7 +50,9 @@ public:
              long style = wxDEFAULT_DIALOG_STYLE,
              const wxString& name = wxDialogNameStr)
     {
-        Create(parent, id, title, pos, size, style, name);
+        Init();
+
+        (void)Create(parent, id, title, pos, size, style, name);
     }
 
     bool Create(wxWindow *parent, wxWindowID id,

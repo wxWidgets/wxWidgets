@@ -173,8 +173,6 @@ void wxDialog::Init()
     m_isShown = FALSE;
     m_modalData = NULL;
     m_endModalCalled = FALSE;
-    
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 }
 
 bool wxDialog::Create(wxWindow *parent,
@@ -185,8 +183,6 @@ bool wxDialog::Create(wxWindow *parent,
                       long style,
                       const wxString& name)
 {
-    Init();
-
     SetExtraStyle(GetExtraStyle() | wxTOPLEVEL_EX_DIALOG);
 
     // save focus before doing anything which can potentially change it
@@ -197,8 +193,11 @@ bool wxDialog::Create(wxWindow *parent,
 
     if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name) )
         return FALSE;
-    if (!m_hasFont)
+
+    if ( !m_hasFont )
         SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
+
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 
     return TRUE;
 }
