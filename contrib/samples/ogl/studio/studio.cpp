@@ -21,8 +21,8 @@
 #include "wx/mdi.h"
 #endif
 
-#include <wx/deprecated/setup.h>
-#include <wx/deprecated/resource.h>
+#include <wx/ogl/ogl.h> // base header of OGL, includes and adjusts wx/deprecated/setup.h
+
 #include "wx/config.h"
 #include "wx/laywin.h"
 
@@ -92,11 +92,13 @@ csApp::~csApp()
 // Initialise this in OnInit, not statically
 bool csApp::OnInit(void)
 {
+#if wxUSE_WX_RESOURCES
   if (!wxResourceParseFile(_T("studio_resources.wxr")))
   {
     wxMessageBox(_T("Could not find or parse resource file: studio_resources.wxr"), _T("Studio"));
     return false;
   }
+#endif
 
 #if wxUSE_MS_HTML_HELP && !defined(__WXUNIVERSAL__)
   m_helpController = new wxWinHelpController;
@@ -224,7 +226,7 @@ int csApp::OnExit(void)
  * Centralised code for creating a document frame.
  * Called from view.cpp, when a view is created.
  */
- 
+
 wxMDIChildFrame *csApp::CreateChildFrame(wxDocument *doc, wxView *view, wxMenu** editMenuRet)
 {
   //// Make a child frame

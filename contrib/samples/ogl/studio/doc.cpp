@@ -53,6 +53,7 @@ bool csDiagramDocument::OnCloseDocument()
   return true;
 }
 
+#if wxUSE_PROLOGIO
 bool csDiagramDocument::OnSaveDocument(const wxString& file)
 {
   if (file == wxEmptyString)
@@ -97,9 +98,10 @@ bool csDiagramDocument::OnOpenDocument(const wxString& file)
   SetFilename(file, true);
   Modify(false);
   UpdateAllViews();
-  
+
   return true;
 }
+#endif // wxUSE_PROLOGIO
 
 
 /*
@@ -268,7 +270,7 @@ bool csCommandState::Do()
         ((csDiagramView*) m_doc->GetFirstView())->SelectShape(m_shapeOnCanvas, false);
 
         m_shapeOnCanvas->Unlink();
-        
+
         m_doc->GetDiagram()->RemoveShape(m_shapeOnCanvas);
 
         m_savedState = m_shapeOnCanvas;
@@ -347,7 +349,7 @@ bool csCommandState::Do()
 
         lineShape->GetFrom()->AddLine(lineShape, lineShape->GetTo(),
             lineShape->GetAttachmentFrom(), lineShape->GetAttachmentTo());
-      
+
         lineShape->Show(true);
 
         wxClientDC dc(lineShape->GetCanvas());
@@ -475,7 +477,7 @@ bool csCommandState::Do()
 
         if (isSelected)
             m_shapeOnCanvas->Select(true, & dc);
-        
+
         m_doc->Modify(true);
         m_doc->UpdateAllViews();
 

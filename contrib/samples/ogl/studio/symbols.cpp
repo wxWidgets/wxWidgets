@@ -24,8 +24,7 @@
 #include <wx/wx.h>
 #endif
 
-#include <wx/deprecated/setup.h>
-#include <wx/deprecated/wxexpr.h>
+#include <wx/ogl/ogl.h> // base header of OGL, includes and adjusts wx/deprecated/setup.h
 
 #include "studio.h"
 #include "doc.h"
@@ -189,7 +188,7 @@ wxBitmap* csSymbolDatabase::CreateToolBitmap(csSymbol* symbol, const wxSize& too
     memDC.SelectObject(wxNullBitmap);
 #endif
 
-#if 1       
+#if 1
     wxMemoryDC memDC;
 
     double height, width, maxSize;

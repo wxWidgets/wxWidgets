@@ -80,9 +80,11 @@ void csFrame::OnHelp(wxCommandEvent& WXUNUSED(event))
 
 void csFrame::OnSettings(wxCommandEvent& WXUNUSED(event))
 {
+#if wxUSE_WX_RESOURCES
     csSettingsDialog* dialog = new csSettingsDialog(this);
     /* int ret = */ dialog->ShowModal();
     dialog->Destroy();
+#endif // wxUSE_WX_RESOURCES
 }
 
 void csFrame::OnQuit(wxCommandEvent& WXUNUSED(event))

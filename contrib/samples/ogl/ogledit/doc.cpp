@@ -194,7 +194,7 @@ bool DiagramCommand::Do(void)
 {
   switch (cmd)
   {
-    case OGLEDIT_CUT:
+    case wxID_CUT:
     {
       if (shape)
       {
@@ -340,7 +340,7 @@ bool DiagramCommand::Undo(void)
 {
   switch (cmd)
   {
-    case OGLEDIT_CUT:
+    case wxID_CUT:
     {
       if (shape)
       {
@@ -428,7 +428,7 @@ void DiagramCommand::RemoveLines(wxShape *shape)
   while (node)
   {
     wxLineShape *line = (wxLineShape *)node->GetData();
-    doc->GetCommandProcessor()->Submit(new DiagramCommand(_T("Cut"), OGLEDIT_CUT, doc, NULL, 0.0, 0.0, line->Selected(), line));
+    doc->GetCommandProcessor()->Submit(new DiagramCommand(_T("Cut"), wxID_CUT, doc, NULL, 0.0, 0.0, line->Selected(), line));
 
     node = shape->GetLines().GetFirst();
   }

@@ -24,13 +24,13 @@
 #include <wx/wx.h>
 #endif
 
-#include <wx/deprecated/setup.h>
-#include <wx/deprecated/resource.h>
 #include "dialogs.h"
 #include "doc.h"
 #include "view.h"
 #include "studio.h"
 #include "studio_resources.h"
+
+#if wxUSE_WX_RESOURCES
 
 IMPLEMENT_CLASS(csLabelEditingDialog, wxDialog)
 
@@ -101,7 +101,7 @@ csSettingsDialog::csSettingsDialog(wxWindow* parent):
     m_generalSettings = new wxPanel;
 
     #ifdef  __WXDEBUG__
-    bool success = 
+    bool success =
     #endif
                    wxLoadFromResource(m_generalSettings, m_notebook, _T("general_settings_dialog"));
     wxASSERT_MSG( (success), _T("Could not load general settings panel."));
@@ -110,7 +110,7 @@ csSettingsDialog::csSettingsDialog(wxWindow* parent):
     m_diagramSettings = new wxPanel;
 
     #ifdef  __WXDEBUG__
-    success = 
+    success =
     #endif
               wxLoadFromResource(m_diagramSettings, m_notebook, _T("diagram_settings_dialog"));
     wxASSERT_MSG( (success), _T("Could not load diagram settings panel."));
@@ -257,7 +257,7 @@ END_EVENT_TABLE()
 // For 400x400 settings dialog, size your panels to about 375x325 in dialog editor
 
 csShapePropertiesDialog::csShapePropertiesDialog(wxWindow* parent, const wxString& title,
-  wxPanel* attributeDialog, const wxString& attributeDialogName):
+    wxPanel* attributeDialog, const wxString& attributeDialogName):
     wxDialog(parent, wxID_ANY, title, wxPoint(0, 0), wxSize(SHAPE_PROPERTY_DIALOG_WIDTH, SHAPE_PROPERTY_DIALOG_HEIGHT))
 {
     m_attributeDialog = attributeDialog;
@@ -269,7 +269,7 @@ csShapePropertiesDialog::csShapePropertiesDialog(wxWindow* parent, const wxStrin
 
     m_generalPropertiesDialog = new csGeneralShapePropertiesDialog;
     #ifdef  __WXDEBUG__
-    bool success = 
+    bool success =
     #endif
                    wxLoadFromResource(m_generalPropertiesDialog, m_notebook, _T("general_shape_properties_dialog"));
     wxASSERT_MSG( (success), _T("Could not load general properties panel."));
@@ -415,6 +415,8 @@ void csGeneralShapePropertiesDialog::SetShapeLabel(const wxString& label)
 
     textCtrl->SetValue(label);
 }
+
+#endif // wxUSE_WX_RESOURCES
 
 /*
  * csThinRectangleDialog

@@ -52,7 +52,7 @@ MyApp::MyApp(void)
 bool MyApp::OnInit(void)
 {
   wxOGLInitialize();
-  
+
   //// Create a document manager
   myDocManager = new wxDocManager;
 
@@ -88,13 +88,13 @@ bool MyApp::OnInit(void)
   edit_menu->Append(wxID_UNDO, _T("&Undo"));
   edit_menu->Append(wxID_REDO, _T("&Redo"));
   edit_menu->AppendSeparator();
-  edit_menu->Append(OGLEDIT_CUT, _T("&Cut"));
+  edit_menu->Append(wxID_CUT, _T("&Cut"));
   edit_menu->AppendSeparator();
   edit_menu->Append(OGLEDIT_CHANGE_BACKGROUND_COLOUR, _T("Change &background colour"));
   edit_menu->Append(OGLEDIT_EDIT_LABEL, _T("Edit &label"));
 
   frame->editMenu = edit_menu;
-  
+
   file_menu->AppendSeparator();
   file_menu->Append(wxID_EXIT, _T("E&xit"));
 
@@ -170,7 +170,7 @@ void MyFrame::OnSize(wxSizeEvent& event)
     int canvasY = 0;
     int canvasW = cw - paletteW;
     int canvasH = ch;
-    
+
     palette->SetSize(paletteX, paletteY, paletteW, paletteH);
     canvas->SetSize(canvasX, canvasY, canvasW, canvasH);
   }

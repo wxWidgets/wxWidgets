@@ -38,7 +38,7 @@
 IMPLEMENT_DYNAMIC_CLASS(DiagramView, wxView)
 
 BEGIN_EVENT_TABLE(DiagramView, wxView)
-    EVT_MENU(OGLEDIT_CUT, DiagramView::OnCut)
+    EVT_MENU(wxID_CUT, DiagramView::OnCut)
     EVT_MENU(OGLEDIT_CHANGE_BACKGROUND_COLOUR, DiagramView::OnChangeBackgroundColour)
     EVT_MENU(OGLEDIT_EDIT_LABEL, DiagramView::OnEditLabel)
 END_EVENT_TABLE()
@@ -195,7 +195,7 @@ void DiagramView::OnCut(wxCommandEvent& WXUNUSED(event))
 
   wxShape *theShape = FindSelectedShape();
   if (theShape)
-    doc->GetCommandProcessor()->Submit(new DiagramCommand(_T("Cut"), OGLEDIT_CUT, doc, NULL, 0.0, 0.0, true, theShape));
+    doc->GetCommandProcessor()->Submit(new DiagramCommand(_T("Cut"), wxID_CUT, doc, NULL, 0.0, 0.0, true, theShape));
 }
 
 void DiagramView::OnChangeBackgroundColour(wxCommandEvent& WXUNUSED(event))

@@ -24,8 +24,7 @@
 #include <wx/wx.h>
 #endif
 
-#include <wx/deprecated/setup.h>
-#include <wx/deprecated/wxexpr.h>
+#include <wx/ogl/ogl.h> // base header of OGL, includes and adjusts wx/deprecated/setup.h
 
 #include <wx/clipbrd.h>
 
@@ -190,7 +189,7 @@ bool wxDiagramClipboard::CopyToClipboard(double scale)
     if (!newBitmap->Ok())
     {
       delete newBitmap;
-      
+
       wxChar buf[200];
       wxSprintf(buf, _T("Sorry, could not allocate clipboard bitmap (%dx%d)"), (maxX+10), (maxY+10));
       wxMessageBox(buf, _T("Clipboard copy problem"));
@@ -226,7 +225,7 @@ bool wxDiagramClipboard::CopyToClipboard(double scale)
         // Close clipboard
         wxCloseClipboard();
     }
-    
+
     delete newBitmap;
     delete mf;
 

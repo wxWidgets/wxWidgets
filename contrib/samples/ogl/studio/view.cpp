@@ -877,6 +877,9 @@ void csCanvas::OnLeftClick(double x, double y, int WXUNUSED(keys))
 
     if (palette->GetSelection() == PALETTE_TEXT_TOOL)
     {
+        wxString newLabel;
+
+#if wxUSE_WX_RESOURCES
         // Ask for a label and create a new free-floating text region
         csLabelEditingDialog* dialog = new csLabelEditingDialog(GetParent());
 
@@ -888,8 +891,9 @@ void csCanvas::OnLeftClick(double x, double y, int WXUNUSED(keys))
             return;
         }
 
-        wxString newLabel = dialog->GetShapeLabel();
+        newLabel = dialog->GetShapeLabel();
         dialog->Destroy();
+#endif // wxUSE_WX_RESOURCES
 
         wxShape* shape = new csTextBoxShape;
         shape->AssignNewIds();

@@ -18,10 +18,7 @@
 
 #include <wx/docview.h>
 #include <wx/string.h>
-#include <wx/deprecated/setup.h>
-#include <wx/deprecated/wxexpr.h>
-
-#include <wx/ogl/ogl.h>
+#include <wx/ogl/ogl.h> // base header of OGL, includes and adjusts wx/deprecated/setup.h
 #include <wx/ogl/basicp.h>
 #include <wx/ogl/linesp.h>
 #include <wx/ogl/drawn.h>
@@ -31,15 +28,17 @@ class csDiagramDocument;
 /*
  * Override a few members for this application
  */
- 
+
 class csDiagram: public wxDiagram
 {
 DECLARE_CLASS(csDiagram)
 public:
     csDiagram(csDiagramDocument* doc) { m_doc = doc; }
     ~csDiagram();
+#if wxUSE_PROLOGIO
     bool OnShapeSave(wxExprDatabase& db, wxShape& shape, wxExpr& expr);
     bool OnShapeLoad(wxExprDatabase& db, wxShape& shape, wxExpr& expr);
+#endif // wxUSE_PROLOGIO
 
     inline csDiagramDocument* GetDocument() const { return m_doc; }
     virtual void Redraw(wxDC& dc);
@@ -206,7 +205,7 @@ public:
 /*
  * Temporary arc label object
  */
- 
+
 class csLabelShape: public wxLabelShape
 {
   DECLARE_DYNAMIC_CLASS(csLabelShape)

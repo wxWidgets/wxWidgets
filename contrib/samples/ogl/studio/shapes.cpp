@@ -28,15 +28,12 @@
 #error You must set wxUSE_DOC_VIEW_ARCHITECTURE to 1 in wx_setup.h!
 #endif
 
-#include <wx/deprecated/setup.h>
-#include <wx/deprecated/wxexpr.h>
+#include <wx/ogl/ogl.h> // base header of OGL, includes and adjusts wx/deprecated/setup.h
 
 #include "studio.h"
 #include "doc.h"
 #include "shapes.h"
 #include "view.h"
-#include <wx/ogl/basicp.h>
-#include <wx/ogl/linesp.h>
 #include "cspalette.h"
 #include "dialogs.h"
 
@@ -682,6 +679,9 @@ bool csEvtHandler::EditProperties()
         return false;
     }
 
+    wxString newLabel(m_label);
+
+#if wxUSE_WX_RESOURCES
     csShapePropertiesDialog* dialog = new csShapePropertiesDialog(shape->GetCanvas()->GetParent(), title, attributeDialog, attributeDialogName);
     dialog->GetGeneralPropertiesDialog()->SetShapeLabel(m_label);
     if (dialog->ShowModal() == wxID_CANCEL)
@@ -690,8 +690,11 @@ bool csEvtHandler::EditProperties()
         return false;
     }
 
-    wxString newLabel = dialog->GetGeneralPropertiesDialog()->GetShapeLabel();
+    newLabel = dialog->GetGeneralPropertiesDialog()->GetShapeLabel();
     dialog->Destroy();
+#else
+    wxUnusedVar(attributeDialog);
+#endif // wxUSE_WX_RESOURCES
 
     wxShape* newShape = shape->CreateNewCopy();
 
@@ -708,6 +711,7 @@ bool csEvtHandler::EditProperties()
  * Diagram
  */
 
+#if wxUSE_PROLOGIO
 bool csDiagram::OnShapeSave(wxExprDatabase& db, wxShape& shape, wxExpr& expr)
 {
   wxDiagram::OnShapeSave(db, shape, expr);
@@ -726,6 +730,7 @@ bool csDiagram::OnShapeLoad(wxExprDatabase& db, wxShape& shape, wxExpr& expr)
 
   return true;
 }
+#endif // wxUSE_PROLOGIO
 
 IMPLEMENT_DYNAMIC_CLASS(csThinRectangleShape, wxDrawnShape)
 
