@@ -131,6 +131,7 @@ wxBase:
 - fixed the bug related to the redrawing on resize introduced in 2.3.2
 - added static wxFontMapper::Get() accessor (use of wxTheFontMapper is now
   deprecated)
+- added wxShutdown() function (Marco Cavallini)
 
 Unix (Base/GUI):
 

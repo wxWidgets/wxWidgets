@@ -290,6 +290,29 @@ bool wxShell(const wxString& command, wxArrayString& output)
     return wxExecute(wxMakeShellCommand(command), output);
 }
 
+// Shutdown or reboot the PC
+bool wxShutdown(wxShutdownFlags wFlags)
+{
+    wxChar level;
+    switch ( wFlags )
+    {
+        case wxSHUTDOWN_POWEROFF:
+            level = _T('0');
+            break;
+
+        case wxSHUTDOWN_REBOOT:
+            level = _T('6');
+            break;
+
+        default:
+            wxFAIL_MSG( _T("unknown wxShutdown() flag") );
+            return FALSE;
+    }
+
+    return system(wxString::Format(_T("init %c"), level).mb_str()) == 0;
+}
+
+
 #if wxUSE_GUI
 
 void wxHandleProcessTermination(wxEndProcessData *proc_data)

@@ -845,7 +845,7 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc)
             return 0;
         }
     }
-#else // Win15
+#else // Win16
     wxFAIL_MSG( _T("not implemented") );
 #endif // Win32/Win16
 
@@ -873,6 +873,66 @@ bool wxShell(const wxString& command)
     }
 
     return wxExecute(cmd, TRUE /* sync */) != 0;
+}
+
+// Shutdown or reboot the PC 
+bool wxShutdown(wxShutdownFlags wFlags)
+{
+#ifdef __WIN32__
+    bool bOK = TRUE;
+
+    if ( wxGetOsVersion(NULL, NULL) == wxWINDOWS_NT ) // if is NT or 2K
+    {
+        // Get a token for this process. 
+        HANDLE hToken; 
+        bOK = ::OpenProcessToken(GetCurrentProcess(),
+                                 TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
+                                 &hToken) != 0;
+        if ( bOK )
+        {
+            TOKEN_PRIVILEGES tkp; 
+
+            // Get the LUID for the shutdown privilege. 
+            ::LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME,
+                                   &tkp.Privileges[0].Luid); 
+
+            tkp.PrivilegeCount = 1;  // one privilege to set    
+            tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED; 
+
+            // Get the shutdown privilege for this process. 
+            ::AdjustTokenPrivileges(hToken, FALSE, &tkp, 0,
+                                    (PTOKEN_PRIVILEGES)NULL, 0); 
+
+            // Cannot test the return value of AdjustTokenPrivileges. 
+            bOK = ::GetLastError() == ERROR_SUCCESS;
+        }
+    }
+
+    if ( bOK )
+    {
+        UINT flags = EWX_SHUTDOWN | EWX_FORCE;
+        switch ( wFlags )
+        {
+            case wxSHUTDOWN_POWEROFF:
+                flags |= EWX_POWEROFF;
+                break;
+
+            case wxSHUTDOWN_REBOOT:
+                flags |= EWX_REBOOT;
+                break;
+
+            default:
+                wxFAIL_MSG( _T("unknown wxShutdown() flag") );
+                return FALSE;
+        }
+
+        bOK = ::ExitWindowsEx(EWX_SHUTDOWN | EWX_FORCE | EWX_REBOOT, 0) != 0; 
+    }
+
+    return bOK;
+#else // Win16
+    return FALSE;
+#endif // Win32/16
 }
 
 // ----------------------------------------------------------------------------
@@ -1106,12 +1166,12 @@ void wxDebugMsg(const wxChar *fmt ...)
   static wxChar buffer[512];
 
   if (!wxTheApp->GetWantDebugOutput())
-    return ;
+    return;
 
   va_start(ap, fmt);
 
-  wvsprintf(buffer,fmt,ap) ;
-  OutputDebugString((LPCTSTR)buffer) ;
+  wvsprintf(buffer,fmt,ap);
+  OutputDebugString((LPCTSTR)buffer);
 
   va_end(ap);
 }

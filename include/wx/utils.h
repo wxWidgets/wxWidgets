@@ -220,6 +220,15 @@ enum wxKillError
     wxKILL_ERROR            // another, unspecified error
 };
 
+enum wxShutdownFlags
+{
+    wxSHUTDOWN_POWEROFF,    // power off the computer
+    wxSHUTDOWN_REBOOT       // shutdown and reboot
+};
+
+// Shutdown or reboot the PC 
+WXDLLEXPORT bool wxShutdown(wxShutdownFlags wFlags);
+
 // send the given signal to the process (only NONE and KILL are supported under
 // Windows, all others mean TERM), return 0 if ok and -1 on error
 //

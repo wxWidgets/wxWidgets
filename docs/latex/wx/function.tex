@@ -196,6 +196,7 @@ the corresponding topic.
 \helpref{wxSetWorkingDirectory}{wxsetworkingdirectory}\\
 \helpref{wxShell}{wxshell}\\
 \helpref{wxShowTip}{wxshowtip}\\
+\helpref{wxShutdown}{wxshutdown}\\
 \helpref{wxSleep}{wxsleep}\\
 \helpref{wxSnprintf}{wxsnprintf}\\
 \helpref{wxSplitPath}{wxsplitfunction}\\
@@ -595,6 +596,26 @@ See also \helpref{wxExecute}{wxexecute}, \helpref{Exec sample}{sampleexec}.
 
 <wx/utils.h>
 
+\membersection{::wxShutdown}\label{wxshutdown}
+
+\func{bool}{wxShutdown}{\param{wxShutdownFlags}{flags}}
+
+This function shuts down or reboots the computer depending on the value of the 
+{\it flags}. Please notice that doing this requires the corresponding access
+rights (superuser under Unix, {\tt SE\_SHUTDOWN} privelege under Windows NT)
+and that this function is only implemented under Unix and Win32.
+
+\wxheading{Parameters}
+
+\docparam{flags}{Either {\tt wxSHUTDOWN\_POWEROFF} or {\tt wxSHUTDOWN\_REBOOT}}
+
+\wxheading{Returns}
+
+{\tt TRUE} on success, {\tt FALSE} if an error occured.
+
+\wxheading{Include files}
+
+<wx/utils.h>
 
 \section{Thread functions}\label{threadfunctions}
 

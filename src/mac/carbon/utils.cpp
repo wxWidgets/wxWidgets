@@ -139,6 +139,13 @@ bool wxShell(const wxString& command)
     return FALSE;
 }
 
+// Shutdown or reboot the PC 
+bool wxShutdown(wxShutdownFlags wFlags)
+{
+    // TODO
+    return FALSE;
+}
+
 // Get free memory in bytes, or -1 if cannot determine amount (e.g. on UNIX)
 long wxGetFreeMemory()
 {
