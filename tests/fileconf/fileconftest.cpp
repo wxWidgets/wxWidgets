@@ -58,6 +58,7 @@ private:
         CPPUNIT_TEST( DeleteAll );
         CPPUNIT_TEST( RenameEntry );
         CPPUNIT_TEST( RenameGroup );
+        CPPUNIT_TEST( DeleteLastGroup );
     CPPUNIT_TEST_SUITE_END();
 
     void Path();
@@ -72,6 +73,7 @@ private:
     void DeleteAll();
     void RenameEntry();
     void RenameGroup();
+    void DeleteLastGroup();
 
     static wxString ChangePath(wxFileConfig& fc, const wxChar *path)
     {
@@ -348,6 +350,49 @@ void FileConfigTestCase::RenameGroup()
                                 _T("subentry=subvalue\n")
                                 _T("subentry2=subvalue2\n")
                                 _T("[foot/group2]\n") );
+}
+
+
+static void EmptyConfigAndWriteKey()
+{
+    wxFileConfig fc(_T("deleteconftest"));
+
+    const wxString groupPath = _T("/root");
+
+    if (fc.Exists(groupPath))
+    {
+        // using DeleteGroup exposes the problem, using DeleteAll doesn't
+        CPPUNIT_ASSERT( fc.DeleteGroup(groupPath) );
+    }
+
+    // the config must be empty for the problem to arise
+    CPPUNIT_ASSERT( !fc.GetNumberOfEntries(true) );
+    CPPUNIT_ASSERT( !fc.GetNumberOfGroups(true) );
+
+
+    // this crashes on second call of this function
+    CPPUNIT_ASSERT( fc.Write(groupPath + _T("/entry"), _T("value")) );
+}
+
+void FileConfigTestCase::DeleteLastGroup()
+{
+    /*
+    We make 2 of the same calls, first to create a file config with a single
+    group and key...
+    */
+    ::EmptyConfigAndWriteKey();
+
+    /*
+    ... then the same but this time the key's group is deleted before the
+    key is written again. This causes a crash.
+    */
+    ::EmptyConfigAndWriteKey();
+
+
+    // clean up
+    wxLogNull noLogging;
+    (void) ::wxRemoveFile(
+        wxFileConfig::GetLocalFileName(_T("deleteconftest")) );
 }
 
 #endif // wxUSE_FILECONFIG
