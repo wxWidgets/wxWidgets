@@ -167,7 +167,7 @@ WXDLLEXPORT void wxDos2UnixFilename(wxChar *s);
 WXDLLEXPORT void wxUnix2DosFilename(wxChar *s);
 #define Unix2DosFilename wxUnix2DosFilename
 
-#if defined(__WXMAC__) && !defined(__UNIX__)
+#if defined(__WXMAC__)
   WXDLLEXPORT wxString wxMacFSSpec2MacFilename( const FSSpec *spec ) ;
   WXDLLEXPORT void wxMacFilename2FSSpec( const char *path , FSSpec *spec ) ;
   WXDLLEXPORT wxString wxMacFSSpec2UnixFilename( const FSSpec *spec ) ;
@@ -264,12 +264,12 @@ WXDLLEXPORT bool wxRmdir(const wxString& dir, int flags = 0);
 #define wxPATH_SEP_MAC        wxT(";")
 
 // platform independent versions
-#ifdef  __UNIX__
+#if defined(__UNIX__)
   #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_UNIX
   #define wxPATH_SEP          wxPATH_SEP_UNIX
 #elif defined(__MAC__)
   #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_MAC
-  #define wxPATH_SEP          wxPATH_SEP_DOS
+  #define wxPATH_SEP          wxPATH_SEP_MAC
 #else   // Windows and OS/2
   #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_DOS
   #define wxPATH_SEP          wxPATH_SEP_DOS
@@ -277,9 +277,9 @@ WXDLLEXPORT bool wxRmdir(const wxString& dir, int flags = 0);
 
 // this is useful for wxString::IsSameAs(): to compare two file names use
 // filename1.IsSameAs(filename2, wxARE_FILENAMES_CASE_SENSITIVE)
-#ifdef  __UNIX__
+#if defined(__UNIX__) && !defined(__DARWIN__)
   #define wxARE_FILENAMES_CASE_SENSITIVE  TRUE
-#else   // Windows and OS/2
+#else   // Windows, Mac OS and OS/2
   #define wxARE_FILENAMES_CASE_SENSITIVE  FALSE
 #endif  // Unix/Windows
 
