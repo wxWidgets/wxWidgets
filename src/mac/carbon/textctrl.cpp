@@ -769,6 +769,9 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         TXNSetSelection( (TXNObject) m_macTXN, 0, 0);
         TXNShowSelection( (TXNObject) m_macTXN, kTXNShowStart);
     }
+    
+    // in case MLTE is catching events before we get the chance to do so, we'd have to reintroduce the tlw-handler in front :
+    // parent->MacGetTopLevelWindow()->MacInstallTopLevelWindowEventHandler() ;
 
     SetBackgroundColour( *wxWHITE ) ;
 
@@ -1322,12 +1325,78 @@ int wxTextCtrl::GetNumberOfLines() const
 
 long wxTextCtrl::XYToPosition(long x, long y) const
 {
-    // TODO
+    Point curpt ;
+    
+    long lastpos = GetLastPosition() ;
+    
+    // TODO find a better implementation : while we can get the 
+    // line metrics of a certain line, we don't get its starting
+    // position, so it would probably be rather a binary search
+    // for the start position
+    long xpos = 0 ; 
+    long ypos = 0 ;
+    int lastHeight = 0 ;
+
+    ItemCount n ;
+    for ( n = 0 ; n <= lastpos ; ++n )
+    {
+        if ( y == ypos && x == xpos )
+            return n ;
+        
+        TXNOffsetToPoint( (TXNObject) m_macTXN,  n , &curpt);
+
+        if ( curpt.v > lastHeight )
+        {
+            xpos = 0 ;
+            if ( n > 0 )
+                ++ypos ;
+            lastHeight = curpt.v ;
+        }
+        else
+            ++xpos ;
+    }
+    
     return 0;
 }
 
 bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
 {
+    Point curpt ;
+    
+    long lastpos = GetLastPosition() ;
+    
+    if ( y ) *y = 0 ;
+    if ( x ) *x = 0 ;
+    
+    if ( pos <= lastpos )
+    {
+        // TODO find a better implementation : while we can get the 
+        // line metrics of a certain line, we don't get its starting
+        // position, so it would probably be rather a binary search
+        // for the start position
+        long xpos = 0 ; 
+        long ypos = 0 ;
+        int lastHeight = 0 ;
+
+        ItemCount n ;
+        for ( n = 0 ; n <= pos ; ++n )
+        {
+            TXNOffsetToPoint( (TXNObject) m_macTXN,  n , &curpt);
+
+            if ( curpt.v > lastHeight )
+            {
+                xpos = 0 ;
+                if ( n > 0 )
+                    ++ypos ;
+                lastHeight = curpt.v ;
+            }
+            else
+                ++xpos ;
+        }
+        if ( y ) *y = ypos ;
+        if ( x ) *x = xpos ;
+    }
+    
     return FALSE ;
 }
 
@@ -1357,57 +1426,83 @@ void wxTextCtrl::ShowPosition(long pos)
 
 int wxTextCtrl::GetLineLength(long lineNo) const
 {
-    // TODO change this if possible to reflect real lines
-    wxString content = GetValue() ;
-
-    // Find line first
-    int count = 0;
-    for (size_t i = 0; i < content.Length() ; i++)
+    Point curpt ;
+    if ( lineNo < GetNumberOfLines() )
     {
-        if (count == lineNo)
-        {
-            // Count chars in line then
-            count = 0;
-            for (size_t j = i; j < content.Length(); j++)
-            {
-                count++;
-                if (content[j] == '\n') return count;
-            }
+        // TODO find a better implementation : while we can get the 
+        // line metrics of a certain line, we don't get its starting
+        // position, so it would probably be rather a binary search
+        // for the start position
+        long xpos = 0 ; 
+        long ypos = 0 ;
+        int lastHeight = 0 ;
+        long lastpos = GetLastPosition() ;
 
-            return count;
+        ItemCount n ;
+        for ( n = 0 ; n <= lastpos ; ++n )
+        {
+            TXNOffsetToPoint( (TXNObject) m_macTXN,  n , &curpt);
+
+            if ( curpt.v > lastHeight )
+            {
+                if ( ypos == lineNo )
+                    return xpos ;
+                    
+                xpos = 0 ;
+                if ( n > 0 )
+                    ++ypos ;
+                lastHeight = curpt.v ;
+            }
+            else
+                ++xpos ;
         }
-        if (content[i] == '\n') count++;
     }
+
     return 0;
 }
 
 wxString wxTextCtrl::GetLineText(long lineNo) const
 {
-    // TODO change this if possible to reflect real lines
+    Point curpt ;
+    wxString line ;
     wxString content = GetValue() ;
 
-    // Find line first
-    int count = 0;
-    for (size_t i = 0; i < content.Length() ; i++)
+    if ( lineNo < GetNumberOfLines() )
     {
-        if (count == lineNo)
+        // TODO find a better implementation : while we can get the 
+        // line metrics of a certain line, we don't get its starting
+        // position, so it would probably be rather a binary search
+        // for the start position
+        long xpos = 0 ; 
+        long ypos = 0 ;
+        int lastHeight = 0 ;
+        long lastpos = GetLastPosition() ;
+
+        ItemCount n ;
+        for ( n = 0 ; n <= lastpos ; ++n )
         {
-            // Add chars in line then
-            wxString tmp;
+            TXNOffsetToPoint( (TXNObject) m_macTXN,  n , &curpt);
 
-            for (size_t j = i; j < content.Length(); j++)
+            if ( curpt.v > lastHeight )
             {
-                if (content[j] == '\n')
-                    return tmp;
-
-                tmp += content[j];
+                if ( ypos == lineNo )
+                    return line ;
+                    
+                xpos = 0 ;
+                if ( n > 0 )
+                    ++ypos ;
+                lastHeight = curpt.v ;
             }
-
-            return tmp;
+            else
+            {
+                if ( ypos == lineNo )
+                    line += content[n] ;
+                ++xpos ;
+            }
         }
-        if (content[i] == '\n') count++;
     }
-    return wxEmptyString ;
+
+    return line ;
 }
 
 /*
