@@ -11,16 +11,25 @@
 
        BASE_CMN                common base files (all platforms)
        GUICMN                  common GUI files (all platforms)
-       
+
        BASE_$(platform)        base files used on platform
-       LOWLEVEL_$(platform)    low-level GUI classes
-       LOWLEVEL_XWIN           low-level classes for X Window System port
-       GUI_$(platform)         high-level GUI classes
+       $(port)LOWLEVEL         low-level GUI classes
+       $(port)                 high-level files for a port
+       XWIN_LOWLEVEL           low-level classes for X Window System port
+
+       HTML                    wxHTML files
   
      * one file may be listed in several groups
     
      ====================================================================== -->
 
+
+
+<!-- ====================================================================== -->
+<!--                              wxUniversal                               -->
+<!-- ====================================================================== -->
+
+     
 <set var="UNIV_THEMES_SRC">
     src/univ/gtk.cpp
     src/univ/win32.cpp
@@ -106,7 +115,9 @@
 </set>
 
 
-
+<!-- ====================================================================== -->
+<!--                               wxBase                                   -->
+<!-- ====================================================================== -->
 
 <set var="BASE_UNIX_SRC">
     src/unix/dir.cpp
@@ -312,6 +323,13 @@
     include/wx/zipstrm.h
     include/wx/zstream.h
 </set>
+
+
+
+<!-- ====================================================================== -->
+<!--                            Common GUI files                            -->
+<!-- ====================================================================== -->
+
 <set var="GUICMN_SRC">
     src/generic/busyinfo.cpp
     src/generic/calctrl.cpp
@@ -427,7 +445,6 @@
     include/wx/generic/msgdlgg.h
     include/wx/generic/notebook.h
     include/wx/generic/panelg.h
-    include/wx/generic/printps.h
     include/wx/generic/prntdlgg.h
     include/wx/generic/progdlgg.h
     include/wx/generic/sashwin.h
@@ -439,22 +456,32 @@
     include/wx/generic/textdlgg.h
     include/wx/generic/timer.h
     include/wx/generic/wizard.h
+    include/wx/generic/treectlg.h
 </set>
 
+
+<!-- ====================================================================== -->
+<!--                            Common X11 code:                            -->
+<!-- ====================================================================== -->
 
 <set var="XWIN_LOWLEVEL_SRC">
     src/unix/fontenum.cpp
     src/unix/fontutil.cpp
-    src/unix/mimetype.cpp
     src/unix/utilsx11.cpp
     src/unix/taskbarx11.cpp
+    src/generic/printps.cpp
 </set>
 <set var="XWIN_LOWLEVEL_HDR">
     include/wx/unix/fontutil.h
-    include/wx/unix/mimetype.h
     include/wx/unix/utilsx11.h
     include/wx/unix/taskbarx11.h
+    include/wx/generic/printps.h
 </set>
+
+
+<!-- ====================================================================== -->
+<!--                                wxGTK                                   -->
+<!-- ====================================================================== -->
 
 <set var="GTK_LOWLEVEL_SRC">
     $(XWIN_LOWLEVEL_SRC)
@@ -495,17 +522,15 @@
 <set var="GTK_SRC">
     <!-- Generic implementations used by wxGTK: -->
     src/generic/imaglist.cpp
-    src/generic/treectlg.cpp
     src/generic/colrdlgg.cpp
     src/generic/listctrl.cpp
     src/generic/filedlgg.cpp
     src/generic/dirdlgg.cpp
-    src/generic/dcpsg.cpp
-    src/generic/printps.cpp
     src/generic/prntdlgg.cpp
     src/generic/accel.cpp
     src/generic/msgdlgg.cpp
     src/generic/fdrepdlg.cpp
+    src/generic/tabg.cpp
     <!-- GTK+ specific files: -->
     src/gtk/bmpbuttn.cpp
     src/gtk/button.cpp
@@ -607,7 +632,244 @@
     include/wx/gtk/win_gtk.h
     include/wx/gtk/window.h
     include/wx/generic/fdrepdlg.h
+    include/wx/generic/tabg.h
+    include/wx/generic/dirdlgg.h
 </set>
+
+
+<!-- ====================================================================== -->
+<!--                             wxMotif                                    -->
+<!-- ====================================================================== -->
+
+<set var="MOTIF_LOWLEVEL_SRC">
+    $(XWIN_LOWLEVEL_SRC)
+    src/x11/region.cpp
+    src/x11/pen.cpp
+    src/x11/brush.cpp
+    src/x11/bitmap.cpp
+    src/x11/utilsx.cpp
+</set>
+<set var="MOTIF_LOWLEVEL_HDR">
+    $(XWIN_LOWLEVEL_HDR)
+</set>
+<set var="MOTIF_SRC">
+    src/motif/gsockmot.c
+    src/motif/accel.cpp
+    src/motif/app.cpp
+    src/motif/bmpbuttn.cpp
+    src/motif/bmpmotif.cpp
+    src/motif/button.cpp
+    src/motif/checkbox.cpp
+    src/motif/checklst.cpp
+    src/motif/choice.cpp
+    src/motif/clipbrd.cpp
+    src/motif/colour.cpp
+    src/motif/combobox.cpp
+    src/motif/combobox_native.cpp
+    src/motif/control.cpp
+    src/motif/cursor.cpp
+    src/motif/data.cpp
+    src/motif/dataobj.cpp
+    src/motif/dc.cpp
+    src/motif/dcclient.cpp
+    src/motif/dcmemory.cpp
+    src/motif/dcscreen.cpp
+    src/motif/dialog.cpp
+    src/motif/evtloop.cpp
+    src/motif/filedlg.cpp
+    src/motif/font.cpp
+    src/motif/frame.cpp
+    src/motif/gauge.cpp
+    src/motif/gdiobj.cpp
+    src/motif/glcanvas.cpp
+    src/motif/icon.cpp
+    src/motif/listbox.cpp
+    src/motif/main.cpp
+    src/motif/mdi.cpp
+    src/motif/menu.cpp
+    src/motif/menuitem.cpp
+    src/motif/minifram.cpp
+    src/motif/msgdlg.cpp
+    src/motif/palette.cpp
+    src/motif/radiobox.cpp
+    src/motif/radiobut.cpp
+    src/motif/scrolbar.cpp
+    src/motif/settings.cpp
+    src/motif/slider.cpp
+    src/motif/spinbutt.cpp
+    src/motif/statbmp.cpp
+    src/motif/statbox.cpp
+    src/motif/stattext.cpp
+    src/motif/toolbar.cpp
+    src/motif/textctrl.cpp
+    src/motif/timer.cpp
+    src/motif/toplevel.cpp
+    src/motif/utils.cpp
+    src/motif/window.cpp
+    <!-- Generic files used by wxMotif: -->
+    src/generic/fdrepdlg.cpp
+    src/generic/listctrl.cpp
+    src/generic/imaglist.cpp
+    src/generic/notebook.cpp
+    src/generic/fontdlgg.cpp
+    src/generic/colrdlgg.cpp
+    src/generic/statline.cpp
+    src/generic/tabg.cpp
+    src/generic/dirdlgg.cpp
+    src/generic/prntdlgg.cpp
+</set>
+<set var="MOTIF_HDR">
+    include/wx/motif/accel.h
+    include/wx/motif/app.h
+    include/wx/motif/bmpbuttn.h
+    include/wx/motif/bmpmotif.h
+    include/wx/motif/button.h
+    include/wx/motif/checkbox.h
+    include/wx/motif/checklst.h
+    include/wx/motif/choice.h
+    include/wx/motif/clipbrd.h
+    include/wx/motif/colour.h
+    include/wx/motif/combobox.h
+    include/wx/motif/control.h
+    include/wx/motif/cursor.h
+    include/wx/motif/dataform.h
+    include/wx/motif/dataobj.h
+    include/wx/motif/dc.h
+    include/wx/motif/dcclient.h
+    include/wx/motif/dcmemory.h
+    include/wx/motif/dcprint.h
+    include/wx/motif/dcscreen.h
+    include/wx/motif/dialog.h
+    include/wx/motif/dnd.h
+    include/wx/motif/filedlg.h
+    include/wx/motif/font.h
+    include/wx/motif/frame.h
+    include/wx/motif/gauge.h
+    include/wx/motif/gdiobj.h
+    include/wx/motif/glcanvas.h
+    include/wx/motif/icon.h
+    include/wx/motif/listbox.h
+    include/wx/motif/mdi.h
+    include/wx/motif/menu.h
+    include/wx/motif/menuitem.h
+    include/wx/motif/minifram.h
+    include/wx/motif/msgdlg.h
+    include/wx/motif/palette.h
+    include/wx/motif/print.h
+    include/wx/motif/private.h
+    include/wx/motif/radiobox.h
+    include/wx/motif/radiobut.h
+    include/wx/motif/region.h
+    include/wx/motif/scrolbar.h
+    include/wx/motif/settings.h
+    include/wx/motif/slider.h
+    include/wx/motif/spinbutt.h
+    include/wx/motif/statbmp.h
+    include/wx/motif/statbox.h
+    include/wx/motif/stattext.h
+    include/wx/motif/textctrl.h
+    include/wx/motif/tglbtn.h
+    include/wx/motif/timer.h
+    include/wx/motif/toolbar.h
+    include/wx/motif/toplevel.h
+    include/wx/motif/window.h
+    include/wx/generic/fdrepdlg.h
+    include/wx/generic/listctrl.h
+    include/wx/generic/imaglist.h
+    include/wx/generic/notebook.h
+    include/wx/generic/fontdlgg.h
+    include/wx/generic/colrdlgg.h
+    include/wx/generic/statline.h
+    include/wx/generic/tabg.h
+    include/wx/generic/dirdlgg.h
+    include/wx/generic/prntdlgg.h
+</set>
+
+
+<!-- ====================================================================== -->
+<!--                               wxX11                                    -->
+<!-- ====================================================================== -->
+
+
+<set var="X11_LOWLEVEL_SRC">
+</set>
+<set var="X11_LOWLEVEL_HDR">
+</set>
+<set var="X11_SRC">
+    src/x11/gsockx11.c
+    src/x11/nanox.c
+    src/x11/app.cpp
+    src/x11/bitmap.cpp
+    src/x11/brush.cpp
+    src/x11/clipbrd.cpp
+    src/x11/colour.cpp
+    src/x11/cursor.cpp
+    src/x11/data.cpp
+    src/x11/dataobj.cpp
+    src/x11/dc.cpp
+    src/x11/dcclient.cpp
+    src/x11/dcmemory.cpp
+    src/x11/dcscreen.cpp
+    src/x11/dcscreen.cpp
+    src/x11/evtloop.cpp
+    src/x11/font.cpp
+    src/x11/gdiobj.cpp
+    src/x11/glcanvas.cpp
+    src/x11/icon.cpp
+    src/x11/joystick.cpp
+    src/x11/main.cpp
+    src/x11/minifram.cpp
+    src/x11/palette.cpp
+    src/x11/pen.cpp
+    src/x11/popupwin.cpp
+    src/x11/region.cpp
+    src/x11/reparent.cpp
+    src/x11/settings.cpp
+    src/x11/toplevel.cpp
+    src/x11/utils.cpp
+    src/x11/utilsx.cpp
+    src/x11/window.cpp
+</set>
+<set var="X11_HDR">
+    include/wx/x11/app.h
+    include/wx/x11/bitmap.h
+    include/wx/x11/brush.h
+    include/wx/x11/clipbrd.h
+    include/wx/x11/colour.h
+    include/wx/x11/cursor.h
+    include/wx/x11/dataform.h
+    include/wx/x11/dataobj.h
+    include/wx/x11/dataobj2.h
+    include/wx/x11/dc.h
+    include/wx/x11/dcclient.h
+    include/wx/x11/dcmemory.h
+    include/wx/x11/dcprint.h
+    include/wx/x11/dcscreen.h
+    include/wx/x11/dnd.h
+    include/wx/x11/font.h
+    include/wx/x11/gdiobj.h
+    include/wx/x11/glcanvas.h
+    include/wx/x11/icon.h
+    include/wx/x11/joystick.h
+    include/wx/x11/minifram.h
+    include/wx/x11/palette.h
+    include/wx/x11/pen.h
+    include/wx/x11/print.h
+    include/wx/x11/private.h
+    include/wx/x11/privx.h
+    include/wx/x11/region.h
+    include/wx/x11/reparent.h
+    include/wx/x11/textctrl.h
+    include/wx/x11/toplevel.h
+    include/wx/x11/window.h
+</set>
+
+
+
+<!-- ====================================================================== -->
+<!--                                wxMSW                                   -->
+<!-- ====================================================================== -->
+
 <set var="MSW_LOWLEVEL_SRC">
     src/msw/app.cpp
     src/msw/bitmap.cpp
@@ -811,6 +1073,12 @@
     include/wx/msw/oleutils.h
     include/wx/msw/uuid.h
 </set>
+
+
+<!-- ====================================================================== -->
+<!--                                wxMGL                                   -->
+<!-- ====================================================================== -->
+
 <set var="MGL_LOWLEVEL_SRC">
     src/mgl/colour.cpp
     src/mgl/dc.cpp
@@ -865,6 +1133,12 @@
     include/wx/mgl/toplevel.h
     include/wx/mgl/window.h
 </set>
+
+
+<!-- ====================================================================== -->
+<!--                               wxOS/2                                   -->
+<!-- ====================================================================== -->
+
 <set var="OS2_LOWLEVEL_SRC">
 </set>
 <set var="OS2_LOWLEVEL_HDR">
@@ -1015,6 +1289,13 @@
     include/wx/os2/statbox.h
     include/wx/os2/toplevel.h
 </set>
+
+
+
+<!-- ====================================================================== -->
+<!--                                wxMac                                   -->
+<!-- ====================================================================== -->
+
 <set var="MAC_LOWLEVEL_SRC">
 </set>
 <set var="MAC_LOWLEVEL_HDR">
@@ -1183,194 +1464,12 @@
     include/wx/mac/wave.h
     include/wx/mac/window.h
 </set>
-<set var="MOTIF_LOWLEVEL_SRC">
-</set>
-<set var="MOTIF_LOWLEVEL_HDR">
-</set>
-<set var="MOTIF_SRC">
-    src/motif/gsockmot.c
-    src/motif/accel.cpp
-    src/motif/app.cpp
-    src/motif/bmpbuttn.cpp
-    src/motif/bmpmotif.cpp
-    src/motif/button.cpp
-    src/motif/checkbox.cpp
-    src/motif/checklst.cpp
-    src/motif/choice.cpp
-    src/motif/clipbrd.cpp
-    src/motif/colour.cpp
-    src/motif/combobox.cpp
-    src/motif/combobox_native.cpp
-    src/motif/control.cpp
-    src/motif/cursor.cpp
-    src/motif/data.cpp
-    src/motif/dataobj.cpp
-    src/motif/dc.cpp
-    src/motif/dcclient.cpp
-    src/motif/dcmemory.cpp
-    src/motif/dcscreen.cpp
-    src/motif/dialog.cpp
-    src/motif/evtloop.cpp
-    src/motif/filedlg.cpp
-    src/motif/font.cpp
-    src/motif/frame.cpp
-    src/motif/gauge.cpp
-    src/motif/gdiobj.cpp
-    src/motif/glcanvas.cpp
-    src/motif/icon.cpp
-    src/motif/listbox.cpp
-    src/motif/main.cpp
-    src/motif/mdi.cpp
-    src/motif/menu.cpp
-    src/motif/menuitem.cpp
-    src/motif/minifram.cpp
-    src/motif/msgdlg.cpp
-    src/motif/palette.cpp
-    src/motif/radiobox.cpp
-    src/motif/radiobut.cpp
-    src/motif/region.cpp
-    src/motif/scrolbar.cpp
-    src/motif/settings.cpp
-    src/motif/slider.cpp
-    src/motif/spinbutt.cpp
-    src/motif/statbmp.cpp
-    src/motif/statbox.cpp
-    src/motif/stattext.cpp
-    src/motif/toolbar.cpp
-    src/motif/textctrl.cpp
-    src/motif/timer.cpp
-    src/motif/toplevel.cpp
-    src/motif/utils.cpp
-    src/motif/window.cpp
-</set>
-<set var="MOTIF_HDR">
-    include/wx/motif/accel.h
-    include/wx/motif/app.h
-    include/wx/motif/bmpbuttn.h
-    include/wx/motif/bmpmotif.h
-    include/wx/motif/button.h
-    include/wx/motif/checkbox.h
-    include/wx/motif/checklst.h
-    include/wx/motif/choice.h
-    include/wx/motif/clipbrd.h
-    include/wx/motif/colour.h
-    include/wx/motif/combobox.h
-    include/wx/motif/control.h
-    include/wx/motif/cursor.h
-    include/wx/motif/dataform.h
-    include/wx/motif/dataobj.h
-    include/wx/motif/dc.h
-    include/wx/motif/dcclient.h
-    include/wx/motif/dcmemory.h
-    include/wx/motif/dcprint.h
-    include/wx/motif/dcscreen.h
-    include/wx/motif/dialog.h
-    include/wx/motif/dnd.h
-    include/wx/motif/filedlg.h
-    include/wx/motif/font.h
-    include/wx/motif/frame.h
-    include/wx/motif/gauge.h
-    include/wx/motif/gdiobj.h
-    include/wx/motif/glcanvas.h
-    include/wx/motif/icon.h
-    include/wx/motif/listbox.h
-    include/wx/motif/mdi.h
-    include/wx/motif/menu.h
-    include/wx/motif/menuitem.h
-    include/wx/motif/minifram.h
-    include/wx/motif/msgdlg.h
-    include/wx/motif/palette.h
-    include/wx/motif/print.h
-    include/wx/motif/private.h
-    include/wx/motif/radiobox.h
-    include/wx/motif/radiobut.h
-    include/wx/motif/region.h
-    include/wx/motif/scrolbar.h
-    include/wx/motif/settings.h
-    include/wx/motif/slider.h
-    include/wx/motif/spinbutt.h
-    include/wx/motif/statbmp.h
-    include/wx/motif/statbox.h
-    include/wx/motif/stattext.h
-    include/wx/motif/textctrl.h
-    include/wx/motif/tglbtn.h
-    include/wx/motif/timer.h
-    include/wx/motif/toolbar.h
-    include/wx/motif/toplevel.h
-    include/wx/motif/window.h
-</set>
-<set var="X11_LOWLEVEL_SRC">
-</set>
-<set var="X11_LOWLEVEL_HDR">
-</set>
-<set var="X11_SRC">
-    src/x11/gsockx11.c
-    src/x11/nanox.c
-    src/x11/app.cpp
-    src/x11/bitmap.cpp
-    src/x11/brush.cpp
-    src/x11/clipbrd.cpp
-    src/x11/colour.cpp
-    src/x11/cursor.cpp
-    src/x11/data.cpp
-    src/x11/dataobj.cpp
-    src/x11/dc.cpp
-    src/x11/dcclient.cpp
-    src/x11/dcmemory.cpp
-    src/x11/dcscreen.cpp
-    src/x11/dcscreen.cpp
-    src/x11/evtloop.cpp
-    src/x11/font.cpp
-    src/x11/gdiobj.cpp
-    src/x11/glcanvas.cpp
-    src/x11/icon.cpp
-    src/x11/joystick.cpp
-    src/x11/main.cpp
-    src/x11/minifram.cpp
-    src/x11/palette.cpp
-    src/x11/pen.cpp
-    src/x11/popupwin.cpp
-    src/x11/region.cpp
-    src/x11/reparent.cpp
-    src/x11/settings.cpp
-    src/x11/toplevel.cpp
-    src/x11/utils.cpp
-    src/x11/utilsx.cpp
-    src/x11/window.cpp
-</set>
-<set var="X11_HDR">
-    include/wx/x11/app.h
-    include/wx/x11/bitmap.h
-    include/wx/x11/brush.h
-    include/wx/x11/clipbrd.h
-    include/wx/x11/colour.h
-    include/wx/x11/cursor.h
-    include/wx/x11/dataform.h
-    include/wx/x11/dataobj.h
-    include/wx/x11/dataobj2.h
-    include/wx/x11/dc.h
-    include/wx/x11/dcclient.h
-    include/wx/x11/dcmemory.h
-    include/wx/x11/dcprint.h
-    include/wx/x11/dcscreen.h
-    include/wx/x11/dnd.h
-    include/wx/x11/font.h
-    include/wx/x11/gdiobj.h
-    include/wx/x11/glcanvas.h
-    include/wx/x11/icon.h
-    include/wx/x11/joystick.h
-    include/wx/x11/minifram.h
-    include/wx/x11/palette.h
-    include/wx/x11/pen.h
-    include/wx/x11/print.h
-    include/wx/x11/private.h
-    include/wx/x11/privx.h
-    include/wx/x11/region.h
-    include/wx/x11/reparent.h
-    include/wx/x11/textctrl.h
-    include/wx/x11/toplevel.h
-    include/wx/x11/window.h
-</set>
+
+
+<!-- ====================================================================== -->
+<!--                              wxCocoa                                   -->
+<!-- ====================================================================== -->
+
 <set var="COCOA_LOWLEVEL_SRC">
 </set>
 <set var="COCOA_LOWLEVEL_HDR">
@@ -1471,10 +1570,13 @@
     include/wx/cocoa/toplevel.h
     include/wx/cocoa/window.h
 </set>
-<set var="HTML_LOWLEVEL_SRC">
-</set>
-<set var="HTML_LOWLEVEL_HDR">
-</set>
+
+
+
+<!-- ====================================================================== -->
+<!--                               wxHTML                                   -->
+<!-- ====================================================================== -->
+
 <set var="HTML_SRC">
     src/html/helpdata.cpp
     src/html/helpfrm.cpp
@@ -1503,10 +1605,9 @@
 
 
 
-
-    <!-- =============================================================== -->
-    <!--             Define sources for specific libraries:              -->
-    <!-- =============================================================== -->
+<!-- ====================================================================== -->
+<!--                    Define sources for specific libraries:              -->
+<!-- ====================================================================== -->
 
     <set var="BASE_PLATFORM_SRC">
         <if cond="PLATFORM_UNIX=='1'">$(BASE_UNIX_SRC)</if>
@@ -1518,12 +1619,16 @@
     
     <set var="LOWLEVEL_SRC">
         <if cond="TOOLKIT=='GTK'">$(GTK_LOWLEVEL_SRC)</if>
+        <if cond="TOOLKIT=='MOTIF'">$(MOTIF_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='MSW'">$(MSW_LOWLEVEL_SRC)</if>
+        <if cond="TOOLKIT=='MAC'">$(MSW_LOWLEVEL_SRC)</if>
     </set>
     
     <set var="GUI_SRC">
         <if cond="TOOLKIT=='GTK'">$(GTK_SRC)</if>
+        <if cond="TOOLKIT=='MOTIF'">$(MOTIF_SRC)</if>
         <if cond="TOOLKIT=='MSW'">$(MSW_SRC)</if>
+        <if cond="TOOLKIT=='MAC'">$(MSW_SRC)</if>
     </set>
 
     <set var="PORT_SRC">
