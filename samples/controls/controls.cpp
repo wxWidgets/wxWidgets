@@ -57,6 +57,21 @@ class MyApp: public wxApp
     bool OnInit(void);
 };
 
+// a text ctrl which allows to call different wxTextCtrl functions
+// interactively by pressing function keys in it
+class MyTextCtrl : public wxTextCtrl
+{
+public:
+    MyTextCtrl(wxWindow *parent, wxWindowID id, const wxString &value,
+               const wxPoint &pos, const wxSize &size, int style = 0)
+        : wxTextCtrl(parent, id, value, pos, size, style) { }
+
+    void OnChar(wxKeyEvent& event);
+
+private:
+    DECLARE_EVENT_TABLE()
+};
+
 class MyPanel: public wxPanel
 {
   public:
@@ -92,8 +107,8 @@ class MyPanel: public wxPanel
     wxButton      *m_fontButton;
     wxSpinButton  *m_spinbutton;
     wxTextCtrl    *m_spintext;
-    wxTextCtrl    *m_multitext;
-    wxTextCtrl    *m_textentry;
+    MyTextCtrl    *m_multitext;
+    MyTextCtrl    *m_textentry;
     wxCheckBox    *m_checkbox;
 
     wxTextCtrl    *m_text;
@@ -160,6 +175,52 @@ bool MyApp::OnInit(void)
 }
 
 //----------------------------------------------------------------------
+// MyTextCtrl
+//----------------------------------------------------------------------
+
+BEGIN_EVENT_TABLE(MyTextCtrl, wxTextCtrl)
+    EVT_CHAR(MyTextCtrl::OnChar)
+END_EVENT_TABLE()
+
+void MyTextCtrl::OnChar(wxKeyEvent& event)
+{
+    switch ( event.KeyCode() )
+    {
+        case WXK_F1:
+            // show current position and text length
+            {
+                long line, column, pos = GetInsertionPoint();
+                PositionToXY(pos, &column, &line);
+
+                wxLogMessage("Current position: %ld\n"
+                             "Current line, column: (%ld, %ld)\n"
+                             "Number of lines: %ld\n"
+                             "Current line length: %ld\n"
+                             "Total text length: %ld",
+                             pos,
+                             line, column,
+                             GetNumberOfLines(),
+                             GetLineLength(line),
+                             GetLastPosition());
+            }
+            break;
+
+        case WXK_F2:
+            // go to the end
+            SetInsertionPointEnd();
+            break;
+
+        case WXK_F3:
+            // go to position 10
+            SetInsertionPoint(10);
+            break;
+
+        default:
+            event.Skip();
+    }
+}
+
+//----------------------------------------------------------------------
 // MyPanel
 //----------------------------------------------------------------------
 
@@ -213,7 +274,6 @@ const int  ID_GAUGE             = 180;
 const int  ID_SLIDER            = 181;
 
 const int  ID_SPIN              = 182;
-
 
 BEGIN_EVENT_TABLE(MyPanel, wxPanel)
   EVT_SIZE      (                         MyPanel::OnSize)
@@ -393,11 +453,12 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   panel = new wxPanel(m_notebook);
 //  panel->SetBackgroundColour("cadet blue");
 //  panel->SetForegroundColour("blue");
-  m_textentry = new wxTextCtrl( panel, ID_TEXT, "Write text here.", wxPoint(10,10), wxSize(320,28));
+  m_textentry = new MyTextCtrl( panel, ID_TEXT, "Write text here.", wxPoint(10,10), wxSize(320,28));
   (*m_textentry) << " More text.";
 //  m_textentry->SetBackgroundColour("wheat");
-  m_multitext = new wxTextCtrl( panel, ID_TEXT, "And here.", wxPoint(10,50), wxSize(320,160), wxTE_MULTILINE  );
-  (*m_multitext) << " More text.";
+  m_multitext = new MyTextCtrl( panel, ID_TEXT, "And here.", wxPoint(10,50), wxSize(320,160), wxTE_MULTILINE  );
+  (*m_multitext) << " More text."
+                 << "\nPress Fn keys to test different wxTextCtrl functions";
 //  m_multitext->SetBackgroundColour("wheat");
   (void)new wxStaticBox( panel, -1, "Move cursor to the end of:",
                          wxPoint(345, 0), wxSize(160, 100) );

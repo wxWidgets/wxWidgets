@@ -435,7 +435,7 @@ long wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
     {
         wxString text = GetValue();
 
-       // cast to prevent warning. But pos really should've been unsigned.
+        // cast to prevent warning. But pos really should've been unsigned.
         if( (unsigned long)pos > text.Len()  )
             return FALSE;
 
@@ -445,8 +445,8 @@ long wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
         if (pos == 0)
             return TRUE;
 
-        const char* stop = text.c_str() + pos + 1;
-        for ( const char *p = text.c_str(); p <= stop; p++ )
+        const char* stop = text.c_str() + pos;
+        for ( const char *p = text.c_str(); p < stop; p++ )
         {
             if (*p == '\n')
             {
