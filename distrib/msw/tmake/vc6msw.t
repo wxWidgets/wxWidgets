@@ -59,6 +59,8 @@
     foreach $file (sort keys %wxHTMLINCLUDE) {
 	$project{"WXHTMLHEADERS"} .= $file . " "
     }
+
+    $project{"WXVERSION"} = "232";
 #$}
 # Microsoft Developer Studio Project File - Name="wxWindows" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
