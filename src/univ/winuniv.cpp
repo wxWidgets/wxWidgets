@@ -180,7 +180,7 @@ void wxWindow::OnErase(wxEraseEvent& event)
 
         return;
     }
-
+    
     DoDrawBackground(*event.GetDC());
 
     // if we have both scrollbars, we also have a square in the corner between

@@ -118,40 +118,47 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     XSizeHints size_hints;
     
     long xattributes_mask =
-        CWOverrideRedirect |
         CWBorderPixel | CWBackPixel;
 
     xattributes.background_pixel = m_backgroundColour.GetPixel();
     xattributes.border_pixel = BlackPixel( xdisplay, xscreen );
+
+    if (HasFlag( wxNO_FULL_REPAINT_ON_RESIZE ))
+    {
+        xattributes_mask |= CWBitGravity;
+        xattributes.bit_gravity = StaticGravity;
+    }
 
     // TODO: if we want no border, caption etc.,
     // I think we set this to True to remove decorations
     // No. RR.
     // Yes :-) JACS (because some WMs don't respect
     // the hints)
-    xattributes.override_redirect = (style & wxNO_BORDER) ? True : False;
-#endif
+    // xattributes.override_redirect = (style & wxNO_BORDER) ? True : False;
     
-#if wxUSE_NANOX
+    xattributes_mask |= CWEventMask;
+    xattributes.event_mask = 
+        ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
+        ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask |
+        KeymapStateMask | FocusChangeMask | ColormapChangeMask | StructureNotifyMask |
+        PropertyChangeMask;
+        
+    Window xwindow = XCreateWindow( xdisplay, xparent, pos2.x, pos2.y, size2.x, size2.y, 
+                                    0, DefaultDepth(xdisplay,xscreen), InputOutput, xvisual, xattributes_mask, &xattributes );
+#else
     long backColor, foreColor;
     backColor = GR_RGB(m_backgroundColour.Red(), m_backgroundColour.Green(), m_backgroundColour.Blue());
     foreColor = GR_RGB(m_foregroundColour.Red(), m_foregroundColour.Green(), m_foregroundColour.Blue());
     
     Window xwindow = XCreateWindowWithColor( xdisplay, xparent, pos2.x, pos2.y, size2.x, size2.y, 
                                     0, 0, InputOutput, xvisual, backColor, foreColor);
-#else
-    Window xwindow = XCreateWindow( xdisplay, xparent, pos2.x, pos2.y, size2.x, size2.y, 
-                                    0, DefaultDepth(xdisplay,xscreen), InputOutput, xvisual, xattributes_mask, &xattributes );
 #endif
+
     m_mainWidget = (WXWindow) xwindow;
 
-    int extraFlags = 0;
 #if wxUSE_NANOX
-    extraFlags |= GR_EVENT_MASK_CLOSE_REQ;
-#endif
-
     XSelectInput( xdisplay, xwindow,
-                  extraFlags |
+                  GR_EVENT_MASK_CLOSE_REQ |
                   ExposureMask |
                   KeyPressMask |
                   KeyReleaseMask |
@@ -167,6 +174,7 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
                   StructureNotifyMask |
                   PropertyChangeMask
                   );
+#endif
     
     wxAddWindowToTable( xwindow, (wxWindow*) this );
 

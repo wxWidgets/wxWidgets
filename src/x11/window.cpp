@@ -140,23 +140,6 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
     m_foregroundColour.CalcPixel( (WXColormap) cm ); 
 
     Window xparent = (Window) parent->GetMainWindow();
-
-#if !wxUSE_NANOX
-    XSetWindowAttributes xattributes;
-    
-    long xattributes_mask =
-        CWEventMask |
-        CWBorderPixel | CWBackPixel;
-        
-    xattributes.background_pixel = m_backgroundColour.GetPixel();
-    xattributes.border_pixel = BlackPixel( xdisplay, xscreen );
-    
-    xattributes.event_mask = 
-        ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
-        ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask |
-        KeymapStateMask | FocusChangeMask | ColormapChangeMask | StructureNotifyMask |
-        PropertyChangeMask;
-#endif
     
     wxSize size2(size);
     if (size2.x == -1)
@@ -170,7 +153,32 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
     if (pos2.y == -1)
 	pos2.y = 0;
     
-#if wxUSE_NANOX
+#if !wxUSE_NANOX
+    XSetWindowAttributes xattributes;
+    
+    long xattributes_mask =
+        CWBorderPixel | CWBackPixel;
+        
+    xattributes.background_pixel = m_backgroundColour.GetPixel();
+    xattributes.border_pixel = BlackPixel( xdisplay, xscreen );
+    
+    xattributes_mask |= CWEventMask;
+    xattributes.event_mask = 
+        ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
+        ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask |
+        KeymapStateMask | FocusChangeMask | ColormapChangeMask | StructureNotifyMask |
+        PropertyChangeMask | VisibilityChangeMask ;
+
+    if (HasFlag( wxNO_FULL_REPAINT_ON_RESIZE ))
+    {
+        xattributes_mask |= CWBitGravity;
+        xattributes.bit_gravity = StaticGravity;
+    }
+
+    Window xwindow = XCreateWindow( xdisplay, xparent, pos2.x, pos2.y, size2.x, size2.y, 
+       0, DefaultDepth(xdisplay,xscreen), InputOutput, xvisual, xattributes_mask, &xattributes );
+#else
+
     int extraFlags = GR_EVENT_MASK_CLOSE_REQ;
 
     long backColor, foreColor;
@@ -184,12 +192,6 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
         ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask |
         KeymapStateMask | FocusChangeMask | ColormapChangeMask | StructureNotifyMask |
         PropertyChangeMask );
-
-#else
-
-    Window xwindow = XCreateWindow( xdisplay, xparent, pos2.x, pos2.y, size2.x, size2.y, 
-       0, DefaultDepth(xdisplay,xscreen), InputOutput, xvisual, xattributes_mask, &xattributes );
-
 #endif
     
     m_mainWidget = (WXWindow) xwindow;
@@ -781,14 +783,12 @@ void wxWindowX11::DoSetClientSize(int width, int height)
 
     wxCHECK_RET( xwindow, wxT("invalid window") );
 
-    XWindowChanges windowChanges;
-    windowChanges.width = width;
-    windowChanges.height = height;
-    windowChanges.stack_mode = 0;
-    int valueMask = CWWidth | CWHeight;
+#if 1
 
-    XConfigureWindow( wxGlobalDisplay(), xwindow, valueMask, &windowChanges );
-#if 0
+    XResizeWindow( wxGlobalDisplay(), xwindow, width, height );
+
+#else
+
     XWindowAttributes attr;
     Status status = XGetWindowAttributes( wxGlobalDisplay(), xwindow, &attr );
     wxCHECK_RET( status, wxT("invalid window attributes") );
@@ -805,6 +805,7 @@ void wxWindowX11::DoSetClientSize(int width, int height)
         new_h = height;
     
     DoMoveWindow( new_x, new_y, new_w, new_h );
+    
 #endif
 }
 
@@ -855,6 +856,28 @@ void wxWindowX11::DoMoveWindow(int x, int y, int width, int height)
 
     wxCHECK_RET( xwindow, wxT("invalid window") );
 
+#if 1
+
+    XWindowAttributes attr;
+    Status status = XGetWindowAttributes( wxGlobalDisplay(), xwindow, &attr );
+    wxCHECK_RET( status, wxT("invalid window attributes") );
+    
+    if (attr.width == width && attr.height == height)
+    {
+        XMoveWindow( wxGlobalDisplay(), xwindow, x, y );
+        return;
+    }
+    
+    if (attr.x == x && attr.y == y)
+    {
+        XResizeWindow( wxGlobalDisplay(), xwindow, width, height );
+        return;
+    }
+    
+    XMoveResizeWindow( wxGlobalDisplay(), xwindow, x, y, width, height );
+    
+#else    
+
     XWindowChanges windowChanges;
     windowChanges.x = x;
     windowChanges.y = y;
@@ -864,6 +887,8 @@ void wxWindowX11::DoMoveWindow(int x, int y, int width, int height)
     int valueMask = CWX | CWY | CWWidth | CWHeight;
 
     XConfigureWindow( wxGlobalDisplay(), xwindow, valueMask, &windowChanges );
+    
+#endif
 }
 
 // ---------------------------------------------------------------------------
@@ -998,38 +1023,33 @@ void wxWindowX11::Clear()
 
 void wxWindowX11::SendEraseEvents()
 {
-    if (!m_clearRegion.IsEmpty())
+    if (m_clearRegion.IsEmpty()) return;
+    
+    wxWindowDC dc( (wxWindow*)this );
+    dc.SetClippingRegion( m_clearRegion );
+    
+    wxEraseEvent erase_event( GetId(), &dc );
+    erase_event.SetEventObject( this );
+
+    if (!GetEventHandler()->ProcessEvent(erase_event))
     {
-        m_clipPaintRegion = TRUE;
-
-        wxWindowDC dc( (wxWindow*)this );
-        dc.SetClippingRegion( m_clearRegion );
-        
-        wxEraseEvent erase_event( GetId(), &dc );
-        erase_event.SetEventObject( this );
-
-        if (!GetEventHandler()->ProcessEvent(erase_event))
+        Window xwindow = (Window) GetMainWindow();
+        Display *xdisplay = wxGlobalDisplay();
+        GC xgc = XCreateGC( xdisplay, xwindow, 0, NULL );
+        XSetFillStyle( xdisplay, xgc, FillSolid );
+        XSetForeground( xdisplay, xgc, m_backgroundColour.GetPixel() );
+        wxRegionIterator upd( m_clearRegion );
+        while (upd)
         {
-            Window xwindow = (Window) GetMainWindow();
-            Display *xdisplay = wxGlobalDisplay();
-            GC xgc = XCreateGC( xdisplay, xwindow, 0, NULL );
-            XSetFillStyle( xdisplay, xgc, FillSolid );
-            XSetForeground( xdisplay, xgc, m_backgroundColour.GetPixel() );
-            wxRegionIterator upd( m_clearRegion );
-            while (upd)
-            {
-                XFillRectangle( xdisplay, xwindow, xgc,
-                                upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight() );
-                upd ++;
-            }
-            XFreeGC( xdisplay, xgc );
+            XFillRectangle( xdisplay, xwindow, xgc,
+                            upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight() );
+            upd ++;
         }
-        m_clearRegion.Clear();
-
-        m_clipPaintRegion = FALSE;
+        XFreeGC( xdisplay, xgc );
     }
+    
+    m_clearRegion.Clear();
 }
-
 
 void wxWindowX11::SendPaintEvents()
 {
@@ -1044,6 +1064,7 @@ void wxWindowX11::SendPaintEvents()
     GetEventHandler()->ProcessEvent( paint_event );
     
     m_updateRegion.Clear();
+    
     m_clipPaintRegion = FALSE;
 }
 

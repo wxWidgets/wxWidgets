@@ -476,6 +476,60 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
     
     switch (event->type)
     {
+        case Expose:
+        {
+            //wxLogDebug("Expose: %s", windowClass.c_str());
+            win->GetUpdateRegion().Union( XExposeEventGetX(event), XExposeEventGetY(event),
+                                          XExposeEventGetWidth(event), XExposeEventGetHeight(event));
+                                              
+            win->GetClearRegion().Union( XExposeEventGetX(event), XExposeEventGetY(event),
+                                         XExposeEventGetWidth(event), XExposeEventGetHeight(event));
+
+#if !wxUSE_NANOX
+            XEvent tmp_event;
+            wxExposeInfo info;
+            info.window = event->xexpose.window;
+            info.found_non_matching = FALSE;
+            while (XCheckIfEvent( wxGlobalDisplay(), &tmp_event, expose_predicate, (XPointer) &info ))
+            {
+                win->GetUpdateRegion().Union( tmp_event.xexpose.x, tmp_event.xexpose.y,
+                                              tmp_event.xexpose.width, tmp_event.xexpose.height );
+                                              
+                win->GetClearRegion().Union( tmp_event.xexpose.x, tmp_event.xexpose.y,
+                                             tmp_event.xexpose.width, tmp_event.xexpose.height );
+            }
+#endif
+
+            // Only erase background, paint in idle time.
+            win->SendEraseEvents();
+
+            return TRUE;
+        }
+        
+#if !wxUSE_NANOX
+        case GraphicsExpose:
+        {
+            // wxLogDebug( "GraphicsExpose from %s", win->GetName().c_str(),
+            //                              event->xgraphicsexpose.x, event->xgraphicsexpose.y,
+            //                              event->xgraphicsexpose.width, event->xgraphicsexpose.height);
+                    
+            win->GetUpdateRegion().Union( event->xgraphicsexpose.x, event->xgraphicsexpose.y,
+                                          event->xgraphicsexpose.width, event->xgraphicsexpose.height);
+                                             
+            win->GetClearRegion().Union( event->xgraphicsexpose.x, event->xgraphicsexpose.y,
+                                         event->xgraphicsexpose.width, event->xgraphicsexpose.height);
+                                              
+            if (event->xgraphicsexpose.count == 0)
+            {
+                // Only erase background, paint in idle time.
+                win->SendEraseEvents();
+                //win->Update();
+            }
+
+            return TRUE;
+        }
+#endif
+
         case KeyPress:
         {
             if (!win->IsEnabled())
@@ -526,7 +580,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
 #endif
             {
                 //wxLogDebug("ConfigureNotify: %s", windowClass.c_str());
-                if (win->IsTopLevel())
+                if (win->IsTopLevel() && win->IsShown())
                 {
                     wxTopLevelWindowX11 *tlw = (wxTopLevelWindowX11 *) win;
                     tlw->SetNeedResizeInIdle();
@@ -566,14 +620,26 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
             }
             return FALSE;
         }
-#if 1
+#if 0
+        case DestroyNotify:
+        {
+            printf( "destroy from %s\n", win->GetName().c_str() );
+            break;
+        }
+        case CreateNotify:
+        {
+            printf( "create from %s\n", win->GetName().c_str() );
+            break;
+        }
+        case MapRequest:
+        {
+            printf( "map request from %s\n", win->GetName().c_str() );
+            break;
+        }
         case ResizeRequest:
         {
-            /*
-            * If resize event, don't resize until the last resize event for this
-            * window is recieved. Prevents flicker as windows are resized.
-            */
-        
+            printf( "resize request from %s\n", win->GetName().c_str() );
+            
             Display *disp = (Display*) wxGetDisplay();
             XEvent report;
             
@@ -599,59 +665,6 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
             }
             return FALSE;
             break;
-        }
-#endif
-        case Expose:
-        {
-            //wxLogDebug("Expose: %s", windowClass.c_str());
-            win->GetUpdateRegion().Union( XExposeEventGetX(event), XExposeEventGetY(event),
-                                          XExposeEventGetWidth(event), XExposeEventGetHeight(event));
-                                              
-            win->GetClearRegion().Union( XExposeEventGetX(event), XExposeEventGetY(event),
-                                         XExposeEventGetWidth(event), XExposeEventGetHeight(event));
-                                              
-
-#if !wxUSE_NANOX
-            XEvent tmp_event;
-            wxExposeInfo info;
-            info.window = event->xexpose.window;
-            info.found_non_matching = FALSE;
-            while (XCheckIfEvent( wxGlobalDisplay(), &tmp_event, expose_predicate, (XPointer) &info ))
-            {
-                win->GetUpdateRegion().Union( tmp_event.xexpose.x, tmp_event.xexpose.y,
-                                              tmp_event.xexpose.width, tmp_event.xexpose.height );
-                                              
-                win->GetClearRegion().Union( tmp_event.xexpose.x, tmp_event.xexpose.y,
-                                             tmp_event.xexpose.width, tmp_event.xexpose.height );
-            }
-#endif
-
-            // Only erase background, paint in idle time.
-            win->SendEraseEvents();
-
-            return TRUE;
-        }
-#if !wxUSE_NANOX
-        case GraphicsExpose:
-        {
-            // wxLogDebug( "GraphicsExpose from %s", win->GetName().c_str(),
-            //                              event->xgraphicsexpose.x, event->xgraphicsexpose.y,
-            //                              event->xgraphicsexpose.width, event->xgraphicsexpose.height);
-                    
-            win->GetUpdateRegion().Union( event->xgraphicsexpose.x, event->xgraphicsexpose.y,
-                                          event->xgraphicsexpose.width, event->xgraphicsexpose.height);
-                                             
-            win->GetClearRegion().Union( event->xgraphicsexpose.x, event->xgraphicsexpose.y,
-                                         event->xgraphicsexpose.width, event->xgraphicsexpose.height);
-                                              
-            if (event->xgraphicsexpose.count == 0)
-            {
-                // Only erase background, paint in idle time.
-                win->SendEraseEvents();
-                //win->Update();
-            }
-
-            return TRUE;
         }
 #endif
         case EnterNotify:
@@ -733,15 +746,6 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                 return FALSE;
                 break;
             }
-#ifndef wxUSE_NANOX
-         case DestroyNotify:
-            {
-                // Do we want to process this (for top-level windows)?
-                // But we want to be able to veto closes, anyway
-                return FALSE;
-                break;
-            }
-#endif
         default:
         {
 #ifdef __WXDEBUG__
