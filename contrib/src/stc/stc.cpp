@@ -1998,8 +1998,6 @@ void wxStyledTextCtrl::OnMouseWheel(wxMouseEvent& evt) {
 
 
 void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
-    int key = evt.GetKeyCode();
-
     // On (some?) non-US keyboards the AltGr key is required to enter some
     // common characters.  It comes to us as both Alt and Ctrl down so we need
     // to let the char through in that case, otherwise if only ctrl or only
@@ -2008,10 +2006,13 @@ void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
     bool alt  = evt.AltDown();
     bool skip = ((ctrl || alt) && ! (ctrl && alt));
 
+    int key = evt.GetKeyCode();
+
 //     printf("OnChar key:%d  consumed:%d  ctrl:%d  alt:%d  skip:%d\n",
 //            key, m_lastKeyDownConsumed, ctrl, alt, skip);
 
-    if (key <= WXK_START && /*key >= 32 &&*/ !m_lastKeyDownConsumed && !skip) {
+    if ( (key <= WXK_START || key > WXK_NUMPAD_DIVIDE) &&
+         !m_lastKeyDownConsumed && !skip) {
         m_swx->DoAddChar(key);
         return;
     }

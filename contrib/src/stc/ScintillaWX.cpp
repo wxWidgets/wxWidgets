@@ -561,8 +561,18 @@ void ScintillaWX::DoButtonMove(Point pt) {
 
 
 void ScintillaWX::DoAddChar(int key) {
+#if wxUSE_UNICODE
+    char ansiChars[3];
+    ansiChars[0] = key;
+    ansiChars[1] = 0;
+    wxString uniChar(ansiChars);
+    wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(uniChar);
+    AddCharUTF((char*)buf.data(), strlen(buf));
+#else
     AddChar(key);
+#endif
 }
+
 
 int  ScintillaWX::DoKeyDown(int key, bool shift, bool ctrl, bool alt, bool* consumed) {
 #if defined(__WXGTK__) || defined(__WXMAC__)
