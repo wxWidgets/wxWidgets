@@ -156,6 +156,15 @@ public :
 DECLARE_EVENT_TABLE()
 };
 
+class WXDLLEXPORT wxStAppResource
+{
+public :
+    wxStAppResource() ;
+    ~wxStAppResource() ;
+private :
+    short m_currentRefNum ;
+} ;
+
 // TODO: add platform-specific arguments
 int WXDLLEXPORT wxEntry( int argc, char *argv[] , bool enterLoop = TRUE);
 
