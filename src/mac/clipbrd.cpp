@@ -205,6 +205,11 @@ bool wxClipboard::IsOpened() const
 
 bool wxClipboard::SetData( wxDataObject *data )
 {
+    wxCHECK_MSG( m_open, FALSE, wxT("clipboard not open") );
+
+    wxCHECK_MSG( data, FALSE, wxT("data is invalid") );
+
+    Clear();
     // as we can only store one wxDataObject, this is the same in this
     // implementation
     return AddData( data );
@@ -236,58 +241,38 @@ bool wxClipboard::AddData( wxDataObject *data )
 #else
         OSStatus err = noErr ;
 #endif
-
-       switch ( array[i].GetType() )
-       {
-           case wxDF_TEXT:
-           case wxDF_OEMTEXT:
-           {
-               wxTextDataObject* textDataObject = (wxTextDataObject*) data;
-               wxCharBuffer buf = textDataObject->GetText().mb_str() ;
-               err = UMAPutScrap( strlen(buf) , kScrapFlavorTypeText , (void*) buf.data()  ) ;
-           }
-           break ;
-#if wxUSE_UNICODE
-           case wxDF_UNICODETEXT :
-           {
-               wxTextDataObject* textDataObject = (wxTextDataObject*) data;
-               wxString str(textDataObject->GetText());
-               err = UMAPutScrap( str.Length() * sizeof(wxChar) , kScrapFlavorTypeUnicode , (void*) str.wc_str()  ) ;
-           }
-           break ;
-#endif
-#if wxUSE_DRAG_AND_DROP
-        case wxDF_METAFILE:
-           {
-                wxMetafileDataObject* metaFileDataObject =
-                (wxMetafileDataObject*) data;
-                  wxMetafile metaFile = metaFileDataObject->GetMetafile();
-                PicHandle pict = (PicHandle) metaFile.GetHMETAFILE() ;
-                  HLock( (Handle) pict ) ;
-                  err = UMAPutScrap( GetHandleSize(  (Handle) pict ) , kScrapFlavorTypePicture , *pict ) ;
-                  HUnlock(  (Handle) pict ) ;
-           }
-           break ;
-#endif
-           case wxDF_BITMAP:
-           case wxDF_DIB:
-           {
-                   bool created = false ;
-                   PicHandle pict = NULL ;
-
-                   wxBitmapDataObject* bitmapDataObject = (wxBitmapDataObject*) data ;
-                   pict = (PicHandle) bitmapDataObject->GetBitmap().GetPict( &created ) ;
-
-                  HLock( (Handle) pict ) ;
-                  err = UMAPutScrap( GetHandleSize(  (Handle) pict ) , kScrapFlavorTypePicture , *pict ) ;
-                  HUnlock(  (Handle) pict ) ;
-                  if ( created )
-                      KillPicture( pict ) ;
-           }
-           default:
-                break ;
-       }
-
+        size_t sz = data->GetDataSize( array[i] ) ;
+        void* buf = malloc( sz + 1 ) ;
+        if ( buf )
+        {        
+            data->GetDataHere( array[i] , buf ) ;
+            OSType mactype = 0 ;
+            switch ( array[i].GetType() )
+            {
+               case wxDF_TEXT:
+               case wxDF_OEMTEXT:
+                    mactype = kScrapFlavorTypeText ;
+               break ;
+    #if wxUSE_UNICODE
+               case wxDF_UNICODETEXT :
+                    mactype = kScrapFlavorTypeUnicode ;
+               break ;
+    #endif
+    #if wxUSE_DRAG_AND_DROP
+            case wxDF_METAFILE:
+                    mactype = kScrapFlavorTypePicture ;
+               break ;
+    #endif
+               case wxDF_BITMAP:
+               case wxDF_DIB:
+                    mactype = kScrapFlavorTypePicture ;
+                    break ;
+               default:
+                    break ;
+            }
+            UMAPutScrap( sz , mactype , buf ) ;
+            free( buf ) ;
+        }
     }
 
     delete[] array;
@@ -297,6 +282,8 @@ bool wxClipboard::AddData( wxDataObject *data )
 
 void wxClipboard::Close()
 {
+    wxCHECK_RET( m_open, wxT("clipboard not open") );
+
     m_open = false ;
     
  	// Get rid of cached object.  If this is not done copying from another application will
