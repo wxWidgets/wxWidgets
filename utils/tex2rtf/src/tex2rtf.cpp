@@ -21,7 +21,12 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+    #ifndef NO_GUI
+        #include "wx/menu.h"
+        #include "wx/textctrl.h"
+        #include "wx/filedlg.h"
+        #include "wx/msgdlg.h"
+    #endif
 #endif
 
 #ifndef NO_GUI
@@ -48,6 +53,11 @@
 
 #if (defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXX11__)) && !defined(NO_GUI)
 #include "tex2rtf.xpm"
+#endif
+
+#if !WXWIN_COMPATIBILITY_2_4
+static inline wxChar* copystring(const wxChar* s)
+    { return wxStrcpy(new wxChar[wxStrlen(s) + 1], s); }
 #endif
 
 const float versionNo = TEX2RTF_VERSION_NUMBER;

@@ -10,7 +10,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include <stdio.h>
-#include "wx/wx.h"
 #include "wx/utils.h"
 #include "wx/list.h"
 #include "wx/hash.h"
@@ -511,9 +510,9 @@ class CustomMacro: public wxObject
   inline CustomMacro(char *name, int args, char *body)
   {
     noArgs = args;
-    macroName = copystring(name);
+    macroName = strcpy(new char[strlen(name) + 1], name);
     if (body)
-      macroBody = copystring(body);
+      macroBody = strcpy(new char[strlen(body) + 1], body);
     else
       macroBody = NULL;
   }

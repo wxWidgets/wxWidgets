@@ -21,13 +21,16 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
 #endif
 
 #include "tex2any.h"
 #include "tex2rtf.h"
 #include "table.h"
 
+#if !WXWIN_COMPATIBILITY_2_4
+static inline wxChar* copystring(const wxChar* s)
+    { return wxStrcpy(new wxChar[wxStrlen(s) + 1], s); }
+#endif
 
 extern wxHashTable TexReferences;
 
