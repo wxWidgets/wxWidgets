@@ -1307,7 +1307,7 @@ public:
     virtual void OnCommand(wxWindow& WXUNUSED(win),
                            wxCommandEvent& WXUNUSED(event))
     {
-        wxFAIL_MSG("shouldn't be called any more");
+        wxFAIL_MSG(_T("shouldn't be called any more"));
     }
 
     // Called if child control has no callback function
