@@ -1464,15 +1464,20 @@ fi dnl not GNU make
 dnl needed for making link to setup.h
 AC_PROG_LN_S
 
-dnl ---------------------------------------------------------------------------
-dnl When we are using gcc on OS/2, we want to be either using resources (PM)
-dnl or a more complete POSIX emulation for Motif/GTK+/X11
-dnl Moreover we need to link explicitly against either stdcpp.a or stdcxx.a
-dnl (depending on compiler version), since we are using "gcc", not "g++/c++".
-dnl ---------------------------------------------------------------------------
-dnl (OS/2-only piece)
+dnl ------------------------------------------------------------------------
+dnl Platform specific tests
+dnl ------------------------------------------------------------------------
+
 case "${host}" in
   *-pc-os2_emx | *-pc-os2-emx )
+      dnl ---------------------------------------------------------------------
+      dnl When we are using gcc on OS/2, we want to be either using resources
+      dnl (PM) or a more complete POSIX emulation for Motif/GTK+/X11.
+      dnl Moreover we need to link explicitly against either stdcpp.a or
+      dnl stdcxx.a (depending on compiler version), since we are using "gcc",
+      dnl not "g++/c++".
+      dnl ---------------------------------------------------------------------
+      dnl (OS/2-only piece)
       if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_GTK" = 1 -o "$wxUSE_X11" = 1; then
           dnl More complete Unix emulation for unix-like ports
           dnl by linking in POSIX/2's cExt (if available).
@@ -1501,53 +1506,61 @@ case "${host}" in
       else
           LIBS="$LIBS -lstdcxx"
       fi
+      dnl (end of OS/2-only piece)
+  ;;
+  *)
+      dnl ---------------------------------------------------------------------
+      dnl look for strcasecmp() in string.h and then strings.h if it's not
+      dnl there. Don't do this on OS/2, where "stricmp" is the function to be
+      dnl used.
+      dnl ---------------------------------------------------------------------
+      dnl (non-OS/2-only piece)
+
+      AC_LANG_SAVE
+      AC_LANG_CPLUSPLUS
+
+      AC_CACHE_CHECK([for strcasecmp() in string.h], ac_cv_string_strcasecmp, [
+          AC_TRY_LINK([
+              #include <string.h>
+              ],
+              [
+                  strcasecmp("foo", "bar");
+              ],
+              ac_cv_string_strcasecmp=yes,
+              ac_cv_string_strcasecmp=no
+          )
+      ])
+
+      if test x"$ac_cv_string_strcasecmp" = "xyes"; then
+          AC_DEFINE(HAVE_STRCASECMP_IN_STRING_H)
+      else
+          AC_CACHE_CHECK([for strcasecmp() in strings.h], ac_cv_strings_strcasecmp, [
+              AC_TRY_LINK([
+                  #include <strings.h>
+                  ],
+                  [
+                      strcasecmp("foo", "bar");
+                  ],
+                  ac_cv_strings_strcasecmp=yes,
+                  ac_cv_strings_strcasecmp=no
+              )
+          ])
+
+          if test x"$ac_cv_string_strcasecmp" = "xyes"; then
+              AC_DEFINE(HAVE_STRCASECMP_IN_STRINGS_H)
+          else
+              AC_MSG_ERROR([No case-insensitive string comparison function found.])
+          fi
+      fi
+
+      AC_LANG_RESTORE
+      dnl (end of non-OS/2-only piece)
   ;;
 esac
-dnl (end of OS/2-only piece)
 
 dnl ------------------------------------------------------------------------
 dnl Check for headers
 dnl ------------------------------------------------------------------------
-
-dnl look for strcasecmp() in string.h and then strings.h if it's not there
-AC_LANG_SAVE
-AC_LANG_CPLUSPLUS
-
-AC_CACHE_CHECK([for strcasecmp() in string.h], ac_cv_string_strcasecmp, [
-    AC_TRY_LINK([
-        #include <string.h>
-        ],
-        [
-            strcasecmp("foo", "bar");
-        ],
-        ac_cv_string_strcasecmp=yes,
-        ac_cv_string_strcasecmp=no
-    )
-])
-
-if test x"$ac_cv_string_strcasecmp" = "xyes"; then
-    AC_DEFINE(HAVE_STRCASECMP_IN_STRING_H)
-else
-    AC_CACHE_CHECK([for strcasecmp() in strings.h], ac_cv_strings_strcasecmp, [
-        AC_TRY_LINK([
-            #include <strings.h>
-            ],
-            [
-                strcasecmp("foo", "bar");
-            ],
-            ac_cv_strings_strcasecmp=yes,
-            ac_cv_strings_strcasecmp=no
-        )
-    ])
-
-    if test x"$ac_cv_string_strcasecmp" = "xyes"; then
-        AC_DEFINE(HAVE_STRCASECMP_IN_STRINGS_H)
-    else
-        AC_MSG_ERROR([No case-insensitive string comparison function found.])
-    fi
-fi
-
-AC_LANG_RESTORE
 
 dnl defines HAVE_STDLIB_H
 AC_CHECK_HEADERS(stdlib.h)
