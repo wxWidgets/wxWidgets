@@ -109,7 +109,7 @@ bool wxDocMDIChildFrame::ProcessEvent(wxEvent& event)
 
     // Break recursion loops
     if (ActiveEvent == &event)
-        return false;
+        return FALSE;
 
     ActiveEvent = &event;
 
