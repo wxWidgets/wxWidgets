@@ -712,6 +712,11 @@ value is set to a bitmask of wxTREE_HITTEST_xxx constants.
         }
     }
 
+#ifdef __WXMSW__
+    // set/get the item state.image (state == -1 means cycle to the next one)
+    void SetState(const wxTreeItemId& node, int state);
+    int GetState(const wxTreeItemId& node);
+#endif
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
