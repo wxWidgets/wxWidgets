@@ -7139,7 +7139,7 @@ fi
      echo "$ac_t""no" 1>&6
      GTK_CFLAGS=""
      GTK_LIBS=""
-     echo "$ac_t""no" 1>&6
+     :
   fi
   
   

@@ -1129,7 +1129,7 @@ if test "$wxUSE_GTK" = 1; then
   MAKEINCLUDE=../gtk.inc
   AM_PATH_GTK(1.2.0, [
        WXGTK12=1
-  ], AC_MSG_RESULT(no))
+  ])
 fi
 
 if test "$wxUSE_QT" = 1; then
