@@ -2208,6 +2208,8 @@ dnl defines HAVE_STRINGS_H (where some string functions live on AIX for example)
 AC_CHECK_HEADERS(strings.h)
 dnl defines HAVE_UNISTD_H
 AC_CHECK_HEADERS(unistd.h)
+dnl defines HAVE_FCNTL_H
+AC_CHECK_HEADERS(fcntl.h)
 dnl defines HAVE_WCHAR_H
 AC_CHECK_HEADERS(wchar.h)
 dnl defines HAVE_WCSTR_H
