@@ -24,7 +24,8 @@ example:
 \begin{verbatim}
 bool MyApp::OnInit()
 {
-    m_checker = new wxSingleInstanceChecker(GetAppName());
+    const wxString name = wxString::Format("MyApp-%s", wxGetUserId().c_str());
+    m_checker = new wxSingleInstanceChecker(name);
     if ( m_checker->IsAnotherRunning() )
     {
         wxLogError(_("Another program instance is already running, aborting."));
@@ -45,8 +46,13 @@ int MyApp::OnExit()
 }
 \end{verbatim}
 
-This class is implemented for Win32 and Unix platforms supporting {\tt fcntl()}
-system call only.
+Note using \helpref{wxGetUserId()}{wxgetuserid} to construct the name: this
+allows different user to run the application concurrently which is usually the
+intended goal. If you don't use the user name in the wxSingleInstanceChecker
+name, only one user would be able to run the application at a time.
+
+This class is implemented for Win32 and Unix platforms (supporting {\tt fcntl()}
+system call, but almost all of modern Unix systems do) only.
 
 \wxheading{Derived from}
 
@@ -84,7 +90,8 @@ had been used is an error.
 
 \docparam{name}{must be given and be as unique as possible. It is used as the
 mutex name under Win32 and the lock file name under Unix. 
-\helpref{GetAppName()}{wxappgetappname} may be a good value for this parameter}
+\helpref{GetAppName()}{wxappgetappname} and \helpref{wxGetUserId()}{wxgetuserid} 
+are commonly used to construct this parameter.}
 
 \docparam{path}{is optional and is ignored under Win32 and used as the directory to
 create the lock file in under Unix (default is 
