@@ -698,7 +698,7 @@ class Editor:
                     includeMagic=self.window.autoCompleteIncludeMagic, 
                     includeSingle=self.window.autoCompleteIncludeSingle, 
                     includeDouble=self.window.autoCompleteIncludeDouble)
-        if list and len(list) < 2000:
+        if list:
             options = ' '.join(list)
             offset = 0
             self.window.AutoCompShow(offset, options)
