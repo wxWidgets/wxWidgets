@@ -2,7 +2,8 @@
 // Name:        src/msw/tglbtn.cpp
 // Purpose:     Definition of the wxToggleButton class, which implements a
 //              toggle button under wxMSW.
-// Author:      John Norris, minor changes by Axel Schlueter
+// Author: John Norris, minor changes by Axel Schlueter
+// and William Gallafent.
 // Modified by:
 // Created:     08.02.01
 // RCS-ID:      $Id$
@@ -73,62 +74,40 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
                             const wxValidator& validator,
                             const wxString& name)
 {
-    // default border for this control is none
-    if ( (style & wxBORDER_MASK) == wxBORDER_DEFAULT )
-    {
-        style |= wxBORDER_NONE;
-    }
+    if ( !CreateControl(parent, id, pos, size, style, validator, name) )
+        return FALSE;
     
-   if (!CreateBase(parent, id, pos, size, style, validator, name))
+    if ( !MSWCreateControl(wxT("BUTTON"), label, pos, size) )
       return FALSE;
+    
+    return TRUE;
+}
 
-   parent->AddChild(this);
+wxBorder wxToggleButton::GetDefaultBorder() const
+{
+    return wxBORDER_NONE;
+}
 
-   m_backgroundColour = parent->GetBackgroundColour();
-   m_foregroundColour = parent->GetForegroundColour();
+WXDWORD wxToggleButton::MSWGetStyle(long style, WXDWORD *exstyle) const
+{
+    WXDWORD msStyle = wxControl::MSWGetStyle(style, exstyle);
 
 #ifndef BS_PUSHLIKE
 #define BS_PUSHLIKE 0x00001000L
 #endif
 
-   WXDWORD exStyle = 0;
-   long msStyle = MSWGetStyle(style, & exStyle) ;
+    msStyle |= BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP;
 
-   msStyle |= BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP ;
-
-#ifdef __WIN32__
-   if(m_windowStyle & wxBU_LEFT)
+    if(style & wxBU_LEFT)
       msStyle |= BS_LEFT;
-   if(m_windowStyle & wxBU_RIGHT)
+    if(style & wxBU_RIGHT)
       msStyle |= BS_RIGHT;
-   if(m_windowStyle & wxBU_TOP)
+    if(style & wxBU_TOP)
       msStyle |= BS_TOP;
-   if(m_windowStyle & wxBU_BOTTOM)
+    if(style & wxBU_BOTTOM)
       msStyle |= BS_BOTTOM;
-#endif
 
-   m_hWnd = (WXHWND)CreateWindowEx(exStyle,
-                                   wxT("BUTTON"), label,
-                                   msStyle, 0, 0, 0, 0,
-                                   (HWND)parent->GetHWND(),
-                                   (HMENU)m_windowId,
-                                   wxGetInstance(), NULL);
-
-   if ( m_hWnd == 0 )
-   {
-        wxLogError(_T("Failed to create a toggle button"));
-
-        return FALSE;
-    }
-
-    // Subclass again for purposes of dialog editing mode
-    SubclassWin(m_hWnd);
-
-    SetFont(parent->GetFont());
-
-    SetSize(pos.x, pos.y, size.x, size.y);
-
-    return TRUE;
+    return msStyle;
 }
 
 void wxToggleButton::SetLabel(const wxString& label)
