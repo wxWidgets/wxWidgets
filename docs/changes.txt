@@ -18,6 +18,7 @@ All (GUI):
 
 - new wxToggleButton class (John Norris, Axel Schlueter)
 - wxCalendarCtrl now highlighting the date with time part bug fixed
+- wxADJUST_MINSIZE sizer flag added
 
 wxMSW:
 
