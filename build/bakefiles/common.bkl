@@ -180,9 +180,6 @@
         <depends cond="FORMAT!='autoconf' and BUILDING_LIB=='1'">setup.h</depends>
         <dirname>$(LIBDIRNAME)</dirname>
         <install-to>$(LIBDIR)</install-to>
-        <if cond="FORMAT!='autoconf'">
-            <cppflags>$(EXTRACFLAGS)</cppflags>
-        </if>
     </template>
 
     <template id="3rdparty_lib" template="common_settings,anylib">
