@@ -148,11 +148,6 @@ __WXLIB_CORE_p =
 __WXLIB_CORE_p = &
 	wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.lib
 !endif
-__WXLIB_HTML_p =
-!ifeq MONOLITHIC 0
-__WXLIB_HTML_p = &
-	wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html.lib
-!endif
 __WXLIB_MONO_p =
 !ifeq MONOLITHIC 1
 __WXLIB_MONO_p = &
@@ -165,16 +160,16 @@ __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
 
 ### Variables: ###
 
-HELPVIEW_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
-	$(__RUNTIME_LIBS_5) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. &
-	$(__DLLFLAG_p) -i=.\..\..\..\samples $(CXXFLAGS)
-HELPVIEW_OBJECTS =  &
-	$(OBJS)\helpview_helpview.obj
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 SETUPHDIR = &
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
+WXEMULATOR_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
+	$(__RUNTIME_LIBS_5) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
+	$(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. &
+	$(__DLLFLAG_p) -i=.\..\..\..\samples $(CXXFLAGS)
+WXEMULATOR_OBJECTS =  &
+	$(OBJS)\wxemulator_emulator.obj
 
 
 all : $(OBJS)
@@ -183,12 +178,12 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\helpview.exe data
+all : .SYMBOLIC $(OBJS)\wxemulator.exe data
 
-$(OBJS)\helpview_helpview.obj :  .AUTODEPEND .\helpview.cpp
-	$(CXX) -zq -fo=$^@ $(HELPVIEW_CXXFLAGS) $<
+$(OBJS)\wxemulator_emulator.obj :  .AUTODEPEND .\emulator.cpp
+	$(CXX) -zq -fo=$^@ $(WXEMULATOR_CXXFLAGS) $<
 
-$(OBJS)\helpview_helpview.res :  .AUTODEPEND .\helpview.rc
+$(OBJS)\wxemulator_sample.res :  .AUTODEPEND .\..\..\..\samples\sample.rc
 	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\..\samples $<
 
 clean : .SYMBOLIC 
@@ -196,19 +191,19 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
-	-if exist $(OBJS)\helpview.exe del $(OBJS)\helpview.exe
+	-if exist $(OBJS)\wxemulator.exe del $(OBJS)\wxemulator.exe
 
 data : .SYMBOLIC 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %f in (test.zip) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+	for %f in (default.wxe ipaq.wxe bluegradient.jpg ipaq01.jpg) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
-$(OBJS)\helpview.exe :  $(HELPVIEW_OBJECTS) $(OBJS)\helpview_helpview.res
-	@%create $(OBJS)\helpview.lbc
-	@%append $(OBJS)\helpview.lbc option quiet
-	@%append $(OBJS)\helpview.lbc name $^@
-	@%append $(OBJS)\helpview.lbc option caseexact
-	@%append $(OBJS)\helpview.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
-	@for %i in ($(HELPVIEW_OBJECTS)) do @%append $(OBJS)\helpview.lbc file %i
-	@for %i in ( $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\helpview.lbc library %i
-	@%append $(OBJS)\helpview.lbc option resource=$(OBJS)\helpview_helpview.res
-	wlink @$(OBJS)\helpview.lbc
+$(OBJS)\wxemulator.exe :  $(WXEMULATOR_OBJECTS) $(OBJS)\wxemulator_sample.res
+	@%create $(OBJS)\wxemulator.lbc
+	@%append $(OBJS)\wxemulator.lbc option quiet
+	@%append $(OBJS)\wxemulator.lbc name $^@
+	@%append $(OBJS)\wxemulator.lbc option caseexact
+	@%append $(OBJS)\wxemulator.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
+	@for %i in ($(WXEMULATOR_OBJECTS)) do @%append $(OBJS)\wxemulator.lbc file %i
+	@for %i in ( $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\wxemulator.lbc library %i
+	@%append $(OBJS)\wxemulator.lbc option resource=$(OBJS)\wxemulator_sample.res
+	wlink @$(OBJS)\wxemulator.lbc
