@@ -598,7 +598,7 @@ bool wxListCtrl::GetColumn(int col, wxListItem& item) const
         lvCol.mask |= LVCF_IMAGE;
     }
 
-    bool success = ListView_GetColumn(GetHwnd(), col, & lvCol) != 0;
+    bool success = ListView_GetColumn(GetHwnd(), col, &lvCol) != 0;
 
     //  item.m_subItem = lvCol.iSubItem;
     item.m_width = lvCol.cx;
@@ -611,12 +611,20 @@ bool wxListCtrl::GetColumn(int col, wxListItem& item) const
 
     if ( item.m_mask & wxLIST_MASK_FORMAT )
     {
-        if (lvCol.fmt == LVCFMT_LEFT)
-            item.m_format = wxLIST_FORMAT_LEFT;
-        else if (lvCol.fmt == LVCFMT_RIGHT)
-            item.m_format = wxLIST_FORMAT_RIGHT;
-        else if (lvCol.fmt == LVCFMT_CENTER)
-            item.m_format = wxLIST_FORMAT_CENTRE;
+        switch (lvCol.fmt & LVCFMT_JUSTIFYMASK) {
+            case LVCFMT_LEFT:
+                item.m_format = wxLIST_FORMAT_LEFT;
+                break;
+            case LVCFMT_RIGHT:
+                item.m_format = wxLIST_FORMAT_RIGHT;
+                break;
+            case LVCFMT_CENTER:
+                item.m_format = wxLIST_FORMAT_CENTRE;
+                break;
+            default:
+                item.m_format = -1;  // Unknown?
+                break;
+        }
     }
 
 #if _WIN32_IE >= 0x0300

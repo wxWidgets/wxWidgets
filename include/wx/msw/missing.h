@@ -39,6 +39,10 @@
     #define HDM_FIRST 0x1200
 #endif
 
+#ifndef LVCFMT_JUSTIFYMASK
+    #define LVCFMT_JUSTIFYMASK 0x0003
+#endif
+
 // mingw32/cygwin don't have declarations for comctl32.dll 4.70+ stuff
 #ifndef NM_CACHEHINT
     typedef struct tagNMLVCACHEHINT
