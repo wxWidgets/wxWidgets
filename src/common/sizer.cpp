@@ -29,7 +29,8 @@
 
 IMPLEMENT_ABSTRACT_CLASS(wxSizerItem, wxObject);
 IMPLEMENT_ABSTRACT_CLASS(wxSizer, wxObject);
-IMPLEMENT_ABSTRACT_CLASS(wxGridSizer, wxObject);
+IMPLEMENT_ABSTRACT_CLASS(wxGridSizer, wxSizer);
+IMPLEMENT_ABSTRACT_CLASS(wxFlexGridSizer, wxGridSizer);
 IMPLEMENT_ABSTRACT_CLASS(wxBoxSizer, wxSizer);
 IMPLEMENT_ABSTRACT_CLASS(wxStaticBoxSizer, wxBoxSizer);
 #if wxUSE_NOTEBOOK
@@ -494,6 +495,184 @@ void wxGridSizer::SetItemBounds( wxSizerItem *item, int x, int y, int w, int h )
     }
     
     item->SetDimension(pt, sz);
+}
+
+//---------------------------------------------------------------------------
+// wxFlexGridSizer
+//---------------------------------------------------------------------------
+
+wxFlexGridSizer::wxFlexGridSizer( int rows, int cols, int vgap, int hgap )
+   : wxGridSizer( rows, cols, vgap, hgap )
+{ 
+    m_rowHeights = (int*) NULL;
+    m_colWidths = (int*) NULL;
+}
+
+wxFlexGridSizer::wxFlexGridSizer( int cols, int vgap, int hgap )
+   : wxGridSizer( cols, vgap, hgap ) 
+{ 
+    m_rowHeights = (int*) NULL;
+    m_colWidths = (int*) NULL;
+}
+       
+wxFlexGridSizer::~wxFlexGridSizer()
+{
+    if (m_rowHeights)
+        delete[] m_rowHeights;
+    if (m_colWidths)
+        delete[] m_colWidths;
+}
+
+void wxFlexGridSizer::CreateArrays()
+{
+    if (m_rowHeights)
+        delete[] m_rowHeights;
+    if (m_colWidths)
+        delete[] m_colWidths;
+        
+    if (m_children.GetCount() == 0)
+        return;
+        
+    int nitems = m_children.GetCount();
+    int nrows = m_rows;
+    int ncols = m_cols;
+
+    if (ncols > 0)
+        nrows = (nitems + ncols-1) / ncols;
+    else
+        ncols = (nitems + nrows-1) / nrows;
+
+    m_rowHeights = new int[nrows];
+    m_colWidths = new int[ncols];
+    
+    for (int col = 0; col < ncols; col++)
+        m_colWidths[ col ] = 0;
+    for (int row = 0; row < nrows; row++)
+        m_rowHeights[ row ] = 0;
+}
+
+void wxFlexGridSizer::RecalcSizes()
+{
+    if (m_children.GetCount() == 0)
+        return;
+
+    int nitems = m_children.GetCount();
+    int nrows = m_rows;
+    int ncols = m_cols;
+
+    if (ncols > 0)
+        nrows = (nitems + ncols-1) / ncols;
+    else
+        ncols = (nitems + nrows-1) / nrows;
+
+    wxSize sz( GetSize() );
+    wxSize minsz( CalcMin() );
+    wxPoint pt( GetPosition() );
+    int delta;
+    int row;
+    int col;
+
+    if ((m_growableRows.GetCount() > 0) && (sz.y > minsz.y))
+    {
+        delta = (sz.y - minsz.y) / m_growableRows.GetCount();
+        for (row = 0; row < nrows; row++)
+            m_rowHeights[ row ] = m_rowHeights[ row ] + delta;
+    }
+    
+    if ((m_growableCols.GetCount() > 0) && (sz.x > minsz.x))
+    {
+        delta = (sz.x - minsz.x) / m_growableCols.GetCount();
+        for (col = 0; col < ncols; col++)
+            m_colWidths[ col ] = m_colWidths[ col ] + delta;
+    }
+    
+    sz = wxSize( pt.x + sz.x, pt.y + sz.y );
+
+    int x = pt.x;
+    for (int c = 0; c < ncols; c++)
+    {
+        int y = pt.y;
+        for (int r = 0; r < nrows; r++)
+        {
+            int i = r * ncols + c;
+            if (i < nitems)
+            {
+                wxNode *node = m_children.Nth( i );
+                wxASSERT( node );
+                
+                int w = wxMax( 0, wxMin( m_colWidths[c], sz.x - x ) );
+                int h = wxMax( 0, wxMin( m_rowHeights[r], sz.y - y ) );
+                
+                SetItemBounds( (wxSizerItem*) node->Data(), x, y, w, h);
+            }
+            y = y + m_rowHeights[r] + m_vgap;
+        }
+        x = x + m_colWidths[c] + m_hgap;
+    }
+}
+
+wxSize wxFlexGridSizer::CalcMin()
+{
+    if (m_children.GetCount() == 0)
+        return wxSize(10,10);
+
+    int nitems = m_children.GetCount();
+    int nrows = m_rows;
+    int ncols = m_cols;
+
+    if (ncols > 0)
+        nrows = (nitems + ncols-1) / ncols;
+    else
+        ncols = (nitems + nrows-1) / nrows;
+
+    CreateArrays();
+    
+    int col;
+    int row;
+    
+    int i = 0;
+    wxNode *node = m_children.First();
+    while (node)
+    {
+        wxSizerItem *item = (wxSizerItem*)node->Data();
+        wxSize sz( item->CalcMin() );
+        row = i / ncols;
+        col = i % ncols;
+        m_rowHeights[ row ] = wxMax( sz.y, m_rowHeights[ row ] );
+        m_colWidths[ col ] = wxMax( sz.x, m_colWidths[ col ] );
+        
+        node = node->Next();
+        i++;
+    }
+    
+    int width = 0;
+    for (col = 0; col < ncols; col++)
+        width += m_colWidths[ col ];
+    
+    int height = 0;
+    for (row = 0; row < nrows; row++)
+        height += m_rowHeights[ row ];
+    
+    return wxSize( width +  (ncols-1) * m_hgap,
+                   height + (nrows-1) * m_vgap);
+}
+
+void wxFlexGridSizer::AddGrowableRow( size_t idx )
+{
+    m_growableRows.Add( idx );
+}
+
+void wxFlexGridSizer::RemoveGrowableRow( size_t idx )
+{
+}
+
+void wxFlexGridSizer::AddGrowableCol( size_t idx )
+{
+    m_growableCols.Add( idx );
+}
+
+void wxFlexGridSizer::RemoveGrowableCol( size_t idx )
+{
 }
 
 //---------------------------------------------------------------------------

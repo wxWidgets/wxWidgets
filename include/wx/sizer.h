@@ -200,6 +200,37 @@ private:
 };
 
 //---------------------------------------------------------------------------
+// wxFlexGridSizer
+//---------------------------------------------------------------------------
+
+class WXDLLEXPORT wxFlexGridSizer: public wxGridSizer
+{
+public:
+    wxFlexGridSizer( int rows, int cols, int vgap, int hgap );
+    wxFlexGridSizer( int cols, int vgap = 0, int hgap = 0 );
+    ~wxFlexGridSizer();
+    
+    void RecalcSizes();
+    wxSize CalcMin();
+    
+    void AddGrowableRow( size_t idx );
+    void RemoveGrowableRow( size_t idx );
+    void AddGrowableCol( size_t idx );
+    void RemoveGrowableCol( size_t idx );
+
+protected:
+    int         *m_rowHeights;
+    int         *m_colWidths;
+    wxArrayInt  m_growableRows;
+    wxArrayInt  m_growableCols;
+    
+    void CreateArrays();
+    
+private:
+    DECLARE_CLASS(wxFlexGridSizer);
+};
+
+//---------------------------------------------------------------------------
 // wxBoxSizer
 //---------------------------------------------------------------------------
 
@@ -209,7 +240,7 @@ public:
     wxBoxSizer( int orient );
 
     void RecalcSizes();
-        wxSize CalcMin();
+    wxSize CalcMin();
 
     int GetOrientation()
         { return m_orient; }
