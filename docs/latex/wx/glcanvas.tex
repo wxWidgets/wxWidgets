@@ -57,6 +57,10 @@ alpha channel, and accum buffer. Other implementations may support them.
 \twocolitem{\windowstyle{WX\_GL\_MIN\_ACCUM\_ALPHA}}{Use blue buffer with most bits (> MIN\_ACCUM\_ALPHA bits)}
 \end{twocollist}
 
+\wxheading{See Also}
+
+\helpref{wxGLContext}{wxglcontext}
+
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 \membersection{wxGLCanvas::wxGLCanvas}\label{wxglcanvasconstr}
@@ -117,7 +121,7 @@ Obtains the context that is associated with this canvas.
 \func{void}{SetCurrent}{\void}
 
 Sets this canvas as the current recipient of OpenGL calls.
-Each canvas contain an OpenGL device context that has been created during
+Each canvas contains an OpenGL device context that has been created during
 the creation of this window. So this call sets the current device context
 as the target device context for OpenGL operations.
 
