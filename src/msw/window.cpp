@@ -1150,11 +1150,14 @@ void wxWindow::DoGetPosition(int *x, int *y) const
             ::ScreenToClient(hParentWnd, &point);
         }
 
-        // We may be faking the client origin. So a window that's really at (0,
-        // 30) may appear (to wxWin apps) to be at (0, 0).
-        wxPoint pt(parent->GetClientAreaOrigin());
-        point.x -= pt.x;
-        point.y -= pt.y;
+        if ( parent )
+        {
+            // We may be faking the client origin. So a window that's really at (0,
+            // 30) may appear (to wxWin apps) to be at (0, 0).
+            wxPoint pt(parent->GetClientAreaOrigin());
+            point.x -= pt.x;
+            point.y -= pt.y;
+        }
     }
 
     if ( x )
