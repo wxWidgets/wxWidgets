@@ -42,9 +42,9 @@ class PythonSTC(stc.StyledTextCtrl):
 
     fold_symbols = 2
     
-    def __init__(self, parent, ID):
+    def __init__(self, parent, ID, style=0):
         stc.StyledTextCtrl.__init__(self, parent, ID,
-                                  style = wx.NO_FULL_REPAINT_ON_RESIZE)
+                                  style = style|wx.NO_FULL_REPAINT_ON_RESIZE)
 
         self.CmdKeyAssign(ord('B'), stc.STC_SCMOD_CTRL, stc.STC_CMD_ZOOMIN)
         self.CmdKeyAssign(ord('N'), stc.STC_SCMOD_CTRL, stc.STC_CMD_ZOOMOUT)

@@ -93,8 +93,6 @@ class RunDemoApp(wx.App):
                 frect = frame.otherWin.GetRect()
                 p = wx.Panel(frame, -1)
                 b = wx.Button(p, -1, " Exit ", (10,10))
-                p.Fit()
-                #frame.SetClientSize(p.GetSize())
                 frame.SetSize((200, 100))
                 frame.Bind(wx.EVT_BUTTON, self.OnButton, b)
             else:

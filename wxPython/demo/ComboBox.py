@@ -40,7 +40,7 @@ class TestComboBox(wx.Panel):
 
         # This combobox is created with no values initially.
         cb = wx.ComboBox(
-            self, 501, "default value", (90, 80), (95, -1), [], wx.CB_SIMPLE)
+            self, 501, "default value", (90, 80), (95, -1), [], wx.CB_DROPDOWN)
 
         # Here we dynamically add our values to the second combobox.
         for item in sampleList:

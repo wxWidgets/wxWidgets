@@ -263,7 +263,7 @@ try:
     from StyledTextCtrl_2 import PythonSTC
     class DemoCodeViewer(PythonSTC):
         def __init__(self, parent, ID):
-            PythonSTC.__init__(self, parent, ID)
+            PythonSTC.__init__(self, parent, ID, wx.BORDER_NONE)
             self.SetUpEditor()
 
         # Some methods to make it compatible with how the wxTextCtrl is used
@@ -431,6 +431,7 @@ class wxPythonDemo(wx.Frame):
     def __init__(self, parent, id, title):
         wx.Frame.__init__(self, parent, -1, title, size = (800, 600),
                           style=wx.DEFAULT_FRAME_STYLE|wx.NO_FULL_REPAINT_ON_RESIZE)
+        
 
         self.cwd = os.getcwd()
         self.curOverview = ""
@@ -684,7 +685,6 @@ class wxPythonDemo(wx.Frame):
         if itemText == self.overviewText:
             self.LoadDemoSource('Main.py')
             self.SetOverview(self.overviewText, overview)
-##            self.nb.Refresh();
             self.window = None
 
         else:
@@ -703,15 +703,10 @@ class wxPythonDemo(wx.Frame):
                     wx.EndBusyCursor()
                 self.tree.Refresh()
 
-                # in case runTest is modal, make sure things look right...
-##                self.nb.Refresh();
-##                wx.SafeYield()
-
                 self.window = module.runTest(self, self.nb, self) ###
                 if self.window is not None:
                     self.nb.AddPage(self.window, 'Demo')
                     self.nb.SetSelection(2)
-##                    self.nb.Refresh()  # without this wxMac has troubles showing the just added page
 
             else:
                 self.ovr.SetPage("")
