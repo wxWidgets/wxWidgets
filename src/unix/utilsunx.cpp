@@ -39,7 +39,7 @@
 #include <signal.h>
 #include <fcntl.h>          // for O_WRONLY and friends
 #include <time.h>           // nanosleep() and/or usleep()
-
+#include <ctype.h>          // isspace()
 #ifdef HAVE_UNAME
     #include <sys/utsname.h> // for uname()
 #endif // HAVE_UNAME
@@ -132,24 +132,61 @@ int wxKill(long pid, int sig)
     return kill(pid, sig);
 }
 
+#define WXEXECUTE_NARGS   127
+
 long wxExecute( const wxString& command, bool sync, wxProcess *process )
 {
-    static const char *IFS = " \t\n";
-
     wxCHECK_MSG( !command.IsEmpty(), 0, "can't exec empty command" );
 
     int argc = 0;
-    char *argv[127];
-    char *tmp = new char[command.Len() + 1];
-    strcpy(tmp, command);
+    char *argv[WXEXECUTE_NARGS];
+    wxString argument;
+    const char *cptr = command.c_str();
+    char quotechar = '\0'; // is arg quoted?
+    bool escaped = FALSE;
 
-    argv[argc++] = strtok(tmp, IFS);
-    while ((argv[argc++] = strtok((char *) NULL, IFS)) != NULL)
-        /* loop */ ;
-
+    do
+    {
+        argument="";
+        quotechar = '\0';
+        // eat leading whitespace:
+        while(*cptr && isspace(*cptr))
+            cptr++;
+        if(*cptr == '\'' || *cptr == '"')
+            quotechar = *cptr++;
+        do
+        {
+            if(*cptr == '\\' && ! escaped)
+            {
+                escaped = TRUE;
+                cptr++;
+                continue;
+            }
+            // all other characters:
+            argument += *cptr ++;
+            escaped = FALSE;
+            // Have we reached the end of the argument?
+            if((*cptr == quotechar && ! escaped)
+               || (quotechar == '\0' && isspace(*cptr))
+               || *cptr == '\0')
+            {
+                wxASSERT(argc < WXEXECUTE_NARGS);
+                argv[argc] = new char[argument.Len()+1];
+                strcpy(argv[argc], argument.c_str());
+                argc++;
+                // if not at end of buffer, swallow last character:
+                if(*cptr) cptr++;
+                break; // done with this one, start over
+            }
+        }while(*cptr);
+    }while(*cptr);
+    argv[argc] = NULL;
+    
     long lRc = wxExecute(argv, sync, process);
 
-    delete [] tmp;
+    argc = 0;
+    while(argv[argc])
+        delete [] argv[argc++];
 
     return lRc;
 }
