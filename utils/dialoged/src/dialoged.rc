@@ -60,5 +60,8 @@ TOBACKTOOL      BITMAP "bitmaps/toback.bmp"
 
 WXWINBMP        BITMAP "bitmaps/wxwin.bmp"
 
+/*
+These files are both invalid and it doesn't appear anyone uses them
 tick_bmp                BITMAP  "bitmaps/tick.bmp"
 cross_bmp               BITMAP  "bitmaps/cross.bmp"
+*/
