@@ -69,20 +69,20 @@ AC_DEFUN(AM_PATH_WXCONFIG,
   dnl deal with optional prefixes
   if test x$wx_config_exec_prefix != x ; then
      wx_config_args="$wx_config_args --exec-prefix=$wx_config_exec_prefix"
-     if test x${WX_CONFIG_NAME+set} != xset ; then
-        WX_CONFIG_PATH=$wx_config_exec_prefix/bin/$WX_CONFIG_NAME
-     fi
+     WX_LOOKUP_PATH="$wx_config_exec_prefix/bin"
   fi
   if test x$wx_config_prefix != x ; then
      wx_config_args="$wx_config_args --prefix=$wx_config_prefix"
-     if test x${WX_CONFIG_NAME+set} != xset ; then
-        WX_CONFIG_PATH=$wx_config_prefix/bin/$WX_CONFIG_NAME
-     fi
+     WX_LOOKUP_PATH="$WX_LOOKUP_PATH:$wx_config_prefix/bin"
   fi
 
-  dnl don't search the PATH if we already have the full name
-  if test "x$WX_CONFIG_PATH" = "x" ; then
-    AC_PATH_PROG(WX_CONFIG_PATH, $WX_CONFIG_NAME, no)
+  dnl don't search the PATH if WX_CONFIG_NAME is absolute filename
+  if test -x "$WX_CONFIG_NAME" ; then
+     AC_MSG_CHECKING(for wx-config)
+     WX_CONFIG_PATH="$WX_CONFIG_NAME"
+     AC_MSG_RESULT($WX_CONFIG_PATH)
+  else
+     AC_PATH_PROG(WX_CONFIG_PATH, $WX_CONFIG_NAME, no, "$WX_LOOKUP_PATH:$PATH")
   fi
 
   if test "$WX_CONFIG_PATH" != "no" ; then

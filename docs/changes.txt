@@ -73,6 +73,7 @@ wxBase:
 - modified wxFileName::CreateTempFileName() to open the file atomically
   (if possible) and, especially, not to leak the file descriptors under Unix
 - memory leak in wxHTTP fixed (Dimitri)
+- fixes to AM_PATH_WXCONFIG autoconf macro
 
 All (GUI):
 
