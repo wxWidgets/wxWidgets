@@ -580,8 +580,21 @@
 /* The type of 3rd argument to getsockname() - usually size_t or int */
 #undef SOCKLEN_T
 
+/* gettimeofday() usually takes 2 arguments, but some really old systems might
+ * have only one, in which case define WX_GETTIMEOFDAY_NO_TZ */
+#undef WX_GETTIMEOFDAY_NO_TZ
+
 /* Define if you have dlopen() */
 #undef HAVE_DLOPEN
+
+/* Define if you have gettimeofday() */
+#undef HAVE_GETTIMEOFDAY
+
+/* Define if you have ftime() */
+#undef HAVE_FTIME
+
+/* Define if you have localtime() */
+#undef HAVE_LOCALTIME
 
 /* Define if you have nanosleep() */
 #undef HAVE_NANOSLEEP
@@ -660,9 +673,6 @@
 
 /* Define if you have the vfork function.  */
 #undef HAVE_VFORK
-
-/* Define if you have the vsnprintf function.  */
-#undef HAVE_VSNPRINTF
 
 /* Define if you have the <X11/XKBlib.h> header file.  */
 #undef HAVE_X11_XKBLIB_H

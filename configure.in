@@ -1355,6 +1355,9 @@ dnl ---------------------------------------------------------------------------
 dnl notice that /usr/include should not be in this list, otherwise it breaks
 dnl compilation on Solaris/gcc because standard headers are included instead
 dnl of the gcc ones
+dnl
+dnl Also try to put all directories which may contain X11R6 before those which
+dnl may contain X11R5/4 - we want to use R6 on machines which have both!
 SEARCH_INCLUDE="\
     /usr/local/include        \
                               \
@@ -1368,15 +1371,14 @@ SEARCH_INCLUDE="\
                               \
     /usr/Motif1.2/include     \
     /usr/dt/include           \
+    /usr/openwin/include      \
+                              \
     /usr/include/Xm           \
                               \
     /usr/X11R6/include        \
+    /usr/X11R6.4/include      \
     /usr/X11R5/include        \
     /usr/X11R4/include        \
-                              \
-    /usr/X11R6/lib            \
-    /usr/X11R5/lib            \
-    /usr/X11R4/lib            \
                               \
     /usr/include/X11R6        \
     /usr/include/X11R5        \
@@ -1416,7 +1418,6 @@ SEARCH_INCLUDE="\
     /usr/local/x11r5/include  \
     /usr/lpp/Xamples/include  \
                               \
-    /usr/openwin/include      \
     /usr/openwin/share/include \
 "
 
@@ -2287,11 +2288,6 @@ if test "$wxUSE_APPLE_IEEE" = "yes"; then
   AC_DEFINE(wxUSE_APPLE_IEEE)
 fi
 
-if test "$wxUSE_TIMEDATE" = "yes"; then
-  AC_DEFINE(wxUSE_TIMEDATE)
-  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS typetest"
-fi
-
 if test "$wxUSE_WAVE" = "yes"; then
   AC_DEFINE(wxUSE_WAVE)
 fi
@@ -2354,12 +2350,6 @@ if test "$wxUSE_LONGLONG" = "yes"; then
   AC_DEFINE(wxUSE_LONGLONG)
 fi
 
-if test "$wxUSE_SOCKETS" = "yes" ; then
-    AC_DEFINE(wxUSE_SOCKETS)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS wxsocket"
-    INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS protocol"
-fi
-
 if test "$wxUSE_DIALUP_MANAGER" = "yes" ; then
   AC_DEFINE(wxUSE_DIALUP_MANAGER)
 fi
@@ -2373,10 +2363,74 @@ if test "$wxUSE_SERIAL" = "yes" ; then
 fi
 
 dnl ------------------------------------------------------------------------
+dnl time/date functions
+dnl ------------------------------------------------------------------------
+
+if test "$wxUSE_TIMEDATE" = "yes"; then
+    AC_CHECK_FUNCS(gettimeofday localtime ftime)
+
+    if test "$ac_cv_func_gettimeofday" = "yes"; then
+        AC_CACHE_CHECK([whether gettimeofday takes two arguments],
+                       wx_cv_func_gettimeofday_has_2_args,
+        [
+            dnl on some _really_ old systems it takes only 1 argument
+            AC_LANG_SAVE
+            AC_LANG_CPLUSPLUS
+
+            AC_TRY_COMPILE(
+                [
+                    #include <sys/time.h>
+                    #include <unistd.h>
+                ],
+                [
+                    struct timeval tv;
+                    struct timezone tz;
+                    gettimeofday(&tv, &tz);
+                ],
+                wx_cv_func_gettimeofday_has_2_args=yes,
+                AC_TRY_COMPILE(
+                    [
+                        #include <sys/time.h>
+                        #include <unistd.h>
+                    ],
+                    [
+                        struct timeval tv;
+                        gettimeofday(&tv);
+                    ],
+                    wx_cv_func_gettimeofday_has_2_args=no,
+                    wx_cv_func_gettimeofday_has_2_args=unknown
+                )
+            )
+            AC_LANG_RESTORE
+        ])
+
+        if test "$wx_cv_func_gettimeofday_has_2_args" != "yes"; then
+            AC_DEFINE(WX_GETTIMEOFDAY_NO_TZ)
+        fi
+    fi
+
+    AC_DEFINE(wxUSE_TIMEDATE)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS typetest"
+fi
+
+dnl ------------------------------------------------------------------------
 dnl wxSocket
 dnl ------------------------------------------------------------------------
 
 if test "$wxUSE_SOCKETS" = "yes"; then
+    dnl under Solaris, socket functions live in -lsocket
+    AC_CHECK_FUNC(socket,,
+        AC_CHECK_LIB(socket, socket,
+            INET_LINK="$INET_LINK -lsocket",
+            [
+                AC_MSG_WARN([socket library not found - sockets will be disabled])
+                wxUSE_SOCKETS=no
+            ]
+        )
+    )
+fi
+
+if test "$wxUSE_SOCKETS" = "yes" ; then
     AC_LANG_SAVE
     AC_LANG_CPLUSPLUS
     dnl determine the type of third argument for getsockname
@@ -2393,18 +2447,15 @@ if test "$wxUSE_SOCKETS" = "yes"; then
                 [#include <sys/socket.h>],
                 [int len; getsockname(0, 0, &len);],
                 AC_DEFINE(SOCKLEN_T, int) AC_MSG_RESULT(int),
-            AC_MSG_RESULT(unknown)
-        )
+                AC_MSG_RESULT(unknown)
+            )
         )
     )
     AC_LANG_RESTORE
 
-    dnl under Solaris, socket functions live in -lsocket
-    AC_CHECK_FUNC(socket,,
-        AC_CHECK_LIB(socket, socket,
-            INET_LINK="$INET_LINK -lsocket"
-        )
-    )
+    AC_DEFINE(wxUSE_SOCKETS)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS wxsocket"
+    INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS protocol"
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -3040,7 +3091,9 @@ AC_OUTPUT([
             if test ! -d include/wx/${TOOLKIT_DIR}; then
               mkdir include/wx/${TOOLKIT_DIR}
             fi
-            mv -f setup.h include/wx/${TOOLKIT_DIR}/setup.h
+            if test -f setup.h; then
+                mv -f setup.h include/wx/${TOOLKIT_DIR}/setup.h
+            fi
           ],
           [
             TOOLKIT_DIR="${TOOLKIT_DIR}"
