@@ -68,10 +68,8 @@ BEGIN_EVENT_TABLE(wxFrameOS2, wxFrameBase)
     EVT_SYS_COLOUR_CHANGED(wxFrameOS2::OnSysColourChanged)
 END_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS(wxFrameOS2, wxWindow)
-
 #ifndef __WXUNIVERSAL__
-IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxFrameMSW)
+IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
 #endif
 
 // ============================================================================

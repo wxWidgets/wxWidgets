@@ -104,6 +104,7 @@ GENERICOBJS= \
   ..\generic\$D\dirctrlg.obj \
   ..\generic\$D\dragimgg.obj \
   ..\generic\$D\fontdlgg.obj \
+  ..\generic\$D\fdrepdlg.obj \
   ..\generic\$D\grid.obj \
   ..\generic\$D\gridctrl.obj \
   ..\generic\$D\gridsel.obj \
@@ -150,6 +151,7 @@ GENLIBOBJS= \
   dirctrlg.obj \
   dragimgg.obj \
   fontdlgg.obj \
+  fdrepdlg.obj \
   grid.obj \
   gridctrl.obj \
   gridsel.obj \
@@ -190,6 +192,7 @@ NONESSENTIALOBJS= \
 
 COMMONOBJS = \
   ..\common\$D\appcmn.obj \
+  ..\common\$D\bmpbase.obj \
   ..\common\$D\choiccmn.obj \
   ..\common\$D\clipcmn.obj \
   ..\common\$D\cmdline.obj \
@@ -220,6 +223,7 @@ COMMONOBJS = \
   ..\common\$D\encconv.obj \
   ..\common\$D\event.obj \
   ..\common\$D\extended.obj \
+  ..\common\$D\fddlgcmn.obj \
   ..\common\$D\ffile.obj \
   ..\common\$D\file.obj \
   ..\common\$D\fileconf.obj \
@@ -315,6 +319,7 @@ COMMONOBJS = \
 
 COMLIBOBJS1 = \
   appcmn.obj \
+  bmpbase.obj \
   choiccmn.obj \
   clipcmn.obj \
   cmdline.obj \
@@ -342,6 +347,7 @@ COMLIBOBJS1 = \
   encconv.obj \
   event.obj \
   extended.obj \
+  fddlgcmn.obj \
   ffile.obj \
   file.obj \
   fileconf.obj \
@@ -355,11 +361,11 @@ COMLIBOBJS1 = \
   fs_mem.obj \
   fs_zip.obj \
   ftp.obj \
-  gaugecmn.obj \
-  gdicmn.obj \
-  geometry.obj
+  gaugecmn.obj
 
 COMLIBOBJS2 = \
+  gdicmn.obj \
+  geometry.obj \
   gifdecod.obj \
   hash.obj \
   helpbase.obj \
@@ -399,11 +405,11 @@ COMLIBOBJS2 = \
   quantize.obj \
   radiocmn.obj \
   regex.obj \
-  resource.obj \
-  sckaddr.obj \
-  sckfile.obj
+  resource.obj
 
 COMLIBOBJS3 = \
+  sckaddr.obj \
+  sckfile.obj \
   sckipc.obj \
   sckstrm.obj \
   serbase.obj \
@@ -666,6 +672,7 @@ $D\dummydll.obj: dummydll.$(SRCSUFF) $(WXDIR)\include\wx\wx.h $(WXDIR)\include\w
 
 $(COMLIBOBJS1):
   copy ..\common\$D\appcmn.obj
+  copy ..\common\$D\bmpbase.obj
   copy ..\common\$D\choiccmn.obj
   copy ..\common\$D\clipcmn.obj
   copy ..\common\$D\cmdline.obj
@@ -693,6 +700,7 @@ $(COMLIBOBJS1):
   copy ..\common\$D\encconv.obj
   copy ..\common\$D\event.obj
   copy ..\common\$D\extended.obj
+  copy ..\common\$D\fddlgcmn.obj
   copy ..\common\$D\ffile.obj
   copy ..\common\$D\file.obj
   copy ..\common\$D\fileconf.obj
@@ -707,10 +715,10 @@ $(COMLIBOBJS1):
   copy ..\common\$D\fs_zip.obj
   copy ..\common\$D\ftp.obj
   copy ..\common\$D\gaugecmn.obj
-  copy ..\common\$D\gdicmn.obj
-  copy ..\common\$D\geometry.obj
 
 $(COMLIBOBJS2):
+  copy ..\common\$D\gdicmn.obj
+  copy ..\common\$D\geometry.obj
   copy ..\common\$D\gifdecod.obj
   copy ..\common\$D\hash.obj
   copy ..\common\$D\helpbase.obj
@@ -751,10 +759,10 @@ $(COMLIBOBJS2):
   copy ..\common\$D\radiocmn.obj
   copy ..\common\$D\regex.obj
   copy ..\common\$D\resource.obj
-  copy ..\common\$D\sckaddr.obj
-  copy ..\common\$D\sckfile.obj
 
 $(COMLIBOBJS3):
+  copy ..\common\$D\sckaddr.obj
+  copy ..\common\$D\sckfile.obj
   copy ..\common\$D\sckipc.obj
   copy ..\common\$D\sckstrm.obj
   copy ..\common\$D\serbase.obj
@@ -797,6 +805,7 @@ $(GENLIBOBJS):
   copy ..\generic\$D\dcpsg.obj
   copy ..\generic\$D\dirctrlg.obj
   copy ..\generic\$D\fontdlgg.obj
+  copy ..\generic\$D\fdrepdlg.obj
   copy ..\generic\$D\grid.obj
   copy ..\generic\$D\gridctrl.obj
   copy ..\generic\$D\gridsel.obj
@@ -1151,8 +1160,6 @@ clean:  $(PERIPH_CLEAN_TARGET) clean_png clean_zlib clean_jpeg clean_xpm clean_t
         erase /N $(COMMDIR)\$D\*.obj
         erase /N $(HTMLDIR)\$D\*.obj
         erase /N $(OS2DIR)\$D\*.obj
-        erase /N $(COMMDIR)\y_tab.c
-        erase /N $(COMMDIR)\lex_yy.c
         rd       $(D)
         rd      ..\generic\$D
         rd      ..\common\$D
@@ -1162,6 +1169,8 @@ clean:  $(PERIPH_CLEAN_TARGET) clean_png clean_zlib clean_jpeg clean_xpm clean_t
 !if "$(WXMAKINGDLL)" == "1"
         erase /N ..\..\lib\wx23.lib
 !endif
+        erase /N $(COMMDIR)\y_tab.c
+        erase /N $(COMMDIR)\lex_yy.c
 
 cleanall: clean
 

@@ -929,7 +929,6 @@ bool wxMenuBar::Append(
     if (!wxMenuBarBase::Append(pMenu, Title))
         return FALSE;
 
-    pMenu->Attach(this);
     m_titles.Add(Title);
 
     if ( IsAttached() )

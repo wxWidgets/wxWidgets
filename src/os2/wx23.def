@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\DEV\WX2\WXWINDOWS\LIB\WX.lib
+;From library:  F:\DEV\WX2\WXWINDOWS\LIB\WX.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -31,6 +31,7 @@ EXPORTS
       ProcessPendingEvents__9wxAppBaseFv
       ;wxAppBase::SetActive(unsigned long,wxWindow*)
       SetActive__9wxAppBaseFUlP8wxWindow
+  ;From object file:  ..\common\bmpbase.cpp
   ;From object file:  ..\common\choiccmn.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxChoiceBase::SetStringSelection(const wxString&)
@@ -1615,10 +1616,28 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
+  ;From object file:  ..\common\fddlgcmn.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxFindDialogEvent::sm_classwxFindDialogEvent
+      sm_classwxFindDialogEvent__17wxFindDialogEvent
+      wxEVT_COMMAND_FIND_REPLACE_ALL
+      wxEVT_COMMAND_FIND_REPLACE
+      wxEVT_COMMAND_FIND_CLOSE
+      ;wxFindReplaceDialogBase::Send(wxFindDialogEvent&)
+      Send__23wxFindReplaceDialogBaseFR17wxFindDialogEvent
+      ;wxFindReplaceData::Init()
+      Init__17wxFindReplaceDataFv
+      ;wxConstructorForwxFindDialogEvent()
+      wxConstructorForwxFindDialogEvent__Fv
+      __vft23wxFindReplaceDialogBase8wxObject
+      wxEVT_COMMAND_FIND_NEXT
+      wxEVT_COMMAND_FIND
+      ;wxFindReplaceDialogBase::~wxFindReplaceDialogBase()
+      __dt__23wxFindReplaceDialogBaseFv
   ;From object file:  ..\common\ffile.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxFFile::Seek(long,wxSeekMode)
@@ -5422,7 +5441,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -7119,6 +7138,37 @@ EXPORTS
       PaintFont__19wxGenericFontDialogFR4wxDC
       ;wxGenericFontDialog::sm_classwxGenericFontDialog
       sm_classwxGenericFontDialog__19wxGenericFontDialog
+  ;From object file:  ..\generic\fdrepdlg.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxFindReplaceDialog::OnFind(wxCommandEvent&)
+      OnFind__19wxFindReplaceDialogFR14wxCommandEvent
+      ;wxFindReplaceDialog::OnUpdateFindUI(wxUpdateUIEvent&)
+      OnUpdateFindUI__19wxFindReplaceDialogFR15wxUpdateUIEvent
+      ;wxFindReplaceDialog::OnReplaceAll(wxCommandEvent&)
+      OnReplaceAll__19wxFindReplaceDialogFR14wxCommandEvent
+      ;wxFindReplaceDialog::sm_classwxFindReplaceDialog
+      sm_classwxFindReplaceDialog__19wxFindReplaceDialog
+      ;wxFindReplaceDialog::sm_eventTable
+      sm_eventTable__19wxFindReplaceDialog
+      __vft19wxFindReplaceDialog8wxObject
+      ;wxConstructorForwxGenericFindReplaceDialog()
+      wxConstructorForwxGenericFindReplaceDialog__Fv
+      ;wxFindReplaceDialog::OnCancel(wxCommandEvent&)
+      OnCancel__19wxFindReplaceDialogFR14wxCommandEvent
+      ;wxFindReplaceDialog::Create(wxWindow*,wxFindReplaceData*,const wxString&,int)
+      Create__19wxFindReplaceDialogFP8wxWindowP17wxFindReplaceDataRC8wxStringi
+      ;wxFindReplaceDialog::SendEvent(const int&)
+      SendEvent__19wxFindReplaceDialogFRCi
+      ;wxFindReplaceDialog::Init()
+      Init__19wxFindReplaceDialogFv
+      ;wxFindReplaceDialog::sm_eventTableEntries
+      sm_eventTableEntries__19wxFindReplaceDialog
+      ;wxFindReplaceDialog::OnReplace(wxCommandEvent&)
+      OnReplace__19wxFindReplaceDialogFR14wxCommandEvent
+      ;wxFindReplaceDialog::OnCloseWindow(wxCloseEvent&)
+      OnCloseWindow__19wxFindReplaceDialogFR12wxCloseEvent
+      ;wxFindReplaceDialog::GetEventTable() const
+      GetEventTable__19wxFindReplaceDialogCFv
   ;From object file:  ..\generic\grid.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxGrid::EnableDragColSize(unsigned long)
@@ -8476,6 +8526,8 @@ EXPORTS
       sm_eventTable__18wxListHeaderWindow
       ;wxListHeaderWindow::sm_eventTableEntries
       sm_eventTableEntries__18wxListHeaderWindow
+      ;wxListView::sm_classwxListView
+      sm_classwxListView__10wxListView
       ;wxListMainWindow::sm_classwxListMainWindow
       sm_classwxListMainWindow__16wxListMainWindow
       ;wxListRenameTimer::wxListRenameTimer(wxListMainWindow*)
@@ -8788,6 +8840,8 @@ EXPORTS
       Add__19wxListLineDataArrayFRC14wxListLineData
       ;wxListCtrl::wxListCtrl()
       __ct__10wxListCtrlFv
+      ;wxConstructorForwxListView()
+      wxConstructorForwxListView__Fv
       ;wxConstructorForwxListHeaderWindow()
       wxConstructorForwxListHeaderWindow__Fv
       ;wxListTextCtrl::wxListTextCtrl(wxWindow*,const int,unsigned long*,wxString*,wxListMainWindow*,const wxString&,const wxPoint&,const wxSize&,int,const wxValidator&,const wxString&)
@@ -10637,6 +10691,8 @@ EXPORTS
       __as__10wxMsgArrayFRC10wxMsgArray
       ;wxApp::RemoveSocketHandler(int)
       RemoveSocketHandler__5wxAppFi
+      ;wxMsgArray::DoEmpty()
+      DoEmpty__10wxMsgArrayFv
       ;wxYield()
       wxYield__Fv
       wxSTD_FRAME_ICON
@@ -10649,8 +10705,6 @@ EXPORTS
       Initialized__5wxAppFv
       ;wxApp::GetEventTable() const
       GetEventTable__5wxAppCFv
-      ;wxMsgArray::DoEmpty()
-      DoEmpty__10wxMsgArrayFv
       wxFrameClassNameNoRedraw
       ;wxSetInstance(unsigned long)
       wxSetInstance__FUl
@@ -11902,18 +11956,14 @@ EXPORTS
       Init__10wxFrameOS2Fv
       ;wxFrameOS2::sm_eventTable
       sm_eventTable__10wxFrameOS2
-      ;wxFrameOS2::sm_classwxFrameOS2
-      sm_classwxFrameOS2__10wxFrameOS2
       ;wxFrameOS2::DoGetPosition(int*,int*) const
       DoGetPosition__10wxFrameOS2CFPiT1
-      ;wxConstructorForwxFrameOS2()
-      wxConstructorForwxFrameOS2__Fv
+      ;wxFrameOS2::IsMaximized() const
+      IsMaximized__10wxFrameOS2CFv
       ;wxFrameOS2::SetIcon(const wxIcon&)
       SetIcon__10wxFrameOS2FRC6wxIcon
       ;wxFrameOS2::PositionToolBar()
       PositionToolBar__10wxFrameOS2Fv
-      ;wxFrameOS2::IsMaximized() const
-      IsMaximized__10wxFrameOS2CFv
       ;wxFrameOS2::GetClientAreaOrigin() const
       GetClientAreaOrigin__10wxFrameOS2CFv
       ;wxFrameOS2::OnCreateStatusBar(int,long,int,const wxString&)

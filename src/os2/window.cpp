@@ -1454,6 +1454,7 @@ void wxWindowOS2::DoMoveWindow(
 , int                               nHeight
 )
 {
+#if 0 // x and y coords should already be in os2 coordinates
     RECTL                           vRect;
     HWND                            hParent;
     wxWindow*                       pParent = GetParent();
@@ -1464,7 +1465,7 @@ void wxWindowOS2::DoMoveWindow(
         hParent = HWND_DESKTOP;
     ::WinQueryWindowRect(hParent, &vRect);
     nY = vRect.yTop - (nY + nHeight);
-
+#endif
     if ( !::WinSetWindowPos( GetHwnd()
                             ,HWND_TOP
                             ,(LONG)nX

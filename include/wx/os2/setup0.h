@@ -360,6 +360,11 @@
                                 // needed for wxCanvas
 #define wxUSE_MENUS               1
 
+#define wxUSE_WAVE                1
+
+#define wxUSE_REGEX               1
+
+#define wxUSE_FINDREPLDLG         1 // Find replace dialog
 
 #endif
     // _WX_SETUP_H_

@@ -245,7 +245,6 @@ private:
     SWP                             m_vSwpToolBar;
 
     DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxFrameOS2)
 };
 
 #endif
