@@ -40,7 +40,6 @@
 #define INCL_PM
 #define INCL_GPI
 #include <os2.h>
-#include<netdb.h>
 #define PURE_32
 #include <upm.h>
 #include <netcons.h>

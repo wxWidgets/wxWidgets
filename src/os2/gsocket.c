@@ -14,15 +14,15 @@
 #define BSD_SELECT // use Berkley Sockets select
 
 #include <assert.h>
-#include <ioctl.h>
+#include <sys\ioctl.h>
 #include <sys\types.h>
-#include <socket.h>
+#include <sys\socket.h>
 #include <utils.h>
 #include <sys\time.h>
 #include <in.h>
 #include <netdb.h>
 #include <nerrno.h>
-#include <select.h>
+#include <sys\select.h>
 
 #include <string.h>
 #include <stdio.h>

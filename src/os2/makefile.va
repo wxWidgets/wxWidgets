@@ -220,6 +220,7 @@ COMMONOBJS = \
   ..\common\$D\longlong.obj \
   ..\common\$D\matrix.obj \
   ..\common\$D\memory.obj \
+  ..\common\$D\menucmn.obj \
   ..\common\$D\mimetype.obj \
   ..\common\$D\module.obj \
   ..\common\$D\mstream.obj \
@@ -319,6 +320,7 @@ COMLIBOBJS2 = \
   longlong.obj \
   matrix.obj \
   memory.obj \
+  menucmn.obj \
   mimetype.obj \
   module.obj \
   mstream.obj \
@@ -352,10 +354,10 @@ COMLIBOBJS2 = \
   url.obj \
   utilscmn.obj \
   valgen.obj \
-  validate.obj \
-  valtext.obj
+  validate.obj
 
 COMLIBOBJS3 = \
+  valtext.obj \
   variant.obj \
   wfstream.obj \
   wincmn.obj \
@@ -622,6 +624,7 @@ $(COMLIBOBJS2):
   copy ..\common\$D\longlong.obj
   copy ..\common\$D\matrix.obj
   copy ..\common\$D\memory.obj
+  copy ..\common\$D\menucmn.obj
   copy ..\common\$D\mimetype.obj
   copy ..\common\$D\module.obj
   copy ..\common\$D\mstream.obj
@@ -656,9 +659,9 @@ $(COMLIBOBJS2):
   copy ..\common\$D\utilscmn.obj
   copy ..\common\$D\valgen.obj
   copy ..\common\$D\validate.obj
-  copy ..\common\$D\valtext.obj
 
 $(COMLIBOBJS3):
+  copy ..\common\$D\valtext.obj
   copy ..\common\$D\variant.obj
   copy ..\common\$D\wfstream.obj
   copy ..\common\$D\wincmn.obj
