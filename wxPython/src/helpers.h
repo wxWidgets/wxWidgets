@@ -219,22 +219,24 @@ protected:
 
 
 class wxPyEvent : public wxEvent, public wxPyEvtSelfRef {
-    DECLARE_DYNAMIC_CLASS(wxPyEvent)
+    DECLARE_ABSTRACT_CLASS(wxPyEvent)
 public:
     wxPyEvent(int id=0);
+    wxPyEvent(const wxPyEvent& evt);
     ~wxPyEvent();
 
-    void CopyObject(wxObject& dest) const;
+    virtual wxEvent* Clone() const { return new wxPyEvent(*this); }
 };
 
 
 class wxPyCommandEvent : public wxCommandEvent, public wxPyEvtSelfRef {
-    DECLARE_DYNAMIC_CLASS(wxPyCommandEvent)
+    DECLARE_ABSTRACT_CLASS(wxPyCommandEvent)
 public:
     wxPyCommandEvent(wxEventType commandType = wxEVT_NULL, int id=0);
+    wxPyCommandEvent(const wxPyCommandEvent& evt);
     ~wxPyCommandEvent();
 
-    void CopyObject(wxObject& dest) const;
+    virtual wxEvent* Clone() const { return new wxPyCommandEvent(*this); }
 };
 
 

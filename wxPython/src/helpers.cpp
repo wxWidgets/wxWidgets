@@ -101,7 +101,6 @@ void WXDLLEXPORT wxEntryCleanup();
 
 
 #ifdef WXP_WITH_THREAD
-//PyThreadState*  wxPyEventThreadState = NULL;
 PyInterpreterState* wxPyInterpreter = NULL;
 #endif
 
@@ -118,7 +117,6 @@ void __wxPreStart()
 
 #ifdef WXP_WITH_THREAD
     PyEval_InitThreads();
-//    wxPyEventThreadState = PyThreadState_Get(); // PyThreadState_New(PyThreadState_Get()->interp);
     wxPyInterpreter = PyThreadState_Get()->interp;
 #endif
 
@@ -632,37 +630,41 @@ PyObject* wxPyEvtSelfRef::GetSelf() const {
 }
 
 
+IMPLEMENT_ABSTRACT_CLASS(wxPyEvent, wxEvent);
+IMPLEMENT_ABSTRACT_CLASS(wxPyCommandEvent, wxCommandEvent);
+
+
 wxPyEvent::wxPyEvent(int id)
     : wxEvent(id) {
 }
 
+
+wxPyEvent::wxPyEvent(const wxPyEvent& evt)
+    : wxEvent(evt)
+{
+    SetSelf(evt.m_self, TRUE);
+}
+
+
 wxPyEvent::~wxPyEvent() {
 }
-
-// This one is so the event object can be Cloned...
-void wxPyEvent::CopyObject(wxObject& dest) const {
-    wxEvent::CopyObject(dest);
-    ((wxPyEvent*)&dest)->SetSelf(m_self, TRUE);
-}
-
-
-IMPLEMENT_DYNAMIC_CLASS(wxPyEvent, wxEvent);
 
 
 wxPyCommandEvent::wxPyCommandEvent(wxEventType commandType, int id)
     : wxCommandEvent(commandType, id) {
 }
 
+
+wxPyCommandEvent::wxPyCommandEvent(const wxPyCommandEvent& evt)
+    : wxCommandEvent(evt)
+{
+    SetSelf(evt.m_self, TRUE);
+}
+
+
 wxPyCommandEvent::~wxPyCommandEvent() {
 }
 
-void wxPyCommandEvent::CopyObject(wxObject& dest) const {
-    wxCommandEvent::CopyObject(dest);
-    ((wxPyCommandEvent*)&dest)->SetSelf(m_self, TRUE);
-}
-
-
-IMPLEMENT_DYNAMIC_CLASS(wxPyCommandEvent, wxCommandEvent);
 
 
 

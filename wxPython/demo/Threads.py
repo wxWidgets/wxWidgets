@@ -71,11 +71,11 @@ class GraphWindow(wxWindow):
         for label in labels:
             self.values.append((label, 0))
 
-        self.font = wxFont(12, wxSWISS, wxNORMAL, wxBOLD)
-        self.SetFont(self.font)
+        font = wxFont(12, wxSWISS, wxNORMAL, wxBOLD)
+        self.SetFont(font)
 
         self.colors = [ wxRED, wxGREEN, wxBLUE, wxCYAN,
-                        wxNamedColour("Yellow"), wxNamedColor("Navy") ]
+                        "Yellow", "Navy" ]
 
         EVT_ERASE_BACKGROUND(self, self.OnEraseBackground)
         EVT_PAINT(self, self.OnPaint)
@@ -98,8 +98,12 @@ class GraphWindow(wxWindow):
         self.barHeight = hmax
 
 
+    def GetBestHeight(self):
+        return 2 * (self.barHeight + 1) * len(self.values)
+
+
     def Draw(self, dc, size):
-        dc.SetFont(self.font)
+        dc.SetFont(self.GetFont())
         dc.SetTextForeground(wxBLUE)
         dc.SetBackground(wxBrush(self.GetBackgroundColour()))
         dc.Clear()
@@ -161,6 +165,7 @@ class TestFrame(wxFrame):
 
         self.graph = GraphWindow(self, ['Zero', 'One', 'Two', 'Three', 'Four',
                                         'Five', 'Six', 'Seven'])
+        self.graph.SetSize((-1, self.graph.GetBestHeight()))
 
         sizer = wxBoxSizer(wxVERTICAL)
         sizer.Add(panel, 0, wxEXPAND)
@@ -168,6 +173,7 @@ class TestFrame(wxFrame):
 
         self.SetSizer(sizer)
         self.SetAutoLayout(true)
+        sizer.Fit(self)
 
         #self.graph.SetValue(0, 25)
         #self.graph.SetValue(1, 50)

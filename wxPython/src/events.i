@@ -48,6 +48,8 @@ public:
     void SetId(int id);
     void SetTimestamp(long timeStamp);
     void Skip(bool skip = TRUE);
+
+    wxEvent *Clone();
 };
 
 //---------------------------------------------------------------------------

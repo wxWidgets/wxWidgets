@@ -41,6 +41,10 @@ class wxEventPtr(wxObjectPtr):
     def Skip(self, *_args, **_kwargs):
         val = apply(eventsc.wxEvent_Skip,(self,) + _args, _kwargs)
         return val
+    def Clone(self, *_args, **_kwargs):
+        val = apply(eventsc.wxEvent_Clone,(self,) + _args, _kwargs)
+        if val: val = wxEventPtr(val) 
+        return val
     def __repr__(self):
         return "<C wxEvent instance at %s>" % (self.this,)
 class wxEvent(wxEventPtr):
