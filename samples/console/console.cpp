@@ -32,11 +32,11 @@
 //#define TEST_ARRAYS
 //#define TEST_DIR
 //#define TEST_LOG
-#define TEST_LONGLONG
+//#define TEST_LONGLONG
 //#define TEST_MIME
 //#define TEST_STRINGS
 //#define TEST_THREADS
-//#define TEST_TIME
+#define TEST_TIME
 
 // ============================================================================
 // implementation
@@ -224,14 +224,16 @@ static void TestSpeed()
 
 static void TestDivision()
 {
+    puts("*** Testing wxLongLong division ***\n");
+
     #define MAKE_LL(x1, x2, x3, x4) wxLongLong((x1 << 16) | x2, (x3 << 16) | x3)
 
     // seed pseudo random generator
-    //srand((unsigned)time(NULL));
+    srand((unsigned)time(NULL));
 
     wxLongLong q, r;
     size_t nTested = 0;
-    for ( size_t n = 0; n < 10000; n++ )
+    for ( size_t n = 0; n < 100000; n++ )
     {
         // get a random wxLongLong (shifting by 12 the MSB ensures that the
         // multiplication will not overflow)
@@ -242,12 +244,19 @@ static void TestDivision()
         q = ll / l;
         r = ll % l;
 
+        // verify the result
         wxASSERT_MSG( ll == q*l + r, "division failure" );
+
+        if ( !(nTested % 1000) )
+        {
+            putchar('.');
+            fflush(stdout);
+        }
 
         nTested++;
     }
 
-    printf("\n*** Tested %u divisions/multiplications: ok\n", nTested);
+    puts(" done!");
 
     #undef MAKE_LL
 }

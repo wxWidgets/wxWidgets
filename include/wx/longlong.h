@@ -25,7 +25,7 @@
 
 #include <limits.h>     // for LONG_MAX
 
-// #define wxUSE_LONGLONG_WX 1 -- for testing (VZ)
+//#define wxUSE_LONGLONG_WX 1 // for testing (VZ)
 
 // ----------------------------------------------------------------------------
 // decide upon which class we will use
@@ -59,7 +59,7 @@
     // have any 64 bit integer type
     #if !defined(__VISAGECPP__) && \
         !defined(__VISUALC__) && \
-        !defined(__BORLANDC__
+        !defined(__BORLANDC__)
         #warning "Your compiler does not appear to support 64 bit integers, "\
                  "using emulation class instead."
     #endif // known compilers without long long

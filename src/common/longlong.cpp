@@ -391,54 +391,128 @@ wxLongLongWx& wxLongLongWx::operator*=(const wxLongLongWx& ll)
 
 // division
 
-void wxLongLongWx::Divide(const wxLongLongWx& divisor,
+void wxLongLongWx::Divide(const wxLongLongWx& divisorIn,
                           wxLongLongWx& quotient,
                           wxLongLongWx& remainder) const
 {
-    if ((divisor.m_lo == 0) && (divisor.m_hi == 0))
+    if ((divisorIn.m_lo == 0) && (divisorIn.m_hi == 0))
     {
         // provoke division by zero error and silence the compilers warnings
         // about an expression without effect and unused variable
-        long dummy = divisor.m_lo/divisor.m_hi;
+        long dummy = divisorIn.m_lo/divisorIn.m_hi;
         dummy += 0;
     }
 
     // VZ: I'm writing this in a hurry and it's surely not the fastest way to
     //     do this - any improvements are more than welcome
+    //
+    //     code inspired by the snippet at
+    //          http://www.bearcave.com/software/divide.htm
+    //
+    //     Copyright notice:
+    //
+    //     Use of this program, for any purpose, is granted the author, Ian
+    //     Kaplan, as long as this copyright notice is included in the source
+    //     code or any source code derived from this program. The user assumes
+    //     all responsibility for using this code. 
 
-    // the algorithm: first find N such that 2^N * divisor is less than us,
-    // then substract divisor from *this - 2^N * divisor as many times as
-    // possible
+    // init everything
+    wxLongLongWx dividend = *this,
+                 divisor = divisorIn;
 
-    wxLongLongWx prev = divisor;
-    remainder = *this;
+    quotient = 0l;
+    remainder = 0l;
 
-    quotient = 1l;
-
-    for ( wxLongLongWx tmp = divisor; tmp < remainder; )
+    // check for some particular cases
+    if ( divisor > dividend )
     {
-        prev = tmp;
+        remainder = dividend;
 
-        tmp <<= 1;
+        return;
+    }
 
-        if ( tmp < 0 )
+    if ( divisor == dividend )
+    {
+        quotient = 1l;
+
+        return;
+    }
+
+    // always do unsigned division and adjust the signs later: in C integer
+    // division, the sign of the remainder is the same as the sign of the
+    // dividend, while the sign of the quotient is the product of the signs of
+    // the dividend and divisor. Of course, we also always have
+    //
+    //      dividend = quotient*divisor + remainder
+    //
+    // with 0 <= abs(remainder) < abs(divisor)
+    bool negRemainder = dividend.m_hi < 0;
+    bool negQuotient = FALSE;   // assume positive
+    if ( dividend.m_hi < 0 )
+    {
+        negQuotient = !negQuotient;
+        dividend = -dividend;
+    }
+    if ( divisor.m_hi < 0 )
+    {
+        negQuotient = !negQuotient;
+        divisor = -divisor;
+    }
+
+    // here: dividend > divisor and both are positibe: do unsigned division
+    size_t nBits = 64u;
+    wxLongLongWx d;
+
+    #define IS_MSB_SET(ll)  ((ll.m_hi) & (1 << (8*sizeof(long) - 1)))
+
+    while ( remainder < divisor )
+    {
+        remainder <<= 1;
+        if ( IS_MSB_SET(dividend) )
         {
-            // shifted too far
-            break;
+            remainder |= 1;
         }
 
-        quotient <<= 1;
+        d = dividend;
+        dividend <<= 1;
+
+        nBits--;
     }
 
-    while ( remainder >= prev )
+    // undo the last loop iteration
+    dividend = d;
+    remainder >>= 1;
+    nBits++;
+
+    for ( size_t i = 0; i < nBits; i++ )
     {
-        remainder -= divisor;
-        quotient++;
+        remainder <<= 1;
+        if ( IS_MSB_SET(dividend) )
+        {
+            remainder |= 1;
+        }
+
+        wxLongLongWx t = remainder - divisor;
+        dividend <<= 1;
+        quotient <<= 1;
+        if ( !IS_MSB_SET(t) )
+        {
+            quotient |= 1;
+
+            remainder = t;
+        }
     }
 
-    // remainder should be in this range at the end
-    wxASSERT_MSG( (0l <= remainder) && (remainder < divisor.Abs()),
-                  _T("logic error in wxLongLong division") );
+    // adjust signs
+    if ( negRemainder )
+    {
+        remainder = -remainder;
+    }
+
+    if ( negQuotient )
+    {
+        quotient = -quotient;
+    }
 }
 
 wxLongLongWx wxLongLongWx::operator/(const wxLongLongWx& ll) const
