@@ -428,6 +428,7 @@ void wxXmlInitResourceModule();
 #define wxTheXmlResource  wxXmlResource::Get()
 #define XMLID             XRCID
 #define XMLCTRL           XRCCTRL
+#define GetXMLID          GetXRCID
 
 
 #endif // _WX_XMLRES_H_
