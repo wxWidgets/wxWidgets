@@ -2,7 +2,7 @@
 // Name:        tex2any.cpp
 // Purpose:     Utilities for Latex conversion.
 // Author:      Julian Smart
-// Modified by: Wlodzimiez ABX Skiba 2003/2004 Unicode support
+// Modified by: Wlodzimierz ABX Skiba 2003/2004 Unicode support
 //              Ron Lee
 // Created:     01/01/99
 // RCS-ID:      $Id$
@@ -1222,7 +1222,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
             pos ++;
 
           // Find the delimiter character
-          int ch = buffer[pos];
+          wxChar ch = buffer[pos];
           pos ++;
           // Now at start of verbatim text
           int j = pos;
