@@ -604,15 +604,15 @@ enum
 
 typedef float wxFloat32 ;
 #if defined( __WXMAC__ )  && defined (__MWERKS__)
-	typedef short double	wxFloat64;
+    typedef short double	wxFloat64;
 #else
-	typedef double			wxFloat64;
+    typedef double			wxFloat64;
 #endif
 
 #if defined( __WXMAC__ )  && !defined( __POWERPC__ )
-	typedef long double wxDouble;
+    typedef long double wxDouble;
 #else
-	typedef double wxDouble ;
+    typedef double wxDouble ;
 #endif
 
 // ----------------------------------------------------------------------------
@@ -1152,6 +1152,14 @@ enum wxStretch
 // ----------------------------------------------------------------------------
 // standard IDs
 // ----------------------------------------------------------------------------
+
+// id for a separator line in the menu (invalid for normal item)
+#define wxID_SEPARATOR (-1)
+
+// this one is for compatibility only, don't use in new code
+#ifndef ID_SEPARATOR
+    #define ID_SEPARATOR    wxID_SEPARATOR
+#endif
 
 // Standard menu IDs
 #define wxID_LOWEST             4999
