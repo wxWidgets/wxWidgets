@@ -107,7 +107,7 @@ bool wxXmlResource::Load(const wxString& filemask)
         //     filename and not URL:
         if (wxFileName::FileExists(fnd))
         {
-            // Make the name absolute filename, because the app may 
+            // Make the name absolute filename, because the app may
             // change working directory later:
             wxFileName fn(fnd);
             if (fn.IsRelative())
@@ -119,7 +119,7 @@ bool wxXmlResource::Load(const wxString& filemask)
             fnd = wxFileSystem::FileNameToURL(fnd);
 #endif
         }
-        
+
 #if wxUSE_FILESYSTEM
         if (fnd.Lower().Matches(wxT("*.zip")) ||
             fnd.Lower().Matches(wxT("*.xrs")))
@@ -290,11 +290,10 @@ static void ProcessPlatformProperty(wxXmlNode *node)
 #ifdef __WINDOWS__
                 if (s == wxT("win")) isok = true;
 #endif
-#ifdef __UNIX__
-                if (s == wxT("unix")) isok = true;
-#endif
-#ifdef __MAC__
+#if defined(__MAC__) || defined(__APPLE__)
                 if (s == wxT("mac")) isok = true;
+#elif defined(__UNIX__)
+                if (s == wxT("unix")) isok = true;
 #endif
 #ifdef __OS2__
                 if (s == wxT("os2")) isok = true;
@@ -569,14 +568,14 @@ wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent,
     wxXmlResourceHandler *handler;
 
     if (handlerToUse)
-    {        
+    {
         if (handlerToUse->CanHandle(node))
         {
             return handlerToUse->CreateResource(node, parent, instance);
         }
     }
     else if (node->GetName() == wxT("object"))
-    {    
+    {
         wxNode *ND = m_handlers.GetFirst();
         while (ND)
         {
