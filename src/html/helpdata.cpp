@@ -48,11 +48,11 @@ WX_DEFINE_OBJARRAY(wxHtmlBookRecArray)
 //-----------------------------------------------------------------------------
 
 // Reads one line, stores it into buf and returns pointer to new line or NULL.
-static char* ReadLine(char *line, char *buf, size_t bufsize)
+static const char* ReadLine(const char *line, char *buf, size_t bufsize)
 {
     char *writeptr = buf;
     char *endptr = buf + bufsize - 1;
-    char *readptr = line;
+    const char *readptr = line;
 
     while (*readptr != 0 && *readptr != '\r' && *readptr != '\n' &&
            writeptr != endptr) 
@@ -248,11 +248,13 @@ wxHtmlHelpData::~wxHtmlHelpData()
     }
 }
 
+// defined in htmlfilt.cpp
+void wxPrivate_ReadString(wxString& str, wxInputStream* s);
+
 bool wxHtmlHelpData::LoadMSProject(wxHtmlBookRecord *book, wxFileSystem& fsys, const wxString& indexfile, const wxString& contentsfile)
 {
     wxFSFile *f;
-    char *buf;
-    int sz;
+    wxString buf;
     wxString string;
 
     HP_Parser parser;
@@ -262,15 +264,12 @@ bool wxHtmlHelpData::LoadMSProject(wxHtmlBookRecord *book, wxFileSystem& fsys, c
     f = ( contentsfile.IsEmpty() ? (wxFSFile*) NULL : fsys.OpenFile(contentsfile) );
     if (f)
     {
-        sz = f->GetStream()->GetSize();
-        buf = new char[sz + 1];
-        buf[sz] = 0;
-        f->GetStream()->Read(buf, sz);
+        buf.clear();
+        wxPrivate_ReadString(buf, f->GetStream());
         delete f;
         handler->ReadIn(m_Contents, m_ContentsCnt);
         parser.Parse(buf);
         handler->WriteOut(m_Contents, m_ContentsCnt);
-        delete[] buf;
     }
     else
         wxLogError(_("Cannot open contents file: %s"), contentsfile.c_str());
@@ -278,15 +277,12 @@ bool wxHtmlHelpData::LoadMSProject(wxHtmlBookRecord *book, wxFileSystem& fsys, c
     f = ( indexfile.IsEmpty() ? (wxFSFile*) NULL : fsys.OpenFile(indexfile) );
     if (f)
     {
-        sz = f->GetStream()->GetSize();
-        buf = new char[sz + 1];
-        buf[sz] = 0;
-        f->GetStream()->Read(buf, sz);
+        buf.clear();
+        wxPrivate_ReadString(buf, f->GetStream());
         delete f;
         handler->ReadIn(m_Index, m_IndexCnt);
         parser.Parse(buf);
         handler->WriteOut(m_Index, m_IndexCnt);
-        delete[] buf;
     }
     else if (!indexfile.IsEmpty())
         wxLogError(_("Cannot open index file: %s"), indexfile.c_str());
@@ -586,15 +582,12 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
         fsys.ChangePathTo(bookFull);
         s = fi->GetStream();
 
-        int sz;
-        char *buff, *lineptr;
+        const char *lineptr;
         char linebuf[300];
+        wxString tmp;
 
-        sz = s->GetSize();
-        buff = new char[sz + 1];
-        buff[sz] = 0;
-        s->Read(buff, sz);
-        lineptr = buff;
+        wxPrivate_ReadString(tmp, s);
+        lineptr = tmp.c_str();
 
         do 
         {
@@ -614,7 +607,6 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
             if (strstr(linebuf, "charset=") == linebuf)
                 charset = linebuf + strlen("charset=");
         } while (lineptr != NULL);
-        delete[] buff;
 
         wxFontEncoding enc;
         if (charset == wxEmptyString) enc = wxFONTENCODING_SYSTEM;
@@ -828,16 +820,16 @@ bool wxSearchEngine::Scan(wxInputStream *stream)
     wxASSERT_MSG(m_Keyword != NULL, wxT("wxSearchEngine::LookFor must be called before scanning!"));
 
     int i, j;
-    int lng = stream ->GetSize();
     int wrd = wxStrlen(m_Keyword);
     bool found = FALSE;
-    char *buf = new char[lng + 1];
-    stream->Read(buf, lng);
-    buf[lng] = 0;
+    wxString tmp;
+    wxPrivate_ReadString(tmp, stream);
+    int lng = tmp.length();
+    const char *buf = tmp.c_str();
 
     if (!m_CaseSensitive)
         for (i = 0; i < lng; i++)
-            if ((buf[i] >= 'A') && (buf[i] <= 'Z')) buf[i] += 'a' - 'A';
+            tmp[size_t(i)] = (char)tolower(tmp[i]);
 
     if (m_WholeWords)
     {
@@ -860,7 +852,6 @@ bool wxSearchEngine::Scan(wxInputStream *stream)
         }
     }
 
-    delete[] buf;
     return found;
 }
 

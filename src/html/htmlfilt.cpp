@@ -29,6 +29,35 @@
 #include "wx/html/htmlfilt.h"
 #include "wx/html/htmlwin.h"
 
+// utility function: read a wxString from a wxInputStream
+void wxPrivate_ReadString(wxString& str, wxInputStream* s)
+{
+    size_t streamSize = s->GetSize();
+
+    if(streamSize == ~(size_t)0)
+    {
+        const size_t bufSize = 4095;
+        char buffer[bufSize+1];
+        size_t lastRead;
+
+        do
+        {
+            s->Read(buffer, bufSize);
+            lastRead = s->LastRead();
+            buffer[lastRead] = 0;
+            str.Append(buffer);
+        }
+        while(lastRead == bufSize);
+    }
+    else
+    {
+        char* src = new char[streamSize+1];
+        s->Read(src, streamSize);
+        src[streamSize] = 0;
+        str = src;
+        delete [] src;
+    }
+}
 
 /*
 
@@ -55,16 +84,12 @@ bool wxHtmlFilterPlainText::CanRead(const wxFSFile& WXUNUSED(file)) const
 wxString wxHtmlFilterPlainText::ReadFile(const wxFSFile& file) const
 {
     wxInputStream *s = file.GetStream();
-    char *src;
     wxString doc, doc2;
 
     if (s == NULL) return wxEmptyString;
-    src = new char[s->GetSize()+1];
-    src[s->GetSize()] = 0;
-    s->Read(src, s->GetSize());
-    doc = src;
-    delete [] src;
+    wxPrivate_ReadString(doc, s);
 
+    doc.Replace(wxT("&"), wxT("&amp;"), TRUE);
     doc.Replace(wxT("<"), wxT("&lt;"), TRUE);
     doc.Replace(wxT(">"), wxT("&gt;"), TRUE);
     doc2 = "<HTML><BODY><PRE>\n" + doc + "\n</PRE></BODY></HTML>";
@@ -139,7 +164,6 @@ bool wxHtmlFilterHTML::CanRead(const wxFSFile& file) const
 wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file) const
 {
     wxInputStream *s = file.GetStream();
-    char *src;
     wxString doc;
 
     if (s == NULL)
@@ -147,11 +171,7 @@ wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file) const
         wxLogError(_("Cannot open HTML document: %s"), file.GetLocation().c_str());
         return wxEmptyString;
     }
-    src = new char[s->GetSize() + 1];
-    src[s->GetSize()] = 0;
-    s->Read(src, s->GetSize());
-    doc = src;
-    delete[] src;
+    wxPrivate_ReadString(doc, s);
 
     // add meta tag if we obtained this through http:
     if (file.GetMimeType().Find(_T("; charset=")) == 0)
