@@ -98,6 +98,8 @@ const char *dlerror(void);
 #   endif  // Win32/16
 #   define wxDllGetSymbol(handle, name)    ::GetProcAddress(handle, name)
 #   define wxDllClose                      ::FreeLibrary
+#elif defined(__WXMAC__)
+#   define wxDllClose(handle)               CloseConnection(&handle)
 #else
 #   error "Don't know how to load shared libraries on this platform."
 #endif // OS
@@ -235,13 +237,13 @@ wxDllLoader::LoadLibrary(const wxString & libname, bool *success)
     Ptr myMainAddr ;
     Str255 myErrName ;
 
-    wxMacPathToFSSpec( libname , &myFSSpec ) ;
+    wxMacFilename2FSSpec( libname , &myFSSpec ) ;
     if (GetDiskFragment( &myFSSpec , 0 , kCFragGoesToEOF , "\p" , kPrivateCFragCopy , &handle , &myMainAddr ,
                 myErrName ) != noErr )
     {
         p2cstr( myErrName ) ;
-        wxASSERT_MSG( 1 , (char*)myErrName ) ;
-        return NULL ;
+        wxLogSysError( _("Failed to load shared library '%s' Error '%s'") , libname.c_str() , (char*)myErrName ) ;
+        handle = NULL ;
     }
 #elif defined(__WXPM__) || defined(__EMX__)
     char zError[256] = "";
