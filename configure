@@ -18263,7 +18263,8 @@ else
             }
             int main()
             {
-                return foo("hi", 17);
+                foo("hi", 17);
+                return 0;
             }
 _ACEOF
 rm -f conftest.$ac_objext conftest$ac_exeext

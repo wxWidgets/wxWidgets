@@ -1740,7 +1740,8 @@ AC_CACHE_CHECK([for va_copy],
             }
             int main()
             {
-                return foo("hi", 17);
+                foo("hi", 17);
+                return 0;
             }],
             wx_cv_func_va_copy=yes,
             wx_cv_func_va_copy=no
