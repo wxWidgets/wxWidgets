@@ -152,6 +152,9 @@ if [ $skipsource != yes -o $onlysource = yes ]; then
     distrib/makedemo
     distrib/makedocs
 
+    # build the new docs too
+    docs/bin/everything
+
     # make the source tarball
     distrib/makerpm 2.3 skipclean skiprpm gtk2
 
