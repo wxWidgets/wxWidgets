@@ -34736,10 +34736,17 @@ if test "$wxUSE_GUI" = "yes"; then
 else         SUBDIRS="samples utils"
 fi
 
-for subdir in echo `$SUBDIRS`; do
+for subdir in `echo $SUBDIRS`; do
     if test -d ${srcdir}/${subdir} ; then
         if test "$wxUSE_GUI" = "yes"; then
-            makefiles=`(cd $srcdir ; find $subdir -name Makefile.in)`
+            if test ${subdir} = "samples"; then
+                                                for sample in `echo $SAMPLES_SUBDIRS`; do
+                    if test -d $srcdir/samples/$sample; then
+                        makefiles="samples/$sample/Makefile.in $makefiles"
+                    fi
+                done
+            else                 makefiles=`(cd $srcdir ; find $subdir -name Makefile.in)`
+            fi
         else                                     if test ${subdir} = "samples"; then
                 makefiles="samples/console/Makefile.in"
             else                 makefiles="utils/HelpGen/Makefile.in \
