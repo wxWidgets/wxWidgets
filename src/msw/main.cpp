@@ -95,27 +95,7 @@ extern "C"
 // Note that WinMain is also defined in dummy.obj, which is linked to
 // an application that is using the DLL version of wxWindows.
 
-#if !defined(_WINDLL)
-
-#ifdef __WXWINCE__
-int WINAPI WinMain(HINSTANCE hInstance,
-                   HINSTANCE hPrevInstance,
-                   LPWSTR lpCmdLine,
-                   int nCmdShow)
-{
-    return wxEntry(hInstance, hPrevInstance, (char*) lpCmdLine, nCmdShow);
-}
-#else
-int PASCAL WinMain(HINSTANCE hInstance,
-                   HINSTANCE hPrevInstance,
-                   LPSTR lpCmdLine,
-                   int nCmdShow)
-{
-    return wxEntry(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
-}
-#endif
-
-#else // _WINDLL
+#if defined(_WINDLL)
 
 // DLL entry point
 
@@ -144,7 +124,7 @@ DllMain(HANDLE hModule, DWORD fdwReason, LPVOID WXUNUSED(lpReserved))
     return TRUE;
 }
 
-#endif // _WINDLL/!_WINDLL
+#endif // _WINDLL
 
 } // extern "C"
 

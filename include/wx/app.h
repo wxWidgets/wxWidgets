@@ -593,7 +593,7 @@ public:
 #if !wxUSE_GUI || !defined(__WXMSW__)
     #define IMPLEMENT_WXWIN_MAIN                                              \
         int main(int argc, char **argv) { return wxEntry(argc, argv); }
-#elif defined(__WXMSW__) && defined(WXUSINGDLL)
+#elif defined(__WXMSW__)
     // we need HINSTANCE declaration to define WinMain()
     #include "wx/msw/wrapwin.h"
 
