@@ -68,6 +68,14 @@
      #define SHGFI_SMALLICON 1
 #endif
 
+#ifndef SHGFI_SHELLICONSIZE
+    #define SHGFI_SHELLICONSIZE 4
+#endif
+
+#ifndef SHGFI_OPENICON
+    #define SHGFI_OPENICON 2
+#endif
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Dynamic library function defs.
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

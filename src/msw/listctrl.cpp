@@ -133,6 +133,7 @@ typedef struct _LVITEMW {
     int iIndent;
 #endif
 } LV_ITEMW;
+typedef LV_ITEM LV_ITEMA;
 #endif
 
 // ----------------------------------------------------------------------------
