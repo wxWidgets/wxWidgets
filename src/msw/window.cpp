@@ -464,13 +464,8 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
 
   m_mouseInWindow = FALSE ;
 
-  if ( id == -1 )
-  	m_windowId = (int)NewControlId();
-  else
-	m_windowId = id;
-
-  MSWCreate(m_windowId, (wxWindow *)parent, wxCanvasClassName, this, NULL, x, y, width, height, msflags,
-    NULL, exStyle);
+  MSWCreate(m_windowId, parent, wxCanvasClassName, this, NULL,
+            x, y, width, height, msflags, NULL, exStyle);
 
   return TRUE;
 }
@@ -875,6 +870,28 @@ void wxWindow::Refresh(bool eraseBack, const wxRectangle *rect)
   }
 }
 
+bool wxWindow::ProcessEvent(wxEvent& event)
+{
+  // we save here the information about the last message because it might be
+  // overwritten if the event handler sends any messages to our window (case
+  // in point: wxNotebook::OnSize) - and then if we call Default() later
+  // (which is done quite often if the message is not processed) it will use
+  // incorrect values for m_lastXXX variables
+  WXUINT lastMsg = m_lastMsg;
+  WXWPARAM lastWParam = m_lastWParam;
+  WXLPARAM lastLParam = m_lastLParam;
+
+  // call the base version
+  bool bProcessed = wxEvtHandler::ProcessEvent(event);
+
+  // restore
+  m_lastMsg = lastMsg;
+  m_lastWParam = lastWParam;
+  m_lastLParam = lastLParam;
+
+  return bProcessed;
+}
+
 // Hook for new window just as it's being created,
 // when the window isn't yet associated with the handle
 wxWindow *wxWndHook = NULL;
@@ -925,61 +942,13 @@ LRESULT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 // Main Windows 3 window proc
 long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
-#if 0
-  switch (message)
-  {
-        case WM_INITDIALOG:
-        case WM_ACTIVATE:
-        case WM_SETFOCUS:
-        case WM_KILLFOCUS:
-	case WM_CREATE:
-	case WM_PAINT:
-	case WM_QUERYDRAGICON:
-        case WM_SIZE:
-        case WM_RBUTTONDOWN:
-        case WM_RBUTTONUP:
-        case WM_RBUTTONDBLCLK:
-        case WM_MBUTTONDOWN:
-        case WM_MBUTTONUP:
-        case WM_MBUTTONDBLCLK:
-        case WM_LBUTTONDOWN:
-        case WM_LBUTTONUP:
-        case WM_LBUTTONDBLCLK:
-        case WM_MOUSEMOVE:
-//        case WM_COMMAND:
-        case WM_NOTIFY:
-        case WM_DESTROY:
-        case WM_MENUSELECT:
-        case WM_INITMENUPOPUP:
-        case WM_DRAWITEM:
-        case WM_MEASUREITEM:
-        case WM_KEYDOWN:
-        case WM_KEYUP:
-        case WM_CHAR: // Always an ASCII character
-        case WM_HSCROLL:
-        case WM_VSCROLL:
-        case WM_CTLCOLORBTN:
-        case WM_CTLCOLORDLG:
-        case WM_CTLCOLORLISTBOX:
-        case WM_CTLCOLORMSGBOX:
-        case WM_CTLCOLORSCROLLBAR:
-        case WM_CTLCOLORSTATIC:
-        case WM_CTLCOLOREDIT:
-        case WM_SYSCOLORCHANGE:
-        case WM_ERASEBKGND:
-        case WM_MDIACTIVATE:
-        case WM_DROPFILES:
-        case WM_QUERYENDSESSION:
-        case WM_CLOSE:
-        case WM_GETMINMAXINFO:
-		case WM_NCHITTEST:
-            return MSWDefWindowProc(message, wParam, lParam );
-    }
-#endif
-
+  wxASSERT( m_lastMsg == message &&
+            m_lastWParam == wParam &&
+            m_lastLParam == lParam );
 
   #ifdef __WXDEBUG__
-    wxLogTrace(wxTraceMessages, "Processing %s", wxGetMessageName(message));
+    wxLogTrace(wxTraceMessages, "Processing %s(%lx, %lx)",
+               wxGetMessageName(message), wParam, lParam);
   #endif // WXDEBUG
 
   HWND hWnd = (HWND)m_hWnd;
@@ -1268,9 +1237,6 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
               MSWOnChar((WORD)wParam, lParam);
             else
               return Default();
-            break;
-
-        case WM_KEYUP:
             break;
 
         case WM_CHAR: // Always an ASCII character
@@ -1570,7 +1536,7 @@ void wxWindow::MSWCreate(int id, wxWindow *parent, const char *wclass, wxWindow 
     if (!title)
       title = "";
       
-    m_hWnd = (WXHWND) CreateWindowEx(extendedStyle, wclass,
+    m_hWnd = (WXHWND)CreateWindowEx(extendedStyle, wclass,
                 title,
                 style,
                 x1, y1,
@@ -1578,15 +1544,12 @@ void wxWindow::MSWCreate(int id, wxWindow *parent, const char *wclass, wxWindow 
                 hParent, (HMENU)controlId, wxGetInstance(),
                 NULL);
 
-    if (m_hWnd == 0)
-    {
-       char buf[300];
-       sprintf(buf, "Can't create window of class %s! Weird.\nPossible Windows 3.x compatibility problem?",
-         wclass);
-       wxFatalError(buf,
-                  "Fatal wxWindows Error");
+    if ( !m_hWnd ) {
+       wxLogError("Can't create window of class %s!\n"
+                  "Possible Windows 3.x compatibility problem?", wclass);
     }
   }
+
   wxWndHook = NULL;
   wxWinHandleList->Append((long)m_hWnd, this);
 
@@ -1911,7 +1874,7 @@ void wxWindow::OnSysColourChanged(wxSysColourChangedEvent& event)
 long wxWindow::MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
   if ( m_oldWndProc )
-  	return ::CallWindowProc(CASTWNDPROC (FARPROC) m_oldWndProc, (HWND) GetHWND(), (UINT) nMsg, (WPARAM) wParam, (LPARAM) lParam);
+  	return ::CallWindowProc((FARPROC)m_oldWndProc, (HWND) GetHWND(), (UINT) nMsg, (WPARAM) wParam, (LPARAM) lParam);
   else
   	return ::DefWindowProc((HWND) GetHWND(), nMsg, wParam, lParam);
 }
@@ -1963,7 +1926,7 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
 
         case VK_UP:
         case VK_LEFT:
-          if ( lDlgCode & DLGC_WANTARROWS || bCtrlDown )
+          if ( (lDlgCode & DLGC_WANTARROWS) || bCtrlDown )
             bProcess = FALSE;
           else
             bForward = FALSE;
@@ -1971,7 +1934,7 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
 
         case VK_DOWN:
         case VK_RIGHT:
-          if ( lDlgCode & DLGC_WANTARROWS || bCtrlDown )
+          if ( (lDlgCode & DLGC_WANTARROWS) || bCtrlDown )
             bProcess = FALSE;
           else
             bForward = TRUE;
@@ -3452,6 +3415,8 @@ void wxWindow::SetFont(const wxFont& font)
 
 void wxWindow::SubclassWin(WXHWND hWnd)
 {
+  wxASSERT_MSG( !m_oldWndProc, "subclassing window twice?" );
+
   wxAssociateWinWithHandle((HWND)hWnd, this);
 
   m_oldWndProc = (WXFARPROC) GetWindowLong((HWND) hWnd, GWL_WNDPROC);
@@ -4515,6 +4480,25 @@ const char *wxGetMessageName(int message)
     case 0x0046: return "WM_WINDOWPOSCHANGING";
     case 0x0047: return "WM_WINDOWPOSCHANGED";
     case 0x0048: return "WM_POWER";
+
+#ifdef  __WIN32__
+    case 0x004A: return "WM_COPYDATA";
+    case 0x004B: return "WM_CANCELJOURNAL";
+    case 0x004E: return "WM_NOTIFY";
+    case 0x0050: return "WM_INPUTLANGCHANGEREQUEST";
+    case 0x0051: return "WM_INPUTLANGCHANGE";
+    case 0x0052: return "WM_TCARD";
+    case 0x0053: return "WM_HELP";
+    case 0x0054: return "WM_USERCHANGED";
+    case 0x0055: return "WM_NOTIFYFORMAT";
+    case 0x007B: return "WM_CONTEXTMENU";
+    case 0x007C: return "WM_STYLECHANGING";
+    case 0x007D: return "WM_STYLECHANGED";
+    case 0x007E: return "WM_DISPLAYCHANGE";
+    case 0x007F: return "WM_GETICON";
+    case 0x0080: return "WM_SETICON";
+#endif  //WIN32
+
     case 0x0081: return "WM_NCCREATE";
     case 0x0082: return "WM_NCDESTROY";
     case 0x0083: return "WM_NCCALCSIZE";
@@ -4541,6 +4525,13 @@ const char *wxGetMessageName(int message)
     case 0x0106: return "WM_SYSCHAR";
     case 0x0107: return "WM_SYSDEADCHAR";
     case 0x0108: return "WM_KEYLAST";
+
+#ifdef  __WIN32__
+    case 0x010D: return "WM_IME_STARTCOMPOSITION";
+    case 0x010E: return "WM_IME_ENDCOMPOSITION";
+    case 0x010F: return "WM_IME_COMPOSITION";
+#endif  //WIN32
+
     case 0x0110: return "WM_INITDIALOG";
     case 0x0111: return "WM_COMMAND";
     case 0x0112: return "WM_SYSCOMMAND";
@@ -4563,6 +4554,18 @@ const char *wxGetMessageName(int message)
     case 0x0208: return "WM_MBUTTONUP";
     case 0x0209: return "WM_MBUTTONDBLCLK";
     case 0x0210: return "WM_PARENTNOTIFY";
+    case 0x0211: return "WM_ENTERMENULOOP";
+    case 0x0212: return "WM_EXITMENULOOP";
+
+#ifdef  __WIN32__
+    case 0x0213: return "WM_NEXTMENU";
+    case 0x0214: return "WM_SIZING";
+    case 0x0215: return "WM_CAPTURECHANGED";
+    case 0x0216: return "WM_MOVING";
+    case 0x0218: return "WM_POWERBROADCAST";
+    case 0x0219: return "WM_DEVICECHANGE";
+#endif  //WIN32
+
     case 0x0220: return "WM_MDICREATE";
     case 0x0221: return "WM_MDIDESTROY";
     case 0x0222: return "WM_MDIACTIVATE";
@@ -4575,6 +4578,18 @@ const char *wxGetMessageName(int message)
     case 0x0229: return "WM_MDIGETACTIVE";
     case 0x0230: return "WM_MDISETMENU";
     case 0x0233: return "WM_DROPFILES";
+
+#ifdef  __WIN32__
+    case 0x0281: return "WM_IME_SETCONTEXT";
+    case 0x0282: return "WM_IME_NOTIFY";
+    case 0x0283: return "WM_IME_CONTROL";
+    case 0x0284: return "WM_IME_COMPOSITIONFULL";
+    case 0x0285: return "WM_IME_SELECT";
+    case 0x0286: return "WM_IME_CHAR";
+    case 0x0290: return "WM_IME_KEYDOWN";
+    case 0x0291: return "WM_IME_KEYUP";
+#endif  //WIN32
+
     case 0x0300: return "WM_CUT";
     case 0x0301: return "WM_COPY";
     case 0x0302: return "WM_PASTE";
@@ -4593,6 +4608,231 @@ const char *wxGetMessageName(int message)
     case 0x030F: return "WM_QUERYNEWPALETTE";
     case 0x0310: return "WM_PALETTEISCHANGING";
     case 0x0311: return "WM_PALETTECHANGED";
+
+#ifdef __WIN32__
+    // common controls messages - although they're not strictly speaking
+    // standard, it's nice to decode them nevertheless
+
+    // listview
+    case 0x1000 + 0: return "LVM_GETBKCOLOR";
+    case 0x1000 + 1: return "LVM_SETBKCOLOR";
+    case 0x1000 + 2: return "LVM_GETIMAGELIST";
+    case 0x1000 + 3: return "LVM_SETIMAGELIST";
+    case 0x1000 + 4: return "LVM_GETITEMCOUNT";
+    case 0x1000 + 5: return "LVM_GETITEMA";
+    case 0x1000 + 75: return "LVM_GETITEMW";
+    case 0x1000 + 6: return "LVM_SETITEMA";
+    case 0x1000 + 76: return "LVM_SETITEMW";
+    case 0x1000 + 7: return "LVM_INSERTITEMA";
+    case 0x1000 + 77: return "LVM_INSERTITEMW";
+    case 0x1000 + 8: return "LVM_DELETEITEM";
+    case 0x1000 + 9: return "LVM_DELETEALLITEMS";
+    case 0x1000 + 10: return "LVM_GETCALLBACKMASK";
+    case 0x1000 + 11: return "LVM_SETCALLBACKMASK";
+    case 0x1000 + 12: return "LVM_GETNEXTITEM";
+    case 0x1000 + 13: return "LVM_FINDITEMA";
+    case 0x1000 + 83: return "LVM_FINDITEMW";
+    case 0x1000 + 14: return "LVM_GETITEMRECT";
+    case 0x1000 + 15: return "LVM_SETITEMPOSITION";
+    case 0x1000 + 16: return "LVM_GETITEMPOSITION";
+    case 0x1000 + 17: return "LVM_GETSTRINGWIDTHA";
+    case 0x1000 + 87: return "LVM_GETSTRINGWIDTHW";
+    case 0x1000 + 18: return "LVM_HITTEST";
+    case 0x1000 + 19: return "LVM_ENSUREVISIBLE";
+    case 0x1000 + 20: return "LVM_SCROLL";
+    case 0x1000 + 21: return "LVM_REDRAWITEMS";
+    case 0x1000 + 22: return "LVM_ARRANGE";
+    case 0x1000 + 23: return "LVM_EDITLABELA";
+    case 0x1000 + 118: return "LVM_EDITLABELW";
+    case 0x1000 + 24: return "LVM_GETEDITCONTROL";
+    case 0x1000 + 25: return "LVM_GETCOLUMNA";
+    case 0x1000 + 95: return "LVM_GETCOLUMNW";
+    case 0x1000 + 26: return "LVM_SETCOLUMNA";
+    case 0x1000 + 96: return "LVM_SETCOLUMNW";
+    case 0x1000 + 27: return "LVM_INSERTCOLUMNA";
+    case 0x1000 + 97: return "LVM_INSERTCOLUMNW";
+    case 0x1000 + 28: return "LVM_DELETECOLUMN";
+    case 0x1000 + 29: return "LVM_GETCOLUMNWIDTH";
+    case 0x1000 + 30: return "LVM_SETCOLUMNWIDTH";
+    case 0x1000 + 31: return "LVM_GETHEADER";
+    case 0x1000 + 33: return "LVM_CREATEDRAGIMAGE";
+    case 0x1000 + 34: return "LVM_GETVIEWRECT";
+    case 0x1000 + 35: return "LVM_GETTEXTCOLOR";
+    case 0x1000 + 36: return "LVM_SETTEXTCOLOR";
+    case 0x1000 + 37: return "LVM_GETTEXTBKCOLOR";
+    case 0x1000 + 38: return "LVM_SETTEXTBKCOLOR";
+    case 0x1000 + 39: return "LVM_GETTOPINDEX";
+    case 0x1000 + 40: return "LVM_GETCOUNTPERPAGE";
+    case 0x1000 + 41: return "LVM_GETORIGIN";
+    case 0x1000 + 42: return "LVM_UPDATE";
+    case 0x1000 + 43: return "LVM_SETITEMSTATE";
+    case 0x1000 + 44: return "LVM_GETITEMSTATE";
+    case 0x1000 + 45: return "LVM_GETITEMTEXTA";
+    case 0x1000 + 115: return "LVM_GETITEMTEXTW";
+    case 0x1000 + 46: return "LVM_SETITEMTEXTA";
+    case 0x1000 + 116: return "LVM_SETITEMTEXTW";
+    case 0x1000 + 47: return "LVM_SETITEMCOUNT";
+    case 0x1000 + 48: return "LVM_SORTITEMS";
+    case 0x1000 + 49: return "LVM_SETITEMPOSITION32";
+    case 0x1000 + 50: return "LVM_GETSELECTEDCOUNT";
+    case 0x1000 + 51: return "LVM_GETITEMSPACING";
+    case 0x1000 + 52: return "LVM_GETISEARCHSTRINGA";
+    case 0x1000 + 117: return "LVM_GETISEARCHSTRINGW";
+    case 0x1000 + 53: return "LVM_SETICONSPACING";
+    case 0x1000 + 54: return "LVM_SETEXTENDEDLISTVIEWSTYLE";
+    case 0x1000 + 55: return "LVM_GETEXTENDEDLISTVIEWSTYLE";
+    case 0x1000 + 56: return "LVM_GETSUBITEMRECT";
+    case 0x1000 + 57: return "LVM_SUBITEMHITTEST";
+    case 0x1000 + 58: return "LVM_SETCOLUMNORDERARRAY";
+    case 0x1000 + 59: return "LVM_GETCOLUMNORDERARRAY";
+    case 0x1000 + 60: return "LVM_SETHOTITEM";
+    case 0x1000 + 61: return "LVM_GETHOTITEM";
+    case 0x1000 + 62: return "LVM_SETHOTCURSOR";
+    case 0x1000 + 63: return "LVM_GETHOTCURSOR";
+    case 0x1000 + 64: return "LVM_APPROXIMATEVIEWRECT";
+    case 0x1000 + 65: return "LVM_SETWORKAREA";
+
+    // tree view
+    case 0x1100 + 0: return "TVM_INSERTITEMA";
+    case 0x1100 + 50: return "TVM_INSERTITEMW";
+    case 0x1100 + 1: return "TVM_DELETEITEM";
+    case 0x1100 + 2: return "TVM_EXPAND";
+    case 0x1100 + 4: return "TVM_GETITEMRECT";
+    case 0x1100 + 5: return "TVM_GETCOUNT";
+    case 0x1100 + 6: return "TVM_GETINDENT";
+    case 0x1100 + 7: return "TVM_SETINDENT";
+    case 0x1100 + 8: return "TVM_GETIMAGELIST";
+    case 0x1100 + 9: return "TVM_SETIMAGELIST";
+    case 0x1100 + 10: return "TVM_GETNEXTITEM";
+    case 0x1100 + 11: return "TVM_SELECTITEM";
+    case 0x1100 + 12: return "TVM_GETITEMA";
+    case 0x1100 + 62: return "TVM_GETITEMW";
+    case 0x1100 + 13: return "TVM_SETITEMA";
+    case 0x1100 + 63: return "TVM_SETITEMW";
+    case 0x1100 + 14: return "TVM_EDITLABELA";
+    case 0x1100 + 65: return "TVM_EDITLABELW";
+    case 0x1100 + 15: return "TVM_GETEDITCONTROL";
+    case 0x1100 + 16: return "TVM_GETVISIBLECOUNT";
+    case 0x1100 + 17: return "TVM_HITTEST";
+    case 0x1100 + 18: return "TVM_CREATEDRAGIMAGE";
+    case 0x1100 + 19: return "TVM_SORTCHILDREN";
+    case 0x1100 + 20: return "TVM_ENSUREVISIBLE";
+    case 0x1100 + 21: return "TVM_SORTCHILDRENCB";
+    case 0x1100 + 22: return "TVM_ENDEDITLABELNOW";
+    case 0x1100 + 23: return "TVM_GETISEARCHSTRINGA";
+    case 0x1100 + 64: return "TVM_GETISEARCHSTRINGW";
+    case 0x1100 + 24: return "TVM_SETTOOLTIPS";
+    case 0x1100 + 25: return "TVM_GETTOOLTIPS";
+    
+    // header
+    case 0x1200 + 0: return "HDM_GETITEMCOUNT";
+    case 0x1200 + 1: return "HDM_INSERTITEMA";
+    case 0x1200 + 10: return "HDM_INSERTITEMW";
+    case 0x1200 + 2: return "HDM_DELETEITEM";
+    case 0x1200 + 3: return "HDM_GETITEMA";
+    case 0x1200 + 11: return "HDM_GETITEMW";
+    case 0x1200 + 4: return "HDM_SETITEMA";
+    case 0x1200 + 12: return "HDM_SETITEMW";
+    case 0x1200 + 5: return "HDM_LAYOUT";
+    case 0x1200 + 6: return "HDM_HITTEST";
+    case 0x1200 + 7: return "HDM_GETITEMRECT";
+    case 0x1200 + 8: return "HDM_SETIMAGELIST";
+    case 0x1200 + 9: return "HDM_GETIMAGELIST";
+    case 0x1200 + 15: return "HDM_ORDERTOINDEX";
+    case 0x1200 + 16: return "HDM_CREATEDRAGIMAGE";
+    case 0x1200 + 17: return "HDM_GETORDERARRAY";
+    case 0x1200 + 18: return "HDM_SETORDERARRAY";
+    case 0x1200 + 19: return "HDM_SETHOTDIVIDER";
+
+    // tab control
+    case 0x1300 + 2: return "TCM_GETIMAGELIST";
+    case 0x1300 + 3: return "TCM_SETIMAGELIST";
+    case 0x1300 + 4: return "TCM_GETITEMCOUNT";
+    case 0x1300 + 5: return "TCM_GETITEMA";
+    case 0x1300 + 60: return "TCM_GETITEMW";
+    case 0x1300 + 6: return "TCM_SETITEMA";
+    case 0x1300 + 61: return "TCM_SETITEMW";
+    case 0x1300 + 7: return "TCM_INSERTITEMA";
+    case 0x1300 + 62: return "TCM_INSERTITEMW";
+    case 0x1300 + 8: return "TCM_DELETEITEM";
+    case 0x1300 + 9: return "TCM_DELETEALLITEMS";
+    case 0x1300 + 10: return "TCM_GETITEMRECT";
+    case 0x1300 + 11: return "TCM_GETCURSEL";
+    case 0x1300 + 12: return "TCM_SETCURSEL";
+    case 0x1300 + 13: return "TCM_HITTEST";
+    case 0x1300 + 14: return "TCM_SETITEMEXTRA";
+    case 0x1300 + 40: return "TCM_ADJUSTRECT";
+    case 0x1300 + 41: return "TCM_SETITEMSIZE";
+    case 0x1300 + 42: return "TCM_REMOVEIMAGE";
+    case 0x1300 + 43: return "TCM_SETPADDING";
+    case 0x1300 + 44: return "TCM_GETROWCOUNT";
+    case 0x1300 + 45: return "TCM_GETTOOLTIPS";
+    case 0x1300 + 46: return "TCM_SETTOOLTIPS";
+    case 0x1300 + 47: return "TCM_GETCURFOCUS";
+    case 0x1300 + 48: return "TCM_SETCURFOCUS";
+    case 0x1300 + 49: return "TCM_SETMINTABWIDTH";
+    case 0x1300 + 50: return "TCM_DESELECTALL";
+
+    // toolbar
+    case WM_USER+1: return "TB_ENABLEBUTTON";
+    case WM_USER+2: return "TB_CHECKBUTTON";
+    case WM_USER+3: return "TB_PRESSBUTTON";
+    case WM_USER+4: return "TB_HIDEBUTTON";
+    case WM_USER+5: return "TB_INDETERMINATE";
+    case WM_USER+9: return "TB_ISBUTTONENABLED";
+    case WM_USER+10: return "TB_ISBUTTONCHECKED";
+    case WM_USER+11: return "TB_ISBUTTONPRESSED";
+    case WM_USER+12: return "TB_ISBUTTONHIDDEN";
+    case WM_USER+13: return "TB_ISBUTTONINDETERMINATE";
+    case WM_USER+17: return "TB_SETSTATE";
+    case WM_USER+18: return "TB_GETSTATE";
+    case WM_USER+19: return "TB_ADDBITMAP";
+    case WM_USER+20: return "TB_ADDBUTTONS";
+    case WM_USER+21: return "TB_INSERTBUTTON";
+    case WM_USER+22: return "TB_DELETEBUTTON";
+    case WM_USER+23: return "TB_GETBUTTON";
+    case WM_USER+24: return "TB_BUTTONCOUNT";
+    case WM_USER+25: return "TB_COMMANDTOINDEX";
+    case WM_USER+26: return "TB_SAVERESTOREA";
+    case WM_USER+76: return "TB_SAVERESTOREW";
+    case WM_USER+27: return "TB_CUSTOMIZE";
+    case WM_USER+28: return "TB_ADDSTRINGA";
+    case WM_USER+77: return "TB_ADDSTRINGW";
+    case WM_USER+29: return "TB_GETITEMRECT";
+    case WM_USER+30: return "TB_BUTTONSTRUCTSIZE";
+    case WM_USER+31: return "TB_SETBUTTONSIZE";
+    case WM_USER+32: return "TB_SETBITMAPSIZE";
+    case WM_USER+33: return "TB_AUTOSIZE";
+    case WM_USER+35: return "TB_GETTOOLTIPS";
+    case WM_USER+36: return "TB_SETTOOLTIPS";
+    case WM_USER+37: return "TB_SETPARENT";
+    case WM_USER+39: return "TB_SETROWS";
+    case WM_USER+40: return "TB_GETROWS";
+    case WM_USER+42: return "TB_SETCMDID";
+    case WM_USER+43: return "TB_CHANGEBITMAP";
+    case WM_USER+44: return "TB_GETBITMAP";
+    case WM_USER+45: return "TB_GETBUTTONTEXTA";
+    case WM_USER+75: return "TB_GETBUTTONTEXTW";
+    case WM_USER+46: return "TB_REPLACEBITMAP";
+    case WM_USER+47: return "TB_SETINDENT";
+    case WM_USER+48: return "TB_SETIMAGELIST";
+    case WM_USER+49: return "TB_GETIMAGELIST";
+    case WM_USER+50: return "TB_LOADIMAGES";
+    case WM_USER+51: return "TB_GETRECT";
+    case WM_USER+52: return "TB_SETHOTIMAGELIST";
+    case WM_USER+53: return "TB_GETHOTIMAGELIST";
+    case WM_USER+54: return "TB_SETDISABLEDIMAGELIST";
+    case WM_USER+55: return "TB_GETDISABLEDIMAGELIST";
+    case WM_USER+56: return "TB_SETSTYLE";
+    case WM_USER+57: return "TB_GETSTYLE";
+    case WM_USER+58: return "TB_GETBUTTONSIZE";
+    case WM_USER+59: return "TB_SETBUTTONWIDTH";
+    case WM_USER+60: return "TB_SETMAXTEXTROWS";
+    case WM_USER+61: return "TB_GETTEXTROWS";
+    case WM_USER+41: return "TB_GETBITMAPFLAGS";
+
+#endif //WIN32
+
     default:
       static char s_szBuf[128];
       sprintf(s_szBuf, "<unknown message = %d>", message);

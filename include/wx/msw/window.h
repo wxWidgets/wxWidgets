@@ -489,6 +489,9 @@ public:
   // Setup background and foreground colours correctly
   virtual void SetupColours(void);
 
+  // Saves the last message information before calling base version
+  virtual bool ProcessEvent(wxEvent& event);
+
   // Handlers
   virtual void MSWOnCreate(WXLPCREATESTRUCT cs);
   virtual bool MSWOnPaint(void);
