@@ -613,7 +613,46 @@ static wxNativeFont wxLoadQueryFont(int pointSize,
         case wxSCRIPT:     xfamily = wxT("utopia"); break;
         default:           xfamily = wxT("*");
     }
+#if wxUSE_NANOX
+    GR_SCREEN_INFO screenInfo;
+    GrGetScreenInfo(& screenInfo);
 
+    int yPixelsPerCM = screenInfo.ydpcm;
+
+    // A point is 1/20 of an inch.
+    // An inch is 2.541 cm.
+    // So pixelHeight = (pointSize / 20) (inches) * 2.541 (for cm) * yPixelsPerCM (for pixels)
+    
+    int pixelHeight = (int) ( (((float)pointSize) / 20.0) * 2.541 * (float) yPixelsPerCM) ;
+    
+    GR_LOGFONT logFont;
+    logFont.lfHeight = pixelHeight;
+    logFont.lfWidth = 0;
+    logFont.lfEscapement = 0;
+    logFont.lfOrientation = 0;
+    logFont.lfWeight = weight; // TODO: check of conversion req'd
+    logFont.lfItalic = (style == wxNORMAL ? 0 : 1) ;
+    logFont.lfUnderline = 0;
+    logFont.lfStrikeOut = 0;
+    logFont.lfCharSet = MWLF_CHARSET_DEFAULT; // TODO: select appropriate one
+    logFont.lfOutPrecision = MWLF_TYPE_DEFAULT;
+    logFont.lfClipPrecision = 0; // Not used
+    logFont.lfRoman = (family == wxROMAN ? 1 : 0) ;
+    logFont.lfSerif = (family == wxSWISS ? 0 : 1) ;
+    logFont.lfSansSerif = !logFont.lfSerif ;
+    logFont.lfModern = (family == wxMODERN ? 1 : 0) ;
+    logFont.lfProportional = (family == wxTELETYPE ? 0 : 1) ;
+    logFont.lfOblique = 0;
+    logFont.lfSmallCaps = 0;
+    logFont.lfPitch = 0; // 0 = default
+    strcpy(logFont.lfFaceName, facename.c_str());
+
+    XFontStruct* fontInfo = (XFontStruct*) malloc(sizeof(XFontStruct));
+    fontInfo->fid = GrCreateFont((GR_CHAR*) facename.c_str(), pixelHeight, & logFont);
+    GrGetFontInfo(fontInfo->fid, & fontInfo->info);
+    return (wxNativeFont) fontInfo;
+    
+#else
     wxString fontSpec;
     if (!facename.IsEmpty())
     {
@@ -789,6 +828,8 @@ static wxNativeFont wxLoadQueryFont(int pointSize,
         *xFontName = fontSpec;
 
     return wxLoadFont(fontSpec);
+#endif
+    // wxUSE_NANOX
 }
 
 // ----------------------------------------------------------------------------

@@ -15,6 +15,7 @@
 #include <ctype.h>
 #include <malloc.h>
 #include <string.h>
+#include <stdio.h>
 #include "wx/defs.h"
 #include "wx/x11/nanox/X11/Xlib.h"
 
@@ -351,6 +352,7 @@ XFontStruct* XLoadQueryFont(Display* display, const char* fontSpec)
     XFontStruct* fontInfo = malloc(sizeof(XFontStruct));
     fontInfo->fid = GrCreateFont(fontName, 0, 0);
     GrGetFontInfo(fontInfo->fid, & fontInfo->info);
+    printf("Warning: should not call XLoadQueryFont since font spec is not used in Nano-X.\n");
     return fontInfo;
 }
 
