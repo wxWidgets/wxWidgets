@@ -529,18 +529,13 @@ wxImage wxBitmap::ConvertToImage() const
       int pixel = gdk_image_get_pixel( gdk_image, i, j );
       if (bpp <= 8)
       {
-/*
-        int r = cmap->colors[pixel].red;    // debug code
-        int g = cmap->colors[pixel].green;
-        int b = cmap->colors[pixel].blue;
-*/
         data[pos] = cmap->colors[pixel].red >> 8;
         data[pos+1] = cmap->colors[pixel].green >> 8;
         data[pos+2] = cmap->colors[pixel].blue >> 8;
       } else if (bpp == 15)
       {
         data[pos] = (pixel >> 7) & 0xf8;
-        data[pos+1] = (pixel >> 3) & 0xf8;
+        data[pos+1] = (pixel >> 2) & 0xf8;
         data[pos+2] = (pixel << 3) & 0xf8;
       } else if (bpp == 16)
       {
