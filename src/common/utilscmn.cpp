@@ -747,7 +747,14 @@ wxWindow* wxGenericFindWindowAtPoint(const wxPoint& pt)
 int wxMessageBox(const wxString& message, const wxString& caption, long style,
                  wxWindow *parent, int WXUNUSED(x), int WXUNUSED(y) )
 {
-    wxMessageDialog dialog(parent, message, caption, style);
+    long decorated_style = style;
+
+    if ( ( style & ( wxICON_EXCLAMATION | wxICON_HAND | wxICON_INFORMATION | wxICON_QUESTION ) ) == 0 )
+    {
+        decorated_style |= ( style & wxYES ) ? wxICON_QUESTION : wxICON_INFORMATION ;
+    }
+
+    wxMessageDialog dialog(parent, message, caption, decorated_style);
 
     int ans = dialog.ShowModal();
     switch ( ans )
