@@ -340,7 +340,7 @@ wxLayoutObjectCmd::wxLayoutObjectCmd(int size, int family, int style, int
 {
    m_StyleInfo = new
       wxLayoutStyleInfo(size,family,style,weight,underline,fg,bg);
-   m_font = m_StyleInfo->GetFont(NULL);
+   m_font = NULL;
 }
 
 wxLayoutObject *
@@ -374,7 +374,7 @@ wxLayoutObjectCmd::Copy(void)
 wxLayoutObjectCmd::~wxLayoutObjectCmd()
 {
    delete m_StyleInfo;
-   delete m_font;
+   if(m_font) delete m_font;
 }
 
 wxLayoutStyleInfo *
@@ -396,6 +396,10 @@ wxLayoutObjectCmd::Draw(wxDC &dc, wxPoint const & /* coords */,
 void
 wxLayoutObjectCmd::Layout(wxDC &dc, class wxLayoutList * llist)
 {
+   if(m_font) delete m_font;
+   m_font = m_StyleInfo->GetFont(llist->GetStyleInfo());
+
+
    // this get called, so that recalculation uses right font sizes
    Draw(dc, wxPoint(0,0), llist);
 }
@@ -1199,14 +1203,32 @@ wxLayoutList::SetFont(int family, int size, int style, int weight,
                       int underline, wxColour *fg,
                       wxColour *bg)
 {
-   if(family != -1)    m_FontFamily = family;
-   if(size != -1)      m_FontPtSize = size;
-   if(style != -1)     m_FontStyle = style;
-   if(weight != -1)    m_FontWeight = weight;
-   if(underline != -1) m_FontUnderline = underline != 0;
+   if(family != -1)    m_CurrentSetting.family = family;
+   if(size != -1)      m_CurrentSetting.size = size;
+   if(style != -1)     m_CurrentSetting.style = style;
+   if(weight != -1)    m_CurrentSetting.weight = weight;
+   if(underline != -1) m_CurrentSetting.underline = underline != 0;
+   if(fg)
+   {
+      m_CurrentSetting.fg_valid = true;
+      m_CurrentSetting.fg_red = fg->Red();
+      m_CurrentSetting.fg_blue = fg->Blue();
+      m_CurrentSetting.fg_green = fg->Green();
+   }
+   if(bg)
+   {
+      m_CurrentSetting.bg_valid = true;
+      m_CurrentSetting.bg_red = bg->Red();
+      m_CurrentSetting.bg_blue = bg->Blue();
+      m_CurrentSetting.bg_green = bg->Green();
+   }
    Insert(
-      new wxLayoutObjectCmd(m_FontPtSize,m_FontFamily,m_FontStyle,m_FontWeight,m_FontUnderline,
-                            fg, bg));
+      new wxLayoutObjectCmd(
+         m_CurrentSetting.size,
+         m_CurrentSetting.family,
+         m_CurrentSetting.style,
+         m_CurrentSetting.weight,
+         m_CurrentSetting.underline, fg, bg));
 }
 
 void
