@@ -256,7 +256,7 @@ public:
     %addmethods {
         void ResizeChildren() {
             wxSizeEvent evt(self->GetClientSize());
-            self->OnSize(evt);
+            self->GetEventHandler()->ProcessEvent(evt);
         }
     }
 
@@ -341,7 +341,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.11  1999/05/15 00:56:05  RD
+// fixes for GetReturnCode/SetReturnCode
+//
 // Revision 1.10  1999/04/30 03:29:19  RD
+//
 // wxPython 2.0b9, first phase (win32)
 // Added gobs of stuff, see wxPython/README.txt for details
 //

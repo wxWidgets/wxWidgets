@@ -132,9 +132,6 @@ class wxWindowPtr(wxEvtHandlerPtr):
         val = wxRectPtr(val)
         val.thisown = 1
         return val
-    def GetReturnCode(self):
-        val = windowsc.wxWindow_GetReturnCode(self.this)
-        return val
     def GetScrollThumb(self,arg0):
         val = windowsc.wxWindow_GetScrollThumb(self.this,arg0)
         return val
@@ -236,9 +233,6 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def SetConstraints(self,arg0):
         val = windowsc.wxWindow_SetConstraints(self.this,arg0.this)
         return val
-    def SetDoubleClick(self,arg0):
-        val = windowsc.wxWindow_SetDoubleClick(self.this,arg0)
-        return val
     def SetFocus(self):
         val = windowsc.wxWindow_SetFocus(self.this)
         return val
@@ -253,9 +247,6 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def SetName(self,arg0):
         val = windowsc.wxWindow_SetName(self.this,arg0)
-        return val
-    def SetReturnCode(self,arg0):
-        val = windowsc.wxWindow_SetReturnCode(self.this,arg0)
         return val
     def SetScrollbar(self,arg0,arg1,arg2,arg3,*args):
         val = apply(windowsc.wxWindow_SetScrollbar,(self.this,arg0,arg1,arg2,arg3,)+args)
@@ -416,6 +407,12 @@ class wxDialogPtr(wxPanelPtr):
         return val
     def ShowModal(self):
         val = windowsc.wxDialog_ShowModal(self.this)
+        return val
+    def GetReturnCode(self):
+        val = windowsc.wxDialog_GetReturnCode(self.this)
+        return val
+    def SetReturnCode(self,arg0):
+        val = windowsc.wxDialog_SetReturnCode(self.this,arg0)
         return val
     def __repr__(self):
         return "<C wxDialog instance>"

@@ -33,10 +33,8 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.11  1999/05/04 00:25:56  RD
- * Some slight cleanup and reorganization
- *
- * Added support for making RPM distribution
+ * Revision 1.12  1999/05/15 00:56:11  RD
+ * fixes for GetReturnCode/SetReturnCode
  *
  ************************************************************************/
 

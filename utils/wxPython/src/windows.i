@@ -100,7 +100,6 @@ public:
     %name(GetPositionTuple) void GetPosition(int *OUTPUT, int *OUTPUT);
     wxPoint GetPosition();
     wxRect GetRect();
-    int  GetReturnCode();
     int GetScrollThumb(int orientation);
     int GetScrollPos(int orientation);
     int GetScrollRange(int orientation);
@@ -140,13 +139,12 @@ public:
     void SetAutoLayout(bool autoLayout);
     void SetBackgroundColour(const wxColour& colour);
     void SetConstraints(wxLayoutConstraints *constraints);
-    void SetDoubleClick(bool allowDoubleClick);
+//    void SetDoubleClick(bool allowDoubleClick);
     void SetFocus();
     void SetFont(const wxFont& font);
     void SetForegroundColour(const wxColour& colour);
     void SetId(int id);
     void SetName(const wxString& name);
-    void SetReturnCode(int retCode);
     void SetScrollbar(int orientation, int position, int thumbSize, int range, bool refresh = TRUE);
     void SetScrollPos(int orientation, int pos, bool refresh = TRUE);
 
@@ -229,6 +227,7 @@ public:
     %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     void InitDialog();
+
 };
 
 //---------------------------------------------------------------------------
@@ -255,6 +254,9 @@ public:
     void SetTitle(const wxString& title);
     bool Show(bool show);
     int ShowModal();
+
+    int  GetReturnCode();
+    void SetReturnCode(int retCode);
 };
 
 //---------------------------------------------------------------------------
@@ -399,7 +401,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.16  1999/05/15 00:56:04  RD
+// fixes for GetReturnCode/SetReturnCode
+//
 // Revision 1.15  1999/04/30 03:29:19  RD
+//
 // wxPython 2.0b9, first phase (win32)
 // Added gobs of stuff, see wxPython/README.txt for details
 //

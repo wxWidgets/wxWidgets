@@ -1033,31 +1033,6 @@ static PyObject *_wrap_wxWindow_GetRect(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-#define wxWindow_GetReturnCode(_swigobj)  (_swigobj->GetReturnCode())
-static PyObject *_wrap_wxWindow_GetReturnCode(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    int  _result;
-    wxWindow * _arg0;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxWindow_GetReturnCode",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxWindow_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_GetReturnCode. Expected _wxWindow_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxWindow_GetReturnCode(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
 #define wxWindow_GetScrollThumb(_swigobj,_swigarg0)  (_swigobj->GetScrollThumb(_swigarg0))
 static PyObject *_wrap_wxWindow_GetScrollThumb(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -2031,34 +2006,6 @@ static PyObject *_wrap_wxWindow_SetConstraints(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-#define wxWindow_SetDoubleClick(_swigobj,_swigarg0)  (_swigobj->SetDoubleClick(_swigarg0))
-static PyObject *_wrap_wxWindow_SetDoubleClick(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxWindow * _arg0;
-    bool  _arg1;
-    char * _argc0 = 0;
-    int tempbool1;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"si:wxWindow_SetDoubleClick",&_argc0,&tempbool1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxWindow_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_SetDoubleClick. Expected _wxWindow_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxWindow_SetDoubleClick(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 #define wxWindow_SetFocus(_swigobj)  (_swigobj->SetFocus())
 static PyObject *_wrap_wxWindow_SetFocus(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -2211,32 +2158,6 @@ static PyObject *_wrap_wxWindow_SetName(PyObject *self, PyObject *args) {
     if (_obj1)
         delete _arg1;
 }
-    return _resultobj;
-}
-
-#define wxWindow_SetReturnCode(_swigobj,_swigarg0)  (_swigobj->SetReturnCode(_swigarg0))
-static PyObject *_wrap_wxWindow_SetReturnCode(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxWindow * _arg0;
-    int  _arg1;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"si:wxWindow_SetReturnCode",&_argc0,&_arg1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxWindow_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_SetReturnCode. Expected _wxWindow_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxWindow_SetReturnCode(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -3378,6 +3299,57 @@ static PyObject *_wrap_wxDialog_ShowModal(PyObject *self, PyObject *args) {
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxDialog_GetReturnCode(_swigobj)  (_swigobj->GetReturnCode())
+static PyObject *_wrap_wxDialog_GetReturnCode(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxDialog * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxDialog_GetReturnCode",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxDialog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDialog_GetReturnCode. Expected _wxDialog_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxDialog_GetReturnCode(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxDialog_SetReturnCode(_swigobj,_swigarg0)  (_swigobj->SetReturnCode(_swigarg0))
+static PyObject *_wrap_wxDialog_SetReturnCode(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxDialog * _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxDialog_SetReturnCode",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxDialog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDialog_SetReturnCode. Expected _wxDialog_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxDialog_SetReturnCode(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -5125,6 +5097,8 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxScrolledWindow_GetScrollPixelsPerUnit", _wrap_wxScrolledWindow_GetScrollPixelsPerUnit, 1 },
 	 { "wxScrolledWindow_EnableScrolling", _wrap_wxScrolledWindow_EnableScrolling, 1 },
 	 { "new_wxScrolledWindow", _wrap_new_wxScrolledWindow, 1 },
+	 { "wxDialog_SetReturnCode", _wrap_wxDialog_SetReturnCode, 1 },
+	 { "wxDialog_GetReturnCode", _wrap_wxDialog_GetReturnCode, 1 },
 	 { "wxDialog_ShowModal", _wrap_wxDialog_ShowModal, 1 },
 	 { "wxDialog_Show", _wrap_wxDialog_Show, 1 },
 	 { "wxDialog_SetTitle", _wrap_wxDialog_SetTitle, 1 },
@@ -5162,13 +5136,11 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_SetDimensions", _wrap_wxWindow_SetDimensions, 1 },
 	 { "wxWindow_SetScrollPos", _wrap_wxWindow_SetScrollPos, 1 },
 	 { "wxWindow_SetScrollbar", _wrap_wxWindow_SetScrollbar, 1 },
-	 { "wxWindow_SetReturnCode", _wrap_wxWindow_SetReturnCode, 1 },
 	 { "wxWindow_SetName", _wrap_wxWindow_SetName, 1 },
 	 { "wxWindow_SetId", _wrap_wxWindow_SetId, 1 },
 	 { "wxWindow_SetForegroundColour", _wrap_wxWindow_SetForegroundColour, 1 },
 	 { "wxWindow_SetFont", _wrap_wxWindow_SetFont, 1 },
 	 { "wxWindow_SetFocus", _wrap_wxWindow_SetFocus, 1 },
-	 { "wxWindow_SetDoubleClick", _wrap_wxWindow_SetDoubleClick, 1 },
 	 { "wxWindow_SetConstraints", _wrap_wxWindow_SetConstraints, 1 },
 	 { "wxWindow_SetBackgroundColour", _wrap_wxWindow_SetBackgroundColour, 1 },
 	 { "wxWindow_SetAutoLayout", _wrap_wxWindow_SetAutoLayout, 1 },
@@ -5198,7 +5170,6 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_GetScrollRange", _wrap_wxWindow_GetScrollRange, 1 },
 	 { "wxWindow_GetScrollPos", _wrap_wxWindow_GetScrollPos, 1 },
 	 { "wxWindow_GetScrollThumb", _wrap_wxWindow_GetScrollThumb, 1 },
-	 { "wxWindow_GetReturnCode", _wrap_wxWindow_GetReturnCode, 1 },
 	 { "wxWindow_GetRect", _wrap_wxWindow_GetRect, 1 },
 	 { "wxWindow_GetPosition", _wrap_wxWindow_GetPosition, 1 },
 	 { "wxWindow_GetPositionTuple", _wrap_wxWindow_GetPositionTuple, 1 },

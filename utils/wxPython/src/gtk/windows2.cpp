@@ -3459,7 +3459,7 @@ static PyObject *_wrap_wxNotebook_GetPage(PyObject *self, PyObject *args) {
 
 static void  wxNotebook_ResizeChildren(wxNotebook *self) {
             wxSizeEvent evt(self->GetClientSize());
-            self->OnSize(evt);
+            self->GetEventHandler()->ProcessEvent(evt);
         }
 static PyObject *_wrap_wxNotebook_ResizeChildren(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
