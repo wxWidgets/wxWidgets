@@ -984,109 +984,276 @@ bool wxDb::getDbInfo(void)
 {
     SWORD cb;
     RETCODE retcode;
+    bool failOnDataTypeUnsupported = True;  // This is replaced by a parameter to this function in 2.5.x
 
-    if (SQLGetInfo(hdbc, SQL_SERVER_NAME, (UCHAR*) dbInf.serverName, 80, &cb) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc));
+    retcode = SQLGetInfo(hdbc, SQL_SERVER_NAME, (UCHAR*) dbInf.serverName, 80, &cb);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
+	{
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
 
-    if (SQLGetInfo(hdbc, SQL_DATABASE_NAME, (UCHAR*) dbInf.databaseName, 128, &cb) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc));
+    retcode = SQLGetInfo(hdbc, SQL_DATABASE_NAME, (UCHAR*) dbInf.databaseName, 128, &cb);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
+	{
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
 
-    if (SQLGetInfo(hdbc, SQL_DBMS_NAME, (UCHAR*) dbInf.dbmsName, 40, &cb) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc));
+    retcode = SQLGetInfo(hdbc, SQL_DBMS_NAME, (UCHAR*) dbInf.dbmsName, 40, &cb);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
+	{
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
 
     // 16-Mar-1999
     // After upgrading to MSVC6, the original 20 char buffer below was insufficient,
     // causing database connectivity to fail in some cases.
     retcode = SQLGetInfo(hdbc, SQL_DBMS_VER, (UCHAR*) dbInf.dbmsVer, 64, &cb);
-
     if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
-        return(DispAllErrors(henv, hdbc));
+	{
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
 
-    if (SQLGetInfo(hdbc, SQL_ACTIVE_CONNECTIONS, (UCHAR*) &dbInf.maxConnections, sizeof(dbInf.maxConnections), &cb) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc));
+    retcode = SQLGetInfo(hdbc, SQL_ACTIVE_CONNECTIONS, (UCHAR*) &dbInf.maxConnections, sizeof(dbInf.maxConnections), &cb);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
+	{
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
 
-    if (SQLGetInfo(hdbc, SQL_ACTIVE_STATEMENTS, (UCHAR*) &dbInf.maxStmts, sizeof(dbInf.maxStmts), &cb) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc));
+    retcode = SQLGetInfo(hdbc, SQL_ACTIVE_STATEMENTS, (UCHAR*) &dbInf.maxStmts, sizeof(dbInf.maxStmts), &cb);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
+	{
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
 
-    if (SQLGetInfo(hdbc, SQL_DRIVER_NAME, (UCHAR*) dbInf.driverName, 40, &cb) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc));
+    retcode = SQLGetInfo(hdbc, SQL_DRIVER_NAME, (UCHAR*) dbInf.driverName, 40, &cb);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
+	{
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
 
-    if (SQLGetInfo(hdbc, SQL_DRIVER_ODBC_VER, (UCHAR*) dbInf.odbcVer, 60, &cb) == SQL_ERROR)
-        return(DispAllErrors(henv, hdbc));
+    retcode = SQLGetInfo(hdbc, SQL_DRIVER_ODBC_VER, (UCHAR*) dbInf.odbcVer, 60, &cb);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
+	{
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
 
     retcode = SQLGetInfo(hdbc, SQL_ODBC_VER, (UCHAR*) dbInf.drvMgrOdbcVer, 60, &cb);
     if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
-        return(DispAllErrors(henv, hdbc));
+	{
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
 
-    if (SQLGetInfo(hdbc, SQL_DRIVER_VER, (UCHAR*) dbInf.driverVer, 60, &cb) == SQL_ERROR)
-        return(DispAllErrors(henv, hdbc));
+    retcode = SQLGetInfo(hdbc, SQL_DRIVER_VER, (UCHAR*) dbInf.driverVer, 60, &cb);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
+	{
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
 
-    if (SQLGetInfo(hdbc, SQL_ODBC_API_CONFORMANCE, (UCHAR*) &dbInf.apiConfLvl, sizeof(dbInf.apiConfLvl), &cb) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc));
+    retcode = SQLGetInfo(hdbc, SQL_ODBC_API_CONFORMANCE, (UCHAR*) &dbInf.apiConfLvl, sizeof(dbInf.apiConfLvl), &cb);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
+	{
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
 
-    if (SQLGetInfo(hdbc, SQL_ODBC_SAG_CLI_CONFORMANCE, (UCHAR*) &dbInf.cliConfLvl, sizeof(dbInf.cliConfLvl), &cb) != SQL_SUCCESS)
-//        return(DispAllErrors(henv, hdbc));
+    retcode = SQLGetInfo(hdbc, SQL_ODBC_SAG_CLI_CONFORMANCE, (UCHAR*) &dbInf.cliConfLvl, sizeof(dbInf.cliConfLvl), &cb);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
     {
         // Not all drivers support this call - Nick Gorham(unixODBC)
         dbInf.cliConfLvl = 0;
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
     }
 
-    if (SQLGetInfo(hdbc, SQL_ODBC_SQL_CONFORMANCE, (UCHAR*) &dbInf.sqlConfLvl, sizeof(dbInf.sqlConfLvl), &cb) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc));
+    retcode = SQLGetInfo(hdbc, SQL_ODBC_SQL_CONFORMANCE, (UCHAR*) &dbInf.sqlConfLvl, sizeof(dbInf.sqlConfLvl), &cb);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
+	{
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
 
-    if (SQLGetInfo(hdbc, SQL_OUTER_JOINS, (UCHAR*) dbInf.outerJoins, 2, &cb) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc));
+    retcode = SQLGetInfo(hdbc, SQL_OUTER_JOINS, (UCHAR*) dbInf.outerJoins, 2, &cb);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
+	{
+		// TODO: BugTracker# 785080 : fails with mysql 4 on linux - edr
+		// TODO: dbInf.outerJoins[0]='N';
+		// TODO: dbInf.outerJoins[1]='\x0';
 
-    if (SQLGetInfo(hdbc, SQL_PROCEDURES, (UCHAR*) dbInf.procedureSupport, 2, &cb) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc));
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
 
-    if (SQLGetInfo(hdbc, SQL_ACCESSIBLE_TABLES, (UCHAR*) dbInf.accessibleTables, 2, &cb) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc));
+    retcode = SQLGetInfo(hdbc, SQL_PROCEDURES, (UCHAR*) dbInf.procedureSupport, 2, &cb);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
+	{
+		// TODO: BugTracker# 785080 : fails with mysql 4 on linux - edr
+		// TODO: dbInf.procedureSupport[0]='N';
+		// TODO: dbInf.procedureSupport[1]='\x0';
 
-    if (SQLGetInfo(hdbc, SQL_CURSOR_COMMIT_BEHAVIOR, (UCHAR*) &dbInf.cursorCommitBehavior, sizeof(dbInf.cursorCommitBehavior), &cb) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc));
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
 
-    if (SQLGetInfo(hdbc, SQL_CURSOR_ROLLBACK_BEHAVIOR, (UCHAR*) &dbInf.cursorRollbackBehavior, sizeof(dbInf.cursorRollbackBehavior), &cb) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc));
+    retcode = SQLGetInfo(hdbc, SQL_ACCESSIBLE_TABLES, (UCHAR*) dbInf.accessibleTables, 2, &cb);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
+	{
+		// TODO: BugTracker# 785080 : fails with mysql 4 on linux - edr
+		// TODO: dbInf.accessibleTables[0]='N';
+		// TODO: dbInf.accessibleTables[1]='\x0';
 
-    if (SQLGetInfo(hdbc, SQL_NON_NULLABLE_COLUMNS, (UCHAR*) &dbInf.supportNotNullClause, sizeof(dbInf.supportNotNullClause), &cb) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc));
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
 
-    if (SQLGetInfo(hdbc, SQL_ODBC_SQL_OPT_IEF, (UCHAR*) dbInf.supportIEF, 2, &cb) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc));
+    retcode = SQLGetInfo(hdbc, SQL_CURSOR_COMMIT_BEHAVIOR, (UCHAR*) &dbInf.cursorCommitBehavior, sizeof(dbInf.cursorCommitBehavior), &cb);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
+	{
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
 
-    if (SQLGetInfo(hdbc, SQL_DEFAULT_TXN_ISOLATION, (UCHAR*) &dbInf.txnIsolation, sizeof(dbInf.txnIsolation), &cb) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc));
+    retcode = SQLGetInfo(hdbc, SQL_CURSOR_ROLLBACK_BEHAVIOR, (UCHAR*) &dbInf.cursorRollbackBehavior, sizeof(dbInf.cursorRollbackBehavior), &cb);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
+	{
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
 
-    if (SQLGetInfo(hdbc, SQL_TXN_ISOLATION_OPTION, (UCHAR*) &dbInf.txnIsolationOptions, sizeof(dbInf.txnIsolationOptions), &cb) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc));
+    retcode = SQLGetInfo(hdbc, SQL_NON_NULLABLE_COLUMNS, (UCHAR*) &dbInf.supportNotNullClause, sizeof(dbInf.supportNotNullClause), &cb);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
+	{
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
 
-    if (SQLGetInfo(hdbc, SQL_FETCH_DIRECTION, (UCHAR*) &dbInf.fetchDirections, sizeof(dbInf.fetchDirections), &cb) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc));
+    retcode = SQLGetInfo(hdbc, SQL_ODBC_SQL_OPT_IEF, (UCHAR*) dbInf.supportIEF, 2, &cb);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
+	{
+		// TODO: BugTracker# 785080 : fails with mysql 4 on linux - edr
+		// TODO: dbInf.supportIEF[0]='N';
+		// TODO: dbInf.supportIEF[1]='\x0';
 
-    if (SQLGetInfo(hdbc, SQL_LOCK_TYPES, (UCHAR*) &dbInf.lockTypes, sizeof(dbInf.lockTypes), &cb) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc));
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
 
-    if (SQLGetInfo(hdbc, SQL_POS_OPERATIONS, (UCHAR*) &dbInf.posOperations, sizeof(dbInf.posOperations), &cb) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc));
+    retcode = SQLGetInfo(hdbc, SQL_DEFAULT_TXN_ISOLATION, (UCHAR*) &dbInf.txnIsolation, sizeof(dbInf.txnIsolation), &cb);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
+	{
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
 
-    if (SQLGetInfo(hdbc, SQL_POSITIONED_STATEMENTS, (UCHAR*) &dbInf.posStmts, sizeof(dbInf.posStmts), &cb) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc));
+    retcode = SQLGetInfo(hdbc, SQL_TXN_ISOLATION_OPTION, (UCHAR*) &dbInf.txnIsolationOptions, sizeof(dbInf.txnIsolationOptions), &cb);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
+	{
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
 
-    if (SQLGetInfo(hdbc, SQL_SCROLL_CONCURRENCY, (UCHAR*) &dbInf.scrollConcurrency, sizeof(dbInf.scrollConcurrency), &cb) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc));
+    retcode = SQLGetInfo(hdbc, SQL_FETCH_DIRECTION, (UCHAR*) &dbInf.fetchDirections, sizeof(dbInf.fetchDirections), &cb);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
+	{
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
 
-    if (SQLGetInfo(hdbc, SQL_SCROLL_OPTIONS, (UCHAR*) &dbInf.scrollOptions, sizeof(dbInf.scrollOptions), &cb) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc));
+    retcode = SQLGetInfo(hdbc, SQL_LOCK_TYPES, (UCHAR*) &dbInf.lockTypes, sizeof(dbInf.lockTypes), &cb);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
+	{
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
 
-    if (SQLGetInfo(hdbc, SQL_STATIC_SENSITIVITY, (UCHAR*) &dbInf.staticSensitivity, sizeof(dbInf.staticSensitivity), &cb) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc));
+    retcode = SQLGetInfo(hdbc, SQL_POS_OPERATIONS, (UCHAR*) &dbInf.posOperations, sizeof(dbInf.posOperations), &cb);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
+	{
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
 
-    if (SQLGetInfo(hdbc, SQL_TXN_CAPABLE, (UCHAR*) &dbInf.txnCapable, sizeof(dbInf.txnCapable), &cb) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc));
+    retcode = SQLGetInfo(hdbc, SQL_POSITIONED_STATEMENTS, (UCHAR*) &dbInf.posStmts, sizeof(dbInf.posStmts), &cb);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
+	{
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
 
-    if (SQLGetInfo(hdbc, SQL_LOGIN_TIMEOUT, (UCHAR*) &dbInf.loginTimeout, sizeof(dbInf.loginTimeout), &cb) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc));
+    retcode = SQLGetInfo(hdbc, SQL_SCROLL_CONCURRENCY, (UCHAR*) &dbInf.scrollConcurrency, sizeof(dbInf.scrollConcurrency), &cb);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
+	{
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
+
+    retcode = SQLGetInfo(hdbc, SQL_SCROLL_OPTIONS, (UCHAR*) &dbInf.scrollOptions, sizeof(dbInf.scrollOptions), &cb);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
+	{
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
+
+    retcode = SQLGetInfo(hdbc, SQL_STATIC_SENSITIVITY, (UCHAR*) &dbInf.staticSensitivity, sizeof(dbInf.staticSensitivity), &cb);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
+	{
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
+
+    retcode = SQLGetInfo(hdbc, SQL_TXN_CAPABLE, (UCHAR*) &dbInf.txnCapable, sizeof(dbInf.txnCapable), &cb);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
+	{
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
+
+    retcode = SQLGetInfo(hdbc, SQL_LOGIN_TIMEOUT, (UCHAR*) &dbInf.loginTimeout, sizeof(dbInf.loginTimeout), &cb);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
+	{
+		DispAllErrors(henv, hdbc);
+		if (failOnDataTypeUnsupported)
+			return FALSE;
+	}
 
 #ifdef DBDEBUG_CONSOLE
     cout << wxT("***** DATA SOURCE INFORMATION *****") << endl;
@@ -3472,13 +3639,13 @@ wxDBMS wxDb::Dbms(void)
 
     if (!wxStricmp(dbInf.dbmsName,wxT("Microsoft SQL Server")))
         return((wxDBMS)(dbmsType = dbmsMS_SQL_SERVER));
-    if (!wxStricmp(dbInf.dbmsName,wxT("MySQL")))
-        return((wxDBMS)(dbmsType = dbmsMY_SQL));
-    if (!wxStricmp(dbInf.dbmsName,wxT("PostgreSQL")))  // v6.5.0
+
+    baseName[10] = 0;
+    if (!wxStricmp(baseName,wxT("PostgreSQL")))  // v6.5.0
         return((wxDBMS)(dbmsType = dbmsPOSTGRES));
 
     baseName[9] = 0;
-    if (!wxStricmp(dbInf.dbmsName,wxT("Pervasive")))
+    if (!wxStricmp(baseName,wxT("Pervasive")))
         return((wxDBMS)(dbmsType = dbmsPERVASIVE_SQL));
 
     baseName[8] = 0;
@@ -3488,20 +3655,16 @@ wxDBMS wxDb::Dbms(void)
     baseName[6] = 0;
     if (!wxStricmp(baseName,wxT("Oracle")))
         return((wxDBMS)(dbmsType = dbmsORACLE));
-    if (!wxStricmp(dbInf.dbmsName,wxT("ACCESS")))
+    if (!wxStricmp(baseName,wxT("ACCESS")))
         return((wxDBMS)(dbmsType = dbmsACCESS));
-    if (!wxStricmp(dbInf.dbmsName,wxT("MySQL")))
-        return((wxDBMS)(dbmsType = dbmsMY_SQL));
     if (!wxStricmp(baseName,wxT("Sybase")))
       return((wxDBMS)(dbmsType = dbmsSYBASE_ASE));
 
     baseName[5] = 0;
     if (!wxStricmp(baseName,wxT("DBASE")))
         return((wxDBMS)(dbmsType = dbmsDBASE));
-
     if (!wxStricmp(baseName,wxT("xBase")))
         return((wxDBMS)(dbmsType = dbmsXBASE_SEQUITER));
-    
     if (!wxStricmp(baseName,wxT("MySQL")))
         return((wxDBMS)(dbmsType = dbmsMY_SQL));
 
