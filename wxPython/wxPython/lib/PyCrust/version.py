@@ -6,5 +6,5 @@ __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
 __version__ = "$Revision$"[11:-2]
 
-VERSION = '0.7'
+VERSION = '0.7.1'
  
