@@ -878,6 +878,9 @@ class wxStyledTextCtrlPtr(wxControlPtr):
     def LineEndDisplayExtend(self, *_args, **_kwargs):
         val = stc_c.wxStyledTextCtrl_LineEndDisplayExtend(self, *_args, **_kwargs)
         return val
+    def LineCopy(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_LineCopy(self, *_args, **_kwargs)
+        return val
     def MoveCaretInsideView(self, *_args, **_kwargs):
         val = stc_c.wxStyledTextCtrl_MoveCaretInsideView(self, *_args, **_kwargs)
         return val
@@ -981,11 +984,11 @@ class wxStyledTextCtrlPtr(wxControlPtr):
     def GetMouseDownCaptures(self, *_args, **_kwargs):
         val = stc_c.wxStyledTextCtrl_GetMouseDownCaptures(self, *_args, **_kwargs)
         return val
-    def SetCursor(self, *_args, **_kwargs):
-        val = stc_c.wxStyledTextCtrl_SetCursor(self, *_args, **_kwargs)
+    def SetSTCCursor(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_SetSTCCursor(self, *_args, **_kwargs)
         return val
-    def GetCursor(self, *_args, **_kwargs):
-        val = stc_c.wxStyledTextCtrl_GetCursor(self, *_args, **_kwargs)
+    def GetSTCCursor(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_GetSTCCursor(self, *_args, **_kwargs)
         return val
     def SetControlCharSymbol(self, *_args, **_kwargs):
         val = stc_c.wxStyledTextCtrl_SetControlCharSymbol(self, *_args, **_kwargs)
@@ -1043,6 +1046,18 @@ class wxStyledTextCtrlPtr(wxControlPtr):
         return val
     def SetHotspotActiveUnderline(self, *_args, **_kwargs):
         val = stc_c.wxStyledTextCtrl_SetHotspotActiveUnderline(self, *_args, **_kwargs)
+        return val
+    def PositionBefore(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_PositionBefore(self, *_args, **_kwargs)
+        return val
+    def PositionAfter(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_PositionAfter(self, *_args, **_kwargs)
+        return val
+    def CopyRange(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_CopyRange(self, *_args, **_kwargs)
+        return val
+    def CopyText(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_CopyText(self, *_args, **_kwargs)
         return val
     def StartRecord(self, *_args, **_kwargs):
         val = stc_c.wxStyledTextCtrl_StartRecord(self, *_args, **_kwargs)
@@ -1119,6 +1134,12 @@ class wxStyledTextCtrlPtr(wxControlPtr):
         return val
     def LoadFile(self, *_args, **_kwargs):
         val = stc_c.wxStyledTextCtrl_LoadFile(self, *_args, **_kwargs)
+        return val
+    def DoDragOver(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_DoDragOver(self, *_args, **_kwargs)
+        return val
+    def DoDropText(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_DoDropText(self, *_args, **_kwargs)
         return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxStyledTextCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
@@ -1379,6 +1400,7 @@ wxSTC_INDIC_SQUIGGLE = stc_c.wxSTC_INDIC_SQUIGGLE
 wxSTC_INDIC_TT = stc_c.wxSTC_INDIC_TT
 wxSTC_INDIC_DIAGONAL = stc_c.wxSTC_INDIC_DIAGONAL
 wxSTC_INDIC_STRIKE = stc_c.wxSTC_INDIC_STRIKE
+wxSTC_INDIC_HIDDEN = stc_c.wxSTC_INDIC_HIDDEN
 wxSTC_INDIC0_MASK = stc_c.wxSTC_INDIC0_MASK
 wxSTC_INDIC1_MASK = stc_c.wxSTC_INDIC1_MASK
 wxSTC_INDIC2_MASK = stc_c.wxSTC_INDIC2_MASK
@@ -1425,6 +1447,7 @@ wxSTC_CARET_SLOP = stc_c.wxSTC_CARET_SLOP
 wxSTC_CARET_STRICT = stc_c.wxSTC_CARET_STRICT
 wxSTC_CARET_JUMPS = stc_c.wxSTC_CARET_JUMPS
 wxSTC_CARET_EVEN = stc_c.wxSTC_CARET_EVEN
+wxSTC_KEYWORDSET_MAX = stc_c.wxSTC_KEYWORDSET_MAX
 wxSTC_MOD_INSERTTEXT = stc_c.wxSTC_MOD_INSERTTEXT
 wxSTC_MOD_DELETETEXT = stc_c.wxSTC_MOD_DELETETEXT
 wxSTC_MOD_CHANGESTYLE = stc_c.wxSTC_MOD_CHANGESTYLE
@@ -1497,6 +1520,11 @@ wxSTC_LEX_FORTRAN = stc_c.wxSTC_LEX_FORTRAN
 wxSTC_LEX_F77 = stc_c.wxSTC_LEX_F77
 wxSTC_LEX_CSS = stc_c.wxSTC_LEX_CSS
 wxSTC_LEX_POV = stc_c.wxSTC_LEX_POV
+wxSTC_LEX_LOUT = stc_c.wxSTC_LEX_LOUT
+wxSTC_LEX_ESCRIPT = stc_c.wxSTC_LEX_ESCRIPT
+wxSTC_LEX_PS = stc_c.wxSTC_LEX_PS
+wxSTC_LEX_NSIS = stc_c.wxSTC_LEX_NSIS
+wxSTC_LEX_MMIXAL = stc_c.wxSTC_LEX_MMIXAL
 wxSTC_LEX_AUTOMATIC = stc_c.wxSTC_LEX_AUTOMATIC
 wxSTC_P_DEFAULT = stc_c.wxSTC_P_DEFAULT
 wxSTC_P_COMMENTLINE = stc_c.wxSTC_P_COMMENTLINE
@@ -1531,6 +1559,7 @@ wxSTC_C_COMMENTLINEDOC = stc_c.wxSTC_C_COMMENTLINEDOC
 wxSTC_C_WORD2 = stc_c.wxSTC_C_WORD2
 wxSTC_C_COMMENTDOCKEYWORD = stc_c.wxSTC_C_COMMENTDOCKEYWORD
 wxSTC_C_COMMENTDOCKEYWORDERROR = stc_c.wxSTC_C_COMMENTDOCKEYWORDERROR
+wxSTC_C_GLOBALCLASS = stc_c.wxSTC_C_GLOBALCLASS
 wxSTC_H_DEFAULT = stc_c.wxSTC_H_DEFAULT
 wxSTC_H_TAG = stc_c.wxSTC_H_TAG
 wxSTC_H_TAGUNKNOWN = stc_c.wxSTC_H_TAGUNKNOWN
@@ -1708,6 +1737,8 @@ wxSTC_LUA_WORD3 = stc_c.wxSTC_LUA_WORD3
 wxSTC_LUA_WORD4 = stc_c.wxSTC_LUA_WORD4
 wxSTC_LUA_WORD5 = stc_c.wxSTC_LUA_WORD5
 wxSTC_LUA_WORD6 = stc_c.wxSTC_LUA_WORD6
+wxSTC_LUA_WORD7 = stc_c.wxSTC_LUA_WORD7
+wxSTC_LUA_WORD8 = stc_c.wxSTC_LUA_WORD8
 wxSTC_ERR_DEFAULT = stc_c.wxSTC_ERR_DEFAULT
 wxSTC_ERR_PYTHON = stc_c.wxSTC_ERR_PYTHON
 wxSTC_ERR_GCC = stc_c.wxSTC_ERR_GCC
@@ -1895,14 +1926,91 @@ wxSTC_CSS_SINGLESTRING = stc_c.wxSTC_CSS_SINGLESTRING
 wxSTC_POV_DEFAULT = stc_c.wxSTC_POV_DEFAULT
 wxSTC_POV_COMMENT = stc_c.wxSTC_POV_COMMENT
 wxSTC_POV_COMMENTLINE = stc_c.wxSTC_POV_COMMENTLINE
-wxSTC_POV_COMMENTDOC = stc_c.wxSTC_POV_COMMENTDOC
 wxSTC_POV_NUMBER = stc_c.wxSTC_POV_NUMBER
-wxSTC_POV_WORD = stc_c.wxSTC_POV_WORD
-wxSTC_POV_STRING = stc_c.wxSTC_POV_STRING
 wxSTC_POV_OPERATOR = stc_c.wxSTC_POV_OPERATOR
 wxSTC_POV_IDENTIFIER = stc_c.wxSTC_POV_IDENTIFIER
-wxSTC_POV_BRACE = stc_c.wxSTC_POV_BRACE
+wxSTC_POV_STRING = stc_c.wxSTC_POV_STRING
+wxSTC_POV_STRINGEOL = stc_c.wxSTC_POV_STRINGEOL
+wxSTC_POV_DIRECTIVE = stc_c.wxSTC_POV_DIRECTIVE
+wxSTC_POV_BADDIRECTIVE = stc_c.wxSTC_POV_BADDIRECTIVE
 wxSTC_POV_WORD2 = stc_c.wxSTC_POV_WORD2
+wxSTC_POV_WORD3 = stc_c.wxSTC_POV_WORD3
+wxSTC_POV_WORD4 = stc_c.wxSTC_POV_WORD4
+wxSTC_POV_WORD5 = stc_c.wxSTC_POV_WORD5
+wxSTC_POV_WORD6 = stc_c.wxSTC_POV_WORD6
+wxSTC_POV_WORD7 = stc_c.wxSTC_POV_WORD7
+wxSTC_POV_WORD8 = stc_c.wxSTC_POV_WORD8
+wxSTC_LOUT_DEFAULT = stc_c.wxSTC_LOUT_DEFAULT
+wxSTC_LOUT_COMMENT = stc_c.wxSTC_LOUT_COMMENT
+wxSTC_LOUT_NUMBER = stc_c.wxSTC_LOUT_NUMBER
+wxSTC_LOUT_WORD = stc_c.wxSTC_LOUT_WORD
+wxSTC_LOUT_WORD2 = stc_c.wxSTC_LOUT_WORD2
+wxSTC_LOUT_WORD3 = stc_c.wxSTC_LOUT_WORD3
+wxSTC_LOUT_WORD4 = stc_c.wxSTC_LOUT_WORD4
+wxSTC_LOUT_STRING = stc_c.wxSTC_LOUT_STRING
+wxSTC_LOUT_OPERATOR = stc_c.wxSTC_LOUT_OPERATOR
+wxSTC_LOUT_IDENTIFIER = stc_c.wxSTC_LOUT_IDENTIFIER
+wxSTC_LOUT_STRINGEOL = stc_c.wxSTC_LOUT_STRINGEOL
+wxSTC_ESCRIPT_DEFAULT = stc_c.wxSTC_ESCRIPT_DEFAULT
+wxSTC_ESCRIPT_COMMENT = stc_c.wxSTC_ESCRIPT_COMMENT
+wxSTC_ESCRIPT_COMMENTLINE = stc_c.wxSTC_ESCRIPT_COMMENTLINE
+wxSTC_ESCRIPT_COMMENTDOC = stc_c.wxSTC_ESCRIPT_COMMENTDOC
+wxSTC_ESCRIPT_NUMBER = stc_c.wxSTC_ESCRIPT_NUMBER
+wxSTC_ESCRIPT_WORD = stc_c.wxSTC_ESCRIPT_WORD
+wxSTC_ESCRIPT_STRING = stc_c.wxSTC_ESCRIPT_STRING
+wxSTC_ESCRIPT_OPERATOR = stc_c.wxSTC_ESCRIPT_OPERATOR
+wxSTC_ESCRIPT_IDENTIFIER = stc_c.wxSTC_ESCRIPT_IDENTIFIER
+wxSTC_ESCRIPT_BRACE = stc_c.wxSTC_ESCRIPT_BRACE
+wxSTC_ESCRIPT_WORD2 = stc_c.wxSTC_ESCRIPT_WORD2
+wxSTC_ESCRIPT_WORD3 = stc_c.wxSTC_ESCRIPT_WORD3
+wxSTC_PS_DEFAULT = stc_c.wxSTC_PS_DEFAULT
+wxSTC_PS_COMMENT = stc_c.wxSTC_PS_COMMENT
+wxSTC_PS_DSC_COMMENT = stc_c.wxSTC_PS_DSC_COMMENT
+wxSTC_PS_DSC_VALUE = stc_c.wxSTC_PS_DSC_VALUE
+wxSTC_PS_NUMBER = stc_c.wxSTC_PS_NUMBER
+wxSTC_PS_NAME = stc_c.wxSTC_PS_NAME
+wxSTC_PS_KEYWORD = stc_c.wxSTC_PS_KEYWORD
+wxSTC_PS_LITERAL = stc_c.wxSTC_PS_LITERAL
+wxSTC_PS_IMMEVAL = stc_c.wxSTC_PS_IMMEVAL
+wxSTC_PS_PAREN_ARRAY = stc_c.wxSTC_PS_PAREN_ARRAY
+wxSTC_PS_PAREN_DICT = stc_c.wxSTC_PS_PAREN_DICT
+wxSTC_PS_PAREN_PROC = stc_c.wxSTC_PS_PAREN_PROC
+wxSTC_PS_TEXT = stc_c.wxSTC_PS_TEXT
+wxSTC_PS_HEXSTRING = stc_c.wxSTC_PS_HEXSTRING
+wxSTC_PS_BASE85STRING = stc_c.wxSTC_PS_BASE85STRING
+wxSTC_PS_BADSTRINGCHAR = stc_c.wxSTC_PS_BADSTRINGCHAR
+wxSTC_NSIS_DEFAULT = stc_c.wxSTC_NSIS_DEFAULT
+wxSTC_NSIS_COMMENT = stc_c.wxSTC_NSIS_COMMENT
+wxSTC_NSIS_STRINGDQ = stc_c.wxSTC_NSIS_STRINGDQ
+wxSTC_NSIS_STRINGLQ = stc_c.wxSTC_NSIS_STRINGLQ
+wxSTC_NSIS_STRINGRQ = stc_c.wxSTC_NSIS_STRINGRQ
+wxSTC_NSIS_FUNCTION = stc_c.wxSTC_NSIS_FUNCTION
+wxSTC_NSIS_VARIABLE = stc_c.wxSTC_NSIS_VARIABLE
+wxSTC_NSIS_LABEL = stc_c.wxSTC_NSIS_LABEL
+wxSTC_NSIS_USERDEFINED = stc_c.wxSTC_NSIS_USERDEFINED
+wxSTC_NSIS_SECTIONDEF = stc_c.wxSTC_NSIS_SECTIONDEF
+wxSTC_NSIS_SUBSECTIONDEF = stc_c.wxSTC_NSIS_SUBSECTIONDEF
+wxSTC_NSIS_IFDEFINEDEF = stc_c.wxSTC_NSIS_IFDEFINEDEF
+wxSTC_NSIS_MACRODEF = stc_c.wxSTC_NSIS_MACRODEF
+wxSTC_NSIS_STRINGVAR = stc_c.wxSTC_NSIS_STRINGVAR
+wxSTC_MMIXAL_LEADWS = stc_c.wxSTC_MMIXAL_LEADWS
+wxSTC_MMIXAL_COMMENT = stc_c.wxSTC_MMIXAL_COMMENT
+wxSTC_MMIXAL_LABEL = stc_c.wxSTC_MMIXAL_LABEL
+wxSTC_MMIXAL_OPCODE = stc_c.wxSTC_MMIXAL_OPCODE
+wxSTC_MMIXAL_OPCODE_PRE = stc_c.wxSTC_MMIXAL_OPCODE_PRE
+wxSTC_MMIXAL_OPCODE_VALID = stc_c.wxSTC_MMIXAL_OPCODE_VALID
+wxSTC_MMIXAL_OPCODE_UNKNOWN = stc_c.wxSTC_MMIXAL_OPCODE_UNKNOWN
+wxSTC_MMIXAL_OPCODE_POST = stc_c.wxSTC_MMIXAL_OPCODE_POST
+wxSTC_MMIXAL_OPERANDS = stc_c.wxSTC_MMIXAL_OPERANDS
+wxSTC_MMIXAL_NUMBER = stc_c.wxSTC_MMIXAL_NUMBER
+wxSTC_MMIXAL_REF = stc_c.wxSTC_MMIXAL_REF
+wxSTC_MMIXAL_CHAR = stc_c.wxSTC_MMIXAL_CHAR
+wxSTC_MMIXAL_STRING = stc_c.wxSTC_MMIXAL_STRING
+wxSTC_MMIXAL_REGISTER = stc_c.wxSTC_MMIXAL_REGISTER
+wxSTC_MMIXAL_HEX = stc_c.wxSTC_MMIXAL_HEX
+wxSTC_MMIXAL_OPERATOR = stc_c.wxSTC_MMIXAL_OPERATOR
+wxSTC_MMIXAL_SYMBOL = stc_c.wxSTC_MMIXAL_SYMBOL
+wxSTC_MMIXAL_INCLUDE = stc_c.wxSTC_MMIXAL_INCLUDE
 wxSTC_CMD_REDO = stc_c.wxSTC_CMD_REDO
 wxSTC_CMD_SELECTALL = stc_c.wxSTC_CMD_SELECTALL
 wxSTC_CMD_UNDO = stc_c.wxSTC_CMD_UNDO
