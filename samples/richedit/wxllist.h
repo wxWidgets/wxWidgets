@@ -1140,6 +1140,12 @@ public:
 
    /// get the line by number
    wxLayoutLine *GetLine(CoordType index) const;
+
+   /** Reads objects from a string and inserts them.
+       @param istr stream to read from, will bee changed
+   */
+   void Read(wxString &istr);
+
 private:
    /// Clear the list.
    void InternalClear(void);

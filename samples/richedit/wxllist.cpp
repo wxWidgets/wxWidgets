@@ -1569,6 +1569,18 @@ wxLayoutList::InternalClear(void)
 }
 
 void
+wxLayoutList::Read(wxString &istr)
+{
+   while(istr.Length())
+   {
+      wxLayoutObject *obj = wxLayoutObject::Read(istr);
+      if(obj)
+         Insert(obj);
+   }
+}
+
+
+void
 wxLayoutList::SetFont(int family, int size, int style, int weight,
                       int underline, wxColour *fg,
                       wxColour *bg)
@@ -2352,15 +2364,10 @@ wxLayoutList::Draw(wxDC &dc,
    }
    InvalidateUpdateRect();
 
-#ifdef DEBUG
-   if ( m_Selection.m_valid )
-   {
-       WXLO_DEBUG(("Selection is %s : %ld,%ld/%ld,%ld",
-                   m_Selection.m_valid ? "valid" : "invalid",
-                   m_Selection.m_CursorA.x, m_Selection.m_CursorA.y,
-                   m_Selection.m_CursorB.x, m_Selection.m_CursorB.y));
-   }
-#endif
+   WXLO_DEBUG(("Selection is %s : l%d,%ld/%ld,%ld",
+               m_Selection.m_valid ? "valid" : "invalid",
+               m_Selection.m_CursorA.x, m_Selection.m_CursorA.y,
+               m_Selection.m_CursorB.x, m_Selection.m_CursorB.y));
 }
 
 wxLayoutObject *
@@ -2860,7 +2867,6 @@ wxLayoutList::GetSelection(wxLayoutDataObject *wxlo, bool invalidate)
             exp->content.object->Write(string);
          delete exp;
       }
-
       wxlo->SetLayoutData(string);
    }
    return llist;

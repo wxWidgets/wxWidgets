@@ -88,7 +88,7 @@ static const int Y_SCROLL_PAGE = 20;
 
 
 
-#define wxUSE_PRIVATE_CLIPBOARD_FORMAT 1
+#define wxUSE_PRIVATE_CLIPBOARD_FORMAT 0
 
 // ----------------------------------------------------------------------------
 // event tables
@@ -496,20 +496,17 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
    if ( IsDirectionKey(keyCode) )
    {
       // just continue the old selection
-      if ( m_Selecting )
-      {
-         if( event.ShiftDown() )
+      if ( m_Selecting && event.ShiftDown() )
             m_llist->ContinueSelection();
-         else
-         {
-            m_llist->DiscardSelection();
-            m_Selecting = false;
-         }
-      }
-      else if( event.ShiftDown() )
+      else
       {
-         m_Selecting = true;
-         m_llist->StartSelection();
+         m_llist->DiscardSelection();
+         m_Selecting = false;
+         if( event.ShiftDown() )
+         {
+            m_Selecting = true;
+            m_llist->StartSelection();
+         }
       }
    }
    
@@ -631,8 +628,12 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
                m_llist->DeleteToEndOfLine();
                SetDirty();
                break;
+            case 'c':
+               Copy();
+               break;
             case 'v':
-               Paste();
+               // if SHIFT is down, use primary selection
+               Paste( event.ShiftDown() );
                break;
             case 'x':
                Cut();
@@ -1079,11 +1080,14 @@ wxLayoutWindow::Paste(bool primary)
    {
 #if wxUSE_PRIVATE_CLIPBOARD_FORMAT
       wxLayoutDataObject wxldo;
-      if ( wxTheClipboard->GetData(wxldo) )
+      if (wxTheClipboard->IsSupported( wxldo.GetFormat() ))
       {
-         //FIXME: missing functionality  m_llist->Insert(wxldo.GetList());
-         wxLayoutImportText(m_llist, wxldo.GetLayoutData());
-         SetDirty();
+         if(wxTheClipboard->GetData(wxldo))
+         {
+            wxString str = wxldo.GetLayoutData();
+            m_llist->Read(str);
+            RequestUpdate();
+         }
       }
       else
 #endif
@@ -1112,20 +1116,10 @@ wxLayoutWindow::Copy(bool invalidate)
       m_llist->EndSelection();
    }
 
-#if wxUSE_PRIVATE_CLIPBOARD_FORMAT
-   // the data object which holds all different data objects, one for each
-   // format we support
-   wxDataObjectComposite *data = new wxDataObjectComposite;
-#endif
-
    wxLayoutDataObject *wldo = new wxLayoutDataObject;
    wxLayoutList *llist = m_llist->GetSelection(wldo, invalidate);
    if(! llist)
-   {
-      delete wldo;
-      delete data;
       return FALSE;
-   }
    // Export selection as text:
    wxString text;
    wxLayoutExportObject *exp;
@@ -1138,7 +1132,6 @@ wxLayoutWindow::Copy(bool invalidate)
    }
    delete llist;
 
-   bool rc;
    // The exporter always appends a newline, so we chop it off if it
    // is there:
    {
@@ -1151,19 +1144,20 @@ wxLayoutWindow::Copy(bool invalidate)
 
    if (wxTheClipboard->Open())
    {
-#if wxUSE_PRIVATE_CLIPBOARD_FORMAT
-      data->Add(wldo, TRUE /* preferred */);
-      data->Add(new wxTextDataObject(text));
-#endif
+      wxTextDataObject *data = new wxTextDataObject( text );
+      bool rc;
+
       rc = wxTheClipboard->SetData( data );
+#if wxUSE_PRIVATE_CLIPBOARD_FORMAT
+      rc |= wxTheClipboard->SetData( wldo );
+#endif
       wxTheClipboard->Close();
+      return rc;
    }
    else
-      rc = FALSE;
-
-   delete wldo;
-   delete data;
-   return rc;
+      delete wldo;
+   
+   return FALSE;
 }
 
 bool
