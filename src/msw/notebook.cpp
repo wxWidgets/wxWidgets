@@ -167,7 +167,7 @@ bool wxNotebook::Create(wxWindow *parent,
     tabStyle |= TCS_VERTICAL;
   if (m_windowStyle & wxNB_RIGHT)
     tabStyle |= TCS_VERTICAL|TCS_RIGHT;
-        
+
 
   if ( !MSWCreate(GetId(), GetParent(), WC_TABCONTROL,
                   this, NULL, pos.x, pos.y, size.x, size.y,
@@ -408,6 +408,16 @@ bool wxNotebook::InsertPage(int nPage,
   // this updates internal flag too - otherwise it will get out of sync
   pPage->Show(FALSE);
 
+  // fit the notebook page to the tab control's display area
+  RECT rc;
+  rc.left = rc.top = 0;
+  GetSize((int *)&rc.right, (int *)&rc.bottom);
+  TabCtrl_AdjustRect(m_hwnd, FALSE, &rc);
+  pPage->SetSize(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
+  if ( pPage->GetAutoLayout() )
+      pPage->Layout();
+
+
   // some page should be selected: either this one or the first one if there is
   // still no selection
   int selNew = -1;
@@ -453,7 +463,7 @@ void wxNotebook::OnSelChange(wxNotebookEvent& event)
       int sel = event.GetOldSelection();
       if ( sel != -1 )
         m_aPages[sel]->Show(FALSE);
-      
+
       sel = event.GetSelection();
       if ( sel != -1 )
       {
@@ -461,7 +471,7 @@ void wxNotebook::OnSelChange(wxNotebookEvent& event)
         pPage->Show(TRUE);
         pPage->SetFocus();
       }
-      
+
       m_nSelection = sel;
   }
 
