@@ -1,4 +1,4 @@
-#ifdef WIN32
+#if defined(__WIN32__) || defined(__GNUWIN32__)
 /* all Win32 compilers can handle C++ comments, and C++ comments
    is the only C++ in setup.h */
 #include "wx/setup.h"
