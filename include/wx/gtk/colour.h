@@ -20,6 +20,7 @@
 #include "wx/object.h"
 #include "wx/string.h"
 #include "wx/gdiobj.h"
+#include "wx/palette.h"
 
 //-----------------------------------------------------------------------------
 // classes

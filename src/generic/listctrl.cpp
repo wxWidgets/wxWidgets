@@ -740,13 +740,13 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
     };
     if (hit)
     {
-//      if (m_currentCursor == wxSTANDARD_CURSOR) SetCursor( m_resizeCursor );
-//      m_currentCursor = m_resizeCursor;
+      if (m_currentCursor == wxSTANDARD_CURSOR) SetCursor( m_resizeCursor );
+      m_currentCursor = m_resizeCursor;
     }
     else
     {
-//      if (m_currentCursor != wxSTANDARD_CURSOR) SetCursor( wxSTANDARD_CURSOR );
-//      m_currentCursor = wxSTANDARD_CURSOR;
+      if (m_currentCursor != wxSTANDARD_CURSOR) SetCursor( wxSTANDARD_CURSOR );
+      m_currentCursor = wxSTANDARD_CURSOR;
     };
   };
 };
@@ -2433,6 +2433,7 @@ void wxListCtrl::OnIdle( wxIdleEvent &event )
   
   m_mainWin->CalculatePositions();
   m_mainWin->RealizeChanges();
+  m_mainWin->m_dirty = FALSE;
   m_mainWin->Refresh();
 };
 

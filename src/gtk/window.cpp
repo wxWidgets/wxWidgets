@@ -414,9 +414,9 @@ gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_e
 //-----------------------------------------------------------------------------
 // focus_in
 
-void gtk_window_focus_in_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxWindow *win )
+gint gtk_window_focus_in_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxWindow *win )
 {
-  if (g_blockEventsOnDrag) return;
+  if (g_blockEventsOnDrag) return FALSE;
   if (win->m_wxwindow)
   {
     if (GTK_WIDGET_CAN_FOCUS(win->m_wxwindow))
@@ -431,7 +431,7 @@ void gtk_window_focus_in_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUS
     };
   };
   
-  if (!win->HasVMT()) return;
+  if (!win->HasVMT()) return FALSE;
   
 /*
   printf( "OnSetFocus from " );
@@ -444,22 +444,22 @@ void gtk_window_focus_in_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUS
   
   wxFocusEvent event( wxEVT_SET_FOCUS, win->GetId() );
   event.SetEventObject( win );
-  win->ProcessEvent( event );
+  return win->ProcessEvent( event );
 };
 
 //-----------------------------------------------------------------------------
 // focus out
 
-void gtk_window_focus_out_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxWindow *win )
+gint gtk_window_focus_out_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxWindow *win )
 {
-  if (g_blockEventsOnDrag) return;
+  if (g_blockEventsOnDrag) return FALSE;
   if (win->m_wxwindow)
   {
     if (GTK_WIDGET_CAN_FOCUS(win->m_wxwindow))
       GTK_WIDGET_UNSET_FLAGS (win->m_wxwindow, GTK_HAS_FOCUS);
   };
   
-  if (!win->HasVMT()) return;
+  if (!win->HasVMT()) return FALSE;
   
 /*
   printf( "OnKillFocus from " );
@@ -470,7 +470,7 @@ void gtk_window_focus_out_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNU
   
   wxFocusEvent event( wxEVT_KILL_FOCUS, win->GetId() );
   event.SetEventObject( win );
-  win->ProcessEvent( event );
+  return win->ProcessEvent( event );
 };
 
 //-----------------------------------------------------------------------------
@@ -648,27 +648,35 @@ bool gtk_window_destroy_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSE
 //-----------------------------------------------------------------------------
 // enter
 
-bool gtk_window_enter_callback( GtkWidget *widget, GdkEvent *WXUNUSED(event), wxWindow *win )
+bool gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, wxWindow *win )
 {
+  if (widget->window != gdk_event->window) return TRUE;
+  
   if (g_blockEventsOnDrag) return FALSE;
   
   if (widget->window)
     gdk_window_set_cursor( widget->window, win->m_cursor->GetCursor() );
     
-  return TRUE;
+  wxMouseEvent event( wxEVT_ENTER_WINDOW );
+  event.SetEventObject( win );
+  return win->ProcessEvent( event );
 };
     
 //-----------------------------------------------------------------------------
 // leave
 
-bool gtk_window_leave_callback( GtkWidget *widget, GdkEvent *WXUNUSED(event), wxWindow *WXUNUSED(win) )
+bool gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, wxWindow *win )
 {
+  if (widget->window != gdk_event->window) return TRUE;
+  
   if (g_blockEventsOnDrag) return FALSE;
   
   if (widget->window)
     gdk_window_set_cursor( widget->window, wxSTANDARD_CURSOR->GetCursor() );
     
-  return TRUE;
+  wxMouseEvent event( wxEVT_LEAVE_WINDOW );
+  event.SetEventObject( win );
+  return win->ProcessEvent( event );
 };
     
 //-----------------------------------------------------------------------------
@@ -1828,7 +1836,7 @@ void wxWindow::SetScrollbar( int orient, int pos, int thumbVisible,
     else  
       gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "changed" );
       
-//    gtk_widget_set_usize( m_widget, m_width, m_height );
+    gtk_widget_set_usize( m_widget, m_width, m_height );
   };
 };
 
