@@ -284,8 +284,13 @@ bool wxApp::OnInitGui()
     if ((gdk_visual_get_best() != gdk_visual_get_system()) &&
         (m_useBestVisual))
     {
+#ifdef __WXGTK20__
+        /* seems gtk_widget_set_default_visual no longer exists? */
+        GdkVisual* vis = gtk_widget_get_default_visual();
+#else
         GdkVisual* vis = gdk_visual_get_best();
         gtk_widget_set_default_visual( vis );
+#endif
 
         GdkColormap *colormap = gdk_colormap_new( vis, FALSE );
         gtk_widget_set_default_colormap( colormap );
@@ -590,7 +595,10 @@ int wxEntryStart( int argc, char *argv[] )
 
     gtk_set_locale();
 
-#if wxUSE_WCHAR_T
+#if defined(__WXGTK20__)
+    // gtk+ 2.0 supports Unicode through UTF-8 strings
+    wxConvCurrent = &wxConvUTF8;
+#elif wxUSE_WCHAR_T
     if (!wxOKlibc()) wxConvCurrent = &wxConvLocal;
 #else
     if (!wxOKlibc()) wxConvCurrent = (wxMBConv*) NULL;
