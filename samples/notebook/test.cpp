@@ -43,7 +43,7 @@ bool MyApp::OnInit()
   // Quit immediately the dialog has been dismissed
   return FALSE;
 #else
-  frame = new MyFrame((wxFrame*) NULL, -1, "Notebook", wxPoint(-1, -1), wxSize(365, 390) );
+  frame = new MyFrame((wxFrame*) NULL, -1, "Notebook", wxPoint(-1, -1), wxSize(465, 390) );
 
   // Problem with generic wxNotebook implementation whereby it doesn't size properly unless
   // you set the size again
@@ -273,8 +273,6 @@ void MyFrame::Init()
   c->bottom.SameAs(this, wxBottom);
   m_panel->SetConstraints(c);
 
-  // Note, omit the wxTAB_STYLE_COLOUR_INTERIOR, so we will guarantee a match
-  // with the panel background, and save a bit of time.
   m_notebook = new wxNotebook(m_panel, ID_NOTEBOOK);
 
   c = new wxLayoutConstraints;

@@ -163,7 +163,7 @@ OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS)
 
 default:	wx
 
-wx:    $(CFG) $(DUMMY).obj $(OBJECTS) $(PERIPH_TARGET) $(LIBTARGET)
+wx:    $(CFG) $(LNKCFG) $(DUMMY).obj $(OBJECTS) $(PERIPH_TARGET) $(LIBTARGET)
 
 all:	all_libs all_execs
 
@@ -357,7 +357,7 @@ $(CFG): makefile.b32
 -I$(WXINC);$(BCCDIR)\include;$(WXDIR)/src/generic;$(WXDIR)/src/png;$(WXDIR)/src/jpeg;$(WXDIR)/src/zlib;$(WXDIR)/src/xpm;$(WXDIR)/src/tiff
 -I$(WXDIR)\include\wx\msw\gnuwin32
 
--L$(BCCDIR)\lib
+-L$(BCCDIR)\lib;$(BCCDIR)\lib\psdk
 -D__WXWIN__
 -D__WXMSW__
 -D__WINDOWS__
@@ -366,6 +366,11 @@ $(OPT)
 $(DEBUG_FLAGS)
 $(WIN95FLAG)
 ! $(CFG)
+
+$(LNKCFG): makefile.b32
+	copy &&!
+-L$(WXLIBDIR);$(WXLIBDIR2);$(BCCDIR)\lib;$(BCCDIR)\lib\psdk
+! $(LNKCFG)
 
 #-I$(WXDIR)\src\common\wxxpm\libxpm.34b\lib
 # -Oxt

@@ -114,7 +114,9 @@ bool MyApp::OnInit()
   /* this catalog is installed in standard location on Linux systems,
      it might not be installed on yours - just ignore the errrors
      or comment out this line then */
-//  m_locale.AddCatalog("fileutils");  // 3) and another just for testing
+#ifdef __LINUX__
+  m_locale.AddCatalog("fileutils");  // 3) and another just for testing
+#endif
   
   // Create the main frame window
   MyFrame *frame = new MyFrame((wxFrame *) NULL, _("International wxWindows App"),

@@ -16,11 +16,11 @@ WXDIR = $(WXWIN)
 LIBS=$(WXLIB) $(EXTRALIBS) cw32mt import32 ole2w32 winpng zlib jpeg xpm tiff odbc32
 
 !if "$(FINAL)" == "0"
-LINKFLAGS=/v /c /Tpe /L$(WXLIBDIR);$(WXLIBDIR2);$(BCCDIR)\lib;$(BCCDIR)\lib\psdk $(EXTRALINKFLAGS)
+LINKFLAGS=/v /c /Tpe +$(LNKCFG) $(EXTRALINKFLAGS)
 OPT = -Od
 DEBUG_FLAGS= -v
 !else
-LINKFLAGS=/Tpe /L$(WXLIBDIR);$(WXLIBDIR2);$(BCCDIR)\lib;$(BCCDIR)\lib\psdk $(EXTRALINKFLAGS)
+LINKFLAGS=/Tpe +$(LNKCFG) $(EXTRALINKFLAGS)
 OPT = -Od
 DEBUG_FLAGS =
 !endif

@@ -315,7 +315,7 @@ MyPanel::MyPanel(wxFrame *frame)
                                     wxCAL_SHOW_HOLIDAYS |
                                     wxRAISED_BORDER);
 
-    m_calendar->SetAutoLayout(TRUE);
+    //m_calendar->SetAutoLayout(TRUE);
     //------------------
     wxLayoutConstraints *c = new wxLayoutConstraints;
     //------------------
