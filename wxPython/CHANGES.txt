@@ -105,6 +105,14 @@ wxRemotelyScrolledTreeCtrl, wxTreeCompanionWindow,
 wxThinSplitterWindow, and wxSplitterScrolledWindow, some of which may
 also be useful by themselves.
 
+Added wxDllWidget from Vaclav Slavik which allows wx widgets derived
+from wxWindow to be loaded from a C++ .dll (or .so) and be used in a
+wxPython program, without the widget having to be SWIGged first.  The
+visible API of the widget is limited to wxWindow methods plus a
+SendCommand method, but it is still quite powerful.  See
+wxPython/contrib/dllwidget and wxPython/demo/dllwidget for more
+details.
+
 
 
 

@@ -166,3 +166,17 @@ include contrib/gizmos/*.c
 include contrib/gizmos/*.h
 include contrib/gizmos/contrib/include/wx/gizmos/*.h
 include contrib/gizmos/contrib/src/gizmos/*.cpp
+
+include contrib/dllwidget/*.txt
+include contrib/dllwidget/*.i
+include contrib/dllwidget/*.py
+include contrib/dllwidget/*.cpp
+include contrib/dllwidget/*.c
+include contrib/dllwidget/*.h
+
+include demo/dllwidget/*.h
+include demo/dllwidget/*.cpp
+include demo/dllwidget/*.py
+include demo/dllwidget/Makefile
+include demo/dllwidget/makefile.*
+

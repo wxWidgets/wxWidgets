@@ -79,6 +79,7 @@ Source: "wxPython\oglc.pyd";                DestDir: "{app}\wxPython"; Component
 Source: "wxPython\stc_c.pyd";               DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\xrcc.pyd";                DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\gizmosc.pyd";             DestDir: "{app}\wxPython"; Components: core
+Source: "wxPython\dllwidget.pyd";           DestDir: "{app}\wxPython"; Components: core
 
 Source: "wxPython\*.py";                    DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\lib\*.py";                DestDir: "{app}\wxPython\lib"; Components: core
@@ -116,6 +117,11 @@ Source: "demo\data\*.txt";                  DestDir: "{app}\wxPython\demo\data";
 Source: "demo\data\*.wav";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
 Source: "demo\data\*.wdr";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
 Source: "demo\data\*.xrc";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
+
+Source: "demo\dllwidget\*.cpp";             DestDir: "{app}\wxPython\demo\dllwidget"; Components: demo
+Source: "demo\dllwidget\*.py";              DestDir: "{app}\wxPython\demo\dllwidget"; Components: demo
+Source: "demo\dllwidget\Makefile";          DestDir: "{app}\wxPython\demo\dllwidget"; Components: demo
+Source: "demo\dllwidget\makefile.*";        DestDir: "{app}\wxPython\demo\dllwidget"; Components: demo
 
 Source: "README.txt";                       DestDir: "{app}\wxPython\docs";  Flags: isreadme; Components: core
 Source: "CHANGES.txt";                      DestDir: "{app}\wxPython\docs"; Components: core
@@ -200,9 +206,6 @@ Type: files; Name: "{app}\wxPython\samples\frogedit\*.pyo";
 
 
 #----------------------------------------------------------------------
-
-## TODO:  For Python 2.2 wxPython should go into
-#         os.path.join(sys.prefix, 'Lib', 'site-packages')
 
 
 IFS_Template = r"""

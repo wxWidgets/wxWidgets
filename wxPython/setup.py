@@ -33,11 +33,13 @@ BUILD_OGL = 1      # If true, build the contrib/ogl extension module
 BUILD_STC = 1      # If true, build the contrib/stc extension module
 BUILD_XRC = 1      # XML based resource system
 BUILD_GIZMOS = 1   # Build a module for the gizmos contrib library
+BUILD_DLLWIDGET = 1# Build a module for the gizmos contrib library
 
 BUILD_IEWIN = 0    # Internet Explorer wrapper (experimental)
 
-
 CORE_ONLY = 0      # if true, don't build any of the above
+
+
 GL_ONLY = 0        # Only used when making the -gl RPM.  See the "b" script
                    # for the ugly details
 
@@ -113,6 +115,7 @@ if bcpp_compiling:
 #----------------------------------------------------------------------
 
 for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 'BUILD_XRC',
+             'BUILD_GIZMOS', 'BUILD_DLLWIDGET',
              'CORE_ONLY', 'USE_SWIG', 'IN_CVS_TREE',
              'FINAL', 'HYBRID', ]:
     for x in range(len(sys.argv)):
@@ -554,7 +557,7 @@ if not GL_ONLY and BUILD_STC:
                             swig_args + ['-I'+STC_H, '-I'+location],
                             [opj(STC_H, 'stc.h')])
 
-    # copy a project specific py module to the main package dir
+    # copy a contrib project specific py module to the main package dir
     copy_file(opj(location, 'stc.py'), PKGDIR, update=1, verbose=0)
 
     # add some include dirs to the standard set
@@ -780,6 +783,39 @@ if not GL_ONLY and BUILD_GIZMOS:
                              ] + swig_sources,
 
                     include_dirs =  gizmos_includes,
+                    define_macros = defines,
+
+                    library_dirs = libdirs,
+                    libraries = libs,
+
+                    extra_compile_args = cflags,
+                    extra_link_args = lflags,
+                    )
+
+    wxpExtensions.append(ext)
+
+
+
+#----------------------------------------------------------------------
+# Define the DLLWIDGET  extension module
+#----------------------------------------------------------------------
+
+if not GL_ONLY and BUILD_DLLWIDGET:
+    msg('Preparing DLLWIDGET...')
+    location = 'contrib/dllwidget'
+    swig_files = ['dllwidget_.i']
+
+    swig_sources = run_swig(swig_files, location, '', PKGDIR,
+                            USE_SWIG, swig_force, swig_args)
+
+    # copy a contrib project specific py module to the main package dir
+    copy_file(opj(location, 'dllwidget.py'), PKGDIR, update=1, verbose=0)
+
+    ext = Extension('dllwidget_c', [
+                                '%s/dllwidget.cpp' % location,
+                             ] + swig_sources,
+
+                    include_dirs =  includes,
                     define_macros = defines,
 
                     library_dirs = libdirs,

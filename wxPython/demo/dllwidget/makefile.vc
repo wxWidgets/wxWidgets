@@ -1,0 +1,32 @@
+
+WXDIR = $(WXWIN)
+WXUSINGDLL = 1
+
+PROGRAM = test_dll
+OBJECTS = test_dll.obj
+
+!include $(WXDIR)\src\makevc.env
+
+
+$(PROGRAM).dll : $(OBJECTS)
+	$(link) @<<
+-out:$(PROGRAM).dll
+-dll $(LINK_DEBUG_FLAGS) $(WINLINKFLAGS)
+$(OBJECTS)
+$(WXLIB)
+<<
+
+
+clean:
+	del $(OBJECTS)
+	del $(PROGRAM).dll
+	del $(PROGRAM).exp
+	del $(PROGRAM).lib
+	del $(PROGRAM).pdb
+
+test:
+	@echo -out:$(PROGRAM).dll
+	@echo -dll $(LINK_DEBUG_FLAGS) $(WINLINKFLAGS)
+	@echo $(OBJECTS)
+	@echo $(WXLIB)
+
