@@ -690,6 +690,8 @@ void wxMenuBar::EnableTop(int pos, bool enable)
     int flag = enable ? MF_ENABLED : MF_GRAYED;;
 
     EnableMenuItem((HMENU)m_hMenu, pos, MF_BYPOSITION | flag);
+
+    Refresh();
 }
 
 // Must only be used AFTER menu has been attached to frame,
