@@ -314,13 +314,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
 #endif // wxUSE_OLE
 
-#if wxUSE_CTL3D
-    if (!Ctl3dRegister(wxhInstance))
-        wxLogError(wxT("Cannot register CTL3D"));
-
-    Ctl3dAutoSubclass(wxhInstance);
-#endif // wxUSE_CTL3D
-
     RegisterWindowClasses();
 
 #if wxUSE_PENWINDOWS
@@ -509,10 +502,6 @@ void wxApp::CleanUp()
     // which case the registration will fail after the first time if we don't
     // unregister the classes now
     UnregisterWindowClasses();
-
-#if wxUSE_CTL3D
-    Ctl3dUnregister(wxhInstance);
-#endif
 
     delete wxWinHandleHash;
     wxWinHandleHash = NULL;

@@ -160,14 +160,6 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
         return false;
     }
 
-#if wxUSE_CTL3D
-    if ( want3D )
-    {
-        Ctl3dSubclassCtl(GetHwnd());
-        m_useCtl3D = true;
-    }
-#endif // wxUSE_CTL3D
-
     // install wxWidgets window proc for this window
     SubclassWin(m_hWnd);
 
