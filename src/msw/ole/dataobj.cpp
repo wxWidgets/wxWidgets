@@ -39,16 +39,12 @@
 
 #include "wx/msw/private.h"         // includes <windows.h>
 
-#if wxUSE_NORLANDER_HEADERS
+// for some compilers, the entire ole2.h must be included, not only oleauto.h
+#if wxUSE_NORLANDER_HEADERS || defined(__WATCOMC__)
   #include <ole2.h>
 #endif
+
 #include <oleauto.h>
-
-#ifndef __WIN32__
-  #include <ole2.h>
-  #include <olestd.h>
-#endif
-
 #include <shlobj.h>
 
 #include "wx/msw/ole/oleutils.h"

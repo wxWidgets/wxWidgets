@@ -18,9 +18,8 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_NORLANDER_HEADERS
-    #include <ole2.h>
-#endif
+// get IUnknown, REFIID &c
+#include <ole2.h>
 
 // ============================================================================
 // General purpose functions and macros
