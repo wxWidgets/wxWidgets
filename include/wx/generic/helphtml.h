@@ -118,6 +118,22 @@ DECLARE_ABSTRACT_CLASS(wxHTMLHelpControllerBase)
    /// Call the browser using a relative URL.
    virtual bool DisplayHelp(wxString const &) = 0;
 
+   /// Allows one to override the default settings for the help frame.
+   virtual void SetFrameParameters(const wxString &title,
+                                   const wxSize &size,
+                                   const wxPoint &pos = wxDefaultPosition,
+                                   bool newFrameEachTime = FALSE)
+      {
+         // does nothing by default
+      }
+   /// Obtains the latest settings used by the help frame.
+   virtual void GetFrameParameters(wxSize *size = NULL,
+                                   wxPoint *pos = NULL,
+                                   bool *newFrameEachTime = NULL)
+      {
+         // does nothing by default
+      }
+
  protected:
    /// Filename of currently active map file.
    wxString         m_MapFile;

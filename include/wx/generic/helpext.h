@@ -74,7 +74,7 @@ DECLARE_CLASS(wxExtHelpController)
    /// Is the viewer a variant of netscape?
    bool             m_BrowserIsNetscape;
    /// Call the browser using a relative URL.
-   bool DisplayHelp(wxString const &);
+   virtual bool DisplayHelp(wxString const &);
 };
 
 #endif // wxUSE_HELP

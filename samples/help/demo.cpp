@@ -17,36 +17,26 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
-    #pragma implementation "demo.cpp"
-    #pragma interface "demo.cpp"
-#endif
-
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-    #pragma hdrstop
+#   pragma hdrstop
 #endif
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWindows headers
 #ifndef WX_PRECOMP
-    #include "wx/wx.h"
+#   include "wx/wx.h"
 #endif
 
-// defien this to 1 to use HTML help even under Windows (by default, Windows
+// define this to 1 to use HTML help even under Windows (by default, Windows
 // version will HLP-based help)
 #define USE_HTML_HELP 1
-
 #if USE_HTML_HELP
-    #include "wx/helpbase.h"
-    #include "wx/generic/helpext.h"
-
-    #define wxHelpController wxExtHelpController
-    #define sm_classwxHelpController sm_classwxExtHelpController
+#   include "wx/helpbase.h"
 #else
-    #include "wx/help.h"
+#   include "wx/help.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -183,11 +173,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(HelpDemo_Help_Help, "&About Help Demo...");
     menuFile->AppendSeparator();
     menuFile->Append(HelpDemo_Help_Search, "&Search help...");
-#ifdef __WXGTK__
+#ifndef __WXMSW__
+#ifndef wxUSE_HTML
     menuFile->AppendSeparator();
     menuFile->Append(HelpDemo_Help_KDE, "Use &KDE");
     menuFile->Append(HelpDemo_Help_GNOME, "Use &GNOME");
     menuFile->Append(HelpDemo_Help_Netscape, "Use &Netscape");
+#endif
 #endif
     menuFile->AppendSeparator();
     menuFile->Append(HelpDemo_Quit, "E&xit");

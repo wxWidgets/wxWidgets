@@ -121,6 +121,7 @@ libwx_gtk_la_SOURCES = \
  fontdlgg.cpp \
  gridg.cpp \
  helpext.cpp \
+ helpwxht.cpp \
  helphtml.cpp \
  imaglist.cpp \
  laywin.cpp \

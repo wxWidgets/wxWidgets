@@ -52,6 +52,20 @@ class WXDLLEXPORT wxHelpControllerBase: public wxObject
   virtual void OnQuit(void) {};
 };
 
+
+/* By default, if wxHTML is compiled in, use the
+   wxHelpControllerHtml. If not, use the external help controller. */
+#if wxUSE_HTML
+#   include "wx/generic/helpwxht.h"
+#   define wxHelpController wxHelpControllerHtml
+#   define sm_classwxHelpController sm_classwxHelpControllerHtml
+#else
+#   include "wx/generic/helpext.h"
+#   define wxHelpController wxExtHelpController
+#   define sm_classwxHelpController sm_classwxExtHelpController
+#endif
+
+
 #endif // wxUSE_HELP
 #endif
     // _WX_HELPBASEH__
