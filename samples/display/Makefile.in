@@ -74,16 +74,17 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_UNICODE1@WXUNICODEFLAG = u
 @COND_BUILDDEBUG@WXDEBUGFLAG = d
 @COND_WXUSE_LIBJPEGBUILTIN@__LIB_JPEG_p = -lwxjpeg
+@COND_WXUSE_LIBPNGBUILTIN@__LIB_PNG_p = -lwxpng
 @COND_WXUSE_LIBPNGBUILTIN@LIB_PNG = wxpng
 @COND_WXUSE_ODBCBUILTIN@__LIB_ODBC_p = -lwxodbc
 @COND_MONOLITHIC0@__WXLIB_CORE_p = -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5
 @COND_WXUNIV1@WXUNIVNAME = univ
 @COND_WXUNIV1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
+@COND_PLATFORM_MAC1@__display___mac_rezcmd = $(__MACOSX_RESOURCES_p)
 @COND_PLATFORM_WIN321@WXCOMPILER = _gcc
 @COND_WXUSE_ZLIBBUILTIN@LIB_ZLIB = wxzlib
-@COND_PLATFORM_MAC1@__richedit___mac_setfilecmd = $(SETFILE) -a C richedit$(EXEEXT)
 @COND_TOOLKITMAC@MACOSX_RESOURCES = Carbon.r ../../lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.r
-@COND_WXUSE_LIBPNGBUILTIN@__LIB_PNG_p = -lwxpng
+@COND_PLATFORM_MAC1@__display___mac_setfilecmd = $(SETFILE) -a C display$(EXEEXT)
 @COND_PLATFORM_WIN321@DLLIMPEXT = .a
 @COND_PLATFORM_WIN320@DLLIMPEXT = .$(SO_SUFFIX)
 @COND_WXUNIV1@WXUNIV_DEFINE = __WXUNIVERSAL__
@@ -93,40 +94,35 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_WXUSE_ODBCBUILTIN@LIB_ODBC = wxodbc
 @COND_MONOLITHIC1@__WXLIB_MONO_p = -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5
 @COND_WXUSE_LIBJPEGBUILTIN@LIB_JPEG = wxjpeg
-@COND_PLATFORM_WIN321@__richedit___win32rc = richedit_rc.o
 @COND_WXUSE_LIBTIFFBUILTIN@LIB_TIFF = wxtiff
-@COND_PLATFORM_MAC1@__richedit___mac_rezcmd = $(__MACOSX_RESOURCES_p)
 @COND_USE_GUI0@PORTNAME = base
 @COND_USE_GUI1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
-@COND_TOOLKITMAC@__MACOSX_RESOURCES_p = $(RESCOMP) -d __DARWIN__ -t APPL -d __WX$(TOOLKIT)__ -d $(WXUNIV_DEFINE) -i $(srcdir)/../../include -i $(srcdir) -o richedit$(EXEEXT) Carbon.r ../../lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.r
+@COND_TOOLKITMAC@__MACOSX_RESOURCES_p = $(RESCOMP) -d __DARWIN__ -t APPL -d __WX$(TOOLKIT)__ -d $(WXUNIV_DEFINE) -i $(srcdir)/../../include -i $(srcdir) -o display$(EXEEXT) Carbon.r ../../lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.r
 @COND_WXUSE_REGEXBUILTIN@__LIB_REGEX_p = -lwxregex
 @COND_WXUSE_REGEXBUILTIN@LIB_REGEX = wxregex
 @COND_DEPS_TYPEGCC@DEPS_FLAG = -MMD -MT$@ -MF$@.d
 
 ### Targets: ###
 
-all: richedit$(EXEEXT)
+all: display$(EXEEXT)
 
 install-strip: install
 
-richedit_rc.o: $(srcdir)/richedit.rc
-	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ --define $(WXUNIV_DEFINE) --include-dir $(srcdir)/../../include --include-dir $(srcdir)
-
-richedit$(EXEEXT): richedit.o $(__richedit___win32rc)
-	$(CXX) -o $@  richedit.o $(__richedit___win32rc)  -L$(top_builddir)/lib $(__WXLIB_MONO_p) $(SAMPLES_RPATH_FLAG) $(__WXLIB_CORE_p) $(EXTRALIBS) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_TIFF_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p)
-	$(__richedit___mac_rezcmd)
-	$(__richedit___mac_setfilecmd)
-
 clean: 
 	rm -f ./*.o ./*.d
-	rm -f richedit$(EXEEXT)
-
-richedit.o: $(srcdir)/richedit.cpp
-	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../include -I$(srcdir) $(DEPS_FLAG) $(CXXFLAGS) $<
-
-uninstall: 
+	rm -f display$(EXEEXT)
 
 install: all
+
+display.o: $(srcdir)/display.cpp
+	$(CXX) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/../../include -I$(srcdir) $(DEPS_FLAG) $(CXXFLAGS) $<
+
+display$(EXEEXT): display.o
+	$(CXX) -o $@  display.o  -L$(top_builddir)/lib $(__WXLIB_MONO_p) $(SAMPLES_RPATH_FLAG) $(__WXLIB_CORE_p) $(EXTRALIBS) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_TIFF_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p)
+	$(__display___mac_rezcmd)
+	$(__display___mac_setfilecmd)
+
+uninstall: 
 
 
 # Include dependency info, if present:
