@@ -234,6 +234,16 @@ WXDLLEXPORT wxChar * wxStrncat(wxChar *dest, const wxChar *src, size_t n)
   return ret;
 }
 
+WXDLLEXPORT int wxStrncmp(const wxChar *s1, const wxChar *s2, size_t n)
+{
+  while (n && (*s1 == *s2) && *s1) n--, s1++, s2++;
+  if (n) {
+    if ((wxUChar)*s1 < (wxUChar)*s2) return -1;
+    if ((wxUChar)*s1 > (wxUChar)*s2) return 1;
+  }
+  return 0;
+}
+
 WXDLLEXPORT wxChar * wxStrncpy(wxChar *dest, const wxChar *src, size_t n)
 {
   wxChar *ret = dest;
