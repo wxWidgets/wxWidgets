@@ -151,6 +151,10 @@ public:
     unsigned char GetGreen( int x, int y ) const;
     unsigned char GetBlue( int x, int y ) const;
 
+    // used to manipulate the icons while extracting from .ico files   
+    bool GetUnusedColour(  unsigned char *r,  unsigned char *g,  unsigned char *b );
+    bool ApplyMask( const wxImage & mask );
+
     static bool CanRead( const wxString& name );
     virtual bool LoadFile( const wxString& name, long type = wxBITMAP_TYPE_ANY );
     virtual bool LoadFile( const wxString& name, const wxString& mimetype );

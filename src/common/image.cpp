@@ -720,6 +720,100 @@ int wxImage::GetHeight() const
     return M_IMGDATA->m_height;
 }
 
+
+bool wxImage::GetUnusedColour (  unsigned char * r,  unsigned char * g,  unsigned char * b )
+{
+    wxHashTable hTable;
+    unsigned long key;
+   
+    ComputeHistogram( hTable );
+    
+    // start with blackest color and work to lightest
+    // 0,0,0 is quite likely to be a used color
+    unsigned char r2 = 1;
+    unsigned char g2 = 0;
+    unsigned char b2 = 0;
+    
+    key = (r2 << 16) | (g2 << 8) | b2;
+
+    while ( (wxHNode *) hTable.Get(key) )
+    {
+        // color already used
+        r2 ++ ;
+        if ( r2 >= 255 )
+        {
+            r2 = 0;
+            g2 ++ ;
+            if ( g2 >= 255 )
+            {
+                g2 = 0 ;
+                b2 ++ ;
+                if ( b2 >= 255 )
+                {
+                    wxLogError( _("GetUnusedColour:: No Unused Color in image ") );            
+                    return FALSE;                              
+                }
+            }
+        }
+        
+        key = (r2 << 16) | (g2 << 8) | b2;
+    }
+    
+    return TRUE;
+}
+
+
+bool wxImage::ApplyMask ( const wxImage & mask )
+{
+    // what to do if we already have a mask ??
+    if (M_IMGDATA->m_hasMask || mask.HasMask() )
+    {
+        wxLogError( _("Image already masked") );            
+        return FALSE;
+    }
+    
+    // check that the images are the same size
+    if ( (M_IMGDATA->m_height != mask.GetHeight() ) || (M_IMGDATA->m_width != mask.GetWidth () ) )
+    {
+        wxLogError( _("Image and Mask have different sizes") );            
+        return FALSE;
+    }
+    
+    // find unused colour
+    unsigned char r,g,b ;
+    if (!GetUnusedColour (&r, &g, &b))
+    {
+        wxLogError( _("No Unused Color in image being masked") );            
+        return FALSE ;
+    }
+        
+    char unsigned *imgdata = GetData();
+    char unsigned *maskdata = mask.GetData();
+
+    const int w = GetWidth();
+    const int h = GetHeight();
+
+    for (int j = 0; j < h; j++)
+        for (int i = 0; i < w; i++)
+        {
+            if ((maskdata[0] > 128) && (maskdata[1] > 128) && (maskdata[2] > 128 ))
+            {
+                imgdata[0] = r;
+                imgdata[1] = g;
+                imgdata[2] = b;
+            }
+            imgdata  += 3;
+            maskdata += 3;
+        }
+
+    M_IMGDATA->m_maskRed = r;
+    M_IMGDATA->m_maskGreen = g;
+    M_IMGDATA->m_maskBlue = b;
+    M_IMGDATA->m_hasMask = TRUE;
+    
+    return TRUE;
+}
+
 #if wxUSE_PALETTE
 
 // Palette functions

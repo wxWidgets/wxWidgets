@@ -41,22 +41,58 @@ enum
 class WXDLLEXPORT wxBMPHandler : public wxImageHandler
 {
 public:
-  wxBMPHandler()
-  {
-      m_name = _T("BMP file");
-      m_extension = _T("bmp");
-      m_type = wxBITMAP_TYPE_BMP;
-      m_mime = _T("image/bmp");
-  };
+    wxBMPHandler()
+    {
+        m_name = _T("BMP file");
+        m_extension = _T("bmp");
+        m_type = wxBITMAP_TYPE_BMP;
+        m_mime = _T("image/bmp");
+    };
 
 #if wxUSE_STREAMS
-  virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
 
+  virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
   virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=0 );
   virtual bool DoCanRead( wxInputStream& stream );
+                                
+protected:
+  bool DoLoadDib (wxImage * image, int width, int height, int bpp, int ncolors, int comp,
+                off_t bmpOffset, wxInputStream& stream,
+                bool verbose, bool IsBmp, bool hasPalette  ) ;
+  bool LoadDib( wxImage *image, wxInputStream& stream, bool verbose, bool IsBmp  ) ;
+
 #endif // wxUSE_STREAMS
 
-  DECLARE_DYNAMIC_CLASS(wxBMPHandler)
+private:
+     DECLARE_DYNAMIC_CLASS(wxBMPHandler)
+};
+
+
+// ----------------------------------------------------------------------------
+// wxICOHandler
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxICOHandler : public wxBMPHandler
+{
+public:
+    wxICOHandler()
+    {
+        m_name = _T("ICO file");
+        m_extension = _T("ico");
+        m_type = wxBITMAP_TYPE_ICO;
+        m_mime = _T("image/icon");
+    };
+
+#if wxUSE_STREAMS
+
+  virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
+  virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=0 );
+  virtual bool DoCanRead( wxInputStream& stream );
+                
+#endif // wxUSE_STREAMS
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxBMPHandler)
 };
 
 
