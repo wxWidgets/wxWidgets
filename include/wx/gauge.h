@@ -85,6 +85,8 @@ protected:
     #include "wx/gtk/gauge.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/gauge.h"
+#elif defined(__WXCOCOA__)
+    #include "wx/cocoa/gauge.h"
 #elif defined(__WXPM__)
     #include "wx/os2/gauge.h"
 #endif
