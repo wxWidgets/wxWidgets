@@ -107,4 +107,12 @@ Checking in configure.in;
 new revision: 1.666; previous revision: 1.665
 
 11. Ukrainian translation (locale/uk.po)
+[and other translations that were updated in the trunk as well]
+
+12. Fix wxZipFSHandler behaviour when used with relative filenames with ..
+
+Checking in fs_zip.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/common/fs_zip.cpp,v  <--  fs_zip.cpp
+new revision: 1.22; previous revision: 1.21
+done
 
