@@ -819,14 +819,15 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
         dc.SetTextBackground( m_owner->m_colourBackground );
 
     if ( m_owner->m_textureBackground) {
-        if ( m_owner->m_backgroundBrush.Ok() )
-            dc.SetBackground( m_owner->m_backgroundBrush );
-        else {
+        if ( ! m_owner->m_backgroundBrush.Ok() ) {
             wxBrush b(wxColour(0,128,0), wxSOLID);
             dc.SetBackground(b);
         }
-        dc.Clear();
+    }
 
+    dc.Clear();
+
+    if ( m_owner->m_textureBackground) {
         dc.SetPen(*wxMEDIUM_GREY_PEN);
         for (int i=0; i<200; i++)
             dc.DrawLine(0, i*10, i*10, 0);
