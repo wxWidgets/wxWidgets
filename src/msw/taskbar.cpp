@@ -51,7 +51,7 @@ UINT   gs_msgTaskbar = 0;
 UINT   gs_msgRestartTaskbar = 0;
 
 #if WXWIN_COMPATIBILITY_2_4
-BEGIN_EVENT_TABLE(wxTaskBarIcon, wxEvtHandler)
+BEGIN_EVENT_TABLE(wxTaskBarIcon, wxTaskBarIconBase)
     EVT_TASKBAR_MOVE         (wxTaskBarIcon::_OnMouseMove)
     EVT_TASKBAR_LEFT_DOWN    (wxTaskBarIcon::_OnLButtonDown)
     EVT_TASKBAR_LEFT_UP      (wxTaskBarIcon::_OnLButtonUp)
@@ -231,13 +231,13 @@ bool wxTaskBarIcon::PopupMenu(wxMenu *menu)
 
 #if WXWIN_COMPATIBILITY_2_4
 // Overridables
-void wxTaskBarIcon::OnMouseMove(wxEvent&)         {}
-void wxTaskBarIcon::OnLButtonDown(wxEvent&)       {}
-void wxTaskBarIcon::OnLButtonUp(wxEvent&)         {}
-void wxTaskBarIcon::OnRButtonDown(wxEvent&)       {}
-void wxTaskBarIcon::OnRButtonUp(wxEvent&)         {}
-void wxTaskBarIcon::OnLButtonDClick(wxEvent&)     {}
-void wxTaskBarIcon::OnRButtonDClick(wxEvent&)     {}
+void wxTaskBarIcon::OnMouseMove(wxEvent& e)         { e.Skip(); }
+void wxTaskBarIcon::OnLButtonDown(wxEvent& e)       { e.Skip(); }
+void wxTaskBarIcon::OnLButtonUp(wxEvent& e)         { e.Skip(); }
+void wxTaskBarIcon::OnRButtonDown(wxEvent& e)       { e.Skip(); }
+void wxTaskBarIcon::OnRButtonUp(wxEvent& e)         { e.Skip(); }
+void wxTaskBarIcon::OnLButtonDClick(wxEvent& e)     { e.Skip(); }
+void wxTaskBarIcon::OnRButtonDClick(wxEvent& e)     { e.Skip(); }
 
 void wxTaskBarIcon::_OnMouseMove(wxTaskBarIconEvent& e)
     { OnMouseMove(e);     }
