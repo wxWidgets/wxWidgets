@@ -366,9 +366,9 @@ int wxDbColFor::Format(int Nation, int dbDataType, SWORD sqlDataType,
                 s_Field = wxT("%02d/%02d/%04d %02d:%02d:%02d.%03d");
             }
             break;
-		  case DB_DATA_TYPE_BLOB:
+          case DB_DATA_TYPE_BLOB:
             s_Field.Printf(wxT("Unable to format(%d)-SQL(%d)"),dbDataType,sqlDataType);        //
-				break;
+                break;
         default:
             s_Field.Printf(wxT("Unknown Format(%d)-SQL(%d)"),dbDataType,sqlDataType);        //
             break;
@@ -619,12 +619,12 @@ bool wxDb::Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthSt
     else if (retcode != SQL_SUCCESS)
         return(DispAllErrors(henv, hdbc));
 
-	if (retcode == SQL_ERROR)
-		return(DispAllErrors(henv, hdbc));
+    if (retcode == SQL_ERROR)
+        return(DispAllErrors(henv, hdbc));
 */
-	if ((retcode != SQL_SUCCESS) &&
+    if ((retcode != SQL_SUCCESS) &&
         (retcode != SQL_SUCCESS_WITH_INFO))
-		return(DispAllErrors(henv, hdbc));
+        return(DispAllErrors(henv, hdbc));
 
 /*
     If using Intersolv branded ODBC drivers, this is the place where you would substitute
@@ -807,8 +807,8 @@ bool wxDb::Open(wxDb *copyDb)
                          (UCHAR FAR *) uid.c_str(), SQL_NTS,
                          (UCHAR FAR *) authStr.c_str(), SQL_NTS);
 
-	if (retcode == SQL_ERROR)
-		return(DispAllErrors(henv, hdbc));
+    if (retcode == SQL_ERROR)
+        return(DispAllErrors(henv, hdbc));
 
 /*
     If using Intersolv branded ODBC drivers, this is the place where you would substitute
@@ -927,7 +927,7 @@ bool wxDb::setConnectionOptions(void)
 
     SQLSetConnectOption(hdbc, SQL_AUTOCOMMIT, SQL_AUTOCOMMIT_OFF);
     SQLSetConnectOption(hdbc, SQL_OPT_TRACE, SQL_OPT_TRACE_OFF);
-//	SQLSetConnectOption(hdbc, SQL_TXN_ISOLATION, SQL_TXN_READ_COMMITTED);  // No dirty reads
+//  SQLSetConnectOption(hdbc, SQL_TXN_ISOLATION, SQL_TXN_READ_COMMITTED);  // No dirty reads
 
     // By default, MS Sql Server closes cursors on commit and rollback.  The following
     // call to SQLSetConnectOption() is needed to force SQL Server to preserve cursors
@@ -1426,7 +1426,7 @@ void wxDb::Close(void)
     for (i = 0; i < DB_MAX_ERROR_HISTORY; i++)
         wxStrcpy(DBerrorList[i], errorList[i]);
 
-    dbmsType	= dbmsUNIDENTIFIED;
+    dbmsType    = dbmsUNIDENTIFIED;
     dbIsOpen = FALSE;
 
 } // wxDb::Close()
@@ -2111,8 +2111,8 @@ wxDbColInf *wxDb::GetColumns(wxChar *tableName[], const wxChar *userID)
  *       to avoid undesired unbinding of columns.
  */
 {
-    UWORD	    noCols = 0;
-    UWORD		 colNo  = 0;
+    UWORD       noCols = 0;
+    UWORD        colNo  = 0;
     wxDbColInf *colInf = 0;
 
     RETCODE  retcode;
@@ -3004,6 +3004,7 @@ bool wxDb::Catalog(const wxChar *userID, const wxString &fileName)
     if (!UserID.IsEmpty() &&
         Dbms() != dbmsMY_SQL &&
         Dbms() != dbmsACCESS &&
+        Dbms() != dbmsINTERBASE &&
         Dbms() != dbmsMS_SQL_SERVER)
     {
         retcode = SQLColumns(hstmt,
@@ -3132,6 +3133,7 @@ bool wxDb::TableExists(const wxString &tableName, const wxChar *userID, const wx
         Dbms() != dbmsACCESS &&
         Dbms() != dbmsMS_SQL_SERVER &&
         Dbms() != dbmsDB2 &&
+        Dbms() != dbmsINTERBASE &&
         Dbms() != dbmsPERVASIVE_SQL)
     {
         retcode = SQLTables(hstmt,
@@ -3393,6 +3395,10 @@ wxDBMS wxDb::Dbms(void)
  *
  * PERVASIVE SQL
  *
+ * INTERBASE
+ *        - Columns that are part of primary keys must be defined as being NOT NULL
+ *          when they are created.  Some code is added in ::CreateIndex to try to adjust the
+ *          column definition if it is not defined correctly, but it is experimental
  */
 {
     // Should only need to do this once for each new database connection
@@ -3425,9 +3431,9 @@ wxDBMS wxDb::Dbms(void)
     {
       if (!wxStrncmp(dbInf.driverName, wxT("oplodbc"), 7) ||
           !wxStrncmp(dbInf.driverName, wxT("OLOD"), 4))
-			return ((wxDBMS)(dbmsMS_SQL_SERVER));
-		else
-			return ((wxDBMS)(dbmsType = dbmsSYBASE_ASE));
+            return ((wxDBMS)(dbmsMS_SQL_SERVER));
+        else
+            return ((wxDBMS)(dbmsType = dbmsSYBASE_ASE));
     }
 
     if (!wxStricmp(dbInf.dbmsName,wxT("Microsoft SQL Server")))
@@ -3438,8 +3444,8 @@ wxDBMS wxDb::Dbms(void)
         return((wxDBMS)(dbmsType = dbmsPOSTGRES));
 
     baseName[9] = 0;
-	if (!wxStricmp(dbInf.dbmsName,wxT("Pervasive")))
-		return((wxDBMS)(dbmsType = dbmsPERVASIVE_SQL));
+    if (!wxStricmp(dbInf.dbmsName,wxT("Pervasive")))
+        return((wxDBMS)(dbmsType = dbmsPERVASIVE_SQL));
 
     baseName[8] = 0;
     if (!wxStricmp(baseName,wxT("Informix")))
@@ -3482,55 +3488,55 @@ bool wxDb::ModifyColumn(const wxString &tableName, const wxString &columnName,
         return FALSE;
 
     wxString dataTypeName;
-	wxString sqlStmt;
+    wxString sqlStmt;
     wxString alterSlashModify;
 
-	switch(dataType)
-	{
-	    case DB_DATA_TYPE_VARCHAR :
-		    dataTypeName = typeInfVarchar.TypeName;
-		    break;
-	    case DB_DATA_TYPE_INTEGER :
-		    dataTypeName = typeInfInteger.TypeName;
-		    break;
-	    case DB_DATA_TYPE_FLOAT :
-		    dataTypeName = typeInfFloat.TypeName;
-		    break;
-	    case DB_DATA_TYPE_DATE :
-		    dataTypeName = typeInfDate.TypeName;
-		    break;
-	    case DB_DATA_TYPE_BLOB :
-		    dataTypeName = typeInfBlob.TypeName;
-		    break;
-	    default:
-		    return FALSE;
-	}
-
-	// Set the modify or alter syntax depending on the type of database connected to
-	switch (Dbms())
-	{
-	    case dbmsORACLE :
-		    alterSlashModify = "MODIFY";
-		    break;
-	    case dbmsMS_SQL_SERVER :
-		    alterSlashModify = "ALTER COLUMN";
-		    break;
-	    case dbmsUNIDENTIFIED :
+    switch(dataType)
+    {
+        case DB_DATA_TYPE_VARCHAR :
+            dataTypeName = typeInfVarchar.TypeName;
+            break;
+        case DB_DATA_TYPE_INTEGER :
+            dataTypeName = typeInfInteger.TypeName;
+            break;
+        case DB_DATA_TYPE_FLOAT :
+            dataTypeName = typeInfFloat.TypeName;
+            break;
+        case DB_DATA_TYPE_DATE :
+            dataTypeName = typeInfDate.TypeName;
+            break;
+        case DB_DATA_TYPE_BLOB :
+            dataTypeName = typeInfBlob.TypeName;
+            break;
+        default:
             return FALSE;
-	    case dbmsSYBASE_ASA :
-	    case dbmsSYBASE_ASE :
-	    case dbmsMY_SQL :
-	    case dbmsPOSTGRES :
-	    case dbmsACCESS :
-	    case dbmsDBASE :
-	    default :
-		    alterSlashModify = "MODIFY";
-		    break;
-	}
+    }
 
-	// create the SQL statement
-	sqlStmt.Printf(wxT("ALTER TABLE %s %s %s %s"), tableName.c_str(), alterSlashModify.c_str(),
-			  columnName.c_str(), dataTypeName.c_str());
+    // Set the modify or alter syntax depending on the type of database connected to
+    switch (Dbms())
+    {
+        case dbmsORACLE :
+            alterSlashModify = "MODIFY";
+            break;
+        case dbmsMS_SQL_SERVER :
+            alterSlashModify = "ALTER COLUMN";
+            break;
+        case dbmsUNIDENTIFIED :
+            return FALSE;
+        case dbmsSYBASE_ASA :
+        case dbmsSYBASE_ASE :
+        case dbmsMY_SQL :
+        case dbmsPOSTGRES :
+        case dbmsACCESS :
+        case dbmsDBASE :
+        default :
+            alterSlashModify = "MODIFY";
+            break;
+    }
+
+    // create the SQL statement
+    sqlStmt.Printf(wxT("ALTER TABLE %s %s %s %s"), tableName.c_str(), alterSlashModify.c_str(),
+              columnName.c_str(), dataTypeName.c_str());
 
     // For varchars only, append the size of the column
     if (dataType == DB_DATA_TYPE_VARCHAR)
@@ -3547,7 +3553,7 @@ bool wxDb::ModifyColumn(const wxString &tableName, const wxString &columnName,
         sqlStmt += optionalParam;
     }
 
-	return ExecSql(sqlStmt);
+    return ExecSql(sqlStmt);
 
 } // wxDb::ModifyColumn()
 
