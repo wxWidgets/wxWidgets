@@ -192,10 +192,10 @@ void wxListCtrl::UpdateStyle()
         DWORD dwStyleNew = ConvertToMSWStyle(dummy, m_windowStyle);
         dwStyleNew |= m_baseStyle;
 
-        // Get the current window style. 
+        // Get the current window style.
         DWORD dwStyleOld = ::GetWindowLong(GetHwnd(), GWL_STYLE);
 
-        // Only set the window style if the view bits have changed. 
+        // Only set the window style if the view bits have changed.
         if ( dwStyleOld != dwStyleNew )
         {
             ::SetWindowLong(GetHwnd(), GWL_STYLE, dwStyleNew);
@@ -741,7 +741,7 @@ wxColour wxListCtrl::GetTextColour(void) const
 // Sets the text colour of the listview
 void wxListCtrl::SetTextColour(const wxColour& col)
 {
-    ListView_SetTextColor(GetHwnd(), PALETTERGB(col.Red(), col.Blue(), col.Green()));
+    ListView_SetTextColor(GetHwnd(), PALETTERGB(col.Red(), col.Green(), col.Blue()));
 }
 
 // Gets the index of the topmost visible item when in
