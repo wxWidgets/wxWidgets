@@ -48,7 +48,7 @@ int wxImageList::Add( const wxBitmap &bitmap )
   return m_images.Number();
 }
 
-wxBitmap *wxImageList::GetBitmap(int index) {
+const wxBitmap *wxImageList::GetBitmap(int index) const {
   wxNode *node = m_images.Nth(index);
   if (node != NULL)
     return (wxBitmap*)node->Data();
