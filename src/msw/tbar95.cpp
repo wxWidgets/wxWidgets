@@ -655,7 +655,7 @@ bool wxToolBar::MSWCommand(WXUINT cmd, WXWORD id)
     if ( tool->CanBeToggled() )
     {
         LRESULT state = ::SendMessage(GetHwnd(), TB_GETSTATE, id, 0);
-        tool->SetToggle((state & TBSTATE_CHECKED) != 0);
+        tool->Toggle((state & TBSTATE_CHECKED) != 0);
     }
 
     bool toggled = tool->IsToggled();
