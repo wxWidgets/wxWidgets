@@ -146,7 +146,7 @@ Fixed the ActiveXWrapper problem.  Looks like when the win32com
 modules make a "callback" that they (incorrectly, IMHO) allocate a
 transient thread state structure.  Since wxPython is now saving
 tstates for it's own callbacks it ended up using garbage after
-win32com gots rid of the tstate...
+win32com got rid of the tstate...
 
 
 
