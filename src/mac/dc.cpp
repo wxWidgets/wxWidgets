@@ -1650,7 +1650,7 @@ void  wxDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *he
 		macText = wxMacMakeMacStringFromPC( string ) ;
 		text = macText ;
 		length = macText.Length() ;
-	}
+	} 
 	else
 	{
 		text = string ;
@@ -2043,6 +2043,8 @@ void wxDC::MacInstallPen() const
 	                wxDash* dash ;
                     int number = m_pen.GetDashes(&dash) ;
 	                // right now we don't allocate larger pixmaps
+	                // int number = 
+	                m_pen.GetDashes(&dash) ;
 	                for ( int i = 0 ; i < 8 ; ++i )
 	                {
 	                    pat.pat[i] = dash[0] ;
