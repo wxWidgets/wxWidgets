@@ -85,6 +85,8 @@ void NodeInfo::Read(const wxString& filename)
             if (s == "sizer") tp = HANDLER_SIZER;
             else if (s == "sizeritem") tp = HANDLER_SIZERITEM;
             else if (s == "panel") tp = HANDLER_PANEL;
+            else if (s == "notebook") tp = HANDLER_NOTEBOOK;
+            else if (s == "notebookpage") tp = HANDLER_NOTEBOOKPAGE;
             else /*if (s == "normal")*/ tp = HANDLER_NORMAL;
         }
         else if (s == "var")
@@ -98,7 +100,8 @@ void NodeInfo::Read(const wxString& filename)
             else if (typ == "flags") pi.Type = PROP_FLAGS;
             else if (typ == "bool") pi.Type = PROP_BOOL;
             else if (typ == "integer") pi.Type = PROP_INTEGER;
-            else if (typ == "coord") pi.Type = PROP_COORD;           
+            else if (typ == "coord") pi.Type = PROP_COORD;
+            else if (typ == "not_implemented") pi.Type = PROP_NOT_IMPLEMENTED;
             else /*if (typ == "text")*/ pi.Type = PROP_TEXT;
             
             bool fnd = FALSE;
@@ -153,6 +156,12 @@ NodeHandler *NodeHandler::CreateFromFile(const wxString& filename, EditorFrame *
         case HANDLER_SIZERITEM:
             hnd = new NodeHandlerSizerItem(frame, ni);
             break;
+        case HANDLER_NOTEBOOK:
+            hnd = new NodeHandlerNotebook(frame, ni);
+            break;
+        case HANDLER_NOTEBOOKPAGE:
+            hnd = new NodeHandlerNotebookPage(frame, ni);
+            break;
         default:
             hnd = new NodeHandler(frame, ni);
             break;
@@ -186,6 +195,7 @@ void NodeHandler::CreatePropHandlers()
     s_PropHandlers[PROP_BOOL] = new BoolPropertyHandler;
     s_PropHandlers[PROP_INTEGER] = new TextPropertyHandler;
     s_PropHandlers[PROP_COORD] = new CoordPropertyHandler;
+    s_PropHandlers[PROP_NOT_IMPLEMENTED] = new NotImplPropertyHandler;
 }
 
 
@@ -373,8 +383,13 @@ void NodeHandlerSizer::InsertNode(wxXmlNode *parent, wxXmlNode *node, wxXmlNode 
 
 int NodeHandlerSizer::GetTreeIcon(wxXmlNode *node)
 {
-    if (XmlReadValue(node, "orient") == "wxVERTICAL") return 2;
-    else return 3;
+    int orig = NodeHandler::GetTreeIcon(node);
+    if (orig == 0)
+    {
+        if (XmlReadValue(node, "orient") == "wxVERTICAL") return 2;
+        else return 3;
+    }
+    else return orig;
 }
 
 
@@ -434,4 +449,32 @@ wxXmlNode *NodeHandlerSizerItem::GetRealNode(wxXmlNode *node)
         n = n->GetNext();
     }
     return NULL;
+}
+
+
+
+
+
+
+void NodeHandlerNotebook::InsertNode(wxXmlNode *parent, wxXmlNode *node, wxXmlNode *insert_before)
+{
+    wxXmlNode *cnd = XmlFindNode(parent, "children");
+    if (cnd == NULL)
+    {
+        cnd = new wxXmlNode(wxXML_ELEMENT_NODE, "children");
+        parent->AddChild(cnd);
+    }
+    
+    {
+        wxXmlNode *itemnode = new wxXmlNode(wxXML_ELEMENT_NODE, "notebookpage");
+        wxXmlNode *winnode = new wxXmlNode(wxXML_ELEMENT_NODE, "window");
+        itemnode->AddChild(winnode);
+        winnode->AddChild(node);
+
+        if (insert_before)
+            cnd->InsertChild(itemnode, insert_before);
+        else
+            cnd->AddChild(itemnode);
+    }
+    EditorFrame::Get()->NotifyChanged(CHANGED_TREE);
 }

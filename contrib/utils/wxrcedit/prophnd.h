@@ -31,9 +31,10 @@ enum PropertyType
     PROP_COLOR = 2,
     PROP_BOOL = 3,
     PROP_INTEGER = 4,
-    PROP_COORD = 5
+    PROP_COORD = 5,
+    PROP_NOT_IMPLEMENTED = 6,
 };
-#define PROP_TYPES_CNT  6
+#define PROP_TYPES_CNT  7
 
 class PropertyInfo
 {
@@ -109,6 +110,15 @@ class FlagsPropertyHandler : public PropertyHandler
 {
     public:
         FlagsPropertyHandler() {}
+        virtual wxPanel *CreateEditPanel(wxWindow *parent, PropsListInfo *pli);
+};
+
+
+
+class NotImplPropertyHandler : public PropertyHandler
+{
+    public:
+        NotImplPropertyHandler() {}
         virtual wxPanel *CreateEditPanel(wxWindow *parent, PropsListInfo *pli);
 };
 

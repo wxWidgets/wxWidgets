@@ -33,7 +33,9 @@ enum HandlerType
     HANDLER_PANEL = 1,
     HANDLER_NORMAL,
     HANDLER_SIZER,
-    HANDLER_SIZERITEM
+    HANDLER_SIZERITEM,
+    HANDLER_NOTEBOOK,
+    HANDLER_NOTEBOOKPAGE
 };
 
 
@@ -121,6 +123,26 @@ class NodeHandlerSizerItem : public NodeHandler
         virtual wxString GetTreeString(wxXmlNode *node);
         virtual int GetTreeIcon(wxXmlNode *node);
         virtual wxXmlNode *GetRealNode(wxXmlNode *node);
+};
+
+
+
+// wxNotebook handler
+class NodeHandlerNotebook : public NodeHandlerPanel
+{
+    public:
+        NodeHandlerNotebook(EditorFrame *frame, NodeInfo *ni) : NodeHandlerPanel(frame, ni) {}
+        
+        virtual void InsertNode(wxXmlNode *parent, wxXmlNode *node, wxXmlNode *insert_before = NULL);
+};
+
+
+// notebook page handler
+class NodeHandlerNotebookPage : public NodeHandlerSizerItem
+{
+    public:
+        NodeHandlerNotebookPage(EditorFrame *frame, NodeInfo *ni) : 
+                                        NodeHandlerSizerItem(frame, ni) {}
 };
 
 

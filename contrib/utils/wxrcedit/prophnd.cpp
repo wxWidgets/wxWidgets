@@ -331,3 +331,17 @@ wxPanel *FlagsPropertyHandler::CreateEditPanel(wxWindow *parent, PropsListInfo *
 {
     return new FlagsPropPanel(parent, this, pli);
 }
+
+
+
+
+wxPanel *NotImplPropertyHandler::CreateEditPanel(wxWindow *parent, PropsListInfo *pli)
+{
+    wxPanel *p = new wxPanel(parent);
+    wxSizer *sizer = new wxBoxSizer(wxVERTICAL);
+    sizer->Add(new wxStaticText(p, -1, _("Sorry, this is not supported.\nYou have to edit XML code directly.")), 1, wxEXPAND|wxALL, 5);
+    p->SetAutoLayout(TRUE);
+    p->SetSizer(sizer);
+    p->Layout();
+    return p;
+}
