@@ -19,8 +19,6 @@
 #include "wx/control.h"
 #include "wx/event.h"
 
-#if defined(__WIN95__)
-
 class WXDLLEXPORT wxSpinButton : public wxSpinButtonBase
 {
 public:
@@ -68,7 +66,5 @@ private:
     DECLARE_DYNAMIC_CLASS(wxSpinButton)
 };
 
-#endif
-    // __WIN95__
 #endif
     // _WX_SPINBUTT_H_
