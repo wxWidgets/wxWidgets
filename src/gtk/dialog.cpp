@@ -96,9 +96,8 @@ END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxDialog,wxPanel)
 
-wxDialog::wxDialog()
+void wxDialog::Init()
 {
-    m_title = "";
     m_sizeSet = FALSE;
     m_modalShowing = FALSE;
 }
@@ -108,8 +107,8 @@ wxDialog::wxDialog( wxWindow *parent,
                     const wxPoint &pos, const wxSize &size,
                     long style, const wxString &name )
 {
-    m_modalShowing = FALSE;
-    m_sizeSet = FALSE;
+    Init();
+
     Create( parent, id, title, pos, size, style, name );
 }
 

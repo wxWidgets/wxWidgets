@@ -1309,8 +1309,10 @@ BEGIN_EVENT_TABLE(wxWindow, wxEvtHandler)
     EVT_KEY_DOWN(wxWindow::OnKeyDown)
 END_EVENT_TABLE()
 
-wxWindow::wxWindow()
+void wxWindow::Init()
 {
+    m_isWindow = TRUE;
+
     m_widget = (GtkWidget *) NULL;
     m_wxwindow = (GtkWidget *) NULL;
     m_parent = (wxWindow *) NULL;
@@ -1377,11 +1379,17 @@ wxWindow::wxWindow()
 #endif // wxUSE_TOOLTIPS
 }
 
+wxWindow::wxWindow()
+{
+    Init();
+}
+
 wxWindow::wxWindow( wxWindow *parent, wxWindowID id,
                     const wxPoint &pos, const wxSize &size,
                     long style, const wxString &name  )
 {
-    m_insertCallback = wxInsertChildInWindow;
+    Init();
+
     Create( parent, id, pos, size, style, name );
 }
 
@@ -1389,9 +1397,7 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
                        const wxPoint &pos, const wxSize &size,
                        long style, const wxString &name  )
 {
-    m_isShown = FALSE;
-    m_isEnabled = TRUE;
-    m_needParent = TRUE;
+    wxASSERT_MSG( m_isWindow, "Init() must have been called before!" );
 
     PreCreation( parent, id, pos, size, style, name );
 

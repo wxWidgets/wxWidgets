@@ -40,7 +40,7 @@ class wxDialog: public wxPanel
     DECLARE_DYNAMIC_CLASS(wxDialog)
 
 public:
-    wxDialog();
+    wxDialog() { Init(); }
     wxDialog( wxWindow *parent, wxWindowID id,
             const wxString &title,
             const wxPoint &pos = wxDefaultPosition,
@@ -97,6 +97,9 @@ public:
     wxIcon     m_icon;
 
 protected:
+    // common part of all ctors
+    void Init();
+
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);

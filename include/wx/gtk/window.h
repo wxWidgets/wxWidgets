@@ -532,6 +532,9 @@ public:
     virtual void GetPositionConstraint(int *x, int *y) const ;
 
 protected:
+    // common part of all ctors
+    void Init();
+
     // this is the virtual function to be overriden in any derived class which
     // wants to change how SetSize() or Move() works - it is called by all
     // versions of these functions in the base class
