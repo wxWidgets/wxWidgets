@@ -34,11 +34,6 @@
 
 #include "wx/msw/private.h"
 
-// Don't implement WinMain if we're building an MFC/wxWidgets hybrid app.
-#if wxUSE_MFC && !defined(NOMAIN)
-    #define NOMAIN 1
-#endif
-
 #ifdef __BORLANDC__
     // BC++ has to be special: its run-time expects the DLL entry point to be
     // named DllEntryPoint instead of the (more) standard DllMain

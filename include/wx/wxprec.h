@@ -20,7 +20,7 @@
          defined(__DIGITALMARS__) || \
          defined(__WATCOMC__) ) ) || \
       defined(__VISAGECPP__) || \
-      defined(__MWERKS__) 
+      defined(__MWERKS__)
 
     #if !defined(NOPCH)
         #define WX_PRECOMP
@@ -39,7 +39,7 @@
 #include "wx/wxchar.h"
 
 // include standard Windows headers
-#if defined(__WXMSW__) && !wxUSE_MFC
+#if defined(__WXMSW__)
     #include "wx/msw/wrapwin.h"
 #endif
 
