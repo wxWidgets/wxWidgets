@@ -161,12 +161,7 @@
 
 #define wxUSE_DEBUG_NEW_ALWAYS 0
 
-#if defined(_MSC_VER) || \
-    (defined(__BORLANDC__) && __BORLANDC__ >= 0x0550)
-    #define wxUSE_ON_FATAL_EXCEPTION 0
-#else
-    #define wxUSE_ON_FATAL_EXCEPTION 0
-#endif
+#define wxUSE_ON_FATAL_EXCEPTION 0
 
 #define wxUSE_STACKWALKER 0
 
@@ -448,8 +443,6 @@
 #define wxUSE_POSTSCRIPT  0
 
 #define wxUSE_AFM_FOR_POSTSCRIPT 0
-
-#define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 0
 
 
 #define wxUSE_ODBC          0
@@ -967,6 +960,10 @@
 /* we need to define wxUSE_XPM_IN_MSW for MSW compilation for compatibility
    with wx/msw/setup.h */
 #define wxUSE_XPM_IN_MSW wxUSE_XPM
+
+// Set to 0 to disable PostScript print/preview architecture code under Windows
+// (just use Windows printing).
+#define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 1
 
 #endif /* __WIN32__ */
 

@@ -995,14 +995,6 @@
 // Set to 1 to use font metric files in GetTextExtent
 #define wxUSE_AFM_FOR_POSTSCRIPT 1
 
-// Set to 0 to disable PostScript print/preview architecture code under Windows
-// (just use Windows printing).
-#if defined(__WIN32__)
-    #define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 1
-#else
-    #define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 0
-#endif
-
 // ----------------------------------------------------------------------------
 // database classes
 // ----------------------------------------------------------------------------
@@ -1116,6 +1108,14 @@
 //
 // Recommended setting: 1 for WIN32
     #define wxUSE_OLE 1
+
+// Set to 0 to disable PostScript print/preview architecture code under Windows
+// (just use Windows printing).
+#if defined(__WIN32__)
+    #define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 1
+#else
+    #define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 0
+#endif
 
 // Define as 1 to use Microsoft's ItsyBitsy small title bar library, for
 // wxMiniFrame. This setting is only used for Win3.1; Win9x and NT use native
