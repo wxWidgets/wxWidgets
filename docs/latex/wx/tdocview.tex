@@ -35,8 +35,7 @@ document child frames surrounded by an overall frame), SDI (a separate, unconstr
 for each document), or single-window (one document open at a time, as in Windows Write).
 \item Use the appropriate wxDocParentFrame and wxDocChildFrame classes. Construct an instance
 of wxDocParentFrame in your wxApp::OnInit, and a wxDocChildFrame (if not single-window) when
-you initialize a view. Create menus using standard menu ids (such as wxID\_OPEN, wxID\_PRINT),
-routing non-application-specific identifiers to the base frame's OnMenuCommand.
+you initialize a view. Create menus using standard menu ids (such as wxID\_OPEN, wxID\_PRINT).
 \item Construct a single wxDocManager instance at the beginning of your wxApp::OnInit, and then
 as many wxDocTemplate instances as necessary to define relationships between documents and
 views. For a simple application, there will be just one wxDocTemplate.
@@ -185,8 +184,7 @@ If you do not wish to use the wxWidgets method of creating document
 objects dynamically, you must override wxDocTemplate::CreateDocument
 and wxDocTemplate::CreateView to return instances of the appropriate class.
 
-{\it NOTE}: the document template has nothing to do with the C++ template construct. C++
-templates are not used anywhere in wxWidgets.
+{\it NOTE}: the document template has nothing to do with the C++ template construct.
 
 \subsection{wxDocManager overview}\label{wxdocmanageroverview}
 
