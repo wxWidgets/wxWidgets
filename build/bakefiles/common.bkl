@@ -3,8 +3,6 @@
 
 <makefile>
     
-    <set var="BUILDING_LIB" overwrite="0">0</set>
-
     <!-- bakefile modules we need: -->
     <using module="datafiles"/>
 
