@@ -745,10 +745,11 @@ wxPathOnly (wxChar *path)
         {
           done = TRUE;
 #ifdef __VMS__
-          buf[i+1] = 0;
-#else
+	   if ( path[i] == wxT(']') )
+	     buf[i+1] = 0;
+	   else
+#endif	     
           buf[i] = 0;
-#endif
 
           return buf;
         }
@@ -793,10 +794,11 @@ wxString wxPathOnly (const wxString& path)
         {
           done = TRUE;
 #ifdef __VMS__
-          buf[i+1] = 0;
-#else
+	   if ( path[i] == wxT(']') )
+	     buf[i+1] = 0;
+	   else
+#endif	     
           buf[i] = 0;
-#endif
 
           return wxString(buf);
         }
@@ -1261,7 +1263,10 @@ bool wxGetTempFileName(const wxString& prefix, wxString& buf)
 wxString wxFindFirstFile(const wxChar *spec, int flags)
 {
     wxString result;
-
+#ifdef __VMS
+   wxChar *specvms = NULL;
+#endif
+   
 #if !defined( __VMS__ ) || ( __VMS_VER >= 70000000 )
     if (gs_dirStream)
         closedir(gs_dirStream); // edz 941103: better housekeping
@@ -1276,11 +1281,29 @@ wxString wxFindFirstFile(const wxChar *spec, int flags)
 
     // special case: path is really "/"
     if ( !path && gs_strFileSpec[0u] == wxT('/') )
-        path = wxT('/');
-    // path is empty => Local directory
+#ifdef __VMS
+     {
+	wxStrcpy( specvms , wxT( "[000000]" ) );
+	gs_strFileSpec = specvms;
+	wxString path_vms(wxPathOnly(gs_strFileSpec));
+	path = path_vms;
+     }
+#else
+     path = wxT('/');
+#endif
+   // path is empty => Local directory
     if ( !path )
-        path = wxT('.');
-
+#ifdef __VMS
+     {
+	wxStrcpy( specvms , wxT( "[]" ) );
+	gs_strFileSpec = specvms;
+	wxString path_vms1(wxPathOnly(gs_strFileSpec));
+	path = path_vms1;
+     }
+#else
+     path = wxT('.');
+#endif
+   
     gs_dirStream = opendir(path.fn_str());
     if ( !gs_dirStream )
     {
