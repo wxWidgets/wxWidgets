@@ -76,6 +76,8 @@
     wx/msw/gccpriv.h
     wx/msw/mimetype.h
     wx/msw/winundef.h
+    wx/msw/wrapwin.h
+    wx/msw/chkconf.h
 </set>
 
 <set var="BASE_DARWIN_SRC">
@@ -277,6 +279,8 @@
     wx/wxprec.h
     wx/zipstrm.h
     wx/zstream.h
+    wx/protocol/protocol.h
+    wx/protocol/http.h
 </set>
 
 
@@ -387,6 +391,57 @@
     src/common/xpmdecod.cpp
 </set>
 <set var="GUI_CMN_HDR">
+    wx/gdicmn.h
+    wx/cursor.h
+    wx/window.h
+    wx/panel.h
+    wx/frame.h
+    wx/dc.h
+    wx/dcclient.h
+    wx/dcmemory.h
+    wx/dcprint.h
+    wx/dcscreen.h
+    wx/button.h
+    wx/menu.h
+    wx/pen.h
+    wx/brush.h
+    wx/palette.h
+    wx/icon.h
+    wx/dialog.h
+    wx/timer.h
+    wx/settings.h
+    wx/msgdlg.h
+    wx/cmndata.h
+    wx/control.h
+    wx/ctrlsub.h
+    wx/bmpbuttn.h
+    wx/checkbox.h
+    wx/checklst.h
+    wx/choice.h
+    wx/scrolbar.h
+    wx/stattext.h
+    wx/statbmp.h
+    wx/statbox.h
+    wx/listbox.h
+    wx/radiobox.h
+    wx/radiobut.h
+    wx/textctrl.h
+    wx/slider.h
+    wx/gauge.h
+    wx/scrolwin.h
+    wx/dirdlg.h
+    wx/toolbar.h
+    wx/combobox.h
+    wx/layout.h
+    wx/sizer.h
+    wx/mdi.h
+    wx/statusbr.h
+    wx/scrolbar.h
+    wx/choicdlg.h
+    wx/textdlg.h
+    wx/filedlg.h
+    wx/validate.h
+    wx/valtext.h
     wx/selstore.h
     wx/generic/accel.h
     wx/generic/calctrl.h
