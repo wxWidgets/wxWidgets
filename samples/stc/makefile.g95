@@ -8,7 +8,7 @@ WXDIR = ../../..
 TARGET = stctest
 OBJECTS = $(TARGET).o
 EXTRAINC = -I$(WXDIR)/contrib/include
-PREEXTRALIBS = -lstc
+EXTRALIBS = -lstc
 
 include $(WXDIR)/src/makeprog.g95
 
