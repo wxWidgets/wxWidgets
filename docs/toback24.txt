@@ -196,3 +196,14 @@ Checking in xmlres.h;
 /pack/cvsroots/wxwindows/wxWindows/contrib/include/wx/xrc/xmlres.h,v  <--  xmlres.h
 new revision: 1.22; previous revision: 1.21
 done
+
+
+16. Fixes for wxLocale::Init and Borland C++
+
+(document it in changes.txt)
+
+Checking in intl.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/common/intl.cpp,v  <--  intl.cpp
+new revision: 1.87; previous revision: 1.86
+done
+
