@@ -29,6 +29,7 @@
 
 #if defined(__WIN95__) && wxUSE_NATIVE_STATUSBAR
 
+#include "wx/intl.h"
 #include "wx/log.h"
 #include "wx/statusbr.h"
 
