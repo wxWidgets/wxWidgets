@@ -211,7 +211,7 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
         }
         else
         {
-            wxLogError(wxT("Don't know what kind of button this is: id = %d"),
+            wxLogError(wxT("Don't know what kind of button this is: id = %ld"),
                        id);
         }
     }

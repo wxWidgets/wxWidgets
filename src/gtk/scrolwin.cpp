@@ -325,6 +325,11 @@ void wxScrolledWindow::DoSetVirtualSize( int x, int y )
 {
     wxPanel::DoSetVirtualSize( x, y );
     AdjustScrollbars();
+
+#if wxUSE_CONSTRAINTS
+    if (GetAutoLayout())
+        Layout();
+#endif
 }
 
 /*
@@ -816,11 +821,6 @@ void wxScrolledWindow::OnSize(wxSizeEvent& WXUNUSED(event))
         m_targetWindow->SetVirtualSize( m_targetWindow->GetClientSize() );
 
     SetVirtualSize( GetClientSize() );
-
-#if wxUSE_CONSTRAINTS
-    if (GetAutoLayout())
-        Layout();
-#endif
 }
 
 // This calls OnDraw, having adjusted the origin according to the current
