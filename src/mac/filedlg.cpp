@@ -20,6 +20,7 @@
 #include "wx/filedlg.h"
 #include "wx/intl.h"
 #include "wx/tokenzr.h"
+#include "wx/filename.h"
 
 #ifndef __DARWIN__
   #include "PLStringFuncs.h"
@@ -152,24 +153,6 @@ NavEventProc(
     }
 }
 
-const wxChar * gfilters[] =
-{
-    wxT("*.TXT") ,
-    wxT("*.TIF") ,
-    wxT("*.JPG") ,
-
-    NULL
-} ;
-
-OSType gfiltersmac[] =
-{
-    'TEXT' ,
-    'TIFF' ,
-    'JPEG' ,
-
-    '****'
-} ;
-
 
 void MakeUserDataRec(OpenUserDataRec    *myData , const wxString& filter )
 {
@@ -218,19 +201,26 @@ void MakeUserDataRec(OpenUserDataRec    *myData , const wxString& filter )
         const size_t extCount = myData->extensions.GetCount();
         for ( size_t i = 0 ; i < extCount; i++ )
         {
-            int j ;
-            for ( j = 0 ; gfilters[j] ; j++ )
+            wxUint32 fileType;
+            wxUint32 creator;
+            wxString extension = myData->extensions[i];
+
+            if (extension.GetChar(0) == '*')
+                extension = extension.Mid(1);	// Remove leading *
+
+            if (extension.GetChar(0) == '.')
             {
-                if ( myData->extensions[i] == gfilters[j]  )
-                {
-                    myData->filtermactypes.Add( gfiltersmac[j] ) ;
-                    break ;
-                }
+                extension = extension.Mid(1);	// Remove leading .
             }
-            if( gfilters[j] == NULL )
+       
+            if (wxFileName::MacFindDefaultTypeAndCreator( extension, &fileType, &creator ))
             {
-                myData->filtermactypes.Add( '****' ) ;
+                myData->filtermactypes.Add( (OSType)fileType );
             }
+            else
+            {
+                myData->filtermactypes.Add( '****' ) ;		// We'll fail safe if it's not recognized
+        	}
         }
     }
 }

@@ -1990,25 +1990,25 @@ WX_DEFINE_EXPORTED_OBJARRAY(MacDefaultExtensionArray) ;
 
 MacDefaultExtensionArray gMacDefaultExtensions ;
 
+// load the default extensions
+MacDefaultExtensionRecord gDefaults[] =
+{
+    MacDefaultExtensionRecord( wxT("txt") , 'TEXT' , 'ttxt' ) ,
+    MacDefaultExtensionRecord( wxT("tif") , 'TIFF' , '****' ) ,
+    MacDefaultExtensionRecord( wxT("jpg") , 'JPEG' , '****' ) ,
+} ;
+
 static void MacEnsureDefaultExtensionsLoaded()
 {
-  if ( !gMacDefaultExtensionsInited )
-  {
-
-    // load the default extensions
-    MacDefaultExtensionRecord defaults[1] =
+    if ( !gMacDefaultExtensionsInited )
     {
-      MacDefaultExtensionRecord( wxT("txt") , 'TEXT' , 'ttxt' ) ,
-
-    } ;
-    // we could load the pc exchange prefs here too
-
-    for ( size_t i = 0 ; i < WXSIZEOF( defaults ) ; ++i )
-    {
-      gMacDefaultExtensions.Add( defaults[i] ) ;
+        // we could load the pc exchange prefs here too
+        for ( size_t i = 0 ; i < WXSIZEOF( gDefaults ) ; ++i )
+        {
+            gMacDefaultExtensions.Add( gDefaults[i] ) ;
+        }
+        gMacDefaultExtensionsInited = true ;
     }
-    gMacDefaultExtensionsInited = true ;
-  }
 }
 bool wxFileName::MacSetTypeAndCreator( wxUint32 type , wxUint32 creator )
 {
