@@ -55,18 +55,6 @@ static char* ReadLine(char *line, char *buf)
 }
 
 
-static wxString SafeFileName(const wxString& s)
-{
-    wxString res = s;
-    res.Replace(wxT(":"), wxT("_"), TRUE);
-    res.Replace(wxT(" "), wxT("_"), TRUE);
-    res.Replace(wxT("/"), wxT("_"), TRUE);
-    res.Replace(wxT("\\"), wxT("_"), TRUE);
-    res.Replace(wxT("#"), wxT("_"), TRUE);
-    res.Replace(wxT("."), wxT("_"), TRUE);
-    return res;
-}
-
 
 static int LINKAGEMODE IndexCompareFunc(const void *a, const void *b)
 {
@@ -260,28 +248,56 @@ bool wxHtmlHelpData::LoadMSProject(wxHtmlBookRecord *book, wxFileSystem& fsys, c
 }
 
 
+
+
+#if wxUSE_UNICODE
+
+#define READ_STRING(f, s, lng) { char tmpc; for (int i = 0; i < lng; i++) { f -> Read(&tmpc, 1); s[i] = (wxChar)tmpc;} }
+#define WRITE_STRING(f, s, lng) { char tmpc; for (int i = 0; i < lng; i++) { tmpc = (char)s[i]; f -> Write(&tmpc, 1);} }
+
+#else
+
+#define READ_STRING(f, s, lng) f -> Read(s, lng * sizeof(char));
+#define WRITE_STRING(f, s, lng) f -> Write(s, lng * sizeof(char));
+
+#endif
+
+
+#define CURRENT_CACHED_BOOK_VERSION     1
+
 bool wxHtmlHelpData::LoadCachedBook(wxHtmlBookRecord *book, wxInputStream *f)
 {
     int i, st;
-    int x;
+    wxInt32 x;
+    wxInt32 version;
+
+    /* load header - version info : */
+
+    f -> Read(&x, sizeof(x));
+    version = wxINT32_SWAP_ON_BE(x);
+    
+    if (version != CURRENT_CACHED_BOOK_VERSION) return FALSE;
+        // NOTE: when adding new version, please ensure backward compatibility!
 
     /* load contents : */
 
     f -> Read(&x, sizeof(x));
     st = m_ContentsCnt;
-    m_ContentsCnt += x;
-    m_Contents = (wxHtmlContentsItem*) realloc(m_Contents, (m_ContentsCnt / wxHTML_REALLOC_STEP + 1) * wxHTML_REALLOC_STEP * sizeof(wxHtmlContentsItem));
+    m_ContentsCnt += wxINT32_SWAP_ON_BE(x);
+    m_Contents = (wxHtmlContentsItem*) realloc(m_Contents, 
+                                               (m_ContentsCnt / wxHTML_REALLOC_STEP + 1) * 
+                                               wxHTML_REALLOC_STEP * sizeof(wxHtmlContentsItem));
     for (i = st; i < m_ContentsCnt; i++) {
         f -> Read(&x, sizeof(x));
-        m_Contents[i].m_Level = x;
+        m_Contents[i].m_Level = wxINT32_SWAP_ON_BE(x);
         f -> Read(&x, sizeof(x));
-        m_Contents[i].m_ID = x;
-        f -> Read(&x, sizeof(x));
+        m_Contents[i].m_ID = wxINT32_SWAP_ON_BE(x);
+        f -> Read(&x, sizeof(x)); x = wxINT32_SWAP_ON_BE(x);
         m_Contents[i].m_Name = new wxChar[x];
-        f -> Read(m_Contents[i].m_Name, x*sizeof(wxChar));
-        f -> Read(&x, sizeof(x));
+        READ_STRING(f, m_Contents[i].m_Name, x);
+        f -> Read(&x, sizeof(x)); x = wxINT32_SWAP_ON_BE(x);
         m_Contents[i].m_Page = new wxChar[x];
-        f -> Read(m_Contents[i].m_Page, x*sizeof(wxChar));
+        READ_STRING(f, m_Contents[i].m_Page, x);
         m_Contents[i].m_Book = book;
     }
 
@@ -289,15 +305,16 @@ bool wxHtmlHelpData::LoadCachedBook(wxHtmlBookRecord *book, wxInputStream *f)
 
     f -> Read(&x, sizeof(x));
     st = m_IndexCnt;
-    m_IndexCnt += x;
-    m_Index = (wxHtmlContentsItem*) realloc(m_Index, (m_IndexCnt / wxHTML_REALLOC_STEP + 1) * wxHTML_REALLOC_STEP * sizeof(wxHtmlContentsItem));
+    m_IndexCnt += wxINT32_SWAP_ON_BE(x);
+    m_Index = (wxHtmlContentsItem*) realloc(m_Index, (m_IndexCnt / wxHTML_REALLOC_STEP + 1) * 
+                                                     wxHTML_REALLOC_STEP * sizeof(wxHtmlContentsItem));
     for (i = st; i < m_IndexCnt; i++) {
-        f -> Read(&x, sizeof(x));
+        f -> Read(&x, sizeof(x)); x = wxINT32_SWAP_ON_BE(x);
         m_Index[i].m_Name = new wxChar[x];
-        f -> Read(m_Index[i].m_Name, x*sizeof(wxChar));
-        f -> Read(&x, sizeof(x));
+        READ_STRING(f, m_Index[i].m_Name, x);
+        f -> Read(&x, sizeof(x)); x = wxINT32_SWAP_ON_BE(x);
         m_Index[i].m_Page = new wxChar[x];
-        f -> Read(m_Index[i].m_Page, x*sizeof(wxChar));
+        READ_STRING(f, m_Index[i].m_Page, x);
         m_Index[i].m_Book = book;
     }
     return TRUE;
@@ -307,40 +324,47 @@ bool wxHtmlHelpData::LoadCachedBook(wxHtmlBookRecord *book, wxInputStream *f)
 bool wxHtmlHelpData::SaveCachedBook(wxHtmlBookRecord *book, wxOutputStream *f)
 {
     int i;
-    int x;
+    wxInt32 x;
+
+    /* save header - version info : */
+
+    x = wxINT32_SWAP_ON_BE(CURRENT_CACHED_BOOK_VERSION);
+    f -> Write(&x, sizeof(x));
 
     /* save contents : */
 
     x = 0;
     for (i = 0; i < m_ContentsCnt; i++) if (m_Contents[i].m_Book == book && m_Contents[i].m_Level > 0) x++;
+    x = wxINT32_SWAP_ON_BE(x);
     f -> Write(&x, sizeof(x));
     for (i = 0; i < m_ContentsCnt; i++) {
         if (m_Contents[i].m_Book != book || m_Contents[i].m_Level == 0) continue;
-        x = m_Contents[i].m_Level;
+        x = wxINT32_SWAP_ON_BE(m_Contents[i].m_Level);
         f -> Write(&x, sizeof(x));
-        x = m_Contents[i].m_ID;
+        x = wxINT32_SWAP_ON_BE(m_Contents[i].m_ID);
         f -> Write(&x, sizeof(x));
-        x = wxStrlen(m_Contents[i].m_Name) + 1;
+        x = wxINT32_SWAP_ON_BE(wxStrlen(m_Contents[i].m_Name) + 1);
         f -> Write(&x, sizeof(x));
-        f -> Write(m_Contents[i].m_Name, x*sizeof(wxChar));
-        x = wxStrlen(m_Contents[i].m_Page) + 1;
+        WRITE_STRING(f, m_Contents[i].m_Name, x);
+        x = wxINT32_SWAP_ON_BE(wxStrlen(m_Contents[i].m_Page) + 1);
         f -> Write(&x, sizeof(x));
-        f -> Write(m_Contents[i].m_Page, x*sizeof(wxChar));
+        WRITE_STRING(f, m_Contents[i].m_Page, x);
     }
 
     /* save index : */
 
     x = 0;
     for (i = 0; i < m_IndexCnt; i++) if (m_Index[i].m_Book == book && m_Index[i].m_Level > 0) x++;
+    x = wxINT32_SWAP_ON_BE(x);
     f -> Write(&x, sizeof(x));
     for (i = 0; i < m_IndexCnt; i++) {
         if (m_Index[i].m_Book != book || m_Index[i].m_Level == 0) continue;
-        x = wxStrlen(m_Index[i].m_Name) + 1;
+        x = wxINT32_SWAP_ON_BE(wxStrlen(m_Index[i].m_Name) + 1);
         f -> Write(&x, sizeof(x));
-        f -> Write(m_Index[i].m_Name, x*sizeof(wxChar));
-        x = wxStrlen(m_Index[i].m_Page) + 1;
+        WRITE_STRING(f, m_Index[i].m_Name, x);
+        x = wxINT32_SWAP_ON_BE(wxStrlen(m_Index[i].m_Page) + 1);
         f -> Write(&x, sizeof(x));
-        f -> Write(m_Index[i].m_Page, x*sizeof(wxChar));
+        WRITE_STRING(f, m_Index[i].m_Page, x);
     }
     return TRUE;
 }
@@ -351,22 +375,22 @@ void wxHtmlHelpData::SetTempDir(const wxString& path)
     if (path == wxEmptyString) m_TempPath = path;
     else {
         if (wxIsAbsolutePath(path)) m_TempPath = path;
-        else m_TempPath = wxGetCwd() + "/" + path;
+        else m_TempPath = wxGetCwd() + _T("/") + path;
 
-        if (m_TempPath[m_TempPath.Length() - 1] != '/')
-            m_TempPath << "/";
+        if (m_TempPath[m_TempPath.Length() - 1] != _T('/'))
+            m_TempPath << _T('/');
     }
 }
 
 
-bool wxHtmlHelpData::AddBookParam(const wxString& title, const wxString& contfile,
+bool wxHtmlHelpData::AddBookParam(const wxFSFile& bookfile,
+                                  const wxString& title, const wxString& contfile,
                                   const wxString& indexfile, const wxString& deftopic,
                                   const wxString& path)
 {
     wxFileSystem fsys;
     wxFSFile *fi;
     wxHtmlBookRecord *bookr;
-    wxString safetitle;
 
     if (! path.IsEmpty())
         fsys.ChangePathTo(path, TRUE);
@@ -387,20 +411,34 @@ bool wxHtmlHelpData::AddBookParam(const wxString& title, const wxString& contfil
     int cont_start = m_ContentsCnt++;
 
     // Try to find cached binary versions:
-    safetitle = SafeFileName(title);
-    fi = fsys.OpenFile(safetitle + wxT(".cached"));
-    if (fi == NULL) fi = fsys.OpenFile(m_TempPath + safetitle + wxT(".cached"));
-    if ((fi == NULL) || (m_TempPath == wxEmptyString)) {
-        LoadMSProject(bookr, fsys, indexfile, contfile);
-        if (m_TempPath != wxEmptyString) {
-            wxFileOutputStream *outs = new wxFileOutputStream(m_TempPath + safetitle + wxT(".cached"));
-            SaveCachedBook(bookr, outs);
-            delete outs;
+    // 1. save file as book, but with .hhp.cached extension
+    // 2. same as 1. but in temp path
+    // 3. otherwise or if cache load failed, load it from MS.
+    
+    fi = fsys.OpenFile(bookfile.GetLocation() + wxT(".cached"));
+    
+    if (fi == NULL || 
+          fi -> GetModificationTime() < bookfile.GetModificationTime() || 
+          !LoadCachedBook(bookr, fi -> GetStream()))
+    {
+        if (fi != NULL) delete fi;
+        fi = fsys.OpenFile(m_TempPath + wxFileNameFromPath(bookfile.GetLocation()) + wxT(".cached"));
+        if (m_TempPath == wxEmptyString || fi == NULL || 
+            fi -> GetModificationTime() < bookfile.GetModificationTime() || 
+            !LoadCachedBook(bookr, fi -> GetStream()))
+        {
+            LoadMSProject(bookr, fsys, indexfile, contfile);
+            if (m_TempPath != wxEmptyString) 
+            {
+                wxFileOutputStream *outs = new wxFileOutputStream(m_TempPath + 
+                                                  wxFileNameFromPath(bookfile.GetLocation()) + wxT(".cached"));
+                SaveCachedBook(bookr, outs);
+                delete outs;
+            }
         }
-    } else {
-        LoadCachedBook(bookr, fi -> GetStream());
-        delete fi;
     }
+    
+    if (fi != NULL) delete fi;
 
     // Now store the contents range
     bookr->SetContentsRange(cont_start, m_ContentsCnt);
@@ -462,7 +500,6 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
         buff[sz] = 0;
         s -> Read(buff, sz);
         lineptr = buff;
-        delete fi;
 
         do {
             lineptr = ReadLine(lineptr, linebuf);
@@ -478,7 +515,9 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
         } while (lineptr != NULL);
         delete[] buff;
 
-        return AddBookParam(title, contents, index, start, fsys.GetPath());
+        bool rtval = AddBookParam(*fi, title, contents, index, start, fsys.GetPath());
+        delete fi;
+        return rtval;
     }
 }
 
@@ -587,19 +626,14 @@ wxHtmlSearchStatus::wxHtmlSearchStatus(wxHtmlHelpData* data, const wxString& key
 
 bool wxHtmlSearchStatus::Search()
 {
-    wxFileSystem fsys;
     wxFSFile *file;
     int i = m_CurIndex;  // shortcut
     bool found = FALSE;
     wxChar *thepage;
 
     if (!m_Active) {
-    // sanity check. Illegal use, but we'll try to prevent a crash anyway
-#if !defined(__VISAGECPP__)
-        wxASSERT(0);
-#else
+        // sanity check. Illegal use, but we'll try to prevent a crash anyway
         wxASSERT(m_Active);
-#endif
         return FALSE;
     }
 
@@ -622,6 +656,7 @@ bool wxHtmlSearchStatus::Search()
     }
     else m_LastPage = thepage;
     
+    wxFileSystem fsys;
     file = fsys.OpenFile(m_Data->m_Contents[i].m_Book -> GetBasePath() + thepage);
     if (file) 
     {

@@ -127,12 +127,11 @@ class WXDLLEXPORT wxHtmlSearchStatus
         wxString m_Keyword, m_Name;
         wxChar *m_LastPage;
         wxHtmlContentsItem* m_ContentsItem;
-        bool m_Active;  // search is not finished
+        bool m_Active;   // search is not finished
         int m_CurIndex;  // where we are now
         int m_MaxIndex;  // number of files we search
         // For progress bar: 100*curindex/maxindex = % complete
-}
-;
+};
 
 class WXDLLEXPORT wxHtmlHelpData : public wxObject
 {
@@ -153,7 +152,8 @@ class WXDLLEXPORT wxHtmlHelpData : public wxObject
         // Adds new book. 'book' is location of .htb file (stands for "html book").
         // See documentation for details on its format.
         // Returns success.
-        bool AddBookParam(const wxString& title, const wxString& contfile,
+        bool AddBookParam(const wxFSFile& bookfile,
+                          const wxString& title, const wxString& contfile,
                           const wxString& indexfile = wxEmptyString,
                           const wxString& deftopic = wxEmptyString,
                           const wxString& path = wxEmptyString);
@@ -190,8 +190,7 @@ class WXDLLEXPORT wxHtmlHelpData : public wxObject
         // Reads binary book
         bool SaveCachedBook(wxHtmlBookRecord *book, wxOutputStream *f);
         // Writes binary book
-}
-;
+};
 
 #endif
 
