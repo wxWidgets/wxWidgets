@@ -61,7 +61,7 @@ public:
 
     bool IsOk() const { return m_dir != NULL; }
 
-    void SetFileSpec(const wxString& filespec) { m_filespec = filespec; }
+    void SetFileSpec(const wxString& filespec);
     void SetFlags(int flags) { m_flags = flags; }
 
     void Rewind();
@@ -104,6 +104,16 @@ wxDirData::~wxDirData()
 {
     if ( m_dir )
         PM_findClose(m_dir);
+}
+
+void wxDirData::SetFileSpec(const wxString& filespec)
+{
+#ifdef __DOS__
+    if ( filespec.IsEmpty() )
+        m_filespec = _T("*.*");
+    else
+#endif
+    m_filespec = filespec;
 }
 
 void wxDirData::Rewind()
