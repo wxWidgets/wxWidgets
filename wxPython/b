@@ -42,7 +42,7 @@ elif [ "$1" = "r" ]; then
     sed "s/GL_ONLY = /GL_ONLY = 1 #/" < setup.py.temp > setup.py
 
     # build wxPython-gl RPM
-    $SETUP $OTHERFLAGS bdist_rpm --binary-only --requires wxPython --requires wxGTK-gl --doc-files README.txt
+    $SETUP $OTHERFLAGS bdist_rpm --binary-only --doc-files README.txt
     rm dist/wxPython-gl*.tar.gz
 
     # Build wxPython RPM
