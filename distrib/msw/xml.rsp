@@ -134,6 +134,9 @@ contrib/utils/wxrcedit/*.txt
 contrib/utils/wxrcedit/*.ico
 contrib/utils/wxrcedit/*.bmp
 contrib/utils/wxrcedit/*.xpm
+contrib/utils/wxrcedit/bitmaps/*.xpm
+contrib/utils/wxrcedit/bitmaps/*.ico
+contrib/utils/wxrcedit/bitmaps/*.bmp
 contrib/utils/wxrcedit/wxRcEditVC.dsp
 contrib/utils/wxrcedit/wxRcEditVC.dsw
 contrib/utils/wxrcedit/df/*.df
