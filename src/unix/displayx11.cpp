@@ -119,7 +119,10 @@ wxDisplay::wxDisplay(size_t index) : wxDisplayBase ( index ), m_priv( new wxDisp
     XineramaScreenInfo *screenarr;
     int numscreens;
     screenarr = XineramaQueryScreens(disp, &numscreens);
-    wxASSERT(index < numscreens);
+    
+    //Make sure index is a valid display number...
+    wxASSERT(index < numscreens)
+
     m_priv->m_rect = wxRect(screenarr[index].x_org, screenarr[index].y_org,
                             screenarr[index].width, screenarr[index].height);
     m_priv->m_depth = DefaultDepth(disp, DefaultScreen(disp));
