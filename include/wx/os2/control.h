@@ -14,8 +14,6 @@
 
 #include "wx/dynarray.h"
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxControlNameStr;
-
 // General item class
 class WXDLLEXPORT wxControl : public wxControlBase
 {

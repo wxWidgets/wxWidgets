@@ -13,7 +13,6 @@
 #define _WX_CHECKBOX_H_
 
 #include "wx/control.h"
-                               WXDLLEXPORT_DATA(extern const char*) wxCheckBoxNameStr;
 
 // Checkbox item (single checkbox)
 class WXDLLEXPORT wxBitmap;

@@ -12,8 +12,6 @@
 #ifndef _WX_RADIOBOX_H_
 #define _WX_RADIOBOX_H_
 
-WXDLLEXPORT_DATA(extern const char*) wxRadioBoxNameStr;
-
 // List box item
 class WXDLLEXPORT wxBitmap ;
 

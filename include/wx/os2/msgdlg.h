@@ -20,8 +20,6 @@
  * Message box dialog
  */
 
-WXDLLEXPORT_DATA(extern const char*) wxMessageBoxCaptionStr;
-
 class WXDLLEXPORT wxMessageDialog : public wxDialog
 {
 DECLARE_DYNAMIC_CLASS(wxMessageDialog)

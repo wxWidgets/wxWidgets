@@ -15,8 +15,6 @@
 #if wxUSE_TOOLBAR
 #include "wx/tbarbase.h"
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxToolBarNameStr;
-
 class WXDLLEXPORT wxToolBar: public wxToolBarBase
 {
 public:

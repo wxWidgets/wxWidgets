@@ -14,8 +14,6 @@
 
 #include "wx/control.h"
 
-WXDLLEXPORT_DATA(extern const char*) wxButtonNameStr;
-
 // Pushbutton
 class WXDLLEXPORT wxButton: public wxButtonBase
 {

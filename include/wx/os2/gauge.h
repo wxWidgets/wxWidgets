@@ -14,8 +14,6 @@
 
 #include "wx/control.h"
 
-WXDLLEXPORT_DATA(extern const char*) wxGaugeNameStr;
-
 class WXDLLEXPORT wxGauge: public wxControl
 {
 public:

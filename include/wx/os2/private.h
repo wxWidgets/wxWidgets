@@ -43,6 +43,64 @@ static const double twips2mm = (1/(METRIC_CONVERSION_CONSTANT*1440));
 static const double mm2pt = (METRIC_CONVERSION_CONSTANT*72);
 static const double pt2mm = (1/(METRIC_CONVERSION_CONSTANT*72));
 
+//
+// Constant strings for control names and classes
+//
+
+//
+// Controls
+//
+WXDLLEXPORT_DATA(extern const wxChar*) wxButtonNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxCanvasNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxCheckBoxNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxChoiceNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxComboBoxNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxDialogNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxFrameNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxGaugeNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxStaticBoxNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxListBoxNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxStaticTextNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxStaticBitmapNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxMultiTextNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxPanelNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxRadioBoxNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxRadioButtonNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxBitmapRadioButtonNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxScrollBarNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxSliderNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxStaticNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxTextCtrlWindowNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxTextCtrlNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxVirtListBoxNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxButtonBarNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxEnhDialogNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxToolBarNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxStatusLineNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxGetTextFromUserPromptStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxMessageBoxCaptionStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxFileSelectorPromptStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxFileSelectorDefaultWildcardStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxInternalErrorStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxFatalErrorStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxTreeCtrlNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxDirDialogNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxDirDialogDefaultFolderStr;
+
+//
+// Class names
+//
+WXDLLEXPORT_DATA(extern const wxChar*)  wxFrameClassName;
+WXDLLEXPORT_DATA(extern const wxChar*)  wxFrameClassNameNoRedraw;
+WXDLLEXPORT_DATA(extern const wxChar*)  wxMDIFrameClassName;
+WXDLLEXPORT_DATA(extern const wxChar*)  wxMDIFrameClassNameNoRedraw;
+WXDLLEXPORT_DATA(extern const wxChar*)  wxMDIChildFrameClassName;
+WXDLLEXPORT_DATA(extern const wxChar*)  wxMDIChildFrameClassNameNoRedraw;
+WXDLLEXPORT_DATA(extern const wxChar*)  wxPanelClassName;
+WXDLLEXPORT_DATA(extern const wxChar*)  wxPanelClassNameNR;
+WXDLLEXPORT_DATA(extern const wxChar*)  wxCanvasClassName;
+WXDLLEXPORT_DATA(extern const wxChar*)  wxCanvasClassNameNR;
+
 // ---------------------------------------------------------------------------
 // standard icons from the resources
 // ---------------------------------------------------------------------------

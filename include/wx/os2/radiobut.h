@@ -14,8 +14,6 @@
 
 #include "wx/control.h"
 
-WXDLLEXPORT_DATA(extern const char*) wxRadioButtonNameStr;
-
 class WXDLLEXPORT wxRadioButton: public wxControl
 {
 public:

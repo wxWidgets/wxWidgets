@@ -107,6 +107,7 @@ public:
     //
     // For internal use only!
     //
+    void SetPS(HPS hPS);
     void SetFM( PFONTMETRICS pFM
                ,int          nNumFonts
               );
