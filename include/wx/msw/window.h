@@ -135,6 +135,12 @@ public:
     // Accept files for dragging
     virtual void DragAcceptFiles(bool accept);
 
+#if WXWIN_COMPATIBILITY_2_4
+    wxDEPRECATED( bool GetUseCtl3D() const );
+    wxDEPRECATED( bool GetTransparentBackground() const );
+    wxDEPRECATED( void SetTransparent(bool t = TRUE) );
+#endif // WXWIN_COMPATIBILITY_2_4
+
 #if WXWIN_COMPATIBILITY
     // Set/get scroll attributes
     virtual void SetScrollRange(int orient, int range, bool refresh = TRUE);
@@ -180,10 +186,6 @@ public:
     WXHWND GetHWND() const { return m_hWnd; }
     void SetHWND(WXHWND hWnd) { m_hWnd = hWnd; }
     virtual WXWidget GetHandle() const { return GetHWND(); }
-
-    bool GetUseCtl3D() const { return m_useCtl3D; }
-    bool GetTransparentBackground() const { return m_backgroundTransparent; }
-    void SetTransparent(bool t = TRUE) { m_backgroundTransparent = t; }
 
     // event handlers
     // --------------
@@ -421,8 +423,6 @@ protected:
     WXFARPROC             m_oldWndProc;
 
     // additional (MSW specific) flags
-    bool                  m_useCtl3D:1; // Using CTL3D for this control
-    bool                  m_backgroundTransparent:1;
     bool                  m_mouseInWindow:1;
     bool                  m_lastKeydownProcessed:1;
 
@@ -493,6 +493,18 @@ private:
     DECLARE_NO_COPY_CLASS(wxWindowMSW)
     DECLARE_EVENT_TABLE()
 };
+
+// ----------------------------------------------------------------------------
+// inline functions
+// ----------------------------------------------------------------------------
+
+#if WXWIN_COMPATIBILITY_2_4
+
+inline bool wxWindowMSW::GetUseCtl3D() const { return false; }
+inline bool wxWindowMSW::GetTransparentBackground() const { return false; }
+inline void wxWindowMSW::SetTransparent(bool WXUNUSED(t)) { }
+
+#endif // WXWIN_COMPATIBILITY_2_4
 
 // ---------------------------------------------------------------------------
 // global functions

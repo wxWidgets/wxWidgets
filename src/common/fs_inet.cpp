@@ -160,7 +160,7 @@ wxInternetFSHandler::~wxInternetFSHandler()
     wxInetCacheNode *n2;
 
     m_Cache.BeginFind();
-    while ((n = m_Cache.Next()))
+    while ((n = m_Cache.Next()) != 0)
     {
         n2 = (wxInetCacheNode*) n->GetData();
         wxRemoveFile(n2->GetTemp());
