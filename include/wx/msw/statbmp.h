@@ -73,6 +73,9 @@ public:
     // implementation only from now on
     // -------------------------------
 
+    // implement base class virtuals
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+
 protected:
     virtual wxBorder GetDefaultBorder() const;
     virtual wxSize DoGetBestSize() const;

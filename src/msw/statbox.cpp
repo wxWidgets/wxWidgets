@@ -151,4 +151,30 @@ wxSize wxStaticBox::DoGetBestSize() const
     return wxSize(wBox, hBox);
 }
 
+// Required for implementing dialog editors, please do not remove
+WXLRESULT wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+{
+    switch ( nMsg )
+    {
+#ifndef __WXWINCE__
+        case WM_NCHITTEST:
+            {
+                int xPos = LOWORD(lParam);  // horizontal position of cursor
+                int yPos = HIWORD(lParam);  // vertical position of cursor
+
+                ScreenToClient(&xPos, &yPos);
+
+                // Make sure you can drag by the top of the groupbox, but let
+                // other (enclosed) controls get mouse events also
+                if ( yPos < 10 )
+                    return (long)HTCLIENT;
+            }
+            break;
+#endif
+    }
+
+    return wxControl::MSWWindowProc(nMsg, wParam, lParam);
+}
+
 #endif // wxUSE_STATBOX
+

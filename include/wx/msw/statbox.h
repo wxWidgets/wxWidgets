@@ -39,6 +39,9 @@ public:
                 long style = 0,
                 const wxString& name = wxStaticBoxNameStr);
 
+    /// Implementation
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+
 protected:
     virtual wxSize DoGetBestSize() const;
 
