@@ -369,7 +369,7 @@ wxStackFrame::GetParam(size_t WXUNUSED(n),
     return false;
 }
 
-void wxStackFrame::OnParam(PSYMBOL_INFO WXUNUSED(pSymInfo))
+void wxStackFrame::OnParam(_SYMBOL_INFO * WXUNUSED(pSymInfo))
 {
 }
 
