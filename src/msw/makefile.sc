@@ -332,7 +332,6 @@ all: MAKEARCHDIR MAKELIBS PCH $(LIBTARGET) zlib png jpeg tiff regex
 
 MAKEARCHDIR:
     @if not exist $(MSWINCDIR)\setup.h copy $(MSWINCDIR)\setup0.h $(MSWINCDIR)\setup.h
-    @if not exist $(ARCHINCDIR)\wx\setup.h mkdir $(ARCHINCDIR)
     @if not exist $(ARCHINCDIR)\wx\setup.h mkdir $(ARCHINCDIR)\wx
     @if not exist $(ARCHINCDIR)\wx\setup.h copy $(MSWINCDIR)\setup.h $(ARCHINCDIR)\wx\setup.h
     @if not exist $(WXOUTDIR)\nul mkdir $(WXOUTDIR)
