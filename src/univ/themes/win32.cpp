@@ -1337,7 +1337,7 @@ wxColour wxWin32ColourScheme::Get(wxWin32ColourScheme::StdColour col) const
         case TITLEBAR_ACTIVE:   return wxColour(GetSysColor(COLOR_ACTIVECAPTION));
         case TITLEBAR_TEXT:     return wxColour(GetSysColor(COLOR_INACTIVECAPTIONTEXT));
         case TITLEBAR_ACTIVE_TEXT: return wxColour(GetSysColor(COLOR_CAPTIONTEXT));
-        
+
         case DESKTOP:           return wxColour(0x808000);
 #else // !__WXMSW__
         // use the standard Windows colours elsewhere
@@ -3466,7 +3466,7 @@ void wxWin32Renderer::DrawFrameTitle(wxDC& dc,
 
     dc.SetFont(m_titlebarFont);
     dc.SetTextForeground(col);
-    
+
     wxCoord textW;
     dc.GetTextExtent(title, &textW, NULL);
     if ( textW > r.width )
@@ -3493,11 +3493,11 @@ void wxWin32Renderer::DrawFrameTitle(wxDC& dc,
             s << title[i];
         }
         s << wxT("...");
-        dc.DrawLabel(s, wxNullBitmap, r, 
+        dc.DrawLabel(s, wxNullBitmap, r,
                      wxALIGN_LEFT | wxALIGN_CENTRE_VERTICAL);
     }
     else
-        dc.DrawLabel(title, wxNullBitmap, r, 
+        dc.DrawLabel(title, wxNullBitmap, r,
                      wxALIGN_LEFT | wxALIGN_CENTRE_VERTICAL);
 }
 
@@ -3935,7 +3935,7 @@ bool wxWin32InputHandler::HandleMouse(wxInputConsumer *control,
     if ( event.ButtonDown() )
     {
         wxWindow *win = control->GetInputWindow();
-        
+
         if ( wxWindow::FindFocus() != control->GetInputWindow() )
         {
             win->SetFocus();
@@ -4205,16 +4205,28 @@ wxWin32StatusBarInputHandler(wxInputHandler *handler)
 bool wxWin32StatusBarInputHandler::IsOnGrip(wxWindow *statbar,
                                             const wxPoint& pt) const
 {
-    wxTopLevelWindow *parentTLW = wxDynamicCast(statbar->GetParent(), wxTopLevelWindow);
-
     if ( statbar->HasFlag(wxST_SIZEGRIP) &&
-            statbar->GetParent()->HasFlag(wxRESIZE_BORDER) &&
-            parentTLW && !parentTLW->IsMaximized() )
+         statbar->GetParent()->HasFlag(wxRESIZE_BORDER) )
     {
-        wxSize sizeSbar = statbar->GetSize();
+        wxTopLevelWindow *
+            parentTLW = wxDynamicCast(statbar->GetParent(), wxTopLevelWindow);
 
-        return (sizeSbar.x - pt.x) < (wxCoord)STATUSBAR_GRIP_SIZE &&
-               (sizeSbar.y - pt.y) < (wxCoord)STATUSBAR_GRIP_SIZE;
+        wxCHECK_MSG( parentTLW, FALSE,
+                     _T("the status bar should be a child of a TLW") );
+
+        // a maximized window can't be resized anyhow
+        if ( !parentTLW->IsMaximized() )
+        {
+            // VZ: I think that the standard Windows behaviour is to only
+            //     show the resizing cursor when the mouse is on top of the
+            //     grip itself but apparently different Windows versions behave
+            //     differently (?) and it seems a better UI to allow resizing
+            //     the status bar even when the mouse is above the grip
+            wxSize sizeSbar = statbar->GetSize();
+
+            int diff = sizeSbar.x - pt.x;
+            return diff >= 0 && diff < (wxCoord)STATUSBAR_GRIP_SIZE;
+        }
     }
 
     return FALSE;
@@ -4281,17 +4293,16 @@ bool wxWin32FrameInputHandler::HandleMouse(wxInputConsumer *consumer,
 {
     if ( event.LeftDClick() )
     {
-        wxTopLevelWindow *tlw = 
+        wxTopLevelWindow *tlw =
             wxStaticCast(consumer->GetInputWindow(), wxTopLevelWindow);
 
         long hit = tlw->HitTest(event.GetPosition());
 
         if ( hit == wxHT_TOPLEVEL_TITLEBAR )
         {
-            tlw->PerformAction(wxACTION_TOPLEVEL_BUTTON_CLICK, 
-                               tlw->IsMaximized() ? 
-                                   wxTOPLEVEL_BUTTON_RESTORE : 
-                                   wxTOPLEVEL_BUTTON_MAXIMIZE);
+            tlw->PerformAction(wxACTION_TOPLEVEL_BUTTON_CLICK,
+                               tlw->IsMaximized() ? wxTOPLEVEL_BUTTON_RESTORE
+                                                  : wxTOPLEVEL_BUTTON_MAXIMIZE);
             return TRUE;
         }
     }
