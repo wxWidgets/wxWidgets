@@ -312,7 +312,7 @@ That's because if you are still importing from wxPython.wx then there
 are some classes defined there with Draw and etc. methods that have
 2.4 compatible signatures.  However if/when the old wxPython.wx
 namespace is removed then these classes will be removed too so you
-should plam on migrating to the new namespace and new DC Draw methods
+should plan on migrating to the new namespace and new DC Draw methods
 before that time.
 
 
