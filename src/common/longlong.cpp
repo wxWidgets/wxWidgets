@@ -608,7 +608,7 @@ void *wxLongLongWx::asArray(void) const
 #endif // wxUSE_LONGLONG_WX
 
 wxString
-#ifdef wxUSE_LONGLONG_NATIVE
+#if wxUSE_LONGLONG_NATIVE
 wxLongLongNative
 #else
 wxLognLongWx
