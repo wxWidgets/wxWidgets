@@ -3181,7 +3181,7 @@ if test "$TOOLKIT" != "MSW"; then
         dnl simply linking with libpthread should make the test below work but
         dnl it's far from certain that the threaded programs compiled without
         dnl any special switches actually work, so try it after all the others
-        THREAD_OPTS="$THREAD_OPTS -lpthread none"
+        THREAD_OPTS="$THREAD_OPTS pthread none"
 
         dnl now test for all possibilities
         THREADS_OK=no

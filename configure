@@ -17135,7 +17135,7 @@ if test "$TOOLKIT" != "MSW"; then
                 ;;
         esac
 
-                                THREAD_OPTS="$THREAD_OPTS -lpthread none"
+                                THREAD_OPTS="$THREAD_OPTS pthread none"
 
                 THREADS_OK=no
         for flag in $THREAD_OPTS; do
