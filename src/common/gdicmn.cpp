@@ -228,7 +228,9 @@ void wxColourDatabase::Initialize ()
         {wxT("MEDIUM GREY"), 100, 100, 100},
     };
 
-    for ( size_t n = 0; n < WXSIZEOF(wxColourTable); n++ )
+    size_t      n;
+
+    for ( n = 0; n < WXSIZEOF(wxColourTable); n++ )
     {
         const wxColourDesc& cc = wxColourTable[n];
         Append(cc.name, new wxColour(cc.r,cc.g,cc.b));

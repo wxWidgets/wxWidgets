@@ -1,4 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////
 // Name:        matrix.cpp
 // Purpose:     wxTransformMatrix class
 // Author:      Chris Breeze, Julian Smart
@@ -268,12 +267,12 @@ wxTransformMatrix&  wxTransformMatrix::Mirror(bool x, bool y)
     if (x)
     {
         temp.m_matrix[1][1] = -1;
-        temp.m_isIdentity=false;
+        temp.m_isIdentity=FALSE;
     }
     if (y)
     {
         temp.m_matrix[0][0] = -1;
-        temp.m_isIdentity=false;
+        temp.m_isIdentity=FALSE;
     }
 
     *this = temp * (*this);
