@@ -20,6 +20,8 @@
 // headers
 // ----------------------------------------------------------------------------
 
+#if wxUSE_TREECTRL
+
 #include "wx/control.h"
 #include "wx/event.h"
 
@@ -204,7 +206,7 @@ public:
     wxTreeItemId GetOldItem() const { return m_itemOld; }
 
         // the point where the mouse was when the drag operation started (for
-        // wxEVT_COMMAND_TREE_BEGIN_(R)DRAG events only)
+        // wxEVT_COMMAND_TREE_BEGIN_(R)DRAG events only) or click position
     wxPoint GetPoint() const { return m_pointDrag; }
 
         // keyboard code (for wxEVT_COMMAND_TREE_KEY_DOWN only)
@@ -279,6 +281,8 @@ typedef void (wxEvtHandler::*wxTreeEventFunction)(wxTreeEvent&);
 // GetItem() returns the item that was clicked on
 #define EVT_TREE_ITEM_RIGHT_CLICK(id, fn) { wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, NULL },
 #define EVT_TREE_ITEM_MIDDLE_CLICK(id, fn) { wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, NULL },
+
+#endif // wxUSE_TREECTRL
 
 #endif
     // _WX_TREEBASE_H_
