@@ -71,11 +71,6 @@ void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord hei
     m_clipY2 = y + height;
 }
 
-void wxDC::DestroyClippingRegion()
-{
-    m_clipping = FALSE;
-}
-
 void wxDC::DoGetSizeMM( int* width, int* height ) const
 {
     int w, h;
