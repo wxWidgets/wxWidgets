@@ -246,7 +246,7 @@ wxGenericTreeItem *wxGenericTreeItem::HitTest( const wxPoint& point,
     // FIXME why +5?
     if ((point.x > m_xCross-5) && (point.x < m_xCross+5) &&
         (point.y > m_yCross-5) && (point.y < m_yCross+5) &&
-        HasChildren())
+        (IsExpanded() || HasPlus()))
     {
       onButton = TRUE;
       return this;
