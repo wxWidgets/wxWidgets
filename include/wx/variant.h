@@ -100,7 +100,6 @@ public:
     wxVariant(void* ptr, const wxString& name = wxEmptyString); // void* (general purpose)
     wxVariant(wxObject* ptr, const wxString& name = wxEmptyString); //wxObject 
     wxVariant(wxVariantData* data, const wxString& name = wxEmptyString); // User-defined data
-//TODO: Need to document
 #if wxUSE_DATETIME
     wxVariant(const wxDateTime& val, const wxString& name = wxEmptyString); // Date
 #endif // wxUSE_DATETIME
@@ -110,7 +109,6 @@ public:
     wxVariant(const TIME_STRUCT* valptr, const wxString& name = wxEmptyString); // DateTime
     wxVariant(const TIMESTAMP_STRUCT* valptr, const wxString& name = wxEmptyString); // DateTime
 #endif
-//TODO: End of Need to document
     
     wxVariant(const wxVariant& variant);
     ~wxVariant();
@@ -119,7 +117,6 @@ public:
     // Assignment
     void operator= (const wxVariant& variant);
 
-//TODO: Need to document
 #if wxUSE_DATETIME
     bool operator== (const wxDateTime& value) const;
     bool operator!= (const wxDateTime& value) const;
@@ -134,7 +131,6 @@ public:
     void operator= (const TIME_STRUCT* value) ;
     void operator= (const TIMESTAMP_STRUCT* value) ;
 #endif
-//TODO: End of Need to document
 
     // Assignment using data, e.g.
     // myVariant = new wxStringVariantData("hello");
@@ -188,11 +184,9 @@ public:
     // No implicit conversion to wxObject, as that would really
     //  confuse people between conversion to our contained data
     //  and downcasting to see our base type.
-//TODO: Need to document
 #if wxUSE_DATETIME
     inline operator wxDateTime () const { return GetDateTime(); }
 #endif // wxUSE_DATETIME
-//TODO: End of Need to document
 
 // Accessors
     // Sets/gets name
@@ -228,12 +222,10 @@ public:
 
     void* GetVoidPtr() const ;
     wxObject* GetWxObjectPtr()  ;
-//TODO: Need to document
 #if wxUSE_DATETIME
     wxDateTime GetDateTime() const ;
 #endif // wxUSE_DATETIME
     wxArrayString GetArrayString() const;
-//TODO: End of Need to document
 
 // Operations
     // Make NULL (i.e. delete the data)
@@ -265,11 +257,9 @@ public:
     bool Convert(double* value) const;
     bool Convert(wxString* value) const;
     bool Convert(char* value) const;
-//TODO: Need to document
 #if wxUSE_DATETIME
     bool Convert(wxDateTime* value) const;
 #endif // wxUSE_DATETIME
-//TODO: End of Need to document
 
 // Attributes
 protected:
