@@ -6,7 +6,23 @@ Minor compile and build fixes for different architectures.
 Added more flags to wxSizer for proportional sizing and
 centering and alignment combination.
 
-Added controls to wxToolBars (e.g. combobox).
+Added controls to wxToolBars (e.g. combobox) and DeleteTool.
+
+Fixed problem with reading flushable streams.
+
+Added code to send events from one thread to another and added
+function to wake up idle system (needed for sending inter-thread 
+events).
+
+Corrected wrongly set flag in dialogs which broke its tab code.
+Also corrected navigation on wxRadioBox.
+
+Corrected segfaults in wxGLCanvas and stupid race when using
+several such windows.
+
+Some minor updates to wxSockets.
+
+Speed-up for new encoding related font code.
 
 7st November '99: wxWindows 2.1.11 released
 

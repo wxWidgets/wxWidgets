@@ -17,18 +17,19 @@ CC = gcc
 
 PROGRAM = bombs
 
-$(PROGRAM): $(PROGRAM).o game.o bombs1.o
-	$(CC) -o $(PROGRAM) \
-	$(PROGRAM).o bombs1.o game.o `wx-config --libs`
+OBJECTS = $(PROGRAM).o game.o bombs1.o
 
-$(PROGRAM).o: $(PROGRAM).cpp
-	$(CC) `wx-config --cflags` -c $(PROGRAM).cpp
+# implementation
 
-game.o: game.cpp
-	$(CC) `wx-config --cflags` -c game.cpp
-	
-bombs1.o: bombs1.cpp
-	$(CC) `wx-config --cflags` -c bombs1.cpp
+.SUFFIXES:	.o .cpp
+
+.cpp.o :
+	$(CC) -c `wx-config --cflags` -o $@ $<
+
+all:    $(PROGRAM)
+
+$(PROGRAM):	$(OBJECTS)
+	$(CC) -o $(PROGRAM) $(OBJECTS) `wx-config --libs`
 
 clean: 
 	rm -f *.o $(PROGRAM)

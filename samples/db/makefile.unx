@@ -13,19 +13,23 @@
 # under Linux.
 #
 
-CC = gcc
-
 PROGRAM = dbtest
 
-$(PROGRAM): $(PROGRAM).o listdb.o
-	$(CC) -o $(PROGRAM) \
-	$(PROGRAM).o listdb.o `wx-config --libs`
+CC = gcc
 
-$(PROGRAM).o: $(PROGRAM).cpp
-	$(CC) `wx-config --cflags` -c $(PROGRAM).cpp
+OBJECTS = $(PROGRAM).o
 
-listdb.o: listdb.cpp
-	$(CC) `wx-config --cflags` -c listdb.cpp
-	
+# implementation
+
+.SUFFIXES:	.o .cpp
+
+.cpp.o :
+	$(CC) -c `wx-config --cflags` -o $@ $<
+
+all:    $(PROGRAM)
+
+$(PROGRAM):	$(OBJECTS)
+	$(CC) -o $(PROGRAM) $(OBJECTS) `wx-config --libs`
+
 clean: 
 	rm -f *.o $(PROGRAM)

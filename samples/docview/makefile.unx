@@ -13,11 +13,11 @@
 # under Linux.
 #
 
-PROGRAM = dnd
-
 CC = gcc
 
-OBJECTS = $(PROGRAM).o
+PROGRAM = docview
+
+OBJECTS = $(PROGRAM).o view.o doc.o
 
 # implementation
 

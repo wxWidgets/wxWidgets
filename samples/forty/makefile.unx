@@ -13,11 +13,11 @@
 # under Linux.
 #
 
-PROGRAM = dnd
-
 CC = gcc
 
-OBJECTS = $(PROGRAM).o
+PROGRAM = drawing
+
+OBJECTS = $(PROGRAM).o canvas.o card.o game.o pile.o playerdg.o scoredg.o scorefil.o
 
 # implementation
 

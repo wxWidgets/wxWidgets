@@ -13,9 +13,9 @@
 # under Linux.
 #
 
-PROGRAM = dnd
-
 CC = gcc
+
+PROGRAM = minimal
 
 OBJECTS = $(PROGRAM).o
 
