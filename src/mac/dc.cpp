@@ -89,12 +89,13 @@ wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win )
         OffsetRgn( m_newClip , x , y ) ;
         SetClip( m_newClip ) ;
         DisposeRgn( insidergn ) ;
-#endif
+#else
         int x = 0 , y = 0;
         win->MacWindowToRootWindow( &x,&y ) ;
         CopyRgn( (RgnHandle) ((wxWindow*)win)->MacGetVisibleRegion().GetWXHRGN() , m_newClip ) ;
         OffsetRgn( m_newClip , x , y ) ;
         SetClip( m_newClip ) ;
+#endif  
     }
 }
 
