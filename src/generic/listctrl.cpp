@@ -473,6 +473,8 @@ private:
     // common part of all ctors
     void Init();
 
+    void SendListEvent(wxEventType type, wxPoint pos);
+
     DECLARE_DYNAMIC_CLASS(wxListHeaderWindow)
     DECLARE_EVENT_TABLE()
 };
@@ -626,7 +628,7 @@ public:
     // suspend/resume redrawing the control
     void Freeze();
     void Thaw();
-    
+
     void SetFocus();
 
     void OnRenameTimer();
@@ -1983,6 +1985,9 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
 
     if (m_isDragging)
     {
+        SendListEvent(wxEVT_COMMAND_LIST_COL_DRAGGING,
+                      event.GetPosition());
+
         // we don't draw the line beyond our window, but we allow dragging it
         // there
         int w = 0;
@@ -2000,6 +2005,8 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
             m_isDragging = FALSE;
             m_dirty = TRUE;
             m_owner->SetColumnWidth( m_column, m_currentX - m_minX );
+            SendListEvent(wxEVT_COMMAND_LIST_COL_END_DRAG,
+                          event.GetPosition());
         }
         else
         {
@@ -2056,25 +2063,15 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
                 m_currentX = x;
                 DrawCurrent();
                 CaptureMouse();
+                SendListEvent(wxEVT_COMMAND_LIST_COL_BEGIN_DRAG,
+                              event.GetPosition());
             }
             else // click on a column
             {
-                wxWindow *parent = GetParent();
-                wxListEvent le( event.LeftDown()
+                SendListEvent( event.LeftDown()
                                     ? wxEVT_COMMAND_LIST_COL_CLICK
                                     : wxEVT_COMMAND_LIST_COL_RIGHT_CLICK,
-                                parent->GetId() );
-                le.SetEventObject( parent );
-                le.m_pointDrag = event.GetPosition();
-
-                // the position should be relative to the parent window, not
-                // this one for compatibility with MSW and common sense: the
-                // user code doesn't know anything at all about this header
-                // window, so why should it get positions relative to it?
-                le.m_pointDrag.y -= GetSize().y;
-
-                le.m_col = m_column;
-                parent->GetEventHandler()->ProcessEvent( le );
+                                event.GetPosition());
             }
         }
         else if (event.Moving())
@@ -2100,6 +2097,23 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
 void wxListHeaderWindow::OnSetFocus( wxFocusEvent &WXUNUSED(event) )
 {
     m_owner->SetFocus();
+}
+
+void wxListHeaderWindow::SendListEvent(wxEventType type, wxPoint pos)
+{
+    wxWindow *parent = GetParent();
+    wxListEvent le( type, parent->GetId() );
+    le.SetEventObject( parent );
+    le.m_pointDrag = pos;
+
+    // the position should be relative to the parent window, not
+    // this one for compatibility with MSW and common sense: the
+    // user code doesn't know anything at all about this header
+    // window, so why should it get positions relative to it?
+    le.m_pointDrag.y -= GetSize().y;
+
+    le.m_col = m_column;
+    parent->GetEventHandler()->ProcessEvent( le );
 }
 
 //-----------------------------------------------------------------------------
@@ -2221,7 +2235,7 @@ void wxListTextCtrl::OnKillFocus( wxFocusEvent &event )
 
     (*m_accept) = TRUE;
     (*m_res) = GetValue();
-    
+
     if ((*m_res) != m_startValue)
         m_owner->OnRenameAccept();
 }
@@ -3053,7 +3067,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
 
 #ifdef __WXGTK__
         // FIXME: wxGTK generates bad sequence of events prior to doubleclick
-        //        ("down, up, down, double, up" while other ports 
+        //        ("down, up, down, double, up" while other ports
         //        do "down, up, double, up"). We have to have this hack
         //        in place till somebody fixes wxGTK...
         if ( current == m_lineBeforeLastClicked )
@@ -3412,13 +3426,13 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
 void wxListMainWindow::SetFocus()
 {
     // VS: wxListMainWindow derives from wxPanel (via wxScrolledWindow) and wxPanel
-    //     overrides SetFocus in such way that it does never change focus from 
+    //     overrides SetFocus in such way that it does never change focus from
     //     panel's child to the panel itself. Unfortunately, we must be able to change
-    //     focus to the panel from wxListTextCtrl because the text control should 
+    //     focus to the panel from wxListTextCtrl because the text control should
     //     disappear when the user clicks outside it.
 
     wxWindow *oldFocus = FindFocus();
-    
+
     if ( oldFocus && oldFocus->GetParent() == this )
     {
         wxWindow::SetFocus();
@@ -3937,7 +3951,7 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
     int clientWidth,
         clientHeight;
     GetSize( &clientWidth, &clientHeight );
-    
+
     if ( HasFlag(wxLC_REPORT) )
     {
         // all lines have the same height
@@ -3972,7 +3986,7 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
         {
             // We start with 4 for the border around all items
             entireWidth = 4;
-                
+
             if (tries == 1)
             {
                 // Now we have decided that the items do not fit into the
@@ -3984,7 +3998,7 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
                 // a scrollbar at the bottom of its client area.
                 entireWidth += SCROLL_UNIT_X;
             }
-            
+
             // Start at 2,2 so the text does not touch the border
             int x = 2;
             int y = 2;
@@ -4018,11 +4032,11 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
                     entireWidth += maxWidth+6;
                     maxWidth = 0;
                 }
-                
+
                 // We have reached the last item.
                 if ( i == count - 1 )
                     entireWidth += maxWidth;
-                    
+
                 if ( (tries == 0) && (entireWidth+SCROLL_UNIT_X > clientWidth) )
                 {
                     clientHeight -= 15; // We guess the scrollbar height. (FIXME)
@@ -4030,7 +4044,7 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
                     currentlyVisibleLines = 0;
                     break;
                 }
-                
+
                 if ( i == count - 1 )
                     tries = 1;  // Everything fits, no second try required.
             }
