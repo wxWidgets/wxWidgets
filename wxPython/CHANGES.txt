@@ -2,6 +2,10 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
+2.3.2.?
+-------
+
+
 2.3.2
 -----
 Added EVT_HELP, EVT_HELP_RANGE, EVT_DETAILED_HELP,
@@ -55,12 +59,12 @@ messages however is wished.  See demo/Main.py for an example.
 
 Added wxFindReplaceDialog.
 
-The second phase of OOR is implemented (for wxEvtHandler and derived
-classes at least.)  This means that finctions and methods that return
-an object derived from wxEvtHandler that was originally created in
-Python, will return the original python object (if it still exists)
-instead of letting SWIG wrap a new shadow object around the original
-C++ pointer.
+The second phase of OOR is implemented for wxEvtHandler, wxSizer,
+wxShape and derived classes.  This means that functions and methods
+that return an object derived from wxEvtHandler that was originally
+created in Python, will return the original Python object (if it still
+exists) instead of letting SWIG wrap a new shadow object around the
+original C++ pointer.
 
 Added some optimization methods to wxDC: GetBoundingBox, DrawLineList,
 DrawPointList.
@@ -70,7 +74,7 @@ Added a set of sophisticated Error Dialogs from Chris Fama.
 Added wxRightTextCtrl from Josu Oyanguren to wxPython.lib for aligning
 text in a wxTextCtrl to the right side.
 
-Added wxURLDataObject and and example showing drag and drop of URLs to
+Added wxURLDataObject and an example showing drag and drop of URLs to
 and from web browsers.  It's still not 100% bullet-proof for all types
 of browsers, but it works for the majority of cases with the popular
 browsers on Windows.  On wxGTK it seems that only Netscape 4.x works,
@@ -88,9 +92,9 @@ Added wxPopupWindow and wxPopupTransientWindow.
 
 Added wxFileHistory.
 
-Added wxDynamicSashWindow, whcih allows you to endlessly split widnows
+Added wxDynamicSashWindow, which allows you to endlessly split windows
 by dragging a little tab next to the scrollbars.  Added a demo to show
-this and also the ability of multiple wxStyledStectCtrls to share the
+this and also the ability of multiple wxStyledTextCtrls to share the
 same document.
 
 Added wxEditableListBox gizmo.
