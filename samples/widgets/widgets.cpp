@@ -251,6 +251,8 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
                              );
     m_lboxLog = new wxListBox(m_panel, -1);
     sizerDown->Add(m_lboxLog, 1, wxGROW | wxALL, 5);
+    sizerDown->SetMinSize(100, 200);
+
     wxBoxSizer *sizerBtns = new wxBoxSizer(wxHORIZONTAL);
     wxButton *btn = new wxButton(m_panel, Widgets_ClearLog, _T("Clear &log"));
     sizerBtns->Add(btn);
