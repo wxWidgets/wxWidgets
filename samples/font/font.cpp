@@ -138,8 +138,8 @@ enum
     Font_EnumFamilies,
     Font_EnumFixedFamilies,
     Font_EnumEncodings,
-    Font_CheckNativeToFromString
-    Font_Max,
+    Font_CheckNativeToFromString,
+    Font_Max
 };
 
 // ----------------------------------------------------------------------------
