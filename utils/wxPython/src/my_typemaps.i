@@ -21,12 +21,12 @@
 }
 
 //----------------------------------------------------------------------
-// LCOUNT and LIST go together.  They allow a single Python list to be
+// LCOUNT and choices go together.  They allow a single Python list to be
 // converted to an integer count and an array count items long.
 
 %typemap(python,build) int LCOUNT {
-    if (_in_LIST) {
-        $target = PyList_Size(_in_LIST);
+    if (_in_choices) {
+        $target = PyList_Size(_in_choices);
     }
     else {
         $target = 0;
@@ -35,110 +35,123 @@
 
 
 
-%typemap(python,in) byte* LIST  {
+%typemap(python,in) byte* choices  {
     $target = byte_LIST_helper($source);
     if ($target == NULL) {
         return NULL;
     }
 }
-%typemap(python,freearg) byte* LIST {
+%typemap(python,freearg) byte* choices {
     delete [] $source;
 }
 
 
-%typemap(python,in) int* LIST  {
+%typemap(python,in) int* choices  {
     $target = int_LIST_helper($source);
     if ($target == NULL) {
         return NULL;
     }
 }
-%typemap(python,freearg) int* LIST {
+%typemap(python,freearg) int* choices {
     delete [] $source;
 }
 
 
-%typemap(python,in) long* LIST {
+%typemap(python,in) long* choices {
     $target = long_LIST_helper($source);
     if ($target == NULL) {
         return NULL;
     }
 }
-%typemap(python,freearg) long* LIST {
+%typemap(python,freearg) long* choices {
     delete [] $source;
 }
 
 
-%typemap(python,in) unsigned long* LIST {
+%typemap(python,in) unsigned long* choices {
     $target = (unsigned long*)long_LIST_helper($source);
     if ($target == NULL) {
         return NULL;
     }
 }
-%typemap(python,freearg) unsigned long* LIST {
+%typemap(python,freearg) unsigned long* choices {
     delete [] $source;
 }
 
 
 #ifdef __WXMSW__
-%typemap(python,in) wxDash* LIST = unsigned long* LIST;
-%typemap(python,freearg) wxDash* LIST = unsigned long* LIST;
+%typemap(python,in) wxDash* choices = unsigned long* choices;
+%typemap(python,freearg) wxDash* choices = unsigned long* choices;
 #else
-%typemap(python,in) wxDash* LIST = byte* LIST;
-%typemap(python,freearg) wxDash* LIST = byte* LIST;
+%typemap(python,in) wxDash* choices = byte* choices;
+%typemap(python,freearg) wxDash* choices = byte* choices;
 #endif
 
 
-%typemap(python,in) char** LIST {
+%typemap(python,in) char** choices {
     $target = string_LIST_helper($source);
     if ($target == NULL) {
         return NULL;
     }
 }
-%typemap(python,freearg) char** LIST {
+%typemap(python,freearg) char** choices {
     delete [] $source;
 }
 
 
-
-%typemap(python,in) wxPoint* LIST  {
-    $target = wxPoint_LIST_helper($source);
-    if ($target == NULL) {
-        return NULL;
-    }
-}
-%typemap(python,freearg) wxPoint* LIST {
-    delete [] $source;
-}
-
-%typemap(python,in) wxBitmap** LIST  {
+%typemap(python,in) wxBitmap** choices  {
     $target = wxBitmap_LIST_helper($source);
     if ($target == NULL) {
         return NULL;
     }
 }
-%typemap(python,freearg) wxBitmap** LIST {
+%typemap(python,freearg) wxBitmap** choices {
     delete [] $source;
 }
 
-%typemap(python,in) wxString* LIST  {
+%typemap(python,in) wxString* choices  {
     $target = wxString_LIST_helper($source);
     if ($target == NULL) {
         return NULL;
     }
 }
-%typemap(python,freearg) wxString* LIST {
+%typemap(python,freearg) wxString* choices {
     delete [] $source;
 }
 
-%typemap(python,in) wxAcceleratorEntry* LIST  {
+%typemap(python,in) wxAcceleratorEntry* choices  {
     $target = wxAcceleratorEntry_LIST_helper($source);
     if ($target == NULL) {
         return NULL;
     }
 }
-%typemap(python,freearg) wxAcceleratorEntry* LIST {
+%typemap(python,freearg) wxAcceleratorEntry* choices {
     delete [] $source;
 }
+
+
+
+
+
+%typemap(python,build) int PCOUNT {
+    if (_in_points) {
+        $target = PyList_Size(_in_points);
+    }
+    else {
+        $target = 0;
+    }
+}
+
+%typemap(python,in) wxPoint* points  {
+    $target = wxPoint_LIST_helper($source);
+    if ($target == NULL) {
+        return NULL;
+    }
+}
+%typemap(python,freearg) wxPoint* points {
+    delete [] $source;
+}
+
 
 
 //---------------------------------------------------------------------------
@@ -162,7 +175,7 @@ static char* wxStringErrorMsg = "string type is required for parameter";
 
 
 %typemap(python, out) wxString {
-    $target = PyString_FromString(WXSTRINGCAST *($source));
+    $target = PyString_FromStringAndSize($source->c_str(), $source->Len());
 }
 %typemap(python, ret) wxString {
     delete $source;
@@ -170,7 +183,7 @@ static char* wxStringErrorMsg = "string type is required for parameter";
 
 
 %typemap(python, out) wxString* {
-    $target = PyString_FromString(WXSTRINGCAST (*$source));
+    $target = PyString_FromStringAndSize($source->c_str(), $source->Len());
 }
 
 

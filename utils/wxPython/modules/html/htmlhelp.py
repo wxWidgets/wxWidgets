@@ -201,9 +201,6 @@ class wxHtmlHelpDataPtr :
     def AddBook(self, *_args, **_kwargs):
         val = apply(htmlhelpc.wxHtmlHelpData_AddBook,(self,) + _args, _kwargs)
         return val
-    def AddBookParam(self, *_args, **_kwargs):
-        val = apply(htmlhelpc.wxHtmlHelpData_AddBookParam,(self,) + _args, _kwargs)
-        return val
     def FindPageByName(self, *_args, **_kwargs):
         val = apply(htmlhelpc.wxHtmlHelpData_FindPageByName,(self,) + _args, _kwargs)
         return val

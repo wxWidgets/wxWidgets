@@ -1323,101 +1323,6 @@ static PyObject *_wrap_wxHtmlHelpData_AddBook(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
-#define wxHtmlHelpData_AddBookParam(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4)  (_swigobj->AddBookParam(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
-static PyObject *_wrap_wxHtmlHelpData_AddBookParam(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxHtmlHelpData * _arg0;
-    wxString * _arg1;
-    wxString * _arg2;
-    wxString * _arg3 = (wxString *) &wxEmptyString;
-    wxString * _arg4 = (wxString *) &wxEmptyString;
-    wxString * _arg5 = (wxString *) &wxEmptyString;
-    PyObject * _argo0 = 0;
-    PyObject * _obj1 = 0;
-    PyObject * _obj2 = 0;
-    PyObject * _obj3 = 0;
-    PyObject * _obj4 = 0;
-    PyObject * _obj5 = 0;
-    char *_kwnames[] = { "self","title","contfile","indexfile","deftopic","path", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO|OOO:wxHtmlHelpData_AddBookParam",_kwnames,&_argo0,&_obj1,&_obj2,&_obj3,&_obj4,&_obj5)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlHelpData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlHelpData_AddBookParam. Expected _wxHtmlHelpData_p.");
-        return NULL;
-        }
-    }
-{
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
-}
-{
-    if (!PyString_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
-}
-    if (_obj3)
-{
-    if (!PyString_Check(_obj3)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg3 = new wxString(PyString_AsString(_obj3), PyString_Size(_obj3));
-}
-    if (_obj4)
-{
-    if (!PyString_Check(_obj4)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg4 = new wxString(PyString_AsString(_obj4), PyString_Size(_obj4));
-}
-    if (_obj5)
-{
-    if (!PyString_Check(_obj5)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg5 = new wxString(PyString_AsString(_obj5), PyString_Size(_obj5));
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxHtmlHelpData_AddBookParam(_arg0,*_arg1,*_arg2,*_arg3,*_arg4,*_arg5);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-{
-    if (_obj1)
-        delete _arg1;
-}
-{
-    if (_obj2)
-        delete _arg2;
-}
-{
-    if (_obj3)
-        delete _arg3;
-}
-{
-    if (_obj4)
-        delete _arg4;
-}
-{
-    if (_obj5)
-        delete _arg5;
-}
-    return _resultobj;
-}
-
 #define wxHtmlHelpData_FindPageByName(_swigobj,_swigarg0)  (_swigobj->FindPageByName(_swigarg0))
 static PyObject *_wrap_wxHtmlHelpData_FindPageByName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2682,7 +2587,6 @@ static PyMethodDef htmlhelpcMethods[] = {
 	 { "wxHtmlHelpData_GetBookRecArray", (PyCFunction) _wrap_wxHtmlHelpData_GetBookRecArray, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlHelpData_FindPageById", (PyCFunction) _wrap_wxHtmlHelpData_FindPageById, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlHelpData_FindPageByName", (PyCFunction) _wrap_wxHtmlHelpData_FindPageByName, METH_VARARGS | METH_KEYWORDS },
-	 { "wxHtmlHelpData_AddBookParam", (PyCFunction) _wrap_wxHtmlHelpData_AddBookParam, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlHelpData_AddBook", (PyCFunction) _wrap_wxHtmlHelpData_AddBook, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlHelpData_SetTempDir", (PyCFunction) _wrap_wxHtmlHelpData_SetTempDir, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxHtmlHelpData", (PyCFunction) _wrap_delete_wxHtmlHelpData, METH_VARARGS | METH_KEYWORDS },

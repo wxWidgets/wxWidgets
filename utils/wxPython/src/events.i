@@ -176,7 +176,7 @@ public:
 
 //---------------------------------------------------------------------------
 
-class wxNavigationKeyEvent : public wxCommandEvent {
+class wxNavigationKeyEvent : public wxEvent {
 public:
     wxNavigationKeyEvent();
 

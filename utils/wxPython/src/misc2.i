@@ -56,21 +56,21 @@ wxString wxGetTextFromUser(const wxString& message,
 
 // TODO: Need to custom wrap this one...
 // int wxGetMultipleChoice(char* message, char* caption,
-//                         int LCOUNT, char** LIST,
+//                         int LCOUNT, char** choices,
 //                         int nsel, int *selection,
 //                         wxWindow *parent = NULL, int x = -1, int y = -1,
 //                         bool centre = TRUE, int width=150, int height=200);
 
 
 wxString wxGetSingleChoice(const wxString& message, const wxString& caption,
-                           int LCOUNT, wxString* LIST,
+                           int LCOUNT, wxString* choices,
                            wxWindow *parent = NULL,
                            int x = -1, int y = -1,
                            bool centre = TRUE,
                            int width=150, int height=200);
 
 int wxGetSingleChoiceIndex(const wxString& message, const wxString& caption,
-                           int LCOUNT, wxString* LIST,
+                           int LCOUNT, wxString* choices,
                            wxWindow *parent = NULL,
                            int x = -1, int y = -1,
                            bool centre = TRUE,
@@ -280,8 +280,6 @@ public:
 #endif
     void Show(int show = TRUE);
     void Hide();
-    void OnSetFocus();
-    void OnKillFocus();
 };
 
 %inline %{

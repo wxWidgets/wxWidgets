@@ -21,8 +21,11 @@ below.)
 
 
 1. Build and install wxWindows as described in its BuildCVS.txt or
-   INSTALL.txt file.  For *nix systems I run configure with these
-   flags:
+   INSTALL.txt file.
+
+1a. Building wxWindows on Unix/Linux.
+
+   For *nix systems I run configure with these flags:
 
                 --with-gtk
                 --with-libjpeg
@@ -34,12 +37,42 @@ below.)
                 --enable-shared=yes
                 --disable-std_iostreams
 
-   You can use whatever flags you want, but these work for me.
+   You can use whatever flags you want, but these work for me.  be
+   sure to run "make install" to install the wxWindows headers and
+   shared library.  You can check where the wxPython build will expect
+   to find them by running "wx-config --cflags" and "wx-config --libs"
+
+1b. Building wxWindows on Win32.
 
    For Win32 systems I use Visual C++ 6.0, but 5.0 should work.  The
    wxPython build utility currently does not support any other win32
    compilers.  Be sure to copy include/wx/msw/setup0.h to
-   include/wx/msw/setup.h and edit it for the options you want.
+   include/wx/msw/setup.h and edit it for the options you want.  At a
+   minimum you should set the following:
+
+	   wxUSE_NEW_GRID		    0
+	   wxUSE_GLOBAL_MEMORY_OPERATORS    0
+	   wxUSE_LIBTIFF		    1
+
+   I also change these:
+
+	   wxUSE_DIALUP_MANAGER		    0
+	   wxUSE_SOCKETS		    0
+	   wxUSE_FS_INET		    0
+
+   There are probably other flags that can be disabled to remove
+   things not being used in wxPython, but I havn't investigated all
+   the potential configurations yet.
+
+   I find it easiest to build wxWindows using the makefiles, that way
+   I don't have to worry about what the IDE might be doing behind the
+   scenes that might screw things up.  Simply go to the src/msw
+   directory and run:
+
+   nmake -f makefile.vc CRTFLAG=/MD EXTRAFLAGS=-D__NO_VC_CRTDBG__ dll pch
+
+   If you want to make a release build, add FINAL=1 to the nmake
+   command, as well as to build.local for wxPython, (see below.)
 
 
 2. For either platform, you should be sure to set an environment
@@ -113,8 +146,3 @@ below.)
     To run it without requiring a console on win32, you can use the
     pythonw.exe version of Python either from the command line or from
     a shortcut.
-
-
-
-
-

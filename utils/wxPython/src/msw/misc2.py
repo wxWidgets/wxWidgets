@@ -83,12 +83,6 @@ class wxCaretPtr :
     def Hide(self, *_args, **_kwargs):
         val = apply(misc2c.wxCaret_Hide,(self,) + _args, _kwargs)
         return val
-    def OnSetFocus(self, *_args, **_kwargs):
-        val = apply(misc2c.wxCaret_OnSetFocus,(self,) + _args, _kwargs)
-        return val
-    def OnKillFocus(self, *_args, **_kwargs):
-        val = apply(misc2c.wxCaret_OnKillFocus,(self,) + _args, _kwargs)
-        return val
     def __repr__(self):
         return "<C wxCaret instance at %s>" % (self.this,)
 class wxCaret(wxCaretPtr):

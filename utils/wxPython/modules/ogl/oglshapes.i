@@ -84,9 +84,9 @@ public:
     void DrawEllipse(const wxRect& rect);
     void DrawPoint(const wxPoint& pt);
     void DrawText(const wxString& text, const wxPoint& pt);
-    void DrawLines(int LCOUNT, wxPoint* LIST);
-    void DrawPolygon(int LCOUNT, wxPoint* LIST, int flags = 0);
-    void DrawSpline(int LCOUNT, wxPoint* LIST);
+    void DrawLines(int PCOUNT, wxPoint* points);
+    void DrawPolygon(int PCOUNT, wxPoint* points, int flags = 0);
+    void DrawSpline(int PCOUNT, wxPoint* points);
     void SetClippingRect(const wxRect& rect);
     void DestroyClippingRect();
     void SetPen(wxPen* pen, bool isOutline = FALSE);
@@ -264,12 +264,12 @@ public:
     void DrawAtAngle(int angle);
     void DrawEllipticArc(const wxRect& rect, double startAngle, double endAngle);
     void DrawLine(const wxPoint& point1, const wxPoint& point2);
-    void DrawLines(int LCOUNT, wxPoint* LIST);
+    void DrawLines(int PCOUNT, wxPoint* points);
     void DrawPoint(const wxPoint& point);
-    void DrawPolygon(int LCOUNT, wxPoint* LIST, int flags = 0);
+    void DrawPolygon(int PCOUNT, wxPoint* points, int flags = 0);
     void DrawRectangle(const wxRect& rect);
     void DrawRoundedRectangle(const wxRect& rect, double radius);
-    void DrawSpline(int LCOUNT, wxPoint* LIST);
+    void DrawSpline(int PCOUNT, wxPoint* points);
     void DrawText(const wxString& text, const wxPoint& point);
     int GetAngle();
 

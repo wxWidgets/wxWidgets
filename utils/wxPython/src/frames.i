@@ -68,7 +68,7 @@ public:
     void SetMenuBar(wxMenuBar* menuBar);
     void SetStatusBar(wxStatusBar *statusBar);
     void SetStatusText(const wxString& text, int number = 0);
-    void SetStatusWidths(int LCOUNT, int* LIST); // uses typemap
+    void SetStatusWidths(int LCOUNT, int* choices); // uses typemap
     void SetTitle(const wxString& title);
     void SetToolBar(wxToolBar* toolbar);
 

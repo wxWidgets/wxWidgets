@@ -127,12 +127,12 @@ public:
         wxSingleChoiceDialog(wxWindow* parent,
                              wxString* message,
                              wxString* caption,
-                             int LCOUNT, wxString* LIST,
+                             int LCOUNT, wxString* choices,
                              //char** clientData = NULL,
                              long style = wxOK | wxCANCEL | wxCENTRE,
                              wxPoint* pos = &wxPyDefaultPosition) {
             return new wxSingleChoiceDialog(parent, *message, *caption,
-                                            LCOUNT, LIST, NULL, style, *pos);
+                                            LCOUNT, choices, NULL, style, *pos);
         }
     }
 

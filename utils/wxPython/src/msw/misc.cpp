@@ -448,7 +448,7 @@ static PyObject *_wrap_wxNow(PyObject *self, PyObject *args, PyObject *kwargs) {
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -656,7 +656,7 @@ static PyObject *_wrap_wxStripMenuCodes(PyObject *self, PyObject *args, PyObject
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     if (_obj0)
@@ -4265,7 +4265,7 @@ static PyObject *_wrap_new_wxAcceleratorTable(PyObject *self, PyObject *args, Py
     int  _arg0;
     wxAcceleratorEntry * _arg1;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "LIST", NULL };
+    char *_kwnames[] = { "choices", NULL };
     char _ptemp[128];
 
     self = self;

@@ -75,6 +75,8 @@ Added some missing EVT_ functions.
 Added Dirk Holtwic's editor classes to the wxPython.lib.editor
 package.
 
+Changed all the "LIST" parameter names to "choices" to match the docs.
+
 
 
 

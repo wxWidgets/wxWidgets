@@ -326,7 +326,7 @@ static PyObject *_wrap_wxPrintData_GetPrinterName(PyObject *self, PyObject *args
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST (*_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
     return _resultobj;
 }

@@ -499,6 +499,9 @@ class wxDCPtr :
     def GetLogicalFunction(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_GetLogicalFunction,(self,) + _args, _kwargs)
         return val
+    def GetLogicalScale(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC_GetLogicalScale,(self,) + _args, _kwargs)
+        return val
     def GetMapMode(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_GetMapMode,(self,) + _args, _kwargs)
         return val
@@ -520,6 +523,10 @@ class wxDCPtr :
         val = apply(gdic.wxDC_GetSize,(self,) + _args, _kwargs)
         if val: val = wxSizePtr(val) ; val.thisown = 1
         return val
+    def GetSizeMM(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC_GetSizeMM,(self,) + _args, _kwargs)
+        if val: val = wxSizePtr(val) ; val.thisown = 1
+        return val
     def GetTextBackground(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_GetTextBackground,(self,) + _args, _kwargs)
         if val: val = wxColourPtr(val) 
@@ -533,6 +540,9 @@ class wxDCPtr :
     def GetTextForeground(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_GetTextForeground,(self,) + _args, _kwargs)
         if val: val = wxColourPtr(val) 
+        return val
+    def GetUserScale(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC_GetUserScale,(self,) + _args, _kwargs)
         return val
     def LogicalToDeviceX(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_LogicalToDeviceX,(self,) + _args, _kwargs)
@@ -585,6 +595,9 @@ class wxDCPtr :
     def SetLogicalFunction(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_SetLogicalFunction,(self,) + _args, _kwargs)
         return val
+    def SetLogicalScale(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC_SetLogicalScale,(self,) + _args, _kwargs)
+        return val
     def SetMapMode(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_SetMapMode,(self,) + _args, _kwargs)
         return val
@@ -611,6 +624,31 @@ class wxDCPtr :
         return val
     def DrawBitmap(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_DrawBitmap,(self,) + _args, _kwargs)
+        return val
+    def CanDrawBitmap(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC_CanDrawBitmap,(self,) + _args, _kwargs)
+        return val
+    def CanGetTextExtent(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC_CanGetTextExtent,(self,) + _args, _kwargs)
+        return val
+    def GetDepth(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC_GetDepth,(self,) + _args, _kwargs)
+        return val
+    def GetPPI(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC_GetPPI,(self,) + _args, _kwargs)
+        if val: val = wxSizePtr(val) ; val.thisown = 1
+        return val
+    def GetLogicalOrigin(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC_GetLogicalOrigin,(self,) + _args, _kwargs)
+        return val
+    def SetLogicalOrigin(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC_SetLogicalOrigin,(self,) + _args, _kwargs)
+        return val
+    def GetDeviceOrigin(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC_GetDeviceOrigin,(self,) + _args, _kwargs)
+        return val
+    def SetAxisOrientation(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC_SetAxisOrientation,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxDC instance at %s>" % (self.this,)

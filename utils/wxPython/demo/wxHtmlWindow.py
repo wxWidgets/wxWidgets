@@ -18,7 +18,7 @@ class MyHtmlWindow(wxHtmlWindow):
     def OnLinkClicked(self, linkinfo):
         self.log.WriteText('OnLinkClicked: %s\n' % linkinfo.GetHref())
 
-        # Virtuals in the base class have been renamed with base_ on the font.
+        # Virtuals in the base class have been renamed with base_ on the front.
         self.base_OnLinkClicked(linkinfo)
 
 
@@ -26,6 +26,8 @@ class MyHtmlWindow(wxHtmlWindow):
         self.log.WriteText('OnSetTitle: %s\n' % title)
         self.base_OnSetTitle(title)
 
+    def __del__(self):
+        print 'MyHtmlWindow.__del__'
 
 
 class TestHtmlPanel(wxPanel):
@@ -36,7 +38,6 @@ class TestHtmlPanel(wxPanel):
         self.cwd = os.path.split(sys.argv[0])[0]
         if not self.cwd:
             self.cwd = os.getcwd()
-
 
         self.html = MyHtmlWindow(self, -1, log)
         self.html.SetRelatedFrame(frame, "wxPython: (A Demonstration) -- %s")
@@ -85,6 +86,9 @@ class TestHtmlPanel(wxPanel):
 
         self.OnShowDefault(None)
 
+
+    def __del__(self):
+        print 'TestHtmlPanel.__del__'
 
 
 

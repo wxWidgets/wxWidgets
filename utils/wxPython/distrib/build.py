@@ -604,7 +604,7 @@ $(CPPFLAGS) /c $<
 $(TARGET) : $(DUMMYOBJ) $(WXLIB) $(OBJECTS) $(RESFILE)
 	$(link) @<<
 /out:$@
-$(LFLAGS) /def:$(MODULE).def /implib:./$(MODULE).lib
+$(LFLAGS) /export:init$(MODULE) /implib:./$(MODULE).lib
 $(DUMMYOBJ) $(OBJECTS) $(RESFILE)
 $(LIBS)
 <<

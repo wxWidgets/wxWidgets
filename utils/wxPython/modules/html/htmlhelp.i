@@ -123,10 +123,10 @@ public:
 
     void SetTempDir(const wxString& path);
     bool AddBook(const wxString& book);
-    bool AddBookParam(const wxString& title, const wxString& contfile,
-		      const wxString& indexfile=wxEmptyString,
-		      const wxString& deftopic=wxEmptyString,
-		      const wxString& path=wxEmptyString);
+//      bool AddBookParam(const wxString& title, const wxString& contfile,
+//  		      const wxString& indexfile=wxEmptyString,
+//  		      const wxString& deftopic=wxEmptyString,
+//  		      const wxString& path=wxEmptyString);
 
     wxString FindPageByName(const wxString& page);
     wxString FindPageById(int id);

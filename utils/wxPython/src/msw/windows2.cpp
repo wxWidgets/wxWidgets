@@ -189,7 +189,7 @@ static PyObject *_wrap_wxGridCell_GetTextValue(PyObject *self, PyObject *args, P
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST (*_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
     return _resultobj;
 }
@@ -1409,7 +1409,7 @@ static PyObject *_wrap_wxGrid_GetCellValue(PyObject *self, PyObject *args, PyObj
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST (*_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
     return _resultobj;
 }
@@ -1801,7 +1801,7 @@ static PyObject *_wrap_wxGrid_GetLabelValue(PyObject *self, PyObject *args, PyOb
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST (*_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
     return _resultobj;
 }
@@ -3823,7 +3823,7 @@ static PyObject *_wrap_wxNotebook_GetPageText(PyObject *self, PyObject *args, Py
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;

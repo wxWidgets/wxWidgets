@@ -350,7 +350,7 @@ public:
 
             // **** This one needs to return a list of ints (wxDash)
     int GetDashes(wxDash **dashes);
-    void SetDashes(int LCOUNT, wxDash* LIST);
+    void SetDashes(int LCOUNT, wxDash* choices);
 
 #ifdef __WXMSW__
     wxBitmap* GetStipple();
@@ -412,14 +412,14 @@ public:
     void DrawEllipticArc(long x, long y, long width, long height, long start, long end);
     void DrawIcon(const wxIcon& icon, long x, long y);
     void DrawLine(long x1, long y1, long x2, long y2);
-    void DrawLines(int LCOUNT, wxPoint* LIST, long xoffset=0, long yoffset=0);
-    void DrawPolygon(int LCOUNT, wxPoint* LIST, long xoffset=0, long yoffset=0,
+    void DrawLines(int PCOUNT, wxPoint* points, long xoffset=0, long yoffset=0);
+    void DrawPolygon(int PCOUNT, wxPoint* points, long xoffset=0, long yoffset=0,
                      int fill_style=wxODDEVEN_RULE);
     void DrawPoint(long x, long y);
     void DrawRectangle(long x, long y, long width, long height);
     void DrawRotatedText(const wxString& text, wxCoord x, wxCoord y, double angle);
     void DrawRoundedRectangle(long x, long y, long width, long height, long radius=20);
-    void DrawSpline(int LCOUNT, wxPoint* LIST);
+    void DrawSpline(int PCOUNT, wxPoint* points);
     void DrawText(const wxString& text, long x, long y);
     void EndDoc();
     void EndDrawing();
@@ -433,6 +433,7 @@ public:
                         long *OUTPUT, long *OUTPUT);
     wxFont& GetFont();
     int GetLogicalFunction();
+    void GetLogicalScale(double *OUTPUT, double *OUTPUT);
     int GetMapMode();
     bool GetOptimization();
     wxPen& GetPen();
@@ -445,12 +446,14 @@ public:
     }
     %name(GetSizeTuple)void GetSize(int* OUTPUT, int* OUTPUT);
     wxSize GetSize();
+    wxSize GetSizeMM();
     wxColour& GetTextBackground();
     void GetTextExtent(const wxString& string, long *OUTPUT, long *OUTPUT);
     %name(GetFullTextExtent)void GetTextExtent(const wxString& string,
                        long *OUTPUT, long *OUTPUT, long *OUTPUT, long* OUTPUT,
                        const wxFont* font = NULL);
     wxColour& GetTextForeground();
+    void GetUserScale(double *OUTPUT, double *OUTPUT);
     long LogicalToDeviceX(long x);
     long LogicalToDeviceXRel(long x);
     long LogicalToDeviceY(long y);
@@ -468,6 +471,7 @@ public:
     void SetBrush(const wxBrush& brush);
     void SetFont(const wxFont& font);
     void SetLogicalFunction(int function);
+    void SetLogicalScale(double x, double y);
     void SetMapMode(int mode);
     void SetOptimization(bool optimize);
     void SetPen(const wxPen& pen);
@@ -478,25 +482,20 @@ public:
     void StartPage();
 
 
-//  Don't need this one anymore as wxWindows has one...
-//      %addmethods {
-//              // This one is my own creation...
-//          void DrawBitmap(wxBitmap& bitmap, long x, long y, bool swapPalette=TRUE) {
-//              wxMemoryDC* memDC = new wxMemoryDC;
-//              memDC->SelectObject(bitmap);
-//  #ifdef __WXMSW__
-//              if (swapPalette)
-//                  self->SetPalette(*bitmap.GetPalette());
-//  #endif
-//              self->Blit(x, y, bitmap.GetWidth(), bitmap.GetHeight(), memDC,
-//                      0, 0, self->GetLogicalFunction());
-//              memDC->SelectObject(wxNullBitmap);
-//              delete memDC;
-//          }
-//      }
 
     void DrawBitmap(const wxBitmap& bitmap, long x, long y,
                     int useMask = FALSE);
+
+    bool CanDrawBitmap();
+    bool CanGetTextExtent();
+    int  GetDepth();
+    wxSize GetPPI();
+
+    void GetLogicalOrigin(int *OUTPUT, int *OUTPUT);
+    void SetLogicalOrigin(int x, int y);
+    void GetDeviceOrigin(int *OUTPUT, int *OUTPUT);
+    void SetDeviceOrigin(int x, int y);
+    void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
 
 };
 
@@ -644,7 +643,7 @@ extern wxColour wxNullColour;
 
 class wxPalette {
 public:
-    wxPalette(int LCOUNT, byte* LIST, byte* LIST, byte* LIST);
+    wxPalette(int LCOUNT, byte* choices, byte* choices, byte* choices);
     ~wxPalette();
 
     int GetPixel(byte red, byte green, byte blue);
@@ -666,7 +665,7 @@ enum {
 
 class wxImageList {
 public:
-    wxImageList(int width, int height, int mask=TRUE, int initialCount=1);
+    wxImageList(int width, int height, int mask=FALSE, int initialCount=1);
     ~wxImageList();
 
 #ifdef __WXMSW__

@@ -59,7 +59,7 @@ public:
 
     void SetFieldsCount(int number = 1);
     void SetStatusText(const wxString& text, int i = 0);
-    void SetStatusWidths(int LCOUNT, int* LIST);
+    void SetStatusWidths(int LCOUNT, int* choices);
 };
 
 

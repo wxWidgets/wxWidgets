@@ -6,8 +6,8 @@ from ftplib import FTP
 
 logfile = 'e:\\temp\\autobuild.log'
 WXDIR   = os.environ['WXWIN']
-dllVer  = '21_11'
-wxpVer  = '2.1.11'
+dllVer  = '21_12'
+wxpVer  = '2.1.12'
 dateSt  = time.strftime("%Y%m%d", time.localtime(time.time()))
 
 #----------------------------------------------------------------------
@@ -128,7 +128,9 @@ FINAL=1
         destName = WXDIR+'\\utils\\wxPython\\distrib\\wxPython-'+wxpVer+'-'+dateSt+'.EXE'
         validateFile(srcName)
         try:
+            time.sleep(5)
             os.rename(srcName, destName)
+            validateFile(destName)
         except:
             pass
 
@@ -144,6 +146,9 @@ FINAL=1
         except:
             pass
 
+
+
+        return
 
         logSeparator("Uploading to website...")
         do('python d:\util32\sendwxp.py %s' % destName)

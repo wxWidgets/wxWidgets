@@ -174,7 +174,7 @@ public:
     wxChoice(wxWindow *parent, wxWindowID id,
              const wxPoint& pos = wxPyDefaultPosition,
              const wxSize& size = wxPyDefaultSize,
-             int LCOUNT=0, wxString* LIST=NULL,
+             int LCOUNT=0, wxString* choices=NULL,
              long style = 0,
              const wxValidator& validator = wxPyDefaultValidator,
              char* name = "choice");
@@ -201,7 +201,7 @@ public:
     wxComboBox(wxWindow* parent, wxWindowID id, char* value = "",
                const wxPoint& pos = wxPyDefaultPosition,
                const wxSize& size = wxPyDefaultSize,
-               int LCOUNT=0, wxString* LIST=NULL,
+               int LCOUNT=0, wxString* choices=NULL,
                long style = 0,
                const wxValidator& validator = wxPyDefaultValidator,
                char* name = "comboBox");
@@ -306,7 +306,7 @@ public:
     wxListBox(wxWindow* parent, wxWindowID id,
               const wxPoint& pos = wxPyDefaultPosition,
               const wxSize& size = wxPyDefaultSize,
-              int LCOUNT, wxString* LIST = NULL,
+              int LCOUNT, wxString* choices = NULL,
               long style = 0,
               const wxValidator& validator = wxPyDefaultValidator,
               char* name = "listBox");
@@ -335,13 +335,13 @@ public:
       }
     }
 
-    void InsertItems(int LCOUNT, wxString* LIST, int pos);
+    void InsertItems(int LCOUNT, wxString* choices, int pos);
 
     wxString GetString(int n);
     wxString GetStringSelection();
     int Number();
     bool Selected(const int n);
-    void Set(int LCOUNT, wxString* LIST);
+    void Set(int LCOUNT, wxString* choices);
     // TODO:    void SetClientData(const int n, char* data);
     void SetFirstItem(int n);
     %name(SetFirstItemStr)void SetFirstItem(const wxString& string);
@@ -359,7 +359,7 @@ public:
                    const wxPoint& pos = wxPyDefaultPosition,
                    const wxSize& size = wxPyDefaultSize,
                    int LCOUNT = 0,
-                   wxString* LIST = NULL,
+                   wxString* choices = NULL,
                    long style = 0,
                    const wxValidator& validator = wxPyDefaultValidator,
                    char* name = "listBox");
@@ -368,7 +368,7 @@ public:
 
     bool  IsChecked(int uiIndex);
     void  Check(int uiIndex, int bCheck = TRUE);
-    void InsertItems(int LCOUNT, wxString* LIST, int pos);
+    void InsertItems(int LCOUNT, wxString* choices, int pos);
 
     int GetItemHeight();
 };
@@ -496,7 +496,7 @@ public:
                const wxString& label,
                const wxPoint& point = wxPyDefaultPosition,
                const wxSize& size = wxPyDefaultSize,
-               int LCOUNT = 0, wxString* LIST = NULL,
+               int LCOUNT = 0, wxString* choices = NULL,
                int majorDimension = 0,
                long style = wxRA_HORIZONTAL,
                const wxValidator& validator = wxPyDefaultValidator,

@@ -224,6 +224,9 @@ class wxFlexGridSizer(wxGridSizer):
             for idx in self.growableCols:
                 self.colWidths[idx] = self.colWidths[idx] + delta
 
+        # bottom right corner
+        sz = wxSize(pt.x + sz.width, pt.y + sz.height)
+
         # Layout each cell
         x = pt.x
         for c in range(ncols):

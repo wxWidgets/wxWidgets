@@ -73,8 +73,17 @@ class MyCanvas(wxScrolledWindow):
         for a in range(0, 360, 45):
             dc.DrawRotatedText("Rotated text...", 300, 300, a)
 
+        dc.SetPen(wxTRANSPARENT_PEN)
+        dc.SetBrush(wxBLUE_BRUSH)
+        dc.DrawRectangle(50,500,50,50)
+        dc.DrawRectangle(100,500,50,50)
+
+        #from wxPython import dch
+        #dch.FillRect(dc, wxRect(50, 400, 50, 50), wxBLACK)
+
         self.DrawSavedLines(dc)
         dc.EndDrawing()
+
 
 
     def DrawSavedLines(self, dc):

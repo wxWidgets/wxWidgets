@@ -896,7 +896,7 @@ static PyObject *_wrap_wxCommandEvent_GetString(PyObject *self, PyObject *args, 
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -2475,14 +2475,6 @@ static PyObject *_wrap_wxKeyEvent_GetPositionTuple(PyObject *self, PyObject *arg
     return _resultobj;
 }
 
-static void *SwigwxNavigationKeyEventTowxCommandEvent(void *ptr) {
-    wxNavigationKeyEvent *src;
-    wxCommandEvent *dest;
-    src = (wxNavigationKeyEvent *) ptr;
-    dest = (wxCommandEvent *) src;
-    return (void *) dest;
-}
-
 static void *SwigwxNavigationKeyEventTowxEvent(void *ptr) {
     wxNavigationKeyEvent *src;
     wxEvent *dest;
@@ -4031,7 +4023,7 @@ static PyObject *_wrap_wxUpdateUIEvent_GetText(PyObject *self, PyObject *args, P
 
     wxPy_END_ALLOW_THREADS;
 }{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 }
 {
     delete _result;
@@ -5296,8 +5288,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCommandEvent","_wxPyCommandEvent",SwigwxPyCommandEventTowxCommandEvent},
     { "_wxCommandEvent","_class_wxNotifyEvent",SwigwxNotifyEventTowxCommandEvent},
     { "_wxCommandEvent","_wxNotifyEvent",SwigwxNotifyEventTowxCommandEvent},
-    { "_wxCommandEvent","_class_wxNavigationKeyEvent",SwigwxNavigationKeyEventTowxCommandEvent},
-    { "_wxCommandEvent","_wxNavigationKeyEvent",SwigwxNavigationKeyEventTowxCommandEvent},
     { "_wxCommandEvent","_class_wxSpinEvent",SwigwxSpinEventTowxCommandEvent},
     { "_wxCommandEvent","_wxSpinEvent",SwigwxSpinEventTowxCommandEvent},
     { "_wxCommandEvent","_class_wxScrollEvent",SwigwxScrollEventTowxCommandEvent},
@@ -5417,8 +5407,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxCommandEvent","_wxPyCommandEvent",SwigwxPyCommandEventTowxCommandEvent},
     { "_class_wxCommandEvent","_class_wxNotifyEvent",SwigwxNotifyEventTowxCommandEvent},
     { "_class_wxCommandEvent","_wxNotifyEvent",SwigwxNotifyEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_class_wxNavigationKeyEvent",SwigwxNavigationKeyEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_wxNavigationKeyEvent",SwigwxNavigationKeyEventTowxCommandEvent},
     { "_class_wxCommandEvent","_class_wxSpinEvent",SwigwxSpinEventTowxCommandEvent},
     { "_class_wxCommandEvent","_wxSpinEvent",SwigwxSpinEventTowxCommandEvent},
     { "_class_wxCommandEvent","_class_wxScrollEvent",SwigwxScrollEventTowxCommandEvent},

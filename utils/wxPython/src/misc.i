@@ -422,7 +422,7 @@ public:
 class wxAcceleratorTable {
 public:
     // Can also accept a list of 3-tuples
-    wxAcceleratorTable(int LCOUNT, wxAcceleratorEntry* LIST);
+    wxAcceleratorTable(int LCOUNT, wxAcceleratorEntry* choices);
     ~wxAcceleratorTable();
 
 };

@@ -232,6 +232,7 @@ class wxGenButton(wxControl):
         if self.hasFocus and self.useFocusInd:
             self.DrawFocusIndicator(dc, width, height)
 
+
     def OnEraseBackground(self, event):
         pass
 
@@ -292,6 +293,7 @@ class wxGenButton(wxControl):
             self.up = false
             self.Refresh()
         event.Skip()
+
 
     def OnKeyUp(self, event):
         if self.hasFocus and event.KeyCode() == ord(" "):
@@ -361,7 +363,8 @@ class wxGenBitmapButton(wxGenButton):
         bw,bh = bmp.GetWidth(), bmp.GetHeight()
         if not self.up:
             dw = dy = 1
-        dc.DrawBitmap(bmp, (width-bw)/2+dw, (height-bh)/2+dy, true)
+        hasMask = bmp.GetMask() != None
+        dc.DrawBitmap(bmp, (width-bw)/2+dw, (height-bh)/2+dy, hasMask)
 
 
 
