@@ -211,6 +211,8 @@ const wxString wxDllLoader::ms_dllext( _T(".sl") );
 #else
 const wxString wxDllLoader::ms_dllext( _T(".so") );
 #endif
+#elif defined(__WXMAC__)
+const wxString wxDllLoader::ms_dllext( _T("") );
 #endif
 
 /* static */
