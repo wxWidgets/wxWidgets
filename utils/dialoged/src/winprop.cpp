@@ -1160,7 +1160,7 @@ wxProperty *wxListBoxPropertyInfo::GetProperty(wxString& name)
     {
         wxStringList *stringList = new wxStringList;
         int i;
-        for (i = 0; i < listBox->Number(); i++)
+        for (i = 0; i < listBox->GetCount(); i++)
             stringList->Add(listBox->GetString(i));
         
         return new wxProperty(name, stringList, "stringlist");
@@ -1241,13 +1241,13 @@ bool wxListBoxPropertyInfo::InstantiateResource(wxItemResource *resource)
     // This will be set for the wxItemResource on reading or in SetProperty
     //  resource->SetValue1(lbox->GetSelectionMode());
     int i;
-    if (lbox->Number() == 0)
+    if (lbox->GetCount() == 0)
         resource->SetStringValues(NULL);
     else
     {
         wxStringList slist;
         
-        for (i = 0; i < lbox->Number(); i++)
+        for (i = 0; i < lbox->GetCount(); i++)
             slist.Add(lbox->GetString(i));
         
         resource->SetStringValues(slist);
@@ -1266,7 +1266,7 @@ wxProperty *wxChoicePropertyInfo::GetProperty(wxString& name)
     {
         wxStringList* stringList = new wxStringList;
         int i;
-        for (i = 0; i < choice->Number(); i++)
+        for (i = 0; i < choice->GetCount(); i++)
             stringList->Add(choice->GetString(i));
         
         return new wxProperty(name, stringList, "stringlist");
@@ -1289,7 +1289,7 @@ bool wxChoicePropertyInfo::SetProperty(wxString& name, wxProperty *property)
                 choice->Append(s);
             expr = expr->GetNext();
         }
-        if (choice->Number() > 0)
+        if (choice->GetCount() > 0)
             choice->SetSelection(0);
         return TRUE;
     }
@@ -1307,13 +1307,13 @@ bool wxChoicePropertyInfo::InstantiateResource(wxItemResource *resource)
 {
     wxChoice *choice = (wxChoice *)m_propertyWindow;
     int i;
-    if (choice->Number() == 0)
+    if (choice->GetCount() == 0)
         resource->SetStringValues(NULL);
     else
     {
         wxStringList slist;
         
-        for (i = 0; i < choice->Number(); i++)
+        for (i = 0; i < choice->GetCount(); i++)
             slist.Add(choice->GetString(i));
         
         resource->SetStringValues(slist);
@@ -1332,7 +1332,7 @@ wxProperty *wxComboBoxPropertyInfo::GetProperty(wxString& name)
     {
         wxStringList *stringList = new wxStringList;
         int i;
-        for (i = 0; i < choice->Number(); i++)
+        for (i = 0; i < choice->GetCount(); i++)
             stringList->Add(choice->GetString(i));
         
         return new wxProperty(name, stringList, "stringlist");
@@ -1374,7 +1374,7 @@ bool wxComboBoxPropertyInfo::SetProperty(wxString& name, wxProperty *property)
                 choice->Append(s);
             expr = expr->GetNext();
         }
-        if (choice->Number() > 0)
+        if (choice->GetCount() > 0)
             choice->SetSelection(0);
         return TRUE;
     }
@@ -1426,13 +1426,13 @@ bool wxComboBoxPropertyInfo::InstantiateResource(wxItemResource *resource)
 {
     wxComboBox *choice = (wxComboBox *)m_propertyWindow;
     int i;
-    if (choice->Number() == 0)
+    if (choice->GetCount() == 0)
         resource->SetStringValues(NULL);
     else
     {
         wxStringList slist;
         
-        for (i = 0; i < choice->Number(); i++)
+        for (i = 0; i < choice->GetCount(); i++)
             slist.Add(choice->GetString(i));
         
         resource->SetStringValues(slist);
@@ -1467,7 +1467,7 @@ wxProperty *wxRadioBoxPropertyInfo::GetProperty(wxString& name)
     {
         wxStringList *stringList = new wxStringList;
         int i;
-        for (i = 0; i < radioBox->Number(); i++)
+        for (i = 0; i < radioBox->GetCount(); i++)
             stringList->Add(radioBox->GetString(i));
         
         return new wxProperty(name, stringList, "stringlist");
@@ -1575,13 +1575,13 @@ bool wxRadioBoxPropertyInfo::InstantiateResource(wxItemResource *resource)
     // Take strings from resource instead
     /*
     int i;
-    if (rbox->Number() == 0)
+    if (rbox->GetCount() == 0)
     resource->SetStringValues(NULL);
     else
     {
     wxStringList *slist = new wxStringList;
     
-      for (i = 0; i < rbox->Number(); i++)
+      for (i = 0; i < rbox->GetCount(); i++)
       slist->Add(rbox->GetString(i));
       
         resource->SetStringValues(slist);
