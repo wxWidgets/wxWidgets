@@ -35,7 +35,7 @@ public:
 class MySplitterWindow : public wxSplitterWindow
 {
 public:
-  MySplitterWindow(wxFrame *parent, wxWindowID id) 
+  MySplitterWindow(wxFrame *parent, wxWindowID id)
     : wxSplitterWindow(parent, id, wxDefaultPosition, wxDefaultSize, wxSP_3D | wxSP_LIVE_UPDATE)
   {
     m_frame = parent;
@@ -45,14 +45,14 @@ public:
   {
     if ( !wxSplitterWindow::OnSashPositionChange(newSashPosition) )
       return FALSE;
-    
+
     wxString str;
     str.Printf( _T("Sash position = %d"), newSashPosition);
     m_frame->SetStatusText(str);
 
     return TRUE;
   }
-  
+
 private:
   wxFrame *m_frame;
 };
@@ -126,7 +126,7 @@ bool MyApp::OnInit(void)
 
   // Show the frame
   frame->Show(TRUE);
-  
+
   SetTopWindow(frame);
 
   return TRUE;
@@ -166,9 +166,11 @@ MyFrame::MyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos, cons
   SetMenuBar(menuBar);
 
   m_splitter = new MySplitterWindow(this, SPLITTER_WINDOW);
-  
+
+#if 0
   wxSize sz( m_splitter->GetSize() );
-//  wxLogMessage( "Initial splitter size: %d %d\n", (int)sz.x, (int)sz.y );
+  wxLogMessage( "Initial splitter size: %d %d\n", (int)sz.x, (int)sz.y );
+#endif // 0
 
   m_leftCanvas = new MyCanvas(m_splitter, CANVAS1, wxPoint(0, 0), wxSize(400, 400), "Test1" );
   m_leftCanvas->SetBackgroundColour(*wxRED);
@@ -178,10 +180,15 @@ MyFrame::MyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos, cons
   m_rightCanvas = new MyCanvas(m_splitter, CANVAS2, wxPoint(0, 0), wxSize(400, 400), "Test2" );
   m_rightCanvas->SetBackgroundColour(*wxCYAN);
   m_rightCanvas->SetScrollbars(20, 20, 50, 50);
-//  m_rightCanvas->Show(FALSE);
 
-  m_splitter->SplitVertically(m_leftCanvas,m_rightCanvas, 40 );
-//  m_splitter->Initialize(m_leftCanvas);
+  // you can also do this to start with a single window
+#if 0
+  m_rightCanvas->Show(FALSE);
+  m_splitter->Initialize(m_leftCanvas);
+#else
+  m_splitter->SplitVertically(m_leftCanvas, m_rightCanvas, 100);
+#endif
+
   SetStatusText("Min pane size = 0", 1);
 }
 
