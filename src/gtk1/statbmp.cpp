@@ -84,15 +84,11 @@ bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
     else
     {
         m_widget = gtk_label_new( "Bitmap" );
-        
         m_focusWidget = m_widget;
-
-        PostCreation();
     }
 
+    PostCreation();
     m_parent->DoAddChild( this );
-
-    Show( TRUE );
 
     return TRUE;
 }
