@@ -112,37 +112,47 @@ bool MyApp::OnInit()
         wxString(argv[1]).ToLong(&lng);
     }
 
+    static const wxLanguage langIds[] =
+    {
+        wxLANGUAGE_DEFAULT,
+        wxLANGUAGE_FRENCH,
+        wxLANGUAGE_GERMAN,
+        wxLANGUAGE_RUSSIAN,
+        wxLANGUAGE_JAPANESE,
+        wxLANGUAGE_ENGLISH,
+        wxLANGUAGE_ENGLISH_US,
+    };
+
     if ( lng == -1 )
     {
-        const wxString langs[] =
+        // note that it makes no sense to translate these strings, they are
+        // shown before we set the locale anyhow
+        const wxString langNames[] =
         {
-            _T("(System default)"),
+            _T("System default"),
             _T("French"),
             _T("German"),
             _T("Russian"),
+            _T("Japanese"),
             _T("English"),
             _T("English (U.S.)")
         };
+
+        // the arrays should be in sync
+        wxCOMPILE_TIME_ASSERT( WXSIZEOF(langNames) == WXSIZEOF(langIds),
+                               LangArraysMismatch );
 
         lng = wxGetSingleChoiceIndex
               (
                 _T("Please choose language:"),
                 _T("Language"), 
-                WXSIZEOF(langs),
-                langs
+                WXSIZEOF(langNames),
+                langNames
               );
     }
 
-    switch ( lng )
-    {
-        case 0 : m_locale.Init(wxLANGUAGE_DEFAULT); break;
-        case 1 : m_locale.Init(wxLANGUAGE_FRENCH); break;
-        case 2 : m_locale.Init(wxLANGUAGE_GERMAN); break;
-        case 3 : m_locale.Init(wxLANGUAGE_RUSSIAN); break;
-        case 4 : m_locale.Init(wxLANGUAGE_ENGLISH); break;
-        case -1:
-        case 5 : m_locale.Init(wxLANGUAGE_ENGLISH_US); break;
-    }
+    if ( lng != -1 )
+        m_locale.Init(langIds[lng]);
 
 
     // Initialize the catalogs we'll be using
