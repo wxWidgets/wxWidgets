@@ -5,7 +5,7 @@
  *          Guilhem Lavaux,
  *          Guillermo Rodriguez Garcia <guille@iies.es>
  * Purpose: GSocket main Unix and OS/2 file
- * Licence: The wxWidgets licence
+ * Licence: The wxWindows licence
  * CVSID:   $Id$
  * -------------------------------------------------------------------------
  */
@@ -175,7 +175,6 @@ public:
     virtual bool Init_Socket(GSocket *socket);
     virtual void Destroy_Socket(GSocket *socket);
     virtual void Install_Callback(GSocket *socket, GSocketEvent event);
-{}
     virtual void Uninstall_Callback(GSocket *socket, GSocketEvent event);
     virtual void Enable_Events(GSocket *socket);
     virtual void Disable_Events(GSocket *socket);
