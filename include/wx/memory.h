@@ -308,8 +308,15 @@ void WXDLLIMPEXP_BASE wxTraceLevel(int level, const wxChar *fmt ...) ATTRIBUTE_P
 
 #else // else part for the #if __WXDEBUG__
 
-inline void wxTrace(const wxChar *WXUNUSED(fmt)) {}
-inline void wxTraceLevel(int WXUNUSED(level), const wxChar *WXUNUSED(fmt)) {}
+// Borland C++ Builder 6 seems to have troubles with inline functions (see bug
+// 819700)
+#if 0
+    inline void wxTrace(const wxChar *WXUNUSED(fmt)) {}
+    inline void wxTraceLevel(int WXUNUSED(level), const wxChar *WXUNUSED(fmt)) {}
+#else
+    #define wxTrace(fmt)
+    #define wxTraceLevel(l, fmt)
+#endif
 
 #define WXTRACE TRUE ? (void)0 : wxTrace
 #define WXTRACELEVEL TRUE ? (void)0 : wxTraceLevel
