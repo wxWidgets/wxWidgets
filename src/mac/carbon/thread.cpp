@@ -524,7 +524,11 @@ bool wxThread::IsMain()
 
 void wxThread::Yield()
 {
+#if TARGET_API_MAC_OSX
+   CFRunLoopRunInMode( kCFRunLoopDefaultMode , 0 , true ) ;
+#endif
     ::YieldToAnyThread() ;
+
 }
 
 void wxThread::Sleep(unsigned long milliseconds)
