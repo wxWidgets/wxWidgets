@@ -71,7 +71,6 @@ wxTreeEvent::wxTreeEvent(wxEventType commandType, int id)
            : wxNotifyEvent(commandType, id)
 {
     m_code = 0;
-    m_itemOld = 0;
+    m_itemOld = 0l;
 }
-
 
