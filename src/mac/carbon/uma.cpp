@@ -104,6 +104,11 @@ void UMAInitToolbox( UInt16 inMoreMastersCalls )
 		NavLoad() ;
 	}
 
+  long menuMgrAttr ;
+  Gestalt( gestaltMenuMgrAttr , &menuMgrAttr ) ;
+  if ( menuMgrAttr & gestaltMenuMgrAquaLayoutMask )
+    sUMAHasAquaLayout = true ;
+
   if ( TXNInitTextension != (void*) kUnresolvedCFragSymbolAddress )
   { 
     FontFamilyID fontId ;
@@ -132,10 +137,7 @@ void UMAInitToolbox( UInt16 inMoreMastersCalls )
   	TXNInitTextension(fontDescriptions,  noOfFontDescriptions, options );
   }
 
-  long menuMgrAttr ;
-  Gestalt( gestaltMenuMgrAttr , &menuMgrAttr ) ;
-  if ( menuMgrAttr & gestaltMenuMgrAquaLayoutMask )
-    sUMAHasAquaLayout = true ;
+
   sUMASystemInitialized = true ;
 
 }
