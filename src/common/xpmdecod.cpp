@@ -132,12 +132,13 @@ wxImage wxXPMDecoder::ReadFile(wxInputStream& stream)
     size_t length = stream.GetSize();
     wxCHECK_MSG(length != 0, wxNullImage, wxT("Cannot read XPM from stream of unknown size"));
 
-    char *xpm_buffer = new char[length];
+    char *xpm_buffer = new char[length+1];
     char *p, *q;
     size_t i;
 
     if ( stream.Read(xpm_buffer, length).LastError() == wxSTREAM_READ_ERROR )
         return wxNullImage;
+    xpm_buffer[length] = '\0';
 
     /*
      *  Remove comments from the file:
