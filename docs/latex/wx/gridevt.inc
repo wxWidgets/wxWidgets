@@ -10,8 +10,8 @@ The event handler for the following functions takes a \helpref{wxGridEvent}{wxgr
 \twocolitem{{\bf EVT\_GRID\_LABEL\_RIGHT\_CLICK(func)}}{The user clicked a label with the right mouse button. Processes a wxEVT\_GRID\_LABEL\_RIGHT\_CLICK.}
 \twocolitem{{\bf EVT\_GRID\_LABEL\_LEFT\_DCLICK(func)}}{The user double-clicked a label with the left mouse button. Processes a wxEVT\_GRID\_LABEL\_LEFT\_DCLICK.}
 \twocolitem{{\bf EVT\_GRID\_LABEL\_RIGHT\_DCLICK(func)}}{The user double-clicked a label with the right mouse button. Processes a wxEVT\_GRID\_LABEL\_RIGHT\_DCLICK.}
-\twocolitem{{\bf EVT\_GRID\_CELL\_CHANGE(func)}}{The user moved the cursor to another cell. Processes a wxEVT\_GRID\_CELL\_CHANGE.}
-\twocolitem{{\bf EVT\_GRID\_SELECT\_CELL(func)}}{The user selected a cell. Processes a wxEVT\_GRID\_SELECT\_CELL.}
+\twocolitem{{\bf EVT\_GRID\_CELL\_CHANGE(func)}}{The user changed the data in a cell. Processes a wxEVT\_GRID\_CELL\_CHANGE.}
+\twocolitem{{\bf EVT\_GRID\_SELECT\_CELL(func)}}{The user moved to, and selected a cell. Processes a wxEVT\_GRID\_SELECT\_CELL.}
 \twocolitem{{\bf EVT\_GRID\_EDITOR\_HIDDEN(func)}}{The editor for a cell was hidden. Processes a wxEVT\_GRID\_EDITOR\_HIDDEN.}
 \twocolitem{{\bf EVT\_GRID\_EDITOR\_SHOWN(func)}}{The editor for a cell was shown. Processes a wxEVT\_GRID\_EDITOR\_SHOWN.}
 \end{twocollist}%
