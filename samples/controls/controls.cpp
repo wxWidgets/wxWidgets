@@ -456,7 +456,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 			    wxSize(240, 110)
                           );
 #endif
-    m_spintext = new wxTextCtrl( panel, -1, "0", wxPoint(20,160), wxSize(80,-1) );
+    m_spintext = new wxTextCtrl( panel, -1, "-5", wxPoint(20,160), wxSize(80,-1) );
 #ifndef wxUSE_SPINBUTTON
     m_spinbutton = new wxSpinButton( panel, ID_SPIN, wxPoint(103,159), wxSize(-1,-1) );
     m_spinbutton->SetRange(-10,30);
