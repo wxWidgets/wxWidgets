@@ -21,7 +21,7 @@ VPATH = @PATH_IFS@$(top_srcdir)/samples/ipc # ':' for autoconf
 .SUFFIXES:	.o .cpp .c .cxx
 
 .cpp.o :
-	$(CC) -c $(CPPFLAGS) -o $@ $<
+	$(CC) -c $(CXXFLAGS) -o $@ $<
 
 # Set defaults from configure
 include ../../src/make.env
