@@ -79,6 +79,13 @@ public:
 
     virtual wxString GetTip();
 };
+
+// Empty implementation for now to keep the linker happy
+wxString wxRegTipProvider::GetTip()
+{
+    return "";
+}
+
 #endif // __WIN32__
 
 // the dialog we show in wxShowTip()
