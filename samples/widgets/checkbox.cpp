@@ -32,6 +32,9 @@
     #include "wx/bitmap.h"
     #include "wx/button.h"
     #include "wx/checkbox.h"
+    #include "wx/radiobox.h"
+    #include "wx/statbox.h"
+    #include "wx/textctrl.h"
 
     #include "wx/sizer.h"
 #endif
