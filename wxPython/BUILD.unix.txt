@@ -143,7 +143,7 @@ D. If using the sources (either from the tarball or from CVS) then
    it, and it should be enabled by default.  You will be able to use
    --enable-largefile or --disable-largefile to control it.  If you
    still get this or a similar error with 2.3.3 then try disabling
-   largefile support in GTK.
+   largefile support in wxGTK.
 
 E. Now just compile and install.  You need to use GNU make, so if your
    system has something else get GNU make and build and install it and
