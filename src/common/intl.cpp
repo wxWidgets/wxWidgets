@@ -100,9 +100,6 @@ typedef wxUint32 size_t32;
 const size_t32 MSGCATALOG_MAGIC    = 0x950412de;
 const size_t32 MSGCATALOG_MAGIC_SW = 0xde120495;
 
-// extension of ".mo" files
-#define MSGCATALOG_EXTENSION  _T(".mo")
-
 // the constants describing the format of lang_LANG locale string
 static const size_t LEN_LANG = 2;
 static const size_t LEN_SUBLANG = 2;
@@ -1106,7 +1103,7 @@ bool wxMsgCatalogFile::Load(const wxChar *szDirPrefix, const wxChar *szName,
                szName, searchPath.c_str());
 
   wxFileName fn(szName);
-  fn.SetExt(MSGCATALOG_EXTENSION);
+  fn.SetExt(_T("mo"));
   wxString strFullName;
   if ( !wxFindFileInPath(&strFullName, searchPath, fn.GetFullPath()) ) {
     wxLogVerbose(_("catalog file for domain '%s' not found."), szName);
