@@ -1,3 +1,14 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        docmanag.tex
+%% Purpose:     wxDocManager documentation
+%% Author:      wxWidgets Team
+%% Modified by:
+%% Created:     
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWidgets Team
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{\class{wxDocManager}}\label{wxdocmanager}
 
 The wxDocManager class is part of the document/view framework supported by wxWidgets,
@@ -20,17 +31,20 @@ and \helpref{wxDocTemplate}{wxdoctemplate} classes.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxDocManager::m\_currentView}\label{wxdocmanagermcreateview}
 
 \member{wxView*}{m\_currentView}
 
 The currently active view.
 
+
 \membersection{wxDocManager::m\_defaultDocumentNameCounter}\label{wxdocmanagermdefaultdocumentnamecounter}
 
 \member{int}{m\_defaultDocumentNameCounter}
 
 Stores the integer to be used for the next default document name.
+
 
 \membersection{wxDocManager::m\_fileHistory}\label{wxdocmanagermfilehistory}
 
@@ -39,6 +53,7 @@ Stores the integer to be used for the next default document name.
 A pointer to an instance of \helpref{wxFileHistory}{wxfilehistory},
 which manages the history of recently-visited files on the File menu.
 
+
 \membersection{wxDocManager::m\_maxDocsOpen}\label{wxdocmanagermmaxdocsopen}
 
 \member{int}{m\_maxDocsOpen}
@@ -46,11 +61,13 @@ which manages the history of recently-visited files on the File menu.
 Stores the maximum number of documents that can be opened before
 existing documents are closed. By default, this is 10,000.
 
+
 \membersection{wxDocManager::m\_docs}\label{wxdocmanagermdocs}
 
 \member{wxList}{m\_docs}
 
 A list of all documents.
+
 
 \membersection{wxDocManager::m\_flags}\label{wxdocmanagermflags}
 
@@ -58,17 +75,20 @@ A list of all documents.
 
 Stores the flags passed to the constructor.
 
+
 \membersection{wxDocManager::m\_lastDirectory}\label{wxdocmanagermlastdirectory}
 
 The directory last selected by the user when opening a file.
 
 \member{wxFileHistory*}{m\_fileHistory}
 
+
 \membersection{wxDocManager::m\_templates}\label{wxdocmanagermtemplates}
 
 \member{wxList}{mnTemplates}
 
 A list of all document templates.
+
 
 \membersection{wxDocManager::wxDocManager}\label{wxdocmanagerctor}
 
@@ -84,11 +104,13 @@ to create a default history list object. If you derive from wxDocManager, you ma
 base constructor with false, and then call Initialize in your own constructor, to allow
 your own Initialize or OnCreateFileHistory functions to be called.
 
+
 \membersection{wxDocManager::\destruct{wxDocManager}}\label{wxdocmanagerdtor}
 
 \func{void}{\destruct{wxDocManager}}{\void}
 
 Destructor.
+
 
 \membersection{wxDocManager::ActivateView}\label{wxdocmanageractivateview}
 
@@ -96,11 +118,13 @@ Destructor.
 
 Sets the current view.
 
+
 \membersection{wxDocManager::AddDocument}\label{wxdocmanageradddocument}
 
 \func{void}{AddDocument}{\param{wxDocument *}{doc}}
 
 Adds the document to the list of documents.
+
 
 \membersection{wxDocManager::AddFileToHistory}\label{wxdocmanageraddfiletohistory}
 
@@ -108,17 +132,20 @@ Adds the document to the list of documents.
 
 Adds a file to the file history list, if we have a pointer to an appropriate file menu.
 
+
 \membersection{wxDocManager::AssociateTemplate}\label{wxdocmanagerassociatetemplate}
 
 \func{void}{AssociateTemplate}{\param{wxDocTemplate *}{temp}}
 
 Adds the template to the document manager's template list.
 
+
 \membersection{wxDocManager::CloseDocuments}\label{wxdocmanagerclosedocuments}
 
 \func{bool}{CloseDocuments}{\param{bool }{force = true}}
 
 Closes all currently opened documents.
+
 
 \membersection{wxDocManager::CreateDocument}\label{wxdocmanagercreatedocument}
 
@@ -141,6 +168,7 @@ extension (Windows) or by popping up a template choice list (other platforms).
 If the maximum number of documents has been reached, this function
 will delete the oldest currently loaded document before creating a new one.
 
+
 \membersection{wxDocManager::CreateView}\label{wxdocmanagercreateview}
 
 \func{wxView*}{CreateView}{\param{wxDocument*}{doc}, \param{long}{ flags}}
@@ -149,11 +177,13 @@ Creates a new view for the given document. If more than one view is allowed for 
 document (by virtue of multiple templates mentioning the same document type), a choice
 of view is presented to the user.
 
+
 \membersection{wxDocManager::DisassociateTemplate}\label{wxdocmanagerdisassociatetemplate}
 
 \func{void}{DisassociateTemplate}{\param{wxDocTemplate *}{temp}}
 
 Removes the template from the list of templates.
+
 
 \membersection{wxDocManager::FileHistoryAddFilesToMenu}\label{wxdocmanagerfilehistoryaddfilestomenu}
 
@@ -165,6 +195,7 @@ Appends the files in the history list, to all menus managed by the file history 
 
 Appends the files in the history list, to the given menu only.
 
+
 \membersection{wxDocManager::FileHistoryLoad}\label{wxdocmanagerfilehistoryload}
 
 \func{void}{FileHistoryLoad}{\param{wxConfigBase\& }{config}}
@@ -175,11 +206,13 @@ Loads the file history from a config object.
 
 \helpref{wxConfig}{wxconfigbase}
 
+
 \membersection{wxDocManager::FileHistoryRemoveMenu}\label{wxdocmanagerfilehistoryremovemenu}
 
 \func{void}{FileHistoryRemoveMenu}{\param{wxMenu*}{ menu}}
 
 Removes the given menu from the list of menus managed by the file history object.
+
 
 \membersection{wxDocManager::FileHistorySave}\label{wxdocmanagerfilehistorysave}
 
@@ -192,6 +225,7 @@ explicitly by the application.
 
 \helpref{wxConfig}{wxconfigbase}
 
+
 \membersection{wxDocManager::FileHistoryUseMenu}\label{wxdocmanagerfilehistoryusemenu}
 
 \func{void}{FileHistoryUseMenu}{\param{wxMenu*}{ menu}}
@@ -203,6 +237,7 @@ list functionality.
 Note that you can add multiple menus using this function, to be managed by the
 file history object.
 
+
 \membersection{wxDocManager::FindTemplateForPath}\label{wxdocmanagerfindtemplateforpath}
 
 \func{wxDocTemplate *}{FindTemplateForPath}{\param{const wxString\& }{path}}
@@ -210,11 +245,13 @@ file history object.
 Given a path, try to find template that matches the extension. This is only
 an approximate method of finding a template for creating a document.
 
+
 \membersection{wxDocManager::GetCurrentDocument}\label{wxdocmanagergetcurrentdocument}
 
 \func{wxDocument *}{GetCurrentDocument}{\void}
 
 Returns the document associated with the currently active view (if any).
+
 
 \membersection{wxDocManager::GetCurrentView}\label{wxdocmanagergetcurrentview}
 
@@ -222,11 +259,13 @@ Returns the document associated with the currently active view (if any).
 
 Returns the currently active view 
 
+
 \membersection{wxDocManager::GetDocuments}\label{wxdocmanagergetdocuments}
 
 \func{wxList\&}{GetDocuments}{\void}
 
 Returns a reference to the list of documents.
+
 
 \membersection{wxDocManager::GetFileHistory}\label{wxdocmanagergetfilehistory}
 
@@ -234,11 +273,13 @@ Returns a reference to the list of documents.
 
 Returns a pointer to file history.
 
+
 \membersection{wxDocManager::GetLastDirectory}\label{wxdocmanagergetlastdirectory}
 
 \constfunc{wxString}{GetLastDirectory}{\void}
 
 Returns the directory last selected by the user when opening a file. Initially empty.
+
 
 \membersection{wxDocManager::GetMaxDocsOpen}\label{wxdocmanagergetmaxdocsopen}
 
@@ -246,11 +287,20 @@ Returns the directory last selected by the user when opening a file. Initially e
 
 Returns the number of documents that can be open simultaneously.
 
+
 \membersection{wxDocManager::GetHistoryFilesCount}\label{wxdocmanagergethistoryfilescount}
 
 \func{size\_t}{GetHistoryFilesCount}{\void}
 
 Returns the number of files currently stored in the file history.
+
+
+\membersection{wxDocManager::GetTemplates}\label{wxdocmanagergettemplates}
+
+\func{wxList\&}{GetTemplates}{\void}
+
+Returns a reference to the list of associated templates.
+
 
 \membersection{wxDocManager::Initialize}\label{wxdocmanagerinitialize}
 
@@ -269,6 +319,7 @@ from the default.
 The bottom line: if you're not deriving from Initialize, forget it and
 construct wxDocManager with no arguments.
 
+
 \membersection{wxDocManager::MakeDefaultName}\label{wxdocmanagermakedefaultname}
 
 \func{bool}{MakeDefaultName}{\param{const wxString\& }{buf}}
@@ -280,6 +331,7 @@ the counter.
 \perlnote{In wxPerl this function must return the modified name rather
 than just modifying the argument.}
 
+
 \membersection{wxDocManager::OnCreateFileHistory}\label{wxdocmanageroncreatefilehistory}
 
 \func{wxFileHistory *}{OnCreateFileHistory}{\void}
@@ -287,11 +339,13 @@ than just modifying the argument.}
 A hook to allow a derived class to create a different type of file history. Called
 from \helpref{Initialize}{wxdocmanagerinitialize}.
 
+
 \membersection{wxDocManager::OnFileClose}\label{wxdocmanageronfileclose}
 
 \func{void}{OnFileClose}{\param{wxCommandEvent\& }{event}}
 
 Closes and deletes the currently active document.
+
 
 \membersection{wxDocManager::OnFileCloseAll}\label{wxdocmanageronfilecloseall}
 
@@ -299,11 +353,13 @@ Closes and deletes the currently active document.
 
 Closes and deletes all the currently opened documents.
 
+
 \membersection{wxDocManager::OnFileNew}\label{wxdocmanageronfilenew}
 
 \func{void}{OnFileNew}{\param{wxCommandEvent\& }{event}}
 
 Creates a document from a list of templates (if more than one template).
+
 
 \membersection{wxDocManager::OnFileOpen}\label{wxdocmanageronfileopen}
 
@@ -311,11 +367,13 @@ Creates a document from a list of templates (if more than one template).
 
 Creates a new document and reads in the selected file.
 
+
 \membersection{wxDocManager::OnFileRevert}\label{wxdocmanageronfilerevert}
 
 \func{void}{OnFileRevert}{\param{wxCommandEvent\& }{event}}
 
 Reverts the current document by calling wxDocument::Revert for the current document.
+
 
 \membersection{wxDocManager::OnFileSave}\label{wxdocmanageronfilesave}
 
@@ -323,17 +381,20 @@ Reverts the current document by calling wxDocument::Revert for the current docum
 
 Saves the current document by calling wxDocument::Save for the current document.
 
+
 \membersection{wxDocManager::OnFileSaveAs}\label{wxdocmanageronfilesaveas}
 
 \func{void}{OnFileSaveAs}{\param{wxCommandEvent\& }{event}}
 
 Calls wxDocument::SaveAs for the current document.
 
+
 \membersection{wxDocManager::RemoveDocument}\label{wxdocmanagerremovedocument}
 
 \func{void}{RemoveDocument}{\param{wxDocument *}{doc}}
 
 Removes the document from the list of documents.
+
 
 \membersection{wxDocManager::SelectDocumentPath}\label{wxdocmanagerselectdocumentpath}
 
@@ -355,6 +416,7 @@ two values, eg:\par
   (doctemplate, path) = My::DocManager->SelectDocumentPath( ... );
 }
 
+
 \membersection{wxDocManager::SelectDocumentType}\label{wxdocmanagerselectdocumenttype}
 
 \func{wxDocTemplate *}{SelectDocumentType}{\param{wxDocTemplate **}{templates},
@@ -373,6 +435,7 @@ will have to choose from is sorted or not when shown the choice box dialog.
 Default is false.}
 
 \perlnote{In wxPerl {\tt templates} is a reference to a list of templates.}
+
 
 \membersection{wxDocManager::SelectViewType}\label{wxdocmanagerselectviewtype}
 
@@ -395,11 +458,13 @@ Default is false.}
 
 \perlnote{In wxPerl {\tt templates} is a reference to a list of templates.}
 
+
 \membersection{wxDocManager::SetLastDirectory}\label{wxdocmanagersetlastdirectory}
 
 \func{void}{SetLastDirectory}{\param{const wxString\&}{ dir}}
 
 Sets the directory to be displayed to the user when opening a file. Initially this is empty.
+
 
 \membersection{wxDocManager::SetMaxDocsOpen}\label{wxdocmanagersetmaxdocsopen}
 
@@ -410,6 +475,4 @@ is 10,000. If you set it to 1, existing documents will be saved and deleted
 when the user tries to open or create a new one (similar to the behaviour
 of Windows Write, for example). Allowing multiple documents gives behaviour
 more akin to MS Word and other Multiple Document Interface applications.
-
-
 
