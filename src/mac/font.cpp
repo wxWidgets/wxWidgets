@@ -103,13 +103,9 @@ void wxFontRefData::MacFindFont()
 			m_macFontNum = ::GetAppFont() ;
 		else
 		{
-#if TARGET_CARBON
-			c2pstrcpy( (StringPtr) wxBuffer, m_faceName ) ;
-#else
-			strcpy( (char *) wxBuffer, m_faceName ) ;
-			c2pstr( (char *) wxBuffer ) ;
-#endif
-			::GetFNum( (StringPtr) wxBuffer, &m_macFontNum);
+			Str255 fontname ;
+			wxMacStringToPascal( m_faceName , fontname ) ;
+			::GetFNum( fontname, &m_macFontNum);
 		}
 	}
 
