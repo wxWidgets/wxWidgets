@@ -356,6 +356,21 @@ bool wxJPEGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     if (image->HasOption(wxT("quality")))
         jpeg_set_quality(&cinfo, image->GetOptionInt(wxT("quality")), TRUE);
 
+    // sets the resolution fields in the output file
+    if (image->HasOption(wxIMAGE_OPTION_RESOLUTION))
+    {
+        cinfo.X_density = 
+        cinfo.Y_density = image->GetOptionInt(wxIMAGE_OPTION_RESOLUTION);
+    }
+
+    // sets the resolution unit field in the output file
+    // wxIMAGE_RESOLUTION_INCHES for inches
+    // wxIMAGE_RESOLUTION_CM for centimeters
+    if (image->HasOption(wxIMAGE_OPTION_RESOLUTIONUNIT))
+    {
+        cinfo.density_unit = image->GetOptionInt(wxIMAGE_OPTION_RESOLUTIONUNIT);
+    }
+
     jpeg_start_compress(&cinfo, TRUE);
 
     stride = cinfo.image_width * 3;    /* JSAMPLEs per row in image_buffer */
