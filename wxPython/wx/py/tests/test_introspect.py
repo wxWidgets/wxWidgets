@@ -630,7 +630,7 @@ class GetAttributeNamesTestCase(GetAttributeTestCase):
 
     def setUp(self):
         GetAttributeTestCase.setUp(self)
-        import PyCrust
+        from wx import py
         spam = Spam()
         self.f = open('test_introspect.py')
         self.items = (
@@ -672,7 +672,7 @@ class GetAttributeNamesTestCase(GetAttributeTestCase):
             # Module.
             introspect,
             # Package.
-            PyCrust,
+            py,
             # Buffer.
             buffer(''),
             # File.
