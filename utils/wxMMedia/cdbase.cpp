@@ -10,6 +10,7 @@
 #ifdef __GNUG__
 #pragma implementation
 #endif
+#include "wx/wxprec.h"
 #include "cdbase.h"
 
 #ifdef __BORLANDC__

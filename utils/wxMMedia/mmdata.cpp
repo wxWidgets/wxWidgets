@@ -7,6 +7,8 @@
 // Copyright:  (C) 1997, 1998, Guilhem Lavaux
 // License:    wxWindows license
 ////////////////////////////////////////////////////////////////////////////////
+#include "wx/wxprec.h"
+
 #include "mmfile.h"
 
 #include "sndsnd.h"

@@ -16,7 +16,7 @@ WXDIR = $(WXWIN)
 WXUSINGDLL=0
 
 EXTRAINC=-I..\..\win
-EXTRALIBS=$(WXDIR)\lib\glcanvas.lib glu.lib opengl.lib
+EXTRALIBS=$(WXDIR)\lib\glcanvas.lib glu32.lib opengl32.lib
 
 !include $(WXDIR)\src\ntwxwin.mak
 

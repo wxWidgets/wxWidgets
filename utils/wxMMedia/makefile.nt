@@ -9,9 +9,7 @@
 # Makefile : Builds wxSock library for Windows NT / Win95
 
 # Change WXDIR or WXWIN to wherever wxWindows is found
-#WXWIN = $(WX)
-WXDIR = $(WXWIN)
-!include $(WXWIN)\src\ntwxwin.mak
+!include <..\..\src\ntwxwin.mak>
 
 WXMMEDDIR = $(WXDIR)\utils\wxmmedia
 WXMMEDINC = $(WXMMEDDIR)
@@ -24,7 +22,7 @@ LIBS=$(WXSOCKLIB) $(LIBS)
 #LIBS=$(WXLIB) $(WXSTRINGLIB) oldnames libw llibcew llibce commdlg shell
 
 OBJECTS = mmdata.obj mmfile.obj sndfile.obj sndsnd.obj sndwin.obj\
-	sndwav.obj sndfrag.obj vidbdrv.obj
+	sndwav.obj sndfrag.obj vidbase.obj
 
 all: $(WXMMEDLIB)
 
@@ -43,44 +41,44 @@ $(WXMMEDLIB): $(OBJECTS)
 $(OBJECTS)
 <<
 
-MMD_data.obj: MMD_data.$(SRCSUFF)
+MMdata.obj: MMdata.$(SRCSUFF)
         cl @<<
-$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF)
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
-MMD_file.obj: MMD_file.$(SRCSUFF)
+MMfile.obj: MMfile.$(SRCSUFF)
         cl @<<
-$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF)
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
-SND_file.obj: SND_file.$(SRCSUFF) SND_file.h
+SNDfile.obj: SNDfile.$(SRCSUFF) SNDfile.h
         cl @<<
-$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF)
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
-SND_wav.obj: SND_wav.$(SRCSUFF) SCK_wav.h
+SNDwav.obj: SNDwav.$(SRCSUFF) SNDwav.h
         cl @<<
-$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF)
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
-SND_sound.obj: SND_sound.$(SRCSUFF) SND_sound.h
+SNDwin.obj: SNDwin.$(SRCSUFF) SNDwin.h
         cl @<<
-$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF)
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
-SND_sound.obj: SND_sound.$(SRCSUFF) SND_sound.h
+SNDsnd.obj: SNDsnd.$(SRCSUFF) SNDsnd.h
         cl @<<
-$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF)
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
-SND_frag.obj: SND_frag.$(SRCSUFF) SND_frag.h
+SNDfrag.obj: SNDfrag.$(SRCSUFF) SNDfrag.h
         cl @<<
-$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF)
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
-VID_bdrv.obj: VID_bdrv.$(SRCSUFF) VID_bdrv.h
+VIDbase.obj: VIDbase.$(SRCSUFF) VIDbase.h
         cl @<<
-$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF)
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
 clean:

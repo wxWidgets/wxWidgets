@@ -24,7 +24,7 @@ typedef   unsigned int  size_t;
 
 class wxCheckListBoxItem; // fwd decl, define in checklst.cpp
 
-class wxCheckListBox : public wxListBox
+class WXDLLEXPORT wxCheckListBox : public wxListBox
 {
   DECLARE_DYNAMIC_CLASS(wxCheckListBox)
 public:
