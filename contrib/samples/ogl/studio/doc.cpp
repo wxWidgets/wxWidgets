@@ -31,7 +31,7 @@
 
 IMPLEMENT_DYNAMIC_CLASS(csDiagramDocument, wxDocument)
 
-#ifdef _MSC_VER
+#ifdef __VISUALC__
 #pragma warning(disable:4355)
 #endif
 
@@ -39,7 +39,7 @@ csDiagramDocument::csDiagramDocument():m_diagram(this)
 {
 }
 
-#ifdef _MSC_VER
+#ifdef __VISUALC__
 #pragma warning(default:4355)
 #endif
 
