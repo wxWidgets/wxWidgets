@@ -68,6 +68,7 @@
 //-----------------------------------------------------------------------------
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxFileSelectorPromptStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxDirDialogDefaultFolderStr;
 
 //-----------------------------------------------------------------------------
 // classes
