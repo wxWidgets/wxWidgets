@@ -30,6 +30,7 @@
 %rename(SP_LIVE_UPDATE)                     wxSP_LIVE_UPDATE;
 %rename(SP_3DSASH)                          wxSP_3DSASH;
 %rename(SP_3DBORDER)                        wxSP_3DBORDER;
+%rename(SP_NO_XP_THEME)                     wxSP_NO_XP_THEME;
 %rename(SP_BORDER)                          wxSP_BORDER;
 %rename(SP_3D)                              wxSP_3D;
 %rename(SPLIT_HORIZONTAL)                   wxSPLIT_HORIZONTAL;

@@ -27,6 +27,7 @@ enum {
     wxSP_LIVE_UPDATE,
     wxSP_3DSASH,
     wxSP_3DBORDER,
+    wxSP_NO_XP_THEME,
     wxSP_BORDER,
     wxSP_3D,
 };
