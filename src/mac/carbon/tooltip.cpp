@@ -274,8 +274,8 @@ void wxMacToolTip::Draw()
     PenNormal() ;
 		SetThemeBackground(kThemeBrushNotificationWindowBackground,32,true) ;
 		BackColor( yellowColor ) ;
-		ForeColor(magentaColor ) ;
-//		EraseRect( &m_rect ) ;
+		ForeColor( blackColor ) ;
+		EraseRect( &m_rect ) ;
 		FrameRect( &m_rect ) ;
 		::MoveTo( m_rect.left + kTipBorder , m_rect.top + fontInfo.ascent + kTipBorder);
 
