@@ -476,6 +476,7 @@ enum {
     wxNB_LEFT,
     wxNB_RIGHT,
     wxNB_BOTTOM,
+    wxNB_MULTILINE,
 
     wxLI_HORIZONTAL,
     wxLI_VERTICAL,

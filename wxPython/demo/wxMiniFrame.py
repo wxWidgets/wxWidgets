@@ -22,7 +22,7 @@ class MyMiniFrame(wxMiniFrame):
 
 def runTest(frame, nb, log):
     win = MyMiniFrame(frame, -1, "This is a wxMiniFrame",
-                      wxDefaultPosition, wxSize(200, 200),
+                      (250, 250), (200, 200),
                       wxDEFAULT_FRAME_STYLE | wxTINY_CAPTION_HORIZ)
     frame.otherWin = win
     win.Show(true)
