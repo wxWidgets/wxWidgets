@@ -1947,6 +1947,8 @@ equivalent variable and GTK+ is version 1.2.3 or above.
             fi
         fi
 
+        wxUSE_UNIVERSAL="yes"
+
         TOOLKIT_INCLUDE="-I$MGL_ROOT/include"
         GUI_TK_LIBRARY="-L$MGL_ROOT/lib/$mgl_lib_type/$mgl_os -lmgl -lmglcpp -lpm"
 
@@ -1973,11 +1975,13 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         TOOLKIT_INCLUDE="-I$MICROWINDOWS/include"
         GUI_TK_LIBRARY="-L$MICROWINDOWS/lib -lmwin -lmwengine -mwfonts -mwdrivers -mwinlib"
 
+        wxUSE_UNIVERSAL="yes"
+
         AFMINSTALL=afminstall
         TOOLKIT=MICROWIN
         GUIDIST=MICROWIN_DIST
-        
-        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXUNIVERSAL__ -D__WXMSW__ -D__WIN95__ -D__WIN32__ -DMWIN -DMICROWIN_NOCONTROLS -DMICROWIN_TODO=1"
+
+        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXMSW__ -D__WIN95__ -D__WIN32__ -DMWIN -DMICROWIN_NOCONTROLS -DMICROWIN_TODO=1"
     fi
 
     if test "$wxUSE_X11" = 1; then
@@ -2035,6 +2039,8 @@ equivalent variable and GTK+ is version 1.2.3 or above.
                 ]
             )
         fi
+
+        wxUSE_UNIVERSAL="yes"
 
         if test "$wxUSE_NANOX" = "yes"; then
             TOOLKIT_INCLUDE="-I\$(top_srcdir)/include/wx/x11/nanox -I\$(MICROWIN)/src/include $TOOLKIT_INCLUDE"
@@ -3496,6 +3502,18 @@ if test "$GCC" = "yes" ; then
         # they had a reason, right??
         CODE_GEN_FLAGS="$CODE_GEN_FLAGS -fno-pcc-struct-return"
     fi
+
+    dnl Ian Brown <ian.brown@printsoft.de> reports that versions of gcc before
+    dnl 3.0 overflow the table of contents on rs6000 as they create an entry
+    dnl for each subroutine by default -- using the switch below only creates
+    dnl one entry per file instead at the price of minor performance penalty
+    dnl
+    dnl TODO: test for the gcc version here (how?)
+    case "${host}" in
+      powerpc*-*-aix* )
+        CODE_GEN_FLAGS="$CODE_GEN_FLAGS -mminimal-toc"
+        ;;
+    esac
 fi
 
 if test "$wxUSE_OPTIMISE" = "no" ; then
