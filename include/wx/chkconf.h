@@ -109,6 +109,14 @@
 #   endif
 #endif /* !defined(wxUSE_CLIPBOARD) */
 
+#ifndef wxUSE_COLOURDLG
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_COLOURDLG must be defined."
+#   else
+#       define wxUSE_COLOURDLG 0
+#   endif
+#endif /* !defined(wxUSE_COLOURDLG) */
+
 #ifndef wxUSE_COMBOBOX
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_COMBOBOX must be defined."

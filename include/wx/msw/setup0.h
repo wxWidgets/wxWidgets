@@ -586,6 +586,13 @@
 // Recommended setting: 1 (used in the library itself)
 #define wxUSE_CHOICEDLG     1
 
+// Use colour picker dialog
+//
+// Default is 1
+//
+// Recommended setting: 1
+#define wxUSE_COLOURDLG     1
+
 // wxDirDlg class for getting a directory name from user
 #define wxUSE_DIRDLG 1
 
