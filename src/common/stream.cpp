@@ -763,9 +763,19 @@ size_t wxInputStream::GetWBack(void *buf, size_t bsize)
 
 size_t wxInputStream::Ungetch(const void *buf, size_t bufsize)
 {
+    if ( m_lasterror != wxSTREAM_NO_ERROR && m_lasterror != wxSTREAM_EOF )
+    {
+        // can't operate on this stream until the error is cleared
+        return 0;
+    }
+
     char *ptrback = AllocSpaceWBack(bufsize);
     if (!ptrback)
         return 0;
+
+    // Eof() shouldn't return TRUE any longer
+    if ( m_lasterror == wxSTREAM_EOF )
+        m_lasterror = wxSTREAM_NO_ERROR;
 
     memcpy(ptrback, buf, bufsize);
     return bufsize;
@@ -773,12 +783,7 @@ size_t wxInputStream::Ungetch(const void *buf, size_t bufsize)
 
 bool wxInputStream::Ungetch(char c)
 {
-    void *ptrback = AllocSpaceWBack(1);
-    if (!ptrback)
-        return FALSE;
-
-    *(char *)ptrback = c;
-    return TRUE;
+    return Ungetch(&c, sizeof(char)) != 0;
 }
 
 char wxInputStream::GetC()
