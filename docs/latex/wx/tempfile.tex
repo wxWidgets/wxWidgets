@@ -43,7 +43,8 @@ No base class
 
 \wxheading{See also:}
 
-\helpref{wxFile}{wxfile}
+\helpref{wxFile}{wxfile}\\
+\helpref{wxTempFileOutputStream}{wxtempfileoutputstream}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -78,6 +79,25 @@ and the program should have write access to it for the function to succeed.
 \constfunc{bool}{IsOpened}{\void}
 
 Returns {\tt true} if the file was successfully opened.
+
+\membersection{wxTempFile::Length}\label{wxtempfilelength}
+
+\constfunc{wxFileOffset}{Length}{\void}
+
+Returns the length of the file.
+
+\membersection{wxTempFile::Seek}\label{wxtempfileseek}
+
+\func{wxFileOffset}{Seek}{\param{wxFileOffset }{ofs}, \param{wxSeekMode }{mode = wxFromStart}}
+
+Seeks to the specified position.
+
+\membersection{wxTempFile::Tell}\label{wxtempfiletell}
+
+\constfunc{wxFileOffset}{Tell}{\void}
+
+Returns the current position or wxInvalidOffset if file is not opened or if another
+error occurred.
 
 \membersection{wxTempFile::Write}\label{wxtempfilewrite}
 

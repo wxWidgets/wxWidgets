@@ -164,6 +164,13 @@ public:
 
   // is the file opened?
   bool IsOpened() const { return m_file.IsOpened(); }
+    // get current file length
+  wxFileOffset Length() const { return m_file.Length(); }
+    // move ptr ofs bytes related to start/current offset/end of file
+  wxFileOffset Seek(wxFileOffset ofs, wxSeekMode mode = wxFromStart)
+    { return m_file.Seek(ofs, mode); }
+    // get current offset
+  wxFileOffset Tell() const { return m_file.Tell(); }
 
   // I/O (both functions return true on success, false on failure)
   bool Write(const void *p, size_t n) { return m_file.Write(p, n) == n; }

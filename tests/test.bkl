@@ -51,6 +51,7 @@
             streams/largefile.cpp
             streams/memstream.cpp
             streams/sstream.cpp
+            streams/tempfile.cpp
             streams/textstreamtest.cpp
             streams/zlibstream.cpp
             uris/uris.cpp

@@ -184,6 +184,33 @@ wxFileOffset wxFileOutputStream::GetLength() const
 }
 
 // ----------------------------------------------------------------------------
+// wxTempFileOutputStream
+// ----------------------------------------------------------------------------
+
+wxTempFileOutputStream::wxTempFileOutputStream(const wxString& fileName)
+{
+    m_file = new wxTempFile(fileName);
+
+    if (!m_file->IsOpened())
+        m_lasterror = wxSTREAM_WRITE_ERROR;
+}
+
+wxTempFileOutputStream::~wxTempFileOutputStream()
+{
+    if (m_file->IsOpened())
+        Discard();
+    delete m_file;
+}
+
+size_t wxTempFileOutputStream::OnSysWrite(const void *buffer, size_t size)
+{
+    if (IsOk() && m_file->Write(buffer, size))
+        return size;
+    m_lasterror = wxSTREAM_WRITE_ERROR;
+    return 0;
+}
+
+// ----------------------------------------------------------------------------
 // wxFileStream
 // ----------------------------------------------------------------------------
 

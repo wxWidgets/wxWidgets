@@ -71,6 +71,7 @@ TEST_OBJECTS =  \
 	test_largefile.o \
 	test_memstream.o \
 	test_sstream.o \
+	test_tempfile.o \
 	test_textstreamtest.o \
 	test_zlibstream.o \
 	test_uris.o
@@ -320,6 +321,9 @@ test_memstream.o: $(srcdir)/streams/memstream.cpp $(TEST_ODEP)
 
 test_sstream.o: $(srcdir)/streams/sstream.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/streams/sstream.cpp
+
+test_tempfile.o: $(srcdir)/streams/tempfile.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/streams/tempfile.cpp
 
 test_textstreamtest.o: $(srcdir)/streams/textstreamtest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/streams/textstreamtest.cpp
