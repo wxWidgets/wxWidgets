@@ -742,9 +742,15 @@ int GSocket_Write(GSocket *socket, const char *buffer, int size)
   if (ret == -1)
   {
     if (errno == EWOULDBLOCK)
+    {
       socket->m_error = GSOCK_WOULDBLOCK;
+      printf( "GSocket_Write error WOULDBLOCK\n" );
+    }
     else
+    {
       socket->m_error = GSOCK_IOERR;
+      printf( "GSocket_Write error IOERR\n" );
+    }
 
     /* Only reenable OUTPUT events after an error (just like WSAAsyncSelect
      * in MSW). Once the first OUTPUT event is received, users can assume

@@ -563,19 +563,19 @@ gtk_pizza_realize (GtkWidget *widget)
 static void
 gtk_pizza_unrealize (GtkWidget *widget)
 {
-  GtkPizza *pizza;
+    GtkPizza *pizza;
 
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_PIZZA (widget));
+    g_return_if_fail (widget != NULL);
+    g_return_if_fail (GTK_IS_PIZZA (widget));
 
-  pizza = GTK_PIZZA (widget);
+    pizza = GTK_PIZZA (widget);
 
-  gdk_window_set_user_data (pizza->bin_window, NULL);
-  gdk_window_destroy (pizza->bin_window);
-  pizza->bin_window = NULL;
+    gdk_window_set_user_data (pizza->bin_window, NULL);
+    gdk_window_destroy (pizza->bin_window);
+    pizza->bin_window = NULL;
 
-  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
-    (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
+    if (GTK_WIDGET_CLASS (parent_class)->unrealize)
+       (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
 }
 
 static void
@@ -712,7 +712,7 @@ gtk_pizza_expose (GtkWidget      *widget,
 
     /* Sometimes, We handle all expose events in window.cpp now. */
     if (pizza->external_expose)
-        return;
+        return FALSE;
 
     if (event->window != pizza->bin_window)
         return FALSE;
