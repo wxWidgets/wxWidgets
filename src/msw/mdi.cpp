@@ -722,6 +722,15 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
   //SetWindowLong(GetHwnd(), 0, (long)this);
 
   wxModelessWindows.Append(this);
+
+  // Necessary to make ResetWindowStyle() work
+  // and will be called eventually anyway 
+  Activate();
+
+  // Without this, a maximized child will still
+  // a double border around the child
+  ResetWindowStyle((void *)NULL); // Set the Client ExStyle right
+
   return TRUE;
 }
 
