@@ -220,14 +220,13 @@ CheckTransparency(unsigned char **lines,
                   png_uint_32 x, png_uint_32 y, png_uint_32 w, png_uint_32 h,
                   size_t numColBytes)
 {
-    // we start from (x + 1, y)
-    x++;
-
     // suppose that a mask will suffice and check all the remaining alpha
     // values to see if it does
     for ( ; y < h; y++ )
     {
-        unsigned const char *ptr = lines[y] + x;
+        // each pixel is numColBytes+1 bytes, offset into the current line by
+        // the current x position
+        unsigned const char *ptr = lines[y] + (x * (numColBytes + 1));
 
         for ( png_uint_32 x2 = x; x2 < w; x2++ )
         {
