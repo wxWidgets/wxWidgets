@@ -2321,7 +2321,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
 #ifdef WM_PRINT
         case WM_PRINTCLIENT:
             if ( GetParent() &&
-                    GetParent()->MSWPrintChild(this, wParam, lParam) )
+                  GetParent()->MSWPrintChild((wxWindow *)this, wParam, lParam) )
             {
                 processed = true;
             }
