@@ -18,10 +18,11 @@
 
 #include "wx/utils.h"
 #include "wx/spinbutt.h"
+
 #include <math.h>
 
-#include "gdk/gdk.h"
-#include "gtk/gtk.h"
+#include <gdk/gdk.h>
+#include <gtk/gtk.h>
 
 //-----------------------------------------------------------------------------
 // idle system
@@ -244,3 +245,4 @@ void wxSpinCtrl::ApplyWidgetStyle()
 }
 
 #endif
+   // wxUSE_SPINCTRL
