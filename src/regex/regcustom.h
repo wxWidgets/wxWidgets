@@ -70,14 +70,19 @@ typedef long celt;				/* type to hold chr, MCCE number, or
 										 * literal */
 #define DIGITVAL(c) ((c)-'0')	/* turn chr digit into its value */
 
-/*  RN - the "not use sizeof() thing is really asanine!" */
+/*  RN - the "not use sizeof() thing is really annoying!" */
 #if wxUSE_UNICODE
 #	define CHRBITS 32
 #else
 #	define CHRBITS 8			/* bits in a chr; must not use sizeof */
 #endif
 #define CHR_MIN 0x00000000		/* smallest and largest chr; the value */
-#define CHR_MAX (1 << CHRBITS) /*0xfffffffe*/		/* CHR_MAX-CHR_MIN+1 should fit in uchr */
+/*	
+	PUTTING PARENTHASES AROUND THIS, I.E. (1 << CHRBITS) WILL
+	CAUSE ALL CHARACTERS TO BE MATCHED!!!
+*/
+#define CHR_MAX 1 << CHRBITS /*0xfffffffe*/		/* CHR_MAX-CHR_MIN+1 should fit in uchr */
+
 
 /* functions operating on chr */
 #define iscalnum(x) wx_isalnum(x)
