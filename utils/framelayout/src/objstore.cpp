@@ -640,7 +640,7 @@ bool wxObjectStorage::VersionsMatch( char* v1, char* v2 )
 
 			 return TRUE;
 
-		if ( wxToUpper(*v1) != wxToUpper(*v2) )
+		if ( toupper(*v1) != toupper(*v2) )
 
 			return FALSE;
 
