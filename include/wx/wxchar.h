@@ -288,10 +288,11 @@ typedef  _TUCHAR     wxUChar;
 #    ifdef HAVE_WCSTR_H
 #      include <wcstr.h>
 #    else
-#      if defined(__FreeBSD__) || defined(__DARWIN__)
-#        include <stdlib.h>
-#        define wxNEED_WCSLEN
-#      else
+       // VZ: do we really have to include this?
+#      include <stdlib.h>
+
+       // include wchar.h to get wcslen() declaration used by wx/buffer.h
+#      if defined(HAVE_WCHAR_H)
 #        include <wchar.h>
 #      endif
 #    endif
@@ -517,11 +518,6 @@ typedef unsigned __WCHAR_TYPE__ wxUChar;
 #  endif
 #endif //!Unicode
 
-#if defined(wxNEED_WCSLEN) && wxUSE_UNICODE
-#  define wcslen wxStrlen
-#  undef wxNEED_WCSLEN
-#endif
-
 // checks whether the passed in pointer is NULL and if the string is empty
 inline bool wxIsEmpty(const wxChar *p) { return !p || !*p; }
 
@@ -578,10 +574,6 @@ WXDLLEXPORT wxChar * wxStrtok(wxChar *psz, const wxChar *delim, wxChar **save_pt
 #ifndef wxSetlocale
 class wxWCharBuffer;
 WXDLLEXPORT wxWCharBuffer wxSetlocale(int category, const wxChar *locale);
-#endif
-
-#ifdef wxNEED_WCSLEN // for use in buffer.h
-WXDLLEXPORT size_t   wcslen(const wchar_t *s);
 #endif
 
 #ifdef wxNEED_WX_CTYPE_H
