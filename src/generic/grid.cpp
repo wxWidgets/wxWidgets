@@ -5301,7 +5301,7 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 }
                 else
                 {
-                    if ( GetGridCursorCol() > 0 )
+                    if ( GetGridCursorCol() < GetNumberCols()-1 )
                     {
                         MoveCursorRight( FALSE );
                     }
