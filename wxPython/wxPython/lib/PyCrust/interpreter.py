@@ -1,3 +1,5 @@
+"""PyCrust Interpreter executes Python commands.
+"""
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
@@ -67,15 +69,15 @@ class Interpreter(InteractiveInterpreter):
         sys.stdin, sys.stdout, sys.stderr = stdin, stdout, stderr
         return more
         
-    def getAutoCompleteList(self, command=''):
+    def getAutoCompleteList(self, command='', *args, **kwds):
         """Return list of auto-completion options for a command.
         
         The list of options will be based on the locals namespace."""
-        return introspect.getAutoCompleteList(command, self.locals)
+        return introspect.getAutoCompleteList(command, self.locals, *args, **kwds)
 
-    def getCallTip(self, command=''):
+    def getCallTip(self, command='', *args, **kwds):
         """Return call tip text for a command.
         
         The call tip information will be based on the locals namespace."""
-        return introspect.getCallTip(command, self.locals)
+        return introspect.getCallTip(command, self.locals, *args, **kwds)
 

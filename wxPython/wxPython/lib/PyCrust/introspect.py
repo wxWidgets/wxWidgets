@@ -9,7 +9,8 @@ __version__ = "$Revision$"[11:-2]
 import inspect
 import string
 
-def getAutoCompleteList(command='', locals=None):
+def getAutoCompleteList(command='', locals=None, includeMagic=1, \
+                        includeSingle=1, includeDouble=1):
     """Return list of auto-completion options for command.
     
     The list of options will be based on the locals namespace."""
@@ -18,37 +19,45 @@ def getAutoCompleteList(command='', locals=None):
     root = getRoot(command, terminator='.')
     try:
         object = eval(root, locals)
-        attributes = getAttributes(object)
+        attributes = getAttributeNames(object)
+        if includeMagic:
+            try: attributes += object._getAttributeNames()
+            except: pass
+        if not includeSingle:
+            attributes = filter(lambda item: item[0]!='_' or item[1]=='_', attributes)
+        if not includeDouble:
+            attributes = filter(lambda item: item[:2]!='__', attributes)
         return attributes
     except:
         return []
     
-def getAttributes(object):
+def getAttributeNames(object):
     """Return list of unique attributes, including inherited, for an object."""
     attributes = []
     dict = {}
     # Remove duplicates from the attribute list.
-    for item in getAllAttributes(object):
+    for item in getAllAttributeNames(object):
         dict[item] = None
     attributes += dict.keys()
     attributes.sort()
     return attributes
 
-def getAllAttributes(object):
+def getAllAttributeNames(object):
     """Return list of all attributes, including inherited, for an object.
     
     Recursively walk through a class and all base classes.
     """
     attributes = []
-    try:
-        attributes += dir(object)
-        if hasattr(object, '__class__'):
-            attributes += getAllAttributes(object.__class__)
-        if hasattr(object, '__bases__'):
-            for base in object.__bases__:
-                attributes += getAllAttributes(base)
-    finally:
-        return attributes
+    # Get attributes available through the normal convention.
+    attributes += dir(object)
+    # For a class instance, get the attributes for the class.
+    if hasattr(object, '__class__'):
+        attributes += getAllAttributeNames(object.__class__)
+    # Also get attributes from any and all parent classes.
+    if hasattr(object, '__bases__'):
+        for base in object.__bases__:
+            attributes += getAllAttributeNames(base)
+    return attributes
 
 def getCallTip(command='', locals=None):
     """Return call tip text for a command.
@@ -119,22 +128,31 @@ def getRoot(command, terminator=None):
     
     The command would normally terminate with a "(" or ".". Anything after 
     the terminator will be dropped, allowing you to get back to the root.
+    Return only the root portion that can be eval()'d without side effect.
     """
     root = ''
     validChars = "._" + string.uppercase + string.lowercase + string.digits
-    # Remove all whitespace from the command.
-    command = ''.join(command.split())
-    # Deal with the terminator.
     if terminator:
+        # Drop the final terminator and anything that follows.
         pieces = command.split(terminator)
         if len(pieces) > 1:
-            # Drop the final terminator and anything that follows.
             command = terminator.join(pieces[:-1])
-    # Go backward through the command until we hit an "invalid" character.
-    i = len(command)
-    while i and command[i-1] in validChars:
-        i -= 1
-    # Grab everything from the "invalid" character to the end.
-    root = command[i:]
+    if command in ("''", '""', '""""""', '[]', '()', '{}'):
+        # Let empty type delimiter pairs go through.
+        root = command
+    else:
+        # Go backward through the command until we hit an "invalid" character.
+        i = len(command)
+        while i and command[i-1] in validChars:
+            i -= 1
+        # Detect situations where we are in the middle of a string.
+        # This code catches the simplest case, but needs to catch others.
+        if command[i-1] in ("'", '"'):
+            # Were in the middle of a string so we aren't dealing with an
+            # object and it would be misleading to return anything here.
+            root = ''
+        else:
+            # Grab everything from the "invalid" character to the end.
+            root = command[i:]
     return root
 

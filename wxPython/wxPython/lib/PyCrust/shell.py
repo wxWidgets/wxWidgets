@@ -1,3 +1,7 @@
+"""PyCrust Shell is the gui text control in which a user interacts and types
+in commands to be sent to the interpreter. This particular shell is based on
+wxPython's wxStyledTextCtrl.
+"""
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
@@ -8,8 +12,10 @@ from wxPython.wx import *
 from wxPython.stc import *
 
 import keyword
+import os
 import sys
 
+from version import VERSION
 
 if wxPlatform == '__WXMSW__':
     faces = { 'times'  : 'Times New Roman',
@@ -32,26 +38,77 @@ else:  # GTK
             }
 
 
-class Editor(wxStyledTextCtrl):
-    """PyCrust Editor based on wxStyledTextCtrl."""
+class Shell(wxStyledTextCtrl):
+    """PyCrust Shell based on wxStyledTextCtrl."""
+    name = 'PyCrust Shell'
     revision = __version__
-    def __init__(self, parent, id):
-        """Create a PyCrust editor object based on wxStyledTextCtrl."""
+    def __init__(self, parent, id, introText='', locals=None, interp=None):
+        """Create a PyCrust Shell object."""
         wxStyledTextCtrl.__init__(self, parent, id, style=wxCLIP_CHILDREN)
-        # Commands get pushed to a method determined by the outer shell.
-        #self.shellPush = pushMethod
+        self.introText = introText
         # Keep track of the most recent prompt starting and ending positions.
         self.promptPos = [0, 0]
         # Keep track of multi-line commands.
         self.more = 0
-        # Configure various defaults and user preferences.
-        self.config()
         # Assign handlers for keyboard events.
         EVT_KEY_DOWN(self, self.OnKeyDown)
         EVT_CHAR(self, self.OnChar)
+        # Create a default interpreter if one isn't provided.
+        if interp == None:
+            from interpreter import Interpreter
+            from pseudo import PseudoFileIn, PseudoFileOut, PseudoFileErr
+            self.stdin = PseudoFileIn(self.readIn)
+            self.stdout = PseudoFileOut(self.writeOut)
+            self.stderr = PseudoFileErr(self.writeErr)
+            # Override the default locals so we have something interesting.
+            self.locals = {'__name__': 'PyCrust', 
+                           '__doc__': 'PyCrust, The Python Shell.',
+                           '__version__': VERSION,
+                          }
+            # Add the dictionary that was passed in.
+            if locals:
+                self.locals.update(locals)
+            self.interp = Interpreter(locals=self.locals, 
+                                      rawin=self.readRaw,
+                                      stdin=self.stdin, 
+                                      stdout=self.stdout, 
+                                      stderr=self.stderr)
+        else:
+            self.interp = interp
 
+        # Configure various defaults and user preferences.
+        self.config()
+
+        try:
+            self.showIntro(self.introText)
+        except:
+            pass
+
+        try:
+            self.setBuiltinKeywords()
+        except:
+            pass
+        
+        try:
+            self.setLocalShell()
+        except:
+            pass
+        
+        # Do this last so the user has complete control over their
+        # environment. They can override anything they want.
+        try:
+            self.execStartupScript(self.interp.startupScript)
+        except:
+            pass
+            
+    def destroy(self):
+        del self.stdin
+        del self.stdout
+        del self.stderr
+        del self.interp
+        
     def config(self):
-        """Configure editor based on user preferences."""
+        """Configure shell based on user preferences."""
         self.SetMarginType(1, wxSTC_MARGIN_NUMBER)
         self.SetMarginWidth(1, 40)
         
@@ -64,12 +121,62 @@ class Editor(wxStyledTextCtrl):
         self.SetUseTabs(0)
         # Do we want to automatically pop up command completion options?
         self.autoComplete = 1
+        self.autoCompleteIncludeMagic = 1
+        self.autoCompleteIncludeSingle = 1
+        self.autoCompleteIncludeDouble = 1
         self.autoCompleteCaseInsensitive = 1
         self.AutoCompSetIgnoreCase(self.autoCompleteCaseInsensitive)
         # De we want to automatically pop up command argument help?
         self.autoCallTip = 1
         self.CallTipSetBackground(wxColour(255, 255, 232))
 
+    def showIntro(self, text=''):
+        """Display introductory text in the shell."""
+        if text:
+            if text[-1] != '\n': text += '\n'
+            self.write(text)
+        try:
+            self.write(self.interp.introText)
+        except AttributeError:
+            pass
+    
+    def setBuiltinKeywords(self):
+        """Create pseudo keywords as part of builtins.
+        
+        This is a rather clever hack that sets "close", "exit" and "quit" 
+        to a PseudoKeyword object so that we can make them do what we want.
+        In this case what we want is to call our self.quit() method.
+        The user can type "close", "exit" or "quit" without the final parens.
+        """
+        import __builtin__
+        from pseudo import PseudoKeyword
+        __builtin__.close = __builtin__.exit = __builtin__.quit = \
+            PseudoKeyword(self.quit)
+
+    def quit(self):
+        """Quit the application."""
+        
+        # XXX Good enough for now but later we want to send a close event.
+        
+        # In the close event handler we can prompt to make sure they want to quit.
+        # Other applications, like PythonCard, may choose to hide rather than
+        # quit so we should just post the event and let the surrounding app
+        # decide what it wants to do.
+        self.write('Click on the close button to leave the application.')
+    
+    def setLocalShell(self):
+        """Add 'shell' to locals."""
+        self.interp.locals['shell'] = self
+    
+    def execStartupScript(self, startupScript):
+        """Execute the user's PYTHONSTARTUP script if they have one."""
+        if startupScript and os.path.isfile(startupScript):
+            startupText = 'Startup script executed: ' + startupScript
+            self.push('print %s;execfile(%s)' % \
+                      (`startupText`, `startupScript`))
+        else:
+            self.push('')
+            
     def setStyles(self, faces):
         """Configure font size, typeface and color for lexer."""
         
@@ -180,48 +287,18 @@ class Editor(wxStyledTextCtrl):
         # to do something more interesting, like write to a status bar.
         print text
 
-    def autoCompleteShow(self, command):
-        """Display auto-completion popup list."""
-        list = self.getAutoCompleteList(command)
-        if list:
-            options = ' '.join(list)
-            offset = 0
-            self.AutoCompShow(offset, options)
-
-    def getAutoCompleteList(self, command):
-        """Return list of auto-completion options for command."""
-        
-        # This method needs to be replaced by the enclosing app
-        # to get the proper auto complete list from the interpreter.
-        return []
-
-    def autoCallTipShow(self, command):
-        """Display argument spec and docstring in a popup bubble thingie."""
-        if self.CallTipActive: self.CallTipCancel()
-        tip = self.getCallTip(command)
-        if tip:
-            offset = self.GetCurrentPos()
-            self.CallTipShow(offset, tip)
-
-    def getCallTip(self, command):
-        """Return arguments and docstring for command."""
-
-        # This method needs to be replaced by the enclosing app
-        # to get the proper auto complete list from the interpreter.
-        return ''
-
     def processLine(self):
         """Process the line of text at which the user hit Enter."""
         
         # The user hit ENTER and we need to decide what to do. They could be
-        # sitting on any line in the editor.
+        # sitting on any line in the shell.
         
         # Grab information about the current line.
         thepos = self.GetCurrentPos()
         theline = self.GetCurrentLine()
         thetext = self.GetCurLine()[0]
         command = self.getCommand(thetext)
-        # Go to the very bottom of the editor.
+        # Go to the very bottom of the text.
         endpos = self.GetTextLength()
         self.SetCurrentPos(endpos)
         endline = self.GetCurrentLine()
@@ -266,19 +343,21 @@ class Editor(wxStyledTextCtrl):
         return command
     
     def push(self, command):
-        """Start a new line, send command to the shell, display a prompt."""
+        """Send command to the interpreter for execution."""
         self.write('\n')
-        self.more = self.shellPush(command)
+        self.more = self.interp.push(command)
         self.prompt()
         # Keep the undo feature from undoing previous responses. The only
         # thing that can be undone is stuff typed after the prompt, before
         # hitting enter. After they hit enter it becomes permanent.
         self.EmptyUndoBuffer()
-        
-    def clear(self):
-        """Delete all text from the editor."""
-        self.ClearAll()
-        
+
+    def write(self, text):
+        """Display text in the shell."""
+        self.AddText(text)
+        self.EnsureCaretVisible()
+        #self.ScrollToColumn(0)
+    
     def prompt(self):
         """Display appropriate prompt for the context, either ps1 or ps2.
         
@@ -325,12 +404,62 @@ class Editor(wxStyledTextCtrl):
             dialog.Destroy()
         return ''
 
-    def write(self, text):
-        """Display text in the editor."""
-        self.AddText(text)
-        self.EnsureCaretVisible()
-        #self.ScrollToColumn(0)
+    def ask(self, prompt='Please enter your response:'):
+        """Get response from the user."""
+        return raw_input(prompt=prompt)
+        
+    def pause(self):
+        """Halt execution pending a response from the user."""
+        self.ask('Press enter to continue:')
+        
+    def clear(self):
+        """Delete all text from the shell."""
+        self.ClearAll()
+        
+    def run(self, command, prompt=1, verbose=1):
+        """Execute command within the shell as if it was typed in directly.
+        >>> shell.run('print "this"')
+        >>> print "this"
+        this
+        >>> 
+        """
+        command = command.rstrip()
+        if prompt: self.prompt()
+        if verbose: self.write(command)
+        self.push(command)
+
+    def runfile(self, filename):
+        """Execute all commands in file as if they were typed into the shell."""
+        file = open(filename)
+        try:
+            self.prompt()
+            for command in file.readlines():
+                if command[:6] == 'shell.':  # Run shell methods silently.
+                    self.run(command, prompt=0, verbose=0)
+                else:
+                    self.run(command, prompt=0, verbose=1)
+        finally:
+            file.close()
     
+    def autoCompleteShow(self, command):
+        """Display auto-completion popup list."""
+        list = self.interp.getAutoCompleteList(command, \
+                    includeMagic=self.autoCompleteIncludeMagic, \
+                    includeSingle=self.autoCompleteIncludeSingle, \
+                    includeDouble=self.autoCompleteIncludeDouble)
+        if list:
+            options = ' '.join(list)
+            offset = 0
+            self.AutoCompShow(offset, options)
+
+    def autoCallTipShow(self, command):
+        """Display argument spec and docstring in a popup bubble thingie."""
+        if self.CallTipActive: self.CallTipCancel()
+        tip = self.interp.getCallTip(command)
+        if tip:
+            offset = self.GetCurrentPos()
+            self.CallTipShow(offset, tip)
+
     def writeOut(self, text):
         """Replacement for stdout."""
         self.write(text)
