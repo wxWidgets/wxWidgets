@@ -46,7 +46,7 @@ _treeList = [
 
     ('wxPython Library', ['OldSizers', 'Layoutf', 'wxScrolledMessageDialog',
                           'wxMultipleChoiceDialog', 'wxPlotCanvas', 'wxFloatBar',
-                          'PyShell']),
+                          'PyShell', 'wxCalendar']),
 
     ('Cool Contribs', ['pyTree', 'hangman', 'SlashDot', 'XMLtreeview']),
 
