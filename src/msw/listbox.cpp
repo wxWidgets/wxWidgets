@@ -257,7 +257,7 @@ bool wxListBox::Create(wxWindow *parent,
                        const wxSize& size,
                        const wxArrayString& choices,
                        long style,
-                       const wxValidator& wxVALIDATOR_PARAM(validator),
+                       const wxValidator& validator,
                        const wxString& name)
 {
     wxCArrayString chs(choices);
