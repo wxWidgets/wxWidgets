@@ -146,8 +146,8 @@ gtk_pizza_get_type ()
 }
 
 #if __WXGTK20__
-// Marshaller needed for set_scroll_adjustments signal,
-//   generated with GLib-2.4.6 glib-genmarshal
+/* Marshaller needed for set_scroll_adjustments signal,
+   generated with GLib-2.4.6 glib-genmarshal */
 #define g_marshal_value_peek_object(v)   g_value_get_object (v)
 static void
 g_cclosure_user_marshal_VOID__OBJECT_OBJECT (GClosure     *closure,
@@ -184,7 +184,7 @@ g_cclosure_user_marshal_VOID__OBJECT_OBJECT (GClosure     *closure,
             g_marshal_value_peek_object (param_values + 2),
             data2);
 }
-#endif // __WXGTK20__
+#endif /* __WXGTK20__ */
 
 static void
 gtk_pizza_class_init (GtkPizzaClass *klass)
@@ -238,7 +238,7 @@ gtk_pizza_class_init (GtkPizzaClass *klass)
                     GTK_SIGNAL_OFFSET (GtkPizzaClass, set_scroll_adjustments),
                     gtk_marshal_NONE__POINTER_POINTER,
                     GTK_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
-#endif // __WXGTK20__
+#endif /* __WXGTK20__ */
 }
 
 static GtkType

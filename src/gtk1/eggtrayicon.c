@@ -437,5 +437,5 @@ egg_tray_icon_cancel_message (EggTrayIcon *icon,
 				      id, 0, 0);
 }
 
-#endif // __WXGTK20__
-#endif // GTK_CHECK_VERSION(2, 1, 0)
+#endif /* __WXGTK20__ */
+#endif /* GTK_CHECK_VERSION(2, 1, 0) */
