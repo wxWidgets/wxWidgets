@@ -182,6 +182,7 @@ public:
         { }
 
     void OnKeyDown(wxKeyEvent& event);
+    void OnChar(wxKeyEvent& event);
 
 private:
     wxGrid*             m_grid;
@@ -194,6 +195,7 @@ private:
 IMPLEMENT_DYNAMIC_CLASS( wxGridCellEditorEvtHandler, wxEvtHandler )
 BEGIN_EVENT_TABLE( wxGridCellEditorEvtHandler, wxEvtHandler )
     EVT_KEY_DOWN( wxGridCellEditorEvtHandler::OnKeyDown )
+    EVT_CHAR( wxGridCellEditorEvtHandler::OnChar )
 END_EVENT_TABLE()
 
 
@@ -486,6 +488,20 @@ void wxGridCellEditorEvtHandler::OnKeyDown(wxKeyEvent& event)
                 m_editor->HandleReturn(event);
             break;
 
+
+        default:
+            event.Skip();
+    }
+}
+
+void wxGridCellEditorEvtHandler::OnChar(wxKeyEvent& event)
+{
+    switch ( event.KeyCode() )
+    {
+        case WXK_ESCAPE:
+        case WXK_TAB:
+        case WXK_RETURN:
+            break;
 
         default:
             event.Skip();
