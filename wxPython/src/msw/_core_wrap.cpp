@@ -1367,8 +1367,8 @@ SWIG_Check_unsigned_SS_long(PyObject* obj)
   return SWIG_AsVal_unsigned_SS_long(obj, (unsigned long*)0);
 }
 
-wxBitmap wxImage_ConvertToBitmap(wxImage *self){
-            wxBitmap bitmap(*self);
+wxBitmap wxImage_ConvertToBitmap(wxImage *self,int depth){
+            wxBitmap bitmap(*self, depth);
             return bitmap;
         }
 wxBitmap wxImage_ConvertToMonoBitmap(wxImage *self,unsigned char red,unsigned char green,unsigned char blue){
@@ -11485,19 +11485,25 @@ static PyObject *_wrap_Image_GetImageExtWildcard(PyObject *, PyObject *args, PyO
 static PyObject *_wrap_Image_ConvertToBitmap(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxImage *arg1 = (wxImage *) 0 ;
+    int arg2 = (int) -1 ;
     wxBitmap result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
-        (char *) "self", NULL 
+        (char *) "self",(char *) "depth", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Image_ConvertToBitmap",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:Image_ConvertToBitmap",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxImage,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if (obj1) {
+        arg2 = (int)SWIG_As_int(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = wxImage_ConvertToBitmap(arg1);
+        result = wxImage_ConvertToBitmap(arg1,arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;

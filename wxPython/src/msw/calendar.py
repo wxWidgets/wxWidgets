@@ -147,6 +147,14 @@ class CalendarEvent(_core.CommandEvent):
         """GetWeekDay(self) -> int"""
         return _calendar.CalendarEvent_GetWeekDay(*args, **kwargs)
 
+    def PySetDate(self, date):
+        """takes datetime.datetime or datetime.date object"""
+        self.SetDate(_py2wx(date))
+
+    def PyGetDate(self):
+        """returns datetime.date object"""
+        return _wx2py(self.GetDate())
+
 
 class CalendarEventPtr(CalendarEvent):
     def __init__(self, this):
@@ -466,6 +474,35 @@ class CalendarCtrl(_core.Control):
         return _calendar.CalendarCtrl_GetClassDefaultAttributes(*args, **kwargs)
 
     GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
+    def PySetDate(self, date):
+        """takes datetime.datetime or datetime.date object"""
+        self.SetDate(_py2wx(date))
+
+    def PyGetDate(self):
+        """returns datetime.date object"""
+        return _wx2py(self.GetDate())
+
+    def PySetLowerDateLimit(self, date):
+        """takes datetime.datetime or datetime.date object"""
+        self.SetLowerDateLimit(_py2wx(date))
+
+    def PySetUpperDateLimit(self, date):
+        """takes datetime.datetime or datetime.date object"""
+        self.SetUpperDateLimit(_py2wx(date))
+
+    def PySetDateRange(self, lowerdate, upperdate):
+        """takes datetime.datetime or datetime.date objects"""
+        self.PySetLowerDateLimit(lowerdate)
+        self.PySetUpperDateLimit(upperdate)
+
+    def PyGetLowerDateLimit(self):
+        """returns datetime.date object"""
+        return _wx2py(self.GetLowerDateLimit())
+
+    def PyGetUpperDateLimit(self):
+        """returns datetime.date object"""
+        return _wx2py(self.GetUpperDateLimit())
+
 
 class CalendarCtrlPtr(CalendarCtrl):
     def __init__(self, this):
@@ -502,5 +539,18 @@ def CalendarCtrl_GetClassDefaultAttributes(*args, **kwargs):
     this.
     """
     return _calendar.CalendarCtrl_GetClassDefaultAttributes(*args, **kwargs)
+
+def _py2wx(date):
+    import datetime
+    assert isinstance(date, (datetime.datetime, datetime.date))
+    tt = date.timetuple()
+    dmy = (tt[2], tt[1]-1, tt[0])
+    return wx.DateTimeFromDMY(*dmy)
+
+def _wx2py(date):
+    import datetime
+    assert isinstance(date, wx.DateTime)
+    ymd = map(int, date.FormatISODate().split('-'))
+    return datetime.date(*ymd)
 
 

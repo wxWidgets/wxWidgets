@@ -2304,7 +2304,7 @@ class Image(Object):
 
     GetImageExtWildcard = staticmethod(GetImageExtWildcard)
     def ConvertToBitmap(*args, **kwargs):
-        """ConvertToBitmap(self) -> Bitmap"""
+        """ConvertToBitmap(self, int depth=-1) -> Bitmap"""
         return _core_.Image_ConvertToBitmap(*args, **kwargs)
 
     def ConvertToMonoBitmap(*args, **kwargs):

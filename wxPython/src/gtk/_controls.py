@@ -3138,6 +3138,10 @@ class Listbook(BookCtrl):
         """IsVertical(self) -> bool"""
         return _controls_.Listbook_IsVertical(*args, **kwargs)
 
+    def GetListView(*args, **kwargs):
+        """GetListView(self) -> ListView"""
+        return _controls_.Listbook_GetListView(*args, **kwargs)
+
 
 class ListbookPtr(Listbook):
     def __init__(self, this):
