@@ -59,12 +59,15 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "wx/ioswrap.h"
-
-#if wxUSE_IOSTREAMH
+#if wxUSE_STD_IOSTREAM
+  #include "wx/ioswrap.h"
+  #if wxUSE_IOSTREAMH
     #include <fstream.h>
-#else
+  #else
     #include <fstream>
+  #endif
+#else
+  #include "wx/wfstream.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -277,8 +280,13 @@ bool wxDocument::OnSaveDocument(const wxString& file)
     else
         msgTitle = wxString(_("File error"));
 
+#if wxUSE_STD_IOSTREAM
     ofstream store(file.fn_str());
     if (store.fail() || store.bad())
+#else
+    wxFileOutputStream store(file.fn_str());
+    if (store.LastError() == 0)
+#endif
     {
         (void)wxMessageBox(_("Sorry, could not open this file for saving."), msgTitle, wxOK | wxICON_EXCLAMATION,
                            GetDocumentWindow());
@@ -308,8 +316,13 @@ bool wxDocument::OnOpenDocument(const wxString& file)
     else
         msgTitle = wxString(_("File error"));
 
+#if wxUSE_STD_IOSTREAM
     ifstream store(file.fn_str());
     if (store.fail() || store.bad())
+#else
+    wxFileInputStream store(file.fn_str());
+    if (store.LastError() == 0)
+#endif
     {
         (void)wxMessageBox(_("Sorry, could not open this file."), msgTitle, wxOK|wxICON_EXCLAMATION,
                            GetDocumentWindow());
@@ -330,19 +343,27 @@ bool wxDocument::OnOpenDocument(const wxString& file)
     return TRUE;
 }
 
+#if wxUSE_STD_IOSTREAM
 istream& wxDocument::LoadObject(istream& stream)
 {
-    //  wxObject::LoadObject(stream);
-
     return stream;
 }
 
 ostream& wxDocument::SaveObject(ostream& stream)
 {
-    //  wxObject::SaveObject(stream);
-
     return stream;
 }
+#else
+bool wxDocument::LoadObject(wxInputStream& stream)
+{
+    return TRUE;
+}
+
+bool wxDocument::SaveObject(wxOutputStream& stream)
+{
+    return TRUE;
+}
+#endif
 
 bool wxDocument::Revert()
 {
@@ -1943,6 +1964,7 @@ void wxFileHistory::AddFilesToMenu(wxMenu* menu)
 // manipulate files directly
 // ----------------------------------------------------------------------------
 
+#if wxUSE_STD_IOSTREAM
 bool wxTransferFileToStream(const wxString& filename, ostream& stream)
 {
     FILE *fd1;
@@ -1977,6 +1999,7 @@ bool wxTransferStreamToFile(istream& stream, const wxString& filename)
     fclose (fd1);
     return TRUE;
 }
+#endif
 
 #endif // wxUSE_DOC_VIEW_ARCHITECTURE
 

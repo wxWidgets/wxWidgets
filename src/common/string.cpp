@@ -138,7 +138,7 @@ extern const wxChar WXDLLEXPORT *g_szNul = &g_strEmpty.dummy;
 // global functions
 // ----------------------------------------------------------------------------
 
-#ifdef  wxSTD_STRING_COMPATIBILITY
+#if defined(wxSTD_STRING_COMPATIBILITY) && wxUSE_STD_IOSTREAM
 
 // MS Visual C++ version 5.0 provides the new STL headers as well as the old
 // iostream ones.

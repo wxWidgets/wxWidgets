@@ -36,7 +36,11 @@ class WXDLLEXPORT wxCommandProcessor;
 class WXDLLEXPORT wxFileHistory;
 class WXDLLEXPORT wxConfigBase;
 
-#include "wx/ioswrap.h"
+#if wxUSE_STD_IOSTREAM
+  #include "wx/ioswrap.h"
+#else
+  #include "wx/stream.h"
+#endif
 
 // Document manager flags
 enum
@@ -84,8 +88,13 @@ public:
     virtual bool SaveAs();
     virtual bool Revert();
 
+#if wxUSE_STD_IOSTREAM
     virtual ostream& SaveObject(ostream& stream);
     virtual istream& LoadObject(istream& stream);
+#else
+    virtual bool SaveObject(wxOutputStream& stream);
+    virtual bool LoadObject(wxInputStream& stream);
+#endif
 
     // Called by wxWindows
     virtual bool OnSaveDocument(const wxString& filename);
@@ -573,9 +582,11 @@ protected:
     int               m_fileMaxFiles;
 };
 
+#if wxUSE_STD_IOSTREAM
 // For compatibility with existing file formats:
 // converts from/to a stream to/from a temporary file.
 bool WXDLLEXPORT wxTransferFileToStream(const wxString& filename, ostream& stream);
 bool WXDLLEXPORT wxTransferStreamToFile(istream& stream, const wxString& filename);
+#endif
 
 #endif // _WX_DOCH__

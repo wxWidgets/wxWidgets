@@ -217,9 +217,12 @@ bool wxGLCanvas::Create( wxWindow *parent,
         int data[] = { GLX_RGBA, 
 	               GLX_DOUBLEBUFFER, 
 		       GLX_DEPTH_SIZE, 1,  /* use largest available depth buffer */
+		       GLX_RED_SIZE, 1, 
+		       GLX_GREEN_SIZE, 1, 
+		       GLX_BLUE_SIZE, 1, 
+		       GLX_ALPHA_SIZE, 1, 
 		       None };
 	attribList = (int*) data;
-        printf( "using default values\n" );
     }
     else
     {

@@ -88,9 +88,9 @@ libwx_gtk_la_SOURCES = \
  textfile.cpp \
  time.cpp \
  timercmn.cpp \
- utilscmn.cpp \
  tokenzr.cpp \
  url.cpp \
+ utilscmn.cpp \
  valgen.cpp \
  validate.cpp \
  valtext.cpp \
@@ -127,6 +127,7 @@ libwx_gtk_la_SOURCES = \
  splitter.cpp \
  statusbr.cpp \
  tabg.cpp \
+ tipdlg.cpp \
  treectrl.cpp \
 \
  threadpsx.cpp \
@@ -185,7 +186,6 @@ libwx_gtk_la_SOURCES = \
  textctrl.cpp \
  textdlg.cpp \
  timer.cpp \
- tipdlg.cpp \
  tooltip.cpp \
  utilsgtk.cpp \
  utilsres.cpp \

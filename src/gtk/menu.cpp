@@ -184,9 +184,11 @@ void wxMenuBar::Append( wxMenu *menu, const wxString &title )
 {
     m_menus.Append( menu );
     
+    const wxChar *pc;
+    
     /* GTK 1.2 wants to have "_" instead of "&" for accelerators */
     wxString str;
-    for ( const wxChar *pc = title; *pc != _T('\0'); pc++ )
+    for ( pc = title; *pc != _T('\0'); pc++ )
     {
         if (*pc == _T('&'))
 	{
@@ -230,7 +232,7 @@ void wxMenuBar::Append( wxMenu *menu, const wxString &title )
     
     /* in order to get the pointer to the item we need the item text _without_ underscores */
     wxString tmp = _T("<main>/");
-    for ( const wxChar *pc = str; *pc != _T('\0'); pc++ )
+    for ( pc = str; *pc != _T('\0'); pc++ )
     {
         if (*pc == _T('_')) pc++; /* skip it */
         tmp << *pc;

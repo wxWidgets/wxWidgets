@@ -248,7 +248,7 @@ bool wxSingleChoiceDialog::Create( wxWindow *WXUNUSED(parent), const wxString& m
     
     int y = message_size.y + 15;
     
-    int listbox_height = wxMin( 160, n*20 );
+    int listbox_height = 100;
     
     wxListBox *listBox = new wxListBox( this, wxID_LISTBOX, wxPoint(10, y), wxSize(240, listbox_height), 
                                         n, choices, wxLB_ALWAYS_SB );

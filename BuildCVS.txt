@@ -11,8 +11,16 @@ No idea, never did it.
 II) Unix using plain makefiles.
 ----------------------------------------
 
-No idea, never did it.
+Set WXWIN environment variable to the base directory such
+as ~/wxWindows
 
+-> type: export WXWIN=~/wxWindows
+
+Edit ~/wxWindows/src/make.env as you wish.
+-> type: cd ~/wxWindows/src/gtk
+-> type: cp ./setup0.h setup.h
+-> type: make -f makefile.unx gtk
+-> pray
 
 III) Windows using configure
 ----------------------------------------
@@ -27,7 +35,7 @@ a) You have all the newest and greatest GNU tools installed on your system
 and in the same directory hierachy (e.g. either all tools in /usr or all 
 in /usr/local), these tools are:
 - GNU libtool 1.2e (1.3 doesn't work here)
-- GNU autoconf 2.14 (including autoheader 2.14)
+- GNU autoconf 2.13 (including autoheader 2.13)
 - GNU automake 1.4 (including aclocal 1.4)
 and possibly but not forcibly
 - GNU make 3.76.1
