@@ -5,7 +5,7 @@
 #
 # Author:       Lorne White (email: lorne.white@telusplanet.net)
 #
-# Version       0.5 
+# Version       0.5
 # Date:         Feb 26, 2001
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
@@ -27,9 +27,9 @@ class TestColourSelect(wxPanel):
         self.x_pos = 30
         self.y_pos = 100
         delta = 40
-        
+
         mID = NewId()
-        wxButton(self, mID, "Get All Colours", wxPoint(self.x_pos, self.y_pos), wxSize(80, 20))
+        wxButton(self, mID, "Get All Colours", wxPoint(self.x_pos, self.y_pos))
         EVT_BUTTON(self, mID, self.OnClick)
         self.y_pos = self.y_pos + delta
 
@@ -53,7 +53,7 @@ class TestColourSelect(wxPanel):
         result = []
         colour = self.colour_def.GetColour()        # default control value
         result.append("Default: " + str(colour))
-        
+
         for i in range(len(self.set_val)):
             val = self.set_val[i]
             colour = val.GetColour()        # get the colour selection button result
@@ -61,7 +61,7 @@ class TestColourSelect(wxPanel):
             result.append(name + ": " + str(colour))        # create string list for easy viewing of results
         out_result = string.joinfields(result, ',  ')
         self.log.WriteText("Colour Results :" + out_result)
-        
+
 #---------------------------------------------------------------------------
 
 def runTest(frame, nb, log):
