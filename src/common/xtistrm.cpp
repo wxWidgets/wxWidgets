@@ -272,7 +272,7 @@ void wxWriter::WriteOneProperty( const wxObject *obj , const wxClassInfo* ci , c
                 const wxEnumTypeInfo *eti = dynamic_cast<const wxEnumTypeInfo*>( pi->GetTypeInfo() ) ;
                 if ( eti )
                 {
-                    eti->ConvertFromLong( value.Get<long>() , value ) ;
+                    eti->ConvertFromLong( value.wxTEMPLATED_MEMBER_CALL(Get , long) , value ) ;
                 }
                 else
                 {

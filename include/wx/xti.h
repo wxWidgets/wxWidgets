@@ -148,7 +148,7 @@ private :
     s =  s_enumData##e.GetEnumMemberName((int)data) ; \
 } \
     void FromLong##e( long data , wxxVariant& result ) { result = wxxVariant((e)data) ;} \
-    void ToLong##e( const wxxVariant& data , long &result ) { result = (long) data.Get<e>() ;} \
+    void ToLong##e( const wxxVariant& data , long &result ) { result = (long) data.wxTEMPLATED_MEMBER_CALL(Get , e) ;} \
     wxEnumTypeInfo s_typeInfo##e(wxT_ENUM , &s_enumData##e , &wxToStringConverter<e> , &wxFromStringConverter<e> , &ToLong##e , &FromLong##e , typeid(e).name() ) ;
 
 // ----------------------------------------------------------------------------
@@ -233,7 +233,7 @@ void wxSetToString( wxString &s , const wxBitset<e> &data )
     wxSetToString( s , data ) ; \
 } \
     void FromLong##SetName( long data , wxxVariant& result ) { result = wxxVariant(SetName((unsigned long)data)) ;} \
-    void ToLong##SetName( const wxxVariant& data , long &result ) { result = (long) data.Get<SetName>().to_ulong() ;} \
+    void ToLong##SetName( const wxxVariant& data , long &result ) { result = (long) data.wxTEMPLATED_MEMBER_CALL(Get , SetName).to_ulong() ;} \
     wxEnumTypeInfo s_typeInfo##SetName(wxT_SET , &s_enumData##e , &wxToStringConverter<SetName> , &wxFromStringConverter<SetName> , &ToLong##SetName , &FromLong##SetName, typeid(SetName).name() ) ;  \
 }
 
@@ -298,7 +298,7 @@ void wxFlagsToString( wxString &s , const e& data )
     wxFlagsToString<e>( s , data ) ; \
 } \
     void FromLong##e( long data , wxxVariant& result ) { result = wxxVariant(e(data)) ;} \
-    void ToLong##e( const wxxVariant& data , long &result ) { result = (long) data.Get<e>().m_data ;} \
+    void ToLong##e( const wxxVariant& data , long &result ) { result = (long) data.wxTEMPLATED_MEMBER_CALL(Get , e).m_data ;} \
     wxEnumTypeInfo s_typeInfo##e(wxT_SET , &s_enumData##e , &wxToStringConverter<e> , &wxFromStringConverter<e> , &ToLong##e , &FromLong##e, typeid(e).name()  ) ;
 // ----------------------------------------------------------------------------
 // Type Information
@@ -737,9 +737,9 @@ public: \
 { \
     Klass *obj = dynamic_cast<Klass*>(object) ;  \
     if ( variantValue.HasData<valueType>() ) \
-    obj->setterMethod(variantValue.Get<valueType>()) ; \
+    obj->setterMethod(variantValue.wxTEMPLATED_MEMBER_CALL(Get , valueType)) ; \
             else \
-            obj->setterMethod(*variantValue.Get<valueType*>()) ; \
+            obj->setterMethod(*variantValue.wxTEMPLATED_MEMBER_CALL(Get , valueType*)) ; \
 } \
 } ;
 
@@ -766,9 +766,9 @@ public: \
 { \
     Klass *obj = dynamic_cast<Klass*>(object) ;  \
     if ( variantValue.HasData<valueType>() ) \
-    obj->addermethod(variantValue.Get<valueType>()) ; \
+    obj->addermethod(variantValue.wxTEMPLATED_MEMBER_CALL(Get , valueType)) ; \
             else \
-            obj->addermethod(*variantValue.Get<valueType*>()) ; \
+            obj->addermethod(*variantValue.wxTEMPLATED_MEMBER_CALL(Get , valueType*)) ; \
 } \
 } ;
 
@@ -1876,7 +1876,7 @@ private :
     wxObject* wxConstructorFor##name()                             \
 { return new name; }                                          \
     const wxClassInfo* name::ms_classParents[] = { &basename::ms_classInfo ,NULL } ; \
-    wxObject* wxVariantOfPtrToObjectConverter##name ( wxxVariant &data ) { return data.Get<name*>() ; } \
+    wxObject* wxVariantOfPtrToObjectConverter##name ( wxxVariant &data ) { return data.wxTEMPLATED_MEMBER_CALL(Get , name*) ; } \
     wxxVariant wxObjectToVariantConverter##name ( wxObject *data ) { return wxxVariant( dynamic_cast<name*> (data)  ) ; } \
     wxClassInfo name::ms_classInfo(name::ms_classParents , wxT(unit) , wxT(#name),   \
     (int) sizeof(name),                              \
@@ -1888,8 +1888,8 @@ private :
     wxObject* wxConstructorFor##name()                             \
 { return new name; }                                          \
     const wxClassInfo* name::ms_classParents[] = { &basename::ms_classInfo ,NULL } ; \
-    wxObject* wxVariantToObjectConverter##name ( wxxVariant &data ) { return &data.Get<name>() ; } \
-    wxObject* wxVariantOfPtrToObjectConverter##name ( wxxVariant &data ) { return data.Get<name*>() ; } \
+    wxObject* wxVariantToObjectConverter##name ( wxxVariant &data ) { return &data.wxTEMPLATED_MEMBER_CALL(Get , name) ; } \
+    wxObject* wxVariantOfPtrToObjectConverter##name ( wxxVariant &data ) { return data.wxTEMPLATED_MEMBER_CALL(Get , name*) ; } \
     wxxVariant wxObjectToVariantConverter##name ( wxObject *data ) { return wxxVariant( dynamic_cast<name*> (data)  ) ; } \
     wxClassInfo name::ms_classInfo(name::ms_classParents , wxT(unit) , wxT(#name),   \
     (int) sizeof(name),                              \
@@ -1956,7 +1956,7 @@ private :
     wxObject* wxConstructorFor##name()                             \
 { return new name; }                                          \
     const wxClassInfo* name::ms_classParents[] = { &basename::ms_classInfo ,&basename2::ms_classInfo , NULL } ; \
-    wxObject* wxVariantToObjectConverter##name ( wxxVariant &data ) { return data.Get<name*>() ; } \
+    wxObject* wxVariantToObjectConverter##name ( wxxVariant &data ) { return data.wxTEMPLATED_MEMBER_CALL(Get , name*) ; } \
     wxxVariant wxObjectToVariantConverter##name ( wxObject *data ) { return wxxVariant( dynamic_cast<name*> (data)  ) ; } \
     wxClassInfo name::ms_classInfo(name::ms_classParents , wxT(unit) , wxT(#name),   \
     (int) sizeof(name),                              \
@@ -1984,8 +1984,8 @@ private :
 
 #define _IMPLEMENT_ABSTRACT_CLASS(name, basename)                \
     const wxClassInfo* name::ms_classParents[] = { &basename::ms_classInfo ,NULL } ; \
-    wxObject* wxVariantToObjectConverter##name ( wxxVariant &data ) { return data.Get<name*>() ; } \
-    wxObject* wxVariantOfPtrToObjectConverter##name ( wxxVariant &data ) { return data.Get<name*>() ; } \
+    wxObject* wxVariantToObjectConverter##name ( wxxVariant &data ) { return data.wxTEMPLATED_MEMBER_CALL(Get , name*) ; } \
+    wxObject* wxVariantOfPtrToObjectConverter##name ( wxxVariant &data ) { return data.wxTEMPLATED_MEMBER_CALL(Get , name*) ; } \
     wxxVariant wxObjectToVariantConverter##name ( wxObject *data ) { return wxxVariant( dynamic_cast<name*> (data)  ) ; } \
     wxClassInfo name::ms_classInfo(name::ms_classParents , wxT("") , wxT(#name),   \
     (int) sizeof(name),                              \
