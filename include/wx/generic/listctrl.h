@@ -593,12 +593,26 @@ class wxListCtrl: public wxControl
     bool SortItems(wxListCtrlCompare fn, long data);
     bool Update(long item);
     virtual bool OnListNotify(wxListEvent& WXUNUSED(event)) { return FALSE; }
-    void SetDropTarget( wxDropTarget *dropTarget )
-      { m_mainWin->SetDropTarget( dropTarget ); };
-    wxDropTarget *GetDropTarget() const
-      { return m_mainWin->GetDropTarget(); };
-
     void OnIdle( wxIdleEvent &event );
+    
+    // We have to hand down a few functions
+    
+    void SetDropTarget( wxDropTarget *dropTarget )
+      { m_mainWin->SetDropTarget( dropTarget ); }
+    wxDropTarget *GetDropTarget() const
+      { return m_mainWin->GetDropTarget(); }
+    void SetCursor( const wxCursor &cursor )
+      { m_mainWin->SetCursor( cursor); }
+    wxColour GetBackgroundColour() const
+      { return m_mainWin->GetBackgroundColour(); }
+    void SetBackgroundColour( const wxColour &colour )
+      { m_mainWin->SetBackgroundColour(); }
+    wxColour GetForegroundColour() const
+      { return m_mainWin->GetForegroundColour(); }
+    void SetForegroundColour( const wxColour &colour )
+      { return m_mainWin->GetForegroundColour(); }
+    bool PopupMenu( wxMenu *menu, int x, int y )
+      { m_mainWin->PopupMenu( menu, x, y ); }
 
   protected:
 

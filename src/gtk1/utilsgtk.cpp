@@ -375,7 +375,12 @@ static void GTK_EndProcessDetector(gpointer data, gint source,
 
   pid = (proc_data->pid > 0) ? proc_data->pid : -(proc_data->pid);
 
+  /* wait4 is not standard, use at own risk */
+#if !defined(__sgi)
   wait4(proc_data->pid, NULL, 0, NULL);
+#else
+  wait3(NULL, 0, NULL);
+#endif
 
   close(source);
   gdk_input_remove(proc_data->tag);

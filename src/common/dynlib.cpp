@@ -22,7 +22,7 @@
 // System dependent include
 // ---------------------------------------------------------------------------
 
-#ifdef linux
+#if defined(__LINUX__) || defined(__SGI__)
 #include <dlfcn.h>
 #endif
 
@@ -63,7 +63,7 @@ wxLibrary::~wxLibrary()
     else
       delete m_liblist;
 
-#ifdef linux
+#if defined(__LINUX__) || defined(__SGI__)
     dlclose(m_handle);
 #endif
 #ifdef __WINDOWS__
@@ -79,7 +79,7 @@ wxObject *wxLibrary::CreateObject(const wxString& name)
 
 void *wxLibrary::GetSymbol(const wxString& symbname)
 {
-#ifdef linux
+#if defined(__LINUX__) || defined(__SGI__)
   return dlsym(m_handle, WXSTRINGCAST symbname);
 #endif
 #ifdef __WINDOWS__
@@ -117,7 +117,7 @@ wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
   if ( (node = m_loaded.Find(name.GetData())) )
     return ((wxLibrary *)node->Data());
 
-#ifdef linux
+#if defined(__LINUX__) || defined(__SGI__)
   lib_name.Prepend("lib");
   lib_name += ".so";
 

@@ -1288,6 +1288,10 @@ if test "$USE_THREADS" = "1"; then
      THREADS_LINK="-lpthread-0.7"
      AC_DEFINE(USE_THREADS)
   ],[
+    AC_CHECK_HEADER(sys/prctl.h, [
+        UNIX_THREAD="gtk/threadsgi.cpp"
+        AC_DEFINE(USE_THREADS)
+    ])
     AC_CHECK_LIB(pthread, pthread_create, [
        UNIX_THREAD="gtk/threadpsx.cpp"
        THREADS_LINK="-lpthread"
@@ -1297,10 +1301,6 @@ if test "$USE_THREADS" = "1"; then
   AC_CHECK_LIB(pthreads, pthread_create, [
      UNIX_THREAD="gtk/threadpsx.cpp"
      THREADS_LINK="-lpthreads"
-     AC_DEFINE(USE_THREADS)
-  ])
-  AC_CHECK_HEADER(sys/prctl.h, [
-     UNIX_THREAD="gtk/threadsgi.cpp"
      AC_DEFINE(USE_THREADS)
   ])
 fi
