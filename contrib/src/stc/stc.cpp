@@ -103,6 +103,7 @@ DEFINE_EVENT_TYPE( wxEVT_STC_DO_DROP )
 BEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
     EVT_PAINT                   (wxStyledTextCtrl::OnPaint)
     EVT_SCROLLWIN               (wxStyledTextCtrl::OnScrollWin)
+    EVT_SCROLL                  (wxStyledTextCtrl::OnScroll)
     EVT_SIZE                    (wxStyledTextCtrl::OnSize)
     EVT_LEFT_DOWN               (wxStyledTextCtrl::OnMouseLeftDown)
 #ifdef __WXMSW__
@@ -143,6 +144,8 @@ wxStyledTextCtrl::wxStyledTextCtrl(wxWindow *parent,
     m_swx = new ScintillaWX(this);
     m_stopWatch.Start();
     m_lastKeyDownConsumed = FALSE;
+    m_vScrollBar = NULL;
+    m_hScrollBar = NULL;
 }
 
 
@@ -1801,6 +1804,16 @@ void wxStyledTextCtrl::OnScrollWin(wxScrollWinEvent& evt) {
         m_swx->DoVScroll(evt.GetEventType(), evt.GetPosition());
 }
 
+void wxStyledTextCtrl::OnScroll(wxScrollEvent& evt) {
+    wxScrollBar* sb = wxDynamicCast(evt.GetEventObject(), wxScrollBar);
+    if (sb) {
+        if (sb->IsVertical())
+            m_swx->DoVScroll(evt.GetEventType(), evt.GetPosition());
+        else
+            m_swx->DoHScroll(evt.GetEventType(), evt.GetPosition());
+    }
+}
+
 void wxStyledTextCtrl::OnSize(wxSizeEvent& evt) {
     wxSize sz = GetClientSize();
     m_swx->DoSize(sz.x, sz.y);
@@ -2064,6 +2077,7 @@ bool wxStyledTextEvent::GetShift() const { return (m_modifiers & SCI_SHIFT) != 0
 bool wxStyledTextEvent::GetControl() const { return (m_modifiers & SCI_CTRL) != 0; }
 bool wxStyledTextEvent::GetAlt() const { return (m_modifiers & SCI_ALT) != 0; }
 
+
 wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
   wxCommandEvent(event)
 {
@@ -2097,6 +2111,11 @@ wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
 
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
+
+
+
+
+
 
 
 

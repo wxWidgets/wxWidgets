@@ -22,7 +22,7 @@
 
 //----------------------------------------------------------------------
 
-const int H_SCROLL_MAX  = 2000;
+const int H_SCROLL_MAX  = 4000;
 const int H_SCROLL_STEP = 20;
 const int H_SCROLL_PAGE = 200;
 
@@ -138,7 +138,7 @@ void ScintillaWX::StartDrag() {
     dragText = evt.GetDragText();
 
     if (dragText.Length()) {
-        wxDropSource        source(wMain.GetID());
+        wxDropSource        source(stc);
         wxTextDataObject    data(dragText);
         wxDragResult        result;
 
@@ -175,9 +175,9 @@ void ScintillaWX::SetTicking(bool on) {
 
 void ScintillaWX::SetMouseCapture(bool on) {
     if (on && !capturedMouse)
-        wMain.GetID()->CaptureMouse();
+        stc->CaptureMouse();
     else if (!on && capturedMouse)
-        wMain.GetID()->ReleaseMouse();
+        stc->ReleaseMouse();
     capturedMouse = on;
 }
 
@@ -189,37 +189,68 @@ bool ScintillaWX::HaveMouseCapture() {
 
 void ScintillaWX::ScrollText(int linesToMove) {
     int dy = vs.lineHeight * (linesToMove);
-    wMain.GetID()->ScrollWindow(0, dy);
-    wMain.GetID()->Update();
+    stc->ScrollWindow(0, dy);
+    stc->Update();
 }
 
 void ScintillaWX::SetVerticalScrollPos() {
-    wMain.GetID()->SetScrollPos(wxVERTICAL, topLine);
+    if (stc->m_vScrollBar == NULL) {  // Use built-in scrollbar
+        stc->SetScrollPos(wxVERTICAL, topLine);
+    }
+    else { // otherwise use the one that's been given to us
+        stc->m_vScrollBar->SetThumbPosition(topLine);
+    }
 }
 
 void ScintillaWX::SetHorizontalScrollPos() {
-    wMain.GetID()->SetScrollPos(wxHORIZONTAL, xOffset);
+    if (stc->m_hScrollBar == NULL) {  // Use built-in scrollbar
+        stc->SetScrollPos(wxHORIZONTAL, xOffset);
+    }
+    else { // otherwise use the one that's been given to us
+        stc->m_hScrollBar->SetThumbPosition(xOffset);
+    }
 }
 
 
 bool ScintillaWX::ModifyScrollBars(int nMax, int nPage) {
     bool modified = false;
-    int  sbMax    = wMain.GetID()->GetScrollRange(wxVERTICAL);
-    int  sbThumb  = wMain.GetID()->GetScrollThumb(wxVERTICAL);
-    int  sbPos    = wMain.GetID()->GetScrollPos(wxVERTICAL);
 
-
-    if (sbMax != nMax || sbThumb != nPage) {
-        wMain.GetID()->SetScrollbar(wxVERTICAL, sbPos, nPage, nMax);
-        modified = true;
+    if (stc->m_vScrollBar == NULL) {  // Use built-in scrollbar
+        int  sbMax    = stc->GetScrollRange(wxVERTICAL);
+        int  sbThumb  = stc->GetScrollThumb(wxVERTICAL);
+        int  sbPos    = stc->GetScrollPos(wxVERTICAL);
+        if (sbMax != nMax || sbThumb != nPage) {
+            stc->SetScrollbar(wxVERTICAL, sbPos, nPage, nMax);
+            modified = true;
+        }
+    }
+    else { // otherwise use the one that's been given to us
+        int  sbMax    = stc->m_vScrollBar->GetRange();
+        int  sbPage   = stc->m_vScrollBar->GetPageSize();
+        int  sbPos    = stc->m_vScrollBar->GetThumbPosition();
+        if (sbMax != nMax || sbPage != nPage) {
+            stc->m_vScrollBar->SetScrollbar(sbPos, nPage, nMax, nPage);
+            modified = true;
+        }
     }
 
+
     if (horizontalScrollBarVisible) {
-        sbMax    = wMain.GetID()->GetScrollRange(wxHORIZONTAL);
-        sbThumb  = wMain.GetID()->GetScrollThumb(wxHORIZONTAL);
-        if ((sbMax != H_SCROLL_MAX) || (sbThumb != H_SCROLL_STEP)) {
-            wMain.GetID()->SetScrollbar(wxHORIZONTAL, 0, H_SCROLL_STEP, H_SCROLL_MAX);
-            modified = true;
+        if (stc->m_hScrollBar == NULL) {  // Use built-in scrollbar
+            int sbMax    = stc->GetScrollRange(wxHORIZONTAL);
+            int sbThumb  = stc->GetScrollThumb(wxHORIZONTAL);
+            if ((sbMax != H_SCROLL_MAX) || (sbThumb != H_SCROLL_STEP)) {
+                stc->SetScrollbar(wxHORIZONTAL, 0, H_SCROLL_STEP, H_SCROLL_MAX);
+                modified = true;
+            }
+        }
+        else { // otherwise use the one that's been given to us
+            int  sbMax    = stc->m_hScrollBar->GetRange();
+            int  sbPage   = stc->m_hScrollBar->GetPageSize();
+            if ((sbMax != H_SCROLL_MAX) || (sbPage != H_SCROLL_STEP)) {
+                stc->m_hScrollBar->SetScrollbar(0, H_SCROLL_STEP, H_SCROLL_MAX, H_SCROLL_STEP);
+                modified = true;
+            }
         }
     }
     return modified;
@@ -282,7 +313,7 @@ bool ScintillaWX::CanPaste() {
 }
 
 void ScintillaWX::CreateCallTipWindow(PRectangle) {
-    ct.wCallTip = new wxSTCCallTip(wMain.GetID(), -1, &ct);
+    ct.wCallTip = new wxSTCCallTip(stc, -1, &ct);
     ct.wDraw = ct.wCallTip;
 }
 
@@ -347,19 +378,19 @@ void ScintillaWX::DoPaint(wxDC* dc, wxRect rect) {
 
 void ScintillaWX::DoHScroll(int type, int pos) {
     int xPos = xOffset;
-    if (type == wxEVT_SCROLLWIN_LINEUP)
+    if (type == wxEVT_SCROLLWIN_LINEUP || type == wxEVT_SCROLL_LINEUP)
         xPos -= H_SCROLL_STEP;
-    else if (type == wxEVT_SCROLLWIN_LINEDOWN)
+    else if (type == wxEVT_SCROLLWIN_LINEDOWN || type == wxEVT_SCROLL_LINEDOWN)
         xPos += H_SCROLL_STEP;
-    else if (type == wxEVT_SCROLLWIN_PAGEUP)
+    else if (type == wxEVT_SCROLLWIN_PAGEUP || type == wxEVT_SCROLL_PAGEUP)
         xPos -= H_SCROLL_PAGE;
-    else if (type == wxEVT_SCROLLWIN_PAGEDOWN)
+    else if (type == wxEVT_SCROLLWIN_PAGEDOWN || type == wxEVT_SCROLL_PAGEDOWN)
         xPos += H_SCROLL_PAGE;
-    else if (type == wxEVT_SCROLLWIN_TOP)
+    else if (type == wxEVT_SCROLLWIN_TOP || type == wxEVT_SCROLL_TOP)
         xPos = 0;
-    else if (type == wxEVT_SCROLLWIN_BOTTOM)
+    else if (type == wxEVT_SCROLLWIN_BOTTOM || type == wxEVT_SCROLL_BOTTOM)
         xPos = H_SCROLL_MAX;
-    else if (type == wxEVT_SCROLLWIN_THUMBTRACK)
+    else if (type == wxEVT_SCROLLWIN_THUMBTRACK || type == wxEVT_SCROLL_THUMBTRACK)
         xPos = pos;
 
     HorizontalScrollTo(xPos);
@@ -367,19 +398,19 @@ void ScintillaWX::DoHScroll(int type, int pos) {
 
 void ScintillaWX::DoVScroll(int type, int pos) {
     int topLineNew = topLine;
-    if (type == wxEVT_SCROLLWIN_LINEUP)
+    if (type == wxEVT_SCROLLWIN_LINEUP || type == wxEVT_SCROLL_LINEUP)
         topLineNew -= 1;
-    else if (type == wxEVT_SCROLLWIN_LINEDOWN)
+    else if (type == wxEVT_SCROLLWIN_LINEDOWN || type == wxEVT_SCROLL_LINEDOWN)
         topLineNew += 1;
-    else if (type ==  wxEVT_SCROLLWIN_PAGEUP)
+    else if (type ==  wxEVT_SCROLLWIN_PAGEUP || type == wxEVT_SCROLL_PAGEUP)
         topLineNew -= LinesToScroll();
-    else if (type ==  wxEVT_SCROLLWIN_PAGEDOWN)
+    else if (type ==  wxEVT_SCROLLWIN_PAGEDOWN || type == wxEVT_SCROLL_PAGEDOWN)
         topLineNew += LinesToScroll();
-    else if (type ==  wxEVT_SCROLLWIN_TOP)
+    else if (type ==  wxEVT_SCROLLWIN_TOP || type == wxEVT_SCROLL_TOP)
         topLineNew = 0;
-    else if (type ==  wxEVT_SCROLLWIN_BOTTOM)
+    else if (type ==  wxEVT_SCROLLWIN_BOTTOM || type == wxEVT_SCROLL_BOTTOM)
         topLineNew = MaxScrollPos();
-    else if (type ==   wxEVT_SCROLLWIN_THUMBTRACK)
+    else if (type ==   wxEVT_SCROLLWIN_THUMBTRACK || type == wxEVT_SCROLL_THUMBTRACK)
         topLineNew = pos;
 
     ScrollTo(topLineNew);
@@ -567,13 +598,13 @@ void ScintillaWX::FullPaint() {
     paintState = painting;
     rcPaint = GetTextRectangle();
     paintingAllText = true;
-    wxClientDC dc(wMain.GetID());
+    wxClientDC dc(stc);
     Surface surfaceWindow;
     surfaceWindow.Init(&dc);
     Paint(&surfaceWindow, rcPaint);
     surfaceWindow.Release();
 
-//     wMain.GetID()->Refresh(FALSE);
+//     stc->Refresh(FALSE);
 
     paintState = notPainting;
 }

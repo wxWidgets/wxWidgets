@@ -1594,6 +1594,14 @@ public:
     // Send a message to Scintilla
     long SendMsg(int msg, long wp=0, long lp=0);
 
+
+    // Set the vertical scrollbar to use instead of the ont that's built-in.
+    void SetVScrollBar(wxScrollBar* bar) { m_vScrollBar = bar; }
+
+
+    // Set the horizontal scrollbar to use instead of the ont that's built-in.
+    void SetHScrollBar(wxScrollBar* bar) { m_hScrollBar = bar; }
+
 //----------------------------------------------------------------------
 
 
@@ -1602,6 +1610,7 @@ private:
     // Event handlers
     void OnPaint(wxPaintEvent& evt);
     void OnScrollWin(wxScrollWinEvent& evt);
+    void OnScroll(wxScrollEvent& evt);
     void OnSize(wxSizeEvent& evt);
     void OnMouseLeftDown(wxMouseEvent& evt);
     void OnMouseMove(wxMouseEvent& evt);
@@ -1629,6 +1638,8 @@ private:
 
     ScintillaWX*        m_swx;
     wxStopWatch         m_stopWatch;
+    wxScrollBar*        m_vScrollBar;
+    wxScrollBar*        m_hScrollBar;
 
     bool                m_lastKeyDownConsumed;
 
@@ -1695,7 +1706,6 @@ public:
     bool GetControl() const;
     bool GetAlt() const;
 
-//    void CopyObject(wxObject& obj) const;
     virtual wxEvent* Clone() const { return new wxStyledTextEvent(*this); }
 
 #ifndef SWIG
