@@ -670,13 +670,27 @@ bool wxClipboard::GetData( wxDataObject& data )
         formatEtc.ptd      = NULL;
         formatEtc.dwAspect = DVASPECT_CONTENT;
         formatEtc.lindex   = -1;
-        formatEtc.tymed    = TYMED_HGLOBAL;
 
         size_t nSupportedFormats = supportedFormats.GetCount();
         for ( size_t n = 0; !result && (n < nSupportedFormats); n++ )
         {
             STGMEDIUM medium;
             formatEtc.cfFormat = supportedFormats[n];
+
+            // use the appropriate tymed
+            switch ( formatEtc.cfFormat )
+            {
+                case CF_BITMAP:
+                    formatEtc.tymed = TYMED_GDI;
+                    break;
+
+                case CF_METAFILEPICT:
+                    formatEtc.tymed = TYMED_MFPICT;
+                    break;
+
+                default:
+                    formatEtc.tymed = TYMED_HGLOBAL;
+            }
 
             // try to get data
             hr = pDataObject->GetData(&formatEtc, &medium);

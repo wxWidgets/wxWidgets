@@ -298,6 +298,12 @@ STDMETHODIMP wxIDataObject::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
             break;
 
         case wxDF_METAFILE:
+            pmedium->hGlobal = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE,
+                                           sizeof(METAFILEPICT));
+            if ( !pmedium->hGlobal ) {
+                wxLogLastError("GlobalAlloc");
+                return E_OUTOFMEMORY;
+            }
             pmedium->tymed = TYMED_MFPICT;
             break;
 
@@ -334,7 +340,7 @@ STDMETHODIMP wxIDataObject::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
     hr = GetDataHere(pformatetcIn, pmedium);
     if ( FAILED(hr) ) {
         // free resources we allocated
-        if ( pmedium->tymed == TYMED_HGLOBAL ) {
+        if ( pmedium->tymed & (TYMED_HGLOBAL | TYMED_MFPICT) ) {
             GlobalFree(pmedium->hGlobal);
         }
 
@@ -358,11 +364,6 @@ STDMETHODIMP wxIDataObject::GetDataHere(FORMATETC *pformatetc,
             break;
 
         case TYMED_MFPICT:
-            // this should be copied on bitmaps - but I don't have time for
-            // this now
-            wxFAIL_MSG(wxT("TODO - no support for metafiles in wxDataObject"));
-            break;
-
         case TYMED_HGLOBAL:
             {
                 // copy data
@@ -409,11 +410,6 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
             break;
 
         case TYMED_MFPICT:
-            // this should be copied on bitmaps - but I don't have time for
-            // this now
-            wxFAIL_MSG(wxT("TODO - no support for metafiles in wxDataObject"));
-            break;
-
         case TYMED_HGLOBAL:
             {
                 wxDataFormat format = pformatetc->cfFormat;
@@ -467,6 +463,10 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                         size = 0;
                         break;
 
+                    case CF_METAFILEPICT:
+                        size = sizeof(METAFILEPICT);
+                        break;
+
                     default:
                         {
                             // we suppose that the size precedes the data
@@ -491,11 +491,17 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
     }
 
     if ( fRelease ) {
-        // we own the medium, so we must release it - but do *not* free the
-        // bitmap handle fi we have it because we have copied it elsewhere
-        if ( pmedium->tymed == TYMED_GDI )
+        // we own the medium, so we must release it - but do *not* free any
+        // data we pass by handle because we have copied it elsewhere
+        switch ( pmedium->tymed )
         {
-            pmedium->hBitmap = 0;
+            case TYMED_GDI:
+                pmedium->hBitmap = 0;
+                break;
+
+            case TYMED_MFPICT:
+                pmedium->hMetaFilePict = 0;
+                break;
         }
 
         ReleaseStgMedium(pmedium);
@@ -759,7 +765,7 @@ bool wxBitmapDataObject2::GetDataHere(void *pBuf) const
     return TRUE;
 }
 
-bool wxBitmapDataObject2::SetData(size_t len, const void *pBuf)
+bool wxBitmapDataObject2::SetData(size_t WXUNUSED(len), const void *pBuf)
 {
     HBITMAP hbmp = *(HBITMAP *)pBuf;
 
