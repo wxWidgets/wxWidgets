@@ -66,13 +66,34 @@ public:
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
     void OnFromPoint(wxCommandEvent& event);
+    void OnFullScreen(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+
+    void OnChangeMode(wxCommandEvent& event);
+    void OnResetMode(wxCommandEvent& event);
 
     void OnLeftClick(wxMouseEvent& event);
 
+    void OnDisplayChanged(wxDisplayChangedEvent& event);
+
 private:
+    // convert video mode to textual description
+    wxString VideoModeToText(const wxVideoMode& mode);
+
+    // GUI controls
+    wxNotebook *m_notebook;
+
     // any class wishing to process wxWindows events must use this macro
     DECLARE_EVENT_TABLE()
+};
+
+// Client data class for the choice control containing the video modes
+class MyVideoModeClientData : public wxClientData
+{
+public:
+    MyVideoModeClientData(const wxVideoMode& m) : mode(m) { }
+
+    const wxVideoMode mode;
 };
 
 // ----------------------------------------------------------------------------
@@ -86,6 +107,13 @@ enum
     Display_Quit = 1,
 
     Display_FromPoint,
+    Display_FullScreen,
+
+    // controls
+    Display_ChangeMode = 1000,
+    Display_ResetMode,
+    Display_CurrentMode,
+
 
     // it is important for the id corresponding to the "About" command to have
     // this standard value as otherwise it won't be handled properly under Mac
@@ -103,9 +131,16 @@ enum
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Display_Quit,  MyFrame::OnQuit)
     EVT_MENU(Display_FromPoint,  MyFrame::OnFromPoint)
+    EVT_MENU(Display_FullScreen, MyFrame::OnFullScreen)
     EVT_MENU(Display_About, MyFrame::OnAbout)
 
+    EVT_CHOICE(Display_ChangeMode, MyFrame::OnChangeMode)
+    EVT_BUTTON(Display_ResetMode, MyFrame::OnResetMode)
+
     EVT_LEFT_UP(MyFrame::OnLeftClick)
+
+
+    EVT_DISPLAY_CHANGED(MyFrame::OnDisplayChanged)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWindows to create
@@ -132,7 +167,7 @@ bool MyApp::OnInit()
 
     // and show it (the frames, unlike simple controls, are not shown when
     // created initially)
-    frame->Show(TRUE);
+    frame->Show();
 
     // success: wxApp::OnRun() will be called which will enter the main message
     // loop and the application will run. If we returned FALSE here, the
@@ -154,7 +189,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 #if wxUSE_MENUS
     // create a menu bar
     wxMenu *menuDisplay = new wxMenu;
-    menuDisplay->Append(Display_FromPoint, _("&Find from point..."));
+    menuDisplay->Append(Display_FromPoint, _("Find from &point..."));
+    menuDisplay->AppendSeparator();
+    menuDisplay->AppendCheckItem(Display_FullScreen, _("Full &screen\tF12"));
     menuDisplay->AppendSeparator();
     menuDisplay->Append(Display_Quit, _("E&xit\tAlt-X"), _("Quit this program"));
 
@@ -175,13 +212,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     CreateStatusBar();
 
     // create child controls
-    wxNotebook *notebook = new wxNotebook(this, -1);
+    m_notebook = new wxNotebook(this, -1);
     const size_t count = wxDisplay::GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    for ( size_t nDpy = 0; nDpy < count; nDpy++ )
     {
-        wxDisplay display(n);
+        wxDisplay display(nDpy);
 
-        wxWindow *page = new wxPanel(notebook, -1);
+        wxWindow *page = new wxPanel(m_notebook, -1);
 
         // create 2 column flex grid sizer with growable 2nd column
         wxFlexGridSizer *sizer = new wxFlexGridSizer(2, 10, 20);
@@ -206,31 +243,58 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
                                          r.width, r.height)
                        ));
 
-        sizer->Add(new wxStaticText(page, -1, _T("Depth: ")));
-        sizer->Add(new wxStaticText
-                       (
-                        page,
-                        -1,
-                        wxString::Format(_T("%d bpp"), display.GetDepth())
-                       ));
 
         sizer->Add(new wxStaticText(page, -1, _T("Name: ")));
         sizer->Add(new wxStaticText(page, -1, display.GetName()));
 
-        sizer->Add(new wxStaticText(page, -1, _T("Colour: ")));
-        sizer->Add(new wxStaticText(page, -1, display.IsColour() ? _T("Yes")
-                                                                 : _T("No")));
+        wxChoice *choiceModes = new wxChoice(page, Display_ChangeMode);
+        const wxArrayVideoModes modes = display.GetModes();
+        const size_t count = modes.GetCount();
+        for ( size_t nMode = 0; nMode < count; nMode++ )
+        {
+            const wxVideoMode& mode = modes[nMode];
 
-        // add it to another sizer to have borders around it
+            choiceModes->Append(VideoModeToText(mode),
+                                new MyVideoModeClientData(mode));
+        }
+
+        sizer->Add(new wxStaticText(page, -1, _T("&Modes: ")));
+        sizer->Add(choiceModes, 0, wxEXPAND);
+
+        sizer->Add(new wxStaticText(page, -1, _T("Current: ")));
+        sizer->Add(new wxStaticText(page, Display_CurrentMode,
+                                    VideoModeToText(display.GetCurrentMode())));
+
+        // add it to another sizer to have borders around it and button below
         wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
         sizerTop->Add(sizer, 1, wxALL | wxEXPAND, 10);
+        sizerTop->Add(new wxButton(page, Display_ResetMode, _T("&Reset mode")),
+                      0, wxALL | wxCENTRE, 5);
         page->SetSizer(sizerTop);
 
-        notebook->AddPage(page,
-                          wxString::Format(_T("Display %lu"), (unsigned long)n));
+        m_notebook->AddPage(page,
+                            wxString::Format(_T("Display %lu"),
+                                             (unsigned long)nDpy));
     }
 }
 
+wxString MyFrame::VideoModeToText(const wxVideoMode& mode)
+{
+    wxString s;
+    s.Printf(_T("%dx%d"), mode.w, mode.h);
+
+    if ( mode.bpp )
+    {
+        s += wxString::Format(_T(", %dbpp"), mode.bpp);
+    }
+
+    if ( mode.refresh )
+    {
+        s += wxString::Format(_T(", %dHz"), mode.refresh);
+    }
+
+    return s;
+}
 
 // event handlers
 
@@ -242,6 +306,13 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
+    wxDisplay dpy(1);
+    if ( !dpy.ChangeMode(wxVideoMode(800, 600)) )
+    {
+        wxLogError("Failed!");
+        return;
+    }
+
     wxMessageBox(_T("Demo program for wxDisplay class.\n\n(c) 2003 Vadim Zeitlin"),
                  _T("About Display Sample"),
                  wxOK | wxICON_INFORMATION,
@@ -255,6 +326,31 @@ void MyFrame::OnFromPoint(wxCommandEvent& WXUNUSED(event))
     CaptureMouse();
 }
 
+void MyFrame::OnFullScreen(wxCommandEvent& event)
+{
+    ShowFullScreen(event.IsChecked());
+}
+
+void MyFrame::OnChangeMode(wxCommandEvent& event)
+{
+    wxDisplay dpy(m_notebook->GetSelection());
+
+    // you wouldn't write this in real code, would you?
+    if ( !dpy.ChangeMode(((MyVideoModeClientData *)
+                wxDynamicCast(event.GetEventObject(), wxChoice)->
+                    GetClientObject(event.GetInt()))->mode) )
+    {
+        wxLogError(_T("Changing video mode failed!"));
+    }
+}
+
+void MyFrame::OnResetMode(wxCommandEvent& WXUNUSED(event))
+{
+    wxDisplay dpy(m_notebook->GetSelection());
+
+    dpy.ResetMode();
+}
+
 void MyFrame::OnLeftClick(wxMouseEvent& event)
 {
     if ( HasCapture() )
@@ -264,7 +360,7 @@ void MyFrame::OnLeftClick(wxMouseEvent& event)
         int dpy = wxDisplay::GetFromPoint(ptScreen);
         if ( dpy == wxNOT_FOUND )
         {
-            wxLogError(_T("Mouse clicked outside of display!!"));
+            wxLogError(_T("Mouse clicked outside of display!?"));
         }
 
         wxLogStatus(this, _T("Mouse clicked in display %d (at (%d, %d))"),
@@ -272,5 +368,23 @@ void MyFrame::OnLeftClick(wxMouseEvent& event)
 
         ReleaseMouse();
     }
+}
+
+void MyFrame::OnDisplayChanged(wxDisplayChangedEvent& event)
+{
+    // update the current mode text
+    for ( int n = 0; n < m_notebook->GetPageCount(); n++ )
+    {
+        wxStaticText *label = wxDynamicCast(m_notebook->GetPage(n)->
+                                                FindWindow(Display_CurrentMode),
+                                            wxStaticText);
+        if ( label )
+            label->SetLabel(VideoModeToText(wxDisplay(n).GetCurrentMode()));
+    }
+
+
+    wxLogStatus(this, _T("Display resolution was changed."));
+
+    event.Skip();
 }
 
