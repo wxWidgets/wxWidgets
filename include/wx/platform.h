@@ -24,6 +24,29 @@
 #endif
 
 /*
+	WXMAC variants
+	__WXMAC_CLASSIC__ means ppc non-carbon builds, __WXMAC_CARBON__ means
+	carbon API available (mach or cfm builds) , __WXMAC_OSX__ means mach-o
+	builds, running under 10.2 + only
+*/
+#ifdef __WXMAC__
+	#if defined(__MACH__)
+		#define __WXMAC_OSX__ 1
+		#define __WXMAC_CARBON__ 1
+		#define __WXMAC_CLASSIC__ 0
+	#else
+		#define __WXMAC_OSX__ 0
+		#if TARGET_CARBON
+			#define __WXMAC_CARBON__ 1
+			#define __WXMAC_CLASSIC__ 0
+		#else
+			#define __WXMAC_CARBON__ 0
+			#define __WXMAC_CLASSIC__ 1
+		#endif
+	#endif
+#endif
+
+/*
    first define Windows symbols if they're not defined on the command line: we
    can autodetect everything we need if _WIN32 is defined
  */
