@@ -2,7 +2,7 @@
 
 NB: this file describes the installation of wxBase library. If you are using a
     GUI version of wxWindows, please refer to the install.txt in the
-    appropriate subdirectory!
+    appropriate subdirectory (msw, gtk, motif).
 
 0. Requirments and supported platforms
    -----------------------------------

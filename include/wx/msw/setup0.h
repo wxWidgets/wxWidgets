@@ -513,9 +513,6 @@
 
 #undef  wxUSE_DEBUG_NEW_ALWAYS
 #define wxUSE_DEBUG_NEW_ALWAYS          0
-
-#undef  wxUSE_GLCANVAS
-#define wxUSE_GLCANVAS                  0
 #endif
 
 // MFC duplicates these operators

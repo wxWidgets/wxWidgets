@@ -820,6 +820,17 @@ $(WXDIR)\docs\ps\referenc.ps:	$(WXDIR)\docs\latex\wx\referenc.dvi
         move referenc.ps $(WXDIR)\docs\ps\referenc.ps
         cd $(THISDIR)
 
+# An htb file is a zip file containing the .htm, .gif, .hhp, .hhc and .hhk
+# files, renamed to htb.
+# This can then be used with e.g. helpview.
+# Optionally, a cached version of the .hhp file can be generated with hhp2cached.
+htb:
+	cd $(WXDIR)\docs\html\wx
+    -erase /Y wx.zip wx.htb
+    zip32 wx.zip *.htm *.gif *.hhp *.hhc *.hhk
+    ren wx.zip wx.htb
+    cd $(THISDIR)
+
 # In order to force document reprocessing
 touchmanual:
     -touch $(WXDIR)\docs\latex\wx\manual.tex

@@ -188,6 +188,11 @@ if necessary) that the project settings, especially the list of defined
 symbols, struct packing, etc. are exactly the same for all items in
 the project. After this, delete everything (including PCH) and recompile.
 
+Note (5): for some further notes about upgrading your project
+files to be compatible with wxWindows 2.1.14, please see
+"Highlights of wxWindows 2.1.14" from the Download page of the
+web site or CD-ROM.
+
 Visual C++ 1.5 compilation (16-bit)
 -----------------------------------
 
@@ -470,6 +475,19 @@ Notes:
 
 5. If there's a problem executing the windres program, try
    commenting out RCPREPROCESSOR in makeg95.env.
+
+6. OpenGL support should work with Mingw32 as-is. However,
+   if you wish to generate import libraries appropriate either for
+   the MS OpenGL libraries or the SGI OpenGL libraries, go to
+   include/wx/msw/gl and use:
+
+     dlltool -k -d opengl.def -llibopengl.a
+
+   for the SGI DLLs, or
+
+     dlltool -k -d opengl32.def -llibopengl32.a
+
+   and similarly for glu[32].def.
 
 References:
 
