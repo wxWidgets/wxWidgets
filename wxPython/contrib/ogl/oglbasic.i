@@ -179,7 +179,7 @@ public:
     %addmethods {
         PyObject* GetChildren() {
             wxList& list = self->GetChildren();
-            return wxPy_ConvertList(&list, "wxPyShape");
+            return wxPy_ConvertShapeList(&list, "wxPyShape");
         }
     }
 
@@ -223,7 +223,7 @@ public:
     %addmethods {
         PyObject* GetLines() {
             wxList& list = self->GetLines();
-            return wxPy_ConvertList(&list, "wxPyLineShape");
+            return wxPy_ConvertShapeList(&list, "wxPyLineShape");
         }
     }
 

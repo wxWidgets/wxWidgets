@@ -59,7 +59,7 @@ public:
     %addmethods {
         PyObject* GetShapeList() {
             wxList* list = self->GetShapeList();
-            return wxPy_ConvertList(list, "wxPyShape");
+            return wxPy_ConvertShapeList(list, "wxPyShape");
         }
     }
 
@@ -146,6 +146,12 @@ public:
     void RemoveShape(wxPyShape *shape);
     void SetDiagram(wxDiagram *diagram);
     void Snap(double *INOUT, double *INOUT);
+
+
+    %pragma(python) addtoclass = "
+    def GetShapeList(self):
+        return self.GetDiagram().GetShapeList()
+    "
 
 };
 

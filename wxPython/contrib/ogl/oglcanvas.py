@@ -209,6 +209,10 @@ class wxPyShapeCanvasPtr(wxScrolledWindowPtr):
         return val
     def __repr__(self):
         return "<C wxPyShapeCanvas instance at %s>" % (self.this,)
+    
+    def GetShapeList(self):
+        return self.GetDiagram().GetShapeList()
+    
 class wxPyShapeCanvas(wxPyShapeCanvasPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(oglcanvasc.new_wxPyShapeCanvas,_args,_kwargs)

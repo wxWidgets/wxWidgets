@@ -186,6 +186,25 @@ PyObject*  wxPyMake_wxShapeEvtHandler(wxShapeEvtHandler* source) {
     return target;
 }
 
+//---------------------------------------------------------------------------
+
+PyObject* wxPy_ConvertShapeList(wxListBase* list, const char* className) {
+    PyObject*   pyList;
+    PyObject*   pyObj;
+    wxObject*   wxObj;
+    wxNode*     node = list->First();
+
+    wxPyBeginBlockThreads();
+    pyList = PyList_New(0);
+    while (node) {
+        wxObj = node->Data();
+        pyObj = wxPyMake_wxShapeEvtHandler((wxShapeEvtHandler*)wxObj);
+        PyList_Append(pyList, pyObj);
+        node = node->Next();
+    }
+    wxPyEndBlockThreads();
+    return pyList;
+}
 
 
 //---------------------------------------------------------------------------

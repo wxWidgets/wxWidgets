@@ -3080,7 +3080,7 @@ static PyObject *_wrap_wxPyShape_GetTopAncestor(PyObject *self, PyObject *args, 
 
 static PyObject * wxPyShape_GetChildren(wxPyShape *self) {
             wxList& list = self->GetChildren();
-            return wxPy_ConvertList(&list, "wxPyShape");
+            return wxPy_ConvertShapeList(&list, "wxPyShape");
         }
 static PyObject *_wrap_wxPyShape_GetChildren(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -4147,7 +4147,7 @@ static PyObject *_wrap_wxPyShape_GetMaintainAspectRatio(PyObject *self, PyObject
 
 static PyObject * wxPyShape_GetLines(wxPyShape *self) {
             wxList& list = self->GetLines();
-            return wxPy_ConvertList(&list, "wxPyLineShape");
+            return wxPy_ConvertShapeList(&list, "wxPyLineShape");
         }
 static PyObject *_wrap_wxPyShape_GetLines(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;

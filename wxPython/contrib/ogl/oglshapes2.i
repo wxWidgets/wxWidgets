@@ -221,7 +221,7 @@ public:
     %addmethods {
         PyObject* GetLineControlPoints() {
             wxList* list = self->GetLineControlPoints();
-            return wxPy_ConvertList(list, "wxPyControlPoint");
+            return wxPy_ConvertShapeList(list, "wxPyControlPoint");
         }
     }
 

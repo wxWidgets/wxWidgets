@@ -4093,7 +4093,7 @@ static PyObject *_wrap_wxPyLineShape_MakeLineControlPoints(PyObject *self, PyObj
 
 static PyObject * wxPyLineShape_GetLineControlPoints(wxPyLineShape *self) {
             wxList* list = self->GetLineControlPoints();
-            return wxPy_ConvertList(list, "wxPyControlPoint");
+            return wxPy_ConvertShapeList(list, "wxPyControlPoint");
         }
 static PyObject *_wrap_wxPyLineShape_GetLineControlPoints(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;

@@ -425,7 +425,7 @@ static PyObject *_wrap_wxDiagram_GetMouseTolerance(PyObject *self, PyObject *arg
 
 static PyObject * wxDiagram_GetShapeList(wxDiagram *self) {
             wxList* list = self->GetShapeList();
-            return wxPy_ConvertList(list, "wxPyShape");
+            return wxPy_ConvertShapeList(list, "wxPyShape");
         }
 static PyObject *_wrap_wxDiagram_GetShapeList(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;

@@ -8147,7 +8147,7 @@ static PyObject *_wrap_wxPyCompositeShape_GetConstraints(PyObject *self, PyObjec
 
 static PyObject * wxPyCompositeShape_GetDivisions(wxPyCompositeShape *self) {
             wxList& list = self->GetDivisions();
-            return wxPy_ConvertList(&list, "wxPyDivisionShape");
+            return wxPy_ConvertShapeList(&list, "wxPyDivisionShape");
         }
 static PyObject *_wrap_wxPyCompositeShape_GetDivisions(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;

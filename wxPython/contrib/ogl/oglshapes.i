@@ -408,7 +408,7 @@ public:
 
         PyObject* GetDivisions() {
             wxList& list = self->GetDivisions();
-            return wxPy_ConvertList(&list, "wxPyDivisionShape");
+            return wxPy_ConvertShapeList(&list, "wxPyDivisionShape");
         }
     }
 
