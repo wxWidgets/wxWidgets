@@ -2511,7 +2511,7 @@ bool wxMacMLTEHIViewControl::HasFocus() const
 
 bool wxMacMLTEHIViewControl::NeedsFocusRect() const 
 {
-    return true ;
+    return m_windowStyle & wxNO_BORDER ? false : true;
 }
 
 #endif
