@@ -4262,32 +4262,25 @@ static void SetInvokingWindow( wxMenu *menu, wxWindowGTK *win )
     }
 }
 
-// used to pass the coordinates from wxWindowGTK::DoPopupMenu() to
-// wxPopupMenuPositionCallback()
-//
-// should be safe even in the MT case as the user can hardly popup 2 menus
-// simultaneously, can he?
-static gint gs_pop_x = 0;
-static gint gs_pop_y = 0;
-
 extern "C" void wxPopupMenuPositionCallback( GtkMenu *menu,
                                              gint *x, gint *y,
 #ifdef __WXGTK20__
                                              gboolean * WXUNUSED(whatever),
 #endif
-                                             gpointer WXUNUSED(user_data) )
+                                             gpointer user_data )
 {
     // ensure that the menu appears entirely on screen
     GtkRequisition req;
     gtk_widget_get_child_requisition(GTK_WIDGET(menu), &req);
 
     wxSize sizeScreen = wxGetDisplaySize();
+    wxPoint *pos = (wxPoint*)user_data;
 
     gint xmax = sizeScreen.x - req.width,
          ymax = sizeScreen.y - req.height;
 
-    *x = gs_pop_x < xmax ? gs_pop_x : xmax;
-    *y = gs_pop_y < ymax ? gs_pop_y : ymax;
+    *x = pos->x < xmax ? pos->x : xmax;
+    *y = pos->y < ymax ? pos->y : ymax;
 }
 
 bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
@@ -4300,9 +4293,7 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
 
     menu->UpdateUI();
 
-    gs_pop_x = x;
-    gs_pop_y = y;
-    ClientToScreen( &gs_pop_x, &gs_pop_y );
+    wxPoint pos(ClientToScreen(wxPoint(x, y)));
 
     bool is_waiting = TRUE;
 
@@ -4316,8 +4307,8 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
                   (GtkWidget *) NULL,           // parent menu shell
                   (GtkWidget *) NULL,           // parent menu item
                   wxPopupMenuPositionCallback,  // function to position it
-                  NULL,                         // client data
-                  0,                            // button used to activate it
+                  &pos,                         // client data
+                  0 /* FIXME! */,               // button used to activate it
 #ifdef __WXGTK20__
                   gtk_get_current_event_time()
 #else
