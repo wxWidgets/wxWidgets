@@ -6295,12 +6295,12 @@ AC_CONFIG_COMMANDS([default],
                 ( cd lib/wx/config ; 
                   rm -f ${TOOLCHAIN_NAME}
                   ${LN_S} ${WXCONFIG_DATA_FILE} ${TOOLCHAIN_NAME} )
-                rm -f wx${TOOLCHAIN_NAME}-config
-                ${LN_S} wx-config wx${TOOLCHAIN_NAME}-config
             fi
             if test -f wx-config-wrapper; then
                 chmod +x wx-config-wrapper
                 mv -f wx-config-wrapper wx-config
+                rm -f wx${TOOLCHAIN_NAME}-config
+                ${LN_S} wx-config wx${TOOLCHAIN_NAME}-config
             fi
           ],
           [
