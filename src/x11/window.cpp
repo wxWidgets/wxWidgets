@@ -137,9 +137,21 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
 
     Window parentWindow = (Window) parent->GetMainWindow();
 
+    wxSize size2(size);
+    if (size2.x == -1)
+	size2.x = 100;
+    if (size2.y == -1)
+	size2.y = 100;
+
+    wxPoint pos2(pos);
+    if (pos2.x == -1)
+	pos2.x = 100;
+    if (pos2.y == -1)
+	pos2.y = 100;
+    
     Window window = XCreateSimpleWindow( 
         xdisplay, parentWindow,
-        x, y, w, h, 0, 
+        pos2.x, pos2.y, size2.x, size2.y, 0, 
         m_backgroundColour.GetPixel(),
         m_backgroundColour.GetPixel() );
         
@@ -162,7 +174,10 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
     // sample).
     SetCursor(*wxSTANDARD_CURSOR);
     SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
-    SetSize(pos.x, pos.y, size.x, size.y);
+
+    // Don't call this, it can have nasty repercussions for composite controls,
+    // for example
+    //    SetSize(pos.x, pos.y, size.x, size.y);
 
     return TRUE;
 }
@@ -747,6 +762,11 @@ void wxWindowX11::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         return;
 
     XWindowChanges windowChanges;
+    windowChanges.x = 0;
+    windowChanges.y = 0;
+    windowChanges.width = 0;
+    windowChanges.height = 0;
+    windowChanges.stack_mode = 0;
     int valueMask = 0;
 
     if (x != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
@@ -766,11 +786,15 @@ void wxWindowX11::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     if (width != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     {
         windowChanges.width = width /* - m_borderSize*2 */;
+	if (windowChanges.width == 0)
+	    windowChanges.width = 1;
         valueMask |= CWWidth;
     }
     if (height != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     {
         windowChanges.height = height /* -m_borderSize*2*/;
+	if (windowChanges.height == 0)
+	    windowChanges.height = 1;
         valueMask |= CWHeight;
     }
 
