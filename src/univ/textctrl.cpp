@@ -488,116 +488,159 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
 
 #else // 1 (new replacement code)
 
-    /*
-       Join all the lines in the replacement range into one string, then
-       replace a part of it with the new text and break it into lines again.
-    */
-
-    // (1) join lines
-    wxString textOrig;
-    long line;
-    for ( line = lineStart; line <= lineEnd; line++ )
+    if ( IsSingleLine() )
     {
-        if ( line > lineStart )
+        // replace the part of the text with the new value
+        wxString valueNew(m_value, (size_t)from);
+
+        // remember it for later use
+        wxCoord startNewText = GetTextWidth(valueNew);
+
+        valueNew += text;
+        if ( (size_t)to < m_value.length() )
         {
-            // from previous line
-            textOrig += _T('\n');
+            valueNew += m_value.c_str() + (size_t)to;
         }
 
-        textOrig += m_lines[line];
-    }
+        // OPT: is the following really ok? not sure any more now at 2 am...
 
-    // (2) replace text in the combined string
-    wxString textNew(textOrig, colStart);
+        // we usually refresh till the end of line except of the most common case
+        // when some text is appended to the end of the string in which case we
+        // refresh just it
+        wxCoord widthNewText;
 
-    // these values will be used to refresh the changed area below
-    wxCoord widthNewText, startNewText = GetTextWidth(textNew);
-    if ( (size_t)colStart == m_lines[lineStart].length() )
-    {
-        // text appended, refresh just enough to show the new text
-        widthNewText = GetTextWidth(text.BeforeFirst(_T('\n')));
-    }
-    else // text inserted, refresh till the end of line
-    {
-        widthNewText = 0;
-    }
-
-    textNew += text;
-    size_t toRel = (size_t)((to - from) + colStart); // adjust for index shift
-    if ( toRel < textOrig.length() )
-        textNew += textOrig.c_str() + toRel;
-
-    // (3) break it into lines
-    wxArrayString lines;
-    if ( textNew.empty() )
-    {
-        // special case: if the replacement string is empty we still want to
-        // have one (empty) string in the lines array but wxStringTokenize()
-        // won't put anything in it in this case, so do it ourselves
-        lines.Add(wxEmptyString);
-    }
-    else // break into lines normally
-    {
-       lines = wxStringTokenize(textNew, _T("\n"), wxTOKEN_RET_EMPTY_ALL);
-    }
-
-    size_t nReplaceCount = lines.GetCount(),
-           nReplaceLine = 0;
-
-    // (4) merge into the array
-
-    size_t countOld = m_lines.GetCount();
-
-    // (4a) replace
-    for ( line = lineStart; line <= lineEnd; line++, nReplaceLine++ )
-    {
-        if ( nReplaceLine < nReplaceCount )
+        if ( (size_t)from < m_value.length() )
         {
-            // we have the replacement line for this one
-            m_lines[line] = lines[nReplaceLine];
-
-            UpdateMaxWidth(line);
+            // refresh till the end of line
+            widthNewText = 0;
         }
-        else // no more replacement lines
+        else // text appended, not replaced
         {
-            // (4b) delete all extra lines
-            while ( line <= lineEnd )
+            // refresh only the new text
+            widthNewText = GetTextWidth(text);
+        }
+
+        m_value = valueNew;
+
+        // force m_colLastVisible update
+        m_colLastVisible = -1;
+
+        // repaint
+        RefreshPixelRange(0, startNewText, widthNewText);
+    }
+    else // multiline
+    {
+        /*
+           Join all the lines in the replacement range into one string, then
+           replace a part of it with the new text and break it into lines again.
+        */
+
+        // (1) join lines
+        wxString textOrig;
+        long line;
+        for ( line = lineStart; line <= lineEnd; line++ )
+        {
+            if ( line > lineStart )
             {
-                m_lines.RemoveAt(line++);
+                // from previous line
+                textOrig += _T('\n');
+            }
+
+            textOrig += m_lines[line];
+        }
+
+        // (2) replace text in the combined string
+        wxString textNew(textOrig, colStart);
+
+        // these values will be used to refresh the changed area below
+        wxCoord widthNewText, startNewText = GetTextWidth(textNew);
+        if ( (size_t)colStart == m_lines[lineStart].length() )
+        {
+            // text appended, refresh just enough to show the new text
+            widthNewText = GetTextWidth(text.BeforeFirst(_T('\n')));
+        }
+        else // text inserted, refresh till the end of line
+        {
+            widthNewText = 0;
+        }
+
+        textNew += text;
+        size_t toRel = (size_t)((to - from) + colStart); // adjust for index shift
+        if ( toRel < textOrig.length() )
+            textNew += textOrig.c_str() + toRel;
+
+        // (3) break it into lines
+        wxArrayString lines;
+        if ( textNew.empty() )
+        {
+            // special case: if the replacement string is empty we still want to
+            // have one (empty) string in the lines array but wxStringTokenize()
+            // won't put anything in it in this case, so do it ourselves
+            lines.Add(wxEmptyString);
+        }
+        else // break into lines normally
+        {
+           lines = wxStringTokenize(textNew, _T("\n"), wxTOKEN_RET_EMPTY_ALL);
+        }
+
+        size_t nReplaceCount = lines.GetCount(),
+               nReplaceLine = 0;
+
+        // (4) merge into the array
+
+        size_t countOld = m_lines.GetCount();
+
+        // (4a) replace
+        for ( line = lineStart; line <= lineEnd; line++, nReplaceLine++ )
+        {
+            if ( nReplaceLine < nReplaceCount )
+            {
+                // we have the replacement line for this one
+                m_lines[line] = lines[nReplaceLine];
+
+                UpdateMaxWidth(line);
+            }
+            else // no more replacement lines
+            {
+                // (4b) delete all extra lines
+                while ( line <= lineEnd )
+                {
+                    m_lines.RemoveAt(line++);
+                }
             }
         }
-    }
 
-    // (4c) insert the new lines
-    while ( nReplaceLine < nReplaceCount )
-    {
-        m_lines.Insert(lines[nReplaceLine++], ++lineEnd);
+        // (4c) insert the new lines
+        while ( nReplaceLine < nReplaceCount )
+        {
+            m_lines.Insert(lines[nReplaceLine++], ++lineEnd);
 
-        UpdateMaxWidth(lineEnd);
-    }
+            UpdateMaxWidth(lineEnd);
+        }
 
-    // (5) now refresh the changed area
-    RefreshPixelRange(lineStart, startNewText, widthNewText);
-    if ( m_lines.GetCount() == countOld )
-    {
-        // number of lines didn't change, refresh the updated lines and the
-        // last one
-        if ( lineStart < lineEnd )
-            RefreshLineRange(lineStart + 1, lineEnd);
-    }
-    else
-    {
-        // number of lines did change, we need to refresh everything below the
-        // start line
-        RefreshLineRange(lineStart + 1);
+        // (5) now refresh the changed area
+        RefreshPixelRange(lineStart, startNewText, widthNewText);
+        if ( m_lines.GetCount() == countOld )
+        {
+            // number of lines didn't change, refresh the updated lines and the
+            // last one
+            if ( lineStart < lineEnd )
+                RefreshLineRange(lineStart + 1, lineEnd);
+        }
+        else
+        {
+            // number of lines did change, we need to refresh everything below the
+            // start line
+            RefreshLineRange(lineStart + 1);
 
-        // the vert scrollbar might [dis]appear
-        m_updateScrollbarY = TRUE;
-    }
+            // the vert scrollbar might [dis]appear
+            m_updateScrollbarY = TRUE;
+        }
 #endif // 0/1
 
-    // update the (cached) last position
-    m_posLast += text.length() - to + from;
+        // update the (cached) last position
+        m_posLast += text.length() - to + from;
+    }
 
     // update the current position: note that we always put the cursor at the
     // end of the replacement text
