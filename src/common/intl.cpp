@@ -443,6 +443,7 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash, bool convertEncoding) cons
     #if wxUSE_FONTMAP
     if ( convertEncoding )
     {
+        wxFontEncoding targetEnc = wxFONTENCODING_SYSTEM;
         wxFontEncoding enc = wxTheFontMapper->CharsetToEncoding(charset, FALSE);
         if ( enc == wxFONTENCODING_SYSTEM )
         {
@@ -450,7 +451,7 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash, bool convertEncoding) cons
         }
         else
         {
-            wxFontEncoding targetEnc = wxLocale::GetSystemEncoding();
+            targetEnc = wxLocale::GetSystemEncoding();
             if (targetEnc == wxFONTENCODING_SYSTEM)
             {
                 wxFontEncodingArray a = wxEncodingConverter::GetPlatformEquivalents(enc);
@@ -479,7 +480,7 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash, bool convertEncoding) cons
     }
 
     if ( !convertEncoding )
-    #else // !wxUSE_FONTMAP
+    #endif // wxUSE_FONTMAP/!wxUSE_FONTMAP
     {
         for (size_t i = 0; i < m_numStrings; i++)
         {
@@ -487,7 +488,6 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash, bool convertEncoding) cons
             hash[key] = StringAtOfs(m_pTransTable, i);
         }
     }
-    #endif // wxUSE_FONTMAP/!wxUSE_FONTMAP
 #endif // wxUSE_WCHAR_T/!wxUSE_WCHAR_T
 }
 
