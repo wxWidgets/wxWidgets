@@ -915,7 +915,7 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
 {
     m_bypassGenericImpl = bypassGenericImpl;
 
-    if (!wxFileDialogBase::Create(parent, message, defaultDir, defaultFile, 
+    if (!wxFileDialogBase::Create(parent, message, defaultDir, defaultFile,
                                   wildCard, style, pos))
     {
         return false;
@@ -1151,12 +1151,13 @@ void wxGenericFileDialog::SetWildcard(const wxString& wildCard)
                                                     wildFilters);
     wxCHECK_RET( count, wxT("wxFileDialog: bad wildcard string") );
 
-    size_t n, old_count = m_choice->GetCount();
-    for ( n = 0; n < count; n++ )
+    const size_t countOld = m_choice->GetCount();
+    size_t n;
+    for ( n = 0; n < countOld; n++ )
     {
         delete (wxString *)m_choice->GetClientData(n);
     }
-    
+
     for ( n = 0; n < count; n++ )
     {
         m_choice->Append( wildDescriptions[n], new wxString( wildFilters[n] ) );
