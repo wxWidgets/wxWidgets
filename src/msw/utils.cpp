@@ -156,7 +156,10 @@ bool wxGetFullHostName(wxChar *buf, int maxSize)
     // TODO should use GetComputerNameEx() when available
 
     // we don't want to always link with Winsock DLL as we might not use it at
-    // all, so load it dynamically here if needed
+    // all, so load it dynamically here if needed (and don't complain if it is
+    // missing, we handle this)
+    wxLogNull noLog;
+
     wxDynamicLibrary dllWinsock(_T("ws2_32.dll"), wxDL_VERBATIM);
     if ( dllWinsock.IsLoaded() )
     {
