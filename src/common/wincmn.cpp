@@ -1512,7 +1512,7 @@ wxHitTest wxWindowBase::DoHitTest(wxCoord x, wxCoord y) const
     {
         // check the right and bottom borders too
         wxSize size = GetSize();
-        outside = x > size.x || y > size.y;
+        outside = x >= size.x || y >= size.y;
     }
 
     return outside ? wxHT_WINDOW_OUTSIDE : wxHT_WINDOW_INSIDE;

@@ -204,20 +204,59 @@ void wxPopupComboWindow::DismissAndNotify()
 
 void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
 {
-    // clicking the mouse outside of this window makes us disappear
-    wxCoord x, y;
-    event.GetPosition(&x, &y);
+    wxPoint pos = event.GetPosition();
+
+    // scrollbar on which the click occured
+    wxWindow *sbar = NULL;
 
     wxWindow *win = (wxWindow *)event.GetEventObject();
-    wxHitTest ht = win->HitTest(x, y);
+    switch ( win->HitTest(pos.x, pos.y) )
+    {
+        case wxHT_WINDOW_OUTSIDE:
+            // clicking outside a popup dismisses it
+            m_popup->DismissAndNotify();
+            break;
 
-    if ( ht == wxHT_WINDOW_OUTSIDE )
-    {
-        m_popup->DismissAndNotify();
+        case wxHT_WINDOW_HORZ_SCROLLBAR:
+            sbar = win->GetScrollbar(wxHORIZONTAL);
+            break;
+
+        case wxHT_WINDOW_VERT_SCROLLBAR:
+            sbar = win->GetScrollbar(wxVERTICAL);
+            break;
+
+        default:
+            // forgot to update the switch after adding a new hit test code?
+            wxFAIL_MSG( _T("unexpected HitTest() return value") );
+            // fall through
+
+        case wxHT_WINDOW_CORNER:
+            // don't actually know if this one is good for anything, but let it
+            // pass just in case
+
+        case wxHT_WINDOW_INSIDE:
+            event.Skip();
+            break;
     }
-    else
+
+    if ( sbar )
     {
-        event.Skip();
+        // translate the event coordinates to the scrollbar ones
+        pos = sbar->ScreenToClient(win->ClientToScreen(pos));
+
+        // and give the event to it
+        wxMouseEvent event2 = event;
+        event2.m_x = pos.x;
+        event2.m_y = pos.y;
+
+        (void)sbar->GetEventHandler()->ProcessEvent(event2);
+
+        if ( wxWindow::GetCapture() != win )
+        {
+            // scrollbar has captured the mouse so we need to ensure it
+            // will be restored to us when it releases it
+            wxWindow::SetStickyCapture(win);
+        }
     }
 }
 

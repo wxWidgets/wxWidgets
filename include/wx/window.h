@@ -482,6 +482,10 @@ public:
         // get the window which currently captures the mouse or NULL
     static wxWindow *GetCapture();
 
+        // does this window have the capture?
+    virtual bool HasCapture() const
+        { return (wxWindow *)this == GetCapture(); }
+
     // painting the window
     // -------------------
 

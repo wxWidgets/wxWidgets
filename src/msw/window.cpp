@@ -251,7 +251,6 @@ void wxWindowMSW::Init()
 
     // MSW specific
     m_doubleClickAllowed = 0;
-    m_winCaptured = FALSE;
 
     m_isBeingDeleted = FALSE;
     m_oldWndProc = 0;
@@ -476,23 +475,17 @@ wxString wxWindowMSW::GetTitle() const
 void wxWindowMSW::CaptureMouse()
 {
     HWND hWnd = GetHwnd();
-    if ( hWnd && !m_winCaptured )
+    if ( hWnd )
     {
         ::SetCapture(hWnd);
-        m_winCaptured = TRUE;
     }
 }
 
 void wxWindowMSW::ReleaseMouse()
 {
-    if ( m_winCaptured )
+    if ( !::ReleaseCapture() )
     {
-        if ( !::ReleaseCapture() )
-        {
-            wxLogLastError(_T("ReleaseCapture"));
-        }
-
-        m_winCaptured = FALSE;
+        wxLogLastError(_T("ReleaseCapture"));
     }
 }
 
@@ -3411,7 +3404,7 @@ bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags)
         // event that the mouse is inside the window: although this is usually
         // true, it is not if we had captured the mouse, so we need to check
         // the mouse coordinates here
-        if ( !m_winCaptured || IsMouseInWindow() )
+        if ( !HasCapture() || IsMouseInWindow() )
         {
             // Generate an ENTER event
             m_mouseInWindow = TRUE;

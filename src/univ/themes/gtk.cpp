@@ -157,7 +157,9 @@ public:
     virtual wxRect GetBorderDimensions(wxBorder border) const;
     virtual bool AreScrollbarsInsideBorder() const;
 
-    // hit testing for the input handlers
+    // geometry and hit testing
+    virtual wxSize GetScrollbarArrowSize() const
+        { return m_sizeScrollbarArrow; }
     virtual wxRect GetScrollbarRect(const wxScrollBar *scrollbar,
                                     wxScrollBar::Element elem,
                                     int thumbPos = -1) const;
@@ -484,13 +486,21 @@ wxInputHandler *wxGTKTheme::GetInputHandler(const wxString& control)
     if ( n == wxNOT_FOUND )
     {
         // create a new handler
-        if ( control == wxINP_HANDLER_BUTTON )
-            handler = new wxStdButtonInputHandler(GetDefaultInputHandler());
-        else if ( control == wxINP_HANDLER_SCROLLBAR )
+        if ( control == wxINP_HANDLER_SCROLLBAR )
             handler = new wxGTKScrollBarInputHandler(m_renderer,
                                                      GetDefaultInputHandler());
+#if wxUSE_BUTTON
+        else if ( control == wxINP_HANDLER_BUTTON )
+            handler = new wxStdButtonInputHandler(GetDefaultInputHandler());
+#endif // wxUSE_CHECKBOX
+#if wxUSE_CHECKBOX
         else if ( control == wxINP_HANDLER_CHECKBOX )
             handler = new wxGTKCheckboxInputHandler(GetDefaultInputHandler());
+#endif // wxUSE_CHECKBOX
+#if wxUSE_COMBOBOX
+        else if ( control == wxINP_HANDLER_COMBOBOX )
+            handler = new wxStdComboBoxInputHandler(GetDefaultInputHandler());
+#endif // wxUSE_COMBOBOX
 #if wxUSE_LISTBOX
         else if ( control == wxINP_HANDLER_LISTBOX )
             handler = new wxStdListboxInputHandler(GetDefaultInputHandler());
@@ -499,8 +509,10 @@ wxInputHandler *wxGTKTheme::GetInputHandler(const wxString& control)
         else if ( control == wxINP_HANDLER_CHECKLISTBOX )
             handler = new wxStdCheckListboxInputHandler(GetDefaultInputHandler());
 #endif // wxUSE_CHECKLISTBOX
+#if wxUSE_TEXTCTRL
         else if ( control == wxINP_HANDLER_TEXTCTRL )
             handler = new wxGTKTextCtrlInputHandler(GetDefaultInputHandler());
+#endif // wxUSE_TEXTCTRL
         else
             handler = GetDefaultInputHandler();
 

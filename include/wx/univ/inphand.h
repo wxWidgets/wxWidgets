@@ -28,9 +28,11 @@
 #define wxINP_HANDLER_BUTTON            _T("button")
 #define wxINP_HANDLER_CHECKBOX          _T("checkbox")
 #define wxINP_HANDLER_CHECKLISTBOX      _T("checklistbox")
+#define wxINP_HANDLER_COMBOBOX          _T("combobox")
+#define wxINP_HANDLER_LISTBOX           _T("listbox")
 #define wxINP_HANDLER_RADIOBTN          _T("radiobtn")
 #define wxINP_HANDLER_SCROLLBAR         _T("scrollbar")
-#define wxINP_HANDLER_LISTBOX           _T("listbox")
+#define wxINP_HANDLER_SPINBTN           _T("spinbtn")
 #define wxINP_HANDLER_TEXTCTRL          _T("textctrl")
 
 // ----------------------------------------------------------------------------

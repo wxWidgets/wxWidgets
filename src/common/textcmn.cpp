@@ -53,22 +53,22 @@
 wxTextCtrlBase::wxTextCtrlBase()
 {
 #ifndef NO_TEXT_WINDOW_STREAM
-  #if wxUSE_IOSTREAMH
-  if (allocate())
-    setp(base(),ebuf());
-  #else
-  m_streambuf=new char[64];
-  setp(m_streambuf,m_streambuf+64);
-  #endif //wxUSE_IOSTREAMH
+    #if wxUSE_IOSTREAMH
+        if (allocate())
+            setp(base(),ebuf());
+    #else
+        m_streambuf = new char[64];
+        setp(m_streambuf, m_streambuf + 64);
+    #endif //wxUSE_IOSTREAMH
 #endif // NO_TEXT_WINDOW_STREAM
 }
 
 wxTextCtrlBase::~wxTextCtrlBase()
 {
 #ifndef NO_TEXT_WINDOW_STREAM
-#if !wxUSE_IOSTREAMH
-  delete m_streambuf;
-#endif
+    #if !wxUSE_IOSTREAMH
+        delete m_streambuf;
+    #endif // !wxUSE_IOSTREAMH
 #endif
 }
 
@@ -236,6 +236,15 @@ bool wxTextCtrlBase::CanPaste() const
 {
     // can paste if we are not read only
     return IsEditable();
+}
+
+// ----------------------------------------------------------------------------
+// misc
+// ----------------------------------------------------------------------------
+
+void wxTextCtrlBase::SelectAll()
+{
+    SetSelection(0, GetLastPosition());
 }
 
 #endif // wxUSE_TEXTCTRL

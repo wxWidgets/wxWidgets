@@ -700,9 +700,11 @@ void wxControlRenderer::DoDrawItems(const wxListBox *lbox,
     // we'll keep the text colour unchanged
     m_dc.SetTextForeground(lbox->GetForegroundColour());
 
-    // an item should have the focused rect only when the app has focus, so
+    // an item should have the focused rect only when the lbox has focus, so
     // make sure that we never set wxCONTROL_FOCUSED flag if it doesn't
-    int itemCurrent = wxTheApp->IsActive() ? lbox->GetCurrentItem() : -1;
+    int itemCurrent = wxWindow::FindFocus() == (wxWindow *)lbox // cast needed
+                        ? lbox->GetCurrentItem()
+                        : -1;
     for ( size_t n = itemFirst; n < itemLast; n++ )
     {
         int flags = 0;

@@ -199,6 +199,9 @@ public:
     // the control looks "nice" if it uses the adjusted rectangle
     virtual void AdjustSize(wxSize *size, const wxWindow *window) = 0;
 
+    // get the size of a scrollbar arrow
+    virtual wxSize GetScrollbarArrowSize() const = 0;
+
     // gets the bounding box for a scrollbar element for the given (by default
     // - current) thumb position
     virtual wxRect GetScrollbarRect(const wxScrollBar *scrollbar,
@@ -415,6 +418,8 @@ public:
     virtual bool AreScrollbarsInsideBorder() const
         { return m_renderer->AreScrollbarsInsideBorder(); }
 
+    virtual wxSize GetScrollbarArrowSize() const
+        { return m_renderer->GetScrollbarArrowSize(); }
     virtual wxRect GetScrollbarRect(const wxScrollBar *scrollbar,
                                     wxScrollBar::Element elem,
                                     int thumbPos = -1) const

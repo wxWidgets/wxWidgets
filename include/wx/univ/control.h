@@ -80,6 +80,9 @@ public:
         return m_indexAccel == -1 ? _T('\0') : m_label[m_indexAccel];
     }
 
+    // get the input handler of this control
+    wxInputHandler *GetInputHandler() const { return m_handler; }
+
     // perform a control-dependent action: an action may have an optional
     // numeric and another (also optional) string argument whose interpretation
     // depends on the action

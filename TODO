@@ -8,10 +8,12 @@ TEST
 TODO
 ----------------------------------------------------------------------------
 
+*   problems with large fonts!
+
 wxComboBox
 
-*   draw the button correctly
-*   position popup inside the screen
++   draw the button correctly
++   position popup inside the screen
 
 samples:
 

@@ -357,6 +357,8 @@ void wxListBox::SetSelection(int n, bool select)
         {
             if ( !HasMultipleSelection() )
             {
+                // selecting an item in a single selection listbox deselects
+                // all the others
                 DeselectAll();
             }
 
@@ -378,8 +380,16 @@ void wxListBox::SetSelection(int n, bool select)
         //else: not selected
     }
 
+    // sanity check: a single selection listbox can't have more than one item
+    // selected
     wxASSERT_MSG( HasMultipleSelection() || (m_selections.GetCount() < 2),
                   _T("multiple selected items in single selection lbox?") );
+
+    if ( select )
+    {
+        // the newly selected item becomes the current one
+        SetCurrentItem(n);
+    }
 }
 
 int wxListBox::GetSelection() const
@@ -737,6 +747,26 @@ void wxListBox::DoSetFirstItem(int n)
     SetCurrentItem(n);
 }
 
+void wxListBox::DoSetSize(int x, int y,
+                          int width, int height,
+                          int sizeFlags)
+{
+    if ( GetWindowStyle() & wxLB_INT_HEIGHT )
+    {
+        // we must round up the height to an entire number of rows
+
+        // the client area must contain an int number of rows, so take borders
+        // into account
+        wxRect rectBorders = GetRenderer()->GetBorderDimensions(GetBorder());
+        wxCoord hBorders = rectBorders.y + rectBorders.height;
+
+        wxCoord hLine = GetLineHeight();
+        height = ((height - hBorders + hLine - 1) / hLine)*hLine + hBorders;
+    }
+
+    wxListBoxBase::DoSetSize(x, y, width, height);
+}
+
 wxSize wxListBox::DoGetBestClientSize() const
 {
     wxCoord width = 0,
@@ -776,9 +806,9 @@ wxSize wxListBox::DoGetBestClientSize() const
 
 bool wxListBox::SendEvent(wxEventType type)
 {
-    // don't generate events while the mouse is captured, we will only send
-    // them once it is released
-    if ( GetCapture() == this )
+    // don't generate select events while the mouse is captured, we will only
+    // send them once it is released
+    if ( (type == wxEVT_COMMAND_LISTBOX_SELECTED) && (GetCapture() == this) )
         return FALSE;
 
     wxCommandEvent event(type, m_windowId);
@@ -818,12 +848,25 @@ void wxListBox::SetCurrentItem(int n)
     //else: nothing to do
 }
 
-bool wxListBox::FindItem(const wxString& prefix)
+bool wxListBox::FindItem(const wxString& prefix, bool strictlyAfter)
 {
     size_t len = prefix.length();
     int count = GetCount();
-    int first = m_current == count - 1 ? 0 : m_current + 1;
-    int last = m_current == -1 ? count : m_current;
+
+    // start either from the current item or from the next one if strictlyAfter
+    int first, last;
+    if ( strictlyAfter )
+    {
+        first = m_current == count - 1 ? 0 : m_current + 1;
+        last = m_current == -1 ? count : m_current;
+    }
+    else // start with the current
+    {
+        first = m_current == -1 ? 0 : m_current;
+        last = first == 0 ? count : first - 1;
+    }
+
+    // loop over all items in the listbox
     for ( int item = first; item != last; item < count - 1 ? item++ : item = 0 )
     {
         if ( wxStrnicmp(m_strings[item], prefix, len) == 0 )
@@ -946,11 +989,17 @@ void wxListBox::ExtendSelection(int itemTo)
 void wxListBox::Select(bool sel, int item)
 {
     if ( item != -1 )
+    {
+        // go to this item first
         SetCurrentItem(item);
+    }
 
+    // the current item is the one we want to change: either it was just
+    // changed above to be the same as item or item == -1 in which we case we
+    // are supposed to use the current one anyhow
     if ( m_current != -1 )
     {
-        // [de]select the new one
+        // [de]select it
         SetSelection(m_current, sel);
     }
 }
@@ -1037,11 +1086,11 @@ bool wxListBox::PerformAction(const wxControlAction& action,
     else if ( action == wxACTION_LISTBOX_EXTENDSEL )
         ExtendSelection(item);
     else if ( action == wxACTION_LISTBOX_FIND )
-        FindItem(strArg);
+        FindNextItem(strArg);
     else if ( action == wxACTION_LISTBOX_ANCHOR )
         AnchorSelection(item == -1 ? m_current : item);
     else if ( action == wxACTION_LISTBOX_SELECTALL ||
-                action == wxACTION_LISTBOX_SELTOGGLE )
+              action == wxACTION_LISTBOX_SELTOGGLE )
         wxFAIL_MSG(_T("unimplemented yet"));
     else
         return wxControl::PerformAction(action, numArg, strArg);
@@ -1060,17 +1109,30 @@ wxStdListboxInputHandler::wxStdListboxInputHandler(wxInputHandler *handler,
     m_btnCapture = 0;
     m_toggleOnPressAlways = toggleOnPressAlways;
     m_actionMouse = wxACTION_NONE;
+    m_trackMouseOutside = TRUE;
 }
 
 int wxStdListboxInputHandler::HitTest(const wxListBox *lbox,
                                       const wxMouseEvent& event)
 {
+    int item = HitTestUnsafe(lbox, event);
+
+    return FixItemIndex(lbox, item);
+}
+
+int wxStdListboxInputHandler::HitTestUnsafe(const wxListBox *lbox,
+                                            const wxMouseEvent& event)
+{
     wxPoint pt = event.GetPosition();
     pt -= lbox->GetClientAreaOrigin();
     int y;
     lbox->CalcUnscrolledPosition(0, pt.y, NULL, &y);
-    int item = y / lbox->GetLineHeight();
+    return y / lbox->GetLineHeight();
+}
 
+int wxStdListboxInputHandler::FixItemIndex(const wxListBox *lbox,
+                                           int item)
+{
     if ( item < 0 )
     {
         // mouse is above the first item
@@ -1083,6 +1145,11 @@ int wxStdListboxInputHandler::HitTest(const wxListBox *lbox,
     }
 
     return item;
+}
+
+bool wxStdListboxInputHandler::IsValidIndex(const wxListBox *lbox, int item)
+{
+    return item >= 0 && item < lbox->GetCount();
 }
 
 wxControlAction
@@ -1148,6 +1215,9 @@ wxStdListboxInputHandler::SetupCapture(wxListBox *lbox,
         m_actionMouse =
         action = wxACTION_LISTBOX_SELECT;
     }
+
+    // by default we always do track it
+    m_trackMouseOutside = TRUE;
 
     return action;
 }
@@ -1255,17 +1325,11 @@ bool wxStdListboxInputHandler::HandleMouse(wxControl *control,
         {
             winCapture->ReleaseMouse();
             m_btnCapture = 0;
-        }
-        else
-        {
-            // this is not supposed to happen - if we get here, the event is
-            // from the mouse button which had been pressed before and we must
-            // have captured the mouse back then
-            wxFAIL_MSG(_T("logic error in listbox mosue handling"));
-        }
 
-        // generate the last event to triiger sending the selection event
-        action = m_actionMouse;
+            // generate the last event to triiger sending the selection event
+            action = m_actionMouse;
+        }
+        //else: the mouse wasn't presed over the listbox, only released here
     }
     else if ( event.LeftDClick() )
     {
@@ -1289,16 +1353,41 @@ bool wxStdListboxInputHandler::HandleMouseMove(wxControl *control,
     if ( winCapture && (event.GetEventObject() == winCapture) )
     {
         wxListBox *lbox = wxStaticCast(control, wxListBox);
-        int item = HitTest(lbox, event);
 
-        if ( !m_btnCapture )
+        if ( !m_btnCapture || !m_trackMouseOutside )
         {
             // someone captured the mouse for us (we always set m_btnCapture
-            // when we do it ourselves) - live with it
-            SetupCapture(lbox, event, item);
+            // when we do it ourselves): in this case we only react to
+            // the mouse messages when they happen inside the listbox
+            if ( lbox->HitTest(event.GetPosition()) != wxHT_WINDOW_INSIDE )
+                return FALSE;
         }
 
-        lbox->PerformAction(m_actionMouse, item);
+        int item = HitTest(lbox, event);
+        if ( !m_btnCapture )
+        {
+            // now that we have the mouse inside the listbox, do capture it
+            // normally - but ensure that we will still ignore the outside
+            // events
+            SetupCapture(lbox, event, item);
+
+            m_trackMouseOutside = FALSE;
+        }
+
+        if ( IsValidIndex(lbox, item) )
+        {
+            lbox->PerformAction(m_actionMouse, item);
+        }
+        // else: don't pass invalid index to the listbox
+    }
+    else // we don't have capture any more
+    {
+        if ( m_btnCapture )
+        {
+            // if we lost capture unexpectedly (someone else took the capture
+            // from us), return to a consistent state
+            m_btnCapture = 0;
+        }
     }
 
     return wxStdInputHandler::HandleMouseMove(control, event);

@@ -1028,7 +1028,8 @@ enum wxBorder
 #define wxLB_NEEDED_SB      0x0200
 #define wxLB_ALWAYS_SB      0x0400
 #define wxLB_HSCROLL        wxHSCROLL
-
+// always show an entire number of rows
+#define wxLB_INT_HEIGHT     0x0800
 /*
  * wxTextCtrl style flags
  */

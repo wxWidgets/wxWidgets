@@ -140,10 +140,11 @@ public:
     // ensure that the given item is visible by scrolling it into view
     virtual void EnsureVisible(int n);
 
-    // find the first item after the current one which starts with the given
-    // string and make it the current one, return TRUE if the current item
-    // changed
-    bool FindItem(const wxString& prefix);
+    // find the first item [strictly] after the current one which starts with
+    // the given string and make it the current one, return TRUE if the current
+    // item changed
+    bool FindItem(const wxString& prefix, bool strictlyAfter = FALSE);
+    bool FindNextItem(const wxString& prefix) { return FindItem(prefix, TRUE); }
 
     // extend the selection to span the range from the anchor (see below) to
     // the specified or current item
@@ -168,7 +169,12 @@ public:
     virtual bool IsContainerWindow() const { return TRUE; }
 
 protected:
+    // geometry
     virtual wxSize DoGetBestClientSize() const;
+    virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
+
     virtual void DoDraw(wxControlRenderer *renderer);
     virtual wxBorder GetDefaultBorder() const;
 
@@ -295,8 +301,16 @@ public:
                                  const wxMouseEvent& event);
 
 protected:
-    // get the listbox item under mouse and return -1 if there is none
+    // return the item under mouse, 0 if the mouse is above the listbox or
+    // GetCount() if it is below it
     int HitTest(const wxListBox *listbox, const wxMouseEvent& event);
+
+    // parts of HitTest(): first finds the pseudo (because not in range) index
+    // of the item and the second one adjusts it if necessary - that is if the
+    // third one returns FALSE
+    int HitTestUnsafe(const wxListBox *listbox, const wxMouseEvent& event);
+    int FixItemIndex(const wxListBox *listbox, int item);
+    bool IsValidIndex(const wxListBox *listbox, int item);
 
     // init m_btnCapture and m_actionMouse
     wxControlAction SetupCapture(wxListBox *lbox,
@@ -311,8 +325,11 @@ protected:
     // the action to perform when the mouse moves while we capture it
     wxControlAction m_actionMouse;
 
-    // see ctor comment
+    // the ctor parameter toggleOnPressAlways (see comments near it)
     bool m_toggleOnPressAlways;
+
+    // do we track the mouse outside the window when it is captured?
+    bool m_trackMouseOutside;
 };
 
 #endif // _WX_UNIV_LISTBOX_H_

@@ -129,12 +129,18 @@ public:
     void SetPopupControl(wxComboPopup *popup);
     wxComboPopup *GetPopupControl() const { return m_popup; }
 
-    // operations
+    // show/hide popup window
     void ShowPopup();
     void HidePopup();
 
+    // return TRUE if the popup is currently shown
+    bool IsPopupShown() const { return m_isPopupShown; }
+
     // get the popup window containing the popup control
     wxPopupComboWindow *GetPopupWindow() const { return m_winPopup; }
+
+    // get the text control which is part of the combobox
+    wxTextCtrl *GetText() const { return m_text; }
 
     // implementation only from now on
     // -------------------------------
@@ -156,15 +162,21 @@ protected:
     // override the base class virtuals involved into geometry calculations
     virtual wxSize DoGetBestClientSize() const;
     virtual void DoMoveWindow(int x, int y, int width, int height);
+    virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
+
+    // we have our own input handler and our own actions
+    virtual bool PerformAction(const wxControlAction& action,
+                               long numArg = 0l,
+                               const wxString& strArg = wxEmptyString);
+    virtual wxString GetInputHandlerType() const;
 
     // event handlers
-    void OnButton(wxCommandEvent& event);
+    void OnKey(wxCommandEvent& event);
 
     // common part of all ctors
     void Init();
-
-    // access the control components
-    wxTextCtrl *GetText() const { return m_text; }
 
 private:
     // the text control and button we show all the time
@@ -179,6 +191,9 @@ private:
 
     // the height of the combobox popup as calculated in Create()
     wxCoord m_heightPopup;
+
+    // is the popup window currenty shown?
+    bool m_isPopupShown;
 
     DECLARE_EVENT_TABLE()
 };
@@ -272,6 +287,20 @@ private:
 
     //DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxComboBox)
+};
+
+// ----------------------------------------------------------------------------
+// wxStdComboBoxInputHandler: allows the user to open/close the combo from kbd
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxStdComboBoxInputHandler : public wxStdInputHandler
+{
+public:
+    wxStdComboBoxInputHandler(wxInputHandler *inphand);
+
+    virtual bool HandleKey(wxControl *control,
+                           const wxKeyEvent& event,
+                           bool pressed);
 };
 
 #endif // _WX_UNIV_COMBOBOX_H_

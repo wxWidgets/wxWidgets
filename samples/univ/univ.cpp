@@ -54,7 +54,7 @@
 
 #include "wx/univ/theme.h"
 
-#define TEST_COMBO
+//#define TEST_COMBO
 //#define TEST_TEXT
 
 // ----------------------------------------------------------------------------
@@ -325,6 +325,10 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 
 #endif // TEST_STATIC_BMP
 
+    wxScrollBar *sb;
+    sb = new wxScrollBar(this, -1, wxPoint(10, 10), wxSize(-1, 35), wxSB_VERTICAL);
+    sb->SetScrollbar(0, 10, 100, 10);
+
 #ifdef TEST_SCROLL
 
 #if 0
@@ -426,8 +430,13 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
         _T("of examples"),
     };
     wxComboBox *combo = new wxComboBox(this, -1, _T("Initial value"),
-                                       wxPoint(0, 50), wxDefaultSize,
+                                       wxPoint(0, 50), wxSize(-1, 100),
                                        WXSIZEOF(choicesCombo), choicesCombo);
+    for ( size_t n = 0; n < 10; n++ )
+    {
+        combo->Append(wxString::Format(_T("Extra item %u"), n + 1));
+    }
+
     combo->SetSelection(1);
 #endif // TEST_COMBO
 

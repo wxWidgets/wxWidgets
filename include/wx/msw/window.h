@@ -380,7 +380,6 @@ protected:
     bool                  m_backgroundTransparent:1;
     bool                  m_mouseInWindow:1;
     bool                  m_doubleClickAllowed:1;
-    bool                  m_winCaptured:1;
 
     // the size of one page for scrolling
     int                   m_xThumbSize;

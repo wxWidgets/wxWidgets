@@ -29,6 +29,8 @@
 #include "wx/control.h"
 #include "wx/event.h"
 
+#define wxSPIN_BUTTON_NAME _T("wxSpinButton")
+
 // ----------------------------------------------------------------------------
 //  The wxSpinButton is like a small scrollbar than is often placed next
 //  to a text control.
@@ -58,6 +60,9 @@ public:
         m_max = maxVal;
     }
 
+    // is this spin button vertically oriented?
+    bool IsVertical() const { return (m_windowStyle & wxSP_VERTICAL) != 0; }
+
 protected:
     // init the base part of the control
     void InitBase()
@@ -75,7 +80,9 @@ protected:
 // include the declaration of the real class
 // ----------------------------------------------------------------------------
 
-#if defined(__WXMSW__)
+#if defined(__WXUNIVERSAL__)
+    #include "wx/univ/spinbutt.h"
+#elif defined(__WXMSW__)
     #include "wx/msw/spinbutt.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/spinbutt.h"
@@ -97,8 +104,6 @@ protected:
 
 class WXDLLEXPORT wxSpinEvent : public wxNotifyEvent
 {
-    DECLARE_DYNAMIC_CLASS(wxSpinEvent)
-
 public:
     wxSpinEvent(wxEventType commandType = wxEVT_NULL, int id = 0)
            : wxNotifyEvent(commandType, id)
@@ -108,20 +113,17 @@ public:
     // get the current value of the control
     int GetPosition() const { return m_commandInt; }
     void SetPosition(int pos) { m_commandInt = pos; }
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxSpinEvent)
 };
 
 typedef void (wxEvtHandler::*wxSpinEventFunction)(wxSpinEvent&);
 
 // macros for handling spin events
-#ifndef EVT_SPIN_UP
 #define EVT_SPIN_UP(id, func) { wxEVT_SCROLL_LINEUP, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxSpinEventFunction) & func },
-#endif
-#ifndef EVT_SPIN_DOWN
 #define EVT_SPIN_DOWN(id, func) { wxEVT_SCROLL_LINEDOWN, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxSpinEventFunction) & func },
-#endif
-#ifndef EVT_SPIN
 #define EVT_SPIN(id, func) { wxEVT_SCROLL_THUMBTRACK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxSpinEventFunction) & func },
-#endif
 
 #endif // wxUSE_SPINBTN
 

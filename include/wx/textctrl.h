@@ -137,6 +137,7 @@ public:
     virtual long GetLastPosition() const = 0;
 
     virtual void SetSelection(long from, long to) = 0;
+    virtual void SelectAll();
     virtual void SetEditable(bool editable) = 0;
 
     // streambuf methods

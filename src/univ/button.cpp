@@ -107,9 +107,10 @@ wxSize wxButtonBase::GetDefaultSize()
     {
         wxScreenDC dc;
 
-        // this corresponds more or less to wxMSW standard
-        s_sizeBtn.x = (50 * dc.GetCharWidth())/4;
-        s_sizeBtn.y = (14 * dc.GetCharHeight())/8;
+        // this corresponds more or less to wxMSW standard in Win32 theme (see
+        // wxWin32Renderer::AdjustSize())
+        s_sizeBtn.x = 8*dc.GetCharWidth();
+        s_sizeBtn.y = (11*dc.GetCharHeight())/10 + 2;
     }
 
     return s_sizeBtn;
@@ -130,6 +131,12 @@ wxSize wxButton::DoGetBestClientSize() const
 
         width += m_bitmap.GetWidth() + 2*m_marginBmpX;
     }
+
+    // for compatibility with other ports, the buttons default size is never
+    // less than the standard one
+    wxSize szDef = GetDefaultSize();
+    if ( width < szDef.x )
+        width = szDef.x;
 
     return wxSize(width, height);
 }

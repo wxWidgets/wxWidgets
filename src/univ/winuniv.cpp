@@ -531,13 +531,13 @@ wxHitTest wxWindow::DoHitTest(wxCoord x, wxCoord y) const
     wxHitTest ht = wxWindowNative::DoHitTest(x, y);
     if ( ht == wxHT_WINDOW_INSIDE )
     {
-        if ( m_scrollbarVert && x > m_scrollbarVert->GetPosition().x )
+        if ( m_scrollbarVert && x >= m_scrollbarVert->GetPosition().x )
         {
             // it can still be changed below because it may also be the corner
             ht = wxHT_WINDOW_VERT_SCROLLBAR;
         }
 
-        if ( m_scrollbarHorz && y > m_scrollbarHorz->GetPosition().y )
+        if ( m_scrollbarHorz && y >= m_scrollbarHorz->GetPosition().y )
         {
             ht = ht == wxHT_WINDOW_VERT_SCROLLBAR ? wxHT_WINDOW_CORNER
                                                   : wxHT_WINDOW_HORZ_SCROLLBAR;
@@ -921,3 +921,27 @@ bool wxWindow::SetFont(const wxFont& font)
 
     return TRUE;
 }
+
+// ----------------------------------------------------------------------------
+// mouse capture
+// ----------------------------------------------------------------------------
+
+wxWindow *wxWindow::ms_winCaptureNext = NULL;
+
+/* static */ void wxWindow::SetStickyCapture(wxWindow *win)
+{
+    ms_winCaptureNext = win;
+}
+
+void wxWindow::ReleaseMouse()
+{
+    wxWindowNative::ReleaseMouse();
+
+    if ( ms_winCaptureNext )
+    {
+        ms_winCaptureNext->CaptureMouse();
+
+        ms_winCaptureNext = NULL;
+    }
+}
+
