@@ -28,7 +28,7 @@ class GLContext(core.Object):
         return _glcanvas.GLContext_SetCurrent(*args, **kwargs)
 
     def SetColour(*args, **kwargs):
-        """SetColour(wxString colour)"""
+        """SetColour(String colour)"""
         return _glcanvas.GLContext_SetColour(*args, **kwargs)
 
     def SwapBuffers(*args, **kwargs):
@@ -85,7 +85,7 @@ class GLCanvas(core.Window):
     def __init__(self, *args, **kwargs):
         """
         __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=0, wxString name=wxPyGLCanvasNameStr, 
+            Size size=DefaultSize, long style=0, String name=wxPyGLCanvasNameStr, 
             int attribList=None, 
             wxPalette palette=wxNullPalette) -> GLCanvas
         """
@@ -100,7 +100,7 @@ class GLCanvas(core.Window):
         return _glcanvas.GLCanvas_SetCurrent(*args, **kwargs)
 
     def SetColour(*args, **kwargs):
-        """SetColour(wxString colour)"""
+        """SetColour(String colour)"""
         return _glcanvas.GLCanvas_SetColour(*args, **kwargs)
 
     def SwapBuffers(*args, **kwargs):
@@ -123,7 +123,7 @@ def wxGLCanvasWithContext(*args, **kwargs):
     """
     wxGLCanvasWithContext(Window parent, GLContext shared=None, int id=-1, Point pos=DefaultPosition, 
         Size size=DefaultSize, 
-        long style=0, wxString name=wxPyGLCanvasNameStr, 
+        long style=0, String name=wxPyGLCanvasNameStr, 
         int attribList=None, wxPalette palette=wxNullPalette) -> GLCanvas
     """
     val = _glcanvas.new_wxGLCanvasWithContext(*args, **kwargs)

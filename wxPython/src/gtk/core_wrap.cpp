@@ -537,10 +537,6 @@ static wxPyCoreAPI API = {
 #endif
 
 
-    DECLARE_DEF_STRING(EmptyString);
-//    DECLARE_DEF_STRING(PanelNameStr);
-
-
 #if ! wxUSE_HOTKEY
 enum wxHotkeyModifier
 {
@@ -553,6 +549,7 @@ enum wxHotkeyModifier
 #define wxEVT_HOTKEY 9999
 #endif
 
+ static const wxString wxPyEmptyString(wxEmptyString); 
 wxString wxObject_GetClassName(wxObject *self){
             return self->GetClassInfo()->GetClassName();
         }
@@ -1315,6 +1312,26 @@ bool wxGridBagSizer_Add(wxGridBagSizer *self,PyObject *item,wxGBPosition const &
 #ifdef __cplusplus
 extern "C" {
 #endif
+static int _wrap_EmptyString_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable EmptyString is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_EmptyString_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyEmptyString)->c_str(), (&wxPyEmptyString)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyEmptyString)->c_str(), (&wxPyEmptyString)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_Object_GetClassName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxObject *arg1 = (wxObject *) 0 ;
@@ -37947,36 +37964,23 @@ static swig_const_info swig_const_table[] = {
 { SWIG_PY_INT,     (char *)"UPDATE_UI_FROMIDLE", (long) wxUPDATE_UI_FROMIDLE, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"BITMAP_TYPE_INVALID", (long) wxBITMAP_TYPE_INVALID, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"BITMAP_TYPE_BMP", (long) wxBITMAP_TYPE_BMP, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"BITMAP_TYPE_BMP_RESOURCE", (long) wxBITMAP_TYPE_BMP_RESOURCE, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"BITMAP_TYPE_RESOURCE", (long) wxBITMAP_TYPE_RESOURCE, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"BITMAP_TYPE_ICO", (long) wxBITMAP_TYPE_ICO, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"BITMAP_TYPE_ICO_RESOURCE", (long) wxBITMAP_TYPE_ICO_RESOURCE, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"BITMAP_TYPE_CUR", (long) wxBITMAP_TYPE_CUR, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"BITMAP_TYPE_CUR_RESOURCE", (long) wxBITMAP_TYPE_CUR_RESOURCE, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"BITMAP_TYPE_XBM", (long) wxBITMAP_TYPE_XBM, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"BITMAP_TYPE_XBM_DATA", (long) wxBITMAP_TYPE_XBM_DATA, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"BITMAP_TYPE_XPM", (long) wxBITMAP_TYPE_XPM, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"BITMAP_TYPE_XPM_DATA", (long) wxBITMAP_TYPE_XPM_DATA, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"BITMAP_TYPE_TIF", (long) wxBITMAP_TYPE_TIF, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"BITMAP_TYPE_TIF_RESOURCE", (long) wxBITMAP_TYPE_TIF_RESOURCE, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"BITMAP_TYPE_GIF", (long) wxBITMAP_TYPE_GIF, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"BITMAP_TYPE_GIF_RESOURCE", (long) wxBITMAP_TYPE_GIF_RESOURCE, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"BITMAP_TYPE_PNG", (long) wxBITMAP_TYPE_PNG, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"BITMAP_TYPE_PNG_RESOURCE", (long) wxBITMAP_TYPE_PNG_RESOURCE, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"BITMAP_TYPE_JPEG", (long) wxBITMAP_TYPE_JPEG, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"BITMAP_TYPE_JPEG_RESOURCE", (long) wxBITMAP_TYPE_JPEG_RESOURCE, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"BITMAP_TYPE_PNM", (long) wxBITMAP_TYPE_PNM, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"BITMAP_TYPE_PNM_RESOURCE", (long) wxBITMAP_TYPE_PNM_RESOURCE, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"BITMAP_TYPE_PCX", (long) wxBITMAP_TYPE_PCX, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"BITMAP_TYPE_PCX_RESOURCE", (long) wxBITMAP_TYPE_PCX_RESOURCE, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"BITMAP_TYPE_PICT", (long) wxBITMAP_TYPE_PICT, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"BITMAP_TYPE_PICT_RESOURCE", (long) wxBITMAP_TYPE_PICT_RESOURCE, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"BITMAP_TYPE_ICON", (long) wxBITMAP_TYPE_ICON, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"BITMAP_TYPE_ICON_RESOURCE", (long) wxBITMAP_TYPE_ICON_RESOURCE, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"BITMAP_TYPE_ANI", (long) wxBITMAP_TYPE_ANI, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"BITMAP_TYPE_IFF", (long) wxBITMAP_TYPE_IFF, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"BITMAP_TYPE_MACCURSOR", (long) wxBITMAP_TYPE_MACCURSOR, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"BITMAP_TYPE_MACCURSOR_RESOURCE", (long) wxBITMAP_TYPE_MACCURSOR_RESOURCE, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"BITMAP_TYPE_ANY", (long) wxBITMAP_TYPE_ANY, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"CURSOR_NONE", (long) wxCURSOR_NONE, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"CURSOR_ARROW", (long) wxCURSOR_ARROW, 0, 0, 0},
@@ -38212,6 +38216,7 @@ SWIGEXPORT(void) SWIG_init(void) {
 #endif
     
     PyDict_SetItemString(d,(char*)"cvar", SWIG_globals);
+    SWIG_addvarlink(SWIG_globals,(char*)"EmptyString",_wrap_EmptyString_get, _wrap_EmptyString_set);
     SWIG_addvarlink(SWIG_globals,(char*)"DefaultPosition",_wrap_DefaultPosition_get, _wrap_DefaultPosition_set);
     SWIG_addvarlink(SWIG_globals,(char*)"DefaultSize",_wrap_DefaultSize_get, _wrap_DefaultSize_set);
     

@@ -16425,7 +16425,7 @@ static PyObject *_wrap_ListItem_m_stateMask_get(PyObject *self, PyObject *args, 
 static PyObject *_wrap_ListItem_m_text_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxListItem *arg1 = (wxListItem *) 0 ;
-    wxString arg2 ;
+    wxString *arg2 = (wxString *) 0 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -16434,13 +16434,8 @@ static PyObject *_wrap_ListItem_m_text_set(PyObject *self, PyObject *args, PyObj
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:ListItem_m_text_set",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxListItem,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        wxString* sptr = wxString_in_helper(obj1);
-        if (sptr == NULL) SWIG_fail;
-        arg2 = *sptr;
-        delete sptr;
-    }
-    if (arg1) (arg1)->m_text = arg2;
+    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (arg1) (arg1)->m_text = *arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
     return resultobj;
@@ -16452,7 +16447,7 @@ static PyObject *_wrap_ListItem_m_text_set(PyObject *self, PyObject *args, PyObj
 static PyObject *_wrap_ListItem_m_text_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxListItem *arg1 = (wxListItem *) 0 ;
-    wxString result;
+    wxString *result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "self", NULL 
@@ -16460,13 +16455,13 @@ static PyObject *_wrap_ListItem_m_text_get(PyObject *self, PyObject *args, PyObj
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:ListItem_m_text_get",kwnames,&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxListItem,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    result =  ((arg1)->m_text);
+    result = (wxString *)& ((arg1)->m_text);
     
     {
 #if wxUSE_UNICODE
-        resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
 #else
-        resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
 #endif
     }
     return resultobj;

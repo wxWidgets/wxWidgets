@@ -27,32 +27,32 @@ class CalendarDateAttr(object):
         return "<%s.%s; proxy of C++ wxCalendarDateAttr instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(wxColour colText, wxColour colBack=wxNullColour, wxColour colBorder=wxNullColour, 
-            wxFont font=wxNullFont, 
-            wxCalendarDateBorder border=CAL_BORDER_NONE) -> CalendarDateAttr
+        __init__(Colour colText, Colour colBack=wxNullColour, Colour colBorder=wxNullColour, 
+            Font font=wxNullFont, 
+            int border=CAL_BORDER_NONE) -> CalendarDateAttr
         """
         newobj = _calendar.new_CalendarDateAttr(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
     def SetTextColour(*args, **kwargs):
-        """SetTextColour(wxColour colText)"""
+        """SetTextColour(Colour colText)"""
         return _calendar.CalendarDateAttr_SetTextColour(*args, **kwargs)
 
     def SetBackgroundColour(*args, **kwargs):
-        """SetBackgroundColour(wxColour colBack)"""
+        """SetBackgroundColour(Colour colBack)"""
         return _calendar.CalendarDateAttr_SetBackgroundColour(*args, **kwargs)
 
     def SetBorderColour(*args, **kwargs):
-        """SetBorderColour(wxColour col)"""
+        """SetBorderColour(Colour col)"""
         return _calendar.CalendarDateAttr_SetBorderColour(*args, **kwargs)
 
     def SetFont(*args, **kwargs):
-        """SetFont(wxFont font)"""
+        """SetFont(Font font)"""
         return _calendar.CalendarDateAttr_SetFont(*args, **kwargs)
 
     def SetBorder(*args, **kwargs):
-        """SetBorder(wxCalendarDateBorder border)"""
+        """SetBorder(int border)"""
         return _calendar.CalendarDateAttr_SetBorder(*args, **kwargs)
 
     def SetHoliday(*args, **kwargs):
@@ -84,23 +84,23 @@ class CalendarDateAttr(object):
         return _calendar.CalendarDateAttr_IsHoliday(*args, **kwargs)
 
     def GetTextColour(*args, **kwargs):
-        """GetTextColour() -> wxColour"""
+        """GetTextColour() -> Colour"""
         return _calendar.CalendarDateAttr_GetTextColour(*args, **kwargs)
 
     def GetBackgroundColour(*args, **kwargs):
-        """GetBackgroundColour() -> wxColour"""
+        """GetBackgroundColour() -> Colour"""
         return _calendar.CalendarDateAttr_GetBackgroundColour(*args, **kwargs)
 
     def GetBorderColour(*args, **kwargs):
-        """GetBorderColour() -> wxColour"""
+        """GetBorderColour() -> Colour"""
         return _calendar.CalendarDateAttr_GetBorderColour(*args, **kwargs)
 
     def GetFont(*args, **kwargs):
-        """GetFont() -> wxFont"""
+        """GetFont() -> Font"""
         return _calendar.CalendarDateAttr_GetFont(*args, **kwargs)
 
     def GetBorder(*args, **kwargs):
-        """GetBorder() -> wxCalendarDateBorder"""
+        """GetBorder() -> int"""
         return _calendar.CalendarDateAttr_GetBorder(*args, **kwargs)
 
 
@@ -112,7 +112,7 @@ class CalendarDateAttrPtr(CalendarDateAttr):
 _calendar.CalendarDateAttr_swigregister(CalendarDateAttrPtr)
 
 def CalendarDateAttrBorder(*args, **kwargs):
-    """CalendarDateAttrBorder(wxCalendarDateBorder border, wxColour colBorder=wxNullColour) -> CalendarDateAttr"""
+    """CalendarDateAttrBorder(int border, Colour colBorder=wxNullColour) -> CalendarDateAttr"""
     val = _calendar.new_CalendarDateAttrBorder(*args, **kwargs)
     val.thisown = 1
     return val
@@ -135,11 +135,11 @@ class CalendarEvent(core.CommandEvent):
         return _calendar.CalendarEvent_SetDate(*args, **kwargs)
 
     def SetWeekDay(*args, **kwargs):
-        """SetWeekDay(wxDateTime::WeekDay wd)"""
+        """SetWeekDay(int wd)"""
         return _calendar.CalendarEvent_SetWeekDay(*args, **kwargs)
 
     def GetWeekDay(*args, **kwargs):
-        """GetWeekDay() -> wxDateTime::WeekDay"""
+        """GetWeekDay() -> int"""
         return _calendar.CalendarEvent_GetWeekDay(*args, **kwargs)
 
 
@@ -171,7 +171,7 @@ class CalendarCtrl(core.Control):
         __init__(Window parent, int id, DateTime date=wxDefaultDateTime, 
             Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=wxCAL_SHOW_HOLIDAYS|wxWANTS_CHARS, 
-            wxString name=wxPyCalendarNameStr) -> CalendarCtrl
+            String name=wxPyCalendarNameStr) -> CalendarCtrl
         """
         newobj = _calendar.new_CalendarCtrl(*args, **kwargs)
         self.this = newobj.this
@@ -184,7 +184,7 @@ class CalendarCtrl(core.Control):
         Create(Window parent, int id, DateTime date=wxDefaultDateTime, 
             Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=wxCAL_SHOW_HOLIDAYS|wxWANTS_CHARS, 
-            wxString name=wxPyCalendarNameStr) -> bool
+            String name=wxPyCalendarNameStr) -> bool
         """
         return _calendar.CalendarCtrl_Create(*args, **kwargs)
 
@@ -229,39 +229,39 @@ class CalendarCtrl(core.Control):
         return _calendar.CalendarCtrl_EnableHolidayDisplay(*args, **kwargs)
 
     def SetHeaderColours(*args, **kwargs):
-        """SetHeaderColours(wxColour colFg, wxColour colBg)"""
+        """SetHeaderColours(Colour colFg, Colour colBg)"""
         return _calendar.CalendarCtrl_SetHeaderColours(*args, **kwargs)
 
     def GetHeaderColourFg(*args, **kwargs):
-        """GetHeaderColourFg() -> wxColour"""
+        """GetHeaderColourFg() -> Colour"""
         return _calendar.CalendarCtrl_GetHeaderColourFg(*args, **kwargs)
 
     def GetHeaderColourBg(*args, **kwargs):
-        """GetHeaderColourBg() -> wxColour"""
+        """GetHeaderColourBg() -> Colour"""
         return _calendar.CalendarCtrl_GetHeaderColourBg(*args, **kwargs)
 
     def SetHighlightColours(*args, **kwargs):
-        """SetHighlightColours(wxColour colFg, wxColour colBg)"""
+        """SetHighlightColours(Colour colFg, Colour colBg)"""
         return _calendar.CalendarCtrl_SetHighlightColours(*args, **kwargs)
 
     def GetHighlightColourFg(*args, **kwargs):
-        """GetHighlightColourFg() -> wxColour"""
+        """GetHighlightColourFg() -> Colour"""
         return _calendar.CalendarCtrl_GetHighlightColourFg(*args, **kwargs)
 
     def GetHighlightColourBg(*args, **kwargs):
-        """GetHighlightColourBg() -> wxColour"""
+        """GetHighlightColourBg() -> Colour"""
         return _calendar.CalendarCtrl_GetHighlightColourBg(*args, **kwargs)
 
     def SetHolidayColours(*args, **kwargs):
-        """SetHolidayColours(wxColour colFg, wxColour colBg)"""
+        """SetHolidayColours(Colour colFg, Colour colBg)"""
         return _calendar.CalendarCtrl_SetHolidayColours(*args, **kwargs)
 
     def GetHolidayColourFg(*args, **kwargs):
-        """GetHolidayColourFg() -> wxColour"""
+        """GetHolidayColourFg() -> Colour"""
         return _calendar.CalendarCtrl_GetHolidayColourFg(*args, **kwargs)
 
     def GetHolidayColourBg(*args, **kwargs):
-        """GetHolidayColourBg() -> wxColour"""
+        """GetHolidayColourBg() -> Colour"""
         return _calendar.CalendarCtrl_GetHolidayColourBg(*args, **kwargs)
 
     def GetAttr(*args, **kwargs):
@@ -281,7 +281,7 @@ class CalendarCtrl(core.Control):
         return _calendar.CalendarCtrl_ResetAttr(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
-        """HitTest(Point pos, DateTime date=None, wxDateTime::WeekDay wd=None) -> wxCalendarHitTestResult"""
+        """HitTest(Point pos, DateTime date=None, int wd=None) -> int"""
         return _calendar.CalendarCtrl_HitTest(*args, **kwargs)
 
     def Enable(*args, **kwargs):

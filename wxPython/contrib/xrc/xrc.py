@@ -17,7 +17,7 @@ class XmlResource(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxXmlResource instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxString filemask, int flags=XRC_USE_LOCALE) -> XmlResource"""
+        """__init__(String filemask, int flags=XRC_USE_LOCALE) -> XmlResource"""
         newobj = _xrc.new_XmlResource(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -31,11 +31,11 @@ class XmlResource(core.Object):
         except: pass
 
     def Load(*args, **kwargs):
-        """Load(wxString filemask) -> bool"""
+        """Load(String filemask) -> bool"""
         return _xrc.XmlResource_Load(*args, **kwargs)
 
     def LoadFromString(*args, **kwargs):
-        """LoadFromString(wxString data) -> bool"""
+        """LoadFromString(String data) -> bool"""
         return _xrc.XmlResource_LoadFromString(*args, **kwargs)
 
     def InitAllHandlers(*args, **kwargs):
@@ -60,67 +60,67 @@ class XmlResource(core.Object):
 
     AddSubclassFactory = staticmethod(AddSubclassFactory)
     def LoadMenu(*args, **kwargs):
-        """LoadMenu(wxString name) -> Menu"""
+        """LoadMenu(String name) -> Menu"""
         return _xrc.XmlResource_LoadMenu(*args, **kwargs)
 
     def LoadMenuBar(*args, **kwargs):
-        """LoadMenuBar(wxString name) -> MenuBar"""
+        """LoadMenuBar(String name) -> MenuBar"""
         return _xrc.XmlResource_LoadMenuBar(*args, **kwargs)
 
     def LoadMenuBarOnFrame(*args, **kwargs):
-        """LoadMenuBarOnFrame(Window parent, wxString name) -> MenuBar"""
+        """LoadMenuBarOnFrame(Window parent, String name) -> MenuBar"""
         return _xrc.XmlResource_LoadMenuBarOnFrame(*args, **kwargs)
 
     def LoadToolBar(*args, **kwargs):
-        """LoadToolBar(Window parent, wxString name) -> wxToolBar"""
+        """LoadToolBar(Window parent, String name) -> wxToolBar"""
         return _xrc.XmlResource_LoadToolBar(*args, **kwargs)
 
     def LoadDialog(*args, **kwargs):
-        """LoadDialog(Window parent, wxString name) -> wxDialog"""
+        """LoadDialog(Window parent, String name) -> wxDialog"""
         return _xrc.XmlResource_LoadDialog(*args, **kwargs)
 
     def LoadOnDialog(*args, **kwargs):
-        """LoadOnDialog(wxDialog dlg, Window parent, wxString name) -> bool"""
+        """LoadOnDialog(wxDialog dlg, Window parent, String name) -> bool"""
         return _xrc.XmlResource_LoadOnDialog(*args, **kwargs)
 
     def LoadPanel(*args, **kwargs):
-        """LoadPanel(Window parent, wxString name) -> wxPanel"""
+        """LoadPanel(Window parent, String name) -> wxPanel"""
         return _xrc.XmlResource_LoadPanel(*args, **kwargs)
 
     def LoadOnPanel(*args, **kwargs):
-        """LoadOnPanel(wxPanel panel, Window parent, wxString name) -> bool"""
+        """LoadOnPanel(wxPanel panel, Window parent, String name) -> bool"""
         return _xrc.XmlResource_LoadOnPanel(*args, **kwargs)
 
     def LoadFrame(*args, **kwargs):
-        """LoadFrame(Window parent, wxString name) -> wxFrame"""
+        """LoadFrame(Window parent, String name) -> wxFrame"""
         return _xrc.XmlResource_LoadFrame(*args, **kwargs)
 
     def LoadOnFrame(*args, **kwargs):
-        """LoadOnFrame(wxFrame frame, Window parent, wxString name) -> bool"""
+        """LoadOnFrame(wxFrame frame, Window parent, String name) -> bool"""
         return _xrc.XmlResource_LoadOnFrame(*args, **kwargs)
 
     def LoadObject(*args, **kwargs):
-        """LoadObject(Window parent, wxString name, wxString classname) -> Object"""
+        """LoadObject(Window parent, String name, String classname) -> Object"""
         return _xrc.XmlResource_LoadObject(*args, **kwargs)
 
     def LoadOnObject(*args, **kwargs):
-        """LoadOnObject(Object instance, Window parent, wxString name, wxString classname) -> bool"""
+        """LoadOnObject(Object instance, Window parent, String name, String classname) -> bool"""
         return _xrc.XmlResource_LoadOnObject(*args, **kwargs)
 
     def LoadBitmap(*args, **kwargs):
-        """LoadBitmap(wxString name) -> wxBitmap"""
+        """LoadBitmap(String name) -> Bitmap"""
         return _xrc.XmlResource_LoadBitmap(*args, **kwargs)
 
     def LoadIcon(*args, **kwargs):
-        """LoadIcon(wxString name) -> wxIcon"""
+        """LoadIcon(String name) -> wxIcon"""
         return _xrc.XmlResource_LoadIcon(*args, **kwargs)
 
     def AttachUnknownControl(*args, **kwargs):
-        """AttachUnknownControl(wxString name, Window control, Window parent=None) -> bool"""
+        """AttachUnknownControl(String name, Window control, Window parent=None) -> bool"""
         return _xrc.XmlResource_AttachUnknownControl(*args, **kwargs)
 
     def GetXRCID(*args, **kwargs):
-        """XmlResource.GetXRCID(wxString str_id) -> int"""
+        """XmlResource.GetXRCID(String str_id) -> int"""
         return _xrc.XmlResource_GetXRCID(*args, **kwargs)
 
     GetXRCID = staticmethod(GetXRCID)
@@ -170,7 +170,7 @@ def XmlResource_AddSubclassFactory(*args, **kwargs):
     return _xrc.XmlResource_AddSubclassFactory(*args, **kwargs)
 
 def XmlResource_GetXRCID(*args, **kwargs):
-    """XmlResource_GetXRCID(wxString str_id) -> int"""
+    """XmlResource_GetXRCID(String str_id) -> int"""
     return _xrc.XmlResource_GetXRCID(*args, **kwargs)
 
 def XmlResource_Get(*args, **kwargs):
@@ -232,7 +232,7 @@ class XmlProperty(object):
         return "<%s.%s; proxy of C++ wxXmlProperty instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(wxString name=wxPyEmptyString, wxString value=wxPyEmptyString, 
+        __init__(String name=EmptyString, String value=EmptyString, 
             XmlProperty next=None) -> XmlProperty
         """
         newobj = _xrc.new_XmlProperty(*args, **kwargs)
@@ -240,11 +240,11 @@ class XmlProperty(object):
         self.thisown = 1
         del newobj.thisown
     def GetName(*args, **kwargs):
-        """GetName() -> wxString"""
+        """GetName() -> String"""
         return _xrc.XmlProperty_GetName(*args, **kwargs)
 
     def GetValue(*args, **kwargs):
-        """GetValue() -> wxString"""
+        """GetValue() -> String"""
         return _xrc.XmlProperty_GetValue(*args, **kwargs)
 
     def GetNext(*args, **kwargs):
@@ -252,11 +252,11 @@ class XmlProperty(object):
         return _xrc.XmlProperty_GetNext(*args, **kwargs)
 
     def SetName(*args, **kwargs):
-        """SetName(wxString name)"""
+        """SetName(String name)"""
         return _xrc.XmlProperty_SetName(*args, **kwargs)
 
     def SetValue(*args, **kwargs):
-        """SetValue(wxString value)"""
+        """SetValue(String value)"""
         return _xrc.XmlProperty_SetValue(*args, **kwargs)
 
     def SetNext(*args, **kwargs):
@@ -276,9 +276,9 @@ class XmlNode(object):
         return "<%s.%s; proxy of C++ wxXmlNode instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(XmlNode parent=None, wxXmlNodeType type=0, wxString name=wxPyEmptyString, 
-            wxString content=wxPyEmptyString, 
-            XmlProperty props=None, XmlNode next=None) -> XmlNode
+        __init__(XmlNode parent=None, int type=0, String name=EmptyString, 
+            String content=EmptyString, XmlProperty props=None, 
+            XmlNode next=None) -> XmlNode
         """
         newobj = _xrc.new_XmlNode(*args, **kwargs)
         self.this = newobj.this
@@ -307,23 +307,23 @@ class XmlNode(object):
         return _xrc.XmlNode_AddProperty(*args, **kwargs)
 
     def AddPropertyName(*args, **kwargs):
-        """AddPropertyName(wxString name, wxString value)"""
+        """AddPropertyName(String name, String value)"""
         return _xrc.XmlNode_AddPropertyName(*args, **kwargs)
 
     def DeleteProperty(*args, **kwargs):
-        """DeleteProperty(wxString name) -> bool"""
+        """DeleteProperty(String name) -> bool"""
         return _xrc.XmlNode_DeleteProperty(*args, **kwargs)
 
     def GetType(*args, **kwargs):
-        """GetType() -> wxXmlNodeType"""
+        """GetType() -> int"""
         return _xrc.XmlNode_GetType(*args, **kwargs)
 
     def GetName(*args, **kwargs):
-        """GetName() -> wxString"""
+        """GetName() -> String"""
         return _xrc.XmlNode_GetName(*args, **kwargs)
 
     def GetContent(*args, **kwargs):
-        """GetContent() -> wxString"""
+        """GetContent() -> String"""
         return _xrc.XmlNode_GetContent(*args, **kwargs)
 
     def GetParent(*args, **kwargs):
@@ -343,23 +343,23 @@ class XmlNode(object):
         return _xrc.XmlNode_GetProperties(*args, **kwargs)
 
     def GetPropVal(*args, **kwargs):
-        """GetPropVal(wxString propName, wxString defaultVal) -> wxString"""
+        """GetPropVal(String propName, String defaultVal) -> String"""
         return _xrc.XmlNode_GetPropVal(*args, **kwargs)
 
     def HasProp(*args, **kwargs):
-        """HasProp(wxString propName) -> bool"""
+        """HasProp(String propName) -> bool"""
         return _xrc.XmlNode_HasProp(*args, **kwargs)
 
     def SetType(*args, **kwargs):
-        """SetType(wxXmlNodeType type)"""
+        """SetType(int type)"""
         return _xrc.XmlNode_SetType(*args, **kwargs)
 
     def SetName(*args, **kwargs):
-        """SetName(wxString name)"""
+        """SetName(String name)"""
         return _xrc.XmlNode_SetName(*args, **kwargs)
 
     def SetContent(*args, **kwargs):
-        """SetContent(wxString con)"""
+        """SetContent(String con)"""
         return _xrc.XmlNode_SetContent(*args, **kwargs)
 
     def SetParent(*args, **kwargs):
@@ -387,7 +387,7 @@ class XmlNodePtr(XmlNode):
 _xrc.XmlNode_swigregister(XmlNodePtr)
 
 def XmlNodeEasy(*args, **kwargs):
-    """XmlNodeEasy(wxXmlNodeType type, wxString name, wxString content=wxPyEmptyString) -> XmlNode"""
+    """XmlNodeEasy(int type, String name, String content=EmptyString) -> XmlNode"""
     val = _xrc.new_XmlNodeEasy(*args, **kwargs)
     val.thisown = 1
     return val
@@ -396,7 +396,7 @@ class XmlDocument(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxXmlDocument instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxString filename, wxString encoding=wxPyUTF8String) -> XmlDocument"""
+        """__init__(String filename, String encoding=wxPyUTF8String) -> XmlDocument"""
         newobj = _xrc.new_XmlDocument(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -408,15 +408,15 @@ class XmlDocument(core.Object):
         except: pass
 
     def Load(*args, **kwargs):
-        """Load(wxString filename, wxString encoding=wxPyUTF8String) -> bool"""
+        """Load(String filename, String encoding=wxPyUTF8String) -> bool"""
         return _xrc.XmlDocument_Load(*args, **kwargs)
 
     def LoadFromStream(*args, **kwargs):
-        """LoadFromStream(wxInputStream stream, wxString encoding=wxPyUTF8String) -> bool"""
+        """LoadFromStream(InputStream stream, String encoding=wxPyUTF8String) -> bool"""
         return _xrc.XmlDocument_LoadFromStream(*args, **kwargs)
 
     def Save(*args, **kwargs):
-        """Save(wxString filename) -> bool"""
+        """Save(String filename) -> bool"""
         return _xrc.XmlDocument_Save(*args, **kwargs)
 
     def SaveToStream(*args, **kwargs):
@@ -432,11 +432,11 @@ class XmlDocument(core.Object):
         return _xrc.XmlDocument_GetRoot(*args, **kwargs)
 
     def GetVersion(*args, **kwargs):
-        """GetVersion() -> wxString"""
+        """GetVersion() -> String"""
         return _xrc.XmlDocument_GetVersion(*args, **kwargs)
 
     def GetFileEncoding(*args, **kwargs):
-        """GetFileEncoding() -> wxString"""
+        """GetFileEncoding() -> String"""
         return _xrc.XmlDocument_GetFileEncoding(*args, **kwargs)
 
     def SetRoot(*args, **kwargs):
@@ -444,11 +444,11 @@ class XmlDocument(core.Object):
         return _xrc.XmlDocument_SetRoot(*args, **kwargs)
 
     def SetVersion(*args, **kwargs):
-        """SetVersion(wxString version)"""
+        """SetVersion(String version)"""
         return _xrc.XmlDocument_SetVersion(*args, **kwargs)
 
     def SetFileEncoding(*args, **kwargs):
-        """SetFileEncoding(wxString encoding)"""
+        """SetFileEncoding(String encoding)"""
         return _xrc.XmlDocument_SetFileEncoding(*args, **kwargs)
 
 
@@ -460,7 +460,7 @@ class XmlDocumentPtr(XmlDocument):
 _xrc.XmlDocument_swigregister(XmlDocumentPtr)
 
 def XmlDocumentFromStream(*args, **kwargs):
-    """XmlDocumentFromStream(wxInputStream stream, wxString encoding=wxPyUTF8String) -> XmlDocument"""
+    """XmlDocumentFromStream(InputStream stream, String encoding=wxPyUTF8String) -> XmlDocument"""
     val = _xrc.new_XmlDocumentFromStream(*args, **kwargs)
     val.thisown = 1
     return val
@@ -505,7 +505,7 @@ class XmlResourceHandler(core.Object):
         return _xrc.XmlResourceHandler_GetNode(*args, **kwargs)
 
     def GetClass(*args, **kwargs):
-        """GetClass() -> wxString"""
+        """GetClass() -> String"""
         return _xrc.XmlResourceHandler_GetClass(*args, **kwargs)
 
     def GetParent(*args, **kwargs):
@@ -525,27 +525,27 @@ class XmlResourceHandler(core.Object):
         return _xrc.XmlResourceHandler_GetInstanceAsWindow(*args, **kwargs)
 
     def IsOfClass(*args, **kwargs):
-        """IsOfClass(XmlNode node, wxString classname) -> bool"""
+        """IsOfClass(XmlNode node, String classname) -> bool"""
         return _xrc.XmlResourceHandler_IsOfClass(*args, **kwargs)
 
     def GetNodeContent(*args, **kwargs):
-        """GetNodeContent(XmlNode node) -> wxString"""
+        """GetNodeContent(XmlNode node) -> String"""
         return _xrc.XmlResourceHandler_GetNodeContent(*args, **kwargs)
 
     def HasParam(*args, **kwargs):
-        """HasParam(wxString param) -> bool"""
+        """HasParam(String param) -> bool"""
         return _xrc.XmlResourceHandler_HasParam(*args, **kwargs)
 
     def GetParamNode(*args, **kwargs):
-        """GetParamNode(wxString param) -> XmlNode"""
+        """GetParamNode(String param) -> XmlNode"""
         return _xrc.XmlResourceHandler_GetParamNode(*args, **kwargs)
 
     def GetParamValue(*args, **kwargs):
-        """GetParamValue(wxString param) -> wxString"""
+        """GetParamValue(String param) -> String"""
         return _xrc.XmlResourceHandler_GetParamValue(*args, **kwargs)
 
     def AddStyle(*args, **kwargs):
-        """AddStyle(wxString name, int value)"""
+        """AddStyle(String name, int value)"""
         return _xrc.XmlResourceHandler_AddStyle(*args, **kwargs)
 
     def AddWindowStyles(*args, **kwargs):
@@ -553,11 +553,11 @@ class XmlResourceHandler(core.Object):
         return _xrc.XmlResourceHandler_AddWindowStyles(*args, **kwargs)
 
     def GetStyle(*args, **kwargs):
-        """GetStyle(wxString param=wxPyStyleString, int defaults=0) -> int"""
+        """GetStyle(String param=wxPyStyleString, int defaults=0) -> int"""
         return _xrc.XmlResourceHandler_GetStyle(*args, **kwargs)
 
     def GetText(*args, **kwargs):
-        """GetText(wxString param, bool translate=True) -> wxString"""
+        """GetText(String param, bool translate=True) -> String"""
         return _xrc.XmlResourceHandler_GetText(*args, **kwargs)
 
     def GetID(*args, **kwargs):
@@ -565,49 +565,49 @@ class XmlResourceHandler(core.Object):
         return _xrc.XmlResourceHandler_GetID(*args, **kwargs)
 
     def GetName(*args, **kwargs):
-        """GetName() -> wxString"""
+        """GetName() -> String"""
         return _xrc.XmlResourceHandler_GetName(*args, **kwargs)
 
     def GetBool(*args, **kwargs):
-        """GetBool(wxString param, bool defaultv=False) -> bool"""
+        """GetBool(String param, bool defaultv=False) -> bool"""
         return _xrc.XmlResourceHandler_GetBool(*args, **kwargs)
 
     def GetLong(*args, **kwargs):
-        """GetLong(wxString param, long defaultv=0) -> long"""
+        """GetLong(String param, long defaultv=0) -> long"""
         return _xrc.XmlResourceHandler_GetLong(*args, **kwargs)
 
     def GetColour(*args, **kwargs):
-        """GetColour(wxString param) -> wxColour"""
+        """GetColour(String param) -> Colour"""
         return _xrc.XmlResourceHandler_GetColour(*args, **kwargs)
 
     def GetSize(*args, **kwargs):
-        """GetSize(wxString param=wxPySizeString) -> Size"""
+        """GetSize(String param=wxPySizeString) -> Size"""
         return _xrc.XmlResourceHandler_GetSize(*args, **kwargs)
 
     def GetPosition(*args, **kwargs):
-        """GetPosition(wxString param=wxPyPosString) -> Point"""
+        """GetPosition(String param=wxPyPosString) -> Point"""
         return _xrc.XmlResourceHandler_GetPosition(*args, **kwargs)
 
     def GetDimension(*args, **kwargs):
-        """GetDimension(wxString param, int defaultv=0) -> int"""
+        """GetDimension(String param, int defaultv=0) -> int"""
         return _xrc.XmlResourceHandler_GetDimension(*args, **kwargs)
 
     def GetBitmap(*args, **kwargs):
         """
-        GetBitmap(wxString param=wxPyBitmapString, wxArtClient defaultArtClient=wxART_OTHER, 
-            Size size=DefaultSize) -> wxBitmap
+        GetBitmap(String param=wxPyBitmapString, wxArtClient defaultArtClient=wxART_OTHER, 
+            Size size=DefaultSize) -> Bitmap
         """
         return _xrc.XmlResourceHandler_GetBitmap(*args, **kwargs)
 
     def GetIcon(*args, **kwargs):
         """
-        GetIcon(wxString param=wxPyIconString, wxArtClient defaultArtClient=wxART_OTHER, 
+        GetIcon(String param=wxPyIconString, wxArtClient defaultArtClient=wxART_OTHER, 
             Size size=DefaultSize) -> wxIcon
         """
         return _xrc.XmlResourceHandler_GetIcon(*args, **kwargs)
 
     def GetFont(*args, **kwargs):
-        """GetFont(wxString param=wxPyFontString) -> wxFont"""
+        """GetFont(String param=wxPyFontString) -> Font"""
         return _xrc.XmlResourceHandler_GetFont(*args, **kwargs)
 
     def SetupWindow(*args, **kwargs):

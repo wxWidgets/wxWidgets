@@ -5649,7 +5649,7 @@ static PyObject * NativeFontInfo_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_NativeEncodingInfo_facename_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxNativeEncodingInfo *arg1 = (wxNativeEncodingInfo *) 0 ;
-    wxString arg2 ;
+    wxString *arg2 = (wxString *) 0 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -5658,13 +5658,8 @@ static PyObject *_wrap_NativeEncodingInfo_facename_set(PyObject *self, PyObject 
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:NativeEncodingInfo_facename_set",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxNativeEncodingInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        wxString* sptr = wxString_in_helper(obj1);
-        if (sptr == NULL) SWIG_fail;
-        arg2 = *sptr;
-        delete sptr;
-    }
-    if (arg1) (arg1)->facename = arg2;
+    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (arg1) (arg1)->facename = *arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
     return resultobj;
@@ -5676,7 +5671,7 @@ static PyObject *_wrap_NativeEncodingInfo_facename_set(PyObject *self, PyObject 
 static PyObject *_wrap_NativeEncodingInfo_facename_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxNativeEncodingInfo *arg1 = (wxNativeEncodingInfo *) 0 ;
-    wxString result;
+    wxString *result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "self", NULL 
@@ -5684,13 +5679,13 @@ static PyObject *_wrap_NativeEncodingInfo_facename_get(PyObject *self, PyObject 
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:NativeEncodingInfo_facename_get",kwnames,&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxNativeEncodingInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    result =  ((arg1)->facename);
+    result = (wxString *)& ((arg1)->facename);
     
     {
 #if wxUSE_UNICODE
-        resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
 #else
-        resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
 #endif
     }
     return resultobj;
@@ -7751,7 +7746,7 @@ static PyObject *_wrap_LanguageInfo_Language_get(PyObject *self, PyObject *args,
 static PyObject *_wrap_LanguageInfo_CanonicalName_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxLanguageInfo *arg1 = (wxLanguageInfo *) 0 ;
-    wxString arg2 ;
+    wxString *arg2 = (wxString *) 0 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -7760,13 +7755,8 @@ static PyObject *_wrap_LanguageInfo_CanonicalName_set(PyObject *self, PyObject *
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:LanguageInfo_CanonicalName_set",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxLanguageInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        wxString* sptr = wxString_in_helper(obj1);
-        if (sptr == NULL) SWIG_fail;
-        arg2 = *sptr;
-        delete sptr;
-    }
-    if (arg1) (arg1)->CanonicalName = arg2;
+    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (arg1) (arg1)->CanonicalName = *arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
     return resultobj;
@@ -7778,7 +7768,7 @@ static PyObject *_wrap_LanguageInfo_CanonicalName_set(PyObject *self, PyObject *
 static PyObject *_wrap_LanguageInfo_CanonicalName_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxLanguageInfo *arg1 = (wxLanguageInfo *) 0 ;
-    wxString result;
+    wxString *result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "self", NULL 
@@ -7786,13 +7776,13 @@ static PyObject *_wrap_LanguageInfo_CanonicalName_get(PyObject *self, PyObject *
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:LanguageInfo_CanonicalName_get",kwnames,&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxLanguageInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    result =  ((arg1)->CanonicalName);
+    result = (wxString *)& ((arg1)->CanonicalName);
     
     {
 #if wxUSE_UNICODE
-        resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
 #else
-        resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
 #endif
     }
     return resultobj;
@@ -7804,7 +7794,7 @@ static PyObject *_wrap_LanguageInfo_CanonicalName_get(PyObject *self, PyObject *
 static PyObject *_wrap_LanguageInfo_Description_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxLanguageInfo *arg1 = (wxLanguageInfo *) 0 ;
-    wxString arg2 ;
+    wxString *arg2 = (wxString *) 0 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -7813,13 +7803,8 @@ static PyObject *_wrap_LanguageInfo_Description_set(PyObject *self, PyObject *ar
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:LanguageInfo_Description_set",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxLanguageInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        wxString* sptr = wxString_in_helper(obj1);
-        if (sptr == NULL) SWIG_fail;
-        arg2 = *sptr;
-        delete sptr;
-    }
-    if (arg1) (arg1)->Description = arg2;
+    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (arg1) (arg1)->Description = *arg2;
     
     Py_INCREF(Py_None); resultobj = Py_None;
     return resultobj;
@@ -7831,7 +7816,7 @@ static PyObject *_wrap_LanguageInfo_Description_set(PyObject *self, PyObject *ar
 static PyObject *_wrap_LanguageInfo_Description_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxLanguageInfo *arg1 = (wxLanguageInfo *) 0 ;
-    wxString result;
+    wxString *result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "self", NULL 
@@ -7839,13 +7824,13 @@ static PyObject *_wrap_LanguageInfo_Description_get(PyObject *self, PyObject *ar
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:LanguageInfo_Description_get",kwnames,&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxLanguageInfo,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    result =  ((arg1)->Description);
+    result = (wxString *)& ((arg1)->Description);
     
     {
 #if wxUSE_UNICODE
-        resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
 #else
-        resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
 #endif
     }
     return resultobj;

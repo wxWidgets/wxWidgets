@@ -783,7 +783,7 @@ class StyledTextCtrl(core.Control):
     def __init__(self, *args, **kwargs):
         """
         __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=0, wxString name=wxPySTCNameStr) -> StyledTextCtrl
+            long style=0, String name=wxPySTCNameStr) -> StyledTextCtrl
         """
         newobj = _stc.new_StyledTextCtrl(*args, **kwargs)
         self.this = newobj.this
@@ -794,12 +794,12 @@ class StyledTextCtrl(core.Control):
     def Create(*args, **kwargs):
         """
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=0, wxString name=wxSTCNameStr)
+            long style=0, String name=wxSTCNameStr)
         """
         return _stc.StyledTextCtrl_Create(*args, **kwargs)
 
     def AddText(*args, **kwargs):
-        """AddText(wxString text)"""
+        """AddText(String text)"""
         return _stc.StyledTextCtrl_AddText(*args, **kwargs)
 
     def AddStyledText(*args, **kwargs):
@@ -807,7 +807,7 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_AddStyledText(*args, **kwargs)
 
     def InsertText(*args, **kwargs):
-        """InsertText(int pos, wxString text)"""
+        """InsertText(int pos, String text)"""
         return _stc.StyledTextCtrl_InsertText(*args, **kwargs)
 
     def ClearAll(*args, **kwargs):
@@ -903,7 +903,7 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_SetAnchor(*args, **kwargs)
 
     def GetCurLine(*args, **kwargs):
-        """GetCurLine(int OUTPUT) -> wxString"""
+        """GetCurLine(int OUTPUT) -> String"""
         return _stc.StyledTextCtrl_GetCurLine(*args, **kwargs)
 
     def GetEndStyled(*args, **kwargs):
@@ -952,17 +952,17 @@ class StyledTextCtrl(core.Control):
 
     def MarkerDefine(*args, **kwargs):
         """
-        MarkerDefine(int markerNumber, int markerSymbol, wxColour foreground=wxNullColour, 
-            wxColour background=wxNullColour)
+        MarkerDefine(int markerNumber, int markerSymbol, Colour foreground=wxNullColour, 
+            Colour background=wxNullColour)
         """
         return _stc.StyledTextCtrl_MarkerDefine(*args, **kwargs)
 
     def MarkerSetForeground(*args, **kwargs):
-        """MarkerSetForeground(int markerNumber, wxColour fore)"""
+        """MarkerSetForeground(int markerNumber, Colour fore)"""
         return _stc.StyledTextCtrl_MarkerSetForeground(*args, **kwargs)
 
     def MarkerSetBackground(*args, **kwargs):
-        """MarkerSetBackground(int markerNumber, wxColour back)"""
+        """MarkerSetBackground(int markerNumber, Colour back)"""
         return _stc.StyledTextCtrl_MarkerSetBackground(*args, **kwargs)
 
     def MarkerAdd(*args, **kwargs):
@@ -990,7 +990,7 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_MarkerPrevious(*args, **kwargs)
 
     def MarkerDefineBitmap(*args, **kwargs):
-        """MarkerDefineBitmap(int markerNumber, wxBitmap bmp)"""
+        """MarkerDefineBitmap(int markerNumber, Bitmap bmp)"""
         return _stc.StyledTextCtrl_MarkerDefineBitmap(*args, **kwargs)
 
     def SetMarginType(*args, **kwargs):
@@ -1030,11 +1030,11 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_StyleClearAll(*args, **kwargs)
 
     def StyleSetForeground(*args, **kwargs):
-        """StyleSetForeground(int style, wxColour fore)"""
+        """StyleSetForeground(int style, Colour fore)"""
         return _stc.StyledTextCtrl_StyleSetForeground(*args, **kwargs)
 
     def StyleSetBackground(*args, **kwargs):
-        """StyleSetBackground(int style, wxColour back)"""
+        """StyleSetBackground(int style, Colour back)"""
         return _stc.StyledTextCtrl_StyleSetBackground(*args, **kwargs)
 
     def StyleSetBold(*args, **kwargs):
@@ -1050,7 +1050,7 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_StyleSetSize(*args, **kwargs)
 
     def StyleSetFaceName(*args, **kwargs):
-        """StyleSetFaceName(int style, wxString fontName)"""
+        """StyleSetFaceName(int style, String fontName)"""
         return _stc.StyledTextCtrl_StyleSetFaceName(*args, **kwargs)
 
     def StyleSetEOLFilled(*args, **kwargs):
@@ -1078,15 +1078,15 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_StyleSetHotSpot(*args, **kwargs)
 
     def SetSelForeground(*args, **kwargs):
-        """SetSelForeground(bool useSetting, wxColour fore)"""
+        """SetSelForeground(bool useSetting, Colour fore)"""
         return _stc.StyledTextCtrl_SetSelForeground(*args, **kwargs)
 
     def SetSelBackground(*args, **kwargs):
-        """SetSelBackground(bool useSetting, wxColour back)"""
+        """SetSelBackground(bool useSetting, Colour back)"""
         return _stc.StyledTextCtrl_SetSelBackground(*args, **kwargs)
 
     def SetCaretForeground(*args, **kwargs):
-        """SetCaretForeground(wxColour fore)"""
+        """SetCaretForeground(Colour fore)"""
         return _stc.StyledTextCtrl_SetCaretForeground(*args, **kwargs)
 
     def CmdKeyAssign(*args, **kwargs):
@@ -1118,7 +1118,7 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_SetCaretPeriod(*args, **kwargs)
 
     def SetWordChars(*args, **kwargs):
-        """SetWordChars(wxString characters)"""
+        """SetWordChars(String characters)"""
         return _stc.StyledTextCtrl_SetWordChars(*args, **kwargs)
 
     def BeginUndoAction(*args, **kwargs):
@@ -1138,19 +1138,19 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_IndicatorGetStyle(*args, **kwargs)
 
     def IndicatorSetForeground(*args, **kwargs):
-        """IndicatorSetForeground(int indic, wxColour fore)"""
+        """IndicatorSetForeground(int indic, Colour fore)"""
         return _stc.StyledTextCtrl_IndicatorSetForeground(*args, **kwargs)
 
     def IndicatorGetForeground(*args, **kwargs):
-        """IndicatorGetForeground(int indic) -> wxColour"""
+        """IndicatorGetForeground(int indic) -> Colour"""
         return _stc.StyledTextCtrl_IndicatorGetForeground(*args, **kwargs)
 
     def SetWhitespaceForeground(*args, **kwargs):
-        """SetWhitespaceForeground(bool useSetting, wxColour fore)"""
+        """SetWhitespaceForeground(bool useSetting, Colour fore)"""
         return _stc.StyledTextCtrl_SetWhitespaceForeground(*args, **kwargs)
 
     def SetWhitespaceBackground(*args, **kwargs):
-        """SetWhitespaceBackground(bool useSetting, wxColour back)"""
+        """SetWhitespaceBackground(bool useSetting, Colour back)"""
         return _stc.StyledTextCtrl_SetWhitespaceBackground(*args, **kwargs)
 
     def SetStyleBits(*args, **kwargs):
@@ -1182,11 +1182,11 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_SetCaretLineVisible(*args, **kwargs)
 
     def GetCaretLineBack(*args, **kwargs):
-        """GetCaretLineBack() -> wxColour"""
+        """GetCaretLineBack() -> Colour"""
         return _stc.StyledTextCtrl_GetCaretLineBack(*args, **kwargs)
 
     def SetCaretLineBack(*args, **kwargs):
-        """SetCaretLineBack(wxColour back)"""
+        """SetCaretLineBack(Colour back)"""
         return _stc.StyledTextCtrl_SetCaretLineBack(*args, **kwargs)
 
     def StyleSetChangeable(*args, **kwargs):
@@ -1194,7 +1194,7 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_StyleSetChangeable(*args, **kwargs)
 
     def AutoCompShow(*args, **kwargs):
-        """AutoCompShow(int lenEntered, wxString itemList)"""
+        """AutoCompShow(int lenEntered, String itemList)"""
         return _stc.StyledTextCtrl_AutoCompShow(*args, **kwargs)
 
     def AutoCompCancel(*args, **kwargs):
@@ -1214,7 +1214,7 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_AutoCompComplete(*args, **kwargs)
 
     def AutoCompStops(*args, **kwargs):
-        """AutoCompStops(wxString characterSet)"""
+        """AutoCompStops(String characterSet)"""
         return _stc.StyledTextCtrl_AutoCompStops(*args, **kwargs)
 
     def AutoCompSetSeparator(*args, **kwargs):
@@ -1226,7 +1226,7 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_AutoCompGetSeparator(*args, **kwargs)
 
     def AutoCompSelect(*args, **kwargs):
-        """AutoCompSelect(wxString text)"""
+        """AutoCompSelect(String text)"""
         return _stc.StyledTextCtrl_AutoCompSelect(*args, **kwargs)
 
     def AutoCompSetCancelAtStart(*args, **kwargs):
@@ -1238,7 +1238,7 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_AutoCompGetCancelAtStart(*args, **kwargs)
 
     def AutoCompSetFillUps(*args, **kwargs):
-        """AutoCompSetFillUps(wxString characterSet)"""
+        """AutoCompSetFillUps(String characterSet)"""
         return _stc.StyledTextCtrl_AutoCompSetFillUps(*args, **kwargs)
 
     def AutoCompSetChooseSingle(*args, **kwargs):
@@ -1258,7 +1258,7 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_AutoCompGetIgnoreCase(*args, **kwargs)
 
     def UserListShow(*args, **kwargs):
-        """UserListShow(int listType, wxString itemList)"""
+        """UserListShow(int listType, String itemList)"""
         return _stc.StyledTextCtrl_UserListShow(*args, **kwargs)
 
     def AutoCompSetAutoHide(*args, **kwargs):
@@ -1278,7 +1278,7 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_AutoCompGetDropRestOfWord(*args, **kwargs)
 
     def RegisterImage(*args, **kwargs):
-        """RegisterImage(int type, wxBitmap bmp)"""
+        """RegisterImage(int type, Bitmap bmp)"""
         return _stc.StyledTextCtrl_RegisterImage(*args, **kwargs)
 
     def ClearRegisteredImages(*args, **kwargs):
@@ -1358,7 +1358,7 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_GetCodePage(*args, **kwargs)
 
     def GetCaretForeground(*args, **kwargs):
-        """GetCaretForeground() -> wxColour"""
+        """GetCaretForeground() -> Colour"""
         return _stc.StyledTextCtrl_GetCaretForeground(*args, **kwargs)
 
     def GetReadOnly(*args, **kwargs):
@@ -1402,12 +1402,12 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_GetPrintColourMode(*args, **kwargs)
 
     def FindText(*args, **kwargs):
-        """FindText(int minPos, int maxPos, wxString text, int flags=0) -> int"""
+        """FindText(int minPos, int maxPos, String text, int flags=0) -> int"""
         return _stc.StyledTextCtrl_FindText(*args, **kwargs)
 
     def FormatRange(*args, **kwargs):
         """
-        FormatRange(bool doDraw, int startPos, int endPos, wxDC draw, wxDC target, 
+        FormatRange(bool doDraw, int startPos, int endPos, DC draw, DC target, 
             Rect renderRect, Rect pageRect) -> int
         """
         return _stc.StyledTextCtrl_FormatRange(*args, **kwargs)
@@ -1417,7 +1417,7 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_GetFirstVisibleLine(*args, **kwargs)
 
     def GetLine(*args, **kwargs):
-        """GetLine(int line) -> wxString"""
+        """GetLine(int line) -> String"""
         return _stc.StyledTextCtrl_GetLine(*args, **kwargs)
 
     def GetLineCount(*args, **kwargs):
@@ -1449,11 +1449,11 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_SetSelection(*args, **kwargs)
 
     def GetSelectedText(*args, **kwargs):
-        """GetSelectedText() -> wxString"""
+        """GetSelectedText() -> String"""
         return _stc.StyledTextCtrl_GetSelectedText(*args, **kwargs)
 
     def GetTextRange(*args, **kwargs):
-        """GetTextRange(int startPos, int endPos) -> wxString"""
+        """GetTextRange(int startPos, int endPos) -> String"""
         return _stc.StyledTextCtrl_GetTextRange(*args, **kwargs)
 
     def HideSelection(*args, **kwargs):
@@ -1477,7 +1477,7 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_EnsureCaretVisible(*args, **kwargs)
 
     def ReplaceSelection(*args, **kwargs):
-        """ReplaceSelection(wxString text)"""
+        """ReplaceSelection(String text)"""
         return _stc.StyledTextCtrl_ReplaceSelection(*args, **kwargs)
 
     def SetReadOnly(*args, **kwargs):
@@ -1517,11 +1517,11 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_Clear(*args, **kwargs)
 
     def SetText(*args, **kwargs):
-        """SetText(wxString text)"""
+        """SetText(String text)"""
         return _stc.StyledTextCtrl_SetText(*args, **kwargs)
 
     def GetText(*args, **kwargs):
-        """GetText() -> wxString"""
+        """GetText() -> String"""
         return _stc.StyledTextCtrl_GetText(*args, **kwargs)
 
     def GetTextLength(*args, **kwargs):
@@ -1561,15 +1561,15 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_GetTargetEnd(*args, **kwargs)
 
     def ReplaceTarget(*args, **kwargs):
-        """ReplaceTarget(wxString text) -> int"""
+        """ReplaceTarget(String text) -> int"""
         return _stc.StyledTextCtrl_ReplaceTarget(*args, **kwargs)
 
     def ReplaceTargetRE(*args, **kwargs):
-        """ReplaceTargetRE(wxString text) -> int"""
+        """ReplaceTargetRE(String text) -> int"""
         return _stc.StyledTextCtrl_ReplaceTargetRE(*args, **kwargs)
 
     def SearchInTarget(*args, **kwargs):
-        """SearchInTarget(wxString text) -> int"""
+        """SearchInTarget(String text) -> int"""
         return _stc.StyledTextCtrl_SearchInTarget(*args, **kwargs)
 
     def SetSearchFlags(*args, **kwargs):
@@ -1581,7 +1581,7 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_GetSearchFlags(*args, **kwargs)
 
     def CallTipShow(*args, **kwargs):
-        """CallTipShow(int pos, wxString definition)"""
+        """CallTipShow(int pos, String definition)"""
         return _stc.StyledTextCtrl_CallTipShow(*args, **kwargs)
 
     def CallTipCancel(*args, **kwargs):
@@ -1601,15 +1601,15 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_CallTipSetHighlight(*args, **kwargs)
 
     def CallTipSetBackground(*args, **kwargs):
-        """CallTipSetBackground(wxColour back)"""
+        """CallTipSetBackground(Colour back)"""
         return _stc.StyledTextCtrl_CallTipSetBackground(*args, **kwargs)
 
     def CallTipSetForeground(*args, **kwargs):
-        """CallTipSetForeground(wxColour fore)"""
+        """CallTipSetForeground(Colour fore)"""
         return _stc.StyledTextCtrl_CallTipSetForeground(*args, **kwargs)
 
     def CallTipSetForegroundHighlight(*args, **kwargs):
-        """CallTipSetForegroundHighlight(wxColour fore)"""
+        """CallTipSetForegroundHighlight(Colour fore)"""
         return _stc.StyledTextCtrl_CallTipSetForegroundHighlight(*args, **kwargs)
 
     def VisibleFromDocLine(*args, **kwargs):
@@ -1729,7 +1729,7 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_GetScrollWidth(*args, **kwargs)
 
     def TextWidth(*args, **kwargs):
-        """TextWidth(int style, wxString text) -> int"""
+        """TextWidth(int style, String text) -> int"""
         return _stc.StyledTextCtrl_TextWidth(*args, **kwargs)
 
     def SetEndAtLastLine(*args, **kwargs):
@@ -1753,7 +1753,7 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_GetUseVerticalScrollBar(*args, **kwargs)
 
     def AppendText(*args, **kwargs):
-        """AppendText(int length, wxString text)"""
+        """AppendText(int length, String text)"""
         return _stc.StyledTextCtrl_AppendText(*args, **kwargs)
 
     def GetTwoPhaseDraw(*args, **kwargs):
@@ -1777,11 +1777,11 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_LinesSplit(*args, **kwargs)
 
     def SetFoldMarginColour(*args, **kwargs):
-        """SetFoldMarginColour(bool useSetting, wxColour back)"""
+        """SetFoldMarginColour(bool useSetting, Colour back)"""
         return _stc.StyledTextCtrl_SetFoldMarginColour(*args, **kwargs)
 
     def SetFoldMarginHiColour(*args, **kwargs):
-        """SetFoldMarginHiColour(bool useSetting, wxColour fore)"""
+        """SetFoldMarginHiColour(bool useSetting, Colour fore)"""
         return _stc.StyledTextCtrl_SetFoldMarginHiColour(*args, **kwargs)
 
     def LineDuplicate(*args, **kwargs):
@@ -1865,11 +1865,11 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_SetEdgeMode(*args, **kwargs)
 
     def GetEdgeColour(*args, **kwargs):
-        """GetEdgeColour() -> wxColour"""
+        """GetEdgeColour() -> Colour"""
         return _stc.StyledTextCtrl_GetEdgeColour(*args, **kwargs)
 
     def SetEdgeColour(*args, **kwargs):
-        """SetEdgeColour(wxColour edgeColour)"""
+        """SetEdgeColour(Colour edgeColour)"""
         return _stc.StyledTextCtrl_SetEdgeColour(*args, **kwargs)
 
     def SearchAnchor(*args, **kwargs):
@@ -1877,11 +1877,11 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_SearchAnchor(*args, **kwargs)
 
     def SearchNext(*args, **kwargs):
-        """SearchNext(int flags, wxString text) -> int"""
+        """SearchNext(int flags, String text) -> int"""
         return _stc.StyledTextCtrl_SearchNext(*args, **kwargs)
 
     def SearchPrev(*args, **kwargs):
-        """SearchPrev(int flags, wxString text) -> int"""
+        """SearchPrev(int flags, String text) -> int"""
         return _stc.StyledTextCtrl_SearchPrev(*args, **kwargs)
 
     def LinesOnScreen(*args, **kwargs):
@@ -2017,11 +2017,11 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_GetPrintWrapMode(*args, **kwargs)
 
     def SetHotspotActiveForeground(*args, **kwargs):
-        """SetHotspotActiveForeground(bool useSetting, wxColour fore)"""
+        """SetHotspotActiveForeground(bool useSetting, Colour fore)"""
         return _stc.StyledTextCtrl_SetHotspotActiveForeground(*args, **kwargs)
 
     def SetHotspotActiveBackground(*args, **kwargs):
-        """SetHotspotActiveBackground(bool useSetting, wxColour back)"""
+        """SetHotspotActiveBackground(bool useSetting, Colour back)"""
         return _stc.StyledTextCtrl_SetHotspotActiveBackground(*args, **kwargs)
 
     def SetHotspotActiveUnderline(*args, **kwargs):
@@ -2041,7 +2041,7 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_CopyRange(*args, **kwargs)
 
     def CopyText(*args, **kwargs):
-        """CopyText(int length, wxString text)"""
+        """CopyText(int length, String text)"""
         return _stc.StyledTextCtrl_CopyText(*args, **kwargs)
 
     def StartRecord(*args, **kwargs):
@@ -2065,15 +2065,15 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_Colourise(*args, **kwargs)
 
     def SetProperty(*args, **kwargs):
-        """SetProperty(wxString key, wxString value)"""
+        """SetProperty(String key, String value)"""
         return _stc.StyledTextCtrl_SetProperty(*args, **kwargs)
 
     def SetKeyWords(*args, **kwargs):
-        """SetKeyWords(int keywordSet, wxString keyWords)"""
+        """SetKeyWords(int keywordSet, String keyWords)"""
         return _stc.StyledTextCtrl_SetKeyWords(*args, **kwargs)
 
     def SetLexerLanguage(*args, **kwargs):
-        """SetLexerLanguage(wxString language)"""
+        """SetLexerLanguage(String language)"""
         return _stc.StyledTextCtrl_SetLexerLanguage(*args, **kwargs)
 
     def GetCurrentLine(*args, **kwargs):
@@ -2081,16 +2081,16 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_GetCurrentLine(*args, **kwargs)
 
     def StyleSetSpec(*args, **kwargs):
-        """StyleSetSpec(int styleNum, wxString spec)"""
+        """StyleSetSpec(int styleNum, String spec)"""
         return _stc.StyledTextCtrl_StyleSetSpec(*args, **kwargs)
 
     def StyleSetFont(*args, **kwargs):
-        """StyleSetFont(int styleNum, wxFont font)"""
+        """StyleSetFont(int styleNum, Font font)"""
         return _stc.StyledTextCtrl_StyleSetFont(*args, **kwargs)
 
     def StyleSetFontAttr(*args, **kwargs):
         """
-        StyleSetFontAttr(int styleNum, int size, wxString faceName, bool bold, 
+        StyleSetFontAttr(int styleNum, int size, String faceName, bool bold, 
             bool italic, bool underline)
         """
         return _stc.StyledTextCtrl_StyleSetFontAttr(*args, **kwargs)
@@ -2140,11 +2140,11 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_SetLastKeydownProcessed(*args, **kwargs)
 
     def SaveFile(*args, **kwargs):
-        """SaveFile(wxString filename) -> bool"""
+        """SaveFile(String filename) -> bool"""
         return _stc.StyledTextCtrl_SaveFile(*args, **kwargs)
 
     def LoadFile(*args, **kwargs):
-        """LoadFile(wxString filename) -> bool"""
+        """LoadFile(String filename) -> bool"""
         return _stc.StyledTextCtrl_LoadFile(*args, **kwargs)
 
     def DoDragOver(*args, **kwargs):
@@ -2152,7 +2152,7 @@ class StyledTextCtrl(core.Control):
         return _stc.StyledTextCtrl_DoDragOver(*args, **kwargs)
 
     def DoDropText(*args, **kwargs):
-        """DoDropText(long x, long y, wxString data) -> bool"""
+        """DoDropText(long x, long y, String data) -> bool"""
         return _stc.StyledTextCtrl_DoDropText(*args, **kwargs)
 
 
@@ -2201,7 +2201,7 @@ class StyledTextEvent(core.CommandEvent):
         return _stc.StyledTextEvent_SetModificationType(*args, **kwargs)
 
     def SetText(*args, **kwargs):
-        """SetText(wxString t)"""
+        """SetText(String t)"""
         return _stc.StyledTextEvent_SetText(*args, **kwargs)
 
     def SetLength(*args, **kwargs):
@@ -2253,7 +2253,7 @@ class StyledTextEvent(core.CommandEvent):
         return _stc.StyledTextEvent_SetY(*args, **kwargs)
 
     def SetDragText(*args, **kwargs):
-        """SetDragText(wxString val)"""
+        """SetDragText(String val)"""
         return _stc.StyledTextEvent_SetDragText(*args, **kwargs)
 
     def SetDragAllowMove(*args, **kwargs):
@@ -2281,7 +2281,7 @@ class StyledTextEvent(core.CommandEvent):
         return _stc.StyledTextEvent_GetModificationType(*args, **kwargs)
 
     def GetText(*args, **kwargs):
-        """GetText() -> wxString"""
+        """GetText() -> String"""
         return _stc.StyledTextEvent_GetText(*args, **kwargs)
 
     def GetLength(*args, **kwargs):
@@ -2333,7 +2333,7 @@ class StyledTextEvent(core.CommandEvent):
         return _stc.StyledTextEvent_GetY(*args, **kwargs)
 
     def GetDragText(*args, **kwargs):
-        """GetDragText() -> wxString"""
+        """GetDragText() -> String"""
         return _stc.StyledTextEvent_GetDragText(*args, **kwargs)
 
     def GetDragAllowMove(*args, **kwargs):

@@ -23352,7 +23352,7 @@ static PyObject * DropSource_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_DropTarget(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_PyDropTarget(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDataObject *arg1 = (wxDataObject *) NULL ;
     wxPyDropTarget *result;
@@ -23361,7 +23361,7 @@ static PyObject *_wrap_new_DropTarget(PyObject *self, PyObject *args, PyObject *
         (char *) "dataObject", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:new_DropTarget",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:new_PyDropTarget",kwnames,&obj0)) goto fail;
     if (obj0) {
         if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDataObject,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     }
@@ -25141,7 +25141,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DropSource_DoDragDrop", (PyCFunction) _wrap_DropSource_DoDragDrop, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DropSource_base_GiveFeedback", (PyCFunction) _wrap_DropSource_base_GiveFeedback, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DropSource_swigregister", DropSource_swigregister, METH_VARARGS },
-	 { (char *)"new_DropTarget", (PyCFunction) _wrap_new_DropTarget, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_PyDropTarget", (PyCFunction) _wrap_new_PyDropTarget, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DropTarget__setCallbackInfo", (PyCFunction) _wrap_DropTarget__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"delete_DropTarget", (PyCFunction) _wrap_delete_DropTarget, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"DropTarget_GetDataObject", (PyCFunction) _wrap_DropTarget_GetDataObject, METH_VARARGS | METH_KEYWORDS },
