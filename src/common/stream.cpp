@@ -585,11 +585,10 @@ wxInputStream& wxInputStream::Read(void *buffer, size_t size)
     m_lasterror = wxStream_NOERROR;
     return *this;
   }
-  size     -= retsize;
-  buf      += retsize;
+  size -= retsize;
+  buf  += retsize;
 
-  // GRG: shouldn't we also add retsize to m_lastcount here?
-  m_lastcount = OnSysRead(buf, size);
+  m_lastcount = OnSysRead(buf, size) + retsize;
   return *this;
 }
 
