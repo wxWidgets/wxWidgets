@@ -1452,7 +1452,8 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& WXUNUSED(event))
                        /* const wxString &orderBy       */ wxT("NAME"),
                        /* wxDb           *pDb           */ wxGetApp().READONLY_DB,
                        /* const wxString &defDir        */ wxGetApp().DbConnectInf->GetDefaultDir(),
-                       /* bool            distinctValues*/ true);
+                       /* bool            distinctValues*/ true,
+                       wxEmptyString, 20);
 
         if (ListDB_Selection && wxStrlen(ListDB_Selection))
         {
