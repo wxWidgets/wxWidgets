@@ -4,23 +4,23 @@
  * Copyright (c) 1988-1997 Sam Leffler
  * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
- * Permission to use, copy, modify, distribute, and sell this software and 
+ * Permission to use, copy, modify, distribute, and sell this software and
  * its documentation for any purpose is hereby granted without fee, provided
  * that (i) the above copyright notices and this permission notice appear in
  * all copies of the software and related documentation, and (ii) the names of
  * Sam Leffler and Silicon Graphics may not be used in any advertising or
  * publicity relating to the software without the specific, prior written
  * permission of Sam Leffler and Silicon Graphics.
- * 
- * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
- * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
- * 
+ *
+ * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+ *
  * IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
  * ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
  * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
- * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
- * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
+ * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF
+ * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
  * OF THIS SOFTWARE.
  */
 
@@ -88,6 +88,12 @@ typedef	HFILE thandle_t;	/* client data handle */
 typedef	void* thandle_t;	/* client data handle */
 #endif
 
+#if defined(OS2_32)
+#define LINKAGEMODE _Optlink
+#else
+#define LINKAGEMODE
+#endif
+
 #ifndef NULL
 #define	NULL	0
 #endif
@@ -114,17 +120,17 @@ typedef struct _TIFFRGBAImage TIFFRGBAImage;
 /*
  * The image reading and conversion routines invoke
  * ``put routines'' to copy/image/whatever tiles of
- * raw image data.  A default set of routines are 
+ * raw image data.  A default set of routines are
  * provided to convert/copy raw image data to 8-bit
  * packed ABGR format rasters.  Applications can supply
  * alternate routines that unpack the data into a
  * different format or, for example, unpack the data
  * and draw the unpacked raster on the display.
  */
-typedef void (*tileContigRoutine)
+typedef void (LINKAGEMODE *tileContigRoutine)
     (TIFFRGBAImage*, uint32*, uint32, uint32, uint32, uint32, int32, int32,
 	unsigned char*);
-typedef void (*tileSeparateRoutine)
+typedef void (LINKAGEMODE *tileSeparateRoutine)
     (TIFFRGBAImage*, uint32*, uint32, uint32, uint32, uint32, int32, int32,
 	unsigned char*, unsigned char*, unsigned char*, unsigned char*);
 /*
@@ -154,7 +160,7 @@ struct _TIFFRGBAImage {
 	uint16*	greencmap;
 	uint16*	bluecmap;
 						/* get image data routine */
-	int	(*get)(TIFFRGBAImage*, uint32*, uint32, uint32);
+	int	(LINKAGEMODE *get)(TIFFRGBAImage*, uint32*, uint32, uint32);
 	union {
 	    void (*any)(TIFFRGBAImage*);
 	    tileContigRoutine	contig;
@@ -185,7 +191,7 @@ struct _TIFFRGBAImage {
  * More codecs may be registered through calls to the library
  * and/or the builtin implementations may be overridden.
  */
-typedef	int (*TIFFInitMethod)(TIFF*, int);
+typedef	int (LINKAGEMODE *TIFFInitMethod)(TIFF*, int);
 typedef struct {
 	char*		name;
 	uint16		scheme;
@@ -198,14 +204,14 @@ typedef struct {
 #if defined(__cplusplus)
 extern "C" {
 #endif
-typedef	void (*TIFFErrorHandler)(const char*, const char*, va_list);
-typedef	tsize_t (*TIFFReadWriteProc)(thandle_t, tdata_t, tsize_t);
-typedef	toff_t (*TIFFSeekProc)(thandle_t, toff_t, int);
-typedef	int (*TIFFCloseProc)(thandle_t);
-typedef	toff_t (*TIFFSizeProc)(thandle_t);
-typedef	int (*TIFFMapFileProc)(thandle_t, tdata_t*, toff_t*);
-typedef	void (*TIFFUnmapFileProc)(thandle_t, tdata_t, toff_t);
-typedef	void (*TIFFExtendProc)(TIFF*); 
+typedef	void (LINKAGEMODE *TIFFErrorHandler)(const char*, const char*, va_list);
+typedef	tsize_t (LINKAGEMODE *TIFFReadWriteProc)(thandle_t, tdata_t, tsize_t);
+typedef	toff_t (LINKAGEMODE *TIFFSeekProc)(thandle_t, toff_t, int);
+typedef	int (LINKAGEMODE *TIFFCloseProc)(thandle_t);
+typedef	toff_t (LINKAGEMODE *TIFFSizeProc)(thandle_t);
+typedef	int (LINKAGEMODE *TIFFMapFileProc)(thandle_t, tdata_t*, toff_t*);
+typedef	void (LINKAGEMODE *TIFFUnmapFileProc)(thandle_t, tdata_t, toff_t);
+typedef	void (LINKAGEMODE *TIFFExtendProc)(TIFF*);
 
 extern	const char* TIFFGetVersion(void);
 

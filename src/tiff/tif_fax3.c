@@ -4,23 +4,23 @@
  * Copyright (c) 1990-1997 Sam Leffler
  * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
- * Permission to use, copy, modify, distribute, and sell this software and 
+ * Permission to use, copy, modify, distribute, and sell this software and
  * its documentation for any purpose is hereby granted without fee, provided
  * that (i) the above copyright notices and this permission notice appear in
  * all copies of the software and related documentation, and (ii) the names of
  * Sam Leffler and Silicon Graphics may not be used in any advertising or
  * publicity relating to the software without the specific, prior written
  * permission of Sam Leffler and Silicon Graphics.
- * 
- * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
- * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
- * 
+ *
+ * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+ *
  * IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
  * ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
  * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
- * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
- * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
+ * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF
+ * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
  * OF THIS SOFTWARE.
  */
 
@@ -182,7 +182,7 @@ Fax3PreDecode(TIFF* tif, tsample_t s)
  * overriding the definitions used by the decoder.
  */
 
-static void
+static void LINKAGEMODE
 Fax3Unexpected(const char* module, TIFF* tif, uint32 a0)
 {
 	TIFFError(module, "%s: Bad code word at scanline %d (x %lu)",
@@ -190,7 +190,7 @@ Fax3Unexpected(const char* module, TIFF* tif, uint32 a0)
 }
 #define	unexpected(table, a0)	Fax3Unexpected(module, tif, a0)
 
-static void
+static void LINKAGEMODE
 Fax3Extension(const char* module, TIFF* tif, uint32 a0)
 {
 	TIFFError(module,
@@ -199,7 +199,7 @@ Fax3Extension(const char* module, TIFF* tif, uint32 a0)
 }
 #define	extension(a0)	Fax3Extension(module, tif, a0)
 
-static void
+static void LINKAGEMODE
 Fax3BadLength(const char* module, TIFF* tif, uint32 a0, uint32 lastx)
 {
 	TIFFWarning(module, "%s: %s at scanline %d (got %lu, expected %lu)",
@@ -209,7 +209,7 @@ Fax3BadLength(const char* module, TIFF* tif, uint32 a0, uint32 lastx)
 }
 #define	badlength(a0,lastx)	Fax3BadLength(module, tif, a0, lastx)
 
-static void
+static void LINKAGEMODE
 Fax3PrematureEOF(const char* module, TIFF* tif, uint32 a0)
 {
 	TIFFWarning(module, "%s: Premature EOF at scanline %d (x %lu)",
@@ -222,7 +222,7 @@ Fax3PrematureEOF(const char* module, TIFF* tif, uint32 a0)
 /*
  * Decode the requested amount of G3 1D-encoded data.
  */
-static int
+static int LINKAGEMODE
 Fax3Decode1D(TIFF* tif, tidata_t buf, tsize_t occ, tsample_t s)
 {
 	DECLARE_STATE(tif, sp, "Fax3Decode1D");
@@ -262,7 +262,7 @@ Fax3Decode1D(TIFF* tif, tidata_t buf, tsize_t occ, tsample_t s)
 /*
  * Decode the requested amount of G3 2D-encoded data.
  */
-static int
+static int LINKAGEMODE
 Fax3Decode2D(TIFF* tif, tidata_t buf, tsize_t occ, tsample_t s)
 {
 	DECLARE_STATE_2D(tif, sp, "Fax3Decode2D");
@@ -574,7 +574,7 @@ static const int _msbmask[9] =
  * the output stream.  Values are
  * assumed to be at most 16 bits.
  */
-static void
+static void LINKAGEMODE
 Fax3PutBits(TIFF* tif, u_int bits, u_int length)
 {
 	Fax3EncodeState* sp = EncoderState(tif);
@@ -609,7 +609,7 @@ Fax3PutBits(TIFF* tif, u_int bits, u_int length)
  * appropriate table that holds the make-up and
  * terminating codes is supplied.
  */
-static void
+static void LINKAGEMODE
 putspan(TIFF* tif, int32 span, const tableentry* tab)
 {
 	Fax3EncodeState* sp = EncoderState(tif);
@@ -652,7 +652,7 @@ putspan(TIFF* tif, int32 span, const tableentry* tab)
  * here.  We also handle writing the tag bit for the next
  * scanline when doing 2d encoding.
  */
-static void
+static void LINKAGEMODE
 Fax3PutEOL(TIFF* tif)
 {
 	Fax3EncodeState* sp = EncoderState(tif);
@@ -778,7 +778,7 @@ static	int32 find1span(u_char*, int32, int32);
  * table.  The ``base'' of the bit string is supplied
  * along with the start+end bit indices.
  */
-INLINE static int32
+INLINE static int32 LINKAGEMODE
 find0span(u_char* bp, int32 bs, int32 be)
 {
 	int32 bits = be - bs;
@@ -837,7 +837,7 @@ find0span(u_char* bp, int32 bs, int32 be)
 	return (span);
 }
 
-INLINE static int32
+INLINE static int32 LINKAGEMODE
 find1span(u_char* bp, int32 bs, int32 be)
 {
 	int32 bits = be - bs;
@@ -916,7 +916,7 @@ find1span(u_char* bp, int32 bs, int32 be)
  * a sequence of all-white or all-black spans
  * of pixels encoded with Huffman codes.
  */
-static int
+static int LINKAGEMODE
 Fax3Encode1DRow(TIFF* tif, u_char* bp, uint32 bits)
 {
 	Fax3EncodeState* sp = EncoderState(tif);
@@ -962,7 +962,7 @@ static const tableentry vcodes[7] = {
  * 2d-encode a row of pixels.  Consult the CCITT
  * documentation for the algorithm.
  */
-static int
+static int LINKAGEMODE
 Fax3Encode2DRow(TIFF* tif, u_char* bp, u_char* rp, uint32 bits)
 {
 #define	PIXEL(buf,ix)	((((buf)[(ix)>>3]) >> (7-((ix)&7))) & 1)
@@ -1007,7 +1007,7 @@ Fax3Encode2DRow(TIFF* tif, u_char* bp, u_char* rp, uint32 bits)
 /*
  * Encode a buffer of pixels.
  */
-static int
+static int LINKAGEMODE
 Fax3Encode(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
 {
 	Fax3EncodeState* sp = EncoderState(tif);
@@ -1215,7 +1215,7 @@ Fax3VGetField(TIFF* tif, ttag_t tag, va_list ap)
 	return (1);
 }
 
-static void
+static void LINKAGEMODE
 Fax3PrintDir(TIFF* tif, FILE* fd, long flags)
 {
 	Fax3BaseState* sp = Fax3State(tif);
@@ -1271,7 +1271,7 @@ Fax3PrintDir(TIFF* tif, FILE* fd, long flags)
 		    (u_long) sp->recvtime);
 }
 
-static int
+static int LINKAGEMODE
 InitCCITTFax3(TIFF* tif)
 {
 	Fax3BaseState* sp;
@@ -1354,7 +1354,7 @@ TIFFInitCCITTFax3(TIFF* tif, int scheme)
 /*
  * Decode the requested amount of G4-encoded data.
  */
-static int
+static int LINKAGEMODE
 Fax4Decode(TIFF* tif, tidata_t buf, tsize_t occ, tsample_t s)
 {
 	DECLARE_STATE_2D(tif, sp, "Fax4Decode");
@@ -1394,7 +1394,7 @@ Fax4Decode(TIFF* tif, tidata_t buf, tsize_t occ, tsample_t s)
 /*
  * Encode the requested amount of data.
  */
-static int
+static int LINKAGEMODE
 Fax4Encode(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
 {
 	Fax3EncodeState *sp = EncoderState(tif);
@@ -1454,7 +1454,7 @@ TIFFInitCCITTFax4(TIFF* tif, int scheme)
 /*
  * Decode the requested amount of RLE-encoded data.
  */
-static int
+static int LINKAGEMODE
 Fax3DecodeRLE(TIFF* tif, tidata_t buf, tsize_t occ, tsample_t s)
 {
 	DECLARE_STATE(tif, sp, "Fax3DecodeRLE");
