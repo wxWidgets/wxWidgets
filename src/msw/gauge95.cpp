@@ -89,9 +89,6 @@ bool wxGauge95::Create(wxWindow *parent, wxWindowID id,
   m_rangeMax = range;
   m_gaugePos = 0;
 
-  SetBackgroundColour(parent->GetBackgroundColour());
-  SetForegroundColour(parent->GetForegroundColour());
-
   m_windowStyle = style;
 
   if ( id == -1 )
@@ -118,6 +115,9 @@ bool wxGauge95::Create(wxWindow *parent, wxWindowID id,
                     wxGetInstance(), NULL);
 
   m_hWnd = (WXHWND)wx_button;
+
+  SetBackgroundColour(parent->GetBackgroundColour());
+  SetForegroundColour(parent->GetForegroundColour());
 
   // Subclass again for purposes of dialog editing mode
   SubclassWin((WXHWND) wx_button);
