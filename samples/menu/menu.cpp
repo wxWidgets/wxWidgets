@@ -584,7 +584,7 @@ void MyFrame::OnFindMenu(wxCommandEvent& WXUNUSED(event))
                      (
                         _T("Enter label to search for: "),
                         _T("Find menu"),
-                        "",
+                        _T(""),
                         this
                      );
 
@@ -798,7 +798,7 @@ void MyFrame::OnFindMenuItem(wxCommandEvent& WXUNUSED(event))
                      (
                         _T("Enter label to search for: "),
                         _T("Find menu item"),
-                        "",
+                        _T(""),
                         this
                      );
 
