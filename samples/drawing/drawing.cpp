@@ -369,7 +369,7 @@ void MyFrame::PrepareDC(wxDC& dc)
     dc.SetMapMode( m_mapMode );
     dc.SetUserScale( m_xUserScale, m_yUserScale );
     dc.SetLogicalOrigin( m_xLogicalOrigin, m_yLogicalOrigin );
-    dc.SetAxisOrientation( m_xAxisReversed, m_yAxisReversed );
+    dc.SetAxisOrientation( !m_xAxisReversed, m_yAxisReversed );
 }
 
 void MyFrame::OnPaint(wxPaintEvent &WXUNUSED(event) )
@@ -420,7 +420,7 @@ wxColour MyFrame::SelectColour()
 
     if ( dialog.ShowModal() == wxID_OK )
     {
-        col = data.GetColour();
+        col = dialog.GetColourData().GetColour();
     }
 
     return col;
