@@ -3461,11 +3461,34 @@ bool wxWindow::MSWOnScroll(int orientation, WXWORD wParam,
         break;
 
     case SB_THUMBPOSITION:
-        event.m_eventType = wxEVT_SCROLLWIN_THUMBRELEASE;
-        break;
-
     case SB_THUMBTRACK:
-        event.m_eventType = wxEVT_SCROLLWIN_THUMBTRACK;
+#ifdef __WIN32__
+        // under Win32, the scrollbar range and position are 32 bit integers,
+        // but WM_[HV]SCROLL only carry the low 16 bits of them, so we must
+        // explicitly query the scrollbar for the correct position (this must
+        // be done only for these two SB_ events as they are the only one
+        // carrying the scrollbar position)
+        {
+            SCROLLINFO scrollInfo;
+            wxZeroMemory(scrollInfo);
+            scrollInfo.cbSize = sizeof(SCROLLINFO);
+            scrollInfo.fMask = SIF_TRACKPOS;
+
+            if ( !::GetScrollInfo(GetHwnd(),
+                                  orientation == wxHORIZONTAL ? SB_HORZ
+                                                              : SB_VERT,
+                                  &scrollInfo) )
+            {
+                wxLogLastError(_T("GetScrollInfo"));
+            }
+
+            event.SetPosition(scrollInfo.nTrackPos);
+        }
+#endif // Win32
+
+        event.m_eventType = wParam == SB_THUMBPOSITION
+                                ? wxEVT_SCROLLWIN_THUMBRELEASE
+                                : wxEVT_SCROLLWIN_THUMBTRACK;
         break;
 
     default:

@@ -343,11 +343,22 @@ void wxSpinCtrl::DoGetSize(int *x, int *y) const
     GetWindowRect(GetHwnd(), &spinrect);
     GetWindowRect((HWND)m_hwndBuddy, &textrect);
     UnionRect(&ctrlrect,&textrect, &spinrect);
-    
+
     if ( x )
         *x = ctrlrect.right - ctrlrect.left;
     if ( y )
         *y = ctrlrect.bottom - ctrlrect.top;
+}
+
+void wxSpinCtrl::DoGetPosition(int *x, int *y) const
+{
+    // hack: pretend that our HWND is the text control just for a moment
+    WXHWND hWnd = GetHWND();
+    wxConstCast(this, wxSpinCtrl)->m_hWnd = m_hwndBuddy;
+
+    wxSpinButton::DoGetPosition(x, y);
+
+    wxConstCast(this, wxSpinCtrl)->m_hWnd = hWnd;
 }
 
 #endif // __WIN95__

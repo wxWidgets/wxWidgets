@@ -73,6 +73,7 @@ public:
     WXFARPROC GetBuddyWndProc() const { return m_oldBuddyWndProc; }
 
 protected:
+    virtual void DoGetPosition(int *x, int *y) const;
     virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual wxSize DoGetBestSize() const;
     virtual void DoGetSize(int *width, int *height) const;
