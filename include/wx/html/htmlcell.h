@@ -521,7 +521,7 @@ public:
     wxHtmlTerminalCellsInterator(const wxHtmlCell *from, const wxHtmlCell *to)
         : m_to(to), m_pos(from) {}
 
-    operator bool() const { return m_pos; }
+    operator bool() const { return m_pos != NULL; }
     const wxHtmlCell* operator++();
     const wxHtmlCell* operator->() const { return m_pos; }
     const wxHtmlCell* operator*() const { return m_pos; }
