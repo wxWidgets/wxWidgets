@@ -21,19 +21,22 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/string.h"
+    #include "wx/utils.h"
+    #include "wx/log.h"
+
+    #include "wx/dcscreen.h"
+
     #include "wx/window.h"
     #include "wx/dialog.h"
     #include "wx/frame.h"
+
+    #include "wx/settings.h"
 #endif
 
-#include <stdlib.h>
-
-#include "wx/string.h"
 #include "wx/splitter.h"
-#include "wx/dcscreen.h"
-#include "wx/settings.h"
-#include "wx/log.h"
-#include "wx/utils.h"
+
+#include <stdlib.h>
 
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING)
@@ -540,7 +543,7 @@ void wxSplitterWindow::DrawSash(wxDC& dc)
                 dc.DrawLine(m_sashPosition+1, h-m_borderSize-1, m_sashPosition+m_sashSize-1, h-m_borderSize-1);
             }
         }
-        else
+        else // wxSPLIT_HORIZONTAL
         {
             dc.SetPen(*m_facePen);
             if (HasFlag( wxSP_SASH_AQUA ))
@@ -580,12 +583,12 @@ void wxSplitterWindow::DrawSash(wxDC& dc)
             }
         }
     }
-    else
+    else // !wxSP_3DSASH
     {
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.SetBrush(*m_faceBrush);
         if ( m_splitMode == wxSPLIT_VERTICAL )
         {
-            dc.SetPen(*wxBLACK_PEN);
-            dc.SetBrush(*wxBLACK_BRUSH);
             int h1 = h-1;
             int y1 = 0;
             if ( (GetWindowStyleFlag() & wxSP_BORDER) != wxSP_BORDER && (GetWindowStyleFlag() & wxSP_3DBORDER) != wxSP_3DBORDER )
@@ -596,10 +599,8 @@ void wxSplitterWindow::DrawSash(wxDC& dc)
             }
             dc.DrawRectangle(m_sashPosition, y1, m_sashSize, h1);
         }
-        else
+        else // wxSPLIT_HORIZONTAL
         {
-            dc.SetPen(*wxBLACK_PEN);
-            dc.SetBrush(*wxBLACK_BRUSH);
             int w1 = w-1;
             int x1 = 0;
             if ( (GetWindowStyleFlag() & wxSP_BORDER) != wxSP_BORDER && (GetWindowStyleFlag() & wxSP_3DBORDER) != wxSP_3DBORDER )
@@ -610,7 +611,6 @@ void wxSplitterWindow::DrawSash(wxDC& dc)
             }
             dc.DrawRectangle(x1, m_sashPosition, w1, m_sashSize);
         }
-
     }
 
     dc.SetPen(wxNullPen);
