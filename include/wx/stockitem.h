@@ -24,19 +24,19 @@
 // ----------------------------------------------------------------------------
 
 // Returns true if the ID is in the list of recognized stock actions
-bool wxIsStockID(wxWindowID id);
+WXDLLEXPORT bool wxIsStockID(wxWindowID id);
 
 // Returns true of the label is empty or label of a stock button with
 // given ID
-bool wxIsStockLabel(wxWindowID id, const wxString& label);
+WXDLLEXPORT bool wxIsStockLabel(wxWindowID id, const wxString& label);
 
 // Returns label that should be used for given stock UI element (e.g. "&OK"
 // for wxSTOCK_OK):
-wxString wxGetStockLabel(wxWindowID id);
+WXDLLEXPORT wxString wxGetStockLabel(wxWindowID id);
 
 #ifdef __WXGTK20__
 // Translates stock ID to GTK+'s stock item string indentifier:
-const char *wxGetStockGtkID(wxWindowID id);
+WXDLLEXPORT const char *wxGetStockGtkID(wxWindowID id);
 #endif
 
 #endif // _WX_STOCKITEM_H_
