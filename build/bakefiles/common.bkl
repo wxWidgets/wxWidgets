@@ -259,6 +259,16 @@
         <if cond="USE_THREADS=='0'">single</if>
     </set>
 
+    <set var="RTTI_DEFINE">
+    	<if cond="USE_RTTI=='0'">wxNO_RTTI</if>
+    </set>
+    <set var="EXCEPTIONS_DEFINE">
+    	<if cond="USE_EXCEPTIONS=='0'">wxNO_EXCEPTIONS</if>
+    </set>
+    <set var="THREAD_DEFINE">
+    	<if cond="USE_THREADS=='0'">wxNO_THREADS</if>
+    </set>
+
     <set var="DEBUG_DEFINE">
         <if cond="FORMAT!='autoconf' and BUILD=='debug' and DEBUG_FLAG=='default'">__WXDEBUG__</if>
         <if cond="FORMAT!='autoconf' and DEBUG_FLAG=='1'">__WXDEBUG__</if>
@@ -394,6 +404,9 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
         <define>__WX$(TOOLKIT)__</define>
         <define>$(WXUNIV_DEFINE)</define>
         <define>$(DEBUG_DEFINE)</define>
+        <define>$(EXCEPTIONS_DEFINE)</define>
+        <define>$(RTTI_DEFINE)</define>
+        <define>$(THREAD_DEFINE)</define>
         <define>$(UNICODE_DEFINE)</define>
         <!-- this include is added by configure, we need to put other
              includes before it: -->
