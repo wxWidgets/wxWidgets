@@ -67,10 +67,6 @@ static void gtk_scrollbar_callback( GtkAdjustment *adjust,
 
     int orient = win->HasFlag(wxSB_VERTICAL) ? wxVERTICAL : wxHORIZONTAL;
 
-    wxScrollEvent event( command, win->GetId(), value, orient );
-    event.SetEventObject( win );
-    win->GetEventHandler()->ProcessEvent( event );
-
     // throw a LINEUP / LINEDOWN event if necessary
     if (g_currentUpDownEvent != wxEVT_NULL)
     {
@@ -78,6 +74,11 @@ static void gtk_scrollbar_callback( GtkAdjustment *adjust,
         event.SetEventObject( win );
         win->GetEventHandler()->ProcessEvent( event );
       }
+    
+	// throw other event (wxEVT_SCROLL_THUMBTRACK)
+	wxScrollEvent event( command, win->GetId(), value, orient );
+    event.SetEventObject( win );
+    win->GetEventHandler()->ProcessEvent( event );
 
 /*
     wxCommandEvent cevent( wxEVT_COMMAND_SCROLLBAR_UPDATED, win->GetId() );
