@@ -234,6 +234,10 @@ public:
     unsigned int GetIndent() const { return m_indent; }
     void SetIndent(unsigned int indent);
 
+    	// spacing is the number of pixels between the start and the Text
+    unsigned int GetSpacing() const { return m_spacing; }
+    void SetSpacing(unsigned int spacing);
+    
         // image list: these functions allow to associate an image list with
         // the control and retrieve it. Note that the control does _not_ delete
         // the associated image list when it's deleted in order to allow image
@@ -453,6 +457,7 @@ protected:
     bool                 m_dirty;
     int                  m_xScroll,m_yScroll;
     unsigned int         m_indent;
+    unsigned int         m_spacing;
     int                  m_lineHeight;
     wxPen                m_dottedPen;
     wxBrush             *m_hilightBrush;

@@ -37,6 +37,8 @@
 #include "wx/imaglist.h"
 #include "wx/treectrl.h"
 
+#include "math.h"
+
 #include "treetest.h"
 
 // verify that the item is ok and insult the user if it is not
@@ -64,6 +66,10 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TreeTest_CollapseAndReset, MyFrame::OnCollapseAndReset)
     EVT_MENU(TreeTest_EnsureVisible, MyFrame::OnEnsureVisible)
     EVT_MENU(TreeTest_AddItem, MyFrame::OnAddItem)
+    EVT_MENU(TreeTest_IncIndent, MyFrame::OnIncIndent)
+    EVT_MENU(TreeTest_DecIndent, MyFrame::OnDecIndent)
+    EVT_MENU(TreeTest_IncSpacing, MyFrame::OnIncSpacing)
+    EVT_MENU(TreeTest_DecSpacing, MyFrame::OnDecSpacing)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
@@ -133,6 +139,12 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     tree_menu->Append(TreeTest_SortRev, "Sort in reversed order");
     tree_menu->AppendSeparator();
     tree_menu->Append(TreeTest_EnsureVisible, "Make the last item &visible");
+    tree_menu->AppendSeparator();
+    tree_menu->Append(TreeTest_IncIndent, "Add 5 points to indentation\tAlt-I");
+    tree_menu->Append(TreeTest_DecIndent, "Reduce indentation by 5 points\tAlt-R");
+    tree_menu->AppendSeparator();
+    tree_menu->Append(TreeTest_IncSpacing, "Add 5 points to spacing\tCtrl-I");
+    tree_menu->Append(TreeTest_DecSpacing, "Reduce spacing by 5 points\tCtrl-R");
 
     item_menu->Append(TreeTest_Dump, "&Dump item children");
     item_menu->AppendSeparator();
@@ -294,6 +306,34 @@ void MyFrame::OnAddItem(wxCommandEvent& WXUNUSED(event))
     m_treeCtrl->AppendItem(m_treeCtrl->GetRootItem(),
                            text,
                            MyTreeCtrl::TreeCtrlIcon_File);
+}
+
+void MyFrame::OnIncIndent(wxCommandEvent& WXUNUSED(event))
+{
+    unsigned int indent = m_treeCtrl->GetIndent();
+    if (indent < 100)
+        m_treeCtrl->SetIndent( indent+5 );
+}
+
+void MyFrame::OnDecIndent(wxCommandEvent& WXUNUSED(event))
+{
+    unsigned int indent = m_treeCtrl->GetIndent();
+    if (indent > 10)
+        m_treeCtrl->SetIndent( indent-5 );
+}
+
+void MyFrame::OnIncSpacing(wxCommandEvent& WXUNUSED(event))
+{
+    unsigned int indent = m_treeCtrl->GetSpacing();
+    if (indent < 100)
+        m_treeCtrl->SetSpacing( indent+5 );
+}
+
+void MyFrame::OnDecSpacing(wxCommandEvent& WXUNUSED(event))
+{
+    unsigned int indent = m_treeCtrl->GetSpacing();
+    if (indent > 10)
+        m_treeCtrl->SetSpacing( indent-5 );
 }
 
 // MyTreeCtrl implementation

@@ -199,6 +199,11 @@ public:
     unsigned int GetIndent() const;
     void SetIndent(unsigned int indent);
 
+    	// spacing is the number of pixels between the start and the Text
+	// not implemented under wxMSW
+    unsigned int GetSpacing() const { return 18; } // return wxGTK default
+    void SetSpacing(unsigned int ) {}
+
         // image list: these functions allow to associate an image list with
         // the control and retrieve it. Note that the control does _not_ delete
         // the associated image list when it's deleted in order to allow image

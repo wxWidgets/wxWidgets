@@ -118,6 +118,12 @@ public:
     void OnSortRev(wxCommandEvent& event) { DoSort(TRUE); }
 
     void OnAddItem(wxCommandEvent& event);
+    
+    void OnIncIndent(wxCommandEvent& event);
+    void OnDecIndent(wxCommandEvent& event);
+
+    void OnIncSpacing(wxCommandEvent& event);
+    void OnDecSpacing(wxCommandEvent& event);
 
 private:
     void DoSort(bool reverse = FALSE);
@@ -147,5 +153,9 @@ enum
     TreeTest_CollapseAndReset,
     TreeTest_EnsureVisible,
     TreeTest_AddItem,
+    TreeTest_IncIndent,
+    TreeTest_DecIndent,
+    TreeTest_IncSpacing,
+    TreeTest_DecSpacing,
     TreeTest_Ctrl = 100
 };

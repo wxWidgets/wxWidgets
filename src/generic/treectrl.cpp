@@ -353,6 +353,7 @@ void wxTreeCtrl::Init()
   m_yScroll = 0;
   m_lineHeight = 10;
   m_indent = 15;
+  m_spacing = 18;
 
   m_hilightBrush = new wxBrush
     (
@@ -403,6 +404,14 @@ size_t wxTreeCtrl::GetCount() const
 void wxTreeCtrl::SetIndent(unsigned int indent)
 {
   m_indent = indent;
+  m_dirty = TRUE;
+  Refresh();
+}
+
+void wxTreeCtrl::SetSpacing(unsigned int spacing)
+{
+  m_spacing = spacing;
+  m_dirty = TRUE;
   Refresh();
 }
 
@@ -1152,11 +1161,11 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
 {
     int horizX = level*m_indent;
 
-    item->SetX( horizX+33 );
+    item->SetX( horizX+m_indent+m_spacing );
     item->SetY( y-m_lineHeight/2 );
     item->SetHeight( m_lineHeight );
 
-    item->SetCross( horizX+15, y );
+    item->SetCross( horizX+m_indent, y );
 
     int oldY = y;
 
@@ -1166,24 +1175,25 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
     if (IsExposed( exposed_x, exposed_y, 10000, m_lineHeight+4 ))  // 10000 = very much
     {
         int startX = horizX;
-        int endX = horizX + 10;
+        int endX = horizX + (m_indent-5);
 
+//        if (!item->HasChildren()) endX += (m_indent+5);
         if (!item->HasChildren()) endX += 20;
 
         dc.DrawLine( startX, y, endX, y );
 
         if (item->HasPlus())
         {
-            dc.DrawLine( horizX+20, y, horizX+30, y );
+            dc.DrawLine( horizX+(m_indent+5), y, horizX+(m_indent+15), y );
             dc.SetPen( *wxGREY_PEN );
             dc.SetBrush( *wxWHITE_BRUSH );
-            dc.DrawRectangle( horizX+10, y-4, 11, 9 );
+            dc.DrawRectangle( horizX+(m_indent-5), y-4, 11, 9 );
             dc.SetPen( *wxBLACK_PEN );
-            dc.DrawLine( horizX+13, y, horizX+18, y );
+            dc.DrawLine( horizX+(m_indent-2), y, horizX+(m_indent+3), y );
 
             if (!item->IsExpanded())
             {
-                dc.DrawLine( horizX+15, y-2, horizX+15, y+3 );
+                dc.DrawLine( horizX+m_indent, y-2, horizX+m_indent, y+3 );
             }
         }
 
@@ -1232,7 +1242,7 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
         // delete all its children for example) - don't draw the vertical line
         // in this case
         if (count > 0)
-            dc.DrawLine( horizX+15, oldY+5, horizX+15, semiOldY );
+            dc.DrawLine( horizX+m_indent, oldY+5, horizX+m_indent, semiOldY );
     }
 }
 
@@ -1534,7 +1544,7 @@ void wxTreeCtrl::CalculateLevel( wxGenericTreeItem *item, wxDC &dc, int level, i
 {
     int horizX = level*m_indent;
 
-    item->SetX( horizX+33 );
+    item->SetX( horizX+m_indent+m_spacing );
     item->SetY( y-m_lineHeight/2 );
     item->SetHeight( m_lineHeight );
 
