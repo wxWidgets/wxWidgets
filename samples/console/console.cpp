@@ -64,6 +64,12 @@
 #define TEST_ZIP
 //#define TEST_ZLIB
 
+
+#ifdef TEST_DATETIME
+#include <math.h>
+#endif
+
+
 // ----------------------------------------------------------------------------
 // test class for container objects
 // ----------------------------------------------------------------------------
