@@ -20,7 +20,7 @@
 // wxTopLevelWindowMSW
 // ----------------------------------------------------------------------------
 
-class wxTopLevelWindowMSW : public wxTopLevelWindowBase
+class WXDLLEXPORT wxTopLevelWindowMSW : public wxTopLevelWindowBase
 {
 public:
     // constructors and such
