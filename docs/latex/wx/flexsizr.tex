@@ -41,17 +41,24 @@ all children.
 
 \membersection{wxFlexGridSizer::AddGrowableCol}\label{wxflexgridsizeraddgrowablecol}
 
-\func{void}{AddGrowableCol}{\param{size\_t }{idx}}
+\func{void}{AddGrowableCol}{\param{size\_t }{idx}, \param{int }{proportion = $0$}}
 
-Specifies that column idx (starting from zero) should be grown if
+Specifies that column {\it idx} (starting from zero) should be grown if
 there is extra space available to the sizer.
+
+The {\it proportion} parameter has the same meaning as the stretch factor for
+the \helpref{sizers}{sizeroverview} except that if all proportions are $0$,
+then all columns are resized equally (instead of not being resized at all).
 
 \membersection{wxFlexGridSizer::AddGrowableRow}\label{wxflexgridsizeraddgrowablerow}
 
-\func{void}{AddGrowableRow}{\param{size\_t }{idx}}
+\func{void}{AddGrowableRow}{\param{size\_t }{idx}, \param{int }{proportion = $0$}}
 
 Specifies that row idx (starting from zero) should be grown if there
 is extra space available to the sizer.
+
+See \helpref{AddGrowableCol}{wxflexgridsizeraddgrowablecol} for the description
+of {\it proportion} parameter.
 
 \membersection{wxFlexGridSizer::GetFlexibleDirection}\label{wxflexgridsizergetflexibledrection}
 

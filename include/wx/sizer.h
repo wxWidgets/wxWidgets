@@ -395,9 +395,9 @@ public:
 
     // set the rows/columns which will grow (the others will remain of the
     // constant initial size)
-    void AddGrowableRow( size_t idx );
+    void AddGrowableRow( size_t idx, int proportion = 0 );
     void RemoveGrowableRow( size_t idx );
-    void AddGrowableCol( size_t idx );
+    void AddGrowableCol( size_t idx, int proportion = 0 );
     void RemoveGrowableCol( size_t idx );
 
 
@@ -426,6 +426,10 @@ protected:
     // indices of the growable columns and rows
     wxArrayInt  m_growableRows,
                 m_growableCols;
+
+    // proportion values of the corresponding growable rows and columns
+    wxArrayInt  m_growableRowsProportions,
+                m_growableColsProportions;
 
     // parameters describing whether the growable cells should be resized in
     // both directions or only one

@@ -1029,6 +1029,9 @@ void wxFlexGridSizer::RecalcSizes()
     int    delta;
     size_t idx, num;
     wxArrayInt temp;
+    wxArrayInt temp_proportions;
+    int sum_proportions = 0;
+    int growable_space = 0;
 
     // what to do with the rows? by default, resize them proportionally
     if ( (m_flexDirection & wxVERTICAL) ||
@@ -1040,18 +1043,33 @@ void wxFlexGridSizer::RecalcSizes()
         for (idx = 0; idx < m_growableRows.GetCount(); idx++)
         {
             if (m_growableRows[idx] < nrows)
+            {
                 temp.Add( m_growableRows[idx] );
+                temp_proportions.Add( m_growableRowsProportions[idx] );
+                sum_proportions += m_growableRowsProportions[idx];
+                growable_space += m_rowHeights[ temp[idx] ];
+            }
         }
 
         num = temp.GetCount();
 
         if ((num > 0) && (sz.y > minsz.y))
         {
-            delta = (sz.y - minsz.y) / num;
             for (idx = 0; idx < num; idx++)
-                m_rowHeights[ temp[idx] ] += delta;
+            {
+                delta = (sz.y - minsz.y);
+                if (sum_proportions == 0)
+                    delta = (delta/num) + m_rowHeights[ temp[idx] ];
+                else
+                    delta = ((delta+growable_space)*temp_proportions[idx])/
+                                                     sum_proportions;
+                m_rowHeights[ temp[idx] ] = delta;
+            }
         }
         temp.Empty();
+        temp_proportions.Empty();
+		sum_proportions = 0;
+		growable_space = 0;
     }
     else if ( (m_growMode == wxFLEX_GROWMODE_ALL) && (sz.y > minsz.y) )
     {
@@ -1068,16 +1086,28 @@ void wxFlexGridSizer::RecalcSizes()
         for (idx = 0; idx < m_growableCols.GetCount(); idx++)
         {
             if (m_growableCols[idx] < ncols)
+            {
                 temp.Add( m_growableCols[idx] );
+                temp_proportions.Add( m_growableColsProportions[idx] );
+                sum_proportions += m_growableColsProportions[idx];
+                growable_space += m_colWidths[idx];
+            }
         }
 
         num = temp.GetCount();
 
         if ((num > 0) && (sz.x > minsz.x))
         {
-            delta = (sz.x - minsz.x) / num;
             for (idx = 0; idx < num; idx++)
-                m_colWidths[ temp[idx] ] += delta;
+            {
+                delta = (sz.x - minsz.x);
+                if (sum_proportions == 0)
+                    delta = (delta/num) + m_colWidths[ temp[idx] ];
+		else
+                    delta = ((delta+growable_space)*temp_proportions[idx])/
+                                                     sum_proportions;
+                m_colWidths[ temp[idx] ] = delta;
+            }
         }
     }
     else if ( (m_growMode == wxFLEX_GROWMODE_ALL) && (sz.x > minsz.x) )
@@ -1191,18 +1221,20 @@ wxSize wxFlexGridSizer::CalcMin()
                    height + (nrows-1) * m_vgap);
 }
 
-void wxFlexGridSizer::AddGrowableRow( size_t idx )
+void wxFlexGridSizer::AddGrowableRow( size_t idx, int proportion )
 {
     m_growableRows.Add( idx );
+    m_growableRowsProportions.Add( proportion );
 }
 
 void wxFlexGridSizer::RemoveGrowableRow( size_t WXUNUSED(idx) )
 {
 }
 
-void wxFlexGridSizer::AddGrowableCol( size_t idx )
+void wxFlexGridSizer::AddGrowableCol( size_t idx, int proportion )
 {
     m_growableCols.Add( idx );
+    m_growableColsProportions.Add( proportion );
 }
 
 void wxFlexGridSizer::RemoveGrowableCol( size_t WXUNUSED(idx) )

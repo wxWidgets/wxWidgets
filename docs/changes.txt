@@ -29,6 +29,7 @@ wxBase:
 All GUI ports:
 
 - added wxSplitterWindow handler to XRC
+- added proportion to wxFlexGridSizer::AddGrowableRow/Col (Maxim Babitski)
 - added wxFlexGridSizer::SetFlexibleDirection() (Szczepan Holyszewski)
 - implemented GetEditControl for wxGenericTreeCtrl (Peter Stieber)
 - improved contrib/utils/convertrc parsing (David J. Cooke)
