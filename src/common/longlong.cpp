@@ -1092,24 +1092,24 @@ void *wxULongLongWx::asArray(void) const
                                                                      \
         name ll = *this;                                             \
                                                                      \
-        bool neg;                                                    \
-        if ( ll < 0 )                                                \
+        bool neg = ll < 0;                                           \
+        if ( neg )                                                   \
         {                                                            \
-            ll.Negate();                                             \
-            neg = true;                                              \
+            while ( ll != 0 )                                        \
+            {                                                        \
+                long digit = (ll % 10).ToLong();                     \
+                result.Prepend((wxChar)(_T('0') - digit));           \
+                ll /= 10;                                            \
+            }                                                        \
         }                                                            \
         else                                                         \
         {                                                            \
-            neg = false;                                             \
-        }                                                            \
-                                                                     \
-        while ( ll != 0 )                                            \
-        {                                                            \
-            long digit = (ll % 10).ToLong();                         \
-            if ( neg )                                               \
-                digit = -digit;                                      \
-            result.Prepend((wxChar)(_T('0') + digit));               \
-            ll /= 10;                                                \
+            while ( ll != 0 )                                        \
+            {                                                        \
+                long digit = (ll % 10).ToLong();                     \
+                result.Prepend((wxChar)(_T('0') + digit));           \
+                ll /= 10;                                            \
+            }                                                        \
         }                                                            \
                                                                      \
         if ( result.empty() )                                        \
