@@ -41,7 +41,7 @@ msgstr " (Fehler %ld: %s)"
 #: ../src/common/date.cpp:385 ../src/common/date.cpp:400
 #: src/common/date.cpp:384 src/common/date.cpp:399
 msgid " B.C."
-msgstr " v.Chr."
+msgstr " B.C."
 
 #: ../src/common/resourc2.cpp:265 ../src/common/resourc2.cpp:1334
 #: ../src/common/resource.cpp:1630 ../src/common/resource.cpp:2704
