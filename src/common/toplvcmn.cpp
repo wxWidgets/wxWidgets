@@ -54,6 +54,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxTopLevelWindow, wxWindow)
 
 wxTopLevelWindowBase::wxTopLevelWindowBase()
 {
+    // Unlike windows, top level windows are created hidden by default.
+    m_isShown = false;
 }
 
 wxTopLevelWindowBase::~wxTopLevelWindowBase()
