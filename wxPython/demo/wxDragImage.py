@@ -262,7 +262,10 @@ class DragCanvas(wxScrolledWindow):
 #----------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    win = DragCanvas(nb, -1)
+    win = wxPanel(nb, -1)
+    canvas = DragCanvas(win, -1)
+    def onSize(evt, panel=win, canvas=canvas): canvas.SetSize(panel.GetSize())
+    EVT_SIZE(win, onSize)
     return win
 
 #----------------------------------------------------------------------

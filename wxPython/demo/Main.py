@@ -122,9 +122,9 @@ _treeList = [
         'wxLEDNumberCtrl',
         'wxMimeTypesManager',
         'wxMVCTree',
+        'wxRightTextCtrl',
         'wxStyledTextCtrl_1',
         'wxStyledTextCtrl_2',
-        'wxRightTextCtrl',
         ]),
 
     # How to lay out the controls in a frame/dialog
@@ -186,7 +186,7 @@ _treeList = [
         'wxPlotCanvas',
         ]),
 
-    # pyTree, hangman, ... in the samples dir
+
     ('Check out the samples dir too', [
         ]),
 
