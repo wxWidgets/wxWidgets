@@ -2,7 +2,7 @@
 // Name:        common/sstream.cpp
 // Purpose:     string-based streams implementation
 // Author:      Vadim Zeitlin
-// Modified by:
+// Modified by: Ryan Norton (UTF8 UNICODE)
 // Created:     2004-09-19
 // RCS-ID:      $Id$
 // Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwindows.org>
@@ -33,13 +33,44 @@
 // ============================================================================
 
 // ----------------------------------------------------------------------------
+// construction/destruction
+// ----------------------------------------------------------------------------
+
+wxStringInputStream::wxStringInputStream(const wxString& s)
+#if wxUSE_UNICODE
+    : m_str(s), m_buf(wxMBConvUTF8().cWX2MB(s).release()), m_len(strlen(m_buf))
+#else
+    : m_str(s), m_buf((char*)s.c_str()), m_len(s.length())
+#endif
+{
+#if wxUSE_UNICODE
+    wxASSERT_MSG(m_buf != NULL, _T("Could not convert string to UTF8!"));
+#endif
+    m_pos = 0;
+}
+
+wxStringInputStream::~wxStringInputStream()
+{
+#if wxUSE_UNICODE
+    delete m_buf;
+#endif
+}
+
+// ----------------------------------------------------------------------------
+// getlength
+// ----------------------------------------------------------------------------
+
+wxFileOffset wxStringInputStream::GetLength() const 
+{ 
+    return m_len; 
+}
+
+// ----------------------------------------------------------------------------
 // seek/tell
 // ----------------------------------------------------------------------------
 
 wxFileOffset wxStringInputStream::OnSysSeek(wxFileOffset ofs, wxSeekMode mode)
 {
-    const size_t ofsMax = m_str.length()*sizeof(wxChar);
-
     switch ( mode )
     {
         case wxFromStart:
@@ -47,7 +78,7 @@ wxFileOffset wxStringInputStream::OnSysSeek(wxFileOffset ofs, wxSeekMode mode)
             break;
 
         case wxFromEnd:
-            ofs += ofsMax;
+            ofs += m_len;
             break;
 
         case wxFromCurrent:
@@ -59,7 +90,7 @@ wxFileOffset wxStringInputStream::OnSysSeek(wxFileOffset ofs, wxSeekMode mode)
             return wxInvalidOffset;
     }
 
-    if ( ofs < 0 || wx_static_cast(size_t, ofs) >= ofsMax )
+    if ( ofs < 0 || wx_static_cast(size_t, ofs) >= m_len )
         return wxInvalidOffset;
 
     m_pos = wx_static_cast(size_t, ofs);
@@ -78,7 +109,7 @@ wxFileOffset wxStringInputStream::OnSysTell() const
 
 size_t wxStringInputStream::OnSysRead(void *buffer, size_t size)
 {
-    const size_t sizeMax = m_str.length()*sizeof(wxChar) - m_pos;
+    const size_t sizeMax = m_len - m_pos;
 
     if ( size >= sizeMax )
     {
@@ -91,7 +122,7 @@ size_t wxStringInputStream::OnSysRead(void *buffer, size_t size)
         size = sizeMax;
     }
 
-    memcpy(buffer, m_str.data() + m_pos, size);
+    memcpy(buffer, m_buf + m_pos, size);
     m_pos += size;
 
     return size;
@@ -116,18 +147,16 @@ wxFileOffset wxStringOutputStream::OnSysTell() const
 
 size_t wxStringOutputStream::OnSysWrite(const void *buffer, size_t size)
 {
-    // in Unicode mode we might not be able to write the last byte
-    size_t len = size / sizeof(wxChar);
+    const char *p = wx_static_cast(const char *, buffer);
 
-    const wxChar *p = wx_static_cast(const wxChar *, buffer);
-
-    m_str->Append(wxString(p, p + len));
+    // append the input buffer (may not be null terminated - thus 
+    // the literal length
+    m_str->Append(wxString(p, m_conv, size));
 
     // return number of bytes actually written
-    len *= sizeof(wxChar);
-    m_pos += len;
+    m_pos += size;
 
-    return len;
+    return size;
 }
 
 #endif // wxUSE_STREAMS

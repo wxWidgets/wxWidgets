@@ -25,13 +25,10 @@ class WXDLLIMPEXP_BASE wxStringInputStream : public wxInputStream
 public:
     // ctor associates the stream with the given string which makes a copy of
     // it
-    wxStringInputStream(const wxString& s)
-        : m_str(s)
-    {
-        m_pos = 0;
-    }
+    wxStringInputStream(const wxString& s);
+    virtual ~wxStringInputStream();
 
-    virtual wxFileOffset GetLength() const { return m_str.length(); }
+    virtual wxFileOffset GetLength() const;
 
 protected:
     virtual wxFileOffset OnSysSeek(wxFileOffset ofs, wxSeekMode mode);
@@ -39,12 +36,17 @@ protected:
     virtual size_t OnSysRead(void *buffer, size_t size);
 
 private:
-    // the string we're reading from
+    // the string that was passed in the ctor
     wxString m_str;
+
+    // the buffer we're reading from
+    char* m_buf;
+
+    // length of the buffer we're reading from
+    size_t m_len;
 
     // position in the stream in bytes, *not* in chars
     size_t m_pos;
-
 
     DECLARE_NO_COPY_CLASS(wxStringInputStream)
 };
@@ -81,6 +83,8 @@ private:
     // position in the stream in bytes, *not* in chars
     size_t m_pos;
 
+    // string encoding converter (UTF8 is the standard)
+    wxMBConvUTF8 m_conv;
 
     DECLARE_NO_COPY_CLASS(wxStringOutputStream)
 };
