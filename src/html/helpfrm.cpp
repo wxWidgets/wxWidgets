@@ -740,21 +740,29 @@ bool wxHtmlHelpFrame::KeywordSearch(const wxString& keyword,
     if (foundcnt)
     {
         wxHtmlContentsItem *it;
-        if (mode == wxHELP_SEARCH_ALL)
+        switch ( mode )
         {
-            it = (wxHtmlContentsItem*) m_SearchList->GetClientData(0);
+            default:
+                wxFAIL_MSG( _T("unknown help search mode") );
+                // fall back
+
+            case wxHELP_SEARCH_ALL:
+                it = (wxHtmlContentsItem*) m_SearchList->GetClientData(0);
+                break;
+
+            case wxHELP_SEARCH_INDEX:
+                it = (wxHtmlContentsItem*) m_IndexList->GetClientData(0);
+                break;
         }
-        else if (mode == wxHELP_SEARCH_INDEX)
-        {
-            it = (wxHtmlContentsItem*) m_IndexList->GetClientData(0);
-        }
+
         if (it)
         {
             m_HtmlWin->LoadPage(it->GetFullPath());
             NotifyPageChanged();
         }
     }
-    return (foundcnt > 0);
+
+    return foundcnt > 0;
 }
 
 void wxHtmlHelpFrame::CreateContents()
