@@ -71,11 +71,20 @@ legal name.
 Creates the smart pointer with the given pointer or none if NULL.  On
 compilers that support it, this uses the explicit keyword.
 
+\membersection{wxScopedPtr::release}
+
+\func{T *}{release}{\void}
+
+Returns the currently hold pointer and resets the smart pointer object to 
+{\tt NULL}. After a call to this function the caller is responsible for
+deleting the pointer.
+
+
 \membersection{wxScopedPtr::reset}
 
 \func{\void}{reset}{\param{T}{ p * = NULL}}
 
-Deletes the currently held pointer and sets it to 'p' or to NULL if no 
+Deletes the currently held pointer and sets it to {\it p} or to NULL if no 
 arguments are specified. This function does check to make sure that the
 pointer you are assigning is not the same pointer that is already stored.
 
@@ -103,8 +112,8 @@ there is none.
 
 \membersection{wxScopedPtr::swap}
 
-\func{\void}{swap}{\param{wxScopedPtr}{ \& ot}}
+\func{\void}{swap}{\param{wxScopedPtr}{ \& other}}
 
-Swap the pointer inside the smart pointer with 'ot'. The pointer being swapped
-must be of the same type (hence the same class name).
+Swap the pointer inside the smart pointer with {\it other}. The pointer being
+swapped must be of the same type (hence the same class name).
 

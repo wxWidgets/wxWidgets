@@ -68,7 +68,7 @@ private:                            \
     name & operator=(name const &); \
                                     \
 public:                             \
-    wxEXPLICIT name(T * ptr = NULL)  \
+    wxEXPLICIT name(T * ptr = NULL) \
     : m_ptr(ptr) { }                \
                                     \
     ~name();                        \
@@ -80,6 +80,13 @@ public:                             \
             delete m_ptr;           \
             m_ptr = ptr;            \
         }                           \
+    }                               \
+                                    \
+    T *release()                    \
+    {                               \
+        T *ptr = m_ptr;             \
+        m_ptr = NULL;               \
+        return ptr;                 \
     }                               \
                                     \
     T & operator*() const           \
