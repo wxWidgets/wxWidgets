@@ -110,7 +110,7 @@ wxProtocolError GetLine(wxSocketBase *sock, wxString& result) {
   result = result.Left(result.Length()-1);
 
   size = ret-tmp_str+1;
-  sock->CreatePushbackBefore(&tmp_buf[size], avail-size);
+  sock->Unread(&tmp_buf[size], avail-size);
   return wxPROTO_NOERR;
 #undef PROTO_BSIZE
 }
