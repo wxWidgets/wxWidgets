@@ -31,7 +31,7 @@
 #else
 
 // define off_t
-#if !defined(__WXMAC__) || defined(__UNIX__)
+#if !defined(__WXMAC__) || defined(__UNIX__) || defined(__MACH__)
     #include  <sys/types.h>
 #else
     typedef long off_t;
@@ -43,7 +43,7 @@
     typedef long off_t;
 #elif defined(__SC__)
     typedef long off_t;
-#elif defined(__MWERKS__) && !defined(__INTEL__)
+#elif defined(__MWERKS__) && !defined(__INTEL__) && !defined(__MACH__)
     typedef long off_t;
 #endif
 

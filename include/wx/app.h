@@ -534,7 +534,7 @@ public:
     #define IMPLEMENT_WXWIN_MAIN \
         extern int wxEntry( int argc, char **argv ); \
         int main(int argc, char **argv) { return wxEntry(argc, argv); }
-#elif defined(__WXMAC__) && defined(__UNIX__)
+#elif defined(__WXMAC__)
     // wxMac seems to have a specific wxEntry prototype
     #define IMPLEMENT_WXWIN_MAIN \
         extern int wxEntry( int argc, char **argv, bool enterLoop = TRUE ); \
