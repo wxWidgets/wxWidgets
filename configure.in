@@ -2039,6 +2039,12 @@ equivalent variable and GTK+ is version 1.2.3 or above.
             fi
         fi
 
+        dnl we need poll() in src/gtk/app.cpp (we know that Darwin doesn't
+        dnl have it but we do the check for the others)
+        if test "$USE_DARWIN" != 1; then
+            AC_CHECK_FUNCS(poll)
+        fi
+
         TOOLKIT_INCLUDE="$wx_cv_cflags_gtk"
         GUI_TK_LIBRARY="$wx_cv_libs_gtk"
 
@@ -5354,4 +5360,4 @@ echo "                                       zlib               ${wxUSE_ZLIB}"
 
 echo ""
 
-dnl vi: set et sts=4 sw=4:
+dnl vi: set et sts=4 sw=4 com=\:dnl:

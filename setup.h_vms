@@ -915,6 +915,9 @@
 /* struct tm doesn't always have the tm_gmtoff field, define this if it does */
 #define WX_GMTOFF_IN_TM
 
+/* Define if you have poll(2) function */
+#define HAVE_POLL 1
+
 /* Define if you have pw_gecos field in struct passwd */
 #undef HAVE_PW_GECOS
 
