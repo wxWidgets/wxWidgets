@@ -41,6 +41,12 @@
     #include "wx/wx.h"
 #endif
 
+
+// many of the tests are specific to the builtin regex lib, so only attempts
+// to do them when using the builtin regex lib.
+//
+#ifdef wxHAS_REGEX_ADVANCED
+
 #include "wx/regex.h"
 #include "wx/cppunit.h"
 #include <string>
@@ -51,14 +57,7 @@ using CppUnit::TestCase;
 using CppUnit::TestSuite;
 using CppUnit::Exception;
 
-using std::vector;
-using std::string;
-
-// many of the tests are specific to the builtin regex lib, so only attempts
-// to do them when using the builtin regex lib.
-//
-#ifdef wxHAS_REGEX_ADVANCED
-
+using namespace std;
 
 ///////////////////////////////////////////////////////////////////////////////
 // The test case - an instance represents a single test
