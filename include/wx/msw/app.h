@@ -41,6 +41,7 @@ public:
     virtual bool Initialized();
     virtual bool Pending();
     virtual void Dispatch();
+    virtual bool Yield(bool onlyIfNeeded = FALSE);
 
     virtual wxIcon GetStdIcon(int which) const;
 

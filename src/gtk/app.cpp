@@ -83,10 +83,21 @@ void wxExit()
 // wxYield
 //-----------------------------------------------------------------------------
 
-static bool gs_inYield = FALSE;
-
-bool wxYield()
+bool wxApp::Yield(bool onlyIfNeeded)
 {
+    // MT-FIXME
+    static bool s_inYield = FALSE;
+
+    if ( s_inYield )
+    {
+        if ( !onlyIfNeeded )
+        {
+            wxFAIL_MSG( wxT("wxYield called recursively" ) );
+        }
+
+        return FALSE;
+    }
+
 #if wxUSE_THREADS
     if ( !wxThread::IsMain() )
     {
@@ -95,19 +106,14 @@ bool wxYield()
     }
 #endif // wxUSE_THREADS
 
-#ifdef __WXDEBUG__
-    if (gs_inYield)
-        wxFAIL_MSG( wxT("wxYield called recursively" ) );
-#endif
-
-    gs_inYield = TRUE;
+    s_inYield = TRUE;
 
     if (!g_isIdle)
     {
         // We need to remove idle callbacks or the loop will
         // never finish.
-        gtk_idle_remove( wxTheApp->m_idleTag );
-        wxTheApp->m_idleTag = 0;
+        gtk_idle_remove( m_idleTag );
+        m_idleTag = 0;
         g_isIdle = TRUE;
     }
 
@@ -121,27 +127,16 @@ bool wxYield()
     /* it's necessary to call ProcessIdle() to update the frames sizes which
        might have been changed (it also will update other things set from
        OnUpdateUI() which is a nice (and desired) side effect) */
-    while (wxTheApp->ProcessIdle()) { }
+    while ( ProcessIdle() )
+    {
+    }
 
     // let the logs be flashed again
     wxLog::Resume();
 
-    gs_inYield = FALSE;
+    s_inYield = FALSE;
 
     return TRUE;
-}
-
-//-----------------------------------------------------------------------------
-// wxYieldIfNeeded
-// Like wxYield, but fails silently if the yield is recursive.
-//-----------------------------------------------------------------------------
-
-bool wxYieldIfNeeded()
-{
-    if (gs_inYield)
-        return FALSE;
-
-    return wxYield();
 }
 
 //-----------------------------------------------------------------------------

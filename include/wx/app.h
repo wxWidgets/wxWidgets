@@ -65,9 +65,6 @@ public:
 
     // the virtual functions which may/must be overridden in the derived class
     // -----------------------------------------------------------------------
-#ifdef __DARWIN__
-    virtual ~wxAppBase() { }
-#endif
 
         // called during the program initialization, returning FALSE from here
         // prevents the program from continuing - it's a good place to create
@@ -135,6 +132,17 @@ public:
         // process the first event in the event queue (blocks until an event
         // apperas if there are none currently)
     virtual void Dispatch() = 0;
+
+        // process all currently pending events right now
+        //
+        // it is an error to call Yield() recursively unless the value of
+        // onlyIfNeeded is TRUE
+        //
+        // WARNING: this function is dangerous as it can lead to unexpected
+        //          reentrancies (i.e. when called from an event handler it
+        //          may result in calling the same event handler again), use
+        //          with _extreme_ care or, better, don't use at all!
+    virtual bool Yield(bool onlyIfNeeded = FALSE) = 0;
 #endif // wxUSE_GUI
 
     // application info: name, description, vendor
@@ -284,6 +292,11 @@ public:
         { m_appInitFn = fn; }
     static wxAppInitializerFunction GetInitializerFunction()
         { return m_appInitFn; }
+
+    // needed to avoid link errors
+#ifdef __DARWIN__
+    virtual ~wxAppBase() { }
+#endif
 
     // process all events in the wxPendingEvents list
     virtual void ProcessPendingEvents();

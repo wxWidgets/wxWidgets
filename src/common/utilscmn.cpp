@@ -36,6 +36,7 @@
     #include "wx/log.h"
 
     #if wxUSE_GUI
+        #include "wx/app.h"
         #include "wx/window.h"
         #include "wx/frame.h"
         #include "wx/menu.h"
@@ -1312,4 +1313,25 @@ long wxExecute(const wxString& command,
     return wxDoExecuteWithCapture(command, output, &error);
 }
 
+// ----------------------------------------------------------------------------
+// wxApp::Yield() wrappers for backwards compatibility
+// ----------------------------------------------------------------------------
+
+bool wxYield()
+{
+#if wxUSE_GUI
+    return wxTheApp && wxTheApp->Yield();
+#else
+    return FALSE;
+#endif
+}
+
+bool wxYieldIfNeeded()
+{
+#if wxUSE_GUI
+    return wxTheApp && wxTheApp->Yield(TRUE);
+#else
+    return FALSE;
+#endif
+}
 

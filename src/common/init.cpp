@@ -77,13 +77,6 @@ void WXDLLEXPORT wxExit()
 }
 
 // Yield to other apps/messages
-bool WXDLLEXPORT wxYield()
-{
-    // do nothing
-    return TRUE;
-}
-
-// Yield to other apps/messages
 void WXDLLEXPORT wxWakeUpIdle()
 {
     // do nothing

@@ -20,7 +20,6 @@
     #pragma interface "utils.h"
 #endif
 
-#include "wx/setup.h"
 #include "wx/object.h"
 #include "wx/list.h"
 #include "wx/filefn.h"

@@ -603,3 +603,29 @@ This function currently only has effect under GTK.
 
 \docparam{flag}{If TRUE, the app will use the best visual.}
 
+\membersection{wxApp::Yield}{wxappyield}
+
+\func{bool}{Yield}{\param{bool}{ onlyIfNeeded = FALSE}}
+
+Yields control to pending messages in the windowing system. This can be useful, for example, when a
+time-consuming process writes to a text window. Without an occasional
+yield, the text window will not be updated properly, and on systems with
+cooperative multitasking, such as Windows 3.1 other processes will not respond.
+
+Caution should be exercised, however, since yielding may allow the
+user to perform actions which are not compatible with the current task.
+Disabling menu items or whole menus during processing can avoid unwanted
+reentrance of code: see \helpref{::wxSafeYield}{wxsafeyield} for a better
+function.
+
+Note that Yield() will not flush the message logs. This is intentional as
+calling Yield() is usually done to quickly update the screen and popping up a
+message box dialog may be undesirable. If you do wish to flush the log
+messages immediately (otherwise it will be done during the next idle loop
+iteration), call \helpref{wxLog::FlushActive}{wxlogflushactive}.
+
+Calling Yield() recursively is normally an error and an assert failure is
+raised in debug build if such situation is detected. However if the the 
+{\it onlyIfNeeded} parameter is {\tt TRUE}, the method will just silently
+return {\tt FALSE} instead.
+
