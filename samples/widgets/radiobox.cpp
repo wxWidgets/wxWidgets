@@ -84,6 +84,7 @@ protected:
     void OnButtonSelection(wxCommandEvent& event);
     void OnButtonSetLabel(wxCommandEvent& event);
 
+    void OnUpdateUIReset(wxUpdateUIEvent& event);
     void OnUpdateUIUpdate(wxUpdateUIEvent& event);
     void OnUpdateUISelection(wxUpdateUIEvent& event);
 
