@@ -592,6 +592,10 @@
  * have only one, in which case define WX_GETTIMEOFDAY_NO_TZ */
 #undef WX_GETTIMEOFDAY_NO_TZ
 
+/* struct tm doesn't always have the tm_gmtoff field, define this if it is
+ * present */
+#define WX_GMTOFF_IN_TM
+
 /* Define if you have dlopen() */
 #define HAVE_DLOPEN
 
