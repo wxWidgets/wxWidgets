@@ -1035,8 +1035,8 @@ bool wxICOHandler::SaveFile(wxImage *image,
 
     ICONDIR IconDir;
     IconDir.idReserved = 0;
-    IconDir.idType = (WORD)wxUINT16_SWAP_ON_BE(type);
-    IconDir.idCount = (WORD)wxUINT16_SWAP_ON_BE(images);
+    IconDir.idType = (wxUint16)wxUINT16_SWAP_ON_BE(type);
+    IconDir.idCount = (wxUint16)wxUINT16_SWAP_ON_BE(images);
     stream.Write(&IconDir.idReserved, sizeof(IconDir.idReserved));
     stream.Write(&IconDir.idType, sizeof(IconDir.idType));
     stream.Write(&IconDir.idCount, sizeof(IconDir.idCount));
@@ -1129,8 +1129,8 @@ bool wxICOHandler::SaveFile(wxImage *image,
 
         offset = offset + sizeof(ICONDIRENTRY);
 
-        icondirentry.bWidth = (BYTE)image->GetWidth();
-        icondirentry.bHeight = (BYTE)(2 * image->GetHeight());
+        icondirentry.bWidth = (wxUint8)image->GetWidth();
+        icondirentry.bHeight = (wxUint8)(2 * image->GetHeight());
         icondirentry.bColorCount = 0;
         icondirentry.bReserved = 0;
         icondirentry.wPlanes = wxUINT16_SWAP_ON_BE(1);
