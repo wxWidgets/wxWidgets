@@ -49,6 +49,7 @@ dnl checks the results of gtk-config to some extent)
 dnl
     AC_TRY_RUN([
 #include <gtk/gtk.h>
+#include <gtk/gtkfeatures.h>
 #include <stdio.h>
 
 int
@@ -58,6 +59,13 @@ main ()
 
   if (sscanf("$min_gtk_version", "%d.%d.%d", &major, &minor, &micro) != 3) {
      printf("%s, bad version string\n", "$min_gtk_version");
+     exit(1);
+   }
+
+   if ((GTK_MAJOR_VERSION != gtk_major_version) ||
+       (GTK_MINOR_VERSION != gtk_minor_version) ||
+       (GTK_MICRO_VERSION != gtk_micro_version)) {
+     printf("Headers vs. library version mismatch!\n");
      exit(1);
    }
 

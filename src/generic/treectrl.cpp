@@ -835,49 +835,53 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parentId,
                                       int image, int selImage,
                                       wxTreeItemData *data)
 {
-  wxGenericTreeItem *parent = parentId.m_pItem;
-  if ( !parent )
-  {
-    // should we give a warning here?
-    return AddRoot(text, image, selImage, data);
-  }
+    wxGenericTreeItem *parent = parentId.m_pItem;
+    if ( !parent )
+    {
+        // should we give a warning here?
+        return AddRoot(text, image, selImage, data);
+    }
 
-  wxClientDC dc(this);
-  wxGenericTreeItem *item = new wxGenericTreeItem(parent,
-                                                  text, dc,
-                                                  image, selImage,
-                                                  data);
+    wxClientDC dc(this);
+    wxGenericTreeItem *item = 
+        new wxGenericTreeItem( parent, text, dc, image, selImage, data );
 
-  if ( data != NULL )
-  {
-    data->m_pItem = item;
-  }
+    if ( data != NULL )
+    {
+        data->m_pItem = item;
+    }
 
-  parent->Insert( item, previous );
+    parent->Insert( item, previous );
 
-  m_dirty = TRUE;
+    m_dirty = TRUE;
 
-  return item;
+    return item;
 }
 
 wxTreeItemId wxTreeCtrl::AddRoot(const wxString& text,
                                  int image, int selImage,
                                  wxTreeItemData *data)
 {
-  wxCHECK_MSG( !m_anchor, wxTreeItemId(), wxT("tree can have only one root") );
+    wxCHECK_MSG( !m_anchor, wxTreeItemId(), wxT("tree can have only one root") );
 
-  wxClientDC dc(this);
-  m_anchor = new wxGenericTreeItem((wxGenericTreeItem *)NULL, text, dc,
+    wxClientDC dc(this);
+    m_anchor = new wxGenericTreeItem((wxGenericTreeItem *)NULL, text, dc,
                                    image, selImage, data);
-  if ( data != NULL )
-  {
-    data->m_pItem = m_anchor;
-  }
+    if ( data != NULL )
+    {
+        data->m_pItem = m_anchor;
+    }
+  
+    if (!HasFlag(wxTR_MULTIPLE))
+    {
+        m_current = m_key_current = m_anchor;
+	m_current->SetHilight( TRUE );
+    }
 
-  Refresh();
-  AdjustMyScrollbars();
+    Refresh();
+    AdjustMyScrollbars();
 
-  return m_anchor;
+    return m_anchor;
 }
 
 wxTreeItemId wxTreeCtrl::PrependItem(const wxTreeItemId& parent,

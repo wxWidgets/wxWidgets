@@ -709,6 +709,7 @@ void wxFileDialog::OnChoice( wxCommandEvent &event )
 {
     wxString *str = (wxString*) m_choice->GetClientData( event.GetInt() );
     m_list->SetWild( *str );
+    m_filterIndex = event.GetInt();
 }
 
 void wxFileDialog::OnCheck( wxCommandEvent &event )
