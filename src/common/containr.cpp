@@ -49,6 +49,28 @@ wxControlContainer::wxControlContainer(wxWindow *winParent)
     m_winDefault = NULL;
 }
 
+bool wxControlContainer::AcceptsFocus() const
+{
+    // We can accept focus only when at last one child will accept focus
+    if ( m_winParent->IsShown() && m_winParent->IsEnabled() )
+    {
+        wxWindowList::Node *node = m_winParent->GetChildren().GetFirst();
+        while ( node )
+        {
+            wxWindow *child = node->GetData();
+
+            if ( child->AcceptsFocus() )
+            {
+                return TRUE;
+            }
+
+            node = node->GetNext();
+        }
+    }
+
+    return FALSE;
+}
+
 void wxControlContainer::SetLastFocus(wxWindow *win)
 {
     // the panel itself should never get the focus at all but if it does happen
@@ -386,3 +408,4 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
 
     return FALSE;
 }
+
