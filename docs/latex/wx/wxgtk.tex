@@ -1,0 +1,18 @@
+\section{wxGTK port}\label{wxgtkport}
+
+wxGTK is a port of wxWindows using the GTK+ library available
+from www.gtk.org. It makes use of GTK+'s native widgets whereever
+possible and uses wxWindows' generic controls when needed. GTK+
+itself has been ported to a number of systems, but sofar only the
+original X11 version is supported. Support for the recently released
+GTK+ 2.0 including Unicode support is still under work.
+
+You will GTK+ 1.2.3 or higher which is available from
+
+  http://www.gtk.org
+  
+In order to configure wxWindows to compile wxGTK you will 
+need to type
+
+  configure --with-gtk
+

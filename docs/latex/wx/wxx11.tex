@@ -1,0 +1,15 @@
+\section{wxX11 port}\label{wxx11port}
+
+wxX11 is a port of wxWindows using X11 (The X Window System)
+as the underlying graphics backend. wxX11 draws its widgets
+using the wxUniversal widget set which is now part of wxWindows.
+wxX11 should be well-suited for a number of special apps such
+as apps running on systems with little resource (PDAs) or apps
+which need to acquire a special themed look. You will need
+wxWindows 2.3.2 or higher.
+  
+In order to configure wxWindows to compile wxX11 you will 
+need to type
+
+  configure --with-x11 --with-universal
+  
