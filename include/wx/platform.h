@@ -245,6 +245,20 @@
 #endif
 
 /*
+   This macro can be used to test the gcc version and can be used like this:
+
+    #if wxCHECK_GCC_VERSION(3, 1)
+        ... we have gcc 3.1 or later ...
+    #else
+        ... no gcc at all or gcc < 3.1 ...
+    #endif
+*/
+#define wxCHECK_GCC_VERSION( major, minor ) \
+    ( defined(__GNUC__) && defined(__GNUC_MINOR__) \
+    && ( ( __GNUC__ > (major) ) \
+        || ( __GNUC__ == (major) && __GNUC_MINOR__ >= (minor) ) ) )
+
+/*
    This macro can be used to check that the version of mingw32 compiler is
    at least maj.min
  */
