@@ -30,8 +30,10 @@
 
 #include "wx/renderer.h"
 
+#include "wx/msw/uxtheme.h"
+
 // ----------------------------------------------------------------------------
-// wxRendererMSW: our wxRendererNative implementation
+// wxRendererMSW: wxRendererNative implementation for "old" Win32 systems
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxRendererMSW : public wxDelegateRendererNative
@@ -39,19 +41,125 @@ class WXDLLEXPORT wxRendererMSW : public wxDelegateRendererNative
 public:
     wxRendererMSW() { }
 
+    static wxRendererNative& Get();
+
 private:
     DECLARE_NO_COPY_CLASS(wxRendererMSW)
 };
 
+// ----------------------------------------------------------------------------
+// wxRendererXP: wxRendererNative implementation for Windows XP and later
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxRendererXP : public wxDelegateRendererNative
+{
+public:
+    wxRendererXP() : wxDelegateRendererNative(wxRendererMSW::Get()) { }
+
+    static wxRendererNative& Get();
+
+    virtual void DrawSplitterBorder(wxWindow *win,
+                                    wxDC& dc,
+                                    const wxRect& rect);
+    virtual void DrawSplitterSash(wxWindow *win,
+                                  wxDC& dc,
+                                  const wxSize& size,
+                                  wxCoord position,
+                                  wxOrientation orient);
+    virtual wxPoint GetSplitterSashAndBorder(const wxWindow *win);
+
+private:
+    DECLARE_NO_COPY_CLASS(wxRendererXP)
+};
+
 // ============================================================================
-// implementation
+// wxRendererNative and wxRendererMSW implementation
 // ============================================================================
 
 /* static */
 wxRendererNative& wxRendererNative::GetDefault()
 {
+    wxUxThemeEngine *themeEngine = wxUxThemeEngine::Get();
+    return themeEngine && themeEngine->IsThemeActive() ? wxRendererXP::Get()
+                                                       : wxRendererMSW::Get();
+}
+
+/* static */
+wxRendererNative& wxRendererMSW::Get()
+{
     static wxRendererMSW s_rendererMSW;
 
     return s_rendererMSW;
+}
+
+// ============================================================================
+// wxRendererXP implementation
+// ============================================================================
+
+/* static */
+wxRendererNative& wxRendererXP::Get()
+{
+    static wxRendererXP s_rendererXP;
+
+    return s_rendererXP;
+}
+
+// ----------------------------------------------------------------------------
+// splitter drawing
+// ----------------------------------------------------------------------------
+
+// the width of the sash: this is the same as used by Explorer...
+static const wxCoord SASH_WIDTH = 4;
+
+wxPoint wxRendererXP::GetSplitterSashAndBorder(const wxWindow * WXUNUSED(win))
+{
+    return wxPoint(SASH_WIDTH, 0);
+}
+
+void
+wxRendererXP::DrawSplitterBorder(wxWindow * WXUNUSED(win),
+                                 wxDC& WXUNUSED(dc),
+                                 const wxRect& WXUNUSED(rect))
+{
+}
+
+void
+wxRendererXP::DrawSplitterSash(wxWindow *win,
+                               wxDC& dc,
+                               const wxSize& size,
+                               wxCoord position,
+                               wxOrientation orient)
+{
+    // I don't know if it is correct to use the rebar background for the
+    // splitter but it least this works ok in the default theme
+    wxUxThemeHandle hTheme(win, L"REBAR");
+    if ( hTheme )
+    {
+        RECT rect;
+        if ( orient == wxVERTICAL )
+        {
+            rect.left = position;
+            rect.right = position + SASH_WIDTH; 
+            rect.top = 0;
+            rect.bottom = size.y;
+        }
+        else // wxHORIZONTAL
+        {
+            rect.left = 0;
+            rect.right = size.x;
+            rect.top = position;
+            rect.bottom = position + SASH_WIDTH;
+        }
+
+        wxUxThemeEngine::Get()->DrawThemeBackground
+                                (
+                                    hTheme,
+                                    dc.GetHDC(),
+                                    3 /* RP_BAND */,
+                                    0 /* no state */ ,
+                                    &rect,
+                                    NULL
+                                );       
+    }
 }
 
