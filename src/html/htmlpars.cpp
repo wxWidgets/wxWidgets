@@ -855,7 +855,7 @@ bool wxMetaTagHandler::HandleTag(const wxHtmlTag& tag)
 {
     if (tag.GetName() == _T("BODY"))
     {
-//        m_Parser->StopParsing();
+        m_Parser->StopParsing();
         return FALSE;
     }
 
@@ -867,7 +867,7 @@ bool wxMetaTagHandler::HandleTag(const wxHtmlTag& tag)
         if (content.Left(19) == _T("text/html; charset="))
         {
             *m_retval = content.Mid(19);
-//            m_Parser->StopParsing();
+            m_Parser->StopParsing();
         }
     }
     return FALSE;
