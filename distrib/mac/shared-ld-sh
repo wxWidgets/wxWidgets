@@ -21,13 +21,13 @@ while test $# -gt 0; do
         verbose=1
         ;;
 
-       -o|-compatibility_version|-current_version|-framework)
+       -o|-compatibility_version|-current_version|-framework|-undefined)
         # collect these options and values
         args="$args $1 $2"
         shift
         ;;
 
-       -l*|-L*)
+       -l*|-L*|-flat_namespace)
         # collect these options
         args="$args $1"
         ;;
