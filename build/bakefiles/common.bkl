@@ -4,6 +4,10 @@
 <makefile>
 
     <requires version="0.1.3"/>
+    <!-- FIXME: remove this kludge when upgraded to 0.1.4: -->
+    <if cond="BAKEFILE_VERSION=='0.1.3'">
+        <define-tag name="pic" rules="exe,dll,lib,module"/>
+    </if>
     
     <!-- bakefile modules we need: -->
     <using module="datafiles"/>
