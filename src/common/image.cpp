@@ -1555,7 +1555,6 @@ wxImage::wxImage( const wxBitmap &bitmap )
         for (int i = 0; i < bitmap.GetWidth(); i++)
         {
             wxInt32 pixel = gdk_image_get_pixel( gdk_image, i, j );
-            // pixel = wxINT32_SWAP_ON_BE( pixel );
             if (bpp <= 8)
             {
                 data[pos] = cmap->colors[pixel].red >> 8;
@@ -1563,19 +1562,31 @@ wxImage::wxImage( const wxBitmap &bitmap )
                 data[pos+2] = cmap->colors[pixel].blue >> 8;
             } else if (bpp == 15)
             {
+#if (wxBYTE_ORDER == wxBIG_ENDIAN)
+                // ?
+#endif
                 data[pos] = (pixel >> 7) & 0xf8;
                 data[pos+1] = (pixel >> 2) & 0xf8;
                 data[pos+2] = (pixel << 3) & 0xf8;
             } else if (bpp == 16)
             {
+#if (wxBYTE_ORDER == wxBIG_ENDIAN)
+                // ?
+#endif
                 data[pos] = (pixel >> 8) & 0xf8;
                 data[pos+1] = (pixel >> 3) & 0xfc;
                 data[pos+2] = (pixel << 3) & 0xf8;
             } else
             {
+#if (wxBYTE_ORDER == wxBIG_ENDIAN)
+                data[pos] = (pixel) & 0xff;		// Red
+                data[pos+1] = (pixel >> 8) & 0xff;	// Green
+                data[pos+2] = (pixel >> 16) & 0xff;	// Blue
+#else
                 data[pos] = (pixel >> 16) & 0xff;
                 data[pos+1] = (pixel >> 8) & 0xff;
                 data[pos+2] = pixel & 0xff;
+#endif
             }
 
             if (gdk_image_mask)
