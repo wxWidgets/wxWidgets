@@ -30,8 +30,7 @@ top_srcdir = @top_srcdir@
 ### Variables: ###
 
 CONSOLE_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
-	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) $(__MULTILIB_FLAG_p) \
-	$(CPPFLAGS) $(CXXFLAGS)
+	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) $(CPPFLAGS) $(CXXFLAGS)
 CONSOLE_OBJECTS =  \
 	console_console.o
 DESTDIR = 
@@ -66,7 +65,6 @@ LIBDIRNAME = $(top_builddir)lib
 @COND_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN@	-lwxtiff$(WXDEBUGFLAG)$(HOST_SUFFIX)
 @COND_WXUSE_ZLIB_BUILTIN@__LIB_ZLIB_p = \
 @COND_WXUSE_ZLIB_BUILTIN@	-lwxzlib$(WXDEBUGFLAG)$(HOST_SUFFIX)
-@COND_MONOLITHIC_0@__MULTILIB_FLAG_p = -DwxUSE_GUI=0
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = \
 @COND_MONOLITHIC_0@	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)
 COND_MONOLITHIC_1___WXLIB_MONO_p = \

@@ -12,12 +12,12 @@
 
 ### Variables: ###
 
-CONSOLE_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS_7)$(__DEBUGRUNTIME_3) \
-	/DWIN32 $(__DEBUGINFO_0) /Fd$(OBJS)\console.pdb $(____DEBUGRUNTIME_2_p) \
+CONSOLE_CXXFLAGS = /M$(__RUNTIME_LIBS_7)$(__DEBUGRUNTIME_3) /DWIN32 \
+	$(__DEBUGINFO_0) /Fd$(OBJS)\console.pdb $(____DEBUGRUNTIME_2_p) \
 	$(__OPTIMIZEFLAG_4) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\..\include /I$(SETUPHDIR) \
-	/W4 /I. $(__DLLFLAG_p) /D_CONSOLE $(__MULTILIB_FLAG_p) $(CXXFLAGS) \
-	$(__EXCEPTIONSFLAG_8) $(__EXCEPTIONSFLAG_9)
+	/W4 /I. $(__DLLFLAG_p) /D_CONSOLE $(__EXCEPTIONSFLAG_8) $(__EXCEPTIONSFLAG_9) \
+	$(CPPFLAGS) $(CXXFLAGS)
 CONSOLE_OBJECTS =  \
 	$(OBJS)\console_console.obj
 OBJS = \
@@ -128,9 +128,6 @@ __LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
 !endif
 !if "$(USE_GUI)" == "1"
 __LIB_TIFF_p = wxtiff$(WXDEBUGFLAG).lib
-!endif
-!if "$(MONOLITHIC)" == "0"
-__MULTILIB_FLAG_p = /DwxUSE_GUI=0
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "0"
 __NO_VC_CRTDBG_p = /D__NO_VC_CRTDBG__

@@ -128,10 +128,6 @@ __LIB_TIFF_p =
 !ifeq USE_GUI 1
 __LIB_TIFF_p = wxtiff$(WXDEBUGFLAG).lib
 !endif
-__MULTILIB_FLAG_p =
-!ifeq MONOLITHIC 0
-__MULTILIB_FLAG_p = -dwxUSE_GUI=0
-!endif
 __OPTIMIZEFLAG_2 =
 !ifeq BUILD debug
 __OPTIMIZEFLAG_2 = -od
@@ -166,10 +162,10 @@ __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
 
 ### Variables: ###
 
-CONSOLE_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
-	$(__RUNTIME_LIBS_5) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) &
-	$(__MULTILIB_FLAG_p) $(CXXFLAGS) $(__EXCEPTIONSFLAG_7)
+CONSOLE_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm $(__RUNTIME_LIBS_5) &
+	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
+	-i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) $(__EXCEPTIONSFLAG_7) &
+	$(CPPFLAGS) $(CXXFLAGS)
 CONSOLE_OBJECTS =  &
 	$(OBJS)\console_console.obj
 OBJS = &

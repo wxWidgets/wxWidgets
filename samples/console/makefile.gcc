@@ -12,11 +12,11 @@ include ../../build/msw/config.gcc
 
 ### Variables: ###
 
-CONSOLE_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) \
+CONSOLE_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I.\..\..\include -I$(SETUPHDIR) -Wall -I. \
-	$(__DLLFLAG_p) $(__MULTILIB_FLAG_p) $(CXXFLAGS) $(__EXCEPTIONSFLAG_4) \
-	$(__EXCEPTIONSFLAG_5)
+	$(__DLLFLAG_p) $(__EXCEPTIONSFLAG_4) $(__EXCEPTIONSFLAG_5) $(CPPFLAGS) \
+	$(CXXFLAGS)
 CONSOLE_OBJECTS =  \
 	$(OBJS)\console_console.o
 OBJS = \
@@ -105,9 +105,6 @@ __LIB_PNG_p = -lwxpng$(WXDEBUGFLAG)
 endif
 ifeq ($(USE_GUI),1)
 __LIB_TIFF_p = -lwxtiff$(WXDEBUGFLAG)
-endif
-ifeq ($(MONOLITHIC),0)
-__MULTILIB_FLAG_p = -DwxUSE_GUI=0
 endif
 ifeq ($(BUILD),debug)
 __OPTIMIZEFLAG_2 = -O0

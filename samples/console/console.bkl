@@ -3,13 +3,8 @@
 
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
-    <set var="MULTILIB_FLAG">
-        <if cond="MONOLITHIC=='0'">wxUSE_GUI=0</if>
-    </set>
-    
     <exe id="console" template="wx_sample_console"
                       template_append="wx_append_base">
-        <define>$(MULTILIB_FLAG)</define>
         <sources>console.cpp</sources>
         <wx-lib>base</wx-lib>
     </exe>
