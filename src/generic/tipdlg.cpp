@@ -198,7 +198,13 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
 #if defined(__WXMSW__) || defined(__WXPM__)
     wxIcon icon("wxICON_TIP");
 #else
+    // XPM hack: make the arrays const
+    #define static static const
+
     #include "wx/generic/tip.xpm"
+
+    #undef static
+
     wxIcon icon(tipIcon);
 #endif
     wxStaticBitmap *bmp = new wxStaticBitmap(this, -1, icon);

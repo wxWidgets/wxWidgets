@@ -3755,9 +3755,9 @@ static void SetInvokingWindow( wxMenu *menu, wxWindowGTK *win )
 static gint gs_pop_x = 0;
 static gint gs_pop_y = 0;
 
-static void wxPopupMenuPositionCallback( GtkMenu *menu,
-                                         gint *x, gint *y,
-                                         gpointer WXUNUSED(user_data) )
+extern "C" void wxPopupMenuPositionCallback( GtkMenu *menu,
+                                             gint *x, gint *y,
+                                             gpointer WXUNUSED(user_data) )
 {
     // ensure that the menu appears entirely on screen
     GtkRequisition req;

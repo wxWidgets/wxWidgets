@@ -490,12 +490,18 @@ void wxCondition::Broadcast()
 // wxThread (Posix implementation)
 //--------------------------------------------------------------------
 
+// the thread callback functions must have the C linkage
+extern "C"
+{
+
 #if HAVE_THREAD_CLEANUP_FUNCTIONS
-
-// thread exit function
-extern "C" void wxPthreadCleanup(void *ptr);
-
+    // thread exit function
+    void wxPthreadCleanup(void *ptr);
 #endif // HAVE_THREAD_CLEANUP_FUNCTIONS
+
+void *wxPthreadStart(void *ptr);
+
+} // extern "C"
 
 class wxThreadInternal
 {
@@ -504,7 +510,7 @@ public:
     ~wxThreadInternal();
 
     // thread entry function
-    static void *PthreadStart(void *ptr);
+    static void *PthreadStart(wxThread *thread);
 
     // thread actions
         // start the thread
@@ -600,9 +606,13 @@ private:
 // thread startup and exit functions
 // ----------------------------------------------------------------------------
 
-void *wxThreadInternal::PthreadStart(void *ptr)
+void *wxPthreadStart(void *ptr)
 {
-    wxThread *thread = (wxThread *)ptr;
+    return wxThreadInternal::PthreadStart((wxThread *)ptr);
+}
+
+void *wxThreadInternal::PthreadStart(wxThread *thread)
+{
     wxThreadInternal *pthread = thread->m_internal;
 
     // associate the thread pointer with the newly created thread so that
@@ -622,7 +632,7 @@ void *wxThreadInternal::PthreadStart(void *ptr)
 #if HAVE_THREAD_CLEANUP_FUNCTIONS
     // install the cleanup handler which will be called if the thread is
     // cancelled
-    pthread_cleanup_push(wxPthreadCleanup, ptr);
+    pthread_cleanup_push(wxPthreadCleanup, thread);
 #endif // HAVE_THREAD_CLEANUP_FUNCTIONS
 
     // wait for the condition to be signaled from Run()
@@ -1042,7 +1052,7 @@ wxThreadError wxThread::Create(unsigned int WXUNUSED(stackSize))
              (
                 m_internal->GetIdPtr(),
                 &attr,
-                wxThreadInternal::PthreadStart,
+                wxPthreadStart,
                 (void *)this
              );
 

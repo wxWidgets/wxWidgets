@@ -205,11 +205,11 @@ bool wxHTTP::Connect(wxSockAddress& addr, bool WXUNUSED(wait))
 
 bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
 {
-  wxChar *tmp_buf;
+  const wxChar *request;
 
   switch (req) {
   case wxHTTP_GET:
-    tmp_buf = wxT("GET");
+    request = wxT("GET");
     break;
   default:
     return FALSE;
@@ -224,7 +224,7 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
   Notify(FALSE);
 
   wxString buf;
-  buf.Printf(wxT("%s %s HTTP/1.0\r\n"), tmp_buf, path.c_str());
+  buf.Printf(wxT("%s %s HTTP/1.0\r\n"), request, path.c_str());
   const wxWX2MBbuf pathbuf = wxConvLibc.cWX2MB(buf);
   Write(pathbuf, strlen(wxMBSTRINGCAST pathbuf));
   SendHeaders();

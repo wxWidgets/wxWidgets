@@ -69,6 +69,9 @@
 # include <time.h>
 #include <unistd.h>
 
+// XPM hack: make the arrays const
+#define static static const
+
 #ifndef __DOS__
 #include "wx/generic/home.xpm"
 #endif
@@ -79,6 +82,8 @@
 #include "wx/generic/folder.xpm"
 #include "wx/generic/deffile.xpm"
 #include "wx/generic/exefile.xpm"
+
+#undef static
 
 //-----------------------------------------------------------------------------
 //  wxFileData

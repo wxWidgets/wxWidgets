@@ -58,10 +58,15 @@
 // XPMs
 // ----------------------------------------------------------------------------
 
+// XPM hack: make the arrays const
+#define static static const
+
 #ifndef __WXMSW__
     #include "wx/generic/cross.xpm"
     #include "wx/generic/tick.xpm"
 #endif
+
+#undef static
 
 // ----------------------------------------------------------------------------
 // accessor functions for the bitmaps (may return NULL, check for it!)

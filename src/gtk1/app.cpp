@@ -868,10 +868,15 @@ int wxEntry( int argc, char *argv[] )
 
 #ifndef __WXUNIVERSAL__
 
+// XPM hack: make the arrays const
+#define static static const
+
 #include "wx/gtk/info.xpm"
 #include "wx/gtk/error.xpm"
 #include "wx/gtk/question.xpm"
 #include "wx/gtk/warning.xpm"
+
+#undef static
 
 wxIcon wxApp::GetStdIcon(int which) const
 {

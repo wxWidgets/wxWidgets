@@ -753,10 +753,15 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
 // TODO use XmGetPixmap (?) to get the really standard icons!
 
+// XPM hack: make the arrays const
+#define static static const
+
 #include "wx/generic/info.xpm"
 #include "wx/generic/error.xpm"
 #include "wx/generic/question.xpm"
 #include "wx/generic/warning.xpm"
+
+#undef static
 
 wxIcon
 wxApp::GetStdIcon(int which) const

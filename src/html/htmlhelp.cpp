@@ -42,12 +42,17 @@ file is only left to point out the problem and will be removed r.s.n.
 // Bitmaps:
 
 #ifndef __WXMSW__
-#include "bitmaps/panel.xpm"
-#include "bitmaps/back.xpm"
-#include "bitmaps/forward.xpm"
-#include "bitmaps/book.xpm"
-#include "bitmaps/folder.xpm"
-#include "bitmaps/page.xpm"
+    // XPM hack: make the arrays const
+    #define static static const
+
+    #include "bitmaps/panel.xpm"
+    #include "bitmaps/back.xpm"
+    #include "bitmaps/forward.xpm"
+    #include "bitmaps/book.xpm"
+    #include "bitmaps/folder.xpm"
+    #include "bitmaps/page.xpm"
+
+    #undef static
 #endif
 
 #include "search.h"
@@ -192,12 +197,12 @@ bool wxHtmlHelpController::AddBook(const wxString& book, bool show_wait_msg)
     int sz;
     char *buff, *lineptr;
     char linebuf[300];
-     
+
     wxString title = _("noname"),
              safetitle,
              start = wxEmptyString,
              contents = wxEmptyString, index = wxEmptyString;
-    
+
     if (wxIsAbsolutePath(book)) bookFull = book;
     else bookFull = wxGetCwd() + "/" + book;
 
@@ -257,7 +262,7 @@ bool wxHtmlHelpController::AddBook(const wxString& book, bool show_wait_msg)
     m_BookRecords.Add(bookr);
     if (m_IndexCnt > 0)
         qsort(m_Index, m_IndexCnt, sizeof(HtmlContentsItem), IndexCompareFunc);
-    
+
     return TRUE;
 }
 
@@ -374,14 +379,15 @@ class MyProgressDlg : public wxDialog
     public:
         bool m_Canceled;
 
-        MyProgressDlg(wxWindow *parent) : wxDialog(parent, -1, 
-	              _("Searching..."), 
-	              wxPoint(0, 0), 
+        MyProgressDlg(wxWindow *parent) : wxDialog(parent, -1,
+	              _("Searching..."),
+	              wxPoint(0, 0),
 #ifdef __WXGTK__
-		      wxSize(300, 110)) 
+		      wxSize(300, 110)
 #else
-		      wxSize(300, 130)) 
+		      wxSize(300, 130)
 #endif
+              )
 		      {m_Canceled = FALSE;}
         void OnCancel(wxCommandEvent& event) {m_Canceled = TRUE;}
         DECLARE_EVENT_TABLE()
@@ -392,7 +398,7 @@ END_EVENT_TABLE()
 
 #endif
 
-	
+
 bool wxHtmlHelpController::KeywordSearch(const wxString& keyword)
 {
     int foundcnt = 0;

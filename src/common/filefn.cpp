@@ -567,7 +567,6 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
 
     /* Expand ~ and ~user */
     nm = lnm;
-    s = wxT("");
     if (nm[0] == wxT('~') && !q)
     {
         /* prefix ~ */
@@ -591,7 +590,7 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
             if ((home = WXSTRINGCAST wxGetUserHome(wxString(nm + 1))) == NULL) {
                if (was_sep) /* replace only if it was there: */
                    *s = SEP;
-                s = wxT("");
+                s = NULL;
             } else {
                 nm = nnm;
                 s = home;

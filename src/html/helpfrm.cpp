@@ -55,24 +55,28 @@
 // Bitmaps:
 
 #ifndef __WXMSW__
-#include "bitmaps/wpanel.xpm"
-#include "bitmaps/wback.xpm"
-#include "bitmaps/wforward.xpm"
-#include "bitmaps/wbook.xpm"
-#include "bitmaps/woptions.xpm"
-#include "bitmaps/wfolder.xpm"
-#include "bitmaps/wpage.xpm"
-#include "bitmaps/whelp.xpm"
-#include "bitmaps/whlproot.xpm"
-#include "bitmaps/wbkadd.xpm"
-#include "bitmaps/wbkdel.xpm"
-#include "bitmaps/wup.xpm"
-#include "bitmaps/wupnode.xpm"
-#include "bitmaps/wdown.xpm"
-#include "bitmaps/wopen.xpm"
-#include "bitmaps/wprint.xpm"
-#endif
+    // XPM hack: make the arrays const
+    #define static static const
 
+    #include "bitmaps/wpanel.xpm"
+    #include "bitmaps/wback.xpm"
+    #include "bitmaps/wforward.xpm"
+    #include "bitmaps/wbook.xpm"
+    #include "bitmaps/woptions.xpm"
+    #include "bitmaps/wfolder.xpm"
+    #include "bitmaps/wpage.xpm"
+    #include "bitmaps/whelp.xpm"
+    #include "bitmaps/whlproot.xpm"
+    #include "bitmaps/wbkadd.xpm"
+    #include "bitmaps/wbkdel.xpm"
+    #include "bitmaps/wup.xpm"
+    #include "bitmaps/wupnode.xpm"
+    #include "bitmaps/wdown.xpm"
+    #include "bitmaps/wopen.xpm"
+    #include "bitmaps/wprint.xpm"
+
+    #undef static
+#endif // __WXMSW__
 
 // what is considered "small index"?
 #define INDEX_IS_SMALL 100

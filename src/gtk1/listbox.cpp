@@ -84,7 +84,7 @@ struct wxlistbox_idle_struct
     gint         m_tag;
 };
 
-static gint wxlistbox_idle_callback( gpointer gdata )
+extern "C" gint wxlistbox_idle_callback( gpointer gdata )
 {
     wxlistbox_idle_struct* data = (wxlistbox_idle_struct*) gdata;
     gdk_threads_enter();

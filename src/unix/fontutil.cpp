@@ -196,10 +196,10 @@ wxString wxNativeFontInfo::ToUserString() const
     return GetXFontName();
 }
 
-bool wxNativeFontInfo::FromXFontName(const wxString& xFontName)
+bool wxNativeFontInfo::FromXFontName(const wxString& fontname)
 {
     // TODO: we should be able to handle the font aliases here, but how?
-    wxStringTokenizer tokenizer(xFontName, _T("-"), wxTOKEN_STRTOK);
+    wxStringTokenizer tokenizer(fontname, _T("-"), wxTOKEN_STRTOK);
 
     for ( size_t n = 0; n < WXSIZEOF(fontElements); n++ )
     {
