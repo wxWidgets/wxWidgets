@@ -52,7 +52,7 @@ class FileBrowseButton(wx.Panel):
         :param startDirectory: Default directory for file dialog startup
         :param fileMask:       File mask (glob pattern, such as *.*) to use in file dialog
         :param fileMode:       wx.OPEN or wx.SAVE, indicates type of file dialog to use
-        :param changeCallback: callback receives all changes in value of control
+        :param changeCallback: Optional callback called for all changes in value of the control
         """
       
         # store variables
@@ -86,11 +86,14 @@ class FileBrowseButton(wx.Panel):
     def createDialog( self, parent, id, pos, size, style ):
         """Setup the graphic representation of the dialog"""
         wx.Panel.__init__ (self, parent, id, pos, size, style)
+        self.SetMinSize(size) # play nice with sizers
+
         # try to set the background colour
         try:
             self.SetBackgroundColour(self._bc)
         except:
             pass
+
         box = wx.BoxSizer(wx.HORIZONTAL)
 
         self.label = self.createLabel( )
