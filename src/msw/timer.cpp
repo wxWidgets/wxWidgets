@@ -2,7 +2,7 @@
 // Name:        msw/timer.cpp
 // Purpose:     wxTimer implementation
 // Author:      Julian Smart
-// Modified by:
+// Modified by: Vadim Zeitlin (use hash map instead of list, global rewrite)
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
@@ -37,10 +37,6 @@
 
 #include "wx/msw/private.h"
 
-// from utils.cpp
-extern "C" WXDLLIMPEXP_BASE HWND
-wxCreateHiddenWindow(LPCTSTR *pclassname, LPCTSTR classname, WNDPROC wndproc);
-
 // ----------------------------------------------------------------------------
 // private globals
 // ----------------------------------------------------------------------------
@@ -56,7 +52,8 @@ static wxTimerMap g_timerMap;
 // private functions
 // ----------------------------------------------------------------------------
 
-void WINAPI wxTimerProc(HWND hwnd, WORD, int idTimer, DWORD);
+// timer callback used for all timers
+void WINAPI wxTimerProc(HWND hwnd, UINT msg, UINT idTimer, DWORD dwTime);
 
 // ----------------------------------------------------------------------------
 // macros
@@ -93,7 +90,7 @@ bool wxTimer::Start(int milliseconds, bool oneShot)
                 NULL,                       // don't use window
                 1,                          // id ignored with NULL hwnd anyhow
                 (UINT)m_milli,              // delay
-                (TIMERPROC)wxTimerProc      // timer proc to call
+                wxTimerProc                 // timer proc to call
              );
 
     if ( !m_id )
@@ -147,7 +144,11 @@ void wxProcessTimer(wxTimer& timer)
     timer.Notify();
 }
 
-void WINAPI wxTimerProc(HWND WXUNUSED(hwnd), WORD, int idTimer, DWORD)
+void WINAPI
+wxTimerProc(HWND WXUNUSED(hwnd),
+            UINT WXUNUSED(msg),
+            UINT idTimer,
+            DWORD WXUNUSED(dwTime))
 {
     wxTimerMap::iterator node = g_timerMap.find(idTimer);
 
