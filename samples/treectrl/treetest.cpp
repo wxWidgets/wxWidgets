@@ -661,7 +661,7 @@ void MyTreeCtrl::OnEndDrag(wxTreeEvent& event)
 {
     wxTreeItemId itemSrc = m_draggedItem,
                  itemDst = event.GetItem();
-    m_draggedItem = 0;
+    m_draggedItem = (wxTreeItemId)0l;
 
     // where to copy the item?
     if ( itemDst.IsOk() && !ItemHasChildren(itemDst) )
