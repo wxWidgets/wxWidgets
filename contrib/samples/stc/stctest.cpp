@@ -49,7 +49,6 @@ public:
 
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
-    void OnStyleNeeded(wxStyledTextEvent& event);
 
 private:
     wxStyledTextCtrl* ed;
@@ -70,7 +69,6 @@ enum
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU            (ID_Quit,  MyFrame::OnQuit)
     EVT_MENU            (ID_About, MyFrame::OnAbout)
-    EVT_STC_STYLENEEDED (ID_ED, MyFrame::OnStyleNeeded)
 END_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
@@ -180,14 +178,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
 
 // event handlers
-
-void MyFrame::OnStyleNeeded(wxStyledTextEvent& event) {
-    int currEndStyled = ed->GetEndStyled();
-    ed->Colourise(currEndStyled, event.GetPosition());
-}
-
-
-
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
