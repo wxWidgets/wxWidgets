@@ -124,6 +124,9 @@ def select(versions):
         
 #----------------------------------------------------------------------
 
+UPDATE_URL = "http://wxPython.org/"
+#UPDATE_URL = "http://sourceforge.net/project/showfiles.php?group_id=10718"
+
 
 def ensureMinimal(minVersion):
     """
@@ -168,7 +171,7 @@ def ensureMinimal(minVersion):
                                % (minVersion, versions),
                       "wxPython Upgrade Needed", style=wx.YES_NO)
         if result == wx.YES:
-            webbrowser.open("http://sourceforge.net/project/showfiles.php?group_id=10718")
+            webbrowser.open(UPDATE_URL)
         app.MainLoop()
         sys.exit()
 
