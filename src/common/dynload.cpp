@@ -87,6 +87,7 @@ wxPluginLibrary::wxPluginLibrary(const wxString &libname, int flags)
 
     if( m_handle != 0 )
     {
+        UpdateClasses();
         RegisterModules();
     }
     else
@@ -101,6 +102,7 @@ wxPluginLibrary::~wxPluginLibrary()
     if( m_handle != 0 )
     {
         UnregisterModules();
+        RestoreClasses();
     }
 }
 
@@ -130,6 +132,27 @@ bool wxPluginLibrary::UnrefLib()
 // ------------------------
 // Private methods
 // ------------------------
+
+void wxPluginLibrary::UpdateClasses()
+{
+    for (wxClassInfo *info = m_after; info != m_before; info = info->m_next)
+    {
+        if( info->m_className )
+        {
+            // Hash all the class names into a local table too so
+            // we can quickly find the entry they correspond to.
+            (*ms_classes)[info->m_className] = this;
+        }
+    }
+}
+
+void wxPluginLibrary::RestoreClasses()
+{
+    for(wxClassInfo *info = m_after; info != m_before; info = info->m_next)
+    {
+        ms_classes->erase(ms_classes->find(info->m_className));
+    }
+}
 
 void wxPluginLibrary::RegisterModules()
 {
