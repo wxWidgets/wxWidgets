@@ -829,6 +829,11 @@
 #define wxUSE_XPM 0
 
 /*
+ * MS Icons and Cursors format support
+ */
+#define wxUSE_ICO_CUR 0
+
+/*
  * Disable this if your compiler can't cope
  * with omission of prototype parameters.
  */
