@@ -918,6 +918,9 @@ class MyApp(wx.App):
         the main frame when it is time to do so.
         """
 
+        # For debugging
+        #self.SetAssertMode(wx.PYAPP_ASSERT_DIALOG)
+
         # Normally when using a SplashScreen you would create it, show
         # it and then continue on with the applicaiton's
         # initialization, finally creating and showing the main

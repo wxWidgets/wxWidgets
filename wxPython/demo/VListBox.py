@@ -14,7 +14,7 @@ class MyVListBox(wx.VListBox):
         if self.GetSelection() == n:
             c = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHTTEXT)
         else:
-            c = self.GetForegroundColour()#wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHTTEXT)
+            c = self.GetForegroundColour()
         dc.SetFont(self.GetFont())
         dc.SetTextForeground(c)
         dc.DrawLabel(self._getItemText(n), rect,
@@ -24,11 +24,9 @@ class MyVListBox(wx.VListBox):
     # required to draw the n'th item.
     def OnMeasureItem(self, n):
         height = 0
-
         for line in self._getItemText(n).split('\n'):
             w, h = self.GetTextExtent(line)
             height += h
-
         return height + 5
 
 
