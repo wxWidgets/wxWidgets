@@ -41,6 +41,10 @@ public:
     wxDIB(const wxBitmap& bmp)
         { Init(); (void)Create(bmp); }
 
+    // create a DIB from the Windows DDB
+    wxDIB(HBITMAP hbmp)
+        { Init(); (void)Create(hbmp); }
+
     // load a DIB from file (any depth is supoprted here unlike above)
     //
     // as above, use IsOk() to see if the bitmap was loaded successfully
@@ -50,6 +54,7 @@ public:
     // same as the corresponding ctors but with return value
     bool Create(int width, int height, int depth);
     bool Create(const wxBitmap& bmp);
+    bool Create(HBITMAP hbmp);
     bool Load(const wxString& filename);
 
     // dtor is not virtual, this class is not meant to be used polymorphically
@@ -60,7 +65,7 @@ public:
     // ----------
 
 #ifndef __WXWINCE__
-    // create a bitmap compatiblr with the given HDC (or screen by default) and
+    // create a bitmap compatible with the given HDC (or screen by default) and
     // return its handle, the caller is responsible for freeing it (using
     // DeleteObject())
     HBITMAP CreateDDB(HDC hdc = 0) const;
@@ -98,7 +103,8 @@ public:
 
     // get raw pointer to bitmap bits, you should know what you do if you
     // decide to use it
-    void *GetData() const { DoGetObject(); return m_data; }
+    unsigned char *GetData() const
+        { DoGetObject(); return (unsigned char *)m_data; }
 
 
     // HBITMAP conversion

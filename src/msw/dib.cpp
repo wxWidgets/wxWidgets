@@ -151,10 +151,18 @@ bool wxDIB::Create(const wxBitmap& bmp)
 {
     wxCHECK_MSG( bmp.Ok(), false, _T("wxDIB::Create(): invalid bitmap") );
 
+    if ( !Create(GetHbitmapOf(bmp)) )
+        return false;
+
+    m_hasAlpha = bmp.HasAlpha();
+
+    return true;
+}
+
+bool wxDIB::Create(HBITMAP hbmp)
+{
     // this bitmap could already be a DIB section in which case we don't need
     // to convert it to DIB
-    HBITMAP hbmp = GetHbitmapOf(bmp);
-
     DIBSECTION ds;
     if ( GetDIBSection(hbmp, &ds) )
     {
@@ -172,17 +180,22 @@ bool wxDIB::Create(const wxBitmap& bmp)
     }
     else // no, it's a DDB -- convert it to DIB
     {
-        const int w = bmp.GetWidth();
-        const int h = bmp.GetHeight();
-        int d = bmp.GetDepth();
+        // prepare all the info we need
+        BITMAP bm;
+        if ( !::GetObject(hbmp, sizeof(bm), &bm) )
+        {
+            wxLogLastError(wxT("GetObject(bitmap)"));
+
+            return false;
+        }
+
+        int d = bm.bmBitsPixel;
         if ( d <= 0 )
             d = wxDisplayDepth();
 
-        if ( !Create(w, h, d) || !CopyFromDDB(hbmp) )
+        if ( !Create(bm.bmWidth, bm.bmHeight, d) || !CopyFromDDB(hbmp) )
             return false;
     }
-
-    m_hasAlpha = bmp.HasAlpha();
 
     return true;
 }
