@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        strconv.cpp
 // Purpose:     Unicode conversion classes
-// Author:      Ove Kaaven, Robert Roebling, Vadim Zeitlin
+// Author:      Ove Kaaven, Robert Roebling, Vadim Zeitlin, Vaclav Slavik
 // Modified by:
 // Created:     29/01/98
 // RCS-ID:      $Id$
-// Copyright:   (c) 1999 Ove Kaaven, Robert Roebling, Vadim Zeitlin
+// Copyright:   (c) 1999 Ove Kaaven, Robert Roebling, Vadim Zeitlin, Vaclav Slavik
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
@@ -54,16 +54,8 @@
 #include "wx/intl.h"
 #include "wx/log.h"
 
-#if defined(WORDS_BIGENDIAN) || defined(__STDC_ISO_10646__)
-#define BSWAP_UCS4(str, len)
-#define BSWAP_UCS2(str, len)
-#else
 #define BSWAP_UCS4(str, len) { unsigned _c; for (_c=0; _c<len; _c++) str[_c]=wxUINT32_SWAP_ALWAYS(str[_c]); }
-#define BSWAP_UCS2(str, len) { unsigned _c; for (_c=0; _c<len; _c++) str[_c]=wxUINT16_SWAP_ALWAYS(str[_c]); }
-#define WC_NEED_BSWAP
-#endif
-#define BSWAP_UTF32(str, len) BSWAP_UCS4(str, len)
-#define BSWAP_UTF16(str, len) BSWAP_UCS2(str, len)
+#define BSWAP_UTF16(str, len) { unsigned _c; for (_c=0; _c<len; _c++) str[_c]=wxUINT16_SWAP_ALWAYS(str[_c]); }
 
 // under Unix SIZEOF_WCHAR_T is defined by configure, but under other platforms
 // it might be not defined - assume the most common value
@@ -72,12 +64,22 @@
 #endif // !defined(SIZEOF_WCHAR_T)
 
 #if SIZEOF_WCHAR_T == 4
-    #define WC_NAME "UCS4"
-    #define WC_BSWAP BSWAP_UCS4
+    #define WC_NAME         "UCS4"
+    #define WC_BSWAP         BSWAP_UCS4
+    #ifdef WORDS_BIGENDIAN
+      #define WC_NAME_BEST  "UCS-4BE"
+    #else
+      #define WC_NAME_BEST  "UCS-4LE"
+    #endif
 #elif SIZEOF_WCHAR_T == 2
-    #define WC_NAME "UTF16"
-    #define WC_BSWAP BSWAP_UTF16
+    #define WC_NAME         "UTF16"
+    #define WC_BSWAP         BSWAP_UTF16
     #define WC_UTF16
+    #ifdef WORDS_BIGENDIAN
+      #define WC_NAME_BEST  "UTF-16BE"
+    #else
+      #define WC_NAME_BEST  "UTF-16LE"
+    #endif
 #else // sizeof(wchar_t) != 2 nor 4
     // I don't know what to do about this
     #error "Weird sizeof(wchar_t): please report your platform details to wx-users mailing list"
@@ -475,6 +477,9 @@ public:
 
 #ifdef HAVE_ICONV_H
 
+bool g_wcNeedsSwap = FALSE;
+static const char *g_wcCharset = NULL;
+
 // VS: glibc 2.1.3 is broken in that iconv() conversion to/from UCS4 fails with E2BIG
 //     if output buffer is _exactly_ as big as needed. Such case is (unless there's
 //     yet another bug in glibc) the only case when iconv() returns with (size_t)-1
@@ -495,11 +500,75 @@ public:
     IC_CharSet(const wxChar *name)
         : wxCharacterSet(name)
     {
-        m2w = iconv_open(WC_NAME, wxConvLibc.cWX2MB(cname));
-        w2m = iconv_open(wxConvLibc.cWX2MB(cname), WC_NAME);
-    }
+        // check for charset that represents wchar_t:
+        if (g_wcCharset == NULL)
+        {
+            g_wcNeedsSwap = FALSE;
 
-    ~IC_CharSet()
+            // try charset with explicit bytesex info (e.g. "UCS-4LE"):
+            g_wcCharset = WC_NAME_BEST;
+            m2w = iconv_open(g_wcCharset, wxConvLibc.cWX2MB(name));
+
+            if (m2w == (iconv_t)-1)
+            {
+                // try charset w/o bytesex info (e.g. "UCS4")
+                // and check for bytesex ourselves: 
+                g_wcCharset = WC_NAME;
+                m2w = iconv_open(g_wcCharset, wxConvLibc.cWX2MB(name));
+
+                // last bet, try if it knows WCHAR_T pseudo-charset
+                if (m2w == (iconv_t)-1)
+                {
+                    g_wcCharset = "WCHAR_T";
+                    m2w = iconv_open(g_wcCharset, wxConvLibc.cWX2MB(name));
+                }
+                
+                if (m2w != (iconv_t)-1)
+                {
+                    char    buf[2], *bufPtr;
+                    wchar_t wbuf[2], *wbufPtr;
+                    size_t  insz, outsz;
+                    size_t  res;
+                    
+                    buf[0] = 'A';
+                    buf[1] = 0;
+                    wbuf[0] = 0;
+                    insz = 2;
+                    outsz = SIZEOF_WCHAR_T * 2;
+                    wbufPtr = wbuf;
+                    bufPtr = buf;
+
+                    #ifdef WX_ICONV_TAKES_CHAR
+                    res = iconv(m2w, (char**)&bufPtr, &insz, (char**)&wbufPtr, &outsz);
+                    #else
+                    res = iconv(m2w, (const char**)&bufPtr, &insz, (char**)&wbufPtr, &outsz);
+                    #endif
+                    if (ICONV_FAILED(res, insz))
+                    {
+                        g_wcCharset = NULL;
+                        wxLogLastError(wxT("iconv"));
+                        wxLogError(_("Convertion to charset '%s' doesn't work."), name);
+                    }
+                    else
+                    {
+                        g_wcNeedsSwap = (wbuf[0] != (wchar_t)buf[0]);
+                    }
+                }
+                else
+                {
+                    g_wcCharset = NULL;
+                    wxLogError(_("Don't know how to convert to/from charset '%s'."), name);
+                }
+            }
+            wxLogTrace(wxT("strconv"), wxT("wchar_t charset is '%s', needs swap: %i"), g_wcCharset, g_wcNeedsSwap);
+        }
+        else
+            m2w = iconv_open(g_wcCharset, wxConvLibc.cWX2MB(name));
+    
+        w2m = iconv_open(wxConvLibc.cWX2MB(name), g_wcCharset);
+    }
+    
+    ~IC_CharSet() 
     {
         if ( m2w != (iconv_t)-1 )
             iconv_close(m2w);
@@ -525,10 +594,12 @@ public:
             cres = iconv(m2w, &pszPtr, &inbuf, (char**)&bufPtr, &outbuf);
 #endif
             res = n - (outbuf / SIZEOF_WCHAR_T);
-            // convert to native endianness
-#ifdef WC_NEED_BSWAP
-            WC_BSWAP(buf /* _not_ bufPtr */, res)
-#endif
+
+            if (g_wcNeedsSwap)
+            {
+                // convert to native endianness
+                WC_BSWAP(buf /* _not_ bufPtr */, res)
+            }
         }
         else
         {
@@ -548,7 +619,11 @@ public:
         }
 
         if (ICONV_FAILED(cres, inbuf))
+        {
+            //VS: it is ok if iconv fails, hence trace only
+            wxLogTrace(wxT("strconv"), wxT("iconv failed: %s"), wxSysErrorMsg(wxSysErrorCode()));
             return (size_t)-1;
+        }
 
         return res;
     }
@@ -562,17 +637,21 @@ public:
 #endif
         size_t outbuf = n;
         size_t res, cres;
+        
+        wchar_t *tmpbuf;
 
-#ifdef WC_NEED_BSWAP
-        // need to copy to temp buffer to switch endianness
-        // this absolutely doesn't rock!
-        // (no, doing WC_BSWAP twice on the original buffer won't help, as it
-        //  could be in read-only memory, or be accessed in some other thread)
-        wchar_t *tmpbuf=(wchar_t*)malloc((inbuf+1)*SIZEOF_WCHAR_T);
-        memcpy(tmpbuf,psz,(inbuf+1)*SIZEOF_WCHAR_T);
-        WC_BSWAP(tmpbuf, inbuf)
-        psz=tmpbuf;
-#endif
+        if (g_wcNeedsSwap)
+        {
+            // need to copy to temp buffer to switch endianness
+            // this absolutely doesn't rock!
+            // (no, doing WC_BSWAP twice on the original buffer won't help, as it
+            //  could be in read-only memory, or be accessed in some other thread)
+            tmpbuf=(wchar_t*)malloc((inbuf+1)*SIZEOF_WCHAR_T);
+            memcpy(tmpbuf,psz,(inbuf+1)*SIZEOF_WCHAR_T);
+            WC_BSWAP(tmpbuf, inbuf)
+            psz=tmpbuf;
+        }
+
         if (buf)
         {
             // have destination buffer, convert there
@@ -599,11 +678,18 @@ public:
                 res += 16 - outbuf;
             } while ((cres==(size_t)-1) && (errno==E2BIG));
         }
-#ifdef WC_NEED_BSWAP
-        free(tmpbuf);
-#endif
+
+        if (g_wcNeedsSwap)
+        {
+            free(tmpbuf);
+        }
+
         if (ICONV_FAILED(cres, inbuf))
+        {
+            //VS: it is ok if iconv fails, hence trace only
+            wxLogTrace(wxT("strconv"), wxT("iconv failed: %s"), wxSysErrorMsg(wxSysErrorCode()));
             return (size_t)-1;
+        }
 
         return res;
     }
@@ -611,7 +697,7 @@ public:
     bool usable()
         { return (m2w != (iconv_t)-1) && (w2m != (iconv_t)-1); }
 
-public:
+protected:
     iconv_t m2w, w2m;
 };
 #endif
