@@ -766,10 +766,10 @@ wxString wxHtmlHelpData::FindPageByName(const wxString& x)
     cnt = m_BookRecords.GetCount();
     for (i = 0; i < cnt; i++) 
     {
-        f = fsys.OpenFile(m_BookRecords[i].GetBasePath() + x);
+        f = fsys.OpenFile(wxAddBasePath(m_BookRecords[i].GetBasePath(), x));
         if (f) 
 	    {
-            url = m_BookRecords[i].GetBasePath() + x;
+            url = wxAddBasePath(m_BookRecords[i].GetBasePath(), x);
             delete f;
             return url;
         }
@@ -782,7 +782,7 @@ wxString wxHtmlHelpData::FindPageByName(const wxString& x)
     {
         if (m_BookRecords[i].GetTitle() == x) 
 	    {
-            url = m_BookRecords[i].GetBasePath() + m_BookRecords[i].GetStart();
+            url = wxAddBasePath(m_BookRecords[i].GetBasePath(), m_BookRecords[i].GetStart());
             return url;
         }
     }
@@ -794,7 +794,7 @@ wxString wxHtmlHelpData::FindPageByName(const wxString& x)
     {
         if (wxStrcmp(m_Contents[i].m_Name, x) == 0) 
 	    {
-            url = m_Contents[i].m_Book->GetBasePath() + m_Contents[i].m_Page;
+            url = wxAddBasePath(m_Contents[i].m_Book->GetBasePath(), m_Contents[i].m_Page);
             return url;
         }
     }
@@ -807,7 +807,7 @@ wxString wxHtmlHelpData::FindPageByName(const wxString& x)
     {
         if (wxStrcmp(m_Index[i].m_Name, x) == 0) 
 	    {
-            url = m_Index[i].m_Book->GetBasePath() + m_Index[i].m_Page;
+            url = wxAddBasePath(m_Index[i].m_Book->GetBasePath(), m_Index[i].m_Page);
             return url;
         }
     }
@@ -824,7 +824,7 @@ wxString wxHtmlHelpData::FindPageById(int id)
     {
         if (m_Contents[i].m_ID == id) 
 	    {
-            url = m_Contents[i].m_Book->GetBasePath() + m_Contents[i].m_Page;
+            url = wxAddBasePath(m_Contents[i].m_Book->GetBasePath(), m_Contents[i].m_Page);
             return url;
         }
     }
@@ -903,7 +903,7 @@ bool wxHtmlSearchStatus::Search()
     else m_LastPage = thepage;
     
     wxFileSystem fsys;
-    file = fsys.OpenFile(m_Data->m_Contents[i].m_Book->GetBasePath() + thepage);
+    file = fsys.OpenFile(wxAddBasePath(m_Data->m_Contents[i].m_Book->GetBasePath(), thepage));
     if (file) 
     {
         if (m_Engine.Scan(file->GetStream())) {
@@ -990,6 +990,14 @@ bool wxSearchEngine::Scan(wxInputStream *stream)
     return found;
 }
 
+// Utility function
+wxString wxAddBasePath(const wxString& basePath, const wxString& path)
+{
+    if (wxIsAbsolutePath(path))
+        return path;
+    else
+        return basePath + path;
+}
 
 
 

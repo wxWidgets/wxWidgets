@@ -695,7 +695,7 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
   else
       mcs.cy = CW_USEDEFAULT;
 
-  DWORD msflags = WS_OVERLAPPED | WS_CLIPCHILDREN;
+  DWORD msflags = WS_OVERLAPPED | WS_CLIPCHILDREN | WS_THICKFRAME;
   if (style & wxMINIMIZE_BOX)
     msflags |= WS_MINIMIZEBOX;
   if (style & wxMAXIMIZE_BOX)

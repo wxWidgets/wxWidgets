@@ -198,6 +198,9 @@ class WXDLLEXPORT wxHtmlHelpData : public wxObject
         // Writes binary book
 };
 
+// Utility function
+wxString wxAddBasePath(const wxString& basePath, const wxString& path) ;
+
 #endif
 
 #endif
