@@ -76,7 +76,7 @@
 #define wxUSE_TEXTFILE            0
 #define wxUSE_INTL                0
 #define wxUSE_MENUS 0 // was 1
-#define wxUSE_TOOLBAR 0
+#define wxUSE_TOOLBAR 1
 #define wxUSE_TOOLBAR_NATIVE 0
 #define wxUSE_TOOLBAR_SIMPLE 0
 #define wxUSE_NOTEBOOK 1
@@ -227,7 +227,7 @@
 #define wxUSE_TEXTFILE            0
 #define wxUSE_INTL                0
 #define wxUSE_MENUS        1
-#define wxUSE_TOOLBAR      0
+#define wxUSE_TOOLBAR      1
 #define wxUSE_TOOLBAR_NATIVE 0
 #define wxUSE_TOOLBAR_SIMPLE 0
 #define wxUSE_NOTEBOOK     1
@@ -383,7 +383,7 @@
 #define wxUSE_TEXTBUFFER          0
 #define wxUSE_INTL                0
 #define wxUSE_MENUS 1
-#define wxUSE_TOOLBAR 0
+#define wxUSE_TOOLBAR 1
 #define wxUSE_TOOLBAR_NATIVE 0
 #define wxUSE_TOOLBAR_SIMPLE 0
 #define wxUSE_NOTEBOOK 1
