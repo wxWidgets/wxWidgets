@@ -409,6 +409,7 @@ struct wxNativeFontInfo
     // reset to the default state
     void Init();
 
+#ifndef __WXGTK__
     // accessors and modifiers for the font elements
     int GetPointSize() const;
     wxFontStyle GetStyle() const;
@@ -425,6 +426,7 @@ struct wxNativeFontInfo
     void SetFaceName(wxString facename);
     void SetFamily(wxFontFamily family);
     void SetEncoding(wxFontEncoding encoding);
+#endif
 
     // it is important to be able to serialize wxNativeFontInfo objects to be
     // able to store them (in config file, for example)

@@ -31,8 +31,11 @@
 
 //----------------------------------------------------------------------
 
-
+#ifdef __WXGTK__
+int  WXDLLEXPORT wxEntryStart( int& argc, char** argv );
+#else
 int  WXDLLEXPORT wxEntryStart( int argc, char** argv );
+#endif
 int  WXDLLEXPORT wxEntryInitGui();
 void WXDLLEXPORT wxEntryCleanup();
 

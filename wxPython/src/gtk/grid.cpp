@@ -3122,19 +3122,28 @@ static PyObject *_wrap_new_wxGridCellAutoWrapStringEditor(PyObject *self, PyObje
     return _resultobj;
 }
 
-#define new_wxGridCellAttr() (new wxGridCellAttr())
+#define new_wxGridCellAttr(_swigarg0) (new wxGridCellAttr(_swigarg0))
 static PyObject *_wrap_new_wxGridCellAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxGridCellAttr * _result;
-    char *_kwnames[] = {  NULL };
+    wxGridCellAttr * _arg0 = (wxGridCellAttr *) NULL;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "attrDefault", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxGridCellAttr",_kwnames)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|O:new_wxGridCellAttr",_kwnames,&_argo0)) 
         return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridCellAttr_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxGridCellAttr. Expected _wxGridCellAttr_p.");
+        return NULL;
+        }
+    }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxGridCellAttr *)new_wxGridCellAttr();
+        _result = (wxGridCellAttr *)new_wxGridCellAttr(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;

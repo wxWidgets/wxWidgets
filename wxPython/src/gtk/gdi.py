@@ -190,6 +190,15 @@ class wxNativeFontInfoPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def FromXFontName(self, *_args, **_kwargs):
+        val = apply(gdic.wxNativeFontInfo_FromXFontName,(self,) + _args, _kwargs)
+        return val
+    def GetXFontName(self, *_args, **_kwargs):
+        val = apply(gdic.wxNativeFontInfo_GetXFontName,(self,) + _args, _kwargs)
+        return val
+    def Init(self, *_args, **_kwargs):
+        val = apply(gdic.wxNativeFontInfo_Init,(self,) + _args, _kwargs)
+        return val
     def FromString(self, *_args, **_kwargs):
         val = apply(gdic.wxNativeFontInfo_FromString,(self,) + _args, _kwargs)
         return val
@@ -199,11 +208,18 @@ class wxNativeFontInfoPtr :
     def __str__(self, *_args, **_kwargs):
         val = apply(gdic.wxNativeFontInfo___str__,(self,) + _args, _kwargs)
         return val
+    def FromUserString(self, *_args, **_kwargs):
+        val = apply(gdic.wxNativeFontInfo_FromUserString,(self,) + _args, _kwargs)
+        return val
+    def ToUserString(self, *_args, **_kwargs):
+        val = apply(gdic.wxNativeFontInfo_ToUserString,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxNativeFontInfo instance at %s>" % (self.this,)
 class wxNativeFontInfo(wxNativeFontInfoPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(gdic.new_wxNativeFontInfo,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -281,6 +297,12 @@ class wxFontPtr(wxGDIObjectPtr):
         val = apply(gdic.wxFont_GetNativeFontInfo,(self,) + _args, _kwargs)
         if val: val = wxNativeFontInfoPtr(val) 
         return val
+    def GetNativeFontInfoDesc(self, *_args, **_kwargs):
+        val = apply(gdic.wxFont_GetNativeFontInfoDesc,(self,) + _args, _kwargs)
+        return val
+    def GetNativeFontInfoUserDesc(self, *_args, **_kwargs):
+        val = apply(gdic.wxFont_GetNativeFontInfoUserDesc,(self,) + _args, _kwargs)
+        return val
     def SetPointSize(self, *_args, **_kwargs):
         val = apply(gdic.wxFont_SetPointSize,(self,) + _args, _kwargs)
         return val
@@ -304,6 +326,9 @@ class wxFontPtr(wxGDIObjectPtr):
         return val
     def SetNativeFontInfo(self, *_args, **_kwargs):
         val = apply(gdic.wxFont_SetNativeFontInfo,(self,) + _args, _kwargs)
+        return val
+    def SetNativeFontInfoUserDesc(self, *_args, **_kwargs):
+        val = apply(gdic.wxFont_SetNativeFontInfoUserDesc,(self,) + _args, _kwargs)
         return val
     def GetFamilyString(self, *_args, **_kwargs):
         val = apply(gdic.wxFont_GetFamilyString,(self,) + _args, _kwargs)
