@@ -933,7 +933,6 @@ void wxWindowX11::X11SendPaintEvents()
     
         if (!GetEventHandler()->ProcessEvent(erase_event))
         {
-            printf( "Hallo!\n" );
             Window xwindow = (Window) GetMainWindow();
             Display *xdisplay = wxGlobalDisplay();
             GC xgc = XCreateGC( xdisplay, xwindow, 0, NULL );
@@ -946,6 +945,7 @@ void wxWindowX11::X11SendPaintEvents()
                                 upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight() );
                 upd ++;
             }
+            XFreeGC( xdisplay, xgc );
         }
         m_clearRegion.Clear();
     }

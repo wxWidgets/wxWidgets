@@ -203,7 +203,7 @@ protected:
 
 private:
     // Virtual function hiding supression
-    virtual void Update() { wxWindowBase::Update(); }
+    virtual void Update() { wxWindow::Update(); }
 
     // create the header window
     void CreateHeaderWindow();

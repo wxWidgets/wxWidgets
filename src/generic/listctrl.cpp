@@ -4581,7 +4581,7 @@ bool wxListCtrl::Create(wxWindow *parent,
         style = style | wxLC_LIST;
     }
 
-    if ( !wxControl::Create( parent, id, pos, size, style, validator, name ) )
+    if ( !wxControl::Create( parent, id, pos, size, style, validator, "listctrl" ) )
         return FALSE;
 
     // don't create the inner window with the border
