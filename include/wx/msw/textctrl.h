@@ -179,9 +179,16 @@ protected:
     bool AdjustSpaceLimit();
 
 #if wxUSE_RICHEDIT
-    // replace the selection with the given text in the specified encoding
-    bool StreamIn(const wxString& value, wxFontEncoding encoding);
+    // replace the selection or the entire control contents with the given text
+    // in the specified encoding
+    bool StreamIn(const wxString& value,
+                  wxFontEncoding encoding,
+                  bool selOnly);
 #endif // wxUSE_RICHEDIT
+
+    // replace the contents of the selection or of the entire control with the
+    // given text
+    void DoWriteText(const wxString& text, bool selectionOnly = TRUE);
 
     // set the selection possibly without scrolling the caret into view
     void DoSetSelection(long from, long to, bool scrollCaret = TRUE);

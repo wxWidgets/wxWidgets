@@ -493,11 +493,7 @@ void wxTextCtrl::SetValue(const wxString& value)
     // edit controls mostly)
     if ( (value.length() > 0x400) || (value != GetValue()) )
     {
-        // it is simpler to do this but it could be more efficient to reproduce
-        // WriteText() logic here
-        Clear();
-
-        WriteText(value);
+        DoWriteText(value, FALSE /* not selection only */);
 
         // mark the control as being not dirty - we changed its text, not the
         // user
@@ -532,11 +528,15 @@ DWORD CALLBACK wxRichEditStreamIn(DWORD dwCookie, BYTE *buf, LONG cb, LONG *pcb)
 extern long wxEncodingToCodepage(wxFontEncoding encoding); // from strconv.cpp
 
 #if wxUSE_UNICODE_MSLU
-bool wxTextCtrl::StreamIn(const wxString& value, wxFontEncoding WXUNUSED(encoding))
+bool wxTextCtrl::StreamIn(const wxString& value,
+                          wxFontEncoding WXUNUSED(encoding),
+                          bool selectionOnly)
 {
     const wchar_t *wpc = value.c_str();
-#else
-bool wxTextCtrl::StreamIn(const wxString& value, wxFontEncoding encoding)
+#else // !wxUSE_UNICODE_MSLU
+bool wxTextCtrl::StreamIn(const wxString& value,
+                          wxFontEncoding encoding,
+                          bool selectionOnly)
 {
     // we have to use EM_STREAMIN to force richedit control 2.0+ to show any
     // text in the non default charset - otherwise it thinks it knows better
@@ -570,7 +570,9 @@ bool wxTextCtrl::StreamIn(const wxString& value, wxFontEncoding encoding)
     eds.pfnCallback = (EDITSTREAMCALLBACK)wxRichEditStreamIn;
 
     if ( !::SendMessage(GetHwnd(), EM_STREAMIN,
-                        SF_TEXT | SF_UNICODE | SFF_SELECTION,
+                        SF_TEXT |
+                        SF_UNICODE |
+                        (selectionOnly ? SFF_SELECTION : 0),
                         (LPARAM)&eds) || eds.dwError )
     {
         wxLogLastError(_T("EM_STREAMIN"));
@@ -584,6 +586,11 @@ bool wxTextCtrl::StreamIn(const wxString& value, wxFontEncoding encoding)
 #endif // wxUSE_RICHEDIT
 
 void wxTextCtrl::WriteText(const wxString& value)
+{
+    DoWriteText(value);
+}
+
+void wxTextCtrl::DoWriteText(const wxString& value, bool selectionOnly)
 {
     wxString valueDos;
     if ( m_windowStyle & wxTE_MULTILINE )
@@ -609,7 +616,7 @@ void wxTextCtrl::WriteText(const wxString& value)
         // but EM_STREAMIN works
         if ( wxGetOsVersion() == wxWIN95 && GetRichVersion() > 1 )
         {
-           done = StreamIn(valueDos, wxFONTENCODING_SYSTEM);
+           done = StreamIn(valueDos, wxFONTENCODING_SYSTEM, selectionOnly);
         }
 #endif // wxUSE_UNICODE_MSLU
 
@@ -627,7 +634,7 @@ void wxTextCtrl::WriteText(const wxString& value)
                wxFontEncoding encoding = font.GetEncoding();
                if ( encoding != wxFONTENCODING_SYSTEM )
                {
-                   done = StreamIn(valueDos, encoding);
+                   done = StreamIn(valueDos, encoding, selectionOnly);
                }
             }
         }
@@ -637,6 +644,11 @@ void wxTextCtrl::WriteText(const wxString& value)
     if ( !done )
 #endif // wxUSE_RICHEDIT
     {
+        if ( !selectionOnly )
+        {
+            SetSelection(-1, -1);
+        }
+
         ::SendMessage(GetHwnd(), EM_REPLACESEL, 0, (LPARAM)valueDos.c_str());
     }
 
