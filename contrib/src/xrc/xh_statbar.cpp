@@ -27,6 +27,8 @@
 #include "wx/xrc/xh_statbar.h"
 #include "wx/statusbr.h"
 
+IMPLEMENT_DYNAMIC_CLASS(wxStatusBarXmlHandler, wxXmlResourceHandler)
+
 wxStatusBarXmlHandler::wxStatusBarXmlHandler() : 
         wxXmlResourceHandler()
 {

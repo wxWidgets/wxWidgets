@@ -19,6 +19,7 @@
 
 class WXDLLIMPEXP_XRC wxStatusBarXmlHandler : public wxXmlResourceHandler
 {
+DECLARE_DYNAMIC_CLASS(wxStatusBarXmlHandler)
     public:
         wxStatusBarXmlHandler();
         virtual wxObject *DoCreateResource();
