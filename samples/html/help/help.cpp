@@ -153,7 +153,13 @@
       config = new wxConfig("wxHTMLhelp");
 
       help.UseConfig(config);
-      help.AddBook("helpfiles/testing.hhp");
+      bool ret;
+      ret = help.AddBook("helpfiles/testing.hhp");
+      if (! ret)
+	  wxMessageBox("Failed adding book helpfiles/testing.hhp");
+      ret = help.AddBook("helpfiles/another.hhp");
+      if (! ret)
+	  wxMessageBox("Failed adding book helpfiles/another.hhp");
    }
 
 

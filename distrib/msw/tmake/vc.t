@@ -135,10 +135,11 @@ COMMONOBJS = \
 MSWOBJS = #$ ExpandList("WXMSWOBJS");
 
 HTMLOBJS = \
+  ..\html\$D\helpdata.obj \
+  ..\html\$D\helpfrm.obj \
+  ..\html\$D\helpctrl.obj \
   ..\html\$D\htmlcell.obj \
   ..\html\$D\htmlfilter.obj \
-  ..\html\$D\htmlhelp.obj \
-  ..\html\$D\htmlhelp_io.obj \
   ..\html\$D\htmlparser.obj \
   ..\html\$D\htmltag.obj \
   ..\html\$D\htmlwin.obj \

@@ -384,10 +384,11 @@ timer.cpp	X
 utils.cpp	X
 window.cpp	X
 
+helpdata.cpp	H
+helpfrm.cpp	H
+helpctrl.cpp	H
 htmlcell.cpp	H
 htmlfilter.cpp	H
-htmlhelp.cpp	H
-htmlhelp_io.cpp	H
 htmlparser.cpp	H
 htmltag.cpp	H
 htmlwin.cpp	H
@@ -821,10 +822,12 @@ http.h	P
 protocol.h	P
 
 forcelink.h	L
+helpdata.h	L
+helpfrm.h	L
+helpctrl.h	L
 htmlcell.h	L
 htmldefs.h	L
 htmlfilter.h	L
-htmlhelp.h	L
 htmlparser.h	L
 htmltag.h	L
 htmlwin.h	L

@@ -25,7 +25,7 @@
 #include <wx/wx.h>
 #endif
 
-#include "search.h"
+#include "wx/html/helpdata.h"
 
 
 

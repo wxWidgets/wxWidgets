@@ -5,6 +5,10 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
+#error This file should not be compiled! Update your build system! \
+(configure users, rerun configure to get a new Makefile) \
+Instead of htmlhelp[_io], use helpdata, helpfrm and helpctrl. This \
+file is only left to point out the problem and will be removed r.s.n.
 
 #ifdef __GNUG__
 #pragma implementation "htmlhelp.h"
