@@ -3855,6 +3855,9 @@ wxGrid::wxGrid( wxWindow *parent,
     m_colMinWidths(GRID_HASH_SIZE),
     m_rowMinHeights(GRID_HASH_SIZE)
 {
+    // Can't use SetBestFittingSize here to avoid a crash as CreateGrid hasn't
+    // been called yet.
+    SetMinSize(size);  
     Create();
 }
 
@@ -3869,8 +3872,10 @@ bool wxGrid::Create(wxWindow *parent, wxWindowID id,
     m_colMinWidths = wxLongToLongHashMap(GRID_HASH_SIZE) ;
     m_rowMinHeights = wxLongToLongHashMap(GRID_HASH_SIZE) ;
 
+    // Can't use SetBestFittingSize here to avoid a crash as CreateGrid hasn't
+    // been called yet.
+    SetMinSize(size);  
     Create() ;
-
 
     return true;
 }
@@ -4314,16 +4319,16 @@ void wxGrid::CalcWindowSizes()
     int cw, ch;
     GetClientSize( &cw, &ch );
 
-    if ( m_cornerLabelWin->IsShown() )
+    if ( m_cornerLabelWin && m_cornerLabelWin->IsShown() )
         m_cornerLabelWin->SetSize( 0, 0, m_rowLabelWidth, m_colLabelHeight );
 
-    if ( m_colLabelWin->IsShown() )
+    if (  m_colLabelWin && m_colLabelWin->IsShown() )
         m_colLabelWin->SetSize( m_rowLabelWidth, 0, cw-m_rowLabelWidth, m_colLabelHeight);
 
-    if ( m_rowLabelWin->IsShown() )
+    if ( m_rowLabelWin && m_rowLabelWin->IsShown() )
         m_rowLabelWin->SetSize( 0, m_colLabelHeight, m_rowLabelWidth, ch-m_colLabelHeight);
 
-    if ( m_gridWin->IsShown() )
+    if ( m_gridWin && m_gridWin->IsShown() )
         m_gridWin->SetSize( m_rowLabelWidth, m_colLabelHeight, cw-m_rowLabelWidth, ch-m_colLabelHeight);
 }
 
@@ -9873,13 +9878,31 @@ wxSize wxGrid::DoGetBestSize() const
     width = self->SetOrCalcColumnSizes(true);
     height = self->SetOrCalcRowSizes(true);
 
+    if (!width) width=100;
+    if (!height) height=80;
+    
+    // Round up to a multiple the scroll rate NOTE: this still doesn't get rid
+    // of the scrollbars, is there any magic incantaion for that?
+    int xpu, ypu;
+    GetScrollPixelsPerUnit(&xpu, &ypu);
+    width  += 1 + xpu - (width  % xpu);
+    height += 1 + ypu - (height % ypu);
+    
+    // limit to 1/4 of the screen size
     int maxwidth, maxheight;
     wxDisplaySize( & maxwidth, & maxheight );
-
+    maxwidth /= 2;
+    maxheight /= 2;    
     if ( width > maxwidth ) width = maxwidth;
     if ( height > maxheight ) height = maxheight;
 
-    return wxSize( width, height );
+    
+    wxSize best(width, height);
+    // NOTE: This size should be cached, but first we need to add calls to
+    // InvalidateBestSize everywhere that could change the results of this
+    // calculation.
+    // CacheBestSize(size);
+    return best;
 }
 
 void wxGrid::Fit()
