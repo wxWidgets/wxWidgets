@@ -348,6 +348,15 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
 
     if ( value == m_maximum )
     {
+        if ( m_state == Finished )
+        {
+            // ignore multiple calls to Update(m_maximum): it may sometimes be
+            // troublesome to ensure that Update() is not called twice with the
+            // same value (e.g. because of the rounding errors) and if we don't
+            // return now we're going to generate asserts below
+            return true;
+        }
+
         // so that we return true below and that out [Cancel] handler knew what
         // to do
         m_state = Finished;
