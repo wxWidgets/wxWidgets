@@ -185,25 +185,32 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
     if (str == wxT("BUTTON"))
     {
         int style1 = (style & 0xFF);
+#if wxUSE_CHECKBOX
         if ((style1 == BS_3STATE) || (style1 == BS_AUTO3STATE) || (style1 == BS_AUTOCHECKBOX) ||
             (style1 == BS_CHECKBOX))
         {
             win = new wxCheckBox;
         }
-        else if ((style1 == BS_AUTORADIOBUTTON) || (style1 == BS_RADIOBUTTON))
+        else
+#endif
+#if wxUSE_RADIOBTN
+        if ((style1 == BS_AUTORADIOBUTTON) || (style1 == BS_RADIOBUTTON))
         {
             win = new wxRadioButton;
         }
+        else
+#endif
 #if wxUSE_BMPBUTTON
 #if defined(__WIN32__) && defined(BS_BITMAP)
-        else if (style & BS_BITMAP)
+        if (style & BS_BITMAP)
         {
             // TODO: how to find the bitmap?
             win = new wxBitmapButton;
             wxLogError(wxT("Have not yet implemented bitmap button as BS_BITMAP button."));
         }
+        else
 #endif
-        else if (style1 == BS_OWNERDRAW)
+        if (style1 == BS_OWNERDRAW)
         {
             // TODO: how to find the bitmap?
             // TODO: can't distinguish between bitmap button and bitmap static.
@@ -213,25 +220,34 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
             // with a switch in the drawing code. Call default proc if BS_BITMAP.
             win = new wxBitmapButton;
         }
+        else
 #endif
-        else if ((style1 == BS_PUSHBUTTON) || (style1 == BS_DEFPUSHBUTTON))
+#if wxUSE_BUTTON
+        if ((style1 == BS_PUSHBUTTON) || (style1 == BS_DEFPUSHBUTTON))
         {
             win = new wxButton;
         }
-        else if (style1 == BS_GROUPBOX)
+        else
+#endif
+#if wxUSE_STATBOX
+        if (style1 == BS_GROUPBOX)
         {
             win = new wxStaticBox;
         }
         else
+#endif
         {
             wxLogError(wxT("Don't know what kind of button this is: id = %ld"),
                        id);
         }
     }
+#if wxUSE_COMBOBOX
     else if (str == wxT("COMBOBOX"))
     {
         win = new wxComboBox;
     }
+#endif
+#if wxUSE_TEXTCTRL
     // TODO: Problem if the user creates a multiline - but not rich text - text control,
     // since wxWin assumes RichEdit control for this. Should have m_isRichText in
     // wxTextCtrl. Also, convert as much of the window style as is necessary
@@ -242,14 +258,19 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
     {
         win = new wxTextCtrl;
     }
+#endif
+#if wxUSE_LISTBOX
     else if (str == wxT("LISTBOX"))
     {
         win = new wxListBox;
     }
+#endif
+#if wxUSE_SCROLLBAR
     else if (str == wxT("SCROLLBAR"))
     {
         win = new wxScrollBar;
     }
+#endif
 #if defined(__WIN95__) && wxUSE_SPINBTN
     else if (str == wxT("MSCTLS_UPDOWN32"))
     {
@@ -263,6 +284,7 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
         win = new wxSlider;
     }
 #endif // wxUSE_SLIDER
+#if wxUSE_STATTEXT
     else if (str == wxT("STATIC"))
     {
         int style1 = (style & 0xFF);
@@ -285,6 +307,7 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
 #endif
 #endif	/* wxUSE_STATBMP */
     }
+#endif
     else
     {
         wxString msg(wxT("Don't know how to convert from Windows class "));

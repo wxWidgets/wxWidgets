@@ -224,6 +224,8 @@ void wxLogStatus(wxFrame *pFrame, const wxChar *szFormat, ...)
 // wxLogGui implementation (FIXME MT-unsafe)
 // ----------------------------------------------------------------------------
 
+#if wxUSE_LOGGUI
+
 wxLogGui::wxLogGui()
 {
     Clear();
@@ -419,6 +421,8 @@ void wxLogGui::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
             break;
     }
 }
+
+#endif   // wxUSE_LOGGUI
 
 // ----------------------------------------------------------------------------
 // wxLogWindow and wxLogFrame implementation

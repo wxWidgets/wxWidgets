@@ -172,6 +172,7 @@ wxCursor::wxCursor()
 {
 }
 
+#if wxUSE_IMAGE
 wxCursor::wxCursor(const wxImage& image)
 {
     // image has to be of the standard cursor size, otherwise we won't be able
@@ -200,6 +201,7 @@ wxCursor::wxCursor(const wxImage& image)
 
     m_refData = new wxCursorRefData(hcursor, true /* delete it later */);
 }
+#endif
 
 wxCursor::wxCursor(const char WXUNUSED(bits)[],
                    int WXUNUSED(width),

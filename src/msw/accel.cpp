@@ -26,6 +26,8 @@
 
 #include "wx/accel.h"
 
+#if wxUSE_ACCEL
+
 #include "wx/msw/private.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxAcceleratorTable, wxObject)
@@ -166,3 +168,4 @@ bool wxAcceleratorTable::Translate(wxWindow *window, WXMSG *wxmsg) const
     return Ok() && ::TranslateAccelerator(GetHwndOf(window), GetHaccel(), msg);
 }
 
+#endif

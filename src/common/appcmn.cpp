@@ -465,7 +465,12 @@ void wxAppBase::OnIdle(wxIdleEvent& WXUNUSED(event))
 
 wxLog *wxGUIAppTraitsBase::CreateLogTarget()
 {
+#if wxUSE_LOGGUI
     return new wxLogGui;
+#else
+    // wem ust have something!
+    return new wxLogStderr;
+#endif
 }
 
 #endif // wxUSE_LOG

@@ -309,6 +309,7 @@ void wxWizard::AddBitmapRow(wxBoxSizer *mainColumn)
         wxEXPAND // No border, (mostly useless) horizontal stretching
     );
 
+#if wxUSE_STATBMP
     if ( m_bitmap.Ok() )
     {
         m_statbmp = new wxStaticBitmap(this, -1, m_bitmap);
@@ -324,6 +325,7 @@ void wxWizard::AddBitmapRow(wxBoxSizer *mainColumn)
             wxEXPAND // No border, (mostly useless) vertical stretching
         );
     }
+#endif
 
     // Added to m_sizerBmpAndPage in FinishLayout
     m_sizerPage = new wxWizardSizer(this);
@@ -555,6 +557,7 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
         bmpIsDefault = FALSE;
     }
 
+#if wxUSE_STATBMP
     // change the bitmap if:
     // 1) a default bitmap was selected in constructor
     // 2) this page was constructed with a bitmap
@@ -568,6 +571,7 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
             bmp = m_page->GetBitmap();
         m_statbmp->SetBitmap(bmp);
     }
+#endif
 
     // and update the buttons state
     m_btnPrev->Enable(HasPrevPage(m_page));

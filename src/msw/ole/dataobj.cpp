@@ -1220,6 +1220,8 @@ static const wxChar *GetTymedName(DWORD tymed)
 // wxDataObject
 // ----------------------------------------------------------------------------
 
+#if wxUSE_DATAOBJ
+
 wxDataObject::wxDataObject()
 {
 }
@@ -1237,6 +1239,8 @@ const wxChar *wxDataObject::GetFormatName(wxDataFormat format)
 {
     return NULL;
 }
+#endif
+
 #endif
 
 #endif

@@ -28,6 +28,8 @@
     #include "wx/dcclient.h"
 #endif //WX_PRECOMP
 
+#if wxUSE_HTML
+
 #include "wx/htmllbox.h"
 
 #include "wx/html/htmlcell.h"
@@ -315,3 +317,4 @@ wxCoord wxHtmlListBox::OnMeasureItem(size_t n) const
     return cell->GetHeight() + cell->GetDescent() + 4;
 }
 
+#endif
