@@ -172,6 +172,18 @@
 // Recommended setting: 0 (unless you only plan to use Windows NT/2000)
 #define wxUSE_UNICODE 0
 
+// Set wxUSE_UNICODE_MSLU to 1 if you want to compile wxWindows in Unicode mode
+// and be able to run compiled apps under Windows 9x as well as NT/2000/XP. This
+// setting enables use of unicows.dll from MSLU (MS Layer for Unicode, see
+// http://www.microsoft.com/globaldev/Articles/mslu_announce.asp). Note that you
+// will have to modify the makefiles to include unicows.lib import library as the first
+// library.
+//
+// Default is 0
+//
+// Recommended setting: 0
+#define wxUSE_UNICODE_MSLU 0
+
 // Setting wxUSE_WCHAR_T to 1 gives you some degree of Unicode support without
 // compiling the program in Unicode mode. More precisely, it will be possible
 // to construct wxString from a wide (Unicode) string and convert any wxString
@@ -350,6 +362,8 @@
 // Default is 1.
 //
 // Recommended setting: 1
+#define wxUSE_DYNAMIC_LOADER  0
+
 #define wxUSE_DYNLIB_CLASS  0
 
 // Set to 1 to use socket classes
