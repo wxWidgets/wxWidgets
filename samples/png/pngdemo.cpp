@@ -159,7 +159,7 @@ void MyCanvas::OnPaint(wxPaintEvent& event)
     // Normal, non-transparent blitting
     dc.Blit(20, 20, g_TestBitmap->GetWidth(), g_TestBitmap->GetHeight(), & memDC, 0, 0, wxCOPY, FALSE);
 
-    memDC.SelectObject(NULL);
+    memDC.SelectObject(wxNullBitmap);
   }
 
   if ( g_TestBitmap && g_TestBitmap->Ok() )
