@@ -2427,6 +2427,14 @@ bool wxWindowOS2::OS2ProcessMessage(
                                 pBtn->OS2Command(BN_CLICKED, 0 /* unused */);
                                 return TRUE;
                             }
+                            else if (!IsTopLevel())
+                            {
+                                //
+                                // if not a top level window, let parent
+                                // handle it
+                                //
+                                return FALSE;
+                            }
                             // else: but if it does not it makes sense to make
                             //       it work like a TAB - and that's what we do.
                             //       Note that Ctrl-Enter always works this way.
