@@ -199,7 +199,7 @@ public:
 #ifdef __WXMSW__
         BLUE, GREEN, RED,
 #else // !__WXMSW__
-        RED, GREEN, BLUE
+        RED, GREEN, BLUE,
 #endif // __WXMSW__/!__WXMSW__
         ALPHA
     };
