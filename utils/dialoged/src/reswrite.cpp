@@ -36,7 +36,9 @@
 
 #include "reseditr.h"
 
+#if !defined(__WXMSW__) && defined(__WXMAC__)
 static char wxBuffer[512];
+#endif
 
 char *SafeString(char *s);
 char *SafeWord(const wxString& s);
