@@ -16,6 +16,7 @@
 #pragma interface "window.h"
 #endif
 
+#include <wx/brush.h>
 // ---------------------------------------------------------------------------
 // forward declarations
 // ---------------------------------------------------------------------------
@@ -251,7 +252,8 @@ public :
 	virtual void						MacGetPortParams(Point* localOrigin, Rect* clipRect, WindowRef *window , wxWindowMac** rootwin ) ;
 	virtual void						MacGetPortClientParams(Point* localOrigin, Rect* clipRect, WindowRef *window  , wxWindowMac** rootwin) ;
 	virtual void						MacDoGetPortClientParams(Point* localOrigin, Rect* clipRect, WindowRef *window  , wxWindowMac** rootwin) ;
-
+	const wxBrush&                      MacGetBackgroundBrush() ;
+    const wxRegion&                     MacGetVisibleRegion() ;
 	bool								MacIsWindowScrollbar( const wxScrollBar* sb ) { return (m_hScrollBar == sb || m_vScrollBar == sb) ; }
 	static wxWindowMac*					s_lastMouseWindow ;
 private:
@@ -259,7 +261,8 @@ private:
 protected:
 //	RgnHandle					m_macUpdateRgn ;
 //	bool						m_macEraseOnRedraw ;
-
+    wxBrush                                 m_macBackgroundBrush ;
+    wxRegion                                m_macVisibleRegion ;
 	int 									m_x ;
 	int 									m_y ;	
 	int 									m_width ;
