@@ -217,6 +217,8 @@ public:
       { return (GetBitmapData() ? GetBitmapData()->m_pSelectedInto : (wxDC*) NULL); }
 
     inline bool IsMono(void) const { return m_bIsMono; }
+    inline bool Flip(void) const { return m_bFlip; }
+
 
     // An OS/2 version that probably doesn't do anything like the msw version
     wxBitmap GetBitmapForDC(wxDC& rDc) const;
@@ -240,7 +242,7 @@ private:
     bool CopyFromIconOrCursor(const wxGDIImage& rIcon);
 
     bool                            m_bIsMono;
-
+    bool                            m_bFlip;
     DECLARE_DYNAMIC_CLASS(wxBitmap)
 }; // end of CLASS wxBitmap
 

@@ -526,7 +526,7 @@ bool wxBitmap::CreateFromImage (
 {
     wxCHECK_MSG(rImage.Ok(), FALSE, wxT("invalid image"));
     m_refData = new wxBitmapRefData();
-
+    m_bFlip = TRUE;
 
     int                             nSizeLimit = 1024 * 768 * 3;
     int                             nWidth = rImage.GetWidth();
