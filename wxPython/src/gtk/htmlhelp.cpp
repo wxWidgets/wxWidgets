@@ -98,21 +98,31 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define new_wxHtmlBookRecord(_swigarg0,_swigarg1,_swigarg2) (new wxHtmlBookRecord(_swigarg0,_swigarg1,_swigarg2))
+static void *SwigwxHtmlBookRecordTowxObject(void *ptr) {
+    wxHtmlBookRecord *src;
+    wxObject *dest;
+    src = (wxHtmlBookRecord *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxHtmlBookRecord(_swigarg0,_swigarg1,_swigarg2,_swigarg3) (new wxHtmlBookRecord(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
 static PyObject *_wrap_new_wxHtmlBookRecord(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxHtmlBookRecord * _result;
     wxString * _arg0;
     wxString * _arg1;
     wxString * _arg2;
+    wxString * _arg3;
     PyObject * _obj0 = 0;
     PyObject * _obj1 = 0;
     PyObject * _obj2 = 0;
-    char *_kwnames[] = { "basepath","title","start", NULL };
+    PyObject * _obj3 = 0;
+    char *_kwnames[] = { "bookfile","basepath","title","start", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:new_wxHtmlBookRecord",_kwnames,&_obj0,&_obj1,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOOO:new_wxHtmlBookRecord",_kwnames,&_obj0,&_obj1,&_obj2,&_obj3)) 
         return NULL;
 {
 #if PYTHON_API_VERSION >= 1009
@@ -169,8 +179,26 @@ static PyObject *_wrap_new_wxHtmlBookRecord(PyObject *self, PyObject *args, PyOb
 #endif
 }
 {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj3) && !PyUnicode_Check(_obj3)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj3, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg3 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj3)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg3 = new wxString(PyString_AS_STRING(_obj3), PyString_GET_SIZE(_obj3));
+#endif
+}
+{
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxHtmlBookRecord *)new_wxHtmlBookRecord(*_arg0,*_arg1,*_arg2);
+        _result = (wxHtmlBookRecord *)new_wxHtmlBookRecord(*_arg0,*_arg1,*_arg2,*_arg3);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -192,6 +220,43 @@ static PyObject *_wrap_new_wxHtmlBookRecord(PyObject *self, PyObject *args, PyOb
 {
     if (_obj2)
         delete _arg2;
+}
+{
+    if (_obj3)
+        delete _arg3;
+}
+    return _resultobj;
+}
+
+#define wxHtmlBookRecord_GetBookFile(_swigobj)  (_swigobj->GetBookFile())
+static PyObject *_wrap_wxHtmlBookRecord_GetBookFile(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxHtmlBookRecord * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlBookRecord_GetBookFile",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlBookRecord_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlBookRecord_GetBookFile. Expected _wxHtmlBookRecord_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = new wxString (wxHtmlBookRecord_GetBookFile(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    delete _result;
 }
     return _resultobj;
 }
@@ -378,6 +443,219 @@ static PyObject *_wrap_wxHtmlBookRecord_GetContentsEnd(PyObject *self, PyObject 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxHtmlBookRecord_SetTitle(_swigobj,_swigarg0)  (_swigobj->SetTitle(_swigarg0))
+static PyObject *_wrap_wxHtmlBookRecord_SetTitle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlBookRecord * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","title", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlBookRecord_SetTitle",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlBookRecord_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlBookRecord_SetTitle. Expected _wxHtmlBookRecord_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxHtmlBookRecord_SetTitle(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxHtmlBookRecord_SetBasePath(_swigobj,_swigarg0)  (_swigobj->SetBasePath(_swigarg0))
+static PyObject *_wrap_wxHtmlBookRecord_SetBasePath(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlBookRecord * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","path", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlBookRecord_SetBasePath",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlBookRecord_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlBookRecord_SetBasePath. Expected _wxHtmlBookRecord_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxHtmlBookRecord_SetBasePath(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxHtmlBookRecord_SetStart(_swigobj,_swigarg0)  (_swigobj->SetStart(_swigarg0))
+static PyObject *_wrap_wxHtmlBookRecord_SetStart(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlBookRecord * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","start", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlBookRecord_SetStart",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlBookRecord_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlBookRecord_SetStart. Expected _wxHtmlBookRecord_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxHtmlBookRecord_SetStart(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxHtmlBookRecord_GetFullPath(_swigobj,_swigarg0)  (_swigobj->GetFullPath(_swigarg0))
+static PyObject *_wrap_wxHtmlBookRecord_GetFullPath(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxHtmlBookRecord * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","page", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlBookRecord_GetFullPath",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlBookRecord_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlBookRecord_GetFullPath. Expected _wxHtmlBookRecord_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = new wxString (wxHtmlBookRecord_GetFullPath(_arg0,*_arg1));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
+{
+    delete _result;
+}
     return _resultobj;
 }
 
@@ -2551,12 +2829,17 @@ static PyMethodDef htmlhelpcMethods[] = {
 	 { "wxHtmlContentsItem_m_ID_set", (PyCFunction) _wrap_wxHtmlContentsItem_m_ID_set, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlContentsItem_m_Level_get", (PyCFunction) _wrap_wxHtmlContentsItem_m_Level_get, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlContentsItem_m_Level_set", (PyCFunction) _wrap_wxHtmlContentsItem_m_Level_set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlBookRecord_GetFullPath", (PyCFunction) _wrap_wxHtmlBookRecord_GetFullPath, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlBookRecord_SetStart", (PyCFunction) _wrap_wxHtmlBookRecord_SetStart, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlBookRecord_SetBasePath", (PyCFunction) _wrap_wxHtmlBookRecord_SetBasePath, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlBookRecord_SetTitle", (PyCFunction) _wrap_wxHtmlBookRecord_SetTitle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlBookRecord_GetContentsEnd", (PyCFunction) _wrap_wxHtmlBookRecord_GetContentsEnd, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlBookRecord_GetContentsStart", (PyCFunction) _wrap_wxHtmlBookRecord_GetContentsStart, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlBookRecord_SetContentsRange", (PyCFunction) _wrap_wxHtmlBookRecord_SetContentsRange, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlBookRecord_GetBasePath", (PyCFunction) _wrap_wxHtmlBookRecord_GetBasePath, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlBookRecord_GetStart", (PyCFunction) _wrap_wxHtmlBookRecord_GetStart, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlBookRecord_GetTitle", (PyCFunction) _wrap_wxHtmlBookRecord_GetTitle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlBookRecord_GetBookFile", (PyCFunction) _wrap_wxHtmlBookRecord_GetBookFile, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxHtmlBookRecord", (PyCFunction) _wrap_new_wxHtmlBookRecord, METH_VARARGS | METH_KEYWORDS },
 	 { NULL, NULL }
 };
@@ -2604,6 +2887,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_EBool","_int",0},
     { "_EBool","_wxWindowID",0},
     { "_unsigned_long","_long",0},
+    { "_struct_wxHtmlContentsItem","_wxHtmlContentsItem",0},
     { "_wxNativeFontInfo","_struct_wxNativeFontInfo",0},
     { "_signed_int","_wxCoord",0},
     { "_signed_int","_wxPrintQuality",0},
@@ -2617,8 +2901,10 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_unsigned_short","_wxDateTime_t",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
+    { "_wxHtmlContentsItem","_struct_wxHtmlContentsItem",0},
     { "_wxObject","_wxHtmlHelpController",SwigwxHtmlHelpControllerTowxObject},
     { "_wxObject","_wxHtmlHelpFrame",SwigwxHtmlHelpFrameTowxObject},
+    { "_wxObject","_wxHtmlBookRecord",SwigwxHtmlBookRecordTowxObject},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
     { "_unsigned_char","_byte",0},
