@@ -2857,6 +2857,23 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
 {
     if ( !m_anchor ) return;
 
+    // Determines what item we are hovering over and need a tooltip for
+    wxTreeItemId HoverItem = HitTest(ScreenToClient(wxGetMousePosition()));
+
+    // We do not want a tooltip if we are dragging, or if the rename timer is running
+    if (HoverItem.IsOk() && !m_isDragging  && (!m_renameTimer || !m_renameTimer->IsRunning()))
+    {
+        // Ask the tree control what tooltip (if any) should be shown
+        wxTreeEvent hevent(wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP, GetId());
+        hevent.m_item = (long) HoverItem;
+        hevent.SetEventObject(this);
+
+        if ( GetEventHandler()->ProcessEvent(hevent) && hevent.IsAllowed() )
+        {
+            SetToolTip(hevent.m_label);
+        }
+    }
+    
     // we process left mouse up event (enables in-place edit), right down
     // (pass to the user code), left dbl click (activate item) and
     // dragging/moving events for items drag-and-drop
