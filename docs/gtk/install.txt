@@ -70,6 +70,7 @@ distributions have correct glibc 2 support:
  - RedHat 5.1
  - Debian 2.0
  - Stampede
+ - DLD 6.0
  
 The next major version of SuSE will also support glibc 2,
 but version 5.X does not. Also Caldera and Slackware

@@ -247,11 +247,9 @@ public:
     wxBitmap * GetStipple();
     int GetStyle();
     bool Ok();
-#ifdef __WXMSW__
     void SetColour(wxColour &colour);
     void SetStipple(wxBitmap& bitmap);
     void SetStyle(int style);
-#endif
 };
 
 //----------------------------------------------------------------------
@@ -290,30 +288,17 @@ public:
     void EndDrawing();
     void EndPage();
     void FloodFill(long x, long y, const wxColour& colour, int style=wxFLOOD_SURFACE);
-#ifdef __WXMSW__
     wxBrush&  GetBackground();
     wxBrush&  GetBrush();
-#else
-    wxBrush  GetBackground();
-    wxBrush  GetBrush();
-#endif
     long GetCharHeight();
     long GetCharWidth();
     void GetClippingBox(long *OUTPUT, long *OUTPUT,
                         long *OUTPUT, long *OUTPUT);
-#ifdef __WXMSW__
     wxFont& GetFont();
-#else
-    wxFont GetFont();
-#endif
     int GetLogicalFunction();
     int GetMapMode();
     bool GetOptimization();
-#ifdef __WXMSW__
     wxPen& GetPen();
-#else
-    wxPen GetPen();
-#endif
     %addmethods {
         %new wxColour* GetPixel(long x, long y) {
             wxColour* wc = new wxColour();
@@ -413,21 +398,17 @@ public:
 
 //---------------------------------------------------------------------------
 
-#ifdef __WXMSW__
 class wxWindowDC : public wxDC {
 public:
       wxWindowDC(wxWindow* win);
 };
-#endif
 
 //---------------------------------------------------------------------------
 
-#ifndef __WXMSW__
 class wxPostScriptDC : public wxDC {
 public:
       wxPostScriptDC(const wxString& output, bool interactive = TRUE, wxWindow* win = NULL);
 };
-#endif
 
 //---------------------------------------------------------------------------
 
@@ -522,7 +503,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.9  1998/12/17 14:07:37  RR
+//   Removed minor differences between wxMSW and wxGTK
+//
 // Revision 1.8  1998/12/16 22:10:54  RD
+//
 // Tweaks needed to be able to build wxPython with wxGTK.
 //
 // Revision 1.7  1998/12/15 20:41:18  RD

@@ -55,18 +55,13 @@ public:
 
     %pragma(python) addtomethod = "__init__:wx._StdDialogCallbacks(self)"
 
-#ifdef __WXMSW__
     wxColourData& GetColourData();
-#else
-    wxColourData GetColourData();
-#endif
     int ShowModal();
 };
 
 
 //----------------------------------------------------------------------
 
-#ifdef __WXMSW__
 class wxDirDialog : public wxDialog {
 public:
     wxDirDialog(wxWindow* parent,
@@ -84,7 +79,6 @@ public:
     void SetPath(const wxString& path);
     int ShowModal();
 };
-#endif
 
 //----------------------------------------------------------------------
 
@@ -311,6 +305,9 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.8  1998/12/17 14:07:25  RR
+//   Removed minor differences between wxMSW and wxGTK
+//
 // Revision 1.7  1998/12/15 20:41:14  RD
 // Changed the import semantics from "from wxPython import *" to "from
 // wxPython.wx import *"  This is for people who are worried about

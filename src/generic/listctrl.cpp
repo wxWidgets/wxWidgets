@@ -2596,10 +2596,17 @@ bool wxListCtrl::DeleteAllItems(void)
   return TRUE;
 }
 
-void wxListCtrl::DeleteAllColumns()
+bool wxListCtrl::DeleteAllColumns()
 {
     for ( size_t n = 0; n < m_mainWin->m_columns.GetCount(); n++ )
         DeleteColumn(n);
+	
+   return TRUE;
+}
+
+void wxListCtrl::ClearAll()
+{
+  m_mainWin->DeleteEverything();
 }
 
 bool wxListCtrl::DeleteColumn( int col )

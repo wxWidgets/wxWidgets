@@ -582,9 +582,10 @@ class wxListCtrl: public wxControl
     wxImageList *GetImageList(int which) const;
     void SetImageList(wxImageList *imageList, int which) ;
     bool Arrange( int flag = wxLIST_ALIGN_DEFAULT ); // always wxLIST_ALIGN_LEFT in wxGLC
+    void ClearAll();
     bool DeleteItem( long item );
-    bool DeleteAllItems(void) ;
-    void DeleteAllColumns(void) ;
+    bool DeleteAllItems(void);
+    bool DeleteAllColumns(void);
     bool DeleteColumn( int col );
 //  wxText& Edit(long item) ;  // not supported in wxGLC
     bool EnsureVisible( long item );

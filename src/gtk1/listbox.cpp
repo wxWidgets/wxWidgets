@@ -47,14 +47,28 @@ gtk_listbox_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_event,
 
     if (!listbox->HasVMT()) return FALSE;
 
-    if (gdk_event->x > 15) return FALSE;
-    
     int sel = listbox->GetIndex( widget );
     
-    wxCheckListBox *clb = (wxCheckListBox *)listbox;
+    if ((listbox->m_hasCheckBoxes) && (gdk_event->x < 15) && (gdk_event->type != GDK_2BUTTON_PRESS))
+    {
+        wxCheckListBox *clb = (wxCheckListBox *)listbox;
     
-    clb->Check( sel, !clb->IsChecked(sel) );
+        clb->Check( sel, !clb->IsChecked(sel) );
     
+        wxCommandEvent event( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, listbox->GetId() );
+        event.SetEventObject( listbox );
+        event.SetInt( sel );
+        listbox->GetEventHandler()->ProcessEvent( event );
+    }
+    
+    if (gdk_event->type == GDK_2BUTTON_PRESS)
+    {
+        wxCommandEvent event( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, listbox->GetId() );
+        event.SetEventObject( listbox );
+        event.SetInt( sel );
+        listbox->GetEventHandler()->ProcessEvent( event );
+    }
+
     return FALSE;
 }
 
@@ -77,6 +91,11 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
     
     clb->Check( sel, !clb->IsChecked(sel) );
     
+    wxCommandEvent event( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, listbox->GetId() );
+    event.SetEventObject( listbox );
+    event.SetInt( sel );
+    listbox->GetEventHandler()->ProcessEvent( event );
+	
     return FALSE;
 }
 
@@ -219,12 +238,12 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 	                        "button_press_event",
                                 (GtkSignalFunc)gtk_listbox_button_press_callback, 
 				(gpointer) this );
-				
-            gtk_signal_connect( GTK_OBJECT(list_item), 
-	                        "key_press_event",
-                                (GtkSignalFunc)gtk_listbox_key_press_callback, 
-				(gpointer)this );
 	}
+	
+        gtk_signal_connect( GTK_OBJECT(list_item), 
+	                    "key_press_event",
+                            (GtkSignalFunc)gtk_listbox_key_press_callback, 
+			    (gpointer)this );
 	
         ConnectWidget( list_item );	
 	
@@ -286,12 +305,12 @@ void wxListBox::AppendCommon( const wxString &item )
 	                        "button_press_event",
                                 (GtkSignalFunc)gtk_listbox_button_press_callback, 
 				(gpointer) this );
-				
-            gtk_signal_connect( GTK_OBJECT(list_item), 
-	                        "key_press_event",
-                                (GtkSignalFunc)gtk_listbox_key_press_callback, 
-				(gpointer)this );    
     }
+    
+    gtk_signal_connect( GTK_OBJECT(list_item), 
+	                "key_press_event",
+                        (GtkSignalFunc)gtk_listbox_key_press_callback, 
+			(gpointer)this );    
 	
     gtk_widget_show( list_item );
 

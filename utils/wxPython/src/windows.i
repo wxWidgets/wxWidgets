@@ -16,13 +16,10 @@
 %{
 #include "helpers.h"
 
-#ifdef __WXMSW__
-    // wxGTK defines wxMenuItem inside menu.h
 #include <wx/menuitem.h>
-#endif
 
 #ifdef __WXMSW__
-#include <wx/minifram.h>
+#include <wx/minifram.h>  // needed ?
 #endif
 %}
 
@@ -87,28 +84,14 @@ public:
     int  GetCharHeight();
     int  GetCharWidth();
     %name(GetClientSizeTuple) void GetClientSize(int *OUTPUT, int *OUTPUT);
-#ifdef __WXMSW__
     wxSize GetClientSize();
-#else
-    %addmethods {
-        wxSize GetClientSize() {
-            int w, h;
-            self->GetClientSize(&w, &h);
-            return wxSize(w, h);
-        }
-    }
-#endif
     wxLayoutConstraints * GetConstraints();
 #ifdef __WXMSW__
     wxButton* GetDefaultItem();
 #endif
     //wxEvtHandler* GetEventHandler();
 
-#ifdef __WXMSW__
     wxFont& GetFont();
-#else
-    wxFont GetFont();
-#endif
     wxColour GetForegroundColour();
     wxWindow * GetGrandParent();
     int GetId();
@@ -116,18 +99,14 @@ public:
     wxString GetName();
     wxWindow * GetParent();
     %name(GetPositionTuple) void GetPosition(int *OUTPUT, int *OUTPUT);
-#ifdef __WXMSW__
     wxPoint GetPosition();
     wxRect GetRect();
-#endif
     int  GetReturnCode();
     int GetScrollThumb(int orientation);
     int GetScrollPos(int orientation);
     int GetScrollRange(int orientation);
     %name(GetSizeTuple) void GetSize(int *OUTPUT, int *OUTPUT);
-#ifdef __WXMSW__
     wxSize GetSize();
-#endif
     void GetTextExtent(const wxString& string, int *OUTPUT, int *OUTPUT); // int* descent = NULL, int* externalLeading = NULL, const wxFont* font = NULL, bool use16 = FALSE)
     wxString GetTitle();
     long GetWindowStyleFlag();
@@ -188,9 +167,7 @@ public:
     bool TransferDataFromWindow();
     bool TransferDataToWindow();
     bool Validate();
-#ifdef __WXMSW__
     void WarpPointer(int x, int y);
-#endif
 
     %name(ConvertDialogPointToPixels) wxPoint ConvertDialogToPixels(const wxPoint& pt);
     %name(ConvertDialogSizeToPixels)  wxSize  ConvertDialogToPixels(const wxSize& sz);
@@ -303,10 +280,8 @@ public:
     void Check(int id, bool flag);
     void Enable(int id, bool enable);
     int FindItem(const wxString& itemString);
-#ifdef __WXMSW__
     wxString GetTitle();
     void SetTitle(const wxString& title);
-#endif
     wxMenuItem* FindItemForId(int id);
     wxString GetHelpString(int id);
     wxString GetLabel(int id);
@@ -340,11 +315,8 @@ public:
     void Enable(int id, bool enable);
     bool Enabled(int id);
     int FindMenuItem(const wxString& menuString, const wxString& itemString);
-#ifdef __WXGTK__
-    %name(FindItemForId) wxMenuItem* FindMenuItemById( int id );
-#endif
-#ifdef __WXMSW__
     wxMenuItem * FindItemForId(int id);
+#ifdef __WXMSW__
     void EnableTop(int pos, bool enable);
     wxString GetHelpString(int id);
     wxString GetLabel(int id);
@@ -368,22 +340,27 @@ public:
     bool IsCheckable();
     int  GetId();
     wxMenu* GetSubMenu();
-#ifdef __WXMSW__
     void SetName(const wxString& strName);
-    void DeleteSubMenu();
     const wxString& GetName();
-#endif
     const wxString& GetHelp();
     void SetHelp(const wxString& strHelp);
     void Enable(bool bDoEnable = TRUE);
     void Check(bool bDoCheck = TRUE);
+    
+#ifdef __WXMSW__
+    void DeleteSubMenu();
+#endif
 };
 
 //---------------------------------------------------------------------------
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.9  1998/12/17 14:07:46  RR
+//   Removed minor differences between wxMSW and wxGTK
+//
 // Revision 1.8  1998/12/16 22:10:56  RD
+//
 // Tweaks needed to be able to build wxPython with wxGTK.
 //
 // Revision 1.7  1998/12/15 20:41:25  RD

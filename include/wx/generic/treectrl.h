@@ -24,6 +24,21 @@
 #include "wx/textctrl.h"
 
 // -----------------------------------------------------------------------------
+// constants
+// -----------------------------------------------------------------------------
+
+// values for the `flags' parameter of wxTreeCtrl::HitTest() which determine
+// where exactly the specified point is situated:
+static const int wxTREE_HITTEST_NOWHERE          = 0x0004;
+    // on the bitmap associated with an item.
+static const int wxTREE_HITTEST_ONITEMICON       = 0x0020;
+    // on the label (string) associated with an item.
+static const int wxTREE_HITTEST_ONITEMLABEL      = 0x0080;
+    // anywhere on the item
+static const int wxTREE_HITTEST_ONITEM  = wxTREE_HITTEST_ONITEMICON |
+                                          wxTREE_HITTEST_ONITEMLABEL;
+					  
+// -----------------------------------------------------------------------------
 // forward declaration
 // -----------------------------------------------------------------------------
 
@@ -186,9 +201,10 @@ public:
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
+	       const wxValidator &validator = wxDefaultValidator,
                const wxString& name = "wxTreeCtrl")
     {
-        Create(parent, id, pos, size, style, name);
+        Create(parent, id, pos, size, style, validator, name);
     }
 
     virtual ~wxTreeCtrl();
@@ -197,6 +213,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
+	        const wxValidator &validator = wxDefaultValidator,
                 const wxString& name = "wxTreeCtrl");
 
     // accessors
@@ -375,6 +392,12 @@ public:
         // scroll to this item (but don't expand its parent)
     void ScrollTo(const wxTreeItemId& item);
 
+        // The first function is more portable (because easier to implement
+        // on other platforms), but the second one returns some extra info.
+    wxTreeItemId HitTest(const wxPoint& point)
+        { int dummy; return HitTest(point, dummy); }
+    wxTreeItemId HitTest(const wxPoint& point, int& flags);
+    
         // start editing the item label: this (temporarily) replaces the item
         // with a one line edit control. The item will be selected if it hadn't
         // been before. textCtrlClass parameter allows you to create an edit

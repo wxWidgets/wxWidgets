@@ -2190,6 +2190,11 @@ void wxWindow::SetCursor( const wxCursor &cursor )
          gdk_window_set_cursor( m_wxwindow->window, m_cursor->GetCursor() );
 }
 
+void wxWindow::WarpPointer( int WXUNUSED(x), int WXUNUSED(y) )
+{
+  // TODO
+}
+
 void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )
 {
     wxCHECK_RET( (m_widget != NULL), "invalid window" );

@@ -83,14 +83,12 @@ public:
     %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     wxBitmap& GetBitmapLabel();
-#ifdef __WXMSW__
     wxBitmap& GetBitmapDisabled();
     wxBitmap& GetBitmapFocus();
     wxBitmap& GetBitmapSelected();
     void SetBitmapDisabled(const wxBitmap& bitmap);
     void SetBitmapFocus(const wxBitmap& bitmap);
     void SetBitmapSelected(const wxBitmap& bitmap);
-#endif
     void SetBitmapLabel(const wxBitmap& bitmap);
 
 };
@@ -270,7 +268,6 @@ public:
 
 //----------------------------------------------------------------------
 
-#ifdef __WXMSW__
 class wxCheckListBox : public wxListBox {
 public:
     wxCheckListBox(wxWindow *parent, wxWindowID id,
@@ -289,7 +286,6 @@ public:
 
     int GetItemHeight();
 };
-#endif
 
 //----------------------------------------------------------------------
 
@@ -483,6 +479,9 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.9  1998/12/17 14:07:29  RR
+//   Removed minor differences between wxMSW and wxGTK
+//
 // Revision 1.8  1998/12/15 20:41:15  RD
 // Changed the import semantics from "from wxPython import *" to "from
 // wxPython.wx import *"  This is for people who are worried about

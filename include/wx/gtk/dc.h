@@ -189,16 +189,16 @@ public:
   virtual void Clear() = 0;
 
   virtual void SetFont( const wxFont &font ) = 0;
-  virtual const wxFont& GetFont() const { return m_font; };
+  virtual wxFont& GetFont() const { return (wxFont&)m_font; };
 
   virtual void SetPen( const wxPen &pen ) = 0;
-  virtual const wxPen& GetPen() const { return m_pen; };
+  virtual wxPen& GetPen() const { return (wxPen&)m_pen; };
 
   virtual void SetBrush( const wxBrush &brush ) = 0;
-  virtual const wxBrush& GetBrush() const { return m_brush; };
+  virtual wxBrush& GetBrush() const { return (wxBrush&)m_brush; };
 
   virtual void SetBackground( const wxBrush &brush ) = 0;
-  virtual const wxBrush& GetBackground() const { return m_backgroundBrush; };
+  virtual wxBrush& GetBackground() const { return (wxBrush&)m_backgroundBrush; };
 
   virtual void SetLogicalFunction( int function ) = 0;
   virtual int GetLogicalFunction() { return m_logicalFunction; };

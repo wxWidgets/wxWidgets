@@ -1,9 +1,6 @@
 
 -------------------- High priority ---------------------
 
-wxClipboard
-  -> On the way, but not functional yet.
-  
 -------------------- Low priority ---------------------
     
 OwnerDraw for wxListCtrl and others
@@ -18,14 +15,8 @@ wxDebugContext <-> wxLogXXX functions
 Implement wxPalette
   -> I never understood that. Postponed.
   
-Implement wxDirDialog
-  -> Not heard of. Postponed.
-
 Show accelerator in menus
   -> Changed in GTK 1.1.X. Postponed.
-  
-Correct tab navigation
-  -> seems to be broken in GTK. Postponed.
   
 Cooperation with Qt
   -> Would be nice.

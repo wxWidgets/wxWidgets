@@ -139,17 +139,16 @@ public:
     wxToolBarTool* FindToolForPosition(const float x, const float y);
     wxSize GetToolSize();
     wxSize GetToolBitmapSize();
+    void SetToolBitmapSize(const wxSize& size);
 //    wxSize GetMargins();
     wxSize GetMaxSize();
 //    wxObject* GetToolClientData(int toolIndex);
 #endif
     bool GetToolEnabled(int toolIndex);
-#ifdef __WXMSW__
     wxString GetToolLongHelp(int toolIndex);
     int GetToolPacking();
     int GetToolSeparation();
     wxString GetToolShortHelp(int toolIndex);
-#endif
     bool GetToolState(int toolIndex);
 
     // TODO:  figure out how to handle these
@@ -157,17 +156,10 @@ public:
     //void OnMouseEnter(int toolIndex);
     //void OnRightClick(int toolIndex, float x, float y);
 
-
-#ifdef __WXMSW__
     bool Realize();
-#else
-    void Realize();
-#endif
-#ifdef __WXMSW__
-    void SetToolBitmapSize(const wxSize& size);
+    
     void SetToolLongHelp(int toolIndex, const wxString& helpString);
     void SetToolShortHelp(int toolIndex, const wxString& helpString);
-#endif
     void SetMargins(const wxSize& size);
     void SetToolPacking(int packing);
     void SetToolSeparation(int separation);
@@ -209,6 +201,9 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.4  1998/12/17 14:07:43  RR
+//   Removed minor differences between wxMSW and wxGTK
+//
 // Revision 1.3  1998/12/15 20:41:23  RD
 // Changed the import semantics from "from wxPython import *" to "from
 // wxPython.wx import *"  This is for people who are worried about

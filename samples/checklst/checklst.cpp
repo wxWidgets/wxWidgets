@@ -154,12 +154,12 @@ CheckListBoxFrame::~CheckListBoxFrame()
 {
 }
 
-void CheckListBoxFrame::OnQuit(wxCommandEvent& event)
+void CheckListBoxFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
   Close(TRUE);
 }
 
-void CheckListBoxFrame::OnAbout(wxCommandEvent& event)
+void CheckListBoxFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
   wxMessageDialog dialog(this, "Demo of wxCheckListBox control\n"
                          "About wxCheckListBox", wxYES_NO | wxCANCEL);
@@ -175,7 +175,7 @@ void CheckListBoxFrame::OnListboxSelect(wxCommandEvent& event)
   SetStatusText(strSelection);
 }
 
-void CheckListBoxFrame::OnListboxDblClick(wxCommandEvent& event)
+void CheckListBoxFrame::OnListboxDblClick(wxCommandEvent& WXUNUSED(event))
 {
   wxString strSelection;
   strSelection.sprintf("item %d double clicked", m_pListBox->GetSelection());

@@ -329,11 +329,15 @@ void wxTreeCtrl::Init()
 
 bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
                         const wxPoint& pos, const wxSize& size,
-                        long style, const wxString& name )
+                        long style, 
+			const wxValidator &validator,
+			const wxString& name )
 {
   Init();
 
   wxScrolledWindow::Create( parent, id, pos, size, style|wxHSCROLL|wxVSCROLL, name );
+  
+  SetValidator( validator );
 
   SetBackgroundColour( *wxWHITE );
   m_dottedPen = wxPen( *wxBLACK, 0, 0 );
@@ -1217,6 +1221,12 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
     default:
       event.Skip();
   }
+}
+
+wxTreeItemId wxTreeCtrl::HitTest(const wxPoint& point, int& WXUNUSED(flags))
+{
+  bool onButton = FALSE;
+  return m_anchor->HitTest( point, onButton );
 }
 
 void wxTreeCtrl::OnMouse( wxMouseEvent &event )

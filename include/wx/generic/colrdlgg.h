@@ -82,7 +82,7 @@ class WXDLLEXPORT wxGenericColourDialog: public wxDialog
   bool Create(wxWindow *parent, wxColourData *data = (wxColourData *) NULL);
 
   int ShowModal(void);
-  wxColourData GetColourData(void) { return colourData; }
+  wxColourData &GetColourData(void) { return colourData; }
 
   // Internal functions
   void OnMouseEvent(wxMouseEvent& event);

@@ -90,11 +90,12 @@ public:
     bool DeleteItem(long item);
     bool DeleteAllItems();
     bool DeleteColumn(int col);
-#ifdef __WXMSW__
     bool DeleteAllColumns(void);
     void ClearAll(void);
+#ifdef __WXMSW__
     wxTextCtrl* EditLabel(long item);
     bool EndEditLabel(bool cancel);
+    wxTextCtrl* GetEditControl();
 #endif
     bool EnsureVisible(long item);
     long FindItem(long start, const wxString& str, bool partial = FALSE);
@@ -104,9 +105,6 @@ public:
     bool GetColumn(int col, wxListItem& item);
     int GetColumnWidth(int col);
     int GetCountPerPage();
-#ifdef __WXMSW__
-    wxTextCtrl* GetEditControl();
-#endif
     wxImageList* GetImageList(int which);
     long GetItemData(long item);
 
@@ -138,6 +136,7 @@ public:
     int GetSelectedItemCount();
 #ifdef __WXMSW__
     wxColour GetTextColour();
+    void SetTextColour(const wxColour& col);
 #endif
     long GetTopItem();
     long HitTest(const wxPoint& point, int& OUTPUT);
@@ -166,9 +165,6 @@ public:
     bool SetItemState(long item, long state, long stateMask);
     void SetItemText(long item, const wxString& text);
     void SetSingleStyle(long style, bool add = TRUE);
-#ifdef __WXMSW__
-    void SetTextColour(const wxColour& col);
-#endif
     void SetWindowStyleFlag(long style);
     // TODO:  bool SortItems(wxListCtrlCompare fn, long data);
 };
@@ -222,7 +218,6 @@ public:
 
 class wxTreeCtrl : public wxControl {
 public:
-#ifdef __WXMSW__
     wxTreeCtrl(wxWindow *parent, wxWindowID id = -1,
                const wxPoint& pos = wxPyDefaultPosition,
                const wxSize& size = wxPyDefaultSize,
@@ -230,14 +225,6 @@ public:
                const wxValidator& validator = wxPyDefaultValidator,
                char* name = "wxTreeCtrl");
 
-#else
-    wxTreeCtrl(wxWindow *parent, wxWindowID id = -1,
-               const wxPoint& pos = wxPyDefaultPosition,
-               const wxSize& size = wxPyDefaultSize,
-               long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
-               //const wxValidator& validator = wxPyDefaultValidator,
-               char* name = "wxTreeCtrl");
-#endif
     %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     size_t GetCount();
@@ -318,9 +305,7 @@ public:
 
     void SetItemBold(const wxTreeItemId& item, bool bold = TRUE);
     bool IsBold(const wxTreeItemId& item) const;
-#ifdef __WXMSW__
     wxTreeItemId HitTest(const wxPoint& point);
-#endif
 };
 
 
@@ -384,7 +369,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.13  1998/12/17 14:07:34  RR
+//   Removed minor differences between wxMSW and wxGTK
+//
 // Revision 1.12  1998/12/16 22:10:52  RD
+//
 // Tweaks needed to be able to build wxPython with wxGTK.
 //
 // Revision 1.11  1998/12/15 20:41:16  RD

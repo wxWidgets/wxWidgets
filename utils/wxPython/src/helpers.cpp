@@ -21,12 +21,6 @@
 #include <Python.h>
 #include "helpers.h"
 
-#ifdef __WXGTK__
-#ifdef wxUSE_GDK_IMLIB
-#include "gdk_imlib/gdk_imlib.h"
-#endif
-#endif
-
 //---------------------------------------------------------------------------
 
 //wxHashTable*  wxPyWindows = NULL;
@@ -139,12 +133,6 @@ void __wxPreStart()
 
     gtk_init( &argc, &argv );
     delete [] argv;
-
-#ifdef wxUSE_GDK_IMLIB
-    gdk_imlib_init();
-    gtk_widget_push_visual(gdk_imlib_get_visual());
-    gtk_widget_push_colormap(gdk_imlib_get_colormap());
-#endif
 
     wxApp::CommonInit();
 #endif
@@ -602,6 +590,9 @@ wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source) {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.16  1998/12/17 14:07:39  RR
+//   Removed minor differences between wxMSW and wxGTK
+//
 // Revision 1.15  1998/12/15 20:41:19  RD
 // Changed the import semantics from "from wxPython import *" to "from
 // wxPython.wx import *"  This is for people who are worried about

@@ -48,6 +48,8 @@ public:
 
   bool IsChecked( int index ) const;
   void Check( int index, bool check = TRUE );
+  
+  int GetItemHeight();
 
 };
 

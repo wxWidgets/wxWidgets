@@ -77,14 +77,13 @@ void wxCheckListBox::Check( int index, bool check )
 	    
 	gtk_label_set( label, str );
 	    
-	wxCommandEvent event( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, GetId() );
-	event.SetEventObject( this );
-	event.SetInt( index );
-	GetEventHandler()->ProcessEvent( event );
-	
 	return;
     }
     
     wxFAIL_MSG("wrong checklistbox index");
 }
 
+int wxCheckListBox::GetItemHeight()
+{
+    return 22;
+}

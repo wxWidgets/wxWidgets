@@ -134,11 +134,23 @@ public:
   virtual void SetSize( int x, int y, int width, int height,
     int sizeFlags = wxSIZE_AUTO );
   virtual void SetSize( int width, int height );
+  
   virtual void Move( int x, int y );
+  
   virtual void GetSize( int *width, int *height ) const;
+  wxSize GetSize() const { int w, h; GetSize(& w, & h); return wxSize(w, h); }
+  
   virtual void SetClientSize( int const width, int const height );
+  
   virtual void GetClientSize( int *width, int *height ) const;
+  wxSize GetClientSize() const { int w, h; GetClientSize(& w, & h); return wxSize(w, h); }
+  
   virtual void GetPosition( int *x, int *y ) const;
+  wxPoint GetPosition() const { int w, h; GetPosition(& w, & h); return wxPoint(w, h); }
+  
+  wxRect GetRect() const
+    { int x, y, w, h; GetPosition(& x, & y); GetSize(& w, & h); return wxRect(x, y, w, h); }
+    
   virtual void Centre( int direction = wxHORIZONTAL );
   inline void Center(int direction = wxHORIZONTAL) { Centre(direction); }
   virtual void Fit();
@@ -204,6 +216,8 @@ public:
 
   void SetCursor( const wxCursor &cursor );
 
+  void WarpPointer(int x, int y);
+  
   virtual void Refresh( bool eraseBackground = TRUE, const wxRect *rect = (const wxRect *) NULL );
   virtual void Clear();
 
@@ -226,13 +240,13 @@ public:
                              const wxFont *theFont = (const wxFont *) NULL, bool use16 = FALSE) const;
 
   virtual void SetFont( const wxFont &font );
-  virtual const wxFont& GetFont() { return m_font; }
+  virtual wxFont& GetFont() { return m_font; }
 
     // For backward compatibility
   inline virtual void SetButtonFont(const wxFont& font) { SetFont(font); }
   inline virtual void SetLabelFont(const wxFont& font) { SetFont(font); }
-  inline virtual const wxFont& GetLabelFont() { return GetFont(); };
-  inline virtual const wxFont& GetButtonFont() { return GetFont(); };
+  inline virtual wxFont& GetLabelFont() { return GetFont(); };
+  inline virtual wxFont& GetButtonFont() { return GetFont(); };
 
   virtual void SetWindowStyleFlag( long flag );
   virtual long GetWindowStyleFlag() const;
