@@ -626,6 +626,8 @@ bool wxWindowMGL::Create(wxWindow *parent,
 
 void wxWindowMGL::SetFocus()
 {
+    if ( gs_focusedWindow == this ) return;
+
     if ( gs_focusedWindow )
         gs_focusedWindow->KillFocus();
     
@@ -658,7 +660,7 @@ void wxWindowMGL::SetFocus()
     
     wxFocusEvent event(wxEVT_SET_FOCUS, GetId());
     event.SetEventObject(this);
-    AddPendingEvent(event);
+    GetEventHandler()->ProcessEvent(event);
 }
 
 void wxWindowMGL::KillFocus()
@@ -679,7 +681,7 @@ void wxWindowMGL::KillFocus()
 
     wxFocusEvent event(wxEVT_KILL_FOCUS, GetId());
     event.SetEventObject(this);
-    AddPendingEvent(event);
+    GetEventHandler()->ProcessEvent(event);
 }
 
 // ----------------------------------------------------------------------------

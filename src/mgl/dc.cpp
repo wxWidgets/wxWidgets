@@ -1234,7 +1234,7 @@ void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
         *descent = YDEV2LOGREL(m_mglFont->descent);
     if ( externalLeading )
         *externalLeading = YDEV2LOGREL(m_mglFont->leading);
-    
+
     if ( theFont != NULL )
         wxConstCast(this, wxDC)->SetFont(oldFont);
 }
