@@ -2725,6 +2725,7 @@ static PyObject *_wrap_wxPyGridCellEditor_base_PaintBackground(PyObject *self, P
 #define wxPyGridCellEditor_base_IsAcceptedKey(_swigobj,_swigarg0)  (_swigobj->base_IsAcceptedKey(_swigarg0))
 static PyObject *_wrap_wxPyGridCellEditor_base_IsAcceptedKey(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
+    bool  _result;
     wxPyGridCellEditor * _arg0;
     wxKeyEvent * _arg1;
     PyObject * _argo0 = 0;
@@ -2749,12 +2750,11 @@ static PyObject *_wrap_wxPyGridCellEditor_base_IsAcceptedKey(PyObject *self, PyO
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPyGridCellEditor_base_IsAcceptedKey(_arg0,*_arg1);
+    _result = (bool )wxPyGridCellEditor_base_IsAcceptedKey(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
