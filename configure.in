@@ -2745,6 +2745,7 @@ AC_OUTPUT([
 	    samples/validate/Makefile
 	    samples/wxpoem/Makefile
 	    samples/wxsocket/Makefile
+	    samples/wizard/Makefile
 	    samples/html/Makefile
 	    samples/html/about/Makefile
 	    samples/html/help/Makefile
