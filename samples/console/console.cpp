@@ -35,28 +35,28 @@
 
 // what to test (in alphabetic order)?
 
-#define TEST_ARRAYS
-#define TEST_CMDLINE
-#define TEST_DATETIME
-#define TEST_DIR
-#define TEST_DLLLOADER
-#define TEST_EXECUTE
-#define TEST_FILE
+//#define TEST_ARRAYS
+//#define TEST_CMDLINE
+//#define TEST_DATETIME
+//#define TEST_DIR
+//#define TEST_DLLLOADER
+//#define TEST_EXECUTE
+//#define TEST_FILE
 #define TEST_FILECONF
-#define TEST_HASH
-#define TEST_LIST
-#define TEST_LOG
-#define TEST_LONGLONG
-#define TEST_MIME
-#define TEST_INFO_FUNCTIONS
-#define TEST_SOCKETS
-#define TEST_STRINGS
-#define TEST_THREADS
-#define TEST_TIMER
-//#define TEST_VCARD            -- don't enable this (VZ)
-#define TEST_WCHAR
-#define TEST_ZIP
-#define TEST_ZLIB
+//#define TEST_HASH
+//#define TEST_LIST
+//#define TEST_LOG
+//#define TEST_LONGLONG
+//#define TEST_MIME
+//#define TEST_INFO_FUNCTIONS
+//#define TEST_SOCKETS
+//#define TEST_STRINGS
+//#define TEST_THREADS
+//#define TEST_TIMER
+////#define TEST_VCARD            -- don't enable this (VZ)
+//#define TEST_WCHAR
+//#define TEST_ZIP
+//#define TEST_ZLIB
 
 // ----------------------------------------------------------------------------
 // test class for container objects
@@ -453,6 +453,39 @@ static const struct FileConfTestData
     { _T("novalue"),                      _T("default") },
 };
 
+static void DumpFileConfGroup(wxFileConfig& fileconf,
+                              const wxString& indent)
+{
+    long dummy;
+    wxString name;
+    bool cont;
+
+    printf("%s[%s]\n", indent.c_str(),
+           fileconf.GetPath().AfterLast(_T('/')).c_str());
+
+    // dump the subgroups
+    cont = fileconf.GetFirstGroup(name, dummy);
+    while ( cont )
+    {
+        fileconf.SetPath(name);
+        DumpFileConfGroup(fileconf, indent + _T("  "));
+        fileconf.SetPath(_T(".."));
+
+        cont = fileconf.GetNextGroup(name, dummy);
+    }
+
+    // and now the entries
+    cont = fileconf.GetFirstEntry(name, dummy);
+    while ( cont )
+    {
+        printf("\t%s = %s\n",
+               name.c_str(),
+               fileconf.Read(name.c_str(), _T("ERROR")).c_str());
+
+        cont = fileconf.GetNextEntry(name, dummy);
+    }
+}
+
 static void TestFileConfRead()
 {
     puts("*** testing wxFileConfig loading/reading ***");
@@ -480,18 +513,9 @@ static void TestFileConfRead()
     }
 
     // test enumerating the entries
-    puts("\nEnumerating all root entries:");
-    long dummy;
-    wxString name;
-    bool cont = fileconf.GetFirstEntry(name, dummy);
-    while ( cont )
-    {
-        printf("\t%s = %s\n",
-               name.c_str(),
-               fileconf.Read(name.c_str(), _T("ERROR")).c_str());
+    puts("\nEnumerating all entries:");
 
-        cont = fileconf.GetNextEntry(name, dummy);
-    }
+    DumpFileConfGroup(fileconf, _T(""));
 }
 
 #endif // TEST_FILECONF
