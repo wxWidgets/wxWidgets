@@ -10,15 +10,11 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-    #pragma implementation "wxWebKit.h"
+    #pragma implementation "webkit.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -109,7 +105,7 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
 {
 
     m_currentURL = strURL;
-    m_pageTitle = "";
+    m_pageTitle = wxT("");
  
  //still needed for wxCocoa??
 /*
@@ -178,7 +174,7 @@ void wxWebKitCtrl::LoadURL(const wxString &url)
     if( !m_webView )
         return;
         
-    [[m_webView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithCString:url.c_str()]]]];
+    [[m_webView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:wxNSStringWithWxString(url)]]];
 
     m_currentURL = url;
 }

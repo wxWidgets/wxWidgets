@@ -41,7 +41,7 @@ public:
                     const wxPoint& pos = wxDefaultPosition,
 			        const wxSize& size = wxDefaultSize, long style = 0,
 			        const wxValidator& validator = wxDefaultValidator,
-			        const wxString& name = wxString("default_webkit_name"))
+			        const wxString& name = wxT("webkitctrl"))
     {
         Create(parent, winID, strURL, pos, size, style, validator, name);
     };
@@ -51,7 +51,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize, long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxString("default_webkit_name"));
+                const wxString& name = wxT("webkitctrl"));
 	virtual ~wxWebKitCtrl();
 	
     void LoadURL(const wxString &url);
@@ -64,7 +64,7 @@ public:
     void Stop();
     bool CanGetPageSource();
     wxString GetPageSource();
-    void SetPageSource(wxString& source, const wxString& baseUrl = wxString(""));
+    void SetPageSource(wxString& source, const wxString& baseUrl = wxEmptyString);
     
     //we need to resize the webview when the control size changes
     //void OnSize(wxSizeEvent &event);
