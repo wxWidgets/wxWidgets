@@ -331,7 +331,7 @@ if os.name == 'nt':
 
     libs = libs + ['kernel32', 'user32', 'gdi32', 'comdlg32',
             'winspool', 'winmm', 'shell32', 'oldnames', 'comctl32',
-            'ctl3d32', 'odbc32', 'ole32', 'oleaut32', 'uuid', 'rpcrt4',
+            'odbc32', 'ole32', 'oleaut32', 'uuid', 'rpcrt4',
             'advapi32', 'wsock32']
 
 
