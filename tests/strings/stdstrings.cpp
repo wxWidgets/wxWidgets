@@ -286,6 +286,33 @@ void StdStringTestCase::StdFindLast()
     CPPUNIT_ASSERT( s1.find_last_of(_T("ijklm")) == 16u );
     CPPUNIT_ASSERT( s1.find_last_of(_T("ijklma"), 33, 4) == 16u );
     CPPUNIT_ASSERT( s1.find_last_of(_T("a"), 17) == 17u );
+
+
+
+    //                  0          1          2         3
+    //                  012345 67890123456789 01234567890123456
+//    wxString s1 = _T("aaaaaa\0bcdefghlkjiaa\0aaaabcdbcdbcdbcd");
+//    wxString s2 = _T("aaaaaa\0");
+    s1.insert(6,1,'\0');
+    s1.insert(20,1,'\0');
+    s2.insert(6,1,'\0');
+
+    CPPUNIT_ASSERT( s2.find_last_not_of(_T('a')) == 6u );
+    CPPUNIT_ASSERT( s1.find_last_not_of(_T('d')) == 35u );
+    CPPUNIT_ASSERT( s1.find_last_not_of(_T('d'), 27) == 26u );
+
+    CPPUNIT_ASSERT( s1.find_last_not_of(_T("bcd")) == 24u );
+    CPPUNIT_ASSERT( s1.find_last_not_of(_T("abc"), 26) == 20u );
+
+    CPPUNIT_ASSERT( s1.find_last_not_of(_T("abcdefghijklmnopqrstuv"), 26, 3) == 20u );
+
+    CPPUNIT_ASSERT( s2.find_last_of(_T('c')) == wxString::npos );
+    CPPUNIT_ASSERT( s1.find_last_of(_T('a')) == 24u );
+    CPPUNIT_ASSERT( s1.find_last_of(_T('b'), 26) == 25u );
+
+    CPPUNIT_ASSERT( s1.find_last_of(_T("ijklm")) == 17u );
+    CPPUNIT_ASSERT( s1.find_last_of(_T("ijklma"), 35, 4) == 17u );
+    CPPUNIT_ASSERT( s1.find_last_of(_T("a"), 18) == 18u );
 }
 
 void StdStringTestCase::StdInsert()

@@ -105,7 +105,7 @@ is an alternative to the use of static event tables. See the 'event' or the old 
 \begin{verbatim}
   frame->Connect( wxID_EXIT,
     wxEVT_COMMAND_MENU_SELECTED,
-    (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) MyFrame::OnQuit );
+    (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) &MyFrame::OnQuit );
 \end{verbatim}
 
 \perlnote{In wxPerl this function takes 4 arguments: \texttt{id,

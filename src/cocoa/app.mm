@@ -70,12 +70,20 @@ WX_IMPLEMENT_POSER(wxPoserNSApplication);
     plan on stopping the event loop, it is wise to send an event through
     the queue to ensure this method will return.
     See wxEventLoop::Exit() for more information.
+
+ Ê ÊRN: We used to use nil as the untilDate in previous versions since nil
+Ê  Êis a shorter and more concise way of specifying an infinite amount of
+ÊÊ Êtime than [NSDate distantPast]. ÊHowever, Apple neglects to mention in
+Ê  Êtheir documentation that nil is not handled correctly in OSX 10.2
+Ê  Ê(and possibly lower) and when the call is reached the system comes to
+Ê  Êa screeching halt, therefore we need to specify [NSDate distantPast]
+Ê  Êexplicitly so that wxCocoa will work correctly in OSX 10.2.
 */
    
 - (NSEvent *)nextEventMatchingMask:(unsigned int)mask untilDate:(NSDate *)expiration inMode:(NSString *)mode dequeue:(BOOL)flag
 {
     // Get the same events except don't block
-    NSEvent *event = [super nextEventMatchingMask:mask untilDate:nil/* equivalent to [NSDate distantPast] */ inMode:mode dequeue:flag];
+    NSEvent *event = [super nextEventMatchingMask:mask untilDate:[NSDate distantPast] inMode:mode dequeue:flag];
     // If we got one, simply return it
     if(event)
         return event;
@@ -91,7 +99,7 @@ WX_IMPLEMENT_POSER(wxPoserNSApplication);
         while(wxTheApp->ProcessIdle())
         {
             // Get the same events except don't block
-            NSEvent *event = [super nextEventMatchingMask:mask untilDate:nil/* equivalent to [NSDate distantPast] */ inMode:mode dequeue:flag];
+            NSEvent *event = [super nextEventMatchingMask:mask untilDate:[NSDate distantPast] inMode:mode dequeue:flag];
             // If we got one, simply return it
             if(event)
                 return event;
@@ -150,7 +158,7 @@ WX_IMPLEMENT_POSER(wxPoserNSApplication);
 
 - (void)controlTintChanged:(NSNotification *)notification
 {
-    wxLogDebug("TODO: send EVT_SYS_COLOUR_CHANGED as appropriate");
+    wxLogDebug(wxT("TODO: send EVT_SYS_COLOUR_CHANGED as appropriate"));
 }
 
 @end // implementation wxNSApplicationDelegate : NSObject
@@ -322,7 +330,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
         wxAutoNSAutoreleasePool pool;
         NSEvent *event = [GetNSApplication()
                 nextEventMatchingMask:NSAnyEventMask
-                untilDate:nil /* ==[NSDate distantPast] */
+                untilDate:[NSDate distantPast]
                 inMode:NSDefaultRunLoopMode
                 dequeue: YES];
         if(!event)
