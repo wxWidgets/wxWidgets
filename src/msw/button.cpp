@@ -132,7 +132,18 @@ bool wxButton::Create(wxWindow *parent,
 {
     wxString label(lbl);
     if (label.empty() && wxIsStockID(id))
-        label = wxGetStockLabel(id);
+    {
+        // On Windows, some buttons aren't supposed to have
+        // mnemonics, so strip them out.
+        
+        label = wxGetStockLabel(id 
+#if defined(__WXMSW__) || defined(__WXWINCE__)
+                                        , ( id != wxID_OK &&
+                                            id != wxID_CANCEL &&
+                                            id != wxID_CLOSE )
+#endif
+                                );
+     }
     
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return false;
