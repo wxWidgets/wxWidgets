@@ -497,8 +497,9 @@ bool wxFileName::SameAs( const wxFileName &filepath, wxPathFormat format)
 /* static */
 bool wxFileName::IsCaseSensitive( wxPathFormat format )
 {
-    // only DOS filenames are case-sensitive
-    return GetFormat(format) != wxPATH_DOS;
+    // only DOS and OpenVMS filenames are case-sensitive
+    return ( GetFormat(format) != wxPATH_DOS &
+	     GetFormat(format) != wxPATH_VMS );
 }
 
 bool wxFileName::IsRelative( wxPathFormat format )
@@ -543,6 +544,10 @@ wxString wxFileName::GetPathSeparators(wxPathFormat format)
 
         case wxPATH_MAC:
             seps = wxFILE_SEP_PATH_MAC;
+            break;
+       
+        case wxPATH_VMS:
+            seps = wxFILE_SEP_PATH_VMS;
             break;
     }
 
@@ -644,6 +649,17 @@ wxString wxFileName::GetFullPath( wxPathFormat format ) const
             ret += m_dirs[i];
             ret += '/';
         }
+    }
+    else
+    if (format == wxPATH_VMS)
+    {
+       ret += '[';
+        for (size_t i = 0; i < m_dirs.GetCount(); i++)
+        {
+            ret += '.';
+            ret += m_dirs[i];
+        }
+       ret += ']';
     }
     else
     {
@@ -813,6 +829,8 @@ wxPathFormat wxFileName::GetFormat( wxPathFormat format )
         format = wxPATH_DOS;
 #elif defined(__WXMAC__) && !defined(__DARWIN__)
         format = wxPATH_MAC; 
+#elif defined(__VMS)
+        format = wxPATH_VMS; 
 #else
         format = wxPATH_UNIX;
 #endif
@@ -842,6 +860,18 @@ void wxFileName::SplitPath(const wxString& fullpath,
              (fullpath[posLastDot - 1] == wxFILE_SEP_PATH_UNIX) )
         {
             // under Unix, dot may be (and commonly is) the first character of
+            // the filename, don't treat the entire filename as extension in
+            // this case
+            posLastDot = wxString::npos;
+        }
+    }
+    else
+     if ( (posLastDot != wxString::npos) && (format == wxPATH_VMS) )
+    {
+        if ( (posLastDot == 0) ||
+             (fullpath[posLastDot - 1] == ']' ) )
+        {
+            // under OpenVMS, dot may be (and commonly is) the first character of
             // the filename, don't treat the entire filename as extension in
             // this case
             posLastDot = wxString::npos;

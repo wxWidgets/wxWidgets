@@ -128,6 +128,7 @@ OBJECTS1=framecmn.obj,\
 		string.obj,\
 		sysopt.obj,\
 		tbarbase.obj,\
+		textbuf.obj,\
 		textcmn.obj,\
 		textfile.obj,\
 		timercmn.obj,\
@@ -241,6 +242,7 @@ SOURCES = \
 		sysopt.cpp,\
 		string.cpp,\
 		tbarbase.cpp,\
+		textbuf.cpp,\
 		textcmn.cpp,\
 		textfile.cpp,\
 		timercmn.cpp,\
@@ -386,6 +388,7 @@ stream.obj : stream.cpp
 sysopt.obj : sysopt.cpp
 string.obj : string.cpp
 tbarbase.obj : tbarbase.cpp
+textbuf.obj : textbuf.cpp
 textcmn.obj : textcmn.cpp
 textfile.obj : textfile.cpp
 timercmn.obj : timercmn.cpp

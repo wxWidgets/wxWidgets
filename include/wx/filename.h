@@ -51,6 +51,7 @@ enum wxPathFormat
     wxPATH_UNIX,
     wxPATH_MAC,
     wxPATH_DOS,
+    wxPATH_VMS,
 
     wxPATH_BEOS = wxPATH_UNIX,
     wxPATH_WIN = wxPATH_DOS,

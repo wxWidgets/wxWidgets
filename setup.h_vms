@@ -498,6 +498,10 @@
  */
 #define wxUSE_FILE 1
 /*
+ * Use wxTextBuffer class
+ */
+#define wxUSE_TEXTBUFFER 1
+/*
  * Use wxTextFile class
  */
 #define wxUSE_TEXTFILE 1
