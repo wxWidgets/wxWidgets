@@ -153,7 +153,7 @@ void wxLogVerbose(const char *szFormat, ...)
     // we check that all of mask bits are set in the current mask, so
     // that wxLogTrace(wxTraceRefCount | wxTraceOle) will only do something
     // if both bits are set.
-    if ( pLog != NULL && (pLog->GetTraceMask() & mask == mask) ) {
+    if ( pLog != NULL && ((pLog->GetTraceMask() & mask) == mask) ) {
       va_list argptr;
       va_start(argptr, szFormat);
       vsprintf(s_szBuf, szFormat, argptr);

@@ -1089,9 +1089,9 @@ wxArrayString::wxArrayString(const wxArrayString& src)
 // assignment operator
 wxArrayString& wxArrayString::operator=(const wxArrayString& src)
 {
-  Clear();
+  if ( m_nSize > 0 )
+    Clear();
 
-  m_nSize = 0;
   if ( src.m_nCount > ARRAY_DEFAULT_INITIAL_SIZE )
     Alloc(src.m_nCount);
 

@@ -100,7 +100,8 @@ void wxBaseArray::Grow()
     else
     {
       // add 50% but not too much
-      uint uiIncrement = m_uiSize >> 1;
+      uint uiIncrement = m_uiSize < WX_ARRAY_DEFAULT_INITIAL_SIZE 
+                         ? WX_ARRAY_DEFAULT_INITIAL_SIZE : m_uiSize >> 1;
       if ( uiIncrement > ARRAY_MAXSIZE_INCREMENT )
         uiIncrement = ARRAY_MAXSIZE_INCREMENT;
       m_uiSize += uiIncrement;
