@@ -134,6 +134,7 @@ All (GUI):
 
 wxMSW:
 
+- wxWindows now builds under Win64
 - fixed DDE memory leaks
 - fixed wxTE_*WRAP styles handling
 - wxTextCtrl::GetValue() works with text in non default encoding
