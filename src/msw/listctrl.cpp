@@ -239,7 +239,7 @@ void wxListCtrl::UpdateStyle()
     }
 }
 
-wxListCtrl::~wxListCtrl()
+void wxListCtrl::FreeAllAttrs()
 {
     if ( m_hasAnyAttr )
     {
@@ -247,8 +247,15 @@ wxListCtrl::~wxListCtrl()
         {
             delete (wxListItemAttr *)node->Data();
         }
-    }
 
+        m_attrs.Destroy();
+
+        m_hasAnyAttr = FALSE;
+    }
+}
+
+wxListCtrl::~wxListCtrl()
+{
     if ( m_textCtrl )
     {
         m_textCtrl->UnsubclassWin();
@@ -1295,20 +1302,12 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             }
 
         case LVN_DELETEALLITEMS:
-            // What's the sense of generating a wxWin event for this when
-	    // it's absolutely not portable?
-            // This is perfectly portable, RR
-#if 1
-	    eventType = wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS;
+            eventType = wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS;
             event.m_itemIndex = -1;
-#endif // 1
 
-            // return TRUE to suppress all additional LVN_DELETEITEM
-            // notifications - this makes deleting all items from a list ctrl
-            // much faster
-            *result = TRUE;
+            FreeAllAttrs();
 
-	    break;
+            break;
 
         case LVN_DELETEITEM:
             {
@@ -1579,19 +1578,19 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     if ( !GetEventHandler()->ProcessEvent(event) )
         return FALSE;
 
-    if (eventType == wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS)
-    {
-	// No postprocessing, because we want *return to
-	// be TRUE so that no further DeleteItem events
-	// are sent, RR.
-        return TRUE;
-    }
-
     // post processing
     // ---------------
 
     switch ( (int)nmhdr->code )
     {
+        case LVN_DELETEALLITEMS:
+            // always return TRUE to suppress all additional LVN_DELETEITEM
+            // notifications - this makes deleting all items from a list ctrl
+            // much faster
+            *result = TRUE;
+
+            return TRUE;
+
         case LVN_GETDISPINFO:
             {
                 LV_DISPINFO *info = (LV_DISPINFO *)lParam;
@@ -1611,8 +1610,6 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 *result = event.IsAllowed();
                 return TRUE;
             }
-        default:
-            break;
     }
 
     *result = !event.IsAllowed();

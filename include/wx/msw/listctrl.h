@@ -331,6 +331,9 @@ protected:
     // common part of all ctors
     void Init();
 
+    // free memory taken by all attributes
+    void FreeAllAttrs();
+
     wxTextCtrl*       m_textCtrl;        // The control used for editing a label
     wxImageList *     m_imageListNormal; // The image list for normal icons
     wxImageList *     m_imageListSmall;  // The image list for small icons
