@@ -905,7 +905,7 @@ void wxTextCtrl::ShowHorzPosition(wxCoord pos)
             // scroll forward
             long col;
             HitTestLine(GetValue(), pos - width, &col);
-            ScrollText(col + 1);
+            ScrollText(col);
         }
     }
 }
@@ -993,6 +993,18 @@ void wxTextCtrl::RefreshLine(long line, long from, long to)
 // ----------------------------------------------------------------------------
 // drawing
 // ----------------------------------------------------------------------------
+
+/*
+   Several remarks about wxTextCtrl redraw logic:
+
+   1. only the regions which must be updated are redrawn, this means that we
+      never Refresh() the entire window but use RefreshLine() and
+      ScrollWindow() which only refresh small parts of it and iterate over the
+      update region in our DoDraw()
+
+   2. the text displayed on the screen is obtained using GetTextToShow(): it
+      should be used for all drawing/measuring
+ */
 
 wxString wxTextCtrl::GetTextToShow(const wxString& text) const
 {
@@ -1125,10 +1137,16 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
 
         // check that the string that we draw fits entirely into the text area,
         // we don't want to draw just a part of characters
-        while ( rectText.GetRight() > m_ofsHorz + m_rectText.width )
+        while ( rectText.GetRight() > m_ofsHorz + m_rectText.GetRight() )
         {
             rectText.width -= GetTextWidth(text.Last());
             text.RemoveLast();
+
+            if ( !text )
+            {
+                // string became empty, nothing to draw finally
+                return;
+            }
         }
 
         // do draw the text
