@@ -215,6 +215,10 @@ public:
     void SetWantDebugOutput( bool flag ) { m_wantDebugOutput = flag; }
     bool GetWantDebugOutput() const { return m_wantDebugOutput; }
 
+        // set use of best visual flag (see below)
+    void SetUseBestVisual( bool flag ) { m_useBestVisual = flag; }
+    bool GetUseBestVisual() const { return m_useBestVisual; }
+    
         // set/get printing mode: see wxPRINT_XXX constants.
         //
         // default behaviour is the normal one for Unix: always use PostScript
@@ -254,6 +258,10 @@ protected:
 
     // TRUE if the application wants to get debug output
     bool m_wantDebugOutput;
+    
+    // TRUE if the apps whats to use the best visual on systems where
+    // more than one are available (Sun, SGI, XFree86 4.0 ?)
+    bool m_useBestVisual;
 
 #if wxUSE_GUI
     // the main top level window - may be NULL

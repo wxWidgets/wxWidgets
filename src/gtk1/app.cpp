@@ -250,6 +250,8 @@ wxApp::wxApp()
 #endif
 
     m_colorCube = (unsigned char*) NULL;
+    
+    m_useBestVisual = FALSE;
 }
 
 wxApp::~wxApp()
@@ -271,7 +273,8 @@ bool wxApp::OnInitGui()
        we make sure we get the best. this can sometimes be wasteful,
        of course, but what do these guys pay $30.000 for? */
        
-    if (gdk_visual_get_best() != gdk_visual_get_system())
+    if ((gdk_visual_get_best() != gdk_visual_get_system()) &&
+        (m_useBestVisual))
     {
         GdkVisual* vis = gdk_visual_get_best();
         gtk_widget_set_default_visual( vis );

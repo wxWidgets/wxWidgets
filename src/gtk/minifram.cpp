@@ -35,8 +35,9 @@ extern bool g_isIdle;
 // data
 //-----------------------------------------------------------------------------
 
-extern bool   g_blockEventsOnDrag;
-extern bool   g_blockEventsOnScroll;
+extern bool        g_blockEventsOnDrag;
+extern bool        g_blockEventsOnScroll;
+extern GtkWidget  *wxRootWindow;
 
 //-----------------------------------------------------------------------------
 // local functions
@@ -321,8 +322,7 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
         ((style & wxCAPTION) || (style & wxTINY_CAPTION_HORIZ) || (style & wxTINY_CAPTION_VERT)))
     {
         GdkBitmap *mask = (GdkBitmap*) NULL;
-        GdkWindow *parent = (GdkWindow*) &gdk_root_parent;
-        GdkPixmap *pixmap = gdk_pixmap_create_from_xpm_d( parent, &mask, NULL, cross_xpm );
+        GdkPixmap *pixmap = gdk_pixmap_create_from_xpm_d( wxRootWindow->window, &mask, NULL, cross_xpm );
     
         GtkWidget *pw = gtk_pixmap_new( pixmap, mask );
         gdk_bitmap_unref( mask );
