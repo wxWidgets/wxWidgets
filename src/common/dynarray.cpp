@@ -147,7 +147,7 @@ void wxBaseArray::Alloc(uint uiSize)
 }
 
 // searches the array for an item (forward or backwards)
-int wxBaseArray::Index(long lItem, Bool bFromEnd) const
+int wxBaseArray::Index(long lItem, bool bFromEnd) const
 {
   if ( bFromEnd ) {
     if ( m_uiCount > 0 ) {
