@@ -256,10 +256,10 @@ void wxFrameBase::OnInternalIdle()
 #endif
 }
 
-void wxFrameBase::OnMenuOpen(wxMenuEvent& WXUNUSED(event))
+void wxFrameBase::OnMenuOpen(wxMenuEvent& event)
 {
 #if wxUSE_MENUS && !wxUSE_IDLEMENUUPDATES
-    DoMenuUpdates();
+    DoMenuUpdates(event.GetMenu());
 #endif
 }
 
@@ -421,13 +421,15 @@ wxToolBar* wxFrameBase::OnCreateToolBar(long style,
 #if wxUSE_MENUS
 
 // update all menus
-void wxFrameBase::DoMenuUpdates()
+void wxFrameBase::DoMenuUpdates(wxMenu* menu)
 {
+    wxEvtHandler* source = GetEventHandler();
     wxMenuBar* bar = GetMenuBar();
 
-    if ( bar != NULL )
+    if (menu)
+        menu->UpdateUI(source);
+    else if ( bar != NULL )
     {
-        wxEvtHandler* source = GetEventHandler();
         int nCount = bar->GetMenuCount();
         for (int n = 0; n < nCount; n++)
             bar->GetMenu(n)->UpdateUI(source);

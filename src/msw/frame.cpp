@@ -141,11 +141,7 @@ wxFrame::~wxFrame()
     m_isBeingDeleted = TRUE;
     DeleteAllBars();
 #ifdef __WXWINCE__
-    if (m_commandBar)
-    {
-        ::DestroyWindow((HWND) m_commandBar);
-        m_commandBar = NULL;
-    }
+    RemoveCommandBar();
 #endif
 
 }
@@ -300,16 +296,9 @@ void wxFrame::InternalSetMenuBar()
 #ifdef __WXMICROWIN__
     // Nothing
 #elif defined(__WXWINCE__)
-    if (!m_commandBar)
-    {
-        // TODO: eventually have a wxCommandBar class
-        m_commandBar = (WXHWND) CommandBar_Create(wxGetInstance(), GetHwnd(), NewControlId());
-        if (!m_commandBar)
-        {
-            wxFAIL_MSG( _T("failed to create commandbar") );
-            return;
-        }
-    }
+    
+    CreateCommandBar() ;
+
     if (m_commandBar)
     {
         if (!CommandBar_InsertMenubarEx((HWND) m_commandBar, NULL,
@@ -802,6 +791,10 @@ long wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             processed = HandlePaint();
             break;
 
+        case WM_INITMENUPOPUP:
+            processed = HandleInitMenuPopup((WXHMENU) wParam);
+            break;
+
 #if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
         case WM_MENUSELECT:
             {
@@ -811,10 +804,6 @@ long wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 
                 processed = HandleMenuSelect(item, flags, hmenu);
             }
-            break;
-
-        case WM_INITMENU:
-            processed = HandleInitMenu();
             break;
 
         case WM_EXITMENULOOP:
@@ -839,13 +828,52 @@ long wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
     return rc;
 }
 
-// handle WM_INITMENU message
-bool wxFrame::HandleInitMenu()
+// handle WM_INITMENUPOPUP message
+bool wxFrame::HandleInitMenuPopup(WXHMENU hMenu)
 {
-    wxMenuEvent event(wxEVT_MENU_OPEN, 0);
+    wxMenu* menu = NULL;
+    if (GetMenuBar())
+    {
+        int nCount = GetMenuBar()->GetMenuCount();
+        for (int n = 0; n < nCount; n++)
+        {
+            if (GetMenuBar()->GetMenu(n)->GetHMenu() == hMenu)
+            {
+                menu = GetMenuBar()->GetMenu(n);
+                break;
+            }
+        }
+    }
+    
+    wxMenuEvent event(wxEVT_MENU_OPEN, 0, menu);
     event.SetEventObject(this);
 
     return GetEventHandler()->ProcessEvent(event);
 }
+
+#ifdef __WXWINCE__
+WXHWND wxFrame::CreateCommandBar()
+{
+    if (m_commandBar)
+        return m_commandBar;
+
+    m_commandBar = (WXHWND) CommandBar_Create(wxGetInstance(), GetHwnd(), NewControlId());
+    if (!m_commandBar)
+    {
+        wxFAIL_MSG( _T("failed to create commandbar") );
+        return 0;
+    }
+    return m_commandBar;
+}
+
+void wxFrame::RemoveCommandBar()
+{
+    if (m_commandBar)
+    {
+        ::DestroyWindow((HWND) m_commandBar);
+        m_commandBar = NULL;
+    }
+}
+#endif
 
 

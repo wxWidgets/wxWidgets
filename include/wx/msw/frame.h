@@ -102,6 +102,12 @@ public:
     // current size - this has an effect of refreshing the window layout
     virtual void SendSizeEvent();
 
+#ifdef __WXWINCE__
+    WXHWND GetCommandBar() { return m_commandBar; }
+    WXHWND CreateCommandBar() ;
+    void RemoveCommandBar() ;
+#endif
+
 protected:
     // common part of all ctors
     void Init();
@@ -128,8 +134,8 @@ protected:
     // window proc for the frames
     long MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
-    // handle WM_INITMENU message
-    bool HandleInitMenu();
+    // handle WM_INITMENUPOPUP message
+    bool HandleInitMenuPopup(WXHMENU hMenu);
 
     virtual bool IsMDIChild() const { return FALSE; }
 

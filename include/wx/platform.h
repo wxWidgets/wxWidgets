@@ -332,8 +332,7 @@
  * Presently, only Windows and GTK+ support wxEVT_MENU_OPEN.
  */
 #ifndef wxUSE_IDLEMENUUPDATES
-    #if (defined(__WXMSW__) && !defined(__WXWINCE)) ||\
-         defined(__WXGTK__)
+    #if defined(__WXMSW__) || defined(__WXGTK__)
         #define wxUSE_IDLEMENUUPDATES 0
     #else
         #define wxUSE_IDLEMENUUPDATES 1

@@ -1184,12 +1184,12 @@ private:
 class WXDLLIMPEXP_CORE wxMenuEvent : public wxEvent
 {
 public:
-    wxMenuEvent(wxEventType type = wxEVT_NULL, int winid = 0)
+    wxMenuEvent(wxEventType type = wxEVT_NULL, int winid = 0, wxMenu* menu = NULL)
         : wxEvent(winid, type)
-        { m_menuId = winid; }
+        { m_menuId = winid; m_menu = NULL; }
     wxMenuEvent(const wxMenuEvent & event)
         : wxEvent(event)
-    { m_menuId = event.m_menuId; }
+    { m_menuId = event.m_menuId; m_menu = event.m_menu; }
 
     // only for wxEVT_MENU_HIGHLIGHT
     int GetMenuId() const { return m_menuId; }
@@ -1197,10 +1197,14 @@ public:
     // only for wxEVT_MENU_OPEN/CLOSE
     bool IsPopup() const { return m_menuId == -1; }
 
+    // only for wxEVT_MENU_OPEN/CLOSE
+    wxMenu* GetMenu() const { return m_menu; }
+
     virtual wxEvent *Clone() const { return new wxMenuEvent(*this); }
 
 private:
-    int m_menuId;
+    int     m_menuId;
+    wxMenu* m_menu;
 
     DECLARE_DYNAMIC_CLASS(wxMenuEvent)
 };

@@ -169,7 +169,7 @@ static void gtk_menu_open_callback( GtkWidget *widget, wxMenu *menu )
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-    wxMenuEvent event( wxEVT_MENU_OPEN, -1 );
+    wxMenuEvent event( wxEVT_MENU_OPEN, -1, menu );
     event.SetEventObject( menu );
 
     wxEvtHandler* handler = menu->GetEventHandler();

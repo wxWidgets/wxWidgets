@@ -146,8 +146,9 @@ public:
     void OnMenuHighlight(wxMenuEvent& event);
 
 #if wxUSE_MENUS
-    // send wxUpdateUIEvents for all menu items (called from OnIdle())
-    void DoMenuUpdates();
+    // send wxUpdateUIEvents for all menu items in the menubar,
+    // or just for menu if non-NULL
+    void DoMenuUpdates(wxMenu* menu = NULL);
 #endif // wxUSE_MENUS
 
     // do the UI update processing for this window
