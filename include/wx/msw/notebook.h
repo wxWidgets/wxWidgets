@@ -42,41 +42,12 @@ WX_DEFINE_ARRAY(wxNotebookPage *, wxArrayPages);
 #define WXDLLEXPORTLOCAL
 
 // ----------------------------------------------------------------------------
-// notebook events
-// ----------------------------------------------------------------------------
-class WXDLLEXPORT wxNotebookEvent : public wxNotifyEvent
-{
-public:
-  wxNotebookEvent(wxEventType commandType = wxEVT_NULL, int id = 0,
-                  int nSel = -1, int nOldSel = -1)
-  : wxNotifyEvent(commandType, id)
-  {
-      m_nSel = nSel;
-      m_nOldSel = nOldSel;
-  }
-
-  // accessors
-    // the currently selected page (-1 if none)
-  int GetSelection() const { return m_nSel; }
-  void SetSelection(int nSel) { m_nSel = nSel; }
-    // the page that was selected before the change (-1 if none)
-  int GetOldSelection() const { return m_nOldSel; }
-  void SetOldSelection(int nOldSel) { m_nOldSel = nOldSel; }
-
-private:
-  int m_nSel,     // currently selected page
-      m_nOldSel;  // previously selected page
-
-  DECLARE_DYNAMIC_CLASS(wxNotebookEvent)
-};
-
-// ----------------------------------------------------------------------------
 // wxNotebook
 // ----------------------------------------------------------------------------
 
-// @@@ this class should really derive from wxTabCtrl, but the interface is not
-//     exactly the same, so I can't do it right now and instead we reimplement
-//     part of wxTabCtrl here
+// FIXME this class should really derive from wxTabCtrl, but the interface is not
+//       exactly the same, so I can't do it right now and instead we reimplement
+//       part of wxTabCtrl here
 class WXDLLEXPORT wxNotebook : public wxControl
 {
 public:
@@ -198,28 +169,5 @@ protected:
   DECLARE_DYNAMIC_CLASS(wxNotebook)
   DECLARE_EVENT_TABLE()
 };
-
-// ----------------------------------------------------------------------------
-// event macros
-// ----------------------------------------------------------------------------
-typedef void (wxEvtHandler::*wxNotebookEventFunction)(wxNotebookEvent&);
-
-#define EVT_NOTEBOOK_PAGE_CHANGED(id, fn)                                   \
-  {                                                                         \
-    wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,                                    \
-    id,                                                                     \
-    -1,                                                                     \
-    (wxObjectEventFunction)(wxEventFunction)(wxNotebookEventFunction) &fn,  \
-    NULL                                                                    \
-  },
-
-#define EVT_NOTEBOOK_PAGE_CHANGING(id, fn)                                  \
-  {                                                                         \
-    wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING,                                   \
-    id,                                                                     \
-    -1,                                                                     \
-    (wxObjectEventFunction)(wxEventFunction)(wxNotebookEventFunction) &fn,  \
-    NULL                                                                    \
-  },
 
 #endif // _NOTEBOOK_H

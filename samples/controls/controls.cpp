@@ -99,6 +99,7 @@ public:
     void OnRadioButtons( wxCommandEvent &event );
     void OnSetFont( wxCommandEvent &event );
     void OnPageChanged( wxNotebookEvent &event );
+    void OnPageChanging( wxNotebookEvent &event );
     void OnSliderUpdate( wxCommandEvent &event );
 #ifndef __WIN16__
     void OnSpinUpdate( wxSpinEvent &event );
@@ -455,6 +456,7 @@ const int  ID_SPIN              = 182;
 
 BEGIN_EVENT_TABLE(MyPanel, wxPanel)
 EVT_SIZE      (                         MyPanel::OnSize)
+EVT_NOTEBOOK_PAGE_CHANGING(ID_NOTEBOOK, MyPanel::OnPageChanging)
 EVT_NOTEBOOK_PAGE_CHANGED(ID_NOTEBOOK,  MyPanel::OnPageChanged)
 EVT_LISTBOX   (ID_LISTBOX,              MyPanel::OnListBox)
 EVT_LISTBOX_DCLICK(ID_LISTBOX,          MyPanel::OnListBoxDoubleClick)
@@ -506,7 +508,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_text = new wxTextCtrl( this, -1, "This is the log window.\n", wxPoint(0,50), wxSize(100,50), wxTE_MULTILINE );
     //  m_text->SetBackgroundColour("wheat");
 
-    delete wxLog::SetActiveTarget(new wxLogTextCtrl(m_text));
+    delete wxLog::SetActiveTarget(new wxLogStderr);
 
     m_notebook = new wxNotebook( this, ID_NOTEBOOK, wxPoint(0,0), wxSize(200,150) );
 
@@ -816,6 +818,26 @@ void MyPanel::OnSize( wxSizeEvent& WXUNUSED(event) )
 
     if (m_notebook) m_notebook->SetSize( 2, 2, x-4, y*2/3-4 );
     if (m_text) m_text->SetSize( 2, y*2/3+2, x-4, y/3-4 );
+}
+
+void MyPanel::OnPageChanging( wxNotebookEvent &event )
+{
+    int selNew = event.GetSelection(),
+        selOld = event.GetOldSelection();
+    if ( selOld == 2 && selNew == 4 )
+    {
+        wxMessageBox("This demonstrates how a program may prevent the "
+                     "page change from taking place - the current page will "
+                     "stay the third one", "Conntrol sample",
+                     wxICON_INFORMATION | wxOK);
+
+        event.Veto();
+    }
+    else
+    {
+        *m_text << "Notebook selection is being changed from "
+                << selOld << " to " << selNew << "\n";
+    }
 }
 
 void MyPanel::OnPageChanged( wxNotebookEvent &event )
