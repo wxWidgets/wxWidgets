@@ -41,6 +41,15 @@
         #define __WIN32__
     #endif
 
+    /*
+       see MSDN for the description of possible WINVER values, this one is a
+       good default and, anyhow, we check for most of the features we use
+       during run-time.
+     */
+    #ifndef WINVER
+        #define WINVER  0x0400
+    #endif
+
     /* Win95 means Win95-style UI, i.e. Win9x/NT 4+ */
     #if !defined(__WIN95__) && defined(WINVER) && (WINVER >= 0x0400)
         #define __WIN95__
