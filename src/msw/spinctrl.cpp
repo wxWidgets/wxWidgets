@@ -265,17 +265,8 @@ bool wxSpinCtrl::Create(wxWindow *parent,
 
     // create the text window
 
-    bool want3D;
-    WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D);
-    int msStyle = WS_CHILD;
-
-    // Even with extended styles, need to combine with WS_BORDER for them to
-    // look right.
-    if ( want3D || wxStyleHasBorder(style) )
-        msStyle |= WS_BORDER;
-
-    if ( style & wxCLIP_SIBLINGS )
-        msStyle |= WS_CLIPSIBLINGS;
+    WXDWORD exStyle = 0;
+    WXDWORD msStyle = MSWGetStyle(GetWindowStyle(), & exStyle) ;
 
     m_hwndBuddy = (WXHWND)::CreateWindowEx
                     (

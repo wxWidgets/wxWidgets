@@ -39,7 +39,12 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos,
            const wxSize& size,
            long style,
-           const wxString& name){
+           const wxString& name)
+{
+    // By default, a static text should have no border.
+    if ((style & wxBORDER_MASK) == wxBORDER_DEFAULT)
+        style |= wxBORDER_NONE;
+
   SetName(name);
   if (parent) parent->AddChild(this);
 
@@ -58,10 +63,9 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
   m_windowStyle = style;
 
-  long msStyle = WS_CHILD | WS_VISIBLE;
+  WXDWORD exStyle = 0;
+  WXDWORD msStyle = MSWGetStyle(GetWindowStyle(), & exStyle) ;
 
-  if ( m_windowStyle & wxCLIP_SIBLINGS )
-    msStyle |= WS_CLIPSIBLINGS;
   if (m_windowStyle & wxALIGN_CENTRE)
     msStyle |= SS_CENTER;
   else if (m_windowStyle & wxALIGN_RIGHT)
@@ -69,12 +73,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
   else
     msStyle |= SS_LEFT;
 
-  // Even with extended styles, need to combine with WS_BORDER
-  // for them to look right.
-  if ( wxStyleHasBorder(m_windowStyle) )
-    msStyle |= WS_BORDER;
-
-  m_hWnd = (WXHWND)::CreateWindowEx(MakeExtendedStyle(m_windowStyle), wxT("STATIC"), (const wxChar *)label,
+  m_hWnd = (WXHWND)::CreateWindowEx(exStyle, wxT("STATIC"), (const wxChar *)label,
                          msStyle,
                          0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
                          wxGetInstance(), NULL);

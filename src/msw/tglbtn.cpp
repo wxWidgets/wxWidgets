@@ -85,10 +85,10 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
 #define BS_PUSHLIKE 0x00001000L
 #endif
 
-   long msStyle = BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP | WS_CHILD | WS_VISIBLE;
-
-   if ( m_windowStyle & wxCLIP_SIBLINGS )
-        msStyle |= WS_CLIPSIBLINGS;
+   WXDWORD exStyle = 0;
+   long msStyle = MSWGetStyle(style, & exStyle) ;
+    
+   msStyle |= BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP ;
 
 #ifdef __WIN32__
    if(m_windowStyle & wxBU_LEFT)
@@ -101,7 +101,7 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
       msStyle |= BS_BOTTOM;
 #endif
 
-   m_hWnd = (WXHWND)CreateWindowEx(MakeExtendedStyle(m_windowStyle),
+   m_hWnd = (WXHWND)CreateWindowEx(exStyle,
                                    wxT("BUTTON"), label,
                                    msStyle, 0, 0, 0, 0,
                                    (HWND)parent->GetHWND(),

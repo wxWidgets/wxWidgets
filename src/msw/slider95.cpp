@@ -59,6 +59,9 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
+    if ( (style & wxBORDER_MASK) == wxBORDER_DEFAULT )
+        style |= wxBORDER_NONE;
+
     SetName(name);
 #if wxUSE_VALIDATORS
     SetValidator(validator);
@@ -90,15 +93,12 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
     long msStyle = 0;
     long wstyle = 0;
 
-    if ( m_windowStyle & wxCLIP_SIBLINGS )
-        msStyle |= WS_CLIPSIBLINGS;
-
     if ( m_windowStyle & wxSL_LABELS )
     {
-        msStyle |= WS_CHILD | WS_VISIBLE | WS_BORDER | SS_CENTER;
+        msStyle |= SS_CENTER;
 
-        bool want3D;
-        WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D) ;
+        WXDWORD exStyle = 0;
+        msStyle |= MSWGetStyle(GetWindowStyle(), & exStyle) ;
 
         m_staticValue = (WXHWND) CreateWindowEx
             (
@@ -123,7 +123,9 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
             );
     }
 
-    msStyle = 0;
+    WXDWORD exStyle = 0;
+
+    msStyle = MSWGetStyle(GetWindowStyle(), & exStyle) ;    
 
     if ( m_windowStyle & wxCLIP_SIBLINGS )
         msStyle |= WS_CLIPSIBLINGS;
@@ -154,7 +156,7 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
 
     HWND scroll_bar = CreateWindowEx
         (
-            MakeExtendedStyle(m_windowStyle), TRACKBAR_CLASS, wxT(""),
+            exStyle, TRACKBAR_CLASS, wxT(""),
             msStyle,
             0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
             wxGetInstance(), NULL

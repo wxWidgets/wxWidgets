@@ -191,15 +191,8 @@ bool wxListBox::Create(wxWindow *parent,
     // doesn't work properly
     wstyle |= LBS_NOINTEGRALHEIGHT;
 
-    bool want3D;
-    WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D);
-
-    // Even with extended styles, need to combine with WS_BORDER for them to
-    // look right.
-    if ( want3D || wxStyleHasBorder(m_windowStyle) )
-    {
-        wstyle |= WS_BORDER;
-    }
+    WXDWORD exStyle = 0;
+    (void) MSWGetStyle(style, & exStyle) ;
 
     m_hWnd = (WXHWND)::CreateWindowEx(exStyle, wxT("LISTBOX"), NULL,
             wstyle | WS_CHILD,
@@ -208,14 +201,6 @@ bool wxListBox::Create(wxWindow *parent,
             wxGetInstance(), NULL);
 
     wxCHECK_MSG( m_hWnd, FALSE, wxT("Failed to create listbox") );
-
-#if wxUSE_CTL3D
-    if (want3D)
-    {
-        Ctl3dSubclassCtl(GetHwnd());
-        m_useCtl3D = TRUE;
-    }
-#endif
 
     // Subclass again to catch messages
     SubclassWin(m_hWnd);

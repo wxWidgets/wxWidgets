@@ -230,6 +230,8 @@ wxMSW:
 - fix for multiple consecutive groups of radiobuttons
 - fix for incorrect display of tooltips in non English locales (Niki Spahiev)
 - fixed memory leak when setting new wxMask for wxBitmap
+- improved border handling so it no longer shows a thin and
+  sunken border under XP
 
 wxMotif:
 
