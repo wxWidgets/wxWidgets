@@ -27,10 +27,13 @@
   #pragma hdrstop
 #endif  //__BORLANDC__
 
+#if wxUSE_DYNLIB_CLASS
+
 #include "wx/dynlib.h"
 #include "wx/filefn.h"
 #include "wx/intl.h"
 #include "wx/log.h"
+#include "wx/tokenzr.h"
 
 // ----------------------------------------------------------------------------
 // conditional compilation
@@ -40,14 +43,14 @@
     #define wxDllOpen(lib)                dlopen(lib, RTLD_LAZY)
     #define wxDllGetSymbol(handle, name)  dlsym(handle, (char *)name)
     #define wxDllClose                    dlclose
-#elif defined(HAVE_SHLLOAD)
-    #define wxDllOpen(lib)                shl_open(lib, BIND_DEFERRED, 0)
+#elif defined(HAVE_SHL_LOAD)
+    #define wxDllOpen(lib)                shl_load(lib, BIND_DEFERRED, 0)
     #define wxDllClose      shl_unload
 
-    static inline void *wxDllGetSymbol(shl_t *handle, const char *name)
+    static inline void *wxDllGetSymbol(shl_t handle, const char *name)
     {
         void *sym;
-        if ( shl_findsym(handle, name, TYPE_UNDEFINED, &sym) == 0 )
+        if ( shl_findsym(&handle, name, TYPE_UNDEFINED, &sym) == 0 )
             return sym;
         else
             return (void *)0;
@@ -77,7 +80,11 @@ static wxString ConstructLibraryName(const wxString& basename)
     wxString fullname(basename);
 
 #if defined(__UNIX__)
-    fullname << ".so";
+    #if defined(__HPUX__)
+        fullname << ".sl";
+    #else	//__HPUX__
+        fullname << ".so";
+    #endif	//__HPUX__
 #elif defined(__WINDOWS__)
     fullname << ".dll";
 #endif
@@ -215,11 +222,30 @@ wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
     wxString lib_name = ConstructLibraryName(name);
 
 #if defined(__UNIX__)
-    // TODO use LD_LIBRARY_PATH!
-    lib_name.Prepend("/lib");
+    // found the first file in LD_LIBRARY_PATH with this name
+    wxString libPath("/lib:/usr/lib"); // system path first
+    const char *envLibPath = getenv("LD_LIBRARY_PATH");
+    if ( envLibPath )
+        libPath << ':' << envLibPath;
+    wxStringTokenizer tokenizer(libPath, ':');
+    while ( tokenizer.HasMoreToken() )
+    {
+        wxString fullname(tokenizer.NextToken());
+
+        fullname << '/' << lib_name;
+        if ( wxFileExists(fullname) )
+        {
+            lib_name = fullname;
+
+            // found the library
+            break;
+        }
+    }
+    //else: not found in the path, leave the name as is (secutiry risk?)
+
 #endif // __UNIX__
 
-    wxDllType handle ;
+    wxDllType handle;
 
 #if defined(__WXMAC__)
     FSSpec myFSSpec ;
@@ -269,3 +295,5 @@ wxObject *wxLibraries::CreateObject(const wxString& path)
     }
     return NULL;
 }
+
+#endif // wxUSE_DYNLIB_CLASS

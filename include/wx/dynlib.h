@@ -16,16 +16,20 @@
     #pragma interface
 #endif
 
+#include <wx/setup.h>
+
+#if wxUSE_DYNLIB_CLASS
+
 #include <wx/string.h>
 #include <wx/list.h>
 #include <wx/hash.h>
 
-// TODO should be done by configure
-#if defined(__UNIX__) && !(defined(HAVE_DLOPEN) || defined(HAVE_SHLLOAD))
+// this is normally done by configure, but I leave it here for now...
+#if defined(__UNIX__) && !(defined(HAVE_DLOPEN) || defined(HAVE_SHL_LOAD))
     #if defined(__LINUX__) || defined(__SOLARIS__) || defined(__SUNOS__) || defined(__FREEBSD__)
         #define HAVE_DLOPEN
     #elif defined(__HPUX__)
-        #define HAVE_SHLLOAD
+        #define HAVE_SHL_LOAD
     #endif // Unix flavour
 #endif // !Unix or already have some HAVE_xxx defined
 
@@ -33,10 +37,10 @@
     #include <dlfcn.h>
 
     typedef void *wxDllType;
-#elif defined(HAVE_SHLLOAD)
+#elif defined(HAVE_SHL_LOAD)
     #include <dl.h>
 
-    typedef void *wxDllType;
+    typedef shl_t wxDllType;
 #elif defined(__WINDOWS__)
     #include <windows.h>
 
@@ -62,7 +66,7 @@ public:
     wxHashTable classTable;
 
 public:
-    wxLibrary(void *handle);
+    wxLibrary(wxDllType handle);
     ~wxLibrary();
 
     // Get a symbol from the dynamic library
@@ -111,5 +115,7 @@ extern "C" wxClassInfo *wxGetClassFirst(); \
 wxClassInfo *wxGetClassFirst() { \
   return wxClassInfo::GetFirst(); \
 }
+
+#endif // wxUSE_DYNLIB_CLASS
 
 #endif // _WX_DYNLIB_H__
