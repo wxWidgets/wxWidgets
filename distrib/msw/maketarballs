@@ -27,8 +27,54 @@ dospinwxgtk()
   echo Configuring...
   $WXSRC/configure --no-recursion
   echo Making...
-  make -j1 dist
+  make -j1 dist bzip-dist-only
   mv $WXDEST/wxgtk/release/*.gz $WXDEST/wxgtk/release/*.bz2 $WXDEST
+}
+
+dospinwxmgl()
+{
+  echo Making wxMGL tarballs...
+
+  if [ ! -d $WXDEST ]; then
+    mkdir $WXDEST
+  fi
+
+  rm -f -r $WXDEST/wxmgl
+  mkdir $WXDEST/wxmgl
+  mkdir $WXDEST/wxmgl/release
+
+  cd $WXSRC
+  cd locale
+  make allmo
+  cd $WXDEST/wxmgl/release
+  echo Configuring...
+  $WXSRC/configure --no-recursion --with-mgl
+  echo Making...
+  make -j1 dist bzip-dist-only
+  mv $WXDEST/wxmgl/release/*.gz $WXDEST/wxmgl/release/*.bz2 $WXDEST
+}
+
+dospinwxbase()
+{
+  echo Making wxBase tarballs...
+
+  if [ ! -d $WXDEST ]; then
+    mkdir $WXDEST
+  fi
+
+  rm -f -r $WXDEST/wxbase
+  mkdir $WXDEST/wxbase
+  mkdir $WXDEST/wxbase/release
+
+  cd $WXSRC
+  cd locale
+  make allmo
+  cd $WXDEST/wxbase/release
+  echo Configuring...
+  $WXSRC/configure --no-recursion --disable-gui
+  echo Making...
+  make -j1 dist bzip-dist-only
+  mv $WXDEST/wxbase/release/*.gz $WXDEST/wxbase/release/*.bz2 $WXDEST
 }
 
 dospinwxx11()
@@ -50,7 +96,7 @@ dospinwxx11()
   echo Configuring...
   $WXSRC/configure --with-x11 --no-recursion
   echo Making...
-  make -j1 dist
+  make -j1 dist bzip-dist-only
 
   cp $WXDEST/wxx11/release/*.tar.gz $WXDEST
   cp $WXDEST/wxx11/release/*.tar.bz2 $WXDEST
@@ -75,7 +121,7 @@ dospinwxmotif()
   echo Configuring...
   $WXSRC/configure --with-motif --no-recursion
   echo Making...
-  make -j1 dist
+  make -j1 dist bzip-dist-only
 
   cp $WXDEST/wxmotif/release/*.tar.gz $WXDEST
   cp $WXDEST/wxmotif/release/*.tar.bz2 $WXDEST
@@ -94,7 +140,7 @@ dospinwxmotif()
   bzip2 -f9 ../wxMotif-$WXVER.tar
   cd ..
   rm -f -r wxMotif.tmp
-  rm -f -r $WXDEST/wxmotif
+#  rm -f -r $WXDEST/wxmotif
 }
 
 dospinwxmac()
@@ -116,7 +162,7 @@ dospinwxmac()
   echo Configuring...
   $WXSRC/configure --with-mac --no-recursion
   echo Making...
-  make -j1 dist
+  make -j1 dist bzip-dist-only
 
   cp $WXDEST/wxmac/release/*.tar.gz $WXDEST
   cp $WXDEST/wxmac/release/*.tar.bz2 $WXDEST
@@ -195,6 +241,7 @@ SPINWXGTK=0
 SPINWXMOTIF=0
 SPINWXMAC=0
 SPINWXBASE=0
+SPINWXMGL=0
 SPINDOCS=0
 SPINEVERYTHING=0
 UPDATECVS=0
@@ -209,6 +256,7 @@ usage()
     echo "    --wxx11        Spin wxX11"
     echo "    --wxmotif      Spin wxMotif"
     echo "    --wxmac        Spin wxMac"
+    echo "    --wxmgl        Spin wxMGL"
     echo "    --docs         Spin docs"
     echo "    --all          Spin EVERYTHING"
     echo "    --updatecvs    Update from CVS"
@@ -242,6 +290,8 @@ for i in "$@"; do
 	--wxx11) SPINWXX11=1 ;;
 	--wxgtk) SPINWXGTK=1 ;;
 	--wxmac) SPINWXMAC=1 ;;
+	--wxbase) SPINWXBASE=1 ;;
+	--wxmgl) SPINWXMGL=1 ;;
 	--wxmotif) SPINWXMOTIF=1 ;;
 	--all) SPINEVERYTHING=1 ;;
 	--updatecvs) UPDATECVS=1 ;;
@@ -277,6 +327,14 @@ fi
 
 if [ "$SPINWXMAC" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
   dospinwxmac
+fi
+
+if [ "$SPINWXMGL" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  dospinwxmgl
+fi
+
+if [ "$SPINWXBASE" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
+  dospinwxbase
 fi
 
 if [ "$SPINDOCS" = "1" ] || [ "$SPINEVERYTHING" = "1" ]; then
