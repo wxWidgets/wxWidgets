@@ -477,8 +477,8 @@ void wxChoice::DoSetSize(int x, int y,
         size_t nItems = GetCount();
         if ( !nItems )
             nItems = 9;
-        else if ( nItems > 39 )
-            nItems = 39;
+        else if ( nItems > 24 )
+            nItems = 24;
 
         // add space for the drop down list
         const int hItem = SendMessage(GetHwnd(), CB_GETITEMHEIGHT, 0, 0);
