@@ -452,6 +452,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/xpmdecod.cpp
     src/generic/busyinfo.cpp
     src/generic/choicdgg.cpp
+    src/generic/choicbkg.cpp
     src/generic/dcpsg.cpp
     src/generic/dirctrlg.cpp
     src/generic/dragimgg.cpp
@@ -561,6 +562,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/bookctrl.h
     wx/busyinfo.h
     wx/caret.h
+    wx/choicebk.h
     wx/clipbrd.h
     wx/cmdproc.h
     wx/colordlg.h
@@ -2370,8 +2372,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     </set>
     <set var="BASE_PLATFORM_SRC" hints="files">
         <if cond="PLATFORM_UNIX=='1'">$(BASE_UNIX_SRC)</if>
-        <!-- 
-            workaround until Bakefiles do not support more than one platform 
+        <!--
+            workaround until Bakefiles do not support more than one platform
             for Open Watcom (DOS(MGL)/MSW) - do not include WIN32 base for DOS application
         -->
         <if cond="PLATFORM_WIN32=='1' and TOOLKIT!='MGL'">$(BASE_WIN32_SRC) $(BASE_WINCE_SRC)</if>
@@ -2537,9 +2539,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         $(NET_CMN_SRC) $(NET_UNIX_SRC) $(NET_WIN32_SRC) $(NET_WINCE_SRC)
         $(XML_SRC) $(ODBC_SRC)
     </set>
-    
-    
-    
+
+
+
     <!-- ================================================================ -->
     <!--        Define where plugins sources go if USE_PLUGINS=0          -->
     <!-- ================================================================ -->
@@ -2550,7 +2552,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
             $(UNIX_SOUND_SRC_SDL)
         </if>
     </set>
-    
+
     <set var="PLUGIN_MONOLIB_SRC">$(PLUGIN_ADV_SRC)</set>
-    
+
 </makefile>

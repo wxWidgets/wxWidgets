@@ -123,6 +123,7 @@
 #define wxUSE_MSGDLG       1
 #define wxUSE_NOTEBOOK     1
 #define wxUSE_LISTBOOK     1
+#define wxUSE_CHOICEBOOK   1
 #define wxUSE_SPLITTER     1
 #define wxUSE_STOPWATCH    1
 #define wxUSE_TAB_DIALOG   1
@@ -201,7 +202,7 @@
 #define wxUSE_ODBC                1
                                   // Define 1 to use ODBC classes
 
-#define wxODBC_FWD_ONLY_CURSORS	1
+#define wxODBC_FWD_ONLY_CURSORS   1
                                   // For backward compatibility reasons, this parameter now only
                                   // controls the default scrolling method used by cursors.  This
                                   // default behavior can be overriden by setting the second param

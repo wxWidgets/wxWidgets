@@ -72,9 +72,9 @@ INCOMPATIBLE CHANGES SINCE 2.4.x
   At this time, the only situation known not to work the same as
   before is the following:
 
-	 win = new SomeWidget(parent);
-	 win->SetSize(SomeNonDefaultSize);
-	 sizer->Add(win);
+    win = new SomeWidget(parent);
+    win->SetSize(SomeNonDefaultSize);
+    sizer->Add(win);
 
   In this case the old code would have used the new size as the
   minimum, but now the sizer will use the default size as the minimum
@@ -227,6 +227,7 @@ All (GUI):
 - added wxTopLevelWindow::RequestUserAttention()
 - support for comma in contrib gizmo wxLEDNumberCtrl (Grant Likely)
 - recursive wxSizer::Show for subsizer and return value if element was found
+- added wxChoicebook control
 
 Unix:
 
@@ -404,7 +405,6 @@ All:
 
 All (GUI):
 
-- added wxListBook control
 - added 3-state checkboxes for MSW/Mac (Dimitri Schoolwerth)
 - added some support for C++ exceptions in the library (do read the manual!)
 - added wxListCtrl::GetViewRect()
@@ -545,7 +545,7 @@ wxBase:
 All GUI ports:
 
 - added wxVScrolledWindow, wxVListBox and wxHtmlLbox classes
-- added wxListbook
+- added wxListbook control
 - added alpha channel support to wxImage
 - added wxRenderer class allowing to customize the drawing of generic controls
 - added wxCLOSE_BOX style for dialogs and frames

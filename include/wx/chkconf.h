@@ -291,6 +291,14 @@
 #   endif
 #endif /* !defined(wxUSE_CHOICE) */
 
+#ifndef wxUSE_CHOICEBOOK
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_CHOICEBOOK must be defined."
+#   else
+#       define wxUSE_CHOICEBOOK 0
+#   endif
+#endif /* !defined(wxUSE_CHOICEBOOK) */
+
 #ifndef wxUSE_CHOICEDLG
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_CHOICEDLG must be defined."
@@ -957,7 +965,7 @@
 #    endif
 #endif /* wxUSE_BMPBUTTON */
 
-#if wxUSE_NOTEBOOK || wxUSE_LISTBOOK
+#if wxUSE_NOTEBOOK || wxUSE_LISTBOOK || wxUSE_CHOICEBOOK
 #   if defined(wxUSE_BOOKCTRL) && !wxUSE_BOOKCTRL
 #       ifdef wxABORT_ON_CONFIG_ERROR
 #           error "wxUSE_BOOKCTRL must be set."
@@ -981,6 +989,17 @@
 #       endif
 #   endif
 #endif /* wxUSE_LISTBOOK */
+
+#if wxUSE_CHOICEBOOK
+#   if !wxUSE_CHOICE
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxChoicebook requires wxChoice"
+#       else
+#           undef wxUSE_CHOICE
+#           define wxUSE_CHOICE 1
+#       endif
+#   endif
+#endif /* wxUSE_CHOICEBOOK */
 
 /* wxUniv-specific dependencies */
 #if defined(__WXUNIVERSAL__)

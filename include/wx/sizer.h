@@ -543,7 +543,7 @@ private:
 
 #if wxUSE_BOOKCTRL
 
-// this sizer works with wxNotebook/wxListbook/... and sizes the control to
+// this sizer works with wxNotebook/wxListbook/wxChoicebook... and sizes the control to
 // fit its pages
 class WXDLLEXPORT wxBookCtrl;
 
