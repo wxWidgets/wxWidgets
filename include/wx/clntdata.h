@@ -13,10 +13,11 @@
 #define _WX_CLNTDATAH__
 
 #ifdef __GNUG__
-    #pragma interface "event.h"
+    #pragma interface "clntdata.h"
 #endif
 
 #include "wx/defs.h"
+#include "wx/string.h"
 
 // ----------------------------------------------------------------------------
 
@@ -48,16 +49,20 @@ private:
 };
 
 
+
+
+// This class is a mixin that provides storage and management of "client
+// data."  The client data stored can either be a pointer to a wxClientData
+// object in which case it is managed by the container (i.e.  it will delete
+// the data when it's destroyed) or an untyped pointer which won't be deleted
+// by the window - but not both of them
+
 class WXDLLEXPORT wxClientDataContainer
 {
 public:
     wxClientDataContainer();
-    ~wxClientDataContainer();
+    virtual ~wxClientDataContainer();
 
-        // each window may have associated client data: either a pointer to
-        // wxClientData object in which case it is managed by the window (i.e.
-        // it will delete the data when it's destroyed) or an untyped pointer
-        // which won't be deleted by the window - but not both of them
     void SetClientObject( wxClientData *data ) { DoSetClientObject(data); }
     wxClientData *GetClientObject() const { return DoGetClientObject(); }
 
@@ -65,11 +70,11 @@ public:
     void *GetClientData() const { return DoGetClientData(); }
 
 protected:
-    // user data associated with the window: either an object which will be
-    // deleted by the window when it's deleted or some raw pointer which we do
-    // nothing with - only one type of data can be used with the given window
-    // (i.e. you cannot set the void data and then associate the window with
-    // wxClientData or vice versa)
+    // The user data: either an object which will be deleted by the container
+    // when it's deleted or some raw pointer which we do nothing with - only
+    // one type of data can be used with the given window (i.e. you cannot set
+    // the void data and then associate the window with wxClientData or vice
+    // versa)
     union
     {
         wxClientData *m_clientObject;
