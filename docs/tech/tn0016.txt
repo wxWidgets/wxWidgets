@@ -223,6 +223,11 @@ g) Update defs.h to define WXMAKINGDLL_FOO if WXMAKINGDLL is defined (add
         #endif
    Use WXDLLIMPEXP_FOO when declaring wxFoo classes and functions.
 
+h) Add this code to one of wxFoo's files (the more often used, the better):
+      // DLL options compatibility check:
+      #include "wx/app.h"
+      WX_CHECK_BUILD_OPTIONS("wxFoo")
+
 i) Add information about wxFoo to the manual ("Libraries list" section
    in libs.tex).
 
