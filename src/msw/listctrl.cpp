@@ -1264,6 +1264,7 @@ bool wxListCtrl::DeleteItem(long item)
 // Deletes all items
 bool wxListCtrl::DeleteAllItems()
 {
+	m_count = 0;
     return ListView_DeleteAllItems(GetHwnd()) != 0;
 }
 
