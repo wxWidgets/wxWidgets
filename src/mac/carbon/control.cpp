@@ -46,7 +46,30 @@ END_EVENT_TABLE()
 
 // Item members
 
+
+#if PRAGMA_STRUCT_ALIGN
+    #pragma options align=mac68k
+#elif PRAGMA_STRUCT_PACKPUSH
+    #pragma pack(push, 2)
+#elif PRAGMA_STRUCT_PACK
+    #pragma pack(2)
+#endif
+
+typedef struct {
+ unsigned short instruction;
+ void (*function)();
+} cdefRec, *cdefPtr, **cdefHandle;
+
+#if PRAGMA_STRUCT_ALIGN
+    #pragma options align=reset
+#elif PRAGMA_STRUCT_PACKPUSH
+    #pragma pack(pop)
+#elif PRAGMA_STRUCT_PACK
+    #pragma pack()
+#endif
+
 ControlActionUPP wxMacLiveScrollbarActionUPP = NULL ;
+wxControl *wxFindControlFromMacControl(ControlHandle inControl ) ;
 
 pascal void wxMacLiveScrollbarActionProc( ControlHandle control , ControlPartCode partCode ) ;
 pascal void wxMacLiveScrollbarActionProc( ControlHandle control , ControlPartCode partCode )
@@ -62,6 +85,24 @@ pascal void wxMacLiveScrollbarActionProc( ControlHandle control , ControlPartCod
 }
 
 ControlColorUPP wxMacSetupControlBackgroundUPP = NULL ;
+ControlDefUPP wxMacControlActionUPP = NULL ;
+
+pascal SInt32  wxMacControlDefintion(SInt16 varCode, ControlRef theControl, ControlDefProcMessage message, SInt32 param)
+{
+    
+	wxControl*  wx = (wxControl*) wxFindControlFromMacControl( theControl ) ;
+	if ( wx != NULL && wx->IsKindOf( CLASSINFO( wxControl ) ) )
+	{
+	    if( message == drawCntl )
+	    {
+	        wxMacWindowClipper clip( wx ) ;
+	        return InvokeControlDefUPP( varCode , theControl , message , param , (ControlDefUPP) wx->MacGetControlAction() ) ;
+	    }
+	    else
+	        return InvokeControlDefUPP( varCode , theControl , message , param , (ControlDefUPP) wx->MacGetControlAction() ) ;
+	}
+	return  NULL ;
+}
 
 pascal OSStatus wxMacSetupControlBackground( ControlRef iControl , SInt16 iMessage , SInt16 iDepth , Boolean iIsColor )
 {
@@ -92,6 +133,7 @@ pascal OSStatus wxMacSetupControlBackground( ControlRef iControl , SInt16 iMessa
 wxControl::wxControl()
 {
     m_macControl = NULL ;
+    m_macControlAction = NULL ;
     m_macHorizontalBorder = 0 ; // additional pixels around the real control
     m_macVerticalBorder = 0 ;
     m_backgroundColour = *wxWHITE;
@@ -137,6 +179,7 @@ bool wxControl::Create(wxWindow *parent, wxWindowID id,
 wxControl::~wxControl()
 {
     m_isBeingDeleted = TRUE;
+    wxRemoveMacControlAssociation( this ) ;
     // If we delete an item, we should initialize the parent panel,
     // because it could now be invalid.
     wxWindow *parent = GetParent() ;
@@ -349,11 +392,29 @@ void wxControl::MacPostControlCreate()
     m_macControlIsShown  = true ;
 
     wxAssociateControlWithMacControl( (ControlHandle) m_macControl , this ) ;
-
 	if ( wxMacSetupControlBackgroundUPP == NULL )
 	{
 		wxMacSetupControlBackgroundUPP = NewControlColorUPP( wxMacSetupControlBackground ) ;
 	}
+	if ( wxMacControlActionUPP == NULL )
+	{
+	    wxMacControlActionUPP = NewControlDefUPP( wxMacControlDefintion ) ;
+	}
+#if TARGET_CARBON
+    m_macControlAction = *(**(ControlHandle)m_macControl).contrlDefProc ;
+    (**(ControlHandle)m_macControl).contrlDefProc = (Handle) &wxMacControlActionUPP ;
+#else
+    m_macControlAction = *(**(ControlHandle)m_macControl).contrlDefProc ;
+
+    cdefHandle cdef ;
+    cdef = (cdefHandle) NewHandle( sizeof(cdefRec) ) ;
+    if (  (**(ControlHandle)m_macControl).contrlDefProc != NULL )
+    {
+      (**cdef).instruction = 0x4EF9;  /* JMP instruction */
+      (**cdef).function = (void(*)()) wxMacControlActionUPP;
+      (**(ControlHandle)m_macControl).contrlDefProc = (Handle) cdef ;
+    }
+#endif
 	SetControlColorProc( (ControlHandle) m_macControl , wxMacSetupControlBackgroundUPP ) ;
  
      // Adjust the controls size and position
@@ -695,27 +756,7 @@ void wxControl::MacRedrawControl()
     {
         wxClientDC dc(this) ;
         wxMacPortSetter helper(&dc) ;
-/*
-        Rect r = { 0 , 0 , 32000 , 32000 } ;
-        ClipRect( &r ) ;
-*/
-        int x = 0 , y = 0;
-        wxWindow *parent = GetParent() ;
-        parent->MacWindowToRootWindow( &x,&y ) ;
-        RgnHandle clrgn = NewRgn() ;
-        RgnHandle insidergn = NewRgn() ;
-        wxSize size = parent->GetSize() ;
-        SetRectRgn( insidergn , parent->MacGetLeftBorderSize() , parent->MacGetTopBorderSize() , 
-      	  size.x - parent->MacGetLeftBorderSize() - parent->MacGetRightBorderSize(), 
-      	  size.y - parent->MacGetTopBorderSize() - parent->MacGetBottomBorderSize()) ;
-
-        CopyRgn( (RgnHandle) parent->MacGetVisibleRegion(false).GetWXHRGN() , clrgn ) ;
-		SectRgn( clrgn , insidergn , clrgn ) ;
-        OffsetRgn( clrgn , x , y ) ;
-        SetClip( clrgn ) ;
-		DisposeRgn( clrgn ) ;
-		DisposeRgn( insidergn ) ;
-
+        wxMacWindowClipper clipper(this) ;
         wxDC::MacSetupBackgroundForCurrentPort( MacGetBackgroundBrush() ) ;
         UMADrawControl( (ControlHandle) m_macControl ) ;
     }
@@ -723,32 +764,16 @@ void wxControl::MacRedrawControl()
 
 void wxControl::OnPaint(wxPaintEvent& event)
 {
+    if ( IsKindOf( CLASSINFO( wxBitmapButton ) ) )
+    {
+        int i ;
+        i = 0 ;
+    }
     if ( (ControlHandle) m_macControl )
     {
         wxPaintDC dc(this) ;
         wxMacPortSetter helper(&dc) ;
-/*
-        Rect r = { 0 , 0 , 32000 , 32000 } ;
-        ClipRect( &r ) ;
-*/
-
-        int x = 0 , y = 0;
-        wxWindow *parent = GetParent() ;
-        parent->MacWindowToRootWindow( &x,&y ) ;
-        RgnHandle clrgn = NewRgn() ;
-        RgnHandle insidergn = NewRgn() ;
-        wxSize size = parent->GetSize() ;
-        SetRectRgn( insidergn , parent->MacGetLeftBorderSize() , parent->MacGetTopBorderSize() , 
-      	  size.x - parent->MacGetLeftBorderSize() - parent->MacGetRightBorderSize(), 
-      	  size.y - parent->MacGetTopBorderSize() - parent->MacGetBottomBorderSize()) ;
-
-        CopyRgn( (RgnHandle) parent->MacGetVisibleRegion(false).GetWXHRGN() , clrgn ) ;
-		SectRgn( clrgn , insidergn , clrgn ) ;
-        OffsetRgn( clrgn , x , y ) ;
-        SetClip( clrgn ) ;
-		DisposeRgn( clrgn ) ;
-		DisposeRgn( insidergn ) ;
-
+        wxMacWindowClipper clipper(this) ;
         wxDC::MacSetupBackgroundForCurrentPort( MacGetBackgroundBrush() ) ;
         UMADrawControl( (ControlHandle) m_macControl ) ;
     }
