@@ -139,7 +139,6 @@ WX_NSColor wxBrushRefData::GetNSColor()
 // Brushes
 wxBrush::wxBrush()
 {
-    m_refData = new wxBrushRefData;
 }
 
 wxBrush::~wxBrush()
@@ -210,7 +209,8 @@ wxBitmap *wxBrush::GetStipple() const
 
 WX_NSColor wxBrush::GetNSColor()
 {
-    wxCHECK_MSG( Ok(), NULL, _T("invalid brush") );
+    if(!m_refData)
+        return [NSColor clearColor];
     return M_BRUSHDATA->GetNSColor();
 }
 
