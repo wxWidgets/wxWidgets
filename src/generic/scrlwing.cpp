@@ -956,7 +956,7 @@ void wxScrollHelper::HandleOnChar(wxKeyEvent& event)
         yScrollOld = m_yScrollPosition;
 
     int dsty;
-    switch ( event.KeyCode() )
+    switch ( event.GetKeyCode() )
     {
         case WXK_PAGEUP:
         case WXK_PRIOR:
