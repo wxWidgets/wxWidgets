@@ -641,6 +641,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_MEM_TRACING=no
   DEFAULT_wxUSE_DEBUG_CONTEXT=no
   DEFAULT_wxUSE_DMALLOC=no
+  DEFAULT_wxUSE_PRECOMP=yes
   DEFAULT_wxUSE_APPLE_IEEE=no
 
   DEFAULT_wxUSE_LOG=yes
@@ -802,6 +803,7 @@ else
   DEFAULT_wxUSE_MEM_TRACING=no
   DEFAULT_wxUSE_DEBUG_CONTEXT=no
   DEFAULT_wxUSE_DMALLOC=no
+  DEFAULT_wxUSE_PRECOMP=yes
   DEFAULT_wxUSE_APPLE_IEEE=yes
 
   DEFAULT_wxUSE_LOG=yes
@@ -1010,6 +1012,9 @@ WX_ARG_ENABLE(shared,      [  --enable-shared         create shared library code
 WX_ARG_ENABLE(soname,      [  --enable-soname         set the DT_SONAME field in ELF shared libraries], wxUSE_SONAME)
 WX_ARG_ENABLE(optimise,    [  --enable-optimise       create optimised code], wxUSE_OPTIMISE)
 WX_ARG_ENABLE(debug,       [  --enable-debug          same as debug_flag and debug_info], wxUSE_DEBUG)
+
+dnl allow the precompiled header option to be disabled under Mac OS X
+WX_ARG_ENABLE(precomp,     [  --enable-precomp        enable use of precompiled headers (Mac OS X)], wxUSE_PRECOMP)
 
 if test "$wxUSE_DEBUG" = "yes"; then
   DEFAULT_wxUSE_DEBUG_FLAG=yes
@@ -1948,14 +1953,16 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         GUIDIST=MOTIF_DIST
     fi
 
-    dnl we can't call this MAC_DIST or autoconf thinks its a macro
     if test "$wxUSE_MAC" = 1; then
-        CPPFLAGS="${CPPFLAGS} -cpp-precomp"
+        if test "$wxUSE_PRECOMP" = "yes"; then
+            CPPFLAGS="${CPPFLAGS} -cpp-precomp"
+        fi
         CFLAGS="${CFLAGS} -fpascal-strings"
         CXXFLAGS="${CXXFLAGS} -fpascal-strings"
         TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -DTARGET_CARBON"
 
         TOOLKIT=MAC
+        dnl we can't call this MAC_DIST or autoconf thinks its a macro
         GUIDIST=MACX_DIST
     fi
 
