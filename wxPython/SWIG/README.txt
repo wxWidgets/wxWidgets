@@ -11,12 +11,6 @@ source tree soon.
 
 ------------------------------------------------------------------------
 
-swig.python-2.patch	    Adds the ability to turn off the automatic
-			    generation of __repr__ methods on a class
-			    by class basis.  Used in wxPython for
-			    classes that have a __repr__ added in
-			    %pythoncode directives.  See SF Patch
-			    #835471.
 
 
 
