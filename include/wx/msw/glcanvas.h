@@ -80,8 +80,6 @@ public:
    wxWindow*        m_window;
 };
 
-#define wxGLCanvasName _T("GLCanvas")
-
 class WXDLLEXPORT wxGLCanvas: public wxWindow
 {
    DECLARE_CLASS(wxGLCanvas)
