@@ -605,10 +605,10 @@ BASE_DIST: ALL_DIST
 	cp $(WXDIR)/@RPM_FILES@ $(DISTDIR)/@RPM_FILES@
 	cp $(WXDIR)/@RPM_SPEC@ $(DISTDIR)/@RPM_SPEC@
 	cp $(WXDIR)/wxBase.dsp $(DISTDIR)
-	cp $(DOCDIR)/install.txt $(DISTDIR)/INSTALL.txt
+	cp $(DOCDIR)/base/install.txt $(DISTDIR)/INSTALL.txt
 	cp $(DOCDIR)/changes.txt $(DISTDIR)/CHANGES.txt
 	cp $(DOCDIR)/readme.txt $(DISTDIR)/README.txt
-	cp $(DOCDIR)/todo.txt $(DISTDIR)/TODO.txt
+	cp $(DOCDIR)/base/todo.txt $(DISTDIR)/TODO.txt
 	cp $(SRCDIR)/*.in $(DISTDIR)/src
 	cp $(WXDIR)/src/common/unzip.h $(DISTDIR)/src/common/unzip.h
 	list='$(HEADERS)'; for p in $$list; do \
