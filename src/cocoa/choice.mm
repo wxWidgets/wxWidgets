@@ -183,6 +183,7 @@ int wxChoice::GetSelection() const
 
 int wxChoice::DoAppend(const wxString& title)
 {
+    wxAutoNSAutoreleasePool pool;    
     NSMenu *nsmenu = [(NSPopUpButton*)m_cocoaNSView menu];
     NSMenuItem *item;
     if(m_sortedStrings)
