@@ -391,8 +391,9 @@ bool wxWindowMSW::Create(wxWindow *parent,
     DWORD msflags = WS_VISIBLE | MSWGetCreateWindowFlags(&exstyle);
 
 #ifdef __WXUNIVERSAL__
-    // no 3d effects, we draw them ourselves
-    exStyle = 0;
+    // no borders, we draw them ourselves
+    exstyle = 0;
+    msflags &= ~WS_BORDER;
 #endif // wxUniversal
 
     if ( style & wxPOPUP_WINDOW )
