@@ -395,14 +395,13 @@ wxApp::wxApp()
     m_appName = "";
     argc = 0;
     argv = NULL;
-    m_exitOnFrameDelete = TRUE;
     m_mainColormap = (WXColormap) NULL;
     m_topLevelWidget = (WXWindow) NULL;
     m_maxRequestSize = 0;
     m_mainLoop = NULL;
     m_showIconic = FALSE;
     m_initialSize = wxDefaultSize;
-    
+
 #if !wxUSE_NANOX
     m_visualColormap = NULL;
     m_colorCube = NULL;
@@ -414,7 +413,7 @@ wxApp::~wxApp()
 #if !wxUSE_NANOX
     if (m_colorCube)
         free( m_colorCube );
-        
+
     if (m_visualColormap)
         delete [] (XColor*)m_visualColormap;
 #endif
@@ -744,7 +743,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
         {
             if (!win->IsEnabled())
                 return FALSE;
-                
+
             // Here we check if the top level window is
             // disabled, which is one aspect of modality.
             wxWindow *tlw = win;
@@ -795,7 +794,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
 #endif
                 {
                     wxLogTrace( _T("focus"), _T("FocusIn from %s of type %s"), win->GetName().c_str(), win->GetClassInfo()->GetClassName() );
-                    
+
                     extern wxWindow* g_GettingFocus;
                     if (g_GettingFocus && g_GettingFocus->GetParent() == win)
                     {
@@ -1033,44 +1032,44 @@ bool wxApp::OnInitGui()
     vinfo_template.visual = xvisual;
     vinfo_template.visualid = XVisualIDFromVisual( xvisual );
     vinfo_template.depth = xdepth;
-        
+
     int nitem = 0;
     XVisualInfo *vi = XGetVisualInfo( xdisplay, VisualIDMask|VisualDepthMask, &vinfo_template, &nitem );
     wxASSERT_MSG( vi, wxT("No visual info") );
-    
+
     m_visualType = vi->visual->c_class;
     m_visualScreen = vi->screen;
-    
+
     m_visualRedMask = vi->red_mask;
     m_visualGreenMask = vi->green_mask;
     m_visualBlueMask = vi->blue_mask;
-    
+
     if (m_visualType != GrayScale && m_visualType != PseudoColor)
     {
         wxCalcPrecAndShift( m_visualRedMask, &m_visualRedShift, &m_visualRedPrec );
         wxCalcPrecAndShift( m_visualGreenMask, &m_visualGreenShift, &m_visualGreenPrec );
         wxCalcPrecAndShift( m_visualBlueMask, &m_visualBlueShift, &m_visualBluePrec );
     }
-    
+
     m_visualDepth = xdepth;
     if (xdepth == 16)
         xdepth = m_visualRedPrec + m_visualGreenPrec + m_visualBluePrec;
-        
+
     m_visualColormapSize = vi->colormap_size;
-        
+
     XFree( vi );
-    
+
     if (m_visualDepth > 8)
         return TRUE;
-    
+
     m_visualColormap = new XColor[m_visualColormapSize];
     XColor* colors = (XColor*) m_visualColormap;
-    
+
     for (int i = 0; i < m_visualColormapSize; i++)
 	    colors[i].pixel = i;
 
     XQueryColors( xdisplay, DefaultColormap(xdisplay,xscreen), colors, m_visualColormapSize );
-        
+
     m_colorCube = (unsigned char*)malloc(32 * 32 * 32);
 
     for (int r = 0; r < 32; r++)
@@ -1113,7 +1112,7 @@ bool wxApp::OnInitGui()
         }
     }
 #endif
-    
+
     return TRUE;
 }
 
