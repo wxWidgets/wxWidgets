@@ -137,13 +137,23 @@ static const wxDateTime::wxDateTime_t gs_cumulatedDays[2][MONTHS_IN_YEAR] =
 };
 
 // ----------------------------------------------------------------------------
-// globals
+// global data
+// ----------------------------------------------------------------------------
+
+static wxDateTime gs_dtDefault;
+
+wxDateTime& wxDefaultDateTime = gs_dtDefault;
+
+wxDateTime::Country wxDateTime::ms_country = wxDateTime::Country_Unknown;
+
+// ----------------------------------------------------------------------------
+// private globals
 // ----------------------------------------------------------------------------
 
 // a critical section is needed to protect GetTimeZone() static
 // variable in MT case
 #if wxUSE_THREADS
-    wxCriticalSection gs_critsectTimezone;
+    static wxCriticalSection gs_critsectTimezone;
 #endif // wxUSE_THREADS
 
 // ----------------------------------------------------------------------------
@@ -365,13 +375,6 @@ static wxString GetAlphaToken(const wxChar*& p)
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// static data
-// ----------------------------------------------------------------------------
-
-wxDateTime::Country wxDateTime::ms_country = wxDateTime::Country_Unknown;
-wxDateTime wxDateTime::ms_InvDateTime;
-
-// ----------------------------------------------------------------------------
 // struct Tm
 // ----------------------------------------------------------------------------
 
@@ -424,7 +427,7 @@ void wxDateTime::Tm::AddMonths(int monDiff)
         monDiff += MONTHS_IN_YEAR;
     }
 
-    while ( monDiff + mon > MONTHS_IN_YEAR )
+    while ( monDiff + mon >= MONTHS_IN_YEAR )
     {
         year++;
 
@@ -817,7 +820,7 @@ wxDateTime wxDateTime::GetBeginDST(int year, Country country)
 
     if ( !IsDSTApplicable(year, country) )
     {
-        return ms_InvDateTime;
+        return wxInvalidDateTime;
     }
 
     wxDateTime dt;
@@ -918,7 +921,7 @@ wxDateTime wxDateTime::GetEndDST(int year, Country country)
 
     if ( !IsDSTApplicable(year, country) )
     {
-        return ms_InvDateTime;
+        return wxInvalidDateTime;
     }
 
     wxDateTime dt;
@@ -1010,7 +1013,7 @@ wxDateTime& wxDateTime::Set(const struct tm& tm)
 
         wxFAIL_MSG( _T("mktime() failed") );
 
-        return ms_InvDateTime;
+        return wxInvalidDateTime;
     }
     else
     {
@@ -1028,14 +1031,14 @@ wxDateTime& wxDateTime::Set(wxDateTime_t hour,
     // we allow seconds to be 61 to account for the leap seconds, even if we
     // don't use them really
     wxCHECK_MSG( hour < 24 && second < 62 && minute < 60 && millisec < 1000,
-                 ms_InvDateTime,
+                 wxInvalidDateTime,
                  _T("Invalid time in wxDateTime::Set()") );
 
     // get the current date from system
     time_t timet = GetTimeNow();
     struct tm *tm = localtime(&timet);
 
-    wxCHECK_MSG( tm, ms_InvDateTime, _T("localtime() failed") );
+    wxCHECK_MSG( tm, wxInvalidDateTime, _T("localtime() failed") );
 
     // adjust the time
     tm->tm_hour = hour;
@@ -1059,13 +1062,13 @@ wxDateTime& wxDateTime::Set(wxDateTime_t day,
     wxASSERT_MSG( IsValid(), _T("invalid wxDateTime") );
 
     wxCHECK_MSG( hour < 24 && second < 62 && minute < 60 && millisec < 1000,
-                 ms_InvDateTime,
+                 wxInvalidDateTime,
                  _T("Invalid time in wxDateTime::Set()") );
 
     ReplaceDefaultYearMonthWithCurrent(&year, &month);
 
     wxCHECK_MSG( (0 < day) && (day <= GetNumberOfDays(month, year)),
-                 ms_InvDateTime,
+                 wxInvalidDateTime,
                  _T("Invalid date in wxDateTime::Set()") );
 
     // the range of time_t type (inclusive)
@@ -1364,7 +1367,7 @@ wxDateTime& wxDateTime::SetToLastMonthDay(Month month,
 
 wxDateTime& wxDateTime::SetToWeekDayInSameWeek(WeekDay weekday)
 {
-    wxCHECK_MSG( weekday != Inv_WeekDay, ms_InvDateTime, _T("invalid weekday") );
+    wxCHECK_MSG( weekday != Inv_WeekDay, wxInvalidDateTime, _T("invalid weekday") );
 
     WeekDay wdayThis = GetWeekDay();
     if ( weekday == wdayThis )
@@ -1384,7 +1387,7 @@ wxDateTime& wxDateTime::SetToWeekDayInSameWeek(WeekDay weekday)
 
 wxDateTime& wxDateTime::SetToNextWeekDay(WeekDay weekday)
 {
-    wxCHECK_MSG( weekday != Inv_WeekDay, ms_InvDateTime, _T("invalid weekday") );
+    wxCHECK_MSG( weekday != Inv_WeekDay, wxInvalidDateTime, _T("invalid weekday") );
 
     int diff;
     WeekDay wdayThis = GetWeekDay();
@@ -1408,7 +1411,7 @@ wxDateTime& wxDateTime::SetToNextWeekDay(WeekDay weekday)
 
 wxDateTime& wxDateTime::SetToPrevWeekDay(WeekDay weekday)
 {
-    wxCHECK_MSG( weekday != Inv_WeekDay, ms_InvDateTime, _T("invalid weekday") );
+    wxCHECK_MSG( weekday != Inv_WeekDay, wxInvalidDateTime, _T("invalid weekday") );
 
     int diff;
     WeekDay wdayThis = GetWeekDay();
@@ -1555,7 +1558,7 @@ wxDateTime& wxDateTime::SetToYearDay(wxDateTime::wxDateTime_t yday)
 {
     int year = GetYear();
     wxCHECK_MSG( (0 < yday) && (yday <= GetNumberOfDays(year)),
-                 ms_InvDateTime, _T("invalid year day") );
+                 wxInvalidDateTime, _T("invalid year day") );
 
     bool isLeap = IsLeapYear(year);
     for ( Month mon = Jan; mon < Inv_Month; wxNextMonth(mon) )

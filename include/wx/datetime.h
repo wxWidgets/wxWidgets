@@ -91,19 +91,21 @@ class WXDLLEXPORT wxDateSpan;
   the copy of the object with the changed sign.
 */
 
+// an invalid/default date time object which may be used as the default
+// argument for arguments of type wxDateTime; it is also returned by all
+// functions returning wxDateTime on failure (this is why it is also called
+// wxInvalidDateTime)
+class WXDLLEXPORT wxDateTime;
+
+WXDLLEXPORT_DATA(extern wxDateTime&) wxDefaultDateTime;
+#define wxInvalidDateTime wxDefaultDateTime
+
 // ----------------------------------------------------------------------------
 // wxDateTime represents an absolute moment in the time
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxDateTime
 {
-private:
-    // invalid wxDateTime object - returned by all functions which return
-    // "wxDateTime &" on failure.
-    // This variable has to be declared at the start of the class,
-    // or some compilers (e.g. Watcom C++) won't like it being used further down.
-    static wxDateTime ms_InvDateTime;
-
 public:
     // types
     // ------------------------------------------------------------------------
@@ -617,7 +619,7 @@ public:
         // set to the next week day following this one
     wxDateTime& SetToNextWeekDay(WeekDay weekday);
 
-        // set to the previous week day following this one
+        // set to the previous week day before this one
     wxDateTime& SetToPrevWeekDay(WeekDay weekday);
 
         // set to Nth occurence of given weekday in the given month of the
@@ -722,9 +724,8 @@ public:
     // result of timezone shift)
     // ------------------------------------------------------------------------
 
-        // is the date valid (FALSE for uninitialized objects as well as after
-        // the functions which failed to convert the date to supported range)
-    inline bool IsValid() const { return this != &ms_InvDateTime; }
+        // is the date valid (TRUE even for non initialized objects)?
+    inline bool IsValid() const { return this != &wxInvalidDateTime; }
 
         // get the broken down date/time representation in the given timezone
         //
@@ -860,7 +861,7 @@ public:
         // default to Today() otherwise)
     const wxChar *ParseFormat(const wxChar *date,
                               const wxChar *format = _T("%c"),
-                              const wxDateTime& dateDef = wxDateTime::ms_InvDateTime);
+                              const wxDateTime& dateDef = wxDefaultDateTime);
         // parse a string containing the date/time in "free" format, this
         // function will try to make an educated guess at the string contents
     const wxChar *ParseDateTime(const wxChar *datetime);

@@ -319,6 +319,13 @@ public:
                             int image = -1, int selectedImage = -1,
                             wxTreeItemData *data = NULL);
 
+        // insert a new item before the one with the given index
+    wxTreeItemId InsertItem(const wxTreeItemId& parent,
+                            size_t index,
+                            const wxString& text,
+                            int image = -1, int selectedImage = -1,
+                            wxTreeItemData *data = NULL);
+
         // insert a new item in as the last child of the parent
     wxTreeItemId AppendItem(const wxTreeItemId& parent,
                             const wxString& text,

@@ -1052,6 +1052,30 @@ wxTreeItemId wxTreeCtrl::InsertItem(const wxTreeItemId& parent,
     return DoInsertItem(parent, idPrevious, text, image, selectedImage, data);
 }
 
+wxTreeItemId wxTreeCtrl::InsertItem(const wxTreeItemId& parent,
+                                    size_t index,
+                                    const wxString& text,
+                                    int image, int selectedImage,
+                                    wxTreeItemData *data)
+{
+    // find the item from index
+    long cookie;
+    wxTreeItemId idPrev, idCur = GetFirstChild(parent, cookie);
+    while ( index != 0 && idCur.IsOk() )
+    {
+        index--;
+
+        idPrev = idCur;
+        idCur = GetNextChild(parent, cookie);
+    }
+
+    // assert, not check: if the index is invalid, we will append the item
+    // to the end
+    wxASSERT_MSG( index == 0, _T("bad index in wxTreeCtrl::InsertItem") );
+
+    return DoInsertItem(parent, idPrev, text, image, selectedImage, data);
+}
+
 wxTreeItemId wxTreeCtrl::AppendItem(const wxTreeItemId& parent,
                                     const wxString& text,
                                     int image, int selectedImage,
