@@ -171,9 +171,38 @@ void wxListBase::DoCopy(const wxListBase& list)
     m_nodeFirst =
     m_nodeLast = (wxNodeBase *) NULL;
 
-    for ( wxNodeBase *node = list.GetFirst(); node; node = node->GetNext() )
-    {
-        Append(node);
+    switch (m_keyType) {
+    
+        case wxKEY_INTEGER:
+            {
+                long key;                
+                for ( wxNodeBase *node = list.GetFirst(); node; node = node->GetNext() )
+                {
+                    key = node->GetKeyInteger();
+                    Append(key, node->GetData());
+                }
+                break;
+            }
+
+        case wxKEY_STRING:
+            {
+                const wxChar *key;                
+                for ( wxNodeBase *node = list.GetFirst(); node; node = node->GetNext() )
+                {
+                    key = node->GetKeyString();
+                    Append(key, node->GetData());
+                }
+                break;
+            }
+
+        default:
+            {
+                for ( wxNodeBase *node = list.GetFirst(); node; node = node->GetNext() )
+                {
+                    Append(node->GetData());
+                }
+                break;
+            }
     }
 }
 
