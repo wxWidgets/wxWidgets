@@ -193,7 +193,7 @@ void wxToolBarMSW::OnMouseEvent(wxMouseEvent& event)
   }
 
   long x, y;
-  event.Position(&x, &y);
+  event.GetPosition(&x, &y);
   wxToolBarTool *tool = FindToolForPosition(x, y);
 
   if (!tool)
