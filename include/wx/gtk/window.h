@@ -113,9 +113,6 @@ public:
 
     virtual WXWidget GetHandle() const { return m_widget; }
 
-    // wxWindows callbacks
-    void OnKeyDown( wxKeyEvent &event );
-
     // also sets the global flag
     void SetScrolling(bool scroll);
 
@@ -235,7 +232,6 @@ public:
 
 private:
     DECLARE_NO_COPY_CLASS(wxWindow);
-    DECLARE_EVENT_TABLE()
 };
 
 #endif // __GTKWINDOWH__

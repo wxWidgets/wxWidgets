@@ -25,7 +25,7 @@ class WXDLLEXPORT wxScrolledWindow: public wxWindow
   DECLARE_ABSTRACT_CLASS(wxScrolledWindow)
 
 public:
-  wxScrolledWindow(void);
+  wxScrolledWindow();
   inline wxScrolledWindow(wxWindow *parent, wxWindowID id = -1,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
@@ -35,7 +35,7 @@ public:
       Create(parent, id, pos, size, style, name);
   }
 
-  inline ~wxScrolledWindow(void) {}
+  ~wxScrolledWindow() {}
 
   bool Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
@@ -94,7 +94,7 @@ public:
   // Adjust the scrollbars
   virtual void AdjustScrollbars(void);
 
-  void OnScroll(wxScrollEvent& event);
+  void OnScroll(wxScrollWinEvent& event);
   void OnSize(wxSizeEvent& event);
   void OnPaint(wxPaintEvent& event);
 
@@ -106,14 +106,11 @@ public:
   virtual void PrepareDC(wxDC& dc);
 
 public:
-  ////////////////////////////////////////////////////////////////////////
-  //// IMPLEMENTATION
+  // IMPLEMENTATION
   
   // Calculate scroll increment
-  virtual int CalcScrollInc(wxScrollEvent& event);
+  virtual int CalcScrollInc(wxScrollWinEvent& event);
 
-  ////////////////////////////////////////////////////////////////////////
-  //// PROTECTED DATA
 protected:
   int                   m_xScrollPixelsPerLine;
   int                   m_yScrollPixelsPerLine;
@@ -130,9 +127,6 @@ protected:
 
 DECLARE_EVENT_TABLE()
 };
-
-////////////////////////////////////////////////////////////////////////
-//// INLINES
 
 #endif
     // __SCROLWINH_G__

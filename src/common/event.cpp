@@ -164,8 +164,8 @@ wxScrollEvent::wxScrollEvent(wxEventType commandType,
 wxScrollWinEvent::wxScrollWinEvent(wxEventType commandType,
                                    int pos,
                                    int orient)
-             : wxEvent(commandType)
 {
+    m_eventType = commandType;
     m_extraLong = orient;
     m_commandInt = pos;
 }

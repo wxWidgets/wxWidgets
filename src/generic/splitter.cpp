@@ -486,6 +486,9 @@ void wxSplitterWindow::SizeWindows()
     if ( m_windowOne && !m_windowTwo )
     {
         m_windowOne->SetSize(m_borderSize, m_borderSize, w - 2*m_borderSize, h - 2*m_borderSize);
+	
+	if (m_windowOne->GetAutoLayout())
+	    m_windowOne->Layout();
     }
     else if ( m_windowOne && m_windowTwo )
     {
@@ -503,6 +506,11 @@ void wxSplitterWindow::SizeWindows()
 
             m_windowOne->SetSize(x1, y1, w1, h1);
             m_windowTwo->SetSize(x2, y2, w2, h2);
+	
+	    if (m_windowOne->GetAutoLayout())
+	        m_windowOne->Layout();
+	    if (m_windowTwo->GetAutoLayout())
+	        m_windowTwo->Layout();
         }
         else
         {
@@ -510,6 +518,11 @@ void wxSplitterWindow::SizeWindows()
                 w - 2*m_borderSize, m_sashPosition - m_borderSize);
             m_windowTwo->SetSize(m_borderSize, m_sashPosition + m_sashSize,
                 w - 2*m_borderSize, h - 2*m_borderSize - m_sashSize - (m_sashPosition - m_borderSize));
+		
+	    if (m_windowOne->GetAutoLayout())
+	        m_windowOne->Layout();
+	    if (m_windowTwo->GetAutoLayout())
+	        m_windowTwo->Layout();
         }
     }
     wxClientDC dc(this);

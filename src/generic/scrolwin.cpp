@@ -28,7 +28,7 @@
 
 #if !USE_SHARED_LIBRARY
 BEGIN_EVENT_TABLE(wxScrolledWindow, wxWindow)
-    EVT_SCROLL(wxScrolledWindow::OnScroll)
+    EVT_SCROLLWIN(wxScrolledWindow::OnScroll)
     EVT_SIZE(wxScrolledWindow::OnSize)
     EVT_PAINT(wxScrolledWindow::OnPaint)
 END_EVENT_TABLE()
@@ -45,7 +45,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxScrolledWindow, wxWindow)
 #include <Xm/Xm.h>
 #endif
 
-wxScrolledWindow::wxScrolledWindow(void)
+wxScrolledWindow::wxScrolledWindow()
 {
     m_xScrollPixelsPerLine = 0;
     m_yScrollPixelsPerLine = 0;
@@ -153,7 +153,7 @@ void wxScrolledWindow::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
 #endif
 }
 
-void wxScrolledWindow::OnScroll(wxScrollEvent& event)
+void wxScrolledWindow::OnScroll(wxScrollWinEvent& event)
 {
     int orient = event.GetOrientation();
 
@@ -196,7 +196,7 @@ void wxScrolledWindow::OnScroll(wxScrollEvent& event)
   }
 }
 
-int wxScrolledWindow::CalcScrollInc(wxScrollEvent& event)
+int wxScrolledWindow::CalcScrollInc(wxScrollWinEvent& event)
 {
   int pos = event.GetPosition();
   int orient = event.GetOrientation();
@@ -204,7 +204,7 @@ int wxScrolledWindow::CalcScrollInc(wxScrollEvent& event)
   int nScrollInc = 0;
   switch (event.GetEventType())
   {
-    case wxEVT_SCROLL_TOP:
+    case wxEVT_SCROLLWIN_TOP:
     {
       if (orient == wxHORIZONTAL)
         nScrollInc = - m_xScrollPosition;
@@ -212,7 +212,7 @@ int wxScrolledWindow::CalcScrollInc(wxScrollEvent& event)
         nScrollInc = - m_yScrollPosition;
       break;
     }
-    case wxEVT_SCROLL_BOTTOM:
+    case wxEVT_SCROLLWIN_BOTTOM:
     {
       if (orient == wxHORIZONTAL)
         nScrollInc = m_xScrollLines - m_xScrollPosition;
@@ -220,17 +220,17 @@ int wxScrolledWindow::CalcScrollInc(wxScrollEvent& event)
         nScrollInc = m_yScrollLines - m_yScrollPosition;
       break;
     }
-    case wxEVT_SCROLL_LINEUP:
+    case wxEVT_SCROLLWIN_LINEUP:
     {
       nScrollInc = -1;
       break;
     }
-    case wxEVT_SCROLL_LINEDOWN:
+    case wxEVT_SCROLLWIN_LINEDOWN:
     {
       nScrollInc = 1;
       break;
     }
-    case wxEVT_SCROLL_PAGEUP:
+    case wxEVT_SCROLLWIN_PAGEUP:
     {
       if (orient == wxHORIZONTAL)
         nScrollInc = -GetScrollPageSize(wxHORIZONTAL);
@@ -238,7 +238,7 @@ int wxScrolledWindow::CalcScrollInc(wxScrollEvent& event)
         nScrollInc = -GetScrollPageSize(wxVERTICAL);
       break;
     }
-    case wxEVT_SCROLL_PAGEDOWN:
+    case wxEVT_SCROLLWIN_PAGEDOWN:
     {
       if (orient == wxHORIZONTAL)
         nScrollInc = GetScrollPageSize(wxHORIZONTAL);
@@ -246,7 +246,7 @@ int wxScrolledWindow::CalcScrollInc(wxScrollEvent& event)
         nScrollInc = GetScrollPageSize(wxVERTICAL);
       break;
     }
-    case wxEVT_SCROLL_THUMBTRACK:
+    case wxEVT_SCROLLWIN_THUMBTRACK:
     {
       if (orient == wxHORIZONTAL)
         nScrollInc = pos - m_xScrollPosition;

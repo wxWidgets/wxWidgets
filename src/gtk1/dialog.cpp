@@ -96,7 +96,13 @@ static gint gtk_dialog_configure_callback( GtkWidget *WXUNUSED(widget), GdkEvent
 static gint 
 gtk_dialog_realized_callback( GtkWidget *widget, wxDialog *win )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
+    if (g_isIdle) 
+        wxapp_install_idle_handler();
+
+    /* I haven''t been able to set the position of
+       the dialog before it is shown, so I set the
+       position in "realize" and "map" */
+    gtk_widget_set_uposition( widget, win->m_x, win->m_y );
 
     /* reset the icon */
     if (win->m_icon != wxNullIcon)
@@ -116,8 +122,12 @@ gtk_dialog_realized_callback( GtkWidget *widget, wxDialog *win )
 static gint 
 gtk_dialog_map_callback( GtkWidget *widget, wxDialog *win )
 {
+    if (g_isIdle) 
+        wxapp_install_idle_handler();
+
     /* I haven''t been able to set the position of
-       the dialog before it is shown, so I do it here */
+       the dialog before it is shown, so I set the
+       position in "realize" and "map" */
     gtk_widget_set_uposition( widget, win->m_x, win->m_y );
     
     /* all this is for Motif Window Manager "hints" and is supposed to be

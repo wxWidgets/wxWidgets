@@ -42,6 +42,7 @@
 #include "gtk/gtk.h"
 #include "gdk/gdkprivate.h"
 #include "gdk/gdkkeysyms.h"
+#include "gdk/gdkx.h"
 #include "wx/gtk/win_gtk.h"
 
 //-----------------------------------------------------------------------------
@@ -180,6 +181,222 @@ void debug_focus_in( GtkWidget* widget, const wxChar* name, const wxChar *window
 
 extern void wxapp_install_idle_handler();
 extern bool g_isIdle;
+
+//-----------------------------------------------------------------------------
+// key event conversion routines
+//-----------------------------------------------------------------------------
+
+static long map_to_unmodified_wx_keysym( KeySym keysym )
+{
+    guint key_code = 0;
+
+    switch (keysym)
+    {
+        case GDK_Shift_L:
+        case GDK_Shift_R:       key_code = WXK_SHIFT;       break;
+        case GDK_Control_L:
+        case GDK_Control_R:     key_code = WXK_CONTROL;     break;
+        case GDK_Menu:          key_code = WXK_MENU;        break;
+        case GDK_Help:          key_code = WXK_HELP;        break;
+        case GDK_BackSpace:     key_code = WXK_BACK;        break;
+        case GDK_ISO_Left_Tab:
+        case GDK_Tab:           key_code = WXK_TAB;         break;
+        case GDK_Linefeed:      key_code = WXK_RETURN;      break;
+        case GDK_Clear:         key_code = WXK_CLEAR;       break;
+        case GDK_Return:        key_code = WXK_RETURN;      break;
+        case GDK_Pause:         key_code = WXK_PAUSE;       break;
+        case GDK_Scroll_Lock:   key_code = WXK_SCROLL;      break;
+        case GDK_Escape:        key_code = WXK_ESCAPE;      break;
+        case GDK_Delete:        key_code = WXK_DELETE;      break;
+        case GDK_Home:          key_code = WXK_HOME;        break;
+        case GDK_Left:          key_code = WXK_LEFT;        break;
+        case GDK_Up:            key_code = WXK_UP;          break;
+        case GDK_Right:         key_code = WXK_RIGHT;       break;
+        case GDK_Down:          key_code = WXK_DOWN;        break;
+        case GDK_Prior:         key_code = WXK_PRIOR;       break;
+//      case GDK_Page_Up:       key_code = WXK_PAGEUP;      break;
+        case GDK_Next:          key_code = WXK_NEXT;        break;
+//      case GDK_Page_Down:     key_code = WXK_PAGEDOWN;    break;
+        case GDK_End:           key_code = WXK_END;         break;
+        case GDK_Begin:         key_code = WXK_HOME;        break;
+        case GDK_Select:        key_code = WXK_SELECT;      break;
+        case GDK_Print:         key_code = WXK_PRINT;       break;
+        case GDK_Execute:       key_code = WXK_EXECUTE;     break;
+        case GDK_Insert:        key_code = WXK_INSERT;      break;
+        case GDK_Num_Lock:      key_code = WXK_NUMLOCK;     break;
+
+        case GDK_KP_0:         key_code = WXK_NUMPAD0;      break;
+        case GDK_KP_1:         key_code = WXK_NUMPAD1;      break;
+        case GDK_KP_2:         key_code = WXK_NUMPAD2;      break;
+        case GDK_KP_3:         key_code = WXK_NUMPAD3;      break;
+        case GDK_KP_4:         key_code = WXK_NUMPAD4;      break;
+        case GDK_KP_5:         key_code = WXK_NUMPAD5;      break;
+        case GDK_KP_6:         key_code = WXK_NUMPAD6;      break;
+        case GDK_KP_7:         key_code = WXK_NUMPAD7;      break;
+        case GDK_KP_8:         key_code = WXK_NUMPAD8;      break;
+        case GDK_KP_9:         key_code = WXK_NUMPAD9;      break;
+        case GDK_KP_Space:     key_code = WXK_NUMPAD_SPACE; break;
+        case GDK_KP_Tab:       key_code = WXK_NUMPAD_TAB;   break;
+        case GDK_KP_Enter:     key_code = WXK_NUMPAD_ENTER; break;
+        case GDK_KP_F1:        key_code = WXK_NUMPAD_F1;    break;
+        case GDK_KP_F2:        key_code = WXK_NUMPAD_F2;    break;
+        case GDK_KP_F3:        key_code = WXK_NUMPAD_F3;    break;
+        case GDK_KP_F4:        key_code = WXK_NUMPAD_F4;    break;
+        case GDK_KP_Home:      key_code = WXK_NUMPAD_HOME;  break;
+        case GDK_KP_Left:      key_code = WXK_NUMPAD_LEFT;  break;
+        case GDK_KP_Up:        key_code = WXK_NUMPAD_UP;    break;
+        case GDK_KP_Right:     key_code = WXK_NUMPAD_RIGHT; break;
+        case GDK_KP_Down:      key_code = WXK_NUMPAD_DOWN;  break;
+        case GDK_KP_Prior:     key_code = WXK_NUMPAD_PRIOR; break;
+//      case GDK_KP_Page_Up:   key_code = WXK_NUMPAD_PAGEUP;   break;
+        case GDK_KP_Next:      key_code = WXK_NUMPAD_PRIOR; break;
+//      case GDK_KP_Page_Down: key_code = WXK_NUMPAD_PAGEDOWN; break;
+        case GDK_KP_End:       key_code = WXK_NUMPAD_END;   break;
+        case GDK_KP_Begin:     key_code = WXK_NUMPAD_BEGIN; break;
+        case GDK_KP_Insert:    key_code = WXK_NUMPAD_INSERT; break;
+        case GDK_KP_Delete:    key_code = WXK_NUMPAD_DELETE; break;
+        case GDK_KP_Equal:     key_code = WXK_NUMPAD_EQUAL;  break;
+        case GDK_KP_Multiply:  key_code = WXK_NUMPAD_MULTIPLY; break;
+        case GDK_KP_Add:       key_code = WXK_NUMPAD_ADD;    break;
+        case GDK_KP_Separator: key_code = WXK_NUMPAD_SEPARATOR; break;
+        case GDK_KP_Subtract:  key_code = WXK_NUMPAD_SUBTRACT;  break;
+        case GDK_KP_Decimal:   key_code = WXK_NUMPAD_DECIMAL;   break;
+        case GDK_KP_Divide:    key_code = WXK_NUMPAD_DIVIDE;    break;
+    
+        case GDK_F1:            key_code = WXK_F1;          break;
+        case GDK_F2:            key_code = WXK_F2;          break;
+        case GDK_F3:            key_code = WXK_F3;          break;
+        case GDK_F4:            key_code = WXK_F4;          break;
+        case GDK_F5:            key_code = WXK_F5;          break;
+        case GDK_F6:            key_code = WXK_F6;          break;
+        case GDK_F7:            key_code = WXK_F7;          break;
+        case GDK_F8:            key_code = WXK_F8;          break;
+        case GDK_F9:            key_code = WXK_F9;          break;
+        case GDK_F10:           key_code = WXK_F10;         break;
+        case GDK_F11:           key_code = WXK_F11;         break;
+        case GDK_F12:           key_code = WXK_F12;         break;
+        default:
+        {
+            if (keysym <= 0xFF)
+            {
+                guint upper = gdk_keyval_to_upper( keysym );
+                keysym = (upper != 0 ? upper : keysym ); /* to be MSW compatible */
+                key_code = keysym;
+            }
+        }
+    }
+
+    return (key_code);
+}
+
+static long map_to_wx_keysym( KeySym keysym )
+{
+    guint key_code = 0;
+
+    switch (keysym)
+    {
+        case GDK_Shift_L:
+        case GDK_Shift_R:       key_code = WXK_SHIFT;       break;
+        case GDK_Control_L:
+        case GDK_Control_R:     key_code = WXK_CONTROL;     break;
+        case GDK_Menu:          key_code = WXK_MENU;        break;
+        case GDK_Help:          key_code = WXK_HELP;        break;
+        case GDK_BackSpace:     key_code = WXK_BACK;        break;
+        case GDK_ISO_Left_Tab:
+        case GDK_Tab:           key_code = WXK_TAB;         break;
+        case GDK_Linefeed:      key_code = WXK_RETURN;      break;
+        case GDK_Clear:         key_code = WXK_CLEAR;       break;
+        case GDK_Return:        key_code = WXK_RETURN;      break;
+        case GDK_Pause:         key_code = WXK_PAUSE;       break;
+        case GDK_Scroll_Lock:   key_code = WXK_SCROLL;      break;
+        case GDK_Escape:        key_code = WXK_ESCAPE;      break;
+        case GDK_Delete:        key_code = WXK_DELETE;      break;
+        case GDK_Home:          key_code = WXK_HOME;        break;
+        case GDK_Left:          key_code = WXK_LEFT;        break;
+        case GDK_Up:            key_code = WXK_UP;          break;
+        case GDK_Right:         key_code = WXK_RIGHT;       break;
+        case GDK_Down:          key_code = WXK_DOWN;        break;
+        case GDK_Prior:         key_code = WXK_PRIOR;       break;
+//      case GDK_Page_Up:       key_code = WXK_PAGEUP;      break;
+        case GDK_Next:          key_code = WXK_NEXT;        break;
+//      case GDK_Page_Down:     key_code = WXK_PAGEDOWN;    break;
+        case GDK_End:           key_code = WXK_END;         break;
+        case GDK_Begin:         key_code = WXK_HOME;        break;
+        case GDK_Select:        key_code = WXK_SELECT;      break;
+        case GDK_Print:         key_code = WXK_PRINT;       break;
+        case GDK_Execute:       key_code = WXK_EXECUTE;     break;
+        case GDK_Insert:        key_code = WXK_INSERT;      break;
+        case GDK_Num_Lock:      key_code = WXK_NUMLOCK;     break;
+
+        case GDK_KP_0:         key_code = '0';      break;
+        case GDK_KP_1:         key_code = '1';      break;
+        case GDK_KP_2:         key_code = '2';      break;
+        case GDK_KP_3:         key_code = '3';      break;
+        case GDK_KP_4:         key_code = '4';      break;
+        case GDK_KP_5:         key_code = '5';      break;
+        case GDK_KP_6:         key_code = '6';      break;
+        case GDK_KP_7:         key_code = '7';      break;
+        case GDK_KP_8:         key_code = '8';      break;
+        case GDK_KP_9:         key_code = '9';      break;
+        case GDK_KP_Space:     key_code = ' ';      break;
+        case GDK_KP_Tab:       key_code = WXK_TAB;    break;        /* or '\t' ??? */
+        case GDK_KP_Enter:     key_code = WXK_RETURN; break;        /* or '\r' ??? */
+        case GDK_KP_F1:        key_code = WXK_NUMPAD_F1;    break;
+        case GDK_KP_F2:        key_code = WXK_NUMPAD_F2;    break;
+        case GDK_KP_F3:        key_code = WXK_NUMPAD_F3;    break;
+        case GDK_KP_F4:        key_code = WXK_NUMPAD_F4;    break;
+        case GDK_KP_Home:      key_code = WXK_HOME;  break;
+        case GDK_KP_Left:      key_code = WXK_LEFT;  break;
+        case GDK_KP_Up:        key_code = WXK_UP;    break;
+        case GDK_KP_Right:     key_code = WXK_RIGHT; break;
+        case GDK_KP_Down:      key_code = WXK_DOWN;  break;
+        case GDK_KP_Prior:     key_code = WXK_PRIOR; break;
+//      case GDK_KP_Page_Up:   key_code = WXK_PAGEUP; break;
+        case GDK_KP_Next:      key_code = WXK_PRIOR;  break;
+//      case GDK_KP_Page_Down: key_code = WXK_PAGEDOWN; break;
+        case GDK_KP_End:       key_code = WXK_END;    break;
+        case GDK_KP_Begin:     key_code = WXK_HOME;   break;
+        case GDK_KP_Insert:    key_code = WXK_INSERT; break;
+        case GDK_KP_Delete:    key_code = WXK_DELETE; break;
+        case GDK_KP_Equal:     key_code = '=';   break;
+        case GDK_KP_Multiply:  key_code = '*';   break;
+        case GDK_KP_Add:       key_code = '+';   break;
+        case GDK_KP_Separator: key_code = ',';   break;
+        case GDK_KP_Subtract:  key_code = '-';   break;
+        case GDK_KP_Decimal:   key_code = '.';   break;
+        case GDK_KP_Divide:    key_code = '/';   break;
+    
+        case GDK_F1:            key_code = WXK_F1;          break;
+        case GDK_F2:            key_code = WXK_F2;          break;
+        case GDK_F3:            key_code = WXK_F3;          break;
+        case GDK_F4:            key_code = WXK_F4;          break;
+        case GDK_F5:            key_code = WXK_F5;          break;
+        case GDK_F6:            key_code = WXK_F6;          break;
+        case GDK_F7:            key_code = WXK_F7;          break;
+        case GDK_F8:            key_code = WXK_F8;          break;
+        case GDK_F9:            key_code = WXK_F9;          break;
+        case GDK_F10:           key_code = WXK_F10;         break;
+        case GDK_F11:           key_code = WXK_F11;         break;
+        case GDK_F12:           key_code = WXK_F12;         break;
+        default:
+        {
+            if (keysym <= 0xFF)
+            {
+                key_code = keysym;
+            }
+        }
+    }
+
+    return (key_code);
+}
+
+static long get_unmodified_wx_keysym( GdkEventKey *event )
+{
+    KeyCode keycode = XKeysymToKeycode( GDK_DISPLAY(), event->keyval );
+    KeySym keysym = XKeycodeToKeysym( GDK_DISPLAY(), keycode, 0 );
+
+    return (map_to_unmodified_wx_keysym( keysym ));
+}
 
 //-----------------------------------------------------------------------------
 // local code (see below)
@@ -350,97 +567,16 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
     printf( "\n" );
 */
 
-    long key_code = 0;
-    switch (gdk_event->keyval)
-    {
-        case GDK_Shift_L:
-	case GDK_Shift_R:       key_code = WXK_SHIFT;       break;
-        case GDK_Control_L:
-	case GDK_Control_R:     key_code = WXK_CONTROL;     break;
-	case GDK_Menu:          key_code = WXK_MENU;        break;
-	case GDK_Help:          key_code = WXK_HELP;        break;
-        case GDK_BackSpace:     key_code = WXK_BACK;        break;
-        case GDK_ISO_Left_Tab:
-        case GDK_KP_Tab:
-        case GDK_Tab:           key_code = WXK_TAB;         break;
-        case GDK_Linefeed:      key_code = WXK_RETURN;      break;
-        case GDK_Clear:         key_code = WXK_CLEAR;       break;
-        case GDK_Return:        key_code = WXK_RETURN;      break;
-        case GDK_Pause:         key_code = WXK_PAUSE;       break;
-        case GDK_Scroll_Lock:   key_code = WXK_SCROLL;      break;
-        case GDK_Escape:        key_code = WXK_ESCAPE;      break;
-        case GDK_Delete:        key_code = WXK_DELETE;      break;
-        case GDK_Home:          key_code = WXK_HOME;        break;
-        case GDK_Left:          key_code = WXK_LEFT;        break;
-        case GDK_Up:            key_code = WXK_UP;          break;
-        case GDK_Right:         key_code = WXK_RIGHT;       break;
-        case GDK_Down:          key_code = WXK_DOWN;        break;
-        case GDK_Prior:         key_code = WXK_PRIOR;       break;
-//      case GDK_Page_Up:       key_code = WXK_PAGEUP;      break;
-        case GDK_Next:          key_code = WXK_NEXT;        break;
-//      case GDK_Page_Down:     key_code = WXK_PAGEDOWN;    break;
-        case GDK_End:           key_code = WXK_END;         break;
-        case GDK_Begin:         key_code = WXK_HOME;        break;
-        case GDK_Select:        key_code = WXK_SELECT;      break;
-        case GDK_Print:         key_code = WXK_PRINT;       break;
-        case GDK_Execute:       key_code = WXK_EXECUTE;     break;
-        case GDK_Insert:        key_code = WXK_INSERT;      break;
-        case GDK_Num_Lock:      key_code = WXK_NUMLOCK;     break;
-        case GDK_KP_Enter:      key_code = WXK_RETURN;      break;
-        case GDK_KP_Home:       key_code = WXK_HOME;        break;
-        case GDK_KP_Left:       key_code = WXK_LEFT;        break;
-        case GDK_KP_Up:         key_code = WXK_UP;          break;
-        case GDK_KP_Right:      key_code = WXK_RIGHT;       break;
-        case GDK_KP_Down:       key_code = WXK_DOWN;        break;
-        case GDK_KP_Prior:      key_code = WXK_PRIOR;       break;
-//      case GDK_KP_Page_Up:    key_code = WXK_PAGEUP;      break;
-        case GDK_KP_Next:       key_code = WXK_NEXT;        break;
-//      case GDK_KP_Page_Down:  key_code = WXK_PAGEDOWN;    break;
-        case GDK_KP_End:        key_code = WXK_END;         break;
-        case GDK_KP_Begin:      key_code = WXK_HOME;        break;
-        case GDK_KP_Insert:     key_code = WXK_INSERT;      break;
-        case GDK_KP_Delete:     key_code = WXK_DELETE;      break;
-        case GDK_KP_Multiply:   key_code = WXK_MULTIPLY;    break;
-        case GDK_KP_Add:        key_code = WXK_ADD;         break;
-        case GDK_KP_Separator:  key_code = WXK_SEPARATOR;   break;
-        case GDK_KP_Subtract:   key_code = WXK_SUBTRACT;    break;
-        case GDK_KP_Decimal:    key_code = WXK_DECIMAL;     break;
-        case GDK_KP_Divide:     key_code = WXK_DIVIDE;      break;
-        case GDK_KP_0:          key_code = WXK_NUMPAD0;     break;
-        case GDK_KP_1:          key_code = WXK_NUMPAD1;     break;
-        case GDK_KP_2:          key_code = WXK_NUMPAD2;     break;
-        case GDK_KP_3:          key_code = WXK_NUMPAD3;     break;
-        case GDK_KP_4:          key_code = WXK_NUMPAD4;     break;
-        case GDK_KP_5:          key_code = WXK_NUMPAD5;     break;
-        case GDK_KP_6:          key_code = WXK_NUMPAD6;     break;
-        case GDK_KP_7:          key_code = WXK_NUMPAD7;     break;
-        case GDK_KP_8:          key_code = WXK_NUMPAD7;     break;
-        case GDK_KP_9:          key_code = WXK_NUMPAD9;     break;
-        case GDK_F1:            key_code = WXK_F1;          break;
-        case GDK_F2:            key_code = WXK_F2;          break;
-        case GDK_F3:            key_code = WXK_F3;          break;
-        case GDK_F4:            key_code = WXK_F4;          break;
-        case GDK_F5:            key_code = WXK_F5;          break;
-        case GDK_F6:            key_code = WXK_F6;          break;
-        case GDK_F7:            key_code = WXK_F7;          break;
-        case GDK_F8:            key_code = WXK_F8;          break;
-        case GDK_F9:            key_code = WXK_F9;          break;
-        case GDK_F10:           key_code = WXK_F10;         break;
-        case GDK_F11:           key_code = WXK_F11;         break;
-        case GDK_F12:           key_code = WXK_F12;         break;
-        default:
-        {
-            if ((gdk_event->keyval >= 0x20) && (gdk_event->keyval <= 0xFF))
-                key_code = gdk_event->keyval;
-        }
-    }
-
+    bool ret = FALSE;
+    
     int x = 0;
     int y = 0;
     GdkModifierType state;
     if (gdk_event->window) gdk_window_get_pointer(gdk_event->window, &x, &y, &state);
 
-    wxKeyEvent event( wxEVT_KEY_DOWN );
+    long key_code = get_unmodified_wx_keysym( gdk_event );
+    
+    wxKeyEvent event( wxEVT_KEY_DOWN );         
     event.SetTimestamp( gdk_event->time );
     event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK);
     event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK);
@@ -451,8 +587,27 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
     event.m_x = x;
     event.m_y = y;
     event.SetEventObject( win );
+    ret = win->GetEventHandler()->ProcessEvent( event );
+    
+    key_code = map_to_wx_keysym( gdk_event->keyval );
 
-    bool ret = win->GetEventHandler()->ProcessEvent( event );
+    /* wxMSW doesn't send char events with Alt pressed */
+    if (((gdk_event->state & GDK_MOD1_MASK) == 0) &&
+        ((gdk_event->state & GDK_MOD1_MASK) == 0))
+    {
+        wxKeyEvent event2( wxEVT_CHAR );                 
+        event2.SetTimestamp( gdk_event->time );
+        event2.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK);
+        event2.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK);
+//        event2.m_altDown = (gdk_event->state & GDK_MOD1_MASK);
+//        event2.m_metaDown = (gdk_event->state & GDK_MOD2_MASK);
+        event2.m_keyCode = key_code;
+        event2.m_scanCode = gdk_event->keyval;
+        event2.m_x = x;
+        event2.m_y = y;
+        event2.SetEventObject( win );
+        ret = (ret || win->GetEventHandler()->ProcessEvent( event2 ));
+    }
 
     if (!ret)
     {
@@ -549,90 +704,7 @@ static gint gtk_window_key_release_callback( GtkWidget *widget, GdkEventKey *gdk
     printf( "\n" );
 */
 
-    long key_code = 0;
-    switch (gdk_event->keyval)
-    {
-        case GDK_Shift_L:
-	case GDK_Shift_R:       key_code = WXK_SHIFT;       break;
-        case GDK_Control_L:
-	case GDK_Control_R:     key_code = WXK_CONTROL;     break;
-	case GDK_Menu:          key_code = WXK_MENU;        break;
-	case GDK_Help:          key_code = WXK_HELP;        break;
-        case GDK_BackSpace:     key_code = WXK_BACK;        break;
-        case GDK_ISO_Left_Tab:
-        case GDK_KP_Tab:
-        case GDK_Tab:           key_code = WXK_TAB;         break;
-        case GDK_Linefeed:      key_code = WXK_RETURN;      break;
-        case GDK_Clear:         key_code = WXK_CLEAR;       break;
-        case GDK_Return:        key_code = WXK_RETURN;      break;
-        case GDK_Pause:         key_code = WXK_PAUSE;       break;
-        case GDK_Scroll_Lock:   key_code = WXK_SCROLL;      break;
-        case GDK_Escape:        key_code = WXK_ESCAPE;      break;
-        case GDK_Delete:        key_code = WXK_DELETE;      break;
-        case GDK_Home:          key_code = WXK_HOME;        break;
-        case GDK_Left:          key_code = WXK_LEFT;        break;
-        case GDK_Up:            key_code = WXK_UP;          break;
-        case GDK_Right:         key_code = WXK_RIGHT;       break;
-        case GDK_Down:          key_code = WXK_DOWN;        break;
-        case GDK_Prior:         key_code = WXK_PRIOR;       break;
-//      case GDK_Page_Up:       key_code = WXK_PAGEUP;      break;
-        case GDK_Next:          key_code = WXK_NEXT;        break;
-//      case GDK_Page_Down:     key_code = WXK_PAGEDOWN;    break;
-        case GDK_End:           key_code = WXK_END;         break;
-        case GDK_Begin:         key_code = WXK_HOME;        break;
-        case GDK_Select:        key_code = WXK_SELECT;      break;
-        case GDK_Print:         key_code = WXK_PRINT;       break;
-        case GDK_Execute:       key_code = WXK_EXECUTE;     break;
-        case GDK_Insert:        key_code = WXK_INSERT;      break;
-        case GDK_Num_Lock:      key_code = WXK_NUMLOCK;     break;
-        case GDK_KP_Enter:      key_code = WXK_RETURN;      break;
-        case GDK_KP_Home:       key_code = WXK_HOME;        break;
-        case GDK_KP_Left:       key_code = WXK_LEFT;        break;
-        case GDK_KP_Up:         key_code = WXK_UP;          break;
-        case GDK_KP_Right:      key_code = WXK_RIGHT;       break;
-        case GDK_KP_Down:       key_code = WXK_DOWN;        break;
-        case GDK_KP_Prior:      key_code = WXK_PRIOR;       break;
-//      case GDK_KP_Page_Up:    key_code = WXK_PAGEUP;      break;
-        case GDK_KP_Next:       key_code = WXK_NEXT;        break;
-//      case GDK_KP_Page_Down:  key_code = WXK_PAGEDOWN;    break;
-        case GDK_KP_End:        key_code = WXK_END;         break;
-        case GDK_KP_Begin:      key_code = WXK_HOME;        break;
-        case GDK_KP_Insert:     key_code = WXK_INSERT;      break;
-        case GDK_KP_Delete:     key_code = WXK_DELETE;      break;
-        case GDK_KP_Multiply:   key_code = WXK_MULTIPLY;    break;
-        case GDK_KP_Add:        key_code = WXK_ADD;         break;
-        case GDK_KP_Separator:  key_code = WXK_SEPARATOR;   break;
-        case GDK_KP_Subtract:   key_code = WXK_SUBTRACT;    break;
-        case GDK_KP_Decimal:    key_code = WXK_DECIMAL;     break;
-        case GDK_KP_Divide:     key_code = WXK_DIVIDE;      break;
-        case GDK_KP_0:          key_code = WXK_NUMPAD0;     break;
-        case GDK_KP_1:          key_code = WXK_NUMPAD1;     break;
-        case GDK_KP_2:          key_code = WXK_NUMPAD2;     break;
-        case GDK_KP_3:          key_code = WXK_NUMPAD3;     break;
-        case GDK_KP_4:          key_code = WXK_NUMPAD4;     break;
-        case GDK_KP_5:          key_code = WXK_NUMPAD5;     break;
-        case GDK_KP_6:          key_code = WXK_NUMPAD6;     break;
-        case GDK_KP_7:          key_code = WXK_NUMPAD7;     break;
-        case GDK_KP_8:          key_code = WXK_NUMPAD7;     break;
-        case GDK_KP_9:          key_code = WXK_NUMPAD9;     break;
-        case GDK_F1:            key_code = WXK_F1;          break;
-        case GDK_F2:            key_code = WXK_F2;          break;
-        case GDK_F3:            key_code = WXK_F3;          break;
-        case GDK_F4:            key_code = WXK_F4;          break;
-        case GDK_F5:            key_code = WXK_F5;          break;
-        case GDK_F6:            key_code = WXK_F6;          break;
-        case GDK_F7:            key_code = WXK_F7;          break;
-        case GDK_F8:            key_code = WXK_F8;          break;
-        case GDK_F9:            key_code = WXK_F9;          break;
-        case GDK_F10:           key_code = WXK_F10;         break;
-        case GDK_F11:           key_code = WXK_F11;         break;
-        case GDK_F12:           key_code = WXK_F12;         break;
-        default:
-        {
-            if ((gdk_event->keyval >= 0x20) && (gdk_event->keyval <= 0xFF))
-                key_code = gdk_event->keyval;
-        }
-    }
+    long key_code = get_unmodified_wx_keysym( gdk_event );
 
     int x = 0;
     int y = 0;
@@ -1238,22 +1310,22 @@ static void gtk_window_vscroll_callback( GtkWidget *WXUNUSED(widget), wxWindow *
 
     if (win->IsScrolling())
     {
-        command = wxEVT_SCROLL_THUMBTRACK;
+        command = wxEVT_SCROLLWIN_THUMBTRACK;
     }
     else
     {
-        if (fabs(win->m_vAdjust->value-win->m_vAdjust->lower) < 0.2) command = wxEVT_SCROLL_BOTTOM;
-        else if (fabs(win->m_vAdjust->value-win->m_vAdjust->upper) < 0.2) command = wxEVT_SCROLL_TOP;
-        else if (fabs(diff-line_step) < 0.2) command = wxEVT_SCROLL_LINEDOWN;
-        else if (fabs(diff+line_step) < 0.2) command = wxEVT_SCROLL_LINEUP;
-        else if (fabs(diff-page_step) < 0.2) command = wxEVT_SCROLL_PAGEDOWN;
-        else if (fabs(diff+page_step) < 0.2) command = wxEVT_SCROLL_PAGEUP;
-        else command = wxEVT_SCROLL_THUMBTRACK;
+        if (fabs(win->m_vAdjust->value-win->m_vAdjust->lower) < 0.2) command = wxEVT_SCROLLWIN_BOTTOM;
+        else if (fabs(win->m_vAdjust->value-win->m_vAdjust->upper) < 0.2) command = wxEVT_SCROLLWIN_TOP;
+        else if (fabs(diff-line_step) < 0.2) command = wxEVT_SCROLLWIN_LINEDOWN;
+        else if (fabs(diff+line_step) < 0.2) command = wxEVT_SCROLLWIN_LINEUP;
+        else if (fabs(diff-page_step) < 0.2) command = wxEVT_SCROLLWIN_PAGEDOWN;
+        else if (fabs(diff+page_step) < 0.2) command = wxEVT_SCROLLWIN_PAGEUP;
+        else command = wxEVT_SCROLLWIN_THUMBTRACK;
     }
 
     int value = (int)(win->m_vAdjust->value+0.5);
 
-    wxScrollEvent event( command, win->GetId(), value, wxVERTICAL );
+    wxScrollWinEvent event( command, value, wxVERTICAL );
     event.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent( event );
 }
@@ -1281,22 +1353,22 @@ static void gtk_window_hscroll_callback( GtkWidget *WXUNUSED(widget), wxWindow *
 
     if (win->IsScrolling())
     {
-        command = wxEVT_SCROLL_THUMBTRACK;
+        command = wxEVT_SCROLLWIN_THUMBTRACK;
     }
     else
     {
-        if (fabs(win->m_hAdjust->value-win->m_hAdjust->lower) < 0.2) command = wxEVT_SCROLL_BOTTOM;
-        else if (fabs(win->m_hAdjust->value-win->m_hAdjust->upper) < 0.2) command = wxEVT_SCROLL_TOP;
-        else if (fabs(diff-line_step) < 0.2) command = wxEVT_SCROLL_LINEDOWN;
-        else if (fabs(diff+line_step) < 0.2) command = wxEVT_SCROLL_LINEUP;
-        else if (fabs(diff-page_step) < 0.2) command = wxEVT_SCROLL_PAGEDOWN;
-        else if (fabs(diff+page_step) < 0.2) command = wxEVT_SCROLL_PAGEUP;
-        else command = wxEVT_SCROLL_THUMBTRACK;
+        if (fabs(win->m_hAdjust->value-win->m_hAdjust->lower) < 0.2) command = wxEVT_SCROLLWIN_BOTTOM;
+        else if (fabs(win->m_hAdjust->value-win->m_hAdjust->upper) < 0.2) command = wxEVT_SCROLLWIN_TOP;
+        else if (fabs(diff-line_step) < 0.2) command = wxEVT_SCROLLWIN_LINEDOWN;
+        else if (fabs(diff+line_step) < 0.2) command = wxEVT_SCROLLWIN_LINEUP;
+        else if (fabs(diff-page_step) < 0.2) command = wxEVT_SCROLLWIN_PAGEDOWN;
+        else if (fabs(diff+page_step) < 0.2) command = wxEVT_SCROLLWIN_PAGEUP;
+        else command = wxEVT_SCROLLWIN_THUMBTRACK;
     }
 
     int value = (int)(win->m_hAdjust->value+0.5);
 
-    wxScrollEvent event( command, win->GetId(), value, wxHORIZONTAL );
+    wxScrollWinEvent event( command, value, wxHORIZONTAL );
     event.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent( event );
 }
@@ -1313,10 +1385,10 @@ static void gtk_window_vscroll_change_callback( GtkWidget *WXUNUSED(widget), wxW
     if (g_blockEventsOnDrag) return;
     if (!win->m_hasVMT) return;
 
-    wxEventType command = wxEVT_SCROLL_THUMBTRACK;
+    wxEventType command = wxEVT_SCROLLWIN_THUMBTRACK;
     int value = (int)(win->m_vAdjust->value+0.5);
 
-    wxScrollEvent event( command, win->GetId(), value, wxVERTICAL );
+    wxScrollWinEvent event( command, value, wxVERTICAL );
     event.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent( event );
 }
@@ -1333,10 +1405,10 @@ static void gtk_window_hscroll_change_callback( GtkWidget *WXUNUSED(widget), wxW
     if (g_blockEventsOnDrag) return;
     if (!win->m_hasVMT) return;
 
-    wxEventType command = wxEVT_SCROLL_THUMBTRACK;
+    wxEventType command = wxEVT_SCROLLWIN_THUMBTRACK;
     int value = (int)(win->m_hAdjust->value+0.5);
 
-    wxScrollEvent event( command, win->GetId(), value, wxHORIZONTAL );
+    wxScrollWinEvent event( command, value, wxHORIZONTAL );
     event.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent( event );
 }
@@ -1467,10 +1539,6 @@ wxWindow* wxGetActiveWindow()
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
-
-BEGIN_EVENT_TABLE(wxWindow, wxWindowBase)
-    EVT_KEY_DOWN(wxWindow::OnKeyDown)
-END_EVENT_TABLE()
 
 void wxWindow::Init()
 {
@@ -2190,16 +2258,6 @@ void wxWindow::GetTextExtent( const wxString& string,
     if (y) (*y) = font->ascent + font->descent;
     if (descent) (*descent) = font->descent;
     if (externalLeading) (*externalLeading) = 0;  // ??
-}
-
-void wxWindow::OnKeyDown( wxKeyEvent &event )
-{
-    event.SetEventType( wxEVT_CHAR );
-
-    if (!GetEventHandler()->ProcessEvent( event ))
-    {
-        event.Skip();
-    }
 }
 
 void wxWindow::SetFocus()
