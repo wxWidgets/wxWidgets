@@ -25,6 +25,7 @@ class wxDC;
 // constants
 //-----------------------------------------------------------------------------
 
+#ifndef MM_TEXT
 #define MM_TEXT         0
 #define MM_ISOTROPIC    1
 #define MM_ANISOTROPIC  2
@@ -33,6 +34,7 @@ class wxDC;
 #define MM_TWIPS        5
 #define MM_POINTS       6
 #define MM_METRIC       7
+#endif
 
 //-----------------------------------------------------------------------------
 // wxDC
