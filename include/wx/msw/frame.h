@@ -145,10 +145,16 @@ protected:
 
     // window proc for the frames
     long MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
-    
+
     virtual bool IsMDIChild() const { return FALSE; }
 
-    bool                  m_iconized;
+    // is the frame currently iconized?
+    bool m_iconized;
+
+    // should the frame be maximized when it will be shown? set by Maximize()
+    // when it is called while the frame is hidden
+    bool m_maximizeOnShow;
+
     WXHICON               m_defaultIcon;
 
 #if wxUSE_STATUSBAR

@@ -95,7 +95,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
 
 void wxFrame::Init()
 {
-    m_iconized = FALSE;
+    m_iconized =
+    m_maximizeOnShow = FALSE;
 
 #if wxUSE_TOOLTIPS
     m_hwndToolTip = 0;
@@ -293,7 +294,27 @@ bool wxFrame::Show(bool show)
     if ( !wxWindowBase::Show(show) )
         return FALSE;
 
-    DoShowWindow(show ? SW_SHOW : SW_HIDE);
+    int nShowCmd;
+    if ( show )
+    {
+        if ( m_maximizeOnShow )
+        {
+            // show and maximize
+            nShowCmd = SW_MAXIMIZE;
+
+            m_maximizeOnShow = FALSE;
+        }
+        else // just show
+        {
+            nShowCmd = SW_SHOW;
+        }
+    }
+    else // hide
+    {
+        nShowCmd = SW_HIDE;
+    }
+
+    DoShowWindow(nShowCmd);
 
     if ( show )
     {
@@ -303,7 +324,7 @@ bool wxFrame::Show(bool show)
         event.SetEventObject( this );
         GetEventHandler()->ProcessEvent(event);
     }
-    else
+    else // hide
     {
         // Try to highlight the correct window (the parent)
         if ( GetParent() )
@@ -324,7 +345,17 @@ void wxFrame::Iconize(bool iconize)
 
 void wxFrame::Maximize(bool maximize)
 {
-    DoShowWindow(maximize ? SW_MAXIMIZE : SW_RESTORE);
+    if ( IsShown() )
+    {
+        // just maximize it directly
+        DoShowWindow(maximize ? SW_MAXIMIZE : SW_RESTORE);
+    }
+    else // hidden
+    {
+        // we can't maximize the hidden frame because it shows it as well, so
+        // just remember that we should do it later in this case
+        m_maximizeOnShow = TRUE;
+    }
 }
 
 void wxFrame::Restore()
