@@ -266,7 +266,8 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
         }
         xp = xp->GetNext() ;
     }
-    callbacks->AllocateObject(objectID, classInfo, metadata);
+    if ( !classInfo->NeedsDirectConstruction() )
+        callbacks->AllocateObject(objectID, classInfo, metadata);
 
     //
     // stream back the Create parameters first
@@ -332,14 +333,28 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
         }
         else
         {
-            createParams[i] = pi->GetDefaultValue() ;
+            if ( pi->GetTypeInfo()->IsObjectType() )
+            {
+                createParamOids[i] = wxNullObjectID ;
+                createClassInfos[i] = dynamic_cast<const wxClassTypeInfo*>(pi->GetTypeInfo())->GetClassInfo() ;
+            }
+            else
+            {
+                createParams[i] = pi->GetDefaultValue() ;
+                createParamOids[i] = wxInvalidObjectID ;
+            }
         }
     }
 
     // got the parameters.  Call the Create method
-    callbacks->CreateObject(objectID, classInfo,
-        classInfo->GetCreateParamCount(),
-        createParams, createParamOids, createClassInfos, metadata );
+    if ( classInfo->NeedsDirectConstruction() )
+        callbacks->ConstructObject(objectID, classInfo,
+            classInfo->GetCreateParamCount(),
+            createParams, createParamOids, createClassInfos, metadata );
+    else
+        callbacks->CreateObject(objectID, classInfo,
+            classInfo->GetCreateParamCount(),
+            createParams, createParamOids, createClassInfos, metadata );
 
     // now stream in the rest of the properties, in the sequence their properties were written in the xml
     for ( size_t j = 0 ; j < propertyNames.size() ; ++j )
@@ -386,12 +401,26 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
                 }
                 else if ( pi->GetTypeInfo()->IsObjectType() )
                 {
-                    int valueId = ReadComponent( prop , callbacks ) ;
-                    if ( valueId != wxInvalidObjectID )
+                    // and object can either be streamed out a string or as an object
+                    // in case we have no node, then the object's streaming out has been vetoed
+                    if ( prop )
                     {
-                        callbacks->SetPropertyAsObject( objectID , classInfo , pi , valueId ) ;
-                        if ( pi->GetTypeInfo()->GetKind() == wxT_OBJECT && valueId != wxNullObjectID )
-                            callbacks->DestroyObject( valueId , GetObjectClassInfo( valueId ) ) ;
+                        if ( prop->GetName() == wxT("object") )
+                        {
+                            int valueId = ReadComponent( prop , callbacks ) ;
+                            if ( valueId != wxInvalidObjectID )
+                            {
+                                callbacks->SetPropertyAsObject( objectID , classInfo , pi , valueId ) ;
+                                if ( pi->GetTypeInfo()->GetKind() == wxT_OBJECT && valueId != wxNullObjectID )
+                                    callbacks->DestroyObject( valueId , GetObjectClassInfo( valueId ) ) ;
+                            }
+                        }
+                        else
+                        {
+                            wxASSERT( pi->GetTypeInfo()->HasStringConverters() ) ;
+                            wxxVariant nodeval = ReadValue( prop , pi->GetTypeInfo() ) ;
+                            callbacks->SetProperty( objectID, classInfo ,pi , nodeval ) ;
+                        }
                     }
                 }
                 else if ( pi->GetTypeInfo()->IsDelegateType() )

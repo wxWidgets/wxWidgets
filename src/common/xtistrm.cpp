@@ -186,7 +186,6 @@ void wxWriter::WriteOneProperty( const wxObject *obj , const wxClassInfo* ci , c
     if ( dynobj && (dynamic_cast<const wxDynamicClassInfo*>(ci) == NULL) )
         obj = dynobj->GetSuperClassInstance() ;
 
-    DoBeginWriteProperty( pi ) ;
     if ( pi->GetTypeInfo()->GetKind() == wxT_COLLECTION )
     {
         wxxVariantArray data ;
@@ -194,6 +193,9 @@ void wxWriter::WriteOneProperty( const wxObject *obj , const wxClassInfo* ci , c
         const wxTypeInfo * elementType = dynamic_cast< const wxCollectionTypeInfo* >( pi->GetTypeInfo() )->GetElementType() ;
         for ( size_t i = 0 ; i < data.GetCount() ; ++i )
         {
+            if ( i == 0 )
+                DoBeginWriteProperty( pi ) ;
+
             DoBeginWriteElement() ;
             wxxVariant value = data[i] ;
             if ( persister->BeforeWriteProperty( this , pi , value ) )
@@ -212,8 +214,10 @@ void wxWriter::WriteOneProperty( const wxObject *obj , const wxClassInfo* ci , c
                 }
             }
             DoEndWriteElement() ;
-        }
-    }
+            if ( i == data.GetCount() - 1 )
+                 DoEndWriteProperty( pi ) ;
+       }
+   }
     else
     {
         const wxDelegateTypeInfo* dti = dynamic_cast< const wxDelegateTypeInfo* > ( pi->GetTypeInfo() ) ;
@@ -230,8 +234,10 @@ void wxWriter::WriteOneProperty( const wxObject *obj , const wxClassInfo* ci , c
             {
                 if ( sink != NULL && handler != NULL )
                 {
+                    DoBeginWriteProperty( pi ) ;
                     wxASSERT_MSG( IsObjectKnown( sink ) , wxT("Streaming delegates for not already streamed objects not yet supported") ) ;
                     DoWriteDelegate( obj , ci , pi , sink , GetObjectID( sink ) , sink->GetClassInfo() , handler ) ;
+                    DoEndWriteProperty( pi ) ;
                 }
             }
         }
@@ -239,30 +245,59 @@ void wxWriter::WriteOneProperty( const wxObject *obj , const wxClassInfo* ci , c
         {
             wxxVariant value ;
             pi->GetAccessor()->GetProperty(obj, value) ;
+
+            // avoid streaming out void objects
+            if( value.IsEmpty() )
+                return ;
+
+            if ( pi->GetFlags() & wxPROP_ENUM_STORE_LONG )
+            {
+                const wxEnumTypeInfo *eti = dynamic_cast<const wxEnumTypeInfo*>( pi->GetTypeInfo() ) ;
+                wxASSERT_MSG( eti , wxT("Type must have enum - long conversion") ) ;
+                eti->ConvertFromLong( value.Get<long>() , value ) ;
+            }
+
+            // avoid streaming out default values
+            if ( pi->GetTypeInfo()->HasStringConverters() && !pi->GetDefaultValue().IsEmpty() )
+            {
+                if ( value.GetAsString() == pi->GetDefaultValue().GetAsString() )
+                    return ;
+            }
+            
+            // avoid streaming out null objects
+            const wxClassTypeInfo* cti = dynamic_cast< const wxClassTypeInfo* > ( pi->GetTypeInfo() ) ;
+
+            if ( cti && value.GetAsObject() == NULL )
+                return ;
+
             if ( persister->BeforeWriteProperty( this , pi , value ) )
             {
-                const wxClassTypeInfo* cti = dynamic_cast< const wxClassTypeInfo* > ( pi->GetTypeInfo() ) ;
+                DoBeginWriteProperty( pi ) ;
                 if ( cti )
                 {
                     const wxClassInfo* pci = cti->GetClassInfo() ;
                     wxObject *vobj = pci->VariantToInstance( value ) ;
-                    wxxVariantArray md ;
-                    WriteObject( vobj , (vobj ? vobj->GetClassInfo() : pci ) , persister , cti->GetKind()== wxT_OBJECT , md) ;
+                    if ( vobj && pi->GetTypeInfo()->HasStringConverters() )
+                    {
+                        wxString stringValue ;
+                        cti->ConvertToString( value , stringValue ) ;
+                        wxxVariant convertedValue(stringValue) ;
+                        DoWriteSimpleType( convertedValue ) ;
+                    }
+                    else
+                    {
+                        wxxVariantArray md ;
+                        WriteObject( vobj , (vobj ? vobj->GetClassInfo() : pci ) , persister , cti->GetKind()== wxT_OBJECT , md) ;
+                    }
                 }
                 else
                 {
-                    if ( pi->GetFlags() & wxPROP_ENUM_STORE_LONG )
-                    {
-                        const wxEnumTypeInfo *eti = dynamic_cast<const wxEnumTypeInfo*>( pi->GetTypeInfo() ) ;
-                        wxASSERT_MSG( eti , wxT("Type must have enum - long conversion") ) ;
-                        eti->ConvertFromLong( value.Get<long>() , value ) ;
-                    }
                     DoWriteSimpleType( value ) ;
                 }
+                DoEndWriteProperty( pi ) ;
             }
         }
     }
-    DoEndWriteProperty( pi ) ;
 }
 
 int wxWriter::GetObjectID(const wxObject *obj)
@@ -396,6 +431,36 @@ void wxRuntimeDepersister::CreateObject(int objectID,
     }
     classInfo->Create(o, paramCount, params);
 }
+
+void wxRuntimeDepersister::ConstructObject(int objectID,
+                                        const wxClassInfo *classInfo,
+                                        int paramCount,
+                                        wxxVariant *params,
+                                        int *objectIdValues,
+                                        const wxClassInfo **objectClassInfos ,
+                                        wxxVariantArray &WXUNUSED(metadata))
+{
+    wxObject *o;
+    for ( int i = 0 ; i < paramCount ; ++i )
+    {
+        if ( objectIdValues[i] != wxInvalidObjectID )
+        {
+            wxObject *o;
+            o = m_data->GetObject(objectIdValues[i]);
+            // if this is a dynamic object and we are asked for another class
+            // than wxDynamicObject we cast it down manually.
+            wxDynamicObject *dyno = dynamic_cast< wxDynamicObject * > (o) ;
+            if ( dyno!=NULL && (objectClassInfos[i] != dyno->GetClassInfo()) )
+            {
+                o = dyno->GetSuperClassInstance() ;
+            }
+            params[i] = objectClassInfos[i]->InstanceToVariant(o) ;
+        }
+    }
+    o = classInfo->ConstructObject(paramCount, params);
+    m_data->SetObject(objectID, o);
+}
+
 
 void wxRuntimeDepersister::DestroyObject(int objectID, wxClassInfo *WXUNUSED(classInfo))
 {
@@ -573,6 +638,37 @@ void wxCodeDepersister::CreateObject(int objectID,
 {
     int i;
     m_fp->WriteString( wxString::Format( "\t%s->Create(", m_data->GetObjectName(objectID).c_str() ) );
+    for (i = 0; i < paramCount; i++)
+    {
+        if ( objectIDValues[i] != wxInvalidObjectID )
+            m_fp->WriteString( wxString::Format( "%s", m_data->GetObjectName( objectIDValues[i] ).c_str() ) );
+        else
+        {
+            m_fp->WriteString( wxString::Format( "%s", ValueAsCode(params[i]).c_str() ) );
+        }
+        if (i < paramCount - 1)
+            m_fp->WriteString( ", ");
+    }
+    m_fp->WriteString( ");\n");
+}
+
+void wxCodeDepersister::ConstructObject(int objectID,
+                                     const wxClassInfo *classInfo,
+                                     int paramCount,
+                                     wxxVariant *params,
+                                     int *objectIDValues,
+                                     const wxClassInfo **WXUNUSED(objectClassInfos) ,
+                                     wxxVariantArray &WXUNUSED(metadata)
+                                     )
+{
+    wxString objectName = wxString::Format( "LocalObject_%d" , objectID ) ;
+    m_fp->WriteString( wxString::Format( "\t%s *%s = new %s(",
+        classInfo->GetClassName(),
+        objectName.c_str(),
+        classInfo->GetClassName()) );
+    m_data->SetObjectName( objectID , objectName ) ;
+
+    int i;
     for (i = 0; i < paramCount; i++)
     {
         if ( objectIDValues[i] != wxInvalidObjectID )
