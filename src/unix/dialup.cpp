@@ -494,10 +494,10 @@ wxDialUpManagerImpl::CheckIfconfig(void)
 #if defined(__SOLARIS__) || defined (__SUNOS__)
       // need to add -a flag
       cmd << " -a";
-#elif defined(__LINUX__) || defined (__FREEBSD__)
+#elif defined(__LINUX__) || defined (__FREEBSD__) || defined(__SGI__)
       // nothing to be added to ifconfig
 #else
-#   pragma warning "No ifconfig information for this OS."
+#     pragma warning "No ifconfig information for this OS."
       m_CanUseIfconfig = 0;
       return -1;
 #endif
@@ -516,20 +516,18 @@ wxDialUpManagerImpl::CheckIfconfig(void)
             output[file.Length()] = '\0';
             if(file.Read(output,file.Length()) == file.Length())
             {
-               if(
+               // FIXME shouldn't we grep for "^ppp"? (VZ)
+
 #if defined(__SOLARIS__) || defined (__SUNOS__)
-                  strstr(output,"ipdptp")   // dialup device
+               // dialup device under SunOS/Solaris
+               rc = strstr(output,"ipdptp") != (char *)NULL;
 #elif defined(__LINUX__) || defined (__FREEBSD__)
-                  strstr(output,"ppp")   // ppp
-                  || strstr(output,"sl") // slip
-                  || strstr(output,"pl") // plip
-#else
-                  FALSE
+               rc = strstr(output,"ppp")   // ppp
+                    || strstr(output,"sl") // slip
+                    || strstr(output,"pl") // plip
+#elif defined(__SGI__)  // IRIX
+               rc = strstr(output, "ppp"); // PPP
 #endif
-                  )
-                  rc = 1;
-               else
-                  rc = 0;
             }
             file.Close();
             delete [] output;
