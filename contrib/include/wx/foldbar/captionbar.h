@@ -12,6 +12,15 @@
 #ifndef __FOLDPANELBAR_H__
 #define __FOLDPANELBAR_H__
 
+#ifdef WXMAKINGDLL_FOLDBAR
+    #define WXDLLIMPEXP_FOLDBAR WXEXPORT
+#elif defined(WXUSINGDLL)
+    #define WXDLLIMPEXP_FOLDBAR WXIMPORT
+#else // not making nor using DLL
+    #define WXDLLIMPEXP_FOLDBAR
+#endif
+
+
 #define wxFPB_EXTRA_X 10
 #define wxFPB_EXTRA_Y 4
 #define wxFPB_BMP_RIGHTSPACE 2    // pixels of the bmp to be alligned from the right filled with space
@@ -393,7 +402,7 @@ protected:
     that the bar is now in collapsed or expanded state. The parent should re-arrange the associated
     windows accordingly */
 
-class WXDLLEXPORT wxCaptionBarEvent : public wxCommandEvent
+class WXDLLIMPEXP_FOLDBAR wxCaptionBarEvent : public wxCommandEvent
 {
 
 private:
@@ -447,7 +456,7 @@ public:
 };
 
 BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EVENT_TYPE(wxEVT_CAPTIONBAR, 7777)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_FOLDBAR, wxEVT_CAPTIONBAR, 7777)
 END_DECLARE_EVENT_TYPES()
 
 typedef void (wxEvtHandler::*wxCaptionBarEventFunction)(wxCaptionBarEvent&);
@@ -455,8 +464,7 @@ typedef void (wxEvtHandler::*wxCaptionBarEventFunction)(wxCaptionBarEvent&);
 #define EVT_CAPTIONBAR(id, fn) \
     DECLARE_EVENT_TABLE_ENTRY( \
         wxEVT_CAPTIONBAR, id, wxID_ANY, \
-        (wxObjectEventFunction)(wxEventFunction)(wxCaptionBarEventFunction) \
-        & fn, \
+        (wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent(wxCaptionBarEventFunction, & fn), \
         (wxObject *) NULL \
     ),
 
