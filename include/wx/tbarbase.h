@@ -151,10 +151,10 @@ public:
     const wxBitmap& GetBitmap() const
         { return IsEnabled() ? GetNormalBitmap() : GetDisabledBitmap(); }
 
-    wxString GetLabel() const { return m_label; }
+    const wxString& GetLabel() const { return m_label; }
 
-    wxString GetShortHelp() const { return m_shortHelpString; }
-    wxString GetLongHelp() const { return m_longHelpString; }
+    const wxString& GetShortHelp() const { return m_shortHelpString; }
+    const wxString& GetLongHelp() const { return m_longHelpString; }
 
     wxObject *GetClientData() const
     {
