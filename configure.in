@@ -140,6 +140,7 @@ DEFAULT_DEFAULT_wxUSE_X11=0
 PROGRAM_EXT=
 SO_SUFFIX=so
 SAMPLES_RPATH_FLAG=
+SAMPLES_RPATH_POSTLINK=
 
 dnl to support a new system, you need to add its canonical name (as determined
 dnl by config.sub or specified by the configure command line) to this "case"
@@ -3105,7 +3106,6 @@ if test "$wxUSE_SHARED" = "yes"; then
     case "${host}" in
       *-*-linux* | *-*-gnu* )
         SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(top_builddir)lib"
-      ;;
 
       *-*-solaris2* )
         if test "$GCC" = yes ; then
@@ -3144,6 +3144,21 @@ if test "$wxUSE_SHARED" = "yes"; then
             SAMPLES_RPATH_FLAG="-R\$(top_builddir)lib"
         fi
       ;;
+      
+      powerpc-*-darwin* )
+        SAMPLES_RPATH_POSTLINK="\$(top_builddir)change-install-names \$(LIBDIRNAME) \$(prefix) \$@"
+        cat <<EOF >change-install-names
+#!/bin/sh
+libnames=\`cd \${1} ; ls -1 | grep '\.[[0-9]][[0-9]]*\.dylib\$'\`
+inst_cmd="install_name_tool "
+for i in \${libnames} ; do
+    inst_cmd="\${inst_cmd} -change \${2}/lib/\${i} \${1}/\${i}"
+done
+\${inst_cmd} \${3}
+EOF
+        chmod +x change-install-names
+      ;;
+      
     esac
 
     dnl set target to shared if not explicitly chose static before
@@ -5629,6 +5644,7 @@ TOOLKIT_LOWERCASE=`echo $TOOLKIT | tr [[A-Z]] [[a-z]]`
 AC_SUBST(TOOLKIT_LOWERCASE)
 AC_SUBST(TOOLKIT_VERSION)
 AC_SUBST(SAMPLES_RPATH_FLAG)
+AC_SUBST(SAMPLES_RPATH_POSTLINK)
 AC_SUBST(HOST_SUFFIX)
 
 AC_BAKEFILE

@@ -25346,14 +25346,6 @@ echo "${ECHO_T}$wx_cv_version_script" >&6
     case "${host}" in
       *-*-linux* | *-*-gnu* )
         SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(top_builddir)lib"
-        SAMPLES_RPATH_POSTLINK="\"libnames=\`cd \$(LIBDIRNAME) ; ls -1 | grep '\.so\.[0-9][0-9]*\$'\` ; \\\\
-inst_cmd='install_name_tool ' ; \\\\
-for i in \$libnames ; do \\\\
-    inst_cmd=\"\$inst_cmd -change \$(prefix)/lib/\\$i \$(LIBDIRNAME)/\\$i\" ; \\\\
-done ; \\\\
-echo \$inst_cmd\""
-
-      ;;
 
       *-*-solaris2* )
         if test "$GCC" = yes ; then
@@ -25460,12 +25452,17 @@ rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
       ;;
 
       powerpc-*-darwin* )
-        SAMPLES_RPATH_POSTLINK="libnames=\`cd \$(LIBDIRNAME) ; ls -1 | grep '\.so\.0-90-9*\$'\` ; \\
-inst_cmd='install_name_tool ' ; \\
-for i in \$libnames ; do \\
-    inst_cmd=\"\$inst_cmd -change \$(prefix)/lib/\\$i \$(LIBDIRNAME)/\\$i\" ; \\
-done ; \\
-echo \$inst_cmd "
+        SAMPLES_RPATH_POSTLINK="\$(top_builddir)change-install-names \$(LIBDIRNAME) \$(prefix) \$@"
+        cat <<EOF >change-install-names
+#!/bin/sh
+libnames=\`cd \${1} ; ls -1 | grep '\.[0-9][0-9]*\.dylib\$'\`
+inst_cmd="install_name_tool "
+for i in \${libnames} ; do
+    inst_cmd="\${inst_cmd} -change \${2}/lib/\${i} \${1}/\${i}"
+done
+\${inst_cmd} \${3}
+EOF
+        chmod +x change-install-names
       ;;
 
     esac

@@ -168,8 +168,9 @@ compiled .lib files and setup.h under the lib/ toplevel directory.
         <option name="EXTRALIBS_ODBC"/>
         <option name="EXTRALIBS_GUI"/>
         <option name="EXTRALIBS_OPENGL"/>
-        <option name="SAMPLES_RPATH_FLAG"/>
         <option name="HOST_SUFFIX"/>
+        <option name="SAMPLES_RPATH_FLAG"/>
+        <option name="SAMPLES_RPATH_POSTLINK"/>
         
         <set var="TOP_SRCDIR">$(top_srcdir)/</set>
         <set var="RUNTIME_LIBS">dynamic</set>
@@ -197,7 +198,6 @@ it if SHARED=1 unless you know what you are doing.
         <set var="TOOLKIT">MSW</set>
         <set var="TOOLKIT_LOWERCASE">$(TOOLKIT.lower())</set>
         <set var="TOOLKIT_VERSION"/>
-        <set var="SAMPLES_RPATH_FLAG"/>
         <set var="HOST_SUFFIX"/>
         <set var="EXTRALIBS"/>
         <set var="EXTRALIBS_XML"/>

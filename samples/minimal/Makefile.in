@@ -21,6 +21,7 @@ LDFLAGS = @LDFLAGS@
 LDFLAGS_GUI = @LDFLAGS_GUI@
 RESCOMP = @RESCOMP@
 SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
+SAMPLES_RPATH_POSTLINK = @SAMPLES_RPATH_POSTLINK@
 SETFILE = @SETFILE@
 TOOLCHAIN_NAME = @TOOLCHAIN_NAME@
 TOOLKIT = @TOOLKIT@
@@ -130,13 +131,12 @@ COND_PLATFORM_MAC_1___minimal___mac_rezcmd = $(RESCOMP) -d __DARWIN__ -t APPL -d
 all: minimal$(EXEEXT)
 
 clean: 
-	rm -rf ./.deps
+	rm -rf ./.deps ./.pch
 	rm -f ./*.o
 	rm -f minimal$(EXEEXT)
 
 distclean: clean
-	rm -f configure config.cache config.log config.status
-	rm -f bk-deps shared-ld-sh
+	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 install: all
 
@@ -146,6 +146,7 @@ minimal$(EXEEXT): $(MINIMAL_OBJECTS) $(__minimal___win32rc)
 	$(CXX) -o $@ $(MINIMAL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
 	$(__minimal___mac_rezcmd)
 	$(__minimal___mac_setfilecmd)
+	$(SAMPLES_RPATH_POSTLINK)
 
 minimal_minimal.o: $(srcdir)/minimal.cpp
 	$(CXXC) -c -o $@ $(MINIMAL_CXXFLAGS) $<
