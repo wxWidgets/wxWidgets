@@ -1146,32 +1146,6 @@ public:
 //---------------------------------------------------------------------------
 %newgroup;
 
-// A help event is sent when the user clicks on a window in context-help mode.
-
-// class wxHelpEvent : public wxCommandEvent
-// {
-// public:
-//     wxHelpEvent(wxEventType type = wxEVT_NULL,
-//                 wxWindowID winid = 0,
-//                 const wxPoint& pt = wxDefaultPosition);
-
-//     // Position of event (in screen coordinates)
-//     const wxPoint& GetPosition() const;
-//     void SetPosition(const wxPoint& pos);
-
-//     // Optional link to further help
-//     const wxString& GetLink() const;
-//     void SetLink(const wxString& link);
-
-//     // Optional target to display help in. E.g. a window specification
-//     const wxString& GetTarget() const;
-//     void SetTarget(const wxString& target);
-// };
-
-
-//---------------------------------------------------------------------------
-%newgroup;
-
 // A Context event is sent when the user right clicks on a window or
 // presses Shift-F10
 // NOTE : Under windows this is a repackaged WM_CONTETXMENU message
