@@ -5,8 +5,6 @@
 //---------------------------------------------------------------------------
 #include <wx/config.h>      // to let wxWindows choose a wxConfig class for your platform
 #include <wx/confbase.h>    // base config class
-// #include <wx/event.h>
-// #include <wx/date.h>
 #include <wx/dbtable.h>
 #include <wx/generic/grid.h>
 #include <wx/file.h>
@@ -21,11 +19,6 @@
 #include <wx/textctrl.h>
 #include <wx/toolbar.h>
 #include <wx/treectrl.h>
-/*
-#ifdef __WXMSW__
-    #include <wx/xpmhand.h>
-#endif
-*/
 //---------------------------
 #include "tabpgwin.h"         // Original name : "controlarea.h"
 //---------------------------

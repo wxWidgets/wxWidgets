@@ -1043,7 +1043,7 @@ static void TestFileNameMakeAbsolute()
     {
         const FileNameInfo& fni = filenames[n];
         wxFileName fn(fni.fullname, fni.format);
-        
+
         wxPrintf(_T("'%s' absolutized: "),
                fn.GetFullPath(fni.format).c_str());
         fn.MakeAbsolute();
@@ -4156,7 +4156,6 @@ static void TestZlibStreamRead()
 
 #include <math.h>
 
-#include "wx/date.h"
 #include "wx/datetime.h"
 
 // the test data
@@ -5155,38 +5154,6 @@ static void TestTimeSpanFormat()
 
     wxPuts(_T(""));
 }
-
-#if 0
-
-// test compatibility with the old wxDate/wxTime classes
-static void TestTimeCompatibility()
-{
-    wxPuts(_T("\n*** wxDateTime compatibility test ***"));
-
-    wxPrintf(_T("wxDate for JDN 0: %s\n"), wxDate(0l).FormatDate().c_str());
-    wxPrintf(_T("wxDate for MJD 0: %s\n"), wxDate(2400000).FormatDate().c_str());
-
-    double jdnNow = wxDateTime::Now().GetJDN();
-    long jdnMidnight = (long)(jdnNow - 0.5);
-    wxPrintf(_T("wxDate for today: %s\n"), wxDate(jdnMidnight).FormatDate().c_str());
-
-    jdnMidnight = wxDate().Set().GetJulianDate();
-    wxPrintf(_T("wxDateTime for today: %s\n"),
-            wxDateTime((double)(jdnMidnight + 0.5)).Format("%c", wxDateTime::GMT0).c_str());
-
-    int flags = wxEUROPEAN;//wxFULL;
-    wxDate date;
-    date.Set();
-    wxPrintf(_T("Today is %s\n"), date.FormatDate(flags).c_str());
-    for ( int n = 0; n < 7; n++ )
-    {
-        wxPrintf(_T("Previous %s is %s\n"),
-               wxDateTime::GetWeekDayName((wxDateTime::WeekDay)n),
-               date.Previous(n + 1).FormatDate(flags).c_str());
-    }
-}
-
-#endif // 0
 
 #endif // TEST_DATETIME
 

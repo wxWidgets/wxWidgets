@@ -25,10 +25,6 @@ public:
     bool OnInit();
     int OnExit() { delete m_mimeDatabase; return wxApp::OnExit(); }
 
-#if wxUSE_TIMEDATE
-    void DoDateDemo(wxCommandEvent& event);
-#endif // wxUSE_TIMEDATE
-    void DoTimeDemo(wxCommandEvent& event);
     void DoVariantDemo(wxCommandEvent& event);
     void DoByteOrderDemo(wxCommandEvent& event);
     void DoStreamDemo(wxCommandEvent& event);

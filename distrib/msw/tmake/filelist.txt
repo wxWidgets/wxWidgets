@@ -843,7 +843,6 @@ cshelp.h	WXH
 ctrlsub.h	WXH
 cursor.h	WXH
 dataobj.h	WXH
-date.h	WXH	Base
 datetime.h	WXH	Base
 datetime.inl	WXH	Base
 datstrm.h	WXH	Base
@@ -1020,7 +1019,6 @@ textfile.h	WXH	Base
 tglbtn.h	WXH
 thread.h	WXH	Base
 thrimpl.cpp	WXH	Base
-time.h	WXH	Base
 timer.h	WXH	Base
 tipdlg.h	WXH
 tipwin.h	WXH

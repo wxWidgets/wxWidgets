@@ -26,7 +26,6 @@
 
 #include "wx/thread.h"
 #include "wx/dynarray.h"
-#include "wx/time.h"
 
 #include "wx/progdlg.h"
 
@@ -686,13 +685,13 @@ void MyFrame::OnShowCPUs(wxCommandEvent& WXUNUSED(event))
         default:
             msg.Printf(wxT("This system has %d CPUs"), nCPUs);
     }
-            
+
     wxLogMessage(msg);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
-    wxMessageDialog dialog(this, 
+    wxMessageDialog dialog(this,
                            _T("wxWindows multithreaded application sample\n")
                            _T("(c) 1998 Julian Smart, Guilhem Lavaux\n")
                            _T("(c) 1999 Vadim Zeitlin\n")

@@ -11,8 +11,6 @@
 
 #ifdef __GNUG__
 #pragma implementation "variant.h"
-#pragma implementation "time.h"
-#pragma implementation "date.h"
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -39,15 +37,6 @@
 #include "wx/tokenzr.h"
 
 #include "wx/variant.h"
-
-#if wxUSE_TIMEDATE
-IMPLEMENT_DYNAMIC_CLASS(wxDate, wxObject)
-IMPLEMENT_DYNAMIC_CLASS(wxTime, wxObject)
-
-wxTime::tFormat    wxTime::ms_Format    = wxTime::wx12h;
-wxTime::tPrecision wxTime::ms_Precision  = wxTime::wxStdMinSec;
-wxChar             wxTime::ms_bufTime[128];
-#endif
 
 IMPLEMENT_ABSTRACT_CLASS(wxVariantData, wxObject)
 
@@ -830,174 +819,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxVariantDataString, wxVariantData)
 #endif
 
 /*
- * wxVariantDataTime
- */
-
-// For some reason, Watcom C++ can't link variant.cpp with time/date classes compiled
-#if wxUSE_TIMEDATE && !defined(__WATCOMC__)
-
-class wxVariantDataTime: public wxVariantData
-{
- DECLARE_DYNAMIC_CLASS(wxVariantDataTime)
-public:
-    wxVariantDataTime() { }
-    wxVariantDataTime(const wxTime& value) { m_value = value; }
-
-    inline wxTime GetValue() const { return m_value; }
-    inline void SetValue(const wxTime& value) { m_value = value; }
-
-    virtual void Copy(wxVariantData& data);
-    virtual bool Eq(wxVariantData& data) const;
-#if wxUSE_STD_IOSTREAM
-    virtual bool Write(wxSTD ostream& str) const;
-#endif
-    virtual bool Write(wxString& str) const;
-#if wxUSE_STD_IOSTREAM
-    virtual bool Read(wxSTD istream& str);
-#endif
-    virtual bool Read(wxString& str);
-    virtual wxString GetType() const { return wxT("time"); };
-    virtual wxVariantData* Clone() { return new wxVariantDataTime; }
-
-protected:
-    wxTime m_value;
-};
-
-IMPLEMENT_DYNAMIC_CLASS(wxVariantDataTime, wxVariantData)
-
-void wxVariantDataTime::Copy(wxVariantData& data)
-{
-    wxASSERT_MSG( (data.GetType() == wxT("time")), wxT("wxVariantDataTime::Copy: Can't copy to this type of data") );
-
-    wxVariantDataTime& otherData = (wxVariantDataTime&) data;
-
-    otherData.m_value = m_value;
-}
-
-bool wxVariantDataTime::Eq(wxVariantData& data) const
-{
-    wxASSERT_MSG( (data.GetType() == wxT("time")), wxT("wxVariantDataTime::Eq: argument mismatch") );
-
-    wxVariantDataTime& otherData = (wxVariantDataTime&) data;
-
-    return (otherData.m_value == m_value);
-}
-
-#if wxUSE_STD_IOSTREAM
-bool wxVariantDataTime::Write(wxSTD ostream& str) const
-{
-    wxString s;
-    Write(s);
-    str << (const char*) s.mb_str();
-    return TRUE;
-}
-#endif
-
-bool wxVariantDataTime::Write(wxString& str) const
-{
-    wxChar*s = m_value.FormatTime();
-    str = s;
-    return TRUE;
-}
-
-#if wxUSE_STD_IOSTREAM
-bool wxVariantDataTime::Read(wxSTD istream& WXUNUSED(str))
-{
-    // Not implemented
-    return FALSE;
-}
-#endif
-
-bool wxVariantDataTime::Read(wxString& WXUNUSED(str))
-{
-    // Not implemented
-    return FALSE;
-}
-
-/*
- * wxVariantDataDate
- */
-
-class wxVariantDataDate: public wxVariantData
-{
- DECLARE_DYNAMIC_CLASS(wxVariantDataDate)
-public:
-    wxVariantDataDate() { }
-    wxVariantDataDate(const wxDate& value) { m_value = value; }
-
-    inline wxDate GetValue() const { return m_value; }
-    inline void SetValue(const wxDate& value) { m_value = value; }
-
-    virtual void Copy(wxVariantData& data);
-    virtual bool Eq(wxVariantData& data) const;
-#if wxUSE_STD_IOSTREAM
-    virtual bool Write(wxSTD ostream& str) const;
-#endif
-    virtual bool Write(wxString& str) const;
-#if wxUSE_STD_IOSTREAM
-    virtual bool Read(wxSTD istream& str);
-#endif
-    virtual bool Read(wxString& str);
-    virtual wxString GetType() const { return wxT("date"); };
-    virtual wxVariantData* Clone() { return new wxVariantDataDate; }
-
-protected:
-    wxDate m_value;
-};
-
-IMPLEMENT_DYNAMIC_CLASS(wxVariantDataDate, wxVariantData)
-
-void wxVariantDataDate::Copy(wxVariantData& data)
-{
-    wxASSERT_MSG( (data.GetType() == wxT("date")), wxT("wxVariantDataDate::Copy: Can't copy to this type of data") );
-
-    wxVariantDataDate& otherData = (wxVariantDataDate&) data;
-
-    otherData.m_value = m_value;
-}
-
-bool wxVariantDataDate::Eq(wxVariantData& data) const
-{
-    wxASSERT_MSG( (data.GetType() == wxT("date")), wxT("wxVariantDataDate::Eq: argument mismatch") );
-
-    wxVariantDataDate& otherData = (wxVariantDataDate&) data;
-
-    return (otherData.m_value == m_value);
-}
-
-#if wxUSE_STD_IOSTREAM
-bool wxVariantDataDate::Write(wxSTD ostream& str) const
-{
-    wxString s;
-    Write(s);
-    str << (const char*) s.mb_str();
-    return TRUE;
-}
-#endif
-
-bool wxVariantDataDate::Write(wxString& str) const
-{
-    str = m_value.FormatDate();
-    return TRUE;
-}
-
-#if wxUSE_STD_IOSTREAM
-bool wxVariantDataDate::Read(wxSTD istream& WXUNUSED(str))
-{
-    // Not implemented
-    return FALSE;
-}
-#endif
-
-bool wxVariantDataDate::Read(wxString& WXUNUSED(str))
-{
-    // Not implemented
-    return FALSE;
-}
-#endif
-  // wxUSE_TIMEDATE
-
-/*
  * wxVariantDataVoidPtr
  */
 
@@ -1342,35 +1163,6 @@ wxVariant::wxVariant(const wxList& val, const wxString& name) // List of variant
     m_name = name;
 }
 
-// For some reason, Watcom C++ can't link variant.cpp with time/date classes compiled
-#if wxUSE_TIMEDATE && !defined(__WATCOMC__)
-wxVariant::wxVariant(const wxTime& val, const wxString& name) // Time
-{
-    m_data = new wxVariantDataTime(val);
-    m_name = name;
-}
-
-wxVariant::wxVariant(const wxDate& val, const wxString& name) // Date
-{
-    m_data = new wxVariantDataDate(val);
-    m_name = name;
-}
-#endif
-
-wxVariant::wxVariant(void* val, const wxString& name) // Void ptr
-{
-    m_data = new wxVariantDataVoidPtr(val);
-    m_name = name;
-}
-
-#if wxUSE_DATETIME
-wxVariant::wxVariant(const wxDateTime& val, const wxString& name) // Date
-{
-    m_data = new wxVariantDataDateTime(val);
-    m_name = name;
-}
-#endif // wxUSE_DATETIME
-
 #if wxUSE_ODBC
 wxVariant::wxVariant(const TIME_STRUCT* valptr, const wxString& name) // Date
 {
@@ -1684,65 +1476,6 @@ void wxVariant::operator= (const wxList& value)
     }
 }
 
-// For some reason, Watcom C++ can't link variant.cpp with time/date classes compiled
-#if wxUSE_TIMEDATE && !defined(__WATCOMC__)
-bool wxVariant::operator== (const wxTime& value) const
-{
-    wxTime thisValue;
-    if (!Convert(&thisValue))
-        return FALSE;
-
-    return value == thisValue;
-}
-
-bool wxVariant::operator!= (const wxTime& value) const
-{
-    return (!((*this) == value));
-}
-
-void wxVariant::operator= (const wxTime& value)
-{
-    if (GetType() == wxT("time"))
-    {
-        ((wxVariantDataTime*)GetData())->SetValue(value);
-    }
-    else
-    {
-        if (m_data)
-            delete m_data;
-        m_data = new wxVariantDataTime(value);
-    }
-}
-
-bool wxVariant::operator== (const wxDate& value) const
-{
-    wxDate thisValue;
-    if (!Convert(&thisValue))
-        return FALSE;
-
-    return (value == thisValue);
-}
-
-bool wxVariant::operator!= (const wxDate& value) const
-{
-    return (!((*this) == value));
-}
-
-void wxVariant::operator= (const wxDate& value)
-{
-    if (GetType() == wxT("date"))
-    {
-        ((wxVariantDataTime*)GetData())->SetValue(value);
-    }
-    else
-    {
-        if (m_data)
-            delete m_data;
-        m_data = new wxVariantDataDate(value);
-    }
-}
-#endif
-
 bool wxVariant::operator== (void* value) const
 {
     return (value == ((wxVariantDataVoidPtr*)GetData())->GetValue());
@@ -2007,31 +1740,6 @@ wxString wxVariant::GetString() const
     return value;
 }
 
-// For some reason, Watcom C++ can't link variant.cpp with time/date classes compiled
-#if wxUSE_TIMEDATE && !defined(__WATCOMC__)
-wxTime wxVariant::GetTime() const
-{
-    wxTime value;
-    if (!Convert(& value))
-    {
-        wxFAIL_MSG(wxT("Could not convert to a time"));
-    }
-
-    return value;
-}
-
-wxDate wxVariant::GetDate() const
-{
-    wxDate value;
-    if (!Convert(& value))
-    {
-        wxFAIL_MSG(wxT("Could not convert to a date"));
-    }
-
-    return value;
-}
-#endif // wxUSE_TIMEDATE
-
 void* wxVariant::GetVoidPtr() const
 {
     wxASSERT( (GetType() == wxT("void*")) );
@@ -2224,33 +1932,6 @@ bool wxVariant::Convert(wxString* value) const
     *value = MakeString();
     return TRUE;
 }
-
-// For some reason, Watcom C++ can't link variant.cpp with time/date classes compiled
-#if wxUSE_TIMEDATE && !defined(__WATCOMC__)
-bool wxVariant::Convert(wxTime* value) const
-{
-    wxString type(GetType());
-    if (type == wxT("time"))
-        *value = ((wxVariantDataTime*)GetData())->GetValue();
-    else if (type == wxT("date"))
-        *value = wxTime(((wxVariantDataDate*)GetData())->GetValue());
-    else
-        return FALSE;
-
-    return TRUE;
-}
-
-bool wxVariant::Convert(wxDate* value) const
-{
-    wxString type(GetType());
-    if (type == wxT("date"))
-        *value = ((wxVariantDataDate*)GetData())->GetValue();
-    else
-        return FALSE;
-
-    return TRUE;
-}
-#endif // wxUSE_TIMEDATE
 
 #if wxUSE_DATETIME
 bool wxVariant::Convert(wxDateTime* value) const

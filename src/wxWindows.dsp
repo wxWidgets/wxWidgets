@@ -1674,10 +1674,6 @@ SOURCE=..\include\wx\dataobj.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\date.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\datetime.h
 # End Source File
 # Begin Source File
@@ -2363,10 +2359,6 @@ SOURCE=..\include\wx\tglbtn.h
 # Begin Source File
 
 SOURCE=..\include\wx\thread.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\time.h
 # End Source File
 # Begin Source File
 

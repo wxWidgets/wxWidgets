@@ -344,7 +344,6 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_STD_IOSTREAM=no
   DEFAULT_wxUSE_CMDLINE_PARSER=no
   DEFAULT_wxUSE_DATETIME=no
-  DEFAULT_wxUSE_TIMEDATE=no
   DEFAULT_wxUSE_TIMER=no
   DEFAULT_wxUSE_STOPWATCH=no
   DEFAULT_wxUSE_FILE=no
@@ -520,7 +519,6 @@ else
   DEFAULT_wxUSE_STD_IOSTREAM=no
   DEFAULT_wxUSE_CMDLINE_PARSER=yes
   DEFAULT_wxUSE_DATETIME=yes
-  DEFAULT_wxUSE_TIMEDATE=no
   DEFAULT_wxUSE_TIMER=yes
   DEFAULT_wxUSE_STOPWATCH=yes
   DEFAULT_wxUSE_FILE=yes
@@ -774,7 +772,6 @@ WX_ARG_ENABLE(ipc,           [  --enable-ipc            use interprocess communi
 
 WX_ARG_ENABLE(cmdline,       [  --enable-cmdline        use wxCmdLineParser class], wxUSE_CMDLINE_PARSER)
 WX_ARG_ENABLE(datetime,      [  --enable-datetime       use wxDateTime class], wxUSE_DATETIME)
-WX_ARG_ENABLE(timedate,      [  --enable-timedate       use obsolete wxDate/wxTime classes], wxUSE_TIMEDATE)
 WX_ARG_ENABLE(stopwatch,     [  --enable-stopwatch      use wxStopWatch class], wxUSE_STOPWATCH)
 WX_ARG_ENABLE(dialupman,     [  --enable-dialupman      use dialup network classes], wxUSE_DIALUP_MANAGER)
 WX_ARG_ENABLE(apple_ieee,    [  --enable-apple_ieee     use the Apple IEEE codec], wxUSE_APPLE_IEEE)
@@ -4107,10 +4104,6 @@ if test "$wxUSE_DATETIME" = "yes"; then
   AC_DEFINE(wxUSE_DATETIME)
 fi
 
-if test "$wxUSE_TIMEDATE" = "yes"; then
-  AC_DEFINE(wxUSE_TIMEDATE)
-fi
-
 if test "$wxUSE_FILE" = "yes"; then
   AC_DEFINE(wxUSE_FILE)
 fi
@@ -4354,7 +4347,6 @@ if test "$wxUSE_DATETIME" = "yes"; then
         fi
     fi
 
-    AC_DEFINE(wxUSE_TIMEDATE)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS typetest"
 fi
 

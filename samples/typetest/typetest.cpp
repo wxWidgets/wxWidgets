@@ -24,8 +24,6 @@
 #include "wx/wx.h"
 #endif
 
-#include "wx/time.h"
-#include "wx/date.h"
 #include "wx/variant.h"
 #include "wx/mimetype.h"
 
@@ -58,10 +56,6 @@ IMPLEMENT_APP    (MyApp)
 IMPLEMENT_DYNAMIC_CLASS    (MyApp, wxApp)
 
 BEGIN_EVENT_TABLE(MyApp, wxApp)
-#if wxUSE_TIMEDATE
-    EVT_MENU(TYPES_DATE,      MyApp::DoDateDemo)
-    EVT_MENU(TYPES_TIME,      MyApp::DoTimeDemo)
-#endif // wxUSE_TIMEDATE
     EVT_MENU(TYPES_VARIANT,   MyApp::DoVariantDemo)
     EVT_MENU(TYPES_BYTEORDER, MyApp::DoByteOrderDemo)
 #if wxUSE_UNICODE
@@ -94,10 +88,6 @@ bool MyApp::OnInit()
     file_menu->Append(TYPES_QUIT, _T("E&xit\tAlt-X"));
 
     wxMenu *test_menu = new wxMenu;
-#if wxUSE_TIMEDATE
-    test_menu->Append(TYPES_DATE, _T("&Date test"));
-    test_menu->Append(TYPES_TIME, _T("&Time test"));
-#endif // wxUSE_TIMEDATE
     test_menu->Append(TYPES_VARIANT, _T("&Variant test"));
     test_menu->Append(TYPES_BYTEORDER, _T("&Byteorder test"));
 #if wxUSE_UNICODE
@@ -1015,161 +1005,6 @@ void MyApp::DoByteOrderDemo(wxCommandEvent& WXUNUSED(event))
     text.Printf( _T("Value of wxInt32 swapped on big endian is: %#x.\n\n"), wxINT32_SWAP_ON_BE( var ) );
     textCtrl.WriteText( text );
 }
-
-#if wxUSE_TIMEDATE
-
-void MyApp::DoTimeDemo(wxCommandEvent& WXUNUSED(event))
-{
-    wxTextCtrl& textCtrl = * GetTextCtrl();
-
-    textCtrl.Clear();
-    textCtrl << _T("\nTest class wxTime:\n");
-    wxTime now;
-    textCtrl << _T("It is now ") << (wxString) now << _T("\n");
-}
-
-void MyApp::DoDateDemo(wxCommandEvent& WXUNUSED(event))
-{
-    wxTextCtrl& textCtrl = * GetTextCtrl();
-
-    textCtrl.Clear();
-    textCtrl << _T("\nTest class wxDate") << _T("\n");
-
-    // Various versions of the constructors
-    // and various output
-
-    wxDate x(10,20,1962);
-
-    textCtrl << x.FormatDate(wxFULL) << _T("  (full)\n");
-
-    // constuctor with a string, just printing the day of the week
-    wxDate y(_T("8/8/1988"));
-
-    textCtrl << y.FormatDate(wxDAY) << _T("  (just day)\n");
-
-    // constructor with a julian
-    wxDate z( 2450000L );
-    textCtrl << z.FormatDate(wxFULL) << _T("  (full)\n");
-
-    // using date addition and subtraction
-    wxDate a = x + 10;
-    textCtrl << a.FormatDate(wxFULL) << _T("  (full)\n");
-    a = a - 25;
-    textCtrl << a.FormatDate(wxEUROPEAN) << _T("  (European)\n");
-
-    // Using subtraction of two date objects
-    wxDate a1 = wxString(_T("7/13/1991"));
-    wxDate a2 = a1 + 14;
-    textCtrl << (a1-a2) << _T("\n");
-    textCtrl << (a2+=10) << _T("\n");
-
-    a1++;
-    textCtrl << _T("Tomorrow= ") << a1.FormatDate(wxFULL) << _T("\n");
-
-    wxDate tmpDate1(_T("08/01/1991"));
-    wxDate tmpDate2(_T("07/14/1991"));
-    textCtrl << _T("a1 (7-14-91) < 8-01-91 ? ==> ") << ((a1 < tmpDate1) ? _T("TRUE") : _T("FALSE")) << _T("\n");
-    textCtrl << _T("a1 (7-14-91) > 8-01-91 ? ==> ") << ((a1 > tmpDate1) ? _T("TRUE") : _T("FALSE")) << _T("\n");
-    textCtrl << _T("a1 (7-14-91)== 7-14-91 ? ==> ") << ((a1==tmpDate2) ? _T("TRUE") : _T("FALSE")) << _T("\n");
-
-    wxDate a3 = a1;
-    textCtrl << _T("a1 (7-14-91)== a3 (7-14-91) ? ==> ") << ((a1==a3) ? _T("TRUE") : _T("FALSE")) << _T("\n");
-    wxDate a4 = a1;
-    textCtrl << _T("a1 (7-14-91)== a4 (7-15-91) ? ==> ") << ((a1==++a4) ? _T("TRUE") : _T("FALSE")) << _T("\n");
-
-    wxDate a5 = wxString(_T("today"));
-    textCtrl << _T("Today is: ") << a5 << _T("\n");
-    a4 = _T("TODAY");
-    textCtrl << _T("Today (a4) is: ") << a4 << _T("\n");
-
-    textCtrl << _T("Today + 4 is: ") << (a4+=4) << _T("\n");
-    a4 = _T("TODAY");
-    textCtrl << _T("Today - 4 is: ") << (a4-=4) << _T("\n");
-
-    textCtrl << _T("=========== Leap Year Test ===========\n");
-    a1 = _T("1/15/1992");
-    textCtrl << a1.FormatDate(wxFULL) << _T("  ") << ((a1.IsLeapYear()) ? _T("Leap") : _T("non-Leap"));
-    textCtrl << _T("  ") << _T("day of year:  ") << a1.GetDayOfYear() << _T("\n");
-
-    a1 = _T("2/16/1993");
-    textCtrl << a1.FormatDate(wxFULL) << _T("  ") << ((a1.IsLeapYear()) ? _T("Leap") : _T("non-Leap"));
-    textCtrl << _T("  ") << _T("day of year:  ") << a1.GetDayOfYear() << _T("\n");
-
-    textCtrl << _T("================== string assignment test ====================\n");
-    wxString date_string=a1;
-    textCtrl << _T("a1 as a string (s/b 2/16/1993) ==> ") << date_string << _T("\n");
-
-    textCtrl << _T("================== SetFormat test ============================\n");
-    a1.SetFormat(wxFULL);
-    textCtrl << _T("a1 (s/b FULL format) ==> ") << a1 << _T("\n");
-    a1.SetFormat(wxEUROPEAN);
-    textCtrl << _T("a1 (s/b EUROPEAN format) ==> ") << a1 << _T("\n");
-
-    textCtrl << _T("================== SetOption test ============================\n");
-    textCtrl << _T("Date abbreviation ON\n");
-
-    a1.SetOption(wxDATE_ABBR);
-    a1.SetFormat(wxMONTH);
-    textCtrl << _T("a1 (s/b MONTH format) ==> ") << a1 << _T("\n");
-    a1.SetFormat(wxDAY);
-    textCtrl << _T("a1 (s/b DAY format) ==> ") << a1 << _T("\n");
-    a1.SetFormat(wxFULL);
-    textCtrl << _T("a1 (s/b FULL format) ==> ") << a1 << _T("\n");
-    a1.SetFormat(wxEUROPEAN);
-    textCtrl << _T("a1 (s/b EUROPEAN format) ==> ") << a1 << _T("\n");
-    textCtrl << _T("Century suppression ON\n");
-    a1.SetOption(wxNO_CENTURY);
-    a1.SetFormat(wxMDY);
-    textCtrl << _T("a1 (s/b MDY format) ==> ") << a1 << _T("\n");
-    textCtrl << _T("Century suppression OFF\n");
-    a1.SetOption(wxNO_CENTURY,FALSE);
-    textCtrl << _T("a1 (s/b MDY format) ==> ") << a1 << _T("\n");
-    textCtrl << _T("Century suppression ON\n");
-    a1.SetOption(wxNO_CENTURY);
-    textCtrl << _T("a1 (s/b MDY format) ==> ") << a1 << _T("\n");
-    a1.SetFormat(wxFULL);
-    textCtrl << _T("a1 (s/b FULL format) ==> ") << a1 << _T("\n");
-
-    textCtrl << _T("\n=============== Version 4.0 Enhancement Test =================\n");
-
-    wxDate v4(_T("11/26/1966"));
-    textCtrl << _T("\n---------- Set Stuff -----------\n");
-    textCtrl << _T("First, 'Set' to today...") << _T("\n");
-    textCtrl << _T("Before 'Set' => ") << v4 << _T("\n");
-    textCtrl << _T("After  'Set' => ") << v4.Set() << _T("\n\n");
-
-    textCtrl << _T("Set to 11/26/66 => ") << v4.Set(11,26,1966) << _T("\n");
-    textCtrl << _T("Current Julian  => ") << v4.GetJulianDate() << _T("\n");
-    textCtrl << _T("Set to Julian 2450000L => ") << v4.Set(2450000L) << _T("\n");
-    textCtrl << _T("See! => ") << v4.GetJulianDate() << _T("\n");
-
-    textCtrl << _T("---------- Add Stuff -----------\n");
-    textCtrl << _T("Start => ") << v4 << _T("\n");
-    textCtrl << _T("Add 4 Weeks => ") << v4.AddWeeks(4) << _T("\n");
-    textCtrl << _T("Sub 1 Month => ") << v4.AddMonths(-1) << _T("\n");
-    textCtrl << _T("Add 2 Years => ") << v4.AddYears(2) << _T("\n");
-
-    textCtrl << _T("---------- Misc Stuff -----------\n");
-    textCtrl << _T("The date aboves' day of the month is => ") << v4.GetDay() << _T("\n");
-    textCtrl << _T("There are ") << v4.GetDaysInMonth() << _T(" days in this month.\n");
-    textCtrl << _T("The first day of this month lands on ") << v4.GetFirstDayOfMonth() << _T("\n");
-    textCtrl << _T("This day happens to be ") << v4.GetDayOfWeekName() << _T("\n");
-    textCtrl << _T("the ") << v4.GetDayOfWeek() << _T(" day of the week,") << _T("\n");
-    textCtrl << _T("on the ") << v4.GetWeekOfYear() << _T(" week of the year,") << _T("\n");
-    textCtrl << _T("on the ") << v4.GetWeekOfMonth() << _T(" week of the month, ") << _T("\n");
-    textCtrl << _T("(which is ") << v4.GetMonthName() << _T(")\n");
-    textCtrl << _T("the ")<< v4.GetMonth() << _T("th month in the year.\n");
-    textCtrl << _T("The year alone is ") << v4.GetYear() << _T("\n");
-
-    textCtrl << _T("---------- First and Last Stuff -----------\n");
-    v4.Set();
-    textCtrl << _T("The first date of this month is ") << v4.GetMonthStart() << _T("\n");
-    textCtrl << _T("The last date of this month is ") << v4.GetMonthEnd() << _T("\n");
-    textCtrl << _T("The first date of this year is ") << v4.GetYearStart() << _T("\n");
-    textCtrl << _T("The last date of this year is ") << v4.GetYearEnd() << _T("\n");
-}
-
-#endif // wxUSE_TIMEDATE
 
 void MyApp::DoVariantDemo(wxCommandEvent& WXUNUSED(event) )
 {

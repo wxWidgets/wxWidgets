@@ -305,15 +305,6 @@
 // Recommended setting: 1
 #define wxUSE_DATETIME      1
 
-// wxUSE_TIMEDATE enables compilation of the old wxDate and wxTime classes (not
-// the same as wxDateTime!). These classes are obsolete and shouldn't be used
-// in new code
-//
-// Default is 0
-//
-// Recommended setting: 0 unless you have legacy code which uses these classes
-#define wxUSE_TIMEDATE 0
-
 // Set wxUSE_TIMER to 1 to compile wxTimer class
 //
 // Default is 1
