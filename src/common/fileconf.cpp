@@ -250,10 +250,11 @@ public:
   wxFileConfigLineList *GetLastGroupLine(); // after which the next group starts
 
   // called by entries/subgroups when they're created/deleted
-  void SetLastEntry(wxFileConfigEntry *pEntry) { m_pLastEntry = pEntry; }
-  void SetLastGroup(wxFileConfigGroup *pGroup) { m_pLastGroup = pGroup; }
+  void SetLastEntry(wxFileConfigEntry *pEntry);
+  void SetLastGroup(wxFileConfigGroup *pGroup)
+    { m_pLastGroup = pGroup; }
 
-    DECLARE_NO_COPY_CLASS(wxFileConfigGroup)
+  DECLARE_NO_COPY_CLASS(wxFileConfigGroup)
 };
 
 // ============================================================================
@@ -1131,8 +1132,7 @@ wxFileConfigLineList *wxFileConfig::LineListAppend(const wxString& str)
     return m_linesTail;
 }
 
-    // insert a new line after the given one or in the very beginning if !pLine
-
+// insert a new line after the given one or in the very beginning if !pLine
 wxFileConfigLineList *wxFileConfig::LineListInsert(const wxString& str,
                                                    wxFileConfigLineList *pLine)
 {
@@ -1311,16 +1311,15 @@ wxFileConfigLineList *wxFileConfigGroup::GetGroupLine()
                 _T("  GetGroupLine() for Group '%s'"),
                 Name().c_str() );
 
-    if ( m_pLine == 0 )
+    if ( !m_pLine )
     {
         wxLogTrace( _T("wxFileConfig"),
                     _T("    Getting Line item pointer") );
 
         wxFileConfigGroup   *pParent = Parent();
 
-            // this group wasn't present in local config file, add it now
-
-        if ( pParent != 0 )
+        // this group wasn't present in local config file, add it now
+        if ( pParent )
         {
             wxLogTrace( _T("wxFileConfig"),
                         _T("    checking parent '%s'"),
@@ -1328,18 +1327,16 @@ wxFileConfigLineList *wxFileConfigGroup::GetGroupLine()
 
             wxString    strFullName;
 
-            strFullName << wxT("[")         // +1: no '/'
+            // add 1 to the name because we don't want to start with '/'
+            strFullName << wxT("[")
                         << FilterOutEntryName(GetFullName().c_str() + 1)
                         << wxT("]");
             m_pLine = m_pConfig->LineListInsert(strFullName,
                                                 pParent->GetLastGroupLine());
             pParent->SetLastGroup(this);  // we're surely after all the others
         }
-        else
-        {
-            // we return NULL, so that LineListInsert() will insert us in the
-            // very beginning
-        }
+        //else: this is the root group and so we return NULL because we don't
+        //      have any group line
     }
 
     return m_pLine;
@@ -1350,19 +1347,18 @@ wxFileConfigLineList *wxFileConfigGroup::GetGroupLine()
 // last line is the group line (m_pLine) itself.
 wxFileConfigLineList *wxFileConfigGroup::GetLastGroupLine()
 {
-        // if we have any subgroups, our last line is
-        // the last line of the last subgroup
-
-    if ( m_pLastGroup != 0 )
+    // if we have any subgroups, our last line is the last line of the last
+    // subgroup
+    if ( m_pLastGroup )
     {
         wxFileConfigLineList *pLine = m_pLastGroup->GetLastGroupLine();
 
-        wxASSERT( pLine != 0 );  // last group must have !NULL associated line
+        wxASSERT_MSG( pLine, _T("last group must have !NULL associated line") );
+
         return pLine;
     }
 
-        // no subgroups, so the last line is the line of thelast entry (if any)
-
+    // no subgroups, so the last line is the line of thelast entry (if any)
     return GetLastEntryLine();
 }
 
@@ -1375,17 +1371,33 @@ wxFileConfigLineList *wxFileConfigGroup::GetLastEntryLine()
                 _T("  GetLastEntryLine() for Group '%s'"),
                 Name().c_str() );
 
-    if ( m_pLastEntry != 0 )
+    if ( m_pLastEntry )
     {
         wxFileConfigLineList    *pLine = m_pLastEntry->GetLine();
 
-        wxASSERT( pLine != 0 );  // last entry must have !NULL associated line
+        wxASSERT_MSG( pLine, _T("last entry must have !NULL associated line") );
+
         return pLine;
     }
 
-        // no entries: insert after the group header
-
+    // no entries: insert after the group header, if any
     return GetGroupLine();
+}
+
+void wxFileConfigGroup::SetLastEntry(wxFileConfigEntry *pEntry)
+{
+    m_pLastEntry = pEntry;
+
+    if ( !m_pLine )
+    {
+        // the only situation in which a group without its own line can have
+        // an entry is when the first entry is added to the initially empty
+        // root pseudo-group
+        wxASSERT_MSG( !m_pParent, _T("unexpected for non root group") );
+
+        // let the group know that it does have a line in the file now
+        m_pLine = pEntry->GetLine();
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -1394,11 +1406,17 @@ wxFileConfigLineList *wxFileConfigGroup::GetLastEntryLine()
 
 void wxFileConfigGroup::Rename(const wxString& newName)
 {
+    wxCHECK_RET( m_pParent, _T("the root group can't be renamed") );
+
     m_strName = newName;
 
-    wxFileConfigLineList *line = GetGroupLine();
+    // +1: no leading '/'
     wxString strFullName;
-    strFullName << wxT("[") << (GetFullName().c_str() + 1) << wxT("]"); // +1: no '/'
+    strFullName << wxT("[") << (GetFullName().c_str() + 1) << wxT("]");
+
+    wxFileConfigLineList *line = GetGroupLine();
+    wxCHECK_RET( line, _T("a non root group must have a corresponding line!") );
+
     line->SetText(strFullName);
 
     SetDirty();
@@ -1799,17 +1817,19 @@ void wxFileConfigEntry::SetValue(const wxString& strValue, bool bUser)
         wxString    strLine;
         strLine << FilterOutEntryName(m_strName) << wxT('=') << strValFiltered;
 
-        if ( m_pLine != 0 )
+        if ( m_pLine )
         {
             // entry was read from the local config file, just modify the line
             m_pLine->SetText(strLine);
         }
-        else {
+        else // this entry didn't exist in the local file
+        {
             // add a new line to the file
             wxASSERT( m_nLine == wxNOT_FOUND );   // consistency check
 
-            m_pLine = Group()->Config()->LineListInsert(strLine,
-                                                        Group()->GetLastEntryLine());
+            wxFileConfigLineList *line = Group()->GetLastEntryLine();
+            m_pLine = Group()->Config()->LineListInsert(strLine, line);
+
             Group()->SetLastEntry(this);
         }
 
