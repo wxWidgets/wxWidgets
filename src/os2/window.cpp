@@ -1158,10 +1158,10 @@ void wxWindowOS2::OnIdle(
             //
             int                     nState = 0;
 
-            if (::WinGetKeyState(HWND_DESKTOP, VK_SHIFT) != 0)
-                nState |= VK_SHIFT;
-            if (::WinGetKeyState(HWND_DESKTOP, VK_CTRL) != 0);
-                nState |= VK_CTRL;
+            if (IsShiftDown())
+                nState |= KC_SHIFT;
+            if (IsCtrlDown())
+                nState |= KC_CTRL;
 
             wxMouseEvent            rEvent(wxEVT_LEAVE_WINDOW);
 
@@ -2550,7 +2550,7 @@ MRESULT wxWindowOS2::OS2WindowProc(
                     bProcessed = HandleMouseEvent( uMsg
                                                   ,nX
                                                   ,nY
-                                                  ,(WXUINT)SHORT1FROMMP(wParam)
+                                                  ,(WXUINT)SHORT2FROMMP(lParam)
                                                  );
                 }
                 else
@@ -2567,7 +2567,7 @@ MRESULT wxWindowOS2::OS2WindowProc(
                     bProcessed = pWin->HandleMouseEvent( uMsg
                                                         ,nX
                                                         ,nY
-                                                        ,(WXUINT)SHORT1FROMMP(wParam)
+                                                        ,(WXUINT)SHORT2FROMMP(lParam)
                                                        );
                 }
             }
@@ -4039,13 +4039,20 @@ void wxWindowOS2::InitMouseEvent(
 , WXUINT                            uFlags
 )
 {
+    int                                 nHeight;
+    DoGetSize(0, &nHeight);
     rEvent.m_x           = nX;
-    rEvent.m_y           = nY;
-    rEvent.m_shiftDown   = ((uFlags & VK_SHIFT) != 0);
-    rEvent.m_controlDown = ((uFlags & VK_CTRL) != 0);
-    rEvent.m_leftDown    = ((uFlags & VK_BUTTON1) != 0);
-    rEvent.m_middleDown  = ((uFlags & VK_BUTTON3) != 0);
-    rEvent.m_rightDown   = ((uFlags & VK_BUTTON2) != 0);
+    // Convert to wxWindows standard coordinate system!
+    rEvent.m_y           = nHeight - nY;
+    rEvent.m_shiftDown   = ((uFlags & KC_SHIFT) != 0);
+    rEvent.m_controlDown = ((uFlags & KC_CTRL) != 0);
+    rEvent.m_altDown     = ((uFlags & KC_ALT) != 0);
+    rEvent.m_leftDown    = (::WinGetKeyState(HWND_DESKTOP, VK_BUTTON1) &
+			    0x8000) != 0;
+    rEvent.m_middleDown  = (::WinGetKeyState(HWND_DESKTOP, VK_BUTTON3) &
+			    0x8000) != 0;
+    rEvent.m_rightDown   = (::WinGetKeyState(HWND_DESKTOP, VK_BUTTON2) &
+			    0x8000) != 0;
     rEvent.SetTimestamp(s_currentMsg.time);
     rEvent.m_eventObject = this;
     rEvent.SetId(GetId());
