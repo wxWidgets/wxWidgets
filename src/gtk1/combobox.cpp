@@ -178,7 +178,13 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     if (new_size.y > size_best.y)
         new_size.y = size_best.y;
     if ((new_size.x != size.x) || (new_size.y != size.y))
+    {
         SetSize( new_size.x, new_size.y );
+        
+        // This is required for tool bar support
+        gtk_widget_set_usize( m_widget, new_size.x, new_size.y );
+    }
+
 
     SetBackgroundColour( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_WINDOW ) );
     SetForegroundColour( parent->GetForegroundColour() );
