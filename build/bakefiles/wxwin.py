@@ -15,6 +15,7 @@ def __noopSubst(func, name):
     return '$(%s)' % name
 utils.addSubstituteCallback('CFG', __noopSubst)
 utils.addSubstituteCallback('LIBDIRNAME', __noopSubst)
+utils.addSubstituteCallback('OBJS', __noopSubst)
 
 
 def mk_wxid(id):

@@ -102,9 +102,10 @@ AUTOCONF_ALL = \
 	../../samples/minifram/Makefile.in \
 	../../samples/minimal/Makefile.in \
 	../../samples/mobile/Makefile.in \
+	../../samples/mobile/styles/Makefile.in \
+	../../samples/mobile/wxedit/Makefile.in \
 	../../samples/multimon/Makefile.in \
 	../../samples/nativdlg/Makefile.in \
-	../../samples/newgrid/Makefile.in \
 	../../samples/notebook/Makefile.in \
 	../../samples/oleauto/Makefile.in \
 	../../samples/opengl/Makefile.in \
@@ -226,9 +227,10 @@ BORLAND_ALL = \
 	../../samples/minifram/makefile.bcc \
 	../../samples/minimal/makefile.bcc \
 	../../samples/mobile/makefile.bcc \
+	../../samples/mobile/styles/makefile.bcc \
+	../../samples/mobile/wxedit/makefile.bcc \
 	../../samples/multimon/makefile.bcc \
 	../../samples/nativdlg/makefile.bcc \
-	../../samples/newgrid/makefile.bcc \
 	../../samples/notebook/makefile.bcc \
 	../../samples/oleauto/makefile.bcc \
 	../../samples/opengl/cube/makefile.bcc \
@@ -351,9 +353,10 @@ MINGW_ALL = \
 	../../samples/minifram/makefile.gcc \
 	../../samples/minimal/makefile.gcc \
 	../../samples/mobile/makefile.gcc \
+	../../samples/mobile/styles/makefile.gcc \
+	../../samples/mobile/wxedit/makefile.gcc \
 	../../samples/multimon/makefile.gcc \
 	../../samples/nativdlg/makefile.gcc \
-	../../samples/newgrid/makefile.gcc \
 	../../samples/notebook/makefile.gcc \
 	../../samples/oleauto/makefile.gcc \
 	../../samples/opengl/cube/makefile.gcc \
@@ -476,9 +479,10 @@ MSVC_ALL = \
 	../../samples/minifram/makefile.vc \
 	../../samples/minimal/makefile.vc \
 	../../samples/mobile/makefile.vc \
+	../../samples/mobile/styles/makefile.vc \
+	../../samples/mobile/wxedit/makefile.vc \
 	../../samples/multimon/makefile.vc \
 	../../samples/nativdlg/makefile.vc \
-	../../samples/newgrid/makefile.vc \
 	../../samples/notebook/makefile.vc \
 	../../samples/oleauto/makefile.vc \
 	../../samples/opengl/cube/makefile.vc \
@@ -597,10 +601,10 @@ MSVC6PRJ_ALL = \
 	../../samples/mfc/mfc.dsw \
 	../../samples/minifram/minifram.dsw \
 	../../samples/minimal/minimal.dsw \
-	../../samples/mobile/mobile.dsw \
+	../../samples/mobile/styles/styles.dsw \
+	../../samples/mobile/wxedit/wxedit.dsw \
 	../../samples/multimon/multimon.dsw \
 	../../samples/nativdlg/nativdlg.dsw \
-	../../samples/newgrid/newgrid.dsw \
 	../../samples/notebook/notebook.dsw \
 	../../samples/oleauto/oleauto.dsw \
 	../../samples/opengl/cube/cube.dsw \
@@ -722,9 +726,10 @@ WATCOM_ALL = \
 	../../samples/minifram/makefile.wat \
 	../../samples/minimal/makefile.wat \
 	../../samples/mobile/makefile.wat \
+	../../samples/mobile/styles/makefile.wat \
+	../../samples/mobile/wxedit/makefile.wat \
 	../../samples/multimon/makefile.wat \
 	../../samples/nativdlg/makefile.wat \
-	../../samples/newgrid/makefile.wat \
 	../../samples/notebook/makefile.wat \
 	../../samples/oleauto/makefile.wat \
 	../../samples/opengl/cube/makefile.wat \
@@ -859,9 +864,10 @@ clean:
 	rm -f ../../samples/minifram/Makefile.in
 	rm -f ../../samples/minimal/Makefile.in
 	rm -f ../../samples/mobile/Makefile.in
+	rm -f ../../samples/mobile/styles/Makefile.in
+	rm -f ../../samples/mobile/wxedit/Makefile.in
 	rm -f ../../samples/multimon/Makefile.in
 	rm -f ../../samples/nativdlg/Makefile.in
-	rm -f ../../samples/newgrid/Makefile.in
 	rm -f ../../samples/notebook/Makefile.in
 	rm -f ../../samples/oleauto/Makefile.in
 	rm -f ../../samples/opengl/Makefile.in
@@ -982,9 +988,10 @@ clean:
 	rm -f ../../samples/minifram/makefile.bcc
 	rm -f ../../samples/minimal/makefile.bcc
 	rm -f ../../samples/mobile/makefile.bcc
+	rm -f ../../samples/mobile/styles/makefile.bcc
+	rm -f ../../samples/mobile/wxedit/makefile.bcc
 	rm -f ../../samples/multimon/makefile.bcc
 	rm -f ../../samples/nativdlg/makefile.bcc
-	rm -f ../../samples/newgrid/makefile.bcc
 	rm -f ../../samples/notebook/makefile.bcc
 	rm -f ../../samples/oleauto/makefile.bcc
 	rm -f ../../samples/opengl/cube/makefile.bcc
@@ -1106,9 +1113,10 @@ clean:
 	rm -f ../../samples/minifram/makefile.gcc
 	rm -f ../../samples/minimal/makefile.gcc
 	rm -f ../../samples/mobile/makefile.gcc
+	rm -f ../../samples/mobile/styles/makefile.gcc
+	rm -f ../../samples/mobile/wxedit/makefile.gcc
 	rm -f ../../samples/multimon/makefile.gcc
 	rm -f ../../samples/nativdlg/makefile.gcc
-	rm -f ../../samples/newgrid/makefile.gcc
 	rm -f ../../samples/notebook/makefile.gcc
 	rm -f ../../samples/oleauto/makefile.gcc
 	rm -f ../../samples/opengl/cube/makefile.gcc
@@ -1230,9 +1238,10 @@ clean:
 	rm -f ../../samples/minifram/makefile.vc
 	rm -f ../../samples/minimal/makefile.vc
 	rm -f ../../samples/mobile/makefile.vc
+	rm -f ../../samples/mobile/styles/makefile.vc
+	rm -f ../../samples/mobile/wxedit/makefile.vc
 	rm -f ../../samples/multimon/makefile.vc
 	rm -f ../../samples/nativdlg/makefile.vc
-	rm -f ../../samples/newgrid/makefile.vc
 	rm -f ../../samples/notebook/makefile.vc
 	rm -f ../../samples/oleauto/makefile.vc
 	rm -f ../../samples/opengl/cube/makefile.vc
@@ -1350,10 +1359,10 @@ clean:
 	rm -f ../../samples/mfc/mfc.dsw
 	rm -f ../../samples/minifram/minifram.dsw
 	rm -f ../../samples/minimal/minimal.dsw
-	rm -f ../../samples/mobile/mobile.dsw
+	rm -f ../../samples/mobile/styles/styles.dsw
+	rm -f ../../samples/mobile/wxedit/wxedit.dsw
 	rm -f ../../samples/multimon/multimon.dsw
 	rm -f ../../samples/nativdlg/nativdlg.dsw
-	rm -f ../../samples/newgrid/newgrid.dsw
 	rm -f ../../samples/notebook/notebook.dsw
 	rm -f ../../samples/oleauto/oleauto.dsw
 	rm -f ../../samples/opengl/cube/cube.dsw
@@ -1474,9 +1483,10 @@ clean:
 	rm -f ../../samples/minifram/makefile.wat
 	rm -f ../../samples/minimal/makefile.wat
 	rm -f ../../samples/mobile/makefile.wat
+	rm -f ../../samples/mobile/styles/makefile.wat
+	rm -f ../../samples/mobile/wxedit/makefile.wat
 	rm -f ../../samples/multimon/makefile.wat
 	rm -f ../../samples/nativdlg/makefile.wat
-	rm -f ../../samples/newgrid/makefile.wat
 	rm -f ../../samples/notebook/makefile.wat
 	rm -f ../../samples/oleauto/makefile.wat
 	rm -f ../../samples/opengl/cube/makefile.wat
@@ -3231,23 +3241,60 @@ Makefile: regenMakefile.py
 	touch $@
 
 
-../../samples/mobile/Makefile.in: $(SDEPS) ../../samples/mobile/mobile.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DWXTOPDIR=../../ -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/mobile/mobile.bkl
+../../samples/mobile/Makefile.in: $(SDEPS) ../../samples/mobile/mobile_samples.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DWXTOPDIR=../../ -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/mobile/mobile_samples.bkl
 	touch $@
-../../samples/mobile/makefile.bcc: $(SDEPS) ../../samples/mobile/mobile.bkl
-	$(BAKEFILE) -fborland -o$@  -DWXTOPDIR=../../ -DOPTIONS_FILE=../../build/msw/config.bcc -DWRITE_OPTIONS_FILE=0  ../../samples/mobile/mobile.bkl
+../../samples/mobile/makefile.bcc: $(SDEPS) ../../samples/mobile/mobile_samples.bkl
+	$(BAKEFILE) -fborland -o$@  -DWXTOPDIR=../../ -DOPTIONS_FILE=../../build/msw/config.bcc -DWRITE_OPTIONS_FILE=0  ../../samples/mobile/mobile_samples.bkl
 	touch $@
-../../samples/mobile/makefile.vc: $(SDEPS) ../../samples/mobile/mobile.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DWXTOPDIR=../../ -DOPTIONS_FILE=../../build/msw/config.vc -DWRITE_OPTIONS_FILE=0  ../../samples/mobile/mobile.bkl
+../../samples/mobile/makefile.vc: $(SDEPS) ../../samples/mobile/mobile_samples.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DWXTOPDIR=../../ -DOPTIONS_FILE=../../build/msw/config.vc -DWRITE_OPTIONS_FILE=0  ../../samples/mobile/mobile_samples.bkl
 	touch $@
-../../samples/mobile/makefile.gcc: $(SDEPS) ../../samples/mobile/mobile.bkl
-	$(BAKEFILE) -fmingw -o$@  -DWXTOPDIR=../../ -DOPTIONS_FILE=../../build/msw/config.gcc -DWRITE_OPTIONS_FILE=0  ../../samples/mobile/mobile.bkl
+../../samples/mobile/makefile.gcc: $(SDEPS) ../../samples/mobile/mobile_samples.bkl
+	$(BAKEFILE) -fmingw -o$@  -DWXTOPDIR=../../ -DOPTIONS_FILE=../../build/msw/config.gcc -DWRITE_OPTIONS_FILE=0  ../../samples/mobile/mobile_samples.bkl
 	touch $@
-../../samples/mobile/makefile.wat: $(SDEPS) ../../samples/mobile/mobile.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DWXTOPDIR=../../ -DOPTIONS_FILE=../../build/msw/config.wat -DWRITE_OPTIONS_FILE=0  ../../samples/mobile/mobile.bkl
+../../samples/mobile/makefile.wat: $(SDEPS) ../../samples/mobile/mobile_samples.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DWXTOPDIR=../../ -DOPTIONS_FILE=../../build/msw/config.wat -DWRITE_OPTIONS_FILE=0  ../../samples/mobile/mobile_samples.bkl
 	touch $@
-../../samples/mobile/mobile.dsw: $(SDEPS) ../../samples/mobile/mobile.bkl
-	$(BAKEFILE) -fmsvc6prj -o$@  -DWXTOPDIR=../../ $(DSWFLAGS)  ../../samples/mobile/mobile.bkl
+
+
+../../samples/mobile/styles/Makefile.in: $(SDEPS) ../../samples/mobile/styles/styles.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DWXTOPDIR=../../../ -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/mobile/styles/styles.bkl
+	touch $@
+../../samples/mobile/styles/makefile.bcc: $(SDEPS) ../../samples/mobile/styles/styles.bkl
+	$(BAKEFILE) -fborland -o$@  -DWXTOPDIR=../../../ -DOPTIONS_FILE=../../../build/msw/config.bcc -DWRITE_OPTIONS_FILE=0  ../../samples/mobile/styles/styles.bkl
+	touch $@
+../../samples/mobile/styles/makefile.vc: $(SDEPS) ../../samples/mobile/styles/styles.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DWXTOPDIR=../../../ -DOPTIONS_FILE=../../../build/msw/config.vc -DWRITE_OPTIONS_FILE=0  ../../samples/mobile/styles/styles.bkl
+	touch $@
+../../samples/mobile/styles/makefile.gcc: $(SDEPS) ../../samples/mobile/styles/styles.bkl
+	$(BAKEFILE) -fmingw -o$@  -DWXTOPDIR=../../../ -DOPTIONS_FILE=../../../build/msw/config.gcc -DWRITE_OPTIONS_FILE=0  ../../samples/mobile/styles/styles.bkl
+	touch $@
+../../samples/mobile/styles/makefile.wat: $(SDEPS) ../../samples/mobile/styles/styles.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DWXTOPDIR=../../../ -DOPTIONS_FILE=../../../build/msw/config.wat -DWRITE_OPTIONS_FILE=0  ../../samples/mobile/styles/styles.bkl
+	touch $@
+../../samples/mobile/styles/styles.dsw: $(SDEPS) ../../samples/mobile/styles/styles.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  -DWXTOPDIR=../../../ $(DSWFLAGS)  ../../samples/mobile/styles/styles.bkl
+	touch $@
+
+
+../../samples/mobile/wxedit/Makefile.in: $(SDEPS) ../../samples/mobile/wxedit/wxedit.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DWXTOPDIR=../../../ -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/mobile/wxedit/wxedit.bkl
+	touch $@
+../../samples/mobile/wxedit/makefile.bcc: $(SDEPS) ../../samples/mobile/wxedit/wxedit.bkl
+	$(BAKEFILE) -fborland -o$@  -DWXTOPDIR=../../../ -DOPTIONS_FILE=../../../build/msw/config.bcc -DWRITE_OPTIONS_FILE=0  ../../samples/mobile/wxedit/wxedit.bkl
+	touch $@
+../../samples/mobile/wxedit/makefile.vc: $(SDEPS) ../../samples/mobile/wxedit/wxedit.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DWXTOPDIR=../../../ -DOPTIONS_FILE=../../../build/msw/config.vc -DWRITE_OPTIONS_FILE=0  ../../samples/mobile/wxedit/wxedit.bkl
+	touch $@
+../../samples/mobile/wxedit/makefile.gcc: $(SDEPS) ../../samples/mobile/wxedit/wxedit.bkl
+	$(BAKEFILE) -fmingw -o$@  -DWXTOPDIR=../../../ -DOPTIONS_FILE=../../../build/msw/config.gcc -DWRITE_OPTIONS_FILE=0  ../../samples/mobile/wxedit/wxedit.bkl
+	touch $@
+../../samples/mobile/wxedit/makefile.wat: $(SDEPS) ../../samples/mobile/wxedit/wxedit.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DWXTOPDIR=../../../ -DOPTIONS_FILE=../../../build/msw/config.wat -DWRITE_OPTIONS_FILE=0  ../../samples/mobile/wxedit/wxedit.bkl
+	touch $@
+../../samples/mobile/wxedit/wxedit.dsw: $(SDEPS) ../../samples/mobile/wxedit/wxedit.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  -DWXTOPDIR=../../../ $(DSWFLAGS)  ../../samples/mobile/wxedit/wxedit.bkl
 	touch $@
 
 
@@ -3288,26 +3335,6 @@ Makefile: regenMakefile.py
 	touch $@
 ../../samples/nativdlg/nativdlg.dsw: $(SDEPS) ../../samples/nativdlg/nativdlg.bkl
 	$(BAKEFILE) -fmsvc6prj -o$@  -DWXTOPDIR=../../ $(DSWFLAGS)  ../../samples/nativdlg/nativdlg.bkl
-	touch $@
-
-
-../../samples/newgrid/Makefile.in: $(SDEPS) ../../samples/newgrid/newgrid.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DWXTOPDIR=../../ -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/newgrid/newgrid.bkl
-	touch $@
-../../samples/newgrid/makefile.bcc: $(SDEPS) ../../samples/newgrid/newgrid.bkl
-	$(BAKEFILE) -fborland -o$@  -DWXTOPDIR=../../ -DOPTIONS_FILE=../../build/msw/config.bcc -DWRITE_OPTIONS_FILE=0  ../../samples/newgrid/newgrid.bkl
-	touch $@
-../../samples/newgrid/makefile.vc: $(SDEPS) ../../samples/newgrid/newgrid.bkl
-	$(BAKEFILE) -fmsvc -o$@  -DWXTOPDIR=../../ -DOPTIONS_FILE=../../build/msw/config.vc -DWRITE_OPTIONS_FILE=0  ../../samples/newgrid/newgrid.bkl
-	touch $@
-../../samples/newgrid/makefile.gcc: $(SDEPS) ../../samples/newgrid/newgrid.bkl
-	$(BAKEFILE) -fmingw -o$@  -DWXTOPDIR=../../ -DOPTIONS_FILE=../../build/msw/config.gcc -DWRITE_OPTIONS_FILE=0  ../../samples/newgrid/newgrid.bkl
-	touch $@
-../../samples/newgrid/makefile.wat: $(SDEPS) ../../samples/newgrid/newgrid.bkl
-	$(BAKEFILE) -fwatcom -o$@  -DWXTOPDIR=../../ -DOPTIONS_FILE=../../build/msw/config.wat -DWRITE_OPTIONS_FILE=0  ../../samples/newgrid/newgrid.bkl
-	touch $@
-../../samples/newgrid/newgrid.dsw: $(SDEPS) ../../samples/newgrid/newgrid.bkl
-	$(BAKEFILE) -fmsvc6prj -o$@  -DWXTOPDIR=../../ $(DSWFLAGS)  ../../samples/newgrid/newgrid.bkl
 	touch $@
 
 

@@ -16,6 +16,7 @@ DONT_GENERATE = [
     '../../demos/demos.dsw',
     '../../samples/html/html_samples.dsw',
     '../../samples/opengl/opengl_samples.dsw',
+    '../../samples/mobile/mobile_samples.dsw',
 ]
 
 file = open('Makefile', 'wt')
