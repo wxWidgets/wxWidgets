@@ -183,8 +183,8 @@ bool wxPyDataObjectSimple::SetData(size_t len, const void *buf) {
 class wxPyDataObjectSimple : public wxDataObjectSimple {
 public:
     wxPyDataObjectSimple(const wxDataFormat& format = wxPyFormatInvalid);
-    void _setSelf(PyObject* self);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self)"
+    void _setSelf(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPyDataObjectSimple)"
 };
 
 //----------------------------------------------------------------------
@@ -235,8 +235,8 @@ IMP_PYCALLBACK__STRING(wxPyTextDataObject, wxTextDataObject, SetText);
 class wxPyTextDataObject : public wxTextDataObject {
 public:
     wxPyTextDataObject(const wxString& text = wxEmptyString);
-    void _setSelf(PyObject* self);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self)"
+    void _setSelf(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPyTextDataObject)"
 };
 
 //----------------------------------------------------------------------
@@ -295,8 +295,8 @@ void wxPyBitmapDataObject::SetBitmap(const wxBitmap& bitmap) {
 class wxPyBitmapDataObject : public wxBitmapDataObject {
 public:
     wxPyBitmapDataObject(const wxBitmap& bitmap = wxNullBitmap);
-    void _setSelf(PyObject* self);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self)"
+    void _setSelf(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPyBitmapDataObject)"
 };
 
 
@@ -441,8 +441,8 @@ public:
                    const wxIcon &go = wxNullIcon);
 #endif
 
-    void _setSelf(PyObject* self, int incref);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self, 0)"
+    void _setSelf(PyObject* self, PyObject* _class, int incref);
+    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxDropSource, 0)"
     ~wxPyDropSource();
 
     void SetData(wxDataObject& data);
@@ -496,8 +496,8 @@ class wxPyDropTarget : public wxDropTarget {
 public:
     wxPyDropTarget(wxDataObject *dataObject = NULL);
     %pragma(python) addtomethod = "__init__:if _args:_args[0].thisown = 0"
-    void _setSelf(PyObject* self);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self)"
+    void _setSelf(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPyDropTarget)"
 
     ~wxPyDropTarget();
 
@@ -550,8 +550,8 @@ IMP_PYCALLBACK_BOOL_INTINT(wxPyTextDropTarget, wxTextDropTarget, OnDrop);
 %name(wxTextDropTarget) class wxPyTextDropTarget : public wxPyDropTarget {
 public:
     wxPyTextDropTarget();
-    void _setSelf(PyObject* self);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self)"
+    void _setSelf(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxTextDropTarget)"
 
     //bool OnDropText(wxCoord x, wxCoord y, const wxString& text) = 0;
     wxDragResult base_OnEnter(wxCoord x, wxCoord y, wxDragResult def);
@@ -609,8 +609,8 @@ IMP_PYCALLBACK_BOOL_INTINT(wxPyFileDropTarget, wxFileDropTarget, OnDrop);
 {
 public:
     wxPyFileDropTarget();
-    void _setSelf(PyObject* self);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self)"
+    void _setSelf(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxFileDropTarget)"
 
 //    bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& filenames) = 0;
     wxDragResult base_OnEnter(wxCoord x, wxCoord y, wxDragResult def);

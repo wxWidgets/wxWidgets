@@ -147,8 +147,8 @@ public:
 
     %addmethods { void Destroy() { delete self; } }
 
-    void _setSelf(PyObject* self, int incref=TRUE);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self, 0)"
+    void _setSelf(PyObject* self, PyObject* _class, int incref=TRUE);
+    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPyValidator, 0)"
 
 };
 

@@ -8,7 +8,9 @@ class SimpleGrid(wxGrid):
         wxGrid.__init__(self, parent, -1)
         self.log = log
 
-        self.CreateGrid(16, 16)
+        self.CreateGrid(25, 25)
+
+        # simple cell formatting
         self.SetColSize(3, 200)
         self.SetRowSize(4, 45)
         self.SetCellValue(0, 0, "First cell")
@@ -17,6 +19,16 @@ class SimpleGrid(wxGrid):
         self.SetCellFont(0, 0, wxFont(12, wxROMAN, wxITALIC, wxNORMAL))
         self.SetCellTextColour(1, 1, wxRED)
         self.SetCellBackgroundColour(2, 2, wxCYAN)
+
+        # attribute objects let you keep a set of formatting values
+        # in one spot, and reuse them if needed
+        attr = wxGridCellAttr()
+        attr.SetTextColour(wxBLACK)
+        attr.SetBackgroundColour(wxRED)
+        attr.SetFont(wxFont(10, wxSWISS, wxNORMAL, wxBOLD))
+
+        # you can set cell attributes for the whole row (or column)
+        self.SetRowAttr(5, attr)
 
 
         # test all the events

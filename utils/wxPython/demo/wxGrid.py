@@ -5,9 +5,9 @@ from wxPython.wx import *
 
 buttonDefs = {
     814 : ('GridSimple',     'Simple wxGrid, catching all events'),
-    815 : ('GridCustEdRend', 'wxGrid showing custom Editors and Renderers'),
-    816 : ('GridCustTable',  'wxGrid using a custom Table'),
-    817 : ('GridHugeTable',  'A wxGrid with a HUGE table (100M cells!)'),
+    815 : ('GridStdEdRend',  'wxGrid showing Editors and Renderers'),
+    818 : ('GridHugeTable',  'A wxGrid with a HUGE table (100 MILLION cells!)'),
+    817 : ('GridCustTable',  'wxGrid using a custom Table, with non-string data'),
     }
 
 

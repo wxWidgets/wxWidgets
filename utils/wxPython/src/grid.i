@@ -58,7 +58,7 @@
             }                                                           \
         }                                                               \
         else                                                            \
-            return PCLASS::CBNAME(a, b);                                \
+            rval = PCLASS::CBNAME(a, b);                                \
         wxPySaveThread(doSave);                                         \
         return rval;                                                    \
     }                                                                   \
@@ -317,7 +317,7 @@
         wxPySaveThread(doSave);                                         \
         return rval;                                                    \
     }                                                                   \
-            wxString base_##CBNAME(int a) {                             \
+    wxString base_##CBNAME(int a) {                                     \
         return PCLASS::CBNAME(a);                                       \
     }
 
@@ -545,8 +545,8 @@ IMP_PYCALLBACK__STRING( wxPyGridCellRenderer, wxGridCellRenderer, SetParameters)
 class wxPyGridCellRenderer : public wxGridCellRenderer {
 public:
     wxPyGridCellRenderer();
-    void _setSelf(PyObject* self);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self)"
+    void _setSelf(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPyGridCellRenderer)"
 
     void base_SetParameters(const wxString& params);
 };
@@ -596,8 +596,8 @@ class  wxGridCellEditor
 {
 public:
     bool IsCreated();
-    wxControl* GetControl() { return m_control; }
-    void SetControl(wxControl* control) { m_control = control; }
+    wxControl* GetControl();
+    void SetControl(wxControl* control);
 
     void SetParameters(const wxString& params);
 
@@ -740,8 +740,8 @@ IMP_PYCALLBACK__(wxPyGridCellEditor, wxGridCellEditor, Destroy);
 class wxPyGridCellEditor : public wxGridCellEditor {
 public:
     wxPyGridCellEditor();
-    void _setSelf(PyObject* self);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self)"
+    void _setSelf(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPyGridCellEditor)"
 
     void base_SetSize(const wxRect& rect);
     void base_Show(bool show, wxGridCellAttr *attr = NULL);
@@ -766,7 +766,7 @@ public:
 class wxGridCellNumberEditor : public wxGridCellTextEditor
 {
 public:
-    wxGridCellNumberEditor();
+    wxGridCellNumberEditor(int min = -1, int max = -1);
 };
 
 
@@ -787,7 +787,9 @@ public:
 class wxGridCellChoiceEditor : public wxGridCellEditor
 {
 public:
-    wxGridCellChoiceEditor();
+    wxGridCellChoiceEditor(int LCOUNT = 0,
+                           const wxString* choices = NULL,
+                           bool allowOthers = FALSE);
 };
 
 
@@ -870,8 +872,8 @@ class wxPyGridCellAttrProvider : public wxGridCellAttrProvider
 {
 public:
     wxPyGridCellAttrProvider();
-    void _setSelf(PyObject* self);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self)"
+    void _setSelf(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPyGridCellAttrProvider)"
 
     wxGridCellAttr *base_GetAttr(int row, int col);
     void base_SetAttr(wxGridCellAttr *attr, int row, int col);
@@ -889,7 +891,7 @@ class wxGridTableBase
 {
 public:
     // wxGridTableBase();   This is an ABC
-    ~wxGridTableBase();
+    //~wxGridTableBase();
 
     void SetAttrProvider(wxGridCellAttrProvider *attrProvider);
     wxGridCellAttrProvider *GetAttrProvider() const;
@@ -956,18 +958,17 @@ public:
     PYCALLBACK_INT__pure(GetNumberRows);
     PYCALLBACK_INT__pure(GetNumberCols);
     PYCALLBACK_BOOL_INTINT_pure(IsEmptyCell);
-    PYCALLBACK_STRING_INTINT_pure(GetValue);
-    PYCALLBACK__INTINTSTRING_pure(SetValue);
-
+    //PYCALLBACK_STRING_INTINT_pure(GetValue);
+    //PYCALLBACK__INTINTSTRING_pure(SetValue);
     PYCALLBACK_STRING_INTINT(wxGridTableBase, GetTypeName);
     PYCALLBACK_BOOL_INTINTSTRING(wxGridTableBase, CanGetValueAs);
     PYCALLBACK_BOOL_INTINTSTRING(wxGridTableBase, CanSetValueAs);
-    PYCALLBACK_LONG_INTINT(wxGridTableBase, GetValueAsLong);
-    PYCALLBACK_DOUBLE_INTINT(wxGridTableBase, GetValueAsDouble);
-    PYCALLBACK_BOOL_INTINT(wxGridTableBase, GetValueAsBool);
-    PYCALLBACK__INTINTLONG(wxGridTableBase, SetValueAsLong);
-    PYCALLBACK__INTINTDOUBLE(wxGridTableBase, SetValueAsDouble);
-    PYCALLBACK__INTINTBOOL(wxGridTableBase, SetValueAsBool);
+    //PYCALLBACK_LONG_INTINT(wxGridTableBase, GetValueAsLong);
+    //PYCALLBACK_DOUBLE_INTINT(wxGridTableBase, GetValueAsDouble);
+    //PYCALLBACK_BOOL_INTINT(wxGridTableBase, GetValueAsBool);
+    //PYCALLBACK__INTINTLONG(wxGridTableBase, SetValueAsLong);
+    //PYCALLBACK__INTINTDOUBLE(wxGridTableBase, SetValueAsDouble);
+    //PYCALLBACK__INTINTBOOL(wxGridTableBase, SetValueAsBool);
     PYCALLBACK__(wxGridTableBase, Clear);
     PYCALLBACK_BOOL_SIZETSIZET(wxGridTableBase, InsertRows);
     PYCALLBACK_BOOL_SIZETSIZET(wxGridTableBase, DeleteRows);
@@ -988,12 +989,104 @@ public:
     PYCALLBACK__GCAINT(wxGridTableBase, SetColAttr);
 
 
+
+    wxString GetValue(int row, int col) {
+        bool doSave = wxPyRestoreThread();
+        wxString rval;
+        if (m_myInst.findCallback("GetValue")) {
+            PyObject* ro;
+            ro = m_myInst.callCallbackObj(Py_BuildValue("(ii)",row,col));
+            if (ro) {
+                rval = PyString_AsString(PyObject_Str(ro));
+                Py_DECREF(ro);
+            }
+        }
+        wxPySaveThread(doSave);
+        return rval;
+    }
+
+    void SetValue(int row, int col, const wxString& val) {
+        bool doSave = wxPyRestoreThread();
+        if (m_myInst.findCallback("SetValue"))
+            m_myInst.callCallback(Py_BuildValue("(iis)",row,col,val.c_str()));
+        wxPySaveThread(doSave);
+    }
+
+
+    // Map the Get/Set methods for the standard non-string types to
+    // the GetValue and SetValue python methods.
+    long GetValueAsLong( int row, int col ) {
+        long rval = 0;
+        bool doSave = wxPyRestoreThread();
+        if (m_myInst.findCallback("GetValue")) {
+            PyObject* ro;
+            PyObject* num;
+            ro = m_myInst.callCallbackObj(Py_BuildValue("(ii)", row, col));
+            if (ro && PyNumber_Check(ro)) {
+                num = PyNumber_Int(ro);
+                if (num) {
+                    rval = PyInt_AsLong(num);
+                    Py_DECREF(num);
+                }
+                Py_DECREF(ro);
+            }
+        }
+        wxPySaveThread(doSave);
+        return rval;
+    }
+
+    double GetValueAsDouble( int row, int col ) {
+        double rval = 0.0;
+        bool doSave = wxPyRestoreThread();
+        if (m_myInst.findCallback("GetValue")) {
+            PyObject* ro;
+            PyObject* num;
+            ro = m_myInst.callCallbackObj(Py_BuildValue("(ii)", row, col));
+            if (ro && PyNumber_Check(ro)) {
+                num = PyNumber_Float(ro);
+                if (num) {
+                    rval = PyFloat_AsDouble(num);
+                    Py_DECREF(num);
+                }
+                Py_DECREF(ro);
+            }
+        }
+        wxPySaveThread(doSave);
+        return rval;
+    }
+
+    bool GetValueAsBool( int row, int col ) {
+        return (bool)GetValueAsLong(row, col);
+    }
+
+    void SetValueAsLong( int row, int col, long value ) {
+        bool doSave = wxPyRestoreThread();
+        if (m_myInst.findCallback("SetValue")) {
+            m_myInst.callCallback(Py_BuildValue("(iii)", row, col, value));
+        }
+        wxPySaveThread(doSave);
+    }
+
+    void SetValueAsDouble( int row, int col, double value ) {
+        bool doSave = wxPyRestoreThread();
+        if (m_myInst.findCallback("SetValue")) {
+            m_myInst.callCallback(Py_BuildValue("(iid)", row, col, value));
+        }
+        wxPySaveThread(doSave);
+    }
+
+    void SetValueAsBool( int row, int col, bool value ) {
+        SetValueAsLong( row, col, (long)value );
+    }
+
+
+
     //TODO:  void* GetValueAsCustom( int row, int col, const wxString& typeName );
     //TODO:  void  SetValueAsCustom( int row, int col, const wxString& typeName, void* value );
     //
-    // It would be nice to SetValue/GetValue in the Python code to beable to work with
-    // any python objects and auto-convert to the various types for the C++ code.
-    // Figure it out.
+    // It would be nice to SetValue/GetValue in the Python code to be able to
+    // work with any python objects and auto-convert to the various types for
+    // the C++ code.  Figure it out.
 
     PYPRIVATE;
 };
@@ -1005,19 +1098,20 @@ class wxPyGridTableBase : public wxGridTableBase
 {
 public:
     wxPyGridTableBase();
-    void _setSelf(PyObject* self);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self)"
+    void _setSelf(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPyGridTableBase)"
 
+    %addmethods { void Destroy() { delete self; } }
 
     wxString base_GetTypeName( int row, int col );
     bool base_CanGetValueAs( int row, int col, const wxString& typeName );
     bool base_CanSetValueAs( int row, int col, const wxString& typeName );
-    long base_GetValueAsLong( int row, int col );
-    double base_GetValueAsDouble( int row, int col );
-    bool base_GetValueAsBool( int row, int col );
-    void base_SetValueAsLong( int row, int col, long value );
-    void base_SetValueAsDouble( int row, int col, double value );
-    void base_SetValueAsBool( int row, int col, bool value );
+    //long base_GetValueAsLong( int row, int col );
+    //double base_GetValueAsDouble( int row, int col );
+    //bool base_GetValueAsBool( int row, int col );
+    //void base_SetValueAsLong( int row, int col, long value );
+    //void base_SetValueAsDouble( int row, int col, double value );
+    //void base_SetValueAsBool( int row, int col, bool value );
     void base_Clear();
     bool base_InsertRows( size_t pos = 0, size_t numRows = 1 );
     bool base_AppendRows( size_t numRows = 1 );
@@ -1071,6 +1165,7 @@ public:
     wxGridTableMessage( wxGridTableBase *table, int id,
                         int comInt1 = -1,
                         int comInt2 = -1 );
+    ~wxGridTableMessage();
 
     void SetTableObject( wxGridTableBase *table );
     wxGridTableBase * GetTableObject() const;

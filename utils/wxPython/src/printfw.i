@@ -265,8 +265,8 @@ IMP_PYCALLBACK_BOOL_INT(wxPyPrintout, wxPrintout, HasPage);
 public:
     wxPyPrintout(const char* title = "Printout");
 
-    void _setSelf(PyObject* self);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self)"
+    void _setSelf(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPrintout)"
 
     %addmethods {
         void Destroy() { delete self; }

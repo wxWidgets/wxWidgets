@@ -109,7 +109,7 @@ class wxPyDataObjectSimple(wxPyDataObjectSimplePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(clip_dndc.new_wxPyDataObjectSimple,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self)
+        self._setSelf(self, wxPyDataObjectSimple)
 
 
 
@@ -168,7 +168,7 @@ class wxPyTextDataObject(wxPyTextDataObjectPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(clip_dndc.new_wxPyTextDataObject,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self)
+        self._setSelf(self, wxPyTextDataObject)
 
 
 
@@ -207,7 +207,7 @@ class wxPyBitmapDataObject(wxPyBitmapDataObjectPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(clip_dndc.new_wxPyBitmapDataObject,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self)
+        self._setSelf(self, wxPyBitmapDataObject)
 
 
 
@@ -333,7 +333,7 @@ class wxDropSource(wxDropSourcePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(clip_dndc.new_wxDropSource,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self, 0)
+        self._setSelf(self, wxDropSource, 0)
 
 
 
@@ -391,7 +391,7 @@ class wxPyDropTarget(wxPyDropTargetPtr):
         self.this = apply(clip_dndc.new_wxPyDropTarget,_args,_kwargs)
         self.thisown = 1
         if _args:_args[0].thisown = 0
-        self._setSelf(self)
+        self._setSelf(self, wxPyDropTarget)
 
 
 
@@ -424,7 +424,7 @@ class wxTextDropTarget(wxTextDropTargetPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(clip_dndc.new_wxTextDropTarget,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self)
+        self._setSelf(self, wxTextDropTarget)
 
 
 
@@ -457,7 +457,7 @@ class wxFileDropTarget(wxFileDropTargetPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(clip_dndc.new_wxFileDropTarget,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self)
+        self._setSelf(self, wxFileDropTarget)
 
 
 

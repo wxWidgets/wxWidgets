@@ -1032,17 +1032,19 @@ static PyObject *_wrap_new_wxPyDataObjectSimple(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
-#define wxPyDataObjectSimple__setSelf(_swigobj,_swigarg0)  (_swigobj->_setSelf(_swigarg0))
+#define wxPyDataObjectSimple__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxPyDataObjectSimple__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyDataObjectSimple * _arg0;
     PyObject * _arg1;
+    PyObject * _arg2;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","self", NULL };
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyDataObjectSimple__setSelf",_kwnames,&_argo0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyDataObjectSimple__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1055,8 +1057,11 @@ static PyObject *_wrap_wxPyDataObjectSimple__setSelf(PyObject *self, PyObject *a
   _arg1 = _obj1;
 }
 {
+  _arg2 = _obj2;
+}
+{
     wxPy_BEGIN_ALLOW_THREADS;
-        wxPyDataObjectSimple__setSelf(_arg0,_arg1);
+        wxPyDataObjectSimple__setSelf(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -1351,17 +1356,19 @@ static PyObject *_wrap_new_wxPyTextDataObject(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
-#define wxPyTextDataObject__setSelf(_swigobj,_swigarg0)  (_swigobj->_setSelf(_swigarg0))
+#define wxPyTextDataObject__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxPyTextDataObject__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyTextDataObject * _arg0;
     PyObject * _arg1;
+    PyObject * _arg2;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","self", NULL };
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyTextDataObject__setSelf",_kwnames,&_argo0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyTextDataObject__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1374,8 +1381,11 @@ static PyObject *_wrap_wxPyTextDataObject__setSelf(PyObject *self, PyObject *arg
   _arg1 = _obj1;
 }
 {
+  _arg2 = _obj2;
+}
+{
     wxPy_BEGIN_ALLOW_THREADS;
-        wxPyTextDataObject__setSelf(_arg0,_arg1);
+        wxPyTextDataObject__setSelf(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -1556,17 +1566,19 @@ static PyObject *_wrap_new_wxPyBitmapDataObject(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
-#define wxPyBitmapDataObject__setSelf(_swigobj,_swigarg0)  (_swigobj->_setSelf(_swigarg0))
+#define wxPyBitmapDataObject__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxPyBitmapDataObject__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyBitmapDataObject * _arg0;
     PyObject * _arg1;
+    PyObject * _arg2;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","self", NULL };
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyBitmapDataObject__setSelf",_kwnames,&_argo0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyBitmapDataObject__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1579,8 +1591,11 @@ static PyObject *_wrap_wxPyBitmapDataObject__setSelf(PyObject *self, PyObject *a
   _arg1 = _obj1;
 }
 {
+  _arg2 = _obj2;
+}
+{
     wxPy_BEGIN_ALLOW_THREADS;
-        wxPyBitmapDataObject__setSelf(_arg0,_arg1);
+        wxPyBitmapDataObject__setSelf(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -2238,18 +2253,20 @@ static PyObject *_wrap_new_wxDropSource(PyObject *self, PyObject *args, PyObject
     return _resultobj;
 }
 
-#define wxDropSource__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
+#define wxDropSource__setSelf(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->_setSelf(_swigarg0,_swigarg1,_swigarg2))
 static PyObject *_wrap_wxDropSource__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyDropSource * _arg0;
     PyObject * _arg1;
-    int  _arg2;
+    PyObject * _arg2;
+    int  _arg3;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","self","incref", NULL };
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","self","_class","incref", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi:wxDropSource__setSelf",_kwnames,&_argo0,&_obj1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOOi:wxDropSource__setSelf",_kwnames,&_argo0,&_obj1,&_obj2,&_arg3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2262,8 +2279,11 @@ static PyObject *_wrap_wxDropSource__setSelf(PyObject *self, PyObject *args, PyO
   _arg1 = _obj1;
 }
 {
+  _arg2 = _obj2;
+}
+{
     wxPy_BEGIN_ALLOW_THREADS;
-        wxDropSource__setSelf(_arg0,_arg1,_arg2);
+        wxDropSource__setSelf(_arg0,_arg1,_arg2,_arg3);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -2503,17 +2523,19 @@ static PyObject *_wrap_new_wxPyDropTarget(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
-#define wxPyDropTarget__setSelf(_swigobj,_swigarg0)  (_swigobj->_setSelf(_swigarg0))
+#define wxPyDropTarget__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxPyDropTarget__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyDropTarget * _arg0;
     PyObject * _arg1;
+    PyObject * _arg2;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","self", NULL };
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyDropTarget__setSelf",_kwnames,&_argo0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyDropTarget__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2526,8 +2548,11 @@ static PyObject *_wrap_wxPyDropTarget__setSelf(PyObject *self, PyObject *args, P
   _arg1 = _obj1;
 }
 {
+  _arg2 = _obj2;
+}
+{
     wxPy_BEGIN_ALLOW_THREADS;
-        wxPyDropTarget__setSelf(_arg0,_arg1);
+        wxPyDropTarget__setSelf(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -2816,17 +2841,19 @@ static PyObject *_wrap_new_wxTextDropTarget(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
-#define wxTextDropTarget__setSelf(_swigobj,_swigarg0)  (_swigobj->_setSelf(_swigarg0))
+#define wxTextDropTarget__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxTextDropTarget__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyTextDropTarget * _arg0;
     PyObject * _arg1;
+    PyObject * _arg2;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","self", NULL };
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTextDropTarget__setSelf",_kwnames,&_argo0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxTextDropTarget__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2839,8 +2866,11 @@ static PyObject *_wrap_wxTextDropTarget__setSelf(PyObject *self, PyObject *args,
   _arg1 = _obj1;
 }
 {
+  _arg2 = _obj2;
+}
+{
     wxPy_BEGIN_ALLOW_THREADS;
-        wxTextDropTarget__setSelf(_arg0,_arg1);
+        wxTextDropTarget__setSelf(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -3035,17 +3065,19 @@ static PyObject *_wrap_new_wxFileDropTarget(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
-#define wxFileDropTarget__setSelf(_swigobj,_swigarg0)  (_swigobj->_setSelf(_swigarg0))
+#define wxFileDropTarget__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxFileDropTarget__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyFileDropTarget * _arg0;
     PyObject * _arg1;
+    PyObject * _arg2;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","self", NULL };
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFileDropTarget__setSelf",_kwnames,&_argo0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxFileDropTarget__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3058,8 +3090,11 @@ static PyObject *_wrap_wxFileDropTarget__setSelf(PyObject *self, PyObject *args,
   _arg1 = _obj1;
 }
 {
+  _arg2 = _obj2;
+}
+{
     wxPy_BEGIN_ALLOW_THREADS;
-        wxFileDropTarget__setSelf(_arg0,_arg1);
+        wxFileDropTarget__setSelf(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);

@@ -2,7 +2,7 @@
 from   wxPython.wx import *
 
 import ColorPanel
-import wxGrid
+import GridSimple
 import wxListCtrl
 import wxScrolledWindow
 
@@ -31,7 +31,7 @@ class TestNB(wxNotebook):
         win = ColorPanel.ColoredPanel(self, wxGREEN)
         self.AddPage(win, "Green")
 
-        win = wxGrid.TestGrid(self, log)
+        win = GridSimple.SimpleGrid(self, log)
         self.AddPage(win, "Grid")
 
         win = wxListCtrl.TestListCtrlPanel(self, log)

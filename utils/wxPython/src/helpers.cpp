@@ -111,7 +111,7 @@ void WXDLLEXPORT wxEntryCleanup();
 
 
 // This is where we pick up the first part of the wxEntry functionality...
-// The rest is in __wxStart and  AfterMainLoop.  This function is called when
+// The rest is in __wxStart and  __wxCleanup.  This function is called when
 // wxcmodule is imported.  (Before there is a wxApp object.)
 void __wxPreStart()
 {
@@ -361,6 +361,7 @@ void wxPyCallback::EventThunker(wxEvent& event) {
 //----------------------------------------------------------------------
 
 wxPyCallbackHelper::wxPyCallbackHelper() {
+    m_class = NULL;
     m_self = NULL;
     m_lastFound = NULL;
     m_incRef = FALSE;
@@ -369,33 +370,52 @@ wxPyCallbackHelper::wxPyCallbackHelper() {
 
 wxPyCallbackHelper::~wxPyCallbackHelper() {
     bool doSave = wxPyRestoreThread();
-    if (m_incRef)
+    if (m_incRef) {
         Py_XDECREF(m_self);
+        Py_XDECREF(m_class);
+    }
     wxPySaveThread(doSave);
 }
 
 wxPyCallbackHelper::wxPyCallbackHelper(const wxPyCallbackHelper& other) {
       m_lastFound = NULL;
       m_self = other.m_self;
-      if (m_self)
+      m_class = other.m_class;
+      if (m_self) {
           Py_INCREF(m_self);
+          Py_INCREF(m_class);
+      }
 }
 
 
-void wxPyCallbackHelper::setSelf(PyObject* self, int incref) {
+void wxPyCallbackHelper::setSelf(PyObject* self, PyObject* _class, int incref) {
     m_self = self;
+    m_class = _class;
     m_incRef = incref;
-    if (incref)
+    if (incref) {
         Py_INCREF(m_self);
+        Py_INCREF(m_class);
+    }
 }
 
 
+// If the object (m_self) has an attibute of the given name, and if that
+// attribute is a method, and if that method's class is not from a base class,
+// then we'll save a pointer to the method so callCallback can call it.
 bool wxPyCallbackHelper::findCallback(const wxString& name) const {
     wxPyCallbackHelper* self = (wxPyCallbackHelper*)this; // cast away const
     self->m_lastFound = NULL;
-    if (m_self && PyObject_HasAttrString(m_self, (char*)name.c_str()))
-        self->m_lastFound = PyObject_GetAttrString(m_self, (char*)name.c_str());
+    if (m_self && PyObject_HasAttrString(m_self, (char*)name.c_str())) {
+        PyObject* method;
+        method = PyObject_GetAttrString(m_self, (char*)name.c_str());
 
+        if (PyMethod_Check(method) &&
+            ((PyMethod_GET_CLASS(method) == m_class) ||
+             PyClass_IsSubclass(PyMethod_GET_CLASS(method), m_class))) {
+
+            self->m_lastFound = method;
+        }
+    }
     return m_lastFound != NULL;
 }
 

@@ -103,7 +103,7 @@ class wxPyValidator(wxPyValidatorPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windowsc.new_wxPyValidator,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self, 0)
+        self._setSelf(self, wxPyValidator, 0)
 
 
 

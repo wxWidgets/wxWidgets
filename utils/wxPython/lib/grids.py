@@ -13,10 +13,24 @@
 
 """
 In this module you will find wxGridSizer and wxFlexGridSizer.
-wxGridSizer arrainges its items in a grid in which all the widths and
-heights are the same.  wxFlexGridSizer allows different widths and
-heights, and you can also specify rows and/or columns that are
-growable.  See the demo for a couple examples for how to use them.
+
+wxGridSizer: Sizes and positions items such that all rows are the same
+height and all columns are the same width.  You can specify a gap in
+pixels to be used between the rows and/or the columns.  When you
+create the sizer you specify the number of rows or the number of
+columns and then as you add items it figures out the other dimension
+automatically.  Like other sizers, items can be set to fill their
+available space, or to be aligned on a side, in a corner, or in the
+center of the space.  When the sizer is resized, all the items are
+resized the same amount so all rows and all columns remain the same
+size.
+
+wxFlexGridSizer: Derives from wxGridSizer and adds the ability for
+particular rows and/or columns to be marked as growable.  This means
+that when the sizer changes size, the growable rows and colums are the
+ones that stretch.  The others remain at their initial size.
+
+See the demo for a couple examples for how to use them.
 """
 
 

@@ -172,7 +172,7 @@ public:
 
     wxPyCallbackHelper(const wxPyCallbackHelper& other);
 
-    void        setSelf(PyObject* self, int incref=TRUE);
+    void        setSelf(PyObject* self, PyObject* _class, int incref=TRUE);
 
     bool        findCallback(const wxString& name) const;
     int         callCallback(PyObject* argTuple) const;
@@ -180,6 +180,7 @@ public:
 
 private:
     PyObject*   m_self;
+    PyObject*   m_class;
     PyObject*   m_lastFound;
     int         m_incRef;
 };
@@ -232,10 +233,10 @@ public:
 // return type, if any, as well as any parameter types.
 //---------------------------------------------------------------------------
 
-#define PYPRIVATE                                       \
-    void _setSelf(PyObject* self, int incref=1) {       \
-        m_myInst.setSelf(self, incref);                 \
-    }                                                   \
+#define PYPRIVATE                                                       \
+    void _setSelf(PyObject* self, PyObject* _class, int incref=1) {     \
+        m_myInst.setSelf(self, _class, incref);                         \
+    }                                                                   \
     private: wxPyCallbackHelper m_myInst;
 
 //---------------------------------------------------------------------------

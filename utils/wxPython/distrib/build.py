@@ -275,7 +275,7 @@ class BuildConfig:
             self.TARGET = '$(MODULE)module$(SO)'
             self.OBJEXT = '.o'
             self.HELPERLIB = 'wxPyHelpers'
-            self.HELPERLIBDIR = '/usr/local/lib'
+            self.HELPERLIBDIR = '$(EXECPREFIX)/lib'
             self.CFLAGS = '-DSWIG_GLOBAL -DHAVE_CONFIG_H $(THREAD) -I. '\
                           '`$(WXCONFIG) --cflags` -I$(PYINCLUDE) -I$(EXECINCLUDE) '\
                           '-I$(WXPSRCDIR)'
