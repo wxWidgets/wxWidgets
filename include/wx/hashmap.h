@@ -328,7 +328,7 @@ protected: \
  \
         CopyHashTable( (_wxHashTable_NodeBase**)srcTable, srcBuckets, \
                        this, (_wxHashTable_NodeBase**)m_table, \
-                       (BucketFromNode)&GetBucketForNode,\
+                       (BucketFromNode)GetBucketForNode,\
                        (ProcessNode)&DummyProcessNode ); \
         free(srcTable); \
     } \
@@ -340,8 +340,8 @@ protected: \
         CopyHashTable( (_wxHashTable_NodeBase**)ht.m_table, ht.m_tableBuckets,\
                        (_wxHashTableBase2*)this, \
                        (_wxHashTable_NodeBase**)m_table, \
-                       (BucketFromNode)&GetBucketForNode, \
-                       (ProcessNode)&CopyNode ); \
+                       (BucketFromNode)GetBucketForNode, \
+                       (ProcessNode)CopyNode ); \
     } \
 };
 
