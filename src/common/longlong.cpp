@@ -26,7 +26,6 @@
 #endif
 
 #if wxUSE_LONGLONG
-
 #include "wx/longlong.h"
 
 #include <memory.h>     // for memset()

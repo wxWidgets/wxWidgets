@@ -2295,7 +2295,11 @@ const wxChar *wxDateTime::ParseRfc822Date(const wxChar* date)
 
     // the spec was correct
     Set(day, mon, year, hour, min, sec);
+#ifndef __BORLANDC__ // The following line doesn't compile with BC++
     MakeTimezone(60*(wxDateTime_t)offset);
+#else
+    wxMessageBox("ParseRfc822Date doesn't with BC++ yet, sorry.");
+#endif
 
     return p;
 }
