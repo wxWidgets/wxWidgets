@@ -1471,7 +1471,7 @@ void wxWindowMSW::Update()
         wxLogLastError(_T("UpdateWindow"));
     }
 #endif
-    
+
 #if defined(__WIN32__) && !defined(__WXMICROWIN__)
     // just calling UpdateWindow() is not enough, what we did in our WM_PAINT
     // handler needs to be really drawn right now
@@ -2612,71 +2612,73 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
             if ( m_lastKeydownProcessed )
             {
                 processed = TRUE;
-                break;
             }
 
-            switch ( wParam )
+            if ( !processed )
             {
-                // we consider these message "not interesting" to OnChar, so
-                // just don't do anything more with them
-                case VK_SHIFT:
-                case VK_CONTROL:
-                case VK_MENU:
-                case VK_CAPITAL:
-                case VK_NUMLOCK:
-                case VK_SCROLL:
-                    processed = TRUE;
-                    break;
+                switch ( wParam )
+                {
+                    // we consider these message "not interesting" to OnChar, so
+                    // just don't do anything more with them
+                    case VK_SHIFT:
+                    case VK_CONTROL:
+                    case VK_MENU:
+                    case VK_CAPITAL:
+                    case VK_NUMLOCK:
+                    case VK_SCROLL:
+                        processed = TRUE;
+                        break;
 
-                // avoid duplicate messages to OnChar for these ASCII keys:
-                // they will be translated by TranslateMessage() and received
-                // in WM_CHAR
-                case VK_ESCAPE:
-                case VK_SPACE:
-                case VK_RETURN:
-                case VK_BACK:
-                case VK_TAB:
-                case VK_ADD:
-                case VK_SUBTRACT:
-                case VK_MULTIPLY:
-                case VK_DIVIDE:
-                case VK_OEM_1:
-                case VK_OEM_2:
-                case VK_OEM_3:
-                case VK_OEM_4:
-                case VK_OEM_5:
-                case VK_OEM_6:
-                case VK_OEM_7:
-                case VK_OEM_PLUS:
-                case VK_OEM_COMMA:
-                case VK_OEM_MINUS:
-                case VK_OEM_PERIOD:
-                    // but set processed to FALSE, not TRUE to still pass them
-                    // to the control's default window proc - otherwise
-                    // built-in keyboard handling won't work
-                    processed = FALSE;
-
-                    break;
+                    // avoid duplicate messages to OnChar for these ASCII keys:
+                    // they will be translated by TranslateMessage() and received
+                    // in WM_CHAR
+                    case VK_ESCAPE:
+                    case VK_SPACE:
+                    case VK_RETURN:
+                    case VK_BACK:
+                    case VK_TAB:
+                    case VK_ADD:
+                    case VK_SUBTRACT:
+                    case VK_MULTIPLY:
+                    case VK_DIVIDE:
+                    case VK_OEM_1:
+                    case VK_OEM_2:
+                    case VK_OEM_3:
+                    case VK_OEM_4:
+                    case VK_OEM_5:
+                    case VK_OEM_6:
+                    case VK_OEM_7:
+                    case VK_OEM_PLUS:
+                    case VK_OEM_COMMA:
+                    case VK_OEM_MINUS:
+                    case VK_OEM_PERIOD:
+                        // but set processed to FALSE, not TRUE to still pass them
+                        // to the control's default window proc - otherwise
+                        // built-in keyboard handling won't work
+                        processed = FALSE;
+                        break;
 
 #ifdef VK_APPS
-                // special case of VK_APPS: treat it the same as right mouse
-                // click because both usually pop up a context menu
-                case VK_APPS:
-                    {
-                        WPARAM flags;
-                        int x, y;
+                    // special case of VK_APPS: treat it the same as right mouse
+                    // click because both usually pop up a context menu
+                    case VK_APPS:
+                        {
+                            WPARAM flags;
+                            int x, y;
 
-                        TranslateKbdEventToMouse(this, &x, &y, &flags);
-                        processed = HandleMouseEvent(WM_RBUTTONDOWN, x, y, flags);
-                    }
-                    break;
+                            TranslateKbdEventToMouse(this, &x, &y, &flags);
+                            processed = HandleMouseEvent(WM_RBUTTONDOWN, x, y, flags);
+                        }
+                        break;
 #endif // VK_APPS
 
-                default:
-                    // do generate a CHAR event
-                    processed = HandleChar((WORD)wParam, lParam);
-
+                    default:
+                        // do generate a CHAR event
+                        processed = HandleChar((WORD)wParam, lParam);
+                }
             }
+            if (message == WM_SYSKEYDOWN)  // Let Windows still handle the SYSKEYs
+                processed = FALSE;
             break;
 
         case WM_SYSKEYUP:
