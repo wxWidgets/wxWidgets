@@ -10,6 +10,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
+
+#if wxUSE_NOTEBOOK
+
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/notebook.h"
@@ -289,3 +292,4 @@ bool wxNotebook::CocoaDelegate_tabView_shouldSelectTabViewItem(WX_NSTabViewItem 
     return !GetEventHandler()->ProcessEvent(event) || event.IsAllowed();
 }
 
+#endif // wxUSE_NOTEBOOK
