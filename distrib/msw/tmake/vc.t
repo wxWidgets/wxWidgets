@@ -463,6 +463,9 @@ clean: $(PERIPH_CLEAN_TARGET)
         -erase *.pdb
         -erase *.sbr
         -erase $(WXLIBNAME).pch
+	-erase $(WXDIR)\$D\$(PCH)
+	-erase $(WXDIR)\$D\*.pdb
+	-erase $(WXDIR)\$D\*.obj
         -erase $(GENDIR)\$D\*.obj
         -erase $(GENDIR)\$D\*.pdb
         -erase $(GENDIR)\$D\*.sbr
@@ -497,6 +500,7 @@ clean: $(PERIPH_CLEAN_TARGET)
         -rmdir $(HTMLDIR)\$(D)
         -rmdir $(JPEGDIR)\$(D)
         -rmdir $(TIFFDIR)\$(D)
+	-rmdir $(WXDIR)\$D
 
 # Making documents
 docs:   allhlp allhtml allpdfrtf allhtb allhtmlhelp
