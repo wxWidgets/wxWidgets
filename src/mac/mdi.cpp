@@ -27,7 +27,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame, wxFrame)
 IMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow, wxWindow)
 
 BEGIN_EVENT_TABLE(wxMDIParentFrame, wxFrame)
-  EVT_SIZE(wxMDIParentFrame::OnSize)
   EVT_ACTIVATE(wxMDIParentFrame::OnActivate)
   EVT_SYS_COLOUR_CHANGED(wxMDIParentFrame::OnSysColourChanged)
 END_EVENT_TABLE()
@@ -123,30 +122,9 @@ wxMDIParentFrame::~wxMDIParentFrame()
 }
 
 
-// Get size *available for subwindows* i.e. excluding menu bar.
-void wxMDIParentFrame::DoGetClientSize(int *x, int *y) const
-{
-    wxDisplaySize( x , y ) ;
-}
-
 void wxMDIParentFrame::SetMenuBar(wxMenuBar *menu_bar)
 {
     wxFrame::SetMenuBar( menu_bar ) ;
-}
-
-void wxMDIParentFrame::OnSize(wxSizeEvent& event)
-{
-#if wxUSE_CONSTRAINTS
-    if (GetAutoLayout())
-        Layout();
-#endif
-    int x = 0;
-    int y = 0;
-    int width, height;
-    GetClientSize(&width, &height);
-    
-    if ( GetClientWindow() )
-        GetClientWindow()->SetSize(x, y, width, height);
 }
 
 void wxMDIParentFrame::OnActivate(wxActivateEvent& event)
@@ -306,6 +284,12 @@ bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
     
     wxModelessWindows.Append(this);
     return TRUE;
+}
+
+// Get size *available for subwindows* i.e. excluding menu bar.
+void wxMDIClientWindow::DoGetClientSize(int *x, int *y) const
+{
+    wxDisplaySize( x , y ) ;
 }
 
 // Explicitly call default scroll behaviour
