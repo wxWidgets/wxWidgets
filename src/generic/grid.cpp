@@ -431,22 +431,10 @@ void wxGridCellEditorEvtHandler::OnKeyDown(wxKeyEvent& event)
             m_grid->EnableCellEditControl(FALSE);
             break;
 
-//          case WXK_UP:
-//          case WXK_DOWN:
-//          case WXK_LEFT:
-//          case WXK_RIGHT:
-//          case WXK_PRIOR:
-//          case WXK_NEXT:
-//          case WXK_SPACE:
-//          case WXK_HOME:
-//          case WXK_END:
-//              // send the event to the parent grid, skipping the
-//              // event if nothing happens
-//              //
-//              event.Skip( m_grid->ProcessEvent( event ) );
-//              break;
-
         case WXK_TAB:
+            event.Skip( m_grid->ProcessEvent( event ) );
+            break;
+
         case WXK_RETURN:
             if (!m_grid->ProcessEvent(event))
                 m_editor->HandleReturn(event);
@@ -1296,7 +1284,7 @@ bool wxGridStringTable::DeleteRows( size_t pos, size_t numRows )
             m_data.Remove( pos );
         }
     }
-    UpdateAttrRows( pos, -numRows );
+    UpdateAttrRows( pos, -((int)numRows) );
     if ( GetView() )
     {
         wxGridTableMessage msg( this,
@@ -1413,7 +1401,7 @@ bool wxGridStringTable::DeleteCols( size_t pos, size_t numCols )
             }
         }
     }
-    UpdateAttrCols( pos, -numCols );
+    UpdateAttrCols( pos, -((int)numCols) );
     if ( GetView() )
     {
         wxGridTableMessage msg( this,
@@ -3551,6 +3539,12 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
 
     if ( !parent->GetEventHandler()->ProcessEvent( keyEvt ) )
     {
+
+        // TODO:  Should also support Shift-cursor keys for
+        //        extending the selection.  Maybe add a flag to
+        //        MoveCursorXXX() and MoveCursorXXXBlock() and
+        //        just send event.ShiftDown().
+
         // try local handlers
         //
         switch ( event.KeyCode() )
@@ -5186,6 +5180,11 @@ void wxGrid::SetDefaultRenderer(wxGridCellRenderer *renderer)
     m_defaultCellAttr->SetRenderer(renderer);
 }
 
+void wxGrid::SetDefaultEditor(wxGridCellEditor *editor)
+{
+    m_defaultCellAttr->SetEditor(editor);
+}
+
 // ----------------------------------------------------------------------------
 // access to the default attrbiutes
 // ----------------------------------------------------------------------------
@@ -5213,6 +5212,11 @@ void wxGrid::GetDefaultCellAlignment( int *horiz, int *vert )
 wxGridCellRenderer *wxGrid::GetDefaultRenderer() const
 {
     return m_defaultCellAttr->GetRenderer();
+}
+
+wxGridCellEditor *wxGrid::GetDefaultEditor() const
+{
+    return m_defaultCellAttr->GetEditor();
 }
 
 // ----------------------------------------------------------------------------
@@ -5256,6 +5260,14 @@ wxGridCellRenderer* wxGrid::GetCellRenderer(int row, int col)
     wxGridCellRenderer* renderer = attr->GetRenderer();
     attr->DecRef();
     return renderer;
+}
+
+wxGridCellEditor* wxGrid::GetCellEditor(int row, int col)
+{
+    wxGridCellAttr* attr = GetCellAttr(row, col);
+    wxGridCellEditor* editor = attr->GetEditor();
+    attr->DecRef();
+    return editor;
 }
 
 // ----------------------------------------------------------------------------
@@ -5444,6 +5456,16 @@ void wxGrid::SetCellRenderer(int row, int col, wxGridCellRenderer *renderer)
     {
         wxGridCellAttr *attr = GetOrCreateCellAttr(row, col);
         attr->SetRenderer(renderer);
+        attr->DecRef();
+    }
+}
+
+void wxGrid::SetCellEditor(int row, int col, wxGridCellEditor* editor)
+{
+    if ( CanHaveAttributes() )
+    {
+        wxGridCellAttr *attr = GetOrCreateCellAttr(row, col);
+        attr->SetEditor(editor);
         attr->DecRef();
     }
 }
