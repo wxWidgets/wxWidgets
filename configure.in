@@ -224,8 +224,11 @@ case "${host}" in
     USE_AIX=1
     USE_SYSV=1
     USE_SVR4=1
-    dnl Irvin Probst <irvin.probst@fr.thalesgroup.com> reports that the shared
-    dnl libraries under AIX have the same suffix as the normal ones
+    dnl quoting from http://www-1.ibm.com/servers/esdd/articles/gnu.html:
+    dnl
+    dnl     Both archive libraries and shared libraries on AIX have an .a
+    dnl     extension. This will explain why you can't link with an .so and
+    dnl     why it works with the name changed to .a. 
     SO_SUFFIX=a
     AC_DEFINE(__AIX__)
     AC_DEFINE(__SYSV__)
@@ -2754,16 +2757,18 @@ if test "$wxUSE_SHARED" = "yes"; then
       ;;
 
       *-*-aix* )
-        dnl the abs path below used to be hardcoded here so I guess it must
-        dnl be some sort of standard location under AIX?
-        AC_CHECK_PROG(AIX_CXX_LD, makeC++SharedLib,
-                      makeC++SharedLib, /usr/lpp/xlC/bin/makeC++SharedLib)
+        dnl default settings are ok for gcc
+        if test "$GCC" != "yes"; then
+            dnl the abs path below used to be hardcoded here so I guess it must
+            dnl be some sort of standard location under AIX?
+            AC_CHECK_PROG(AIX_CXX_LD, makeC++SharedLib,
+                          makeC++SharedLib, /usr/lpp/xlC/bin/makeC++SharedLib)
 
-        SHARED_LD="$(AIX_CXX_LD) -p 0 -o"
+            SHARED_LD="$(AIX_CXX_LD) -p 0 -o"
+        fi
       ;;
 
       *-*-cygwin* | *-*-mingw32* )
-
         WX_LIBRARY_IMPORTLIB="${WX_LIBRARY_NAME_SHARED}.a"
 
         SHARED_LD="${CXX} -shared -Wl,--out-implib,lib/${WX_LIBRARY_IMPORTLIB} -o"
@@ -3361,7 +3366,17 @@ if test "$TOOLKIT" != "MSW"; then
           AC_MSG_CHECKING([if more special flags are required for pthreads])
           flag=no
           case "${host}" in
-            *-aix* | *-freebsd*)
+            *-aix*)
+                dnl again quoting from
+                dnl http://www-1.ibm.com/servers/esdd/articles/gnu.html:
+                dnl
+                dnl     When compiling and linking with -pthread, the library
+                dnl     search path should include -L/usr/lib/threads at the
+                dnl     beginning of the path.
+                LDFLAGS="-L/usr/lib/threads $LDFLAGS"
+                flag="-D_THREAD_SAFE"
+                ;;
+            *-freebsd*)
                 flag="-D_THREAD_SAFE"
                 ;;
             *-hp-hpux* )
