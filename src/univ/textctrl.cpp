@@ -2286,6 +2286,8 @@ bool wxTextCtrl::Enable(bool enable)
         return FALSE;
 
     ShowCaret(enable);
+
+    return TRUE;
 }
 
 void wxTextCtrl::CreateCaret()
