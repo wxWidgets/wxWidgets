@@ -185,6 +185,26 @@
                         <SETTING><NAME>FrameworkPath</NAME><VALUE>false</VALUE></SETTING>
                         <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
                     </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>xml</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>Unix</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>FrameworkPath</NAME><VALUE>false</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>expat/lib</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>Unix</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>FrameworkPath</NAME><VALUE>false</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
                 </SETTING>
                 <SETTING><NAME>SystemSearchPaths</NAME>
                     <SETTING>
@@ -666,7 +686,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; </VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@&#171; &#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -4104,6 +4124,60 @@
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:generic:</ACCESSPATH>
+                    <PATH>renderg.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>renderer.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>xml</ACCESSPATH>
+                    <PATH>xml.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlparse.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlrole.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmltok.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -6349,6 +6423,48 @@
                     <PATH>init.cpp</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:generic:</ACCESSPATH>
+                    <PATH>renderg.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>renderer.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>xml</ACCESSPATH>
+                    <PATH>xml.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlparse.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlrole.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmltok.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
             </LINKORDER>
             <SUBPROJECTLIST>
                 <SUBPROJECT>
@@ -6614,6 +6730,26 @@
                         <SETTING><NAME>SearchPath</NAME>
                             <SETTING><NAME>Path</NAME><VALUE>:tiff:</VALUE></SETTING>
                             <SETTING><NAME>PathFormat</NAME><VALUE>MacOS</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>FrameworkPath</NAME><VALUE>false</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>xml</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>Unix</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>FrameworkPath</NAME><VALUE>false</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>expat/lib</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>Unix</VALUE></SETTING>
                             <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
                         </SETTING>
                         <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
@@ -7091,7 +7227,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; </VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@&#171; &#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -10527,6 +10663,60 @@
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:generic:</ACCESSPATH>
+                    <PATH>renderg.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>renderer.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>xml</ACCESSPATH>
+                    <PATH>xml.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlparse.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlrole.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmltok.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -12770,6 +12960,48 @@
                     <PATH>init.cpp</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:generic:</ACCESSPATH>
+                    <PATH>renderg.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>renderer.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>xml</ACCESSPATH>
+                    <PATH>xml.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlparse.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlrole.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmltok.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
             </LINKORDER>
             <SUBPROJECTLIST>
                 <SUBPROJECT>
@@ -13106,7 +13338,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; </VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@&#171; &#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -13940,7 +14172,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; </VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@&#171; &#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -14610,6 +14842,26 @@
                         <SETTING><NAME>FrameworkPath</NAME><VALUE>false</VALUE></SETTING>
                         <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
                     </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>xml</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>Unix</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>FrameworkPath</NAME><VALUE>false</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>expat/lib</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>Unix</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>FrameworkPath</NAME><VALUE>false</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
                 </SETTING>
                 <SETTING><NAME>SystemSearchPaths</NAME>
                     <SETTING>
@@ -15081,7 +15333,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; </VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@&#171; &#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -18509,6 +18761,60 @@
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:generic:</ACCESSPATH>
+                    <PATH>renderg.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>renderer.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>xml</ACCESSPATH>
+                    <PATH>xml.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlparse.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlrole.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmltok.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -20748,6 +21054,48 @@
                     <PATH>init.cpp</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:generic:</ACCESSPATH>
+                    <PATH>renderg.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>renderer.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>xml</ACCESSPATH>
+                    <PATH>xml.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlparse.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlrole.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmltok.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
             </LINKORDER>
             <SUBPROJECTLIST>
                 <SUBPROJECT>
@@ -21013,6 +21361,26 @@
                         <SETTING><NAME>SearchPath</NAME>
                             <SETTING><NAME>Path</NAME><VALUE>:regex:</VALUE></SETTING>
                             <SETTING><NAME>PathFormat</NAME><VALUE>MacOS</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>FrameworkPath</NAME><VALUE>false</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>xml</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>Unix</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>FrameworkPath</NAME><VALUE>false</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>expat/lib</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>Unix</VALUE></SETTING>
                             <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
                         </SETTING>
                         <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
@@ -21490,7 +21858,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; </VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@&#171; &#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -24699,6 +25067,60 @@
                     <FILEKIND>Library</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:generic:</ACCESSPATH>
+                    <PATH>renderg.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>renderer.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>xml</ACCESSPATH>
+                    <PATH>xml.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlparse.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlrole.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmltok.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -26769,6 +27191,48 @@
                     <PATH>MetroNub Utilities/MNU Carbon.Lib</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:generic:</ACCESSPATH>
+                    <PATH>renderg.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>renderer.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>xml</ACCESSPATH>
+                    <PATH>xml.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlparse.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlrole.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmltok.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
             </LINKORDER>
             <SUBPROJECTLIST>
                 <SUBPROJECT>
@@ -27034,6 +27498,26 @@
                         <SETTING><NAME>SearchPath</NAME>
                             <SETTING><NAME>Path</NAME><VALUE>:html:</VALUE></SETTING>
                             <SETTING><NAME>PathFormat</NAME><VALUE>MacOS</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>FrameworkPath</NAME><VALUE>false</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>xml</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>Unix</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>FrameworkPath</NAME><VALUE>false</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>expat/lib</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>Unix</VALUE></SETTING>
                             <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
                         </SETTING>
                         <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
@@ -27511,7 +27995,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; </VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@&#171; &#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -30726,6 +31210,60 @@
                     <FILEKIND>Library</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:generic:</ACCESSPATH>
+                    <PATH>renderg.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>renderer.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>xml</ACCESSPATH>
+                    <PATH>xml.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlparse.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlrole.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmltok.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -32798,6 +33336,48 @@
                     <PATH>Universal/Libraries/StubLibraries/CarbonLib</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:generic:</ACCESSPATH>
+                    <PATH>renderg.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>renderer.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>xml</ACCESSPATH>
+                    <PATH>xml.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlparse.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlrole.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmltok.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
             </LINKORDER>
             <SUBPROJECTLIST>
                 <SUBPROJECT>
@@ -33204,7 +33784,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; </VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@&#171; &#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -33890,6 +34470,26 @@
                         <SETTING><NAME>FrameworkPath</NAME><VALUE>false</VALUE></SETTING>
                         <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
                     </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>xml</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>Unix</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>FrameworkPath</NAME><VALUE>false</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>expat/lib</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>Unix</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>FrameworkPath</NAME><VALUE>false</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
                 </SETTING>
                 <SETTING><NAME>SystemSearchPaths</NAME>
                     <SETTING>
@@ -34371,7 +34971,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; </VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@&#171; &#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -37827,6 +38427,60 @@
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:generic:</ACCESSPATH>
+                    <PATH>renderg.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>renderer.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>xml</ACCESSPATH>
+                    <PATH>xml.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlparse.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlrole.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmltok.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -40086,6 +40740,48 @@
                     <PATH>init.cpp</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:generic:</ACCESSPATH>
+                    <PATH>renderg.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>renderer.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>xml</ACCESSPATH>
+                    <PATH>xml.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlparse.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlrole.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmltok.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
             </LINKORDER>
             <SUBPROJECTLIST>
                 <SUBPROJECT>
@@ -40848,7 +41544,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; </VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@&#171; &#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -41546,6 +42242,26 @@
                         <SETTING><NAME>FrameworkPath</NAME><VALUE>false</VALUE></SETTING>
                         <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
                     </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>xml</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>Unix</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>FrameworkPath</NAME><VALUE>false</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>expat/lib</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>Unix</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>FrameworkPath</NAME><VALUE>false</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
                 </SETTING>
                 <SETTING><NAME>SystemSearchPaths</NAME>
                     <SETTING>
@@ -42027,7 +42743,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; </VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@&#171; &#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -45483,6 +46199,60 @@
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:generic:</ACCESSPATH>
+                    <PATH>renderg.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>renderer.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>xml</ACCESSPATH>
+                    <PATH>xml.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlparse.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlrole.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmltok.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -47742,6 +48512,48 @@
                     <PATH>init.cpp</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:generic:</ACCESSPATH>
+                    <PATH>renderg.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>renderer.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>xml</ACCESSPATH>
+                    <PATH>xml.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlparse.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlrole.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmltok.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
             </LINKORDER>
             <SUBPROJECTLIST>
                 <SUBPROJECT>
@@ -48007,6 +48819,26 @@
                         <SETTING><NAME>SearchPath</NAME>
                             <SETTING><NAME>Path</NAME><VALUE>:html:</VALUE></SETTING>
                             <SETTING><NAME>PathFormat</NAME><VALUE>MacOS</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>FrameworkPath</NAME><VALUE>false</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>xml</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>Unix</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>FrameworkPath</NAME><VALUE>false</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>expat/lib</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>Unix</VALUE></SETTING>
                             <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
                         </SETTING>
                         <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
@@ -48494,7 +49326,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; </VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@&#171; &#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -51743,6 +52575,60 @@
                     <FILEKIND>Library</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:generic:</ACCESSPATH>
+                    <PATH>renderg.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>renderer.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>xml</ACCESSPATH>
+                    <PATH>xml.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlparse.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlrole.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmltok.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -53841,6 +54727,48 @@
                     <PATH>MetroNub Utilities/MNU Carbon.Lib</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:generic:</ACCESSPATH>
+                    <PATH>renderg.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>renderer.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>xml</ACCESSPATH>
+                    <PATH>xml.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlparse.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlrole.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmltok.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
             </LINKORDER>
             <SUBPROJECTLIST>
                 <SUBPROJECT>
@@ -54106,6 +55034,26 @@
                         <SETTING><NAME>SearchPath</NAME>
                             <SETTING><NAME>Path</NAME><VALUE>:html:</VALUE></SETTING>
                             <SETTING><NAME>PathFormat</NAME><VALUE>MacOS</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>FrameworkPath</NAME><VALUE>false</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>xml</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>Unix</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>FrameworkPath</NAME><VALUE>false</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>expat/lib</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>Unix</VALUE></SETTING>
                             <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
                         </SETTING>
                         <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
@@ -54593,7 +55541,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; </VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@&#171; &#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -57887,6 +58835,60 @@
                     <FILEKIND>Library</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:generic:</ACCESSPATH>
+                    <PATH>renderg.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>renderer.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>xml</ACCESSPATH>
+                    <PATH>xml.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlparse.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlrole.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmltok.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -60020,6 +61022,48 @@
                     <PATH>Universal/Libraries/StubLibraries/CarbonLib</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:generic:</ACCESSPATH>
+                    <PATH>renderg.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>renderer.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>xml</ACCESSPATH>
+                    <PATH>xml.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlparse.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlrole.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmltok.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
             </LINKORDER>
             <SUBPROJECTLIST>
                 <SUBPROJECT>
@@ -60782,7 +61826,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; </VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@&#171; &#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -61971,7 +63015,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; </VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@&#171; &#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -63160,7 +64204,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; </VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@&#171; &#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -63878,6 +64922,26 @@
                         <SETTING><NAME>FrameworkPath</NAME><VALUE>false</VALUE></SETTING>
                         <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
                     </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>xml</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>Unix</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>FrameworkPath</NAME><VALUE>false</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>expat/lib</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>Unix</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>FrameworkPath</NAME><VALUE>false</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
                 </SETTING>
                 <SETTING><NAME>SystemSearchPaths</NAME>
                     <SETTING>
@@ -64567,7 +65631,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; </VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@&#171; &#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -67780,6 +68844,60 @@
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:generic:</ACCESSPATH>
+                    <PATH>renderg.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>renderer.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>xml</ACCESSPATH>
+                    <PATH>xml.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlparse.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlrole.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmltok.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -69852,6 +70970,48 @@
                     <PATH>baseunix.cpp</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:generic:</ACCESSPATH>
+                    <PATH>renderg.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>renderer.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>xml</ACCESSPATH>
+                    <PATH>xml.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlparse.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlrole.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmltok.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
             </LINKORDER>
             <SUBPROJECTLIST>
                 <SUBPROJECT>
@@ -70143,6 +71303,26 @@
                     <SETTING>
                         <SETTING><NAME>SearchPath</NAME>
                             <SETTING><NAME>Path</NAME><VALUE>../lib</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>Unix</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>FrameworkPath</NAME><VALUE>false</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>xml</VALUE></SETTING>
+                            <SETTING><NAME>PathFormat</NAME><VALUE>Unix</VALUE></SETTING>
+                            <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
+                        </SETTING>
+                        <SETTING><NAME>Recursive</NAME><VALUE>true</VALUE></SETTING>
+                        <SETTING><NAME>FrameworkPath</NAME><VALUE>false</VALUE></SETTING>
+                        <SETTING><NAME>HostFlags</NAME><VALUE>All</VALUE></SETTING>
+                    </SETTING>
+                    <SETTING>
+                        <SETTING><NAME>SearchPath</NAME>
+                            <SETTING><NAME>Path</NAME><VALUE>expat/lib</VALUE></SETTING>
                             <SETTING><NAME>PathFormat</NAME><VALUE>Unix</VALUE></SETTING>
                             <SETTING><NAME>PathRoot</NAME><VALUE>Project</VALUE></SETTING>
                         </SETTING>
@@ -70839,7 +72019,7 @@
                 <!-- Settings for "FTP Panel" panel -->
                 <SETTING><NAME>MWFTP_Post_hostName</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_username</NAME><VALUE></VALUE></SETTING>
-                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196; </VALUE></SETTING>
+                <SETTING><NAME>MWFTP_Post_password</NAME><VALUE>0&#255;&#196;@&#171; &#144;"&#168;T</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_remoteDir</NAME><VALUE></VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathVersion</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWFTP_Post_ftp_PathType</NAME><VALUE>0</VALUE></SETTING>
@@ -74052,6 +75232,60 @@
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:generic:</ACCESSPATH>
+                    <PATH>renderg.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>renderer.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>xml</ACCESSPATH>
+                    <PATH>xml.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlparse.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlrole.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmltok.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -76124,6 +77358,48 @@
                     <PATH>baseunix.cpp</PATH>
                     <PATHFORMAT>Unix</PATHFORMAT>
                 </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:generic:</ACCESSPATH>
+                    <PATH>renderg.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>renderer.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>xml</ACCESSPATH>
+                    <PATH>xml.cpp</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlparse.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmlrole.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>expat/lib</ACCESSPATH>
+                    <PATH>xmltok.c</PATH>
+                    <PATHFORMAT>Unix</PATHFORMAT>
+                </FILEREF>
             </LINKORDER>
             <SUBPROJECTLIST>
                 <SUBPROJECT>
@@ -77584,6 +78860,14 @@
                 <PATHTYPE>PathRelative</PATHTYPE>
                 <PATHROOT>Project</PATHROOT>
                 <ACCESSPATH>:generic:</ACCESSPATH>
+                <PATH>renderg.cpp</PATH>
+                <PATHFORMAT>Unix</PATHFORMAT>
+            </FILEREF>
+            <FILEREF>
+                <TARGETNAME>wxlib PPC debug</TARGETNAME>
+                <PATHTYPE>PathRelative</PATHTYPE>
+                <PATHROOT>Project</PATHROOT>
+                <ACCESSPATH>:generic:</ACCESSPATH>
                 <PATH>:sashwin.cpp</PATH>
                 <PATHFORMAT>MacOS</PATHFORMAT>
             </FILEREF>
@@ -78053,6 +79337,40 @@
                 <PATHROOT>Project</PATHROOT>
                 <ACCESSPATH>unix</ACCESSPATH>
                 <PATH>utilsunx.cpp</PATH>
+                <PATHFORMAT>Unix</PATHFORMAT>
+            </FILEREF>
+        </GROUP>
+        <GROUP><NAME>xml</NAME>
+            <FILEREF>
+                <TARGETNAME>wxlib PPC debug</TARGETNAME>
+                <PATHTYPE>PathRelative</PATHTYPE>
+                <PATHROOT>Project</PATHROOT>
+                <ACCESSPATH>xml</ACCESSPATH>
+                <PATH>xml.cpp</PATH>
+                <PATHFORMAT>Unix</PATHFORMAT>
+            </FILEREF>
+            <FILEREF>
+                <TARGETNAME>wxlib PPC debug</TARGETNAME>
+                <PATHTYPE>PathRelative</PATHTYPE>
+                <PATHROOT>Project</PATHROOT>
+                <ACCESSPATH>expat/lib</ACCESSPATH>
+                <PATH>xmlparse.c</PATH>
+                <PATHFORMAT>Unix</PATHFORMAT>
+            </FILEREF>
+            <FILEREF>
+                <TARGETNAME>wxlib PPC debug</TARGETNAME>
+                <PATHTYPE>PathRelative</PATHTYPE>
+                <PATHROOT>Project</PATHROOT>
+                <ACCESSPATH>expat/lib</ACCESSPATH>
+                <PATH>xmlrole.c</PATH>
+                <PATHFORMAT>Unix</PATHFORMAT>
+            </FILEREF>
+            <FILEREF>
+                <TARGETNAME>wxlib PPC debug</TARGETNAME>
+                <PATHTYPE>PathRelative</PATHTYPE>
+                <PATHROOT>Project</PATHROOT>
+                <ACCESSPATH>expat/lib</ACCESSPATH>
+                <PATH>xmltok.c</PATH>
                 <PATHFORMAT>Unix</PATHFORMAT>
             </FILEREF>
         </GROUP>
@@ -78594,6 +79912,14 @@
                 <ACCESSPATH>:mac:</ACCESSPATH>
                 <PATH>:region.cpp</PATH>
                 <PATHFORMAT>MacOS</PATHFORMAT>
+            </FILEREF>
+            <FILEREF>
+                <TARGETNAME>wxlib PPC debug</TARGETNAME>
+                <PATHTYPE>PathRelative</PATHTYPE>
+                <PATHROOT>Project</PATHROOT>
+                <ACCESSPATH>:mac:</ACCESSPATH>
+                <PATH>renderer.cpp</PATH>
+                <PATHFORMAT>Unix</PATHFORMAT>
             </FILEREF>
             <FILEREF>
                 <TARGETNAME>wxlib PPC debug</TARGETNAME>
