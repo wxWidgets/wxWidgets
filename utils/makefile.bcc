@@ -36,16 +36,31 @@ MAKEARGS = -DCPPFLAGS="$(CPPFLAGS)" -DDEBUG_FLAG="$(DEBUG_FLAG)" \
 
 ### Targets: ###
 
-all: tex2rtf helpgen
+all: configtool emulator helpview tex2rtf helpgen
 
 clean: 
 	-if exist .\*.obj del .\*.obj
 	-if exist .\*.res del .\*.res
 
+configtool: 
+	cd configtool\src
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..\..
+
+emulator: 
+	cd emulator\src
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..\..
+
 helpgen: 
 	cd HelpGen
 	$(MAKE) -f makefile.bcc $(MAKEARGS) all
 	cd ..
+
+helpview: 
+	cd helpview\src
+	$(MAKE) -f makefile.bcc $(MAKEARGS) all
+	cd ..\..
 
 tex2rtf: 
 	cd tex2rtf\src

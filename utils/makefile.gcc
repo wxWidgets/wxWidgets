@@ -28,15 +28,24 @@ MAKEARGS = CPPFLAGS="$(CPPFLAGS)" DEBUG_FLAG="$(DEBUG_FLAG)" \
 
 ### Targets: ###
 
-all: tex2rtf helpgen
+all: configtool emulator helpview tex2rtf helpgen
 
 clean: 
 	-if exist .\*.o del .\*.o
 
+configtool: 
+	$(MAKE) -C configtool\src -f makefile.gcc $(MAKEARGS) all
+
+emulator: 
+	$(MAKE) -C emulator\src -f makefile.gcc $(MAKEARGS) all
+
 helpgen: 
 	$(MAKE) -C HelpGen -f makefile.gcc $(MAKEARGS) all
+
+helpview: 
+	$(MAKE) -C helpview\src -f makefile.gcc $(MAKEARGS) all
 
 tex2rtf: 
 	$(MAKE) -C tex2rtf\src -f makefile.gcc $(MAKEARGS) all
 
-.PHONY: all clean helpgen tex2rtf
+.PHONY: all clean configtool emulator helpgen helpview tex2rtf

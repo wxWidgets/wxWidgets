@@ -42,7 +42,7 @@ MAKEARGS = CPPFLAGS="$(CPPFLAGS)" DEBUG_FLAG="$(DEBUG_FLAG)" &
 
 ### Targets: ###
 
-all : .SYMBOLIC tex2rtf helpgen
+all : .SYMBOLIC configtool emulator helpview tex2rtf helpgen
 
 clean : .SYMBOLIC 
 	-if exist .\*.obj del .\*.obj
@@ -50,8 +50,23 @@ clean : .SYMBOLIC
 	-if exist .\*.lbc del .\*.lbc
 	-if exist .\*.ilk del .\*.ilk
 
+configtool : .SYMBOLIC 
+	cd configtool\src
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
+	cd $(WATCOM_CWD)
+
+emulator : .SYMBOLIC 
+	cd emulator\src
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
+	cd $(WATCOM_CWD)
+
 helpgen : .SYMBOLIC 
 	cd HelpGen
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
+	cd $(WATCOM_CWD)
+
+helpview : .SYMBOLIC 
+	cd helpview\src
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
 	cd $(WATCOM_CWD)
 

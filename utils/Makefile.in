@@ -20,19 +20,31 @@ DESTDIR =
 
 ### Targets: ###
 
-all: tex2rtf helpgen
+all: configtool emulator helpview tex2rtf helpgen
 
 clean: 
 	rm -rf ./.deps ./.pch
 	rm -f ./*.o
+	(cd configtool/src && $(MAKE) clean)
+	(cd emulator/src && $(MAKE) clean)
+	(cd helpview/src && $(MAKE) clean)
 	(cd tex2rtf/src && $(MAKE) clean)
 	(cd HelpGen && $(MAKE) clean)
+
+configtool: 
+	(cd configtool/src && $(MAKE) all)
 
 distclean: clean
 	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
+emulator: 
+	(cd emulator/src && $(MAKE) all)
+
 helpgen: 
 	(cd HelpGen && $(MAKE) all)
+
+helpview: 
+	(cd helpview/src && $(MAKE) all)
 
 install: all
 	(cd tex2rtf/src && $(MAKE) install)
@@ -51,4 +63,4 @@ uninstall:
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all clean distclean helpgen install tex2rtf uninstall
+.PHONY: all clean configtool distclean emulator helpgen helpview install tex2rtf uninstall

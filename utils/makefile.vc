@@ -27,14 +27,29 @@ MAKEARGS = CPPFLAGS="$(CPPFLAGS)" DEBUG_FLAG="$(DEBUG_FLAG)" \
 
 ### Targets: ###
 
-all: sub_tex2rtf sub_helpgen
+all: sub_configtool sub_emulator sub_helpview sub_tex2rtf sub_helpgen
 
 clean: 
 	-if exist .\*.obj del .\*.obj
 	-if exist .\*.res del .\*.res
 
+sub_configtool: 
+	cd configtool\src
+	$(MAKE) -f makefile.vc $(MAKEARGS) all
+	cd $(MAKEDIR)
+
+sub_emulator: 
+	cd emulator\src
+	$(MAKE) -f makefile.vc $(MAKEARGS) all
+	cd $(MAKEDIR)
+
 sub_helpgen: 
 	cd HelpGen
+	$(MAKE) -f makefile.vc $(MAKEARGS) all
+	cd $(MAKEDIR)
+
+sub_helpview: 
+	cd helpview\src
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd $(MAKEDIR)
 
