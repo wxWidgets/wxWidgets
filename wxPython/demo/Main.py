@@ -162,9 +162,25 @@ class wxPythonDemo(wxFrame):
         # Create a Notebook
         self.nb = wxNotebook(splitter2, -1)
 
-        # Set up a TextCtrl on the Overview Notebook page
-        self.ovr = wxHtmlWindow(self.nb, -1)
-        self.nb.AddPage(self.ovr, "Overview")
+        # Set up a wxHtmlWindow on the Overview Notebook page
+        # we put it in a panel first because there seems to be a
+        # refresh bug of some sort (wxGTK) when it is directly in
+        # the notebook...
+        if 0:  # the old way
+            self.ovr = wxHtmlWindow(self.nb, -1, size=(400, 400))
+            self.nb.AddPage(self.ovr, "Overview")
+
+        else:  # hopefully I can remove this hacky code soon
+            panel = wxPanel(self.nb, -1)
+            self.ovr = wxHtmlWindow(panel, -1, size=(400, 400))
+            self.nb.AddPage(panel, "Overview")
+
+            def OnOvrSize(evt, ovr=self.ovr):
+                ovr.SetSize(evt.GetSize())
+
+            EVT_SIZE(panel, OnOvrSize)
+
+        self.SetOverview("Overview", overview)
 
 
         # Set up a TextCtrl on the Demo Code Notebook page
