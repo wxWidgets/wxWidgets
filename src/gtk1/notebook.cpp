@@ -430,16 +430,17 @@ bool wxNotebook::SetPageImage( size_t page, int image )
     {
         /* Case 2) or 4). There is already an image in the gtkhbox. Let's find it */
 
-        GList *child = gtk_container_children(GTK_CONTAINER(nb_page->m_box));
-        while (child)
+        GList *children = gtk_container_children(GTK_CONTAINER(nb_page->m_box));
+        for ( child = children; child; child = child->next )
         {
             if (GTK_IS_PIXMAP(child->data))
             {
                 pixmapwid = GTK_WIDGET(child->data);
                 break;
             }
-            child = child->next;
         }
+
+        g_list_free(children);
 
         /* We should have the pixmap widget now */
         wxASSERT(pixmapwid != NULL);
