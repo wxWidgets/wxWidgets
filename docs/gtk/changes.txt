@@ -1,7 +1,19 @@
 
 *** wxWindows 2.3.3 ***
 
-Beta support for GTK 2.0.
+Look at the General changes file for more encompassing on
+the changes that have taken place in 2.3.3. This file has
+not been kept uptodate. RR.
+
+Beta support for GTK 2.0. Use "configure --enable-gtk2 --enable-unicode".
+
+Lots of work locale/encoding conversion classes.
+
+Large changes in wxThread/wxCondition code.
+
+wxLocale detects the system language on all ports.
+
+Corrected wxFrame::ShowFullScreen().
 
 Added wxArtProvider for changing default icons and more.
 
@@ -54,7 +66,8 @@ wxFont's accessors.
 
 Added IFF image handler.
 
-Added ICO, CUR and ANI image handler.
+Added ICO, CUR and ANI image handler. Added image handler
+for several image per file (GIF, TIFF).
 
 wxFrame::SetMenuBar() corrected (for NULL etc.)
 
