@@ -248,7 +248,20 @@ static ibool MGLAPI wxWindowMouseHandler(window_t *wnd, event_t *e)
 
 static long wxScanToKeyCode(event_t *event)
 {
-    #define KEY(mgl,wx) case mgl: key = wx; break;
+    // VS: make it __WXDEBUG__-only, since we have lots of wxLogTrace calls
+    //     here and the arguments would be stored in non-debug executable even
+    //     though wxLogTrace would be no-op...
+    #ifdef __WXDEBUG__
+      #define KEY(mgl_key,wx_key) \
+        case mgl_key: \
+          wxLogTrace(_T("keyevents"), \
+                     _T("key " #mgl_key ", mapped to " #wx_key)); \
+          key = wx_key; \
+          break;
+    #else
+      #define KEY(mgl_key,wx_key) \
+        case mgl_key: key = wx_key; break; 
+    #endif
 
     long key = 0;
     switch ( EVT_scanCode(event->message) )
@@ -437,14 +450,30 @@ static ibool MGLAPI wxWindowKeybHandler(window_t *wnd, event_t *e)
         }
 #endif // wxUSE_ACCEL
 
-        /* wxMSW doesn't send char events with Alt pressed */
-        /* Only send wxEVT_CHAR event if not processed yet. Thus, ALT-x
-           will only be sent if it is not in an accelerator table. */
+        // wxMSW doesn't send char events with Alt pressed
+        // Only send wxEVT_CHAR event if not processed yet. Thus, ALT-x
+        // will only be sent if it is not in an accelerator table.
         event2.m_keyCode = wxAsciiToKeyCode(e);
         if ( !ret && event2.m_keyCode != 0 )
         {
             event2.SetEventType(wxEVT_CHAR);
             ret = win->GetEventHandler()->ProcessEvent(event2);
+        }
+        
+        // Synthetize navigation key event, but do it only if the TAB key
+        // wasn't handled yet.
+        // FIXME_MGL - isn't this wxUniv's business?
+        if ( !ret && event.m_keyCode == WXK_TAB &&
+             win->GetParent() && win->GetParent()->HasFlag(wxTAB_TRAVERSAL) )
+        {
+            wxNavigationKeyEvent navEvent;
+            navEvent.SetEventObject(win->GetParent());
+            // Shift-TAB goes in reverse direction:
+            navEvent.SetDirection(!event.m_shiftDown);
+            // Ctrl-TAB changes the (parent) window, i.e. switch notebook page:
+            navEvent.SetWindowChange(event.m_controlDown);
+            navEvent.SetCurrentFocus(wxStaticCast(win, wxWindow));
+            ret = win->GetParent()->GetEventHandler()->ProcessEvent(navEvent);
         }
         
         return ret;
