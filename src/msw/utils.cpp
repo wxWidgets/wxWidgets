@@ -36,6 +36,17 @@
     #include "wx/log.h"
 #endif  //WX_PRECOMP
 
+// In some mingws there is a missing extern "C" int the winsock header,
+// so we put it here just to be safe. Note that this must appear _before_
+// #include "wx/msw/private.h" which itself includes <windows.h>, as this 
+// one in turn includes <winsock.h> unless we define WIN32_LEAN_AND_MEAN.
+//
+#if defined(__WIN32__) && !defined(__TWIN32__)
+extern "C" {
+    #include <winsock.h>    // we use socket functions in wxGetFullHostName()
+}
+#endif
+
 #include "wx/msw/private.h"     // includes <windows.h>
 
 #include "wx/timer.h"
@@ -59,10 +70,6 @@
                     // this (3.1 I believe) and how to test for it.
                     // If this works for Borland 4.0 as well, then no worries.
     #include <dir.h>
-#endif
-
-#if defined(__WIN32__) && !defined(__TWIN32__)
-    #include <winsock.h> // we use socket functions in wxGetFullHostName()
 #endif
 
 // VZ: there is some code using NetXXX() functions to get the full user name:
@@ -178,9 +185,6 @@ bool wxGetHostName(wxChar *buf, int maxSize)
 // get full hostname (with domain name if possible)
 bool wxGetFullHostName(wxChar *buf, int maxSize)
 {
-// This breaks _at least_ mingw!!
-#if 0
-
 #if defined(__WIN32__) && !defined(__TWIN32__)
     // TODO should use GetComputerNameEx() when available
     WSADATA wsa;
@@ -219,8 +223,6 @@ bool wxGetFullHostName(wxChar *buf, int maxSize)
         }
     }
 #endif // Win32
-
-#endif // 0
 
     return wxGetHostName(buf, maxSize);
 }
