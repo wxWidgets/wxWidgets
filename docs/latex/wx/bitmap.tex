@@ -48,9 +48,9 @@ Windows only, I think.
 \func{}{wxBitmap}{\param{const char}{ bits[]}, \param{int}{ width}, \param{int}{ height}\\
   \param{int}{ depth = 1}}
 
-Creates a bitmap from an array of bits. 
+Creates a bitmap from an array of bits.
 
-Note that the bit depth is ignored on GTK+ and Motif. If you want to create a bitmap 
+Note that the bit depth is ignored on GTK+ and Motif. If you want to create a bitmap
 from something else than a 1-bit data array, use the \helpref{wxImage}{wximage} class.
 
 \func{}{wxBitmap}{\param{int}{ width}, \param{int}{ height}, \param{int}{ depth = -1}}
@@ -143,6 +143,8 @@ Under X, {\it type} defaults to wxBITMAP\_TYPE\_XPM.
 \pythonnote{Constructors supported by wxPython are:\par
 \indented{2cm}{\begin{twocollist}
 \twocolitem{\bf{wxBitmap(name, flag)}}{Loads a bitmap from a file}
+\twocolitem{\bf{wxBitmap(data, type, width, height, depth=1)}}{Creates
+a bitmap from the given data, which can be of arbitrary type.}
 \twocolitem{\bf{wxNoRefBitmap(name, flag)}}{This one won't own the
 reference, so Python won't call the destructor, this is good for toolbars
 and such where the parent will manage the bitmap.}

@@ -68,6 +68,9 @@ Returns a system colour.
 \twocolitem{{\bf wxSYS\_COLOUR\_BTNHILIGHT}}{Same as wxSYS\_COLOUR\_BTNHIGHLIGHT.}
 \end{twocollist}
 
+\pythonnote{This static method is implemented in Python as a
+standalone function named \tt{wxSystemSettings_GetSystemColour}}
+
 \membersection{wxSystemSettings::GetSystemFont}\label{wxsystemsettingsgetsystemfont}
 
 \func{static wxFont}{GetSystemFont}{\param{int}{ index}}
@@ -86,6 +89,9 @@ Returns a system font.
 \twocolitem{{\bf wxSYS\_DEFAULT\_GUI\_FONT}}{Default font for user interface objects such as menus and dialog boxes.
 Not available in versions of Windows earlier than Windows 95 or Windows NT 4.0.}
 \end{twocollist}
+
+\pythonnote{This static method is implemented in Python as a
+standalone function named \tt{wxSystemSettings_GetSystemFont}}
 
 \membersection{wxSystemSettings::GetSystemMetric}\label{wxsystemsettingsgetsystemmetric}
 
@@ -142,4 +148,13 @@ in pixels. Each item fits into a rectangle of this size when arranged.}
 where it would otherwise present the information only in audible form; zero otherwise.}
 \twocolitem{{\bf wxSYS\_SWAP\_BUTTONS}}{Non-zero if the meanings of the left and right mouse buttons are swapped; zero otherwise.}
 \end{twocollist}
+
+\pythonnote{This static method is implemented in Python as a
+standalone function named \tt{wxSystemSettings_GetSystemMetric}}
+
+
+
+
+
+
 
