@@ -26,29 +26,24 @@ wxControl::wxControl()
     m_needParent = TRUE;
 }
 
-wxControl::wxControl( wxWindow *parent,
+bool wxControl::Create( wxWindow *parent,
                       wxWindowID id,
                       const wxPoint &pos,
                       const wxSize &size,
                       long style,
+#if wxUSE_VALIDATORS
+                      const wxValidator& validator,
+#endif
                       const wxString &name )
 {
-    (void)Create(parent, id, pos, size, style, name);
-}
-
+    bool ret = wxWindow::Create(parent, id, pos, size, style, name);
+    
 #if wxUSE_VALIDATORS
-wxControl::wxControl( wxWindow *parent,
-                      wxWindowID id,
-                      const wxPoint &pos,
-                      const wxSize &size,
-                      long style,
-                      const wxValidator& validator,
-                      const wxString &name)
-{
-    (void)Create(parent, id, pos, size, style, name);
     SetValidator(validator);
-}
 #endif
+
+    return ret;
+}
 
 void wxControl::SetLabel( const wxString &label )
 {

@@ -35,22 +35,28 @@ class wxControl : public wxControlBase
 {
 public:
     wxControl();
-    wxControl( wxWindow *parent,
-               wxWindowID id,
-               const wxPoint &pos = wxDefaultPosition,
-               const wxSize &size = wxDefaultSize,
-               long style = 0,
-               const wxString &name = wxControlNameStr );
-
+    wxControl(wxWindow *parent, wxWindowID id,
+             const wxPoint& pos = wxDefaultPosition,
+             const wxSize& size = wxDefaultSize, long style = 0,
 #if wxUSE_VALIDATORS
-    wxControl( wxWindow *parent,
-               wxWindowID id,
-               const wxPoint &pos = wxDefaultPosition,
-               const wxSize &size = wxDefaultSize,
-               long style = 0,
-               const wxValidator& validator = wxDefaultValidator,
-               const wxString &name = wxControlNameStr );
+             const wxValidator& validator = wxDefaultValidator,
 #endif
+             const wxString& name = wxControlNameStr)
+    {
+        Create(parent, id, pos, size, style,
+#if wxUSE_VALIDATORS
+            validator, 
+#endif
+            name);
+    }
+
+    bool Create(wxWindow *parent, wxWindowID id,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize, long style = 0,
+#if wxUSE_VALIDATORS
+            const wxValidator& validator = wxDefaultValidator,
+#endif
+            const wxString& name = wxControlNameStr);
 
     // this function will filter out '&' characters and will put the accelerator
     // char (the one immediately after '&') into m_chAccel (TODO not yet)

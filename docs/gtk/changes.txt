@@ -6,6 +6,9 @@ and/or 16 bit colour mode? I need this for testing purposes, i.e. this
 person could help me by running a small testprogram and sending
 me the output.
 
+Improved support for GTK's themes, changes in font sizes (and
+the dialogs' ability to react to that) and related things.
+
 Added Calendar control.
 
 Added classes for recoding text (e.g. from Windows encoding to ISO encoding
@@ -53,6 +56,8 @@ Added wxNotebookSizer for combining notebooks and sizers.
 
 Added wxDir class. Useful as a replacement for wxFileGetFirst()
 and wxFileGetNext().
+
+Fixed Y2000 bug in file dialog (sic.)
 
 Added wxStopWatch class.
 

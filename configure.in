@@ -1491,7 +1491,7 @@ fi
 if test "$wxUSE_GTK" = 1; then
     dnl avoid calling AM_PATH_GTK twice, so check first for the newer version
     dnl and only then, if it wasn't found, for an older one
-    AM_PATH_GTK(1.2.1, WXGTK12=1, AC_MSG_ERROR(Is gtk-config in path and GTK+ is version 1.2.1 or above?))
+    AM_PATH_GTK(1.2.3, WXGTK12=1, AC_MSG_ERROR(Is gtk-config in path and GTK+ is version 1.2.3 or above?))
 dnl it doesn't really work with 1.3.0 now...
 dnl    AM_PATH_GTK(1.3.0,
 dnl        WXGTK13=1,
@@ -3297,6 +3297,7 @@ AC_OUTPUT([
             samples/png/Makefile
             samples/printing/Makefile
             samples/proplist/Makefile
+            samples/propsize/Makefile
             samples/richedit/Makefile
             samples/resource/Makefile
             samples/sashtest/Makefile

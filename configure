@@ -6928,7 +6928,7 @@ else
   echo "$ac_t""no" 1>&6
 fi
 
-  min_gtk_version=1.2.1
+  min_gtk_version=1.2.3
   echo $ac_n "checking for GTK - version >= $min_gtk_version""... $ac_c" 1>&6
 echo "configure:6934: checking for GTK - version >= $min_gtk_version" >&5
   no_gtk=""
@@ -6999,7 +6999,7 @@ fi
      echo "$ac_t""no" 1>&6
      GTK_CFLAGS=""
      GTK_LIBS=""
-     { echo "configure: error: Is gtk-config in path and GTK+ is version 1.2.1 or above?" 1>&2; exit 1; }
+     { echo "configure: error: Is gtk-config in path and GTK+ is version 1.2.3 or above?" 1>&2; exit 1; }
   fi
   
   
@@ -13196,6 +13196,7 @@ trap 'rm -fr `echo "
             samples/png/Makefile
             samples/printing/Makefile
             samples/proplist/Makefile
+            samples/propsize/Makefile
             samples/richedit/Makefile
             samples/resource/Makefile
             samples/sashtest/Makefile
@@ -13423,6 +13424,7 @@ CONFIG_FILES=\${CONFIG_FILES-"wx-config
             samples/png/Makefile
             samples/printing/Makefile
             samples/proplist/Makefile
+            samples/propsize/Makefile
             samples/richedit/Makefile
             samples/resource/Makefile
             samples/sashtest/Makefile
