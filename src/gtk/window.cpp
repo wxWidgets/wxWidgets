@@ -960,6 +960,7 @@ static void wxFillOtherKeyEventFields(wxKeyEvent& event,
         gdk_window_get_pointer(gdk_event->window, &x, &y, &state);
 
     event.SetTimestamp( gdk_event->time );
+    event.SetId(win->GetId());
     event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK) != 0;
     event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK) != 0;
     event.m_altDown = (gdk_event->state & GDK_MOD1_MASK) != 0;
