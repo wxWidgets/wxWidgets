@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        minimal.cpp
 // Purpose:     Popup wxWidgets sample
-// Author:      Julian Smart
+// Author:      Robert Roebling
 // Modified by:
-// Created:     04/01/98
+// Created:     2005-02-04
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart
+// Copyright:   (c) 2005 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -110,10 +110,12 @@ void SimpleTransientPopup::OnSize(wxSizeEvent &event)
 
 void SimpleTransientPopup::OnSetFocus(wxFocusEvent &event)
 {
+    event.Skip();
 }
 
 void SimpleTransientPopup::OnKillFocus(wxFocusEvent &event)
 {
+    event.Skip();
 }
 
 void SimpleTransientPopup::OnMouse(wxMouseEvent &event)
