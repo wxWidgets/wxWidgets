@@ -1448,18 +1448,25 @@ struct MacDirectoryIterator
 static int g_iter_flags ;
 
 static MacDirectoryIterator g_iter ;
+wxString g_iter_spec ;
 
 wxString wxFindFirstFile(const wxChar *spec, int flags)
 {
     wxString result;
 
+    g_iter_spec = spec ;
+    g_iter_spec.MakeUpper() ;
     g_iter_flags = flags; /* MATTHEW: [5] Remember flags */
 
     // Find path only so we can concatenate found file onto path
     wxString path(wxPathOnly(spec));
+#ifdef __DARWIN__
+    // TODO:check whether is necessary/correct
     if ( !path.IsEmpty() )
-        result << path << wxT('\\');
-
+        result << path << wxT('/');
+#else
+    result = path ;
+#endif
     FSSpec fsspec ;
 
     wxMacFilename2FSSpec( result , &fsspec ) ;
@@ -1480,37 +1487,44 @@ wxString wxFindNextFile()
     wxString result;
 
     short err = noErr ;
-
-    while ( err == noErr )
+    wxString name ;
+    
+    while(1)
     {
-        g_iter.m_index++ ;
-        g_iter.m_CPB.dirInfo.ioFDirIndex = g_iter.m_index;
-        g_iter.m_CPB.dirInfo.ioDrDirID = g_iter.m_dirId;    /* we need to do this every time */
-        err = PBGetCatInfoSync((CInfoPBPtr)&g_iter.m_CPB);
-        if ( err != noErr )
-            break ;
+      while ( err == noErr )
+      {
+          g_iter.m_index++ ;
+          g_iter.m_CPB.dirInfo.ioFDirIndex = g_iter.m_index;
+          g_iter.m_CPB.dirInfo.ioDrDirID = g_iter.m_dirId;    /* we need to do this every time */
+          err = PBGetCatInfoSync((CInfoPBPtr)&g_iter.m_CPB);
+          if ( err != noErr )
+              break ;
 
-        if ( ( g_iter.m_CPB.dirInfo.ioFlAttrib & ioDirMask) != 0 && (g_iter_flags & wxDIR) ) //  we have a directory
-            break ;
+          if ( ( g_iter.m_CPB.dirInfo.ioFlAttrib & ioDirMask) != 0 && (g_iter_flags & wxDIR) ) //  we have a directory
+              break ;
 
-        if ( ( g_iter.m_CPB.dirInfo.ioFlAttrib & ioDirMask) == 0 && !(g_iter_flags & wxFILE ) )
-            continue ;
+          if ( ( g_iter.m_CPB.dirInfo.ioFlAttrib & ioDirMask) == 0 && !(g_iter_flags & wxFILE ) )
+              continue ;
 
-        // hit !
-        break ;
+          // hit !
+          break ;
+      }
+      if ( err != noErr )
+      {
+          return wxEmptyString ;
+      }
+      FSSpec spec ;
+
+      FSMakeFSSpecCompat(g_iter.m_CPB.hFileInfo.ioVRefNum,
+                                     g_iter.m_dirId,
+                                     g_iter.m_name,
+                                     &spec) ;
+
+      wxString name = wxMacFSSpec2MacFilename( &spec ) ;
+      if ( g_iter_spec.Right(4)==(":*.*") || g_iter_spec.Right(2)==(":*") || name.Upper().Matches(g_iter_spec) )
+        return name ;
     }
-    if ( err != noErr )
-    {
-        return wxEmptyString ;
-    }
-    FSSpec spec ;
-
-    FSMakeFSSpecCompat(g_iter.m_CPB.hFileInfo.ioVRefNum,
-                                   g_iter.m_dirId,
-                                   g_iter.m_name,
-                                   &spec) ;
-
-    return wxMacFSSpec2MacFilename( &spec ) ;
+    return wxEmptyString ;
 }
 
 #elif defined(__WXMSW__)
