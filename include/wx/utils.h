@@ -86,6 +86,10 @@ WXDLLEXPORT int wxGetOsVersion(int *majorVsn = (int *) NULL,
 // Return a string with the current date/time
 WXDLLEXPORT wxString wxNow();
 
+// Return path where wxWindows is installed (mostly useful in Unices)
+WXDLLEXPORT const wxChar *wxGetInstallPrefix();
+
+
 #if wxUSE_GUI
 // Don't synthesize KeyUp events holding down a key and producing
 // KeyDown events with autorepeat. On by default and always on

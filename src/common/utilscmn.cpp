@@ -1072,6 +1072,21 @@ bool wxSetDetectableAutoRepeat( bool WXUNUSED(flag) )
 
 #endif // wxUSE_GUI
 
+const wxChar *wxGetInstallPrefix()
+{
+    wxString prefix;
+    
+    if ( wxGetEnv(wxT("WX_PREFIX"), &prefix) )
+        return prefix.c_str();
+    
+#ifdef wxINSTALL_PREFIX
+    return wxT(wxINSTALL_PREFIX);
+#else 
+    return wxT("");
+#endif
+}
+
+
 // ----------------------------------------------------------------------------
 // network and user id functions
 // ----------------------------------------------------------------------------

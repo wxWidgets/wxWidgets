@@ -2034,7 +2034,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
            - afmFile = fopen() may fail and in that case the next if branch
            MUST be executed - and it would not if there was "else" */
         {
-           afmName = wxINSTALL_PREFIX;
+           afmName = wxGetInstallPrefix();
            afmName <<  wxFILE_SEP_PATH
                    << wxT("share") << wxFILE_SEP_PATH
                    << wxT("wx") << wxFILE_SEP_PATH
