@@ -12,6 +12,3 @@ wx.wxHtmlWidgetCellPtr      = wxHtmlWidgetCellPtr
 wx.wxHtmlWindowPtr          = wxHtmlWindowPtr
 wx.wxHtmlLinkInfoPtr        = wxHtmlLinkInfoPtr
 
-wx.wxPyHtmlTagHandlerPtr    = wxHtmlTagHandlerPtr
-wx.wxPyHtmlWinTagHandlerPtr = wxHtmlWinTagHandlerPtr
-wx.wxPyHtmlWindowPtr        = wxHtmlWindowPtr

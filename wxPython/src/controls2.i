@@ -1272,8 +1272,10 @@ public:
 //----------------------------------------------------------------------
 
 %init %{
+    // Map renamed classes back to their common name for OOR
     wxPyPtrTypeMap_Add("wxTreeItemData", "wxPyTreeItemData");
     wxPyPtrTypeMap_Add("wxTreeCtrl", "wxPyTreeCtrl");
+    wxPyPtrTypeMap_Add("wxListCtrl", "wxPyListCtrl");
 %}
 
 //----------------------------------------------------------------------

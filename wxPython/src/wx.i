@@ -231,6 +231,14 @@ static wxPyCoreAPI API = {
     initstreamsc();
     initfilesysc();
 
+
+    PyDict_SetItemString(d,"wxMAJOR_VERSION", PyInt_FromLong((long)wxMAJOR_VERSION ));
+    PyDict_SetItemString(d,"wxMINOR_VERSION", PyInt_FromLong((long)wxMINOR_VERSION ));
+    PyDict_SetItemString(d,"wxRELEASE_NUMBER", PyInt_FromLong((long)wxRELEASE_NUMBER ));
+    PyDict_SetItemString(d,"wxVERSION_NUMBER", PyInt_FromLong((long)wxVERSION_NUMBER ));
+    PyDict_SetItemString(d,"wxVERSION_STRING", PyString_FromString(wxVERSION_STRING));
+
+
 %}
 
 //----------------------------------------------------------------------

@@ -10183,8 +10183,10 @@ SWIGEXPORT(void) initcontrols2c() {
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK", PyInt_FromLong((long) wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TREE_END_DRAG", PyInt_FromLong((long) wxEVT_COMMAND_TREE_END_DRAG));
 
+    // Map renamed classes back to their common name for OOR
     wxPyPtrTypeMap_Add("wxTreeItemData", "wxPyTreeItemData");
     wxPyPtrTypeMap_Add("wxTreeCtrl", "wxPyTreeCtrl");
+    wxPyPtrTypeMap_Add("wxListCtrl", "wxPyListCtrl");
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

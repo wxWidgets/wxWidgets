@@ -1400,11 +1400,6 @@ NULL = None  # For backwards compatibility only.  You should really be
 wxColor      = wxColour
 wxNamedColor = wxNamedColour
 
-wxPyListCtrlPtr       = wxListCtrlPtr
-wxPyTreeCtrlPtr       = wxTreeCtrlPtr
-wxGenericDragImagePtr = wxDragImagePtr
-wxPyProcessPtr        = wxProcessPtr
-
 
 # backwards compatibility
 wxNoRefBitmap       = wxBitmap
@@ -1412,6 +1407,7 @@ wxPyDefaultPosition = wxDefaultPosition
 wxPyDefaultSize     = wxDefaultSize
 
 
+#----------------------------------------------------------------------
 # wxGTK sets the locale when initialized.  Doing this at the Python
 # level should set it up to match what GTK is doing at the C level.
 try:
@@ -1419,6 +1415,19 @@ try:
     locale.setlocale(locale.LC_ALL, "")
 except:
     pass
+
+
+
+#----------------------------------------------------------------------
+# wxWindows version numbers.  wxPython version is in __version__.
+
+wxMAJOR_VERSION   = wxc.wxMAJOR_VERSION
+wxMINOR_VERSION   = wxc.wxMINOR_VERSION
+wxRELEASE_NUMBER  = wxc.wxRELEASE_NUMBER
+wxVERSION_STRING  = wxc.wxVERSION_STRING
+wxVERSION_NUMBER  = wxc.wxVERSION_NUMBER
+
+wxVERSION = (wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER)
 
 
 #----------------------------------------------------------------------
