@@ -55,17 +55,6 @@
 
 #include "wx/msw/private.h"
 
-#if wxUSE_THREADS
-    #include "wx/thread.h"
-
-    // define the array of MSG strutures
-    WX_DECLARE_OBJARRAY(MSG, wxMsgArray);
-
-    #include "wx/arrimpl.cpp"
-
-    WX_DEFINE_OBJARRAY(wxMsgArray);
-#endif // wxUSE_THREADS
-
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
 #endif // wxUSE_TOOLTIPS
@@ -568,22 +557,8 @@ bool wxApp::Initialized()
 #endif
 }
 
-// this is a temporary hack and will be replaced by using wxEventLoop in the
-// future
-//
-// it is needed to allow other event loops (currently only one: the modal
-// dialog one) to reset the OnIdle() semaphore because otherwise OnIdle()
-// wouldn't do anything while a modal dialog shown from OnIdle() call is shown.
-bool wxIsInOnIdleFlag = FALSE;
-
 void wxApp::OnIdle(wxIdleEvent& event)
 {
-    // Avoid recursion (via ProcessEvent default case)
-    if ( wxIsInOnIdleFlag )
-        return;
-
-    wxIsInOnIdleFlag = TRUE;
-
     wxAppBase::OnIdle(event);
 
 #if wxUSE_DC_CACHEING
@@ -593,8 +568,6 @@ void wxApp::OnIdle(wxIdleEvent& event)
     if (!::GetKeyState(MK_LBUTTON) && !::GetKeyState(MK_MBUTTON) && !::GetKeyState(MK_RBUTTON))
         wxDC::ClearCache();
 #endif // wxUSE_DC_CACHEING
-
-    wxIsInOnIdleFlag = FALSE;
 }
 
 void wxApp::WakeUpIdle()
