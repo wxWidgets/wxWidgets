@@ -79,8 +79,8 @@ class WXDLLEXPORT wxIFFDecoder
 private:
     IFFImage *m_image;		// image data
     wxInputStream *m_f; 	// input stream
-    unsigned char *databuf; 
-    unsigned char *picptr; 
+    unsigned char *databuf;
+    unsigned char *picptr;
     unsigned char *decomp_mem;
 
     void Destroy();
@@ -376,7 +376,7 @@ int wxIFFDecoder::ReadIFF()
     // main decoding loop. searches IFF chunks and handles them.
     // terminates when BODY chunk was found or dataptr ran over end of file
     //
-    bool BMHDok = false, CMAPok = false, CAMGok = false;
+    bool BMHDok = FALSE, CMAPok = FALSE, CAMGok = FALSE;
     int bmhd_width = 0, bmhd_height = 0, bmhd_bitplanes = 0, bmhd_transcol = -1;
     byte bmhd_masking = 0, bmhd_compression = 0;
     long camg_viewmode = 0;
@@ -406,7 +406,7 @@ int wxIFFDecoder::ReadIFF()
         bmhd_masking  = *(dataptr + 8 + 9);
         bmhd_compression = *(dataptr + 8 + 10);     // get compression
         bmhd_transcol    = iff_getword(dataptr + 8 + 12);
-        BMHDok = true;                              // got BMHD
+        BMHDok = TRUE;                              // got BMHD
         dataptr += 8 + chunkLen;                    // to next chunk
     }
     else if (strncmp((char *)dataptr, "CMAP", 4) == 0) { // CMAP ?
@@ -437,14 +437,14 @@ int wxIFFDecoder::ReadIFF()
         wxLogTrace(_T("iff"), _T("Read %d colors from IFF file."),
             colors);
 
-        CMAPok = true;                              // got CMAP
+        CMAPok = TRUE;                              // got CMAP
         dataptr += 8 + chunkLen;                    // to next chunk
     } else if (strncmp((char *)dataptr, "CAMG", 4) == 0) { // CAMG ?
         if (chunkLen < 4 || truncated) {
         break;
         }
         camg_viewmode = iff_getlong(dataptr + 8);   // get viewmodes
-        CAMGok = true;                              // got CAMG
+        CAMGok = TRUE;                              // got CAMG
         dataptr += 8 + chunkLen;                    // to next chunk
     }
     else if (strncmp((char *)dataptr, "BODY", 4) == 0) { // BODY ?
@@ -727,7 +727,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxIFFHandler, wxImageHandler)
 
 #if wxUSE_STREAMS
 
-bool wxIFFHandler::LoadFile(wxImage *image, wxInputStream& stream, 
+bool wxIFFHandler::LoadFile(wxImage *image, wxInputStream& stream,
                             bool verbose, int WXUNUSED(index))
 {
     wxIFFDecoder *decod;
