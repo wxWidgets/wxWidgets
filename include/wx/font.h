@@ -97,7 +97,7 @@ enum wxFontEncoding
     wxFONTENCODING_CP850,           // CP437 merged with Latin1
     wxFONTENCODING_CP852,           // CP437 merged with Latin2
     wxFONTENCODING_CP855,           // another cyrillic encoding
-    wxFONTENCODING_CP866 = wxFONTENCODING_ALTERNATIVE,
+    wxFONTENCODING_CP866,           // and another one
         // and for Windows
     wxFONTENCODING_CP1250,          // WinLatin2
     wxFONTENCODING_CP1251,          // WinCyrillic

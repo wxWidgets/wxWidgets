@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -128,26 +128,26 @@ void wxFontRefData::Init(int pointSize,
                          const wxString& faceName,
                          wxFontEncoding encoding)
 {
-	m_style = style;
-  	m_pointSize = pointSize;
-  	m_family = family;
-  	m_style = style;
-  	m_weight = weight;
-  	m_underlined = underlined;
-  	m_faceName = faceName;
+    m_style = style;
+    m_pointSize = pointSize;
+    m_family = family;
+    m_style = style;
+    m_weight = weight;
+    m_underlined = underlined;
+    m_faceName = faceName;
     m_encoding = encoding;
 
-  	m_fontId = 0;
-  	m_temporary = FALSE;
+    m_fontId = 0;
+    m_temporary = FALSE;
 
-  	m_hFont = 0;
+    m_hFont = 0;
 }
 
 wxFontRefData::~wxFontRefData()
 {
-	if ( m_hFont )
+    if ( m_hFont )
     {
-    	if ( !::DeleteObject((HFONT) m_hFont) )
+        if ( !::DeleteObject((HFONT) m_hFont) )
         {
             wxLogLastError("DeleteObject(font)");
         }
@@ -205,52 +205,89 @@ bool wxFont::RealizeResource()
         return TRUE;
     }
 
-    BYTE ff_italic;
-    int ff_weight = 0;
     int ff_family = 0;
     wxString ff_face;
 
-    switch (M_FONTDATA->m_family)
+    switch ( M_FONTDATA->m_family )
     {
-        case wxSCRIPT:     ff_family = FF_SCRIPT ;
-                           ff_face = _T("Script") ;
-                           break ;
-        case wxDECORATIVE: ff_family = FF_DECORATIVE;
-                           break;
-        case wxROMAN:      ff_family = FF_ROMAN;
-                           ff_face = _T("Times New Roman") ;
-                           break;
+        case wxSCRIPT:
+            ff_family = FF_SCRIPT ;
+            ff_face = _T("Script") ;
+            break ;
+
+        case wxDECORATIVE:
+            ff_family = FF_DECORATIVE;
+            break;
+
+        case wxROMAN:
+            ff_family = FF_ROMAN;
+            ff_face = _T("Times New Roman") ;
+            break;
+
         case wxTELETYPE:
-        case wxMODERN:     ff_family = FF_MODERN;
-                           ff_face = _T("Courier New") ;
-                           break;
-        case wxSWISS:      ff_family = FF_SWISS;
-                           ff_face = _T("Arial") ;
-                           break;
+        case wxMODERN:
+            ff_family = FF_MODERN;
+            ff_face = _T("Courier New") ;
+            break;
+
+        case wxSWISS:
+            ff_family = FF_SWISS;
+            ff_face = _T("Arial") ;
+            break;
+
         case wxDEFAULT:
-        default:           ff_family = FF_SWISS;
-                           ff_face = _T("Arial") ; 
+        default:
+            ff_family = FF_SWISS;
+            ff_face = _T("Arial") ; 
     }
 
-    if (M_FONTDATA->m_style == wxITALIC || M_FONTDATA->m_style == wxSLANT)
-        ff_italic = 1;
+    BYTE ff_italic;
+    switch ( M_FONTDATA->m_style )
+    {
+        case wxITALIC:
+        case wxSLANT:
+            ff_italic = 1;
+            break;
+
+        default:
+            wxFAIL_MSG(_T("unknown font slant"));
+            // fall through
+
+        case wxNORMAL:
+            ff_italic = 0;
+    }
+
+    int ff_weight = 0;
+    switch ( M_FONTDATA->m_weight )
+    {
+        default:
+            wxFAIL_MSG(_T("unknown font weight"));
+            // fall through
+
+        case wxNORMAL:
+            ff_weight = FW_NORMAL;
+            break;
+
+        case wxLIGHT:
+            ff_weight = FW_LIGHT;
+            break;
+
+        case wxBOLD:
+            ff_weight = FW_BOLD;
+            break;
+    }
+
+    const wxChar* pzFace;
+    if ( M_FONTDATA->m_faceName.IsEmpty() )
+        pzFace = ff_face;
     else
-        ff_italic = 0;
+        pzFace = M_FONTDATA->m_faceName ;
 
-    if (M_FONTDATA->m_weight == wxNORMAL)
-        ff_weight = FW_NORMAL;
-    else if (M_FONTDATA->m_weight == wxLIGHT)
-        ff_weight = FW_LIGHT;
-    else if (M_FONTDATA->m_weight == wxBOLD)
-        ff_weight = FW_BOLD;
-
-    const wxChar* pzFace = (const wxChar*) ff_face;
-    if (!M_FONTDATA->m_faceName.IsNull())
-        pzFace = (const wxChar*) M_FONTDATA->m_faceName ;
-
+#if 0
     /* Always calculate fonts using the screen DC (is this the best strategy?)
      * There may be confusion if a font is selected into a printer
      * DC (say), because the height will be calculated very differently.
+     */
     // What sort of display is it?
     int technology = ::GetDeviceCaps(dc, TECHNOLOGY);
 
@@ -258,25 +295,28 @@ bool wxFont::RealizeResource()
 
     if (technology != DT_RASDISPLAY && technology != DT_RASPRINTER)
     {
-    // Have to get screen DC Caps, because a metafile will return 0.
-    HDC dc2 = ::GetDC(NULL);
-    nHeight = M_FONTDATA->m_pointSize*GetDeviceCaps(dc2, LOGPIXELSY)/72;
-    ::ReleaseDC(NULL, dc2);
+        // Have to get screen DC Caps, because a metafile will return 0.
+        HDC dc2 = ::GetDC(NULL);
+        nHeight = M_FONTDATA->m_pointSize*GetDeviceCaps(dc2, LOGPIXELSY)/72;
+        ::ReleaseDC(NULL, dc2);
     }
     else
     {
-    nHeight = M_FONTDATA->m_pointSize*GetDeviceCaps(dc, LOGPIXELSY)/72;
+        nHeight = M_FONTDATA->m_pointSize*GetDeviceCaps(dc, LOGPIXELSY)/72;
     }
-     */
+#endif // 0
+
+#if 0
     // Have to get screen DC Caps, because a metafile will return 0.
     HDC dc2 = ::GetDC(NULL);
-    int ppInch = ::GetDeviceCaps(dc2, LOGPIXELSY);
+    ppInch = ::GetDeviceCaps(dc2, LOGPIXELSY);
     ::ReleaseDC(NULL, dc2);
+#endif // 0
 
-    // New behaviour: apparently ppInch varies according to
-    // Large/Small Fonts setting in Windows. This messes
-    // up fonts. So, set ppInch to a constant 96 dpi.
-    ppInch = 96;
+    // New behaviour: apparently ppInch varies according to Large/Small Fonts
+    // setting in Windows. This messes up fonts. So, set ppInch to a constant
+    // 96 dpi.
+    static const int ppInch = 96;
 
 #if wxFONT_SIZE_COMPATIBILITY
     // Incorrect, but compatible with old wxWindows behaviour
@@ -286,15 +326,96 @@ bool wxFont::RealizeResource()
     int nHeight = - (M_FONTDATA->m_pointSize*ppInch/72);
 #endif
 
-    bool ff_underline = M_FONTDATA->m_underlined;
+    BYTE ff_underline = M_FONTDATA->m_underlined;
 
-    M_FONTDATA->m_hFont = (WXHFONT) CreateFont(nHeight, 0, 0, 0,ff_weight,ff_italic,(BYTE)ff_underline,
-            0, ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-            PROOF_QUALITY, DEFAULT_PITCH | ff_family, pzFace);
-#ifdef WXDEBUG_CREATE
-    if (m_hFont==NULL) wxError(_T("Cannot create font"),_T("Internal Error")) ;
-#endif
-    return (M_FONTDATA->m_hFont != (WXHFONT) NULL);
+    wxFontEncoding encoding = M_FONTDATA->m_encoding;
+    if ( encoding == wxFONTENCODING_DEFAULT )
+    {
+        encoding = wxFont::GetDefaultEncoding();
+    }
+
+    DWORD charset;
+    switch ( encoding )
+    {
+        case wxFONTENCODING_ISO8859_1:
+        case wxFONTENCODING_ISO8859_15:
+        case wxFONTENCODING_CP1250:
+            charset = ANSI_CHARSET;
+            break;
+
+        case wxFONTENCODING_ISO8859_2:
+        case wxFONTENCODING_CP1252:
+            charset = EASTEUROPE_CHARSET;
+            break;
+
+        case wxFONTENCODING_ISO8859_4:
+        case wxFONTENCODING_ISO8859_10:
+            charset = BALTIC_CHARSET;
+            break;
+
+        case wxFONTENCODING_ISO8859_5:
+        case wxFONTENCODING_CP1251:
+            charset = RUSSIAN_CHARSET;
+            break;
+
+        case wxFONTENCODING_ISO8859_6:
+            charset = ARABIC_CHARSET;
+            break;
+
+        case wxFONTENCODING_ISO8859_7:
+            charset = GREEK_CHARSET;
+            break;
+
+        case wxFONTENCODING_ISO8859_8:
+            charset = HEBREW_CHARSET;
+            break;
+
+        case wxFONTENCODING_ISO8859_9:
+            charset = TURKISH_CHARSET;
+            break;
+
+        case wxFONTENCODING_ISO8859_11:
+            charset = THAI_CHARSET;
+            break;
+
+        case wxFONTENCODING_CP437:
+            charset = OEM_CHARSET;
+            break;
+
+        default:
+            wxFAIL_MSG(_T("unsupported encoding"));
+            // fall through
+
+        case wxFONTENCODING_SYSTEM:
+            charset = ANSI_CHARSET;
+    }
+
+    HFONT hFont = ::CreateFont
+                  (
+                   nHeight,             // height
+                   0,                   // width (choose best)
+                   0,                   // escapement
+                   0,                   // orientation
+                   ff_weight,           // weight
+                   ff_italic,           // italic?
+                   ff_underline,        // underlined?
+                   0,                   // strikeout?
+                   charset,             // charset
+                   OUT_DEFAULT_PRECIS,  // precision
+                   CLIP_DEFAULT_PRECIS, // clip precision
+                   PROOF_QUALITY,       // quality of match
+                   DEFAULT_PITCH |      // fixed or variable
+                   ff_family,           // family id
+                   pzFace               // face name
+                  );
+
+    M_FONTDATA->m_hFont = (WXHFONT)hFont;
+    if ( !hFont )
+    {
+        wxLogLastError("CreateFont");
+    }
+
+    return hFont != 0;
 }
 
 bool wxFont::FreeResource(bool force)
@@ -328,17 +449,17 @@ bool wxFont::IsFree() const
 
 void wxFont::Unshare()
 {
-	// Don't change shared data
-	if ( !m_refData )
+    // Don't change shared data
+    if ( !m_refData )
     {
-		m_refData = new wxFontRefData();
-	}
+        m_refData = new wxFontRefData();
+    }
     else
     {
-		wxFontRefData* ref = new wxFontRefData(*M_FONTDATA);
-		UnRef();
-		m_refData = ref;
-	}
+        wxFontRefData* ref = new wxFontRefData(*M_FONTDATA);
+        UnRef();
+        m_refData = ref;
+    }
 }
 
 // ----------------------------------------------------------------------------
