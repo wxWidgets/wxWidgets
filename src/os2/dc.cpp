@@ -1147,8 +1147,8 @@ void wxDC::DoDrawRoundedRectangle(
         ::GpiBox( m_hPS
                  ,lControl
                  ,&vPoint[1]
-                 ,0L
-                 ,0L
+                 ,(LONG)dRadius
+                 ,(LONG)dRadius
                 );
         lControl = DRO_FILL;
         ::GpiSetColor( m_hPS
@@ -1162,8 +1162,8 @@ void wxDC::DoDrawRoundedRectangle(
         ::GpiBox( m_hPS
                  ,lControl
                  ,&vPoint[1]
-                 ,0L
-                 ,0L
+                 ,(LONG)dRadius
+                 ,(LONG)dRadius
                 );
     }
 
@@ -1314,31 +1314,14 @@ void wxDC::DoDrawBitmap(
 
         vY = OS2Y(vY,rBmp.GetHeight());
 
-        //
-        // Flip the picture as OS/2 is upside-down
-        //
-        if (rBmp.Flip())
-        {
-            vPoint[0].x = vX;
-            vPoint[0].y = vY + rBmp.GetHeight();
-            vPoint[1].x = vX + rBmp.GetWidth();
-            vPoint[1].y = vY;
-            vPoint[2].x = 0;
-            vPoint[2].y = 0;
-            vPoint[3].x = rBmp.GetWidth();
-            vPoint[3].y = rBmp.GetHeight();
-        }
-        else
-        {
-            vPoint[0].x = vX;
-            vPoint[0].y = vY;
-            vPoint[1].x = vX + rBmp.GetWidth();
-            vPoint[1].y = vY + rBmp.GetHeight();
-            vPoint[2].x = 0;
-            vPoint[2].y = 0;
-            vPoint[3].x = rBmp.GetWidth();
-            vPoint[3].y = rBmp.GetHeight();
-        }
+        vPoint[0].x = vX;
+        vPoint[0].y = vY + rBmp.GetHeight();
+        vPoint[1].x = vX + rBmp.GetWidth();
+        vPoint[1].y = vY;
+        vPoint[2].x = 0;
+        vPoint[2].y = 0;
+        vPoint[3].x = rBmp.GetWidth();
+        vPoint[3].y = rBmp.GetHeight();
         if (bUseMask)
         {
             wxMask*                     pMask = rBmp.GetMask();
@@ -1786,14 +1769,14 @@ void wxDC::DrawAnyText(
           m_vRclPaint.yBottom == 0 &&
           m_vRclPaint.xRight == 0 &&
           m_vRclPaint.xLeft == 0))
-        vPtlStart.y = OS2Y(vY,vTextY);
+        vPtlStart.y = OS2Y(vY,vTextY/1.5); // Full extent is a bit much
     else
     {
         if (m_vSelectedBitmap != wxNullBitmap)
         {
             m_vRclPaint.yTop = m_vSelectedBitmap.GetHeight();
             m_vRclPaint.xRight = m_vSelectedBitmap.GetWidth();
-            vPtlStart.y = OS2Y(vY,vTextY);
+            vPtlStart.y = OS2Y(vY,vTextY/1.5);
         }
         else
             vPtlStart.y = vY;

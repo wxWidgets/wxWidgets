@@ -150,6 +150,22 @@ void wxMemoryDC::SelectObject(
 
     if (!hBmp)
     {
+        //
+        // Bmps drawn to are upside down, so flip it before committing
+        //
+        POINTL                      vPoint[4] = { 0, m_vSelectedBitmap.GetHeight(),
+                                                  m_vSelectedBitmap.GetWidth(), 0,
+                                                  0, 0, m_vSelectedBitmap.GetWidth(), m_vSelectedBitmap.GetHeight()
+                                                };
+
+
+        ::GpiBitBlt( m_hPS
+                    ,m_hPS
+                    ,4
+                    ,vPoint
+                    ,ROP_SRCCOPY
+                    ,BBO_IGNORE
+                   );
         m_vSelectedBitmap.SetSelectedInto(NULL);
     }
     m_vSelectedBitmap = rBitmap;
@@ -157,6 +173,7 @@ void wxMemoryDC::SelectObject(
 
     if (!hBmp)
     {
+
         m_hOldBitmap = (WXHBITMAP)::GpiSetBitmap(m_hPS, NULLHANDLE);
         return;
     }

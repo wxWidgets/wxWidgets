@@ -90,7 +90,6 @@ void wxBitmap::Init()
     //
     // True for all bitmaps created from bits, wxImages, Xpms
     //
-    m_bFlip = TRUE;
 } // end of wxBitmap::Init
 
 bool wxBitmap::CopyFromIconOrCursor(
@@ -269,7 +268,6 @@ wxBitmap::wxBitmap(
 )
 {
     Init();
-    m_bFlip = FALSE;
     (void)Create( nW
                  ,nH
                  ,nD
@@ -300,7 +298,6 @@ wxBitmap::wxBitmap(
 )
 {
     Init();
-    m_bFlip = FALSE;
     LoadFile( rFilename
              ,(int)lType
             );
@@ -326,8 +323,6 @@ bool wxBitmap::Create(
     // Xpms and bitmaps from other images can also be mono's, but only
     // mono's need help changing their colors with MemDC changes
     //
-    if (nD == 1)
-        m_bIsMono = TRUE;
     if (nD > 0)
     {
         DEVOPENSTRUC                vDop  = {0L, "DISPLAY", NULL, 0L, 0L, 0L, 0L, 0L, 0L};
@@ -335,6 +330,8 @@ bool wxBitmap::Create(
         HDC                         hDC   = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDop, NULLHANDLE);
         HPS                         hPS   = ::GpiCreatePS(vHabmain, hDC, &vSize, PU_PELS | GPIA_ASSOC);
 
+        if (nD == 1)
+            m_bIsMono = TRUE;
         memset(&vHeader, '\0', 16);
         vHeader.cbFix     =  16;
         vHeader.cx        = nW;
@@ -526,7 +523,6 @@ bool wxBitmap::CreateFromImage (
 {
     wxCHECK_MSG(rImage.Ok(), FALSE, wxT("invalid image"));
     m_refData = new wxBitmapRefData();
-    m_bFlip = TRUE;
 
     int                             nSizeLimit = 1024 * 768 * 3;
     int                             nWidth = rImage.GetWidth();
@@ -565,6 +561,10 @@ bool wxBitmap::CreateFromImage (
     wxCHECK_MSG(rImage.Ok(), FALSE, wxT("invalid image"));
     SetWidth(nWidth);
     SetHeight(nBmpHeight);
+    if (nDepth == 1)
+        m_bIsMono = TRUE;
+    else
+        m_bIsMono = FALSE;
     if (nDepth == -1)
         nDepth = wxDisplayDepth();
     SetDepth(nDepth);
@@ -770,6 +770,7 @@ bool wxBitmap::CreateFromImage (
                 //
                 nHeight         = nHRemain;
                 vHeader.cy      = (DWORD)(nHeight);
+                vHeader.cbImage = nBytePerLine * nHeight;
             }
             ptbits = pucBits;
             for (int j = 0; j < nHeight; j++)
