@@ -274,10 +274,18 @@ protected:
 	mutable bool	m_macPenInstalled ;
 	mutable bool	m_macBrushInstalled ;
 	
-	WXHRGN				m_macBoundaryClipRgn ;
-	WXHRGN               m_macCurrentClipRgn ;
+	WXHRGN				    m_macBoundaryClipRgn ;
+	WXHRGN                  m_macCurrentClipRgn ;
 	wxPoint					m_macLocalOrigin ;
 	void					MacSetupPort( wxMacPortStateHelper* ph ) const ;
+	void                    MacCleanupPort( wxMacPortStateHelper* ph ) const ;
+	mutable void*                   m_macATSUIStyle ;
+	mutable wxMacPortStateHelper*   m_macCurrentPortStateHelper ;
+	mutable bool                    m_macFormerAliasState ;
+	mutable short                   m_macFormerAliasSize ;
+	mutable bool                    m_macAliasWasEnabled ;
+	mutable void*                   m_macForegroundPixMap ;
+	mutable void*                   m_macBackgroundPixMap ;
 };
 
 #endif

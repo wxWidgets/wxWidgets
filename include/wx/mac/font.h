@@ -68,11 +68,12 @@ protected:
     bool          m_underlined;
     wxString      m_faceName;
     wxFontEncoding m_encoding;
-
+    
 public :
 	short		m_macFontNum ;
 	short		m_macFontSize ;
 	unsigned char m_macFontStyle ;
+	wxUint32      m_macATSUFontID ;
 public :
 	void		MacFindFont() ;
 };
