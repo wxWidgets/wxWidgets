@@ -48,7 +48,7 @@ MyFrame *frame = (MyFrame *) NULL;
 
 // In single window mode, don't have any child windows; use
 // main window.
-bool singleWindowMode = FALSE;
+bool singleWindowMode = false;
 
 IMPLEMENT_APP(MyApp)
 
@@ -67,7 +67,7 @@ bool MyApp::OnInit(void)
     {
         if (wxStrcmp(argv[1], _T("-single")) == 0)
         {
-            singleWindowMode = TRUE;
+            singleWindowMode = true;
         }
     }
     
@@ -99,7 +99,7 @@ bool MyApp::OnInit(void)
     }
     
     //// Create the main frame window
-    frame = new MyFrame(m_docManager, (wxFrame *) NULL, -1, _T("DocView Demo"), wxPoint(0, 0), wxSize(500, 400), wxDEFAULT_FRAME_STYLE);
+    frame = new MyFrame(m_docManager, (wxFrame *) NULL, wxID_ANY, _T("DocView Demo"), wxPoint(0, 0), wxSize(500, 400), wxDEFAULT_FRAME_STYLE);
     
     //// Give it an icon (this is ignored in MDI mode: uses resources)
 #ifdef __WXMSW__
@@ -155,10 +155,10 @@ bool MyApp::OnInit(void)
     frame->SetMenuBar(menu_bar);
     
     frame->Centre(wxBOTH);
-    frame->Show(TRUE);
+    frame->Show(true);
     
     SetTopWindow(frame);
-    return TRUE;
+    return true;
 }
 
 int MyApp::OnExit(void)
@@ -176,7 +176,7 @@ int MyApp::OnExit(void)
 wxFrame *MyApp::CreateChildFrame(wxDocument *doc, wxView *view, bool isCanvas)
 {
     //// Make a child frame
-    wxDocChildFrame *subframe = new wxDocChildFrame(doc, view, GetMainFrame(), -1, _T("Child Frame"),
+    wxDocChildFrame *subframe = new wxDocChildFrame(doc, view, GetMainFrame(), wxID_ANY, _T("Child Frame"),
         wxPoint(10, 10), wxSize(300, 300), wxDEFAULT_FRAME_STYLE);
     
 #ifdef __WXMSW__

@@ -160,7 +160,7 @@ bool MyApp::OnInit()
                                  wxPoint(50, 50), wxSize(450, 340));
 
     // Show it and tell the application that it's our main window
-    frame->Show(TRUE);
+    frame->Show(true);
     SetTopWindow(frame);
 
     // Init dial up manager
@@ -175,12 +175,12 @@ bool MyApp::OnInit()
         // do it here, OnExit() won't be called
         delete m_dial;
 
-        return FALSE;
+        return false;
     }
 
     frame->SetStatusText(GetDialer()->IsAlwaysOnline() ? _T("LAN") : _T("No LAN"), 2);
 
-    return TRUE;
+    return true;
 }
 
 int MyApp::OnExit()
@@ -216,7 +216,7 @@ void MyApp::OnConnected(wxDialUpEvent& event)
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-       : wxFrame((wxFrame *)NULL, -1, title, pos, size)
+       : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size)
 {
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
@@ -249,8 +249,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    // TRUE is to force the frame to close
-    Close(TRUE);
+    // true is to force the frame to close
+    Close(true);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
@@ -328,7 +328,7 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
 
 void MyFrame::OnIdle(wxIdleEvent& WXUNUSED(event))
 {
-    static int s_isOnline = -1; // not TRUE nor FALSE
+    static int s_isOnline = -1; // not true nor false
 
     bool isOnline = wxGetApp().GetDialer()->IsOnline();
     if ( s_isOnline != (int)isOnline )

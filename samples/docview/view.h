@@ -52,7 +52,7 @@ public:
     bool OnCreate(wxDocument *doc, long flags);
     void OnDraw(wxDC *dc);
     void OnUpdate(wxView *sender, wxObject *hint = (wxObject *) NULL);
-    bool OnClose(bool deleteWindow = TRUE);
+    bool OnClose(bool deleteWindow = true);
     
     void OnCut(wxCommandEvent& event);
     
@@ -73,7 +73,7 @@ public:
     bool OnCreate(wxDocument *doc, long flags);
     void OnDraw(wxDC *dc);
     void OnUpdate(wxView *sender, wxObject *hint = (wxObject *) NULL);
-    bool OnClose(bool deleteWindow = TRUE);
+    bool OnClose(bool deleteWindow = true);
 };
 
 #endif
