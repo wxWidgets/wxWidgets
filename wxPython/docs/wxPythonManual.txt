@@ -2,15 +2,18 @@
  The wxPython Manual
 =====================
 
---------------------------------------------------------
- A guide to the wxPython toolkit for Python programmers
---------------------------------------------------------
+--------------------------------------------
+ A guide to wxPython for Python programmers
+--------------------------------------------
 
 :Author: Patrick K. O'Brien
 :Contact: pobrien@orbtech.com
+:Organization: Orbtech_
 :Date: $Date$
 :Revision: $Revision$
 :License: wxWindows Free Documentation Licence, Version 3
+
+.. _Orbtech: http://www.orbtech.com/
 
 .. contents::
 
@@ -983,14 +986,19 @@ ID_YES
 ID_YESTOALL
 
 
-Source Document
+Source document
 ===============
 
-The source document is named wxPython.txt and is located in the
-PyCrust/wxd directory.  It is written using a fantastic formatting
-convention called reStructuredText.  The wxPython.html file is created
+The source document is named wxPythonManual.txt and can be found by
+clicking the link at the bottom of this page (assuming you are viewing
+the html file).  It is written using a fantastic formatting convention
+called reStructuredText.  The wxPythonManual.html file is created
 using the Docutils utilities, which can turn reStructuredText
 documents into html, xml, pdf, and even OpenOffice files.
+
+
+Submitting changes to the source document
+=========================================
 
 Some items in the source text file look like this::
 
@@ -1028,5 +1036,5 @@ License
 This document began as a translation of the wxWindows documentation.
 As such, it adheres to the same license, which is provided here:
 
-.. include:: ../license/licendoc.txt
+.. include:: ../licence/licendoc.txt
    :literal:

@@ -8,23 +8,22 @@
 
 :Author: Patrick K. O'Brien
 :Contact: pobrien@orbtech.com
+:Organization: Orbtech_
 :Date: $Date$
 :Revision: $Revision$
 
+.. _Orbtech: http://www.orbtech.com/
+
 .. contents::
-
-
-.. Add a link to wxExamples.html
-
 
 
 Introduction
 ============
 
 Big things sometimes come in small packages.  This is certainly true
-of the new wx package, which is being introduced as a transition to
-allow the "wx" prefix to be dropped from the names of all wxPython
-classes, functions, and constants.
+of the new wx package, which is being introduced as a way to allow the
+"wx" prefix to be dropped from the names of all wxPython classes,
+functions, and constants.
 
 
 Why change anything?
@@ -127,18 +126,18 @@ Again, the technique is very similar to the one used by the wx
 package.
 
 
-How do I use it?
-================
+How do I use this new wx package?
+=================================
 
-The wx package is created when you install wxPython.  So you can start
-using it now.  Examples are included in the wx/examples directory,
-which includes an examples.txt documentation file.  Here is the source
-code for ``hello.py``, a simple program that displays a wxPython
-graphic inside a frame:
+The wx package is automatically created when you install wxPython
+version 2.4.1 or higher.  So all you have to do is::
 
-.. include:: ../samples/wx_examples/hello/hello.py
-   :literal:
+    import wx
+
+Example programs are included in the wxPython/samples/wx_examples
+directory, and are documented in the wxPythonExamples_ documentation
+file.
+
+.. _wxPythonExamples: wxPythonExamples.html
 
 Good luck.  I hope you like the new wx package as much as I do.
-
-Pat

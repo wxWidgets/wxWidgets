@@ -2,15 +2,18 @@
  The wxPython Tutorial
 =======================
 
------------------------------------------------------
- How to get up and running with the wxPython toolkit
------------------------------------------------------
+-----------------------------------------
+ How to get up and running with wxPython
+-----------------------------------------
 
 :Author: Patrick K. O'Brien
 :Contact: pobrien@orbtech.com
+:Organization: Orbtech_
 :Date: $Date$
 :Revision: $Revision$
 :License: wxWindows Free Documentation Licence, Version 3
+
+.. _Orbtech: http://www.orbtech.com/
 
 .. contents::
 
@@ -35,5 +38,5 @@ License
 This document adheres to the same license as the other documentation
 that comes with wxWindows:
 
-.. include:: ../license/licendoc.txt
+.. include:: ../licence/licendoc.txt
    :literal:
