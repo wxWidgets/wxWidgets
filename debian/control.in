@@ -187,7 +187,7 @@ Description: wxWindows Cross-platform C++ GUI toolkit (i18n support)
 Package: wxwin=V-doc
 Architecture: all
 Section: doc
-Conflicts: wxwin2.2-doc wxwin-doc
+Conflicts: wxwin2.2-doc, wxwin-doc
 Replaces: wxwin-doc
 Provides: wxwin-doc
 Suggests: doc-base, www-browser
