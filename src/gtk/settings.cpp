@@ -233,9 +233,9 @@ wxFont wxSystemSettings::GetSystemFont( int index )
         {
             if (!g_systemFont)
             {
+#if 0
                 GdkFont *gdk_font = (GdkFont*) NULL;
                 GtkWidget *widget = gtk_button_new();
-#if 0
                 GtkStyle *def = gtk_rc_get_style( widget );
                 if (def)
                     gdk_font =  def->font;
@@ -253,13 +253,11 @@ wxFont wxSystemSettings::GetSystemFont( int index )
                     wxFontData font_data;
                     g_systemFont = new wxFont( font_string, font_data );
                 }
-                else
-#endif
-                {
-                    g_systemFont = new wxFont( 12, wxSWISS, wxNORMAL, wxNORMAL );
-                }
-                
                 gtk_widget_destroy( widget );
+#endif
+
+                g_systemFont = new wxFont( 12, wxSWISS, wxNORMAL, wxNORMAL );
+                
             }
             return *g_systemFont;
         }
