@@ -329,7 +329,7 @@ wxFindReplaceDialog::wxFindReplaceDialog(wxWindow *parent,
                                          wxFindReplaceData *data,
                                          const wxString &title,
                                          int flags)
-                   : m_FindReplaceData(data)
+                   : wxFindReplaceDialogBase(parent, data, title, flags)
 {
     Init();
 
@@ -361,16 +361,6 @@ bool wxFindReplaceDialog::Create(wxWindow *parent,
 
     // we must have a parent as it will get the messages from us
     return parent != NULL;
-}
-
-// ----------------------------------------------------------------------------
-// wxFindReplaceDialog data access
-// ----------------------------------------------------------------------------
-
-void wxFindReplaceDialog::SetData(wxFindReplaceData *data)
-{
-    delete m_FindReplaceData;
-    m_FindReplaceData = data;
 }
 
 // ----------------------------------------------------------------------------
