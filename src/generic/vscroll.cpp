@@ -164,8 +164,8 @@ void wxVScrolledWindow::SetLineCount(size_t count)
                                    count/2 + NUM_LINES_TO_SAMPLE/2);
 
         // use the height of the lines we looked as the average
-        m_heightTotal = ((float)m_heightTotal / (3*NUM_LINES_TO_SAMPLE)) *
-                            m_lineMax;
+        m_heightTotal = (wxCoord)
+                (((float)m_heightTotal / (3*NUM_LINES_TO_SAMPLE)) * m_lineMax);
     }
 
 
@@ -354,5 +354,9 @@ void wxVScrolledWindow::OnScroll(wxScrollWinEvent& event)
     }
 
     ScrollToLine(lineFirstNew);
+
+#ifdef __WXMAC__
+    Update();
+#endif // __WXMAC__
 }
 
