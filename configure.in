@@ -2378,14 +2378,7 @@ AC_CACHE_CHECK([for wchar_t], wx_cv_type_wchar_t,
             ws = L"Hello, world!";
         ],
         wx_cv_type_wchar_t=yes,
-        AC_TRY_COMPILE([#include <stdlib.h>],
-            [
-                wchar_t wc, *ws;
-                wc = L'a';
-                ws = L"Hello, world!";
-            ],
-        wx_cv_type_wchar_t=yes,
-        wx_cv_type_wchar_t=no)
+        wx_cv_type_wchar_t=no
     )
 ])
 
