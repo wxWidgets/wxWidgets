@@ -23,6 +23,7 @@
 
 #include "wx/xrc/xh_dlg.h"
 #include "wx/dialog.h"
+#include "wx/frame.h"
 #include "wx/log.h"
 #include "wx/intl.h"
 
