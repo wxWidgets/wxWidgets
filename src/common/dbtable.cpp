@@ -255,6 +255,7 @@ wxTable::~wxTable()
 #ifdef __WXDEBUG__
     if (tableID)
     {
+        TablesInUse.DeleteContents(TRUE);
         bool found = FALSE;
 
         wxNode *pNode;
