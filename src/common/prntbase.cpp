@@ -195,6 +195,11 @@ void wxPreviewCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
     wxPaintDC dc(this);
     PrepareDC( dc );
 
+#ifdef __WXGTK__
+    if (!GetUpdateRegion().IsEmpty())
+        dc.SetClippingRegion( GetUpdateRegion() );
+#endif
+
     if (m_printPreview)
     {
         m_printPreview->PaintPage(this, dc);

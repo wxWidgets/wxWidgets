@@ -613,7 +613,7 @@ static void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExp
     DEBUG_MAIN_THREAD
 
 /*
-    if (win->GetName() == wxT("columntitles"))
+    if (win->GetName() == wxT("grid window"))
     {
         wxPrintf( wxT("OnExpose from ") );
         if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
@@ -664,7 +664,7 @@ static void gtk_window_draw_callback( GtkWidget *WXUNUSED(widget),
         return;
 
 /*
-    if (win->GetName() == wxT("columntitles"))
+    if (win->GetName() == wxT("grid window"))
     {
         wxPrintf( wxT("OnDraw from ") );
         if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())

@@ -187,7 +187,7 @@ public:
     ~wxListHeaderWindow();
     wxListHeaderWindow( wxWindow *win, wxWindowID id, wxListMainWindow *owner,
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
-      long style = 0, const wxString &name = "columntitles" );
+      long style = 0, const wxString &name = "wxlistctrlcolumntitles" );
     void DoDrawRect( wxDC *dc, int x, int y, int w, int h );
     void OnPaint( wxPaintEvent &event );
     void DrawCurrent();
@@ -233,7 +233,7 @@ public:
                     const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
                     int style = 0,
                     const wxValidator& validator = wxDefaultValidator,
-                    const wxString &name = "wxListTextCtrlText" );
+                    const wxString &name = "listctrltextctrl" );
     void OnChar( wxKeyEvent &event );
     void OnKillFocus( wxFocusEvent &event );
 
@@ -281,7 +281,7 @@ public:
     wxListMainWindow();
     wxListMainWindow( wxWindow *parent, wxWindowID id,
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
-      long style = 0, const wxString &name = "listctrl" );
+      long style = 0, const wxString &name = "listctrlmainwindow" );
     ~wxListMainWindow();
     void RefreshLine( wxListLineData *line );
     void OnPaint( wxPaintEvent &event );

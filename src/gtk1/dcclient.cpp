@@ -24,6 +24,12 @@
 #include <gtk/gtk.h>
 
 //-----------------------------------------------------------------------------
+// local defines
+//-----------------------------------------------------------------------------
+
+#define USE_PAINT_REGION 0
+
+//-----------------------------------------------------------------------------
 // local data
 //-----------------------------------------------------------------------------
 
@@ -248,6 +254,86 @@ wxWindowDC::wxWindowDC( wxWindow *window )
 wxWindowDC::~wxWindowDC()
 {
     Destroy();
+}
+
+void wxWindowDC::SetUpDC()
+{
+    m_ok = TRUE;
+    
+    wxASSERT_MSG( !m_penGC, wxT("GCs already created") );
+    
+    if (m_isMemDC && (((wxMemoryDC*)this)->m_selected.GetDepth() == 1))
+    {
+        m_penGC = wxGetPoolGC( m_window, wxPEN_MONO );
+        m_brushGC = wxGetPoolGC( m_window, wxBRUSH_MONO );
+        m_textGC = wxGetPoolGC( m_window, wxTEXT_MONO );
+        m_bgGC = wxGetPoolGC( m_window, wxBG_MONO );
+    }
+    else
+    {
+        m_penGC = wxGetPoolGC( m_window, wxPEN_COLOUR );
+        m_brushGC = wxGetPoolGC( m_window, wxBRUSH_COLOUR );
+        m_textGC = wxGetPoolGC( m_window, wxTEXT_COLOUR );
+        m_bgGC = wxGetPoolGC( m_window, wxBG_COLOUR );
+    }
+
+    /* background colour */
+    m_backgroundBrush = *wxWHITE_BRUSH;
+    m_backgroundBrush.GetColour().CalcPixel( m_cmap );
+    GdkColor *bg_col = m_backgroundBrush.GetColour().GetColor();
+
+    /* m_textGC */
+    m_textForegroundColour.CalcPixel( m_cmap );
+    gdk_gc_set_foreground( m_textGC, m_textForegroundColour.GetColor() );
+
+    m_textBackgroundColour.CalcPixel( m_cmap );
+    gdk_gc_set_background( m_textGC, m_textBackgroundColour.GetColor() );
+
+    gdk_gc_set_fill( m_textGC, GDK_SOLID );
+
+    /* m_penGC */
+    m_pen.GetColour().CalcPixel( m_cmap );
+    gdk_gc_set_foreground( m_penGC, m_pen.GetColour().GetColor() );
+    gdk_gc_set_background( m_penGC, bg_col );
+    
+    gdk_gc_set_line_attributes( m_penGC, 0, GDK_LINE_SOLID, GDK_CAP_NOT_LAST, GDK_JOIN_ROUND );
+
+    
+    /* m_brushGC */
+    m_brush.GetColour().CalcPixel( m_cmap );
+    gdk_gc_set_foreground( m_brushGC, m_brush.GetColour().GetColor() );
+    gdk_gc_set_background( m_brushGC, bg_col );
+    
+    gdk_gc_set_fill( m_brushGC, GDK_SOLID );
+    
+    
+    /* m_bgGC */
+    gdk_gc_set_background( m_bgGC, bg_col );
+    gdk_gc_set_foreground( m_bgGC, bg_col );
+
+    gdk_gc_set_fill( m_bgGC, GDK_SOLID );
+  
+    /* ROPs */
+    gdk_gc_set_function( m_textGC, GDK_COPY );
+    gdk_gc_set_function( m_brushGC, GDK_COPY );
+    gdk_gc_set_function( m_penGC, GDK_COPY );
+    
+    /* clipping */
+    gdk_gc_set_clip_rectangle( m_penGC, (GdkRectangle *) NULL );
+    gdk_gc_set_clip_rectangle( m_brushGC, (GdkRectangle *) NULL );
+    gdk_gc_set_clip_rectangle( m_textGC, (GdkRectangle *) NULL );
+    gdk_gc_set_clip_rectangle( m_bgGC, (GdkRectangle *) NULL );
+
+    if (!hatch_bitmap)
+    {
+        hatch_bitmap    = hatches;
+        hatch_bitmap[0] = gdk_bitmap_create_from_data( (GdkWindow *) NULL, bdiag_bits, bdiag_width, bdiag_height );
+        hatch_bitmap[1] = gdk_bitmap_create_from_data( (GdkWindow *) NULL, cdiag_bits, cdiag_width, cdiag_height );
+        hatch_bitmap[2] = gdk_bitmap_create_from_data( (GdkWindow *) NULL, fdiag_bits, fdiag_width, fdiag_height );
+        hatch_bitmap[3] = gdk_bitmap_create_from_data( (GdkWindow *) NULL, cross_bits, cross_width, cross_height );
+        hatch_bitmap[4] = gdk_bitmap_create_from_data( (GdkWindow *) NULL, horiz_bits, horiz_width, horiz_height );
+        hatch_bitmap[5] = gdk_bitmap_create_from_data( (GdkWindow *) NULL, verti_bits, verti_width, verti_height );
+    }
 }
 
 void wxWindowDC::DoFloodFill( wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
@@ -1539,8 +1625,10 @@ void wxWindowDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoo
     
     m_currentClippingRegion.Clear();
     m_currentClippingRegion.Union( rect );
+#if USE_PAINT_REGION    
     if (!m_paintClippingRegion.IsEmpty())
         m_currentClippingRegion.Intersect( m_paintClippingRegion );
+#endif
 
     gdk_gc_set_clip_region( m_penGC, m_currentClippingRegion.GetRegion() );
     gdk_gc_set_clip_region( m_brushGC, m_currentClippingRegion.GetRegion() );
@@ -1567,8 +1655,10 @@ void wxWindowDC::DoSetClippingRegionAsRegion( const wxRegion &region  )
     
     m_currentClippingRegion.Clear();
     m_currentClippingRegion.Union( region );
+#if USE_PAINT_REGION    
     if (!m_paintClippingRegion.IsEmpty())
         m_currentClippingRegion.Intersect( m_paintClippingRegion );
+#endif
 
     gdk_gc_set_clip_region( m_penGC, m_currentClippingRegion.GetRegion() );
     gdk_gc_set_clip_region( m_brushGC, m_currentClippingRegion.GetRegion() );
@@ -1602,77 +1692,6 @@ void wxWindowDC::DestroyClippingRegion()
         gdk_gc_set_clip_region( m_brushGC, m_currentClippingRegion.GetRegion() );
         gdk_gc_set_clip_region( m_textGC, m_currentClippingRegion.GetRegion() );
         gdk_gc_set_clip_region( m_bgGC, m_currentClippingRegion.GetRegion() );
-    }
-}
-
-void wxWindowDC::SetUpDC()
-{
-    m_ok = TRUE;
-    
-    if (!m_penGC)
-    {
-        m_penGC = wxGetPoolGC( m_window, wxPEN_COLOUR );
-        m_brushGC = wxGetPoolGC( m_window, wxBRUSH_COLOUR );
-        m_textGC = wxGetPoolGC( m_window, wxTEXT_COLOUR );
-        m_bgGC = wxGetPoolGC( m_window, wxBG_COLOUR );
-    }
-
-    /* background colour */
-    m_backgroundBrush = *wxWHITE_BRUSH;
-    m_backgroundBrush.GetColour().CalcPixel( m_cmap );
-    GdkColor *bg_col = m_backgroundBrush.GetColour().GetColor();
-
-    /* m_textGC */
-    m_textForegroundColour.CalcPixel( m_cmap );
-    gdk_gc_set_foreground( m_textGC, m_textForegroundColour.GetColor() );
-
-    m_textBackgroundColour.CalcPixel( m_cmap );
-    gdk_gc_set_background( m_textGC, m_textBackgroundColour.GetColor() );
-
-    gdk_gc_set_fill( m_textGC, GDK_SOLID );
-
-    /* m_penGC */
-    m_pen.GetColour().CalcPixel( m_cmap );
-    gdk_gc_set_foreground( m_penGC, m_pen.GetColour().GetColor() );
-    gdk_gc_set_background( m_penGC, bg_col );
-    
-    gdk_gc_set_line_attributes( m_penGC, 0, GDK_LINE_SOLID, GDK_CAP_NOT_LAST, GDK_JOIN_ROUND );
-
-    
-    /* m_brushGC */
-    m_brush.GetColour().CalcPixel( m_cmap );
-    gdk_gc_set_foreground( m_brushGC, m_brush.GetColour().GetColor() );
-    gdk_gc_set_background( m_brushGC, bg_col );
-    
-    gdk_gc_set_fill( m_brushGC, GDK_SOLID );
-    
-    
-    /* m_bgGC */
-    gdk_gc_set_background( m_bgGC, bg_col );
-    gdk_gc_set_foreground( m_bgGC, bg_col );
-
-    gdk_gc_set_fill( m_bgGC, GDK_SOLID );
-  
-    /* ROPs */
-    gdk_gc_set_function( m_textGC, GDK_COPY );
-    gdk_gc_set_function( m_brushGC, GDK_COPY );
-    gdk_gc_set_function( m_penGC, GDK_COPY );
-    
-    /* clipping */
-    gdk_gc_set_clip_rectangle( m_penGC, (GdkRectangle *) NULL );
-    gdk_gc_set_clip_rectangle( m_brushGC, (GdkRectangle *) NULL );
-    gdk_gc_set_clip_rectangle( m_textGC, (GdkRectangle *) NULL );
-    gdk_gc_set_clip_rectangle( m_bgGC, (GdkRectangle *) NULL );
-
-    if (!hatch_bitmap)
-    {
-        hatch_bitmap    = hatches;
-        hatch_bitmap[0] = gdk_bitmap_create_from_data( (GdkWindow *) NULL, bdiag_bits, bdiag_width, bdiag_height );
-        hatch_bitmap[1] = gdk_bitmap_create_from_data( (GdkWindow *) NULL, cdiag_bits, cdiag_width, cdiag_height );
-        hatch_bitmap[2] = gdk_bitmap_create_from_data( (GdkWindow *) NULL, fdiag_bits, fdiag_width, fdiag_height );
-        hatch_bitmap[3] = gdk_bitmap_create_from_data( (GdkWindow *) NULL, cross_bits, cross_width, cross_height );
-        hatch_bitmap[4] = gdk_bitmap_create_from_data( (GdkWindow *) NULL, horiz_bits, horiz_width, horiz_height );
-        hatch_bitmap[5] = gdk_bitmap_create_from_data( (GdkWindow *) NULL, verti_bits, verti_width, verti_height );
     }
 }
 
@@ -1905,6 +1924,7 @@ wxPaintDC::wxPaintDC()
 wxPaintDC::wxPaintDC( wxWindow *win )
   : wxWindowDC( win )
 {
+#if USE_PAINT_REGION    
     if (!win->GetUpdateRegion().IsEmpty())
     {
         m_paintClippingRegion = win->GetUpdateRegion();
@@ -1915,6 +1935,7 @@ wxPaintDC::wxPaintDC( wxWindow *win )
         gdk_gc_set_clip_region( m_textGC, m_paintClippingRegion.GetRegion() );
         gdk_gc_set_clip_region( m_bgGC, m_paintClippingRegion.GetRegion() );
     }
+#endif
 }
 
 //-----------------------------------------------------------------------------
