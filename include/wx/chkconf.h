@@ -1144,6 +1144,27 @@
 #           endif
 #       endif
 #   endif  /* wxUSE_DYNAMIC_LOADER */
+
+#   if !wxUSE_ON_FATAL_EXCEPTION
+#       if wxUSE_CRASHREPORT
+#           ifdef wxABORT_ON_CONFIG_ERROR
+#               error "wxUSE_CRASHREPORT requires wxUSE_ON_FATAL_EXCEPTION"
+#           else
+#               undef wxUSE_CRASHREPORT
+#               define wxUSE_CRASHREPORT 0
+#           endif
+#       endif
+
+#       if wxUSE_STACKWALKER
+#           ifdef wxABORT_ON_CONFIG_ERROR
+#               error "wxUSE_STACKWALKER requires wxUSE_ON_FATAL_EXCEPTION"
+#           else
+#               undef wxUSE_STACKWALKER
+#               define wxUSE_STACKWALKER 0
+#           endif
+#       endif
+#   endif /* wxUSE_ON_FATAL_EXCEPTION */
+
 #endif /* wxMSW */
 
 /* wxMAC-specific dependencies */
