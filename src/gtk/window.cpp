@@ -2459,13 +2459,14 @@ void wxWindow::SetFocus()
 
     if (m_wxwindow)
     {
-        gtk_widget_grab_focus (m_wxwindow);
+        if (!GTK_WIDGET_HAS_FOCUS (m_wxwindow))
+            gtk_widget_grab_focus (m_wxwindow);
         return;
     }
 
     if (m_widget)
     {
-        if (GTK_WIDGET_CAN_FOCUS(m_widget) /*&& !GTK_WIDGET_HAS_FOCUS (connect_widget)*/ )
+        if (GTK_WIDGET_CAN_FOCUS(m_widget) && !GTK_WIDGET_HAS_FOCUS (m_widget) )
         {
             gtk_widget_grab_focus (m_widget);
         }

@@ -259,7 +259,7 @@ bool wxDialog::Create( wxWindow *parent,
 
     m_insertCallback = (wxInsertChildFunction) wxInsertChildInDialog;
     
-    m_widget = gtk_window_new( GTK_WINDOW_TOPLEVEL );
+    m_widget = gtk_window_new( GTK_WINDOW_DIALOG );
     
     if (!name.IsEmpty())
         gtk_window_set_wmclass( GTK_WINDOW(m_widget), name.mb_str(), name.mb_str() );

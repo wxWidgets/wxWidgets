@@ -528,7 +528,7 @@ wxView::wxView()
 
 wxView::~wxView()
 {
-    GetDocumentManager()->ActivateView(this, FALSE, TRUE);
+//    GetDocumentManager()->ActivateView(this, FALSE, TRUE);
     m_viewDocument->RemoveView(this);
 }
 
