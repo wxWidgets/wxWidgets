@@ -219,6 +219,13 @@ protected:
        on demand.
    */
    int m_CursorVisibility;
+
+   bool SetAutoDeleteSelection(bool enable = TRUE)
+   {
+      bool old = m_AutoDeleteSelection;
+      m_AutoDeleteSelection = enable;
+      return old;
+   }
 private:
    /// The layout list to be displayed.
    wxLayoutList *m_llist;
@@ -243,6 +250,11 @@ private:
    int          m_StatusFieldCursor;
    /// a pointer to a bitmap for the background
    wxBitmap    *m_BGbitmap;
+   /**@name Some configuration options */
+   //@{
+   /// Do we want to auto-replace the selection with new text?
+   bool         m_AutoDeleteSelection;
+   //@}
    DECLARE_EVENT_TABLE()
 };
 

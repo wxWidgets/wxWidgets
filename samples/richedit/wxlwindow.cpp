@@ -415,6 +415,7 @@ void
 wxLayoutWindow::OnChar(wxKeyEvent& event)
 {
    int keyCode = event.KeyCode();
+   bool ctrlDown = event.ControlDown();
 
 #ifdef WXLAYOUT_DEBUG
    if(keyCode == WXK_F1)
@@ -424,34 +425,36 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
    }
 #endif
 
-   wxASSERT_MSG( !m_Selecting || event.ShiftDown(),
-                 "m_Selecting is normally reset in OnKeyUp() when Shift "
-                 "goes up!" );
-
-   if ( !m_Selecting && m_llist->HasSelection() )
-   {
-      // pressing any non-arrow key replaces the selection
-      if ( !IsDirectionKey(keyCode) )
-      {
-         m_llist->DeleteSelection();
-      }
-      else if ( !event.ShiftDown() )
-      {
-         m_llist->DiscardSelection();
-      }
-   }
-
+   // Force m_Selecting to be false if shift is no longer
+   // pressed. OnKeyUp() cannot catch all Shift-Up events.
+   if(!event.ShiftDown())
+      m_Selecting = false;
+   
+   // pressing any non-arrow key optionally replaces the selection:
+   if(m_AutoDeleteSelection
+      && !m_Selecting
+      && m_llist->HasSelection() 
+      && ! IsDirectionKey(keyCode)
+      && ! (event.AltDown() || ctrlDown)
+      )
+      m_llist->DeleteSelection();
+   
    // <Shift>+<arrow> starts selection
-   if ( event.ShiftDown() && IsDirectionKey(keyCode) )
+   if ( IsDirectionKey(keyCode) )
    {
       if ( !m_Selecting )
       {
          m_Selecting = true;
          m_llist->StartSelection();
       }
-      //else: just continue the old selection
+      else
+      {
+         // just continue the old selection
+         if(! event.ShiftDown() )
+            m_llist->DiscardSelection();
+      }
    }
-
+   
    // If needed, make cursor visible:
    if(m_CursorVisibility == -1)
       m_CursorVisibility = 1;
@@ -461,7 +464,6 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
       cursor, etc. It's default will process all keycodes causing
       modifications to the buffer, but only if editing is allowed.
    */
-   bool ctrlDown = event.ControlDown();
    switch(keyCode)
    {
    case WXK_RIGHT:
@@ -510,7 +512,7 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
       else if( IsEditable() )
       {
          /* First, handle control keys */
-         if(event.ControlDown() && ! event.AltDown())
+         if(ctrlDown && ! event.AltDown())
          {
             switch(keyCode)
             {
@@ -976,17 +978,6 @@ wxLayoutWindow::Paste(bool primary)
       }
       wxTheClipboard->Close();
    }
-
-#if 0
-   /* My attempt to get the primary selection, but it does not
-      work. :-( */
-   if(text.Length() == 0)
-   {
-      wxTextCtrl tmp_tctrl(this,-1);
-      tmp_tctrl.Paste();
-      text += tmp_tctrl.GetValue();
-   }
-#endif
 }
 
 bool
