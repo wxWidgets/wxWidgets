@@ -170,7 +170,8 @@ bool MyApp::OnInit()
   if (!InputFile || !OutputFile)
     isInteractive = TRUE;
 
-  for (int i = n; i < argc;)
+  int i;
+  for (i = n; i < argc;)
   {
     if (strcmp(argv[i], "-winhelp") == 0)
     {
@@ -497,6 +498,7 @@ void MyFrame::OnExit(wxCommandEvent& event)
 
 void MyFrame::OnGo(wxCommandEvent& event)
 {
+      passNumber = 1;
       menuBar->EnableTop(0, FALSE);
       menuBar->EnableTop(1, FALSE);
       menuBar->EnableTop(2, FALSE);
@@ -826,7 +828,7 @@ bool Go(void)
     char buf[100];
 #ifndef NO_GUI
     long tim = wxGetElapsedTime();
-    sprintf(buf, "Finished in %ld seconds.", (long)(tim/1000.0));
+    sprintf(buf, "Finished PASS #%d in %ld seconds.\n", passNumber, (long)(tim/1000.0));
     OnInform(buf);
     if (isInteractive)
     {
