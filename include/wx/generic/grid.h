@@ -357,6 +357,10 @@ public:
     // create a new object which is the copy of this one
     virtual wxGridCellEditor *Clone() const = 0;
 
+    // DJC MAPTEK
+    // added GetValue so we can get the value which is in the control
+    virtual wxString GetValue() const = 0;
+
 protected:
     // the dtor is private because only DecRef() can delete us
     virtual ~wxGridCellEditor();
@@ -405,6 +409,9 @@ public:
     virtual wxGridCellEditor *Clone() const
         { return new wxGridCellTextEditor; }
 
+    // DJC MAPTEK
+    // added GetValue so we can get the value which is in the control
+    virtual wxString GetValue() const;
 protected:
     wxTextCtrl *Text() const { return (wxTextCtrl *)m_control; }
 
@@ -441,6 +448,9 @@ public:
 
     virtual wxGridCellEditor *Clone() const
         { return new wxGridCellNumberEditor(m_min, m_max); }
+    // DJC MAPTEK
+    // added GetValue so we can get the value which is in the control
+    virtual wxString GetValue() const;
 
 protected:
     wxSpinCtrl *Spin() const { return (wxSpinCtrl *)m_control; }
@@ -516,6 +526,9 @@ public:
 
     virtual wxGridCellEditor *Clone() const
         { return new wxGridCellBoolEditor; }
+    // DJC MAPTEK
+    // added GetValue so we can get the value which is in the control
+    virtual wxString GetValue() const;
 
 protected:
     wxCheckBox *CBox() const { return (wxCheckBox *)m_control; }
@@ -552,11 +565,16 @@ public:
     virtual void SetParameters(const wxString& params);
 
     virtual wxGridCellEditor *Clone() const;
+    // DJC MAPTEK
+    // added GetValue so we can get the value which is in the control
+    virtual wxString GetValue() const;
 
 protected:
     wxComboBox *Combo() const { return (wxComboBox *)m_control; }
 
-private:
+// DJC - (MAPTEK) you at least need access to m_choices if you
+//                wish to override this class
+protected:
     wxString        m_startValue;
     wxArrayString   m_choices;
     bool            m_allowOthers;
@@ -1416,12 +1434,13 @@ public:
     void RegisterDataType(const wxString& typeName,
                           wxGridCellRenderer* renderer,
                           wxGridCellEditor* editor);
-    wxGridCellEditor* GetDefaultEditorForCell(int row, int col) const;
+    // DJC MAPTEK
+    virtual wxGridCellEditor* GetDefaultEditorForCell(int row, int col) const;
     wxGridCellEditor* GetDefaultEditorForCell(const wxGridCellCoords& c) const
         { return GetDefaultEditorForCell(c.GetRow(), c.GetCol()); }
-    wxGridCellRenderer* GetDefaultRendererForCell(int row, int col) const;
-    wxGridCellEditor* GetDefaultEditorForType(const wxString& typeName) const;
-    wxGridCellRenderer* GetDefaultRendererForType(const wxString& typeName) const;
+    virtual wxGridCellRenderer* GetDefaultRendererForCell(int row, int col) const;
+    virtual wxGridCellEditor* GetDefaultEditorForType(const wxString& typeName) const;
+    virtual wxGridCellRenderer* GetDefaultRendererForType(const wxString& typeName) const;
 
     // grid may occupy more space than needed for its rows/columns, this
     // function allows to set how big this extra space is
