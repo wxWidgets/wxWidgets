@@ -837,7 +837,8 @@ static wxString ConvertStringFromOle(BSTR bStr)
 	char    *buf = new char[len];
 	(void)wcstombs( buf, bStr, len);
 
-	wxString str(buf);
+    // FIXME -- use bStr directly in Unicode mode?
+	wxString str(buf, wxConvLibc); 
 	delete[] buf;
 	return str;
 }
