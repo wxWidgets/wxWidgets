@@ -19,8 +19,9 @@
 #   pragma hdrstop
 #endif
 
+#if wxUSE_HTML
+
 #ifndef WX_PRECOMP
-#   include "wx/setup.h"
 #   include "wx/string.h"
 #   include "wx/utils.h"
 #   include "wx/list.h"
@@ -41,7 +42,7 @@
 #endif
 
 IMPLEMENT_CLASS(wxHelpControllerHtml, wxHTMLHelpControllerBase)
-   
+
 /**
    This class implements help via an external browser.
    It requires the name of a directory containing the documentation
@@ -49,11 +50,11 @@ IMPLEMENT_CLASS(wxHelpControllerHtml, wxHTMLHelpControllerBase)
 */
 
 #define FRAME_WIDTH  400
-#define FRAME_HEIGHT 400   
+#define FRAME_HEIGHT 400
 #define LAYOUT_X_MARGIN 2
 #define LAYOUT_Y_MARGIN 2
 #define OFFSET 10
-   
+
 class wxHelpFrame : public wxFrame
 {
 public:
@@ -81,9 +82,9 @@ wxHelpFrame::wxHelpFrame(wxWindow *parent, int id,
 {
 
    m_controller = controller;
-   m_htmlwin = new wxHtmlWindow(this,-1,wxDefaultPosition,wxSize(FRAME_WIDTH, 
+   m_htmlwin = new wxHtmlWindow(this,-1,wxDefaultPosition,wxSize(FRAME_WIDTH,
                                                           FRAME_HEIGHT));
-   
+
    wxLayoutConstraints *c;
 
    c = new wxLayoutConstraints;
@@ -120,7 +121,7 @@ wxHelpControllerHtml::wxHelpControllerHtml(void)
 {
    m_Frame = NULL;
    m_offset = 0;
-   
+
    SetFrameParameters(_("Help"),
                       wxSize(FRAME_WIDTH, FRAME_HEIGHT),
                       wxDefaultPosition);
@@ -158,7 +159,7 @@ wxHelpControllerHtml::DisplayHelp(wxString const &relativeURL)
          if(m_offset > 200)
             m_offset = 0;
       }
-      
+
    }
    return m_Frame->LoadPage(url);
 }
@@ -185,3 +186,5 @@ wxHelpControllerHtml::GetFrameParameters(wxSize *size = NULL,
    if(pos) *pos = m_FramePosition;
    if(newframe) *newframe = m_NewFrameEachTime;
 }
+
+#endif // wxUSE_HTML

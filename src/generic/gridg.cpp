@@ -98,7 +98,7 @@ wxGenericGrid::wxGenericGrid()
   m_currentRectVisible = FALSE;
   m_editable = TRUE;
 
-  m_editInPlace = TRUE;
+  m_editInPlace = FALSE;
   m_inOnTextInPlace = FALSE;
 
 #if defined(__WIN95__)
@@ -165,6 +165,8 @@ bool wxGenericGrid::Create(wxWindow *parent,
   m_textItem = (wxTextCtrl *) NULL;
   m_currentRectVisible = FALSE;
   m_editable = TRUE;
+  m_editInPlace = FALSE;
+  m_inOnTextInPlace = FALSE;
 #if defined(__WIN95__)
   m_scrollWidth = wxSystemSettings::GetSystemMetric(wxSYS_VSCROLL_X);
 #elif defined(__WXGTK__)
@@ -250,8 +252,9 @@ bool wxGenericGrid::Create(wxWindow *parent,
                                       wxPoint( m_currentRect.x-2, m_currentRect.y-2 ),
                                       wxSize( m_currentRect.width+4, m_currentRect.height+4 ),
                                       wxNO_BORDER | wxTE_PROCESS_ENTER );
-  m_inPlaceTextItem->Show(TRUE);
-  m_inPlaceTextItem->SetFocus();
+  m_inPlaceTextItem->Show(m_editInPlace);
+  if ( m_editInPlace )
+    m_inPlaceTextItem->SetFocus();
 
   return TRUE;
 }
