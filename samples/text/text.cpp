@@ -57,11 +57,13 @@ class MyTextCtrl : public wxTextCtrl
 public:
     MyTextCtrl(wxWindow *parent, wxWindowID id, const wxString &value,
                const wxPoint &pos, const wxSize &size, int style = 0)
-        : wxTextCtrl(parent, id, value, pos, size, style) { }
+        : wxTextCtrl(parent, id, value, pos, size, style) { m_hasCapture = FALSE; }
 
     void OnKeyDown(wxKeyEvent& event);
     void OnKeyUp(wxKeyEvent& event);
     void OnChar(wxKeyEvent& event);
+
+    bool  m_hasCapture;
 
 private:
     static inline wxChar GetChar(bool on, wxChar c) { return on ? c : _T('-'); }
@@ -411,6 +413,21 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
             // go to position 10
             SetInsertionPoint(10);
             break;
+	    
+        case WXK_F4:
+	    if (!m_hasCapture)
+	    {
+                wxLogDebug( wxT("Now capturing mouse and events.") );
+	        m_hasCapture = TRUE;
+	        CaptureMouse();
+	    }
+	    else
+	    {
+                wxLogDebug( wxT("Stopped capturing mouse and events.") );
+	        m_hasCapture = TRUE;
+	        ReleaseMouse();
+	    }
+            break;
     }
 
     LogEvent( _("Key down"), event);
@@ -463,7 +480,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_multitext->WriteText( "Prepended. " );
 
 #if wxUSE_TOOLTIPS
-    m_multitext->SetToolTip("Press F1 here.");
+    m_multitext->SetToolTip("Press F1 here for statitics, F4 for capture and uncapture mouse.");
 #endif
 
     m_tab = new MyTextCtrl( this, -1, "Multiline, allow <TAB> processing.",

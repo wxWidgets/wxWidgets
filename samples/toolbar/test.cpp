@@ -209,10 +209,10 @@ bool MyApp::InitToolbar(wxToolBar* toolBar, bool smallicons)
   if ( !smallicons )
   {
       currentX += width + 5;
-      toolBar->AddTool(wxID_SAVE, *(toolBarBitmaps[2]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Save file");
+      toolBar->AddTool(wxID_SAVE, *(toolBarBitmaps[2]), wxNullBitmap, TRUE, currentX, -1, (wxObject *) NULL, "Toggle button 1");
       currentX += width + 5;
       toolBar->AddSeparator();
-      toolBar->AddTool(wxID_COPY, *(toolBarBitmaps[3]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Disable/Enable print button");
+      toolBar->AddTool(wxID_COPY, *(toolBarBitmaps[3]), wxNullBitmap, TRUE, currentX, -1, (wxObject *) NULL, "Toggle button 2");
       currentX += width + 5;
       toolBar->AddTool(wxID_CUT, *(toolBarBitmaps[4]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Toggle/Untoggle help button");
       currentX += width + 5;
@@ -222,8 +222,11 @@ bool MyApp::InitToolbar(wxToolBar* toolBar, bool smallicons)
       toolBar->AddTool(wxID_PRINT, *(toolBarBitmaps[6]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Print");
       currentX += width + 5;
       toolBar->AddSeparator();
-      toolBar->AddTool(wxID_HELP, *(toolBarBitmaps[7]), *(toolBarBitmaps[6]), TRUE, currentX, -1, (wxObject *) NULL, "Help");
+      toolBar->AddTool(wxID_HELP, *(toolBarBitmaps[7]), wxNullBitmap, TRUE, currentX, -1, (wxObject *) NULL, "Help button");
 
+      toolBar->ToggleTool( wxID_SAVE, TRUE );
+      toolBar->ToggleTool( wxID_COPY, TRUE );
+      toolBar->ToggleTool( wxID_COPY, FALSE );
       toolBar->EnableTool( wxID_PRINT, FALSE );
   }
 
