@@ -6,20 +6,50 @@ class wxNativeFontInfoPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def FromXFontName(self, *_args, **_kwargs):
-        val = apply(fontsc.wxNativeFontInfo_FromXFontName,(self,) + _args, _kwargs)
-        return val
-    def IsDefault(self, *_args, **_kwargs):
-        val = apply(fontsc.wxNativeFontInfo_IsDefault,(self,) + _args, _kwargs)
-        return val
-    def GetXFontName(self, *_args, **_kwargs):
-        val = apply(fontsc.wxNativeFontInfo_GetXFontName,(self,) + _args, _kwargs)
-        return val
-    def SetXFontName(self, *_args, **_kwargs):
-        val = apply(fontsc.wxNativeFontInfo_SetXFontName,(self,) + _args, _kwargs)
-        return val
     def Init(self, *_args, **_kwargs):
         val = apply(fontsc.wxNativeFontInfo_Init,(self,) + _args, _kwargs)
+        return val
+    def GetPointSize(self, *_args, **_kwargs):
+        val = apply(fontsc.wxNativeFontInfo_GetPointSize,(self,) + _args, _kwargs)
+        return val
+    def GetStyle(self, *_args, **_kwargs):
+        val = apply(fontsc.wxNativeFontInfo_GetStyle,(self,) + _args, _kwargs)
+        return val
+    def GetWeight(self, *_args, **_kwargs):
+        val = apply(fontsc.wxNativeFontInfo_GetWeight,(self,) + _args, _kwargs)
+        return val
+    def GetUnderlined(self, *_args, **_kwargs):
+        val = apply(fontsc.wxNativeFontInfo_GetUnderlined,(self,) + _args, _kwargs)
+        return val
+    def GetFaceName(self, *_args, **_kwargs):
+        val = apply(fontsc.wxNativeFontInfo_GetFaceName,(self,) + _args, _kwargs)
+        return val
+    def GetFamily(self, *_args, **_kwargs):
+        val = apply(fontsc.wxNativeFontInfo_GetFamily,(self,) + _args, _kwargs)
+        return val
+    def GetEncoding(self, *_args, **_kwargs):
+        val = apply(fontsc.wxNativeFontInfo_GetEncoding,(self,) + _args, _kwargs)
+        return val
+    def SetPointSize(self, *_args, **_kwargs):
+        val = apply(fontsc.wxNativeFontInfo_SetPointSize,(self,) + _args, _kwargs)
+        return val
+    def SetStyle(self, *_args, **_kwargs):
+        val = apply(fontsc.wxNativeFontInfo_SetStyle,(self,) + _args, _kwargs)
+        return val
+    def SetWeight(self, *_args, **_kwargs):
+        val = apply(fontsc.wxNativeFontInfo_SetWeight,(self,) + _args, _kwargs)
+        return val
+    def SetUnderlined(self, *_args, **_kwargs):
+        val = apply(fontsc.wxNativeFontInfo_SetUnderlined,(self,) + _args, _kwargs)
+        return val
+    def SetFaceName(self, *_args, **_kwargs):
+        val = apply(fontsc.wxNativeFontInfo_SetFaceName,(self,) + _args, _kwargs)
+        return val
+    def SetFamily(self, *_args, **_kwargs):
+        val = apply(fontsc.wxNativeFontInfo_SetFamily,(self,) + _args, _kwargs)
+        return val
+    def SetEncoding(self, *_args, **_kwargs):
+        val = apply(fontsc.wxNativeFontInfo_SetEncoding,(self,) + _args, _kwargs)
         return val
     def FromString(self, *_args, **_kwargs):
         val = apply(fontsc.wxNativeFontInfo_FromString,(self,) + _args, _kwargs)

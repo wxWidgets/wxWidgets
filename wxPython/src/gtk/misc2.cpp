@@ -1903,6 +1903,35 @@ static PyObject *_wrap_wxLogInfo(PyObject *self, PyObject *args, PyObject *kwarg
     return _resultobj;
 }
 
+static PyObject *_wrap_wxLogDebug(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _arg0;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "msg", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxLogDebug",_kwnames,&_obj0)) 
+        return NULL;
+{
+    _arg0 = wxString_in_helper(_obj0);
+    if (_arg0 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxLogDebug(*_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj0)
+        delete _arg0;
+}
+    return _resultobj;
+}
+
 static PyObject *_wrap_wxLogVerbose(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxString * _arg0;
@@ -5020,6 +5049,43 @@ static PyObject *_wrap_wxLog_IsAllowedTraceMask(PyObject *self, PyObject *args, 
     if (_obj0)
         delete _arg0;
 }
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxLog_SetLogLevel(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    unsigned long  _arg0;
+    char *_kwnames[] = { "logLevel", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"l:wxLog_SetLogLevel",_kwnames,&_arg0)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxLog::SetLogLevel(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxLog_GetLogLevel(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    unsigned long  _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxLog_GetLogLevel",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (unsigned long )wxLog::GetLogLevel();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("l",_result);
     return _resultobj;
 }
 
@@ -11161,6 +11227,8 @@ static PyMethodDef misc2cMethods[] = {
 	 { "new_wxLogTextCtrl", (PyCFunction) _wrap_new_wxLogTextCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxLogStderr", (PyCFunction) _wrap_new_wxLogStderr, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLog_TimeStamp", (PyCFunction) _wrap_wxLog_TimeStamp, METH_VARARGS | METH_KEYWORDS },
+	 { "wxLog_GetLogLevel", (PyCFunction) _wrap_wxLog_GetLogLevel, METH_VARARGS | METH_KEYWORDS },
+	 { "wxLog_SetLogLevel", (PyCFunction) _wrap_wxLog_SetLogLevel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLog_IsAllowedTraceMask", (PyCFunction) _wrap_wxLog_IsAllowedTraceMask, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLog_GetTraceMask", (PyCFunction) _wrap_wxLog_GetTraceMask, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLog_GetVerbose", (PyCFunction) _wrap_wxLog_GetVerbose, METH_VARARGS | METH_KEYWORDS },
@@ -11262,6 +11330,7 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxLogStatusFrame", (PyCFunction) _wrap_wxLogStatusFrame, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLogStatus", (PyCFunction) _wrap_wxLogStatus, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLogVerbose", (PyCFunction) _wrap_wxLogVerbose, METH_VARARGS | METH_KEYWORDS },
+	 { "wxLogDebug", (PyCFunction) _wrap_wxLogDebug, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLogInfo", (PyCFunction) _wrap_wxLogInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLogMessage", (PyCFunction) _wrap_wxLogMessage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLogWarning", (PyCFunction) _wrap_wxLogWarning, METH_VARARGS | METH_KEYWORDS },
