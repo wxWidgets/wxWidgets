@@ -133,7 +133,11 @@ wxHTMLHelpControllerBase::LoadFile(const wxString& ifile)
          wxChar* f = wxGetWorkingDirectory();
          file = f;
          delete[] f; // wxGetWorkingDirectory returns new memory
+#ifdef __WXMAC__
+         file << ifile;
+#else
          file << WXEXTHELP_SEPARATOR << ifile;
+#endif
       }
       else
          file = ifile;
