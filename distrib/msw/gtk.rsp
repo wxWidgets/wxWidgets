@@ -14,6 +14,7 @@ src/gtk/files.lst
 src/gtk/*.cpp
 src/gtk/*.c
 src/gtk/*.xbm
+src/gtk/*.h
 
 misc/afm/*.afm
 misc/gs_afm/*.afm
