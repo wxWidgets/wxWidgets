@@ -130,5 +130,10 @@ int wxFileDialog::ShowModal()
     }
 }
 
+void wxFileDialog::GetFilenames(wxArrayString& files) const
+{
+    files = m_fileNames;
+}
+
 #endif // wxUSE_FILEDLG
 
