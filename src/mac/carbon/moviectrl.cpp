@@ -327,6 +327,8 @@ void wxMovieCtrl::Cleanup()
 #ifndef __WXMAC__
     TerminateQTML();
 #endif
+
+    m_bLoaded = false;
 }
 
 wxMovieCtrl::~wxMovieCtrl()
