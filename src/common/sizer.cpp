@@ -361,6 +361,8 @@ bool wxSizer::Remove( wxSizer *sizer )
 
 bool wxSizer::Remove( int pos )
 {
+    if ((size_t)pos >= m_children.GetCount())
+        return FALSE;
     wxNode *node = m_children.Nth( pos );
     if (!node) return FALSE;
 
@@ -659,7 +661,7 @@ wxGridSizer::wxGridSizer( int cols, int vgap, int hgap )
 int wxGridSizer::CalcRowsCols(int& nrows, int& ncols) const
 {
     int nitems = m_children.GetCount();
-    if ( nitems) 
+    if ( nitems)
     {
         if ( m_cols )
         {
