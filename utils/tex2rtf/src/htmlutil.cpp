@@ -2026,7 +2026,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
 	  {
             TexOutput("<img src=\"");
             TexOutput(ConvertCase(wxFileNameFromPath(inlineFilename)));
-            TexOutput("\""); TexOutput(alignment); TexOutput("></A>");
+            TexOutput("\""); TexOutput(alignment); TexOutput(">");
             delete[] inlineFilename;
 	  }
         }
