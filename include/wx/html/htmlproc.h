@@ -12,7 +12,7 @@
 #define _WX_HTMLPREP_H_
 
 #ifdef __GNUG__
-#pragma interface "htmlprep.h"
+#pragma interface "htmlproc.h"
 // (implementation is in htmlwin.cpp, there's no htmlprep.cpp!)
 #endif
 
