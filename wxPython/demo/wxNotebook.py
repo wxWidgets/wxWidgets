@@ -13,7 +13,12 @@ import sys
 
 class TestNB(wxNotebook):
     def __init__(self, parent, id, log):
-        wxNotebook.__init__(self, parent, id, style=wxNB_BOTTOM)
+        wxNotebook.__init__(self, parent, id, style=
+                            #0
+                            wxNB_BOTTOM
+                            #wxNB_LEFT
+                            #wxNB_RIGHT
+                            )
         self.log = log
 
         win = self.makeColorPanel(wxBLUE)
