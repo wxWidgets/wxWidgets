@@ -309,6 +309,7 @@ int wxChoicebook::SetSelection(size_t n)
             page->SetSize(GetPageRect());
             page->Show();
 
+            // change m_selection now to ignore the selection change event
             m_selection = n;
             m_choice->Select(n);
 
@@ -337,16 +338,28 @@ wxChoicebook::InsertPage(size_t n,
 
     m_choice->Insert(text, n);
 
-    // we should always have some selection if possible
-    if ( bSelect || (m_selection == wxNOT_FOUND) )
+    // if the inserted page is before the selected one, we must update the
+    // index of the selected page
+    if ( int(n) <= m_selection )
     {
-        SetSelection(n);
+        // one extra page added
+        m_selection++;
+        m_choice->Select(m_selection);
     }
-    else // don't select this page
-    {
-        // it will be shown only when selected
+
+    // some page should be selected: either this one or the first one if there
+    // is still no selection
+    int selNew = -1;
+    if ( bSelect )
+        selNew = n;
+    else if ( m_selection == -1 )
+        selNew = 0;
+
+    if ( selNew != m_selection )
         page->Hide();
-    }
+
+    if ( selNew != -1 )
+        SetSelection(selNew);
 
     InvalidateBestSize();
     return true;
@@ -395,7 +408,6 @@ bool wxChoicebook::DeleteAllPages()
 void wxChoicebook::OnChoiceSelected(wxCommandEvent& eventChoice)
 {
     const int selNew = eventChoice.GetSelection();
-    const int selOld = m_selection;
 
     if ( selNew == m_selection )
     {
@@ -405,28 +417,11 @@ void wxChoicebook::OnChoiceSelected(wxCommandEvent& eventChoice)
         return;
     }
 
-    // first send "change in progress" event which may be vetoed by user
-    wxChoicebookEvent eventIng(wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING, GetId());
-
-    eventIng.SetEventObject(this);
-    eventIng.SetSelection(selNew);
-    eventIng.SetOldSelection(selOld);
-    if ( GetEventHandler()->ProcessEvent(eventIng) && !eventIng.IsAllowed() )
-    {
-        m_choice->Select(m_selection);
-        return;
-    }
-
-    // change allowed: do change the page and notify the user about it
     SetSelection(selNew);
 
-    wxChoicebookEvent eventEd(wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED, GetId());
-
-    eventEd.SetEventObject(this);
-    eventEd.SetSelection(selNew);
-    eventEd.SetOldSelection(selOld);
-
-    (void)GetEventHandler()->ProcessEvent(eventEd);
+    // change wasn't allowed, return to previous state
+    if (m_selection != selNew)
+        m_choice->Select(m_selection);
 }
 
 #endif // wxUSE_CHOICEBOOK
