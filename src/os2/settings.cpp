@@ -188,7 +188,7 @@ wxFont wxSystemSettings::GetSystemFont(int index)
         }
     }
 
-    return wxFont();
+    return *wxSWISS_FONT;
 }
 
 // Get a system metric, e.g. scrollbar size

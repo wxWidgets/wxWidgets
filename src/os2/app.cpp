@@ -536,7 +536,6 @@ wxApp::~wxApp()
         delete[] argv[i];
     }
     delete[] argv;
-#endif
 } // end of wxApp::~wxApp
 
 bool wxApp::Initialized()
@@ -884,7 +883,7 @@ void wxExit()
     wxLogError(_("Fatal error: exiting"));
 
     wxApp::CleanUp();
-} // end of wxExit 
+} // end of wxExit
 
 //
 // Yield to incoming messages
@@ -893,7 +892,7 @@ bool wxYield()
 {
     HAB                             vHab = 0;
     QMSG                            vMsg;
-  
+
     //
     // Disable log flushing from here because a call to wxYield() shouldn't
     // normally result in message boxes popping up &c
