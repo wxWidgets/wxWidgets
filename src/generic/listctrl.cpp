@@ -2397,7 +2397,6 @@ void wxListMainWindow::RefreshAfter( size_t lineFrom )
 
         CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
         RefreshRect( rect );
-    
     }
     else // !report
     {
@@ -2433,10 +2432,24 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
         size_t visibleFrom, visibleTo;
         GetVisibleLinesRange(&visibleFrom, &visibleTo);
+
+        wxRect rectLine;
+        wxCoord xOrig, yOrig;
+        CalcUnscrolledPosition(0, 0, &xOrig, &yOrig);
+
         for ( size_t line = visibleFrom; line <= visibleTo; line++ )
         {
+            rectLine = GetLineRect(line);
+
+            if ( !IsExposed(rectLine.x - xOrig, rectLine.y - yOrig,
+                            rectLine.width, rectLine.height) )
+            {
+                // don't redraw unaffected lines to avoid flicker
+                continue;
+            }
+
             GetLine(line)->DrawInReportMode( &dc,
-                                             GetLineRect(line),
+                                             rectLine,
                                              GetLineHighlightRect(line),
                                              IsHighlighted(line) );
         }
@@ -3756,6 +3769,7 @@ void wxListMainWindow::DeleteItem( long lindex )
         m_lines.RemoveAt( index );
     }
 
+    m_dirty = TRUE;
     RefreshAfter(index);
 }
 
@@ -3934,6 +3948,7 @@ void wxListMainWindow::InsertItem( wxListItem &item )
 
     m_lines.Insert( line, id );
 
+    m_dirty = TRUE;
     RefreshLines(id, GetItemCount() - 1);
 }
 
