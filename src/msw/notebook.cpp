@@ -398,7 +398,7 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
     // pass to the parent
     if ( GetParent() ) {
       event.SetCurrentFocus(this);
-      GetParent()->ProcessEvent(event);
+      GetParent()->GetEventHandler()->ProcessEvent(event);
     }
   }
 }
@@ -453,7 +453,7 @@ bool wxNotebook::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
   event.SetEventObject(this);
   event.SetInt(LOWORD(wParam));
 
-  return ProcessEvent(event);
+  return GetEventHandler()->ProcessEvent(event);
 }
 
 // ----------------------------------------------------------------------------

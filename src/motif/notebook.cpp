@@ -26,6 +26,9 @@
 #include  <wx/notebook.h>
 #include  <wx/dcclient.h>
 
+#include  <Xm/Xm.h>
+#include  <wx/motif/private.h>
+
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
@@ -96,15 +99,8 @@ bool wxNotebook::Create(wxWindow *parent,
 {
     // base init
     SetName(name);
-    SetParent(parent);
 
     m_windowId = id == -1 ? NewControlId() : id;
-
-    // style
-    m_windowStyle = style;
-
-    if ( parent != NULL )
-        parent->AddChild(this);
 
     // It's like a normal window...
     if (!wxWindow::Create(parent, id, pos, size, style, name))
@@ -137,6 +133,9 @@ int wxNotebook::GetRowCount() const
 
 int wxNotebook::SetSelection(int nPage)
 {
+    if (nPage == -1)
+      return 0;
+
     wxASSERT( IS_VALID_PAGE(nPage) );
 
     ChangePage(m_nSelection, nPage);
@@ -250,6 +249,7 @@ bool wxNotebook::InsertPage(int nPage,
     wxCHECK( IS_VALID_PAGE(nPage) || nPage == GetPageCount(), FALSE );
 
     m_tabView->AddTab(nPage, strText);
+    pPage->Show(FALSE);
 
 /*
     if (bSelect)
@@ -323,9 +323,13 @@ void wxNotebook::OnSize(wxSizeEvent& event)
         unsigned int nCount = m_aPages.Count();
         for ( unsigned int nPage = 0; nPage < nCount; nPage++ ) {
             wxNotebookPage *pPage = m_aPages[nPage];
-            pPage->SetSize(rect.x + 2, rect.y + 2, rect.width - 2, rect.height - 2);
-            if ( pPage->GetAutoLayout() )
-                pPage->Layout();
+            if (pPage->IsShown())
+            {
+                wxRect clientRect = GetAvailableClientSize();
+                pPage->SetSize(clientRect.x, clientRect.y, clientRect.width, clientRect.height);
+                if ( pPage->GetAutoLayout() )
+                   pPage->Layout();
+            }
         }
         Refresh();
     }
@@ -401,11 +405,19 @@ void wxNotebook::ChangePage(int nOldSel, int nSel)
 
     if ( nOldSel != -1 ) {
         m_aPages[nOldSel]->Show(FALSE);
+        m_aPages[nOldSel]->Lower();
     }
 
     wxNotebookPage *pPage = m_aPages[nSel];
+
+    wxRect clientRect = GetAvailableClientSize();
+    pPage->SetSize(clientRect.x, clientRect.y, clientRect.width, clientRect.height);
+
     pPage->Show(TRUE);
+    pPage->Raise();
     pPage->SetFocus();
+
+    Refresh();
 
     m_nSelection = nSel;
 }
@@ -438,6 +450,23 @@ void wxNotebook::OnPaint(wxPaintEvent& WXUNUSED(event) )
         m_tabView->Draw(dc);
 }
 
+wxRect wxNotebook::GetAvailableClientSize()
+{
+    int cw, ch;
+    GetClientSize(& cw, & ch);
+
+    int tabHeight = m_tabView->GetTotalTabHeight();
+
+    // TODO: these margins should be configurable.
+    wxRect rect;
+    rect.x = 6;
+    rect.y = tabHeight + 6;
+    rect.width = cw - 12;
+    rect.height = ch - 4 - rect.y ;
+
+    return rect;
+}
+
 /*
  * wxNotebookTabView
  */
@@ -448,8 +477,6 @@ wxNotebookTabView::wxNotebookTabView(wxNotebook *notebook, long style): wxTabVie
 {
   m_notebook = notebook;
 
-//  m_currentWindow = (wxWindow *) NULL;
-
   m_notebook->SetTabView(this);
 
   SetWindow(m_notebook);
@@ -457,7 +484,6 @@ wxNotebookTabView::wxNotebookTabView(wxNotebook *notebook, long style): wxTabVie
 
 wxNotebookTabView::~wxNotebookTabView(void)
 {
-//  ClearWindows(TRUE);
 }
 
 // Called when a tab is activated
@@ -465,16 +491,44 @@ void wxNotebookTabView::OnTabActivate(int activateId, int deactivateId)
 {
   if (!m_notebook)
     return;
-    
+
+  wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, m_notebook->GetId());
+  event.SetEventObject(m_notebook);
+  event.SetSelection(activateId);
+  event.SetOldSelection(deactivateId);
+  m_notebook->GetEventHandler()->ProcessEvent(event);
+  
+  /*    
   wxWindow *oldWindow = ((deactivateId == -1) ? 0 : m_notebook->GetPage(deactivateId));
   wxWindow *newWindow = m_notebook->GetPage(activateId);
 
   if (oldWindow)
+  {
     oldWindow->Show(FALSE);
+    oldWindow->Lower();
+  }
   if (newWindow)
+  {
     newWindow->Show(TRUE);
-    
+    newWindow->Raise();
+
+    int cw, ch;
+    m_notebook->GetClientSize(& cw, & ch);
+
+    int tabHeight = GetTotalTabHeight();
+    wxRect rect;
+    rect.x = 4;
+    rect.y = tabHeight + 4;
+    rect.width = cw - 8;
+    rect.height = ch - 4 - rect.y ;
+  
+    newWindow->SetSize(rect.x + 2, rect.y + 2, rect.width - 2, rect.height - 2);
+    newWindow->Refresh();
+  }
+
+  // TODO: only refresh the tab area.    
   m_notebook->Refresh();
+*/
 }
 
 #if 0

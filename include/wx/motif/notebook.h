@@ -49,6 +49,9 @@ public:
   int GetSelection() const { return m_nSel; }
   int GetOldSelection() const { return m_nOldSel; }
 
+  void SetSelection(int sel) { m_nSel = sel; }
+  void SetOldSelection(int oldSel) { m_nOldSel = oldSel; }
+
 private:
   int m_nSel,     // currently selected page
       m_nOldSel;  // previously selected page
@@ -73,22 +76,7 @@ public:
   // Called when a tab is activated
   virtual void OnTabActivate(int activateId, int deactivateId);
 
-/*
-  // Specific to this class
-   void AddTabWindow(int id, wxWindow *window);
-   wxWindow *GetTabWindow(int id) const ;
-   void ClearWindows(bool deleteWindows = TRUE);
-   inline wxWindow *GetCurrentWindow() const { return m_currentWindow; }
-   void ShowWindowForTab(int id);
-*/
-
 protected:
-/*
-   // List of panels, one for each tab. Indexed
-   // by tab ID.
-   wxList           m_tabWindows;
-   wxWindow*        m_currentWindow;
-*/
    wxNotebook*      m_notebook;
 };
 
@@ -204,6 +192,7 @@ public:
   virtual void ChangeFont(bool keepOriginalSize = TRUE);
   virtual void ChangeBackgroundColour();
   virtual void ChangeForegroundColour();
+  virtual wxRect GetAvailableClientSize();
 
 protected:
   // common part of all ctors

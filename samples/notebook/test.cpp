@@ -81,12 +81,14 @@ void MyApp::InitTabView(wxNotebook* notebook, wxWindow* window)
 
   // Add some panels
   wxPanel *panel1 = new wxPanel(notebook, -1);
+  //  panel1->SetBackgroundColour(wxColour("RED"));
   (void)new wxButton(panel1, -1, "Press me", wxPoint(10, 10));
   (void)new wxTextCtrl(panel1, -1, "1234", wxPoint(10, 40), wxSize(120, 150));
   
   notebook->AddPage(panel1, "Cat");
 
   wxPanel *panel2 = new wxPanel(notebook, -1);
+  panel2->SetBackgroundColour(wxColour("BLUE"));
 
   wxString animals[] = { "Fox", "Hare", "Rabbit", "Sabre-toothed tiger", "T Rex" };
   (void)new wxListBox(panel2, -1, wxPoint(5, 5), wxSize(170, 80), 5, animals);
@@ -95,6 +97,14 @@ void MyApp::InitTabView(wxNotebook* notebook, wxWindow* window)
     wxTE_MULTILINE);
 
   notebook->AddPage(panel2, "Dog");
+
+  wxPanel *panel3 = new wxPanel(notebook, -1);
+  panel3->SetBackgroundColour(wxColour("WHITE"));
+  notebook->AddPage(panel3, "Goat");
+
+  wxPanel *panel4 = new wxPanel(notebook, -1);
+  panel4->SetBackgroundColour(wxColour("YELLOW"));
+  notebook->AddPage(panel4, "Sheep");
 }
 
 BEGIN_EVENT_TABLE(MyDialog, wxDialog)

@@ -508,7 +508,7 @@ void wxMenu::ProcessCommand(wxCommandEvent & event)
   // Try the window the menu was popped up from (and up
   // through the hierarchy)
   if ( !processed && GetInvokingWindow())
-    processed = GetInvokingWindow()->ProcessEvent(event);
+    processed = GetInvokingWindow()->GetEventHandler()->ProcessEvent(event);
 }
 
 extern wxMenu *wxCurrentPopupMenu;

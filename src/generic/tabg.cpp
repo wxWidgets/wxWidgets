@@ -43,7 +43,6 @@ wxTabControl::wxTabControl(wxTabView *v)
 {
   m_view = v;
   m_isSelected = FALSE;
-  m_labelFont = (wxFont *) NULL;
   m_offsetX = 0;
   m_offsetY = 0;
   m_width = 0;
@@ -86,7 +85,11 @@ void wxTabControl::OnDraw(wxDC& dc, bool lastInRow)
     dc.SetBrush(*m_view->GetBackgroundBrush());
 
     // Add 1 because the pen is transparent. Under Motif, may be different.
+#ifdef __WXMOTIF__
+    dc.DrawRectangle(tabX, tabY, (GetWidth()+1), (GetHeight() + tabHeightInc));
+#else
     dc.DrawRectangle(tabX, tabY, (GetWidth()+1), (GetHeight() + 1 + tabHeightInc));
+#endif
   }
   
   // Draw highlight and shadow
@@ -152,6 +155,10 @@ void wxTabControl::OnDraw(wxDC& dc, bool lastInRow)
       if ( GetRowPosition() < (maxPositions - 1) )
         topY = tabY + GetHeight() + tabHeightInc;
 
+#ifdef __WXMOTIF__
+      topY -= 1;
+#endif
+
       // Shadow
       dc.DrawLine((tabX + GetWidth()), tabY, (tabX + GetWidth()), topY);
       // Draw black line to emphasize shadow
@@ -170,6 +177,10 @@ void wxTabControl::OnDraw(wxDC& dc, bool lastInRow)
       if (tabBeneath && tabBeneath->IsSelected())
         subtractThis = (m_view->GetTabSelectionHeight() - m_view->GetTabHeight());
 
+#ifdef __WXMOTIF__
+      subtractThis += 1;
+#endif
+
       // Draw only to next tab down.
       dc.DrawLine((tabX + GetWidth()), tabY,
          (tabX + GetWidth()), (tabY + GetHeight() + tabHeightInc - subtractThis));
@@ -185,9 +196,9 @@ void wxTabControl::OnDraw(wxDC& dc, bool lastInRow)
   int textY = tabY + m_view->GetVerticalTabTextSpacing() + tabHeightInc;
 
   if (m_isSelected)
-    dc.SetFont(*m_view->GetSelectedTabFont());
+    dc.SetFont(* m_view->GetSelectedTabFont());
   else
-    dc.SetFont(*GetFont());
+    dc.SetFont(* GetFont());
 
   wxColour col(m_view->GetTextColour());
   dc.SetTextForeground(col);
@@ -510,13 +521,14 @@ wxTabView::wxTabView(long style)
   m_shadowPen = wxGREY_PEN;
   m_backgroundPen = wxLIGHT_GREY_PEN;
   m_backgroundBrush = wxLIGHT_GREY_BRUSH;
-  m_tabFont = wxTheFontList->FindOrCreateFont(9, wxSWISS, wxNORMAL, wxNORMAL);
-  m_tabSelectedFont = wxTheFontList->FindOrCreateFont(9, wxSWISS, wxNORMAL, wxBOLD);
+  m_tabFont = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
+  m_tabSelectedFont = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
   m_window = (wxWindow *) NULL;
 }
 
 wxTabView::~wxTabView()
 {
+  ClearTabs(TRUE);
 }
   
 // Automatically positions tabs
@@ -578,7 +590,7 @@ wxTabControl *wxTabView::AddTab(int id, const wxString& label, wxTabControl *exi
   tabControl->SetSize(GetTabWidth(), GetTabHeight());
   tabControl->SetId(id);
   tabControl->SetLabel(label);
-  tabControl->SetFont(GetTabFont());
+  tabControl->SetFont(* GetTabFont());
   
   tabLayer->Append(tabControl);
   m_noTabs ++;
@@ -779,7 +791,12 @@ void wxTabView::Draw(wxDC& dc)
 		dc.DrawLine(
 				(GetViewRect().x),
 				(GetViewRect().y + GetViewRect().height + 1),
+#if defined(__WXMOTIF__)
+				(GetViewRect().x + GetViewRect().width + 1),
+#else
 				(GetViewRect().x + GetViewRect().width + 2),
+#endif
+
 				(GetViewRect().y + GetViewRect().height + 1)
 				);
 

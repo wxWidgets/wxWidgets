@@ -112,8 +112,6 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, width, height);
 
-    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW);
-
     ChangeBackgroundColour();
 
     return TRUE;
@@ -751,10 +749,41 @@ void wxListBox::ChangeFont(bool keepOriginalSize)
 void wxListBox::ChangeBackgroundColour()
 {
     wxWindow::ChangeBackgroundColour();
+
+    Widget parent = XtParent ((Widget) m_mainWidget);
+    Widget hsb, vsb;
+
+    XtVaGetValues (parent,
+		     XmNhorizontalScrollBar, &hsb,
+		     XmNverticalScrollBar, &vsb,
+		     NULL);
+
+    /* TODO: should scrollbars be affected? Should probably have separate
+     * function to change them (by default, taken from wxSystemSettings)
+    DoChangeBackgroundColour((WXWidget) hsb, m_backgroundColour, TRUE);
+    DoChangeBackgroundColour((WXWidget) vsb, m_backgroundColour, TRUE);
+    */
+
+    DoChangeBackgroundColour((WXWidget) parent, m_backgroundColour, TRUE);
 }
 
 void wxListBox::ChangeForegroundColour()
 {
     wxWindow::ChangeForegroundColour();
+
+    Widget parent = XtParent ((Widget) m_mainWidget);
+    Widget hsb, vsb;
+
+    XtVaGetValues (parent,
+		     XmNhorizontalScrollBar, &hsb,
+		     XmNverticalScrollBar, &vsb,
+		     NULL);
+    /* TODO: should scrollbars be affected? Should probably have separate
+     * function to change them (by default, taken from wxSystemSettings)
+    DoChangeForegroundColour((WXWidget) hsb, m_foregroundColour);
+    DoChangeForegroundColour((WXWidget) vsb, m_foregroundColour);
+    DoChangeForegroundColour((WXWidget) parent, m_foregroundColour);
+    */
 }
+
 

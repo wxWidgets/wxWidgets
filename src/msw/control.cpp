@@ -242,7 +242,7 @@ bool wxControl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
     event.SetEventType(eventType);
 	event.SetEventObject(this);
 
-	if ( !ProcessEvent(event) )
+	if ( !GetEventHandler()->ProcessEvent(event) )
 		return FALSE;
 	return TRUE;
 #else

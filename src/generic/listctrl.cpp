@@ -1087,7 +1087,7 @@ void wxListMainWindow::OnRenameAccept()
 
 void wxListMainWindow::OnMouse( wxMouseEvent &event )
 {
-  if (GetParent()->ProcessEvent( event)) return;
+  if (GetParent()->GetEventHandler()->ProcessEvent( event)) return;
 
   if (!m_current) return;
   if (m_dirty) return;
@@ -1402,7 +1402,7 @@ void wxListMainWindow::OnSetFocus( wxFocusEvent &WXUNUSED(event) )
   
   wxFocusEvent event( wxEVT_SET_FOCUS, GetParent()->GetId() );
   event.SetEventObject( GetParent() );
-  GetParent()->ProcessEvent( event );
+  GetParent()->GetEventHandler()->ProcessEvent( event );
 }
 
 void wxListMainWindow::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
@@ -2054,7 +2054,7 @@ void wxListMainWindow::SortItems( wxListCtrlCompare fn, long data )
 
 bool wxListMainWindow::OnListNotify( wxListEvent &event )
 {
-  if (GetParent()) GetParent()->ProcessEvent( event );
+  if (GetParent()) GetParent()->GetEventHandler()->ProcessEvent( event );
   return FALSE;
 }
 

@@ -646,11 +646,47 @@ void wxTextCtrl::ChangeFont(bool keepOriginalSize)
 void wxTextCtrl::ChangeBackgroundColour()
 {
     wxWindow::ChangeBackgroundColour();
+
+    Widget parent = XtParent ((Widget) m_mainWidget);
+    Widget hsb, vsb;
+
+    XtVaGetValues (parent,
+		     XmNhorizontalScrollBar, &hsb,
+		     XmNverticalScrollBar, &vsb,
+		     NULL);
+
+    /* TODO: should scrollbars be affected? Should probably have separate
+     * function to change them (by default, taken from wxSystemSettings)
+    if (hsb)
+        DoChangeBackgroundColour((WXWidget) hsb, m_backgroundColour, TRUE);
+    if (vsb)
+        DoChangeBackgroundColour((WXWidget) vsb, m_backgroundColour, TRUE);
+     */
+
+    DoChangeBackgroundColour((WXWidget) parent, m_backgroundColour, TRUE);
 }
 
 void wxTextCtrl::ChangeForegroundColour()
 {
     wxWindow::ChangeForegroundColour();
+
+
+    Widget parent = XtParent ((Widget) m_mainWidget);
+    Widget hsb, vsb;
+
+    XtVaGetValues (parent,
+		     XmNhorizontalScrollBar, &hsb,
+		     XmNverticalScrollBar, &vsb,
+		     NULL);
+
+    /* TODO: should scrollbars be affected? Should probably have separate
+     * function to change them (by default, taken from wxSystemSettings)
+    if (hsb)
+        DoChangeForegroundColour((WXWidget) hsb, m_foregroundColour);
+    if (vsb)
+        DoChangeForegroundColour((WXWidget) vsb, m_foregroundColour);
+     */
+    DoChangeForegroundColour((WXWidget) parent, m_foregroundColour);
 }
 
 static void wxTextWindowChangedProc (Widget w, XtPointer clientData, XtPointer ptr)

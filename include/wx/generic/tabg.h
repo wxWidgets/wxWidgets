@@ -40,8 +40,8 @@ public:
     inline void SetLabel(const wxString& str) { m_controlLabel = str; }
     inline wxString GetLabel(void) const { return m_controlLabel; }
 
-    inline void SetFont(wxFont *f) { m_labelFont = f; }
-    inline wxFont *GetFont(void) const { return m_labelFont; }
+    inline void SetFont(const wxFont& f) { m_labelFont = f; }
+    inline wxFont *GetFont(void) const { return (wxFont*) & m_labelFont; }
 
     inline void SetSelected(bool sel) { m_isSelected = sel; }
     inline bool IsSelected(void) const { return m_isSelected; }
@@ -68,7 +68,7 @@ protected:
     wxTabView*      m_view;
     wxString        m_controlLabel;
     bool            m_isSelected;
-    wxFont*         m_labelFont;
+    wxFont          m_labelFont;
     int             m_offsetX; // Offsets from top-left of tab view area (the area below the tabs)
     int             m_offsetY;
     int             m_width;
@@ -188,11 +188,11 @@ public:
   inline void SetVerticalTabTextSpacing(int s) { m_tabVerticalTextSpacing = s; }
   inline int GetVerticalTabTextSpacing() const { return m_tabVerticalTextSpacing; }
   
-  inline wxFont *GetTabFont() const { return m_tabFont; }
-  inline void SetTabFont(wxFont *f) { m_tabFont = f; }
+  inline wxFont *GetTabFont() const { return (wxFont*) & m_tabFont; }
+  inline void SetTabFont(const wxFont& f) { m_tabFont = f; }
 
-  inline wxFont *GetSelectedTabFont() const { return m_tabSelectedFont; }
-  inline void SetSelectedTabFont(wxFont *f) { m_tabSelectedFont = f; }
+  inline wxFont *GetSelectedTabFont() const { return (wxFont*) & m_tabSelectedFont; }
+  inline void SetSelectedTabFont(const wxFont& f) { m_tabSelectedFont = f; }
   // Find the node and the column at which this control is positioned.
   wxNode *FindTabNodeAndColumn(wxTabControl *control, int *col) const ;
   
@@ -253,8 +253,8 @@ protected:
    wxPen*           m_backgroundPen;
    wxBrush*         m_backgroundBrush;
    
-   wxFont*          m_tabFont;
-   wxFont*          m_tabSelectedFont;
+   wxFont           m_tabFont;
+   wxFont           m_tabSelectedFont;
    
    int              m_noTabs;
 

@@ -74,7 +74,8 @@ wxColour wxSystemSettings::GetSystemColour(int index)
     case wxSYS_COLOUR_INFOBK:
     case wxSYS_COLOUR_APPWORKSPACE:
     {
-      return *wxWHITE;
+        return wxColour("LIGHT GREY");
+	//      return *wxWHITE;
     }
   }
   return *wxWHITE;

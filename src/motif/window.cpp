@@ -740,6 +740,8 @@ bool wxWindow::Show(bool show)
     {
        if (m_borderWidget || m_scrolledWindow)
        {
+           if (m_drawingArea)
+             XtMapWidget((Widget) m_drawingArea);
            XtMapWidget(m_borderWidget ? (Widget) m_borderWidget : (Widget) m_scrolledWindow);
        }
        else
@@ -751,6 +753,8 @@ bool wxWindow::Show(bool show)
     {
        if (m_borderWidget || m_scrolledWindow)
        {
+           if (m_drawingArea)
+             XtUnmapWidget((Widget) m_drawingArea);
            XtUnmapWidget(m_borderWidget ? (Widget) m_borderWidget : (Widget) m_scrolledWindow);
        }
        else
@@ -1387,7 +1391,18 @@ void wxWindow::RemoveChild(wxWindow *child)
 
 void wxWindow::DestroyChildren()
 {
-  if (GetChildren()) {
+  if (GetChildren())
+  {
+    wxNode *node = GetChildren()->First();
+    while (node)
+    {
+      wxNode* next = node->Next();
+      wxWindow* child = (wxWindow*) node->Data();
+      delete child;
+      node = next;
+    }
+    GetChildren()->Clear();
+#if 0
     wxNode *node;
     while ((node = GetChildren()->First()) != (wxNode *)NULL) {
       wxWindow *child;
@@ -1397,6 +1412,7 @@ void wxWindow::DestroyChildren()
 			delete node;
       }
     } /* while */
+#endif
   }
 }
 

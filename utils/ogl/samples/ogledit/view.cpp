@@ -66,10 +66,81 @@ bool DiagramView::OnCreate(wxDocument *doc, long flags)
   return TRUE;
 }
 
+#define CENTER  FALSE // Place the drawing to the center of the page
+
+
 // Sneakily gets used for default print/preview
-// as well as drawing on the screen.
-void DiagramView::OnDraw(wxDC *dc)
-{
+// as well as drawing on the screen. 
+void DiagramView::OnDraw(wxDC *dc) 
+{ 
+
+  /* You might use THIS code if you were scaling 
+   * graphics of known size to fit on the page. 
+   */ 
+  float w, h; 
+
+  // We need to adjust for the graphic size, a formula will be added 
+  float maxX = 900; 
+  float maxY = 700; 
+  // A better way of find the maxium values would be to search through 
+  // the linked list 
+
+  // Let's have at least 10 device units margin 
+  float marginX = 10; 
+  float marginY = 10; 
+
+  // Add the margin to the graphic size 
+  maxX += (2 * marginX); 
+  maxY += (2 * marginY); 
+
+  // Get the size of the DC in pixels 
+  dc->GetSize (&w, &h); 
+
+  // Calculate a suitable scaling factor 
+  float scaleX = (float) (w / maxX); 
+  float scaleY = (float) (h / maxY); 
+
+  // Use x or y scaling factor, whichever fits on the DC 
+  float actualScale = wxMin (scaleX, scaleY); 
+
+  float posX, posY; 
+  // Calculate the position on the DC for centring the graphic 
+  if (CENTER == TRUE) // center the drawing 
+    { 
+      posX = (float) ((w - (200 * actualScale)) / 2.0); 
+      posY = (float) ((h - (200 * actualScale)) / 2.0); 
+    } 
+  else    // Use defined presets 
+    { 
+      posX = 10; 
+      posY = 35; 
+    } 
+  
+
+  // Set the scale and origin 
+  dc->SetUserScale (actualScale, actualScale); 
+  dc->SetDeviceOrigin (posX, posY); 
+
+  // This part was added to preform the print preview and printing functions 
+
+  dc->BeginDrawing(); // Allows optimization of drawing code under MS Windows. 
+  wxDiagram *diagram_p=((DiagramDocument*)GetDocument())->GetDiagram();  // Get the current diagram
+  if (diagram_p->GetShapeList()) 
+  { 
+    wxCursor *old_cursor = NULL; 
+    wxNode *current = diagram_p->GetShapeList()->First();
+
+    while (current) // Loop through the entire list of shapes 
+    {
+        wxShape *object = (wxShape *)current->Data();
+        if (!object->GetParent())
+        {
+            object->Draw(* dc); // Draw the shape onto our printing dc
+        }
+        current = current->Next();  // Procede to the next shape in the list
+    }
+  }
+  dc->EndDrawing(); // Allows optimization of drawing code under MS Windows. 
 }
 
 void DiagramView::OnUpdate(wxView *sender, wxObject *hint)
@@ -166,6 +237,7 @@ void DiagramView::OnEditLabel(wxCommandEvent& event)
         GetDocument()->GetCommandProcessor()->Submit(new DiagramCommand("Edit label", OGLEDIT_EDIT_LABEL, (DiagramDocument*) GetDocument(), newLabel, theShape));
       }
 }
+
 
 /*
  * Window implementations

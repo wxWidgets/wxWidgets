@@ -252,7 +252,7 @@ bool wxSpinButton::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
 	event.eventObject = this;
 	event.SetEventType(eventType);
 
-	if ( !ProcessEvent(event) )
+	if ( !GetEventHandler()->ProcessEvent(event) )
 		return FALSE;
 */
   	return TRUE;

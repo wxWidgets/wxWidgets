@@ -3575,7 +3575,7 @@ void wxWindow::OnChar(wxKeyEvent& event)
         // propagate the TABs to the parent - it's up to it to decide what
         // to do with it
         if ( GetParent() ) {
-            if ( GetParent()->ProcessEvent(event) )
+            if ( GetParent()->GetEventHandler()->ProcessEvent(event) )
                 return;
         }
     }

@@ -1034,7 +1034,7 @@ bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
                                                  : wxEVT_SET_FOCUS,
                            m_windowId);
         event.SetEventObject( this );
-        ProcessEvent(event);
+        GetEventHandler()->ProcessEvent(event);
       }
       break;
 
@@ -1083,7 +1083,7 @@ bool wxTextCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
   event.SetEventObject( this );
   event.SetEventType(eventType);
 
-  if ( !ProcessEvent(event) )
+  if ( !GetEventHandler()->ProcessEvent(event) )
     return FALSE;
 
     return TRUE;
