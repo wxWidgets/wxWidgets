@@ -18,9 +18,9 @@
 
 #include "wx/dc.h"
 
-// -----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // fwd declarations
-// -----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxWindowDC;
 class WXDLLEXPORT wxWindow;
@@ -140,12 +140,18 @@ protected:
     virtual void DoDrawPolygon(int n, wxPoint points[],
         wxCoord xoffset, wxCoord yoffset,
         int fillStyle = wxODDEVEN_RULE);
-    
+
+    void DoGetSize( int *width, int *height ) const;
+
+    // common part of constructors
+    void Init();
+
     WXGC         m_gc;
     WXGC         m_gcBacking;
     WXDisplay*   m_display;
     wxWindow*    m_window;
-    WXRegion     m_currentRegion; // Current clipping region (incl. paint clip region)
+    // Current clipping region (incl. paint clip region)
+    WXRegion     m_currentRegion; 
     WXRegion     m_userRegion;    // User-defined clipping region
     WXPixmap     m_pixmap;        // Pixmap for drawing on
     

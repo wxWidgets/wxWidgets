@@ -126,7 +126,7 @@ static int roundmin(double a, double b)
 // wxWindowDC
 // ----------------------------------------------------------------------------
 
-wxWindowDC::wxWindowDC()
+void wxWindowDC::Init()
 {
     m_gc = (WXGC) 0;
     m_gcBacking = (WXGC) 0;
@@ -138,7 +138,6 @@ wxWindowDC::wxWindowDC()
     m_currentPenDash = (wxX11Dash*) NULL;
     m_currentStyle = -1;
     m_currentFill = -1;
-    //    m_currentBkMode = wxTRANSPARENT;
     m_colour = wxColourDisplay();
     m_display = (WXDisplay*) NULL;
     m_currentRegion = (WXRegion) 0;
@@ -146,29 +145,23 @@ wxWindowDC::wxWindowDC()
     m_pixmap = (WXPixmap) 0;
     m_autoSetting = 0;
     m_oldFont = (WXFont) 0;
+    m_ok = false;
+}
+
+wxWindowDC::wxWindowDC()
+{
+    Init();
 }
 
 wxWindowDC::wxWindowDC( wxWindow *window )
 {
     wxASSERT_MSG( (window != (wxWindow*) NULL), "You must pass a valid wxWindow to wxWindowDC/wxClientDC/wxPaintDC constructor." );
 
+    Init();
+
     m_window = window;
     m_font = window->GetFont();
-    m_gc = (WXGC) 0;
-    m_gcBacking = (WXGC) 0;
-    m_backgroundPixel = -1;
-    m_currentPenWidth = 1;
-    m_currentPenJoin = -1;
-    m_currentPenDashCount = -1;
-    m_currentPenDash = (wxX11Dash*) NULL;
-    m_currentStyle = -1;
-    m_currentFill = -1;
-    //    m_currentBkMode = wxTRANSPARENT;
-    m_colour = wxColourDisplay();
-    m_currentRegion = (WXRegion) 0;
-    m_userRegion = (WXRegion) 0;
     m_ok = TRUE;
-    m_autoSetting = 0;
 
     m_display = window->GetXDisplay();
     m_pixmap = window->GetXWindow();
@@ -260,8 +253,6 @@ void wxWindowDC::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 )
 
     int x1d, y1d, x2d, y2d;
 
-    //  FreeGetPixelCache();
-
     x1d = XLOG2DEV(x1);
     y1d = YLOG2DEV(y1);
     x2d = XLOG2DEV(x2);
@@ -313,8 +304,6 @@ void wxWindowDC::DoCrossHair( wxCoord x, wxCoord y )
 void wxWindowDC::DoDrawArc( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoord xc, wxCoord yc )
 {
     wxCHECK_RET( Ok(), "invalid dc" );
-
-    //  FreeGetPixelCache();
 
     int xx1 = XLOG2DEV (x1);
     int yy1 = YLOG2DEV (y1);
@@ -442,8 +431,6 @@ void wxWindowDC::DoDrawPoint( wxCoord x, wxCoord y )
 {
     wxCHECK_RET( Ok(), "invalid dc" );
 
-    //  FreeGetPixelCache();
-
     if (m_pen.Ok() && m_autoSetting)
         SetPen (m_pen);
 
@@ -457,8 +444,6 @@ void wxWindowDC::DoDrawPoint( wxCoord x, wxCoord y )
 void wxWindowDC::DoDrawLines( int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset )
 {
     wxCHECK_RET( Ok(), "invalid dc" );
-
-    //  FreeGetPixelCache();
 
     if (m_pen.Ok() && m_pen.GetStyle () != wxTRANSPARENT)
     {
@@ -492,8 +477,6 @@ void wxWindowDC::DoDrawPolygon( int n, wxPoint points[],
                                 wxCoord xoffset, wxCoord yoffset, int fillStyle )
 {
     wxCHECK_RET( Ok(), "invalid dc" );
-
-    //  FreeGetPixelCache();
 
     XPoint *xpoints1 = new XPoint[n + 1];
     XPoint *xpoints2 = new XPoint[n + 1];
@@ -546,8 +529,6 @@ void wxWindowDC::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord h
 {
     wxCHECK_RET( Ok(), "invalid dc" );
 
-    //  FreeGetPixelCache();
-
     int xd, yd, wfd, hfd, wd, hd;
 
     xd = XLOG2DEV(x);
@@ -590,8 +571,6 @@ void wxWindowDC::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord h
 void wxWindowDC::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius )
 {
     wxCHECK_RET( Ok(), "invalid dc" );
-
-    //  FreeGetPixelCache();
 
     // If radius is negative, it's a proportion of the smaller dimension.
 
@@ -747,8 +726,6 @@ void wxWindowDC::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width, wx
     }
     CalcBoundingBox (x, y);
     CalcBoundingBox (x + width, y + height);
-
-
 }
 
 void wxWindowDC::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
@@ -767,8 +744,6 @@ void wxWindowDC::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord hei
         x = x + width;
         width = - width ;
     }
-
-    //  FreeGetPixelCache();
 
     static const int angle = 23040;
 
@@ -813,66 +788,6 @@ bool wxWindowDC::CanDrawBitmap() const
     return TRUE;
 }
 
-#if 0
-void wxWindowDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y)
-{
-    //  FreeGetPixelCache();
-
-    // Be sure that foreground pixels (1) of
-    // the Icon will be painted with pen colour. [m_pen.SetColour()]
-    // Background pixels (0) will be painted with
-    // last selected background color. [::SetBackground]
-    if (m_pen.Ok() && m_autoSetting)
-        SetPen (m_pen);
-
-    int width, height;
-    Pixmap iconPixmap = (Pixmap) icon.GetDrawable();
-    width = icon.GetWidth();
-    height = icon.GetHeight();
-    if (icon.GetDisplay() == m_display)
-    {
-        if (icon.GetDepth() <= 1)
-        {
-            XCopyPlane  ((Display*) m_display, iconPixmap, (Pixmap) m_pixmap, (GC) m_gc,
-                0, 0, width, height,
-                (int) XLOG2DEV (x), (int) YLOG2DEV (y), 1);
-        }
-        else
-        {
-            XCopyArea  ((Display*) m_display, iconPixmap, (Pixmap) m_pixmap, (GC) m_gc,
-                0, 0, width, height,
-                (int) XLOG2DEV (x), (int) YLOG2DEV (y));
-        }
-
-
-        if (m_window && m_window->GetBackingPixmap())
-        {
-            if (icon.GetDepth() <= 1)
-            {
-                XCopyPlane ((Display*) m_display, iconPixmap, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
-                    0, 0, width, height, (int) XLOG2DEV_2 (x), (int) YLOG2DEV_2 (y), 1);
-            }
-            else
-            {
-                XCopyArea  ((Display*) m_display, iconPixmap, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
-                    0, 0, width, height,
-                    (int) XLOG2DEV_2 (x), (int) YLOG2DEV_2 (y));
-            }
-        }
-    } else { /* Remote copy (different (Display*) m_displays) */
-        XImage *cache = NULL;
-        if (m_window && m_window->GetBackingPixmap())
-            XCopyRemote((Display*) icon.GetDisplay(), (Display*) m_display, iconPixmap, (Pixmap) m_window->GetBackingPixmap(),
-            (GC) m_gcBacking, 0, 0, width, height,
-            (int) XLOG2DEV_2 (x), (int) YLOG2DEV_2 (y), TRUE, &cache);
-        XCopyRemote((Display*) icon.GetDisplay(), (Display*) m_display, iconPixmap, (Pixmap) m_pixmap, (GC) m_gc,
-            0, 0, width, height,
-            (int) XLOG2DEV (x), (int) YLOG2DEV (y), FALSE, &cache);
-    }
-    CalcBoundingBox (x, y);
-}
-#endif // 0
-
 // TODO: use scaled Blit e.g. as per John Price's implementation in Contrib/Utilities
 bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                          wxDC *source, wxCoord xsrc, wxCoord ysrc, int rop, bool useMask,
@@ -883,8 +798,6 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
     wxWindowDC* sourceDC = wxDynamicCast(source, wxWindowDC);
 
     wxASSERT_MSG( sourceDC, "Blit source DC must be wxWindowDC or derived class." );
-
-    //  FreeGetPixelCache();
 
     // Be sure that foreground pixels (1) of the Icon will be painted with
     // foreground colour. [m_textForegroundColour] Background pixels (0)
@@ -1482,42 +1395,31 @@ wxCoord wxWindowDC::GetCharHeight() const
     return XDEV2LOGREL(ascent + descent);
 }
 
-void wxWindowDC::Clear()
+void wxWindowDC::DoGetSize( int *width, int *height ) const
 {
-    wxCHECK_RET( Ok(), "invalid dc" );
+    int w = 0, h = 0;
 
-    int w, h;
-    if (m_window)
+    if( m_window )
     {
-        m_window->GetSize(&w, &h);
-
-        if (m_window && m_window->GetBackingPixmap())
+        if( m_window->GetBackingPixmap() )
         {
             w = m_window->GetPixmapWidth();
             h = m_window->GetPixmapHeight();
         }
-    }
-    else
-    {
-        if (this->IsKindOf(CLASSINFO(wxMemoryDC)))
-        {
-            wxMemoryDC* memDC = (wxMemoryDC*) this;
-            w = memDC->GetBitmap().GetWidth();
-            h = memDC->GetBitmap().GetHeight();
-        }
         else
-            return;
+            m_window->GetSize( &w, &h );
     }
 
-    wxBrush saveBrush = m_brush;
-    SetBrush (m_backgroundBrush);
+    if( width ) *width = w;
+    if( height ) *height = h;
+}
 
-    XFillRectangle ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, 0, 0, w, h);
+void wxWindowDC::Clear()
+{
+    wxCHECK_RET( Ok(), "invalid dc" );
 
-    if (m_window && m_window->GetBackingPixmap())
-        XFillRectangle ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking, 0, 0, w, h);
-
-    m_brush = saveBrush;
+    wxRect rect( wxPoint( 0, 0 ), GetSize() );
+    Clear( rect );
 }
 
 void wxWindowDC::Clear(const wxRect& rect)
@@ -1530,10 +1432,13 @@ void wxWindowDC::Clear(const wxRect& rect)
     wxBrush saveBrush = m_brush;
     SetBrush (m_backgroundBrush);
 
-    XFillRectangle ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, x, y, w, h);
+    XFillRectangle ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc,
+                    x, y, w, h);
 
     if (m_window && m_window->GetBackingPixmap())
-        XFillRectangle ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking, x, y, w, h);
+        XFillRectangle ((Display*) m_display,
+                        (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking,
+                        x, y, w, h);
 
     m_brush = saveBrush;
 }
@@ -2055,14 +1960,6 @@ void wxWindowDC::SetBackground( const wxBrush &brush )
 
     m_backgroundPixel = m_backgroundBrush.GetColour().AllocColour(m_display);
 
-    // New behaviour, 10/2/99: setting the background brush of a DC
-    // doesn't affect the window background colour.
-/*
-    // XSetWindowBackground doesn't work for non-Window pixmaps
-    if (!this->IsKindOf(CLASSINFO(wxMemoryDC)))
-        XSetWindowBackground ((Display*) m_display, (Pixmap) m_pixmap, pixel);
-*/
-
     // Necessary for ::DrawIcon, which use fg/bg pixel or the GC.
     // And Blit,... (Any fct that use XCopyPlane, in fact.)
     XSetBackground ((Display*) m_display, (GC) m_gc, m_backgroundPixel);
@@ -2150,23 +2047,14 @@ void wxWindowDC::SetTextForeground( const wxColour &col )
 {
     wxCHECK_RET( Ok(), "invalid dc" );
 
-    if (m_textForegroundColour == col)
-        return;
-
     m_textForegroundColour = col;
-
 }
 
 void wxWindowDC::SetTextBackground( const wxColour &col )
 {
     wxCHECK_RET( Ok(), "invalid dc" );
 
-    if (m_textBackgroundColour == col)
-        return;
-
     m_textBackgroundColour = col;
-    if (!m_textBackgroundColour.Ok())
-        return;
 }
 
 void wxWindowDC::SetBackgroundMode( int mode )
