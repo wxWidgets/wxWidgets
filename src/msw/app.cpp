@@ -49,6 +49,7 @@
 #endif
 
 #include "wx/cmdline.h"
+#include "wx/filename.h"
 #include "wx/module.h"
 
 #include "wx/msw/private.h"
@@ -566,6 +567,13 @@ void wxApp::ConvertToStandardCommandArgs(const char* lpCmdLine)
     argv[0] = new wxChar[260]; // 260 is MAX_PATH value from windef.h
     ::GetModuleFileName(wxhInstance, argv[0], 260);
 
+    // also set the app name from argv[0]
+    wxString name;
+    wxFileName::SplitPath(argv[0], NULL, &name, NULL);
+
+    SetAppName(name);
+
+    // copy all the other arguments to wxApp::argv[]
     for ( int i = 1; i < argc; i++ )
     {
         argv[i] = copystring(args[i - 1]);
