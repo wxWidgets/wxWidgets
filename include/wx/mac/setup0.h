@@ -139,8 +139,9 @@
 //
 // Default is 1 if supported by the compiler.
 //
-// Recommended setting: 0, it is still experimental and API may change
-#define wxUSE_DEBUGREPORT 0
+// Recommended setting: 1, it is compiled into a separate library so there
+//                         is no overhead if you don't use it
+#define wxUSE_DEBUGREPORT 1
 
 // ----------------------------------------------------------------------------
 // Unicode support
