@@ -74,44 +74,44 @@ void wxStaticText::DrawParagraph(wxDC &dc, wxString paragraph, int &y)
         return;
     }
 
-  int x = 0 ;
+    int x = 0 ;
 
-  bool linedrawn = true;
-  while( paragraph.Length() > 0 )
-  {
+    bool linedrawn = true;
+    while( paragraph.Length() > 0 )
+    {
         dc.GetTextExtent( paragraph , &width , &height ) ;
-
+        
         if ( width > m_width )
         {
-            for ( int p = paragraph.Length() -1 ; p > 0 ; --p )
+            for ( size_t p = paragraph.Length() - 1 ; p > 0 ; --p )
             {
-              if ((punct.Find(paragraph[p]) != wxNOT_FOUND) || !linedrawn)
+                if ((punct.Find(paragraph[p]) != wxNOT_FOUND) || !linedrawn)
                 {
-                  int blank = (paragraph[p] == ' ') ? 0 : 1;
-
+                    int blank = (paragraph[p] == ' ') ? 0 : 1;
+                    
                     dc.GetTextExtent( paragraph.Left(p + blank) , &width , &height ) ;
-
+                    
                     if ( width <= m_width )
                     {
                         int pos = x ;
                         if ( HasFlag( wxALIGN_CENTER ) )
                         {
                             pos += ( m_width - width ) / 2 ;
-                      }
+                        }
                         else if ( HasFlag( wxALIGN_RIGHT ) )
                         {
                             pos += ( m_width - width ) ;
-                      }
-
-                    dc.DrawText( paragraph.Left(p + blank), pos , y) ;
-                    y += height ;
+                        }
+                        
+                        dc.DrawText( paragraph.Left(p + blank), pos , y) ;
+                        y += height ;
                         paragraph = paragraph.Mid(p+1) ;
                         linedrawn = true;
                         break ;
                     }
                 }
             }
-
+            
             linedrawn = false;
         }
         else
@@ -120,15 +120,15 @@ void wxStaticText::DrawParagraph(wxDC &dc, wxString paragraph, int &y)
             if ( HasFlag( wxALIGN_CENTER ) )
             {
                 pos += ( m_width - width ) / 2 ;
-          }
+            }
             else if ( HasFlag( wxALIGN_RIGHT ) )
             {
                 pos += ( m_width - width ) ;
-          }
-
-        dc.DrawText( paragraph, pos , y) ;
-        paragraph="";
-        y += height ;
+            }
+            
+            dc.DrawText( paragraph, pos , y) ;
+            paragraph="";
+            y += height ;
         }
     }
 }
@@ -177,7 +177,7 @@ void wxStaticText::OnDraw( wxDC &dc )
       DrawParagraph(dc, paragraph,y);
 }
 
-void wxStaticText::OnPaint( wxPaintEvent &event )
+void wxStaticText::OnPaint( wxPaintEvent & WXUNUSED(event) )
 {
     wxPaintDC dc(this);
     OnDraw( dc ) ;
