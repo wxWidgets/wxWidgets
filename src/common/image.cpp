@@ -85,10 +85,10 @@ wxImageRefData::wxImageRefData()
     m_maskRed = 0;
     m_maskGreen = 0;
     m_maskBlue = 0;
-    m_hasMask = FALSE;
+    m_hasMask = false;
 
-    m_ok = FALSE;
-    m_static = FALSE;
+    m_ok = false;
+    m_static = false;
 }
 
 wxImageRefData::~wxImageRefData()
@@ -166,7 +166,7 @@ bool wxImage::Create( int width, int height, bool clear )
     if (!M_IMGDATA->m_data)
     {
         UnRef();
-        return FALSE;
+        return false;
     }
 
     if (clear)
@@ -174,26 +174,26 @@ bool wxImage::Create( int width, int height, bool clear )
 
     M_IMGDATA->m_width = width;
     M_IMGDATA->m_height = height;
-    M_IMGDATA->m_ok = TRUE;
+    M_IMGDATA->m_ok = true;
 
-    return TRUE;
+    return true;
 }
 
 bool wxImage::Create( int width, int height, unsigned char* data, bool static_data )
 {
     UnRef();
 
-    wxCHECK_MSG( data, FALSE, _T("NULL data in wxImage::Create") );
+    wxCHECK_MSG( data, false, _T("NULL data in wxImage::Create") );
 
     m_refData = new wxImageRefData();
 
     M_IMGDATA->m_data = data;
     M_IMGDATA->m_width = width;
     M_IMGDATA->m_height = height;
-    M_IMGDATA->m_ok = TRUE;
+    M_IMGDATA->m_ok = true;
     M_IMGDATA->m_static = static_data;
 
-    return TRUE;
+    return true;
 }
 
 void wxImage::Destroy()
@@ -735,7 +735,7 @@ void wxImage::SetData( unsigned char *data )
     newRefData->m_width = M_IMGDATA->m_width;
     newRefData->m_height = M_IMGDATA->m_height;
     newRefData->m_data = data;
-    newRefData->m_ok = TRUE;
+    newRefData->m_ok = true;
     newRefData->m_maskRed = M_IMGDATA->m_maskRed;
     newRefData->m_maskGreen = M_IMGDATA->m_maskGreen;
     newRefData->m_maskBlue = M_IMGDATA->m_maskBlue;
@@ -755,7 +755,7 @@ void wxImage::SetData( unsigned char *data, int new_width, int new_height )
         newRefData->m_width = new_width;
         newRefData->m_height = new_height;
         newRefData->m_data = data;
-        newRefData->m_ok = TRUE;
+        newRefData->m_ok = true;
         newRefData->m_maskRed = M_IMGDATA->m_maskRed;
         newRefData->m_maskGreen = M_IMGDATA->m_maskGreen;
         newRefData->m_maskBlue = M_IMGDATA->m_maskBlue;
@@ -766,7 +766,7 @@ void wxImage::SetData( unsigned char *data, int new_width, int new_height )
         newRefData->m_width = new_width;
         newRefData->m_height = new_height;
         newRefData->m_data = data;
-        newRefData->m_ok = TRUE;
+        newRefData->m_ok = true;
     }
 
     UnRef();
@@ -833,7 +833,7 @@ void wxImage::SetMaskColour( unsigned char r, unsigned char g, unsigned char b )
     M_IMGDATA->m_maskRed = r;
     M_IMGDATA->m_maskGreen = g;
     M_IMGDATA->m_maskBlue = b;
-    M_IMGDATA->m_hasMask = TRUE;
+    M_IMGDATA->m_hasMask = true;
 }
 
 unsigned char wxImage::GetMaskRed() const
@@ -866,7 +866,7 @@ void wxImage::SetMask( bool mask )
 
 bool wxImage::HasMask() const
 {
-    wxCHECK_MSG( Ok(), FALSE, wxT("invalid image") );
+    wxCHECK_MSG( Ok(), false, wxT("invalid image") );
 
     return M_IMGDATA->m_hasMask;
 }
@@ -892,7 +892,7 @@ bool wxImage::SetMaskFromImage(const wxImage& mask,
     if ( (M_IMGDATA->m_height != mask.GetHeight() ) || (M_IMGDATA->m_width != mask.GetWidth () ) )
     {
         wxLogError( _("Image and Mask have different sizes") );
-        return FALSE;
+        return false;
     }
 
     // find unused colour
@@ -900,7 +900,7 @@ bool wxImage::SetMaskFromImage(const wxImage& mask,
     if (!FindFirstUnusedColour(&r, &g, &b))
     {
         wxLogError( _("No Unused Color in image being masked") );
-        return FALSE ;
+        return false ;
     }
 
     unsigned char *imgdata = GetData();
@@ -925,9 +925,9 @@ bool wxImage::SetMaskFromImage(const wxImage& mask,
     }
 
     SetMaskColour(r, g, b);
-    SetMask(TRUE);
+    SetMask(true);
 
-    return TRUE;
+    return true;
 }
 
 #if wxUSE_PALETTE
@@ -937,7 +937,7 @@ bool wxImage::SetMaskFromImage(const wxImage& mask,
 bool wxImage::HasPalette() const
 {
     if (!Ok())
-        return FALSE;
+        return false;
 
     return M_IMGDATA->m_palette.Ok();
 }
@@ -963,7 +963,7 @@ void wxImage::SetOption(const wxString& name, const wxString& value)
 {
     wxCHECK_RET( Ok(), wxT("invalid image") );
 
-    int idx = M_IMGDATA->m_optionNames.Index(name, FALSE);
+    int idx = M_IMGDATA->m_optionNames.Index(name, false);
     if (idx == wxNOT_FOUND)
     {
         M_IMGDATA->m_optionNames.Add(name);
@@ -987,7 +987,7 @@ wxString wxImage::GetOption(const wxString& name) const
 {
     wxCHECK_MSG( Ok(), wxEmptyString, wxT("invalid image") );
 
-    int idx = M_IMGDATA->m_optionNames.Index(name, FALSE);
+    int idx = M_IMGDATA->m_optionNames.Index(name, false);
     if (idx == wxNOT_FOUND)
         return wxEmptyString;
     else
@@ -1003,9 +1003,9 @@ int wxImage::GetOptionInt(const wxString& name) const
 
 bool wxImage::HasOption(const wxString& name) const
 {
-    wxCHECK_MSG( Ok(), FALSE, wxT("invalid image") );
+    wxCHECK_MSG( Ok(), false, wxT("invalid image") );
 
-    return (M_IMGDATA->m_optionNames.Index(name, FALSE) != wxNOT_FOUND);
+    return (M_IMGDATA->m_optionNames.Index(name, false) != wxNOT_FOUND);
 }
 
 bool wxImage::LoadFile( const wxString& filename, long type, int index )
@@ -1021,10 +1021,10 @@ bool wxImage::LoadFile( const wxString& filename, long type, int index )
     {
         wxLogError( _("Can't load image from file '%s': file does not exist."), filename.c_str() );
 
-        return FALSE;
+        return false;
     }
 #else // !wxUSE_STREAMS
-    return FALSE;
+    return false;
 #endif // wxUSE_STREAMS
 }
 
@@ -1041,10 +1041,10 @@ bool wxImage::LoadFile( const wxString& filename, const wxString& mimetype, int 
     {
         wxLogError( _("Can't load image from file '%s': file does not exist."), filename.c_str() );
 
-        return FALSE;
+        return false;
     }
 #else // !wxUSE_STREAMS
-    return FALSE;
+    return false;
 #endif // wxUSE_STREAMS
 }
 
@@ -1058,12 +1058,12 @@ bool wxImage::SaveFile( const wxString& filename ) const
     if (pHandler)
     {
         SaveFile(filename, pHandler->GetType());
-        return TRUE;
+        return true;
     }
 
     wxLogError(_("Can't save image to file '%s': unknown extension."), filename.c_str());
 
-    return FALSE;
+    return false;
 }
 
 bool wxImage::SaveFile( const wxString& filename, int type ) const
@@ -1080,7 +1080,7 @@ bool wxImage::SaveFile( const wxString& filename, int type ) const
     }
 #endif // wxUSE_STREAMS
 
-    return FALSE;
+    return false;
 }
 
 bool wxImage::SaveFile( const wxString& filename, const wxString& mimetype ) const
@@ -1097,7 +1097,7 @@ bool wxImage::SaveFile( const wxString& filename, const wxString& mimetype ) con
     }
 #endif // wxUSE_STREAMS
 
-    return FALSE;
+    return false;
 }
 
 bool wxImage::CanRead( const wxString &name )
@@ -1106,7 +1106,7 @@ bool wxImage::CanRead( const wxString &name )
   wxFileInputStream stream(name);
   return CanRead(stream);
 #else
-  return FALSE;
+  return false;
 #endif
 }
 
@@ -1131,10 +1131,10 @@ bool wxImage::CanRead( wxInputStream &stream )
     {
         wxImageHandler *handler=(wxImageHandler*)node->GetData();
         if (handler->CanRead( stream ))
-            return TRUE;
+            return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 int wxImage::GetImageCount( wxInputStream &stream, long type )
@@ -1162,7 +1162,7 @@ int wxImage::GetImageCount( wxInputStream &stream, long type )
     if ( !handler )
     {
         wxLogWarning(_("No image handler for type %d defined."), type);
-        return FALSE;
+        return false;
     }
 
     if ( handler->CanRead(stream) )
@@ -1192,12 +1192,12 @@ bool wxImage::LoadFile( wxInputStream& stream, long type, int index )
         {
              handler=(wxImageHandler*)node->GetData();
              if ( handler->CanRead(stream) )
-                 return handler->LoadFile(this, stream, TRUE/*verbose*/, index);
+                 return handler->LoadFile(this, stream, true/*verbose*/, index);
 
         }
 
         wxLogWarning( _("No handler found for image type.") );
-        return FALSE;
+        return false;
     }
 
     handler = FindHandler(type);
@@ -1206,10 +1206,10 @@ bool wxImage::LoadFile( wxInputStream& stream, long type, int index )
     {
         wxLogWarning( _("No image handler for type %d defined."), type );
 
-        return FALSE;
+        return false;
     }
 
-    return handler->LoadFile(this, stream, TRUE/*verbose*/, index);
+    return handler->LoadFile(this, stream, true/*verbose*/, index);
 }
 
 bool wxImage::LoadFile( wxInputStream& stream, const wxString& mimetype, int index )
@@ -1224,15 +1224,15 @@ bool wxImage::LoadFile( wxInputStream& stream, const wxString& mimetype, int ind
     {
         wxLogWarning( _("No image handler for type %s defined."), mimetype.GetData() );
 
-        return FALSE;
+        return false;
     }
 
-    return handler->LoadFile( this, stream, TRUE/*verbose*/, index );
+    return handler->LoadFile( this, stream, true/*verbose*/, index );
 }
 
 bool wxImage::SaveFile( wxOutputStream& stream, int type ) const
 {
-    wxCHECK_MSG( Ok(), FALSE, wxT("invalid image") );
+    wxCHECK_MSG( Ok(), false, wxT("invalid image") );
 
     wxImageHandler *handler = FindHandler(type);
 
@@ -1240,7 +1240,7 @@ bool wxImage::SaveFile( wxOutputStream& stream, int type ) const
     {
         wxLogWarning( _("No image handler for type %d defined."), type );
 
-        return FALSE;
+        return false;
     }
 
     return handler->SaveFile( (wxImage*)this, stream );
@@ -1248,7 +1248,7 @@ bool wxImage::SaveFile( wxOutputStream& stream, int type ) const
 
 bool wxImage::SaveFile( wxOutputStream& stream, const wxString& mimetype ) const
 {
-    wxCHECK_MSG( Ok(), FALSE, wxT("invalid image") );
+    wxCHECK_MSG( Ok(), false, wxT("invalid image") );
 
     wxImageHandler *handler = FindHandlerMime(mimetype);
 
@@ -1256,7 +1256,7 @@ bool wxImage::SaveFile( wxOutputStream& stream, const wxString& mimetype ) const
     {
         wxLogWarning( _("No image handler for type %s defined."), mimetype.GetData() );
 
-        return FALSE;
+        return false;
     }
 
     return handler->SaveFile( (wxImage*)this, stream );
@@ -1266,7 +1266,7 @@ bool wxImage::SaveFile( wxOutputStream& stream, const wxString& mimetype ) const
 void wxImage::AddHandler( wxImageHandler *handler )
 {
     // make sure that the memory will be freed at the program end
-    sm_handlers.DeleteContents(TRUE);
+    sm_handlers.DeleteContents(true);
 
     // Check for an existing handler of the type being added.
     if (FindHandler( handler->GetType() ) == 0)
@@ -1290,7 +1290,7 @@ void wxImage::AddHandler( wxImageHandler *handler )
 void wxImage::InsertHandler( wxImageHandler *handler )
 {
     // make sure that the memory will be freed at the program end
-    sm_handlers.DeleteContents(TRUE);
+    sm_handlers.DeleteContents(true);
 
     // Check for an existing handler of the type being added.
     if (FindHandler( handler->GetType() ) == 0)
@@ -1312,10 +1312,10 @@ bool wxImage::RemoveHandler( const wxString& name )
     if (handler)
     {
         sm_handlers.DeleteObject(handler);
-        return TRUE;
+        return true;
     }
     else
-        return FALSE;
+        return false;
 }
 
 wxImageHandler *wxImage::FindHandler( const wxString& name )
@@ -1363,7 +1363,7 @@ wxImageHandler *wxImage::FindHandlerMime( const wxString& mimetype )
     while (node)
     {
         wxImageHandler *handler = (wxImageHandler *)node->GetData();
-        if (handler->GetMimeType().IsSameAs(mimetype, FALSE)) return handler;
+        if (handler->GetMimeType().IsSameAs(mimetype, false)) return handler;
         node = node->GetNext();
     }
     return 0;
@@ -1399,12 +1399,12 @@ IMPLEMENT_ABSTRACT_CLASS(wxImageHandler,wxObject)
 #if wxUSE_STREAMS
 bool wxImageHandler::LoadFile( wxImage *WXUNUSED(image), wxInputStream& WXUNUSED(stream), bool WXUNUSED(verbose), int WXUNUSED(index) )
 {
-    return FALSE;
+    return false;
 }
 
 bool wxImageHandler::SaveFile( wxImage *WXUNUSED(image), wxOutputStream& WXUNUSED(stream), bool WXUNUSED(verbose) )
 {
-    return FALSE;
+    return false;
 }
 
 int wxImageHandler::GetImageCount( wxInputStream& WXUNUSED(stream) )
@@ -1422,7 +1422,7 @@ bool wxImageHandler::CanRead( const wxString& name )
 
     wxLogError( _("Can't check image format of file '%s': file does not exist."), name.c_str() );
 
-    return FALSE;
+    return false;
 }
 
 bool wxImageHandler::CallDoCanRead(wxInputStream& stream)
@@ -1431,7 +1431,7 @@ bool wxImageHandler::CallDoCanRead(wxInputStream& stream)
     if ( posOld == wxInvalidOffset )
     {
         // can't test unseekable stream
-        return FALSE;
+        return false;
     }
 
     bool ok = DoCanRead(stream);
@@ -1442,7 +1442,7 @@ bool wxImageHandler::CallDoCanRead(wxInputStream& stream)
         wxLogDebug(_T("Failed to rewind the stream in wxImageHandler!"));
 
         // reading would fail anyhow as we're not at the right position
-        return FALSE;
+        return false;
     }
 
     return ok;
@@ -1510,7 +1510,7 @@ wxImageHistogram::FindFirstUnusedColour(unsigned char *r,
                 if ( b2 >= 255 )
                 {
                     wxLogError(_("GetUnusedColour:: No Unused Color in image ") );
-                    return FALSE;
+                    return false;
                 }
             }
         }
@@ -1525,7 +1525,7 @@ wxImageHistogram::FindFirstUnusedColour(unsigned char *r,
     if ( b )
         *b = b2;
 
-    return TRUE;
+    return true;
 }
 
 bool
@@ -1878,7 +1878,7 @@ class wxImageModule: public wxModule
 DECLARE_DYNAMIC_CLASS(wxImageModule)
 public:
     wxImageModule() {}
-    bool OnInit() { wxImage::InitStandardHandlers(); return TRUE; };
+    bool OnInit() { wxImage::InitStandardHandlers(); return true; };
     void OnExit() { wxImage::CleanUpHandlers(); };
 };
 
