@@ -21,6 +21,7 @@ XRC:
     - Added 'icon' property to wxFrame and wxDialog
     - No longer ignores menu bitmaps on non-MSW platforms
     - Notebook page bitmaps are now supported
+    - added system colours and fonts support (based on patch #1038207)
 
 wxMSW: fix for [ 1052989 ] TextCtrl.SetBackgroundColour(wx.NullColour)
 bug.
@@ -57,6 +58,22 @@ internal scrollbar visible.
 
 Added wx.StandardPaths which provides methods for determining standard
 system paths for each platform.
+
+wxMSW: The window background is now only erased by default if the
+background colour or background mode has been changed.  This better
+allows the default system themed behaviour to show through for
+uncustomized windows.  Explicit support added for using the correct
+theme texture for wx.Notebook pages and their children.
+
+wx.Image: Added support for alpha channels in interpolated and
+non-interpolated image rotation.  Added ConvertAlphaToMask helper
+method for turning shades of grey into shades of alpha and a colour.
+
+wxGTK2: Reimplemented DoDrawRotatedText() by way of a rotation of an
+alpha blended text bitmap.  It would be better if Pango could draw
+directly into an wxImage (as FreeType can,) but that is for later...
+
+Added wrappers for wx.MediaCtrl.
 
 
 

@@ -103,6 +103,16 @@ def runTest(frame, nb, log):
 overview = """<html><body>
 <h2><center>wx.MediaCtrl</center></h2>
 
+wx.MediaCtrl is a class that allows a way to convieniently display types of 
+media, such as videos, audio files, natively through native codecs.
+
+<p>
+wx.MediaCtrl uses native backends to render media, for example on Windows
+there is a ActiveMovie/DirectShow backend, and on Macintosh there is a 
+QuickTime backend.
+<p>
+wx.MediaCtrl is not currently available on unix systems. 
+
 </body></html>
 """
 
