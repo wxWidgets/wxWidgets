@@ -115,7 +115,9 @@ public:
     const wxString& name);
 
   // Create toolbar
-  virtual wxToolBar* CreateToolBar(long style = wxNO_BORDER|wxTB_HORIZONTAL, wxWindowID id = -1, const wxString& name = wxToolBarNameStr);
+  virtual wxToolBar* CreateToolBar(long style = wxNO_BORDER | wxTB_HORIZONTAL | wxTB_FLAT,
+                                   wxWindowID id = -1,
+                                   const wxString& name = wxToolBarNameStr);
   virtual wxToolBar *OnCreateToolBar(long style, wxWindowID id, const wxString& name);
   // If made known to the frame, the frame will manage it automatically.
   virtual inline void SetToolBar(wxToolBar *toolbar) { m_frameToolBar = toolbar; }
