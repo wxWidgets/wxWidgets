@@ -583,9 +583,12 @@ enum
 #define wxWANTS_CHARS           0x00040000
 
 // Make window retained (mostly Motif, I think)
-#define wxRETAINED              0x0002000
+#define wxRETAINED              0x00020000
 #define wxBACKINGSTORE          wxRETAINED
 
+// don't invalidate the whole window (resulting in a PAINT event) when the
+// window is resized (currently, makes sense for wxMSW only)
+#define wxNO_FULLREPAINT_ON_RESIZE 0x00010000
 /*
  * wxFrame/wxDialog style flags
  */

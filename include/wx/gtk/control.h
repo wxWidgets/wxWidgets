@@ -29,7 +29,7 @@ class wxControl;
 // wxControl
 //-----------------------------------------------------------------------------
 
-class wxControl : public wxControlBase
+class wxControl : public wxWindow
 {
     DECLARE_DYNAMIC_CLASS(wxControl)
 

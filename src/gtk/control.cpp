@@ -38,7 +38,7 @@ wxControl::wxControl( wxWindow *parent,
 
 void wxControl::SetLabel( const wxString &label )
 {
-    m_label = _T("");
+    m_label.Empty();
     for ( const wxChar *pc = label; *pc != _T('\0'); pc++ )
     {
         if ( *pc == _T('&') )

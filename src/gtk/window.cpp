@@ -2011,7 +2011,7 @@ void wxWindow::PreCreation( wxWindow *parent,
 {
     wxASSERT_MSG( !m_needParent || parent, _T("Need complete parent.") );
 
-    if ( !CreateBase(parent, id, pos, size, style, name) )
+    if ( !CreateBase(parent, id, pos, size, style, wxDefaultValidator, name) )
     {
         wxFAIL_MSG(_T("window creation failed"));
     }
