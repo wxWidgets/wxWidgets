@@ -125,6 +125,11 @@ bool wxPanel::Create(wxWindow *parent, wxWindowID id,
     // so that non-solid background renders correctly under GTK+:
     SetThemeEnabled(true);
 
+#ifdef __WXWINCE__
+    // Required get solid control backgrounds under WinCE
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
+#endif
+
     return true;
 }
 
