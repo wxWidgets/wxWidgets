@@ -231,11 +231,22 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
         case CBN_EDITCHANGE:
             {
                 wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, GetId());
+
                 // if sel != -1, value was initialized above (and we can't use
                 // GetValue() here as it would return the old selection and we
                 // want the new one)
                 if ( sel == -1 )
+                {
                     value = GetValue();
+                }
+                else // we're synthesizing text updated event from sel change
+                {
+                    // we need to do this because the user code expects
+                    // wxComboBox::GetValue() to return the new value from
+                    // "text updated" handler but it hadn't been updated yet
+                    SetValue(value);
+                }
+
                 event.SetString(value);
                 event.SetEventObject(this);
                 ProcessCommand(event);
