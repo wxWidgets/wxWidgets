@@ -4,7 +4,7 @@ msgstr ""
 "POT-Creation-Date: 2002-06-03 21:07+0200\n"
 "PO-Revision-Date: 2000-08-10 16:09+0200\n"
 "Last-Translator: Roman Rolinsky <rolinsky@mema.ucl.ac.be>, Vadim Zeitlin "
-"<vadimwxwindows.org>\n"
+"<vadim@wxwindows.org>\n"
 "Language-Team: wx-translators <wx-translators@wxwindows.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=koi8-r\n"
@@ -849,7 +849,7 @@ msgstr "Невозможно открыть URL '%s'"
 
 #: ../src/msw/dialup.cpp:816
 msgid "Cannot find the location of address book file"
-msgstr "Файл с адрессной книжкой не найден"
+msgstr "Файл с адресной книжкой не найден"
 
 # ../src/unix/threadpsx.cpp:954
 #: ../src/unix/threadpsx.cpp:1200
@@ -982,7 +982,7 @@ msgstr "Baltic (ISO-8859-13)"
 #: ../src/common/fontmap.cpp:113
 #, fuzzy
 msgid "Central European (ISO-8859-2)"
-msgstr "Central European (ISO-8859-2/Latin 2)"
+msgstr "Central European (ISO-8859-2)"
 
 #: ../src/msw/dialup.cpp:751
 msgid "Choose ISP to dial"
@@ -992,10 +992,6 @@ msgstr "Выберите подсоединения"
 #: ../src/gtk/fontdlg.cpp:122
 msgid "Choose font"
 msgstr "Выберите шрифт"
-
-#: ../src/msw/glcanvas.cpp:428
-msgid "ChoosePixelFormat failed."
-msgstr ""
 
 # ../src/generic/logg.cpp:471
 #: ../src/generic/logg.cpp:482
@@ -1020,7 +1016,6 @@ msgstr "Закрыть это окно"
 
 # ../src/generic/dirdlgg.cpp:210
 #: ../src/generic/dirctrlg.cpp:547
-#, fuzzy
 msgid "Computer"
 msgstr "Компьютер"
 
@@ -1153,7 +1148,7 @@ msgstr ""
 #: ../src/msw/ole/dataobj.cpp:143
 #, c-format
 msgid "Couldn't register clipboard format '%s'."
-msgstr "Невозможно зарегестрировать формат '%s;"
+msgstr "Невозможно зарегистрировать формат '%s'"
 
 #: ../src/msw/thread.cpp:219
 msgid "Couldn't release a mutex"
@@ -1179,17 +1174,17 @@ msgstr "Не удалось завершить нить"
 # ../src/generic/dirdlgg.cpp:571
 #: ../src/generic/dirdlgg.cpp:263
 msgid "Create directory"
-msgstr "Создать директорий"
+msgstr "Создать каталог"
 
 # ../src/generic/filedlgg.cpp:883
 #: ../src/generic/dirdlgg.cpp:103 ../src/generic/filedlgg.cpp:1108
 msgid "Create new directory"
-msgstr "Создать новый директорий"
+msgstr "Создать новый каталог"
 
 # ../src/generic/filedlgg.cpp:890
 #: ../src/generic/filedlgg.cpp:1119
 msgid "Current directory:"
-msgstr "Текущий директорий:"
+msgstr "Текущий каталог:"
 
 # ../src/common/fontmap.cpp:109
 #: ../src/common/fontmap.cpp:116
@@ -1690,7 +1685,7 @@ msgstr "Ошибка загрузки разделяемой библиотеки '%s'"
 #: ../src/common/dynlib.cpp:256 ../src/common/dynload.cpp:125
 #, fuzzy, c-format
 msgid "Failed to load shared library '%s' Error '%s'"
-msgstr "Ошибка загрузки разделяемой библиотеки '%s'"
+msgstr "Ошибка загрузки разделяемой библиотеки '%s' -- %s"
 
 # ../src/common/ffile.cpp:182
 #: ../src/unix/snglinst.cpp:192
@@ -1741,7 +1736,7 @@ msgstr "Не удалось перенаправить ввод/вывод порожденного процесса"
 #: ../src/msw/dde.cpp:285
 #, c-format
 msgid "Failed to register DDE server '%s'"
-msgstr "Не удалось зарегестрировать сервер DDE '%s'"
+msgstr "Не удалось зарегистрировать сервер DDE '%s'"
 
 # ../src/common/fontmap.cpp:507
 #: ../src/common/fontmap.cpp:674
@@ -1875,9 +1870,9 @@ msgstr "Фатальная ошибка: выходим"
 
 # ../src/html/htmprint.cpp:272
 #: ../src/mgl/bitmap.cpp:544
-#, fuzzy, c-format
+#, c-format
 msgid "File %s does not exist."
-msgstr ": файл не существует!"
+msgstr "Файл %s не существует."
 
 # ../src/generic/filedlgg.cpp:1074 ../src/gtk/filedlg.cpp:72
 #: ../src/generic/filedlgg.cpp:1335 ../src/gtk/filedlg.cpp:69
@@ -2198,7 +2193,7 @@ msgstr "Невозможно получить ввод порожденного процесса"
 #: ../src/common/filefn.cpp:1111
 #, fuzzy, c-format
 msgid "Impossible to overwrite the file '%s'"
-msgstr "ошибка сброса буфера файла '%s'."
+msgstr "Невозможно переписать файл '%s'"
 
 #: ../src/common/filefn.cpp:1161
 #, c-format
@@ -2247,7 +2242,7 @@ msgstr "невозможно открыть файл '%s'"
 #: ../src/common/regex.cpp:173
 #, c-format
 msgid "Invalid regular expression '%s': %s"
-msgstr ""
+msgstr "Неверное регулярное выражение '%s': %s"
 
 # ../src/generic/fontdlgg.cpp:213
 #: ../src/generic/fontdlgg.cpp:230
@@ -2459,7 +2454,8 @@ msgid ""
 "Do you want to use this encoding (otherwise you will have to choose another "
 "one)?"
 msgstr ""
-"Кодировка '%s' неизвестна. Хотите выбрать шрифт для использования с этой\n"
+"Не найден шрифт для отображения текста в кодировке '%s'.\n"
+"Хотите выбрать шрифт для использования с этой\n"
 "кодировкой (иначе текст в этой кодировке не будет показан правильно)?"
 
 # ../src/common/fontmap.cpp:655
@@ -2906,13 +2902,12 @@ msgstr "Удалить текущую станицу из закладок"
 
 # ../src/common/ffile.cpp:133 ../src/common/ffile.cpp:154
 #: ../src/generic/fdrepdlg.cpp:177
-#, fuzzy
 msgid "Replace &all"
-msgstr "Заменить файл '%s'?"
+msgstr "Заменить все"
 
 #: ../src/generic/fdrepdlg.cpp:129
 msgid "Replace with:"
-msgstr ""
+msgstr "Заменить на:"
 
 #: ../contrib/src/xrc/xmlres.cpp:359
 msgid "Resource files must have same version number!"
@@ -2971,9 +2966,8 @@ msgstr ""
 
 # ../src/generic/dirdlgg.cpp:571
 #: ../src/generic/fdrepdlg.cpp:158
-#, fuzzy
 msgid "Search direction"
-msgstr "Создать директорий"
+msgstr "Направление поиска"
 
 # ../src/generic/helpwxht.cpp:161 ../src/html/helpfrm.cpp:414
 # ../src/html/helpfrm.cpp:434
@@ -3175,7 +3169,7 @@ msgstr "Thai (ISO-8859-11)"
 
 #: ../src/common/ftp.cpp:569
 msgid "The FTP server doesn't support passive mode."
-msgstr ""
+msgstr "Сервер FTP не поддерживает пассивный режим."
 
 # ../src/common/fontmap.cpp:466
 #: ../src/common/fontmap.cpp:630
@@ -3245,7 +3239,7 @@ msgid ""
 "tooold, please upgrade (the following required function is missing: %s)."
 msgstr ""
 "Сервис удаленного подсоединения (RAS) установленный на этой машине "
-"недостаточно новый (функция %s не найденф)."
+"недостаточно новый (функция %s не найдена)."
 
 #: ../src/html/htmprint.cpp:548
 msgid ""
@@ -3440,7 +3434,7 @@ msgstr "Неподдерживаемый формат clipboard."
 #: ../src/common/appcmn.cpp:311
 #, c-format
 msgid "Unsupported theme '%s'."
-msgstr ""
+msgstr "Неподдерживаемая тема '%s'."
 
 #: ../src/generic/fdrepdlg.cpp:157
 msgid "Up"
@@ -3799,7 +3793,7 @@ msgstr "Жирный"
 #: ../src/common/ffile.cpp:93
 #, c-format
 msgid "can't close file '%s'"
-msgstr "невозможно открыть файл '%s'"
+msgstr "невозможно закрыть файл '%s'"
 
 # ../src/common/file.cpp:257
 #: ../src/common/file.cpp:276
@@ -3841,7 +3835,7 @@ msgstr "невозможно определить длину файла с дескриптором %d"
 msgid "can't find user's HOME, using current directory."
 msgstr ""
 "невозможно определить HOME пользователя, будет использован текущий "
-"директорий."
+"каталог."
 
 # ../src/common/file.cpp:316
 #: ../src/common/file.cpp:339
@@ -4082,7 +4076,7 @@ msgstr "Светлый"
 #: ../src/common/intl.cpp:614
 #, c-format
 msgid "locale '%s' can not be set."
-msgstr "локейл '%s' не может быть установлен."
+msgstr "локаль '%s' не может быть установлена."
 
 # ../src/common/intl.cpp:352
 #: ../src/common/intl.cpp:358
