@@ -1380,7 +1380,9 @@ void wxBitmap::UngetRawData(wxPixelDataBase& data)
     GWorldPtr gworld = MAC_WXHBITMAP(M_BITMAPDATA->m_hBitmap);
     PixMapHandle hPixMap = GetGWorldPixMap(gworld);
     if ( hPixMap )
+    {
         UnlockPixels(hPixMap);
+    }
 }
 
 void wxBitmap::UseAlpha()
