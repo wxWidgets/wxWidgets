@@ -537,7 +537,7 @@
 #define wxUSE_CHECKLISTBOX 1    // wxCheckListBox (requires wxUSE_OWNER_DRAWN)
 #define wxUSE_CHOICE       1    // wxChoice
 #define wxUSE_COMBOBOX     1    // wxComboBox
-#define wxUSE_DATEPICKCTRL 1
+#define wxUSE_DATEPICKCTRL 1    // wxDatePickerCtrl
 #define wxUSE_GAUGE        1    // wxGauge
 #define wxUSE_LISTBOX      1    // wxListBox
 #define wxUSE_LISTCTRL     1    // wxListCtrl
@@ -1048,6 +1048,16 @@
 //
 // Recommended setting: 1
 #define wxUSE_OLE           1
+
+// wxDC cacheing implementation
+#define wxUSE_DC_CACHEING 1
+
+// Set this to 1 to enable the use of DIB's for wxBitmap to support
+// bitmaps > 16MB on Win95/98/Me.  Set to 0 to use DDB's only.
+#define wxUSE_DIB_FOR_BITMAP 0
+
+// Set this to 1 to enable wxDIB
+#define wxUSE_WXDIB 1
 
 // Define as 1 to use Microsoft's ItsyBitsy small title bar library, for
 // wxMiniFrame. This setting is only used for Win3.1; Win9x and NT use native
