@@ -142,5 +142,11 @@ typedef void (wxEvtHandler::*wxTreeEventFunction)(wxTreeEvent&);
 // GetItem() returns the item that was activated (double click, enter, space)
 #define EVT_TREE_ITEM_ACTIVATED(id, fn) { wxEVT_COMMAND_TREE_ITEM_ACTIVATED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, NULL },
 
+// GetItem() returns the item that was clicked on
+#define EVT_TREE_ITEM_RIGHT_CLICK(id, fn) { wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, NULL },
+#define EVT_TREE_ITEM_MIDDLE_CLICK(id, fn) { wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, NULL },
+
 #endif
     // _WX_TREECTRL_H_BASE_
+
+
