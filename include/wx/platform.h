@@ -21,13 +21,7 @@
 */
 #if __MWERKS__
     #include <stddef.h>
-    #if defined(WIN32) || defined(_WIN32)
-        #ifndef WINVER
-            #define WINVER  0x0400
-        #endif
-    #endif
 #endif
-
 
 /*
    first define Windows symbols if they're not defined on the command line: we
@@ -58,8 +52,17 @@
         #define __WIN32__
     #endif
 
+    /*
+       see MSDN for the description of possible WINVER values, this one is a
+       good default and, anyhow, we check for most of the features we use
+       during run-time.
+     */
+    #ifndef WINVER
+        #define WINVER  0x0400
+    #endif
+
     /* Win95 means Win95-style UI, i.e. Win9x/NT 4+ */
-    #if !defined(__WIN95__) && defined(WINVER) && (WINVER >= 0x0400)
+    #if !defined(__WIN95__) && (WINVER >= 0x0400)
         #define __WIN95__
     #endif
 #endif /* Win32 */
