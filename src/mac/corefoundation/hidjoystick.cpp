@@ -33,15 +33,15 @@
 #include <unistd.h>
 
 enum {
-    wxJS_AXIS_X = 41,
+    wxJS_AXIS_X = 40,
     wxJS_AXIS_Y,
     wxJS_AXIS_Z,
     wxJS_AXIS_RUDDER,
     wxJS_AXIS_U,
     wxJS_AXIS_V,
 
-    wxJS_AXIS_MAX = 32767,
-    wxJS_AXIS_MIN = -32767
+    wxJS_AXIS_MAX = 255, //32767,
+    wxJS_AXIS_MIN = 0, //-32767
 };
 
 class wxHIDJoystick : public wxHIDDevice
@@ -49,9 +49,11 @@ class wxHIDJoystick : public wxHIDDevice
 public:
 	bool Create(int nWhich);
 	virtual void BuildCookies(wxCFArray& Array);
+	void MakeCookies(wxCFArray& Array);
     IOHIDElementCookie* GetCookies() {return m_pCookies;}
-    
     IOHIDQueueInterface** GetQueue() {return m_ppQueue;}
+    
+    friend class wxJoystick;
 };
 
 
@@ -76,43 +78,63 @@ void wxHIDJoystick::BuildCookies(wxCFArray& Array)
 {
 	Array = CFDictionaryGetValue((CFDictionaryRef)Array[0], CFSTR(kIOHIDElementKey));
 	InitCookies(50, true);
+
+    memset(m_pCookies, 0, sizeof(*m_pCookies) * 50);
+    MakeCookies(Array);
+    
+//    for(int i = 0; i < 50; ++i)
+//        wxPrintf(wxT("\nVAL #%i:[%i]"), i, m_pCookies[i]);
+}//end buildcookies
+
+void wxHIDJoystick::MakeCookies(wxCFArray& Array)
+{
 	int i,
 		nUsage,
         nPage;
 	for (i = 0; i < Array.Count(); ++i)
 	{
-		CFNumberGetValue(
+        const void* ref = CFDictionaryGetValue((CFDictionaryRef)Array[i], CFSTR(kIOHIDElementKey));
+
+//        wxPrintf(wxT("ELM\n"));
+        if (ref  != NULL)
+        {
+            wxCFArray newarray(ref);
+            MakeCookies(newarray);
+        }
+        else
+        {
+            CFNumberGetValue(
 			(CFNumberRef) CFDictionaryGetValue((CFDictionaryRef) Array[i], CFSTR(kIOHIDElementUsageKey)), 
 				kCFNumberLongType, &nUsage);
 			
-		CFNumberGetValue(
+            CFNumberGetValue(
 			(CFNumberRef) CFDictionaryGetValue((CFDictionaryRef) Array[i], CFSTR(kIOHIDElementUsagePageKey)), 
 				kCFNumberLongType, &nPage);
 
-		if (nPage == kHIDPage_Button && nUsage <= 40)
-			AddCookieInQueue(Array[i], nUsage );
-		else if (nPage == kHIDPage_GenericDesktop)
-        {
-            switch(nUsage)
+            if (nPage == kHIDPage_Button && nUsage <= 40)
+                AddCookieInQueue(Array[i], nUsage-1 );
+            else if (nPage == kHIDPage_GenericDesktop)
             {
-                case kHIDUsage_GD_X:
-                    AddCookieInQueue(Array[i], wxJS_AXIS_X);
-                    break;                    
-                case kHIDUsage_GD_Y:
-                    AddCookieInQueue(Array[i], wxJS_AXIS_Y);
-                    break;
-                case kHIDUsage_GD_Z:
-                    AddCookieInQueue(Array[i], wxJS_AXIS_Z);
-                    break;
-                default:
-                    break;
+                switch(nUsage)
+                {
+                    case kHIDUsage_GD_X:
+                        AddCookieInQueue(Array[i], wxJS_AXIS_X);
+                        break;                    
+                    case kHIDUsage_GD_Y:
+                        AddCookieInQueue(Array[i], wxJS_AXIS_Y);
+                        break;
+                    case kHIDUsage_GD_Z:
+                        AddCookieInQueue(Array[i], wxJS_AXIS_Z);
+                        break;
+                    default:
+                        break;
+                }
             }
+            else if (nPage == kHIDPage_Simulation && nUsage == kHIDUsage_Sim_Rudder)
+                AddCookieInQueue(Array[i], wxJS_AXIS_RUDDER );
         }
-        else if (nPage == kHIDPage_Simulation && nUsage == kHIDUsage_Sim_Rudder)
-			AddCookieInQueue(Array[i], wxJS_AXIS_RUDDER );
 	}
-}//end buildcookies
-
+}
 
 
 
@@ -129,6 +151,107 @@ public:
     wxJoystickThread(wxHIDJoystick* hid, int joystick);
     void* Entry();
 
+    static void HIDCallback(void* target, IOReturn res, void* context, void* sender)
+    {
+        IOHIDEventStruct hidevent;
+        AbsoluteTime bogustime = {0,0};
+        IOReturn ret;
+        wxJoystickThread* pThis = (wxJoystickThread*) context;
+        wxHIDJoystick* m_hid = pThis->m_hid;
+        
+//        wxMutexGuiEnter();
+        ret = (*m_hid->GetQueue())->getNextEvent(m_hid->GetQueue(), 
+                        &hidevent, bogustime, 0);
+  //      wxMutexGuiLeave(); 
+        while (    ret != kIOReturnUnderrun )
+        {
+            if (pThis->TestDestroy())
+                break;
+
+//            wxPrintf(wxT("ENTER\n"));
+            if(ret != kIOReturnSuccess)
+            {
+                wxLogSysError(wxString::Format(wxT("wxJoystick Error:[%i]"), ret));
+                return;
+            }	
+                
+            wxJoystickEvent wxevent;
+            
+            int nIndex = 0;
+            IOHIDElementCookie* pCookies = m_hid->GetCookies();
+            while(nIndex < 50)
+            {
+                if(hidevent.elementCookie == pCookies[nIndex])
+                    break;
+                    
+                ++nIndex;
+            } 
+            if(nIndex == 50)
+            {
+                wxLogSysError(wxString::Format(wxT("wxJoystick Out Of Bounds Error")));
+                break;
+            }	
+            
+            if (nIndex < 40)
+            {
+                if (hidevent.value)
+                {
+                    pThis->m_buttons |= (1 << nIndex);
+                    wxevent.SetEventType(wxEVT_JOY_BUTTON_DOWN);
+                }
+                else
+                {
+                    pThis->m_buttons &= ~(1 << nIndex);
+                    wxevent.SetEventType(wxEVT_JOY_BUTTON_UP);
+                }
+
+                wxevent.SetButtonChange(nIndex+1);
+            }
+            else if (nIndex == wxJS_AXIS_X)
+            {
+                pThis->m_lastposition.x = hidevent.value;
+                wxevent.SetEventType(wxEVT_JOY_MOVE);
+                pThis->m_axe[0] = hidevent.value;
+            }
+            else if (nIndex == wxJS_AXIS_Y)
+            {
+                pThis->m_lastposition.y = hidevent.value;
+                wxevent.SetEventType(wxEVT_JOY_MOVE);
+                pThis->m_axe[1] = hidevent.value;
+            }
+            else if (nIndex == wxJS_AXIS_Z)
+            {
+                wxevent.SetEventType(wxEVT_JOY_ZMOVE);
+                pThis->m_axe[2] = hidevent.value;
+            }
+            else
+                wxevent.SetEventType(wxEVT_JOY_MOVE);            
+
+            Nanoseconds timestamp = AbsoluteToNanoseconds(hidevent.timestamp);
+            
+            wxULongLong llTime(timestamp.hi, timestamp.lo);
+            
+            llTime /= 1000000;
+            
+            wxevent.SetTimestamp(llTime.GetValue());
+            wxevent.SetJoystick(pThis->m_joystick);
+            wxevent.SetButtonState(pThis->m_buttons);
+            wxevent.SetPosition(pThis->m_lastposition);
+            wxevent.SetZPosition(pThis->m_axe[2]);
+            wxevent.SetEventObject(pThis->m_catchwin);
+
+//            wxPrintf(wxT("SEND\n"));
+
+            if (pThis->m_catchwin)
+                pThis->m_catchwin->AddPendingEvent(wxevent);            
+
+         //   wxMutexGuiEnter();
+            ret = (*m_hid->GetQueue())->getNextEvent(m_hid->GetQueue(), 
+                        &hidevent, bogustime, 0);
+           // wxMutexGuiLeave(); 
+        }
+    }
+    
 private:
     wxHIDJoystick*       m_hid;
     int       m_joystick;
@@ -145,7 +268,7 @@ private:
 wxJoystickThread::wxJoystickThread(wxHIDJoystick* hid, int joystick)
     : m_hid(hid),
       m_joystick(joystick),
-      m_lastposition(wxDefaultPosition),
+      m_lastposition(127,127),
       m_buttons(0),
       m_catchwin(NULL),
       m_polling(0)
@@ -170,12 +293,10 @@ void* wxJoystickThread::Entry()
     CFRunLoopRef pRL = CFRunLoopGetCurrent();  
     CFRunLoopAddSource(pRL, pRLSource, kCFRunLoopDefaultMode);
       
-//    wxJSVERIFY( (*m_hid->GetQueue())->start(m_hid->GetQueue()) == kIOReturnSuccess ); 
+    wxJSVERIFY( (*m_hid->GetQueue())->start(m_hid->GetQueue()) == kIOReturnSuccess ); 
+    wxJSVERIFY( (*m_hid->GetQueue())->setEventCallout(m_hid->GetQueue(), &wxJoystickThread::HIDCallback, this, this) == kIOReturnSuccess ); 
     
     double dTime;
-    IOHIDEventStruct hidevent;
-    AbsoluteTime bogustime = {0,0};
-    IOReturn ret;
     
     while(true)
     {
@@ -187,78 +308,13 @@ void* wxJoystickThread::Entry()
         else
             dTime = 0.0001 * 10;  // check at least every 10 msec in blocking case
 
-        CFRunLoopRunInMode(kCFRunLoopDefaultMode, dTime, m_polling);        
-        
-        while (    (ret = (*m_hid->GetQueue())->getNextEvent(m_hid->GetQueue(), 
-                        &hidevent, bogustime, 0)) != kIOReturnUnderrun )
-        {
-            if (TestDestroy())
-                break;
-
-            wxJSASSERT(ret == kIOReturnSuccess);
-            wxJoystickEvent wxevent;
-            
-            int nIndex = 0;
-            IOHIDElementCookie* pCookies = m_hid->GetCookies();
-            while(nIndex < 50)
-            {
-                if(hidevent.elementCookie == pCookies[nIndex])
-                    break;
-            } 
-            wxASSERT(nIndex != 50);
-            
-            if (nIndex < 40)
-            {
-                if (hidevent.value)
-                {
-                    m_buttons |= (1 << nIndex);
-                    wxevent.SetEventType(wxEVT_JOY_BUTTON_DOWN);
-                }
-                else
-                {
-                    m_buttons &= ~(1 << nIndex);
-                    wxevent.SetEventType(wxEVT_JOY_BUTTON_UP);
-                }
-
-                wxevent.SetButtonChange(nIndex);
-            }
-            else if (nIndex == wxJS_AXIS_X)
-            {
-                m_lastposition.x = hidevent.value;
-                wxevent.SetEventType(wxEVT_JOY_MOVE);
-                m_axe[nIndex - 39] = hidevent.value;
-            }
-            else if (nIndex == wxJS_AXIS_Y)
-            {
-                m_lastposition.y = hidevent.value;
-                wxevent.SetEventType(wxEVT_JOY_MOVE);
-                m_axe[nIndex - 39] = hidevent.value;
-            }
-            else if (nIndex == wxJS_AXIS_Z)
-            {
-                wxevent.SetEventType(wxEVT_JOY_ZMOVE);
-                m_axe[nIndex - 39] = hidevent.value;
-            }
-            else
-                wxevent.SetEventType(wxEVT_JOY_MOVE);            
-
-            Nanoseconds timestamp = AbsoluteToNanoseconds(hidevent.timestamp);
-            
-            wxULongLong llTime(timestamp.hi, timestamp.lo);
-            
-            llTime /= 1000000;
-            
-            wxevent.SetTimestamp(llTime.GetValue());
-            wxevent.SetJoystick(m_joystick);
-            wxevent.SetButtonState(m_buttons);
-            wxevent.SetPosition(m_lastposition);
-            wxevent.SetZPosition(m_axe[3]);
-            wxevent.SetEventObject(m_catchwin);
-
-            if (m_catchwin)
-                m_catchwin->AddPendingEvent(wxevent);            
-        }
+        CFRunLoopRunInMode(kCFRunLoopDefaultMode, dTime, true);        
     }
+    
+    wxJSASSERT( CFRunLoopContainsSource(pRL, pRLSource, kCFRunLoopDefaultMode) );
+    CFRunLoopRemoveSource(pRL, pRLSource, kCFRunLoopDefaultMode);
+    CFRelease(pRLSource);
+
     return NULL;
 }
 
@@ -366,13 +422,13 @@ int wxJoystick::GetNumberJoysticks() const
             wxHIDDevice::GetCount(kHIDPage_GenericDesktop, kHIDUsage_GD_GamePad);   }
     
 int wxJoystick::GetManufacturerId() const
-{	return 0;				}	
+{	return m_hid->m_nManufacturerId;				}
 
 int wxJoystick::GetProductId() const
-{	return 0;				}
+{	return m_hid->m_nProductId;				}
 
 wxString wxJoystick::GetProductName() const
-{	return wxT("unknown");	}
+{	return m_hid->m_szProductName;				}
 
 int wxJoystick::GetXMin() const
 {	return wxJS_AXIS_MIN;	}

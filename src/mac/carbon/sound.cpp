@@ -422,8 +422,10 @@ bool wxSound::DoPlay(unsigned flags) const
                 int nError;
                 if ((nError = NativePathNameToFSSpec ((char*) m_sndname.c_str(), &sfFile, 0)) != noErr)
                 {
+/*
                     wxLogSysError(wxString::Format(wxT("File:%s does not exist\nError:%i"),
                                     m_sndname.c_str(), nError));
+*/
                     return false;
                 }
 #endif

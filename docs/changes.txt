@@ -101,6 +101,7 @@ wxMac:
 - Vertical sliders oriented consistent with MSW/GTK (0 at top) (Kevin Hock)
 - wxDynamicLibrary::GetDllExt() now returns ".bundle", not ".dylib"
 - wxDynamicLibrary::GetSymbol() now prepends underscore to the symbol name
+- wxJoystick now works on OSX
 
 wxMSW:
 

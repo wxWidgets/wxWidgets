@@ -24,7 +24,7 @@
 #endif
 
 #include "wx/defs.h"
-
+#include "wx/string.h"
 
 // ---------------------------------------------------------------------------
 // definitions
@@ -91,7 +91,9 @@ protected:
 	IOHIDQueueInterface**	m_ppQueue;  //queue (if we want one)
 	IOHIDElementCookie* 	m_pCookies; //cookies
 
-	const char* 			m_szName; //(product) name
+	wxString 				m_szProductName; //product name
+	int		 				m_nProductId; //product id
+	int		 				m_nManufacturerId; //manufacturer id
 	mach_port_t 			m_pPort;
 };
 

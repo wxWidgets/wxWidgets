@@ -34,6 +34,7 @@
 #include "wx/mac/corefoundation/hid.h"
 #include "wx/string.h"
 #include "wx/log.h"
+#include "wx/mac/corefoundation/cfstring.h"
 
 
 // ---------------------------------------------------------------------------
@@ -118,7 +119,7 @@ bool wxHIDDevice::Create (int nClass, int nType, int nDev)
 	//Now get the maching services
 	io_iterator_t pIterator;
 	wxIOCHECK(IOServiceGetMatchingServices(m_pPort, pDictionary, &pIterator), "No Matching HID Services");
-	wxASSERT(pIterator != 0);
+	wxASSERT_MSG(pIterator != 0, wxT("No devices found!"));
 
 	//Now we iterate through them
 	io_object_t pObject;
@@ -133,11 +134,36 @@ bool wxHIDDevice::Create (int nClass, int nType, int nDev)
 		//Just for sanity :)
 		wxASSERT(CFGetTypeID(CFDictionaryGetValue(pDictionary, CFSTR(kIOHIDProductKey))) == CFStringGetTypeID());
 			
+/*
+        kIOHIDTransportKey;
+        kIOHIDVendorIDKey;
+        kIOHIDProductIDKey;
+        kIOHIDVersionNumberKey;
+        kIOHIDManufacturerKey;
+        kIOHIDSerialNumberKey;
+        if !kIOHIDLocationIDKey
+            kUSBDevicePropertyLocationID
+        kIOHIDPrimaryUsageKey
+kIOHIDPrimaryUsagePageKey
+idProduct
+idVendor
+USB Product Name
+*/
 		//Get [product] name
-		m_szName = CFStringGetCStringPtr	(
-						(CFStringRef) CFDictionaryGetValue(pDictionary, CFSTR(kIOHIDProductKey)), 
-						CFStringGetSystemEncoding()
-										);
+		m_szProductName = wxMacCFStringHolder( (CFStringRef) CFDictionaryGetValue(pDictionary, CFSTR(kIOHIDProductKey)), false ).AsString();
+        
+	CFNumberGetValue(
+				(CFNumberRef) CFDictionaryGetValue(pDictionary, CFSTR(kIOHIDProductIDKey)),	
+				kCFNumberIntType,
+                &m_nProductId
+				);
+
+
+	CFNumberGetValue(
+				(CFNumberRef) CFDictionaryGetValue(pDictionary, CFSTR(kIOHIDVendorIDKey)),	
+				kCFNumberIntType,
+                &m_nManufacturerId
+				);
 
 		//Create the interface (good grief - long function names!)
 		SInt32 nScore;
@@ -164,8 +190,6 @@ bool wxHIDDevice::Create (int nClass, int nType, int nDev)
 		//
 		wxCFArray CookieArray = CFDictionaryGetValue(pDictionary, CFSTR(kIOHIDElementKey));
 		BuildCookies(CookieArray);
-		if (m_ppQueue != NULL)
-			wxVERIFY((*m_ppQueue)->start(m_ppQueue) == S_OK);
 
 		//cleanup
 		CFRelease(pDictionary);
@@ -215,7 +239,9 @@ int wxHIDDevice::GetCount (int nClass, int nType)
 	//Now get the maching services
 	io_iterator_t pIterator;
 	wxIOCHECK(IOServiceGetMatchingServices(m_pPort, pDictionary, &pIterator), "No Matching HID Services");
-	wxASSERT(pIterator != 0);
+	
+    if(pIterator == NULL)
+        return 0;
 
 	//Now we iterate through them
 	io_object_t pObject;
