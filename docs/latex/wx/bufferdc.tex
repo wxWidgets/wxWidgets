@@ -38,7 +38,7 @@ your \texttt{OnPaint()} handler, you should look at
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxBufferedDC::wxBufferedDC}\label{wxbufferedtdcctor}
+\membersection{wxBufferedDC::wxBufferedDC}\label{wxbuffereddcctor}
 
 \func{}{wxBufferedDC}{\void}
 
@@ -47,7 +47,7 @@ your \texttt{OnPaint()} handler, you should look at
 \func{}{wxBufferedDC}{\param{wxDC *}{dc}, \param{const wxBitmap\& }{buffer}}
 
 If you use the first, default, constructor, you must call one of the 
-\helpref{Init}{wxbufferedtdcinit} methods later in order to use the object.
+\helpref{Init}{wxbuffereddcinit} methods later in order to use the object.
 
 The other constructors initialize the object immediately and \texttt{Init()} 
 must not be called after using them.
@@ -71,14 +71,14 @@ time but it also requires more memory as the bitmap is never freed. The bitmap
 should have appropriate size, anything drawn outside of its bounds is clipped.}
 
 
-\membersection{wxBufferedDC::Init}\label{wxbufferedtdcinit}
+\membersection{wxBufferedDC::Init}\label{wxbuffereddcinit}
 
 \func{void}{Init}{\param{wxDC *}{dc}, \param{const wxSize\& }{area}, \param{int }{flags}}
 
 \func{void}{Init}{\param{wxDC *}{dc}, \param{const wxBitmap\& }{buffer}}
 
 These functions initialize the object created using the default constructor.
-Please see \helpref{constructors documentation}{wxbufferedtdcctor} for details.
+Please see \helpref{constructors documentation}{wxbuffereddcctor} for details.
 
 
 % VZ: UnMask() intentionally not documented, we might want to make it private
@@ -99,7 +99,7 @@ inside \texttt{OnPaint()} handler. Just create an object of this class instead
 of \helpref{wxPaintDC}{wxpaintdc} and that's all you have to do to (mostly)
 avoid flicker. The only thing to watch out for is that if you are using this
 class together with \helpref{wxScrolledWindow}{wxscrolledwindow}, you probably
-do \textbf{not} want to call \helpref{PrepareDC}{wxwindowpreparedc} on it as it
+do \textbf{not} want to call \helpref{PrepareDC}{wxscrolledwindowpreparedc} on it as it
 already does this internally for the real underlying wxPaintDC.
 
 \wxheading{Derived from}

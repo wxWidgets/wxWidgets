@@ -13,9 +13,9 @@
 # dll builds a library (wxdll.lib) suitable for creating DLLs
 #
 WXDIR=$(WXWIN)
-THISDIR=$(WXWIN)\src\msw
+THISDIR=$(WXWIN)\distrib\msw
 DOCDIR = $(WXDIR)\docs
-
+WAITFLAG=/w
 # Making documents
 docs:   allhlp allhtml allpdfrtf allhtb allhtmlhelp
 alldocs: docs
