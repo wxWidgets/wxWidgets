@@ -901,6 +901,12 @@ void wxFileDialog::SetPath( const wxString& path )
 void wxFileDialog::GetPaths( wxArrayString& paths ) const
 {
     paths.Empty();
+    if (m_list->GetSelectedItemCount() == 0)
+    {
+        paths.Add( GetPath() );
+        return;
+    }
+    
     paths.Alloc( m_list->GetSelectedItemCount() );
 
     wxString dir;
@@ -922,6 +928,11 @@ void wxFileDialog::GetPaths( wxArrayString& paths ) const
 void wxFileDialog::GetFilenames(wxArrayString& files) const
 {
     files.Empty();
+    if (m_list->GetSelectedItemCount() == 0)
+    {
+        files.Add( GetFilename() );
+        return;
+    }
     files.Alloc( m_list->GetSelectedItemCount() );
 
     wxListItem item;

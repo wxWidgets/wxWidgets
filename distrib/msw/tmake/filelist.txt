@@ -590,9 +590,7 @@ string.h	W	B
 tab.h	W
 tabctrl.h	W
 taskbar.h	W
-tbar95.h	W
 tbarbase.h	W
-tbarmsw.h	W
 tbarsmpl.h	W
 textctrl.h	W
 textdlg.h	W

@@ -89,7 +89,7 @@ $\backslash$n or $\backslash$r$\backslash$n or $\backslash$r.
 \section{\class{wxTextOutputStream}}\label{wxtextoutputstream}
 
 This class provides functions that write text datas using an output stream.
-So, you can write \it{text} floats, integers.
+So, you can write {\it text} floats, integers.
 
 You can also simulate the C++ cout class:
 \begin{verbatim}
@@ -108,7 +108,7 @@ and Unix in their native formats (concerning the line ending).
 
 \membersection{wxTextOutputStream::wxTextOutputStream}\label{wxtextoutputstreamconstr}
 
-\func{}{wxTextOutputStream}{\param{wxOutputStream\&}{ stream}}
+\func{}{wxTextOutputStream}{\param{wxOutputStream\&}{ stream}, \param{wxEOL}{ mode = wxEOL_NATIVE}}
 
 Constructs a text stream object from an output stream. Only write methods will
 be available.
@@ -117,11 +117,25 @@ be available.
 
 \docparam{stream}{The output stream.}
 
+\docparam{mode}{The end-of-line mode. One of {\bf wxEOL_NATIVE}, {\bf wxEOL_DOS}, {\bf wxEOL_MAC} or {\bf wxEOL_UNIX}.}
+
 \membersection{wxTextOutputStream::\destruct{wxTextOutputStream}}
 
 \func{}{\destruct{wxTextOutputStream}}{\void}
 
 Destroys the wxTextOutputStream object.
+
+\membersection{wxTextOutputStream::GetMode}
+
+\func{wxEOL}{wxTextOutputStream::GetMode}{\void}
+
+Returns the end-of-line mode. One of {\bf wxEOL_DOS}, {\bf wxEOL_MAC} or {\bf wxEOL_UNIX}.
+
+\membersection{wxTextOutputStream::SetMode}
+
+\func{void}{wxTextOutputStream::SetMode}{{\param wxEOL}{ mode = wxEOL_NATIVE}}
+
+Set the end-of-line mode. One of {\bf wxEOL_NATIVE}, {\bf wxEOL_DOS}, {\bf wxEOL_MAC} or {\bf wxEOL_UNIX}.
 
 \membersection{wxTextOutputStream::Write8}
 
@@ -143,14 +157,14 @@ Writes the 32 bit integer {\it i32} to the stream.
 
 \membersection{wxTextOutputStream::WriteDouble}
 
-\func{void}{wxTextOutputStream::WriteDouble}{{\param double }{f}}
+\func{virtual void}{wxTextOutputStream::WriteDouble}{{\param double }{f}}
 
 Writes the double {\it f} to the stream using the IEEE format.
 
 \membersection{wxTextOutputStream::WriteString}
 
-\func{void}{wxTextOutputStream::WriteString}{{\param const wxString\& }{string}}
+\func{virtual void}{wxTextOutputStream::WriteString}{{\param const wxString\& }{string}}
 
-Writes {\it string} as a line. Depending on the operating system, it adds
-$\backslash$n or $\backslash$r$\backslash$n.
+Writes {\it string} as a line. Depending on the end-of-line mode, it adds
+$\backslash$n, $\backslash$r or $\backslash$r$\backslash$n.
 
