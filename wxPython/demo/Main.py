@@ -209,6 +209,10 @@ class MyLog(wxPyLog):
         self.tc.AppendText(message + '\n')
 
 
+class MyTP(wxPyTipProvider):
+    def GetTip(self):
+        return "This is my tip"
+
 #---------------------------------------------------------------------------
 
 def opj(path):
@@ -545,6 +549,7 @@ class wxPythonDemo(wxFrame):
             showTip, index = (1, 0)
         if showTip:
             tp = wxCreateFileTipProvider(opj("data/tips.txt"), index)
+            ##tp = MyTP(0)
             showTip = wxShowTip(self, tp)
             index = tp.GetCurrentTip()
             open(opj("data/showTips"), "w").write(str( (showTip, index) ))
