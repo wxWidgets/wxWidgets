@@ -179,10 +179,10 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxString msg;
-    msg.Printf("This is the about dialog of minimal sample.\n"
-               "Welcome to %s"
+    msg.Printf( _T("This is the about dialog of minimal sample.\n")
+                _T("Welcome to %s")
 #ifdef wxBETA_NUMBER
-               " (beta %d)!"
+               _T(" (beta %d)!")
 #endif // wxBETA_NUMBER
                , wxVERSION_STRING
 #ifdef wxBETA_NUMBER

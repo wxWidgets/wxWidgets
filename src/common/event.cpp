@@ -118,7 +118,7 @@ wxCommandEvent::wxCommandEvent(wxEventType commandType, int theId)
     m_extraLong = 0;
     m_commandInt = 0;
     m_id = theId;
-    m_commandString = (char *) NULL;
+    m_commandString = (wxChar *) NULL;
     m_isCommandEvent = TRUE;
 }
 
