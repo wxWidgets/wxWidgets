@@ -892,10 +892,6 @@ SOURCE=.\msw\app.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\msw\automtn.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\msw\bitmap.cpp
 # End Source File
 # Begin Source File
@@ -921,10 +917,6 @@ SOURCE=.\msw\cursor.cpp
 # Begin Source File
 
 SOURCE=.\msw\data.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\msw\dataobj.cpp
 # End Source File
 # Begin Source File
 
@@ -965,14 +957,6 @@ SOURCE=.\msw\dir.cpp
 # Begin Source File
 
 SOURCE=.\msw\dirdlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\msw\dropsrc.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\msw\droptgt.cpp
 # End Source File
 # Begin Source File
 
@@ -1040,10 +1024,6 @@ SOURCE=.\msw\minifram.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\msw\oleutils.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\msw\palette.cpp
 # End Source File
 # Begin Source File
@@ -1104,10 +1084,6 @@ SOURCE=.\msw\utilsexc.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\msw\uuid.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\msw\volume.cpp
 # End Source File
 # Begin Source File
@@ -1130,6 +1106,35 @@ SOURCE=.\msw\gsockmsw.c
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 
+# Begin Group "OLE Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\msw\ole\automtn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\ole\dataobj.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\ole\dropsrc.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\ole\droptgt.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\ole\oleutils.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\ole\uuid.cpp
+# End Source File
+
+# End Group
 # End Group
 # Begin Group "Universal Files"
 
@@ -1775,6 +1780,10 @@ SOURCE=..\include\wx\imagxpm.h
 # Begin Source File
 
 SOURCE=..\include\wx\intl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\iosfwrap.h
 # End Source File
 # Begin Source File
 
