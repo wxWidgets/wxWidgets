@@ -29,9 +29,6 @@ class WXDLLEXPORT wxStatusBar;
 class WXDLLEXPORT wxMacToolTip ;
 
 class WXDLLEXPORT wxFrame: public wxFrameBase {
-
-  DECLARE_DYNAMIC_CLASS(wxFrame)
-
 public:
     // construction
     wxFrame() { Init(); }
