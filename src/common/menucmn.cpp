@@ -319,6 +319,7 @@ bool wxMenuBase::DoAppend(wxMenuItem *item)
     wxCHECK_MSG( item, FALSE, wxT("invalid item in wxMenu::Append()") );
 
     m_items.Append(item);
+    item->SetMenu((wxMenu*)this);
     if ( item->IsSubMenu() )
     {
         AddSubMenu(item->GetSubMenu());
@@ -352,6 +353,7 @@ bool wxMenuBase::DoInsert(size_t pos, wxMenuItem *item)
     wxCHECK_MSG( node, FALSE, wxT("invalid index in wxMenu::Insert()") );
 
     m_items.Insert(node, item);
+    item->SetMenu((wxMenu*)this);
     if ( item->IsSubMenu() )
     {
         AddSubMenu(item->GetSubMenu());
@@ -380,6 +382,7 @@ wxMenuItem *wxMenuBase::DoRemove(wxMenuItem *item)
     m_items.DeleteNode(node);
 
     // item isn't attached to anything any more
+    item->SetMenu((wxMenu *)NULL);
     wxMenu *submenu = item->GetSubMenu();
     if ( submenu )
     {
