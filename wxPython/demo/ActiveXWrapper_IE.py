@@ -37,7 +37,7 @@ class TestPanel(wxWindow):
         wxWindow.__init__(self, parent, -1)#, style=wxCLIP_CHILDREN)
         self.ie = None
         self.log = log
-        self.current = "http://alldunn.com/"
+        self.current = "http://wxPython.org/"
         self.frame = frame
         if frame:
             self.titleBase = frame.GetTitle()

@@ -50,13 +50,15 @@ _treeList = [
                         'wxImage', 'wxMask', 'PrintFramework', 'wxOGL',
                         'PythonEvents', 'Threads',
                         'ActiveXWrapper_Acrobat', 'ActiveXWrapper_IE',
-                        'wxDragImage', 'PyShellWindow',
+                        'wxDragImage',
                         ]),
 
     ('wxPython Library', ['Layoutf', 'wxScrolledMessageDialog',
                           'wxMultipleChoiceDialog', 'wxPlotCanvas', 'wxFloatBar',
                           'PyShell', 'wxCalendar', 'wxMVCTree', 'wxVTKRenderWindow',
-                          'FileBrowseButton', 'GenericButtons', 'wxEditor']),
+                          'FileBrowseButton', 'GenericButtons', 'wxEditor',
+                          'PyShellWindow',
+                          ]),
 
     ('Cool Contribs', ['pyTree', 'hangman', 'SlashDot', 'XMLtreeview']),
 

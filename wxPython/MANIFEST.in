@@ -26,6 +26,8 @@ include wxPython/lib/editor/*.py
 include wxPython/lib/editor/*.txt
 
 exclude wxPython/*
+exclude tests
+exclude SWIG
 
 include src/*.i
 include src/*.py
@@ -82,6 +84,7 @@ include contrib/stc/contrib/src/stc/*.h
 include contrib/stc/contrib/src/stc/*.cpp
 include contrib/stc/contrib/src/stc/*.txt
 include contrib/stc/contrib/src/stc/*.py
+include contrib/stc/contrib/src/stc/*.in
 include contrib/stc/contrib/src/stc/scintilla/include/*.h
 include contrib/stc/contrib/src/stc/scintilla/include/*.iface
 include contrib/stc/contrib/src/stc/scintilla/src/*.h

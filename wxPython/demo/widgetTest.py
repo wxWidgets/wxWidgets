@@ -1,5 +1,7 @@
 
 
+import sys, string
+
 from wxPython.wx   import *
 from wxPython.html import *
 
@@ -41,7 +43,10 @@ class TestHtmlPanel(wxPanel):
         import About
         wxPanel.__init__(self, parent, id, size=size)
         self.html = wxHtmlWindow(self, -1, wxPoint(5,5), wxSize(400, 350))
-        self.html.SetPage(About.MyAboutBox.text % wx.__version__)
+        py_version = string.split(sys.version)[0]
+        self.html.SetPage(About.MyAboutBox.text % (wx.__version__, py_version))
+        ir = self.html.GetInternalRepresentation()
+        self.html.SetSize( (ir.GetWidth()+5, ir.GetHeight()+5) )
         self.Fit()
 
 #----------------------------------------------------------------------

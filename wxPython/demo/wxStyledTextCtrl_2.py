@@ -126,9 +126,17 @@ class PythonSTC(wxStyledTextCtrl):
                 self.CallTipShow(pos, 'param1, param2')
             # Code completion
             else:
-                self.AutoCompShow('I love wxPython a b c')
-                self.AutoCompSelect('wx')
-
+                #lst = []
+                #for x in range(50000):
+                #    lst.append('%05d' % x)
+                #st = string.join(lst)
+                #print len(st)
+                #self.AutoCompShow(0, st)
+                self.AutoCompSetIgnoreCase(true)
+                self.AutoCompShow(0, string.join(keyword.kwlist))
+                self.AutoCompSelect('br')
+        else:
+            event.Skip()
 
 
     def OnUpdateUI(self, evt):

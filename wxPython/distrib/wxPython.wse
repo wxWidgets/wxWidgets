@@ -17,7 +17,7 @@ item: Global
   Patch Flags=0000000000001001
   Patch Threshold=85
   Patch Memory=4000
-  EXE Filename=wxPython-2.2.1.exe
+  EXE Filename=wxPython-2.2.2.exe
   FTP Cluster Size=20
   Per-User Version ID=1
   Dialogs Version=6
@@ -814,8 +814,8 @@ item: Install File
   Flags=0000001010000011
 end
 item: Install File
-  Source=c:\projects\wx\lib\wx22_1.dll
-  Destination=%SYS%\wx22_1.dll
+  Source=c:\projects\wx\lib\wx22_2.dll
+  Destination=%SYS%\wx22_2.dll
   Flags=0000001010010010
 end
 item: Install File
@@ -839,12 +839,6 @@ end
 item: Install File
   Source=c:\Projects\wx\wxPython\wxPython\lib\*.py
   Destination=%MAINDIR%\wxPython\lib
-  Description=wxPython Standard Library
-  Flags=0000000010000010
-end
-item: Install File
-  Source=c:\Projects\wx\wxPython\wxPython\lib\sizers\*.py
-  Destination=%MAINDIR%\wxPython\lib\sizers
   Description=wxPython Standard Library
   Flags=0000000010000010
 end
@@ -909,6 +903,18 @@ item: Install File
   Flags=0000000010000010
 end
 item: Install File
+  Source=c:\Projects\wx\wxPython\demo\data\*.htm
+  Destination=%MAINDIR%\wxPython\demo\data
+  Description=Demos
+  Flags=0000000010000010
+end
+item: Install File
+  Source=c:\Projects\wx\wxPython\demo\data\*.py
+  Destination=%MAINDIR%\wxPython\demo\data
+  Description=Demos
+  Flags=0000000010000010
+end
+item: Install File
   Source=c:\Projects\wx\wxPython\demo\data\*.png
   Destination=%MAINDIR%\wxPython\demo\data
   Description=Demos
@@ -932,14 +938,16 @@ item: Install File
   Description=Demos
   Flags=0000000010000010
 end
+item: Remark
+end
 item: Install File
-  Source=C:\PROJECTS\wx\wxPython\README.txt
-  Destination=%MAINDIR%\wxPython\README.txt
+  Source=C:\PROJECTS\wx\wxPython\*.txt
+  Destination=%MAINDIR%\wxPython\docs\
   Flags=0000000010000010
 end
 item: Install File
-  Source=C:\PROJECTS\wx\wxPython\CHANGES.txt
-  Destination=%MAINDIR%\wxPython\CHANGES.txt
+  Source=C:\PROJECTS\wx\wxPython\licence\*.txt
+  Destination=%MAINDIR%\wxPython\docs\licence\
   Flags=0000000010000010
 end
 item: Remark
@@ -953,36 +961,6 @@ end
 item: Install File
   Source=c:\PROJECTS\wx\docs\html\ogl\ogl.chm
   Destination=%MAINDIR%\wxPython\docs\ogl.chm
-  Description=wxPython documentation
-  Flags=0000000010000010
-end
-item: Install File
-  Source=c:\PROJECTS\wx\docs\preamble.txt
-  Destination=%MAINDIR%\wxPython\docs\preamble.txt
-  Description=wxPython documentation
-  Flags=0000000010000010
-end
-item: Install File
-  Source=c:\PROJECTS\wx\docs\licence.txt
-  Destination=%MAINDIR%\wxPython\docs\licence.txt
-  Description=wxPython documentation
-  Flags=0000000010000010
-end
-item: Install File
-  Source=c:\PROJECTS\wx\docs\licendoc.txt
-  Destination=%MAINDIR%\wxPython\docs\licendoc.txt
-  Description=wxPython documentation
-  Flags=0000000010000010
-end
-item: Install File
-  Source=c:\PROJECTS\wx\docs\lgpl.txt
-  Destination=%MAINDIR%\wxPython\docs\lgpl.txt
-  Description=wxPython documentation
-  Flags=0000000010000010
-end
-item: Install File
-  Source=c:\PROJECTS\wx\docs\gpl.txt
-  Destination=%MAINDIR%\wxPython\docs\gpl.txt
   Description=wxPython documentation
   Flags=0000000010000010
 end
@@ -1160,21 +1138,21 @@ item: Create Shortcut
   Flags=00000001
 end
 item: Create Shortcut
-  Source=%MAINDIR%\wxPython\docs\licence.txt
+  Source=%MAINDIR%\wxPython\docs\licence\licence.txt
   Destination=%CGROUPDIR%\%CGROUP_SAVE%\License.lnk
   Icon Number=0
   Key Type=1536
   Flags=00000001
 end
 item: Create Shortcut
-  Source=%MAINDIR%\wxPython\README.txt
+  Source=%MAINDIR%\wxPython\docs\README.txt
   Destination=%CGROUPDIR%\%CGROUP_SAVE%\ReadMe.lnk
   Icon Number=0
   Key Type=1536
   Flags=00000001
 end
 item: Create Shortcut
-  Source=%MAINDIR%\wxPython\CHANGES.txt
+  Source=%MAINDIR%\wxPython\docs\CHANGES.txt
   Destination=%CGROUPDIR%\%CGROUP_SAVE%\Changes.lnk
   Icon Number=0
   Key Type=1536

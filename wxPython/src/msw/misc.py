@@ -80,6 +80,17 @@ class wxRealPointPtr :
     def asTuple(self, *_args, **_kwargs):
         val = apply(miscc.wxRealPoint_asTuple,(self,) + _args, _kwargs)
         return val
+    def __add__(self, *_args, **_kwargs):
+        val = apply(miscc.wxRealPoint___add__,(self,) + _args, _kwargs)
+        if val: val = wxRealPointPtr(val) ; val.thisown = 1
+        return val
+    def __sub__(self, *_args, **_kwargs):
+        val = apply(miscc.wxRealPoint___sub__,(self,) + _args, _kwargs)
+        if val: val = wxRealPointPtr(val) ; val.thisown = 1
+        return val
+    def __cmp__(self, *_args, **_kwargs):
+        val = apply(miscc.wxRealPoint___cmp__,(self,) + _args, _kwargs)
+        return val
     def __setattr__(self,name,value):
         if name == "x" :
             miscc.wxRealPoint_x_set(self,value)
@@ -118,6 +129,17 @@ class wxPointPtr :
         return val
     def asTuple(self, *_args, **_kwargs):
         val = apply(miscc.wxPoint_asTuple,(self,) + _args, _kwargs)
+        return val
+    def __add__(self, *_args, **_kwargs):
+        val = apply(miscc.wxPoint___add__,(self,) + _args, _kwargs)
+        if val: val = wxPointPtr(val) ; val.thisown = 1
+        return val
+    def __sub__(self, *_args, **_kwargs):
+        val = apply(miscc.wxPoint___sub__,(self,) + _args, _kwargs)
+        if val: val = wxPointPtr(val) ; val.thisown = 1
+        return val
+    def __cmp__(self, *_args, **_kwargs):
+        val = apply(miscc.wxPoint___cmp__,(self,) + _args, _kwargs)
         return val
     def __setattr__(self,name,value):
         if name == "x" :
@@ -630,8 +652,6 @@ wxUsleep = miscc.wxUsleep
 wxYield = miscc.wxYield
 
 wxSafeYield = miscc.wxSafeYield
-
-wxFlushEvents = miscc.wxFlushEvents
 
 wxEnableTopLevelWindows = miscc.wxEnableTopLevelWindows
 

@@ -152,14 +152,14 @@ public:
         wxToolBarToolBase *AddTool(int id,
                                    const wxBitmap& bitmap,
                                    const wxBitmap& pushedBitmap = wxNullBitmap,
-                                   int toggle = FALSE,
+                                   int isToggle = FALSE,
                                    PyObject *clientData = NULL,
                                    const wxString& shortHelpString = wxPyEmptyStr,
                                    const wxString& longHelpString = wxPyEmptyStr) {
             wxPyUserData* udata = NULL;
             if (clientData)
                 udata = new wxPyUserData(clientData);
-            return self->AddTool(id, bitmap, pushedBitmap, (bool)toggle,
+            return self->AddTool(id, bitmap, pushedBitmap, (bool)isToggle,
                                  udata, shortHelpString, longHelpString);
         }
 
@@ -168,8 +168,8 @@ public:
                                          const wxBitmap& bitmap,
                                          const wxString& shortHelpString = wxPyEmptyStr,
                                          const wxString& longHelpString = wxPyEmptyStr,
-                                         int toggle = FALSE) {
-            return self->AddTool(id, bitmap, wxNullBitmap, toggle, NULL,
+                                         int isToggle = FALSE) {
+            return self->AddTool(id, bitmap, wxNullBitmap, isToggle, NULL,
                                  shortHelpString, longHelpString);
         }
 
@@ -179,14 +179,14 @@ public:
                                       int id,
                                       const wxBitmap& bitmap,
                                       const wxBitmap& pushedBitmap = wxNullBitmap,
-                                      int toggle = FALSE,
+                                      int isToggle = FALSE,
                                       PyObject *clientData = NULL,
                                       const wxString& shortHelpString = wxPyEmptyStr,
                                       const wxString& longHelpString = wxPyEmptyStr) {
             wxPyUserData* udata = NULL;
             if (clientData)
                 udata = new wxPyUserData(clientData);
-            return self->InsertTool(pos, id, bitmap, pushedBitmap, (bool)toggle,
+            return self->InsertTool(pos, id, bitmap, pushedBitmap, (bool)isToggle,
                                     udata, shortHelpString, longHelpString);
         }
 
@@ -196,8 +196,8 @@ public:
                                             const wxBitmap& bitmap,
                                             const wxString& shortHelpString = wxPyEmptyStr,
                                             const wxString& longHelpString = wxPyEmptyStr,
-                                            int toggle = FALSE) {
-            return self->InsertTool(pos, id, bitmap, wxNullBitmap, toggle, NULL,
+                                            int isToggle = FALSE) {
+            return self->InsertTool(pos, id, bitmap, wxNullBitmap, isToggle, NULL,
                                     shortHelpString, longHelpString);
         }
     }

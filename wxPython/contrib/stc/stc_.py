@@ -13,6 +13,8 @@ from clip_dnd import *
 
 from events import *
 
+from streams import *
+
 from mdi import *
 
 from frames import *
@@ -34,6 +36,10 @@ from image import *
 from printfw import *
 
 from sizers import *
+
+from filesys import *
+
+from utils import *
 
 def EVT_STC_CHANGE(win, id, fn):
     win.Connect(id, -1, wxEVT_STC_CHANGE, fn)

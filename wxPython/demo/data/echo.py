@@ -23,3 +23,5 @@ while line:
     line = sys.stdin.readline()
 
 
+sys.stdout.write('\nExiting...\n')
+sys.stdout.flush()

@@ -641,7 +641,7 @@ public:
 
 class wxMenuBar : public wxWindow {
 public:
-    wxMenuBar();
+    wxMenuBar(long style = 0);
 
     bool Append(wxMenu *menu, const wxString& title);
     bool Insert(size_t pos, wxMenu *menu, const wxString& title);

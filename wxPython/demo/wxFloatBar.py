@@ -43,7 +43,7 @@ class TestFloatBar(wxFrame):
 
         tb.AddTool(60, wxBitmap('bitmaps/tog1.bmp', wxBITMAP_TYPE_BMP),
                    wxBitmap('bitmaps/tog2.bmp', wxBITMAP_TYPE_BMP),
-                   shortHelpString="Toggle with 2 bitmaps", toggle=true)
+                   shortHelpString="Toggle with 2 bitmaps", isToggle=true)
         EVT_TOOL(self, 60, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 60, self.OnToolRClick)
         tb.Realize()

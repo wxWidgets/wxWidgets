@@ -7614,19 +7614,20 @@ static void *SwigwxMenuBarTowxEvtHandler(void *ptr) {
     return (void *) dest;
 }
 
-#define new_wxMenuBar() (new wxMenuBar())
+#define new_wxMenuBar(_swigarg0) (new wxMenuBar(_swigarg0))
 static PyObject *_wrap_new_wxMenuBar(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxMenuBar * _result;
-    char *_kwnames[] = {  NULL };
+    long  _arg0 = (long ) 0;
+    char *_kwnames[] = { "style", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxMenuBar",_kwnames)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|l:new_wxMenuBar",_kwnames,&_arg0)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxMenuBar *)new_wxMenuBar();
+        _result = (wxMenuBar *)new_wxMenuBar(_arg0);
 
     wxPy_END_ALLOW_THREADS;
 }    if (_result) {

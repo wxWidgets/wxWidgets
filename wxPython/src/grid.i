@@ -1565,7 +1565,8 @@ public:
     void SelectRow( int row, bool addToSelected = FALSE );
     void SelectCol( int col, bool addToSelected = FALSE );
 
-    void SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol );
+    void SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol,
+                      bool addToSelected = FALSE );
     // TODO: ??? void SelectBlock( const wxGridCellCoords& topLeft,
     // TODO: ???                   const wxGridCellCoords& bottomRight )
 

@@ -95,9 +95,10 @@ class PyShellWindow(wxStyledTextCtrl, InteractiveInterpreter):
 
         # copyright/banner message
         if banner is None:
-            self.write("Python %s on %s\n%s\n(%s)\n" %
-                       (sys.version, sys.platform, sys.copyright,
-                        self.__class__.__name__))
+            self.write("Python %s on %s\n" % #%s\n(%s)\n" %
+                       (sys.version, sys.platform,
+                        #sys.copyright, self.__class__.__name__
+                        ))
         else:
             self.write("%s\n" % banner)
 

@@ -5,7 +5,7 @@ CHANGES.txt for wxPython
 New in 2.2.2
 ------------
 
-Significantly changed how the wxStyledtextCtrl code that wrapps
+Significantly changed how the wxStyledtextCtrl code that wraps
 Scintilla is implemented.  Most of it is now automatically generated
 from an interface definition file provided by Scintilla.  This means
 that it will be much easier to stay in sync with new Scintilla
@@ -26,7 +26,7 @@ install version 1.0 of Distutils from the website above.  If you are
 using Python 2.0 then you already have it.
 
 Added wxInputStream and the wxFileSystem family of classes,
-contributed by Joerg Baumann
+contributed by Joerg Baumann.
 
 Added wxProcess and support for it to wxExecute.  wxProcess lets you
 get notified when an asyncronous child process terminates, and also to
@@ -35,6 +35,8 @@ stdin.
 
 Removed the old python sizers.
 
+Added __add__, __sub__ and __cmp__ (equality check only) for wxPoint
+and wxRealPoint.
 
 
 

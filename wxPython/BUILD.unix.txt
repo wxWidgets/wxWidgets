@@ -166,6 +166,9 @@ B. As mentioned previouslly, wxPython is built with the standard
 
          LDSHARED=gcc -G
 
+   This particular problem has been fixed in Python 1.6 and beyond,
+   but there may be similar issues on other platforms.
+
    While we're on the subject of how Python was built... Since
    wxPython is a C++ extension some platforms and/or compilers will
    require that the Python executable was linked with the C++ linker
@@ -252,7 +255,8 @@ F. If you would like to make a test build that doesn't overwrite the
    To run using this test version just add the base wxPython source
    directory to the PYTHONPATH:
 
-         set PYTHONPATH=~/projects/wxWindows/wxPython
+         export PYTHONPATH=~/projects/wxWindows/wxPython
+	 # or whatever is required for your shell
 	 cd ~/projects/wxWindows/wxPython/demo
 	 python demo.py
 

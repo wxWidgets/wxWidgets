@@ -94,15 +94,26 @@ class TestPanel(wxPanel):
 
     def OnIdle(self, evt):
         if self.process is not None:
-            st = self.process.GetInputStream()
-            if not st.eof():
-                text = st.read()
+            stream = self.process.GetInputStream()
+
+            # Yes, this is weird.  For this particular stream, EOF
+            # simply means that there is no data available to be read,
+            # not truly the end of file.  Also, read() just reads all
+            # the currently available data, not until the real EOF...
+            if not stream.eof():
+                text = stream.read()
                 self.out.AppendText(text)
 
 
     def OnProcessEnded(self, evt):
         self.log.write('OnProcessEnded, pid:%s,  exitCode: %s\n' %
                        (evt.GetPid(), evt.GetExitCode()))
+
+        stream = self.process.GetInputStream()
+        if not stream.eof():
+            text = stream.read()
+            self.out.AppendText(text)
+
         self.process.Destroy()
         self.process = None
         self.inp.Enable(false)
@@ -126,7 +137,19 @@ overview = """\
 <html><body>
 <h2>wxProcess</h2>
 
-blah blah blah...
+wxProcess lets you get notified when an asyncronous child process
+started by wxExecute terminates, and also to get input/output streams
+for the child process's stdout, stderr and stdin.
+
+<p>
+This demo launches a simple python script that echos back on stdout
+lines that it reads from stdin.  You can send text to the echo
+process' stdin by typing in the lower textctrl and clicking Send.
+
+<p>
+Clicking the Close Stream button will close the demo's end of the
+stdin pipe to the child process.  In our case that will cause the
+child process to exit its main loop.
 
 </body><html>
 """
