@@ -223,7 +223,7 @@ implements the following methods:\par
 
 \membersection{wxWindow::Close}\label{wxwindowclose}
 
-\func{virtual bool}{Close}{\param{const bool}{ force = FALSE}}
+\func{virtual bool}{Close}{\param{bool}{ force = FALSE}}
 
 The purpose of this call is to provide a safer way of destroying a window than using
 the {\it delete} operator.
@@ -363,7 +363,7 @@ Destroys all children of a window.  Called automatically by the destructor.
 
 \membersection{wxWindow::DragAcceptFiles}\label{wxwindowdragacceptfiles}
 
-\func{virtual void}{DragAcceptFiles}{\param{const bool}{ accept}}
+\func{virtual void}{DragAcceptFiles}{\param{bool}{ accept}}
 
 Enables or disables elibility for drop file events (OnDropFiles).
 
@@ -382,7 +382,7 @@ Windows only.
 
 \membersection{wxWindow::Enable}\label{wxwindowenable}
 
-\func{virtual void}{Enable}{\param{const bool}{ enable}}
+\func{virtual void}{Enable}{\param{bool}{ enable}}
 
 Enable or disable the window for user input.
 
@@ -714,7 +714,7 @@ implements the following methods:\par
 
 \constfunc{virtual void}{GetTextExtent}{\param{const wxString\& }{string}, \param{int* }{x}, \param{int* }{y},
  \param{int* }{descent = NULL}, \param{int* }{externalLeading = NULL},
- \param{const wxFont* }{font = NULL}, \param{const bool}{ use16 = FALSE}}
+ \param{const wxFont* }{font = NULL}, \param{bool}{ use16 = FALSE}}
 
 Gets the dimensions of the string as it would be drawn on the
 window with the currently selected font.
@@ -878,7 +878,7 @@ or frame).
 
 \membersection{wxWindow::MakeModal}\label{wxwindowmakemodal}
 
-\func{virtual void}{MakeModal}{\param{const bool }{flag}}
+\func{virtual void}{MakeModal}{\param{bool }{flag}}
 
 Disables all other windows in the application so that
 the user can only interact with this window. (This function
@@ -1616,7 +1616,7 @@ or frame).
 
 \membersection{wxWindow::Refresh}\label{wxwindowrefresh}
 
-\func{virtual void}{Refresh}{\param{const bool}{ eraseBackground = TRUE}, \param{const wxRect* }{rect
+\func{virtual void}{Refresh}{\param{bool}{ eraseBackground = TRUE}, \param{const wxRect* }{rect
 = NULL}}
 
 Causes a message or event to be generated to repaint the
@@ -1719,7 +1719,7 @@ Sets the accelerator table for this window. See \helpref{wxAcceleratorTable}{wxa
 
 \membersection{wxWindow::SetAutoLayout}\label{wxwindowsetautolayout}
 
-\func{void}{SetAutoLayout}{\param{const bool}{ autoLayout}}
+\func{void}{SetAutoLayout}{\param{bool}{ autoLayout}}
 
 Determines whether the \helpref{wxWindow::Layout}{wxwindowlayout} function will
 be called automatically when the window is resized. Use in connection with
@@ -1970,7 +1970,7 @@ Obsolete - use \helpref{wxDC::SetPalette}{wxdcsetpalette} instead.
 
 \func{virtual void}{SetScrollbar}{\param{int }{orientation}, \param{int }{position},\rtfsp
 \param{int }{thumbSize}, \param{int }{range},\rtfsp
-\param{const bool }{refresh = TRUE}}
+\param{bool }{refresh = TRUE}}
 
 Sets the scrollbar properties of a built-in scrollbar.
 
@@ -2019,7 +2019,7 @@ from your \helpref{wxWindow::OnSize}{wxwindowonsize} event handler function.
 \begin{comment}
 \membersection{wxWindow::SetScrollPage}\label{wxwindowsetscrollpage}
 
-\func{virtual void}{SetScrollPage}{\param{int }{orientation}, \param{int }{pageSize}, \param{const bool }{refresh = TRUE}}
+\func{virtual void}{SetScrollPage}{\param{int }{orientation}, \param{int }{pageSize}, \param{bool }{refresh = TRUE}}
 
 Sets the page size of one of the built-in scrollbars.
 
@@ -2057,7 +2057,7 @@ handling of pages and ranges.
 
 \membersection{wxWindow::SetScrollPos}\label{wxwindowsetscrollpos}
 
-\func{virtual void}{SetScrollPos}{\param{int }{orientation}, \param{int }{pos}, \param{const bool }{refresh = TRUE}}
+\func{virtual void}{SetScrollPos}{\param{int }{orientation}, \param{int }{pos}, \param{bool }{refresh = TRUE}}
 
 Sets the position of one of the built-in scrollbars.
 
@@ -2084,7 +2084,7 @@ application to take note of scrollbar attributes and redraw contents accordingly
 \begin{comment}
 \membersection{wxWindow::SetScrollRange}\label{wxwindowsetscrollrange}
 
-\func{virtual void}{SetScrollRange}{\param{int }{orientation}, \param{int }{range}, \param{const bool }{refresh = TRUE}}
+\func{virtual void}{SetScrollRange}{\param{int }{orientation}, \param{int }{range}, \param{bool }{refresh = TRUE}}
 
 Sets the range of one of the built-in scrollbars.
 
@@ -2255,7 +2255,7 @@ create a new validator of this type.
 
 \membersection{wxWindow::Show}\label{wxwindowshow}
 
-\func{virtual bool}{Show}{\param{const bool}{ show}}
+\func{virtual bool}{Show}{\param{bool}{ show}}
 
 Shows or hides the window.
 

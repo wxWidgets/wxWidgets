@@ -862,7 +862,9 @@ Sets the translation (from the top left corner) for PostScript output. The defau
 
 \section{Clipboard functions}\label{clipsboard}
 
-These clipboard functions are implemented for Windows only.
+These clipboard functions are implemented for Windows only. The use of these functions
+is drepated and the code no longer maintained. Use the \helpref{wxClipboard}{wxclipboard}
+class instead.
 
 \wxheading{Include files}
 
@@ -1513,7 +1515,12 @@ sometime later - usually during the next even loop iteration.
 
 Note that a copy of the {\it event} is made by the function, so the original
 copy can be deleted as soon as function returns. This function can also be used
-to send events between different threads safely.
+to send events between different threads safely. As this function makes a
+copy of the event, the event needs to have a fully implemented Clone() method,
+which may not be the case for all event in wxWindows.
+
+See also \helpref{AddPendingEvent}{wxevthandleraddpendingevent} (which this function
+uses internally).
 
 \wxheading{Include files}
 
@@ -1710,6 +1717,21 @@ function.
 \wxheading{Include files}
 
 <wx/app.h> or <wx/utils.h>
+
+\membersection{::wxWakeUpIdle}\label{wxwakeupidle}
+
+\func{void}{wxWakeUpIdle}{\void}
+
+This functions wakes up the (internal and platform dependent) idle system, i.e. it
+will force the system to send an idle event even if the system currently {\it is}
+idle and thus would not send any idle event until after some other event would get
+sent. This is also useful for sending events between two threads and is used by
+the corresponding functions \helpref{::wxPostEvent}{wxpostevent} and 
+\helpref{wxEvtHandler::AddPendingEvent}{wxevthandleraddpendingevent}.
+
+\wxheading{Include files}
+
+<wx/app.h>
 
 \section{Macros}\label{macros}
 
