@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        generic/scrolwin.cpp
+// Name:        gtk/scrolwin.cpp
 // Purpose:     wxScrolledWindow implementation
 // Author:      Julian Smart
 // Modified by:
@@ -137,6 +137,7 @@ void wxScrolledWindow::Init()
     m_targetWindow = (wxWindow*) NULL;
     m_scaleX = 1.0;
     m_scaleY = 1.0;
+    m_hasScrolling = TRUE;
 }
 
 bool wxScrolledWindow::Create(wxWindow *parent,
