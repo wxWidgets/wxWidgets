@@ -304,6 +304,57 @@ int wxHtmlTag::ScanParam(const wxString& par, wxChar *format, void *param) const
     return wxSscanf(parval, format, param);
 }
 
+bool wxHtmlTag::GetParamAsColour(const wxString& par, wxColour *clr) const
+{
+    wxString str = GetParam(par);
+    
+    if (str.IsEmpty()) return FALSE;
+    if (str.GetChar(0) == wxT('#'))
+    {
+        unsigned long tmp;
+        if (ScanParam(par, wxT("#%lX"), &tmp) != 1)
+            return FALSE;
+        *clr = wxColour((unsigned char)((tmp & 0xFF0000) >> 16),
+					    (unsigned char)((tmp & 0x00FF00) >> 8),
+					    (unsigned char)(tmp & 0x0000FF));
+        return TRUE;
+    }
+    else
+    {
+        // Handle colours defined in HTML 4.0:
+        #define HTML_COLOUR(name,r,g,b)                 \
+            if (str.IsSameAs(wxT(name), FALSE))         \
+                { *clr = wxColour(r,g,b); return TRUE; }
+        HTML_COLOUR("black",   0x00,0x00,0x00)
+        HTML_COLOUR("silver",  0xC0,0xC0,0xC0)
+        HTML_COLOUR("gray",    0x80,0x80,0x80)
+        HTML_COLOUR("white",   0xFF,0xFF,0xFF)
+        HTML_COLOUR("maroon",  0x80,0x00,0x00)
+        HTML_COLOUR("red",     0xFF,0x00,0x00)
+        HTML_COLOUR("purple",  0x80,0x00,0x80)
+        HTML_COLOUR("fuchsia", 0xFF,0x00,0xFF)
+        HTML_COLOUR("green",   0x00,0x80,0x00)
+        HTML_COLOUR("lime",    0x00,0xFF,0x00)
+        HTML_COLOUR("olive",   0x80,0x80,0x00)
+        HTML_COLOUR("yellow",  0xFF,0xFF,0x00)
+        HTML_COLOUR("navy",    0x00,0x00,0x80)
+        HTML_COLOUR("blue",    0x00,0x00,0xFF)
+        HTML_COLOUR("teal",    0x00,0x80,0x80)
+        HTML_COLOUR("aqua",    0x00,0xFF,0xFF)
+        #undef HTML_COLOUR
+        return FALSE;
+    }
+}
+
+bool wxHtmlTag::GetParamAsInt(const wxString& par, int *clr) const
+{
+    if (!HasParam(par)) return FALSE;
+    long i;
+    bool succ = GetParam(par).ToLong(&i);
+    *clr = (int)i;
+    return succ;
+}
+
 wxString wxHtmlTag::GetAllParams() const
 {
     // VS: this function is for backward compatiblity only, 

@@ -174,43 +174,23 @@ TAG_HANDLER_BEGIN(BODY, "BODY")
 
     TAG_HANDLER_PROC(tag)
     {
-        unsigned long tmp;
         wxColour clr;
 
-        if (tag.HasParam(wxT("TEXT")))
+        if (tag.GetParamAsColour(wxT("TEXT"), &clr))
 	    {
-            if (tag.ScanParam(wxT("TEXT"), wxT("#%lX"), &tmp) == 1)
-	        {
-                clr = wxColour((unsigned char)((tmp & 0xFF0000) >> 16),
-							   (unsigned char)((tmp & 0x00FF00) >> 8),
-							   (unsigned char)(tmp & 0x0000FF));
-                m_WParser->SetActualColor(clr);
-                m_WParser->GetContainer()->InsertCell(new wxHtmlColourCell(clr));
-            }
-    	}
-
-        if (tag.HasParam(wxT("LINK")))
-	    {
-            if (tag.ScanParam(wxT("LINK"), wxT("#%lX"), &tmp) == 1)
-	        {
-                clr = wxColour((unsigned char)((tmp & 0xFF0000) >> 16),
-							   (unsigned char)((tmp & 0x00FF00) >> 8),
-							   (unsigned char)(tmp & 0x0000FF));
-                m_WParser->SetLinkColor(clr);
-    	    }
+            m_WParser->SetActualColor(clr);
+            m_WParser->GetContainer()->InsertCell(new wxHtmlColourCell(clr));
         }
 
-        if (tag.HasParam(wxT("BGCOLOR")))
+        if (tag.GetParamAsColour(wxT("LINK"), &clr))
+            m_WParser->SetLinkColor(clr);
+
+        if (tag.GetParamAsColour(wxT("BGCOLOR"), &clr))
 	    {
-            if (tag.ScanParam(wxT("BGCOLOR"), wxT("#%lX"), &tmp) == 1)
-	        {
-                clr = wxColour((unsigned char)((tmp & 0xFF0000) >> 16),
-							   (unsigned char)((tmp & 0x00FF00) >> 8),
-							   (unsigned char)(tmp & 0x0000FF));
-                m_WParser->GetContainer()->InsertCell(new wxHtmlColourCell(clr, wxHTML_CLR_BACKGROUND));
-                if (m_WParser->GetWindow() != NULL)
-                    m_WParser->GetWindow()->SetBackgroundColour(clr);
-    	    }
+            m_WParser->GetContainer()->InsertCell(
+                new wxHtmlColourCell(clr, wxHTML_CLR_BACKGROUND));
+            if (m_WParser->GetWindow() != NULL)
+                m_WParser->GetWindow()->SetBackgroundColour(clr);
         }
         return FALSE;
     }

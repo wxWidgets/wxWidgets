@@ -162,7 +162,7 @@ bool HP_TagHandler::HandleTag(const wxHtmlTag& tag)
         if (tag.GetParam(wxT("NAME")) == wxT("Local")) 
             m_Page = tag.GetParam(wxT("VALUE"));
         if (tag.GetParam(wxT("NAME")) == wxT("ID")) 
-            tag.ScanParam(wxT("VALUE"), wxT("%i"), &m_ID);
+            tag.GetParamAsInt(wxT("VALUE"), &m_ID);
         return FALSE;
     }
 }

@@ -49,8 +49,10 @@ FORCE_LINK_ME(m_tables)
 
 
 typedef struct {
-        int width, units;                      // universal
-        int leftpos, pixwidth, maxrealwidth;   // temporary (depends on width of table)
+        int width, units;                      
+                // universal
+        int leftpos, pixwidth, maxrealwidth;   
+                // temporary (depends on width of table)
     } colStruct;
 
 typedef enum {
@@ -90,7 +92,7 @@ class wxHtmlTableCell : public wxHtmlContainerCell
                 // number of actual column (ranging from 0..m_NumCols)
 
         // default values (for table and row):
-        int m_tBkg, m_rBkg;
+        wxColour m_tBkg, m_rBkg;
         wxString m_tValign, m_rValign;
 
         double m_PixelScale;
@@ -117,18 +119,23 @@ wxHtmlTableCell::wxHtmlTableCell(wxHtmlContainerCell *parent, const wxHtmlTag& t
  : wxHtmlContainerCell(parent)
 {
     m_PixelScale = pixel_scale;
-    m_HasBorders = (tag.HasParam(wxT("BORDER")) && tag.GetParam(wxT("BORDER")) != wxT("0"));
+    m_HasBorders = (tag.GetParam(wxT("BORDER")) != wxT("0"));
     m_ColsInfo = NULL;
     m_NumCols = m_NumRows = 0;
     m_CellInfo = NULL;
     m_ActualCol = m_ActualRow = -1;
 
     /* scan params: */
-    m_tBkg = m_rBkg = -1;
-    if (tag.HasParam(wxT("BGCOLOR"))) tag.ScanParam(wxT("BGCOLOR"), wxT("#%lX"), &m_tBkg);
-    if (tag.HasParam(wxT("VALIGN"))) m_tValign = tag.GetParam(wxT("VALIGN")); else m_tValign = wxEmptyString;
-    if (tag.HasParam(wxT("CELLSPACING")) && tag.ScanParam(wxT("CELLSPACING"), wxT("%i"), &m_Spacing) == 1) {} else m_Spacing = 2;
-    if (tag.HasParam(wxT("CELLPADDING")) && tag.ScanParam(wxT("CELLPADDING"), wxT("%i"), &m_Padding) == 1) {} else m_Padding = 3;
+    if (tag.HasParam(wxT("BGCOLOR"))) 
+        tag.GetParamAsColour(wxT("BGCOLOR"), &m_tBkg);
+    if (tag.HasParam(wxT("VALIGN"))) 
+        m_tValign = tag.GetParam(wxT("VALIGN")); 
+    else 
+        m_tValign = wxEmptyString;
+    if (!tag.GetParamAsInt(wxT("CELLSPACING"), &m_Spacing))
+        m_Spacing = 2;
+    if (!tag.GetParamAsInt(wxT("CELLPADDING"), &m_Padding))
+        m_Padding = 3;
     m_Spacing = (int)(m_PixelScale * (double)m_Spacing);
     m_Padding = (int)(m_PixelScale * (double)m_Padding);
 
@@ -202,7 +209,7 @@ void wxHtmlTableCell::AddRow(const wxHtmlTag& tag)
     // scan params:
     m_rBkg = m_tBkg;
     if (tag.HasParam(wxT("BGCOLOR"))) 
-        tag.ScanParam(wxT("BGCOLOR"), wxT("#%lX"), &m_rBkg);
+        tag.GetParamAsColour(wxT("BGCOLOR"), &m_rBkg);
     if (tag.HasParam(wxT("VALIGN"))) 
         m_rValign = tag.GetParam(wxT("VALIGN")); 
     else 
@@ -226,7 +233,8 @@ void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
     do 
     {
         m_ActualCol++;
-    } while ((m_ActualCol < m_NumCols) && (m_CellInfo[m_ActualRow][m_ActualCol].flag != cellFree));
+    } while ((m_ActualCol < m_NumCols) && 
+             (m_CellInfo[m_ActualRow][m_ActualCol].flag != cellFree));
     
     if (m_ActualCol > m_NumCols - 1)
         ReallocCols(m_ActualCol + 1);
@@ -244,11 +252,11 @@ void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
 
     // width:
     {
-        if (tag.HasParam("WIDTH")) 
+        if (tag.HasParam(wxT("WIDTH")))
         {
-            wxString wd = tag.GetParam("WIDTH");
+            wxString wd = tag.GetParam(wxT("WIDTH"));
 
-            if (wd[wd.Length()-1] == '%') 
+            if (wd[wd.Length()-1] == wxT('%'))
             {
                 wxSscanf(wd.c_str(), wxT("%i%%"), &m_ColsInfo[c].width);
                 m_ColsInfo[c].units = wxHTML_UNITS_PERCENT;
@@ -265,14 +273,16 @@ void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
 
     // spanning:
     {
-        if (tag.HasParam(wxT("COLSPAN"))) tag.ScanParam(wxT("COLSPAN"), wxT("%i"), &m_CellInfo[r][c].colspan);
-        if (tag.HasParam(wxT("ROWSPAN"))) tag.ScanParam(wxT("ROWSPAN"), wxT("%i"), &m_CellInfo[r][c].rowspan);
+        tag.GetParamAsInt(wxT("COLSPAN"), &m_CellInfo[r][c].colspan);
+        tag.GetParamAsInt(wxT("ROWSPAN"), &m_CellInfo[r][c].rowspan);
         if ((m_CellInfo[r][c].colspan != 1) || (m_CellInfo[r][c].rowspan != 1)) 
         {
             int i, j;
 
-            if (r + m_CellInfo[r][c].rowspan > m_NumRows) ReallocRows(r + m_CellInfo[r][c].rowspan);
-            if (c + m_CellInfo[r][c].colspan > m_NumCols) ReallocCols(c + m_CellInfo[r][c].colspan);
+            if (r + m_CellInfo[r][c].rowspan > m_NumRows) 
+                ReallocRows(r + m_CellInfo[r][c].rowspan);
+            if (c + m_CellInfo[r][c].colspan > m_NumCols) 
+                ReallocCols(c + m_CellInfo[r][c].colspan);
             for (i = r; i < r + m_CellInfo[r][c].rowspan; i++)
                 for (j = c; j < c + m_CellInfo[r][c].colspan; j++)
                     m_CellInfo[i][j].flag = cellSpan;
@@ -282,13 +292,11 @@ void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
 
     //background color:
     {
-        int bk = m_rBkg;
-        if (tag.HasParam(wxT("BGCOLOR"))) tag.ScanParam(wxT("BGCOLOR"), wxT("#%lX"), &bk);
-        if (bk != -1) 
-        {
-            wxColour clr = wxColour((bk & 0xFF0000) >> 16 , (bk & 0x00FF00) >> 8, (bk & 0x0000FF));
-            cell->SetBackgroundColour(clr);
-        }
+        wxColour bk = m_rBkg;
+        if (tag.HasParam(wxT("BGCOLOR"))) 
+            tag.GetParamAsColour(wxT("BGCOLOR"), &bk);
+        if (bk.Ok())
+            cell->SetBackgroundColour(bk);
     }
     if (m_HasBorders)
         cell->SetBorder(TABLE_BORDER_CLR_2, TABLE_BORDER_CLR_1);
@@ -296,10 +304,15 @@ void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
     // vertical alignment:
     {
         wxString valign;
-        if (tag.HasParam(wxT("VALIGN"))) valign = tag.GetParam(wxT("VALIGN")); else valign = m_tValign;
+        if (tag.HasParam(wxT("VALIGN"))) 
+            valign = tag.GetParam(wxT("VALIGN")); 
+        else 
+            valign = m_tValign;
         valign.MakeUpper();
-        if (valign == wxT("TOP")) m_CellInfo[r][c].valign = wxHTML_ALIGN_TOP;
-        else if (valign == wxT("BOTTOM")) m_CellInfo[r][c].valign = wxHTML_ALIGN_BOTTOM;
+        if (valign == wxT("TOP")) 
+            m_CellInfo[r][c].valign = wxHTML_ALIGN_TOP;
+        else if (valign == wxT("BOTTOM")) 
+            m_CellInfo[r][c].valign = wxHTML_ALIGN_BOTTOM;
         else m_CellInfo[r][c].valign = wxHTML_ALIGN_CENTER;
     }
 
@@ -470,7 +483,8 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
             m_Table = new wxHtmlTableCell(c, tag, m_WParser->GetPixelScale());
             m_OldAlign = m_WParser->GetAlign();
             m_tAlign = wxEmptyString;
-            if (tag.HasParam(wxT("ALIGN"))) m_tAlign = tag.GetParam(wxT("ALIGN"));
+            if (tag.HasParam(wxT("ALIGN")))
+                m_tAlign = tag.GetParam(wxT("ALIGN"));
 
             ParseInner(tag);
 
@@ -489,7 +503,8 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
             {
                 m_Table->AddRow(tag);
                 m_rAlign = m_tAlign;
-                if (tag.HasParam(wxT("ALIGN"))) m_rAlign = tag.GetParam(wxT("ALIGN"));
+                if (tag.HasParam(wxT("ALIGN"))) 
+                    m_rAlign = tag.GetParam(wxT("ALIGN"));
             }
 
             // new cell
@@ -510,10 +525,13 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
                     wxString als;
 
                     als = m_rAlign;
-                    if (tag.HasParam(wxT("ALIGN"))) als = tag.GetParam(wxT("ALIGN"));
+                    if (tag.HasParam(wxT("ALIGN"))) 
+                        als = tag.GetParam(wxT("ALIGN"));
                     als.MakeUpper();
-                    if (als == wxT("RIGHT")) m_WParser->SetAlign(wxHTML_ALIGN_RIGHT);
-                    else if (als == wxT("CENTER")) m_WParser->SetAlign(wxHTML_ALIGN_CENTER);
+                    if (als == wxT("RIGHT")) 
+                        m_WParser->SetAlign(wxHTML_ALIGN_RIGHT);
+                    else if (als == wxT("CENTER")) 
+                        m_WParser->SetAlign(wxHTML_ALIGN_CENTER);
                 }
                 m_WParser->OpenContainer();
             }

@@ -404,20 +404,24 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                 wxString mn = wxEmptyString;
 
                 str = m_WParser->GetFS()->OpenFile(tmp);
-                if (tag.HasParam(wxT("WIDTH"))) tag.ScanParam(wxT("WIDTH"), wxT("%i"), &w);
-                if (tag.HasParam(wxT("HEIGHT"))) tag.ScanParam(wxT("HEIGHT"), wxT("%i"), &h);
+                if (tag.HasParam(wxT("WIDTH"))) 
+                    tag.GetParamAsInt(wxT("WIDTH"), &w);
+                if (tag.HasParam(wxT("HEIGHT"))) 
+                    tag.GetParamAsInt(wxT("HEIGHT"), &h);
                 al = wxHTML_ALIGN_BOTTOM;
                 if (tag.HasParam(wxT("ALIGN"))) 
 		        {
                     wxString alstr = tag.GetParam(wxT("ALIGN"));
                     alstr.MakeUpper();  // for the case alignment was in ".."
-                    if (alstr == wxT("TEXTTOP")) al = wxHTML_ALIGN_TOP;
-                    else if ((alstr == wxT("CENTER")) || (alstr == wxT("ABSCENTER"))) al = wxHTML_ALIGN_CENTER;
+                    if (alstr == wxT("TEXTTOP")) 
+                        al = wxHTML_ALIGN_TOP;
+                    else if ((alstr == wxT("CENTER")) || (alstr == wxT("ABSCENTER"))) 
+                        al = wxHTML_ALIGN_CENTER;
                 }
                 if (tag.HasParam(wxT("USEMAP"))) 
 		        {
                     mn = tag.GetParam( wxT("USEMAP") );
-                    if (mn[ (unsigned int) 0 ] == wxT('#')) 
+                    if (mn.GetChar(0) == wxT('#')) 
 		            {
                         mn = mn.Mid( 1 );
                     }

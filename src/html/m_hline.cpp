@@ -80,7 +80,7 @@ TAG_HANDLER_BEGIN(HR, "HR")
         c->SetAlign(tag);
         c->SetWidthFloat(tag);
         sz = 1;
-        if (tag.HasParam(wxT("SIZE")) && tag.ScanParam(wxT("SIZE"), wxT("%i"), &sz) == 1) {}
+        tag.GetParamAsInt(wxT("SIZE"), &sz);
         c->InsertCell(new wxHtmlLineCell((int)((double)sz * m_WParser->GetPixelScale())));
 
         m_WParser->CloseContainer();
