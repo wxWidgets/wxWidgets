@@ -577,14 +577,14 @@ void WXDLLEXPORT wxSafeShowMessage(const wxString& title, const wxString& text);
 #ifdef __VISUALC__
     #define wxLogApiError(api, rc)                                            \
         wxLogDebug(wxT("%s(%d): '%s' failed with error 0x%08lx (%s)."),       \
-                   __TFILE__, __LINE__, api,                              \
-                   rc, wxSysErrorMsg(rc))
+                   __TFILE__, __LINE__, api,                                  \
+                   (long)rc, wxSysErrorMsg(rc))
 #else // !VC++
     #define wxLogApiError(api, rc)                                            \
         wxLogDebug(wxT("In file %s at line %d: '%s' failed with "             \
-                      "error 0x%08lx (%s)."),                                 \
-                   __TFILE__, __LINE__, api,                              \
-                   rc, wxSysErrorMsg(rc))
+                       "error 0x%08lx (%s)."),                                \
+                   __TFILE__, __LINE__, api,                                  \
+                   (long)rc, wxSysErrorMsg(rc))
 #endif // VC++/!VC++
 
     #define wxLogLastError(api) wxLogApiError(api, wxSysErrorCode())
