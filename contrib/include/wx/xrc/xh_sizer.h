@@ -33,7 +33,7 @@ public:
 private:
     bool m_isInside;
     bool m_isGBS;
-    
+
     wxSizer *m_parentSizer;
 
     bool IsSizerNode(wxXmlNode *node);
@@ -52,7 +52,7 @@ private:
     wxGBSpan GetGBSpan(const wxString& param);
     wxSizerItem* MakeSizerItem();
     void SetSizerItemAttributes(wxSizerItem* sitem);
-    void AddSizerItem(wxSizerItem* sitem);    
+    void AddSizerItem(wxSizerItem* sitem);
 };
 
 

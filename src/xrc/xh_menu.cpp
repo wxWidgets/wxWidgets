@@ -7,7 +7,7 @@
 // Copyright:   (c) 2000 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 #pragma implementation "xh_menu.h"
 #endif
@@ -25,8 +25,8 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxMenuXmlHandler, wxXmlResourceHandler)
 
-wxMenuXmlHandler::wxMenuXmlHandler() : 
-        wxXmlResourceHandler(), m_insideMenu(FALSE)
+wxMenuXmlHandler::wxMenuXmlHandler() :
+        wxXmlResourceHandler(), m_insideMenu(false)
 {
     XRC_ADD_STYLE(wxMENU_TEAROFF);
 }
@@ -38,10 +38,10 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
         wxMenu *menu = new wxMenu(GetStyle());
         wxString title = GetText(wxT("label"));
         wxString help = GetText(wxT("help"));
-        
+
         bool oldins = m_insideMenu;
-        m_insideMenu = TRUE;
-        CreateChildren(menu, TRUE/*only this handler*/);
+        m_insideMenu = true;
+        CreateChildren(menu, true/*only this handler*/);
         m_insideMenu = oldins;
 
         wxMenuBar *p_bar = wxDynamicCast(m_parent, wxMenuBar);
@@ -60,16 +60,16 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
     else
     {
         wxMenu *p_menu = wxDynamicCast(m_parent, wxMenu);
-        
+
         if (m_class == wxT("separator"))
             p_menu->AppendSeparator();
         else if (m_class == wxT("break"))
             p_menu->Break();
         else /*wxMenuItem*/
-        {          
+        {
             int id = GetID();
             wxString label = GetText(wxT("label"));
-            wxString accel = GetText(wxT("accel"), FALSE);
+            wxString accel = GetText(wxT("accel"), false);
             wxString fullLabel = label;
             if (!accel.IsEmpty())
                 fullLabel << wxT("\t") << accel;
@@ -85,13 +85,13 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
 
             wxMenuItem *mitem = new wxMenuItem(p_menu, id, fullLabel,
                                                GetText(wxT("help")), kind);
-                                               
+
 #if wxCHECK_VERSION(2,3,0) || (defined(__WXMSW__) && wxUSE_OWNER_DRAWN)
             if (HasParam(wxT("bitmap")))
                 mitem->SetBitmap(GetBitmap(wxT("bitmap"), wxART_MENU));
 #endif
             p_menu->Append(mitem);
-            mitem->Enable(GetBool(wxT("enabled"), TRUE));
+            mitem->Enable(GetBool(wxT("enabled"), true));
             if (kind == wxITEM_CHECK)
                 mitem->Check(GetBool(wxT("checked")));
         }
@@ -104,7 +104,7 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
 bool wxMenuXmlHandler::CanHandle(wxXmlNode *node)
 {
     return IsOfClass(node, wxT("wxMenu")) ||
-           (m_insideMenu && 
+           (m_insideMenu &&
                (IsOfClass(node, wxT("wxMenuItem")) ||
                 IsOfClass(node, wxT("break")) ||
                 IsOfClass(node, wxT("separator")))

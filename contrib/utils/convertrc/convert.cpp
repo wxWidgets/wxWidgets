@@ -58,17 +58,17 @@ bool wxConvertApp::OnInit()
     SetAppName(_T("wxConvertApp"));
 
     if (HandleCommandLine())
-        return TRUE;
+        return true;
 
 
 // Create the main frame window
-    m_pFrame = new wxMainFrame(NULL, -1, _T("wxConvertApp"), wxPoint(0, 0), wxSize(500, 400),
+    m_pFrame = new wxMainFrame(NULL, wxID_ANY, _T("wxConvertApp"), wxPoint(0, 0), wxSize(500, 400),
         wxDEFAULT_FRAME_STYLE | wxHSCROLL | wxVSCROLL);
 
     InitMenu();
-    m_pFrame->Show(TRUE);
+    m_pFrame->Show(true);
     SetTopWindow(m_pFrame);
-    return TRUE;
+    return true;
 }
 
 void wxConvertApp::InitMenu()
@@ -122,7 +122,7 @@ wxMainFrame::~wxMainFrame()
 
 void wxMainFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    Close(TRUE);
+    Close(true);
 }
 
 
@@ -192,7 +192,7 @@ bool wxConvertApp::HandleCommandLine()
 {
 
    if (argc != 2)
-       return FALSE;
+       return false;
 
 //Figure out kind of conversion
     wxString source,target;
@@ -208,18 +208,18 @@ bool wxConvertApp::HandleCommandLine()
     if ((source.Find(_T(".wxr"))>0)&&(target.Find(_T(".xml"))>0))
         {
         trans_wxr2xml.Convert(source,target);
-        return TRUE;
+        return true;
         }
-    else if ((source.Find(_T(".rc"))!=-1)&(target.Find(_T(".wxr"))!=-1))
+    else if ((source.Find(_T(".rc"))!=wxNOT_FOUND)&(target.Find(_T(".wxr"))!=wxNOT_FOUND))
         {
         trans_rc2wxr.Convert(source,target);
-        return TRUE;
+        return true;
         }
-    else if ((source.Find(_T(".rc"))!=-1)&(target.Find(_T(".xml"))!=-1))
+    else if ((source.Find(_T(".rc"))!=wxNOT_FOUND)&(target.Find(_T(".xml"))!=wxNOT_FOUND))
         {
         trans_rc2xml.Convert(source,target);
-        return TRUE;
+        return true;
         }
 
-    return FALSE;
+    return false;
 }

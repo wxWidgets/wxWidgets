@@ -7,7 +7,7 @@
 // Copyright:   (c) 2002 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 #pragma implementation "xh_scwin.h"
 #endif
@@ -24,8 +24,8 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxScrolledWindowXmlHandler, wxXmlResourceHandler)
 
-wxScrolledWindowXmlHandler::wxScrolledWindowXmlHandler() 
-: wxXmlResourceHandler() 
+wxScrolledWindowXmlHandler::wxScrolledWindowXmlHandler()
+: wxXmlResourceHandler()
 {
     XRC_ADD_STYLE(wxHSCROLL);
     XRC_ADD_STYLE(wxVSCROLL);
@@ -33,7 +33,7 @@ wxScrolledWindowXmlHandler::wxScrolledWindowXmlHandler()
 }
 
 wxObject *wxScrolledWindowXmlHandler::DoCreateResource()
-{ 
+{
     XRC_MAKE_INSTANCE(control, wxScrolledWindow)
 
     control->Create(m_parentAsWindow,
@@ -44,7 +44,7 @@ wxObject *wxScrolledWindowXmlHandler::DoCreateResource()
 
     SetupWindow(control);
     CreateChildren(control);
-    
+
     return control;
 }
 

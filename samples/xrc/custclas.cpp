@@ -42,18 +42,18 @@
 // Internal constants
 //-----------------------------------------------------------------------------
 
-// Popup menu (PU) item control IDs. In this example, they aren't hooked up 
+// Popup menu (PU) item control IDs. In this example, they aren't hooked up
 // to any functions. Normally you would use these IDs in your event table, so
-// that if one of these menu items is clicked, then a certain function is 
+// that if one of these menu items is clicked, then a certain function is
 // called.
 enum {
-    PU_ADD_RECORD        = wxID_HIGHEST + 1, 
+    PU_ADD_RECORD        = wxID_HIGHEST + 1,
     PU_EDIT_RECORD,
-    PU_DELETE_RECORD    
+    PU_DELETE_RECORD
 };
 
 // Columns of the listctrl (the leftmost one starts at 0, and so on).
-// Allows easier code maintenance if want to add/rearrangement of listctrl's 
+// Allows easier code maintenance if want to add/rearrangement of listctrl's
 // columns.
 enum {
     RECORD_COLUMN    = 0,
@@ -71,9 +71,9 @@ IMPLEMENT_DYNAMIC_CLASS( MyResizableListCtrl, wxListCtrl )
 // Event table: connect the events to the handler functions to process them
 //-----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE( MyResizableListCtrl, wxListCtrl )    
-    // Something to do when right mouse down   
-    EVT_RIGHT_DOWN( MyResizableListCtrl::ContextSensitiveMenu )     
+BEGIN_EVENT_TABLE( MyResizableListCtrl, wxListCtrl )
+    // Something to do when right mouse down
+    EVT_RIGHT_DOWN( MyResizableListCtrl::ContextSensitiveMenu )
     // Something to do when resized
     EVT_SIZE( MyResizableListCtrl::OnSize )
 END_EVENT_TABLE()
@@ -90,15 +90,15 @@ MyResizableListCtrl::MyResizableListCtrl( wxWindow *parent, wxWindowID id,
                                         const wxString& name )
    : wxListCtrl( parent, id, pos, size, style, validator, name )
 {
-    
-    // This listctrl needs to insert its columns in the constructor, since 
-    // as soon as the listctrl is built, it is resized and grafted onto an 
-    // "unknown" XRC placeholder. This induces an OnSize() event, calling the 
-    // overrriden OnSize function for this class, which needs to have 3 
+
+    // This listctrl needs to insert its columns in the constructor, since
+    // as soon as the listctrl is built, it is resized and grafted onto an
+    // "unknown" XRC placeholder. This induces an OnSize() event, calling the
+    // overrriden OnSize function for this class, which needs to have 3
     // columns to resize (else an assert on WXGTK debug build).
     InsertColumn( RECORD_COLUMN, _("Record"), wxLIST_FORMAT_LEFT, 140);
     InsertColumn( ACTION_COLUMN, _("Action"), wxLIST_FORMAT_LEFT, 70);
-    InsertColumn( PRIORITY_COLUMN, _("Priority"), wxLIST_FORMAT_LEFT, 70 );    
+    InsertColumn( PRIORITY_COLUMN, _("Priority"), wxLIST_FORMAT_LEFT, 70 );
 }
 
 
@@ -115,16 +115,16 @@ void MyResizableListCtrl::ContextSensitiveMenu( wxMouseEvent& event )
     a_menu.Append( PU_ADD_RECORD, _( "Add a new record...") );
     a_menu.Append( PU_EDIT_RECORD, _( "Edit selected record..." ) );
     a_menu.Append( PU_DELETE_RECORD, _( "Delete selected record" ) );
-    
-    // If no listctrl rows selected, then disable the menu items that 
+
+    // If no listctrl rows selected, then disable the menu items that
     // require selection
     if ( GetSelectedItemCount() == 0 ) {
-        a_menu.Enable( PU_EDIT_RECORD, FALSE );
-        a_menu.Enable( PU_DELETE_RECORD, FALSE );
+        a_menu.Enable( PU_EDIT_RECORD, false );
+        a_menu.Enable( PU_DELETE_RECORD, false );
     }
 
-    // Show the popup menu (wxWindow::PopupMenu ), at the x,y position 
-    // of the click event 
+    // Show the popup menu (wxWindow::PopupMenu ), at the x,y position
+    // of the click event
     PopupMenu( &a_menu, event.GetPosition() );
 }
 
@@ -133,28 +133,28 @@ void MyResizableListCtrl::OnSize( wxSizeEvent &event )
 {
     // Call our custom width setting function.
     SetColumnWidths();
-    // REQURED event.Skip() call to allow this event to propagate 
-    // upwards so others can do what they need to do in response to 
+    // REQURED event.Skip() call to allow this event to propagate
+    // upwards so others can do what they need to do in response to
     // this size event.
     event.Skip();
 }
 
 
 void MyResizableListCtrl::SetColumnWidths()
-{     
+{
     // Get width of entire listctrl
-    int leftmostColumnWidth = GetSize().x;     
-     
-    // Subtract width of other columns, scrollbar, and some padding  
+    int leftmostColumnWidth = GetSize().x;
+
+    // Subtract width of other columns, scrollbar, and some padding
     leftmostColumnWidth -= GetColumnWidth( ACTION_COLUMN );
     leftmostColumnWidth -= GetColumnWidth( PRIORITY_COLUMN );
-    leftmostColumnWidth -= wxSystemSettings::GetSystemMetric( wxSYS_VSCROLL_X );     
+    leftmostColumnWidth -= wxSystemSettings::GetSystemMetric( wxSYS_VSCROLL_X );
     leftmostColumnWidth -= 5;
-     
+
     // Set the column width to the new value.
-    SetColumnWidth( RECORD_COLUMN, leftmostColumnWidth );  
-    
-    // This is just a debug message in case you want to watch the 
+    SetColumnWidth( RECORD_COLUMN, leftmostColumnWidth );
+
+    // This is just a debug message in case you want to watch the
     // events scroll by as you resize.
     wxLogDebug( wxT("Successfully set column widths") );
 }

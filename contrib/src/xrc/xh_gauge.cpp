@@ -7,7 +7,7 @@
 // Copyright:   (c) 2000 Bob Mitchell and Verant Interactive
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 #pragma implementation "xh_gauge.h"
 #endif
@@ -26,8 +26,8 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxGaugeXmlHandler, wxXmlResourceHandler)
 
-wxGaugeXmlHandler::wxGaugeXmlHandler() 
-: wxXmlResourceHandler() 
+wxGaugeXmlHandler::wxGaugeXmlHandler()
+: wxXmlResourceHandler()
 {
     XRC_ADD_STYLE(wxGA_HORIZONTAL);
     XRC_ADD_STYLE(wxGA_VERTICAL);
@@ -37,12 +37,12 @@ wxGaugeXmlHandler::wxGaugeXmlHandler()
 }
 
 wxObject *wxGaugeXmlHandler::DoCreateResource()
-{ 
+{
     XRC_MAKE_INSTANCE(control, wxGauge)
 
     control->Create(m_parentAsWindow,
                     GetID(),
-                    GetLong(wxT("range"), wxGAUGE_DEFAULT_RANGE), 
+                    GetLong(wxT("range"), wxGAUGE_DEFAULT_RANGE),
                     GetPosition(), GetSize(),
                     GetStyle(),
                     wxDefaultValidator,

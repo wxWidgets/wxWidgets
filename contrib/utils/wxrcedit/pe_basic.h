@@ -25,12 +25,12 @@ class PropEditCtrlNull : public PropEditCtrl
     public:
         PropEditCtrlNull(PropertiesFrame *propFrame)
            : PropEditCtrl(propFrame) {}
-                
+
         virtual void BeginEdit(const wxRect& WXUNUSED(rect), wxTreeItemId WXUNUSED(ti)) {}
         virtual void EndEdit() {}
-                
+
         virtual wxWindow* CreateEditCtrl() {return NULL;}
-        
+
         virtual void ReadValue() {}
         virtual void WriteValue() {}
 };
@@ -42,12 +42,12 @@ class PropEditCtrlTxt : public PropEditCtrl
     public:
         PropEditCtrlTxt(PropertiesFrame *propFrame)
            : PropEditCtrl(propFrame) {}
-                
+
         virtual wxWindow* CreateEditCtrl();
-        
+
         virtual void ReadValue();
         virtual void WriteValue();
-        
+
     protected:
         wxTextCtrl *m_TextCtrl;
 
@@ -63,7 +63,7 @@ class PropEditCtrlInt : public PropEditCtrlTxt
     public:
         PropEditCtrlInt(PropertiesFrame *propFrame)
            : PropEditCtrlTxt(propFrame) {}
-                
+
         virtual wxWindow* CreateEditCtrl();
 };
 
@@ -74,13 +74,13 @@ class PropEditCtrlBool : public PropEditCtrl
     public:
         PropEditCtrlBool(PropertiesFrame *propFrame)
            : PropEditCtrl(propFrame) {}
-                
+
         virtual wxWindow* CreateEditCtrl();
-        
+
         virtual void ReadValue();
         virtual void WriteValue();
         virtual wxString GetValueAsText(wxTreeItemId ti);
-    
+
     protected:
         wxChoice *m_Choice;
 
@@ -94,9 +94,9 @@ class PropEditCtrlCoord : public PropEditCtrlTxt
     public:
         PropEditCtrlCoord(PropertiesFrame *propFrame);
         ~PropEditCtrlCoord();
-    
+
         virtual wxTreeItemId CreateTreeEntry(wxTreeItemId parent, const PropertyInfo& pinfo);
-        
+
     private:
         PropEditCtrl *m_CtrlX, *m_CtrlY, *m_CtrlDlg;
 };
@@ -107,9 +107,9 @@ class PropEditCtrlDim : public PropEditCtrlTxt
     public:
         PropEditCtrlDim(PropertiesFrame *propFrame);
         ~PropEditCtrlDim();
-    
+
         virtual wxTreeItemId CreateTreeEntry(wxTreeItemId parent, const PropertyInfo& pinfo);
-        
+
     private:
         PropEditCtrl *m_CtrlX, *m_CtrlDlg;
 };
@@ -121,11 +121,11 @@ class PropEditCtrlXRCID : public PropEditCtrlTxt
     public:
         PropEditCtrlXRCID(PropertiesFrame *propFrame)
            : PropEditCtrlTxt(propFrame) {}
-                
+
         virtual void ReadValue();
         virtual void WriteValue();
         virtual void Clear();
-        virtual bool HasDetails() { return TRUE; }
+        virtual bool HasDetails() { return true; }
         virtual void OnDetails();
         virtual wxString GetValueAsText(wxTreeItemId ti);
         virtual bool IsPresent(const PropertyInfo& pinfo);

@@ -29,7 +29,7 @@ wxXmlNode *XmlFindNodeSimple(wxXmlNode *parent, const wxString& param)
     if (param.IsEmpty()) return parent;
 
     wxXmlNode *n = parent->GetChildren();
-    
+
     while (n)
     {
         if (n->GetType() == wxXML_ELEMENT_NODE && n->GetName() == param)
@@ -68,13 +68,13 @@ wxXmlNode *XmlCreateNode(wxXmlNode *parent, const wxString& name)
         nm = tkn.GetNextToken();
         n = XmlFindNodeSimple(parent, nm);
         if (n) continue;
-        
+
         // n == NULL:
         n = new wxXmlNode(wxXML_ELEMENT_NODE, nm);
-        parent->AddChild(n);        
+        parent->AddChild(n);
     }
     n->AddChild(new wxXmlNode(wxXML_TEXT_NODE, wxEmptyString));
-    
+
     return n;
 }
 
@@ -85,12 +85,12 @@ void XmlWriteValue(wxXmlNode *parent, const wxString& name, const wxString& valu
     wxXmlNode *n = XmlFindNode(parent, name);
     if (n == NULL)
         n = XmlCreateNode(parent, name);
-    
+
     n = n->GetChildren();
-    
+
     while (n)
     {
-        if (n->GetType() == wxXML_TEXT_NODE || 
+        if (n->GetType() == wxXML_TEXT_NODE ||
             n->GetType() == wxXML_CDATA_SECTION_NODE)
         {
             n->SetContent(value);
@@ -107,10 +107,10 @@ wxString XmlReadValue(wxXmlNode *parent, const wxString& name)
     wxXmlNode *n = XmlFindNode(parent, name);
     if (n == NULL) return wxEmptyString;
     n = n->GetChildren();
-    
+
     while (n)
     {
-        if (n->GetType() == wxXML_TEXT_NODE || 
+        if (n->GetType() == wxXML_TEXT_NODE ||
             n->GetType() == wxXML_CDATA_SECTION_NODE)
             return n->GetContent();
         n = n->GetNext();

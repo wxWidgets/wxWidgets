@@ -7,7 +7,7 @@
 // Copyright:   (c) 2000 Bob Mitchell and Verant Interactive
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 #pragma implementation "xh_combo.h"
 #endif
@@ -27,8 +27,8 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxComboBoxXmlHandler, wxXmlResourceHandler)
 
-wxComboBoxXmlHandler::wxComboBoxXmlHandler() 
-: wxXmlResourceHandler() , m_insideBox(FALSE)
+wxComboBoxXmlHandler::wxComboBoxXmlHandler()
+: wxXmlResourceHandler() , m_insideBox(false)
 {
     XRC_ADD_STYLE(wxCB_SIMPLE);
     XRC_ADD_STYLE(wxCB_SORT);
@@ -38,14 +38,14 @@ wxComboBoxXmlHandler::wxComboBoxXmlHandler()
 }
 
 wxObject *wxComboBoxXmlHandler::DoCreateResource()
-{ 
+{
     if( m_class == wxT("wxComboBox"))
     {
         // find the selection
         long selection = GetLong( wxT("selection"), -1 );
 
         // need to build the list of strings from children
-        m_insideBox = TRUE;
+        m_insideBox = true;
         CreateChildrenPrivately(NULL, GetParamNode(wxT("content")));
         wxString *strings = (wxString *) NULL;
         if (strList.GetCount() > 0)
@@ -75,7 +75,7 @@ wxObject *wxComboBoxXmlHandler::DoCreateResource()
 
         if (strings != NULL)
             delete[] strings;
-        strList.Clear();    // dump the strings   
+        strList.Clear();    // dump the strings
 
         return control;
     }

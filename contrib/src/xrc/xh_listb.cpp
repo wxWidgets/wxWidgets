@@ -7,7 +7,7 @@
 // Copyright:   (c) 2000 Bob Mitchell and Verant Interactive
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 #pragma implementation "xh_listb.h"
 #endif
@@ -25,8 +25,8 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxListBoxXmlHandler, wxXmlResourceHandler)
 
-wxListBoxXmlHandler::wxListBoxXmlHandler() 
-: wxXmlResourceHandler() , m_insideBox(FALSE)
+wxListBoxXmlHandler::wxListBoxXmlHandler()
+: wxXmlResourceHandler() , m_insideBox(false)
 {
     XRC_ADD_STYLE(wxLB_SINGLE);
     XRC_ADD_STYLE(wxLB_MULTIPLE);
@@ -39,14 +39,14 @@ wxListBoxXmlHandler::wxListBoxXmlHandler()
 }
 
 wxObject *wxListBoxXmlHandler::DoCreateResource()
-{ 
+{
     if( m_class == wxT("wxListBox"))
     {
         // find the selection
         long selection = GetLong(wxT("selection"), -1);
 
         // need to build the list of strings from children
-        m_insideBox = TRUE;
+        m_insideBox = true;
         CreateChildrenPrivately(NULL, GetParamNode(wxT("content")));
         wxString *strings = (wxString *) NULL;
         if (strList.GetCount() > 0)
@@ -75,7 +75,7 @@ wxObject *wxListBoxXmlHandler::DoCreateResource()
 
         if (strings != NULL)
             delete[] strings;
-        strList.Clear();    // dump the strings   
+        strList.Clear();    // dump the strings
 
         return control;
     }
@@ -83,7 +83,7 @@ wxObject *wxListBoxXmlHandler::DoCreateResource()
     {
         // on the inside now.
         // handle <item>Label</item>
-        
+
         // add to the list
         wxString str = GetNodeContent(m_node);
         if (m_resource->GetFlags() & wxXRC_USE_LOCALE)

@@ -7,7 +7,7 @@
 // Copyright:   (c) 2000 Bob Mitchell and Verant Interactive
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 #pragma implementation "xh_html.h"
 #endif
@@ -28,8 +28,8 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlWindowXmlHandler, wxXmlResourceHandler)
 
-wxHtmlWindowXmlHandler::wxHtmlWindowXmlHandler() 
-: wxXmlResourceHandler() 
+wxHtmlWindowXmlHandler::wxHtmlWindowXmlHandler()
+: wxXmlResourceHandler()
 {
     XRC_ADD_STYLE(wxHW_SCROLLBAR_NEVER);
     XRC_ADD_STYLE(wxHW_SCROLLBAR_AUTO);
@@ -56,7 +56,7 @@ wxObject *wxHtmlWindowXmlHandler::DoCreateResource()
     {
         wxString url = GetParamValue(wxT("url"));
         wxFileSystem& fsys = GetCurFileSystem();
-        
+
         wxFSFile *f = fsys.OpenFile(url);
         if (f)
         {
@@ -66,14 +66,14 @@ wxObject *wxHtmlWindowXmlHandler::DoCreateResource()
         else
             control->LoadPage(url);
     }
-    
+
     else if (HasParam(wxT("htmlcode")))
     {
         control->SetPage(GetText(wxT("htmlcode")));
     }
 
     SetupWindow(control);
-    
+
     return control;
 }
 

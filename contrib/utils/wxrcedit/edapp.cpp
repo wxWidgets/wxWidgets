@@ -53,9 +53,9 @@ bool MyApp::OnInit()
     wxInitAllImageHandlers();
     wxFrame *frame = new EditorFrame(NULL, arg);
     SetTopWindow(frame);
-    frame->Show(TRUE);
-    PreviewFrame::Get()->Show(TRUE);
-    PropertiesFrame::Get()->Show(TRUE);
-    return TRUE;
+    frame->Show(true);
+    PreviewFrame::Get()->Show(true);
+    PropertiesFrame::Get()->Show(true);
+    return true;
 }
 

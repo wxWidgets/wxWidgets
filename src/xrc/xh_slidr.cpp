@@ -7,7 +7,7 @@
 // Copyright:   (c) 2000 Bob Mitchell and Verant Interactive
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 #pragma implementation "xh_slidr.h"
 #endif
@@ -26,8 +26,8 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxSliderXmlHandler, wxXmlResourceHandler)
 
-wxSliderXmlHandler::wxSliderXmlHandler() 
-: wxXmlResourceHandler() 
+wxSliderXmlHandler::wxSliderXmlHandler()
+: wxXmlResourceHandler()
 {
     XRC_ADD_STYLE(wxSL_HORIZONTAL);
     XRC_ADD_STYLE(wxSL_VERTICAL);
@@ -43,12 +43,12 @@ wxSliderXmlHandler::wxSliderXmlHandler()
 }
 
 wxObject *wxSliderXmlHandler::DoCreateResource()
-{ 
+{
     XRC_MAKE_INSTANCE(control, wxSlider)
 
     control->Create(m_parentAsWindow,
                     GetID(),
-                    GetLong(wxT("value"), wxSL_DEFAULT_VALUE), 
+                    GetLong(wxT("value"), wxSL_DEFAULT_VALUE),
                     GetLong(wxT("min"), wxSL_DEFAULT_MIN),
                     GetLong(wxT("max"), wxSL_DEFAULT_MAX),
                     GetPosition(), GetSize(),
@@ -82,7 +82,7 @@ wxObject *wxSliderXmlHandler::DoCreateResource()
     }
 
     SetupWindow(control);
-    
+
     return control;
 }
 

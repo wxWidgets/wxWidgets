@@ -33,16 +33,16 @@
 
 
 wxList NodeHandler::ms_Handlers;
-bool NodeHandler::ms_HandlersLoaded = FALSE;
+bool NodeHandler::ms_HandlersLoaded = false;
 
 
 NodeHandler *NodeHandler::Find(wxXmlNode *node)
 {
     if (!ms_HandlersLoaded)
     {
-        ms_HandlersLoaded = TRUE;
-        ms_Handlers.DeleteContents(TRUE);
-        
+        ms_HandlersLoaded = true;
+        ms_Handlers.DeleteContents(true);
+
         NodeInfoArray& arr = NodesDb::Get()->GetNodesInfo();
         NodeHandler *hnd;
         for (size_t i = 0; i < arr.GetCount(); i++)
@@ -63,7 +63,7 @@ NodeHandler *NodeHandler::Find(wxXmlNode *node)
                 hnd = new NodeHandler(&(arr[i]));
             if (hnd) ms_Handlers.Append(hnd);
         }
-        ms_Handlers.Append(new NodeHandlerUnknown);        
+        ms_Handlers.Append(new NodeHandlerUnknown);
     }
 
     wxNode *n = ms_Handlers.GetFirst();
@@ -80,7 +80,7 @@ NodeHandler *NodeHandler::Find(wxXmlNode *node)
 
 
 
-NodeHandler::NodeHandler(NodeInfo *ni) : 
+NodeHandler::NodeHandler(NodeInfo *ni) :
         m_NodeInfo(ni)
 {
 }
@@ -107,12 +107,12 @@ PropertyInfoArray& NodeHandler::GetPropsList(wxXmlNode *WXUNUSED(node))
 
 
 
-wxTreeItemId NodeHandler::CreateTreeNode(wxTreeCtrl *treectrl, 
+wxTreeItemId NodeHandler::CreateTreeNode(wxTreeCtrl *treectrl,
                                          wxTreeItemId parent,
                                          wxXmlNode *node)
 {
     int icon = GetTreeIcon(node);
-    wxTreeItemId item = 
+    wxTreeItemId item =
         treectrl->AppendItem(parent, GetTreeString(node),
                              icon, icon, new XmlTreeData(node));
     if (parent == treectrl->GetRootItem())
@@ -140,14 +140,14 @@ wxArrayString& NodeHandler::GetChildTypes()
     {
         wxString basetype = m_NodeInfo->ChildType;
         NodeInfoArray& arr = NodesDb::Get()->GetNodesInfo();
-        
+
         for (size_t i = 0; i < arr.GetCount(); i++)
         {
             NodeInfo &ni = arr[i];
-            
-            if (ni.NodeClass == basetype && !ni.Abstract) 
+
+            if (ni.NodeClass == basetype && !ni.Abstract)
                 m_ChildTypes.Add(ni.NodeClass);
-            
+
             if (ni.DerivedFrom.Index(basetype) != wxNOT_FOUND && !ni.Abstract)
                 m_ChildTypes.Add(ni.NodeClass);
         }
@@ -172,12 +172,12 @@ void NodeHandler::InsertNode(wxXmlNode *WXUNUSED(parent), wxXmlNode *node, wxXml
 
 
 
-wxTreeItemId NodeHandlerPanel::CreateTreeNode(wxTreeCtrl *treectrl, 
+wxTreeItemId NodeHandlerPanel::CreateTreeNode(wxTreeCtrl *treectrl,
                                          wxTreeItemId parent,
                                          wxXmlNode *node)
 {
     wxTreeItemId root = NodeHandler::CreateTreeNode(treectrl, parent, node);
-    
+
     wxXmlNode *n = XmlFindNode(node, _T("object"));
 
     while (n)
@@ -207,7 +207,7 @@ void NodeHandlerPanel::InsertNode(wxXmlNode *parent, wxXmlNode *node, wxXmlNode 
 
 
 void NodeHandlerSizer::InsertNode(wxXmlNode *parent, wxXmlNode *node, wxXmlNode *insert_before)
-{  
+{
     if (XmlGetClass(node) == _T("spacer") || XmlGetClass(node) == _T("sizeritem"))
     {
         if (insert_before)
@@ -244,7 +244,7 @@ int NodeHandlerSizer::GetTreeIcon(wxXmlNode *node)
 
 
 
-wxTreeItemId NodeHandlerSizerItem::CreateTreeNode(wxTreeCtrl *treectrl, 
+wxTreeItemId NodeHandlerSizerItem::CreateTreeNode(wxTreeCtrl *treectrl,
                                          wxTreeItemId parent,
                                          wxXmlNode *node)
 {
@@ -265,11 +265,11 @@ PropertyInfoArray& NodeHandlerSizerItem::GetPropsList(wxXmlNode *node)
     wxXmlNode *nd = GetRealNode(node);
     m_dummy.Add(PropertyInfo(wxEmptyString, wxEmptyString, wxEmptyString));
     size_t pos = m_dummy.GetCount();
-    WX_APPEND_ARRAY(m_dummy, 
+    WX_APPEND_ARRAY(m_dummy,
                     Find(nd)->GetPropsList(nd));
     for (size_t i = pos; i < m_dummy.GetCount(); i++)
         m_dummy[i].Name = _T("object/") + m_dummy[i].Name;
-    
+
     return m_dummy;
 }
 
@@ -302,10 +302,10 @@ wxXmlNode *NodeHandlerSizerItem::GetRealNode(wxXmlNode *node)
 
 
 void NodeHandlerNotebook::InsertNode(wxXmlNode *parent, wxXmlNode *node, wxXmlNode *insert_before)
-{  
+{
     {
         wxXmlNode *itemnode;
-        
+
         if (XmlGetClass(node) == _T("notebookpage"))
             itemnode = node;
         else

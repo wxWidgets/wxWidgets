@@ -41,7 +41,7 @@ wxGenericDirCtrlXmlHandler::wxGenericDirCtrlXmlHandler()
 wxObject *wxGenericDirCtrlXmlHandler::DoCreateResource()
 {
     XRC_MAKE_INSTANCE(ctrl, wxGenericDirCtrl)
- 
+
     ctrl->Create(m_parentAsWindow,
                  GetID(),
                  GetText(wxT("defaultfolder")),

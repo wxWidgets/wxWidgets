@@ -21,17 +21,17 @@ public:
     void OnWXR2XML(wxCommandEvent& event);
     void OnRc2Wxr(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
-    wxMainFrame(wxWindow* parent, wxWindowID id, 
+    wxMainFrame(wxWindow* parent, wxWindowID id,
         const wxString& title, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE,
         const wxString& name = _T("frame"));
     virtual ~wxMainFrame();
-	
+
 protected:
     DECLARE_EVENT_TABLE()
 };
 
-class wxConvertApp : public wxApp  
+class wxConvertApp : public wxApp
 {
 public:
     bool HandleCommandLine();

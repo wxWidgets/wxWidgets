@@ -7,7 +7,7 @@
 // Copyright:   (c) 2000 Bob Mitchell and Verant Interactive
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 #pragma implementation "xh_chckb.h"
 #endif
@@ -26,14 +26,14 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxCheckBoxXmlHandler, wxXmlResourceHandler)
 
-wxCheckBoxXmlHandler::wxCheckBoxXmlHandler() 
-: wxXmlResourceHandler() 
+wxCheckBoxXmlHandler::wxCheckBoxXmlHandler()
+: wxXmlResourceHandler()
 {
     AddWindowStyles();
 }
 
 wxObject *wxCheckBoxXmlHandler::DoCreateResource()
-{ 
+{
     XRC_MAKE_INSTANCE(control, wxCheckBox)
 
     control->Create(m_parentAsWindow,
@@ -46,7 +46,7 @@ wxObject *wxCheckBoxXmlHandler::DoCreateResource()
 
     control->SetValue(GetBool( wxT("checked")));
     SetupWindow(control);
-    
+
     return control;
 }
 

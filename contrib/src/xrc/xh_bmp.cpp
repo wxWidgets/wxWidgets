@@ -7,7 +7,7 @@
 // Copyright:   (c) 2000 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 #pragma implementation "xh_bmp.h"
 #endif
@@ -24,13 +24,13 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapXmlHandler, wxXmlResourceHandler)
 
-wxBitmapXmlHandler::wxBitmapXmlHandler() 
-: wxXmlResourceHandler() 
+wxBitmapXmlHandler::wxBitmapXmlHandler()
+: wxXmlResourceHandler()
 {
 }
 
 wxObject *wxBitmapXmlHandler::DoCreateResource()
-{ 
+{
     return new wxBitmap(GetBitmap(wxT("")));
 }
 
@@ -41,13 +41,13 @@ bool wxBitmapXmlHandler::CanHandle(wxXmlNode *node)
 
 IMPLEMENT_DYNAMIC_CLASS(wxIconXmlHandler, wxXmlResourceHandler)
 
-wxIconXmlHandler::wxIconXmlHandler() 
-: wxXmlResourceHandler() 
+wxIconXmlHandler::wxIconXmlHandler()
+: wxXmlResourceHandler()
 {
 }
 
 wxObject *wxIconXmlHandler::DoCreateResource()
-{ 
+{
     return new wxIcon(GetIcon(wxT("")));
 }
 

@@ -28,13 +28,13 @@ class PropertyInfo
         PropertyInfo() {}
         PropertyInfo(const wxString& atype, const wxString& aname, const wxString& amoreinfo)
           : Type(atype), Name(aname), MoreInfo(amoreinfo) {}
-       
+
         PropertyInfo& operator=(const PropertyInfo& p)
         {
             Type = p.Type; Name = p.Name; MoreInfo = p.MoreInfo;
             return *this;
         }
-       
+
         wxString Type;
         wxString Name;
         wxString MoreInfo;
@@ -47,13 +47,13 @@ class NodeInfo
 {
     public:
         wxString NodeClass;
-        wxString Type;   
+        wxString Type;
         PropertyInfoArray Props;
         wxArrayString DerivedFrom;
         bool Abstract;
         wxString ChildType;
         int Icon;
-    
+
         void Read(const wxString& filename, wxPathList& list);
 };
 
@@ -65,15 +65,15 @@ class NodesDb
 {
     public:
         NodesDb();
-    
+
         void Load();
         void LoadDir(const wxString& path);
         void LoadFile(const wxString& file);
-        
+
         NodeInfoArray& GetNodesInfo() { return m_Infos; }
-    
+
         static NodesDb *Get();
-    
+
     private:
         static NodesDb *ms_Instance;
         NodeInfoArray m_Infos;
@@ -82,4 +82,4 @@ class NodesDb
 
 
 
-#endif 
+#endif

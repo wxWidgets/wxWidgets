@@ -75,18 +75,18 @@ bool MyApp::OnInit()
     // you want PNGs, then add a PNG handler, etc. See wxImage::AddHandler()
     // documentation for the types of image handlers available.
     wxImage::AddHandler(new wxXPMHandler);
-    
+
     // Initialize all the XRC handlers. Always required (unless you feel like
     // going through and initializing a handler of each control type you will
     // be using (ie initialize the spinctrl handler, initialize the textctrl
     // handler). However, if you are only using a few control types, it will
     // save some space to only initialize the ones you will be using. See
     // wxXRC docs for details.
-    wxXmlResource::Get()->InitAllHandlers();    
-      
+    wxXmlResource::Get()->InitAllHandlers();
+
     // Load all of the XRC files that will be used. You can put everything
-    // into one giant XRC file if you wanted, but then they become more 
-    // diffcult to manage, and harder to reuse in later projects.   
+    // into one giant XRC file if you wanted, but then they become more
+    // diffcult to manage, and harder to reuse in later projects.
     // The menubar
     wxXmlResource::Get()->Load(wxT("rc/menu.xrc"));
     // The toolbar
@@ -100,7 +100,7 @@ bool MyApp::OnInit()
     // Frame example
     wxXmlResource::Get()->Load(wxT("rc/frame.xrc"));
     // Uncentered example
-    wxXmlResource::Get()->Load(wxT("rc/uncenter.xrc"));    
+    wxXmlResource::Get()->Load(wxT("rc/uncenter.xrc"));
     // Custom class example
     wxXmlResource::Get()->Load(wxT("rc/custclas.xrc"));
     // wxArtProvider example
@@ -110,15 +110,15 @@ bool MyApp::OnInit()
     // Variable expansion example
     wxXmlResource::Get()->Load(wxT("rc/variable.xrc"));
 
-    // Make an instance of your derived frame. Passing NULL (the default value 
+    // Make an instance of your derived frame. Passing NULL (the default value
     // of MyFrame's constructor is NULL) as the frame doesn't have a frame
-    // since it is the first window. 
+    // since it is the first window.
     MyFrame *frame = new MyFrame();
-    
+
     // Show the frame.
-    frame->Show(TRUE);
-    
-    // Return TRUE to tell program to continue (FALSE would terminate).
-    return TRUE;
+    frame->Show(true);
+
+    // Return true to tell program to continue (false would terminate).
+    return true;
 }
 

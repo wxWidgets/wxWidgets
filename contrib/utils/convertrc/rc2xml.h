@@ -10,7 +10,7 @@
 #include <wx/list.h>
 
 
-class rc2xml : public wxObject  
+class rc2xml : public wxObject
 {
 public:
     wxString m_workingpath;
@@ -22,8 +22,8 @@ public:
     ~rc2xml();
 
 protected:
-	wxString LookUpId(wxString id);
-	
+    wxString LookUpId(wxString id);
+
     void ParseResourceHeader();
     void WriteBitmap(wxString bitmapname);
     void ParseListCtrl(wxString label,wxString varname);
@@ -37,7 +37,7 @@ protected:
     wxList * m_iconlist;
     void ParseIconStatic();
     void ParseMenuItem();
-	
+
 //Functions
     bool SplitHelp(wxString msg, wxString &shorthelp, wxString &longhelp);
     bool LookUpString(wxString strid,wxString & st);

@@ -45,7 +45,7 @@ void PropEditCtrl::OnButtonDetails(wxCommandEvent& WXUNUSED(event))
 void PropEditCtrl::OnButtonClear(wxCommandEvent& WXUNUSED(event))
 {
     Clear();
-    EditorFrame::Get()->NotifyChanged(CHANGED_PROPS);        
+    EditorFrame::Get()->NotifyChanged(CHANGED_PROPS);
 }
 
 
@@ -54,7 +54,7 @@ void PropEditCtrl::BeginEdit(const wxRect& rect, wxTreeItemId ti)
     m_PropInfo = &(((PETreeData*)m_TreeCtrl->GetItemData(ti))->PropInfo);
     m_TreeItem = ti;
 
-    m_CanSave = FALSE;
+    m_CanSave = false;
     if (!m_Created)
     {
         wxSizer *sz = new wxBoxSizer(wxHORIZONTAL);
@@ -62,28 +62,28 @@ void PropEditCtrl::BeginEdit(const wxRect& rect, wxTreeItemId ti)
         sz->Add(m_TheCtrl, 1);
         if (HasDetails())
             sz->Add(new wxButton(this, ID_DETAILS, _T("..."), wxDefaultPosition,
-                    wxSize(16,-1)));
+                    wxSize(16,wxDefaultSize.y)));
         if (HasClearButton())
             sz->Add(new wxButton(this, ID_CLEAR, _T("X"), wxDefaultPosition,
-                    wxSize(16,-1)));
-        SetAutoLayout(TRUE);
+                    wxSize(16,wxDefaultSize.y)));
+        SetAutoLayout(true);
         SetSizer(sz);
-        m_Created = TRUE;
+        m_Created = true;
     }
 
     m_TheCtrl->SetFocus();
 
     SetSize(rect.x, rect.y, rect.width, rect.height);
-    Show(TRUE);
+    Show(true);
     ReadValue();
-    m_CanSave = TRUE;
+    m_CanSave = true;
 }
 
 
 
 void PropEditCtrl::EndEdit()
 {
-    Show(FALSE);
+    Show(false);
 }
 
 
@@ -93,7 +93,7 @@ wxTreeItemId PropEditCtrl::CreateTreeEntry(wxTreeItemId parent, const PropertyIn
     wxTreeItemId t = m_TreeCtrl->AppendItem(parent, GetPropName(pinfo));
     m_TreeCtrl->SetItemData(t, new PETreeData(this, pinfo));
     if (IsPresent(pinfo))
-        m_TreeCtrl->SetItemBold(t, TRUE);
+        m_TreeCtrl->SetItemBold(t, true);
     return t;
 }
 
@@ -113,7 +113,7 @@ void PropEditCtrl::Clear()
     {
         n->GetParent()->RemoveChild(n);
         delete n;
-        m_TreeCtrl->SetItemBold(m_TreeItem, FALSE);
+        m_TreeCtrl->SetItemBold(m_TreeItem, false);
     }
 }
 

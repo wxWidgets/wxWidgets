@@ -22,7 +22,7 @@
 
 class WXDLLIMPEXP_XRC wxSliderXmlHandler : public wxXmlResourceHandler
 {
-	DECLARE_DYNAMIC_CLASS(wxSliderXmlHandler)
+    DECLARE_DYNAMIC_CLASS(wxSliderXmlHandler)
     enum
     {
         wxSL_DEFAULT_VALUE = 0,

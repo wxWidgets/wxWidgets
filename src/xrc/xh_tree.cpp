@@ -7,7 +7,7 @@
 // Copyright:   (c) 2000 Brian Gavin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 #pragma implementation "xh_tree.h"
 #endif
@@ -24,8 +24,8 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxTreeCtrlXmlHandler, wxXmlResourceHandler)
 
-wxTreeCtrlXmlHandler::wxTreeCtrlXmlHandler() 
-: wxXmlResourceHandler() 
+wxTreeCtrlXmlHandler::wxTreeCtrlXmlHandler()
+: wxXmlResourceHandler()
 {
     XRC_ADD_STYLE(wxTR_EDIT_LABELS);
     XRC_ADD_STYLE(wxTR_NO_BUTTONS);
@@ -45,7 +45,7 @@ wxTreeCtrlXmlHandler::wxTreeCtrlXmlHandler()
 }
 
 wxObject *wxTreeCtrlXmlHandler::DoCreateResource()
-{ 
+{
     XRC_MAKE_INSTANCE(tree, wxTreeCtrl)
 
     tree->Create(m_parentAsWindow,
@@ -56,7 +56,7 @@ wxObject *wxTreeCtrlXmlHandler::DoCreateResource()
                 GetName());
 
     SetupWindow(tree);
-    
+
     return tree;
 }
 

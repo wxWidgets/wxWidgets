@@ -7,7 +7,7 @@
 // Copyright:   (c) 2000 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 #pragma implementation "xh_stbmp.h"
 #endif
@@ -24,14 +24,14 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmapXmlHandler, wxXmlResourceHandler)
 
-wxStaticBitmapXmlHandler::wxStaticBitmapXmlHandler() 
-: wxXmlResourceHandler() 
+wxStaticBitmapXmlHandler::wxStaticBitmapXmlHandler()
+: wxXmlResourceHandler()
 {
     AddWindowStyles();
 }
 
 wxObject *wxStaticBitmapXmlHandler::DoCreateResource()
-{ 
+{
     XRC_MAKE_INSTANCE(bmp, wxStaticBitmap)
 
     bmp->Create(m_parentAsWindow,
@@ -42,7 +42,7 @@ wxObject *wxStaticBitmapXmlHandler::DoCreateResource()
                 GetName());
 
     SetupWindow(bmp);
-    
+
     return bmp;
 }
 

@@ -31,7 +31,7 @@ private:
 
 class WXDLLIMPEXP_XRC wxMenuBarXmlHandler : public wxXmlResourceHandler
 {
-	DECLARE_DYNAMIC_CLASS(wxMenuBarXmlHandler)
+    DECLARE_DYNAMIC_CLASS(wxMenuBarXmlHandler)
     public:
         wxMenuBarXmlHandler();
         virtual wxObject *DoCreateResource();

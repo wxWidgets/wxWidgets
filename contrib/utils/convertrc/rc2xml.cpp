@@ -49,7 +49,7 @@ cross platform (wxGTK,etc)
 
 rc2xml::rc2xml()
 {
-    m_done=FALSE;
+    m_done=false;
     m_bitmaplist=new wxList(wxKEY_STRING);
     m_stringtable=new wxList(wxKEY_STRING);
     m_iconlist = new wxList(wxKEY_STRING);
@@ -83,7 +83,7 @@ bool rc2xml::Convert(wxString rcfile, wxString xmlfile)
     result=m_xmlfile.Open(xmlfile.c_str(),_T("w+t"));
     wxASSERT_MSG(result,_T("Couldn't create XML file"));
     if (!result)
-        return FALSE;
+        return false;
 
 
 /* Write Basic header for XML file */
@@ -94,7 +94,7 @@ bool rc2xml::Convert(wxString rcfile, wxString xmlfile)
     ParseResourceHeader();
 //Gather all the resource we need for toolbars,menus, and etc
     FirstPass();
-    m_done=FALSE;
+    m_done=false;
     m_rc.Seek(0);
 //Read in dialogs, toolbars,menus
     SecondPass();
@@ -105,7 +105,7 @@ bool rc2xml::Convert(wxString rcfile, wxString xmlfile)
     wxMessageBox(_("Conversion complete."), _("Done"),
                             wxOK | wxICON_INFORMATION);
 
-return TRUE;
+return true;
 }
 
 
@@ -308,9 +308,9 @@ void rc2xml::ParseRadioButton(wxString phrase, wxString varname)
     bool GotOrs;
     GotOrs = ReadOrs(token);
     if (ReadRect(x,y,width,height))
-        if (GotOrs==FALSE)
+        if (GotOrs==false)
       ReadOrs(token);
-    if (token.Find(_T("WS_GROUP")) != -1)
+    if (token.Find(_T("WS_GROUP")) != wxNOT_FOUND)
         style += _T("wxRB_GROUP");
 
     m_xmlfile.Write(_T("\t\t<object class=\"wxRadioButton\""));
@@ -347,15 +347,15 @@ bool rc2xml::Seperator(int ch)
 {
 //if ((ch==' ')|(ch==',')|(ch==13)|(ch==10)|(ch=='|')|(ch=='\t'))
     if ((ch==' ')|(ch==',')|(ch==13)|(ch==10)|(ch=='\t'))
-        return TRUE;
+        return true;
 
     if (ch==EOF)
         {
-        m_done=TRUE;
-        return TRUE;
+        m_done=true;
+        return true;
         }
 
-    return FALSE;
+    return false;
 }
 
 void rc2xml::ParseGroupBox(wxString phrase, wxString varname)
@@ -394,7 +394,7 @@ wxString rc2xml::GetToken(bool *listseperator)
 
     if (m_rc.Eof())
     {
-    m_done=TRUE;
+    m_done=true;
     return token;
 }
 
@@ -402,7 +402,7 @@ wxString rc2xml::GetToken(bool *listseperator)
     ReadChar(ch);
     if (ch==EOF)
     {
-    m_done=TRUE;
+    m_done=true;
     return token;
     }
 
@@ -415,7 +415,7 @@ wxString rc2xml::GetToken(bool *listseperator)
 
     if (ch==EOF)
     {
-    m_done=TRUE;
+    m_done=true;
     }
 
 
@@ -426,7 +426,7 @@ wxString rc2xml::GetToken(bool *listseperator)
     }
 
     if (ch == EOF)
-        m_done = TRUE;
+        m_done = true;
 
     if (listseperator)
       *listseperator = (ch == ',');
@@ -458,14 +458,14 @@ wxString rc2xml::GetStringQuote()
 {
     wxString phrase;
     //ASCII code 34 "
-    bool done=FALSE;
+    bool done=false;
     int p,ch=0,lastch=0;
     ReadChar(ch);
 
     while (ch!=34)
         ReadChar(ch);
     ReadChar(ch);
-    while (done==FALSE)
+    while (done==false)
         {
         if ((ch==34)&&(lastch!='\\'))
             {
@@ -477,10 +477,10 @@ wxString rc2xml::GetStringQuote()
             else
     {
                 m_rc.Seek(p);
-                done = TRUE;
+                done = true;
                 }
             }
-         if (done==TRUE)
+         if (done==true)
              break;
          if (ch=='\r')
              ReadChar(ch);                    // skip
@@ -501,15 +501,15 @@ void rc2xml::ReadChar(int &ch)
     result=m_rc.Tell();
 
     if((result>=m_filesize))
-        m_done=TRUE;
+        m_done=true;
 
     result=m_rc.Read(&ch,1);
 
     if((result==-1))
-        m_done=TRUE;
+        m_done=true;
 
     if(ch==EOF)
-        m_done=TRUE;
+        m_done=true;
 }
 
 void rc2xml::ParseComboBox(wxString varname)
@@ -521,16 +521,16 @@ void rc2xml::ParseComboBox(wxString varname)
     bool GotOrs;
     GotOrs = ReadOrs(token);
     if (ReadRect(x,y,width,height))
-        if (GotOrs==FALSE)
+        if (GotOrs==false)
       ReadOrs(token);
 
     m_xmlfile.Write(_T("\t\t<object class=\"wxComboBox\""));
     WriteBasicInfo(x,y,width,height,varname);
-    if (token.Find(_T("CBS_SIMPLE")) != -1)
+    if (token.Find(_T("CBS_SIMPLE")) != wxNOT_FOUND)
         WriteStyle(_T("wxCB_SIMPLE"));
-    if (token.Find(_T("CBS_SORT")) != -1)
+    if (token.Find(_T("CBS_SORT")) != wxNOT_FOUND)
         WriteStyle(_T("wxCB_SORT"));
-    if (token.Find(_T("CBS_DISABLENOSCROLL")) != -1)
+    if (token.Find(_T("CBS_DISABLENOSCROLL")) != wxNOT_FOUND)
         WriteStyle(_T("wxLB_ALWAYS_SB"));
     m_xmlfile.Write(_T("\n\t\t</object>\n"));
 
@@ -631,7 +631,7 @@ void rc2xml::ParseSlider(wxString WXUNUSED(label), wxString varname)
 {
     wxString token,style;
     ReadOrs(token);
-    if (token.Find(_T("TBS_VERT"))!=-1)
+    if (token.Find(_T("TBS_VERT"))!=wxNOT_FOUND)
         style+=_T("wxSL_VERTICAL");
     //MFC RC Default is horizontal
     else
@@ -670,7 +670,7 @@ bool rc2xml::ReadOrs(wxString & orstring)
 
     token=PeekToken();
     if (token.IsNumber())
-        return FALSE;
+        return false;
     orstring=GetToken();
 
     while(PeekToken()==_T("|"))
@@ -680,7 +680,7 @@ bool rc2xml::ReadOrs(wxString & orstring)
     //Grab next token
     orstring+=GetToken();
     }
-    return TRUE;
+    return true;
 }
 
 //Is it a checkbutton or a radiobutton or a pushbutton or a groupbox
@@ -692,15 +692,15 @@ void rc2xml::ParseCtrlButton(wxString label, wxString varname)
     ReadOrs(token);
     m_rc.Seek(p);
 
-    if (token.Find(_T("BS_AUTOCHECKBOX"))!=-1)
+    if (token.Find(_T("BS_AUTOCHECKBOX"))!=wxNOT_FOUND)
         ParseCheckBox(label, varname);
-    else if ((token.Find(_T("BS_AUTORADIOBUTTON"))!=-1)||
-                  (token.Find(_T("BS_RADIOBUTTON"))!=-1))
+    else if ((token.Find(_T("BS_AUTORADIOBUTTON"))!=wxNOT_FOUND)||
+                  (token.Find(_T("BS_RADIOBUTTON"))!=wxNOT_FOUND))
         ParseRadioButton(label, varname);
-    else if (token.Find(_T("BS_GROUPBOX"))!=-1)
+    else if (token.Find(_T("BS_GROUPBOX"))!=wxNOT_FOUND)
         ParseGroupBox(label, varname);
-    else  // if ((token.Find("BS_PUSHBUTTON")!=-1)||
-//                (token.Find("BS_DEFPUSHBUTTON")!=-1))
+    else  // if ((token.Find("BS_PUSHBUTTON")!=wxNOT_FOUND)||
+//                (token.Find("BS_DEFPUSHBUTTON")!=wxNOT_FOUND))
         ParsePushButton(label, varname);           // make default case
 }
 
@@ -846,7 +846,7 @@ void rc2xml::ParseSpinCtrl(wxString WXUNUSED(label), wxString varname)
     wxString token,style;
 
     ReadOrs(token);
-    if (token.Find(_T("UDS_HORZ"))!=-1)
+    if (token.Find(_T("UDS_HORZ"))!=wxNOT_FOUND)
         style=_T("wxSP_HORIZONTAL");
     //MFC default
     else
@@ -928,7 +928,7 @@ void rc2xml::ParseToolBar(wxString varname)
         wxLogError(_T("Unable to load bitmap:")+*bitmappath);
 
 //Write toolbar to xml file
-    m_xmlfile.Write(_T("	<object class=\"wxToolBar\""));
+    m_xmlfile.Write(_T("\t<object class=\"wxToolBar\""));
 //Avoid duplicate names this way
     varname.Replace(_T("IDR_"),_T("TB_"));
     WriteName(varname);
@@ -962,7 +962,7 @@ void rc2xml::ParseToolBar(wxString varname)
                 {
                 SplitHelp(msg,tip,longhelp);
                 m_xmlfile.Write(_T("\t\t\t\t<tooltip>")+tip+_T("</tooltip>\n"));
-                m_xmlfile.Write(_T("		<longhelp>")+longhelp+_T("</longhelp>\n"));
+                m_xmlfile.Write(_T("\t\t<longhelp>")+longhelp+_T("</longhelp>\n"));
                 }
             //Make a bitmap file name
             buttonname=CleanName(buttonname);
@@ -1016,19 +1016,19 @@ bool rc2xml::LookUpString(wxString strid,wxString & st)
     wxNode *node=m_stringtable->Find(strid);
     wxString *s;
     if (node==NULL)
-        return FALSE;
+        return false;
 
     s=(wxString *)node->GetData();
     st=*s;
 
-    return TRUE;
+    return true;
 }
 
 bool rc2xml::SplitHelp(wxString msg, wxString &shorthelp, wxString &longhelp)
 {
     int spot;
     spot=msg.Find(_T("\\n"));
-    if (spot==-1)
+    if (spot==wxNOT_FOUND)
         {
         shorthelp=msg;
         longhelp=msg;
@@ -1037,7 +1037,7 @@ bool rc2xml::SplitHelp(wxString msg, wxString &shorthelp, wxString &longhelp)
     longhelp=msg.Left(spot);
     spot=msg.Length()-spot-2;
     shorthelp=msg.Right(spot);
-    return TRUE;
+    return true;
 }
 
 void rc2xml::ParseMenuItem()
@@ -1191,7 +1191,7 @@ kindctrl.MakeUpper();
         int p=m_rc.Tell();
         ReadOrs(token);
         m_rc.Seek(p);
-        if (token.Find(_T("SS_BITMAP"))!=-1)
+        if (token.Find(_T("SS_BITMAP"))!=wxNOT_FOUND)
             ParseStaticBitmap(label,varname);
         else
             ParseStaticText(label,varname);
@@ -1238,7 +1238,7 @@ void rc2xml::ParseScrollBar()
 
     ReadOrs(token);
 
-if (token.Find(_T("SBS_VERT"))!=-1)
+if (token.Find(_T("SBS_VERT"))!=wxNOT_FOUND)
     style=_T("wxSB_VERTICAL");
 //Default MFC style is horizontal
     else
@@ -1377,7 +1377,7 @@ wxTextFile r;
 //Read through entire file
     for ( str = r.GetFirstLine(); !r.Eof(); str = r.GetNextLine() )
     {
-    if (str.Find(_T("#define"))!=-1)
+    if (str.Find(_T("#define"))!=wxNOT_FOUND)
         {
         tok.SetString(str);
         //Just ignore #define token

@@ -22,7 +22,7 @@ class WXDLLEXPORT wxXmlNode;
 class XmlTreeData : public wxTreeItemData
 {
     public:
-        XmlTreeData(wxXmlNode *n) : Node(n) {}        
+        XmlTreeData(wxXmlNode *n) : Node(n) {}
         wxXmlNode *Node;
 };
 

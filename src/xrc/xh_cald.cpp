@@ -7,7 +7,7 @@
 // Copyright:   (c) 2000 Brian Gavin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 #pragma implementation "xh_cald.h"
 #endif
@@ -29,8 +29,8 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxCalendarCtrlXmlHandler, wxXmlResourceHandler)
 
-wxCalendarCtrlXmlHandler::wxCalendarCtrlXmlHandler() 
-: wxXmlResourceHandler() 
+wxCalendarCtrlXmlHandler::wxCalendarCtrlXmlHandler()
+: wxXmlResourceHandler()
 {
     XRC_ADD_STYLE(wxCAL_SUNDAY_FIRST);
     XRC_ADD_STYLE(wxCAL_MONDAY_FIRST);
@@ -45,7 +45,7 @@ wxCalendarCtrlXmlHandler::wxCalendarCtrlXmlHandler()
 
 
 wxObject *wxCalendarCtrlXmlHandler::DoCreateResource()
-{ 
+{
     XRC_MAKE_INSTANCE(calendar, wxCalendarCtrl);
 
     calendar->Create(m_parentAsWindow,
@@ -55,9 +55,9 @@ wxObject *wxCalendarCtrlXmlHandler::DoCreateResource()
                      GetPosition(), GetSize(),
                      GetStyle(),
                      GetName());
-    
+
     SetupWindow(calendar);
-    
+
     return calendar;
 }
 

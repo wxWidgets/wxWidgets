@@ -7,7 +7,7 @@
 // Copyright:   (c) 2000 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 #pragma implementation "xh_panel.h"
 #endif
@@ -35,7 +35,7 @@ wxPanelXmlHandler::wxPanelXmlHandler() : wxXmlResourceHandler()
 }
 
 wxObject *wxPanelXmlHandler::DoCreateResource()
-{ 
+{
     XRC_MAKE_INSTANCE(panel, wxPanel)
 
     panel->Create(m_parentAsWindow,
@@ -46,7 +46,7 @@ wxObject *wxPanelXmlHandler::DoCreateResource()
 
     SetupWindow(panel);
     CreateChildren(panel);
-    
+
     return panel;
 }
 

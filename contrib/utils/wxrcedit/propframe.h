@@ -27,15 +27,15 @@ class PropertiesFrame : public wxFrame
     public:
         PropertiesFrame();
         ~PropertiesFrame();
-        
+
         void ShowProps(wxXmlNode *node);
-        
+
         void ClearProps();
         void AddProps(PropertyInfoArray& plist);
         void AddSingleProp(const PropertyInfo& pinfo, wxTreeItemId *root = NULL);
-      
+
         static PropertiesFrame *Get();
-           
+
     private:
 
         static PropertiesFrame *ms_Instance;
@@ -43,11 +43,11 @@ class PropertiesFrame : public wxFrame
 
         wxRemotelyScrolledTreeCtrl *m_tree;
         wxThinSplitterWindow *m_splitter;
-	    wxSplitterScrolledWindow *m_scrolledWindow;
+        wxSplitterScrolledWindow *m_scrolledWindow;
         wxTreeCompanionWindow *m_valueWindow;
-        
+
         wxHashTable m_EditCtrls;
-        
+
         friend class PropEditCtrl;
 };
 

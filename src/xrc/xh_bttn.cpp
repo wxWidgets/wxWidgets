@@ -7,7 +7,7 @@
 // Copyright:   (c) 2000 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 #pragma implementation "xh_bttn.h"
 #endif
@@ -24,8 +24,8 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxButtonXmlHandler, wxXmlResourceHandler)
 
-wxButtonXmlHandler::wxButtonXmlHandler() 
-: wxXmlResourceHandler() 
+wxButtonXmlHandler::wxButtonXmlHandler()
+: wxXmlResourceHandler()
 {
     XRC_ADD_STYLE(wxBU_LEFT);
     XRC_ADD_STYLE(wxBU_RIGHT);
@@ -36,7 +36,7 @@ wxButtonXmlHandler::wxButtonXmlHandler()
 }
 
 wxObject *wxButtonXmlHandler::DoCreateResource()
-{ 
+{
    XRC_MAKE_INSTANCE(button, wxButton)
 
    button->Create(m_parentAsWindow,
@@ -50,7 +50,7 @@ wxObject *wxButtonXmlHandler::DoCreateResource()
     if (GetBool(wxT("default"), 0))
         button->SetDefault();
     SetupWindow(button);
-    
+
     return button;
 }
 

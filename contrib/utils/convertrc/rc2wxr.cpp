@@ -77,7 +77,7 @@ rc2wxr::rc2wxr()
 
 {
 
-m_done=FALSE;
+m_done=false;
 
 m_controlid=6000;
 
@@ -511,7 +511,7 @@ bool rc2wxr::Seperator(int ch)
 
 if ((ch==' ')|(ch==',')|(ch==13)|(ch==10)|(ch=='|'))
 
-   return TRUE;
+   return true;
 
 
 
@@ -519,13 +519,13 @@ if (ch==EOF)
 
 {
 
-m_done=TRUE;
+m_done=true;
 
-return TRUE;
+return true;
 
 }
 
-return FALSE;
+return false;
 
 }
 
@@ -595,7 +595,7 @@ if (m_rc.Eof())
 
 {
 
-m_done=TRUE;
+m_done=true;
 
 return tok;
 
@@ -611,7 +611,7 @@ if (ch==EOF)
 
 {
 
-m_done=TRUE;
+m_done=true;
 
 return tok;
 
@@ -637,7 +637,7 @@ if (ch==EOF)
 
 {
 
-m_done=TRUE;
+m_done=true;
 
 
 
@@ -663,7 +663,7 @@ ReadChar(ch);
 
 if (ch==EOF)
 
-   m_done=TRUE;
+   m_done=true;
 
 
 
@@ -719,7 +719,7 @@ void rc2wxr::ReadChar(int &ch)
 
 {
 
-	int result;
+    int result;
 
 result=m_rc.Tell();
 
@@ -727,7 +727,7 @@ result=m_rc.Tell();
 
 if((result>=m_filesize))
 
-    m_done=TRUE;
+    m_done=true;
 
 
 
@@ -737,13 +737,13 @@ result=m_rc.Read(&ch,1);
 
 if((result==-1))
 
-   m_done=TRUE;
+   m_done=true;
 
 
 
 if(ch==EOF)
 
-   m_done=TRUE;
+   m_done=true;
 
 }
 
@@ -817,13 +817,13 @@ while ((tok!=_T("END"))&(tok!=_T("}")))
 
 if (tok==_T("POPUP"))
 
-	{
+    {
 
     ParsePopupMenu();
 
-	wxFprintf(m_wxr,_T("  ],\\\n"));
+    wxFprintf(m_wxr,_T("  ],\\\n"));
 
-	}
+    }
 
 }
 
@@ -1043,7 +1043,7 @@ if (tok.IsNumber())
 
 w=GetToken();
 
-return TRUE;
+return true;
 
 }
 

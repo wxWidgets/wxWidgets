@@ -7,7 +7,7 @@
 // Copyright:   (c) 2000 Bob Mitchell and Verant Interactive
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 #pragma implementation "xh_radbx.h"
 #endif
@@ -27,8 +27,8 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxRadioBoxXmlHandler, wxXmlResourceHandler)
 
-wxRadioBoxXmlHandler::wxRadioBoxXmlHandler() 
-: wxXmlResourceHandler(), m_insideBox(FALSE)
+wxRadioBoxXmlHandler::wxRadioBoxXmlHandler()
+: wxXmlResourceHandler(), m_insideBox(false)
 {
     XRC_ADD_STYLE(wxRA_SPECIFY_COLS);
     XRC_ADD_STYLE(wxRA_HORIZONTAL);
@@ -38,14 +38,14 @@ wxRadioBoxXmlHandler::wxRadioBoxXmlHandler()
 }
 
 wxObject *wxRadioBoxXmlHandler::DoCreateResource()
-{ 
+{
     if( m_class == wxT("wxRadioBox"))
     {
         // find the selection
         long selection = GetLong( wxT("selection"), -1 );
 
         // need to build the list of strings from children
-        m_insideBox = TRUE;
+        m_insideBox = true;
         CreateChildrenPrivately( NULL, GetParamNode(wxT("content")));
         wxString *strings = (wxString *) NULL;
         if( strList.GetCount() > 0 )
@@ -76,7 +76,7 @@ wxObject *wxRadioBoxXmlHandler::DoCreateResource()
 
         if (strings != NULL)
             delete[] strings;
-        strList.Clear();    // dump the strings   
+        strList.Clear();    // dump the strings
 
         return control;
     }

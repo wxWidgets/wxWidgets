@@ -30,21 +30,21 @@ class PreviewFrame : public wxFrame
     public:
         PreviewFrame();
         ~PreviewFrame();
-        
+
         void Preview(wxXmlNode *node,wxXmlDocument *doc);
         void MakeDirty();
                 // current node updated, needs preview refresh
                 // (will be done once mouse enters preview win)
-      
+
         static PreviewFrame *Get();
         void ResetResource();
-        
+
     private:
         void PreviewMenu();
         void PreviewToolbar();
         void PreviewPanel();
-		void PreviewWXFrame();
-    
+        void PreviewWXFrame();
+
     private:
         static PreviewFrame *ms_Instance;
         wxXmlNode *m_Node;
@@ -52,12 +52,12 @@ class PreviewFrame : public wxFrame
         wxScrolledWindow *m_ScrollWin;
         wxTextCtrl *m_LogCtrl;
         wxSplitterWindow *m_Splitter;
-        
+
         wxXmlResource *m_RC;
         wxString m_TmpFile;
-        
+
         bool m_Dirty;
-        
+
         DECLARE_EVENT_TABLE()
         void OnMouseEnter(wxMouseEvent& event);
 };

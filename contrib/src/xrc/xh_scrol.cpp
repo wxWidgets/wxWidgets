@@ -7,7 +7,7 @@
 // Copyright:   (c) 2000 Brian Gavin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 #pragma implementation "xh_scrol.h"
 #endif
@@ -24,8 +24,8 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxScrollBarXmlHandler, wxXmlResourceHandler)
 
-wxScrollBarXmlHandler::wxScrollBarXmlHandler() 
-: wxXmlResourceHandler() 
+wxScrollBarXmlHandler::wxScrollBarXmlHandler()
+: wxXmlResourceHandler()
 {
     XRC_ADD_STYLE(wxSB_HORIZONTAL);
     XRC_ADD_STYLE(wxSB_VERTICAL);
@@ -33,7 +33,7 @@ wxScrollBarXmlHandler::wxScrollBarXmlHandler()
 }
 
 wxObject *wxScrollBarXmlHandler::DoCreateResource()
-{ 
+{
     XRC_MAKE_INSTANCE(control, wxScrollBar)
 
     control->Create(m_parentAsWindow,
@@ -43,14 +43,14 @@ wxObject *wxScrollBarXmlHandler::DoCreateResource()
                     wxDefaultValidator,
                     GetName());
 
-    control->SetScrollbar(GetLong( wxT("value"), 0), 
+    control->SetScrollbar(GetLong( wxT("value"), 0),
                           GetLong( wxT("thumbsize"),1),
                           GetLong( wxT("range"), 10),
                           GetLong( wxT("pagesize"),1));
 
     SetupWindow(control);
     CreateChildren(control);
-    
+
     return control;
 }
 

@@ -36,7 +36,7 @@
 wxWindow* PropEditCtrlFont::CreateEditCtrl()
 {
     PropEditCtrlTxt::CreateEditCtrl();
-    m_TextCtrl->Enable(FALSE);
+    m_TextCtrl->Enable(false);
     return m_TextCtrl;
 }
 
@@ -61,18 +61,18 @@ wxTreeItemId PropEditCtrlFont::CreateTreeEntry(wxTreeItemId parent, const Proper
 
 
 BEGIN_EVENT_TABLE(PropEditCtrlChoice, PropEditCtrl)
-    EVT_CHOICE(-1, PropEditCtrlChoice::OnChoice)
+    EVT_CHOICE(wxID_ANY, PropEditCtrlChoice::OnChoice)
 END_EVENT_TABLE()
 
 wxWindow* PropEditCtrlChoice::CreateEditCtrl()
 {
-    m_Choice = new wxChoice(this, -1);
-    
+    m_Choice = new wxChoice(this, wxID_ANY);
+
     return m_Choice;
 }
 
 
-        
+
 void PropEditCtrlChoice::ReadValue()
 {
     wxStringTokenizer tkn(m_PropInfo->MoreInfo, _T(","));
@@ -96,10 +96,10 @@ void PropEditCtrlChoice::WriteValue()
 
 void PropEditCtrlChoice::OnChoice(wxCommandEvent& WXUNUSED(event))
 {
-    if (CanSave()) 
+    if (CanSave())
     {
         WriteValue();
-        EditorFrame::Get()->NotifyChanged(CHANGED_PROPS);    
+        EditorFrame::Get()->NotifyChanged(CHANGED_PROPS);
     }
 }
 
@@ -112,11 +112,11 @@ void PropEditCtrlColor::OnDetails()
     wxColour clr;
     wxString txt = m_TextCtrl->GetValue();
     long unsigned tmp;
-    
+
     if (txt.Length() == 7 && txt[0u] == _T('#') &&
         wxSscanf(txt.c_str(), _T("#%lX"), &tmp) == 1)
-        clr = wxColour((tmp & 0xFF0000) >> 16, 
-                       (tmp & 0x00FF00) >> 8, 
+        clr = wxColour((tmp & 0xFF0000) >> 16,
+                       (tmp & 0x00FF00) >> 8,
                        (tmp & 0x0000FF));
 
     clr = wxGetColourFromUser(NULL, clr);
@@ -143,19 +143,19 @@ void PropEditCtrlFlags::OnDetails()
     wxArrayString arr;
     size_t i;
     int j;
-    
+
     wxStringTokenizer tkn(m_PropInfo->MoreInfo, _T(","));
     while (tkn.HasMoreTokens())
         arr.Add(tkn.GetNextToken());
 
     wxConfigBase *cfg = wxConfigBase::Get();
-    
-    wxDialog dlg(m_PropFrame, -1, _("Flags"), 
-            wxPoint(cfg->Read(_T("flagsdlg_x"), -1), cfg->Read(_T("flagsdlg_y"), -1)),
+
+    wxDialog dlg(m_PropFrame, wxID_ANY, _("Flags"),
+            wxPoint(cfg->Read(_T("flagsdlg_x"), wxDefaultPosition.x), cfg->Read(_T("flagsdlg_y"), wxDefaultPosition.y)),
             wxSize(cfg->Read(_T("flagsdlg_w"), 300), cfg->Read(_T("flagsdlg_h"), 300)),
             wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
     wxSizer *sz = new wxBoxSizer(wxVERTICAL);
-    wxCheckListBox *lbox = new wxCheckListBox(&dlg, -1);
+    wxCheckListBox *lbox = new wxCheckListBox(&dlg, wxID_ANY);
     sz->Add(lbox, 1, wxEXPAND | wxALL, 10);
     wxSizer *sz2 = new wxBoxSizer(wxHORIZONTAL);
     wxButton *btnok = new wxButton(&dlg, wxID_OK, _("OK"));
@@ -165,12 +165,12 @@ void PropEditCtrlFlags::OnDetails()
     sz->Add(sz2, 0, wxALIGN_RIGHT | wxRIGHT | wxBOTTOM, 10);
 
     dlg.SetSizer(sz);
-    dlg.SetAutoLayout(TRUE);
+    dlg.SetAutoLayout(true);
     dlg.Layout();
-    
+
     for (i = 0; i < arr.GetCount(); i++)
         lbox->Append(arr[i]);
-  
+
     tkn.SetString(txt, _T("| "));
     while (tkn.HasMoreTokens())
     {
@@ -178,12 +178,12 @@ void PropEditCtrlFlags::OnDetails()
         j = arr.Index(t);
         if (j != wxNOT_FOUND) lbox->Check(j);
     }
-            
-    
+
+
     if (dlg.ShowModal() != wxID_OK) return;
-    
+
     txt.Empty();
-    
+
     for (i = 0; i < arr.GetCount(); i++)
         if (lbox->IsChecked(i))
             txt << arr[i] << _T('|');
@@ -216,14 +216,14 @@ void PropEditCtrlFile::OnDetails()
 {
     wxString txt = m_TextCtrl->GetValue();
     txt = wxPathOnly(EditorFrame::Get()->GetFileName()) + _T("/") + txt;
-    wxString name = wxFileSelector(_("Choose file"), 
+    wxString name = wxFileSelector(_("Choose file"),
                                    wxPathOnly(txt),
                                    wxFileNameFromPath(txt),
                                    _T(""),
                                    GetFileTypes(),
                                    wxOPEN | wxFILE_MUST_EXIST);
     if (!name) return;
-    
+
     // compute relative path:
     wxArrayString axrc, afile;
     wxStringTokenizer tkn;
@@ -231,7 +231,7 @@ void PropEditCtrlFile::OnDetails()
     while (tkn.HasMoreTokens()) afile.Add(tkn.GetNextToken());
     tkn.SetString(EditorFrame::Get()->GetFileName(), _T("/\\"));
     while (tkn.HasMoreTokens()) axrc.Add(tkn.GetNextToken());
-    
+
     if (afile.GetCount() == 0 || axrc.GetCount() == 0)
         txt = name;
     else

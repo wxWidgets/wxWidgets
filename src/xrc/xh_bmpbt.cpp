@@ -7,7 +7,7 @@
 // Copyright:   (c) 2000 Brian Gavin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 #pragma implementation "xh_bmpbt.h"
 #endif
@@ -24,8 +24,8 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapButtonXmlHandler, wxXmlResourceHandler)
 
-wxBitmapButtonXmlHandler::wxBitmapButtonXmlHandler() 
-: wxXmlResourceHandler() 
+wxBitmapButtonXmlHandler::wxBitmapButtonXmlHandler()
+: wxXmlResourceHandler()
 {
     XRC_ADD_STYLE(wxBU_AUTODRAW);
     XRC_ADD_STYLE(wxBU_LEFT);
@@ -37,7 +37,7 @@ wxBitmapButtonXmlHandler::wxBitmapButtonXmlHandler()
 }
 
 wxObject *wxBitmapButtonXmlHandler::DoCreateResource()
-{ 
+{
     XRC_MAKE_INSTANCE(button, wxBitmapButton)
 
     button->Create(m_parentAsWindow,
@@ -50,14 +50,14 @@ wxObject *wxBitmapButtonXmlHandler::DoCreateResource()
     if (GetBool(wxT("default"), 0))
         button->SetDefault();
     SetupWindow(button);
-    
+
     if (!GetParamValue(wxT("selected")).IsEmpty())
         button->SetBitmapSelected(GetBitmap(wxT("selected")));
     if (!GetParamValue(wxT("focus")).IsEmpty())
         button->SetBitmapFocus(GetBitmap(wxT("focus")));
     if (!GetParamValue(wxT("disabled")).IsEmpty())
         button->SetBitmapDisabled(GetBitmap(wxT("disabled")));
-    
+
     return button;
 }
 

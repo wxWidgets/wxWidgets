@@ -7,7 +7,7 @@
 // Copyright:   (c) 2000 Bob Mitchell and Verant Interactive
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 #pragma implementation "xh_spin.h"
 #endif
@@ -26,8 +26,8 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxSpinButtonXmlHandler, wxXmlResourceHandler)
 
-wxSpinButtonXmlHandler::wxSpinButtonXmlHandler() 
-: wxXmlResourceHandler() 
+wxSpinButtonXmlHandler::wxSpinButtonXmlHandler()
+: wxXmlResourceHandler()
 {
     XRC_ADD_STYLE(wxSP_HORIZONTAL);
     XRC_ADD_STYLE(wxSP_VERTICAL);
@@ -37,7 +37,7 @@ wxSpinButtonXmlHandler::wxSpinButtonXmlHandler()
 }
 
 wxObject *wxSpinButtonXmlHandler::DoCreateResource()
-{ 
+{
     XRC_MAKE_INSTANCE(control, wxSpinButton)
 
     control->Create(m_parentAsWindow,
@@ -50,7 +50,7 @@ wxObject *wxSpinButtonXmlHandler::DoCreateResource()
     control->SetRange(GetLong( wxT("min"), wxSP_DEFAULT_MIN),
                       GetLong(wxT("max"), wxSP_DEFAULT_MAX));
     SetupWindow(control);
-    
+
     return control;
 }
 
@@ -65,8 +65,8 @@ bool wxSpinButtonXmlHandler::CanHandle(wxXmlNode *node)
 
 IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrlXmlHandler, wxXmlResourceHandler)
 
-wxSpinCtrlXmlHandler::wxSpinCtrlXmlHandler() 
-: wxXmlResourceHandler() 
+wxSpinCtrlXmlHandler::wxSpinCtrlXmlHandler()
+: wxXmlResourceHandler()
 {
     XRC_ADD_STYLE(wxSP_HORIZONTAL);
     XRC_ADD_STYLE(wxSP_VERTICAL);
@@ -75,9 +75,9 @@ wxSpinCtrlXmlHandler::wxSpinCtrlXmlHandler()
 }
 
 wxObject *wxSpinCtrlXmlHandler::DoCreateResource()
-{ 
+{
     XRC_MAKE_INSTANCE(control, wxSpinCtrl)
-    
+
     control->Create(m_parentAsWindow,
                     GetID(),
                     GetText(wxT("value")),
@@ -89,7 +89,7 @@ wxObject *wxSpinCtrlXmlHandler::DoCreateResource()
                     GetName());
 
     SetupWindow(control);
-    
+
     return control;
 }
 

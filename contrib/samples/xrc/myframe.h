@@ -41,7 +41,7 @@ public:
     // Constructor.
     MyFrame( wxWindow* parent=(wxWindow *)NULL);
 
-private:   
+private:
 
     // Event handlers (these functions should _not_ be virtual)
     void OnExitToolOrMenuCommand(wxCommandEvent& event);
@@ -49,7 +49,7 @@ private:
     void OnNonDerivedDialogToolOrMenuCommand(wxCommandEvent& event);
     void OnDerivedDialogToolOrMenuCommand(wxCommandEvent& event);
     void OnControlsToolOrMenuCommand(wxCommandEvent& event);
-    void OnUncenteredToolOrMenuCommand(wxCommandEvent& event);    
+    void OnUncenteredToolOrMenuCommand(wxCommandEvent& event);
     void OnCustomClassToolOrMenuCommand(wxCommandEvent& event);
     void OnPlatformPropertyToolOrMenuCommand(wxCommandEvent& event);
     void OnArtProviderToolOrMenuCommand(wxCommandEvent& event);

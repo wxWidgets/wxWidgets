@@ -82,7 +82,7 @@ bool wxXmlResource::Load(const wxString& filemask)
     wxString fnd;
     wxXmlResourceDataRecord *drec;
     bool iswild = wxIsWild(filemask);
-    bool rt = TRUE;
+    bool rt = true;
 
 #if wxUSE_FILESYSTEM
     wxFileSystem fsys;
@@ -260,7 +260,7 @@ bool wxXmlResource::AttachUnknownControl(const wxString& name,
     if (!container)
     {
         wxLogError(_("Cannot find container for unknown control '%s'."), name.c_str());
-        return FALSE;
+        return false;
     }
     return control->Reparent(container);
 }
@@ -274,9 +274,9 @@ static void ProcessPlatformProperty(wxXmlNode *node)
     wxXmlNode *c = node->GetChildren();
     while (c)
     {
-        isok = FALSE;
+        isok = false;
         if (!c->GetPropVal(wxT("platform"), &s))
-            isok = TRUE;
+            isok = true;
         else
         {
             wxStringTokenizer tkn(s, wxT(" |"));
@@ -366,8 +366,8 @@ bool wxXmlResource::UpdateResources()
 
 #           if wxUSE_FILESYSTEM
             file = fsys.OpenFile(m_data[i].File);
-			if (file)
-				stream = file->GetStream();
+            if (file)
+                stream = file->GetStream();
 #           else
             stream = new wxFileInputStream(m_data[i].File);
 #           endif
@@ -391,7 +391,7 @@ bool wxXmlResource::UpdateResources()
                 rt = false;
             }
             else
-			{
+            {
                 long version;
                 int v1, v2, v3, v4;
                 wxString verstr = m_data[i].Doc->GetRoot()->GetPropVal(
@@ -411,17 +411,17 @@ bool wxXmlResource::UpdateResources()
 
                 ProcessPlatformProperty(m_data[i].Doc->GetRoot());
 #if wxUSE_FILESYSTEM
-				m_data[i].Time = file->GetModificationTime();
+                m_data[i].Time = file->GetModificationTime();
 #else
                 m_data[i].Time = wxDateTime(wxFileModificationTime(m_data[i].File));
 #endif
-			}
+            }
 
 #           if wxUSE_FILESYSTEM
-				wxDELETE(file);
-				wxUnusedVar(file);
+                wxDELETE(file);
+                wxUnusedVar(file);
 #           else
-				wxDELETE(stream);
+                wxDELETE(stream);
 #           endif
         }
     }
@@ -456,7 +456,7 @@ wxXmlNode *wxXmlResource::DoFindResource(wxXmlNode *parent,
                 wxString refName = node->GetPropVal(wxT("ref"), wxEmptyString);
                 if (refName.empty())
                     continue;
-                wxXmlNode* refNode = FindResource(refName, wxEmptyString, TRUE);
+                wxXmlNode* refNode = FindResource(refName, wxEmptyString, true);
                 if (refNode &&
                     refNode->GetPropVal(wxT("class"), wxEmptyString) == classname)
                 {
@@ -473,7 +473,7 @@ wxXmlNode *wxXmlResource::DoFindResource(wxXmlNode *parent,
                  (node->GetName() == wxT("object") ||
                   node->GetName() == wxT("object_ref")) )
             {
-                wxXmlNode* found = DoFindResource(node, name, classname, TRUE);
+                wxXmlNode* found = DoFindResource(node, name, classname, true);
                 if ( found )
                     return found;
             }
@@ -565,7 +565,7 @@ wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent,
     if ( node->GetName() == wxT("object_ref") )
     {
         wxString refName = node->GetPropVal(wxT("ref"), wxEmptyString);
-        wxXmlNode* refNode = FindResource(refName, wxEmptyString, TRUE);
+        wxXmlNode* refNode = FindResource(refName, wxEmptyString, true);
 
         if ( !refNode )
         {
@@ -1090,7 +1090,7 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param)
     else if (family == wxT("swiss")) ifamily = wxSWISS;
     else if (family == wxT("modern")) ifamily = wxMODERN;
 
-    bool underlined = GetBool(wxT("underlined"), FALSE);
+    bool underlined = GetBool(wxT("underlined"), false);
 
     wxString encoding = GetParamValue(wxT("encoding"));
     wxFontMapper mapper;
@@ -1107,7 +1107,7 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param)
     wxStringTokenizer tk(faces, wxT(","));
     while (tk.HasMoreTokens())
     {
-        int index = enu.GetFacenames()->Index(tk.GetNextToken(), FALSE);
+        int index = enu.GetFacenames()->Index(tk.GetNextToken(), false);
         if (index != wxNOT_FOUND)
         {
             facename = (*enu.GetFacenames())[index];
@@ -1136,11 +1136,11 @@ void wxXmlResourceHandler::SetupWindow(wxWindow *wnd)
     if (HasParam(wxT("fg")))
         wnd->SetForegroundColour(GetColour(wxT("fg")));
     if (GetBool(wxT("enabled"), 1) == 0)
-        wnd->Enable(FALSE);
+        wnd->Enable(false);
     if (GetBool(wxT("focused"), 0) == 1)
         wnd->SetFocus();
     if (GetBool(wxT("hidden"), 0) == 1)
-        wnd->Show(FALSE);
+        wnd->Show(false);
 #if wxUSE_TOOLTIPS
     if (HasParam(wxT("tooltip")))
         wnd->SetToolTip(GetText(wxT("tooltip")));
@@ -1309,7 +1309,7 @@ public:
     {
         AddStdXRCID_Records();
         wxXmlResource::AddSubclassFactory(new wxXmlSubclassFactoryCXX);
-        return TRUE;
+        return true;
     }
     void OnExit()
     {

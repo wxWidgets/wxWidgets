@@ -7,7 +7,7 @@
 // Copyright:   (c) 2000 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 #pragma implementation "xh_notbk.h"
 #endif
@@ -29,8 +29,8 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxNotebookXmlHandler, wxXmlResourceHandler)
 
-wxNotebookXmlHandler::wxNotebookXmlHandler() 
-: wxXmlResourceHandler(), m_isInside(FALSE), m_notebook(NULL)
+wxNotebookXmlHandler::wxNotebookXmlHandler()
+: wxXmlResourceHandler(), m_isInside(false), m_notebook(NULL)
 {
     XRC_ADD_STYLE(wxNB_FIXEDWIDTH);
     XRC_ADD_STYLE(wxNB_LEFT);
@@ -40,7 +40,7 @@ wxNotebookXmlHandler::wxNotebookXmlHandler()
 }
 
 wxObject *wxNotebookXmlHandler::DoCreateResource()
-{ 
+{
     if (m_class == wxT("notebookpage"))
     {
         wxXmlNode *n = GetParamNode(wxT("object"));
@@ -51,7 +51,7 @@ wxObject *wxNotebookXmlHandler::DoCreateResource()
         if (n)
         {
             bool old_ins = m_isInside;
-            m_isInside = FALSE;
+            m_isInside = false;
             wxObject *item = CreateResFromNode(n, m_notebook, NULL);
             m_isInside = old_ins;
             wxWindow *wnd = wxDynamicCast(item, wxWindow);
@@ -59,8 +59,8 @@ wxObject *wxNotebookXmlHandler::DoCreateResource()
             if (wnd)
                 m_notebook->AddPage(wnd, GetText(wxT("label")),
                                          GetBool(wxT("selected"), 0));
-            else 
-                wxLogError(wxT("Error in resource."));              
+            else
+                wxLogError(wxT("Error in resource."));
             return wnd;
         }
         else
@@ -69,12 +69,12 @@ wxObject *wxNotebookXmlHandler::DoCreateResource()
             return NULL;
         }
     }
-    
-    else 
+
+    else
     {
         XRC_MAKE_INSTANCE(nb, wxNotebook)
 
-        nb->Create(m_parentAsWindow, 
+        nb->Create(m_parentAsWindow,
                    GetID(),
                    GetPosition(), GetSize(),
                    GetStyle(wxT("style")),
@@ -83,12 +83,12 @@ wxObject *wxNotebookXmlHandler::DoCreateResource()
         wxNotebook *old_par = m_notebook;
         m_notebook = nb;
         bool old_ins = m_isInside;
-        m_isInside = TRUE;
-        CreateChildren(m_notebook, TRUE/*only this handler*/);
+        m_isInside = true;
+        CreateChildren(m_notebook, true/*only this handler*/);
         m_isInside = old_ins;
         m_notebook = old_par;
 
-        if (GetBool(wxT("usenotebooksizer"), FALSE))
+        if (GetBool(wxT("usenotebooksizer"), false))
             return new wxNotebookSizer(nb);
         else
             return nb;

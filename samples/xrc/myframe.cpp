@@ -76,18 +76,18 @@
 // The event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
-// The reason why the menuitems and tools are given the same name in the 
+// The reason why the menuitems and tools are given the same name in the
 // XRC file, is that both a tool (a toolbar item) and a menuitem are designed
-// to fire the same kind of event (an EVT_MENU) and thus I give them the same 
-// ID name to help new users emphasize this point which is often overlooked 
+// to fire the same kind of event (an EVT_MENU) and thus I give them the same
+// ID name to help new users emphasize this point which is often overlooked
 // when starting out with wxWidgets.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(XRCID("exit_tool_or_menuitem"),  MyFrame::OnExitToolOrMenuCommand)
-    EVT_MENU(XRCID("non_derived_dialog_tool_or_menuitem"), MyFrame::OnNonDerivedDialogToolOrMenuCommand) 
-    EVT_MENU(XRCID("derived_tool_or_menuitem"), MyFrame::OnDerivedDialogToolOrMenuCommand) 
-    EVT_MENU(XRCID("controls_tool_or_menuitem"), MyFrame::OnControlsToolOrMenuCommand) 
-    EVT_MENU(XRCID("uncentered_tool_or_menuitem"), MyFrame::OnUncenteredToolOrMenuCommand) 
-    EVT_MENU(XRCID("custom_class_tool_or_menuitem"), MyFrame::OnCustomClassToolOrMenuCommand) 
+    EVT_MENU(XRCID("non_derived_dialog_tool_or_menuitem"), MyFrame::OnNonDerivedDialogToolOrMenuCommand)
+    EVT_MENU(XRCID("derived_tool_or_menuitem"), MyFrame::OnDerivedDialogToolOrMenuCommand)
+    EVT_MENU(XRCID("controls_tool_or_menuitem"), MyFrame::OnControlsToolOrMenuCommand)
+    EVT_MENU(XRCID("uncentered_tool_or_menuitem"), MyFrame::OnUncenteredToolOrMenuCommand)
+    EVT_MENU(XRCID("custom_class_tool_or_menuitem"), MyFrame::OnCustomClassToolOrMenuCommand)
     EVT_MENU(XRCID("platform_property_tool_or_menuitem"), MyFrame::OnPlatformPropertyToolOrMenuCommand)
     EVT_MENU(XRCID("art_provider_tool_or_menuitem"), MyFrame::OnArtProviderToolOrMenuCommand)
     EVT_MENU(XRCID("variable_expansion_tool_or_menuitem"), MyFrame::OnVariableExpansionToolOrMenuCommand)
@@ -102,12 +102,12 @@ END_EVENT_TABLE()
 MyFrame::MyFrame(wxWindow* parent)
 {
     // Load up this frame from XRC. [Note, instead of making a class's
-    // constructor take a wxWindow* parent with a default value of NULL, 
-    // we could have just had designed MyFrame class with an empty 
+    // constructor take a wxWindow* parent with a default value of NULL,
+    // we could have just had designed MyFrame class with an empty
     // constructor and then written here:
     // wxXmlResource::Get()->LoadFrame(this, (wxWindow* )NULL, "main_frame");
-    // since this frame will always be the top window, and thus parentless. 
-    // However, the current approach has source code that can be recycled 
+    // since this frame will always be the top window, and thus parentless.
+    // However, the current approach has source code that can be recycled
     // for other frames that aren't the top level window.]
     wxXmlResource::Get()->LoadFrame(this, parent, wxT("main_frame"));
 
@@ -121,9 +121,9 @@ MyFrame::MyFrame(wxWindow* parent)
     // With toolbars, you currently can't create one, and set it later. It
     // needs to be all in one step.
     SetToolBar(wxXmlResource::Get()->LoadToolBar(this, wxT("main_toolbar")));
-    
-    // Give the frame a optional statusbar. The '1' just means one field. 
-    // A gripsizer will automatically get put on into the corner, if that 
+
+    // Give the frame a optional statusbar. The '1' just means one field.
+    // A gripsizer will automatically get put on into the corner, if that
     // is the normal OS behaviour for frames on that platform. Helptext
     // for menu items and toolbar tools will automatically get displayed
     // here.
@@ -136,8 +136,8 @@ MyFrame::MyFrame(wxWindow* parent)
 
 void MyFrame::OnExitToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 {
-    // TRUE is to force the frame to close.
-    Close(TRUE);
+    // true is to force the frame to close.
+    Close(true);
 }
 
 
@@ -152,10 +152,10 @@ void MyFrame::OnNonDerivedDialogToolOrMenuCommand(wxCommandEvent& WXUNUSED(event
 }
 
 
-void MyFrame::OnDerivedDialogToolOrMenuCommand(wxCommandEvent& WXUNUSED(event)) 
+void MyFrame::OnDerivedDialogToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 {
     // Make an instance of our derived dialog, passing it "this" window
-    // (the main frame) as the parent of the dialog. This allows the dialog 
+    // (the main frame) as the parent of the dialog. This allows the dialog
     // to be destructed automatically when the parent is destroyed.
     PreferencesDialog preferencesDialog(this);
     // Show the instance of the dialog, modally.
@@ -163,19 +163,19 @@ void MyFrame::OnDerivedDialogToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 }
 
 
-void MyFrame::OnControlsToolOrMenuCommand(wxCommandEvent& WXUNUSED(event)) 
+void MyFrame::OnControlsToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 {
     wxDialog dlg;
     wxXmlResource::Get()->LoadDialog(&dlg, this, wxT("controls_dialog"));
 
 #if wxUSE_LISTCTRL
     // There is no data in the listctrl. This will add some columns
-    // and some data. You don't need use any pointers 
+    // and some data. You don't need use any pointers
     // at all to manipulate the controls, just simply use the XRCCTL(...) macros.
     // "controls_treectrl" is the name of this control in the XRC.
     // (1) Insert a column, with the column header of "Name"
     // (The '_' function around "Name" marks this string as one to translate).
-    XRCCTRL(dlg, "controls_listctrl", wxListCtrl)->InsertColumn( 0, 
+    XRCCTRL(dlg, "controls_listctrl", wxListCtrl)->InsertColumn( 0,
                                                                  _("Name"),
                                                                  wxLIST_FORMAT_LEFT,
                                                                  ( 200 )
@@ -186,12 +186,12 @@ void MyFrame::OnControlsToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
     XRCCTRL(dlg, "controls_listctrl", wxListCtrl)->InsertItem(2,wxT("Leon Li"));
 #endif
 
-#if wxUSE_TREECTRL    
+#if wxUSE_TREECTRL
     // There is no data in the tree ctrl. These lines will add some.
-    // (1) Instead of having to write out 
-    // XRCCTRL(dlg, "controls_treectrl", wxTreeCtrl)->SomeFunction() 
+    // (1) Instead of having to write out
+    // XRCCTRL(dlg, "controls_treectrl", wxTreeCtrl)->SomeFunction()
     // each time (which is also OK), this example code will shown how
-    // to make a pointer to the XRC control, so we can use 
+    // to make a pointer to the XRC control, so we can use
     // treectrl->SomeFunction() as a short cut. This is useful if you
     // will be referring to this control often in the code.
     wxTreeCtrl* treectrl = XRCCTRL(dlg, "controls_treectrl", wxTreeCtrl);
@@ -200,15 +200,15 @@ void MyFrame::OnControlsToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
     // (3)Append some items to the root node.
     treectrl->AppendItem(treectrl->GetRootItem(), _("Evil henchman 1"));
     treectrl->AppendItem(treectrl->GetRootItem(), _("Evil henchman 2"));
-    treectrl->AppendItem(treectrl->GetRootItem(), _("Evil accountant"));      
+    treectrl->AppendItem(treectrl->GetRootItem(), _("Evil accountant"));
 #endif
-    
+
     // All done. Show the dialog.
     dlg.ShowModal();
 }
 
 
-void MyFrame::OnUncenteredToolOrMenuCommand(wxCommandEvent& WXUNUSED(event)) 
+void MyFrame::OnUncenteredToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 {
     wxDialog dlg;
     wxXmlResource::Get()->LoadDialog(&dlg, this, wxT("uncentered_dialog"));
@@ -220,16 +220,16 @@ void MyFrame::OnCustomClassToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 {
     wxDialog dlg;
     wxXmlResource::Get()->LoadDialog(&dlg, this, wxT("custom_class_dialog"));
-    
-    // Make an instance of our new custom class. 
-    MyResizableListCtrl* a_myResizableListCtrl = new MyResizableListCtrl(&dlg, 
-                                                -1,
+
+    // Make an instance of our new custom class.
+    MyResizableListCtrl* a_myResizableListCtrl = new MyResizableListCtrl(&dlg,
+                                                wxID_ANY,
                                                 wxDefaultPosition,
                                                 wxDefaultSize,
                                                 wxLC_REPORT,
                                                 wxDefaultValidator);
-    
-    // "custom_control_placeholder" is the name of the "unknown" tag in the 
+
+    // "custom_control_placeholder" is the name of the "unknown" tag in the
     // custctrl.xrc XRC file.
     wxXmlResource::Get()->AttachUnknownControl(wxT("custom_control_placeholder"),
                                                 a_myResizableListCtrl);

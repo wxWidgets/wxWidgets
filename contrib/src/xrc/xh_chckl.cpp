@@ -7,7 +7,7 @@
 // Copyright:   (c) 2000 Bob Mitchell and Verant Interactive
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 #pragma implementation "xh_chckl.h"
 #endif
@@ -28,15 +28,15 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxCheckListBoxXmlHandler, wxXmlResourceHandler)
 
-wxCheckListBoxXmlHandler::wxCheckListBoxXmlHandler() 
-: wxXmlResourceHandler(), m_insideBox(FALSE)
+wxCheckListBoxXmlHandler::wxCheckListBoxXmlHandler()
+: wxXmlResourceHandler(), m_insideBox(false)
 {
     // no styles
     AddWindowStyles();
 }
 
 wxObject *wxCheckListBoxXmlHandler::DoCreateResource()
-{ 
+{
     if (m_class == wxT("wxCheckListBox")
 #if WXWIN_COMPATIBILITY_2_4
         || m_class == wxT("wxCheckList")
@@ -48,7 +48,7 @@ wxObject *wxCheckListBoxXmlHandler::DoCreateResource()
             wxLogDebug(wxT("'wxCheckList' name is deprecated, use 'wxCheckListBox' instead."));
 #endif
         // need to build the list of strings from children
-        m_insideBox = TRUE;
+        m_insideBox = true;
         CreateChildrenPrivately(NULL, GetParamNode(wxT("content")));
         wxString *strings = (wxString *) NULL;
         if (strList.GetCount() > 0)
@@ -84,17 +84,17 @@ wxObject *wxCheckListBoxXmlHandler::DoCreateResource()
             wxString v = n->GetPropVal(wxT("checked"), wxEmptyString);
             v.MakeLower();
             if (v && v == wxT("1"))
-                control->Check( i, TRUE );
+                control->Check( i, true );
 
-            i++;        
+            i++;
             n = n->GetNext();
         }
-        
+
         SetupWindow(control);
 
         if (strings != NULL)
             delete[] strings;
-        strList.Clear();    // dump the strings   
+        strList.Clear();    // dump the strings
 
         return control;
     }

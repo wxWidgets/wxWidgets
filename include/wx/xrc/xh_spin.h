@@ -21,7 +21,7 @@
 #if wxUSE_SPINBTN
 class WXDLLIMPEXP_XRC wxSpinButtonXmlHandler : public wxXmlResourceHandler
 {
-	DECLARE_DYNAMIC_CLASS(wxSpinButtonXmlHandler)
+    DECLARE_DYNAMIC_CLASS(wxSpinButtonXmlHandler)
     enum
     {
         wxSP_DEFAULT_VALUE = 0,
@@ -39,7 +39,7 @@ public:
 #if wxUSE_SPINCTRL
 class WXDLLIMPEXP_XRC wxSpinCtrlXmlHandler : public wxXmlResourceHandler
 {
-	DECLARE_DYNAMIC_CLASS(wxSpinCtrlXmlHandler)
+    DECLARE_DYNAMIC_CLASS(wxSpinCtrlXmlHandler)
     enum
     {
         wxSP_DEFAULT_VALUE = 0,

@@ -7,7 +7,7 @@
 // Copyright:   (c) 2000 Bob Mitchell and Verant Interactive
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 #pragma implementation "xh_radbt.h"
 #endif
@@ -26,21 +26,21 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxRadioButtonXmlHandler, wxXmlResourceHandler)
 
-wxRadioButtonXmlHandler::wxRadioButtonXmlHandler() 
-: wxXmlResourceHandler() 
+wxRadioButtonXmlHandler::wxRadioButtonXmlHandler()
+: wxXmlResourceHandler()
 {
     XRC_ADD_STYLE(wxRB_GROUP);
     AddWindowStyles();
 }
 
 wxObject *wxRadioButtonXmlHandler::DoCreateResource()
-{ 
+{
     /* BOBM - implementation note.
      * once the wxBitmapRadioButton is implemented.
-     * look for a bitmap property. If not null, 
-     * make it a wxBitmapRadioButton instead of the 
+     * look for a bitmap property. If not null,
+     * make it a wxBitmapRadioButton instead of the
      * normal radio button.
-     */ 
+     */
 
     XRC_MAKE_INSTANCE(control, wxRadioButton)
 
@@ -54,7 +54,7 @@ wxObject *wxRadioButtonXmlHandler::DoCreateResource()
 
     control->SetValue(GetBool(wxT("value"), 0));
     SetupWindow(control);
-    
+
     return control;
 }
 

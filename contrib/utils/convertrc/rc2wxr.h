@@ -8,7 +8,7 @@
 #include "wx/file.h"
 #include "stdio.h"
 
-class rc2wxr : public wxObject  
+class rc2wxr : public wxObject
 {
 public:
 rc2wxr();

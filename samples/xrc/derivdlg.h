@@ -36,26 +36,26 @@
 class PreferencesDialog : public wxDialog
 {
 
-public: 
-    
+public:
+
     // Constructor.
     /*
        \param parent The parent window. Simple constructor.
-     */    
+     */
     PreferencesDialog( wxWindow* parent );
-    
-    // Destructor.                  
+
+    // Destructor.
     ~PreferencesDialog();
 
 private:
-    
+
     // Stuff to do when "My Button" gets clicked
     void OnMyButtonClicked( wxCommandEvent &event );
 
-    // Stuff to do when a "My Checkbox" gets updated 
+    // Stuff to do when a "My Checkbox" gets updated
     // (drawn, or it changes its value)
     void OuUpdateUIMyCheckbox( wxUpdateUIEvent &event );
-   
+
     // Override base class functions of a wxDialog.
     void OnOK( wxCommandEvent &event );
 

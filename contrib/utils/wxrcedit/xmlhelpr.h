@@ -28,4 +28,4 @@ wxXmlNode *XmlFindNodeSimple(wxXmlNode *parent, const wxString& path);
 wxString XmlGetClass(wxXmlNode *parent);
 void XmlSetClass(wxXmlNode *parent, const wxString& classname);
 
-#endif 
+#endif

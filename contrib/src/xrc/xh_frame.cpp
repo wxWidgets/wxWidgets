@@ -75,7 +75,7 @@ wxObject *wxFrameXmlHandler::DoCreateResource()
 
     CreateChildren(frame);
 
-    if (GetBool(wxT("centered"), FALSE))
+    if (GetBool(wxT("centered"), false))
         frame->Centre();
 
     return frame;

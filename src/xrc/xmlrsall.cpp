@@ -7,7 +7,7 @@
 // Copyright:   (c) 2000 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 // -- Already done in xmlres.cpp
 //#ifdef __GNUG__
 //#pragma implementation "xmlres.h"
@@ -56,16 +56,16 @@ void wxXmlResource::InitAllHandlers()
 #endif
 #if wxUSE_CHECKBOX
     AddHandler(new wxCheckBoxXmlHandler);
-#endif    
+#endif
 #if wxUSE_HTML
     AddHandler(new wxHtmlWindowXmlHandler);
-#endif    
+#endif
 #if wxUSE_SPINBTN
     AddHandler(new wxSpinButtonXmlHandler);
-#endif    
+#endif
 #if wxUSE_SPINCTRL
     AddHandler(new wxSpinCtrlXmlHandler);
-#endif    
+#endif
 #if wxUSE_SCROLLBAR
     AddHandler(new wxScrollBarXmlHandler);
 #endif

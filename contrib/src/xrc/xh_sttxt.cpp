@@ -7,7 +7,7 @@
 // Copyright:   (c) 2000 Bob Mitchell and Verant Interactive
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 #pragma implementation "xh_sttxt.h"
 #endif
@@ -24,8 +24,8 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxStaticTextXmlHandler, wxXmlResourceHandler)
 
-wxStaticTextXmlHandler::wxStaticTextXmlHandler() 
-: wxXmlResourceHandler() 
+wxStaticTextXmlHandler::wxStaticTextXmlHandler()
+: wxXmlResourceHandler()
 {
     XRC_ADD_STYLE(wxST_NO_AUTORESIZE);
     XRC_ADD_STYLE(wxALIGN_LEFT);
@@ -35,7 +35,7 @@ wxStaticTextXmlHandler::wxStaticTextXmlHandler()
 }
 
 wxObject *wxStaticTextXmlHandler::DoCreateResource()
-{ 
+{
     XRC_MAKE_INSTANCE(text, wxStaticText)
 
     text->Create(m_parentAsWindow,
@@ -46,7 +46,7 @@ wxObject *wxStaticTextXmlHandler::DoCreateResource()
                     GetName());
 
     SetupWindow(text);
-    
+
     return text;
 }
 

@@ -7,7 +7,7 @@
 // Copyright:   (c) 2000 Brian Gavin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 #pragma implementation "xh_stbox.h"
 #endif
@@ -24,14 +24,14 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxStaticBoxXmlHandler, wxXmlResourceHandler)
 
-wxStaticBoxXmlHandler::wxStaticBoxXmlHandler() 
-: wxXmlResourceHandler() 
+wxStaticBoxXmlHandler::wxStaticBoxXmlHandler()
+: wxXmlResourceHandler()
 {
     AddWindowStyles();
 }
 
 wxObject *wxStaticBoxXmlHandler::DoCreateResource()
-{ 
+{
     XRC_MAKE_INSTANCE(box, wxStaticBox)
 
     box->Create(m_parentAsWindow,
@@ -42,7 +42,7 @@ wxObject *wxStaticBoxXmlHandler::DoCreateResource()
                 GetName());
 
     SetupWindow(box);
-    
+
     return box;
 }
 

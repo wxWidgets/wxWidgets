@@ -240,7 +240,7 @@ protected:
     bool UpdateResources();
 
     // Finds a resource (calls UpdateResources) and returns a node containing it.
-    wxXmlNode *FindResource(const wxString& name, const wxString& classname, bool recursive = FALSE);
+    wxXmlNode *FindResource(const wxString& name, const wxString& classname, bool recursive = false);
 
     // Helper function: finds a resource (calls UpdateResources) and returns a node containing it.
     wxXmlNode *DoFindResource(wxXmlNode *parent, const wxString& name, const wxString& classname, bool recursive);
@@ -329,8 +329,8 @@ public:
     // were filled.
     virtual wxObject *DoCreateResource() = 0;
 
-    // Returns TRUE if it understands this node and can create
-    // a resource from it, FALSE otherwise.
+    // Returns true if it understands this node and can create
+    // a resource from it, false otherwise.
     virtual bool CanHandle(wxXmlNode *node) = 0;
 
     // Sets the parent resource.
@@ -385,7 +385,7 @@ protected:
     // - replaces \n, \r, \t by respective chars (according to C syntax)
     // - replaces _ by & and __ by _ (needed for _File => &File because of XML)
     // - calls wxGetTranslations (unless disabled in wxXmlResource)
-    wxString GetText(const wxString& param, bool translate = TRUE);
+    wxString GetText(const wxString& param, bool translate = true);
 
     // Returns the XRCID.
     int GetID();
@@ -393,8 +393,8 @@ protected:
     // Returns the resource name.
     wxString GetName();
 
-    // Gets a bool flag (1, t, yes, on, true are TRUE, everything else is FALSE).
-    bool GetBool(const wxString& param, bool defaultv = FALSE);
+    // Gets a bool flag (1, t, yes, on, true are true, everything else is false).
+    bool GetBool(const wxString& param, bool defaultv = false);
 
     // Gets the integer value from the parameter.
     long GetLong( const wxString& param, long defaultv = 0 );
@@ -428,7 +428,7 @@ protected:
     void SetupWindow(wxWindow *wnd);
 
     // Creates children.
-    void CreateChildren(wxObject *parent, bool this_hnd_only = FALSE);
+    void CreateChildren(wxObject *parent, bool this_hnd_only = false);
 
     // Helper function.
     void CreateChildrenPrivately(wxObject *parent, wxXmlNode *rootnode = NULL);

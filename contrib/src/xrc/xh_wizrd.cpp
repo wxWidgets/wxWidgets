@@ -7,7 +7,7 @@
 // Copyright:   (c) 2000 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 #pragma implementation "xh_wizrd.h"
 #endif
@@ -35,7 +35,7 @@ wxWizardXmlHandler::wxWizardXmlHandler() : wxXmlResourceHandler()
 }
 
 wxObject *wxWizardXmlHandler::DoCreateResource()
-{ 
+{
     if (m_class == wxT("wxWizard"))
     {
         XRC_MAKE_INSTANCE(wiz, wxWizard)
@@ -92,7 +92,7 @@ wxObject *wxWizardXmlHandler::DoCreateResource()
 
 bool wxWizardXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return IsOfClass(node, wxT("wxWizard")) || 
+    return IsOfClass(node, wxT("wxWizard")) ||
            (m_wizard != NULL &&
                 (IsOfClass(node, wxT("wxWizardPage")) ||
                  IsOfClass(node, wxT("wxWizardPageSimple")))

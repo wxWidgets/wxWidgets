@@ -28,20 +28,20 @@
 
 
 BEGIN_EVENT_TABLE(PropEditCtrlTxt, PropEditCtrl)
-    EVT_TEXT(-1, PropEditCtrlTxt::OnText)
+    EVT_TEXT(wxID_ANY, PropEditCtrlTxt::OnText)
 END_EVENT_TABLE()
 
 
 wxWindow *PropEditCtrlTxt::CreateEditCtrl()
 {
-    return (m_TextCtrl = new wxTextCtrl(this, -1));
+    return (m_TextCtrl = new wxTextCtrl(this, wxID_ANY));
 }
 
 
 
 void PropEditCtrlTxt::OnText(wxCommandEvent& WXUNUSED(event))
 {
-    if (CanSave()) 
+    if (CanSave())
     {
         WriteValue();
         EditorFrame::Get()->NotifyChanged(CHANGED_PROPS);
@@ -61,7 +61,7 @@ void PropEditCtrlTxt::WriteValue()
 {
     wxString newv = m_TextCtrl->GetValue();
     XmlWriteValue(GetNode(), m_PropInfo->Name, newv);
-    m_TreeCtrl->SetItemBold(m_TreeItem, TRUE);
+    m_TreeCtrl->SetItemBold(m_TreeItem, true);
 }
 
 
@@ -82,12 +82,12 @@ wxWindow *PropEditCtrlInt::CreateEditCtrl()
 
 
 BEGIN_EVENT_TABLE(PropEditCtrlBool, PropEditCtrl)
-    EVT_CHOICE(-1, PropEditCtrlBool::OnChoice)
+    EVT_CHOICE(wxID_ANY, PropEditCtrlBool::OnChoice)
 END_EVENT_TABLE()
 
 wxWindow *PropEditCtrlBool::CreateEditCtrl()
 {
-    m_Choice = new wxChoice(this, -1);
+    m_Choice = new wxChoice(this, wxID_ANY);
     m_Choice->Append(_T("false"));
     m_Choice->Append(_T("true"));
     return m_Choice;
@@ -110,7 +110,7 @@ void PropEditCtrlBool::WriteValue()
     wxString newv = m_Choice->GetSelection() == 0 ? _T("0") : _T("1");
 
     XmlWriteValue(GetNode(), m_PropInfo->Name, newv);
-    m_TreeCtrl->SetItemBold(m_TreeItem, TRUE);
+    m_TreeCtrl->SetItemBold(m_TreeItem, true);
 }
 
 
@@ -128,7 +128,7 @@ wxString PropEditCtrlBool::GetValueAsText(wxTreeItemId ti)
 
 void PropEditCtrlBool::OnChoice(wxCommandEvent& WXUNUSED(event))
 {
-    if (CanSave()) 
+    if (CanSave())
     {
         WriteValue();
         EditorFrame::Get()->NotifyChanged(CHANGED_PROPS);
@@ -145,7 +145,7 @@ class PropEditCtrlCoordXY : public PropEditCtrlInt
     public:
         PropEditCtrlCoordXY(PropertiesFrame *propFrame, int which)
            : PropEditCtrlInt(propFrame), m_which(which) {}
-        
+
         virtual void ReadValue()
         {
             wxString s = XmlReadValue(GetNode(), m_PropInfo->Name);
@@ -161,7 +161,7 @@ class PropEditCtrlCoordXY : public PropEditCtrlInt
             }
             m_TextCtrl->SetValue(m_c[m_which]);
         }
-        
+
         virtual void WriteValue()
         {
             m_c[m_which] = m_TextCtrl->GetValue();
@@ -172,9 +172,9 @@ class PropEditCtrlCoordXY : public PropEditCtrlInt
             wxString prev = XmlReadValue(GetNode(), m_PropInfo->Name);
             if (prev[prev.Len()-1] == _T('d')) s << _T('d');
             XmlWriteValue(GetNode(), m_PropInfo->Name, s);
-            m_TreeCtrl->SetItemBold(m_TreeCtrl->GetItemParent(m_TreeItem), TRUE);
+            m_TreeCtrl->SetItemBold(m_TreeCtrl->GetItemParent(m_TreeItem), true);
         }
-        
+
         virtual wxString GetValueAsText(wxTreeItemId ti)
         {
             PropertyInfo *pi = &(((PETreeData*)m_TreeCtrl->GetItemData(ti))->PropInfo);
@@ -191,16 +191,16 @@ class PropEditCtrlCoordXY : public PropEditCtrlInt
             }
             return m_c[m_which];
         }
-        
+
         virtual wxString GetPropName(const PropertyInfo& WXUNUSED(pinfo))
         {
             if (m_which == 0) return _T("x"); else return _T("y");
         }
 
-        virtual bool HasClearButton() { return FALSE; }
-        virtual bool IsPresent(const PropertyInfo& WXUNUSED(pinfo)) { return FALSE; } 
+        virtual bool HasClearButton() { return false; }
+        virtual bool IsPresent(const PropertyInfo& WXUNUSED(pinfo)) { return false; }
 
-    
+
     protected:
         wxString m_c[2];
         int m_which;
@@ -212,7 +212,7 @@ class PropEditCtrlCoordDlg : public PropEditCtrlBool
     public:
         PropEditCtrlCoordDlg(PropertiesFrame *propFrame)
            : PropEditCtrlBool(propFrame) {}
-        
+
         virtual void ReadValue()
         {
             wxString s = XmlReadValue(GetNode(), m_PropInfo->Name);
@@ -222,15 +222,15 @@ class PropEditCtrlCoordDlg : public PropEditCtrlBool
             else
                 m_Choice->SetSelection(0);
         }
-        
+
         virtual void WriteValue()
         {
             wxString s = XmlReadValue(GetNode(), m_PropInfo->Name).BeforeFirst(_T('d'));
             if (m_Choice->GetSelection() == 1) s << _T('d');
             XmlWriteValue(GetNode(), m_PropInfo->Name, s);
-            m_TreeCtrl->SetItemBold(m_TreeCtrl->GetItemParent(m_TreeItem), TRUE);
+            m_TreeCtrl->SetItemBold(m_TreeCtrl->GetItemParent(m_TreeItem), true);
         }
-        
+
         virtual wxString GetValueAsText(wxTreeItemId ti)
         {
             PropertyInfo *pi = &(((PETreeData*)m_TreeCtrl->GetItemData(ti))->PropInfo);
@@ -242,14 +242,14 @@ class PropEditCtrlCoordDlg : public PropEditCtrlBool
             else
                 return _("true");
         }
-        
+
         virtual wxString GetPropName(const PropertyInfo& WXUNUSED(pinfo))
         {
             return _T("dlg");
         }
 
-        virtual bool HasClearButton() { return FALSE; }
-        virtual bool IsPresent(const PropertyInfo& WXUNUSED(pinfo)) { return FALSE; } 
+        virtual bool HasClearButton() { return false; }
+        virtual bool IsPresent(const PropertyInfo& WXUNUSED(pinfo)) { return false; }
 };
 
 
@@ -293,14 +293,14 @@ class PropEditCtrlDimX : public PropEditCtrlInt
     public:
         PropEditCtrlDimX(PropertiesFrame *propFrame)
            : PropEditCtrlInt(propFrame){}
-        
+
         virtual void ReadValue()
         {
             wxString s = XmlReadValue(GetNode(), m_PropInfo->Name);
             m_c = s.BeforeFirst(_T('d'));
             m_TextCtrl->SetValue(m_c);
         }
-        
+
         virtual void WriteValue()
         {
             wxString s = XmlReadValue(GetNode(), m_PropInfo->Name);
@@ -309,24 +309,24 @@ class PropEditCtrlDimX : public PropEditCtrlInt
             s = m_c;
             if (dlg) s << _T('d');
             XmlWriteValue(GetNode(), m_PropInfo->Name, s);
-            m_TreeCtrl->SetItemBold(m_TreeCtrl->GetItemParent(m_TreeItem), TRUE);
+            m_TreeCtrl->SetItemBold(m_TreeCtrl->GetItemParent(m_TreeItem), true);
         }
-        
+
         virtual wxString GetValueAsText(wxTreeItemId ti)
         {
             PropertyInfo *pi = &(((PETreeData*)m_TreeCtrl->GetItemData(ti))->PropInfo);
             return XmlReadValue(GetNode(), pi->Name).BeforeFirst(_T('d'));
         }
-        
+
         virtual wxString GetPropName(const PropertyInfo& WXUNUSED(pinfo))
         {
             return _T("val");
         }
 
-        virtual bool HasClearButton() { return FALSE; }
-        virtual bool IsPresent(const PropertyInfo& WXUNUSED(pinfo)) { return FALSE; } 
+        virtual bool HasClearButton() { return false; }
+        virtual bool IsPresent(const PropertyInfo& WXUNUSED(pinfo)) { return false; }
 
-    
+
     protected:
         wxString m_c;
 };
@@ -379,7 +379,7 @@ void PropEditCtrlXRCID::WriteValue()
     REAL_NODE->DeleteProperty(_T("name"));
     REAL_NODE->AddProperty(_T("name"), s);
 
-    m_TreeCtrl->SetItemBold(m_TreeItem, TRUE);
+    m_TreeCtrl->SetItemBold(m_TreeItem, true);
     EditorFrame::Get()->NotifyChanged(CHANGED_TREE_SELECTED);
 }
 
@@ -389,7 +389,7 @@ void PropEditCtrlXRCID::Clear()
 {
     EndEdit();
     REAL_NODE->DeleteProperty(_T("name"));
-    m_TreeCtrl->SetItemBold(m_TreeItem, FALSE);
+    m_TreeCtrl->SetItemBold(m_TreeItem, false);
     EditorFrame::Get()->NotifyChanged(CHANGED_TREE_SELECTED);
 }
 
@@ -401,7 +401,7 @@ void PropEditCtrlXRCID::OnDetails()
       #define stdID(id) , wxString(_T(#id))
       stdID(wxID_OK) stdID(wxID_CANCEL)
       stdID(wxID_YES) stdID(wxID_NO)
-      stdID(wxID_APPLY) stdID(wxID_HELP) 
+      stdID(wxID_APPLY) stdID(wxID_HELP)
       stdID(wxID_HELP_CONTEXT)
 
       stdID(wxID_OPEN) stdID(wxID_CLOSE) stdID(wxID_NEW)
@@ -412,20 +412,20 @@ void PropEditCtrlXRCID::OnDetails()
       stdID(wxID_HELP_COMMANDS) stdID(wxID_HELP_PROCEDURES)
       stdID(wxID_CUT) stdID(wxID_COPY) stdID(wxID_PASTE)
       stdID(wxID_CLEAR) stdID(wxID_FIND) stdID(wxID_DUPLICATE)
-      stdID(wxID_SELECTALL) 
+      stdID(wxID_SELECTALL)
       stdID(wxID_STATIC) stdID(wxID_FORWARD) stdID(wxID_BACKWARD)
       stdID(wxID_DEFAULT) stdID(wxID_MORE) stdID(wxID_SETUP)
-      stdID(wxID_RESET) 
+      stdID(wxID_RESET)
       #undef stdID
       };
 
-    wxString s = 
-        wxGetSingleChoice(_("Choose from predefined IDs:"), _("XRCID"), 
+    wxString s =
+        wxGetSingleChoice(_("Choose from predefined IDs:"), _("XRCID"),
                           38/*sizeof choices*/, choices);
     if (!s) return;
     m_TextCtrl->SetValue(s);
     WriteValue();
-    EditorFrame::Get()->NotifyChanged(CHANGED_PROPS);    
+    EditorFrame::Get()->NotifyChanged(CHANGED_PROPS);
 }
 
 

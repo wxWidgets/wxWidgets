@@ -34,17 +34,17 @@ void NodeInfo::Read(const wxString& filename, wxPathList& list)
 {
     wxString tp;
     wxString nd, cht;
-    bool ab = FALSE;
+    bool ab = false;
     long icn = -1;
 
     NodeClass.Empty();
 
     wxString path = list.FindValidPath(filename);
     if (path.IsEmpty()) return;
-    
+
     wxTextFile tf;
     tf.Open(path);
-    
+
     if (!tf.IsOpened()) return;
 
     for (size_t i = 0; i < tf.GetLineCount(); i++)
@@ -80,8 +80,8 @@ void NodeInfo::Read(const wxString& filename, wxPathList& list)
             tkn.GetNextToken();
             pi.Type = tkn.GetNextToken();
             if (tkn.HasMoreTokens()) pi.MoreInfo = tkn.GetNextToken();
-            
-            bool fnd = FALSE;
+
+            bool fnd = false;
             for (size_t j = 0; j < Props.GetCount(); j++)
             {
                 if (Props[j].Name == pi.Name)
@@ -90,14 +90,14 @@ void NodeInfo::Read(const wxString& filename, wxPathList& list)
                         Props[j].MoreInfo << _T(',') << pi.MoreInfo;
                     else
                         Props[j] = pi;
-                    fnd = TRUE;
+                    fnd = true;
                 }
             }
-            
+
             if (!fnd) Props.Add(pi);
         }
     }
-    
+
     if (!nd.IsEmpty()) NodeClass = nd;
     if (!cht.IsEmpty()) ChildType = cht;
     if (!!tp) Type = tp;
@@ -117,7 +117,7 @@ NodesDb* NodesDb::ms_Instance = NULL;
 
 NodesDb *NodesDb::Get()
 {
-    if (ms_Instance == NULL) 
+    if (ms_Instance == NULL)
     {
         (void)new NodesDb;
     }
@@ -131,7 +131,7 @@ NodesDb::NodesDb()
 
     m_Paths.Add(_T("."));
     m_Paths.Add(_T("./df"));
-#ifdef __UNIX__ 
+#ifdef __UNIX__
     m_Paths.Add(wxGetHomeDir() + _T("/.wxrcedit"));
     #ifdef wxINSTALL_PREFIX
     m_Paths.Add(wxINSTALL_PREFIX _T("/share/wx/wxrcedit"));
@@ -154,7 +154,7 @@ void NodesDb::Load()
 void NodesDb::LoadDir(const wxString& path)
 {
     if (!wxDirExists(path)) return;
-    
+
     wxDir dir(path);
     wxString filename;
     bool cont;
@@ -171,20 +171,20 @@ void NodesDb::LoadDir(const wxString& path)
 
 void NodesDb::LoadFile(const wxString& file)
 {
-    NodeInfo *ni = new NodeInfo; 
+    NodeInfo *ni = new NodeInfo;
     ni->Type = wxEmptyString;
     ni->Icon = 0;
     wxPathList paths;
     size_t i;
-    
+
     for (i = 0; i < m_Paths.GetCount(); i++)
         paths.Add(m_Paths[i]);
-    
+
     ni->Read(file, paths);
-    
+
     // maybe we already parsed it?
     for (i = 0; i < m_Infos.GetCount(); i++)
         if (m_Infos[i].NodeClass == ni->NodeClass) return;
-    
+
     m_Infos.Add(ni);
 }

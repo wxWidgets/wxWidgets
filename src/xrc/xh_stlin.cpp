@@ -7,7 +7,7 @@
 // Copyright:   (c) 2000 Brian Gavin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 #pragma implementation "xh_stlin.h"
 #endif
@@ -26,8 +26,8 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxStaticLineXmlHandler, wxXmlResourceHandler)
 
-wxStaticLineXmlHandler::wxStaticLineXmlHandler() 
-: wxXmlResourceHandler() 
+wxStaticLineXmlHandler::wxStaticLineXmlHandler()
+: wxXmlResourceHandler()
 {
     XRC_ADD_STYLE(wxLI_HORIZONTAL);
     XRC_ADD_STYLE(wxLI_VERTICAL);
@@ -35,7 +35,7 @@ wxStaticLineXmlHandler::wxStaticLineXmlHandler()
 }
 
 wxObject *wxStaticLineXmlHandler::DoCreateResource()
-{ 
+{
     XRC_MAKE_INSTANCE(line, wxStaticLine)
 
     line->Create(m_parentAsWindow,
@@ -45,7 +45,7 @@ wxObject *wxStaticLineXmlHandler::DoCreateResource()
                 GetName());
 
     SetupWindow(line);
-    
+
     return line;
 }
 

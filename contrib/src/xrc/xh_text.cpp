@@ -7,7 +7,7 @@
 // Copyright:   (c) 2000 Aleksandras Gluchovas
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 #pragma implementation "xh_text.h"
 #endif
@@ -24,7 +24,7 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxTextCtrlXmlHandler, wxXmlResourceHandler)
 
-wxTextCtrlXmlHandler::wxTextCtrlXmlHandler() : wxXmlResourceHandler() 
+wxTextCtrlXmlHandler::wxTextCtrlXmlHandler() : wxXmlResourceHandler()
 {
     XRC_ADD_STYLE(wxTE_NO_VSCROLL);
     XRC_ADD_STYLE(wxTE_AUTO_SCROLL);
@@ -48,7 +48,7 @@ wxTextCtrlXmlHandler::wxTextCtrlXmlHandler() : wxXmlResourceHandler()
 }
 
 wxObject *wxTextCtrlXmlHandler::DoCreateResource()
-{ 
+{
     XRC_MAKE_INSTANCE(text, wxTextCtrl)
 
     text->Create(m_parentAsWindow,
@@ -60,7 +60,7 @@ wxObject *wxTextCtrlXmlHandler::DoCreateResource()
                  GetName());
 
     SetupWindow(text);
-    
+
     return text;
 }
 

@@ -7,7 +7,7 @@
 // Copyright:   (c) 2000 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
- 
+
 #ifdef __GNUG__
 #pragma implementation "xh_sizer.h"
 #endif
@@ -32,12 +32,12 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxSizerXmlHandler, wxXmlResourceHandler)
 
-    
-    
-wxSizerXmlHandler::wxSizerXmlHandler() 
+
+
+wxSizerXmlHandler::wxSizerXmlHandler()
     : wxXmlResourceHandler(),
-      m_isInside(FALSE),
-      m_isGBS(FALSE),
+      m_isInside(false),
+      m_isGBS(false),
       m_parentSizer(NULL)
 {
     XRC_ADD_STYLE(wxHORIZONTAL);
@@ -69,7 +69,7 @@ wxSizerXmlHandler::wxSizerXmlHandler()
     XRC_ADD_STYLE(wxALIGN_CENTRE_HORIZONTAL);
     XRC_ADD_STYLE(wxALIGN_CENTER_VERTICAL);
     XRC_ADD_STYLE(wxALIGN_CENTRE_VERTICAL);
-    
+
     XRC_ADD_STYLE(wxADJUST_MINSIZE);
     XRC_ADD_STYLE(wxFIXED_MINSIZE);
 }
@@ -80,16 +80,16 @@ bool wxSizerXmlHandler::CanHandle(wxXmlNode *node)
 {
     return ( (!m_isInside && IsSizerNode(node)) ||
              (m_isInside && IsOfClass(node, wxT("sizeritem"))) ||
-             (m_isInside && IsOfClass(node, wxT("spacer"))) 
+             (m_isInside && IsOfClass(node, wxT("spacer")))
         );
 }
 
-    
+
 wxObject* wxSizerXmlHandler::DoCreateResource()
-{ 
+{
     if (m_class == wxT("sizeritem"))
         return Handle_sizeritem();
-    
+
     else if (m_class == wxT("spacer"))
         return Handle_spacer();
 
@@ -122,13 +122,13 @@ wxObject* wxSizerXmlHandler::Handle_sizeritem()
     {
         // create a sizer item for it
         wxSizerItem* sitem = MakeSizerItem();
-        
+
         // now fetch the item to be managed
         bool old_gbs = m_isGBS;
         bool old_ins = m_isInside;
         wxSizer *old_par = m_parentSizer;
-        m_isInside = FALSE;
-        if (!IsSizerNode(n)) m_parentSizer = NULL;        
+        m_isInside = false;
+        if (!IsSizerNode(n)) m_parentSizer = NULL;
         wxObject *item = CreateResFromNode(n, m_parent, NULL);
         m_isInside = old_ins;
         m_parentSizer = old_par;
@@ -137,12 +137,12 @@ wxObject* wxSizerXmlHandler::Handle_sizeritem()
         // and figure out what type it is
         wxSizer *sizer = wxDynamicCast(item, wxSizer);
         wxWindow *wnd = wxDynamicCast(item, wxWindow);
-        
+
         if (sizer)
             sitem->SetSizer(sizer);
         else if (wnd)
             sitem->SetWindow(wnd);
-        else 
+        else
             wxLogError(wxT("Error in resource."));
 
         // finally, set other wxSizerItem attributes
@@ -166,7 +166,7 @@ wxObject* wxSizerXmlHandler::Handle_spacer()
     wxSizerItem* sitem = MakeSizerItem();
     SetSizerItemAttributes(sitem);
     sitem->SetSpacer(GetSize());
-    AddSizerItem(sitem);    
+    AddSizerItem(sitem);
     return NULL;
 }
 
@@ -174,7 +174,7 @@ wxObject* wxSizerXmlHandler::Handle_spacer()
 wxObject* wxSizerXmlHandler::Handle_sizer()
 {
     wxSizer *sizer = NULL;
-        
+
     wxXmlNode *parentNode = m_node->GetParent();
 
     wxCHECK_MSG(m_parentSizer != NULL ||
@@ -191,17 +191,17 @@ wxObject* wxSizerXmlHandler::Handle_sizer()
 
     else if (m_class == wxT("wxStaticBoxSizer"))
         sizer = Handle_wxStaticBoxSizer();
-        
+
     else if (m_class == wxT("wxGridSizer"))
         sizer = Handle_wxGridSizer();
-                                    
+
     else if (m_class == wxT("wxFlexGridSizer"))
         sizer = Handle_wxFlexGridSizer();
 
     else if (m_class == wxT("wxGridBagSizer"))
         sizer = Handle_wxGridBagSizer();
 
-    
+
     wxSize minsize = GetSize(wxT("minsize"));
     if (!(minsize == wxDefaultSize))
         sizer->SetMinSize(minsize);
@@ -212,10 +212,10 @@ wxObject* wxSizerXmlHandler::Handle_sizer()
 
     // set new state
     m_parentSizer = sizer;
-    m_isInside = TRUE;
+    m_isInside = true;
     m_isGBS = (m_class == wxT("wxGridBagSizer"));
-    
-    CreateChildren(m_parent, TRUE/*only this handler*/);
+
+    CreateChildren(m_parent, true/*only this handler*/);
 
     // restore state
     m_isInside = old_ins;
@@ -223,7 +223,7 @@ wxObject* wxSizerXmlHandler::Handle_sizer()
 
     if (m_parentSizer == NULL) // setup window:
     {
-        m_parentAsWindow->SetAutoLayout(TRUE);
+        m_parentAsWindow->SetAutoLayout(true);
         m_parentAsWindow->SetSizer(sizer);
 
         wxXmlNode *nd = m_node;
@@ -235,7 +235,7 @@ wxObject* wxSizerXmlHandler::Handle_sizer()
         if (m_parentAsWindow->GetWindowStyle() & (wxRESIZE_BOX | wxRESIZE_BORDER))
             sizer->SetSizeHints(m_parentAsWindow);
     }
-        
+
     return sizer;
 }
 
@@ -243,8 +243,8 @@ wxObject* wxSizerXmlHandler::Handle_sizer()
 wxSizer*  wxSizerXmlHandler::Handle_wxBoxSizer()
 {
     return new wxBoxSizer(GetStyle(wxT("orient"), wxHORIZONTAL));
-}        
-    
+}
+
 wxSizer*  wxSizerXmlHandler::Handle_wxStaticBoxSizer()
 {
     return new wxStaticBoxSizer(
@@ -256,7 +256,7 @@ wxSizer*  wxSizerXmlHandler::Handle_wxStaticBoxSizer()
                             GetName()),
             GetStyle(wxT("orient"), wxHORIZONTAL));
 }
-    
+
 wxSizer*  wxSizerXmlHandler::Handle_wxGridSizer()
 {
     return new wxGridSizer(GetLong(wxT("rows")), GetLong(wxT("cols")),
@@ -266,7 +266,7 @@ wxSizer*  wxSizerXmlHandler::Handle_wxGridSizer()
 
 wxSizer*  wxSizerXmlHandler::Handle_wxFlexGridSizer()
 {
-    wxFlexGridSizer *sizer = 
+    wxFlexGridSizer *sizer =
         new wxFlexGridSizer(GetLong(wxT("rows")), GetLong(wxT("cols")),
                             GetDimension(wxT("vgap")), GetDimension(wxT("hgap")));
     SetGrowables(sizer, wxT("growablerows"), true);
@@ -277,7 +277,7 @@ wxSizer*  wxSizerXmlHandler::Handle_wxFlexGridSizer()
 
 wxSizer*  wxSizerXmlHandler::Handle_wxGridBagSizer()
 {
-    wxGridBagSizer *sizer = 
+    wxGridBagSizer *sizer =
         new wxGridBagSizer(GetDimension(wxT("vgap")), GetDimension(wxT("hgap")));
     SetGrowables(sizer, wxT("growablerows"), true);
     SetGrowables(sizer, wxT("growablecols"), false);
@@ -345,13 +345,13 @@ void wxSizerXmlHandler::SetSizerItemAttributes(wxSizerItem* sitem)
     sz = GetSize(wxT("ratio"));
     if (!(sz == wxDefaultSize))
         sitem->SetRatio(sz);
-    
+
     if (m_isGBS)
     {
         wxGBSizerItem* gbsitem = (wxGBSizerItem*)sitem;
         gbsitem->SetPos(GetGBPos(wxT("cellpos")));
         gbsitem->SetSpan(GetGBSpan(wxT("cellspan")));
-    }    
+    }
 }
 
 void wxSizerXmlHandler::AddSizerItem(wxSizerItem* sitem)
@@ -361,7 +361,7 @@ void wxSizerXmlHandler::AddSizerItem(wxSizerItem* sitem)
     else
         m_parentSizer->Add(sitem);
 }
-   
+
 
 
 
