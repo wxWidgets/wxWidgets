@@ -1035,6 +1035,7 @@ bool wxApp::ProcessMessage(WXMSG *wxmsg)
     // Try translations first; find the youngest window with
     // a translation table.
     wxWindow *wnd;
+
     for ( wnd = wndThis; wnd; wnd = wnd->GetParent() )
     {
         if ( wnd->MSWTranslateMessage(wxmsg) )

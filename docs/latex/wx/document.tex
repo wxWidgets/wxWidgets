@@ -352,7 +352,9 @@ the filename.
 
 \membersection{wxDocument::UpdateAllViews}\label{wxdocumentupdateallviews}
 
-\func{void}{UpdateAllViews}{\param{wxView* }{sender = NULL}}
+\func{void}{UpdateAllViews}{\param{wxView* }{sender = NULL}, \param{wxObject*}{ hint = NULL}}
 
 Updates all views. If {\it sender} is non-NULL, does not update this view.
+
+{\it hint} represents optional information to allow a view to optimize its update.
 

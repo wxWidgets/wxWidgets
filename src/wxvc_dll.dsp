@@ -211,6 +211,10 @@ SOURCE=.\common\filefn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\filename.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\filesys.cpp
 # End Source File
 # Begin Source File
