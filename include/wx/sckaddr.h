@@ -78,6 +78,9 @@ private:
   wxString m_origHostname;
 };
 
+// Compatibility with wxWindows 2.5.x
+typedef wxIPV4address wxIPaddress;
+
 #ifdef ENABLE_IPV6
 class WXDLLEXPORT wxIPV6address : public wxSockAddress {
   DECLARE_DYNAMIC_CLASS(wxIPV6address)
