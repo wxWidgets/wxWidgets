@@ -17,6 +17,11 @@
 #endif
 
 #include "wx/bitmap.h"
+#if wxUSE_IMAGE
+#include "wx/image.h"
+#endif
+
+
 
 /* Cursor for one display, so we can choose the correct one for
 * the current display.
@@ -61,7 +66,11 @@ public:
     
     wxCursor(const wxString& name, long flags = wxBITMAP_TYPE_XBM,
         int hotSpotX = 0, int hotSpotY = 0);
-    
+
+#if wxUSE_IMAGE   
+    wxCursor(const wxImage& image);
+#endif
+   
     wxCursor(wxStockCursor id);
     ~wxCursor();
     

@@ -18,6 +18,9 @@
 #include "wx/icon.h"
 #include "wx/app.h"
 #include "wx/utils.h"
+#if wxUSE_IMAGE
+#include "wx/image.h"
+#endif									     
 
 #ifdef __VMS__
 #pragma message disable nosimpint
@@ -55,6 +58,187 @@ wxCursorRefData::~wxCursorRefData()
 wxCursor::wxCursor()
 {
 }
+
+#if wxUSE_IMAGE
+wxCursor::wxCursor(const wxImage & image)
+{
+    unsigned char * rgbBits = image.GetData();
+    int w = image.GetWidth() ;
+    int h = image.GetHeight();
+    bool bHasMask = image.HasMask();
+    int imagebitcount = (w*h)/8;
+
+    unsigned char * bits = new unsigned char [imagebitcount];
+    unsigned char * maskBits = new unsigned char [imagebitcount];
+
+    int i, j, i8; unsigned char c, cMask;
+    for (i=0; i<imagebitcount; i++)
+    {
+        bits[i] = 0;
+        i8 = i * 8;
+
+        cMask = 1;
+        for (j=0; j<8; j++)
+        {
+            // possible overflow if we do the summation first ?
+            c = rgbBits[(i8+j)*3]/3 + rgbBits[(i8+j)*3+1]/3 + rgbBits[(i8+j)*3+2]/3;
+            //if average value is > mid grey
+            if (c>127)
+                bits[i] = bits[i] | cMask;
+            cMask = cMask * 2;
+        }
+    }
+
+    unsigned long keyMaskColor;
+    if (bHasMask)
+    {
+        unsigned char
+            r = image.GetMaskRed(),
+            g = image.GetMaskGreen(),
+            b = image.GetMaskBlue();
+
+        for (i=0; i<imagebitcount; i++)
+        {
+            maskBits[i] = 0x0;
+            i8 = i * 8;
+
+            cMask = 1;
+            for (j=0; j<8; j++)
+            {
+                if (rgbBits[(i8+j)*3] != r || rgbBits[(i8+j)*3+1] != g || rgbBits[(i8+j)*3+2] != b)
+                    maskBits[i] = maskBits[i] | cMask;
+                cMask = cMask * 2;
+            }
+        }
+
+        keyMaskColor = (r << 16) | (g << 8) | b;
+    }
+    else // no mask
+    {
+        for (i=0; i<imagebitcount; i++)
+            maskBits[i] = 0xFF;
+
+        // init it to avoid compiler warnings
+        keyMaskColor = 0;
+    }
+/*
+    // find the most frequent color(s)
+    wxImageHistogram histogram;
+    image.ComputeHistogram(histogram);
+
+    // colors as rrggbb
+    unsigned long key;
+    unsigned long value;
+
+    long colMostFreq = 0;
+    unsigned long nMost = 0;
+    long colNextMostFreq = 0;
+    unsigned long nNext = 0;
+    for ( wxImageHistogram::iterator entry = histogram.begin();
+          entry != histogram.end();
+          ++entry )
+    {
+        value = entry->second.value;
+        key = entry->first;
+        if ( !bHasMask || (key != keyMaskColor) )
+        {
+            if (value > nMost)
+            {
+                nMost = value;
+                colMostFreq = key;
+            }
+            else if (value > nNext)
+            {
+                nNext = value;
+                colNextMostFreq = key;
+            }
+        }
+    }
+
+    wxColour fg = wxColour ( (unsigned char)(colMostFreq >> 16),
+                             (unsigned char)(colMostFreq >> 8),
+                             (unsigned char)(colMostFreq) );
+
+    wxColour bg = wxColour ( (unsigned char)(colNextMostFreq >> 16),
+                             (unsigned char)(colNextMostFreq >> 8),
+                             (unsigned char)(colNextMostFreq) );
+end of color code
+ */
+    int hotSpotX;
+    int hotSpotY;
+
+    if (image.HasOption(wxCUR_HOTSPOT_X))
+        hotSpotX = image.GetOptionInt(wxCUR_HOTSPOT_X);
+    else
+        hotSpotX = 0;
+
+    if (image.HasOption(wxCUR_HOTSPOT_Y))
+        hotSpotY = image.GetOptionInt(wxCUR_HOTSPOT_Y);
+    else
+        hotSpotY = 0;
+
+    if (hotSpotX < 0 || hotSpotX >= w)
+        hotSpotX = 0;
+    if (hotSpotY < 0 || hotSpotY >= h)
+        hotSpotY = 0;
+   
+    m_refData = new wxCursorRefData;
+
+    Display *dpy = (Display*) wxGetDisplay();
+    int screen_num =  DefaultScreen (dpy);
+
+    Pixmap pixmap = XCreatePixmapFromBitmapData (dpy,
+                                          RootWindow (dpy, DefaultScreen(dpy)),
+                                          (char*) bits, w, h,
+                                          1 , 0 , 1);
+
+    Pixmap mask_pixmap = None;
+    if (maskBits != NULL)
+    {
+        mask_pixmap = XCreatePixmapFromBitmapData (dpy,
+                                          RootWindow (dpy, DefaultScreen(dpy)),
+                                          (char*) maskBits, w, h,
+                                          1 , 0 , 1);
+    }
+
+    XColor foreground_color;
+    XColor background_color;
+    foreground_color.pixel = BlackPixel(dpy, screen_num);
+    background_color.pixel = WhitePixel(dpy, screen_num);
+    Colormap cmap = (Colormap) wxTheApp->GetMainColormap((WXDisplay*) dpy);
+    XQueryColor(dpy, cmap, &foreground_color);
+    XQueryColor(dpy, cmap, &background_color);
+
+    Cursor cursor = XCreatePixmapCursor (dpy,
+                                  pixmap,
+                                  mask_pixmap,
+                                  &foreground_color,
+                                  &background_color,
+                                  hotSpotX , 
+                                  hotSpotY);
+
+    XFreePixmap( dpy, pixmap );
+    if (mask_pixmap != None)
+    {
+        XFreePixmap( dpy, mask_pixmap );
+    }
+
+    if (cursor)
+    {
+        wxXCursor *c = new wxXCursor;
+
+        c->m_cursor = (WXCursor) cursor;
+        c->m_display = (WXDisplay*) dpy;
+        M_CURSORDATA->m_cursors.Append(c);
+        M_CURSORDATA->m_ok = TRUE;
+    }
+    else
+    {
+        M_CURSORDATA->m_ok = TRUE;
+    }
+    
+}
+#endif
 
 wxCursor::wxCursor(const char bits[], int width, int height,
     int hotSpotX, int hotSpotY, const char maskBits[])
