@@ -572,6 +572,8 @@ bool wxAnimationCtrlBase::Create(wxWindow *parent, wxWindowID id,
     m_animationPlayer.SetPosition(wxPoint(0, 0));
     m_animationPlayer.SetDestroyAnimation(FALSE);
 
+    LoadFile(filename);
+    
     return TRUE;
 }
 
