@@ -549,6 +549,8 @@ bool wxApp::Initialize()
     wxClassInfo::InitializeClasses();
 
     wxSystemSettings::Init();
+    
+    wxFont::SetDefaultEncoding(wxLocale::GetSystemEncoding());
 
     // GL: I'm annoyed ... I don't know where to put this and I don't want to
     // create a module for that as it's part of the core.
