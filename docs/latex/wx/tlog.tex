@@ -26,8 +26,9 @@ arguments or a variable argument list pointer. Here are all of them:
 
 \begin{itemize}\itemsep=0pt
 \item{\bf wxLogFatalError} which is like {\it wxLogError}, but also
-terminates the program with the exit code 3 (using {\it abort()} standard
-function also terminates the program with this exit code).
+terminates the program with the exit code $3$ (using {\it abort()} standard
+function). Unlike for all the other logging functions, this function can't be
+overridden by a log target.
 \item{\bf wxLogError} is the function to use for error messages, i.e. the
 messages that must be shown to the user. The default processing is to pop up a
 message box to inform the user about it.

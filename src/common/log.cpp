@@ -36,6 +36,7 @@
 
     #if wxUSE_GUI
         #include "wx/window.h"
+        #include "wx/msgdlg.h"
         #ifdef __WXMSW__
             #include "wx/msw/private.h"
         #endif
@@ -145,16 +146,38 @@ void wxLogGeneric(wxLogLevel level, const wxChar *szFormat, ...)
   {                                                                 \
     va_list argptr;                                                 \
     va_start(argptr, szFormat);                                     \
-    wxVLog##level(szFormat, argptr);                                 \
+    wxVLog##level(szFormat, argptr);                                \
     va_end(argptr);                                                 \
   }
 
-IMPLEMENT_LOG_FUNCTION(FatalError)
 IMPLEMENT_LOG_FUNCTION(Error)
 IMPLEMENT_LOG_FUNCTION(Warning)
 IMPLEMENT_LOG_FUNCTION(Message)
 IMPLEMENT_LOG_FUNCTION(Info)
 IMPLEMENT_LOG_FUNCTION(Status)
+
+// fatal errors can't be suppressed nor handled by the custom log target and
+// always terminate the program
+void wxVLogFatalError(const wxChar *szFormat, va_list argptr)
+{
+    wxVsnprintf(s_szBuf, WXSIZEOF(s_szBuf), szFormat, argptr);
+
+#if wxUSE_GUI
+    wxMessageBox(s_szBuf, _("Fatal Error"), wxID_OK | wxICON_STOP);
+#else
+    fprintf(stderr, _("Fatal error: %s\n"), s_szBuf);
+#endif
+
+    abort();
+}
+
+void wxLogFatalError(const wxChar *szFormat, ...)
+{
+    va_list argptr;
+    va_start(argptr, szFormat);
+    wxVLogFatalError(szFormat, argptr);
+    va_end(argptr);
+}
 
 // same as info, but only if 'verbose' mode is on
 void wxVLogVerbose(const wxChar *szFormat, va_list argptr)
