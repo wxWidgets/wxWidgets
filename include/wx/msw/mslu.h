@@ -25,7 +25,7 @@ WXDLLIMPEXP_BASE bool wxUsingUnicowsDll();
 // Wrongly implemented functions from unicows.dll
 //------------------------------------------------------------------------
 
-#if !wxUSE_UNICODE_MSLU
+#if wxUSE_UNICODE_MSLU
 
 #if wxUSE_GUI
 
