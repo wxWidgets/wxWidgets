@@ -926,6 +926,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/motif/cursor.h
     wx/motif/dataform.h
     wx/motif/dataobj.h
+    wx/motif/dataobj2.h
     wx/motif/dc.h
     wx/motif/dcclient.h
     wx/motif/dcmemory.h
