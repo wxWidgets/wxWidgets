@@ -41,7 +41,7 @@ public:
     void Draw(wxDC& WXUNUSED(dc),
               int WXUNUSED(x), int WXUNUSED(y),
               int WXUNUSED(view_y1), int WXUNUSED(view_y2),
-              wxHtmlRenderingState& WXUNUSED(state)) {}
+              wxHtmlRenderingInfo& WXUNUSED(info)) {}
 
     virtual const wxHtmlCell* Find(int condition, const void* param) const
     {
