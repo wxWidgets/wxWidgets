@@ -20,7 +20,7 @@
 #include "wx/wx.h"
 #endif
 
-#include "wx/msw/taskbar.h"
+#include "wx/taskbar.h"
 #include "tbtest.h"
 
 // Declare two frames

@@ -281,6 +281,8 @@ wxMSW:
 - don't fail to register remaining window classes if one fails to register
 - wxFontDialog effects only turned on if a valid colour was
   provided in wxFontData
+- Added wxTE_LEFT, wxTE_CENTRE and wxTE_RIGHT flags for text
+  control alignment.
 
 wxGTK:
 

@@ -56,6 +56,8 @@ src/common/*.rc
 src/msw/*.cpp
 src/msw/*.h
 src/msw/makefile.*
+src/msw/makebase.b32
+src/msw/makeuniv.b32
 src/msw/*.lst
 src/msw/*.def
 src/msw/*.inc

@@ -41,3 +41,5 @@ src/mac/macsock/*.lib
 include/wx_pb.h
 include/wx/mac/*.h
 
+samples/minimal/minimal.pbproj/project.pbxproj
+

@@ -362,6 +362,10 @@ void wxTextCtrl::AdoptAttributesFromHWND()
         m_windowStyle |= wxTE_READONLY;
     if (style & ES_WANTRETURN)
         m_windowStyle |= wxTE_PROCESS_ENTER;
+    if (style & ES_CENTER)
+        m_windowStyle |= wxTE_CENTRE;
+    if (style & ES_RIGHT)
+        m_windowStyle |= wxTE_RIGHT;
 }
 
 WXDWORD wxTextCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
@@ -409,6 +413,12 @@ WXDWORD wxTextCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 
     if ( style & wxTE_NOHIDESEL )
         msStyle |= ES_NOHIDESEL;
+
+    if ( style & wxTE_CENTRE )
+        msStyle |= ES_CENTER;
+
+    if ( style & wxTE_RIGHT )
+        msStyle |= ES_RIGHT;
 
     return msStyle;
 }

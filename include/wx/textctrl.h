@@ -58,18 +58,27 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 // wxTextCtrl style flags
 // ----------------------------------------------------------------------------
 
-// the flag bits 0x0001, 2, 4 and 8 are free but should be used only for the
+// the flag bits 0x0001, and 0x0004 are free but should be used only for the
 // things which don't make sense for a text control used by wxTextEntryDialog
 // because they would otherwise conflict with wxOK, wxCANCEL, wxCENTRE
+
+#define wxTE_NO_VSCROLL     0x0002
+#define wxTE_AUTO_SCROLL    0x0008
+
 #define wxTE_READONLY       0x0010
 #define wxTE_MULTILINE      0x0020
 #define wxTE_PROCESS_TAB    0x0040
 
+// alignment flags
+#define wxTE_LEFT           0x0000                    // 0x0000
+#define wxTE_CENTER         wxALIGN_CENTER_HORIZONTAL // 0x0100
+#define wxTE_RIGHT          wxALIGN_RIGHT             // 0x0200
+#define wxTE_CENTRE         wxTE_CENTER
+
 // this style means to use RICHEDIT control and does something only under wxMSW
 // and Win32 and is silently ignored under all other platforms
 #define wxTE_RICH           0x0080
-#define wxTE_NO_VSCROLL     0x0100
-#define wxTE_AUTO_SCROLL    0x0200
+
 #define wxTE_PROCESS_ENTER  0x0400
 #define wxTE_PASSWORD       0x0800
 
