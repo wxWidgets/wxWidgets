@@ -67,7 +67,9 @@ PyObject* __wxSetDictionary(PyObject*, PyObject* args);
 
 void wxPyEventThunker(wxObject*, wxEvent& event);
 
-HELPEREXPORT PyObject* wxPyConstructObject(void* ptr, const char* className);
+HELPEREXPORT PyObject* wxPyConstructObject(void* ptr,
+                                           const char* className,
+                                           int setThisOwn=0);
 HELPEREXPORT bool wxPyRestoreThread();
 HELPEREXPORT void wxPySaveThread(bool doSave);
 HELPEREXPORT PyObject* wxPy_ConvertList(wxListBase* list, const char* className);

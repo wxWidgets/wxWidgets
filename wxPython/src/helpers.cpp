@@ -245,7 +245,9 @@ PyObject* __wxSetDictionary(PyObject* /* self */, PyObject* args)
 
 //---------------------------------------------------------------------------
 
-PyObject* wxPyConstructObject(void* ptr, const char* className) {
+PyObject* wxPyConstructObject(void* ptr,
+                              const char* className,
+                              int setThisOwn) {
     char    buff[64];               // should always be big enough...
     char    swigptr[64];
 
@@ -262,6 +264,10 @@ PyObject* wxPyConstructObject(void* ptr, const char* className) {
     PyObject* arg = Py_BuildValue("(s)", swigptr);
     PyObject* obj = PyInstance_New(classobj, arg, NULL);
     Py_DECREF(arg);
+
+    if (setThisOwn) {
+        PyObject_SetAttrString(obj, "thisown", PyInt_FromLong(1));
+    }
 
     return obj;
 }

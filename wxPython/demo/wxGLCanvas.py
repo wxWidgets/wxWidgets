@@ -8,7 +8,7 @@ except ImportError:
 
 try:
     # The Python OpenGL package can be found at
-    # http://starship.python.net:9673/crew/da/Code/PyOpenGL/
+    # http://PyOpenGL.sourceforge.net/
     from OpenGL.GL import *
     from OpenGL.GLUT import *
     haveOpenGL = true
@@ -28,7 +28,7 @@ elif not haveOpenGL:
     def runTest(frame, nb, log):
         dlg = wxMessageDialog(frame,
                               'The OpenGL package was not found.  You can get it at\n'
-                              'http://starship.python.net:9673/crew/da/Code/PyOpenGL/',
+                              'http://PyOpenGL.sourceforge.net/',
                           'Sorry', wxOK | wxICON_INFORMATION)
         dlg.ShowModal()
         dlg.Destroy()
@@ -57,7 +57,8 @@ else:
 
     class CubeCanvas(wxGLCanvas):
         def __init__(self, parent):
-            wxGLCanvas.__init__(self, parent, -1)
+            wxGLCanvas.__init__(self, parent, -1) #,
+                                #attribList=[GL_RED_BITS, 4, GL_DOUBLEBUFFER] )
             EVT_ERASE_BACKGROUND(self, self.OnEraseBackground)
             EVT_SIZE(self, self.OnSize)
             EVT_PAINT(self, self.OnPaint)

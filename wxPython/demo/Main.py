@@ -20,8 +20,8 @@ from   wxPython.html import wxHtmlWindow
 
 
 _treeList = [
-    ('New since last release', ['PyShellWindow',
-                                ]),
+    #('New since last release', ['PyShellWindow',
+    #                            ]),
 
     ('Managed Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame']),
 
@@ -413,7 +413,7 @@ class MyApp(wxApp):
             showTip, index = eval(showTipText)
         except IOError:
             showTip, index = (1, 0)
-        print showTip, index
+        #print showTip, index
         if showTip:
             tp = wxCreateFileTipProvider("data/tips.txt", index)
             showTip = wxShowTip(frame, tp)

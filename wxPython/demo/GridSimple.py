@@ -7,6 +7,9 @@ class SimpleGrid(wxGrid):
     def __init__(self, parent, log):
         wxGrid.__init__(self, parent, -1)
         self.log = log
+        self.moveTo = None
+
+        EVT_IDLE(self, self.OnIdle)
 
         self.CreateGrid(25, 25)
 
@@ -113,15 +116,43 @@ class SimpleGrid(wxGrid):
                            (evt.GetTopLeftCoords(), evt.GetBottomRightCoords()))
         evt.Skip()
 
+
     def OnCellChange(self, evt):
         self.log.write("OnCellChange: (%d,%d) %s\n" %
                        (evt.GetRow(), evt.GetCol(), evt.GetPosition()))
-        evt.Skip()
+
+        # Show how to stay in a cell that has bad data.  We can't just
+        # call SetGridCursor here since we are nested inside one so it
+        # won't have any effect.  Instead, set coordinants to move to in
+        # idle time.
+        value = self.GetCellValue(evt.GetRow(), evt.GetCol())
+        if value == 'no good':
+            self.moveTo = evt.GetRow(), evt.GetCol()
+
+    def OnIdle(self, evt):
+        if self.moveTo != None:
+            self.SetGridCursor(self.moveTo[0], self.moveTo[1])
+            self.moveTo = None
+
+
 
     def OnSelectCell(self, evt):
         self.log.write("OnSelectCell: (%d,%d) %s\n" %
                        (evt.GetRow(), evt.GetCol(), evt.GetPosition()))
-        evt.Skip()
+
+        # Another way to stay in a cell that has a bad value...
+        row = self.GetGridCursorRow()
+        col = self.GetGridCursorCol()
+        if self.IsCellEditControlEnabled():
+            self.HideCellEditControl()
+            self.DisableCellEditControl()
+        value = self.GetCellValue(row, col)
+        if value == 'no good 2':
+            return  # cancels the cell selection
+        else:
+            evt.Skip()
+
+
 
     def OnEditorShown(self, evt):
         self.log.write("OnEditorShown: (%d,%d) %s\n" %
@@ -154,3 +185,5 @@ if __name__ == '__main__':
 
 
 #---------------------------------------------------------------------------
+
+
