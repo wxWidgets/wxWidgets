@@ -256,7 +256,6 @@ void MyFrame::RecreateToolbar()
     style |= m_horzToolbar ? wxTB_HORIZONTAL : wxTB_VERTICAL;
 
     toolBar = CreateToolBar(style, ID_TOOLBAR);
-    //toolBar->SetMargins( 4, 4 );
 
     // Set up toolbar
     wxBitmap toolBarBitmaps[8];
@@ -486,6 +485,8 @@ void MyFrame::OnToggleAnotherToolbar(wxCommandEvent& WXUNUSED(event))
         m_tbar = new wxToolBar(this, -1,
                                wxDefaultPosition, wxDefaultSize,
                                style);
+
+        m_tbar->SetMargins(4, 4);
 
         m_tbar->AddRadioTool(wxID_NEW, _T("First"), wxBITMAP(new));
         m_tbar->AddRadioTool(wxID_OPEN, _T("Second"), wxBITMAP(open));
