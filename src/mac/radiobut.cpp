@@ -2,7 +2,7 @@
 // Name:        radiobut.cpp
 // Purpose:     wxRadioButton
 // Author:      AUTHOR
-// Modified by:
+// Modified by: JS Lair (99/11/15) adding the cyclic groupe notion for radiobox
 // Created:     ??/??/98
 // RCS-ID:      $Id$
 // Copyright:   (c) AUTHOR
@@ -19,6 +19,8 @@
 IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
 #endif
 
+#include <wx/mac/uma.h>
+
 bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
 		   const wxString& label,
            const wxPoint& pos,
@@ -26,43 +28,69 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
-    SetName(name);
-    SetValidator(validator);
+	Rect bounds ;
+	Str255 title ;
+	
+	m_cycle=NULL;
+	
+	MacPreControlCreate( parent , id ,  label , pos , size ,style, validator , name , &bounds , title ) ;
 
-    if (parent) parent->AddChild(this);
+	m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , title , true , 0 , 0 , 1, 
+	  	kControlRadioButtonProc , (long) this ) ;
+	
+	MacPostControlCreate() ;
 
-    if ( id == -1 )
-  	    m_windowId = (int)NewControlId();
-    else
-	    m_windowId = id;
-
-    m_windowStyle = style ;
-
-    // TODO create radiobutton
-    return FALSE;
+  return TRUE;
 }
 
-void wxRadioButton::SetLabel(const wxString& label)
+void wxRadioButton::SetValue(bool val)
 {
-    // TODO
+	int i;
+	wxRadioButton *cycle;
+	
+   ::SetControlValue( m_macControl , val ) ;
+   
+   if (val) {
+   		cycle=this->NextInCycle();
+  		if (cycle!=NULL) {
+   			while (cycle!=this) {
+   				cycle->SetValue(false);
+   				cycle=cycle->NextInCycle();
+   				}
+   			}
+   		}
 }
 
-void wxRadioButton::SetValue(bool value)
-{
-    // TODO
-}
-
-// Get single selection, for single choice list items
 bool wxRadioButton::GetValue() const
 {
-    // TODO
-    return FALSE;
+    return ::GetControlValue( m_macControl ) ;
 }
 
 void wxRadioButton::Command (wxCommandEvent & event)
 {
-  SetValue ( (event.m_commandInt != 0) );
+  SetValue ( (event.GetInt() != 0) );
   ProcessCommand (event);
 }
 
+void wxRadioButton::MacHandleControlClick( ControlHandle control , SInt16 controlpart ) 
+{
+	SetValue(true) ;
+}
+
+wxRadioButton *wxRadioButton::AddInCycle(wxRadioButton *cycle)
+{
+	wxRadioButton *next,*current;
+		
+	if (cycle==NULL) {
+		m_cycle=this;
+		return(this);
+		}
+	else {
+		current=cycle;
+  		while ((next=current->m_cycle)!=cycle) current=current->m_cycle;
+	  	m_cycle=cycle;
+	  	current->m_cycle=this;
+	  	return(cycle);
+  	}
+}  
 

@@ -43,11 +43,17 @@ class WXDLLEXPORT wxRadioButton: public wxControl
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxRadioButtonNameStr);
 
-  virtual void SetLabel(const wxString& label);
   virtual void SetValue(bool val);
   virtual bool GetValue() const ;
 
+  	virtual void MacHandleControlClick( ControlHandle control , SInt16 controlpart ); 
   void Command(wxCommandEvent& event);
+  wxRadioButton *AddInCycle(wxRadioButton *cycle);
+  inline wxRadioButton *NextInCycle() {return m_cycle;}
+
+  protected:
+  
+  wxRadioButton *m_cycle;  
 };
 
 // Not implemented
