@@ -33,11 +33,8 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.5  1999/01/30 08:14:59  RD
- * Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
- *
- * Various cleanup, tweaks, minor additions, etc. to maintain
- * compatibility with the current wxWindows.
+ * Revision 1.6  1999/02/01 00:17:51  RD
+ * Added the missing EVT_LIST_ITEM_SELECTED and friends.
  *
  ************************************************************************/
 
@@ -1677,7 +1674,7 @@ SWIGEXPORT(void,initwxc)() {
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TAB_SEL_CHANGING", PyInt_FromLong((long) wxEVT_COMMAND_TAB_SEL_CHANGING));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED", PyInt_FromLong((long) wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING", PyInt_FromLong((long) wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING));
-	 PyDict_SetItemString(d,"__version__", PyString_FromString("0.5.3"));
+	 PyDict_SetItemString(d,"__version__", PyString_FromString("0.5.4"));
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
 	 SWIG_addvarlink(SWIG_globals,"wxPyDefaultPosition",_wrap_wxPyDefaultPosition_get, _wrap_wxPyDefaultPosition_set);
 	 SWIG_addvarlink(SWIG_globals,"wxPyDefaultSize",_wrap_wxPyDefaultSize_get, _wrap_wxPyDefaultSize_set);
