@@ -41,6 +41,58 @@
 - (void)getRectsBeingDrawn:(const NSRect **)rects count:(int *)count;
 @end
 
+NSPoint CocoaTransformNSViewBoundsToWx(NSView *nsview, NSPoint pointBounds)
+{
+    wxCHECK_MSG(nsview, pointBounds, wxT("Need to have a Cocoa view to do translation"));
+    if([nsview isFlipped])
+        return pointBounds;
+    NSRect ourBounds = [nsview bounds];
+    return NSMakePoint
+    (   pointBounds.x
+    ,   ourBounds.size.height - pointBounds.y
+    );
+}
+
+NSRect CocoaTransformNSViewBoundsToWx(NSView *nsview, NSRect rectBounds)
+{
+    wxCHECK_MSG(nsview, rectBounds, wxT("Need to have a Cocoa view to do translation"));
+    if([nsview isFlipped])
+        return rectBounds;
+    NSRect ourBounds = [nsview bounds];
+    return NSMakeRect
+    (   rectBounds.origin.x
+    ,   ourBounds.size.height - (rectBounds.origin.y + rectBounds.size.height)
+    ,   rectBounds.size.width
+    ,   rectBounds.size.height
+    );
+}
+
+NSPoint CocoaTransformNSViewWxToBounds(NSView *nsview, NSPoint pointWx)
+{
+    wxCHECK_MSG(nsview, pointWx, wxT("Need to have a Cocoa view to do translation"));
+    if([nsview isFlipped])
+        return pointWx;
+    NSRect ourBounds = [nsview bounds];
+    return NSMakePoint
+    (   pointWx.x
+    ,   ourBounds.size.height - pointWx.y
+    );
+}
+
+NSRect CocoaTransformNSViewWxToBounds(NSView *nsview, NSRect rectWx)
+{
+    wxCHECK_MSG(nsview, rectWx, wxT("Need to have a Cocoa view to do translation"));
+    if([nsview isFlipped])
+        return rectWx;
+    NSRect ourBounds = [nsview bounds];
+    return NSMakeRect
+    (   rectWx.origin.x
+    ,   ourBounds.size.height - (rectWx.origin.y + rectWx.size.height)
+    ,   rectWx.size.width
+    ,   rectWx.size.height
+    );
+}
+
 // ========================================================================
 // wxWindowCocoaHider
 // ========================================================================
@@ -348,57 +400,25 @@ WX_NSView wxWindowCocoa::GetNSViewForHiding() const
 NSPoint wxWindowCocoa::CocoaTransformBoundsToWx(NSPoint pointBounds)
 {
     // TODO: Handle scrolling offset
-    wxCHECK_MSG(GetNSView(), pointBounds, wxT("Need to have a Cocoa view to do translation"));
-    if([GetNSView() isFlipped])
-        return pointBounds;
-    NSRect ourBounds = [GetNSView() bounds];
-    return NSMakePoint
-    (   pointBounds.x
-    ,   ourBounds.size.height - pointBounds.y
-    );
+    return CocoaTransformNSViewBoundsToWx(GetNSView(), pointBounds);
 }
 
 NSRect wxWindowCocoa::CocoaTransformBoundsToWx(NSRect rectBounds)
 {
     // TODO: Handle scrolling offset
-    wxCHECK_MSG(GetNSView(), rectBounds, wxT("Need to have a Cocoa view to do translation"));
-    if([GetNSView() isFlipped])
-        return rectBounds;
-    NSRect ourBounds = [GetNSView() bounds];
-    return NSMakeRect
-    (   rectBounds.origin.x
-    ,   ourBounds.size.height - (rectBounds.origin.y + rectBounds.size.height)
-    ,   rectBounds.size.width
-    ,   rectBounds.size.height
-    );
+    return CocoaTransformNSViewBoundsToWx(GetNSView(), rectBounds);
 }
 
 NSPoint wxWindowCocoa::CocoaTransformWxToBounds(NSPoint pointWx)
 {
     // TODO: Handle scrolling offset
-    wxCHECK_MSG(GetNSView(), pointWx, wxT("Need to have a Cocoa view to do translation"));
-    if([GetNSView() isFlipped])
-        return pointWx;
-    NSRect ourBounds = [GetNSView() bounds];
-    return NSMakePoint
-    (   pointWx.x
-    ,   ourBounds.size.height - pointWx.y
-    );
+    return CocoaTransformNSViewWxToBounds(GetNSView(), pointWx);
 }
 
 NSRect wxWindowCocoa::CocoaTransformWxToBounds(NSRect rectWx)
 {
     // TODO: Handle scrolling offset
-    wxCHECK_MSG(GetNSView(), rectWx, wxT("Need to have a Cocoa view to do translation"));
-    if([GetNSView() isFlipped])
-        return rectWx;
-    NSRect ourBounds = [GetNSView() bounds];
-    return NSMakeRect
-    (   rectWx.origin.x
-    ,   ourBounds.size.height - (rectWx.origin.y + rectWx.size.height)
-    ,   rectWx.size.width
-    ,   rectWx.size.height
-    );
+    return CocoaTransformNSViewWxToBounds(GetNSView(), rectWx);
 }
 
 WX_NSAffineTransform wxWindowCocoa::CocoaGetWxToBoundsTransform()
