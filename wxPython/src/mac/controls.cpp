@@ -2644,22 +2644,6 @@ static PyObject *_wrap_wxChoice_SetString(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
-static void *SwigwxComboBoxTowxChoice(void *ptr) {
-    wxComboBox *src;
-    wxChoice *dest;
-    src = (wxComboBox *) ptr;
-    dest = (wxChoice *) src;
-    return (void *) dest;
-}
-
-static void *SwigwxComboBoxTowxControlWithItems(void *ptr) {
-    wxComboBox *src;
-    wxControlWithItems *dest;
-    src = (wxComboBox *) ptr;
-    dest = (wxControlWithItems *) src;
-    return (void *) dest;
-}
-
 static void *SwigwxComboBoxTowxControl(void *ptr) {
     wxComboBox *src;
     wxControl *dest;
@@ -3362,6 +3346,361 @@ static PyObject *_wrap_wxComboBox_SetEditable(PyObject *self, PyObject *args, Py
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     wxComboBox_SetEditable(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxComboBox_Clear(_swigobj)  (_swigobj->Clear())
+static PyObject *_wrap_wxComboBox_Clear(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxComboBox * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxComboBox_Clear",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxComboBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxComboBox_Clear. Expected _wxComboBox_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxComboBox_Clear(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxComboBox_Delete(_swigobj,_swigarg0)  (_swigobj->Delete(_swigarg0))
+static PyObject *_wrap_wxComboBox_Delete(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxComboBox * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","n", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxComboBox_Delete",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxComboBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxComboBox_Delete. Expected _wxComboBox_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxComboBox_Delete(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxComboBox_GetCount(_swigobj)  (_swigobj->GetCount())
+static PyObject *_wrap_wxComboBox_GetCount(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxComboBox * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxComboBox_GetCount",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxComboBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxComboBox_GetCount. Expected _wxComboBox_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (int )wxComboBox_GetCount(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxComboBox_GetString(_swigobj,_swigarg0)  (_swigobj->GetString(_swigarg0))
+static PyObject *_wrap_wxComboBox_GetString(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxComboBox * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","n", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxComboBox_GetString",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxComboBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxComboBox_GetString. Expected _wxComboBox_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxString (wxComboBox_GetString(_arg0,_arg1));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
+#else
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxComboBox_FindString(_swigobj,_swigarg0)  (_swigobj->FindString(_swigarg0))
+static PyObject *_wrap_wxComboBox_FindString(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxComboBox * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","s", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxComboBox_FindString",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxComboBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxComboBox_FindString. Expected _wxComboBox_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (int )wxComboBox_FindString(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxComboBox_GetSelection(_swigobj)  (_swigobj->GetSelection())
+static PyObject *_wrap_wxComboBox_GetSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxComboBox * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxComboBox_GetSelection",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxComboBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxComboBox_GetSelection. Expected _wxComboBox_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (int )wxComboBox_GetSelection(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxComboBox_GetStringSelection(_swigobj)  (_swigobj->GetStringSelection())
+static PyObject *_wrap_wxComboBox_GetStringSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxComboBox * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxComboBox_GetStringSelection",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxComboBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxComboBox_GetStringSelection. Expected _wxComboBox_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxString (wxComboBox_GetStringSelection(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
+#else
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+static void  wxComboBox_Append(wxComboBox *self,const wxString & item,PyObject * clientData) {
+            if (clientData) {
+                wxPyClientData* data = new wxPyClientData(clientData);
+                self->Append(item, data);
+            } else
+                self->Append(item);
+        }
+static PyObject *_wrap_wxComboBox_Append(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxComboBox * _arg0;
+    wxString * _arg1;
+    PyObject * _arg2 = (PyObject *) NULL;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","item","clientData", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|O:wxComboBox_Append",_kwnames,&_argo0,&_obj1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxComboBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxComboBox_Append. Expected _wxComboBox_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+    if (_obj2)
+{
+  _arg2 = _obj2;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxComboBox_Append(_arg0,*_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+static PyObject * wxComboBox_GetClientData(wxComboBox *self,int  n) {
+            wxPyClientData* data = (wxPyClientData*)self->GetClientObject(n);
+            if (data) {
+                Py_INCREF(data->m_obj);
+                return data->m_obj;
+            } else {
+                Py_INCREF(Py_None);
+                return Py_None;
+            }
+        }
+static PyObject *_wrap_wxComboBox_GetClientData(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxComboBox * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","n", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxComboBox_GetClientData",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxComboBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxComboBox_GetClientData. Expected _wxComboBox_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (PyObject *)wxComboBox_GetClientData(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
+static void  wxComboBox_SetClientData(wxComboBox *self,int  n,PyObject * clientData) {
+            wxPyClientData* data = new wxPyClientData(clientData);
+            self->SetClientObject(n, data);
+        }
+static PyObject *_wrap_wxComboBox_SetClientData(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxComboBox * _arg0;
+    int  _arg1;
+    PyObject * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","n","clientData", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxComboBox_SetClientData",_kwnames,&_argo0,&_arg1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxComboBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxComboBox_SetClientData. Expected _wxComboBox_p.");
+        return NULL;
+        }
+    }
+{
+  _arg2 = _obj2;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxComboBox_SetClientData(_arg0,_arg1,_arg2);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -11295,6 +11634,16 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxGauge_Create", (PyCFunction) _wrap_wxGauge_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPreGauge", (PyCFunction) _wrap_new_wxPreGauge, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxGauge", (PyCFunction) _wrap_new_wxGauge, METH_VARARGS | METH_KEYWORDS },
+	 { "wxComboBox_SetClientData", (PyCFunction) _wrap_wxComboBox_SetClientData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxComboBox_GetClientData", (PyCFunction) _wrap_wxComboBox_GetClientData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxComboBox_Append", (PyCFunction) _wrap_wxComboBox_Append, METH_VARARGS | METH_KEYWORDS },
+	 { "wxComboBox_GetStringSelection", (PyCFunction) _wrap_wxComboBox_GetStringSelection, METH_VARARGS | METH_KEYWORDS },
+	 { "wxComboBox_GetSelection", (PyCFunction) _wrap_wxComboBox_GetSelection, METH_VARARGS | METH_KEYWORDS },
+	 { "wxComboBox_FindString", (PyCFunction) _wrap_wxComboBox_FindString, METH_VARARGS | METH_KEYWORDS },
+	 { "wxComboBox_GetString", (PyCFunction) _wrap_wxComboBox_GetString, METH_VARARGS | METH_KEYWORDS },
+	 { "wxComboBox_GetCount", (PyCFunction) _wrap_wxComboBox_GetCount, METH_VARARGS | METH_KEYWORDS },
+	 { "wxComboBox_Delete", (PyCFunction) _wrap_wxComboBox_Delete, METH_VARARGS | METH_KEYWORDS },
+	 { "wxComboBox_Clear", (PyCFunction) _wrap_wxComboBox_Clear, METH_VARARGS | METH_KEYWORDS },
 	 { "wxComboBox_SetEditable", (PyCFunction) _wrap_wxComboBox_SetEditable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxComboBox_SetValue", (PyCFunction) _wrap_wxComboBox_SetValue, METH_VARARGS | METH_KEYWORDS },
 	 { "wxComboBox_SetMark", (PyCFunction) _wrap_wxComboBox_SetMark, METH_VARARGS | METH_KEYWORDS },
@@ -11386,7 +11735,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_size_t",0},
     { "_wxPrintQuality","_time_t",0},
     { "_byte","_unsigned_char",0},
-    { "_wxChoice","_wxComboBox",SwigwxComboBoxTowxChoice},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
     { "_size_t","_wxCoord",0},
@@ -11481,7 +11829,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_short","_signed_short",0},
     { "_wxControlWithItems","_wxCheckListBox",SwigwxCheckListBoxTowxControlWithItems},
     { "_wxControlWithItems","_wxListBox",SwigwxListBoxTowxControlWithItems},
-    { "_wxControlWithItems","_wxComboBox",SwigwxComboBoxTowxControlWithItems},
     { "_wxControlWithItems","_wxChoice",SwigwxChoiceTowxControlWithItems},
     { "_wxWindowID","_wxCoord",0},
     { "_wxWindowID","_wxPrintQuality",0},

@@ -1314,7 +1314,7 @@ static void *SwigwxHtmlWinParserTowxObject(void *ptr) {
 static PyObject *_wrap_new_wxHtmlWinParser(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxHtmlWinParser * _result;
-    wxHtmlWindow * _arg0 = (wxHtmlWindow *) NULL;
+    wxPyHtmlWindow * _arg0 = (wxPyHtmlWindow *) NULL;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "wnd", NULL };
     char _ptemp[128];
@@ -1324,8 +1324,8 @@ static PyObject *_wrap_new_wxHtmlWinParser(PyObject *self, PyObject *args, PyObj
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlWindow_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxHtmlWinParser. Expected _wxHtmlWindow_p.");
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyHtmlWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxHtmlWinParser. Expected _wxPyHtmlWindow_p.");
         return NULL;
         }
     }
@@ -1469,10 +1469,11 @@ static PyObject *_wrap_wxHtmlWinParser_GetCharWidth(PyObject *self, PyObject *ar
 #define wxHtmlWinParser_GetWindow(_swigobj)  (_swigobj->GetWindow())
 static PyObject *_wrap_wxHtmlWinParser_GetWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxHtmlWindow * _result;
+    wxPyHtmlWindow * _result;
     wxHtmlWinParser * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlWinParser_GetWindow",_kwnames,&_argo0)) 
@@ -1486,11 +1487,17 @@ static PyObject *_wrap_wxHtmlWinParser_GetWindow(PyObject *self, PyObject *args,
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxHtmlWindow *)wxHtmlWinParser_GetWindow(_arg0);
+    _result = (wxPyHtmlWindow *)wxHtmlWinParser_GetWindow(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}{ _resultobj = wxPyMake_wxObject(_result); }
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyHtmlWindow_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
     return _resultobj;
 }
 
