@@ -1180,7 +1180,7 @@ void wxWindowMSW::OnIdle(wxIdleEvent& WXUNUSED(event))
     // Check if we need to send a LEAVE event
     if ( m_mouseInWindow )
     {
-        if ( !IsMouseInWindow() && HasCapture())
+        if ( !IsMouseInWindow() && !HasCapture())
         {
             // Generate a LEAVE event
             m_mouseInWindow = FALSE;
