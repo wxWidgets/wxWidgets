@@ -99,7 +99,7 @@ public:
 // wxJPEGHandler
 //-----------------------------------------------------------------------------
 
-#ifdef wxUSE_LIBJPEG
+#if wxUSE_LIBJPEG
 class WXDLLEXPORT wxJPEGHandler: public wxImageHandler
 {
   DECLARE_DYNAMIC_CLASS(wxJPEGHandler)
