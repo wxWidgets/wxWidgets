@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_NET_H
-#define _WX_NET_H
+#ifndef _WX_DIALUP_H
+#define _WX_DIALUP_H
 
 #ifdef __GNUG__
     #pragma interface "dialup.h"
@@ -198,4 +198,4 @@ typedef void (wxEvtHandler::*wxDialUpEventFunction)(wxDialUpEvent&);
 
 #endif // wxUSE_DIALUP_MANAGER
 
-#endif // _WX_NET_H
+#endif // _WX_DIALUP_H
