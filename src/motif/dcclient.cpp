@@ -1180,8 +1180,8 @@ void wxWindowDC::GetTextExtent( const wxString &string, long *width, long *heigh
         // TODO: this should be an error log function
         wxFAIL_MSG("set a valid font before calling GetTextExtent!");
 
-        *width = -1;
-        *height = -1;
+        if (width) *width = -1;
+        if (height) *height = -1;
         return;
     }
 
@@ -1207,8 +1207,8 @@ void wxWindowDC::GetTextExtent( const wxString &string, long *width, long *heigh
         XTextExtents((XFontStruct*) pFontStruct, (char*) (const char*) string, slen, &direction,
         &ascent, &descent2, &overall);
 
-    *width = XDEV2LOGREL (overall.width);
-    *height = YDEV2LOGREL (ascent + descent2);
+    if (width) *width = XDEV2LOGREL (overall.width);
+    if (height) *height = YDEV2LOGREL (ascent + descent2);
     if (descent)
         *descent = descent2;
     if (externalLeading)
@@ -1992,7 +1992,7 @@ void wxWindowDC::SetDCClipping()
 
 void wxWindowDC::DoSetClippingRegion( long x, long y, long width, long height )
 {
-    wxDC::SetClippingRegion( x, y, width, height );
+    wxDC::DoSetClippingRegion( x, y, width, height );
 
     if (m_userRegion)
         XDestroyRegion ((Region) m_userRegion);
@@ -2023,7 +2023,7 @@ void wxWindowDC::DoSetClippingRegionAsRegion( const wxRegion& region )
 {
     wxRect box = region.GetBox();
 
-    wxDC::SetClippingRegion( box.x, box.y, box.width, box.height );
+    wxDC::DoSetClippingRegion( box.x, box.y, box.width, box.height );
 
     if (m_userRegion)
         XDestroyRegion ((Region) m_userRegion);

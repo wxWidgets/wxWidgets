@@ -164,18 +164,11 @@ bool MyApp::OnInit()
 
     frame->SetIcon( wxICON(mondrian) );
 
-    // submenu
-    wxMenu *sub_menu = new wxMenu( wxMENU_TEAROFF );
-    sub_menu->Append(MINIMAL_ABOUT, "&About", "About this sample");
-    sub_menu->Append(MINIMAL_ABOUT, "&About", "About this sample");
-    sub_menu->Append(MINIMAL_ABOUT, "&About", "About this sample");
-
     wxMenu *file_menu = new wxMenu;
     file_menu->Append(MINIMAL_ABOUT, "&About\tF1");
     file_menu->Append(MINIMAL_QUIT, "E&xit\tAlt-X", "Quit controls sample");
-    file_menu->Append( 0, "&Submenu", sub_menu );
 
-    wxMenuBar *menu_bar = new wxMenuBar( wxMB_DOCKABLE );
+    wxMenuBar *menu_bar = new wxMenuBar;
     menu_bar->Append(file_menu, "&File");
 
 #if wxUSE_TOOLTIPS

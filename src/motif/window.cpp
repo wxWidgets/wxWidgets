@@ -36,7 +36,7 @@
 #include "wx/msgdlg.h"
 #include "wx/frame.h"
 #include "wx/scrolwin.h"
-
+#include "wx/module.h"
 #include "wx/menuitem.h"
 #include "wx/log.h"
 
@@ -68,7 +68,7 @@ static const int SCROLL_MARGIN = 4;
 // global variables for this module
 // ----------------------------------------------------------------------------
 
-static wxHashTable *gs_wxWidgetHashTable;
+extern wxHashTable *wxWidgetHashTable;
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -1588,26 +1588,26 @@ bool wxWindow::ProcessAccelerator(wxKeyEvent& event)
 bool wxAddWindowToTable(Widget w, wxWindow *win)
 {
     wxWindow *oldItem = NULL;
-    if ((oldItem = (wxWindow *)gs_wxWidgetHashTable->Get ((long) w)))
+    if ((oldItem = (wxWindow *)wxWidgetHashTable->Get ((long) w)))
     {
         wxLogDebug("Widget table clash: new widget is %ld, %s",
                    (long)w, win->GetClassInfo()->GetClassName());
         return FALSE;
     }
 
-    gs_wxWidgetHashTable->Put((long) w, win);
+    wxWidgetHashTable->Put((long) w, win);
 
     return TRUE;
 }
 
 wxWindow *wxGetWindowFromTable(Widget w)
 {
-    return (wxWindow *)gs_wxWidgetHashTable->Get((long) w);
+    return (wxWindow *)wxWidgetHashTable->Get((long) w);
 }
 
 void wxDeleteWindowFromTable(Widget w)
 {
-    gs_wxWidgetHashTable->Delete((long)w);
+    wxWidgetHashTable->Delete((long)w);
 }
 
 // ----------------------------------------------------------------------------
