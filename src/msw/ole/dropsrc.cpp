@@ -36,17 +36,17 @@
 #if wxUSE_DRAG_AND_DROP
 
 #include "wx/log.h"
-#include "wx/dataobj.h"
-#include "wx/msw/ole/dropsrc.h"
+#include "wx/dnd.h"
 
 #include <windows.h>
+
 #ifdef wxUSE_NORLANDER_HEADERS
-#include <ole2.h>
+    #include <ole2.h>
 #endif
 
 #ifndef __WIN32__
-  #include <ole2.h>
-  #include <olestd.h>
+    #include <ole2.h>
+    #include <olestd.h>
 #endif
 
 #include <oleauto.h>
@@ -165,7 +165,6 @@ wxDropSource::wxDropSource(wxWindow* WXUNUSED(win),
                            const wxIcon & WXUNUSED(stop))
 {
   Init();
-  m_pData = NULL;
 }
 
 wxDropSource::wxDropSource(wxDataObject& data,
@@ -189,10 +188,10 @@ wxDropSource::~wxDropSource()
 // Notes   : you must call SetData() before if you had used def ctor
 wxDragResult wxDropSource::DoDragDrop(bool bAllowMove)
 {
-  wxCHECK_MSG( m_pData != NULL, wxDragNone, wxT("No data in wxDropSource!") );
+  wxCHECK_MSG( m_data != NULL, wxDragNone, wxT("No data in wxDropSource!") );
 
   DWORD dwEffect;
-  HRESULT hr = ::DoDragDrop(m_pData->GetInterface(),
+  HRESULT hr = ::DoDragDrop(m_data->GetInterface(),
                             m_pIDropSource,
                             bAllowMove ? DROPEFFECT_COPY | DROPEFFECT_MOVE
                                        : DROPEFFECT_COPY,

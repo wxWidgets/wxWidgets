@@ -58,6 +58,10 @@
     static const wxChar *GetTymedName(DWORD tymed);
 #endif // Debug
 
+// to be moved into wx/msw/bitmap.h
+extern size_t wxConvertBitmapToDIB(BITMAPINFO *pbi, const wxBitmap& bitmap);
+extern wxBitmap wxConvertDIBToBitmap(const BITMAPINFO *bmi);
+
 // ----------------------------------------------------------------------------
 // wxIEnumFORMATETC interface implementation
 // ----------------------------------------------------------------------------
@@ -320,6 +324,12 @@ STDMETHODIMP wxIDataObject::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
                 return DV_E_FORMATETC;
             }
 
+            if ( !format.IsStandard() ) {
+                // for custom formats, put the size with the data - alloc the
+                // space for it
+                size += sizeof(size_t);
+            }
+
             HGLOBAL hGlobal = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, size);
             if ( hGlobal == NULL ) {
                 wxLogLastError("GlobalAlloc");
@@ -369,17 +379,25 @@ STDMETHODIMP wxIDataObject::GetDataHere(FORMATETC *pformatetc,
         case TYMED_HGLOBAL:
             {
                 // copy data
-                void *pBuf = GlobalLock(pmedium->hGlobal);
+                HGLOBAL hGlobal = pmedium->hGlobal;
+                void *pBuf = GlobalLock(hGlobal);
                 if ( pBuf == NULL ) {
                     wxLogLastError(wxT("GlobalLock"));
                     return E_OUTOFMEMORY;
                 }
 
-                wxDataFormat format = (wxDataFormatId)pformatetc->cfFormat;
+                if ( !wxDataFormat(pformatetc->cfFormat).IsStandard() ) {
+                    // for custom formats, put the size with the data
+                    size_t *p = (size_t *)pBuf;
+                    *p++ = GlobalSize(hGlobal);
+                    pBuf = p;
+                }
+
+                wxDataFormat format = pformatetc->cfFormat;
                 if ( !m_pDataObject->GetDataHere(format, pBuf) )
                     return E_UNEXPECTED;
 
-                GlobalUnlock(pmedium->hGlobal);
+                GlobalUnlock(hGlobal);
             }
             break;
 
@@ -390,7 +408,7 @@ STDMETHODIMP wxIDataObject::GetDataHere(FORMATETC *pformatetc,
     return S_OK;
 }
 
-// set data functions (not implemented)
+// set data functions
 STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                                     STGMEDIUM *pmedium,
                                     BOOL       fRelease)
@@ -400,7 +418,7 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
     switch ( pmedium->tymed )
     {
         case TYMED_GDI:
-            m_pDataObject->SetData(wxDF_BITMAP, &pmedium->hBitmap);
+            m_pDataObject->SetData(wxDF_BITMAP, 0, &pmedium->hBitmap);
             break;
 
         case TYMED_MFPICT:
@@ -419,10 +437,47 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                     return E_OUTOFMEMORY;
                 }
 
-                wxDataFormat format = (wxDataFormatId)pformatetc->cfFormat;
-                m_pDataObject->SetData(format, pBuf);
+                // we've got a problem with SetData() here because the base
+                // class version requires the size parameter which we don't
+                // have anywhere in OLE data transfer - so we need to
+                // synthetise it for known formats and we suppose that all data
+                // in custom formats starts with a DWORD containing the size
+                size_t size;
+                switch ( pformatetc->cfFormat )
+                {
+                    case CF_TEXT:
+                    case CF_OEMTEXT:
+                        size = strlen((const char *)pBuf);
+                        break;
+
+                    case CF_UNICODETEXT:
+                        size = wcslen((const wchar_t *)pBuf);
+                        break;
+
+                    case CF_BITMAP:
+                    case CF_HDROP:
+                        // these formats don't use size at all, anyhow (but
+                        // pass data by handle, which is always a single DWORD)
+                        size = 0;
+                        break;
+
+                    default:
+                        {
+                            // we suppose that the size precedes the data
+                            size_t *p = (size_t *)pBuf;
+                            size = *p++;
+                            pBuf = p;
+                        }
+                }
+
+                wxDataFormat format = pformatetc->cfFormat;
+                bool ok = m_pDataObject->SetData(format, size, pBuf);
 
                 GlobalUnlock(pmedium->hGlobal);
+
+                if ( !ok ) {
+                    return E_UNEXPECTED;
+                }
             }
             break;
 
@@ -474,7 +529,7 @@ STDMETHODIMP wxIDataObject::QueryGetData(FORMATETC *pformatetc)
     }
 
     // and now check the type of data requested
-    wxDataFormat format = (wxDataFormatId)pformatetc->cfFormat;
+    wxDataFormat format = pformatetc->cfFormat;
     if ( m_pDataObject->IsSupportedFormat(format) ) {
 #ifdef __WXDEBUG__
         wxLogTrace(wxTRACE_OleCalls, wxT("wxIDataObject::QueryGetData: %s ok"),
@@ -482,11 +537,10 @@ STDMETHODIMP wxIDataObject::QueryGetData(FORMATETC *pformatetc)
 #endif // Debug
     }
     else {
-#ifdef __WXDEBUG__
         wxLogTrace(wxTRACE_OleCalls,
                    wxT("wxIDataObject::QueryGetData: %s unsupported"),
                    wxDataObject::GetFormatName(format));
-#endif
+
         return DV_E_FORMATETC;
     }
 
@@ -521,25 +575,18 @@ STDMETHODIMP wxIDataObject::GetCanonicalFormatEtc(FORMATETC *pFormatetcIn,
     return DATA_S_SAMEFORMATETC;
 }
 
-STDMETHODIMP wxIDataObject::EnumFormatEtc(DWORD dwDirection,
+STDMETHODIMP wxIDataObject::EnumFormatEtc(DWORD dwDir,
                                           IEnumFORMATETC **ppenumFormatEtc)
 {
     wxLogTrace(wxTRACE_OleCalls, wxT("wxIDataObject::EnumFormatEtc"));
 
-    bool allowOutputOnly = dwDirection == DATADIR_GET;
+    wxDataObject::Direction dir = dwDir == DATADIR_GET ? wxDataObject::Get
+                                                       : wxDataObject::Set;
 
-    size_t nFormatCount = m_pDataObject->GetFormatCount(allowOutputOnly);
+    size_t nFormatCount = m_pDataObject->GetFormatCount(dir);
     wxDataFormat format, *formats;
-    if ( nFormatCount == 1 ) {
-        // this is the most common case, this is why we consider it separately
-        formats = &format;
-        format = m_pDataObject->GetPreferredFormat();
-    }
-    else {
-        // bad luck, build the array with all formats
-        formats = new wxDataFormat[nFormatCount];
-        m_pDataObject->GetAllFormats(formats, allowOutputOnly);
-    }
+    formats = nFormatCount == 1 ? &format : new wxDataFormat[nFormatCount];
+    m_pDataObject->GetAllFormats(formats, dir);
 
     wxIEnumFORMATETC *pEnum = new wxIEnumFORMATETC(formats, nFormatCount);
     pEnum->AddRef();
@@ -552,7 +599,10 @@ STDMETHODIMP wxIDataObject::EnumFormatEtc(DWORD dwDirection,
     return S_OK;
 }
 
+// ----------------------------------------------------------------------------
 // advise sink functions (not implemented)
+// ----------------------------------------------------------------------------
+
 STDMETHODIMP wxIDataObject::DAdvise(FORMATETC   *pformatetc,
                                     DWORD        advf,
                                     IAdviseSink *pAdvSink,
@@ -656,66 +706,81 @@ const char *wxDataObject::GetFormatName(wxDataFormat format)
 #endif // Debug
 
 // ----------------------------------------------------------------------------
-// wxPrivateDataObject
+// wxBitmapDataObject supports CF_DIB format
 // ----------------------------------------------------------------------------
 
-wxPrivateDataObject::wxPrivateDataObject()
+size_t wxBitmapDataObject::GetDataSize() const
 {
-    m_size = 0;
-    m_data = NULL;
+    return wxConvertBitmapToDIB(NULL, GetBitmap());
 }
 
-void wxPrivateDataObject::Free()
+bool wxBitmapDataObject::GetDataHere(void *buf) const
 {
-    if ( m_data )
-        free(m_data);
+    return wxConvertBitmapToDIB((BITMAPINFO *)buf, GetBitmap()) != 0;
 }
 
-void wxPrivateDataObject::SetData( const void *data, size_t size )
+bool wxBitmapDataObject::SetData(size_t len, const void *buf)
 {
-    Free();
+    wxBitmap bitmap(wxConvertDIBToBitmap((const BITMAPINFO *)buf));
 
-    m_size = size;
-    m_data = malloc(size);
+    if ( !bitmap.Ok() ) {
+        wxFAIL_MSG(wxT("pasting/dropping invalid bitmap"));
 
-    memcpy( m_data, data, size );
-}
+        return FALSE;
+    }
 
-void wxPrivateDataObject::WriteData( void *dest ) const
-{
-    WriteData( m_data, dest );
-}
+    SetBitmap(bitmap);
 
-size_t wxPrivateDataObject::GetSize() const
-{
-    return m_size;
-}
-
-void wxPrivateDataObject::WriteData( const void *data, void *dest ) const
-{
-    memcpy( dest, data, GetSize() );
+    return TRUE;
 }
 
 // ----------------------------------------------------------------------------
-// wxBitmapDataObject: it supports standard CF_BITMAP and CF_DIB formats
+// wxBitmapDataObject2 supports CF_BITMAP format
 // ----------------------------------------------------------------------------
 
-size_t wxBitmapDataObject::GetFormatCount(bool outputOnlyToo) const
-{
-    return 2;
-}
-
-void wxBitmapDataObject::GetAllFormats(wxDataFormat *formats,
-                                       bool outputOnlyToo) const
-{
-    formats[0] = CF_BITMAP;
-    formats[1] = CF_DIB;
-}
-
-// the bitmaps aren't passed by value as other types of data (i.e. by copyign
+// the bitmaps aren't passed by value as other types of data (i.e. by copying
 // the data into a global memory chunk and passing it to the clipboard or
 // another application or whatever), but by handle, so these generic functions
 // don't make much sense to them.
+
+size_t wxBitmapDataObject2::GetDataSize() const
+{
+    return 0;
+}
+
+bool wxBitmapDataObject2::GetDataHere(void *pBuf) const
+{
+    // we put a bitmap handle into pBuf
+    *(WXHBITMAP *)pBuf = GetBitmap().GetHBITMAP();
+
+    return TRUE;
+}
+
+bool wxBitmapDataObject2::SetData(size_t len, const void *pBuf)
+{
+    HBITMAP hbmp = *(HBITMAP *)pBuf;
+
+    BITMAP bmp;
+    if ( !GetObject(hbmp, sizeof(BITMAP), &bmp) )
+    {
+        wxLogLastError("GetObject(HBITMAP)");
+    }
+
+    wxBitmap bitmap(bmp.bmWidth, bmp.bmHeight, bmp.bmPlanes);
+    bitmap.SetHBITMAP((WXHBITMAP)hbmp);
+
+    if ( !bitmap.Ok() ) {
+        wxFAIL_MSG(wxT("pasting/dropping invalid bitmap"));
+
+        return FALSE;
+    }
+
+    SetBitmap(bitmap);
+
+    return TRUE;
+}
+
+#if 0
 
 size_t wxBitmapDataObject::GetDataSize(const wxDataFormat& format) const
 {
@@ -789,7 +854,8 @@ bool wxBitmapDataObject::GetDataHere(const wxDataFormat& format,
     return TRUE;
 }
 
-bool wxBitmapDataObject::SetData(const wxDataFormat& format, const void *pBuf)
+bool wxBitmapDataObject::SetData(const wxDataFormat& format,
+                                 size_t size, const void *pBuf)
 {
     HBITMAP hbmp;
     if ( format.GetFormatId() == CF_DIB )
@@ -833,9 +899,119 @@ bool wxBitmapDataObject::SetData(const wxDataFormat& format, const void *pBuf)
     return TRUE;
 }
 
+#endif // 0
+
+// ----------------------------------------------------------------------------
+// wxFileDataObject
+// ----------------------------------------------------------------------------
+
+bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *pData)
+{
+    m_filenames.Empty();
+
+    // the documentation states that the first member of DROPFILES structure is
+    // a "DWORD offset of double NUL terminated file list". What they mean by
+    // this (I wonder if you see it immediately) is that the list starts at
+    // ((char *)&(pDropFiles.pFiles)) + pDropFiles.pFiles. We're also advised
+    // to use DragQueryFile to work with this structure, but not told where and
+    // how to get HDROP.
+    HDROP hdrop = (HDROP)pData;   // NB: it works, but I'm not sure about it
+
+    // get number of files (magic value -1)
+    UINT nFiles = ::DragQueryFile(hdrop, (unsigned)-1, NULL, 0u);
+
+    // for each file get the length, allocate memory and then get the name
+    wxString str;
+    UINT len, n;
+    for ( n = 0; n < nFiles; n++ ) {
+        // +1 for terminating NUL
+        len = ::DragQueryFile(hdrop, n, NULL, 0) + 1;
+
+        UINT len2 = ::DragQueryFile(hdrop, n, str.GetWriteBuf(len), len);
+        str.UngetWriteBuf();
+        m_filenames.Add(str);
+
+        if ( len2 != len - 1 ) {
+            wxLogDebug(wxT("In wxFileDropTarget::OnDrop DragQueryFile returned"
+                           " %d characters, %d expected."), len2, len - 1);
+        }
+    }
+
+    return TRUE;
+}
+
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
+
+// otherwise VC++ would give here:
+//  "local variable 'bi' may be used without having been initialized"
+// even though in fact it may not
+#ifdef __VISUALC__
+    #pragma warning(disable:4701)
+#endif // __VISUALC__
+
+size_t wxConvertBitmapToDIB(BITMAPINFO *pbi, const wxBitmap& bitmap)
+{
+    // shouldn't be selected into a DC or GetDIBits() would fail
+    wxASSERT_MSG( !bitmap.GetSelectedInto(),
+                  wxT("can't copy bitmap selected into wxMemoryDC") );
+
+    HBITMAP hbmp = (HBITMAP)bitmap.GetHBITMAP();
+
+    BITMAPINFO bi;
+
+    // first get the info
+    ScreenHDC hdc;
+    if ( !GetDIBits(hdc, hbmp, 0, 0, NULL, pbi ? pbi : &bi, DIB_RGB_COLORS) )
+    {
+        wxLogLastError("GetDIBits(NULL)");
+
+        return 0;
+    }
+
+    if ( !pbi )
+    {
+        // we were only asked for size needed for the buffer, not to actually
+        // copy the data
+        return sizeof(BITMAPINFO) + bi.bmiHeader.biSizeImage;
+    }
+
+    // and now copy the bits
+    if ( !GetDIBits(hdc, hbmp, 0, pbi->bmiHeader.biHeight, pbi + 1,
+                    pbi, DIB_RGB_COLORS) )
+    {
+        wxLogLastError("GetDIBits");
+
+        return 0;
+    }
+
+    return sizeof(BITMAPINFO) + pbi->bmiHeader.biSizeImage;
+}
+
+#ifdef __VISUALC__
+    #pragma warning(default:4701)
+#endif // __VISUALC__
+
+wxBitmap wxConvertDIBToBitmap(const BITMAPINFO *pbmi)
+{
+    // here we get BITMAPINFO struct followed by the actual bitmap bits and
+    // BITMAPINFO starts with BITMAPINFOHEADER followed by colour info
+    const BITMAPINFOHEADER *pbmih = &pbmi->bmiHeader;
+
+    ScreenHDC hdc;
+    HBITMAP hbmp = CreateDIBitmap(hdc, pbmih, CBM_INIT,
+                                  pbmi + 1, pbmi, DIB_RGB_COLORS);
+    if ( !hbmp )
+    {
+        wxLogLastError("CreateDIBitmap");
+    }
+
+    wxBitmap bitmap(pbmih->biWidth, pbmih->biHeight, pbmih->biBitCount);
+    bitmap.SetHBITMAP((WXHBITMAP)hbmp);
+
+    return bitmap;
+}
 
 #ifdef __WXDEBUG__
 

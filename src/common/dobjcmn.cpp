@@ -175,6 +175,10 @@ bool wxTextDataObject::SetData(size_t WXUNUSED(len), const void *buf)
 // wxFileDataObjectBase
 // ----------------------------------------------------------------------------
 
+// VZ: I don't need this in MSW finally, so if it is needed in wxGTK, it should
+//     be moved to gtk/dataobj.cpp
+#if 0
+
 wxString wxFileDataObjectBase::GetFilenames() const
 {
     wxString str;
@@ -211,6 +215,8 @@ void wxFileDataObjectBase::SetFilenames(const wxChar* filenames)
         }
     }
 }
+
+#endif // 0
 
 // ----------------------------------------------------------------------------
 // wxCustomDataObject
@@ -257,7 +263,7 @@ bool wxCustomDataObject::GetDataHere(void *buf) const
     return TRUE;
 }
 
-bool wxCustomDataObject::SetData(size_t len, const void *buf)
+bool wxCustomDataObject::SetData(size_t size, const void *buf)
 {
     Free();
 
@@ -265,7 +271,7 @@ bool wxCustomDataObject::SetData(size_t len, const void *buf)
     if ( !m_data )
         return FALSE;
 
-    memcpy(m_data, buf, m_size = len);
+    memcpy(m_data, buf, m_size = size);
 
     return TRUE;
 }

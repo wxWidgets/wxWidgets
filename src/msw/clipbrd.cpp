@@ -584,7 +584,7 @@ bool wxClipboard::GetData( wxDataObject *data )
     }
 
     // build the list of supported formats
-    size_t nFormats = data->GetFormatCount(FALSE /* for SetData() */);
+    size_t nFormats = data->GetFormatCount(wxDataObject::Set);
     wxDataFormat format, *formats;
     if ( nFormats == 1 )
     {
@@ -597,7 +597,7 @@ bool wxClipboard::GetData( wxDataObject *data )
         formats = new wxDataFormat[nFormats];
     }
 
-    data->GetAllFormats(formats, FALSE);
+    data->GetAllFormats(formats, wxDataObject::Set);
 
     // get the format enumerator
     bool result = FALSE;

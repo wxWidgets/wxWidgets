@@ -42,8 +42,7 @@
     #include <shellapi.h>
 #endif
 
-#include "wx/dataobj.h"
-#include "wx/msw/ole/droptgt.h"
+#include "wx/dnd.h"
 
 #ifndef __WIN32__
     #include <ole2.h>
@@ -70,18 +69,11 @@ public:
   STDMETHODIMP DragLeave(void);
   STDMETHODIMP Drop(LPDATAOBJECT, DWORD, POINTL, LPDWORD);
 
-  // we assume that if QueryGetData() returns S_OK, than we can really get data
-  // in this format, so we remember here the format for which QueryGetData()
-  // succeeded
-  void SetSupportedFormat(wxDataFormat cfFormat) { m_cfFormat = cfFormat; }
-
   DECLARE_IUNKNOWN_METHODS;
 
 protected:
   IDataObject   *m_pIDataObject;  // !NULL between DragEnter and DragLeave/Drop
   wxDropTarget  *m_pTarget;       // the real target (we're just a proxy)
-
-  wxDataFormat   m_cfFormat;      // the format in which to ask for data
 
 private:
   static inline DWORD GetDropEffect(DWORD flags);
@@ -108,7 +100,6 @@ wxIDropTarget::wxIDropTarget(wxDropTarget *pTarget)
 {
   m_cRef         = 0;
   m_pTarget      = pTarget;
-  m_cfFormat     = wxDF_INVALID;
   m_pIDataObject = NULL;
 }
 
@@ -212,45 +203,33 @@ STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
                                  POINTL       pt,
                                  DWORD       *pdwEffect)
 {
-  wxLogDebug(wxT("IDropTarget::Drop"));
+    wxLogDebug(wxT("IDropTarget::Drop"));
 
-  // TODO I don't know why there is this parameter, but so far I assume
-  //      that it's the same we've already got in DragEnter
-  wxASSERT( m_pIDataObject == pIDataSource );
+    // TODO I don't know why there is this parameter, but so far I assume
+    //      that it's the same we've already got in DragEnter
+    wxASSERT( m_pIDataObject == pIDataSource );
 
-  STGMEDIUM stm;
-  *pdwEffect = DROPEFFECT_NONE;
+    // by default, nothing happens
+    *pdwEffect = DROPEFFECT_NONE;
 
-  // should be set by SetSupportedFormat() call
-  wxASSERT( m_cfFormat != wxDF_INVALID );
+    // first ask the drop target if it wants data
+    if ( m_pTarget->OnDrop(pt.x, pt.y) ) {
+        // it does, so give it the data source
+        m_pTarget->SetDataSource(pIDataSource);
 
-  FORMATETC fmtMemory;
-  fmtMemory.cfFormat  = m_cfFormat;
-  fmtMemory.ptd       = NULL;
-  fmtMemory.dwAspect  = DVASPECT_CONTENT;
-  fmtMemory.lindex    = -1;
-  fmtMemory.tymed     = TYMED_HGLOBAL;  // TODO to add other media
-
-  HRESULT hr = pIDataSource->GetData(&fmtMemory, &stm);
-  if ( SUCCEEDED(hr) ) {
-    if ( stm.hGlobal != NULL ) {
-      if ( m_pTarget->OnDrop(pt.x, pt.y, GlobalLock(stm.hGlobal)) )
-        *pdwEffect = GetDropEffect(grfKeyState);
-      //else: DROPEFFECT_NONE
-
-      GlobalUnlock(stm.hGlobal);
-      ReleaseStgMedium(&stm);
+        // and now it has the data
+        if ( m_pTarget->OnData(pt.x, pt.y) ) {
+            // operation succeeded
+            *pdwEffect = GetDropEffect(grfKeyState);
+        }
+        //else: *pdwEffect is already DROPEFFECT_NONE
     }
-  }
-  else
-  {
-    // wxLogApiError("GetData", hr);
-  }
+    //else: OnDrop() returned FALSE, no need to copy data
 
-  // release the held object
-  RELEASE_AND_NULL(m_pIDataObject);
+    // release the held object
+    RELEASE_AND_NULL(m_pIDataObject);
 
-  return S_OK;
+    return S_OK;
 }
 
 // ============================================================================
@@ -261,17 +240,18 @@ STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
 // ctor/dtor
 // ----------------------------------------------------------------------------
 
-wxDropTarget::wxDropTarget()
+wxDropTarget::wxDropTarget(wxDataObject *dataObj)
+            : wxDropTargetBase(dataObj)
 {
-  // create an IDropTarget implementation which will notify us about
-  // d&d operations.
-  m_pIDropTarget = new wxIDropTarget(this);
-  m_pIDropTarget->AddRef();
+    // create an IDropTarget implementation which will notify us about d&d
+    // operations.
+    m_pIDropTarget = new wxIDropTarget(this);
+    m_pIDropTarget->AddRef();
 }
 
 wxDropTarget::~wxDropTarget()
 {
-  ReleaseInterface(m_pIDropTarget);
+    ReleaseInterface(m_pIDropTarget);
 }
 
 // ----------------------------------------------------------------------------
@@ -280,140 +260,179 @@ wxDropTarget::~wxDropTarget()
 
 bool wxDropTarget::Register(WXHWND hwnd)
 {
-  HRESULT hr = ::CoLockObjectExternal(m_pIDropTarget, TRUE, FALSE);
-  if ( FAILED(hr) ) {
-    wxLogApiError("CoLockObjectExternal", hr);
-    return FALSE;
-  }
+    HRESULT hr = ::CoLockObjectExternal(m_pIDropTarget, TRUE, FALSE);
+    if ( FAILED(hr) ) {
+        wxLogApiError("CoLockObjectExternal", hr);
+        return FALSE;
+    }
 
-  hr = ::RegisterDragDrop((HWND) hwnd, m_pIDropTarget);
-  if ( FAILED(hr) ) {
-    ::CoLockObjectExternal(m_pIDropTarget, FALSE, FALSE);
+    hr = ::RegisterDragDrop((HWND) hwnd, m_pIDropTarget);
+    if ( FAILED(hr) ) {
+        ::CoLockObjectExternal(m_pIDropTarget, FALSE, FALSE);
 
-    wxLogApiError("RegisterDragDrop", hr);
-    return FALSE;
-  }
+        wxLogApiError("RegisterDragDrop", hr);
+        return FALSE;
+    }
 
-  return TRUE;
+    return TRUE;
 }
 
 void wxDropTarget::Revoke(WXHWND hwnd)
 {
-  HRESULT hr = ::RevokeDragDrop((HWND) hwnd);
+    HRESULT hr = ::RevokeDragDrop((HWND) hwnd);
 
-  if ( FAILED(hr) ) {
-    wxLogApiError("RevokeDragDrop", hr);
-  }
+    if ( FAILED(hr) ) {
+        wxLogApiError("RevokeDragDrop", hr);
+    }
 
-  ::CoLockObjectExternal(m_pIDropTarget, FALSE, TRUE);
+    ::CoLockObjectExternal(m_pIDropTarget, FALSE, TRUE);
 }
 
 // ----------------------------------------------------------------------------
-// determine if we accept data of this type
+// base class pure virtuals
 // ----------------------------------------------------------------------------
+
+// OnDrop() is called only if we previously returned TRUE from
+// IsAcceptedData(), so no need to check anything here
+bool wxDropTarget::OnDrop(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y))
+{
+    return TRUE;
+}
+
+// copy the data from the data source to the target data object
+bool wxDropTarget::GetData()
+{
+    wxDataFormat format = GetSupportedFormat(m_pIDataSource);
+    if ( format == wxDF_INVALID ) {
+        // this is strange because IsAcceptedData() succeeded previously!
+        wxFAIL_MSG(wxT("strange - did supported formats list change?"));
+
+        return FALSE;
+    }
+
+    STGMEDIUM stm;
+    FORMATETC fmtMemory;
+    fmtMemory.cfFormat  = format;
+    fmtMemory.ptd       = NULL;
+    fmtMemory.dwAspect  = DVASPECT_CONTENT;
+    fmtMemory.lindex    = -1;
+    fmtMemory.tymed     = TYMED_HGLOBAL;  // TODO to add other media
+
+    bool rc = FALSE;
+
+    HRESULT hr = m_pIDataSource->GetData(&fmtMemory, &stm);
+    if ( SUCCEEDED(hr) ) {
+        IDataObject *dataObject = m_dataObject->GetInterface();
+
+        hr = dataObject->SetData(&fmtMemory, &stm, TRUE);
+        if ( SUCCEEDED(hr) ) {
+            rc = TRUE;
+        }
+        else {
+            wxLogLastError("IDataObject::SetData()");
+        }
+    }
+    else {
+        wxLogLastError("IDataObject::GetData()");
+    }
+
+    return rc;
+}
+
+// ----------------------------------------------------------------------------
+// callbacks used by wxIDropTarget
+// ----------------------------------------------------------------------------
+
+// we need a data source, so wxIDropTarget gives it to us using this function
+void wxDropTarget::SetDataSource(IDataObject *pIDataSource)
+{
+    m_pIDataSource = pIDataSource;
+}
+
+// determine if we accept data of this type
 bool wxDropTarget::IsAcceptedData(IDataObject *pIDataSource) const
 {
-  // this strucutre describes a data of any type (first field will be
-  // changing) being passed through global memory block.
-  static FORMATETC s_fmtMemory = {
-    0,
-    NULL,
-    DVASPECT_CONTENT,
-    -1,
-    TYMED_HGLOBAL
-  };
-
-  // cycle thorugh all supported formats
-  for ( size_t n = 0; n < GetFormatCount(); n++ ) {
-    s_fmtMemory.cfFormat = GetFormat(n);
-    // NB: don't use SUCCEEDED macro here: QueryGetData returns 1 (whatever it
-    //     means) for file drag and drop
-    if ( pIDataSource->QueryGetData(&s_fmtMemory) == S_OK ) {
-      // remember this format: we'll later ask for data in it
-      m_pIDropTarget->SetSupportedFormat((unsigned int)s_fmtMemory.cfFormat);
-      return TRUE;
-    }
-  }
-
-  return FALSE;
+    return GetSupportedFormat(pIDataSource) != wxDF_INVALID;
 }
 
-// ============================================================================
+// ----------------------------------------------------------------------------
+// helper functions
+// ----------------------------------------------------------------------------
+
+wxDataFormat wxDropTarget::GetSupportedFormat(IDataObject *pIDataSource) const
+{
+    // this strucutre describes a data of any type (first field will be
+    // changing) being passed through global memory block.
+    static FORMATETC s_fmtMemory = {
+        0,
+        NULL,
+        DVASPECT_CONTENT,
+        -1,
+        TYMED_HGLOBAL       // TODO is it worth supporting other tymeds here?
+    };
+
+    // get the list of supported formats
+    size_t nFormats = m_dataObject->GetFormatCount(wxDataObject::Set);
+    wxDataFormat format, *formats;
+    formats = nFormats == 1 ? &format :  new wxDataFormat[nFormats];
+
+    m_dataObject->GetAllFormats(formats, wxDataObject::Set);
+
+    // cycle through all supported formats
+    size_t n;
+    for ( n = 0; n < nFormats; n++ ) {
+        s_fmtMemory.cfFormat = formats[n];
+
+        // NB: don't use SUCCEEDED macro here: QueryGetData returns S_FALSE
+        //     for file drag and drop (format == CF_HDROP)
+        if ( pIDataSource->QueryGetData(&s_fmtMemory) == S_OK ) {
+            format = formats[n];
+
+            break;
+        }
+    }
+
+    if ( formats != &format ) {
+        // free memory if we allocated it
+        delete [] formats;
+    }
+
+    return n < nFormats ? format : wxDF_INVALID;
+}
+
+// ----------------------------------------------------------------------------
 // wxTextDropTarget
-// ============================================================================
+// ----------------------------------------------------------------------------
 
-bool wxTextDropTarget::OnDrop(long x, long y, const void *pData)
+wxTextDropTarget::wxTextDropTarget()
+                : wxDropTarget(new wxTextDataObject)
 {
-  return OnDropText(x, y, (const wxChar *)pData);
 }
 
-size_t wxTextDropTarget::GetFormatCount() const
+bool wxTextDropTarget::OnData(wxCoord x, wxCoord y)
 {
-  return 1;
+    if ( !GetData() )
+        return FALSE;
+
+    return OnDropText(x, y, ((wxTextDataObject *)m_dataObject)->GetText());
 }
 
-wxDataFormat wxTextDropTarget::GetFormat(size_t WXUNUSED(n)) const
-{
-  return wxDF_TEXT;
-}
-
-// ============================================================================
+// ----------------------------------------------------------------------------
 // wxFileDropTarget
-// ============================================================================
+// ----------------------------------------------------------------------------
 
-bool wxFileDropTarget::OnDrop(long x, long y, const void *pData)
+wxFileDropTarget::wxFileDropTarget()
+                : wxDropTarget(new wxFileDataObject)
 {
-  // the documentation states that the first member of DROPFILES structure
-  // is a "DWORD offset of double NUL terminated file list". What they mean by
-  // this (I wonder if you see it immediately) is that the list starts at
-  // ((char *)&(pDropFiles.pFiles)) + pDropFiles.pFiles. We're also advised to
-  // use DragQueryFile to work with this structure, but not told where and how
-  // to get HDROP.
-  HDROP hdrop = (HDROP)pData;   // NB: it works, but I'm not sure about it
-
-  // get number of files (magic value -1)
-  UINT nFiles = ::DragQueryFile(hdrop, (unsigned)-1, NULL, 0u);
-
-  // for each file get the length, allocate memory and then get the name
-  wxChar **aszFiles = new wxChar *[nFiles];
-  UINT len, n;
-  for ( n = 0; n < nFiles; n++ ) {
-    // +1 for terminating NUL
-    len = ::DragQueryFile(hdrop, n, NULL, 0) + 1;
-
-    aszFiles[n] = new wxChar[len];
-
-    UINT len2 = ::DragQueryFile(hdrop, n, aszFiles[n], len);
-    if ( len2 != len - 1 ) {
-      wxLogDebug(wxT("In wxFileDropTarget::OnDrop DragQueryFile returned %d "
-                    "characters, %d expected."), len2, len - 1);
-    }
-  }
-
-  bool bResult = OnDropFiles(x, y, nFiles, (const wxChar**) aszFiles);
-
-  // free memory
-  for ( n = 0; n < nFiles; n++ ) {
-    delete [] aszFiles[n];
-  }
-  delete [] aszFiles;
-
-  return bResult;
 }
 
-size_t wxFileDropTarget::GetFormatCount() const
+bool wxFileDropTarget::OnData(wxCoord x, wxCoord y)
 {
-  return 1;
-}
+    if ( !GetData() )
+        return FALSE;
 
-wxDataFormat wxFileDropTarget::GetFormat(size_t WXUNUSED(n)) const
-{
-#ifdef __WIN32__
-  return wxDF_FILENAME;
-#else
-  // TODO: how to implement this in WIN16?
-  return wxDF_TEXT;
-#endif
+    return OnDropFiles(x, y,
+                       ((wxFileDataObject *)m_dataObject)->GetFilenames());
 }
 
 #endif

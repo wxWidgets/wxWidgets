@@ -9,9 +9,6 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-// ============================================================================
-// prolog
-// ============================================================================
 #ifndef   _WX_OLEDROPTGT_H
 #define   _WX_OLEDROPTGT_H
 
@@ -20,12 +17,13 @@
 #endif
 
 #if !wxUSE_DRAG_AND_DROP
-  #error  "You should #define wxUSE_DRAG_AND_DROP to 1 to compile this file!"
+    #error  "You should #define wxUSE_DRAG_AND_DROP to 1 to compile this file!"
 #endif  //WX_DRAG_DROP
 
 // ----------------------------------------------------------------------------
 // forward declarations
 // ----------------------------------------------------------------------------
+
 class  wxIDropTarget;
 struct IDataObject;
 
@@ -38,11 +36,12 @@ struct IDataObject;
 // your own class from it implementing pure virtual function in order to use it
 // (all of them, including protected ones which are called by the class itself)
 // ----------------------------------------------------------------------------
-class WXDLLEXPORT wxDropTarget
+
+class WXDLLEXPORT wxDropTarget : public wxDropTargetBase
 {
 public:
     // ctor & dtor
-    wxDropTarget();
+    wxDropTarget(wxDataObject *dataObject = NULL);
     virtual ~wxDropTarget();
 
     // normally called by wxWindow on window creation/destruction, but might be
@@ -50,62 +49,57 @@ public:
     bool Register(WXHWND hwnd);
     void Revoke(WXHWND hwnd);
 
+    // provide default implementation for base class pure virtuals
+    virtual bool OnDrop(wxCoord x, wxCoord y);
+    virtual bool GetData();
+
+    // implementation only from now on
+    // -------------------------------
+
     // do we accept this kind of data?
-    virtual bool IsAcceptedData(IDataObject *pIDataSource) const;
+    bool IsAcceptedData(IDataObject *pIDataSource) const;
 
-    // called when mouse enters/leaves the window: might be used to give
-    // some visual feedback to the user
-    virtual void OnEnter() { }
-    virtual void OnLeave() { }
-
-    // this function is called when data is dropped.
-    // (x, y) are the coordinates of the drop
-    virtual bool OnDrop(long x, long y, const void *pData) = 0;
-
-protected:
-    // Override these to indicate what kind of data you support: the first
-    // format to which data can be converted is used. The classes below show
-    // how it can be done in the simplest cases.
-        // how many different (clipboard) formats do you support?
-    virtual size_t GetFormatCount() const = 0;
-        // return the n-th supported format
-    virtual wxDataFormat GetFormat(size_t n) const = 0;
+    // give us the data source from IDropTarget::Drop() - this is later used by
+    // GetData() when it's called from inside OnData()
+    void SetDataSource(IDataObject *pIDataSource);
 
 private:
-    wxIDropTarget    *m_pIDropTarget; // the pointer to COM interface
+    // helper used by IsAcceptedData() and GetData()
+    wxDataFormat GetSupportedFormat(IDataObject *pIDataSource) const;
+
+    wxIDropTarget *m_pIDropTarget; // the pointer to our COM interface
+    IDataObject   *m_pIDataSource; // the pointer to the source data object
 };
 
 // ----------------------------------------------------------------------------
 // A simple wxDropTarget derived class for text data: you only need to
 // override OnDropText() to get something working
 // ----------------------------------------------------------------------------
+
 class WXDLLEXPORT wxTextDropTarget : public wxDropTarget
 {
 public:
-  virtual bool OnDrop(long x, long y, const void *pData);
-  virtual bool OnDropText(long x, long y, const wxChar *psz) = 0;
+    wxTextDropTarget();
 
-protected:
-  virtual size_t GetFormatCount() const;
-  virtual wxDataFormat GetFormat(size_t n) const;
+    virtual bool OnDropText(wxCoord x, wxCoord y, const wxString& text) = 0;
+
+    virtual bool OnData(wxCoord x, wxCoord y);
 };
 
 // ----------------------------------------------------------------------------
 // A drop target which accepts files (dragged from File Manager or Explorer)
 // ----------------------------------------------------------------------------
+
 class WXDLLEXPORT wxFileDropTarget : public wxDropTarget
 {
 public:
-  virtual bool OnDrop(long x, long y, const void *pData);
+    wxFileDropTarget();
 
-  // params: the number of files and the array of file names
-  virtual bool OnDropFiles(long x, long y,
-                           size_t nFiles, const wxChar * const aszFiles[]) = 0;
+    // parameters are the number of files and the array of file names
+    virtual bool OnDropFiles(wxCoord x, wxCoord y,
+                             const wxArrayString& filenames) = 0;
 
-protected:
-  virtual size_t GetFormatCount() const;
-  virtual wxDataFormat GetFormat(size_t n) const;
+    virtual bool OnData(wxCoord x, wxCoord y);
 };
 
-// ============================================================================
 #endif  //_WX_OLEDROPTGT_H

@@ -1243,29 +1243,29 @@ typedef enum
 #define    wxTOOL_LEFT       3
 #define    wxTOOL_RIGHT       4
 
-
-// tyhe ids of standard data formats
+// the values of the format constants should be the same as correspondign
+// CF_XXX constants in Windows API
 enum wxDataFormatId
 {
-  wxDF_INVALID =          0,
-  wxDF_TEXT =             1,  /* CF_TEXT */
-  wxDF_BITMAP =           2,  /* CF_BITMAP */
-  wxDF_METAFILE =         3,  /* CF_METAFILEPICT */
-  wxDF_SYLK =             4,
-  wxDF_DIF =              5,
-  wxDF_TIFF =             6,
-  wxDF_OEMTEXT =          7,  /* CF_OEMTEXT */
-  wxDF_DIB =              8,  /* CF_DIB */
-  wxDF_PALETTE =          9,
-  wxDF_PENDATA =          10,
-  wxDF_RIFF =             11,
-  wxDF_WAVE =             12,
-  wxDF_UNICODETEXT =      13,
-  wxDF_ENHMETAFILE =      14,
-  wxDF_FILENAME =         15, /* CF_HDROP */
-  wxDF_LOCALE =           16,
-  wxDF_PRIVATE =          20,
-  wxDF_MAX
+    wxDF_INVALID =          0,
+    wxDF_TEXT =             1,  /* CF_TEXT */
+    wxDF_BITMAP =           2,  /* CF_BITMAP */
+    wxDF_METAFILE =         3,  /* CF_METAFILEPICT */
+    wxDF_SYLK =             4,
+    wxDF_DIF =              5,
+    wxDF_TIFF =             6,
+    wxDF_OEMTEXT =          7,  /* CF_OEMTEXT */
+    wxDF_DIB =              8,  /* CF_DIB */
+    wxDF_PALETTE =          9,
+    wxDF_PENDATA =          10,
+    wxDF_RIFF =             11,
+    wxDF_WAVE =             12,
+    wxDF_UNICODETEXT =      13,
+    wxDF_ENHMETAFILE =      14,
+    wxDF_FILENAME =         15, /* CF_HDROP */
+    wxDF_LOCALE =           16,
+    wxDF_PRIVATE =          20,
+    wxDF_MAX
 };
 
 /* Virtual keycodes */

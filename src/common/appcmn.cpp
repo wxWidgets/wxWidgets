@@ -33,6 +33,7 @@
 #endif
 
 #include "wx/thread.h"
+#include "wx/clipbrd.h"
 
 // ===========================================================================
 // implementation

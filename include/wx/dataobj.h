@@ -134,7 +134,10 @@ public:
     // get data from the buffer of specified length (in the given format),
     // return TRUE if the data was read successfully, FALSE otherwise
     virtual bool SetData(const wxDataFormat& format,
-                         size_t len, const void *buf) = 0;
+                         size_t len, const void *buf)
+    {
+        return FALSE;
+    }
 };
 
 // ----------------------------------------------------------------------------
@@ -334,31 +337,25 @@ private:
 
 // ----------------------------------------------------------------------------
 // wxFileDataObject contains a list of filenames
+//
+// NB: notice that this is a "write only" object, it can only be filled with
+//     data from drag and drop operation.
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxFileDataObjectBase : public wxDataObjectSimple
 {
 public:
-    // ctor: you can specify the bitmap here or in SetBitmap(), or override
-    // GetBitmap()
+    // ctor: use AddFile() later to fill the array
     wxFileDataObjectBase() : wxDataObjectSimple(wxDF_FILENAME) { }
 
-    // get a reference to our array - you may modify it (i.e. add/remove
-    // filenames to it then)
-    wxArrayString& GetFilenames() { return m_filenames; }
+    // get a reference to our array
+    const wxArrayString& GetFilenames() { return m_filenames; }
 
-    // a helper function
-    void AddFile(const wxString& filename) { m_filenames.Add(filename); }
+    // the Get() functions do nothing for us
+    virtual size_t GetDataSize() const { return 0; }
+    virtual bool GetDataHere(void *WXUNUSED(buf)) const { return FALSE; }
 
-    // virtual functions which you may override if you want to provide data on
-    // demand only - otherwise, the trivial default versions will be used.
-    //
-    // they work with a NUL-separated string of filenames, the base class
-    // versions concatenate/extract filenames from this string
-    virtual wxString GetFilenames() const;
-    virtual void SetFilenames(const wxChar* filenames);
-
-private:
+protected:
     wxArrayString m_filenames;
 };
 

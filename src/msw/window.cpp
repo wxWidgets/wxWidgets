@@ -54,9 +54,8 @@
     #include "wx/ownerdrw.h"
 #endif
 
-#if     wxUSE_DRAG_AND_DROP
-    #include "wx/dataobj.h"
-    #include "wx/msw/ole/droptgt.h"
+#if wxUSE_DRAG_AND_DROP
+    #include "wx/dnd.h"
 #endif
 
 #include "wx/menuitem.h"
@@ -1215,7 +1214,7 @@ void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     wxSize size(-1, -1);
     if ( width == -1 )
     {
-        if ( sizeFlags && wxSIZE_AUTO_WIDTH )
+        if ( sizeFlags & wxSIZE_AUTO_WIDTH )
         {
             size = DoGetBestSize();
             width = size.x;
@@ -1229,7 +1228,7 @@ void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
     if ( height == -1 )
     {
-        if ( sizeFlags && wxSIZE_AUTO_HEIGHT )
+        if ( sizeFlags & wxSIZE_AUTO_HEIGHT )
         {
             if ( size.x == -1 )
             {

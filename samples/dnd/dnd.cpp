@@ -43,15 +43,12 @@
 // file names) we drop on them
 // ----------------------------------------------------------------------------
 
-typedef long wxDropPointCoord;
-
 class DnDText : public wxTextDropTarget
 {
 public:
     DnDText(wxListBox *pOwner) { m_pOwner = pOwner; }
 
-    virtual bool OnDropText(wxDropPointCoord x, wxDropPointCoord y,
-                            const wxChar* psz);
+    virtual bool OnDropText(wxCoord x, wxCoord y, const wxString& text);
 
 private:
     wxListBox *m_pOwner;
@@ -62,8 +59,8 @@ class DnDFile : public wxFileDropTarget
 public:
     DnDFile(wxListBox *pOwner) { m_pOwner = pOwner; }
 
-  virtual bool OnDropFiles(wxDropPointCoord x, wxDropPointCoord y,
-                           size_t nFiles, const wxChar* const aszFiles[] );
+    virtual bool OnDropFiles(wxCoord x, wxCoord y,
+                             const wxArrayString& filenames);
 
 private:
     wxListBox *m_pOwner;
@@ -146,6 +143,10 @@ public:
     {
     }
 
+    // this is for debugging - lets us see when exactly an object is freed
+    // (this may be later than you think if it's on the clipboard, for example)
+    virtual ~DnDShape() { }
+
     // the functions used for drag-and-drop: they dump and restore a shape into
     // some bitwise-copiable data (might use streams too...)
     // ------------------------------------------------------------------------
@@ -213,6 +214,11 @@ public:
     {
     }
 
+    virtual ~DnDTriangularShape()
+    {
+        wxLogMessage("DnDTriangularShape is being deleted");
+    }
+
     virtual Kind GetKind() const { return Triangle; }
     virtual void Draw(wxDC& dc)
     {
@@ -242,6 +248,11 @@ public:
                         const wxColour& col)
         : DnDShape(pos, size, col)
     {
+    }
+
+    virtual ~DnDRectangularShape()
+    {
+        wxLogMessage("DnDRectangularShape is being deleted");
     }
 
     virtual Kind GetKind() const { return Rectangle; }
@@ -275,6 +286,11 @@ public:
     {
     }
 
+    virtual ~DnDEllipticShape()
+    {
+        wxLogMessage("DnDEllipticShape is being deleted");
+    }
+
     virtual Kind GetKind() const { return Ellipse; }
     virtual void Draw(wxDC& dc)
     {
@@ -299,9 +315,24 @@ class DnDShapeDataObject : public wxDataObject
 public:
     // ctor doesn't copy the pointer, so it shouldn't go away while this object
     // is alive
-    DnDShapeDataObject(DnDShape *shape)
+    DnDShapeDataObject(DnDShape *shape = (DnDShape *)NULL)
     {
-        m_shape = shape;
+        if ( shape )
+        {
+            // we need to copy the shape because the one we're handled may be
+            // deleted while it's still on the clipboard (for example) - and we
+            // reuse the serialisation methods here to copy it
+            void *buf = malloc(shape->DnDShape::GetDataSize());
+            shape->GetDataHere(buf);
+            m_shape = DnDShape::New(buf);
+
+            free(buf);
+        }
+        else
+        {
+            // nothing to copy
+            m_shape = NULL;
+        }
 
         // this string should uniquely identify our format, but is otherwise
         // arbitrary
@@ -312,36 +343,38 @@ public:
         m_hasBitmap = FALSE;
     }
 
+    virtual ~DnDShapeDataObject() { delete m_shape; }
+
     // accessors
     DnDShape *GetShape() const { return m_shape; }
 
     // implement base class pure virtuals
     // ----------------------------------
 
-    virtual wxDataFormat GetPreferredFormat() const
+    virtual wxDataFormat GetPreferredFormat(Direction WXUNUSED(dir)) const
     {
         return m_formatShape;
     }
 
-    virtual size_t GetFormatCount(bool outputOnlyToo) const
+    virtual size_t GetFormatCount(Direction dir) const
     {
         // our custom format is supported by both GetData() and SetData()
         size_t nFormats = 1;
-        if ( outputOnlyToo )
+        if ( dir == Get )
         {
             // but the bitmap format(s) are only supported for output
-            nFormats += m_dataobj.GetFormatCount();
+            nFormats += m_dataobj.GetFormatCount(dir);
         }
 
         return nFormats;
     }
 
-    virtual void GetAllFormats(wxDataFormat *formats, bool outputOnlyToo) const
+    virtual void GetAllFormats(wxDataFormat *formats, Direction dir) const
     {
         formats[0] = m_formatShape;
-        if ( outputOnlyToo )
+        if ( dir == Get )
         {
-            m_dataobj.GetAllFormats(&formats[1]);
+            m_dataobj.GetAllFormats(&formats[1], dir);
         }
     }
 
@@ -356,7 +389,7 @@ public:
             if ( !m_hasBitmap )
                 CreateBitmap();
 
-            return m_dataobj.GetDataSize(format);
+            return m_dataobj.GetDataSize();
         }
     }
 
@@ -375,11 +408,12 @@ public:
             if ( !m_hasBitmap )
                 CreateBitmap();
 
-            return m_dataobj.GetDataHere(format, pBuf);
+            return m_dataobj.GetDataHere(pBuf);
         }
     }
 
-    virtual bool SetData(const wxDataFormat& format, const void *buf)
+    virtual bool SetData(const wxDataFormat& format,
+                         size_t len, const void *buf)
     {
         wxCHECK_MSG( format == m_formatShape, FALSE, "unsupported format" );
 
@@ -483,11 +517,9 @@ class DnDShapeDropTarget : public wxDropTarget
 {
 public:
     DnDShapeDropTarget(DnDShapeFrame *frame)
+        : wxDropTarget(new DnDShapeDataObject)
     {
         m_frame = frame;
-
-        // the same as used by DnDShapeDataObject
-        m_formatShape.SetId(shapeFormatId);
     }
 
     // override base class (pure) virtuals
@@ -495,21 +527,23 @@ public:
         { m_frame->SetStatusText("Mouse entered the frame"); }
     virtual void OnLeave()
         { m_frame->SetStatusText("Mouse left the frame"); }
-    virtual bool OnDrop(long x, long y, const void *pData)
+    virtual bool OnData(wxCoord x, wxCoord y)
     {
-        m_frame->OnDrop(x, y, DnDShape::New(pData));
+        if ( !GetData() )
+        {
+            wxLogError("Failed to get drag and drop data");
+
+            return FALSE;
+        }
+
+        m_frame->OnDrop(x, y,
+                        ((DnDShapeDataObject *)GetDataObject())->GetShape());
 
         return TRUE;
     }
 
-protected:
-    virtual size_t GetFormatCount() const { return 1; }
-    virtual wxDataFormat GetFormat(size_t WXUNUSED(n)) const
-        { return m_formatShape; }
-
 private:
     DnDShapeFrame *m_frame;
-    wxDataFormat m_formatShape;
 };
 
 // ----------------------------------------------------------------------------
@@ -1012,21 +1046,21 @@ void DnDFrame::OnPaste(wxCommandEvent& WXUNUSED(event))
 // Notifications called by the base class
 // ----------------------------------------------------------------------------
 
-bool DnDText::OnDropText( wxDropPointCoord, wxDropPointCoord, const wxChar *psz )
+bool DnDText::OnDropText(wxCoord, wxCoord, const wxString& text)
 {
-    m_pOwner->Append(psz);
+    m_pOwner->Append(text);
 
     return TRUE;
 }
 
-bool DnDFile::OnDropFiles( wxDropPointCoord, wxDropPointCoord, size_t nFiles,
-                           const wxChar* const aszFiles[])
+bool DnDFile::OnDropFiles(wxCoord, wxCoord, const wxArrayString& filenames)
 {
+    size_t nFiles = filenames.GetCount();
     wxString str;
     str.Printf( _T("%d files dropped"), nFiles);
     m_pOwner->Append(str);
     for ( size_t n = 0; n < nFiles; n++ ) {
-        m_pOwner->Append(aszFiles[n]);
+        m_pOwner->Append(filenames[n]);
     }
 
     return TRUE;
@@ -1224,6 +1258,18 @@ void DnDShapeFrame::OnDrag(wxMouseEvent& event)
     //else: status text already set
 }
 
+void DnDShapeFrame::OnDrop(long x, long y, DnDShape *shape)
+{
+    ms_lastDropTarget = this;
+
+    wxString s;
+    s.Printf("Shape dropped at (%ld, %ld)", x, y);
+    SetStatusText(s);
+
+    shape->Move(ScreenToClient(wxPoint(x, y)));
+    SetShape(shape);
+}
+
 void DnDShapeFrame::OnEditShape(wxCommandEvent& event)
 {
     DnDShapeDialog dlg(this, m_shape);
@@ -1285,18 +1331,6 @@ void DnDShapeFrame::OnPaint(wxPaintEvent& event)
         m_shape->Draw(wxPaintDC(this));
     else
         event.Skip();
-}
-
-void DnDShapeFrame::OnDrop(long x, long y, DnDShape *shape)
-{
-    ms_lastDropTarget = this;
-
-    wxString s;
-    s.Printf("Shape dropped at (%ld, %ld)", x, y);
-    SetStatusText(s);
-
-    shape->Move(ScreenToClient(wxPoint(x, y)));
-    SetShape(shape);
 }
 
 // ----------------------------------------------------------------------------

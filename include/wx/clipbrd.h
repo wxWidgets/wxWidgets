@@ -115,7 +115,7 @@ class wxClipboardModule : public wxModule
 {
 public:
     bool OnInit()
-        { wxTheClipboard = new wxClipboard; }
+        { wxTheClipboard = new wxClipboard; return TRUE; }
     void OnExit()
         { delete wxTheClipboard; wxTheClipboard = (wxClipboard *)NULL; }
 

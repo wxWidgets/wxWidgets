@@ -49,7 +49,7 @@ public:
     // start drag action, see enum wxDragResult for return value description
     //
     // if bAllowMove is TRUE, data can be moved, if not - only copied
-    virtual wxDragResult DoDragDrop( bool bAllowMove = FALSE );
+    virtual wxDragResult DoDragDrop(bool bAllowMove = FALSE) = 0;
 
     // override to give feedback depending on the current operation result
     // "effect"
@@ -65,7 +65,13 @@ protected:
 
 // ----------------------------------------------------------------------------
 // wxDropTarget should be associated with a window if it wants to be able to
-// receive data via drag and drop
+// receive data via drag and drop.
+//
+// To use this class, you should derive from wxDropTarget and implement
+// OnData() pure virtual method. You may also wish to override OnDrop() if you
+// want to accept the data only inside some region of the window (this may
+// avoid having to copy the data to this application which happens only when
+// OnData() is called)
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxDropTargetBase
@@ -99,7 +105,7 @@ public:
     // called after OnDrop() returns TRUE: you will usually just call
     // GetData() from here and, probably, also refresh something to update the
     // new data
-    virtual bool OnData() = 0;
+    virtual bool OnData(wxCoord x, wxCoord y) = 0;
 
     // may be called *only* from inside OnData() and will fill m_dataObject
     // with the data from the drop source if it returns TRUE
@@ -110,11 +116,15 @@ protected:
 };
 
 // ----------------------------------------------------------------------------
+// the platform-specific headers also define standard wxDropTarget
+// implementations wxTextDropTarget and wxFileDropTarget
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
 // include platform dependent class declarations
 // ----------------------------------------------------------------------------
 
 #if defined(__WXMSW__)
-    #include "wx/dataobj.h"
     #include "wx/msw/ole/dropsrc.h"
     #include "wx/msw/ole/droptgt.h"
 #elif defined(__WXMOTIF__)
