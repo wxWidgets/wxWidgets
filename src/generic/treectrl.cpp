@@ -950,7 +950,7 @@ void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
         int x_pos = GetScrollPos( wxHORIZONTAL );
         SetScrollbars( 10, 10, x/10, y/10, x_pos, (item_y-client_h/2)/10 );
     }
-    else if (item_y > start_y+client_h-16)
+    else if (item_y > start_y+client_h-20)
     {
        int x = 0;
        int y = 0;

@@ -94,9 +94,9 @@ void wxScrolledWindow::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
     bool do_refresh =
     (
       (noUnitsX != 0 && m_xScrollLines == 0) ||
-      (noUnitsX < m_xScrollPosition) ||
+      (noUnitsX < m_xScrollLines) ||
       (noUnitsY != 0 && m_yScrollLines == 0) ||
-      (noUnitsY < m_yScrollPosition) ||
+      (noUnitsY < m_yScrollLines) ||
       (xPos != m_xScrollPosition) ||
       (yPos != m_yScrollPosition) ||
       (pixelsPerUnitX != m_xScrollPixelsPerLine) ||
@@ -145,7 +145,8 @@ void wxScrolledWindow::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
       
     AdjustScrollbars();
    
-   if (do_refresh && !noRefresh) Refresh();
+    if (do_refresh && !noRefresh) 
+	Refresh(); 
    
 #ifdef __WXMSW__
    // Necessary?
@@ -456,7 +457,7 @@ void wxScrolledWindow::Scroll( int x_pos, int y_pos )
         SetScrollPos( wxVERTICAL, m_yScrollPosition, TRUE );
     }
     
-    // BAD, BAD, can cause event loops if called from OnPaint(). (KB)
+    // BAD, BAD, can cause event loops if called from OnPaint(). KB.
     // Refresh();
     
 #ifdef __WXMSW__

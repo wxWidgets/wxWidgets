@@ -2857,6 +2857,14 @@ void wxWindow::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
         m_scrollGC = gdk_gc_new( m_wxwindow->window );
         gdk_gc_set_exposures( m_scrollGC, TRUE );
     }
+    
+    wxNode *node = m_children.First();
+    while (node)
+    {
+        wxWindow *child = (wxWindow*) node->Data();
+	child->Move( child->m_x + dx, child->m_y + dy );
+	node = node->Next();
+    }
 
     int cw = 0;
     int ch = 0;
@@ -2889,14 +2897,6 @@ void wxWindow::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
         if (dx != 0) rect.height = ch; else rect.height = abs(dy);
 
         Refresh( TRUE, &rect );
-    }
-    
-    wxNode *node = m_children.First();
-    while (node)
-    {
-        wxWindow *child = (wxWindow*) node->Data();
-	child->Move( child->m_x + dx, child->m_y + dy );
-	node = node->Next();
     }
 }
 
