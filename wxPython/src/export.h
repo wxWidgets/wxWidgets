@@ -41,7 +41,7 @@ static void wxPyCoreAPI_IMPORT() {
 #define int_LIST_helper(a)              (wxPyCoreAPIPtr->p_int_LIST_helper(a))
 #define long_LIST_helper(a)             (wxPyCoreAPIPtr->p_long_LIST_helper(a))
 #define string_LIST_helper(a)           (wxPyCoreAPIPtr->p_string_LIST_helper(a))
-#define wxPoint_LIST_helper(a)          (wxPyCoreAPIPtr->p_wxPoint_LIST_helper(a))
+#define wxPoint_LIST_helper(a,b)        (wxPyCoreAPIPtr->p_wxPoint_LIST_helper(a, b))
 #define wxBitmap_LIST_helper(a)         (wxPyCoreAPIPtr->p_wxBitmap_LIST_helper(a))
 #define wxString_LIST_helper(a)         (wxPyCoreAPIPtr->p_wxString_LIST_helper(a))
 #define wxAcceleratorEntry_LIST_helper(a) (wxPyCoreAPIPtr->p_wxAcceleratorEntry_LIST_helper(a))

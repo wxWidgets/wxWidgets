@@ -131,28 +131,20 @@
     delete [] $source;
 }
 
-
-
-
-
 %typemap(python,build) int PCOUNT {
-    if (_in_points) {
-        $target = PyList_Size(_in_points);
-    }
-    else {
-        $target = 0;
-    }
+	$target = NPOINTS;
 }
 
-%typemap(python,in) wxPoint* points  {
-    $target = wxPoint_LIST_helper($source);
-    if ($target == NULL) {
-        return NULL;
-    }
+%typemap(python,in) wxPoint* points (int NPOINTS) {
+    $target = wxPoint_LIST_helper($source, &NPOINTS);
+	if ($target == NULL) {
+		return NULL;
+	}
 }
 %typemap(python,freearg) wxPoint* points {
     delete [] $source;
 }
+
 
 
 

@@ -32,6 +32,8 @@ that can be used in place of wxPyOnDemandOutputWindow.
 Added colourselect.py, imagebrowser.py and an updated calendar.py to
 wxPython/lib from Lorne White.
 
+Added patch to wxPoint_LIST_helper from Tim Hochberg that should make
+it gobs faster in certain situations.
 
 
 

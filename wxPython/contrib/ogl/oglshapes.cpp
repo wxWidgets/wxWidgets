@@ -1273,6 +1273,7 @@ static PyObject *_wrap_wxPseudoMetaFile_DrawLines(PyObject *self, PyObject *args
     int  _arg1;
     wxPoint * _arg2;
     PyObject * _argo0 = 0;
+    int  NPOINTS;
     PyObject * _obj2 = 0;
     char *_kwnames[] = { "self","points", NULL };
 
@@ -1288,18 +1289,13 @@ static PyObject *_wrap_wxPseudoMetaFile_DrawLines(PyObject *self, PyObject *args
     }
     if (_obj2)
 {
-    _arg2 = wxPoint_LIST_helper(_obj2);
-    if (_arg2 == NULL) {
-        return NULL;
-    }
+    _arg2 = wxPoint_LIST_helper(_obj2, &NPOINTS);
+	if (_arg2 == NULL) {
+		return NULL;
+	}
 }
 {
-    if (_obj2) {
-        _arg1 = PyList_Size(_obj2);
-    }
-    else {
-        _arg1 = 0;
-    }
+	_arg1 = NPOINTS;
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1322,6 +1318,7 @@ static PyObject *_wrap_wxPseudoMetaFile_DrawPolygon(PyObject *self, PyObject *ar
     wxPoint * _arg2;
     int  _arg3 = (int ) 0;
     PyObject * _argo0 = 0;
+    int  NPOINTS;
     PyObject * _obj2 = 0;
     char *_kwnames[] = { "self","points","flags", NULL };
 
@@ -1337,18 +1334,13 @@ static PyObject *_wrap_wxPseudoMetaFile_DrawPolygon(PyObject *self, PyObject *ar
     }
     if (_obj2)
 {
-    _arg2 = wxPoint_LIST_helper(_obj2);
-    if (_arg2 == NULL) {
-        return NULL;
-    }
+    _arg2 = wxPoint_LIST_helper(_obj2, &NPOINTS);
+	if (_arg2 == NULL) {
+		return NULL;
+	}
 }
 {
-    if (_obj2) {
-        _arg1 = PyList_Size(_obj2);
-    }
-    else {
-        _arg1 = 0;
-    }
+	_arg1 = NPOINTS;
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -1370,6 +1362,7 @@ static PyObject *_wrap_wxPseudoMetaFile_DrawSpline(PyObject *self, PyObject *arg
     int  _arg1;
     wxPoint * _arg2;
     PyObject * _argo0 = 0;
+    int  NPOINTS;
     PyObject * _obj2 = 0;
     char *_kwnames[] = { "self","points", NULL };
 
@@ -1385,18 +1378,13 @@ static PyObject *_wrap_wxPseudoMetaFile_DrawSpline(PyObject *self, PyObject *arg
     }
     if (_obj2)
 {
-    _arg2 = wxPoint_LIST_helper(_obj2);
-    if (_arg2 == NULL) {
-        return NULL;
-    }
+    _arg2 = wxPoint_LIST_helper(_obj2, &NPOINTS);
+	if (_arg2 == NULL) {
+		return NULL;
+	}
 }
 {
-    if (_obj2) {
-        _arg1 = PyList_Size(_obj2);
-    }
-    else {
-        _arg1 = 0;
-    }
+	_arg1 = NPOINTS;
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5546,6 +5534,7 @@ static PyObject *_wrap_wxPyDrawnShape_DrawLines(PyObject *self, PyObject *args, 
     int  _arg1;
     wxPoint * _arg2;
     PyObject * _argo0 = 0;
+    int  NPOINTS;
     PyObject * _obj2 = 0;
     char *_kwnames[] = { "self","points", NULL };
 
@@ -5561,18 +5550,13 @@ static PyObject *_wrap_wxPyDrawnShape_DrawLines(PyObject *self, PyObject *args, 
     }
     if (_obj2)
 {
-    _arg2 = wxPoint_LIST_helper(_obj2);
-    if (_arg2 == NULL) {
-        return NULL;
-    }
+    _arg2 = wxPoint_LIST_helper(_obj2, &NPOINTS);
+	if (_arg2 == NULL) {
+		return NULL;
+	}
 }
 {
-    if (_obj2) {
-        _arg1 = PyList_Size(_obj2);
-    }
-    else {
-        _arg1 = 0;
-    }
+	_arg1 = NPOINTS;
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5630,6 +5614,7 @@ static PyObject *_wrap_wxPyDrawnShape_DrawPolygon(PyObject *self, PyObject *args
     wxPoint * _arg2;
     int  _arg3 = (int ) 0;
     PyObject * _argo0 = 0;
+    int  NPOINTS;
     PyObject * _obj2 = 0;
     char *_kwnames[] = { "self","points","flags", NULL };
 
@@ -5645,18 +5630,13 @@ static PyObject *_wrap_wxPyDrawnShape_DrawPolygon(PyObject *self, PyObject *args
     }
     if (_obj2)
 {
-    _arg2 = wxPoint_LIST_helper(_obj2);
-    if (_arg2 == NULL) {
-        return NULL;
-    }
+    _arg2 = wxPoint_LIST_helper(_obj2, &NPOINTS);
+	if (_arg2 == NULL) {
+		return NULL;
+	}
 }
 {
-    if (_obj2) {
-        _arg1 = PyList_Size(_obj2);
-    }
-    else {
-        _arg1 = 0;
-    }
+	_arg1 = NPOINTS;
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -5749,6 +5729,7 @@ static PyObject *_wrap_wxPyDrawnShape_DrawSpline(PyObject *self, PyObject *args,
     int  _arg1;
     wxPoint * _arg2;
     PyObject * _argo0 = 0;
+    int  NPOINTS;
     PyObject * _obj2 = 0;
     char *_kwnames[] = { "self","points", NULL };
 
@@ -5764,18 +5745,13 @@ static PyObject *_wrap_wxPyDrawnShape_DrawSpline(PyObject *self, PyObject *args,
     }
     if (_obj2)
 {
-    _arg2 = wxPoint_LIST_helper(_obj2);
-    if (_arg2 == NULL) {
-        return NULL;
-    }
+    _arg2 = wxPoint_LIST_helper(_obj2, &NPOINTS);
+	if (_arg2 == NULL) {
+		return NULL;
+	}
 }
 {
-    if (_obj2) {
-        _arg1 = PyList_Size(_obj2);
-    }
-    else {
-        _arg1 = 0;
-    }
+	_arg1 = NPOINTS;
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;

@@ -62,7 +62,9 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/fontenum.h>
 #include <wx/tipdlg.h>
 #include <wx/process.h>
+#ifdef __WXMSW__
 #include <wx/joystick.h>
+#endif
 
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;

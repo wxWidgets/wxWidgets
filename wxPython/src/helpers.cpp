@@ -757,43 +757,115 @@ char** string_LIST_helper(PyObject* source) {
     return temp;
 }
 
-
-
-wxPoint* wxPoint_LIST_helper(PyObject* source) {
-    if (!PyList_Check(source)) {
-        PyErr_SetString(PyExc_TypeError, "Expected a list object.");
-        return NULL;
+//--------------------------------
+// Part of patch from Tim Hochberg
+static inline bool wxPointFromObjects(PyObject* o1, PyObject* o2, wxPoint* point) {
+    if (PyInt_Check(o1) && PyInt_Check(o2)) {
+        point->x = PyInt_AS_LONG(o1);
+        point->y = PyInt_AS_LONG(o2);
+        return true;
     }
-    int count = PyList_Size(source);
-    wxPoint* temp = new wxPoint[count];
-    if (! temp) {
+    if (PyFloat_Check(o1) && PyFloat_Check(o2)) {
+        point->x = (int)PyFloat_AS_DOUBLE(o1);
+        point->y = (int)PyFloat_AS_DOUBLE(o2);
+        return true;
+    }
+    if (PyInstance_Check(o1) || PyInstance_Check(o2)) {
+        // Disallow instances because they can cause havok
+        return false;
+    }
+    if (PyNumber_Check(o1) && PyNumber_Check(o2)) {
+        // I believe this excludes instances, so this should be safe without INCREFFing o1 and o2
+        point->x = PyInt_AsLong(o1);
+        point->y = PyInt_AsLong(o2);
+        return true;
+    }
+    return false;
+}
+
+
+wxPoint* wxPoint_LIST_helper(PyObject* source, int *count) {
+    // Putting all of the declarations here allows
+    // us to put the error handling all in one place.
+    int x;
+    wxPoint* temp;
+    PyObject *o, *o1, *o2;
+    int isFast = PyList_Check(source) || PyTuple_Check(source);
+
+    // The length of the sequence is returned in count.
+    if (!PySequence_Check(source)) {
+        goto error0;
+    }
+    *count = PySequence_Length(source);
+    if (*count < 0) {
+        goto error0;
+    }
+
+    temp = new wxPoint[*count];
+    if (!temp) {
         PyErr_SetString(PyExc_MemoryError, "Unable to allocate temporary array");
         return NULL;
     }
-    for (int x=0; x<count; x++) {
-        PyObject* o = PyList_GetItem(source, x);
-        if (PyTuple_Check(o)) {
-            PyObject* o1 = PyTuple_GetItem(o, 0);
-            PyObject* o2 = PyTuple_GetItem(o, 1);
+    for (x=0; x<*count; x++) {
+        // Get an item: try fast way first.
+        if (isFast) {
+            o = PySequence_Fast_GET_ITEM(source, x);
+        }
+        else {
+            o = PySequence_GetItem(source, x);
+            if (o == NULL) {
+                goto error1;
+            }
+        }
 
-            temp[x].x = PyInt_AsLong(o1);
-            temp[x].y = PyInt_AsLong(o2);
+        // Convert o to wxPoint.
+        if ((PyTuple_Check(o) && PyTuple_GET_SIZE(o) == 2) ||
+            (PyList_Check(o) && PyList_GET_SIZE(o) == 2)) {
+            o1 = PySequence_Fast_GET_ITEM(o, 0);
+            o2 = PySequence_Fast_GET_ITEM(o, 1);
+            if (!wxPointFromObjects(o1, o2, &temp[x])) {
+                goto error2;
+            }
         }
         else if (PyInstance_Check(o)) {
             wxPoint* pt;
-            if (SWIG_GetPtrObj(o,(void **) &pt,"_wxPoint_p")) {
-                PyErr_SetString(PyExc_TypeError,"Expected _wxPoint_p.");
-                return NULL;
+            if (SWIG_GetPtrObj(o, (void **)&pt, "_wxPoint_p")) {
+                goto error2;
             }
             temp[x] = *pt;
         }
-        else {
-            PyErr_SetString(PyExc_TypeError, "Expected a list of 2-tuples or wxPoints.");
-            return NULL;
+        else if (PySequence_Check(o) && PySequence_Length(o) == 2) {
+            o1 = PySequence_GetItem(o, 0);
+            o2 = PySequence_GetItem(o, 1);
+            if (!wxPointFromObjects(o1, o2, &temp[x])) {
+                goto error3;
+            }
+            Py_DECREF(o1);
+            Py_DECREF(o2);
         }
+        else {
+            goto error2;
+        }
+        // Clean up.
+        if (!isFast)
+            Py_DECREF(o);
     }
     return temp;
+
+error3:
+    Py_DECREF(o1);
+    Py_DECREF(o2);
+error2:
+    if (!isFast)
+        Py_DECREF(o);
+error1:
+    delete temp;
+error0:
+    PyErr_SetString(PyExc_TypeError, "Expected a sequence of length-2 sequences or wxPoints.");
+    return NULL;
 }
+// end of patch
+//------------------------------
 
 
 wxBitmap** wxBitmap_LIST_helper(PyObject* source) {
@@ -925,14 +997,21 @@ bool wxPoint_helper(PyObject* source, wxPoint** obj) {
         *obj = ptr;
         return TRUE;
     }
-    // otherwise a 2-tuple of integers is expected
-    else if (PySequence_Check(source) && PyObject_Length(source) == 2) {
+    // otherwise a length-2 sequence of integers is expected
+    if (PySequence_Check(source) && PySequence_Length(source) == 2) {
         PyObject* o1 = PySequence_GetItem(source, 0);
         PyObject* o2 = PySequence_GetItem(source, 1);
-        **obj = wxPoint(PyInt_AsLong(o1), PyInt_AsLong(o2));
+		// This should really check for integers, not numbers -- but that would break code.
+		if (!PyNumber_Check(o1) || !PyNumber_Check(o2)) {
+			Py_DECREF(o1);
+		    Py_DECREF(o2);
+			goto error;
+		}
+		**obj = wxPoint(PyInt_AsLong(o1), PyInt_AsLong(o2));
+		Py_DECREF(o1);
+		Py_DECREF(o2);
         return TRUE;
     }
-
  error:
     PyErr_SetString(PyExc_TypeError, "Expected a 2-tuple of integers or a wxPoint object.");
     return FALSE;

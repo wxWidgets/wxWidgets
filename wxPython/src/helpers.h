@@ -112,7 +112,7 @@ byte* byte_LIST_helper(PyObject* source);
 int* int_LIST_helper(PyObject* source);
 long* long_LIST_helper(PyObject* source);
 char** string_LIST_helper(PyObject* source);
-wxPoint* wxPoint_LIST_helper(PyObject* source);
+wxPoint* wxPoint_LIST_helper(PyObject* source, int* npoints);
 wxBitmap** wxBitmap_LIST_helper(PyObject* source);
 wxString* wxString_LIST_helper(PyObject* source);
 wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
@@ -230,7 +230,7 @@ struct wxPyCoreAPI {
     int*        (*p_int_LIST_helper)(PyObject* source);
     long*       (*p_long_LIST_helper)(PyObject* source);
     char**      (*p_string_LIST_helper)(PyObject* source);
-    wxPoint*    (*p_wxPoint_LIST_helper)(PyObject* source);
+    wxPoint*    (*p_wxPoint_LIST_helper)(PyObject* source, int* npoints);
     wxBitmap**  (*p_wxBitmap_LIST_helper)(PyObject* source);
     wxString*   (*p_wxString_LIST_helper)(PyObject* source);
     wxAcceleratorEntry*   (*p_wxAcceleratorEntry_LIST_helper)(PyObject* source);
