@@ -133,6 +133,7 @@ protected:
     #include "../../art/htmbook.xpm"
     #include "../../art/htmfoldr.xpm"
     #include "../../art/htmpage.xpm"
+    #include "../../art/missimg.xpm"
 #endif // wxUSE_HTML
 
 #include "../../art/addbookm.xpm"
@@ -180,6 +181,7 @@ wxBitmap wxDefaultArtProvider::CreateBitmap(const wxArtID& id,
     ART(wxART_HELP_BOOK,                           htmbook)
     ART(wxART_HELP_FOLDER,                         htmfoldr)
     ART(wxART_HELP_PAGE,                           htmpage)
+    ART(wxART_MISSING_IMAGE,                       missimg)
 #endif // wxUSE_HTML
     ART(wxART_ADD_BOOKMARK,                        addbookm)
     ART(wxART_DEL_BOOKMARK,                        delbookm)
