@@ -300,8 +300,14 @@ wxHtmlTag::wxHtmlTag(wxHtmlTag *parent,
 
 wxHtmlTag::~wxHtmlTag()
 {
-    for (wxHtmlTag *t = m_FirstChild; t; t = t->GetNextSibling())
-        delete t;
+    wxHtmlTag *t1, *t2;
+    t1 = m_FirstChild;
+    while (t1)
+    {
+        t2 = t1->GetNextSibling();
+        delete t1;
+        t1 = t2;
+    }
 }
 
 bool wxHtmlTag::HasParam(const wxString& par) const
