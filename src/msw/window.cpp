@@ -2010,7 +2010,10 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                       node;
                       node = node->GetNext() )
                 {
-                    if ( node->GetData()->AcceptsFocus() )
+                    wxWindow * const win = node->GetData();
+                    if ( win->AcceptsFocus() &&
+                            !(::GetWindowLong(GetHwndOf(win), GWL_EXSTYLE) &
+                                WS_EX_CONTROLPARENT) )
                     {
                         // it shouldn't hang...
                         canSafelyCallIsDlgMsg = TRUE;
@@ -2019,7 +2022,7 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                     }
                 }
             }
-#endif
+#endif // !__WXWINCE__
 
             if ( canSafelyCallIsDlgMsg )
             {
