@@ -68,9 +68,6 @@
 
 //Libraries for MSVC with optional backends
 #ifdef _MSC_VER
-    #if wxUSE_DIRECTSHOW
-        #pragma comment(lib,"strmiids.lib")
-    #endif
     #if wxUSE_QUICKTIME
         #pragma comment(lib,"qtmlClient.lib")
     #endif
@@ -112,15 +109,9 @@ enum
 //    wxID_STOP,   [built-in to wxWidgets]
 //    wxID_ABOUT,  [built-in to wxWidgets]
 //    wxID_EXIT,   [built-in to wxWidgets]
-
-    // event id for our slider
-    wxID_SLIDER,
-
-    // event id for our notebook
-    wxID_NOTEBOOK,
-
-    // event id for our wxMediaCtrl
-    wxID_MEDIACTRL
+    wxID_SLIDER,    // event id for our slider
+    wxID_NOTEBOOK,  // event id for our notebook
+    wxID_MEDIACTRL  // event id for our wxMediaCtrl
 };
 
 // ----------------------------------------------------------------------------
@@ -176,7 +167,7 @@ private:
 
     class MyTimer* m_timer;     //Timer to write info to status bar
     wxString m_basestatus;      //Base status string (see ResetStatus())
-    wxNotebook* m_notebook;
+    wxNotebook* m_notebook;     //Notebook containing our pages
 
     // So that mytimer can access MyFrame's members
     friend class MyTimer;
@@ -413,6 +404,12 @@ MyFrame::MyFrame(const wxString& title)
     //  (wxObjectEventFunction)(wxEventFunction)
     //  (wxCommandEventFunction) &MyFrame::MyHandler
     //
+    //  Or, you can use the new (2.5.5+) event handler
+    //  conversion macros - for instance the above could
+    //  be done as 
+    //  wxCommandEventHandler(MyFrame::MyHandler)
+    //  pretty simple, eh?
+    //
     //  The fourth is an optional userdata param -
     //  this is of historical relevance only and is
     //  there only for backwards compatibility.
@@ -432,55 +429,43 @@ MyFrame::MyFrame(const wxString& title)
     // Menu events
     //
     this->Connect(wxID_EXIT, wxEVT_COMMAND_MENU_SELECTED,
-                  (wxObjectEventFunction) (wxEventFunction)
-                  (wxCommandEventFunction) &MyFrame::OnQuit);
+                  wxCommandEventHandler(MyFrame::OnQuit));
 
     this->Connect(wxID_ABOUT, wxEVT_COMMAND_MENU_SELECTED,
-                  (wxObjectEventFunction) (wxEventFunction)
-                  (wxCommandEventFunction) &MyFrame::OnAbout);
+                  wxCommandEventHandler(MyFrame::OnAbout));
 
     this->Connect(wxID_LOOP, wxEVT_COMMAND_MENU_SELECTED,
-                  (wxObjectEventFunction) (wxEventFunction)
-                  (wxCommandEventFunction) &MyFrame::OnLoop);
+                  wxCommandEventHandler(MyFrame::OnLoop));
 
     this->Connect(wxID_OPENFILENEWPAGE, wxEVT_COMMAND_MENU_SELECTED,
-                  (wxObjectEventFunction) (wxEventFunction)
-                  (wxCommandEventFunction) &MyFrame::OnOpenFileNewPage);
+                  wxCommandEventHandler(MyFrame::OnOpenFileNewPage));
 
     this->Connect(wxID_OPENFILESAMEPAGE, wxEVT_COMMAND_MENU_SELECTED,
-                  (wxObjectEventFunction) (wxEventFunction)
-                  (wxCommandEventFunction) &MyFrame::OnOpenFileSamePage);
+                  wxCommandEventHandler(MyFrame::OnOpenFileSamePage));
 
     this->Connect(wxID_OPENURLNEWPAGE, wxEVT_COMMAND_MENU_SELECTED,
-                  (wxObjectEventFunction) (wxEventFunction)
-                  (wxCommandEventFunction) &MyFrame::OnOpenURLNewPage);
+                  wxCommandEventHandler(MyFrame::OnOpenURLNewPage));
 
     this->Connect(wxID_OPENURLSAMEPAGE, wxEVT_COMMAND_MENU_SELECTED,
-                  (wxObjectEventFunction) (wxEventFunction)
-                  (wxCommandEventFunction) &MyFrame::OnOpenURLSamePage);
+                  wxCommandEventHandler(MyFrame::OnOpenURLSamePage));
 
     this->Connect(wxID_CLOSECURRENTPAGE, wxEVT_COMMAND_MENU_SELECTED,
-                  (wxObjectEventFunction) (wxEventFunction)
-                  (wxCommandEventFunction) &MyFrame::OnCloseCurrentPage);
+                  wxCommandEventHandler(MyFrame::OnCloseCurrentPage));
 
     this->Connect(wxID_PLAY, wxEVT_COMMAND_MENU_SELECTED,
-                  (wxObjectEventFunction) (wxEventFunction)
-                  (wxCommandEventFunction) &MyFrame::OnPlay);
+                  wxCommandEventHandler(MyFrame::OnPlay));
 
     this->Connect(wxID_PAUSE, wxEVT_COMMAND_MENU_SELECTED,
-                  (wxObjectEventFunction) (wxEventFunction)
-                  (wxCommandEventFunction) &MyFrame::OnPause);
+                  wxCommandEventHandler(MyFrame::OnPause));
 
     this->Connect(wxID_STOP, wxEVT_COMMAND_MENU_SELECTED,
-                  (wxObjectEventFunction) (wxEventFunction)
-                  (wxCommandEventFunction) &MyFrame::OnStop);
+                  wxCommandEventHandler(MyFrame::OnStop));
 
     //
     // Notebook events
     //
     this->Connect(wxID_NOTEBOOK, wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,
-                  (wxObjectEventFunction) (wxEventFunction)
-                  (wxNotebookEventFunction) &MyFrame::OnPageChange);
+                  wxNotebookEventHandler(MyFrame::OnPageChange));
 
     //
     // End of Events
@@ -646,6 +631,8 @@ void MyFrame::OpenFile(bool bNewPage)
     {
         if(bNewPage || !m_notebook->GetCurrentPage())
             m_notebook->AddPage(new MyNotebookPage(m_notebook), fd.GetPath(), true);
+        else //don't forget to update notebook page title
+            m_notebook->SetPageText(m_notebook->GetSelection(), fd.GetPath());
 
         if( !GetCurrentMediaCtrl()->Load(fd.GetPath()) )
             wxMessageBox(wxT("Couldn't load file!"));
@@ -657,7 +644,6 @@ void MyFrame::OpenFile(bool bNewPage)
 
         GetCurrentSlider()->SetRange(0,
                         (int)(GetCurrentMediaCtrl()->Length() / 1000));
-
     }
 }
 
@@ -704,6 +690,8 @@ void MyFrame::OpenURL(bool bNewPage)
     {
         if(bNewPage || !m_notebook->GetCurrentPage())
             m_notebook->AddPage(new MyNotebookPage(m_notebook), theURL, true);
+        else //don't forget to update notebook page title
+            m_notebook->SetPageText(m_notebook->GetSelection(), theURL);
 
         if( !GetCurrentMediaCtrl()->Load(wxURI(theURL)) )
             wxMessageBox(wxT("Couldn't load URL!"));
@@ -906,15 +894,13 @@ MyNotebookPage::MyNotebookPage(wxNotebook* theBook) :
     // Slider events
     //
     this->Connect(wxID_SLIDER, wxEVT_COMMAND_SLIDER_UPDATED,
-                  (wxObjectEventFunction) (wxEventFunction)
-                  (wxCommandEventFunction) &MyNotebookPage::OnSeek);
+                  wxCommandEventHandler(MyNotebookPage::OnSeek));
 
     //
     // Media Control events
     //
     this->Connect(wxID_MEDIACTRL, wxEVT_MEDIA_FINISHED,
-                  (wxObjectEventFunction) (wxEventFunction)
-                  (wxMediaEventFunction) &MyNotebookPage::OnMediaFinished);
+                  wxMediaEventHandler(MyNotebookPage::OnMediaFinished));
 }
 
 // ----------------------------------------------------------------------------
