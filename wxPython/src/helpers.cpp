@@ -586,7 +586,15 @@ void wxPySaveThreadState(PyThreadState* tstate) {
     for(size_t i=0; i < wxPyTStates->GetCount(); i++) {
         wxPyThreadState& info = wxPyTStates->Item(i);
         if (info.tid == ctid) {
-            info.tstate = tstate;
+#if 0
+            if (info.tstate != tstate)
+                wxLogMessage("*** tstate mismatch!???");
+#endif
+            // info.tstate = tstate;    *** DO NOT updating existing ones???
+            // Normally it will never change, but apparently COM callbacks
+            // (i.e. ActiveX controls) will (incorrectly IMHO) use a transient
+            // tstate wich will then be garbage the next time we try to use
+            // it...
             wxPyTMutex->Unlock();
             return;
         }
