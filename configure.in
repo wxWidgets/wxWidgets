@@ -1002,10 +1002,6 @@ WX_ARG_SYS_WITH(regex,     [  --with-regex            enable support for wxRegEx
 WX_ARG_SYS_WITH(zlib,      [  --with-zlib             use zlib for LZW compression], wxUSE_ZLIB)
 WX_ARG_WITH(odbc,          [  --with-odbc             use the IODBC and wxODBC classes], wxUSE_ODBC)
 
-dnl ====================
-dnl compile-time options
-dnl ====================
-
 dnl ---------------------------------------------------------------------------
 dnl compile options
 dnl ---------------------------------------------------------------------------
@@ -1979,6 +1975,10 @@ equivalent variable and GTK+ is version 1.2.3 or above.
     PORT_FILES="\${top_srcdir}/src/\$(TOOLKITDIR)/files.lst"
 
     if test "$wxUSE_UNIVERSAL" = "yes"; then
+        dnl FIXME this should not be a permanent state of affairs.
+        wxUSE_MDI_ARCHITECTURE=no
+        AC_MSG_WARN(MDI is not supported for wxUNIVERSAL yet... disabling)
+
         ALL_OBJECTS="\$(GUI_LOWLEVEL_OBJS) \${UNIVOBJS}"
         PORT_FILES="${PORT_FILES} \${top_srcdir}/src/univ/files.lst"
         TOOLKIT_VPATH="\${top_srcdir}/src/univ${PATH_IFS}\${top_srcdir}/src/univ/themes${PATH_IFS}\${top_srcdir}/src/${TOOLKIT_DIR}"
