@@ -3,6 +3,10 @@
 #ifndef _WX_MSW_GCCPRIV_H_
 #define _WX_MSW_GCCPRIV_H_
 
+#if defined(__MINGW32__) && !defined(__GNUWIN32__)
+    #define __GNUWIN32__
+#endif
+
 #if defined( __MINGW32__ ) && !defined(__WINE__) && !defined( HAVE_W32API_H )
     #if ( __GNUC__ > 2 ) || ( ( __GNUC__ == 2 ) && ( __GNUC_MINOR__ >= 95 ) )
         #include <_mingw.h>
