@@ -4586,8 +4586,9 @@ if test "$WXGTK20" = 1; then
         
                 PKG_CHECK_MODULES(LIBGNOMEPRINTUI, libgnomeprintui-2.2,
                     [
+                        EXTRALIBS_GNOMEPRINT="$LIBGNOMEPRINTUI_LIBS"
                         CXXFLAGS="$CXXFLAGS $LIBGNOMEPRINTUI_CFLAGS"
-                        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $LIBGNOMEPRINTUI_LIBS"
+                        AC_DEFINE(wxUSE_LIBGNOMEPRINT)
                     ],
                     [
                         AC_MSG_WARN([libgnomeprintui not found, library will use standard PostScript printing])
