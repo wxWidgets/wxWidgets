@@ -67,7 +67,7 @@
 
 #endif // __WXPM__
 
-#ifdef __WXMAC__
+#if defined(__WXMAC__) && !defined(__UNIX__)
 #include "moreextr.h"
 #endif
 
@@ -597,7 +597,7 @@ void wxGenericDirCtrl::SetupSections()
         }
     }
 #endif
-#elif defined(__WXMAC__)
+#elif defined(__WXMAC__) && !defined(__UNIX__)
     FSSpec volume ;
     short index = 1 ;
     while(1) {
