@@ -117,55 +117,6 @@ Copies {\it file1} to {\it file2}, returning TRUE if successful.
 
 Returns a string containing the current (or working) directory.
 
-\membersection{::wxGetHostName}\label{wxgethostname}
-
-\func{bool}{wxGetHostName}{\param{const wxString\& }{buf}, \param{int }{sz}}
-
-Copies the current host machine's name into the supplied buffer. Please note
-that the returned name is {\it not} fully qualified, i.e. it does not include
-the domain name.
-
-Under Windows or NT, this function first looks in the environment
-variable SYSTEM\_NAME; if this is not found, the entry {\bf HostName}\rtfsp
-in the {\bf wxWindows} section of the WIN.INI file is tried.
-
-Returns TRUE if successful, FALSE otherwise.
-
-\membersection{::wxGetEmailAddress}\label{wxgetemailaddress}
-
-\func{bool}{wxGetEmailAddress}{\param{const wxString\& }{buf}, \param{int }{sz}}
-
-Copies the user's email address into the supplied buffer, by
-concatenating the values returned by \helpref{wxGetHostName}{wxgethostname}\rtfsp
-and \helpref{wxGetUserId}{wxgetuserid}.
-
-Returns TRUE if successful, FALSE otherwise.
-
-\membersection{::wxGetUserId}\label{wxgetuserid}
-
-\func{bool}{wxGetUserId}{\param{const wxString\& }{buf}, \param{int }{sz}}
-
-Copies the current user id into the supplied buffer.
-
-Under Windows or NT, this function first looks in the environment
-variables USER and LOGNAME; if neither of these is found, the entry {\bf UserId}\rtfsp
-in the {\bf wxWindows} section of the WIN.INI file is tried.
-
-Returns TRUE if successful, FALSE otherwise.
-
-\membersection{::wxGetUserName}\label{wxgetusername}
-
-\func{bool}{wxGetUserName}{\param{const wxString\& }{buf}, \param{int }{sz}}
-
-Copies the current user name into the supplied buffer.
-
-Under Windows or NT, this function looks for the entry {\bf UserName}\rtfsp
-in the {\bf wxWindows} section of the WIN.INI file. If PenWindows
-is running, the entry {\bf Current} in the section {\bf User} of
-the PENWIN.INI file is used.
-
-Returns TRUE if successful, FALSE otherwise.
-
 \membersection{::wxGetWorkingDirectory}
 
 \func{wxString}{wxGetWorkingDirectory}{\param{char*}{buf=NULL}, \param{int }{sz=1000}}
@@ -277,6 +228,104 @@ Copies the given stream to the file {\it filename}. Useful when converting an ol
 use streams (within the document/view framework, for example).
 
 Use of this function requires the file wx\_doc.h to be included.
+
+\section{Network functions}\label{networkfunctions}
+
+\membersection{::wxGetFullHostName}\label{wxgetfullhostname}
+
+\func{wxString}{wxGetFullHostName}{\void}
+
+Returns the FQDN (fully qualified domain host name) or an empty string on
+error.
+
+See also: \helpref{wxGetHostName}{wxgethostname}
+
+\wxheading{Include files}
+
+<wx/utils.h>
+
+\membersection{::wxGetEmailAddress}\label{wxgetemailaddress}
+
+\func{bool}{wxGetEmailAddress}{\param{const wxString\& }{buf}, \param{int }{sz}}
+
+Copies the user's email address into the supplied buffer, by
+concatenating the values returned by \helpref{wxGetFullHostName}{wxgetfullhostname}\rtfsp
+and \helpref{wxGetUserId}{wxgetuserid}.
+
+Returns TRUE if successful, FALSE otherwise.
+
+\wxheading{Include files}
+
+<wx/utils.h>
+
+\membersection{::wxGetHostName}\label{wxgethostname}
+
+\func{wxString}{wxGetHostName}{\void}
+\func{bool}{wxGetHostName}{\param{char * }{buf}, \param{int }{sz}}
+
+Copies the current host machine's name into the supplied buffer. Please note
+that the returned name is {\it not} fully qualified, i.e. it does not include
+the domain name.
+
+Under Windows or NT, this function first looks in the environment
+variable SYSTEM\_NAME; if this is not found, the entry {\bf HostName}\rtfsp
+in the {\bf wxWindows} section of the WIN.INI file is tried.
+
+The first variant of this function returns the hostname if successful or an
+empty string otherwise. The second (deprecated) function returns TRUE
+if successful, FALSE otherwise.
+
+See also: \helpref{wxGetFullHostName}{wxgetfullhostname}
+
+\wxheading{Include files}
+
+<wx/utils.h>
+
+\section{User identification}\label{useridfunctions}
+
+\membersection{::wxGetUserId}\label{wxgetuserid}
+
+\func{wxString}{wxGetUserId}{\void}
+\func{bool}{wxGetUserId}{\param{char * }{buf}, \param{int }{sz}}
+
+This function returns the "user id" also known as "login name" under Unix i.e.
+something like "jsmith". It uniquely identifies the current user (on this system).
+
+Under Windows or NT, this function first looks in the environment
+variables USER and LOGNAME; if neither of these is found, the entry {\bf UserId}\rtfsp
+in the {\bf wxWindows} section of the WIN.INI file is tried.
+
+The first variant of this function returns the login name if successful or an
+empty string otherwise. The second (deprecated) function returns TRUE
+if successful, FALSE otherwise.
+
+See also: \helpref{wxGetUserName}{wxgetusername}
+
+\wxheading{Include files}
+
+<wx/utils.h>
+
+\membersection{::wxGetUserName}\label{wxgetusername}
+
+\func{wxString}{wxGetUserName}{\void}
+\func{bool}{wxGetUserName}{\param{char * }{buf}, \param{int }{sz}}
+
+This function returns the full user name (something like "Mr. John Smith").
+
+Under Windows or NT, this function looks for the entry {\bf UserName}\rtfsp
+in the {\bf wxWindows} section of the WIN.INI file. If PenWindows
+is running, the entry {\bf Current} in the section {\bf User} of
+the PENWIN.INI file is used.
+
+The first variant of this function returns the user name if successful or an
+empty string otherwise. The second (deprecated) function returns TRUE
+if successful, FALSE otherwise.
+
+See also: \helpref{wxGetUserId}{wxgetuserid}
+
+\wxheading{Include files}
+
+<wx/utils.h>
 
 \section{String functions}
 
