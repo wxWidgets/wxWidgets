@@ -149,6 +149,8 @@ int wxSpinCtrl::GetValue() const
 {
     wxCHECK_MSG( (m_widget != NULL), 0, wxT("invalid spin button") );
 
+    gtk_spin_button_update( GTK_SPIN_BUTTON(m_widget) );
+
     return (int)ceil(m_adjust->value);
 }
 

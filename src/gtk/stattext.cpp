@@ -62,9 +62,7 @@ bool wxStaticText::Create(wxWindow *parent,
     wxControl::SetLabel(label);
     m_widget = gtk_label_new( m_label.mbc_str() );
     
-    gtk_label_set_line_wrap( GTK_LABEL(m_widget), FALSE );
-
-    SetFont( parent->GetFont() );
+    wxControl::SetFont( parent->GetFont() );
 
     GtkJustification justify;
     if ( style & wxALIGN_CENTER )
@@ -78,6 +76,9 @@ bool wxStaticText::Create(wxWindow *parent,
     // GTK_JUSTIFY_LEFT is 0, RIGHT 1 and CENTER 2
     static const float labelAlignments[] = { 0.0, 1.0, 0.5 };
     gtk_misc_set_alignment(GTK_MISC(m_widget), labelAlignments[justify], 0.0);
+
+    // do not move this call elsewhere
+    gtk_label_set_line_wrap( GTK_LABEL(m_widget), FALSE );
 
     SetSizeOrDefault( size );
 
@@ -107,10 +108,19 @@ void wxStaticText::SetLabel( const wxString &label )
     gtk_label_set( GTK_LABEL(m_widget), m_label.mbc_str() );
 
     // adjust the label size to the new label unless disabled
-    if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
-    {
+    if (!HasFlag(wxST_NO_AUTORESIZE))
         SetSize( GetBestSize() );
-    }
+}
+
+bool wxStaticText::SetFont( const wxFont &font )
+{
+    bool ret = wxControl::SetFont(font);
+
+    // adjust the label size to the new label unless disabled
+    if (!HasFlag(wxST_NO_AUTORESIZE))
+        SetSize( GetBestSize() );
+    
+    return ret;
 }
 
 void wxStaticText::ApplyWidgetStyle()
@@ -118,3 +128,22 @@ void wxStaticText::ApplyWidgetStyle()
     SetWidgetStyle();
     gtk_widget_set_style( m_widget, m_widgetStyle );
 }
+
+wxSize wxStaticText::DoGetBestSize() const
+{
+    // Do not return any arbitrary default value...
+    wxASSERT_MSG( m_widget, wxT("wxStaticText::DoGetBestSize called before creation") );
+
+    // this invalidates the size request
+    gtk_label_set_line_wrap( GTK_LABEL(m_widget), TRUE );
+    gtk_label_set_line_wrap( GTK_LABEL(m_widget), FALSE );
+
+    GtkRequisition req;
+    req.width = 2;
+    req.height = 2;
+    (* GTK_WIDGET_CLASS( GTK_OBJECT(m_widget)->klass )->size_request )
+        (m_widget, &req );
+
+    return wxSize(req.width, req.height);
+}
+

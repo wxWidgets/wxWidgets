@@ -39,7 +39,6 @@ extern const wxChar *wxStaticTextNameStr;
 class wxStaticText : public wxControl
 {
 public:
-
     wxStaticText();
     wxStaticText(wxWindow *parent,
                  wxWindowID id,
@@ -60,10 +59,16 @@ public:
     wxString GetLabel() const;
     void SetLabel( const wxString &label );
 
+    bool SetFont( const wxFont &font );
+    
     // implementation
+    // --------------
+    
     void ApplyWidgetStyle();
 
 protected:
+    virtual wxSize DoGetBestSize() const;
+
     DECLARE_DYNAMIC_CLASS(wxStaticText)
 };
 

@@ -78,6 +78,8 @@ wxSize wxControl::DoGetBestSize() const
     wxASSERT_MSG( m_widget, wxT("DoGetBestSize called before creation") );
 
     GtkRequisition req;
+    req.width = 2;
+    req.height = 2;
     (* GTK_WIDGET_CLASS( GTK_OBJECT(m_widget)->klass )->size_request )
         (m_widget, &req );
 
