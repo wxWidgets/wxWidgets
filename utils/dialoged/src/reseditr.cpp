@@ -427,7 +427,7 @@ bool wxResourceManager::New(bool loadFromFile, const wxString& filename)
         return FALSE;
     }
     
-    if (!m_resourceTable.ParseResourceFile(WXSTRINGCAST str))
+    if (!m_resourceTable.ParseResourceFile(str))
     {
       wxMessageBox("Could not read file.", "Resource file load error", wxOK | wxICON_EXCLAMATION);
       return FALSE;
@@ -1486,12 +1486,15 @@ bool wxResourceManager::DeleteResource(wxItemResource *res)
 
 bool wxResourceManager::DeleteResource(wxWindow *win)
 {
-  if (win->IsKindOf(CLASSINFO(wxControl)))
+  if (win->IsKindOf(CLASSINFO(wxControl)) && (win->GetEventHandler() != win))
   {
     // Deselect and refresh window in case we leave selection
     // handles behind
     wxControl *item = (wxControl *)win;
     wxResourceEditorControlHandler *childHandler = (wxResourceEditorControlHandler *)item->GetEventHandler();
+
+    wxASSERT_MSG( win->GetEventHandler()->IsKindOf(CLASSINFO(wxResourceEditorControlHandler)), "Wrong kind of handler in DeleteResource" );
+
     if (childHandler->IsSelected())
     {
       RemoveSelection(item);
@@ -2241,6 +2244,22 @@ void ObjectMenuProc(wxMenu *menu, wxCommandEvent& event)
     }
     case OBJECT_MENU_DELETE:
     {
+      if (data->IsKindOf(CLASSINFO(wxControl)) && (data->GetEventHandler() != data))
+      {
+         // Deselect and refresh window in case we leave selection
+         // handles behind
+         wxControl *item = (wxControl *)data;
+         wxResourceEditorControlHandler *childHandler = (wxResourceEditorControlHandler *)item->GetEventHandler();
+         if (childHandler->IsSelected())
+         {
+            wxResourceManager::GetCurrentResourceManager()->RemoveSelection(item);
+            childHandler->SelectItem(FALSE);
+#ifndef __WXGTK__
+            item->GetParent()->Refresh();
+#endif
+         }
+      } 
+
       wxResourceManager::GetCurrentResourceManager()->SaveInfoAndDeleteHandler(data);
       wxResourceManager::GetCurrentResourceManager()->DeleteResource(data);
       wxResourceManager::GetCurrentResourceManager()->DeleteWindow(data);

@@ -347,7 +347,7 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, const wxItemResource* c
    else if (itemType == wxString(wxT("wxMessage")) || itemType == wxString(wxT("wxStaticText")) ||
          itemType == wxString(wxT("wxStaticBitmap")))
       {
-        if (childResource->GetValue4() != wxT(""))
+        if (childResource->GetValue4() != wxT("") || itemType == wxString(wxT("wxStaticBitmap")) )
         {
           // Bitmap message
           wxBitmap bitmap = childResource->GetBitmap();
@@ -357,6 +357,12 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, const wxItemResource* c
             ((wxItemResource*) childResource)->SetBitmap(bitmap);
           }
 #if wxUSE_BITMAP_MESSAGE
+#ifdef __WXMSW__
+          // Use a default bitmap
+          if (!bitmap.Ok())
+             bitmap.LoadFile("cross_bmp", wxBITMAP_TYPE_BMP_RESOURCE);
+#endif
+
           if (bitmap.Ok())
            control = new wxStaticBitmap(parent, id, bitmap, pos, size,
              childResource->GetStyle(), childResource->GetName());

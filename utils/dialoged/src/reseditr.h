@@ -12,7 +12,7 @@
 #ifndef _RESEDITR_H_
 #define _RESEDITR_H_
 
-#define wxDIALOG_EDITOR_VERSION 1.6
+#define wxDIALOG_EDITOR_VERSION 1.7
 
 #ifdef __GNUG__
 #pragma interface "reseditr.h"

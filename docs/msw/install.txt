@@ -48,6 +48,7 @@ wx2_x_y_vc.zip             MS VC++ 5.0 project files
 wx2_x_y_cw.zip             Metrowerks CodeWarrior project files
 wx2_x_y_bc.zip             BC++ 5 project files
 jpeg.zip                   Use this to allow wxImage to read and write JPEG files
+tiff.zip                   Use this to allow wxImage to read and write TIFF files
 
 Unarchive the required files plus any optional documentation
 files into a suitable directory such as c:\wx.
@@ -100,7 +101,11 @@ Using project files:
 Using makefiles:
 
 1. Make sure your WXWIN variable is set.
-2. Change directory to wx\src\msw. Type:
+2. If you do NOT have the TIFF or JPEG source code, please remove
+   the tiff and jpeg targets from the 'all' target in
+   src\msw\makefile.vc. Also ensure the settings in
+   include\wx\msw\setup.h specify not to use JPEG or TIFF.
+3. Change directory to wx\src\msw. Type:
 
   'nmake -f makefile.vc'
 
@@ -111,9 +116,6 @@ Using makefiles:
 
    to make the wxWindows core library without debug information
    (wx\lib\wx.lib).
-3. If you wish to use JPEG in your applications, do the same
-   procedure in src\jpeg but add the 'all' target to the
-   command line.
 4. Change directory to wx\samples and type 'nmake -f makefile.vc'
    to make all the samples. You can also make them individually.
 

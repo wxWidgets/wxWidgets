@@ -67,8 +67,8 @@ public:
     // IMPLEMENTATION
 #ifdef __WIN16__
     virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
-    virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 #endif // __WIN16__
+    virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
 protected:
     virtual wxSize DoGetBestSize() const;

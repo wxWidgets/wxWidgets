@@ -311,8 +311,8 @@ void MyApp::GenerateSamples(const wxString& dir)
     project.SetIncludeDirs(wxStringList("../../../include", 0));
     project.SetResourceIncludeDirs(wxStringList("../../../include", 0));
     project.SetLibDirs(wxStringList("../../../lib", 0));
-    project.SetDebugLibDirs(wxStringList("../../../src/Debug", 0));
-    project.SetReleaseLibDirs(wxStringList("../../../src/Release", 0));
+    project.SetDebugLibDirs(wxStringList("../../../src/Debug", "../../../src/jpeg/Debug", "../../../src/tiff/Debug", 0));
+    project.SetReleaseLibDirs(wxStringList("../../../src/Release", "../../../src/jpeg/Release", "../../../tiff/Release", 0));
 
     project.SetProjectName("DialogEdVC");
     project.SetTargetName("dialoged");
@@ -333,8 +333,8 @@ void MyApp::GenerateSamples(const wxString& dir)
     project.SetIncludeDirs(wxStringList("../../../include", 0));
     project.SetResourceIncludeDirs(wxStringList("../../../include", 0));
     project.SetLibDirs(wxStringList("../../../lib", 0));
-    project.SetDebugLibDirs(wxStringList("../../../src/Debug", 0));
-    project.SetReleaseLibDirs(wxStringList("../../../src/Release", 0));
+    project.SetDebugLibDirs(wxStringList("../../../src/Debug", "../../../src/jpeg/Debug", "../../../src/tiff/Debug", 0));
+    project.SetReleaseLibDirs(wxStringList("../../../src/Release", "../../../src/jpeg/Release", "../../../tiff/Release", 0));
 
     project.SetProjectName("Tex2RTFVC");
     project.SetTargetName("tex2rtf");
@@ -354,8 +354,8 @@ void MyApp::GenerateSamples(const wxString& dir)
     project.SetIncludeDirs(wxStringList("../../../include", 0));
     project.SetResourceIncludeDirs(wxStringList("../../../include", 0));
     project.SetLibDirs(wxStringList("../../../lib", 0));
-    project.SetDebugLibDirs(wxStringList("../../../src/Debug", 0));
-    project.SetReleaseLibDirs(wxStringList("../../../src/Release", 0));
+    project.SetDebugLibDirs(wxStringList("../../../src/Debug", "../../../src/jpeg/Debug", "../../../src/tiff/Debug", 0));
+    project.SetReleaseLibDirs(wxStringList("../../../src/Release", "../../../src/jpeg/Release", "../../../tiff/Release", 0));
 
     project.SetProjectName("HelpGenVC");
     project.SetTargetName("helpgen");
@@ -376,8 +376,8 @@ void MyApp::GenerateSamples(const wxString& dir)
     project.SetIncludeDirs(wxStringList("../../include", 0));
     project.SetResourceIncludeDirs(wxStringList("../../include", 0));
     project.SetLibDirs(wxStringList("../../lib", 0));
-    project.SetDebugLibDirs(wxStringList("../../src/Debug", 0));
-    project.SetReleaseLibDirs(wxStringList("../../src/Release", 0));
+    project.SetDebugLibDirs(wxStringList("../../src/Debug", "../../src/jpeg/Debug", "../../src/tiff/Debug", 0));
+    project.SetReleaseLibDirs(wxStringList("../../src/Release", "../../src/jpeg/Release", "../../tiff/Release", 0));
 
     project.SetProjectName("ProjGenVC");
     project.SetTargetName("makeproj");
@@ -395,8 +395,8 @@ void MyApp::GenerateSamples(const wxString& dir)
     project.SetIncludeDirs(wxStringList("../../../include", 0));
     project.SetResourceIncludeDirs(wxStringList("../../../include", 0));
     project.SetLibDirs(wxStringList("../../../lib", 0));
-    project.SetDebugLibDirs(wxStringList("../../../src/Debug", 0));
-    project.SetReleaseLibDirs(wxStringList("../../../src/Release", 0));
+    project.SetDebugLibDirs(wxStringList("../../../src/Debug", "../../../src/jpeg/Debug", "../../../src/tiff/Debug", 0));
+    project.SetReleaseLibDirs(wxStringList("../../../src/Release", "../../../src/jpeg/Release", "../../../tiff/Release", 0));
 
     project.SetProjectName("TreeSampleVC");
     project.SetTargetName("test");
@@ -414,8 +414,9 @@ void MyApp::GenerateSamples(const wxString& dir)
     project.SetIncludeDirs(wxStringList("../../../../include", "../../src", 0));
     project.SetResourceIncludeDirs(wxStringList("../../../../include", 0));
     project.SetLibDirs(wxStringList("../../../../lib", 0));
-    project.SetDebugLibDirs(wxStringList("../../../../src/Debug", "../../src/Debug", 0));
-    project.SetReleaseLibDirs(wxStringList("../../../../src/Release", "../../src/Release", 0));
+    project.SetDebugLibDirs(wxStringList("../../../../src/Debug", "../../src/Debug", "../../../../src/jpeg/Debug", "../../../../src/tiff/Debug", 0));
+    project.SetReleaseLibDirs(wxStringList("../../../../src/Release", "../../src/Release", "../../../../src/jpeg/Release", "../../../../tiff/Release", 0));
+
     project.SetExtraLibs(wxStringList("ogl.lib", 0));
 
     project.SetProjectName("OGLEditVC");
@@ -436,8 +437,8 @@ void MyApp::GenerateSamples(const wxString& dir)
     project.SetIncludeDirs(wxStringList("../../../../include", "../../src", 0));
     project.SetResourceIncludeDirs(wxStringList("../../../../include", 0));
     project.SetLibDirs(wxStringList("../../../../lib", 0));
-    project.SetDebugLibDirs(wxStringList("../../../../src/Debug", "../../src/Debug", 0));
-    project.SetReleaseLibDirs(wxStringList("../../../../src/Release", "../../src/Release", 0));
+    project.SetDebugLibDirs(wxStringList("../../../../src/Debug", "../../src/Debug", "../../../../src/jpeg/Debug", "../../../../src/tiff/Debug", 0));
+    project.SetReleaseLibDirs(wxStringList("../../../../src/Release", "../../src/Release", "../../../../src/jpeg/Release", "../../../../tiff/Release", 0));
     project.SetExtraLibs(wxStringList("ogl.lib", 0));
 
     project.SetProjectName("StudioVC");
@@ -460,8 +461,9 @@ void MyApp::GenerateSamples(const wxString& dir)
     project.SetIncludeDirs(wxStringList("../../../../include", "../../win", 0));
     project.SetResourceIncludeDirs(wxStringList("../../../../include", 0));
     project.SetLibDirs(wxStringList("../../../../lib", 0));
-    project.SetDebugLibDirs(wxStringList("../../../../src/Debug", "../../win/Debug", 0));
-    project.SetReleaseLibDirs(wxStringList("../../../../src/Release", "../../win/Release", 0));
+    project.SetDebugLibDirs(wxStringList("../../../../src/Debug", "../../win/Debug", "../../../../src/jpeg/Debug", "../../../../src/tiff/Debug", 0));
+    project.SetReleaseLibDirs(wxStringList("../../../../src/Release", "../../win/Release", "../../../../src/jpeg/Release", "../../../../tiff/Release", 0));
+
     project.SetExtraLibs(wxStringList("glcanvas.lib", "opengl32.lib", "glu32.lib", 0));
 
     project.SetProjectName("CubeVC");
@@ -481,8 +483,8 @@ void MyApp::GenerateSamples(const wxString& dir)
     project.SetIncludeDirs(wxStringList("../../../../include", "../../win", 0));
     project.SetResourceIncludeDirs(wxStringList("../../../../include", 0));
     project.SetLibDirs(wxStringList("../../../../lib", 0));
-    project.SetDebugLibDirs(wxStringList("../../../../src/Debug", "../../win/Debug", 0));
-    project.SetReleaseLibDirs(wxStringList("../../../../src/Release", "../../win/Release", 0));
+    project.SetDebugLibDirs(wxStringList("../../../../src/Debug", "../../win/Debug", "../../../../src/jpeg/Debug", "../../../../src/tiff/Debug", 0));
+    project.SetReleaseLibDirs(wxStringList("../../../../src/Release", "../../win/Release", "../../../../src/jpeg/Release", "../../../../tiff/Release", 0));
     project.SetExtraLibs(wxStringList("glcanvas.lib", "opengl32.lib", "glu32.lib", 0));
 
     project.SetProjectName("IsoSurfVC");
@@ -502,8 +504,8 @@ void MyApp::GenerateSamples(const wxString& dir)
     project.SetIncludeDirs(wxStringList("../../../../include", "../../win", 0));
     project.SetResourceIncludeDirs(wxStringList("../../../../include", 0));
     project.SetLibDirs(wxStringList("../../../../lib", 0));
-    project.SetDebugLibDirs(wxStringList("../../../../src/Debug", "../../win/Debug", 0));
-    project.SetReleaseLibDirs(wxStringList("../../../../src/Release", "../../win/Release", 0));
+    project.SetDebugLibDirs(wxStringList("../../../../src/Debug", "../../win/Debug", "../../../../src/jpeg/Debug", "../../../../src/tiff/Debug", 0));
+    project.SetReleaseLibDirs(wxStringList("../../../../src/Release", "../../win/Release", "../../../../src/jpeg/Release", "../../../../tiff/Release", 0));
     project.SetExtraLibs(wxStringList("glcanvas.lib", "opengl32.lib", "glu32.lib", 0));
 
     project.SetProjectName("PenguinVC");

@@ -56,7 +56,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)
 //     reason to revert to the backward compatible behaviour - but I still
 //     leave this possibility just in case.
 
-#define RADIOBTN_PARENT_IS_RADIOBOX 1
+#define RADIOBTN_PARENT_IS_RADIOBOX 0
 
 // ---------------------------------------------------------------------------
 // private functions
