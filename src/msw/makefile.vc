@@ -287,10 +287,10 @@ $(OLEDIR)\$D:
 
 # wxWindows library as DLL
 dll:
-        nmake -f makefile.vc all FINAL=$(FINAL) DLL=1 WXMAKINGDLL=1
+        nmake -f makefile.vc all FINAL=$(FINAL) DLL=1 WXMAKINGDLL=1 NEW_WXLIBNAME=$(NEW_WXLIBNAME)
 
 cleandll:
-        nmake -f makefile.vc clean FINAL=$(FINAL) DLL=1 WXMAKINGDLL=1
+        nmake -f makefile.vc clean FINAL=$(FINAL) DLL=1 WXMAKINGDLL=1 NEW_WXLIBNAME=$(NEW_WXLIBNAME)
 
 # wxWindows + app as DLL. Only affects main.cpp.
 dllapp:
@@ -311,7 +311,7 @@ dllnp:
 # or an app is calling the DLL exported functionality (WXDLLEXPORT is different
 # in each case) so you couldn't use the same PCH.
 pch:
-        nmake -f makefile.vc pch1 WXUSINGDLL=1 FINAL=$(FINAL)
+        nmake -f makefile.vc pch1 WXUSINGDLL=1 FINAL=$(FINAL) NEW_WXLIBNAME=$(NEW_WXLIBNAME)
 
 pch1:   dirs $(DUMMYOBJ)
     echo $(DUMMYOBJ)
