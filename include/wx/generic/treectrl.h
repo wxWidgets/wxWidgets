@@ -294,6 +294,8 @@ public:
   int  GetItemImage(long item) const;
   long GetParent( long item ) const;
   long GetRootItem() const;
+  long GetChild(long item) const;
+  long GetNextItem(long item, int code) const;
   long GetSelection() const;
   bool SelectItem( long item );
   bool ItemHasChildren( long item ) const;
@@ -304,6 +306,9 @@ public:
   bool SetItemText( long item, const wxString &text );
   void SetItemImage(long item, int image, int imageSel) const;
   long HitTest( const wxPoint& point, int &flags );
+  
+  int  GetItemState(long item, long stateMask) const;
+  bool SetItemState(long item, long state, long stateMask);
 
   void AdjustMyScrollbars();
   void PaintLevel( wxGenericTreeItem *item, wxPaintDC &dc, int level, int &y );

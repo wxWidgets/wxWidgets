@@ -39,7 +39,8 @@
 #include <sys/timeb.h>
 #endif
 
-#if defined(__linux__) || defined(__SVR4__) || defined(__SYSV__) || defined(__SGI__) || defined(__ALPHA__) || defined(__GNUWIN32__)
+#if defined(__linux__) || defined(__SVR4__) || defined(__SYSV__) || defined(__SGI__) || \
+    defined(__ALPHA__) || defined(__GNUWIN32__) || defined(__FreeBSD__) || defined(__NetBSD__)
 #include <sys/time.h>
 #endif
 

@@ -517,7 +517,7 @@ void wxFrame::SetTitle( const wxString &title )
 
 void wxFrame::SetSizeHints(int minW, int minH,
                            int WXUNUSED(maxW), int WXUNUSED(maxH),
-                           int WXUNUSED(incW) )
+                           int WXUNUSED(incW), int WXUNUSED(incH) )
 {
   // gdk_window_set_hints alone doesn't really prevent the user from shrinking
   // the window to the size smaller than (minW, minH)

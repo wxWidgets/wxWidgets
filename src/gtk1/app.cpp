@@ -346,6 +346,8 @@ int wxEntry( int argc, char *argv[] )
   wxTheApp->argc = argc;
   wxTheApp->argv = argv;
 
+  gtk_set_locale();
+  
   gtk_init( &argc, &argv );
 
 #ifdef USE_GDK_IMLIB

@@ -33,7 +33,7 @@ wxTreeItem::wxTreeItem()
   m_selectedImage = -1;
   m_children = 0;
   m_data = 0;
-};
+}
 
 //-----------------------------------------------------------------------------
 // wxTreeEvent
@@ -46,7 +46,7 @@ wxTreeEvent::wxTreeEvent( wxEventType commandType, int id ) :
 {
   m_code = 0;
   m_oldItem = 0;
-};
+}
 
 //-----------------------------------------------------------------------------
 // wxGenericTreeItem
@@ -59,7 +59,7 @@ wxGenericTreeItem::wxGenericTreeItem( wxGenericTreeItem *parent )
   Reset();
   m_parent = parent;
   m_hasHilight = FALSE;
-};
+}
 
 wxGenericTreeItem::wxGenericTreeItem( wxGenericTreeItem *parent, const wxTreeItem& item, wxDC *dc )
 {
@@ -67,7 +67,7 @@ wxGenericTreeItem::wxGenericTreeItem( wxGenericTreeItem *parent, const wxTreeIte
   SetItem( item, dc );
   m_parent = parent;
   m_hasHilight = FALSE;
-};
+}
 
 void wxGenericTreeItem::SetItem( const wxTreeItem &item, wxDC *dc )
 {
@@ -90,7 +90,7 @@ void wxGenericTreeItem::SetItem( const wxTreeItem &item, wxDC *dc )
   dc->GetTextExtent( m_text, &lw, &lh );
   m_width = lw;
   m_height = lh;
-};
+}
 
 void wxGenericTreeItem::SetText( const wxString &text, wxDC *dc )
 {
@@ -100,7 +100,7 @@ void wxGenericTreeItem::SetText( const wxString &text, wxDC *dc )
   dc->GetTextExtent( m_text, &lw, &lh );
   m_width = lw;
   m_height = lh;
-};
+}
 
 void wxGenericTreeItem::Reset()
 {
@@ -122,7 +122,7 @@ void wxGenericTreeItem::Reset()
   m_children.DeleteContents( TRUE );
   m_isCollapsed = TRUE;
   m_parent = (wxGenericTreeItem *) NULL;
-};
+}
 
 void wxGenericTreeItem::GetItem( wxTreeItem &item ) const
 {
@@ -138,12 +138,12 @@ void wxGenericTreeItem::GetItem( wxTreeItem &item ) const
     item.m_children = (int)m_hasChildren;
   if ((item.m_mask & wxTREE_MASK_DATA) == wxTREE_MASK_DATA)
     item.m_data = m_data;
-};
+}
 
 bool wxGenericTreeItem::HasChildren()
 {
   return m_hasChildren;
-};
+}
 
 bool wxGenericTreeItem::HasPlus()
 {
@@ -151,7 +151,7 @@ bool wxGenericTreeItem::HasPlus()
     return FALSE;
 
   return !IsExpanded();
-};
+}
 
 int wxGenericTreeItem::NumberOfVisibleDescendents()
 {
@@ -162,14 +162,14 @@ int wxGenericTreeItem::NumberOfVisibleDescendents()
     wxGenericTreeItem *item = (wxGenericTreeItem*)node->Data();
     ret += item->NumberOfVisibleDescendents();
     node = node->Next();
-  };
+  }
   return ret;
-};
+}
 
 int wxGenericTreeItem::NumberOfVisibleChildren()
 {
   return m_isCollapsed ? 0 : m_children.Number();
-};
+}
 
 wxGenericTreeItem *wxGenericTreeItem::FindItem( long itemId ) const
 {
@@ -181,20 +181,20 @@ wxGenericTreeItem *wxGenericTreeItem::FindItem( long itemId ) const
     wxGenericTreeItem *res = item->FindItem( itemId );
     if (res) return (wxGenericTreeItem*)(res);
     node = node->Next();
-  };
+  }
   return (wxGenericTreeItem *) NULL;
-};
+}
 
 void wxGenericTreeItem::AddChild( wxGenericTreeItem *child )
 {
   m_children.Append( child );
-};
+}
 
 void wxGenericTreeItem::SetCross( int x, int y )
 {
   m_xCross = x;
   m_yCross = y;
-};
+}
 
 void wxGenericTreeItem::GetSize( int &x, int &y )
 {
@@ -207,8 +207,8 @@ void wxGenericTreeItem::GetSize( int &x, int &y )
     wxGenericTreeItem *item = (wxGenericTreeItem*)node->Data();
     item->GetSize( x, y );
     node = node->Next();
-  };
-};
+  }
+}
 
 long wxGenericTreeItem::HitTest( const wxPoint& point, int &flags )
 {
@@ -222,17 +222,17 @@ long wxGenericTreeItem::HitTest( const wxPoint& point, int &flags )
     {
       flags = wxTREE_HITTEST_ONITEMBUTTON;
       return m_itemId;
-    };
+    }
     if ((point.x > m_x) && (point.x < m_x+m_width))
     {
       flags = wxTREE_HITTEST_ONITEMLABEL;
       return m_itemId;
-    };
+    }
     if (point.x > m_x)
     {
       flags = wxTREE_HITTEST_ONITEMRIGHT;
       return m_itemId;
-    };
+    }
     flags = wxTREE_HITTEST_ONITEMINDENT;
     return m_itemId;
   }
@@ -247,11 +247,11 @@ long wxGenericTreeItem::HitTest( const wxPoint& point, int &flags )
         long res = child->HitTest( point, flags );
         if (res != -1) return res;
         node = node->Next();
-      };
-    };
-  };
+      }
+    }
+  }
   return -1;
-};
+}
 
 void wxGenericTreeItem::PrepareEvent( wxTreeEvent &event )
 {
@@ -266,7 +266,7 @@ void wxGenericTreeItem::PrepareEvent( wxTreeEvent &event )
   event.m_code = 0;
   event.m_pointDrag.x = 0;
   event.m_pointDrag.y = 0;
-};
+}
 
 void wxGenericTreeItem::SendKeyDown( wxWindow *target )
 {
@@ -274,7 +274,7 @@ void wxGenericTreeItem::SendKeyDown( wxWindow *target )
   PrepareEvent( event );
   event.SetEventObject( target );
   target->ProcessEvent( event );
-};
+}
 
 void wxGenericTreeItem::SendSelected( wxWindow *target )
 {
@@ -282,7 +282,7 @@ void wxGenericTreeItem::SendSelected( wxWindow *target )
   PrepareEvent( event );
   event.SetEventObject( target );
   target->ProcessEvent( event );
-};
+}
 
 void wxGenericTreeItem::SendDelete( wxWindow *target )
 {
@@ -290,7 +290,7 @@ void wxGenericTreeItem::SendDelete( wxWindow *target )
   PrepareEvent( event );
   event.SetEventObject( target );
   target->ProcessEvent( event );
-};
+}
 
 void wxGenericTreeItem::SendExpand( wxWindow *target )
 {
@@ -304,7 +304,7 @@ void wxGenericTreeItem::SendExpand( wxWindow *target )
   event.SetEventType(wxEVT_COMMAND_TREE_ITEM_EXPANDED);
   PrepareEvent( event );
   target->ProcessEvent( event );
-};
+}
 
 void wxGenericTreeItem::SendCollapse( wxWindow *target )
 {
@@ -318,17 +318,17 @@ void wxGenericTreeItem::SendCollapse( wxWindow *target )
   event.SetEventType(wxEVT_COMMAND_TREE_ITEM_COLLAPSED);
   PrepareEvent( event );
   target->ProcessEvent( event );
-};
+}
 
 void wxGenericTreeItem::SetHilight( bool set )
 {
   m_hasHilight = set;
-};
+}
 
 bool wxGenericTreeItem::HasHilight()
 {
   return m_hasHilight;
-};
+}
 
 //-----------------------------------------------------------------------------
 // wxTreeCtrl
@@ -358,7 +358,7 @@ wxTreeCtrl::wxTreeCtrl()
   m_hilightBrush = new wxBrush( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHT), wxSOLID );
   m_imageList = (wxImageList *) NULL;
   m_smallImageList = (wxImageList *) NULL;
-};
+}
 
 wxTreeCtrl::wxTreeCtrl(wxWindow *parent, wxWindowID id,
             const wxPoint& pos, const wxSize& size,
@@ -377,11 +377,11 @@ wxTreeCtrl::wxTreeCtrl(wxWindow *parent, wxWindowID id,
   m_imageList = (wxImageList *) NULL;
   m_smallImageList = (wxImageList *) NULL;
   Create( parent, id, pos, size, style, name );
-};
+}
 
 wxTreeCtrl::~wxTreeCtrl()
 {
-};
+}
 
 bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
             const wxPoint& pos, const wxSize& size,
@@ -391,13 +391,13 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
   SetBackgroundColour( *wxWHITE );
   m_dottedPen = wxPen( *wxBLACK, 0, 0 );
   return TRUE;
-};
+}
 
 int wxTreeCtrl::GetCount() const
 {
   if (!m_anchor) return 0;
   return m_anchor->NumberOfVisibleDescendents();
-};
+}
 
 long wxTreeCtrl::InsertItem( long parent, const wxString& label, int image,
       int selImage, long WXUNUSED(insertAfter) )
@@ -411,7 +411,7 @@ long wxTreeCtrl::InsertItem( long parent, const wxString& label, int image,
   {
     p = FindItem( parent );
     if (!p) return -1;
-  };
+  }
   wxTreeItem item;
   m_lastId++;
   item.m_mask = wxTREE_MASK_HANDLE;
@@ -420,17 +420,17 @@ long wxTreeCtrl::InsertItem( long parent, const wxString& label, int image,
   {
     item.m_text = label;
     item.m_mask |= wxTREE_MASK_TEXT;
-  };
+  }
   if (image >= 0)
   {
     item.m_image = image;
     item.m_mask |= wxTREE_MASK_IMAGE;
-  };
+  }
   if (selImage >= 0)
   {
     item.m_selectedImage = selImage;
     item.m_mask |= wxTREE_MASK_SELECTED_IMAGE;
-  };
+  }
 
   wxClientDC dc(this);
   wxGenericTreeItem *new_child = new wxGenericTreeItem( p, item, &dc );
@@ -465,7 +465,7 @@ long wxTreeCtrl::InsertItem( long parent, const wxString& label, int image,
       wxNode *node = p->m_children.Member( new_child )->Previous();
       wxGenericTreeItem* last_child = (wxGenericTreeItem*)node->Data();
       rect.y = dc.LogicalToDeviceY( last_child->m_y );
-    };
+    }
 
     AdjustMyScrollbars();
 
@@ -476,10 +476,10 @@ long wxTreeCtrl::InsertItem( long parent, const wxString& label, int image,
     AdjustMyScrollbars();
 
     Refresh();
-  };
+  }
 
   return m_lastId;
-};
+}
 
 long wxTreeCtrl::InsertItem( long parent, wxTreeItem &info, long WXUNUSED(insertAfter) )
 {
@@ -496,8 +496,8 @@ long wxTreeCtrl::InsertItem( long parent, wxTreeItem &info, long WXUNUSED(insert
     {
       printf( "TreeItem not found.\n" );
       return -1;
-    };
-  };
+    }
+  }
   long ret = 0;
   if ((info.m_mask & wxTREE_MASK_HANDLE) == 0)
   {
@@ -509,7 +509,7 @@ long wxTreeCtrl::InsertItem( long parent, wxTreeItem &info, long WXUNUSED(insert
   else
   {
     ret = info.m_itemId;
-  };
+  }
 
   wxClientDC dc(this);
   wxGenericTreeItem *new_child = new wxGenericTreeItem( p, info, &dc );
@@ -544,7 +544,7 @@ long wxTreeCtrl::InsertItem( long parent, wxTreeItem &info, long WXUNUSED(insert
       wxNode *node = p->m_children.Member( new_child )->Previous();
       wxGenericTreeItem* last_child = (wxGenericTreeItem*)node->Data();
       rect.y = dc.LogicalToDeviceY( last_child->m_y );
-    };
+    }
 
     AdjustMyScrollbars();
 
@@ -555,11 +555,11 @@ long wxTreeCtrl::InsertItem( long parent, wxTreeItem &info, long WXUNUSED(insert
     AdjustMyScrollbars();
 
     Refresh();
-  };
+  }
 
   info.m_mask = oldMask;
   return ret;
-};
+}
 
 bool wxTreeCtrl::ExpandItem( long item, int action )
 {
@@ -585,7 +585,7 @@ bool wxTreeCtrl::ExpandItem( long item, int action )
         if ( child->IsExpanded() )
           ExpandItem( child->m_itemId, wxTREE_EXPAND_COLLAPSE );
         node = node->Next();
-      };
+      }
 
       CalculatePositions();
 
@@ -601,7 +601,7 @@ bool wxTreeCtrl::ExpandItem( long item, int action )
         ExpandItem( item, wxTREE_EXPAND_EXPAND );
       return TRUE;
     }
-  };
+  }
 
   wxClientDC dc(this);
   PrepareDC(dc);
@@ -620,7 +620,7 @@ bool wxTreeCtrl::ExpandItem( long item, int action )
   AdjustMyScrollbars();
 
   return TRUE;
-};
+}
 
 void wxTreeCtrl::DeleteItem( long item )
 {
@@ -648,7 +648,7 @@ bool wxTreeCtrl::DeleteAllItems()
   m_anchor = (wxGenericTreeItem *) NULL;
   Refresh();
   return TRUE;
-};
+}
 
 bool wxTreeCtrl::GetItem( wxTreeItem &info ) const
 {
@@ -656,21 +656,21 @@ bool wxTreeCtrl::GetItem( wxTreeItem &info ) const
   if (!i) return FALSE;
   i->GetItem( info );
   return TRUE;
-};
+}
 
 long wxTreeCtrl::GetItemData( long item ) const
 {
   wxGenericTreeItem *i = FindItem( item );
   if (!i) return 0;
   return i->m_data;
-};
+}
 
 wxString wxTreeCtrl::GetItemText( long item ) const
 {
   wxGenericTreeItem *i = FindItem( item );
   if (!i) return "";
   return i->m_text;
-};
+}
 
 int wxTreeCtrl::GetItemImage(long item) const
 {
@@ -685,20 +685,72 @@ long wxTreeCtrl::GetParent( long item ) const
   i = i->m_parent;
   if (!i) return -1;
   return i->m_parent->m_itemId;
-};
+}
 
 long wxTreeCtrl::GetRootItem() const
 {
   if (m_anchor) return m_anchor->m_itemId;
   return -1;
-};
+}
+
+long wxTreeCtrl::GetChild( long item ) const
+{
+  wxGenericTreeItem *i = FindItem( item );
+  if (!i) return -1;
+  if (!i->HasChildren()) return -1;
+  wxNode *node = i->m_children.First();
+  i = (wxGenericTreeItem *)node->Data();
+  return i->m_itemId;
+}
+
+long wxTreeCtrl::GetNextItem( long item, int code ) const
+{
+  switch (code)
+  {
+    case wxTREE_NEXT_CARET:  return GetSelection();
+    case wxTREE_NEXT_CHILD:  return GetChild( item );
+    case wxTREE_NEXT_ROOT:   return GetRootItem();
+    case wxTREE_NEXT_PARENT: return GetParent( item );
+    case wxTREE_NEXT_NEXT:
+    {
+      wxGenericTreeItem *i = FindItem( item );
+      if (!i) return -1;
+      if (i->m_parent)
+      {
+        wxNode *node = i->m_parent->m_children.Member( i );
+	if (!node) return -1;
+	node = node->Next();
+	if (!node) return -1;
+        i = (wxGenericTreeItem *)node->Data();
+        return i->m_itemId;
+      }
+      break;
+    }
+    case wxTREE_NEXT_PREVIOUS:
+    {
+      wxGenericTreeItem *i = FindItem( item );
+      if (!i) return -1;
+      if (i->m_parent)
+      {
+        wxNode *node = i->m_parent->m_children.Member( i );
+	if (!node) return -1;
+	node = node->Previous();
+	if (!node) return -1;
+        i = (wxGenericTreeItem *)node->Data();
+        return i->m_itemId;
+      }
+      break;
+    }
+  }
+  return -1;
+}
 
 long wxTreeCtrl::GetSelection() const
 {
   return m_current ? m_current->GetItemId() : -1;
-};
+}
 
-bool wxTreeCtrl::SelectItem(long itemId)
+bool wxTreeCtrl::SelectItem( long itemId )
 {
   wxGenericTreeItem *pItem = FindItem(itemId);
   if ( !pItem ) {
@@ -710,7 +762,7 @@ bool wxTreeCtrl::SelectItem(long itemId)
   SelectItem(pItem);
 
   return TRUE;
-};
+}
 
 void wxTreeCtrl::SelectItem(wxGenericTreeItem *item)
 {
@@ -720,7 +772,7 @@ void wxTreeCtrl::SelectItem(wxGenericTreeItem *item)
     {
       m_current->SetHilight( FALSE );
       RefreshLine( m_current );
-    };
+    }
     m_current = item;
     m_current->SetHilight( TRUE );
     RefreshLine( m_current );
@@ -734,18 +786,18 @@ bool wxTreeCtrl::ItemHasChildren( long item ) const
   wxGenericTreeItem *i = FindItem( item );
   if (!i) return FALSE;
   return i->m_hasChildren;
-};
+}
 
 void wxTreeCtrl::SetIndent( int indent )
 {
   m_indent = indent;
   Refresh();
-};
+}
 
 int wxTreeCtrl::GetIndent() const
 {
   return m_indent;
-};
+}
 
 bool wxTreeCtrl::SetItem( wxTreeItem &info )
 {
@@ -755,7 +807,7 @@ bool wxTreeCtrl::SetItem( wxTreeItem &info )
   i->SetItem( info, &dc );
   Refresh();
   return TRUE;
-};
+}
 
 bool wxTreeCtrl::SetItemData( long item, long data )
 {
@@ -763,7 +815,7 @@ bool wxTreeCtrl::SetItemData( long item, long data )
   if (!i) return FALSE;
   i->m_data = data;
   return TRUE;
-};
+}
 
 bool wxTreeCtrl::SetItemText( long item, const wxString &text )
 {
@@ -772,15 +824,67 @@ bool wxTreeCtrl::SetItemText( long item, const wxString &text )
   wxClientDC dc(this);
   i->SetText( text, &dc );
   return TRUE;
-};
+}
 
 void wxTreeCtrl::SetItemImage(long item, int image, int imageSel) const
 {
   wxGenericTreeItem *i = FindItem( item );
-  if ( i != 0 ) {
+  if ( i != 0 ) 
+  {
     i->SetImage(image);
     i->SetSelectedImage(imageSel);
   }
+}
+
+int wxTreeCtrl::GetItemState( long item, long stateMask ) const
+{
+  wxGenericTreeItem *i = FindItem( item );
+  if (!i) return 0;
+  int ret = 0;
+  
+  // Currently, an item is always selected _and_ focussed in wxGTK
+  
+  if (stateMask & wxTREE_STATE_FOCUSED)
+    if (m_current == i) 
+      ret += wxTREE_STATE_FOCUSED;
+    
+  if (stateMask & wxTREE_STATE_SELECTED)
+    if (m_current == i) 
+      ret += wxTREE_STATE_SELECTED;
+      
+  if (stateMask & wxTREE_STATE_EXPANDED)
+    if (i->IsExpanded()) 
+      ret += wxTREE_STATE_EXPANDED;
+      
+  return ret;
+}
+
+bool wxTreeCtrl::SetItemState( long item, long state, long stateMask )
+{
+  wxGenericTreeItem *i = FindItem( item );
+  if (!i) return FALSE;
+  
+  if (stateMask & wxTREE_STATE_FOCUSED)
+  {
+    if (state & wxTREE_STATE_FOCUSED)
+      SelectItem( i );
+  }
+    
+  if (stateMask & wxTREE_STATE_SELECTED)
+  {
+    if (state & wxTREE_STATE_SELECTED)
+      SelectItem( i );
+  }
+      
+  if (stateMask & wxTREE_STATE_EXPANDED)
+  {
+    if (state & wxTREE_STATE_EXPANDED)
+      ExpandItem( i->m_itemId, wxTREE_EXPAND_EXPAND );
+    else
+      ExpandItem( i->m_itemId, wxTREE_EXPAND_COLLAPSE );
+  }
+  
+  return TRUE;
 }
 
 long wxTreeCtrl::HitTest( const wxPoint& point, int &flags )
@@ -788,13 +892,13 @@ long wxTreeCtrl::HitTest( const wxPoint& point, int &flags )
   flags = 0;
   if (!m_anchor) return -1;
   return m_anchor->HitTest( point, flags );
-};
+}
 
 wxImageList *wxTreeCtrl::GetImageList( int which ) const
 {
   if (which == wxIMAGE_LIST_NORMAL) return m_imageList;
   return m_smallImageList;
-};
+}
 
 void wxTreeCtrl::SetImageList( wxImageList *imageList, int which )
 {
@@ -807,8 +911,8 @@ void wxTreeCtrl::SetImageList( wxImageList *imageList, int which )
   {
     if (m_smallImageList) delete m_smallImageList;
     m_smallImageList = imageList;
-  };
-};
+  }
+}
 
 void wxTreeCtrl::AdjustMyScrollbars()
 {
@@ -825,8 +929,8 @@ void wxTreeCtrl::AdjustMyScrollbars()
   else
   {
     SetScrollbars( 0, 0, 0, 0 );
-  };
-};
+  }
+}
 
 void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxPaintDC &dc, int level, int &y )
 {
@@ -861,7 +965,7 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxPaintDC &dc, int level, 
         dc.DrawLine( horizX+13, y, horizX+18, y );
         if (item->HasPlus())
           dc.DrawLine( horizX+15, y-2, horizX+15, y+3 );
-      };
+      }
 
       if (item->HasHilight())
       {
@@ -894,8 +998,8 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxPaintDC &dc, int level, 
         dc.DrawRectangle( item->m_x-2, item->m_y-2, tw+4, th+4 );
         dc.DrawText( item->m_text, item->m_x, item->m_y );
         dc.SetPen( *wxBLACK_PEN );
-      };
-  };
+      }
+  }
 
   if (item->NumberOfVisibleChildren() == 0) return;
 
@@ -912,7 +1016,7 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxPaintDC &dc, int level, 
     PaintLevel( child, dc, level+1, y );
 
     node = node->Next();
-  };
+  }
 
   dc.DrawLine( horizX+15, oldY+5, horizX+15, semiOldY );
 }
@@ -931,24 +1035,24 @@ void wxTreeCtrl::OnPaint( const wxPaintEvent &WXUNUSED(event) )
 
   int y = m_lineHeight / 2 + 2;
   PaintLevel( m_anchor, dc, 0, y );
-};
+}
 
 void wxTreeCtrl::OnSetFocus( const wxFocusEvent &WXUNUSED(event) )
 {
   m_hasFocus = TRUE;
   if (m_current) RefreshLine( m_current );
-};
+}
 
 void wxTreeCtrl::OnKillFocus( const wxFocusEvent &WXUNUSED(event) )
 {
   m_hasFocus = FALSE;
   if (m_current) RefreshLine( m_current );
-};
+}
 
 void wxTreeCtrl::OnChar( wxKeyEvent &event )
 {
   event.Skip();
-};
+}
 
 void wxTreeCtrl::OnMouse( const wxMouseEvent &event )
 {
@@ -979,8 +1083,8 @@ void wxTreeCtrl::OnMouse( const wxMouseEvent &event )
   {
     ExpandItem( item->m_itemId, wxTREE_EXPAND_TOGGLE );
     return;
-  };
-};
+  }
+}
 
 void wxTreeCtrl::CalculateLevel( wxGenericTreeItem *item, wxPaintDC &dc, int level, int &y )
 {
@@ -1001,8 +1105,8 @@ void wxTreeCtrl::CalculateLevel( wxGenericTreeItem *item, wxPaintDC &dc, int lev
     CalculateLevel( child, dc, level+1, y );
 
     node = node->Next();
-  };
-};
+  }
+}
 
 void wxTreeCtrl::CalculatePositions()
 {
@@ -1019,13 +1123,13 @@ void wxTreeCtrl::CalculatePositions()
 
   int y = m_lineHeight / 2 + 2;
   CalculateLevel( m_anchor, dc, 0, y );
-};
+}
 
 wxGenericTreeItem *wxTreeCtrl::FindItem( long itemId ) const
 {
   if (!m_anchor) return (wxGenericTreeItem *) NULL;
   return m_anchor->FindItem( itemId );
-};
+}
 
 void wxTreeCtrl::RefreshLine( wxGenericTreeItem *item )
 {
@@ -1038,7 +1142,7 @@ void wxTreeCtrl::RefreshLine( wxGenericTreeItem *item )
   rect.width = 1000;
   rect.height = dc.GetCharHeight()+6;
   Refresh( TRUE, &rect );
-};
+}
 
 
 
