@@ -160,7 +160,9 @@ gtk_scrollbar_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 
 extern bool wxIsInsideYield;
 
-typedef void (*GtkDrawCallback)(GtkWidget *widget, GdkRectangle *rect);
+extern "C" {
+    typedef void (*GtkDrawCallback)(GtkWidget *widget, GdkRectangle *rect);
+}
 
 static GtkDrawCallback gs_gtk_text_draw = NULL;
 
