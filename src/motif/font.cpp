@@ -137,7 +137,7 @@ wxXFont::~wxXFont()
     XmFontList fontList = (XmFontList) m_fontList;
     XmFontListFree (fontList);
 
-#if wxCHECK_MOTIF_VERSION( 2, 0 )
+#if wxCHECK_MOTIF_VERSION( 2, 0 ) && !wxCHECK_LESSTIF()
     XmRenderTable renderTable = (XmRenderTable) m_renderTable;
     XmRenderTableFree (renderTable);
 #endif
