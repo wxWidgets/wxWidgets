@@ -1753,6 +1753,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_EBool",0},
     { "_wxPrintQuality","_size_t",0},
     { "_class_wxCustomDataObject","_wxCustomDataObject",0},
+    { "_wxSpinCtrl","_class_wxSpinCtrl",0},
     { "_class_wxRegionIterator","_wxRegionIterator",0},
     { "_class_wxPyTextDropTarget","_wxPyTextDropTarget",0},
     { "_class_wxMenuBar","_wxMenuBar",0},
@@ -1848,6 +1849,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPoint","_class_wxPoint",0},
     { "_class_wxButton","_wxButton",0},
     { "_wxRadioBox","_class_wxRadioBox",0},
+    { "_class_wxSpinCtrl","_wxSpinCtrl",0},
     { "_char","_wxChar",0},
     { "_wxBitmap","_class_wxBitmap",0},
     { "_wxWindowDC","_class_wxWindowDC",0},
@@ -2083,6 +2085,11 @@ SWIGEXPORT(void) initwindows2c() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("windows2c", windows2cMethods);
 	 d = PyModule_GetDict(m);
+	 PyDict_SetItemString(d,"wxSPLIT_HORIZONTAL", PyInt_FromLong((long) wxSPLIT_HORIZONTAL));
+	 PyDict_SetItemString(d,"wxSPLIT_VERTICAL", PyInt_FromLong((long) wxSPLIT_VERTICAL));
+	 PyDict_SetItemString(d,"wxSPLIT_DRAG_NONE", PyInt_FromLong((long) wxSPLIT_DRAG_NONE));
+	 PyDict_SetItemString(d,"wxSPLIT_DRAG_DRAGGING", PyInt_FromLong((long) wxSPLIT_DRAG_DRAGGING));
+	 PyDict_SetItemString(d,"wxSPLIT_DRAG_LEFT_DOWN", PyInt_FromLong((long) wxSPLIT_DRAG_LEFT_DOWN));
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

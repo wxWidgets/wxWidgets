@@ -2376,6 +2376,62 @@ static PyObject *_wrap_wxWindow_GetWindowStyleFlag(PyObject *self, PyObject *arg
     return _resultobj;
 }
 
+#define wxWindow_SetWindowStyleFlag(_swigobj,_swigarg0)  (_swigobj->SetWindowStyleFlag(_swigarg0))
+static PyObject *_wrap_wxWindow_SetWindowStyleFlag(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _arg0;
+    long  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","style", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxWindow_SetWindowStyleFlag",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_SetWindowStyleFlag. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxWindow_SetWindowStyleFlag(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxWindow_SetWindowStyle(_swigobj,_swigarg0)  (_swigobj->SetWindowStyle(_swigarg0))
+static PyObject *_wrap_wxWindow_SetWindowStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _arg0;
+    long  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","style", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxWindow_SetWindowStyle",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_SetWindowStyle. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxWindow_SetWindowStyle(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxWindow_Hide(_swigobj)  (_swigobj->Hide())
 static PyObject *_wrap_wxWindow_Hide(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -8966,6 +9022,8 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_IsEnabled", (PyCFunction) _wrap_wxWindow_IsEnabled, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_InitDialog", (PyCFunction) _wrap_wxWindow_InitDialog, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_Hide", (PyCFunction) _wrap_wxWindow_Hide, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_SetWindowStyle", (PyCFunction) _wrap_wxWindow_SetWindowStyle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_SetWindowStyleFlag", (PyCFunction) _wrap_wxWindow_SetWindowStyleFlag, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetWindowStyleFlag", (PyCFunction) _wrap_wxWindow_GetWindowStyleFlag, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetUpdateRegion", (PyCFunction) _wrap_wxWindow_GetUpdateRegion, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetTitle", (PyCFunction) _wrap_wxWindow_GetTitle, METH_VARARGS | METH_KEYWORDS },

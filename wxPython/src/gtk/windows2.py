@@ -214,3 +214,8 @@ class wxSplitterWindow(wxSplitterWindowPtr):
 
 #-------------- VARIABLE WRAPPERS ------------------
 
+wxSPLIT_HORIZONTAL = windows2c.wxSPLIT_HORIZONTAL
+wxSPLIT_VERTICAL = windows2c.wxSPLIT_VERTICAL
+wxSPLIT_DRAG_NONE = windows2c.wxSPLIT_DRAG_NONE
+wxSPLIT_DRAG_DRAGGING = windows2c.wxSPLIT_DRAG_DRAGGING
+wxSPLIT_DRAG_LEFT_DOWN = windows2c.wxSPLIT_DRAG_LEFT_DOWN

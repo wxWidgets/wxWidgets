@@ -56,6 +56,7 @@ extern PyObject *SWIG_newvarlink(void);
 #include "helpers.h"
 #include <wx/slider.h>
 #include <wx/spinbutt.h>
+#include <wx/spinctrl.h>
 #include <wx/dynarray.h>
 #include <wx/statline.h>
 //#include <wx/toggbutt.h>
@@ -3262,7 +3263,7 @@ static PyObject * wxListBox_GetSelections(wxListBox *self) {
           wxArrayInt lst;
           self->GetSelections(lst);
           PyObject *tup = PyTuple_New(lst.GetCount());
-          for(int i=0; i<lst.GetCount(); i++) {
+          for(size_t i=0; i<lst.GetCount(); i++) {
               PyTuple_SetItem(tup, i, PyInt_FromLong(lst[i]));
           }
           return tup;
@@ -7152,7 +7153,99 @@ static PyObject *_wrap_wxSlider_SetValue(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
+static void *SwigwxSpinCtrlTowxSpinButton(void *ptr) {
+    wxSpinCtrl *src;
+    wxSpinButton *dest;
+    src = (wxSpinCtrl *) ptr;
+    dest = (wxSpinButton *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxSpinCtrlTowxControl(void *ptr) {
+    wxSpinCtrl *src;
+    wxControl *dest;
+    src = (wxSpinCtrl *) ptr;
+    dest = (wxControl *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxSpinCtrlTowxWindow(void *ptr) {
+    wxSpinCtrl *src;
+    wxWindow *dest;
+    src = (wxSpinCtrl *) ptr;
+    dest = (wxWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxSpinCtrlTowxEvtHandler(void *ptr) {
+    wxSpinCtrl *src;
+    wxEvtHandler *dest;
+    src = (wxSpinCtrl *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+#define new_wxSpinCtrl(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6,_swigarg7,_swigarg8,_swigarg9) (new wxSpinCtrl(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6,_swigarg7,_swigarg8,_swigarg9))
+static PyObject *_wrap_new_wxSpinCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSpinCtrl * _result;
+    wxWindow * _arg0;
+    wxWindowID  _arg1 = (wxWindowID ) -1;
+    char * _arg2 = (char *) "";
+    wxPoint * _arg3 = (wxPoint *) &wxPyDefaultPosition;
+    wxSize * _arg4 = (wxSize *) &wxPyDefaultSize;
+    long  _arg5 = (long ) wxSP_ARROW_KEYS;
+    int  _arg6 = (int ) 0;
+    int  _arg7 = (int ) 100;
+    int  _arg8 = (int ) 0;
+    char * _arg9 = (char *) "wxSpinCtrl";
+    PyObject * _argo0 = 0;
+    wxPoint  temp;
+    PyObject * _obj3 = 0;
+    wxSize  temp0;
+    PyObject * _obj4 = 0;
+    char *_kwnames[] = { "parent","id","value","pos","size","style","min","max","initial","name", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|isOOliiis:new_wxSpinCtrl",_kwnames,&_argo0,&_arg1,&_arg2,&_obj3,&_obj4,&_arg5,&_arg6,&_arg7,&_arg8,&_arg9)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxSpinCtrl. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_obj3)
+{
+    _arg3 = &temp;
+    if (! wxPoint_helper(_obj3, &_arg3))
+        return NULL;
+}
+    if (_obj4)
+{
+    _arg4 = &temp0;
+    if (! wxSize_helper(_obj4, &_arg4))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxSpinCtrl *)new_wxSpinCtrl(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,_arg6,_arg7,_arg8,_arg9);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxSpinCtrl_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
 static PyMethodDef controlscMethods[] = {
+	 { "new_wxSpinCtrl", (PyCFunction) _wrap_new_wxSpinCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSlider_SetValue", (PyCFunction) _wrap_wxSlider_SetValue, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSlider_SetTick", (PyCFunction) _wrap_wxSlider_SetTick, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSlider_SetThumbLength", (PyCFunction) _wrap_wxSlider_SetThumbLength, METH_VARARGS | METH_KEYWORDS },
@@ -7364,9 +7457,12 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_EBool",0},
     { "_wxPrintQuality","_size_t",0},
     { "_class_wxCustomDataObject","_wxCustomDataObject",0},
+    { "_wxSpinCtrl","_class_wxSpinCtrl",0},
     { "_class_wxRegionIterator","_wxRegionIterator",0},
     { "_class_wxPyTextDropTarget","_wxPyTextDropTarget",0},
     { "_class_wxMenuBar","_wxMenuBar",0},
+    { "_class_wxEvtHandler","_class_wxSpinCtrl",SwigwxSpinCtrlTowxEvtHandler},
+    { "_class_wxEvtHandler","_wxSpinCtrl",SwigwxSpinCtrlTowxEvtHandler},
     { "_class_wxEvtHandler","_class_wxSlider",SwigwxSliderTowxEvtHandler},
     { "_class_wxEvtHandler","_wxSlider",SwigwxSliderTowxEvtHandler},
     { "_class_wxEvtHandler","_class_wxRadioButton",SwigwxRadioButtonTowxEvtHandler},
@@ -7484,11 +7580,14 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxButton","_wxBitmapButton",SwigwxBitmapButtonTowxButton},
     { "_class_wxButton","_wxButton",0},
     { "_wxRadioBox","_class_wxRadioBox",0},
+    { "_class_wxSpinCtrl","_wxSpinCtrl",0},
     { "_char","_wxChar",0},
     { "_wxBitmap","_class_wxBitmap",0},
     { "_wxWindowDC","_class_wxWindowDC",0},
     { "_wxTimerEvent","_class_wxTimerEvent",0},
     { "_wxScrollBar","_class_wxScrollBar",0},
+    { "_wxSpinButton","_class_wxSpinCtrl",SwigwxSpinCtrlTowxSpinButton},
+    { "_wxSpinButton","_wxSpinCtrl",SwigwxSpinCtrlTowxSpinButton},
     { "_wxSpinButton","_class_wxSpinButton",0},
     { "_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0},
     { "_class_wxNotifyEvent","_wxNotifyEvent",0},
@@ -7521,6 +7620,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxFocusEvent","_class_wxFocusEvent",0},
     { "_wxMaximizeEvent","_class_wxMaximizeEvent",0},
     { "_class_wxTimerEvent","_wxTimerEvent",0},
+    { "_class_wxSpinButton","_class_wxSpinCtrl",SwigwxSpinCtrlTowxSpinButton},
+    { "_class_wxSpinButton","_wxSpinCtrl",SwigwxSpinCtrlTowxSpinButton},
     { "_class_wxSpinButton","_wxSpinButton",0},
     { "_wxAcceleratorEntry","_class_wxAcceleratorEntry",0},
     { "_class_wxPanel","_wxPanel",0},
@@ -7548,6 +7649,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxBrush","_wxBrush",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
+    { "_class_wxWindow","_class_wxSpinCtrl",SwigwxSpinCtrlTowxWindow},
+    { "_class_wxWindow","_wxSpinCtrl",SwigwxSpinCtrlTowxWindow},
     { "_class_wxWindow","_class_wxSlider",SwigwxSliderTowxWindow},
     { "_class_wxWindow","_wxSlider",SwigwxSliderTowxWindow},
     { "_class_wxWindow","_class_wxRadioButton",SwigwxRadioButtonTowxWindow},
@@ -7616,6 +7719,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxScrolledWindow","_class_wxScrolledWindow",0},
     { "_unsigned_char","_byte",0},
     { "_class_wxMenu","_wxMenu",0},
+    { "_wxControl","_class_wxSpinCtrl",SwigwxSpinCtrlTowxControl},
+    { "_wxControl","_wxSpinCtrl",SwigwxSpinCtrlTowxControl},
     { "_wxControl","_class_wxSlider",SwigwxSliderTowxControl},
     { "_wxControl","_wxSlider",SwigwxSliderTowxControl},
     { "_wxControl","_class_wxRadioButton",SwigwxRadioButtonTowxControl},
@@ -7717,6 +7822,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxValidator","_class_wxValidator",0},
     { "_class_wxLayoutConstraints","_wxLayoutConstraints",0},
     { "_wxIconizeEvent","_class_wxIconizeEvent",0},
+    { "_class_wxControl","_class_wxSpinCtrl",SwigwxSpinCtrlTowxControl},
+    { "_class_wxControl","_wxSpinCtrl",SwigwxSpinCtrlTowxControl},
     { "_class_wxControl","_class_wxSlider",SwigwxSliderTowxControl},
     { "_class_wxControl","_wxSlider",SwigwxSliderTowxControl},
     { "_class_wxControl","_class_wxRadioButton",SwigwxRadioButtonTowxControl},
@@ -7787,6 +7894,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxMemoryDC","_wxMemoryDC",0},
     { "_wxPyTextDropTarget","_class_wxPyTextDropTarget",0},
     { "_wxMenuBar","_class_wxMenuBar",0},
+    { "_wxEvtHandler","_class_wxSpinCtrl",SwigwxSpinCtrlTowxEvtHandler},
+    { "_wxEvtHandler","_wxSpinCtrl",SwigwxSpinCtrlTowxEvtHandler},
     { "_wxEvtHandler","_class_wxSlider",SwigwxSliderTowxEvtHandler},
     { "_wxEvtHandler","_wxSlider",SwigwxSliderTowxEvtHandler},
     { "_wxEvtHandler","_class_wxRadioButton",SwigwxRadioButtonTowxEvtHandler},
@@ -7835,6 +7944,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxFileDataObject","_class_wxFileDataObject",0},
     { "_class_wxEraseEvent","_wxEraseEvent",0},
     { "_class_wxDataObjectComposite","_wxDataObjectComposite",0},
+    { "_wxWindow","_class_wxSpinCtrl",SwigwxSpinCtrlTowxWindow},
+    { "_wxWindow","_wxSpinCtrl",SwigwxSpinCtrlTowxWindow},
     { "_wxWindow","_class_wxSlider",SwigwxSliderTowxWindow},
     { "_wxWindow","_wxSlider",SwigwxSliderTowxWindow},
     { "_wxWindow","_class_wxRadioButton",SwigwxRadioButtonTowxWindow},
