@@ -89,7 +89,7 @@ template<> void wxStringWriteValue(wxString & , wxPoint* const & )
     assert(0) ;
 }
 
-WX_CUSTOM_TYPE_INFO(wxPoint)
+WX_CUSTOM_TYPE_INFO(wxPoint, wxToStringConverter<wxPoint> , wxFromStringConverter<wxPoint>)
 
 template<> void wxStringReadValue(const wxString &s , wxSize &data )
 {
@@ -111,7 +111,7 @@ template<> void wxStringWriteValue(wxString & , wxSize * const & )
     assert(0) ;
 }
 
-WX_CUSTOM_TYPE_INFO(wxSize)
+WX_CUSTOM_TYPE_INFO(wxSize, wxToStringConverter<wxSize> , wxFromStringConverter<wxSize>)
 
 #endif
 
