@@ -154,8 +154,8 @@ MyCanvas::MyCanvas( wxScrolledWindow *parent, wxWindowID id,
 {
     m_owner = parent;
     
-    (void)new wxButton( this, -1, "Hallo I", wxPoint(20,20), wxSize(100,30) );
-    (void)new wxButton( this, -1, "Hallo II", wxPoint(220,20), wxSize(100,30) );
+    (void)new wxButton( this, -1, "Hallo I", wxPoint(0,50), wxSize(100,25) );
+    (void)new wxButton( this, -1, "Hallo II", wxPoint(200,50), wxSize(100,25) );
 
     SetBackgroundColour( *wxWHITE );
   
@@ -173,13 +173,55 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     dc.SetPen( *wxBLACK_PEN );
     
-    dc.DrawText( "Some text", 140, 140 );
-
-    dc.DrawRectangle( 100, 160, 200, 200 );
+    // OK, let's assume we are a grid control and we have two
+    // grid cells. Here in OnPaint we want to know which cell
+    // to redraw so that we prevent redrawing cells that don't
+    // need to get redrawn. We have one cell at (0,0) and one
+    // more at (200,0), both having a size of (100,25).
     
-    dc.SetBrush( *wxTRANSPARENT_BRUSH );
+    // We can query how much the window has been scrolled 
+    // by calling CalcUnscrolledPosition()
     
-    dc.DrawRectangle( 10, 10, 480, 980 );
+    int scroll_x = 0;
+    int scroll_y = 0;
+    m_owner->CalcUnscrolledPosition( scroll_x, scroll_y, &scroll_x, &scroll_y );
+    
+    // We also need to know the size of the window to see which
+    // cells are completely hidden and not get redrawn
+    
+    int size_x = 0;
+    int size_y = 0;
+    GetClientSize( &size_x, &size_y );
+    
+    // First cell: (0,0)(100,25)
+    // It it on screen?
+    if ((0+100-scroll_x > 0) && (0+25-scroll_y > 0) &&
+        (0-scroll_x < size_x) && (0-scroll_y < size_y))
+    {
+        // Has the region an screen been exposed?
+	if (IsExposed(0,0,100,25))
+	{
+	    printf( "Redraw first cell\n" );
+            dc.DrawRectangle( 0, 0, 100, 25 );
+	    dc.DrawText( "First Cell", 5, 5 );
+	}
+    }
+    
+    
+    // Second cell: (0,200)(100,25)
+    // It it on screen?
+    if ((200+100-scroll_x > 0) && (0+25-scroll_y > 0) &&
+        (200-scroll_x < size_x) && (0-scroll_y < size_y))
+    {
+        // Has the region an screen been exposed?
+	if (IsExposed(200,0,100,25))
+	{
+	    printf( "Redraw second cell\n" );
+            dc.DrawRectangle( 200, 0, 100, 25 );
+	    dc.DrawText( "Second Cell", 205, 5 );
+	}
+    }
+    
 }
 
 
