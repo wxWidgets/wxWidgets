@@ -325,7 +325,6 @@ void wxHtmlImageCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
                                 (y + m_PosY) / m_Scale, TRUE);
         dc.SetUserScale(us_x, us_y);
     }
-    wxHtmlCell::Draw(dc, x, y, view_y1, view_y2);
 }
 
 wxHtmlLinkInfo *wxHtmlImageCell::GetLink( int x, int y ) const

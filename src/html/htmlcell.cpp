@@ -46,7 +46,6 @@ wxHtmlCell::wxHtmlCell() : wxObject()
 wxHtmlCell::~wxHtmlCell() 
 {
     if (m_Link) delete m_Link; 
-    if (m_Next) delete m_Next;
 }
 
 
@@ -71,14 +70,9 @@ bool wxHtmlCell::AdjustPagebreak(int *pagebreak) const
     if ((!m_CanLiveOnPagebreak) && 
                 m_PosY < *pagebreak && m_PosY + m_Height > *pagebreak) {
         *pagebreak = m_PosY;
-        if (m_Next != NULL) m_Next -> AdjustPagebreak(pagebreak);
         return TRUE;
     }
-    
-    else {
-        if (m_Next != NULL) return m_Next -> AdjustPagebreak(pagebreak);
-        else return FALSE;
-    }
+    return FALSE;
 }
 
 
@@ -96,28 +90,24 @@ void wxHtmlCell::SetLink(const wxHtmlLinkInfo& link)
 void wxHtmlCell::Layout(int w) 
 {
     SetPos(0, 0); 
-    if (m_Next) m_Next -> Layout(w);
 }
 
 
 void wxHtmlCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2) 
 {
-    if (m_Next) m_Next -> Draw(dc, x, y, view_y1, view_y2);
 }
 
 
 
 void wxHtmlCell::DrawInvisible(wxDC& dc, int x, int y) 
 {
-    if (m_Next) m_Next -> DrawInvisible(dc, x, y);
 }
 
 
 
 const wxHtmlCell* wxHtmlCell::Find(int condition, const void* param) const 
 {
-    if (m_Next) return m_Next -> Find(condition, param); 
-    else return NULL;
+    return NULL;
 }
 
 
@@ -252,7 +242,6 @@ wxHtmlWordCell::wxHtmlWordCell(const wxString& word, wxDC& dc) : wxHtmlCell()
 void wxHtmlWordCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
 {
     dc.DrawText(m_Word, x + m_PosX, y + m_PosY);
-    wxHtmlCell::Draw(dc, x, y, view_y1, view_y2);
 }
 
 
@@ -280,7 +269,13 @@ wxHtmlContainerCell::wxHtmlContainerCell(wxHtmlContainerCell *parent) : wxHtmlCe
 
 wxHtmlContainerCell::~wxHtmlContainerCell() 
 {
-    if (m_Cells) delete m_Cells;
+    wxHtmlCell *cell = m_Cells;
+    while ( cell )
+    {
+        wxHtmlCell *cellNext = cell->GetNext();
+        delete cell;
+        cell = cellNext;
+    }
 }
 
 
@@ -377,7 +372,8 @@ void wxHtmlContainerCell::Layout(int w)
     if (m_Cells) {
         int l = (m_IndentLeft < 0) ? (-m_IndentLeft * m_Width / 100) : m_IndentLeft;
         int r = (m_IndentRight < 0) ? (-m_IndentRight * m_Width / 100) : m_IndentRight;
-        m_Cells -> Layout(m_Width - (l + r));
+        for (wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext())
+            cell->Layout(m_Width - (l + r));
     }
 
     /*
@@ -513,22 +509,31 @@ void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
             dc.DrawLine(x + m_PosX, y + m_PosY + m_Height - 1, x + m_PosX + m_Width - 1, y + m_PosY + m_Height - 1);
         }
 
-        if (m_Cells) m_Cells -> Draw(dc, x + m_PosX, y + m_PosY, view_y1, view_y2);
+        if (m_Cells) 
+        {
+            for (wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext())
+                cell->Draw(dc, x + m_PosX, y + m_PosY, view_y1, view_y2);
+        }
     }
     // container invisible, just proceed font+color changing:
     else {
-        if (m_Cells) m_Cells -> DrawInvisible(dc, x + m_PosX, y + m_PosY);
+        if (m_Cells) 
+        {
+            for (wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext())
+                cell->DrawInvisible(dc, x + m_PosX, y + m_PosY);
+        }
     }
-
-    wxHtmlCell::Draw(dc, x, y, view_y1, view_y2);
 }
 
 
 
 void wxHtmlContainerCell::DrawInvisible(wxDC& dc, int x, int y)
 {
-    if (m_Cells) m_Cells -> DrawInvisible(dc, x + m_PosX, y + m_PosY);
-    wxHtmlCell::DrawInvisible(dc, x, y);
+    if (m_Cells) 
+    {
+        for (wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext())
+            cell->DrawInvisible(dc, x + m_PosX, y + m_PosY);
+    }
 }
 
 
@@ -605,14 +610,17 @@ void wxHtmlContainerCell::SetWidthFloat(const wxHtmlTag& tag, double pixel_scale
 
 const wxHtmlCell* wxHtmlContainerCell::Find(int condition, const void* param) const
 {
-    const wxHtmlCell *r = NULL;
+    if (m_Cells)
+    {   
+        const wxHtmlCell *r = NULL;
 
-    if (m_Cells) {
-        r = m_Cells -> Find(condition, param);
-        if (r) return r;
+        for (wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext())
+        {
+            r = cell->Find(condition, param);
+            if (r) return r;
+        }
     }
-
-    return wxHtmlCell::Find(condition, param);
+    return NULL;
 }
 
 
@@ -650,7 +658,6 @@ void wxHtmlColourCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
         dc.SetBackground(wxBrush(m_Colour, wxSOLID));
         dc.SetTextBackground(m_Colour);
     }
-    wxHtmlCell::Draw(dc, x, y, view_y1, view_y2);
 }
 
 void wxHtmlColourCell::DrawInvisible(wxDC& dc, int x, int y)
@@ -661,7 +668,6 @@ void wxHtmlColourCell::DrawInvisible(wxDC& dc, int x, int y)
         dc.SetBackground(wxBrush(m_Colour, wxSOLID));
         dc.SetTextBackground(m_Colour);
     }
-    wxHtmlCell::DrawInvisible(dc, x, y);
 }
 
 
@@ -674,13 +680,11 @@ void wxHtmlColourCell::DrawInvisible(wxDC& dc, int x, int y)
 void wxHtmlFontCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
 {
     dc.SetFont(m_Font);
-    wxHtmlCell::Draw(dc, x, y, view_y1, view_y2);
 }
 
 void wxHtmlFontCell::DrawInvisible(wxDC& dc, int x, int y)
 {
     dc.SetFont(m_Font);
-    wxHtmlCell::DrawInvisible(dc, x, y);
 }
 
 
@@ -717,8 +721,6 @@ void wxHtmlWidgetCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
 
     ((wxScrolledWindow*)(m_Wnd -> GetParent())) -> ViewStart(&stx, &sty);
     m_Wnd -> SetSize(absx - wxHTML_SCROLL_STEP * stx, absy  - wxHTML_SCROLL_STEP * sty, m_Width, m_Height);
-
-    wxHtmlCell::Draw(dc, x, y, view_y1, view_y2);
 }
 
 
@@ -736,8 +738,6 @@ void wxHtmlWidgetCell::DrawInvisible(wxDC& dc, int x, int y)
 
     ((wxScrolledWindow*)(m_Wnd -> GetParent())) -> ViewStart(&stx, &sty);
     m_Wnd -> SetSize(absx - wxHTML_SCROLL_STEP * stx, absy  - wxHTML_SCROLL_STEP * sty, m_Width, m_Height);
-
-    wxHtmlCell::DrawInvisible(dc, x, y);
 }
 
 
