@@ -113,9 +113,9 @@ void RegExMatchTestCase::runTest()
             wxString msgstr;
             msgstr.Printf(_T("\\%d == '%s' (expected '%s')"),
                           (int)i, result.c_str(), expected.c_str());
-            const char *msg = msgstr.mb_str();
 
-            CPPUNIT_ASSERT_MESSAGE(msg, result == expected);
+            CPPUNIT_ASSERT_MESSAGE((const char*)msgstr.mb_str(),
+                                   result == expected);
         }
 
         if ((m_flags & wxRE_NOSUB) == 0)
@@ -166,12 +166,10 @@ void RegExReplaceTestCase::runTest()
 
     wxString msgstr;
     msgstr.Printf(_T("returns '%s' (expected '%s')"), text.c_str(), m_expected.c_str());
-    const char *msg = msgstr.mb_str();
-    CPPUNIT_ASSERT_MESSAGE(msg, text == m_expected);
+    CPPUNIT_ASSERT_MESSAGE((const char*)msgstr.mb_str(), text == m_expected);
 
     msgstr.Printf(_T("matches %d times (expected %d)"), nRepl, m_count);
-    msg = msgstr.mb_str();
-    CPPUNIT_ASSERT_MESSAGE(msg, nRepl == m_count);
+    CPPUNIT_ASSERT_MESSAGE((const char*)msgstr.mb_str(), nRepl == m_count);
 }
 
 
