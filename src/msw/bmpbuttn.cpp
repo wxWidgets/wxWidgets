@@ -100,48 +100,49 @@ bitmap "disabled" ,
 
 #define BUTTON_HEIGHT_FACTOR (EDIT_CONTROL_FACTOR * 1.1)
 
-bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bitmap,
-           const wxPoint& pos,
-           const wxSize& size, long style,
-           const wxValidator& wxVALIDATOR_PARAM(validator),
-           const wxString& name)
+bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id,
+    const wxBitmap& bitmap,
+    const wxPoint& pos,
+    const wxSize& size, long style,
+    const wxValidator& wxVALIDATOR_PARAM(validator),
+    const wxString& name)
 {
-  m_bmpNormal = bitmap;
-  SetName(name);
+    m_bmpNormal = bitmap;
+    SetName(name);
 
 #if wxUSE_VALIDATORS
-  SetValidator(validator);
+    SetValidator(validator);
 #endif // wxUSE_VALIDATORS
 
-  parent->AddChild(this);
+    parent->AddChild(this);
 
-  m_backgroundColour = parent->GetBackgroundColour();
-  m_foregroundColour = parent->GetForegroundColour();
-  m_windowStyle = style;
+    m_backgroundColour = parent->GetBackgroundColour();
+    m_foregroundColour = parent->GetForegroundColour();
+    m_windowStyle = style;
 
-  if ( style & wxBU_AUTODRAW )
-  {
-    m_marginX = wxDEFAULT_BUTTON_MARGIN;
-    m_marginY = wxDEFAULT_BUTTON_MARGIN;
-  }
+    if ( style & wxBU_AUTODRAW )
+    {
+        m_marginX = wxDEFAULT_BUTTON_MARGIN;
+        m_marginY = wxDEFAULT_BUTTON_MARGIN;
+    }
 
-  int x = pos.x;
-  int y = pos.y;
-  int width = size.x;
-  int height = size.y;
+    int x = pos.x;
+    int y = pos.y;
+    int width = size.x;
+    int height = size.y;
 
-  if (id == -1)
-    m_windowId = NewControlId();
-  else
-    m_windowId = id;
+    if (id == -1)
+        m_windowId = NewControlId();
+    else
+        m_windowId = id;
 
-  if ( width == -1 && bitmap.Ok())
-    width = bitmap.GetWidth() + 2*m_marginX;
+    if ( width == -1 && bitmap.Ok())
+        width = bitmap.GetWidth() + 2*m_marginX;
 
-  if ( height == -1 && bitmap.Ok())
-    height = bitmap.GetHeight() + 2*m_marginY;
+    if ( height == -1 && bitmap.Ok())
+        height = bitmap.GetHeight() + 2*m_marginY;
 
-	long msStyle = WS_VISIBLE | WS_TABSTOP | WS_CHILD | BS_OWNERDRAW ;
+    long msStyle = WS_VISIBLE | WS_TABSTOP | WS_CHILD | BS_OWNERDRAW ;
 
     if ( m_windowStyle & wxCLIP_SIBLINGS )
         msStyle |= WS_CLIPSIBLINGS;
@@ -157,8 +158,7 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
         msStyle |= BS_BOTTOM;
 #endif
 
-  m_hWnd = (WXHWND)CreateWindowEx
-                   (
+    m_hWnd = (WXHWND) CreateWindowEx(
                     0,
                     wxT("BUTTON"),
                     wxEmptyString,
@@ -170,14 +170,14 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
                     NULL
                    );
 
-  // Subclass again for purposes of dialog editing mode
-  SubclassWin(m_hWnd);
+    // Subclass again for purposes of dialog editing mode
+    SubclassWin(m_hWnd);
 
-  SetFont(parent->GetFont());
+    SetFont(parent->GetFont());
 
-  SetSize(x, y, width, height);
+    SetSize(x, y, width, height);
 
-  return TRUE;
+    return true;
 }
 
 // VZ: should be at the very least less than wxDEFAULT_BUTTON_MARGIN
@@ -191,7 +191,7 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
     {
         // Let default procedure draw the bitmap, which is defined
         // in the Windows resource.
-        return FALSE;
+        return false;
     }
 #endif
 
@@ -215,7 +215,7 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
         bitmap = &m_bmpNormal;
 
     if ( !bitmap->Ok() )
-        return FALSE;
+        return false;
 
     // centre the bitmap in the control area
     int x      = lpDIS->rcItem.left;
@@ -225,8 +225,8 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
     int wBmp   = bitmap->GetWidth();
     int hBmp   = bitmap->GetHeight();
 
-	int x1,y1;
-	
+    int x1,y1;
+
     if(m_windowStyle & wxBU_LEFT)
         x1 = x + (FOCUS_MARGIN+1);
     else if(m_windowStyle & wxBU_RIGHT)
@@ -258,8 +258,8 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
 
     // draw the bitmap
     wxDC dst;
-    dst.SetHDC((WXHDC) hDC, FALSE);
-    dst.DrawBitmap(*bitmap, x1, y1, TRUE);
+    dst.SetHDC((WXHDC) hDC, false);
+    dst.DrawBitmap(*bitmap, x1, y1, true);
 
     // draw focus / disabled state, if auto-drawing
     if ( (state & ODS_DISABLED) && autoDraw )
@@ -267,7 +267,7 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
         DrawButtonDisable((WXHDC) hDC,
                           lpDIS->rcItem.left, lpDIS->rcItem.top,
                           lpDIS->rcItem.right, lpDIS->rcItem.bottom,
-                          TRUE);
+                          true);
     }
     else if ( (state & ODS_FOCUS) && autoDraw )
     {
@@ -279,14 +279,15 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
                         isSelected);
     }
 
-    return TRUE;
+    return true;
 }
 
 // GRG Feb/2000, support for bmp buttons with Win95/98 standard LNF
 
 #if defined(__WIN95__)
 
-void wxBitmapButton::DrawFace( WXHDC dc, int left, int top, int right, int bottom, bool sel )
+void wxBitmapButton::DrawFace( WXHDC dc, int left, int top,
+    int right, int bottom, bool sel )
 {
     HPEN oldp;
     HPEN penHiLight;
@@ -342,7 +343,8 @@ void wxBitmapButton::DrawFace( WXHDC dc, int left, int top, int right, int botto
 
 #else
 
-void wxBitmapButton::DrawFace( WXHDC dc, int left, int top, int right, int bottom, bool sel )
+void wxBitmapButton::DrawFace( WXHDC dc, int left, int top,
+    int right, int bottom, bool sel )
 {
     HPEN oldp;
     HPEN penBorder;
@@ -406,7 +408,8 @@ void wxBitmapButton::DrawFace( WXHDC dc, int left, int top, int right, int botto
 #endif // defined(__WIN95__)
 
 
-void wxBitmapButton::DrawButtonFocus( WXHDC dc, int left, int top, int right, int bottom, bool sel )
+void wxBitmapButton::DrawButtonFocus( WXHDC dc, int left, int top, int right,
+    int bottom, bool WXUNUSED(sel) )
 {
     RECT rect;
     rect.left = left;
@@ -420,18 +423,19 @@ void wxBitmapButton::DrawButtonFocus( WXHDC dc, int left, int top, int right, in
     if ( sel )
         OffsetRect( &rect, 1, 1 );
 */
-	(void)sel;
+
     DrawFocusRect( (HDC) dc, &rect );
 }
 
 extern HBRUSH wxDisableButtonBrush;
-void wxBitmapButton::DrawButtonDisable( WXHDC dc, int left, int top, int right, int bottom, bool with_marg )
+void wxBitmapButton::DrawButtonDisable( WXHDC dc, int left, int top, int right,
+    int bottom, bool with_marg )
 {
     HBRUSH  old = (HBRUSH) SelectObject( (HDC) dc, wxDisableButtonBrush );
 
     // ROP for "dest |= pattern" operation -- as it doesn't have a standard
     // name, give it our own
-    static const DWORD PATPAINT = 0xFA0089UL;
+    static const DWORD PATTERNPAINT = 0xFA0089UL;
 
     if ( with_marg )
     {
@@ -441,7 +445,7 @@ void wxBitmapButton::DrawButtonDisable( WXHDC dc, int left, int top, int right, 
         bottom -= 2 * m_marginY;
     }
 
-    ::PatBlt( (HDC) dc, left, top, right, bottom, PATPAINT);
+    ::PatBlt( (HDC) dc, left, top, right, bottom, PATTERNPAINT);
 
     ::SelectObject( (HDC) dc, old );
 }
