@@ -760,8 +760,8 @@ public:
     // result of timezone shift)
     // ------------------------------------------------------------------------
 
-        // is the date valid (TRUE even for non initialized objects)?
-    inline bool IsValid() const { return this != &wxInvalidDateTime; }
+        // is the date valid?
+    inline bool IsValid() const { return m_time != wxInvalidDateTime.m_time; }
 
         // get the broken down date/time representation in the given timezone
         //
