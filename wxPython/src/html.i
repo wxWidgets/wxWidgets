@@ -1195,9 +1195,10 @@ enum {
 
 MustHaveApp(wxHtmlHelpController);
 
-class wxHtmlHelpController : public wxEvtHandler {
+class wxHtmlHelpController : public wxObject  // wxHelpControllerBase
+{
 public:
-    %pythonAppend wxHtmlHelpController "self._setOORInfo(self)"
+//    %pythonAppend wxHtmlHelpController "self._setOORInfo(self)"
     
     wxHtmlHelpController(int style = wxHF_DEFAULTSTYLE);
     ~wxHtmlHelpController();
