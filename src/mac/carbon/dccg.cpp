@@ -1007,6 +1007,7 @@ void  wxDC::DoDrawArc( wxCoord x1, wxCoord y1,
         -atan2(double(yy2-yyc), double(xx2-xxc)) * RAD2DEG;
     }
     wxCoord alpha2 = wxCoord(radius2 - radius1);
+    wxCoord alpha1 = wxCoord(wxConvertWXangleToMACangle(radius1));
     if( (xx1 > xx2) || (yy1 > yy2) ) {
         alpha2 *= -1;
     }
