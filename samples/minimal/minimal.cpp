@@ -183,9 +183,26 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
+#if 1
+    wxDialog dialog( this, -1, "Dialog", wxDefaultPosition, wxDefaultSize, 
+        wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxSYSTEM_MENU |wxCLIP_CHILDREN );
+    wxBoxSizer *main_sizer = new wxBoxSizer( wxVERTICAL );
+    wxStaticBox *box = new wxStaticBox( &dialog, -1, "Box" );
+    wxStaticBoxSizer *sizer = new wxStaticBoxSizer( box, wxHORIZONTAL );
+    wxCheckBox *check = new wxCheckBox( &dialog, -1, "Check" );
+    main_sizer->Add( sizer, 0, wxALIGN_RIGHT | wxALL, 10 );
+    sizer->Add( check, 0, wxCENTRE | wxALL, 10 );
+    dialog.SetSizer( main_sizer );
+    dialog.SetAutoLayout( TRUE );
+    main_sizer->Fit( &dialog );
+    main_sizer->SetSizeHints( &dialog );
+    dialog.Layout();
+    dialog.ShowModal();
+#else
     wxString msg;
     msg.Printf( _T("This is the about dialog of minimal sample.\n")
                 _T("Welcome to %s"), wxVERSION_STRING);
 
     wxMessageBox(msg, "About Minimal", wxOK | wxICON_INFORMATION, this);
+#endif
 }
