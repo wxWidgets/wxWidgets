@@ -91,7 +91,7 @@ void gtk_filedialog_ok_callback( GtkWidget *WXUNUSED(widget), wxFileDialog *dial
         wxString cwd;
         wxSplitPath(filename, &cwd, NULL, NULL);
 
-        if ( cwd != wxGetWorkingDirectory() )
+        if ( cwd != wxGetCwd() )
         {
             wxSetWorkingDirectory(cwd);
         }
