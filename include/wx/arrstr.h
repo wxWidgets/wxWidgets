@@ -209,7 +209,7 @@ public:
   typedef int difference_type;
   typedef size_t size_type;
 
-  // FIXME: same in dynarray.h
+  // TODO: this code duplicates the one in dynarray.h
   class reverse_iterator
   {
     typedef wxString value_type;
