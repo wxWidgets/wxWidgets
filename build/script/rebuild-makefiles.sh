@@ -36,7 +36,8 @@ do_package()
     if test $archtype = tar ; then
         tar czf ../archives/wx-mk-${format}-${CURDATE}.tar.gz $files
     elif test $archtype = zip ; then
-        zip -q -9 ../archives/wx-mk-${format}-${CURDATE}.zip $files
+        zip -l -q -9 ../archives/wx-mk-${format}-${CURDATE}.zip $files
+        # (-l translates to DOS line endings)
     fi
     
     cd ..
