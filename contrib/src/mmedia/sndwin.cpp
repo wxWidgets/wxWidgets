@@ -98,8 +98,11 @@ wxSoundStreamWin::wxSoundStreamWin()
 
   m_waiting_for = FALSE;
 
-  if (!OpenDevice(wxSOUND_OUTPUT))
-    return;
+  if (!OpenDevice(wxSOUND_OUTPUT)) {
+    m_snderror = wxSOUND_NOERROR; //next call to OpenDevice won't do this
+    if (!OpenDevice(wxSOUND_INPUT))
+      return;
+  }
 
   CloseDevice();
 }
