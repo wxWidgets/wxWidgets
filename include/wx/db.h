@@ -57,7 +57,6 @@
 #include "wx/defs.h"
 #include "wx/string.h"
 
-extern "C" {
 #ifdef __VISUALC__
 // include standard Windows headers
 #if defined(__WXMSW__) && !wxUSE_MFC
@@ -79,10 +78,12 @@ extern "C" {
     #include "sqlext.h"
     #include "odbcinst.h"
 #else
+extern "C" {
     #include "wx/isql.h"
     #include "wx/isqlext.h"
-#endif
 }
+#endif
+
 
 typedef float SFLOAT;
 typedef double SDOUBLE;
