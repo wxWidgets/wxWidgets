@@ -38021,7 +38021,6 @@ if test "$wxUSE_TABDIALOG" = "yes"; then
 #define wxUSE_TAB_DIALOG 1
 _ACEOF
 
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS tab"
 fi
 
 if test "$wxUSE_TEXTCTRL" = "yes"; then
