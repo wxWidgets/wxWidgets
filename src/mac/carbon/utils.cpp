@@ -458,8 +458,12 @@ void wxDisplaySize(int *width, int *height)
     BitMap screenBits;
     GetQDGlobalsScreenBits( &screenBits );
     
-    *width = screenBits.bounds.right - screenBits.bounds.left  ;
-    *height = screenBits.bounds.bottom - screenBits.bounds.top ;
+    if (width != NULL) { 
+        *width = screenBits.bounds.right - screenBits.bounds.left  ;
+    }
+    if (height != NULL) { 
+        *height = screenBits.bounds.bottom - screenBits.bounds.top ;
+    }
 }
 
 void wxDisplaySizeMM(int *width, int *height)
@@ -467,8 +471,13 @@ void wxDisplaySizeMM(int *width, int *height)
     wxDisplaySize(width, height);
     // on mac 72 is fixed (at least now ;-)
     float cvPt2Mm = 25.4 / 72;
-    *width = int( *width * cvPt2Mm );
-    *height = int( *height * cvPt2Mm );
+
+    if (width != NULL) { 
+        *width = int( *width * cvPt2Mm );
+    }
+    if (height != NULL) { 
+        *height = int( *height * cvPt2Mm );
+    }
 }
 
 void wxClientDisplayRect(int *x, int *y, int *width, int *height)
@@ -479,8 +488,12 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
     if (x) *x = 0;
     if (y) *y = 0;
 
-    *width = screenBits.bounds.right - screenBits.bounds.left  ;
-    *height = screenBits.bounds.bottom - screenBits.bounds.top ;
+    if (width != NULL) { 
+        *width = screenBits.bounds.right - screenBits.bounds.left  ;
+    }
+    if (height != NULL) { 
+        *height = screenBits.bounds.bottom - screenBits.bounds.top ;
+    }
 
     SInt16 mheight ;
 #if TARGET_CARBON
@@ -488,8 +501,10 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 #else
     mheight = LMGetMBarHeight() ;
 #endif
-    *height -= mheight ;
-    if ( y )
+    if (height != NULL) { 
+        *height -= mheight ;
+    }
+    if (y)
         *y = mheight ;
 }
 
