@@ -14,6 +14,8 @@ Appropriate 3D shading for the Windows 95 user interface is an option.
 \twocolitem{\windowstyle{wxSP\_3D}}{Draws a 3D effect border and sash.}
 \twocolitem{\windowstyle{wxSP\_BORDER}}{Draws a thin black border around the window, and a black sash.}
 \twocolitem{\windowstyle{wxSP\_NOBORDER}}{No border, and a black sash.}
+\twocolitem{\windowstyle{wxSP\_PERMIT\_UNSPLIT}}{The can always be
+unsplit, even if the minimum pane size is set to something other than zero.}
 \end{twocollist}
 
 See also \helpref{window styles overview}{windowstyles}.
@@ -36,15 +38,21 @@ macros to direct input to member functions that take a
 
 \twocolwidtha{10cm}
 \begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_SPLITTER\_SASH\_POS\_CHANGING(id, func)}}{The sash
+position is in the process of being changed. May be used to modify the
+position of the tracking bar to properly reflect the position that
+would be set if the drag were to be completed at this point. Processes
+a wxEVT\_COMMAND\_SPLITTER\_SASH\_POS\_CHANGING event.}
 \twocolitem{{\bf EVT\_SPLITTER\_SASH\_POS\_CHANGED(id, func)}}{The sash
-position was changed. May be used to prevent the change from taking place.
-Processes wxEVT\_COMMAND\_SPLITTER\_SASH\_POS\_CHANGED event.}
+position was changed. May be used to modify the sash position before
+it is set, or to prevent the change from taking place.
+Processes a wxEVT\_COMMAND\_SPLITTER\_SASH\_POS\_CHANGED event.}
 \twocolitem{{\bf EVT\_SPLITTER\_UNSPLIT(id, func)}}{The splitter has been just
-unsplit. Processes wxEVT\_COMMAND\_SPLITTER\_UNSPLIT event.}
+unsplit. Processes a wxEVT\_COMMAND\_SPLITTER\_UNSPLIT event.}
 \twocolitem{{\bf EVT\_SPLITTER\_DOUBLECLICKED(id, func)}}{The sash was double
 clicked. The default behaviour is to unsplit the window when this happens
 (unless the minimum pane size has been set to a value greater than zero).
-Processes wxEVT\_COMMAND\_SPLITTER\_DOUBLECLICKED event}
+Processes a wxEVT\_COMMAND\_SPLITTER\_DOUBLECLICKED event.}
 \end{twocollist}%
 
 \wxheading{See also}
@@ -59,7 +67,7 @@ Processes wxEVT\_COMMAND\_SPLITTER\_DOUBLECLICKED event}
 
 Default constructor.
 
-\func{}{wxSplitterWindow}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id}, \param{int }{x},\rtfsp
+\func{}{wxSplitterWindow}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
 \param{const wxPoint\& }{point = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
 \param{long }{style=wxSP\_3D}, \param{const wxString\&}{ name = "splitterWindow"}}
 
@@ -292,7 +300,9 @@ Sets the minimum pane size.
 
 The default minimum pane size is zero, which means that either pane can be reduced to zero by dragging
 the sash, thus removing one of the panes. To prevent this behaviour (and veto out-of-range sash dragging),
-set a minimum size, for example 20 pixels.
+set a minimum size, for example 20 pixels. If the wxSP\_PERMIT\_UNSPLIT style
+is used when a splitter window is created, the window may be unsplit even
+if minimum size is non-zero.
 
 \wxheading{See also}
 
@@ -405,6 +415,4 @@ which can be overridden for the desired behaviour. By default, the pane being re
 
 \helpref{wxSplitterWindow::SplitHorizontally}{wxsplitterwindowsplithorizontally}, \helpref{wxSplitterWindow::SplitVertically}{wxsplitterwindowsplitvertically},\rtfsp
 \helpref{wxSplitterWindow::IsSplit}{wxsplitterwindowissplit}, \helpref{wxSplitterWindow::OnUnsplit}{wxsplitterwindowonunsplit}
-
-
 
