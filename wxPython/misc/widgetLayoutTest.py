@@ -31,7 +31,7 @@ class LayoutTestFrame(wx.Frame):
             wx.SystemSettings.GetColour(wx.SYS_COLOUR_INFOBK))
         self.docstring.SetBackgroundColour(
             wx.SystemSettings.GetColour(wx.SYS_COLOUR_INFOBK))
-        
+
 
         addBtn = wx.Button(p, -1, "Add")
         remBtn = wx.Button(p, -1, "Remove")
@@ -52,6 +52,7 @@ class LayoutTestFrame(wx.Frame):
         self.testPanel.SetDefaultBackgroundColour((205, 183, 181)) # mistyrose3
         self.testWidget = None
 
+        self.infoPane = InfoPane(p)
 
         # setup event bindings
         self.Bind(wx.EVT_TEXT, self.OnUpdate, self.moduleName)
@@ -70,7 +71,7 @@ class LayoutTestFrame(wx.Frame):
         self.Bind(wx.EVT_BUTTON, self.OnReplaceHistory, repBtn)
         self.Bind(wx.EVT_LISTBOX, self.OnHistorySelect, self.testHistory)
         self.Bind(wx.EVT_LISTBOX_DCLICK, self.OnHistoryActivate, self.testHistory)
-        
+
 
         # setup the layout
         mainSizer = wx.BoxSizer(wx.VERTICAL)
@@ -78,11 +79,8 @@ class LayoutTestFrame(wx.Frame):
         ctlsSizer = wx.FlexGridSizer(2, 2, 5, 5)
         ctlsSizer.AddGrowableCol(1)
         btnSizer =  wx.BoxSizer(wx.HORIZONTAL)
-        
-        topSizer.Add(self.testHistory, 0, wx.RIGHT, 30)
 
-        ctlsSizer.Add((1,25))
-        ctlsSizer.Add((1,25))
+        topSizer.Add(self.testHistory, 0, wx.RIGHT, 30)
 
         ctlsSizer.Add(wx.StaticText(p, -1, "Module name:"),
                       0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
@@ -103,9 +101,9 @@ class LayoutTestFrame(wx.Frame):
         ctlsSizer.Add(self.postCreate, 0, wx.EXPAND)
         ctlsSizer.Add(wx.StaticText(p, -1, "DocString:"), 0, wx.ALIGN_RIGHT)
         ctlsSizer.Add(self.docstring, 0, wx.EXPAND)
-        ctlsSizer.AddGrowableRow(5)
+        ctlsSizer.AddGrowableRow(4)
         topSizer.Add(ctlsSizer, 1, wx.EXPAND)
-
+  
         btnSizer.Add((5,5))
         btnSizer.Add(addBtn, 0, wx.RIGHT, 5)
         btnSizer.Add(remBtn, 0, wx.RIGHT, 5)
@@ -122,19 +120,21 @@ class LayoutTestFrame(wx.Frame):
         ##mainSizer.Add(wx.StaticLine(p, -1), 0, wx.EXPAND)
         mainSizer.Add(bottomPanel, 1, wx.EXPAND)
 
+        mainSizer.Add(self.infoPane, 0, wx.EXPAND)
+
         self.bottomSizer = sz = wx.BoxSizer(wx.VERTICAL)
         sz.Add((0,0), 1)
         sz.Add(self.testPanel, 0, wx.ALIGN_CENTER)
         sz.Add((0,0), 1)
         bottomPanel.SetSizer(sz)
-        
+
         p.SetSizerAndFit(mainSizer)
         self.Fit()
 
         self.PopulateHistory()
 
 
-       
+
 
     def PopulateHistory(self):
         """
@@ -149,7 +149,7 @@ class LayoutTestFrame(wx.Frame):
             self.history = []
 
         self.testHistory.Clear()
-        
+
         for idx in range(len(self.history)):
             item = self.history[idx]
             # check if it is too short
@@ -196,7 +196,7 @@ class LayoutTestFrame(wx.Frame):
             self.testHistory.Delete(idx)
         self.needSaved = True
         self.OnClear(None)
-        
+
 
     def OnReplaceHistory(self, evt):
         idx = self.testHistory.GetSelection()
@@ -227,7 +227,7 @@ class LayoutTestFrame(wx.Frame):
         if btn is not None:
             e = wx.CommandEvent(wx.wxEVT_COMMAND_BUTTON_CLICKED, btn.GetId())
             btn.Command(e)
-            
+
 
 
     def OnUpdate(self, evt):
@@ -235,7 +235,7 @@ class LayoutTestFrame(wx.Frame):
         moduleName = self.moduleName.GetValue()
         className  = self.className.GetValue()
         parameters = self.parameters.GetValue()
-        
+
         expr = "w = %s.%s( testPanel, %s )" % (moduleName, className, parameters)
         self.expression.SetValue(expr)
 
@@ -245,7 +245,7 @@ class LayoutTestFrame(wx.Frame):
         except:
             pass
         self.docstring.SetValue(docstring)
-        
+
 
     def OnEnableDestroy(self, evt):
         evt.Enable(self.testWidget is not None)
@@ -259,7 +259,7 @@ class LayoutTestFrame(wx.Frame):
             return
 
         testPanel = self.testPanel
-        
+
         # get the details from the form
         moduleName = self.moduleName.GetValue()
         className  = self.className.GetValue()
@@ -297,7 +297,7 @@ class LayoutTestFrame(wx.Frame):
                 traceback.print_exc()
                 w.Destroy()
                 return
-            
+
         # Put the widget in a sizer and the sizer in the testPanel
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(w, 0, wx.ALL, 5)
@@ -308,34 +308,39 @@ class LayoutTestFrame(wx.Frame):
         # make the destroy button be default now
         self.destroyBtn.SetDefault()
 
+        self.infoPane.Update(w, testPanel)
+        
         if False:
             print 'w size', w.GetSize()
             print 'w minsize', w.GetMinSize()
             print 'w bestsize', w.GetBestSize()
             print 'w abstsize', w.GetAdjustedBestSize()
-        
+
             tp = self.testPanel
             #print tp.GetSizer()
             print 'tp size', tp.GetSize()
             print 'tp minsize', tp.GetMinSize()
             print 'tp bestsize', tp.GetBestSize()
             print 'tp abstsize', tp.GetAdjustedBestSize()
-            
-        
+
+
 
     def OnDestroyWidget(self, evt):
         self.testWidget.Destroy()
         self.testWidget = None
         self.testPanel.SetSizer(None, True)
         self.testPanel.Refresh()
-        
+
         # ensure the panel shrinks again
-        self.testPanel.SetSizeHints((20,20)) 
+        self.testPanel.SetSizeHints((20,20))
         self.bottomSizer.Layout()
         self.testPanel.SetSizeHints(wx.DefaultSize)
-        
+
         # make the create button be default now
         self.createBtn.SetDefault()
+
+        self.infoPane.Clear()
+        
 
 
     def OnClear(self, evt):
@@ -345,8 +350,157 @@ class LayoutTestFrame(wx.Frame):
         self.expression.SetValue("")
         self.docstring.SetValue("")
         self.postCreate.SetValue("")
+
+
+
+
+
+
+class InfoPane(wx.Panel):
+    """
+    This class is used to display details of various properties of the
+    widget and the testPanel to aid with debugging.
+    """
+    def __init__(self, parent):
+        wx.Panel.__init__(self, parent)
+
+        # create subwidgets
+        self.wPane = SizeInfoPane(self, "Widget")
+        self.tpPane= SizeInfoPane(self, "testPanel")
+        self.cPane = ColourInfoPanel(self, "Widget colours")
+
+        # Setup the layout
+        sizer = wx.BoxSizer(wx.HORIZONTAL)
+        sizer.Add(self.wPane, 0, wx.EXPAND|wx.ALL, 5)
+        sizer.Add(self.tpPane, 0, wx.EXPAND|wx.ALL, 5)
+        sizer.Add(self.cPane, 0, wx.EXPAND|wx.ALL, 5)
+
+        self.SetSizer(sizer)
+
+        
+    def Update(self, w, tp):
+        self.wPane.Update(w)
+        self.tpPane.Update(tp)
+        self.cPane.Update(w)
+        
+    def Clear(self):
+        self.wPane.Clear()
+        self.tpPane.Clear()
+        self.cPane.Clear()
+
+
+
+class SizeInfoPane(wx.Panel):
+    """
+    A component of the InfoPane that shows vaious window size attributes.
+    """
+    def __init__(self, parent, label):
+        wx.Panel.__init__(self, parent)
+
+        # create subwidgets
+        sb = wx.StaticBox(self, -1, label)
+        self._size        = wx.TextCtrl(self, -1, "", style=wx.TE_READONLY)
+        self._minsize     = wx.TextCtrl(self, -1, "", style=wx.TE_READONLY)
+        self._bestsize    = wx.TextCtrl(self, -1, "", style=wx.TE_READONLY)
+        self._adjbstsize  = wx.TextCtrl(self, -1, "", style=wx.TE_READONLY)
+
+        # setup the layout
+        fgs = wx.FlexGridSizer(2, 2, 5, 5)
+        fgs.AddGrowableCol(1)
+
+        fgs.Add(wx.StaticText(self, -1, "Size:"),
+                0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+        fgs.Add(self._size, 0, wx.EXPAND)
+
+        fgs.Add(wx.StaticText(self, -1, "MinSize:"),
+                0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+        fgs.Add(self._minsize, 0, wx.EXPAND)
+
+        fgs.Add(wx.StaticText(self, -1, "BestSize:"),
+                0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+        fgs.Add(self._bestsize, 0, wx.EXPAND)
+
+        fgs.Add(wx.StaticText(self, -1, "AdjustedBestSize:"),
+                0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+        fgs.Add(self._adjbstsize, 0, wx.EXPAND)
+
+        sbs = wx.StaticBoxSizer(sb, wx.VERTICAL)
+        sbs.Add(fgs, 0, wx.EXPAND|wx.ALL, 4)
+
+        self.SetSizer(sbs)
+
+
+    def Update(self, win):
+        self._size.SetValue(       str(win.GetSize()) )
+        self._minsize.SetValue(    str(win.GetMinSize()) )
+        self._bestsize.SetValue(   str(win.GetBestSize()) )
+        self._adjbstsize.SetValue( str(win.GetAdjustedBestSize()) )
         
 
+    def Clear(self):
+        self._size.SetValue("")
+        self._minsize.SetValue("")
+        self._bestsize.SetValue("")
+        self._adjbstsize.SetValue("")
+
+
+
+class ColourInfoPanel(wx.Panel):
+    """
+    A component of the InfoPane that shows fg and bg colour attributes.    
+    """
+    def __init__(self, parent, label):
+        wx.Panel.__init__(self, parent)
+
+        # create subwidgets
+        sb = wx.StaticBox(self, -1, label)
+        self._fgtxt = wx.TextCtrl(self, -1, "", style=wx.TE_READONLY)
+        self._fgclr = wx.Panel(self, style=wx.SIMPLE_BORDER)
+        self._fgclr.SetSizeHints((20,20))
+        self._bgtxt = wx.TextCtrl(self, -1, "", style=wx.TE_READONLY)
+        self._bgclr = wx.Panel(self, style=wx.SIMPLE_BORDER)
+        self._bgclr.SetSizeHints((20,20))
+
+        # setup the layout
+        fgs = wx.FlexGridSizer(2, 3, 5, 5)
+        fgs.AddGrowableCol(1)
+
+        fgs.Add(wx.StaticText(self, -1, "FG colour:"),
+                0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+        fgs.Add(self._fgtxt, 0, wx.EXPAND)
+        fgs.Add(self._fgclr)
+
+        fgs.Add(wx.StaticText(self, -1, "BG colour:"),
+                0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+        fgs.Add(self._bgtxt, 0, wx.EXPAND)
+        fgs.Add(self._bgclr)
+
+        sbs = wx.StaticBoxSizer(sb, wx.VERTICAL)
+        sbs.Add(fgs, 0, wx.EXPAND|wx.ALL, 4)
+
+        self.SetSizer(sbs)
+
+
+    def Update(self, win):
+        def clr2hex(c, cp):
+            cp.SetBackgroundColour(c)
+            cp.Refresh()
+            return "#%02X%02X%02X" % c.Get()
+        
+        self._fgtxt.SetValue( clr2hex(win.GetForegroundColour(), self._fgclr) )
+        self._bgtxt.SetValue( clr2hex(win.GetBackgroundColour(), self._bgclr) )
+
+
+    def Clear(self):
+        self._fgtxt.SetValue("")
+        self._bgtxt.SetValue("")
+        self._fgclr.SetBackgroundColour(self.GetBackgroundColour())
+        self._bgclr.SetBackgroundColour(self.GetBackgroundColour())
+        self._fgclr.Refresh()
+        self._bgclr.Refresh()
+
+
+        
 
 app = wx.PySimpleApp(redirect=True)
 frame = LayoutTestFrame()
