@@ -574,7 +574,8 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
     else
         filterStyle |= wxBORDER_SUNKEN;
 
-    m_treeCtrl = new wxTreeCtrl(this, wxID_TREECTRL, pos, size, treeStyle);
+    m_treeCtrl = new wxTreeCtrl(this, wxID_TREECTRL,
+                                wxPoint(0,0), GetClientSize(), treeStyle);
 
     if (!filter.IsEmpty() && (style & wxDIRCTRL_SHOW_FILTERS))
         m_filterListCtrl = new wxDirFilterListCtrl(this, wxID_FILTERLISTCTRL, wxDefaultPosition, wxDefaultSize, filterStyle);
