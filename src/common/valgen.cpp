@@ -225,6 +225,10 @@ bool wxGenericValidator::TransferToWindow(void)
             {
                 pControl->SetStringSelection(* m_pString);
             }
+            else
+            {
+                pControl->SetValue(* m_pString);
+            }
             return TRUE;
         }
     } else
