@@ -365,16 +365,16 @@ struct DbList
 // for other code segments to use, or close all of them when the application has
 // completed.
 
-wxDB  *GetDbConnection(DbStuff *pDbStuff);
-bool  FreeDbConnection(wxDB *pDb);
-void  CloseDbConnections(void);
-int	NumberDbConnectionsInUse(void);
+wxDB* WXDLLEXPORT GetDbConnection(DbStuff *pDbStuff);
+bool  WXDLLEXPORT FreeDbConnection(wxDB *pDb);
+void  WXDLLEXPORT CloseDbConnections(void);
+int   WXDLLEXPORT NumberDbConnectionsInUse(void);
 
 // This routine allows you to query a driver manager
 // for a list of available datasources.  Call this routine
 // the first time using SQL_FETCH_FIRST.  Continue to call it
 // using SQL_FETCH_NEXT until you've exhausted the list.
-bool GetDataSource(HENV henv, char *Dsn, SWORD DsnMax, char *DsDesc, SWORD DsDescMax,
+bool WXDLLEXPORT GetDataSource(HENV henv, char *Dsn, SWORD DsnMax, char *DsDesc, SWORD DsDescMax,
 						 UWORD direction = SQL_FETCH_NEXT);
 
 #endif

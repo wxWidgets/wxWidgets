@@ -56,7 +56,7 @@
 #include <ctype.h>
 #include "wx/db.h"
 
-DbList *PtrBegDbList = 0;
+DbList* WXDLLEXPORT PtrBegDbList = 0;
 
 /********** wxDB Constructor **********/
 wxDB::wxDB(HENV &aHenv)
@@ -1353,7 +1353,7 @@ bool wxDB::WriteSqlLog(char *logMsg)
 
 
 /********** GetDbConnection() **********/
-wxDB *GetDbConnection(DbStuff *pDbStuff)
+wxDB* WXDLLEXPORT GetDbConnection(DbStuff *pDbStuff)
 {
 	DbList *pList;
 
@@ -1413,7 +1413,7 @@ wxDB *GetDbConnection(DbStuff *pDbStuff)
 }  // GetDbConnection()
 
 /********** FreeDbConnection() **********/
-bool FreeDbConnection(wxDB *pDb)
+bool WXDLLEXPORT FreeDbConnection(wxDB *pDb)
 {
 	DbList *pList;
 
@@ -1430,7 +1430,7 @@ bool FreeDbConnection(wxDB *pDb)
 }  // FreeDbConnection()
 
 /********** CloseDbConnections() **********/
-void CloseDbConnections(void)
+void WXDLLEXPORT CloseDbConnections(void)
 {
 	DbList *pList, *pNext;
 	
@@ -1450,7 +1450,7 @@ void CloseDbConnections(void)
 }  // CloseDbConnections()
 
 /********** NumberDbConnectionsInUse() **********/
-int NumberDbConnectionsInUse(void)
+int WXDLLEXPORT NumberDbConnectionsInUse(void)
 {
 	DbList *pList;
 	int cnt = 0;
