@@ -303,7 +303,7 @@ void wxError(
 , const wxString&                   rTitle
 )
 {
-    wxBuffer = new wxChar[256];
+    wxChar *wxBuffer = new wxChar[256];
     wxSprintf(wxBuffer, "%s\nContinue?", WXSTRINGCAST rMsg);
     if (::WinMessageBox( HWND_DESKTOP
                         ,NULL
@@ -409,7 +409,7 @@ wxChar* wxGetUserHome (
     wxChar*                         zHome;
     wxString                        sUser1(rUser);
 
-    wxBuffer = new wxChar[256];
+    char *wxBuffer = new wxChar[256];
 #ifndef __EMX__
     if (sUser1 != _T(""))
     {
