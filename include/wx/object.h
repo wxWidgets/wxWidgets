@@ -219,24 +219,30 @@ class WXDLLEXPORT wxObject
 
 #if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING
   void * operator new (size_t size, wxChar * fileName = NULL, int lineNum = 0);
-  void operator delete (void * buf);
+#  if defined(__VISAGECPP__)
+#    if __DEBUG_ALLOC__
+       void operator delete (void * buf,const char * _fname, size_t _line);
+#    endif  //__DEBUG_ALLOC__
+#  else // Everybody else
+    void operator delete (void * buf);
+#  endif // end of VISAGECPP
 
 // VC++ 6.0
-#if defined(__VISUALC__) && (__VISUALC__ >= 1200)
-  void operator delete(void *buf, wxChar*, int);
-#endif
+#  if defined(__VISUALC__) && (__VISUALC__ >= 1200)
+    void operator delete(void *buf, wxChar*, int);
+#  endif
 
     // Causes problems for VC++
-#if wxUSE_ARRAY_MEMORY_OPERATORS && !defined(__VISUALC__) && !defined( __MWERKS__)
-  void * operator new[] (size_t size, wxChar * fileName = NULL, int lineNum = 0);
-  void operator delete[] (void * buf);
-#endif
+#  if wxUSE_ARRAY_MEMORY_OPERATORS && !defined(__VISUALC__) && !defined( __MWERKS__)
+    void * operator new[] (size_t size, wxChar * fileName = NULL, int lineNum = 0);
+    void operator delete[] (void * buf);
+#  endif
 
-#ifdef __MWERKS__
-  void * operator new[] (size_t size, wxChar * fileName , int lineNum = 0);
-  void * operator new[] (size_t size) { return operator new[] ( size , NULL , 0 ) ; }
-  void operator delete[] (void * buf);
-#endif
+#  ifdef __MWERKS__
+    void * operator new[] (size_t size, wxChar * fileName , int lineNum = 0);
+    void * operator new[] (size_t size) { return operator new[] ( size , NULL , 0 ) ; }
+    void operator delete[] (void * buf);
+#  endif
 
 #endif // Debug & memory tracing
 
