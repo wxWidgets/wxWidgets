@@ -31,6 +31,7 @@ _treeList = [
         'wxGenericDirCtrl',
         'wxImageFromStream',
         'wxArtProvider',
+        'ScrolledPanel',
         ]),
 
     # managed windows == things with a caption you can close
@@ -127,6 +128,7 @@ _treeList = [
         'LayoutAnchors',
         'Layoutf',
         'RowColSizer',
+        'ScrolledPanel',
         'Sizers',
         'wxLayoutConstraints',
         'XML_Resource',
@@ -356,9 +358,12 @@ class wxPythonDemo(wxFrame):
         # But instead of the above we want to show how to use our own wxLog class
         wxLog_SetActiveTarget(MyLog(self.log))
 
-
+        # for serious debugging
+        #wxLog_SetActiveTarget(wxLogStderr())
+        #wxLog_SetTraceMask(wxTraceMessages)
 
         self.Show(true)
+
 
         # add the windows to the splitter and split it.
         splitter2.SplitHorizontally(self.nb, self.log)

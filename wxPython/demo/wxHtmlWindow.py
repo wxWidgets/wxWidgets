@@ -158,6 +158,7 @@ class TestHtmlPanel(wxPanel):
 
 def runTest(frame, nb, log):
     win = TestHtmlPanel(nb, frame, log)
+    print wxWindow_FindFocus()
     return win
 
 

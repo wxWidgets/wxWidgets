@@ -124,12 +124,15 @@ DoGetBestSize and AcceptsFocus.
 Added wxArtProvider.
 
 Added wxCallAfter which is a helper function that registers a function
-(or any callable Python object) to be called one time the next time
-there are no pending events.  This is useful for when you need to do
+(or any callable Python object) to be called once the next time there
+are no pending events.  This is useful for when you need to do
 something but it can't be done during the current event handler.  The
 implementation is very simple, see wxPython/wx.py.
 
 Fixed a boatload of reference leaks.
+
+Added a demo of using a sizer in a wxScrolledWindow, in effect
+creating a ScrolledPanel.
 
 
 

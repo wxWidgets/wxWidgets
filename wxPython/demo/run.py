@@ -72,6 +72,8 @@ class RunDemoApp(wxApp):
 
         self.SetTopWindow(frame)
         self.frame = frame
+        #wxLog_SetActiveTarget(wxLogStderr())
+        #wxLog_SetTraceMask(wxTraceMessages)
         return true
 
 
