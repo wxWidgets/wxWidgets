@@ -20,6 +20,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxCheckBox, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapCheckBox, wxCheckBox)
 #endif
 
+#include <wx/mac/uma.h>
+
 // Single check box item
 bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
            const wxPoint& pos,
@@ -27,47 +29,38 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
            const wxValidator& validator,
            const wxString& name)
 {
-    SetName(name);
-    SetValidator(validator);
-    m_windowStyle = style;
+	Rect bounds ;
+	Str255 title ;
+	
+	MacPreControlCreate( parent , id ,  label , pos , size ,style, validator , name , &bounds , title ) ;
 
-    if (parent) parent->AddChild(this);
+	m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , title , true , 0 , 0 , 1, 
+	  	kControlCheckBoxProc , (long) this ) ;
+	
+	MacPostControlCreate() ;
 
-    if ( id == -1 )
-        m_windowId = NewControlId();
-    else
-        m_windowId = id;
-
-    // TODO: create checkbox
-
-    return FALSE;
-}
-
-void wxCheckBox::SetLabel(const wxString& label)
-{
-    // TODO
-}
-
-void wxCheckBox::SetSize(int x, int y, int width, int height, int sizeFlags)
-{
-    // TODO
+  return TRUE;
 }
 
 void wxCheckBox::SetValue(bool val)
 {
-    // TODO
+   ::SetControlValue( m_macControl , val ) ;
 }
 
 bool wxCheckBox::GetValue() const
 {
-    // TODO
-    return FALSE;
+    return ::GetControlValue( m_macControl ) ;
 }
 
 void wxCheckBox::Command (wxCommandEvent & event)
 {
     SetValue ((event.GetInt() != 0));
     ProcessCommand (event);
+}
+
+void wxCheckBox::MacHandleControlClick( ControlHandle control , SInt16 controlpart ) 
+{
+	SetValue( !GetValue() ) ;
 }
 
 // Bitmap checkbox
@@ -100,7 +93,7 @@ void wxBitmapCheckBox::SetLabel(const wxBitmap *bitmap)
 
 void wxBitmapCheckBox::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
-    // TODO
+    wxControl::SetSize( x , y , width , height , sizeFlags ) ;
 }
 
 void wxBitmapCheckBox::SetValue(bool val)

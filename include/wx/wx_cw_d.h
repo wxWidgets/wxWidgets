@@ -12,6 +12,9 @@
 #ifndef _WX_CW__
 #define _WX_CW__
 
+#if __option(profile)
+#error "profiling is not supported in debug versions"
+#else
 #ifdef __cplusplus
 	#if __POWERPC__
 		#include <wx_PPC++_d.mch>
@@ -32,6 +35,7 @@
 	#else
 		#include <wx_68k_d.mch>
 	#endif
+#endif
 #endif
 
 #endif

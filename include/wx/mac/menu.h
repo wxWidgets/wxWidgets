@@ -92,6 +92,10 @@ public:
 
   inline wxList& GetItems() const { return (wxList&) m_menuItems; }
 
+  void      				SetInvokingWindow(wxWindow *pWin) { m_pInvokingWindow = pWin; }
+  wxWindow *				GetInvokingWindow()         const { return m_pInvokingWindow; }
+
+  bool MacMenuSelect(wxEvtHandler* handler, long when , int macMenuId, int macMenuItemNum) ;
 public:
   wxFunction        m_callback;
 
@@ -101,7 +105,21 @@ public:
   wxList            m_menuItems;
   wxEvtHandler *    m_parent;
   wxEvtHandler *    m_eventHandler;
+  wxWindow*			m_pInvokingWindow;
   void*             m_clientData;
+  
+  MenuHandle		m_macMenuHandle;
+  short				m_macMenuId;
+  bool				m_macMenuEnabled ;
+
+  //	void 					MacSetTitle(const wxString& title);
+  int				MacGetIndexFromId( int id ) ; 
+  int				MacGetIndexFromItem( wxMenuItem *pItem ) ; 
+  void				MacEnableMenu( bool bDoEnable ) ;
+
+  static short		s_macNextMenuId ;
+
+protected:
 };
 
 // ----------------------------------------------------------------------------
@@ -149,14 +167,17 @@ class WXDLLEXPORT wxMenuBar: public wxEvtHandler
   inline int GetMenuCount() const { return m_menuCount; }
   inline wxMenu* GetMenu(int i) const { return m_menus[i]; }
 
+  void MacInstallMenuBar() ;
+  void MacMenuSelect(wxEvtHandler* handler, long when , int macMenuId, int macMenuItemNum) ;
+
  public:
   wxEvtHandler *            m_eventHandler;
   int                       m_menuCount;
   wxMenu **                 m_menus;
   wxString *                m_titles;
   wxFrame *                 m_menuBarFrame;
-/* TODO: data that represents the actual menubar when created.
- */
+
+  static wxMenuBar*			s_macInstalledMenuBar ;
 };
 
 #endif // _WX_MENU_H_

@@ -74,9 +74,7 @@ public:
 
   void InitFromName(const wxString& col);
 
-/* TODO
-  WXCOLORREF GetPixel() const { return m_pixel; };
-*/
+  const WXCOLORREF GetPixel() const { return m_pixel; };
 
 private:
   bool          m_isInit;
@@ -85,9 +83,8 @@ private:
   unsigned char m_green;
 
 public:
-  /* TODO: implementation
-     WXCOLORREF m_pixel ;
-   */
+  WXCOLORREF m_pixel ;
+  void Set( WXCOLORREF color ) { m_pixel = color ; m_red = m_pixel.red>>8 ;m_blue = m_pixel.blue>>8 ;m_green = m_pixel.green>>8 ;}
 
 private:
   DECLARE_DYNAMIC_CLASS(wxColour)

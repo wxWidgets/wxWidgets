@@ -63,9 +63,11 @@ class WXDLLEXPORT wxChoice: public wxControl
 
   virtual inline void SetColumns(int WXUNUSED(n) = 1 ) { /* No effect */ } ;
   virtual inline int GetColumns() const { return 1 ; };
+	void		MacHandleControlClick( ControlHandle control , SInt16 controlpart ) ;
 
 protected:
   int m_noStrings;
+  MenuHandle	m_macPopUpMenuHandle ;
 };
 
 #endif

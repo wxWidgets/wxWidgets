@@ -62,7 +62,6 @@ LIB_CPP_SRC=\
  ../common/variant.cpp \
  ../common/wxexpr.cpp \
  ../common/socket.cpp \
- ../common/sckint.cpp \
  ../common/sckaddr.cpp \
  ../common/sckipc.cpp \
  ../common/protocol.cpp \

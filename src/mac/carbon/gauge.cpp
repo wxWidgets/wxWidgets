@@ -19,67 +19,65 @@
 IMPLEMENT_DYNAMIC_CLASS(wxGauge, wxControl)
 #endif
 
+#include <wx/mac/uma.h>
+
 bool wxGauge::Create(wxWindow *parent, wxWindowID id,
            int range,
            const wxPoint& pos,
-           const wxSize& size,
+           const wxSize& s,
            long style,
            const wxValidator& validator,
            const wxString& name)
 {
-    SetName(name);
-    SetValidator(validator);
-    m_rangeMax = range;
-    m_windowStyle = style;
+	wxSize size = s ;
+	Rect bounds ;
+	Str255 title ;
+	m_rangeMax = range ;
+	m_macHorizontalBorder = 2 ; // additional pixels around the real control
+	m_macVerticalBorder = 2 ;
+	
+	if ( size.x == wxDefaultSize.x && size.y == wxDefaultSize.y)
+	{
+		size = wxSize( 200 , 16 ) ;
+	}
+	
+	MacPreControlCreate( parent , id ,  "" , pos , size ,style, validator , name , &bounds , title ) ;
 
-    if (parent) parent->AddChild(this);
+	m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , title , true , 0 , 0 , range, 
+	  	kControlProgressBarProc , (long) this ) ;
+	
+	MacPostControlCreate() ;
 
-    if ( id == -1 )
-  	    m_windowId = (int)NewControlId();
-    else
-	    m_windowId = id;
-
-
-    // TODO
-    return FALSE;
-}
-
-void wxGauge::SetSize(int x, int y, int width, int height, int sizeFlags)
-{
-    // TODO
+  return TRUE;
 }
 
 void wxGauge::SetShadowWidth(int w)
 {
-    // TODO optional
 }
 
 void wxGauge::SetBezelFace(int w)
 {
-    // TODO optional
 }
 
 void wxGauge::SetRange(int r)
 {
     m_rangeMax = r;
-    // TODO
+    ::SetControlMaximum( m_macControl , m_rangeMax ) ;
 }
 
 void wxGauge::SetValue(int pos)
 {
     m_gaugePos = pos;
-    // TODO
+   ::SetControlValue( m_macControl , m_gaugePos ) ;
 }
 
 int wxGauge::GetShadowWidth() const
 {
-    // TODO optional
     return 0;
 }
 
 int wxGauge::GetBezelFace() const
 {
-    // TODO optional
     return 0;
 }
 

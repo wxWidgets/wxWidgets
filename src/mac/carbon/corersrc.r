@@ -1,8 +1,18 @@
 #include <Types.r>
 
-resource 'ALRT' (128, purgeable) {
+#if UNIVERSAL_INTERFACES_VERSION > 0x320
+	#include <ControlDefinitions.r>
+#endif
+
+#define kMacOKAlertResourceID 128
+#define kMacYesNoAlertResourceID 129
+#define kMacYesNoCancelAlertResourceID 130
+#define kMacNoYesAlertResourceID 131
+#define kMacNoYesCancelAlertResourceID 132
+
+resource 'ALRT' (kMacOKAlertResourceID, purgeable) {
 	{70, 50, 198, 470},
-	128,
+	kMacOKAlertResourceID,
 	{	/* array: 4 elements */
 		/* [1] */
 		OK, visible, sound1,
@@ -16,9 +26,9 @@ resource 'ALRT' (128, purgeable) {
 	noAutoCenter
 };
 
-resource 'ALRT' (129, purgeable) {
+resource 'ALRT' (kMacYesNoAlertResourceID, purgeable) {
 	{70, 50, 198, 470},
-	129,
+	kMacYesNoAlertResourceID,
 	{	/* array: 4 elements */
 		/* [1] */
 		OK, visible, sound1,
@@ -32,7 +42,39 @@ resource 'ALRT' (129, purgeable) {
 	noAutoCenter
 };
 
-resource 'ALRT' (130, purgeable) {
+resource 'ALRT' (kMacYesNoAlertResourceID + 10, purgeable) {
+	{70, 50, 198, 470},
+	kMacYesNoAlertResourceID + 10,
+	{	/* array: 4 elements */
+		/* [1] */
+		OK, visible, sound1,
+		/* [2] */
+		OK, visible, sound1,
+		/* [3] */
+		OK, visible, sound1,
+		/* [4] */
+		OK, visible, sound1
+	},
+	noAutoCenter
+};
+
+resource 'ALRT' (kMacYesNoAlertResourceID + 20, purgeable) {
+	{70, 50, 198, 470},
+	kMacYesNoAlertResourceID + 20,
+	{	/* array: 4 elements */
+		/* [1] */
+		OK, visible, sound1,
+		/* [2] */
+		OK, visible, sound1,
+		/* [3] */
+		OK, visible, sound1,
+		/* [4] */
+		OK, visible, sound1
+	},
+	noAutoCenter
+};
+
+resource 'ALRT' (kMacYesNoCancelAlertResourceID, purgeable) {
 	{70, 50, 198, 470},
 	130,
 	{	/* array: 4 elements */
@@ -48,7 +90,7 @@ resource 'ALRT' (130, purgeable) {
 	noAutoCenter
 };
 
-resource 'ALRT' (131, purgeable) {
+resource 'ALRT' (kMacNoYesAlertResourceID, purgeable) {
 	{70, 50, 198, 470},
 	131,
 	{	/* array: 4 elements */
@@ -64,7 +106,7 @@ resource 'ALRT' (131, purgeable) {
 	noAutoCenter
 };
 
-resource 'ALRT' (132, purgeable) {
+resource 'ALRT' (kMacNoYesCancelAlertResourceID, purgeable) {
 	{70, 50, 198, 470},
 	132,
 	{	/* array: 4 elements */
@@ -80,7 +122,7 @@ resource 'ALRT' (132, purgeable) {
 	noAutoCenter
 };
 
-resource 'DITL' (128, purgeable) {
+resource 'DITL' (kMacOKAlertResourceID, purgeable) {
 	{	/* array DITLarray: 3 elements */
 		/* [1] */
 		{100, 340, 120, 408},
@@ -103,13 +145,71 @@ resource 'DITL' (128, purgeable) {
 	}
 };
 
-resource 'DITL' (129, purgeable) {
+resource 'DITL' (kMacYesNoAlertResourceID, purgeable) {
 	{	/* array DITLarray: 4 elements */
 		/* [1] */
 		{100, 340, 120, 408},
 		Button {
 			enabled,
-			"Yes"
+			"Ja"
+		},
+		/* [2] */
+		{100, 260, 120, 324},
+		Button {
+			enabled,
+			"Nein"
+		},
+		/* [3] */
+		{38, 64, 88, 408},
+		StaticText {
+			disabled,
+			"^1"
+		},
+		/* [4] */
+		{10, 64, 30, 412},
+		StaticText {
+			disabled,
+			"^0"
+		}
+	}
+};
+
+resource 'DITL' (kMacYesNoAlertResourceID + 10, purgeable) {
+	{	/* array DITLarray: 4 elements */
+		/* [1] */
+		{100, 340, 120, 408},
+		Button {
+			enabled,
+			"Oui"
+		},
+		/* [2] */
+		{100, 260, 120, 324},
+		Button {
+			enabled,
+			"Non"
+		},
+		/* [3] */
+		{38, 64, 88, 408},
+		StaticText {
+			disabled,
+			"^1"
+		},
+		/* [4] */
+		{10, 64, 30, 412},
+		StaticText {
+			disabled,
+			"^0"
+		}
+	}
+};
+
+resource 'DITL' (kMacYesNoAlertResourceID + 20, purgeable) {
+	{	/* array DITLarray: 4 elements */
+		/* [1] */
+		{100, 340, 120, 408},
+		Button {
+			enabled,
+			"Si"
 		},
 		/* [2] */
 		{100, 260, 120, 324},
@@ -132,7 +232,7 @@ resource 'DITL' (129, purgeable) {
 	}
 };
 
-resource 'DITL' (130, purgeable) {
+resource 'DITL' (kMacYesNoCancelAlertResourceID, purgeable) {
 	{	/* array DITLarray: 5 elements */
 		/* [1] */
 		{100, 340, 120, 408},
@@ -167,7 +267,7 @@ resource 'DITL' (130, purgeable) {
 	}
 };
 
-resource 'DITL' (131, purgeable) {
+resource 'DITL' (kMacNoYesAlertResourceID, purgeable) {
 	{	/* array DITLarray: 4 elements */
 		/* [1] */
 		{100, 340, 120, 408},
@@ -196,7 +296,7 @@ resource 'DITL' (131, purgeable) {
 	}
 };
 
-resource 'DITL' (132, purgeable) {
+resource 'DITL' (kMacNoYesCancelAlertResourceID, purgeable) {
 	{	/* array DITLarray: 5 elements */
 		/* [1] */
 		{100, 340, 120, 408},
@@ -278,54 +378,17 @@ data 'DLGX' (132) {
 	$"0000 0006 0000 0000 0000 0000 0000"                 /* .............. */
 };
 
-data 'ics#' (200, "¥ New File") {
-	$"0000 3FE0 2C70 3458 2C78 3408 2C08 3408"            /* ..?à,p4X,x4.,.4. */
-	$"2C08 3408 2C08 3408 2C0E 340F 3FFE 0000"            /* ,.4.,.4.,.4.?þ.. */
-	$"0000 3FE0 3FF0 3FF8 3FF8 3FF8 3FF8 3FF8"            /* ..?à?ð?ø?ø?ø?ø?ø */
-	$"3FF8 3FF8 3FF8 3FF8 3FFE 3FFF 3FFE 0000"            /* ?ø?ø?ø?ø?þ?ÿ?þ.. */
-};
-
-data 'ics4' (200, "¥ New File") {
-	$"0000 0000 0000 0000 00FF FFFF FFF0 0000"            /* .........ÿÿÿÿð.. */
-	$"00F1 FFED EFFF 0000 00FF 1FDE DFCF F000"            /* .ñÿíïÿ...ÿ.ÞßÏð. */
-	$"00F1 FFED EFFF F000 00FF 1FDE DEEE F000"            /* .ñÿíïÿð..ÿ.ÞÞîð. */
-	$"00F1 FFED EDED F000 00FF 1FDE DEDE F000"            /* .ñÿíííð..ÿ.ÞÞÞð. */
-	$"00F1 FFED EDED F000 00FF 1FDE DEDE F000"            /* .ñÿíííð..ÿ.ÞÞÞð. */
-	$"00F1 FFED EDED F000 00FF 1FDE DEDE F000"            /* .ñÿíííð..ÿ.ÞÞÞð. */
-	$"00F1 FFED EDED FEE0 00FF 1FDE DEDE FEEE"            /* .ñÿíííþà.ÿ.ÞÞÞþî */
-	$"00FF FFFF FFFF FEE0 0000 0000 0000 0000"            /* .ÿÿÿÿÿþà........ */
-};
-
-data 'ics8' (200, "¥ New File") {
-	$"0000 0000 0000 0000 0000 0000 0000 0000"            /* ................ */
-	$"0000 FFFF FFFF FFFF FFFF FF00 0000 0000"            /* ..ÿÿÿÿÿÿÿÿÿ..... */
-	$"0000 FF05 FFFF FB7F FBFF FFFF 0000 0000"            /* ..ÿ.ÿÿû.ûÿÿÿ.... */
-	$"0000 FFFF 0BFF 7FFB 7FFF F6FF FF00 0000"            /* ..ÿÿ.ÿ.û.ÿöÿÿ... */
-	$"0000 FF05 FFFF FB7F FBFF FFFF FF00 0000"            /* ..ÿ.ÿÿû.ûÿÿÿÿ... */
-	$"0000 FFFF 0BFF 7FFB 7FFB FBFB FF00 0000"            /* ..ÿÿ.ÿ.û.ûûûÿ... */
-	$"0000 FF05 FFFF FB7F FB7F FB7F FF00 0000"            /* ..ÿ.ÿÿû.û.û.ÿ... */
-	$"0000 FFFF 0BFF 7FFB 7FFB 7FFB FF00 0000"            /* ..ÿÿ.ÿ.û.û.ûÿ... */
-	$"0000 FF05 FFFF FB7F FB7F FB7F FF00 0000"            /* ..ÿ.ÿÿû.û.û.ÿ... */
-	$"0000 FFFF 0BFF 7FFB 7FFB 7FFB FF00 0000"            /* ..ÿÿ.ÿ.û.û.ûÿ... */
-	$"0000 FF05 FFFF FB7F FB7F FB7F FF00 0000"            /* ..ÿ.ÿÿû.û.û.ÿ... */
-	$"0000 FFFF 0BFF 7FFB 7FFB 7FFB FF00 0000"            /* ..ÿÿ.ÿ.û.û.ûÿ... */
-	$"0000 FF05 FFFF FB7F FB7F FB7F FFFC FC00"            /* ..ÿ.ÿÿû.û.û.ÿüü. */
-	$"0000 FFFF 0BFF 7FFB 7FFB 7FFB FFFC FCFC"            /* ..ÿÿ.ÿ.û.û.ûÿüüü */
-	$"0000 FFFF FFFF FFFF FFFF FFFF FFFC FC00"            /* ..ÿÿÿÿÿÿÿÿÿÿÿüü. */
-	$"0000 0000 0000 0000 0000 0000 0000 0000"            /* ................ */
-};
-
 resource 'ldes' ( 128 )
 {
 	versionZero 
 	{
 		0 , 
-		1 ,
+		0 ,
 		0 , 
 		0 , 
 		hasVertScroll , 
 		noHorizScroll , 
-		0 , 
+		128 , 
 		noGrowSpace , 
 	}
 } ;
@@ -536,3 +599,4 @@ resource 'STR#' (251) {
 	}
 };
 
+// end of get file

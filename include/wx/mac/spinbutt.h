@@ -63,10 +63,12 @@ class WXDLLEXPORT wxSpinButton: public wxControl
   ////////////////////////////////////////////////////////////////////////////
 
   void Command(wxCommandEvent& event) { ProcessCommand(event); };
+	virtual void MacHandleControlClick( ControlHandle control , SInt16 controlpart ) ;
 
 protected:
   int   m_min;
   int   m_max;
+  int		m_value ;
 };
 
 class WXDLLEXPORT wxSpinEvent: public wxScrollEvent

@@ -9,7 +9,16 @@
 #if (__MWERKS__ < 0x0900) || macintosh
     #define __MAC__
     #define __WXMAC__
-    #define	USE_PRECOMPILED_MAC_HEADERS	1  /*Set to 0 if you don't want to use precompiled MacHeaders*/
+    #if TARGET_CARBON
+	    #define	USE_PRECOMPILED_MAC_HEADERS	0  /*Set to 0 if you don't want to use precompiled MacHeaders*/
+			#ifdef __cplusplus
+					#include <MacHeadersPPCX++>
+			#else
+					#include <MacHeadersPPCX>
+			#endif
+		#else
+	    #define	USE_PRECOMPILED_MAC_HEADERS	1  /*Set to 0 if you don't want to use precompiled MacHeaders*/
+		#endif
 // automatically includes MacHeaders
 #elif (__MWERKS__ >= 0x0900) && __INTEL__
     #define __WXMSW__
@@ -27,19 +36,23 @@
 #ifdef __WXMSW__
     #include <ansi_prefix.win32.h>
     #include <ansi_parms.h>
+    #ifdef __MWERKS__
     #if defined( __MSL__ ) && __MSL__ >= 0x5012
 			#define	fileno	_fileno
 			#define	fdopen	_fdopen
 			#define	tell	_tell
+    #endif
     #endif
 #elif defined( __WXMAC__)
     #include <ansi_prefix.mac.h>
 #endif
 
 #define USE_DEFINE
+
 // in order to avoid problems further down in wxWindows
 
 #ifdef __cplusplus
+
 extern "C" 
 {
 #endif

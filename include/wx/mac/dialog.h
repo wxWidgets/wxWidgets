@@ -60,23 +60,17 @@ public:
   ~wxDialog();
 
   virtual bool Destroy();
-  void SetClientSize(int width, int height);
-  void GetPosition(int *x, int *y) const;
   bool Show(bool show);
+  void Fit();
+
   void Iconize(bool iconize);
 
   virtual bool IsIconized() const;
-  void Fit();
-
-  void SetTitle(const wxString& title);
-  wxString GetTitle() const ;
-
   void OnCharHook(wxKeyEvent& event);
   void OnCloseWindow(wxCloseEvent& event);
 
   void SetModal(bool flag);
 
-  virtual void Centre(int direction = wxBOTH);
   virtual bool IsModal() const { return ((GetWindowStyleFlag() & wxDIALOG_MODAL) == wxDIALOG_MODAL); }
 
   virtual int ShowModal();
@@ -87,8 +81,16 @@ public:
   void OnApply(wxCommandEvent& event);
   void OnCancel(wxCommandEvent& event);
 
+	void OnSize(wxSizeEvent& event) ;
   // Responds to colour changes
   void OnSysColourChanged(wxSysColourChangedEvent& event);
+
+    // splits text up at newlines and places the
+    // lines into a vertical wxBoxSizer
+    wxSizer *CreateTextSizer( const wxString &message );
+    
+    // places buttons into a horizontal wxBoxSizer
+    wxSizer *CreateButtonSizer( long flags );
 
 DECLARE_EVENT_TABLE()
 };

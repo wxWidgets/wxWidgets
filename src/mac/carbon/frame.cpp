@@ -23,6 +23,8 @@
 #include "wx/settings.h"
 #include "wx/app.h"
 
+#include <wx/mac/uma.h>
+
 extern wxList wxModelessWindows;
 extern wxList wxPendingDelete;
 
@@ -47,7 +49,11 @@ bool wxFrame::m_useNativeStatusBar = FALSE;
 
 wxFrame::wxFrame()
 {
+#if wxUSE_TOOLBAR
   m_frameToolBar = NULL ;
+#endif
+	m_macShown = false ;
+	// in order to be able to give size events on show
   m_frameMenuBar = NULL;
   m_frameStatusBar = NULL;
 
@@ -69,7 +75,10 @@ bool wxFrame::Create(wxWindow *parent,
   SetName(name);
   m_windowStyle = style;
   m_frameMenuBar = NULL;
+
+#if wxUSE_TOOLBAR
   m_frameToolBar = NULL ;
+#endif
   m_frameStatusBar = NULL;
 
   SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
@@ -83,9 +92,63 @@ bool wxFrame::Create(wxWindow *parent,
 
   wxModelessWindows.Append(this);
 
-  // TODO: create frame.
+  // create frame.
 
-  return FALSE;
+	Rect theBoundsRect;
+
+  m_x = (int)pos.x;
+  m_y = (int)pos.y;
+  if ( m_y < 50 )
+  	m_y = 50 ;
+  if ( m_x < 20 )
+  	m_x = 20 ;
+  	
+  m_width = size.x;
+	if (m_width == -1) 
+		m_width = 20;
+  m_height = size.y;
+	if (m_height == -1) 
+		m_height = 20;
+
+	m_macWindowData = new MacWindowData() ;
+
+	::SetRect(&theBoundsRect, m_x, m_y, m_x + m_width, m_y + m_height);
+
+	WindowClass wclass = kDocumentWindowClass ;
+	WindowAttributes attr = kWindowNoAttributes ;
+	
+	if ( ( m_windowStyle & wxMINIMIZE_BOX ) || ( m_windowStyle & wxMAXIMIZE_BOX ) )
+	{
+		attr |= kWindowFullZoomAttribute ;
+		attr |= kWindowResizableAttribute ;
+	}
+	if ( m_windowStyle & wxSTAY_ON_TOP )
+	{
+		wclass = kFloatingWindowClass ;
+		
+//			if ( m_windowStyle & wxCAPTION )
+//				attr |= kHasPaletteTitlebarMask ;
+	}
+	else
+	{
+	}
+	if ( m_windowStyle & wxSYSTEM_MENU )
+	{
+		attr |= kWindowCloseBoxAttribute ;
+	}
+	UMACreateNewWindow( wclass , attr , &theBoundsRect , &m_macWindowData->m_macWindow ) ;
+	wxAssociateWinWithMacWindow( m_macWindowData->m_macWindow , this ) ;
+	wxString label ;
+	if( wxApp::s_macDefaultEncodingIsPC )
+		label = wxMacMakeMacStringFromPC( title ) ;
+	else
+		label = title ;
+	UMASetWTitleC( m_macWindowData->m_macWindow , label ) ;
+	UMACreateRootControl( m_macWindowData->m_macWindow , &m_macWindowData->m_macRootControl ) ;
+	m_macWindowData->m_macWindowBackgroundTheme = kThemeBrushDocumentWindowBackground ;
+	m_macWindowData->m_macFocus = NULL ;
+	m_macShown = false ;
+  return TRUE;
 }
 
 wxFrame::~wxFrame()
@@ -105,46 +168,13 @@ wxFrame::~wxFrame()
 
     if (wxTheApp->GetExitOnFrameDelete())
     {
-       // TODO signal to the app that we're going to close
+       wxTheApp->ExitMainLoop() ;
     }
   }
 
   wxModelessWindows.DeleteObject(this);
 }
 
-// Get size *available for subwindows* i.e. excluding menu bar, toolbar etc.
-void wxFrame::GetClientSize(int *x, int *y) const
-{
-    // TODO
-}
-
-// Set the client size (i.e. leave the calculation of borders etc.
-// to wxWindows)
-void wxFrame::SetClientSize(int width, int height)
-{
-    // TODO
-}
-
-void wxFrame::GetSize(int *width, int *height) const
-{
-    // TODO
-}
-
-void wxFrame::GetPosition(int *x, int *y) const
-{
-    // TODO
-}
-
-void wxFrame::SetSize(int x, int y, int width, int height, int sizeFlags)
-{
-    // TODO
-}
-
-bool wxFrame::Show(bool show)
-{
-    // TODO
-    return FALSE;
-}
 
 void wxFrame::Iconize(bool iconize)
 {
@@ -170,17 +200,6 @@ bool wxFrame::IsMaximized(void) const
     return FALSE;
 }
 
-void wxFrame::SetTitle(const wxString& title)
-{
-    // TODO
-}
-
-wxString wxFrame::GetTitle() const
-{
-    // TODO
-    return wxString("");
-}
-
 void wxFrame::SetIcon(const wxIcon& icon)
 {
   m_icon = icon;
@@ -192,10 +211,12 @@ wxStatusBar *wxFrame::OnCreateStatusBar(int number, long style, wxWindowID id,
 {
     wxStatusBar *statusBar = NULL;
 
-    statusBar = new wxStatusBar(this, id, wxPoint(0, 0), wxSize(100, 20),
+    statusBar = new wxStatusBar(this, id, wxPoint(0, 0), wxSize(100, 17),
         style, name);
 
     // Set the height according to the font and the border size
+    // we shouldn't do this on the mac, because we have to fit the grow box
+    /*
     wxClientDC dc(statusBar);
     dc.SetFont(statusBar->GetFont());
 
@@ -205,6 +226,8 @@ wxStatusBar *wxFrame::OnCreateStatusBar(int number, long style, wxWindowID id,
     int height = (int)( (y  * 1.1) + 2* statusBar->GetBorderY());
 
     statusBar->SetSize(-1, -1, 100, height);
+
+		*/
 
     statusBar->SetFieldsCount(number);
     return statusBar;
@@ -245,6 +268,8 @@ void wxFrame::SetStatusWidths(int n, const int widths_field[])
 
 void wxFrame::PositionStatusBar()
 {
+  if (m_frameStatusBar )
+  {
     int w, h;
     GetClientSize(&w, &h);
     int sw, sh;
@@ -253,6 +278,7 @@ void wxFrame::PositionStatusBar()
     // Since we wish the status bar to be directly under the client area,
     // we use the adjusted sizes without using wxSIZE_NO_ADJUSTMENTS.
     m_frameStatusBar->SetSize(0, h, w, sh);
+   }
 }
 
 void wxFrame::SetMenuBar(wxMenuBar *menuBar)
@@ -264,8 +290,8 @@ void wxFrame::SetMenuBar(wxMenuBar *menuBar)
     }
   
     m_frameMenuBar = menuBar;
-
-    // TODO
+		// TODO : we move this into the app code
+    m_frameMenuBar->MacInstallMenuBar() ;
 }
 
 void wxFrame::Fit()
@@ -333,8 +359,12 @@ void wxFrame::OnSize(wxSizeEvent& event)
     wxWindow *win = (wxWindow *)node->Data();
     if ( !win->IsKindOf(CLASSINFO(wxFrame))  &&
          !win->IsKindOf(CLASSINFO(wxDialog)) && 
-         (win != GetStatusBar()) &&
-         (win != GetToolBar()) )
+         (win != GetStatusBar()) 
+#if wxUSE_TOOLBAR
+         &&
+         (win != GetToolBar()) 
+#endif
+         )
     {
       if ( child )
         return;     // it's our second subwindow - nothing to do
@@ -410,21 +440,6 @@ wxMenuBar *wxFrame::GetMenuBar() const
   return m_frameMenuBar;
 }
 
-void wxFrame::Centre(int direction)
-{
-  int display_width, display_height, width, height, x, y;
-  wxDisplaySize(&display_width, &display_height);
-
-  GetSize(&width, &height);
-  GetPosition(&x, &y);
-
-  if (direction & wxHORIZONTAL)
-    x = (int)((display_width - width)/2);
-  if (direction & wxVERTICAL)
-    y = (int)((display_height - height)/2);
-
-  SetSize(x, y, width, height);
-}
 
 // Call this to simulate a menu command
 void wxFrame::Command(int id)
@@ -434,7 +449,7 @@ void wxFrame::Command(int id)
 
 void wxFrame::ProcessCommand(int id)
 {
-  wxCommandEvent commandEvent(wxEVENT_TYPE_MENU_COMMAND, id);
+  wxCommandEvent commandEvent(wxEVT_COMMAND_MENU_SELECTED, id);
   commandEvent.SetInt( id );
   commandEvent.SetEventObject( this );
 
@@ -450,18 +465,14 @@ void wxFrame::ProcessCommand(int id)
   }
 */
 
-  // Process events starting with the window with the focus, if any.
-  wxWindow* focusWin = wxFindFocusDescendant(this);
-
-  wxEvtHandler* evtHandler = focusWin ? focusWin->GetEventHandler() : GetEventHandler();
-
-  evtHandler->ProcessEvent(commandEvent);
+  GetEventHandler()->ProcessEvent(commandEvent);
 }
 
 // Checks if there is a toolbar, and returns the first free client position
 wxPoint wxFrame::GetClientAreaOrigin() const
 {
     wxPoint pt(0, 0);
+#if wxUSE_TOOLBAR
     if (GetToolBar())
     {
         int w, h;
@@ -476,33 +487,46 @@ wxPoint wxFrame::GetClientAreaOrigin() const
             pt.y += h;
         }
     }
+#endif
     return pt;
 }
 
-void wxFrame::ScreenToClient(int *x, int *y) const
+void wxFrame::GetClientSize(int *x, int *y) const
 {
-    wxWindow::ScreenToClient(x, y);
+	wxWindow::GetClientSize( x , y ) ;
 
-    // We may be faking the client origin.
-    // So a window that's really at (0, 30) may appear
-    // (to wxWin apps) to be at (0, 0).
-    wxPoint pt(GetClientAreaOrigin());
-    *x -= pt.x;
-    *y -= pt.y;
+  if ( GetStatusBar() )
+  {
+    int statusX, statusY;
+    GetStatusBar()->GetClientSize(&statusX, &statusY);
+    *y -= statusY;
+  }
+
+  wxPoint pt(GetClientAreaOrigin());
+  *y -= pt.y;
+  *x -= pt.x;
 }
 
-void wxFrame::ClientToScreen(int *x, int *y) const
+void wxFrame::DoSetClientSize(int clientwidth, int clientheight)
 {
-    // We may be faking the client origin.
-    // So a window that's really at (0, 30) may appear
-    // (to wxWin apps) to be at (0, 0).
-    wxPoint pt1(GetClientAreaOrigin());
-    *x += pt1.x;
-    *y += pt1.y;
+	int currentclientwidth , currentclientheight ;
+	int currentwidth , currentheight ;
+	
+	GetClientSize( &currentclientwidth , &currentclientheight ) ;
+	GetSize( &currentwidth , &currentheight ) ;
+	
+	// find the current client size
 
-    wxWindow::ClientToScreen(x, y);
+  // Find the difference between the entire window (title bar and all)
+  // and the client area; add this to the new client size to move the
+  // window
+
+	DoSetSize( -1 , -1 , currentwidth + clientwidth - currentclientwidth ,
+		currentheight + clientheight - currentclientheight , wxSIZE_USE_EXISTING ) ;
 }
 
+
+#if wxUSE_TOOLBAR
 wxToolBar* wxFrame::CreateToolBar(long style, wxWindowID id, const wxString& name)
 {
     wxCHECK_MSG( m_frameToolBar == NULL, FALSE,
@@ -534,7 +558,10 @@ void wxFrame::PositionToolBar()
     // the toolbar/status bar were added.
     // So DEFINITELY replace the line below with something appropriate.
 
-    GetClientSize(& cw, &ch);
+   //  GetClientSize(& cw, &ch);
+
+		cw = m_width ;
+		ch = m_height ;
 
     if ( GetStatusBar() )
     {
@@ -562,4 +589,4 @@ void wxFrame::PositionToolBar()
         }
     }
 }
-
+#endif

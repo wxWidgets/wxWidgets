@@ -11,6 +11,16 @@
 /* see jconfig.doc for explanations */
 
 /* use wxWindows' configure */
+#ifdef __MWERKS__
+#if (__MWERKS__ < 0x0900) || macintosh
+    #define __WXMAC__
+		#define USE_MAC_MEMMGR
+// automatically includes MacHeaders
+#elif (__MWERKS__ >= 0x0900) && __INTEL__
+    #define __WXMSW__
+#endif
+#endif
+
 #include "wx/setup.h"
 
 #define HAVE_PROTOTYPES

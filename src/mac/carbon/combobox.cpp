@@ -14,10 +14,14 @@
 #endif
 
 #include "wx/combobox.h"
+#include "wx/mac/uma.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
 #endif
+
+// right now we don't support editable comboboxes
+
 
 bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
            const wxString& value,
@@ -28,32 +32,39 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
-    SetName(name);
-    SetValidator(validator);
     m_noStrings = n;
-    m_windowStyle = style;
 
-    if (parent) parent->AddChild(this);
+		Rect bounds ;
+		Str255 title ;
+	
+		MacPreControlCreate( parent , id ,  "" , pos , size ,style, validator , name , &bounds , title ) ;
+	
+		m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , title , true , 0 , -12345 , 0, 
+	  	kControlPopupButtonProc , (long) this ) ; 
+	
+		m_macPopUpMenuHandle =  NewMenu( 1 , "\pPopUp Menu" ) ;
+		SetControlData( m_macControl , kControlNoPart , kControlPopupButtonMenuHandleTag , sizeof( MenuHandle ) , (char*) &m_macPopUpMenuHandle) ;
+		for ( int i = 0 ; i < n ; i++ )
+		{
+			appendmenu( m_macPopUpMenuHandle , choices[i] ) ;
+		}
+		SetControlMinimum( m_macControl , 0 ) ;
+		SetControlMaximum( m_macControl , m_noStrings) ;
+		SetControlValue( m_macControl , 1 ) ;
 
-    if ( id == -1 )
-    	m_windowId = (int)NewControlId();
-    else
-	m_windowId = id;
+		MacPostControlCreate() ;
 
-    // TODO: create combobox control
-
-    return TRUE;
+  	return TRUE;
 }
 
 wxString wxComboBox::GetValue() const
 {
-    // TODO
-    return wxString("");
+    return GetStringSelection() ;
 }
 
 void wxComboBox::SetValue(const wxString& value)
 {
-    // TODO
+    SetStringSelection( value ) ;
 }
 
 // Clipboard operations
@@ -116,50 +127,85 @@ void wxComboBox::SetSelection(long from, long to)
 
 void wxComboBox::Append(const wxString& item)
 {
-    // TODO
+	appendmenu( m_macPopUpMenuHandle , item ) ;
+    m_noStrings ++;
+	SetControlMaximum( m_macControl , m_noStrings) ;
 }
 
 void wxComboBox::Delete(int n)
 {
-    // TODO
+	wxASSERT( n < m_noStrings ) ;
+    ::DeleteMenuItem( m_macPopUpMenuHandle , n + 1) ;
+    m_noStrings --;
+	SetControlMaximum( m_macControl , m_noStrings) ;
 }
 
 void wxComboBox::Clear()
 {
-    // TODO
+    for ( int i = 0 ; i < m_noStrings ; i++ )
+    {
+    	::DeleteMenuItem( m_macPopUpMenuHandle , 1 ) ;
+	}
+    m_noStrings = 0;
+	SetControlMaximum( m_macControl , m_noStrings) ;
 }
 
 int wxComboBox::GetSelection() const
 {
-    // TODO
-    return -1;
+    return GetControlValue( m_macControl ) -1 ;
 }
 
 void wxComboBox::SetSelection(int n)
 {
-    // TODO
+    SetControlValue( m_macControl , n + 1 ) ;
 }
 
 int wxComboBox::FindString(const wxString& s) const
 {
-    // TODO
+    for( int i = 0 ; i < m_noStrings ; i++ )
+    {
+    	if ( GetString( i ) == s )
+    		return i ; 
+    }
     return -1;
 }
 
 wxString wxComboBox::GetString(int n) const
 {
-    // TODO
-    return wxString("");
+	Str255 text ;
+    ::GetMenuItemText( m_macPopUpMenuHandle , n+1 , text ) ;
+    p2cstr( text ) ;
+    return wxString( text );
 }
 
 wxString wxComboBox::GetStringSelection() const
 {
-    // TODO
-    return wxString("");
+    int sel = GetSelection ();
+    if (sel > -1)
+        return wxString(this->GetString (sel));
+    else
+        return wxString("");
 }
 
 bool wxComboBox::SetStringSelection(const wxString& sel)
 {
-    // TODO
-    return FALSE;
+    int s = FindString (sel);
+    if (s > -1)
+        {
+            SetSelection (s);
+            return TRUE;
+        }
+    else
+        return FALSE;
 }
+
+void wxComboBox::MacHandleControlClick( ControlHandle control , SInt16 controlpart ) 
+{
+    wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, m_windowId );
+	event.SetInt(GetSelection());
+    event.SetEventObject(this);
+    event.SetString(copystring(GetStringSelection()));
+    ProcessCommand(event);
+    delete[] event.GetString();
+}
+

@@ -36,11 +36,14 @@
 #endif
 #endif
 
+#include "wx/mac/uma.h"
+
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxControl)
 
 BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
 	EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
+	EVT_CHAR(wxTextCtrl::OnChar)
 END_EVENT_TABLE()
 #endif
 
@@ -54,67 +57,114 @@ wxTextCtrl::wxTextCtrl()
 }
 
 bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
-		   const wxString& value,
+		   const wxString& st,
            const wxPoint& pos,
            const wxSize& size, long style,
            const wxValidator& validator,
            const wxString& name)
 {
-    m_fileName = "";
-    SetName(name);
-    SetValidator(validator);
-    if (parent) parent->AddChild(this);
+	m_macHorizontalBorder = 2 ; // additional pixels around the real control
+	m_macVerticalBorder = 2 ;
 
-    m_windowStyle = style;
+	wxSize mySize = size ;
 
-    if ( id == -1 )
-  	    m_windowId = (int)NewControlId();
-    else
-	    m_windowId = id;
+	Rect bounds ;
+	Str255 title ;
+	
+	if ( mySize.y == -1 )
+	{
+		if ( UMAHasAppearance() )
+			mySize.y = 16 ;
+		else
+			mySize.y = 24 ;
+	}
+	MacPreControlCreate( parent , id ,  "" , pos , mySize ,style, validator , name , &bounds , title ) ;
 
-    return TRUE;
+	m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , "\p" , true , 0 , 0 , 1, 
+	  	kControlEditTextProc , (long) this ) ;
+	MacPostControlCreate() ;
+
+	wxString value ;
+	
+	if( wxApp::s_macDefaultEncodingIsPC )
+		value = wxMacMakeMacStringFromPC( st ) ;
+	else
+		value = st ;
+	UMASetControlData( m_macControl, 0, kControlEditTextTextTag , value.Length() , (char*) ((const char*)value) ) ;
+
+  return TRUE;
 }
 
 wxString wxTextCtrl::GetValue() const
 {
-    // TODO
-    return wxString("");
+	Size actualsize;
+	UMAGetControlData( m_macControl, 0, kControlEditTextTextTag , 32767 , wxBuffer , &actualsize) ;
+	wxBuffer[actualsize] = 0 ;
+	if( wxApp::s_macDefaultEncodingIsPC )
+		return wxMacMakePCStringFromMac( wxBuffer ) ;
+	else
+    	return wxString(wxBuffer);
 }
 
-void wxTextCtrl::SetValue(const wxString& value)
+void wxTextCtrl::SetValue(const wxString& st)
 {
-    // TODO
+	wxString value ;
+	
+	if( wxApp::s_macDefaultEncodingIsPC )
+		value = wxMacMakeMacStringFromPC( st ) ;
+	else
+		value = st ;
+	UMASetControlData( m_macControl, 0, kControlEditTextTextTag , value.Length() , (char*) ((const char*)value) ) ;
+	Refresh() ;
+//	MacInvalidateControl() ;
 }
 
 void wxTextCtrl::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
-    // TODO
+    wxControl::SetSize( x , y , width , height , sizeFlags ) ;
 }
 
 // Clipboard operations
 void wxTextCtrl::Copy()
 {
-    // TODO
+   TEHandle teH ;
+   long size ;
+   
+   UMAGetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+	TECopy( teH ) ;
 }
 
 void wxTextCtrl::Cut()
 {
-    // TODO
+   TEHandle teH ;
+   long size ;
+   
+   UMAGetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+	TECut( teH ) ;
+//	MacInvalidateControl() ;
 }
 
 void wxTextCtrl::Paste()
 {
-    // TODO
+   TEHandle teH ;
+   long size ;
+   
+   UMAGetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+	TEPaste( teH ) ;
+//	MacInvalidateControl() ;
 }
 
 void wxTextCtrl::SetEditable(bool editable)
 {
-    // TODO
+    if ( editable )
+    	UMAActivateControl( m_macControl ) ;
+    else
+    	UMADeactivateControl( m_macControl ) ;
 }
 
 void wxTextCtrl::SetInsertionPoint(long pos)
 {
-    // TODO
+	SetSelection( pos , pos ) ;
 }
 
 void wxTextCtrl::SetInsertionPointEnd()
@@ -125,29 +175,72 @@ void wxTextCtrl::SetInsertionPointEnd()
 
 long wxTextCtrl::GetInsertionPoint() const
 {
-    // TODO
-    return 0;
+   ControlEditTextSelectionRec selection ;
+   TEHandle teH ;
+   long size ;
+   
+   UMAGetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+//   UMAGetControlData( m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection , &size ) ;
+    return (**teH).selStart ;
 }
 
 long wxTextCtrl::GetLastPosition() const
 {
-    // TODO
-    return 0;
+   ControlEditTextSelectionRec selection ;
+   TEHandle teH ;
+   long size ;
+   
+   UMAGetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+   
+//   UMAGetControlData( m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection , &size ) ;
+    return (**teH).teLength ;
 }
 
 void wxTextCtrl::Replace(long from, long to, const wxString& value)
 {
-    // TODO
+   	TEHandle teH ;
+   	long size ;
+   
+   	ControlEditTextSelectionRec selection ;
+   
+   	selection.selStart = from ;
+   	selection.selEnd = to ;
+   	UMASetControlData( m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection ) ;
+		UMAGetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+   	TESetSelect( from , to  , teH ) ;
+   	TEDelete( teH ) ;
+		TEInsert( value , value.Length() , teH ) ;
+//	MacInvalidateControl() ;
 }
 
 void wxTextCtrl::Remove(long from, long to)
 {
-    // TODO
+   	TEHandle teH ;
+   	long size ;
+   
+   	ControlEditTextSelectionRec selection ;
+   
+   	selection.selStart = from ;
+   	selection.selEnd = to ;
+   	UMASetControlData( m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection ) ;
+	UMAGetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+   	TEDelete( teH ) ;
+//	MacInvalidateControl() ;
 }
 
 void wxTextCtrl::SetSelection(long from, long to)
 {
-    // TODO
+   ControlEditTextSelectionRec selection ;
+   TEHandle teH ;
+   long size ;
+   
+   UMAGetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+   
+   selection.selStart = from ;
+   selection.selEnd = to ;
+   
+   UMASetControlData( m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection ) ;
+   TESetSelect( selection.selStart , selection.selEnd , teH ) ;
 }
 
 bool wxTextCtrl::LoadFile(const wxString& file)
@@ -217,23 +310,44 @@ bool wxTextCtrl::SaveFile(const wxString& file)
 
 void wxTextCtrl::WriteText(const wxString& text)
 {
-    // TODO write text to control
+    TEHandle teH ;
+    long size ;
+   
+   	memcpy( wxBuffer, text , text.Length() ) ;
+   	wxBuffer[text.Length() ] = 0 ;
+//    wxMacConvertNewlines( wxBuffer , wxBuffer ) ;
+   
+    UMAGetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+   
+		TEInsert( wxBuffer , strlen( wxBuffer) , teH ) ;
+		Refresh() ;
 }
 
 void wxTextCtrl::AppendText(const wxString& text)
 {
-    // TODO append text to control
+    SetInsertionPointEnd();
+    WriteText(text);
 }
 
 void wxTextCtrl::Clear()
 {
-    // TODO
+    TEHandle teH ;
+    long size ;
+   	ControlEditTextSelectionRec selection ;
+   
+  	selection.selStart = 0 ;
+   	selection.selEnd = 32767 ;
+   
+    UMASetControlData( m_macControl , 0, kControlEditTextSelectionTag , sizeof( selection ) , (char*) &selection ) ;
+   
+    UMAGetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
+		TECut( teH ) ;
+//	MacInvalidateControl() ;
 }
 
 bool wxTextCtrl::IsModified() const
 {
-    // TODO
-    return FALSE;
+    return TRUE;
 }
 
 // Makes 'unmodified'
@@ -266,14 +380,12 @@ void wxTextCtrl::ShowPosition(long pos)
 
 int wxTextCtrl::GetLineLength(long lineNo) const
 {
-    // TODO
-    return 0;
+    return GetValue().Length();
 }
 
 wxString wxTextCtrl::GetLineText(long lineNo) const
 {
-    // TODO
-    return wxString("");
+    return GetValue();
 }
 
 /*
@@ -295,6 +407,76 @@ void wxTextCtrl::OnDropFiles(wxDropFilesEvent& event)
     }
 }
 
+void wxTextCtrl::OnChar(wxKeyEvent& event)
+{
+	bool handleIt = true ;
+    switch( event.KeyCode() )
+    {
+        case WXK_RETURN:
+        {
+/* Oh yes it will, because we also specify DLGC_WANTCHARS
+            wxASSERT_MSG( m_windowStyle & wxTE_PROCESS_ENTER,
+                          "this text ctrl should never receive return" );
+*/
+
+            if ( (m_windowStyle & wxTE_MULTILINE) == 0 )
+            {
+            	wxWindow* parent = GetParent() ;
+            	while( parent )
+            	{
+            		if ( parent->GetDefaultItem() )
+            		{
+            			wxButton *defaultBtn = parent->GetDefaultItem() ;
+							    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, defaultBtn->GetId() );
+							    event.SetEventObject(defaultBtn);
+							    defaultBtn->Command(event);
+            			return ;
+					}
+            		parent = parent->GetParent() ;
+				} ;
+            }
+            break;
+        }
+        case WXK_TAB:
+            // only produce navigation event if we don't process TAB ourself or
+            // if it's a Shift-Tab keypress (we assume nobody will ever need
+            // this key combo for himself)
+            //
+            // NB: Notice that Ctrl-Tab is handled elsewhere and Alt-Tab is
+            //     handled by Windows
+            if ( event.ShiftDown() || !(m_windowStyle & wxTE_PROCESS_TAB) )
+            {
+                wxNavigationKeyEvent eventNav;
+                eventNav.SetDirection(!event.ShiftDown());
+                eventNav.SetWindowChange(FALSE);
+                eventNav.SetEventObject(this);
+    
+                if ( GetEventHandler()->ProcessEvent(eventNav) )
+                    return;
+            }
+            break;
+    }
+    if ( handleIt )
+    {
+			EventRecord *ev = wxTheApp->MacGetCurrentEvent() ;
+			short keycode ;
+			short keychar ;
+			keychar = short(ev->message & charCodeMask);
+			keycode = short(ev->message & keyCodeMask) >> 8 ;
+			UMAHandleControlKey( m_macControl , keycode , keychar , ev->modifiers ) ;
+			if ( keychar >= 0x20 )
+			{
+      {
+        wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
+        wxString val(GetValue());
+        if ( !val.IsNull() )
+          event.m_commandString = WXSTRINGCAST val;
+        event.SetEventObject( this );
+        ProcessCommand(event);
+      }
+			}
+		}
+}
 // The streambuf code was partly taken from chapter 3 by Jerry Schwarz of
 // AT&T's "C++ Lanuage System Release 3.0 Library Manual" - Stein Somers
 

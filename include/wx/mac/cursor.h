@@ -27,9 +27,7 @@ public:
     ~wxCursorRefData();
 
 protected:
-/* TODO: implementation
   WXHCURSOR m_hCursor;
-*/
 };
 
 #define M_CURSORDATA ((wxCursorRefData *)m_refData)
@@ -49,24 +47,22 @@ public:
   wxCursor(const char bits[], int width, int height, int hotSpotX = -1, int hotSpotY = -1,
     const char maskBits[] = NULL);
 
-  /* TODO: make default type suit platform */
-  wxCursor(const wxString& name, long flags = wxBITMAP_TYPE_CUR_RESOURCE,
+  wxCursor(const wxString& name, long flags = wxBITMAP_TYPE_MACCURSOR_RESOURCE,
    int hotSpotX = 0, int hotSpotY = 0);
 
   wxCursor(int cursor_type);
   ~wxCursor();
 
-  // TODO: also verify the internal cursor handle
-  virtual bool Ok() const { return (m_refData != NULL) ; }
+  virtual bool Ok() const { return (m_refData != NULL && M_CURSORDATA->m_hCursor != NULL ) ; }
 
   inline wxCursor& operator = (const wxCursor& cursor) { if (*this == cursor) return (*this); Ref(cursor); return *this; }
   inline bool operator == (const wxCursor& cursor) { return m_refData == cursor.m_refData; }
   inline bool operator != (const wxCursor& cursor) { return m_refData != cursor.m_refData; }
 
-/* TODO: implementation
+	void MacInstall() const ;
+
   void SetHCURSOR(WXHCURSOR cursor);
   inline WXHCURSOR GetHCURSOR() const { return (M_CURSORDATA ? M_CURSORDATA->m_hCursor : 0); }
-*/
 };
 
 extern WXDLLEXPORT void wxSetCursor(const wxCursor& cursor);

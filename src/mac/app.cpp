@@ -37,10 +37,18 @@
 
 // mac
 
+#if __option(profile)
+	#include <profiler.h>
+#endif	
+
 #include "apprsrc.h"
+
+#include <wx/mac/uma.h>
 
 extern char *wxBuffer;
 extern wxList wxPendingDelete;
+extern wxList *wxWinMacWindowList;
+extern wxList *wxWinMacControlList;
 
 wxApp *wxTheApp = NULL;
 
@@ -51,56 +59,279 @@ BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
 END_EVENT_TABLE()
 #endif
 
-long wxApp::sm_lastMessageTime = 0;
 
 const short	kMacMinHeap = (29 * 1024) ;
 // platform specific static variables
 
-bool					gMacHasAppearance = false ;
-long					gMacAppearanceVersion = 0 ;
-RgnHandle			gMacCursorRgn = NULL ;
+const short kwxMacMenuBarResource = 1 ;
+const short kwxMacAppleMenuId = 1 ;
 
+RgnHandle			wxApp::s_macCursorRgn = NULL;
+wxWindow*			wxApp::s_captureWindow = NULL ;
+int					wxApp::s_lastMouseDown = 0 ;
+long 					wxApp::sm_lastMessageTime = 0;
+
+#ifdef __WXMAC__
+
+bool	wxApp::s_macDefaultEncodingIsPC = true ;
+bool wxApp::s_macSupportPCMenuShortcuts = true ;
+long wxApp::s_macAboutMenuItemId = wxID_ABOUT ;
+wxString wxApp::s_macHelpMenuTitleName = "&Help" ;
+
+OSErr AEHandleODoc( AppleEvent *event , AppleEvent *reply , long refcon )
+{
+	wxApp* app = (wxApp*) refcon ;
+	return wxTheApp->MacHandleAEODoc( event , reply) ;
+}
+
+OSErr AEHandleOApp( AppleEvent *event , AppleEvent *reply , long refcon )
+{
+	wxApp* app = (wxApp*) refcon ;
+	return wxTheApp->MacHandleAEOApp( event , reply ) ;
+}
+
+OSErr AEHandlePDoc( AppleEvent *event , AppleEvent *reply , long refcon )
+{
+	wxApp* app = (wxApp*) refcon ;
+	return wxTheApp->MacHandleAEPDoc( event , reply ) ;
+}
+
+OSErr AEHandleQuit( AppleEvent *event , AppleEvent *reply , long refcon )
+{
+	wxApp* app = (wxApp*) refcon ;
+	return wxTheApp->MacHandleAEQuit( event , reply) ;
+}
+
+OSErr wxApp::MacHandleAEODoc(AppleEvent *event , AppleEvent *reply) 
+{
+	ProcessSerialNumber PSN ;
+	PSN.highLongOfPSN = 0 ;
+	PSN.lowLongOfPSN = kCurrentProcess ;
+	SetFrontProcess( &PSN ) ;
+	return noErr ;
+}
+
+OSErr wxApp::MacHandleAEPDoc(AppleEvent *event , AppleEvent *reply) 
+{
+	return noErr ;
+}
+
+OSErr wxApp::MacHandleAEOApp(AppleEvent *event , AppleEvent *reply) 
+{
+	return noErr ;
+}
+
+OSErr wxApp::MacHandleAEQuit(AppleEvent *event , AppleEvent *reply) 
+{
+	wxWindow* win = GetTopWindow() ;
+	if ( win )
+	{
+		win->Close(TRUE ) ;
+	}
+	else
+	{
+		ExitMainLoop() ;
+	}
+	return noErr ;
+}
+
+char StringMac[] = 	"\x80\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8a\x8b\x8c\x8d\x8e\x8f"
+					"\x90\x91\x92\x93\x94\x95\x96\x97\x98\x99\x9a\x9b\x9c\x9d\x9e\x9f"
+					"\xa0\xa1\xa2\xa3\xa4\xa5\xa6\xa7\xa8\xa9\xaa\xab\xac\xae\xaf"
+					"\xb1\xb4\xb5\xb6\xbb\xbc\xbe\xbf"
+					"\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xcb\xcc\xcd\xce\xcf"
+					"\xd0\xd1\xd2\xd3\xd4\xd5\xd6\xd8\xca\xdb" ;
+
+char StringANSI[] = "\xC4\xC5\xC7\xC9\xD1\xD6\xDC\xE1\xE0\xE2\xE4\xE3\xE5\xE7\xE9\xE8"
+					"\xEA\xEB\xED\xEC\xEE\xEF\xF1\xF3\xF2\xF4\xF6\xF5\xFA\xF9\xFB\xFC"
+					"\x86\xBA\xA2\xA3\xA7\x95\xB6\xDF\xAE\xA9\x99\xB4\xA8\xC6\xD8"
+					"\xB1\xA5\xB5\xF0\xAA\xBA\xE6\xF8"
+					"\xBF\xA1\xAC\x83\xAB\xBB\x85\xC0\xC3\xD5\x8C\x9C"
+					"\x96\x97\x93\x94\x91\x92\xF7\xFF\xA0\x80" ;
+
+void wxMacConvertFromPC( const char *from , char *to , int len )
+{
+	char *c ;
+	if ( from == to )
+	{
+		for( int i = 0 ; i < len ; ++ i )
+		{
+			c = strchr( StringANSI , *from ) ;
+			if ( c != NULL )
+			{
+				*to = StringMac[ c - StringANSI] ;
+			}	
+			++to ;
+			++from ;
+		}
+	}
+	else
+	{
+		for( int i = 0 ; i < len ; ++ i )
+		{
+			c = strchr( StringANSI , *from ) ;
+			if ( c != NULL )
+			{
+				*to = StringMac[ c - StringANSI] ;
+			}	
+			else
+			{
+				*to = *from ;
+			}
+			++to ;
+			++from ;
+		}
+	}
+}
+
+void wxMacConvertToPC( const char *from , char *to , int len )
+{
+	char *c ;
+	if ( from == to )
+	{
+		for( int i = 0 ; i < len ; ++ i )
+		{
+			c = strchr( StringMac , *from ) ;
+			if ( c != NULL )
+			{
+				*to = StringANSI[ c - StringMac] ;
+			}	
+			++to ;
+			++from ;
+		}
+	}
+	else
+	{
+		for( int i = 0 ; i < len ; ++ i )
+		{
+			c = strchr( StringMac , *from ) ;
+			if ( c != NULL )
+			{
+				*to = StringANSI[ c - StringMac] ;
+			}	
+			else
+			{
+				*to = *from ;
+			}
+			++to ;
+			++from ;
+		}
+	}
+}
+
+void wxMacConvertFromPC( char * p ) 
+{
+	char *ptr = p ;
+	int len = strlen ( p ) ;
+	
+	wxMacConvertFromPC( ptr , ptr , len ) ;
+}
+
+void wxMacConvertFromPCForControls( char * p ) 
+{
+	char *ptr = p ;
+	int len = strlen ( p ) ;
+	
+	wxMacConvertFromPC( ptr , ptr , len ) ;
+	for ( int i = 0 ; i < strlen ( ptr ) ; i++ )
+	{
+		if ( ptr[i] == '&' && ptr[i]+1 != ' ' )
+		{
+			memmove( &ptr[i] , &ptr[i+1] , strlen( &ptr[i+1] ) + 1) ;
+		}
+	}
+}
+
+void wxMacConvertFromPC( unsigned char *p ) 
+{
+	char *ptr = (char*) p + 1 ;
+	int len = p[0] ;
+	
+	wxMacConvertFromPC( ptr , ptr , len ) ;
+}
+
+extern char *wxBuffer ;
+
+wxString wxMacMakeMacStringFromPC( const char * p ) 
+{
+	const char *ptr = p ;
+	int len = strlen ( p ) ;
+	char *buf = wxBuffer ;
+	
+	if ( len >= BUFSIZ + 512 )
+	{
+		buf = new char [len+1] ;
+	}
+
+	wxMacConvertFromPC( ptr , buf , len ) ;
+	buf[len] = 0 ;
+	wxString result( buf ) ;
+	if ( buf != wxBuffer )
+		delete buf ;
+	return result ;
+}
+
+
+void wxMacConvertToPC( char * p ) 
+{
+	char *ptr = p ;
+	int len = strlen ( p ) ;
+	
+	wxMacConvertToPC( ptr , ptr , len ) ;
+}
+
+void wxMacConvertToPC( unsigned char *p ) 
+{
+	char *ptr = (char*) p + 1 ;
+	int len = p[0] ;
+	
+	wxMacConvertToPC( ptr , ptr , len ) ;
+}
+
+wxString wxMacMakePCStringFromMac( const char * p ) 
+{
+	const char *ptr = p ;
+	int len = strlen ( p ) ;
+	char *buf = wxBuffer ;
+	
+	if ( len >= BUFSIZ + 512 )
+	{
+		buf = new char [len+1] ;
+	}
+
+	wxMacConvertToPC( ptr , buf , len ) ;
+	buf[len] = 0 ;
+	
+	wxString result( buf ) ;
+	if ( buf != wxBuffer )
+		delete buf ;
+	return result ;
+}
+
+#endif
 
 bool wxApp::Initialize()
 {
   int error = 0 ;
 	
   // Mac-specific
-	long total,contig;
   
-  // init all managers
+  UMAInitToolbox( 4 ) ;
+	UMAShowWatchCursor() ;
 
-	::InitGraf(&qd.thePort);
-	::InitFonts();
-	::InitWindows();
-	::InitMenus();
-	::TEInit();
-	::InitDialogs(0L);
-	::InitCursor();
-	CursHandle aCursHandle = ::GetCursor(watchCursor);	// Watch should be in system
-	if (aCursHandle)
-		::SetCursor(*aCursHandle);											
-	::FlushEvents(everyEvent, 0);
-	
-	// setup memory of application 
-	
-	::MaxApplZone();
-	for (long i = 1; i <= 4; i++)
-		::MoreMasters();
-	PurgeSpace(&total, &contig);
-	::SetCursor( &qd.arrow ) ; 
-
+	AEInstallEventHandler( kCoreEventClass , kAEOpenDocuments , NewAEEventHandlerProc(AEHandleODoc) , (long) wxTheApp , FALSE ) ;
+	AEInstallEventHandler( kCoreEventClass , kAEOpenApplication , NewAEEventHandlerProc(AEHandleOApp) , (long) wxTheApp , FALSE ) ;
+	AEInstallEventHandler( kCoreEventClass , kAEPrintDocuments , NewAEEventHandlerProc(AEHandlePDoc) , (long) wxTheApp , FALSE ) ;
+	AEInstallEventHandler( kCoreEventClass , kAEQuitApplication , NewAEEventHandlerProc(AEHandleQuit) , (long) wxTheApp  , FALSE ) ;
 #if 0
-	InitAEHandlers();
-	InitializeAECore() ;
 	GUSISetup(GUSIwithInternetSockets);
 #endif
 
+	
   // test the minimal configuration necessary
 
 	long theSystem ;
 	long theMachine;
-	long theAppearance ;
 
 	if (Gestalt(gestaltMachineType, &theMachine) != noErr)
 	{
@@ -114,32 +345,25 @@ bool wxApp::Initialize()
 	{
 		error = kMacSTROldSystem  ;
 	}	
-	else if ( theSystem < 0x0700 )
+	else if ( theSystem < 0x0750 )
 	{
 		error = kMacSTROldSystem  ;
 	}
+	#if !TARGET_CARBON
 	else if ((long)GetApplLimit() - (long)ApplicationZone() < kMacMinHeap)
 	{
 		error = kMacSTRSmallSize;
 	}
+	#endif
+	/*
 	else
 	{
-		if ( Gestalt( gestaltAppearanceAttr, &theAppearance ) == noErr )
+		if ( !UMAHasAppearance() )
 		{
-			gMacHasAppearance = true ;
-			RegisterAppearanceClient();
-			if ( Gestalt( gestaltAppearanceVersion, &theAppearance ) == noErr )
-			{
-				gMacAppearanceVersion = theAppearance ;
-			}
-			else
-			{
-				gMacAppearanceVersion = 0x0100 ;
-			}
-		}
-		else
 			error = kMacSTRNoPre8Yet ;
+		}
 	}
+	*/
 
 	// if we encountered any problems so far, give the error code and exit immediately
   	
@@ -147,19 +371,23 @@ bool wxApp::Initialize()
   {  	
 		short itemHit;
 		Str255 message;
-	
-		SetCursor(&qd.arrow);
+
 		GetIndString(message, 128, error);
-		ParamText(message, (ConstStr255Param)"\p", (ConstStr255Param)"\p", (ConstStr255Param)"\p");
-		itemHit = Alert(129, nil);
+		UMAShowArrowCursor() ;
+		ParamText("\pFatal Error", message, (ConstStr255Param)"\p", (ConstStr255Param)"\p");
+		itemHit = Alert(128, nil);
 	  return FALSE ;
   }  
-  
+
+#if __option(profile)
+	ProfilerInit( collectDetailed, bestTimeBase , 20000 , 30 ) ;
+#endif	
+
   // now avoid exceptions thrown for new (bad_alloc)
   
   std::__throws_bad_alloc = FALSE ;
   
-	gMacCursorRgn = ::NewRgn() ;
+	s_macCursorRgn = ::NewRgn() ;
 
 #ifdef __WXMSW__
   wxBuffer = new char[1500];
@@ -191,8 +419,14 @@ bool wxApp::Initialize()
   wxBitmap::InitStandardHandlers();
 
   wxModule::RegisterModules();
-  wxASSERT( wxModule::InitializeModules() == TRUE );
+  if (!wxModule::InitializeModules())
+     return FALSE;
 
+  wxWinMacWindowList = new wxList(wxKEY_INTEGER);
+  wxWinMacControlList = new wxList(wxKEY_INTEGER);
+
+	UMAShowArrowCursor() ;
+  
   return TRUE;
 }
 
@@ -228,7 +462,15 @@ void wxApp::CleanUp()
   delete[] wxBuffer;
   wxBuffer = NULL;
 
+  if (wxWinMacWindowList)
+    delete wxWinMacWindowList ;
+
   wxClassInfo::CleanUpClasses();
+
+#if __option(profile)
+	ProfilerDump( "\papp.prof" ) ;
+	ProfilerTerm() ;
+#endif	
 
   delete wxTheApp;
   wxTheApp = NULL;
@@ -253,8 +495,8 @@ void wxApp::CleanUp()
   delete wxLog::SetActiveTarget(NULL);
 
 	::PrClose() ;
-	if (gMacCursorRgn)
-		::DisposeRgn(gMacCursorRgn);
+	if (s_macCursorRgn)
+		::DisposeRgn(s_macCursorRgn);
 	#if 0
 		TerminateAE() ;
 	#endif
@@ -281,11 +523,18 @@ int wxEntry( int argc, char *argv[] )
     return 0;
   };
 
+#ifdef __WXMAC__
+  argc = 1 ; // currently we don't support files as parameters
+#endif
+
   wxTheApp->argc = argc;
   wxTheApp->argv = argv;
 
   // GUI-specific initialization, such as creating an app context.
   wxTheApp->OnInitGui();
+  
+  // we could try to get the open apple events here to adjust argc and argv better
+  
 
   // Here frames insert themselves automatically
   // into wxTopLevelWindows by getting created
@@ -324,22 +573,19 @@ wxApp::wxApp()
   m_appName = "";
   argc = 0;
   argv = NULL;
-#ifdef __WXMSW__
+
   m_printMode = wxPRINT_WINDOWS;
-#else
-  m_printMode = wxPRINT_POSTSCRIPT;
-#endif
+
   m_exitOnFrameDelete = TRUE;
   m_auto3D = TRUE;
 }
 
 bool wxApp::Initialized()
 {
+  if (GetTopWindow())
     return TRUE;
-//  if (GetTopWindow())
-//    return TRUE;
-//  else
-//    return FALSE;
+  else
+    return FALSE;
 }
 
 int wxApp::MainLoop()
@@ -372,16 +618,15 @@ void wxApp::ExitMainLoop()
 // Is a message/event pending?
 bool wxApp::Pending()
 {
-/* TODO.
- */
-  return FALSE;
+	EventRecord event ;
+
+  return EventAvail( everyEvent , &event ) ;
 }
 
 // Dispatch a message.
 void wxApp::Dispatch()
 {
-/* TODO.
- */
+	MacDoOneEvent() ;
 }
 
 void wxApp::OnIdle(wxIdleEvent& event)
@@ -493,32 +738,70 @@ void wxExit()
 // Yield to other processes
 bool wxYield()
 {
-#if 0
-	::YieldToOtherThreads() ;
-	::SystemTime() ;
-#endif
+//	YieldToAnyThread() ;
+	SystemTask() ;
   return TRUE;
 }
 
 // platform specifics 
 
+void wxApp::MacSuspend( bool convertClipboard )
+{
+		s_lastMouseDown = 0 ;
+		if( convertClipboard ) 
+		{
+			MacConvertPrivateToPublicScrap() ;
+		}
+		
+		UMAHideFloatingWindows() ;
+}
+
+void wxApp::MacResume( bool convertClipboard )
+{
+		s_lastMouseDown = 0 ;
+		if( convertClipboard ) 
+		{
+			MacConvertPublicToPrivateScrap() ;
+		}
+		
+		UMAShowFloatingWindows() ;
+}
+
+void wxApp::MacConvertPrivateToPublicScrap()
+{
+	::ZeroScrap();
+	::TEToScrap();
+}
+
+void wxApp::MacConvertPublicToPrivateScrap()
+{
+	::TEFromScrap() ;
+}
+
 void wxApp::MacDoOneEvent() 
 {
   EventRecord event ;
 
-	long sleepTime = 60;
+	long sleepTime = ::GetCaretTime();
 
-	if (WaitNextEvent(everyEvent, &event,sleepTime, gMacCursorRgn))
+	if (WaitNextEvent(everyEvent, &event,sleepTime, s_macCursorRgn))
 	{
     MacHandleOneEvent( &event );
 	}
 	else
 	{
 		// idlers
+		WindowPtr window = UMAFrontWindow() ;
+		if ( window )
+			UMAIdleControls( window ) ;
+			
 		wxTheApp->ProcessIdle() ;
 	}
-	
+	if ( event.what != kHighLevelEvent )
+		SetRectRgn( s_macCursorRgn , event.where.h - 1 , event.where.v - 1,  event.where.h + 1 , event.where.v + 1 ) ;
+
 	// repeaters
+
 #if 0
 	wxMacProcessSocketEvents() ;  
 #endif
@@ -526,29 +809,30 @@ void wxApp::MacDoOneEvent()
 
 void wxApp::MacHandleOneEvent( EventRecord *ev ) 
 {
+	m_macCurrentEvent = ev ;
+	
+	wxApp::sm_lastMessageTime = ev->when ;
+	
 	switch (ev->what)
 	{
-		case nullEvent:
-			MacHandleNullEvent( ev ) ;
-			break ;
-		case kHighLevelEvent:
-			MacHandleHighLevelEvent( ev ) ;
-			break;
 		case mouseDown:
 			MacHandleMouseDownEvent( ev ) ;
-			wxTheApp->ExitMainLoop() ;
+			if ( ev->modifiers & controlKey )
+				s_lastMouseDown = 2;
+			else
+				s_lastMouseDown = 1;
 			break;
 		case mouseUp:
+			if ( s_lastMouseDown == 2 )
+			{
+				ev->modifiers |= controlKey ;
+			}
+			else
+			{
+				ev->modifiers &= ~controlKey ;
+			}			
 			MacHandleMouseUpEvent( ev ) ;
-			break;
-		case keyDown:
-			MacHandleKeyDownEvent( ev ) ;
-			break;
-		case autoKey:
-			MacHandleAutoKeyEvent( ev ) ;
-			break;
-		case keyUp:
-			MacHandleKeyUpEvent( ev ) ;
+			s_lastMouseDown = 0;
 			break;
 		case activateEvt:
 			MacHandleActivateEvent( ev ) ;
@@ -556,848 +840,530 @@ void wxApp::MacHandleOneEvent( EventRecord *ev )
 		case updateEvt:
 			MacHandleUpdateEvent( ev ) ;
 			break;
+		case keyDown:
+		case autoKey:
+			MacHandleKeyDownEvent( ev ) ;
+			break;
+		case keyUp:
+			MacHandleKeyUpEvent( ev ) ;
+			break;
 		case diskEvt:
 			MacHandleDiskEvent( ev ) ;
 			break;
 		case osEvt:
 			MacHandleOSEvent( ev ) ;
 			break;
+		case kHighLevelEvent:
+			MacHandleHighLevelEvent( ev ) ;
+			break;
 		default:
 			break;
 	}
 }
 
-void wxApp::MacHandleNullEvent( EventRecord *ev ) 
-{
-}
-
 void wxApp::MacHandleHighLevelEvent( EventRecord *ev )
 {
+	::AEProcessAppleEvent( ev ) ;
 }
+
+bool s_macIsInModalLoop = false ;
 
 void wxApp::MacHandleMouseDownEvent( EventRecord *ev )
 {
+	WindowRef window;
+	WindowRef frontWindow = UMAFrontNonFloatingWindow() ;
+	WindowAttributes frontWindowAttributes = NULL ;
+	if ( frontWindow )
+		UMAGetWindowAttributes( frontWindow , &frontWindowAttributes ) ;
+	
+	short windowPart = ::FindWindow(ev->where, &window);
+	wxWindow* win = wxFindWinFromMacWindow( window ) ;
+	
+	switch (windowPart)
+	{
+		case inMenuBar :
+			if ( s_macIsInModalLoop ) 
+			{
+				SysBeep ( 30 ) ;
+			}
+			else
+			{
+				UInt32 menuresult = MenuSelect(ev->where) ;
+				MacHandleMenuSelect( HiWord( menuresult ) , LoWord( menuresult ) );
+				s_lastMouseDown = 0;
+			}
+			break ;
+		case inSysWindow :
+			SystemClick( ev , window ) ;
+			s_lastMouseDown = 0;
+			break ;
+		case inDrag :
+			if ( window != frontWindow && s_macIsInModalLoop && !(ev->modifiers & cmdKey ) )
+			{
+				SysBeep ( 30 ) ;
+			}
+			else
+			{
+				DragWindow(window, ev->where, &qd.screenBits.bounds);
+				if (win)
+				{
+					GrafPtr port ;
+					GetPort( &port ) ;
+					Point pt = { 0, 0 } ;
+					SetPort( window ) ;
+					SetOrigin( 0 , 0 ) ;
+					LocalToGlobal( &pt ) ;
+					SetPort( port ) ;
+						win->SetSize( pt.h , pt.v , -1 , 
+							-1 , wxSIZE_USE_EXISTING);
+				}
+				s_lastMouseDown = 0;
+			}
+			break ;
+		case inGoAway:
+			if (TrackGoAway(window, ev->where))
+			{
+				if ( win )
+					win->Close() ;
+			}
+			s_lastMouseDown = 0;
+			break;
+		case inGrow:
+				int growResult = GrowWindow(window , ev->where, &qd.screenBits.bounds);
+				if (growResult != 0)
+				{
+					int newWidth = LoWord(growResult);
+					int newHeight = HiWord(growResult);
+					int oldWidth, oldHeight;
+					
+					win->GetSize(&oldWidth, &oldHeight);
+					if (newWidth == 0) 
+						newWidth = oldWidth;
+					if (newHeight == 0) 
+						newHeight = oldHeight;
+					
+					if (win)
+						win->SetSize( -1, -1, newWidth, newHeight, wxSIZE_USE_EXISTING);
+				}
+				s_lastMouseDown = 0;
+			break;
+		case inZoomIn:
+		case inZoomOut:
+				if (TrackBox(window, ev->where, windowPart))
+				{
+					// TODO setup size event
+					ZoomWindow( window , windowPart , false ) ;
+					if (win)
+						win->SetSize( -1, -1, window->portRect.right-window->portRect.left , 
+							window->portRect.bottom-window->portRect.top, wxSIZE_USE_EXISTING);
+				}
+			s_lastMouseDown = 0;
+			break;
+		case inCollapseBox :
+				// TODO setup size event
+			s_lastMouseDown = 0;
+			break ;
+
+		case inContent :
+				if ( window != frontWindow )
+				{
+					if ( s_macIsInModalLoop ) 
+					{
+						SysBeep ( 30 ) ;
+					}
+					else if ( UMAIsWindowFloating( window ) )
+					{
+						if ( win )
+							win->MacMouseDown( ev , windowPart ) ;
+					}
+					else
+					{
+						UMASelectWindow( window ) ;
+					}
+				}
+				else
+				{
+					if ( win )
+						win->MacMouseDown( ev , windowPart ) ;
+				}
+			break ;
+			
+		default:
+			break;
+	}
 }
 
 void wxApp::MacHandleMouseUpEvent( EventRecord *ev )
 {
-}
-
-void wxApp::MacHandleKeyDownEvent( EventRecord *ev )
-{
-}
-
-void wxApp::MacHandleKeyUpEvent( EventRecord *ev )
-{
-}
-
-void wxApp::MacHandleAutoKeyEvent( EventRecord *ev )
-{
-}
-
-void wxApp::MacHandleActivateEvent( EventRecord *ev )
-{
-}
-
-void wxApp::MacHandleUpdateEvent( EventRecord *ev )
-{
-}
-
-void wxApp::MacHandleDiskEvent( EventRecord *ev )
-{
-}
-
-void wxApp::MacHandleOSEvent( EventRecord *ev )
-{
-}
-
-
-
-/*
-
-void wxApp::doMacMouseDown(void)
-{
-	WindowPtr window;
-	short windowPart = ::FindWindow(m_event.where, &window);
-	if ( windowPart != inMenuBar )
+	WindowRef window;
+	
+	short windowPart = ::FindWindow(ev->where, &window);
+	
+	switch (windowPart)
 	{
-		WindowPtr frontWindow = FrontWindow();
-		if (WindowIsModal(frontWindow) && (window != frontWindow))
-			SysBeep(1);
-		else
-		{	
-			switch (windowPart)
+		case inMenuBar :
+			break ;
+		case inSysWindow :
+			break ;
+		default:
 			{
-				case inMenuBar:
-					break;
-				case inContent:
-					doMacInContent(window); break;
-				case inDrag:
-					doMacInDrag(window); break;
-				case inGrow:
-					doMacInGrow(window); break;
-				case inGoAway:
-					doMacInGoAway(window); break;
-				case inZoomIn:
-				case inZoomOut:
-					doMacInZoom(window, windowPart); break;
-				default:
-					break;
+				wxWindow* win = wxFindWinFromMacWindow( window ) ;
+				if ( win )
+					win->MacMouseUp( ev , windowPart ) ;
 			}
-	
-		}
-	}
-	else
-	{
-		doMacInMenuBar(::MenuSelect(m_event.where));
-	}
-}
-
-void wxApp::doMacMouseUp(void)
-{
-	if (m_mouseWindow)
-	{
-#if 0
-		int hitX = m_event.where.h; 				// screen window c.s.
-		int hitY = m_event.where.v; 				// screen window c.s.
-		m_mouseWindow->ScreenToClient(&hitX, &hitY);		// mouseWindow client c.s.
-		m_mouseWindow->ClientToLogical(&hitX, &hitY); 	// mouseWindow logical c.s.
-#endif
-		
-		wxMouseEvent event(wxEVT_LEFT_UP);
-		event.m_shiftDown = m_event.modifiers & shiftKey;
-		event.m_controlDown = m_event.modifiers & controlKey;
-		event.m_altDown = m_event.modifiers & optionKey;
-		event.m_metaDown = m_event.modifiers & cmdKey;
-		event.m_leftDown = FALSE;
-		event.m_middleDown = FALSE;
-		event.m_rightDown = FALSE;
-		event.m_x = m_event.where.h;
-		event.m_y = m_event.where.v;
-		event.m_timeStamp = m_event.when;
-		event.SetEventObject(m_mouseWindow);
-
-		m_mouseWindow->ProcessEvent(event);
-	}
-	else
- 	{
- 		//??? Can't we just throw away mouse up events without matching mouse down
-		wxWindow* theMacWxFrame = wxFrame::MacFindFrameOrDialog(::FrontWindow());
- 		if (theMacWxFrame)
- 		{
-#if 0
- 			int hitX = cCurrentEvent.where.h; // screen window c.s.
- 			int hitY = cCurrentEvent.where.v; // screen window c.s.
-			theMacWxFrame->ScreenToWindow(&hitX, &hitY);
-#endif
-
-			wxMouseEvent event(wxEVT_LEFT_UP);
-			event.m_shiftDown = m_event.modifiers & shiftKey;
-			event.m_controlDown = m_event.modifiers & controlKey;
-			event.m_altDown = m_event.modifiers & optionKey;
-			event.m_metaDown = m_event.modifiers & cmdKey;
-			event.m_leftDown = FALSE;
-			event.m_middleDown = FALSE;
-			event.m_rightDown = FALSE;
-			event.m_x = m_event.where.h;
-			event.m_y = m_event.where.v;
-			event.m_timeStamp = m_event.when;
-			event.SetEventObject(m_mouseWindow);
-
-			theMacWxFrame->ProcessEvent(event);
- 		}
- 	}
-}
-
-void wxApp::doMacMouseMotion(void)
-{
-	if (m_mouseWindow) {
-		wxMouseEvent event(wxEVT_MOTION);
-		event.m_shiftDown = m_event.modifiers & shiftKey;
-		event.m_controlDown = m_event.modifiers & controlKey;
-		event.m_altDown = m_event.modifiers & optionKey;
-		event.m_metaDown = m_event.modifiers & cmdKey;
-		event.m_leftDown = !(m_event.modifiers & btnState);
-		event.m_middleDown = FALSE;
-		event.m_rightDown = FALSE;
-		event.m_x = m_event.where.h;
-		event.m_y = m_event.where.v;
-		event.m_timeStamp = m_event.when;
-		event.SetEventObject(m_mouseWindow);
-
-		m_mouseWindow->ProcessEvent(event);
-	}
-	else
- 	{
-		wxWindow* theMacWxFrame = wxFrame::MacFindFrameOrDialog(::FrontWindow());
- 		if (theMacWxFrame)
- 		{
-			wxMouseEvent event(wxEVT_MOTION);
-			event.m_shiftDown = m_event.modifiers & shiftKey;
-			event.m_controlDown = m_event.modifiers & controlKey;
-			event.m_altDown = m_event.modifiers & optionKey;
-			event.m_metaDown = m_event.modifiers & cmdKey;
-			event.m_leftDown = !(m_event.modifiers & btnState);
-			event.m_middleDown = FALSE;
-			event.m_rightDown = FALSE;
-			event.m_x = m_event.where.h;
-			event.m_y = m_event.where.v;
-			event.m_timeStamp = m_event.when;
-			event.SetEventObject(m_mouseWindow);
-
-			m_mouseWindow->ProcessEvent(event);
-		}
-	}
-	
-	//??? Need to work with floating windows... isn't there a toolbox call to find the
-	// top window intersecting a point is screen coordinates??
-#if 0
-	else	// will only work for one floating window at the moment... ?
-	{	
-		WindowPtr frontDocPtr = findFrontNonFloatingWindow();
-		WindowPtr frontFloatingPtr = ::FrontWindow();
-		
-		int hitX = cCurrentEvent.where.h;
-		int hitY = cCurrentEvent.where.v;
-		
-		wxFrame* macWxFrame = findMacWxFrame(frontDocPtr);
-		
-		if ((frontFloatingPtr != frontDocPtr) & (frontFloatingPtr != NULL))
-		{
-			RgnHandle frontFloatStrRgn = getStructureRegion(frontFloatingPtr);
-			Rect 	  frontFloatRect = (**frontFloatStrRgn).rgnBBox;
-	
-			if 	   ((hitX >= frontFloatRect.left) & 
-					(hitX <= frontFloatRect.right) & 
-					(hitY >= frontFloatRect.top) &
-					(hitY <= frontFloatRect.bottom))
-			{
-				macWxFrame = findMacWxFrame(frontFloatingPtr);
-			}
-		}
-	}
-#endif
-}
-
-void wxApp::doMacKeyDown(void)
-{
-	long menuResult = 0 ;
-	short keycode ;
-	short keychar ;
-	keychar = short(m_event.message & charCodeMask);
-	keycode = short(m_event.message & keyCodeMask) >> 8 ;
-
-	// Handle menu accelerators
-	if ( gSFMacHasAppearance )
-	{
-		menuResult = MenuEvent( &m_event ) ;
-		if ( HiWord( menuResult ) )
-		{
-			doMacInMenuBar( menuResult ) ;
-		}
-		else
-		{
-			ControlHandle control ;
-			
-			GetKeyboardFocus( FrontNonFloatingWindow() , &control ) ;
-			if ( control && keychar != 0x07 )
-				HandleControlKey( control , keycode , keychar , m_event.modifiers ) ;
-			else
-			{
-				wxWindow* theMacWxFrame = wxFrame::MacFindFrameOrDialog(::FrontWindow());
-				if (theMacWxFrame)
-				{
-					wxKeyEvent event(wxEVT_CHAR);
-					event.m_shiftDown = m_event.modifiers & shiftKey;
-					event.m_controlDown = m_event.modifiers & controlKey;
-					event.m_altDown = m_event.modifiers & optionKey;
-					event.m_metaDown = m_event.modifiers & cmdKey;
-					event.m_keyCode = macTranslateKey(keychar, m_event.modifiers & (shiftKey|optionKey));
-					event.m_x = m_event.where.h;
-					event.m_y = m_event.where.v;
-					event.m_timeStamp = m_event.when;
-					event.SetEventObject(theMacWxFrame);
-			
-					theMacWxFrame->ProcessEvent(event);
-				}
-			}
-		}
-	}
-	else
-	{
-		if (GetMenuHandle( kwxMacAppleMenuId ) )
-		{
-//			menuResult = MDEF_MenuKey(m_event.message, m_event.modifiers , GetMenuHandle( kwxMacAppleMenuId ) );
-		}
-		else
-		{
-			if (m_event.modifiers & cmdKey)
-			{
-				menuResult = MenuKey( keychar ) ;
-			}
-		}
-
-		if ( HiWord( menuResult ) )
-		{
-			doMacInMenuBar( menuResult ) ;
-		}
-		else
-		{
-			wxWindow* theMacWxFrame = wxFrame::MacFindFrameOrDialog(::FrontWindow());
-			if (theMacWxFrame)
-			{
-				wxKeyEvent event(wxEVT_CHAR);
-				event.m_shiftDown = m_event.modifiers & shiftKey;
-				event.m_controlDown = m_event.modifiers & controlKey;
-				event.m_altDown = m_event.modifiers & optionKey;
-				event.m_metaDown = m_event.modifiers & cmdKey;
-				event.m_keyCode = macTranslateKey(keychar, m_event.modifiers & (shiftKey|optionKey));
-				event.m_x = m_event.where.h;
-				event.m_y = m_event.where.v;
-				event.m_timeStamp = m_event.when;
-				event.SetEventObject(theMacWxFrame);
-		
-				theMacWxFrame->ProcessEvent(event);
-			}
-		}
-	}
-}
-
-void wxApp::doMacAutoKey(void)
-{
-	doMacKeyDown();
-}
-
-void wxApp::doMacKeyUp(void)
-{
-}
-
-void wxApp::doMacActivateEvt(void)
-{
-	HighlightAndActivateWindow( (WindowPtr) m_event.message , m_event.modifiers & activeFlag ) ;
-}
-
-void wxApp::doMacUpdateEvt(void)
-{
-	WindowPtr theMacWindow = (WindowPtr)(m_event.message);
-	::BeginUpdate(theMacWindow);
-	
-	wxWindow* theMacWxFrame = wxFrame::MacFindFrameOrDialog(theMacWindow);
-	if (theMacWxFrame)
-	{
-//		if (!::EmptyRgn(theMacWindow->visRgn))	// this doesn't work with windowshade
-//		{
-			if ( theMacWxFrame->MacSetupPort() )
-			{
-				// Erase update region
-				// we must do this, because controls add their former rect to the inval
-				// rgn and the background might not have been correct at that moment
-				::EraseRect(&theMacWindow->portRect); 
-	
-	 			// Can't use UpdateControls since each control has it's own coordinate system
-	 			//		::UpdateControls(theMacWindow, theMacWindow->visRgn);
-	
-				::UpdateControls( theMacWindow , theMacWindow->visRgn ) ;
-	#if 0
-	 			// Draw the grow box
-	 			if (cStyle & wxRESIZE_BORDER)
-	 				MacDrawGrowIcon();
-	#endif
-	
-				wxPaintEvent event;
-				event.m_timeStamp = m_event.when;
-				event.SetEventObject(theMacWxFrame);
-	
-				theMacWxFrame->ProcessEvent(event);
-	//			::SetThemeWindowBackground(  theMacWindow , kThemeActiveDialogBackgroundBrush ,  false ) ;
-				::ClipRect( &theMacWindow->portRect ) ;		
-				::SetOrigin(  0 , 0 );	
-			}
-			else
-			{
-				wxASSERT_MSG( false , "unabled to setup window mac port") ;
-			}
-			
-//		}
-	}
-
-	::EndUpdate(theMacWindow);
-}
-
-void wxApp::doMacDiskEvt(void)
-{ // based on "Programming for System 7" by Gary Little and Tim Swihart
-	if ((m_event.message >> 16) != noErr)
-	{
-		const int kDILeft = 0x0050; // top coord for disk init dialog
-		const int kDITop = 0x0070; // left coord for disk init dialog
-		Point mountPoint;
-		mountPoint.h = kDILeft;
-		mountPoint.v = kDITop;
-		int myError = DIBadMount(mountPoint, m_event.message);
-	}
-}
-
-void wxApp::doMacOsEvt(void)
-{ // based on "Programming for System 7" by Gary Little and Tim Swihart
-	switch ((m_event.message >> 24) & 0x0ff)
-	{
-		case suspendResumeMessage:
-			if (m_event.message & resumeFlag)
-				doMacResumeEvent();
-			else
-				doMacSuspendEvent();
-			break;
-		case mouseMovedMessage:
-			doMacMouseMovedMessage();
 			break;
 	}
 }
 
-void wxApp::doMacHighLevelEvent(void)
-{
-	::AEProcessAppleEvent(&m_event); // System 7 or higher
-}
-
-void wxApp::doMacResumeEvent(void)
-{
-	wxWindow* theMacWxFrame = wxFrame::MacFindFrameOrDialog(::FrontWindow());
-	if (theMacWxFrame)
-	{
-		if (m_event.message & convertClipboardFlag)
-			::TEFromScrap();
-
-		wxActivateEvent event(wxEVT_ACTIVATE, TRUE);
-		event.m_timeStamp = m_event.when;
-		event.SetEventObject(theMacWxFrame);
-
-		theMacWxFrame->ProcessEvent(event);
-	}
-}
-
-void wxApp::doMacSuspendEvent(void)
-{
-	wxWindow* theMacWxFrame = wxFrame::MacFindFrameOrDialog(::FrontWindow());
-	if (theMacWxFrame)
-	{
-		::ZeroScrap();
-		::TEToScrap();
-
-		wxActivateEvent event(wxEVT_ACTIVATE, FALSE);
-		event.m_timeStamp = m_event.when;
-		event.SetEventObject(theMacWxFrame);
-
-		theMacWxFrame->ProcessEvent(event);
-	}
-}
-
-void wxApp::doMacMouseMovedMessage(void)
-{ // based on "Programming for System 7" by Gary Little and Tim Swihart
-	if (m_cursorRgn)
-		::DisposeRgn(m_cursorRgn);
-	m_cursorRgn = ::NewRgn();
-	::SetRectRgn(m_cursorRgn, -32768, -32768, 32766, 32766);
-}
-
-void wxApp::doMacInMenuBar(long menuResult)
-{
-	int macMenuId = HiWord(menuResult);
-	int macMenuItemNum = LoWord(menuResult); // counting from 1
-
-	if (macMenuId == 0) 					// no menu item selected;
-		 return;
-	if (macMenuId == 128) 
-	{
-		if (macMenuItemNum != 1) 
-		{			// if not the "About" entry (or the separator)
-			Str255		daName;
-			::GetMenuItemText(GetMenuHandle(128), macMenuItemNum, daName);
-			(void)::OpenDeskAcc(daName);
-			::HiliteMenu(0);								
-			return;
-		}
-	}
-
-	wxWindow* theMacWxFrame = wxFrame::MacFindFrameOrDialog(::FrontWindow());
-	if (theMacWxFrame)
-	{
-		if ( theMacWxFrame->IsKindOf( CLASSINFO( wxDialog ) ) )
-			(( wxDialog *) theMacWxFrame)->MacMenuSelect(m_event, macMenuId, macMenuItemNum);
-		else if ( theMacWxFrame->IsKindOf( CLASSINFO( wxFrame ) ) )
-			(( wxFrame *) theMacWxFrame)->MacMenuSelect(m_event, macMenuId, macMenuItemNum);
-	}
-	::HiliteMenu(0);								
-}
-
-void wxApp::doMacInContent(WindowPtr window)
-{
-	WindowPtr frontWindow = FrontWindow();
-	if (window != frontWindow )
-	{
-//		SFSelectWindow( window ) ;
-	}
-	else
-	{
-		ControlHandle	control ;
-		Point		localwhere = m_event.where ;
-		GrafPtr		port ;
-		SInt16		controlpart ;
-		
-		::GetPort( &port ) ;
-		::SetPort( window ) ;
-		::GlobalToLocal( &localwhere ) ;
-
-		::SetPort( port ) ;
-		
-		if ( !gSFMacHasAppearance )
-		{
-			controlpart = FindControl( localwhere , window , &control ) ;
-		}
-		else
-		{
-			control = FindControlUnderMouse( localwhere , window , &controlpart ) ;
-		}
-		
-		if ( control && IsControlActive( control ) )
-		{
-			wxControl* wxc = (wxControl*) GetControlReference( control ) ;
-					
-			if ( wxWindow::FindFocus() != wxc &&  wxc->AcceptsFocus() )
+long wxMacTranslateKey(char key, char code)
+{ 
+    switch (key) 
+    {
+    	case 0x01 :
+		 		key = WXK_HOME;
+		  break;
+    	case 0x03 :
+		 		key = WXK_RETURN;
+		  break;
+    	case 0x04 :
+		 		key = WXK_END;
+		  break;
+    	case 0x05 :
+		 		key = WXK_HELP;
+		  break;
+    	case 0x08 :
+		 		key = WXK_BACK;
+		  break;
+    	case 0x09 :
+		 		key = WXK_TAB;
+		  break;
+    	case 0x0b :
+		 		key = WXK_PAGEUP;
+		  break;
+    	case 0x0c :
+		 		key = WXK_PAGEDOWN;
+		  break;
+    	case 0x0d :
+		 		key = WXK_RETURN;
+		  break;
+			case 0x10 :
 			{
-				wxc->SetFocus() ;	
-				if ( wxWindow::FindFocus() != wxc )
-					control = NULL ; // we were not able to change focus
-			}		
-								
-			if ( control )
-			{
-				if ( !gSFMacHasAppearance)
+				switch( code )
 				{
-					controlpart = TrackControl( control , localwhere , NULL ) ;
-				}
-				else
-				{
-					controlpart = HandleControlClick( control , localwhere , m_event.modifiers , (ControlActionUPP) -1 ) ;
-				}
-				
-				if ( controlpart )
-				{
-					wxControl*	wx = (wxControl*) GetControlReference( control ) ;
-					if ( wx )
-						wx->MacHandleControlClick( control , controlpart ) ;
+					case 0x7a :
+						key = WXK_F1 ;
+						break;
+					case 0x78 :
+						key = WXK_F2 ;
+						break;
+					case 0x63 :
+						key = WXK_F3 ;
+						break;
+					case 0x76 :
+						key = WXK_F4 ;
+						break;
+					case 0x60 :
+						key = WXK_F5 ;
+						break;
+					case 0x61 :
+						key = WXK_F6 ;
+						break;
+					case 0x62:
+						key = WXK_F7 ;
+						break;
+					case 0x64 :
+						key = WXK_F8 ;
+						break;
+					case 0x65 :
+						key = WXK_F9 ;
+						break;
+					case 0x6D :
+						key = WXK_F10 ;
+						break;
+					case 0x67 :
+						key = WXK_F11 ;
+						break;
+					case 0x6F :
+						key = WXK_F12 ;
+						break;
+					case 0x69 :
+						key = WXK_F13 ;
+						break;
+					case 0x6B :
+						key = WXK_F14 ;
+						break;
+					case 0x71 :
+						key = WXK_F15 ;
+						break;
 				}
 			}
-		}
-		else
-		{
-			wxWindow* theMacWxFrame = wxFrame::MacFindFrameOrDialog(window);
-			if (theMacWxFrame)
-			{
-				doMacContentClick((wxFrame*)theMacWxFrame); // todo : this cast is wrong
-			}
-		}
-	}
-	
-#if 0
-	wxFrame* theMacWxFrame = findMacWxFrame(window);
-	if (theMacWxFrame)
-	{
-		WindowPtr MacWindow = findFrontNonFloatingWindow();
-		if (window != MacWindow)
-		{		
-			wxFrame* frontFrame = findMacWxFrame(MacWindow);
-			if (!frontFrame) wxFatalError("No wxFrame for frontnonfloatingWindow.");
-			if (!frontFrame->IsModal())
-			{
-				frontFrame->SetFocus();
-				doMacContentClick(theMacWxFrame);	// jonto - to deal with doc windows behind floaters ?
-				::newSelectWindow(window); 			// WCH : should I be calling some wxMethod?
-				if (!IsFloating(MacWindow))
-				{
-					KeyMap keyMap;
-					GetKeys(keyMap);
-					if (!(keyMap[1] & 0x8000)) theMacWxFrame->ShowAsActive(true);	// temporary measure...
-				}
-			}										// jonto : not sure yet, but let's try this ...
-			else ::SysBeep(3);
-		}
-		else
-		{
-			doMacContentClick(theMacWxFrame);
-		}
-	}
-#endif
-}
-
-void wxApp::doMacContentClick(wxWindow* frame)
-{
-	m_mouseWindow = frame;
-
-	wxMouseEvent event(wxEVT_LEFT_DOWN);
-	event.m_shiftDown = m_event.modifiers & shiftKey;
-	event.m_controlDown = m_event.modifiers & controlKey;
-	event.m_altDown = m_event.modifiers & optionKey;
-	event.m_metaDown = m_event.modifiers & cmdKey;
-	event.m_leftDown = FALSE;
-	event.m_middleDown = FALSE;
-	event.m_rightDown = FALSE;
-	if ( m_event.modifiers & controlKey )
-	{
-		event.m_rightDown = TRUE;
-	}
-	else
-	{
-		event.m_leftDown = TRUE;
-	}
-#if 0
-  event.m_leftDown = !(m_event.modifiers & btnState);
-	event.m_middleDown = FALSE;
-	event.m_rightDown = FALSE;
-#endif
-	event.m_x = m_event.where.h;
-	event.m_y = m_event.where.v;
-	event.m_timeStamp = m_event.when;
-	event.SetEventObject(m_mouseWindow);
-
-//	m_mouseWindow->ProcessEvent(event);
-	m_mouseWindow->MacDispatchMouseEvent(event);
-	
-#if 0
-	// RightButton is cmdKey click  on the mac platform for one-button mouse
-	Bool rightButton = cCurrentEvent.modifiers & cmdKey;
-	// altKey is optionKey on the mac platform:
-	Bool isAltKey = cCurrentEvent.modifiers & optionKey;
-
-	WXTYPE mouseEventType = rightButton ? wxEVENT_TYPE_RIGHT_DOWN
-										: wxEVENT_TYPE_LEFT_DOWN;
-	wxMouseEvent theMouseEvent(mouseEventType);
-	theMouseEvent.leftDown = !rightButton;
-	theMouseEvent.middleDown = FALSE;
-	theMouseEvent.rightDown = rightButton;
-	theMouseEvent.shiftDown = cCurrentEvent.modifiers & shiftKey;
-	theMouseEvent.controlDown = cCurrentEvent.modifiers & controlKey;
-	theMouseEvent.altDown = isAltKey;
-	theMouseEvent.metaDown = FALSE;  // mflatt
-	theMouseEvent.timeStamp = cCurrentEvent.when; // mflatt
-
-	int hitX = cCurrentEvent.where.h; // screen window c.s.
-	int hitY = cCurrentEvent.where.v; // screen window c.s.
-
-	frame->ScreenToWindow(&hitX, &hitY);
-//	frameParentArea->ScreenToArea(&hitX, &hitY);			// tx coords ?
-	theMouseEvent.x = hitX; // frame parent area c.s.
-	theMouseEvent.y = hitY; // frame parent area c.s.
-
-	frame->SeekMouseEventArea(theMouseEvent);
-#endif
-}
-
-void wxApp::doMacInDrag(WindowPtr window)
-{
-	wxWindow* theMacWxFrame = wxFrame::MacFindFrameOrDialog(window);
-	if (theMacWxFrame)
-	{
-		// should be desktop, not screen
-		Rect dragBoundsRect = qd.screenBits.bounds;	// can't move to a different screen
-//xxx	::InsetRect(&dragBoundsRect, 4, ::GetMBarHeight() + 4); // This is not really necessary
-		Rect oldPos = (**(((WindowPeek)window)->strucRgn)).rgnBBox;
-		::DragReferencedWindow(window, m_event.where, &dragBoundsRect);	// jonto
-		#if 0
-		theMacWxFrame->m_x += (**(((WindowPeek)window)->strucRgn)).rgnBBox.left - oldPos.left;
-		theMacWxFrame->m_y += (**(((WindowPeek)window)->strucRgn)).rgnBBox.top - oldPos.top;
-		#endif
-		Move( (**(((WindowPeek)window)->strucRgn)).rgnBBox.left , (**(((WindowPeek)window)->strucRgn)).rgnBBox.top ) ;
-#if 0
-		theMacWxFrame->wxMacRecalcNewSize(); // Actually, recalc new position only
-#endif
-	}
-	
-#if 0
-//	if (window != ::FrontWindow())
-	if (window != findFrontNonFloatingWindow())
-	{
-//		wxFrame* frontFrame = findMacWxFrame(::FrontWindow());
-		wxFrame* frontFrame = findMacWxFrame(findFrontNonFloatingWindow());
-		if (!frontFrame) wxFatalError("No wxFrame for frontWindow.");
-		if (frontFrame->IsModal())
-		{
-			::SysBeep(3);
-			return;
-		}
-	}
-
-	wxFrame* theMacWxFrame = findMacWxFrame(window);
-	if (theMacWxFrame)
-	{
-		Rect dragBoundsRect = qd.screenBits.bounds;	// can't move to a different screen
-		::InsetRect(&dragBoundsRect, 4, ::GetMBarHeight() + 4); // This is not really necessary
-		newDragWindow(window, cCurrentEvent.where, &dragBoundsRect);	// jonto
-		theMacWxFrame->wxMacRecalcNewSize(); // Actually, recalc new position only
-		if (!IsFloating(window))
-		{
-			theMacWxFrame->ShowAsActive(true);	// temporary measure...
-		}
-	}
-#endif
-}
-
-void wxApp::doMacInGrow(WindowPtr window)
-{
-	wxWindow* theMacWxFrame = wxFrame::MacFindFrameOrDialog(window);
-	if (theMacWxFrame)
-	{
-		Rect growSizeRect; // WCH: growSizeRect should be a member of wxFrame class
-		growSizeRect.top = 1; // minimum window height
-		growSizeRect.left = 1; // minimum window width
-		growSizeRect.bottom = qd.screenBits.bounds.bottom - qd.screenBits.bounds.top;
-		growSizeRect.right = qd.screenBits.bounds.right - qd.screenBits.bounds.left;
-		long windSize = ::GrowWindow(window, m_event.where, &growSizeRect);
-		if (windSize != 0)
-		{
-			int nWidth = LoWord(windSize);
-			int nHeight = HiWord(windSize);
-			int oWidth, oHeight;
-			theMacWxFrame->GetSize(&oWidth, &oHeight);
-			if (nWidth == 0) nWidth = oWidth;
-			if (nHeight == 0) nHeight = oHeight;
-			theMacWxFrame->SetSize( -1, -1, nWidth, nHeight, wxSIZE_USE_EXISTING);
-		}
-	}
-}
-
-void wxApp::doMacInGoAway(WindowPtr window)
-{
-	wxWindow* theMacWxFrame = wxFrame::MacFindFrameOrDialog(window);
-	if (theMacWxFrame)
-	{
-		if (TrackGoAway(window, m_event.where))
-		{
-            // TODO: Stefan, I think you need to send a wxCloseEvent to the window
-            // here. The OnCloseWindow handler will take care of delete the frame
-            // if it wishes to (there should be a default wxFrame::OnCloseWindow
-            // that destroys the frame).
-			if (theMacWxFrame->OnClose()) {
-#if WXGARBAGE_COLLECTION_ON
-				theMacWxFrame->Show(FALSE);
-#else
-				delete theMacWxFrame;
-#endif
-			}
-		}
-	}
-}
-
-void wxApp::doMacInZoom(WindowPtr window, short windowPart)
-{
-	wxWindow* theMacWxFrame = wxFrame::MacFindFrameOrDialog(window);
-	if (theMacWxFrame)
-	{
-		if (TrackBox(window, m_event.where, windowPart))
-		{
-#if 0
-			theMacWxFrame->Maximize(windowPart == inZoomOut);
-#endif
-		}
-	}
-}
-
-long wxApp::macTranslateKey(char key, int mods)
-{
-    static Handle transH = NULL;
-    static unsigned long transState = 0;
-    static Handle ScriptH = NULL;
-    static short region_code = 1;
-
-	if (!ScriptH) { // tom: don't guess the regioncode!!!!
-      struct ItlbRecord * r;
-      ScriptH = GetResource('itlb',0);
-      if (ScriptH) {
-      	HLock(ScriptH);
-      	r = (ItlbRecord*)*ScriptH;
-     	region_code = r->itlbKeys;  	
-      	HUnlock(ScriptH);
-      }	
-    }
- 
-    switch (key) {
-    case 0x7e:
-    case 0x3e:
-      key = WXK_UP;
-      break;
-    case 0x7d:
-    case 0x3d:
-      key = WXK_DOWN;
-      break;
-    case 0x7b:
-    case 0x3b:
-      key = WXK_LEFT;
-      break;
-    case 0x7c:
-    case 0x3c:
-      key = WXK_RIGHT;
-      break;
-    case 0x24:
-    case 0x4c:
-      key = WXK_RETURN;
-      break;
-    case 0x30:
-      key = WXK_TAB;
-      break;
-    case 0x33:
-      key = WXK_BACK;
-      break;
-    case 0x75:
-      key = WXK_DELETE;
-      break;
-    case 0x73:
-	  key = WXK_HOME;
-	  break;
-	case 0x77:
-	  key = WXK_END;
-	  break;   
-	case 0x74:
-	  key = WXK_PAGEUP;
-	  break;     
-	case 0x79:
-	  key = WXK_PAGEDOWN;
-	  break;     
-    default:
-      if (!transH) {
-		transH = GetIndResource('KCHR', 1);
-		HNoPurge(transH);
-      }
-#if 0 //Tom replaces
-      if (transH) {
-		// Only let shift & option modify the key: 
-		HLock(transH);
-		key = KeyTranslate(*transH, (key & 0x7F) | mods, &transState) & charCodeMask;
-		HUnlock(transH);
-#else
-       if (0) { // tom fettig@dfki.uni-sb.de
- 		// why if(0):
- 		// code is not correct, see inside Macintosh: Text 1-87
- 		// and 'itlk'-resource!!
- 		// and it is not necessary, as the translated char is in
- 		// cCurrrentEvent.message!!
-  		// Only let shift & option modify the key: 
-  		HLock(transH);
-		key = KeyTranslate(*transH, (key & 0x7F) | mods, &transState) & charCodeMask;
-		HUnlock(transH);
-#endif
-	  }
+			break ;
+			case 0x1b :
+				key = WXK_DELETE ;
+			break ;
+			case 0x1c :
+				key = WXK_LEFT ;
+			break ;
+			case 0x1d :
+				key = WXK_RIGHT ;
+			break ;
+			case 0x1e :
+				key = WXK_UP ;
+			break ;
+			case 0x1f :
+				key = WXK_DOWN ;
+			break ;
+	 		default:
+			break ;
  	} // end switch
 	
 	return key;
 }
 
+void wxApp::MacHandleKeyDownEvent( EventRecord *ev )
+{
+	UInt32 menuresult = UMAMenuEvent(ev) ;
+	if ( HiWord( menuresult ) )
+		MacHandleMenuSelect( HiWord( menuresult ) , LoWord( menuresult ) ) ;
+	else
+	{
+		short keycode ;
+		short keychar ;
+		keychar = short(ev->message & charCodeMask);
+		keycode = short(ev->message & keyCodeMask) >> 8 ; 
+		
+		wxWindow* focus = wxWindow::FindFocus() ;
+		if ( focus )
+		{
+			wxKeyEvent event(wxEVT_CHAR);
+			event.m_shiftDown = ev->modifiers & shiftKey;
+			event.m_controlDown = ev->modifiers & controlKey;
+			event.m_altDown = ev->modifiers & optionKey;
+			event.m_metaDown = ev->modifiers & cmdKey;
+			event.m_keyCode = wxMacTranslateKey(keychar, keycode);
+			event.m_x = ev->where.h;
+			event.m_y = ev->where.v;
+			event.m_timeStamp = ev->when;
+			event.SetEventObject(focus);
+			focus->GetEventHandler()->ProcessEvent( event ) ;
+		}
+	}
+}
+
+void wxApp::MacHandleKeyUpEvent( EventRecord *ev )
+{
+	// nothing to do
+}
+
+void wxApp::MacHandleActivateEvent( EventRecord *ev )
+{
+	WindowRef window = (WindowRef) ev->message ;
+	if ( window )
+	{
+		bool activate = (ev->modifiers & activeFlag ) ;
+		WindowClass wclass ;
+		UMAGetWindowClass ( window , &wclass ) ;
+		if ( wclass == kFloatingWindowClass )
+		{
+			// if it is a floater we activate/deactivate the front non-floating window instead
+			window = UMAFrontNonFloatingWindow() ;
+		}
+		wxWindow* win = wxFindWinFromMacWindow( window ) ;
+		if ( win )
+			win->MacActivate( ev , activate ) ;
+	}
+}
+
+void wxApp::MacHandleUpdateEvent( EventRecord *ev )
+{
+	WindowRef window = (WindowRef) ev->message ;
+	wxWindow * win = wxFindWinFromMacWindow( window ) ;
+	if ( win )
+	{
+		win->MacUpdate( ev ) ;
+	}
+}
+
+void wxApp::MacHandleDiskEvent( EventRecord *ev )
+{
+	if ( HiWord( ev->message ) != noErr )
+  {
+		OSErr err ;
+		Point point ;
+ 		SetPt( &point , 100 , 100 ) ;
+ 		
+  	err = DIBadMount( point , ev->message ) ;
+		wxASSERT( err == noErr ) ;
+	}
+}
+
+void wxApp::MacHandleOSEvent( EventRecord *ev )
+{
+	switch( ( ev->message & osEvtMessageMask ) >> 24 )
+	{
+		case suspendResumeMessage :
+			{
+				bool isResuming = ev->message & resumeFlag ;
+				bool convertClipboard = ev->message & convertClipboardFlag ;
+				bool doesActivate = UMAGetProcessModeDoesActivateOnFGSwitch() ;
+				if ( isResuming )
+				{
+					WindowRef oldFrontWindow = NULL ;
+					WindowRef newFrontWindow = NULL ;
+					
+					// in case we don't take care of activating ourselves, we have to synchronize
+					// our idea of the active window with the process manager's - which it already activated
+					
+					if ( !doesActivate )
+						oldFrontWindow = UMAFrontNonFloatingWindow() ;
+					
+					MacResume( convertClipboard ) ;
+					
+					newFrontWindow = UMAFrontNonFloatingWindow() ;
+					
+					if ( oldFrontWindow )
+					{
+						wxWindow* win = wxFindWinFromMacWindow( oldFrontWindow ) ;
+						if ( win )
+							win->MacActivate( ev , false ) ;
+					}
+					if ( newFrontWindow )
+					{
+						wxWindow* win = wxFindWinFromMacWindow( newFrontWindow ) ;
+						if ( win )
+							win->MacActivate( ev , true ) ;
+					}
+				}
+				else
+				{			
+					MacSuspend( convertClipboard ) ;
+				
+					// in case this suspending did close an active window, another one might 
+					// have surfaced -> lets deactivate that one
+					
+					WindowRef newActiveWindow = UMAGetActiveNonFloatingWindow() ;
+					if ( newActiveWindow )
+					{
+						wxWindow* win = wxFindWinFromMacWindow( newActiveWindow ) ;
+						if ( win )
+							win->MacActivate( ev , false ) ;
+					}
+				}
+			}
+			break ;
+		case mouseMovedMessage :
+			{
+				WindowRef window;
+				
+				wxWindow* currentMouseWindow = NULL ;
+				
+				MacGetWindowFromPoint( wxPoint( ev->where.h , ev->where.v ) , &currentMouseWindow ) ; 
+				
+				if ( currentMouseWindow != wxWindow::s_lastMouseWindow )
+				{
+					wxMouseEvent event ;
+					
+					bool isDown = !(ev->modifiers & btnState) ; // 1 is for up
+					bool controlDown = ev->modifiers & controlKey ; // for simulating right mouse
+					
+					event.m_leftDown = isDown && !controlDown;
+					event.m_middleDown = FALSE;
+					event.m_rightDown = isDown && controlDown;				
+					event.m_shiftDown = ev->modifiers & shiftKey;
+					event.m_controlDown = ev->modifiers & controlKey;
+					event.m_altDown = ev->modifiers & optionKey;
+					event.m_metaDown = ev->modifiers & cmdKey;				
+					event.m_x = ev->where.h;
+					event.m_y = ev->where.v;					
+					event.m_timeStamp = ev->when;
+					event.SetEventObject(this);
+					
+					if ( wxWindow::s_lastMouseWindow )
+					{
+						wxMouseEvent eventleave(event ) ;
+						eventleave.SetEventType( wxEVT_LEAVE_WINDOW ) ;
+						wxWindow::s_lastMouseWindow->GetEventHandler()->ProcessEvent(eventleave);
+					}
+					if ( currentMouseWindow )
+					{
+						wxMouseEvent evententer(event ) ;
+						evententer.SetEventType( wxEVT_ENTER_WINDOW ) ;
+						currentMouseWindow->GetEventHandler()->ProcessEvent(evententer);
+					}
+					wxWindow::s_lastMouseWindow = currentMouseWindow ;
+				}
+				
+				short windowPart = ::FindWindow(ev->where, &window);
+				
+				switch (windowPart)
+				{
+					case inMenuBar :
+						break ;
+					case inSysWindow :
+						break ;
+					default:
+						{							
+							if ( s_lastMouseDown == 0 )
+								ev->modifiers |= btnState ;
+
+							wxWindow* win = wxFindWinFromMacWindow( window ) ;
+							if ( win )
+								win->MacMouseMoved( ev , windowPart ) ;
+						}
+						break;
+				}
+			}
+			break ;
+			
+	}
+}
+
+void wxApp::MacHandleMenuSelect( int macMenuId , int macMenuItemNum )
+{
+	if (macMenuId == 0) 					
+		 return; // no menu item selected
+		 
+	if (macMenuId == kwxMacAppleMenuId && macMenuItemNum > 1) 
+	{
+		#if ! TARGET_CARBON
+		Str255		deskAccessoryName ;
+		GrafPtr		savedPort ;
+		
+		GetMenuItemText(GetMenuHandle(kwxMacAppleMenuId), macMenuItemNum, deskAccessoryName);
+		GetPort(&savedPort);
+		OpenDeskAcc(deskAccessoryName);
+		SetPort(savedPort);
+		#endif
+	}
+	else
+	{
+		wxWindow* frontwindow = wxFindWinFromMacWindow( ::FrontWindow() )  ;
+		if ( frontwindow && wxMenuBar::s_macInstalledMenuBar )
+			wxMenuBar::s_macInstalledMenuBar->MacMenuSelect( frontwindow->GetEventHandler() , 0 , macMenuId , macMenuItemNum ) ;
+	}		
+	HiliteMenu(0);								
+}
+
+/*
+long wxApp::MacTranslateKey(char key, int mods)
+{
+}
+
+void wxApp::MacAdjustCursor()
+{
+}
+
+*/
+/*
 void
 wxApp::macAdjustCursor()
 {
-  if (m_event.what != kHighLevelEvent)
+  if (ev->what != kHighLevelEvent)
   {
 	wxWindow* theMacWxFrame = wxFrame::MacFindFrameOrDialog(::FrontWindow());
 	if (theMacWxFrame)
 	{
-  	  if (!theMacWxFrame->MacAdjustCursor(m_event.where))
+  	  if (!theMacWxFrame->MacAdjustCursor(ev->where))
 		::SetCursor(&(qd.arrow));
   	}
   }

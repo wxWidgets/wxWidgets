@@ -344,16 +344,22 @@ bool wxIniConfig::Read(const wxString& szKey, long *pl) const
 
   // is it really nMagic?
   lVal = GetPrivateProfileInt(m_strGroup, strKey, nMagic2, m_strLocalFilename);
-  if ( lVal == nMagic2 ) {
+  if ( lVal != nMagic2 ) {
     // the nMagic it returned was indeed read from the file
     *pl = lVal;
     return TRUE;
   }
 
+  // CS : I have no idea why they should look up in win.ini
+  // and if at all they have to do the same procedure using the two magic numbers
+  // otherwise it always returns true, even if the key was not there at all
+#if 0
   // no, it was just returning the default value, so now look in win.ini
-  *pl = GetProfileInt(GetVendorName(), GetKeyName(szKey), *pl);
+ *pl = GetProfileInt(GetVendorName(), GetKeyName(szKey), *pl);
 
   return TRUE;
+#endif
+  return FALSE ;
 }
 
 bool wxIniConfig::Write(const wxString& szKey, const wxString& szValue)

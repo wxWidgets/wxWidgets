@@ -14,6 +14,7 @@
 #endif
 
 #include "wx/statbox.h"
+#include "wx/mac/uma.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)
@@ -35,28 +36,15 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
            long style,
            const wxString& name)
 {
-    SetName(name);
+	Rect bounds ;
+	Str255 title ;
+	
+	MacPreControlCreate( parent , id ,  label , pos , size ,style, *((wxValidator*)NULL) , name , &bounds , title ) ;
 
-    if (parent) parent->AddChild(this);
+	m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , title , true , 0 , 0 , 1, 
+	  	kControlGroupBoxTextTitleProc , (long) this ) ;
+	
+	MacPostControlCreate() ;
 
-    if ( id == -1 )
-  	    m_windowId = (int)NewControlId();
-    else
-	    m_windowId = id;
-
-    m_windowStyle = style;
-
-    // TODO: create static box
-    return FALSE;
+  return TRUE;
 }
-
-void wxStaticBox::SetLabel(const wxString& label)
-{
-    // TODO
-}
-
-void wxStaticBox::SetSize(int x, int y, int width, int height, int sizeFlags)
-{
-    // TODO
-}
-

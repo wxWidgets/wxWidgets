@@ -108,7 +108,7 @@ wxString wxRadioBox::GetString(int n) const
 
 void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
-    // TODO
+    wxControl::SetSize( x , y , width , height , sizeFlags ) ;
 }
 
 void wxRadioBox::GetSize(int *width, int *height) const
@@ -140,12 +140,13 @@ void wxRadioBox::SetFocus()
 bool wxRadioBox::Show(bool show)
 {
     // TODO
-    return FALSE;
+	return wxWindow::Show( show ) ;
 }
 
 // Enable a specific button
 void wxRadioBox::Enable(int item, bool enable)
 {
+    wxControl::Enable(enable);
     // TODO
 }
 

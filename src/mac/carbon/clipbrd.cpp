@@ -30,19 +30,17 @@ IMPLEMENT_ABSTRACT_CLASS(wxClipboardClient, wxObject)
 
 bool wxOpenClipboard()
 {
-    // TODO
-    return FALSE;
+    return TRUE;
 }
 
 bool wxCloseClipboard()
 {
-    // TODO
     return FALSE;
 }
 
 bool wxEmptyClipboard()
 {
-    // TODO
+		ZeroScrap() ;
     return FALSE;
 }
 
@@ -169,7 +167,7 @@ wxClipboardClient *wxClipboard::GetClipboardClient()
 }
 
 void wxClipboard::SetClipboardString(char *str, long time)
-{
+{/*
   bool got_selection;
 
   if (clipOwner) {
@@ -195,6 +193,7 @@ void wxClipboard::SetClipboardString(char *str, long time)
     delete[] cbString;
     cbString = NULL;
   }
+  */
 }
 
 char *wxClipboard::GetClipboardString(long time)

@@ -155,7 +155,7 @@ class WXDLLEXPORT wxDropTarget: public wxObject
 
 //  protected:
       
-    friend wxWindow;
+    friend class wxWindow;
     
     // Override these to indicate what kind of data you support: 
   

@@ -25,7 +25,7 @@
 char *wxBuffer = NULL;
 
 // Windows List
-wxList wxTopLevelWindows;
+wxWindowList wxTopLevelWindows;
 
 // List of windows pending deletion
 wxList wxPendingDelete;

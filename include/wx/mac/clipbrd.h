@@ -24,17 +24,6 @@
 
 #include "wx/list.h"
 
-bool WXDLLEXPORT wxOpenClipboard();
-bool WXDLLEXPORT wxClipboardOpen();
-bool WXDLLEXPORT wxCloseClipboard();
-bool WXDLLEXPORT wxEmptyClipboard();
-bool WXDLLEXPORT wxIsClipboardFormatAvailable(int dataFormat);
-bool WXDLLEXPORT wxSetClipboardData(int dataFormat, wxObject *obj, int width = 0, int height = 0);
-wxObject* WXDLLEXPORT wxGetClipboardData(int dataFormat, long *len = NULL);
-int  WXDLLEXPORT wxEnumClipboardFormats(int dataFormat);
-int  WXDLLEXPORT wxRegisterClipboardFormat(char *formatName);
-bool WXDLLEXPORT wxGetClipboardFormatName(int dataFormat, char *formatName, int maxCount);
-
 /* A clipboard client holds data belonging to the clipboard.
    For plain text, a client is not necessary. */
 class WXDLLEXPORT wxClipboardClient : public wxObject

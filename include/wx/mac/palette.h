@@ -26,10 +26,9 @@ class WXDLLEXPORT wxPaletteRefData: public wxGDIRefData
 public:
     wxPaletteRefData();
     ~wxPaletteRefData();
-/* TODO: implementation
 protected:
- WXHPALETTE m_hPalette;
-*/
+ 		wxColour* m_palette;
+ 		wxInt32		m_count ;
 };
 
 #define M_PALETTEDATA ((wxPaletteRefData *)m_refData)

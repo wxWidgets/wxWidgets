@@ -19,12 +19,14 @@
 #include "wx/window.h"
 #include "wx/toolbar.h"
 #include "wx/accel.h"
+#include "wx/icon.h"
 
 WXDLLEXPORT_DATA(extern const char*) wxFrameNameStr;
 WXDLLEXPORT_DATA(extern const char*) wxToolBarNameStr;
 
 class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxStatusBar;
+class WXDLLEXPORT wxMacToolTip ;
 
 class WXDLLEXPORT wxFrame: public wxWindow {
 
@@ -54,14 +56,6 @@ public:
            const wxString& name = wxFrameNameStr);
 
   virtual bool Destroy();
-  void SetClientSize(int width, int height);
-  void GetClientSize(int *width, int *height) const;
-
-  void GetSize(int *width, int *height) const ;
-  void GetPosition(int *x, int *y) const ;
-  void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
-  void ClientToScreen(int *x, int *y) const;
-  void ScreenToClient(int *x, int *y) const;
 
   void OnSize(wxSizeEvent& event);
   void OnMenuHighlight(wxMenuEvent& event);
@@ -69,17 +63,9 @@ public:
   void OnIdle(wxIdleEvent& event);
   void OnCloseWindow(wxCloseEvent& event);
 
-  bool Show(bool show);
-
   // Set menu bar
   void SetMenuBar(wxMenuBar *menu_bar);
   virtual wxMenuBar *GetMenuBar() const ;
-
-  // Set title
-  void SetTitle(const wxString& title);
-  wxString GetTitle() const ;
-
-  void Centre(int direction = wxBOTH);
 
   // Call this to simulate a menu command
   virtual void Command(int id);
@@ -96,6 +82,8 @@ public:
   virtual wxStatusBar *OnCreateStatusBar(int number, long style, wxWindowID id,
     const wxString& name);
 
+#if wxUSE_TOOLBAR
+
   // Create toolbar
   virtual wxToolBar* CreateToolBar(long style = wxNO_BORDER|wxTB_HORIZONTAL, wxWindowID id = -1, const wxString& name = wxToolBarNameStr);
   virtual wxToolBar *OnCreateToolBar(long style, wxWindowID id, const wxString& name);
@@ -103,6 +91,8 @@ public:
   virtual inline void SetToolBar(wxToolBar *toolbar) { m_frameToolBar = toolbar; }
   virtual inline wxToolBar *GetToolBar() const { return m_frameToolBar; }
   virtual void PositionToolBar();
+
+#endif
 
   // Set status line text
   virtual void SetStatusText(const wxString& text, int number = 0);
@@ -136,10 +126,18 @@ public:
 
   // Query app for menu item updates (called from OnIdle)
   void DoMenuUpdates();
-  void DoMenuUpdates(wxMenu* menu, wxWindow* focusWin);
+  void DoMenuUpdates(wxMenu* menu);
 
   // Checks if there is a toolbar, and returns the first free client position
   virtual wxPoint GetClientAreaOrigin() const;
+	virtual	void GetClientSize(int *x, int *y) const ;
+	virtual void DoSetClientSize(int clientwidth, int clientheight) ;
+
+  // tooltip management
+#if wxUSE_TOOLTIPS
+    wxMacToolTip* GetToolTipCtrl() const { return m_hwndToolTip; }
+    void SetToolTipCtrl(wxMacToolTip *tt) { m_hwndToolTip = wxMacToolTip; }
+#endif // tooltips
 
 protected:
   wxMenuBar *           m_frameMenuBar;
@@ -147,7 +145,9 @@ protected:
   wxIcon                m_icon;
   bool                  m_iconized;
   static bool           m_useNativeStatusBar;
+#if wxUSE_TOOLBAR
   wxToolBar *           m_frameToolBar ;
+#endif
 
   DECLARE_EVENT_TABLE()
 };

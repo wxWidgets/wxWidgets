@@ -44,8 +44,7 @@ class WXDLLEXPORT wxCheckBox: public wxControl
            const wxString& name = wxCheckBoxNameStr);
   virtual void SetValue(bool);
   virtual bool GetValue() const ;
-  virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
-  virtual void SetLabel(const wxString& label);
+	virtual void 						MacHandleControlClick( ControlHandle control , SInt16 controlpart ) ;
   virtual void Command(wxCommandEvent& event);
 };
 
@@ -76,6 +75,7 @@ class WXDLLEXPORT wxBitmapCheckBox: public wxCheckBox
   virtual bool GetValue() const ;
   virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
   virtual void SetLabel(const wxBitmap *bitmap);
+	virtual void SetLabel( const wxString &name ) {} 
 };
 #endif
     // _WX_CHECKBOX_H_

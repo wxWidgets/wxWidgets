@@ -19,7 +19,9 @@
 IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
 #endif
 
+#include <wx/mac/uma.h>
 // Button
+
 
 bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
            const wxPoint& pos,
@@ -27,49 +29,43 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
            const wxValidator& validator,
            const wxString& name)
 {
-    SetName(name);
-    SetValidator(validator);
-    m_windowStyle = style;
+	Rect bounds ;
+	Str255 title ;
+	m_macHorizontalBorder = 2 ; // additional pixels around the real control
+	m_macVerticalBorder = 2 ;
+	
+	MacPreControlCreate( parent , id ,  label , pos , size ,style, validator , name , &bounds , title ) ;
 
-    parent->AddChild((wxButton *)this);
+	m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , title , true , 0 , 0 , 1, 
+	  	kControlPushButtonProc , (long) this ) ;
+	wxASSERT_MSG( m_macControl != NULL , "No valid mac control" ) ;
+	
+	MacPostControlCreate() ;
 
-    if (id == -1)
-        m_windowId = NewControlId();
-    else
-        m_windowId = id;
-
-    // TODO: create button
-
-    return FALSE;
-}
-
-void wxButton::SetSize(int x, int y, int width, int height, int sizeFlags)
-{
-    // TODO
+  return TRUE;
 }
 
 void wxButton::SetDefault()
 {
-    wxWindow *parent = (wxWindow *)GetParent();
-    if (parent)
-        parent->SetDefaultItem(this);
+  wxWindow *parent = (wxWindow *)GetParent();
+  if (parent)
+      parent->SetDefaultItem(this);
 
-    // TODO: make button the default
-}
-
-wxString wxButton::GetLabel() const
-{
-    // TODO
-    return wxString("");
-}
-
-void wxButton::SetLabel(const wxString& label)
-{
-    // TODO
+  if ( m_macControl )
+  {
+		UMASetControlData( m_macControl , kControlButtonPart , kControlPushButtonDefaultTag , sizeof( Boolean ) , (char*)((Boolean)1) ) ;
+	}
 }
 
 void wxButton::Command (wxCommandEvent & event)
 {
     ProcessCommand (event);
+}
+
+void wxButton::MacHandleControlClick( ControlHandle control , SInt16 controlpart ) 
+{
+    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, m_windowId );
+    event.SetEventObject(this);
+    ProcessCommand(event);
 }
 

@@ -125,6 +125,7 @@ public:
 
   // MDI operations
   virtual void Maximize();
+  virtual void Maximize( bool ){ Maximize() ; } // this one is inherited from wxFrame
   virtual void Restore();
   virtual void Activate();
 };

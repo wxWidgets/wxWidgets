@@ -67,11 +67,6 @@ class WXDLLEXPORT wxApp: public wxEvtHandler
   virtual int OnRun() { return MainLoop(); };
   virtual int OnExit() { return 0; }
 
-
-  /** Returns the standard icons for the msg dialogs, implemented in 
-      src/generic/msgdlgg.cpp and src/gtk/app.cpp. */
-  virtual wxIcon GetStdIcon(int which) const;
-
   inline void SetPrintMode(int mode) { m_printMode = mode; }
   inline int GetPrintMode() const { return m_printMode; }
 
@@ -141,6 +136,11 @@ public:
 
 public:
   static long           sm_lastMessageTime;
+  static wxWindow*			s_captureWindow ;
+  static int						s_lastMouseDown ; // 0 = none , 1 = left , 2 = right
+  static RgnHandle			s_macCursorRgn ;
+	EventRecord*					m_macCurrentEvent ;
+  
   int                   m_nCmdShow;
 
 protected:
@@ -149,29 +149,72 @@ protected:
 // mac specifics
 
 public :
+	static bool						s_macDefaultEncodingIsPC ;
+	static bool						s_macSupportPCMenuShortcuts ;
+	static long						s_macAboutMenuItemId ;
+	static wxString				s_macHelpMenuTitleName ;
 
-	void									MacDoOneEvent() ;
+  static bool						s_macHasAppearance ;
+  static long						s_macAppearanceVersion ;
+  static bool						s_macHasNavigation ;
+  static bool						s_macNavigationVersion ;
+  static bool						s_macHasWindowManager ;
+  static long						s_macWindowManagerVersion ;
+  static bool						s_macHasMenuManager ;
+  static long						s_macMenuManagerVersion ;
+  static bool						s_macHasDialogManager ;
+  static long						s_macDialogManagerVersion ;
+
+	RgnHandle							m_macCursorRgn ;
+	RgnHandle							m_macSleepRgn ;
+	RgnHandle							m_macHelpRgn ;
 	
+  virtual void          MacSuspend( bool convertClipboard ) ;
+  virtual void          MacResume( bool convertClipboard ) ;
+
+	virtual void					MacConvertPrivateToPublicScrap() ;
+	virtual void					MacConvertPublicToPrivateScrap() ;
+
+	// event main methods
+
+	void									MacDoOneEvent() ;	
 	void									MacHandleOneEvent( EventRecord *ev ) ;
-  void                  MacHandleNullEvent( EventRecord *ev ) ;
-  void                  MacHandleHighLevelEvent( EventRecord *ev ) ;
-  void                  MacHandleMouseDownEvent( EventRecord *ev ) ;
-  void                  MacHandleMouseUpEvent( EventRecord *ev ) ;
-  void                  MacHandleKeyDownEvent( EventRecord *ev ) ;
-  void                  MacHandleKeyUpEvent( EventRecord *ev ) ;
-  void                  MacHandleAutoKeyEvent( EventRecord *ev ) ;
-  void                  MacHandleActivateEvent( EventRecord *ev ) ;
-  void                  MacHandleUpdateEvent( EventRecord *ev ) ;
-  void                  MacHandleDiskEvent( EventRecord *ev ) ;
-  void                  MacHandleOSEvent( EventRecord *ev ) ;
-
+	EventRecord*					MacGetCurrentEvent() { return m_macCurrentEvent ; }
+	// primary events
 	
+  virtual void          MacHandleMouseDownEvent( EventRecord *ev ) ;
+  virtual void          MacHandleMouseUpEvent( EventRecord *ev ) ;
+ 	virtual void          MacHandleActivateEvent( EventRecord *ev ) ;
+  virtual void          MacHandleUpdateEvent( EventRecord *ev ) ;
+  virtual void          MacHandleKeyDownEvent( EventRecord *ev ) ;
+  virtual void          MacHandleKeyUpEvent( EventRecord *ev ) ;
+  virtual void          MacHandleDiskEvent( EventRecord *ev ) ;
+  virtual void          MacHandleOSEvent( EventRecord *ev ) ;
+  virtual void   				MacHandleHighLevelEvent( EventRecord *ev ) ;
+ 	virtual void					MacHandleMenuSelect( int menuid , int menuitem ) ;
+
+	virtual OSErr					MacHandleAEODoc(AppleEvent *event , AppleEvent *reply) ;
+	virtual OSErr					MacHandleAEPDoc(AppleEvent *event , AppleEvent *reply) ;
+	virtual OSErr					MacHandleAEOApp(AppleEvent *event , AppleEvent *reply) ;
+	virtual OSErr					MacHandleAEQuit(AppleEvent *event , AppleEvent *reply) ;
 
 DECLARE_EVENT_TABLE()
 };
 
 // TODO: add platform-specific arguments
 int WXDLLEXPORT wxEntry( int argc, char *argv[] );
+
+void wxMacConvertFromPCForControls( char * p ) ;
+
+void wxMacConvertToPC( const char *from , char *to , int len ) ;
+void wxMacConvertFromPC( const char *from , char *to , int len ) ;
+void wxMacConvertToPC( const char *from , char *to , int len ) ;
+void wxMacConvertFromPC( char * p ) ;
+void wxMacConvertFromPC( unsigned char *p ) ;
+wxString wxMacMakeMacStringFromPC( const char * p ) ;
+void wxMacConvertToPC( char * p ) ;
+void wxMacConvertToPC( unsigned char *p ) ;
+wxString wxMacMakePCStringFromMac( const char * p ) ;
 
 #endif
     // _WX_APP_H_

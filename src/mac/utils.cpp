@@ -196,7 +196,9 @@ bool wxGetResource(const wxString& section, const wxString& entry, int *value, c
 }
 #endif // wxUSE_RESOURCES
 
-static int wxBusyCursorCount = 0;
+int wxBusyCursorCount = 0;
+extern CursHandle	gMacCurrentCursor ;
+CursHandle			gMacStoredActiveCursor = NULL ;
 
 // Set the cursor to the busy cursor for all windows
 void wxBeginBusyCursor(wxCursor *cursor)
@@ -204,7 +206,8 @@ void wxBeginBusyCursor(wxCursor *cursor)
   wxBusyCursorCount ++;
   if (wxBusyCursorCount == 1)
   {
-        // TODO
+  	gMacStoredActiveCursor = gMacCurrentCursor ;
+		::SetCursor( *::GetCursor( watchCursor ) ) ;
   }
   else
   {
@@ -221,7 +224,11 @@ void wxEndBusyCursor()
   wxBusyCursorCount --;
   if (wxBusyCursorCount == 0)
   {
-    // TODO
+    if ( gMacStoredActiveCursor )
+    	::SetCursor( *gMacStoredActiveCursor ) ;
+    else
+    	::SetCursor( &qd.arrow ) ;
+   	gMacStoredActiveCursor = NULL ;
   }
 }
 
@@ -247,26 +254,40 @@ bool wxCheckForInterrupt(wxWindow *wnd)
 
 void wxGetMousePosition( int* x, int* y )
 {
-    // TODO
+    Point pt ;
+    
+    GetMouse( &pt ) ;
+    LocalToGlobal( &pt ) ;
+    *x = pt.h ;
+    *y = pt.v ;
 };
 
 // Return TRUE if we have a colour display
 bool wxColourDisplay()
 {
-    // TODO
     return TRUE;
 }
 
 // Returns depth of screen
 int wxDisplayDepth()
 {
-    // TODO
-    return 0;
+		// get max pixel depth
+		CGrafPtr port ;
+		GetCWMgrPort( &port ) ; 
+		GDHandle maxDevice ;
+		
+		maxDevice = GetMaxDevice( &port->portRect ) ;
+		if ( maxDevice )
+			return (**((**maxDevice).gdPMap)).pixelSize ;
+		else
+			return 8 ; 
 }
 
 // Get size of display
 void wxDisplaySize(int *width, int *height)
 {
-    // TODO
+    *width = qd.screenBits.bounds.right - qd.screenBits.bounds.left  ;
+    *height = qd.screenBits.bounds.bottom - qd.screenBits.bounds.top ; 
+    *height -= LMGetMBarHeight() ;
 }
 

@@ -14,7 +14,7 @@
 #pragma implementation "colordlg.h"
 #endif
 
-#include "wx/stubs/colordlg.h"
+#include "wx/mac/colordlg.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog)
@@ -45,8 +45,20 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
 
 int wxColourDialog::ShowModal()
 {
-    /* TODO: implement dialog
-     */
+	Point where ;
+	RGBColor currentColor = m_colourData.dataColour.GetPixel() , newColor ;
+	
+	where.h = where.v = -1;
+
+	if (GetColor( where, "\pSelect a new palette color.", &currentColor, &newColor ))
+	{
+		m_colourData.dataColour.Set( newColor ) ;
+    	return wxID_OK;
+	}
+	else
+	{
+    	return wxID_CANCEL;
+	}
 
     return wxID_CANCEL;
 }

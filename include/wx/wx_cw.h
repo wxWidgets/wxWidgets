@@ -12,6 +12,29 @@
 #ifndef _WX_CW__
 #define _WX_CW__
 
+#if __option(profile)
+#ifdef __cplusplus
+	#if __POWERPC__
+		#include <wx_PPC++_prof.mch>
+	#elif __INTEL__
+		#include <wx_x86++_prof.mch>
+	#elif __CFM68K__
+		#include <wx_cfm++_prof.mch>
+	#else
+		#include <wx_68k++_prof.mch>
+	#endif
+#else
+	#if __POWERPC__
+		#include <wx_PPC_prof.mch>
+	#elif __INTEL__
+		#include <wx_x86_prof.mch>
+	#elif __CFM68K__
+		#include <wx_cfm_prof.mch>
+	#else
+		#include <wx_68k_prof.mch>
+	#endif
+#endif
+#else
 #ifdef __cplusplus
 	#if __POWERPC__
 		#include <wx_PPC++.mch>
@@ -33,6 +56,6 @@
 		#include <wx_68k.mch>
 	#endif
 #endif
-
+#endif
 #endif
     // _WX_CW__

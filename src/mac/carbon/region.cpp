@@ -28,19 +28,24 @@ class WXDLLEXPORT wxRegionRefData : public wxGDIRefData {
 public:
 	wxRegionRefData()
 	{
+		m_macRgn = NewRgn() ;
 	}
 
 	wxRegionRefData(const wxRegionRefData& data)
 	{
-        // TODO
+		m_macRgn = NewRgn() ;
+        CopyRgn( data.m_macRgn , m_macRgn ) ;
 	}
 
 	~wxRegionRefData()
 	{
-        // TODO
+        DisposeRgn( m_macRgn ) ;
 	}
+	RgnHandle	m_macRgn ;
 };
 
+#define M_REGION (((wxRegionRefData*)m_refData)->m_macRgn)
+#define OTHER_M_REGION(a) (((wxRegionRefData*)(a.m_refData))->m_macRgn)
 
 //-----------------------------------------------------------------------------
 // wxRegion
@@ -52,25 +57,30 @@ public:
 wxRegion::wxRegion()
 {
     m_refData = new wxRegionRefData;
-    // TODO create empty region
+}
+
+wxRegion::wxRegion(WXHRGN hRegion )
+{
+    m_refData = new wxRegionRefData;
+    CopyRgn( hRegion , M_REGION ) ;
 }
 
 wxRegion::wxRegion(long x, long y, long w, long h)
 {
     m_refData = new wxRegionRefData;
-    // TODO create rect region
+    SetRectRgn( M_REGION , x , y , x+w , y+h ) ;
 }
 
 wxRegion::wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight)
 {
     m_refData = new wxRegionRefData;
-    // TODO create rect region
+    SetRectRgn( M_REGION , topLeft.x , topLeft.y , bottomRight.x , bottomRight.y ) ;
 }
 
 wxRegion::wxRegion(const wxRect& rect)
 {
     m_refData = new wxRegionRefData;
-    // TODO create rect region
+    SetRectRgn( M_REGION , rect.x , rect.y , rect.x+rect.width , rect.y+rect.height ) ;
 }
 
 /*!
@@ -95,41 +105,42 @@ void wxRegion::Clear()
 bool wxRegion::Combine(long x, long y, long width, long height, wxRegionOp op)
 {
 	// Don't change shared data
-	if (!m_refData) {
+	if (!m_refData) 
+	{
 		m_refData = new wxRegionRefData();
-	} else if (m_refData->GetRefCount() > 1) {
+	} 
+	else if (m_refData->GetRefCount() > 1) 
+	{
 		wxRegionRefData* ref = (wxRegionRefData*)m_refData;
 		UnRef();
 		m_refData = new wxRegionRefData(*ref);
 	}
-    // If ref count is 1, that means it's 'ours' anyway so no action.
-
-    // TODO create rect region
-
-    int mode = 0; // TODO platform-specific code
+    RgnHandle rgn = NewRgn() ;
+		SetRectRgn( rgn , x , y, x+width,y + height ) ;
+		
     switch (op)
     {
         case wxRGN_AND:
-            // TODO
+            SectRgn( M_REGION , rgn , M_REGION ) ;
             break ;
         case wxRGN_OR:
-            // TODO
+            UnionRgn( M_REGION , rgn , M_REGION ) ;
             break ;
         case wxRGN_XOR:
-            // TODO
+             XorRgn( M_REGION , rgn , M_REGION ) ;
             break ;
         case wxRGN_DIFF:
-            // TODO
+            DiffRgn( M_REGION , rgn , M_REGION ) ;
             break ;
         case wxRGN_COPY:
         default:
-            // TODO
+       			CopyRgn( rgn ,M_REGION ) ;
             break ;
     }
 
-    // TODO do combine region
+		DisposeRgn( rgn ) ;
 
-    return FALSE;
+    return TRUE;
 }
 
 //! Union /e region with this.
@@ -141,36 +152,35 @@ bool wxRegion::Combine(const wxRegion& region, wxRegionOp op)
 	// Don't change shared data
 	if (!m_refData) {
 		m_refData = new wxRegionRefData();
-	} else	if (m_refData->GetRefCount() > 1) {
+	} 
+	else	if (m_refData->GetRefCount() > 1) 
+	{
 		wxRegionRefData* ref = (wxRegionRefData*)m_refData;
 		UnRef();
 		m_refData = new wxRegionRefData(*ref);
 	}
 
-    int mode = 0; // TODO platform-specific code
     switch (op)
     {
         case wxRGN_AND:
-            // TODO
+            SectRgn( M_REGION , OTHER_M_REGION(region) , M_REGION ) ;
             break ;
         case wxRGN_OR:
-            // TODO
+            UnionRgn( M_REGION , OTHER_M_REGION(region) , M_REGION ) ;
             break ;
         case wxRGN_XOR:
-            // TODO
+             XorRgn( M_REGION , OTHER_M_REGION(region) , M_REGION ) ;
             break ;
         case wxRGN_DIFF:
-            // TODO
+            DiffRgn( M_REGION , OTHER_M_REGION(region) , M_REGION ) ;
             break ;
         case wxRGN_COPY:
         default:
-            // TODO
+       			CopyRgn( OTHER_M_REGION(region) ,M_REGION ) ;
             break ;
     }
 
-    // TODO combine region
-
-	return FALSE;
+	return TRUE;
 }
 
 bool wxRegion::Combine(const wxRect& rect, wxRegionOp op)
@@ -185,9 +195,16 @@ bool wxRegion::Combine(const wxRect& rect, wxRegionOp op)
 // Outer bounds of region
 void wxRegion::GetBox(long& x, long& y, long&w, long &h) const
 {
-	if (m_refData) {
-        // TODO get box
-	} else {
+	if (m_refData) 
+	{
+		Rect box = (**M_REGION).rgnBBox ;
+        x = box.left ;
+        y = box.top ;
+        w = box.right - box.left ;
+        h = box.bottom - box.top ;
+	} 
+	else 
+	{
 		x = y = w = h = 0;
 	}
 }
@@ -202,8 +219,12 @@ wxRect wxRegion::GetBox() const
 // Is region empty?
 bool wxRegion::Empty() const
 {
-    // TODO
-    return FALSE;
+    return EmptyRgn( M_REGION ) ;
+}
+
+const WXHRGN wxRegion::GetWXHRGN() const
+{
+	return M_REGION ;
 }
 
 //-----------------------------------------------------------------------------
@@ -228,11 +249,11 @@ wxRegionContain wxRegion::Contains(const wxPoint& pt) const
 	if (!m_refData)
 		return wxOutRegion;
 
-    // TODO. Return wxInRegion if within region.
-    if (0)
+    Point p = { pt.y , pt.x } ;
+    if (PtInRgn( p , M_REGION ) )
         return wxInRegion;
-    else
-        return wxOutRegion;
+        
+    return wxOutRegion;
 }
 
 // Does the region contain the rectangle (x, y, w, h)?
@@ -241,8 +262,8 @@ wxRegionContain wxRegion::Contains(long x, long y, long w, long h) const
 	if (!m_refData)
 		return wxOutRegion;
 
-    // TODO. Return wxInRegion if within region.
-    if (0)
+    Rect rect = { y , x , y + h , x + w } ;
+    if (RectInRgn( &rect , M_REGION ) )
         return wxInRegion;
     else
         return wxOutRegion;
@@ -308,8 +329,14 @@ void wxRegionIterator::Reset(const wxRegion& region)
 		m_numRects = 0;
 	else
     {
-        // TODO create m_rects and fill with rectangles for this region
-        m_numRects = 0;
+    	// we cannot dissolve it into rects on mac
+        m_rects = new wxRect[1];
+        Rect rect = (**OTHER_M_REGION( region )).rgnBBox ;
+        m_rects[0].x = rect.left;
+        m_rects[0].y = rect.top;
+        m_rects[0].width = rect.right - rect.left;
+        m_rects[0].height = rect.bottom - rect.top;
+        m_numRects = 1;
     }
 }
 

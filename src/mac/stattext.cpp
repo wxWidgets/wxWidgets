@@ -22,6 +22,8 @@
 IMPLEMENT_DYNAMIC_CLASS(wxStaticText, wxControl)
 #endif
 
+#include <wx/mac/uma.h>
+
 bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
            const wxString& label,
            const wxPoint& pos,
@@ -29,32 +31,31 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
            long style,
            const wxString& name)
 {
-  SetName(name);
-  if (parent) parent->AddChild(this);
+	Rect bounds ;
+	Str255 title ;
+	
+	MacPreControlCreate( parent , id ,  label , pos , size ,style, *((wxValidator*)NULL) , name , &bounds , title ) ;
 
-  SetBackgroundColour(parent->GetBackgroundColour()) ;
-  SetForegroundColour(parent->GetForegroundColour()) ;
+	m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , "\p" , true , 0 , 0 , 1, 
+	  	kControlStaticTextProc , (long) this ) ;
+	::UMASetControlData( m_macControl, kControlLabelPart, kControlStaticTextTextTag , (long) title[0] , (char*) &title[1] ) ;
+	
+	MacPostControlCreate() ;
 
-  if ( id == -1 )
-  	m_windowId = (int)NewControlId();
-  else
-	m_windowId = id;
-
-  m_windowStyle = style;
-
-  SetFont(parent->GetFont());
-
-  // TODO
-  return FALSE;
+  return TRUE;
 }
 
-void wxStaticText::SetSize(int x, int y, int width, int height, int sizeFlags)
+void wxStaticText::SetLabel(const wxString& st , bool resize )
 {
-    // TODO
-}
-
-void wxStaticText::SetLabel(const wxString& label)
-{
-    // TODO
+	m_label = st ;
+	wxString label ;
+	
+	if( wxApp::s_macDefaultEncodingIsPC )
+		label = wxMacMakeMacStringFromPC( st ) ;
+	else
+		label = st ;
+		
+	::UMASetControlData( m_macControl, kControlLabelPart, kControlStaticTextTextTag , (long) label.Length() , (char*)(const char*) label ) ;
+	Refresh() ;
 }
 

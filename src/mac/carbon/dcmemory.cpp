@@ -40,6 +40,18 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
   m_selected = bitmap;
   if (m_selected.Ok())
   {
+		wxBitmapRefData * bmap = (wxBitmapRefData*) (m_selected.GetRefData()) ;
+		if ( bmap->m_hBitmap )
+		{
+			m_macPort = (GrafPtr) bmap->m_hBitmap ;
+			MacSetupPort() ;
+ 			m_ok = TRUE ;
+			// SetBackground(wxBrush(*wxWHITE, wxSOLID));
+ 		}
+ 		else
+ 		{
+	    m_ok = FALSE;
+ 		}
   }
   else
   {

@@ -17,6 +17,7 @@
 #endif
 
 #include "wx/control.h"
+#include "wx/dynarray.h"
 
 WXDLLEXPORT_DATA(extern const char*) wxListBoxNameStr;
 
@@ -26,6 +27,9 @@ class WXDLLEXPORT wxArrayInt;
 WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
 
 // List box item
+
+WX_DEFINE_ARRAY( char * , wxListDataArray ) ;
+
 class WXDLLEXPORT wxListBox: public wxControl
 {
   DECLARE_DYNAMIC_CLASS(wxListBox)
@@ -73,7 +77,6 @@ class WXDLLEXPORT wxListBox: public wxControl
   virtual int GetSelections(wxArrayInt& aSelections) const;
   virtual bool Selected(int n) const ;
   virtual wxString GetString(int n) const ;
-  virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
 
   // Set the specified item at the first visible item
   // or scroll to max range.
@@ -88,9 +91,33 @@ class WXDLLEXPORT wxListBox: public wxControl
 
   void Command(wxCommandEvent& event);
 
+	void MacSetRedraw( bool doDraw ) ;
  protected:
   int       m_noItems;
   int       m_selected;
+  
+	void			MacDestroy() ;			
+	void			MacDelete( int n ) ;
+	void			MacInsert( int n , const char * text) ;
+	void			MacAppend( const char * text) ;
+	void			MacSet( int n , const char *text ) ;
+	void			MacClear() ;
+	void			MacSetSelection( int n , bool select ) ;
+	int 			MacGetSelection() const ;
+	int				MacGetSelections(wxArrayInt& aSelections) const ;
+	bool			MacIsSelected( int n ) const ;
+	void			MacScrollTo( int n ) ;
+	void			OnSize( const wxSizeEvent &size ) ;
+	void			MacDoClick() ;
+	void			MacDoDoubleClick() ;
+
+ public :
+  ListHandle	m_macList ;
+	wxArrayString m_stringArray ;
+	wxListDataArray m_dataArray ;
+	
+    virtual void	MacHandleControlClick( ControlHandle control , SInt16 controlpart ) ;
+DECLARE_EVENT_TABLE()
 };
 
 #endif

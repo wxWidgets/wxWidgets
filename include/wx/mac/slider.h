@@ -51,9 +51,6 @@ public:
 
   virtual int GetValue() const ;
   virtual void SetValue(int);
-  void GetSize(int *x, int *y) const ;
-  void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
-  void GetPosition(int *x, int *y) const ;
   bool Show(bool show);
 
   void SetRange(int minValue, int maxValue);
@@ -78,7 +75,12 @@ public:
   void SetTick(int tickPos) ;
 
   void Command(wxCommandEvent& event);
+	void 					MacHandleControlClick( ControlHandle control , SInt16 controlpart ) ;
  protected:
+ 	wxStaticText*	m_macMinimumStatic ;
+ 	wxStaticText*	m_macMaximumStatic ;
+ 	wxStaticText*	m_macValueStatic ;
+
   int           m_rangeMin;
   int           m_rangeMax;
   int           m_pageSize;

@@ -22,7 +22,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxWindowDC)
 // Create a DC representing the whole screen
 wxScreenDC::wxScreenDC()
 {
-    // TODO
+	m_macPort = LMGetWMgrPort() ;
+	MacSetupPort() ;
+ 	m_ok = TRUE ;
 }
 
 wxScreenDC::~wxScreenDC()

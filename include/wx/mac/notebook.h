@@ -165,6 +165,7 @@ public:
   virtual bool DoPhase(int nPhase);
 
 protected:
+	virtual void 						MacHandleControlClick( ControlHandle control , SInt16 controlpart ) ;
   // common part of all ctors
   void Init();
 

@@ -1534,6 +1534,44 @@ typedef enum {
 // platform specific (implementation) parts of the headers
 // ---------------------------------------------------------------------------
 
+#ifdef __WXMAC__
+
+typedef WindowPtr   	WXHWND;
+typedef Handle   			WXHANDLE;
+typedef CIconHandle		WXHICON;
+//typedef unsigned long   WXHFONT;
+typedef MenuHandle   	WXHMENU;
+//typedef unsigned long   WXHPEN;
+//typedef unsigned long   WXHBRUSH;
+//typedef unsigned long   WXHPALETTE;
+typedef CursHandle   	WXHCURSOR;
+typedef RgnHandle   	WXHRGN;
+//typedef unsigned long   WXHACCEL;
+//typedef unsigned long   WXHINSTANCE;
+typedef GWorldPtr   WXHBITMAP;
+//typedef unsigned long   WXHIMAGELIST;
+//typedef unsigned long   WXHGLOBAL;
+typedef GrafPtr   		WXHDC;
+typedef unsigned int    WXUINT;
+typedef unsigned long   WXDWORD;
+typedef unsigned short  WXWORD;
+//typedef unsigned int    WXWPARAM;
+//typedef long            WXLPARAM;
+typedef RGBColor   		WXCOLORREF;
+//typedef void *          WXRGNDATA;
+//typedef void *          WXMSG;
+//typedef unsigned long   WXHCONV;
+//typedef unsigned long   WXHKEY;
+//typedef void *          WXDRAWITEMSTRUCT;
+//typedef void *          WXMEASUREITEMSTRUCT;
+//typedef void *          WXLPCREATESTRUCT;
+typedef int (*WXFARPROC)();
+
+typedef WindowPtr           WXWindow;
+typedef ControlHandle       WXWidget;
+
+#endif
+
 #if defined(__WXMSW__) || defined(__WXPM__)
 // Stand-ins for Windows types or OS/2, to avoid #including all of windows.h or os2.h
 typedef unsigned long   WXHWND;

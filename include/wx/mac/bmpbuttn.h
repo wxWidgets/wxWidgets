@@ -47,6 +47,8 @@ class WXDLLEXPORT wxBitmapButton: public wxButton
     SetBitmapLabel(bitmap);
   }
 
+	virtual void SetLabel( const wxString &name ) {} 
+
   virtual void SetBitmapLabel(const wxBitmap& bitmap);
 
   inline wxBitmap& GetBitmapLabel() const { return (wxBitmap&) m_buttonBitmap; }

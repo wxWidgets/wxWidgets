@@ -28,6 +28,12 @@ class WXDLLEXPORT wxBitmapHandler;
 class WXDLLEXPORT wxIcon;
 class WXDLLEXPORT wxCursor;
 
+GWorldPtr 	wxMacCreateGWorld( int height , int widtdh , int depth ) ;
+void 				wxMacDestroyGWorld( GWorldPtr gw ) ;
+PicHandle 	wxMacCreatePict( GWorldPtr gw , GWorldPtr mask = NULL ) ;
+void 				wxMacSetColorTableEntry( CTabHandle newColors , int index , int red , int green ,  int blue ) ;
+CTabHandle 	wxMacCreateColorTable( int numColors ) ;
+
 // A mask is a mono bitmap used for drawing bitmaps
 // transparently.
 class WXDLLEXPORT wxMask: public wxObject
@@ -54,14 +60,14 @@ public:
   bool Create(const wxBitmap& bitmap, int paletteIndex);
   bool Create(const wxBitmap& bitmap);
 
-/* TODO: platform-specific data access
   // Implementation
   inline WXHBITMAP GetMaskBitmap() const { return m_maskBitmap; }
   inline void SetMaskBitmap(WXHBITMAP bmp) { m_maskBitmap = bmp; }
 protected:
   WXHBITMAP m_maskBitmap;
-*/
 };
+
+enum { kMacBitmapTypeUnknownType , kMacBitmapTypeGrafWorld, kMacBitmapTypePict } ;
 
 class WXDLLEXPORT wxBitmapRefData: public wxGDIRefData
 {
@@ -81,7 +87,9 @@ public:
   wxPalette     m_bitmapPalette;
   int           m_quality;
 
-/*  WXHBITMAP     m_hBitmap; TODO: platform-specific handle */
+	int						m_bitmapType ;
+	PicHandle			m_hPict ;
+	WXHBITMAP     m_hBitmap;
   wxMask *      m_bitmapMask; // Optional mask
 };
 
@@ -128,14 +136,11 @@ public:
   // Initialize with raw data.
   wxBitmap(const char bits[], int width, int height, int depth = 1);
 
-/* TODO: maybe implement XPM reading
   // Initialize with XPM data
   wxBitmap(const char **data);
-*/
 
   // Load a file or resource
-  // TODO: make default type whatever's appropriate for the platform.
-  wxBitmap(const wxString& name, long type = wxBITMAP_TYPE_BMP_RESOURCE);
+  wxBitmap(const wxString& name, long type = wxBITMAP_TYPE_PICT_RESOURCE);
 
   // Constructor for generalised creation from data
   wxBitmap(void *data, long type, int width, int height, int depth = 1);
@@ -184,14 +189,11 @@ public:
 protected:
   static wxList sm_handlers;
 
-/*
   // TODO: Implementation
 public:
   void SetHBITMAP(WXHBITMAP bmp);
   inline WXHBITMAP GetHBITMAP() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_hBitmap : 0); }
   bool FreeResource(bool force = FALSE);
-*/
-
 };
 #endif
   // _WX_BITMAP_H_

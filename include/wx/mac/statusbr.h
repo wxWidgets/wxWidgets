@@ -19,7 +19,7 @@
 
 #include "wx/generic/statusbr.h"
 
-class WXDLLEXPORT wxStatusBarXX : public wxStatusBar
+class WXDLLEXPORT wxStatusBarMac : public wxStatusBar
 {
   DECLARE_DYNAMIC_CLASS(wxStatusBarXX);
 
@@ -51,3 +51,4 @@ protected:
 };
 
 #endif
+    // _WX_STATBAR_H_

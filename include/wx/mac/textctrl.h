@@ -119,11 +119,12 @@ public:
   virtual void PositionToXY(long pos, long *x, long *y) const ;
   virtual void ShowPosition(long pos);
   virtual void Clear();
+	virtual bool MacCanFocus() const { return true ; }
   
   // callbacks
   // ---------
   void OnDropFiles(wxDropFilesEvent& event);
-//  void OnChar(wxKeyEvent& event); // Process 'enter' if required
+	void OnChar(wxKeyEvent& event); // Process 'enter' if required
 //  void OnEraseBackground(wxEraseEvent& event);
   
   // Implementation

@@ -15,6 +15,7 @@
 
 #include "wx/control.h"
 #include "wx/tabctrl.h"
+#include "wx/mac/uma.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxTabCtrl, wxControl)
@@ -31,20 +32,18 @@ wxTabCtrl::wxTabCtrl()
 bool wxTabCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
             long style, const wxString& name)
 {
-    m_imageList = NULL;
+	Rect bounds ;
+	Str255 title ;
 
-    SetName(name);
+  m_imageList = NULL;
+	
+	MacPreControlCreate( parent , id ,  "" , pos , size ,style, *((wxValidator*)NULL) , name , &bounds , title ) ;
 
-    m_windowStyle = style;
-
-    SetParent(parent);
-
-    m_windowId = (id < 0 ? NewControlId() : id);
-
-    if (parent) parent->AddChild(this);
-
-    // TODO: create tab control
-    return FALSE;
+	m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , title , true , 0 , 0 , 1, 
+	  	kControlTabSmallProc , (long) this ) ;
+	
+	MacPostControlCreate() ;
+	return TRUE ;
 }
 
 wxTabCtrl::~wxTabCtrl()

@@ -31,9 +31,10 @@ wxFontRefData::wxFontRefData()
   	m_weight = 0;
   	m_underlined = 0;
   	m_faceName = "";
-/* TODO
-  	m_hFont = 0;
-*/
+
+  	m_macFontSize = m_pointSize ; 
+  	m_macFontNum = systemFont ;
+  	m_macFontStyle = normal ;
 }
 
 wxFontRefData::wxFontRefData(const wxFontRefData& data)
@@ -45,14 +46,65 @@ wxFontRefData::wxFontRefData(const wxFontRefData& data)
   	m_weight = data.m_weight;
   	m_underlined = data.m_underlined;
   	m_faceName = data.m_faceName;
-/* TODO
-  	m_hFont = 0;
-*/
+
+  	m_macFontSize = m_pointSize ; 
+  	m_macFontNum = systemFont ;
+  	m_macFontStyle = normal ;
 }
 
 wxFontRefData::~wxFontRefData()
 {
     // TODO: delete font data
+}
+
+void wxFontRefData::MacFindFont()
+{
+	if( m_faceName == "" )
+	{
+		switch( m_family )
+		{
+			case wxDEFAULT :
+				m_macFontNum = ::GetAppFont() ;
+				break ;
+			case wxDECORATIVE :
+				::GetFNum( "\pTimes" , &m_macFontNum) ;
+				break ;
+			case wxROMAN :
+				::GetFNum( "\pTimes" , &m_macFontNum) ;
+				break ;
+			case wxSCRIPT :
+				::GetFNum( "\pTimes" , &m_macFontNum) ;
+				break ;
+			case wxSWISS :
+				::GetFNum( "\pHelvetica" , &m_macFontNum) ;
+				break ;
+			case wxMODERN :
+				::GetFNum( "\pMonaco" , &m_macFontNum) ;
+				break ;
+		}
+	}
+	else
+	{
+		if ( m_faceName == "systemfont" )
+			m_macFontNum = ::GetSysFont() ;
+		else if ( m_faceName == "applicationfont" )
+			m_macFontNum = ::GetAppFont() ;
+		else
+		{
+			strcpy(wxBuffer, m_faceName);
+			C2PStr(wxBuffer);
+			::GetFNum( (unsigned char*) wxBuffer, &m_macFontNum);
+		}
+	}
+
+	m_macFontStyle = 0;
+	if (m_weight == wxBOLD)
+		 m_macFontStyle |= bold;
+	if (m_style == wxITALIC || m_style == wxSLANT) 
+		m_macFontStyle |= italic;
+	if (m_underlined) 
+		m_macFontStyle |= underline;
+	m_macFontSize = m_pointSize ;
 }
 
 wxFont::wxFont()
@@ -94,8 +146,8 @@ wxFont::~wxFont()
 
 bool wxFont::RealizeResource()
 {
-    // TODO: create the font (if there is a native font object)
-    return FALSE;
+	M_FONTDATA->MacFindFont() ;
+    return TRUE;
 }
 
 void wxFont::Unshare()

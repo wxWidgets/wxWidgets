@@ -26,12 +26,30 @@ IMPLEMENT_DYNAMIC_CLASS(wxIcon, wxBitmap)
 
 wxIconRefData::wxIconRefData()
 {
-    // TODO: init icon handle
+    m_ok = FALSE;
+    m_width = 0;
+    m_height = 0;
+    m_depth = 0;
+    m_quality = 0;
+    m_numColors = 0;
+    m_bitmapMask = NULL;
+		m_hBitmap = NULL ;
+		m_hIcon = NULL ;
 }
 
 wxIconRefData::~wxIconRefData()
 {
-    // TODO: destroy icon handle
+	if ( m_hIcon )
+	{
+		DisposeCIcon( m_hIcon ) ;
+		m_hIcon = NULL ;
+	}
+		
+  if (m_bitmapMask)
+  {
+    delete m_bitmapMask;
+    m_bitmapMask = NULL;
+  }
 }
 
 wxIcon::wxIcon()
@@ -68,3 +86,32 @@ bool wxIcon::LoadFile(const wxString& filename, long type,
 	return FALSE;
 }
 
+IMPLEMENT_DYNAMIC_CLASS(wxICONResourceHandler, wxBitmapHandler)
+
+bool  wxICONResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
+          int desiredWidth, int desiredHeight)
+{
+	Str255 theName ;
+	short theId ;
+	OSType theType ;
+	strcpy( (char*) theName , name ) ;
+	c2pstr( (char*) theName ) ;
+	
+	Handle resHandle = GetNamedResource( 'cicn' , theName ) ;
+	GetResInfo( resHandle , &theId , &theType , theName ) ;
+	ReleaseResource( resHandle ) ;
+	
+	CIconHandle theIcon = (CIconHandle ) GetCIcon( theId ) ;
+	if ( theIcon )
+	{
+		M_ICONHANDLERDATA->m_hIcon = theIcon ;
+		M_ICONHANDLERDATA->m_width =  32 ;
+		M_ICONHANDLERDATA->m_height = 32 ;
+		
+		M_ICONHANDLERDATA->m_depth = 8 ;
+		M_ICONHANDLERDATA->m_ok = true ;
+		M_ICONHANDLERDATA->m_numColors = 256 ;
+		return TRUE ;
+	}
+	return FALSE ;
+}

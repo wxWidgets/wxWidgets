@@ -44,9 +44,8 @@ class WXDLLEXPORT wxStaticText: public wxControl
            const wxString& name = wxStaticTextNameStr);
 
   // accessors
-  void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
-  void SetLabel(const wxString&);
-
+  void SetLabel(const wxString& , bool resize );
+  void SetLabel( const wxString &str ) { SetLabel( str , true ) ; }
   // operations
   virtual void Command(wxCommandEvent& WXUNUSED(event)) {};
   virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {};

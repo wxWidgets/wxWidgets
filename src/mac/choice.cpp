@@ -15,6 +15,7 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/choice.h"
+#include "wx/mac/uma.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControl)
@@ -23,71 +24,103 @@ IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControl)
 bool wxChoice::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos,
            const wxSize& size,
-		   int n, const wxString choices[],
-		   long style,
+		   		int n, const wxString choices[],
+		   		long style,
            const wxValidator& validator,
            const wxString& name)
 {
-    SetName(name);
-    SetValidator(validator);
     m_noStrings = n;
-    m_windowStyle = style;
 
-    if (parent) parent->AddChild(this);
+		Rect bounds ;
+		Str255 title ;
+	
+		MacPreControlCreate( parent , id ,  "" , pos , size ,style, validator , name , &bounds , title ) ;
+	
+		m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , title , true , 0 , -12345 , 0, 
+	  	kControlPopupButtonProc , (long) this ) ; 
+	
+		m_macPopUpMenuHandle =  NewMenu( 1 , "\pPopUp Menu" ) ;
+		SetControlData( m_macControl , kControlNoPart , kControlPopupButtonMenuHandleTag , sizeof( MenuHandle ) , (char*) &m_macPopUpMenuHandle) ;
+		for ( int i = 0 ; i < n ; i++ )
+		{
+			appendmenu( m_macPopUpMenuHandle , choices[i] ) ;
+		}
+		SetControlMinimum( m_macControl , 0 ) ;
+		SetControlMaximum( m_macControl , m_noStrings) ;
+		SetControlValue( m_macControl , 1 ) ;
 
-    if ( id == -1 )
-    	m_windowId = (int)NewControlId();
-    else
-	m_windowId = id;
+		MacPostControlCreate() ;
 
-    // TODO: create choice control
-    return FALSE;
+  	return TRUE;
 }
 
 void wxChoice::Append(const wxString& item)
 {
-    // TODO
+	appendmenu( m_macPopUpMenuHandle , item ) ;
     m_noStrings ++;
+	SetControlMaximum( m_macControl , m_noStrings) ;
 }
 
 void wxChoice::Delete(int n)
 {
-    // TODO
+	wxASSERT( n < m_noStrings ) ;
+    ::DeleteMenuItem( m_macPopUpMenuHandle , n + 1) ;
     m_noStrings --;
+	SetControlMaximum( m_macControl , m_noStrings) ;
 }
 
 void wxChoice::Clear()
 {
-    // TODO
+    for ( int i = 0 ; i < m_noStrings ; i++ )
+    {
+    	::DeleteMenuItem( m_macPopUpMenuHandle , 1 ) ;
+	}
     m_noStrings = 0;
+	SetControlMaximum( m_macControl , m_noStrings) ;
 }
 
 int wxChoice::GetSelection() const
 {
-    // TODO
-    return 0;
+    return GetControlValue( m_macControl ) -1 ;
 }
+
+void wxChoice::MacHandleControlClick( ControlHandle control , SInt16 controlpart ) 
+{
+    wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, m_windowId );
+	event.SetInt(GetSelection());
+    event.SetEventObject(this);
+    event.SetString(copystring(GetStringSelection()));
+    ProcessCommand(event);
+    delete[] event.GetString();
+}
+
 
 void wxChoice::SetSelection(int n)
 {
-    // TODO
+    SetControlValue( m_macControl , n + 1 ) ;
 }
 
 int wxChoice::FindString(const wxString& s) const
 {
-    // TODO
-    return 0;
+    for( int i = 0 ; i < m_noStrings ; i++ )
+    {
+    	if ( GetString( i ) == s )
+    		return i ; 
+    }
+    return -1;
 }
 
 wxString wxChoice::GetString(int n) const
 {
-    // TODO
-    return wxString("");
+	Str255 text ;
+    ::GetMenuItemText( m_macPopUpMenuHandle , n+1 , text ) ;
+    p2cstr( text ) ;
+    return wxString( text );
 }
 
 void wxChoice::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
-    // TODO
+  wxControl::SetSize( x,y,width,height,sizeFlags ) ;
 }
 
 wxString wxChoice::GetStringSelection () const

@@ -76,6 +76,11 @@
 	#include "wx/dbtable.h"
 #endif
 
+#ifdef __MWERKS__
+#define stricmp _stricmp
+#define strnicmp _strnicmp
+#endif
+
 #ifdef __UNIX__
 // The HPUX preprocessor lines below were commented out on 8/20/97
 // because macros.h currently redefines DEBUG and is unneeded.

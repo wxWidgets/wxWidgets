@@ -47,8 +47,8 @@ class WXDLLEXPORT wxStaticBox: public wxControl
   virtual void Command(wxCommandEvent& WXUNUSED(event)) {};
   virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {};
 
-  void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
-  void SetLabel(const wxString& label);
+
+protected:
 
 DECLARE_EVENT_TABLE()
 };

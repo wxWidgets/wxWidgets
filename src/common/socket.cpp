@@ -45,7 +45,7 @@
 #include "wx/socket.h"
 
 
-#if defined(__WXMSW__) || defined(__WXPM__) || defined(__WXMOTIF__)
+#if defined(__WXMSW__) || defined(__WXPM__) || defined(__WXMOTIF__) || defined(__WXMAC__)
     #define PROCESS_EVENTS() wxYield()
 #elif defined(__WXGTK__)
     #include <gtk/gtk.h>

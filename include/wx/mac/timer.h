@@ -45,9 +45,5 @@ private:
     DECLARE_ABSTRACT_CLASS(wxTimer)
 };
 
-/* Note: these are implemented in common/timercmn.cpp, so need to implement them separately.
- * But you may need to modify timercmn.cpp.
- */
-
 #endif
     // _WX_TIMER_H_

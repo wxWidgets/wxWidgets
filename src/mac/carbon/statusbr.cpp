@@ -17,7 +17,7 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#include "wx/stubs/statusbr.h"
+#include "wx/mac/statusbr.h"
 
 #if     !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxStatusBarXX, wxStatusBar);

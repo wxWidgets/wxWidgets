@@ -16,7 +16,10 @@
 #pragma interface "toolbar.h"
 #endif
 
+#if wxUSE_TOOLBAR
+
 #include "wx/tbarbase.h"
+#include "wx/dynarray.h"
 
 WXDLLEXPORT_DATA(extern const char*) wxToolBarNameStr;
 
@@ -62,16 +65,19 @@ class WXDLLEXPORT wxToolBar: public wxToolBarBase
 
   // Add all the buttons
   virtual bool CreateTools();
-  virtual void Layout() {}
+ 	virtual void LayoutButtons() {}
 
   // The post-tool-addition call. TODO: do here whatever's
   // necessary for completing the toolbar construction.
   bool Realize() { return CreateTools(); };
-
+	virtual void MacHandleControlClick( ControlHandle control , SInt16 controlpart ) ;
 protected:
+	wxArrayPtrVoid	m_macToolHandles ;
 
 DECLARE_EVENT_TABLE()
 };
+
+#endif // wxUSE_TOOLBAR
 
 #endif
     // _WX_TOOLBAR_H_

@@ -22,13 +22,20 @@ IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
 
 // Colour
 
+static void wxComposeRGBColor( RGBColor * col , int red, int blue, int green ) ;
+static void wxComposeRGBColor( RGBColor * col , int red, int blue, int green ) 
+{
+	col->red = (red << 8) + red;
+	col->blue = (blue << 8) + blue;
+	col->green = (green << 8) + green;
+}
+
 wxColour::wxColour ()
 {
-    m_isInit = FALSE;
-    m_red = m_blue = m_green = 0;
-/* TODO
-    m_pixel = 0;
-*/
+  m_isInit = FALSE;
+  m_red = m_blue = m_green = 0;
+
+	wxComposeRGBColor( &m_pixel , m_red , m_blue , m_green ) ;
 }
 
 wxColour::wxColour (unsigned char r, unsigned char g, unsigned char b)
@@ -37,9 +44,8 @@ wxColour::wxColour (unsigned char r, unsigned char g, unsigned char b)
     m_green = g;
     m_blue = b;
     m_isInit = TRUE;
-/* TODO
-    m_pixel = PALETTERGB (m_red, m_green, m_blue);
-*/
+
+	wxComposeRGBColor( &m_pixel , m_red , m_blue , m_green ) ;
 }
 
 wxColour::wxColour (const wxColour& col)
@@ -48,9 +54,18 @@ wxColour::wxColour (const wxColour& col)
     m_green = col.m_green;
     m_blue = col.m_blue;
     m_isInit = col.m_isInit;
-/* TODO
+
     m_pixel = col.m_pixel;
-*/
+}
+
+wxColour::wxColour (const wxColour* col)
+{
+    m_red = col->m_red;
+    m_green = col->m_green;
+    m_blue = col->m_blue;
+    m_isInit = col->m_isInit;
+
+    m_pixel = col->m_pixel;
 }
 
 wxColour& wxColour::operator =(const wxColour& col)
@@ -59,9 +74,9 @@ wxColour& wxColour::operator =(const wxColour& col)
   m_green = col.m_green;
   m_blue = col.m_blue;
   m_isInit = col.m_isInit;
-/* TODO
+ 
   m_pixel = col.m_pixel;
-*/
+
   return *this;
 }
 
@@ -82,9 +97,8 @@ void wxColour::InitFromName(const wxString& col)
         m_blue = 0;
         m_isInit = FALSE;
     }
-/* TODO
-    m_pixel = PALETTERGB (m_red, m_green, m_blue);
-*/
+
+	wxComposeRGBColor( &m_pixel , m_red , m_blue , m_green ) ;
 }
 
 wxColour::~wxColour ()
@@ -97,7 +111,6 @@ void wxColour::Set (unsigned char r, unsigned char g, unsigned char b)
     m_green = g;
     m_blue = b;
     m_isInit = TRUE;
-/* TODO
-    m_pixel = PALETTERGB (m_red, m_green, m_blue);
-*/
+
+	wxComposeRGBColor( &m_pixel , m_red , m_blue , m_green ) ;
 }

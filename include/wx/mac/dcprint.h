@@ -17,6 +17,7 @@
 #endif
 
 #include "wx/dc.h"
+#include "wx/cmndata.h"
 
 class WXDLLEXPORT wxPrinterDC: public wxDC
 {
@@ -24,9 +25,16 @@ class WXDLLEXPORT wxPrinterDC: public wxDC
   DECLARE_CLASS(wxPrinterDC)
 
   // Create a printer DC
-  wxPrinterDC(const wxString& driver, const wxString& device, const wxString& output, bool interactive = TRUE, int orientation = wxPORTRAIT);
-
+  wxPrinterDC(const wxPrintData& printdata );
   ~wxPrinterDC();
+
+    virtual bool StartDoc( const wxString& WXUNUSED(message) ) ;
+    virtual void EndDoc(void) ;
+    virtual void StartPage(void) ;
+    virtual void EndPage(void) ;
+ protected :
+ 	TPPrPort 	m_macPrintPort ;
+ 	wxPrintData m_printData ;
 };
 
 #endif

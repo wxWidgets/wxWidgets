@@ -43,6 +43,7 @@ public:
     wxRegion(long x, long y, long w, long h);
     wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight);
     wxRegion(const wxRect& rect);
+	wxRegion( WXHRGN hRegion );
 	wxRegion();
 	~wxRegion();
 
@@ -100,6 +101,7 @@ public:
 	bool Combine(long x, long y, long width, long height, wxRegionOp op);
 	bool Combine(const wxRegion& region, wxRegionOp op);
 	bool Combine(const wxRect& rect, wxRegionOp op);
+	const WXHRGN GetWXHRGN() const ;
 };
 
 class WXDLLEXPORT wxRegionIterator : public wxObject {
@@ -125,7 +127,6 @@ public:
 	long GetH() const;
 	long GetHeight() const { return GetH(); }
     wxRect GetRect() const { return wxRect(GetX(), GetY(), GetWidth(), GetHeight()); }
-
 private:
 	long	 m_current;
 	long	 m_numRects;

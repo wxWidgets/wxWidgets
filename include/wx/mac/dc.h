@@ -61,53 +61,53 @@ class WXDLLEXPORT wxDC: public wxObject
     
     virtual bool Ok(void) const { return m_ok; };
 
-    virtual void FloodFill( long x1, long y1, const wxColour& col, int style=wxFLOOD_SURFACE ) = 0;
+    virtual void FloodFill( long x1, long y1, const wxColour& col, int style=wxFLOOD_SURFACE );
     inline void FloodFill(const wxPoint& pt, const wxColour& col, int style=wxFLOOD_SURFACE)
     {
         FloodFill(pt.x, pt.y, col, style);
     }
 
-    virtual bool GetPixel( long x1, long y1, wxColour *col ) const = 0;
+    virtual bool GetPixel( long x1, long y1, wxColour *col ) const ;
     inline bool GetPixel(const wxPoint& pt, wxColour *col) const
     {
         return GetPixel(pt.x, pt.y, col);
     }
 
-    virtual void DrawLine( long x1, long y1, long x2, long y2 ) = 0;
+    virtual void DrawLine( long x1, long y1, long x2, long y2 );
     inline void DrawLine(const wxPoint& pt1, const wxPoint& pt2)
     {
         DrawLine(pt1.x, pt1.y, pt2.x, pt2.y);
     }
 
-    virtual void CrossHair( long x, long y ) = 0;
+    virtual void CrossHair( long x, long y );
     inline void CrossHair(const wxPoint& pt)
     {
         CrossHair(pt.x, pt.y);
     }
 
-    virtual void DrawArc( long x1, long y1, long x2, long y2, long xc, long yc ) = 0;
+    virtual void DrawArc( long x1, long y1, long x2, long y2, long xc, long yc );
     inline void DrawArc(const wxPoint& pt1, const wxPoint& pt2, const wxPoint& centre)
     {
         DrawArc(pt1.x, pt1.y, pt2.x, pt2.y, centre.x, centre.y);
     }
 
-    virtual void DrawEllipticArc( long x, long y, long width, long height, double sa, double ea ) = 0;
+    virtual void DrawEllipticArc( long x, long y, long width, long height, double sa, double ea );
     virtual void DrawEllipticArc (const wxPoint& pt, const wxSize& sz, double sa, double ea)
     {
         DrawEllipticArc(pt.x, pt.y, sz.x, sz.y, sa, ea);
     }
 
-    virtual void DrawPoint( long x, long y ) = 0;
+    virtual void DrawPoint( long x, long y );
     virtual void DrawPoint( wxPoint& point );
     
-    virtual void DrawLines( int n, wxPoint points[], long xoffset = 0, long yoffset = 0 ) = 0;
+    virtual void DrawLines( int n, wxPoint points[], long xoffset = 0, long yoffset = 0 );
     virtual void DrawLines( wxList *points, long xoffset = 0, long yoffset = 0 );
     virtual void DrawPolygon( int n, wxPoint points[], long xoffset = 0, long yoffset = 0, 
-                              int fillStyle=wxODDEVEN_RULE ) = 0;
+                              int fillStyle=wxODDEVEN_RULE );
     virtual void DrawPolygon( wxList *lines, long xoffset = 0, long yoffset = 0, 
                               int fillStyle=wxODDEVEN_RULE );
     
-    virtual void DrawRectangle( long x, long y, long width, long height ) = 0;
+    virtual void DrawRectangle( long x, long y, long width, long height );
     inline void DrawRectangle(const wxPoint& pt, const wxSize& sz)
     {
         DrawRectangle(pt.x, pt.y, sz.x, sz.y);
@@ -116,7 +116,7 @@ class WXDLLEXPORT wxDC: public wxObject
     {
         DrawRectangle(rect.x, rect.y, rect.width, rect.height);
     }
-    virtual void DrawRoundedRectangle( long x, long y, long width, long height, double radius = 20.0 ) = 0;
+    virtual void DrawRoundedRectangle( long x, long y, long width, long height, double radius = 20.0 );
     inline void DrawRoundedRectangle(const wxPoint& pt, const wxSize& sz, double radius = 20.0)
     {
         DrawRoundedRectangle(pt.x, pt.y, sz.x, sz.y, radius);
@@ -126,7 +126,7 @@ class WXDLLEXPORT wxDC: public wxObject
         DrawRoundedRectangle(rect.x, rect.y, rect.width, rect.height, radius);
     }
 
-    virtual void DrawEllipse( long x, long y, long width, long height ) = 0;
+    virtual void DrawEllipse( long x, long y, long width, long height );
     inline void DrawEllipse(const wxPoint& pt, const wxSize& sz)
     {
         DrawEllipse(pt.x, pt.y, sz.x, sz.y);
@@ -137,10 +137,10 @@ class WXDLLEXPORT wxDC: public wxObject
     }
 
     virtual void DrawSpline( long x1, long y1, long x2, long y2, long x3, long y3 );
-    virtual void DrawSpline( wxList *points ) = 0;
+    virtual void DrawSpline( wxList *points );
     virtual void DrawSpline( int n, wxPoint points[] );
     
-    virtual bool CanDrawBitmap(void) const = 0;
+    virtual bool CanDrawBitmap(void) const ;
 
     virtual void DrawIcon( const wxIcon &icon, long x, long y, bool useMask=FALSE );
     inline void DrawIcon(const wxIcon& icon, const wxPoint& pt)
@@ -148,47 +148,44 @@ class WXDLLEXPORT wxDC: public wxObject
         DrawIcon(icon, pt.x, pt.y);
     }
 
-    // TODO DrawBitmap is not always the same as DrawIcon, especially if bitmaps and
-    // icons are implemented differently.
-    void DrawBitmap( const wxBitmap &bmp, long x, long y, bool useMask=FALSE )
-	      { DrawIcon( *((wxIcon*)(&bmp)), x, y, useMask ); }
+    void DrawBitmap( const wxBitmap &bmp, long x, long y, bool useMask=FALSE ) ;
 
     virtual bool Blit( long xdest, long ydest, long width, long height,
-       wxDC *source, long xsrc, long ysrc, int logical_func = wxCOPY, bool useMask=FALSE ) = 0;
+       wxDC *source, long xsrc, long ysrc, int logical_func = wxCOPY, bool useMask=FALSE );
     inline bool Blit(const wxPoint& destPt, const wxSize& sz,
             wxDC *source, const wxPoint& srcPt, int rop = wxCOPY, bool useMask = FALSE)
     {
         return Blit(destPt.x, destPt.y, sz.x, sz.y, source, srcPt.x, srcPt.y, rop, useMask);
     }
 
-    virtual void DrawText( const wxString &text, long x, long y, bool use16 = FALSE ) = 0;
+    virtual void DrawText( const wxString &text, long x, long y, bool use16 = FALSE );
     inline void DrawText(const wxString& text, const wxPoint& pt, bool use16bit = FALSE)
     {
         DrawText(text, pt.x, pt.y, use16bit);
     }
 
-    virtual bool CanGetTextExtent(void) const = 0;
+    virtual bool CanGetTextExtent(void) const ;
     virtual void GetTextExtent( const wxString &string, long *width, long *height,
                      long *descent = NULL, long *externalLeading = NULL,
-                     wxFont *theFont = NULL, bool use16 = FALSE ) = 0;
-    virtual long GetCharWidth(void) = 0;
-    virtual long GetCharHeight(void) = 0;
+                     wxFont *theFont = NULL, bool use16 = FALSE ) const ;
+    virtual long GetCharWidth(void);
+    virtual long GetCharHeight(void);
     
-    virtual void Clear(void) = 0;
+    virtual void Clear(void);
             
-    virtual void SetFont( const wxFont &font ) = 0;
+    virtual void SetFont( const wxFont &font );
     virtual wxFont& GetFont(void) const { return (wxFont&) m_font; };
     
-    virtual void SetPen( const wxPen &pen ) = 0;
+    virtual void SetPen( const wxPen &pen );
     virtual wxPen& GetPen(void) const { return (wxPen&) m_pen; };
     
-    virtual void SetBrush( const wxBrush &brush ) = 0;
+    virtual void SetBrush( const wxBrush &brush );
     virtual wxBrush& GetBrush(void) const { return (wxBrush&) m_brush; };
 
-    virtual void SetBackground( const wxBrush &brush ) = 0;
+    virtual void SetBackground( const wxBrush &brush );
     virtual wxBrush& GetBackground(void) const { return (wxBrush&) m_backgroundBrush; };
 
-    virtual void SetLogicalFunction( int function ) = 0;
+    virtual void SetLogicalFunction( int function );
     virtual int GetLogicalFunction(void) const { return m_logicalFunction; };
     
     virtual void SetTextForeground( const wxColour &col );
@@ -196,10 +193,10 @@ class WXDLLEXPORT wxDC: public wxObject
     virtual wxColour& GetTextBackground(void) const { return (wxColour&)m_textBackgroundColour; };
     virtual wxColour& GetTextForeground(void) const { return (wxColour&)m_textForegroundColour; };
     
-    virtual void SetBackgroundMode( int mode ) = 0;
+    virtual void SetBackgroundMode( int mode );
     virtual int GetBackgroundMode(void) const { return m_backgroundMode; };
     
-    virtual void SetPalette( const wxPalette& palette ) = 0;
+    virtual void SetPalette( const wxPalette& palette );
     void SetColourMap( const wxPalette& palette ) { SetPalette(palette); };
     
     // the first two must be overridden and called
@@ -368,6 +365,30 @@ class WXDLLEXPORT wxDC: public wxObject
     
     long         m_clipX1,m_clipY1,m_clipX2,m_clipY2;
     long         m_minX,m_maxX,m_minY,m_maxY;
+
+//begin wxmac
+	GrafPtr				m_macPort ;
+
+	// in order to preserve the const inheritance of the virtual functions, we have to 
+	// use mutable variables starting from CWPro 5
+
+	void					MacInstallFont() const ;
+	void					MacInstallPen() const ;
+	void					MacInstallBrush() const ;
+	
+	mutable bool	m_macFontInstalled ;
+	mutable bool	m_macPenInstalled ;
+	mutable bool	m_macBrushInstalled ;
+	
+	mutable long	m_macPortId ;
+	GrafPtr				m_macOrigPort ;
+	Rect					m_macClipRect ;
+	Point					m_macLocalOrigin ;
+	
+	void					MacSetupPort() const ;
+	void					MacVerifySetup() const { if ( m_macPortId != m_macCurrentPortId ) MacSetupPort() ; } 
+
+	static long m_macCurrentPortId ;
 };
 
 #endif

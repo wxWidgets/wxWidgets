@@ -23,6 +23,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap, wxControl)
  * wxStaticBitmap
  */
 
+BEGIN_EVENT_TABLE(wxStaticBitmap, wxControl)
+    EVT_PAINT(wxStaticBitmap::OnPaint)
+END_EVENT_TABLE()
+
 bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
            const wxBitmap& bitmap,
            const wxPoint& pos,
@@ -41,19 +45,27 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
 
     m_windowStyle = style;
 
-    // TODO: create static bitmap control
-    return FALSE;
+    bool ret = wxControl::Create( parent, id, pos, size, style , name );
+
+    return ret;
 }
 
 void wxStaticBitmap::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
-    // TODO
+    wxControl::SetSize( x , y , width , height , sizeFlags ) ;
 }
 
 void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
 {
     m_messageBitmap = bitmap;
 
-    // TODO: redraw bitmap
+    Refresh() ;
+}
+void wxStaticBitmap::OnPaint( wxPaintEvent &event ) 
+{
+    wxPaintDC dc(this);
+    PrepareDC(dc);
+		dc.SetPalette( *m_messageBitmap.GetPalette() ) ;
+		dc.DrawBitmap( m_messageBitmap , 0 , 0 ) ;
 }
 
