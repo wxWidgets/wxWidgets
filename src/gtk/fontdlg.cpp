@@ -152,7 +152,6 @@ bool wxFontDialog::DoCreate(wxWindow *parent)
     gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event",
         GTK_SIGNAL_FUNC(gtk_fontdialog_delete_callback), (gpointer)this );
 
-#ifndef __WXGTK20__
     wxFont font = m_fontData.GetInitialFont();
     if( font.Ok() )
     {
@@ -160,14 +159,15 @@ bool wxFontDialog::DoCreate(wxWindow *parent)
 
         if ( info )
         {
+
+#ifdef __WXGTK20__
+            const wxString& fontname = info->ToString();
+#else
             const wxString& fontname = info->GetXFontName();
             if ( !fontname )
                 font.GetInternalFont();
-            gtk_font_selection_dialog_set_font_name
-            (
-                sel,
-                wxConvCurrent->cWX2MB(fontname)
-            );
+#endif
+            gtk_font_selection_dialog_set_font_name(sel, wxGTK_CONV(fontname));
         }
         else
         {
@@ -175,7 +175,6 @@ bool wxFontDialog::DoCreate(wxWindow *parent)
             wxFAIL_MSG(_T("font is ok but no native font info?"));
         }
     }
-#endif
 
     return TRUE;
 }
