@@ -3138,23 +3138,25 @@ int wxGridStringTable::GetNumberCols()
 
 wxString wxGridStringTable::GetValue( int row, int col )
 {
-    wxASSERT_MSG( (row < GetNumberRows()) && (col < GetNumberCols()),
-                  _T("invalid row or column index in wxGridStringTable") );
+    wxCHECK_MSG( (row < GetNumberRows()) && (col < GetNumberCols()),
+                 wxEmptyString,
+                 _T("invalid row or column index in wxGridStringTable") );
 
     return m_data[row][col];
 }
 
 void wxGridStringTable::SetValue( int row, int col, const wxString& value )
 {
-    wxASSERT_MSG( (row < GetNumberRows()) && (col < GetNumberCols()),
-                  _T("invalid row or column index in wxGridStringTable") );
+    wxCHECK_RET( (row < GetNumberRows()) && (col < GetNumberCols()),
+                 _T("invalid row or column index in wxGridStringTable") );
 
     m_data[row][col] = value;
 }
 
 bool wxGridStringTable::IsEmptyCell( int row, int col )
 {
-    wxASSERT_MSG( (row < GetNumberRows()) && (col < GetNumberCols()),
+    wxCHECK_MSG( (row < GetNumberRows()) && (col < GetNumberCols()),
+                 true,
                   _T("invalid row or column index in wxGridStringTable") );
 
     return (m_data[row][col] == wxEmptyString);
@@ -3916,21 +3918,21 @@ bool wxGrid::SetTable( wxGridTableBase *table, bool takeOwnership,
 {
     if ( m_created )
     {
-        // stop all processing 
-        m_created = FALSE; 
+        // stop all processing
+        m_created = FALSE;
 
         if (m_ownTable)
         {
             wxGridTableBase *t=m_table;
             m_table=0;
-            delete t; 
+            delete t;
         }
-        delete m_selection; 
- 
-        m_table=0; 
-        m_selection=0; 
-        m_numRows=0; 
-        m_numCols=0; 
+        delete m_selection;
+
+        m_table=0;
+        m_selection=0;
+        m_numRows=0;
+        m_numCols=0;
     }
     if (table)
     {
@@ -9339,13 +9341,13 @@ void wxGrid::SetColSize( int col, int width )
     // should we check that it's bigger than GetColMinimalWidth(col) here?
     //                                                                 (VZ)
     // No, because it is reasonable to assume the library user know's
-    // what he is doing. However whe should test against the weaker 
+    // what he is doing. However whe should test against the weaker
     // constariant of minimalAcceptableWidth, as this breaks rendering
-    // 
+    //
     // This test then fixes sf.net bug #645734
-    
+
     if ( width < GetColMinimalAcceptableWidth()) { return; }
-    
+
     if ( m_colWidths.IsEmpty() )
     {
         // need to really create the array
