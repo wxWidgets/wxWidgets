@@ -130,7 +130,7 @@ void wxLogVerbose(wxTString strFormat, ...)
 }
 
 // debug functions
-#ifdef __DEBUG__
+#ifdef __WXDEBUG__
 #define IMPLEMENT_LOG_DEBUG_FUNCTION(level)                       \
   void wxLog##level(const char *szFormat, ...)                    \
   {                                                               \
@@ -291,7 +291,7 @@ void wxLog::DoLog(wxLogLevel level, const char *szString)
 
     case wxLOG_Trace:
     case wxLOG_Debug:
-      #ifdef __DEBUG__
+      #ifdef __WXDEBUG__
         #ifdef  __WIN32__
           // in addition to normal logging, also send the string to debugger
           // (don't prepend "Debug" here: it will go to debug window anyhow)
@@ -448,7 +448,7 @@ void wxLogGui::DoLog(wxLogLevel level, const char *szString)
 
     case wxLOG_Trace:
     case wxLOG_Debug:
-      #ifdef __DEBUG__
+      #ifdef __WXDEBUG__
         #ifdef  __WIN32__
           OutputDebugString(szString);
           OutputDebugString("\n\r");
@@ -809,7 +809,7 @@ const char *wxSysErrorMsg(unsigned long nErrCode)
 // debug helper
 // ----------------------------------------------------------------------------
 
-#ifdef  __DEBUG__
+#ifdef  __WXDEBUG__
 
 // this function is called when an assert fails
 void wxOnAssert(const char *szFile, int nLine, const char *szMsg)
@@ -854,5 +854,5 @@ void wxOnAssert(const char *szFile, int nLine, const char *szMsg)
   }
 }
 
-#endif  //DEBUG
+#endif  //WXDEBUG
 

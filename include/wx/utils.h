@@ -182,7 +182,7 @@ class WXDLLEXPORT wxDebugStreamBuf: public streambuf
     int sync(void);
 };
 
-#if DEBUG && USE_GLOBAL_MEMORY_OPERATORS
+#if WXDEBUG && USE_GLOBAL_MEMORY_OPERATORS
 #define new WXDEBUG_NEW
 #endif
 

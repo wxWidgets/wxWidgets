@@ -161,7 +161,7 @@ bool wxBrush::RealizeResource(void)
         M_BRUSHDATA->m_hBrush = (WXHBRUSH) CreateSolidBrush(ms_colour) ;
         break;
     }
-#ifdef DEBUG_CREATE
+#ifdef WXDEBUG_CREATE
     if (M_BRUSHDATA->m_hBrush==NULL) wxError("Cannot create brush","Internal error") ;
 #endif
     return TRUE;

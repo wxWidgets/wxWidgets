@@ -5660,7 +5660,7 @@ fi
 
 if test "$USE_DEBUG_FLAG" = 1 ; then
   cat >> confdefs.h <<EOF
-#define DEBUG $USE_DEBUG_FLAG
+#define WXDEBUG $USE_DEBUG_FLAG
 EOF
 
 fi

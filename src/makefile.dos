@@ -31,13 +31,13 @@ WXBASEINC = $(WXDIR)\include\base
 FINAL=0
 !endif
 
-!ifndef DEBUG
-DEBUG=0
+!ifndef WXDEBUG
+WXDEBUG=0
 !endif
 
 all:
   cd $(WXDIR)\src\msw
-  nmake -f makefile.dos FINAL=$(FINAL) DEBUG=$(DEBUG)
+  nmake -f makefile.dos FINAL=$(FINAL) WXDEBUG=$(WXDEBUG)
   cd $(THISDIR)
 
 clean:

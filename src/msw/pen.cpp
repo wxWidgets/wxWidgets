@@ -260,7 +260,7 @@ bool wxPen::RealizeResource(void)
 #else
     M_PENDATA->m_hPen = (WXHPEN) CreatePen(wx2msPenStyle(M_PENDATA->m_style), M_PENDATA->m_width, ms_colour);
 #endif
-#ifdef DEBUG_CREATE
+#ifdef WXDEBUG_CREATE
     if (M_PENDATA->m_hPen==0)
       wxError("Cannot create pen","Internal error") ;
 #endif

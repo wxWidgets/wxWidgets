@@ -9,8 +9,8 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef   __DEBUGH__
-#define   __DEBUGH__
+#ifndef   __WXDEBUGH__
+#define   __WXDEBUGH__
 
 #include  <assert.h>
 
@@ -31,7 +31,7 @@
   <BR>
   <BR>
   Extensive use of these macros is recommended! Remember that ASSERTs are
-  disabled in final (without DEBUG defined) build, so they add strictly
+  disabled in final (without WXDEBUG defined) build, so they add strictly
   nothing to your program's code. On the other hand, CHECK macros do stay
   even in release builds, but in general are not much of a burden, while
   a judicious use of them might increase your program's stability.
@@ -43,7 +43,7 @@
 
 /** @name Macros which are completely disabled in 'release' mode */
 //@{
-#ifdef  __DEBUG__
+#ifdef  __WXDEBUG__
   /**
   this function may be redefined to do something non trivial and is called
   whenever one of debugging macros fails (i.e. condition is false in an
@@ -62,7 +62,7 @@
   // no more bugs ;-)
   #define   wxASSERT(cond)
   #define   wxASSERT_MSG(x, m)
-#endif  //DEBUG
+#endif  //WXDEBUG
 
   /// special form of assert: always triggers it (in debug mode)
 #define   wxFAIL                 wxASSERT(0)
@@ -99,5 +99,5 @@
 
 //@}
 
-#endif  // __DEBUGH__
+#endif  // __WXDEBUGH__
 

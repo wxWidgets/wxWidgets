@@ -116,13 +116,13 @@
                                   // NOW MANDATORY: don't change.
 #define USE_MEMORY_TRACING      1
                                   // If 1, enables debugging versions of wxObject::new and
-                                  // wxObject::delete *IF* DEBUG is also defined.
+                                  // wxObject::delete *IF* WXDEBUG is also defined.
                                   // WARNING: this code may not work with all architectures, especially
                                   // if alignment is an issue.
-#define USE_DEBUG_CONTEXT       1
+#define USE_WXDEBUG_CONTEXT       1
                                   // If 1, enables wxDebugContext, for
                                   // writing error messages to file, etc. 
-                                  // If DEBUG is not defined, will still use
+                                  // If WXDEBUG is not defined, will still use
                                   // normal memory operators.
                                   // It's recommended to set this to 1,
                                   // since you may well need to output

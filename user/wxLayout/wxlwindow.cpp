@@ -37,7 +37,7 @@ wxLayoutWindow::OnMouse(wxMouseEvent& event)
    m_FindPos.y = event.GetY();
    m_FoundObject = NULL;
 
-#ifdef   DEBUG
+#ifdef   WXDEBUG
    cerr << "OnMouse: " << m_FindPos.x << ',' << m_FindPos.y << endl;
 #endif
    Refresh();
@@ -90,7 +90,7 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
    case WXK_RETURN:
       m_llist.LineBreak();
       break;
-#ifdef DEBUG   
+#ifdef WXDEBUG   
    case WXK_F1:
       m_llist.Debug();
       break;

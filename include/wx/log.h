@@ -283,7 +283,7 @@ DECLARE_LOG_FUNCTION(SysError);
 void WXDLLEXPORT wxLogSysError(long lErrCode, wxTString strFormat, ...);
 
 // debug functions do nothing in release mode
-#ifdef  __DEBUG__
+#ifdef  __WXDEBUG__
   // NB: debug functions don't translate their arguments
   extern void WXDLLEXPORT wxLogDebug(const char *szFormat, ...);
 
@@ -321,7 +321,7 @@ const char* WXDLLEXPORT wxSysErrorMsg(unsigned long nErrCode = 0);
 // debug only logging functions: use them with API name and error code
 // ----------------------------------------------------------------------------
 
-#ifdef  __DEBUG__
+#ifdef  __WXDEBUG__
   #define wxLogApiError(api, rc)                                              \
                     wxLogDebug("At %s(%d) '%s' failed with error %lx (%s).",  \
                                __FILE__, __LINE__, api,                       \

@@ -29,7 +29,7 @@
 #define   DBG_POINT(p)   cerr << #p << ": " << p.x << ',' << p.y << endl
 #define   TRACE(f)   cerr << #f":" << endl;
 
-#ifdef DEBUG
+#ifdef WXDEBUG
 static const char *_t[] = { "invalid", "text", "cmd", "icon",
                              "linebreak"};
 
@@ -72,12 +72,12 @@ wxLayoutObjectText::Draw(wxDC &dc, wxPoint position, CoordType baseLine,
    position.y += baseLine-m_BaseLine;
    if(draw)
       dc.DrawText(m_Text,position.x,position.y);
-#   ifdef   DEBUG
+#   ifdef   WXDEBUG
 //   dc.DrawRectangle(position.x, position.y, m_Width, m_Height);
 #   endif
 }
 
-#ifdef DEBUG
+#ifdef WXDEBUG
 void
 wxLayoutObjectText::Debug(void)
 {
@@ -397,7 +397,7 @@ wxLayoutList::Draw(wxDC &dc, bool findObject, wxPoint const &findCoords)
    return foundObject;
 }
 
-#ifdef DEBUG
+#ifdef WXDEBUG
 void
 wxLayoutList::Debug(void)
 {
@@ -447,7 +447,7 @@ wxLayoutList::FindObjectCursor(wxPoint const &cpos, CoordType *offset)
    CoordType width;
    wxLayoutObjectList::iterator i;
 
-#ifdef DEBUG
+#ifdef WXDEBUG
    cerr << "Looking for object at " << cpos.x << ',' << cpos.y <<
       endl;
 #endif
@@ -474,14 +474,14 @@ wxLayoutList::FindObjectCursor(wxPoint const &cpos, CoordType *offset)
          if(offset)
             *offset = cpos.x-(cursor.x-width);  // 0==cursor before
          // the object
-#ifdef DEBUG
+#ifdef WXDEBUG
          cerr << "   found object at " << cursor.x-width << ',' <<
             cursor.y << ", type:" << _t[(*i)->GetType()] <<endl;
 #endif   
          return i;
       }
    }
-#ifdef DEBUG
+#ifdef WXDEBUG
    cerr << "   not found" << endl;
 #endif
    return end(); // not found
@@ -569,7 +569,7 @@ wxLayoutList::MoveCursor(int dx, int dy)
    if(m_CursorPosition.x > lineLength)
       m_CursorPosition.x = lineLength;
       
-#ifdef   DEBUG
+#ifdef   WXDEBUG
    i = FindCurrentObject(&offs);
    cerr << "Cursor: "
         << m_CursorPosition.x << ','
@@ -609,7 +609,7 @@ wxLayoutList::Delete(CoordType count)
       i  = FindCurrentObject(&offs);
       if(i == end())
          return;
-#ifdef DEBUG
+#ifdef WXDEBUG
       cerr << "trying to delete: " << _t[(*i)->GetType()] << endl;
 #endif
       if((*i)->GetType() == WXLO_TYPE_LINEBREAK)
@@ -678,7 +678,7 @@ wxLayoutList::Insert(wxLayoutObjectBase *obj)
       if((*i)->GetType() == WXLO_TYPE_TEXT && offs != 0 && offs != (*i)->CountPositions())
       {
          wxLayoutObjectText *tobj = (wxLayoutObjectText *) *i;
-#ifdef DEBUG
+#ifdef WXDEBUG
          cerr << "text: '" << tobj->GetText() << "'" << endl;
          VAR(offs);
 #endif

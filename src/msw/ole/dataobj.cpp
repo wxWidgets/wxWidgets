@@ -357,7 +357,7 @@ wxDataObject::~wxDataObject()
 
 const char *wxDataObject::GetFormatName(wxDataFormat format)
 {
-#ifdef __DEBUG__
+#ifdef __WXDEBUG__
   static char s_szBuf[128];
   switch ( format ) {
     case CF_TEXT:         return "CF_TEXT";

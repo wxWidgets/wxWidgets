@@ -197,7 +197,7 @@ bool wxFont::RealizeResource(void)
     M_FONTDATA->m_hFont = (WXHFONT) CreateFont(nHeight, 0, 0, 0,ff_weight,ff_italic,(BYTE)ff_underline,
                 0, ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
                 PROOF_QUALITY, DEFAULT_PITCH | ff_family, (ff_face == "" ? NULL : (const char *)ff_face));
-#ifdef DEBUG_CREATE
+#ifdef WXDEBUG_CREATE
     if (m_hFont==NULL) wxError("Cannot create font","Internal Error") ;
 #endif
     return (M_FONTDATA->m_hFont != (WXHFONT) NULL);

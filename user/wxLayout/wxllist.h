@@ -16,8 +16,8 @@
 
 #include   <wx/wx.h>
 
-#ifndef   DEBUG
-#   define DEBUG
+#ifndef   WXDEBUG
+#   define WXDEBUG
 #endif
 
 
@@ -52,7 +52,7 @@ public:
 
    wxLayoutObjectBase() { m_UserData = NULL; }
    virtual ~wxLayoutObjectBase() {}
-#ifdef DEBUG
+#ifdef WXDEBUG
    virtual void Debug(void);
 #endif
 
@@ -75,7 +75,7 @@ public:
        align text objects.
    */
    virtual wxPoint GetSize(CoordType *baseLine) const;
-#ifdef DEBUG
+#ifdef WXDEBUG
    virtual void Debug(void);
 #endif
 
@@ -182,7 +182,7 @@ public:
    wxLayoutObjectBase *Draw(wxDC &dc, bool findObject = false,
                        wxPoint const &coords = wxPoint(0,0));
 
-#ifdef DEBUG
+#ifdef WXDEBUG
    void Debug(void);
 #endif
 

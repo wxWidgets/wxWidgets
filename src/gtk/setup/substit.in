@@ -1,7 +1,7 @@
 s|*OS*|@OS@|g
 s|*WXBASEDIR*|@WXBASEDIR@|g
 s|*PROFILE*|@PROFILE@|g
-s|*DEBUG*|@DEBUG@|g
+s|*WXDEBUG*|@WXDEBUG@|g
 s|*OPTIMISE*|@OPTIMISE@|g
 s|*CC*|@CC@|g
 s|*CFLAGS*|@CFLAGS@|g

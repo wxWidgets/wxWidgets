@@ -23,7 +23,7 @@
   info, or to be a straight call to the new operator.
 */
 
-#if (DEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
+#if (WXDEBUG && USE_MEMORY_TRACING) || USE_WXDEBUG_CONTEXT
 
 #include <stddef.h>
 
@@ -39,7 +39,7 @@
 #define WXDEBUG_NEW new(__FILE__,__LINE__)
 #endif
 
-#if DEBUG
+#if WXDEBUG
 void * wxDebugAlloc(size_t size, char * fileName, int lineNum, bool isObject, bool isVect = FALSE);
 void wxDebugFree(void * buf, bool isVect = FALSE);
 
@@ -263,7 +263,7 @@ void WXDLLEXPORT wxTraceLevel(int level, const char *fmt ...);
 #define WXTRACE wxTrace
 #define WXTRACELEVEL wxTraceLevel
 
-#else // else part for the #if DEBUG
+#else // else part for the #if WXDEBUG
 
 inline void wxTrace(const char *WXUNUSED(fmt)) {}
 inline void wxTraceLevel(int WXUNUSED(level), const char *WXUNUSED(fmt)) {}
@@ -272,7 +272,7 @@ inline void wxTraceLevel(int WXUNUSED(level), const char *WXUNUSED(fmt)) {}
 #define WXTRACELEVEL TRUE ? (void)0 : wxTraceLevel
 #define WXDEBUG_NEW new
 
-#endif // DEBUG
+#endif // WXDEBUG
 
 #endif
     // __MEMORYH__

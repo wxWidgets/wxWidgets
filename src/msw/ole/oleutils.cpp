@@ -64,7 +64,7 @@ bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount)
 // Debug support
 // ----------------------------------------------------------------------------
 
-#if defined(__DEBUG__) && defined(_MSC_VER) && (_MSC_VER > 1000)
+#if defined(__WXDEBUG__) && defined(_MSC_VER) && (_MSC_VER > 1000)
 const char *GetIidName(REFIID riid)
 {
   // an association between symbolic name and numeric value of an IID
@@ -186,7 +186,7 @@ void wxLogRelease(const char *szInterface, ULONG cRef)
   wxLogTrace("After %s::Release: m_cRef = %d", szInterface, cRef - 1);
 }
 
-#endif  //DEBUG
+#endif  //WXDEBUG
 
 #endif
   // USE_DRAG_AND_DROP

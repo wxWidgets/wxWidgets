@@ -80,9 +80,9 @@
 #undef GetClassInfo
 #endif
 
-#ifdef  __DEBUG__
+#ifdef  __WXDEBUG__
   static const char *GetMessageName(int message);
-#endif  //DEBUG
+#endif  //WXDEBUG
 
 #define WINDOW_MARGIN 3 // This defines sensitivity of Leave events
 
@@ -866,7 +866,7 @@ LRESULT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 	wxWndHook = NULL;
     wnd->m_hWnd = (WXHWND) hWnd;
   }
-#if (DEBUG > 1)
+#if (WXDEBUG > 1)
   wxDebugMsg("hWnd = %d, m_hWnd = %d, msg = %d\n", hWnd, m_hWnd, message);
 #endif
   // Stop right here if we don't have a valid handle
@@ -900,9 +900,9 @@ LRESULT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 // Main Windows 3 window proc
 long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
-  #ifdef __DEBUG__
+  #ifdef __WXDEBUG__
     wxLogTrace(wxTraceMessages, "Processing %s", GetMessageName(message));
-  #endif // DEBUG
+  #endif // WXDEBUG
 
   HWND hWnd = (HWND)m_hWnd;
 
@@ -1436,7 +1436,7 @@ void wxWindow::MSWDestroyWindow(void)
 {
 #if 0
 
-#if DEBUG > 1
+#if WXDEBUG > 1
   wxDebugMsg("wxWindow::MSWDestroyWindow %d\n", handle);
 #endif
   MSWDetachWindowMenu();
@@ -1541,7 +1541,7 @@ void wxWindow::MSWCreate(int id, wxWindow *parent, const char *wclass, wxWindow 
   wxWndHook = NULL;
   wxWinHandleList->Append((long)m_hWnd, this);
 
-#if DEBUG > 1
+#if WXDEBUG > 1
   wxDebugMsg("wxWindow::MSWCreate %d\n", m_hWnd);
 #endif
 }
@@ -1552,7 +1552,7 @@ void wxWindow::MSWOnCreate(WXLPCREATESTRUCT WXUNUSED(cs))
 
 bool wxWindow::MSWOnClose(void)
 {
-#if DEBUG > 1
+#if WXDEBUG > 1
   wxDebugMsg("wxWindow::MSWOnClose %d\n", handle);
 #endif
   return FALSE;
@@ -1560,7 +1560,7 @@ bool wxWindow::MSWOnClose(void)
 
 bool wxWindow::MSWOnDestroy(void)
 {
-#if DEBUG > 1
+#if WXDEBUG > 1
   wxDebugMsg("wxWindow::MSWOnDestroy %d\n", handle);
 #endif
   // delete our drop target if we've got one
@@ -1621,7 +1621,7 @@ bool wxWindow::MSWOnNotify(WXWPARAM wParam, WXLPARAM lParam)
 
 void wxWindow::MSWOnMenuHighlight(WXWORD WXUNUSED(item), WXWORD WXUNUSED(flags), WXHMENU WXUNUSED(sysmenu))
 {
-#if DEBUG > 1
+#if WXDEBUG > 1
   wxDebugMsg("wxWindow::MSWOnMenuHighlight %d\n", handle);
 #endif
 }
@@ -1632,7 +1632,7 @@ void wxWindow::MSWOnInitMenuPopup(WXHMENU menu, int pos, bool isSystem)
 
 bool wxWindow::MSWOnActivate(int state, bool WXUNUSED(minimized), WXHWND WXUNUSED(activate))
 {
-#if DEBUG > 1
+#if WXDEBUG > 1
   wxDebugMsg("wxWindow::MSWOnActivate %d\n", handle);
 #endif
 
@@ -1645,7 +1645,7 @@ bool wxWindow::MSWOnActivate(int state, bool WXUNUSED(minimized), WXHWND WXUNUSE
 
 bool wxWindow::MSWOnSetFocus(WXHWND WXUNUSED(hwnd))
 {
-#if DEBUG > 1
+#if WXDEBUG > 1
   wxDebugMsg("wxWindow::MSWOnSetFocus %d\n", m_hWnd);
 #endif
     // Deal with caret
@@ -1665,7 +1665,7 @@ bool wxWindow::MSWOnSetFocus(WXHWND WXUNUSED(hwnd))
 
 bool wxWindow::MSWOnKillFocus(WXHWND WXUNUSED(hwnd))
 {
-#if DEBUG > 1
+#if WXDEBUG > 1
   wxDebugMsg("wxWindow::MSWOnKillFocus %d\n", m_hWnd);
 #endif
     // Deal with caret
@@ -1683,7 +1683,7 @@ bool wxWindow::MSWOnKillFocus(WXHWND WXUNUSED(hwnd))
 
 void wxWindow::MSWOnDropFiles(WXWPARAM wParam)
 {
-#if DEBUG > 1
+#if WXDEBUG > 1
   wxDebugMsg("wxWindow::MSWOnDropFiles %d\n", m_hWnd);
 #endif
 
@@ -1776,7 +1776,7 @@ bool wxWindow::MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
 WXHBRUSH wxWindow::MSWOnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
                          WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
-#if DEBUG > 1
+#if WXDEBUG > 1
   wxDebugMsg("wxWindow::MSWOnCtlColour %d\n", m_hWnd);
 #endif
   if (nCtlColor == CTLCOLOR_DLG)
@@ -1852,10 +1852,10 @@ long wxWindow::Default()
     if (m_lastMsg == 0)
         return 0;
 
-    #ifdef __DEBUG__
+    #ifdef __WXDEBUG__
         wxLogTrace(wxTraceMessages, "Forwarding %s to DefWindowProc.",
                   GetMessageName(m_lastMsg));
-    #endif // DEBUG
+    #endif // WXDEBUG
 
     return this->MSWDefWindowProc(m_lastMsg, m_lastWParam, m_lastLParam);
 }
@@ -1930,7 +1930,7 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
 
 long wxWindow::MSWOnMDIActivate(long WXUNUSED(flag), WXHWND WXUNUSED(activate), WXHWND WXUNUSED(deactivate))
 {
-#if DEBUG > 1
+#if WXDEBUG > 1
   wxDebugMsg("wxWindow::MSWOnMDIActivate %d\n", m_hWnd);
 #endif
   return 1;
@@ -1969,7 +1969,7 @@ void wxWindow::MSWOnSize(int w, int h, WXUINT WXUNUSED(flag))
   if (m_inOnSize)
     return;
     
-#if DEBUG > 1
+#if WXDEBUG > 1
   wxDebugMsg("wxWindow::MSWOnSize %d\n", m_hWnd);
 #endif
   if (!m_hWnd)
@@ -1993,7 +1993,7 @@ void wxWindow::MSWOnWindowPosChanging(void *WXUNUSED(lpPos))
 // Deal with child commands from buttons etc.
 bool wxWindow::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND WXUNUSED(control))
 {
-#if DEBUG > 1
+#if WXDEBUG > 1
   wxDebugMsg("wxWindow::MSWOnCommand\n");
 #endif
   if (wxCurrentPopupMenu)
@@ -2003,7 +2003,7 @@ bool wxWindow::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND WXUNUSED(control))
     bool succ = popupMenu->MSWCommand(cmd, id);
     return succ;
   }
-#if DEBUG > 1
+#if WXDEBUG > 1
   char buf[80];
   sprintf(buf, "Looking for item %d...\n", id);
   wxDebugMsg(buf);
@@ -2013,7 +2013,7 @@ bool wxWindow::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND WXUNUSED(control))
   if (item)
   {
     bool value = item->MSWCommand(cmd, id);
-#if DEBUG > 1
+#if WXDEBUG > 1
     if (value)
       wxDebugMsg("MSWCommand succeeded\n");
     else
@@ -2023,7 +2023,7 @@ bool wxWindow::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND WXUNUSED(control))
   }
   else
   {
-#if DEBUG > 1
+#if WXDEBUG > 1
     wxDebugMsg("Could not find item!\n");
     char buf[100];
     wxDebugMsg("Item ids for this panel:\n");
@@ -2642,7 +2642,7 @@ void wxGetCharSize(WXHWND wnd, int *x, int *y,wxFont *the_font)
   HFONT was = 0;
   if (the_font)
   {
-#if DEBUG > 1
+#if WXDEBUG > 1
     wxDebugMsg("wxGetCharSize: Selecting HFONT %X\n", fnt);
 #endif
 //    the_font->UseResource();
@@ -2653,7 +2653,7 @@ void wxGetCharSize(WXHWND wnd, int *x, int *y,wxFont *the_font)
   GetTextMetrics(dc, &tm);
   if (the_font && fnt && was)
   {
-#if DEBUG > 1
+#if WXDEBUG > 1
     wxDebugMsg("wxGetCharSize: Selecting old HFONT %X\n", was);
 #endif
     SelectObject(dc,was) ;
@@ -4518,7 +4518,7 @@ bool wxWindow::AcceptsFocus() const
   return IsShown() && IsEnabled();
 }
 
-#ifdef __DEBUG__
+#ifdef __WXDEBUG__
 static const char *GetMessageName(int message)
 {
   switch ( message ) {
@@ -4659,4 +4659,4 @@ static const char *GetMessageName(int message)
       return s_szBuf;
   }
 }
-#endif //DEBUG
+#endif //WXDEBUG

@@ -27,8 +27,8 @@
 
 #include "wx/date.h"
 
-#if !DEBUG
-#error You must set DEBUG to 1 on the 'make' command line or make.env.
+#if !WXDEBUG
+#error You must set WXDEBUG to 1 on the 'make' command line or make.env.
 #endif
 
 #define new WXDEBUG_NEW

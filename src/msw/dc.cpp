@@ -130,14 +130,14 @@ wxDC::~wxDC(void)
 // DC.
 void wxDC::SelectOldObjects(WXHDC dc)
 {
-#if DEBUG > 1
+#if WXDEBUG > 1
   wxDebugMsg("wxDC::SelectOldObjects %X\n", this);
 #endif
   if (dc)
   {
     if (m_oldBitmap)
     {
-#if DEBUG > 1
+#if WXDEBUG > 1
       wxDebugMsg("wxDC::SelectOldObjects: Selecting old HBITMAP %X\n", m_oldBitmap);
 #endif
       ::SelectObject((HDC) dc, (HBITMAP) m_oldBitmap);
@@ -149,7 +149,7 @@ void wxDC::SelectOldObjects(WXHDC dc)
     m_oldBitmap = 0 ;
     if (m_oldPen)
     {
-#if DEBUG > 1
+#if WXDEBUG > 1
       wxDebugMsg("wxDC::SelectOldObjects: Selecting old HPEN %X\n", m_oldPen);
 #endif
       ::SelectObject((HDC) dc, (HPEN) m_oldPen);
@@ -157,7 +157,7 @@ void wxDC::SelectOldObjects(WXHDC dc)
     m_oldPen = 0 ;
     if (m_oldBrush)
     {
-#if DEBUG > 1
+#if WXDEBUG > 1
       wxDebugMsg("wxDC::SelectOldObjects: Selecting old HBRUSH %X\n", m_oldBrush);
 #endif
       ::SelectObject((HDC) dc, (HBRUSH) m_oldBrush);
@@ -165,7 +165,7 @@ void wxDC::SelectOldObjects(WXHDC dc)
     m_oldBrush = 0 ;
     if (m_oldFont)
     {
-#if DEBUG > 1
+#if WXDEBUG > 1
       wxDebugMsg("wxDC::SelectOldObjects: Selecting old HFONT %X\n", m_oldFont);
 #endif
       ::SelectObject((HDC) dc, (HFONT) m_oldFont);
@@ -173,12 +173,12 @@ void wxDC::SelectOldObjects(WXHDC dc)
     m_oldFont = 0 ;
     if (m_oldPalette)
     {
-#if DEBUG > 1
+#if WXDEBUG > 1
       wxDebugMsg("wxDC::SelectOldObjects: Selecting old HPALETTE %X\n", m_oldPalette);
 #endif
       ::SelectPalette((HDC) dc, (HPALETTE) m_oldPalette, TRUE);
     }
-#if DEBUG > 1
+#if WXDEBUG > 1
     wxDebugMsg("wxDC::SelectOldObjects: Done.\n");
 #endif
     m_oldPalette = 0 ;
@@ -217,11 +217,11 @@ void wxDC::DestroyClippingRegion(void)
   if (m_clipping && m_hDC)
   {
     HRGN rgn = CreateRectRgn(0, 0, 32000, 32000);
-#if DEBUG > 1
+#if WXDEBUG > 1
     wxDebugMsg("wxDC::DestroyClippingRegion: Selecting HRGN %X\n", rgn);
 #endif
     SelectClipRgn((HDC) m_hDC, rgn);
-#if DEBUG > 1
+#if WXDEBUG > 1
     wxDebugMsg("wxDC::DestroyClippingRegion: Deleting HRGN %X\n", rgn);
 #endif
     DeleteObject(rgn);
@@ -267,7 +267,7 @@ void wxDC::SetPalette(const wxPalette& palette)
     if (m_oldPalette)
     {
       ::SelectPalette((HDC) m_hDC, (HPALETTE) m_oldPalette, TRUE);
-#if DEBUG > 1
+#if WXDEBUG > 1
       wxDebugMsg("wxDC::SetPalette: set old palette %X\n", m_oldPalette);
 #endif
       m_oldPalette = 0;
@@ -282,7 +282,7 @@ void wxDC::SetPalette(const wxPalette& palette)
     if (!m_oldPalette)
       m_oldPalette = (WXHPALETTE) oldPal;
 
-#if DEBUG > 1
+#if WXDEBUG > 1
     wxDebugMsg("wxDC::SetPalette %X: selected palette %X\n", this, m_palette.GetHPALETTE());
     if (oldPal)
       wxDebugMsg("wxDC::SetPalette: oldPal was palette %X\n", oldPal);
@@ -639,7 +639,7 @@ void wxDC::SetFont(const wxFont& the_font)
 
   if (m_font.Ok() && m_font.GetResourceHandle())
   {
-#if DEBUG > 1
+#if WXDEBUG > 1
     wxDebugMsg("wxDC::SetFont: Selecting HFONT %X\n", m_font.GetResourceHandle());
 #endif
     HFONT f = (HFONT) ::SelectObject((HDC) m_hDC, (HFONT) m_font.GetResourceHandle());
@@ -713,7 +713,7 @@ void wxDC::DrawText(const wxString& text, long x, long y, bool use16bit)
 {
   if (m_font.Ok() && m_font.GetResourceHandle())
   {
-#if DEBUG > 1
+#if WXDEBUG > 1
     wxDebugMsg("wxDC::DrawText: Selecting HFONT %X\n", m_font.GetResourceHandle());
 #endif
     HFONT f = (HFONT) ::SelectObject((HDC) m_hDC, (HFONT) m_font.GetResourceHandle());

@@ -121,7 +121,7 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
 
   m_windowMenu = (WXHMENU) ::LoadMenu(wxGetInstance(), "wxWindowMenu");
 
-#if DEBUG > 1
+#if WXDEBUG > 1
   wxDebugMsg("Loaded m_windowMenu %d\n", m_windowMenu);
 #endif
 
@@ -514,7 +514,7 @@ bool wxMDIParentFrame::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control)
      }
     if (id >= 0xF000)
     {
-#if DEBUG > 1
+#if WXDEBUG > 1
       wxDebugMsg("wxMDIFrame::OnCommand %d: system command: calling default window proc\n", GetHWND());
 #endif
       return FALSE; // Get WndProc to call default proc
@@ -527,7 +527,7 @@ bool wxMDIParentFrame::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control)
     }
     else if (m_currentChild && (id < wxFIRST_MDI_CHILD || id > wxLAST_MDI_CHILD))
     {
-#if DEBUG > 1
+#if WXDEBUG > 1
       wxDebugMsg("wxMDIFrame::MSWOnCommand %d: calling child OnCommand\n", GetHWND());
 #endif
       return m_currentChild->MSWOnCommand(id, cmd, control);
@@ -883,7 +883,7 @@ void wxMDIChildFrame::MSWOnSize(int x, int y, WXUINT id)
 
   if (invalidHandle == (HWND) GetHWND())
   {
-#if DEBUG > 1
+#if WXDEBUG > 1
   wxDebugMsg("wxMDIChildFrame::OnSize %d: invalid, so returning.\n", GetHWND());
 #endif
     return;
@@ -923,7 +923,7 @@ void wxMDIChildFrame::MSWOnSize(int x, int y, WXUINT id)
 
 bool wxMDIChildFrame::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control)
 {
-#if DEBUG > 1
+#if WXDEBUG > 1
   wxDebugMsg("wxMDIChildFrame::MSWOnCommand %d\n", GetHWND());
 #endif
   if ((cmd == 0) && GetHWND())
@@ -969,11 +969,11 @@ long wxMDIChildFrame::MSWOnMDIActivate(long activate, WXHWND WXUNUSED(one), WXHW
 {
   wxMDIParentFrame *parent = (wxMDIParentFrame *)GetParent();
   HMENU parent_menu = (HMENU) parent->GetWinMenu();
-#if DEBUG > 1
+#if WXDEBUG > 1
   wxDebugMsg("Parent menu is %d\n", parent_menu);
 #endif
   HMENU child_menu = (HMENU) GetWinMenu();
-#if DEBUG > 1
+#if WXDEBUG > 1
   wxDebugMsg("Child menu is %d\n", child_menu);
 #endif
 
@@ -985,7 +985,7 @@ long wxMDIChildFrame::MSWOnMDIActivate(long activate, WXHWND WXUNUSED(one), WXHW
     {
       parent->m_parentFrameActive = FALSE;
       HMENU subMenu = GetSubMenu((HMENU) parent->GetWindowMenu(), 0);
-#if DEBUG > 1
+#if WXDEBUG > 1
       wxDebugMsg("Window submenu is %d\n", subMenu);
 #endif
 //      HMENU subMenu = 0;
@@ -1018,7 +1018,7 @@ long wxMDIChildFrame::MSWOnMDIActivate(long activate, WXHWND WXUNUSED(one), WXHW
     {
       parent->m_parentFrameActive = TRUE;
       HMENU subMenu = GetSubMenu((HMENU) parent->GetWindowMenu(), 0);
-#if DEBUG > 1
+#if WXDEBUG > 1
       wxDebugMsg("Window submenu is %d\n", subMenu);
 #endif
 //      HMENU subMenu = 0;
@@ -1039,7 +1039,7 @@ long wxMDIChildFrame::MSWOnMDIActivate(long activate, WXHWND WXUNUSED(one), WXHW
   event.SetEventObject( this );
   GetEventHandler()->ProcessEvent(event);
 
-#if DEBUG > 1
+#if WXDEBUG > 1
   wxDebugMsg("Finished (de)activating\n");
 #endif
   return 0;
@@ -1058,7 +1058,7 @@ void wxMDIChildFrame::MSWDestroyWindow(void)
   // destroyed.
 
   HWND oldHandle = (HWND)GetHWND();
-#if DEBUG > 1
+#if WXDEBUG > 1
   wxDebugMsg("*** About to DestroyWindow MDI child %d\n", oldHandle);
 #endif
 #ifdef __WIN32__
@@ -1066,7 +1066,7 @@ void wxMDIChildFrame::MSWDestroyWindow(void)
 #else
   SendMessage((HWND) parent->GetClientWindow()->GetHWND(), WM_MDIDESTROY, (HWND)oldHandle, 0);
 #endif
-#if DEBUG > 1
+#if WXDEBUG > 1
   wxDebugMsg("*** Finished DestroyWindow MDI child %d\n", oldHandle);
 #endif
   invalidHandle = 0;

@@ -121,7 +121,7 @@ bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount);
 // Debugging support
 // ============================================================================
 
-#if defined(__DEBUG__) && defined(_MSC_VER) && (_MSC_VER > 1000)
+#if defined(__WXDEBUG__) && defined(_MSC_VER) && (_MSC_VER > 1000)
 // ----------------------------------------------------------------------------
 // 
 // ----------------------------------------------------------------------------
@@ -137,10 +137,10 @@ void wxLogQueryInterface(const char *szInterface, REFIID riid);
 void wxLogAddRef (const char *szInterface, ULONG cRef);
 void wxLogRelease(const char *szInterface, ULONG cRef);
 
-#else   //!DEBUG
+#else   //!WXDEBUG
   #define   wxLogQueryInterface(szInterface, riid)
   #define   wxLogAddRef(szInterface, cRef)
   #define   wxLogRelease(szInterface, cRef)
-#endif  //DEBUG
+#endif  //WXDEBUG
 
 #endif  //_OLEUTILS_H
