@@ -94,8 +94,7 @@ public:
   void SetLogicalFunction( int function );
   void SetBackground( const wxBrush& brush );
 
-  void SetClippingRegion(long x, long y, long width, long height);
-  void SetClippingRegion( const wxRegion &region );
+  void DoSetClippingRegion(long x, long y, long width, long height);
   void DestroyClippingRegion();
 
   void DoSetClippingRegionAsRegion( const wxRegion &WXUNUSED(clip) ) {}

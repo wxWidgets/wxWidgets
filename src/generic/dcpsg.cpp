@@ -387,13 +387,13 @@ bool wxPostScriptDC::PrinterDialog(wxWindow *parent)
     return m_ok;
 }
 
-void wxPostScriptDC::SetClippingRegion (long x, long y, long w, long h)
+void wxPostScriptDC::DoSetClippingRegion (long x, long y, long w, long h)
 {
     wxCHECK_RET( m_ok && m_pstream, wxT("invalid postscript dc") );
 
-    if (m_clipping) return;
+    if (m_clipping) DestroyClippingRegion();
 
-    wxDC::SetClippingRegion( x, y, w, h );
+    wxDC::DoSetClippingRegion(x, y, w, h);
 
     m_clipping = TRUE;
     fprintf( m_pstream, 
@@ -409,22 +409,18 @@ void wxPostScriptDC::SetClippingRegion (long x, long y, long w, long h)
 	    XLOG2DEV(x),   YLOG2DEV(y+h) );
 }
 
-void wxPostScriptDC::SetClippingRegion( const wxRegion &WXUNUSED(region) )
-{
-    wxFAIL_MSG( wxT("wxPostScriptDC::SetClippingRegion not implemented.") );
-}
 
 void wxPostScriptDC::DestroyClippingRegion()
 {
     wxCHECK_RET( m_ok && m_pstream, wxT("invalid postscript dc") );
-
-    wxDC::DestroyClippingRegion();
 
     if (m_clipping)
     {
         m_clipping = FALSE;
 	fprintf( m_pstream, "grestore\n" );
     }
+    
+    wxDC::DestroyClippingRegion();
 }
 
 void wxPostScriptDC::Clear()
