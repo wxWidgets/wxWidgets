@@ -4,7 +4,7 @@
 //              as a basic visual element of HTML page
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$
-// Copyright:   (c) 1999 Vaclav Slavik
+// Copyright:   (c) 1999-2003 Vaclav Slavik
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -38,6 +38,7 @@ class WXDLLEXPORT wxHtmlSelection
 public:
     wxHtmlSelection() 
         : m_fromPos(wxDefaultPosition), m_toPos(wxDefaultPosition),
+          m_fromPrivPos(wxDefaultPosition), m_toPrivPos(wxDefaultPosition),
           m_fromCell(NULL), m_toCell(NULL) {}
 
     void Set(const wxPoint& fromPos, wxHtmlCell *fromCell,
@@ -47,16 +48,23 @@ public:
     const wxHtmlCell *GetFromCell() const { return m_fromCell; }
     const wxHtmlCell *GetToCell() const { return m_toCell; }
     
-    // these values are *relative* to From/To cell's origin:
+    // these values are in absolute coordinates:
     const wxPoint& GetFromPos() const { return m_fromPos; }
     const wxPoint& GetToPos() const { return m_toPos; }
+    
+    // these are From/ToCell's private data
+    const wxPoint& GetFromPrivPos() const { return m_fromPrivPos; }
+    const wxPoint& GetToPrivPos() const { return m_toPrivPos; }
+    void SetFromPrivPos(const wxPoint& pos) { m_fromPrivPos = pos; }
+    void SetToPrivPos(const wxPoint& pos) { m_toPrivPos = pos; }
 
     const bool IsEmpty() const 
         { return m_fromPos == wxDefaultPosition && 
                  m_toPos == wxDefaultPosition; }
 
 private:
-    wxPoint     m_fromPos,   m_toPos;
+    wxPoint m_fromPos, m_toPos;
+    wxPoint m_fromPrivPos, m_toPrivPos;
     wxHtmlCell *m_fromCell, *m_toCell;
 };
 
@@ -91,7 +99,7 @@ private:
 
 
 // HTML rendering customization. This class is used when rendering wxHtmlCells
-// as a callback .
+// as a callback:
 class WXDLLEXPORT wxHtmlRenderingStyle
 {
 public:
@@ -99,6 +107,7 @@ public:
     virtual wxColour GetSelectedTextBgColour(const wxColour& clr) = 0;
 };
 
+// Standard style:
 class WXDLLEXPORT wxDefaultHtmlRenderingStyle : public wxHtmlRenderingStyle
 {
 public:
@@ -275,6 +284,9 @@ public:
     // then both A.IsBefore(B) and B.IsBefore(A) always return true.
     bool IsBefore(wxHtmlCell *cell) const;
 
+    // Sets cell's private position values in wxHtmlSelection
+    virtual void SetSelectionPrivPos(wxDC& dc, wxHtmlSelection *s) const {}
+
     // Converts the cell into text representation. If sel != NULL then
     // only part of the cell inside the selection is converted.
     virtual wxString ConvertToText(wxHtmlSelection *WXUNUSED(sel)) const
@@ -320,12 +332,12 @@ public:
     void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
               wxHtmlRenderingInfo& info);
     wxString ConvertToText(wxHtmlSelection *sel) const;
+    void SetSelectionPrivPos(wxDC& dc, wxHtmlSelection *s) const;
 
 protected:
     void Split(wxDC& dc,
                const wxPoint& selFrom, const wxPoint& selTo,
-               wxString& s1, wxString& s2, wxString& s3,
-               unsigned& pos1, unsigned& pos2);
+               unsigned& pos1, unsigned& pos2) const;
     
     wxString m_Word;
 };
