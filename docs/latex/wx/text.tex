@@ -83,6 +83,11 @@ when the text controls contents changes - whether this is due to user input or
 comes from the program itself (for example, if SetValue() is called)}
 \twocolitem{{\bf EVT\_TEXT\_ENTER(id, func)}}{Respond to a wxEVT\_COMMAND\_TEXT\_ENTER event,
 generated when enter is pressed in a single-line text control.}
+\twocolitem{{\bf EVT\_TEXT\_URL(id, func)}}{A mouse event occured over an URL
+in the text control (Win32 only)}
+\twocolitem{{\bf EVT\_TEXT\_MAXLEN(id, func)}}{User tried to enter more text
+into the control than the limit set by 
+\helpref{SetMaxLength}{wxtextctrlsetmaxlength}.}
 \end{twocollist}%
 
 %\wxheading{See also}
