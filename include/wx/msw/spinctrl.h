@@ -58,8 +58,9 @@ public:
     // -------------------------------
 
     virtual void SetValue(int val) { wxSpinButton::SetValue(val); }
-    virtual int GetValue() const;
+    virtual int  GetValue() const;
     virtual bool SetFont(const wxFont &font);
+    virtual void SetFocus();
 
     virtual bool Enable(bool enable = TRUE);
     virtual bool Show(bool show = TRUE);
@@ -67,7 +68,6 @@ public:
 protected:
     virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual wxSize DoGetBestSize() const;
-    virtual void SetFocus();
 
     // the handler for wxSpinButton events
     void OnSpinChange(wxSpinEvent& event);
