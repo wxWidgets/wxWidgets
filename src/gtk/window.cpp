@@ -1730,7 +1730,7 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEventFocus *gdk
         //     always) and makes using Mahogany quite annoying
 #if 0
         wxASSERT_MSG( wxGetTopLevelParent(win) == g_activeFrame,
-                        wxT("unfocusing window that hasn't gained focus properly") )
+                        wxT("unfocusing window that hasn't gained focus properly") );
 #endif // 0
 
         g_activeFrameLostFocus = TRUE;

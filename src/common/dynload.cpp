@@ -433,7 +433,7 @@ void wxPluginLibrary::RestoreClassInfo()
         info = wxClassInfo::sm_first;
         while( info->m_next && info->m_next != m_after ) info = info->m_next;
 
-        wxASSERT_MSG( info, _T("ClassInfo from wxPluginLibrary not found on purge"))
+        wxASSERT_MSG( info, _T("ClassInfo from wxPluginLibrary not found on purge"));
 
         info->m_next = m_before;
     }

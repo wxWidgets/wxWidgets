@@ -52,7 +52,7 @@ protected:
 
 void wxUnknownControlContainer::AddChild(wxWindowBase *child)
 {
-    wxASSERT_MSG( !m_controlAdded, wxT("Couldn't add two unknown controls to the same container!") )
+    wxASSERT_MSG( !m_controlAdded, wxT("Couldn't add two unknown controls to the same container!") );
 
     wxPanel::AddChild(child);
 

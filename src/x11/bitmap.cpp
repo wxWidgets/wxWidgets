@@ -370,7 +370,7 @@ bool wxBitmap::CreateFromXpm( const char **bits )
         XGetGeometry( xdisplay, pixmap, &xroot, &xRet, &yRet,
             &widthRet, &heightRet, &borderWidthRet, &depthRet);
 
-        wxASSERT_MSG( bpp == (int)depthRet, wxT("colour depth mismatch") )
+        wxASSERT_MSG( bpp == (int)depthRet, wxT("colour depth mismatch") );
 #endif
 
         XpmFreeAttributes(&xpmAttr);

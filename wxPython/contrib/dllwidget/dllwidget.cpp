@@ -49,7 +49,7 @@ wxDllWidget::~wxDllWidget()
 
 void wxDllWidget::AddChild(wxWindowBase *child)
 {
-    wxASSERT_MSG( !m_controlAdded, wxT("Couldn't load two widgets into one container!") )
+    wxASSERT_MSG( !m_controlAdded, wxT("Couldn't load two widgets into one container!") );
 
     wxPanel::AddChild(child);
 
