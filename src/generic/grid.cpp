@@ -5127,12 +5127,6 @@ bool wxGrid::SendEvent( const wxEventType type,
 void wxGrid::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
     wxPaintDC dc(this);  // needed to prevent zillions of paint events on MSW
-
-    CalcDimensions();
-    m_rowLabelWin->Refresh();
-    m_colLabelWin->Refresh();
-    m_cornerLabelWin->Refresh();
-    m_gridWin->Refresh();
 }
 
 
@@ -5928,6 +5922,24 @@ void wxGrid::GetTextBoxSize( wxDC& dc,
     *height = h;
 }
 
+//
+// ------ Batch processing.
+//
+void wxGrid::EndBatch()
+{
+    if ( m_batchCount > 0 )
+    {
+	m_batchCount--;
+	if ( !m_batchCount )
+	{
+	    CalcDimensions();
+	    m_rowLabelWin->Refresh();
+	    m_colLabelWin->Refresh();
+	    m_cornerLabelWin->Refresh();
+	    m_gridWin->Refresh();
+	}
+    }
+}
 
 //
 // ------ Edit control functions
