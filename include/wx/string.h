@@ -604,27 +604,9 @@ public:
 
 #endif // !wxUSE_STL
 
-// ---------------------------------------------------------------------------
-// This is (yet another one) String class for C++ programmers. It doesn't use
-// any of "advanced" C++ features (i.e. templates, exceptions, namespaces...)
-// thus you should be able to compile it with practicaly any C++ compiler.
-// This class uses copy-on-write technique, i.e. identical strings share the
-// same memory as long as neither of them is changed.
-//
-// This class aims to be as compatible as possible with the new standard
-// std::string class, but adds some additional functions and should be at
-// least as efficient than the standard implementation.
-//
-// Performance note: it's more efficient to write functions which take "const
-// String&" arguments than "const char *" if you assign the argument to
-// another string.
-//
-// It was compiled and tested under Win32, Linux (libc 5 & 6), Solaris 5.5.
-//
-// To do:
-//  - ressource support (string tables in ressources)
-//  - more wide character (UNICODE) support
-//  - regular expressions support
+// ----------------------------------------------------------------------------
+// wxString: string class trying to be compatible with std::string, MFC
+//           CString and wxWindows 1.x wxString all at once
 // ---------------------------------------------------------------------------
 
 class WXDLLIMPEXP_BASE wxString : public wxStringBase
@@ -1409,46 +1391,10 @@ private:
 // wxString comparison functions: operator versions are always case sensitive
 // ---------------------------------------------------------------------------
 
-#if wxUSE_STL
-
-inline bool operator==(const wxString& s1, const wxString& s2)
-    { return s1.compare(s2) == 0; }
-inline bool operator==(const wxString& s1, const wxChar  * s2)
-    { return s1.compare(s2) == 0; }
-inline bool operator==(const wxChar  * s1, const wxString& s2)
-    { return s2.compare(s1) == 0; }
-inline bool operator!=(const wxString& s1, const wxString& s2)
-    { return s1.compare(s2) != 0; }
-inline bool operator!=(const wxString& s1, const wxChar  * s2)
-    { return s1.compare(s2) != 0; }
-inline bool operator!=(const wxChar  * s1, const wxString& s2)
-    { return s2.compare(s1) != 0; }
-inline bool operator< (const wxString& s1, const wxString& s2)
-    { return s1.compare(s2) <  0; }
-inline bool operator< (const wxString& s1, const wxChar  * s2)
-    { return s1.compare(s2) <  0; }
-inline bool operator< (const wxChar  * s1, const wxString& s2)
-    { return s2.compare(s1) >  0; }
-inline bool operator> (const wxString& s1, const wxString& s2)
-    { return s1.compare(s2) >  0; }
-inline bool operator> (const wxString& s1, const wxChar  * s2)
-    { return s1.compare(s2) >  0; }
-inline bool operator> (const wxChar  * s1, const wxString& s2)
-    { return s2.compare(s1) <  0; }
-inline bool operator<=(const wxString& s1, const wxString& s2)
-    { return s1.compare(s2) <= 0; }
-inline bool operator<=(const wxString& s1, const wxChar  * s2)
-    { return s1.compare(s2) <= 0; }
-inline bool operator<=(const wxChar  * s1, const wxString& s2)
-    { return s2.compare(s1) >= 0; }
-inline bool operator>=(const wxString& s1, const wxString& s2)
-    { return s1.compare(s2) >= 0; }
-inline bool operator>=(const wxString& s1, const wxChar  * s2)
-    { return s1.compare(s2) >= 0; }
-inline bool operator>=(const wxChar  * s1, const wxString& s2)
-    { return s2.compare(s1) <= 0; }
-
-#else // if !wxUSE_STL
+// note that when wxUSE_STL == 1 the comparison operators taking std::string
+// are used and defining them also for wxString would only result in
+// compilation ambiguities when comparing std::string and wxString
+#if !wxUSE_STL
 
 inline bool operator==(const wxString& s1, const wxString& s2)
     { return (s1.Len() == s2.Len()) && (s1.Cmp(s2) == 0); }
