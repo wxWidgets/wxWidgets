@@ -40,8 +40,15 @@
 #include "wx/module.h"
 
 #if wxUSE_THREADS
-#include "wx/thread.h"
-#endif
+    #include "wx/thread.h"
+
+    // define the array of MSG strutures
+    WX_DECLARE_OBJARRAY(MSG, wxMsgArray);
+
+    #include "wx/arrimpl.cpp"
+
+    WX_DEFINE_OBJARRAY(wxMsgArray);
+#endif // wxUSE_THREADS
 
 #if wxUSE_WX_RESOURCES
   #include "wx/resource.h"
@@ -736,24 +743,82 @@ bool wxApp::Initialized()
 
 /*
  * Get and process a message, returning FALSE if WM_QUIT
- * received.
+ * received (and also set the flag telling the app to exit the main loop)
  *
  */
 bool wxApp::DoMessage()
 {
-  if (!::GetMessage(&s_currentMsg, (HWND) NULL, 0, 0))
-  {
-    return FALSE;
-  }
+    BOOL rc = ::GetMessage(&s_currentMsg, (HWND) NULL, 0, 0);
+    if ( rc == 0 )
+    {
+        // got WM_QUIT
+        m_keepGoing = FALSE;
+        
+        return FALSE;
+    }
+    else if ( rc == -1 )
+    {
+        // should never happen, but let's test for it nevertheless
+        wxLogLastError("GetMessage");
+    }
+    else
+    {
+#if wxUSE_THREADS
+        wxASSERT_MSG( wxThread::IsMain(),
+                      "only the main thread can process Windows messages" );
 
-  // Process the message
-  if (!ProcessMessage((WXMSG *)&s_currentMsg))
-  {
-    ::TranslateMessage(&s_currentMsg);
-    wxApp::sm_lastMessageTime = s_currentMsg.time; /* MATTHEW: timeStamp impl. */
-    ::DispatchMessage(&s_currentMsg);
-  }
-  return TRUE;
+        static bool s_hadGuiLock = TRUE;
+        static wxMsgArray s_aSavedMessages;
+
+        // if a secondary thread owns is doing GUI calls, save all messages for
+        // later processing - we can't process them right now because it will
+        // lead to recursive library calls (and we're not reentrant)
+        if ( !wxGuiOwnedByMainThread() )
+        {
+            s_hadGuiLock = FALSE;
+
+            s_aSavedMessages.Add(s_currentMsg);
+
+            return TRUE;
+        }
+        else
+        {
+            // have we just regained the GUI lock? if so, post all of the saved
+            // messages
+            //
+            // FIXME of course, it's not _exactly_ the same as processing the
+            //       messages normally - expect some things to break...
+            if ( !s_hadGuiLock )
+            {
+                s_hadGuiLock = TRUE;
+
+                size_t count = s_aSavedMessages.Count();
+                for ( size_t n = 0; n < count; n++ )
+                {
+                    MSG& msg = s_aSavedMessages[n];
+
+                    if ( !ProcessMessage((WXMSG *)&msg) )
+                    {
+                        ::TranslateMessage(&msg);
+                        ::DispatchMessage(&msg);
+                    }
+                }
+
+                s_aSavedMessages.Empty();
+            }
+        }
+#endif // wxUSE_THREADS
+
+        // Process the message
+        if ( !ProcessMessage((WXMSG *)&s_currentMsg) )
+        {
+            ::TranslateMessage(&s_currentMsg);
+            wxApp::sm_lastMessageTime = s_currentMsg.time; /* MATTHEW: timeStamp impl. */
+            ::DispatchMessage(&s_currentMsg);
+        }
+    }
+
+    return TRUE;
 }
 
 /*
@@ -773,12 +838,19 @@ bool wxApp::DoMessage()
 int wxApp::MainLoop()
 {
   m_keepGoing = TRUE;
-  while (m_keepGoing)
+
+  while ( m_keepGoing )
   {
-    while (!::PeekMessage(&s_currentMsg, 0, 0, 0, PM_NOREMOVE) &&
-           ProcessIdle()) {}
-    if (!DoMessage())
-      m_keepGoing = FALSE;
+    #if wxUSE_THREADS
+        wxMutexGuiLeaveOrEnter();
+    #endif // wxUSE_THREADS
+
+    while ( !::PeekMessage(&s_currentMsg, 0, 0, 0, PM_NOREMOVE) &&
+            ProcessIdle() )
+    {
+    }
+
+    DoMessage();
   }
 
   return s_currentMsg.wParam;
@@ -806,8 +878,7 @@ bool wxApp::Pending()
 
 void wxApp::Dispatch()
 {
-    if (!DoMessage())
-      m_keepGoing = FALSE;
+    DoMessage();
 }
 
 /*
@@ -871,12 +942,6 @@ void wxApp::OnIdle(wxIdleEvent& event)
         // idle events
         event.RequestMore(TRUE);
     }
-#if wxUSE_THREADS
-    // give a chance to all other threads to perform GUI calls
-    wxMutexGuiLeave();
-    ::Sleep(0);
-    wxMutexGuiEnter();
-#endif
 
     s_inOnIdle = FALSE;
 }
@@ -1029,7 +1094,7 @@ bool wxYield()
   // if we see a WM_QUIT. (?)
   while (PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE) && msg.message != WM_QUIT)
   {
-    if (!wxTheApp->DoMessage())
+    if ( !wxTheApp->DoMessage() )
       break;
   }
 

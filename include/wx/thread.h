@@ -139,13 +139,13 @@ private:
 class WXDLLEXPORT wxCriticalSectionLocker
 {
 public:
-    wxCriticalSectionLocker(wxCriticalSection *critsect)
-        { (m_critsect = critsect)->Enter(); }
+    wxCriticalSectionLocker(wxCriticalSection& critsect) : m_critsect(critsect)
+        { m_critsect.Enter(); }
     ~wxCriticalSectionLocker()
-        { m_critsect->Leave(); }
+        { m_critsect.Leave(); }
 
 private:
-    wxCriticalSection *m_critsect;
+    wxCriticalSection& m_critsect;
 };
 
 #endif
@@ -253,6 +253,20 @@ private:
 void WXDLLEXPORT wxMutexGuiEnter();
 void WXDLLEXPORT wxMutexGuiLeave();
 
+// implementation only
+#ifdef __WXMSW__
+    // unlock GUI if there are threads waiting for and lock it back when
+    // there are no more of them - should be called periodically by the main
+    // thread
+    void WXDLLEXPORT wxMutexGuiLeaveOrEnter();
+
+    // returns TRUE if the main thread has GUI lock
+    inline bool WXDLLEXPORT wxGuiOwnedByMainThread();
+
+    // wakes up the main thread if it's sleeping inside ::GetMessage()
+    inline void WXDLLEXPORT wxWakeUpMainThread();
+#endif // MSW
+
 #else // !wxUSE_THREADS
 
 // no thread support
@@ -260,5 +274,13 @@ inline void WXDLLEXPORT wxMutexGuiEnter() { }
 inline void WXDLLEXPORT wxMutexGuiLeave() { }
 
 #endif // wxUSE_THREADS
+
+// automatically unlock GUI mutex in dtor
+class WXDLLEXPORT wxMutexGuiLocker
+{
+public:
+    wxMutexGuiLocker() { wxMutexGuiEnter(); }
+   ~wxMutexGuiLocker() { wxMutexGuiLeave(); }
+};
 
 #endif // __THREADH__
