@@ -194,6 +194,9 @@ wxSize wxCheckBox::DoGetBestSize() const
         wCheckbox = s_checkSize;
         hCheckbox = s_checkSize;
     }
+#ifdef __WXWINCE__
+    hCheckbox += 1;
+#endif
 
     return wxSize(wCheckbox, hCheckbox);
 }
