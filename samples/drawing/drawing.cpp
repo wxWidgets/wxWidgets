@@ -16,6 +16,7 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
     #pragma implementation "drawing.cpp"
     #pragma interface "drawing.cpp"
@@ -39,10 +40,37 @@
 // ----------------------------------------------------------------------------
 // ressources
 // ----------------------------------------------------------------------------
+
 // the application icon
 #if defined(__WXGTK__) || defined(__WXMOTIF__)
     #include "mondrian.xpm"
 #endif
+
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+// what do we show on screen (there are too many shapes to put them all on
+// screen simultaneously)
+enum ScreenToShow
+{
+    Show_Default,
+    Show_Text,
+    Show_Lines,
+    Show_Polygons,
+    Show_Mask
+};
+
+// ----------------------------------------------------------------------------
+// global variables
+// ----------------------------------------------------------------------------
+
+static wxBitmap gs_bmpNoMask,
+                gs_bmpWithColMask,
+                gs_bmpMask,
+                gs_bmpWithMask,
+                gs_bmp4,
+                gs_bmp36;
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -59,6 +87,9 @@ public:
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
     virtual bool OnInit();
+
+protected:
+    bool LoadImages();
 };
 
 class MyCanvas;
@@ -73,6 +104,7 @@ public:
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+    void OnShow(wxCommandEvent &event);
     void OnOption(wxCommandEvent &event);
 
     wxColour SelectColour();
@@ -102,15 +134,23 @@ class MyCanvas: public wxScrolledWindow
 public:
     MyCanvas( MyFrame *parent );
 
-    void DrawTestPoly( int x, int y, wxDC &dc ,int transparent );
-    void DrawTestLines( int x, int y, int width, wxDC &dc );
     void OnPaint(wxPaintEvent &event);
     void OnMouseMove(wxMouseEvent &event);
 
+    void Show(ScreenToShow show) { m_show = show; Refresh(); }
+
 protected:
-    MyFrame *m_owner;
+    void DrawTestPoly( int x, int y, wxDC &dc ,int transparent );
+    void DrawTestLines( int x, int y, int width, wxDC &dc );
+    void DrawText(wxDC& dc);
+    void DrawImages(wxDC& dc);
+    void DrawDefault(wxDC& dc);
 
 private:
+    MyFrame *m_owner;
+
+    ScreenToShow m_show;
+
     DECLARE_EVENT_TABLE()
 };
 
@@ -122,8 +162,16 @@ private:
 enum
 {
     // menu items
-    Minimal_Quit = 1,
-    Minimal_About,
+    File_Quit = 1,
+    File_About,
+
+    MenuShow_First,
+    File_ShowDefault = MenuShow_First,
+    File_ShowText,
+    File_ShowLines,
+    File_ShowPolygons,
+    File_ShowMask,
+    MenuShow_Last = File_ShowMask,
 
     MenuOption_First,
 
@@ -175,6 +223,48 @@ IMPLEMENT_APP(MyApp)
 // the application class
 // ----------------------------------------------------------------------------
 
+bool MyApp::LoadImages()
+{
+    wxPathList pathList;
+    pathList.Add(".");
+    pathList.Add("..");
+
+    wxString path = pathList.FindValidPath("pat4.bmp");
+    if ( !path )
+        return FALSE;
+    gs_bmp4.LoadFile(path, wxBITMAP_TYPE_BMP);
+    wxMask* mask4 = new wxMask(gs_bmp4, *wxBLACK);
+    gs_bmp4.SetMask(mask4);
+
+    path = pathList.FindValidPath("pat36.bmp");
+    if ( !path )
+        return FALSE;
+    gs_bmp36.LoadFile(path, wxBITMAP_TYPE_BMP);
+    wxMask* mask36 = new wxMask(gs_bmp36, *wxBLACK);
+    gs_bmp36.SetMask(mask36);
+
+    path = pathList.FindValidPath("image.bmp");
+    if ( !path )
+        return FALSE;
+    gs_bmpNoMask.LoadFile(path, wxBITMAP_TYPE_BMP);
+    gs_bmpWithMask.LoadFile(path, wxBITMAP_TYPE_BMP);
+    gs_bmpWithColMask.LoadFile(path, wxBITMAP_TYPE_BMP);
+
+    path = pathList.FindValidPath("mask.bmp");
+    if ( !path )
+        return FALSE;
+    gs_bmpMask.LoadFile(path, wxBITMAP_TYPE_BMP);
+    gs_bmpMask.SetDepth(1);
+
+    wxMask *mask = new wxMask(gs_bmpMask);
+    gs_bmpWithMask.SetMask(mask);
+
+    mask = new wxMask(gs_bmpWithColMask, *wxWHITE);
+    gs_bmpWithColMask.SetMask(mask);
+
+    return TRUE;
+}
+
 // `Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
@@ -186,9 +276,17 @@ bool MyApp::OnInit()
     frame->Show(TRUE);
     SetTopWindow(frame);
 
-    // success: wxApp::OnRun() will be called which will enter the main message
-    // loop and the application will run. If we returned FALSE here, the
-    // application would exit immediately.
+    if ( !LoadImages() )
+    {
+        wxLogError("Can't load one of the bitmap files needed for this sample "
+                   "from the current or parent directory, please copy them "
+                   "there.");
+
+        // stop here
+        return FALSE;
+    }
+
+    // ok, continue
     return TRUE;
 }
 
@@ -206,6 +304,7 @@ END_EVENT_TABLE()
 MyCanvas::MyCanvas( MyFrame *parent ) : wxScrolledWindow( parent )
 {
     m_owner = parent;
+    m_show = Show_Default;
 }
 
 //draw a polygon and an overlapping rectangle
@@ -221,53 +320,8 @@ MyCanvas::MyCanvas( MyFrame *parent ) : wxScrolledWindow( parent )
 //variations are endless using other logical functions
 void MyCanvas::DrawTestPoly( int x, int y,wxDC &dc,int transparent )
 {
-    char pathfile[80];
-
-#ifdef __WXMSW__
-    //this if run from ide project file
-    sprintf(pathfile,"./drawing/pat%i.bmp",4);
-    wxBitmap* nonMonoBitmap4 = new wxBitmap(32,32,-1);
-    nonMonoBitmap4->LoadFile(pathfile,wxBITMAP_TYPE_BMP);
-
-    sprintf(pathfile,"./drawing/pat%i.bmp",36);
-    wxBitmap* nonMonoBitmap36 = new wxBitmap(32,32,-1);
-    nonMonoBitmap36->LoadFile(pathfile,wxBITMAP_TYPE_BMP);
-#else
-    sprintf(pathfile,"./pat%i.bmp",4);
-    wxBitmap* nonMonoBitmap4 = new wxBitmap(32,32,-1);
-    nonMonoBitmap4->LoadFile(pathfile,wxBITMAP_TYPE_BMP);
-
-    sprintf(pathfile,"./pat%i.bmp",36);
-    wxBitmap* nonMonoBitmap36 = new wxBitmap(32,32,-1);
-    nonMonoBitmap36->LoadFile(pathfile,wxBITMAP_TYPE_BMP);
-#endif
-
-    if ( !nonMonoBitmap4->Ok() || !nonMonoBitmap36->Ok() )
-    {
-        static bool s_errorGiven = FALSE;
-
-        if ( !s_errorGiven )
-        {
-            wxLogError("Couldn't find bitmap files near the program file, "
-                       "please copy them there.");
-
-            s_errorGiven = TRUE;
-        }
-    }
-
-    //set mask to monochrome bitmap based on color bitmap
-    wxColour white("WHITE");
-    wxPen _Pen = wxPen(white,1,wxSOLID);
-    wxColour black("BLACK");
-
-    wxMask* monochrome_mask4 = new wxMask(*nonMonoBitmap4,black);
-    nonMonoBitmap4->SetMask(monochrome_mask4);
-
-    wxMask* monochrome_mask36 = new wxMask(*nonMonoBitmap36,black);
-    nonMonoBitmap36->SetMask(monochrome_mask36);
-
-    wxBrush* _brush4  = new wxBrush(*nonMonoBitmap4);
-    wxBrush* _brush36 = new wxBrush(*nonMonoBitmap36);
+    wxBrush* brush4  = new wxBrush(gs_bmp4);
+    wxBrush* brush36 = new wxBrush(gs_bmp36);
 
     wxPoint todraw[5];
     todraw[0].x=(long)x+100;
@@ -298,18 +352,16 @@ void MyCanvas::DrawTestPoly( int x, int y,wxDC &dc,int transparent )
         case 0:
             {
                 dc.SetPen( wxPen( "black", 4, wxSOLID) );
-                dc.SetBrush( *_brush4 );
+                dc.SetBrush( *brush4 );
                 dc.SetTextForeground(*wxGREEN);
-                //       dc.SetTextBackground(*wxBLUE);
                 dc.SetTextBackground(m_owner->m_colourForeground);
                 dc.SetLogicalFunction(wxCOPY);
                 dc.DrawPolygon(5,todraw,0,0,wxWINDING_RULE);
 
                 //don't understand hwo but the outline is also depending on logicalfunction
                 dc.SetPen( wxPen( "red", 4, wxSOLID) );
-                dc.SetBrush( *_brush36 );
+                dc.SetBrush( *brush36 );
                 dc.SetTextForeground(*wxCYAN);
-                //       dc.SetTextBackground(*wxRED);
                 dc.SetTextBackground(m_owner->m_colourBackground);
                 dc.SetLogicalFunction(wxCOPY);
                 dc.DrawRectangle( x+10, y+10, 200, 200 );
@@ -320,140 +372,140 @@ void MyCanvas::DrawTestPoly( int x, int y,wxDC &dc,int transparent )
         case 1:  //now with transparent fillpatterns
             {
 
-                wxBitmap* _blitbitmap = new wxBitmap(600,400);
-                wxMemoryDC* _memDC= new wxMemoryDC();
+                wxBitmap* bmpBlit = new wxBitmap(600,400);
+                wxMemoryDC* memDC= new wxMemoryDC();
                 //      wxBrush _clearbrush(*wxGREEN,wxSOLID);
                 wxBrush _clearbrush(*wxBLACK,wxSOLID);
-                _memDC->SelectObject(*_blitbitmap);
-                _memDC->BeginDrawing();
-                _memDC->SetBackground(_clearbrush);
-                _memDC->Clear();
-                _memDC->SetBackground(wxNullBrush);
+                memDC->SelectObject(*bmpBlit);
+                memDC->BeginDrawing();
+                memDC->SetBackground(_clearbrush);
+                memDC->Clear();
+                memDC->SetBackground(wxNullBrush);
 
-                _memDC->SetPen( wxPen( "black", 4, wxSOLID) );
-                _memDC->SetBrush( wxNullBrush);
-                _memDC->SetBrush( *_brush4 );
-                _memDC->SetTextForeground(*wxBLACK);            // 0s --> 0x000000 (black)
-                _memDC->SetTextBackground(*wxWHITE);    // 1s --> 0xFFFFFF (white)
-                _memDC->SetLogicalFunction(wxAND_INVERT);
+                memDC->SetPen( wxPen( "black", 4, wxSOLID) );
+                memDC->SetBrush( wxNullBrush);
+                memDC->SetBrush( *brush4 );
+                memDC->SetTextForeground(*wxBLACK);            // 0s --> 0x000000 (black)
+                memDC->SetTextBackground(*wxWHITE);    // 1s --> 0xFFFFFF (white)
+                memDC->SetLogicalFunction(wxAND_INVERT);
 
                 // BLACK OUT the opaque pixels and leave the rest as is
-                _memDC->DrawPolygon(5,todraw2,0,0,wxWINDING_RULE);
+                memDC->DrawPolygon(5,todraw2,0,0,wxWINDING_RULE);
 
                 // Set background and foreground colors for fill pattern
                 //the previous blacked out pixels are now merged with the layer color
                 //while the non blacked out pixels stay as they are.
-                _memDC->SetTextForeground(*wxBLACK);            // 0s --> 0x000000 (black)
+                memDC->SetTextForeground(*wxBLACK);            // 0s --> 0x000000 (black)
 
                 //now define what will be the color of the fillpattern parts that are not transparent
-                //      _memDC->SetTextBackground(*wxBLUE);
-                _memDC->SetTextBackground(m_owner->m_colourForeground);
-                _memDC->SetLogicalFunction(wxOR);
+                //      memDC->SetTextBackground(*wxBLUE);
+                memDC->SetTextBackground(m_owner->m_colourForeground);
+                memDC->SetLogicalFunction(wxOR);
 
 
                 //don't understand how but the outline is also depending on logicalfunction
-                _memDC->SetPen( wxPen( "red", 4, wxSOLID) );
-                _memDC->DrawPolygon(5,todraw2,0,0,wxWINDING_RULE);
+                memDC->SetPen( wxPen( "red", 4, wxSOLID) );
+                memDC->DrawPolygon(5,todraw2,0,0,wxWINDING_RULE);
 
-                _memDC->SetLogicalFunction(wxCOPY);
+                memDC->SetLogicalFunction(wxCOPY);
 
-                _memDC->SetPen( wxPen( "black", 4, wxSOLID) );
-                _memDC->SetBrush( wxNullBrush);
-                _memDC->SetBrush( *_brush36 );
-                _memDC->SetTextForeground(*wxBLACK);            // 0s --> 0x000000 (black)
-                _memDC->SetTextBackground(*wxWHITE);    // 1s --> 0xFFFFFF (white)
-                _memDC->SetLogicalFunction(wxAND_INVERT);
+                memDC->SetPen( wxPen( "black", 4, wxSOLID) );
+                memDC->SetBrush( wxNullBrush);
+                memDC->SetBrush( *brush36 );
+                memDC->SetTextForeground(*wxBLACK);            // 0s --> 0x000000 (black)
+                memDC->SetTextBackground(*wxWHITE);    // 1s --> 0xFFFFFF (white)
+                memDC->SetLogicalFunction(wxAND_INVERT);
 
-                _memDC->DrawRectangle( 10, 10, 200, 200 );
+                memDC->DrawRectangle( 10, 10, 200, 200 );
 
                 // Set background and foreground colors for fill pattern
                 //the previous blacked out pixels are now merged with the layer color
                 //while the non blacked out pixels stay as they are.
-                _memDC->SetTextForeground(*wxBLACK);            // 0s --> 0x000000 (black)
+                memDC->SetTextForeground(*wxBLACK);            // 0s --> 0x000000 (black)
                 //now define what will be the color of the fillpattern parts that are not transparent
-                //      _memDC->SetTextBackground(*wxRED);
-                _memDC->SetTextBackground(m_owner->m_colourBackground);
-                _memDC->SetLogicalFunction(wxOR);
+                //      memDC->SetTextBackground(*wxRED);
+                memDC->SetTextBackground(m_owner->m_colourBackground);
+                memDC->SetLogicalFunction(wxOR);
 
                 //don't understand how but the outline is also depending on logicalfunction
-                _memDC->SetPen( wxPen( "yellow", 4, wxSOLID) );
-                _memDC->DrawRectangle( 10, 10, 200, 200 );
+                memDC->SetPen( wxPen( "yellow", 4, wxSOLID) );
+                memDC->DrawRectangle( 10, 10, 200, 200 );
 
-                _memDC->SetBrush(wxNullBrush);
-                _memDC->SetPen(wxNullPen);
+                memDC->SetBrush(wxNullBrush);
+                memDC->SetPen(wxNullPen);
 
-                _memDC->EndDrawing();
-                dc.Blit(x,y,600,400,_memDC,0,0,wxCOPY);
-                delete _blitbitmap;
-                delete _memDC;
+                memDC->EndDrawing();
+                dc.Blit(x,y,600,400,memDC,0,0,wxCOPY);
+                delete bmpBlit;
+                delete memDC;
                 break;
             }
         case 2:  //now with transparent inversed fillpatterns
             {
-                wxBitmap* _blitbitmap = new wxBitmap(600,400);
-                wxMemoryDC* _memDC= new wxMemoryDC();
+                wxBitmap* bmpBlit = new wxBitmap(600,400);
+                wxMemoryDC* memDC= new wxMemoryDC();
                 wxBrush _clearbrush(*wxWHITE,wxSOLID);
-                _memDC->SelectObject(*_blitbitmap);
-                _memDC->BeginDrawing();
-                _memDC->SetBackground(_clearbrush);
-                _memDC->Clear();
-                _memDC->SetBackground(wxNullBrush);
+                memDC->SelectObject(*bmpBlit);
+                memDC->BeginDrawing();
+                memDC->SetBackground(_clearbrush);
+                memDC->Clear();
+                memDC->SetBackground(wxNullBrush);
 
-                _memDC->SetPen( wxPen( "black", 4, wxSOLID) );
-                _memDC->SetBrush( *_brush4 );
-                _memDC->SetTextBackground(*wxBLACK);            // 0s --> 0x000000 (black)
-                _memDC->SetTextForeground(*wxWHITE);    // 1s --> 0xFFFFFF (white)
-                _memDC->SetLogicalFunction(wxAND_INVERT);
+                memDC->SetPen( wxPen( "black", 4, wxSOLID) );
+                memDC->SetBrush( *brush4 );
+                memDC->SetTextBackground(*wxBLACK);            // 0s --> 0x000000 (black)
+                memDC->SetTextForeground(*wxWHITE);    // 1s --> 0xFFFFFF (white)
+                memDC->SetLogicalFunction(wxAND_INVERT);
 
                 // BLACK OUT the opaque pixels and leave the rest as is
-                _memDC->DrawPolygon(5,todraw2,0,0,wxWINDING_RULE);
+                memDC->DrawPolygon(5,todraw2,0,0,wxWINDING_RULE);
 
                 // Set background and foreground colors for fill pattern
                 //the previous blacked out pixels are now merged with the layer color
                 //while the non blacked out pixels stay as they are.
-                _memDC->SetTextBackground(*wxBLACK);            // 0s --> 0x000000 (black)
+                memDC->SetTextBackground(*wxBLACK);            // 0s --> 0x000000 (black)
 
                 //now define what will be the color of the fillpattern parts that are not transparent
-                _memDC->SetTextForeground(m_owner->m_colourForeground);
-                _memDC->SetLogicalFunction(wxOR);
+                memDC->SetTextForeground(m_owner->m_colourForeground);
+                memDC->SetLogicalFunction(wxOR);
 
 
                 //don't understand how but the outline is also depending on logicalfunction
-                _memDC->SetPen( wxPen( "red", 4, wxSOLID) );
-                _memDC->DrawPolygon(5,todraw2,0,0,wxWINDING_RULE);
+                memDC->SetPen( wxPen( "red", 4, wxSOLID) );
+                memDC->DrawPolygon(5,todraw2,0,0,wxWINDING_RULE);
 
-                _memDC->SetLogicalFunction(wxCOPY);
+                memDC->SetLogicalFunction(wxCOPY);
 
-                _memDC->SetPen( wxPen( "black", 4, wxSOLID) );
-                _memDC->SetBrush( *_brush36 );
-                _memDC->SetTextBackground(*wxBLACK);            // 0s --> 0x000000 (black)
-                _memDC->SetTextForeground(*wxWHITE);    // 1s --> 0xFFFFFF (white)
-                _memDC->SetLogicalFunction(wxAND_INVERT);
+                memDC->SetPen( wxPen( "black", 4, wxSOLID) );
+                memDC->SetBrush( *brush36 );
+                memDC->SetTextBackground(*wxBLACK);            // 0s --> 0x000000 (black)
+                memDC->SetTextForeground(*wxWHITE);    // 1s --> 0xFFFFFF (white)
+                memDC->SetLogicalFunction(wxAND_INVERT);
 
-                _memDC->DrawRectangle( 10,10, 200, 200 );
+                memDC->DrawRectangle( 10,10, 200, 200 );
 
                 // Set background and foreground colors for fill pattern
                 //the previous blacked out pixels are now merged with the layer color
                 //while the non blacked out pixels stay as they are.
-                _memDC->SetTextBackground(*wxBLACK);            // 0s --> 0x000000 (black)
+                memDC->SetTextBackground(*wxBLACK);            // 0s --> 0x000000 (black)
                 //now define what will be the color of the fillpattern parts that are not transparent
-                _memDC->SetTextForeground(m_owner->m_colourBackground);
-                _memDC->SetLogicalFunction(wxOR);
+                memDC->SetTextForeground(m_owner->m_colourBackground);
+                memDC->SetLogicalFunction(wxOR);
 
                 //don't understand how but the outline is also depending on logicalfunction
-                _memDC->SetPen( wxPen( "yellow", 4, wxSOLID) );
-                _memDC->DrawRectangle( 10, 10, 200, 200 );
+                memDC->SetPen( wxPen( "yellow", 4, wxSOLID) );
+                memDC->DrawRectangle( 10, 10, 200, 200 );
 
-                _memDC->SetBrush(wxNullBrush);
-                _memDC->SetPen(wxNullPen);
-                dc.Blit(x,y,600,400,_memDC,0,0,wxCOPY);
-                delete _blitbitmap;
-                delete _memDC;
+                memDC->SetBrush(wxNullBrush);
+                memDC->SetPen(wxNullPen);
+                dc.Blit(x,y,600,400,memDC,0,0,wxCOPY);
+                delete bmpBlit;
+                delete memDC;
             }
     }
 
-    delete _brush4;
-    delete _brush36;
+    delete brush4;
+    delete brush36;
 }
 
 void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
@@ -503,20 +555,8 @@ void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
 
 }
 
-void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
+void MyCanvas::DrawDefault(wxDC& dc)
 {
-    wxPaintDC dc(this);
-    PrepareDC(dc);
-    m_owner->PrepareDC(dc);
-
-    dc.SetBackgroundMode( m_owner->m_backgroundMode );
-    if ( m_owner->m_backgroundBrush.Ok() )
-        dc.SetBackground( m_owner->m_backgroundBrush );
-    if ( m_owner->m_colourForeground.Ok() )
-        dc.SetTextForeground( m_owner->m_colourForeground );
-    if ( m_owner->m_colourBackground.Ok() )
-        dc.SetTextBackground( m_owner->m_colourBackground );
-
     // mark the origin
     dc.DrawCircle(0, 0, 10);
 #if !(defined __WXGTK__) && !(defined __WXMOTIF__)
@@ -524,6 +564,19 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
     dc.FloodFill(0, 0, wxColour(255, 0, 0));
 #endif //
 
+    dc.DrawIcon( wxICON(mondrian), 410, 40 );
+
+    // test the rectangle drawing - there should be no pixels between the rect
+    // and the lines
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.DrawRectangle(350, 170, 49, 29);
+    dc.SetPen(*wxRED_PEN);
+    dc.DrawLine(400, 160, 400, 210); 
+    dc.DrawLine(340, 200, 410, 200); 
+}
+
+void MyCanvas::DrawText(wxDC& dc)
+{
     // set underlined font for testing
     dc.SetFont( wxFont(12, wxMODERN, wxNORMAL, wxNORMAL, TRUE) );
     dc.DrawText( "This is text", 110, 10 );
@@ -551,32 +604,102 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
     text.Printf( "Dimensions are length %ld, height %ld, descent %ld", length, height, descent );
     dc.DrawText( text, 110, 80 );
 
-    dc.DrawRectangle( 100, 40, 4, height );
-
     text.Printf( "CharHeight() returns: %d", dc.GetCharHeight() );
     dc.DrawText( text, 110, 120 );
 
-    dc.DrawIcon( wxICON(mondrian), 310, 40 );
+    dc.DrawRectangle( 100, 40, 4, height );
+}
 
-    // test the rectangle drawing - there should be no pixels between the rect
-    // and the lines
-    dc.SetPen(*wxTRANSPARENT_PEN);
-    dc.DrawRectangle(350, 170, 49, 29);
-    dc.SetPen(*wxRED_PEN);
-    dc.DrawLine(400, 160, 400, 210); 
-    dc.DrawLine(340, 200, 410, 200); 
+void MyCanvas::DrawImages(wxDC& dc)
+{
+    static const struct
+    {
+        const wxChar *name;
+        int           rop;
+    } rasterOperations[] =
+    {
+        { "wxAND",          wxAND           },
+        { "wxAND_INVERT",   wxAND_INVERT    },
+        { "wxAND_REVERSE",  wxAND_REVERSE   },
+        { "wxCLEAR",        wxCLEAR         },
+        { "wxCOPY",         wxCOPY          },
+        { "wxEQUIV",        wxEQUIV         },
+        { "wxINVERT",       wxINVERT        },
+        { "wxNAND",         wxNAND          },
+        { "wxNO_OP",        wxNO_OP         },
+        { "wxOR",           wxOR            },
+        { "wxOR_INVERT",    wxOR_INVERT     },
+        { "wxOR_REVERSE",   wxOR_REVERSE    },
+        { "wxSET",          wxSET           },
+        { "wxSRC_INVERT",   wxSRC_INVERT    },
+        { "wxXOR",          wxXOR           },
+    };
 
-    DrawTestLines( 0, 200, 0, dc );
+    dc.DrawText("original image", 0, 0);
+    dc.DrawBitmap(gs_bmpNoMask, 0, 20, 0);
+    dc.DrawText("with colour mask", 0, 100);
+    dc.DrawBitmap(gs_bmpWithColMask, 0, 120, TRUE);
+    dc.DrawText("the mask image", 0, 200);
+    dc.DrawBitmap(gs_bmpMask, 0, 220, 0);
+    dc.DrawText("masked image", 0, 300);
+    dc.DrawBitmap(gs_bmpWithMask, 0, 320, TRUE);
 
-    DrawTestLines( 0, 400, 1, dc );
+    int cx = gs_bmpWithColMask.GetWidth(),
+        cy = gs_bmpWithColMask.GetHeight();
 
-    DrawTestLines( 0, 600, 2, dc );
+    wxMemoryDC memDC;
+    for ( size_t n = 0; n < WXSIZEOF(rasterOperations); n++ )
+    {
+        wxCoord x = 120 + 150*(n%4),
+                y =  20 + 100*(n/4);
 
-    DrawTestLines( 0, 800, 6, dc );
+        dc.DrawText(rasterOperations[n].name, x, y - 20);
+        memDC.SelectObject(gs_bmpWithColMask);
+        dc.Blit(x, y, cx, cy, &memDC, 0, 0, rasterOperations[n].rop, TRUE);
+    }
+}
 
-    DrawTestPoly( 0, 1000, dc ,0);
-    DrawTestPoly( 33, 1400, dc ,1);
-    DrawTestPoly( 43, 1900, dc ,2);
+void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
+{
+    wxPaintDC dc(this);
+    PrepareDC(dc);
+    m_owner->PrepareDC(dc);
+
+    dc.SetBackgroundMode( m_owner->m_backgroundMode );
+    if ( m_owner->m_backgroundBrush.Ok() )
+        dc.SetBackground( m_owner->m_backgroundBrush );
+    if ( m_owner->m_colourForeground.Ok() )
+        dc.SetTextForeground( m_owner->m_colourForeground );
+    if ( m_owner->m_colourBackground.Ok() )
+        dc.SetTextBackground( m_owner->m_colourBackground );
+
+    switch ( m_show )
+    {
+        case Show_Default:
+            DrawDefault(dc);
+            break;
+
+        case Show_Text:
+            DrawText(dc);
+            break;
+
+        case Show_Lines:
+            DrawTestLines( 0, 100, 0, dc );
+            DrawTestLines( 0, 300, 1, dc );
+            DrawTestLines( 0, 500, 2, dc );
+            DrawTestLines( 0, 700, 6, dc );
+            break;
+
+        case Show_Polygons:
+            DrawTestPoly( 0,  100, dc, 0 );
+            DrawTestPoly( 33, 500, dc, 1 );
+            DrawTestPoly( 43, 1000, dc, 2 );
+            break;
+
+        case Show_Mask:
+            DrawImages(dc);
+            break;
+    }
 }
 
 void MyCanvas::OnMouseMove(wxMouseEvent &event)
@@ -601,8 +724,11 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MENU      (Minimal_Quit,     MyFrame::OnQuit)
-    EVT_MENU      (Minimal_About,    MyFrame::OnAbout)
+    EVT_MENU      (File_Quit,     MyFrame::OnQuit)
+    EVT_MENU      (File_About,    MyFrame::OnAbout)
+
+    EVT_MENU_RANGE(MenuShow_First,   MenuShow_Last,   MyFrame::OnShow)
+
     EVT_MENU_RANGE(MenuOption_First, MenuOption_Last, MyFrame::OnOption)
 END_EVENT_TABLE()
 
@@ -614,9 +740,15 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     SetIcon(wxICON(mondrian));
 
     wxMenu *menuFile = new wxMenu;
-    menuFile->Append(Minimal_About, "&About...\tCtrl-A", "Show about dialog");
+    menuFile->Append(File_ShowDefault, "&Default screen\tF1");
+    menuFile->Append(File_ShowText, "&Text screen\tF2");
+    menuFile->Append(File_ShowLines, "&Lines screen\tF3");
+    menuFile->Append(File_ShowPolygons, "&Polygons screen\tF4");
+    menuFile->Append(File_ShowMask, "wx&Mask screen\tF5");
     menuFile->AppendSeparator();
-    menuFile->Append(Minimal_Quit, "E&xit\tAlt-X", "Quit this program");
+    menuFile->Append(File_About, "&About...\tCtrl-A", "Show about dialog");
+    menuFile->AppendSeparator();
+    menuFile->Append(File_Quit, "E&xit\tAlt-X", "Quit this program");
 
     wxMenu *menuMapMode = new wxMenu;
     menuMapMode->Append( MapMode_Text, "&TEXT map mode" );
@@ -698,7 +830,12 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     wxMessageBox(msg, "About Drawing", wxOK | wxICON_INFORMATION, this);
 }
 
-void MyFrame::OnOption(wxCommandEvent &event)
+void MyFrame::OnShow(wxCommandEvent& event)
+{
+    m_canvas->Show((ScreenToShow)(event.GetInt() - MenuShow_First));
+}
+
+void MyFrame::OnOption(wxCommandEvent& event)
 {
     switch (event.GetInt())
     {
