@@ -2383,7 +2383,7 @@ AC_CACHE_CHECK([for vsscanf], wx_cv_func_vsscanf,
 
 AC_LANG_RESTORE
 
-dnl under MSW we always have Sleep()
+dnl the following tests are for Unix(like) systems only
 if test "$TOOLKIT" != "MSW"; then
 
 dnl check for POSIX signals if we need them
