@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma interface "glcanvas.h"
+#  pragma interface "glcanvas.h"
 #endif
 
 #ifndef _WX_GLCANVAS_H_
@@ -23,8 +23,13 @@
 #include "wx/palette.h"
 #include "wx/scrolwin.h"
 
-#include <gl.h>
-#include <agl.h>
+#ifdef __DARWIN__
+#  include <OpenGL/gl.h>
+#  include <AGL/agl.h>
+#else
+#  include <gl.h>
+#  include <agl.h>
+#endif
 
 //---------------------------------------------------------------------------
 // Constants for attriblist
