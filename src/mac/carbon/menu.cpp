@@ -698,47 +698,85 @@ void wxMenuBar::MacInstallMenuBar()
 #else
 			if( m_titles[i] == "?" || m_titles[i] == "&?"  || m_titles[i] == wxApp::s_macHelpMenuTitleName )
 			{
-				wxMenuItem::MacBuildMenuString( label, NULL , NULL , m_titles[i] , false );
-				UMASetMenuTitle( menu->GetHMenu() , label ) ;
+				  wxMenuItem::MacBuildMenuString( label, NULL , NULL , m_titles[i] , false );
+				  UMASetMenuTitle( menu->GetHMenu() , label ) ;
+					
+					wxArrayPtrVoid submenus ;
 					
 			  	for (pos = 0 , node = menu->GetMenuItems().First(); node; node = node->Next(), pos++) 
 		  		{
-		 			item = (wxMenuItem *)node->Data();
-		 			subMenu = item->GetSubMenu() ;
-					if (subMenu)	 		
-					{
-						::InsertMenu( subMenu->GetHMenu() , -1 ) ;
-					}
-					else
-					{
-						if ( item->GetId() == wxApp::s_macAboutMenuItemId )
-						{ 
-							Str255 label ;
-							UInt8 modifiers ;
-							SInt16 key ;
-							wxMenuItem::MacBuildMenuString( label, &key , &modifiers  , item->GetText(), item->GetId() != wxApp::s_macAboutMenuItemId); // no shortcut in about menu
-							::SetMenuItemText( GetMenuHandle( kwxMacAppleMenuId ) , 1 , label );
-							UMAEnableMenuItem( GetMenuHandle( kwxMacAppleMenuId ) , 1 );
- 						}
-					}
-				}
-				::InsertMenu(m_menus[i]->GetHMenu(), 0);
+  		 			item = (wxMenuItem *)node->Data();
+  		 			subMenu = item->GetSubMenu() ;
+  					if (subMenu)	 		
+  					{
+  					  submenus.Add(subMenu) ;
+  					}
+  					else
+  					{
+  						if ( item->GetId() == wxApp::s_macAboutMenuItemId )
+  						{ 
+  							Str255 label ;
+  							UInt8 modifiers ;
+  							SInt16 key ;
+  							wxMenuItem::MacBuildMenuString( label, &key , &modifiers  , item->GetText(), item->GetId() != wxApp::s_macAboutMenuItemId); // no shortcut in about menu
+  							::SetMenuItemText( GetMenuHandle( kwxMacAppleMenuId ) , 1 , label );
+  							UMAEnableMenuItem( GetMenuHandle( kwxMacAppleMenuId ) , 1 );
+   						}
+  					}
+  				}
+  				::InsertMenu(m_menus[i]->GetHMenu(), 0);
+  				for ( int i = 0 ; i < submenus.GetCount() ; ++i )
+  				{
+  				  wxMenu* submenu = (wxMenu*) submenus[i] ;
+          	wxNode *subnode;
+          	wxMenuItem *subitem;
+          	int subpos ;
+            for ( subpos = 0 , subnode = submenu->GetMenuItems().First(); subnode; subnode = subnode->Next(), subpos++) 
+  		  		{
+    		 			subitem = (wxMenuItem *)subnode->Data();
+    		 			wxMenu* itsSubMenu = subitem->GetSubMenu() ;
+    					if (itsSubMenu)	 		
+    					{
+    						submenus.Add(itsSubMenu) ;
+    					}  				
+    				}
+  					::InsertMenu( submenu->GetHMenu() , -1 ) ;
+    			}
 			}
 #endif
 			else
 			{
 				wxMenuItem::MacBuildMenuString( label, NULL , NULL , m_titles[i] , false );
 				UMASetMenuTitle( menu->GetHMenu() , label ) ;
+					wxArrayPtrVoid submenus ;
+					
 		  		for (pos = 0, node = menu->GetMenuItems().First(); node; node = node->Next(), pos++) 
 	  			{
 		 			item = (wxMenuItem *)node->Data();
 		 			subMenu = item->GetSubMenu() ;
 					if (subMenu)	 		
 					{
-						::InsertMenu( subMenu->GetHMenu() , -1 ) ;
+  					  submenus.Add(subMenu) ;
 					}
 				}
 				::InsertMenu(m_menus[i]->GetHMenu(), 0);
+				for ( int i = 0 ; i < submenus.GetCount() ; ++i )
+				{
+				  wxMenu* submenu = (wxMenu*) submenus[i] ;
+        	wxNode *subnode;
+        	wxMenuItem *subitem;
+        	int subpos ;
+          for ( subpos = 0 , subnode = submenu->GetMenuItems().First(); subnode; subnode = subnode->Next(), subpos++) 
+		  		{
+  		 			subitem = (wxMenuItem *)subnode->Data();
+  		 			wxMenu* itsSubMenu = subitem->GetSubMenu() ;
+  					if (itsSubMenu)	 		
+  					{
+  						submenus.Add(itsSubMenu) ;
+  					}  				
+  				}
+					::InsertMenu( submenu->GetHMenu() , -1 ) ;
+  			}
 			}
 		}
 		::DrawMenuBar() ;
