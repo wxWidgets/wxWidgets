@@ -99,14 +99,14 @@ void wxDirDialog::SetPath(const wxString& path)
     {
         while ( *(m_path.end() - 1) == _T('\\') )
         {
-            size_t len = m_path.length();
-            if ( len == 1 )
-            {
-                // leave '/' alone
-                break;
-            }
+            m_path.erase(m_path.length() - 1);
+        }
 
-            m_path.erase(len - 1);
+        // but the root drive should have a trailing slash (again, this is just
+        // the way the native dialog works)
+        if ( *(m_path.end() - 1) == _T(':') )
+        {
+            m_path += _T('\\');
         }
     }
 }
