@@ -34,83 +34,83 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
     
     switch( index )
     {
-        case wxSYS_COLOUR_SCROLLBAR :
-        case wxSYS_COLOUR_BACKGROUND:
-        case wxSYS_COLOUR_ACTIVECAPTION:
-        case wxSYS_COLOUR_INACTIVECAPTION:
-        case wxSYS_COLOUR_MENU:
-        case wxSYS_COLOUR_WINDOW:
-        case wxSYS_COLOUR_WINDOWFRAME:
-        case wxSYS_COLOUR_ACTIVEBORDER:
-        case wxSYS_COLOUR_INACTIVEBORDER:
-        case wxSYS_COLOUR_BTNFACE:
-        case wxSYS_COLOUR_MENUBAR:
-            return wxColor( 0xDD , 0xDD , 0xDD ) ;
-            break ;
+    case wxSYS_COLOUR_SCROLLBAR:
+    case wxSYS_COLOUR_BACKGROUND:
+    case wxSYS_COLOUR_ACTIVECAPTION:
+    case wxSYS_COLOUR_INACTIVECAPTION:
+    case wxSYS_COLOUR_MENU:
+    case wxSYS_COLOUR_WINDOW:
+    case wxSYS_COLOUR_WINDOWFRAME:
+    case wxSYS_COLOUR_ACTIVEBORDER:
+    case wxSYS_COLOUR_INACTIVEBORDER:
+    case wxSYS_COLOUR_BTNFACE:
+    case wxSYS_COLOUR_MENUBAR:
+        return wxColor( 0xDD , 0xDD , 0xDD ) ;
+        break ;
 
-        case wxSYS_COLOUR_LISTBOX :
-        {
-            if (major >= 10)
-                return *wxWHITE ;
-            else
-                return wxColor( 0xEE , 0xEE , 0xEE ) ;
-            break ;
-        }
-        case wxSYS_COLOUR_BTNSHADOW:
-            return wxColor( 0x44 , 0x44 , 0x44 ) ;
-            break ;
-
-        case wxSYS_COLOUR_BTNTEXT:
-        case wxSYS_COLOUR_MENUTEXT:
-        case wxSYS_COLOUR_WINDOWTEXT:
-        case wxSYS_COLOUR_CAPTIONTEXT:
-        case wxSYS_COLOUR_INFOTEXT:
-        case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
-            return *wxBLACK;
-            break ;
-        case wxSYS_COLOUR_HIGHLIGHT:
-            {
-                RGBColor hilite ;
-                LMGetHiliteRGB(&hilite) ;
-                return wxColor( hilite.red >> 8 , hilite.green >> 8  , hilite.blue >> 8  ) ;
-            }
-            break ;
-        case wxSYS_COLOUR_BTNHIGHLIGHT:
-        case wxSYS_COLOUR_GRAYTEXT:
-            return wxColor( 0xCC , 0xCC , 0xCC ) ;
-            break ;
-    
-        case wxSYS_COLOUR_3DDKSHADOW:
-            return wxColor( 0x44 , 0x44 , 0x44 ) ;
-            break ;
-        case wxSYS_COLOUR_3DLIGHT:
-            return wxColor( 0xCC , 0xCC , 0xCC ) ;
-            break ;
-        case wxSYS_COLOUR_HIGHLIGHTTEXT :
-            {
-                RGBColor hilite ;
-                LMGetHiliteRGB(&hilite) ;
-                if ( ( hilite.red + hilite.green + hilite.blue ) == 0 )
-                        return *wxWHITE ;
-                else
-                        return *wxBLACK ;
-            }
-            break ;
-        case wxSYS_COLOUR_INFOBK :
-        case wxSYS_COLOUR_APPWORKSPACE: 
+    case wxSYS_COLOUR_LISTBOX:
+    {
+        if (major >= 10)
             return *wxWHITE ;
-            break ;
+        else
+            return wxColor( 0xEE , 0xEE , 0xEE ) ;
+        break ;
+    }
+    case wxSYS_COLOUR_BTNSHADOW:
+        return wxColor( 0x44 , 0x44 , 0x44 ) ;
+        break ;
 
-        case wxSYS_COLOUR_HOTLIGHT:
-        case wxSYS_COLOUR_GRADIENTACTIVECAPTION:
-        case wxSYS_COLOUR_GRADIENTINACTIVECAPTION:
-        case wxSYS_COLOUR_MENUHILIGHT:
-            // TODO
-            return *wxBLACK;
-         
-        case wxSYS_COLOUR_MAX:
-            wxFAIL_MSG( _T("unknown system colour index") );
-            break ;
+    case wxSYS_COLOUR_BTNTEXT:
+    case wxSYS_COLOUR_MENUTEXT:
+    case wxSYS_COLOUR_WINDOWTEXT:
+    case wxSYS_COLOUR_CAPTIONTEXT:
+    case wxSYS_COLOUR_INFOTEXT:
+    case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
+        return *wxBLACK;
+        break ;
+    case wxSYS_COLOUR_HIGHLIGHT:
+        {
+            RGBColor hilite ;
+            LMGetHiliteRGB(&hilite) ;
+            return wxColor( hilite.red >> 8 , hilite.green >> 8  , hilite.blue >> 8  ) ;
+        }
+        break ;
+    case wxSYS_COLOUR_BTNHIGHLIGHT:
+    case wxSYS_COLOUR_GRAYTEXT:
+        return wxColor( 0xCC , 0xCC , 0xCC ) ;
+        break ;
+
+    case wxSYS_COLOUR_3DDKSHADOW:
+        return wxColor( 0x44 , 0x44 , 0x44 ) ;
+        break ;
+    case wxSYS_COLOUR_3DLIGHT:
+        return wxColor( 0xCC , 0xCC , 0xCC ) ;
+        break ;
+    case wxSYS_COLOUR_HIGHLIGHTTEXT:
+        {
+            RGBColor hilite ;
+            LMGetHiliteRGB(&hilite) ;
+            if ( ( hilite.red + hilite.green + hilite.blue ) == 0 )
+                    return *wxWHITE ;
+            else
+                    return *wxBLACK ;
+        }
+        break ;
+    case wxSYS_COLOUR_INFOBK:
+    case wxSYS_COLOUR_APPWORKSPACE:
+        return *wxWHITE ;
+        break ;
+
+    case wxSYS_COLOUR_HOTLIGHT:
+    case wxSYS_COLOUR_GRADIENTACTIVECAPTION:
+    case wxSYS_COLOUR_GRADIENTINACTIVECAPTION:
+    case wxSYS_COLOUR_MENUHILIGHT:
+        // TODO
+        return *wxBLACK;
+     
+    case wxSYS_COLOUR_MAX:
+        wxFAIL_MSG( _T("unknown system colour index") );
+        break ;
     }
     return *wxWHITE;
 #endif
