@@ -37,8 +37,8 @@ import distutils.command.clean
 
 VER_MAJOR        = 2      # The first three must match wxWidgets
 VER_MINOR        = 5
-VER_RELEASE      = 1
-VER_SUBREL       = 6      # wxPython release num for x.y.z release of wxWidgets
+VER_RELEASE      = 2
+VER_SUBREL       = 0      # wxPython release num for x.y.z release of wxWidgets
 VER_FLAGS        = "p"     # release flags, such as prerelease num, unicode, etc.
 
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
