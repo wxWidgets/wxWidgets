@@ -148,7 +148,7 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
     m_mainWidget = (WXWindow) window;
 
     // Select event types wanted
-    XSelectInput(wxGlobalDisplay(), window,
+    XSelectInput( wxGlobalDisplay(), window,
         ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
         ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask |
         KeymapStateMask | FocusChangeMask | ColormapChangeMask | StructureNotifyMask |
@@ -206,40 +206,23 @@ wxWindowX11::~wxWindowX11()
 
 void wxWindowX11::SetFocus()
 {
-    Window wMain = (Window) GetMainWindow();
-    if (wMain)
-    {
-	// TODO: set a m_needInputFocus flag and do the
-	// the setting in OnIdle or Show, because we can't
-	// set the focus for an unmapped window.
-	// We need to figure out how to find out if the window
-	// is mapped.
-#if 0
-        XSetInputFocus(wxGlobalDisplay(), wMain, RevertToParent, CurrentTime);
-        
-        XWMHints wmhints;
-        wmhints.flags = InputHint;
-        wmhints.input = True;
-        XSetWMHints(wxGlobalDisplay(), wMain, &wmhints);
-#endif
-    }
+    Window xwindow = (Window) GetMainWindow();
+    
+    wxCHECK_RET( xwindow, wxT("invalid window") );
+    
+    XSetInputFocus( wxGlobalDisplay(), xwindow, RevertToParent, CurrentTime );
 }
 
 // Get the window with the focus
 wxWindow *wxWindowBase::FindFocus()
 {
-    Window wFocus = (Window) 0;
+    Window xfocus = (Window) 0;
     int revert = 0;
 
-    XGetInputFocus(wxGlobalDisplay(), & wFocus, & revert);
-    if (wFocus)
+    XGetInputFocus( wxGlobalDisplay(), &xfocus, &revert);
+    if (xfocus)
     {
-        wxWindow *win = NULL;
-        do
-        {
-            win = wxGetWindowFromTable(wFocus);
-            wFocus = wxGetWindowParent(wFocus);
-        } while (wFocus && !win);
+        wxWindow *win = wxGetWindowFromTable( xfocus );
 
         return win;
     }
@@ -313,6 +296,8 @@ void wxWindowX11::DoCaptureMouse()
 
     Window xwindow = (Window) GetMainWindow();
 
+    wxCHECK_RET( xwindow, wxT("invalid window") );
+    
     g_captureWindow = (wxWindow*) this;
 
     if (xwindow)
@@ -422,16 +407,19 @@ bool wxWindowX11::SetCursor(const wxCursor& cursor)
         return FALSE;
     }
 
-    wxCursor* cursor2 = NULL;
+    Window xwindow = (Window) GetMainWindow();
+
+    wxCHECK_MSG( xwindow, FALSE, wxT("invalid window") );
+    
+    wxCursor cursorToUse;
     if (m_cursor.Ok())
-        cursor2 = & m_cursor;
+        cursorToUse = m_cursor;
     else
-        cursor2 = wxSTANDARD_CURSOR;
+        cursorToUse = *wxSTANDARD_CURSOR;
 
-    WXCursor x_cursor = cursor2->GetCursor();
+    Cursor xcursor = (Cursor) cursorToUse.GetCursor();
 
-    Window win = (Window) GetMainWindow();
-    XDefineCursor((Display*) wxGlobalDisplay(), win, (Cursor) x_cursor);
+    XDefineCursor( (Display*) wxGlobalDisplay(), xwindow, xcursor );
 
     return TRUE;
 }
@@ -439,8 +427,11 @@ bool wxWindowX11::SetCursor(const wxCursor& cursor)
 // Coordinates relative to the window
 void wxWindowX11::WarpPointer (int x, int y)
 {
-    if (m_mainWidget)
-        XWarpPointer( wxGlobalDisplay(), None, (Window) m_mainWidget, 0, 0, 0, 0, x, y);
+    Window xwindow = (Window) GetMainWindow();
+
+    wxCHECK_RET( xwindow, wxT("invalid window") );
+    
+    XWarpPointer( wxGlobalDisplay(), None, xwindow, 0, 0, 0, 0, x, y);
 }
 
 // Does a physical scroll
@@ -656,18 +647,18 @@ bool wxWindowX11::PreResize()
 // Get total size
 void wxWindowX11::DoGetSize(int *x, int *y) const
 {
-    Window window = (Window) m_mainWidget;
-    if (window)
-    {
-        XWindowAttributes attr;
-        Status status = XGetWindowAttributes(wxGlobalDisplay(), window, & attr);
-        wxASSERT(status);
+    Window xwindow = (Window) GetMainWindow();
+
+    wxCHECK_RET( xwindow, wxT("invalid window") );
+    
+    XWindowAttributes attr;
+    Status status = XGetWindowAttributes( wxGlobalDisplay(), xwindow, &attr );
+    wxASSERT(status);
         
-        if (status)
-        {
-            *x = attr.width /* + 2*m_borderSize */ ;
-            *y = attr.height /* + 2*m_borderSize */ ;
-        }
+    if (status)
+    {
+        *x = attr.width /* + 2*m_borderSize */ ;
+        *y = attr.height /* + 2*m_borderSize */ ;
     }
 }
 
@@ -1280,69 +1271,6 @@ bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window WXUNUSED(win
 // ----------------------------------------------------------------------------
 // Colour stuff
 // ----------------------------------------------------------------------------
-
-#if 0
-
-#define YAllocColor XAllocColor
-XColor g_itemColors[5];
-int wxComputeColours (Display *display, wxColour * back, wxColour * fore)
-{
-    int result;
-    static XmColorProc colorProc;
-
-    result = wxNO_COLORS;
-
-    if (back)
-    {
-        g_itemColors[0].red = (((long) back->Red ()) << 8);
-        g_itemColors[0].green = (((long) back->Green ()) << 8);
-        g_itemColors[0].blue = (((long) back->Blue ()) << 8);
-        g_itemColors[0].flags = DoRed | DoGreen | DoBlue;
-        if (colorProc == (XmColorProc) NULL)
-        {
-            // Get a ptr to the actual function
-            colorProc = XmSetColorCalculation ((XmColorProc) NULL);
-            // And set it back to motif.
-            XmSetColorCalculation (colorProc);
-        }
-        (*colorProc) (&g_itemColors[wxBACK_INDEX],
-            &g_itemColors[wxFORE_INDEX],
-            &g_itemColors[wxSELE_INDEX],
-            &g_itemColors[wxTOPS_INDEX],
-            &g_itemColors[wxBOTS_INDEX]);
-        result = wxBACK_COLORS;
-    }
-    if (fore)
-    {
-        g_itemColors[wxFORE_INDEX].red = (((long) fore->Red ()) << 8);
-        g_itemColors[wxFORE_INDEX].green = (((long) fore->Green ()) << 8);
-        g_itemColors[wxFORE_INDEX].blue = (((long) fore->Blue ()) << 8);
-        g_itemColors[wxFORE_INDEX].flags = DoRed | DoGreen | DoBlue;
-        if (result == wxNO_COLORS)
-            result = wxFORE_COLORS;
-    }
-
-    Display *dpy = display;
-    Colormap cmap = (Colormap) wxTheApp->GetMainColormap((WXDisplay*) dpy);
-
-    if (back)
-    {
-        /* 5 Colours to allocate */
-        for (int i = 0; i < 5; i++)
-            if (!YAllocColor (dpy, cmap, &g_itemColors[i]))
-                result = wxNO_COLORS;
-    }
-    else if (fore)
-    {
-        /* Only 1 colour to allocate */
-        if (!YAllocColor (dpy, cmap, &g_itemColors[wxFORE_INDEX]))
-            result = wxNO_COLORS;
-    }
-
-    return (result);
-
-}
-#endif
 
 bool wxWindowX11::SetBackgroundColour(const wxColour& col)
 {

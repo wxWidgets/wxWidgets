@@ -703,6 +703,10 @@ WXColormap wxApp::GetMainColormap(WXDisplay* display)
 
 Window wxGetWindowParent(Window window)
 {
+    wxASSERT_MSG( window, "invalid window" );
+    
+    return (Window) 0;
+
     Window parent, root = 0;
     unsigned int noChildren = 0;
     Window* children = NULL;

@@ -55,8 +55,6 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     Window xparent = RootWindow( xdisplay, xscreen );
     
     XSetWindowAttributes xattributes;
-    XSizeHints size_hints;
-    XWMHints wm_hints;
     
     long xattributes_mask =
         CWOverrideRedirect |
@@ -79,29 +77,14 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     m_mainWidget = (WXWindow) xwindow;
     wxAddWindowToTable( xwindow, (wxWindow*) this );
 
-    // Probably shouldn't be here for an unmanaged window
-    //XSetTransientForHint( xdisplay, xwindow, xparent );
+    XSetTransientForHint( xdisplay, xwindow, xparent );
 
-    // TODO: Will these calls cause decoration??
-
-    size_hints.flags = PSize;
-    size_hints.width = size.x;
-    size_hints.height = size.y;
-    XSetWMNormalHints( xdisplay, xwindow, &size_hints);
-    
+    XWMHints wm_hints;
     wm_hints.flags = InputHint | StateHint /* | WindowGroupHint */;
     wm_hints.input = True;
     wm_hints.initial_state = NormalState;
     XSetWMHints( xdisplay, xwindow, &wm_hints);
  
-    // No decorations for this window
-#if 0
-    Atom wm_delete_window = XInternAtom( xdisplay, "WM_DELETE_WINDOW", False);
-    XSetWMProtocols( xdisplay, xwindow, &wm_delete_window, 1);
-    
-    wxSetWMDecorations((Window) GetMainWindow(), style);
-#endif
-
     return TRUE;
 }
 
@@ -117,7 +100,15 @@ void wxPopupWindow::DoSetSize( int x, int y, int width, int height, int sizeFlag
 
 bool wxPopupWindow::Show( bool show )
 {
-    return wxWindowX11::Show( show );
+    bool ret = wxWindowX11::Show( show );
+
+#if 0    
+    int x,y;
+    GetSize( &x, &y );
+    printf( "popup size %d, %d\n", x, y );
+#endif
+    
+    return ret;
 }
 
 #endif // wxUSE_POPUPWIN
