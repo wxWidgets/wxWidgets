@@ -507,7 +507,14 @@ void wxMenuBar::MacInstallMenuBar()
     MenuBarHandle menubar = NewHandleClear( sizeof( MenuBarHeader ) ) ;
     ::SetMenuBar( menubar ) ;
     DisposeMenuBar( menubar ) ;
-        
+    MenuHandle appleMenu = NULL ;
+    char appleMenuTitle[3] = { 01 , kMenuAppleLogoFilledGlyph , 0 } ;
+
+    verify_noerr( CreateNewMenu( kwxMacAppleMenuId , 0 , &appleMenu ) ) ;
+    verify_noerr( SetMenuTitle( appleMenu , (ConstStr255Param) appleMenuTitle ) );
+    MacInsertMenuItem( appleMenu , "\pAbout..." , 0 ) ;
+    MacInsertMenu( appleMenu , 0 ) ;
+
     // clean-up the help menu before adding new items
     MenuHandle mh = NULL ;
     if ( UMAGetHelpMenu( &mh , &firstUserHelpMenuItem) == noErr )
