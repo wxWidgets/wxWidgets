@@ -43,7 +43,7 @@ For example:
 
 \membersection{wxTextInputStream::wxTextInputStream}\label{wxtextinputstreamconstr}
 
-\func{}{wxTextInputStream}{\param{wxInputStream\&}{ stream}, \param{const wxString\&}{ sep=wxT(" \t")}, 
+\func{}{wxTextInputStream}{\param{wxInputStream\&}{ stream}, \param{const wxString\&}{ sep=" $\backslash$t"}, 
   \param{wxMBConv\&}{ conv = wxConvUTF8} }
 
 Constructs a text stream object from an input stream. Only read methods will
@@ -252,5 +252,4 @@ Writes the double {\it f} to the stream using the IEEE format.
 Writes {\it string} as a line. Depending on the end-of-line mode the end of
 line ('$\backslash$n') characters in the string are converted to the correct
 line ending terminator.
-
 

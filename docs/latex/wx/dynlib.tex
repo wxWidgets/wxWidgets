@@ -31,16 +31,16 @@ done in the objects destructor automatically.
 
 Constructor. Second form calls \helpref{Load}{wxdynamiclibraryload}.
 
-
 \membersection{wxDynamicLibrary::CanonicalizeName}\label{wxdynamiclibrarycanonicalizename}
 
-\func{wxString}{CanonicalizeName}{\param{const wxString\& }{name}, \param{wxDynamicLibraryCategory cat = wxDL\_LIBRARY}}
+\func{wxString}{CanonicalizeName}{\param{const wxString\& }{name}, \param{wxDynamicLibraryCategory}{ cat = wxDL\_LIBRARY}}
 
 Returns the platform-specific full name for the library called \arg{name}. E.g.
 it adds a {\tt ".dll"} extension under Windows and {\tt "lib"} prefix and 
 {\tt ".so"}, {\tt ".sl"} or maybe {\tt ".dylib"} extension under Unix.
 
 The possible values for \arg{cat} are:
+
 \begin{twocollist}
     \twocolitem{wxDL\_LIBRARY}{normal library}
     \twocolitem{wxDL\_MODULE}{a loadable module or plugin}
@@ -53,7 +53,7 @@ The possible values for \arg{cat} are:
 
 \membersection{wxDynamicLibrary::CanonicalizePluginName}\label{wxdynamiclibrarycanonicalizepluginname}
 
-\func{wxString}{CanonicalizePluginName}{\param{const wxString\& }{name}, \param{wxPluginCategory cat = wxDL\_PLUGIN\_GUI}}
+\func{wxString}{CanonicalizePluginName}{\param{const wxString\& }{name}, \param{wxPluginCategory}{ cat = wxDL\_PLUGIN\_GUI}}
 
 This function does the same thing as 
 \helpref{CanonicalizeName}{wxdynamiclibrarycanonicalizename} but for wxWindows
@@ -62,11 +62,11 @@ to the name to ensure that the plugin which is going to be loaded will be
 compatible with the main program.
 
 The possible values for \arg{cat} are:
+
 \begin{twocollist}
     \twocolitem{wxDL\_PLUGIN\_GUI}{plugin which uses GUI classes (default)}
     \twocolitem{wxDL\_PLUGIN\_BASE}{plugin which only uses wxBase}
 \end{twocollist}
-
 
 \membersection{wxDynamicLibrary::Detach}\label{wxdynamiclibrarydetach}
 
@@ -75,7 +75,6 @@ The possible values for \arg{cat} are:
 Detaches this object from its library handle, i.e. the object will not unload
 the library any longer in its destructor but it is now the callers
 responsability to do this using \helpref{Unload}{wxdynamiclibraryunload}.
-
 
 \membersection{wxDynamicLibrary::GetSymbol}\label{wxdynamiclibrarygetsymbol}
 
@@ -88,13 +87,11 @@ contains no such symbol.
 
 \helpref{wxDYNLIB\_FUNCTION}{wxdynlibfunction}
 
-
 \membersection{wxDynamicLibrary::IsLoaded}\label{wxdynamiclibraryisloaded}
 
 \constfunc{bool}{IsLoaded}{\void}
 
 Returns \true if the library was successfully loaded, \false otherwise.
-
 
 \membersection{wxDynamicLibrary::Load}\label{wxdynamiclibraryload}
 
@@ -111,11 +108,6 @@ the library name (this is done by default).}
 \end{twocollist}
 
 Returns \true if the library was successfully loaded, \false otherwise.
-
-\wxheading{See also}
-
-\helpref{}{}
-
 
 \membersection{wxDynamicLibrary::Unload}\label{wxdynamiclibraryunload}
 
