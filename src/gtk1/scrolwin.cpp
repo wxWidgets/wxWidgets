@@ -349,16 +349,10 @@ void wxScrolledWindow::SetScrollbars( int pixelsPerUnitX, int pixelsPerUnitY,
     m_hAdjust->value = m_xScrollPosition = xPos;
     m_vAdjust->value = m_yScrollPosition = yPos;
 
-    // For better backward compatibility we set persisting limits
-    // here not just the size.  It makes SetScrollbars 'sticky'
-    // emulating the old non-autoscroll behaviour.
-
-    m_targetWindow->SetVirtualSizeHints( noUnitsX * pixelsPerUnitX, noUnitsY * pixelsPerUnitY );
-
-    // The above should arguably be deprecated, this however we still need.
-
+    // The first line should arguably be deprecated, the second we still need.
     m_targetWindow->SetVirtualSize( noUnitsX * pixelsPerUnitX, noUnitsY * pixelsPerUnitY );
-
+    m_targetWindow->SetVirtualSize( noUnitsX * pixelsPerUnitX, noUnitsY * pixelsPerUnitY );
+    
     if (!noRefresh)
     {
         int new_x = m_xScrollPixelsPerLine * m_xScrollPosition;
@@ -389,13 +383,16 @@ void wxScrolledWindow::AdjustScrollbars()
         // If the scrollbar hits the right side, move the window
         // right to keep it from over extending.
 
-        if( m_hAdjust->value + m_hAdjust->page_size > m_hAdjust->upper )
+        if ((m_hAdjust->value != 0.0) && (m_hAdjust->value + m_hAdjust->page_size > m_hAdjust->upper))
         {
+            m_hAdjust->value = m_hAdjust->upper - m_hAdjust->page_size;
+            if (m_hAdjust->value < 0.0)
+                m_hAdjust->value = 0.0;
+                
             if (GetChildren().GetCount() == 0)
-            {
-                m_hAdjust->value = m_hAdjust->upper - m_hAdjust->page_size;
-                m_xScrollPosition = (int)m_hAdjust->value;
-            }
+                m_xScrollPosition = (int)m_hAdjust->value; // This is enough without child windows
+            else
+                gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "value_changed" ); // Actually scroll window
         }
     }
 
@@ -409,13 +406,16 @@ void wxScrolledWindow::AdjustScrollbars()
         m_vAdjust->upper = vh / m_yScrollPixelsPerLine;
         m_vAdjust->page_size = (h / m_yScrollPixelsPerLine);
 
-        if( m_vAdjust->value + m_vAdjust->page_size > m_vAdjust->upper )
+        if ((m_vAdjust->value != 0.0) && (m_vAdjust->value + m_vAdjust->page_size > m_vAdjust->upper))
         {
+            m_vAdjust->value = m_vAdjust->upper - m_vAdjust->page_size;
+            if (m_vAdjust->value < 0.0)
+                m_vAdjust->value = 0.0;
+                
             if (GetChildren().GetCount() == 0)
-            {
-                m_vAdjust->value = m_vAdjust->upper - m_vAdjust->page_size;
-                m_yScrollPosition = (int)m_vAdjust->value;
-            }
+                m_yScrollPosition = (int)m_vAdjust->value;  
+            else
+                gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "value_changed" );
         }
     }
 
@@ -839,7 +839,9 @@ void wxScrolledWindow::OnSize(wxSizeEvent& WXUNUSED(event))
         FitInside();
     }
     else
+    {
         AdjustScrollbars();
+    }
 }
 
 // This calls OnDraw, having adjusted the origin according to the current
