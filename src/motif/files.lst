@@ -554,7 +554,6 @@ ALL_HEADERS = \
 		motif/radiobut.h \
 		motif/region.h \
 		motif/scrolbar.h \
-		motif/settings.h \
 		motif/slider.h \
 		motif/spinbutt.h \
 		motif/statbmp.h \

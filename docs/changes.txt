@@ -202,6 +202,10 @@ wxMSW:
 - fix iostream.h problem with VC 7.1 (it doesn't support it any longer) 
 - compilation fix for XRC with mingw32
 
+wxMotif:
+
+- fixed "make install"
+
 
 2.4.1
 -----

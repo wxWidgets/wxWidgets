@@ -1190,7 +1190,6 @@ radiobox.h	MotifH
 radiobut.h	MotifH
 region.h	MotifH
 scrolbar.h	MotifH
-settings.h	MotifH
 slider.h	MotifH
 spinbutt.h	MotifH
 statbmp.h	MotifH
