@@ -54,6 +54,10 @@
     #undef WXDEBUG_REFRESH
 #endif
 
+#if defined(WXDEBUG_REFRESH) && defined(__WXMSW__) && !defined(__WXMICROWIN__)
+#include "wx/msw/private.h"
+#endif
+
 // ============================================================================
 // implementation
 // ============================================================================

@@ -49,6 +49,10 @@
     #undef WXDEBUG_SCROLLBAR
 #endif // !__WXDEBUG__
 
+#if defined(WXDEBUG_SCROLLBAR) && defined(__WXMSW__) && !defined(__WXMICROWIN__)
+#include "wx/msw/private.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // wxScrollBarTimer: this class is used to repeatedly scroll the scrollbar
 // when the mouse is help pressed on the arrow or on the bar. It generates the

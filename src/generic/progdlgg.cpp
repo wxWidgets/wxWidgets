@@ -93,7 +93,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 
     bool hasAbortButton = (style & wxPD_CAN_ABORT) != 0;
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     // we have to remove the "Close" button from the title bar then as it is
     // confusing to have it - it doesn't work anyhow
     //
@@ -329,7 +329,7 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
             // tell the user what he should do...
             m_btnAbort->SetLabel(_("Close"));
         }
-#ifdef __WXMSW__
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
         else // enable the close button to give the user a way to close the dlg
         {
             EnableCloseButton(TRUE);
