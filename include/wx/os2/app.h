@@ -21,7 +21,6 @@
 #include <utils.h>
 #undef BYTE_ORDER
 #include <types.h>
-#include <nerrno.h>
 #define INCL_ORDERS
 #endif
 

@@ -56,6 +56,12 @@
 #define wxUSE_TIMEDATE    1
                                 // 0 for no wxTime/wxDate classes
 
+#define wxUSE_MENUS       1
+                                // 0 for no menus
+
+#define wxUSE_JOYSTICK    1
+                                // 0 for no joystick functions
+
 #define wxUSE_CLIPBOARD   1
                                 // 0 for no clipboard functions
 
