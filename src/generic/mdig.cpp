@@ -34,6 +34,8 @@
     #include "wx/intl.h"
 #endif //WX_PRECOMP
 
+#define _(x) wxT(x)
+
 #include "wx/generic/mdig.h"
 
 enum MDI_MENU_ID
@@ -110,7 +112,7 @@ bool wxGenericMDIParentFrame::Create(wxWindow *parent,
       m_pWindowMenu = new wxMenu;
 
       m_pWindowMenu->Append(wxWINDOWCLOSE,    _("Cl&ose"));
-      m_pWindowMenu->Append(wxWINDOWCLOSEALL, _("Close Al&l"));
+      m_pWindowMenu->Append(wxWINDOWCLOSEALL, _("Close All"));
       m_pWindowMenu->AppendSeparator();
       m_pWindowMenu->Append(wxWINDOWNEXT,     _("&Next"));
       m_pWindowMenu->Append(wxWINDOWPREV,     _("&Previous"));
@@ -794,6 +796,16 @@ void wxGenericMDIClientWindow::OnSize(wxSizeEvent& event)
  */
 
 #if wxUSE_GENERIC_MDI_AS_NATIVE
+
+wxMDIChildFrame * wxMDIParentFrame::GetActiveChild() const
+    {
+        wxGenericMDIChildFrame *pGFrame = wxGenericMDIParentFrame::GetActiveChild();
+        wxMDIChildFrame *pFrame = wxDynamicCast(pGFrame, wxMDIChildFrame);
+
+        wxASSERT_MSG(!(pFrame == NULL && pGFrame != NULL), wxT("Active frame is class not derived from wxMDIChildFrame!"));
+
+        return pFrame;
+    }
 
 IMPLEMENT_DYNAMIC_CLASS(wxMDIParentFrame, wxGenericMDIParentFrame)
 IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame, wxGenericMDIChildFrame)
