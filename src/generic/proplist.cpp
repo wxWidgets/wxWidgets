@@ -1713,7 +1713,7 @@ class wxPropertyStringListEditorDialog: public wxDialog
       m_currentSelection = -1;
     }
     ~wxPropertyStringListEditorDialog(void) {}
-    bool OnClose(void);
+    void OnCloseWindow(wxCloseEvent& event);
     void SaveCurrentSelection(void);
     void ShowCurrentSelection(void);
 
@@ -1745,6 +1745,7 @@ BEGIN_EVENT_TABLE(wxPropertyStringListEditorDialog, wxDialog)
     EVT_BUTTON(wxID_PROP_SL_DELETE,		wxPropertyStringListEditorDialog::OnDelete)
     EVT_LISTBOX(wxID_PROP_SL_STRINGS,	wxPropertyStringListEditorDialog::OnStrings)
     EVT_TEXT_ENTER(wxID_PROP_SL_TEXT,			wxPropertyStringListEditorDialog::OnText)
+    EVT_CLOSE(wxPropertyStringListEditorDialog::OnCloseWindow)
 END_EVENT_TABLE()
 
 class wxPropertyStringListEditorText: public wxTextCtrl
@@ -1905,14 +1906,16 @@ void wxPropertyStringListEditorDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 {
   SaveCurrentSelection();
   EndModal(wxID_OK);
-  Close(TRUE);
+  // Close(TRUE);
+  this->Destroy();
 }
 
 void wxPropertyStringListEditorDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 {
   sm_dialogCancelled = TRUE;
   EndModal(wxID_CANCEL);
-  Close(TRUE);
+//  Close(TRUE);
+  this->Destroy();
 }
 
 void wxPropertyStringListEditorDialog::OnText(wxCommandEvent& event)
@@ -1923,10 +1926,10 @@ void wxPropertyStringListEditorDialog::OnText(wxCommandEvent& event)
   }
 }
 
-bool wxPropertyStringListEditorDialog::OnClose(void)
+void wxPropertyStringListEditorDialog::OnCloseWindow(wxCloseEvent& event)
 {
   SaveCurrentSelection();
-  return TRUE;
+  this->Destroy();
 }
 
 void wxPropertyStringListEditorDialog::SaveCurrentSelection(void)

@@ -1,0 +1,9 @@
+      *   Last change:  JS    8 Sep 98    9:19 pm
+NAME         SashTest
+DESCRIPTION  'wxSashWindow Demo'
+EXETYPE      WINDOWS
+STUB         'WINSTUB.EXE'
+CODE         PRELOAD MOVEABLE DISCARDABLE
+DATA         PRELOAD MOVEABLE MULTIPLE
+HEAPSIZE     4048
+STACKSIZE    16000
