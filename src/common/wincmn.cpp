@@ -405,18 +405,18 @@ void wxWindowBase::Centre(int direction)
     wxRect rect = wxGetClientDisplayRect();
     wxSize size (rect.width,rect.height);
 
-#ifndef __WXMGL__ // FIXME - temporary dirty hack!!
-    if (posParent.x >= 0)  // if parent is on the main display
-#endif
+    // NB: in wxMSW, negative position may not neccessary mean "out of screen",
+    //     but it may mean that the window is placed on other than the main
+    //     display. Therefore we only make sure centered window is on the main display
+    //     if the parent is at least partially present here.
+    if (posParent.x + widthParent >= 0)  // if parent is (partially) on the main display
     {
         if (xNew < 0)
             xNew = 0;
         else if (xNew+width > size.x)
             xNew = size.x-width-1;
     }
-#ifndef __WXMGL__ // FIXME - temporary dirty hack!!
-    if (posParent.y >= 0)  // if parent is on the main display
-#endif
+    if (posParent.y + heightParent >= 0)  // if parent is (partially) on the main display
     {
         if (yNew+height > size.y)
             yNew = size.y-height-1;
