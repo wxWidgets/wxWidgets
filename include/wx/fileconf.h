@@ -34,12 +34,12 @@
 // ----------------------------------------------------------------------------
 
 /*
-  wxFileConfig derives from base Config and implements file based config class, 
+  wxFileConfig derives from base Config and implements file based config class,
   i.e. it uses ASCII disk files to store the information. These files are
-  alternatively called INI, .conf or .rc in the documentation. They are 
+  alternatively called INI, .conf or .rc in the documentation. They are
   organized in groups or sections, which can nest (i.e. a group contains
   subgroups, which contain their own subgroups &c). Each group has some
-  number of entries, which are "key = value" pairs. More precisely, the format 
+  number of entries, which are "key = value" pairs. More precisely, the format
   is:
 
   # comments are allowed after either ';' or '#' (Win/UNIX standard)
@@ -118,11 +118,16 @@ public:
   virtual bool GetFirstEntry(wxString& str, long& lIndex);
   virtual bool GetNextEntry (wxString& str, long& lIndex);
 
+  virtual bool HasGroup(const wxString& strName) const;
+  virtual bool HasEntry(const wxString& strName) const;
+
   virtual bool Read(wxString *pstr, const char *szKey,
                     const char *szDefault = 0) const;
   virtual const char *Read(const char *szKey,
                            const char *szDefault = 0) const;
   virtual bool Read(long *pl, const char *szKey, long lDefault) const;
+  virtual long Read(const char *szKey, long lDefault) const
+    { return wxConfig::Read(szKey, lDefault); }
   virtual bool Write(const char *szKey, const char *szValue);
   virtual bool Write(const char *szKey, long lValue);
   virtual bool Flush(bool bCurrentOnly = FALSE);
@@ -141,12 +146,14 @@ public:
   {
   public:
     // ctor
-    LineList(const wxString& str, LineList *pNext = NULL) : m_strLine(str) 
-      { SetNext(pNext); }
-    
-    // 
+    LineList(const wxString& str, LineList *pNext = NULL) : m_strLine(str)
+      { SetNext(pNext); SetPrev(NULL); }
+
+    //
     LineList *Next() const              { return m_pNext;  }
+    LineList *Prev() const              { return m_pPrev;  }
     void      SetNext(LineList *pNext)  { m_pNext = pNext; }
+    void      SetPrev(LineList *pPrev)  { m_pPrev = pPrev; }
 
     //
     void SetText(const wxString& str) { m_strLine = str;  }
@@ -154,13 +161,15 @@ public:
 
   private:
     wxString  m_strLine;      // line contents
-    LineList *m_pNext;        // next node
+    LineList *m_pNext,        // next node
+             *m_pPrev;        // previous one
   };
-  
+
   // functions to work with this list
   LineList *LineListAppend(const wxString& str);
-  LineList *LineListInsert(const wxString& str, 
-                           LineList *pLine);    // NULL => Append()
+  LineList *LineListInsert(const wxString& str,
+                           LineList *pLine);    // NULL => Prepend()
+  void      LineListRemove(LineList *pLine);
   bool      LineListIsEmpty();
 
 private:
@@ -268,7 +277,7 @@ protected:
     // will also recursively set parent's dirty flag
     void SetDirty();
     void SetLine(LineList *pLine);
-    
+
     // the new entries in this subgroup will be inserted after the last subgroup
     // or, if there is none, after the last entry
     void SetLastEntry(ConfigEntry *pLastEntry) { m_pLastEntry = pLastEntry; }

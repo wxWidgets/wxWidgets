@@ -109,6 +109,15 @@ public:
   virtual bool GetFirstEntry(wxString& str, long& lIndex) = 0;
   virtual bool GetNextEntry (wxString& str, long& lIndex) = 0;
 
+  // tests of existence
+    // returns TRUE if the group by this name exists
+  virtual bool HasGroup(const wxString& strName) const = 0;
+    // same as above, but for an entry
+  virtual bool HasEntry(const wxString& strName) const = 0;
+    // returns TRUE if either a group or an entry with a given name exist
+  bool Exists(const wxString& strName) const
+    { return HasGroup(strName) || HasEntry(strName); }
+
   // key access: returns TRUE if value was really read, FALSE if default used
   // (and if the key is not found the default value is returned.)
     // read a string from the key
@@ -119,7 +128,7 @@ public:
   virtual const char *Read(const char *szKey,
                            const char *szDefault = NULL) const;
     // the same for longs
-  long Read(const char *szKey, long lDefault) const
+  virtual long Read(const char *szKey, long lDefault) const
     { long l; Read(&l, szKey, lDefault); return l; }
     // and another version: returns true if default value is returned
   virtual bool Read(long *pl, const char *szKey, long lDefault = 0) const = 0;

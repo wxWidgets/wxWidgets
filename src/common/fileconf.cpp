@@ -2,7 +2,7 @@
 // Name:        fileconf.cpp
 // Purpose:     implementation of wxFileConfig derivation of wxConfig
 // Author:      Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     07.04.98 (adapted from appconf.cpp)
 // RCS-ID:      $Id$
 // Copyright:   (c) 1997 Karsten Ballüder   &  Vadim Zeitlin
@@ -55,7 +55,7 @@
 // is 'c' a valid character in group name?
 // NB: APPCONF_IMMUTABLE_PREFIX and APPCONF_PATH_SEPARATOR must be valid chars,
 //     but _not_ ']' (group name delimiter)
-inline bool IsValid(char c) { return isalnum(c) || strchr("_/-!.*%", c); }
+inline bool IsValid(char c) { return isalnum(c) || strchr("@_/-!.*%", c); }
 
 // filter strings
 static wxString FilterIn(const wxString& str);
@@ -131,7 +131,7 @@ wxString wxFileConfig::GetLocalFileName(const char *szFile)
 
 void wxFileConfig::Init()
 {
-  m_pCurrentGroup = 
+  m_pCurrentGroup =
   m_pRootGroup    = new ConfigGroup(NULL, "", this);
 
   m_linesHead =
@@ -191,7 +191,7 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
 {
   const char *pStart;
   const char *pEnd;
-  
+
   for ( uint n = 0; n < file.GetLineCount(); n++ ) {
     // add the line to linked list
     if ( bLocal )
@@ -238,12 +238,12 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
           case ';':
             bCont = FALSE;
             break;
-        
+
           case ' ':
           case '\t':
             // ignore whitespace ('\n' impossible here)
             break;
-          
+
           default:
             wxLogWarning("file '%s', line %d: '%s' ignored after group header.",
                          file.GetName(), n + 1, pEnd);
@@ -259,7 +259,7 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
       wxString strKey(pStart, pEnd);
 
       // skip whitespace
-      while ( isspace(*pEnd) ) 
+      while ( isspace(*pEnd) )
         pEnd++;
 
       if ( *pEnd++ != '=' ) {
@@ -288,7 +288,7 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
           //  (c) key from global file now found in local one
           // which is exactly what we want.
           else if ( !bLocal || pEntry->IsLocal() ) {
-            wxLogWarning("file '%s', line %d: key '%s' was first found at line %d.", 
+            wxLogWarning("file '%s', line %d: key '%s' was first found at line %d.",
                          file.GetName(), n + 1, strKey.c_str(), pEntry->Line());
 
             if ( bLocal )
@@ -297,7 +297,7 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
         }
 
         // skip whitespace
-        while ( isspace(*pEnd) ) 
+        while ( isspace(*pEnd) )
           pEnd++;
 
         wxString strValue;
@@ -325,8 +325,10 @@ void wxFileConfig::SetPath(const wxString& strPath)
 {
   wxArrayString aParts;
 
-  if ( strPath.IsEmpty() )
+  if ( strPath.IsEmpty() ) {
+    SetRootPath();
     return;
+  }
 
   if ( strPath[0] == APPCONF_PATH_SEPARATOR ) {
     // absolute path
@@ -390,6 +392,26 @@ bool wxFileConfig::GetNextEntry (wxString& str, long& lIndex)
   }
   else
     return FALSE;
+}
+
+// ----------------------------------------------------------------------------
+// tests for existence
+// ----------------------------------------------------------------------------
+
+bool wxFileConfig::HasGroup(const wxString& strName) const
+{
+  PathChanger path(this, strName);
+
+  ConfigGroup *pGroup = m_pCurrentGroup->FindSubgroup(path.Name());
+  return pGroup != NULL;
+}
+
+bool wxFileConfig::HasEntry(const wxString& strName) const
+{
+  PathChanger path(this, strName);
+
+  ConfigEntry *pEntry = m_pCurrentGroup->FindEntry(path.Name());
+  return pEntry != NULL;
 }
 
 // ----------------------------------------------------------------------------
@@ -540,6 +562,7 @@ wxFileConfig::LineList *wxFileConfig::LineListAppend(const wxString& str)
   else {
     // adjust pointers
     m_linesTail->SetNext(pLine);
+    pLine->SetPrev(m_linesTail);
   }
 
   m_linesTail = pLine;
@@ -547,24 +570,47 @@ wxFileConfig::LineList *wxFileConfig::LineListAppend(const wxString& str)
 }
 
 // insert a new line after the given one or in the very beginning if !pLine
-wxFileConfig::LineList *wxFileConfig::LineListInsert(const wxString& str, 
+wxFileConfig::LineList *wxFileConfig::LineListInsert(const wxString& str,
                                                      LineList *pLine)
 {
   if ( pLine == m_linesTail )
     return LineListAppend(str);
 
-  LineList *pNewLine;
-  
+  LineList *pNewLine = new LineList(str);
   if ( pLine == NULL ) {
-    pNewLine = new LineList(str, m_linesHead);
+    // prepend to the list
+    pNewLine->SetNext(m_linesHead);
+    m_linesHead->SetPrev(pNewLine);
     m_linesHead = pNewLine;
   }
   else {
-    pNewLine = new LineList(str, pLine->Next());
+    // insert before pLine
+    LineList *pNext = pLine->Next();
+    pNewLine->SetNext(pNext);
+    pNewLine->SetPrev(pLine);
+    pNext->SetPrev(pNewLine);
     pLine->SetNext(pNewLine);
   }
 
   return pNewLine;
+}
+
+void wxFileConfig::LineListRemove(LineList *pLine)
+{
+  LineList *pPrev = pLine->Prev(),
+           *pNext = pLine->Next();
+  if ( pPrev == NULL ) {
+    // deleting the first entry
+    m_linesHead = pNext;
+  }
+  else {
+    // not the first entry
+    pPrev->SetNext(pNext);
+  }
+
+  pNext->SetPrev(pPrev);
+
+  delete pLine;
 }
 
 bool wxFileConfig::LineListIsEmpty()
@@ -627,7 +673,7 @@ wxFileConfig::LineList *wxFileConfig::ConfigGroup::GetGroupLine()
     if ( Parent() != NULL ) {
       wxString strFullName;
       strFullName << "[" << GetFullName().c_str() + 1 << "]"; // +1: no '/'
-      m_pLine = m_pConfig->LineListInsert(strFullName, 
+      m_pLine = m_pConfig->LineListInsert(strFullName,
                                           Parent()->GetLastGroupLine());
       Parent()->SetLastGroup(this);
     }
@@ -755,7 +801,21 @@ bool wxFileConfig::ConfigGroup::DeleteSubgroup(const char *szName)
   if ( n == nCount )
     return FALSE;
 
-  delete m_aSubgroups[n];
+  nCount = m_aEntries.Count();
+  for ( n = 0; n < nCount; n++ ) {
+    LineList *pLine = m_aEntries[n]->GetLine();
+    if ( pLine != NULL )
+      m_pConfig->LineListRemove(pLine);
+  }
+
+  ConfigGroup *pGroup = m_aSubgroups[n];
+  LineList *pLine = pGroup->m_pLine;
+  if ( pLine != NULL )
+    m_pConfig->LineListRemove(pLine);
+  delete pGroup;
+
+  SetDirty();
+
   m_aSubgroups.Remove(n);
   return TRUE;
 }
@@ -771,13 +831,20 @@ bool wxFileConfig::ConfigGroup::DeleteEntry(const char *szName)
   if ( n == nCount )
     return FALSE;
 
-  delete m_aEntries[n];
+  ConfigEntry *pEntry = m_aEntries[n];
+  LineList *pLine = pEntry->GetLine();
+  if ( pLine != NULL )
+    m_pConfig->LineListRemove(pLine);
+  delete pEntry;
+
+  SetDirty();
+
   m_aEntries.Remove(n);
   return TRUE;
 }
 
 // ----------------------------------------------------------------------------
-// 
+//
 // ----------------------------------------------------------------------------
 void wxFileConfig::ConfigGroup::SetDirty()
 {
@@ -793,7 +860,7 @@ void wxFileConfig::ConfigGroup::SetDirty()
 // ----------------------------------------------------------------------------
 // ctor
 // ----------------------------------------------------------------------------
-wxFileConfig::ConfigEntry::ConfigEntry(wxFileConfig::ConfigGroup *pParent, 
+wxFileConfig::ConfigEntry::ConfigEntry(wxFileConfig::ConfigGroup *pParent,
                                        const wxString& strName,
                                        int nLine)
                          : m_strName(strName)
@@ -829,7 +896,7 @@ void wxFileConfig::ConfigEntry::SetLine(LineList *pLine)
 void wxFileConfig::ConfigEntry::SetValue(const wxString& strValue, bool bUser)
 {
   if ( bUser && IsImmutable() ) {
-    wxLogWarning("Attempt to change immutable key '%s' ignored.", 
+    wxLogWarning("Attempt to change immutable key '%s' ignored.",
                  Name().c_str());
     return;
   }
@@ -853,7 +920,7 @@ void wxFileConfig::ConfigEntry::SetValue(const wxString& strValue, bool bUser)
       // add a new line to the file
       wxASSERT( m_nLine == NOT_FOUND );   // consistency check
 
-      m_pLine = Group()->Config()->LineListInsert(strLine, 
+      m_pLine = Group()->Config()->LineListInsert(strLine,
                                                   Group()->GetLastEntryLine());
       Group()->SetLastEntry(this);
     }
