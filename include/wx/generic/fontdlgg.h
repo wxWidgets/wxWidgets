@@ -79,11 +79,11 @@ class WXDLLEXPORT wxGenericFontDialog: public wxDialog
 DECLARE_EVENT_TABLE()
 };
 
-const wxChar WXDLLEXPORT *wxFontFamilyIntToString(int family);
-const wxChar WXDLLEXPORT *wxFontWeightIntToString(int weight);
-const wxChar WXDLLEXPORT *wxFontStyleIntToString(int style);
-int WXDLLEXPORT wxFontFamilyStringToInt(wxChar *family);
-int WXDLLEXPORT wxFontWeightStringToInt(wxChar *weight);
-int WXDLLEXPORT wxFontStyleStringToInt(wxChar *style);
+WXDLLEXPORT const wxChar *wxFontFamilyIntToString(int family);
+WXDLLEXPORT const wxChar *wxFontWeightIntToString(int weight);
+WXDLLEXPORT const wxChar *wxFontStyleIntToString(int style);
+WXDLLEXPORT int wxFontFamilyStringToInt(wxChar *family);
+WXDLLEXPORT int wxFontWeightStringToInt(wxChar *weight);
+WXDLLEXPORT int wxFontStyleStringToInt(wxChar *style);
 
 #endif
