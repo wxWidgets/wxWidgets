@@ -223,7 +223,15 @@ void MyFrame::OnCommand( wxCommandEvent &event )
       Close( TRUE );
       break;
    case ID_PRINT:
-      m_lwin->Print();
+{
+   wxPrinter printer;
+   wxLayoutPrintout printout(m_lwin->GetLayoutList(),_("M: Printout"));
+   if (! printer.Print(this, &printout, TRUE))
+      wxMessageBox(                           
+         _("There was a problem with printing the message:\n"
+           "perhaps your current printer is not set up correctly?"),
+         _("Printing"), wxOK);
+}
       break;
    case ID_NOWRAP:
    case ID_WRAP:

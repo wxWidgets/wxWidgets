@@ -1,7 +1,7 @@
 /*-*- c++ -*-********************************************************
  * wxlparser.h : parsers,  import/export for wxLayoutList           *
  *                                                                  *
- * (C) 1998 by Karsten Ballüder (Ballueder@usa.net)                 *
+ * (C) 1998,1999 by Karsten Ballüder (Ballueder@usa.net)            *
  *                                                                  *
  * $Id$
  *******************************************************************/
@@ -11,7 +11,7 @@
 #endif
 
 //#include "Mpch.h"
-#ifdef M_BASEDIR
+#ifdef M_PREFIX
 #   include "gui/wxllist.h"
 #   include "gui/wxlparser.h"
 #else
@@ -21,18 +21,18 @@
 
 #define   BASE_SIZE 12
 
-inline static bool IsEndOfLine(const char *p)
+inline static bool IsEndOfLine(const char *p, int mode)
 {
    // in addition to Unix EOL convention we also (but not instead) understand
    // the DOS one under Windows
    return
-#ifdef OS_WIN
-      ((*p == '\r') && (*(p + 1) == '\n')) ||
-#endif
-      (*p == '\n');
+      ((mode & WXLO_EXPORT_WITH_MASK) == WXLO_EXPORT_WITH_CRLF) ?
+      ((*p == '\r') && (*(p + 1) == '\n')) 
+      :
+      (((*p == '\r') && (*(p + 1) == '\n'))||(*p == '\n'));
 }
 
-void wxLayoutImportText(wxLayoutList &list, String const &str)
+void wxLayoutImportText(wxLayoutList &list, String const &str, int withflag)
 {
    char * cptr = (char *)str.c_str(); // string gets changed only temporarily
    const char * begin = cptr;
@@ -41,7 +41,7 @@ void wxLayoutImportText(wxLayoutList &list, String const &str)
    for(;;)
    {
       begin = cptr;
-      while( *cptr && !IsEndOfLine(cptr) )
+      while( *cptr && !IsEndOfLine(cptr, withflag) )
          cptr++;
       backup = *cptr;
       *cptr = '\0';
@@ -49,7 +49,7 @@ void wxLayoutImportText(wxLayoutList &list, String const &str)
       *cptr = backup;
 
       // check if it's the end of this line
-      if ( IsEndOfLine(cptr) )
+      if ( IsEndOfLine(cptr, withflag) )
       {
          // if it was "\r\n", skip the following '\n'
          if ( *cptr == '\r' )
@@ -64,7 +64,7 @@ void wxLayoutImportText(wxLayoutList &list, String const &str)
 
 static
 String wxLayoutExportCmdAsHTML(wxLayoutObjectCmd const & cmd,
-                                 wxLayoutStyleInfo **lastStylePtr)
+                               wxLayoutStyleInfo **lastStylePtr)
 {
    static char buffer[20];
    String html;
@@ -152,13 +152,13 @@ String wxLayoutExportCmdAsHTML(wxLayoutObjectCmd const & cmd,
 #define   WXLO_IS_TEXT(type) \
 ( (type == WXLO_TYPE_TEXT || type == WXLO_TYPE_LINEBREAK) \
   || (type == WXLO_TYPE_CMD \
-      && mode == WXLO_EXPORT_AS_HTML))
+      && (mode & WXLO_EXPORT_AS_MASK) == WXLO_EXPORT_AS_HTML))
 
 
   
-   wxLayoutExportObject *wxLayoutExport(wxLayoutList &list,
-                                        wxLayoutList::iterator &from,
-                                        wxLayoutExportMode mode)
+wxLayoutExportObject *wxLayoutExport(wxLayoutList &list,
+                                     wxLayoutList::iterator &from,
+                                     int mode)
 {
    if(from == list.end())
       return NULL;
@@ -168,7 +168,7 @@ String wxLayoutExportCmdAsHTML(wxLayoutObjectCmd const & cmd,
 
    static wxLayoutStyleInfo *s_si = NULL;
    
-   if( mode == WXLO_EXPORT_AS_OBJECTS || ! WXLO_IS_TEXT(type)) // simple case
+   if( (mode & WXLO_EXPORT_AS_MASK) == WXLO_EXPORT_AS_OBJECTS || ! WXLO_IS_TEXT(type)) // simple case
    {
       export->type = WXLO_EXPORT_OBJECT;
       export->content.object = *from;
@@ -187,12 +187,15 @@ String wxLayoutExportCmdAsHTML(wxLayoutObjectCmd const & cmd,
          *str += ((wxLayoutObjectText *)*from)->GetText();
          break;
       case WXLO_TYPE_LINEBREAK:
-         if(mode == WXLO_EXPORT_AS_HTML)
+         if((mode & WXLO_EXPORT_AS_MASK) == WXLO_EXPORT_AS_HTML)
             *str += "<br>";
-         *str += '\n';
+         if((mode & WXLO_EXPORT_WITH_CRLF) == WXLO_EXPORT_WITH_CRLF)
+            *str += "\r\n";
+         else
+            *str += '\n';
          break;
       case WXLO_TYPE_CMD:
-         wxASSERT_MSG( mode == WXLO_EXPORT_AS_HTML,
+         wxASSERT_MSG( (mode&WXLO_EXPORT_AS_MASK) == WXLO_EXPORT_AS_HTML,
                        "reached cmd object in text mode" );
          
          *str += wxLayoutExportCmdAsHTML(*(wxLayoutObjectCmd const
@@ -205,7 +208,7 @@ String wxLayoutExportCmdAsHTML(wxLayoutObjectCmd const & cmd,
       if(from != list.end())
          type = (*from)->GetType();
    }
-   export->type = (mode == WXLO_EXPORT_AS_HTML) ?  WXLO_EXPORT_HTML : WXLO_EXPORT_TEXT;
+   export->type = ((mode & WXLO_EXPORT_AS_MASK) == WXLO_EXPORT_AS_HTML) ?  WXLO_EXPORT_HTML : WXLO_EXPORT_TEXT;
    export->content.text = str;
    return export;
 }

@@ -42,6 +42,9 @@ public:
    */
    wxLayoutWindow(wxWindow *parent);
 
+   /// Destructor.
+   virtual ~wxLayoutWindow();
+   
    /* Returns a reference to the wxLayoutList object.
       @return the list
    */
@@ -54,14 +57,13 @@ public:
       {
          GetLayoutList().Clear(family,size,style,weight,underline,fg,bg);
          SetBackgroundColour( *GetLayoutList().GetDefaults()->GetBGColour());
-
+         Update();
          m_bDirty = FALSE;
       }
 
    // callbacks
    // NB: these functions are used as event handlers and must not be virtual
    void OnPaint(wxPaintEvent &event);
-   
    void OnLeftMouseClick(wxMouseEvent& event)
       { OnMouse(WXLOWIN_MENU_LCLICK, event); }
    void OnRightMouseClick(wxMouseEvent& event)
@@ -74,29 +76,42 @@ public:
 
    void EnablePopup(bool enable = true) { m_DoPopupMenu = enable; }
    /// gets called by either Update() or OnPaint()
-   void DoPaint(wxDC &dc);
+   void DoPaint(bool cursoronly = false);
 
 #ifdef __WXMSW__
    virtual long MSWGetDlgCode();
 #endif //MSW
 
-   void UpdateScrollbars(void);
-   void Print(void);
-   wxMenu * wxLayoutWindow::MakeFormatMenu(void);
+   /// if exact == false, assume 50% extra size for the future
+   void UpdateScrollbars(bool exact = false);  // don't change this to true!
+   void Print(wxDC &dc);
+   wxMenu * MakeFormatMenu(void);
 
    /// if the flag is true, we send events when user clicks on embedded objects
    inline void SetMouseTracking(bool doIt = true) { m_doSendEvents = doIt; }
-
-   virtual ~wxLayoutWindow() { if(m_PopupMenu) delete m_PopupMenu; }
 
    // dirty flag access
    bool IsDirty() const { return m_llist.IsDirty(); }
    void ResetDirty()    { m_llist.ResetDirty();     }
 
+   void OnSetFocus(wxFocusEvent &ev);
+   void OnKillFocus(wxFocusEvent &ev);
 protected:
+   /// Deletes from cursor to end of line.
+   void DeleteToEndOfLine(void);
+   /// Deletes everything left of cursor.
+   void DeleteToBeginOfLine(void);
+   /// Goto end of line.
+   void GotoEndOfLine(void);
+   /// Goto begin of line.
+   void GotoBeginOfLine(void);
+   /// Delete Line
+   void DeleteLine(void);
    /// generic function for mouse events processing
    void OnMouse(int eventId, wxMouseEvent& event);
-
+   /// scroll to cursor
+   void ScrollToCursor(void);
+   
    /// repaint if needed
    void Update(void);
 
@@ -107,8 +122,6 @@ protected:
    /// the layout list to be displayed
    wxLayoutList m_llist;
 
-   /// have we already set the scrollbars?
-   bool m_ScrollbarsSet;
    /// Where does the current view start?
    int m_ViewStartX; int m_ViewStartY;
    
@@ -119,7 +132,17 @@ protected:
    bool m_DoPopupMenu;
    /// the menu
    wxMenu * m_PopupMenu;
+   /// for derived classes, set when mouse is clicked
+   wxPoint m_ClickPosition;
+   /// for scrollbar calculations:
+   int m_maxx;
+   int m_maxy;
+   int m_lineHeight;
 private:
+   wxMemoryDC  *m_memDC;
+   wxBitmap    *m_bitmap;
+   wxPoint      m_bitmapSize;
+
    DECLARE_EVENT_TABLE()
 };
 

@@ -5,6 +5,8 @@
  *                                                                  *
  * $Id$
  *******************************************************************/
+
+
 #ifndef WXLLIST_H
 #define WXLLIST_H
 
@@ -23,7 +25,7 @@
 // skip the following defines if embedded in M application
 #ifdef   M_BASEDIR
 #   ifdef   DEBUG
-//#      define   WXLAYOUT_DEBUG
+#      define   WXLAYOUT_DEBUG
 #   endif
 #else
     // for testing only:
@@ -328,7 +330,8 @@ public:
              wxPoint const &translate = wxPoint(0,0));
 
    /** Deletes at least to the end of line and redraws */
-   void EraseAndDraw(wxDC &dc, iterator start = iterator(NULL));
+   void EraseAndDraw(wxDC &dc, iterator start = iterator(NULL),
+                     wxPoint const &translate = wxPoint(0,0));
    
    /** Finds the object occupying a certain screen position.
        @return pointer to wxLayoutObjectBase or NULL if not found
@@ -360,9 +363,8 @@ public:
    bool IsEditable(void) const { return m_Editable; }
    /// move cursor, returns true if it could move to the desired position
    bool MoveCursor(int dx = 0, int dy = 0);
-   void SetCursor(wxPoint const &p) { m_CursorPos = p; }
-   void DrawCursor(wxDC &dc, bool erase = false);
-   
+   void SetCursor(wxPoint const &p);
+   void DrawCursor(wxDC &dc, bool erase = false,wxPoint const &translate = wxPoint(0,0));
    /// Get current cursor position cursor coords
    wxPoint GetCursor(void) const { return m_CursorPos; }
    /// Gets graphical coordinates of cursor
@@ -391,6 +393,13 @@ public:
 
    /// Return maximum X,Y coordinates
    wxPoint GetSize(void) const { return wxPoint(m_MaxX, m_MaxY); }
+
+   /// calculates current cursor coordinates, called in Layout()
+   void CalculateCursor(wxDC &dc);
+
+   /// toggle normal/bold cursor
+   void SetBoldCursor(bool bold = true)
+      { m_boldCursor = bold; m_CursorMoved = true;}
 //@}
 protected:
    /// font parameters:
@@ -431,7 +440,7 @@ protected:
    /// object iterator for current cursor position:
    iterator  m_CursorObject;
    /// position of cursor within m_CursorObject:
-   int       m_CursorOffset;
+   CoordType m_CursorOffset;
    
    /// to store content overwritten by cursor
    wxMemoryDC m_CursorMemDC;
@@ -450,14 +459,14 @@ protected:
 private:
    /// Resets the font settings etc to default values
    void ResetSettings(wxDC &dc);
-   /// calculates current cursor coordinates, called in Layout()
-   void CalculateCursor(wxDC &dc);
    /// remembers the last cursor position for which FindObjectCursor was called
    wxPoint m_FoundCursor;
    /// remembers the iterator to the object related to m_FoundCursor
    wxLayoutObjectList::iterator m_FoundIterator;
    /// the wrap margin
    long m_WrapMargin;
+   /// draw a bold cursor?
+   bool m_boldCursor;
 };
 
 class wxLayoutPrintout: public wxPrintout
