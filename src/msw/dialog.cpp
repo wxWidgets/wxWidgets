@@ -121,8 +121,8 @@ bool wxDialog::Create(wxWindow *parent,
 
     if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name) )
         return FALSE;
-
-    SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
+    if (!m_hasFont)
+        SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
     return TRUE;
 }
