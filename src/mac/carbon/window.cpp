@@ -1142,9 +1142,10 @@ void wxWindowMac::DoGetPosition(int *x, int *y) const
         wxWindow *parent = GetParent();
         if ( parent )
         {
-            // we must first adjust it twice, as otherwise it gets lost by the clientareaorigin fix
-            x1 += 2 * parent->MacGetLeftBorderSize() ;
-            y1 += 2 * parent->MacGetTopBorderSize() ;
+            // we must first adjust it to be in window coordinates of the parent, as otherwise it gets lost by the clientareaorigin fix
+            x1 += parent->MacGetLeftBorderSize() ;
+            y1 += parent->MacGetTopBorderSize() ;
+            // and now to client coordinates
             wxPoint pt(parent->GetClientAreaOrigin());
             x1 -= pt.x ;
             y1 -= pt.y ;
@@ -2261,9 +2262,16 @@ void wxWindowMac::MacPaintBorders( int left , int top )
     }
     else if (HasFlag(wxSIMPLE_BORDER))
     {
+#if wxMAC_USE_THEME_BORDER
+        SInt32 border = 0 ;
+        GetThemeMetric( kThemeMetricListBoxFrameOutset , &border ) ;
+        InsetRect( &rect , border , border );
+        DrawThemeListBoxFrame(&rect,IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;   
+#else
         Rect rect = { top , left , h + top , w + left } ;
         RGBForeColor( &darkShadow ) ;
         FrameRect( &rect ) ;
+#endif
     }
 }
 
@@ -2697,14 +2705,14 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
         SetRectRgn( newupdate , origin.x , origin.y , origin.x + point.x , origin.y+point.y ) ;
         SectRgn( newupdate , updatergn , newupdate ) ;
         
-        if (!EmptyRgn(newupdate))
-        {
+//        if (!EmptyRgn(newupdate))
+//        {
             wxWindowDC dc(this);
-            dc.SetClippingRegion(wxRegion(newupdate));
+            dc.SetClippingRegion(wxRegion(updatergn));
             wxEraseEvent eevent( GetId(), &dc );
             eevent.SetEventObject( this );
             GetEventHandler()->ProcessEvent( eevent );
-        }
+//        }
         
         // calculate a client-origin version of the update rgn and set m_updateRegion to that
         OffsetRgn( newupdate , -origin.x , -origin.y ) ;
