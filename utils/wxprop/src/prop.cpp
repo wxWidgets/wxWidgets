@@ -376,8 +376,11 @@ void wxPropertyValue::Copy(wxPropertyValue& copyFrom)
       (*this) = copyFrom.IntegerValuePtr();
       return ;
     case wxPropertyValueStringPtr:
-      (*this) = copyFrom.StringValuePtr();
+    {
+      char** s = copyFrom.StringValuePtr();
+      (*this) = s;
       return ;
+    }
       
     case wxPropertyValueList:
     {
