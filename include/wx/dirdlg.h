@@ -51,8 +51,8 @@ public:
     #include "wx/generic/dirdlgg.h"
     #define wxDirDialog wxGenericDirDialog
 
-// MS Smartphone
-#elif defined(__SMARTPHONE__) && defined(__WXWINCE__)
+// MS PocketPC or MS Smartphone
+#elif defined(__WXMSW__) && defined(__WXWINCE__) && !defined(__HANDHELDPC__)
 
     #include "wx/generic/dirdlgg.h"
     #define wxDirDialog wxGenericDirDialog
