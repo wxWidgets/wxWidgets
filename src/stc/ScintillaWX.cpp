@@ -269,7 +269,7 @@ bool ScintillaWX::ModifyScrollBars(int nMax, int nPage) {
         int  sbThumb  = stc->GetScrollThumb(wxVERTICAL);
         int  sbPos    = stc->GetScrollPos(wxVERTICAL);
         if (sbMax != nMax || sbThumb != nPage) {
-            stc->SetScrollbar(wxVERTICAL, sbPos, nPage, nMax);
+            stc->SetScrollbar(wxVERTICAL, sbPos, nPage, nMax+1);
             modified = true;
         }
     }
@@ -278,7 +278,7 @@ bool ScintillaWX::ModifyScrollBars(int nMax, int nPage) {
         int  sbPage   = stc->m_vScrollBar->GetPageSize();
         int  sbPos    = stc->m_vScrollBar->GetThumbPosition();
         if (sbMax != nMax || sbPage != nPage) {
-            stc->m_vScrollBar->SetScrollbar(sbPos, nPage, nMax, nPage);
+            stc->m_vScrollBar->SetScrollbar(sbPos, nPage, nMax+1, nPage);
             modified = true;
         }
     }
