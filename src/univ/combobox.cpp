@@ -694,7 +694,7 @@ bool wxComboBox::Create(wxWindow *parent,
                         const wxPoint& pos,
                         const wxSize& size,
                         int n,
-                        const wxString *choices,
+                        const wxString choices[],
                         long style,
                         const wxValidator& validator,
                         const wxString& name)

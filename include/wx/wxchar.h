@@ -114,6 +114,8 @@
     #include <ctype.h>
 #elif defined(__WATCOMC__)
     #define wxHAVE_TCHAR_SUPPORT
+#elif defined(__DMC__)
+    #define wxHAVE_TCHAR_SUPPORT
 #elif defined(__MINGW32__) && wxCHECK_W32API_VERSION( 1, 0 )
     #define wxHAVE_TCHAR_SUPPORT
     #include <stddef.h>
@@ -300,7 +302,17 @@
     #define  wxPutchar   _puttchar
     #define  wxPuts      _putts
     #define  wxScanf     _tscanf
+    #if defined(__DMC__)
+        /* Digital Mars adds count to _stprintf (C99) so it does not fit wxWindows needs */
+        /* Instead of it we can use function from MSW api (FIXME: doesn't work) */
+        #ifdef wxUSE_UNICODE
+            #define wxSprintf wsprintfW
+        #else
+            #define wxSprintf wsprintfA
+        #endif
+    #else
     #define  wxSprintf   _stprintf
+    #endif
     #define  wxSscanf    _stscanf
     #define  wxTmpnam    _ttmpnam
     #define  wxUngetc    _tungetc

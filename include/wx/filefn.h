@@ -75,6 +75,7 @@ enum wxSeekMode
 #if defined( __VISUALC__ ) \
     || ( defined(__MINGW32__) && !defined(__WINE__) && wxCHECK_W32API_VERSION( 0, 5 ) ) \
     || ( defined(__MWERKS__) && defined(__WXMSW__) ) \
+    || ( defined(__DMC__) && defined(__WXMSW__) ) \
     || ( defined(__WATCOMC__) && defined(__WXMSW__) )
     // functions
 #if defined(__BORLANDC__) || defined(__WATCOMC__)
@@ -162,6 +163,9 @@ enum wxSeekMode
 #   define wxNEED_WX_UNISTD_H
 #if defined(__MWERKS__) && defined(macintosh)
 	#include <sys/stat.h>
+#endif
+#if defined(__DMC__)
+    typedef unsigned long mode_t;
 #endif
 WXDLLIMPEXP_BASE int wxStat( const wxChar *file_name, wxStructStat *buf );
 WXDLLIMPEXP_BASE int wxAccess( const wxChar *pathname, int mode );
