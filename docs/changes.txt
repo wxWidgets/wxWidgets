@@ -138,6 +138,8 @@ wxGTK:
 - added support for wxCHK_3STATE style (GTK2 only)
 - implemented text underlining under GTK2
 - implemented wxFRAME_NO_TASKBAR style (GTK >= 2.2)
+- implemented support for wxSYS_DCLICK_?, wxSYS_DRAG_? and wxSYS_CURSOR_?
+  in wxSystemSettings::GetMetric (Mart Raudsepp)
 
 wxMotif:
 

@@ -347,9 +347,32 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index )
         case wxSYS_HSCROLL_Y:  return 15;
         case wxSYS_VSCROLL_X:  return 15;
 
+#if defined(__WXGTK20__) && GTK_CHECK_VERSION(2, 4, 0)
+        case wxSYS_DCLICK_X:
+        case wxSYS_DCLICK_Y:
+            gint dclick_distance;
+            g_object_get(gtk_settings_get_default(), "gtk-double-click-distance", &dclick_distance, NULL);
+            return dclick_distance * 2;
+#endif
+
+#if defined(__WXGTK20__)
+        case wxSYS_DRAG_X:
+        case wxSYS_DRAG_Y:
+            gint drag_threshold;
+            g_object_get(gtk_settings_get_default(), "gtk-dnd-drag-threshold", &drag_threshold, NULL);
+            return drag_threshold * 2;
+#endif
+
         // VZ: is there any way to get the cursor size with GDK?
+        // Mart Raudsepp: Yes, there is a way to get the default cursor size for a display ever since GDK 2.4
+#if defined(__WXGTK20__) && GTK_CHECK_VERSION(2, 4, 0)
+        case wxSYS_CURSOR_X:
+        case wxSYS_CURSOR_Y:
+            return gdk_display_get_default_cursor_size(gdk_display_get_default());
+#else
         case wxSYS_CURSOR_X:   return 16;
         case wxSYS_CURSOR_Y:   return 16;
+#endif
         // MBN: ditto for icons
         case wxSYS_ICON_X:     return 32;
         case wxSYS_ICON_Y:     return 32;
