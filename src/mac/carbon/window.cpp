@@ -1896,6 +1896,9 @@ void wxWindowMac::GetTextExtent(const wxString& string, int *x, int *y,
 
 void wxWindowMac::Refresh(bool eraseBack, const wxRect *rect)
 {
+    if ( m_peer == NULL )
+        return ;
+        
 #if TARGET_API_MAC_OSX
     if ( rect == NULL )
         m_peer->SetNeedsDisplay( true ) ; 
