@@ -29,7 +29,8 @@ copy docs\xml\wxPython-metadata.xml %BASE%\docs\xml
 
 rem *** remove unneeded files
 cd _distrib_zip
-ffind /A:D /SB CVS > del-files
+ffind /A:D /SB CVS  > del-files
+ffind /SB *.pyc    >> del-files
 cat del-files
 del /sxzy @del-files
 del del-files
