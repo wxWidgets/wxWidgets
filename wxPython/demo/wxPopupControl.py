@@ -1,13 +1,22 @@
-from wxPython.wx import *
-from wxPython.lib.popupctl import wxPopupControl
-from wxPython.calendar import *
+# 11/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
+# 11/30/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Is it just me or are the graphics for the control not lining up right?
+# 
 
-class TestDateControl(wxPopupControl):
+import  wx
+import  wx.lib.popupctl as  pop
+import  wx.calendar     as  cal
+
+class TestDateControl(pop.wxPopupControl):
     def __init__(self,*_args,**_kwargs):
-        apply(wxPopupControl.__init__,(self,) + _args,_kwargs)
+        apply(pop.wxPopupControl.__init__,(self,) + _args,_kwargs)
 
-        self.win = wxWindow(self,-1,pos = (0,0),style = 0)
-        self.cal = wxCalendarCtrl(self.win,-1,pos = (0,0))
+        self.win = wx.Window(self,-1,pos = (0,0),style = 0)
+        self.cal = cal.CalendarCtrl(self.win,-1,pos = (0,0))
 
         bz = self.cal.GetBestSize()
         self.win.SetSize(bz)
@@ -17,7 +26,7 @@ class TestDateControl(wxPopupControl):
         self.SetPopupContent(self.win)
 
         # Event registration for date selection
-        EVT_CALENDAR_DAY(self.cal,self.cal.GetId(),self.OnCalSelected)
+        self.cal.Bind(cal.EVT_CALENDAR_DAY, self.OnCalSelected)
 
     # Method called when a day is selected in the calendar
     def OnCalSelected(self,evt):
@@ -39,26 +48,29 @@ class TestDateControl(wxPopupControl):
         txtValue = self.GetValue()
         dmy = txtValue.split('/')
         didSet = False
+
         if len(dmy) == 3:
             date = self.cal.GetDate()
             d = int(dmy[0])
             m = int(dmy[1]) - 1
             y = int(dmy[2])
+
             if d > 0 and d < 31:
                 if m >= 0 and m < 12:
                     if y > 1000:
-                        self.cal.SetDate(wxDateTimeFromDMY(d,m,y))
+                        self.cal.SetDate(wx.DateTimeFromDMY(d,m,y))
                         didSet = True
+
         if not didSet:
-            self.cal.SetDate(wxDateTime_Today())
+            self.cal.SetDate(wx.DateTime_Today())
 
 
 #---------------------------------------------------------------------------
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, log):
         self.log = log
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
         date = TestDateControl(self, -1, pos = (30,30), size = (100,22))
 
 #----------------------------------------------------------------------
@@ -68,8 +80,6 @@ def runTest(frame, nb, log):
     return win
 
 #----------------------------------------------------------------------
-
-
 
 overview = """<html><body>
 <h2><center>wxPopupControl</center></h2>
@@ -84,7 +94,6 @@ wxPopupWindow should be used...
 
 </body></html>
 """
-
 
 
 if __name__ == '__main__':

@@ -1,29 +1,30 @@
+# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-from wxPython.wx import *
-
-import images
+import  wx
+import  images
 
 #----------------------------------------------------------------------
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
         self.log = log
         self.count = 0
 
-        wxStaticText(self, -1, "This is a wxStaticBitmap.", wxPoint(45, 15))
+        wx.StaticText(self, -1, "This is a wxStaticBitmap.", (45, 15))
 
         bmp = images.getTest2Bitmap()
-        mask = wxMaskColour(bmp, wxBLUE)
+        mask = wx.MaskColour(bmp, wx.BLUE)
         bmp.SetMask(mask)
-        wxStaticBitmap(self, -1, bmp, wxPoint(80, 50),
-                       wxSize(bmp.GetWidth(), bmp.GetHeight()))
+        wx.StaticBitmap(self, -1, bmp, (80, 50), (bmp.GetWidth(), bmp.GetHeight()))
 
         bmp = images.getRobinBitmap()
-        wxStaticBitmap(self, -1, bmp, (80, 150))
+        wx.StaticBitmap(self, -1, bmp, (80, 150))
 
-        wxStaticText(self, -1, "Hey, if Ousterhout can do it, so can I.",
-                     (200, 175))
+        wx.StaticText(self, -1, "Hey, if Ousterhout can do it, so can I.", (200, 175))
 
 
 #----------------------------------------------------------------------
@@ -34,14 +35,15 @@ def runTest(frame, nb, log):
 
 #----------------------------------------------------------------------
 
-
-
-
-
 overview = """\
+A static bitmap control displays a bitmap.
+
+The bitmap to be displayed should have a small number of colours, such as 16, 
+to avoid palette problems.
+
+A bitmap can be derived from most image formats using the wxImage class.
+
 """
-
-
 
 if __name__ == '__main__':
     import sys,os

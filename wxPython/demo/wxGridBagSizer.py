@@ -20,7 +20,6 @@ class TestFrame(wx.Frame):
         gbs.Add( wx.StaticText(p, -1, gbsDescription),
                  (0,0), (1,7), wx.ALIGN_CENTER | wx.ALL, 5)
 
-
         gbs.Add( wx.TextCtrl(p, -1, "pos(1,0)"), (1,0) )
         gbs.Add( wx.TextCtrl(p, -1, "pos(1,1)"), (1,1) )
         gbs.Add( wx.TextCtrl(p, -1, "pos(2,0)"), (2,0) )

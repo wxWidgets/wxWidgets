@@ -1,33 +1,34 @@
+# 11/15/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# o Why is there a popup menu in this demo?
+#
 
-from wxPython.wx import *
+import  wx
 
 #----------------------------------------------------------------------
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
         self.log = log
 
         sampleList = ['zero', 'one', 'two', 'three', 'four', 'five',
                       'six', 'seven', 'eight', 'nine', 'ten', 'eleven',
                       'twelve', 'thirteen', 'fourteen']
 
-        wxStaticText(self, -1, "This example uses the wxCheckListBox control.",
-                               (45, 15))
+        wx.StaticText(self, -1, "This example uses the wxCheckListBox control.", (45, 15))
 
-        lb = wxCheckListBox(self, 60, (80, 50), (80, 120),
-                            sampleList)
-        EVT_LISTBOX(self, 60, self.EvtListBox)
-        EVT_LISTBOX_DCLICK(self, 60, self.EvtListBoxDClick)
+        lb = wx.CheckListBox(self, 60, (80, 50), (80, 120), sampleList)
+        self.Bind(wx.EVT_LISTBOX, self.EvtListBox, id=60)
+        self.Bind(wx.EVT_LISTBOX_DCLICK, self.EvtListBoxDClick, id=60)
         lb.SetSelection(0)
         self.lb = lb
 
         pos = lb.GetPosition().x + lb.GetSize().width + 25
-        btn = wxButton(self, -1, "Test SetString", (pos, 50))
-        EVT_BUTTON(self, btn.GetId(), self.OnTestButton)
-
-        EVT_RIGHT_UP(self, self.OnDoPopup)
-
+        btn = wx.Button(self, -1, "Test SetString", (pos, 50))
+        self.Bind(wx.EVT_BUTTON, self.OnTestButton, id=btn.GetId())
+        self.Bind(wx.EVT_RIGHT_UP, self.OnDoPopup)
 
     def EvtListBox(self, event):
         self.log.WriteText('EvtListBox: %s\n' % event.GetString())
@@ -40,19 +41,23 @@ class TestPanel(wxPanel):
 
 
     def OnDoPopup(self, evt):
-        menu = wxMenu()
+        menu = wx.Menu()
         # Make this first item bold
-        item = wxMenuItem(menu, wxNewId(), "If supported, this is bold")
-        df = wxSystemSettings_GetSystemFont(wxSYS_DEFAULT_GUI_FONT)
-        nf = wxFont(df.GetPointSize(), df.GetFamily(), df.GetStyle(), wxBOLD,
-                    False, df.GetFaceName())
+        item = wx.MenuItem(menu, wx.NewId(), "If supported, this is bold")
+        df = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
+
+        nf = wx.Font(
+                df.GetPointSize(), df.GetFamily(), df.GetStyle(), 
+                wx.BOLD, False, df.GetFaceName()
+                )
+
         item.SetFont(nf)
         menu.AppendItem(item)
 
-        menu.AppendItem(wxMenuItem(menu, wxNewId(), "Normal Item &1"))
-        menu.AppendItem(wxMenuItem(menu, wxNewId(), "Normal Item &2"))
-        menu.AppendItem(wxMenuItem(menu, wxNewId(), "Normal Item &3"))
-        menu.AppendItem(wxMenuItem(menu, wxNewId(), "Normal Item &4"))
+        menu.AppendItem(wx.MenuItem(menu, wx.NewId(), "Normal Item &1"))
+        menu.AppendItem(wx.MenuItem(menu, wx.NewId(), "Normal Item &2"))
+        menu.AppendItem(wx.MenuItem(menu, wx.NewId(), "Normal Item &3"))
+        menu.AppendItem(wx.MenuItem(menu, wx.NewId(), "Normal Item &4"))
 
         self.PopupMenu(menu, evt.GetPosition())
         menu.Destroy()
@@ -68,13 +73,16 @@ def runTest(frame, nb, log):
 #----------------------------------------------------------------------
 
 
-
-
 overview = """\
+A checklistbox is like a Listbox, but allows items to be checked or unchecked rather
+than relying on extended selection (e.g. shift-select) to select multiple items in
+the list. 
+
+This class is currently implemented under Windows and GTK. 
+
+This demo shows the basic CheckListBox and how to use the SetString method to change
+labels dynamically.
 """
-
-
-
 
 
 if __name__ == '__main__':

@@ -1,6 +1,17 @@
-from wxPython.wx import *
-from wxPython.lib.multisash import wxMultiSash
-from wxPython.stc import *
+# 11/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
+# 11/30/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wx renamer needs to be applied to multisash lib.
+# o There appears to be a problem with the image that
+#   the library is trying to use for the alternate cursor
+# 
+
+import  wx
+import  wx.lib.multisash    as  sash
+import  wx.stc              as  stc
 
 #---------------------------------------------------------------------------
 
@@ -26,24 +37,27 @@ returned by GetSaveData, as it is just another object in the dictionary.
 
 #---------------------------------------------------------------------------
 
-class TestWindow(wxStyledTextCtrl):
+class TestWindow(stc.StyledTextCtrl):
     def __init__(self, parent):
-        wxStyledTextCtrl.__init__(self, parent, -1, style=wxNO_BORDER)
+        stc.StyledTextCtrl.__init__(self, parent, -1, style=wx.NO_BORDER)
         self.SetMarginWidth(1,0)
-        if wxPlatform == '__WXMSW__':
+
+        if wx.Platform == '__WXMSW__':
             fSize = 10
         else:
             fSize = 12
-        self.StyleSetFont(wxSTC_STYLE_DEFAULT,
-                          wxFont(fSize, wxMODERN, wxNORMAL, wxNORMAL))
+
+        self.StyleSetFont(
+            stc.STC_STYLE_DEFAULT,
+            wx.Font(fSize, wx.MODERN, wx.NORMAL, wx.NORMAL)
+            )
+
         self.SetText(sampleText)
 
-class TestFrame(wxFrame):
+class TestFrame(wx.Frame):
     def __init__(self, parent, log):
-        wxFrame.__init__(self, parent, -1, "Multi Sash Demo",
-                         size=(640,480))
-        self.multi = wxMultiSash(self,-1,pos = wxPoint(0,0),
-                                 size = (640,480))
+        wx.Frame.__init__(self, parent, -1, "Multi Sash Demo", size=(640,480))
+        self.multi = sash.wxMultiSash(self,-1,pos=(0,0), size=(640,480))
 
         # Use this method to set the default class that will be created when
         # a new sash is created. The class's constructor needs 1 parameter
@@ -55,7 +69,7 @@ class TestFrame(wxFrame):
 
 
 def runTest(frame, nb, log):
-    multi = wxMultiSash(nb, -1, pos = (0,0), size = (640,480))
+    multi = sash.wxMultiSash(nb, -1, pos = (0,0), size = (640,480))
 
     # Use this method to set the default class that will be created when
     # a new sash is created. The class's constructor needs 1 parameter

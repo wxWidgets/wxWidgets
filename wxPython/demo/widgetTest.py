@@ -1,36 +1,42 @@
+# 11/15/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
+# This file is used for the wx.HtmlWindow demo.
+#
 
+import  sys
 
-import sys
-
-from wxPython.wx   import *
-from wxPython.html import *
+import  wx
+import  wx.html as  html
 
 #----------------------------------------------------------------------
 
-
-class TestPanel(wxPanel):
-    def __init__(self, parent, id=-1, size=wxDefaultSize, bgcolor=None):
-        wxPanel.__init__(self, parent, id, size=size)
+class TestPanel(wx.Panel):
+    def __init__(self, parent, id=-1, size=wx.DefaultSize, bgcolor=None):
+        wx.Panel.__init__(self, parent, id, size=size)
 
         if bgcolor:
             self.SetBackgroundColour(bgcolor)
 
-        wxStaticText(self, -1, 'Name:', wxPoint(10, 10))
-        wxStaticText(self, -1, 'Email:', wxPoint(10, 40))
+        wx.StaticText(self, -1, 'Name:', (10, 10))
+        wx.StaticText(self, -1, 'Email:', (10, 40))
 
-        self.name  = wxTextCtrl(self, -1, '', wxPoint(50, 10), wxSize(100, -1))
-        self.email = wxTextCtrl(self, -1, '', wxPoint(50, 40), wxSize(100, -1))
+        self.name  = wx.TextCtrl(self, -1, '', (50, 10), (100, -1))
+        self.email = wx.TextCtrl(self, -1, '', (50, 40), (100, -1))
 
-        wxButton(self, 12121, 'Okay', wxPoint(50, 70))
-        EVT_BUTTON(self, 12121, self.OnButton)
+        wx.Button(self, -1, 'Okay', (50, 70))
+        self.Bind(wx.EVT_BUTTON, self.OnButton)
 
 
     def OnButton(self, event):
         name = self.name.GetValue()
         email = self.email.GetValue()
-        dlg = wxMessageDialog(self,
-                              'You entered:\n    %s\n    %s' % (name, email),
-                              'Results', style = wxOK | wxICON_INFORMATION)
+        dlg = wx.MessageDialog(
+                self, 'You entered:\n    %s\n    %s' % (name, email),
+                'Results', style = wx.OK | wx.ICON_INFORMATION
+                )
+
         dlg.ShowModal()
         dlg.Destroy()
 
@@ -38,17 +44,29 @@ class TestPanel(wxPanel):
 
 #----------------------------------------------------------------------
 
-class TestHtmlPanel(wxPanel):
-    def __init__(self, parent, id=-1, size=wxDefaultSize):
+class TestHtmlPanel(wx.Panel):
+    def __init__(self, parent, id=-1, size=wx.DefaultSize):
+
         import About
-        wxPanel.__init__(self, parent, id, size=size)
-        self.html = wxHtmlWindow(self, -1, wxPoint(5,5), wxSize(400, 350))
+
+        wx.Panel.__init__(self, parent, id, size=size)
+        self.html = html.HtmlWindow(self, -1, (5,5), (400, 350))
         py_version = sys.version.split()[0]
-        self.html.SetPage(About.MyAboutBox.text % (wx.__version__, py_version))
+        self.html.SetPage(About.MyAboutBox.text % (wx.VERSION_STRING, py_version))
         ir = self.html.GetInternalRepresentation()
         self.html.SetSize( (ir.GetWidth()+5, ir.GetHeight()+5) )
         self.Fit()
 
 #----------------------------------------------------------------------
 
+def runTest(frame, nb, log):
+    win = TestHtmlPanel(frame)
+    return win
+
+#----------------------------------------------------------------------
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
 

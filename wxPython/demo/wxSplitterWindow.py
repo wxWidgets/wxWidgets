@@ -1,15 +1,19 @@
+# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-from wxPython.wx import *
-
+import  wx
 
 #---------------------------------------------------------------------------
 
-class MySplitter(wxSplitterWindow):
+class MySplitter(wx.SplitterWindow):
     def __init__(self, parent, ID, log):
-        wxSplitterWindow.__init__(self, parent, ID)
+        wx.SplitterWindow.__init__(self, parent, ID)
         self.log = log
-        EVT_SPLITTER_SASH_POS_CHANGED(self, self.GetId(), self.OnSashChanged)
-        EVT_SPLITTER_SASH_POS_CHANGING(self, self.GetId(), self.OnSashChanging)
+        
+        self.Bind(wx.EVT_SPLITTER_SASH_POS_CHANGED, self.OnSashChanged)
+        self.Bind(wx.EVT_SPLITTER_SASH_POS_CHANGING, self.OnSashChanging)
 
     def OnSashChanged(self, evt):
         self.log.WriteText("sash changed to %s\n" % str(evt.GetSashPosition()))
@@ -26,13 +30,13 @@ class MySplitter(wxSplitterWindow):
 def runTest(frame, nb, log):
     splitter = MySplitter(nb, -1, log)
 
-    p1 = wxWindow(splitter, -1)
-    p1.SetBackgroundColour(wxRED)
-    wxStaticText(p1, -1, "Panel One", wxPoint(5,5)).SetBackgroundColour(wxRED)
+    p1 = wx.Window(splitter, -1)
+    p1.SetBackgroundColour(wx.RED)
+    wx.StaticText(p1, -1, "Panel One", (5,5)).SetBackgroundColour(wx.RED)
 
-    p2 = wxWindow(splitter, -1)
-    p2.SetBackgroundColour(wxBLUE)
-    wxStaticText(p2, -1, "Panel Two", wxPoint(5,5)).SetBackgroundColour(wxBLUE)
+    p2 = wx.Window(splitter, -1)
+    p2.SetBackgroundColour(wx.BLUE)
+    wx.StaticText(p2, -1, "Panel Two", (5,5)).SetBackgroundColour(wx.BLUE)
 
     splitter.SetMinimumPaneSize(20)
     splitter.SplitVertically(p1, p2, 100)
@@ -43,15 +47,11 @@ def runTest(frame, nb, log):
 #---------------------------------------------------------------------------
 
 
-
-
 overview = """\
 This class manages up to two subwindows. The current view can be split
 into two programmatically (perhaps from a menu command), and unsplit
 either programmatically or via the wxSplitterWindow user interface.
 """
-
-
 
 if __name__ == '__main__':
     import sys,os

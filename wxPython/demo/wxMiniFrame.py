@@ -1,17 +1,24 @@
+# 11/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-from wxPython.wx import *
+import  wx
 
 #---------------------------------------------------------------------------
-class MyMiniFrame(wxMiniFrame):
-    def __init__(self, parent, title, pos=wxDefaultPosition, size=wxDefaultSize,
-                 style=wxDEFAULT_FRAME_STYLE ):
-        wxMiniFrame.__init__(self, parent, -1, title, pos, size, style)
-        panel = wxPanel(self, -1)
+class MyMiniFrame(wx.MiniFrame):
+    def __init__(
+        self, parent, title, pos=wx.DefaultPosition, size=wx.DefaultSize,
+        style=wx.DEFAULT_FRAME_STYLE 
+        ):
 
-        button = wxButton(panel, -1, "Close Me")
-        button.SetPosition(wxPoint(15, 15))
-        EVT_BUTTON(self, button.GetId(), self.OnCloseMe)
-        EVT_CLOSE(self, self.OnCloseWindow)
+        wx.MiniFrame.__init__(self, parent, -1, title, pos, size, style)
+        panel = wx.Panel(self, -1)
+
+        button = wx.Button(panel, -1, "Close Me")
+        button.SetPosition((15, 15))
+        self.Bind(wx.EVT_BUTTON, self.OnCloseMe, button)
+        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
     def OnCloseMe(self, event):
         self.Close(True)
@@ -25,9 +32,9 @@ class MyMiniFrame(wxMiniFrame):
 def runTest(frame, nb, log):
     win = MyMiniFrame(frame, "This is a wxMiniFrame",
                       #pos=(250,250), size=(200,200),
-                      style=wxDEFAULT_FRAME_STYLE | wxTINY_CAPTION_HORIZ)
+                      style=wx.DEFAULT_FRAME_STYLE | wx.TINY_CAPTION_HORIZ)
     win.SetSize((200, 200))
-    win.CenterOnParent(wxBOTH)
+    win.CenterOnParent(wx.BOTH)
     frame.otherWin = win
     win.Show(True)
 
@@ -35,19 +42,11 @@ def runTest(frame, nb, log):
 #---------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
 overview = """\
+A miniframe is a frame with a small title bar. It is suitable for floating 
+toolbars that must not take up too much screen area. In other respects, it's the 
+same as a wxFrame.
 """
-
-
-
 
 
 if __name__ == '__main__':

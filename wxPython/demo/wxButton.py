@@ -1,47 +1,50 @@
+# 11/15/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-from wxPython.wx import *
-
-import images
+import  wx
+import  images
 
 #----------------------------------------------------------------------
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1,
-                         style=wxNO_FULL_REPAINT_ON_RESIZE)
+        wx.Panel.__init__(self, parent, -1,
+                         style=wx.NO_FULL_REPAINT_ON_RESIZE)
         self.log = log
 
-        b = wxButton(self, 10, "Default Button", wxPoint(20, 20))
-        EVT_BUTTON(self, 10, self.OnClick)
+        b = wx.Button(self, 10, "Default Button", (20, 20))
+        self.Bind(EVT_BUTTON, self.OnClick, b)
         b.SetDefault()
         b.SetSize(b.GetBestSize())
 
-        b = wxButton(self, 20, "HELLO AGAIN!", wxPoint(20, 80), wxSize(120, 45))
-        EVT_BUTTON(self, 20, self.OnClick)
+        b = wx.Button(self, 20, "HELLO AGAIN!", (20, 80), (120, 45))
+        self.Bind(EVT_BUTTON, self.OnClick, b)
         b.SetToolTipString("This is a Hello button...")
 
-        if 0:  # a test case for catching wxPyAssertionError
+        if 0:  # a test case for catching wx.PyAssertionError
 
-            #wxGetApp().SetAssertMode(wxPYAPP_ASSERT_SUPPRESS)
-            #wxGetApp().SetAssertMode(wxPYAPP_ASSERT_EXCEPTION)
-            #wxGetApp().SetAssertMode(wxPYAPP_ASSERT_DIALOG)
-            #wxGetApp().SetAssertMode(wxPYAPP_ASSERT_EXCEPTION | wxPYAPP_ASSERT_DIALOG)
+            #wx.GetApp().SetAssertMode(wx.PYAPP_ASSERT_SUPPRESS)
+            #wx.GetApp().SetAssertMode(wx.PYAPP_ASSERT_EXCEPTION)
+            #wx.GetApp().SetAssertMode(wx.PYAPP_ASSERT_DIALOG)
+            #wx.GetApp().SetAssertMode(wx.PYAPP_ASSERT_EXCEPTION | wx.PYAPP_ASSERT_DIALOG)
 
             try:
-                bmp = wxBitmap("nosuchfile.bmp", wxBITMAP_TYPE_BMP)
-                mask = wxMaskColour(bmp, wxBLUE)
-            except wxPyAssertionError:
-                self.log.write("Caught wxPyAssertionError!  I will fix the problem.\n")
+                bmp = wx.Bitmap("nosuchfile.bmp", wx.BITMAP_TYPE_BMP)
+                mask = wx.MaskColour(bmp, wx.BLUE)
+            except wx.PyAssertionError:
+                self.log.write("Caught wx.PyAssertionError!  I will fix the problem.\n")
                 bmp = images.getTest2Bitmap()
-                mask = wxMaskColour(bmp, wxBLUE)
+                mask = wx.MaskColour(bmp, wx.BLUE)
         else:
             bmp = images.getTest2Bitmap()
-            mask = wxMaskColour(bmp, wxBLUE)
+            mask = wx.MaskColour(bmp, wx.BLUE)
 
         bmp.SetMask(mask)
-        wxBitmapButton(self, 30, bmp, wxPoint(160, 20),
-                       wxSize(bmp.GetWidth()+10, bmp.GetHeight()+10))
-        EVT_BUTTON(self, 30, self.OnClick)
+        wx.BitmapButton(self, 30, bmp, (160, 20),
+                       (bmp.GetWidth()+10, bmp.GetHeight()+10))
+        self.Bind(wx.EVT_BUTTON, self.OnClick, id=30)
 
 
     def OnClick(self, event):
@@ -61,9 +64,9 @@ def runTest(frame, nb, log):
 
 
 overview = """<html><body>
-<h2>wxButton</h2>
+<h2>Button</h2>
 
-A button is a control that contains a text string or a bitmap and cab be
+A button is a control that contains a text string or a bitmap and can be
 placed on nearly any kind of window.
 
 </body></html>

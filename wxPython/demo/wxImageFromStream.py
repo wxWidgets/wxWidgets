@@ -1,24 +1,31 @@
+# 11/19/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-from wxPython.wx import *
+import  cStringIO
+
+import  wx
+
 from Main import opj
-
-from cStringIO import StringIO
 
 #----------------------------------------------------------------------
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
 
         data = open(opj('bitmaps/image.png'), "rb").read()
-        stream = StringIO(data)
+        stream = cStringIO.StringIO(data)
 
-        bmp = wxBitmapFromImage( wxImageFromStream( stream ))
+        bmp = wx.BitmapFromImage( wx.ImageFromStream( stream ))
 
-        wxStaticText(self, -1,
-                     "This image was loaded from a Python file-like object:",
-                     (15, 15))
-        wxStaticBitmap(self, -1, bmp, (15, 45))#, (bmp.GetWidth(), bmp.GetHeight()))
+        wx.StaticText(
+            self, -1, "This image was loaded from a Python file-like object:", 
+            (15, 15)
+            )
+
+        wx.StaticBitmap(self, -1, bmp, (15, 45))#, (bmp.GetWidth(), bmp.GetHeight()))
 
 
 
@@ -37,10 +44,7 @@ directly from any Python file-like object, such as a memory buffer
 using StringIO.  """
 
 
-
-
 if __name__ == '__main__':
     import sys,os
     import run
     run.main(['', os.path.basename(sys.argv[0])])
-

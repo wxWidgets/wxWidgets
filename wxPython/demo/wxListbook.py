@@ -1,11 +1,15 @@
+# 11/22/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
+# 11/29/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Bunches of imports that might need to go away for the final roll-out.
+# 
 
-from   wxPython.wx import *
+import  sys
 
-import ColorPanel
-import GridSimple
-import wxListCtrl
-import wxScrolledWindow
-import images
+import  wx
 
 colourList = [ "Aquamarine", "Black", "Blue", "Blue Violet", "Brown", "Cadet Blue",
                "Coral", "Cornflower Blue", "Cyan", "Dark Grey", "Dark Green",
@@ -26,10 +30,10 @@ colourList = [ "Aquamarine", "Black", "Blue", "Blue Violet", "Brown", "Cadet Blu
 
 #----------------------------------------------------------------------------
 
-class TestLB(wxListbook):
+class TestLB(wx.Listbook):
     def __init__(self, parent, id, log):
-        wxListbook.__init__(self, parent, id, style=
-                            wxLB_DEFAULT
+        wx.Listbook.__init__(self, parent, id, style=
+                            wx.LB_DEFAULT
                             #wxLB_TOP
                             #wxLB_BOTTOM
                             #wxLB_LEFT
@@ -45,7 +49,6 @@ class TestLB(wxListbook):
             bmp = f()
             il.Add(bmp)
         self.AssignImageList(il)
-        
 
         # Now make a bunch of panels for the list book
         first = True
@@ -71,12 +74,12 @@ class TestLB(wxListbook):
 
 
     def makeColorPanel(self, color):
-        p = wxPanel(self, -1)
+        p = wx.Panel(self, -1)
         win = ColorPanel.ColoredPanel(p, color)
         p.win = win
         def OnCPSize(evt, win=win):
             win.SetSize(evt.GetSize())
-        EVT_SIZE(p, OnCPSize)
+        p.Bind(wx.EVT_SIZE, OnCPSize)
         return p
 
 
@@ -103,8 +106,6 @@ def runTest(frame, nb, log):
 #----------------------------------------------------------------------------
 
 
-
-
 overview = """\
 <html><body>
 <h2>wxListbook</h2>
@@ -120,8 +121,5 @@ if __name__ == '__main__':
     import sys,os
     import run
     run.main(['', os.path.basename(sys.argv[0])])
-
-
-
 
 

@@ -1,39 +1,44 @@
+# 11/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-from   wxPython.wx import *
+import  sys
 
-import ColorPanel
-import GridSimple
-import wxListCtrl
-import wxScrolledWindow
-import images
+import  wx
 
-import sys
+import  ColorPanel
+import  GridSimple
+import  wxListCtrl
+import  wxScrolledWindow
+import  images
 
 #----------------------------------------------------------------------------
 
-class TestNB(wxNotebook):
+class TestNB(wx.Notebook):
     def __init__(self, parent, id, log):
-        wxNotebook.__init__(self, parent, id, style=
+        wx.Notebook.__init__(self, parent, id, style=
                             #wxNB_TOP
-                            wxNB_BOTTOM
+                            wx.NB_BOTTOM
                             #wxNB_LEFT
                             #wxNB_RIGHT
                             )
         self.log = log
 
-        win = self.makeColorPanel(wxBLUE)
+        win = self.makeColorPanel(wx.BLUE)
         self.AddPage(win, "Blue")
-        st = wxStaticText(win.win, -1,
+        st = wx.StaticText(win.win, -1,
                           "You can put nearly any type of window here,\n"
                           "and if the platform supports it then the\n"
                           "tabs can be on any side of the notebook.",
-                          wxPoint(10, 10))
-        st.SetForegroundColour(wxWHITE)
-        st.SetBackgroundColour(wxBLUE)
+                          (10, 10))
+
+        st.SetForegroundColour(wx.WHITE)
+        st.SetBackgroundColour(wx.BLUE)
 
         # Show how to put an image on one of the notebook tabs,
         # first make the image list:
-        il = wxImageList(16, 16)
+        il = wx.ImageList(16, 16)
         idx1 = il.Add(images.getSmilesBitmap())
         self.AssignImageList(il)
 
@@ -41,13 +46,13 @@ class TestNB(wxNotebook):
         self.SetPageImage(0, idx1)
 
 
-        win = self.makeColorPanel(wxRED)
+        win = self.makeColorPanel(wx.RED)
         self.AddPage(win, "Red")
 
         win = wxScrolledWindow.MyCanvas(self)
         self.AddPage(win, 'ScrolledWindow')
 
-        win = self.makeColorPanel(wxGREEN)
+        win = self.makeColorPanel(wx.GREEN)
         self.AddPage(win, "Green")
 
         win = GridSimple.SimpleGrid(self, log)
@@ -56,34 +61,35 @@ class TestNB(wxNotebook):
         win = wxListCtrl.TestListCtrlPanel(self, log)
         self.AddPage(win, 'List')
 
-        win = self.makeColorPanel(wxCYAN)
+        win = self.makeColorPanel(wx.CYAN)
         self.AddPage(win, "Cyan")
 
-##         win = self.makeColorPanel(wxWHITE)
-##         self.AddPage(win, "White")
+#         win = self.makeColorPanel(wxWHITE)
+#         self.AddPage(win, "White")
 
-##         win = self.makeColorPanel(wxBLACK)
-##         self.AddPage(win, "Black")
+#         win = self.makeColorPanel(wxBLACK)
+#         self.AddPage(win, "Black")
 
-        win = self.makeColorPanel(wxNamedColour('MIDNIGHT BLUE'))
+        win = self.makeColorPanel(wx.NamedColour('MIDNIGHT BLUE'))
         self.AddPage(win, "MIDNIGHT BLUE")
 
-        win = self.makeColorPanel(wxNamedColour('INDIAN RED'))
+        win = self.makeColorPanel(wx.NamedColour('INDIAN RED'))
         self.AddPage(win, "INDIAN RED")
 
-        EVT_NOTEBOOK_PAGE_CHANGED(self, self.GetId(), self.OnPageChanged)
-        EVT_NOTEBOOK_PAGE_CHANGING(self, self.GetId(), self.OnPageChanging)
+        self.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
+        self.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGING, self.OnPageChanging)
 
 
     def makeColorPanel(self, color):
-        p = wxPanel(self, -1)
+        p = wx.Panel(self, -1)
         win = ColorPanel.ColoredPanel(p, color)
         p.win = win
+
         def OnCPSize(evt, win=win):
             win.SetSize(evt.GetSize())
-        EVT_SIZE(p, OnCPSize)
-        return p
 
+        p.Bind(wx.EVT_SIZE, OnCPSize)
+        return p
 
     def OnPageChanged(self, event):
         old = event.GetOldSelection()
@@ -108,8 +114,6 @@ def runTest(frame, nb, log):
 #----------------------------------------------------------------------------
 
 
-
-
 overview = """\
 <html><body>
 <h2>wxNotebook</h2>
@@ -122,7 +126,6 @@ InsertPage, passing a window to be used as the page. Do not explicitly
 delete the window for a page that is currently managed by wxNotebook.
 
 """
-
 
 
 if __name__ == '__main__':

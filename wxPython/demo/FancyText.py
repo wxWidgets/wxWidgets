@@ -1,6 +1,21 @@
-
-from wxPython.wx import *
-from wxPython.lib import fancytext
+# 11/5/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated to wx namespace
+#
+# 11/25/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Issues previously noted have evaporated.
+# o Hoo boy, the doc string in the lib needs fixed :-)
+#
+# 12/02/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Making the library's doc string acceptable for the overview rendered
+#   it unusable in the library's own test code, so I copied it over
+#   and massaged the XML into useful HTML. 
+#
+  
+import  wx
+import  wx.lib.fancytext as fancytext
 
 #----------------------------------------------------------------------
 
@@ -11,14 +26,13 @@ test_str = ('<font style="italic" family="swiss" color="red" weight="bold" >'
 test_str2 = '<font family="swiss" color="dark green" size="40">big green text</font>'
 
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent):
-        wxPanel.__init__(self, parent, -1)
-        EVT_PAINT(self, self.OnPaint)
-
+        wx.Panel.__init__(self, parent, -1)
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
 
     def OnPaint(self, evt):
-        dc = wxPaintDC(self)
+        dc = wx.PaintDC(self)
 
         w, h = fancytext.GetExtent(test_str, dc)
         fancytext.RenderToDC(test_str, dc, 20, 20)
@@ -36,8 +50,43 @@ def runTest(frame, nb, log):
 
 
 
-overview = fancytext.__doc__.replace("<", "&lt;")
+overview = \
+"""
+<html>
+<body>
+<h1>FancyText -- <i>methods for rendering XML specified text</i></h1>
 
+<p>This module exports four main methods::
+<pre>
+    def GetExtent(str, dc=None, enclose=True)
+    def GetFullExtent(str, dc=None, enclose=True)
+    def RenderToBitmap(str, background=None, enclose=True)
+    def RenderToDC(str, dc, x, y, enclose=True)
+</pre>
+
+In all cases, 'str' is an XML string. Note that start and end tags
+are only required if *enclose* is set to False. In this case the 
+text should be wrapped in FancyText tags.
+
+<p>In addition, the module exports one class::
+<pre>
+    class StaticFancyText(self, window, id, text, background, ...)
+</pre>
+This class works similar to StaticText except it interprets its text 
+as FancyText.
+
+<p>The text can support<sup>superscripts</sup> and <sub>subscripts</sub>, text
+in different <font size="+3">sizes</font>, <font color="blue">colors</font>, 
+<i>styles</i>, <b>weights</b> and
+<font family="script">families</font>. It also supports a limited set of symbols,
+currently <times/>, <infinity/>, <angle/> as well as greek letters in both
+upper case (<Alpha/><Beta/>...<Omega/>) and lower case (<alpha/><beta/>...<omega/>).
+
+</font></font>
+The End
+</body>
+</html>
+"""
 
 
 

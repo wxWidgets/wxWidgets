@@ -4,34 +4,38 @@
 # menus in wxPython 2.3.3
 #
 #-------------------------------------------------------------------
+# 11/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-from wxPython.wx import *
-import images
-import time
+import  time
+import  wx
+import  images
 
 #-------------------------------------------------------------------
 
-class MyFrame(wxFrame):
+class MyFrame(wx.Frame):
 
     def __init__(self, parent, id, log):
-        wxFrame.__init__(self, parent, id, 'Playing with menus', size=(400, 200))
+        wx.Frame.__init__(self, parent, id, 'Playing with menus', size=(400, 200))
         self.log = log
         self.CenterOnScreen()
 
         self.CreateStatusBar()
         self.SetStatusText("This is the statusbar")
 
-        tc = wxTextCtrl(self, -1, """
+        tc = wx.TextCtrl(self, -1, """
 A bunch of bogus menus have been created for this frame.  You
 can play around with them to see how they behave and then
 check the source for this sample to see how to implement them.
-""", style=wxTE_READONLY|wxTE_MULTILINE)
+""", style=wx.TE_READONLY|wx.TE_MULTILINE)
 
         # Prepare the menu bar
-        menuBar = wxMenuBar()
+        menuBar = wx.MenuBar()
 
         # 1st menu from left
-        menu1 = wxMenu()
+        menu1 = wx.Menu()
         menu1.Append(101, "&Mercury", "This the text in the Statusbar")
         menu1.Append(102, "&Venus", "")
         menu1.Append(103, "&Earth", "You may select Earth too")
@@ -41,11 +45,11 @@ check the source for this sample to see how to implement them.
         menuBar.Append(menu1, "&Planets")
 
         # 2nd menu from left
-        menu2 = wxMenu()
+        menu2 = wx.Menu()
         menu2.Append(201, "Hydrogen")
         menu2.Append(202, "Helium")
         # a submenu in the 2nd menu
-        submenu = wxMenu()
+        submenu = wx.Menu()
         submenu.Append(2031,"Lanthanium")
         submenu.Append(2032,"Cerium")
         submenu.Append(2033,"Praseodymium")
@@ -53,33 +57,36 @@ check the source for this sample to see how to implement them.
         # Append 2nd menu
         menuBar.Append(menu2, "&Elements")
 
-        menu3 = wxMenu()
-        menu3.Append(301, "IDLE", "a Python shell using tcl/tk as GUI", wxITEM_RADIO)
-        menu3.Append(302, "PyCrust", "a Python shell using wxPython as GUI", wxITEM_RADIO)
-        menu3.Append(303, "psi", "a simple Python shell using wxPython as GUI", wxITEM_RADIO)
+        menu3 = wx.Menu()
+        # Radio items
+        menu3.Append(301, "IDLE", "a Python shell using tcl/tk as GUI", wx.ITEM_RADIO)
+        menu3.Append(302, "PyCrust", "a Python shell using wxPython as GUI", wx.ITEM_RADIO)
+        menu3.Append(303, "psi", "a simple Python shell using wxPython as GUI", wx.ITEM_RADIO)
         menu3.AppendSeparator()
-        menu3.Append(304, "project1", "", wxITEM_NORMAL)
-        menu3.Append(305, "project2", "", wxITEM_NORMAL)
+        menu3.Append(304, "project1", "", wx.ITEM_NORMAL)
+        menu3.Append(305, "project2", "", wx.ITEM_NORMAL)
         menuBar.Append(menu3, "&Shells")
 
-        menu4 = wxMenu()
-        menu4.Append(401, "letters", "abcde...", wxITEM_CHECK)
-        menu4.Append(402, "digits", "123...", wxITEM_CHECK)
-        menu4.Append(403, "letters and digits", "abcd... + 123...", wxITEM_CHECK)
+        menu4 = wx.Menu()
+        # Check menu items
+        menu4.Append(401, "letters", "abcde...", wx.ITEM_CHECK)
+        menu4.Append(402, "digits", "123...", wx.ITEM_CHECK)
+        menu4.Append(403, "letters and digits", "abcd... + 123...", wx.ITEM_CHECK)
         menuBar.Append(menu4, "Chec&k")
 
-        menu5 = wxMenu()
+        menu5 = wx.Menu()
         # Show how to put an icon in the menu
-        item = wxMenuItem(menu5, 500, "&Smile!\tCtrl+S", "This one has an icon")
+        item = wx.MenuItem(menu5, 500, "&Smile!\tCtrl+S", "This one has an icon")
         item.SetBitmap(images.getSmilesBitmap())
         menu5.AppendItem(item)
 
+        # Shortcuts
         menu5.Append(501, "Interesting thing\tCtrl+A", "Note the shortcut!")
         menu5.AppendSeparator()
         menu5.Append(502, "Hello\tShift+H")
         menu5.AppendSeparator()
         menu5.Append(503, "remove the submenu")
-        menu6 = wxMenu()
+        menu6 = wx.Menu()
         menu6.Append(601, "Submenu Item")
         menu5.AppendMenu(504, "submenu", menu6)
         menu5.Append(505, "remove this menu")
@@ -91,36 +98,37 @@ check the source for this sample to see how to implement them.
         self.SetMenuBar(menuBar)
 
         # Menu events
-        EVT_MENU_HIGHLIGHT_ALL(self, self.OnMenuHighlight)
+        self.Bind(wx.EVT_MENU_HIGHLIGHT_ALL, self.OnMenuHighlight)
 
-        EVT_MENU(self, 101, self.Menu101)
-        EVT_MENU(self, 102, self.Menu102)
-        EVT_MENU(self, 103, self.Menu103)
-        EVT_MENU(self, 104, self.CloseWindow)
+        self.Bind(wx.EVT_MENU, self.Menu101, id=101)
+        self.Bind(wx.EVT_MENU, self.Menu102, id=102)
+        self.Bind(wx.EVT_MENU, self.Menu103, id=103)
+        self.Bind(wx.EVT_MENU, self.CloseWindow, id=104)
 
-        EVT_MENU(self, 201, self.Menu201)
-        EVT_MENU(self, 202, self.Menu202)
-        EVT_MENU(self, 2031, self.Menu2031)
-        EVT_MENU(self, 2032, self.Menu2032)
-        EVT_MENU(self, 2033, self.Menu2033)
+        self.Bind(wx.EVT_MENU, self.Menu201, id=201)
+        self.Bind(wx.EVT_MENU, self.Menu202, id=202)
+        self.Bind(wx.EVT_MENU, self.Menu2031, id=2031)
+        self.Bind(wx.EVT_MENU, self.Menu2032, id=2032)
+        self.Bind(wx.EVT_MENU, self.Menu2033, id=2033)
 
-        EVT_MENU(self, 301, self.Menu301To303)
-        EVT_MENU(self, 302, self.Menu301To303)
-        EVT_MENU(self, 303, self.Menu301To303)
-        EVT_MENU(self, 304, self.Menu304)
-        EVT_MENU(self, 305, self.Menu305)
+        self.Bind(wx.EVT_MENU, self.Menu301To303, id=301)
+        self.Bind(wx.EVT_MENU, self.Menu301To303, id=302)
+        self.Bind(wx.EVT_MENU, self.Menu301To303, id=303)
+        self.Bind(wx.EVT_MENU, self.Menu304, id=304)
+        self.Bind(wx.EVT_MENU, self.Menu305, id=305)
 
-        EVT_MENU_RANGE(self, 401, 403, self.Menu401To403)
+        # Range of menu items
+        self.Bind(wx.EVT_MENU_RANGE, self.Menu401To403, id=401, id2=403)
 
-        EVT_MENU(self, 500, self.Menu500)
-        EVT_MENU(self, 501, self.Menu501)
-        EVT_MENU(self, 502, self.Menu502)
-        EVT_MENU(self, 503, self.TestRemove)
-        EVT_MENU(self, 505, self.TestRemove2)
-        EVT_MENU(self, 507, self.TestInsert)
-        EVT_MENU(self, 508, self.TestInsert)
+        self.Bind(wx.EVT_MENU, self.Menu500, id=500)
+        self.Bind(wx.EVT_MENU, self.Menu501, id=501)
+        self.Bind(wx.EVT_MENU, self.Menu502, id=502)
+        self.Bind(wx.EVT_MENU, self.TestRemove, id=503)
+        self.Bind(wx.EVT_MENU, self.TestRemove2, id=505)
+        self.Bind(wx.EVT_MENU, self.TestInsert, id=507)
+        self.Bind(wx.EVT_MENU, self.TestInsert, id=508)
 
-        EVT_UPDATE_UI(wxGetApp(), 506, self.TestUpdateUI)
+        wx.GetApp().Bind(wx.EVT_UPDATE_UI, self.TestUpdateUI, id=506)
 
     # Methods
 
@@ -130,8 +138,10 @@ check the source for this sample to see how to implement them.
         item = self.GetMenuBar().FindItemById(id)
         text = item.GetText()
         help = item.GetHelp()
+
         #print text, help
-        event.Skip() # but in this case just call Skip so the default is done
+        # but in this case just call Skip so the default is done
+        event.Skip() 
 
 
     def Menu101(self, event):
@@ -187,14 +197,21 @@ check the source for this sample to see how to implement them.
     def TestRemove(self, evt):
         mb = self.GetMenuBar()
         submenuItem = mb.FindItemById(601)
+
         if not submenuItem:
             return
+
         submenu = submenuItem.GetMenu()
         menu = submenu.GetParent()
 
-        #menu.Remove(504)               # works
-        menu.RemoveItem(mb.FindItemById(504))  # this also works
-        #menu.RemoveItem(submenuItem)   # doesn't work, as expected since submenuItem is not on menu
+        # This works
+        #menu.Remove(504)
+
+        # this also works
+        menu.RemoveItem(mb.FindItemById(504))  
+
+        # This doesn't work, as expected since submenuItem is not on menu        
+        #menu.RemoveItem(submenuItem)   
 
 
     def TestRemove2(self, evt):
@@ -216,24 +233,25 @@ check the source for this sample to see how to implement them.
 
         # figure out the position to insert at
         pos = 0
+
         for i in menu.GetMenuItems():
             if i.GetId() == theID:
                 break
+
             pos += 1
 
         # now insert the new item
-        ID = wxNewId()
+        ID = wx.NewId()
         ##menu.Insert(pos, ID, "NewItem " + str(ID))
-        item = wxMenuItem(menu)
+        item = wx.MenuItem(menu)
         item.SetId(ID)
         item.SetText("NewItem " + str(ID))
         menu.InsertItem(pos, item)
 
 
-
 #-------------------------------------------------------------------
 
-wxRegisterId(10000)
+wx.RegisterId(10000)
 
 def runTest(frame, nb, log):
     win = MyFrame(frame, -1, log)
@@ -246,9 +264,33 @@ def runTest(frame, nb, log):
 
 overview = """\
 A demo of using wxMenuBar and wxMenu in various ways.
+
+A menu is a popup (or pull down) list of items, one of which may be selected 
+before the menu goes away (clicking elsewhere dismisses the menu). Menus may be 
+used to construct either menu bars or popup menus.
+
+A menu item has an integer ID associated with it which can be used to identify 
+the selection, or to change the menu item in some way. A menu item with a special 
+identifier -1 is a separator item and doesn't have an associated command but just 
+makes a separator line appear in the menu.
+
+Menu items may be either normal items, check items or radio items. Normal items 
+don't have any special properties while the check items have a boolean flag associated 
+to them and they show a checkmark in the menu when the flag is set. wxWindows 
+automatically toggles the flag value when the item is clicked and its value may 
+be retrieved using either IsChecked method of wxMenu or wxMenuBar itself or by 
+using wxEvent.IsChecked when you get the menu notification for the item in question.
+
+The radio items are similar to the check items except that all the other items 
+in the same radio group are unchecked when a radio item is checked. The radio group 
+is formed by a contiguous range of radio items, i.e. it starts at the first item of 
+this kind and ends with the first item of a different kind (or the end of the menu). 
+Notice that because the radio groups are defined in terms of the item positions 
+inserting or removing the items in the menu containing the radio items risks to not 
+work correctly. Finally note that the radio items are only supported under Windows 
+and GTK+ currently.
+
 """
-
-
 
 
 if __name__ == '__main__':

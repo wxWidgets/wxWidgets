@@ -1,49 +1,64 @@
+# 11/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-from wxPython.wx import *
+import  wx
 
 #---------------------------------------------------------------------------
 
-class wxFindPrefixListBox(wxListBox):
-    def __init__(self, parent, id, pos=wxDefaultPosition, size=wxDefaultSize,
-                 choices=[], style=0, validator=wxDefaultValidator):
-        wxListBox.__init__(self, parent, id, pos, size, choices, style, validator)
+# This listbox subclass lets you type the starting letters of what you want to
+# select, and scrolls the list to the match if it is found.
+class FindPrefixListBox(wx.ListBox):
+    def __init__(self, parent, id, pos=wx.DefaultPosition, size=wx.DefaultSize,
+                 choices=[], style=0, validator=wx.DefaultValidator):
+        wx.ListBox.__init__(self, parent, id, pos, size, choices, style, validator)
         self.typedText = ''
         self.log = parent.log
-        EVT_KEY_DOWN(self, self.OnKey)
+        self.Bind(wx.EVT_KEY_DOWN, self.OnKey)
 
 
     def FindPrefix(self, prefix):
         self.log.WriteText('Looking for prefix: %s\n' % prefix)
+
         if prefix:
             prefix = prefix.lower()
             length = len(prefix)
-            for x in range(self.Number()):
+
+            # Changed in 2.5 because ListBox.Number() is no longer supported.
+            # ListBox.GetCount() is now the appropriate way to go.
+            for x in range(self.GetCount()):
                 text = self.GetString(x)
                 text = text.lower()
+
                 if text[:length] == prefix:
                     self.log.WriteText('Prefix %s is found.\n' % prefix)
                     return x
+
         self.log.WriteText('Prefix %s is not found.\n' % prefix)
         return -1
 
 
     def OnKey(self, evt):
         key = evt.GetKeyCode()
+
         if key >= 32 and key <= 127:
             self.typedText = self.typedText + chr(key)
             item = self.FindPrefix(self.typedText)
+
             if item != -1:
                 self.SetSelection(item)
 
-        elif key == WXK_BACK:   # backspace removes one character and backs up
+        elif key == wx.WXK_BACK:   # backspace removes one character and backs up
             self.typedText = self.typedText[:-1]
+
             if not self.typedText:
                 self.SetSelection(0)
             else:
                 item = self.FindPrefix(self.typedText)
+
                 if item != -1:
                     self.SetSelection(item)
-
         else:
             self.typedText = ''
             evt.Skip()
@@ -54,44 +69,38 @@ class wxFindPrefixListBox(wxListBox):
 
 #---------------------------------------------------------------------------
 
-class TestListBox(wxPanel):
+class TestListBox(wx.Panel):
     def __init__(self, parent, log):
         self.log = log
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
 
         sampleList = ['zero', 'one', 'two', 'three', 'four', 'five',
                       'six', 'seven', 'eight', 'nine', 'ten', 'eleven',
                       'twelve', 'thirteen', 'fourteen']
 
-        wxStaticText(self, -1, "This example uses the wxListBox control.",
-                               wxPoint(45, 10))
-
-        wxStaticText(self, -1, "Select one:", wxPoint(15, 50), wxSize(65, 18))
-        self.lb1 = wxListBox(self, 60, wxPoint(80, 50), wxSize(80, 120),
-                       sampleList, wxLB_SINGLE)
-        EVT_LISTBOX(self, 60, self.EvtListBox)
-        EVT_LISTBOX_DCLICK(self, 60, self.EvtListBoxDClick)
-        EVT_RIGHT_UP(self.lb1, self.EvtRightButton)
+        wx.StaticText(self, -1, "This example uses the wxListBox control.", (45, 10))
+        wx.StaticText(self, -1, "Select one:", (15, 50), (65, 18))
+        self.lb1 = wx.ListBox(self, 60, (80, 50), (80, 120), sampleList, wx.LB_SINGLE)
+        self.Bind(wx.EVT_LISTBOX, self.EvtListBox, self.lb1)
+        self.Bind(wx.EVT_LISTBOX_DCLICK, self.EvtListBoxDClick, self.lb1)
+        self.lb1.Bind(wx.EVT_RIGHT_UP, self.EvtRightButton)
         self.lb1.SetSelection(3)
         self.lb1.Append("with data", "This one has data");
         self.lb1.SetClientData(2, "This one has data");
 
 
-        wxStaticText(self, -1, "Select many:", wxPoint(200, 50), wxSize(65, 18))
-        self.lb2 = wxListBox(self, 70, wxPoint(280, 50), wxSize(80, 120),
-                       sampleList, wxLB_EXTENDED)
-        EVT_LISTBOX(self, 70, self.EvtMultiListBox)
-        EVT_RIGHT_UP(self.lb2, self.EvtRightButton)
+        wx.StaticText(self, -1, "Select many:", (200, 50), (65, 18))
+        self.lb2 = wx.ListBox(self, 70, (280, 50), (80, 120), sampleList, wx.LB_EXTENDED)
+        self.Bind(wx.EVT_LISTBOX, self.EvtMultiListBox, self.lb2)
+        self.lb2.Bind(wx.EVT_RIGHT_UP, self.EvtRightButton)
         self.lb2.SetSelection(0)
-
 
         sampleList = sampleList + ['test a', 'test aa', 'test aab',
                                    'test ab', 'test abc', 'test abcc',
                                    'test abcd' ]
         sampleList.sort()
-        wxStaticText(self, -1, "Find Prefix:", wxPoint(15, 250))
-        fp = wxFindPrefixListBox(self, -1, wxPoint(80, 250), wxSize(80, 120),
-                                 sampleList, wxLB_SINGLE)
+        wx.StaticText(self, -1, "Find Prefix:", (15, 250))
+        fp = FindPrefixListBox(self, -1, (80, 250), (80, 120), sampleList, wx.LB_SINGLE)
         fp.SetSelection(0)
 
 
@@ -101,6 +110,7 @@ class TestListBox(wxPanel):
 
         lb = event.GetEventObject()
         data = lb.GetClientData(lb.GetSelection())
+
         if data is not None:
             self.log.WriteText('\tdata: %s\n' % data)
 
@@ -114,9 +124,11 @@ class TestListBox(wxPanel):
 
     def EvtRightButton(self, event):
         self.log.WriteText('EvtRightButton: %s\n' % event.GetPosition())
+
         if event.GetEventObject().GetId() == 70:
             selections = list(self.lb2.GetSelections())
             selections.reverse()
+
             for index in selections:
                 self.lb2.Delete(index)
 
@@ -128,9 +140,6 @@ def runTest(frame, nb, log):
     return win
 
 #---------------------------------------------------------------------------
-
-
-
 
 
 

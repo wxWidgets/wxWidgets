@@ -1,39 +1,45 @@
+# 11/25/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for V2.5
+#
 
-from wxPython.wx import *
+import  wx
 
 #----------------------------------------------------------------------
 
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
 
-        e = wxFontEnumerator()
+        e = wx.FontEnumerator()
         e.EnumerateFacenames()
         list = e.GetFacenames()
 
         list.sort()
 
-        s1 = wxStaticText(self, -1, "Face names:")
-        self.lb1 = wxListBox(self, -1, wxDefaultPosition, (200, 250),
-                             list, wxLB_SINGLE)
-        EVT_LISTBOX(self, self.lb1.GetId(), self.OnSelect)
+        s1 = wx.StaticText(self, -1, "Face names:")
 
-        self.txt = wxStaticText(self, -1, "Sample text...", (285, 50))
+        self.lb1 = wx.ListBox(self, -1, wx.DefaultPosition, (200, 250),
+                             list, wx.LB_SINGLE)
 
-        row = wxBoxSizer(wxHORIZONTAL)
-        row.Add(s1, 0, wxALL, 5)
-        row.Add(self.lb1, 0, wxALL, 5)
-        row.Add(self.txt, 0, wxALL|wxADJUST_MINSIZE, 5)
+        self.Bind(wx.EVT_LISTBOX, self.OnSelect, id=self.lb1.GetId())
 
-        sizer = wxBoxSizer(wxVERTICAL)
-        sizer.Add(row, 0, wxALL, 30)
+        self.txt = wx.StaticText(self, -1, "Sample text...", (285, 50))
+
+        row = wx.BoxSizer(wx.HORIZONTAL)
+        row.Add(s1, 0, wx.ALL, 5)
+        row.Add(self.lb1, 0, wx.ALL, 5)
+        row.Add(self.txt, 0, wx.ALL|wx.ADJUST_MINSIZE, 5)
+
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(row, 0, wx.ALL, 30)
         self.SetSizer(sizer)
         self.Layout()
 
         self.lb1.SetSelection(0)
         self.OnSelect(None)
-        wxFutureCall(300, self.SetTextSize)
+        wx.FutureCall(300, self.SetTextSize)
 
 
     def SetTextSize(self):
@@ -44,7 +50,7 @@ class TestPanel(wxPanel):
         #print "OnSelect: "
         face = self.lb1.GetStringSelection()
         #print '\t '+face
-        font = wxFont(28, wxDEFAULT, wxNORMAL, wxNORMAL, False, face)
+        font = wx.Font(28, wx.DEFAULT, wx.NORMAL, wx.NORMAL, False, face)
         #print "\t got font"
         self.txt.SetLabel(face)
         #print "\t set label"
@@ -55,9 +61,9 @@ class TestPanel(wxPanel):
 
 
 ##         st = font.GetNativeFontInfo().ToString()
-##         ni2 = wxNativeFontInfo()
+##         ni2 = wx.NativeFontInfo()
 ##         ni2.FromString(st)
-##         font2 = wxFontFromNativeInfo(ni2)
+##         font2 = wx.FontFromNativeInfo(ni2)
 
 #----------------------------------------------------------------------
 
@@ -66,11 +72,6 @@ def runTest(frame, nb, log):
     return win
 
 #----------------------------------------------------------------------
-
-
-
-
-
 
 
 

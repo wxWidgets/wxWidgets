@@ -1,42 +1,47 @@
+# 11/22/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-from wxPython.wx import *
-from wxPython.xrc import *
+import  wx
+import  wx.xrc  as  xrc
+
 from Main import opj
 
 #----------------------------------------------------------------------
 
 RESFILE = opj("data/resource_wdr.xrc")
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
         self.log = log
 
         # make the components
-        label = wxStaticText(self, -1, "The lower panel was built from this XML:")
-        label.SetFont(wxFont(12, wxSWISS, wxNORMAL, wxBOLD))
+        label = wx.StaticText(self, -1, "The lower panel was built from this XML:")
+        label.SetFont(wx.Font(12, wx.SWISS, wx.NORMAL, wx.BOLD))
 
         resourceText = open(RESFILE).read()
-        text = wxTextCtrl(self, -1, resourceText,
-                          style=wxTE_READONLY|wxTE_MULTILINE)
+        text = wx.TextCtrl(self, -1, resourceText,
+                          style=wx.TE_READONLY|wx.TE_MULTILINE)
         text.SetInsertionPoint(0)
 
-        line = wxStaticLine(self, -1)
+        line = wx.StaticLine(self, -1)
 
         # This shows a few different ways to load XML Resources
         if 0:
             # XML Resources can be loaded from a file like this:
-            res = wxXmlResource(RESFILE)
+            res = xrc.XmlResource(RESFILE)
 
         elif 1:
             # or from a Virtual FileSystem:
-            wxFileSystem_AddHandler(wxMemoryFSHandler())
-            wxMemoryFSHandler_AddFile("XRC_Resources/data_file", resourceText)
-            res = wxXmlResource("memory:XRC_Resources/data_file")
+            wx.FileSystem_AddHandler(wx.MemoryFSHandler())
+            wx.MemoryFSHandler_AddFile("XRC_Resources/data_file", resourceText)
+            res = xrc.XmlResource("memory:XRC_Resources/data_file")
 
         else:
             # or from a string, like this:
-            res = wxEmptyXmlResource()
+            res = xrc.EmptyXmlResource()
             res.LoadFromString(resourceText)
 
 
@@ -44,11 +49,11 @@ class TestPanel(wxPanel):
         panel = res.LoadPanel(self, "MyPanel")
 
         # and do the layout
-        sizer = wxBoxSizer(wxVERTICAL)
-        sizer.Add(label, 0, wxEXPAND|wxTOP|wxLEFT, 5)
-        sizer.Add(text, 1, wxEXPAND|wxALL, 5)
-        sizer.Add(line, 0, wxEXPAND)
-        sizer.Add(panel, 1, wxEXPAND|wxALL, 5)
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(label, 0, wx.EXPAND|wx.TOP|wx.LEFT, 5)
+        sizer.Add(text, 1, wx.EXPAND|wx.ALL, 5)
+        sizer.Add(line, 0, wx.EXPAND)
+        sizer.Add(panel, 1, wx.EXPAND|wx.ALL, 5)
 
         self.SetSizer(sizer)
         self.SetAutoLayout(True)
@@ -66,7 +71,6 @@ def runTest(frame, nb, log):
 
 overview = """
 """
-
 
 
 if __name__ == '__main__':

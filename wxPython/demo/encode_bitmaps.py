@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 #----------------------------------------------------------------------
+# 11/5/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Modified for wx namespace
+#
 
 """
 This is a way to save the startup time when running img2py on lots of
@@ -7,7 +11,8 @@ files...
 """
 
 import sys
-from wxPython.tools import img2py
+
+from wx.tools import img2py
 
 
 command_lines = [

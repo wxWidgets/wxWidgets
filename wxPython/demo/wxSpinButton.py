@@ -1,26 +1,32 @@
+# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
+# 11/30/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o EVT_SPIN events (or something about them) freezes up the app.
+# 
 
-from wxPython.wx import *
+import  wx
 
 #----------------------------------------------------------------------
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
         self.log = log
         self.count = 0
 
-        wxStaticText(self, -1, "This example uses the wxSpinButton control.",
-                               wxPoint(45, 15))
+        wx.StaticText(self, -1, "This example uses the wxSpinButton control.", (45, 15))
 
-
-        self.text = wxTextCtrl(self, -1, "1", wxPoint(30, 50), wxSize(60, -1))
+        self.text = wx.TextCtrl(self, -1, "1", (30, 50), (60, -1))
         h = self.text.GetSize().height
-        self.spin = wxSpinButton(self, 20, wxPoint(92, 50), wxSize(h, h),
-                                 wxSP_VERTICAL)
+
+        self.spin = wx.SpinButton(self, -1, (92, 50), (h, h), wx.SP_VERTICAL)
         self.spin.SetRange(1, 100)
         self.spin.SetValue(1)
 
-        EVT_SPIN(self, 20, self.OnSpin)
+        self.Bind(wx.EVT_SPIN, self.OnSpin, self.spin)
 
 
     def OnSpin(self, event):
@@ -36,18 +42,18 @@ def runTest(frame, nb, log):
 #----------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
 overview = """\
+A wxSpinButton has two small up and down (or left and right) arrow buttons. 
+It is often used next to a text control for increment and decrementing a value. 
+Portable programs should try to use wxSpinCtrl instead as wxSpinButton is not 
+implemented for all platforms (Win32 and GTK only currently).
+
+NB: the range supported by this control (and wxSpinCtrl) depends on the platform 
+but is at least -0x8000 to 0x7fff. Under GTK and Win32 with sufficiently new version 
+of comctrl32.dll (at least 4.71 is required, 5.80 is recommended) the full 32 bit 
+range is supported.
+
 """
-
-
 
 if __name__ == '__main__':
     import sys,os

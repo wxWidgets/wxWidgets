@@ -1,6 +1,16 @@
+# 11/22/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# o There are issues using the wx namespace within the xrc code.
+#
+# 11/30/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Error report: "Error: No handler found for XML node 'object', 
+#   class 'wx.StaticText'!"; no text shows on panel.
+#
 
-from wxPython.wx import *
-from wxPython.xrc import *
+import  wx
+import  wx.xrc  as  xrc
 
 #----------------------------------------------------------------------
 
@@ -11,8 +21,8 @@ resourceText = r'''<?xml version="1.0"?>
 
 <object class="MyBluePanel" name="MyPanel">
     <size>200,100</size>
-    <object class="wxStaticText" name="label1">
-        <label>This blue panel is a class derived from wxPanel,\nand is loaded by a custom wxXmlResourceHandler.</label>
+    <object class="wx.StaticText" name="label1">
+        <label>This blue panel is a class derived from wx.Panel,\nand is loaded by a custom XmlResourceHandler.</label>
         <pos>10,10</pos>
     </object>
 </object>
@@ -21,9 +31,9 @@ resourceText = r'''<?xml version="1.0"?>
 
 #----------------------------------------------------------------------
 
-class MyBluePanel(wxPanel):
+class MyBluePanel(wx.Panel):
     def __init__(self, parent, id, pos, size, style, name):
-        wxPanel.__init__(self, parent, id, pos, size, style, name)
+        wx.Panel.__init__(self, parent, id, pos, size, style, name)
 
         # This is the little bit of customization that we do for this
         # silly example.  It could just as easily have been done in
@@ -36,27 +46,27 @@ class MyBluePanel(wxPanel):
 # class a little differently...  This could obviously be done with a
 # single class, but I wanted to make separate ones to make clear what
 # the different requirements are.
-class PreMyBluePanel(wxPanel):
+class PreMyBluePanel(wx.Panel):
     def __init__(self):
-        p = wxPrePanel()
+        p = wx.PrePanel()
         self.PostCreate(p)
 
     def Create(self, parent, id, pos, size, style, name):
-        wxPanel.Create(self, parent, id, pos, size, style, name)
+        wx.Panel.Create(self, parent, id, pos, size, style, name)
         self.SetBackgroundColour("BLUE")
         self.SetForegroundColour("WHITE")
 
 
 #----------------------------------------------------------------------
 
-class MyBluePanelXmlHandler(wxXmlResourceHandler):
+class MyBluePanelXmlHandler(xrc.XmlResourceHandler):
     def __init__(self):
-        wxXmlResourceHandler.__init__(self)
+        xrc.XmlResourceHandler.__init__(self)
         # Specify the styles recognized by objects of this type
-        self.AddStyle("wxNO_3D", wxNO_3D);
-        self.AddStyle("wxTAB_TRAVERSAL", wxTAB_TRAVERSAL);
-        self.AddStyle("wxWS_EX_VALIDATE_RECURSIVELY", wxWS_EX_VALIDATE_RECURSIVELY);
-        self.AddStyle("wxCLIP_CHILDREN", wxCLIP_CHILDREN);
+        self.AddStyle("wx.NO_3D", wx.NO_3D);
+        self.AddStyle("wx.TAB_TRAVERSAL", wx.TAB_TRAVERSAL);
+        self.AddStyle("wx.WS_EX_VALIDATE_RECURSIVELY", wx.WS_EX_VALIDATE_RECURSIVELY);
+        self.AddStyle("wx.CLIP_CHILDREN", wx.CLIP_CHILDREN);
         self.AddWindowStyles();
 
     # This method and the next one are required for XmlResourceHandlers
@@ -90,7 +100,7 @@ class MyBluePanelXmlHandler(wxXmlResourceHandler):
                                 self.GetID(),
                                 self.GetPosition(),
                                 self.GetSize(),
-                                self.GetStyle("style", wxTAB_TRAVERSAL),
+                                self.GetStyle("style", wx.TAB_TRAVERSAL),
                                 self.GetName()
                                 )
         else:
@@ -106,7 +116,7 @@ class MyBluePanelXmlHandler(wxXmlResourceHandler):
                          self.GetID(),
                          self.GetPosition(),
                          self.GetSize(),
-                         self.GetStyle("style", wxTAB_TRAVERSAL),
+                         self.GetStyle("style", wx.TAB_TRAVERSAL),
                          self.GetName()
                          )
 
@@ -122,23 +132,23 @@ class MyBluePanelXmlHandler(wxXmlResourceHandler):
 #----------------------------------------------------------------------
 
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, log):
         self.log = log
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
 
         # make the components
-        label = wxStaticText(self, -1, "The lower panel was built from this XML:")
-        label.SetFont(wxFont(12, wxSWISS, wxNORMAL, wxBOLD))
+        label = wx.StaticText(self, -1, "The lower panel was built from this XML:")
+        label.SetFont(wx.Font(12, wx.SWISS, wx.NORMAL, wx.BOLD))
 
-        text = wxTextCtrl(self, -1, resourceText,
-                          style=wxTE_READONLY|wxTE_MULTILINE)
+        text = wx.TextCtrl(self, -1, resourceText,
+                          style=wx.TE_READONLY|wx.TE_MULTILINE)
         text.SetInsertionPoint(0)
 
-        line = wxStaticLine(self, -1)
+        line = wx.StaticLine(self, -1)
 
         # Load the resource
-        res = wxEmptyXmlResource()
+        res = xrc.EmptyXmlResource()
         res.InsertHandler(MyBluePanelXmlHandler())
         res.LoadFromString(resourceText)
 
@@ -146,11 +156,11 @@ class TestPanel(wxPanel):
         panel = res.LoadObject(self, "MyPanel", "MyBluePanel")
 
         # and do the layout
-        sizer = wxBoxSizer(wxVERTICAL)
-        sizer.Add(label, 0, wxEXPAND|wxTOP|wxLEFT, 5)
-        sizer.Add(text, 1, wxEXPAND|wxALL, 5)
-        sizer.Add(line, 0, wxEXPAND)
-        sizer.Add(panel, 1, wxEXPAND|wxALL, 5)
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(label, 0, wx.EXPAND|wx.TOP|wx.LEFT, 5)
+        sizer.Add(text, 1, wx.EXPAND|wx.ALL, 5)
+        sizer.Add(line, 0, wx.EXPAND)
+        sizer.Add(panel, 1, wx.EXPAND|wx.ALL, 5)
 
         self.SetSizer(sizer)
         self.SetAutoLayout(True)

@@ -1,3 +1,8 @@
+# 11/13/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+#
+
 """
 Hello, and welcome to this test of the wxTreeItemData
 class.
@@ -23,8 +28,10 @@ sample not because it's used, but because it's so
 beautifully documented...
 """
 
-from wxPython import wx
-import sys, string # Don't use it, but it's fun expanding :-)
+import  string  # Used for demo purposes, nothing more. :-)
+import  sys
+
+import  wx
 
 #----------------------------------------------------------------------
 
@@ -47,8 +54,10 @@ def _sourcefinder(func):
 
     for i in range(func.co_firstlineno):
         line = f.readline()
+
     ind = _getindent(line)
     msg = ""
+
     while line:
         msg = msg + line
         line = f.readline()
@@ -56,13 +65,14 @@ def _sourcefinder(func):
         # confused by multiline docstrings. Using == works most of
         # the time... but not always!
         if _getindent(line) == ind: break
+
     return msg
 
 #----------------------------------------------------------------------
 
-class pyTree(wx.wxTreeCtrl):
+class pyTree(wx.TreeCtrl):
     """
-    This wxTreeCtrl derivative displays a tree view of a Python namespace.
+    This wx.TreeCtrl derivative displays a tree view of a Python namespace.
     Anything from which the dir() command returns a non-empty list is a branch
     in this tree.
     """
@@ -75,13 +85,16 @@ class pyTree(wx.wxTreeCtrl):
         SEL_CHANGED handler attempts to display interesting
         information about the selected object.
         """
-        wx.wxTreeCtrl.__init__(self, parent, id)
-        self.root = self.AddRoot(str(root), -1, -1, wx.wxTreeItemData(root))
+        wx.TreeCtrl.__init__(self, parent, id)
+        self.root = self.AddRoot(str(root), -1, -1, wx.TreeItemData(root))
+
         if dir(root):
-            self.SetItemHasChildren(self.root, wx.True)
-        wx.EVT_TREE_ITEM_EXPANDING(self, self.GetId(), self.OnItemExpanding)
-        wx.EVT_TREE_ITEM_COLLAPSED(self, self.GetId(), self.OnItemCollapsed)
-        wx.EVT_TREE_SEL_CHANGED(self, self.GetId(), self.OnSelChanged)
+            self.SetItemHasChildren(self.root, True)
+
+        self.Bind(wx.EVT_TREE_ITEM_EXPANDING, self.OnItemExpanding, id=self.GetId())
+        self.Bind(wx.EVT_TREE_ITEM_COLLAPSED, self.OnItemCollapsed, id=self.GetId())
+        self.Bind(wx.EVT_TREE_SEL_CHANGED, self.OnSelChanged, id=self.GetId())
+
         self.output = None
         self.Expand(self.root)
 
@@ -112,16 +125,20 @@ class pyTree(wx.wxTreeCtrl):
         will again figure out what the offspring is.
         """
         item = event.GetItem()
+
         if self.IsExpanded(item):  # This event can happen twice in the self.Expand call
             return
+            
         obj = self.GetPyData( item )
         lst = dir(obj)
+
         for key in lst:
             new_obj = getattr(obj,key)
             new_item = self.AppendItem( item, key, -1, -1,
-                                        wx.wxTreeItemData(new_obj) )
+                                        wx.TreeItemData(new_obj) )
+
             if dir(new_obj):
-                self.SetItemHasChildren(new_item, wx.True)
+                self.SetItemHasChildren(new_item, True)
 
     def OnItemCollapsed(self, event):
         """
@@ -140,16 +157,22 @@ class pyTree(wx.wxTreeCtrl):
         """
         if not self.output:
             return
+
         obj = self.GetPyData( event.GetItem() )
         msg = str(obj)
+
         if hasattr(obj, '__doc__'):
             msg = msg+"\n\nDocumentation string:\n\n%s" % ( getattr(obj, '__doc__'),)
+
         # Is it a function?
         func = None
+
         if hasattr(obj, "func_code"): # normal function
             func = getattr(obj, "func_code")
+
         elif hasattr(obj, "im_func"): # unbound class method
             func = getattr(getattr(obj, "im_func"), "func_code")
+
         if func: # if we found one, let's try to print the source
             msg = msg+"\n\nFunction source:\n\n" + _sourcefinder(func)
 
@@ -164,17 +187,15 @@ def runTest(frame, nb, log):
     This method is used by the wxPython Demo Framework for integrating
     this demo with the rest.
     """
-    #thisModule = __import__(__name__, globals())
     thisModule = sys.modules[__name__]
-    win = wx.wxFrame(frame, -1, "PyTreeItemData Test")
-    split = wx.wxSplitterWindow(win, -1)
+    win = wx.Frame(frame, -1, "PyTreeItemData Test")
+    split = wx.SplitterWindow(win, -1)
     tree = pyTree(split, -1, thisModule)
-    text = wx.wxTextCtrl(split, -1, "", wx.wxDefaultPosition,
-                         wx.wxDefaultSize, wx.wxTE_MULTILINE)
+    text = wx.TextCtrl(split, -1, "", style=wx.TE_MULTILINE)
     split.SplitVertically(tree, text, 200)
     tree.SetOutput(text.SetValue)
     tree.SelectItem(tree.root)
-    win.SetSize(wx.wxSize(800,500))
+    win.SetSize((800,500))
     frame.otherWin = win
     win.Show(1)
 
@@ -183,33 +204,31 @@ def runTest(frame, nb, log):
 #----------------------------------------------------------------------
 if __name__ == '__main__':
 
-    class MyFrame(wx.wxFrame):
+    class MyFrame(wx.Frame):
         """Very standard Frame class. Nothing special here!"""
 
         def __init__(self):
             """Make a splitter window; left a tree, right a textctrl. Wow."""
             import __main__
-            wx.wxFrame.__init__(self, None, -1, "PyTreeItemData Test",
-                                wx.wxDefaultPosition, wx.wxSize(800,500))
-            split = wx.wxSplitterWindow(self, -1)
+            wx.Frame.__init__(self, None, -1, "PyTreeItemData Test", size=(800,500))
+            split = wx.SplitterWindow(self, -1)
             tree = pyTree(split, -1, __main__)
-            text = wx.wxTextCtrl(split, -1, "", wx.wxDefaultPosition,
-                                 wx.wxDefaultSize, wx.wxTE_MULTILINE)
+            text = wx.TextCtrl(split, -1, "", style=wx.TE_MULTILINE)
             split.SplitVertically(tree, text, 200)
             tree.SetOutput(text.SetValue)
             tree.SelectItem(tree.root)
 
-    class MyApp(wx.wxApp):
+    class MyApp(wx.App):
         """This class is even less interesting than MyFrame."""
 
         def OnInit(self):
             """OnInit. Boring, boring, boring!"""
             frame = MyFrame()
-            frame.Show(wx.True)
+            frame.Show(True)
             self.SetTopWindow(frame)
-            return wx.True
+            return True
 
-    app = MyApp(0)
+    app = MyApp(False)
     app.MainLoop()
 
 

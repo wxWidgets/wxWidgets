@@ -1,104 +1,123 @@
+# 11/6/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+#
 
-from wxPython.wx import *
-from wxPython.lib.buttons import *
+import  wx
+import  wx.lib.buttons  as  buttons
 
 import images
+
 #----------------------------------------------------------------------
 
-
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
         self.log = log
 
-        sizer = wxFlexGridSizer(1, 3, 20, 20)
-        b = wxButton(self, -1, "A real button")
+        sizer = wx.FlexGridSizer(1, 3, 20, 20)
+
+        # A regular button, selected as the default button
+        b = wx.Button(self, -1, "A real button")
         b.SetDefault()
-        EVT_BUTTON(self, b.GetId(), self.OnButton)
+        self.Bind(wx.EVT_BUTTON, self.OnButton, id=b.GetId())
         sizer.Add(b)
 
-        b = wxButton(self, -1, "non-default")
-        EVT_BUTTON(self, b.GetId(), self.OnButton)
+        # Same thing, but NOT set as the default button
+        b = wx.Button(self, -1, "non-default")
+        self.Bind(wx.EVT_BUTTON, self.OnButton, id=b.GetId())
         sizer.Add(b)
         sizer.Add((10,10))
 
-        b = wxGenButton(self, -1, 'Hello')
-        EVT_BUTTON(self, b.GetId(), self.OnButton)
+        # Plain old text button based off GenButton()
+        b = buttons.GenButton(self, -1, 'Hello')
+        self.Bind(wx.EVT_BUTTON, self.OnButton, id=b.GetId())
         sizer.Add(b)
 
-        b = wxGenButton(self, -1, 'disabled')
-        EVT_BUTTON(self, b.GetId(), self.OnButton)
+        # Plain old text button, disabled.
+        b = buttons.GenButton(self, -1, 'disabled')
+        self.Bind(wx.EVT_BUTTON, self.OnButton, id=b.GetId())
         b.Enable(False)
         sizer.Add(b)
 
-        b = wxGenButton(self, -1, 'bigger')
-        EVT_BUTTON(self, b.GetId(), self.OnBiggerButton)
-        b.SetFont(wxFont(20, wxSWISS, wxNORMAL, wxBOLD, False))
+        # This time, we let the botton be as big as it can be.
+        # Also, this one is fancier, with custom colors and bezel size.
+        b = buttons.GenButton(self, -1, 'bigger')
+        self.Bind(wx.EVT_BUTTON, self.OnBiggerButton, id=b.GetId())
+        b.SetFont(wx.Font(20, wx.SWISS, wx.NORMAL, wx.BOLD, False))
         b.SetBezelWidth(5)
         ###b.SetBestSize()
         b.SetBackgroundColour("Navy")
-        b.SetForegroundColour(wxWHITE)
+        b.SetForegroundColour(wx.WHITE)
         b.SetToolTipString("This is a BIG button...")
-        sizer.Add(b, flag=wxADJUST_MINSIZE)  # let the sizer set best size
+        # let the sizer set best size
+        sizer.Add(b, flag=wx.ADJUST_MINSIZE) 
 
+        # An image button
         bmp = images.getTest2Bitmap()
-        b = wxGenBitmapButton(self, -1, bmp)
-        EVT_BUTTON(self, b.GetId(), self.OnButton)
+        b = buttons.GenBitmapButton(self, -1, bmp)
+        self.Bind(wx.EVT_BUTTON, self.OnButton, id=b.GetId())
         sizer.Add(b)
 
+        # An image button, disabled.
         bmp = images.getTest2Bitmap()
-        b = wxGenBitmapButton(self, -1, bmp)
-        EVT_BUTTON(self, b.GetId(), self.OnButton)
+        b = buttons.GenBitmapButton(self, -1, bmp)
+        self.Bind(wx.EVT_BUTTON, self.OnButton, id=b.GetId())
         sizer.Add(b)
         b.Enable(False)
 
-        b = wxGenBitmapButton(self, -1, None)
-        EVT_BUTTON(self, b.GetId(), self.OnButton)
+        # An image button, using a mask to get rid of the
+        # undesireable part of the image
+        b = buttons.GenBitmapButton(self, -1, None)
+        self.Bind(wx.EVT_BUTTON, self.OnButton, id=b.GetId())
         bmp = images.getBulb1Bitmap()
-        mask = wxMaskColour(bmp, wxBLUE)
+        mask = wx.MaskColour(bmp, wx.BLUE)
         bmp.SetMask(mask)
         b.SetBitmapLabel(bmp)
         bmp = images.getBulb2Bitmap()
-        mask = wxMaskColour(bmp, wxBLUE)
+        mask = wx.MaskColour(bmp, wx.BLUE)
         bmp.SetMask(mask)
         b.SetBitmapSelected(bmp)
         b.SetBestSize()
         sizer.Add(b)
 
-        b = wxGenToggleButton(self, -1, "Toggle Button")
-        EVT_BUTTON(self, b.GetId(), self.OnToggleButton)
+        # A toggle button
+        b = buttons.GenToggleButton(self, -1, "Toggle Button")
+        self.Bind(wx.EVT_BUTTON, self.OnToggleButton, id=b.GetId())
         sizer.Add(b)
 
-        b = wxGenBitmapToggleButton(self, -1, None)
-        EVT_BUTTON(self, b.GetId(), self.OnToggleButton)
+        # An image toggle button
+        b = buttons.GenBitmapToggleButton(self, -1, None)
+        self.Bind(wx.EVT_BUTTON, self.OnToggleButton, id=b.GetId())
         bmp = images.getBulb1Bitmap()
-        mask = wxMaskColour(bmp, wxBLUE)
+        mask = wx.MaskColour(bmp, wx.BLUE)
         bmp.SetMask(mask)
         b.SetBitmapLabel(bmp)
         bmp = images.getBulb2Bitmap()
-        mask = wxMaskColour(bmp, wxBLUE)
+        mask = wx.MaskColour(bmp, wx.BLUE)
         bmp.SetMask(mask)
         b.SetBitmapSelected(bmp)
         b.SetToggle(True)
         b.SetBestSize()
         sizer.Add(b)
 
-        b = wxGenBitmapTextButton(self, -1, None, "Bitmapped Text", size = (200, 45))
-        EVT_BUTTON(self, b.GetId(), self.OnButton)
+        # A bitmap button with text.
+        b = buttons.GenBitmapTextButton(self, -1, None, "Bitmapped Text", size = (200, 45))
+        self.Bind(wx.EVT_BUTTON, self.OnButton, id=b.GetId())
         bmp = images.getBulb1Bitmap()
-        mask = wxMaskColour(bmp, wxBLUE)
+        mask = wx.MaskColour(bmp, wx.BLUE)
         bmp.SetMask(mask)
         b.SetBitmapLabel(bmp)
         bmp = images.getBulb2Bitmap()
-        mask = wxMaskColour(bmp, wxBLUE)
+        mask = wx.MaskColour(bmp, wx.BLUE)
         bmp.SetMask(mask)
         b.SetBitmapSelected(bmp)
         b.SetUseFocusIndicator(False)
         b.SetBestSize()
         sizer.Add(b)
 
-        border = wxBoxSizer(wxVERTICAL)
-        border.Add(sizer, 0, wxALL, 25)
+        border = wx.BoxSizer(wx.VERTICAL)
+        border.Add(sizer, 0, wx.ALL, 25)
         self.SetSizer(border)
 
 
@@ -131,10 +150,7 @@ def runTest(frame, nb, log):
 #----------------------------------------------------------------------
 
 
-import wxPython.lib.buttons
-overview = wxPython.lib.buttons.__doc__
-
-
+overview = buttons.__doc__
 
 if __name__ == '__main__':
     import sys,os

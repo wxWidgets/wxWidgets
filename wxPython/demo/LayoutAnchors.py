@@ -1,67 +1,179 @@
+# 11/6/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# o In the lambda function at the top, removed the leading 'wx' from the
+#   ID names to remove confusion with 'official' wx members.
+#
 
-from wxPython.wx import *
-from wxPython.lib.anchors import LayoutAnchors
+import  wx
+import  wx.lib.anchors as anchors
 
 #----------------------------------------------------------------------
 
+# Nifty little trick here; apply wx.NewId() to generate a series of
+# IDs used later on in the app. 
 
-[wxID_ANCHORSDEMOFRAMEANCHOREDPANEL, wxID_ANCHORSDEMOFRAMEHELPSTATICTEXT,
- wxID_ANCHORSDEMOFRAMEMAINPANEL, wxID_ANCHORSDEMOFRAMEBACKGROUNDPANEL,
- wxID_ANCHORSDEMOFRAMERIGHTCHECKBOX, wxID_ANCHORSDEMOFRAMEOKBUTTON,
- wxID_ANCHORSDEMOFRAMETOPCHECKBOX, wxID_ANCHORSDEMOFRAMEBOTTOMCHECKBOX,
- wxID_ANCHORSDEMOFRAME, wxID_ANCHORSDEMOFRAMELEFTCHECKBOX,
- ] = map(lambda _init_ctrls: wxNewId(), range(10))
+[   ID_ANCHORSDEMOFRAMEANCHOREDPANEL, 
+    ID_ANCHORSDEMOFRAMEHELPSTATICTEXT,
+    ID_ANCHORSDEMOFRAMEMAINPANEL, 
+    ID_ANCHORSDEMOFRAMEBACKGROUNDPANEL,
+    ID_ANCHORSDEMOFRAMERIGHTCHECKBOX, 
+    ID_ANCHORSDEMOFRAMEOKBUTTON,
+    ID_ANCHORSDEMOFRAMETOPCHECKBOX, 
+    ID_ANCHORSDEMOFRAMEBOTTOMCHECKBOX,
+    ID_ANCHORSDEMOFRAME, 
+    ID_ANCHORSDEMOFRAMELEFTCHECKBOX,
+ ] = map(lambda _init_ctrls: wx.NewId(), range(10))
 
-class AnchorsDemoFrame(wxFrame):
+# A small note here: while only certain parts of this frame are actually demonstrating
+# the capabilities of the LayoutAnchors feature, all the controls are within the same
+# frame; therefore, all controls and windows within the frame must use LayoutAnchors.
+# You can't mix LayoutAnchors and sizers.
+class AnchorsDemoFrame(wx.Frame):
     def _init_utils(self):
         pass
 
     def _init_ctrls(self, prnt):
-        wxFrame.__init__(self, size = wxSize(328, 187), id = wxID_ANCHORSDEMOFRAME, title = 'LayoutAnchors Demonstration', parent = prnt, name = 'AnchorsDemoFrame', style = wxDEFAULT_FRAME_STYLE | wxCLIP_CHILDREN, pos = wxPoint(261, 123))
+        wx.Frame.__init__(
+            self, size=(328, 187), id=ID_ANCHORSDEMOFRAME, 
+            title='LayoutAnchors Demonstration', parent=prnt, 
+            name='AnchorsDemoFrame', 
+            style = wx.DEFAULT_FRAME_STYLE | wx.CLIP_CHILDREN, pos=(261, 123)
+            )
+
         self._init_utils()
 
-        self.mainPanel = wxPanel(size = wxSize(320, 160), parent = self, id = wxID_ANCHORSDEMOFRAMEMAINPANEL, name = 'panel1', style = wxTAB_TRAVERSAL | wxCLIP_CHILDREN, pos = wxPoint(0, 0))
+        self.mainPanel = wx.Panel(
+                            size=(320, 160), parent=self, 
+                            id=ID_ANCHORSDEMOFRAMEMAINPANEL, name='panel1', 
+                            style=wx.TAB_TRAVERSAL | wx.CLIP_CHILDREN, 
+                            pos=(0, 0)
+                            )
+
         self.mainPanel.SetAutoLayout(True)
 
-        self.okButton = wxButton(label = 'OK', id = wxID_ANCHORSDEMOFRAMEOKBUTTON, parent = self.mainPanel, name = 'okButton', size = wxSize(72, 24), style = 0, pos = wxPoint(240, 128))
-        self.okButton.SetConstraints(LayoutAnchors(self.okButton, False, False, True, True))
-        EVT_BUTTON(self.okButton, wxID_ANCHORSDEMOFRAMEOKBUTTON, self.OnOkButtonButton)
+        self.okButton = wx.Button(
+                            label='OK', id=ID_ANCHORSDEMOFRAMEOKBUTTON, 
+                            parent=self.mainPanel, name='okButton', 
+                            size=(72, 24), style=0, pos=(240, 128)
+                            )
 
-        self.backgroundPanel = wxPanel(size = wxSize(304, 80), parent = self.mainPanel, id = wxID_ANCHORSDEMOFRAMEBACKGROUNDPANEL, name = 'backgroundPanel', style = wxSIMPLE_BORDER | wxCLIP_CHILDREN, pos = wxPoint(8, 40))
-        self.backgroundPanel.SetBackgroundColour(wxColour(255, 255, 255))
-        self.backgroundPanel.SetConstraints(LayoutAnchors(self.backgroundPanel, True, True, True, True))
+        self.okButton.SetConstraints(
+            anchors.LayoutAnchors(self.okButton, False, False, True, True)
+            )
 
-        self.anchoredPanel = wxPanel(size = wxSize(88, 48), id = wxID_ANCHORSDEMOFRAMEANCHOREDPANEL, parent = self.backgroundPanel, name = 'anchoredPanel', style = wxSIMPLE_BORDER, pos = wxPoint(104, 16))
-        self.anchoredPanel.SetBackgroundColour(wxColour(0, 0, 222))
-        self.anchoredPanel.SetConstraints(LayoutAnchors(self.anchoredPanel, False, False, False, False))
+        self.Bind(
+            wx.EVT_BUTTON, self.OnOkButtonButton, id=ID_ANCHORSDEMOFRAMEOKBUTTON
+            )
 
-        self.leftCheckBox = wxCheckBox(label = 'Left', id = wxID_ANCHORSDEMOFRAMELEFTCHECKBOX, parent = self.mainPanel, name = 'leftCheckBox', size = wxSize(40, 16), style = 0, pos = wxPoint(8, 8))
-        self.leftCheckBox.SetConstraints(LayoutAnchors(self.leftCheckBox, False, True, False, False))
-        EVT_CHECKBOX(self.leftCheckBox, wxID_ANCHORSDEMOFRAMELEFTCHECKBOX, self.OnCheckboxCheckbox)
+        self.backgroundPanel = wx.Panel(
+                                size=(304, 80), parent=self.mainPanel, 
+                                id=ID_ANCHORSDEMOFRAMEBACKGROUNDPANEL, 
+                                name='backgroundPanel', 
+                                style=wx.SIMPLE_BORDER | wx.CLIP_CHILDREN, 
+                                pos = (8, 40)
+                                )
 
-        self.topCheckBox = wxCheckBox(label = 'Top', id = wxID_ANCHORSDEMOFRAMETOPCHECKBOX, parent = self.mainPanel, name = 'topCheckBox', size = wxSize(40, 16), style = 0, pos = wxPoint(88, 8))
-        self.topCheckBox.SetConstraints(LayoutAnchors(self.topCheckBox, False, True, False, False))
-        EVT_CHECKBOX(self.topCheckBox, wxID_ANCHORSDEMOFRAMETOPCHECKBOX, self.OnCheckboxCheckbox)
+        self.backgroundPanel.SetBackgroundColour(wx.Colour(255, 255, 255))
+        self.backgroundPanel.SetConstraints(
+            anchors.LayoutAnchors(self.backgroundPanel, True, True, True, True)
+            )
 
-        self.rightCheckBox = wxCheckBox(label = 'Right', id = wxID_ANCHORSDEMOFRAMERIGHTCHECKBOX, parent = self.mainPanel, name = 'rightCheckBox', size = wxSize(48, 16), style = 0, pos = wxPoint(168, 8))
-        self.rightCheckBox.SetConstraints(LayoutAnchors(self.rightCheckBox, False, True, False, False))
-        EVT_CHECKBOX(self.rightCheckBox, wxID_ANCHORSDEMOFRAMERIGHTCHECKBOX, self.OnCheckboxCheckbox)
+        self.anchoredPanel = wx.Panel(
+                                size=(88, 48), id=ID_ANCHORSDEMOFRAMEANCHOREDPANEL, 
+                                parent=self.backgroundPanel, name='anchoredPanel', 
+                                style=wx.SIMPLE_BORDER, pos=(104, 16)
+                                )
 
-        self.bottomCheckBox = wxCheckBox(label = 'Bottom', id = wxID_ANCHORSDEMOFRAMEBOTTOMCHECKBOX, parent = self.mainPanel, name = 'bottomCheckBox', size = wxSize(56, 16), style = 0, pos = wxPoint(248, 8))
-        self.bottomCheckBox.SetConstraints(LayoutAnchors(self.bottomCheckBox, False, True, False, False))
-        EVT_CHECKBOX(self.bottomCheckBox, wxID_ANCHORSDEMOFRAMEBOTTOMCHECKBOX, self.OnCheckboxCheckbox)
+        self.anchoredPanel.SetBackgroundColour(wx.Colour(0, 0, 222))
+        self.anchoredPanel.SetConstraints(
+            anchors.LayoutAnchors(self.anchoredPanel, False, False, False, False)
+            )
 
-        self.helpStaticText = wxStaticText(label = 'Select anchor options above, then resize window to see the effect', id = wxID_ANCHORSDEMOFRAMEHELPSTATICTEXT, parent = self.mainPanel, name = 'helpStaticText', size = wxSize(224, 24), style = wxST_NO_AUTORESIZE, pos = wxPoint(8, 128))
-        self.helpStaticText.SetConstraints(LayoutAnchors(self.helpStaticText, True, False, True, True))
+        self.leftCheckBox = wx.CheckBox(
+                                label='Left', id=ID_ANCHORSDEMOFRAMELEFTCHECKBOX, 
+                                parent=self.mainPanel, name='leftCheckBox', 
+                                size=(40, 16), style=0, pos=(8, 8)
+                                )
+
+        self.leftCheckBox.SetConstraints(
+            anchors.LayoutAnchors(self.leftCheckBox, False, True, False, False)
+            )
+        
+        self.Bind(
+            wx.EVT_CHECKBOX, self.OnCheckboxCheckbox, source=self.leftCheckBox,
+            id=ID_ANCHORSDEMOFRAMELEFTCHECKBOX
+            )
+
+        self.topCheckBox = wx.CheckBox(
+                            label='Top', id=ID_ANCHORSDEMOFRAMETOPCHECKBOX, 
+                            parent=self.mainPanel, name='topCheckBox', 
+                            size=(40, 16), style=0, pos=(88, 8)
+                            )
+
+        self.topCheckBox.SetConstraints(
+            anchors.LayoutAnchors(self.topCheckBox, False, True, False, False)
+            )
+        
+        self.Bind(
+            wx.EVT_CHECKBOX, self.OnCheckboxCheckbox, source=self.topCheckBox,
+            id=ID_ANCHORSDEMOFRAMETOPCHECKBOX
+            )
+
+        self.rightCheckBox = wx.CheckBox(
+                            label='Right', id=ID_ANCHORSDEMOFRAMERIGHTCHECKBOX, 
+                            parent=self.mainPanel, name='rightCheckBox', 
+                            size=(48, 16), style=0, pos=(168, 8)
+                            )
+
+        self.rightCheckBox.SetConstraints(
+            anchors.LayoutAnchors(self.rightCheckBox, False, True, False, False)
+            )
+
+        self.Bind(
+            wx.EVT_CHECKBOX, self.OnCheckboxCheckbox, source=self.rightCheckBox,
+            id=ID_ANCHORSDEMOFRAMERIGHTCHECKBOX
+            )
+
+        self.bottomCheckBox = wx.CheckBox(
+                                label='Bottom', id=ID_ANCHORSDEMOFRAMEBOTTOMCHECKBOX, 
+                                parent=self.mainPanel, name='bottomCheckBox', 
+                                size=(56, 16), style=0, pos=(248, 8)
+                                )
+
+        self.bottomCheckBox.SetConstraints(
+            anchors.LayoutAnchors(self.bottomCheckBox, False, True, False, False)
+            )
+
+        self.Bind(
+            wx.EVT_CHECKBOX, self.OnCheckboxCheckbox, source=self.bottomCheckBox,
+            id=ID_ANCHORSDEMOFRAMEBOTTOMCHECKBOX
+            )
+
+        self.helpStaticText = wx.StaticText(
+                                label='Select anchor options above, then resize window to see the effect', 
+                                id=ID_ANCHORSDEMOFRAMEHELPSTATICTEXT, 
+                                parent=self.mainPanel, name='helpStaticText', 
+                                size=(224, 24), style=wx.ST_NO_AUTORESIZE, 
+                                pos=(8, 128)
+                                )
+
+        self.helpStaticText.SetConstraints(
+            anchors.LayoutAnchors(self.helpStaticText, True, False, True, True)
+            )
 
     def __init__(self, parent):
         self._init_ctrls(parent)
 
+    # Based on the values of the above checkboxes, we will adjust the layout constraints
+    # on the sample window whenever one of the checkboxes changes state.
     def OnCheckboxCheckbox(self, event):
         self.anchoredPanel.SetConstraints(
-            LayoutAnchors(self.anchoredPanel,
+            anchors.LayoutAnchors(self.anchoredPanel,
                           self.leftCheckBox.GetValue(), self.topCheckBox.GetValue(),
-                          self.rightCheckBox.GetValue(), self.bottomCheckBox.GetValue()) )
+                          self.rightCheckBox.GetValue(), self.bottomCheckBox.GetValue()
+                          ) 
+            )
 
     def OnOkButtonButton(self, event):
         self.Close()
@@ -77,8 +189,6 @@ def runTest(frame, nb, log):
 
 
 #----------------------------------------------------------------------
-
-
 
 
 overview = """<html><body>
@@ -129,10 +239,6 @@ overview = """<html><body>
 </pre>
 </html></body>
 """
-
-
-
-
 
 
 

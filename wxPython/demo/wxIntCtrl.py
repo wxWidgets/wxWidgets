@@ -1,52 +1,62 @@
-from wxPython.wx import *
-from wxPython.lib.intctrl import *
+# 11/19/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
+# 11/29/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o intctrl needs the renamer applied.
+# o intctrl needs new event binders.
+# 
+
+import  wx
+import  wx.lib.intctrl  as  intctrl
 
 #----------------------------------------------------------------------
 
-class TestPanel( wxPanel ):
+class TestPanel( wx.Panel ):
     def __init__( self, parent, log ):
 
-        wxPanel.__init__( self, parent, -1 )
+        wx.Panel.__init__( self, parent, -1 )
         self.log = log
-        panel = wxPanel( self, -1 )
+        panel = wx.Panel( self, -1 )
 
-        self.set_min = wxCheckBox( panel, -1, "Set minimum value:" )
-        self.min = wxIntCtrl( panel, size=wxSize( 50, -1 ) )
+        self.set_min = wx.CheckBox( panel, -1, "Set minimum value:" )
+        self.min = intctrl.wxIntCtrl( panel, size=( 50, -1 ) )
         self.min.Enable( False )
 
-        self.set_max = wxCheckBox( panel, -1, "Set maximum value:" )
-        self.max = wxIntCtrl( panel, size=wxSize( 50, -1 ) )
+        self.set_max = wx.CheckBox( panel, -1, "Set maximum value:" )
+        self.max = intctrl.wxIntCtrl( panel, size=( 50, -1 ) )
         self.max.Enable( False )
 
-        self.limit_target = wxCheckBox( panel, -1, "Limit control" )
-        self.allow_none = wxCheckBox( panel, -1, "Allow empty control" )
-        self.allow_long = wxCheckBox( panel, -1, "Allow long integers" )
+        self.limit_target = wx.CheckBox( panel, -1, "Limit control" )
+        self.allow_none = wx.CheckBox( panel, -1, "Allow empty control" )
+        self.allow_long = wx.CheckBox( panel, -1, "Allow long integers" )
 
-        label = wxStaticText( panel, -1, "Resulting integer control:" )
-        self.target_ctl = wxIntCtrl( panel )
+        label = wx.StaticText( panel, -1, "Resulting integer control:" )
+        self.target_ctl = intctrl.wxIntCtrl( panel )
 
-        grid = wxFlexGridSizer( 0, 2, 0, 0 )
-        grid.AddWindow( self.set_min, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
-        grid.AddWindow( self.min, 0, wxALIGN_LEFT|wxALL, 5 )
+        grid = wx.FlexGridSizer( 0, 2, 0, 0 )
+        grid.Add( self.set_min, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+        grid.Add( self.min, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
 
-        grid.AddWindow( self.set_max, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
-        grid.AddWindow( self.max, 0, wxALIGN_LEFT|wxALL, 5 )
+        grid.Add(self.set_max, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+        grid.Add( self.max, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
 
-        grid.AddWindow( self.limit_target, 0, wxALIGN_LEFT|wxALL, 5 )
-        grid.AddSpacer( (20, 0), 0, wxALIGN_LEFT|wxALL, 5 )
-        grid.AddWindow( self.allow_none, 0, wxALIGN_LEFT|wxALL, 5 )
-        grid.AddSpacer( (20, 0), 0, wxALIGN_LEFT|wxALL, 5 )
-        grid.AddWindow( self.allow_long, 0, wxALIGN_LEFT|wxALL, 5 )
-        grid.AddSpacer( (20, 0), 0, wxALIGN_LEFT|wxALL, 5 )
+        grid.Add( self.limit_target, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
+        grid.Add( (20, 0), 0, wx.ALIGN_LEFT|wx.ALL, 5 )
+        grid.Add( self.allow_none, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
+        grid.Add( (20, 0), 0, wx.ALIGN_LEFT|wx.ALL, 5 )
+        grid.Add( self.allow_long, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
+        grid.Add( (20, 0), 0, wx.ALIGN_LEFT|wx.ALL, 5 )
 
-        grid.AddSpacer( (20, 0), 0, wxALIGN_LEFT|wxALL, 5 )
-        grid.AddSpacer( (20, 0), 0, wxALIGN_LEFT|wxALL, 5 )
+        grid.Add( (20, 0), 0, wx.ALIGN_LEFT|wx.ALL, 5 )
+        grid.Add( (20, 0), 0, wx.ALIGN_LEFT|wx.ALL, 5 )
 
-        grid.AddWindow( label, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
-        grid.AddWindow( self.target_ctl, 0, wxALIGN_LEFT|wxALL, 5 )
+        grid.Add( label, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+        grid.Add( self.target_ctl, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
 
-        outer_box = wxBoxSizer( wxVERTICAL )
-        outer_box.AddSizer( grid, 0, wxALIGN_CENTRE|wxALL, 20 )
+        outer_box = wx.BoxSizer( wx.VERTICAL )
+        outer_box.AddSizer( grid, 0, wx.ALIGN_CENTRE|wx.ALL, 20 )
 
         panel.SetAutoLayout( True )
         panel.SetSizer( outer_box )
@@ -54,14 +64,16 @@ class TestPanel( wxPanel ):
         panel.Move( (50,50) )
         self.panel = panel
 
-        EVT_CHECKBOX( self, self.set_min.GetId(), self.OnSetMin )
-        EVT_CHECKBOX( self, self.set_max.GetId(), self.OnSetMax )
-        EVT_CHECKBOX( self, self.limit_target.GetId(), self.SetTargetMinMax )
-        EVT_CHECKBOX( self, self.allow_none.GetId(), self.OnSetAllowNone )
-        EVT_CHECKBOX( self, self.allow_long.GetId(), self.OnSetAllowLong )
-        EVT_INT( self, self.min.GetId(), self.SetTargetMinMax )
-        EVT_INT( self, self.max.GetId(), self.SetTargetMinMax )
-        EVT_INT( self, self.target_ctl.GetId(), self.OnTargetChange )
+        self.Bind(wx.EVT_CHECKBOX, self.OnSetMin, self.set_min)
+        self.Bind(wx.EVT_CHECKBOX, self.OnSetMax, self.set_max)
+        self.Bind(wx.EVT_CHECKBOX, self.SetTargetMinMax, self.limit_target)
+        self.Bind(wx.EVT_CHECKBOX, self.OnSetAllowNone, self.allow_none)
+        self.Bind(wx.EVT_CHECKBOX, self.OnSetAllowLong, self.allow_long)
+
+        # Once the intctrl library is updated, this should be too.
+        intctrl.EVT_INT(self, self.min.GetId(), self.SetTargetMinMax)
+        intctrl.EVT_INT(self, self.max.GetId(), self.SetTargetMinMax)
+        intctrl.EVT_INT(self, self.target_ctl.GetId(), self.OnTargetChange)
 
 
     def OnSetMin( self, event ):
@@ -79,6 +91,7 @@ class TestPanel( wxPanel ):
 
         if self.set_min.GetValue():
             min = self.min.GetValue()
+
         if self.set_max.GetValue():
             max = self.max.GetValue()
 
@@ -86,16 +99,18 @@ class TestPanel( wxPanel ):
 
         if min != cur_min and not self.target_ctl.SetMin( min ):
             self.log.write( "min (%d) > current max (%d) -- bound not set\n" % ( min, self.target_ctl.GetMax() ) )
-            self.min.SetForegroundColour( wxRED )
+            self.min.SetForegroundColour( wx.RED )
         else:
-            self.min.SetForegroundColour( wxBLACK )
+            self.min.SetForegroundColour( wx.BLACK )
+
         self.min.Refresh()
 
         if max != cur_max and not self.target_ctl.SetMax( max ):
             self.log.write( "max (%d) < current min (%d) -- bound not set\n" % ( max, self.target_ctl.GetMin() ) )
-            self.max.SetForegroundColour( wxRED )
+            self.max.SetForegroundColour( wx.RED )
         else:
-            self.max.SetForegroundColour( wxBLACK )
+            self.max.SetForegroundColour( wx.BLACK )
+
         self.max.Refresh()
 
         if min != cur_min or max != cur_max:

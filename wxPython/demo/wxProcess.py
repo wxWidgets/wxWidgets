@@ -1,58 +1,62 @@
+# 11/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-from wxPython.wx import *
+import  wx
 
 #----------------------------------------------------------------------
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, ID, log):
-        wxPanel.__init__(self, parent, ID)
+        wx.Panel.__init__(self, parent, ID)
         self.log = log
 
         self.process = None
-        EVT_IDLE(self, self.OnIdle)
+        self.Bind(wx.EVT_IDLE, self.OnIdle)
 
         # We can either derive from wxProcess and override OnTerminate
         # or we can let wxProcess send this window an event that is
         # caught in the normal way...
-        EVT_END_PROCESS(self, -1, self.OnProcessEnded)
+        self.Bind(wx.EVT_END_PROCESS, self.OnProcessEnded)
 
 
         # Make the controls
-        prompt = wxStaticText(self, -1, 'Command line:')
-        self.cmd = wxTextCtrl(self, -1, 'python -u data/echo.py')
-        self.exBtn = wxButton(self, -1, 'Execute')
+        prompt = wx.StaticText(self, -1, 'Command line:')
+        self.cmd = wx.TextCtrl(self, -1, 'python -u data/echo.py')
+        self.exBtn = wx.Button(self, -1, 'Execute')
 
-        self.out = wxTextCtrl(self, -1, '', style=wxTE_MULTILINE|wxTE_READONLY)
+        self.out = wx.TextCtrl(self, -1, '', style=wx.TE_MULTILINE|wx.TE_READONLY)
 
-        self.inp = wxTextCtrl(self, -1, '', style=wxTE_PROCESS_ENTER)
-        self.sndBtn = wxButton(self, -1, 'Send')
-        self.termBtn = wxButton(self, -1, 'Close Stream')
+        self.inp = wx.TextCtrl(self, -1, '', style=wx.TE_PROCESS_ENTER)
+        self.sndBtn = wx.Button(self, -1, 'Send')
+        self.termBtn = wx.Button(self, -1, 'Close Stream')
         self.inp.Enable(False)
         self.sndBtn.Enable(False)
         self.termBtn.Enable(False)
 
         # Hook up the events
-        EVT_BUTTON(self, self.exBtn.GetId(), self.OnExecuteBtn)
-        EVT_BUTTON(self, self.sndBtn.GetId(), self.OnSendText)
-        EVT_BUTTON(self, self.termBtn.GetId(), self.OnCloseStream)
-        EVT_TEXT_ENTER(self, self.inp.GetId(), self.OnSendText)
+        self.Bind(wx.EVT_BUTTON, self.OnExecuteBtn, self.exBtn)
+        self.Bind(wx.EVT_BUTTON, self.OnSendText, self.sndBtn)
+        self.Bind(wx.EVT_BUTTON, self.OnCloseStream, self.termBtn)
+        self.Bind(wx.EVT_TEXT_ENTER, self.OnSendText, self.inp)
 
 
         # Do the layout
-        box1 = wxBoxSizer(wxHORIZONTAL)
-        box1.Add(prompt, 0, wxALIGN_CENTER)
-        box1.Add(self.cmd, 1, wxALIGN_CENTER|wxLEFT|wxRIGHT, 5)
+        box1 = wx.BoxSizer(wx.HORIZONTAL)
+        box1.Add(prompt, 0, wx.ALIGN_CENTER)
+        box1.Add(self.cmd, 1, wx.ALIGN_CENTER|wx.LEFT|wx.RIGHT, 5)
         box1.Add(self.exBtn, 0)
 
-        box2 = wxBoxSizer(wxHORIZONTAL)
-        box2.Add(self.inp, 1, wxALIGN_CENTER)
-        box2.Add(self.sndBtn, 0, wxLEFT, 5)
-        box2.Add(self.termBtn, 0, wxLEFT, 5)
+        box2 = wx.BoxSizer(wx.HORIZONTAL)
+        box2.Add(self.inp, 1, wx.ALIGN_CENTER)
+        box2.Add(self.sndBtn, 0, wx.LEFT, 5)
+        box2.Add(self.termBtn, 0, wx.LEFT, 5)
 
-        sizer = wxBoxSizer(wxVERTICAL)
-        sizer.Add(box1, 0, wxEXPAND|wxALL, 10)
-        sizer.Add(self.out, 1, wxEXPAND|wxALL, 10)
-        sizer.Add(box2, 0, wxEXPAND|wxALL, 10)
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(box1, 0, wx.EXPAND|wx.ALL, 10)
+        sizer.Add(self.out, 1, wx.EXPAND|wx.ALL, 10)
+        sizer.Add(box2, 0, wx.EXPAND|wx.ALL, 10)
 
         self.SetSizer(sizer)
         self.SetAutoLayout(True)
@@ -68,9 +72,9 @@ class TestPanel(wxPanel):
     def OnExecuteBtn(self, evt):
         cmd = self.cmd.GetValue()
 
-        self.process = wxProcess(self)
+        self.process = wx.Process(self)
         self.process.Redirect();
-        pid = wxExecute(cmd, wxEXEC_ASYNC, self.process)
+        pid = wx.Execute(cmd, wx.EXEC_ASYNC, self.process)
         self.log.write('OnExecuteBtn: "%s" pid: %s\n' % (cmd, pid))
 
         self.inp.Enable(True)
@@ -109,6 +113,7 @@ class TestPanel(wxPanel):
                        (evt.GetPid(), evt.GetExitCode()))
 
         stream = self.process.GetInputStream()
+
         if stream.CanRead():
             text = stream.read()
             self.out.AppendText(text)
@@ -152,9 +157,6 @@ child process to exit its main loop.
 
 </body><html>
 """
-
-
-
 
 
 if __name__ == '__main__':

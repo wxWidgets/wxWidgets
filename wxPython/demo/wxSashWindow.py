@@ -1,9 +1,14 @@
+# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# o Should be renamed to wxSashLayoutWindow.py
+#
 
-from wxPython.wx import *
+import  wx
 
 #---------------------------------------------------------------------------
 
-class TestSashWindow(wxPanel):
+class TestSashWindow(wx.Panel):
     ID_WINDOW_TOP    = 5100
     ID_WINDOW_LEFT1  = 5101
     ID_WINDOW_LEFT2  = 5102
@@ -11,97 +16,112 @@ class TestSashWindow(wxPanel):
 
 
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
 
         self.log = log
 
         # will occupy the space not used by the Layout Algorithm
-        self.remainingSpace = wxPanel(self, -1, style=wxSUNKEN_BORDER)
+        self.remainingSpace = wx.Panel(self, -1, style=wx.SUNKEN_BORDER)
 
-        EVT_SASH_DRAGGED_RANGE(self, self.ID_WINDOW_TOP,
-                               self.ID_WINDOW_BOTTOM, self.OnSashDrag)
-        EVT_SIZE(self, self.OnSize)
+        self.Bind(
+            wx.EVT_SASH_DRAGGED_RANGE, self.OnSashDrag,
+            id=self.ID_WINDOW_TOP, id2=self.ID_WINDOW_BOTTOM, 
+            )
+
+        self.Bind(wx.EVT_SIZE, self.OnSize)
 
 
         # Create some layout windows
         # A window like a toolbar
-        win = wxSashLayoutWindow(self, self.ID_WINDOW_TOP, wxDefaultPosition,
-                                 wxSize(200, 30), wxNO_BORDER|wxSW_3D)
-        win.SetDefaultSize(wxSize(1000, 30))
-        win.SetOrientation(wxLAYOUT_HORIZONTAL)
-        win.SetAlignment(wxLAYOUT_TOP)
-        win.SetBackgroundColour(wxColour(255, 0, 0))
-        win.SetSashVisible(wxSASH_BOTTOM, True)
+        win = wx.SashLayoutWindow(
+            self, self.ID_WINDOW_TOP, wx.DefaultPosition, (200, 30), 
+            wx.NO_BORDER|wx.SW_3D
+            )
+
+        win.SetDefaultSize((1000, 30))
+        win.SetOrientation(wx.LAYOUT_HORIZONTAL)
+        win.SetAlignment(wx.LAYOUT_TOP)
+        win.SetBackgroundColour(wx.Colour(255, 0, 0))
+        win.SetSashVisible(wx.SASH_BOTTOM, True)
 
         self.topWindow = win
 
 
         # A window like a statusbar
-        win = wxSashLayoutWindow(self, self.ID_WINDOW_BOTTOM,
-                                 wxDefaultPosition, wxSize(200, 30),
-                                 wxNO_BORDER|wxSW_3D)
-        win.SetDefaultSize(wxSize(1000, 30))
-        win.SetOrientation(wxLAYOUT_HORIZONTAL)
-        win.SetAlignment(wxLAYOUT_BOTTOM)
-        win.SetBackgroundColour(wxColour(0, 0, 255))
-        win.SetSashVisible(wxSASH_TOP, True)
+        win = wx.SashLayoutWindow(
+                self, self.ID_WINDOW_BOTTOM, wx.DefaultPosition, (200, 30), 
+                wx.NO_BORDER|wx.SW_3D
+                )
+
+        win.SetDefaultSize((1000, 30))
+        win.SetOrientation(wx.LAYOUT_HORIZONTAL)
+        win.SetAlignment(wx.LAYOUT_BOTTOM)
+        win.SetBackgroundColour(wx.Colour(0, 0, 255))
+        win.SetSashVisible(wx.SASH_TOP, True)
 
         self.bottomWindow = win
 
-
         # A window to the left of the client window
-        win =  wxSashLayoutWindow(self, self.ID_WINDOW_LEFT1,
-                                  wxDefaultPosition, wxSize(200, 30),
-                                  wxNO_BORDER|wxSW_3D)
-        win.SetDefaultSize(wxSize(120, 1000))
-        win.SetOrientation(wxLAYOUT_VERTICAL)
-        win.SetAlignment(wxLAYOUT_LEFT)
-        win.SetBackgroundColour(wxColour(0, 255, 0))
-        win.SetSashVisible(wxSASH_RIGHT, True)
+        win =  wx.SashLayoutWindow(
+                self, self.ID_WINDOW_LEFT1, wx.DefaultPosition, (200, 30), 
+                wx.NO_BORDER|wx.SW_3D
+                )
+
+        win.SetDefaultSize((120, 1000))
+        win.SetOrientation(wx.LAYOUT_VERTICAL)
+        win.SetAlignment(wx.LAYOUT_LEFT)
+        win.SetBackgroundColour(wx.Colour(0, 255, 0))
+        win.SetSashVisible(wx.SASH_RIGHT, True)
         win.SetExtraBorderSize(10)
-        textWindow = wxTextCtrl(win, -1, "", wxDefaultPosition, wxDefaultSize,
-                                wxTE_MULTILINE|wxSUNKEN_BORDER)
+        textWindow = wx.TextCtrl(
+                        win, -1, "", wx.DefaultPosition, wx.DefaultSize, 
+                        wx.TE_MULTILINE|wx.SUNKEN_BORDER
+                        )
+
         textWindow.SetValue("A sub window")
 
         self.leftWindow1 = win
 
 
         # Another window to the left of the client window
-        win = wxSashLayoutWindow(self, self.ID_WINDOW_LEFT2,
-                                 wxDefaultPosition, wxSize(200, 30),
-                                 wxNO_BORDER|wxSW_3D)
-        win.SetDefaultSize(wxSize(120, 1000))
-        win.SetOrientation(wxLAYOUT_VERTICAL)
-        win.SetAlignment(wxLAYOUT_LEFT)
-        win.SetBackgroundColour(wxColour(0, 255, 255))
-        win.SetSashVisible(wxSASH_RIGHT, True)
+        win = wx.SashLayoutWindow(
+                self, self.ID_WINDOW_LEFT2, wx.DefaultPosition, (200, 30), 
+                wx.NO_BORDER|wx.SW_3D
+                )
+
+        win.SetDefaultSize((120, 1000))
+        win.SetOrientation(wx.LAYOUT_VERTICAL)
+        win.SetAlignment(wx.LAYOUT_LEFT)
+        win.SetBackgroundColour(wx.Colour(0, 255, 255))
+        win.SetSashVisible(wx.SASH_RIGHT, True)
 
         self.leftWindow2 = win
 
 
     def OnSashDrag(self, event):
-        if event.GetDragStatus() == wxSASH_STATUS_OUT_OF_RANGE:
+        if event.GetDragStatus() == wx.SASH_STATUS_OUT_OF_RANGE:
             return
 
         eID = event.GetId()
+
         if eID == self.ID_WINDOW_TOP:
-            self.topWindow.SetDefaultSize(wxSize(1000, event.GetDragRect().height))
+            self.topWindow.SetDefaultSize((1000, event.GetDragRect().height))
 
         elif eID == self.ID_WINDOW_LEFT1:
-            self.leftWindow1.SetDefaultSize(wxSize(event.GetDragRect().width, 1000))
+            self.leftWindow1.SetDefaultSize((event.GetDragRect().width, 1000))
 
 
         elif eID == self.ID_WINDOW_LEFT2:
-            self.leftWindow2.SetDefaultSize(wxSize(event.GetDragRect().width, 1000))
+            self.leftWindow2.SetDefaultSize((event.GetDragRect().width, 1000))
 
         elif eID == self.ID_WINDOW_BOTTOM:
-            self.bottomWindow.SetDefaultSize(wxSize(1000, event.GetDragRect().height))
+            self.bottomWindow.SetDefaultSize((1000, event.GetDragRect().height))
 
-        wxLayoutAlgorithm().LayoutWindow(self, self.remainingSpace)
+        wx.LayoutAlgorithm().LayoutWindow(self, self.remainingSpace)
         self.remainingSpace.Refresh()
 
     def OnSize(self, event):
-        wxLayoutAlgorithm().LayoutWindow(self, self.remainingSpace)
+        wx.LayoutAlgorithm().LayoutWindow(self, self.remainingSpace)
 
 #---------------------------------------------------------------------------
 
@@ -112,12 +132,17 @@ def runTest(frame, nb, log):
 #---------------------------------------------------------------------------
 
 
-
-
 overview = """\
+wxSashLayoutWindow responds to OnCalculateLayout events generated by 
+wxLayoutAlgorithm. It allows the application to use simple accessors to 
+specify how the window should be laid out, rather than having to respond 
+to events. The fact that the class derives from wxSashWindow allows sashes 
+to be used if required, to allow the windows to be user-resizable.
+
+The documentation for wxLayoutAlgorithm explains the purpose of this class 
+in more detail.
+
 """
-
-
 
 
 if __name__ == '__main__':

@@ -1,114 +1,136 @@
-from wxPython.wx import *
-from wxPython.lib.timectrl import *
-from wxPython.lib.timectrl import __doc__ as overviewdoc
-from wxPython.lib.scrolledpanel import wxScrolledPanel
+# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
+# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wx renamer needed for timectrl lib
+# o presense of spin control causing probs (see spin ctrl demo for details)
+# 
+
+import  wx
+import  wx.lib.timectrl         as  timectl
+import  wx.lib.scrolledpanel    as  scrolled
 
 #----------------------------------------------------------------------
 
-class TestPanel( wxScrolledPanel ):
+class TestPanel( scrolled.wxScrolledPanel ):
     def __init__( self, parent, log ):
 
-        wxScrolledPanel.__init__( self, parent, -1 )
+        scrolled.wxScrolledPanel.__init__( self, parent, -1 )
         self.log = log
 
 
-        text1 = wxStaticText( self, -1, "12-hour format:")
-        self.time12 = wxTimeCtrl( self, -1, name="12 hour control" )
-        spin1 = wxSpinButton( self, -1, wxDefaultPosition, wxSize(-1,20), 0 )
+        text1 = wx.StaticText( self, -1, "12-hour format:")
+        self.time12 = timectl.wxTimeCtrl( self, -1, name="12 hour control" )
+        spin1 = wx.SpinButton( self, -1, wx.DefaultPosition, (-1,20), 0 )
         self.time12.BindSpinButton( spin1 )
 
-        text2 = wxStaticText( self, -1, "24-hour format:")
-        spin2 = wxSpinButton( self, -1, wxDefaultPosition, wxSize(-1,20), 0 )
-        self.time24 = wxTimeCtrl( self, -1, name="24 hour control", fmt24hr=True, spinButton = spin2 )
+        text2 = wx.StaticText( self, -1, "24-hour format:")
+        spin2 = wx.SpinButton( self, -1, wx.DefaultPosition, (-1,20), 0 )
+        self.time24 = timectl.wxTimeCtrl(
+                        self, -1, name="24 hour control", fmt24hr=True, 
+                        spinButton = spin2 
+                        )
 
-        text3 = wxStaticText( self, -1, "No seconds\nor spin button:")
-        self.spinless_ctrl = wxTimeCtrl( self, -1, name="spinless control", display_seconds = False )
+        text3 = wx.StaticText( self, -1, "No seconds\nor spin button:")
+        self.spinless_ctrl = timectl.wxTimeCtrl(
+                                self, -1, name="spinless control", 
+                                display_seconds = False 
+                                )
 
-        grid = wxFlexGridSizer( 0, 2, 10, 5 )
-        grid.Add( text1, 0, wxALIGN_RIGHT )
-        hbox1 = wxBoxSizer( wxHORIZONTAL )
-        hbox1.Add( self.time12, 0, wxALIGN_CENTRE )
-        hbox1.Add( spin1, 0, wxALIGN_CENTRE )
-        grid.Add( hbox1, 0, wxLEFT )
+        grid = wx.FlexGridSizer( 0, 2, 10, 5 )
+        grid.Add( text1, 0, wx.ALIGN_RIGHT )
+        hbox1 = wx.BoxSizer( wx.HORIZONTAL )
+        hbox1.Add( self.time12, 0, wx.ALIGN_CENTRE )
+        hbox1.Add( spin1, 0, wx.ALIGN_CENTRE )
+        grid.Add( hbox1, 0, wx.LEFT )
 
-        grid.Add( text2, 0, wxALIGN_RIGHT|wxTOP|wxBOTTOM )
-        hbox2 = wxBoxSizer( wxHORIZONTAL )
-        hbox2.Add( self.time24, 0, wxALIGN_CENTRE )
-        hbox2.Add( spin2, 0, wxALIGN_CENTRE )
-        grid.Add( hbox2, 0, wxLEFT )
+        grid.Add( text2, 0, wx.ALIGN_RIGHT|wx.TOP|wx.BOTTOM )
+        hbox2 = wx.BoxSizer( wx.HORIZONTAL )
+        hbox2.Add( self.time24, 0, wx.ALIGN_CENTRE )
+        hbox2.Add( spin2, 0, wx.ALIGN_CENTRE )
+        grid.Add( hbox2, 0, wx.LEFT )
 
-        grid.Add( text3, 0, wxALIGN_RIGHT|wxTOP|wxBOTTOM )
-        grid.Add( self.spinless_ctrl, 0, wxLEFT )
-
-
-        buttonChange = wxButton( self, -1, "Change Controls")
-        self.radio12to24 = wxRadioButton( self, -1, "Copy 12-hour time to 24-hour control", wxDefaultPosition, wxDefaultSize, wxRB_GROUP )
-        self.radio24to12 = wxRadioButton( self, -1, "Copy 24-hour time to 12-hour control")
-        self.radioWx = wxRadioButton( self, -1, "Set controls to 'now' using wxDateTime")
-        self.radioMx = wxRadioButton( self, -1, "Set controls to 'now' using mxDateTime")
-
-        radio_vbox = wxBoxSizer( wxVERTICAL )
-        radio_vbox.Add( self.radio12to24, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 )
-        radio_vbox.Add( self.radio24to12, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 )
-        radio_vbox.Add( self.radioWx, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 )
-        radio_vbox.Add( self.radioMx, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 )
-
-        box_label = wxStaticBox( self, -1, "Change Controls through API" )
-        buttonbox = wxStaticBoxSizer( box_label, wxHORIZONTAL )
-        buttonbox.Add( buttonChange, 0, wxALIGN_CENTRE|wxALL, 5 )
-        buttonbox.Add( radio_vbox, 0, wxALIGN_CENTRE|wxALL, 5 )
-
-        hbox = wxBoxSizer( wxHORIZONTAL )
-        hbox.Add( grid, 0, wxALIGN_LEFT|wxALL, 15 )
-        hbox.Add( buttonbox, 0, wxALIGN_RIGHT|wxBOTTOM, 20 )
+        grid.Add( text3, 0, wx.ALIGN_RIGHT|wx.TOP|wx.BOTTOM )
+        grid.Add( self.spinless_ctrl, 0, wx.LEFT )
 
 
-        box_label = wxStaticBox( self, -1, "Bounds Control" )
-        boundsbox = wxStaticBoxSizer( box_label, wxHORIZONTAL )
-        self.set_bounds = wxCheckBox( self, -1, "Set time bounds:" )
+        buttonChange = wx.Button( self, -1, "Change Controls")
+        self.radio12to24 = wx.RadioButton(
+                            self, -1, "Copy 12-hour time to 24-hour control", 
+                            wx.DefaultPosition, wx.DefaultSize, wx.RB_GROUP 
+                            )
 
-        minlabel = wxStaticText( self, -1, "minimum time:" )
-        self.min = wxTimeCtrl( self, -1, name="min", display_seconds = False )
+        self.radio24to12 = wx.RadioButton(
+                            self, -1, "Copy 24-hour time to 12-hour control"
+                            )
+
+        self.radioWx = wx.RadioButton( self, -1, "Set controls to 'now' using wxDateTime")
+        self.radioMx = wx.RadioButton( self, -1, "Set controls to 'now' using mxDateTime")
+
+        radio_vbox = wx.BoxSizer( wx.VERTICAL )
+        radio_vbox.Add( self.radio12to24, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+        radio_vbox.Add( self.radio24to12, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+        radio_vbox.Add( self.radioWx, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+        radio_vbox.Add( self.radioMx, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+
+        box_label = wx.StaticBox( self, -1, "Change Controls through API" )
+        buttonbox = wx.StaticBoxSizer( box_label, wx.HORIZONTAL )
+        buttonbox.Add( buttonChange, 0, wx.ALIGN_CENTRE|wx.ALL, 5 )
+        buttonbox.Add( radio_vbox, 0, wx.ALIGN_CENTRE|wx.ALL, 5 )
+
+        hbox = wx.BoxSizer( wx.HORIZONTAL )
+        hbox.Add( grid, 0, wx.ALIGN_LEFT|wx.ALL, 15 )
+        hbox.Add( buttonbox, 0, wx.ALIGN_RIGHT|wx.BOTTOM, 20 )
+
+
+        box_label = wx.StaticBox( self, -1, "Bounds Control" )
+        boundsbox = wx.StaticBoxSizer( box_label, wx.HORIZONTAL )
+        self.set_bounds = wx.CheckBox( self, -1, "Set time bounds:" )
+
+        minlabel = wx.StaticText( self, -1, "minimum time:" )
+        self.min = timectl.wxTimeCtrl( self, -1, name="min", display_seconds = False )
         self.min.Enable( False )
 
-        maxlabel = wxStaticText( self, -1, "maximum time:" )
-        self.max = wxTimeCtrl( self, -1, name="max", display_seconds = False )
+        maxlabel = wx.StaticText( self, -1, "maximum time:" )
+        self.max = timectl.wxTimeCtrl( self, -1, name="max", display_seconds = False )
         self.max.Enable( False )
 
-        self.limit_check = wxCheckBox( self, -1, "Limit control" )
+        self.limit_check = wx.CheckBox( self, -1, "Limit control" )
 
-        label = wxStaticText( self, -1, "Resulting time control:" )
-        self.target_ctrl = wxTimeCtrl( self, -1, name="new" )
+        label = wx.StaticText( self, -1, "Resulting time control:" )
+        self.target_ctrl = timectl.wxTimeCtrl( self, -1, name="new" )
 
-        grid2 = wxFlexGridSizer( 0, 2, 0, 0 )
-        grid2.Add( (20, 0), 0, wxALIGN_LEFT|wxALL, 5 )
-        grid2.Add( (20, 0), 0, wxALIGN_LEFT|wxALL, 5 )
+        grid2 = wx.FlexGridSizer( 0, 2, 0, 0 )
+        grid2.Add( (20, 0), 0, wx.ALIGN_LEFT|wx.ALL, 5 )
+        grid2.Add( (20, 0), 0, wx.ALIGN_LEFT|wx.ALL, 5 )
 
-        grid2.Add( self.set_bounds, 0, wxALIGN_LEFT|wxALL, 5 )
-        grid3 = wxFlexGridSizer( 0, 2, 5, 5 )
-        grid3.Add(minlabel, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL )
-        grid3.Add( self.min, 0, wxALIGN_LEFT )
-        grid3.Add(maxlabel, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL )
-        grid3.Add( self.max, 0, wxALIGN_LEFT )
-        grid2.Add(grid3, 0, wxALIGN_LEFT )
+        grid2.Add( self.set_bounds, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
+        grid3 = wx.FlexGridSizer( 0, 2, 5, 5 )
+        grid3.Add(minlabel, 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL )
+        grid3.Add( self.min, 0, wx.ALIGN_LEFT )
+        grid3.Add(maxlabel, 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL )
+        grid3.Add( self.max, 0, wx.ALIGN_LEFT )
+        grid2.Add(grid3, 0, wx.ALIGN_LEFT )
 
-        grid2.Add( self.limit_check, 0, wxALIGN_LEFT|wxALL, 5 )
-        grid2.Add( (20, 0), 0, wxALIGN_LEFT|wxALL, 5 )
+        grid2.Add( self.limit_check, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
+        grid2.Add( (20, 0), 0, wx.ALIGN_LEFT|wx.ALL, 5 )
 
-        grid2.Add( (20, 0), 0, wxALIGN_LEFT|wxALL, 5 )
-        grid2.Add( (20, 0), 0, wxALIGN_LEFT|wxALL, 5 )
-        grid2.Add( label, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
-        grid2.Add( self.target_ctrl, 0, wxALIGN_LEFT|wxALL, 5 )
-        boundsbox.Add(grid2, 0, wxALIGN_CENTER|wxEXPAND|wxALL, 5)
+        grid2.Add( (20, 0), 0, wx.ALIGN_LEFT|wx.ALL, 5 )
+        grid2.Add( (20, 0), 0, wx.ALIGN_LEFT|wx.ALL, 5 )
+        grid2.Add( label, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+        grid2.Add( self.target_ctrl, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
+        boundsbox.Add(grid2, 0, wx.ALIGN_CENTER|wx.EXPAND|wx.ALL, 5)
 
-        vbox = wxBoxSizer( wxVERTICAL )
+        vbox = wx.BoxSizer( wx.VERTICAL )
         vbox.Add( (20, 20) )
-        vbox.Add( hbox, 0, wxALIGN_LEFT|wxALL, 5)
-        vbox.Add( boundsbox, 0, wxALIGN_LEFT|wxALL, 5 )
+        vbox.Add( hbox, 0, wx.ALIGN_LEFT|wx.ALL, 5)
+        vbox.Add( boundsbox, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
 
 
-        outer_box = wxBoxSizer( wxVERTICAL )
-        outer_box.Add( vbox, 0, wxALIGN_LEFT|wxALL, 5)
+        outer_box = wx.BoxSizer( wx.VERTICAL )
+        outer_box.Add( vbox, 0, wx.ALIGN_LEFT|wx.ALL, 5)
 
 
         # Turn on mxDateTime option only if we can import the module:
@@ -123,17 +145,17 @@ class TestPanel( wxScrolledPanel ):
         outer_box.Fit( self )
         self.SetupScrolling()
 
-        EVT_BUTTON( self, buttonChange.GetId(), self.OnButtonClick )
-        EVT_TIMEUPDATE( self, self.time12.GetId(), self.OnTimeChange )
-        EVT_TIMEUPDATE( self, self.time24.GetId(), self.OnTimeChange )
-        EVT_TIMEUPDATE( self, self.spinless_ctrl.GetId(), self.OnTimeChange )
+        self.Bind(wx.EVT_BUTTON, self.OnButtonClick, buttonChange )
+        timectl.EVT_TIMEUPDATE( self, self.time12.GetId(), self.OnTimeChange )
+        timectl.EVT_TIMEUPDATE( self, self.time24.GetId(), self.OnTimeChange )
+        timectl.EVT_TIMEUPDATE( self, self.spinless_ctrl.GetId(), self.OnTimeChange )
 
 
-        EVT_CHECKBOX( self, self.set_bounds.GetId(), self.OnBoundsCheck )
-        EVT_CHECKBOX( self, self.limit_check.GetId(), self.SetTargetMinMax )
-        EVT_TIMEUPDATE( self, self.min.GetId(), self.SetTargetMinMax )
-        EVT_TIMEUPDATE( self, self.max.GetId(), self.SetTargetMinMax )
-        EVT_TIMEUPDATE( self, self.target_ctrl.GetId(), self.OnTimeChange )
+        self.Bind(wx.EVT_CHECKBOX, self.OnBoundsCheck, self.set_bounds )
+        self.Bind(wx.EVT_CHECKBOX, self.SetTargetMinMax, self.limit_check )
+        timectl.EVT_TIMEUPDATE( self, self.min.GetId(), self.SetTargetMinMax )
+        timectl.EVT_TIMEUPDATE( self, self.max.GetId(), self.SetTargetMinMax )
+        timectl.EVT_TIMEUPDATE( self, self.target_ctrl.GetId(), self.OnTimeChange )
 
 
 
@@ -152,7 +174,7 @@ class TestPanel( wxScrolledPanel ):
             self.time12.SetValue( self.time24.GetValue() )
 
         elif self.radioWx.GetValue():
-            now = wxDateTime_Now()
+            now = wx.DateTime_Now()
             self.time12.SetValue( now )
             # (demonstrates that G/SetValue returns/takes a wxDateTime)
             self.time24.SetValue( self.time12.GetValue(as_wxDateTime=True) )
@@ -179,7 +201,8 @@ class TestPanel( wxScrolledPanel ):
 
 
     def SetTargetMinMax( self, event=None ):
-        min = max = None
+        min = None
+        max = None
 
         if self.set_bounds.GetValue():
             min = self.min.GetWxDateTime()
@@ -189,13 +212,16 @@ class TestPanel( wxScrolledPanel ):
 
         cur_min, cur_max = self.target_ctrl.GetBounds()
 
-        if min != cur_min: self.target_ctrl.SetMin( min )
-        if max != cur_max: self.target_ctrl.SetMax( max )
+        # jmg - A little expirimental change to ensure that min
+        # or max contain valid values before we use them
+        if min and (min != cur_min): self.target_ctrl.SetMin( min )
+        if max and (max != cur_max): self.target_ctrl.SetMax( max )
 
         self.target_ctrl.SetLimited( self.limit_check.GetValue() )
 
         if min != cur_min or max != cur_max:
             new_min, new_max = self.target_ctrl.GetBounds()
+
             if new_min and new_max:
                 self.log.write( "current min, max:  (%s, %s)\n" % ( new_min.FormatTime(), new_max.FormatTime() ) )
             else:
@@ -209,7 +235,7 @@ def runTest( frame, nb, log ):
 
 #----------------------------------------------------------------------
 
-overview = overviewdoc
+overview = timectl.__doc__
 
 if __name__ == '__main__':
     import sys,os

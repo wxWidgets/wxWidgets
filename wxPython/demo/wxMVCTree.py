@@ -1,8 +1,17 @@
+# 11/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
+# 11/30/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Library must be updated for this to run.
+# 
 
-import sys, os
-from wxPython.wx import *
-from wxPython.lib.mvctree import *
+import  os
+import  sys
 
+import  wx
+import  wx.lib.mvctree  as  tree
 
 logger = None
 def selchanging(evt):
@@ -23,31 +32,31 @@ def delitem(evt):
     logger.write("Delete\n")
 
 def runTest(frame, nb, log):
-    #f = wxFrame(frame, -1, "wxMVCTree", wxPoint(0,0), wxSize(200,500))
+    #f = wx.Frame(frame, -1, "wxMVCTree", (0,0), (200,500))
     global logger
     logger = log
-    p = wxMVCTree(nb, -1)
-    #f = wxFrame(frame, -1, "wxMVCTree")
-    #p = wxMVCTree(f, -1)
+    p = tree.wxMVCTree(nb, -1)
+    #f = wx.Frame(frame, -1, "wxMVCTree")
+    #p = tree.wxMVCTree(f, -1)
     p.SetAssumeChildren(True)
-    p.SetModel(LateFSTreeModel(os.path.normpath(os.getcwd() + os.sep +'..')))
+    p.SetModel(tree.LateFSTreeModel(os.path.normpath(os.getcwd() + os.sep +'..')))
+
     #Uncomment this to enable live filename editing!
 #    p.AddEditor(FileEditor(p))
+
     p.SetMultiSelect(True)
-    EVT_MVCTREE_SEL_CHANGING(p, p.GetId(), selchanging)
-    EVT_MVCTREE_SEL_CHANGED(p, p.GetId(), selchanged)
-    EVT_MVCTREE_ITEM_EXPANDED(p, p.GetId(), expanded)
-    EVT_MVCTREE_ITEM_COLLAPSED(p, p.GetId(), closed)
-    EVT_MVCTREE_ADD_ITEM(p, p.GetId(), add)
-    EVT_MVCTREE_DELETE_ITEM(p, p.GetId(), delitem)
-    EVT_MVCTREE_KEY_DOWN(p, p.GetId(), key)
+    tree.EVT_MVCTREE_SEL_CHANGING(p, p.GetId(), selchanging)
+    tree.EVT_MVCTREE_SEL_CHANGED(p, p.GetId(), selchanged)
+    tree.EVT_MVCTREE_ITEM_EXPANDED(p, p.GetId(), expanded)
+    tree.EVT_MVCTREE_ITEM_COLLAPSED(p, p.GetId(), closed)
+    tree.EVT_MVCTREE_ADD_ITEM(p, p.GetId(), add)
+    tree.EVT_MVCTREE_DELETE_ITEM(p, p.GetId(), delitem)
+    tree.EVT_MVCTREE_KEY_DOWN(p, p.GetId(), key)
 
     return p
     #frame.otherWin = f
     #f.Show(True)
     #return None
-
-
 
 
 overview = """\
@@ -69,9 +78,6 @@ There is also support for editing, though it's not enabled in this
 demo, to avoid accidentally renaming files!
 
 """
-
-
-
 
 
 if __name__ == '__main__':

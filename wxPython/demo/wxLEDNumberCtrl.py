@@ -1,32 +1,36 @@
+# 11/19/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-from wxPython.wx import *
-from wxPython.gizmos import *
+import  time
 
-import time
+import  wx
+import  wx.gizmos   as  gizmos
 
 #----------------------------------------------------------------------
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
         self.log = log
 
-        led = wxLEDNumberCtrl(self, -1, (25,25), (280, 50))
+        led = gizmos.LEDNumberCtrl(self, -1, (25,25), (280, 50))
         led.SetValue("01234")
 
-        led = wxLEDNumberCtrl(self, -1, (25,100), (280, 50))
+        led = gizmos.LEDNumberCtrl(self, -1, (25,100), (280, 50))
         led.SetValue("56789")
-        led.SetAlignment(wxLED_ALIGN_RIGHT)
+        led.SetAlignment(gizmos.LED_ALIGN_RIGHT)
         led.SetDrawFaded(False)
 
-        led = wxLEDNumberCtrl(self, -1, (25,175), (280, 50),
-                              wxLED_ALIGN_CENTER)# | wxLED_DRAW_FADED)
+        led = gizmos.LEDNumberCtrl(self, -1, (25,175), (280, 50),
+                              gizmos.LED_ALIGN_CENTER)# | gizmos.LED_DRAW_FADED)
         self.clock = led
         self.OnTimer(None)
 
-        self.timer = wxTimer(self)
+        self.timer = wx.Timer(self)
         self.timer.Start(1000)
-        EVT_TIMER(self, -1, self.OnTimer)
+        self.Bind(wx.EVT_TIMER, self.OnTimer)
 
 
     def OnTimer(self, evt):
@@ -45,6 +49,62 @@ def runTest(frame, nb, log):
 #----------------------------------------------------------------------
 
 overview = """\
+<html>
+<body>
+<font size=-1>The following was gleaned as best I could from the wxWindows
+source, which was a bit reluctant to reveal its secrets. My appologies if
+I missed anything - jmg</font>
+<p>
+<code><b>wxLEDNumberCtrl</b>( parent, id=-1, pos=wx.DefaultPosition, 
+size=wx.DefaultSize, style=LED_ALIGN_LEFT | LED_DRAW_FADED)</code>
+
+<p>This is a control that simulates an LED clock display. It only accepts 
+numeric input. 
+
+<p><b>Styles</b>
+
+<p><dl>
+<dt><b>LED_ALIGN_LEFT</b>
+<dd>Align to the left.
+
+<dt><b>LED_ALIGN_RIGHT</b>
+<dd>Align to the right.
+
+<dt><b>LED_ALIGN_CENTER</b>
+<dd>Center on display.
+
+<dt><b>LED_DRAW_FADED</b>
+<dd>Not implemented.
+
+</dl>
+
+<p><b>Methods</b> (and best guesses at what they do)
+
+<p><dl>
+<dt><b>GetAlignment()</b>
+<dd>Returns the alignment attribute for the control.
+
+<dt><b>GetDrawFaded()</b>
+<dd>Returns the DrawFaded attribute for the control.
+
+<dt><b>GetValue()</b>
+<dd>Returns the current value of the control.
+
+<dt><b>SetAlignment(alignment)</b>
+<dd>Set the alignment attribute for the control.
+
+<dt><b>SetDrawFaded(value)</b>
+<dd>Set the DrawFaded attribute for the control.
+
+<dt><b>SetValue(number)</b>
+<dd>Set the value for the control. Only numeric values are accepted.
+
+</dl>
+
+<p>Additionally, several methods of wx.Window are available as well.
+
+</body>
+</html>
 """
 
 

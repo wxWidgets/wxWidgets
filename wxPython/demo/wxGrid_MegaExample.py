@@ -1,8 +1,14 @@
-from wxPython.wx import *
-from wxPython.grid import *
-import images
+# 11/18/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-class MegaTable(wxPyGridTableBase):
+import  wx
+import  wx.grid as  Grid
+
+import  images
+
+class MegaTable(Grid.PyGridTableBase):
     """
     A custom wxGrid Table using user supplied data
     """
@@ -13,12 +19,12 @@ class MegaTable(wxPyGridTableBase):
         colname
         """
         # The base class must be initialized *first*
-        wxPyGridTableBase.__init__(self)
+        Grid.PyGridTableBase.__init__(self)
         self.data = data
         self.colnames = colnames
         self.plugins = plugins or {}
         # XXX
-        # we need to store the row length and collength to
+        # we need to store the row length and column length to
         # see if the table has changed size
         self._rows = self.GetNumberRows()
         self._cols = self.GetNumberCols()
@@ -46,21 +52,24 @@ class MegaTable(wxPyGridTableBase):
 
     def ResetView(self, grid):
         """
-        (wxGrid) -> Reset the grid view.   Call this to
+        (Grid) -> Reset the grid view.   Call this to
         update the grid if rows and columns have been added or deleted
         """
         grid.BeginBatch()
+
         for current, new, delmsg, addmsg in [
-            (self._rows, self.GetNumberRows(), wxGRIDTABLE_NOTIFY_ROWS_DELETED, wxGRIDTABLE_NOTIFY_ROWS_APPENDED),
-            (self._cols, self.GetNumberCols(), wxGRIDTABLE_NOTIFY_COLS_DELETED, wxGRIDTABLE_NOTIFY_COLS_APPENDED),
+            (self._rows, self.GetNumberRows(), Grid.GRIDTABLE_NOTIFY_ROWS_DELETED, Grid.GRIDTABLE_NOTIFY_ROWS_APPENDED),
+            (self._cols, self.GetNumberCols(), Grid.GRIDTABLE_NOTIFY_COLS_DELETED, Grid.GRIDTABLE_NOTIFY_COLS_APPENDED),
         ]:
+
             if new < current:
-                msg = wxGridTableMessage(self,delmsg,new,current-new)
+                msg = Grid.GridTableMessage(self,delmsg,new,current-new)
                 grid.ProcessTableMessage(msg)
             elif new > current:
-                msg = wxGridTableMessage(self,addmsg,new-current)
+                msg = Grid.GridTableMessage(self,addmsg,new-current)
                 grid.ProcessTableMessage(msg)
                 self.UpdateValues(grid)
+
         grid.EndBatch()
 
         self._rows = self.GetNumberRows()
@@ -76,7 +85,7 @@ class MegaTable(wxPyGridTableBase):
     def UpdateValues(self, grid):
         """Update all displayed values"""
         # This sends an event to the grid table to update all of the values
-        msg = wxGridTableMessage(self, wxGRIDTABLE_REQUEST_VIEW_GET_VALUES)
+        msg = Grid.GridTableMessage(self, Grid.GRIDTABLE_REQUEST_VIEW_GET_VALUES)
         grid.ProcessTableMessage(msg)
 
     def _updateColAttrs(self, grid):
@@ -88,25 +97,33 @@ class MegaTable(wxPyGridTableBase):
         Otherwise default to the default renderer.
         """
         col = 0
+
         for colname in self.colnames:
-            attr = wxGridCellAttr()
+            attr = Grid.GridCellAttr()
             if colname in self.plugins:
                 renderer = self.plugins[colname](self)
+
                 if renderer.colSize:
                     grid.SetColSize(col, renderer.colSize)
+
                 if renderer.rowSize:
                     grid.SetDefaultRowSize(renderer.rowSize)
+
                 attr.SetReadOnly(True)
                 attr.SetRenderer(renderer)
+
             grid.SetColAttr(col, attr)
             col += 1
 
     # ------------------------------------------------------
     # begin the added code to manipulate the table (non wx related)
     def AppendRow(self, row):
+        #print 'append'
         entry = {}
+
         for name in self.colnames:
             entry[name] = "Appended_%i"%row
+
         # XXX Hack
         # entry["A"] can only be between 1..4
         entry["A"] = random.choice(range(4))
@@ -123,11 +140,13 @@ class MegaTable(wxPyGridTableBase):
         deleteCount = 0
         cols = cols[:]
         cols.sort()
+
         for i in cols:
             self.colnames.pop(i-deleteCount)
             # we need to advance the delete count
             # to make sure we delete the right columns
             deleteCount += 1
+
         if not len(self.colnames):
             self.data = []
 
@@ -139,6 +158,7 @@ class MegaTable(wxPyGridTableBase):
         deleteCount = 0
         rows = rows[:]
         rows.sort()
+
         for i in rows:
             self.data.pop(i-deleteCount)
             # we need to advance the delete count
@@ -151,12 +171,14 @@ class MegaTable(wxPyGridTableBase):
         """
         name = self.colnames[col]
         _data = []
+
         for row in self.data:
             rowname, entry = row
             _data.append((entry.get(name, None), row))
 
         _data.sort()
         self.data = []
+
         for sortvalue, row in _data:
             self.data.append(row)
 
@@ -167,20 +189,19 @@ class MegaTable(wxPyGridTableBase):
 # --------------------------------------------------------------------
 # Sample wxGrid renderers
 
-class MegaImageRenderer(wxPyGridCellRenderer):
+class MegaImageRenderer(Grid.PyGridCellRenderer):
     def __init__(self, table):
         """
         Image Renderer Test.  This just places an image in a cell
         based on the row index.  There are N choices and the
         choice is made by  choice[row%N]
         """
-        wxPyGridCellRenderer.__init__(self)
+        Grid.PyGridCellRenderer.__init__(self)
         self.table = table
         self._choices = [images.getSmilesBitmap,
                          images.getMondrianBitmap,
                          images.get_10s_Bitmap,
                          images.get_01c_Bitmap]
-
 
         self.colSize = None
         self.rowSize = None
@@ -188,21 +209,25 @@ class MegaImageRenderer(wxPyGridCellRenderer):
     def Draw(self, grid, attr, dc, rect, row, col, isSelected):
         choice = self.table.GetRawValue(row, col)
         bmp = self._choices[ choice % len(self._choices)]()
-        image = wxMemoryDC()
+        image = wx.MemoryDC()
         image.SelectObject(bmp)
 
         # clear the background
-        dc.SetBackgroundMode(wxSOLID)
+        dc.SetBackgroundMode(wx.SOLID)
+
         if isSelected:
-            dc.SetBrush(wxBrush(wxBLUE, wxSOLID))
-            dc.SetPen(wxPen(wxBLUE, 1, wxSOLID))
+            dc.SetBrush(wx.Brush(wx.BLUE, wx.SOLID))
+            dc.SetPen(wx.Pen(wx.BLUE, 1, wx.SOLID))
         else:
             dc.SetBrush(wxBrush(wxWHITE, wxSOLID))
             dc.SetPen(wxPen(wxWHITE, 1, wxSOLID))
         dc.DrawRectangleRect(rect)
 
+        #dc.DrawRectangle((rect.x, rect.y), (rect.width, rect.height))
+
         # copy the image but only to the size of the grid cell
         width, height = bmp.GetWidth(), bmp.GetHeight()
+
         if width > rect.width-2:
             width = rect.width-2
 
@@ -214,17 +239,15 @@ class MegaImageRenderer(wxPyGridCellRenderer):
                 (0, 0), wxCOPY, True)
 
 
-class MegaFontRenderer(wxPyGridCellRenderer):
+class MegaFontRenderer(Grid.PyGridCellRenderer):
     def __init__(self, table, color="blue", font="ARIAL", fontsize=8):
         """Render data in the specified color and font and fontsize"""
-        wxPyGridCellRenderer.__init__(self)
+        Grid.PyGridCellRenderer.__init__(self)
         self.table = table
         self.color = color
-        self.font = wxFont(fontsize, wxDEFAULT, wxNORMAL, wxNORMAL,
-                           0, font)
-        self.selectedBrush = wxBrush("blue",
-                                     wxSOLID)
-        self.normalBrush = wxBrush(wxWHITE, wxSOLID)
+        self.font = wx.Font(fontsize, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, font)
+        self.selectedBrush = wx.Brush("blue", wx.SOLID)
+        self.normalBrush = wx.Brush(wx.WHITE, wx.SOLID)
         self.colSize = None
         self.rowSize = 50
 
@@ -236,17 +259,20 @@ class MegaFontRenderer(wxPyGridCellRenderer):
         dc.SetClippingRect(rect)
 
         # clear the background
-        dc.SetBackgroundMode(wxSOLID)
+        dc.SetBackgroundMode(wx.SOLID)
+        
         if isSelected:
-            dc.SetBrush(wxBrush(wxBLUE, wxSOLID))
-            dc.SetPen(wxPen(wxBLUE, 1, wxSOLID))
+            dc.SetBrush(wx.Brush(wx.BLUE, wx.SOLID))
+            dc.SetPen(wx.Pen(wx.BLUE, 1, wx.SOLID))
         else:
             dc.SetBrush(wxBrush(wxWHITE, wxSOLID))
             dc.SetPen(wxPen(wxWHITE, 1, wxSOLID))
         dc.DrawRectangleRect(rect)
 
+        #dc.DrawRectangle((rect.x, rect.y), (rect.width, rect.height))
+
         text = self.table.GetValue(row, col)
-        dc.SetBackgroundMode(wxSOLID)
+        dc.SetBackgroundMode(wx.SOLID)
 
         # change the text background based on whether the grid is selected
         # or not
@@ -267,6 +293,7 @@ class MegaFontRenderer(wxPyGridCellRenderer):
         # when the text is larger than the grid cell
 
         width, height = dc.GetTextExtent(text)
+        
         if width > rect.width-2:
             width, height = dc.GetTextExtent("...")
             x = rect.x+1 + rect.width-2 - width
@@ -280,7 +307,7 @@ class MegaFontRenderer(wxPyGridCellRenderer):
 # Sample Grid using a specialized table and renderers that can
 # be plugged in based on column names
 
-class MegaGrid(wxGrid):
+class MegaGrid(Grid.Grid):
     def __init__(self, parent, data, colnames, plugins=None):
         """parent, data, colnames, plugins=None
         Initialize a grid using the data defined in data and colnames
@@ -289,12 +316,12 @@ class MegaGrid(wxGrid):
         """
 
         # The base class must be initialized *first*
-        wxGrid.__init__(self, parent, -1)
+        Grid.Grid.__init__(self, parent, -1)
         self._table = MegaTable(data, colnames, plugins)
         self.SetTable(self._table)
         self._plugins = plugins
 
-        EVT_GRID_LABEL_RIGHT_CLICK(self, self.OnLabelRightClicked)
+        self.Bind(Grid.EVT_GRID_LABEL_RIGHT_CLICK, self.OnLabelRightClicked)
 
     def Reset(self):
         """reset the view based on the data in the table.  Call
@@ -309,12 +336,14 @@ class MegaGrid(wxGrid):
 
     def rowPopup(self, row, evt):
         """(row, evt) -> display a popup menu when a row label is right clicked"""
-        appendID = wxNewId()
-        deleteID = wxNewId()
+        appendID = wx.NewId()
+        deleteID = wx.NewId()
         x = self.GetRowSize(row)/2
+
         if not self.GetSelectedRows():
             self.SelectRow(row)
-        menu = wxMenu()
+
+        menu = wx.Menu()
         xo, yo = evt.GetPosition()
         menu.Append(appendID, "Append Row")
         menu.Append(deleteID, "Delete Row(s)")
@@ -328,18 +357,20 @@ class MegaGrid(wxGrid):
             self._table.DeleteRows(rows)
             self.Reset()
 
-        EVT_MENU(self, appendID, append)
-        EVT_MENU(self, deleteID, delete)
-        self.PopupMenu(menu, wxPoint(x, yo))
+        self.Bind(wx.EVT_MENU, append, id=appendID)
+        self.Bind(wx.EVT_MENU, delete, id=deleteID)
+        self.PopupMenu(menu, (x, yo))
         menu.Destroy()
+        return
+
 
     def colPopup(self, col, evt):
         """(col, evt) -> display a popup menu when a column label is
         right clicked"""
         x = self.GetColSize(col)/2
-        menu = wxMenu()
-        id1 = wxNewId()
-        sortID = wxNewId()
+        menu = wx.Menu()
+        id1 = wx.NewId()
+        sortID = wx.NewId()
 
         xo, yo = evt.GetPosition()
         self.SelectCol(col)
@@ -357,11 +388,14 @@ class MegaGrid(wxGrid):
             self._table.SortColumn(col)
             self.Reset()
 
-        EVT_MENU(self, id1, delete)
+        self.Bind(wx.EVT_MENU, delete, id=id1)
+
         if len(cols) == 1:
-            EVT_MENU(self, sortID, sort)
-        self.PopupMenu(menu, wxPoint(xo, 0))
+            self.Bind(wx.EVT_MENU, sort, id=sortID)
+
+        self.PopupMenu(menu, (xo, 0))
         menu.Destroy()
+        return
 
 # -----------------------------------------------------------------
 # Test data
@@ -374,10 +408,12 @@ import random
 colnames = ["Row", "This", "Is", "A", "Test"]
 
 data = []
+
 for row in range(1000):
     d = {}
     for name in ["This", "Test", "Is"]:
         d[name] = random.random()
+
     d["Row"] = len(data)
     # XXX
     # the "A" column can only be between one and 4
@@ -402,11 +438,11 @@ class MegaFontRendererFactory:
 
 #---------------------------------------------------------------------------
 
-class TestFrame(wxFrame):
+class TestFrame(wx.Frame):
     def __init__(self, parent, plugins={"This":MegaFontRendererFactory("red", "ARIAL", 8),
                                         "A":MegaImageRenderer,
                                         "Test":MegaFontRendererFactory("orange", "TIMES", 24),}):
-        wxFrame.__init__(self, parent, -1,
+        wx.Frame.__init__(self, parent, -1,
                          "Test Frame", size=(640,480))
 
         grid = MegaGrid(self, data, colnames, plugins)
@@ -428,20 +464,20 @@ This example attempts to show many examples and tricks of
 using a virtual grid object.  Hopefully the source isn't too jumbled.
 
 Features:
-   1) Uses a virtual grid
-   2) Columns and rows have popup menus (right click on labels)
-   3) Columns and rows can be deleted (i.e. table can be
+<ol>
+   <li>Uses a virtual grid
+   <li>Columns and rows have popup menus (right click on labels)
+   <li>Columns and rows can be deleted (i.e. table can be
       resized)
-   4) Dynamic renderers.  Renderers are plugins based on
+   <li>Dynamic renderers.  Renderers are plugins based on
       column header name.  Shows a simple Font Renderer and
       an Image Renderer.
+</ol>
 
-Look for XXX in the code to indicate some workarounds for non-obvious
+Look for 'XXX' in the code to indicate some workarounds for non-obvious
 behavior and various hacks.
 
 """
-
-
 
 
 if __name__ == '__main__':

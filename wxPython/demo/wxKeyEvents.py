@@ -1,139 +1,148 @@
+# 11/19/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
+# 11/29/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o lib.mixins.listctrl needs wx renamer applied.
+# 
 
-from wxPython.wx import *
+import  wx
+import  wx.lib.mixins.listctrl  as  listmix
 
 #----------------------------------------------------------------------
 
 keyMap = {
-    WXK_BACK : "WXK_BACK",
-    WXK_TAB : "WXK_TAB",
-    WXK_RETURN : "WXK_RETURN",
-    WXK_ESCAPE : "WXK_ESCAPE",
-    WXK_SPACE : "WXK_SPACE",
-    WXK_DELETE : "WXK_DELETE",
-    WXK_START : "WXK_START",
-    WXK_LBUTTON : "WXK_LBUTTON",
-    WXK_RBUTTON : "WXK_RBUTTON",
-    WXK_CANCEL : "WXK_CANCEL",
-    WXK_MBUTTON : "WXK_MBUTTON",
-    WXK_CLEAR : "WXK_CLEAR",
-    WXK_SHIFT : "WXK_SHIFT",
-    WXK_ALT : "WXK_ALT",
-    WXK_CONTROL : "WXK_CONTROL",
-    WXK_MENU : "WXK_MENU",
-    WXK_PAUSE : "WXK_PAUSE",
-    WXK_CAPITAL : "WXK_CAPITAL",
-    WXK_PRIOR : "WXK_PRIOR",
-    WXK_NEXT : "WXK_NEXT",
-    WXK_END : "WXK_END",
-    WXK_HOME : "WXK_HOME",
-    WXK_LEFT : "WXK_LEFT",
-    WXK_UP : "WXK_UP",
-    WXK_RIGHT : "WXK_RIGHT",
-    WXK_DOWN : "WXK_DOWN",
-    WXK_SELECT : "WXK_SELECT",
-    WXK_PRINT : "WXK_PRINT",
-    WXK_EXECUTE : "WXK_EXECUTE",
-    WXK_SNAPSHOT : "WXK_SNAPSHOT",
-    WXK_INSERT : "WXK_INSERT",
-    WXK_HELP : "WXK_HELP",
-    WXK_NUMPAD0 : "WXK_NUMPAD0",
-    WXK_NUMPAD1 : "WXK_NUMPAD1",
-    WXK_NUMPAD2 : "WXK_NUMPAD2",
-    WXK_NUMPAD3 : "WXK_NUMPAD3",
-    WXK_NUMPAD4 : "WXK_NUMPAD4",
-    WXK_NUMPAD5 : "WXK_NUMPAD5",
-    WXK_NUMPAD6 : "WXK_NUMPAD6",
-    WXK_NUMPAD7 : "WXK_NUMPAD7",
-    WXK_NUMPAD8 : "WXK_NUMPAD8",
-    WXK_NUMPAD9 : "WXK_NUMPAD9",
-    WXK_MULTIPLY : "WXK_MULTIPLY",
-    WXK_ADD : "WXK_ADD",
-    WXK_SEPARATOR : "WXK_SEPARATOR",
-    WXK_SUBTRACT : "WXK_SUBTRACT",
-    WXK_DECIMAL : "WXK_DECIMAL",
-    WXK_DIVIDE : "WXK_DIVIDE",
-    WXK_F1 : "WXK_F1",
-    WXK_F2 : "WXK_F2",
-    WXK_F3 : "WXK_F3",
-    WXK_F4 : "WXK_F4",
-    WXK_F5 : "WXK_F5",
-    WXK_F6 : "WXK_F6",
-    WXK_F7 : "WXK_F7",
-    WXK_F8 : "WXK_F8",
-    WXK_F9 : "WXK_F9",
-    WXK_F10 : "WXK_F10",
-    WXK_F11 : "WXK_F11",
-    WXK_F12 : "WXK_F12",
-    WXK_F13 : "WXK_F13",
-    WXK_F14 : "WXK_F14",
-    WXK_F15 : "WXK_F15",
-    WXK_F16 : "WXK_F16",
-    WXK_F17 : "WXK_F17",
-    WXK_F18 : "WXK_F18",
-    WXK_F19 : "WXK_F19",
-    WXK_F20 : "WXK_F20",
-    WXK_F21 : "WXK_F21",
-    WXK_F22 : "WXK_F22",
-    WXK_F23 : "WXK_F23",
-    WXK_F24 : "WXK_F24",
-    WXK_NUMLOCK : "WXK_NUMLOCK",
-    WXK_SCROLL : "WXK_SCROLL",
-    WXK_PAGEUP : "WXK_PAGEUP",
-    WXK_PAGEDOWN : "WXK_PAGEDOWN",
-    WXK_NUMPAD_SPACE : "WXK_NUMPAD_SPACE",
-    WXK_NUMPAD_TAB : "WXK_NUMPAD_TAB",
-    WXK_NUMPAD_ENTER : "WXK_NUMPAD_ENTER",
-    WXK_NUMPAD_F1 : "WXK_NUMPAD_F1",
-    WXK_NUMPAD_F2 : "WXK_NUMPAD_F2",
-    WXK_NUMPAD_F3 : "WXK_NUMPAD_F3",
-    WXK_NUMPAD_F4 : "WXK_NUMPAD_F4",
-    WXK_NUMPAD_HOME : "WXK_NUMPAD_HOME",
-    WXK_NUMPAD_LEFT : "WXK_NUMPAD_LEFT",
-    WXK_NUMPAD_UP : "WXK_NUMPAD_UP",
-    WXK_NUMPAD_RIGHT : "WXK_NUMPAD_RIGHT",
-    WXK_NUMPAD_DOWN : "WXK_NUMPAD_DOWN",
-    WXK_NUMPAD_PRIOR : "WXK_NUMPAD_PRIOR",
-    WXK_NUMPAD_PAGEUP : "WXK_NUMPAD_PAGEUP",
-    WXK_NUMPAD_NEXT : "WXK_NUMPAD_NEXT",
-    WXK_NUMPAD_PAGEDOWN : "WXK_NUMPAD_PAGEDOWN",
-    WXK_NUMPAD_END : "WXK_NUMPAD_END",
-    WXK_NUMPAD_BEGIN : "WXK_NUMPAD_BEGIN",
-    WXK_NUMPAD_INSERT : "WXK_NUMPAD_INSERT",
-    WXK_NUMPAD_DELETE : "WXK_NUMPAD_DELETE",
-    WXK_NUMPAD_EQUAL : "WXK_NUMPAD_EQUAL",
-    WXK_NUMPAD_MULTIPLY : "WXK_NUMPAD_MULTIPLY",
-    WXK_NUMPAD_ADD : "WXK_NUMPAD_ADD",
-    WXK_NUMPAD_SEPARATOR : "WXK_NUMPAD_SEPARATOR",
-    WXK_NUMPAD_SUBTRACT : "WXK_NUMPAD_SUBTRACT",
-    WXK_NUMPAD_DECIMAL : "WXK_NUMPAD_DECIMAL",
-    WXK_NUMPAD_DIVIDE : "WXK_NUMPAD_DIVIDE",
+    wx.WXK_BACK : "wx.WXK_BACK",
+    wx.WXK_TAB : "wx.WXK_TAB",
+    wx.WXK_RETURN : "wx.WXK_RETURN",
+    wx.WXK_ESCAPE : "wx.WXK_ESCAPE",
+    wx.WXK_SPACE : "wx.WXK_SPACE",
+    wx.WXK_DELETE : "wx.WXK_DELETE",
+    wx.WXK_START : "wx.WXK_START",
+    wx.WXK_LBUTTON : "wx.WXK_LBUTTON",
+    wx.WXK_RBUTTON : "wx.WXK_RBUTTON",
+    wx.WXK_CANCEL : "wx.WXK_CANCEL",
+    wx.WXK_MBUTTON : "wx.WXK_MBUTTON",
+    wx.WXK_CLEAR : "wx.WXK_CLEAR",
+    wx.WXK_SHIFT : "wx.WXK_SHIFT",
+    wx.WXK_ALT : "wx.WXK_ALT",
+    wx.WXK_CONTROL : "wx.WXK_CONTROL",
+    wx.WXK_MENU : "wx.WXK_MENU",
+    wx.WXK_PAUSE : "wx.WXK_PAUSE",
+    wx.WXK_CAPITAL : "wx.WXK_CAPITAL",
+    wx.WXK_PRIOR : "wx.WXK_PRIOR",
+    wx.WXK_NEXT : "wx.WXK_NEXT",
+    wx.WXK_END : "wx.WXK_END",
+    wx.WXK_HOME : "wx.WXK_HOME",
+    wx.WXK_LEFT : "wx.WXK_LEFT",
+    wx.WXK_UP : "wx.WXK_UP",
+    wx.WXK_RIGHT : "wx.WXK_RIGHT",
+    wx.WXK_DOWN : "wx.WXK_DOWN",
+    wx.WXK_SELECT : "wx.WXK_SELECT",
+    wx.WXK_PRINT : "wx.WXK_PRINT",
+    wx.WXK_EXECUTE : "wx.WXK_EXECUTE",
+    wx.WXK_SNAPSHOT : "wx.WXK_SNAPSHOT",
+    wx.WXK_INSERT : "wx.WXK_INSERT",
+    wx.WXK_HELP : "wx.WXK_HELP",
+    wx.WXK_NUMPAD0 : "wx.WXK_NUMPAD0",
+    wx.WXK_NUMPAD1 : "wx.WXK_NUMPAD1",
+    wx.WXK_NUMPAD2 : "wx.WXK_NUMPAD2",
+    wx.WXK_NUMPAD3 : "wx.WXK_NUMPAD3",
+    wx.WXK_NUMPAD4 : "wx.WXK_NUMPAD4",
+    wx.WXK_NUMPAD5 : "wx.WXK_NUMPAD5",
+    wx.WXK_NUMPAD6 : "wx.WXK_NUMPAD6",
+    wx.WXK_NUMPAD7 : "wx.WXK_NUMPAD7",
+    wx.WXK_NUMPAD8 : "wx.WXK_NUMPAD8",
+    wx.WXK_NUMPAD9 : "wx.WXK_NUMPAD9",
+    wx.WXK_MULTIPLY : "wx.WXK_MULTIPLY",
+    wx.WXK_ADD : "wx.WXK_ADD",
+    wx.WXK_SEPARATOR : "wx.WXK_SEPARATOR",
+    wx.WXK_SUBTRACT : "wx.WXK_SUBTRACT",
+    wx.WXK_DECIMAL : "wx.WXK_DECIMAL",
+    wx.WXK_DIVIDE : "wx.WXK_DIVIDE",
+    wx.WXK_F1 : "wx.WXK_F1",
+    wx.WXK_F2 : "wx.WXK_F2",
+    wx.WXK_F3 : "wx.WXK_F3",
+    wx.WXK_F4 : "wx.WXK_F4",
+    wx.WXK_F5 : "wx.WXK_F5",
+    wx.WXK_F6 : "wx.WXK_F6",
+    wx.WXK_F7 : "wx.WXK_F7",
+    wx.WXK_F8 : "wx.WXK_F8",
+    wx.WXK_F9 : "wx.WXK_F9",
+    wx.WXK_F10 : "wx.WXK_F10",
+    wx.WXK_F11 : "wx.WXK_F11",
+    wx.WXK_F12 : "wx.WXK_F12",
+    wx.WXK_F13 : "wx.WXK_F13",
+    wx.WXK_F14 : "wx.WXK_F14",
+    wx.WXK_F15 : "wx.WXK_F15",
+    wx.WXK_F16 : "wx.WXK_F16",
+    wx.WXK_F17 : "wx.WXK_F17",
+    wx.WXK_F18 : "wx.WXK_F18",
+    wx.WXK_F19 : "wx.WXK_F19",
+    wx.WXK_F20 : "wx.WXK_F20",
+    wx.WXK_F21 : "wx.WXK_F21",
+    wx.WXK_F22 : "wx.WXK_F22",
+    wx.WXK_F23 : "wx.WXK_F23",
+    wx.WXK_F24 : "wx.WXK_F24",
+    wx.WXK_NUMLOCK : "wx.WXK_NUMLOCK",
+    wx.WXK_SCROLL : "wx.WXK_SCROLL",
+    wx.WXK_PAGEUP : "wx.WXK_PAGEUP",
+    wx.WXK_PAGEDOWN : "wx.WXK_PAGEDOWN",
+    wx.WXK_NUMPAD_SPACE : "wx.WXK_NUMPAD_SPACE",
+    wx.WXK_NUMPAD_TAB : "wx.WXK_NUMPAD_TAB",
+    wx.WXK_NUMPAD_ENTER : "wx.WXK_NUMPAD_ENTER",
+    wx.WXK_NUMPAD_F1 : "wx.WXK_NUMPAD_F1",
+    wx.WXK_NUMPAD_F2 : "wx.WXK_NUMPAD_F2",
+    wx.WXK_NUMPAD_F3 : "wx.WXK_NUMPAD_F3",
+    wx.WXK_NUMPAD_F4 : "wx.WXK_NUMPAD_F4",
+    wx.WXK_NUMPAD_HOME : "wx.WXK_NUMPAD_HOME",
+    wx.WXK_NUMPAD_LEFT : "wx.WXK_NUMPAD_LEFT",
+    wx.WXK_NUMPAD_UP : "wx.WXK_NUMPAD_UP",
+    wx.WXK_NUMPAD_RIGHT : "wx.WXK_NUMPAD_RIGHT",
+    wx.WXK_NUMPAD_DOWN : "wx.WXK_NUMPAD_DOWN",
+    wx.WXK_NUMPAD_PRIOR : "wx.WXK_NUMPAD_PRIOR",
+    wx.WXK_NUMPAD_PAGEUP : "wx.WXK_NUMPAD_PAGEUP",
+    wx.WXK_NUMPAD_NEXT : "wx.WXK_NUMPAD_NEXT",
+    wx.WXK_NUMPAD_PAGEDOWN : "wx.WXK_NUMPAD_PAGEDOWN",
+    wx.WXK_NUMPAD_END : "wx.WXK_NUMPAD_END",
+    wx.WXK_NUMPAD_BEGIN : "wx.WXK_NUMPAD_BEGIN",
+    wx.WXK_NUMPAD_INSERT : "wx.WXK_NUMPAD_INSERT",
+    wx.WXK_NUMPAD_DELETE : "wx.WXK_NUMPAD_DELETE",
+    wx.WXK_NUMPAD_EQUAL : "wx.WXK_NUMPAD_EQUAL",
+    wx.WXK_NUMPAD_MULTIPLY : "wx.WXK_NUMPAD_MULTIPLY",
+    wx.WXK_NUMPAD_ADD : "wx.WXK_NUMPAD_ADD",
+    wx.WXK_NUMPAD_SEPARATOR : "wx.WXK_NUMPAD_SEPARATOR",
+    wx.WXK_NUMPAD_SUBTRACT : "wx.WXK_NUMPAD_SUBTRACT",
+    wx.WXK_NUMPAD_DECIMAL : "wx.WXK_NUMPAD_DECIMAL",
+    wx.WXK_NUMPAD_DIVIDE : "wx.WXK_NUMPAD_DIVIDE",
 }
 
 
 #----------------------------------------------------------------------
 
-class KeySink(wxWindow):
+class KeySink(wx.Window):
     def __init__(self, parent):
-        wxWindow.__init__(self, parent, -1, style =
-                          wxWANTS_CHARS
-                          #| wxRAISED_BORDER
-                          #| wxSUNKEN_BORDER
+        wx.Window.__init__(self, parent, -1, style=wx.WANTS_CHARS
+                          #| wx.RAISED_BORDER
+                          #| wx.SUNKEN_BORDER
                           )
-        self.SetBackgroundColour(wxBLUE)
+
+        self.SetBackgroundColour(wx.BLUE)
         self.haveFocus = False
         self.callSkip = False
         self.logKeyDn = True
         self.logKeyUp = True
         self.logChar = True
 
-        EVT_PAINT(self, self.OnPaint)
-        EVT_SET_FOCUS(self, self.OnSetFocus)
-        EVT_KILL_FOCUS(self, self.OnKillFocus)
-        EVT_MOUSE_EVENTS(self, self.OnMouse)
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+        self.Bind(wx.EVT_SET_FOCUS, self.OnSetFocus)
+        self.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
+        self.Bind(wx.EVT_MOUSE_EVENTS, self.OnMouse)
 
-        EVT_KEY_DOWN(self, self.OnKeyDown)
-        EVT_KEY_UP(self, self.OnKeyUp)
-        EVT_CHAR(self, self.OnChar)
+        self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
+        self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
+        self.Bind(wx.EVT_CHAR, self.OnChar)
 
 
     def SetCallSkip(self, skip):
@@ -150,17 +159,17 @@ class KeySink(wxWindow):
 
 
     def OnPaint(self, evt):
-        dc = wxPaintDC(self)
+        dc = wx.PaintDC(self)
         rect = self.GetClientRect()
-        dc.SetTextForeground(wxWHITE)
+        dc.SetTextForeground(wx.WHITE)
         dc.DrawLabel("Click here and then press some keys",
-                     rect, wxALIGN_CENTER | wxALIGN_TOP)
+                     rect, wx.ALIGN_CENTER | wx.ALIGN_TOP)
         if self.haveFocus:
-            dc.SetTextForeground(wxGREEN)
-            dc.DrawLabel("Have Focus", rect, wxALIGN_RIGHT | wxALIGN_BOTTOM)
+            dc.SetTextForeground(wx.GREEN)
+            dc.DrawLabel("Have Focus", rect, wx.ALIGN_RIGHT | wx.ALIGN_BOTTOM)
         else:
-            dc.SetTextForeground(wxRED)
-            dc.DrawLabel("Need Focus!", rect, wxALIGN_RIGHT | wxALIGN_BOTTOM)
+            dc.SetTextForeground(wx.RED)
+            dc.DrawLabel("Need Focus!", rect, wx.ALIGN_RIGHT | wx.ALIGN_BOTTOM)
 
 
     def OnSetFocus(self, evt):
@@ -195,14 +204,12 @@ class KeySink(wxWindow):
 
 #----------------------------------------------------------------------
 
-from wxPython.lib.mixins.listctrl import wxListCtrlAutoWidthMixin
-
-class KeyLog(wxListCtrl, wxListCtrlAutoWidthMixin):
+class KeyLog(wx.ListCtrl, listmix.wxListCtrlAutoWidthMixin):
 
     def __init__(self, parent):
-        wxListCtrl.__init__(self, parent, -1,
-                            style = wxLC_REPORT|wxLC_VRULES|wxLC_HRULES)
-        wxListCtrlAutoWidthMixin.__init__(self)
+        wx.ListCtrl.__init__(self, parent, -1,
+                            style = wx.LC_REPORT|wx.LC_VRULES|wx.LC_HRULES)
+        listmix.wxListCtrlAutoWidthMixin.__init__(self)
 
         self.InsertColumn(0, "Event Type")
         self.InsertColumn(1, "Key Name")
@@ -213,7 +220,7 @@ class KeyLog(wxListCtrl, wxListCtrlAutoWidthMixin):
         self.InsertColumn(6, "")
 
         for x in range(6):
-            self.SetColumnWidth(x, wxLIST_AUTOSIZE_USEHEADER)
+            self.SetColumnWidth(x, wx.LIST_AUTOSIZE_USEHEADER)
 
         self.SetColumnWidth(1, 125)
 
@@ -261,43 +268,43 @@ class KeyLog(wxListCtrl, wxListCtrlAutoWidthMixin):
 #----------------------------------------------------------------------
 
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, log):
         self.log = log
-        wxPanel.__init__(self, parent, -1, style=0)
+        wx.Panel.__init__(self, parent, -1, style=0)
         self.keysink = KeySink(self)
         self.keysink.SetSize((100, 65))
         self.keylog = KeyLog(self)
 
-        btn = wxButton(self, -1, "Clear Log")
-        EVT_BUTTON(self, btn.GetId(), self.OnClearBtn)
+        btn = wx.Button(self, -1, "Clear Log")
+        self.Bind(wx.EVT_BUTTON, self.OnClearBtn, btn)
 
-        cb1 = wxCheckBox(self, -1, "Call evt.Skip for Key Up/Dn events")
-        EVT_CHECKBOX(self, cb1.GetId(), self.OnSkipCB)
+        cb1 = wx.CheckBox(self, -1, "Call evt.Skip for Key Up/Dn events")
+        self.Bind(wx.EVT_CHECKBOX, self.OnSkipCB, cb1)
 
-        cb2 = wxCheckBox(self, -1, "EVT_KEY_UP")
-        EVT_CHECKBOX(self, cb2.GetId(), self.OnKeyUpCB)
+        cb2 = wx.CheckBox(self, -1, "EVT_KEY_UP")
+        self.Bind(wx.EVT_CHECKBOX, self.OnKeyUpCB, cb2)
         cb2.SetValue(True)
 
-        cb3 = wxCheckBox(self, -1, "EVT_KEY_DOWN")
-        EVT_CHECKBOX(self, cb3.GetId(), self.OnKeyDnCB)
+        cb3 = wx.CheckBox(self, -1, "EVT_KEY_DOWN")
+        self.Bind(wx.EVT_CHECKBOX, self.OnKeyDnCB, cb3)
         cb3.SetValue(True)
 
-        cb4 = wxCheckBox(self, -1, "EVT_CHAR")
-        EVT_CHECKBOX(self, cb4.GetId(), self.OnCharCB)
+        cb4 = wx.CheckBox(self, -1, "EVT_CHAR")
+        self.Bind(wx.EVT_CHECKBOX, self.OnCharCB, cb4)
         cb4.SetValue(True)
 
-        buttons = wxBoxSizer(wxHORIZONTAL)
-        buttons.Add(btn, 0, wxALL, 4)
-        buttons.Add(cb1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 6)
-        buttons.Add(cb2, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 6)
-        buttons.Add(cb3, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 6)
-        buttons.Add(cb4, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 6)
+        buttons = wx.BoxSizer(wx.HORIZONTAL)
+        buttons.Add(btn, 0, wx.ALL, 4)
+        buttons.Add(cb1, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT|wx.RIGHT, 6)
+        buttons.Add(cb2, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 6)
+        buttons.Add(cb3, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 6)
+        buttons.Add(cb4, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 6)
 
-        sizer = wxBoxSizer(wxVERTICAL)
-        sizer.Add(self.keysink, 0, wxGROW)
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(self.keysink, 0, wx.GROW)
         sizer.Add(buttons)
-        sizer.Add(self.keylog, 1, wxGROW)
+        sizer.Add(self.keylog, 1, wx.GROW)
 
         self.SetSizer(sizer)
 
@@ -331,7 +338,7 @@ def runTest(frame, nb, log):
 overview = """<html><body>
 <h2><center>wxKeyEvents</center></h2>
 
-This demo simply lets catches all key events and prints info about them.
+This demo simply catches all key events and prints info about them.
 It is meant to be used as a compatibility test for cross platform work.
 
 </body></html>

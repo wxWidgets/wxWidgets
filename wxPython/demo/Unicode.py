@@ -1,6 +1,9 @@
+# 11/13/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+#
 
-
-from wxPython.wx import *
+import  wx
 
 #----------------------------------------------------------------------
 
@@ -41,22 +44,22 @@ rus_utf8 = ('\xd0\x9f\xd0\xb8\xd1\x82\xd0\xbe\xd0\xbd - \xd0\xbb\xd1\x83\xd1\x87
 
 #----------------------------------------------------------------------
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, log):
         self.log = log
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
 
-        box = wxBoxSizer(wxVERTICAL)
+        box = wx.BoxSizer(wx.VERTICAL)
 
-        if not wxUSE_UNICODE:
+        if not wx.USE_UNICODE:
             self.AddLine(box)
             self.AddText(box, "Sorry, this wxPython was not built with Unicode support.",
-                         font = wxFont(12, wxSWISS, wxNORMAL, wxBOLD))
+                         font = wx.Font(12, wx.SWISS, wx.NORMAL, wx.BOLD))
             self.AddLine(box)
 
         else:
             f = self.GetFont()
-            font = wxFont(14, f.GetFamily(), f.GetStyle(), wxBOLD, False,
+            font = wx.Font(14, f.GetFamily(), f.GetStyle(), wx.BOLD, False,
                           f.GetFaceName(), f.GetEncoding())
 
             self.AddLine(box)
@@ -77,32 +80,32 @@ class TestPanel(wxPanel):
             self.AddLine(box)
 
 
-        border = wxBoxSizer(wxVERTICAL)
-        border.Add(box, 1, wxEXPAND|wxALL, 10)
+        border = wx.BoxSizer(wx.VERTICAL)
+        border.Add(box, 1, wx.EXPAND|wx.ALL, 10)
         self.SetAutoLayout(True)
         self.SetSizer(border)
 
 
     def AddLine(self, sizer):
-        sizer.Add(wxStaticLine(self, -1), 0, wxEXPAND)
+        sizer.Add(wx.StaticLine(self, -1), 0, wx.EXPAND)
 
     def AddText(self, sizer, text1, text2='', lang='', font=None):
         # create some controls
-        lang  = wxStaticText(self, -1, lang)
-        text1 = wxStaticText(self, -1, text1)
-        text2 = wxStaticText(self, -1, text2, style=wxALIGN_RIGHT)
+        lang  = wx.StaticText(self, -1, lang)
+        text1 = wx.StaticText(self, -1, text1)
+        text2 = wx.StaticText(self, -1, text2, style=wx.ALIGN_RIGHT)
         if font is not None:
             text1.SetFont(font)
 
         # put them in a sizer
-        row = wxBoxSizer(wxHORIZONTAL)
+        row = wx.BoxSizer(wx.HORIZONTAL)
         row.Add(lang)
-        row.Add(15,10)
-        row.Add(text1, 1, wxEXPAND)
+        row.Add((15,10))
+        row.Add(text1, 1, wx.EXPAND)
         row.Add(text2)
 
         # put the row in the main sizer
-        sizer.Add(row, 0, wxEXPAND|wxALL, 5)
+        sizer.Add(row, 0, wx.EXPAND|wx.ALL, 5)
 
 
 #----------------------------------------------------------------------

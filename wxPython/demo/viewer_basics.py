@@ -1,14 +1,20 @@
-from wxPython.wx import *
-from wxPython.lib import vtk
+# 11/15/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# o No idea what this does.
+#
+
+import  wx
+import  wx.lib.vtk  as vtk
 
 #---------------------------------------------------------------------------
-class VtkFrame(wxFrame):
+class VtkFrame(wx.Frame):
     """
         Simple example VTK window that contains a cone.
     """
     def __init__(self, parent, id, title):
-        wxFrame.__init__(self, parent,id,title, size=(450, 300))
-        win = vtk.wxVTKRenderWindow(self, -1)
+        wx.Frame.__init__(self, parent, id, title, size=(450, 300))
+        win = vtk.VTKRenderWindow(self, -1)
 
         renWin = win.GetRenderWindow()
 
@@ -22,19 +28,17 @@ class VtkFrame(wxFrame):
         ren.AddActor(coneActor)
 
 #---------------------------------------------------------------------------
-wxEVT_ADD_CONE = 25015
+# Using new event binder
+wx_EVT_ADD_CONE = wx.NewEventType()
+EVT_ADD_CONE = wx.PyEventBinder(wx_EVT_ADD_CONE, 1)
 
-def EVT_ADD_CONE(win, func):
-    win.Connect(-1, -1, wxEVT_ADD_CONE, func)
-
-
-class AddCone(wxPyEvent):
+class AddCone(wx.PyEvent):
     def __init__(self):
-        wxPyEvent.__init__(self)
-        self.SetEventType(wxEVT_ADD_CONE)
+        wx.PyEvent.__init__(self)
+        self.SetEventType(wx_EVT_ADD_CONE)
 
 
-class HiddenCatcher(wxFrame):
+class HiddenCatcher(wx.Frame):
     """
         The "catcher" frame in the second thread.
         It is invisible.  It's only job is to receive
@@ -42,8 +46,8 @@ class HiddenCatcher(wxFrame):
         the appropriate windows.
     """
     def __init__(self):
-        wxFrame.__init__(self, None, -1, '')
-        EVT_ADD_CONE(self, self.AddCone)
+        wx.Frame.__init__(self, None, -1, '')
+        self.Bind(EVT_ADD_CONE, self.AddCone)
 
     def AddCone(self,evt):
         add_cone()
@@ -51,14 +55,14 @@ class HiddenCatcher(wxFrame):
 
 #---------------------------------------------------------------------------
 
-class SecondThreadApp(wxApp):
+class SecondThreadApp(wx.App):
     """
         wxApp that lives in the second thread.
     """
     def OnInit(self):
         catcher = HiddenCatcher()
         #self.SetTopWindow(catcher)
-        self.catcher =catcher
+        self.catcher = catcher
         return True
 
 #---------------------------------------------------------------------------

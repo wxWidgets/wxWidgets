@@ -1,19 +1,22 @@
+# 11/22/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-from wxPython.wx        import *
-from wxPython.lib.grids import wxFlexGridSizer
+import  string
+import  wx
 
-import string
 
 #----------------------------------------------------------------------
 
 ALPHA_ONLY = 1
 DIGIT_ONLY = 2
 
-class MyValidator(wxPyValidator):
+class MyValidator(wx.PyValidator):
     def __init__(self, flag=None, pyVar=None):
-        wxPyValidator.__init__(self)
+        wx.PyValidator.__init__(self)
         self.flag = flag
-        EVT_CHAR(self, self.OnChar)
+        self.Bind(wx.EVT_CHAR, self.OnChar)
 
     def Clone(self):
         return MyValidator(self.flag)
@@ -21,6 +24,7 @@ class MyValidator(wxPyValidator):
     def Validate(self, win):
         tc = self.GetWindow()
         val = tc.GetValue()
+        
         if self.flag == ALPHA_ONLY:
             for x in val:
                 if x not in string.letters:
@@ -36,18 +40,21 @@ class MyValidator(wxPyValidator):
 
     def OnChar(self, event):
         key = event.KeyCode()
-        if key < WXK_SPACE or key == WXK_DELETE or key > 255:
+
+        if key < wx.WXK_SPACE or key == wx.WXK_DELETE or key > 255:
             event.Skip()
             return
+
         if self.flag == ALPHA_ONLY and chr(key) in string.letters:
             event.Skip()
             return
+
         if self.flag == DIGIT_ONLY and chr(key) in string.digits:
             event.Skip()
             return
 
-        if not wxValidator_IsSilent():
-            wxBell()
+        if not wx.Validator_IsSilent():
+            wx.Bell()
 
         # Returning without calling even.Skip eats the event before it
         # gets to the text control
@@ -55,13 +62,13 @@ class MyValidator(wxPyValidator):
 
 #----------------------------------------------------------------------
 
-class TestValidatorPanel(wxPanel):
+class TestValidatorPanel(wx.Panel):
     def __init__(self, parent):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
         self.SetAutoLayout(True)
         VSPACE = 10
 
-        fgs = wxFlexGridSizer(0, 2)
+        fgs = wx.FlexGridSizer(0, 2)
 
         fgs.Add((1,1))
         fgs.Add(wxStaticText(self, -1, "These controls have validators that limit\n"
@@ -69,26 +76,26 @@ class TestValidatorPanel(wxPanel):
 
         fgs.Add((1,VSPACE)); fgs.Add((1,VSPACE))
 
-        label = wxStaticText(self, -1, "Alpha Only: ")
-        fgs.Add(label, 0, wxALIGN_RIGHT|wxCENTER)
+        label = wx.StaticText(self, -1, "Alpha Only: ")
+        fgs.Add(label, 0, wx.ALIGN_RIGHT|wx.CENTER)
 
-        fgs.Add(wxTextCtrl(self, -1, "", validator = MyValidator(ALPHA_ONLY)))
+        fgs.Add(wx.TextCtrl(self, -1, "", validator = MyValidator(ALPHA_ONLY)))
 
         fgs.Add((1,VSPACE)); fgs.Add((1,VSPACE))
 
-        label = wxStaticText(self, -1, "Digits Only: ")
-        fgs.Add(label, 0, wxALIGN_RIGHT|wxCENTER)
-        fgs.Add(wxTextCtrl(self, -1, "", validator = MyValidator(DIGIT_ONLY)))
+        label = wx.StaticText(self, -1, "Digits Only: ")
+        fgs.Add(label, 0, wx.ALIGN_RIGHT|wxCENTER)
+        fgs.Add(wx.TextCtrl(self, -1, "", validator = MyValidator(DIGIT_ONLY)))
 
         fgs.Add((1,VSPACE)); fgs.Add((1,VSPACE))
         fgs.Add((1,VSPACE)); fgs.Add((1,VSPACE))
         fgs.Add((0,0))
-        b = wxButton(self, -1, "Test Dialog Validation")
-        EVT_BUTTON(self, b.GetId(), self.OnDoDialog)
+        b = wx.Button(self, -1, "Test Dialog Validation")
+        self.Bind(EVT_BUTTON, self.OnDoDialog, b)
         fgs.Add(b)
 
-        border = wxBoxSizer()
-        border.Add(fgs, 1, wxGROW|wxALL, 25)
+        border = wx.BoxSizer()
+        border.Add(fgs, 1, wx.GROW|wx.ALL, 25)
         self.SetSizer(border)
         self.Layout()
 
@@ -100,14 +107,14 @@ class TestValidatorPanel(wxPanel):
 
 #----------------------------------------------------------------------
 
-class TextObjectValidator(wxPyValidator):
+class TextObjectValidator(wx.PyValidator):
      """ This validator is used to ensure that the user has entered something
          into the text object editor dialog's text field.
      """
      def __init__(self):
          """ Standard constructor.
          """
-         wxPyValidator.__init__(self)
+         wx.PyValidator.__init__(self)
 
 
 
@@ -126,14 +133,14 @@ class TextObjectValidator(wxPyValidator):
          text = textCtrl.GetValue()
 
          if len(text) == 0:
-             wxMessageBox("A text object must contain some text!", "Error")
+             wx.MessageBox("A text object must contain some text!", "Error")
              textCtrl.SetBackgroundColour("pink")
              textCtrl.SetFocus()
              textCtrl.Refresh()
              return False
          else:
              textCtrl.SetBackgroundColour(
-                 wxSystemSettings_GetColour(wxSYS_COLOUR_WINDOW))
+                 wx.SystemSettings_GetColour(wx.SYS_COLOUR_WINDOW))
              textCtrl.Refresh()
              return True
 
@@ -157,14 +164,14 @@ class TextObjectValidator(wxPyValidator):
 
 #----------------------------------------------------------------------
 
-class TestValidateDialog(wxDialog):
+class TestValidateDialog(wx.Dialog):
     def __init__(self, parent):
-        wxDialog.__init__(self, parent, -1, "Validated Dialog")
+        wx.Dialog.__init__(self, parent, -1, "Validated Dialog")
 
         self.SetAutoLayout(True)
         VSPACE = 10
 
-        fgs = wxFlexGridSizer(0, 2)
+        fgs = wx.FlexGridSizer(0, 2)
 
         fgs.Add((1,1));
         fgs.Add(wxStaticText(self, -1,
@@ -174,26 +181,26 @@ class TestValidateDialog(wxDialog):
 
         fgs.Add((1,VSPACE)); fgs.Add((1,VSPACE))
 
-        label = wxStaticText(self, -1, "First: ")
-        fgs.Add(label, 0, wxALIGN_RIGHT|wxCENTER)
+        label = wx.StaticText(self, -1, "First: ")
+        fgs.Add(label, 0, wx.ALIGN_RIGHT|wx.CENTER)
 
-        fgs.Add(wxTextCtrl(self, -1, "", validator = TextObjectValidator()))
+        fgs.Add(wx.TextCtrl(self, -1, "", validator = TextObjectValidator()))
 
         fgs.Add((1,VSPACE)); fgs.Add((1,VSPACE))
 
-        label = wxStaticText(self, -1, "Second: ")
-        fgs.Add(label, 0, wxALIGN_RIGHT|wxCENTER)
-        fgs.Add(wxTextCtrl(self, -1, "", validator = TextObjectValidator()))
+        label = wx.StaticText(self, -1, "Second: ")
+        fgs.Add(label, 0, wx.ALIGN_RIGHT|wx.CENTER)
+        fgs.Add(wx.TextCtrl(self, -1, "", validator = TextObjectValidator()))
 
 
-        buttons = wxBoxSizer(wxHORIZONTAL)
-        b = wxButton(self, wxID_OK, "Okay")
+        buttons = wx.BoxSizer(wx.HORIZONTAL)
+        b = wx.Button(self, wx.ID_OK, "Okay")
         b.SetDefault()
-        buttons.Add(b, 0, wxALL, 10)
-        buttons.Add(wxButton(self, wxID_CANCEL, "Cancel"), 0, wxALL, 10)
+        buttons.Add(b, 0, wx.ALL, 10)
+        buttons.Add(wx.Button(self, wx.ID_CANCEL, "Cancel"), 0, wx.ALL, 10)
 
-        border = wxBoxSizer(wxVERTICAL)
-        border.Add(fgs, 1, wxGROW|wxALL, 25)
+        border = wx.BoxSizer(wx.VERTICAL)
+        border.Add(fgs, 1, wx.GROW|wx.ALL, 25)
         border.Add(buttons)
         self.SetSizer(border)
         border.Fit(self)
@@ -211,18 +218,21 @@ def runTest(frame, nb, log):
 
 
 overview = """\
-wxValidator is the base class for a family of validator classes that mediate between a class of control, and application data.
+<html>
+<body>
+wxValidator is the base class for a family of validator classes that mediate 
+between a class of control, and application data.
 
-A validator has three major roles:
+<p>A validator has three major roles:
 
-1. to transfer data from a C++ variable or own storage to and from a control;
-
-2. to validate data in a control, and show an appropriate error message;
-
-3. to filter events (such as keystrokes), thereby changing the behaviour of the associated control.
-
-Validators can be plugged into controls dynamically.
-
+<p><ol>
+<li>to transfer data from a C++ variable or own storage to and from a control;
+<li>to validate data in a control, and show an appropriate error message;
+<li>to filter events (such as keystrokes), thereby changing the behaviour of the associated control.
+</ol>
+<p>Validators can be plugged into controls dynamically.
+</body>
+</html>
 """
 
 

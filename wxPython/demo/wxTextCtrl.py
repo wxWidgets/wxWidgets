@@ -1,9 +1,14 @@
-import sys
-from wxPython.wx import *
+# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
+
+import  sys
+import  wx
 
 #---------------------------------------------------------------------------
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def OnSetFocus(self, evt):
         print "OnSetFocus"
         evt.Skip()
@@ -16,72 +21,73 @@ class TestPanel(wxPanel):
 
 
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
         self.log = log
 
-        l1 = wxStaticText(self, -1, "wxTextCtrl")
-        t1 = wxTextCtrl(self, -1, "Test it out and see", size=(125, -1))
+        l1 = wx.StaticText(self, -1, "wx.TextCtrl")
+        t1 = wx.TextCtrl(self, -1, "Test it out and see", size=(125, -1))
         t1.SetInsertionPoint(0)
         self.tc1 = t1
-        EVT_TEXT(self, t1.GetId(), self.EvtText)
-        EVT_CHAR(t1, self.EvtChar)
-        EVT_SET_FOCUS(t1, self.OnSetFocus)
-        EVT_KILL_FOCUS(t1, self.OnKillFocus)
-        EVT_WINDOW_DESTROY(t1, self.OnWindowDestroy)
 
-        l2 = wxStaticText(self, -1, "Password")
-        t2 = wxTextCtrl(self, -1, "", size=(125, -1), style=wxTE_PASSWORD)
-        EVT_TEXT(self, t2.GetId(), self.EvtText)
+        self.Bind(wx.EVT_TEXT, self.EvtText, t1)
+        t1.Bind(wx.EVT_CHAR, self.EvtChar)
+        t1.Bind(wx.EVT_SET_FOCUS, self.OnSetFocus)
+        t1.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
+        t1.Bind(wx.EVT_WINDOW_DESTROY, self.OnWindowDestroy)
 
-        l3 = wxStaticText(self, -1, "Multi-line")
-        t3 = wxTextCtrl(self, -1,
+        l2 = wx.StaticText(self, -1, "Password")
+        t2 = wx.TextCtrl(self, -1, "", size=(125, -1), style=wx.TE_PASSWORD)
+        self.Bind(wx.EVT_TEXT, self.EvtText, t2)
+
+        l3 = wx.StaticText(self, -1, "Multi-line")
+        t3 = wx.TextCtrl(self, -1,
                         "Here is a looooooooooooooong line of text set in the control.\n\n"
                         "The quick brown fox jumped over the lazy dog...",
-                       size=(200, 100), style=wxTE_MULTILINE)
+                       size=(200, 100), style=wx.TE_MULTILINE)
+
         t3.SetInsertionPoint(0)
-        EVT_TEXT(self, t3.GetId(), self.EvtText)
-        b = wxButton(self, -1, "Test Replace")
-        EVT_BUTTON(self, b.GetId(), self.OnTestReplace)
-        b2 = wxButton(self, -1, "Test GetSelection")
-        EVT_BUTTON(self, b2.GetId(), self.OnTestGetSelection)
-        b3 = wxButton(self, -1, "Test WriteText")
-        EVT_BUTTON(self, b3.GetId(), self.OnTestWriteText)
+        self.Bind(wx.EVT_TEXT, self.EvtText, t3)
+        b = wx.Button(self, -1, "Test Replace")
+        self.Bind(wx.EVT_BUTTON, self.OnTestReplace, b)
+        b2 = wx.Button(self, -1, "Test GetSelection")
+        self.Bind(wx.EVT_BUTTON, self.OnTestGetSelection, b2)
+        b3 = wx.Button(self, -1, "Test WriteText")
+        self.Bind(wx.EVT_BUTTON, self.OnTestWriteText, b3)
         self.tc = t3
 
 
-        l4 = wxStaticText(self, -1, "Rich Text")
-        t4 = wxTextCtrl(self, -1, "If supported by the native control, this is red, and this is a different font.",
-                        size=(200, 100), style=wxTE_MULTILINE|wxTE_RICH2)
+        l4 = wx.StaticText(self, -1, "Rich Text")
+        t4 = wx.TextCtrl(self, -1, "If supported by the native control, this is red, and this is a different font.",
+                        size=(200, 100), style=wx.TE_MULTILINE|wx.TE_RICH2)
         t4.SetInsertionPoint(0)
-        t4.SetStyle(44, 47, wxTextAttr("RED", "YELLOW"))
+        t4.SetStyle(44, 47, wx.TextAttr("RED", "YELLOW"))
         points = t4.GetFont().GetPointSize()  # get the current size
-        f = wxFont(points+3, wxROMAN, wxITALIC, wxBOLD, True)
-        t4.SetStyle(63, 77, wxTextAttr("BLUE", wxNullColour, f))
+        f = wx.Font(points+3, wx.ROMAN, wx.ITALIC, wx.BOLD, True)
+        t4.SetStyle(63, 77, wx.TextAttr("BLUE", wx.NullColour, f))
 
-        l5 = wxStaticText(self, -1, "Test Positions")
-        t5 = wxTextCtrl(self, -1, "0123456789\n" * 5, size=(200, 100),
-                        style = wxTE_MULTILINE
-                        #| wxTE_RICH
-                        | wxTE_RICH2
+        l5 = wx.StaticText(self, -1, "Test Positions")
+        t5 = wx.TextCtrl(self, -1, "0123456789\n" * 5, size=(200, 100),
+                        style = wx.TE_MULTILINE
+                        #| wx.TE_RICH
+                        | wx.TE_RICH2
                         )
-        EVT_LEFT_DOWN(t5, self.OnT5LeftDown)
+        t5.Bind(wx.EVT_LEFT_DOWN, self.OnT5LeftDown)
         self.t5 = t5
 
+        bsizer = wx.BoxSizer(wx.VERTICAL)
+        bsizer.Add(b, 0, wx.GROW|wx.ALL, 4)
+        bsizer.Add(b2, 0, wx.GROW|wx.ALL, 4)
+        bsizer.Add(b3, 0, wx.GROW|wx.ALL, 4)
 
-        bsizer = wxBoxSizer(wxVERTICAL)
-        bsizer.Add(b, 0, wxGROW|wxALL, 4)
-        bsizer.Add(b2, 0, wxGROW|wxALL, 4)
-        bsizer.Add(b3, 0, wxGROW|wxALL, 4)
-
-        sizer = wxFlexGridSizer(cols=3, hgap=6, vgap=6)
+        sizer = wx.FlexGridSizer(cols=3, hgap=6, vgap=6)
         sizer.AddMany([ l1, t1, (0,0),
                         l2, t2, (0,0),
                         l3, t3, bsizer,
                         l4, t4, (0,0),
                         l5, t5, (0,0),
                         ])
-        border = wxBoxSizer(wxVERTICAL)
-        border.Add(sizer, 0, wxALL, 25)
+        border = wx.BoxSizer(wx.VERTICAL)
+        border.Add(sizer, 0, wx.ALL, 25)
         self.SetSizer(border)
         self.SetAutoLayout(True)
 
@@ -105,8 +111,9 @@ class TestPanel(wxPanel):
     def OnTestGetSelection(self, evt):
         start, end = self.tc.GetSelection()
         text = self.tc.GetValue()
-        if wxPlatform == "__WXMSW__":  # This is why GetStringSelection was added
+        if wx.Platform == "__WXMSW__":  # This is why GetStringSelection was added
             text = text.replace('\n', '\r\n')
+
         self.log.write("multi-line GetSelection(): (%d, %d)\n"
                        "\tGetStringSelection(): %s\n"
                        "\tSelectedText: %s\n" %
@@ -116,8 +123,10 @@ class TestPanel(wxPanel):
 
         start, end = self.tc1.GetSelection()
         text = self.tc1.GetValue()
-        if wxPlatform == "__WXMSW__":  # This is why GetStringSelection was added
+
+        if wx.Platform == "__WXMSW__":  # This is why GetStringSelection was added
             text = text.replace('\n', '\r\n')
+
         self.log.write("single-line GetSelection(): (%d, %d)\n"
                        "\tGetStringSelection(): %s\n"
                        "\tSelectedText: %s\n" %
@@ -128,7 +137,7 @@ class TestPanel(wxPanel):
 
     def OnT5LeftDown(self, evt):
         evt.Skip()
-        wxCallAfter(self.LogT5Position, evt)
+        wx.CallAfter(self.LogT5Position, evt)
 
     def LogT5Position(self, evt):
         text = self.t5.GetValue()
@@ -151,12 +160,13 @@ def runTest(frame, nb, log):
 #---------------------------------------------------------------------------
 
 
-
-
 overview = """\
+A text control allows text to be displayed and (possibly) edited. It may be single 
+line or multi-line, support styles or not, be read-only or not, and even supports
+text masking for such things as passwords.
+
+
 """
-
-
 
 
 if __name__ == '__main__':

@@ -1,23 +1,35 @@
+# 11/17/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-from wxPython.wx import *
+import  wx
 
 #---------------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    dlg = wxDirDialog(frame, "Choose a directory:",
-                      style=wxDD_DEFAULT_STYLE|wxDD_NEW_DIR_BUTTON)
-    if dlg.ShowModal() == wxID_OK:
+    
+    # In this case we include a "New directory" button. 
+    dlg = wx.DirDialog(frame, "Choose a directory:",
+                      style=wx.DD_DEFAULT_STYLE|wx.DD_NEW_DIR_BUTTON)
+
+    # If the user selects OK, then we process the dialog's data.
+    # This is done by getting the path data from the dialog - BEFORE
+    # we destroy it. 
+    if dlg.ShowModal() == wx.ID_OK:
         log.WriteText('You selected: %s\n' % dlg.GetPath())
+
+    # Only destroy a dialog after you're done with it.
     dlg.Destroy()
 
 #---------------------------------------------------------------------------
 
 
 
-
-
 overview = """\
-This class represents the directory chooser dialog.
+This class represents the directory chooser dialog.  It is used when all you
+need from the user is the name of a directory. Data is retrieved via utility
+methods; see the <code>DirDialog</code> documentation for specifics.
 """
 
 

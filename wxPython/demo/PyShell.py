@@ -1,7 +1,9 @@
+# 11/13/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+#
 
-
-from wx import py
-
+import  wx.py   as  py
 
 #----------------------------------------------------------------------
 

@@ -8,12 +8,37 @@
 # Date:         Feb 26, 2001
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
+# 11/15/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# o Some updating of the library itself will be needed for this demo to work
+#   correctly.
+#
+# 11/26/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Problems have changed a little. The print dialog requires
+#   a wx.Size to work with the calendar library. wx.core doesn't
+#   approve, though, so we get deprecation warnings.
+# o Ugh. AFter updating to the Bind() method, things lock up
+#   on various control clicks. Will have to debug. Only seems
+#   to happen on windows with calendar controls, though. 
+#
+# 11/30/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Lockup issue clarification: it appears that the spinner is
+#   the culprit.
+#
+# 12/01/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o New Bind() method now fully supported.
+#
 
-from wxPython.wx           import *
-from wxPython.lib.calendar import wxCalendar, Month, PrtCalDraw, CalenDlg
+import  os
 
-import images
-import os
+import  wx
+import  wx.lib.calendar as  calendar
+
+import  images
 
 
 # highlighted days in month
@@ -35,21 +60,25 @@ test_days ={ 0: [],
 # test of full window calendar control functions
 
 def GetMonthList():
+
     monthlist = []
+
     for i in range(13):
-        name = Month[i]
+        name = calendar.Month[i]
+
         if name != None:
             monthlist.append(name)
+
     return monthlist
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, log, frame):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
 
         self.log = log
         self.frame = frame
 
-        self.calend = wxCalendar(self, -1, wxPoint(100, 50), wxSize(200, 180))
+        self.calend = calendar.wxCalendar(self, -1, (100, 50), (200, 180))
 
 #        start_month = 2        # preselect the date for calendar
 #        start_year = 2001
@@ -57,83 +86,85 @@ class TestPanel(wxPanel):
         start_month = self.calend.GetMonth()        # get the current month & year
         start_year = self.calend.GetYear()
 
-# month list from DateTime module
+        # month list from DateTime module
 
         monthlist = GetMonthList()
 
-        mID = wxNewId()
-        self.date = wxComboBox(self, mID, "",
-                               wxPoint(100, 20), wxSize(90, -1),
-                               monthlist, wxCB_DROPDOWN)
-        self.date.SetSelection(start_month-1)
-        EVT_COMBOBOX(self, mID, self.EvtComboBox)
+        mID = wx.NewId()
+        self.date = wx.ComboBox(self, mID, "",
+                               (100, 20), (90, -1),
+                               monthlist, wx.CB_DROPDOWN)
 
-# set start month and year
+        self.date.SetSelection(start_month-1)
+        self.Bind(wx.EVT_COMBOBOX, self.EvtComboBox, id=mID)
+
+        # set start month and year
 
         self.calend.SetMonth(start_month)
         self.calend.SetYear(start_year)
 
-# set attributes of calendar
+        # set attributes of calendar
 
         self.calend.hide_title = True
         self.calend.HideGrid()
         self.calend.SetWeekColor('WHITE', 'BLACK')
 
-# display routine
+        # display routine
 
         self.ResetDisplay()
 
-# mouse click event
+        # mouse click event
+        self.Bind(calendar.EVT_CALENDAR, self.MouseClick, self.calend)
 
-        self.Connect(self.calend.GetId(), -1, 2100, self.MouseClick)
+        # scroll bar for month selection
 
-# scroll bar for month selection
+        mID = wx.NewId()
 
-        mID = wxNewId()
-        self.scroll = wxScrollBar(self, mID, wxPoint(100, 240), wxSize(200, 20), wxSB_HORIZONTAL)
+        self.scroll = wx.ScrollBar(self, mID, (100, 240), (200, 20), wx.SB_HORIZONTAL)
         self.scroll.SetScrollbar(start_month-1, 1, 12, 1, True)
-        EVT_COMMAND_SCROLL(self, mID, self.Scroll)
+        self.Bind(wx.EVT_COMMAND_SCROLL, self.Scroll, id=mID)
 
-# spin control for year selection
+        # spin control for year selection
 
-        self.dtext = wxTextCtrl(self, -1, str(start_year), wxPoint(200, 20), wxSize(60, -1))
+        self.dtext = wx.TextCtrl(self, -1, str(start_year), (200, 20), (60, -1))
         h = self.dtext.GetSize().height
 
-        mID = wxNewId()
-        self.spin = wxSpinButton(self, mID, wxPoint(270, 20), wxSize(h*2, h))
+        mID = wx.NewId()
+        self.spin = wx.SpinButton(self, mID, (270, 20), (h*2, h))
         self.spin.SetRange(1980, 2010)
         self.spin.SetValue(start_year)
-        EVT_SPIN(self, mID, self.OnSpin)
+        self.Bind(wx.EVT_SPIN, self.OnSpin, id=mID)
 
-# button for calendar dialog test
+        # button for calendar dialog test
 
-        wxStaticText(self, -1, "Test Calendar Dialog", wxPoint(350, 50), wxSize(150, -1))
+        wx.StaticText(self, -1, "Test Calendar Dialog", (350, 50), (150, -1))
 
-        mID = wxNewId()
+        mID = wx.NewId()
         bmp = images.getCalendarBitmap()
-        self.but = wxBitmapButton(self, mID, bmp, wxPoint(380, 80))#, wxSize(30, 30))
-        EVT_BUTTON(self, mID, self.TestDlg)
+        self.but = wx.BitmapButton(self, mID, bmp, (380, 80))
+        self.Bind(wx.EVT_BUTTON, self.TestDlg, id=mID)
 
-# button for calendar window test
+        # button for calendar window test
 
-        wxStaticText(self, -1, "Test Calendar Window", wxPoint(350, 150), wxSize(150, -1))
+        wx.StaticText(self, -1, "Test Calendar Window", (350, 150), (150, -1))
 
-        mID = wxNewId()
-        self.but = wxBitmapButton(self, mID, bmp, wxPoint(380, 180))#, wxSize(30, 30))
-        EVT_BUTTON(self, mID, self.TestFrame)
+        mID = wx.NewId()
+        self.but = wx.BitmapButton(self, mID, bmp, (380, 180))
+        self.Bind(wx.EVT_BUTTON, self.TestFrame, id=mID)
 
-        wxStaticText(self, -1, "Test Calendar Print", wxPoint(350, 250), wxSize(150, -1))
+        wx.StaticText(self, -1, "Test Calendar Print", (350, 250), (150, -1))
 
-        mID = wxNewId()
-        self.but = wxBitmapButton(self, mID, bmp, wxPoint(380, 280))#, wxSize(30, 30))
-        EVT_BUTTON(self, mID, self.OnPreview)
+        mID = wx.NewId()
+        self.but = wx.BitmapButton(self, mID, bmp, (380, 280))
+        self.Bind(wx.EVT_BUTTON, self.OnPreview, id=mID)
 
-# calendar dialog
+        # calendar dialog
 
     def TestDlg(self, event):       # test the date dialog
-        dlg = CalenDlg(self)
+        dlg = calendar.CalenDlg(self)
         dlg.Centre()
-        if dlg.ShowModal() == wxID_OK:
+
+        if dlg.ShowModal() == wx.ID_OK:
             result = dlg.result
             day = result[1]
             month = result[2]
@@ -143,14 +174,14 @@ class TestPanel(wxPanel):
         else:
             self.log.WriteText('No Date Selected')
 
-# calendar window test
+        # calendar window test
 
     def TestFrame(self, event):
         frame = CalendFrame(self, -1, "Test Calendar", self.log)
         frame.Show(True)
         return True
 
-# calendar print preview
+    # calendar print preview
 
     def OnPreview(self, event):
         month = self.calend.GetMonth()
@@ -159,7 +190,7 @@ class TestPanel(wxPanel):
         prt = PrintCalend(self.frame, month, year)
         prt.Preview()
 
-# month and year control events
+    # month and year control events
 
     def OnSpin(self, event):
         year = event.GetPosition()
@@ -183,20 +214,21 @@ class TestPanel(wxPanel):
         self.ResetDisplay()
         self.log.WriteText('Month: %s\n' % value)
 
-        name = Month[monthval]
+        name = calendar.Month[monthval]
         self.date.SetValue(name)
 
-# log mouse events
+    # log mouse events
 
     def MouseClick(self, evt):
         text = '%s CLICK   %02d/%02d/%d' % (evt.click, evt.day, evt.month, evt.year)  # format date
         self.log.WriteText('Date Selected: ' + text + '\n')
 
 
-# set the highlighted days for the calendar
+    # set the highlighted days for the calendar
 
     def ResetDisplay(self):
         month = self.calend.GetMonth()
+
         try:
             set_days = test_days[month]
         except:
@@ -206,7 +238,7 @@ class TestPanel(wxPanel):
         self.calend.SetSelDay(set_days)
         self.calend.Refresh()
 
-# increment and decrement toolbar controls
+    # increment and decrement toolbar controls
 
     def OnIncYear(self, event):
         self.calend.IncYear()
@@ -230,16 +262,17 @@ class TestPanel(wxPanel):
 
 # test of full window calendar control functions
 
-class CalendFrame(wxFrame):
+class CalendFrame(wx.Frame):
     def __init__(self, parent, id, title, log):
-        wxFrame.__init__(self, parent, id, title, size=wxSize(400, 400),
-                         style=wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE)
-        EVT_CLOSE(self, self.OnCloseWindow)
+        wx.Frame.__init__(self, parent, id, title, size=(400, 400),
+                         style=wx.DEFAULT_FRAME_STYLE|wx.NO_FULL_REPAINT_ON_RESIZE)
+
+        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
         self.log = log
         self.CreateStatusBar()
-        self.mainmenu = wxMenuBar()
-        menu = wxMenu()
+        self.mainmenu = wx.MenuBar()
+        menu = wx.Menu()
 
         menu = self.MakeFileMenu()
         self.mainmenu.Append(menu, '&File')
@@ -247,7 +280,7 @@ class CalendFrame(wxFrame):
         self.MakeToolMenu()             # toolbar
 
         self.SetMenuBar(self.mainmenu)
-        self.calend = wxCalendar(self, -1)
+        self.calend = calendar.wxCalendar(self, -1)
         self.calend.SetCurrentDay()
         self.calend.grid_color = 'BLUE'
         self.calend.SetBusType()
@@ -255,7 +288,7 @@ class CalendFrame(wxFrame):
 
         self.ResetDisplay()
 
-        self.Connect(self.calend.GetId(), -1, 2100, self.MouseClick)
+        self.Bind(calendar.EVT_CALENDAR, self.MouseClick, self.calend)
 
     def MouseClick(self, evt):
         text = '%s CLICK   %02d/%02d/%d' % (evt.click, evt.day, evt.month, evt.year)  # format date
@@ -266,6 +299,7 @@ class CalendFrame(wxFrame):
 
     def ResetDisplay(self):
         month = self.calend.GetMonth()
+
         try:
             set_days = test_days[month]
         except:
@@ -297,46 +331,46 @@ class CalendFrame(wxFrame):
         self.ResetDisplay()
 
     def MakeFileMenu(self):
-        menu = wxMenu()
+        menu = wx.Menu()
 
-        mID = wxNewId()
+        mID = wx.NewId()
         menu.Append(mID, 'Decrement', 'Next')
-        EVT_MENU(self, mID, self.OnDecMonth)
+        self.Bind(wx.EVT_MENU, self.OnDecMonth, id=mID)
 
-        mID = wxNewId()
+        mID = wx.NewId()
         menu.Append(mID, 'Increment', 'Dec')
-        EVT_MENU(self, mID, self.OnIncMonth)
+        self.Bind(wx.EVT_MENU, self.OnIncMonth, id=mID)
 
         menu.AppendSeparator()
 
-        mID = wxNewId()
+        mID = wx.NewId()
         menu.Append(mID, 'E&xit', 'Exit')
-        EVT_MENU(self, mID, self.OnCloseWindow)
+        self.Bind(wx.EVT_MENU, self.OnCloseWindow, id=mID)
 
         return menu
 
     def MakeToolMenu(self):
-        tb = self.CreateToolBar(wxTB_HORIZONTAL|wxNO_BORDER)
+        tb = self.CreateToolBar(wx.TB_HORIZONTAL|wx.NO_BORDER)
 
-        mID = wxNewId()
+        mID = wx.NewId()
         SetToolPath(self, tb, mID, images.getDbDecBitmap(), 'Dec Year')
-        EVT_TOOL(self, mID, self.OnDecYear)
+        self.Bind(wx.EVT_TOOL, self.OnDecYear, id=mID)
 
-        mID = wxNewId()
+        mID = wx.NewId()
         SetToolPath(self, tb, mID, images.getDecBitmap(), 'Dec Month')
-        EVT_TOOL(self, mID, self.OnDecMonth)
+        self.Bind(wx.EVT_TOOL, self.OnDecMonth, id=mID)
 
-        mID = wxNewId()
+        mID = wx.NewId()
         SetToolPath(self, tb, mID, images.getPtBitmap(), 'Current Month')
-        EVT_TOOL(self, mID, self.OnCurrent)
+        self.Bind(wx.EVT_TOOL, self.OnCurrent, id=mID)
 
-        mID = wxNewId()
+        mID = wx.NewId()
         SetToolPath(self, tb, mID, images.getIncBitmap(), 'Inc Month')
-        EVT_TOOL(self, mID, self.OnIncMonth)
+        self.Bind(wx.EVT_TOOL, self.OnIncMonth, id=mID)
 
-        mID = wxNewId()
+        mID = wx.NewId()
         SetToolPath(self, tb, mID, images.getDbIncBitmap(), 'Inc Year')
-        EVT_TOOL(self, mID, self.OnIncYear)
+        self.Bind(wx.EVT_TOOL, self.OnIncYear, id=mID)
 
         tb.Realize()
 
@@ -352,15 +386,15 @@ class PrintCalend:
 
         self.SetParms()
         self.SetCal()
-        self.printData = wxPrintData()
+        self.printData = wx.PrintData()
 
     def SetCal(self):
         self.grid_color = 'BLUE'
         self.back_color = 'WHITE'
         self.sel_color = 'RED'
         self.high_color = 'LIGHT BLUE'
-        self.font = wxSWISS
-        self.bold = wxNORMAL
+        self.font = wx.SWISS
+        self.bold = wx.NORMAL
 
         self.sel_key = None      #  last used by
         self.sel_lst = []        # highlighted selected days
@@ -404,14 +438,15 @@ class PrintCalend:
     def Preview(self):
         printout = SetPrintout(self)
         printout2 = SetPrintout(self)
-        self.preview = wxPrintPreview(printout, printout2, self.printData)
+        self.preview = wx.PrintPreview(printout, printout2, self.printData)
+
         if not self.preview.Ok():
-            wxMessageBox("There was a problem printing!", "Printing", wxOK)
+            wx.MessageBox("There was a problem printing!", "Printing", wx.OK)
             return
 
         self.preview.SetZoom(60)        # initial zoom value
 
-        frame = wxPreviewFrame(self.preview, self.frame, "Print preview")
+        frame = wx.PreviewFrame(self.preview, self.frame, "Print preview")
 
         frame.Initialize()
         frame.SetPosition(self.frame.GetPosition())
@@ -419,22 +454,24 @@ class PrintCalend:
         frame.Show(True)
 
     def Print(self):
-        pdd = wxPrintDialogData()
+        pdd = wx.PrintDialogData()
         pdd.SetPrintData(self.printData)
-        printer = wxPrinter(pdd)
+        printer = wx.Printer(pdd)
         printout = SetPrintout(self)
-        frame = wxFrame(None, -1, "Test")
+        frame = wx.Frame(None, -1, "Test")
+
         if not printer.Print(frame, printout):
-            wxMessageBox("There was a problem printing.\nPerhaps your current printer is not set correctly?", "Printing", wxOK)
+            wx.MessageBox("There was a problem printing.\nPerhaps your current printer is not set correctly?", "Printing", wx.OK)
         else:
             self.printData = printer.GetPrintDialogData().GetPrintData()
+
         printout.Destroy()
 
     def DoDrawing(self, DC):
-        size = DC.GetSizeTuple()
+        size = DC.GetSize()
         DC.BeginDrawing()
 
-        cal = PrtCalDraw(self)
+        cal = calendar.PrtCalDraw(self)
 
         if self.preview is None:
             cal.SetPSize(size[0]/self.pagew, size[1]/self.pageh)
@@ -458,14 +495,16 @@ class PrintCalend:
         cal.font = self.font
         cal.bold = self.bold
 
-        cal_size = wxSize(3.0, 3.0)
+        cal_size = (3.0, 3.0)
         cal.SetSize(cal_size)
 
         year, month = self.year, self.month
 
         x = 1.0
+
         for i in range(2):
             y = 0.5
+
             for j in range(3):
                 cal.SetCal(year, month)       # current month
                 cal.SetPos(x, y)
@@ -481,6 +520,7 @@ class PrintCalend:
 
                 year, month = self.IncMonth(year, month)
                 y = y + 3.5
+
             x = x + 4.0     # next column
 
         DC.EndDrawing()
@@ -490,6 +530,7 @@ class PrintCalend:
 
     def IncMonth(self, year, month):     # next month
         month = month + 1
+
         if month > 12:
             month = 1
             year = year + 1
@@ -520,9 +561,9 @@ class PrintCalend:
 def SetToolPath(self, tb, id, bmp, title):
     tb.AddSimpleTool(id, bmp, title, title)
 
-class SetPrintout(wxPrintout):
+class SetPrintout(wx.Printout):
     def __init__(self, canvas):
-        wxPrintout.__init__(self)
+        wx.Printout.__init__(self)
         self.canvas = canvas
         self.end_pg = 1
 
@@ -541,10 +582,12 @@ class SetPrintout(wxPrintout):
     def GetPageInfo(self):
         self.end_pg = self.canvas.GetTotalPages()
         str_pg = 1
+
         try:
             end_pg = self.end_pg
         except:
             end_pg = 1
+
         return (str_pg, end_pg, str_pg, end_pg)
 
     def OnPreparePrinting(self):
@@ -554,12 +597,13 @@ class SetPrintout(wxPrintout):
         dc = self.GetDC()
 
         self.preview = self.IsPreview()
+
         if (self.preview):
             self.pixelsPerInch = self.GetPPIScreen()
         else:
             self.pixelsPerInch = self.GetPPIPrinter()
 
-        (w, h) = dc.GetSizeTuple()
+        (w, h) = dc.GetSize()
         scaleX = float(w) / 1000
         scaleY = float(h) / 1000
         self.printUserScale = min(scaleX, scaleY)
@@ -576,7 +620,7 @@ class SetPrintout(wxPrintout):
 
     def OnPrintPage(self, page):
         dc = self.GetDC()
-        (w, h) = dc.GetSizeTuple()
+        (w, h) = dc.GetSize()
         scaleX = float(w) / 1000
         scaleY = float(h) / 1000
         self.printUserScale = min(scaleX, scaleY)
@@ -596,9 +640,9 @@ class SetPrintout(wxPrintout):
         self.canvas.DoDrawing(dc)
         return True
 
-class MyApp(wxApp):
+class MyApp(wx.App):
     def OnInit(self):
-        frame = CalendFrame(None, -1, "Test Calendar")
+        frame = CalendFrame(None, -1, "Test Calendar", log)
         frame.Show(True)
         self.SetTopWindow(frame)
         return True
@@ -606,7 +650,7 @@ class MyApp(wxApp):
 #---------------------------------------------------------------------------
 
 def MessageDlg(self, message, type = 'Message'):
-    dlg = wxMessageDialog(self, message, type, wxOK | wxICON_INFORMATION)
+    dlg = wx.MessageDialog(self, message, type, wx.OK | wx.ICON_INFORMATION)
     dlg.ShowModal()
     dlg.Destroy()
 
@@ -620,11 +664,14 @@ def runTest(frame, nb, log):
 
 
 overview = """\
-This control provides a calendar control class for displaying and selecting dates.  In addition, the class is extended and can now be used for printing/previewing.
+This control provides a calendar control class for displaying and selecting dates.  
+In addition, the class is extended and can now be used for printing/previewing.
 
-Additional features include weekend highlighting and business type Monday-Sunday format.
+Additional features include weekend highlighting and business type Monday-Sunday 
+format.
 
-See example for various methods used to set display month, year, and highlighted dates (different font and background colours).
+See example for various methods used to set display month, year, and highlighted 
+dates (different font and background colours).
 
 by Lorne White
 

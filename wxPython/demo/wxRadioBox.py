@@ -1,40 +1,44 @@
+# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-from wxPython.wx import *
+import  wx
 
 #---------------------------------------------------------------------------
 
-RBUT1 = wxNewId()
-RBUT2 = wxNewId()
-RBUT3 = wxNewId()
-RBUT4 = wxNewId()
-
-RBOX1 = wxNewId()
-RBOX2 = wxNewId()
-
-class TestRadioButtons(wxPanel):
+class TestRadioBox(wx.Panel):
     def __init__(self, parent, log):
         self.log = log
-        wxPanel.__init__(self, parent, -1)
-        #self.SetBackgroundColour(wxBLUE)
+        wx.Panel.__init__(self, parent, -1)
+        #self.SetBackgroundColour(wx.BLUE)
 
         sampleList = ['zero', 'one', 'two', 'three', 'four', 'five',
                       'six', 'seven', 'eight']
 
-        sizer = wxBoxSizer(wxVERTICAL)
-        rb = wxRadioBox(self, RBOX1, "wxRadioBox",
-                        wxDefaultPosition, wxDefaultSize,
-                        sampleList, 2, wxRA_SPECIFY_COLS)
-        EVT_RADIOBOX(self, RBOX1, self.EvtRadioBox)
-        #rb.SetBackgroundColour(wxBLUE)
-        rb.SetToolTip(wxToolTip("This is a ToolTip!"))
-        #rb.SetLabel("wxRadioBox")
-        sizer.Add(rb, 0, wxALL, 20)
+        sizer = wx.BoxSizer(wx.VERTICAL)
 
-        rb = wxRadioBox(self, RBOX2, "", wxDefaultPosition, wxDefaultSize,
-                        sampleList, 3, wxRA_SPECIFY_COLS | wxNO_BORDER)
-        EVT_RADIOBOX(self, RBOX2, self.EvtRadioBox)
-        rb.SetToolTip(wxToolTip("This box has no label"))
-        sizer.Add(rb, 0, wxLEFT|wxRIGHT|wxBOTTOM, 20)
+        rb = wx.RadioBox(
+                self, -1, "wx.RadioBox", wx.DefaultPosition, wx.DefaultSize,
+                sampleList, 2, wx.RA_SPECIFY_COLS
+                )
+        
+        self.Bind(wx.EVT_RADIOBOX, self.EvtRadioBox, rb)
+        #rb.SetBackgroundColour(wx.BLUE)
+        rb.SetToolTip(wx.ToolTip("This is a ToolTip!"))
+        #rb.SetLabel("wxRadioBox")
+
+        sizer.Add(rb, 0, wx.ALL, 20)
+
+        rb = wx.RadioBox(
+                self, -1, "", wx.DefaultPosition, wx.DefaultSize,
+                sampleList, 3, wx.RA_SPECIFY_COLS | wx.NO_BORDER
+                )
+        
+        self.Bind(wx.EVT_RADIOBOX, self.EvtRadioBox, rb)
+        rb.SetToolTip(wx.ToolTip("This box has no label"))
+
+        sizer.Add(rb, 0, wx.LEFT|wx.RIGHT|wx.BOTTOM, 20)
 
         self.SetSizer(sizer)
 
@@ -42,13 +46,14 @@ class TestRadioButtons(wxPanel):
     def EvtRadioBox(self, event):
         self.log.WriteText('EvtRadioBox: %d\n' % event.GetInt())
 
-    def EvtRadioButton(self, event):
-        self.log.write('EvtRadioButton:%d\n' % event.GetId())
+# Doesn't appear to be used for anything.
+#    def EvtRadioButton(self, event):
+#        self.log.write('EvtRadioButton:%d\n' % event.GetId())
 
 #---------------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    win = TestRadioButtons(nb, log)
+    win = TestRadioBox(nb, log)
     return win
 
 
@@ -59,7 +64,6 @@ choices.  It is displayed as a vertical column or horizontal row of
 labelled buttons.
 
 """
-
 
 
 if __name__ == '__main__':

@@ -1,26 +1,31 @@
+# 11/22/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-from wxPython.wx import *
-from wxPython.gizmos import wxTreeListCtrl
+import  wx
+import  wx.gizmos   as  gizmos
 
-import images
+import  images
 
 #----------------------------------------------------------------------
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, log):
         self.log = log
-        wxPanel.__init__(self, parent, -1)
-        EVT_SIZE(self, self.OnSize)
+        wx.Panel.__init__(self, parent, -1)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
 
-        self.tree = wxTreeListCtrl(self, -1, style = wxTR_DEFAULT_STYLE
-                                   #| wxTR_ROW_LINES
-                                   #| wxTR_NO_LINES | wxTR_TWIST_BUTTONS
+        self.tree = gizmos.TreeListCtrl(self, -1, style = wx.TR_DEFAULT_STYLE
+                                   #| wx.TR_ROW_LINES
+                                   #| wx.TR_NO_LINES 
+                                   #| wx.TR_TWIST_BUTTONS
                                    )
         isz = (16,16)
-        il = wxImageList(isz[0], isz[1])
-        fldridx     = il.Add(wxArtProvider_GetBitmap(wxART_FOLDER,      wxART_OTHER, isz))
-        fldropenidx = il.Add(wxArtProvider_GetBitmap(wxART_FILE_OPEN,   wxART_OTHER, isz))
-        fileidx     = il.Add(wxArtProvider_GetBitmap(wxART_REPORT_VIEW, wxART_OTHER, isz))
+        il = wx.ImageList(isz[0], isz[1])
+        fldridx     = il.Add(wx.ArtProvider_GetBitmap(wx.ART_FOLDER,      wx.ART_OTHER, isz))
+        fldropenidx = il.Add(wx.ArtProvider_GetBitmap(wx.ART_FILE_OPEN,   wx.ART_OTHER, isz))
+        fileidx     = il.Add(wx.ArtProvider_GetBitmap(wx.ART_REPORT_VIEW, wx.ART_OTHER, isz))
         smileidx    = il.Add(images.getSmilesBitmap())
 
         self.tree.SetImageList(il)
@@ -37,8 +42,8 @@ class TestPanel(wxPanel):
         self.root = self.tree.AddRoot("The Root Item")
         self.tree.SetItemText(self.root, "col 1 root", 1)
         self.tree.SetItemText(self.root, "col 2 root", 2)
-        self.tree.SetItemImage(self.root, fldridx, which = wxTreeItemIcon_Normal)
-        self.tree.SetItemImage(self.root, fldropenidx, which = wxTreeItemIcon_Expanded)
+        self.tree.SetItemImage(self.root, fldridx, which = wx.TreeItemIcon_Normal)
+        self.tree.SetItemImage(self.root, fldropenidx, which = wx.TreeItemIcon_Expanded)
 
 
         for x in range(15):
@@ -46,29 +51,29 @@ class TestPanel(wxPanel):
             child = self.tree.AppendItem(self.root, txt)
             self.tree.SetItemText(child, txt + "(c1)", 1)
             self.tree.SetItemText(child, txt + "(c2)", 2)
-            self.tree.SetItemImage(child, fldridx, which = wxTreeItemIcon_Normal)
-            self.tree.SetItemImage(child, fldropenidx, which = wxTreeItemIcon_Expanded)
+            self.tree.SetItemImage(child, fldridx, which = wx.TreeItemIcon_Normal)
+            self.tree.SetItemImage(child, fldropenidx, which = wx.TreeItemIcon_Expanded)
 
             for y in range(5):
                 txt = "item %d-%s" % (x, chr(ord("a")+y))
                 last = self.tree.AppendItem(child, txt)
                 self.tree.SetItemText(last, txt + "(c1)", 1)
                 self.tree.SetItemText(last, txt + "(c2)", 2)
-                self.tree.SetItemImage(last, fldridx, which = wxTreeItemIcon_Normal)
-                self.tree.SetItemImage(last, fldropenidx, which = wxTreeItemIcon_Expanded)
+                self.tree.SetItemImage(last, fldridx, which = wx.TreeItemIcon_Normal)
+                self.tree.SetItemImage(last, fldropenidx, which = wx.TreeItemIcon_Expanded)
 
                 for z in range(5):
                     txt = "item %d-%s-%d" % (x, chr(ord("a")+y), z)
                     item = self.tree.AppendItem(last,  txt)
                     self.tree.SetItemText(item, txt + "(c1)", 1)
                     self.tree.SetItemText(item, txt + "(c2)", 2)
-                    self.tree.SetItemImage(item, fileidx, which = wxTreeItemIcon_Normal)
-                    self.tree.SetItemImage(item, smileidx, which = wxTreeItemIcon_Selected)
+                    self.tree.SetItemImage(item, fileidx, which = wx.TreeItemIcon_Normal)
+                    self.tree.SetItemImage(item, smileidx, which = wx.TreeItemIcon_Selected)
 
 
         self.tree.Expand(self.root)
 
-        EVT_RIGHT_UP(self.tree.GetMainWindow(), self.OnRightUp)
+        self.tree.GetMainWindow().Bind(wx.EVT_RIGHT_UP, self.OnRightUp)
 
 
     def OnRightUp(self, evt):
@@ -79,6 +84,7 @@ class TestPanel(wxPanel):
         pos = self.tree.GetMainWindow().ClientToScreen(pos)
         pos = self.tree.ScreenToClient(pos)
         item, flags, col = self.tree.HitTest(pos)
+
         if item:
             print flags, col, self.tree.GetItemText(item, col)
 
@@ -100,13 +106,11 @@ def runTest(frame, nb, log):
 overview = """<html><body>
 <h2><center>wxTreeListCtrl</center></h2>
 
-The wxTreeListCtrl is essentially a wxTreeCtrl with extra columns,
-such that the look is similar to a wxListCtrl.
+The wx.TreeListCtrl is essentially a wx.TreeCtrl with extra columns,
+such that the look is similar to a wx.ListCtrl.
 
 </body></html>
 """
-
-
 
 
 if __name__ == '__main__':

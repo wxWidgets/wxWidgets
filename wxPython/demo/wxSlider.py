@@ -1,19 +1,25 @@
+# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-from wxPython.wx import *
+import  wx
 
 #----------------------------------------------------------------------
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
         self.log = log
         self.count = 0
 
-        wxStaticText(self, -1, "This is a wxSlider.", wxPoint(45, 15))
+        wx.StaticText(self, -1, "This is a wxSlider.", (45, 15))
 
-        slider = wxSlider(self, 100, 25, 1, 100, wxPoint(30, 60),
-                          wxSize(250, -1),
-                          wxSL_HORIZONTAL | wxSL_AUTOTICKS | wxSL_LABELS )
+        slider = wx.Slider(
+            self, 100, 25, 1, 100, (30, 60), (250, -1), 
+            wx.SL_HORIZONTAL | wx.SL_AUTOTICKS | wx.SL_LABELS 
+            )
+
         slider.SetTickFreq(5, 1)
 
 
@@ -30,8 +36,13 @@ def runTest(frame, nb, log):
 
 
 overview = """\
-"""
+A slider is a control with a handle which can be pulled back and forth to 
+change the value.
 
+In Windows versions below Windows 95, a scrollbar is used to simulate the slider. 
+In Windows 95, the track bar control is used.
+
+"""
 
 
 if __name__ == '__main__':

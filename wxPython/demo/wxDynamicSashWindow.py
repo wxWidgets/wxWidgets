@@ -1,23 +1,29 @@
+# 11/17/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-from wxPython.wx import *
-from wxPython.gizmos import *
-from wxPython.stc import *
+import  wx
+import  wx.gizmos   as  gizmos
+import  wx.stc      as  stc
 
 #----------------------------------------------------------------------
 # This is an example of the complex view that manages its own scrollbars
 # as described in the overview below.
 
-class TestView(wxStyledTextCtrl):
+class TestView(stc.StyledTextCtrl):
     def __init__(self, parent, ID, log):
-        wxStyledTextCtrl.__init__(self, parent, ID, style=wxNO_BORDER)
+        stc.StyledTextCtrl.__init__(self, parent, ID, style=wx.NO_BORDER)
         self.dyn_sash = parent
         self.log = log
         self.SetupScrollBars()
         self.SetMarginWidth(1,0)
-        self.StyleSetFont(wxSTC_STYLE_DEFAULT,
-                          wxFont(10, wxMODERN, wxNORMAL, wxNORMAL))
-        EVT_DYNAMIC_SASH_SPLIT(self, -1, self.OnSplit)
-        EVT_DYNAMIC_SASH_UNIFY(self, -1, self.OnUnify)
+
+        self.StyleSetFont(stc.STC_STYLE_DEFAULT,
+                          wx.Font(10, wx.MODERN, wx.NORMAL, wx.NORMAL))
+
+        self.Bind(gizmos.EVT_DYNAMIC_SASH_SPLIT, self.OnSplit)
+        self.Bind(gizmos.EVT_DYNAMIC_SASH_UNIFY, self.OnUnify)
         #self.SetScrollWidth(500)
 
     def SetupScrollBars(self):
@@ -25,10 +31,10 @@ class TestView(wxStyledTextCtrl):
         # to this view
         v_bar = self.dyn_sash.GetVScrollBar(self)
         h_bar = self.dyn_sash.GetHScrollBar(self)
-        EVT_SCROLL(v_bar, self.OnSBScroll)
-        EVT_SCROLL(h_bar, self.OnSBScroll)
-        EVT_SET_FOCUS(v_bar, self.OnSBFocus)
-        EVT_SET_FOCUS(h_bar, self.OnSBFocus)
+        v_bar.Bind(wx.EVT_SCROLL, self.OnSBScroll)
+        h_bar.Bind(wx.EVT_SCROLL, self.OnSBScroll)
+        v_bar.Bind(wx.EVT_SET_FOCUS, self.OnSBFocus)
+        h_bar.Bind(wx.EVT_SET_FOCUS, self.OnSBFocus)
 
         # And set the wxStyledText to use these scrollbars instead
         # of its built-in ones.
@@ -67,20 +73,20 @@ continue splitting the new views as much as you like.  Try it and see.
 
 In this case the views also share the same document so changes in one
 are instantly seen in the others.  This is a feature of the
-wxStyledTextCtrl that is used for the view class in this sample.
+StyledTextCtrl that is used for the view class in this sample.
 """
 
 #----------------------------------------------------------------------
 # This one is simpler, but doesn't do anything with the scrollbars
 # except the default wxDynamicSashWindow behaviour
 
-class SimpleView(wxPanel):
+class SimpleView(wx.Panel):
     def __init__(self, parent, ID, log):
-        wxPanel.__init__(self, parent, ID)
+        wx.Panel.__init__(self, parent, ID)
         self.dyn_sash = parent
         self.log = log
         self.SetBackgroundColour("LIGHT BLUE")
-        EVT_DYNAMIC_SASH_SPLIT(self, -1, self.OnSplit)
+        self.Bind(gizmos.EVT_DYNAMIC_SASH_SPLIT, self.OnSplit)
 
     def OnSplit(self, evt):
         v = SimpleView(self.dyn_sash, -1, self.log)
@@ -89,21 +95,21 @@ class SimpleView(wxPanel):
 #----------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    if wxPlatform == "__WXMAC__":
-        wxMessageBox("This demo currently fails on the Mac. The problem is being looked into...", "Sorry")
+    if wx.Platform == "__WXMAC__":
+        wx.MessageBox("This demo currently fails on the Mac. The problem is being looked into...", "Sorry")
         return
 
     if 1:
-        win = wxDynamicSashWindow(nb, -1, style = 0
-                                  | wxCLIP_CHILDREN
+        win = gizmos.DynamicSashWindow(nb, -1, style =  wx.CLIP_CHILDREN
                                   #| wxDS_MANAGE_SCROLLBARS
                                   #| wxDS_DRAG_CORNER
                                   )
-        win.SetFont(wxFont(10, wxMODERN, wxNORMAL, wxNORMAL))
+
+        win.SetFont(wx.Font(10, wx.MODERN, wx.NORMAL, wx.NORMAL))
         view = TestView(win, -1, log)
         view.SetText(sampleText)
     else:
-        win = wxDynamicSashWindow(nb, -1)
+        win = wx.DynamicSashWindow(nb, -1)
         view = SimpleView(win, -1, log)
     return win
 
@@ -111,7 +117,7 @@ def runTest(frame, nb, log):
 
 overview = """\
 <html><body>
-<h2>wxDynamicSashWindow</h2>
+<h2>DynamicSashWindow</h2>
 <p>
 wxDynamicSashWindow widgets manages the way other widgets are viewed.
 When a wxDynamicSashWindow is first shown, it will contain one child

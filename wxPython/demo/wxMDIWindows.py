@@ -1,34 +1,39 @@
+# 11/12/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+#
 
-from wxPython.wx import *
+import  wx
+
+import  MDIDemo
+import  MDISashDemo
 
 #----------------------------------------------------------------------
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, log):
         self.log = log
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
 
-        b1 = wxButton(self, -1, "MDI demo")
-        EVT_BUTTON(self, b1.GetId(), self.ShowMDIDemo)
+        b1 = wx.Button(self, -1, "MDI demo")
+        self.Bind(wx.EVT_BUTTON, self.ShowMDIDemo, b1)
 
-        b2 = wxButton(self, -1, "MDI with SashWindows demo")
-        EVT_BUTTON(self, b2.GetId(), self.ShowMDISashDemo)
+        b2 = wx.Button(self, -1, "MDI with SashWindows demo")
+        self.Bind(wx.EVT_BUTTON, self.ShowMDIDemo, b2)
 
-        box = wxBoxSizer(wxVERTICAL)
+        box = wx.BoxSizer(wx.VERTICAL)
         box.Add((20, 30))
-        box.Add(b1, 0, wxALIGN_CENTER|wxALL, 15)
-        box.Add(b2, 0, wxALIGN_CENTER|wxALL, 15)
+        box.Add(b1, 0, wx.ALIGN_CENTER|wx.ALL, 15)
+        box.Add(b2, 0, wx.ALIGN_CENTER|wx.ALL, 15)
         self.SetAutoLayout(True)
         self.SetSizer(box)
 
 
     def ShowMDIDemo(self, evt):
-        import MDIDemo
         frame = MDIDemo.MyParentFrame()
         frame.Show()
 
     def ShowMDISashDemo(self, evt):
-        import MDISashDemo
         frame = MDISashDemo.MyParentFrame()
         frame.Show()
 
@@ -48,13 +53,11 @@ overview = """<html><body>
 <h2><center>Multiple Document Interface</center></h2>
 
 Although Microsoft has deprecated the MDI model, wxWindows still supports
-it.  Here are a couple samples of how to use it.
+it.  Here are a couple samples of how to use it - one straightforward, the other
+showing how the MDI interface can be integrated into a SashWindow interface.
 
 </body></html>
 """
-
-
-
 
 
 if __name__ == '__main__':

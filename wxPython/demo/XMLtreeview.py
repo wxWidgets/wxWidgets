@@ -1,9 +1,13 @@
+# 11/22/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-import sys
+import  sys
+import  wx
 
 py2 = sys.version[0] == '2'
 
-from wxPython.wx import *
 try:
     if py2:
         from xml.parsers import expat
@@ -19,30 +23,34 @@ except ImportError:
 
 if not haveXML:
     def runTest(frame, nb, log):
-        dlg = wxMessageDialog(frame, 'This demo requires the XML package.  '
-                              'See http://www.python.org/sigs/xml-sig/',
-                          'Sorry', wxOK | wxICON_INFORMATION)
+        dlg = wx.MessageDialog(
+                frame, 'This demo requires the XML package.  '
+                'See http://www.python.org/sigs/xml-sig/',
+                'Sorry', wx.OK | wx.ICON_INFORMATION
+                )
+
         dlg.ShowModal()
         dlg.Destroy()
 
 else:
 
-    class XMLTree(wxTreeCtrl):
+    class XMLTree(wx.TreeCtrl):
         def __init__(self, parent, ID):
-            wxTreeCtrl.__init__(self, parent, ID)
+            wx.TreeCtrl.__init__(self, parent, ID)
             self.nodeStack = [self.AddRoot("Root")]
 
             # Trees need an image list to do DnD...
-            self.il = wxImageList(16,16)
+            self.il = wx.ImageList(16,16)
             self.SetImageList(self.il)
 
             # event handlers for DnD
-            EVT_TREE_BEGIN_DRAG(self, ID, self.OnBeginDrag)
-            EVT_TREE_END_DRAG(self, ID, self.OnEndDrag)
+            self.Bind(wx.EVT_TREE_BEGIN_DRAG, self.OnBeginDrag)
+            self.Bind(wx.EVT_TREE_END_DRAG, self.OnEndDrag)
 
 
         def OnBeginDrag(self, event):
             item = event.GetItem()
+
             if item != self.GetRootItem():
                 self.draggingItem = item
                 event.Allow()  # if DnD of this item is okay Allow it.
@@ -69,6 +77,7 @@ else:
         def StartElement(self, name, attrs ):
             if py2:
                 name = name.encode()
+
             id = self.AppendItem(self.nodeStack[-1], name)
             self.nodeStack.append(id)
 
@@ -79,6 +88,7 @@ else:
             if data.strip():
                 if py2:
                     data = data.encode()
+
                 self.AppendItem(self.nodeStack[-1], data)
 
 
@@ -104,14 +114,8 @@ else:
 
 
 
-
-
-
 overview = """\
 """
-
-
-
 
 
 if __name__ == '__main__':

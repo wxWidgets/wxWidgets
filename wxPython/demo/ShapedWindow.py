@@ -1,68 +1,72 @@
+# 11/13/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+#
 
-from wxPython.wx import *
-import images
+import  wx
+import  images
 
 #----------------------------------------------------------------------
 
-class TestFrame(wxFrame):
+class TestFrame(wx.Frame):
     def __init__(self, parent, log):
         self.log = log
-        wxFrame.__init__(self, parent, -1, "Shaped Window",
+        wx.Frame.__init__(self, parent, -1, "Shaped Window",
                          style =
-                           wxFRAME_SHAPED
-                         | wxSIMPLE_BORDER
-                         | wxFRAME_NO_TASKBAR
-                         | wxSTAY_ON_TOP
+                           wx.FRAME_SHAPED
+                         | wx.SIMPLE_BORDER
+                         | wx.FRAME_NO_TASKBAR
+                         | wx.STAY_ON_TOP
                          )
 
         self.hasShape = False
-        self.delta = wxPoint(0,0)
+        self.delta = (0,0)
 
-        EVT_LEFT_DCLICK(self, self.OnDoubleClick)
-        EVT_LEFT_DOWN(self, self.OnLeftDown)
-        EVT_LEFT_UP(self, self.OnLeftUp)
-        EVT_MOTION(self, self.OnMouseMove)
-        EVT_RIGHT_UP(self, self.OnExit)
-        EVT_PAINT(self, self.OnPaint)
+        self.Bind(wx.EVT_LEFT_DCLICK,   self.OnDoubleClick)
+        self.Bind(wx.EVT_LEFT_DOWN,     self.OnLeftDown)
+        self.Bind(wx.EVT_LEFT_UP,       self.OnLeftUp)
+        self.Bind(wx.EVT_MOTION,        self.OnMouseMove)
+        self.Bind(wx.EVT_RIGHT_UP,      self.OnExit)
+        self.Bind(wx.EVT_PAINT,         self.OnPaint)
 
         self.bmp = images.getTuxBitmap()
         w, h = self.bmp.GetWidth(), self.bmp.GetHeight()
         self.SetClientSize( (w, h) )
 
-        if wxPlatform != "__WXMAC__":
+        if wx.Platform != "__WXMAC__":
             # wxMac clips the tooltip to the window shape, YUCK!!!
             self.SetToolTipString("Right-click to close the window\n"
                                   "Double-click the image to set/unset the window shape")
 
-        if wxPlatform == "__WXGTK__":
+        if wx.Platform == "__WXGTK__":
             # wxGTK requires that the window be created before you can
             # set its shape, so delay the call to SetWindowShape until
             # this event.
-            EVT_WINDOW_CREATE(self, self.SetWindowShape)
+            self.Bind(wx.EVT_WINDOW_CREATE, self.SetWindowShape)
         else:
             # On wxMSW and wxMac the window has already been created, so go for it.
             self.SetWindowShape()
 
-        dc = wxClientDC(self)
+        dc = wx.ClientDC(self)
         dc.DrawBitmap(self.bmp, (0,0), True)
 
 
     def SetWindowShape(self, *evt):
         # Use the bitmap's mask to determine the region
-        r = wxRegionFromBitmap(self.bmp)
+        r = wx.RegionFromBitmap(self.bmp)
         self.hasShape = self.SetShape(r)
 
 
     def OnDoubleClick(self, evt):
         if self.hasShape:
-            self.SetShape(wxRegion())
+            self.SetShape(wx.Region())
             self.hasShape = False
         else:
             self.SetWindowShape()
 
 
     def OnPaint(self, evt):
-        dc = wxPaintDC(self)
+        dc = wx.PaintDC(self)
         dc.DrawBitmap(self.bmp, (0,0), True)
 
     def OnExit(self, evt):
@@ -71,11 +75,11 @@ class TestFrame(wxFrame):
 
     def OnLeftDown(self, evt):
         self.CaptureMouse()
-        pos = self.ClientToScreen(evt.GetPosition())
-        origin = self.GetPosition()
-        dx = pos.x - origin.x
-        dy = pos.y - origin.y
-        self.delta = wxPoint(dx, dy)
+        x, y = self.ClientToScreen(evt.GetPosition())
+        originx, originy = self.GetPosition()
+        dx = x - originx
+        dy = y - originy
+        self.delta = ((dx, dy))
 
 
     def OnLeftUp(self, evt):
@@ -85,8 +89,8 @@ class TestFrame(wxFrame):
 
     def OnMouseMove(self, evt):
         if evt.Dragging() and evt.LeftIsDown():
-            pos = self.ClientToScreen(evt.GetPosition())
-            fp = (pos.x - self.delta.x, pos.y - self.delta.y)
+            x, y = self.ClientToScreen(evt.GetPosition())
+            fp = (x - self.delta[0], y - self.delta[1])
             self.Move(fp)
 
 

@@ -1,52 +1,59 @@
+# 11/4/03 - grimmtooth@softhome.net (Jeff Grimmett)
+# 
+# o wx Namespace 
+#
 
-
-
-from wxPython.wx import *
-from wxPython.lib.analogclock import AnalogClockWindow
+import  wx
+import  wx.lib.analogclock  as  aclock
 
 #----------------------------------------------------------------------
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, log):
         self.log = log
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
 
-        c1 = AnalogClockWindow(self)
+        # A red background with blue hands and white markings
+        c1 = aclock.AnalogClockWindow(self)
         c1.SetBackgroundColour("RED")
         c1.SetHandsColour("BLUE")
         c1.SetTickMarkColours("WHITE")
 
-        c2 = AnalogClockWindow(self)
+        # A white background with red hands and blue markings
+        c2 = aclock.AnalogClockWindow(self)
         c2.SetBackgroundColour("WHITE")
         c2.SetHandsColour("RED")
         c2.SetTickMarkColours("BLUE")
 
-        c3 = AnalogClockWindow(self)
+        # A blue background with white hands and red markings
+        c3 = aclock.AnalogClockWindow(self)
         c3.SetBackgroundColour("BLUE")
         c3.SetHandsColour("WHITE")
         c3.SetTickMarkColours("RED")
 
-        c4 = AnalogClockWindow(self, style=wxRAISED_BORDER)
-        c4.SetTickMarkStyle(AnalogClockWindow.TICKS_CIRCLE)
+        # Raised border, circular tick marks.
+        c4 = aclock.AnalogClockWindow(self, style=wx.RAISED_BORDER)
+        c4.SetTickMarkStyle(aclock.AnalogClockWindow.TICKS_CIRCLE)
 
-        c5 = AnalogClockWindow(self)
-        c5.SetTickMarkStyle(AnalogClockWindow.TICKS_NONE)
+        # No tick marks
+        c5 = aclock.AnalogClockWindow(self)
+        c5.SetTickMarkStyle(aclock.AnalogClockWindow.TICKS_NONE)
 
-        c6 = AnalogClockWindow(self, style=wxSUNKEN_BORDER)
+        # Sunken into window
+        c6 = aclock.AnalogClockWindow(self, style=wx.SUNKEN_BORDER)
 
-
-        # layout the clocks in a grid
-        gs = wxGridSizer(2, 3, 4, 4)
-        gs.Add(c1, 0, wxEXPAND)
-        gs.Add(c2, 0, wxEXPAND)
-        gs.Add(c3, 0, wxEXPAND)
-        gs.Add(c4, 0, wxEXPAND)
-        gs.Add(c5, 0, wxEXPAND)
-        gs.Add(c6, 0, wxEXPAND)
+        # layout the clocks in a grid sizer
+        gs = wx.GridSizer(2, 3, 4, 4)
+        gs.Add(c1, 0, wx.EXPAND)
+        gs.Add(c2, 0, wx.EXPAND)
+        gs.Add(c3, 0, wx.EXPAND)
+        gs.Add(c4, 0, wx.EXPAND)
+        gs.Add(c5, 0, wx.EXPAND)
+        gs.Add(c6, 0, wx.EXPAND)
 
         # put it in another sizer for a border
-        sizer = wxBoxSizer(wxVERTICAL)
-        sizer.Add(gs, 1, wxEXPAND|wxALL, 10)
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(gs, 1, wx.EXPAND|wx.ALL, 10)
 
         self.SetSizer(sizer)
 
@@ -69,8 +76,6 @@ members of the wxPython-users group.
 
 </body></html>
 """
-
-
 
 if __name__ == '__main__':
     import sys,os

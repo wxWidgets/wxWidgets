@@ -1,48 +1,58 @@
+# 11/13/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# o Got rid of static buton IDs
+# o Took at a stab at a lucid overview string.
+#
 
-from wxPython.wx         import *
-from wxScrolledWindow    import MyCanvas
+import  wx
+import  wxScrolledWindow
 
 #----------------------------------------------------------------------
 
-class MyPrintout(wxPrintout):
+ID_Setup    =   wx.NewId()
+ID_Preview  =   wx.NewId()
+ID_Print    =   wx.NewId()
+
+class MyPrintout(wx.Printout):
     def __init__(self, canvas, log):
-        wxPrintout.__init__(self)
+        wx.Printout.__init__(self)
         self.canvas = canvas
         self.log = log
 
     def OnBeginDocument(self, start, end):
-        self.log.WriteText("wxPrintout.OnBeginDocument\n")
+        self.log.WriteText("wx.Printout.OnBeginDocument\n")
         return self.base_OnBeginDocument(start, end)
 
     def OnEndDocument(self):
-        self.log.WriteText("wxPrintout.OnEndDocument\n")
+        self.log.WriteText("wx.Printout.OnEndDocument\n")
         self.base_OnEndDocument()
 
     def OnBeginPrinting(self):
-        self.log.WriteText("wxPrintout.OnBeginPrinting\n")
+        self.log.WriteText("wx.Printout.OnBeginPrinting\n")
         self.base_OnBeginPrinting()
 
     def OnEndPrinting(self):
-        self.log.WriteText("wxPrintout.OnEndPrinting\n")
+        self.log.WriteText("wx.Printout.OnEndPrinting\n")
         self.base_OnEndPrinting()
 
     def OnPreparePrinting(self):
-        self.log.WriteText("wxPrintout.OnPreparePrinting\n")
+        self.log.WriteText("wx.Printout.OnPreparePrinting\n")
         self.base_OnPreparePrinting()
 
     def HasPage(self, page):
-        self.log.WriteText("wxPrintout.HasPage: %d\n" % page)
+        self.log.WriteText("wx.Printout.HasPage: %d\n" % page)
         if page <= 2:
             return True
         else:
             return False
 
     def GetPageInfo(self):
-        self.log.WriteText("wxPrintout.GetPageInfo\n")
+        self.log.WriteText("wx.Printout.GetPageInfo\n")
         return (1, 2, 1, 2)
 
     def OnPrintPage(self, page):
-        self.log.WriteText("wxPrintout.OnPrintPage: %d\n" % page)
+        self.log.WriteText("wx.Printout.OnPrintPage: %d\n" % page)
         dc = self.GetDC()
 
         #-------------------------------------------
@@ -88,41 +98,40 @@ class MyPrintout(wxPrintout):
 #----------------------------------------------------------------------
 
 
-class TestPrintPanel(wxPanel):
+class TestPrintPanel(wx.Panel):
     def __init__(self, parent, frame, log):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
         self.log = log
         self.frame = frame
 
+        self.printData = wx.PrintData()
+        self.printData.SetPaperId(wx.PAPER_LETTER)
 
-        self.printData = wxPrintData()
-        self.printData.SetPaperId(wxPAPER_LETTER)
+        self.box = wx.BoxSizer(wx.VERTICAL)
+        self.canvas = wxScrolledWindow.MyCanvas(self)
+        self.box.Add(self.canvas, 1, wx.GROW)
 
-        self.box = wxBoxSizer(wxVERTICAL)
-        self.canvas = MyCanvas(self)
-        self.box.Add(self.canvas, 1, wxGROW)
+        subbox = wx.BoxSizer(wx.HORIZONTAL)
+        btn = wx.Button(self, ID_Setup, "Print Setup")
+        self.Bind(wx.EVT_BUTTON, self.OnPrintSetup, id=ID_Setup)
+        subbox.Add(btn, 1, wx.GROW | wx.ALL, 2)
 
-        subbox = wxBoxSizer(wxHORIZONTAL)
-        btn = wxButton(self, 1201, "Print Setup")
-        EVT_BUTTON(self, 1201, self.OnPrintSetup)
-        subbox.Add(btn, 1, wxGROW | wxALL, 2)
+        btn = wx.Button(self, ID_Preview, "Print Preview")
+        self.Bind(wx.EVT_BUTTON, self.OnPrintPreview, id=ID_Preview)
+        subbox.Add(btn, 1, wx.GROW | wx.ALL, 2)
 
-        btn = wxButton(self, 1202, "Print Preview")
-        EVT_BUTTON(self, 1202, self.OnPrintPreview)
-        subbox.Add(btn, 1, wxGROW | wxALL, 2)
+        btn = wx.Button(self, ID_Print, "Print")
+        self.Bind(wx.EVT_BUTTON, self.OnDoPrint, id=ID_Print)
+        subbox.Add(btn, 1, wx.GROW | wx.ALL, 2)
 
-        btn = wxButton(self, 1203, "Print")
-        EVT_BUTTON(self, 1203, self.OnDoPrint)
-        subbox.Add(btn, 1, wxGROW | wxALL, 2)
-
-        self.box.Add(subbox, 0, wxGROW)
+        self.box.Add(subbox, 0, wx.GROW)
 
         self.SetAutoLayout(True)
         self.SetSizer(self.box)
 
 
     def OnPrintSetup(self, event):
-        printerDialog = wxPrintDialog(self)
+        printerDialog = wx.PrintDialog(self)
         printerDialog.GetPrintDialogData().SetPrintData(self.printData)
         printerDialog.GetPrintDialogData().SetSetupDialog(True)
         printerDialog.ShowModal();
@@ -134,12 +143,13 @@ class TestPrintPanel(wxPanel):
         self.log.WriteText("OnPrintPreview\n")
         printout = MyPrintout(self.canvas, self.log)
         printout2 = MyPrintout(self.canvas, self.log)
-        self.preview = wxPrintPreview(printout, printout2, self.printData)
+        self.preview = wx.PrintPreview(printout, printout2, self.printData)
+
         if not self.preview.Ok():
             self.log.WriteText("Houston, we have a problem...\n")
             return
 
-        frame = wxPreviewFrame(self.preview, self.frame, "This is a print preview")
+        frame = wx.PreviewFrame(self.preview, self.frame, "This is a print preview")
 
         frame.Initialize()
         frame.SetPosition(self.frame.GetPosition())
@@ -149,12 +159,13 @@ class TestPrintPanel(wxPanel):
 
 
     def OnDoPrint(self, event):
-        pdd = wxPrintDialogData()
+        pdd = wx.PrintDialogData()
         pdd.SetPrintData(self.printData)
-        printer = wxPrinter(pdd)
+        printer = wx.Printer(pdd)
         printout = MyPrintout(self.canvas, self.log)
+
         if not printer.Print(self.frame, printout):
-            wxMessageBox("There was a problem printing.\nPerhaps your current printer is not set correctly?", "Printing", wxOK)
+            wx.MessageBox("There was a problem printing.\nPerhaps your current printer is not set correctly?", "Printing", wx.OK)
         else:
             self.printData = printer.GetPrintDialogData().GetPrintData()
         printout.Destroy()
@@ -174,10 +185,46 @@ def runTest(frame, nb, log):
 
 
 overview = """\
+<html>
+<body>
+<h1>PrintFramework</h1>
+
+This is an overview of the classes and methods used to print documents.
+It also demonstrates how to do print previews and invoke the printer
+setup dialog.
+
+<p>Classes demonstrated here:<P>
+<ul>
+    <li><b>wx.Printout()</b> - This class encapsulates the functionality of printing out 
+        an application document. A new class must be derived and members overridden 
+        to respond to calls such as OnPrintPage and HasPage. Instances of this class 
+        are passed to wx.Printer.Print() or a wx.PrintPreview object to initiate 
+        printing or previewing.<P><p>
+        
+    <li><b>wx.PrintData()</b> - This class holds a variety of information related to 
+        printers and printer device contexts. This class is used to create a 
+        wx.PrinterDC and a wx.PostScriptDC. It is also used as a data member of 
+        wx.PrintDialogData and wx.PageSetupDialogData, as part of the mechanism for 
+        transferring data between the print dialogs and the application.<p><p>
+
+    <li><b>wx.PrintDialog()</b> - This class represents the print and print setup 
+        common dialogs. You may obtain a wx.PrinterDC device context from a 
+        successfully dismissed print dialog.<p><p>
+        
+    <li><b>wx.PrintPreview()</b> - Objects of this class manage the print preview 
+        process. The object is passed a wx.Printout object, and the wx.PrintPreview 
+        object itself is passed to a wx.PreviewFrame object. Previewing is started by 
+        initializing and showing the preview frame. Unlike wxPrinter.Print, flow of 
+        control returns to the application immediately after the frame is shown.<p><p>
+</ul>
+
+<p>Other classes are also demonstrated, but this is the gist of the printer interface
+framework in wxPython.
+
+</body>
+</html>
+
 """
-
-
-
 
 
 if __name__ == '__main__':

@@ -1,39 +1,73 @@
+# 11/4/03 - grimmtooth@softhome.net (Jeff Grimmett)
+#
+# o Updated to use wx namespace
+#
+# 11/24/03 - grimmtooth@softhome.net (Jeff Grimmett)
+#
+# o Had to move the call to wx.updateColourDB()
+# o Updated several places to change discrete pos and size parameters
+#   into two-tuples.
+#
 
-from wxPython.wx import *
-from wxPython.lib import colourdb
+import wx
+import wx.lib.colourdb as cdb
 
 import images
 
 
 #----------------------------------------------------------------------
 
-class TestWindow(wxScrolledWindow):
+class TestWindow(wx.ScrolledWindow):
     def __init__(self, parent):
-        wxScrolledWindow.__init__(self, parent, -1)
+        wx.ScrolledWindow.__init__(self, parent, -1)
 
-        self.clrList = colourdb.getColourList()
+        # Populate our color list
+        self.clrList = cdb.getColourList()
+
+        # Just for style points, we'll use this as a background image.
         #self.clrList.sort()
         self.bg_bmp = images.getGridBGBitmap()
 
-        EVT_PAINT(self, self.OnPaint)
-        EVT_ERASE_BACKGROUND(self, self.OnEraseBackground)
-        #self.SetBackgroundColour("WHITE")
+        # Event handlers
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+        self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
 
-        self.font = wxFont(10, wxSWISS, wxNORMAL, wxNORMAL)
-        dc = wxClientDC(self)
+        # This could also be done by getting the window's default font;
+        # either way, we need to have a font loaded for later on.
+        #self.SetBackgroundColour("WHITE")
+        self.font = wx.Font(10, wx.SWISS, wx.NORMAL, wx.NORMAL)
+
+        # Create drawing area and set its font
+        dc = wx.ClientDC(self)
         dc.SetFont(self.font)
 
-        w,h,d,e = dc.GetFullTextExtent("Wy") # a wide character and one that descends
+        # Using GetFullTextExtent(), we calculate a basic 'building block'
+        # that will be used to draw a depiction of the color list. We're
+        # using 'Wy' as the model becuase 'W' is a wide character and 'y' 
+        # has a descender. This constitutes a 'worst case' scenario, which means
+        # that no matter what we draw later, text-wise, we'll have room for it
+        w,h,d,e = dc.GetFullTextExtent("Wy") 
+
+        # Height plus descender
         self.textHeight = h + d
+
+        # Pad a little bit
         self.lineHeight = self.textHeight + 5
+
+        # ... and this is the basic width.
         self.cellWidth = w
 
+        # jmg 11/8/03: why 24?
         numCells = 24
-        self.SetScrollbars(self.cellWidth, self.lineHeight, numCells, len(self.clrList) + 2)
+        
+        # 'prep' our scroll bars.
+        self.SetScrollbars(
+            self.cellWidth, self.lineHeight, numCells, len(self.clrList) + 2
+            )
 
 
+    # tile the background bitmap loaded in __init__()
     def TileBackground(self, dc):
-        # tile the background bitmap
         sz = self.GetClientSize()
         w = self.bg_bmp.GetWidth()
         h = self.bg_bmp.GetHeight()
@@ -44,25 +78,29 @@ class TestWindow(wxScrolledWindow):
         dx,  dy  = (spx * vsx) % w, (spy * vsy) % h
 
         x = -dx
+
         while x < sz.width:
             y = -dy
             while y < sz.height:
                 dc.DrawBitmap(self.bg_bmp, (x, y))
                 y = y + h
+
             x = x + w
 
-
+    # Redraw the background over a 'damaged' area.
     def OnEraseBackground(self, evt):
         dc = evt.GetDC()
+
         if not dc:
-            dc = wxClientDC(self)
+            dc = wx.ClientDC(self)
             rect = self.GetUpdateRegion().GetBox()
             dc.SetClippingRect(rect)
+
         self.TileBackground(dc)
 
 
     def OnPaint(self, evt):
-        dc = wxPaintDC(self)
+        dc = wx.PaintDC(self)
         self.PrepareDC(dc)
         self.Draw(dc, self.GetUpdateRegion(), self.GetViewStart())
 
@@ -70,13 +108,15 @@ class TestWindow(wxScrolledWindow):
     def Draw(self, dc, rgn=None, vs=None):
         dc.BeginDrawing()
         dc.SetTextForeground("BLACK")
-        dc.SetPen(wxPen("BLACK", 1, wxSOLID))
+        dc.SetPen(wx.Pen("BLACK", 1, wx.SOLID))
         dc.SetFont(self.font)
         colours = self.clrList
         numColours = len(colours)
 
         if rgn:
-            # determine the subset that has been exposed and needs drawn
+            # determine the subset of the color list that has been exposed 
+            # and needs drawn. This is based on all the precalculation we
+            # did in __init__()
             rect = rgn.GetBox()
             pixStart = vs[1]*self.lineHeight + rect.y
             pixStop  = pixStart + rect.height
@@ -89,9 +129,11 @@ class TestWindow(wxScrolledWindow):
         for line in range(max(0,start), min(stop,numColours)):
             clr = colours[line]
             y = (line+1) * self.lineHeight + 2
+
+            # Updated for 2.5 - now takes tuple for pos
             dc.DrawText(clr, (self.cellWidth, y))
 
-            brush = wxBrush(clr, wxSOLID)
+            brush = wx.Brush(clr, wx.SOLID)
             dc.SetBrush(brush)
             dc.DrawRectangle((12 * self.cellWidth, y),
                              (6 * self.cellWidth, self.textHeight))
@@ -100,12 +142,13 @@ class TestWindow(wxScrolledWindow):
 
 
 # On wxGTK there needs to be a panel under wxScrolledWindows if they are
-# going to be in a wxNotebook...
-class TestPanel(wxPanel):
+# going to be in a wxNotebook. And, in the demo, we are.
+class TestPanel(wx.Panel):
     def __init__(self, parent):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
         self.win = TestWindow(self)
-        EVT_SIZE(self, self.OnSize)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
+
 
     def OnSize(self, evt):
         self.win.SetSize(evt.GetSize())
@@ -117,15 +160,46 @@ class TestPanel(wxPanel):
 
 def runTest(frame, nb, log):
     # This loads a whole bunch of new color names and values
-    # into wxTheColourDatabase
-    colourdb.updateColourDB()
+    # into TheColourDatabase
+    #
+    # Note 11/24/03 - jg - I moved this into runTest() because
+    # there must be a wx.App existing before this function
+    # can be called - this is a change from 2.4 -> 2.5.
+    cdb.updateColourDB()
 
     win = TestPanel(nb)
+
     return win
 
 #----------------------------------------------------------------------
 
 overview = """
+<html>
+<body>
+<B><font size=+2>ColourDB</font></b>
+
+<p>wxWindows maintains a database of standard RGB colours for a predefined 
+set of named colours (such as "BLACK'', "LIGHT GREY''). The application 
+may add to this set if desired by using Append. There is only one instance 
+of this class: <b>TheColourDatabase</b>.
+
+<p>The <code>colourdb</code> library is a lightweight API that pre-defines
+a multitude of colors for you to use 'out of the box', and this demo serves
+to show you these colors (it also serves as a handy reference).
+
+<p>A secondary benefit of this demo is the use of the <b>ScrolledWindow</b> class
+and the use of various *DC() classes, including background tiling and the use of
+font data to generate a "building block" type of construct for repetitive use.
+
+<p>
+<B><font size=+2>Important note</font></b>
+
+<p>
+With implementation of V2.5 and later, it is required to have a wx.App already
+initialized before <b><code>wx.updateColourDB()</code></b> can be called. 
+Trying to do otherwise will cause an exception to be raised.
+</body>
+</html>
 """
 
 

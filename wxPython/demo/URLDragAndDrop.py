@@ -1,22 +1,26 @@
+# 11/15/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-from wxPython.wx import *
+import  wx
 
 #----------------------------------------------------------------------
 
-class MyURLDropTarget(wxPyDropTarget):
+class MyURLDropTarget(wx.PyDropTarget):
     def __init__(self, window):
-        wxPyDropTarget.__init__(self)
+        wx.PyDropTarget.__init__(self)
         self.window = window
 
-        self.data = wxURLDataObject();
+        self.data = wx.URLDataObject();
         self.SetDataObject(self.data)
 
     def OnDragOver(self, x, y, d):
-        return wxDragLink
+        return wx.DragLink
 
     def OnData(self, x, y, d):
         if not self.GetData():
-            return wxDragNone
+            return wx.DragNone
 
         url = self.data.GetURL()
         self.window.AppendText(url + "\n")
@@ -26,16 +30,16 @@ class MyURLDropTarget(wxPyDropTarget):
 
 #----------------------------------------------------------------------
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
 
         self.SetAutoLayout(True)
-        outsideSizer = wxBoxSizer(wxVERTICAL)
+        outsideSizer = wx.BoxSizer(wx.VERTICAL)
 
         msg = "Drag-And-Drop of URLs"
-        text = wxStaticText(self, -1, "", style=wxALIGN_CENTRE)
-        text.SetFont(wxFont(24, wxSWISS, wxNORMAL, wxBOLD, False))
+        text = wx.StaticText(self, -1, "", style=wx.ALIGN_CENTRE)
+        text.SetFont(wx.Font(24, wx.SWISS, wx.NORMAL, wx.BOLD, False))
         text.SetLabel(msg)
         w,h = text.GetTextExtent(msg)
         text.SetSize(wxSize(w,h+1))
@@ -44,55 +48,53 @@ class TestPanel(wxPanel):
         outsideSizer.Add(wxStaticLine(self, -1), 0, wxEXPAND)
         outsideSizer.Add((20,20))
 
-        self.SetFont(wxFont(10, wxSWISS, wxNORMAL, wxBOLD, False))
+        self.SetFont(wx.Font(10, wx.SWISS, wx.NORMAL, wx.BOLD, False))
 
-        inSizer = wxFlexGridSizer(2, 2, 5, 5)
+        inSizer = wx.FlexGridSizer(2, 2, 5, 5)
         inSizer.AddGrowableCol(0)
 
         inSizer.Add((20,20))
         inSizer.Add((20,20))
         inSizer.Add(wxStaticText(self, -1,
                                  "Drag URLs from your browser to\nthis window:",
-                                 style = wxALIGN_RIGHT),
-                    0, wxALIGN_RIGHT )
-        self.dropText = wxTextCtrl(self, -1, "", size=(380, 180),
-                                   style=wxTE_MULTILINE|wxTE_READONLY)
-        inSizer.Add(self.dropText, 0, wxEXPAND)
+                                 style = wx.ALIGN_RIGHT),
+                    0, wx.ALIGN_RIGHT )
+        self.dropText = wx.TextCtrl(self, -1, "", size=(380, 180),
+                                   style=wx.TE_MULTILINE|wx.TE_READONLY)
+        inSizer.Add(self.dropText, 0, wx.EXPAND)
 
 
-        inSizer.Add(wxStaticText(self, -1,
+        inSizer.Add(wx.StaticText(self, -1,
                                  "Drag this URL to your browser:",
-                                 style = wxALIGN_RIGHT),
-                    0, wxALIGN_RIGHT )
-        self.dragText = wxTextCtrl(self, -1, "http://wxPython.org/")
-        inSizer.Add(self.dragText, 0, wxEXPAND)
-        EVT_MOTION(self.dragText, self.OnStartDrag)
+                                 style = wx.ALIGN_RIGHT),
+                    0, wx.ALIGN_RIGHT )
+        self.dragText = wx.TextCtrl(self, -1, "http://wxPython.org/")
+        inSizer.Add(self.dragText, 0, wx.EXPAND)
+        self.dragText.Bind(wx.EVT_MOTION, self.OnStartDrag)
 
 
-##         inSizer.Add(wxStaticText(self, -1,
+##         inSizer.Add(wx.StaticText(self, -1,
 ##                                  "Drag this TEXT to your browser:",
-##                                  style = wxALIGN_RIGHT),
-##                     0, wxALIGN_RIGHT )
-##         self.dragText2 = wxTextCtrl(self, -1, "http://wxPython.org/")
-##         inSizer.Add(self.dragText2, 0, wxEXPAND)
-##         EVT_MOTION(self.dragText2, self.OnStartDrag2)
+##                                  style = wx.ALIGN_RIGHT),
+##                     0, wx.ALIGN_RIGHT )
+##         self.dragText2 = wx.TextCtrl(self, -1, "http://wxPython.org/")
+##         inSizer.Add(self.dragText2, 0, wx.EXPAND)
+##         self.dragText2.Bind(EVT_MOTION, self.OnStartDrag2)
 
 
-        outsideSizer.Add(inSizer, 1, wxEXPAND)
+        outsideSizer.Add(inSizer, 1, wx.EXPAND)
         self.SetSizer(outsideSizer)
 
-
         self.dropText.SetDropTarget(MyURLDropTarget(self.dropText))
-
 
 
     def OnStartDrag(self, evt):
         if evt.Dragging():
             url = self.dragText.GetValue()
-            data = wxURLDataObject()
+            data = wx.URLDataObject()
             data.SetURL(url)
 
-            dropSource = wxDropSource(self.dragText)
+            dropSource = wx.DropSource(self.dragText)
             dropSource.SetData(data)
             result = dropSource.DoDragDrop()
 
@@ -100,10 +102,10 @@ class TestPanel(wxPanel):
     def OnStartDrag2(self, evt):
         if evt.Dragging():
             url = self.dragText2.GetValue()
-            data = wxTextDataObject()
+            data = wx.TextDataObject()
             data.SetText(url)
 
-            dropSource = wxDropSource(self.dragText2)
+            dropSource = wx.DropSource(self.dragText2)
             dropSource.SetData(data)
             result = dropSource.DoDragDrop()
 

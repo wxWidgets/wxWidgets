@@ -1,6 +1,10 @@
+# 11/22/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+#
 
-from wxPython.wx import *
-from wxPython.xrc import *
+import  wx
+import  wx.xrc  as  xrc
 
 #----------------------------------------------------------------------
 
@@ -24,12 +28,12 @@ and is loaded by a using a subclass attribute of the object tag.</label>
 
 #----------------------------------------------------------------------
 
-class MyBluePanel(wxPanel):
+class MyBluePanel(wx.Panel):
     def __init__(self):
-        p = wxPrePanel()
+        p = wx.PrePanel()
         self.PostCreate(p)
 
-        EVT_WINDOW_CREATE(self, self.OnCreate)
+        self.Bind(wx.EVT_WINDOW_CREATE, self.OnCreate)
         
     def OnCreate(self, evt):
         # This is the little bit of customization that we do for this
@@ -42,34 +46,34 @@ class MyBluePanel(wxPanel):
 #----------------------------------------------------------------------
 
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, log):
         self.log = log
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
 
         # make the components
-        label = wxStaticText(self, -1, "The lower panel was built from this XML:")
-        label.SetFont(wxFont(12, wxSWISS, wxNORMAL, wxBOLD))
+        label = wx.StaticText(self, -1, "The lower panel was built from this XML:")
+        label.SetFont(wx.Font(12, wx.SWISS, wx.NORMAL, wx.BOLD))
 
-        text = wxTextCtrl(self, -1, resourceText,
-                          style=wxTE_READONLY|wxTE_MULTILINE)
+        text = wx.TextCtrl(self, -1, resourceText,
+                          style=wx.TE_READONLY|wx.TE_MULTILINE)
         text.SetInsertionPoint(0)
 
-        line = wxStaticLine(self, -1)
+        line = wx.StaticLine(self, -1)
 
         # Load the resource
-        res = wxEmptyXmlResource()
+        res = xrc.EmptyXmlResource()
         res.LoadFromString(resourceText)
 
         # Now create a panel from the resource data
         panel = res.LoadPanel(self, "MyPanel")
 
         # and do the layout
-        sizer = wxBoxSizer(wxVERTICAL)
-        sizer.Add(label, 0, wxEXPAND|wxTOP|wxLEFT, 5)
-        sizer.Add(text, 1, wxEXPAND|wxALL, 5)
-        sizer.Add(line, 0, wxEXPAND)
-        sizer.Add(panel, 1, wxEXPAND|wxALL, 5)
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(label, 0, wx.EXPAND|wx.TOP|wx.LEFT, 5)
+        sizer.Add(text, 1, wx.EXPAND|wx.ALL, 5)
+        sizer.Add(line, 0, wx.EXPAND)
+        sizer.Add(panel, 1, wx.EXPAND|wx.ALL, 5)
 
         self.SetSizer(sizer)
         self.SetAutoLayout(True)

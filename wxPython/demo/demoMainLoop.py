@@ -1,5 +1,11 @@
 #!/usr/bin/env python
 #---------------------------------------------------------------------------
+# 11/9/2003 - Jeff Grimmett (grimmtooth@softhome.net
+#
+# o Updated for V2.5
+# o Mainloop is freezing up app.
+#
+
 """
 This demo attempts to override the C++ MainLoop and implement it
 in Python.  This is not part of the demo framework.
@@ -8,10 +14,8 @@ in Python.  This is not part of the demo framework.
                 THIS FEATURE IS STILL EXPERIMENTAL...
 """
 
-
-import wx                  # This module uses the new wx namespace
 import time
-
+import wx                  
 
 #---------------------------------------------------------------------------
 
@@ -19,37 +23,37 @@ class MyFrame(wx.Frame):
 
     def __init__(self, parent, id, title):
         wx.Frame.__init__(self, parent, id, title,
-                         wx.Point(100, 100), wx.Size(160, 150))
+                         (100, 100), (160, 150))
 
-        wx.EVT_SIZE(self, self.OnSize)
-        wx.EVT_MOVE(self, self.OnMove)
-        wx.EVT_CLOSE(self, self.OnCloseWindow)
-        wx.EVT_IDLE(self, self.OnIdle)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
+        self.Bind(wx.EVT_MOVE, self.OnMove)
+        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
+        self.Bind(wx.EVT_IDLE, self.OnIdle)
 
         self.count = 0
 
         panel = wx.Panel(self, -1)
         wx.StaticText(panel, -1, "Size:",
-                     wx.DLG_PNT(panel, wx.Point(4, 4)),  wx.DefaultSize)
+                     wx.DLG_PNT(panel, (4, 4)),  wx.DefaultSize)
         wx.StaticText(panel, -1, "Pos:",
-                     wx.DLG_PNT(panel, wx.Point(4, 16)), wx.DefaultSize)
+                     wx.DLG_PNT(panel, (4, 16)), wx.DefaultSize)
 
         wx.StaticText(panel, -1, "Idle:",
-                     wx.DLG_PNT(panel, wx.Point(4, 28)), wx.DefaultSize)
+                     wx.DLG_PNT(panel, (4, 28)), wx.DefaultSize)
 
         self.sizeCtrl = wx.TextCtrl(panel, -1, "",
-                                   wx.DLG_PNT(panel, wx.Point(24, 4)),
-                                   wx.DLG_SZE(panel, wx.Size(36, -1)),
+                                   wx.DLG_PNT(panel, (24, 4)),
+                                   wx.DLG_SZE(panel, (36, -1)),
                                    wx.TE_READONLY)
 
         self.posCtrl = wx.TextCtrl(panel, -1, "",
-                                  wx.DLG_PNT(panel, wx.Point(24, 16)),
-                                  wx.DLG_SZE(panel, wx.Size(36, -1)),
+                                  wx.DLG_PNT(panel, (24, 16)),
+                                  wx.DLG_SZE(panel, (36, -1)),
                                   wx.TE_READONLY)
 
         self.idleCtrl = wx.TextCtrl(panel, -1, "",
-                                   wx.DLG_PNT(panel, wx.Point(24, 28)),
-                                   wx.DLG_SZE(panel, wx.Size(36, -1)),
+                                   wx.DLG_PNT(panel, (24, 28)),
+                                   wx.DLG_SZE(panel, (36, -1)),
                                    wx.TE_READONLY)
 
 
@@ -112,7 +116,7 @@ class MyApp(wx.App):
         return True
 
 
-app = MyApp(0)
+app = MyApp(False)
 app.MainLoop()
 
 

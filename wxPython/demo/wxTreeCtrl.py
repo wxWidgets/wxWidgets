@@ -1,13 +1,17 @@
+# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-from wxPython.wx import *
-import images
-import string
+import  string
+import  wx
+import  images
 
 #---------------------------------------------------------------------------
 
-class MyTreeCtrl(wxTreeCtrl):
+class MyTreeCtrl(wx.TreeCtrl):
     def __init__(self, parent, id, pos, size, style, log):
-        wxTreeCtrl.__init__(self, parent, id, pos, size, style)
+        wx.TreeCtrl.__init__(self, parent, id, pos, size, style)
         self.log = log
 
     def OnCompareItems(self, item1, item2):
@@ -20,27 +24,27 @@ class MyTreeCtrl(wxTreeCtrl):
 
 #---------------------------------------------------------------------------
 
-class TestTreeCtrlPanel(wxPanel):
+class TestTreeCtrlPanel(wx.Panel):
     def __init__(self, parent, log):
         # Use the WANTS_CHARS style so the panel doesn't eat the Return key.
-        wxPanel.__init__(self, parent, -1, style=wxWANTS_CHARS)
-        EVT_SIZE(self, self.OnSize)
+        wx.Panel.__init__(self, parent, -1, style=wx.WANTS_CHARS)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
 
         self.log = log
-        tID = wxNewId()
+        tID = wx.NewId()
 
-        self.tree = MyTreeCtrl(self, tID, wxDefaultPosition, wxDefaultSize,
-                               wxTR_HAS_BUTTONS
-                               | wxTR_EDIT_LABELS
-                               #| wxTR_MULTIPLE
-                               #| wxTR_HIDE_ROOT
+        self.tree = MyTreeCtrl(self, tID, wx.DefaultPosition, wx.DefaultSize,
+                               wx.TR_HAS_BUTTONS
+                               | wx.TR_EDIT_LABELS
+                               #| wx.TR_MULTIPLE
+                               #| wx.TR_HIDE_ROOT
                                , self.log)
 
         isz = (16,16)
-        il = wxImageList(isz[0], isz[1])
-        fldridx     = il.Add(wxArtProvider_GetBitmap(wxART_FOLDER,      wxART_OTHER, isz))
-        fldropenidx = il.Add(wxArtProvider_GetBitmap(wxART_FILE_OPEN,   wxART_OTHER, isz))
-        fileidx     = il.Add(wxArtProvider_GetBitmap(wxART_REPORT_VIEW, wxART_OTHER, isz))
+        il = wx.ImageList(isz[0], isz[1])
+        fldridx     = il.Add(wx.ArtProvider_GetBitmap(wx.ART_FOLDER,      wx.ART_OTHER, isz))
+        fldropenidx = il.Add(wx.ArtProvider_GetBitmap(wx.ART_FILE_OPEN,   wx.ART_OTHER, isz))
+        fileidx     = il.Add(wx.ArtProvider_GetBitmap(wx.ART_REPORT_VIEW, wx.ART_OTHER, isz))
         smileidx    = il.Add(images.getSmilesBitmap())
 
         self.tree.SetImageList(il)
@@ -53,37 +57,39 @@ class TestTreeCtrlPanel(wxPanel):
 
         self.root = self.tree.AddRoot("The Root Item")
         self.tree.SetPyData(self.root, None)
-        self.tree.SetItemImage(self.root, fldridx, wxTreeItemIcon_Normal)
-        self.tree.SetItemImage(self.root, fldropenidx, wxTreeItemIcon_Expanded)
+        self.tree.SetItemImage(self.root, fldridx, wx.TreeItemIcon_Normal)
+        self.tree.SetItemImage(self.root, fldropenidx, wx.TreeItemIcon_Expanded)
 
 
         for x in range(15):
             child = self.tree.AppendItem(self.root, "Item %d" % x)
             self.tree.SetPyData(child, None)
-            self.tree.SetItemImage(child, fldridx, wxTreeItemIcon_Normal)
-            self.tree.SetItemImage(child, fldropenidx, wxTreeItemIcon_Expanded)
+            self.tree.SetItemImage(child, fldridx, wx.TreeItemIcon_Normal)
+            self.tree.SetItemImage(child, fldropenidx, wx.TreeItemIcon_Expanded)
+
             for y in range(5):
                 last = self.tree.AppendItem(child, "item %d-%s" % (x, chr(ord("a")+y)))
                 self.tree.SetPyData(last, None)
-                self.tree.SetItemImage(last, fldridx, wxTreeItemIcon_Normal)
-                self.tree.SetItemImage(last, fldropenidx, wxTreeItemIcon_Expanded)
+                self.tree.SetItemImage(last, fldridx, wx.TreeItemIcon_Normal)
+                self.tree.SetItemImage(last, fldropenidx, wx.TreeItemIcon_Expanded)
+
                 for z in range(5):
                     item = self.tree.AppendItem(last,  "item %d-%s-%d" % (x, chr(ord("a")+y), z))
                     self.tree.SetPyData(item, None)
-                    self.tree.SetItemImage(item, fileidx, wxTreeItemIcon_Normal)
-                    self.tree.SetItemImage(item, smileidx, wxTreeItemIcon_Selected)
+                    self.tree.SetItemImage(item, fileidx, wx.TreeItemIcon_Normal)
+                    self.tree.SetItemImage(item, smileidx, wx.TreeItemIcon_Selected)
 
         self.tree.Expand(self.root)
-        EVT_TREE_ITEM_EXPANDED  (self, tID, self.OnItemExpanded)
-        EVT_TREE_ITEM_COLLAPSED (self, tID, self.OnItemCollapsed)
-        EVT_TREE_SEL_CHANGED    (self, tID, self.OnSelChanged)
-        EVT_TREE_BEGIN_LABEL_EDIT(self, tID, self.OnBeginEdit)
-        EVT_TREE_END_LABEL_EDIT (self, tID, self.OnEndEdit)
-        EVT_TREE_ITEM_ACTIVATED (self, tID, self.OnActivate)
+        self.Bind(wx.EVT_TREE_ITEM_EXPANDED, self.OnItemExpanded, self.tree)
+        self.Bind(wx.EVT_TREE_ITEM_COLLAPSED, self.OnItemCollapsed, self.tree)
+        self.Bind(wx.EVT_TREE_SEL_CHANGED, self.OnSelChanged, self.tree)
+        self.Bind(wx.EVT_TREE_BEGIN_LABEL_EDIT, self.OnBeginEdit, self.tree)
+        self.Bind(wx.EVT_TREE_END_LABEL_EDIT, self.OnEndEdit, self.tree)
+        self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnActivate, self.tree)
 
-        EVT_LEFT_DCLICK(self.tree, self.OnLeftDClick)
-        EVT_RIGHT_DOWN(self.tree, self.OnRightClick)
-        EVT_RIGHT_UP(self.tree, self.OnRightUp)
+        self.tree.Bind(wx.EVT_LEFT_DCLICK, self.OnLeftDClick)
+        self.tree.Bind(wx.EVT_RIGHT_DOWN, self.OnRightClick)
+        self.tree.Bind(wx.EVT_RIGHT_UP, self.OnRightUp)
 
 
 
@@ -108,13 +114,14 @@ class TestTreeCtrlPanel(wxPanel):
         self.log.WriteText("OnBeginEdit\n")
         # show how to prevent edit...
         if self.tree.GetItemText(event.GetItem()) == "The Root Item":
-            wxBell()
+            wx.Bell()
             self.log.WriteText("You can't edit this one...\n")
 
             # Lets just see what's visible of its children
             cookie = 0
             root = event.GetItem()
             (child, cookie) = self.tree.GetFirstChild(root, cookie)
+
             while child.IsOk():
                 self.log.WriteText("Child [%s] visible = %d" %
                                    (self.tree.GetItemText(child),
@@ -159,7 +166,7 @@ class TestTreeCtrlPanel(wxPanel):
     def OnSelChanged(self, event):
         self.item = event.GetItem()
         self.log.WriteText("OnSelChanged: %s\n" % self.tree.GetItemText(self.item))
-        if wxPlatform == '__WXMSW__':
+        if wx.Platform == '__WXMSW__':
             self.log.WriteText("BoundingRect: %s\n" %
                                self.tree.GetBoundingRect(self.item, True))
         #items = self.tree.GetSelections()
@@ -184,7 +191,9 @@ def runTest(frame, nb, log):
 
 
 overview = """\
-A tree control presents information as a hierarchy, with items that may be expanded to show further items. Items in a tree control are referenced by wxTreeItemId handles.
+A tree control presents information as a hierarchy, with items that may be 
+expanded to show further items. Items in a tree control are referenced by 
+wxTreeItemId handles.
 
 """
 

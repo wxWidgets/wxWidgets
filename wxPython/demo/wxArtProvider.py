@@ -1,56 +1,60 @@
+# 11/15/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-from wxPython.wx import *
-import cStringIO
+import  cStringIO
+import  wx
 
 #----------------------------------------------------------------------
 
-ArtClients = [ "wxART_TOOLBAR",
-               "wxART_MENU",
-               "wxART_FRAME_ICON",
-               "wxART_CMN_DIALOG",
-               "wxART_HELP_BROWSER",
-               "wxART_MESSAGE_BOX",
-               "wxART_OTHER",
+ArtClients = [ "wx.ART_TOOLBAR",
+               "wx.ART_MENU",
+               "wx.ART_FRAME_ICON",
+               "wx.ART_CMN_DIALOG",
+               "wx.ART_HELP_BROWSER",
+               "wx.ART_MESSAGE_BOX",
+               "wx.ART_OTHER",
                ]
 
-ArtIDs = [ "wxART_ADD_BOOKMARK",
-           "wxART_DEL_BOOKMARK",
-           "wxART_HELP_SIDE_PANEL",
-           "wxART_HELP_SETTINGS",
-           "wxART_HELP_BOOK",
-           "wxART_HELP_FOLDER",
-           "wxART_HELP_PAGE",
-           "wxART_GO_BACK",
-           "wxART_GO_FORWARD",
-           "wxART_GO_UP",
-           "wxART_GO_DOWN",
-           "wxART_GO_TO_PARENT",
-           "wxART_GO_HOME",
-           "wxART_FILE_OPEN",
-           "wxART_PRINT",
-           "wxART_HELP",
-           "wxART_TIP",
-           "wxART_REPORT_VIEW",
-           "wxART_LIST_VIEW",
-           "wxART_NEW_DIR",
-           "wxART_FOLDER",
-           "wxART_GO_DIR_UP",
-           "wxART_EXECUTABLE_FILE",
-           "wxART_NORMAL_FILE",
-           "wxART_TICK_MARK",
-           "wxART_CROSS_MARK",
-           "wxART_ERROR",
-           "wxART_QUESTION",
-           "wxART_WARNING",
-           "wxART_INFORMATION",
+ArtIDs = [ "wx.ART_ADD_BOOKMARK",
+           "wx.ART_DEL_BOOKMARK",
+           "wx.ART_HELP_SIDE_PANEL",
+           "wx.ART_HELP_SETTINGS",
+           "wx.ART_HELP_BOOK",
+           "wx.ART_HELP_FOLDER",
+           "wx.ART_HELP_PAGE",
+           "wx.ART_GO_BACK",
+           "wx.ART_GO_FORWARD",
+           "wx.ART_GO_UP",
+           "wx.ART_GO_DOWN",
+           "wx.ART_GO_TO_PARENT",
+           "wx.ART_GO_HOME",
+           "wx.ART_FILE_OPEN",
+           "wx.ART_PRINT",
+           "wx.ART_HELP",
+           "wx.ART_TIP",
+           "wx.ART_REPORT_VIEW",
+           "wx.ART_LIST_VIEW",
+           "wx.ART_NEW_DIR",
+           "wx.ART_FOLDER",
+           "wx.ART_GO_DIR_UP",
+           "wx.ART_EXECUTABLE_FILE",
+           "wx.ART_NORMAL_FILE",
+           "wx.ART_TICK_MARK",
+           "wx.ART_CROSS_MARK",
+           "wx.ART_ERROR",
+           "wx.ART_QUESTION",
+           "wx.ART_WARNING",
+           "wx.ART_INFORMATION",
            ]
 
 
+#----------------------------------------------------------------------
 
-
-class MyArtProvider(wxArtProvider):
+class MyArtProvider(wx.ArtProvider):
     def __init__(self, log):
-        wxArtProvider.__init__(self)
+        wx.ArtProvider.__init__(self)
         self.log = log
 
     def CreateBitmap(self, artid, client, size):
@@ -60,32 +64,32 @@ class MyArtProvider(wxArtProvider):
 
         # See end of file for the image data
 
-        bmp = wxNullBitmap
+        bmp = wx.NullBitmap
         # use this one for all 48x48 images
         if size.width == 48:
             bmp = makeBitmap(smile48_png)
 
         # but be more specific for these
-        elif size.width == 16 and artid == wxART_ADD_BOOKMARK:
+        elif size.width == 16 and artid == wx.ART_ADD_BOOKMARK:
             bmp = makeBitmap(smile16_png)
-        elif size.width == 32 and artid == wxART_ADD_BOOKMARK:
+        elif size.width == 32 and artid == wx.ART_ADD_BOOKMARK:
             bmp = makeBitmap(smile32_png)
 
         # and just ignore the size for these
-        elif artid == wxART_GO_BACK:
+        elif artid == wx.ART_GO_BACK:
             bmp = makeBitmap(left_png)
-        elif artid == wxART_GO_FORWARD:
+        elif artid == wx.ART_GO_FORWARD:
             bmp = makeBitmap(right_png)
-        elif artid == wxART_GO_UP:
+        elif artid == wx.ART_GO_UP:
             bmp = makeBitmap(up_png)
-        elif artid == wxART_GO_DOWN:
+        elif artid == wx.ART_GO_DOWN:
             bmp = makeBitmap(down_png)
-        elif artid == wxART_GO_TO_PARENT:
+        elif artid == wx.ART_GO_TO_PARENT:
             bmp = makeBitmap(back_png)
 
-        elif artid == wxART_CROSS_MARK:
+        elif artid == wx.ART_CROSS_MARK:
             bmp = makeBitmap(cross_png)
-        elif artid == wxART_TICK_MARK:
+        elif artid == wx.ART_TICK_MARK:
             bmp = makeBitmap(tick_png)
 
         if bmp.Ok():
@@ -94,69 +98,69 @@ class MyArtProvider(wxArtProvider):
 
 
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
         self.log = log
 
-        sizer = wxBoxSizer(wxVERTICAL)
+        sizer = wx.BoxSizer(wx.VERTICAL)
 
-        title = wxStaticText(self, -1, "wxArtProvider")
-        title.SetFont(wxFont(18, wxSWISS, wxNORMAL, wxBOLD))
-        sizer.AddWindow(title, 0, wxALIGN_CENTRE|wxALL, 5)
+        title = wx.StaticText(self, -1, "ArtProvider")
+        title.SetFont(wx.Font(18, wx.SWISS, wx.NORMAL, wx.BOLD))
+        sizer.Add(title, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
 
-        line = wxStaticLine(self, -1, size=(20,-1), style=wxLI_HORIZONTAL)
-        sizer.AddWindow(line, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5)
+        line = wx.StaticLine(self, -1, size=(20,-1), style=wx.LI_HORIZONTAL)
+        sizer.Add(line, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
 
-        fgs = wxFlexGridSizer(0, 3, 10, 10)
+        fgs = wx.FlexGridSizer(0, 3, 10, 10)
 
-        combo = wxComboBox(self, -1, "", choices = ArtClients,
-                           style = wxCB_DROPDOWN|wxCB_READONLY)
-        fgs.AddWindow(combo, 0, wxALIGN_CENTRE|wxALL, 5)
-        EVT_COMBOBOX(self, combo.GetId(), self.OnSelectClient)
+        combo = wx.ComboBox(self, -1, "", choices = ArtClients,
+                           style = wx.CB_DROPDOWN|wx.CB_READONLY)
+        fgs.Add(combo, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        self.Bind(wx.EVT_COMBOBOX, self.OnSelectClient, combo)
         combo.Select(0)
 
-        combo = wxComboBox(self, -1, "", choices = ArtIDs,
-                           style = wxCB_DROPDOWN|wxCB_READONLY)
-        fgs.AddWindow(combo, 0, wxALIGN_CENTRE|wxALL, 5)
-        EVT_COMBOBOX(self, combo.GetId(), self.OnSelectID)
+        combo = wx.ComboBox(self, -1, "", choices = ArtIDs,
+                           style = wx.CB_DROPDOWN|wx.CB_READONLY)
+        fgs.Add(combo, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        self.Bind(wx.EVT_COMBOBOX, self.OnSelectID, combo)
         combo.Select(0)
 
         cb = wxCheckBox(self, -1, "Use custom provider")
-        fgs.AddWindow(cb, 0, wxALIGN_CENTRE|wxALL, 5)
-        EVT_CHECKBOX(self, cb.GetId(), self.OnUseCustom)
+        fgs.Add(cb, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        self.Bind(EVT_CHECKBOX, self.OnUseCustom, cb)
 
-        fgs.Add((10, 10), 0, wxALIGN_CENTRE|wxALL, 5)
-        fgs.Add((10, 10), 0, wxALIGN_CENTRE|wxALL, 5)
-        fgs.Add((10, 10), 0, wxALIGN_CENTRE|wxALL, 5)
+        fgs.Add((10, 10), 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        fgs.Add((10, 10), 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        fgs.Add((10, 10), 0, wx.ALIGN_CENTRE|wx.ALL, 5)
 
-        box = wxBoxSizer(wxVERTICAL)
-        bmp = wxEmptyBitmap(16,16)
-        self.bmp16 = wxStaticBitmap(self, -1, bmp)
-        box.AddWindow(self.bmp16, 0, wxALIGN_CENTRE|wxALL, 5)
-        text = wxStaticText(self, -1, "16x16")
-        box.AddWindow(text, 0, wxALIGN_CENTRE|wxALL, 5)
+        box = wx.BoxSizer(wx.VERTICAL)
+        bmp = wx.EmptyBitmap(16,16)
+        self.bmp16 = wx.StaticBitmap(self, -1, bmp)
+        box.Add(self.bmp16, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        text = wx.StaticText(self, -1, "16x16")
+        box.Add(text, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
 
-        fgs.AddSizer(box, 0, wxALIGN_CENTRE|wxALL, 5)
+        fgs.Add(box, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
 
-        box = wxBoxSizer(wxVERTICAL)
-        bmp = wxEmptyBitmap(32,32)
-        self.bmp32 = wxStaticBitmap(self, -1, bmp)
-        box.AddWindow(self.bmp32, 0, wxALIGN_CENTRE|wxALL, 5)
-        text = wxStaticText(self, -1, "32x32")
-        box.AddWindow(text, 0, wxALIGN_CENTRE|wxALL, 5)
+        box = wx.BoxSizer(wx.VERTICAL)
+        bmp = wx.EmptyBitmap(32,32)
+        self.bmp32 = wx.StaticBitmap(self, -1, bmp)
+        box.Add(self.bmp32, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        text = wx.StaticText(self, -1, "32x32")
+        box.Add(text, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
 
-        fgs.AddSizer(box, 0, wxALIGN_CENTRE|wxALL, 5)
+        fgs.Add(box, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
 
-        box = wxBoxSizer(wxVERTICAL)
-        bmp = wxEmptyBitmap(48,48)
-        self.bmp48 = wxStaticBitmap(self, -1, bmp)
-        box.AddWindow(self.bmp48, 0, wxALIGN_CENTRE|wxALL, 5)
-        text = wxStaticText(self, -1, "48x48")
-        box.AddWindow(text, 0, wxALIGN_CENTRE|wxALL, 5)
+        box = wx.BoxSizer(wx.VERTICAL)
+        bmp = wx.EmptyBitmap(48,48)
+        self.bmp48 = wx.StaticBitmap(self, -1, bmp)
+        box.Add(self.bmp48, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        text = wx.StaticText(self, -1, "48x48")
+        box.Add(text, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
 
-        fgs.AddSizer(box, 0, wxALIGN_CENTRE|wxALL, 5)
-        sizer.AddSizer(fgs, 0, wxALL, 5)
+        fgs.AddSizer(box, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        sizer.Add(fgs, 0, wx.ALL, 5)
         self.SetSizer(sizer)
 
         self.client = eval(ArtClients[0])
@@ -179,29 +183,35 @@ class TestPanel(wxPanel):
     def OnUseCustom(self, evt):
         if evt.IsChecked():
             self.log.write("Images will now be provided by MyArtProvider\n")
-            wxArtProvider_PushProvider( MyArtProvider(self.log) )
+            wx.ArtProvider_PushProvider( MyArtProvider(self.log) )
         else:
             self.log.write("MyArtProvider deactivated\n")
-            wxArtProvider_PopProvider()
+            wx.ArtProvider_PopProvider()
         self.getArt()
 
 
     def getArt(self):
         self.log.write("Getting art for %s:%s\n" % (self.client, self.artid))
 
-        bmp = wxArtProvider_GetBitmap(self.artid, self.client, (16,16))
+        bmp = wx.ArtProvider_GetBitmap(self.artid, self.client, (16,16))
+
         if not bmp.Ok():
             bmp = wxEmptyBitmap(16,16)
+
         self.bmp16.SetBitmap(bmp)
 
-        bmp = wxArtProvider_GetBitmap(self.artid, self.client, (32,32))
+        bmp = wx.ArtProvider_GetBitmap(self.artid, self.client, (32,32))
+
         if not bmp.Ok():
             bmp = wxEmptyBitmap(32,32)
+
         self.bmp32.SetBitmap(bmp)
 
-        bmp = wxArtProvider_GetBitmap(self.artid, self.client, (48,48))
+        bmp = wx.ArtProvider_GetBitmap(self.artid, self.client, (48,48))
+
         if not bmp.Ok():
             bmp = wxEmptyBitmap(48,48)
+
         self.bmp48.SetBitmap(bmp)
 
 
@@ -212,7 +222,6 @@ def runTest(frame, nb, log):
     return win
 
 #----------------------------------------------------------------------
-
 
 
 overview = """<html><body>
@@ -242,7 +251,7 @@ provided by wxArtProvider_GetBitmap or wxArtProvider_GetIcon methods.
 
 def makeBitmap(data):
     stream = cStringIO.StringIO(data)
-    return wxBitmapFromImage(wxImageFromStream(stream))
+    return wx.BitmapFromImage(wx.ImageFromStream(stream))
 
 
 back_png = \

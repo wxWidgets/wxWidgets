@@ -1,15 +1,20 @@
+# 11/12/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# o Rudimentary overview doc added.
+#
 
-from wxPython.wx import *
+import  wx
 
-import images
+import  images
 
 BUFFERED = 1
 
 #---------------------------------------------------------------------------
 
-class MyCanvas(wxScrolledWindow):
-    def __init__(self, parent, id = -1, size = wxDefaultSize):
-        wxScrolledWindow.__init__(self, parent, id, wxPoint(0, 0), size, wxSUNKEN_BORDER)
+class MyCanvas(wx.ScrolledWindow):
+    def __init__(self, parent, id = -1):
+        wx.ScrolledWindow.__init__(self, parent, id, (0, 0), size=size, style=wx.SUNKEN_BORDER)
 
         self.lines = []
         self.maxWidth  = 1000
@@ -19,9 +24,9 @@ class MyCanvas(wxScrolledWindow):
         self.drawing = False
 
         self.SetBackgroundColour("WHITE")
-        self.SetCursor(wxStockCursor(wxCURSOR_PENCIL))
+        self.SetCursor(wx.StockCursor(wx.CURSOR_PENCIL))
         bmp = images.getTest2Bitmap()
-        mask = wxMaskColour(bmp, wxBLUE)
+        mask = wx.MaskColour(bmp, wx.BLUE)
         bmp.SetMask(mask)
         self.bmp = bmp
 
@@ -29,17 +34,16 @@ class MyCanvas(wxScrolledWindow):
 
         if BUFFERED:
             # Initialize the buffer bitmap.  No real DC is needed at this point.
-            self.buffer = wxEmptyBitmap(self.maxWidth, self.maxHeight)
-            dc = wxBufferedDC(None, self.buffer)
-            dc.SetBackground(wxBrush(self.GetBackgroundColour()))
+            self.buffer = wx.EmptyBitmap(self.maxWidth, self.maxHeight)
+            dc = wx.BufferedDC(None, self.buffer)
+            dc.SetBackground(wx.Brush(self.GetBackgroundColour()))
             dc.Clear()
             self.DoDrawing(dc)
 
-        EVT_LEFT_DOWN(self, self.OnLeftButtonEvent)
-        EVT_LEFT_UP(self,   self.OnLeftButtonEvent)
-        EVT_MOTION(self,    self.OnLeftButtonEvent)
-        EVT_PAINT(self, self.OnPaint)
-        ##EVT_MOUSEWHEEL(self, self.OnWheel)
+        self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftButtonEvent)
+        self.Bind(wx.EVT_LEFT_UP,   self.OnLeftButtonEvent)
+        self.Bind(wx.EVT_MOTION,    self.OnLeftButtonEvent)
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
 
 
     def getWidth(self):
@@ -52,12 +56,12 @@ class MyCanvas(wxScrolledWindow):
     def OnPaint(self, event):
         if BUFFERED:
             # Create a buffered paint DC.  It will create the real
-            # wxPaintDC and then blit the bitmap to it when dc is
+            # wx.PaintDC and then blit the bitmap to it when dc is
             # deleted.  Since we don't need to draw anything else
             # here that's all there is to it.
-            dc = wxBufferedPaintDC(self, self.buffer)
+            dc = wx.BufferedPaintDC(self, self.buffer)
         else:
-            dc = wxPaintDC(self)
+            dc = wx.PaintDC(self)
             self.PrepareDC(dc)
             # since we're not buffering in this case, we have to
             # paint the whole window, potentially very time consuming.
@@ -66,49 +70,50 @@ class MyCanvas(wxScrolledWindow):
 
     def DoDrawing(self, dc, printing=False):
         dc.BeginDrawing()
-        dc.SetPen(wxPen('RED'))
+        dc.SetPen(wx.Pen('RED'))
         dc.DrawRectangle((5, 5), (50, 50))
 
-        dc.SetBrush(wxLIGHT_GREY_BRUSH)
-        dc.SetPen(wxPen('BLUE', 4))
+        dc.SetBrush(wx.LIGHT_GREY_BRUSH)
+        dc.SetPen(wx.Pen('BLUE', 4))
         dc.DrawRectangle((15, 15), (50, 50))
 
-        dc.SetFont(wxFont(14, wxSWISS, wxNORMAL, wxNORMAL))
-        dc.SetTextForeground(wxColour(0xFF, 0x20, 0xFF))
+        dc.SetFont(wx.Font(14, wx.SWISS, wx.NORMAL, wx.NORMAL))
+        dc.SetTextForeground(wx.Colour(0xFF, 0x20, 0xFF))
         te = dc.GetTextExtent("Hello World")
         dc.DrawText("Hello World", (60, 65))
 
-        dc.SetPen(wxPen('VIOLET', 4))
+        dc.SetPen(wx.Pen('VIOLET', 4))
         dc.DrawLine((5, 65+te[1]), (60+te[0], 65+te[1]))
 
         lst = [(100,110), (150,110), (150,160), (100,160)]
         dc.DrawLines(lst, -60)
-        dc.SetPen(wxGREY_PEN)
+        dc.SetPen(wx.GREY_PEN)
         dc.DrawPolygon(lst, 75)
-        dc.SetPen(wxGREEN_PEN)
+        dc.SetPen(wx.GREEN_PEN)
         dc.DrawSpline(lst+[(100,100)])
 
         dc.DrawBitmap(self.bmp, (200, 20), True)
-        dc.SetTextForeground(wxColour(0, 0xFF, 0x80))
+        dc.SetTextForeground(wx.Colour(0, 0xFF, 0x80))
         dc.DrawText("a bitmap", (200, 85))
 
-##         dc.SetFont(wxFont(14, wxSWISS, wxNORMAL, wxNORMAL))
+##         dc.SetFont(wx.Font(14, wx.SWISS, wx.NORMAL, wx.NORMAL))
 ##         dc.SetTextForeground("BLACK")
-##         dc.DrawText("TEST this STRING", 10, 200)
+##         dc.DrawText("TEST this STRING", (10, 200))
 ##         print dc.GetFullTextExtent("TEST this STRING")
 
-        font = wxFont(20, wxSWISS, wxNORMAL, wxNORMAL)
+        font = wx.Font(20, wx.SWISS, wx.NORMAL, wx.NORMAL)
         dc.SetFont(font)
-        dc.SetTextForeground(wxBLACK)
+        dc.SetTextForeground(wx.BLACK)
+
         for a in range(0, 360, 45):
             dc.DrawRotatedText("Rotated text...", (300, 300), a)
 
-        dc.SetPen(wxTRANSPARENT_PEN)
-        dc.SetBrush(wxBLUE_BRUSH)
-        dc.DrawRectangle((50,500), (50,50))
-        dc.DrawRectangle((100,500), (50,50))
+        dc.SetPen(wx.TRANSPARENT_PEN)
+        dc.SetBrush(wx.BLUE_BRUSH)
+        dc.DrawRectangle((50,500),(50,50))
+        dc.DrawRectangle((100,500),(50,50))
 
-        dc.SetPen(wxPen('RED'))
+        dc.SetPen(wx.Pen('RED'))
         dc.DrawEllipticArc((200, 500), (50, 75), 0, 90)
 
         if not printing:
@@ -116,21 +121,22 @@ class MyCanvas(wxScrolledWindow):
             # probably something to do with the pen styles and the scaling
             # it does...
             y = 20
-            for style in [wxDOT, wxLONG_DASH, wxSHORT_DASH, wxDOT_DASH, wxUSER_DASH]:
-                pen = wxPen("DARK ORCHID", 1, style)
-                if style == wxUSER_DASH:
-                    pen.SetCap(wxCAP_BUTT)
+
+            for style in [wx.DOT, wx.LONG_DASH, wx.SHORT_DASH, wx.DOT_DASH, wx.USER_DASH]:
+                pen = wx.Pen("DARK ORCHID", 1, style)
+                if style == wx.USER_DASH:
+                    pen.SetCap(wx.CAP_BUTT)
                     pen.SetDashes([1,2])
                     pen.SetColour("RED")
                 dc.SetPen(pen)
-                dc.DrawLine((300, y),  (400, y))
+                dc.DrawLine((300, y), (400, y))
                 y = y + 10
 
-        dc.SetBrush(wxTRANSPARENT_BRUSH)
-        dc.SetPen(wxPen(wxColour(0xFF, 0x20, 0xFF), 1, wxSOLID))
+        dc.SetBrush(wx.TRANSPARENT_BRUSH)
+        dc.SetPen(wx.Pen(wx.Colour(0xFF, 0x20, 0xFF), 1, wx.SOLID))
         dc.DrawRectangle((450, 50), (100, 100))
         old_pen = dc.GetPen()
-        new_pen = wxPen("BLACK", 5)
+        new_pen = wx.Pen("BLACK", 5)
         dc.SetPen(new_pen)
         dc.DrawRectangle((470, 70), (60, 60))
         dc.SetPen(old_pen)
@@ -141,10 +147,11 @@ class MyCanvas(wxScrolledWindow):
 
 
     def DrawSavedLines(self, dc):
-        dc.SetPen(wxPen('MEDIUM FOREST GREEN', 4))
+        dc.SetPen(wx.Pen('MEDIUM FOREST GREEN', 4))
+
         for line in self.lines:
             for coords in line:
-                dc.DrawLine(*coords)
+                apply(dc.DrawLine, coords)
 
 
     def SetXY(self, event):
@@ -168,18 +175,18 @@ class MyCanvas(wxScrolledWindow):
             if BUFFERED:
                 # If doing buffered drawing, create the buffered DC, giving it
                 # it a real DC to blit to when done.
-                cdc = wxClientDC(self)
+                cdc = wx.ClientDC(self)
                 self.PrepareDC(cdc)
-                dc = wxBufferedDC(cdc, self.buffer)
+                dc = wx.BufferedDC(cdc, self.buffer)
             else:
-                dc = wxClientDC(self)
+                dc = wx.ClientDC(self)
                 self.PrepareDC(dc)
 
             dc.BeginDrawing()
-            dc.SetPen(wxPen('MEDIUM FOREST GREEN', 4))
-            coords = ((self.x, self.y),  self.ConvertEventCoords(event))
+            dc.SetPen(wx.Pen('MEDIUM FOREST GREEN', 4))
+            coords = [(self.x, self.y) , self.ConvertEventCoords(event)]
             self.curLine.append(coords)
-            dc.DrawLine( *coords)
+            apply(dc.DrawLine, coords)
             self.SetXY(event)
             dc.EndDrawing()
 
@@ -193,7 +200,8 @@ class MyCanvas(wxScrolledWindow):
 
 ## This is an example of what to do for the EVT_MOUSEWHEEL event,
 ## but since wxScrolledWindow does this already it's not
-## necessary to do it ourselves.
+## necessary to do it ourselves. You would need to add an event table 
+## entry to __init__() to direct wheelmouse events to this handler.
 
 ##     wheelScroll = 0
 ##     def OnWheel(self, evt):
@@ -222,12 +230,15 @@ def runTest(frame, nb, log):
 
 
 
-
-
-overview = """\
+overview = """
+<html>
+<body>
+The wx.ScrolledWindow class manages scrolling for its client area, transforming the 
+coordinates according to the scrollbar positions, and setting the scroll positions, 
+thumb sizes and ranges according to the area in view.
+</body>
+</html>
 """
-
-
 
 
 if __name__ == '__main__':

@@ -1,14 +1,22 @@
+# 11/17/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+#
+# 11/28/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o editor lib hasn't been hit by the renamer yet.
+#
 
-from wxPython.wx         import *
-from wxPython.lib.editor import wxEditor
+import  wx
+import  wx.lib.editor    as  editor
 
 #----------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    win = wxPanel(nb, -1)
-    ed = wxEditor(win, -1, style=wxSUNKEN_BORDER)
-    box = wxBoxSizer(wxVERTICAL)
-    box.Add(ed, 1, wxALL|wxGROW, 1)
+    win = wx.Panel(nb, -1)
+    ed = editor.wxEditor(win, -1, style=wx.SUNKEN_BORDER)
+    box = wx.BoxSizer(wx.VERTICAL)
+    box.Add(ed, 1, wx.ALL|wx.GROW, 1)
     win.SetSizer(box)
     win.SetAutoLayout(True)
 
@@ -56,7 +64,6 @@ To add or change functionality, you can subclass this
 component. One example of this might be to change the key
 Alt key commands. In that case you would (for example) override the
 SetAltFuncs() method.
-
 
 """
 

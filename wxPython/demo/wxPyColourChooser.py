@@ -1,16 +1,25 @@
-from wxPython.wx import *
-from wxPython.lib.colourchooser import wxPyColourChooser
+# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
+# 11/30/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wx renamer not applied to library.
+# 
+
+import  wx
+import  wx.lib.colourchooser    as  cc
 
 #---------------------------------------------------------------
 
-class TestColourChooser(wxPanel):
+class TestColourChooser(wx.Panel):
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
         self.log = log
 
-        chooser = wxPyColourChooser(self, -1)
-        sizer = wxBoxSizer(wxVERTICAL)
-        sizer.Add(chooser, 0, wxALL, 25)
+        chooser = cc.wxPyColourChooser(self, -1)
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(chooser, 0, wx.ALL, 25)
 
         self.SetAutoLayout(True)
         self.SetSizer(sizer)

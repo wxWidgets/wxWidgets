@@ -1,95 +1,99 @@
+# 11/19/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-from wxPython.wx import *
+import  wx
 
 #---------------------------------------------------------------------------
 
-class TestLayoutConstraints(wxPanel):
+class TestLayoutConstraints(wx.Panel):
     def __init__(self, parent):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
         self.SetAutoLayout(True)
-        EVT_BUTTON(self, 100, self.OnButton)
+        self.Bind(wx.EVT_BUTTON, self.OnButton, id=100)
 
-        self.SetBackgroundColour(wxNamedColour("MEDIUM ORCHID"))
+        self.SetBackgroundColour(wx.NamedColour("MEDIUM ORCHID"))
 
-        self.panelA = wxWindow(self, -1, wxDefaultPosition, wxDefaultSize,
-                               wxSIMPLE_BORDER)
-        self.panelA.SetBackgroundColour(wxBLUE)
-        txt = wxStaticText(self.panelA, -1,
-                           "Resize the window and see\n"
-                           "what happens...  Notice that\n"
-                           "there is no OnSize handler.",
-                           wxPoint(5,5), wxSize(-1, 50))
-        txt.SetBackgroundColour(wxBLUE)
-        txt.SetForegroundColour(wxWHITE)
+        self.panelA = wx.Window(self, -1, style=wx.SIMPLE_BORDER)
+        self.panelA.SetBackgroundColour(wx.BLUE)
 
-        lc = wxLayoutConstraints()
-        lc.top.SameAs(self, wxTop, 10)
-        lc.left.SameAs(self, wxLeft, 10)
-        lc.bottom.SameAs(self, wxBottom, 10)
-        lc.right.PercentOf(self, wxRight, 50)
+        txt = wx.StaticText(
+                    self.panelA, -1,
+                    "Resize the window and see\n"
+                    "what happens...  Notice that\n"
+                    "there is no OnSize handler.",
+                    (5,5), (-1, 50)
+                    )
+
+        txt.SetBackgroundColour(wx.BLUE)
+        txt.SetForegroundColour(wx.WHITE)
+
+        lc = wx.LayoutConstraints()
+        lc.top.SameAs(self, wx.Top, 10)
+        lc.left.SameAs(self, wx.Left, 10)
+        lc.bottom.SameAs(self, wx.Bottom, 10)
+        lc.right.PercentOf(self, wx.Right, 50)
         self.panelA.SetConstraints(lc)
 
-        self.panelB = wxWindow(self, -1, wxDefaultPosition, wxDefaultSize,
-                               wxSIMPLE_BORDER)
-        self.panelB.SetBackgroundColour(wxRED)
-        lc = wxLayoutConstraints()
-        lc.top.SameAs(self, wxTop, 10)
-        lc.right.SameAs(self, wxRight, 10)
-        lc.bottom.PercentOf(self, wxBottom, 30)
+        self.panelB = wx.Window(self, -1, style=wx.SIMPLE_BORDER)
+        self.panelB.SetBackgroundColour(wx.RED)
+        lc = wx.LayoutConstraints()
+        lc.top.SameAs(self, wx.Top, 10)
+        lc.right.SameAs(self, wx.Right, 10)
+        lc.bottom.PercentOf(self, wx.Bottom, 30)
         lc.left.RightOf(self.panelA, 10)
         self.panelB.SetConstraints(lc)
 
-        self.panelC = wxWindow(self, -1, wxDefaultPosition, wxDefaultSize,
-                               wxSIMPLE_BORDER)
-        self.panelC.SetBackgroundColour(wxWHITE)
-        lc = wxLayoutConstraints()
+        self.panelC = wx.Window(self, -1, style=wx.SIMPLE_BORDER)
+        self.panelC.SetBackgroundColour(wx.WHITE)
+        lc = wx.LayoutConstraints()
         lc.top.Below(self.panelB, 10)
-        lc.right.SameAs(self, wxRight, 10)
-        lc.bottom.SameAs(self, wxBottom, 10)
+        lc.right.SameAs(self, wx.Right, 10)
+        lc.bottom.SameAs(self, wx.Bottom, 10)
         lc.left.RightOf(self.panelA, 10)
         self.panelC.SetConstraints(lc)
 
-        b = wxButton(self.panelA, 100, ' Panel A ')
-        lc = wxLayoutConstraints()
-        lc.centreX.SameAs   (self.panelA, wxCentreX)
-        lc.centreY.SameAs   (self.panelA, wxCentreY)
+        b = wx.Button(self.panelA, 100, ' Panel A ')
+        lc = wx.LayoutConstraints()
+        lc.centreX.SameAs   (self.panelA, wx.CentreX)
+        lc.centreY.SameAs   (self.panelA, wx.CentreY)
         lc.height.AsIs      ()
-        lc.width.PercentOf  (self.panelA, wxWidth, 50)
+        lc.width.PercentOf  (self.panelA, wx.Width, 50)
         b.SetConstraints(lc);
 
-        b = wxButton(self.panelB, 100, ' Panel B ')
-        lc = wxLayoutConstraints()
-        lc.top.SameAs       (self.panelB, wxTop, 2)
-        lc.right.SameAs     (self.panelB, wxRight, 4)
+        b = wx.Button(self.panelB, 100, ' Panel B ')
+        lc = wx.LayoutConstraints()
+        lc.top.SameAs       (self.panelB, wx.Top, 2)
+        lc.right.SameAs     (self.panelB, wx.Right, 4)
         lc.height.AsIs      ()
         lc.width.AsIs       ()
         b.SetConstraints(lc);
 
-        self.panelD = wxWindow(self.panelC, -1, wxDefaultPosition, wxDefaultSize,
-                            wxSIMPLE_BORDER)
-        self.panelD.SetBackgroundColour(wxGREEN)
-        wxStaticText(self.panelD, -1, "Panel D", wxPoint(4, 4)).SetBackgroundColour(wxGREEN)
+        self.panelD = wx.Window(self.panelC, -1, style=wx.SIMPLE_BORDER)
+        self.panelD.SetBackgroundColour(wx.GREEN)
+        wx.StaticText(
+            self.panelD, -1, "Panel D", (4, 4)
+            ).SetBackgroundColour(wx.GREEN)
 
-        b = wxButton(self.panelC, 100, ' Panel C ')
-        lc = wxLayoutConstraints()
+        b = wx.Button(self.panelC, 100, ' Panel C ')
+        lc = wx.LayoutConstraints()
         lc.top.Below        (self.panelD)
         lc.left.RightOf     (self.panelD)
         lc.height.AsIs      ()
         lc.width.AsIs       ()
         b.SetConstraints(lc);
 
-        lc = wxLayoutConstraints()
-        lc.bottom.PercentOf (self.panelC, wxHeight, 50)
-        lc.right.PercentOf  (self.panelC, wxWidth, 50)
-        lc.height.SameAs    (b, wxHeight)
-        lc.width.SameAs     (b, wxWidth)
+        lc = wx.LayoutConstraints()
+        lc.bottom.PercentOf (self.panelC, wx.Height, 50)
+        lc.right.PercentOf  (self.panelC, wx.Width, 50)
+        lc.height.SameAs    (b, wx.Height)
+        lc.width.SameAs     (b, wx.Width)
         self.panelD.SetConstraints(lc);
 
 
-
-
     def OnButton(self, event):
-        wxBell()
+        wx.Bell()
 
 
 #---------------------------------------------------------------------------
@@ -102,43 +106,33 @@ def runTest(frame, nb, log):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-overview = """\<html><body>
+overview = """\
+<html><body>
 Objects of this class can be associated with a window to define its
 layout constraints, with respect to siblings or its parent.
 
-The class consists of the following eight constraints of class
+<p>The class consists of the following eight constraints of class
 wxIndividualLayoutConstraint, some or all of which should be accessed
 directly to set the appropriate constraints.
 
-left: represents the left hand edge of the window
+<p><ul>
+<li>left: represents the left hand edge of the window
 
-right: represents the right hand edge of the window
+<li>right: represents the right hand edge of the window
 
-top: represents the top edge of the window
+<li>top: represents the top edge of the window
 
-bottom: represents the bottom edge of the window
+<li>bottom: represents the bottom edge of the window
 
-width: represents the width of the window
+<li>width: represents the width of the window
 
-height: represents the height of the window
+<li>height: represents the height of the window
 
-centreX: represents the horizontal centre point of the window
+<li>centreX: represents the horizontal centre point of the window
 
-centreY: represents the vertical centre point of the window
-
-Most constraints are initially set to have the relationship
+<li>centreY: represents the vertical centre point of the window
+</ul>
+<p>Most constraints are initially set to have the relationship
 wxUnconstrained, which means that their values should be calculated by
 looking at known constraints. The exceptions are width and height,
 which are set to wxAsIs to ensure that if the user does not specify a

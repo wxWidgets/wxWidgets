@@ -1,9 +1,13 @@
+# 11/18/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-import sys, os
+import  os
+import  sys
 
-from   wxPython.wx         import *
-from   wxPython.html       import *
-import wxPython.lib.wxpTag
+import  wx
+import  wx.html         as  html
 
 from Main import opj
 
@@ -13,17 +17,16 @@ from Main import opj
 
 # This shows how to catch the OnLinkClicked non-event.  (It's a virtual
 # method in the C++ code...)
-class MyHtmlWindow(wxHtmlWindow):
+class MyHtmlWindow(html.HtmlWindow):
     def __init__(self, parent, id, log):
-        wxHtmlWindow.__init__(self, parent, id, style=wxNO_FULL_REPAINT_ON_RESIZE)
+        html.HtmlWindow.__init__(self, parent, id, style=wx.NO_FULL_REPAINT_ON_RESIZE)
         self.log = log
-        EVT_SCROLLWIN( self, self.OnScroll )
+        self.Bind(wx.EVT_SCROLLWIN, self.OnScroll )
 
     def OnScroll( self, event ):
         #print 'event.GetOrientation()',event.GetOrientation()
         #print 'event.GetPosition()',event.GetPosition()
         event.Skip()
-
 
     def OnLinkClicked(self, linkinfo):
         self.log.WriteText('OnLinkClicked: %s\n' % linkinfo.GetHref())
@@ -46,9 +49,9 @@ class MyHtmlWindow(wxHtmlWindow):
 
 
 # This filter doesn't really do anything but show how to use filters
-class MyHtmlFilter(wxHtmlFilter):
+class MyHtmlFilter(html.HtmlFilter):
     def __init__(self, log):
-        wxHtmlFilter.__init__(self)
+        html.HtmlFilter.__init__(self)
         self.log = log
 
     # This method decides if this filter is able to read the file
@@ -62,64 +65,65 @@ class MyHtmlFilter(wxHtmlFilter):
         return ""
 
 
-class TestHtmlPanel(wxPanel):
+class TestHtmlPanel(wx.Panel):
     def __init__(self, parent, frame, log):
-        wxPanel.__init__(self, parent, -1, style=wxNO_FULL_REPAINT_ON_RESIZE)
+        wx.Panel.__init__(self, parent, -1, style=wx.NO_FULL_REPAINT_ON_RESIZE)
         self.log = log
         self.frame = frame
         self.cwd = os.path.split(sys.argv[0])[0]
+
         if not self.cwd:
             self.cwd = os.getcwd()
         if frame:
             self.titleBase = frame.GetTitle()
 
-        wxHtmlWindow_AddFilter(MyHtmlFilter(log))
+        html.HtmlWindow_AddFilter(MyHtmlFilter(log))
 
         self.html = MyHtmlWindow(self, -1, log)
         self.html.SetRelatedFrame(frame, self.titleBase + " -- %s")
         self.html.SetRelatedStatusBar(0)
 
-        self.printer = wxHtmlEasyPrinting()
+        self.printer = html.HtmlEasyPrinting()
 
-        self.box = wxBoxSizer(wxVERTICAL)
-        self.box.Add(self.html, 1, wxGROW)
+        self.box = wx.BoxSizer(wx.VERTICAL)
+        self.box.Add(self.html, 1, wx.GROW)
 
-        subbox = wxBoxSizer(wxHORIZONTAL)
+        subbox = wx.BoxSizer(wx.HORIZONTAL)
 
-        btn = wxButton(self, -1, "Load File")
-        EVT_BUTTON(self, btn.GetId(), self.OnLoadFile)
-        subbox.Add(btn, 1, wxGROW | wxALL, 2)
+        btn = wx.Button(self, -1, "Load File")
+        self.Bind(wx.EVT_BUTTON, self.OnLoadFile, btn)
+        subbox.Add(btn, 1, wx.GROW | wx.ALL, 2)
 
-        btn = wxButton(self, -1, "Load URL")
-        EVT_BUTTON(self, btn.GetId(), self.OnLoadURL)
-        subbox.Add(btn, 1, wxGROW | wxALL, 2)
+        btn = wx.Button(self, -1, "Load URL")
+        self.Bind(wx.EVT_BUTTON, self.OnLoadURL, btn)
+        subbox.Add(btn, 1, wx.GROW | wx.ALL, 2)
 
-        btn = wxButton(self, -1, "With Widgets")
-        EVT_BUTTON(self, btn.GetId(), self.OnWithWidgets)
-        subbox.Add(btn, 1, wxGROW | wxALL, 2)
+        btn = wx.Button(self, -1, "With Widgets")
+        self.Bind(wx.EVT_BUTTON, self.OnWithWidgets, btn)
+        subbox.Add(btn, 1, wx.GROW | wx.ALL, 2)
 
-        btn = wxButton(self, -1, "Back")
-        EVT_BUTTON(self, btn.GetId(), self.OnBack)
-        subbox.Add(btn, 1, wxGROW | wxALL, 2)
+        btn = wx.Button(self, -1, "Back")
+        self.Bind(wx.EVT_BUTTON, self.OnBack, btn)
+        subbox.Add(btn, 1, wx.GROW | wx.ALL, 2)
 
-        btn = wxButton(self, -1, "Forward")
-        EVT_BUTTON(self, btn.GetId(), self.OnForward)
-        subbox.Add(btn, 1, wxGROW | wxALL, 2)
+        btn = wx.Button(self, -1, "Forward")
+        self.Bind(wx.EVT_BUTTON, self.OnForward, btn)
+        subbox.Add(btn, 1, wx.GROW | wx.ALL, 2)
 
-        btn = wxButton(self, -1, "Print")
-        EVT_BUTTON(self, btn.GetId(), self.OnPrint)
-        subbox.Add(btn, 1, wxGROW | wxALL, 2)
+        btn = wx.Button(self, -1, "Print")
+        self.Bind(wx.EVT_BUTTON, self.OnPrint, btn)
+        subbox.Add(btn, 1, wx.GROW | wx.ALL, 2)
 
-        btn = wxButton(self, -1, "View Source")
-        EVT_BUTTON(self, btn.GetId(), self.OnViewSource)
-        subbox.Add(btn, 1, wxGROW | wxALL, 2)
+        btn = wx.Button(self, -1, "View Source")
+        self.Bind(wx.EVT_BUTTON, self.OnViewSource, btn)
+        subbox.Add(btn, 1, wx.GROW | wx.ALL, 2)
 
-        self.box.Add(subbox, 0, wxGROW)
+        self.box.Add(subbox, 0, wx.GROW)
         self.SetSizer(self.box)
         self.SetAutoLayout(True)
 
         # A button with this ID is created on the widget test page.
-        EVT_BUTTON(self, wxID_OK, self.OnOk)
+        self.Bind(wx.EVT_BUTTON, self.OnOk, id=wx.ID_OK)
 
         self.OnShowDefault(None)
 
@@ -136,18 +140,22 @@ class TestHtmlPanel(wxPanel):
 
 
     def OnLoadFile(self, event):
-        dlg = wxFileDialog(self, wildcard = '*.htm*', style=wxOPEN)
+        dlg = wx.FileDialog(self, wildcard = '*.htm*', style=wx.OPEN)
+
         if dlg.ShowModal():
             path = dlg.GetPath()
             self.html.LoadPage(path)
+
         dlg.Destroy()
 
 
     def OnLoadURL(self, event):
-        dlg = wxTextEntryDialog(self, "Enter a URL")
+        dlg = wx.TextEntryDialog(self, "Enter a URL")
+
         if dlg.ShowModal():
             url = dlg.GetValue()
             self.html.LoadPage(url)
+
         dlg.Destroy()
 
 
@@ -162,18 +170,20 @@ class TestHtmlPanel(wxPanel):
 
     def OnBack(self, event):
         if not self.html.HistoryBack():
-            wxMessageBox("No more items in history!")
+            wx.MessageBox("No more items in history!")
 
 
     def OnForward(self, event):
         if not self.html.HistoryForward():
-            wxMessageBox("No more items in history!")
+            wx.MessageBox("No more items in history!")
 
 
     def OnViewSource(self, event):
-        from wxPython.lib.dialogs import wxScrolledMessageDialog
+        import  wx.lib.dialogs  as  dlgs
+
         source = self.html.GetParser().GetSource()
-        dlg = wxScrolledMessageDialog(self, source, 'HTML Source')
+
+        dlg = dlgs.wxScrolledMessageDialog(self, source, 'HTML Source')
         dlg.ShowModal()
         dlg.Destroy()
 
@@ -186,14 +196,11 @@ class TestHtmlPanel(wxPanel):
 
 def runTest(frame, nb, log):
     win = TestHtmlPanel(nb, frame, log)
-    print wxWindow_FindFocus()
+    print wx.Window_FindFocus()
     return win
 
 
 #----------------------------------------------------------------------
-
-
-
 
 
 overview = """<html><body>
@@ -203,9 +210,8 @@ overview = """<html><body>
 simple HTML tags.
 
 <p>It is not intended to be a high-end HTML browser.  If you're
-looking for something like that try http://www.mozilla.org - there's a
-chance you'll be able to make their widget wxWindows-compatible. I'm
-sure everyone will enjoy your work in that case...
+looking for something like that see the IEHtmlWin class, which
+wraps the core MSIE HTML viewer.
 
 </body></html>
 """

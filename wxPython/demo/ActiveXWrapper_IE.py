@@ -18,93 +18,104 @@ shown.)
 </body></html>
 """
 
-from wxPython.wx import *
+# 11/24/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for V2.5
+# 
 
-if wxPlatform == '__WXMSW__':
-    from wxPython.lib.activexwrapper import MakeActiveXClass
-    import win32com.client.gencache
+import  sys
+import  wx
+
+if wx.Platform == '__WXMSW__':
+    import  wx.lib.activexwrapper   as  ax
+    import  win32com.client.gencache
 
     try:
-        browserModule = win32com.client.gencache.EnsureModule("{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}", 0, 1, 1)
+        browserModule = win32com.client.gencache.EnsureModule(
+            "{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}", 0, 1, 1
+            )
     except:
         raise ImportError("IE4 or greater does not appear to be installed.")
 
 
 #----------------------------------------------------------------------
 
-class TestPanel(wxWindow):
+class TestPanel(wx.Window):
     def __init__(self, parent, log, frame=None):
-        wxWindow.__init__(self, parent, -1,
-                          style=wxCLIP_CHILDREN|wxNO_FULL_REPAINT_ON_RESIZE)
+        wx.Window.__init__(
+            self, parent, -1,
+            style=wx.CLIP_CHILDREN|wx.NO_FULL_REPAINT_ON_RESIZE
+            )
+
         self.ie = None
         self.log = log
         self.current = "http://wxPython.org/"
         self.frame = frame
+
         if frame:
             self.titleBase = frame.GetTitle()
 
-
-        sizer = wxBoxSizer(wxVERTICAL)
-        btnSizer = wxBoxSizer(wxHORIZONTAL)
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
 
         # Make a new class that derives from the WebBrowser class in the
         # COM module imported above.  This class also derives from wxWindow and
         # implements the machinery needed to integrate the two worlds.
-        theClass = MakeActiveXClass(browserModule.WebBrowser,
-                                    eventObj = self)
+        theClass = ax.MakeActiveXClass(
+                        browserModule.WebBrowser, eventObj = self
+                        )
 
         # Create an instance of that class
         self.ie = theClass(self, -1) ##, style=wxSUNKEN_BORDER)
 
 
-        btn = wxButton(self, wxNewId(), "Open", style=wxBU_EXACTFIT)
-        EVT_BUTTON(self, btn.GetId(), self.OnOpenButton)
-        btnSizer.Add(btn, 0, wxEXPAND|wxALL, 2)
+        btn = wx.Button(self, wx.NewId(), "Open", style=wx.BU_EXACTFIT)
+        self.Bind(wx.EVT_BUTTON, self.OnOpenButton, id=btn.GetId())
+        btnSizer.Add(btn, 0, wx.EXPAND|wx.ALL, 2)
 
-        btn = wxButton(self, wxNewId(), "Home", style=wxBU_EXACTFIT)
-        EVT_BUTTON(self, btn.GetId(), self.OnHomeButton)
-        btnSizer.Add(btn, 0, wxEXPAND|wxALL, 2)
+        btn = wx.Button(self, wx.NewId(), "Home", style=wx.BU_EXACTFIT)
+        self.Bind(wx.EVT_BUTTON, self.OnHomeButton, id=btn.GetId())
+        btnSizer.Add(btn, 0, wx.EXPAND|wx.ALL, 2)
 
-        btn = wxButton(self, wxNewId(), "<--", style=wxBU_EXACTFIT)
-        EVT_BUTTON(self, btn.GetId(), self.OnPrevPageButton)
-        btnSizer.Add(btn, 0, wxEXPAND|wxALL, 2)
+        btn = wx.Button(self, wx.NewId(), "<--", style=wx.BU_EXACTFIT)
+        self.Bind(wx.EVT_BUTTON, self.OnPrevPageButton, id=btn.GetId())
+        btnSizer.Add(btn, 0, wx.EXPAND|wx.ALL, 2)
 
-        btn = wxButton(self, wxNewId(), "-->", style=wxBU_EXACTFIT)
-        EVT_BUTTON(self, btn.GetId(), self.OnNextPageButton)
-        btnSizer.Add(btn, 0, wxEXPAND|wxALL, 2)
+        btn = wx.Button(self, wx.NewId(), "-->", style=wx.BU_EXACTFIT)
+        self.Bind(wx.EVT_BUTTON, self.OnNextPageButton, id=btn.GetId())
+        btnSizer.Add(btn, 0, wx.EXPAND|wx.ALL, 2)
 
-        btn = wxButton(self, wxNewId(), "Stop", style=wxBU_EXACTFIT)
-        EVT_BUTTON(self, btn.GetId(), self.OnStopButton)
-        btnSizer.Add(btn, 0, wxEXPAND|wxALL, 2)
+        btn = wx.Button(self, wx.NewId(), "Stop", style=wx.BU_EXACTFIT)
+        self.Bind(wx.EVT_BUTTON, self.OnStopButton, id=btn.GetId())
+        btnSizer.Add(btn, 0, wx.EXPAND|wx.ALL, 2)
 
-        btn = wxButton(self, wxNewId(), "Search", style=wxBU_EXACTFIT)
-        EVT_BUTTON(self, btn.GetId(), self.OnSearchPageButton)
-        btnSizer.Add(btn, 0, wxEXPAND|wxALL, 2)
+        btn = wx.Button(self, wx.NewId(), "Search", style=wx.BU_EXACTFIT)
+        self.Bind(wx.EVT_BUTTON, self.OnSearchPageButton, id=btn.GetId())
+        btnSizer.Add(btn, 0, wx.EXPAND|wx.ALL, 2)
 
-        btn = wxButton(self, wxNewId(), "Refresh", style=wxBU_EXACTFIT)
-        EVT_BUTTON(self, btn.GetId(), self.OnRefreshPageButton)
-        btnSizer.Add(btn, 0, wxEXPAND|wxALL, 2)
+        btn = wx.Button(self, wx.NewId(), "Refresh", style=wx.BU_EXACTFIT)
+        self.Bind(wx.EVT_BUTTON, self.OnRefreshPageButton, id=btn.GetId())
+        btnSizer.Add(btn, 0, wx.EXPAND|wx.ALL, 2)
 
-        txt = wxStaticText(self, -1, "Location:")
-        btnSizer.Add(txt, 0, wxCENTER|wxALL, 2)
+        txt = wx.StaticText(self, -1, "Location:")
+        btnSizer.Add(txt, 0, wx.CENTER|wx.ALL, 2)
 
-        self.location = wxComboBox(self, wxNewId(), "", style=wxCB_DROPDOWN)
-        EVT_COMBOBOX(self, self.location.GetId(), self.OnLocationSelect)
-        EVT_KEY_UP(self.location, self.OnLocationKey)
-        EVT_CHAR(self.location, self.IgnoreReturn)
-        btnSizer.Add(self.location, 1, wxEXPAND|wxALL, 2)
+        self.location = wx.ComboBox(self, wx.NewId(), "", style=wx.CB_DROPDOWN)
+        self.Bind(wx.EVT_COMBOBOX, self.OnLocationSelect, id=self.location.GetId())
+        self.Bind(wx.EVT_KEY_UP, self.OnLocationKey, self.location)
+        self.Bind(wx.EVT_CHAR, self.IgnoreReturn, self.location)
+        btnSizer.Add(self.location, 1, wx.EXPAND|wx.ALL, 2)
 
-        sizer.Add(btnSizer, 0, wxEXPAND)
-        sizer.Add(self.ie, 1, wxEXPAND)
+        sizer.Add(btnSizer, 0, wx.EXPAND)
+        sizer.Add(self.ie, 1, wx.EXPAND)
 
         self.ie.Navigate(self.current)
         self.location.Append(self.current)
 
         self.SetSizer(sizer)
         self.SetAutoLayout(True)
-        EVT_SIZE(self, self.OnSize)
-
-        EVT_WINDOW_DESTROY(self, self.OnDestroy)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
+        self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy)
 
 
     def ShutdownDemo(self):
@@ -130,7 +141,7 @@ class TestPanel(wxWindow):
         self.ie.Navigate(url)
 
     def OnLocationKey(self, evt):
-        if evt.KeyCode() == WXK_RETURN:
+        if evt.KeyCode() == wx.WXK_RETURN:
             URL = self.location.GetValue()
             self.location.Append(URL)
             self.ie.Navigate(URL)
@@ -139,17 +150,20 @@ class TestPanel(wxWindow):
 
     def IgnoreReturn(self, evt):
         print 'IgnoreReturn'
-        if evt.KeyCode() != WXK_RETURN:
+        if evt.KeyCode() != wx.WXK_RETURN:
             evt.Skip()
 
     def OnOpenButton(self, event):
-        dlg = wxTextEntryDialog(self, "Open Location",
+        dlg = wx.TextEntryDialog(self, "Open Location",
                                 "Enter a full URL or local path",
-                                self.current, wxOK|wxCANCEL)
+                                self.current, wx.OK|wx.CANCEL)
+
         dlg.CentreOnParent()
-        if dlg.ShowModal() == wxID_OK:
+
+        if dlg.ShowModal() == wx.ID_OK:
             self.current = dlg.GetValue()
             self.ie.Navigate(self.current)
+
         dlg.Destroy()
 
     def OnHomeButton(self, event):
@@ -169,7 +183,6 @@ class TestPanel(wxWindow):
 
     def OnRefreshPageButton(self, evt):
         self.ie.Refresh2(3)
-
 
 
     # The following event handlers are called by the web browser COM
@@ -199,12 +212,12 @@ class TestPanel(wxWindow):
 # for the demo framework...
 
 def runTest(frame, nb, log):
-    if wxPlatform == '__WXMSW__':
+    if wx.Platform == '__WXMSW__':
         win = TestPanel(nb, log, frame)
         return win
     else:
-        dlg = wxMessageDialog(frame, 'This demo only works on MSW.',
-                          'Sorry', wxOK | wxICON_INFORMATION)
+        dlg = wx.MessageDialog(frame, 'This demo only works on MSW.',
+                          'Sorry', wx.OK | wx.ICON_INFORMATION)
         dlg.ShowModal()
         dlg.Destroy()
 
@@ -215,23 +228,24 @@ overview = __doc__
 
 
 if __name__ == '__main__':
-    class TestFrame(wxFrame):
+    class TestFrame(wx.Frame):
         def __init__(self):
-            wxFrame.__init__(self, None, -1, "ActiveX test -- Internet Explorer",
-                             size=(640, 480),
-                             style=wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE)
+            wx.Frame.__init__(
+                self, None, -1, "ActiveX test -- Internet Explorer",
+                size=(640, 480),
+                style=wx.DEFAULT_FRAME_STYLE|wx.NO_FULL_REPAINT_ON_RESIZE
+                )
+
             self.CreateStatusBar()
             self.tp = TestPanel(self, sys.stdout, self)
-            EVT_CLOSE(self, self.OnCloseWindow)
+            self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
         def OnCloseWindow(self, evt):
             self.tp.Destroy()
             self.Destroy()
 
-    app = wxPySimpleApp()
+    app = wx.PySimpleApp()
     frame = TestFrame()
     frame.Show(True)
     app.MainLoop()
-
-
 

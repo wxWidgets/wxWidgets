@@ -1,8 +1,11 @@
+# 11/25/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for V2.5
+#
 
-from wxPython.wx  import *
+import  wx
 
-
-## Stuff to integrate FloatCanvas into wxPython Demo
+# Stuff to integrate FloatCanvas into wxPython Demo
 try:
     import Numeric
     haveNumeric = True
@@ -17,8 +20,10 @@ You can get it at:
      http://sourceforge.net/projects/numpy
 """     
     def runTest(frame, nb, log):
-        dlg = wxMessageDialog(frame, errorText, 
-                              'Sorry', wxOK | wxICON_INFORMATION)
+        dlg = wx.MessageDialog(
+                frame, errorText, 'Sorry', wx.OK | wx.ICON_INFORMATION
+                )
+
         dlg.ShowModal()
         dlg.Destroy()
 
@@ -28,21 +33,22 @@ else:
     from wxPython.lib import floatcanvas
     import wxPython.lib.colourdb
     
-    ID_ABOUT_MENU = wxNewId()          
-    ID_EXIT_MENU  = wxNewId() 
-    ID_ZOOM_TO_FIT_MENU = wxNewId()
-    ID_DRAWTEST_MENU = wxNewId()
-    ID_LINETEST_MENU = wxNewId()
-    ID_DRAWMAP_MENU = wxNewId()
-    ID_DRAWMAP2_MENU = wxNewId()
-    ID_CLEAR_MENU = wxNewId()
+    ID_ABOUT_MENU = wx.NewId()          
+    ID_EXIT_MENU  = wx.NewId() 
+    ID_ZOOM_TO_FIT_MENU = wx.NewId()
+    ID_DRAWTEST_MENU = wx.NewId()
+    ID_LINETEST_MENU = wx.NewId()
+    ID_DRAWMAP_MENU = wx.NewId()
+    ID_DRAWMAP2_MENU = wx.NewId()
+    ID_CLEAR_MENU = wx.NewId()
+
 
     colors = []
     LineStyles = floatcanvas.draw_object.LineStyleList.keys()
 
 
     
-    class DrawFrame(wxFrame):
+    class DrawFrame(wx.Frame):
     
         """
     
@@ -50,39 +56,38 @@ else:
         
         """
         
-        def __init__(self,parent, id,title,position,size):
-            wxFrame.__init__(self,parent, id,title,position, size)
+        def __init__(self, parent, id, title, position, size):
+            wx.Frame.__init__(self,parent, id,title,position, size)
             
-            ## Set up the MenuBar
+            # Set up the MenuBar
             
-            MenuBar = wxMenuBar()
+            MenuBar = wx.MenuBar()
             
-            file_menu = wxMenu()
+            file_menu = wx.Menu()
             file_menu.Append(ID_EXIT_MENU, "&Close","Close this frame")
-            EVT_MENU(self, ID_EXIT_MENU,       self.OnQuit)
+            self.Bind(wx.EVT_MENU, self.OnQuit, id=ID_EXIT_MENU)
             MenuBar.Append(file_menu, "&File")
             
-            draw_menu = wxMenu()
+            draw_menu = wx.Menu()
             draw_menu.Append(ID_DRAWTEST_MENU, "&Draw Test","Run a test of drawing random components")
-            EVT_MENU(self, ID_DRAWTEST_MENU,self.DrawTest)
+            self.Bind(wx.EVT_MENU, self.DrawTest, id=ID_DRAWTEST_MENU)
             draw_menu.Append(ID_LINETEST_MENU, "&Line Test","Run a test of drawing random lines")
-            EVT_MENU(self, ID_LINETEST_MENU,self.LineTest)
+            self.Bind(wx.EVT_MENU, self.LineTest, id=ID_LINETEST_MENU)
             draw_menu.Append(ID_DRAWMAP_MENU, "Draw &Map","Run a test of drawing a map")
-            EVT_MENU(self, ID_DRAWMAP_MENU,self.DrawMap)
+            self.Bind(wx.EVT_MENU, self.DrawMap, id=ID_DRAWMAP_MENU)
             draw_menu.Append(ID_CLEAR_MENU, "&Clear","Clear the Canvas")
-            EVT_MENU(self, ID_CLEAR_MENU,self.Clear)
+            self.Bind(wx.EVT_MENU, self.Clear, id=ID_CLEAR_MENU)
             MenuBar.Append(draw_menu, "&Draw")
-            
-            
-            view_menu = wxMenu()
+
+            view_menu = wx.Menu()
             view_menu.Append(ID_ZOOM_TO_FIT_MENU, "Zoom to &Fit","Zoom to fit the window")
-            EVT_MENU(self, ID_ZOOM_TO_FIT_MENU,self.ZoomToFit)
+            self.Bind(wx.EVT_MENU, self.ZoomToFit, id=ID_ZOOM_TO_FIT_MENU)
             MenuBar.Append(view_menu, "&View")
             
-            help_menu = wxMenu()
+            help_menu = wx.Menu()
             help_menu.Append(ID_ABOUT_MENU, "&About",
                                     "More information About this program")
-            EVT_MENU(self, ID_ABOUT_MENU,      self.OnAbout)
+            self.Bind(wx.EVT_MENU, self.OnAbout, id=ID_ABOUT_MENU)
             MenuBar.Append(help_menu, "&Help")
             
             self.SetMenuBar(MenuBar)
@@ -90,10 +95,10 @@ else:
             self.CreateStatusBar()
             self.SetStatusText("")
             
-            EVT_CLOSE(self, self.OnCloseWindow)
+            self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
             
             # Other event handlers:
-            EVT_RIGHT_DOWN(self, self.RightButtonEvent)
+            self.Bind(wx.EVT_RIGHT_DOWN, self.RightButtonEvent)
             
             # Add the Canvas
             self.Canvas = floatcanvas.FloatCanvas(self,-1,(500,500),
@@ -115,20 +120,24 @@ else:
             event.Skip()
             
         def OnAbout(self, event):
-            dlg = wxMessageDialog(self, "This is a small program to demonstrate\n"
+            dlg = wx.MessageDialog(self, "This is a small program to demonstrate\n"
                                                       "the use of the FloatCanvas\n",
-                                                      "About Me", wxOK | wxICON_INFORMATION)
+                                                      "About Me", wx.OK | wx.ICON_INFORMATION)
             dlg.ShowModal()
             dlg.Destroy()
             
         def SetMode(self,event):
             for id in [ID_ZOOM_IN_BUTTON,ID_ZOOM_OUT_BUTTON,ID_MOVE_MODE_BUTTON]:
                 self.ToolBar.ToggleTool(id,0)
+                
             self.ToolBar.ToggleTool(event.GetId(),1)
+
             if event.GetId() == ID_ZOOM_IN_BUTTON:
                 self.Canvas.SetGUIMode("ZoomIn")
+
             elif event.GetId() == ID_ZOOM_OUT_BUTTON:
                 self.Canvas.SetGUIMode("ZoomOut")
+
             elif event.GetId() == ID_MOVE_MODE_BUTTON:
                 self.Canvas.SetGUIMode("Move")
                 
@@ -147,15 +156,17 @@ else:
             self.Destroy()
             
         def DrawTest(self,event):
-            wxGetApp().Yield()
+            wx.GetApp().Yield()
+
             import random
             import RandomArray
+
             Range = (-10,10)
             
             Canvas = self.Canvas
             object_list = self.object_list
             
-            ##		Random tests of everything:
+            #		Random tests of everything:
             
             # Rectangles
             for i in range(5):
@@ -240,7 +251,7 @@ else:
             self.Canvas.ZoomToBB()
             
         def DrawMap(self,event = None):
-            wxGetApp().Yield()
+            wx.GetApp().Yield()
             import os, time
         ## Test of Actual Map Data
             self.Clear()
@@ -285,7 +296,7 @@ else:
     ##        print "It took %f seconds to draw %i lines"%(time.clock() - start,len(linepoints) )
     
         def LineTest(self,event = None):
-            wxGetApp().Yield()
+            wx.GetApp().Yield()
             import os, time
             import random
             Range = (-10,10)
@@ -310,7 +321,7 @@ else:
             self.Canvas.ZoomToBB()
             print "It took %f seconds to draw %i lines"%(time.clock() - start,len(linepoints) )
     
-    class DemoApp(wxApp):
+    class DemoApp(wx.App):
         """
         How the demo works:
         
@@ -450,6 +461,11 @@ if __name__ == "__main__":
         print errorText
     else:
         app = DemoApp(0)
+
+        import  wx.lib.colourdb
+        wx.lib.colourdb.updateColourDB()
+        colors = wx.lib.colourdb.getColourList()
+
         app.MainLoop()
     
     

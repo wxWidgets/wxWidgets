@@ -1,143 +1,145 @@
-from wxPython.wx import *
-from wxPython.lib.maskednumctrl import wxMaskedNumCtrl, EVT_MASKEDNUM
-from wxPython.lib.maskednumctrl import __doc__ as overviewdoc
-from wxPython.lib.maskededit import wxMaskedTextCtrl
-import string, sys, traceback
+# 11/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
+# 11/29/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wx.lib.maskednumctrl needs hit up with the renamer and new binders
+# 
+
+import  string
+import  sys
+import  traceback
+
+import  wx
+import  wx.lib.maskednumctrl    as mnum
 #----------------------------------------------------------------------
 
-class TestPanel( wxPanel ):
+class TestPanel( wx.Panel ):
     def __init__( self, parent, log ):
 
-        wxPanel.__init__( self, parent, -1 )
+        wx.Panel.__init__( self, parent, -1 )
         self.log = log
-        panel = wxPanel( self, -1 )
+        panel = wx.Panel( self, -1 )
 
-        header = wxStaticText(panel, -1, """\
+        header = wx.StaticText(panel, -1, """\
 This shows the various options for wxMaskedNumCtrl.
 The controls at the top reconfigure the resulting control at the bottom.
 """)
         header.SetForegroundColour( "Blue" )
 
-        intlabel = wxStaticText( panel, -1, "Integer width:" )
-        self.integerwidth = wxMaskedNumCtrl(
-                                        panel, value=10,
-                                        integerWidth=2,
-                                        allowNegative=False)
+        intlabel = wx.StaticText( panel, -1, "Integer width:" )
+        self.integerwidth = mnum.wxMaskedNumCtrl(
+                                panel, value=10, integerWidth=2, allowNegative=False
+                                )
 
-        fraclabel = wxStaticText( panel, -1, "Fraction width:" )
-        self.fractionwidth = wxMaskedNumCtrl(
-                                        panel, value=0,
-                                        integerWidth=2,
-                                        allowNegative=False )
+        fraclabel = wx.StaticText( panel, -1, "Fraction width:" )
+        self.fractionwidth = mnum.wxMaskedNumCtrl(
+                                panel, value=0, integerWidth=2, allowNegative=False 
+                                )
 
-        groupcharlabel = wxStaticText( panel,-1, "Grouping char:" )
-        self.groupchar = wxMaskedTextCtrl( panel, -1,
-                                           value=',',
-                                           mask='&',
-                                           excludeChars = '-()',
-                                           formatcodes='F',
-                                           emptyInvalid=True,
-                                           validRequired=True)
+        groupcharlabel = wx.StaticText( panel,-1, "Grouping char:" )
+        self.groupchar = mnum.wxMaskedTextCtrl( 
+                                panel, -1, value=',', mask='&', excludeChars = '-()',
+                                formatcodes='F', emptyInvalid=True, validRequired=True
+                                )
 
-        decimalcharlabel = wxStaticText( panel,-1, "Decimal char:" )
-        self.decimalchar = wxMaskedTextCtrl( panel, -1,
-                                             value='.',
-                                             mask='&',
-                                             excludeChars = '-()',
-                                             formatcodes='F',
-                                             emptyInvalid=True,
-                                             validRequired=True)
+        decimalcharlabel = wx.StaticText( panel,-1, "Decimal char:" )
+        self.decimalchar = mnum.wxMaskedTextCtrl( 
+                                panel, -1, value='.', mask='&', excludeChars = '-()',
+                                formatcodes='F', emptyInvalid=True, validRequired=True
+                                )
 
-        self.set_min = wxCheckBox( panel, -1, "Set minimum value:" )
-        # Create this wxMaskedNumCtrl using factory, to show how:
-        self.min = wxMaskedNumCtrl( panel, integerWidth=5, fractionWidth=2 )
+        self.set_min = wx.CheckBox( panel, -1, "Set minimum value:" )
+        # Create this MaskedNumCtrl using factory, to show how:
+        self.min = mnum.wxMaskedNumCtrl( panel, integerWidth=5, fractionWidth=2 )
         self.min.Enable( False )
 
-        self.set_max = wxCheckBox( panel, -1, "Set maximum value:" )
-        self.max = wxMaskedNumCtrl( panel, integerWidth=5, fractionWidth=2 )
+        self.set_max = wx.CheckBox( panel, -1, "Set maximum value:" )
+        self.max = mnum.wxMaskedNumCtrl( panel, integerWidth=5, fractionWidth=2 )
         self.max.Enable( False )
 
 
-        self.limit_target = wxCheckBox( panel, -1, "Limit control" )
-        self.allow_none = wxCheckBox( panel, -1, "Allow empty control" )
-        self.group_digits = wxCheckBox( panel, -1, "Group digits" )
+        self.limit_target = wx.CheckBox( panel, -1, "Limit control" )
+        self.allow_none = wx.CheckBox( panel, -1, "Allow empty control" )
+        self.group_digits = wx.CheckBox( panel, -1, "Group digits" )
         self.group_digits.SetValue( True )
-        self.allow_negative = wxCheckBox( panel, -1, "Allow negative values" )
+        self.allow_negative = wx.CheckBox( panel, -1, "Allow negative values" )
         self.allow_negative.SetValue( True )
-        self.use_parens = wxCheckBox( panel, -1, "Use parentheses" )
-        self.select_on_entry = wxCheckBox( panel, -1, "Select on entry" )
+        self.use_parens = wx.CheckBox( panel, -1, "Use parentheses" )
+        self.select_on_entry = wx.CheckBox( panel, -1, "Select on entry" )
         self.select_on_entry.SetValue( True )
 
-        label = wxStaticText( panel, -1, "Resulting numeric control:" )
+        label = wx.StaticText( panel, -1, "Resulting numeric control:" )
         font = label.GetFont()
-        font.SetWeight(wxBOLD)
+        font.SetWeight(wx.BOLD)
         label.SetFont(font)
 
-        self.target_ctl = wxMaskedNumCtrl( panel, -1, name="target control" )
+        self.target_ctl = mnum.wxMaskedNumCtrl( panel, -1, name="target control" )
 
-        label_numselect = wxStaticText( panel, -1, """\
+        label_numselect = wx.StaticText( panel, -1, """\
 Programmatically set the above
 value entry ctrl:""")
-        self.numselect = wxComboBox(panel, -1, choices = [ '0', '111', '222.22', '-3', '54321.666666666', '-1353.978',
+        self.numselect = wx.ComboBox(panel, -1, choices = [ '0', '111', '222.22', '-3', '54321.666666666', '-1353.978',
                                                      '1234567', '-1234567', '123456789', '-123456789.1',
                                                      '1234567890.', '-9876543210.9' ])
 
-        grid1 = wxFlexGridSizer( 0, 4, 0, 0 )
-        grid1.Add( intlabel, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5)
-        grid1.Add( self.integerwidth, 0, wxALIGN_LEFT|wxALL, 5 )
+        grid1 = wx.FlexGridSizer( 0, 4, 0, 0 )
+        grid1.Add( intlabel, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+        grid1.Add( self.integerwidth, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
 
-        grid1.Add( groupcharlabel, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5)
-        grid1.Add( self.groupchar, 0, wxALIGN_LEFT|wxALL, 5 )
+        grid1.Add( groupcharlabel, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+        grid1.Add( self.groupchar, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
 
-        grid1.Add( fraclabel, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
-        grid1.Add( self.fractionwidth, 0, wxALIGN_LEFT|wxALL, 5 )
+        grid1.Add( fraclabel, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+        grid1.Add( self.fractionwidth, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
 
-        grid1.Add( decimalcharlabel, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5)
-        grid1.Add( self.decimalchar, 0, wxALIGN_LEFT|wxALL, 5 )
+        grid1.Add( decimalcharlabel, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+        grid1.Add( self.decimalchar, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
 
-        grid1.Add( self.set_min, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
-        grid1.Add( self.min, 0, wxALIGN_LEFT|wxALL, 5 )
-        grid1.Add( (5,5), 0, wxALIGN_LEFT|wxALL, 5)
-        grid1.Add( (5,5), 0, wxALIGN_LEFT|wxALL, 5)
+        grid1.Add( self.set_min, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+        grid1.Add( self.min, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
+        grid1.Add( (5,5), 0, wx.ALIGN_LEFT|wx.ALL, 5)
+        grid1.Add( (5,5), 0, wx.ALIGN_LEFT|wx.ALL, 5)
 
-        grid1.Add( self.set_max, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
-        grid1.Add( self.max, 0, wxALIGN_LEFT|wxALL, 5 )
-        grid1.Add( (5,5), 0, wxALIGN_LEFT|wxALL, 5)
-        grid1.Add( (5,5), 0, wxALIGN_LEFT|wxALL, 5)
-
-
-        grid1.Add( self.limit_target, 0, wxALIGN_LEFT|wxALL, 5 )
-        grid1.Add( self.allow_none, 0, wxALIGN_LEFT|wxALL, 5 )
-        hbox1 = wxBoxSizer( wxHORIZONTAL )
-        hbox1.Add( (17,5), 0, wxALIGN_LEFT|wxALL, 5)
-        hbox1.Add( self.group_digits, 0, wxALIGN_LEFT|wxLEFT, 5 )
-        grid1.Add( hbox1, 0, wxALIGN_LEFT|wxALL, 5)
-        grid1.Add( (5,5), 0, wxALIGN_LEFT|wxALL, 5)
-
-        grid1.Add( self.allow_negative, 0, wxALIGN_LEFT|wxALL, 5 )
-        grid1.Add( self.use_parens, 0, wxALIGN_LEFT|wxALL, 5 )
-        hbox2 = wxBoxSizer( wxHORIZONTAL )
-        hbox2.Add( (17,5), 0, wxALIGN_LEFT|wxALL, 5)
-        hbox2.Add( self.select_on_entry, 0, wxALIGN_LEFT|wxLEFT, 5 )
-        grid1.Add( hbox2, 0, wxALIGN_LEFT|wxALL, 5)
-        grid1.Add( (5,5), 0, wxALIGN_LEFT|wxALL, 5)
+        grid1.Add( self.set_max, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+        grid1.Add( self.max, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
+        grid1.Add( (5,5), 0, wx.ALIGN_LEFT|wx.ALL, 5)
+        grid1.Add( (5,5), 0, wx.ALIGN_LEFT|wx.ALL, 5)
 
 
-        grid2 = wxFlexGridSizer( 0, 2, 0, 0 )
-        grid2.Add( label, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
-        grid2.Add( self.target_ctl, 0, wxALIGN_LEFT|wxALL, 5 )
-        grid2.Add( (5,5), 0, wxALIGN_LEFT|wxALL, 5)
-        grid2.Add( (5,5), 0, wxALIGN_LEFT|wxALL, 5)
-        grid2.Add( label_numselect, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
-        grid2.Add( self.numselect, 0, wxALIGN_LEFT|wxALL, 5 )
-        grid2.Add( (5,5), 0, wxALIGN_LEFT|wxALL, 5)
-        grid2.Add( (5,5), 0, wxALIGN_LEFT|wxALL, 5)
+        grid1.Add( self.limit_target, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
+        grid1.Add( self.allow_none, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
+        hbox1 = wx.BoxSizer( wx.HORIZONTAL )
+        hbox1.Add( (17,5), 0, wx.ALIGN_LEFT|wx.ALL, 5)
+        hbox1.Add( self.group_digits, 0, wx.ALIGN_LEFT|wx.LEFT, 5 )
+        grid1.Add( hbox1, 0, wx.ALIGN_LEFT|wx.ALL, 5)
+        grid1.Add( (5,5), 0, wx.ALIGN_LEFT|wx.ALL, 5)
+
+        grid1.Add( self.allow_negative, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
+        grid1.Add( self.use_parens, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
+        hbox2 = wx.BoxSizer( wx.HORIZONTAL )
+        hbox2.Add( (17,5), 0, wx.ALIGN_LEFT|wx.ALL, 5)
+        hbox2.Add( self.select_on_entry, 0, wx.ALIGN_LEFT|wx.LEFT, 5 )
+        grid1.Add( hbox2, 0, wx.ALIGN_LEFT|wx.ALL, 5)
+        grid1.Add( (5,5), 0, wx.ALIGN_LEFT|wx.ALL, 5)
+
+
+        grid2 = wx.FlexGridSizer( 0, 2, 0, 0 )
+        grid2.Add( label, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+        grid2.Add( self.target_ctl, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
+        grid2.Add( (5,5), 0, wx.ALIGN_LEFT|wx.ALL, 5)
+        grid2.Add( (5,5), 0, wx.ALIGN_LEFT|wx.ALL, 5)
+        grid2.Add( label_numselect, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+        grid2.Add( self.numselect, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
+        grid2.Add( (5,5), 0, wx.ALIGN_LEFT|wx.ALL, 5)
+        grid2.Add( (5,5), 0, wx.ALIGN_LEFT|wx.ALL, 5)
         grid2.AddGrowableCol(1)
 
-        self.outer_box = wxBoxSizer( wxVERTICAL )
-        self.outer_box.Add(header, 0, wxALIGN_LEFT|wxTOP|wxLEFT, 20)
-        self.outer_box.Add( grid1, 0, wxALIGN_CENTRE|wxLEFT|wxBOTTOM|wxRIGHT, 20 )
-        self.outer_box.Add( grid2, 0, wxALIGN_LEFT|wxALL, 20 )
+        self.outer_box = wx.BoxSizer( wx.VERTICAL )
+        self.outer_box.Add(header, 0, wx.ALIGN_LEFT|wx.TOP|wx.LEFT, 20)
+        self.outer_box.Add( grid1, 0, wx.ALIGN_CENTRE|wx.LEFT|wx.BOTTOM|wx.RIGHT, 20 )
+        self.outer_box.Add( grid2, 0, wx.ALIGN_LEFT|wx.ALL, 20 )
         self.grid2 = grid2
 
         panel.SetAutoLayout( True )
@@ -146,34 +148,35 @@ value entry ctrl:""")
         panel.Move( (50,10) )
         self.panel = panel
 
-        EVT_MASKEDNUM( self, self.integerwidth.GetId(), self.OnSetIntWidth )
-        EVT_MASKEDNUM( self, self.fractionwidth.GetId(), self.OnSetFractionWidth )
-        EVT_TEXT( self, self.groupchar.GetId(), self.OnSetGroupChar )
-        EVT_TEXT( self, self.decimalchar.GetId(), self.OnSetDecimalChar )
+        mnum.EVT_MASKEDNUM( self, self.integerwidth.GetId(), self.OnSetIntWidth )
+        mnum.EVT_MASKEDNUM( self, self.fractionwidth.GetId(), self.OnSetFractionWidth )
+        self.Bind(wx.EVT_TEXT, self.OnSetGroupChar, self.groupchar )
+        self.Bind(wx.EVT_TEXT, self.OnSetDecimalChar, self.decimalchar )
 
-        EVT_CHECKBOX( self, self.set_min.GetId(), self.OnSetMin )
-        EVT_CHECKBOX( self, self.set_max.GetId(), self.OnSetMax )
-        EVT_MASKEDNUM( self, self.min.GetId(), self.SetTargetMinMax )
-        EVT_MASKEDNUM( self, self.max.GetId(), self.SetTargetMinMax )
+        self.Bind(wx.EVT_CHECKBOX, self.OnSetMin, self.set_min )
+        self.Bind(wx.EVT_CHECKBOX, self.OnSetMax, self.set_max )
+        mnum.EVT_MASKEDNUM( self, self.min.GetId(), self.SetTargetMinMax )
+        mnum.EVT_MASKEDNUM( self, self.max.GetId(), self.SetTargetMinMax )
 
-        EVT_CHECKBOX( self, self.limit_target.GetId(), self.SetTargetMinMax )
-        EVT_CHECKBOX( self, self.allow_none.GetId(), self.OnSetAllowNone )
-        EVT_CHECKBOX( self, self.group_digits.GetId(), self.OnSetGroupDigits )
-        EVT_CHECKBOX( self, self.allow_negative.GetId(), self.OnSetAllowNegative )
-        EVT_CHECKBOX( self, self.use_parens.GetId(), self.OnSetUseParens )
-        EVT_CHECKBOX( self, self.select_on_entry.GetId(), self.OnSetSelectOnEntry )
+        self.Bind(wx.EVT_CHECKBOX, self.SetTargetMinMax, self.limit_target )
+        self.Bind(wx.EVT_CHECKBOX, self.OnSetAllowNone, self.allow_none )
+        self.Bind(wx.EVT_CHECKBOX, self.OnSetGroupDigits, self.group_digits )
+        self.Bind(wx.EVT_CHECKBOX, self.OnSetAllowNegative, self.allow_negative )
+        self.Bind(wx.EVT_CHECKBOX, self.OnSetUseParens, self.use_parens )
+        self.Bind(wx.EVT_CHECKBOX, self.OnSetSelectOnEntry, self.select_on_entry )
 
-        EVT_MASKEDNUM( self, self.target_ctl.GetId(), self.OnTargetChange )
-        EVT_COMBOBOX( self, self.numselect.GetId(), self.OnNumberSelect )
+        mnum.EVT_MASKEDNUM( self, self.target_ctl.GetId(), self.OnTargetChange )
+        self.Bind(wx.EVT_COMBOBOX, self.OnNumberSelect, self.numselect )
 
 
     def OnSetIntWidth(self, event ):
         width = self.integerwidth.GetValue()
+
         if width < 1:
             self.log.write("integer width must be positive\n")
-            self.integerwidth.SetForegroundColour(wxRED)
+            self.integerwidth.SetForegroundColour(wx.RED)
         else:
-            self.integerwidth.SetForegroundColour(wxBLACK)
+            self.integerwidth.SetForegroundColour(wx.BLACK)
             self.log.write("setting integer width to %d\n" % width)
             self.target_ctl.SetParameters( integerWidth = width)
             # Now resize and fit the dialog as appropriate:
@@ -196,9 +199,9 @@ value entry ctrl:""")
         char = self.groupchar.GetValue()
         if self.target_ctl.GetDecimalChar() == char:
             self.log.write("group and decimal chars must be different\n")
-            self.groupchar.SetForegroundColour(wxRED)
+            self.groupchar.SetForegroundColour(wx.RED)
         else:
-            self.groupchar.SetForegroundColour(wxBLACK)
+            self.groupchar.SetForegroundColour(wx.BLACK)
             self.log.write("setting group char to %s\n" % char)
             self.target_ctl.SetGroupChar( char )
 
@@ -206,9 +209,9 @@ value entry ctrl:""")
         char = self.decimalchar.GetValue()
         if self.target_ctl.GetGroupChar() == char:
             self.log.write("group and decimal chars must be different\n")
-            self.decimalchar.SetForegroundColour(wxRED)
+            self.decimalchar.SetForegroundColour(wx.RED)
         else:
-            self.decimalchar.SetForegroundColour(wxBLACK)
+            self.decimalchar.SetForegroundColour(wx.BLACK)
             self.log.write("setting decimal char to %s\n" % char)
             self.target_ctl.SetDecimalChar( char )
 
@@ -238,9 +241,9 @@ value entry ctrl:""")
                 self.log.write( "min (%d) won't fit in control -- bound not set\n" % min )
             else:
                 self.log.write( "min (%d) > current max (%d) -- bound not set\n" % ( min, self.target_ctl.GetMax() ) )
-            self.min.SetParameters( signedForegroundColour=wxRED, foregroundColour=wxRED )
+            self.min.SetParameters( signedForegroundColour=wx.RED, foregroundColour=wx.RED )
         else:
-            self.min.SetParameters( signedForegroundColour=wxBLACK, foregroundColour=wxBLACK )
+            self.min.SetParameters( signedForegroundColour=wx.BLACK, foregroundColour=wx.BLACK )
         self.min.Refresh()
 
         if max != cur_max and not self.target_ctl.SetMax( max ):
@@ -248,9 +251,9 @@ value entry ctrl:""")
                 self.log.write( "max (%d) won't fit in control -- bound not set\n" % max )
             else:
                 self.log.write( "max (%d) < current min (%d) -- bound not set\n" % ( max, self.target_ctl.GetMin() ) )
-            self.max.SetParameters( signedForegroundColour=wxRED, foregroundColour=wxRED )
+            self.max.SetParameters( signedForegroundColour=wx.RED, foregroundColour=wx.RED )
         else:
-            self.max.SetParameters( signedForegroundColour=wxBLACK, foregroundColour=wxBLACK )
+            self.max.SetParameters( signedForegroundColour=wx.BLACK, foregroundColour=wx.BLACK )
         self.max.Refresh()
 
         if min != cur_min or max != cur_max:
@@ -327,7 +330,7 @@ def runTest( frame, nb, log ):
     return win
 
 #----------------------------------------------------------------------
-overview = overviewdoc
+overview = mnum.__doc__
 
 if __name__ == '__main__':
     import sys,os

@@ -1,85 +1,116 @@
+# 11/5/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# o Got rid of all the hardcoded window IDs.
+# o Fixed a bug in class TestPanel() (empty sizer Add())
+#
+# 11/25/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Fixed a bug in the BMP file dialog; was using GetFilename() 
+#   instead of GetPath() to get the file to load.
+#
 
-from wxPython.wx import *
+import  wx
 
 #----------------------------------------------------------------------
 
-class ClipTextPanel(wxPanel):
+ID_CopyBtn      = wx.NewId()
+ID_PasteBtn     = wx.NewId()
+ID_BitmapBtn    = wx.NewId()
+
+#----------------------------------------------------------------------
+
+class ClipTextPanel(wx.Panel):
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
         self.log = log
 
-        #self.SetFont(wxFont(10, wxSWISS, wxNORMAL, wxBOLD, False))
+        #self.SetFont(wx.Font(10, wx.SWISS, wx.NORMAL, wx.BOLD, False))
 
-        sizer = wxBoxSizer(wxVERTICAL)
-        sizer.Add(wxStaticText(self, -1,
-                               "Copy/Paste text to/from\n"
-                               "this window and other apps"), 0, wxEXPAND|wxALL, 2)
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(
+            wx.StaticText(
+                self, -1, "Copy/Paste text to/from\n"
+                "this window and other apps"
+                ), 
+            0, wx.EXPAND|wx.ALL, 2
+            )
 
-        self.text = wxTextCtrl(self, -1, "", style=wxTE_MULTILINE|wxHSCROLL)
-        sizer.Add(self.text, 1, wxEXPAND)
+        self.text = wx.TextCtrl(self, -1, "", style=wx.TE_MULTILINE|wx.HSCROLL)
+        sizer.Add(self.text, 1, wx.EXPAND)
 
-        hsz = wxBoxSizer(wxHORIZONTAL)
-        hsz.Add(wxButton(self, 6050, " Copy "), 1, wxEXPAND|wxALL, 2)
-        hsz.Add(wxButton(self, 6051, " Paste "), 1, wxEXPAND|wxALL, 2)
-        sizer.Add(hsz, 0, wxEXPAND)
-        sizer.Add(wxButton(self, 6052, " Copy Bitmap "), 0, wxEXPAND|wxALL, 2)
+        hsz = wx.BoxSizer(wx.HORIZONTAL)
+        hsz.Add(wx.Button(self, ID_CopyBtn, " Copy "), 1, wx.EXPAND|wx.ALL, 2)
+        hsz.Add(wx.Button(self, ID_PasteBtn, " Paste "), 1, wx.EXPAND|wx.ALL, 2)
+        sizer.Add(hsz, 0, wx.EXPAND)
+        sizer.Add(
+            wx.Button(self, ID_BitmapBtn, " Copy Bitmap "), 
+            0, wx.EXPAND|wx.ALL, 2
+            )
 
-        EVT_BUTTON(self, 6050, self.OnCopy)
-        EVT_BUTTON(self, 6051, self.OnPaste)
-        EVT_BUTTON(self, 6052, self.OnCopyBitmap)
+        self.Bind(wx.EVT_BUTTON, self.OnCopy, id=ID_CopyBtn)
+        self.Bind(wx.EVT_BUTTON, self.OnPaste, id=ID_PasteBtn)
+        self.Bind(wx.EVT_BUTTON, self.OnCopyBitmap, id=ID_BitmapBtn)
 
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
 
 
     def OnCopy(self, evt):
-        self.do = wxTextDataObject()
+        self.do = wx.TextDataObject()
         self.do.SetText(self.text.GetValue())
-        wxTheClipboard.Open()
-        wxTheClipboard.SetData(self.do)
-        wxTheClipboard.Close()
+        wx.TheClipboard.Open()
+        wx.TheClipboard.SetData(self.do)
+        wx.TheClipboard.Close()
 
 
     def OnPaste(self, evt):
-        do = wxTextDataObject()
-        wxTheClipboard.Open()
-        success = wxTheClipboard.GetData(do)
-        wxTheClipboard.Close()
+        do = wx.TextDataObject()
+        wx.TheClipboard.Open()
+        success = wx.TheClipboard.GetData(do)
+        wx.TheClipboard.Close()
+
         if success:
             self.text.SetValue(do.GetText())
         else:
-            wxMessageBox("There is no data in the clipboard in the required format",
-                         "Error")
+            wx.MessageBox(
+                "There is no data in the clipboard in the required format",
+                "Error"
+                )
 
     def OnCopyBitmap(self, evt):
-        dlg = wxFileDialog(self, "Choose a bitmap to copy", wildcard="*.bmp")
-        if dlg.ShowModal() == wxID_OK:
-            bmp = wxBitmap(dlg.GetFilename(), wxBITMAP_TYPE_BMP)
-            bmpdo = wxBitmapDataObject(bmp)
-            wxTheClipboard.Open()
-            wxTheClipboard.SetData(bmpdo)
-            wxTheClipboard.Close()
+        dlg = wx.FileDialog(self, "Choose a bitmap to copy", wildcard="*.bmp")
 
-            wxMessageBox("The bitmap is now in the Clipboard.  Switch to a graphics\n"
-                         "editor and try pasting it in...")
+        if dlg.ShowModal() == wx.ID_OK:
+            bmp = wx.Bitmap(dlg.GetPath(), wx.BITMAP_TYPE_BMP)
+            bmpdo = wx.BitmapDataObject(bmp)
+            wx.TheClipboard.Open()
+            wx.TheClipboard.SetData(bmpdo)
+            wx.TheClipboard.Close()
+
+            wx.MessageBox(
+                "The bitmap is now in the Clipboard.  Switch to a graphics\n"
+                "editor and try pasting it in..."
+                )
+
         dlg.Destroy()
 
 #----------------------------------------------------------------------
 
-class OtherDropTarget(wxPyDropTarget):
+class OtherDropTarget(wx.PyDropTarget):
     def __init__(self, window, log):
-        wxPyDropTarget.__init__(self)
+        wx.PyDropTarget.__init__(self)
         self.log = log
-        self.do = wxFileDataObject()
+        self.do = wx.FileDataObject()
         self.SetDataObject(self.do)
 
     def OnEnter(self, x, y, d):
         self.log.WriteText("OnEnter: %d, %d, %d\n" % (x, y, d))
-        return wxDragCopy
+        return wx.DragCopy
 
     #def OnDragOver(self, x, y, d):
     #    self.log.WriteText("OnDragOver: %d, %d, %d\n" % (x, y, d))
-    #    return wxDragCopy
+    #    return wx.DragCopy
 
     def OnLeave(self):
         self.log.WriteText("OnLeave\n")
@@ -95,11 +126,9 @@ class OtherDropTarget(wxPyDropTarget):
         return d
 
 
-
-
-class MyFileDropTarget(wxFileDropTarget):
+class MyFileDropTarget(wx.FileDropTarget):
     def __init__(self, window, log):
-        wxFileDropTarget.__init__(self)
+        wx.FileDropTarget.__init__(self)
         self.window = window
         self.log = log
 
@@ -107,13 +136,14 @@ class MyFileDropTarget(wxFileDropTarget):
         self.window.SetInsertionPointEnd()
         self.window.WriteText("\n%d file(s) dropped at %d,%d:\n" %
                               (len(filenames), x, y))
+
         for file in filenames:
             self.window.WriteText(file + '\n')
 
 
-class MyTextDropTarget(wxTextDropTarget):
+class MyTextDropTarget(wx.TextDropTarget):
     def __init__(self, window, log):
-        wxTextDropTarget.__init__(self)
+        wx.TextDropTarget.__init__(self)
         self.window = window
         self.log = log
 
@@ -121,32 +151,43 @@ class MyTextDropTarget(wxTextDropTarget):
         self.window.WriteText("(%d, %d)\n%s\n" % (x, y, text))
 
     def OnDragOver(self, x, y, d):
-        return wxDragCopy
+        return wx.DragCopy
 
 
-class FileDropPanel(wxPanel):
+class FileDropPanel(wx.Panel):
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
 
-        #self.SetFont(wxFont(10, wxSWISS, wxNORMAL, wxBOLD, False))
+        #self.SetFont(wx.Font(10, wx.SWISS, wx.NORMAL, wx.BOLD, False))
 
-        sizer = wxBoxSizer(wxVERTICAL)
-        sizer.Add(wxStaticText(self, -1, " \nDrag some files here:"),
-                  0, wxEXPAND|wxALL, 2)
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(
+            wx.StaticText(self, -1, " \nDrag some files here:"),
+            0, wx.EXPAND|wx.ALL, 2
+            )
 
-        self.text = wxTextCtrl(self, -1, "",
-                               style = wxTE_MULTILINE|wxHSCROLL|wxTE_READONLY)
+        self.text = wx.TextCtrl(
+                        self, -1, "",
+                        style = wx.TE_MULTILINE|wx.HSCROLL|wx.TE_READONLY
+                        )
+
         dt = MyFileDropTarget(self, log)
         self.text.SetDropTarget(dt)
-        sizer.Add(self.text, 1, wxEXPAND)
+        sizer.Add(self.text, 1, wx.EXPAND)
 
-        sizer.Add(wxStaticText(self, -1, " \nDrag some text here:"),
-                  0, wxEXPAND|wxALL, 2)
-        self.text2 = wxTextCtrl(self, -1, "",
-                               style = wxTE_MULTILINE|wxHSCROLL|wxTE_READONLY)
+        sizer.Add(
+            wx.StaticText(self, -1, " \nDrag some text here:"),
+            0, wx.EXPAND|wx.ALL, 2
+            )
+
+        self.text2 = wx.TextCtrl(
+                        self, -1, "",
+                        style = wx.TE_MULTILINE|wx.HSCROLL|wx.TE_READONLY
+                        )
+
         dt = MyTextDropTarget(self.text2, log)
         self.text2.SetDropTarget(dt)
-        sizer.Add(self.text2, 1, wxEXPAND)
+        sizer.Add(self.text2, 1, wx.EXPAND)
 
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
@@ -162,28 +203,29 @@ class FileDropPanel(wxPanel):
 #----------------------------------------------------------------------
 #----------------------------------------------------------------------
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
 
         self.SetAutoLayout(True)
-        outsideSizer = wxBoxSizer(wxVERTICAL)
+        outsideSizer = wx.BoxSizer(wx.VERTICAL)
 
         msg = "Clipboard / Drag-And-Drop"
-        text = wxStaticText(self, -1, "", style=wxALIGN_CENTRE)
-        text.SetFont(wxFont(24, wxSWISS, wxNORMAL, wxBOLD, False))
+        text = wx.StaticText(self, -1, "", style=wx.ALIGN_CENTRE)
+        text.SetFont(wx.Font(24, wx.SWISS, wx.NORMAL, wx.BOLD, False))
         text.SetLabel(msg)
+
         w,h = text.GetTextExtent(msg)
-        text.SetSize(wxSize(w,h+1))
-        text.SetForegroundColour(wxBLUE)
-        outsideSizer.Add(text, 0, wxEXPAND|wxALL, 5)
-        outsideSizer.Add(wxStaticLine(self, -1), 0, wxEXPAND)
+        text.SetSize(wx.Size(w,h+1))
+        text.SetForegroundColour(wx.BLUE)
+        outsideSizer.Add(text, 0, wx.EXPAND|wx.ALL, 5)
+        outsideSizer.Add(wx.StaticLine(self, -1), 0, wx.EXPAND)
 
-        inSizer = wxBoxSizer(wxHORIZONTAL)
-        inSizer.Add(ClipTextPanel(self, log), 1, wxEXPAND)
-        inSizer.Add(FileDropPanel(self, log), 1, wxEXPAND)
+        inSizer = wx.BoxSizer(wx.HORIZONTAL)
+        inSizer.Add(ClipTextPanel(self, log), 1, wx.EXPAND)
+        inSizer.Add(FileDropPanel(self, log), 1, wx.EXPAND)
 
-        outsideSizer.Add(inSizer, 1, wxEXPAND)
+        outsideSizer.Add(inSizer, 1, wx.EXPAND)
         self.SetSizer(outsideSizer)
 
 
@@ -196,17 +238,9 @@ def runTest(frame, nb, log):
 #----------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-overview = """<html><body>\
+overview = """\
+<html>
+<body>
 This demo shows some examples of data transfer through clipboard or
 drag and drop. In wxWindows, these two ways to transfer data (either
 between different applications or inside one and the same) are very
@@ -230,10 +264,9 @@ and target, the data provider and the data receiver. These which may
 be in the same application and even the same window when, for example,
 you drag some text from one position to another in a word
 processor. Let us describe what each of them should do.
-</body></html>
+</body>
+</html>
 """
-
-
 
 
 if __name__ == '__main__':

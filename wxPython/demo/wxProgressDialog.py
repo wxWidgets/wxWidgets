@@ -1,21 +1,33 @@
+# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
+# 11/30/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wx.ProgressDialog appears to be broken. No abort button
+#   and it's not possible to dismiss it otherwise.
+# 
 
-from wxPython.wx import *
+import  wx
 
 #---------------------------------------------------------------------------
 
 def runTest(frame, nb, log):
     max = 20
-    dlg = wxProgressDialog("Progress dialog example",
+    
+    dlg = wx.ProgressDialog("Progress dialog example",
                            "An informative message",
-                           max,
-                           frame,
-                           wxPD_CAN_ABORT | wxPD_APP_MODAL)
+                           maximum = max,
+                           parent=frame,
+                           style = wx.PD_CAN_ABORT | wx.PD_APP_MODAL)
 
     keepGoing = True
     count = 0
+
     while keepGoing and count < max:
         count = count + 1
-        wxSleep(1)
+        #print count
+        wx.Sleep(1)
 
         if count == max / 2:
             keepGoing = dlg.Update(count, "Half-time!")
@@ -28,12 +40,20 @@ def runTest(frame, nb, log):
 #---------------------------------------------------------------------------
 
 
-
-
 overview = """\
+This class represents a dialog that shows a short message and a progress bar. 
+Optionally, it can display an ABORT button
+
+This dialog indicates the progress of some event that takes a while to accomplish, 
+usually, such as file copy progress, download progress, and so on. The display
+is <b>completely</b> under control of the program; you must update the dialog from
+within the program creating it. 
+
+When the dialog closes, you must check to see if the user aborted the process or
+not, and act accordingly -- that is, if the PD_CAN_ABORT style flag is set. 
+If not then you may progress blissfully onward.
+
 """
-
-
 
 if __name__ == '__main__':
     import sys,os

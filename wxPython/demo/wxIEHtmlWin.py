@@ -1,83 +1,96 @@
+# 11/18/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
+# 11/28/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o iewin.py is missing
+# 
 
-from wxPython.wx import *
+import  wx
 
-if wxPlatform == '__WXMSW__':
-    from wxPython.iewin import *
+if wx.Platform == '__WXMSW__':
+    import  wx.iewin    as  iewin
 
 #----------------------------------------------------------------------
 
-class TestPanel(wxWindow):
+class TestPanel(wx.Window):
     def __init__(self, parent, log, frame=None):
-        wxWindow.__init__(self, parent, -1,
-                          style=wxTAB_TRAVERSAL|wxCLIP_CHILDREN|wxNO_FULL_REPAINT_ON_RESIZE)
+        wx.Window.__init__(
+            self, parent, -1,
+            style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN|wx.NO_FULL_REPAINT_ON_RESIZE
+            )
+            
         self.log = log
-        self.current = "http://wxWindows.org/"
+        self.current = "http://wxPython.org/"
         self.frame = frame
+
         if frame:
             self.titleBase = frame.GetTitle()
 
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        sizer = wxBoxSizer(wxVERTICAL)
-        btnSizer = wxBoxSizer(wxHORIZONTAL)
-
-        self.ie = wxIEHtmlWin(self, -1, style = wxNO_FULL_REPAINT_ON_RESIZE)
-
-
-        btn = wxButton(self, wxNewId(), "Open", style=wxBU_EXACTFIT)
-        EVT_BUTTON(self, btn.GetId(), self.OnOpenButton)
-        btnSizer.Add(btn, 0, wxEXPAND|wxALL, 2)
-
-        btn = wxButton(self, wxNewId(), "Home", style=wxBU_EXACTFIT)
-        EVT_BUTTON(self, btn.GetId(), self.OnHomeButton)
-        btnSizer.Add(btn, 0, wxEXPAND|wxALL, 2)
-
-        btn = wxButton(self, wxNewId(), "<--", style=wxBU_EXACTFIT)
-        EVT_BUTTON(self, btn.GetId(), self.OnPrevPageButton)
-        btnSizer.Add(btn, 0, wxEXPAND|wxALL, 2)
-
-        btn = wxButton(self, wxNewId(), "-->", style=wxBU_EXACTFIT)
-        EVT_BUTTON(self, btn.GetId(), self.OnNextPageButton)
-        btnSizer.Add(btn, 0, wxEXPAND|wxALL, 2)
-
-        btn = wxButton(self, wxNewId(), "Stop", style=wxBU_EXACTFIT)
-        EVT_BUTTON(self, btn.GetId(), self.OnStopButton)
-        btnSizer.Add(btn, 0, wxEXPAND|wxALL, 2)
-
-        btn = wxButton(self, wxNewId(), "Search", style=wxBU_EXACTFIT)
-        EVT_BUTTON(self, btn.GetId(), self.OnSearchPageButton)
-        btnSizer.Add(btn, 0, wxEXPAND|wxALL, 2)
-
-        btn = wxButton(self, wxNewId(), "Refresh", style=wxBU_EXACTFIT)
-        EVT_BUTTON(self, btn.GetId(), self.OnRefreshPageButton)
-        btnSizer.Add(btn, 0, wxEXPAND|wxALL, 2)
-
-        txt = wxStaticText(self, -1, "Location:")
-        btnSizer.Add(txt, 0, wxCENTER|wxALL, 2)
-
-        self.location = wxComboBox(self, wxNewId(), "", style=wxCB_DROPDOWN|wxPROCESS_ENTER)
-        EVT_COMBOBOX(self, self.location.GetId(), self.OnLocationSelect)
-        EVT_KEY_UP(self.location, self.OnLocationKey)
-        EVT_CHAR(self.location, self.IgnoreReturn)
-        btnSizer.Add(self.location, 1, wxEXPAND|wxALL, 2)
+        self.ie = iewin.IEHtmlWin(self, -1, style = wx.NO_FULL_REPAINT_ON_RESIZE)
 
 
-        sizer.Add(btnSizer, 0, wxEXPAND)
-        sizer.Add(self.ie, 1, wxEXPAND)
+        btn = wx.Button(self, wx.NewId(), "Open", style=wx.BU_EXACTFIT)
+        wx.EVT_BUTTON(self, btn.GetId(), self.OnOpenButton)
+        btnSizer.Add(btn, 0, wx.EXPAND|wx.ALL, 2)
+
+        btn = wx.Button(self, wx.NewId(), "Home", style=wx.BU_EXACTFIT)
+        wx.EVT_BUTTON(self, btn.GetId(), self.OnHomeButton)
+        btnSizer.Add(btn, 0, wx.EXPAND|wx.ALL, 2)
+
+        btn = wx.Button(self, wx.NewId(), "<--", style=wx.BU_EXACTFIT)
+        wx.EVT_BUTTON(self, btn.GetId(), self.OnPrevPageButton)
+        btnSizer.Add(btn, 0, wx.EXPAND|wx.ALL, 2)
+
+        btn = wx.Button(self, wx.NewId(), "-->", style=wx.BU_EXACTFIT)
+        wx.EVT_BUTTON(self, btn.GetId(), self.OnNextPageButton)
+        btnSizer.Add(btn, 0, wx.EXPAND|wx.ALL, 2)
+
+        btn = wx.Button(self, wx.NewId(), "Stop", style=wx.BU_EXACTFIT)
+        wx.EVT_BUTTON(self, btn.GetId(), self.OnStopButton)
+        btnSizer.Add(btn, 0, wx.EXPAND|wx.ALL, 2)
+
+        btn = wx.Button(self, wx.NewId(), "Search", style=wx.BU_EXACTFIT)
+        wx.EVT_BUTTON(self, btn.GetId(), self.OnSearchPageButton)
+        btnSizer.Add(btn, 0, wx.EXPAND|wx.ALL, 2)
+
+        btn = wx.Button(self, wx.NewId(), "Refresh", style=wx.BU_EXACTFIT)
+        wx.EVT_BUTTON(self, btn.GetId(), self.OnRefreshPageButton)
+        btnSizer.Add(btn, 0, wx.EXPAND|wx.ALL, 2)
+
+        txt = wx.StaticText(self, -1, "Location:")
+        btnSizer.Add(txt, 0, wx.CENTER|wx.ALL, 2)
+
+        self.location = wx.ComboBox(
+                            self, wx.NewId(), "", style=wx.CB_DROPDOWN|wx.PROCESS_ENTER
+                            )
+        
+        wx.EVT_COMBOBOX(self, self.location.GetId(), self.OnLocationSelect)
+        wx.EVT_KEY_UP(self.location, self.OnLocationKey)
+        wx.EVT_CHAR(self.location, self.IgnoreReturn)
+        btnSizer.Add(self.location, 1, wx.EXPAND|wx.ALL, 2)
+
+        sizer.Add(btnSizer, 0, wx.EXPAND)
+        sizer.Add(self.ie, 1, wx.EXPAND)
 
         self.ie.Navigate(self.current)
         self.location.Append(self.current)
 
         self.SetSizer(sizer)
         self.SetAutoLayout(True)
-        EVT_SIZE(self, self.OnSize)
+        wx.EVT_SIZE(self, self.OnSize)
 
         # Hook up the event handlers for the IE window
-        EVT_MSHTML_BEFORENAVIGATE2(self, -1, self.OnBeforeNavigate2)
-        EVT_MSHTML_NEWWINDOW2(self, -1, self.OnNewWindow2)
-        EVT_MSHTML_DOCUMENTCOMPLETE(self, -1, self.OnDocumentComplete)
+        iewin.EVT_MSHTML_BEFORENAVIGATE2(self, -1, self.OnBeforeNavigate2)
+        iewin.EVT_MSHTML_NEWWINDOW2(self, -1, self.OnNewWindow2)
+        iewin.EVT_MSHTML_DOCUMENTCOMPLETE(self, -1, self.OnDocumentComplete)
         #EVT_MSHTML_PROGRESSCHANGE(self, -1, self.OnProgressChange)
-        EVT_MSHTML_STATUSTEXTCHANGE(self, -1, self.OnStatusTextChange)
-        EVT_MSHTML_TITLECHANGE(self, -1, self.OnTitleChange)
+        iewin.EVT_MSHTML_STATUSTEXTCHANGE(self, -1, self.OnStatusTextChange)
+        iewin.EVT_MSHTML_TITLECHANGE(self, -1, self.OnTitleChange)
 
 
     def ShutdownDemo(self):
@@ -96,7 +109,7 @@ class TestPanel(wxWindow):
         self.ie.Navigate(url)
 
     def OnLocationKey(self, evt):
-        if evt.KeyCode() == WXK_RETURN:
+        if evt.KeyCode() == wx.WXK_RETURN:
             URL = self.location.GetValue()
             self.location.Append(URL)
             self.ie.Navigate(URL)
@@ -105,17 +118,19 @@ class TestPanel(wxWindow):
 
 
     def IgnoreReturn(self, evt):
-        if evt.GetKeyCode() != WXK_RETURN:
+        if evt.GetKeyCode() != wx.WXK_RETURN:
             evt.Skip()
 
     def OnOpenButton(self, event):
-        dlg = wxTextEntryDialog(self, "Open Location",
+        dlg = wx.TextEntryDialog(self, "Open Location",
                                 "Enter a full URL or local path",
-                                self.current, wxOK|wxCANCEL)
+                                self.current, wx.OK|wx.CANCEL)
         dlg.CentreOnParent()
-        if dlg.ShowModal() == wxID_OK:
+
+        if dlg.ShowModal() == wx.ID_OK:
             self.current = dlg.GetValue()
             self.ie.Navigate(self.current)
+
         dlg.Destroy()
 
     def OnHomeButton(self, event):
@@ -134,8 +149,7 @@ class TestPanel(wxWindow):
         self.ie.GoSearch()
 
     def OnRefreshPageButton(self, evt):
-        self.ie.Refresh(wxIEHTML_REFRESH_COMPLETELY)
-
+        self.ie.Refresh(iewin.IEHTML_REFRESH_COMPLETELY)
 
 
     def logEvt(self, name, event):
@@ -169,12 +183,12 @@ class TestPanel(wxWindow):
 # for the demo framework...
 
 def runTest(frame, nb, log):
-    if wxPlatform == '__WXMSW__':
+    if wx.Platform == '__WXMSW__':
         win = TestPanel(nb, log, frame)
         return win
     else:
-        dlg = wxMessageDialog(frame, 'This demo only works on MSW.',
-                          'Sorry', wxOK | wxICON_INFORMATION)
+        dlg = wx.MessageDialog(frame, 'This demo only works on MSW.',
+                          'Sorry', wx.OK | wx.ICON_INFORMATION)
         dlg.ShowModal()
         dlg.Destroy()
 

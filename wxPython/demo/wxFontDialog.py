@@ -1,69 +1,73 @@
+# 11/18/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-from wxPython.wx import *
+import  wx
 
 #---------------------------------------------------------------------------
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
         self.log = log
 
-        btn = wxButton(self, -1, "Select Font")
-        EVT_BUTTON(self, btn.GetId(), self.OnSelectFont)
+        btn = wx.Button(self, -1, "Select Font")
+        self.Bind(wx.EVT_BUTTON, self.OnSelectFont, btn)
 
-        self.sampleText = wxTextCtrl(self, -1, "Sample Text")
+        self.sampleText = wx.TextCtrl(self, -1, "Sample Text")
         #from wxPython.lib.stattext import wxGenStaticText
         #self.sampleText = wxGenStaticText(self, -1, "Sample Text")
 
         self.curFont = self.sampleText.GetFont()
-        self.curClr = wxBLACK
+        self.curClr = wx.BLACK
 
-        fgs = wxFlexGridSizer(cols=2, vgap=5, hgap=5)
+        fgs = wx.FlexGridSizer(cols=2, vgap=5, hgap=5)
         fgs.AddGrowableCol(1)
         fgs.AddGrowableRow(0)
 
         fgs.Add(btn)
-        fgs.Add(self.sampleText, 0, wxADJUST_MINSIZE|wxGROW)
+        fgs.Add(self.sampleText, 0, wx.ADJUST_MINSIZE|wx.GROW)
 
         fgs.Add((15,15)); fgs.Add((15,15))   # an empty row
 
-        fgs.Add(wxStaticText(self, -1, "PointSize:"))
-        self.ps = wxStaticText(self, -1, "")
+        fgs.Add(wx.StaticText(self, -1, "PointSize:"))
+        self.ps = wx.StaticText(self, -1, "")
         font = self.ps.GetFont()
-        font.SetWeight(wxBOLD)
+        font.SetWeight(wx.BOLD)
         self.ps.SetFont(font)
-        fgs.Add(self.ps, 0, wxADJUST_MINSIZE)
+        fgs.Add(self.ps, 0, wx.ADJUST_MINSIZE)
 
-        fgs.Add(wxStaticText(self, -1, "Family:"))
-        self.family = wxStaticText(self, -1, "")
+        fgs.Add(wx.StaticText(self, -1, "Family:"))
+        self.family = wx.StaticText(self, -1, "")
         self.family.SetFont(font)
-        fgs.Add(self.family, 0, wxADJUST_MINSIZE)
+        fgs.Add(self.family, 0, wx.ADJUST_MINSIZE)
 
-        fgs.Add(wxStaticText(self, -1, "Style:"))
-        self.style = wxStaticText(self, -1, "")
+        fgs.Add(wx.StaticText(self, -1, "Style:"))
+        self.style = wx.StaticText(self, -1, "")
         self.style.SetFont(font)
-        fgs.Add(self.style, 0, wxADJUST_MINSIZE)
+        fgs.Add(self.style, 0, wx.ADJUST_MINSIZE)
 
-        fgs.Add(wxStaticText(self, -1, "Weight:"))
-        self.weight = wxStaticText(self, -1, "")
+        fgs.Add(wx.StaticText(self, -1, "Weight:"))
+        self.weight = wx.StaticText(self, -1, "")
         self.weight.SetFont(font)
-        fgs.Add(self.weight, 0, wxADJUST_MINSIZE)
+        fgs.Add(self.weight, 0, wx.ADJUST_MINSIZE)
 
-        fgs.Add(wxStaticText(self, -1, "Face:"))
-        self.face = wxStaticText(self, -1, "")
+        fgs.Add(wx.StaticText(self, -1, "Face:"))
+        self.face = wx.StaticText(self, -1, "")
         self.face.SetFont(font)
-        fgs.Add(self.face, 0, wxADJUST_MINSIZE)
+        fgs.Add(self.face, 0, wx.ADJUST_MINSIZE)
 
         fgs.Add((15,15)); fgs.Add((15,15))   # an empty row
 
-        fgs.Add(wxStaticText(self, -1, "wxNativeFontInfo:"))
-        self.nfi = wxStaticText(self, -1, "")
+        fgs.Add(wx.StaticText(self, -1, "wx.NativeFontInfo:"))
+        self.nfi = wx.StaticText(self, -1, "")
         self.nfi.SetFont(font)
-        fgs.Add(self.nfi, 0, wxADJUST_MINSIZE)
+        fgs.Add(self.nfi, 0, wx.ADJUST_MINSIZE)
 
         # give it some border space
-        sizer = wxBoxSizer(wxVERTICAL)
-        sizer.Add(fgs, 0, wxGROW|wxADJUST_MINSIZE|wxALL, 25)
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(fgs, 0, wx.GROW|wx.ADJUST_MINSIZE|wx.ALL, 25)
 
         self.SetSizer(sizer)
         self.UpdateUI()
@@ -81,26 +85,29 @@ class TestPanel(wxPanel):
 
 
     def OnSelectFont(self, evt):
-        data = wxFontData()
+        data = wx.FontData()
         data.EnableEffects(True)
         data.SetColour(self.curClr)         # set colour
         data.SetInitialFont(self.curFont)
 
-        dlg = wxFontDialog(self, data)
-        if dlg.ShowModal() == wxID_OK:
+        dlg = wx.FontDialog(self, data)
+        
+        if dlg.ShowModal() == wx.ID_OK:
             data = dlg.GetFontData()
             font = data.GetChosenFont()
             colour = data.GetColour()
+
             self.log.WriteText('You selected: "%s", %d points, color %s\n' %
                                (font.GetFaceName(), font.GetPointSize(),
                                 colour.Get()))
+
             self.curFont = font
             self.curClr = colour
             self.UpdateUI()
+
+        # Don't destroy the dialog until you get everything you need from the
+        # dialog!
         dlg.Destroy()
-
-
-
 
 
 #---------------------------------------------------------------------------
@@ -109,18 +116,26 @@ def runTest(frame, nb, log):
     win = TestPanel(nb, log)
     return win
 
-
 #---------------------------------------------------------------------------
 
 
-
-
 overview = """\
-This class allows you to use the system font chooser dialog.
+This class allows you to use the system font selection dialog 
+from within your program. Generally speaking, this allows you
+to select a font by its name, font size, and weight, and 
+on some systems such things as strikethrough and underline.
+
+As with other dialogs used in wxPython, it is important to
+use the class' methods to extract the information you need
+about the font <b>before</b> you destroy the dialog. Failure
+to observe this almost always leads to a program failure of 
+some sort, often ugly.
+
+This demo serves two purposes; it shows how to use the dialog
+to GET font information from the user, but also shows how
+to APPLY that information once you get it.
 
 """
-
-
 
 if __name__ == '__main__':
     import sys,os

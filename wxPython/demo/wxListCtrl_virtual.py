@@ -1,18 +1,29 @@
+# 11/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
+# 11/29/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wx.ListItem.GetText() returns a wxString pointer, not the text.
+# 
 
-from wxPython.wx import *
-import images
+import  wx
+import  images
 
 #----------------------------------------------------------------------
 
-class TestVirtualList(wxListCtrl):
+class TestVirtualList(wx.ListCtrl):
     def __init__(self, parent, log):
-        wxListCtrl.__init__(self, parent, -1,
-                            style=wxLC_REPORT|wxLC_VIRTUAL|wxLC_HRULES|wxLC_VRULES)
+        wx.ListCtrl.__init__(
+            self, parent, -1, 
+            style=wx.LC_REPORT|wx.LC_VIRTUAL|wx.LC_HRULES|wx.LC_VRULES
+            )
+
         self.log = log
 
-        self.il = wxImageList(16, 16)
+        self.il = wx.ImageList(16, 16)
         self.idx1 = self.il.Add(images.getSmilesBitmap())
-        self.SetImageList(self.il, wxIMAGE_LIST_SMALL)
+        self.SetImageList(self.il, wx.IMAGE_LIST_SMALL)
 
 
         self.InsertColumn(0, "First")
@@ -24,15 +35,15 @@ class TestVirtualList(wxListCtrl):
 
         self.SetItemCount(1000000)
 
-        self.attr1 = wxListItemAttr()
+        self.attr1 = wx.ListItemAttr()
         self.attr1.SetBackgroundColour("yellow")
 
-        self.attr2 = wxListItemAttr()
+        self.attr2 = wx.ListItemAttr()
         self.attr2.SetBackgroundColour("light blue")
 
-        EVT_LIST_ITEM_SELECTED(self, self.GetId(), self.OnItemSelected)
-        EVT_LIST_ITEM_ACTIVATED(self, self.GetId(), self.OnItemActivated)
-        EVT_LIST_ITEM_DESELECTED(self, self.GetId(), self.OnItemDeselected)
+        self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
+        self.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.OnItemActivated)
+        self.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.OnItemDeselected)
 
 
     def OnItemSelected(self, event):
@@ -89,10 +100,12 @@ def runTest(frame, nb, log):
 #----------------------------------------------------------------------
 
 
-
-
-
 overview = """\
+This example demonstrates the ListCtrl's Virtual List features. A Virtual list
+can contain any number of cells, but data is not loaded into the control itself.
+It is loaded on demand via virtual methods <code>OnGetItemText(), OnGetItemImage()</code>,
+and <code>OnGetItemAttr()</code>. This greatly reduces the amount of memory required
+without limiting what can be done with the list control itself.
 """
 
 

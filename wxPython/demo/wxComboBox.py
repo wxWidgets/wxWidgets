@@ -1,60 +1,80 @@
-from wxPython.wx import *
+# 11/15/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
+
+import  wx
 
 #---------------------------------------------------------------------------
 
-class TestComboBox(wxPanel):
+class TestComboBox(wx.Panel):
     def OnSetFocus(self, evt):
         print "OnSetFocus"
         evt.Skip()
+
     def OnKillFocus(self, evt):
         print "OnKillFocus"
         evt.Skip()
 
     def __init__(self, parent, log):
         self.log = log
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
 
         sampleList = ['zero', 'one', 'two', 'three', 'four', 'five',
-                      ##'this is a long item that needs a scrollbar...',
+                      #'this is a long item that needs a scrollbar...',
                       'six', 'seven', 'eight']
 
-        wxStaticText(self, -1, "This example uses the wxComboBox control.",
-                               wxPoint(8, 10))
+        wx.StaticText(self, -1, "This example uses the wxComboBox control.", (8, 10))
+        wx.StaticText(self, -1, "Select one:", (15, 50), (75, 18))
 
-        wxStaticText(self, -1, "Select one:", wxPoint(15, 50), wxSize(75, 18))
-        cb = wxComboBox(self, 500, "default value", wxPoint(90, 50), wxSize(95, -1),
-                        sampleList, wxCB_DROPDOWN)#|wxTE_PROCESS_ENTER)
+        # This combobox is created with a preset list of values.
+        cb = wx.ComboBox(
+            self, 500, "default value", (90, 50), 
+            (95, -1), sampleList, wx.CB_DROPDOWN #|wxTE_PROCESS_ENTER
+            )
+
         ##import win32api, win32con
         ##win32api.SendMessage(cb.GetHandle(),
         ##                     win32con.CB_SETHORIZONTALEXTENT,
 	##                     200, 0)
 
-        EVT_COMBOBOX(self, 500, self.EvtComboBox)
-        EVT_TEXT(self, 500, self.EvtText)
-        EVT_TEXT_ENTER(self, 500, self.EvtTextEnter)
-        EVT_SET_FOCUS(cb, self.OnSetFocus)
-        EVT_KILL_FOCUS(cb, self.OnKillFocus)
+        self.Bind(wx.EVT_COMBOBOX, self.EvtComboBox, cb)
+        self.Bind(wx.EVT_TEXT, self.EvtText, cb)
+        self.Bind(wx.EVT_TEXT_ENTER, self.EvtTextEnter, cb)
+        cb.Bind(wx.EVT_SET_FOCUS, self.OnSetFocus)
+        cb.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
 
+        # Once the combobox is set up, we append some more data to it.
         cb.Append("foo", "This is some client data for this item")
 
-        cb = wxComboBox(self, 501, "default value", wxPoint(90, 80), wxSize(95, -1),
-                        [], wxCB_SIMPLE)
+        # This combobox is created with no values initially.
+        cb = wx.ComboBox(
+            self, 501, "default value", (90, 80), (95, -1), [], wx.CB_SIMPLE)
+
+        # Here we dynamically add our values to the second combobox.
         for item in sampleList:
             cb.Append(item, item.upper())
-        EVT_COMBOBOX(self, 501, self.EvtComboBox)
-        EVT_TEXT(self, 501, self.EvtText)
 
+        self.Bind(wx.EVT_COMBOBOX, self.EvtComboBox, cb)
+        self.Bind(wx.EVT_COMBOBOX, self.EvtText, cb)
 
+    # The user selects something, we go here.
     def EvtComboBox(self, evt):
         cb = evt.GetEventObject()
         data = cb.GetClientData(cb.GetSelection())
         self.log.WriteText('EvtComboBox: %s\nClientData: %s\n' % (evt.GetString(), data))
 
+        if evt.GetString() == 'one':
+            self.log.WriteText("You follow directions well!\n\n")
+
+    # Capture events every time a user hits a key in the text entry field.
     def EvtText(self, evt):
         self.log.WriteText('EvtText: %s\n' % evt.GetString())
 
+    # Capture events when the user types something into the control then
+    # hits ENTER.
     def EvtTextEnter(self, evt):
-        self.log.WriteText('EvtTextEnter: does this work?')
+        self.log.WriteText('EvtTextEnter: %s' % evt.GetString())
 
 #---------------------------------------------------------------------------
 
@@ -66,16 +86,27 @@ def runTest(frame, nb, log):
 
 
 
-
-
-
-
 overview = """\
-A combobox is like a combination of an edit control and a listbox. It can be displayed as static list with editable or read-only text field; or a drop-down list with text field; or a drop-down list without a text field.
+A ComboBox is like a combination of an edit control and a listbox. It can be 
+displayed as static list with editable or read-only text field; or a drop-down 
+list with text field; or a drop-down list without a text field.
+
+This example shows both a preset ComboBox and one that is dynamically created
+(that is, it is initially empty but then we 'grow' it out of program-supplied 
+data). The former is common for read-only controls. 
+
+This example also shows the two form factors for the ComboBox. The first is more
+common, and resembles a Choice control. The latter, although less common, shows
+how all the values in the ComboBox can be visible, yet the functionality is the
+same for both.
+
+Finally, this demo shows how event handling can differ. The first ComboBox is set
+up to handle EVT_TEXT_ENTER events, in which text is typed in and then ENTER is
+hit by the user. This allows the user to enter a line of text which can then be
+processed by the program. EVT_TEXT can also be processed, but in that case the
+event is generated every time that the user hits a key in the ComboBox entry field.
 
 """
-
-
 
 if __name__ == '__main__':
     import sys,os

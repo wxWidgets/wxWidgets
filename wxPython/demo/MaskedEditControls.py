@@ -1,10 +1,21 @@
-from wxPython.wx import *
-from wxPython.lib.maskededit import Field, wxMaskedTextCtrl, wxMaskedComboBox, wxIpAddrCtrl, states, state_names, months
-from wxPython.lib.maskededit import __doc__ as maskededit_doc
-from wxPython.lib.maskededit import autoformats
-from wxPython.lib.maskedctrl import wxMaskedCtrl, controlTypes, MASKEDCOMBO
-from wxPython.lib.scrolledpanel import wxScrolledPanel
-import string, sys, traceback
+# 11/23/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
+# 11/26/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o the three libraries below all have not been hit by the 
+#   wx renamer.
+# 
+
+import  string
+import  sys
+import  traceback
+
+import  wx
+import  wx.lib.maskededit       as  med
+import  wx.lib.maskedctrl       as  mctl
+import  wx.lib.scrolledpanel    as  scroll
 
 
 class demoMixin:
@@ -12,17 +23,17 @@ class demoMixin:
     Centralized routines common to demo pages, to remove repetition.
     """
     def labelGeneralTable(self, sizer):
-        description = wxStaticText( self, -1, "Description", )
-        mask        = wxStaticText( self, -1, "Mask Value" )
-        formatcode  = wxStaticText( self, -1, "Format" )
-        regex       = wxStaticText( self, -1, "Regexp Validator(opt.)" )
-        ctrl        = wxStaticText( self, -1, "wxMaskedTextCtrl" )
+        description = wx.StaticText( self, -1, "Description", )
+        mask        = wx.StaticText( self, -1, "Mask Value" )
+        formatcode  = wx.StaticText( self, -1, "Format" )
+        regex       = wx.StaticText( self, -1, "Regexp Validator(opt.)" )
+        ctrl        = wx.StaticText( self, -1, "wxMaskedTextCtrl" )
 
-        description.SetFont( wxFont(9, wxSWISS, wxNORMAL, wxBOLD))
-        mask.SetFont( wxFont(9, wxSWISS, wxNORMAL, wxBOLD))
-        formatcode.SetFont( wxFont(9, wxSWISS, wxNORMAL, wxBOLD) )
-        regex.SetFont( wxFont(9, wxSWISS, wxNORMAL, wxBOLD))
-        ctrl.SetFont( wxFont(9, wxSWISS, wxNORMAL, wxBOLD))
+        description.SetFont( wx.Font(9, wx.SWISS, wx.NORMAL, wx.BOLD))
+        mask.SetFont( wx.Font(9, wx.SWISS, wx.NORMAL, wx.BOLD))
+        formatcode.SetFont( wx.Font(9, wx.SWISS, wx.NORMAL, wx.BOLD) )
+        regex.SetFont( wx.Font(9, wx.SWISS, wx.NORMAL, wx.BOLD))
+        ctrl.SetFont( wx.Font(9, wx.SWISS, wx.NORMAL, wx.BOLD))
 
         sizer.Add(description)
         sizer.Add(mask)
@@ -33,13 +44,13 @@ class demoMixin:
 
     def layoutGeneralTable(self, controls, sizer):
         for control in controls:
-            sizer.Add( wxStaticText( self, -1, control[0]) )
-            sizer.Add( wxStaticText( self, -1, control[1]) )
-            sizer.Add( wxStaticText( self, -1, control[3]) )
-            sizer.Add( wxStaticText( self, -1, control[4]) )
+            sizer.Add( wx.StaticText( self, -1, control[0]) )
+            sizer.Add( wx.StaticText( self, -1, control[1]) )
+            sizer.Add( wx.StaticText( self, -1, control[3]) )
+            sizer.Add( wx.StaticText( self, -1, control[4]) )
 
             if control in controls:
-                newControl  = wxMaskedTextCtrl( self, -1, "",
+                newControl  = med.wxMaskedTextCtrl( self, -1, "",
                                                 mask         = control[1],
                                                 excludeChars = control[2],
                                                 formatcodes  = control[3],
@@ -56,25 +67,28 @@ class demoMixin:
 
 
     def changeControlParams(self, event, parameter, checked_value, notchecked_value):
-        if event.Checked(): value = checked_value
+        if event.IsChecked(): value = checked_value
         else:               value = notchecked_value
+
         kwargs = {parameter: value}
+
         for control in self.editList:
             control.SetCtrlParameters(**kwargs)
             control.Refresh()
+
         self.Refresh()
 
 
 
 #----------------------------------------------------------------------------
-class demoPage1(wxScrolledPanel, demoMixin):
+class demoPage1(scroll.wxScrolledPanel, demoMixin):
     def __init__(self, parent, log):
-        wxScrolledPanel.__init__(self, parent, -1)
-        self.sizer = wxBoxSizer( wxVERTICAL )
+        scroll.wxScrolledPanel.__init__(self, parent, -1)
+        self.sizer = wx.BoxSizer( wx.VERTICAL )
         self.editList  = []
 
-        label = wxStaticText( self, -1, """\
-Here are some basic wxMaskedTextCtrls to give you an idea of what you can do
+        label = wx.StaticText( self, -1, """\
+Here are some basic MaskedTextCtrls to give you an idea of what you can do
 with this control.  Note that all controls have been auto-sized by including 'F' in
 the format codes.
 
@@ -83,25 +97,25 @@ Note that the State and Last Name fields are list-limited (valid last names are:
 Smith, Jones, Williams).  Signs on numbers can be toggled with the minus key.
 """)
         label.SetForegroundColour( "Blue" )
-        header = wxBoxSizer( wxHORIZONTAL )
-        header.Add( label, 0, flag=wxALIGN_LEFT|wxALL, border = 5 )
+        header = wx.BoxSizer( wx.HORIZONTAL )
+        header.Add( label, 0, flag=wx.ALIGN_LEFT|wx.ALL, border = 5 )
 
-        highlight = wxCheckBox( self, -1, "Highlight Empty" )
-        disallow =  wxCheckBox( self, -1, "Disallow Empty" )
-        showFill = wxCheckBox( self, -1, "change fillChar" )
+        highlight = wx.CheckBox( self, -1, "Highlight Empty" )
+        disallow =  wx.CheckBox( self, -1, "Disallow Empty" )
+        showFill = wx.CheckBox( self, -1, "change fillChar" )
 
-        vbox = wxBoxSizer( wxVERTICAL )
-        vbox.Add( highlight, 0, wxALIGN_LEFT|wxALL, 5 )
-        vbox.Add( disallow, 0, wxALIGN_LEFT|wxALL, 5 )
-        vbox.Add( showFill, 0, wxALIGN_LEFT|wxALL, 5 )
-        header.AddSpacer(15, 0)
-        header.Add(vbox, 0, flag=wxALIGN_LEFT|wxALL, border=5 )
+        vbox = wx.BoxSizer( wx.VERTICAL )
+        vbox.Add( highlight, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
+        vbox.Add( disallow, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
+        vbox.Add( showFill, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
+        header.Add((15, 0))
+        header.Add(vbox, 0, flag=wx.ALIGN_LEFT|wx.ALL, border=5 )
 
-        EVT_CHECKBOX( self, highlight.GetId(), self.onHighlightEmpty )
-        EVT_CHECKBOX( self, disallow.GetId(), self.onDisallowEmpty )
-        EVT_CHECKBOX( self, showFill.GetId(), self.onShowFill )
+        self.Bind(wx.EVT_CHECKBOX, self.onHighlightEmpty, id=highlight.GetId())
+        self.Bind(wx.EVT_CHECKBOX, self.onDisallowEmpty, id=disallow.GetId())
+        self.Bind(wx.EVT_CHECKBOX, self.onShowFill, id=showFill.GetId())
 
-        grid = wxFlexGridSizer( 0, 5, vgap=10, hgap=10 )
+        grid = wx.FlexGridSizer( 0, 5, vgap=10, hgap=10 )
         self.labelGeneralTable(grid)
 
         # The following list is of the controls for the demo. Feel free to play around with
@@ -119,8 +133,8 @@ Smith, Jones, Williams).  Signs on numbers can be toggled with the minus key.
        ]
 
         self.layoutGeneralTable(controls, grid)
-        self.sizer.Add( header, 0, flag=wxALIGN_LEFT|wxALL, border=5 )
-        self.sizer.Add( grid, 0, flag= wxALIGN_LEFT|wxLEFT, border=5 )
+        self.sizer.Add( header, 0, flag=wx.ALIGN_LEFT|wx.ALL, border=5 )
+        self.sizer.Add( grid, 0, flag= wx.ALIGN_LEFT|wx.LEFT, border=5 )
         self.SetSizer(self.sizer)
         self.SetupScrolling()
         self.SetAutoLayout(1)
@@ -139,13 +153,13 @@ Smith, Jones, Williams).  Signs on numbers can be toggled with the minus key.
         self.changeControlParams( event, "fillChar", '?', ' ' )
 
 
-class demoPage2(wxScrolledPanel, demoMixin):
+class demoPage2(scroll.wxScrolledPanel, demoMixin):
     def __init__( self, parent, log ):
         self.log = log
-        wxScrolledPanel.__init__( self, parent, -1 )
-        self.sizer = wxBoxSizer( wxVERTICAL )
+        scroll.wxScrolledPanel.__init__( self, parent, -1 )
+        self.sizer = wx.BoxSizer( wx.VERTICAL )
 
-        label = wxStaticText( self, -1, """\
+        label = wx.StaticText( self, -1, """\
 All these controls have been created by passing a single parameter, the autoformat code,
 and use the factory class wxMaskedCtrl with its default controlType.
 The maskededit module contains an internal dictionary of types and formats (autoformats).
@@ -154,72 +168,72 @@ Many of these already do complicated validation; To see some examples, try
 """)
 
         label.SetForegroundColour( "Blue" )
-        self.sizer.Add( label, 0, wxALIGN_LEFT|wxALL, 5 )
+        self.sizer.Add( label, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
 
-        description = wxStaticText( self, -1, "Description")
-        autofmt     = wxStaticText( self, -1, "AutoFormat Code")
-        ctrl        = wxStaticText( self, -1, "wxMaskedCtrl")
+        description = wx.StaticText( self, -1, "Description")
+        autofmt     = wx.StaticText( self, -1, "AutoFormat Code")
+        ctrl        = wx.StaticText( self, -1, "MaskedCtrl")
 
-        description.SetFont( wxFont( 9, wxSWISS, wxNORMAL, wxBOLD ) )
-        autofmt.SetFont( wxFont( 9, wxSWISS, wxNORMAL, wxBOLD ) )
-        ctrl.SetFont( wxFont( 9, wxSWISS, wxNORMAL, wxBOLD ) )
+        description.SetFont( wx.Font( 9, wx.SWISS, wx.NORMAL, wx.BOLD ) )
+        autofmt.SetFont( wx.Font( 9, wx.SWISS, wx.NORMAL, wx.BOLD ) )
+        ctrl.SetFont( wx.Font( 9, wx.SWISS, wx.NORMAL, wx.BOLD ) )
 
-        grid = wxFlexGridSizer( 0, 3, vgap=10, hgap=5 )
-        grid.Add( description, 0, wxALIGN_LEFT )
-        grid.Add( autofmt,     0, wxALIGN_LEFT )
-        grid.Add( ctrl,        0, wxALIGN_LEFT )
+        grid = wx.FlexGridSizer( 0, 3, vgap=10, hgap=5 )
+        grid.Add( description, 0, wx.ALIGN_LEFT )
+        grid.Add( autofmt,     0, wx.ALIGN_LEFT )
+        grid.Add( ctrl,        0, wx.ALIGN_LEFT )
 
-        for autoformat, desc in autoformats:
-            grid.Add( wxStaticText( self, -1, desc), 0, wxALIGN_LEFT )
-            grid.Add( wxStaticText( self, -1, autoformat), 0, wxALIGN_LEFT )
-            grid.Add( wxMaskedCtrl( self, -1, "",
+        for autoformat, desc in med.autoformats:
+            grid.Add( wx.StaticText( self, -1, desc), 0, wx.ALIGN_LEFT )
+            grid.Add( wx.StaticText( self, -1, autoformat), 0, wx.ALIGN_LEFT )
+            grid.Add( mctl.wxMaskedCtrl( self, -1, "",
                                     autoformat       = autoformat,
                                     demo             = True,
                                     name             = autoformat),
-                            0, wxALIGN_LEFT )
+                            0, wx.ALIGN_LEFT )
 
-        self.sizer.Add( grid, 0, wxALIGN_LEFT|wxALL, border=5 )
+        self.sizer.Add( grid, 0, wx.ALIGN_LEFT|wx.ALL, border=5 )
         self.SetSizer( self.sizer )
         self.SetAutoLayout( 1 )
         self.SetupScrolling()
 
 
-class demoPage3(wxScrolledPanel, demoMixin):
+class demoPage3(scroll.wxScrolledPanel, demoMixin):
     def __init__(self, parent, log):
         self.log = log
-        wxScrolledPanel.__init__(self, parent, -1)
-        self.sizer = wxBoxSizer( wxVERTICAL )
+        scroll.wxScrolledPanel.__init__(self, parent, -1)
+        self.sizer = wx.BoxSizer( wx.VERTICAL )
         self.editList  = []
 
-        label = wxStaticText( self, -1, """\
+        label = wx.StaticText( self, -1, """\
 Here wxMaskedTextCtrls that have default values.  The states
 control has a list of valid values, and the unsigned integer
 has a legal range specified.
 """)
         label.SetForegroundColour( "Blue" )
-        requireValid =  wxCheckBox( self, -1, "Require Valid Value" )
-        EVT_CHECKBOX( self, requireValid.GetId(), self.onRequireValid )
+        requireValid =  wx.CheckBox( self, -1, "Require Valid Value" )
+        self.Bind(wx.EVT_CHECKBOX, self.onRequireValid, id=requireValid.GetId())
 
-        header = wxBoxSizer( wxHORIZONTAL )
-        header.Add( label, 0, flag=wxALIGN_LEFT|wxALL, border = 5)
-        header.AddSpacer(75, 0)
-        header.Add( requireValid, 0, flag=wxALIGN_LEFT|wxALL, border=10 )
+        header = wx.BoxSizer( wx.HORIZONTAL )
+        header.Add( label, 0, flag=wx.ALIGN_LEFT|wx.ALL, border = 5)
+        header.Add((75, 0))
+        header.Add( requireValid, 0, flag=wx.ALIGN_LEFT|wx.ALL, border=10 )
 
-        grid = wxFlexGridSizer( 0, 5, vgap=10, hgap=10 )
+        grid = wx.FlexGridSizer( 0, 5, vgap=10, hgap=10 )
         self.labelGeneralTable( grid )
 
         controls = [
         #description        mask                    excl format     regexp                              range,list,initial
-       ("U.S. State (2 char)",      "AA",            "", 'F!_',       "[A-Z]{2}",                         '',states, states[0]),
+       ("U.S. State (2 char)",      "AA",            "", 'F!_',       "[A-Z]{2}",                         '',med.states, med.states[0]),
        ("Integer (signed)",         "#{6}",          "", 'F-_',       "",                                 '','', ' 0    '),
        ("Integer (unsigned)\n(1-399)","######",      "", 'F_',        "",                                 (1,399),'', '1     '),
        ("Float (signed)",           "#{6}.#{9}",     "", 'F-_R',      "",                                 '','', '000000.000000000'),
-       ("Date (MDY) + Time",        "##/##/#### ##:##:## AM",  'BCDEFGHIJKLMNOQRSTUVWXYZ','DF!',"",          '','', wxDateTime_Now().Format("%m/%d/%Y %I:%M:%S %p")),
+       ("Date (MDY) + Time",        "##/##/#### ##:##:## AM",  'BCDEFGHIJKLMNOQRSTUVWXYZ','DF!',"",          '','', wx.DateTime_Now().Format("%m/%d/%Y %I:%M:%S %p")),
        ]
         self.layoutGeneralTable( controls, grid )
 
-        self.sizer.Add( header, 0, flag=wxALIGN_LEFT|wxALL, border=5 )
-        self.sizer.Add( grid, 0, flag=wxALIGN_LEFT|wxALL, border=5 )
+        self.sizer.Add( header, 0, flag=wx.ALIGN_LEFT|wx.ALL, border=5 )
+        self.sizer.Add( grid, 0, flag=wx.ALIGN_LEFT|wx.ALL, border=5 )
 
         self.SetSizer( self.sizer )
         self.SetAutoLayout( 1 )
@@ -230,13 +244,13 @@ has a legal range specified.
         self.changeControlParams( event, "validRequired", True, False )
 
 
-class demoPage4(wxScrolledPanel, demoMixin):
+class demoPage4(scroll.wxScrolledPanel, demoMixin):
     def __init__( self, parent, log ):
         self.log = log
-        wxScrolledPanel.__init__( self, parent, -1 )
-        self.sizer = wxBoxSizer( wxVERTICAL )
+        scroll.wxScrolledPanel.__init__( self, parent, -1 )
+        self.sizer = wx.BoxSizer( wx.VERTICAL )
 
-        label = wxStaticText( self, -1, """\
+        label = wx.StaticText( self, -1, """\
 These controls have field-specific choice lists and allow autocompletion.
 
 Down arrow or Page Down in an uncompleted field with an auto-completable field will attempt
@@ -246,111 +260,111 @@ Page Up and Shift-Up arrow will similarly cycle backwards through the list.
 """)
 
         label.SetForegroundColour( "Blue" )
-        self.sizer.Add( label, 0, wxALIGN_LEFT|wxALL, 5 )
+        self.sizer.Add( label, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
 
-        description  = wxStaticText( self, -1, "Description" )
-        autofmt      = wxStaticText( self, -1, "AutoFormat Code" )
-        fields       = wxStaticText( self, -1, "Field Objects" )
-        ctrl         = wxStaticText( self, -1, "wxMaskedTextCtrl" )
+        description  = wx.StaticText( self, -1, "Description" )
+        autofmt      = wx.StaticText( self, -1, "AutoFormat Code" )
+        fields       = wx.StaticText( self, -1, "Field Objects" )
+        ctrl         = wx.StaticText( self, -1, "wxMaskedTextCtrl" )
 
-        description.SetFont( wxFont( 9, wxSWISS, wxNORMAL, wxBOLD ) )
-        autofmt.SetFont( wxFont( 9, wxSWISS, wxNORMAL, wxBOLD ) )
-        fields.SetFont( wxFont( 9, wxSWISS, wxNORMAL, wxBOLD ) )
-        ctrl.SetFont( wxFont( 9, wxSWISS, wxNORMAL, wxBOLD ) )
+        description.SetFont( wx.Font( 9, wx.SWISS, wx.NORMAL, wx.BOLD ) )
+        autofmt.SetFont( wx.Font( 9, wx.SWISS, wx.NORMAL, wx.BOLD ) )
+        fields.SetFont( wx.Font( 9, wx.SWISS, wx.NORMAL, wx.BOLD ) )
+        ctrl.SetFont( wx.Font( 9, wx.SWISS, wx.NORMAL, wx.BOLD ) )
 
-        grid = wxFlexGridSizer( 0, 4, vgap=10, hgap=10 )
-        grid.Add( description, 0, wxALIGN_LEFT )
-        grid.Add( autofmt,     0, wxALIGN_LEFT )
-        grid.Add( fields,      0, wxALIGN_LEFT )
-        grid.Add( ctrl,        0, wxALIGN_LEFT )
+        grid = wx.FlexGridSizer( 0, 4, vgap=10, hgap=10 )
+        grid.Add( description, 0, wx.ALIGN_LEFT )
+        grid.Add( autofmt,     0, wx.ALIGN_LEFT )
+        grid.Add( fields,      0, wx.ALIGN_LEFT )
+        grid.Add( ctrl,        0, wx.ALIGN_LEFT )
 
         autoformat = "USPHONEFULLEXT"
-        fieldsDict = {0: Field(choices=["617","781","508","978","413"], choiceRequired=True)}
+        fieldsDict = {0: med.Field(choices=["617","781","508","978","413"], choiceRequired=True)}
         fieldsLabel = """\
 {0: Field(choices=[
             "617","781",
             "508","978","413"],
           choiceRequired=True)}"""
-        grid.Add( wxStaticText( self, -1, "Restricted Area Code"), 0, wxALIGN_LEFT )
-        grid.Add( wxStaticText( self, -1, autoformat), 0, wxALIGN_LEFT )
-        grid.Add( wxStaticText( self, -1, fieldsLabel), 0, wxALIGN_LEFT )
-        grid.Add( wxMaskedTextCtrl( self, -1, "",
+        grid.Add( wx.StaticText( self, -1, "Restricted Area Code"), 0, wx.ALIGN_LEFT )
+        grid.Add( wx.StaticText( self, -1, autoformat), 0, wx.ALIGN_LEFT )
+        grid.Add( wx.StaticText( self, -1, fieldsLabel), 0, wx.ALIGN_LEFT )
+        grid.Add( med.wxMaskedTextCtrl( self, -1, "",
                                     autoformat       = autoformat,
                                     fields           = fieldsDict,
                                     demo             = True,
                                     name             = autoformat),
-                  0, wxALIGN_LEFT )
+                  0, wx.ALIGN_LEFT )
 
         autoformat = "EXPDATEMMYY"
-        fieldsDict = {1: Field(choices=["03", "04", "05"], choiceRequired=True)}
+        fieldsDict = {1: med.Field(choices=["03", "04", "05"], choiceRequired=True)}
         fieldsLabel = """\
 {1: Field(choices=[
             "03", "04", "05"],
           choiceRequired=True)}"""
-        exp =  wxMaskedTextCtrl( self, -1, "",
+        exp =  med.wxMaskedTextCtrl( self, -1, "",
                                  autoformat       = autoformat,
                                  fields           = fieldsDict,
                                  demo             = True,
                                  name             = autoformat)
 
-        grid.Add( wxStaticText( self, -1, "Restricted Expiration"), 0, wxALIGN_LEFT )
-        grid.Add( wxStaticText( self, -1, autoformat), 0, wxALIGN_LEFT )
-        grid.Add( wxStaticText( self, -1, fieldsLabel), 0, wxALIGN_LEFT )
-        grid.Add( exp, 0, wxALIGN_LEFT )
+        grid.Add( wx.StaticText( self, -1, "Restricted Expiration"), 0, wx.ALIGN_LEFT )
+        grid.Add( wx.StaticText( self, -1, autoformat), 0, wx.ALIGN_LEFT )
+        grid.Add( wx.StaticText( self, -1, fieldsLabel), 0, wx.ALIGN_LEFT )
+        grid.Add( exp, 0, wx.ALIGN_LEFT )
 
-        fieldsDict = {0: Field(choices=["02134","02155"], choiceRequired=True),
-                      1: Field(choices=["1234", "5678"],  choiceRequired=False)}
+        fieldsDict = {0: med.Field(choices=["02134","02155"], choiceRequired=True),
+                      1: med.Field(choices=["1234", "5678"],  choiceRequired=False)}
         fieldsLabel = """\
 {0: Field(choices=["02134","02155"],
           choiceRequired=True),
  1: Field(choices=["1234", "5678"],
           choiceRequired=False)}"""
         autoformat = "USZIPPLUS4"
-        zip =  wxMaskedTextCtrl( self, -1, "",
+        zip =  med.wxMaskedTextCtrl( self, -1, "",
                                  autoformat       = autoformat,
                                  fields           = fieldsDict,
                                  demo             = True,
                                  name             = autoformat)
 
-        grid.Add( wxStaticText( self, -1, "Restricted Zip + 4"), 0, wxALIGN_LEFT )
-        grid.Add( wxStaticText( self, -1, autoformat), 0, wxALIGN_LEFT )
-        grid.Add( wxStaticText( self, -1, fieldsLabel), 0, wxALIGN_LEFT )
-        grid.Add( zip, 0, wxALIGN_LEFT )
+        grid.Add( wx.StaticText( self, -1, "Restricted Zip + 4"), 0, wx.ALIGN_LEFT )
+        grid.Add( wx.StaticText( self, -1, autoformat), 0, wx.ALIGN_LEFT )
+        grid.Add( wx.StaticText( self, -1, fieldsLabel), 0, wx.ALIGN_LEFT )
+        grid.Add( zip, 0, wx.ALIGN_LEFT )
 
-        self.sizer.Add( grid, 0, wxALIGN_LEFT|wxALL, border=5 )
+        self.sizer.Add( grid, 0, wx.ALIGN_LEFT|wx.ALL, border=5 )
         self.SetSizer( self.sizer )
         self.SetAutoLayout(1)
         self.SetupScrolling()
 
 
-class demoPage5(wxScrolledPanel, demoMixin):
+class demoPage5(scroll.wxScrolledPanel, demoMixin):
     def __init__( self, parent, log ):
         self.log = log
-        wxScrolledPanel.__init__( self, parent, -1 )
-        self.sizer = wxBoxSizer( wxVERTICAL )
+        scroll.wxScrolledPanel.__init__( self, parent, -1 )
+        self.sizer = wx.BoxSizer( wx.VERTICAL )
 
 
-        labelMaskedCombos = wxStaticText( self, -1, """\
+        labelMaskedCombos = wx.StaticText( self, -1, """\
 These are some examples of wxMaskedComboBox:""")
         labelMaskedCombos.SetForegroundColour( "Blue" )
 
 
-        label_statecode = wxStaticText( self, -1, """\
+        label_statecode = wx.StaticText( self, -1, """\
 A state selector; only
 "legal" values can be
 entered:""")
-        statecode = wxMaskedComboBox( self, -1, states[0],
-                                  choices = states,
+        statecode = med.wxMaskedComboBox( self, -1, med.states[0],
+                                  choices = med.states,
                                   autoformat="USSTATE")
 
-        label_statename = wxStaticText( self, -1, """\
+        label_statename = wx.StaticText( self, -1, """\
 A state name selector,
 with auto-select:""")
 
         # Create this one using factory function:
-        statename = wxMaskedCtrl( self, -1, state_names[0],
-                                  controlType = controlTypes.MASKEDCOMBO,
-                                  choices = state_names,
+        statename = mctl.wxMaskedCtrl( self, -1, med.state_names[0],
+                                  controlType = mctl.controlTypes.MASKEDCOMBO,
+                                  choices = med.state_names,
                                   autoformat="USSTATENAME",
                                   autoSelect=True)
         statename.SetCtrlParameters(formatcodes = 'F!V_')
@@ -358,8 +372,8 @@ with auto-select:""")
 
         numerators = [ str(i) for i in range(1, 4) ]
         denominators = [ string.ljust(str(i), 2) for i in [2,3,4,5,8,16,32,64] ]
-        fieldsDict = {0: Field(choices=numerators, choiceRequired=False),
-                      1: Field(choices=denominators, choiceRequired=True)}
+        fieldsDict = {0: med.Field(choices=numerators, choiceRequired=False),
+                      1: med.Field(choices=denominators, choiceRequired=True)}
         choices = []
         for n in numerators:
             for d in denominators:
@@ -367,13 +381,13 @@ with auto-select:""")
                     choices.append( '%s/%s' % (n,d) )
 
 
-        label_fraction = wxStaticText( self, -1, """\
+        label_fraction = wx.StaticText( self, -1, """\
 A masked ComboBox for fraction selection.
 Choices for each side of the fraction can
 be selected with PageUp/Down:""")
 
-        fraction = wxMaskedCtrl( self, -1, "",
-                                 controlType = MASKEDCOMBO,
+        fraction = mctl.wxMaskedCtrl( self, -1, "",
+                                 controlType = mctl.MASKEDCOMBO,
                                  choices = choices,
                                  choiceRequired = True,
                                  mask = "#/##",
@@ -382,23 +396,23 @@ be selected with PageUp/Down:""")
                                  fields = fieldsDict )
 
 
-        label_code = wxStaticText( self, -1, """\
+        label_code = wx.StaticText( self, -1, """\
 A masked ComboBox to validate
 text from a list of numeric codes:""")
 
         choices = ["91", "136", "305", "4579"]
-        code = wxMaskedComboBox( self, -1, choices[0],
+        code = med.wxMaskedComboBox( self, -1, choices[0],
                                  choices = choices,
                                  choiceRequired = True,
                                  formatcodes = "F_r",
                                  mask = "####")
 
-        label_selector = wxStaticText( self, -1, """\
+        label_selector = wx.StaticText( self, -1, """\
 Programmatically set
 choice sets:""")
-        self.list_selector = wxComboBox(self, -1, '', choices = ['list1', 'list2', 'list3'])
-        self.dynamicbox = wxMaskedCtrl( self, -1, '    ',
-                                      controlType = controlTypes.MASKEDCOMBO,
+        self.list_selector = wx.ComboBox(self, -1, '', choices = ['list1', 'list2', 'list3'])
+        self.dynamicbox = mctl.wxMaskedCtrl( self, -1, '    ',
+                                      controlType = mctl.controlTypes.MASKEDCOMBO,
                                       mask =    'XXXX',
                                       formatcodes = 'F_',
                                       # these are to give dropdown some initial height,
@@ -409,24 +423,24 @@ choice sets:""")
         self.dynamicbox.Clear()   # get rid of initial choices used to size the dropdown
 
 
-        labelIpAddrs = wxStaticText( self, -1, """\
+        labelIpAddrs = wx.StaticText( self, -1, """\
 Here are some examples of wxIpAddrCtrl, a control derived from wxMaskedTextCtrl:""")
         labelIpAddrs.SetForegroundColour( "Blue" )
 
 
-        label_ipaddr1 = wxStaticText( self, -1, "An empty control:")
-        ipaddr1 = wxIpAddrCtrl( self, -1, style = wxTE_PROCESS_TAB )
+        label_ipaddr1 = wx.StaticText( self, -1, "An empty control:")
+        ipaddr1 = med.wxIpAddrCtrl( self, -1, style = wx.TE_PROCESS_TAB )
 
 
-        label_ipaddr2 = wxStaticText( self, -1, "A restricted mask:")
-        ipaddr2 = wxIpAddrCtrl( self, -1, mask=" 10.  1.109.###" )
+        label_ipaddr2 = wx.StaticText( self, -1, "A restricted mask:")
+        ipaddr2 = med.wxIpAddrCtrl( self, -1, mask=" 10.  1.109.###" )
 
 
-        label_ipaddr3 = wxStaticText( self, -1, """\
+        label_ipaddr3 = wx.StaticText( self, -1, """\
 A control with restricted legal values:
 10. (1|2) . (129..255) . (0..255)""")
-        ipaddr3 = wxMaskedCtrl( self, -1,
-                                controlType = controlTypes.IPADDR,
+        ipaddr3 = mctl.wxMaskedCtrl( self, -1,
+                                controlType = mctl.controlTypes.IPADDR,
                                 mask=" 10.  #.###.###")
         ipaddr3.SetFieldParameters(0, validRegex="1|2",validRequired=False )   # requires entry to match or not allowed
 
@@ -435,104 +449,103 @@ A control with restricted legal values:
 
 
 
-        labelNumerics = wxStaticText( self, -1, """\
+        labelNumerics = wx.StaticText( self, -1, """\
 Here are some useful configurations of a wxMaskedTextCtrl for integer and floating point input that still treat
 the control as a text control.  (For a true numeric control, check out the wxMaskedNumCtrl class!)""")
         labelNumerics.SetForegroundColour( "Blue" )
 
-        label_intctrl1 = wxStaticText( self, -1, """\
+        label_intctrl1 = wx.StaticText( self, -1, """\
 An integer entry control with
 shifting insert enabled:""")
-        self.intctrl1 = wxMaskedTextCtrl(self, -1, name='intctrl', mask="#{9}", formatcodes = '_-,F>')
-        label_intctrl2 = wxStaticText( self, -1, """\
+        self.intctrl1 = med.wxMaskedTextCtrl(self, -1, name='intctrl', mask="#{9}", formatcodes = '_-,F>')
+        label_intctrl2 = wx.StaticText( self, -1, """\
      Right-insert integer entry:""")
-        self.intctrl2 = wxMaskedTextCtrl(self, -1, name='intctrl', mask="#{9}", formatcodes = '_-,Fr')
+        self.intctrl2 = med.wxMaskedTextCtrl(self, -1, name='intctrl', mask="#{9}", formatcodes = '_-,Fr')
 
-        label_floatctrl = wxStaticText( self, -1, """\
+        label_floatctrl = wx.StaticText( self, -1, """\
 A floating point entry control
 with right-insert for ordinal:""")
-        self.floatctrl = wxMaskedTextCtrl(self, -1, name='floatctrl', mask="#{9}.#{2}", formatcodes="F,_-R", useParensForNegatives=False)
+        self.floatctrl = med.wxMaskedTextCtrl(self, -1, name='floatctrl', mask="#{9}.#{2}", formatcodes="F,_-R", useParensForNegatives=False)
         self.floatctrl.SetFieldParameters(0, formatcodes='r<', validRequired=True)  # right-insert, require explicit cursor movement to change fields
         self.floatctrl.SetFieldParameters(1, defaultValue='00')                     # don't allow blank fraction
 
-        label_numselect = wxStaticText( self, -1, """\
+        label_numselect = wx.StaticText( self, -1, """\
 <= Programmatically set the value
      of the float entry ctrl:""")
-        numselect = wxComboBox(self, -1, choices = [ '', '111', '222.22', '-3', '54321.666666666', '-1353.978',
+        numselect = wx.ComboBox(self, -1, choices = [ '', '111', '222.22', '-3', '54321.666666666', '-1353.978',
                                                      '1234567', '-1234567', '123456789', '-123456789.1',
                                                      '1234567890.', '-1234567890.1' ])
 
-        parens_check = wxCheckBox(self, -1, "Use () to indicate negatives in above controls")
+        parens_check = wx.CheckBox(self, -1, "Use () to indicate negatives in above controls")
 
 
 
-        gridCombos = wxFlexGridSizer( 0, 4, vgap=10, hgap = 10 )
-        gridCombos.Add( label_statecode, 0, wxALIGN_LEFT )
-        gridCombos.Add( statecode, 0, wxALIGN_LEFT )
-        gridCombos.Add( label_fraction, 0, wxALIGN_LEFT )
-        gridCombos.Add( fraction, 0, wxALIGN_LEFT )
-        gridCombos.Add( label_statename, 0, wxALIGN_LEFT )
-        gridCombos.Add( statename, 0, wxALIGN_LEFT )
-        gridCombos.Add( label_code, 0, wxALIGN_LEFT )
-        gridCombos.Add( code, 0, wxALIGN_LEFT )
-        gridCombos.Add( label_selector, 0, wxALIGN_LEFT)
-        hbox = wxBoxSizer( wxHORIZONTAL )
-        hbox.Add( self.list_selector, 0, wxALIGN_LEFT )
-        hbox.Add(wxStaticText(self, -1, ' => '), 0, wxALIGN_LEFT)
-        hbox.Add( self.dynamicbox, 0, wxALIGN_LEFT )
-        gridCombos.Add( hbox, 0, wxALIGN_LEFT )
+        gridCombos = wx.FlexGridSizer( 0, 4, vgap=10, hgap = 10 )
+        gridCombos.Add( label_statecode, 0, wx.ALIGN_LEFT )
+        gridCombos.Add( statecode, 0, wx.ALIGN_LEFT )
+        gridCombos.Add( label_fraction, 0, wx.ALIGN_LEFT )
+        gridCombos.Add( fraction, 0, wx.ALIGN_LEFT )
+        gridCombos.Add( label_statename, 0, wx.ALIGN_LEFT )
+        gridCombos.Add( statename, 0, wx.ALIGN_LEFT )
+        gridCombos.Add( label_code, 0, wx.ALIGN_LEFT )
+        gridCombos.Add( code, 0, wx.ALIGN_LEFT )
+        gridCombos.Add( label_selector, 0, wx.ALIGN_LEFT)
+        hbox = wx.BoxSizer( wx.HORIZONTAL )
+        hbox.Add( self.list_selector, 0, wx.ALIGN_LEFT )
+        hbox.Add(wx.StaticText(self, -1, ' => '), 0, wx.ALIGN_LEFT)
+        hbox.Add( self.dynamicbox, 0, wx.ALIGN_LEFT )
+        gridCombos.Add( hbox, 0, wx.ALIGN_LEFT )
 
-        gridIpAddrs = wxFlexGridSizer( 0, 4, vgap=10, hgap = 15 )
-        gridIpAddrs.Add( label_ipaddr1, 0, wxALIGN_LEFT )
-        gridIpAddrs.Add( ipaddr1, 0, wxALIGN_LEFT )
-        gridIpAddrs.Add( label_ipaddr2, 0, wxALIGN_LEFT )
-        gridIpAddrs.Add( ipaddr2, 0, wxALIGN_LEFT )
-        gridIpAddrs.Add( label_ipaddr3, 0, wxALIGN_LEFT )
-        gridIpAddrs.Add( ipaddr3, 0, wxALIGN_LEFT )
+        gridIpAddrs = wx.FlexGridSizer( 0, 4, vgap=10, hgap = 15 )
+        gridIpAddrs.Add( label_ipaddr1, 0, wx.ALIGN_LEFT )
+        gridIpAddrs.Add( ipaddr1, 0, wx.ALIGN_LEFT )
+        gridIpAddrs.Add( label_ipaddr2, 0, wx.ALIGN_LEFT )
+        gridIpAddrs.Add( ipaddr2, 0, wx.ALIGN_LEFT )
+        gridIpAddrs.Add( label_ipaddr3, 0, wx.ALIGN_LEFT )
+        gridIpAddrs.Add( ipaddr3, 0, wx.ALIGN_LEFT )
 
-        gridNumerics = wxFlexGridSizer( 0, 4, vgap=10, hgap = 10 )
-        gridNumerics.Add( label_intctrl1, 0, wxALIGN_LEFT )
-        gridNumerics.Add( self.intctrl1, 0, wxALIGN_LEFT )
-        gridNumerics.Add( label_intctrl2, 0, wxALIGN_RIGHT )
-        gridNumerics.Add( self.intctrl2, 0, wxALIGN_LEFT )
-        gridNumerics.Add( label_floatctrl, 0, wxALIGN_LEFT )
-        gridNumerics.Add( self.floatctrl, 0, wxALIGN_LEFT )
-        gridNumerics.Add( label_numselect, 0, wxALIGN_RIGHT )
-        gridNumerics.Add( numselect, 0, wxALIGN_LEFT )
+        gridNumerics = wx.FlexGridSizer( 0, 4, vgap=10, hgap = 10 )
+        gridNumerics.Add( label_intctrl1, 0, wx.ALIGN_LEFT )
+        gridNumerics.Add( self.intctrl1, 0, wx.ALIGN_LEFT )
+        gridNumerics.Add( label_intctrl2, 0, wx.ALIGN_RIGHT )
+        gridNumerics.Add( self.intctrl2, 0, wx.ALIGN_LEFT )
+        gridNumerics.Add( label_floatctrl, 0, wx.ALIGN_LEFT )
+        gridNumerics.Add( self.floatctrl, 0, wx.ALIGN_LEFT )
+        gridNumerics.Add( label_numselect, 0, wx.ALIGN_RIGHT )
+        gridNumerics.Add( numselect, 0, wx.ALIGN_LEFT )
 
-        self.sizer.Add( labelMaskedCombos, 0, wxALIGN_LEFT|wxALL, 5 )
-        self.sizer.Add( gridCombos, 0, wxALIGN_LEFT|wxALL, border=5 )
-        self.sizer.Add( wxStaticLine(self, -1), 0, wxEXPAND|wxTOP|wxBOTTOM, border=8 )
-        self.sizer.Add( labelIpAddrs, 0, wxALIGN_LEFT|wxALL, 5 )
-        self.sizer.Add( gridIpAddrs, 0, wxALIGN_LEFT|wxALL, border=5 )
-        self.sizer.Add( wxStaticLine(self, -1), 0, wxEXPAND|wxTOP|wxBOTTOM, border=8 )
-        self.sizer.Add( labelNumerics, 0, wxALIGN_LEFT|wxALL, 5 )
-        self.sizer.Add( gridNumerics, 0, wxALIGN_LEFT|wxALL, border=5 )
-        self.sizer.Add( parens_check, 0, wxALIGN_LEFT|wxALL, 5 )
+        self.sizer.Add( labelMaskedCombos, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
+        self.sizer.Add( gridCombos, 0, wx.ALIGN_LEFT|wx.ALL, border=5 )
+        self.sizer.Add( wx.StaticLine(self, -1), 0, wx.EXPAND|wx.TOP|wx.BOTTOM, border=8 )
+        self.sizer.Add( labelIpAddrs, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
+        self.sizer.Add( gridIpAddrs, 0, wx.ALIGN_LEFT|wx.ALL, border=5 )
+        self.sizer.Add( wx.StaticLine(self, -1), 0, wx.EXPAND|wx.TOP|wx.BOTTOM, border=8 )
+        self.sizer.Add( labelNumerics, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
+        self.sizer.Add( gridNumerics, 0, wx.ALIGN_LEFT|wx.ALL, border=5 )
+        self.sizer.Add( parens_check, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
 
         self.SetSizer( self.sizer )
         self.SetAutoLayout(1)
         self.SetupScrolling()
 
-        EVT_COMBOBOX( self, fraction.GetId(), self.OnComboSelection )
-        EVT_COMBOBOX( self, code.GetId(), self.OnComboSelection )
-        EVT_COMBOBOX( self, statecode.GetId(), self.OnComboSelection )
-        EVT_COMBOBOX( self, statename.GetId(), self.OnComboSelection )
-        EVT_TEXT( self, fraction.GetId(), self.OnTextChange )
-        EVT_TEXT( self, code.GetId(), self.OnTextChange )
-        EVT_TEXT( self, statecode.GetId(), self.OnTextChange )
-        EVT_TEXT( self, statename.GetId(), self.OnTextChange )
-        EVT_COMBOBOX( self, self.list_selector.GetId(), self.OnListSelection )
+        self.Bind(wx.EVT_COMBOBOX, self.OnComboSelection, id=fraction.GetId())
+        self.Bind(wx.EVT_COMBOBOX, self.OnComboSelection, id=code.GetId())
+        self.Bind(wx.EVT_COMBOBOX, self.OnComboSelection, id=statecode.GetId())
+        self.Bind(wx.EVT_COMBOBOX, self.OnComboSelection, id=statename.GetId())
+        self.Bind(wx.EVT_TEXT, self.OnTextChange, id=code.GetId())
+        self.Bind(wx.EVT_TEXT, self.OnTextChange, id=statecode.GetId())
+        self.Bind(wx.EVT_TEXT, self.OnTextChange, id=statename.GetId())
+        self.Bind(wx.EVT_COMBOBOX, self.OnListSelection, id=self.list_selector.GetId())
 
-        EVT_TEXT( self, self.intctrl1.GetId(), self.OnTextChange )
-        EVT_TEXT( self, self.intctrl2.GetId(), self.OnTextChange )
-        EVT_TEXT( self, self.floatctrl.GetId(), self.OnTextChange )
-        EVT_COMBOBOX( self, numselect.GetId(), self.OnNumberSelect )
-        EVT_CHECKBOX( self, parens_check.GetId(), self.OnParensCheck )
+        self.Bind(wx.EVT_TEXT, self.OnTextChange, id=self.intctrl1.GetId())
+        self.Bind(wx.EVT_TEXT, self.OnTextChange, id=self.intctrl2.GetId())
+        self.Bind(wx.EVT_TEXT, self.OnTextChange, id=self.floatctrl.GetId())
+        self.Bind(wx.EVT_COMBOBOX, self.OnNumberSelect, id=numselect.GetId())
+        self.Bind(wx.EVT_CHECKBOX, self.OnParensCheck, id=parens_check.GetId())
 
-        EVT_TEXT( self, ipaddr1.GetId(), self.OnIpAddrChange )
-        EVT_TEXT( self, ipaddr2.GetId(), self.OnIpAddrChange )
-        EVT_TEXT( self, ipaddr3.GetId(), self.OnIpAddrChange )
+        self.Bind(wx.EVT_TEXT, self.OnIpAddrChange, id=ipaddr1.GetId())
+        self.Bind(wx.EVT_TEXT, self.OnIpAddrChange, id=ipaddr2.GetId())
+        self.Bind(wx.EVT_TEXT, self.OnIpAddrChange, id=ipaddr3.GetId())
 
 
 
@@ -595,9 +608,9 @@ with right-insert for ordinal:""")
         self.dynamicbox.SetValue(choices[0])
 
 # ---------------------------------------------------------------------
-class TestMaskedTextCtrls(wxNotebook):
+class TestMaskedTextCtrls(wx.Notebook):
     def __init__(self, parent, id, log):
-        wxNotebook.__init__(self, parent, id)
+        wx.Notebook.__init__(self, parent, id)
         self.log = log
 
         win = demoPage1(self, log)
@@ -623,19 +636,16 @@ def runTest(frame, nb, log):
     return testWin
 
 def RunStandalone():
-    app = wxPySimpleApp()
-    frame = wxFrame(None, -1, "Test wxMaskedTextCtrl", size=(640, 480))
+    app = wx.PySimpleApp()
+    frame = wx.Frame(None, -1, "Test MaskedTextCtrl", size=(640, 480))
     win = TestMaskedTextCtrls(frame, -1, sys.stdout)
     frame.Show(True)
     app.MainLoop()
 #----------------------------------------------------------------------------
-if __name__ == "__main__":
-    RunStandalone()
-
 
 overview = """<html>
 <PRE><FONT SIZE=-1>
-""" + maskededit_doc + """
+""" + med.__doc__ + """
 </FONT></PRE>
 """
 

@@ -1,35 +1,44 @@
+# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-from wxPython.wx import *
-
-import time
+import  time
+import  wx
 
 #---------------------------------------------------------------------------
 
-class CustomStatusBar(wxStatusBar):
+class CustomStatusBar(wx.StatusBar):
     def __init__(self, parent, log):
-        wxStatusBar.__init__(self, parent, -1)
+        wx.StatusBar.__init__(self, parent, -1)
+
+        # This status bar has three fields
         self.SetFieldsCount(3)
         self.log = log
         self.sizeChanged = False
-        EVT_SIZE(self, self.OnSize)
-        EVT_IDLE(self, self.OnIdle)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
+        self.Bind(wx.EVT_IDLE, self.OnIdle)
 
+        # Field 0 ... just text
         self.SetStatusText("A Custom StatusBar...", 0)
 
-        self.cb = wxCheckBox(self, 1001, "toggle clock")
-        EVT_CHECKBOX(self, 1001, self.OnToggleClock)
+        # This will fall into field 1 (the second field)
+        self.cb = wx.CheckBox(self, 1001, "toggle clock")
+        self.Bind(wx.EVT_CHECKBOX, self.OnToggleClock, self.cb)
         self.cb.SetValue(True)
 
         # set the initial position of the checkbox
         self.Reposition()
 
-        # start our timer
-        self.timer = wxPyTimer(self.Notify)
+        # We're going to use a timer to drive a 'clock' in the last
+        # field.
+        self.timer = wx.PyTimer(self.Notify)
         self.timer.Start(1000)
         self.Notify()
 
 
-    # Time-out handler
+    # Handles events from the timer we started in __init__().
+    # We're using it to drive a 'clock' in field 2 (the third field).
     def Notify(self):
         t = time.localtime(time.time())
         st = time.strftime("%d-%b-%Y   %I:%M:%S", t)
@@ -63,23 +72,22 @@ class CustomStatusBar(wxStatusBar):
     # reposition the checkbox
     def Reposition(self):
         rect = self.GetFieldRect(1)
-        self.cb.SetPosition(wxPoint(rect.x+2, rect.y+2))
-        self.cb.SetSize(wxSize(rect.width-4, rect.height-4))
+        self.cb.SetPosition((rect.x+2, rect.y+2))
+        self.cb.SetSize((rect.width-4, rect.height-4))
         self.sizeChanged = False
 
 
 
-class TestCustomStatusBar(wxFrame):
+class TestCustomStatusBar(wx.Frame):
     def __init__(self, parent, log):
-        wxFrame.__init__(self, parent, -1, 'Test Custom StatusBar')
-        #wxWindow(self, -1).SetBackgroundColour(wxNamedColour("WHITE"))
+        wx.Frame.__init__(self, parent, -1, 'Test Custom StatusBar')
 
         self.sb = CustomStatusBar(self, log)
         self.SetStatusBar(self.sb)
-        tc = wxTextCtrl(self, -1, "", style=wxTE_READONLY|wxTE_MULTILINE)
+        tc = wx.TextCtrl(self, -1, "", style=wx.TE_READONLY|wx.TE_MULTILINE)
 
         self.SetSize((500, 300))
-        EVT_CLOSE(self, self.OnCloseWindow)
+        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
     def OnCloseWindow(self, event):
         self.sb.timer.Stop()
@@ -96,21 +104,18 @@ def runTest(frame, nb, log):
 #---------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
 overview = """\
 A status bar is a narrow window that can be placed along the bottom of
 a frame to give small amounts of status information. It can contain
 one or more fields, one or more of which can be variable length
-according to the size of the window.  """
+according to the size of the window.  
 
+This example demonstrates how to create a custom status bar with actual
+gadgets embedded in it. In this case, the first field is just plain text,
+The second one has a checkbox that enables the timer, and the third
+field has a clock that shows the current time when it is enabled.
 
-
+"""
 
 
 if __name__ == '__main__':

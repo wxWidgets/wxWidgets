@@ -1,42 +1,49 @@
+# 11/5/2003 - Modified by grimmtooth@softhome.net (Jeff Grimmett)
+# 
+# o Updated for wx namespace
+#
+# 11/24/2003 - Modified by grimmtooth@softhome.net (Jeff Grimmett)
+# 
+# o Issues around line 167. I'm stuck.
+#
 
-from wxPython.wx import *
-
-import cPickle
+import  cPickle
+import  wx
 
 #----------------------------------------------------------------------
 
 
-class DoodlePad(wxWindow):
+class DoodlePad(wx.Window):
     def __init__(self, parent, log):
-        wxWindow.__init__(self, parent, -1, style=wxSUNKEN_BORDER)
+        wx.Window.__init__(self, parent, -1, style=wx.SUNKEN_BORDER)
         self.log = log
-        self.SetBackgroundColour(wxWHITE)
+        self.SetBackgroundColour(wx.WHITE)
         self.lines = []
         self.x = self.y = 0
         self.SetMode("Draw")
 
-        EVT_LEFT_DOWN(self, self.OnLeftDown)
-        EVT_LEFT_UP(self, self.OnLeftUp)
-        EVT_RIGHT_UP(self, self.OnRightUp)
-        EVT_MOTION(self, self.OnMotion)
-        EVT_PAINT(self, self.OnPaint)
+        wx.EVT_LEFT_DOWN(self, self.OnLeftDown)
+        wx.EVT_LEFT_UP(self, self.OnLeftUp)
+        wx.EVT_RIGHT_UP(self, self.OnRightUp)
+        wx.EVT_MOTION(self, self.OnMotion)
+        wx.EVT_PAINT(self, self.OnPaint)
 
 
     def SetMode(self, mode):
         self.mode = mode
         if self.mode == "Draw":
-            self.SetCursor(wxStockCursor(wxCURSOR_PENCIL))
+            self.SetCursor(wx.StockCursor(wx.CURSOR_PENCIL))
         else:
-            self.SetCursor(wxSTANDARD_CURSOR)
+            self.SetCursor(wx.STANDARD_CURSOR)
 
 
     def OnPaint(self, event):
-        dc = wxPaintDC(self)
+        dc = wx.PaintDC(self)
         self.DrawSavedLines(dc)
 
     def DrawSavedLines(self, dc):
         dc.BeginDrawing()
-        dc.SetPen(wxPen(wxBLUE, 3))
+        dc.SetPen(wx.Pen(wx.BLUE, 3))
         for line in self.lines:
             for coords in line:
                 dc.DrawLineXY(*coords)
@@ -51,7 +58,7 @@ class DoodlePad(wxWindow):
             self.x, self.y = event.GetPositionTuple()
             self.CaptureMouse()
         else:
-            wxBell()
+            wx.Bell()
             self.log.write("unknown mode!\n")
 
 
@@ -66,10 +73,10 @@ class DoodlePad(wxWindow):
 
     def OnMotion(self, event):
         if event.Dragging() and not self.mode == "Drag":
-            dc = wxClientDC(self)
+            dc = wx.ClientDC(self)
             dc.BeginDrawing()
-            dc.SetPen(wxPen(wxBLUE, 3))
-            coords = (self.x, self.y) + event.GetPositionTuple()
+            dc.SetPen(wx.Pen(wx.BLUE, 3))
+            coords = ((self.x, self.y), event.GetPosition())
             self.curLine.append(coords)
             dc.DrawLineXY(*coords)
             self.x, self.y = event.GetPositionTuple()
@@ -82,34 +89,35 @@ class DoodlePad(wxWindow):
 
         # create our own data format and use it in a
         # custom data object
-        ldata = wxCustomDataObject(wxCustomDataFormat("DoodleLines"))
+        ldata = wx.CustomDataObject(wx.CustomDataFormat("DoodleLines"))
         ldata.SetData(linesdata)
 
         # Also create a Bitmap version of the drawing
         size = self.GetSize()
-        bmp = wxEmptyBitmap(size.width, size.height)
-        dc = wxMemoryDC()
+        bmp = wx.EmptyBitmap(size.width, size.height)
+        dc = wx.MemoryDC()
         dc.SelectObject(bmp)
-        dc.SetBackground(wxWHITE_BRUSH)
+        dc.SetBackground(wx.WHITE_BRUSH)
         dc.Clear()
         self.DrawSavedLines(dc)
-        dc.SelectObject(wxNullBitmap)
+        dc.SelectObject(wx.NullBitmap)
 
         # Now make a data object for the bitmap and also a composite
         # data object holding both of the others.
-        bdata = wxBitmapDataObject(bmp)
-        data = wxDataObjectComposite()
+        bdata = wx.BitmapDataObject(bmp)
+        data = wx.DataObjectComposite()
         data.Add(ldata)
         data.Add(bdata)
 
         # And finally, create the drop source and begin the drag
         # and drop opperation
-        dropSource = wxDropSource(self)
+        dropSource = wx.DropSource(self)
         dropSource.SetData(data)
         self.log.WriteText("Begining DragDrop\n")
-        result = dropSource.DoDragDrop(wxDrag_AllowMove)
+        result = dropSource.DoDragDrop(wx.Drag_AllowMove)
         self.log.WriteText("DragDrop completed: %d\n" % result)
-        if result == wxDragMove:
+
+        if result == wx.DragMove:
             self.lines = []
             self.Refresh()
 
@@ -117,15 +125,15 @@ class DoodlePad(wxWindow):
 #----------------------------------------------------------------------
 
 
-class DoodleDropTarget(wxPyDropTarget):
+class DoodleDropTarget(wx.PyDropTarget):
     def __init__(self, window, log):
-        wxPyDropTarget.__init__(self)
+        wx.PyDropTarget.__init__(self)
         self.log = log
         self.dv = window
 
         # specify the type of data we will accept
-        self.df = wxCustomDataFormat("DoodleLines")
-        self.data = wxCustomDataObject(self.df)
+        self.df = wx.CustomDataFormat("DoodleLines")
+        self.data = wx.CustomDataObject(self.df)
         self.SetDataObject(self.data)
 
 
@@ -163,25 +171,26 @@ class DoodleDropTarget(wxPyDropTarget):
         if self.GetData():
             # convert it back to a list of lines and give it to the viewer
             linesdata = self.data.GetData()
-            lines = cPickle.loads(linesdata)
+            lines = wx.InputStream(cPickle.loads(linesdata))
             self.dv.SetLines(lines)
-        return d  # what is returned signals the source what to do
-                  # with the original data (move, copy, etc.)  In this
-                  # case we just return the suggested value given to us.
+            
+        # what is returned signals the source what to do
+        # with the original data (move, copy, etc.)  In this
+        # case we just return the suggested value given to us.
+        return d  
+        
 
 
-
-
-class DoodleViewer(wxWindow):
+class DoodleViewer(wx.Window):
     def __init__(self, parent, log):
-        wxWindow.__init__(self, parent, -1, style=wxSUNKEN_BORDER)
+        wx.Window.__init__(self, parent, -1, style=wx.SUNKEN_BORDER)
         self.log = log
-        self.SetBackgroundColour(wxWHITE)
+        self.SetBackgroundColour(wx.WHITE)
         self.lines = []
         self.x = self.y = 0
         dt = DoodleDropTarget(self, log)
         self.SetDropTarget(dt)
-        EVT_PAINT(self, self.OnPaint)
+        wx.EVT_PAINT(self, self.OnPaint)
 
 
     def SetLines(self, lines):
@@ -189,12 +198,13 @@ class DoodleViewer(wxWindow):
         self.Refresh()
 
     def OnPaint(self, event):
-        dc = wxPaintDC(self)
+        dc = wx.PaintDC(self)
         self.DrawSavedLines(dc)
 
     def DrawSavedLines(self, dc):
         dc.BeginDrawing()
-        dc.SetPen(wxPen(wxRED, 3))
+        dc.SetPen(wx.Pen(wx.RED, 3))
+
         for line in self.lines:
             for coords in line:
                 dc.DrawLineXY(*coords)
@@ -202,14 +212,14 @@ class DoodleViewer(wxWindow):
 
 #----------------------------------------------------------------------
 
-class CustomDnDPanel(wxPanel):
+class CustomDnDPanel(wx.Panel):
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
 
-        self.SetFont(wxFont(10, wxSWISS, wxNORMAL, wxBOLD, False))
+        self.SetFont(wx.Font(10, wx.SWISS, wx.NORMAL, wx.BOLD, False))
 
         # Make the controls
-        text1 = wxStaticText(self, -1,
+        text1 = wx.StaticText(self, -1,
                             "Draw a little picture in this window\n"
                             "then switch the mode below and drag the\n"
                             "picture to the lower window or to another\n"
@@ -217,12 +227,12 @@ class CustomDnDPanel(wxPanel):
                              "target.\n"
                             )
 
-        rb1 = wxRadioButton(self, -1, "Draw", style=wxRB_GROUP)
+        rb1 = wx.RadioButton(self, -1, "Draw", style=wx.RB_GROUP)
         rb1.SetValue(True)
-        rb2 = wxRadioButton(self, -1, "Drag")
+        rb2 = wx.RadioButton(self, -1, "Drag")
         rb2.SetValue(False)
 
-        text2 = wxStaticText(self, -1,
+        text2 = wx.StaticText(self, -1,
                              "The lower window is accepting a\n"
                              "custom data type that is a pickled\n"
                              "Python list of lines data.")
@@ -231,9 +241,9 @@ class CustomDnDPanel(wxPanel):
         view = DoodleViewer(self, log)
 
         # put them in sizers
-        sizer = wxBoxSizer(wxHORIZONTAL)
-        box = wxBoxSizer(wxVERTICAL)
-        rbox = wxBoxSizer(wxHORIZONTAL)
+        sizer = wx.BoxSizer(wx.HORIZONTAL)
+        box = wx.BoxSizer(wx.VERTICAL)
+        rbox = wx.BoxSizer(wx.HORIZONTAL)
 
         rbox.Add(rb1)
         rbox.Add(rb2)
@@ -244,18 +254,18 @@ class CustomDnDPanel(wxPanel):
 
         sizer.Add(box)
 
-        dndsizer = wxBoxSizer(wxVERTICAL)
-        dndsizer.Add(self.pad, 1, wxEXPAND|wxALL, 5)
-        dndsizer.Add(view, 1, wxEXPAND|wxALL, 5)
+        dndsizer = wx.BoxSizer(wx.VERTICAL)
+        dndsizer.Add(self.pad, 1, wx.EXPAND|wx.ALL, 5)
+        dndsizer.Add(view, 1, wx.EXPAND|wx.ALL, 5)
 
-        sizer.Add(dndsizer, 1, wxEXPAND)
+        sizer.Add(dndsizer, 1, wx.EXPAND)
 
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
 
         # Events
-        EVT_RADIOBUTTON(self, rb1.GetId(), self.OnRadioButton)
-        EVT_RADIOBUTTON(self, rb2.GetId(), self.OnRadioButton)
+        wx.EVT_RADIOBUTTON(self, rb1.GetId(), self.OnRadioButton)
+        wx.EVT_RADIOBUTTON(self, rb2.GetId(), self.OnRadioButton)
 
 
     def OnRadioButton(self, evt):
@@ -266,24 +276,24 @@ class CustomDnDPanel(wxPanel):
 #----------------------------------------------------------------------
 #----------------------------------------------------------------------
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
 
         self.SetAutoLayout(True)
-        sizer = wxBoxSizer(wxVERTICAL)
+        sizer = wx.BoxSizer(wx.VERTICAL)
 
         msg = "Custom Drag-And-Drop"
-        text = wxStaticText(self, -1, "", style=wxALIGN_CENTRE)
-        text.SetFont(wxFont(24, wxSWISS, wxNORMAL, wxBOLD, False))
+        text = wx.StaticText(self, -1, "", style=wx.ALIGN_CENTRE)
+        text.SetFont(wx.Font(24, wx.SWISS, wx.NORMAL, wx.BOLD, False))
         text.SetLabel(msg)
         w,h = text.GetTextExtent(msg)
-        text.SetSize(wxSize(w,h+1))
-        text.SetForegroundColour(wxBLUE)
-        sizer.Add(text, 0, wxEXPAND|wxALL, 5)
-        sizer.Add(wxStaticLine(self, -1), 0, wxEXPAND)
+        text.SetSize(wx.Size(w,h+1))
+        text.SetForegroundColour(wx.BLUE)
+        sizer.Add(text, 0, wx.EXPAND|wx.ALL, 5)
+        sizer.Add(wx.StaticLine(self, -1), 0, wx.EXPAND)
 
-        sizer.Add(CustomDnDPanel(self, log), 1, wxEXPAND)
+        sizer.Add(CustomDnDPanel(self, log), 1, wx.EXPAND)
 
         self.SetSizer(sizer)
 
@@ -298,29 +308,30 @@ def runTest(frame, nb, log):
 
 if __name__ == '__main__':
     import sys
+    
     class DummyLog:
         def WriteText(self, text):
             sys.stdout.write(text)
 
-    class TestApp(wxApp):
+    class TestApp(wx.App):
         def OnInit(self):
-            wxInitAllImageHandlers()
+            wx.InitAllImageHandlers()
             self.MakeFrame()
             return True
 
         def MakeFrame(self, event=None):
-            frame = wxFrame(None, -1, "Custom Drag and Drop", size=(550,400))
-            menu = wxMenu()
+            frame = wx.Frame(None, -1, "Custom Drag and Drop", size=(550,400))
+            menu = wx.Menu()
             menu.Append(6543, "Window")
-            mb = wxMenuBar()
+            mb = wx.MenuBar()
             mb.Append(menu, "New")
             frame.SetMenuBar(mb)
-            EVT_MENU(frame, 6543, self.MakeFrame)
+            wx.EVT_MENU(frame, 6543, self.MakeFrame)
             panel = TestPanel(frame, DummyLog())
             frame.Show(True)
             self.SetTopWindow(frame)
 
-
+    #----------------------------------------------------------------------
 
     app = TestApp(0)
     app.MainLoop()
@@ -338,10 +349,8 @@ A second data object is also created containing a bitmap of the image
 and is made available to any drop target that accepts bitmaps, such as
 MS Word.
 
-The two data objects are combined in a wxDataObjectComposite and the
+The two data objects are combined in a wx.DataObjectComposite and the
 rest is handled by the framework.
 </body></html>
 """
-
-
 

@@ -1,29 +1,32 @@
+# 11/15/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-from wxPython.wx import *
-from wxPython.calendar import *
-
+import  wx
+import  wx.lib.calendar as calendar
 
 #----------------------------------------------------------------------
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, ID, log):
-        wxPanel.__init__(self, parent, ID)
+        wx.Panel.__init__(self, parent, ID)
         self.log = log
 
-        cal = wxCalendarCtrl(self, -1, wxDateTime_Now(), pos = (25,50),
-                             style = wxCAL_SHOW_HOLIDAYS
-                             | wxCAL_SUNDAY_FIRST
-                             | wxCAL_SEQUENTIAL_MONTH_SELECTION
+        cal = calendar.CalendarCtrl(self, -1, wx.DateTime_Now(), pos = (25,50),
+                             style = calendar.CAL_SHOW_HOLIDAYS
+                             | calendar.CAL_SUNDAY_FIRST
+                             | calendar.CAL_SEQUENTIAL_MONTH_SELECTION
                              )
 
-        EVT_CALENDAR(self, cal.GetId(), self.OnCalSelected)
+        self.Bind(calendar.EVT_CALENDAR, self.OnCalSelected, id=cal.GetId())
 
-        b = wxButton(self, -1, "Destroy the Calendar", pos = (250, 50))
-        EVT_BUTTON(self, b.GetId(), self.OnButton)
+        b = wx.Button(self, -1, "Destroy the Calendar", pos = (250, 50))
+        self.Bind(wx.EVT_BUTTON, self.OnButton, id= b.GetId())
         self.cal = cal
 
         # Set up control to display a set of holidays:
-        EVT_CALENDAR_MONTH(self, cal.GetId(), self.OnChangeMonth)
+        self.Bind(calendar.EVT_CALENDAR_MONTH, self.OnChangeMonth, id=cal.GetId())
         self.holidays = [(1,1), (10,31), (12,25) ]    # (these don't move around)
         self.OnChangeMonth()
 
@@ -36,6 +39,7 @@ class TestPanel(wxPanel):
 
     def OnChangeMonth(self, evt=None):
         cur_month = self.cal.GetDate().GetMonth() + 1   # convert wxDateTime 0-11 => 1-12
+
         for month, day in self.holidays:
             if month == cur_month:
                 self.cal.SetHoliday(day)

@@ -1,5 +1,9 @@
+# 11/18/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-from wxPython.wx import *
+import  wx
 
 #---------------------------------------------------------------------------
 
@@ -11,24 +15,25 @@ buttonDefs = {
     819 : ('GridEnterHandler',' Remapping keys to behave differently '),
     820 : ('GridCustEditor',  ' Shows how to create a custom Cell Editor '),
     821 : ('GridDragable',    ' A wxGrid with dragable rows and columns '),
-    822 : ('GridDragAndDrop', 'Shows how to make a grid a drop target for files'),
+    822 : ('GridDragAndDrop', ' Shows how to make a grid a drop target for files'),
     }
 
 
-class ButtonPanel(wxPanel):
+class ButtonPanel(wx.Panel):
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
         self.log = log
 
-        box = wxBoxSizer(wxVERTICAL)
+        box = wxBoxSizer(wx.VERTICAL)
         box.Add((20, 20))
         keys = buttonDefs.keys()
         keys.sort()
+
         for k in keys:
             text = buttonDefs[k][1]
-            btn = wxButton(self, k, text)
-            box.Add(btn, 0, wxALIGN_CENTER|wxALL, 10)
-            EVT_BUTTON(self, k, self.OnButton)
+            btn = wx.Button(self, k, text)
+            box.Add(btn, 0, wx.ALIGN_CENTER|wx.ALL, 10)
+            self.Bind(wx.EVT_BUTTON, self.OnButton, btn)
 
         self.SetAutoLayout(True)
         self.SetSizer(box)
@@ -48,13 +53,6 @@ def runTest(frame, nb, log):
     return win
 
 #---------------------------------------------------------------------------
-
-
-
-
-
-
-
 
 
 
@@ -97,8 +95,6 @@ and wrapping around to the next row when needed.
 <p>
 
 """
-
-
 
 
 if __name__ == '__main__':

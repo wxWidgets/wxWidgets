@@ -1,26 +1,32 @@
+# 11/22/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-from wxPython.wx import *
+import  wx
 
 #----------------------------------------------------------------------
 
 # The wxVListBox is much like a regular wxListBox except you draw the
 # items yourself and the items can vary in height.
-class MyVListBox(wxVListBox):
+class MyVListBox(wx.VListBox):
 
     # This method must be overridden.  When called it should draw the
     # n'th item on the dc within the rect.  How it is drawn, and what
     # is drawn is entirely up to you.
     def OnDrawItem(self, dc, rect, n):
         dc.DrawLabel(self._getItemText(n), rect,
-                     wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL)
+                     wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
 
     # This method must be overridden.  It should return the height
     # required to draw the n'th item.
     def OnMeasureItem(self, n):
         height = 0
+
         for line in self._getItemText(n).split('\n'):
             w, h = self.GetTextExtent(line)
             height += h
+
         return height + 5
 
 
@@ -42,9 +48,9 @@ class MyVListBox(wxVListBox):
 
 #----------------------------------------------------------------------
 
-# The wxHtmlListBox derives from wxVListBox, but draws each item
-# itself as a wxHtmlCell.
-class MyHtmlListBox(wxHtmlListBox):
+# The wx.HtmlListBox derives from wx.VListBox, but draws each item
+# itself as a wx.HtmlCell.
+class MyHtmlListBox(wx.HtmlListBox):
 
     def OnGetItem(self, n):
         if n % 2 == 0:
@@ -54,30 +60,30 @@ class MyHtmlListBox(wxHtmlListBox):
 
 #----------------------------------------------------------------------
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, log):
         self.log = log
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
         spacer = 50
 
-        vlb = MyVListBox(self, -1, size=(150, 250), style=wxBORDER_SUNKEN)
+        vlb = MyVListBox(self, -1, size=(150, 250), style=wx.BORDER_SUNKEN)
         vlb.SetItemCount(50)
         vlb.SetSelection(0)
         vlb.SetFocus()
-        vlbSizer = wxBoxSizer(wxVERTICAL)
+        vlbSizer = wx.BoxSizer(wx.VERTICAL)
         vlbSizer.Add((spacer, spacer))
-        vlbSizer.Add(wxStaticText(self, -1, "wxVListBox"), 0, 5, wxALL)
+        vlbSizer.Add(wx.StaticText(self, -1, "wx.VListBox"), 0, 5, wx.ALL)
         vlbSizer.Add(vlb)
 
-        hlb = MyHtmlListBox(self, -1, size=(150, 250), style=wxBORDER_SUNKEN)
+        hlb = MyHtmlListBox(self, -1, size=(150, 250), style=wx.BORDER_SUNKEN)
         hlb.SetItemCount(50)
         hlb.SetSelection(0)
-        hlbSizer = wxBoxSizer(wxVERTICAL)
+        hlbSizer = wx.BoxSizer(wx.VERTICAL)
         hlbSizer.Add((spacer, spacer))
-        hlbSizer.Add(wxStaticText(self, -1, "wxHtmlListBox"), 0, 5, wxALL)
+        hlbSizer.Add(wx.StaticText(self, -1, "wx.HtmlListBox"), 0, 5, wx.ALL)
         hlbSizer.Add(hlb)
 
-        sizer = wxBoxSizer(wxHORIZONTAL)
+        sizer = wx.BoxSizer(wx.HORIZONTAL)
         sizer.Add((spacer, spacer))
         sizer.Add(vlbSizer)
         sizer.Add((spacer, spacer))

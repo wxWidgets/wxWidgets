@@ -1,10 +1,15 @@
+# 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-from wxPython.wx import *
-
-import time
+import  time
+import  wx
 
 #---------------------------------------------------------------------------
 
+## For your convenience; an example of creating your own timer class.
+##
 ## class TestTimer(wxTimer):
 ##     def __init__(self, log = None):
 ##         wxTimer.__init__(self)
@@ -16,32 +21,30 @@ import time
 
 #---------------------------------------------------------------------------
 
-ID_Start  = wxNewId()
-ID_Stop   = wxNewId()
-ID_Timer  = wxNewId()
-ID_Timer2 = wxNewId()
+ID_Start  = wx.NewId()
+ID_Stop   = wx.NewId()
+ID_Timer  = wx.NewId()
+ID_Timer2 = wx.NewId()
 
-class TestTimerWin(wxPanel):
+class TestTimerWin(wx.Panel):
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
         self.log = log
 
-        wxStaticText(self, -1, "This is a timer example",
-                               wxPoint(15, 30))
+        wx.StaticText(self, -1, "This is a timer example", (15, 30))
+        wx.Button(self, ID_Start, ' Start ', (15, 75), wx.DefaultSize)
+        wx.Button(self, ID_Stop, ' Stop ', (115, 75), wx.DefaultSize)
 
-        wxButton(self, ID_Start, ' Start ', wxPoint(15, 75), wxDefaultSize)
-        wxButton(self, ID_Stop, ' Stop ', wxPoint(115, 75), wxDefaultSize)
+        self.timer = wx.Timer(self,      # object to send the event to
+                              ID_Timer)  # event id to use
 
-        self.timer = wxTimer(self,      # object to send the event to
-                             ID_Timer)  # event id to use
+        self.timer2 = wx.Timer(self,      # object to send the event to
+                              ID_Timer2)  # event id to use
 
-        self.timer2 = wxTimer(self,      # object to send the event to
-                             ID_Timer2)  # event id to use
-
-        EVT_BUTTON(self, ID_Start, self.OnStart)
-        EVT_BUTTON(self, ID_Stop,  self.OnStop)
-        EVT_TIMER(self,  ID_Timer, self.OnTimer)
-        EVT_TIMER(self,  ID_Timer2, self.OnTimer2)
+        self.Bind(wx.EVT_BUTTON, self.OnStart, id=ID_Start)
+        self.Bind(wx.EVT_BUTTON, self.OnStop, id=ID_Stop)
+        self.Bind(wx.EVT_TIMER, self.OnTimer, id=ID_Timer)
+        self.Bind(wx.EVT_TIMER, self.OnTimer2, id=ID_Timer2)
 
     def OnStart(self, event):
         self.timer.Start(1000)
@@ -52,12 +55,12 @@ class TestTimerWin(wxPanel):
         self.timer2.Stop()
 
     def OnTimer(self, event):
-        wxBell()
+        wx.Bell()
         if self.log:
             self.log.WriteText('beep!\n')
 
     def OnTimer2(self, event):
-        wxBell()
+        wx.Bell()
         if self.log:
             self.log.WriteText('beep 2!\n')
 
@@ -72,7 +75,8 @@ def runTest(frame, nb, log):
 
 
 overview = """\
-The wxTimer class allows you to execute code at specified intervals.
+The wxTimer class allows you to execute code at specified intervals from
+within the wxPython event loop. Timers can be one-shot or repeating.
 
 """
 

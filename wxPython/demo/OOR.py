@@ -1,50 +1,56 @@
+# 11/13/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+#
 
-from wxPython.wx import *
-from wxPython.html import *
+import  wx
+import  wx.html as wxhtml
 
 #----------------------------------------------------------------------
 
-BTN1 = wxNewId()
-BTN2 = wxNewId()
+BTN1 = wx.NewId()
+BTN2 = wx.NewId()
 
-
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
         self.log = log
 
-        sizer = wxBoxSizer(wxVERTICAL)
-        html = wxHtmlWindow(self, -1)
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        html = wxhtml.HtmlWindow(self, -1)
         html.SetPage(overview)
-        sizer.Add(html, 1, wxEXPAND|wxALL, 5)
+        sizer.Add(html, 1, wx.EXPAND|wx.ALL, 5)
 
-        btns = wxBoxSizer(wxHORIZONTAL)
-        btns.Add(50, -1, 1, wxEXPAND)
-        btn1 = wxButton(self, BTN1, "Find My Alter-ego")  # don't save a ref to this one
+        btns = wx.BoxSizer(wx.HORIZONTAL)
+        btns.Add((50, -1), 1, wx.EXPAND)
+        btn1 = wx.Button(self, BTN1, "Find My Alter-ego") # don't save a ref to this one 
         btns.Add(btn1)
-        btns.Add(50, -1, 1, wxEXPAND)
-        self.btn2 = wxButton(self, BTN2, "Find Myself")
+        btns.Add((50, -1), 1, wx.EXPAND)
+        self.btn2 = wx.Button(self, BTN2, "Find Myself")
         btns.Add(self.btn2)
-        btns.Add(50, -1, 1, wxEXPAND)
+        btns.Add((50, -1), 1, wx.EXPAND)
 
-        sizer.Add(btns, 0, wxEXPAND|wxALL, 15)
+        sizer.Add(btns, 0, wx.EXPAND|wx.ALL, 15)
 
         self.SetSizer(sizer)
         self.SetAutoLayout(True)
 
         self.sizer = sizer  # save it for testing later
 
-        EVT_BUTTON(self, BTN1, self.OnFindButton1)
-        EVT_BUTTON(self, BTN2, self.OnFindButton2)
+        self.Bind(wx.EVT_BUTTON, self.OnFindButton1, id=BTN1)
+        self.Bind(wx.EVT_BUTTON, self.OnFindButton2, id=BTN2)
 
 
     def OnFindButton1(self, evt):
         win = self.FindWindowById(BTN1)
+
         if win is None:
             self.log.write("***** OOPS! None returned...\n")
             return
+
         className = win.__class__.__name__
-        if className in ["wxButton", "wxButtonPtr"]:
+
+        if className in ["Button", "ButtonPtr"]:
             self.log.write("The types are the same! <grin>\n")
         else:
             self.log.write("Got %s, expected wxButton or wxButtonPtr\n" % className)
@@ -53,27 +59,33 @@ class TestPanel(wxPanel):
 
     def OnFindButton2(self, evt):
         win = self.FindWindowById(BTN2)
+
         if win is None:
             self.log.write("***** OOPS! None returned...\n")
             return
+
         if win is self.btn2:
             self.log.write("The objects are the same! <grin>\n")
         else:
             self.log.write("The objects are NOT the same! <frown>\n")
 
         win = evt.GetEventObject()
+
         if win is None:
             self.log.write("***** OOPS! None returned...\n")
             return
+
         if win is self.btn2:
             self.log.write("The objects are the same! <grin>\n")
         else:
             self.log.write("The objects are NOT the same! <frown>\n")
 
         sizer = self.GetSizer()
+
         if sizer is None:
             self.log.write("***** OOPS! None returned...\n")
             return
+
         if sizer is self.sizer:
             self.log.write("The objects are the same! <grin>\n")
         else:
@@ -132,7 +144,7 @@ and be able to then turn wxPyTypeCast in to a no-op.
 </ol>
 
 <p>The first button below shows the first of these phases (<i>working</i>)
-and the second will show #2 (<i>working as of 2.3.2</i>)
+and the second will show #2 (<i>working as of Python 2.3.2</i>)
 
 </body></html>
 """

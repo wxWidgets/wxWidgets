@@ -1,20 +1,34 @@
-from wxPython.wx import *
+# 11/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
+# 11/30/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Some issues with the listbox example; I tried correcting
+#   it but it's still not working the way it should. Commented
+#   out for now but will be revisited.
+# o The math in determining the popup window's position is
+#   a bit off.
+# 
+
+import  wx
 
 havePopupWindow = 1
 try:
-    wxPopupWindow
+    wx.PopupWindow
 except NameError:
     havePopupWindow = 0
-    wxPopupWindow = wxPopupTransientWindow = wxWindow
+    wx.PopupWindow = wx.PopupTransientWindow = wx.Window
 
 #---------------------------------------------------------------------------
 
-class TestPopup(wxPopupWindow):
+class TestPopup(wx.PopupWindow):
     """Adds a bit of text and mouse movement to the wxPopupWindow"""
     def __init__(self, parent, style):
-        wxPopupWindow.__init__(self, parent, style)
+        wx.PopupWindow.__init__(self, parent, style)
         self.SetBackgroundColour("CADET BLUE")
-        st = wxStaticText(self, -1,
+
+        st = wx.StaticText(self, -1,
                           "This is a special kind of top level\n"
                           "window that can be used for\n"
                           "popup menus, combobox popups\n"
@@ -27,17 +41,19 @@ class TestPopup(wxPopupWindow):
                           "and closed with the right."
                           ,
                           pos=(10,10))
+
         sz = st.GetBestSize()
         self.SetSize( (sz.width+20, sz.height+20) )
 
-        EVT_LEFT_DOWN(self, self.OnMouseLeftDown)
-        EVT_MOTION(self, self.OnMouseMotion)
-        EVT_LEFT_UP(self, self.OnMouseLeftUp)
-        EVT_RIGHT_UP(self, self.OnRightUp)
-        EVT_LEFT_DOWN(st, self.OnMouseLeftDown)
-        EVT_MOTION(st, self.OnMouseMotion)
-        EVT_LEFT_UP(st, self.OnMouseLeftUp)
-        EVT_RIGHT_UP(st, self.OnRightUp)
+        self.Bind(wx.EVT_LEFT_DOWN, self.OnMouseLeftDown)
+        self.Bind(wx.EVT_MOTION, self.OnMouseMotion)
+        self.Bind(wx.EVT_LEFT_UP, self.OnMouseLeftUp)
+        self.Bind(wx.EVT_RIGHT_UP, self.OnRightUp)
+
+        st.Bind(wx.EVT_LEFT_DOWN, self.OnMouseLeftDown)
+        st.Bind(wx.EVT_MOTION, self.OnMouseMotion)
+        st.Bind(wx.EVT_LEFT_UP, self.OnMouseLeftUp)
+        st.Bind(wx.EVT_RIGHT_UP, self.OnRightUp)
 
     def OnMouseLeftDown(self, evt):
         self.ldPos = evt.GetEventObject().ClientToScreen(evt.GetPosition())
@@ -59,14 +75,14 @@ class TestPopup(wxPopupWindow):
         self.Destroy()
 
 
-class TestTransientPopup(wxPopupTransientWindow):
+class TestTransientPopup(wx.PopupTransientWindow):
     """Adds a bit of text and mouse movement to the wxPopupWindow"""
     def __init__(self, parent, style, log):
-        wxPopupTransientWindow.__init__(self, parent, style)
+        wx.PopupTransientWindow.__init__(self, parent, style)
         self.log = log
-        panel = wxPanel(self, -1)
+        panel = wx.Panel(self, -1)
         panel.SetBackgroundColour("#FFB6C1")
-        st = wxStaticText(panel, -1,
+        st = wx.StaticText(panel, -1,
                           "wxPopupTransientWindow is a\n"
                           "wxPopupWindow which disappears\n"
                           "automatically when the user\n"
@@ -87,77 +103,87 @@ class TestTransientPopup(wxPopupTransientWindow):
 
 
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
         self.log = log
 
-        b = wxButton(self, -1, "Show wxPopupWindow", (25, 50))
-        EVT_BUTTON(self, b.GetId(), self.OnShowPopup)
+        b = wx.Button(self, -1, "Show wxPopupWindow", (25, 50))
+        self.Bind(wx.EVT_BUTTON, self.OnShowPopup, b)
 
-        b = wxButton(self, -1, "Show wxPopupTransientWindow", (25, 95))
-        EVT_BUTTON(self, b.GetId(), self.OnShowPopupTransient)
+        b = wx.Button(self, -1, "Show wxPopupTransientWindow", (25, 95))
+        self.Bind(wx.EVT_BUTTON, self.OnShowPopupTransient, b)
 
-        if 0:
-            b = wxButton(self, -1, "Show wxPopupWindow with listbox", (25, 140))
-            EVT_BUTTON(self, b.GetId(), self.OnShowPopupListbox)
+        # This isn't working so well, not sure why. Commented out for
+        # now.
+        
+#        b = wx.Button(self, -1, "Show wxPopupWindow with listbox", (25, 140))
+#        self.Bind(wx.EVT_BUTTON, self.OnShowPopupListbox, b)
 
 
     def OnShowPopup(self, evt):
-        win = TestPopup(self, wxSIMPLE_BORDER)
+        win = TestPopup(self, wx.SIMPLE_BORDER)
 
         # Show the popup right below or above the button
         # depending on available screen space...
         btn = evt.GetEventObject()
         pos = btn.ClientToScreen( (0,0) )
         sz =  btn.GetSize()
-        win.Position(pos, (0, sz.height))
+        win.Position(pos, (0, sz[1]))
 
         win.Show(True)
 
 
     def OnShowPopupTransient(self, evt):
-        win = TestTransientPopup(self, wxSIMPLE_BORDER, self.log)
+        win = TestTransientPopup(self, wx.SIMPLE_BORDER, self.log)
 
         # Show the popup right below or above the button
         # depending on available screen space...
         btn = evt.GetEventObject()
         pos = btn.ClientToScreen( (0,0) )
         sz =  btn.GetSize()
-        win.Position(pos, (0, sz.height))
+        win.Position(pos, (0, sz[1]))
 
         win.Popup()
 
 
     def OnShowPopupListbox(self, evt):
-        win = TestPopupWithListbox(self, wxNO_BORDER, self.log)
+        win = TestPopupWithListbox(self, wx.NO_BORDER, self.log)
 
         # Show the popup right below or above the button
         # depending on available screen space...
         btn = evt.GetEventObject()
         pos = btn.ClientToScreen( (0,0) )
         sz =  btn.GetSize()
-        win.Position(pos, (0, sz.height))
+        win.Position(pos, (0, sz[1]))
 
         win.Show(True)
 
-class TestPopupWithListbox(wxPopupWindow):
+class TestPopupWithListbox(wx.PopupWindow):
     def __init__(self, parent, style, log):
-        wxPopupWindow.__init__(self, parent, style)
+        wx.PopupWindow.__init__(self, parent, style)
+
         import keyword
-        self.lb = wxListBox(self, -1, choices = keyword.kwlist)
+
+        self.lb = wx.ListBox(self, -1, choices = keyword.kwlist)
         #sz = self.lb.GetBestSize()
         self.SetSize((150, 75)) #sz)
         self.lb.SetSize(self.GetClientSize())
         self.lb.SetFocus()
-        EVT_LEFT_DOWN(self.lb, self.OnLeft)
-        EVT_LISTBOX(self, -1, self.OnListBox)
+        self.Bind(wx.EVT_LISTBOX, self.OnListBox)
+        self.lb.Bind(wx.EVT_LEFT_DOWN, self.OnLeft)
 
     def OnLeft(self, evt):
-        print "OnLeft", evt.GetEventObject()
+        obj = evt.GetEventObject()
+        print "OnLeft", obj
+        print 'Selected: %s' % obj.GetStringSelection()
+        obj.Show(False)
         evt.Skip()
+
     def OnListBox(self, evt):
-        print "OnListBox", evt.GetEventObject()
+        obj = evt.GetEventObject()
+        print "OnListBox", obj
+        print 'Selected: %s' % obj.GetString()
         evt.Skip()
 
 
@@ -169,20 +195,19 @@ def runTest(frame, nb, log):
         win = TestPanel(nb, log)
         return win
     else:
-        dlg = wxMessageDialog(frame, 'wxPopupWindow is not available on this platform.',
-                          'Sorry', wxOK | wxICON_INFORMATION)
+        dlg = wx.MessageDialog(
+                frame, 'wxPopupWindow is not available on this platform.',
+                'Sorry', wx.OK | wx.ICON_INFORMATION
+                )
+
         dlg.ShowModal()
         dlg.Destroy()
 
 #---------------------------------------------------------------------------
 
 
-
-
 overview = """\
 """
-
-
 
 
 if __name__ == '__main__':

@@ -1,27 +1,32 @@
+# 11/15/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
 
-from wxPython.wx import *
+import  wx
 
 #---------------------------------------------------------------------------
 
-class TestChoice(wxPanel):
+class TestChoice(wx.Panel):
     def __init__(self, parent, log):
         self.log = log
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
 
         sampleList = ['zero', 'one', 'two', 'three', 'four', 'five',
                       'six', 'seven', 'eight']
 
-        wxStaticText(self, -1, "This example uses the wxChoice control.",
-                               wxPoint(15, 10))
-
-        wxStaticText(self, -1, "Select one:", wxPoint(15, 50), wxSize(75, 20))
-        self.ch = wxChoice(self, 40, (80, 50), choices = sampleList)
-        EVT_CHOICE(self, 40, self.EvtChoice)
+        wx.StaticText(self, -1, "This example uses the wxChoice control.", (15, 10))
+        wx.StaticText(self, -1, "Select one:", (15, 50), (75, 20))
+        self.ch = wx.Choice(self, -1, (80, 50), choices = sampleList)
+        self.Bind(wx.EVT_CHOICE, self.EvtChoice, self.ch)
 
 
     def EvtChoice(self, event):
         self.log.WriteText('EvtChoice: %s\n' % event.GetString())
         self.ch.Append("A new item")
+        
+        if event.GetString() == 'one':
+            self.log.WriteText('Well done!\n')
 
 
 #---------------------------------------------------------------------------
@@ -32,21 +37,18 @@ def runTest(frame, nb, log):
 
 #---------------------------------------------------------------------------
 
+overview = """
+A Choice control is used to select one of a list of strings. Unlike a listbox, 
+only the current selection is visible until the user pulls down the menu of 
+choices.
 
+This demo illustrates how to set up the Choice control and how to extract the
+selected choice once it is selected. 
 
-
-
-
-
-
-
-
-
-
-overview = """\
-A choice item is used to select one of a list of strings. Unlike a listbox, only the selection is visible until the user pulls down the menu of choices.
+Note that the syntax of the constructor is different than the C++ implementation.
+The number of choices and the choice array are consilidated into one python 
+<code>list</code>.
 """
-
 
 
 

@@ -1,38 +1,45 @@
+# 11/22/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o Updated for wx namespace
+# 
+# 11/3-/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o WizardPage* doesn't support GetId()
+# 
 
-from wxPython.wx import *
-from wxPython.wizard import *
-
-import images
+import  wx
+import  wx.wizard   as  wiz
+import  images
 
 #----------------------------------------------------------------------
 
 def makePageTitle(wizPg, title):
-    sizer = wxBoxSizer(wxVERTICAL)
+    sizer = wx.BoxSizer(wx.VERTICAL)
     wizPg.SetSizer(sizer)
-    title = wxStaticText(wizPg, -1, title)
-    title.SetFont(wxFont(18, wxSWISS, wxNORMAL, wxBOLD))
-    sizer.AddWindow(title, 0, wxALIGN_CENTRE|wxALL, 5)
-    sizer.AddWindow(wxStaticLine(wizPg, -1), 0, wxEXPAND|wxALL, 5)
+    title = wx.StaticText(wizPg, -1, title)
+    title.SetFont(wx.Font(18, wx.SWISS, wx.NORMAL, wx.BOLD))
+    sizer.AddWindow(title, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+    sizer.AddWindow(wx.StaticLine(wizPg, -1), 0, wx.EXPAND|wx.ALL, 5)
     return sizer
 
 #----------------------------------------------------------------------
 
-class TitledPage(wxWizardPageSimple):
+class TitledPage(wiz.WizardPageSimple):
     def __init__(self, parent, title):
-        wxWizardPageSimple.__init__(self, parent)
+        wiz.WizardPageSimple.__init__(self, parent)
         self.sizer = makePageTitle(self, title)
 
 
 #----------------------------------------------------------------------
 
-class SkipNextPage(wxPyWizardPage):
+class SkipNextPage(wiz.PyWizardPage):
     def __init__(self, parent, title):
-        wxPyWizardPage.__init__(self, parent)
+        wiz.PyWizardPage.__init__(self, parent)
         self.next = self.prev = None
         self.sizer = makePageTitle(self, title)
 
-        self.cb = wxCheckBox(self, -1, "Skip next page")
-        self.sizer.Add(self.cb, 0, wxALL, 5)
+        self.cb = wx.CheckBox(self, -1, "Skip next page")
+        self.sizer.Add(self.cb, 0, wx.ALL, 5)
 
     def SetNext(self, next):
         self.next = next
@@ -44,7 +51,7 @@ class SkipNextPage(wxPyWizardPage):
     # Classes derived from wxPyWizardPanel must override
     # GetNext and GetPrev, and may also override GetBitmap
     # as well as all those methods overridable by
-    # wxPyWindow.
+    # wx.PyWindow.
 
     def GetNext(self):
         """If the checkbox is set then return the next page's next page"""
@@ -58,14 +65,14 @@ class SkipNextPage(wxPyWizardPage):
 
 #----------------------------------------------------------------------
 
-class UseAltBitmapPage(wxPyWizardPage):
+class UseAltBitmapPage(wiz.PyWizardPage):
     def __init__(self, parent, title):
-        wxPyWizardPage.__init__(self, parent)
+        wiz.PyWizardPage.__init__(self, parent)
         self.next = self.prev = None
         self.sizer = makePageTitle(self, title)
 
-        self.sizer.Add(wxStaticText(self, -1, "This page uses a different bitmap"),
-                       0, wxALL, 5)
+        self.sizer.Add(wx.StaticText(self, -1, "This page uses a different bitmap"),
+                       0, wx.ALL, 5)
 
     def SetNext(self, next):
         self.next = next
@@ -91,23 +98,22 @@ class UseAltBitmapPage(wxPyWizardPage):
 
 #----------------------------------------------------------------------
 
-class TestPanel(wxPanel):
-    ID_wiz = wxNewId()
+class TestPanel(wx.Panel):
+    ID_wiz = wx.NewId()
 
     def __init__(self, parent, log):
         self.log = log
-        wxPanel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1)
 
-        b = wxButton(self, -1, "Run Simple Wizard", pos=(50, 50))
-        EVT_BUTTON(self, b.GetId(), self.OnRunSimpleWizard)
+        b = wx.Button(self, -1, "Run Simple Wizard", pos=(50, 50))
+        self.Bind(wx.EVT_BUTTON, self.OnRunSimpleWizard, b)
 
-        b = wxButton(self, -1, "Run Dynamic Wizard", pos=(50, 100))
-        EVT_BUTTON(self, b.GetId(), self.OnRunDynamicWizard)
+        b = wx.Button(self, -1, "Run Dynamic Wizard", pos=(50, 100))
+        self.Bind(wx.EVT_BUTTON, self.OnRunDynamicWizard, b)
 
-        EVT_WIZARD_PAGE_CHANGED(self, self.ID_wiz, self.OnWizPageChanged)
-        EVT_WIZARD_PAGE_CHANGING(self, self.ID_wiz, self.OnWizPageChanging)
-        EVT_WIZARD_CANCEL(self, self.ID_wiz, self.OnWizCancel)
-        EVT_WIZARD_FINISHED(self, self.ID_wiz, self.OnWizFinished)
+        wiz.EVT_WIZARD_PAGE_CHANGED(self, self.ID_wiz, self.OnWizPageChanged)
+        wiz.EVT_WIZARD_PAGE_CHANGING(self, self.ID_wiz, self.OnWizPageChanging)
+        wiz.EVT_WIZARD_CANCEL(self, self.ID_wiz, self.OnWizCancel)
 
 
     def OnWizPageChanged(self, evt):
@@ -115,6 +121,7 @@ class TestPanel(wxPanel):
             dir = "forward"
         else:
             dir = "backward"
+
         page = evt.GetPage()
         self.log.write("OnWizPageChanged: %s, %s\n" % (dir, page.__class__))
 
@@ -124,6 +131,7 @@ class TestPanel(wxPanel):
             dir = "forward"
         else:
             dir = "backward"
+
         page = evt.GetPage()
         self.log.write("OnWizPageChanging: %s, %s\n" % (dir, page.__class__))
 
@@ -135,7 +143,7 @@ class TestPanel(wxPanel):
         # Show how to prevent cancelling of the wizard.  The
         # other events can be Veto'd too.
         if page is self.page1:
-            wxMessageBox("Cancelling on the first page has been prevented.", "Sorry")
+            wx.MessageBox("Cancelling on the first page has been prevented.", "Sorry")
             evt.Veto()
 
     def OnWizFinished(self, evt):
@@ -144,7 +152,7 @@ class TestPanel(wxPanel):
 
     def OnRunSimpleWizard(self, evt):
         # Create the wizard and the pages
-        wizard = wxWizard(self, self.ID_wiz, "Simple Wizard",
+        wizard = wiz.Wizard(self, self.ID_wiz, "Simple Wizard",
                           images.getWizTest1Bitmap())
         page1 = TitledPage(wizard, "Page 1")
         page2 = TitledPage(wizard, "Page 2")
@@ -152,33 +160,33 @@ class TestPanel(wxPanel):
         page4 = TitledPage(wizard, "Page 4")
         self.page1 = page1
 
-        page1.sizer.Add(wxStaticText(page1, -1, """
+        page1.sizer.Add(wx.StaticText(page1, -1, """
 This wizard is totally useless, but is meant to show how to
 chain simple wizard pages together in a non-dynamic manner.
 IOW, the order of the pages never changes, and so the
 wxWizardPageSimple class can easily be used for the pages."""))
         wizard.FitToPage(page1)
-        page4.sizer.Add(wxStaticText(page4, -1, "\nThis is the last page."))
+        page4.sizer.Add(wx.StaticText(page4, -1, "\nThis is the last page."))
 
         # Use the convenience Chain function to connect the pages
-        wxWizardPageSimple_Chain(page1, page2)
-        wxWizardPageSimple_Chain(page2, page3)
-        wxWizardPageSimple_Chain(page3, page4)
+        wiz.WizardPageSimple_Chain(page1, page2)
+        wiz.WizardPageSimple_Chain(page2, page3)
+        wiz.WizardPageSimple_Chain(page3, page4)
 
         if wizard.RunWizard(page1):
-            wxMessageBox("Wizard completed successfully", "That's all folks!")
+            wx.MessageBox("Wizard completed successfully", "That's all folks!")
         else:
-            wxMessageBox("Wizard was cancelled", "That's all folks!")
+            wx.MessageBox("Wizard was cancelled", "That's all folks!")
 
 
 
     def OnRunDynamicWizard(self, evt):
         # Create the wizard and the pages
-        #wizard = wxPreWizard()
-        #wizard.SetExtraStyle(wxWIZARD_EX_HELPBUTTON)
+        #wizard = wx.PreWizard()
+        #wizard.SetExtraStyle(wx.WIZARD_EX_HELPBUTTON)
         #wizard.Create(self, self.ID_wiz, "Simple Wizard",
         #              images.getWizTest1Bitmap())
-        wizard = wxWizard(self, self.ID_wiz, "Simple Wizard",
+        wizard = wiz.Wizard(self, self.ID_wiz, "Simple Wizard",
                           images.getWizTest1Bitmap())
 
         page1 = TitledPage(wizard, "Page 1")
@@ -188,12 +196,12 @@ wxWizardPageSimple class can easily be used for the pages."""))
         page5 = TitledPage(wizard, "Page 5")
         self.page1 = page1
 
-        page1.sizer.Add(wxStaticText(page1, -1, """
+        page1.sizer.Add(wx.StaticText(page1, -1, """
 This wizard shows the ability to choose at runtime the order
 of the pages and also which bitmap is shown.
 """))
         wizard.FitToPage(page1)
-        page5.sizer.Add(wxStaticText(page5, -1, "\nThis is the last page."))
+        page5.sizer.Add(wx.StaticText(page5, -1, "\nThis is the last page."))
 
         # Set the initial order of the pages
         page1.SetNext(page2)
@@ -207,9 +215,9 @@ of the pages and also which bitmap is shown.
 
 
         if wizard.RunWizard(page1):
-            wxMessageBox("Wizard completed successfully", "That's all folks!")
+            wx.MessageBox("Wizard completed successfully", "That's all folks!")
         else:
-            wxMessageBox("Wizard was cancelled", "That's all folks!")
+            wx.MessageBox("Wizard was cancelled", "That's all folks!")
 
 #----------------------------------------------------------------------
 
