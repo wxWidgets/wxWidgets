@@ -62,7 +62,7 @@
 #ifdef __WXDEBUG__
     static const wxChar *GetTymedName(DWORD tymed);
 #else // !Debug
-    #define GetTymedName(tymed) ""
+    #define GetTymedName(tymed) _T("")
 #endif // Debug/!Debug
 
 // ----------------------------------------------------------------------------
@@ -621,7 +621,7 @@ STDMETHODIMP wxIDataObject::EnumFormatEtc(DWORD dwDir,
 
     size_t nFormatCount = m_pDataObject->GetFormatCount(dir);
     wxDataFormat format;
-	wxDataFormat *formats;
+    wxDataFormat *formats;
     formats = nFormatCount == 1 ? &format : new wxDataFormat[nFormatCount];
     m_pDataObject->GetAllFormats(formats, dir);
 
@@ -1029,7 +1029,8 @@ bool wxFileDataObject::GetDataHere(void *pData) const
         *pbuf++ = wxT('\0');
     }
 
-    *pbuf = wxT('\0');	// add final null terminator
+    // add final null terminator
+    *pbuf = wxT('\0');
 
     return TRUE;
 }

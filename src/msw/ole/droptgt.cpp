@@ -142,9 +142,31 @@ STDMETHODIMP wxIDropTarget::DragEnter(IDataObject *pIDataSource,
                                       POINTL       pt,
                                       DWORD       *pdwEffect)
 {
-    wxLogDebug(wxT("IDropTarget::DragEnter"));
+    wxLogTrace(wxTRACE_OleCalls, wxT("IDropTarget::DragEnter"));
 
-    wxASSERT( m_pIDataObject == NULL );
+    wxASSERT_MSG( m_pIDataObject == NULL,
+                  _T("drop target must have data object") );
+
+    // show the list of formats supported by the source data object for the
+    // debugging purposes
+#if 0
+    IEnumFORMATETC *penumFmt;
+    if ( SUCCEEDED(pIDataSource->EnumFormatEtc(DATADIR_GET, &penumFmt)) )
+    {
+        FORMATETC fmt;
+        while ( penumFmt->Next(1, &fmt, NULL) == S_OK )
+        {
+            wxLogDebug(_T("Drop source supports format %s"),
+                       wxDataObject::GetFormatName(fmt.cfFormat));
+        }
+
+        penumFmt->Release();
+    }
+    else
+    {
+        wxLogLastError(_T("IDataObject::EnumFormatEtc"));
+    }
+#endif // 0
 
     if ( !m_pTarget->IsAcceptedData(pIDataSource) ) {
         // we don't accept this kind of data
@@ -216,7 +238,7 @@ STDMETHODIMP wxIDropTarget::DragOver(DWORD   grfKeyState,
 // Notes   : good place to do any clean-up
 STDMETHODIMP wxIDropTarget::DragLeave()
 {
-  wxLogDebug(wxT("IDropTarget::DragLeave"));
+  wxLogTrace(wxTRACE_OleCalls, wxT("IDropTarget::DragLeave"));
 
   // remove the UI feedback
   m_pTarget->OnLeave();
@@ -241,7 +263,7 @@ STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
                                  POINTL       pt,
                                  DWORD       *pdwEffect)
 {
-    wxLogDebug(wxT("IDropTarget::Drop"));
+    wxLogTrace(wxTRACE_OleCalls, wxT("IDropTarget::Drop"));
 
     // TODO I don't know why there is this parameter, but so far I assume
     //      that it's the same we've already got in DragEnter
@@ -425,7 +447,7 @@ wxDataFormat wxDropTarget::GetSupportedFormat(IDataObject *pIDataSource) const
     // get the list of supported formats
     size_t nFormats = m_dataObject->GetFormatCount(wxDataObject::Set);
     wxDataFormat format;
-	wxDataFormat *formats;
+    wxDataFormat *formats;
     formats = nFormats == 1 ? &format :  new wxDataFormat[nFormats];
 
     m_dataObject->GetAllFormats(formats, wxDataObject::Set);

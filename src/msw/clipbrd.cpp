@@ -633,7 +633,7 @@ bool wxClipboard::GetData( wxDataObject& data )
     // build the list of supported formats
     size_t nFormats = data.GetFormatCount(wxDataObject::Set);
     wxDataFormat format;
-	wxDataFormat *formats;
+    wxDataFormat *formats;
     if ( nFormats == 1 )
     {
         // the most common case
