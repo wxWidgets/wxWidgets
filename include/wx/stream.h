@@ -23,7 +23,7 @@
 #include <stdio.h>
 #include "wx/object.h"
 #include "wx/string.h"
-#include "wx/filefn.h"  // for off_t, wxInvalidOffset and wxSeekMode
+#include "wx/filefn.h"  // for wxFileOffset, wxInvalidOffset and wxSeekMode
 
 class WXDLLIMPEXP_BASE wxStreamBase;
 class WXDLLIMPEXP_BASE wxInputStream;

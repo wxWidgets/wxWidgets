@@ -576,10 +576,10 @@ wxFileOffset wxStreamBuffer::Seek(wxFileOffset pos, wxSeekMode mode)
             default:
                 wxFAIL_MSG( _T("invalid seek mode") );
 
-                return (wxFileOffset) wxInvalidOffset;
+                return wxInvalidOffset;
         }
         if (diff < 0 || diff > last_access)
-            return (wxFileOffset) wxInvalidOffset;
+            return wxInvalidOffset;
         SetIntPosition(diff);
         return diff;
     }
@@ -616,19 +616,19 @@ wxFileOffset wxStreamBuffer::Seek(wxFileOffset pos, wxSeekMode mode)
             return ret_off;
     }
 
-    return (wxFileOffset) wxInvalidOffset;
+    return wxInvalidOffset;
 }
 
 wxFileOffset wxStreamBuffer::Tell() const
 {
-    wxFileSize_t pos;
+    wxFileOffset pos;
 
     // ask the stream for position if we have a real one
     if ( m_stream )
     {
         pos = m_stream->OnSysTell();
         if ( pos == wxInvalidOffset )
-            return (wxFileOffset) wxInvalidOffset;
+            return wxInvalidOffset;
     }
     else // no associated stream
     {
@@ -659,12 +659,12 @@ wxStreamBase::~wxStreamBase()
 
 wxFileOffset wxStreamBase::OnSysSeek(wxFileOffset WXUNUSED(seek), wxSeekMode WXUNUSED(mode))
 {
-    return (wxFileOffset) wxInvalidOffset;
+    return wxInvalidOffset;
 }
 
 wxFileOffset wxStreamBase::OnSysTell() const
 {
-    return (wxFileOffset) wxInvalidOffset;
+    return wxInvalidOffset;
 }
 
 // ----------------------------------------------------------------------------
@@ -889,7 +889,7 @@ wxFileOffset wxInputStream::SeekI(wxFileOffset pos, wxSeekMode mode)
 
 wxFileOffset wxInputStream::TellI() const
 {
-    wxFileSize_t pos = OnSysTell();
+    wxFileOffset pos = OnSysTell();
 
     if (pos != wxInvalidOffset)
         pos -= (m_wbacksize - m_wbackcur);
@@ -990,7 +990,7 @@ wxFileOffset wxCountingOutputStream::OnSysSeek(wxFileOffset pos, wxSeekMode mode
 
         default:
             wxFAIL_MSG( _T("invalid seek mode") );
-            return (wxFileOffset) wxInvalidOffset;
+            return wxInvalidOffset;
     }
 
     if (m_currentPos > m_lastcount)
@@ -1122,7 +1122,7 @@ wxFileOffset wxBufferedInputStream::SeekI(wxFileOffset pos, wxSeekMode mode)
 
 wxFileOffset wxBufferedInputStream::TellI() const
 {
-    wxFileSize_t pos = m_i_streambuf->Tell();
+    wxFileOffset pos = m_i_streambuf->Tell();
 
     if (pos != wxInvalidOffset)
         pos -= (m_wbacksize - m_wbackcur);

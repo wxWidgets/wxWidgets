@@ -97,7 +97,7 @@ bool wxTextFile::OnRead(wxMBConv& conv)
     char *strBuf, *strPtr, *strEnd;
     char ch, chLast = '\0';
     char buf[1024];
-    wxFileSize_t nRead;
+    size_t nRead;
 
     strPtr = strBuf = new char[1024];
     strEnd = strBuf + 1024;
@@ -105,14 +105,14 @@ bool wxTextFile::OnRead(wxMBConv& conv)
     do
     {
         nRead = m_file.Read(buf, WXSIZEOF(buf));
-        if ( nRead == wxInvalidOffset )
+        if ( nRead == (size_t)wxInvalidOffset )
         {
             // read error (error message already given in wxFile::Read)
             delete[] strBuf;
             return false;
         }
 
-        for (wxFileSize_t n = 0; n < nRead; n++)
+        for (size_t n = 0; n < nRead; n++)
         {
             ch = buf[n];
             switch ( ch )

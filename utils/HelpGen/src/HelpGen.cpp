@@ -1417,7 +1417,7 @@ bool DocManager::ParseTeXFile(const wxString& filename)
     char *buf = new char[len + 1];
     buf[len] = '\0';
 
-    if ( (wxFileOffset)file.Read(buf, len) == wxInvalidOffset ) {
+    if ( file.Read(buf, len) == (size_t)wxInvalidOffset ) {
         delete [] buf;
 
         return false;
@@ -1988,7 +1988,7 @@ bool IgnoreNamesHandler::AddNamesFromFile(const wxString& filename)
     char *buf = new char[len + 1];
     buf[len] = '\0';
 
-    if ( (wxFileOffset)file.Read(buf, len) == wxInvalidOffset ) {
+    if ( file.Read(buf, len) == (size_t)wxInvalidOffset ) {
         delete [] buf;
 
         return false;
@@ -2186,6 +2186,9 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.32  2004/11/10 21:02:58  VZ
+   new set of fixes for problems due to huge files support: drop wxFileSize_t, use wxFileOffset only, make wxInvalidOffset an int (main part of the patch 1063498)
+
    Revision 1.31  2004/10/05 15:38:29  ABX
    Warning fixes found under hardest mode of OpenWatcom. Seems clean in Borland, MinGW and DMC.
 

@@ -69,17 +69,17 @@ size_t wxFileInputStream::GetSize() const
 
 size_t wxFileInputStream::OnSysRead(void *buffer, size_t size)
 {
-    wxFileSize_t ret = m_file->Read(buffer, size);
+    size_t ret = m_file->Read(buffer, size);
 
     // NB: we can't use a switch here because HP-UX CC doesn't allow
-    //     switching over long long (which off_t is in 64bit mode)
+    //     switching over long long (which size_t is in 64bit mode)
 
     if ( !ret )
     {
         // nothing read, so nothing more to read
         m_lasterror = wxSTREAM_EOF;
     }
-    else if ( ret == wxInvalidOffset )
+    else if ( ret == (size_t)wxInvalidOffset )
     {
         m_lasterror = wxSTREAM_READ_ERROR;
         ret = 0;
@@ -234,11 +234,11 @@ size_t wxFFileInputStream::GetSize() const
 
 size_t wxFFileInputStream::OnSysRead(void *buffer, size_t size)
 {
-    wxFileSize_t ret = m_file->Read(buffer, size);
+    size_t ret = m_file->Read(buffer, size);
 
     if (m_file->Eof())
         m_lasterror = wxSTREAM_EOF;
-    if (ret == wxInvalidOffset)
+    if (ret == (size_t)wxInvalidOffset)
     {
         m_lasterror = wxSTREAM_READ_ERROR;
         ret = 0;
@@ -252,7 +252,7 @@ wxFileOffset wxFFileInputStream::OnSysSeek(wxFileOffset pos, wxSeekMode mode)
 #ifdef __VMS
 #pragma message disable intsignchange
 #endif
-   return ( m_file->Seek(pos, mode) ? m_file->Tell() : wxInvalidOffset );
+   return ( m_file->Seek(pos, mode) ? (wxFileOffset)m_file->Tell() : wxInvalidOffset );
 #ifdef __VMS
 #pragma message enable intsignchange
 #endif
@@ -331,7 +331,7 @@ wxFileOffset wxFFileOutputStream::OnSysSeek(wxFileOffset pos, wxSeekMode mode)
 #ifdef __VMS
 #pragma message disable intsignchange
 #endif
-    return ( m_file->Seek(pos, mode) ? m_file->Tell() : wxInvalidOffset );
+    return ( m_file->Seek(pos, mode) ? (wxFileOffset)m_file->Tell() : wxInvalidOffset );
 #ifdef __VMS
 #pragma message enable intsignchange
 #endif

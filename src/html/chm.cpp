@@ -377,13 +377,13 @@ protected:
     /// See wxInputStream
     virtual size_t OnSysRead(void *buffer, size_t bufsize);
     /// See wxInputStream
-    virtual off_t OnSysSeek(off_t seek, wxSeekMode mode);
+    virtual wxFileOffset OnSysSeek(wxFileOffset seek, wxSeekMode mode);
     /// See wxInputStream
-    virtual off_t OnSysTell() const { return m_pos; }
+    virtual wxFileOffset OnSysTell() const { return m_pos; }
 
 private:
     size_t m_size;
-    off_t m_pos;
+    wxFileOffset m_pos;
     bool m_simulateHHP;
 
     char * m_content;
@@ -501,7 +501,7 @@ size_t wxChmInputStream::OnSysRead(void *buffer, size_t bufsize)
 
 
 
-off_t wxChmInputStream::OnSysSeek(off_t seek, wxSeekMode mode)
+wxFileOffset wxChmInputStream::OnSysSeek(wxFileOffset seek, wxSeekMode mode)
 {
     wxString mode_str = wxEmptyString;
 
@@ -512,7 +512,7 @@ off_t wxChmInputStream::OnSysSeek(off_t seek, wxSeekMode mode)
     }
     m_lasterror = wxSTREAM_NO_ERROR;
 
-    off_t nextpos;
+    wxFileOffset nextpos;
 
     switch ( mode )
     {

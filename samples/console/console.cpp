@@ -575,12 +575,12 @@ static void TestFileRead()
 
         wxPuts(_T("File dump:\n----------"));
 
-        static const off_t len = 1024;
+        static const size_t len = 1024;
         wxChar buf[len];
         for ( ;; )
         {
-            off_t nRead = file.Read(buf, len);
-            if ( nRead == wxInvalidOffset )
+            size_t nRead = file.Read(buf, len);
+            if ( nRead == (size_t)wxInvalidOffset )
             {
                 wxPrintf(_T("Failed to read the file."));
                 break;

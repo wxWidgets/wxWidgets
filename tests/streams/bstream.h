@@ -208,7 +208,7 @@ protected:
         CPPUNIT_ASSERT(stream_in.TellI() == 1);
         if (!m_bSimpleTellITest)
         {
-            off_t pos = stream_in.SeekI(5, wxFromStart);
+            wxFileOffset pos = stream_in.SeekI(5, wxFromStart);
             CPPUNIT_ASSERT(stream_in.TellI() == pos);
             (void)stream_in.GetC();
             CPPUNIT_ASSERT(stream_in.TellI() == 6);
@@ -269,8 +269,8 @@ protected:
         TStreamOut &stream_out = CreateOutStream();
 
         char *buf = "Some text";
-        off_t i;
-        off_t len = (off_t) strlen(buf);
+        int i;
+        int len = strlen(buf);
         for (i = 0; i < len; i++)
             stream_out.PutC(buf[i]);
 
@@ -285,7 +285,7 @@ protected:
 
         // Do the buffer version.
         char *buf = "Some text";
-        off_t len = (off_t) strlen(buf);
+        int len = strlen(buf);
         (void)stream_out.Write(buf, len);
         CPPUNIT_ASSERT(stream_out.TellO() == len);
 

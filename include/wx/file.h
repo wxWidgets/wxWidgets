@@ -95,28 +95,28 @@ public:
 
   // read/write (unbuffered)
     // returns number of bytes read or ofsInvalid on error
-  wxFileSize_t Read(void *pBuf, wxFileSize_t nCount);
+  size_t Read(void *pBuf, size_t nCount);
     // returns the number of bytes written
-  wxFileSize_t Write(const void *pBuf, wxFileSize_t nCount);
+  size_t Write(const void *pBuf, size_t nCount);
     // returns true on success
   bool Write(const wxString& s, wxMBConv& conv = wxConvUTF8)
   {
       const wxWX2MBbuf buf = s.mb_str(conv);
-      wxFileSize_t size = strlen(buf);
+      size_t size = strlen(buf);
       return Write((const char *) buf, size) == size;
   }
     // flush data not yet written
   bool Flush();
 
-  // file pointer operations (return ofsInvalid on failure)
-    // move ptr ofs bytes related to start/current off_t/end of file
-  wxFileSize_t Seek(wxFileOffset ofs, wxSeekMode mode = wxFromStart);
+  // file pointer operations (return wxInvalidOffset on failure)
+    // move ptr ofs bytes related to start/current offset/end of file
+  wxFileOffset Seek(wxFileOffset ofs, wxSeekMode mode = wxFromStart);
     // move ptr to ofs bytes before the end
-  wxFileSize_t SeekEnd(wxFileOffset ofs = 0) { return Seek(ofs, wxFromEnd); }
-    // get current off_t
-  wxFileSize_t Tell() const;
+  wxFileOffset SeekEnd(wxFileOffset ofs = 0) { return Seek(ofs, wxFromEnd); }
+    // get current offset
+  wxFileOffset Tell() const;
     // get current file length
-  wxFileSize_t Length() const;
+  wxFileOffset Length() const;
 
   // simple accessors
     // is file opened?
@@ -164,7 +164,7 @@ public:
   bool IsOpened() const { return m_file.IsOpened(); }
 
   // I/O (both functions return true on success, false on failure)
-  bool Write(const void *p, wxFileSize_t n) { return m_file.Write(p, n) == n; }
+  bool Write(const void *p, size_t n) { return m_file.Write(p, n) == n; }
   bool Write(const wxString& str, wxMBConv& conv = wxConvUTF8)
     { return m_file.Write(str, conv); }
 

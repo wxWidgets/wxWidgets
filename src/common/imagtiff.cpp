@@ -89,7 +89,7 @@ _tiffSeekIProc(thandle_t handle, toff_t off, int whence)
         default:       mode = wxFromCurrent; break;
     }
 
-    return (toff_t)stream->SeekI( (off_t)off, mode );
+    return (toff_t)stream->SeekI( (wxFileOffset)off, mode );
 }
 
 toff_t TIFFLINKAGEMODE
@@ -105,7 +105,7 @@ _tiffSeekOProc(thandle_t handle, toff_t off, int whence)
         default:       mode = wxFromCurrent; break;
     }
 
-    return (toff_t)stream->SeekO( (off_t)off, mode );
+    return (toff_t)stream->SeekO( (wxFileOffset)off, mode );
 }
 
 int TIFFLINKAGEMODE

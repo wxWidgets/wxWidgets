@@ -1037,6 +1037,8 @@ static wxString GetFullSearchPath(const wxChar *lang)
                    << wxPATH_SEP;
     }
 
+    // TODO: use wxStandardPaths instead of all this mess!!
+
     // LC_PATH is a standard env var containing the search path for the .mo
     // files
 #ifndef __WXWINCE__
@@ -1056,14 +1058,16 @@ static wxString GetFullSearchPath(const wxChar *lang)
 
     // then take the current directory
     // FIXME it should be the directory of the executable
-#ifdef __WXMAC__
-    wxChar cwd[512] ;
-    wxGetWorkingDirectory( cwd , sizeof( cwd ) ) ;
-    searchPath << GetAllMsgCatalogSubdirs(cwd, lang);
+#if defined(__WXMAC__)
+    searchPath << GetAllMsgCatalogSubdirs(wxGetCwd(), lang);
     // generic search paths could be somewhere in the system folder preferences
-#else // !Mac
+#elif defined(__WXMSW__)
+    // look in the directory of the executable
+    wxString path;
+    wxSplitPath(wxGetFullModuleName(), &path, NULL, NULL);
+    searchPath << GetAllMsgCatalogSubdirs(path, lang);
+#else // !Mac, !MSW
     searchPath << GetAllMsgCatalogSubdirs(wxT("."), lang);
-
 #endif // platform
 
     return searchPath;
@@ -1120,19 +1124,19 @@ bool wxMsgCatalogFile::Load(const wxChar *szDirPrefix, const wxChar *szName0,
     return false;
 
   // get the file size (assume it is less than 4Gb...)
-  wxFileSize_t nSize = fileMsg.Length();
+  wxFileOffset nSize = fileMsg.Length();
   if ( nSize == wxInvalidOffset )
     return false;
 
   // read the whole file in memory
   m_pData = new size_t8[nSize];
-  if ( fileMsg.Read(m_pData, nSize) != nSize ) {
+  if ( fileMsg.Read(m_pData, nSize) != nSize + (size_t)0 ) {
     wxDELETEA(m_pData);
     return false;
   }
 
   // examine header
-  bool bValid = nSize > sizeof(wxMsgCatalogHeader);
+  bool bValid = nSize + (size_t)0 > sizeof(wxMsgCatalogHeader);
 
   wxMsgCatalogHeader *pHeader = (wxMsgCatalogHeader *)m_pData;
   if ( bValid ) {

@@ -844,7 +844,7 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     wxInt32         dbuf[4];
     wxInt8          bbuf[4];
 
-    wxFileSize_t offset = 0; // keep gcc quiet
+    wxFileOffset offset = 0; // keep gcc quiet
     if ( IsBmp )
     {
         // read the header off the .BMP format file

@@ -144,6 +144,15 @@
     #include "wx/msw/private.h"
 #endif
 
+#if !defined __UNIX__ && !defined __DJGPP__
+    #ifdef __WXWINCE__
+        typedef int ssize_t;
+    #else
+        typedef ptrdiff_t ssize_t;
+    #endif
+#endif
+wxCOMPILE_TIME_ASSERT(sizeof(ssize_t) == sizeof(size_t), ssize_t_wrong_size);
+
 // ============================================================================
 // implementation of wxFile
 // ============================================================================
@@ -298,35 +307,36 @@ bool wxFile::Close()
 // ----------------------------------------------------------------------------
 
 // read
-wxFileSize_t wxFile::Read(void *pBuf, wxFileSize_t nCount)
+size_t wxFile::Read(void *pBuf, size_t nCount)
 {
     wxCHECK( (pBuf != NULL) && IsOpened(), 0 );
 
-    wxFileSize_t iRc = wxRead(m_fd, pBuf, nCount);
+    ssize_t iRc = wxRead(m_fd, pBuf, nCount);
 
-    if ( iRc == wxInvalidOffset )
+    if ( iRc == -1 )
     {
         wxLogSysError(_("can't read from file descriptor %d"), m_fd);
+        return (size_t)wxInvalidOffset;
     }
 
     return iRc;
 }
 
 // write
-wxFileSize_t wxFile::Write(const void *pBuf, wxFileSize_t nCount)
+size_t wxFile::Write(const void *pBuf, size_t nCount)
 {
     wxCHECK( (pBuf != NULL) && IsOpened(), 0 );
 
-    wxFileSize_t iRc = wxWrite(m_fd, pBuf, nCount);
+    ssize_t iRc = wxWrite(m_fd, pBuf, nCount);
 
-    if ( iRc == wxInvalidOffset )
+    if ( iRc == -1 )
     {
         wxLogSysError(_("can't write to file descriptor %d"), m_fd);
         m_error = true;
         iRc = 0;
     }
 
-    return (wxFileSize_t)iRc;
+    return iRc;
 }
 
 // flush
@@ -352,7 +362,7 @@ bool wxFile::Flush()
 // ----------------------------------------------------------------------------
 
 // seek
-wxFileSize_t wxFile::Seek(wxFileOffset ofs, wxSeekMode mode)
+wxFileOffset wxFile::Seek(wxFileOffset ofs, wxSeekMode mode)
 {
     wxASSERT( IsOpened() );
 
@@ -374,12 +384,12 @@ wxFileSize_t wxFile::Seek(wxFileOffset ofs, wxSeekMode mode)
             break;
     }
 
-    if (ofs == (wxFileOffset) wxInvalidOffset)
+    if (ofs == wxInvalidOffset)
     {
         wxLogSysError(_("can't seek on file descriptor %d, large files support is not enabled."), m_fd);
         return wxInvalidOffset;
     }
-    wxFileSize_t iRc = wxSeek(m_fd, ofs, origin);
+    wxFileOffset iRc = wxSeek(m_fd, ofs, origin);
     if ( iRc == wxInvalidOffset )
     {
         wxLogSysError(_("can't seek on file descriptor %d"), m_fd);
@@ -389,11 +399,11 @@ wxFileSize_t wxFile::Seek(wxFileOffset ofs, wxSeekMode mode)
 }
 
 // get current file offset
-wxFileSize_t wxFile::Tell() const
+wxFileOffset wxFile::Tell() const
 {
     wxASSERT( IsOpened() );
 
-    wxFileSize_t iRc = wxTell(m_fd);
+    wxFileOffset iRc = wxTell(m_fd);
     if ( iRc == wxInvalidOffset )
     {
         wxLogSysError(_("can't get seek position on file descriptor %d"), m_fd);
@@ -403,14 +413,14 @@ wxFileSize_t wxFile::Tell() const
 }
 
 // get current file length
-wxFileSize_t wxFile::Length() const
+wxFileOffset wxFile::Length() const
 {
     wxASSERT( IsOpened() );
 
-    wxFileSize_t iRc = Tell();
+    wxFileOffset iRc = Tell();
     if ( iRc != wxInvalidOffset ) {
         // have to use const_cast :-(
-        wxFileSize_t iLen = ((wxFile *)this)->SeekEnd();
+        wxFileOffset iLen = ((wxFile *)this)->SeekEnd();
         if ( iLen != wxInvalidOffset ) {
             // restore old position
             if ( ((wxFile *)this)->Seek(iRc) == wxInvalidOffset ) {
@@ -435,11 +445,11 @@ bool wxFile::Eof() const
 {
     wxASSERT( IsOpened() );
 
-    wxFileSize_t iRc;
+    wxFileOffset iRc;
 
 #if defined(__DOS__) || defined(__UNIX__) || defined(__GNUWIN32__) || defined( __MWERKS__ ) || defined(__SALFORDC__)
     // @@ this doesn't work, of course, on unseekable file descriptors
-    wxFileSize_t ofsCur = Tell(),
+    wxFileOffset ofsCur = Tell(),
     ofsMax = Length();
     if ( ofsCur == wxInvalidOffset || ofsMax == wxInvalidOffset )
         iRc = wxInvalidOffset;

@@ -239,7 +239,7 @@ bool wxIFFDecoder::CanRead()
     if ( !m_f->Read(buf, WXSIZEOF(buf)) )
         return false;
 
-    m_f->SeekI(-(off_t)WXSIZEOF(buf), wxFromCurrent);
+    m_f->SeekI(-(wxFileOffset)WXSIZEOF(buf), wxFromCurrent);
 
     return (memcmp(buf, "FORM", 4) == 0) && (memcmp(buf+8, "ILBM", 4) == 0);
 }
@@ -339,7 +339,7 @@ int wxIFFDecoder::ReadIFF()
     }
 
     // compute file length
-    off_t currentPos = m_f->TellI();
+    wxFileOffset currentPos = m_f->TellI();
     m_f->SeekI(0, wxFromEnd);
     long filesize = m_f->TellI();
     m_f->SeekI(currentPos, wxFromStart);

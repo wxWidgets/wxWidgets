@@ -131,7 +131,6 @@ enum wxSeekMode
 // Implemented in filefnwce.cpp
 #if defined( __WXWINCE__)
     typedef __int64 wxFileOffset;
-    typedef unsigned __int64 wxFileSize_t;
     #define wxFileOffsetFmtSpec _("I64")
     int wxOpen(const wxChar *filename, int oflag, int WXUNUSED(pmode));
     int wxAccess(const wxChar *name, int WXUNUSED(how));
@@ -198,11 +197,9 @@ enum wxSeekMode
 
     #if wxHAS_HUGE_FILES
         typedef wxLongLong_t wxFileOffset;
-        typedef unsigned wxLongLong_t wxFileSize_t;
         #define wxFileOffsetFmtSpec wxLongLongFmtSpec
     #else
         typedef off_t wxFileOffset;
-        typedef unsigned long wxFileSize_t;
     #endif
 
     #define   wxClose      _close
@@ -218,12 +215,7 @@ enum wxSeekMode
                   _write(fd, (const char *)buf, nCount)
         #endif
     #else
-        #if defined(__WATCOMC__)
-            inline wxFileSize_t wxRead( int handle, void *buffer, wxFileSize_t len )
-                                { return ::read( handle, buffer, (unsigned int)len ); }
-            inline wxFileSize_t wxWrite( int handle, const void *buffer, wxFileSize_t len )
-                                { return ::write( handle, buffer, (unsigned int)len ); }
-        #elif defined(__DMC__)
+        #if defined(__DMC__) || defined(__WATCOMC__)
             #define wxRead        ::read
             #define wxWrite       ::write
         #else
@@ -332,10 +324,8 @@ enum wxSeekMode
         #define wxFileOffsetFmtSpec wxLongLongFmtSpec
         wxCOMPILE_TIME_ASSERT( sizeof(off_t) == sizeof(wxLongLong_t),
                                 BadFileSizeType );
-        typedef unsigned wxLongLong_t wxFileSize_t;
     #else
         #define wxFileOffsetFmtSpec _T("")
-        typedef unsigned long wxFileSize_t;
     #endif
     // functions
     #define   wxClose      close
@@ -373,9 +363,9 @@ enum wxSeekMode
 // VisualAge C++ V4.0 cannot have any external linkage const decs
 // in headers included by more than one primary source
 //
-extern const wxFileSize_t wxInvalidOffset;
+extern const int wxInvalidOffset;
 #else
-const wxFileSize_t wxInvalidOffset = (wxFileSize_t)-1;
+const int wxInvalidOffset = -1;
 #endif
 
 // ----------------------------------------------------------------------------
