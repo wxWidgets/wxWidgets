@@ -27,6 +27,13 @@ of the item positions inserting or removing the items in the menu containing
 the radio items risks to not work correctly. Finally note that the radio items
 are only supported under Windows and GTK+ currently.
 
+\wxheading{Allocation strategy}
+
+All menus except the popup ones must be created on the heap. All menus
+attached to a menubar or to another menu will be deleted by their parent when
+it is deleted. As the frame menubar is deleted by the frame itself, it means
+that normally all menus used are deleted automatically.
+
 \wxheading{Derived from}
 
 \helpref{wxEvtHandler}{wxevthandler}\\
