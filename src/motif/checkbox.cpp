@@ -52,19 +52,25 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     else
         m_windowId = id;
 
+#if 0  // gcc 2.95 doesn't like this apparently    
     char* label1 = (label.IsNull() ? "" : (char*) (const char*) label);
-
     XmString text = XmStringCreateSimple (label1);
+#endif
+
+    wxXmString text( label );
+    
     Widget parentWidget = (Widget) parent->GetClientWidget();
     XmFontList fontList = (XmFontList) m_font.GetFontList(1.0, XtDisplay(parentWidget));
 
     m_mainWidget = (WXWidget) XtVaCreateManagedWidget ("toggle",
         xmToggleButtonWidgetClass, parentWidget,
         XmNfontList, fontList,
-        XmNlabelString, text,
+        XmNlabelString, text(),
         NULL);
+#if 0    
     XmStringFree (text);
-
+#endif
+    
     XtAddCallback ((Widget) m_mainWidget, XmNvalueChangedCallback, (XtCallbackProc) wxCheckBoxCallback,
         (XtPointer) this);
 

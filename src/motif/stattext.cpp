@@ -47,15 +47,21 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
     m_windowStyle = style;
     m_font = parent->GetFont();
 
+#if 0  // gcc 2.95 doesn't like this apparently    
     char* label1 = (label.IsNull() ? "" : (char*) (const char*) label);
-
+#endif
+    
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
+#if 0 // gcc 2.95 doesn't like this apparently    
     // Use XmStringCreateLtoR(), since XmStringCreateSimple
     // doesn't obey separators.
 //    XmString text = XmStringCreateSimple (label1);
     XmString text = XmStringCreateLtoR (label1, XmSTRING_DEFAULT_CHARSET);
-
+#endif // 0
+    
+    XmString text = XmStringCreateLtoR ((char *)(const char*)label, XmSTRING_DEFAULT_CHARSET);
+    
     XmFontList fontList = (XmFontList) m_font.GetFontList(1.0, XtDisplay(parentWidget));
 
     m_mainWidget = (WXWidget) XtVaCreateManagedWidget ((char*) (const char*) name,

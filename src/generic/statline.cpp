@@ -47,7 +47,7 @@ bool wxStaticLine::Create( wxWindow *parent,
                            long style,
                            const wxString &name)
 {
-    if ( !CreateBase(parent, id, pos, size, style, name) )
+    if ( !CreateBase(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
 
     // ok, this is ugly but it's better than nothing: use a thin static box to
