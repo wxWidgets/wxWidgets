@@ -81,7 +81,7 @@ public:
     void OnHangUp(wxCommandEvent& event);
     void OnDial(wxCommandEvent& event);
     void OnEnumISPs(wxCommandEvent& event);
-
+    void OnCheck(wxCommandEvent& event);
     void OnUpdateUI(wxUpdateUIEvent& event);
 
     void OnIdle(wxIdleEvent& event);
@@ -104,6 +104,7 @@ enum
     NetTest_HangUp,
     NetTest_Dial,
     NetTest_EnumISP,
+    NetTest_Check,
     NetTest_Max
 };
 
@@ -125,6 +126,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(NetTest_HangUp, MyFrame::OnHangUp)
     EVT_MENU(NetTest_Dial, MyFrame::OnDial)
     EVT_MENU(NetTest_EnumISP, MyFrame::OnEnumISPs)
+    EVT_MENU(NetTest_Check, MyFrame::OnCheck)
 
     EVT_UPDATE_UI(NetTest_Dial, MyFrame::OnUpdateUI)
 
@@ -219,6 +221,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(NetTest_HangUp, "&HangUp\tCtrl-H", "Hang up modem");
     menuFile->AppendSeparator();
     menuFile->Append(NetTest_EnumISP, "&Enumerate ISPs...\tCtrl-E");
+    menuFile->Append(NetTest_Check, "&Check connection status...\tCtrl-C");
     menuFile->AppendSeparator();
     menuFile->Append(NetTest_About, "&About...\tCtrl-A", "Show about dialog");
     menuFile->AppendSeparator();
@@ -283,6 +286,14 @@ void MyFrame::OnDial(wxCommandEvent& WXUNUSED(event))
     }
 
     wxEndBusyCursor();
+}
+
+void MyFrame::OnCheck(wxCommandEvent& WXUNUSED(event))
+{
+   if(wxGetApp().GetDialer()->IsOnline())
+      wxLogMessage("Network is online.");
+   else
+      wxLogMessage("Network is offline.");
 }
 
 void MyFrame::OnEnumISPs(wxCommandEvent& WXUNUSED(event))
