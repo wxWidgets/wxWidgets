@@ -38,6 +38,15 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
                                  long style,
                                  const wxPoint& WXUNUSED(pos))
 {
+#ifdef __WXDEBUG__
+    // check for common programming errors
+    if ( (style & wxID_OK) == wxID_OK )
+    {
+        // programmer probably confused wxID_OK with wxOK. Correct one is wxOK.
+        wxFAIL_MSG( _T("wxMessageBox: Did you mean wxOK (and not wxID_OK)?") );
+    }
+#endif // __WXDEBUG__
+
     m_caption = caption;
     m_message = message;
     m_dialogStyle = style;
