@@ -43,7 +43,7 @@
 
 //#define TEST_ARRAYS
 //#define TEST_CHARSET
-//#define TEST_CMDLINE
+#define TEST_CMDLINE
 //#define TEST_DATETIME
 //#define TEST_DIR
 //#define TEST_DLLLOADER
@@ -4904,13 +4904,17 @@ int main(int argc, char **argv)
 #ifdef TEST_CMDLINE
     static const wxCmdLineEntryDesc cmdLineDesc[] =
     {
+        { wxCMD_LINE_SWITCH, _T("h"), _T("help"), "show this help message",
+            wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
         { wxCMD_LINE_SWITCH, "v", "verbose", "be verbose" },
         { wxCMD_LINE_SWITCH, "q", "quiet",   "be quiet" },
 
         { wxCMD_LINE_OPTION, "o", "output",  "output file" },
         { wxCMD_LINE_OPTION, "i", "input",   "input dir" },
-        { wxCMD_LINE_OPTION, "s", "size",    "output block size", wxCMD_LINE_VAL_NUMBER },
-        { wxCMD_LINE_OPTION, "d", "date",    "output file date", wxCMD_LINE_VAL_DATE },
+        { wxCMD_LINE_OPTION, "s", "size",    "output block size",
+            wxCMD_LINE_VAL_NUMBER },
+        { wxCMD_LINE_OPTION, "d", "date",    "output file date",
+            wxCMD_LINE_VAL_DATE },
 
         { wxCMD_LINE_PARAM,  NULL, NULL, "input file",
             wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_MULTIPLE },
