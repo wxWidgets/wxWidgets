@@ -101,15 +101,9 @@ ALL_DIST: distrib_clean
 	cp $(ZLIBDIR)/*.mms $(DISTDIR)/src/zlib
 	mkdir $(DISTDIR)/src/regex
 	cp $(REGEXDIR)/*.h $(DISTDIR)/src/regex
-	cp $(REGEXDIR)/*.ih $(DISTDIR)/src/regex
 	cp $(REGEXDIR)/*.c $(DISTDIR)/src/regex
-	cp $(REGEXDIR)/Makefile $(DISTDIR)/src/regex
-	cp $(REGEXDIR)/makefile.* $(DISTDIR)/src/regex
 	cp $(REGEXDIR)/COPYRIGHT $(DISTDIR)/src/regex
 	cp $(REGEXDIR)/README $(DISTDIR)/src/regex
-	cp $(REGEXDIR)/WHATSNEW $(DISTDIR)/src/regex
-	cp $(REGEXDIR)/mkh $(DISTDIR)/src/regex
-#	cp $(REGEXDIR)/tests $(DISTDIR)/src/regex
 	cp -Rf $(EXPATDIR) $(DISTDIR)/src
 	(cd $(DISTDIR)/src/expat ; rm -rf `find -name CVS`)
 	mkdir $(DISTDIR)/src/iodbc
