@@ -403,6 +403,7 @@ ALL_BASE_SOURCES =  \
 	src/unix/dlunix.cpp \
 	src/unix/mimetype.cpp \
 	src/unix/snglinst.cpp \
+	src/unix/stackwalk.cpp \
 	src/unix/stdpaths.cpp \
 	src/unix/threadpsx.cpp \
 	src/msw/basemsw.cpp \
@@ -1196,6 +1197,7 @@ COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR =  \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
 	wx/unix/pipe.h \
+	wx/unix/stackwalk.h \
 	wx/unix/stdpaths.h
 @COND_PLATFORM_UNIX_1@BASE_PLATFORM_HDR = $(COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR)
 COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR =  \
@@ -1219,6 +1221,7 @@ COND_TOOLKIT_COCOA_BASE_PLATFORM_HDR =  \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
 	wx/unix/pipe.h \
+	wx/unix/stackwalk.h \
 	wx/unix/stdpaths.h
 @COND_TOOLKIT_COCOA@BASE_PLATFORM_HDR = $(COND_TOOLKIT_COCOA_BASE_PLATFORM_HDR)
 COND_TOOLKIT_MAC_BASE_PLATFORM_HDR =  \
@@ -2483,6 +2486,7 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_dlunix.o \
 	monodll_mimetype.o \
 	monodll_snglinst.o \
+	monodll_stackwalk.o \
 	monodll_stdpaths.o \
 	monodll_threadpsx.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS)
@@ -2511,6 +2515,7 @@ COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_dlunix.o \
 	monodll_mimetype.o \
 	monodll_snglinst.o \
+	monodll_stackwalk.o \
 	monodll_stdpaths.o \
 	monodll_threadpsx.o \
 	monodll_cfstring.o \
@@ -2522,6 +2527,7 @@ COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_dlunix.o \
 	monodll_mimetype.o \
 	monodll_snglinst.o \
+	monodll_stackwalk.o \
 	monodll_stdpaths.o \
 	monodll_threadpsx.o \
 	monodll_cfstring.o \
@@ -2533,6 +2539,7 @@ COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_dlunix.o \
 	monodll_mimetype.o \
 	monodll_snglinst.o \
+	monodll_stackwalk.o \
 	monodll_stdpaths.o \
 	monodll_threadpsx.o \
 	monodll_cfstring.o \
@@ -2557,6 +2564,7 @@ COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_dlunix.o \
 	monodll_mimetype.o \
 	monodll_snglinst.o \
+	monodll_stackwalk.o \
 	monodll_stdpaths.o \
 	monodll_threadpsx.o \
 	monodll_cfstring.o \
@@ -2568,6 +2576,7 @@ COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_dlunix.o \
 	monodll_mimetype.o \
 	monodll_snglinst.o \
+	monodll_stackwalk.o \
 	monodll_stdpaths.o \
 	monodll_threadpsx.o \
 	monodll_cfstring.o \
@@ -3916,6 +3925,7 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_dlunix.o \
 	monolib_mimetype.o \
 	monolib_snglinst.o \
+	monolib_stackwalk.o \
 	monolib_stdpaths.o \
 	monolib_threadpsx.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1)
@@ -3944,6 +3954,7 @@ COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_dlunix.o \
 	monolib_mimetype.o \
 	monolib_snglinst.o \
+	monolib_stackwalk.o \
 	monolib_stdpaths.o \
 	monolib_threadpsx.o \
 	monolib_cfstring.o \
@@ -3955,6 +3966,7 @@ COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_dlunix.o \
 	monolib_mimetype.o \
 	monolib_snglinst.o \
+	monolib_stackwalk.o \
 	monolib_stdpaths.o \
 	monolib_threadpsx.o \
 	monolib_cfstring.o \
@@ -3966,6 +3978,7 @@ COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_dlunix.o \
 	monolib_mimetype.o \
 	monolib_snglinst.o \
+	monolib_stackwalk.o \
 	monolib_stdpaths.o \
 	monolib_threadpsx.o \
 	monolib_cfstring.o \
@@ -3990,6 +4003,7 @@ COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_dlunix.o \
 	monolib_mimetype.o \
 	monolib_snglinst.o \
+	monolib_stackwalk.o \
 	monolib_stdpaths.o \
 	monolib_threadpsx.o \
 	monolib_cfstring.o \
@@ -4001,6 +4015,7 @@ COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_dlunix.o \
 	monolib_mimetype.o \
 	monolib_snglinst.o \
+	monolib_stackwalk.o \
 	monolib_stdpaths.o \
 	monolib_threadpsx.o \
 	monolib_cfstring.o \
@@ -5386,6 +5401,7 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_dlunix.o \
 	basedll_mimetype.o \
 	basedll_snglinst.o \
+	basedll_stackwalk.o \
 	basedll_stdpaths.o \
 	basedll_threadpsx.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2)
@@ -5414,6 +5430,7 @@ COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_dlunix.o \
 	basedll_mimetype.o \
 	basedll_snglinst.o \
+	basedll_stackwalk.o \
 	basedll_stdpaths.o \
 	basedll_threadpsx.o \
 	basedll_cfstring.o \
@@ -5425,6 +5442,7 @@ COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_dlunix.o \
 	basedll_mimetype.o \
 	basedll_snglinst.o \
+	basedll_stackwalk.o \
 	basedll_stdpaths.o \
 	basedll_threadpsx.o \
 	basedll_cfstring.o \
@@ -5436,6 +5454,7 @@ COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_dlunix.o \
 	basedll_mimetype.o \
 	basedll_snglinst.o \
+	basedll_stackwalk.o \
 	basedll_stdpaths.o \
 	basedll_threadpsx.o \
 	basedll_cfstring.o \
@@ -5460,6 +5479,7 @@ COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_dlunix.o \
 	basedll_mimetype.o \
 	basedll_snglinst.o \
+	basedll_stackwalk.o \
 	basedll_stdpaths.o \
 	basedll_threadpsx.o \
 	basedll_cfstring.o \
@@ -5471,6 +5491,7 @@ COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_dlunix.o \
 	basedll_mimetype.o \
 	basedll_snglinst.o \
+	basedll_stackwalk.o \
 	basedll_stdpaths.o \
 	basedll_threadpsx.o \
 	basedll_cfstring.o \
@@ -5526,6 +5547,7 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_dlunix.o \
 	baselib_mimetype.o \
 	baselib_snglinst.o \
+	baselib_stackwalk.o \
 	baselib_stdpaths.o \
 	baselib_threadpsx.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3)
@@ -5554,6 +5576,7 @@ COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_dlunix.o \
 	baselib_mimetype.o \
 	baselib_snglinst.o \
+	baselib_stackwalk.o \
 	baselib_stdpaths.o \
 	baselib_threadpsx.o \
 	baselib_cfstring.o \
@@ -5565,6 +5588,7 @@ COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_dlunix.o \
 	baselib_mimetype.o \
 	baselib_snglinst.o \
+	baselib_stackwalk.o \
 	baselib_stdpaths.o \
 	baselib_threadpsx.o \
 	baselib_cfstring.o \
@@ -5576,6 +5600,7 @@ COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_dlunix.o \
 	baselib_mimetype.o \
 	baselib_snglinst.o \
+	baselib_stackwalk.o \
 	baselib_stdpaths.o \
 	baselib_threadpsx.o \
 	baselib_cfstring.o \
@@ -5600,6 +5625,7 @@ COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_dlunix.o \
 	baselib_mimetype.o \
 	baselib_snglinst.o \
+	baselib_stackwalk.o \
 	baselib_stdpaths.o \
 	baselib_threadpsx.o \
 	baselib_cfstring.o \
@@ -5611,6 +5637,7 @@ COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_dlunix.o \
 	baselib_mimetype.o \
 	baselib_snglinst.o \
+	baselib_stackwalk.o \
 	baselib_stdpaths.o \
 	baselib_threadpsx.o \
 	baselib_cfstring.o \
@@ -9944,9 +9971,6 @@ monodll_regconf.o: $(srcdir)/src/msw/regconf.cpp $(MONODLL_ODEP)
 monodll_registry.o: $(srcdir)/src/msw/registry.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-monodll_stackwalk.o: $(srcdir)/src/msw/stackwalk.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
 monodll_time.o: $(srcdir)/src/msw/wince/time.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -10524,6 +10548,27 @@ monodll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_PLATFORM_WIN32_1@monodll_snglinst.o: $(srcdir)/src/msw/snglinst.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_PLATFORM_UNIX_1@monodll_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@monodll_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@monodll_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@monodll_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@monodll_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_@monodll_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_PLATFORM_WIN32_1@monodll_stackwalk.o: $(srcdir)/src/msw/stackwalk.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_PLATFORM_UNIX_1@monodll_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(MONODLL_ODEP)
@@ -13304,9 +13349,6 @@ monolib_regconf.o: $(srcdir)/src/msw/regconf.cpp $(MONOLIB_ODEP)
 monolib_registry.o: $(srcdir)/src/msw/registry.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-monolib_stackwalk.o: $(srcdir)/src/msw/stackwalk.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
 monolib_time.o: $(srcdir)/src/msw/wince/time.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
@@ -13884,6 +13926,27 @@ monolib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_PLATFORM_WIN32_1@monolib_snglinst.o: $(srcdir)/src/msw/snglinst.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_PLATFORM_UNIX_1@monolib_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@monolib_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@monolib_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@monolib_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@monolib_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_@monolib_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_PLATFORM_WIN32_1@monolib_stackwalk.o: $(srcdir)/src/msw/stackwalk.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_PLATFORM_UNIX_1@monolib_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(MONOLIB_ODEP)
@@ -16664,9 +16727,6 @@ basedll_regconf.o: $(srcdir)/src/msw/regconf.cpp $(BASEDLL_ODEP)
 basedll_registry.o: $(srcdir)/src/msw/registry.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
-basedll_stackwalk.o: $(srcdir)/src/msw/stackwalk.cpp $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
-
 basedll_time.o: $(srcdir)/src/msw/wince/time.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
@@ -16830,6 +16890,27 @@ basedll_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
 @COND_PLATFORM_WIN32_1@basedll_snglinst.o: $(srcdir)/src/msw/snglinst.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+
+@COND_PLATFORM_UNIX_1@basedll_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@basedll_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@basedll_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@basedll_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@basedll_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_@basedll_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+
+@COND_PLATFORM_WIN32_1@basedll_stackwalk.o: $(srcdir)/src/msw/stackwalk.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
 @COND_PLATFORM_UNIX_1@basedll_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(BASEDLL_ODEP)
@@ -17168,9 +17249,6 @@ baselib_regconf.o: $(srcdir)/src/msw/regconf.cpp $(BASELIB_ODEP)
 baselib_registry.o: $(srcdir)/src/msw/registry.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
-baselib_stackwalk.o: $(srcdir)/src/msw/stackwalk.cpp $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
-
 baselib_time.o: $(srcdir)/src/msw/wince/time.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
@@ -17334,6 +17412,27 @@ baselib_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 @COND_PLATFORM_WIN32_1@baselib_snglinst.o: $(srcdir)/src/msw/snglinst.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
+
+@COND_PLATFORM_UNIX_1@baselib_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@baselib_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@baselib_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@baselib_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@baselib_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_@baselib_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
+
+@COND_PLATFORM_WIN32_1@baselib_stackwalk.o: $(srcdir)/src/msw/stackwalk.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 @COND_PLATFORM_UNIX_1@baselib_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(BASELIB_ODEP)

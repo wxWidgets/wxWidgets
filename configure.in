@@ -417,6 +417,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_OPENGL=no
 
   DEFAULT_wxUSE_ON_FATAL_EXCEPTION=no
+  DEFAULT_wxUSE_STACKWALKER=no
   DEFAULT_wxUSE_SNGLINST_CHECKER=no
   DEFAULT_wxUSE_STD_IOSTREAM=no
   DEFAULT_wxUSE_CMDLINE_PARSER=no
@@ -607,6 +608,7 @@ else
   DEFAULT_wxUSE_OPENGL=no
 
   DEFAULT_wxUSE_ON_FATAL_EXCEPTION=yes
+  DEFAULT_wxUSE_STACKWALKER=yes
   DEFAULT_wxUSE_SNGLINST_CHECKER=yes
   DEFAULT_wxUSE_STD_IOSTREAM=no
   DEFAULT_wxUSE_CMDLINE_PARSER=yes
@@ -881,6 +883,7 @@ WX_ARG_ENABLE(ipc,           [  --enable-ipc            use interprocess communi
 dnl please keep the settings below in alphabetical order
 WX_ARG_ENABLE(apple_ieee,    [  --enable-apple_ieee     use the Apple IEEE codec], wxUSE_APPLE_IEEE)
 WX_ARG_ENABLE(catch_segvs,   [  --enable-catch_segvs    catch signals in wxApp::OnFatalException (Unix only)], wxUSE_ON_FATAL_EXCEPTION)
+WX_ARG_ENABLE(backtrace,     [  --enable-backtrace      use wxStackWalker class for getting backtraces], wxUSE_STACKWALKER)
 WX_ARG_ENABLE(cmdline,       [  --enable-cmdline        use wxCmdLineParser class], wxUSE_CMDLINE_PARSER)
 WX_ARG_ENABLE(datetime,      [  --enable-datetime       use wxDateTime class], wxUSE_DATETIME)
 WX_ARG_ENABLE(dialupman,     [  --enable-dialupman      use dialup network classes], wxUSE_DIALUP_MANAGER)
@@ -3759,6 +3762,53 @@ if test "$wxUSE_ON_FATAL_EXCEPTION" = "yes" -a "$wxUSE_UNIX" = "yes"; then
     fi
 fi
 
+dnl backtrace() and backtrace_symbols() for wxStackWalker
+if test "$wxUSE_STACKWALKER" = "yes" -a "$wxUSE_UNIX" = "yes"; then
+    AC_LANG_SAVE
+    AC_LANG_CPLUSPLUS
+
+    AC_CACHE_CHECK([for backtrace() in <execinfo.h>], wx_cv_func_backtrace,
+        [
+            AC_TRY_COMPILE([#include <execinfo.h>],
+                [
+                    void *trace[1];
+                    char **messages;
+
+                    backtrace(trace, 1);
+                    messages = backtrace_symbols(trace, 1);
+                ],
+                wx_cv_func_backtrace=yes,
+                wx_cv_func_backtrace=no
+            )
+        ]
+    )
+
+
+    if test "$wx_cv_func_backtrace" = "no"; then
+        AC_MSG_WARN([backtrace() is not available, wxStackWalker will not be available])
+        wxUSE_STACKWALKER=no
+    else
+        AC_CACHE_CHECK([for __cxa_demangle() in <cxxabi.h>], wx_cv_func_cxa_demangle,
+            [
+                AC_TRY_COMPILE([#include <cxxabi.h>],
+                    [
+                        int rc;
+                        __cxxabiv1::__cxa_demangle("foo", 0, 0, &rc);
+                    ],
+                    wx_cv_func_cxa_demangle=yes,
+                    wx_cv_func_cxa_demangle=no
+                )
+            ]
+        )
+
+        if test "$wx_cv_func_cxa_demangle" = "yes"; then
+            AC_DEFINE(HAVE_CXA_DEMANGLE)
+        fi
+    fi
+
+    AC_LANG_RESTORE
+fi
+
 dnl check for the function for temp files creation
 AC_CHECK_FUNCS(mkstemp mktemp, break)
 
@@ -4716,6 +4766,10 @@ fi
 
 if test "$wxUSE_ON_FATAL_EXCEPTION" = "yes"; then
   AC_DEFINE(wxUSE_ON_FATAL_EXCEPTION)
+fi
+
+if test "$wxUSE_STACKWALKER" = "yes"; then
+    AC_DEFINE(wxUSE_STACKWALKER)
 fi
 
 if test "$wxUSE_SNGLINST_CHECKER" = "yes"; then

@@ -127,6 +127,15 @@
     #define wxUSE_ON_FATAL_EXCEPTION 0
 #endif
 
+// Set this to 1 to be able to generate a human-readable (unlike
+// machine-readable minidumop created by wxCrashReport::Generate()) stack back
+// trace when your program crashes using wxStackWalker
+//
+// Default is 1 if supported by the compiler.
+//
+// Recommended setting: 1, set to 0 if your programs never crash
+#define wxUSE_STACKWALKER 1
+
 // ----------------------------------------------------------------------------
 // Unicode support
 // ----------------------------------------------------------------------------
@@ -1110,15 +1119,6 @@
 //
 // Recommended setting: 1, set to 0 if your programs never crash
 #define wxUSE_CRASHREPORT 1
-
-// Set this to 1 to be able to generate a human-readable (unlike
-// machine-readable minidumop created by wxCrashReport::Generate()) stack back
-// trace when your program crashes using wxStackWalker
-//
-// Default is 1 if supported by the compiler.
-//
-// Recommended setting: 1, set to 0 if your programs never crash
-#define wxUSE_STACKWALKER 1
 
 // ----------------------------------------------------------------------------
 // obsolete settings

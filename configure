@@ -904,6 +904,7 @@ Optional Features:
   --enable-ipc            use interprocess communication (wxSocket etc.)
   --enable-apple_ieee     use the Apple IEEE codec
   --enable-catch_segvs    catch signals in wxApp::OnFatalException (Unix only)
+  --enable-backtrace      use wxStackWalker class for getting backtraces
   --enable-cmdline        use wxCmdLineParser class
   --enable-datetime       use wxDateTime class
   --enable-dialupman      use dialup network classes
@@ -2069,6 +2070,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_OPENGL=no
 
   DEFAULT_wxUSE_ON_FATAL_EXCEPTION=no
+  DEFAULT_wxUSE_STACKWALKER=no
   DEFAULT_wxUSE_SNGLINST_CHECKER=no
   DEFAULT_wxUSE_STD_IOSTREAM=no
   DEFAULT_wxUSE_CMDLINE_PARSER=no
@@ -2259,6 +2261,7 @@ else
   DEFAULT_wxUSE_OPENGL=no
 
   DEFAULT_wxUSE_ON_FATAL_EXCEPTION=yes
+  DEFAULT_wxUSE_STACKWALKER=yes
   DEFAULT_wxUSE_SNGLINST_CHECKER=yes
   DEFAULT_wxUSE_STD_IOSTREAM=no
   DEFAULT_wxUSE_CMDLINE_PARSER=yes
@@ -4696,6 +4699,47 @@ fi;
           fi
 
           if test "$wxUSE_ON_FATAL_EXCEPTION" = yes; then
+            echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+          else
+            echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+          fi
+
+
+	  enablestring=
+          echo "$as_me:$LINENO: checking for --${enablestring:-enable}-backtrace" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-backtrace... $ECHO_C" >&6
+          no_cache=0
+          # Check whether --enable-backtrace or --disable-backtrace was given.
+if test "${enable_backtrace+set}" = set; then
+  enableval="$enable_backtrace"
+
+                          if test "$enableval" = yes; then
+                            ac_cv_use_backtrace='wxUSE_STACKWALKER=yes'
+                          else
+                            ac_cv_use_backtrace='wxUSE_STACKWALKER=no'
+                          fi
+
+else
+
+                          LINE=`grep "wxUSE_STACKWALKER" ${wx_arg_cache_file}`
+                          if test "x$LINE" != x ; then
+                            eval "DEFAULT_$LINE"
+                          else
+                            no_cache=1
+                          fi
+
+                          ac_cv_use_backtrace='wxUSE_STACKWALKER='$DEFAULT_wxUSE_STACKWALKER
+
+fi;
+
+          eval "$ac_cv_use_backtrace"
+          if test "$no_cache" != 1; then
+            echo $ac_cv_use_backtrace >> ${wx_arg_cache_file}.tmp
+          fi
+
+          if test "$wxUSE_STACKWALKER" = yes; then
             echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
           else
@@ -29984,6 +30028,161 @@ _ACEOF
     fi
 fi
 
+if test "$wxUSE_STACKWALKER" = "yes" -a "$wxUSE_UNIX" = "yes"; then
+
+
+    ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+
+    echo "$as_me:$LINENO: checking for backtrace() in <execinfo.h>" >&5
+echo $ECHO_N "checking for backtrace() in <execinfo.h>... $ECHO_C" >&6
+if test "${wx_cv_func_backtrace+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+            cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <execinfo.h>
+int
+main ()
+{
+
+                    void *trace[1];
+                    char **messages;
+
+                    backtrace(trace, 1);
+                    messages = backtrace_symbols(trace, 1);
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  wx_cv_func_backtrace=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+wx_cv_func_backtrace=no
+
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+
+
+fi
+echo "$as_me:$LINENO: result: $wx_cv_func_backtrace" >&5
+echo "${ECHO_T}$wx_cv_func_backtrace" >&6
+
+
+    if test "$wx_cv_func_backtrace" = "no"; then
+        { echo "$as_me:$LINENO: WARNING: backtrace() is not available, wxStackWalker will not be available" >&5
+echo "$as_me: WARNING: backtrace() is not available, wxStackWalker will not be available" >&2;}
+        wxUSE_STACKWALKER=no
+    else
+        echo "$as_me:$LINENO: checking for __cxa_demangle() in <cxxabi.h>" >&5
+echo $ECHO_N "checking for __cxa_demangle() in <cxxabi.h>... $ECHO_C" >&6
+if test "${wx_cv_func_cxa_demangle+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+                cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <cxxabi.h>
+int
+main ()
+{
+
+                        int rc;
+                        __cxxabiv1::__cxa_demangle("foo", 0, 0, &rc);
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  wx_cv_func_cxa_demangle=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+wx_cv_func_cxa_demangle=no
+
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+
+
+fi
+echo "$as_me:$LINENO: result: $wx_cv_func_cxa_demangle" >&5
+echo "${ECHO_T}$wx_cv_func_cxa_demangle" >&6
+
+        if test "$wx_cv_func_cxa_demangle" = "yes"; then
+            cat >>confdefs.h <<\_ACEOF
+#define HAVE_CXA_DEMANGLE 1
+_ACEOF
+
+        fi
+    fi
+
+    ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+fi
+
 
 
 for ac_func in mkstemp mktemp
@@ -34839,6 +35038,13 @@ fi
 if test "$wxUSE_ON_FATAL_EXCEPTION" = "yes"; then
   cat >>confdefs.h <<\_ACEOF
 #define wxUSE_ON_FATAL_EXCEPTION 1
+_ACEOF
+
+fi
+
+if test "$wxUSE_STACKWALKER" = "yes"; then
+    cat >>confdefs.h <<\_ACEOF
+#define wxUSE_STACKWALKER 1
 _ACEOF
 
 fi
@@ -40199,8 +40405,6 @@ fi
 
 
     BAKEFILE_BAKEFILE_M4_VERSION="0.1.4"
-
-
 
 
 

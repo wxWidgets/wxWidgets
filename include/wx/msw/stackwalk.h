@@ -84,7 +84,9 @@ private:
 class WXDLLIMPEXP_BASE wxStackWalker : public wxStackWalkerBase
 {
 public:
-    wxStackWalker() { }
+    // we don't use ctor argument, it is for compatibility with Unix version
+    // only
+    wxStackWalker(const char * WXUNUSED(argv0) = NULL) { }
 
     virtual void Walk(size_t skip = 1);
     virtual void WalkFromException();

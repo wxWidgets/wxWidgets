@@ -59,6 +59,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/unix/dlunix.cpp
     src/unix/mimetype.cpp
     src/unix/snglinst.cpp
+    src/unix/stackwalk.cpp
     src/unix/stdpaths.cpp
     src/unix/threadpsx.cpp
 </set>
@@ -71,6 +72,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/unix/execute.h
     wx/unix/mimetype.h
     wx/unix/pipe.h
+    wx/unix/stackwalk.h
     wx/unix/stdpaths.h
 </set>
 

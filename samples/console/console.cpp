@@ -74,6 +74,7 @@
     #define TEST_SCOPEGUARD
     #define TEST_SNGLINST
 //    #define TEST_SOCKETS  --FIXME! (RN)
+    #define TEST_STACKWALKER
     #define TEST_STDPATHS
     #define TEST_STREAMS
     #define TEST_TEXTSTREAM
@@ -84,7 +85,7 @@
     #define TEST_WCHAR
     #define TEST_ZIP
 #else // #if TEST_ALL
-    #define TEST_DLLLOADER
+    #define TEST_STACKWALKER
 #endif
 
 // some tests are interactive, define this to run them
@@ -433,7 +434,7 @@ static void TestDllListLoaded()
     for ( size_t n = 0; n < count; ++n )
     {
         const wxDynamicLibraryDetails& details = dlls[n];
-        printf("%-45s", details.GetPath().c_str());
+        printf("%-45s", details.GetPath().mb_str());
 
         void *addr;
         size_t len;
@@ -443,7 +444,7 @@ static void TestDllListLoaded()
                    (unsigned long)addr, (unsigned long)((char *)addr + len));
         }
 
-        printf(" %s\n", details.GetVersion().c_str());
+        printf(" %s\n", details.GetVersion().mb_str());
     }
 }
 
@@ -2630,6 +2631,71 @@ static void TestFtpUpload()
 #endif // TEST_FTP
 
 // ----------------------------------------------------------------------------
+// stack backtrace
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_STACKWALKER
+
+#include "wx/stackwalk.h"
+
+class StackDump : public wxStackWalker
+{
+public:
+    StackDump(const char *argv0)
+        : wxStackWalker(argv0)
+    {
+    }
+
+    virtual void Walk()
+    {
+        wxPuts(_T("Stack dump:"));
+
+        wxStackWalker::Walk();
+    }
+
+protected:
+    virtual void OnStackFrame(const wxStackFrame& frame)
+    {
+        printf("[%2d] ", frame.GetLevel());
+
+        wxString name = frame.GetName();
+        if ( !name.empty() )
+        {
+            printf("%-20.40s", name.mb_str());
+        }
+        else
+        {
+            printf("0x%08lx", (unsigned long)frame.GetAddress());
+        }
+
+        if ( frame.HasSourceLocation() )
+        {
+            printf("\t%s:%d",
+                   frame.GetFileName().mb_str(),
+                   frame.GetLine());
+        }
+
+        puts("");
+
+        wxString type, val;
+        for ( size_t n = 0; frame.GetParam(n, &type, &name, &val); n++ )
+        {
+            printf("\t%s %s = %s\n", type.mb_str(), name.mb_str(), val.mb_str());
+        }
+    }
+};
+
+static void TestStackWalk(const char *argv0)
+{
+    wxPuts(_T("*** Testing wxStackWalker ***\n"));
+
+    StackDump dump(argv0);
+    dump.Walk();
+}
+
+#endif // TEST_STACKWALKER
+
+// ----------------------------------------------------------------------------
 // standard paths
 // ----------------------------------------------------------------------------
 
@@ -4331,6 +4397,10 @@ int main(int argc, char **argv)
 #ifdef TEST_SCOPEGUARD
     TestScopeGuard();
 #endif
+
+#ifdef TEST_STACKWALKER
+    TestStackWalk(argv[0]);
+#endif // TEST_STACKWALKER
 
 #ifdef TEST_STDPATHS
     TestStandardPaths();

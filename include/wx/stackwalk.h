@@ -54,6 +54,9 @@ public:
     // return the instruction pointer offset from the start of the function
     size_t GetOffset() const { ConstCast()->OnGetName(); return m_offset; }
 
+    // get the module this function belongs to (not always available)
+    wxString GetModule() const { ConstCast()->OnGetName(); return m_module; }
+
 
     // return true if we have the filename and line number for this frame
     bool HasSourceLocation() const { return !GetFileName().empty(); }
@@ -101,7 +104,9 @@ protected:
     size_t m_level;
 
     wxString m_name,
+             m_module,
              m_filename;
+
     size_t m_line;
 
     void *m_address;
@@ -117,6 +122,9 @@ class WXDLLIMPEXP_BASE wxStackWalkerBase
 public:
     // ctor does nothing, use Walk() to walk the stack
     wxStackWalkerBase() { }
+
+    // dtor does nothing neither but should be virtual
+    virtual ~wxStackWalkerBase() { }
 
     // enumerate stack frames from the current location, skipping the initial
     // number of them (this can be useful when Walk() is called from some known
@@ -136,6 +144,10 @@ protected:
 
 #ifdef __WXMSW__
     #include "wx/msw/stackwalk.h"
+#elif defined(__UNIX__)
+    #include "wx/unix/stackwalk.h"
+#else
+    #error "wxStackWalker is not supported, set wxUSE_STACKWALKER to 0"
 #endif
 
 #endif // wxUSE_STACKWALKER
