@@ -1225,6 +1225,40 @@ void wxMacConvertNewlines10To13( wxChar * data )
 #endif
 
 // ----------------------------------------------------------------------------
+// Common Event Support
+// ----------------------------------------------------------------------------
+
+extern ProcessSerialNumber gAppProcess ;
+
+void wxMacWakeUp()
+{
+    ProcessSerialNumber psn ;
+    Boolean isSame ;
+    psn.highLongOfPSN = 0 ;
+    psn.lowLongOfPSN = kCurrentProcess ;
+    SameProcess( &gAppProcess , &psn , &isSame ) ;
+    if ( isSame )
+    {
+#if TARGET_CARBON
+        EventRef dummyEvent ;
+        OSStatus err = MacCreateEvent(nil, 'WXMC', 'WXMC', GetCurrentEventTime(),
+                        kEventAttributeNone, &dummyEvent);
+        if (err == noErr) 
+        {
+            err = PostEventToQueue(GetMainEventQueue(), dummyEvent,
+                                  kEventPriorityHigh);
+        } 
+#else
+        PostEvent( nullEvent , 0 ) ;
+#endif
+    }
+    else
+    {
+        WakeUpProcess( &gAppProcess ) ;
+    }
+}
+
+// ----------------------------------------------------------------------------
 // Carbon Event Support
 // ----------------------------------------------------------------------------
 
