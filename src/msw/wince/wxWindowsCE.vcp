@@ -2256,6 +2256,12 @@ SOURCE=..\taskbar.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\tbar95.cpp
+
+
+# End Source File
+# Begin Source File
+
 SOURCE=..\textctrl.cpp
 
 

@@ -519,7 +519,7 @@ void wxFrameBase::SetMenuBar(wxMenuBar *menubar)
 
     DetachMenuBar();
 
-    AttachMenuBar(menubar);
+    this->AttachMenuBar(menubar);
 }
 
 #endif // wxUSE_MENUS

@@ -39,7 +39,9 @@
     #include "wx/control.h"
 #endif
 
-#if wxUSE_TOOLBAR && wxUSE_TOOLBAR_NATIVE
+// Use the WinCE-specific toolbar only if we're either compiling
+// with a WinCE earlier than 4, or we wish to emulate a PocketPC-style UI
+#if wxUSE_TOOLBAR && wxUSE_TOOLBAR_NATIVE && (_WIN32_WCE < 400 || wxUSE_POCKETPC_UI)
 
 #include "wx/toolbar.h"
 

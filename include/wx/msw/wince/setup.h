@@ -146,9 +146,9 @@
 //
 // Default is 0
 //
-// Recommended setting: 0 (unless you only plan to use Windows NT/2000/XP)
+// Recommended setting: 1
 #ifndef wxUSE_UNICODE
-    #define wxUSE_UNICODE 0
+    #define wxUSE_UNICODE 1
 #endif
 
 // Set wxUSE_UNICODE_MSLU to 1 if you want to compile wxWindows in Unicode mode
@@ -1061,8 +1061,25 @@
 // (notably, wxNotebook pages)
 #define wxUSE_UXTHEME_AUTO      0
 
-// Set to 1 to if you're developing for MS SmartPhone
+// Set to 1 if you're developing for MS SmartPhone
 #define wxUSE_SMARTPHONE        0
+
+// Set to 1 if you want to maintain a PocketPC-style UI on
+// Windows CE .NET. If 0, wxWindows will use a commandbar
+// for the menubar, and a normal separate toolbar as per the
+// desktop implementation. If 1, wxWindows will combine
+// the toolbar and menubar as per the PocketPC implementation.
+//
+// Note that at present, the dynamic loading of PocketPC
+// shell functions on WinCE .NET is not yet done, and a
+// simple commandbar implementation is used instead of the
+// PocketPC one. The intention is to use the PocketPC style
+// when available (when wxUSE_POCKETPC_UI is 1).
+//
+// So if you're using WinCE .NET, and wxUSE_POCKETPC_UI is 0,
+// you will be able to create separate toolbars and menubars,
+// but _not_ the combined toolbar/menubar.
+#define wxUSE_POCKETPC_UI       1
 
 // ----------------------------------------------------------------------------
 // obsolete settings

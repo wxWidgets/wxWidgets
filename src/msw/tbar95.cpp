@@ -39,7 +39,7 @@
     #include "wx/control.h"
 #endif
 
-#if wxUSE_TOOLBAR && defined(__WIN95__) && wxUSE_TOOLBAR_NATIVE
+#if wxUSE_TOOLBAR && wxUSE_TOOLBAR_NATIVE && (!defined(_WIN32_WCE) || (_WIN32_WCE >= 400 && !wxUSE_POCKETPC_UI))
 
 #include "wx/toolbar.h"
 

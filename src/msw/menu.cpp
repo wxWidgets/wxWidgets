@@ -673,8 +673,14 @@ void wxMenuBar::Init()
 {
     m_eventHandler = this;
     m_hMenu = 0;
-#ifdef __WXWINCE__
+#if wxUSE_TOOLBAR && defined(__WXWINCE__) && (_WIN32_WCE < 400 || wxUSE_POCKETPC_UI)
     m_toolBar = NULL;
+#endif
+    // Not using a combined wxToolBar/wxMenuBar? then use
+    // a commandbar in WinCE .NET just to implement the
+    // menubar.
+#if defined(__WXWINCE__) && (_WIN32_WCE >= 400 && !wxUSE_POCKETPC_UI)
+    m_commandBar = NULL;
 #endif
 }
 
@@ -705,9 +711,9 @@ wxMenuBar::wxMenuBar(int count, wxMenu *menus[], const wxString titles[])
 
 wxMenuBar::~wxMenuBar()
 {
-    // In Windows CE, the menubar is always associated
+    // In Windows CE (not .NET), the menubar is always associated
     // with a toolbar, which destroys the menu implicitly.
-#ifdef __WXWINCE__
+#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || wxUSE_POCKETPC_UI)
     if (GetToolBar())
         GetToolBar()->SetMenuBar(NULL);
 #else
@@ -715,7 +721,12 @@ wxMenuBar::~wxMenuBar()
     // which happens if we're attached to a frame
     if (m_hMenu && !IsAttached())
     {
+#if defined(__WXWINCE__) && (_WIN32_WCE >= 400 && !wxUSE_POCKETPC_UI)
+        ::DestroyWindow((HWND) m_commandBar);
+        m_commandBar = (WXHWND) NULL;
+#else
         ::DestroyMenu((HMENU)m_hMenu);
+#endif        
         m_hMenu = (WXHMENU)NULL;
     }
 #endif
@@ -729,11 +740,14 @@ void wxMenuBar::Refresh()
 {
     wxCHECK_RET( IsAttached(), wxT("can't refresh unattached menubar") );
 
-#ifdef __WXWINCE__
+#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || wxUSE_POCKETPC_UI)
     if (GetToolBar())
     {
         CommandBar_DrawMenuBar((HWND) GetToolBar()->GetHWND(), 0);
     }
+#elif defined(__WXWINCE__) && (_WIN32_WCE >= 400 && !wxUSE_POCKETPC_UI)
+    if (m_commandBar)
+        DrawMenuBar((HWND) m_commandBar);
 #else
     DrawMenuBar(GetHwndOf(GetFrame()));
 #endif
@@ -805,17 +819,6 @@ WXHMENU wxMenuBar::Create()
             }
         }
     }
-
-#if _WIN32_WCE >= 400
-    if (GetToolBar())
-    {
-        HWND hCommandBar = (HWND) GetToolBar()->GetHWND();
-        if (!CommandBar_InsertMenubarEx(hCommandBar, NULL, (LPTSTR) m_hMenu, 0))
-        {
-            wxLogLastError(wxT("CommandBar_InsertMenubarEx"));
-        }
-    }
-#endif
 
     return m_hMenu;
 #endif
@@ -953,7 +956,7 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 
     if ( IsAttached() )
     {
-#ifdef __WXWINCE__
+#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || wxUSE_POCKETPC_UI)
         if (!GetToolBar())
             return FALSE;
         TBBUTTON tbButton; 
@@ -1007,7 +1010,7 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
 
     if ( IsAttached() )
     {
-#ifdef __WXWINCE__
+#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || wxUSE_POCKETPC_UI)
         if (!GetToolBar())
             return FALSE;
         TBBUTTON tbButton; 
@@ -1058,7 +1061,7 @@ wxMenu *wxMenuBar::Remove(size_t pos)
 
     if ( IsAttached() )
     {
-#ifdef __WXWINCE__
+#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || wxUSE_POCKETPC_UI)
         if (GetToolBar())
         {
             if (!::SendMessage((HWND) GetToolBar()->GetHWND(), TB_DELETEBUTTON, (UINT) pos, (LPARAM) 0))
@@ -1124,6 +1127,36 @@ void wxMenuBar::RebuildAccelTable()
 void wxMenuBar::Attach(wxFrame *frame)
 {
     wxMenuBarBase::Attach(frame);
+
+#if defined(__WXWINCE__) && _WIN32_WCE >= 400
+    if (!m_hMenu)
+        this->Create();
+#if wxUSE_POCKETPC_UI
+    if (GetToolBar())
+    {
+        HWND hCommandBar = (HWND) GetToolBar()->GetHWND();
+        if (!CommandBar_InsertMenubarEx(hCommandBar, NULL, (LPTSTR) m_hMenu, 0))
+        {
+            wxLogLastError(wxT("CommandBar_InsertMenubarEx"));
+        }
+    }
+#else
+    if (!m_commandBar)
+        m_commandBar = (WXHWND) CommandBar_Create(wxGetInstance(), (HWND) frame->GetHWND(), NewControlId());
+    if (m_commandBar)
+    {
+        if (m_hMenu)
+        {
+            if (!CommandBar_InsertMenubarEx((HWND) m_commandBar, NULL, (LPTSTR) m_hMenu, 0))
+            {
+                wxLogLastError(wxT("CommandBar_InsertMenubarEx"));
+            }
+        }
+    }
+#endif
+    // wxUSE_POCKETPC_UI
+#endif
+    // __WXWINCE__ && _WIN32_WCE >= 400
 
 #if wxUSE_ACCEL
     RebuildAccelTable();

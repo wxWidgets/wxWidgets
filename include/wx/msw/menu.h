@@ -172,7 +172,7 @@ public:
     virtual void Detach();
     virtual void Attach(wxFrame *frame);
 
-#if defined(__WXWINCE__) && wxUSE_TOOLBAR
+#if wxUSE_TOOLBAR && defined(__WXWINCE__) && (_WIN32_WCE < 400 || wxUSE_POCKETPC_UI)
     // Under WinCE, a menubar is owned by the frame's toolbar
     void SetToolBar(wxToolBar* toolBar) { m_toolBar = toolBar; }
     wxToolBar* GetToolBar() const { return m_toolBar; }
@@ -213,6 +213,12 @@ protected:
 
 #if defined(__WXWINCE__) && wxUSE_TOOLBAR
     wxToolBar*  m_toolBar;
+#endif
+    // Not using a combined wxToolBar/wxMenuBar? then use
+    // a commandbar in WinCE .NET to implement the
+    // menubar, since there is no ::SetMenu function.
+#if defined(__WXWINCE__) && (_WIN32_WCE >= 400 && !wxUSE_POCKETPC_UI)
+    WXHWND      m_commandBar;
 #endif
 
 private:
