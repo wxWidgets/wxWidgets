@@ -136,6 +136,22 @@ _tiffUnmapProc(thandle_t WXUNUSED(handle),
 {
 }
 
+static void
+TIFFwxWarningHandler(const char* module, const char* fmt, va_list ap)
+{
+    if (module != NULL)
+            wxLogWarning(_("tiff module: %s"), module);
+    wxLogWarning((wxChar *) fmt, ap);
+}
+ 
+static void
+TIFFwxErrorHandler(const char* module, const char* fmt, va_list ap)
+{
+    if (module != NULL)
+            wxLogError(_("tiff module: %s"), module);
+    wxVLogError((wxChar *) fmt, ap);
+}
+
 } // extern "C"
 
 TIFF*
@@ -160,6 +176,16 @@ TIFFwxOpen(wxOutputStream &stream, const char* name, const char* mode)
         _tiffMapProc, _tiffUnmapProc);
 
     return tif;
+}
+
+wxTIFFHandler::wxTIFFHandler()
+{
+    m_name = wxT("TIFF file");
+    m_extension = wxT("tif");
+    m_type = wxBITMAP_TYPE_TIF;
+    m_mime = wxT("image/tiff");
+    TIFFSetWarningHandler((TIFFErrorHandler) TIFFwxWarningHandler);
+    TIFFSetErrorHandler((TIFFErrorHandler) TIFFwxErrorHandler);
 }
 
 bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose, int index )

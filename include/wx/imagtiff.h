@@ -25,13 +25,7 @@
 class WXDLLEXPORT wxTIFFHandler: public wxImageHandler
 {
 public:
-    inline wxTIFFHandler()
-    {
-        m_name = wxT("TIFF file");
-        m_extension = wxT("tif");
-        m_type = wxBITMAP_TYPE_TIF;
-        m_mime = wxT("image/tiff");
-    }
+    wxTIFFHandler();
 
 #if wxUSE_STREAMS
     virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=-1 );
