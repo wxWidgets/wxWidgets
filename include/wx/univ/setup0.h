@@ -482,11 +482,7 @@
 #define wxUSE_SYSTEM_OPTIONS 1
 
 // wxWave class
-#if defined(__WIN32__)
-    #define wxUSE_WAVE 1
-#else
-    #define wxUSE_WAVE 1
-#endif
+#define wxUSE_WAVE 1
 
 // ----------------------------------------------------------------------------
 // Individual GUI controls
@@ -546,7 +542,7 @@
 #define wxUSE_STATTEXT     1    // wxStaticText
 #define wxUSE_STATBMP      1    // wxStaticBitmap
 #define wxUSE_TEXTCTRL     1    // wxTextCtrl
-#define wxUSE_TOGGLEBTN    0    // requires wxButton //? not supported in generic and wrong in msw
+#define wxUSE_TOGGLEBTN    0    // requires wxButton // currently not supported
 #define wxUSE_TREECTRL     1    // wxTreeCtrl
 
 // Use a status bar class? Depending on the value of wxUSE_NATIVE_STATUSBAR
@@ -578,7 +574,7 @@
 // wxUSE_TOOLBAR_SIMPLE.
 #define wxUSE_TOOLBAR 1
 #define wxUSE_TOOLBAR_NATIVE 0
-#define wxUSE_TOOLBAR_SIMPLE 0
+#define wxUSE_TOOLBAR_SIMPLE 1
 
 // this setting is obsolete, value is ignored
 #define wxUSE_BUTTONBAR 0
@@ -796,9 +792,15 @@
 // Default is 1 for wxUSE_ENH_METAFILE and 0 for wxUSE_WIN_METAFILES_ALWAYS.
 //
 // Recommended setting: default or 0 for everything for portable programs.
-#define wxUSE_METAFILE 0
-#define wxUSE_ENH_METAFILE 0
-#define wxUSE_WIN_METAFILES_ALWAYS 0
+#if defined(__WIN32__)
+    #define wxUSE_METAFILE 1
+    #define wxUSE_ENH_METAFILE 1
+    #define wxUSE_WIN_METAFILES_ALWAYS 0
+#else
+    #define wxUSE_METAFILE 0
+    #define wxUSE_ENH_METAFILE 0
+    #define wxUSE_WIN_METAFILES_ALWAYS 0
+#endif
 
 // ----------------------------------------------------------------------------
 // Big GUI components
@@ -824,7 +826,7 @@
 
 // OpenGL canvas
 #if defined(__WIN32__)
-    #define wxUSE_GLCANVAS 0 //? error unresolved external symbol ...
+    #define wxUSE_GLCANVAS 1
 #else
     #define wxUSE_GLCANVAS 0
 #endif
@@ -841,14 +843,14 @@
 // Default is 1.
 //
 // Recommended setting: 1
-#define wxUSE_CLIPBOARD 0 //? needs wxUSE_OLE
+#define wxUSE_CLIPBOARD 1
 
 // Use wxDataObject and related classes. Needed for clipboard and OLE drag and
 // drop
 //
 // Default is 1.
 //
-// Recommended setting: 1
+// Recommended setting: 1 for WIN32
 #define wxUSE_DATAOBJ 1
 
 // Use wxDropTarget and wxDropSource classes for drag and drop (this is
@@ -859,7 +861,7 @@
 //
 // Recommended setting: 1
 #if defined(__WIN32__)
-    #define wxUSE_DRAG_AND_DROP 0 //? needs wxUSE_OLE
+    #define wxUSE_DRAG_AND_DROP 1
 #else
     #define wxUSE_DRAG_AND_DROP 0
 #endif
@@ -897,7 +899,7 @@
 // MS help
 #define wxUSE_MS_HTML_HELP 1
 
-// Use wxHTML-based help controller?
+// Use wxHTML-based help controller
 #define wxUSE_WXHTML_HELP 1
 
 // Use resources
@@ -920,18 +922,10 @@
 #endif
 
 // Use dynamic DIB loading/saving code in utils/dib under MSW.
-#if defined(__WIN32__)
-    #define wxUSE_IMAGE_LOADING_IN_MSW 0 //? needs more testing
-#else
-    #define wxUSE_IMAGE_LOADING_IN_MSW 0
-#endif
+#define wxUSE_IMAGE_LOADING_IN_MSW 0
 
 // Use dynamic icon/cursor loading/saving code under MSW.
-#if defined(__WIN32__)
-    #define wxUSE_RESOURCE_LOADING_IN_MSW 0 //? needs more testing
-#else
-    #define wxUSE_RESOURCE_LOADING_IN_MSW 0
-#endif
+#define wxUSE_RESOURCE_LOADING_IN_MSW 0
 
 // use wxExpr (a.k.a. PrologIO)
 #define wxUSE_PROLOGIO          0
@@ -1075,20 +1069,20 @@
 //
 // Default is 1.
 //
-// Recommended setting: 1
-#define wxUSE_OLE 0 //? needs more testing
+// Recommended setting: 1 for WIN32
+#if defined(__WIN32__)
+    #define wxUSE_OLE 1
+#else
+    #define wxUSE_OLE 0
+#endif
 
 // Set this to 1 to use Microsoft CTL3D library for "3D-look" under Win16 or NT
 // 3.x. This setting is ignored under Win9x and NT 4.0+.
 //
 // Default is 0 for (most) Win32 (systems), 1 for Win16
 //
-// Recommended setting: same as default
-#if defined(__WIN95__) //? wrong test, should be positive
-    #define wxUSE_CTL3D 0
-#else
-    #define wxUSE_CTL3D 0 //? see above
-#endif
+// Recommended setting: 0
+#define wxUSE_CTL3D 0
 
 // Define as 1 to use Microsoft's ItsyBitsy small title bar library, for
 // wxMiniFrame. This setting is only used for Win3.1; Win9x and NT use native
@@ -1096,12 +1090,8 @@
 //
 // Default is 0 for (most) Win32 (systems), 1 for Win16
 //
-// Recommended setting: same as default
-#if defined(__WIN95__) //? wrong test, should be positive
-    #define wxUSE_ITSY_BITSY 0
-#else
-    #define wxUSE_ITSY_BITSY 0 //? see above
-#endif
+// Recommended setting: 0
+#define wxUSE_ITSY_BITSY 0
 
 // Set this to 1 to use RICHEDIT controls for wxTextCtrl with style wxTE_RICH
 // which allows to put more than ~32Kb of text in it even under Win9x (NT
@@ -1114,8 +1104,8 @@
 #if defined(__WIN95__) && !defined(__TWIN32__) && !defined(__GNUWIN32_OLD__)
 // TODO:  This should be ifdef'ed for any compilers that don't support
 //        RichEdit 2.0 but do have RichEdit 1.0...
-    #define wxUSE_RICHEDIT 0 //? needs more testing
-    #define wxUSE_RICHEDIT2 0 //? needs more testing
+    #define wxUSE_RICHEDIT 0 // currently not supported
+    #define wxUSE_RICHEDIT2 0 // currently not supported
 
 #else
     #define wxUSE_RICHEDIT 0

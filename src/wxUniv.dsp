@@ -649,10 +649,6 @@ SOURCE=.\generic\dirctrlg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\generic\dirdlgg.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\generic\dragimgg.cpp
 # End Source File
 # Begin Source File
@@ -896,6 +892,10 @@ SOURCE=.\msw\app.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\automtn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\bitmap.cpp
 # End Source File
 # Begin Source File
@@ -921,6 +921,10 @@ SOURCE=.\msw\cursor.cpp
 # Begin Source File
 
 SOURCE=.\msw\data.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\dataobj.cpp
 # End Source File
 # Begin Source File
 
@@ -957,6 +961,22 @@ SOURCE=.\msw\dib.cpp
 # Begin Source File
 
 SOURCE=.\msw\dir.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\dirdlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\dropsrc.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\droptgt.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\enhmeta.cpp
 # End Source File
 # Begin Source File
 
@@ -1020,6 +1040,10 @@ SOURCE=.\msw\minifram.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\oleutils.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\palette.cpp
 # End Source File
 # Begin Source File
@@ -1077,6 +1101,10 @@ SOURCE=.\msw\utils.cpp
 # Begin Source File
 
 SOURCE=.\msw\utilsexc.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\uuid.cpp
 # End Source File
 # Begin Source File
 
