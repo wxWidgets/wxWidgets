@@ -548,24 +548,6 @@ void wxSetStringToArray( const wxString &s , wxArrayString &array )
 // wxClassInfo
 // ----------------------------------------------------------------------------
 
-
-void wxClassInfo::Register(const char *WXUNUSED(name), wxClassInfo *WXUNUSED(info))
-{
-	/*
-    if (!ExtendedTypeMap)
-	ExtendedTypeMap = new ClassMap;
-    (*ExtendedTypeMap)[string(Name)] = Info;
-	*/
-}
-
-void wxClassInfo::Unregister(const char *WXUNUSED(name))
-{
-	/*
-    assert(ExtendedTypeMap);
-    ExtendedTypeMap->erase(Name);
-	*/
-}
-
 const wxPropertyAccessor *wxClassInfo::FindAccessor(const char *PropertyName)
 {
     const wxPropertyInfo* info = FindPropertyInfo( PropertyName ) ;

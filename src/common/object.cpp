@@ -194,9 +194,7 @@ wxClassInfo::~wxClassInfo()
             info = info->m_next;
         }
     }
-#if wxUSE_EXTENDED_RTTI
-	Unregister( m_className ) ;
-#endif
+	Unregister();
 }
 
 wxClassInfo *wxClassInfo::FindClass(const wxChar *className)
@@ -217,30 +215,6 @@ wxClassInfo *wxClassInfo::FindClass(const wxChar *className)
     }
 }
 
-// a tiny InitializeClasses() helper
-/* static */
-inline wxClassInfo *wxClassInfo::GetBaseByName(const wxChar *name)
-{
-    if ( !name )
-        return NULL;
-
-    wxClassInfo *classInfo = (wxClassInfo *)sm_classTable->Get(name);
-
-#ifdef __WXDEBUG__
-    // this must be fixed, other things will work wrongly later if you get this
-    if ( !classInfo )
-    {
-        wxFAIL_MSG( wxString::Format
-                    (
-                        _T("base class '%s' is unknown to wxWindows RTTI"),
-                        name
-                    ) );
-    }
-#endif // __WXDEBUG__
-
-    return classInfo;
-}
-
 // Set pointers to base class(es) to speed up IsKindOf
 void wxClassInfo::InitializeClasses()
 {
@@ -255,36 +229,46 @@ void wxClassInfo::InitializeClasses()
     size_t nClass = 0;
 #endif
 
-    sm_classTable = new wxHashTable(wxKEY_STRING);
-
-        // Index all class infos by their class name
-
-    wxClassInfo *info;
-    for(info = sm_first; info; info = info->m_next)
+    // Do this initialization only once, because classes are added
+    // automatically if
+    if ( sm_classTable == NULL )
     {
-        if (info->m_className)
+        sm_classTable = new wxHashTable(wxKEY_STRING);
+
+        // Index all class infos by their class name:
+        wxClassInfo *info;
+        for(info = sm_first; info; info = info->m_next)
         {
-            wxASSERT_MSG( ++nClass < nMaxClasses,
-                          _T("an infinite loop detected - have you used IMPLEMENT_DYNAMIC_CLASS() twice (may be by linking some object module(s) twice)?") );
-            sm_classTable->Put(info->m_className, (wxObject *)info);
+            if (info->m_className)
+            {
+                wxASSERT_MSG( ++nClass < nMaxClasses,
+                              _T("an infinite loop detected - have you used IMPLEMENT_DYNAMIC_CLASS() twice (may be by linking some object module(s) twice)?") );
+                sm_classTable->Put(info->m_className, (wxObject *)info);
+            }
         }
     }
-
-#if wxUSE_EXTENDED_RTTI == 0
-        // Set base pointers for each wxClassInfo
-
-    for(info = sm_first; info; info = info->m_next)
-    {
-        info->m_baseInfo1 = GetBaseByName(info->GetBaseClassName1());
-        info->m_baseInfo2 = GetBaseByName(info->GetBaseClassName2());
-    }
-#endif
 }
 
 void wxClassInfo::CleanUpClasses()
 {
     delete wxClassInfo::sm_classTable;
     wxClassInfo::sm_classTable = NULL;
+}
+
+void wxClassInfo::Register()
+{
+    if ( sm_classTable )
+    {
+        sm_classTable->Put(m_className, (wxObject *)this);
+    }
+}
+
+void wxClassInfo::Unregister()
+{
+    if ( sm_classTable )
+    {
+        sm_classTable->Delete(m_className);
+    }
 }
 
 wxObject *wxCreateDynamicObject(const wxChar *name)

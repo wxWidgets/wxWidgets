@@ -63,27 +63,28 @@ class WXDLLIMPEXP_BASE wxClassInfo
 {
 public:
     wxClassInfo( const wxChar *className,
-                 const wxChar *baseName1,
-                 const wxChar *baseName2,
+                 const wxClassInfo *baseInfo1,
+                 const wxClassInfo *baseInfo2,
                  int size,
                  wxObjectConstructorFn ctor )
         : m_className(className)
-        , m_baseClassName1(baseName1)
-        , m_baseClassName2(baseName2)
         , m_objectSize(size)
         , m_objectConstructor(ctor)
-        , m_baseInfo1(0)
-        , m_baseInfo2(0)
+        , m_baseInfo1(baseInfo1)
+        , m_baseInfo2(baseInfo2)
         , m_next(sm_first)
-        { sm_first = this; }
+        { 
+            sm_first = this;
+            Register();
+        }
 
     ~wxClassInfo();
 
     wxObject *CreateObject() { return m_objectConstructor ? (*m_objectConstructor)() : 0; }
 
     const wxChar       *GetClassName() const { return m_className; }
-    const wxChar       *GetBaseClassName1() const { return m_baseClassName1; }
-    const wxChar       *GetBaseClassName2() const { return m_baseClassName2; }
+    const wxChar       *GetBaseClassName1() const { return m_baseInfo1->GetClassName(); }
+    const wxChar       *GetBaseClassName2() const { return m_baseInfo2->GetClassName(); }
     const wxClassInfo  *GetBaseClass1() const { return m_baseInfo1; }
     const wxClassInfo  *GetBaseClass2() const { return m_baseInfo2; }
     int                 GetSize() const { return m_objectSize; }
@@ -104,19 +105,14 @@ public:
                  ( m_baseInfo2 && m_baseInfo2->IsKindOf(info) ) );
     }
 
-        // Initializes parent pointers and hash table for fast searching.
-
+    // Initializes parent pointers and hash table for fast searching.
     static void     InitializeClasses();
 
-        // Cleans up hash table used for fast searching.
-
+    // Cleans up hash table used for fast searching.
     static void     CleanUpClasses();
-
-
+    
 public:
     const wxChar            *m_className;
-    const wxChar            *m_baseClassName1;
-    const wxChar            *m_baseClassName2;
     int                      m_objectSize;
     wxObjectConstructorFn    m_objectConstructor;
 
@@ -140,6 +136,11 @@ private:
     static wxClassInfo *GetBaseByName(const wxChar *name);
 
     DECLARE_NO_COPY_CLASS(wxClassInfo)
+   
+protected: 
+    // registers the class
+    void Register();
+    void Unregister();
 };
 
 WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxChar *name);
@@ -174,8 +175,9 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxChar *name);
 #define IMPLEMENT_DYNAMIC_CLASS(name, basename)                 \
  wxObject* wxConstructorFor##name()                             \
   { return new name; }                                          \
- wxClassInfo name::sm_class##name(wxT(#name), wxT(#basename),   \
-            0, (int) sizeof(name),                              \
+ wxClassInfo name::sm_class##name(wxT(#name),                   \
+            &basename::sm_class##basename, NULL,                \
+            (int) sizeof(name),                                 \
             (wxObjectConstructorFn) wxConstructorFor##name);
 
     // Multiple inheritance with two base classes
@@ -183,7 +185,9 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxChar *name);
 #define IMPLEMENT_DYNAMIC_CLASS2(name, basename1, basename2)    \
  wxObject* wxConstructorFor##name()                             \
   { return new name; }                                          \
- wxClassInfo name::sm_class##name(wxT(#name), wxT(#basename1),  \
+ wxClassInfo name::sm_class##name(wxT(#name),                   \
+            &basename1::sm_class##basename1,                    \
+            &basename2::sm_class##basename2,                    \
             wxT(#basename2), (int) sizeof(name),                \
             (wxObjectConstructorFn) wxConstructorFor##name);
 
@@ -194,14 +198,17 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxChar *name);
     // Single inheritance with one base class
 
 #define IMPLEMENT_ABSTRACT_CLASS(name, basename)                \
- wxClassInfo name::sm_class##name(wxT(#name), wxT(#basename),   \
-            0, (int) sizeof(name), (wxObjectConstructorFn) 0);
+ wxClassInfo name::sm_class##name(wxT(#name),                   \
+            &basename::sm_class##basename, NULL,                \
+            (int) sizeof(name), (wxObjectConstructorFn) 0);
 
     // Multiple inheritance with two base classes
 
 #define IMPLEMENT_ABSTRACT_CLASS2(name, basename1, basename2)   \
- wxClassInfo name::sm_class##name(wxT(#name), wxT(#basename1),  \
-            wxT(#basename2), (int) sizeof(name),                \
+ wxClassInfo name::sm_class##name(wxT(#name),                   \
+            &basename1::sm_class##basename1,                    \
+            &basename2::sm_class##basename2,                    \
+            (int) sizeof(name),                                 \
             (wxObjectConstructorFn) 0);
 
 #define IMPLEMENT_CLASS IMPLEMENT_ABSTRACT_CLASS

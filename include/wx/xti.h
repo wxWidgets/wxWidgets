@@ -1135,13 +1135,14 @@ private:
 
     const wxPropertyAccessor *FindAccessor (const wxChar *propertyName);
 
-    // registers the class
-    static void Register(const wxChar *name, wxClassInfo *info);
-
-    static void Unregister(const wxChar *name);
 
     // InitializeClasses() helper
     static wxClassInfo *GetBaseByName(const wxChar *name);
+    
+protected:
+    // registers the class
+    void Register();
+    void Unregister();
 
     DECLARE_NO_COPY_CLASS(wxClassInfo)
 };

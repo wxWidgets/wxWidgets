@@ -159,16 +159,6 @@ void wxPluginLibrary::UpdateClassInfo()
             (*ms_classes)[info->m_className] = this;
         }
     }
-
-#if wxUSE_EXTENDED_RTTI == 0
-    for(info = m_after; info != m_before; info = info->m_next)
-    {
-        if( info->m_baseClassName1 )
-            info->m_baseInfo1 = (wxClassInfo *)t->Get(info->m_baseClassName1);
-        if( info->m_baseClassName2 )
-            info->m_baseInfo2 = (wxClassInfo *)t->Get(info->m_baseClassName2);
-    }
-#endif
 }
 
 void wxPluginLibrary::RestoreClassInfo()
@@ -531,7 +521,7 @@ void wxLibrary::PrepareClasses(wxClassInfo *first)
         info = info->m_next;
     }
 
-#if wxUSE_EXTENDED_RTTI == 0
+#if !wxUSE_EXTENDED_RTTI
     // Set base pointers for each wxClassInfo
     info = first;
     while (info)
