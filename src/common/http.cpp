@@ -103,7 +103,7 @@ wxString wxHTTP::GetHeader(const wxString& header) const
 {
     wxHeaderIterator it = FindHeader(header);
 
-    return it == m_headers.end() ? wxEmptyString : it->second;
+    return it == m_headers.end() ? wxGetEmptyString() : it->second;
 }
 
 void wxHTTP::SetPostBuffer(const wxString& post_buf)
