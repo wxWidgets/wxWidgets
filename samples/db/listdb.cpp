@@ -105,7 +105,7 @@ char *GetExtendedDBErrorMsg2(char *ErrFile, int ErrLine)
         msg += ErrFile;
         msg += "   Line: ";
         tStr.Printf("%d",ErrLine);
-        msg += tStr.GetData();
+        msg += tStr.c_str();
         msg += "\n";
     }
 
@@ -126,7 +126,7 @@ char *GetExtendedDBErrorMsg2(char *ErrFile, int ErrLine)
             if (pDbList->PtrDb->errorList[i])
             {
                 msg.Append(pDbList->PtrDb->errorList[i]);
-                if (strcmp(pDbList->PtrDb->errorList[i],"") != 0)
+                if (wxStrcmp(pDbList->PtrDb->errorList[i],"") != 0)
                     msg.Append("\n");
             }
         }
@@ -149,13 +149,13 @@ Clookup::Clookup(char *tblName, char *colName) : wxDbTable(READONLY_DB, tblName,
 
 // Clookup2 constructor
 Clookup2::Clookup2(char *tblName, char *colName1, char *colName2, wxDb *pDb)
-   : wxDbTable(pDb, tblName, (1 + (strlen(colName2) > 0)), NULL, !wxDB_QUERY_ONLY, DbConnectInf.defaultDir)
+   : wxDbTable(pDb, tblName, (1 + (wxStrlen(colName2) > 0)), NULL, !wxDB_QUERY_ONLY, DbConnectInf.defaultDir)
 {
     int i = 0;
 
     SetColDefs (i, colName1, DB_DATA_TYPE_VARCHAR, lookupCol1, SQL_C_CHAR, LOOKUP_COL_LEN+1, FALSE, FALSE);
 
-    if (strlen(colName2) > 0)
+    if (wxStrlen(colName2) > 0)
         SetColDefs (++i, colName2, DB_DATA_TYPE_VARCHAR, lookupCol2, SQL_C_CHAR, LOOKUP_COL_LEN+1, FALSE, FALSE);
 
 }  // Clookup2()
@@ -174,7 +174,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, char *windowTitle, char *tableName, cha
 {
     wxBeginBusyCursor();
     
-    strcpy(ListDB_Selection,"");
+    wxStrcpy(ListDB_Selection,"");
     widgetPtrsSet = FALSE;
     lookup  = 0;
     lookup2 = 0;
@@ -204,8 +204,8 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, char *windowTitle, char *tableName, cha
         return;
     }
 
-    lookup->orderBy = orderBy;
-    lookup->where = where;
+    lookup->SetOrderByClause(orderBy);
+    lookup->SetWhereClause(where);
     if (!lookup->Query())
     {
         wxMessageBox("ODBC error during Query()","ODBC Error...");
@@ -268,12 +268,12 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, char *windowTitle, char *tableName,
 {
     wxBeginBusyCursor();
     
-    strcpy(ListDB_Selection,"");
-    strcpy(ListDB_Selection2,"");
+    wxStrcpy(ListDB_Selection,"");
+    wxStrcpy(ListDB_Selection2,"");
     widgetPtrsSet = FALSE;
     lookup  = 0;
     lookup2 = 0;
-    noDisplayCols = (strlen(dispCol2) ? 2 : 1);
+    noDisplayCols = (wxStrlen(dispCol2) ? 2 : 1);
     col1Len = 0;
 
     wxFont fixedFont(12,wxMODERN,wxNORMAL,wxNORMAL);
@@ -314,14 +314,14 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, char *windowTitle, char *tableName,
     else
     {
         maxColLen = LOOKUP_COL_LEN;
-        if (strlen(dispCol2))
+        if (wxStrlen(dispCol2))
         {
             wxString q = "SELECT MAX({fn LENGTH(";
             q += dispCol1;
             q += ")}), NULL";
             q += " FROM ";
             q += tableName;
-            if (strlen(where))
+            if (wxStrlen(where))
             {
                 q += " WHERE ";
                 q += where;
@@ -340,7 +340,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, char *windowTitle, char *tableName,
     }
 
     // Query the actual record set
-    if (selectStmt && strlen(selectStmt))    // Query by sql stmt passed in
+    if (selectStmt && wxStrlen(selectStmt))    // Query by sql stmt passed in
     {
         if (!lookup2->QueryBySqlStmt(selectStmt))
         {
@@ -351,8 +351,8 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, char *windowTitle, char *tableName,
     }
     else    // Query using where and order by clauses
     {
-        lookup2->orderBy = orderBy;
-        lookup2->where = where;
+        lookup2->SetOrderByClause(orderBy);
+        lookup2->SetWhereClause(where);
         if (!lookup2->Query(FALSE, distinctValues))
         {
             wxMessageBox("ODBC error during Query()","ODBC Error...");
@@ -366,9 +366,9 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, char *windowTitle, char *tableName,
     while (lookup2->GetNext())
     {
         s = lookup2->lookupCol1;
-        if (strlen(dispCol2))        // Append the optional column 2
+        if (wxStrlen(dispCol2))        // Append the optional column 2
         {
-            s.Append(' ', (maxColLen + LISTDB_NO_SPACES_BETWEEN_COLS - strlen(lookup2->lookupCol1)));
+            s.Append(' ', (maxColLen + LISTDB_NO_SPACES_BETWEEN_COLS - wxStrlen(lookup2->lookupCol1)));
             s.Append(lookup2->lookupCol2);
         }
         pLookUpSelectList->Append(s);
@@ -434,25 +434,25 @@ void ClookUpDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
             if (pLookUpSelectList->GetSelection() != -1)
             {
                 if (noDisplayCols == 1)
-                    strcpy (ListDB_Selection, pLookUpSelectList->GetStringSelection());
+                    wxStrcpy (ListDB_Selection, pLookUpSelectList->GetStringSelection());
                 else  // 2 display columns
                 {
                     wxString s = pLookUpSelectList->GetStringSelection();
                     // Column 1
                     s = s.SubString(0, col1Len-1);
                     s = s.Strip();
-                    strcpy(ListDB_Selection, s);
+                    wxStrcpy(ListDB_Selection, s);
                     // Column 2
                     s = pLookUpSelectList->GetStringSelection();
                     s = s.Mid(col1Len + LISTDB_NO_SPACES_BETWEEN_COLS);
                     s = s.Strip();
-                    strcpy(ListDB_Selection2, s);
+                    wxStrcpy(ListDB_Selection2, s);
                 }
             }
             else
             {
-                strcpy(ListDB_Selection,"");
-                strcpy(ListDB_Selection2,"");
+                wxStrcpy(ListDB_Selection,"");
+                wxStrcpy(ListDB_Selection2,"");
             }
             Close();
         }  // OK Button
@@ -460,8 +460,8 @@ void ClookUpDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
         // Cancel Button
         if (widgetName == pLookUpCancelBtn->GetName())
         {
-            strcpy (ListDB_Selection,"");
-            strcpy (ListDB_Selection2,"");
+            wxStrcpy (ListDB_Selection,"");
+            wxStrcpy (ListDB_Selection2,"");
             Close();
         }  // Cancel Button
     }
