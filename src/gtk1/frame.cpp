@@ -357,7 +357,7 @@ static void wxInsertChildInFrame( wxFrame* parent, wxWindow* child )
                          child->m_width,
                          child->m_height );
 
-#if wxUSE_TOOLBAR && !wxUSE_TOOLBAR_SIMPLE
+#if wxUSE_TOOLBAR_NATIVE
         /* we connect to these events for recalculating the client area
            space when the toolbar is floating */
         if (wxIS_KIND_OF(child,wxToolBar))
