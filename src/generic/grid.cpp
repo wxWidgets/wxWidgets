@@ -5427,7 +5427,20 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 m_winCapture = NULL;
             }
 
-            if ( m_selectingTopLeft != wxGridNoCellCoords &&
+            if ( coords == m_currentCellCoords && m_waitForSlowClick && CanEnableCellControl())
+            {
+                ClearSelection();
+                EnableCellEditControl();
+
+                wxGridCellAttr* attr = GetCellAttr(coords);
+                wxGridCellEditor *editor = attr->GetEditor(this, coords.GetRow(), coords.GetCol());
+                editor->StartingClick();
+                editor->DecRef();
+                attr->DecRef();
+
+                m_waitForSlowClick = FALSE;
+            }
+            else if ( m_selectingTopLeft != wxGridNoCellCoords &&
                  m_selectingBottomRight != wxGridNoCellCoords )
             {
                 if ( m_selection )
@@ -5448,21 +5461,6 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 // Show the edit control, if it has been hidden for
                 // drag-shrinking.
                 ShowCellEditControl();
-            }
-            else
-            {
-              if( m_waitForSlowClick && CanEnableCellControl())
-              {
-                EnableCellEditControl();
-
-                wxGridCellAttr* attr = GetCellAttr(coords);
-                wxGridCellEditor *editor = attr->GetEditor(this, coords.GetRow(), coords.GetCol());
-                editor->StartingClick();
-                editor->DecRef();
-                attr->DecRef();
-
-                m_waitForSlowClick = FALSE;
-              }
             }
         }
         else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW )
