@@ -4,9 +4,12 @@ Recent Changes for wxPython
 2.5.1.4
 -------
 
-(See also the MigrationGuide.txt file for details about some of the
+(See also the MigrationGuide_ file for details about some of the
 big changes that have happened in this release and how you should
 adapt your code.)
+
+.. _MigrationGuide: MigrationGuide.html
+
 
 The wxWindows project and library is now known as wxWidgets.  Please
 see http://www.wxwindows.org/name.htm for more details.  This won't

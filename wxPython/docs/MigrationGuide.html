@@ -12,7 +12,7 @@
 <h1 class="title">wxPython 2.5 Migration Guide</h1>
 <p>This document will help explain some of the major changes in wxPython
 2.5 and let you know what you need to do to adapt your programs to
-those changes.  Be sure to also check in the CHANGES.txt file like
+those changes.  Be sure to also check in the <a class="reference" href="CHANGES.html">CHANGES</a> file like
 usual to see info about the not so major changes and other things that
 have been added to wxPython.</p>
 <div class="section" id="wxname-change">
@@ -555,6 +555,26 @@ when your last Frame is closed.  For wxPython apps it is usually
 enough if your main frame object holds the only reference to the
 wx.TaskBarIcon, then when the frame is closed Python reference
 counting takes care of the rest.</p>
+<p>Before Python 2.3 it was possible to pass a floating point object as a
+parameter to a function that expected an integer, and the
+PyArg_ParseTuple family of functions would automatically convert to
+integer by truncating the fractional portion of the number.  With
+Python 2.3 that behavior was deprecated and a deprecation warning is
+raised when you pass a floating point value, (for example, calling
+wx.DC.DrawLineXY with floats for the position and size,) and lots of
+developers using wxPython had to scramble to change their code to call
+int() before calling wxPython methods.  Recent changes in SWIG have
+moved the conversion out of PyArg_ParseTuple to custom code that SWIG
+generates.  Since the default conversion fragment was a little too
+strict and didn't generate a very meaningful exception when it failed,
+I decided to use a custom fragment instead, and it turned out that
+it's very easy to allow floats to be converted again just like they
+used to be.   So, in a nutshell, any numeric type that can be
+converted to an integer is now legal to be passed to SWIG wrapped
+functions in wxPython for parameters that are expecting an integer.
+If the object is not already an integer then it will be asked to
+convert itself to one.  A similar conversion fragment is in place for
+parameters that expect floating point values.</p>
 </div>
 </div>
 </body>
