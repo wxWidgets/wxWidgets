@@ -39,7 +39,7 @@
 class CellBox
 {
 public:
-    // members    
+    // members
     inline bool IsAlive(int dx, int dy) const;
     inline bool SetCell(int dx, int dy, bool alive);
 
@@ -98,7 +98,7 @@ bool CellBox::SetCell(int dx, int dy, bool alive)
 // --------------------------------------------------------------------------
 
 Life::Life()
-{            
+{
     m_numcells  = 0;
     m_boxes     = new CellBox *[HASHSIZE];
     m_head      = NULL;
@@ -117,29 +117,29 @@ Life::~Life()
     Clear();
 
     delete[] m_boxes;
-    delete[] m_cells;        
+    delete[] m_cells;
 }
 
 // Clear:
 //  Clears the board, freeing all storage.
-// 
+//
 void Life::Clear()
 {
     CellBox *c, *nc;
 
     m_numcells = 0;
-    
+
     // clear the hash table pointers
     for (int i = 0; i < HASHSIZE; i++)
         m_boxes[i] = NULL;
-    
+
     // free used boxes
     c = m_head;
     while (c)
     {
         nc = c->m_next;
         delete c;
-        c = nc;   
+        c = nc;
     }
     m_head = NULL;
 
@@ -149,7 +149,7 @@ void Life::Clear()
     {
         nc = c->m_next;
         delete c;
-        c = nc;   
+        c = nc;
     }
     m_available = NULL;
 }
@@ -184,7 +184,7 @@ void Life::SetCell(wxInt32 x, wxInt32 y, bool alive)
         else
             m_numcells--;
     }
-}    
+}
 
 void Life::SetShape(const LifeShape& shape)
 {
@@ -232,9 +232,9 @@ CellBox* Life::CreateBox(wxInt32 x, wxInt32 y, wxUint32 hv)
                 // the above call should abort, but it doesn't :-?
                 abort();
 
-                break;    
+                break;
             }
-    
+
             c->m_next = m_available;
             m_available = c;
         }
@@ -297,13 +297,13 @@ void Life::KillBox(CellBox *c)
     else
         m_head = c->m_next;
 
-    // remove from the hash table        
+    // remove from the hash table
     if (c != m_boxes[hv])
         c->m_hprev->m_hnext = c->m_hnext;
     else
         m_boxes[hv] = c->m_hnext;
 
-    // update neighbours    
+    // update neighbours
     if (c->m_next) c->m_next->m_prev = c->m_prev;
     if (c->m_hnext) c->m_hnext->m_hprev = c->m_hprev;
     if (c->m_up) c->m_up->m_dn = NULL;
@@ -339,7 +339,7 @@ void Life::DoLine(wxInt32 i, wxInt32 j, wxUint32 live, wxUint32 old)
         live >>= 1;
     }
 }
- 
+
 // Post eight cells to the cell arrays (alive cells only)
 void Life::DoLine(wxInt32 i, wxInt32 j, wxUint32 live)
 {
@@ -355,7 +355,7 @@ void Life::DoLine(wxInt32 i, wxInt32 j, wxUint32 live)
         }
         live >>= 1;
     }
-}       
+}
 
 void Life::BeginFind(wxInt32 i0, wxInt32 j0, wxInt32 i1, wxInt32 j1, bool changed)
 {
@@ -363,12 +363,12 @@ void Life::BeginFind(wxInt32 i0, wxInt32 j0, wxInt32 i1, wxInt32 j1, bool change
     // cellboxes that fit in the specified viewport is smaller
     // than the current total of boxes; iterating over the list
     // should then be faster than searching in the hash table.
-    
+
     m_i0 = m_i = i0 & 0xfffffff8;
     m_j0 = m_j = j0 & 0xfffffff8;
     m_i1 = (i1 + 7) & 0xfffffff8;
     m_j1 = (j1 + 7) & 0xfffffff8;
-   
+
     m_findmore = TRUE;
     m_changed = changed;
 }
@@ -386,14 +386,14 @@ bool Life::FindMore(Cell *cells[], size_t *ncells)
             {
                 if ((c = LinkBox(m_i, m_j, FALSE)) == NULL)
                     continue;
-    
+
                 // check whether there is enough space left in the array
                 if (m_ncells > (ARRAYSIZE - 64))
                 {
                     *ncells = m_ncells;
                     return FALSE;
                 }
-                
+
                 DoLine(m_i, m_j    , c->m_live1,       c->m_old1      );
                 DoLine(m_i, m_j + 1, c->m_live1 >> 8,  c->m_old1 >> 8 );
                 DoLine(m_i, m_j + 2, c->m_live1 >> 16, c->m_old1 >> 16);
@@ -405,20 +405,20 @@ bool Life::FindMore(Cell *cells[], size_t *ncells)
             }
     }
     else
-    {         
+    {
         for ( ; m_j <= m_j1; m_j += 8, m_i = m_i0)
             for ( ; m_i <= m_i1; m_i += 8)
             {
                 if ((c = LinkBox(m_i, m_j, FALSE)) == NULL)
                     continue;
-    
+
                 // check whether there is enough space left in the array
                 if (m_ncells > (ARRAYSIZE - 64))
                 {
                     *ncells = m_ncells;
                     return FALSE;
                 }
-    
+
                 DoLine(m_i, m_j    , c->m_live1      );
                 DoLine(m_i, m_j + 1, c->m_live1 >> 8 );
                 DoLine(m_i, m_j + 2, c->m_live1 >> 16);
@@ -429,12 +429,12 @@ bool Life::FindMore(Cell *cells[], size_t *ncells)
                 DoLine(m_i, m_j + 7, c->m_live2 >> 24);
             }
     }
-    
+
     *ncells = m_ncells;
     m_findmore = FALSE;
     return TRUE;
 }
-                  
+
 // --------------------------------------------------------------------------
 // Evolution engine
 // --------------------------------------------------------------------------
@@ -444,20 +444,20 @@ extern int g_tab2[];
 
 // NextTic:
 //  Advance one step in evolution :-)
-// 
+//
 bool Life::NextTic()
 {
     CellBox  *c, *up, *dn, *lf, *rt;
     wxUint32 t1, t2, t3, t4;
     bool     changed = FALSE;
-    
+
     m_numcells = 0;
-    
+
     // Stage 1:
     // Compute neighbours of each cell
-    // 
+    //
     // WARNING: unrolled loops and lengthy code follows!
-    //    
+    //
     c = m_head;
 
     while (c)
@@ -465,25 +465,25 @@ bool Life::NextTic()
         if (! (c->m_live1 || c->m_live2))
         {
             c = c->m_next;
-            continue;    
-        }        
+            continue;
+        }
         up = c->m_up;
         dn = c->m_dn;
         lf = c->m_lf;
         rt = c->m_rt;
 
-        // up        
+        // up
         t1 = c->m_live1 & 0x000000ff;
         if (t1)
         {
             if (!up)
             {
                 up = LinkBox(c->m_x, c->m_y - 8);
-                up->m_dn = c;    
+                up->m_dn = c;
             }
             t2 = g_tab1[t1];
             up->m_on[7] += t2;
-            c->m_on[1] += t2;        
+            c->m_on[1] += t2;
             c->m_on[0] += g_tab2[t1];
         }
 
@@ -494,30 +494,30 @@ bool Life::NextTic()
             if (!dn)
             {
                 dn = LinkBox(c->m_x, c->m_y + 8);
-                dn->m_up = c;    
+                dn->m_up = c;
             }
             t2 = g_tab1[t1];
             dn->m_on[0] += t2;
-            c->m_on[6] += t2;        
+            c->m_on[6] += t2;
             c->m_on[7] += g_tab2[t1];
         }
-        
+
         t1 = c->m_live1;
         t2 = c->m_live2;
-        
+
         // left
         if (t1 & 0x01010101)
         {
             if (!lf)
             {
-                lf = LinkBox(c->m_x - 8, c->m_y);    
+                lf = LinkBox(c->m_x - 8, c->m_y);
                 lf->m_rt = c;
             }
             if (t1 & 0x00000001)
             {
                if (!lf->m_up)
                {
-                   lf->m_up = LinkBox(c->m_x - 8, c->m_y - 8);    
+                   lf->m_up = LinkBox(c->m_x - 8, c->m_y - 8);
                    lf->m_up->m_dn = lf;
                }
                lf->m_up->m_on[7] += 0x10000000;
@@ -526,53 +526,53 @@ bool Life::NextTic()
             }
             if (t1 & 0x00000100)
             {
-               lf->m_on[0] += 0x10000000;   
-               lf->m_on[1] += 0x10000000;   
-               lf->m_on[2] += 0x10000000;   
-            }   
+               lf->m_on[0] += 0x10000000;
+               lf->m_on[1] += 0x10000000;
+               lf->m_on[2] += 0x10000000;
+            }
             if (t1 & 0x00010000)
             {
-               lf->m_on[1] += 0x10000000;   
-               lf->m_on[2] += 0x10000000;   
-               lf->m_on[3] += 0x10000000;   
+               lf->m_on[1] += 0x10000000;
+               lf->m_on[2] += 0x10000000;
+               lf->m_on[3] += 0x10000000;
             }
             if (t1 & 0x01000000)
             {
-               lf->m_on[2] += 0x10000000;   
-               lf->m_on[3] += 0x10000000;   
-               lf->m_on[4] += 0x10000000;   
+               lf->m_on[2] += 0x10000000;
+               lf->m_on[3] += 0x10000000;
+               lf->m_on[4] += 0x10000000;
             }
         }
         if (t2 & 0x01010101)
         {
             if (!lf)
             {
-                lf = LinkBox(c->m_x - 8, c->m_y);    
+                lf = LinkBox(c->m_x - 8, c->m_y);
                 lf->m_rt = c;
             }
             if (t2 & 0x00000001)
             {
-               lf->m_on[3] += 0x10000000;   
-               lf->m_on[4] += 0x10000000;   
-               lf->m_on[5] += 0x10000000;   
-            }   
+               lf->m_on[3] += 0x10000000;
+               lf->m_on[4] += 0x10000000;
+               lf->m_on[5] += 0x10000000;
+            }
             if (t2 & 0x00000100)
             {
-               lf->m_on[4] += 0x10000000;   
-               lf->m_on[5] += 0x10000000;   
-               lf->m_on[6] += 0x10000000;   
-            }   
+               lf->m_on[4] += 0x10000000;
+               lf->m_on[5] += 0x10000000;
+               lf->m_on[6] += 0x10000000;
+            }
             if (t2 & 0x00010000)
             {
-               lf->m_on[5] += 0x10000000;   
-               lf->m_on[6] += 0x10000000;   
-               lf->m_on[7] += 0x10000000;   
+               lf->m_on[5] += 0x10000000;
+               lf->m_on[6] += 0x10000000;
+               lf->m_on[7] += 0x10000000;
             }
-            if (t2 & 0x01000000) 
+            if (t2 & 0x01000000)
             {
                if (!lf->m_dn)
                {
-                   lf->m_dn = LinkBox(c->m_x - 8, c->m_y + 8);    
+                   lf->m_dn = LinkBox(c->m_x - 8, c->m_y + 8);
                    lf->m_dn->m_up = lf;
                }
                lf->m_on[6] += 0x10000000;
@@ -586,14 +586,14 @@ bool Life::NextTic()
         {
             if (!rt)
             {
-                rt = LinkBox(c->m_x + 8, c->m_y);    
+                rt = LinkBox(c->m_x + 8, c->m_y);
                 rt->m_lf = c;
             }
             if (t1 & 0x00000080)
             {
                if (!rt->m_up)
                {
-                   rt->m_up = LinkBox(c->m_x + 8, c->m_y - 8);    
+                   rt->m_up = LinkBox(c->m_x + 8, c->m_y - 8);
                    rt->m_up->m_dn = rt;
                }
                rt->m_up->m_on[7] += 0x00000001;
@@ -602,53 +602,53 @@ bool Life::NextTic()
             }
             if (t1 & 0x00008000)
             {
-               rt->m_on[0] += 0x00000001;   
-               rt->m_on[1] += 0x00000001;   
-               rt->m_on[2] += 0x00000001;   
-            }   
+               rt->m_on[0] += 0x00000001;
+               rt->m_on[1] += 0x00000001;
+               rt->m_on[2] += 0x00000001;
+            }
             if (t1 & 0x00800000)
             {
-               rt->m_on[1] += 0x00000001;   
-               rt->m_on[2] += 0x00000001;   
-               rt->m_on[3] += 0x00000001;   
+               rt->m_on[1] += 0x00000001;
+               rt->m_on[2] += 0x00000001;
+               rt->m_on[3] += 0x00000001;
             }
             if (t1 & 0x80000000)
             {
-               rt->m_on[2] += 0x00000001;   
-               rt->m_on[3] += 0x00000001;   
-               rt->m_on[4] += 0x00000001;   
+               rt->m_on[2] += 0x00000001;
+               rt->m_on[3] += 0x00000001;
+               rt->m_on[4] += 0x00000001;
             }
         }
         if (t2 & 0x80808080)
         {
             if (!rt)
             {
-                rt = LinkBox(c->m_x + 8, c->m_y);    
+                rt = LinkBox(c->m_x + 8, c->m_y);
                 rt->m_lf = c;
             }
             if (t2 & 0x00000080)
             {
-               rt->m_on[3] += 0x00000001;   
-               rt->m_on[4] += 0x00000001;   
-               rt->m_on[5] += 0x00000001;   
-            }   
+               rt->m_on[3] += 0x00000001;
+               rt->m_on[4] += 0x00000001;
+               rt->m_on[5] += 0x00000001;
+            }
             if (t2 & 0x00008000)
             {
-               rt->m_on[4] += 0x00000001;   
-               rt->m_on[5] += 0x00000001;   
-               rt->m_on[6] += 0x00000001;   
-            }   
+               rt->m_on[4] += 0x00000001;
+               rt->m_on[5] += 0x00000001;
+               rt->m_on[6] += 0x00000001;
+            }
             if (t2 & 0x00800000)
             {
-               rt->m_on[5] += 0x00000001;   
-               rt->m_on[6] += 0x00000001;   
-               rt->m_on[7] += 0x00000001;   
+               rt->m_on[5] += 0x00000001;
+               rt->m_on[6] += 0x00000001;
+               rt->m_on[7] += 0x00000001;
             }
-            if (t2 & 0x80000000) 
+            if (t2 & 0x80000000)
             {
                if (!rt->m_dn)
                {
-                   rt->m_dn = LinkBox(c->m_x + 8, c->m_y + 8);    
+                   rt->m_dn = LinkBox(c->m_x + 8, c->m_y + 8);
                    rt->m_dn->m_up = rt;
                }
                rt->m_on[6] += 0x00000001;
@@ -656,9 +656,10 @@ bool Life::NextTic()
                rt->m_dn->m_on[0] += 0x00000001;
             }
         }
-         
+
         // inner cells
-        for (int i = 1; i <= 3; i++)
+        int i;
+        for (i = 1; i <= 3; i++)
         {
             t1 = ((c->m_live1) >> (i * 8)) & 0x000000ff;
             if (t1)
@@ -668,7 +669,7 @@ bool Life::NextTic()
                 c->m_on[i + 1] += g_tab1[t1];
             }
         }
-        for (int i = 0; i <= 2; i++)
+        for (i = 0; i <= 2; i++)
         {
             t1 = ((c->m_live2) >> (i * 8)) & 0x000000ff;
             if (t1)
@@ -690,15 +691,16 @@ bool Life::NextTic()
     // Stabilize
     //
     // WARNING: to be optimized and unrolled soon.
-    // 
+    //
     c = m_head;
-    
+
     while (c)
     {
         t1 = c->m_live1;
         c->m_old1 = t1;
         t2 = 0;
-        for (int i = 0; i <= 3; i++)
+        int i;
+        for (i = 0; i <= 3; i++)
         {
             t3 = c->m_on[i];
             if (!t3)
@@ -712,13 +714,13 @@ bool Life::NextTic()
             {
                 t2 >>= 1;
                 t4 = t3 & 0x0000000f;
-                
+
                 if ((t4 == 3) || ((t4 == 2) && (t1 & 0x00000001)))
                 {
                     t2 |= 0x80000000;
                     m_numcells++;
                 }
-                
+
                 t3 >>= 4;
                 t1 >>= 1;
             }
@@ -729,7 +731,7 @@ bool Life::NextTic()
         t1 = c->m_live2;
         c->m_old2 = t1;
         t2 = 0;
-        for (int i = 4; i <= 7; i++)
+        for (i = 4; i <= 7; i++)
         {
             t3 = c->m_on[i];
             if (!t3)
@@ -743,13 +745,13 @@ bool Life::NextTic()
             {
                 t2 >>= 1;
                 t4 = t3 & 0x0000000f;
-                
+
                 if ((t4 == 3) || ((t4 == 2) && (t1 & 0x00000001)))
                 {
                     t2 |= 0x80000000;
                     m_numcells++;
                 }
-                
+
                 t3 >>= 4;
                 t1 >>= 1;
             }
@@ -759,7 +761,7 @@ bool Life::NextTic()
 
         // keep track of changes
         changed |= ((c->m_live1 ^ c->m_old1) || (c->m_live2 ^ c->m_old2));
-        
+
         // mark, and discard if necessary, dead boxes
         if (c->m_live1 || c->m_live2)
         {
@@ -770,8 +772,8 @@ bool Life::NextTic()
         {
             CellBox *aux = c->m_next;
             if (c->m_dead++ > MAXDEAD)
-               KillBox(c);    
-               
+               KillBox(c);
+
             c = aux;
         }
     }
