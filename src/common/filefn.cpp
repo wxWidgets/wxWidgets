@@ -277,14 +277,10 @@ wxFileExists (const wxString& filename)
     return FALSE ;
 #else
 
-#ifdef __SALFORDC__
-  struct _stat stbuf;
-#else
-  struct stat stbuf;
-#endif
-
-  if ((filename != wxT("")) && stat (wxFNSTRINGCAST filename.fn_str(), &stbuf) == 0)
+  wxStructStat stbuf;
+  if ((filename != wxT("")) && wxStat (wxFNSTRINGCAST filename.fn_str(), &stbuf) == 0)
     return TRUE;
+
   return FALSE;
 #endif
 }
@@ -1050,7 +1046,7 @@ wxRenameFile (const wxString& file1, const wxString& file2)
     return TRUE;
 #else
   // Normal system call
-  if (0 == rename (wxFNSTRINGCAST file1.fn_str(), wxFNSTRINGCAST file2.fn_str()))
+  if (0 == wxRename (wxFNSTRINGCAST file1.fn_str(), wxFNSTRINGCAST file2.fn_str()))
     return TRUE;
 #endif
   // Try to copy
@@ -1065,7 +1061,7 @@ wxRenameFile (const wxString& file1, const wxString& file2)
 bool wxRemoveFile(const wxString& file)
 {
 #if defined(__VISUALC__) || defined(__BORLANDC__) || defined(__WATCOMC__)
-  int flag = remove(wxFNSTRINGCAST file.fn_str());
+  int flag = wxRemove(wxFNSTRINGCAST file.fn_str());
 #elif defined( __WXMAC__ )
   int flag = unlink(wxUnix2MacFilename( file ));
 #else
@@ -1086,7 +1082,7 @@ bool wxMkdir(const wxString& dir, int perm)
 #if (!(defined(__WXMSW__) || defined(__OS2__))) || (defined(__GNUWIN32__) && !defined(__MINGW32__)) || defined(__WXWINE__)
     if ( mkdir(wxFNCONV(dirname), perm) != 0 )
 #else  // !MSW and !OS/2 VAC++
-    if ( mkdir(wxFNSTRINGCAST wxFNCONV(dirname)) != 0 )
+    if ( wxMkdir(wxFNSTRINGCAST wxFNCONV(dirname)) != 0 )
 #endif // !MSW/MSW
     {
         wxLogSysError(_("Directory '%s' couldn't be created"), dirname);
@@ -1109,7 +1105,7 @@ bool wxRmdir(const wxString& dir, int WXUNUSED(flags))
 #ifdef __SALFORDC__
   return FALSE; // What to do?
 #else
-  return (rmdir(wxFNSTRINGCAST dir.fn_str()) == 0);
+  return (wxRmdir(wxFNSTRINGCAST dir.fn_str()) == 0);
 #endif
 
 #endif
@@ -1170,13 +1166,9 @@ bool wxPathExists(const wxChar *pszPathName)
   if ( wxEndsWithPathSeparator(pszPathName) && pszPathName[1] != wxT('\0') )
     strPath.Last() = wxT('\0');
 
-#ifdef __SALFORDC__
-  struct _stat st;
-#else
-  struct stat st;
-#endif
+  wxStructStat st;
 
-  return stat(wxFNSTRINGCAST strPath.fn_str(), &st) == 0 && (st.st_mode & S_IFDIR);
+  return wxStat(wxFNSTRINGCAST strPath.fn_str(), &st) == 0 && (st.st_mode & S_IFDIR);
 }
 
 // Get a temporary filename, opening and closing the file.
@@ -1869,9 +1861,9 @@ void WXDLLEXPORT wxSplitPath(const wxChar *pszFileName,
 
 time_t WXDLLEXPORT wxFileModificationTime(const wxString& filename)
 {
-    struct stat buf;
+    wxStructStat buf;
 
-    stat(filename.fn_str(), &buf);
+    wxStat(filename.fn_str(), &buf);
     return buf.st_mtime;
 }
 

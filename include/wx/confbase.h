@@ -35,13 +35,13 @@
 
 /// separates group and entry names (probably shouldn't be changed)
 #ifndef wxCONFIG_PATH_SEPARATOR
-  #define   wxCONFIG_PATH_SEPARATOR     '/'
+  #define   wxCONFIG_PATH_SEPARATOR     _T('/')
 #endif
 
 /// introduces immutable entries
 // (i.e. the ones which can't be changed from the local config file)
 #ifndef wxCONFIG_IMMUTABLE_PREFIX
-  #define   wxCONFIG_IMMUTABLE_PREFIX   '!'
+  #define   wxCONFIG_IMMUTABLE_PREFIX   _T('!')
 #endif
 
 /// should we use registry instead of configuration files under Windows?

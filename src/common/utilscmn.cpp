@@ -513,8 +513,8 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
                     else
 #endif // 0
                     {
-                        wxLogDebug(wxT("Unrecognized accel key '%s', accel "
-                                       "string ignored."), current.c_str());
+                        wxLogDebug(wxT("Unrecognized accel key '%s', accel string ignored."),
+                                   current.c_str());
                     }
                 }
             }

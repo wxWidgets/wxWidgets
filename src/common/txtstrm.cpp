@@ -284,17 +284,19 @@ wxTextInputStream& wxTextInputStream::operator>>(wxString& word)
     return *this;
 }
 
-wxTextInputStream& wxTextInputStream::operator>>(wxChar& c)
+wxTextInputStream& wxTextInputStream::operator>>(char& c)
 {
     if (!m_input)
     {
-        c = (wxChar) 0;
+        c = 0;
         return *this;
     }
 
     c = m_input.GetC();
 
-    if (EatEOL(c)) c=wxT('\n');
+    if (EatEOL(c))
+        c = '\n';
+
     return *this;
 }
 
@@ -444,9 +446,14 @@ wxTextOutputStream& wxTextOutputStream::operator<<(const wxString& string)
     return *this;
 }
 
-wxTextOutputStream& wxTextOutputStream::operator<<(wxChar c)
+wxTextOutputStream& wxTextOutputStream::operator<<(char c)
 {
-    WriteString( wxString(c) );
+    // these strange manipulations are needed in Unicode mode
+    char buf[2];
+    buf[0] = c;
+    buf[1] = 0;
+
+    WriteString( wxString(buf) );
     return *this;
 }
 

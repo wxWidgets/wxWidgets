@@ -41,7 +41,7 @@ wxList WXDLLEXPORT wxPendingDelete;
 // Currently this can be Win95, Windows, Win32s, WinNT.
 // For some systems, you can't tell until run-time what services you
 // have. See wxGetOsVersion, which uses this string if present.
-char *wxOsVersion = NULL;
+extern wxChar *wxOsVersion = NULL;
 
 int wxPageNumber;
 

@@ -230,7 +230,7 @@ bool wxResourceTable::ParseResourceFile(const wxString& filename)
 #ifdef __WXMAC__
   FILE *fd = fopen(wxUnix2MacFilename(filename.fn_str()), "r");
 #else	
-  FILE *fd = fopen(filename.fn_str(), "r");
+  FILE *fd = wxFopen(filename.fn_str(), _T("r"));
 #endif
   if (!fd)
     return FALSE;
@@ -2779,7 +2779,7 @@ bool wxResourceParseIncludeFile(const wxString& f, wxResourceTable *table)
   if (!table)
     table = wxDefaultResourceTable;
 
-  FILE *fd = fopen(f.fn_str(), "r");
+  FILE *fd = wxFopen(f.fn_str(), _T("r"));
   if (!fd)
   {
     return FALSE;

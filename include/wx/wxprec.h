@@ -27,6 +27,10 @@
 
 #ifdef WX_PRECOMP
 
+// include <wx/wxchar.h> first to ensure that UNICODE macro is correctly set
+// _before_ including <windows.h>
+#include "wx/wxchar.h"
+
 // include standard Windows headers
 #if defined(__WXMSW__) && !wxUSE_MFC
     #include <windows.h>

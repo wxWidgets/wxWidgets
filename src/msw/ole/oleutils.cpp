@@ -63,16 +63,16 @@ bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount)
 // ----------------------------------------------------------------------------
 
 #if defined(__WXDEBUG__) && defined(__VISUALC__) && (__VISUALC__ > 1000)
-const char *GetIidName(REFIID riid)
+const wxChar *GetIidName(REFIID riid)
 {
   // an association between symbolic name and numeric value of an IID
   struct KNOWN_IID {
     const IID  *pIid;
-    const char *szName;
+    const wxChar *szName;
   };
 
   // construct the table containing all known interfaces
-  #define ADD_KNOWN_IID(name) { &IID_I##name, #name }
+  #define ADD_KNOWN_IID(name) { &IID_I##name, _T(#name) }
 
   static const KNOWN_IID aKnownIids[] = {
     ADD_KNOWN_IID(AdviseSink),

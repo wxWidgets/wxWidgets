@@ -207,7 +207,7 @@ WXHWND wxToolTip::GetToolTipCtrl()
     if ( !ms_hwndTT )
     {
         ms_hwndTT = (WXHWND)::CreateWindow(TOOLTIPS_CLASS,
-                                           (LPSTR)NULL,
+                                           (LPCTSTR)NULL,
                                            TTS_ALWAYSTIP,
                                            CW_USEDEFAULT, CW_USEDEFAULT,
                                            CW_USEDEFAULT, CW_USEDEFAULT,

@@ -963,8 +963,8 @@ bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *pData)
         m_filenames.Add(str);
 
         if ( len2 != len - 1 ) {
-            wxLogDebug(wxT("In wxFileDropTarget::OnDrop DragQueryFile returned"
-                           " %d characters, %d expected."), len2, len - 1);
+            wxLogDebug(wxT("In wxFileDropTarget::OnDrop DragQueryFile returned\
+ %d characters, %d expected."), len2, len - 1);
         }
     }
 

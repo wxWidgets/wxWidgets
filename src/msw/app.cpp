@@ -1173,7 +1173,7 @@ int wxApp::GetComCtl32Version()
             // try to use DllGetVersion() if available in _headers_
             #ifdef DLLVER_PLATFORM_WINDOWS // defined in shlwapi.h
                 DLLGETVERSIONPROC pfnDllGetVersion = (DLLGETVERSIONPROC)
-                    ::GetProcAddress(hModuleComCtl32, _T("DllGetVersion"));
+                    ::GetProcAddress(hModuleComCtl32, "DllGetVersion");
                 if ( pfnDllGetVersion )
                 {
                     DLLVERSIONINFO dvi;
@@ -1202,11 +1202,7 @@ int wxApp::GetComCtl32Version()
                     FARPROC theProc = ::GetProcAddress
                                         (
                                          hModuleComCtl32,
-#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x520)
                                          "InitCommonControlsEx"
-#else
-                                         _T("InitCommonControlsEx")
-#endif
                                         );
 
                     if ( !theProc )
@@ -1221,11 +1217,7 @@ int wxApp::GetComCtl32Version()
                         theProc = ::GetProcAddress
                                     (
                                      hModuleComCtl32,
-#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x520)
                                      "InitializeFlatSB"
-#else
-                                     _T("InitializeFlatSB")
-#endif
                                     );
                         if ( !theProc )
                         {

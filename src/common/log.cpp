@@ -655,7 +655,7 @@ void wxOnAssert(const wxChar *szFile, int nLine, const wxChar *szMsg)
             //case wxNO: nothing to do
         }
 #else // !GUI, but MSW
-        switch ( ::MessageBox(NULL, szBuf, "Debug",
+        switch ( ::MessageBox(NULL, szBuf, _T("Debug"),
                               MB_YESNOCANCEL | MB_ICONSTOP ) ) {
             case IDYES:
                 Trap();

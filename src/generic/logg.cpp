@@ -483,8 +483,8 @@ void wxLogFrame::OnSave(wxCommandEvent& WXUNUSED(event))
     if ( wxFile::Exists(szFileName) ) {
         bool bAppend = FALSE;
         wxString strMsg;
-        strMsg.Printf(_("Append log to file '%s' "
-                    "(choosing [No] will overwrite it)?"), szFileName);
+        strMsg.Printf(_("Append log to file '%s' (choosing [No] will overwrite it)?"),
+                      szFileName);
         switch ( wxMessageBox(strMsg, _("Question"), wxYES_NO | wxCANCEL) ) {
             case wxYES:
                 bAppend = TRUE;

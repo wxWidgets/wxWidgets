@@ -645,12 +645,7 @@ bool wxThread::SetConcurrency(size_t level)
         if ( hModKernel )
         {
             pfnSetProcessAffinityMask = (SETPROCESSAFFINITYMASK)
-                ::GetProcAddress(hModKernel,
-#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x520)
-                                 "SetProcessAffinityMask");
-#else
-                                 _T("SetProcessAffinityMask"));
-#endif
+                ::GetProcAddress(hModKernel, "SetProcessAffinityMask");
         }
 
         // we've discovered a MT version of Win9x!

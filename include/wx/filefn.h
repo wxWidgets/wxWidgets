@@ -61,6 +61,65 @@ enum wxSeekMode
 WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 
 // ----------------------------------------------------------------------------
+// declare our versions of low level file functions: some compilers prepend
+// underscores to the usual names, some also have Unicode versions of them
+// ----------------------------------------------------------------------------
+
+// Microsoft compiler loves underscores, feed them to it
+#ifdef  __VISUALC__
+    // functions
+    #define   wxOpen       _wopen
+    #define   wxClose      _close
+    #define   wxRead       _read
+    #define   wxWrite      _write
+    #define   wxLseek      _lseek
+    #define   wxFsync      _commit
+    #define   wxAccess     _waccess
+    #define   wxEof        _eof
+
+    #define   wxTell       _tell
+
+    #define   wxMkdir      _wmkdir
+    #define   wxRmdir      _wrmdir
+
+    #define   wxStat       _wstat
+
+    // types
+    #define   wxStructStat struct _stat
+
+    // constants
+
+    #define   O_RDONLY    _O_RDONLY
+    #define   O_WRONLY    _O_WRONLY
+    #define   O_RDWR      _O_RDWR
+    #define   O_EXCL      _O_EXCL
+    #define   O_CREAT     _O_CREAT
+    #define   O_BINARY    _O_BINARY
+
+    #define   S_IFDIR     _S_IFDIR
+    #define   S_IFREG     _S_IFREG
+#else
+    // functions
+    #define   wxOpen       open
+    #define   wxClose      close
+    #define   wxRead       read
+    #define   wxWrite      write
+    #define   wxLseek      lseek
+    #define   wxFsync      commit
+    #define   wxAccess     access
+    #define   wxEof        eof
+
+    #define   wxMkdir      mkdir
+    #define   wxRmdir      rmdir
+
+    #define   wxTell(fd)   lseek(fd, 0, SEEK_CUR)
+
+    // types
+    #define   wxStructStat struct stat
+
+#endif  // VC++
+
+// ----------------------------------------------------------------------------
 // functions
 // ----------------------------------------------------------------------------
 WXDLLEXPORT bool wxFileExists(const wxString& filename);

@@ -305,7 +305,7 @@ bool wxTCPConnection::Execute(const wxChar *data, int size, wxIPCFormat format)
   m_codeco->Write8(format);
 
   if (size < 0)
-    size = strlen(data) + 1;    // includes final NUL
+    size = wxStrlen(data) + 1;    // includes final NUL
 
   m_codeco->Write32(size);
   m_sockstrm->Write(data, size);
@@ -353,7 +353,7 @@ bool wxTCPConnection::Poke (const wxString& item, wxChar *data, int size, wxIPCF
   m_codeco->Write8(format);
 
   if (size < 0)
-    size = strlen(data) + 1;    // includes final NUL
+    size = wxStrlen(data) + 1;    // includes final NUL
 
   m_codeco->Write32(size);
   m_sockstrm->Write(data, size);
@@ -409,7 +409,7 @@ bool wxTCPConnection::Advise (const wxString& item,
   m_codeco->Write8(format);
 
   if (size < 0)
-    size = strlen(data) + 1;    // includes final NUL
+    size = wxStrlen(data) + 1;    // includes final NUL
 
   m_codeco->Write32(size);
   m_sockstrm->Write(data, size);

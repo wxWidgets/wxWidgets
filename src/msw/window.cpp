@@ -2640,10 +2640,13 @@ bool wxWindow::HandleDropFiles(WXWPARAM wParam)
     DragQueryPoint(hFilesInfo, (LPPOINT) &dropPoint);
 
     // Get the total number of files dropped
-    WORD gwFilesDropped = (WORD)DragQueryFile ((HDROP)hFilesInfo,
-        (UINT)-1,
-        (LPSTR)0,
-        (UINT)0);
+    WORD gwFilesDropped = (WORD)::DragQueryFile
+                            (
+                                (HDROP)hFilesInfo,
+                                (UINT)-1,
+                                (LPTSTR)0,
+                                (UINT)0
+                            );
 
     wxString *files = new wxString[gwFilesDropped];
     int wIndex;

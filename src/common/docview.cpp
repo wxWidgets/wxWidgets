@@ -287,7 +287,7 @@ bool wxDocument::OnSaveDocument(const wxString& file)
         msgTitle = wxString(_("File error"));
 
 #if wxUSE_STD_IOSTREAM
-    ofstream store(wxString(file.fn_str()));
+    ofstream store(wxString(file.fn_str()).mb_str());
     if (store.fail() || store.bad())
 #else
     wxFileOutputStream store(wxString(file.fn_str()));
@@ -323,7 +323,7 @@ bool wxDocument::OnOpenDocument(const wxString& file)
         msgTitle = wxString(_("File error"));
 
 #if wxUSE_STD_IOSTREAM
-    ifstream store(wxString(file.fn_str()));
+    ifstream store(wxString(file.fn_str()).mb_str());
     if (store.fail() || store.bad())
 #else
     wxFileInputStream store(wxString(file.fn_str()));
@@ -2164,7 +2164,7 @@ bool wxTransferFileToStream(const wxString& filename, ostream& stream)
     FILE *fd1;
     int ch;
 
-    if ((fd1 = fopen (filename.fn_str(), "rb")) == NULL)
+    if ((fd1 = wxFopen (filename.fn_str(), _T("rb"))) == NULL)
         return FALSE;
 
     while ((ch = getc (fd1)) != EOF)
@@ -2179,7 +2179,7 @@ bool wxTransferStreamToFile(istream& stream, const wxString& filename)
     FILE *fd1;
     int ch;
 
-    if ((fd1 = fopen (filename.fn_str(), "wb")) == NULL)
+    if ((fd1 = wxFopen (filename.fn_str(), _T("wb"))) == NULL)
     {
         return FALSE;
     }
