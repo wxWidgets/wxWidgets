@@ -906,6 +906,8 @@ bool wxDocManager::Clear(bool force)
     if (!CloseDocuments(force))
         return false;
 
+    m_currentView = NULL;
+
     wxList::compatibility_iterator node = m_templates.GetFirst();
     while (node)
     {
