@@ -245,6 +245,7 @@ wxGTK:
 - implemented wxTextCtrl::Remove/Replace() for GTK2
 - improved X11 ShowFullScreen
 - added support for GTK2 label mnemonics
+- don't consume 100% CPU when showing a poup menu
 
 wxMSW:
 
