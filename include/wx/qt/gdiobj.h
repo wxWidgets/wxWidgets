@@ -1,31 +1,42 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        gdiobj.h
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     wxGDIObject class: base class for other GDI classes
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifndef __GDIOBJH__
-#define __GDIOBJH__
+#ifndef _WX_GDIOBJ_H_
+#define _WX_GDIOBJ_H_
 
 #include "wx/object.h"
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "gdiobj.h"
 #endif
+
+class WXDLLEXPORT wxGDIRefData: public wxObjectRefData {
+public:
+    inline wxGDIRefData()
+	{
+ 	}
+};
+
+#define M_GDIDATA ((wxGDIRefData *)m_refData)
 
 class WXDLLEXPORT wxGDIObject: public wxObject
 {
 DECLARE_DYNAMIC_CLASS(wxGDIObject)
  public:
-  inline wxGDIObject(void) { m_visible = FALSE; };
-  inline ~wxGDIObject(void) {};
+  inline wxGDIObject() { m_visible = FALSE; };
+  inline ~wxGDIObject() {};
 
-  virtual bool GetVisible(void) { return m_visible; }
+  inline bool IsNull() const { return (m_refData == 0); }
+
+  virtual bool GetVisible() { return m_visible; }
   virtual void SetVisible(bool v) { m_visible = v; }
 
 protected:
@@ -34,4 +45,4 @@ protected:
 };
 
 #endif
-    // __GDIOBJH__
+    // _WX_GDIOBJ_H_

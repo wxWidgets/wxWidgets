@@ -1,10 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dcscreen.cpp
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     wxScreenDC class
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -13,35 +14,19 @@
 #endif
 
 #include "wx/dcscreen.h"
-#include "wx/window.h"
 
-//-----------------------------------------------------------------------------
-// wxScreenDC
-//-----------------------------------------------------------------------------
+#if !USE_SHARED_LIBRARY
+IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxPaintDC)
+#endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxScreenDC,wxPaintDC)
-
-wxScreenDC::wxScreenDC(void)
+// Create a DC representing the whole screen
+wxScreenDC::wxScreenDC()
 {
-  m_ok = FALSE;
-};
+    // TODO
+}
 
-wxScreenDC::~wxScreenDC(void)
+wxScreenDC::~wxScreenDC()
 {
-  EndDrawingOnTop();
-};
+    // TODO
+}
 
-bool wxScreenDC::StartDrawingOnTop( wxWindow *WXUNUSED(window) )
-{
-  return TRUE;
-};
-
-bool wxScreenDC::StartDrawingOnTop( wxRectangle *WXUNUSED(rect) )
-{
-  return TRUE;
-};
-
-bool wxScreenDC::EndDrawingOnTop(void)
-{
-  return TRUE;
-};

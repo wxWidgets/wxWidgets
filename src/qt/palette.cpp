@@ -1,13 +1,13 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        palette.cpp
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     wxPalette
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
-
 
 #ifdef __GNUG__
 #pragma implementation "palette.h"
@@ -15,89 +15,77 @@
 
 #include "wx/palette.h"
 
-//-----------------------------------------------------------------------------
-// wxPalette
-//-----------------------------------------------------------------------------
+#if !USE_SHARED_LIBRARIES
+IMPLEMENT_DYNAMIC_CLASS(wxPalette, wxGDIObject)
+#endif
 
-class wxPaletteRefData: public wxObjectRefData
+/*
+ * Palette
+ *
+ */
+
+wxPaletteRefData::wxPaletteRefData()
 {
-  public:
-  
-    wxPaletteRefData(void);
-    ~wxPaletteRefData(void);
-  
-};
+    // TODO
+}
 
-wxPaletteRefData::wxPaletteRefData(void)
+wxPaletteRefData::~wxPaletteRefData()
 {
-};
+    // TODO
+}
 
-wxPaletteRefData::~wxPaletteRefData(void)
+wxPalette::wxPalette()
 {
-};
+}
 
-//-----------------------------------------------------------------------------
-
-#define M_PALETTEDATA ((wxPaletteRefData *)m_refData)
-
-IMPLEMENT_DYNAMIC_CLASS(wxPalette,wxGDIObject)
-
-wxPalette::wxPalette(void)
+wxPalette::wxPalette(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue)
 {
-};
+    Create(n, red, green, blue);
+}
 
-wxPalette::wxPalette( int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue )
+wxPalette::~wxPalette()
 {
-  m_refData = new wxPaletteRefData();
-  Create( n, red, green, blue );
-};
+}
 
-wxPalette::wxPalette( const wxPalette& palette )
+bool wxPalette::FreeResource(bool force)
 {
-  Ref( palette );
-};
+	if ( M_PALETTEDATA && M_PALETTEDATA->m_hPalette)
+	{
+      DeleteObject((HPALETTE)M_PALETTEDATA->m_hPalette);
+	}
+	return TRUE;
+}
 
-wxPalette::wxPalette( const wxPalette* palette )
+bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue)
 {
   UnRef();
-  if (palette) Ref( *palette ); 
-};
 
-wxPalette::~wxPalette(void)
-{
-};
+  m_refData = new wxPaletteRefData;
 
-wxPalette& wxPalette::operator = ( const wxPalette& palette )
-{
-  if (*this == palette) return (*this); 
-  Ref( palette ); 
-  return *this; 
-};
+  // TODO
 
-bool wxPalette::operator == ( const wxPalette& palette )
-{
-  return m_refData == palette.m_refData; 
-};
+  return FALSE;
+}
 
-bool wxPalette::operator != ( const wxPalette& palette )
+int wxPalette::GetPixel(const unsigned char red, const unsigned char green, const unsigned char blue) const
 {
-  return m_refData != palette.m_refData; 
-};
+    if ( !m_refData )
+  	return FALSE;
 
-bool wxPalette::Ok(void) const
-{
-  return (m_refData);
-};
+    // TODO
+    return FALSE;
+}
 
-bool wxPalette::Create( int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue)
+bool wxPalette::GetRGB(int index, unsigned char *red, unsigned char *green, unsigned char *blue) const
 {
-};
+    if ( !m_refData )
+	    return FALSE;
 
-int wxPalette::GetPixel( const unsigned char red, const unsigned char green, const unsigned char blue ) const
-{
-};
+    if (index < 0 || index > 255)
+        return FALSE;
 
-bool wxPalette::GetRGB( int pixel, unsigned char *red, unsigned char *green, unsigned char *blue ) const
-{
-};
+    // TODO
+    return FALSE;
+}
+
 

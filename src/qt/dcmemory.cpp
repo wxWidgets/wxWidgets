@@ -1,10 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dcmemory.cpp
-// Purpose:
-// Author:      Robert Roebling
+// Purpose:     wxMemoryDC class
+// Author:      AUTHOR
+// Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -13,6 +14,10 @@
 #endif
 
 #include "wx/dcmemory.h"
+
+#if !USE_SHARED_LIBRARY
+IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxDC)
+#endif
 
 //-----------------------------------------------------------------------------
 // wxMemoryDC

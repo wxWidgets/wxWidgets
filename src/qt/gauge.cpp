@@ -1,10 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        gauge.cpp
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     wxGauge class
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -14,38 +15,91 @@
 
 #include "wx/gauge.h"
 
-//-----------------------------------------------------------------------------
-// wxGauge
-//-----------------------------------------------------------------------------
+#if !USE_SHARED_LIBRARY
+IMPLEMENT_DYNAMIC_CLASS(wxGauge, wxControl)
+#endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxGauge,wxControl)
-
-bool wxGauge::Create( wxWindow *parent, wxWindowID id,  int range,
-    const wxPoint& pos, const wxSize& size,
-    long style, const wxString& name )
+bool wxGauge::Create(wxWindow *parent, wxWindowID id,
+           int range,
+           const wxPoint& pos,
+           const wxSize& size,
+           long style,
+           const wxValidator& validator,
+           const wxString& name)
 {
-  return TRUE;
-};
+    SetName(name);
+    SetValidator(validator);
+    m_rangeMax = range;
+    m_windowStyle = style;
 
-void wxGauge::SetRange( int r )
-{
-  m_rangeMax = r;
-  if (m_gaugePos > m_rangeMax) m_gaugePos = m_rangeMax;
-};
+    if (parent) parent->AddChild(this);
 
-void wxGauge::SetValue( int pos )
-{
-  m_gaugePos = pos;
-  if (m_gaugePos > m_rangeMax) m_gaugePos = m_rangeMax;
-};
+    if ( id == -1 )
+  	    m_windowId = (int)NewControlId();
+    else
+	    m_windowId = id;
 
-int wxGauge::GetRange(void) const
-{
-  return m_rangeMax;
-};
 
-int wxGauge::GetValue(void) const
+    // TODO
+    return FALSE;
+}
+
+void wxGauge::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
-  return m_gaugePos;
-};
+    // TODO
+}
+
+void wxGauge::SetShadowWidth(int w)
+{
+    // TODO optional
+}
+
+void wxGauge::SetBezelFace(int w)
+{
+    // TODO optional
+}
+
+void wxGauge::SetRange(int r)
+{
+    m_rangeMax = r;
+    // TODO
+}
+
+void wxGauge::SetValue(int pos)
+{
+    m_gaugePos = pos;
+    // TODO
+}
+
+int wxGauge::GetShadowWidth() const
+{
+    // TODO optional
+    return 0;
+}
+
+int wxGauge::GetBezelFace() const
+{
+    // TODO optional
+    return 0;
+}
+
+int wxGauge::GetRange() const
+{
+    return m_rangeMax;
+}
+
+int wxGauge::GetValue() const
+{
+    return m_gaugePos;
+}
+
+void wxGauge::SetForegroundColour(const wxColour& col)
+{
+    m_foregroundColour = col ;
+}
+
+void wxGauge::SetBackgroundColour(const wxColour& col)
+{
+    m_backgroundColour = col ;
+}
 

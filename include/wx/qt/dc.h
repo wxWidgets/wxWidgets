@@ -1,24 +1,21 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dc.h
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     wxDC class
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifndef __GTKDCH__
-#define __GTKDCH__
+#ifndef _WX_DC_H_
+#define _WX_DC_H_
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "dc.h"
 #endif
 
-#include "wx/defs.h"
-#include "wx/object.h"
-#include "wx/gdicmn.h"
 #include "wx/pen.h"
 #include "wx/brush.h"
 #include "wx/icon.h"
@@ -26,18 +23,12 @@
 #include "wx/gdicmn.h"
 
 //-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class wxDC;
-
-//-----------------------------------------------------------------------------
 // constants
 //-----------------------------------------------------------------------------
 
 #define MM_TEXT			0
-#define MM_ISOTROPIC		1
-#define MM_ANISOTROPIC		2
+#define MM_ISOTROPIC	1
+#define MM_ANISOTROPIC	2
 #define MM_LOMETRIC		3
 #define MM_HIMETRIC		4
 #define MM_TWIPS		5
@@ -54,7 +45,7 @@ extern int wxPageNumber;
 // wxDC
 //-----------------------------------------------------------------------------
 
-class wxDC: public wxObject
+class WXDLLEXPORT wxDC: public wxObject
 {
   DECLARE_ABSTRACT_CLASS(wxDC)
 
@@ -69,12 +60,40 @@ class wxDC: public wxObject
     virtual bool Ok(void) const { return m_ok; };
 
     virtual void FloodFill( long x1, long y1, wxColour *col, int style=wxFLOOD_SURFACE ) = 0;
+    inline void FloodFill(const wxPoint& pt, const wxColour& col, int style=wxFLOOD_SURFACE)
+    {
+        FloodFill(pt.x, pt.y, col, style);
+    }
     virtual bool GetPixel( long x1, long y1, wxColour *col ) const = 0;
+    inline bool GetPixel(const wxPoint& pt, wxColour *col) const
+    {
+        return GetPixel(pt.x, pt.y, col);
+    }
 
     virtual void DrawLine( long x1, long y1, long x2, long y2 ) = 0;
+    inline void DrawLine(const wxPoint& pt1, const wxPoint& pt2)
+    {
+        DrawLine(pt1.x, pt1.y, pt2.x, pt2.y);
+    }
+
     virtual void CrossHair( long x, long y ) = 0;
-    virtual void DrawArc( long x1, long y1, long x2, long y2, double xc, double yc );
+    inline void CrossHair(const wxPoint& pt)
+    {
+        CrossHair(pt.x, pt.y);
+    }
+
+    virtual void DrawArc( long x1, long y1, long x2, long y2, double xc, double yc ) = 0;
+    inline void DrawArc(const wxPoint& pt1, const wxPoint& pt2, double xc, double yc)
+    {
+        DrawArc(pt1.x, pt1.y, pt2.x, pt2.y, xc, yc);
+    }
+
     virtual void DrawEllipticArc( long x, long y, long width, long height, double sa, double ea ) = 0;
+    virtual void DrawEllipticArc (const wxPoint& pt, const wxSize& sz, double sa, double ea)
+    {
+        DrawEllipticArc(pt.x, pt.y, sz.x, sz.y, sa, ea);
+    }
+
     virtual void DrawPoint( long x, long y ) = 0;
     virtual void DrawPoint( wxPoint& point );
     
@@ -86,21 +105,67 @@ class wxDC: public wxObject
                               int fillStyle=wxODDEVEN_RULE );
     
     virtual void DrawRectangle( long x, long y, long width, long height ) = 0;
+    inline void DrawRectangle(const wxPoint& pt, const wxSize& sz)
+    {
+        DrawRectangle(pt.x, pt.y, sz.x, sz.y);
+    }
+    inline void DrawRectangle(const wxRect& rect)
+    {
+        DrawRectangle(rect.x, rect.y, rect.width, rect.height);
+    }
     virtual void DrawRoundedRectangle( long x, long y, long width, long height, double radius = 20.0 ) = 0;
+    inline void DrawRoundedRectangle(const wxPoint& pt, const wxSize& sz, double radius = 20.0)
+    {
+        DrawRoundedRectangle(pt.x, pt.y, sz.x, sz.y, radius);
+    }
+    inline void DrawRoundedRectangle(const wxRect& rect, double radius = 20.0)
+    {
+        DrawRoundedRectangle(rect.x, rect.y, rect.width, rect.height, radius);
+    }
+
     virtual void DrawEllipse( long x, long y, long width, long height ) = 0;
-    
+    inline void DrawEllipse(const wxPoint& pt, const wxSize& sz)
+    {
+        DrawEllipse(pt.x, pt.y, sz.x, sz.y);
+    }
+    inline void DrawEllipse(const wxRect& rect)
+    {
+        DrawEllipse(rect.x, rect.y, rect.width, rect.height);
+    }
+
+    virtual void DrawIcon(const wxIcon& icon, long x, long y) = 0;
+
     virtual void DrawSpline( long x1, long y1, long x2, long y2, long x3, long y3 );
     virtual void DrawSpline( wxList *points );
     virtual void DrawSpline( int n, wxPoint points[] );
     
     virtual bool CanDrawBitmap(void) const = 0;
+
     virtual void DrawIcon( const wxIcon &icon, long x, long y, bool useMask=FALSE );
-            void DrawBitmap( const wxBitmap &bmp, long x, long y, bool useMask=FALSE )
-	    { DrawIcon( *((wxIcon*)(&bmp)), x, y, useMask ); }
+    inline void DrawIcon(const wxIcon& icon, const wxPoint& pt)
+    {
+        DrawIcon(icon, pt.x, pt.y);
+    }
+
+    // TODO DrawBitmap is not always the same as DrawIcon, especially if bitmaps and
+    // icons are implemented differently.
+    void DrawBitmap( const wxBitmap &bmp, long x, long y, bool useMask=FALSE )
+	      { DrawIcon( *((wxIcon*)(&bmp)), x, y, useMask ); }
+
     virtual bool Blit( long xdest, long ydest, long width, long height,
        wxDC *source, long xsrc, long ysrc, int logical_func = wxCOPY, bool useMask=FALSE ) = 0;
+    inline bool Blit(const wxPoint& destPt, const wxSize& sz,
+            wxDC *source, const wxPoint& srcPt, int rop = wxCOPY, bool useMask = FALSE)
+    {
+        return Blit(destPt.x, destPt.y, sz.x, sz.y, source, srcPt.x, srcPt.y, rop, useMask);
+    }
 
     virtual void DrawText( const wxString &text, long x, long y, bool use16 = FALSE ) = 0;
+    inline void DrawText(const wxString& text, const wxPoint& pt, bool use16bit = FALSE)
+    {
+        DrawText(text, pt.x, pt.y, use16bit);
+    }
+
     virtual bool CanGetTextExtent(void) const = 0;
     virtual void GetTextExtent( const wxString &string, long *width, long *height,
                      long *descent = NULL, long *externalLeading = NULL,
@@ -111,19 +176,19 @@ class wxDC: public wxObject
     virtual void Clear(void) = 0;
             
     virtual void SetFont( const wxFont &font ) = 0;
-    virtual wxFont *GetFont(void) { return &m_font; };
+    virtual wxFont *GetFont(void) const { return &m_font; };
     
     virtual void SetPen( const wxPen &pen ) = 0;
-    virtual wxPen *GetPen(void) { return &m_pen; };
+    virtual wxPen *GetPen(void) const { return &m_pen; };
     
     virtual void SetBrush( const wxBrush &brush ) = 0;
-    virtual wxBrush *GetBrush(void) { return &m_brush; };
+    virtual wxBrush *GetBrush(void) const { return &m_brush; };
 
     virtual void SetBackground( const wxBrush &brush ) = 0;
-    virtual wxBrush *GetBackground(void) { return &m_backgroundBrush; };
+    virtual wxBrush *GetBackground(void) const { return &m_backgroundBrush; };
 
     virtual void SetLogicalFunction( int function ) = 0;
-    virtual int GetLogicalFunction(void) { return m_logicalFunction; };
+    virtual int GetLogicalFunction(void) const { return m_logicalFunction; };
     
     virtual void SetTextForeground( const wxColour &col );
     virtual void SetTextBackground( const wxColour &col );
@@ -131,10 +196,10 @@ class wxDC: public wxObject
     virtual wxColour& GetTextForeground(void) const { return (wxColour&)m_textForegroundColour; };
     
     virtual void SetBackgroundMode( int mode ) = 0;
-    virtual int GetBackgroundMode(void) { return m_backgroundMode; };
+    virtual int GetBackgroundMode(void) const { return m_backgroundMode; };
     
     virtual void SetPalette( const wxPalette& palette ) = 0;
-      void SetColourMap( const wxPalette& palette ) { SetPalette(palette); };
+    void SetColourMap( const wxPalette& palette ) { SetPalette(palette); };
     
     // the first two must be overridden and called
     virtual void SetClippingRegion( long x, long y, long width, long height );
@@ -306,4 +371,5 @@ class wxDC: public wxObject
     long         m_minX,m_maxX,m_minY,m_maxY;
 };
 
-#endif // __GTKDCH__
+#endif
+    // _WX_DC_H_

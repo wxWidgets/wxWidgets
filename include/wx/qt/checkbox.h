@@ -1,57 +1,81 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        checkbox.h
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     wxCheckBox class
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifndef __GTKCHECKBOXH__
-#define __GTKCHECKBOXH__
+#ifndef _WX_CHECKBOX_H_
+#define _WX_CHECKBOX_H_
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "checkbox.h"
 #endif
 
-#include "wx/defs.h"
-#include "wx/object.h"
-#include "wx/list.h"
 #include "wx/control.h"
 
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
+WXDLLEXPORT_DATA(extern const char*) wxCheckBoxNameStr;
 
-class wxCheckBox;
-
-//-----------------------------------------------------------------------------
-// global data
-//-----------------------------------------------------------------------------
-
-extern const char *wxCheckBoxNameStr;
-
-//-----------------------------------------------------------------------------
-// wxCheckBox
-//-----------------------------------------------------------------------------
-
-class wxCheckBox: public wxControl
+// Checkbox item (single checkbox)
+class WXDLLEXPORT wxBitmap;
+class WXDLLEXPORT wxCheckBox: public wxControl
 {
   DECLARE_DYNAMIC_CLASS(wxCheckBox)
 
-  public:
+ public:
+  inline wxCheckBox() { }
+  inline wxCheckBox(wxWindow *parent, wxWindowID id, const wxString& label,
+           const wxPoint& pos = wxDefaultPosition,
+           const wxSize& size = wxDefaultSize, long style = 0,
+           const wxValidator& validator = wxDefaultValidator,
+           const wxString& name = wxCheckBoxNameStr)
+  {
+      Create(parent, id, label, pos, size, style, validator, name);
+  }
 
-    wxCheckBox(void);
-    wxCheckBox( wxWindow *parent, wxWindowID id, const wxString &label,
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      long style = 0, const wxString &name = wxCheckBoxNameStr  );
-    bool Create(  wxWindow *parent, wxWindowID id, const wxString &label,
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      long style = 0, const wxString &name = wxCheckBoxNameStr  );
-    void SetValue( bool state );
-    bool GetValue(void) const;
+  bool Create(wxWindow *parent, wxWindowID id, const wxString& label,
+           const wxPoint& pos = wxDefaultPosition,
+           const wxSize& size = wxDefaultSize, long style = 0,
+           const wxValidator& validator = wxDefaultValidator,
+           const wxString& name = wxCheckBoxNameStr);
+  virtual void SetValue(bool);
+  virtual bool GetValue() const ;
+  virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+  virtual void SetLabel(const wxString& label);
+  virtual void Command(wxCommandEvent& event);
 };
 
-#endif // __GTKCHECKBOXH__
+class WXDLLEXPORT wxBitmapCheckBox: public wxCheckBox
+{
+  DECLARE_DYNAMIC_CLASS(wxBitmapCheckBox)
+
+ public:
+  int checkWidth ;
+  int checkHeight ;
+
+  inline wxBitmapCheckBox() { checkWidth = -1; checkHeight = -1; }
+  inline wxBitmapCheckBox(wxWindow *parent, wxWindowID id, const wxBitmap *label,
+           const wxPoint& pos = wxDefaultPosition,
+           const wxSize& size = wxDefaultSize, long style = 0,
+           const wxValidator& validator = wxDefaultValidator,
+           const wxString& name = wxCheckBoxNameStr)
+  {
+      Create(parent, id, label, pos, size, style, validator, name);
+  }
+
+  bool Create(wxWindow *parent, wxWindowID id, const wxBitmap *bitmap,
+           const wxPoint& pos = wxDefaultPosition,
+           const wxSize& size = wxDefaultSize, long style = 0,
+           const wxValidator& validator = wxDefaultValidator,
+           const wxString& name = wxCheckBoxNameStr);
+  virtual void SetValue(bool);
+  virtual bool GetValue() const ;
+  virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+  virtual void SetLabel(const wxBitmap *bitmap);
+};
+#endif
+    // _WX_CHECKBOX_H_

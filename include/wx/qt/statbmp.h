@@ -1,60 +1,64 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        statbmp.h
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     wxStaticBitmap class
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifndef __GTKSTATICBITMAPH__
-#define __GTKSTATICBITMAPH__
+#ifndef _WX_STATBMP_H_
+#define _WX_STATBMP_H_
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "statbmp.h"
 #endif
 
-#include "wx/defs.h"
-#include "wx/object.h"
 #include "wx/control.h"
 
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
+WXDLLEXPORT_DATA(extern const char*) wxStaticBitmapNameStr;
 
-class wxStaticBitmap;
-
-//-----------------------------------------------------------------------------
-// global data
-//-----------------------------------------------------------------------------
-
-extern const char* wxStaticBitmapNameStr;
-
-//-----------------------------------------------------------------------------
-// wxStaticBitmap
-//-----------------------------------------------------------------------------
-
-class wxStaticBitmap: public wxControl
+class WXDLLEXPORT wxStaticBitmap: public wxControl
 {
   DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
-  
-  public:
-  
-    wxStaticBitmap(void);
-    wxStaticBitmap( wxWindow *parent, wxWindowID id, const wxBitmap& label,
-      const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-      long style = 0, const wxString& name = wxStaticBitmapNameStr );
-    bool Create( wxWindow *parent, wxWindowID id, const wxBitmap& label,
-      const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-      long style = 0, const wxString& name = wxStaticBitmapNameStr);
-    virtual void SetBitmap( const wxBitmap& bitmap );
-    wxBitmap& GetBitmap(void) const { return (wxBitmap&)m_bitmap; }
+ public:
+  inline wxStaticBitmap() { }
 
- private:
- 
-   wxBitmap   m_bitmap;
+  inline wxStaticBitmap(wxWindow *parent, wxWindowID id,
+           const wxBitmap& label,
+           const wxPoint& pos = wxDefaultPosition,
+           const wxSize& size = wxDefaultSize,
+           long style = 0,
+           const wxString& name = wxStaticBitmapNameStr)
+  {
+    Create(parent, id, label, pos, size, style, name);
+  }
+
+  bool Create(wxWindow *parent, wxWindowID id,
+           const wxBitmap& label,
+           const wxPoint& pos = wxDefaultPosition,
+           const wxSize& size = wxDefaultSize,
+           long style = 0,
+           const wxString& name = wxStaticBitmapNameStr);
+
+  virtual void SetBitmap(const wxBitmap& bitmap);
+
+  virtual void Command(wxCommandEvent& WXUNUSED(event)) {};
+  virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {};
+
+  void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+
+  inline wxBitmap& GetBitmap() const { return (wxBitmap&) m_messageBitmap; }
+
+  // overriden base class virtuals
+  virtual bool AcceptsFocus() const { return FALSE; }
+
+ protected:
+  wxBitmap m_messageBitmap;
+
 };
 
-#endif // __GTKSTATICBITMAPH__
+#endif
+    // _WX_STATBMP_H_

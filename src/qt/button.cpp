@@ -1,10 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        button.cpp
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     wxButton
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -14,48 +15,61 @@
 
 #include "wx/button.h"
 
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
+#if !USE_SHARED_LIBRARY
+IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
+#endif
 
-class wxButton;
+// Button
 
-//-----------------------------------------------------------------------------
-// wxButton
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxButton,wxControl)
-
-//-----------------------------------------------------------------------------
-
-wxButton::wxButton(void)
+bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
+           const wxPoint& pos,
+           const wxSize& size, long style,
+           const wxValidator& validator,
+           const wxString& name)
 {
-};
+    SetName(name);
+    SetValidator(validator);
+    m_windowStyle = style;
 
-wxButton::wxButton( wxWindow *parent, wxWindowID id, const wxString &label,
-      const wxPoint &pos, const wxSize &size,
-      long style, const wxString &name )
-{
-  Create( parent, id, label, pos, size, style, name );
-};
+    parent->AddChild((wxButton *)this);
 
-bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
-      const wxPoint &pos, const wxSize &size,
-      long style, const wxString &name )
-{
-  return TRUE;
-};
+    if (id == -1)
+        m_windowId = NewControlId();
+    else
+        m_windowId = id;
 
-void wxButton::SetDefault(void)
-{
-};
+    // TODO: create button
 
-void wxButton::SetLabel( const wxString &label )
-{
-  wxControl::SetLabel( label );
-};
+    return FALSE;
+}
 
-wxString wxButton::GetLabel(void) const
+void wxButton::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
-  return wxControl::GetLabel();
-};
+    // TODO
+}
+
+void wxButton::SetDefault()
+{
+    wxWindow *parent = (wxWindow *)GetParent();
+    if (parent)
+        parent->SetDefaultItem(this);
+
+    // TODO: make button the default
+}
+
+wxString wxButton::GetLabel() const
+{
+    // TODO
+    return wxString("");
+}
+
+void wxButton::SetLabel(const wxString& label)
+{
+    // TODO
+}
+
+void wxButton::Command (wxCommandEvent & event)
+{
+    ProcessCommand (event);
+}
+

@@ -1,41 +1,44 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        notebook.h
-// Purpose:     wxNotebook class
-// Author:      Robert Roebling
+// Purpose:     MSW/GTK compatible notebook (a.k.a. property sheet)
+// Author:      AUTHOR
 // Modified by:
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:     wxWindows license
+// Copyright:   (c) AUTHOR
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __NOTEBOOKH__
-#define __NOTEBOOKH__
+#ifndef _WX_NOTEBOOK_H_
+#define _WX_NOTEBOOK_H_
 
 #ifdef __GNUG__
 #pragma interface "notebook.h"
 #endif
 
-#include "wx/defs.h"
-#include "wx/object.h"
-#include "wx/string.h"
-#include "wx/control.h"
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+#include <wx/dynarray.h>
 
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// types
+// ----------------------------------------------------------------------------
 
-class wxImageList;
-class wxNotebook;
-class wxNotebookPage;
+// fwd declarations
+class WXDLLEXPORT wxImageList;
+class WXDLLEXPORT wxWindow;
+
+// array of notebook pages
+typedef wxWindow wxNotebookPage;  // so far, any window can be a page
+WX_DEFINE_ARRAY(wxNotebookPage *, wxArrayPages);
 
 // ----------------------------------------------------------------------------
 // notebook events
 // ----------------------------------------------------------------------------
-
-class wxNotebookEvent : public wxCommandEvent
+class WXDLLEXPORT wxNotebookEvent : public wxCommandEvent
 {
 public:
-  wxNotebookEvent(wxEventType commandType = wxEVT_NULL, int id = 0,
+  wxNotebookEvent(wxEventType commandType = wxEVT_NULL, int id = 0, 
                   int nSel = -1, int nOldSel = -1)
     : wxCommandEvent(commandType, id) { m_nSel = nSel; m_nOldSel = nOldSel; }
 
@@ -50,10 +53,13 @@ private:
   DECLARE_DYNAMIC_CLASS(wxNotebookEvent)
 };
 
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // wxNotebook
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
+// @@@ this class should really derive from wxTabCtrl, but the interface is not
+//     exactly the same, so I can't do it right now and instead we reimplement
+//     part of wxTabCtrl here
 class wxNotebook : public wxControl
 {
 public:
@@ -63,14 +69,14 @@ public:
   wxNotebook();
     // the same arguments as for wxControl (@@@ any special styles?)
   wxNotebook(wxWindow *parent,
-             wxWindowID id,
+             wxWindowID id, 
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = 0,
              const wxString& name = "notebook");
     // Create() function
   bool Create(wxWindow *parent,
-              wxWindowID id,
+              wxWindowID id, 
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               long style = 0,
@@ -90,7 +96,7 @@ public:
     // cycle thru the tabs
   void AdvanceSelection(bool bForward = TRUE);
     // get the currently selected page
-  int GetSelection() const;
+  int GetSelection() const { return m_nSelection; }
 
     // set/get the title of a page
   bool SetPageText(int nPage, const wxString& strText);
@@ -104,7 +110,7 @@ public:
     // associate image list with a control
   void SetImageList(wxImageList* imageList);
     // get pointer (may be NULL) to the associated image list
-  wxImageList* GetImageList() const { return m_imageList; }
+  wxImageList* GetImageList() const { return m_pImageList; }
 
     // sets/returns item's image index in the current image list
   int  GetPageImage(int nPage) const;
@@ -128,30 +134,46 @@ public:
   bool DeleteAllPages();
     // adds a new page to the notebook (it will be deleted ny the notebook,
     // don't delete it yourself). If bSelect, this page becomes active.
-  bool AddPage(wxWindow *pPage,
+  bool AddPage(wxNotebookPage *pPage,
                const wxString& strText,
                bool bSelect = FALSE,
                int imageId = -1);
-    // @@@@ VZ: I don't know how to implement InsertPage()
-
+    // the same as AddPage(), but adds it at the specified position
+  bool InsertPage(int nPage,
+                  wxNotebookPage *pPage,
+                  const wxString& strText,
+                  bool bSelect = FALSE,
+                  int imageId = -1);
     // get the panel which represents the given page
-  wxWindow *GetPage(int nPage) const;
+  wxNotebookPage *GetPage(int nPage) { return m_aPages[nPage]; }
 
-  // implementation
-  // --------------
-    // base class virtuals
-  virtual void AddChild(wxWindow *child);
-  virtual void SetConstraintSizes(bool recurse);
-  virtual bool DoPhase(int phase);
+  // callbacks
+  // ---------
+  void OnSize(wxSizeEvent& event);
+  void OnSelChange(wxNotebookEvent& event);
+  void OnSetFocus(wxFocusEvent& event);
+  void OnNavigationKey(wxNavigationKeyEvent& event);
+  
+  // base class virtuals
+  // -------------------
+  virtual void Command(wxCommandEvent& event);
+  virtual void SetConstraintSizes(bool recurse = TRUE);
+  virtual bool DoPhase(int nPhase);
 
-private:
+protected:
   // common part of all ctors
   void Init();
 
-  wxImageList*    m_imageList;
-  wxList          m_pages;
+  // helper functions
+  void ChangePage(int nOldSel, int nSel); // change pages
+
+  wxImageList  *m_pImageList; // we can have an associated image list
+  wxArrayPages  m_aPages;     // array of pages
+
+  int m_nSelection;           // the current selection (-1 if none)
 
   DECLARE_DYNAMIC_CLASS(wxNotebook)
+  DECLARE_EVENT_TABLE()
 };
 
 // ----------------------------------------------------------------------------
@@ -177,5 +199,4 @@ typedef void (wxEvtHandler::*wxNotebookEventFunction)(wxNotebookEvent&);
     NULL                                                                    \
   },
 
-#endif
-    // __NOTEBOOKH__
+#endif // _WX_NOTEBOOK_H_

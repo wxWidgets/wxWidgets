@@ -1,78 +1,68 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        scrolbar.h
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Name:        scrollbar.h
+// Purpose:     wxScrollBar class
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifndef __GTKSCROLLBARH__
-#define __GTKSCROLLBARH__
+#ifndef _WX_SCROLBAR_H_
+#define _WX_SCROLBAR_H_
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "scrolbar.h"
 #endif
 
-#include "wx/defs.h"
-#include "wx/object.h"
 #include "wx/control.h"
 
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
+WXDLLEXPORT_DATA(extern const char*) wxScrollBarNameStr;
 
-class wxScrollBar;
-
-//-----------------------------------------------------------------------------
-// global data
-//-----------------------------------------------------------------------------
-
-extern const char *wxScrollBarNameStr;
-
-//-----------------------------------------------------------------------------
-// wxScrollBar
-//-----------------------------------------------------------------------------
-
-class wxScrollBar: public wxControl
+// Scrollbar item
+class WXDLLEXPORT wxScrollBar: public wxControl
 {
   DECLARE_DYNAMIC_CLASS(wxScrollBar)
 
-  public:
-  
-    wxScrollBar(void) { };
-    wxScrollBar(wxWindow *parent, wxWindowID id,
+public:
+  inline wxScrollBar() { m_pageSize = 0; m_viewSize = 0; m_objectSize = 0; }
+  ~wxScrollBar();
+
+  inline wxScrollBar(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = wxSB_HORIZONTAL,
-           const wxString& name = wxScrollBarNameStr );
-    ~wxScrollBar(void);
-    bool Create(wxWindow *parent, wxWindowID id,
+           const wxValidator& validator = wxDefaultValidator,
+           const wxString& name = wxScrollBarNameStr)
+  {
+      Create(parent, id, pos, size, style, validator, name);
+  }
+  bool Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = wxSB_HORIZONTAL,
+           const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxScrollBarNameStr);
-    int GetPosition(void) const;
-    int GetThumbSize() const;
-    int GetPageSize() const;
-    int GetRange() const;
-    virtual void SetPosition( int viewStart );
-    virtual void SetScrollbar( int position, int thumbSize, int range, int pageSize,
-      bool refresh = TRUE );
 
-    // Backward compatibility
-    int GetValue(void) const;
-    void SetValue( int viewStart );
-    void GetValues( int *viewStart, int *viewLength, int *objectLength, int *pageLength) const;
-    int GetViewLength() const;
-    int GetObjectLength() const;
-    void SetPageSize( int pageLength );
-    void SetObjectLength( int objectLength );
-    void SetViewLength( int viewLength );
+  int GetPosition() const ;
+  inline int GetThumbSize() const { return m_pageSize; }
+  inline int GetPageSize() const { return m_viewSize; }
+  inline int GetRange() const { return m_objectSize; }
 
+  virtual void SetPosition(int viewStart);
+  virtual void SetScrollbar(int position, int thumbSize, int range, int pageSize,
+    bool refresh = TRUE);
+
+  void Command(wxCommandEvent& event);
+
+protected:
+    int m_pageSize;
+    int m_viewSize;
+    int m_objectSize;
+
+DECLARE_EVENT_TABLE()
 };
 
 #endif
-    // __GTKSCROLLBARH__
+    // _WX_SCROLBAR_H_

@@ -1,9 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        dnd.cpp
-// Purpose:     wxDropTarget class
-// Author:      Robert Roebling
-// Copyright:   Robert Roebling
-// Licence:     wxWindows license
+// Purpose:     wxDropTarget, wxDropSource, wxDataObject implementation
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) 1998 AUTHOR
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -18,8 +21,6 @@
 // ----------------------------------------------------------------------------
 // global
 // ----------------------------------------------------------------------------
-
-extern bool g_blockEventsOnDrag;
 
 // ----------------------------------------------------------------------------
 // wxDropTarget
@@ -92,32 +93,41 @@ wxDataFormat wxFileDropTarget::GetFormat(size_t WXUNUSED(n)) const
 // wxDropSource
 //-------------------------------------------------------------------------
 
-wxDropSource::wxDropSource( wxWindow *WXUNUSED(win) )
+//-----------------------------------------------------------------------------
+// drag request
+
+wxDropSource::wxDropSource( wxWindow *win )
 {
-  g_blockEventsOnDrag = TRUE;
+    // TODO
+    m_window = win;
+    m_data = NULL;
+
+    m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
+    m_goaheadCursor = wxCursor( wxCURSOR_HAND );
 };
 
-wxDropSource::wxDropSource( wxDataObject &data, wxWindow *WXUNUSED(win) )
+wxDropSource::wxDropSource( wxDataObject &data, wxWindow *win )
 {
-  g_blockEventsOnDrag = TRUE;
-  
-  m_data = &data;  
+    // TODO
+    m_window = win;
+    m_data = &data;
+
+    m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
+    m_goaheadCursor = wxCursor( wxCURSOR_HAND );
 };
 
 void wxDropSource::SetData( wxDataObject &data )
 {
-  m_data = &data;  
+    m_data = &data;
 };
 
 wxDropSource::~wxDropSource(void)
 {
-//  if (m_data) delete m_data;
-
-  g_blockEventsOnDrag = FALSE;
 };
    
 wxDropSource::DragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
 {
-  return Copy;
+    // TODO
+    return Error;
 };
 

@@ -1,60 +1,50 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        control.h
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     wxControl class
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifndef __GTKCONTROLH__
-#define __GTKCONTROLH__
+#ifndef _WX_CONTROL_H_
+#define _WX_CONTROL_H_
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "control.h"
 #endif
 
-#include "wx/defs.h"
-#include "wx/object.h"
-#include "wx/list.h"
 #include "wx/window.h"
+#include "wx/list.h"
+#include "wx/validate.h"
 
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class wxControl;
-
-//-----------------------------------------------------------------------------
-// wxControl
-//-----------------------------------------------------------------------------
-
-class wxControl: public wxWindow
+// General item class
+class WXDLLEXPORT wxControl: public wxWindow
 {
-DECLARE_DYNAMIC_CLASS(wxControl)
-
+  DECLARE_ABSTRACT_CLASS(wxControl)
 public:
-  // construction
-  wxControl();
-  wxControl( wxWindow *parent, wxWindowID id, 
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      long style = 0, const wxString &name = wxPanelNameStr  );
-  
-  // overridables
-  virtual void Command( wxCommandEvent &event );
+   wxControl();
+   ~wxControl();
 
-  // accessors
-    // this function will filter out '&' characters and will put the accelerator
-    // char (the one immediately after '&') into m_chAccel (@@ not yet)
-  virtual void SetLabel( const wxString &label );
-  virtual wxString GetLabel() const;
+   virtual void Command(wxCommandEvent& WXUNUSED(event)) = 0;        // Simulates an event
+   virtual void ProcessCommand(wxCommandEvent& event); // Calls the callback and
+                                                                 // appropriate event handlers
+   virtual void SetLabel(const wxString& label);
+   virtual wxString GetLabel() const ;
+
+   // Places item in centre of panel - so can't be used BEFORE panel->Fit()
+   void Centre(int direction = wxHORIZONTAL);
+   inline void Callback(const wxFunction function) { m_callback = function; }; // Adds callback
+
+   inline wxFunction GetCallback() { return m_callback; }
 
 protected:
-  wxString   m_label;
-  // when we implement keyboard interface we will make use of this, but not yet
-  //char       m_chAccel;
+   wxFunction       m_callback;     // Callback associated with the window
+
+DECLARE_EVENT_TABLE()
 };
 
-#endif // __GTKCONTROLH__
+#endif
+    // _WX_CONTROL_H_

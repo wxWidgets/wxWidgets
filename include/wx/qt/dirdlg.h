@@ -1,35 +1,47 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dirdlg.h
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     wxDirDialog class
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifndef __DIRDIALOGH__
-#define __DIRDIALOGH__
+#ifndef _WX_DIRDLG_H_
+#define _WX_DIRDLG_H_
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "dirdlg.h"
 #endif
 
-#include "wx/defs.h"
-#include "wx/object.h"
-#include "wx/list.h"
-#include "wx/control.h"
 #include "wx/dialog.h"
 
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
+class WXDLLEXPORT wxDirDialog: public wxDialog
+{
+DECLARE_DYNAMIC_CLASS(wxDirDialog)
+public:
+    wxDirDialog(wxWindow *parent, const wxString& message = wxFileSelectorPromptStr,
+        const wxString& defaultPath = "",
+        long style = 0, const wxPoint& pos = wxDefaultPosition);
 
-class wxDirDialog;
+    inline void SetMessage(const wxString& message) { m_message = message; }
+    inline void SetPath(const wxString& path) { m_path = path; }
+    inline void SetStyle(long style) { m_dialogStyle = style; }
 
-//-----------------------------------------------------------------------------
-// wxDirDialog
-//-----------------------------------------------------------------------------
+    inline wxString GetMessage() const { return m_message; }
+    inline wxString GetPath() const { return m_path; }
+    inline long GetStyle() const { return m_dialogStyle; }
 
-#endif // __DIRDIALOGH__
+    int ShowModal();
+
+protected:
+    wxString    m_message;
+    long        m_dialogStyle;
+    wxWindow *  m_parent;
+    wxString    m_path;
+};
+
+#endif
+    // _WX_DIRDLG_H_

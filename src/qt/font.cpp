@@ -1,10 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        font.cpp
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     wxFont class
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -13,201 +14,228 @@
 #endif
 
 #include "wx/font.h"
-#include "wx/utils.h"
-#include <strings.h>
 
-//-----------------------------------------------------------------------------
-// local data
-//-----------------------------------------------------------------------------
-
-static char *wx_font_family [] = {
-    "wxDEFAULT", "wxDECORATIVE", "wxMODERN", "wxROMAN", "wxSCRIPT",
-    "wxSWISS", "wxTELETYPE",
-};
-static char *wx_font_style [] = {
-    "wxDEFAULT", "wxNORMAL", "wxSLANT", "wxITALIC",
-};
-static char *wx_font_weight [] = {
-    "wxDEFAULT", "wxNORMAL", "wxBOLD", "wxLIGHT",
-};
-
-extern wxFontNameDirectory wxTheFontNameDirectory;
-
-//-----------------------------------------------------------------------------
-// wxFont
-//-----------------------------------------------------------------------------
-
-class wxFontRefData: public wxObjectRefData
-{
-  public:
-  
-    wxFontRefData(void);
-    ~wxFontRefData(void);
- 
-    wxList   m_scaled_xfonts;
-    int      m_pointSize;
-    int      m_family, m_style, m_weight;
-    bool     m_underlined;
-    int      m_fontId;
-    char*    m_faceName;
-     
-};
-
-wxFontRefData::wxFontRefData(void) : m_scaled_xfonts(wxKEY_INTEGER)
-{
-  m_pointSize = -1;
-  m_family = -1;
-  m_style = -1;
-  m_weight = -1;
-  m_underlined = FALSE;
-  m_fontId = 0;
-  m_faceName = NULL;
-};
-
-wxFontRefData::~wxFontRefData(void)
-{
-  wxNode *node = m_scaled_xfonts.First();
-  while (node) 
-  {
-    wxNode *next = node->Next();
-    node = next;
-  };
-  if (m_faceName) 
-  {
-    delete m_faceName;
-    m_faceName = NULL;
-  };
-};
-
-//-----------------------------------------------------------------------------
-
-#define M_FONTDATA ((wxFontRefData *)m_refData)
-
+#if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
+#endif
 
-wxFont::wxFont(void)
+wxFontRefData::wxFontRefData()
 {
-  if (wxTheFontList) wxTheFontList->Append( this );
-};
+	m_style = 0;
+  	m_pointSize = 0;
+  	m_family = 0;
+  	m_style = 0;
+  	m_weight = 0;
+  	m_underlined = 0;
+  	m_faceName = "";
+/* TODO
+  	m_hFont = 0;
+*/
+}
 
-wxFont::wxFont( char *xFontName )
+wxFontRefData::wxFontRefData(const wxFontRefData& data)
 {
-  if (!xFontName) return;
-  
-  m_refData = new wxFontRefData();
-  
-};
+	m_style = data.m_style;
+  	m_pointSize = data.m_pointSize;
+  	m_family = data.m_family;
+  	m_style = data.m_style;
+  	m_weight = data.m_weight;
+  	m_underlined = data.m_underlined;
+  	m_faceName = data.m_faceName;
+/* TODO
+  	m_hFont = 0;
+*/
+}
 
-wxFont::wxFont(int PointSize, int FontIdOrFamily, int Style, int Weight,
-	       bool Underlined, const char* Face)
+wxFontRefData::~wxFontRefData()
 {
-  m_refData = new wxFontRefData();
-  
+    // TODO: delete font data
+}
 
-  if (wxTheFontList) wxTheFontList->Append( this );
-};
-
-wxFont::wxFont(int PointSize, const char *Face, int Family, int Style, 
-	       int Weight, bool Underlined)
+wxFont::wxFont()
 {
-  m_refData = new wxFontRefData();
+    if ( wxTheFontList )
+        wxTheFontList->Append(this);
+}
 
-
-  if (wxTheFontList) wxTheFontList->Append( this );
-};
-
-wxFont::wxFont( const wxFont& font )
-{ 
-  Ref( font ); 
-};
-
-wxFont::wxFont( const wxFont* font ) 
-{ 
-  UnRef(); 
-  if (font) Ref( *font ); 
-};
-
-wxFont::~wxFont(void)
+wxFont::wxFont(int pointSize, int family, int style, int weight, bool underlined, const wxString& faceName)
 {
-  if (wxTheFontList) wxTheFontList->DeleteObject( this );
-};
+    Create(pointSize, family, style, weight, underlined, faceName);
 
-wxFont& wxFont::operator = ( const wxFont& font ) 
-{ 
-  if (*this == font) return (*this); 
-  Ref( font ); 
-  return *this; 
-};
+    if ( wxTheFontList )
+        wxTheFontList->Append(this);
+}
 
-bool wxFont::operator == ( const wxFont& font ) 
-{ 
-  return m_refData == font.m_refData; 
-};
-
-bool wxFont::operator != ( const wxFont& font ) 
-{ 
-  return m_refData != font.m_refData; 
-};
-
-bool wxFont::Ok()
+bool wxFont::Create(int pointSize, int family, int style, int weight, bool underlined, const wxString& faceName)
 {
-  return (m_refData != NULL);
-};
+    UnRef();
+    m_refData = new wxFontRefData;
 
-int wxFont::GetPointSize(void) const
-{
-  return M_FONTDATA->m_pointSize;
-};
+    M_FONTDATA->m_family = family;
+    M_FONTDATA->m_style = style;
+    M_FONTDATA->m_weight = weight;
+    M_FONTDATA->m_pointSize = pointSize;
+    M_FONTDATA->m_underlined = underlined;
+    M_FONTDATA->m_faceName = faceName;
 
-wxString wxFont::GetFaceString(void) const
-{
-  return "";
-};
+    RealizeResource();
 
-wxString wxFont::GetFaceName(void) const
-{
-  return ""; 
-};
+    return TRUE;
+}
 
-int wxFont::GetFamily(void) const
+wxFont::~wxFont()
 {
-  return M_FONTDATA->m_family;
-};
+    if (wxTheFontList)
+        wxTheFontList->DeleteObject(this);
+}
 
-wxString wxFont::GetFamilyString(void) const
+bool wxFont::RealizeResource()
 {
-  wxString s = wx_font_family[M_FONTDATA->m_family];
-  return s;
-};
+    // TODO: create the font (if there is a native font object)
+    return FALSE;
+}
 
-int wxFont::GetFontId(void) const
+void wxFont::Unshare()
 {
-  return M_FONTDATA->m_fontId; // stub
-};
+	// Don't change shared data
+	if (!m_refData)
+    {
+		m_refData = new wxFontRefData();
+	}
+    else
+    {
+		wxFontRefData* ref = new wxFontRefData(*(wxFontRefData*)m_refData);
+		UnRef();
+		m_refData = ref;
+	}
+}
 
-int wxFont::GetStyle(void) const
+void wxFont::SetPointSize(int pointSize)
 {
-  return M_FONTDATA->m_style;
-};
+    Unshare();
 
-wxString wxFont::GetStyleString(void) const
-{
-  wxString s =  wx_font_style[M_FONTDATA->m_style];
-  return s;
-};
+    M_FONTDATA->m_pointSize = pointSize;
 
-int wxFont::GetWeight(void) const
-{
-  return M_FONTDATA->m_weight;
-};
+    RealizeResource();
+}
 
-wxString wxFont::GetWeightString(void) const
+void wxFont::SetFamily(int family)
 {
-  wxString s = wx_font_weight[M_FONTDATA->m_weight];
-  return s;
-};
+    Unshare();
 
-bool wxFont::GetUnderlined(void) const
+    M_FONTDATA->m_family = family;
+
+    RealizeResource();
+}
+
+void wxFont::SetStyle(int style)
 {
-  return M_FONTDATA->m_underlined;
-};
+    Unshare();
+
+    M_FONTDATA->m_style = style;
+
+    RealizeResource();
+}
+
+void wxFont::SetWeight(int weight)
+{
+    Unshare();
+
+    M_FONTDATA->m_weight = weight;
+
+    RealizeResource();
+}
+
+void wxFont::SetFaceName(const wxString& faceName)
+{
+    Unshare();
+
+    M_FONTDATA->m_faceName = faceName;
+
+    RealizeResource();
+}
+
+void wxFont::SetUnderlined(bool underlined)
+{
+    Unshare();
+
+    M_FONTDATA->m_underlined = underlined;
+
+    RealizeResource();
+}
+
+wxString wxFont::GetFamilyString() const
+{
+  wxString fam("");
+  switch (GetFamily())
+  {
+    case wxDECORATIVE:
+      fam = "wxDECORATIVE";
+      break;
+    case wxROMAN:
+      fam = "wxROMAN";
+      break;
+    case wxSCRIPT:
+      fam = "wxSCRIPT";
+      break;
+    case wxSWISS:
+      fam = "wxSWISS";
+      break;
+    case wxMODERN:
+      fam = "wxMODERN";
+      break;
+    case wxTELETYPE:
+      fam = "wxTELETYPE";
+      break;
+    default:
+      fam = "wxDEFAULT";
+      break;
+  }
+  return fam;
+}
+
+/* New font system */
+wxString wxFont::GetFaceName() const
+{
+    wxString str("");
+    if (M_FONTDATA)
+	    str = M_FONTDATA->m_faceName ;
+    return str;
+}
+
+wxString wxFont::GetStyleString() const
+{
+    wxString styl("");
+    switch (GetStyle())
+    {
+        case wxITALIC:
+            styl = "wxITALIC";
+            break;
+        case wxSLANT:
+            styl = "wxSLANT";
+            break;
+        default:
+            styl = "wxNORMAL";
+            break;
+    }
+    return styl;
+}
+
+wxString wxFont::GetWeightString() const
+{
+    wxString w("");
+    switch (GetWeight())
+    {
+        case wxBOLD:
+            w = "wxBOLD";
+            break;
+        case wxLIGHT:
+            w = "wxLIGHT";
+            break;
+        default:
+            w = "wxNORMAL";
+            break;
+    }
+    return w;
+}
+

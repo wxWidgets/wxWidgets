@@ -1,10 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        mdi.cpp
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     MDI classes
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -13,217 +14,250 @@
 #endif
 
 #include "wx/mdi.h"
-#include "wx/dialog.h"
-#include "wx/menu.h"
 
-//-----------------------------------------------------------------------------
+extern wxList wxModelessWindows;
 
-extern wxList wxPendingDelete;
-
-//-----------------------------------------------------------------------------
-// wxMDIParentFrame
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxMDIParentFrame,wxFrame)
+#if !USE_SHARED_LIBRARY
+IMPLEMENT_DYNAMIC_CLASS(wxMDIParentFrame, wxFrame)
+IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame, wxFrame)
+IMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow, wxWindow)
 
 BEGIN_EVENT_TABLE(wxMDIParentFrame, wxFrame)
+  EVT_SIZE(wxMDIParentFrame::OnSize)
+  EVT_ACTIVATE(wxMDIParentFrame::OnActivate)
+  EVT_SYS_COLOUR_CHANGED(wxMDIParentFrame::OnSysColourChanged)
 END_EVENT_TABLE()
 
-wxMDIParentFrame::wxMDIParentFrame(void)
-{
-  m_clientWindow = NULL;
-  m_currentChild = NULL;
-  m_parentFrameActive = TRUE;
-};
-
-wxMDIParentFrame::wxMDIParentFrame( wxWindow *parent,
-      wxWindowID id, const wxString& title,
-      const wxPoint& pos, const wxSize& size,
-      long style, const wxString& name )
-{
-  m_clientWindow = NULL;
-  m_currentChild = NULL;
-  m_parentFrameActive = TRUE;
-  Create( parent, id, title, pos, size, style, name );
-};
-
-wxMDIParentFrame::~wxMDIParentFrame(void)
-{
-};
-
-bool wxMDIParentFrame::Create( wxWindow *parent,
-      wxWindowID id, const wxString& title,
-      const wxPoint& pos, const wxSize& size,
-      long style, const wxString& name )
-{
-  wxFrame::Create( parent, id, title, pos, size, style, name );
-  
-  OnCreateClient();
-  
-  return TRUE;
-};
-
-void wxMDIParentFrame::GetClientSize(int *width, int *height ) const
-{
-  wxFrame::GetClientSize( width, height );
-};
-
-wxMDIChildFrame *wxMDIParentFrame::GetActiveChild(void) const
-{
-  return m_currentChild;
-};
-
-wxMDIClientWindow *wxMDIParentFrame::GetClientWindow(void) const
-{
-  return m_clientWindow;
-};
-
-wxMDIClientWindow *wxMDIParentFrame::OnCreateClient(void)
-{
-  m_clientWindow = new wxMDIClientWindow( this );
-  return m_clientWindow;
-};
-
-void wxMDIParentFrame::ActivateNext(void)
-{
-};
-
-void wxMDIParentFrame::ActivatePrevious(void)
-{
-};
-
-void wxMDIParentFrame::OnActivate( wxActivateEvent& WXUNUSED(event) )
-{
-};
-
-void wxMDIParentFrame::OnSysColourChanged( wxSysColourChangedEvent& WXUNUSED(event) )
-{
-};
-
-//-----------------------------------------------------------------------------
-// wxMDIChildFrame
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame,wxFrame)
-  
-BEGIN_EVENT_TABLE(wxMDIChildFrame, wxFrame)
-  EVT_ACTIVATE(wxMDIChildFrame::OnActivate)
+BEGIN_EVENT_TABLE(wxMDIClientWindow, wxWindow)
+  EVT_SCROLL(wxMDIClientWindow::OnScroll)
 END_EVENT_TABLE()
 
-wxMDIChildFrame::wxMDIChildFrame(void)
-{
-};
+#endif
 
-wxMDIChildFrame::wxMDIChildFrame( wxMDIParentFrame *parent,
-      wxWindowID id, const wxString& title,
-      const wxPoint& WXUNUSED(pos), const wxSize& size,
-      long style, const wxString& name )
-{
-  Create( parent, id, title, wxDefaultPosition, size, style, name );
-};
+// Parent frame
 
-wxMDIChildFrame::~wxMDIChildFrame(void)
+wxMDIParentFrame::wxMDIParentFrame()
 {
-};
-
-bool wxMDIChildFrame::Create( wxMDIParentFrame *parent,
-      wxWindowID id, const wxString& title,
-      const wxPoint& WXUNUSED(pos), const wxSize& size,
-      long style, const wxString& name )
-{
-  m_title = title;
-  return wxWindow::Create( parent->GetClientWindow(), id, wxDefaultPosition, size, style, name );
-};
-
-void wxMDIChildFrame::GetClientSize( int *width, int *height ) const
-{
-  wxWindow::GetClientSize( width, height );
 }
 
-void wxMDIChildFrame::AddChild( wxWindow *child )
+bool wxMDIParentFrame::Create(wxWindow *parent,
+           wxWindowID id,
+           const wxString& title,
+           const wxPoint& pos,
+           const wxSize& size,
+           long style,
+           const wxString& name)
 {
-  wxWindow::AddChild( child );
-}
-  
-static void SetInvokingWindow( wxMenu *menu, wxWindow *win )
-{
-  menu->SetInvokingWindow( win );
-  wxNode *node = menu->m_items.First();
-  while (node)
-  {
-    wxMenuItem *menuitem = (wxMenuItem*)node->Data();
-    if (menuitem->IsSubMenu())
-      SetInvokingWindow( menuitem->GetSubMenu(), win );
-    node = node->Next();
-  };
-};
+    if (!parent)
+        wxTopLevelWindows.Append(this);
 
-void wxMDIChildFrame::SetMenuBar( wxMenuBar *menu_bar )
+    SetName(name);
+    m_windowStyle = style;
+
+    if (parent) parent->AddChild(this);
+
+    if ( id > -1 )
+        m_windowId = id;
+    else
+        m_windowId = (int)NewControlId();
+
+    // TODO: create MDI parent frame
+
+    wxModelessWindows.Append(this);
+
+    return TRUE;
+}
+
+wxMDIParentFrame::~wxMDIParentFrame()
 {
-  m_menuBar = menu_bar;
-  
-  if (m_menuBar)
-  {
-    wxMDIParentFrame *mdi_frame = (wxMDIParentFrame*)m_parent->m_parent;
-    
-    if (m_menuBar->m_parent != this)
+}
+
+// Get size *available for subwindows* i.e. excluding menu bar.
+void wxMDIParentFrame::GetClientSize(int *x, int *y) const
+{
+    // TODO
+}
+
+void wxMDIParentFrame::SetMenuBar(wxMenuBar *menu_bar)
+{
+    // TODO
+    if (!menu_bar)
     {
-      wxNode *node = m_menuBar->m_menus.First();
-      while (node)
-      {
-        wxMenu *menu = (wxMenu*)node->Data();
-        SetInvokingWindow( menu, this );
-        node = node->Next();
-      };
-      
-      m_menuBar->m_parent = mdi_frame;
+        m_frameMenuBar = NULL;
+        return;
     }
-    mdi_frame->SetMDIMenuBar( m_menuBar );
+  
+    if (menu_bar->m_menuBarFrame)
+	    return;
 
-  }
-};
+    m_frameMenuBar = menu_bar;
+}
 
-wxMenuBar *wxMDIChildFrame::GetMenuBar()
+void wxMDIParentFrame::OnSize(wxSizeEvent& event)
 {
-  return m_menuBar;
-};
+#if USE_CONSTRAINTS
+    if (GetAutoLayout())
+      Layout();
+#endif
+    int x = 0;
+    int y = 0;
+    int width, height;
+    GetClientSize(&width, &height);
 
-void wxMDIChildFrame::Activate(void)
+    if ( GetClientWindow() )
+        GetClientWindow()->SetSize(x, y, width, height);
+}
+
+void wxMDIParentFrame::OnActivate(wxActivateEvent& event)
 {
-};
+	// Do nothing
+}
 
-void wxMDIChildFrame::OnActivate( wxActivateEvent &WXUNUSED(event) )
+// Returns the active MDI child window
+wxMDIChildFrame *wxMDIParentFrame::GetActiveChild() const
 {
-};
+    // TODO
+    return NULL;
+}
 
-//-----------------------------------------------------------------------------
-// wxMDIClientWindow
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow,wxWindow)
-
-wxMDIClientWindow::wxMDIClientWindow(void)
+// Create the client window class (don't Create the window,
+// just return a new class)
+wxMDIClientWindow *wxMDIParentFrame::OnCreateClient()
 {
-};
+	return new wxMDIClientWindow ;
+}
 
-wxMDIClientWindow::wxMDIClientWindow( wxMDIParentFrame *parent, long style )
+// Responds to colour changes, and passes event on to children.
+void wxMDIParentFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
-  CreateClient( parent, style );
-};
+    // TODO
 
-wxMDIClientWindow::~wxMDIClientWindow(void)
+    // Propagate the event to the non-top-level children
+    wxFrame::OnSysColourChanged(event);
+}
+
+// MDI operations
+void wxMDIParentFrame::Cascade()
 {
-};
+    // TODO
+}
 
-bool wxMDIClientWindow::CreateClient( wxMDIParentFrame *WXUNUSED(parent), long WXUNUSED(style) )
+void wxMDIParentFrame::Tile()
 {
-  return TRUE;
-};
+    // TODO
+}
 
-void wxMDIClientWindow::AddChild( wxWindow *WXUNUSED(child) )
+void wxMDIParentFrame::ArrangeIcons()
 {
-};
+    // TODO
+}
 
+void wxMDIParentFrame::ActivateNext()
+{
+    // TODO
+}
+
+void wxMDIParentFrame::ActivatePrevious()
+{
+    // TODO
+}
+
+// Child frame
+
+wxMDIChildFrame::wxMDIChildFrame()
+{
+}
+
+bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
+           wxWindowID id,
+           const wxString& title,
+           const wxPoint& pos,
+           const wxSize& size,
+           long style,
+           const wxString& name)
+{
+    SetName(name);
+
+    if ( id > -1 )
+        m_windowId = id;
+    else
+        m_windowId = (int)NewControlId();
+
+    if (parent) parent->AddChild(this);
+
+    // TODO: create child frame
+
+    wxModelessWindows.Append(this);
+    return FALSE;
+}
+
+wxMDIChildFrame::~wxMDIChildFrame()
+{
+}
+
+// Set the client size (i.e. leave the calculation of borders etc.
+// to wxWindows)
+void wxMDIChildFrame::SetClientSize(int width, int height)
+{
+    // TODO
+}
+
+void wxMDIChildFrame::GetPosition(int *x, int *y) const
+{
+    // TODO
+}
+
+void wxMDIChildFrame::SetMenuBar(wxMenuBar *menu_bar)
+{
+    // TODO
+    if (!menu_bar)
+    {
+        m_frameMenuBar = NULL;
+        return;
+    }
+  
+    if (menu_bar->m_menuBarFrame)
+	    return;
+    m_frameMenuBar = menu_bar;
+}
+
+// MDI operations
+void wxMDIChildFrame::Maximize()
+{
+    // TODO
+}
+
+void wxMDIChildFrame::Restore()
+{
+    // TODO
+}
+
+void wxMDIChildFrame::Activate()
+{
+    // TODO
+}
+
+// Client window
+
+wxMDIClientWindow::wxMDIClientWindow()
+{
+}
+
+wxMDIClientWindow::~wxMDIClientWindow()
+{
+}
+
+bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
+{
+    // TODO create client window
+    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE);
+
+    return FALSE;
+}
+
+// Explicitly call default scroll behaviour
+void wxMDIClientWindow::OnScroll(wxScrollEvent& event)
+{
+    Default(); // Default processing
+}
 

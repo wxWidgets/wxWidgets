@@ -1,68 +1,72 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        choice.h
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     wxChoice class
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifndef __GTKCHOICEH__
-#define __GTKCHOICEH__
+#ifndef _WX_CHOICE_H_
+#define _WX_CHOICE_H_
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "choice.h"
 #endif
 
-#include "wx/defs.h"
-#include "wx/object.h"
-#include "wx/list.h"
 #include "wx/control.h"
 
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
+WXDLLEXPORT_DATA(extern const char*) wxChoiceNameStr;
 
-class wxChoice;
-
-//-----------------------------------------------------------------------------
-// global data
-//-----------------------------------------------------------------------------
-
-extern const char *wxChoiceNameStr;
-
-//-----------------------------------------------------------------------------
-// wxChoice
-//-----------------------------------------------------------------------------
-
-class wxChoice: public wxControl
+// Choice item
+class WXDLLEXPORT wxChoice: public wxControl
 {
   DECLARE_DYNAMIC_CLASS(wxChoice)
 
-  public:
+ public:
+  inline wxChoice() { m_noStrings = 0; }
 
-    wxChoice(void);
-    wxChoice( wxWindow *parent, wxWindowID id,
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
-      int n = 0, const wxString choices[] = NULL,
-      long style = 0, const wxString &name = wxChoiceNameStr );
-    bool Create( wxWindow *parent, wxWindowID id,
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
-      int n = 0, const wxString choices[] = NULL,
-      long style = 0, const wxString &name = wxChoiceNameStr );
-    void Append( const wxString &item );
-    void Clear(void);
-    int FindString( const wxString &string ) const;
-    int GetColumns(void) const;
-    int GetSelection(void);
-    wxString GetString( int n ) const;
-    wxString GetStringSelection(void) const;
-    int Number(void) const;
-    void SetColumns( int n = 1 );
-    void SetSelection( int n );
-    void SetStringSelection( const wxString &string );
+  inline wxChoice(wxWindow *parent, wxWindowID id,
+           const wxPoint& pos = wxDefaultPosition,
+           const wxSize& size = wxDefaultSize,
+           int n = 0, const wxString choices[] = NULL,
+           long style = 0,
+           const wxValidator& validator = wxDefaultValidator,
+           const wxString& name = wxChoiceNameStr)
+  {
+    Create(parent, id, pos, size, n, choices, style, validator, name);
+  }
+
+  bool Create(wxWindow *parent, wxWindowID id,
+           const wxPoint& pos = wxDefaultPosition,
+           const wxSize& size = wxDefaultSize,
+           int n = 0, const wxString choices[] = NULL,
+           long style = 0,
+           const wxValidator& validator = wxDefaultValidator,
+           const wxString& name = wxChoiceNameStr);
+
+  virtual void Append(const wxString& item);
+  virtual void Delete(int n);
+  virtual void Clear();
+  virtual int GetSelection() const ;
+  virtual void SetSelection(int n);
+  virtual int FindString(const wxString& s) const;
+  virtual wxString GetString(int n) const ;
+  virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+  virtual wxString GetStringSelection() const ;
+  virtual bool SetStringSelection(const wxString& sel);
+
+  virtual inline int Number() const { return m_noStrings; }
+  virtual void Command(wxCommandEvent& event);
+
+  virtual inline void SetColumns(int WXUNUSED(n) = 1 ) { /* No effect */ } ;
+  virtual inline int GetColumns() const { return 1 ; };
+
+protected:
+  int m_noStrings;
 };
 
-#endif // __GTKCHOICEH__
+#endif
+	// _WX_CHOICE_H_

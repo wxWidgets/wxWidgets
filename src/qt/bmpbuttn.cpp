@@ -1,10 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        bmpbuttn.cpp
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     wxBitmapButton
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -14,65 +15,51 @@
 
 #include "wx/bmpbuttn.h"
 
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
+#if !USE_SHARED_LIBRARY
+IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
+#endif
 
-class wxBitmapButton;
-
-//-----------------------------------------------------------------------------
-// wxBitmapButton
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton,wxControl)
-
-wxBitmapButton::wxBitmapButton(void)
+bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bitmap,
+           const wxPoint& pos,
+           const wxSize& size, long style,
+           const wxValidator& validator,
+           const wxString& name)
 {
-};
+    m_buttonBitmap = bitmap;
+    SetName(name);
+    SetValidator(validator);
+    parent->AddChild(this);
 
-wxBitmapButton::wxBitmapButton( wxWindow *parent, wxWindowID id, const wxBitmap &bitmap,
-      const wxPoint &pos, const wxSize &size, 
-      long style, const wxString &name )
+    m_backgroundColour = parent->GetDefaultBackgroundColour() ;
+    m_foregroundColour = parent->GetDefaultForegroundColour() ;
+    m_windowStyle = style;
+    m_marginX = 0;
+    m_marginY = 0;
+
+    int x = pos.x;
+    int y = pos.y;
+    int width = size.x;
+    int height = size.y;
+
+    if (id == -1)
+        m_windowId = NewControlId();
+    else
+        m_windowId = id;
+
+    if ( width == -1 && bitmap.Ok())
+	width = bitmap.GetWidth() + 2*m_marginX;
+
+    if ( height == -1 && bitmap.Ok())
+	height = bitmap.GetHeight() + 2*m_marginY;
+
+    /* TODO: create bitmap button
+     */
+
+    return FALSE;
+}
+
+void wxBitmapButton::SetBitmapLabel(const wxBitmap& bitmap)
 {
-  Create( parent, id, bitmap, pos, size, style, name );
-};
+    m_buttonBitmap = bitmap;
+}
 
-bool wxBitmapButton::Create(  wxWindow *parent, wxWindowID id, const wxBitmap &bitmap,
-      const wxPoint &pos, const wxSize &size, 
-      long style, const wxString &name )
-{
-  m_needParent = TRUE;
-  
-  wxSize newSize = size;
-
-  PreCreation( parent, id, pos, newSize, style, name );
-  
-  m_bitmap = bitmap;
-  m_label = "";
-  
-  
-  if (newSize.x == -1) newSize.x = m_bitmap.GetHeight()+10;
-  if (newSize.y == -1) newSize.y = m_bitmap.GetWidth()+10;
-  SetSize( newSize.x, newSize.y );
-  
-
-  PostCreation();
-  
-  Show( TRUE );
-    
-  return TRUE;
-};
-      
-void wxBitmapButton::SetDefault(void)
-{
-};
-
-void wxBitmapButton::SetLabel( const wxString &label )
-{
-  wxControl::SetLabel( label );
-};
-
-wxString wxBitmapButton::GetLabel(void) const
-{
-  return wxControl::GetLabel();
-};

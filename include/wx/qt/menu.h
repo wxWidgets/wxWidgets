@@ -1,155 +1,157 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        menu.h
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
-// Licence:     wxWindows licence
+// Purpose:     wxMenu, wxMenuBar classes
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifndef __GTKMENUH__
-#define __GTKMENUH__
+#ifndef _WX_MENU_H_
+#define _WX_MENU_H_
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "menu.h"
 #endif
 
 #include "wx/defs.h"
-#include "wx/object.h"
-#include "wx/list.h"
-#include "wx/window.h"
+#include "wx/event.h"
 
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
+class WXDLLEXPORT wxMenuItem;
+class WXDLLEXPORT wxMenuBar;
+class WXDLLEXPORT wxMenu;
 
-class wxMenuBar;
-class wxMenuItem;
-class wxMenu;
+WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
 
-//-----------------------------------------------------------------------------
-// const
-//-----------------------------------------------------------------------------
-
-#define   ID_SEPARATOR    (-1)
-
-//-----------------------------------------------------------------------------
-// wxMenuBar
-//-----------------------------------------------------------------------------
-
-class wxMenuBar: public wxWindow
+// ----------------------------------------------------------------------------
+// Menu
+// ----------------------------------------------------------------------------
+class WXDLLEXPORT wxMenu: public wxEvtHandler
 {
-DECLARE_DYNAMIC_CLASS(wxMenuBar)
+  DECLARE_DYNAMIC_CLASS(wxMenu)
 
 public:
-  wxMenuBar();
-  void Append( wxMenu *menu, const wxString &title );
+  // ctor & dtor
+  wxMenu(const wxString& title = wxEmptyString, const wxFunction func = NULL);
+  ~wxMenu();
 
-  int FindMenuItem( const wxString &menuString, const wxString &itemString ) const;
-  wxMenuItem* FindMenuItemById( int id ) const;
-  
-  void Check( int id, bool check );
-  bool Checked( int id ) const;
-  void Enable( int id, bool enable );
-  bool Enabled( int id ) const;
-  inline bool IsEnabled(int Id) const { return Enabled(Id); };
-  inline bool IsChecked(int Id) const { return Checked(Id); };
-
-  int     GetMenuCount() const { return m_menus.Number(); }
-  wxMenu *GetMenu(int n) const { return (wxMenu *)m_menus.Nth(n)->Data(); }
-
-  wxList       m_menus;
-};
-
-//-----------------------------------------------------------------------------
-// wxMenu
-//-----------------------------------------------------------------------------
-
-class wxMenuItem: public wxObject
-{
-DECLARE_DYNAMIC_CLASS(wxMenuItem)
-
-public:
-  wxMenuItem();
-
-  // accessors
-    // id
-  void SetId(int id) { m_id = id; }
-  int  GetId() const { return m_id; }
-  bool IsSeparator() const { return m_id == ID_SEPARATOR; }
-
-    // the item's text
-  void SetText(const wxString& str);
-  const wxString& GetText() const { return m_text; }
-
-    // what kind of menu item we are
-  void SetCheckable(bool checkable) { m_isCheckMenu = checkable; }
-  bool IsCheckable() const { return m_isCheckMenu; }
-  void SetSubMenu(wxMenu *menu) { m_subMenu = menu; }
-  wxMenu *GetSubMenu() const { return m_subMenu; }
-  bool IsSubMenu() const { return m_subMenu != NULL; }
-
-    // state
-  void Enable(bool enable = TRUE) { m_isEnabled = enable; }
-  bool IsEnabled() const { return m_isEnabled; }
-  void Check(bool check = TRUE);
-  bool IsChecked() const;
-
-    // help string (displayed in the status bar by default)
-  void SetHelpString(const wxString& str) { m_helpStr = str; }
-
-
-private:
-  int           m_id;
-  wxString      m_text;
-  bool          m_isCheckMenu;
-  bool          m_isChecked;
-  bool          m_isEnabled;
-  wxMenu       *m_subMenu;
-  wxString      m_helpStr;
-};
-
-class wxMenu: public wxEvtHandler
-{
-DECLARE_DYNAMIC_CLASS(wxMenu)
-
-public:
-  // construction
-  wxMenu( const wxString &title = "" );
-
-  // operations
-    // menu creation
+  // construct menu
+    // append items to the menu
+      // separator line
   void AppendSeparator();
-  void Append(int id, const wxString &item,
-              const wxString &helpStr = "", bool checkable = FALSE);
-  void Append(int id, const wxString &item,
-              wxMenu *subMenu, const wxString &helpStr = "" );
-  void Break() {};
+      // normal item
+  void Append(int id, const wxString& Label, const wxString& helpString = wxEmptyString,
+              bool checkable = FALSE);
+      // a submenu
+  void Append(int id, const wxString& Label, wxMenu *SubMenu, 
+              const wxString& helpString = wxEmptyString);
+      // the most generic form (create wxMenuItem first and use it's functions)
+  void Append(wxMenuItem *pItem);
+    // insert a break in the menu
+  void Break();
+    // delete an item
+  void Delete(int id);
 
-    // find item by name/id
-  int FindItem( const wxString itemString ) const;
-  wxMenuItem *FindItem(int id) const;
+  // menu item control
+  void Enable(int id, bool Flag);
+  bool Enabled(int id) const;
+  inline bool IsEnabled(int id) const { return Enabled(id); };
+  void Check(int id, bool Flag);
+  bool Checked(int id) const;
+  inline bool IsChecked(int id) const { return IsChecked(id); };
 
-    // get/set item's state
-  void Enable( int id, bool enable );
-  bool IsEnabled( int id ) const;
-  void Check( int id, bool check );
-  bool IsChecked( int id ) const;
+  // item properties
+    // title
+  void SetTitle(const wxString& label);
+  const wxString& GetTitle() const;
+    // label
+  void SetLabel(int id, const wxString& label);
+  wxString GetLabel(int id) const;
+    // help string
+  virtual void SetHelpString(int id, const wxString& helpString);
+  virtual wxString GetHelpString(int id) const ;
 
-  void SetLabel( int id, const wxString &label );
+  // find item
+    // Finds the item id matching the given string, -1 if not found.
+  virtual int FindItem(const wxString& itemString) const ;
+    // Find wxMenuItem by ID, and item's menu too if itemMenu is !NULL.
+  wxMenuItem *FindItemForId(int itemId, wxMenu **itemMenu = NULL) const;
 
-  // accessors
-  wxList& GetItems() { return m_items; }
+  void ProcessCommand(wxCommandEvent& event);
+  inline void Callback(const wxFunction func) { m_callback = func; }
+
+  virtual void SetParent(wxEvtHandler *parent) { m_parent = parent; }
+  inline void SetEventHandler(wxEvtHandler *handler) { m_eventHandler = handler; }
+  inline wxEvtHandler *GetEventHandler() { return m_eventHandler; }
+
+  inline wxList& GetItems() const { return (wxList&) m_menuItems; }
 
 public:
-  void SetInvokingWindow( wxWindow *win );
-  wxWindow *GetInvokingWindow();
+  wxFunction        m_callback;
 
-  wxString    m_title;
-  wxList      m_items;
-  wxWindow   *m_invokingWindow;
+  int               m_noItems;
+  wxString          m_title;
+  wxMenuBar *       m_menuBar;
+  wxList            m_menuItems;
+  wxEvtHandler *    m_parent;
+  wxEvtHandler *    m_eventHandler;
 };
 
-#endif // __GTKMENUH__
+// ----------------------------------------------------------------------------
+// Menu Bar (a la Windows)
+// ----------------------------------------------------------------------------
+class WXDLLEXPORT wxFrame;
+class WXDLLEXPORT wxMenuBar: public wxEvtHandler
+{
+  DECLARE_DYNAMIC_CLASS(wxMenuBar)
+
+  wxMenuBar();
+  wxMenuBar(int n, wxMenu *menus[], const wxString titles[]);
+  ~wxMenuBar();
+
+  void Append(wxMenu *menu, const wxString& title);
+  // Must only be used AFTER menu has been attached to frame,
+  // otherwise use individual menus to enable/disable items
+  void Enable(int Id, bool Flag);
+  bool Enabled(int Id) const ;
+  inline bool IsEnabled(int Id) const { return Enabled(Id); };
+  void EnableTop(int pos, bool Flag);
+  void Check(int id, bool Flag);
+  bool Checked(int id) const ;
+  inline bool IsChecked(int Id) const { return Checked(Id); };
+  void SetLabel(int id, const wxString& label) ;
+  wxString GetLabel(int id) const ;
+  void SetLabelTop(int pos, const wxString& label) ;
+  wxString GetLabelTop(int pos) const ;
+  virtual void Delete(wxMenu *menu, int index = 0); /* Menu not destroyed */
+  virtual bool OnAppend(wxMenu *menu, const char *title);
+  virtual bool OnDelete(wxMenu *menu, int index);
+
+  virtual void SetHelpString(int Id, const wxString& helpString);
+  virtual wxString GetHelpString(int Id) const ;
+
+  virtual int FindMenuItem(const wxString& menuString, const wxString& itemString) const ;
+
+  // Find wxMenuItem for item ID, and return item's
+  // menu too if itemMenu is non-NULL.
+  wxMenuItem *FindItemForId(int itemId, wxMenu **menuForItem = NULL) const ;
+
+  inline void SetEventHandler(wxEvtHandler *handler) { m_eventHandler = handler; }
+  inline wxEvtHandler *GetEventHandler() { return m_eventHandler; }
+
+  inline int GetMenuCount() const { return m_menuCount; }
+  inline wxMenu* GetMenu(int i) const { return m_menus[i]; }
+
+ public:
+  wxEvtHandler *            m_eventHandler;
+  int                       m_menuCount;
+  wxMenu **                 m_menus;
+  wxString *                m_titles;
+  wxFrame *                 m_menuBarFrame;
+/* TODO: data that represents the actual menubar when created.
+ */
+};
+
+#endif // _WX_MENU_H_

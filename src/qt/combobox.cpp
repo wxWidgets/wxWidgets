@@ -1,10 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        combobox.cpp
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     wxComboBox class
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -14,136 +15,102 @@
 
 #include "wx/combobox.h"
 
-//-----------------------------------------------------------------------------
-// wxComboBox
-//-----------------------------------------------------------------------------
+#if !USE_SHARED_LIBRARY
+IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
+#endif
 
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxComboBox,wxControl)
-
-bool wxComboBox::Create(wxWindow *parent, wxWindowID id, const wxString& value,
-  const wxPoint& pos, const wxSize& size, int n, const wxString choices[],
-  long style, const wxString& name )
+bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
+           const wxString& value,
+           const wxPoint& pos,
+           const wxSize& size,
+		   int n, const wxString choices[],
+		   long style,
+           const wxValidator& validator,
+           const wxString& name)
 {
-  return TRUE;
-};
+    SetName(name);
+    SetValidator(validator);
+    m_noStrings = n;
+    m_windowStyle = style;
 
-void wxComboBox::Clear(void)
+    if (parent) parent->AddChild(this);
+
+    if ( id == -1 )
+    	m_windowId = (int)NewControlId();
+    else
+	m_windowId = id;
+
+    // TODO: create combobox control
+
+    return TRUE;
+}
+
+wxString wxComboBox::GetValue() const
 {
-};
+    // TODO
+    return wxString("");
+}
 
-void wxComboBox::Append( const wxString &item )
+void wxComboBox::SetValue(const wxString& value)
 {
-  Append( item, (char*)NULL );
-};
+    // TODO
+}
 
-void wxComboBox::Append( const wxString &WXUNUSED(item), char *WXUNUSED(clientData) )
+// Clipboard operations
+void wxComboBox::Copy()
 {
-};
+    // TODO
+}
 
-void wxComboBox::Delete( int WXUNUSED(n) )
+void wxComboBox::Cut()
 {
-};
+    // TODO
+}
 
-int wxComboBox::FindString( const wxString &WXUNUSED(item) )
+void wxComboBox::Paste()
 {
-  return -1;
-};
+    // TODO
+}
 
-char* wxComboBox::GetClientData( int WXUNUSED(n) )
+void wxComboBox::SetEditable(bool editable)
 {
-  return (char*)NULL;
-};
+    // TODO
+}
 
-void wxComboBox::SetClientData( int WXUNUSED(n), char *WXUNUSED(clientData) )
+void wxComboBox::SetInsertionPoint(long pos)
 {
-};
+    // TODO
+}
 
-int wxComboBox::GetSelection(void) const
+void wxComboBox::SetInsertionPointEnd()
 {
-  return -1;
-};
+    // TODO
+}
 
-wxString wxComboBox::GetString( int WXUNUSED(n) ) const
+long wxComboBox::GetInsertionPoint() const
 {
-  return "";
-};
+    // TODO
+    return 0;
+}
 
-wxString wxComboBox::GetStringSelection(void) const
+long wxComboBox::GetLastPosition() const
 {
-  return "";
-};
+    // TODO
+    return 0;
+}
 
-int wxComboBox::Number(void) const
+void wxComboBox::Replace(long from, long to, const wxString& value)
 {
-  return 0;
-};
+    // TODO
+}
 
-void wxComboBox::SetSelection( int WXUNUSED(n) )
+void wxComboBox::Remove(long from, long to)
 {
-};
+    // TODO
+}
 
-void wxComboBox::SetStringSelection( const wxString &string )
+void wxComboBox::SetSelection(long from, long to)
 {
-  int res = FindString( string );
-  if (res == -1) return;
-  SetSelection( res );
-};
+    // TODO
+}
 
-wxString wxComboBox::GetValue(void) const
-{
-  return "";
-};
-
-void wxComboBox::SetValue( const wxString& WXUNUSED(value) )
-{
-};
-
-void wxComboBox::Copy(void)
-{
-};
-
-void wxComboBox::Cut(void)
-{
-};
-
-void wxComboBox::Paste(void)
-{
-};
-
-void wxComboBox::SetInsertionPoint( long WXUNUSED(pos) )
-{
-};
-
-void wxComboBox::SetInsertionPointEnd(void)
-{
-};
-
-long wxComboBox::GetInsertionPoint(void) const
-{
-  return 0;
-};
-
-long wxComboBox::GetLastPosition(void) const
-{
-  return 0;
-};
-
-void wxComboBox::Replace( long WXUNUSED(from), long WXUNUSED(to), const wxString& WXUNUSED(value) )
-{
-};
-
-void wxComboBox::Remove(long WXUNUSED(from), long WXUNUSED(to) )
-{
-};
-
-void wxComboBox::SetSelection( long WXUNUSED(from), long WXUNUSED(to) )
-{
-};
-
-void wxComboBox::SetEditable( bool WXUNUSED(editable) )
-{
-};
-
-      

@@ -1,138 +1,153 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        app.h
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Purpose:     wxApp class
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKAPPH__
-#define __GTKAPPH__
+#ifndef _WX_APP_H_
+#define _WX_APP_H_
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "app.h"
 #endif
 
-#include "wx/window.h"
-#include "wx/frame.h"
+#include "wx/defs.h"
+#include "wx/object.h"
 
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class wxApp;
-class wxLog;
-class wxConfig; // it's not used #if !USE_WXCONFIG, but fwd decl doesn't harm
-
-//-----------------------------------------------------------------------------
-// global data
-//-----------------------------------------------------------------------------
-
-extern wxApp *wxTheApp;
-
-//-----------------------------------------------------------------------------
-// global functions
-//-----------------------------------------------------------------------------
-
-void wxExit(void);
-bool wxYield(void);
-
-//-----------------------------------------------------------------------------
-// constants
-//-----------------------------------------------------------------------------
+class WXDLLEXPORT wxFrame;
+class WXDLLEXPORT wxWindow;
+class WXDLLEXPORT wxApp ;
+class WXDLLEXPORT wxKeyEvent;
+class WXDLLEXPORT wxLog;
 
 #define wxPRINT_WINDOWS         1
 #define wxPRINT_POSTSCRIPT      2
 
-//-----------------------------------------------------------------------------
-// wxApp
-//-----------------------------------------------------------------------------
+WXDLLEXPORT_DATA(extern wxApp*) wxTheApp;
 
-class wxApp: public wxEvtHandler
+void WXDLLEXPORT wxCleanUp();
+void WXDLLEXPORT wxCommonCleanUp(); // Call this from the platform's wxCleanUp()
+void WXDLLEXPORT wxCommonInit();    // Call this from the platform's initialization
+
+// Force an exit from main loop
+void WXDLLEXPORT wxExit();
+
+// Yield to other apps/messages
+bool WXDLLEXPORT wxYield();
+
+// Represents the application. Derive OnInit and declare
+// a new App object to start application
+class WXDLLEXPORT wxApp: public wxEvtHandler
 {
   DECLARE_DYNAMIC_CLASS(wxApp)
+  wxApp();
+  inline ~wxApp() {}
 
-  public:
-  
-    wxApp(void);
-    ~wxApp(void);
-    
-    static void SetInitializerFunction(wxAppInitializerFunction fn) { m_appInitFn = fn; }
-    static wxAppInitializerFunction GetInitializerFunction(void) { return m_appInitFn; }
-    
-    virtual bool OnInit(void);
-    virtual bool OnInitGui(void);
-    virtual int OnRun(void);
-    virtual int OnExit(void);
-    
-    wxWindow *GetTopWindow(void);
-    void SetTopWindow( wxWindow *win );
-    virtual int MainLoop(void);
-    void ExitMainLoop(void);
-    bool Initialized(void);
-    virtual bool Pending(void);
-    virtual void Dispatch(void);
+  static void SetInitializerFunction(wxAppInitializerFunction fn) { m_appInitFn = fn; }
+  static wxAppInitializerFunction GetInitializerFunction() { return m_appInitFn; }
 
-    inline void SetWantDebugOutput(bool flag) { m_wantDebugOutput = flag; }
-    inline bool GetWantDebugOutput(void) { return m_wantDebugOutput; }
+  virtual int MainLoop();
+  void ExitMainLoop();
+  bool Initialized();
+  virtual bool Pending() ;
+  virtual void Dispatch() ;
 
-    void OnIdle( wxIdleEvent &event );    
-    bool SendIdleEvents(void);
-    bool SendIdleEvents( wxWindow* win );
-        
-    inline wxString GetAppName(void) const {
+  virtual void OnIdle(wxIdleEvent& event);
+
+// Generic
+  virtual bool OnInit() { return FALSE; };
+
+  // No specific tasks to do here.
+  virtual bool OnInitGui() { return TRUE; }
+
+  // Called to set off the main loop
+  virtual int OnRun() { return MainLoop(); };
+  virtual int OnExit() { return 0; }
+
+  inline void SetPrintMode(int mode) { m_printMode = mode; }
+  inline int GetPrintMode() const { return m_printMode; }
+
+  inline void SetExitOnFrameDelete(bool flag) { m_exitOnFrameDelete = flag; }
+  inline bool GetExitOnFrameDelete() const { return m_exitOnFrameDelete; }
+
+  inline wxString GetAppName() const {
       if (m_appName != "")
         return m_appName;
       else return m_className;
     }
-    inline void SetAppName(const wxString& name) { m_appName = name; };
-    inline wxString GetClassName(void) const { return m_className; }
-    inline void SetClassName(const wxString& name) { m_className = name; }
-    const wxString& GetVendorName() const { return m_vendorName; }
-    void SetVendorName(const wxString& name) { m_vendorName = name; }
 
-    inline void SetExitOnFrameDelete(bool flag) { m_exitOnFrameDelete = flag; }
-    inline bool GetExitOnFrameDelete(void) const { return m_exitOnFrameDelete; }
-  
-    void SetPrintMode(int WXUNUSED(mode) ) {}; 
-    int GetPrintMode(void) const { return wxPRINT_POSTSCRIPT; };
-    
-    // override this function to create default log target of arbitrary
-    // user-defined classv (default implementation creates a wxLogGui object)
-    virtual wxLog *CreateLogTarget();
-    
-#if USE_WXCONFIG
-    // override this function to create a global wxConfig object of different
-    // than default type (right now the default implementation returns NULL)
-    virtual wxConfig *CreateConfig() { return NULL; }
-#endif
-    
-  // GTK implementation
+  inline void SetAppName(const wxString& name) { m_appName = name; };
+  inline wxString GetClassName() const { return m_className; }
+  inline void SetClassName(const wxString& name) { m_className = name; }
 
-    static void CommonInit(void);
-    static void CommonCleanUp(void);    
-    
-    bool ProcessIdle(void);
-    void DeletePendingObjects(void);
-    
-    bool          m_initialized;
-    bool          m_exitOnFrameDelete;
-    bool          m_wantDebugOutput;
-    wxWindow     *m_topWindow;
-    
-    int         argc;
-    char      **argv;
-    
-    static wxAppInitializerFunction m_appInitFn;
-    
-private:
-  wxString m_vendorName,
-           m_appName,
-           m_className;
+  void SetVendorName(const wxString& vendorName) { m_vendorName = vendorName; }
+  const wxString& GetVendorName() const { return m_vendorName; }
 
-  DECLARE_EVENT_TABLE()
+  wxWindow *GetTopWindow() const ;
+  inline void SetTopWindow(wxWindow *win) { m_topWindow = win; }
+
+  inline void SetWantDebugOutput(bool flag) { m_wantDebugOutput = flag; }
+  inline bool GetWantDebugOutput() { return m_wantDebugOutput; }
+
+  // Send idle event to all top-level windows.
+  // Returns TRUE if more idle time is requested.
+  bool SendIdleEvents();
+
+  // Send idle event to window and all subwindows
+  // Returns TRUE if more idle time is requested.
+  bool SendIdleEvents(wxWindow* win);
+
+  // Windows only, but for compatibility...
+  inline void SetAuto3D(bool flag) { m_auto3D = flag; }
+  inline bool GetAuto3D() const { return m_auto3D; }
+
+  // Creates a log object
+  virtual wxLog* CreateLogTarget();
+
+public:
+  // Will always be set to the appropriate, main-style values.
+  int                   argc;
+  char **               argv;
+
+protected:
+  bool                  m_wantDebugOutput ;
+  wxString              m_className;
+  wxString              m_appName,
+                        m_vendorName;
+  wxWindow *            m_topWindow;
+  bool                  m_exitOnFrameDelete;
+  bool                  m_showOnInit;
+  int                   m_printMode; // wxPRINT_WINDOWS, wxPRINT_POSTSCRIPT
+  bool                  m_auto3D ;   // Always use 3D controls, except
+                                 // where overriden
+  static wxAppInitializerFunction	m_appInitFn;
+
+public:
+
+  // Implementation
+  static void CommonInit();
+  static void CommonCleanUp();
+  void DeletePendingObjects();
+  bool ProcessIdle();
+
+public:
+  static long           sm_lastMessageTime;
+  int                   m_nCmdShow;
+
+protected:
+  bool                  m_keepGoing ;
+
+DECLARE_EVENT_TABLE()
 };
 
-#endif // __GTKAPPH__
+// TODO: add platform-specific arguments
+int WXDLLEXPORT wxEntry( int argc, char *argv[] );
+
+#endif
+    // _WX_APP_H_
+

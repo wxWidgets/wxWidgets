@@ -1,147 +1,185 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        slider.cpp
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     wxSlider
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
-
 
 #ifdef __GNUG__
 #pragma implementation "slider.h"
 #endif
 
-#include "wx/slider.h"
-#include "wx/utils.h"
+#include "wx/msw/slider.h"
 
-//-----------------------------------------------------------------------------
-// wxSlider
-//-----------------------------------------------------------------------------
+#if !USE_SHARED_LIBRARY
+IMPLEMENT_DYNAMIC_CLASS(wxSlider, wxControl)
+#endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxSlider,wxControl)
-
-wxSlider::wxSlider(void)
+// Slider
+wxSlider::wxSlider()
 {
-};
-
-wxSlider::wxSlider( wxWindow *parent, wxWindowID id,
-        int value, int minValue, int maxValue,
-        const wxPoint& pos, const wxSize& size,
-        long style,
-/*      const wxValidator& validator = wxDefaultValidator, */
-        const wxString& name )
-{
-  Create( parent, id, value, minValue, maxValue,
-          pos, size, style, name );
-};
-
-wxSlider::~wxSlider(void)
-{
-};
+  m_pageSize = 1;
+  m_lineSize = 1;
+  m_rangeMax = 0;
+  m_rangeMin = 0;
+  m_tickFreq = 0;
+}
 
 bool wxSlider::Create(wxWindow *parent, wxWindowID id,
-        int value, int minValue, int maxValue,
-        const wxPoint& pos, const wxSize& size,
-        long style,
-/*      const wxValidator& validator = wxDefaultValidator, */
-        const wxString& name )
+           int value, int minValue, int maxValue,
+           const wxPoint& pos,
+           const wxSize& size, long style,
+           const wxValidator& validator,
+           const wxString& name)
 {
-  return TRUE;
-};
+    SetName(name);
+    SetValidator(validator);
 
-int wxSlider::GetValue(void) const
-{
-};
+    if (parent) parent->AddChild(this);
 
-void wxSlider::SetValue( int value )
-{
-};
+    m_lineSize = 1;
+    m_windowStyle = style;
+    m_tickFreq = 0;
 
-void wxSlider::SetRange( int minValue, int maxValue )
-{
-};
+    if ( id == -1 )
+  	    m_windowId = (int)NewControlId();
+    else
+	    m_windowId = id;
 
-int wxSlider::GetMin(void) const
-{
-};
+    m_rangeMax = maxValue;
+    m_rangeMin = minValue;
 
-int wxSlider::GetMax(void) const
-{
-};
+    m_pageSize = (int)((maxValue-minValue)/10);
 
-void wxSlider::SetPageSize( int pageSize )
-{
-};
+    // TODO create slider
 
-int wxSlider::GetPageSize(void) const
-{
-};
+    return FALSE;
+}
 
-void wxSlider::SetThumbLength( int len )
+wxSlider::~wxSlider()
 {
-};
+}
 
-int wxSlider::GetThumbLength(void) const
+int wxSlider::GetValue() const
 {
-};
+    // TODO
+    return 0;
+}
 
-void wxSlider::SetLineSize( int WXUNUSED(lineSize) )
+void wxSlider::SetValue(int value)
 {
-};
+    // TODO
+}
 
-int wxSlider::GetLineSize(void) const
+void wxSlider::GetSize(int *width, int *height) const
 {
-};
+    // TODO
+}
 
-void wxSlider::GetSize( int *x, int *y ) const
+void wxSlider::GetPosition(int *x, int *y) const
 {
-  wxWindow::GetSize( x, y );
-};
+    // TODO
+}
 
-void wxSlider::SetSize( int x, int y, int width, int height, int sizeFlags )
+void wxSlider::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
-  wxWindow::SetSize( x, y, width, height, sizeFlags );
-};
+    // TODO
+}
 
-void wxSlider::GetPosition( int *x, int *y ) const
+void wxSlider::SetRange(int minValue, int maxValue)
 {
-  wxWindow::GetPosition( x, y );
-};
+    m_rangeMin = minValue;
+    m_rangeMax = maxValue;
 
-void wxSlider::SetTick( int WXUNUSED(tickPos) )
-{
-};
+    // TODO
+}
 
-void wxSlider::SetTickFreq( int WXUNUSED(n), int WXUNUSED(pos) )
+// For trackbars only
+void wxSlider::SetTickFreq(int n, int pos)
 {
-};
+    // TODO
+    m_tickFreq = n;
+}
 
-int wxSlider::GetTickFreq(void) const
+void wxSlider::SetPageSize(int pageSize)
 {
-  return 0;
-};
+    // TODO
+    m_pageSize = pageSize;
+}
 
-void wxSlider::ClearTicks(void)
+int wxSlider::GetPageSize() const
 {
-};
+    return m_pageSize;
+}
 
-void wxSlider::SetSelection( int WXUNUSED(minPos), int WXUNUSED(maxPos) )
+void wxSlider::ClearSel()
 {
-};
+    // TODO
+}
 
-int wxSlider::GetSelEnd(void) const
+void wxSlider::ClearTicks()
 {
-  return 0;
-};
+    // TODO
+}
 
-int wxSlider::GetSelStart(void) const
+void wxSlider::SetLineSize(int lineSize)
 {
-  return 0;
-};
+    m_lineSize = lineSize;
+    // TODO
+}
 
-void wxSlider::ClearSel(void)
+int wxSlider::GetLineSize() const
 {
-};
+    // TODO
+    return 0;
+}
+
+int wxSlider::GetSelEnd() const
+{
+    // TODO
+    return 0;
+}
+
+int wxSlider::GetSelStart() const
+{
+    // TODO
+    return 0;
+}
+
+void wxSlider::SetSelection(int minPos, int maxPos)
+{
+    // TODO
+}
+
+void wxSlider::SetThumbLength(int len)
+{
+    // TODO
+}
+
+int wxSlider::GetThumbLength() const
+{
+    // TODO
+    return 0;
+}
+
+void wxSlider::SetTick(int tickPos)
+{
+    // TODO
+}
+
+void wxSlider::Command (wxCommandEvent & event)
+{
+  SetValue (event.GetInt());
+  ProcessCommand (event);
+}
+
+bool wxSlider::Show(bool show)
+{
+    // TODO
+    return TRUE;
+}
 

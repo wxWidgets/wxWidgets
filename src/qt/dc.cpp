@@ -1,19 +1,23 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dc.cpp
-// Purpose:
-// Author:      Robert Roebling
+// Purpose:     wxDC class
+// Author:      AUTHOR
+// Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
-
 
 #ifdef __GNUG__
 #pragma implementation "dc.h"
 #endif
 
 #include "wx/dc.h"
+
+#if !USE_SHARED_LIBRARY
+IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
+#endif
 
 //-----------------------------------------------------------------------------
 // constants
@@ -87,12 +91,7 @@ wxDC::~wxDC(void)
 {
 };
 
-void wxDC::DrawArc( long WXUNUSED(x1), long WXUNUSED(y1), long WXUNUSED(x2), long WXUNUSED(y2), 
-  double WXUNUSED(xc), double WXUNUSED(yc) )
-{
-};
-
-void wxDC::DrawIcon( const wxIcon &WXUNUSED(icon), long WXUNUSED(x), long WXUNUSED(y), bool WXUNUSED(useMask) ) 
+void wxDC::DrawIcon( const wxIcon &WXUNUSED(icon), long WXUNUSED(x), long WXUNUSED(y), bool WXUNUSED(useMask) )
 {
 };
 

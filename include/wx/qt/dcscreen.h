@@ -1,16 +1,20 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dcscreen.h
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     wxScreenDC class
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WX_DCSCREEN_H_
+#define _WX_DCSCREEN_H_
 
-#ifndef __GTKDCSCREENH__
-#define __GTKDCSCREENH__
+#ifdef __GNUG__
+#pragma interface "dcscreen.h"
+#endif
 
 #include "wx/dcclient.h"
 
@@ -19,14 +23,17 @@ class WXDLLEXPORT wxScreenDC: public wxPaintDC
   DECLARE_DYNAMIC_CLASS(wxScreenDC)
 
  public:
-  wxScreenDC(void);
-  ~wxScreenDC(void);
+  // Create a DC representing the whole screen
+  wxScreenDC();
+  ~wxScreenDC();
 
-  static bool StartDrawingOnTop( wxWindow *window );
-  static bool StartDrawingOnTop( wxRectangle *rect = NULL );
-  static bool EndDrawingOnTop(void);
+  // Compatibility with X's requirements for
+  // drawing on top of all windows
+  static bool StartDrawingOnTop(wxWindow* WXUNUSED(window)) { return TRUE; }
+  static bool StartDrawingOnTop(wxRectangle* WXUNUSED(rect) = NULL) { return TRUE; }
+  static bool EndDrawingOnTop() { return TRUE; }
 };
 
 #endif
-    // __GTKDCSCREENH__
+    // _WX_DCSCREEN_H_
 

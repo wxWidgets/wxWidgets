@@ -1,75 +1,68 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        colour.h
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     wxColour class
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifndef __GTKCOLOURH__
-#define __GTKCOLOURH__
+#ifndef _WX_COLOUR_H_
+#define _WX_COLOUR_H_
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "colour.h"
 #endif
 
-#include "wx/defs.h"
-#include "wx/object.h"
-#include "wx/string.h"
-#include "wx/gdiobj.h"
-#include "wx/palette.h"
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class wxDC;
-class wxPaintDC;
-class wxBitmap;
-class wxWindow;
-
-class wxColour;
-
-//-----------------------------------------------------------------------------
-// wxColour
-//-----------------------------------------------------------------------------
-
-class wxColour: public wxGDIObject
+// Colour
+class WXDLLEXPORT wxColour: public wxObject
 {
   DECLARE_DYNAMIC_CLASS(wxColour)
+public:
+  wxColour();
+  wxColour(unsigned char r, unsigned char g, unsigned char b);
+  wxColour(unsigned long colRGB) { Set(colRGB); }
+  wxColour(const wxColour& col);
+  wxColour(const wxString& col);
+  ~wxColour() ;
+  wxColour& operator =(const wxColour& src) ;
+  wxColour& operator =(const wxString& src) ;
+  inline int Ok() const { return (m_isInit) ; }
 
-  public:
+  void Set(unsigned char r, unsigned char g, unsigned char b);
+  void Set(unsigned long colRGB) 
+  { 
+    // we don't need to know sizeof(long) here because we assume that the three
+    // least significant bytes contain the R, G and B values
+    Set((unsigned char)colRGB, 
+        (unsigned char)(colRGB >> 8),
+        (unsigned char)(colRGB >> 16)); 
+  }
 
-    wxColour(void);
-    wxColour( char red, char green, char blue );
-    wxColour( const wxString &colourName );
-    wxColour( const wxColour& col );
-    wxColour( const wxColour* col );
-    ~wxColour(void);
-    wxColour& operator = ( const wxColour& col );
-    wxColour& operator = ( const wxString& colourName );
-    bool operator == ( const wxColour& col );
-    bool operator != ( const wxColour& col );
-    void Set( const unsigned char red, const unsigned char green, const unsigned char blue );
-    unsigned char Red(void) const;
-    unsigned char Green(void) const;
-    unsigned char Blue(void) const;
-    bool Ok(void) const;
+  inline unsigned char Red() const { return m_red; }
+  inline unsigned char Green() const { return m_green; }
+  inline unsigned char Blue() const { return m_blue; }
 
-  private:
-  public:
-  
-    friend wxDC;
-    friend wxPaintDC;
-    friend wxBitmap;
-    friend wxWindow;
-        
-    int GetPixel(void);
-    
-    // no data :-)
+  inline bool operator == (const wxColour& colour) { return (m_red == colour.m_red && m_green == colour.m_green && m_blue == colour.m_blue); }
+
+  inline bool operator != (const wxColour& colour) { return (!(m_red == colour.m_red && m_green == colour.m_green && m_blue == colour.m_blue)); }
+
+  WXCOLORREF GetPixel() const { return m_pixel; };
+
+ private:
+  bool 			m_isInit;
+  unsigned char m_red;
+  unsigned char m_blue;
+  unsigned char m_green;
+ public:
+/* TODO: implementation
+  WXCOLORREF m_pixel ;
+*/
 };
-  
-#endif // __GTKCOLOURH__
+
+#define wxColor wxColour
+
+#endif
+	// _WX_COLOUR_H_

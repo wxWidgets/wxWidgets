@@ -1,11 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        statbox.cpp
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
-// Licence:     wxWindows licence
+// Purpose:     wxStaticBox
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -14,25 +15,48 @@
 
 #include "wx/statbox.h"
 
-//-----------------------------------------------------------------------------
-// wxStaticBox
-//-----------------------------------------------------------------------------
+#if !USE_SHARED_LIBRARY
+IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticBox,wxControl)
+BEGIN_EVENT_TABLE(wxStaticBox, wxControl)
+	EVT_ERASE_BACKGROUND(wxStaticBox::OnEraseBackground)
+END_EVENT_TABLE()
 
-wxStaticBox::wxStaticBox(void)
+#endif
+
+/*
+ * Static box
+ */
+ 
+bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
+           const wxString& label,
+           const wxPoint& pos,
+           const wxSize& size,
+           long style,
+           const wxString& name)
 {
-};
+    SetName(name);
 
-wxStaticBox::wxStaticBox( wxWindow *parent, wxWindowID id, const wxString &label,
-      const wxPoint &pos, const wxSize &size,
-      long style, const wxString &name )
-{
-  Create( parent, id, label, pos, size, style, name );
-};
+    if (parent) parent->AddChild(this);
 
-bool wxStaticBox::Create( wxWindow *parent, wxWindowID id, const wxString &label,
-      const wxPoint &pos, const wxSize &size,
-      long style, const wxString &name )
+    if ( id == -1 )
+  	    m_windowId = (int)NewControlId();
+    else
+	    m_windowId = id;
+
+    m_windowStyle = style;
+
+    // TODO: create static box
+    return FALSE;
+}
+
+void wxStaticBox::SetLabel(const wxString& label)
 {
-};
+    // TODO
+}
+
+void wxStaticBox::SetSize(int x, int y, int width, int height, int sizeFlags)
+{
+    // TODO
+}
+

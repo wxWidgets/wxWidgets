@@ -1,10 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        brush.cpp
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     wxBrush
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -12,121 +13,150 @@
 #pragma implementation "brush.h"
 #endif
 
+#include "wx/setup.h"
+#include "wx/utils.h"
 #include "wx/brush.h"
 
-//-----------------------------------------------------------------------------
-// wxBrush
-//-----------------------------------------------------------------------------
+#if !USE_SHARED_LIBRARIES
+IMPLEMENT_DYNAMIC_CLASS(wxBrush, wxGDIObject)
+#endif
 
-class wxBrushRefData: public wxObjectRefData
+wxBrushRefData::wxBrushRefData()
 {
-  public:
-  
-    wxBrushRefData(void);
-  
-    int        m_style;
-    wxBitmap   m_stipple;
-    wxColour   m_colour;
-};
+    m_style = wxSOLID;
+// TODO: null data
+}
 
-wxBrushRefData::wxBrushRefData(void)
+wxBrushRefData::wxBrushRefData(const wxBrushRefData& data)
 {
-  m_style = 0;
-};
+  m_style = data.m_style;
+  m_stipple = data.m_stipple;
+  m_colour = data.m_colour;
+/* TODO: null data
+  m_hBrush = 0;
+*/
+}
 
-//-----------------------------------------------------------------------------
-
-#define M_BRUSHDATA ((wxBrushRefData *)m_refData)
-
-IMPLEMENT_DYNAMIC_CLASS(wxBrush,wxGDIObject)
-
-wxBrush::wxBrush(void)
+wxBrushRefData::~wxBrushRefData()
 {
-  if (wxTheBrushList) wxTheBrushList->AddBrush( this );
-};
+// TODO: delete data
+}
 
-wxBrush::wxBrush( const wxColour &colour, int style )
+// Brushes
+wxBrush::wxBrush()
 {
-  m_refData = new wxBrushRefData();
-  M_BRUSHDATA->m_style = style;
-  M_BRUSHDATA->m_colour = colour;
-  
-  if (wxTheBrushList) wxTheBrushList->AddBrush( this );
-};
+    if ( wxTheBrushList )
+        wxTheBrushList->AddBrush(this);
+}
 
-wxBrush::wxBrush( const wxString &colourName, int style )
+wxBrush::~wxBrush()
 {
-  m_refData = new wxBrushRefData();
-  M_BRUSHDATA->m_style = style;
-  M_BRUSHDATA->m_colour = colourName;
-  
-  if (wxTheBrushList) wxTheBrushList->AddBrush( this );
-};
+    if ( wxTheBrushList )
+        wxTheBrushList->RemoveBrush(this);
+}
 
-wxBrush::wxBrush( const wxBitmap &stippleBitmap )
+wxBrush::wxBrush(const wxColour& col, int Style)
 {
-  m_refData = new wxBrushRefData();
-  M_BRUSHDATA->m_style = wxSTIPPLE;
-  M_BRUSHDATA->m_colour = *wxBLACK;
-  M_BRUSHDATA->m_stipple = stippleBitmap;
-  
-  if (wxTheBrushList) wxTheBrushList->AddBrush( this );
-};
+    m_refData = new wxBrushRefData;
 
-wxBrush::wxBrush( const wxBrush &brush )
-{
-  Ref( brush );
-  
-  if (wxTheBrushList) wxTheBrushList->AddBrush( this );
-};
+    M_BRUSHDATA->m_colour = col;
+    M_BRUSHDATA->m_style = Style;
 
-wxBrush::wxBrush( const wxBrush *brush )
-{
-  if (brush) Ref( *brush );
-  
-  if (wxTheBrushList) wxTheBrushList->Append( this );
-};
+    RealizeResource();
 
-wxBrush::~wxBrush(void)
-{
-  if (wxTheBrushList) wxTheBrushList->RemoveBrush( this );
-};
+    if ( wxTheBrushList )
+        wxTheBrushList->AddBrush(this);
+}
 
-wxBrush& wxBrush::operator = ( const wxBrush& brush )
+wxBrush::wxBrush(const wxString& col, int Style)
 {
-  if (*this == brush) return (*this); 
-  Ref( brush ); 
-  return *this; 
-};
-  
-bool wxBrush::operator == ( const wxBrush& brush )
-{
-  return m_refData == brush.m_refData; 
-};
+    m_refData = new wxBrushRefData;
 
-bool wxBrush::operator != ( const wxBrush& brush )
-{
-  return m_refData != brush.m_refData; 
-};
+    // Implicit conversion from string to wxColour via colour database
+    M_BRUSHDATA->m_colour = col;
+    M_BRUSHDATA->m_style = Style;
 
-bool wxBrush::Ok(void) const
-{
-  return ((m_refData) && M_BRUSHDATA->m_colour.Ok());
-};
+    RealizeResource();
 
-int wxBrush::GetStyle(void) const
-{
-  return M_BRUSHDATA->m_style;
-};
+    if ( wxTheBrushList )
+        wxTheBrushList->AddBrush(this);
+}
 
-wxColour &wxBrush::GetColour(void) const
+wxBrush::wxBrush(const wxBitmap& stipple)
 {
-  return M_BRUSHDATA->m_colour;
-};
+    m_refData = new wxBrushRefData;
 
-wxBitmap *wxBrush::GetStipple(void) const
+    M_BRUSHDATA->m_style = wxSTIPPLE;
+    M_BRUSHDATA->m_stipple = stipple;
+
+    RealizeResource();
+
+    if ( wxTheBrushList )
+        wxTheBrushList->AddBrush(this);
+}
+
+void wxBrush::Unshare()
 {
-  return &M_BRUSHDATA->m_stipple;
-};
+	// Don't change shared data
+	if (!m_refData)
+    {
+		m_refData = new wxBrushRefData();
+	}
+    else
+    {
+		wxBrushRefData* ref = new wxBrushRefData(*(wxBrushRefData*)m_refData);
+		UnRef();
+		m_refData = ref;
+	}
+}
 
+void wxBrush::SetColour(const wxColour& col)
+{
+    Unshare();
+
+    M_BRUSHDATA->m_colour = col;
+
+    RealizeResource();
+}
+
+void wxBrush::SetColour(const wxString& col)
+{
+    Unshare();
+
+    M_BRUSHDATA->m_colour = col;
+
+    RealizeResource();
+}
+
+void wxBrush::SetColour(const unsigned char r, const unsigned char g, const unsigned char b)
+{
+    Unshare();
+
+    M_BRUSHDATA->m_colour.Set(r, g, b);
+
+    RealizeResource();
+}
+
+void wxBrush::SetStyle(int Style)
+{
+    Unshare();
+
+    M_BRUSHDATA->m_style = Style;
+
+    RealizeResource();
+}
+
+void wxBrush::SetStipple(const wxBitmap& Stipple)
+{
+    Unshare();
+
+    M_BRUSHDATA->m_stipple = Stipple;
+
+    RealizeResource();
+}
+
+void wxBrush::RealizeResource()
+{
+// TODO: create the brush
+}
 

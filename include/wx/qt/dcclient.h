@@ -1,29 +1,32 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dcclient.h
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     wxClientDC, wxPaintDC and wxWindowDC classes
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifndef __GTKDCCLIENTH__
-#define __GTKDCCLIENTH__
+#ifndef _WX_DCCLIENT_H_
+#define _WX_DCCLIENT_H_
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "dcclient.h"
 #endif
 
 #include "wx/dc.h"
-#include "wx/window.h"
 
 //-----------------------------------------------------------------------------
 // classes
 //-----------------------------------------------------------------------------
 
-class wxPaintDC;
+class WXDLLEXPORT wxPaintDC;
+
+// Under Windows, wxClientDC, wxPaintDC and wxWindowDC are implemented differently.
+// On many platforms, however, they will be the same.
+
 typedef wxPaintDC wxClientDC;
 typedef wxPaintDC wxWindowDC;
 
@@ -31,7 +34,7 @@ typedef wxPaintDC wxWindowDC;
 // wxPaintDC
 //-----------------------------------------------------------------------------
 
-class wxPaintDC: public wxDC
+class WXDLLEXPORT wxPaintDC: public wxDC
 {
   DECLARE_DYNAMIC_CLASS(wxPaintDC)
 
@@ -91,7 +94,7 @@ class wxPaintDC: public wxDC
     virtual void DestroyClippingRegion(void);
     
     virtual void DrawOpenSpline( wxList *points );
-    
 };
 
-#endif // __GTKDCCLIENTH__
+#endif
+    // _WX_DCCLIENT_H_

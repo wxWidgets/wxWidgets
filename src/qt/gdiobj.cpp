@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        gdiobj.cpp
 // Purpose:     wxGDIObject class
-// Author:      Julian Smart
+// Author:      AUTHOR
 // Modified by:
-// Created:     01/02/97
+// Created:     ??/??/98
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -19,3 +19,4 @@
 IMPLEMENT_DYNAMIC_CLASS(wxGDIObject, wxObject)
 #endif
 
+// TODO: Nothing to do, unless you want to.

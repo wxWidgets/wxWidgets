@@ -1,10 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dialog.cpp
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     wxDialog class
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -13,179 +14,281 @@
 #endif
 
 #include "wx/dialog.h"
+#include "wx/utils.h"
 #include "wx/frame.h"
 #include "wx/app.h"
+#include "wx/settings.h"
 
-//-----------------------------------------------------------------------------
-
+// Lists to keep track of windows, so we can disable/enable them
+// for modal dialogs
+wxList wxModalDialogs;
+wxList wxModelessWindows;  // Frames and modeless dialogs
 extern wxList wxPendingDelete;
 
-//-----------------------------------------------------------------------------
-// wxDialog
-//-----------------------------------------------------------------------------
+#if !USE_SHARED_LIBRARY
+IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxPanel)
 
-BEGIN_EVENT_TABLE(wxDialog,wxWindow)
-  EVT_BUTTON  (wxID_OK,       wxDialog::OnOk)
-  EVT_BUTTON  (wxID_CANCEL,   wxDialog::OnCancel)
-  EVT_BUTTON  (wxID_APPLY,    wxDialog::OnApply)
-  EVT_CLOSE   (wxDialog::OnCloseWindow)
+BEGIN_EVENT_TABLE(wxDialog, wxPanel)
+  EVT_BUTTON(wxID_OK, wxDialog::OnOK)
+  EVT_BUTTON(wxID_APPLY, wxDialog::OnApply)
+  EVT_BUTTON(wxID_CANCEL, wxDialog::OnCancel)
+  EVT_CHAR_HOOK(wxDialog::OnCharHook)
+  EVT_SYS_COLOUR_CHANGED(wxDialog::OnSysColourChanged)
+  EVT_CLOSE(wxDialog::OnCloseWindow)
 END_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS(wxDialog,wxWindow)
+#endif
 
-wxDialog::wxDialog(void)
+wxDialog::wxDialog()
 {
-  m_title = "";
-  m_modalShowing = FALSE;
-  wxTopLevelWindows.Insert( this );
-};
+    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+}
 
-wxDialog::wxDialog( wxWindow *parent, 
-      wxWindowID id, const wxString &title,
-      const wxPoint &pos, const wxSize &size, 
-      long style, const wxString &name )
+bool wxDialog::Create(wxWindow *parent, wxWindowID id,
+           const wxString& title,
+           const wxPoint& pos,
+           const wxSize& size,
+           long style,
+           const wxString& name)
 {
-  m_modalShowing = FALSE;
-  wxTopLevelWindows.Insert( this );
-  Create( parent, id, title, pos, size, style, name );
-};
+  m_windowStyle = style;
 
-bool wxDialog::Create( wxWindow *parent,
-      wxWindowID id, const wxString &title,
-      const wxPoint &pos, const wxSize &size, 
-      long style, const wxString &name )
-{
-  return TRUE;
-};
+  SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+  SetName(name);
+  
+  if (!parent)
+    wxTopLevelWindows.Append(this);
 
-wxDialog::~wxDialog(void)
-{
-  wxTopLevelWindows.DeleteObject( this );
-  if (wxTopLevelWindows.Number() == 0) wxTheApp->ExitMainLoop();
-};
+  if (parent) parent->AddChild(this);
 
-void wxDialog::SetTitle(const wxString& title )
-{
-  m_title = title;
-};
-
-wxString wxDialog::GetTitle(void) const
-{
-  return (wxString&)m_title;
-};
-
-void wxDialog::OnApply( wxCommandEvent &WXUNUSED(event) )
-{
-  if (Validate()) TransferDataFromWindow();
-};
-
-void wxDialog::OnCancel( wxCommandEvent &WXUNUSED(event) )
-{
-  if (IsModal())
-  {
-    EndModal(wxID_CANCEL);
-  }
+  if ( id == -1 )
+  	m_windowId = (int)NewControlId();
   else
-  {
-    SetReturnCode(wxID_CANCEL);
-    this->Show(FALSE);
-  };
-};
+	m_windowId = id;
 
-void wxDialog::OnOk( wxCommandEvent &WXUNUSED(event) )
-{
-  if ( Validate() && TransferDataFromWindow())
-  {
-    if (IsModal()) 
-    {
-      EndModal(wxID_OK);
-    }
-    else
-    {
-      SetReturnCode(wxID_OK);
-      this->Show(FALSE);
-    };
-  };
-};
+  // TODO: create dialog
 
-void wxDialog::OnPaint( wxPaintEvent& WXUNUSED(event) )
-{
-  // yes
-};
-
-bool wxDialog::OnClose(void)
-{
-  static wxList closing;
-
-  if (closing.Member(this)) return FALSE;   // no loops
-  
-  closing.Append(this);
-
-  wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
-  cancelEvent.SetEventObject( this );
-  GetEventHandler()->ProcessEvent(cancelEvent);
-  closing.DeleteObject(this);
-  
   return FALSE;
 }
 
-bool wxDialog::Destroy(void)
+void wxDialog::SetModal(bool flag)
 {
-  if (!wxPendingDelete.Member(this))
-    wxPendingDelete.Append(this);
+	if ( flag )
+		m_windowStyle |= wxDIALOG_MODAL ;
+	else
+		if ( m_windowStyle & wxDIALOG_MODAL )
+  			m_windowStyle -= wxDIALOG_MODAL ;
+  
+  wxModelessWindows.DeleteObject(this);
+  if (!flag)
+    wxModelessWindows.Append(this);
+}
 
-  return TRUE;
+wxDialog::~wxDialog()
+{
+    // TODO
+    wxTopLevelWindows.DeleteObject(this);
+
+    if ( (GetWindowStyleFlag() & wxDIALOG_MODAL) != wxDIALOG_MODAL )
+      wxModelessWindows.DeleteObject(this);
+
+    // If this is the last top-level window, exit.
+    if (wxTheApp && (wxTopLevelWindows.Number() == 0))
+    {
+      wxTheApp->SetTopWindow(NULL);
+
+      if (wxTheApp->GetExitOnFrameDelete())
+      {
+         // TODO: exit
+      }
+    }
+}
+
+// By default, pressing escape cancels the dialog
+void wxDialog::OnCharHook(wxKeyEvent& event)
+{
+  if (GetHWND())
+  {
+    if (event.m_keyCode == WXK_ESCAPE)
+    {
+		// Behaviour changed in 2.0: we'll send a Cancel message
+		// to the dialog instead of Close.
+		wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
+		cancelEvent.SetEventObject( this );
+		GetEventHandler()->ProcessEvent(cancelEvent);
+
+		return;
+    }
+  }
+  // We didn't process this event.
+  event.Skip();
+}
+
+void wxDialog::Iconize(bool WXUNUSED(iconize))
+{
+    // TODO
+}
+
+bool wxDialog::IsIconized() const
+{
+    // TODO
+    return FALSE;
+}
+
+void wxDialog::SetClientSize(int width, int height)
+{
+    // TODO
+}
+
+void wxDialog::GetPosition(int *x, int *y) const
+{
+    // TODO
+}
+
+bool wxDialog::Show(bool show)
+{
+    // TODO
+    return FALSE;
+}
+
+void wxDialog::SetTitle(const wxString& title)
+{
+    // TODO
+}
+
+wxString wxDialog::GetTitle() const
+{
+    // TODO
+    return wxString("");
+}
+
+void wxDialog::Centre(int direction)
+{
+  int x_offset,y_offset ;
+  int display_width, display_height;
+  int  width, height, x, y;
+  wxFrame *frame ;
+  if (direction & wxCENTER_FRAME)
+  {
+    frame = (wxFrame*)GetParent() ;
+    if (frame)
+    {
+      frame->GetPosition(&x_offset,&y_offset) ;
+      frame->GetSize(&display_width,&display_height) ;
+    }
+  }
+  else
+    frame = NULL ;
+
+  if (frame==NULL)
+  {
+    wxDisplaySize(&display_width, &display_height);
+    x_offset = 0 ;
+    y_offset = 0 ;
+  }
+
+  GetSize(&width, &height);
+  GetPosition(&x, &y);
+
+  if (direction & wxHORIZONTAL)
+    x = (int)((display_width - width)/2);
+  if (direction & wxVERTICAL)
+    y = (int)((display_height - height)/2);
+
+  SetSize(x+x_offset, y+y_offset, width, height);
+}
+
+// Replacement for Show(TRUE) for modal dialogs - returns return code
+int wxDialog::ShowModal()
+{
+    m_windowStyle |= wxDIALOG_MODAL;
+    // TODO: modal showing
+	Show(TRUE);
+	return GetReturnCode();
+}
+
+void wxDialog::EndModal(int retCode)
+{
+	SetReturnCode(retCode);
+    // TODO modal un-showing
+	Show(FALSE);
+}
+
+// Standard buttons
+void wxDialog::OnOK(wxCommandEvent& event)
+{
+	if ( Validate() && TransferDataFromWindow() )
+	{
+        if ( IsModal() )
+            EndModal(wxID_OK);
+        else
+        {
+		    SetReturnCode(wxID_OK);
+		    this->Show(FALSE);
+        }
+	}
+}
+
+void wxDialog::OnApply(wxCommandEvent& event)
+{
+	if (Validate())
+		TransferDataFromWindow();
+	// TODO probably need to disable the Apply button until things change again
+}
+
+void wxDialog::OnCancel(wxCommandEvent& event)
+{
+    if ( IsModal() )
+        EndModal(wxID_CANCEL);
+    else
+    {
+        SetReturnCode(wxID_CANCEL);
+		this->Show(FALSE);
+    }
+}
+
+bool wxDialog::OnClose()
+{
+	// Behaviour changed in 2.0: we'll send a Cancel message by default,
+    // which may close the dialog.
+    // Check for looping if the Cancel event handler calls Close()
+
+    static wxList closing;
+
+    if ( closing.Member(this) )
+        return FALSE;
+
+    closing.Append(this);
+
+	wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
+	cancelEvent.SetEventObject( this );
+	GetEventHandler()->ProcessEvent(cancelEvent);
+
+    closing.DeleteObject(this);
+
+	return FALSE;
 }
 
 void wxDialog::OnCloseWindow(wxCloseEvent& event)
 {
-  if (GetEventHandler()->OnClose() || event.GetForce())
-  {
-    this->Destroy();
-  };
-};
+    // Compatibility
+    if ( GetEventHandler()->OnClose() || event.GetForce())
+    {
+        this->Destroy();
+    }
+}
 
-bool wxDialog::Show( bool show )
+// Destroy the window (delayed, if a managed window)
+bool wxDialog::Destroy()
 {
-  if (!show && IsModal() && m_modalShowing)
-  {
-    EndModal( wxID_CANCEL );
-  };
-
-  wxWindow::Show( show );
-  
-  if (show) InitDialog();
-  
+  if (!wxPendingDelete.Member(this))
+    wxPendingDelete.Append(this);
   return TRUE;
-};
+}
 
-int wxDialog::ShowModal(void)
+void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
-  if (m_modalShowing) return GetReturnCode();
-
-  Show( TRUE );
-  
-  m_modalShowing = TRUE;
-  
-  // grab here
-  // main here
-  // release here
-  
-  return GetReturnCode();
-};
-
-void wxDialog::EndModal( int retCode )
-{
-  SetReturnCode( retCode );
-  
-  if (!m_modalShowing) return;
-  m_modalShowing = FALSE;
-  
-  // quit main 
-};
-
-void wxDialog::InitDialog(void)
-{
-  wxWindow::InitDialog();
-};
+  SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+  Refresh();
+}
 

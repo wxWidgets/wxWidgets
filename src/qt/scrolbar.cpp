@@ -1,102 +1,78 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        scrolbar.cpp
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     wxScrollBar
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
-
 
 #ifdef __GNUG__
 #pragma implementation "scrolbar.h"
 #endif
 
 #include "wx/scrolbar.h"
-#include "wx/utils.h"
 
-//-----------------------------------------------------------------------------
-// wxScrollBar
-//-----------------------------------------------------------------------------
+#if !USE_SHARED_LIBRARY
+IMPLEMENT_DYNAMIC_CLASS(wxScrollBar, wxControl)
 
-IMPLEMENT_DYNAMIC_CLASS(wxScrollBar,wxControl)
+#endif
 
-wxScrollBar::wxScrollBar(wxWindow *parent, wxWindowID id,
-           const wxPoint& pos, const wxSize& size,
-           long style, const wxString& name )
-{
-  Create( parent, id, pos, size, style, name );
-};
-
-wxScrollBar::~wxScrollBar(void)
-{
-};
-
+// Scrollbar
 bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
-           const wxPoint& pos, const wxSize& size,
-           long style, const wxString& name )
+           const wxPoint& pos,
+           const wxSize& size, long style,
+           const wxValidator& validator,
+           const wxString& name)
 {
-  return TRUE;
-};
+    if (!parent)
+        return FALSE;
+    parent->AddChild(this);
+    SetName(name);
+	SetValidator(validator);
+    
+    m_windowStyle = style;
 
-int wxScrollBar::GetPosition(void) const
-{
-};
+    if ( id == -1 )
+  	    m_windowId = (int)NewControlId();
+    else
+	    m_windowId = id;
 
-int wxScrollBar::GetThumbSize() const
-{
-};
+    // TODO create scrollbar
+    return TRUE;
+}
 
-int wxScrollBar::GetPageSize() const
+wxScrollBar::~wxScrollBar()
 {
-};
+}
 
-int wxScrollBar::GetRange() const
+void wxScrollBar::SetPosition(int viewStart)
 {
-};
+    // TODO
+}
 
-void wxScrollBar::SetPosition( int viewStart )
+int wxScrollBar::GetPosition() const
 {
-};
+    // TODO
+    return 0;
+}
 
-void wxScrollBar::SetScrollbar( int position, int thumbSize, int range, int pageSize,
-      bool WXUNUSED(refresh) )
+void wxScrollBar::SetScrollbar(int position, int thumbSize, int range, int pageSize,
+    bool refresh)
 {
-};
+    m_viewSize = pageSize;
+    m_pageSize = thumbSize;
+    m_objectSize = range;
 
-// Backward compatibility
-int wxScrollBar::GetValue(void) const
-{
-  return GetPosition();
-};
+    // TODO
+}
 
-void wxScrollBar::SetValue( int viewStart )
-{
-  SetPosition( viewStart );
-};
 
-void wxScrollBar::GetValues( int *viewStart, int *viewLength, int *objectLength, int *pageLength ) const
+void wxScrollBar::Command(wxCommandEvent& event)
 {
-};
-
-int wxScrollBar::GetViewLength() const
-{
-};
-
-int wxScrollBar::GetObjectLength() const
-{
-};
-
-void wxScrollBar::SetPageSize( int pageLength )
-{
-};
-
-void wxScrollBar::SetObjectLength( int objectLength )
-{
-};
-
-void wxScrollBar::SetViewLength( int viewLength )
-{
-};
+    SetValue(event.m_commandInt);
+    ProcessCommand(event);
+}
 

@@ -1,10 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        statbmp.cpp
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     wxStaticBitmap
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -14,31 +15,45 @@
 
 #include "wx/statbmp.h"
 
-//-----------------------------------------------------------------------------
-// wxStaticBitmap
-//-----------------------------------------------------------------------------
+#if !USE_SHARED_LIBRARY
+IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap, wxControl)
+#endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap,wxControl)
+/*
+ * wxStaticBitmap
+ */
 
-wxStaticBitmap::wxStaticBitmap(void)
+bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
+           const wxBitmap& bitmap,
+           const wxPoint& pos,
+           const wxSize& size,
+           long style,
+           const wxString& name)
 {
-};
+    m_messageBitmap = bitmap;
+    SetName(name);
+    if (parent) parent->AddChild(this);
 
-wxStaticBitmap::wxStaticBitmap( wxWindow *parent, wxWindowID id, const wxBitmap &bitmap, 
-      const wxPoint &pos, const wxSize &size, 
-      long style, const wxString &name )
-{
-  Create( parent, id, bitmap, pos, size, style, name );
-};
+    if ( id == -1 )
+  	    m_windowId = (int)NewControlId();
+    else
+	    m_windowId = id;
 
-bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bitmap, 
-      const wxPoint &pos, const wxSize &size, 
-      long style, const wxString &name )
-{
-  return TRUE;
-};
+    m_windowStyle = style;
 
-void wxStaticBitmap::SetBitmap( const wxBitmap &bitmap ) 
+    // TODO: create static bitmap control
+    return FALSE;
+}
+
+void wxStaticBitmap::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
-};
+    // TODO
+}
+
+void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
+{
+    m_messageBitmap = bitmap;
+
+    // TODO: redraw bitmap
+}
 

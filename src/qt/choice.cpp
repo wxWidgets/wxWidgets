@@ -1,97 +1,119 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        choice.cpp
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     wxChoice
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
-
 
 #ifdef __GNUG__
 #pragma implementation "choice.h"
 #endif
 
+// For compilers that support precompilation, includes "wx.h".
 #include "wx/choice.h"
 
-//-----------------------------------------------------------------------------
-// wxChoice
-//-----------------------------------------------------------------------------
+#if !USE_SHARED_LIBRARY
+IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControl)
+#endif
 
-//-----------------------------------------------------------------------------
+bool wxChoice::Create(wxWindow *parent, wxWindowID id,
+           const wxPoint& pos,
+           const wxSize& size,
+		   int n, const wxString choices[],
+		   long style,
+           const wxValidator& validator,
+           const wxString& name)
+{
+    SetName(name);
+    SetValidator(validator);
+    m_noStrings = n;
+    m_windowStyle = style;
 
-IMPLEMENT_DYNAMIC_CLASS(wxChoice,wxControl)
+    if (parent) parent->AddChild(this);
 
-wxChoice::wxChoice(void)
-{
-};
+    if ( id == -1 )
+    	m_windowId = (int)NewControlId();
+    else
+	m_windowId = id;
 
-wxChoice::wxChoice( wxWindow *parent, wxWindowID id,
-      const wxPoint &pos, const wxSize &size,
-      int n, const wxString choices[],
-      long style, const wxString &name )
-{
-  Create( parent, id, pos, size, n, choices, style, name );
-};
+    // TODO: create choice control
+    return FALSE;
+}
 
-bool wxChoice::Create( wxWindow *parent, wxWindowID id,
-      const wxPoint &pos, const wxSize &size,
-      int n, const wxString choices[],
-      long style, const wxString &name )
+void wxChoice::Append(const wxString& item)
 {
-  return TRUE;
-};
-      
-void wxChoice::Append( const wxString &WXUNUSED(item) )
-{
-};
- 
-void wxChoice::Clear(void)
-{
-};
+    // TODO
+    m_noStrings ++;
+}
 
-int wxChoice::FindString( const wxString &WXUNUSED(string) ) const
+void wxChoice::Delete(int n)
 {
-  return -1;
-};
+    // TODO
+    m_noStrings --;
+}
 
-int wxChoice::GetColumns(void) const
+void wxChoice::Clear()
 {
-  return 1;
-};
+    // TODO
+    m_noStrings = 0;
+}
 
-int wxChoice::GetSelection(void)
+int wxChoice::GetSelection() const
 {
-  return -1;
-};
+    // TODO
+    return 0;
+}
 
-wxString wxChoice::GetString( int WXUNUSED(n) ) const
+void wxChoice::SetSelection(int n)
 {
-  return "";
-};
+    // TODO
+}
 
-wxString wxChoice::GetStringSelection(void) const
+int wxChoice::FindString(const wxString& s) const
 {
-  return "";
-};
+    // TODO
+    return 0;
+}
 
-int wxChoice::Number(void) const
+wxString wxChoice::GetString(int n) const
 {
-  return 0;
-};
+    // TODO
+    return wxString("");
+}
 
-void wxChoice::SetColumns( int WXUNUSED(n) )
+void wxChoice::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
-};
+    // TODO
+}
 
-void wxChoice::SetSelection( int WXUNUSED(n) )
+wxString wxChoice::GetStringSelection () const
 {
-};
+    int sel = GetSelection ();
+    if (sel > -1)
+        return wxString(this->GetString (sel));
+    else
+        return wxString("");
+}
 
-void wxChoice::SetStringSelection( const wxString &string )
+bool wxChoice::SetStringSelection (const wxString& s)
 {
-  int n = FindString( string );
-  if (n != -1) SetSelection( n );
-};
+    int sel = FindString (s);
+    if (sel > -1)
+        {
+            SetSelection (sel);
+            return TRUE;
+        }
+    else
+        return FALSE;
+}
+
+void wxChoice::Command(wxCommandEvent & event)
+{
+    SetSelection (event.GetInt());
+    ProcessCommand (event);
+}
 

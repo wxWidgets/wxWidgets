@@ -1,91 +1,98 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dialog.h
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     wxDialog class
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifndef __GTKDIALOGH__
-#define __GTKDIALOGH__
+#ifndef _WX_DIALOG_H_
+#define _WX_DIALOG_H_
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "dialog.h"
 #endif
 
-#include "wx/defs.h"
-#include "wx/object.h"
-#include "wx/string.h"
-#include "wx/event.h"
-#include "wx/window.h"
+#include "wx/panel.h"
 
-//-----------------------------------------------------------------------------
-// forward decls
-//-----------------------------------------------------------------------------
+WXDLLEXPORT_DATA(extern const char*) wxDialogNameStr;
 
-class wxRadioBox;
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class wxDialog;
-
-//-----------------------------------------------------------------------------
-// global data
-//-----------------------------------------------------------------------------
-
-extern const char *wxDialogNameStr;
-
-//-----------------------------------------------------------------------------
-// wxDialog
-//-----------------------------------------------------------------------------
-
-class wxDialog: public wxWindow
+// Dialog boxes
+class WXDLLEXPORT wxDialog: public wxPanel
 {
   DECLARE_DYNAMIC_CLASS(wxDialog)
+public:
 
-  public:
+  wxDialog();
 
-    wxDialog(void);
-    wxDialog( wxWindow *parent, wxWindowID id, const wxString &title,
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      long style = wxDEFAULT_DIALOG_STYLE, const wxString &name = wxDialogNameStr );
-    bool Create( wxWindow *parent, wxWindowID id, const wxString &title,
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      long style = wxDEFAULT_DIALOG_STYLE, const wxString &name = wxDialogNameStr );
-    ~wxDialog(void);
-    void SetTitle(const wxString& title);
-    wxString GetTitle(void) const;
-    bool OnClose(void);
-    void OnApply( wxCommandEvent &event );
-    void OnCancel( wxCommandEvent &event );
-    void OnOk( wxCommandEvent &event );
-    void OnPaint(wxPaintEvent& event);
-    bool Destroy(void);
-    void OnCloseWindow(wxCloseEvent& event);
-/*
-    void OnCharHook(wxKeyEvent& event);
-*/
-    virtual bool Show( bool show );
-    virtual int ShowModal(void);
-    virtual void EndModal(int retCode);
-    virtual bool IsModal(void) const { return ((GetWindowStyleFlag() & wxDIALOG_MODAL) == wxDIALOG_MODAL); }
-    virtual void InitDialog(void);
-    
-  private:
-  
-    friend    wxWindow;
-    friend    wxDC;
-    friend    wxRadioBox;
-    bool       m_modalShowing;
-    wxString   m_title;
-    
-  DECLARE_EVENT_TABLE()
-    
+  // Constructor with a modal flag, but no window id - the old convention
+  inline wxDialog(wxWindow *parent,
+           const wxString& title, bool modal,
+           int x = -1, int y= -1, int width = 500, int height = 500,
+           long style = wxDEFAULT_DIALOG_STYLE,
+           const wxString& name = wxDialogNameStr)
+  {
+      long modalStyle = modal ? wxDIALOG_MODAL : wxDIALOG_MODELESS ;
+      Create(parent, -1, title, wxPoint(x, y), wxSize(width, height), style|modalStyle, name);
+  }
+
+  // Constructor with no modal flag - the new convention.
+  inline wxDialog(wxWindow *parent, wxWindowID id,
+           const wxString& title,
+           const wxPoint& pos = wxDefaultPosition,
+           const wxSize& size = wxDefaultSize,
+           long style = wxDEFAULT_DIALOG_STYLE,
+           const wxString& name = wxDialogNameStr)
+  {
+      Create(parent, id, title, pos, size, style, name);
+  }
+
+  bool Create(wxWindow *parent, wxWindowID id,
+           const wxString& title, // bool modal = FALSE, // TODO make this a window style?
+           const wxPoint& pos = wxDefaultPosition,
+           const wxSize& size = wxDefaultSize,
+           long style = wxDEFAULT_DIALOG_STYLE,
+           const wxString& name = wxDialogNameStr);
+
+  ~wxDialog();
+
+  virtual bool Destroy();
+  void SetClientSize(int width, int height);
+  void GetPosition(int *x, int *y) const;
+  bool Show(bool show);
+  void Iconize(bool iconize);
+
+  virtual bool IsIconized() const;
+  void Fit();
+
+  void SetTitle(const wxString& title);
+  wxString GetTitle() const ;
+
+  bool OnClose();
+  void OnCharHook(wxKeyEvent& event);
+  void OnCloseWindow(wxCloseEvent& event);
+
+  void SetModal(bool flag);
+
+  virtual void Centre(int direction = wxBOTH);
+  virtual bool IsModal() const { return ((GetWindowStyleFlag() & wxDIALOG_MODAL) == wxDIALOG_MODAL); }
+
+  virtual int ShowModal();
+  virtual void EndModal(int retCode);
+
+  // Standard buttons
+  void OnOK(wxCommandEvent& event);
+  void OnApply(wxCommandEvent& event);
+  void OnCancel(wxCommandEvent& event);
+
+  // Responds to colour changes
+  void OnSysColourChanged(wxSysColourChangedEvent& event);
+
+DECLARE_EVENT_TABLE()
 };
 
-#endif // __GTKDIALOGH__
+#endif
+    // _WX_DIALOG_H_

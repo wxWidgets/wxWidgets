@@ -1,60 +1,66 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        palette.h
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     wxPalette class
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifndef __GTKPALETTEH__
-#define __GTKPALETTEH__
+#ifndef _WX_PALETTE_H_
+#define _WX_PALETTE_H_
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "palette.h"
 #endif
 
-#include "wx/defs.h"
-#include "wx/object.h"
 #include "wx/gdiobj.h"
-#include "wx/gdicmn.h"
 
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
+class WXDLLEXPORT wxPalette;
 
-class wxPalette;
+class WXDLLEXPORT wxPaletteRefData: public wxGDIRefData
+{
+    friend class WXDLLEXPORT wxPalette;
+public:
+    wxPaletteRefData();
+    ~wxPaletteRefData();
+/* TODO: implementation
+protected:
+ WXHPALETTE m_hPalette;
+*/
+};
 
-//-----------------------------------------------------------------------------
-// wxPalette
-//-----------------------------------------------------------------------------
+#define M_PALETTEDATA ((wxPaletteRefData *)m_refData)
 
-class wxPalette: public wxGDIObject
+class WXDLLEXPORT wxPalette: public wxGDIObject
 {
   DECLARE_DYNAMIC_CLASS(wxPalette)
 
-  public:
-  
-    wxPalette(void);
-    wxPalette( int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue );
-    wxPalette( const wxPalette& palette );
-    wxPalette( const wxPalette* palette );
-    ~wxPalette(void);
-    wxPalette& operator = ( const wxPalette& palette );
-    bool operator == ( const wxPalette& palette );
-    bool operator != ( const wxPalette& palette );
-    bool Ok(void) const;
-    
-    bool Create( int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
-    int GetPixel( const unsigned char red, const unsigned char green, const unsigned char blue ) const;
-    bool GetRGB( int pixel, unsigned char *red, unsigned char *green, unsigned char *blue ) const;
+public:
+  wxPalette();
+  inline wxPalette(const wxPalette& palette) { Ref(palette); }
+  inline wxPalette(const wxPalette* palette) { UnRef(); if (palette) Ref(*palette); }
 
-    // no data
+  wxPalette(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
+  ~wxPalette();
+  bool Create(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
+  int GetPixel(const unsigned char red, const unsigned char green, const unsigned char blue) const;
+  bool GetRGB(int pixel, unsigned char *red, unsigned char *green, unsigned char *blue) const;
+
+  virtual bool Ok() const { return (m_refData != NULL) ; }
+
+  inline wxPalette& operator = (const wxPalette& palette) { if (*this == palette) return (*this); Ref(palette); return *this; }
+  inline bool operator == (const wxPalette& palette) { return m_refData == palette.m_refData; }
+  inline bool operator != (const wxPalette& palette) { return m_refData != palette.m_refData; }
+
+  virtual bool FreeResource(bool force = FALSE);
+/* TODO: implementation
+  inline WXHPALETTE GetHPALETTE() const { return (M_PALETTEDATA ? M_PALETTEDATA->m_hPalette : 0); }
+  void SetHPALETTE(WXHPALETTE pal);
+*/
 };
 
-#define wxColorMap wxPalette
-#define wxColourMap wxPalette
-
-#endif // __GTKPALETTEH__
+#endif
+    // _WX_PALETTE_H_

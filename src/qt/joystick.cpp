@@ -1,358 +1,279 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        joystick.cpp
 // Purpose:     wxJoystick class
-// Author:      Ported to Linux by Guilhem Lavaux
+// Author:      AUTHOR
 // Modified by:
-// Created:     05/23/98
+// Created:     ??/??/98
 // RCS-ID:      $Id$
-// Copyright:   (c) Guilhem Lavaux
-// Licence:   	wxWindows license
+// Copyright:   (c) AUTHOR
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
 #pragma implementation "joystick.h"
 #endif
 
-#include <linux/joystick.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/time.h>
-#include <sys/ioctl.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include "wx/event.h"
-#include "wx/window.h"
-#include "wx/gtk/joystick.h"
-
-#define JOYSTICK_AXE_MAX 32767
-#define JOYSTICK_AXE_MIN -32767
+#include <wx/joystick.h>
 
 IMPLEMENT_DYNAMIC_CLASS(wxJoystick, wxObject)
 
-wxJoystick::wxJoystick(int joystick)
-{
-  wxString dev_name;
-  // Assume it's the same device name on all Linux systems ...
-  dev_name.Printf("/dev/js%d", (joystick == wxJOYSTICK1) ? 0 : 1);
-
-  m_joystick = open(dev_name, O_RDWR);
-  m_lastposition = wxPoint(-1, -1);
-  for (int i=0;i<15;i++)
-    m_axe[i] = 0;
-  if (m_joystick != -1)
-    Create();
-}
-
-////////////////////////////////////////////////////////////////////////////
-// Background thread
-////////////////////////////////////////////////////////////////////////////
-void *wxJoystick::Entry(void)
-{
-  struct js_event j_evt;
-  wxJoystickEvent jwx_event;
-  fd_set read_fds;
-  struct timeval time_out = {0, 0};
-
-  FD_ZERO(&read_fds);
-  DeferDestroy(TRUE);
-  while (1) {
-    TestDestroy();
-
-    if (m_polling) {
-      FD_SET(m_joystick, &read_fds);
-      select(m_joystick+1, &read_fds, NULL, NULL, &time_out);
-      if (FD_ISSET(m_joystick, &read_fds))
-        read(m_joystick, &j_evt, sizeof(j_evt));
-      else
-        j_evt.type = 0;
-    } else {
-      read(m_joystick, &j_evt, sizeof(j_evt));
-    }
-
-    if ((j_evt.type & JS_EVENT_AXIS) == JS_EVENT_AXIS) {
-      switch (j_evt.number) {
-      case 1:
-        m_lastposition.x = j_evt.value;
-        jwx_event.SetEventType(wxEVT_JOY_MOVE);
-        break;
-      case 2:
-        m_lastposition.y = j_evt.value;
-        jwx_event.SetEventType(wxEVT_JOY_MOVE);
-        break;
-      case 3:
-        m_axe[3] = j_evt.value;
-        jwx_event.SetEventType(wxEVT_JOY_ZMOVE);
-        break;
-      default:
-        m_axe[j_evt.number] = j_evt.value;
-        jwx_event.SetEventType(wxEVT_JOY_MOVE);
-        break;
-      }
-      jwx_event.SetPosition(m_lastposition);
-      jwx_event.SetZPosition(m_axe[3]);
-    }
-    if ((j_evt.type & JS_EVENT_BUTTON) == JS_EVENT_BUTTON) {
-      register int mask = 1 << j_evt.number;
-      char button = m_buttons & mask;
-
-      m_buttons &= ~mask;
-      if (button) {
-        jwx_event.SetEventType(wxEVT_JOY_BUTTON_UP);
-      } else {
-        jwx_event.SetEventType(wxEVT_JOY_BUTTON_DOWN);
-        m_buttons |= mask;
-      }
-
-      jwx_event.SetButtonState(m_buttons);
-      jwx_event.SetButtonChange(j_evt.number);
-    }
-  }
-  if (m_catchwin)
-    m_catchwin->ProcessEvent(jwx_event);
-  if (m_polling)
-    usleep(m_polling*1000);
-}
-
-////////////////////////////////////////////////////////////////////////////
-// State
+// Attributes
 ////////////////////////////////////////////////////////////////////////////
 
-wxPoint wxJoystick::GetPosition(void) const
+wxPoint wxJoystick::GetPosition() const
 {
-  return m_lastposition;
+    // TODO
+    return wxPoint(0, 0);
 }
 
-int wxJoystick::GetZPosition(void) const
+int wxJoystick::GetZPosition() const
 {
-  return m_axe[3];
+    // TODO
+    return 0;
 }
 
-int wxJoystick::GetButtonState(void) const
+int wxJoystick::GetButtonState() const
 {
-  return m_buttons;
+    // TODO
+    return 0;
 }
 
-int wxJoystick::GetPOVPosition(void) const
+int wxJoystick::GetPOVPosition() const
 {
-  return 0;
+    // TODO
+    return 0;
 }
 
-int wxJoystick::GetPOVCTSPosition(void) const
+int wxJoystick::GetPOVCTSPosition() const
 {
-  return 0;
+    // TODO
+    return 0;
 }
 
-int wxJoystick::GetRudderPosition(void) const
+int wxJoystick::GetRudderPosition() const
 {
-  return m_axe[4];
+    // TODO
+    return 0;
 }
 
-int wxJoystick::GetUPosition(void) const
+int wxJoystick::GetUPosition() const
 {
-  return m_axe[5];
+    // TODO
+    return 0;
 }
 
-int wxJoystick::GetVPosition(void) const
+int wxJoystick::GetVPosition() const
 {
-  return m_axe[6];
+    // TODO
+    return 0;
 }
 
-int wxJoystick::GetMovementThreshold(void) const
+int wxJoystick::GetMovementThreshold() const
 {
-  return 0;
+    // TODO
+    return 0;
 }
 
 void wxJoystick::SetMovementThreshold(int threshold)
 {
+    // TODO
 }
 
-////////////////////////////////////////////////////////////////////////////
 // Capabilities
 ////////////////////////////////////////////////////////////////////////////
 
-bool wxJoystick::IsOk(void) const
+bool wxJoystick::IsOk() const
 {
-  return (m_joystick != -1);
+    // TODO
+    return FALSE;
 }
 
-int wxJoystick::GetNumberJoysticks(void) const
+int wxJoystick::GetNumberJoysticks() const
 {
-  wxString dev_name;
-  int fd, j;
-
-  for (j=0;j<2;j++) {
-    dev_name.Printf("/dev/js%d", j);
-    fd = open(dev_name, O_RDONLY);
-    if (fd == -1)
-      return j;
-    close(fd);
-  }
-  return j;
+    // TODO
+    return 0;
 }
 
-int wxJoystick::GetManufacturerId(void) const
+int wxJoystick::GetManufacturerId() const
 {
-  return 0;
+    // TODO
+    return 0;
 }
 
-int wxJoystick::GetProductId(void) const
+int wxJoystick::GetProductId() const
 {
-  return 0;
+    // TODO
+    return 0;
 }
 
-wxString wxJoystick::GetProductName(void) const
+wxString wxJoystick::GetProductName() const
 {
-  return "";
+    // TODO
+    return wxString("");
 }
 
-int wxJoystick::GetXMin(void) const
+int wxJoystick::GetXMin() const
 {
-  return JOYSTICK_AXE_MAX;
+    // TODO
+    return 0;
 }
 
-int wxJoystick::GetYMin(void) const
+int wxJoystick::GetYMin() const
 {
-  return JOYSTICK_AXE_MAX;
+    // TODO
+    return 0;
 }
 
-int wxJoystick::GetZMin(void) const
+int wxJoystick::GetZMin() const
 {
-  return JOYSTICK_AXE_MAX;
+    // TODO
+    return 0;
 }
 
-int wxJoystick::GetXMax(void) const
+int wxJoystick::GetXMax() const
 {
-  return JOYSTICK_AXE_MAX;
+    // TODO
+    return 0;
 }
 
-int wxJoystick::GetYMax(void) const
+int wxJoystick::GetYMax() const
 {
-  return JOYSTICK_AXE_MAX;
+    // TODO
+    return 0;
 }
 
-int wxJoystick::GetZMax(void) const
+int wxJoystick::GetZMax() const
 {
-  return JOYSTICK_AXE_MAX;
+    // TODO
+    return 0;
 }
 
-int wxJoystick::GetNumberButtons(void) const
+int wxJoystick::GetNumberButtons() const
 {
-  int nb;
-
-  ioctl(m_joystick, JSIOCGBUTTONS, &nb);
-
-  return nb;
+    // TODO
+    return 0;
 }
 
-int wxJoystick::GetNumberAxes(void) const
+int wxJoystick::GetNumberAxes() const
 {
-  int nb;
-
-  ioctl(m_joystick, JSIOCGAXES, &nb);
-
-  return nb;
+    // TODO
+    return 0;
 }
 
-int wxJoystick::GetMaxButtons(void) const
+int wxJoystick::GetMaxButtons() const
 {
-  return 15; // internal
+    // TODO
+    return 0;
 }
 
-int wxJoystick::GetMaxAxes(void) const
+int wxJoystick::GetMaxAxes() const
 {
-  return 15; // internal
+    // TODO
+    return 0;
 }
 
-int wxJoystick::GetPollingMin(void) const
+int wxJoystick::GetPollingMin() const
 {
-  return -1;
+    // TODO
+    return 0;
 }
 
-int wxJoystick::GetPollingMax(void) const
+int wxJoystick::GetPollingMax() const
 {
-  return -1;
+    // TODO
+    return 0;
 }
 
-int wxJoystick::GetRudderMin(void) const
+int wxJoystick::GetRudderMin() const
 {
-  return JOYSTICK_AXE_MIN;
+    // TODO
+    return 0;
 }
 
-int wxJoystick::GetRudderMax(void) const
+int wxJoystick::GetRudderMax() const
 {
-  return JOYSTICK_AXE_MAX;
+    // TODO
+    return 0;
 }
 
-int wxJoystick::GetUMin(void) const
+int wxJoystick::GetUMin() const
 {
-  return JOYSTICK_AXE_MIN;
+    // TODO
+    return 0;
 }
 
-int wxJoystick::GetUMax(void) const
+int wxJoystick::GetUMax() const
 {
-  return JOYSTICK_AXE_MAX;
+    // TODO
+    return 0;
 }
 
-int wxJoystick::GetVMin(void) const
+int wxJoystick::GetVMin() const
 {
-  return JOYSTICK_AXE_MIN;
+    // TODO
+    return 0;
 }
 
-int wxJoystick::GetVMax(void) const
+int wxJoystick::GetVMax() const
 {
-  return JOYSTICK_AXE_MAX;
+    // TODO
+    return 0;
 }
 
-bool wxJoystick::HasRudder(void) const
+bool wxJoystick::HasRudder() const
 {
-  return GetNumberAxes() >= 4;
+    // TODO
+    return FALSE;
 }
 
-bool wxJoystick::HasZ(void) const
+bool wxJoystick::HasZ() const
 {
-  return GetNumberAxes() >= 3;
+    // TODO
+    return FALSE;
 }
 
-bool wxJoystick::HasU(void) const
+bool wxJoystick::HasU() const
 {
-  return GetNumberAxes() >= 5;
+    // TODO
+    return FALSE;
 }
 
-bool wxJoystick::HasV(void) const
+bool wxJoystick::HasV() const
 {
-  return GetNumberAxes() >= 6;
+    // TODO
+    return FALSE;
 }
 
-bool wxJoystick::HasPOV(void) const
+bool wxJoystick::HasPOV() const
 {
-  return FALSE;
+    // TODO
+    return FALSE;
 }
 
-bool wxJoystick::HasPOV4Dir(void) const
+bool wxJoystick::HasPOV4Dir() const
 {
-  return FALSE;
+    // TODO
+    return FALSE;
 }
 
-bool wxJoystick::HasPOVCTS(void) const
+bool wxJoystick::HasPOVCTS() const
 {
-  return FALSE;
+    // TODO
+    return FALSE;
 }
 
-////////////////////////////////////////////////////////////////////////////
 // Operations
 ////////////////////////////////////////////////////////////////////////////
 
-bool wxJoystick::SetCapture(wxWindow* win, int pollingFreq = 0)
+bool wxJoystick::SetCapture(wxWindow* win, int pollingFreq)
 {
-  m_catchwin = win;
-  m_polling = pollingFreq;
-  return TRUE;
+    // TODO
+    return FALSE;
 }
 
-bool wxJoystick::ReleaseCapture(void)
+bool wxJoystick::ReleaseCapture()
 {
-  m_catchwin = NULL;
-  m_polling = 0;
-  return TRUE;
+    // TODO
+    return FALSE;
 }
 

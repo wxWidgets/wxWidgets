@@ -1,13 +1,13 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        timer.cpp
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     wxTimer implementation
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
-
 
 #ifdef __GNUG__
 #pragma implementation "timer.h"
@@ -15,52 +15,42 @@
 
 #include "wx/timer.h"
 
-//-----------------------------------------------------------------------------
-// wxTimer
-//-----------------------------------------------------------------------------
+#if !USE_SHARED_LIBRARY
+IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxObject)
+#endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxTimer,wxObject)
-
-gint timeout_callback( gpointer data )
+wxTimer::wxTimer()
 {
-  wxTimer *timer = (wxTimer*)data;
-  timer->Notify();
-  if (timer->OneShot()) timer->Stop();
-  return TRUE;
-};
+    m_milli = 0 ;
+    m_lastMilli = -1 ;
+    m_id = 0;
+    m_oneShot = FALSE;
+}
 
-wxTimer::wxTimer(void)
+wxTimer::~wxTimer()
 {
-  m_time = 1000;
-  m_oneShot = FALSE;
-};
+    Stop();
+}
 
-wxTimer::~wxTimer(void)
+bool wxTimer::Start(int milliseconds,bool mode)
 {
-  Stop();
-};
+    m_oneShot = mode ;
+    if (m_milliseconds < 0)
+        m_milliseconds = lastMilli;
 
-int wxTimer::Interval(void)
-{
-  return m_time;
-};
+    if (m_milliseconds <= 0)
+        return FALSE;
 
-bool wxTimer::OneShot(void)
-{
-  return m_oneShot;
-};
+    m_lastMilli = m_milli = m_milliseconds;
 
-void wxTimer::Notify(void)
-{
-};
+    // TODO: set the timer going.
+    return FALSE;
+}
 
-void wxTimer::Start( int millisecs, bool oneShot )
+void wxTimer::Stop()
 {
-  if (millisecs != -1) m_time = millisecs;
-  m_oneShot = oneShot;
-};
+    m_id = 0 ;
+    m_milli = 0 ;
+}
 
-void wxTimer::Stop(void)
-{
-};
 

@@ -1,10 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dcclient.cpp
-// Purpose:
-// Author:      Robert Roebling
+// Purpose:     wxClientDC class
+// Author:      AUTHOR
+// Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -17,19 +18,6 @@
 #include <math.h>
 
 //-----------------------------------------------------------------------------
-// local data
-//-----------------------------------------------------------------------------
-
-#include "bdiag.xbm"
-#include "fdiag.xbm"
-#include "cdiag.xbm"
-#include "horiz.xbm"
-#include "verti.xbm"
-#include "cross.xbm"
-#define  num_hatches 6
-
-
-//-----------------------------------------------------------------------------
 // constants
 //-----------------------------------------------------------------------------
 
@@ -39,7 +27,12 @@
 // wxPaintDC
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxPaintDC,wxDC)
+#if !USE_SHARED_LIBRARY
+//IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxDC)
+//IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
+IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxDC)
+#endif
+
 
 wxPaintDC::wxPaintDC(void)
 {

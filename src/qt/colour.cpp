@@ -1,164 +1,126 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        colour.cpp
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     wxColour class
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
-
 
 #ifdef __GNUG__
 #pragma implementation "colour.h"
 #endif
 
 #include "wx/gdicmn.h"
+#include "wx/colour.h"
 
-//-----------------------------------------------------------------------------
-// wxColour
-//-----------------------------------------------------------------------------
+#if !USE_SHARED_LIBRARY
+IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
+#endif
 
-class wxColourRefData: public wxObjectRefData
+// Colour
+
+wxColour::wxColour ()
 {
-  public:
-  
-    wxColourRefData(void);
-    ~wxColourRefData(void);
-    void FreeColour(void);
-  
-    bool         m_hasPixel;
-    
-    friend wxColour;
-};
+    m_isInit = FALSE;
+    m_red = m_blue = m_green = 0;
+/* TODO
+    m_pixel = 0;
+*/
+}
 
-wxColourRefData::wxColourRefData(void)
+wxColour::wxColour (unsigned char r, unsigned char g, unsigned char b)
 {
-  m_hasPixel = FALSE;
-};
+    m_red = r;
+    m_green = g;
+    m_blue = b;
+    m_isInit = TRUE;
+/* TODO
+    m_pixel = PALETTERGB (m_red, m_green, m_blue);
+*/
+}
 
-wxColourRefData::~wxColourRefData(void)
+wxColour::wxColour (const wxColour& col)
 {
-  FreeColour();
-};
+    m_red = col.m_red;
+    m_green = col.m_green;
+    m_blue = col.m_blue;
+    m_isInit = col.m_isInit;
+/* TODO
+    m_pixel = col.m_pixel;
+*/
+}
 
-void wxColourRefData::FreeColour(void)
+wxColour& wxColour::operator =(const wxColour& col)
 {
-};
+  m_red = col.m_red;
+  m_green = col.m_green;
+  m_blue = col.m_blue;
+  m_isInit = col.m_isInit;
+/* TODO
+  m_pixel = col.m_pixel;
+*/
+  return *this;
+}
 
-//-----------------------------------------------------------------------------
-
-#define M_COLDATA ((wxColourRefData *)m_refData)
-
-#define SHIFT (8*(sizeof(short int)-sizeof(char)))
-
-IMPLEMENT_DYNAMIC_CLASS(wxColour,wxGDIObject)
-
-wxColour::wxColour(void)
+wxColour::wxColour (const wxString& col)
 {
-};
+    wxColour *the_colour = wxTheColourDatabase->FindColour (col);
+    if (the_colour)
+    {
+        m_red = the_colour->Red ();
+        m_green = the_colour->Green ();
+        m_blue = the_colour->Blue ();
+        m_isInit = TRUE;
+    }
+    else
+    {
+        m_red = 0;
+        m_green = 0;
+        m_blue = 0;
+        m_isInit = FALSE;
+    }
+/* TODO
+    m_pixel = PALETTERGB (m_red, m_green, m_blue);
+*/
+}
 
-wxColour::wxColour( char WXUNUSED(red), char WXUNUSED(green), char WXUNUSED(blue) )
+wxColour::~wxColour ()
 {
-  m_refData = new wxColourRefData();
-};
-  
-wxColour::wxColour( const wxString &colourName )
+}
+
+wxColour& wxColour::operator = (const wxString& col)
 {
-  wxNode *node = NULL;
-  if ( (wxTheColourDatabase) && (node = wxTheColourDatabase->Find(colourName)) ) 
-  {
-    wxColour *col = (wxColour*)node->Data();
-    UnRef();
-    if (col) Ref( *col );
-  } 
-  else 
-  {
-    m_refData = new wxColourRefData();
-  };
-};
+    wxColour *the_colour = wxTheColourDatabase->FindColour (col);
+    if (the_colour)
+    {
+        m_red = the_colour->Red ();
+        m_green = the_colour->Green ();
+        m_blue = the_colour->Blue ();
+        m_isInit = TRUE;
+    }
+    else
+    {
+        m_red = 0;
+        m_green = 0;
+        m_blue = 0;
+        m_isInit = FALSE;
+    }
+/* TODO
+    m_pixel = PALETTERGB (m_red, m_green, m_blue);
+*/
+    return (*this);
+}
 
-wxColour::wxColour( const wxColour& col )
-{ 
-  Ref( col ); 
-};
-
-wxColour::wxColour( const wxColour* col ) 
-{ 
-  if (col) Ref( *col ); 
-};
-
-wxColour::~wxColour(void)
+void wxColour::Set (unsigned char r, unsigned char g, unsigned char b)
 {
-};
-
-wxColour& wxColour::operator = ( const wxColour& col ) 
-{ 
-  if (*this == col) return (*this); 
-  Ref( col ); 
-  return *this; 
-};
-
-wxColour& wxColour::operator = ( const wxString& colourName ) 
-{ 
-  UnRef();
-  wxNode *node = NULL;
-  if ((wxTheColourDatabase) && (node = wxTheColourDatabase->Find(colourName)) ) 
-  {
-    wxColour *col = (wxColour*)node->Data();
-    if (col) Ref( *col );
-  } 
-  else 
-  {
-    m_refData = new wxColourRefData();
-  };
-  return *this; 
-};
-
-bool wxColour::operator == ( const wxColour& col ) 
-{ 
-  return m_refData == col.m_refData; 
-};
-
-bool wxColour::operator != ( const wxColour& col) 
-{ 
-  return m_refData != col.m_refData; 
-};
-
-void wxColour::Set( const unsigned char WXUNUSED(red), const unsigned char WXUNUSED(green), 
-                    const unsigned char WXUNUSED(blue) )
-{
-  UnRef();
-  m_refData = new wxColourRefData();
-};
-
-unsigned char wxColour::Red(void) const
-{
-  if (!Ok()) return 0;
-  return 0;
-};
-
-unsigned char wxColour::Green(void) const
-{
-  if (!Ok()) return 0;
-  return 0;
-};
-
-unsigned char wxColour::Blue(void) const
-{
-  if (!Ok()) return 0;
-  return 0;
-};
-
-bool wxColour::Ok(void) const
-{
-  return (m_refData);
-  return 0;
-};
-
-int wxColour::GetPixel(void)
-{
-  if (!Ok()) return 0;
-  return 0;
-};
-
+    m_red = r;
+    m_green = g;
+    m_blue = b;
+    m_isInit = TRUE;
+/* TODO
+    m_pixel = PALETTERGB (m_red, m_green, m_blue);
+*/
+}

@@ -1,52 +1,57 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        timer.h
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     wxTimer class
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifndef __GTKTIMERH__
-#define __GTKTIMERH__
+#ifndef _WX_TIMER_H_
+#define _WX_TIMER_H_
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "timer.h"
 #endif
 
-#include "wx/defs.h"
 #include "wx/object.h"
 
-//-----------------------------------------------------------------------------
-// derived classes
-//-----------------------------------------------------------------------------
-
-class wxTimer;
-
-//-----------------------------------------------------------------------------
-// wxTimer
-//-----------------------------------------------------------------------------
-
-class wxTimer: public wxObject
+class WXDLLEXPORT wxTimer: public wxObject
 {
   DECLARE_DYNAMIC_CLASS(wxTimer)
 
-  public:
+ public:
+  wxTimer();
+  ~wxTimer();
+  virtual bool Start(int milliseconds = -1,bool one_shot = FALSE); // Start timer
+  virtual void Stop();                   // Stop timer
+  virtual void Notify() = 0;             // Override this member
+  inline int Interval() { return m_milli ; }; // Returns the current interval time (0 if stop)
 
-    wxTimer(void);
-    ~wxTimer(void);
-    int Interval(void);
-    bool OneShot(void);
-    virtual void Notify(void);
-    void Start( int millisecs = -1, bool oneShot = FALSE );
-    void Stop(void);
-    
-  private:
-  
-    int  m_time;
-    bool m_oneShot;
+protected:
+  bool      m_oneShot ;
+  int       m_milli ;
+  int       m_lastMilli ;
+  long      m_id;
+
 };
 
-#endif // __GTKTIMERH__
+/* Note: these are implemented in common/timercmn.cpp, so need to implement them separately.
+ * But you may need to modify timercmn.cpp.
+ */
+
+// Timer functions (milliseconds)
+void WXDLLEXPORT wxStartTimer();
+// Gets time since last wxStartTimer or wxGetElapsedTime
+long WXDLLEXPORT wxGetElapsedTime(bool resetTimer = TRUE);
+
+// EXPERIMENTAL: comment this out if it doesn't compile.
+bool WXDLLEXPORT wxGetLocalTime(long *timeZone, int *dstObserved);
+
+// Get number of seconds since 00:00:00 GMT, Jan 1st 1970.
+long WXDLLEXPORT wxGetCurrentTime();
+
+#endif
+    // _WX_TIMER_H_

@@ -1,133 +1,194 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        radiobox.cpp
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Purpose:     wxRadioBox
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
+// RCS-ID:      $Id$
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
-
 
 #ifdef __GNUG__
 #pragma implementation "radiobox.h"
 #endif
 
 #include "wx/radiobox.h"
-#include "wx/dialog.h"
-#include "wx/frame.h"
 
-//-----------------------------------------------------------------------------
-// data
-//-----------------------------------------------------------------------------
+#if !USE_SHARED_LIBRARY
+IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)
+#endif
 
-extern bool   g_blockEventsOnDrag;
-
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxRadioBox,wxControl)
-
-wxRadioBox::wxRadioBox(void)
+// Radio box item
+wxRadioBox::wxRadioBox()
 {
-};
+    m_selectedButton = -1;
+    m_noItems = 0;
+    m_noRowsOrCols = 0;
+    m_majorDim = 0 ;
+}
 
-wxRadioBox::wxRadioBox( wxWindow *parent, wxWindowID id, const wxString& title,
-      const wxPoint &pos, const wxSize &size,
-      int n, const wxString choices[],
-      int majorDim, long style,
-      const wxString &name )
+bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
+             const wxPoint& pos, const wxSize& size,
+             int n, const wxString choices[],
+             int majorDim, long style,
+             const wxValidator& val, const wxString& name)
 {
-  Create( parent, id, title, pos, size, n, choices, majorDim, style, name );
-};
+    m_selectedButton = -1;
+    m_noItems = n;
 
-bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
-      const wxPoint &pos, const wxSize &size,
-      int n, const wxString choices[],
-      int WXUNUSED(majorDim), long style,
-      const wxString &name )
-{
-  return TRUE;
-};
+    SetName(name);
+    SetValidator(val);
 
-bool wxRadioBox::Show( bool show )
-{
-  wxWindow::Show( show );
-  return TRUE;
-};
+    parent->AddChild(this);
 
-int wxRadioBox::FindString( const wxString &s ) const
-{
-  return -1;
-};
+    m_windowStyle = (long&)style;
 
-void wxRadioBox::SetSelection( int n )
-{
-};
+    if (id == -1)
+        m_windowId = NewControlId();
+    else
+        m_windowId = id;
 
-int wxRadioBox::GetSelection(void) const
-{
-  return -1;
-};
+    m_noRowsOrCols = majorDim;
 
-wxString wxRadioBox::GetString( int n ) const
-{
-};
+    if (majorDim==0)
+        m_majorDim = n ;
+    else
+        m_majorDim = majorDim ;
 
-wxString wxRadioBox::GetLabel(void) const
-{
-  return wxControl::GetLabel();
-};
 
-void wxRadioBox::SetLabel( const wxString& WXUNUSED(label) )
-{
-};
+    // TODO create radiobox
+    return FALSE;
+}
 
-void wxRadioBox::SetLabel( int WXUNUSED(item), const wxString& WXUNUSED(label) )
-{
-};
 
-void wxRadioBox::SetLabel( int WXUNUSED(item), wxBitmap *WXUNUSED(bitmap) )
+wxRadioBox::~wxRadioBox()
 {
-};
+    // TODO
+}
 
-wxString wxRadioBox::GetLabel( int WXUNUSED(item) ) const
+wxString wxRadioBox::GetLabel(int item) const
 {
-  return "";
-};
+    // TODO
+    return wxString("");
+}
 
-void wxRadioBox::Enable( bool WXUNUSED(enable) )
+void wxRadioBox::SetLabel(int item, const wxString& label)
 {
-};
+    // TODO
+}
 
-void wxRadioBox::Enable( int WXUNUSED(item), bool WXUNUSED(enable) )
+int wxRadioBox::FindString(const wxString& s) const
 {
-};
+    // TODO
+    return -1;
+}
 
-void wxRadioBox::Show( int WXUNUSED(item), bool WXUNUSED(show) )
+void wxRadioBox::SetSelection(int n)
 {
-};
+    if ((n < 0) || (n >= m_noItems))
+        return;
+    // TODO
 
-wxString wxRadioBox::GetStringSelection(void) const
-{
-  return "";
-};
+    m_selectedButton = n;
+}
 
-bool wxRadioBox::SetStringSelection( const wxString&s )
+// Get single selection, for single choice list items
+int wxRadioBox::GetSelection() const
 {
-  return TRUE;
-};
+    return m_selectedButton;
+}
 
-int wxRadioBox::Number(void) const
+// Find string for position
+wxString wxRadioBox::GetString(int n) const
 {
-  return 0;
-};
+    // TODO
+    return wxString("");
+}
 
-int wxRadioBox::GetNumberOfRowsOrCols(void) const
+void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
-  return 1;
-};
+    // TODO
+}
 
-void wxRadioBox::SetNumberOfRowsOrCols( int WXUNUSED(n) )
+void wxRadioBox::GetSize(int *width, int *height) const
 {
-};
+    // TODO
+}
+
+void wxRadioBox::GetPosition(int *x, int *y) const
+{
+    // TODO
+}
+
+wxString wxRadioBox::GetLabel() const
+{
+    // TODO
+    return wxString("");
+}
+
+void wxRadioBox::SetLabel(const wxString& label)
+{
+    // TODO
+}
+
+void wxRadioBox::SetFocus()
+{
+    // TODO
+}
+
+bool wxRadioBox::Show(bool show)
+{
+    // TODO
+    return FALSE;
+}
+
+// Enable a specific button
+void wxRadioBox::Enable(int item, bool enable)
+{
+    // TODO
+}
+
+// Enable all controls
+void wxRadioBox::Enable(bool enable)
+{
+    wxControl::Enable(enable);
+
+    // TODO
+}
+
+// Show a specific button
+void wxRadioBox::Show(int item, bool show)
+{
+    // TODO
+}
+
+// For single selection items only
+wxString wxRadioBox::GetStringSelection () const
+{
+    int sel = GetSelection ();
+    if (sel > -1)
+        return this->GetString (sel);
+    else
+        return wxString("");
+}
+
+bool wxRadioBox::SetStringSelection (const wxString& s)
+{
+    int sel = FindString (s);
+    if (sel > -1)
+    {
+        SetSelection (sel);
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+void wxRadioBox::Command (wxCommandEvent & event)
+{
+    SetSelection (event.m_commandInt);
+    ProcessCommand (event);
+}
+
 

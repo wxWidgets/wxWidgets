@@ -1,33 +1,22 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dcmemory.h
-// Purpose:
-// Author:      Robert Roebling
-// Created:     01/02/97
+// Purpose:     wxMemoryDC class
+// Author:      AUTHOR
+// Modified by:
+// Created:     ??/??/98
 // RCS-ID:      $Id$
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Copyright:   (c) AUTHOR
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifndef __GTKDCMEMORYH__
-#define __GTKDCMEMORYH__
+#ifndef _WX_DCMEMORY_H_
+#define _WX_DCMEMORY_H_
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "dcmemory.h"
 #endif
 
-#include "wx/defs.h"
 #include "wx/dcclient.h"
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class wxMemoryDC;
-
-//-----------------------------------------------------------------------------
-// wxMemoryDC
-//-----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxMemoryDC: public wxPaintDC
 {
@@ -46,5 +35,4 @@ class WXDLLEXPORT wxMemoryDC: public wxPaintDC
 };
 
 #endif
-    // __GTKDCMEMORYH__
-
+    // _WX_DCMEMORY_H_
