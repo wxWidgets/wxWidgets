@@ -116,6 +116,29 @@ wxSize wxNotebookBase::CalcSizeFromPage(const wxSize& sizePage) const
     return sizeTotal;
 }
 
+wxSize wxNotebookBase::DoGetBestSize() const
+{
+    wxSize bestSize;
+
+    // iterate over all pages, get the largest width and height
+    const size_t nCount = m_pages.Count();
+    for ( size_t nPage = 0; nPage < nCount; nPage++ )
+    {
+        wxNotebookPage *pPage = m_pages[nPage];
+        wxSize childBestSize(pPage->GetBestSize());
+
+        if ( childBestSize.x > bestSize.x )
+            bestSize.x = childBestSize.x;
+
+        if ( childBestSize.y > bestSize.y )
+            bestSize.y = childBestSize.y;
+    }
+
+    // convert display area to window area, adding the size neccessary for the
+    // tabs
+    return CalcSizeFromPage(bestSize);
+}
+
 // ----------------------------------------------------------------------------
 // pages management
 // ----------------------------------------------------------------------------
@@ -140,28 +163,6 @@ wxNotebookPage *wxNotebookBase::DoRemovePage(int nPage)
     m_pages.RemoveAt(nPage);
 
     return pageRemoved;
-}
-
-wxSize wxNotebookBase::DoGetBestSize() const
-{
-    wxSize bestSize(0,0);
-    size_t nCount = m_pages.Count();
-
-    // iterate over all pages, get the largest width and height
-    for ( size_t nPage = 0; nPage < nCount; nPage++ )
-    {
-        wxNotebookPage *pPage = m_pages[nPage];
-        wxSize childBestSize(pPage->GetBestSize());
-
-        if ( childBestSize.x > bestSize.x )
-            bestSize.x = childBestSize.x;
-
-        if ( childBestSize.y > bestSize.y )
-            bestSize.y = childBestSize.y;
-    }
-
-    // convert display area to window area, adding the size neccessary for the tab control itself
-    return CalcSizeFromPage(bestSize);
 }
 
 int wxNotebookBase::GetNextPage(bool forward) const
