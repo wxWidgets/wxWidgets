@@ -471,6 +471,21 @@
 // wxWave class
 #define wxUSE_WAVE 1
 
+// XML parsing classes. Note that their API will change in the future, so
+// using wxXmlDocument and wxXmlNode in your app is not recommended.
+//
+// Default is 1
+//
+// Recommended setting: 1 (needed by XRC)
+#define wxUSE_XML       1
+
+// Set to 1 to compile MS Windows XP theme engine support
+#define wxUSE_UXTHEME           0
+
+// Set to 1 to auto-adapt to MS Windows XP themes where possible
+// (notably, wxNotebook pages)
+#define wxUSE_UXTHEME_AUTO      0
+
 // ----------------------------------------------------------------------------
 // Individual GUI controls
 // ----------------------------------------------------------------------------
@@ -918,28 +933,6 @@
 // Splines
 #define wxUSE_SPLINES 1
 
-// Use XPM support in wxBitmap
-//
-// Default is 1, as XPM is now fully supported this makes easier the issue
-// of portable icons and bitmaps
-#if defined(__WIN32__)
-    #define wxUSE_XPM_IN_MSW 1
-#else
-    #define wxUSE_XPM_IN_MSW 0
-#endif
-
-// Use dynamic DIB loading/saving code in utils/dib under MSW.
-#define wxUSE_IMAGE_LOADING_IN_MSW 0
-
-// Use dynamic icon/cursor loading/saving code under MSW.
-#define wxUSE_RESOURCE_LOADING_IN_MSW 0
-
-// use wxExpr (a.k.a. PrologIO)
-#define wxUSE_PROLOGIO          0
-
-// Use .wxr resource mechanism (requires PrologIO library)
-#define wxUSE_WX_RESOURCES 0
-
 // Include mouse wheel support
 #define wxUSE_MOUSEWHEEL 1
 
@@ -1073,11 +1066,7 @@
 // Default is 1.
 //
 // Recommended setting: 1 for WIN32
-#if defined(__WIN32__)
     #define wxUSE_OLE 1
-#else
-    #define wxUSE_OLE 0
-#endif
 
 // Set this to 1 to use Microsoft CTL3D library for "3D-look" under Win16 or NT
 // 3.x. This setting is ignored under Win9x and NT 4.0+.
@@ -1125,165 +1114,6 @@
 #endif
 
 // ----------------------------------------------------------------------------
-// disable the settings which don't work for some compilers
-// ----------------------------------------------------------------------------
-
-#ifndef wxUSE_NORLANDER_HEADERS
-    #if (defined(__MINGW32__) || defined(__CYGWIN__)) && ((__GNUC__>2) ||((__GNUC__==2) && (__GNUC_MINOR__>=95)))
-        #define wxUSE_NORLANDER_HEADERS 1
-    #else
-        #define wxUSE_NORLANDER_HEADERS 0
-    #endif
-#endif
-
-// wxUSE_DEBUG_NEW_ALWAYS doesn't work with CodeWarrior
-#if defined(__MWERKS__)
-    #undef wxUSE_DEBUG_NEW_ALWAYS
-    #define wxUSE_DEBUG_NEW_ALWAYS 0
-#endif
-
-#if defined(__GNUWIN32__)
-// These don't work as expected for mingw32 and cygwin32
-    #undef  wxUSE_MEMORY_TRACING
-    #define wxUSE_MEMORY_TRACING 0
-
-    #undef  wxUSE_GLOBAL_MEMORY_OPERATORS
-    #define wxUSE_GLOBAL_MEMORY_OPERATORS 0
-
-    #undef  wxUSE_DEBUG_NEW_ALWAYS
-    #define wxUSE_DEBUG_NEW_ALWAYS 0
-
-// Cygwin betas don't have wcslen
-    #if defined(__CYGWIN__) || defined(__CYGWIN32__)
-        #if ! ((__GNUC__>2) ||((__GNUC__==2) && (__GNUC_MINOR__>=95)))
-            #undef wxUSE_WCHAR_T
-            #define wxUSE_WCHAR_T 0
-        #endif
-    #endif
-
-#endif // __GNUWIN32__
-
-// MFC duplicates these operators
-#if wxUSE_MFC
-    #undef  wxUSE_GLOBAL_MEMORY_OPERATORS
-    #define wxUSE_GLOBAL_MEMORY_OPERATORS 0
-
-    #undef  wxUSE_DEBUG_NEW_ALWAYS
-    #define wxUSE_DEBUG_NEW_ALWAYS 0
-#endif // wxUSE_MFC
-
-#if (!defined(WIN32) && !defined(__WIN32__)) || (defined(__GNUWIN32__) && !wxUSE_NORLANDER_HEADERS)
-// Can't use OLE drag and drop in Windows 3.1 because we don't know how
-// to implement UUIDs
-// GnuWin32 doesn't have appropriate headers for e.g. IUnknown.
-    #undef wxUSE_DRAG_AND_DROP
-    #define wxUSE_DRAG_AND_DROP 0
-#endif
-
-// Only WIN32 supports wxStatusBar95
-#if !defined(__WIN32__) && wxUSE_NATIVE_STATUSBAR
-    #undef  wxUSE_NATIVE_STATUSBAR
-    #define wxUSE_NATIVE_STATUSBAR 0
-#endif
-
-// Salford C++ doesn't like some of the memory operator definitions
-#ifdef __SALFORDC__
-    #undef  wxUSE_MEMORY_TRACING
-    #define wxUSE_MEMORY_TRACING 0
-
-    #undef wxUSE_GLOBAL_MEMORY_OPERATORS
-    #define wxUSE_GLOBAL_MEMORY_OPERATORS 0
-
-    #undef wxUSE_DEBUG_NEW_ALWAYS
-    #define wxUSE_DEBUG_NEW_ALWAYS 0
-
-    #undef wxUSE_THREADS
-    #define wxUSE_THREADS 0
-
-    #undef wxUSE_OWNER_DRAWN
-    #define wxUSE_OWNER_DRAWN 0
-#endif // __SALFORDC__
-
-// BC++/Win16 can't cope with the amount of data in resource.cpp
-#if defined(__WIN16__) && defined(__BORLANDC__)
-    #undef wxUSE_WX_RESOURCES
-    #define wxUSE_WX_RESOURCES 0
-
-    #undef wxUSE_ODBC
-    #define wxUSE_ODBC 0
-
-    #undef wxUSE_NEW_GRID
-    #define wxUSE_NEW_GRID 0
-#endif
-
-#if defined(__BORLANDC__) && (__BORLANDC__ < 0x500)
-// BC++ 4.0 can't compile JPEG library
-    #undef wxUSE_LIBJPEG
-    #define wxUSE_LIBJPEG 0
-#endif
-
-// wxUSE_DEBUG_NEW_ALWAYS = 1 not compatible with BC++ in DLL mode
-#if defined(__BORLANDC__) && (defined(WXMAKINGDLL) || defined(WXUSINGDLL))
-    #undef wxUSE_DEBUG_NEW_ALWAYS
-    #define wxUSE_DEBUG_NEW_ALWAYS 0
-#endif
-
-#if defined(__WXMSW__) && defined(__WATCOMC__)
-    /*
-    #undef  wxUSE_GLCANVAS
-    #define wxUSE_GLCANVAS 0
-    */
-
-    #undef wxUSE_WCHAR_T
-    #define wxUSE_WCHAR_T 0
-#endif
-
-#if defined(__WXMSW__) && !defined(__WIN32__)
-    #undef wxUSE_SOCKETS
-    #define wxUSE_SOCKETS 0
-
-    #undef wxUSE_THREADS
-    #define wxUSE_THREADS 0
-
-    #undef wxUSE_TOOLTIPS
-    #define wxUSE_TOOLTIPS 0
-
-    #undef wxUSE_SPINCTRL
-    #define wxUSE_SPINCTRL 0
-
-    #undef wxUSE_SPINBTN
-    #define wxUSE_SPINBTN 0
-
-    #undef wxUSE_LIBPNG
-    #define wxUSE_LIBPNG 0
-
-    #undef wxUSE_LIBJPEG
-    #define wxUSE_LIBJPEG 0
-
-    #undef wxUSE_LIBTIFF
-    #define wxUSE_LIBTIFF 0
-
-    #undef wxUSE_GIF
-    #define wxUSE_GIF 0
-
-    #undef wxUSE_PNM
-    #define wxUSE_PNM 0
-
-    #undef wxUSE_PCX
-    #define wxUSE_PCX 0
-
-    #undef wxUSE_GLCANVAS
-    #define wxUSE_GLCANVAS 0
-
-    #undef wxUSE_MS_HTML_HELP
-    #define wxUSE_MS_HTML_HELP 0
-
-    #undef wxUSE_WCHAR_T
-    #define wxUSE_WCHAR_T 0
-
-#endif // Win16
-
-// ----------------------------------------------------------------------------
 // unknown settings
 // ----------------------------------------------------------------------------
 
@@ -1297,8 +1127,5 @@
 #else
     #define wxUSE_DDE_FOR_IPC 0
 #endif
-
-//??????
-#define wxUSE_SPAWNBROWSER 0
 
 #endif // _WX_UNIV_SETUP_H_
