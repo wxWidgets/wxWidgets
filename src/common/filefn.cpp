@@ -1347,7 +1347,7 @@ try_again:
 
 #ifdef __WIN32__
     if (gs_hFileStruct == INVALID_HANDLE_VALUE)
-        return NULL;
+        return result;
 
     bool success = (FindNextFile(gs_hFileStruct, &gs_findDataStruct) != 0);
     if (!success)
