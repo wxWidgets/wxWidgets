@@ -420,7 +420,7 @@ bool wxMDIParentFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND hwnd)
 
     // is it one of standard MDI commands?
     WXWPARAM wParam = 0;
-    int msg;
+    int msg = 0;
 
     // TODO:
 /*

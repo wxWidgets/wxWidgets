@@ -387,7 +387,7 @@ bool wxFont::RealizeResource()
     }
 
 // TODO:
-WXHFONT hFont;
+WXHFONT hFont = 0;
 //    HFONT hFont = ::CreateFont
 //                  (
 //                   nHeight,             // height

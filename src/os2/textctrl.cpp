@@ -302,7 +302,8 @@ void wxTextCtrl::Paste()
 bool wxTextCtrl::CanCopy() const
 {
     // Can copy if there's a selection
-    long from, to;
+    long from = 0L;
+    long to = 0L;
 //    GetSelection(& from, & to);
     return (from != to);
 }
@@ -310,7 +311,8 @@ bool wxTextCtrl::CanCopy() const
 bool wxTextCtrl::CanCut() const
 {
     // Can cut if there's a selection
-    long from, to;
+    long from = 0L;
+    long to = 0L;
 //    GetSelection(& from, & to);
     return (from != to);
 }
@@ -527,7 +529,7 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
     HWND hWnd = GetHwnd();
 
     // This gets the line number containing the character
-    int lineNo;
+    int lineNo = -1;
 //    lineNo = (int)SendMessage(hWnd, EM_LINEFROMCHAR, (WPARAM)pos, 0);
 
     if ( lineNo == -1 )

@@ -18,13 +18,18 @@
 
 #include "wx/file.h"
 #include "wx/os2/wave.h"
-#include "wx/os2/private.h"
-
-#ifdef RECT
-    #undef RECT
-#endif
-#include <mmio.h>
-#include <mmsystem.h>
+#define INCL_32                         /* force 32 bit compile */
+#define INCL_GPIBITMAPS
+#define INCL_DOSFILEMGR
+#define INCL_WIN
+#define INCL_GPI
+#define INCL_PM                         
+#include <os2.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <os2medef.h>
+#include <mmioos2.h>
 
 wxWave::wxWave()
   : m_waveData(NULL), m_waveLength(0), m_isResource(FALSE)

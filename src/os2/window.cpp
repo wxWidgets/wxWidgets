@@ -623,7 +623,7 @@ WXDWORD wxWindow::MakeExtendedStyle(long style, bool eliminateBorders)
 WXDWORD wxWindow::Determine3DEffects(WXDWORD defaultBorderStyle,
                                      bool *want3D) const
 {
-   DWORD exStyle; // remove after implementation doe
+   DWORD exStyle = 0L; // remove after implementation doe
 /* TODO:  this ought to be fun
 *
     // If matches certain criteria, then assume no 3D effects
@@ -977,7 +977,7 @@ void wxWindow::UnpackMenuSelect(WXWPARAM wParam, WXLPARAM lParam,
 wxWindow *wxWndHook = NULL;
 
 // Main window proc
-MRESULT wxWndProc(HWND hWnd, UINT message, MPARAM wParam, MPARAM lParam)
+MRESULT wxWndProc(HWND hWnd, ULONG message, MPARAM wParam, MPARAM lParam)
 {
     // trace all messages - useful for the debugging
 #ifdef __WXDEBUG__

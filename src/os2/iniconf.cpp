@@ -323,7 +323,7 @@ bool wxIniConfig::Read(const wxString& szKey, long *pl) const
 
   static const int nMagic  = 17; // 17 is some "rare" number
   static const int nMagic2 = 28; // arbitrary number != nMagic
-  long lVal; // = GetPrivateProfileInt(m_strGroup, strKey, nMagic, m_strLocalFilename);
+  long lVal = 0; // = GetPrivateProfileInt(m_strGroup, strKey, nMagic, m_strLocalFilename);
   if ( lVal != nMagic ) {
     // the value was read from the file
     *pl = lVal;
@@ -349,7 +349,7 @@ bool wxIniConfig::Write(const wxString& szKey, const wxString& szValue)
   wxConfigPathChanger path(this, szKey);
   wxString strKey = GetPrivateKeyName(path.Name());
 
-  bool bOk; // = WritePrivateProfileString(m_strGroup, strKey,
+  bool bOk = FALSE; // = WritePrivateProfileString(m_strGroup, strKey,
 //                                       szValue, m_strLocalFilename) != 0;
 
   if ( !bOk )
@@ -394,7 +394,7 @@ bool wxIniConfig::DeleteEntry(const wxString& szKey, bool bGroupIfEmptyAlso)
     return TRUE;
 
   // delete the current group too
-  bool bOk; // = WritePrivateProfileString(m_strGroup, NULL,
+  bool bOk = FALSE; // = WritePrivateProfileString(m_strGroup, NULL,
 //                                       NULL, m_strLocalFilename) != 0;
 
   if ( !bOk )
@@ -409,7 +409,7 @@ bool wxIniConfig::DeleteGroup(const wxString& szKey)
 
   // passing NULL as section name to WritePrivateProfileString deletes the
   // whole section according to the docs
-  bool bOk; // = WritePrivateProfileString(path.Name(), NULL,
+  bool bOk = FALSE; // = WritePrivateProfileString(path.Name(), NULL,
   //                                     NULL, m_strLocalFilename) != 0;
 
   if ( !bOk )
@@ -429,7 +429,7 @@ bool wxIniConfig::DeleteAll()
 
   // then delete our own ini file
   char szBuf[MAX_PATH];
-  size_t nRc; // = GetWindowsDirectory(szBuf, WXSIZEOF(szBuf));
+  size_t nRc = 0; // = GetWindowsDirectory(szBuf, WXSIZEOF(szBuf));
   if ( nRc == 0 )
   {
     wxLogLastError("GetWindowsDirectory");

@@ -411,7 +411,7 @@ ScanOtherColors(Display *display, XpmColor *colors, int ncolors, Pixel *pixels,
 
 	xcolor->pixel = *pixels;
     }
-#ifdef wx_msw
+#if defined(wx_msw) || defined(wx_pm)
     XQueryColors(display, (Colormap *)colormap, xcolors, ncolors);
 #else
     XQueryColors(display, (Colormap)colormap, xcolors, ncolors);

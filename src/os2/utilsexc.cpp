@@ -248,9 +248,9 @@ bool wxGetFullHostName(
     char                            zServer[256];
     char                            zComputer[256];
     unsigned long                   ulLevel = 0;
-    unsigned char*                  zBuffer;
-    unsigned long                   ulBuffer;
-    unsigned long*                  pulTotalAvail;
+    unsigned char*                  zBuffer = NULL;
+    unsigned long                   ulBuffer = 256;
+    unsigned long*                  pulTotalAvail = NULL;
 
     NetBios32GetInfo( (const unsigned char*)zServer
                      ,(const unsigned char*)zComputer

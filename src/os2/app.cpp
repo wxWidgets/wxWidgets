@@ -93,7 +93,11 @@ HICON wxDEFAULT_MDIPARENTFRAME_ICON  = (HICON) NULL;
 
 HBRUSH wxDisableButtonBrush = (HBRUSH) 0;
 
-MRESULT wxWndProc(HWND, UINT, MPARAM, MPARAM);
+MRESULT wxWndProc( HWND
+                  ,ULONG
+                  ,MPARAM
+                  ,MPARAM
+                 );
 
 // ===========================================================================
 // implementation
@@ -399,7 +403,7 @@ int wxEntry(
 , char*                             argv[]
 )
 {
-    HAB                             vHab;
+    HAB                             vHab = 0;
 
     if (!wxApp::Initialize(vHab))
         return 0;
@@ -874,7 +878,7 @@ void wxExit()
 // Yield to incoming messages
 bool wxYield()
 {
-    HAB                             vHab;
+    HAB                             vHab = 0;
     QMSG                            vMsg;
     // We want to go back to the main message loop
     // if we see a WM_QUIT. (?)

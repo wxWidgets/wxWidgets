@@ -20,6 +20,9 @@
 #include "wx/wxchar.h"
 #include "wx/buffer.h"
 
+#if defined(__VISAGECPP__) && __IBMCPP__ >= 400
+#  undef __BSEXCPT__
+#endif
 #include <stdlib.h>
 
 #if wxUSE_WCHAR_T

@@ -13,6 +13,9 @@
 #define _WX_EXPRH__
 
 #include <math.h>
+#if defined(__VISAGECPP__) && __IBMCPP__ >= 400
+#  undef __BSEXCPT__
+#endif
 #include <stdlib.h>
 
 #ifdef ____HPUX__

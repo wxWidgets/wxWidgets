@@ -240,7 +240,7 @@ void wxPen::SetCap(int Cap)
 
 int wx2os2PenStyle(int wx_style)
 {
-    int cstyle;
+    int cstyle = 0;
 // TODO:
 /*
     switch (wx_style)

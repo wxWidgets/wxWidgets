@@ -35,8 +35,8 @@ IMPLEMENT_CLASS(wxPrinterDC, wxDC)
 // This form is deprecated
 wxPrinterDC::wxPrinterDC(const wxString& driver_name, const wxString& device_name, const wxString& file, bool interactive, int orientation)
 {
-    LONG            lType;
-    HAB             hab;
+    LONG            lType = 0;
+    HAB             hab = 0;
     DEVOPENSTRUC    devOpen = { (char*)device_name.c_str()
                                ,(char*)driver_name.c_str()
                                ,NULL
@@ -284,7 +284,7 @@ static bool wxGetDefaultDeviceName(wxString& deviceName, wxString& portName)
 // Gets an HDC for the specified printer configuration
 WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& printDataConst)
 {
-    HDC   hDC;
+    HDC   hDC = NULLHANDLE;
 /*
     wxPrintData printData = printDataConst;
     printData.ConvertToNative();

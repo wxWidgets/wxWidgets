@@ -65,9 +65,9 @@ bool wxGetHostName(
     char                            zServer[256];
     char                            zComputer[256];
     unsigned long                   ulLevel = 0;
-    unsigned char*                  zBuffer;
-    unsigned long                   ulBuffer;
-    unsigned long*                  pulTotalAvail;
+    unsigned char*                  zBuffer = NULL;
+    unsigned long                   ulBuffer = 256;
+    unsigned long*                  pulTotalAvail = NULL;
 
     NetBios32GetInfo( (const unsigned char*)zServer
                      ,(const unsigned char*)zComputer
@@ -197,7 +197,7 @@ bool wxShell(
 // Get free memory in bytes, or -1 if cannot determine amount (e.g. on UNIX)
 long wxGetFreeMemory()
 {
-    void*                           pMemptr;
+    void*                           pMemptr = NULL;
     ULONG                           lSize;
     ULONG                           lMemFlags;
     APIRET                          rc;
@@ -336,8 +336,8 @@ bool wxWriteResource(
 , const wxString&                   rFile
 )
 {
-    HAB                             hab;
-    HINI                            hIni;
+    HAB                             hab = 0;
+    HINI                            hIni = 0;
 
     if (rFile != "")
     {
@@ -418,8 +418,8 @@ bool wxGetResource(
 , const wxString&                   rFile
 )
 {
-    HAB                             hab;
-    HINI                            hIni;
+    HAB                             hab = 0;
+    HINI                            hIni = 0;
     wxChar                          zDefunkt[] = _T("$$default");
     char                            zBuf[1000];
 
@@ -669,8 +669,8 @@ bool wxCheckForInterrupt(
     if(pWnd)
     {
         QMSG                        vMsg;
-        HAB                         hab;
-        HWND                        hwndFilter;
+        HAB                         hab = 0;
+        HWND                        hwndFilter = NULLHANDLE;
         HWND                        hwndWin= (HWND) pWnd->GetHWND();
 
         while(::WinPeekMsg(hab, &vMsg, hwndFilter, 0, 0, PM_REMOVE))

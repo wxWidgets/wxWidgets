@@ -11,7 +11,7 @@
 
 #if wxUSE_SOCKETS
 
-#define BSD_SELECT // use Berkley Sockets select
+#define BSD_SELECT /* use Berkley Sockets select */
 
 #include <assert.h>
 #include <sys\types.h>
@@ -28,6 +28,13 @@
 #include <sys\socket.h>
 #include <sys\ioctl.h>
 #include <sys\select.h>
+#define select(a,b,c,d,e) bsdselect(a,b,c,d,e)
+int _System bsdselect(int,
+                      struct fd_set *,
+                      struct fd_set *,
+                      struct fd_set *,
+                      struct timeval *);
+int _System soclose(int);
 #endif
 
 #include <string.h>

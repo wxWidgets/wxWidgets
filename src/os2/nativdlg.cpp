@@ -62,7 +62,7 @@ bool wxWindow::LoadNativeDialog(wxWindow* parent, wxWindowID& id)
         wxTopLevelWindows.Append(this);
 
     // Enumerate all children
-    HWND hWndNext;
+    HWND hWndNext = NULLHANDLE;
 // TODO    hWndNext = ::GetWindow((HWND) m_hWnd, GW_CHILD);
 
     wxWindow* child = NULL;

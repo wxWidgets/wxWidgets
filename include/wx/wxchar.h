@@ -61,6 +61,44 @@
     #define wxNO_TCHAR_STDIO
     #define wxNO_TCHAR_STDLIB
     #define wxNO_TCHAR_TIME
+    #define wxNO_TCHAR_LOCALE
+    //
+    // supplemental VA V4 defs so at least we know what these are
+    // just define to standard defs
+    //
+
+    // for wcslen
+    #include <wchar.h>
+
+    // locale.h functons -- not defined in tchar.h
+    #define  wxSetlocale setlocale
+    // some stdio functions are defined others are not
+    // these are not
+    #define  wxFgetchar  fgetchar
+    #define  wxFopen     fopen
+    #define  wxFputchar  fputchar
+    #define  wxFreopen   freopen
+    #define  wxGets      gets
+    #define  wxPerror    perror
+    #define  wxPuts      puts
+    #define  wxRemove    remove
+    #define  wxRename    rename
+    #define  wxTmpnam    tmpnam
+    #define  wxUngetc    ungetc
+    #define  wxVsscanf   vsscanf
+    // stdlib not defined in VA V4
+    #if !wxUSE_UNICODE
+    #  define  wxAtof      atof
+    #endif
+    #define  wxAtoi      atoi
+    #define  wxAtol      atol
+    #define  wxGetenv    getenv
+    #define  wxSystem    system
+    // time.h functions  -- none defined in tchar.h
+    #define  wxAsctime   asctime
+    #define  wxCtime     ctime
+
+
 #endif
 
 #ifdef wxHAVE_TCHAR_FUNCTIONS
@@ -157,7 +195,7 @@ typedef  _TUCHAR     wxUChar;
 #  define  wxVprintf   _vtprintf
 #  define  wxVsscanf   _vstscanf
 #  define  wxVsprintf  _vstprintf
-#elif defined(__VISAGECPP__)
+#elif defined(__VISAGECPP__) && (__IBMCPP__ >= 400)
     // it has some stdio.h functions, apparently
 #  define  wxFgetc     _fgettc
 #  define  wxFgets     _fgetts
@@ -215,6 +253,8 @@ typedef  _TUCHAR     wxUChar;
 #      define wxUSE_WCHAR_T 0
 #    elif defined(__WATCOMC__)
 #      define wxUSE_WCHAR_T 0
+#    elif defined(__VISAGECPP__) && (__IBMCPP__ >= 400)
+#      define wxUSE_WCHAR_T 1
 #    else
   // add additional compiler checks if this fails
 #      define wxUSE_WCHAR_T 1
