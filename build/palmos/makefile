@@ -210,7 +210,6 @@ PALMOS_SRC = \
 ../../src/palmos/statbrpalm.cpp \
 ../../src/palmos/statline.cpp \
 ../../src/palmos/stattext.cpp \
-../../src/palmos/taskbar.cpp \
 ../../src/palmos/toolbar.cpp \
 ../../src/palmos/textctrl.cpp \
 ../../src/palmos/tglbtn.cpp \
@@ -290,7 +289,59 @@ GUI_CMN_SRC = \
 ../../src/common/validate.cpp \
 ../../src/common/valtext.cpp \
 ../../src/common/wincmn.cpp \
-../../src/common/xpmdecod.cpp
+../../src/common/xpmdecod.cpp \
+../../src/generic/busyinfo.cpp \
+../../src/generic/choicdgg.cpp \
+../../src/generic/choicbkg.cpp \
+../../src/generic/dcpsg.cpp \
+../../src/generic/dirctrlg.cpp \
+../../src/generic/dragimgg.cpp \
+../../src/generic/listbkg.cpp \
+../../src/generic/logg.cpp \
+../../src/generic/numdlgg.cpp \
+../../src/generic/panelg.cpp \
+../../src/generic/printps.cpp \
+../../src/generic/renderg.cpp \
+../../src/generic/scrlwing.cpp \
+../../src/generic/selstore.cpp \
+../../src/generic/spinctlg.cpp \
+../../src/generic/splitter.cpp \
+../../src/generic/textdlgg.cpp \
+../../src/generic/tipwin.cpp \
+../../src/generic/treectlg.cpp \
+../../src/generic/vlbox.cpp \
+../../src/generic/vscroll.cpp
+
+ADVANCED_CMN_SRC = \
+../../src/generic/calctrl.cpp \
+../../src/generic/datectlg.cpp \
+../../src/generic/grid.cpp \
+../../src/generic/gridctrl.cpp \
+../../src/generic/gridsel.cpp \
+../../src/generic/helpext.cpp \
+../../src/generic/laywin.cpp \
+../../src/generic/sashwin.cpp \
+../../src/generic/splash.cpp \
+../../src/generic/tipdlg.cpp \
+../../src/generic/wizard.cpp
+
+ADVANCED_PALMOS_SRC = \
+../../src/common/taskbarcmn.cpp \
+../../src/palmos/sound.cpp \
+../../src/palmos/taskbar.cpp
+
+ADVANCED_PALMOS_DESKTOP_SRC = \
+../../src/palmos/joystick.cpp
+
+ADVANCED_PALMOS_NATIVE_SRC = \
+../../src/palmos/datectrl.cpp
+
+MEDIA_CMN_SRC = \
+../../src/common/mediactrlcmn.cpp
+
+ADVANCED_PLATFORM_SRC = $(ADVANCED_PALMOS_SRC) $(ADVANCED_PALMOS_DESKTOP_SRC)
+
+ADVANCED_PLATFORM_NATIVE_SRC = $(ADVANCED_PALMOS_NATIVE_SRC)
 
 LOWLEVEL_SRC = $(PALMOS_LOWLEVEL_SRC)
 
@@ -308,13 +359,90 @@ NET_SRC = $(NET_CMN_SRC)
 
 CORE_SRC = $(LOWLEVEL_SRC) $(GUI_SRC) $(GUI_CMN_SRC)
 
-# ADVANCED_SRC =
-# MEDIA_SRC =
-# HTML_SRC =
-# ODBC_SRC =
-# DBGRID_SRC =
-# XRC_SRC =
-# XML_SRC = 
+ADVANCED_SRC = $(ADVANCED_CMN_SRC) $(ADVANCED_PLATFORM_SRC) $(ADVANCED_PLATFORM_NATIVE_SRC)
+
+MEDIA_SRC = $(MEDIA_CMN_SRC)
+
+HTML_SRC = \
+../../src/html/helpctrl.cpp \
+../../src/html/helpdata.cpp \
+../../src/html/helpfrm.cpp \
+../../src/html/htmlcell.cpp \
+../../src/html/htmlfilt.cpp \
+../../src/html/htmlpars.cpp \
+../../src/html/htmltag.cpp \
+../../src/html/htmlwin.cpp \
+../../src/html/htmprint.cpp \
+../../src/html/m_dflist.cpp \
+../../src/html/m_fonts.cpp \
+../../src/html/m_hline.cpp \
+../../src/html/m_image.cpp \
+../../src/html/m_layout.cpp \
+../../src/html/m_links.cpp \
+../../src/html/m_list.cpp \
+../../src/html/m_pre.cpp \
+../../src/html/m_style.cpp \
+../../src/html/m_tables.cpp \
+../../src/html/winpars.cpp \
+../../src/generic/htmllbox.cpp
+
+ODBC_SRC = \
+../../src/common/db.cpp \
+../../src/common/dbtable.cpp
+
+DBGRID_SRC = \
+../../src/common/dbgrid.cpp
+
+XRC_SRC = \
+../../src/xrc/xh_bmpbt.cpp \
+../../src/xrc/xh_bmp.cpp \
+../../src/xrc/xh_bttn.cpp \
+../../src/xrc/xh_cald.cpp \
+../../src/xrc/xh_chckb.cpp \
+../../src/xrc/xh_chckl.cpp \
+../../src/xrc/xh_choic.cpp \
+../../src/xrc/xh_choicbk.cpp \
+../../src/xrc/xh_combo.cpp \
+../../src/xrc/xh_datectrl.cpp \
+../../src/xrc/xh_dlg.cpp \
+../../src/xrc/xh_frame.cpp \
+../../src/xrc/xh_gauge.cpp \
+../../src/xrc/xh_gdctl.cpp \
+../../src/xrc/xh_html.cpp \
+../../src/xrc/xh_listb.cpp \
+../../src/xrc/xh_listbk.cpp \
+../../src/xrc/xh_listc.cpp \
+../../src/xrc/xh_menu.cpp \
+../../src/xrc/xh_notbk.cpp \
+../../src/xrc/xh_panel.cpp \
+../../src/xrc/xh_radbt.cpp \
+../../src/xrc/xh_radbx.cpp \
+../../src/xrc/xh_scrol.cpp \
+../../src/xrc/xh_scwin.cpp \
+../../src/xrc/xh_sizer.cpp \
+../../src/xrc/xh_slidr.cpp \
+../../src/xrc/xh_spin.cpp \
+../../src/xrc/xh_split.cpp \
+../../src/xrc/xh_statbar.cpp \
+../../src/xrc/xh_stbmp.cpp \
+../../src/xrc/xh_stbox.cpp \
+../../src/xrc/xh_stlin.cpp \
+../../src/xrc/xh_sttxt.cpp \
+../../src/xrc/xh_text.cpp \
+../../src/xrc/xh_tglbtn.cpp \
+../../src/xrc/xh_toolb.cpp \
+../../src/xrc/xh_tree.cpp \
+../../src/xrc/xh_unkwn.cpp \
+../../src/xrc/xh_wizrd.cpp \
+../../src/xrc/xmlres.cpp \
+../../src/xrc/xmlrsall.cpp
+
+XML_SRC = \
+../../src/xml/xml.cpp \
+../../src/common/xtixml.cpp
+
+OPENGL_SRC = \
+../../src/palmos/glcanvas.cpp
 
 SOURCES =  ../../samples/minimal/minimal.cpp \
 $(BASE_SRC) \
@@ -328,17 +456,8 @@ $(ODBC_SRC) \
 $(DBGRID_SRC) \
 $(XRC_SRC) \
 $(XML_SRC) \
-../../src/common/db.cpp \
-../../src/common/dbgrid.cpp \
-../../src/common/dbtable.cpp \
-../../src/common/taskbarcmn.cpp \
-../../src/common/xtixml.cpp \
-../../src/generic/renderg.cpp \
-../../src/palmos/datectrl.cpp \
-../../src/palmos/glcanvas.cpp \
-../../src/palmos/joystick.cpp \
-../../src/palmos/progdlg.cpp \
-../../src/palmos/sound.cpp
+$(OPENGL_SRC) \
+../../src/palmos/progdlg.cpp
 
 RESOURCES = ../../include/wx/palmos/wxWidgets.xrd ../../include/wx/palmos/Version.xrd
 DEFS_FILE = ../../include/wx/palmos/wxWidgets.def

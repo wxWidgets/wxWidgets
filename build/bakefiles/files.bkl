@@ -204,6 +204,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
 <!--                               OS/2                                     -->
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
+
 <set var="BASE_OS2_SRC" hints="files">
     src/os2/dir.cpp
     src/os2/mimetype.cpp
@@ -219,6 +220,33 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/os2/apptrait.h
     wx/os2/mimetype.h
     wx/os2/stdpaths.h
+</set>
+
+<!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
+<!--                              PalmOS                                    -->
+<!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
+
+<set var="BASE_PALMOS_SRC" hints="files">
+    src/palmos/base.cpp
+    src/palmos/dir.cpp
+    src/palmos/prefconf.cpp
+    src/palmos/snglinst.cpp
+    src/palmos/thread.cpp
+    src/palmos/utils.cpp
+    src/palmos/utilsexc.cpp
+</set>
+
+<set var="BASE_AND_GUI_PALMOS_SRC" hints="files">
+    src/palmos/main.cpp
+    src/palmos/volume.cpp
+</set>
+
+<set var="BASE_PALMOS_HDR" hints="files">
+    wx/palmos/apptbase.h
+    wx/palmos/apptrait.h
+    wx/palmos/chkconf.h
+    wx/palmos/mimetype.h
+    wx/palmos/stdpaths.h
 </set>
 
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
@@ -2693,6 +2721,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="PLATFORM_MACOSX=='1'">$(BASE_MACOSX_SRC)</if>
         <if cond="PLATFORM_MACOS=='1'">$(BASE_MAC_SRC) $(BASE_MAC_CARBONLIB_SRC)</if>
         <if cond="PLATFORM_OS2=='1'">$(BASE_OS2_SRC)</if>
+        <if cond="PLATFORM_PALMOS=='1'">$(BASE_PALMOS_SRC)</if>
     </set>
     <set var="BASE_AND_GUI_TOOLKIT_SRC" hints="files">
         <if cond="TOOLKIT=='MAC'">$(BASE_AND_GUI_MAC_SRC)</if>
@@ -2701,6 +2730,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="PLATFORM_UNIX=='1'">$(BASE_AND_GUI_UNIX_SRC)</if>
         <if cond="PLATFORM_WIN32=='1'">$(BASE_AND_GUI_WIN32_SRC)</if>
         <if cond="PLATFORM_MACOSX=='1'">$(BASE_AND_GUI_UNIX_SRC)</if>
+        <if cond="PLATFORM_PALMOS=='1'">$(BASE_AND_GUI_PALMOS_SRC)</if>
         <!-- At the moment, BASE_AND_GUI_TOOLKIT_SRC handles this -->
         <!-- if cond="PLATFORM_MACOS=='1'">$(BASE_AND_GUI_MAC_SRC)</if -->
     </set>
@@ -2709,6 +2739,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="PLATFORM_WIN32=='1'">$(BASE_WIN32_HDR) $(BASE_WINCE_HDR)</if>
         <if cond="TOOLKIT=='MAC'">$(BASE_MAC_HDR) $(BASE_MAC_OSX_HDR)</if>
         <if cond="TOOLKIT=='COCOA'">$(BASE_UNIX_HDR)</if>
+        <if cond="PLATFORM_PALMOS=='1'">$(BASE_PALMOS_HDR)</if>
     </set>
 
     <set var="BASE_SRC" hints="files">

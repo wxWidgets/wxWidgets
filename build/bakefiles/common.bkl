@@ -22,6 +22,9 @@
         <set var="PLATFORM_MACOS">0</set>
     </if>
 
+    <!-- FIXME: PalmOS is another candidate to bakefiles -->
+    <set var="PLATFORM_PALMOS">0</set>
+
     <include file="config.bkl"/>
 
     <include file="plugins_deps.bkl"/>
