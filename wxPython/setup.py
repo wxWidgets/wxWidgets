@@ -519,6 +519,13 @@ elif os.name == 'posix':
     libdirs = []
     libs = []
 
+    # If you get unresolved symbol errors on Solaris and are using gcc, then
+    # uncomment this block to add the right flags to the link step and build
+    # again.
+    ## if os.uname()[0] == 'SunOS':
+    ##     libs.append('gcc')
+    ##     libdirs.append(commands.getoutput("gcc -print-search-dirs | grep '^install' | awk '{print $2}'")[:-1])
+
     cflags = os.popen(WX_CONFIG + ' --cxxflags', 'r').read()[:-1]
     cflags = cflags.split()
     if debug:
