@@ -83,6 +83,8 @@ public:
     virtual void SetEncoding(wxFontEncoding encoding);
     virtual void SetNativeFontInfo(const wxNativeFontInfo& info);
 
+    virtual bool IsFixedWidth() const;
+
     // implementation only from now on
     // -------------------------------
 

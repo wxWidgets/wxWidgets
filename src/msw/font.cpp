@@ -50,6 +50,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
 // constants
 // ----------------------------------------------------------------------------
 
+// the mask used to extract the pitch from LOGFONT::lfPitchAndFamily field
+static const int PITCH_MASK = FIXED_PITCH | VARIABLE_PITCH;
+
 // ----------------------------------------------------------------------------
 // wxFontRefData - the internal description of the font
 // ----------------------------------------------------------------------------
@@ -270,42 +273,6 @@ void wxFontRefData::Init(int pointSize,
 
 void wxFontRefData::Init(const wxNativeFontInfo& info, WXHFONT hFont)
 {
-    // we don't really need the family, what for?
-#if 0
-    // extract family from pitch-and-family
-    int lfFamily = info.lf.lfPitchAndFamily;
-    if ( lfFamily & FIXED_PITCH )
-        lfFamily -= FIXED_PITCH;
-    if ( lfFamily & VARIABLE_PITCH )
-        lfFamily -= VARIABLE_PITCH;
-
-    switch ( lfFamily )
-    {
-        case FF_ROMAN:
-            m_family = wxROMAN;
-            break;
-
-        case FF_SWISS:
-            m_family = wxSWISS;
-            break;
-
-        case FF_SCRIPT:
-            m_family = wxSCRIPT;
-            break;
-
-        case FF_MODERN:
-            m_family = wxMODERN;
-            break;
-
-        case FF_DECORATIVE:
-            m_family = wxDECORATIVE;
-            break;
-
-        default:
-            m_family = wxSWISS;
-    }
-#endif // 0
-
     // hFont may be zero, or it be passed in case we really want to
     // use the exact font created in the underlying system
     // (for example where we can't guarantee conversion from HFONT
@@ -401,41 +368,37 @@ wxString wxNativeFontInfo::GetFaceName() const
 
 wxFontFamily wxNativeFontInfo::GetFamily() const
 {
+    wxFontFamily family;
+
     // extract family from pitch-and-family
-    int lfFamily = lf.lfPitchAndFamily;
-    int family;
-
-    if ( lfFamily & FIXED_PITCH )
-        lfFamily -= FIXED_PITCH;
-    if ( lfFamily & VARIABLE_PITCH )
-        lfFamily -= VARIABLE_PITCH;
-
-    switch ( lfFamily )
+    switch ( lf.lfPitchAndFamily & ~PITCH_MASK )
     {
         case FF_ROMAN:
-            family = wxROMAN;
-            break;
-
-        case FF_SWISS:
-            family = wxSWISS;
-            break;
-
-        case FF_SCRIPT:
-            family = wxSCRIPT;
-            break;
-
-        case FF_MODERN:
-            family = wxMODERN;
-            break;
-
-        case FF_DECORATIVE:
-            family = wxDECORATIVE;
+            family = wxFONTFAMILY_ROMAN;
             break;
 
         default:
-            family = wxSWISS;
+            wxFAIL_MSG( _T("unknown LOGFONT::lfFamily value") );
+            // fall through
+
+        case FF_SWISS:
+            family = wxFONTFAMILY_SWISS;
+            break;
+
+        case FF_SCRIPT:
+            family = wxFONTFAMILY_SCRIPT;
+            break;
+
+        case FF_MODERN:
+            family = wxFONTFAMILY_MODERN;
+            break;
+
+        case FF_DECORATIVE:
+            family = wxFONTFAMILY_DECORATIVE;
+            break;
     }
-    return (wxFontFamily)family;
+
+    return family;
 }
 
 wxFontEncoding wxNativeFontInfo::GetEncoding() const
@@ -574,7 +537,7 @@ void wxNativeFontInfo::SetEncoding(wxFontEncoding encoding)
 #endif // wxUSE_FONTMAP
         {
             // unsupported encoding, replace with the default
-            info.charset = ANSI_CHARSET;
+            info.charset = DEFAULT_CHARSET;
         }
     }
 
@@ -942,5 +905,20 @@ wxNativeFontInfo *wxFont::GetNativeFontInfo() const
         return new wxNativeFontInfo(M_FONTDATA->GetNativeFontInfo());
 
     return 0;
+}
+
+bool wxFont::IsFixedWidth() const
+{
+    if ( M_FONTDATA->HasNativeFontInfo() )
+    {
+        // the two low-order bits specify the pitch of the font, the rest is
+        // family
+        BYTE pitch = M_FONTDATA->GetNativeFontInfo().
+                        lf.lfPitchAndFamily & PITCH_MASK;
+
+        return pitch == FIXED_PITCH;
+    }
+
+    return wxFontBase::IsFixedWidth();
 }
 
